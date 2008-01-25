@@ -1,0 +1,38 @@
+// ------------------------------------------------------------------------
+// Proces:		VIRTUAL SENSOR PROCESS (VSP)
+// Plik:			vsp_digital_scales_sensor.cc
+// System:	QNX/MRROC++  v. 6.3
+// Opis:		Deklaracja klasy vsp_digital_scales_sensor - odczyt z czujnika zlozonego z linialow.
+// Autor:		tkornuta
+// Data:		30.11.2006
+// ------------------------------------------------------------------------
+
+#if !defined(_VSP_DIGITAL_SCALES_SENSOR_H)
+#define _VSP_DIGITAL_SCALES_SENSOR_H
+
+#include "vsp/vsp_sensor.h"
+
+/********** klasa czujnikow po stronie VSP **************/
+class vsp_digital_scales_sensor : public vsp_sensor {
+private:
+    // Odczyty w pozycji konfiguracji czujnika.
+    double position_zero[6];
+    // Liczba linialow.
+    short number_of_scales;
+    // Flagi stanu procesu.
+    short readings_initiated;
+    
+public:
+    // Konstruktor czujnika wirtualnego.
+    vsp_digital_scales_sensor(void);
+    // Destruktor czujnika wirtualnego.
+    ~vsp_digital_scales_sensor(void);
+    // Konfiguracja czujnika.
+    void configure_sensor (void);
+    // Inicjacja odczytu.
+    void initiate_reading (void);
+    // Odeslanie odczytu.
+    void get_reading (void);
+}; // end: class vsp_ds_sensor
+
+#endif

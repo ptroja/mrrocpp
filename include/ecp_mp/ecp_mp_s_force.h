@@ -1,0 +1,23 @@
+// -------------------------------------------------------------------------
+// Proces: 	EFFECTOR CONTROL PROCESS (ECP) 
+// Plik:			ecp_mp_s_force.h
+// System:	QNX/MRROC++  v. 6.3
+// Opis:		Definicje klasy ecp_mp_force_sensor - czujnik sily.
+// Autor:		tkornuta
+// Data:		29.11.2006
+// -------------------------------------------------------------------------
+
+#ifndef __ECP_MP_S_FORCE_H
+#define __ECP_MP_S_FORCE_H
+
+// klasa bazowa sensor.
+#include "ecp_mp/ecp_mp_sensor.h"
+
+// Klasa obrazujaca czujniki sily w systemie MRROC++.
+class ecp_mp_force_sensor: public ecp_mp_sensor{
+  public:
+	// Konstruktor czujnika wirtualnego - wywolanie konstruktora klasy bazowej.
+ 	ecp_mp_force_sensor (SENSOR_ENUM _sensor_name, char* _section_name, ecp_mp_task& _ecp_mp_object);
+};// end: class force_sensor
+
+#endif

@@ -1,0 +1,28 @@
+// -------------------------------------------------------------------------
+//                            ecp_t_time.h
+// 
+// 
+// -------------------------------------------------------------------------
+
+#if !defined(_ECP_T_SK_H)
+#define _ECP_T_SK_H
+
+#include "ecp/common/ecp_task.h"
+#include "ecp/common/ecp_g_time.h"
+
+class ecp_task_time: public ecp_task  {
+protected:
+	time_generator *tfg;
+
+public:
+	// KONSTRUKTORY
+	ecp_task_time();
+	~ecp_task_time();
+	
+	// methods for ECP template to redefine in concrete classes
+	void task_initialization(void);
+	void main_task_algorithm(void);
+	
+};
+
+#endif /* _ECP_T_SK_H */

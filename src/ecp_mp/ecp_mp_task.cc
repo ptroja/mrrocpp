@@ -1,0 +1,218 @@
+// -------------------------------------------------------------------------
+//                            ecp_mp_task.cc
+//            Effector Control Process (ECP) i MP - methods
+// 
+// Ostatnia modyfikacja: 2005
+// -------------------------------------------------------------------------
+
+#include <stdio.h>
+#include <iostream>
+#include <stdint.h>
+#include <string.h>
+#include <errno.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#if defined(__QNXNTO__)
+#include <sys/neutrino.h>
+#include <sys/netmgr.h>
+#endif /* __QNXNTO__ */
+
+#include "common/typedefs.h"
+#include "common/impconst.h"
+#include "common/com_buf.h"
+
+#include "lib/srlib.h"
+#include "ecp_mp/ecp_mp_task.h"
+#include "ecp_mp/ecp_mp_sensor.h"
+
+sr_ecp* ecp_mp_task::sr_ecp_msg = NULL;
+
+// mapa wszystkich czujnikow
+std::map <SENSOR_ENUM, sensor*> ecp_mp_task::sensor_m;
+std::map <TRANSMITTER_ENUM, transmitter*> ecp_mp_task::transmitter_m;
+
+// --------------------------------------------------------------------------
+// Odpowiedz operatora typu (Yes/No) na zadane pytanie (question)
+bool ecp_mp_task::operator_reaction (const char* question ) {
+  ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
+  UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
+  uint64_t e;     // kod bledu systemowego
+  ecp_to_ui_msg.ecp_message = YES_NO;     // Polecenie odpowiedzi na zadane
+  strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI podczas uczenia
+
+	ecp_to_ui_msg.hdr.type=0;
+
+  if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+	 e = errno;
+	 perror("ECP operator_reaction(): Send() to UI failed");
+	 sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+	 throw ECP_MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+  }
+  if (ui_to_ecp_rep.reply == ANSWER_YES) {
+     return true;
+  } else {
+     return false;
+  }
+}; // end: operator_reaction
+// --------------------------------------------------------------------------
+
+
+// --------------------------------------------------------------------------
+// by Y - Wybor przez operatora jednej z opcji
+BYTE ecp_mp_task::choose_option (const char* question, BYTE nr_of_options_input )
+{
+	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
+	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
+	uint64_t e;     // kod bledu systemowego
+	
+	ecp_to_ui_msg.ecp_message = CHOOSE_OPTION; // Polecenie odpowiedzi na zadane
+	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
+
+	ecp_to_ui_msg.nr_of_options = nr_of_options_input;
+
+	ecp_to_ui_msg.hdr.type=0;
+	
+	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+		e = errno;
+		perror("ECP: Send() to UI failed\n");
+		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+		throw ECP_MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+	};
+	
+	return ui_to_ecp_rep.reply; // by Y
+}; // end: irp6_on_track_input_double
+// --------------------------------------------------------------------------
+
+
+// --------------------------------------------------------------------------
+// Zadanie od operatora podania liczby calkowitej (int)
+int ecp_mp_task::input_integer (const char* question ) {
+  ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
+  UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
+  uint64_t e;     // kod bledu systemowego
+
+  ecp_to_ui_msg.ecp_message = INTEGER_NUMBER; // Polecenie odpowiedzi na zadane
+  strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
+
+	ecp_to_ui_msg.hdr.type=0;
+
+  if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+	e = errno;
+	perror("ECP: Send() to UI failed\n");
+	sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+	throw ECP_MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+  }
+  
+    return ui_to_ecp_rep.integer_number;
+}; // end: irp6_on_track_input_integer
+// --------------------------------------------------------------------------
+
+
+// --------------------------------------------------------------------------
+// Zadanie od operatora podania liczby rzeczywistej (double)
+double ecp_mp_task::input_double (const char* question )
+{
+	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
+	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
+	uint64_t e;     // kod bledu systemowego
+	
+	ecp_to_ui_msg.ecp_message = DOUBLE_NUMBER; // Polecenie odpowiedzi na zadane
+	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
+	
+	ecp_to_ui_msg.hdr.type=0;
+
+	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0)
+	{// by Y&W
+		e = errno;
+		perror("ECP: Send() to UI failed\n");
+		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+		throw ECP_MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+	};
+	return ui_to_ecp_rep.double_number; // by Y
+}; // end: irp6_on_track_input_double
+// --------------------------------------------------------------------------
+
+
+// --------------------------------------------------------------------------
+// Informacja wymagajaca potwierdzenia odbioru przez operatora
+bool ecp_mp_task::show_message (const char* message) 
+{
+	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
+	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
+	uint64_t e;     // kod bledu systemowego
+	
+	ecp_to_ui_msg.ecp_message = MESSAGE; // Polecenie wyswietlenia komunikatu
+	strcpy(ecp_to_ui_msg.string, message);
+
+	ecp_to_ui_msg.hdr.type=0;
+
+   if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+	e = errno;
+	perror("ECP: Send() to UI failed\n");
+	sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+	throw ECP_MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+  }
+   if (ui_to_ecp_rep.reply == ANSWER_YES)
+     return true;
+   else
+     return false;
+}; // end: irp6_on_track_show_message
+// --------------------------------------------------------------------------
+
+
+// Funkcje do obslugi czujnikow
+
+// ------------------------------------------------------------------------
+void ecp_mp_task::kill_all_VSP (std::map <SENSOR_ENUM, sensor*>& _sensor_m) {
+// Zabicie wszystkich procesow VSP
+	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = _sensor_m.begin();
+		 sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++)
+	{
+		if (sensor_m_iterator->second->pid !=0) {
+			SignalKill(configurator::return_node_number(sensor_m_iterator->second->node_name),
+					sensor_m_iterator->second->pid, 0, SIGTERM, 0, 0);
+		}
+	}
+
+} // end: kill_all_VSP()
+// ------------------------------------------------------------------------
+
+
+void ecp_mp_task::all_sensors_initiate_reading (std::map <SENSOR_ENUM, sensor*>& _sensor_m)
+{
+
+	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = _sensor_m.begin();
+		 sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++)
+	{
+		if (sensor_m_iterator->second->base_period > 0)
+	   	{
+	   		if (sensor_m_iterator->second->current_period == sensor_m_iterator->second->base_period)
+	   		{
+				sensor_m_iterator->second->initiate_reading();
+			}
+			sensor_m_iterator->second->current_period--;
+		}
+	}
+};
+
+
+void ecp_mp_task::all_sensors_get_reading (std::map <SENSOR_ENUM, sensor*>& _sensor_m)
+{
+
+	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = _sensor_m.begin();
+		 sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++)
+	{
+		// jesli wogole mamy robic pomiar
+	   	if (sensor_m_iterator->second->base_period > 0)
+	   	{
+	   		if (sensor_m_iterator->second->current_period == 0)
+	   		{
+				sensor_m_iterator->second->get_reading();
+				sensor_m_iterator->second->current_period = sensor_m_iterator->second->base_period;
+			}
+		}
+	}
+
+};

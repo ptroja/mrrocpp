@@ -1,0 +1,1 @@
+bledy z grania nie jako return z funkcji speak - lecz jako wyjatki

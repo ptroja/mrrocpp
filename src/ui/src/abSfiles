@@ -1,0 +1,1 @@
+ABSRC = ../MAM_wnd_manual_moves_automatic_measure.cc ../abmain.cc ../fun.cc ../fun_r_conveyor.cc ../fun_r_irp6_mechatronika.cc ../fun_r_irp6_on_track.cc ../fun_r_irp6_postument.cc ../fun_r_speaker.cc ../timer.cc ../ui_init.cc ../wndFileLocationEvents.cc ../wndForceControlEvents.cc ../wndTrajectoryReproduceEvents.cc 

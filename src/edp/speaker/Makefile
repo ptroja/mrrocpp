@@ -1,0 +1,42 @@
+#------------- edp/irp6_postument catalog makefile of the MRROC++ frame system ---------------#
+#======================================================#
+SOURCES = ${wildcard *.cc}
+OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
+EDPOBJS  = ${OBJECTS}
+BINARIES  = edp_speaker
+#-----------------------------------------------------------------------------------------------------------------------#
+# Should be modified only by developers not by users
+HOMEDIR = ../../..
+include $(HOMEDIR)/common.mk
+
+CXXFLAGS += -O3
+SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a $(QNX_TARGET)/x86/lib/libasound.so
+# search path for make, if you want create dependencies from files from other directory than ".", 
+# then place that directory in the VPATH variable
+VPATH = ../common $(LIBDIR) ../irp6s
+#======================================================#	
+.PHONY: all clean install depend
+#------------------------------------------------- Build rules -------------------------------------------------------#
+all: ${BINARIES}
+#-----------------------------------------------------------------------------------------------------------------------#
+edp_speaker: $(EDPOBJS) $(SHOBJ) 
+	$(LD) $(LDFLAGS) -o $@ $^ 
+#---------------------------------Special object build rules (user made)-------------------------------------#
+# e.g:
+# plik.o: plik.cc plik1.h plik2.h ... itd
+#	$(CXX) -c user_flags -I$(HOMEDIR)/include -o $@ $<
+#======================================================#	
+#----------------------------------------------- Maintain rules ----------------------------------------------------#
+install: ${BINARIES}
+	cp ${BINARIES} $(BINDIR)
+#-----------------------------------------------------------------------------------------------------------------------#
+clean:
+	@rm -f *.o ${BINARIES}
+#-----------------------------------------------------------------------------------------------------------------------#
+depend:
+	@touch .depend
+	@makedepend	-f.depend -I$(HOMEDIR)/include  \
+							${patsubst %,-I%,${SYS_HEADER_DIRS}} \
+							${SOURCES} 2> /dev/null
+
+-include .depend

@@ -1,0 +1,910 @@
+2007.03.08
+- new servo-vision tasks
+- force library fix'es in progress
+
+
+2007.02.22
+- ECP and MP refactored - new task classes and process templates introduced
+
+
+2007.02.19
+- rcsc with speaker finished
+
+
+2007.02.10
+- wprowadzenie dodatkowego pulsu trigger z do reader'a z UI oraz rejestracji wsp. joints w reader
+
+
+2007.02.09
+- wprowadzenie ograniczen na predkosc i przyspieszenie w regulatorach Servo Group 
+	metoda constraint_detector klasy regulator - druga generacja z predykcja przyrostu calki uchybu
+
+
+2007.02.07
+- wprowadzenie ograniczen na predkosc i przyspieszenie w regulatorach Servo Group 
+	metoda constraint_detector klasy regulator
+
+
+2007.01.31
+- pierwsza dzialajace wersja zadania ukladania kostki Rubika (z obliczeniami na poziomie ECP i koordynacja w MP)
+
+
+2007.01.20
+- usuniecie plikow Makefile.bak z repozytorium
+- dodanie VSP do rozpoznawania polecen glosowych
+- modyfikacja EDP_speaker
+- szereg poprawek w kinematyce
+- przygotowania do nowej implementacji zadania ukladania kostki Rubika
+	 (z obliczeniami na poziomie ECP i koordynacja w MP)
+- znaczna ilosc drobnych poprawek
+
+
+2007.01.15
+- dodanie mechanizmu automatyczengo tworzenie pliku default_file.cfg, usuniecie tego pliku z repozytorium
+
+2006.12.18
+- MP Move instruction and other functions modifications
+
+
+2006.12.15
+- MP pulse chanels number reduced to 1 (for both ECP and UI)
+
+
+2006.12.14
+- EDP kinematics constrains check improved
+- UI manual moves improved
+
+
+2006.12.11
+- EDP code finally rebuild
+- PLAYER support added
+
+
+2006.12.09
+- EDP fix'es
+- UI check_gns() improvements
+
+
+2006.12.07
+- EDP code rebuilt
+
+
+2006.12.04
+- SR reports time of event generation instead of time taken from UI
+- cleanup of PI constanstants in place of M_PI (from <math.h>
+
+
+2006.11.30
+ - All three VSP Shells were modified - now, when a reading is required, they send only given bytes number
+(previously they sent the number of bytes equal to the maximum size of the IMAGE union).
+ - SR was modified - selected VSP errors were classified as NON_FATAL_ERRORs, instead of FATAL_ERRORs.
+- UI reload_configuration, check_gns and slay_all functions improvements
+
+
+2006.11.29
+- Necessary modifications of the MAM/ FCT/ TRG processes.
+
+
+2006.11.16
+- replacament of four individual ecp_tran files by one in ecp/common directory
+- minor modyfications of robot constructors
+
+
+2006.11.14
+- modyfikajca sposobu zadawania konfiguracji systemu (m.in. dodanie pliku "common.ini" z domyslna konfiguracja)
+
+
+2006.10.14
+- poprawki w obsludze odczytu stanu kontrolera robota
+
+
+2006.09.26
+- poprawki obslugi wyjatkow w ECP i MP
+- poprawki w zadaniu ukladania kostki Rubika i VSP wizyjnego
+
+
+2006.09.11
+- poprawki w zadaniu ruszania skrzydlem
+
+
+2006.09.07
+- aktualizacja VSP wizyjnego
+
+
+2006.09.01
+- usuniecie metod Wait i condition, gdyz jest to jedynie specyficzna odmiana Move i generator
+
+
+2006.08.30
+- zmiana nazwy srp na sr bo srp od dawna nie jest juz procesem a watkiem
+
+
+2006.08.29
+- duzo roznych zmian o charakterze kosmetycznym
+
+
+2006.08.21
+- poprawki VSP wizyjnego
+
+
+2006.08.16
+- masa drobnych poprawek m.in. usuniecie bledow configuratora
+
+
+2006.08.12
+- wyeliminowanie list mrrocowych mlst.h (calkowicie zastapione listami stl'owymi)
+- poprawki w kinematyce robotow
+- zmiana generatorow i warunkow ECP i instrukcji Move i Wait w celu ujednolicenia z rozwiazaniami z MP
+
+
+2006.08.07
+- uruchomienie zadania uczenia
+- drobne poprawki w ECP i MP
+
+
+2006.08.06
+- wyeliminowanie klasy genset poprzez rozbudowanie i modyfikacje klasy mp_generator w MP
+- zmiany w instrukcjach Move, Wait, Schedule w MP
+
+
+2006.08.05
+- zastapienie listy czujnikow w ECP i MP przez mape czujnikow
+
+
+2006.08.04
+- zastapienie listy robotow w MP przez mape robotow
+
+
+2006.08.03
+- dodanie identyfikacji kostki w zadaniu ukladania kostki rubika
+
+
+2006.07.26
+- dopracowanie trasnsmittera rc_windows
+
+
+2006.07.07
+- tzw. uporzadkowanie VSP
+
+
+2006.07.06
+- dodanie klasy transmitter w ecp_mp
+- poprawki w vsp wizyjnym
+
+
+2006.07.05
+- usuwanie klasy m_list.h (w toku)
+- poprawa ruchow recznych chwytaka
+- poprawki obslugi bledow ecp_mp
+
+
+2006.07.04
+- rozwiniecie ecp_class
+
+
+2006.07.03
+- rozwiniecie mp_class
+
+
+2006.06.30
+- dopracowanie klasy mp_gen_set i scheduller'a w mp_class w MP
+- pierwsze generatory jednorobotowe w MP
+
+
+2006.06.29
+- dodanie klasy mp_gen_set i scheduller'a w mp_class w MP
+
+
+2006.06.25
+- wprowadzenie globlanych klas dla procesow MP - mp_class, ECP ecp_class wywodzacych sie z klasy ecp_mp_class
+- dodanie mechanizmu wysylania pulsu z ECP do MP w celu zgloszenia gotowosci do odbioru wiadomosci podczas spotkania
+
+
+2006.06.15
+- rozwiniecie zadania ukladania kostki Rubika o zadawanie sekwencji manipulacji z pliku konfiguracyjnego
+
+
+2006.06.13
+- scalenie sily i wizji w zadaniu ukladania kostki Rubika
+
+
+2006.06.12
+- rozwiniecie zadania ukladania kostki Rubika
+
+
+2006.06.09
+- dodanie mozliwosci modyfikacji parametrow kinematyki i regulatorow w UI
+
+
+2006.06.08
+- rozwiniecie zadania ukladania kostki Rubika
+
+
+2006.06.07
+- rozwiniecie zadania ukladania kostki Rubika
+
+
+2006.06.06
+- dodanie eksportu i impotu pozycji w UI
+- ujednolicenie nazw niektorych przyciskow w UI
+- rozwiniecie zadania ukladania kostki Rubika
+- modyfikacja sposobu zadawania pozycji w pliku konfiguracyjnym
+
+
+2006.06.02
+- rozwiniecie zadania ukladania kostki Rubika
+- zastapienie BOOLEAN przez bool
+
+
+2006.06.01
+- rozwiniecie zadania ukladania kostki Rubika
+
+
+2006.05.24
+- poprawki regulatorow chwytaka
+- rozwiniecie zadania ukladania kostki Rubika
+- rozwiniecie zadania wizyjnego chwytania kostki Rubika
+
+
+2006.05.23
+- poprawki regulatorow chwytaka
+- poprawki zadania ukladania kostki Rubika
+
+
+2006.05.22
+- poprawki regulatorow chwytaka
+- uruchomienie generatora wizyjnego w MP
+
+
+2006.05.20
+- poprawki regulatorow chwytaka
+- dodanie generatora wizyjnego w MP
+
+
+2006.05.19
+- drobne modyfikacje sily
+- modyfikacje serwowizji
+- rozwiniecie zadania ukladania kostki Rubika
+
+
+2006.05.17
+- dodanie plynnego sterowania chwytakiem w trybie TFF
+- dodanie zadania ukladania kostki Rubika
+
+
+2006.05.15
+- pelne sterowanie TFF z opisem narzedzia i ukladu zadania dla robotow irp6 zaimplementowane w EDP
+- poprawki zadania ruszania skrzydlem
+- zmiana ecp_vis i vsp_vis (zmiana obliczania srodka kafelka ze srodka aproksymujacego blob czworokata na srodek rzeczywisty bloba)
+
+
+2006.05.12
+- dodanie zmodyfikowanych trajektorii do rysowania
+
+
+2006.05.11
+- uwspolnienie duzej czesci kodu ECP (generatory i metody dodatkowe)
+- wiele innych drobnych modyfikacji, glownie w ECP i MP
+
+
+2006.05.10
+- rozszerzenie robotow w EDP, ECP i MP o zmienna robot_name z informacje o nazwie robota (track, postument etc.)
+- uproszczenie kodu ECP
+- wprowadzenie generatorow wspolnych dla wszystkich ECP (generator transparentny)
+
+
+2006.05.09
+- modyfikacja generatorow Jarosza dla IRP6_POSTUMENT
+- dodanie zadania ruszania skrzydlem na bazie generatorow jarosza
+
+
+2006.05.08
+- kalibracja IRP6_POSTUMENT do sterowania TFF
+- testy majace na celu obrot kostka w zamknietym lancuchu kinematycznym
+
+
+2006.05.05
+- poprawka zadawania narzedzia w mp_gen_force_kd
+- poprawione wczytywanie konfiguracji w UI
+- sterowanie silowe TFF jako funkcjonalnosc EDP
+- poprawki readera
+ 
+
+2006.05.04
+- uzuplenienie klasy configurator o metody: return_ini_file_path i exists
+- uwspolnienie kodu watku reader na wszystkie roboty
+- dodanie konfiguracji watku reader do plikow konfiguracyjnych
+- wprowadzenie poprawek potrzebnych do zbierania pomiarow sily dla postumenta
+- dodanie komentarzy w mp_gen_force_kd i mp_m_kd
+- korekta kinematyki dla robota on-track w irp6_kin.h
+- poprawki fun.cc w UI
+- poprawki w obsludze chwytaka w buforach komunikacyjnych
+
+
+2006.04.28
+- wprowadzenie modyfikacji Krzyska Dziubka
+
+
+2006.04.26
+- modyfikacja 6-osiowej kinematyki robotow irp6
+- modyfikacja ecp_gen_test obu robotow dla zadania poruszania kostka
+
+
+2006.04.25
+- dodanie obslugi krzywych nurbs autorstwa Tomka Stempkowicza
+
+
+2006.04.24
+- poprawki GEOM_SYNCH_POS dla robota on_track
+- kalibracja i poprawki w ecp_gen_test do sterowania silowego
+	
+
+2006.04.22
+- poprawka 5 osiowej kinematyki robota postument zmian wartosci EQUATION_EPS 1.0E-5 na 1.0E-10
+	dla funkcji word16 Check_cos_Theta1.
+
+
+2006.04.21
+- poprawka bledow przepisywania buforow ECP i MP
+- serwomechanizm wizyjny XYZ z ograniczeniem predkosci i przyspieszenia
+
+
+2006.04.20
+- poprawka krytycznego bledu konstruktora ecp_sensor
+- poprawki biblioteki ForceTrans
+- modyfikacje klasy configurator
+- modyfikacje vsp_vis
+
+
+2006.04.19
+- zmiany komentarzy w plikach dotyczacych czujnika FT6284
+
+
+2006.04.16
+- dodanie "szybkiego" przetwarzania obrazu
+
+
+2006.04.15
+- dodanie informacji o stanie w ktorym znajduje sie regulator chwytaka w informacji zwrotnej z EDP do ECP i MP
+	(pole gripper_reg_state w r_buffer com_buf.cc i buforach odbiorczych ECP i MP)
+
+
+2006.04.13
+- poprawki w ograniczeniach ruchu silownikow
+- dostosowanie klasy ForceTrans do zmiany sprzetu
+- dostosowanie generatora ecp_gen_test do zmiany sprzetu
+- zmiana ukladu sterowania z bazowego do ukladu kisci w ecp_gen_test
+- modyfikacje i ujednolicenie kinematyk robotow (dodanie plikow irp6_kin_ot.cc i irp6_kin_p.cc)
+- dodanie mozliwosci wyboru kinematyki na poziomie generatora w MP lub ECP
+- modyfikacje zadania kalibracyjnego T. Kornuty
+- poprawka Regulatorow chwytaka
+- uwzglenienie w nowej kinematyce EDP_OT toru jezdnego
+
+
+2006.04.11
+- zmiana nazw polecen w menu UI wedlug standartu z raportu o mrrocpp z 1999 roku
+- wysylanie ograniczen pradowych do poszczegolnych osi robotow przy inicjacji EDP
+- modyfikacja regulatora chwytaka w obu robotach tak aby uwzgledniany byl prad (automat skonczony 5 stanowy)
+
+
+2006.04.10
+- poprawka bledu w odczycie pradu silnikow robotow postument i conveyor
+
+
+2006.04.03
+- dodanie obslugi narzedzia osiowosymetrycznego w notacji TOOL_AS_XYZ_EULER_ZY - modyfikacja w edp_irp6s.cc
+
+
+2006.03.29
+- dodanie opcji konfiguracji EDP: "is_grriper_active" wraz z jej obsluga.
+	 is_grriper_active=1 - normalna praca, is_grriper_active=0 - brak chwytaka
+	implementacja zgodna z opisem z 2006.02.22
+
+
+2006.03.20
+- poprawki biblioteki przeksztalcen sil
+- modyfikacja kinematyki po zmianie robota
+
+
+2006.03.16
+- przerobiono zadanie zbierania pomiarow podczas ruchow recznych robotem - obecnie dwa zadania dla dwoch robotow
+
+
+2006.03.15
+- dodanie nowego zadana - zbierania pomiarow z suwmiarek podczas ruchow recznych robotem
+- korekty w wykrywaniu ograniczen kinematyczno - ruchowych
+
+
+2006.03.13
+- poprawki generatora mp_gen_force_kd
+- poprawki przepisywania w buforach komunikacyjnych w ECP i MP 
+- poprawka generatora w ui
+- poprawka kinematyk robotow
+- dodanie zadania rysowania z ISR (plot)
+
+
+2006.03.06
+- poprawka zakresu ruchu dla obrotu chwytaka w ruchach w motorach w UI dla obu manipulatorow
+- poprawka przepisywania buforow komunikacyjnych w ECP i MP
+
+
+2006.02.28
+- poprawki we wszystkich EDP, ze wzgledu na sposob realizacji makrokorokow w servo 
+	(zlikwidowanie zewnetrznej petli sprzezenia pozycyjnego - powrot do rozwiazania bliskiego pierwotnemu)
+
+
+2006.02.24
+- poprawki w kinematyce robotow
+- dodanie wartosci zmierzonej pradu do regulatorow
+- poprawki funkcji srp_edp::interpret
+
+
+2006.02.23
+- poprawki w kinematyce robotow
+- dodanie plikow K.Dziubka
+
+
+2006.02.22
+- ustawienie pradu maksymalnego dla przedostatniej osi (obrot chwytaka) obu robotow
+- uruchomienie robota irp6_postument w sytuacji braku silnika chwytaka (wersja tymczasowa do czasu usuniecia awarii)
+	UWAGA: po usunieciu awarii w plikach int_han.cc i servo_gr.cc (synchronizacja) zamienic sekwencje
+	tymczasowa "IRP6_POSTUMENT_NUM_OF_SERVOS-1" na typowa "IRP6_POSTUMENT_NUM_OF_SERVOS"
+
+
+2006.02.20
+- dodanie nowej kinematyki (z robota irp6_postument) do robota irp6_on_track
+- wprowadzenie ograniczen na zakres ruchu dla nowych stopni swobody
+
+
+2006.02.17
+- modyfikacje sposobu synchronizacji w obu robotach
+- uruchomienie starej kinematyki z irp6_on_track w nowej konfiguracji tego robota
+
+
+2006.02.16
+- modyfikacje regulatorow predkosciowych
+- ujednoliczenie sposobu odwolywania sie do sprzeru w robotach on_track, conveyor i postument
+- uruchamianie robota irp6_on_track w nowej konfiguracji (w toku)
+
+
+2006.02.15
+- modyfikacje regulatorow predkosciowych
+- uruchamianie robota irp6_on_track w nowej konfiguracji (w toku)
+
+
+2006.02.14
+- wlaczenie automatycznego wykrywania synchronizacji po starcie EDP (dla robota postument wersja ostateczna,
+	po przerobkach pakietow)
+
+
+2006.02.10
+- wlaczenie automatycznego wykrywania synchronizacji po starcie EDP (dla robota postument wersja tymczasowa)
+- drobne poprawki synchronizacji
+- modyfikacje robota conveyor w duchu poprzednich modyfikacji robot postument
+
+
+2006.02.09
+- krytyczna poprawka synchronizacji obu robotow
+- inne drobne zmiany
+
+
+2006.02.08
+- krytyczna poprawka synchronizacji obu robotow
+- modyfikacja sposobu komunikacji watku transformation i sg w EDP postument
+
+
+2006.02.01
+- poprawki srp_lib
+- poprawka w kinematyce chwytaka
+- poprawki init_wnd_irp6_on_track_xyz_angle_axis_ts, init_wnd_irp6_postument_xyz_angle_axis_ts w UI
+
+
+2006.01.31
+- dodanie obslugi wylacznikow krancowych w funkcjach obslugi przerwania EDP
+- poprawki w EDP
+
+
+2006.01.27
+- poprawki nowej kinematyki (6 osiowej) irp6_postument
+- dodanie starej kinematyki (5 osiowej) irp6_postument
+
+
+2006.01.26
+- dodanie obslugi chwytaka w EDP i UI
+
+
+2006.01.25
+- uruchamianie nowego robota, wstawienie nowej kinematyki dla robota irp6_postument (w toku)
+- inne poprawki
+
+
+2006.01.24
+- uruchamianie nowego robota (w toku)
+- wprowadzono wykrywanie zalaczenia mocy w robotach irp6_postument i conveyor i reakcje na to
+- zmodyfikowano obsluge komunikacji podczas inicjacji EDP
+
+
+2006.01.20
+- uruchamianie nowego robota (w toku)
+- dodanie sterowania silowego TFF w EDP
+
+
+2006.01.19
+- uruchamianie nowego robota (w toku)
+
+
+2006.01.17
+- usprawnienie funkcji check_gns w UI
+- dodanie w UI definicji narzedzia w postaci xyz_euler_zyz
+- poprawki trybu testowego w EDP
+
+
+2006.01.14
+- uwspolnienie czesci kodu EDP
+
+
+2006.01.13
+- dodanie definicji narzedzia osiowo symetrycznego w postaci euler_zy dla irp6_postument
+- dodanie obslugi definicji polozenia w postaci angle_axis dla robota irp6_postument w UI
+- dodanie definicji narzedzia w postaci angle_axis dla robota irp6_postument i irp6_on_track w UI
+
+
+2006.01.05
+- kosmetyczne poprawki w komentarzach
+- dodanie mechanizmu informowania UI o stanie EDP podczas pierwszego zapytania UI do EDP zaraz po
+	uruchomieniu EDP - pozwoli to na wykorzystanie informacji zapisanej w szafie o tym, ze robot jest juz zsynchronizowany i 
+	jest wylaczona moc
+- rozszerzenie buforow c_buffer i r_buffer o chwytak (gripper_coordinate) i nowe stopnie swobody
+- modyfikacje okienek ruchow recznych w UI uwzgledniajace nowe stopnie swobody
+
+
+2006.01.04
+- kosmetyczne poprawki w komentarzach
+- zdefiniowanie metod EDP tool_xyz_aa_2_frame, tool_xyz_eul_zyz_2_frame, tool_frame_2_xyz_aa, 
+	tool_frame_2_xyz_eul_zyz - uwaga metody nie zostaly przetestowane
+
+
+2006.01.02
+- kosmetyczne poprawki w komentarzach
+
+
+2005.12.22
+- poprawienie obslugi wyjatkow w MP_master
+
+
+2005.12.21
+- poprawki plikow mp_master
+- modyfikacja zadania powielania rysunku w wersji 2 robotowej na 3 robotowa
+
+
+2005.12.20
+- modyfikacja funkcji copy_frame w com_buf.h do kopiowania ramek
+- dodanie zadania silowego dla robot irp6_postument
+- poprawki plikow mp_master i biblioteki mp_timer
+
+
+2005.12.19
+- dodanie funkcji copy_frame w com_buf.h do kopiowania ramek
+
+
+2005.12.18
+- usuniecie niewykorzystywanego pliku naglowkowego include/common/mp_ds.h
+- zmiana nazwy clasy condition na odpowiednio mp_condition i ecp_condition
+- wprowadzenie przekazywania wskaznika na obiekt do komunikacji z srp poprze kontruktor zamiast
+	 dodatkowych funkcji w klasach generator i condition
+- oddzielenie generatorow jarosza od ecp_local do plikow ecp_gen_jarosz.h i ecp_gen_jarosz.cc 
+	dla poszczegolnych robotow
+- przygotowanie szablonu pod silowe aplikacje dwurobotowe ze sterowaniem silowym w obydwu EDP
+
+
+2005.12.15
+- dodanie obiektu mp_timer do pomiaru czasu
+- reorganizacja (uproszczenie) buforow komunikacyjnych c_buffer r_buffer
+
+
+2005.12.13
+- modyfikacje dotychczasowego sterowania silowego: POSE_FORCE_LINEAR
+- dodanie szablonu nowego sterowania silowego: POSE_FORCE_TORQUE_AT_FRAME
+- kalibracja czujnika sily ATI6284
+
+
+2005.12.09
+- poprawki w bibliotece czujnika ATI6284
+
+
+2005.12.08
+- poprawki w bibliotece czujnika ATI6284
+- dodanie oblugi wyjatku w force thread w EDP
+- poprawka w bibliotece sily ForceTrans
+
+
+2005.12.07
+- poprawka w bibliotece czujnika ATI6284
+- poprawka w bibliotece sily ForceTrans
+
+
+2005.12.03
+- dodanie czujnikow ATI6284 i ATI3084 (dawny schunk) w EDP
+- modyfikacja organizacji kodu dla czujnikow sily w EDP
+
+
+2005.11.30
+- modyfikacje bibliotek force_trans
+- modyfikacje menu w UI
+
+
+2005.11.28
+- utworzenie projektu CVS
+
+
+2005.11.26
+- w UI agregacja wszystkich ui_robotow w jedna strukture i wszytkich srp_msg w inna strukture
+
+
+2005.11.24
+- modyfikacja konstruktorow ui_robot
+
+
+2005.11.23
+- zastapienie nazw klas robot i generator odpowiednio mp_robot i mp_generator w MP i ecp_robot i ecp_generator w ECP
+- zmiany w metodzie initiate_communication w ECP
+- modyfikacja konstruktorow all_ecp_robots, i mp_robot
+
+
+2005.11.21
+- bardzo duzo roznych zmian ;) w szczegolnosci zasadnicza zmiana odczytu konfiguracji, choc nie samych plikow konfiiguracyjnych
+
+
+2005.10.24
+- modyfikacja klasy master_trans_t_buffer
+
+
+2005.10.06
+- dodanie aplikacji realizujacej pelna podatnosc robota z wykorzystaniem sterowania silowego (skladowe liniowe i momenty sil). pliki: ecp_m_test i ecp_gen_test dla irp6_on_track
+- modyfikacje przetwarzania odczytow sil i momentow sil w edp_irp6_on_track
+
+
+2005.09.26
+- poprawka bledu w obsludze sygnal SIGALRM w UI
+- modyfikacja sposobu odtwarzania rysunkow w wersji jedno i dwurobotowej
+
+
+2005.09.25
+- poprawki w bibliotece mathtr (Hubert Lyczek)
+
+
+2005.09.21
+- poprawki eliminujace znaczna czesc ostrzezen podczas kompilacji (wszystkie procesy)
+
+
+2005.09.20
+- poprawka w bibliotece transformacji sil oraz EDP
+
+
+2005.09.18
+- drobne poprawki w process_manage.cc i ecp_s_common.cc podczas powolywania zarzadcow zasobow (EDP i VSP)
+
+
+2005.09.16
+- drobne poprawki majace umozliwiajace kompilacje pod QCC 3.3.1 w procesach ECP
+- krytyczne poprawki w funkcji obslugi przerwania czujnika schunk (karta advantech) w edp_s.cc
+- dolaczenie generatorow "irp6ot_hermite_spline_generator" i "irp6ot_natural_spline_generator" z pracy dyplomowej Krzysztofa Bochni
+
+
+2005.09.13
+- drobne poprawki majace umozliwiajace kompilacje pod QCC 3.3.1 w procesach ECP i MP oraz UI
+- poprawka modulu komunikacji z czujnikiem w EDP irp6_on_track
+
+
+2005.09.10
+- drobne poprawki majace umozliwiajace kompilacje pod QCC 3.3.1 w zakresie uwspolnionego kodu dla fuckcji catch w ECP i w UI
+- drobne poprawki w EDP
+
+
+2005.09.09
+- wstawienie biblioteki ForceTrans do przetwarzania pomiarow sil autorstwa Slawka Bazanta
+- modyfikacje mathtr.h mathtr.cc oraz schunk.cc
+
+
+2005.09.08
+- krytyczna poprawka rzucania bledow w EDP (wszytskie roboty)
+- prace nad filtrami sily w EDP irp6_on_track
+
+
+2005.09.01
+- krytyczne poprawki wyznaczania pozycji bezwzglednej w funkcjach obslugi przerwania int_hand.cc w EDP irp6_on_track i irp6_postument i conveyor
+- poprawa ograniczen konfiguracyjnych dla irp6_postument irp6_kin.h
+- poprawka bledu w ruchach recznych w UI
+
+
+2005.08.31
+- modyfikacje filtrow sily w EDP - na te chwile eksperymenty wstrzymane, a filtry wylaczone
+
+
+2005.08.29
+- implementacja filtra pomiarow sil w move_arm EDP irp6_on_track
+- poprawki w reader EDP
+
+
+2005.08.27
+- uwspolnienie kodu obslugi wyjatkow w ECP
+- inne kosmetyczne zmiany w ECP
+
+
+2005.08.26
+- poprawki w funkcji initialize_communication w ECP a takze process_manage.cc w UI
+- dodanie obslugi wyjatkow funkcji ECP rzucanych w UI
+
+
+2005.08.25
+- dodanie pomiaru rzeczywistego polozenia dla kazdego kroku servo (zapis w readerze) - tylko dla robota irp6_on_track
+
+
+2005.08.22
+- kosmetyczne poprawki UI i EDP
+- wprowadzenie ograniczen predkosci i przyspieszenia dla skladowych silowych podczas ruchu pozycyjno - silowego (EDP)
+- dodanie pozycji menu position 0 etc. w menu all_robots
+
+
+2005.08.18
+- kosmetyczne poprawki UI
+- ukonczono nowa aplikacje silowa (rysowanie z odrywaniem) w wersji wielorobotowej (track + conveyor)
+
+
+2005.08.17
+- kosmetyczne poprawki UI
+- dalsze przygotowania do nowej aplikacji silowej w wersji wielorobotowej (MP)
+
+
+2005.08.07
+- dodanie kolorowania funkcji menu UI w zaleznosci od stanu EDP i MP
+- dalsze przygotowania do nowej aplikacji silowej w wersji wielorobotowej (MP)
+
+
+2005.08.06
+- dodanie funkcji edp_create i synchronise w menu all_robots
+- przygotowania do nowej aplikacji silowej w wersji wielorobotowej (track + conveyor)
+
+
+2005.08.05
+- dodanie fukcji slay_all w UI, ktora zabija wszystkie procesy wzmiankowane w pliku konfiguracyjnym
+- drobne zmiany w UI (dodanie menu special, zablokowanie zamykania okna poprzez krzyzyk)
+- automatyczne uruchamianie klientow gns podczas wczytywania konfiguracji w UI
+
+
+2005.08.04
+- modyfikacja oblsugi plikow konfiguracyjnych - wykrywanie braku wymaganego wezla sieciowego 
+- dla generatorow silowych z rysowaniem zastapienie funkcji teaching_move dwoma trybami pracy generatora
+- poprawka w generatorach przezroczystych ECP (generator_t) - dodanie funkcji przepisujacej bufor EDP do MP
+- zmiana w sposobie komunikowania o braku przerwania sprzetowego w EDP poprzez SRP
+- pierwsza dwurobotowa aplikacja silowo - wizyjna z trajektoria generowana w MP
+
+
+2005.08.03
+- dalsze zmiany w MP i ECP   pod katem aplikacji wielorobotowych
+- wymiana regulatorow w robotach postument i conveyor (Konrad Wojdan)
+
+
+2005.08.02
+- uwspolnienie obslugi czujnikow wirtualnych na ECP i MP
+- dodanie pozycji clear history w task menu w UI
+- uwspolnienie funkcji pulse_check na ECP i MP
+
+
+2005.08.01
+- poprawki w przepisywaniu buforow komunikacyjnych w MP
+
+
+2005.07.29
+- szereg modyfikacji zwiazanych z robotem conveyor
+
+
+2005.07.27
+- kosmetyczne zmiany w nazewnictwie pozycji w menu UI
+- dodanie menu all Robots w UI
+
+
+2005.07.26
+- kosmetyczne poprawki w srp_lib.cc
+- wyeliminowanie wycieku pamieci w EDP i inne kosmetyczne poprawki w EDP
+- poprawka w ecp_wait_for_stop
+- wprowadzenie ochrony przed przerwaniem komunikacji miedzy ECP a EDP 	pomiedzy SET a QUERY poprzez maskowanie sygnalu SIG_TERM
+
+
+2005.07.07
+- dodano robota speaker w EDP, ECP, MP i UI
+
+
+2005.07.01
+- modyfikacje dotyczace aplikacji wieloczujnikowych w y_config oraz ECP
+
+
+2005.06.29
+- poprawki w UI w wysylaniu pulsow
+- modyfikacje struktury klas czujnika wirtualnego po stronie ECP
+
+
+2005.06.28
+- poprawki w lst.h oraz MP dotyczace aplikacji dwurobotowych
+- dodanie nowych generatorow ecp_gen_test oraz procesow ecp_test w pierwszej aplikacji testowej dla dwoch robotow
+
+
+2005.06.17
+- poprawka w synchronizacji w servo_gr.cc dla irp6_on_track
+
+
+2005.06.16
+- zmiana adresu karty ISA w hi_rydz.h dla irp6_on_track
+
+
+2005.06.06
+- modyfikacje MP i UI - dla aplikacji wielorobotowych
+- poprawki w lst.h
+- modyfikacje makefile w w ecp_irp6_on_track i ecp common
+
+
+2005.05.24
+- poprawki w kinematyce wszystkich robotow
+
+
+2005.05.23
+- drobne poprawki w edp_conveyor i edp_postument
+- dostosowani pulse_ecp w process_manage.cc a takze process_controll _window_init do obslugi wielu ECP
+- dodanie sprawdzania czy gns jest uruchomiony w ui_init.cc w UI
+- poprawki w fun.cc w UI - wylaczenie ruchow w internal przed synchronizacja
+- poprawki w motion.cc w UI dotyczace przydzialu pamieci dla funkcji ruchow
+- poprawki w funkcji create_vsp_sensor_object() w VSP
+- usuniecie wyswietlania niektorych komunikatow na konsoli podczas pracy edp_irp6_postument
+
+
+2005.05.12
+- faktyczne usuniecie ograniczenia na przyrost PWM w regulatorach - w zwiazku z poprawkami we wzmacniaczach mocy
+- rozszerzenie wykorzystania biblioteki mathtr w EDP
+
+
+2005.05.10
+- rozbudowa biblioteki matematycnej Huberta Lyczka - mathtr
+
+
+2005.05.06
+- wykorzystanie polimorfizmu dla klasy vsp_sensor i nowoutowrzonych klas potomnych 
+- zmiana nazwy klasy vsp_sensor w edp na edp_schunk_sensor
+
+
+2005.05.05
+- oprogramowanie (w EDP) nowej plytki intetrfejsu czujnika 
+
+
+2005.04.27
+- poprawka w kinematyce irp6_postument
+
+
+2005.04.19
+- korekty w name_open w roznych plikach
+- zmiana sposobu wczytywania konfiguracji w UI
+- oslabienie ograniczen na przyrost PWM w regulatorach
+- dodanie ruchow recznych we wsp. xyz_angle_axis dla robota irp6_on_track w UI
+- poprawki w kinematyce irp6_postument autorstwa Sebastiana
+
+
+2005.04.18
+- usuniecie bledu obliczen w odwrotnym zagadnieniu kinematyki z uzyciem narzedzia dla irp6_on_track
+
+
+2005.04.15
+- poprawki w bibliotece matematycznej Huberta Lyczka
+
+
+2005.04.14
+- dodano ograniczenie przyrostu PWM we wszystkich regulatorach robotow
+- dodano biblioteke matematyczna Huberta Lyczka
+
+
+2005.04.13
+- dodano kinematyke robota irp6_postument
+
+
+2005.04.12
+- w UI poprawiono zwalnianie pamieci 
+- w UI zmieniono nazwy widgetow
+- w UI dodano okna i szkielet metod dla ruchow w trybie xyz_angle_axis dla robotow irp6_on_track i irp6_postument

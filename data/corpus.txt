@@ -1,0 +1,4 @@
+uwaga corpus.tgz do pobrania z robotyka.ia.pw.edu.pl menu pliki. Plik nalezy rozpakowac do biezacego katalogu.
+
+krotkie slowa nalezy zakonczyc kropka.
+czasami warto stosowac przecinki

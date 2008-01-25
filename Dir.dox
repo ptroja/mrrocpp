@@ -1,0 +1,552 @@
+// *INDENT-OFF*
+// \if DOXYGEN_SHOULD_SKIP_THIS
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//                                        TECHNICAL SPECIFICATION
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 
+// $Id$
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// File        : $HeadURL: $
+// Revision    : $LastChangedRevision: $
+// Application : MRROC++
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Creation date      : 2007-01-12
+// Last modification  : $LastChangedDate: $
+// Developer          : $LastChangedBy: $
+//        (elka email): jnowacki@elka.pw.edu.pl
+//        (nick)      : jarosz 
+//        (real name) : Janusz Nowacki
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// File modification history:
+//
+// Date         User              Description
+// ==========   ==============    =======================================================================
+// 2007-08-18   janusz.nowacki    1) technical specification added 
+//                                   (non-Doxygen comments)
+//                                2) functional specification added 
+//                                   (Doxygen comments)
+// ----------   --------------    -----------------------------------------------------------------------
+// 2007-09-22   janusz.nowacki    1) changes in the doxygen comments
+//                                2) minor layout changes 
+// ----------   --------------    -----------------------------------------------------------------------
+// 2007-10-02   janusz.nowacki    1) SVN keywords added: Id HeadURL LastChangedRevision LastChangedDate 
+//                                                       LastChangedBy WCREV
+//                                2) Mainpage.dox renamed to Mainpage_template.dox. From this new file
+//                                   SubWCRev will create Mainpage.dox changing the keywords to values
+// ----------   --------------   -----------------------------------------------------------------------
+// 2007-10-03   janusz.nowacki    1) minor layout changes, comments added
+//                                2) SVN keywords added to file properties
+//                                3) retab done in Vim, TAB key set to 2 spaces
+//
+// ----------   --------------    -----------------------------------------------------------------------
+// 2007-10-04   janusz.nowacki    1) more layout changes
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// File description:
+// 
+//  Directory list of MRROC++ for the Doxygen documentation.
+// 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// \endif
+// *INDENT-ON*
+
+// *INDENT-OFF*
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//                                      FUNCTIONAL SPECIFICATION
+//                                        (Doxygen comments)
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*! \file         mrrocpp/Dir.dox
+ *
+ *  \polish
+ *    \brief      Stona g³ówna dla dokumentacji projektu tworzonej za pomoca Doxygena.
+ *  \endpolish
+ *
+ *  \english
+ *    \brief      Main page for the project's documentation created with Doxygen.
+ *  \endenglish
+ *
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////
+// *INDENT-ON*
+
+// *INDENT-OFF*
+// \if DOXYGEN_SHOULD_SKIP_THIS
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//                                   FILE SOURCE w/ Doxygen comments
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// \endif
+// *INDENT-ON*
+
+// *INDENT-OFF*
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*! \dir    /include
+ *  \brief  \~polish  Pliki naglowkowe (<tt>.h</tt>)
+ *          \~english Header files
+ *///////////////////////////////////////////////////////////////////////////////////////////////////////
+      /*! \dir    /include/common
+       *  \brief  \~polish  Naglowki podstawowe.
+       *          \~english Basic headers.
+       */////////////////////////////////////////////////////////////////////////////////////////////////
+      /*! \dir    /include/ecp
+       *  \brief  \~polish  Katalog ten zawiera definicje struktur danych i deklaracje
+       *                    metod opisujcych proces ECP <i>(Effector Control Process)</i>.
+       *                    Jest on odpowiedzialny za wykonywanie zadan przydzielonych do danego
+       *                    efektora. Moze wspolistniec kilka porocesow ECP (ich liczba zalezy
+       *                    od ilosci oddzielnych efektorow w systemie).  
+       *          
+       *                    ECP jest odpowiedzialny za:
+       *                    <ul>
+       *                        <li>  wykonywanie zadan przydzielonych do pojedynczego efektora,
+       *                        <li>  otrzymywanie informacji z procesu MP i przesylanie odpowiedzi na nie,
+       *                        <li>  generacja trajektorii w przypadku robotow nieskoordynowanych lub luzno
+       *                              wspolpracujacych,
+       *                        <li>  transmisja makrokroku przyslanego z MP do EDP w przypadku scislej 
+       *                              wspolpracy robotow,
+       *                        <li>  przesyl informacji do EDP,
+       *                        <li>  transfer informacji o wykrytych bledach do UI.
+       *                    </ul>
+       *
+       *                    Proces ECP i zwiazane z nim zagadnienia przedstawione zostaly
+       *                    w  \ref ZSW06b "[ZSW+06b]". Znajduje sie tam model procesu ECP na poziomie 
+       *                    analitycznym, zas w \ref ZSW06b "[ZWS+06b]" na poziomie projektowym.
+       *                     
+       *          
+       *          \~english Directory contains definitions of data structures and declarations of
+       *                    methods defining the ECP <i>(Effector Control Process)</i>.
+       *                    It is responsible for the execution of the task allotted to the effector.
+       *                    Several of those processes can coexist (the number depends on the number 
+       *                    of distinct effectors present in the system).
+       *                    
+       *                    ECP is responsible for:
+       *                      <ul>
+       *                        <li>  the execution of the tasks of a single-effector,
+       *                        <li>  receiving the information and replying to the MP,
+       *                        <li>  the generation of the trajectories of uncoordinated 
+       *                              or sporadically coordinated robots,
+       *                        <li>  transmission of the macrostep sent by the MP to the EDP  
+       *                              in the case of continuous coordination,
+       *                        <li>  dispatching the information to the EDP,
+       *                        <li>  the transfer of information to the UI about the detected errors.
+       *                    </ul>
+       *
+       *                    ECP process and the related concepts have been described in 
+       *                    in  \ref ZSW06b "[ZSW+06b]".
+       *                    One can find an analytical model there.
+       *                    In \ref ZSW06d "[ZWS+06d]" there is a design model.
+       *                      
+       *
+       */////////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /include/ecp/common
+             *  \brief  \~polish  Katalog zawiera definicje struktur danych i deklaracje metod procesu ECP
+             *                    dla wszystkich typow robotow. 
+             *                    
+             *                    Obslugiwane typy robotów to:
+             *                      <ul>
+             *                        <li>  tasmociag (<tt>conveyor</tt>),
+             *                        <li>  robot IRp-6 na torze (<tt>irp6_on_track</tt>),
+             *                        <li>  robot IRp-6 na postumencie (<tt>irp6_postument</tt>),
+             *                        <li>  speaker (<tt>speaker</tt>).
+             *                      </ul>
+             *
+             *          \~english Directory contains definitions of data structures and declarations
+             *                    of methods for ECP process, for each robot type. 
+             *                    
+             *                    The robot types are:
+             *                      <ul>
+             *                        <li>  conveyor robot (<tt>conveyor</tt>),
+             *                        <li>  IRp-6 robot on track (<tt>irp6_on_track</tt>),
+             *                        <li>  IRp-6 robot on a postument (<tt>irp6_postument</tt>),
+             *                        <li>  speaker (<tt>speaker</tt>).
+             *                      </ul>
+             *
+             *///////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /include/ecp/conveyor
+             *  \brief  \~polish  Katalog zawiera definicje struktur danych i deklaracje metod procesu ECP
+             *                    dla tasmociagu (<tt>conveyor</tt>).
+             *          \~english Directory contains definitions of data structures and declarations
+             *                    of methods for ECP process, for conveyor robot (<tt>conveyor</tt>). 
+             *///////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /include/ecp/irp6_mechatronika
+             *  \brief  \~polish  
+             *
+             *          \~english  
+             *///////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /include/ecp/irp6_on_track
+             *  \brief  \~polish  Katalog zawiera definicje struktur danych i deklaracje metod procesu ECP
+             *                    dla robot IRp-6 na torze (<tt>irp6_on_track</tt>). 
+             *          \~english Directory contains definitions of data structures and declarations
+             *                    of methods for ECP process, for IRp-6 robot on track 
+             *                    (<tt>irp6_on_track</tt>). 
+             *///////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /include/ecp/irp6_postument
+             *  \brief  \~polish  Katalog zawiera definicje struktur danych i deklaracje metod procesu ECP
+             *                    dla robot IRp-6 na postumencie (<tt>irp6_postument</tt>). 
+             *          \~english Directory contains definitions of data structures and declarations
+             *                    of methods for ECP process, for IRp-6 robot on postument 
+             *                    (<tt>irp6_postument</tt>). 
+             *///////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /include/ecp/spekear
+             *  \brief  \~polish  Katalog zawiera definicje struktur danych i deklaracje metod procesu ECP
+             *                    dla robota speaker (<tt>speaker</tt>). 
+             *          \~english Directory contains definitions of data structures and declarations
+             *                    of methods for ECP process, for a speker robot (<tt>speaker</tt>). 
+       */////////////////////////////////////////////////////////////////////////////////////////////////
+      /*! \dir    /include/ecp_mp
+       *  \brief  \~polish  
+       *                     
+       *          \~english 
+       */////////////////////////////////////////////////////////////////////////////////////////////////
+      /*! \dir    /include/edp
+       *  \brief  \~polish  
+       *                     
+       *          \~english
+        */////////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /include/edp/ati3084
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /include/edp/ati6284
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+                   /*! \dir   /include/edp/ati6284/ati
+                    * \brief  \~polish
+                    *
+                    *         \~english
+                    */////////////////////////////////////////////////////////////////////////////////////
+                   /*! \dir   /include/edp/ati6284/ni
+                    * \brief  \~polish
+                    *
+                    *         \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /include/edp/common
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /include/edp/conveyor
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /include/edp/irp6_mechatronika
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /include/edp/irp6_on_track
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /include/edp/irp6_postument
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /include/edp/speaker
+             *  \brief  \~polish
+             *
+             *          \~english
+       *//////////////////////////////////////////////////////////////////////////////////////////////////
+      /*! \dir    /include/lib
+       *  \brief  \~polish  
+       *                     
+       *          \~english
+       *//////////////////////////////////////////////////////////////////////////////////////////////////
+      /*! \dir    /include/messip
+       *  \brief  \~polish  
+       *                     
+       *          \~english
+       *//////////////////////////////////////////////////////////////////////////////////////////////////
+      /*! \dir    /include/mp
+       *  \brief  \~polish  Katalog zawiera definicje struktur danych i deklaracje metod procesu MP
+       *                    dla wszystkich typow robotow. 
+       *                    
+       *          \~english Directory contains definitions of data structures and declarations
+       *                    of methods for MP process, for each robot type.
+       *//////////////////////////////////////////////////////////////////////////////////////////////////
+      /*! \dir    /include/player
+       *  \brief  \~polish  
+       *                    
+       *          \~english 
+       *//////////////////////////////////////////////////////////////////////////////////////////////////
+      /*! \dir    /include/player
+       *  \brief  \~polish  
+       *                    
+       *          \~english 
+       *//////////////////////////////////////////////////////////////////////////////////////////////////
+      /*! \dir    /include/ui
+       *  \brief  \~polish  
+       *                    
+       *          \~english
+       *//////////////////////////////////////////////////////////////////////////////////////////////////
+      /*! \dir    /include/vsp
+       *  \brief  \~polish  
+       *                    
+       *          \~english
+       *//////////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /include/vsp/rcs
+             *  \brief  \~polish
+             *
+             *          \~english
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*! \dir    /src
+ *  \brief  \~polish  Pliki zrodlowe
+ *          \~english Source files
+ *////////////////////////////////////////////////////////////////////////////////////////////////////////
+      /*! \dir    /src/ecp
+       *  \brief  \~polish  
+       *          \~english 
+       *//////////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/edp/common
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/edp/conveyor
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/edp/irp6_mechatronika
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/edp/irp6_on_track
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/edp/irp6_postument
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/edp/speaker
+             *  \brief  \~polish
+             *
+             *          \~english
+       *//////////////////////////////////////////////////////////////////////////////////////////////////
+      /*! \dir    /src/ecp_mp
+       *  \brief  \~polish
+       *
+       *          \~english 
+       *//////////////////////////////////////////////////////////////////////////////////////////////////
+      /*! \dir    /src/edp
+       *  \brief  \~polish  
+       *
+       *          \~english 
+       *//////////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/edp/ati3084
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/edp/ati6284
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+                   /*! \dir   /src/edp/ati6284/ati
+                    * \brief  \~polish
+                    *
+                    *         \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/edp/common
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/edp/conveyor
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/edp/irp6_mechatronika
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/edp/irp6_on_track
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/edp/irp6_postument
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/edp/speaker
+             *  \brief  \~polish
+             *
+             *          \~english
+       *//////////////////////////////////////////////////////////////////////////////////////////////////
+      /*! \dir    /src/lib
+       *  \brief  \~polish  
+       *
+       *          \~english 
+       *//////////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/lib/playerc
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/lib/messsip
+             *  \brief  \~polish
+             *
+             *          \~english
+       *//////////////////////////////////////////////////////////////////////////////////////////////////
+      /*! \dir    /src/mp
+       *  \brief  \~polish  
+       *
+       *          \~english 
+       *//////////////////////////////////////////////////////////////////////////////////////////////////
+      /*! \dir    /src/ui
+       *  \brief  \~polish  
+       *
+       *          \~english 
+       *//////////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/ui/src
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+                   /*! \dir   /src/ui/src/gcc_ntox
+                    * \brief  \~polish
+                    *
+                    *         \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/ui/wgt
+             *  \brief  \~polish
+             *
+             *          \~english
+       *//////////////////////////////////////////////////////////////////////////////////////////////////
+      /*! \dir    /src/vsp
+       *  \brief  \~polish  
+       *
+       *          \~english 
+       *//////////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/vsp/common
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+                   /*! \dir   /src/vsp/common/player
+                    * \brief  \~polish
+                    *
+                    *         \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/vsp/pawel
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/vsp/rcs
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+                   /*! \dir   /src/vsp/rcs/Combinatorials
+                    * \brief  \~polish
+                    *
+                    *         \~english
+                    */////////////////////////////////////////////////////////////////////////////////////
+                   /*! \dir   /src/vsp/rcs/Cube
+                    * \brief  \~polish
+                    *
+                    *         \~english
+                    */////////////////////////////////////////////////////////////////////////////////////
+                   /*! \dir   /src/vsp/rcs/General
+                    * \brief  \~polish
+                    *
+                    *         \~english
+                    */////////////////////////////////////////////////////////////////////////////////////
+                   /*! \dir   /src/vsp/rcs/Cube
+                    * \brief  \~polish
+                    *
+                    *         \~english
+                    */////////////////////////////////////////////////////////////////////////////////////
+                   /*! \dir   /src/vsp/rcs/Kociemba
+                    * \brief  \~polish
+                    *
+                    *         \~english
+                    */////////////////////////////////////////////////////////////////////////////////////
+                   /*! \dir   /src/vsp/rcs/Korf
+                    * \brief  \~polish
+                    *
+                    *         \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/vsp/shunk
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/vsp/vis
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/vsp/vis_pbeclsac
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/vsp/vis_pbeoleih
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/vsp/vis_pbeolsac
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/vsp/vis_sac
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/vsp/vsp_digital_scales_sensor
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/vsp/vsp_force_sensor
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/vsp/vsp_mic
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/vsp/vsp_nn
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/vsp/vsp_rcs_kociemba
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+            /*! \dir    /src/vsp/vsp_rcs_korf
+             *  \brief  \~polish
+             *
+             *          \~english
+             *////////////////////////////////////////////////////////////////////////////////////////////
+
+// *INDENT-ON*
+
