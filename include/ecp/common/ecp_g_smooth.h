@@ -76,9 +76,13 @@ public:
 
 class ecp_smooth_pouring_generator : public ecp_smooth_generator
 {
+protected:
+	double tool_parameters[3];
+	
 public:
 	ecp_smooth_pouring_generator(ecp_task& _ecp_task, bool _is_synchronised);
 	ecp_smooth_pouring_generator(ecp_task& _ecp_task, bool _is_synchronised, bool _debug);
+	void set_tool_parameters(double x, double y, double z);
 	
 	virtual bool first_step();
 	virtual bool next_step();

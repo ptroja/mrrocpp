@@ -95,15 +95,15 @@ bool mp_task_pouring::pour(void)
 	{	return true;}
 	if (run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }
 
+	if(set_next_ecps_state( (int) ECP_END_POURING, 0, "trj/pouring/irp6_ot_pour_4.trj", 1, ROBOT_IRP6_ON_TRACK))
+	{	return true;}
+	if (run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }
+	
 	return false;
 }
 
 bool mp_task_pouring::put_back(void)
 {
-	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_pour_4.trj", 1, ROBOT_IRP6_ON_TRACK))
-	{	return true;}
-	if (run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }
-
 	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_track_put_back.trj", 1, ROBOT_IRP6_ON_TRACK))
 	{	return true;}
 	if (run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }
@@ -208,11 +208,11 @@ void mp_task_pouring::main_task_algorithm(void)
 			printf("Meet skonczony\n");
 		}
 
-/*		if(!pour())
+		if(!pour())
 		{
 			printf("Pour skonczony\n");
 		}
-*/
+
 		
 		if (!put_back())
 		{

@@ -1154,7 +1154,7 @@ bool ecp_smooth_pouring_generator::first_step ()
   initiate_pose_list();
   get_pose();
 
-  Homog_matrix tool_frame(-0.18, 0.0, 0.25);
+  Homog_matrix tool_frame(tool_parameters[0], tool_parameters[1], tool_parameters[2]);
   tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame_m);
 
   switch ( ecp_t.mp_command_type() )
@@ -1404,7 +1404,7 @@ bool ecp_smooth_pouring_generator::next_step ()
         case MOTOR:
           the_robot->EDP_data.instruction_type = SET;
           the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-		the_robot->EDP_data.set_type = RMODEL_DV;
+		the_robot->EDP_data.set_type = RMODEL_DV  | ARM_DV;;
 		the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
 		the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
           the_robot->EDP_data.set_arm_type = MOTOR;
@@ -1439,7 +1439,7 @@ bool ecp_smooth_pouring_generator::next_step ()
          case JOINT:
 		the_robot->EDP_data.instruction_type = SET;
           the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-		the_robot->EDP_data.set_type = RMODEL_DV;
+		the_robot->EDP_data.set_type = RMODEL_DV  | ARM_DV;;
 		the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
 		the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
           the_robot->EDP_data.set_arm_type = JOINT;
@@ -1475,7 +1475,7 @@ bool ecp_smooth_pouring_generator::next_step ()
 	    case XYZ_EULER_ZYZ:
           the_robot->EDP_data.instruction_type = SET;
           the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-		the_robot->EDP_data.set_type = RMODEL_DV;
+		the_robot->EDP_data.set_type = RMODEL_DV | ARM_DV;
 		the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
 		the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
           the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
@@ -1509,7 +1509,7 @@ bool ecp_smooth_pouring_generator::next_step ()
         case XYZ_ANGLE_AXIS:
           the_robot->EDP_data.instruction_type = SET;
           the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-		the_robot->EDP_data.set_type = RMODEL_DV;
+		the_robot->EDP_data.set_type = RMODEL_DV  | ARM_DV;;
 		the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
 		the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
           the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
@@ -1553,7 +1553,22 @@ bool ecp_smooth_pouring_generator::next_step ()
 
 } // end: BOOLEAN ecp_smooth_pouring_generator::next_step ( )
 
+void ecp_smooth_pouring_generator::set_tool_parameters(double x, double y, double z)
+{
+	tool_parameters[0]=x;
+	tool_parameters[1]=y;
+	tool_parameters[2]=z;
+}
+
 ecp_smooth_pouring_generator::ecp_smooth_pouring_generator (ecp_task& _ecp_task, bool _is_synchronised):ecp_smooth_generator (_ecp_task, _is_synchronised)
-{}
+{
+
+set_tool_parameters(-0.18, 0.0, 0.25);
+
+}
 ecp_smooth_pouring_generator::ecp_smooth_pouring_generator (ecp_task& _ecp_task, bool _is_synchronised, bool _debug):ecp_smooth_generator (_ecp_task, _is_synchronised, _debug)
-{}
+{
+
+set_tool_parameters(-0.18, 0.0, 0.25);
+
+}
