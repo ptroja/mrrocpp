@@ -9,6 +9,8 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
+#include <map>
 
 #include "common/typedefs.h"
 #include "common/impconst.h"
@@ -16,6 +18,7 @@
 
 #include "lib/srlib.h"
 #include "ecp_mp/ecp_mp_t_pouring.h"
+#include "ecp_mp/ecp_mp_s_schunk.h"	
 
 #include "ecp/irp6_postument/ecp_local.h"
 #include "ecp/common/ecp_t_pouring.h"
@@ -28,6 +31,7 @@
 ecp_task_pouring_irp6p::ecp_task_pouring_irp6p() : ecp_task()
 {
 	sg = NULL;
+	spg = NULL;
 };
 
 ecp_task_pouring_irp6p::~ecp_task_pouring_irp6p(){};
@@ -38,9 +42,25 @@ void ecp_task_pouring_irp6p::task_initialization(void)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
 	 ecp_m_robot = new ecp_irp6_postument_robot (*this); 
-	
-	// powolanie czujnikow
+
+/*	// Powolanie czujnikow
+	sensor_m[SENSOR_FORCE_POSTUMENT] = 
+		new ecp_mp_schunk_sensor (SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
+				
+	// Konfiguracja wszystkich czujnikow	
+	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+		sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
+	{
+		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_m_iterator->second->configure_sensor();
+	}
+
+	usleep(1000*100);
+*/
 	sg = new ecp_smooth_generator (*this, true);
+	spg = new ecp_smooth_pouring_generator (*this, true);
+	
+	spg->sensor_m=sensor_m;
 		
 	sr_ecp_msg->message("ECP loaded");
 };

@@ -14,6 +14,7 @@
 class ecp_task_pouring_irp6p: public ecp_task  {
 protected:
 	ecp_smooth_generator* sg;
+	ecp_smooth_pouring_generator* spg;
 
 public:
 	// KONSTRUKTORY
