@@ -49,8 +49,8 @@ ecp_mp_sensor::ecp_mp_sensor(SENSOR_ENUM _sensor_name, const char* _section_name
 	while( (sd = open(VSP_NAME, O_RDWR)) == -1)
 	{
 // 		cout<<tmp<<endl;
-		if((tmp++)<20)
-			usleep(1000*100);
+		if((tmp++)<CONNECT_RETRY)
+			usleep(CONNECT_DELAY);
 		else				
 			throw sensor_error(SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);						
 	}// end: while
@@ -77,8 +77,8 @@ ecp_mp_sensor::ecp_mp_sensor(SENSOR_ENUM _sensor_name, const char* _section_name
 	while( (ch = messip_channel_connect(NULL, VSP_NAME, MESSIP_NOTIMEOUT)) == NULL)
 	{
 // 		cout<<tmp<<endl;
-		if((tmp++)<20)
-			usleep(1000*100);
+		if((tmp++)<CONNECT_RETRY)
+			usleep(CONNECT_DELAY);
 		else {
 			fprintf(stderr, "ecp_mp_sensor: messip_channel_connect(%s) failed\n", VSP_NAME);
 			throw sensor_error(SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);						

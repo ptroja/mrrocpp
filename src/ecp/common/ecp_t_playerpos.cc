@@ -38,7 +38,7 @@ void ecp_task_playerpos::task_initialization(void)
 
 	transmitter_m[TRANSMITTER_PLAYER] = 
            new player_transmitter (TRANSMITTER_PLAYER, "[transmitter_player]", *this,
-                   "192.168.1.68", 6665, "position", 1, 'a');
+                   "192.168.1.64", 6665, "position", 1, 'a');
                    
    	ppg = new playerpos_generator(*this, 8);
 	ppg->transmitter_m = transmitter_m;

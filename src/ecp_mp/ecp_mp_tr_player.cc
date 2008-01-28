@@ -121,7 +121,7 @@ player_transmitter::player_transmitter  (
     printf("4\n");
 
     printf("pthread_create()..."); fflush(stdout);
-    pthread_create(&worker, NULL, query_loop, client);
+    pthread_create(&worker, NULL, query_loop, this);
     printf("done\n");
 }
 
@@ -154,7 +154,9 @@ bool player_transmitter::t_read(bool wait) {
 	pthread_mutex_lock(&this->mtx);
 	int rc = 0;
 	while (device->fresh == 0 && rc == 0) {
+	    printf("pthread_cond_wait()..."); fflush(stdout);
 	    rc = pthread_cond_wait(&this->cond, &this->mtx);
+	    printf("\n");
 	}
     }
 
@@ -219,6 +221,8 @@ bool player_transmitter::t_read(bool wait) {
 	pthread_mutex_unlock(&this->mtx);
     }
 
+    device->fresh = 0;
+
     return 1;
 }
 
@@ -231,6 +235,7 @@ void * player_transmitter::query_loop(void * arg) {
     while(1) {
        int rc;
        playerc_client_read(clnt);
+       printf("playerc_client_read()\n");
        
        if ((rc = pthread_mutex_lock(&me->mtx))) {
           fprintf(stderr, "player_transmitter::query_loop(): pthread_mutex_lock(): %s\n",
@@ -238,11 +243,12 @@ void * player_transmitter::query_loop(void * arg) {
        }
 
        if(me->device->fresh) {
-	   rc = pthread_cond_signal(&me->mtx);
+	   rc = pthread_cond_signal(&me->cond);
 	   if (rc) {
 	       fprintf(stderr, "player_transmitter::query_loop(): pthread_cond_signal(): %s\n",
 		       strerror(rc));
 	   }
+	   printf("pthread_cond_signal()\n");
        }
 
        if ((rc = pthread_mutex_unlock(&me->mtx))) {

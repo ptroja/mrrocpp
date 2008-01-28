@@ -8,7 +8,7 @@ LD = QCC
 CPPFLAGS = -I$(HOMEDIR)/include
 CFLAGS =
 CXXFLAGS =
-LDFLAGS = ${FLAGS} -l m -l socket -l cpp
+LDFLAGS = -l m -l socket -l cpp
 
 LIBDIR = $(HOMEDIR)/lib
 BINDIR = $(HOMEDIR)/bin

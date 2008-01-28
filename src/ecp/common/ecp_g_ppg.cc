@@ -92,7 +92,7 @@ bool playerpos_generator::next_step ( )
 	node_counter++;
 	*/
 
-    transmitter_m[TRANSMITTER_PLAYER]->t_read(0);
+    transmitter_m[TRANSMITTER_PLAYER]->t_read(1);
     printf("odometry: [%f, %f %f]\n",
             transmitter_m[TRANSMITTER_PLAYER]->from_va.player_position.px,
             transmitter_m[TRANSMITTER_PLAYER]->from_va.player_position.py,

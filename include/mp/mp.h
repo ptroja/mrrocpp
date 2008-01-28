@@ -386,9 +386,9 @@ mp_task* mp_object;
     // wypelnia bufor wysylkowy do EDP na podstawie danych zawartych w swych skladowych
 	// Ten bufor znajduje sie w robocie
 
-virtual void create_next_pose_command (void) = 0;
+  virtual void create_next_pose_command (void) {};
 
-  virtual void get_reply ( void ) = 0;
+  virtual void get_reply ( void ) {};
 
     // pobiera z pakietu przeslanego z EDP informacje i wstawia je do odpowiednich swoich skladowych
 }; // end: class mp_robot

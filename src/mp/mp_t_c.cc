@@ -25,8 +25,7 @@ mp_task* return_created_mp_task (void)
 // methods for mp template to redefine in concrete class
 void mp_task_c::task_initialization(void) 
 {
-
-	usleep(1000*100);
+	//usleep(1000*100);
 	sr_ecp_msg->message("MP c loaded");
 };
  
@@ -37,7 +36,7 @@ void mp_task_c::main_task_algorithm(void)
    
       // Oczekiwanie na zlecenie START od UI  
       wait_for_start ();
-	      // Wyslanie START do wszystkich ECP 
+      // Wyslanie START do wszystkich ECP 
       start_all (robot_m);
 
       for (;;) {  // Wewnetrzna petla    

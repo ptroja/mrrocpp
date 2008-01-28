@@ -19,13 +19,13 @@
 mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task* mp_object_l) { // Konstruktor mp_robot
 //  Powolanie i zaladowanie procesu ECP
 
+	fprintf(stderr, "mp_robot::mp_robot(..., %s, ...);\n", _section_name);
+
 	mp_receive_pulse_struct_tdef input;
 
 	mp_object = mp_object_l;
 	robot_name = l_robot_name;
 	sr_ecp_msg = mp_object->sr_ecp_msg;
-
-	uint64_t e;     // kod bledu
 
 	char *node_name = mp_object->config->return_string_value("node_name", _section_name);
 	nd = mp_object->config->return_node_number(node_name);
@@ -52,7 +52,7 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task*
 	communicate = true; // domyslnie robot jest aktywny
 
 	if ( ECP_pid < 0) {
-		e = errno;
+		uint64_t e = errno; // kod bledu
 		perror ("Failed to spawn ECP process on node\n");
 		sr_ecp_msg->message(SYSTEM_ERROR, e, "MP: Failed to spawn ECP");
 		throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
@@ -72,7 +72,7 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task*
 		if ((tmp++) < CONNECT_RETRY)
 			usleep(1000 * CONNECT_DELAY);
 		else {
-			e = errno;
+			uint64_t e = errno; // kod bledu
 			perror("Connect to ECP failed");
 			sr_ecp_msg->message (SYSTEM_ERROR, e, "Connect to ECP failed");
 			delete[] network_ecp_attach_point;

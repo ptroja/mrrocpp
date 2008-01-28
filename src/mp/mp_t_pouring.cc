@@ -10,8 +10,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-#include <list>
-#include <map>
 
 #include "common/typedefs.h"
 #include "common/impconst.h"

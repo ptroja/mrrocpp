@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-//                              mp.cc
+//                              mp_task.cc
 //
 // MP Master Process - methods
 //
@@ -105,6 +105,12 @@ bool mp_task::create_robots() {
 	if (config->return_int_value("is_irp6_mechatronika_active", "[ui]")) {
 		robot_tmp = new mp_irp6_mechatronika_robot (this);
 		robot_m[ROBOT_IRP6_MECHATRONIKA] = robot_tmp;
+	}
+
+	// ROBOT VIRTUAL_ROBOT
+	if (config->return_int_value("is_virtual_robot_active", "[ui]")) {
+		robot_tmp = new mp_robot (ROBOT_VIRTUAL, "[ecp_virtual]", this);
+		robot_m[ROBOT_VIRTUAL] = robot_tmp;
 	}
 
 	return true;

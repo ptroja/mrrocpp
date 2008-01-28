@@ -311,7 +311,7 @@ int configurator::return_int_value(const char* _key, const char* __section_name)
 	lock_mutex();
 	if (input_config(file_location, configs, _section_name)<1) {
 		if (input_config(common_file_location, configs, _section_name)<1) {
-			printf("Blad input_config() w return_int_value file_location:%s, _section_name:%s\n", file_location, _section_name);
+			printf("Blad input_config() w return_int_value file_location:%s, _section_name:%s, _key:%s\n", file_location, _section_name, _key);
 		}
 	}
 	unlock_mutex();

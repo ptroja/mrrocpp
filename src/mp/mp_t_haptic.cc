@@ -47,7 +47,6 @@ void mp_task_haptic::task_initialization(void)
 			
 	usleep(1000*100);
 	
-		
 	sr_ecp_msg->message("MP haptic device loaded");
 };
  
