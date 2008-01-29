@@ -57,8 +57,8 @@ void ecp_task_pouring_irp6p::task_initialization(void)
 
 	usleep(1000*100);
 */
-	sg = new ecp_smooth_generator (*this, true, true);
-	spg = new ecp_smooth_pouring_generator (*this, true, true);
+	sg = new ecp_smooth_generator (*this, true);
+	spg = new ecp_smooth_pouring_generator (*this, true);
 	
 	spg->sensor_m=sensor_m;
 		

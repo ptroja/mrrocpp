@@ -76,33 +76,13 @@ void ecp_task_pouring_irp6ot::main_task_algorithm(void)
 					Move (*sg);
 					//printf("OT po move\n");
 					break;
-				case ECP_GEN_POURING:
-					size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.mp_package.mp_2_ecp_next_state_string);				  	
-					path1 = new char[size];
-					// Stworzenie sciezki do pliku.
-					strcpy(path1, mrrocpp_network_path);
-					sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.mp_package.mp_2_ecp_next_state_string);
-					spg->load_file_with_path (path1);			
+				case ECP_GEN_POURING:				
 					spg->set_tool_parameters(-0.18, 0.0, 0.25);
-					//printf("\nON_TRACK ECP_GEN_SMOOTH :%s\n\n", path1);
-					delete[] path1;
-					//printf("OT po delete\n");
 					Move (*spg);
-					//printf("OT po move\n");
 					break;
 				case ECP_END_POURING:
-					size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.mp_package.mp_2_ecp_next_state_string);				  	
-					path1 = new char[size];
-					// Stworzenie sciezki do pliku.
-					strcpy(path1, mrrocpp_network_path);
-					sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.mp_package.mp_2_ecp_next_state_string);
-					spg->load_file_with_path (path1);			
 					spg->set_tool_parameters(0.0, 0.0, 0.25);
-					//printf("\nON_TRACK ECP_GEN_SMOOTH :%s\n\n", path1);
-					delete[] path1;
-					//printf("OT po delete\n");
 					Move (*spg);
-					//printf("OT po move\n");
 					break;
 				case GRIP:
 					ecp_gripper_opening(*this, -0.03, 1000);

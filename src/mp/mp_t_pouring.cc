@@ -91,25 +91,35 @@ bool mp_task_pouring::meet(void)
 	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_pour.trj", 1, ROBOT_IRP6_ON_TRACK))
 	{	return true;}
 	if (run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }
-
 	
 	return false;
 }
 
 bool mp_task_pouring::pour(void)
 {	
-	if(set_next_ecps_state( (int) ECP_GEN_POURING, 0, "trj/pouring/irp6_ot_pour_2.trj", 1, ROBOT_IRP6_ON_TRACK))
+ 
+
+	if(set_next_ecps_state( (int) ECP_GEN_POURING, 0, "", 1, ROBOT_IRP6_ON_TRACK))
 	{	return true;}
 	if (run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }
 
-	if(set_next_ecps_state( (int) ECP_GEN_POURING, 0, "trj/pouring/irp6_ot_pour_3.trj", 1, ROBOT_IRP6_ON_TRACK))
+/*	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_pour_2.trj", 1, ROBOT_IRP6_ON_TRACK))
 	{	return true;}
 	if (run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }
 
-	if(set_next_ecps_state( (int) ECP_END_POURING, 0, "trj/pouring/irp6_ot_pour_4.trj", 1, ROBOT_IRP6_ON_TRACK))
+	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_pour_3.trj", 1, ROBOT_IRP6_ON_TRACK))
 	{	return true;}
 	if (run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }
-	
+*/
+/*	if(set_next_ecps_state( (int) ECP_END_POURING, 0, "", 1, ROBOT_IRP6_ON_TRACK))
+	{	return true;}
+	if (run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }
+	*/
+/*
+	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_pour_4.trj", 1, ROBOT_IRP6_ON_TRACK))
+	{	return true;}
+	if (run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }
+*/	
 	return false;
 }
 
@@ -216,7 +226,7 @@ void mp_task_pouring::main_task_algorithm(void)
 
 	for (;;)
 	{  // Wewnetrzna petla
-
+/*
 
 		if (!approach())
 		{
@@ -228,6 +238,7 @@ void mp_task_pouring::main_task_algorithm(void)
 			printf("Grab skonczony\n");
 		}
 
+
 		if (!weight())
 		{
 			printf("Weight skonczony\n");
@@ -237,13 +248,14 @@ void mp_task_pouring::main_task_algorithm(void)
 		{
 			printf("Meet skonczony\n");
 		}
+*/
 
 		if(!pour())
 		{
 			printf("Pour skonczony\n");
 		}
 
-		if (!go_back())
+/*		if (!go_back())
 		{
 			printf("Go back skonczony\n");
 		}
@@ -257,7 +269,7 @@ void mp_task_pouring::main_task_algorithm(void)
 		{
 			printf("Depart skonczony\n");
 		}
-
+*/
 
         	// Oczekiwanie na STOP od UI
 		wait_for_stop (MP_THROW);
