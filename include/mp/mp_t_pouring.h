@@ -29,8 +29,10 @@ public:
 
 	bool approach(void);
 	bool grab(void);
+	bool weight(void);
 	bool meet(void);
 	bool pour(void);
+	bool go_back(void);
 	bool put_back(void);
 	bool depart(void);
 

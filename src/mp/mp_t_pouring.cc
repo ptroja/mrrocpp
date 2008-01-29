@@ -60,6 +60,19 @@ bool mp_task_pouring::grab(void)
 	return false;
 }
 
+bool mp_task_pouring::weight(void)
+{
+	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_weight.trj", 1, ROBOT_IRP6_ON_TRACK))
+	{	return true;}
+	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_weight.trj", 1, ROBOT_IRP6_POSTUMENT))
+	{	return true;}
+
+	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	 	(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, 
+		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
+	return false;
+}
+
 bool mp_task_pouring::meet(void)
 {
 	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_meet.trj", 1, ROBOT_IRP6_ON_TRACK))
@@ -100,12 +113,26 @@ bool mp_task_pouring::pour(void)
 	return false;
 }
 
-bool mp_task_pouring::put_back(void)
-{
+bool mp_task_pouring::go_back(void)
+{	
 	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_track_put_back.trj", 1, ROBOT_IRP6_ON_TRACK))
 	{	return true;}
 	if (run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }
 	
+	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_go_back.trj", 1, ROBOT_IRP6_ON_TRACK))
+	{	return true;}
+	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_go_back.trj", 1, ROBOT_IRP6_POSTUMENT))
+	{	return true;}
+
+	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	 	(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, 
+		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
+
+	return false;
+}
+
+bool mp_task_pouring::put_back(void)
+{	
 	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_put_back.trj", 1, ROBOT_IRP6_ON_TRACK))
 	{	return true;}
 	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_put_back.trj", 1, ROBOT_IRP6_POSTUMENT))
@@ -201,6 +228,11 @@ void mp_task_pouring::main_task_algorithm(void)
 			printf("Grab skonczony\n");
 		}
 
+		if (!weight())
+		{
+			printf("Weight skonczony\n");
+		}
+		
 		if(!meet())
 		{
 			printf("Meet skonczony\n");
@@ -211,7 +243,11 @@ void mp_task_pouring::main_task_algorithm(void)
 			printf("Pour skonczony\n");
 		}
 
-		
+		if (!go_back())
+		{
+			printf("Go back skonczony\n");
+		}
+
 		if (!put_back())
 		{
 			printf("Put back skonczony\n");
