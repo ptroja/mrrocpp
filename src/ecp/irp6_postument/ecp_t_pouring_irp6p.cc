@@ -31,16 +31,12 @@
 ecp_task_pouring_irp6p::ecp_task_pouring_irp6p() : ecp_task()
 {
 	sg = NULL;
-	spg = NULL;
 };
 
 ecp_task_pouring_irp6p::~ecp_task_pouring_irp6p(){};
 
-
-// methods for ECP template to redefine in concrete classes
 void ecp_task_pouring_irp6p::task_initialization(void) 
 {
-	// the robot is choose dependendat on the section of configuration file sent as argv[4]
 	 ecp_m_robot = new ecp_irp6_postument_robot (*this); 
 
 /*	// Powolanie czujnikow
@@ -58,10 +54,7 @@ void ecp_task_pouring_irp6p::task_initialization(void)
 	usleep(1000*100);
 */
 	sg = new ecp_smooth_generator (*this, true);
-	spg = new ecp_smooth_pouring_generator (*this, true);
 	
-	spg->sensor_m=sensor_m;
-		
 	sr_ecp_msg->message("ECP loaded");
 };
 
@@ -86,25 +79,24 @@ void ecp_task_pouring_irp6p::main_task_algorithm(void)
 			switch ( (POURING_ECP_STATES) mp_command.mp_package.mp_2_ecp_next_state)
 			{
 				case ECP_GEN_SMOOTH:
-					//printf("P w ECP\n");
 				  	size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.mp_package.mp_2_ecp_next_state_string);				  	
 					path1 = new char[size];
-					// Stworzenie sciezki do pliku.
 					strcpy(path1, mrrocpp_network_path);
 					sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.mp_package.mp_2_ecp_next_state_string);
-					//printf("\n1 POSTUMENT ECP_GEN_SMOOTH :%s\n\n", path1);
 					sg->load_file_with_path (path1);
-					//printf("\nPOSTUMENT ECP_GEN_SMOOTH :%s\n\n", path1);
 					delete[] path1;
-					//printf("P po delete\n");
 					Move (*sg);
-					//printf("P po move\n");
 					break;
 				case GRIP:
 					ecp_gripper_opening(*this, -0.018, 1000);
 					break;
 				case LET_GO:
 					ecp_gripper_opening(*this, 0.014, 1000);
+					break;
+				case WEIGHT:
+					printf("force0: %d\n", sensor_m.begin()->second->image.force.rez[0]);
+					printf("force1: %d\n", sensor_m.begin()->second->image.force.rez[0]);
+					printf("force2: %d\n", sensor_m.begin()->second->image.force.rez[0]);
 					break;
 				default:
 				break;

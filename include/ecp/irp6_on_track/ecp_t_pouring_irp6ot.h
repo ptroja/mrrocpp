@@ -15,7 +15,7 @@
 class ecp_task_pouring_irp6ot: public ecp_task  {
 protected:
 	ecp_smooth_generator* sg;
-	ecp_smooth_pouring_generator* spg;
+	ecp_tool_change_generator* tcg;
 
 public:
 	// KONSTRUKTORY

@@ -25,7 +25,7 @@
 ecp_task_pouring_irp6ot::ecp_task_pouring_irp6ot() : ecp_task()
 {
 	sg = NULL;
-	spg = NULL;
+	tcg = NULL;
 };
 
 ecp_task_pouring_irp6ot::~ecp_task_pouring_irp6ot(){};
@@ -38,7 +38,7 @@ void ecp_task_pouring_irp6ot::task_initialization(void)
 	 ecp_m_robot = new ecp_irp6_on_track_robot (*this); 
 	
 	sg = new ecp_smooth_generator (*this, true);
-	spg = new ecp_smooth_pouring_generator(*this, true);
+	tcg = new ecp_tool_change_generator(*this, true);
 		
 	sr_ecp_msg->message("ECP loaded");
 };
@@ -77,12 +77,12 @@ void ecp_task_pouring_irp6ot::main_task_algorithm(void)
 					//printf("OT po move\n");
 					break;
 				case ECP_GEN_POURING:				
-					spg->set_tool_parameters(-0.18, 0.0, 0.25);
-					Move (*spg);
+					tcg->set_tool_parameters(-0.18, 0.0, 0.25);
+					Move (*tcg);
 					break;
 				case ECP_END_POURING:
-					spg->set_tool_parameters(0.0, 0.0, 0.25);
-					Move (*spg);
+					tcg->set_tool_parameters(0.0, 0.0, 0.25);
+					Move (*tcg);
 					break;
 				case GRIP:
 					ecp_gripper_opening(*this, -0.03, 1000);

@@ -1146,62 +1146,72 @@ bool ecp_smooth_generator::next_step ()
 /**************/
 /**************************************************************************/
 
-bool ecp_smooth_pouring_generator::first_step ()
+bool ecp_tool_change_generator::first_step ()
 {
-  ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-  ecp_t.get_mp_command ();
+//  	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
+// 	 ecp_t.get_mp_command ();
 
-  Homog_matrix tool_frame(tool_parameters[0], tool_parameters[1], tool_parameters[2]);
-  tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame_m);
+ 	Homog_matrix tool_frame(tool_parameters[0], tool_parameters[1], tool_parameters[2]);
+ 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame_m);
 
-  switch ( ecp_t.mp_command_type() )
-  {
-    case NEXT_POSE:
-       first_interval=true;
+	the_robot->EDP_data.instruction_type = SET;
+	the_robot->EDP_data.get_type = ARM_DV;
+	the_robot->EDP_data.set_type = RMODEL_DV;
+	the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
+	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
+	the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
+	the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;
+	the_robot->EDP_data.motion_type = ABSOLUTE;
 
-			the_robot->EDP_data.instruction_type = GET;
-			the_robot->EDP_data.get_type = ARM_DV;
-			the_robot->EDP_data.set_type = RMODEL_DV;
-			the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
-			the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
-			the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
-			the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;
-			the_robot->EDP_data.motion_type = ABSOLUTE;
-
-	  the_robot->create_command ();
-	  break;
-    case STOP:
-      throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-    case END_MOTION:
-    case INVALID_COMMAND:
-    default:
-       throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-  } // end: switch ( ecp_t.mp_command_type() )
-
-  return true;
+	 the_robot->create_command ();
+ 	 return true;
 
 }; // end: bool ecp_smooth_pouring_generator::first_step ( )
 
-bool ecp_smooth_pouring_generator::next_step ()
+bool ecp_tool_change_generator::next_step ()
 {
-   return true;
+	if (first_interval) {
+		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
+	} else {
+		ecp_t.set_ecp_reply (TASK_TERMINATED);
+	}
 
+	ecp_t.get_mp_command ();
+
+	switch ( ecp_t.mp_command_type() ) {
+		case NEXT_POSE:
+			if (!first_interval)
+				{
+					return false; // Jezeli lista jest pusta to konczymy generacje trajektorii
+				}
+				first_interval=false;						
+				the_robot->create_command ();
+				return true;
+				break;
+		case END_MOTION:  // Dla irp6ot_teach_in_generator ten przypadek jest nieakatywny,
+			return false;   // koniec determinuje ten generator a nie MP
+		case STOP:
+			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+		case INVALID_COMMAND:
+		default:
+			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
+	} // end: switch
 } // end: BOOLEAN ecp_smooth_pouring_generator::next_step ( )
 
-void ecp_smooth_pouring_generator::set_tool_parameters(double x, double y, double z)
+void ecp_tool_change_generator::set_tool_parameters(double x, double y, double z)
 {
 	tool_parameters[0]=x;
 	tool_parameters[1]=y;
 	tool_parameters[2]=z;
 }
 
-ecp_smooth_pouring_generator::ecp_smooth_pouring_generator (ecp_task& _ecp_task, bool _is_synchronised):ecp_smooth_generator (_ecp_task, _is_synchronised)
+ecp_tool_change_generator::ecp_tool_change_generator (ecp_task& _ecp_task, bool _is_synchronised):ecp_smooth_generator (_ecp_task, _is_synchronised)
 {
 
 set_tool_parameters(-0.18, 0.0, 0.25);
 
 }
-ecp_smooth_pouring_generator::ecp_smooth_pouring_generator (ecp_task& _ecp_task, bool _is_synchronised, bool _debug):ecp_smooth_generator (_ecp_task, _is_synchronised, _debug)
+ecp_tool_change_generator::ecp_tool_change_generator (ecp_task& _ecp_task, bool _is_synchronised, bool _debug):ecp_smooth_generator (_ecp_task, _is_synchronised, _debug)
 {
 
 set_tool_parameters(-0.18, 0.0, 0.25);
