@@ -294,8 +294,8 @@ struct robot_ECP_transmission_data {
 	// dla POSE_FORCE_TORQUE_AT_FRAME
 	// c_buffer
 
-	double MPtoECP_inertia[6], MPtoECP_reciprocal_damping[6], MPtoECP_stiffness[6];
-	double MPtoECP_position_velocity[MAX_SERVOS_NR], MPtoECP_stiffness_base_position[MAX_SERVOS_NR], MPtoECP_force_xyz_torque_xyz[6];
+	double MPtoECP_inertia[6], MPtoECP_reciprocal_damping[6];
+	double MPtoECP_position_velocity[MAX_SERVOS_NR], MPtoECP_force_xyz_torque_xyz[6];
 //	bool MPselection_vector[6];
 
 

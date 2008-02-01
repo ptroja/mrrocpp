@@ -1,8 +1,8 @@
 // -------------------------------------------------------------------------
 //                              mp.cc
-// 
+//
 // MP Master Process - methods
-// 
+//
 // Ostatnia modyfikacja: 2007
 // -------------------------------------------------------------------------
 // Funkcje do konstruowania procesow MP
@@ -37,7 +37,7 @@ void mp_irp6_on_track_robot::create_next_pose_command (void) {
   switch (ecp_td.instruction_type) {
     case SET:
     case SET_GET:
-  
+
         if (ecp_td.set_type & RMODEL_DV) {
           switch (ecp_td.set_rmodel_type) {
             case TOOL_FRAME:
@@ -69,7 +69,7 @@ void mp_irp6_on_track_robot::create_next_pose_command (void) {
               throw MP_error(NON_FATAL_ERROR, INVALID_RMODEL_TYPE);
           }; // end: switch (set_rmodel_type)
         }
-        
+
          if (ecp_td.set_type & ARM_DV) { // tylko ramie
           mp_command.mp_package.instruction.motion_type = ecp_td.motion_type;
           mp_command.mp_package.instruction.motion_steps = ecp_td.motion_steps;
@@ -86,14 +86,14 @@ void mp_irp6_on_track_robot::create_next_pose_command (void) {
                 mp_command.mp_package.instruction.arm.coordinate_def.arm_coordinates[j]
                    = ecp_td.next_XYZ_AA_arm_coordinates[j];
         	        mp_command.mp_package.instruction.arm.coordinate_def.gripper_coordinate
-	                  = ecp_td.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka  
+	                  = ecp_td.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka
               break;
             case  XYZ_EULER_ZYZ:
               for (j=0; j<6 ; j++)
                 mp_command.mp_package.instruction.arm.coordinate_def.arm_coordinates[j]
                    = ecp_td.next_XYZ_ZYZ_arm_coordinates[j];
                    mp_command.mp_package.instruction.arm.coordinate_def.gripper_coordinate
-	                  = ecp_td.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka  
+	                  = ecp_td.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka
           break;
 		case  POSE_FORCE_TORQUE_AT_FRAME:
 			for(int i=0;i<6;i++) {
@@ -101,8 +101,7 @@ void mp_irp6_on_track_robot::create_next_pose_command (void) {
 					=ecp_td.MPtoECP_inertia[i];
 				mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.reciprocal_damping[i]
 					=ecp_td.MPtoECP_reciprocal_damping[i];
-				mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.stiffness[i]
-					=ecp_td.MPtoECP_stiffness[i];
+
 					/*
 				mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.selection_vector[i]
 					=ecp_td.MPselection_vector[i];
@@ -115,8 +114,7 @@ void mp_irp6_on_track_robot::create_next_pose_command (void) {
               {
 				mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.position_velocity[i]
 					=ecp_td.MPtoECP_position_velocity[i];
-				mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.stiffness_base_position[i]
-					=ecp_td.MPtoECP_stiffness_base_position[i];
+
               }
 			mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.gripper_coordinate=ecp_td.next_gripper_coordinate;
 			break;
@@ -156,7 +154,7 @@ void mp_irp6_on_track_robot::get_reply (void) {
 
  ecp_td.ecp_reply = ecp_reply.reply;
  ecp_td.reply_type = ecp_reply.ecp_reply.reply_package.reply_type;
- 
+
 //  printf("mp mp_irp6_on_track_robot get_reply:%d\n", ecp_td.reply_type);
  switch (ecp_td.reply_type) {
    case ERROR:
@@ -198,7 +196,7 @@ void mp_irp6_on_track_robot::get_input_reply (void)
 {
 
 	int i; // liczniki petli
-	
+
      ecp_td.input_values = ecp_reply.ecp_reply.reply_package.input_values;
      for (i=0; i<8; i++)
 	{
@@ -215,7 +213,7 @@ void mp_irp6_on_track_robot::get_arm_reply (void)
          for (int i=0; i<IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
            ecp_td.current_motor_arm_coordinates[i] =
              ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
-         ecp_td.gripper_reg_state = 
+         ecp_td.gripper_reg_state =
             	ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
          break;
        };
@@ -223,13 +221,13 @@ void mp_irp6_on_track_robot::get_arm_reply (void)
          for (int i=0; i<IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
            ecp_td.current_joint_arm_coordinates[i] =
              ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
-        ecp_td.gripper_reg_state = 
+        ecp_td.gripper_reg_state =
             	ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
          break;
        };
        case FRAME: {
        copy_frame(ecp_td.current_arm_frame_m, ecp_reply.ecp_reply.reply_package.arm.frame_def.arm_frame_m);
-       ecp_td.gripper_reg_state = 
+       ecp_td.gripper_reg_state =
             	ecp_reply.ecp_reply.reply_package.arm.frame_def.gripper_reg_state;
 	ecp_td.current_gripper_coordinate =
              ecp_reply.ecp_reply.reply_package.arm.frame_def.gripper_coordinate;
@@ -239,7 +237,7 @@ void mp_irp6_on_track_robot::get_arm_reply (void)
          for (int i=0; i<6; i++)
            ecp_td.current_XYZ_ZYZ_arm_coordinates[i] =
              ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
-          ecp_td.gripper_reg_state = 
+          ecp_td.gripper_reg_state =
             	ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
            ecp_td.current_gripper_coordinate =
              ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_coordinate;
@@ -253,7 +251,7 @@ void mp_irp6_on_track_robot::get_arm_reply (void)
 			copy_frame(ecp_td.MPcurrent_present_arm_frame_m,
 							ecp_reply.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.present_arm_frame_m);
 			for(int i = 0;i<6;i++) {
-				ecp_td.ECPtoMP_force_xyz_torque_xyz[i] = 
+				ecp_td.ECPtoMP_force_xyz_torque_xyz[i] =
 				ecp_reply.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i];
 			}
 			ecp_td.gripper_reg_state = ecp_reply.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.gripper_reg_state;
@@ -263,7 +261,7 @@ void mp_irp6_on_track_robot::get_arm_reply (void)
          for (int i=0; i<6; i++)
            ecp_td.current_XYZ_AA_arm_coordinates[i] =
              ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
-           ecp_td.gripper_reg_state = 
+           ecp_td.gripper_reg_state =
             	ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
            ecp_td.current_gripper_coordinate =
              ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_coordinate;
@@ -279,7 +277,7 @@ void mp_irp6_on_track_robot::get_rmodel_reply (void)
 {
 
 	int i,j; // liczniki petli
-	
+
    switch (ecp_reply.ecp_reply.reply_package.rmodel_type) {
        case TOOL_FRAME:
        copy_frame(ecp_td.current_tool_frame_m, ecp_reply.ecp_reply.reply_package.rmodel.tool_frame_def.tool_frame_m);

@@ -1,8 +1,8 @@
 // -------------------------------------------------------------------------
 //                              mp.cc
-// 
+//
 // MP Master Process - methods
-// 
+//
 // Ostatnia modyfikacja: 2007
 // -------------------------------------------------------------------------
 // Funkcje do konstruowania procesow MP
@@ -60,7 +60,7 @@ void mp_irp6_postument_robot::create_next_pose_command (void) {
 						}
 						break;
 					case ARM_KINEMATIC_MODEL:
-						mp_command.mp_package.instruction.rmodel.kinematic_model.kinematic_model_no	
+						mp_command.mp_package.instruction.rmodel.kinematic_model.kinematic_model_no
 						= ecp_td.next_kinematic_model_no;
 
 						break;
@@ -72,11 +72,11 @@ void mp_irp6_postument_robot::create_next_pose_command (void) {
 							= ecp_td.next_servo_parameters_no[j];
 						}
 						break;
-					default: // Blad: niewlasciwy typ modelu robota            
+					default: // Blad: niewlasciwy typ modelu robota
 						throw MP_error(NON_FATAL_ERROR, INVALID_RMODEL_TYPE);
 				}
 			}
-		
+
 			if (ecp_td.set_type & ARM_DV) { // ramie
 				mp_command.mp_package.instruction.motion_type = ecp_td.motion_type;
 				mp_command.mp_package.instruction.motion_steps = ecp_td.motion_steps;
@@ -94,7 +94,7 @@ void mp_irp6_postument_robot::create_next_pose_command (void) {
 							= ecp_td.next_XYZ_AA_arm_coordinates[j];
 						}
 						mp_command.mp_package.instruction.arm.coordinate_def.gripper_coordinate
-						= ecp_td.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka  
+						= ecp_td.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka
 						break;
 					case  XYZ_EULER_ZYZ:
 						for (int j=0; j<6 ; j++) {
@@ -102,7 +102,7 @@ void mp_irp6_postument_robot::create_next_pose_command (void) {
 							= ecp_td.next_XYZ_ZYZ_arm_coordinates[j];
 						}
 						mp_command.mp_package.instruction.arm.coordinate_def.gripper_coordinate
-						= ecp_td.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka  
+						= ecp_td.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka
 						break;
 					case  POSE_FORCE_TORQUE_AT_FRAME:
 						for(int i=0;i<6;i++) {
@@ -110,21 +110,19 @@ void mp_irp6_postument_robot::create_next_pose_command (void) {
 								=ecp_td.MPtoECP_inertia[i];
 							mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.reciprocal_damping[i]
 								=ecp_td.MPtoECP_reciprocal_damping[i];
-							mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.stiffness[i]
-								=ecp_td.MPtoECP_stiffness[i];
+
 								/*
 							mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.selection_vector[i]
 								=ecp_td.MPselection_vector[i];
 								*/
-			
+
 							mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i]
 								=ecp_td.MPtoECP_force_xyz_torque_xyz[i];
 						}
 						for (int i=0; i<IRP6_POSTUMENT_NUM_OF_SERVOS ; i++) {
 							mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.position_velocity[i]
 								=ecp_td.MPtoECP_position_velocity[i];
-							mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.stiffness_base_position[i]
-								=ecp_td.MPtoECP_stiffness_base_position[i];
+
 						}
 						mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.gripper_coordinate
 							=ecp_td.next_gripper_coordinate;
@@ -141,7 +139,7 @@ void mp_irp6_postument_robot::create_next_pose_command (void) {
 							= ecp_td.next_motor_arm_coordinates[j];
 						}
 						break;
-					default: // Blad: niewlasciwy sposob zadawania polozenia ramienia            
+					default: // Blad: niewlasciwy sposob zadawania polozenia ramienia
 						throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 				}
 			}
@@ -150,7 +148,7 @@ void mp_irp6_postument_robot::create_next_pose_command (void) {
 		case SYNCHRO:
 		case QUERY:
 			break;
-		default: // blad: nieprawidlowe polecenie    
+		default: // blad: nieprawidlowe polecenie
 			throw MP_error (NON_FATAL_ERROR, INVALID_ECP_COMMAND);
 	}
 }; // end: mp_irp6_postument_robot::create_next_pose_command
@@ -220,7 +218,7 @@ void mp_irp6_postument_robot::get_arm_reply (void)
 			}
 			ecp_td.gripper_reg_state = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
 		break;
-		case FRAME: 
+		case FRAME:
 			copy_frame(ecp_td.current_arm_frame_m, ecp_reply.ecp_reply.reply_package.arm.frame_def.arm_frame_m);
 			ecp_td.gripper_reg_state = ecp_reply.ecp_reply.reply_package.arm.frame_def.gripper_reg_state;
 			ecp_td.current_gripper_coordinate = ecp_reply.ecp_reply.reply_package.arm.frame_def.gripper_coordinate;
@@ -240,7 +238,7 @@ void mp_irp6_postument_robot::get_arm_reply (void)
 			copy_frame(ecp_td.MPcurrent_present_arm_frame_m,
 							ecp_reply.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.present_arm_frame_m);
 			for(int i = 0;i<6;i++) {
-				ecp_td.ECPtoMP_force_xyz_torque_xyz[i] = 
+				ecp_td.ECPtoMP_force_xyz_torque_xyz[i] =
 				ecp_reply.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i];
 			}
 			ecp_td.gripper_reg_state = ecp_reply.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.gripper_reg_state;

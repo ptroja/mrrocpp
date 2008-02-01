@@ -23,8 +23,8 @@ public:
 
 struct robot_EDP_transmission_data {
   INSTRUCTION_TYPE instruction_type;    // typ instrukcji: SET, GET, SET_GET, SYNCHRO, QUERY
-  
-  
+
+
   char text[MAX_TEXT]; // MAC7
   char prosody[MAX_PROSODY]; // MAC7
   bool speaking; // MAC7
@@ -81,8 +81,8 @@ double current_XYZ_ZYZ_arm_coordinates[8];  // aktualne wspolrzedne XYZ +
 
 // by Y  do sily
 
-	double ECPtoEDP_inertia[6], ECPtoEDP_reciprocal_damping[6], ECPtoEDP_stiffness[6];
-	double ECPtoEDP_position_velocity[MAX_SERVOS_NR], ECPtoEDP_stiffness_base_position[MAX_SERVOS_NR], ECPtoEDP_force_xyz_torque_xyz[6];
+	double ECPtoEDP_inertia[6], ECPtoEDP_reciprocal_damping[6];
+	double ECPtoEDP_position_velocity[MAX_SERVOS_NR], ECPtoEDP_force_xyz_torque_xyz[6];
 //	bool selection_vector[6];
 
 	// r_buffer
@@ -94,7 +94,7 @@ double current_XYZ_ZYZ_arm_coordinates[8];  // aktualne wspolrzedne XYZ +
 	short gripper_reg_state; // stan w ktorym znajduje sie regulator chwytaka
 	double current_gripper_coordinate; // odczytanu stopien rozwarcia chwytaka
 	double next_gripper_coordinate; // zadany stopien rozwarcia chwytaka
-	
+
 // end by Y
 
   double current_XYZ_AA_arm_coordinates[6];  // aktualne wspolrzedne XYZ +
@@ -121,8 +121,8 @@ double current_XYZ_ZYZ_arm_coordinates[8];  // aktualne wspolrzedne XYZ +
                                                       // narzedzia wzgledem kolnierza
   double next_XYZ_AA_tool_coordinates[6];             // wygenerowane XYZ + orientacja AA
                                                       // narzedzia wzgledem kolnierza
-                                                      
-                                                      
+
+
   BYTE current_kinematic_model_no;                    // odczytany numer zestawu parametrow
                                                       // modelu kinematyki
   BYTE next_kinematic_model_no;                       // wygenerowany numer zestawu
@@ -181,25 +181,25 @@ class ecp_robot {
 #endif
     const ROBOT_ENUM robot_name; // by Y - nazwa robota (track, postument etc.)
  	bool communicate; // okresla czy robot ma byc obslugiwany w Move
-   
+
    robot_EDP_transmission_data EDP_data; // Obraz robota wykorzystywany przez generator
 
   virtual void execute_motion (void);
     // Zlecenie wykonania ruchu przez robota
     // (realizowane przez klase konkretna):
     // na poziomie ECP jest to polecenie dla EDP
-   ecp_robot(ROBOT_ENUM _robot_name, configurator &_config, sr_ecp *_sr_ecp); 
+   ecp_robot(ROBOT_ENUM _robot_name, configurator &_config, sr_ecp *_sr_ecp);
    ecp_robot(ROBOT_ENUM _robot_name, ecp_task& _ecp_object);
 
    pid_t get_EDP_pid(void) const;
-   
+
     // destruktor by Y - do usuniecia obiektu do komunikacji z SR
    virtual ~ecp_robot(void);
 
   virtual void synchronise ( void );
                                     // Zlecenie synchronizacji robota
                                      // Pobranie aktualnych polozen
-                                     
+
   virtual void create_command (void) = 0;
     // wypelnia bufor wysylkowy do EDP na podstawie danych zawartych w obrazie
     // robota wykorzystywanych przez generator
@@ -212,12 +212,12 @@ class ecp_robot {
 
   // Kopiowanie bufora przesylanego z MP do bufora wysylanego do EDP
   virtual void copy_mp_to_edp_buffer (c_buffer& mp_buffer);
-  
+
   	// by Y - o dziwo tego nie bylo !!!
 	// Kopiowanie bufora przesylanego z EDP do bufora wysylanego do MP
  	virtual void copy_edp_to_mp_buffer (r_buffer& mp_buffer);
 
-  bool is_synchronised ( void ) const; // Czy robot zsynchronizowany?                                     
+  bool is_synchronised ( void ) const; // Czy robot zsynchronizowany?
 
   class ECP_error {  // Klasa obslugi bledow robota
     public:

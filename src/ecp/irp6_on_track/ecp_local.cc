@@ -3,7 +3,7 @@
 //            Effector Control Process (ECP) - methods
 // Funkcje do tworzenia procesow ECP
 // robot - irp6_on_track
-// 
+//
 // -------------------------------------------------------------------------
 
 #include "common/impconst.h"
@@ -69,7 +69,7 @@ void ecp_irp6_on_track_robot::create_command (void) {
               throw ECP_error(NON_FATAL_ERROR, INVALID_RMODEL_TYPE);
           } // end: switch (set_rmodel_type)
         }
-        
+
          if (EDP_data.set_type & ARM_DV) {
           EDP_command_and_reply_buffer.instruction.motion_type = EDP_data.motion_type;
           EDP_command_and_reply_buffer.instruction.motion_steps = EDP_data.motion_steps;
@@ -101,8 +101,6 @@ void ecp_irp6_on_track_robot::create_command (void) {
 						= EDP_data.ECPtoEDP_inertia[j];
 					EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.reciprocal_damping[j]
 	                  = EDP_data.ECPtoEDP_reciprocal_damping[j];
-	               EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.stiffness[j]
-	                  = EDP_data.ECPtoEDP_stiffness[j];
 	                  /*
 			      EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.selection_vector[j]
 	                  = EDP_data.selection_vector[j];	 // zadana sila
@@ -113,10 +111,8 @@ void ecp_irp6_on_track_robot::create_command (void) {
 				for (int j=0; j<IRP6_ON_TRACK_NUM_OF_SERVOS ; j++){
 					EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.position_velocity[j]
 						= EDP_data.ECPtoEDP_position_velocity[j];	 // pozycja poczatkowa
-					EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.stiffness_base_position[j]
-						= EDP_data.ECPtoEDP_stiffness_base_position[j];	 
-                  }
-                   
+					               }
+
                    EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.gripper_coordinate
 	                   = EDP_data.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka
           break;
@@ -154,7 +150,7 @@ void ecp_irp6_on_track_robot::get_reply (void) {
   // odpowiednich skladowych generatora lub warunku
 
  EDP_data.reply_type = EDP_command_and_reply_buffer.reply_package.reply_type;
-  
+
  switch (EDP_data.reply_type) {
    case ERROR:
      EDP_data.error_no.error0 = EDP_command_and_reply_buffer.reply_package.error_no.error0;
@@ -206,19 +202,19 @@ void ecp_irp6_on_track_robot::get_arm_reply (void)
          for (int i=0; i<IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
            EDP_data.current_motor_arm_coordinates[i] =
              EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[i];
-          EDP_data.gripper_reg_state = 
+          EDP_data.gripper_reg_state =
             	EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.gripper_reg_state;
          break;
        case JOINT:
          for (int i=0; i<IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
            EDP_data.current_joint_arm_coordinates[i] =
              EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[i];
-          EDP_data.gripper_reg_state = 
+          EDP_data.gripper_reg_state =
             	EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.gripper_reg_state;
          break;
        case FRAME:
        copy_frame(EDP_data.current_arm_frame_m, EDP_command_and_reply_buffer.reply_package.arm.frame_def.arm_frame_m);
-       EDP_data.gripper_reg_state = 
+       EDP_data.gripper_reg_state =
             	EDP_command_and_reply_buffer.reply_package.arm.frame_def.gripper_reg_state;
        EDP_data.current_gripper_coordinate =
              EDP_command_and_reply_buffer.reply_package.arm.frame_def.gripper_coordinate;
@@ -227,35 +223,35 @@ void ecp_irp6_on_track_robot::get_arm_reply (void)
         for (int i=0; i<6; i++)
            EDP_data.current_XYZ_ZYZ_arm_coordinates[i] =
              EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[i];
-        EDP_data.gripper_reg_state = 
+        EDP_data.gripper_reg_state =
             	EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.gripper_reg_state;
         EDP_data.current_gripper_coordinate =
              EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.gripper_coordinate;
          break;
-         
+
          case POSE_FORCE_TORQUE_AT_FRAME:
          for (int i=0; i<6; i++) {
     	        EDP_data.EDPtoECP_force_xyz_torque_xyz[i] =
-		  	 EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i]; 
+		  	 EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i];
 		   }
-		   copy_frame(EDP_data.current_beggining_arm_frame_m, 
+		   copy_frame(EDP_data.current_beggining_arm_frame_m,
 				EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.beggining_arm_frame_m);
-		   copy_frame(EDP_data.current_predicted_arm_frame_m, 
+		   copy_frame(EDP_data.current_predicted_arm_frame_m,
 				EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.predicted_arm_frame_m);
-		   copy_frame(EDP_data.current_present_arm_frame_m, 
+		   copy_frame(EDP_data.current_present_arm_frame_m,
 				EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.present_arm_frame_m);
-		EDP_data.gripper_reg_state = 
+		EDP_data.gripper_reg_state =
             	EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.gripper_reg_state;
 		EDP_data.current_gripper_coordinate =
              EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.gripper_coordinate;
 
          break;
-         
-       case XYZ_ANGLE_AXIS: 
+
+       case XYZ_ANGLE_AXIS:
          for (int i=0; i<6; i++)
            EDP_data.current_XYZ_AA_arm_coordinates[i] =
              EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[i];
-          EDP_data.gripper_reg_state = 
+          EDP_data.gripper_reg_state =
             	EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.gripper_reg_state;
           EDP_data.current_gripper_coordinate =
              EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.gripper_coordinate;

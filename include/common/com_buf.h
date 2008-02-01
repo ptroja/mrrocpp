@@ -31,23 +31,23 @@ const BYTE INVALID_REPLY = 0, NEXT = 1, QUIT = 2, ANSWER_YES = 3,
          ANSWER_NO = 4, FILE_LOADED = 5, FILE_SAVED = 6,
 
          	// Rozkazy z okna Force Control.
-		FC_ADD_MACROSTEP = 7, FC_CALIBRATE_SENSOR = 8, 
-		FC_CHANGE_CONTROL = 9, FC_MOVE_ROBOT = 10, 
+		FC_ADD_MACROSTEP = 7, FC_CALIBRATE_SENSOR = 8,
+		FC_CHANGE_CONTROL = 9, FC_MOVE_ROBOT = 10,
 		FC_SAVE_TRAJECTORY = 11, FC_NEW_TRAJECTORY = 12,
 		FC_EXIT = 13, FC_GET_DATA =14,
-		
+
 		// Rozkazy z okna Trajectory Render.
 		TR_LOAD_TRAJECTORY = 16, TR_PAUSE_MOVE = 17,
 		TR_START_MOVE = 18, TR_STOP_MOVE = 19, TR_EXIT = 20,
 		TR_ZERO_POSITION = 21, TR_SAVE_READINGS = 22,
 		TR_CALIBRATE_DIGITAL_SCALES_SENSOR = 23,
 		TR_CALIBRATE_FORCE_SENSOR = 24, TR_TRY_MOVE_AGAIN = 25,
-		
+
 		// Odpowiedzi z okna z opcjami
 		OPTION_ONE = 26, OPTION_TWO = 27, OPTION_THREE = 28, OPTION_FOUR = 29,
 
              	// Rozkazy z okna MAM_wnd_manual_moves_automatic_measures.
-		MAM_START = 30, MAM_STOP = 31, MAM_CLEAR = 32, MAM_SAVE = 33, 
+		MAM_START = 30, MAM_STOP = 31, MAM_CLEAR = 32, MAM_SAVE = 33,
 		MAM_EXIT = 34, MAM_CALIBRATE =35;
 
 // Dlugosc komunikatu przesylanego z ECP lub MP do UI
@@ -75,7 +75,7 @@ struct ECP_message {
 			double sensor_reading[6];
 			int measure_number;
 			} MAM;
-		};		
+		};
 	};
 
 // Odpowiedz UI do ECP
@@ -87,14 +87,14 @@ struct UI_reply {
    double coordinates[MAX_SERVOS_NR];
    char path[80];
    char filename[20];
-};		
+};
 
 // Przesylka z UI do ECP
 struct UI_ECP_message{
 	msg_header_t hdr;
 	BYTE command ;
 	union{
-		// nazwa pliku 
+		// nazwa pliku
 		char filename[100];
 		// czas ruchu
 		int motion_time;
@@ -130,13 +130,13 @@ struct EDP_VSP_reply {
 
 // typ wyliczeniowy przeniesiony na poczatek - bedzie uzywany w trajectory_description    (by Jarosz)
 
-// !!! UWAGA !!!// 
+// !!! UWAGA !!!//
 // POWIAZANY Z C_MOTOR C_JOINT etc. UWAZAC NA INDEKSY
 
 // Rodzaje polecen ECP dla UI:
 const BYTE C_INVALID_END_EFFECTOR = 0, C_FRAME =1, C_XYZ_ANGLE_AXIS = 2,
                C_XYZ_EULER_ZYZ = 3, C_JOINT = 4, C_MOTOR = 5, YES_NO = 6,
-               DOUBLE_NUMBER = 7, INTEGER_NUMBER = 8, SAVE_FILE = 9,        
+               DOUBLE_NUMBER = 7, INTEGER_NUMBER = 8, SAVE_FILE = 9,
                LOAD_FILE = 10, MESSAGE = 11, OPEN_FORCE_SENSOR_MOVE_WINDOW = 12,
                OPEN_TRAJECTORY_REPRODUCE_WINDOW = 13, TR_REFRESH_WINDOW = 14,
                TR_DANGEROUS_FORCE_DETECTED = 15, CHOOSE_OPTION = 16,
@@ -366,12 +366,14 @@ enum GRIPPER_STATE_ENUM {
 
 enum INSTRUCTION_TYPE    { INVALID, SET, GET, SET_GET, SYNCHRO, QUERY };
 enum RMODEL_SPECIFICATION { INVALID_RMODEL, TOOL_FRAME, TOOL_XYZ_ANGLE_AXIS, TOOL_XYZ_EULER_ZYZ, TOOL_AS_XYZ_EULER_ZY, ARM_KINEMATIC_MODEL, SERVO_ALGORITHM };
-enum MOTION_TYPE	{ ABSOLUTE, RELATIVE, 
-								PF_FIXED_FRAME_TO_XYZ_ANGLE_AXIS_ABSOLUTE_POSE, PF_FIXED_FRAME_TO_JOINTS_ABSOLUTE_POSE, 
-								PF_FIXED_FRAME_TO_MOTORS_ABSOLUTE_POSE, PF_FIXED_FRAME_WITH_DESIRED_FORCE_OR_SPEED,
-								PF_MOVING_FRAME_WITH_DESIRED_FORCE_OR_SPEED};
+enum MOTION_TYPE	{ ABSOLUTE, RELATIVE,
+								PF_XYZ_ANGLE_AXIS_ABSOLUTE_POSE, PF_JOINTS_ABSOLUTE_POSITION, PF_MOTORS_ABSOLUTE_POSITION,
+								PF_XYZ_ANGLE_AXIS_RELATIVE_POSE, PF_JOINTS_RELATIVE_POSITION, PF_MOTORS_RELATIVE_POSITION,
+								PF_VELOCITY};
 enum REPLY_TYPE            {ERROR, ACKNOWLEDGE, SYNCHRO_OK, ARM, RMODEL, INPUTS,
                                   ARM_RMODEL, ARM_INPUTS, RMODEL_INPUTS, ARM_RMODEL_INPUTS, CONTROLLER_STATE };
+
+enum BEHAVIOUR_SPECIFICATION	{UNGUARDED_MOTION, GUARDED_MOTION, CONTACT};
 
 
 /*--------------------------------------------------------------------------*/
@@ -416,7 +418,7 @@ struct servo_group_reply // wzorzec odpowiedzi przesylanej z SERVO_GROUP do EDP_
  edp_error error;                           // struktura zawierajaca zakodowana przyczyne bledu
  double position[MAX_SERVOS_NR];   // przyrost polozenia walu silnika
                                          // osiagniety od ostatniego odczytu
- double abs_position[MAX_SERVOS_NR];   // by Y - bezwzgledna pozycja stawow w radianach                 
+ double abs_position[MAX_SERVOS_NR];   // by Y - bezwzgledna pozycja stawow w radianach
  word16 PWM_value[MAX_SERVOS_NR]; // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
  word16 current[MAX_SERVOS_NR];    // prad sterujacy -- zazwyczaj zbedne
  BYTE algorithm_no[MAX_SERVOS_NR];// numery uzywanych algorytmow regulacji
@@ -440,7 +442,7 @@ typedef union { // rmodel
 	} tool_coordinate_def;
 	struct {
 		BYTE kinematic_model_no;               // numer zestawu parametrow modelu kinematyki
-		
+
 	// 	BYTE address_byte;               // bajt do obliczania dlugosci rozkazu
 	} kinematic_model;
 	struct {
@@ -467,17 +469,17 @@ typedef union { // arm
  			double gripper_coordinate; // stopien rozwarcia chwytaka
 		} coordinate_def;
 	 	struct { // by Y do sterowania pozycyjno silowego
-	 		double inertia[6], reciprocal_damping[6], stiffness[6];
-			double stiffness_base_position [MAX_SERVOS_NR], position_velocity [MAX_SERVOS_NR];
-			double force_xyz_torque_xyz[6]; 
-			//		bool selection_vector[6];
+	 		double inertia[6], reciprocal_damping[6];
+			double position_velocity [MAX_SERVOS_NR];
+			double force_xyz_torque_xyz[6];
+			BEHAVIOUR_SPECIFICATION behaviour[6];
 			double gripper_coordinate; // stopien rozwarcia chwytaka
 			// 	BYTE address_byte;                // bajt do obliczania dlugosci rozkazu
 	 	} pose_force_torque_at_frame_def; // end by Y
 		struct {
 			char text[MAX_TEXT]; // MAC7
-			char prosody[MAX_PROSODY]; // MAC7 
-		// 	BYTE address_byte; 
+			char prosody[MAX_PROSODY]; // MAC7
+		// 	BYTE address_byte;
 		} text_def;
 } c_buffer_arm;
 
@@ -488,8 +490,8 @@ struct c_buffer {
 
     struct _pulse hdr;
 
-   	INSTRUCTION_TYPE instruction_type; // typ instrukcji: SET, GET, SET_GET, SYNCHRO, QUERY	
-   
+   	INSTRUCTION_TYPE instruction_type; // typ instrukcji: SET, GET, SET_GET, SYNCHRO, QUERY
+
    	BYTE set_type;                            // typ instrukcji set: ARM/RMODEL/OUTPUTS
    	BYTE get_type;                            // typ instrukcji get: ARM/RMODEL/INPUTS
    	RMODEL_SPECIFICATION set_rmodel_type;   // sposob zdefiniowania narzedzia przy jego zadawaniu:
@@ -506,7 +508,7 @@ struct c_buffer {
                                          // FRAME / XYZ_EULER_ZYZ / XYZ_ANGLE_AXIS
    	WORD output_values;                     // wartosci wyjsc binarnych
    	BYTE address_byte;                       // bajt do obliczania dlugosci rozkazu
-   	
+
  	MOTION_TYPE motion_type;        // sposob zadania ruchu: ABSOLUTE/RELATIVE
 	WORD motion_steps;                // liczba krokow ruchu zadanego (makrokroku)
 	WORD value_in_step_no;           // liczba krokow pierwszej fazy ruchu, czyli
@@ -528,7 +530,7 @@ struct c_buffer {
                                       // wiadomosc dotrze przed zrealizowaniem makrokroku
                                       // i informacja o polozeniu bedzie dotyczyc
                                       // realizacji srodkowej fazy makrokroku.
- 	
+
 	c_buffer_rmodel rmodel;
 	c_buffer_arm arm;
 
@@ -552,7 +554,7 @@ typedef union {   // rmodel
 	} tool_coordinate_def;
 	struct {
 		BYTE kinematic_model_no;       // numer modelu kinematyki
-		
+
 //		BYTE address_byte;               // bajt do obliczania dlugosci rozkazu
 	} kinematic_model;
 	struct {
@@ -566,12 +568,12 @@ typedef struct {
 		bool is_power_on;        // czy wzmacniacze mocy sa zasilane
 		bool is_wardrobe_on;        // czy szafa jest wlaczona
 		bool is_controller_card_present;        // czy karta kontrolera robota jest w zamontowana w komputerze
-		bool is_robot_blocked;        // czy wyzerowana sterowanie na silnikach po awarii sprzetowej	
+		bool is_robot_blocked;        // czy wyzerowana sterowanie na silnikach po awarii sprzetowej
 	} controller_state_typedef;
 
 
 typedef union {   // arm
-	struct {	
+	struct {
 		word16 PWM_value[MAX_SERVOS_NR];               // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
 		word16 current[MAX_SERVOS_NR];                 // prad sterujacy -- zazwyczaj zbedne
 		frame_tab arm_frame_m;           // Macierz reprezentujaca koncowke
@@ -618,7 +620,7 @@ struct r_buffer {
                                          // TOOL_FRAME / TOOL_XYZ_EULER_ZYZ / TOOL_XYZ_ANGLE_AXIS / TOOL_AS_XYZ_EULER_ZY /
                                          // ARM_KINEMATIC_MODEL / SERVO_ALGORITHM
 	POSE_SPECIFICATION arm_type;    // sposob zdefiniowania polozenia zadanego
-                                       // koncowki: MOTOR / JOINT / FRAME 
+                                       // koncowki: MOTOR / JOINT / FRAME
 						    // XYZ_EULER_ZYZ / POSE_FORCE_LINEAR / XYZ_ANGLE_AXIS / POSE_FORCE_TORQUE_AT_FRAME
 	WORD input_values;                 // wartosci wejsc binarnych
 	BYTE analog_input[8];		// wejscie analogowe
@@ -627,7 +629,7 @@ struct r_buffer {
 	unsigned long servo_step;       // by Y numer kroku servo
 
    	BYTE address_byte;                 // bajt do obliczania dlugosci odpowiedzi
-	
+
 	word16 PWM_value[MAX_SERVOS_NR];             // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
 	word16 current[MAX_SERVOS_NR];                // prad sterujacy -- zazwyczaj zbedne
 
@@ -642,9 +644,9 @@ struct r_buffer {
 // ------------------------------------------------------------------------
 class ecp_command_buffer {
 public:
-	
-   c_buffer instruction;     // bufor polecen przysylanych z ECP do EDP	   	   	   
-   
+
+   c_buffer instruction;     // bufor polecen przysylanych z ECP do EDP
+
 	// zlecenie zmiany stanu skojarzone z NEXT_STATE
 	int mp_2_ecp_next_state;
 	int mp_2_ecp_next_state_variant; // skojarzone z NEXT_STATE
