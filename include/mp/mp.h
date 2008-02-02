@@ -296,6 +296,7 @@ struct robot_ECP_transmission_data {
 
 	double MPtoECP_inertia[6], MPtoECP_reciprocal_damping[6];
 	double MPtoECP_position_velocity[MAX_SERVOS_NR], MPtoECP_force_xyz_torque_xyz[6];
+	BEHAVIOUR_SPECIFICATION MPtoECP_behaviour[6];
 //	bool MPselection_vector[6];
 
 

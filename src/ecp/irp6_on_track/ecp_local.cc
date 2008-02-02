@@ -106,7 +106,9 @@ void ecp_irp6_on_track_robot::create_command (void) {
 	                  = EDP_data.selection_vector[j];	 // zadana sila
 	                  */
    	    		      EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[j]
- 	   	            = EDP_data.ECPtoEDP_force_xyz_torque_xyz[j]; // pozycja docelowa
+ 	   	    	        = EDP_data.ECPtoEDP_force_xyz_torque_xyz[j]; // pozycja docelowa
+ 	   	            EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.behaviour[j]
+ 	   	     	       = EDP_data.ECPtoEDP_behaviour[j]; // pozycja docelowa
                    }
 				for (int j=0; j<IRP6_ON_TRACK_NUM_OF_SERVOS ; j++){
 					EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.position_velocity[j]

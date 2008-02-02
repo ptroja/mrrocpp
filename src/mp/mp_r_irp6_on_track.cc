@@ -109,6 +109,8 @@ void mp_irp6_on_track_robot::create_next_pose_command (void) {
 
 				mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i]
 					=ecp_td.MPtoECP_force_xyz_torque_xyz[i];
+			     mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.behaviour[i]
+ 	   	     	       = ecp_td.MPtoECP_behaviour[i]; // pozycja docelowa
 			}
 			          for (int i=0; i<IRP6_ON_TRACK_NUM_OF_SERVOS ; i++)
               {

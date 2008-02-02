@@ -83,6 +83,7 @@ double current_XYZ_ZYZ_arm_coordinates[8];  // aktualne wspolrzedne XYZ +
 
 	double ECPtoEDP_inertia[6], ECPtoEDP_reciprocal_damping[6];
 	double ECPtoEDP_position_velocity[MAX_SERVOS_NR], ECPtoEDP_force_xyz_torque_xyz[6];
+	BEHAVIOUR_SPECIFICATION ECPtoEDP_behaviour[6];
 //	bool selection_vector[6];
 
 	// r_buffer

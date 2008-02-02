@@ -244,9 +244,11 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 
 	double inertia[6];
 	double reciprocal_damping[6];
+	BEHAVIOUR_SPECIFICATION behaviour[6];
 
 	memcpy (inertia, instruction->arm.pose_force_torque_at_frame_def.inertia, sizeof (double[6]) );
 	memcpy (reciprocal_damping, instruction->arm.pose_force_torque_at_frame_def.reciprocal_damping, sizeof (double[6]) );
+	memcpy (behaviour, instruction->arm.pose_force_torque_at_frame_def.behaviour, sizeof (BEHAVIOUR_SPECIFICATION[6]) );
 
 	switch (motion_type)
 	{
