@@ -259,12 +259,8 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 		break;
 	}
 
-
 	motion_steps = 1;
 	value_in_step_no = 0;
-
-
-
 
 	double current_force[6], previous_force[6];
 	// double stifness[6];
@@ -281,29 +277,17 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 
 	Ft_v_vector move_rot_vector;
 	Ft_v_vector pos_xyz_rot_xyz_vector;
-
-	// kopie predkosci zadanych do wykorzystanie w generacji nowych predkosci w kolejnym kroku
-//	static k_vector previous_move_vector;
-//	static k_vector previous_rot_vector;
-
 	static Ft_v_vector previous_move_rot_vector;
 
 
-
-	Homog_matrix current_end_effector_frame_wo_translation;
-
-	double begining_joints[MAX_SERVOS_NR], tmp_joints[MAX_SERVOS_NR];
+ 	// WYLICZENIE POZYCJI POCZATKOWEJ
+	double begining_joints[MAX_SERVOS_NR], tmp_joints[MAX_SERVOS_NR], tmp_motor_pos[MAX_SERVOS_NR];
 	frame_tab begining_frame_m;
 
 	get_current_kinematic_model()->mp2i_transform (desired_motor_pos_new, begining_joints);
 	get_current_kinematic_model()->i2e_transform (begining_joints, &begining_frame_m);
-
-	Homog_matrix next_frame (begining_frame_m);
-
-	// dla trybu FIXED FRAME
-	Homog_matrix begining_end_effector_frame = Homog_matrix (begining_frame_m);
-
-
+	Homog_matrix begining_end_effector_frame (begining_frame_m);
+	Homog_matrix next_frame = begining_end_effector_frame;
 
 
 	frame_tab goal_frame_tab;
@@ -318,10 +302,22 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 		case PF_XYZ_ANGLE_AXIS_ABSOLUTE_POSE:
 			goal_frame.set_xyz_angle_axis (instruction->arm.pose_force_torque_at_frame_def.position_velocity);
 		break;
+		case PF_XYZ_ANGLE_AXIS_RELATIVE_POSE:
+			goal_frame.set_xyz_angle_axis (instruction->arm.pose_force_torque_at_frame_def.position_velocity); // tutaj goal_frame jako zmienna tymczasowa
+			goal_frame = begining_end_effector_frame * goal_frame;
+		break;
 		case PF_JOINTS_ABSOLUTE_POSITION:
 			get_current_kinematic_model()->i2e_transform
 				(instruction->arm.pose_force_torque_at_frame_def.position_velocity, &goal_frame_tab);
 			goal_frame.set_frame_tab (goal_frame_tab);
+		break;
+		case PF_JOINTS_RELATIVE_POSITION:
+			for (int i = 0; i < MAX_SERVOS_NR; i++)
+			{
+				tmp_joints[i] = begining_joints[i] + instruction->arm.pose_force_torque_at_frame_def.position_velocity[i];
+			}
+			get_current_kinematic_model()->i2e_transform (tmp_joints, &goal_frame_tab);
+			goal_frame.set_frame_tab (goal_frame_tab);			
 		break;
 		case PF_MOTORS_ABSOLUTE_POSITION:
 			get_current_kinematic_model()->mp2i_transform
@@ -329,17 +325,28 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 			get_current_kinematic_model()->i2e_transform (tmp_joints, &goal_frame_tab);
 			goal_frame.set_frame_tab (goal_frame_tab);
 		break;
+		case PF_MOTORS_RELATIVE_POSITION:
+			for (int i = 0; i < MAX_SERVOS_NR; i++)
+			{
+				tmp_motor_pos[i] = desired_motor_pos_new[i] + instruction->arm.pose_force_torque_at_frame_def.position_velocity[i];
+			}
+			get_current_kinematic_model()->mp2i_transform (tmp_motor_pos, tmp_joints);
+			get_current_kinematic_model()->i2e_transform (tmp_joints, &goal_frame_tab);
+			goal_frame.set_frame_tab (goal_frame_tab);
+		break;
 		default:
 		break;
 	}
 
-	// koniec dla trybu FIXED FRAME
 
 	switch (motion_type)
 	{
 		case PF_XYZ_ANGLE_AXIS_ABSOLUTE_POSE:
 		case PF_JOINTS_ABSOLUTE_POSITION:
 		case PF_MOTORS_ABSOLUTE_POSITION:
+		case PF_XYZ_ANGLE_AXIS_RELATIVE_POSE:
+		case PF_JOINTS_RELATIVE_POSITION:
+		case PF_MOTORS_RELATIVE_POSITION:
 			goal_frame_increment_in_end_effector = ((!begining_end_effector_frame)*goal_frame);
 			goal_frame_increment_in_end_effector.get_xyz_angle_axis(goal_xyz_angle_axis_increment_in_end_effector);
 			for (int i = 0; i < 6; i++)
@@ -347,7 +354,6 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 				pos_xyz_rot_xyz[i] =goal_xyz_angle_axis_increment_in_end_effector[i] *
 					(double) (1/ ( ((double)STEP)*((double)ECP_motion_steps) ) );
 			}
-
 		break;
 		case PF_VELOCITY:
 			memcpy (pos_xyz_rot_xyz, instruction->arm.pose_force_torque_at_frame_def.position_velocity, sizeof (double[6]) );
@@ -369,20 +375,12 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 	Ft_v_tr v_tr_tool_matrix  (current_tool, Ft_v_tr::V);
 	Ft_v_tr v_tr_inv_tool_matrix = !v_tr_tool_matrix;
 
-	/*
-	Ft_v_tr ft_tr_reference_matrix (reference_frame, Ft_v_tr::FT);
-	Ft_v_tr ft_tr_inv_reference_matrix = !ft_tr_reference_matrix;
-	Ft_v_tr v_tr_reference_matrix (reference_frame, Ft_v_tr::V);
-	Ft_v_tr v_tr_inv_reference_matrix = !v_tr_reference_matrix;
-	*/
 
 
 
 	// poczatek generacji makrokroku
 	for (int step = 1; step <= ECP_motion_steps; step++)
 	{
-	//	Homog_matrix next_frame_wo_offset = next_frame;
-	//	next_frame_wo_offset.remove_translation ();
 
 		Homog_matrix current_frame_wo_offset = return_current_frame (WITHOUT_TRANSLATION);
 
@@ -396,18 +394,16 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 		// modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
 
 
-		// dla trybu FIXED
-
-
 
 		Homog_matrix begining_end_effector_frame_with_current_translation = begining_end_effector_frame;
 		begining_end_effector_frame_with_current_translation.set_translation_vector(next_frame);
 
 		Homog_matrix modified_beginning_to_desired_end_effector_frame = !begining_end_effector_frame_with_current_translation *
 			next_frame;
-
+/*
 		Ft_v_tr ft_tr_modified_beginning_to_desired_end_effector_frame (modified_beginning_to_desired_end_effector_frame, Ft_v_tr::FT);
 		Ft_v_tr ft_tr_inv_modified_beginning_to_desired_end_effector_frame = !ft_tr_modified_beginning_to_desired_end_effector_frame;
+		*/
 		Ft_v_tr v_tr_modified_beginning_to_desired_end_effector_frame  (modified_beginning_to_desired_end_effector_frame, Ft_v_tr::V);
 		Ft_v_tr v_tr_inv_modified_beginning_to_desired_end_effector_frame  = !v_tr_modified_beginning_to_desired_end_effector_frame;
 
@@ -457,6 +453,9 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 			case PF_XYZ_ANGLE_AXIS_ABSOLUTE_POSE:
 			case PF_JOINTS_ABSOLUTE_POSITION:
 			case PF_MOTORS_ABSOLUTE_POSITION:
+			case PF_XYZ_ANGLE_AXIS_RELATIVE_POSE:
+			case PF_JOINTS_RELATIVE_POSITION:
+			case PF_MOTORS_RELATIVE_POSITION:
 				pos_xyz_rot_xyz_vector =  v_tr_inv_modified_beginning_to_desired_end_effector_frame * base_pos_xyz_rot_xyz_vector;
 			break;
 			case PF_VELOCITY:
@@ -469,11 +468,11 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 		for (int i = 0; i < 6; i++)
 		{
 
-			// MODYFIKACJA PARAMETROW W ZALEZNOSCI OD ZALOZNOEGO ZACHOWANIA DLA DANEGO KIERUNKU
+			// MODYFIKACJA PARAMETROW W ZALEZNOSCI OD ZALOZONEGO ZACHOWANIA DLA DANEGO KIERUNKU
 			switch (behaviour[i])
 			{
 				case UNGUARDED_MOTION:
-					reciprocal_damping[i]=0; // the force influence is eliminated
+					reciprocal_damping[i]= 0.0; // the force influence is eliminated
 					// inertia is not eleliminated
 				break;
 				case GUARDED_MOTION:
@@ -560,9 +559,6 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 
 	next_frame.get_frame_tab (local_force_end_effector_frame_m);
 	ending_gripper_coordinate = desired_gripper_coordinate;
-
-
-
 
 }
 /*--------------------------------------------------------------------------*/
