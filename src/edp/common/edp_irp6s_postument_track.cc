@@ -249,7 +249,8 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 	memcpy (inertia, instruction->arm.pose_force_torque_at_frame_def.inertia, sizeof (double[6]) );
 	memcpy (reciprocal_damping, instruction->arm.pose_force_torque_at_frame_def.reciprocal_damping, sizeof (double[6]) );
 	memcpy (behaviour, instruction->arm.pose_force_torque_at_frame_def.behaviour, sizeof (BEHAVIOUR_SPECIFICATION[6]) );
-
+	memcpy (force_xyz_torque_xyz, instruction->arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz, sizeof (double[6]) );
+	double desired_gripper_coordinate = instruction->arm.pose_force_torque_at_frame_def.gripper_coordinate;
 	switch (motion_type)
 	{
 		case ABSOLUTE:
@@ -258,29 +259,11 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 		break;
 	}
 
-/*
-	switch (motion_type)
-	{
-		case PF_FIXED_FRAME_TO_XYZ_ANGLE_AXIS_ABSOLUTE_POSE:
-		break;
-		case PF_FIXED_FRAME_TO_JOINTS_ABSOLUTE_POSE:
-		break;
-		case PF_FIXED_FRAME_TO_MOTORS_ABSOLUTE_POSE:
-		break;
-		case PF_FIXED_FRAME_WITH_DESIRED_FORCE_OR_SPEED:
-		break;
-		case PF_MOVING_FRAME_WITH_DESIRED_FORCE_OR_SPEED:
-		break;
-	}
-	*/
+
+	motion_steps = 1;
+	value_in_step_no = 0;
 
 
-	memcpy (force_xyz_torque_xyz, instruction->arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz, sizeof (double[6]) );
-
-
-
-
-	double desired_gripper_coordinate = instruction->arm.pose_force_torque_at_frame_def.gripper_coordinate;
 
 
 	double current_force[6], previous_force[6];
@@ -297,6 +280,7 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 //	k_vector rot_vector;
 
 	Ft_v_vector move_rot_vector;
+	Ft_v_vector pos_xyz_rot_xyz_vector;
 
 	// kopie predkosci zadanych do wykorzystanie w generacji nowych predkosci w kolejnym kroku
 //	static k_vector previous_move_vector;
@@ -304,8 +288,7 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 
 	static Ft_v_vector previous_move_rot_vector;
 
-	motion_steps = 1;
-	value_in_step_no = 0;
+
 
 	Homog_matrix current_end_effector_frame_wo_translation;
 
@@ -371,6 +354,7 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 		break;
 	}
 
+	Ft_v_vector base_pos_xyz_rot_xyz_vector (pos_xyz_rot_xyz);
 
 	copy_frame (reply.arm.pose_force_torque_at_frame_def.beggining_arm_frame_m, begining_frame_m);
 
@@ -392,7 +376,7 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 	Ft_v_tr v_tr_inv_reference_matrix = !v_tr_reference_matrix;
 	*/
 
-	bool wyswietl = true;
+
 
 	// poczatek generacji makrokroku
 	for (int step = 1; step <= ECP_motion_steps; step++)
@@ -432,7 +416,7 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 		Ft_v_vector current_force_torque (ft_tr_inv_tool_matrix *  ft_tr_inv_current_frame_matrix * Ft_v_vector (current_force));
 //		Ft_v_vector tmp_force_torque (Ft_v_tr((!current_tool) * (!current_frame_wo_offset), Ft_v_tr::FT) * Ft_v_vector (current_force));
 		Ft_v_vector previous_force_torque (ft_tr_inv_tool_matrix *  ft_tr_inv_current_frame_matrix * Ft_v_vector (previous_force));
-
+/*
 		switch (motion_type)
 		{
 			case PF_XYZ_ANGLE_AXIS_ABSOLUTE_POSE:
@@ -442,38 +426,7 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 				previous_force_torque = ft_tr_modified_beginning_to_desired_end_effector_frame * previous_force_torque;
 			break;
 		}
-
-		/*
-		if ((debugi%10==0)&&(wyswietl))
-		{
-			printf("edp current_force_torque");
-			current_force_torque.wypisz_wartosc_na_konsole();
-			printf("edp tmp_force_torque");
-			tmp_force_torque.wypisz_wartosc_na_konsole();
-		}
 */
-		//current_force_torque = Ft_v_tr (!force_tool_frame) * current_force_torque;
-		//previous_force_torque = Ft_v_tr (!force_tool_frame) * previous_force_torque;
-		/*
-		switch (motion_type)
-
-			case RELATIVE:
-				current_force_torque = ft_tr_inv_reference_matrix * current_force_torque;
-				previous_force_torque = ft_tr_inv_reference_matrix * previous_force_torque;
-			break;
-			case ABSOLUTE:
-				// do zrobienia
-			break;
-		}
-		*/
-//	if ((debugi%10==0)&&(wyswietl)) std::cout << current_force_torque[3] << std::endl;
-
-
-	//	previous_move_rot_vector = Ft_v_vector(previous_move_vector, previous_rot_vector);
-
-		// przeniesienie poprzednich predkosci zadanych do ukladu reference_frame
-		//previous_move_vector = !reference_frame_wo_offset * !current_frame_wo_offset * previous_move_vector;
-		//previous_rot_vector = !reference_frame_wo_offset * !current_frame_wo_offset * previous_rot_vector;
 
 		//wyzerowanie historii dla dlugiej przerwy w sterowaniu silowym
 
@@ -486,13 +439,10 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 		{
 		//	printf("\n\nPREVIOUS_MOVE_VECTOR_NULL_STEP_VALUE NOT\n\n");
 		}
-/*
-		previous_move_rot_vector =  v_tr_inv_reference_matrix * v_tr_inv_tool_matrix *
-			v_tr_inv_current_frame_matrix * previous_move_rot_vector;
-	*/
+
 
 		previous_move_rot_vector =  v_tr_inv_tool_matrix * v_tr_inv_current_frame_matrix * previous_move_rot_vector;
-
+/*
 		switch (motion_type)
 		{
 			case PF_XYZ_ANGLE_AXIS_ABSOLUTE_POSE:
@@ -501,54 +451,48 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 				previous_move_rot_vector =  v_tr_modified_beginning_to_desired_end_effector_frame * previous_move_rot_vector;
 			break;
 		}
-
-
-
-
-
-		// sily sa teraz przeksztalcone do reference_frame - albo wzgledem current_end_effector_frame, albo wzgledem ukladu globalnego
-		// wspolczynniki predkosci ruchu TFF
-
-		// sprowadzenie rzeczywistych przemieszczen manipulatora do ukladu reference frame w celu wyznaczenie sztywnosci
-
-//		k_vector servo_translation = !reference_frame_wo_offset * !current_frame_wo_offset * servo_xyz_angle_axis_translation;
-//		k_vector servo_rotation = !reference_frame_wo_offset * !current_frame_wo_offset * servo_xyz_angle_axis_rotation;
-
-//		 printf("b rx: %f, ry: %f, rz: %f\n", servo_translation[0], servo_translation[1], 	servo_translation[2]);
-
-//		printf("ft rx: %f, ry: %f, rz: %f\n", current_force_torque[0], current_force_torque[1], 	current_force_torque[2]);
-
-/*
-		for (int i = 0; i < 3; i++)
+*/
+		switch (motion_type)
 		{
-			if (servo_translation[i]!=0) stifness[i] = abs((current_force_torque[i] - previous_force_torque[i])/servo_translation[i]);
-				else stifness[i]=100000000;
-			if (servo_rotation[i]!=0) stifness[i+3] = abs((current_force_torque[i+3] - previous_force_torque[i+3])/servo_rotation[i]);
-				else stifness[i+3]=100000000;
+			case PF_XYZ_ANGLE_AXIS_ABSOLUTE_POSE:
+			case PF_JOINTS_ABSOLUTE_POSITION:
+			case PF_MOTORS_ABSOLUTE_POSITION:
+				pos_xyz_rot_xyz_vector =  v_tr_inv_modified_beginning_to_desired_end_effector_frame * base_pos_xyz_rot_xyz_vector;
+			break;
+			case PF_VELOCITY:
+				pos_xyz_rot_xyz_vector =  base_pos_xyz_rot_xyz_vector;
+			break;
 		}
-	*/
 
-	//	 printf("stifness rx: %f, ry: %f, rz: %f\n", stifness[0], stifness[1], stifness[2]);
-
-//	if (robot_name==ROBOT_IRP6_POSTUMENT) std::cout << current_force_torque <<std::endl;
-
-		// printf("edp: x: %+d, y: %+d\n", (int) round(force_torque[0]),  (int) round(force_torque[1]));
 
 		// wyznaczenie predkosci z uwzglednieniem wirtualnej inercji i wirtualnego tarcia wiskotycznego
 		for (int i = 0; i < 6; i++)
 		{
-			/*
-			move_rot_vector[i] =
-				((force_xyz_torque_xyz[i] - current_force_torque[i]) * reciprocal_damping[i] + pos_xyz_rot_xyz[i]) * STEP +
-					inertia[i] * previous_move_rot_vector[i];
-			*/
 
+			// MODYFIKACJA PARAMETROW W ZALEZNOSCI OD ZALOZNOEGO ZACHOWANIA DLA DANEGO KIERUNKU
+			switch (behaviour[i])
+			{
+				case UNGUARDED_MOTION:
+					reciprocal_damping[i]=0; // the force influence is eliminated
+					// inertia is not eleliminated
+				break;
+				case GUARDED_MOTION:
+					force_xyz_torque_xyz[i] = 0.0; // the desired force is set to zero
+				break;
+				case CONTACT:
+					pos_xyz_rot_xyz_vector[i] = 0.0; // the desired velocity is set to zero
+				break;
+				default:
+				break;
+			}
+			
+			// PRAWO STEROWANIA
 			move_rot_vector[i] =
-				(( reciprocal_damping[i] * (force_xyz_torque_xyz[i] - current_force_torque[i]) + pos_xyz_rot_xyz[i] ) * STEP * STEP +
+				(( reciprocal_damping[i] * (force_xyz_torque_xyz[i] - current_force_torque[i]) + pos_xyz_rot_xyz_vector[i] ) * STEP * STEP +
 				reciprocal_damping[i] * inertia[i] * previous_move_rot_vector[i]) / (STEP + reciprocal_damping[i] * inertia[i]) ;
 		}
 
-
+/*
 		switch (motion_type)
 		{
 			case PF_XYZ_ANGLE_AXIS_ABSOLUTE_POSE:
@@ -557,20 +501,7 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 				move_rot_vector =  v_tr_inv_modified_beginning_to_desired_end_effector_frame * move_rot_vector;
 			break;
 		}
-
-//		if (robot_name==ROBOT_IRP6_POSTUMENT) std::cout << step << " "<< move_rot_vector[2] <<std::endl;
-
-/*
-		if ((debugi%10==0)&&(wyswietl))
-		{
-			printf("edp force_xyz_torque_xyz: %f", force_xyz_torque_xyz[2]);
-			printf("edp current_force_torque: %f", current_force_torque[2]);
-			printf("edp previous_move_rot_vector: %f", previous_move_rot_vector[2]);
-			printf("\n");
-		}
 */
-	wyswietl=false;
-
 
 
 
@@ -581,16 +512,7 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 
 		Homog_matrix rot_frame (Homog_matrix::MTR_XYZ_ANGLE_AXIS, move_rot_vector);
 
-//		printf("a rx: %f, ry: %f, rz: %f\n", move_vector[0], move_vector[1], move_vector[2]);
-//		printf("a rx: %f, ry: %f, rz: %f\n", move_vector[0], move_vector[1], move_vector[2]);
 
-		// by Y - STARA WERSJA
-		/*
-		Homog_matrix rot_frame(rot_vector);	// tworzenie ramki rotacji (formula rodrigeza)
-
-		// dodanie skladowej translacji
-		rot_frame.set_translation_vector (move_vector);
-		*/
 		// wyliczenie nowej pozycji zadanej
 		next_frame = next_frame * rot_frame;
 
