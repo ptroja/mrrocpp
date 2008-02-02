@@ -228,17 +228,8 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 	// zmienne z bufora wejsciowego
 	WORD ECP_motion_steps = instruction->motion_steps;	// liczba krokow w makrokroku
 	int ECP_value_in_step_no = instruction->value_in_step_no;	// liczba krokow po ktorych bedzie wyslana odpowiedz do ECP o przewidywanym zakonczeniu ruchu
-//	int force_move_mode = instruction->arm.pose_force_torque_at_frame_def.force_move_mode; // typ ruchu silowego 0 - relative, 1 - absolute
-//	Homog_matrix reference_frame(instruction->arm.pose_force_torque_at_frame_def.reference_frame);	// referencyjna ramka ruchu
-//	Homog_matrix reference_frame_wo_offset = reference_frame;
-//	reference_frame_wo_offset.remove_translation ();
-
-//	if (robot_name==ROBOT_IRP6_POSTUMENT) std::cout << "ALALA" << std::endl;
 
 	const unsigned long PREVIOUS_MOVE_VECTOR_NULL_STEP_VALUE = 10;
-
-	// Homog_matrix force_tool_frame(instruction->arm.pose_force_torque_at_frame_def.force_tool_frame);
-	//int position_set_mode = instruction->arm.pose_force_torque_at_frame_def.position_set_mode; // typ ruchu pozycyjnego 0 - desired 1- increment (nie uzywane)
 	double pos_xyz_rot_xyz[6];			// wartosci ruchu pozycyjnego
 	double force_xyz_torque_xyz[6]; 	// wartosci uchybu sily
 
@@ -263,7 +254,6 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 	value_in_step_no = 0;
 
 	double current_force[6], previous_force[6];
-	// double stifness[6];
 
 	double beginning_gripper_coordinate;
 	static double ending_gripper_coordinate;
@@ -271,14 +261,9 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 
 	static unsigned long last_force_step_counter = step_counter;
 
-	// wektor predkosci zadanych
-//	k_vector move_vector;
-//	k_vector rot_vector;
-
 	Ft_v_vector move_rot_vector;
 	Ft_v_vector pos_xyz_rot_xyz_vector;
 	static Ft_v_vector previous_move_rot_vector;
-
 
  	// WYLICZENIE POZYCJI POCZATKOWEJ
 	double begining_joints[MAX_SERVOS_NR], tmp_joints[MAX_SERVOS_NR], tmp_motor_pos[MAX_SERVOS_NR];
@@ -374,8 +359,6 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 	Ft_v_tr ft_tr_inv_tool_matrix = !ft_tr_tool_matrix;
 	Ft_v_tr v_tr_tool_matrix  (current_tool, Ft_v_tr::V);
 	Ft_v_tr v_tr_inv_tool_matrix = !v_tr_tool_matrix;
-
-
 
 
 	// poczatek generacji makrokroku
