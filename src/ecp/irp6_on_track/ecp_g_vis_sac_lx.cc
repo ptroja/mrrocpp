@@ -422,6 +422,7 @@ std::cout << "C_T_G" << std::endl;
 
 	//skrot myslowy
 	O_Tx_G=O_Tx_G*G_Tx_S;
+	O_Tx_G=O_Tx_G*!G_Tx_G2;
 
 //std::cout << "MP O_T_G2" << std::endl;
 //std::cout << O_Tx_G;
@@ -450,9 +451,11 @@ std::cout << "C_T_G" << std::endl;
 	C2_Tx_G=C2_Tx_G*G_Tx_S;
 	O_Tx_G__C2=O_Tx_E*C2_Tx_G; //rota O_Tx_E 0,0,0
 
-
-	O_Tx_G__C2.get_xyz_angle_axis(O_r_G[0]);
-
+	//SAC
+	O_Tx_G.get_xyz_angle_axis(O_r_G[0]);
+	//EIH
+	//O_Tx_G__C2.get_xyz_angle_axis(O_r_G[0]);
+	
 
 
 std::cout << "MP O_T_G__C2" << std::endl;
