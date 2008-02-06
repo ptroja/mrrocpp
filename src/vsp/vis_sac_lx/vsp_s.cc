@@ -49,21 +49,26 @@
 #define HOST "mieszko"
 #define PORT 30000
 
+#define HOST_EIH "bona"
+#define PORT_EIH 40000
+
 #define BUFFER_SIZE 8*256 //8*
 
 int sockfd, portno, n;
 struct sockaddr_in serv_addr;
 struct hostent *server;
 
+int sockfd_eih, portno_eih, n_eih;
+struct sockaddr_in serv_addr_eih;
+struct hostent *server_eih;
+
 char buffer[BUFFER_SIZE];
+char buffer_eih[BUFFER_SIZE];
 
 
 int ImageBPL = 1024;
 int state = 0;
 int fd;
-//unsigned short buffer[600000];
-
-int alloc_m=0, alloc_v=0; // globalnie widoczne liczby zaalokowanych macierzy i wektorow
 
 int size_read;
 clock_t start_time, end_time;
@@ -78,10 +83,17 @@ int a=0;
 int b=0;
 int g=0;
 
+int x_sac=0;
+int y_sac=0;
+int z_sac=0;
+
+int a_sac=0;
+int b_sac=0;
+int g_sac=0;
+
 int C_T_G[16];
 
-//double x=0;
-//double y=0;
+
 
 int irq_no;
 int id;  
@@ -129,56 +141,18 @@ vsp_vis_sac_lx_sensor::vsp_vis_sac_lx_sensor(void){
 
 	// Wielkosc unii.
 	union_size = sizeof(image.vis_sac);
-
-//	uint64_t e;			// kod bledu systemowego
 	
 	is_sensor_configured=false;	// czujnik niezainicjowany 
 	is_reading_ready=false;				// nie ma zadnego gotowego odczytu
 	irq_no = 0;
 	ThreadCtl (_NTO_TCTL_IO, NULL);  // by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi 
-	
-	
-	// Obliczenie dlugosci sciezki do pliku INI.
-/*	
-	char* node_l = config->return_node();
-	char* dir_l = config->return_dir();
-	
-	//int size = strlen("/net/") + strlen(node_l) + strlen(dir_l) + strlen("data/color.txt");
-	int size = strlen("../data/color.txt");
-	char * file_location = new char[size];
-	// Stworzenie sciezki do pliku.
-	//strcpy(file_location, "/net/");
-	//strcat(file_location, node_l);
-	//strcat(file_location, dir_l);
-	//strcat(file_location, "data/color.txt");
-	strcat(file_location, "../data/color.txt");
-
-	//size = strlen("/net/") + strlen(node_l) + strlen(dir_l) + strlen("data/pattern.txt");
-	size = strlen("../data/pattern.txt");
-	char * file_location2 = new char[size];
-	// Stworzenie sciezki do pliku.
-	//strcpy(file_location2, "/net/");
-	//strcat(file_location2, node_l);
-	//strcat(file_location2, dir_l);
-	//strcat(file_location2, "data/pattern.txt");
-	strcat(file_location2, "../data/pattern.txt");
-	
-	//vision.loadColors("color.txt");
-  	//printf("ret%d",ret);
-  	
-			if (vision.loadColors(file_location)){
-				 vision.initialize(XMAX,YMAX);
-				 vision.countLUT();
-				 vision.initEstim(file_location2);
-
-}
-else printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
-	fd = open("/dev/bttvx",O_RDWR); // bezposrednio odczyt ze sterownika zamiast konstruktora 
-*/
 		
 	z=0;
 	x=0;
-		portno = PORT;
+	
+//SAC	
+
+	portno = PORT;
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0)
 	{
@@ -201,6 +175,34 @@ else printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	    printf("ERROR connecting");
 	    throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 		}
+
+//EIH	
+	portno_eih = PORT_EIH;
+	sockfd_eih = socket(AF_INET, SOCK_STREAM, 0);
+	if (sockfd_eih < 0)
+	{
+	    printf("ERROR opening socket");
+	    throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	}
+	server_eih = gethostbyname(HOST_EIH);
+	if (server_eih == NULL) {
+	    printf("ERROR, no such host\n");	    
+	    throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	}
+	   bzero((char *) &serv_addr_eih, sizeof(serv_addr_eih));
+	serv_addr_eih.sin_family = AF_INET;
+	bcopy((char *)server_eih->h_addr, 
+	     (char *)&serv_addr_eih.sin_addr.s_addr,
+	     server_eih->h_length);
+	serv_addr_eih.sin_port = htons(portno_eih);
+	  if (connect(sockfd_eih, (const struct sockaddr *) &serv_addr_eih,sizeof(serv_addr_eih)) < 0) 
+	  {
+	    printf("ERROR connecting");
+	    throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		}
+		
+		
+		
 	sr_msg->message ("VSP VIS PB-ECL-SAC LX started");
 	
 	};
@@ -230,54 +232,32 @@ void vsp_vis_sac_lx_sensor::initiate_reading (void){
 
 	if(!is_sensor_configured)
 	     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
-	     
-//clock_gettime( CLOCK_REALTIME , &s_time);
- 
 
- /*
-	size_read = read( fd, buffer, sizeof( buffer ) ); // bezposredni odczyt zamiast przez klase
-   
-	lseek(fd,0,SEEK_SET);
-
-//recog
-  vision.findBlobs(buffer);
- 
-vision.filterBlobsReset();
-vision.filterBlobs(BLOB_SIZE_BIGGER,200.0);
-vision.filterBlobs(BLOB_SIZE_SMALLER,10000.0);
-vision.findVerticesAll();
-vision.filterBlobs(VERTICES_BIGGER,3.0);
-vision.filterBlobs(VERTICES_SMALLER,7.0);
-vision.filterBlobs(BLOB_CIRCULARITY_BIGGER,0.5);
-vision.filterBlobs(BLOB_CIRCULARITY_SMALLER,6.0);
-
-
-vision.estimPose3();
-//vision.estimError();
-
- k1.clear();
-
-if(k1.build(&vision))	vision.setRoi(k1.roi,40);
-else
-vision.setRoi(k1.roi,1000);
-
-		*/
-// koniec przepisywania
-
+//SAC
 
 	n = write(sockfd,"x",strlen("x"));
     if (n < 0) 
          printf("ERROR writing to socket");
     bzero(buffer,BUFFER_SIZE);
-  //  printf("po buff zero\n");
     n = read(sockfd,buffer,BUFFER_SIZE);
- //	printf("po buff read\n");   
 	if (n < 0) 
          printf("ERROR reading from socket");
-    //x = atoi(buffer);
-    
-	sscanf(buffer,"%d %d %d %d %d %d", &x,&y,&z, &a, &b, &g);
-printf("VSP - %d %d %d %d %d %d\n", x,y,z, a, b, g);
+	sscanf(buffer,"%d %d %d %d %d %d", &x_sac,&y_sac,&z_sac, &a_sac, &b_sac, &g_sac);
+	printf("VSP_SAC - %d %d %d %d %d %d\n", x_sac,y_sac,z_sac, a_sac, b_sac, g_sac);
+
+
+//EIH
+
+	n_eih = write(sockfd_eih,"x",strlen("x"));
+    if (n_eih < 0) 
+         printf("ERROR writing to socket");
+    bzero(buffer_eih,BUFFER_SIZE);
+    n_eih = read(sockfd_eih,buffer_eih,BUFFER_SIZE);
+	if (n_eih < 0) 
+         printf("ERROR reading from socket");
+	sscanf(buffer_eih,"%d %d %d %d %d %d", &x,&y,&z, &a, &b, &g);
+	printf("VSP - %d %d %d %d %d %d\n", x,y,z, a, b, g);
+
 
 //for(int i=0; i<12; i++)
 /*
@@ -387,6 +367,12 @@ double aux=0;
 	from_vsp.comm_image.vis_sac.frame_E_r_G__f[4]=(double) b/100000;
 	from_vsp.comm_image.vis_sac.frame_E_r_G__f[5]=(double) g/100000;
 	
+	from_vsp.comm_image.vis_sac.frame_E_r_G[0]=(double) x_sac/10000;
+	from_vsp.comm_image.vis_sac.frame_E_r_G[1]=(double) y_sac/10000;	
+	from_vsp.comm_image.vis_sac.frame_E_r_G[2]=(double) z_sac/10000;
+	from_vsp.comm_image.vis_sac.frame_E_r_G[3]=(double) a_sac/100000;
+	from_vsp.comm_image.vis_sac.frame_E_r_G[4]=(double) b_sac/100000;
+	from_vsp.comm_image.vis_sac.frame_E_r_G[5]=(double) g_sac/100000;
 	
 	
 	

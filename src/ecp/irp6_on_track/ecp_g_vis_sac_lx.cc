@@ -332,8 +332,14 @@ std::cout << "C_T_G" << std::endl;
 
 
 
+//SAC
+	C_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G[0],vsp_vis_sac->image.vis_sac.frame_E_r_G[1],
+-vsp_vis_sac->image.vis_sac.frame_E_r_G[2],
+-vsp_vis_sac->image.vis_sac.frame_E_r_G[3]
+,0,0);
 
-	C_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0],vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1],
+//EIH
+	C2_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0],vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1],
 -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2],
 -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3]
 ,0,0);
@@ -353,7 +359,7 @@ std::cout << "C_T_G" << std::endl;
 //std::cout << O_Tx_G;
 
 	C_Tx_G.get_xyz_rpy(C_r_G[0]);
-	C2_Tx_G=C_Tx_G; //EIH
+//	C2_Tx_G=C_Tx_G; //EIH
 
 	std::cout << "ROZNICA:C " << fabs(C_r_G[1][0]-C_r_G[0][0])<<" "<< C_r_G[1][0] <<" " <<C_r_G[0][0] << std::endl;
 
@@ -453,9 +459,19 @@ std::cout << "C_T_G" << std::endl;
 
 	//SAC
 	O_Tx_G.get_xyz_angle_axis(O_r_G[0]);
-	//EIH
-	//O_Tx_G__C2.get_xyz_angle_axis(O_r_G[0]);
 	
+	for (int i=0; i<6; i++)
+	{
+		O_rcom_G[0][i]=O_r_G[0][i];
+	}	
+	//EIH
+	O_Tx_G__C2.get_xyz_angle_axis(O_r_G[0]);
+	
+	//BOTH
+		for (int i=0; i<6; i++)
+	{
+		O_r_G[0][i]=0.5*O_r_G[0][i]+0.5*O_rcom_G[0][i];
+	}
 
 
 std::cout << "MP O_T_G__C2" << std::endl;

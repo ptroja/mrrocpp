@@ -72,6 +72,7 @@ int step_no;
 	double O_r_Ep_d2[3][6]; //2giego stopnia
 	
 	double O_r_G[3][6];
+	double O_rcom_G[3][6];
 	double E_r_G[3][6];
 	double E_r_Ep[3][6];
 	
