@@ -335,33 +335,21 @@ std::cout << "C_T_G" << std::endl;
 //SAC
 	C_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G[0],vsp_vis_sac->image.vis_sac.frame_E_r_G[1],
 -vsp_vis_sac->image.vis_sac.frame_E_r_G[2],
--vsp_vis_sac->image.vis_sac.frame_E_r_G[3]
-,0,0);
+
+vsp_vis_sac->image.vis_sac.frame_E_r_G[5],0,0);
+std::cout <<"Rota C_T_Gxxx " << vsp_vis_sac->image.vis_sac.frame_E_r_G[5] <<" " << O_r_G[0][4] << " "<< O_r_G[0][5] <<std::endl;
 
 //EIH
 	C2_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0],vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1],
 -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2],
 -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3]
 ,0,0);
-//vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]);
 
-//std::cout << "MP C_T_G" << std::endl;
-//std::cout << C_Tx_G;
-
-	//O_Tx_G.set_xyz_euler_zyz(0.950, 0.000, 0.265, 0.002, 1.481, 2.341);
-
-//	O_Tx_G.set_xyz_euler_zyz(0.950+0.058+vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0],
-//	0.000+vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1]-0.06,
-// 	0.265+vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2]+0.900,
-//	0.002, 1.481+0.03, 2.341);
-
-//std::cout << "MP O_T_G pierwsze" << std::endl;
-//std::cout << O_Tx_G;
+	C2_Tx_G.get_xyz_rpy(C_r_G[0]);
 
 	C_Tx_G.get_xyz_rpy(C_r_G[0]);
-//	C2_Tx_G=C_Tx_G; //EIH
+	
 
-	std::cout << "ROZNICA:C " << fabs(C_r_G[1][0]-C_r_G[0][0])<<" "<< C_r_G[1][0] <<" " <<C_r_G[0][0] << std::endl;
 
 //podjazd gdy sie nie ruszamy
 	if(fabs(O_r_G[1][0]-O_r_G[0][0])<=0.02 && fabs(O_r_G[1][1]-O_r_G[0][1])<=0.02) //0.007
@@ -371,7 +359,7 @@ std::cout << "C_T_G" << std::endl;
 	}
 	else
 	{
-		x2g=-0.07;
+		x2g=-0.14;
 		steps2switch=0;
 	}
 
@@ -401,7 +389,7 @@ std::cout << "C_T_G" << std::endl;
 //	}
 
 	//x2g=-0.07;
-
+std::cout <<"x2g " << x2g << std::endl;
 	G_Tx_S.set_xyz_rpy(x2g, 0, 0, 0, 0, 0);
 
 
@@ -411,35 +399,12 @@ std::cout << "C_T_G" << std::endl;
  	0.265+0.900+0.05-0.105,
 	0,0,0);
 
-//std::cout << "MP O_T_C" << std::endl;
-//std::cout << O_Tx_C;
-//	std::cout << "MP C_T_G" << std::endl;
-//	std::cout << C_Tx_G;
-
 
 	O_Tx_G=O_Tx_C*C_Tx_G;
-
-//std::cout << "MP O_T_G2" << std::endl;
-//std::cout << O_Tx_G;
-
-//std::cout << "MP O_T_G1" << std::endl;
-//std::cout << O_Tx_G;
 
 
 	//skrot myslowy
 	O_Tx_G=O_Tx_G*G_Tx_S;
-	O_Tx_G=O_Tx_G*!G_Tx_G2;
-
-//std::cout << "MP O_T_G2" << std::endl;
-//std::cout << O_Tx_G;
-//	O_Tx_G=O_Tx_G*G_Tx_G2;
-//std::cout << "MP O_T_G3" << std::endl;
-//std::cout << O_Tx_G;
-
-
-//std::cout << "MP O_T_G" << std::endl;
-//std::cout << O_Tx_G;
-
 
 	O_Tx_G.get_xyz_angle_axis(O_r_G[0]);
 	O_Tx_E.set_frame_tab(the_robot->EDP_data.current_predicted_arm_frame_m);
@@ -451,9 +416,8 @@ std::cout << "C_T_G" << std::endl;
 
 	//EIH
 	C2_Tx_G.get_xyz_angle_axis(O_r_G[0]);
-	std::cout <<"Rota C2_T_G " << O_r_G[0][3] <<" " << O_r_G[0][4] << " "<< O_r_G[0][5] <<std::endl;
 
-	//O_Tx_G__C2=(O_Tx_E*!G_Tx_G2)*C2_Tx_G*G_Tx_G2;
+
 	C2_Tx_G=C2_Tx_G*G_Tx_S;
 	O_Tx_G__C2=O_Tx_E*C2_Tx_G; //rota O_Tx_E 0,0,0
 
@@ -470,42 +434,18 @@ std::cout << "C_T_G" << std::endl;
 	//BOTH
 		for (int i=0; i<6; i++)
 	{
-		O_r_G[0][i]=0.5*O_r_G[0][i]+0.5*O_rcom_G[0][i];
+		//O_r_G[0][i]=0.5*O_r_G[0][i]+0.5*O_rcom_G[0][i]; //SAC+EIH
+		O_r_G[0][i]=O_rcom_G[0][i]; //SAC ONLY
+		//O_r_G[0][i]=O_r_G[0][i]; //EIH ONLY
 	}
 
 
-std::cout << "MP O_T_G__C2" << std::endl;
-std::cout << O_Tx_G__C2;
-
-std::cout << "MP O_T_E" << std::endl;
-std::cout << O_Tx_E;
-
-std::cout << "MP C2_T_G" << std::endl;
-std::cout << C2_Tx_G;
-
-std::cout <<"Rota O_r_G" << O_r_G[0][3] <<" " << O_r_G[0][4] << " "<< O_r_G[0][5] <<std::endl;
-//std::cout << "MP O_T_EE" << std::endl;
-//std::cout << O_Tx_EE;
-
-	//skrot myslowy
-	//O_Tx_G__C2=(O_Tx_G__C2*!G_Tx_G2)*G_Tx_S*G_Tx_G2;
-
-	std::cout << "MP O_T_G__C2" << std::endl;
-	std::cout << O_Tx_G__C2;
-
-//	std::cout << "O_r_Ep[0][i]  O_r_Ep[1][i] O_eps_EG[0][i]   O_r_G[0][i] O_r_E[0][i]" << std::endl;
-		std::cout << "poczatek ";
-		std::cout << O_r_E[0][1] << " " <<  O_r_E[1][1] << std::endl;
 
 
 	for (int i=0; i<6; i++)
 	{
 		O_eps_EG[0][i]=O_r_G[0][i]-O_r_E[0][i];
-		//O_r_Ep[0][i]=O_r_E[0][i]+0.5*O_eps_EG[0][i]; //0.01
 		O_r_Ep[0][i]=O_r_E[0][i]+gain[i]*O_eps_EG[0][i]; //0.01
-		std::cout << "O_r_Ep[0][i]  O_r_E[0][i] O_eps_EG[0][i]  O_r_G[0][i] O_r_E[0][i]" << std::endl;
-
-		std::cout << O_r_Ep[0][i]  << " " <<  O_r_E[0][i] << " " << O_eps_EG[0][i] << " " <<  O_r_G[0][i] << " " << O_r_E[0][i] << std::endl;
 	}
 
 	//O_eps_EG[0][2]=O_r_G[0][2]-O_r_E[0][2];
