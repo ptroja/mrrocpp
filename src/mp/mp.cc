@@ -7,20 +7,7 @@
 // -------------------------------------------------------------------------
 // Funkcje do konstruowania procesow MP
 
-#include <stdio.h>
-#include <signal.h>
-#include <stdarg.h>
-#include <errno.h>
-#include <string.h>
-#include <stdint.h>
-#include <stdlib.h>
 #include <unistd.h>
-#include <math.h>
-#include <fstream>
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
-#include <sys/neutrino.h>
-#include <sys/netmgr.h>
 
 #include "common/typedefs.h"
 #include "common/impconst.h"
