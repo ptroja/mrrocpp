@@ -55,10 +55,10 @@ mp_vf: mp_t_vf.o $(MP_MAIN_OBJECTS) mp_g_test.o ecp_mp_s_schunk.o ecp_mp_s_vis.o
 mp_pr: mp_t_pr.o $(MP_MAIN_OBJECTS) mp_g_teach_in.o mp_g_force.o ecp_mp_s_schunk.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
-mp_rc: $(MP_MAIN_OBJECTS) mp_t_rc.o mp_g_teach_in.o ecp_mp_tr_rc_windows.o mp_g_vis.o mp_g_force.o ecp_mp_s_vis.o ecp_mp_s_schunk.o $(SHOBJ)
+mp_rc: $(MP_MAIN_OBJECTS) mp_t_rc.o mp_g_teach_in.o ecp_mp_tr_rc_windows.o mp_g_vis.o mp_g_force.o ecp_mp_s_vis.o ecp_mp_s_schunk.o CubeState.o SingleManipulation.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
-mp_rcsc: $(MP_MAIN_OBJECTS) mp_t_rcsc.o ecp_mp_tr_rc_windows.o mp_g_teach_in.o mp_g_vis.o mp_g_force.o ecp_mp_s_vis.o ecp_mp_s_schunk.o $(SHOBJ)
+mp_rcsc: $(MP_MAIN_OBJECTS) mp_t_rcsc.o ecp_mp_tr_rc_windows.o mp_g_teach_in.o mp_g_vis.o mp_g_force.o ecp_mp_s_vis.o ecp_mp_s_schunk.o CubeState.o SingleManipulation.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 mp_haptic: $(MP_MAIN_OBJECTS) mp_t_haptic.o mp_g_teach_in.o mp_g_force.o ecp_mp_s_schunk.o $(SHOBJ)
@@ -88,13 +88,13 @@ mp_vis_sac: mp_t_vis_sac.o $(MP_MAIN_OBJECTS) mp_g_teach_in.o mp_g_vis_sac.o mp_
 mp_vis_sac_lx: mp_t_vis_sac_lx.o $(MP_MAIN_OBJECTS) mp_g_teach_in.o mp_g_vis_sac_lx.o mp_g_force.o ecp_mp_s_vis_sac_lx.o ecp_mp_s_schunk.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
-mp_rcs_test: $(MP_MAIN_OBJECTS) mp_t_rcs_test.o ecp_mp_s_rcs_korf.o ecp_mp_s_rcs_kociemba.o $(SHOBJ)
+mp_rcs_test: $(MP_MAIN_OBJECTS) mp_t_rcs_test.o ecp_mp_s_rcs_korf.o ecp_mp_s_rcs_kociemba.o CubeState.o SingleManipulation.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 mp_pouring: $(MP_MAIN_OBJECTS) mp_t_pouring.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
-mp_rcs: $(MP_MAIN_OBJECTS) mp_t_rcs.o mp_g_teach_in.o ecp_mp_s_rcs_korf.o ecp_mp_s_rcs_kociemba.o ecp_mp_tr_rc_windows.o mp_g_vis.o mp_g_force.o ecp_mp_s_vis.o ecp_mp_s_schunk.o $(SHOBJ)
+mp_rcs: $(MP_MAIN_OBJECTS) mp_t_rcs.o mp_g_teach_in.o ecp_mp_s_rcs_korf.o ecp_mp_s_rcs_kociemba.o ecp_mp_tr_rc_windows.o mp_g_vis.o mp_g_force.o ecp_mp_s_vis.o ecp_mp_s_schunk.o CubeState.o SingleManipulation.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #---------------------------------Special object build rules (user made)-------------------------------------#

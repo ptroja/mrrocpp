@@ -11,66 +11,12 @@
 #include "mp/mp.h"
 #include "ecp_mp/ecp_mp_t_rcsc.h"
 
+#include "mp/CubeState.h"
+#include "mp/SingleManipulation.h"
+
 #include <list>
 
-// zbior obejmujacy mozliwe stany kostki 
-enum CUBE_COLORS {UNKNOWN_CUBE_COLOR, RED, YELLOW, GREEN, BLUE, ORANGE, WHITE};
-enum CUBE_TURN_ANGLE {UKNOWN_TURN_ANGLE, CL_180, CL_90, CL_0, CCL_90};
-
 class mp_rubik_cube_solver_task_class;
-
-CUBE_COLORS read_cube_color (char input_char);
-CUBE_TURN_ANGLE read_cube_turn_angle (char input_char);
-
-
-
-class single_manipulation_class {
-public:
-	CUBE_COLORS face_to_turn;
-	CUBE_TURN_ANGLE turn_angle;
-	
-	// metody 
-	void set_state (CUBE_COLORS face_to_turn_l, CUBE_TURN_ANGLE turn_angle_l);
-	
-	// konstruktory
-	single_manipulation_class(void);
-	single_manipulation_class(CUBE_COLORS face_to_turn_l, CUBE_TURN_ANGLE turn_angle_l);
-	single_manipulation_class (const single_manipulation_class& cs);
-
-};
-
-
-class cube_state_class
-{
-protected:
-	// okresla jak sciany kostki sa zorientowane wzgledem chwytaka truck'a z punkltu widzenia chwytaka
-	CUBE_COLORS up, down, front, rear, left, right;
-	
-public:
-	char cube_tab[6][9]; // NAZWA DO ZMIANY
-
-	friend class mp_task_rubik_cube_solver;
-    // konstruktory
-    cube_state_class();
-    cube_state_class(CUBE_COLORS up_is, CUBE_COLORS down_is, CUBE_COLORS front_is, 
-		CUBE_COLORS rear_is, CUBE_COLORS left_is, CUBE_COLORS right_is);
-		
-	// kontruktor kopiujacy
-	cube_state_class (const cube_state_class& cs);
-	
-	// operatory
-	cube_state_class& operator= (const cube_state_class& cs);
-	
-	// metody
-	// okresla jak sciany kostki sa zorientowane wzgledem chwytaka truck'a z punkltu widzenia chwytaka
-	void set_state(CUBE_COLORS up_is, CUBE_COLORS down_is, CUBE_COLORS front_is, 
-		CUBE_COLORS rear_is, CUBE_COLORS left_is, CUBE_COLORS right_is);
-		
-	void print_face_color(CUBE_COLORS face_name);
-	void print_cube_colors();
-		
-};
-
 
 
 class mp_task_rubik_cube_solver : public mp_task  
@@ -80,7 +26,7 @@ protected:
 
 // stan kostki
 // kolory scian patrzac przez os ramienia tracka (od kolumny), w plaszczynie ziemi
- 	cube_state_class* cube_state;
+ 	CubeState* cube_state;
  
 	bool break_state;
   	bool manipulation_sequence_computed;
@@ -91,7 +37,7 @@ protected:
 public:
 
 	// stl'owa lista manipulacji
-	std::list<single_manipulation_class> manipulation_list;
+	std::list<SingleManipulation> manipulation_list;
 
 	void initiate (CUBE_COLORS up_is, CUBE_COLORS down_is, CUBE_COLORS front_is, 
 		CUBE_COLORS rear_is, CUBE_COLORS left_is, CUBE_COLORS right_is);

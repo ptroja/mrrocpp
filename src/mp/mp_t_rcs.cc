@@ -29,169 +29,6 @@
 #include "ecp_mp/ecp_mp_s_rcs_korf.h"
 
 
-//extern bool debug_tmp;
-
-CUBE_COLORS read_cube_color(char input_char)
-{
-	switch (input_char)
-	{
-		case 'Y':
-			return YELLOW;
-		break;
-		case 'W':
-			return WHITE;
-		break;
-		case 'R':
-			return RED;
-		break;
-		case 'O':
-			return ORANGE;
-		break;
-		case 'G':
-			return GREEN;
-		break;
-		case 'B':
-			return BLUE;
-		break;
-		default:
-			return UNKNOWN_CUBE_COLOR;
-		break;			
-	}	
-};
- 
-
-CUBE_TURN_ANGLE read_cube_turn_angle(char input_char)
-{
-	switch (input_char)
-	{
-		case '0':
-			return CL_0;
-		break;
-		case '1':
-			return CL_90;
-		break;
-		case '2':
-			return CL_180;
-		break;
-		case '3':
-			return CCL_90;
-		break;
-		default:
-			return UKNOWN_TURN_ANGLE;
-		break;			
-	}	
-};
-
-
-// single_manipulation_class
-
-void single_manipulation_class::set_state (CUBE_COLORS face_to_turn_l, CUBE_TURN_ANGLE turn_angle_l)
-	{ face_to_turn = face_to_turn_l; turn_angle = turn_angle_l;};
-
-// konstruktory
-single_manipulation_class::single_manipulation_class(void){};
-single_manipulation_class::single_manipulation_class(CUBE_COLORS face_to_turn_l, CUBE_TURN_ANGLE turn_angle_l)
-	{ };
-single_manipulation_class::single_manipulation_class (const single_manipulation_class& cs)
-	{ set_state(cs.face_to_turn, cs.turn_angle);};
-
-
-// CUBE_STATE_CLASS
-
-cube_state_class::cube_state_class ()
-{
-	up = UNKNOWN_CUBE_COLOR;
-	down = UNKNOWN_CUBE_COLOR;
-	front = UNKNOWN_CUBE_COLOR;
-	rear = UNKNOWN_CUBE_COLOR;
-	left = UNKNOWN_CUBE_COLOR;
-	right = UNKNOWN_CUBE_COLOR;
-};
-
-
-cube_state_class::cube_state_class (CUBE_COLORS up_is, CUBE_COLORS down_is, CUBE_COLORS front_is, 
-	CUBE_COLORS rear_is, CUBE_COLORS left_is, CUBE_COLORS right_is)
-{
-	set_state(up_is, down_is, front_is, rear_is, left_is, right_is);
-};
-
-
-cube_state_class::cube_state_class (const cube_state_class& cs)
-{
-	set_state(cs.up, cs.down, cs.front, cs.rear, cs.left, cs.right);
-};
-
-
-cube_state_class& cube_state_class::operator= (const cube_state_class& cs)
-{
-	if (this != &cs)
-		this->set_state(cs.up, cs.down, cs.front, cs.rear, cs.left, cs.right);
-
-	return *this;
-};
-
-
-void cube_state_class::set_state(CUBE_COLORS up_is, CUBE_COLORS down_is, CUBE_COLORS front_is, 
-		CUBE_COLORS rear_is, CUBE_COLORS left_is, CUBE_COLORS right_is)
-{
-	up = up_is;
-	down = down_is;
-	front = front_is;
-	rear = rear_is;
-	left = left_is;
-	right = right_is;
-};
-
-
-void cube_state_class::print_face_color(CUBE_COLORS face_name)
-{
-	switch (face_name)
-	{
-		case YELLOW:
-			printf("YELLOW");
-		break;
-		case WHITE:
-			printf("WHITE");
-		break;
-		case RED:
-			printf("RED");
-		break;
-		case ORANGE:
-			printf("ORANGE");
-		break;
-		case GREEN:
-			printf("GREEN");
-		break;
-		case BLUE:
-			printf("BLUE");
-		break;
-		default:
-		break;			
-	}	
-};
-
-
-void cube_state_class::print_cube_colors()
-{
-	
-	printf("up: ");
-	print_face_color(up);
-	printf(", down: ");
-	print_face_color(down);
-	printf(", front: ");
-	print_face_color(front);
-	printf(", rear: ");
-	print_face_color(rear);
-	printf(", left: ");
-	print_face_color(left);
-	printf(", right: ");
-	print_face_color(right);
-	printf("\n");
-	
-};
-
-
-
 
 // MP_RUBIK_CUBE_SOLVER_CLASS
 
@@ -199,7 +36,7 @@ void cube_state_class::print_cube_colors()
 void mp_task_rubik_cube_solver::initiate(CUBE_COLORS up_is, CUBE_COLORS down_is, CUBE_COLORS front_is, 
 		CUBE_COLORS rear_is, CUBE_COLORS left_is, CUBE_COLORS right_is)
 {
-	cube_state = new cube_state_class(up_is, down_is, front_is, rear_is, left_is, right_is);
+	cube_state = new CubeState(up_is, down_is, front_is, rear_is, left_is, right_is);
 	
 	cube_initial_state = NULL;
 	
@@ -523,7 +360,7 @@ bool mp_task_rubik_cube_solver::find_rcs()
 
 	//reszta
 	// struktura pomiocnicza
-	single_manipulation_class single_manipulation;
+	SingleManipulation single_manipulation;
 	
 	// czyszczenie listy
 	manipulation_list.clear();
@@ -761,7 +598,7 @@ int mp_task_rubik_cube_solver::find_rcs_with_windows_solver(char* cube_state, ch
 
 bool mp_task_rubik_cube_solver::execute_manipulation_sequence()
 {
-	for(std::list<single_manipulation_class>::iterator manipulation_list_iterator = manipulation_list.begin(); 
+	for(std::list<SingleManipulation>::iterator manipulation_list_iterator = manipulation_list.begin(); 
 		 manipulation_list_iterator != manipulation_list.end(); manipulation_list_iterator++)
 	{
 		if (manipulate(manipulation_list_iterator->face_to_turn, manipulation_list_iterator->turn_angle))
@@ -1123,7 +960,7 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 
 	// zmiana stanu kostki
 
-	cube_state_class tmp_cube_state;
+	CubeState tmp_cube_state;
 
 	switch (turn_angle)
 	{
@@ -1415,7 +1252,7 @@ void mp_task_rubik_cube_solver::main_task_algorithm(void)
     if (cube_initial_state) delete[] cube_initial_state;
 	cube_initial_state = config->return_string_value("cube_initial_state");
 	//	enum CUBE_COLORS {UKNOWN, RED, YELLOW, GREEN, BLUE, ORANGE, WHITE};
-	//	 cube_state_class::set_state(CUBE_COLORS up_is, CUBE_COLORS down_is, CUBE_COLORS front_is, 
+	//	 cube_state::set_state(CUBE_COLORS up_is, CUBE_COLORS down_is, CUBE_COLORS front_is, 
 	//		CUBE_COLORS rear_is, CUBE_COLORS left_is, CUBE_COLORS right_is)
 
 	initiate (read_cube_color(cube_initial_state[0]), 
