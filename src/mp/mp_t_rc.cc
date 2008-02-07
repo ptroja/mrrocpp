@@ -49,7 +49,7 @@ CUBE_COLORS read_cube_color(char input_char)
 			return BLUE;
 		break;
 		default:
-			return UKNOWN_CUBE_COLOR;
+			return UNKNOWN_CUBE_COLOR;
 		break;			
 	}	
 };
@@ -95,12 +95,12 @@ CUBE_TURN_ANGLE read_cube_turn_angle(char input_char)
 
 cube_state_class::cube_state_class ()
 {
-	up = UKNOWN_CUBE_COLOR;
-	down = UKNOWN_CUBE_COLOR;
-	front = UKNOWN_CUBE_COLOR;
-	rear = UKNOWN_CUBE_COLOR;
-	left = UKNOWN_CUBE_COLOR;
-	right = UKNOWN_CUBE_COLOR;
+	up = UNKNOWN_CUBE_COLOR;
+	down = UNKNOWN_CUBE_COLOR;
+	front = UNKNOWN_CUBE_COLOR;
+	rear = UNKNOWN_CUBE_COLOR;
+	left = UNKNOWN_CUBE_COLOR;
+	right = UNKNOWN_CUBE_COLOR;
 };
 
 

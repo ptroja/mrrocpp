@@ -12,7 +12,7 @@
 #include <list>
 
 // zbior obejmujacy mozliwe stany kostki 
-enum CUBE_COLORS {UKNOWN_CUBE_COLOR, RED, YELLOW, GREEN, BLUE, ORANGE, WHITE};
+enum CUBE_COLORS {UNKNOWN_CUBE_COLOR, RED, YELLOW, GREEN, BLUE, ORANGE, WHITE};
 enum CUBE_TURN_ANGLE {UKNOWN_TURN_ANGLE, CL_180, CL_90, CL_0, CCL_90};
 
 class mp_rubik_cube_solver_task_class;

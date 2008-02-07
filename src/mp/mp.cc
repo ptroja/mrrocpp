@@ -523,6 +523,3 @@ bool mp_tight_coop_generator::next_step () {
 	return true;
 }
 ; // end: bool tight_coop_generator::next_step ()
-
-
-
