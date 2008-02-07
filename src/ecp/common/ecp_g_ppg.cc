@@ -79,19 +79,6 @@ bool playerpos_generator::next_step ( )
 		ecp_t.get_mp_command ();
 	}
 
-	// Kopiowanie danych z bufora przyslanego z EDP do
-	// obrazu danych wykorzystywanych przez generator
-	/*
-	the_robot->get_reply();
-
-	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-	the_robot->EDP_data.instruction_type = SET;
-	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.get_type = NOTHING_DV;
-	the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
-	node_counter++;
-	*/
-
     transmitter_m[TRANSMITTER_PLAYER]->t_read(1);
     printf("odometry: [%f, %f %f]\n",
             transmitter_m[TRANSMITTER_PLAYER]->from_va.player_position.px,
@@ -114,4 +101,4 @@ bool playerpos_generator::next_step ( )
 	} // end: switch
 
 	return true;
-};  // end: bool playerpos_generator::next_step (, robot& the_robot )
+}; // end: bool playerpos_generator::next_step (, robot& the_robot )

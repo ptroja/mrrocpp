@@ -1,12 +1,3 @@
-// -------------------------------------------------------------------------
-//                              mp_task_rk.cc
-// 
-// MP Master Process - methods for rubik cube solver task sporadic coordination
-// 
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
-
-
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>

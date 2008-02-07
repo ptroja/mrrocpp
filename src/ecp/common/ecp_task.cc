@@ -239,7 +239,7 @@ void ecp_task::ecp_wait_for_stop (void)
 	send_pulse_to_mp ( ECP_WAIT_FOR_STOP, 1);
 
 	// Oczekiwanie na wiadomosc.
-	int caller = reveive_mp_message();
+	int caller = receive_mp_message();
 
 	if (mp_command_type() == STOP) {
 		set_ecp_reply (ECP_ACKNOWLEDGE);
@@ -269,7 +269,7 @@ bool ecp_task::ecp_wait_for_start (void)
 	// Wyslanie pulsu do MP
 	send_pulse_to_mp ( ECP_WAIT_FOR_START, 1);
 
-	int caller = reveive_mp_message();
+	int caller = receive_mp_message();
 
 	switch (mp_command_type() ) {
 		case START_TASK:
@@ -313,7 +313,7 @@ bool ecp_task::get_next_state (void)
 	// Wyslanie pulsu do MP
 	send_pulse_to_mp ( ECP_WAIT_FOR_NEXT_STATE, 1);
 
-	int caller = reveive_mp_message();
+	int caller = receive_mp_message();
 
 	switch (mp_command_type() ) {
 		case NEXT_STATE:
@@ -354,7 +354,7 @@ void ecp_task::get_mp_command (void)
 	// Wyslanie pulsu do MP
 	send_pulse_to_mp ( ECP_WAIT_FOR_COMMAND, 1);
 
-	int caller = reveive_mp_message();
+	int caller = receive_mp_message();
 
 	switch (mp_command_type() ) {
 		case NEXT_STATE:
@@ -379,7 +379,7 @@ void ecp_task::get_mp_command (void)
 }
 
 // Receive of mp message
-int ecp_task::reveive_mp_message (void)
+int ecp_task::receive_mp_message (void)
 {
 	while (1) {
 

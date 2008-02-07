@@ -63,7 +63,7 @@ public:
 	void get_mp_command (void);
 	
 	// Receive of mp message
-	int reveive_mp_message (void);
+	int receive_mp_message (void);
 	
 	// Badanie typu polecenia z MP
 	MP_COMMAND mp_command_type (void) const;
