@@ -14,10 +14,19 @@
 #include "common/typedefs.h"
 #include "common/impconst.h"
 #include "common/com_buf.h"
+#include "ecp_mp/ecp_mp_s_schunk.h"
 
 #include "lib/srlib.h"
 #include "mp/mp.h"
 #include "mp/mp_t_pouring.h"
+
+#include <list>
+#include <map>
+
+#include "mp/mp_g_force.h"
+#include "mp/mp_g_vis.h"
+#include "ecp_mp/ecp_mp_s_vis.h"
+#include "ecp_mp/ecp_mp_tr_rc_windows.h"
 
 bool mp_task_pouring::approach(void)
 {
@@ -70,6 +79,10 @@ bool mp_task_pouring::weight(void)
 	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
 	 	(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
+		
+/*	if(set_next_ecps_state( (int) WEIGHT, 0, "", 1, ROBOT_IRP6_POSTUMENT))
+	{	return true;}
+	if (run_ext_empty_gen (false, 1, ROBOT_IRP6_POSTUMENT)) {  return true;  }*/
 	return false;
 }
 
@@ -209,6 +222,21 @@ mp_task* return_created_mp_task (void)
 // methods fo mp template to redefine in concete class
 void mp_task_pouring::task_initialization(void) 
 {
+/*	// Powolanie czujnikow
+	sensor_m[SENSOR_FORCE_ON_TRACK]=new ecp_mp_schunk_sensor(SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
+		
+	sensor_m[SENSOR_FORCE_POSTUMENT] = new ecp_mp_schunk_sensor(SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
+		
+	// Konfiguracja wszystkich czujnikow	
+	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+		 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
+	{
+		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_m_iterator->second->configure_sensor();
+	}
+			
+	usleep(1000*100);
+*/
 	sr_ecp_msg->message("MP pouring loaded");
 };
  

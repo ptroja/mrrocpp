@@ -39,11 +39,11 @@ void ecp_task_pouring_irp6p::task_initialization(void)
 {
 	 ecp_m_robot = new ecp_irp6_postument_robot (*this); 
 
-/*	// Powolanie czujnikow
-	sensor_m[SENSOR_FORCE_POSTUMENT] = 
-		new ecp_mp_schunk_sensor (SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
+	// Powolanie czujnikow
+//	sensor_m[SENSOR_FORCE_POSTUMENT] = 
+//		new ecp_mp_schunk_sensor (SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
 				
-	// Konfiguracja wszystkich czujnikow	
+/*	// Konfiguracja wszystkich czujnikow	
 	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 		sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
@@ -91,7 +91,7 @@ void ecp_task_pouring_irp6p::main_task_algorithm(void)
 					ecp_gripper_opening(*this, -0.018, 1000);
 					break;
 				case LET_GO:
-					ecp_gripper_opening(*this, 0.014, 1000);
+					ecp_gripper_opening(*this, 0.015, 2000);
 					break;
 				case WEIGHT:
 					printf("force0: %d\n", sensor_m.begin()->second->image.force.rez[0]);
