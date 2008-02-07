@@ -30,8 +30,8 @@
 // MP_RUBIK_CUBE_SOLVER_CLASS
 
 
-void mp_task_rubik_cube_solver::initiate(CUBE_COLORS up_is, CUBE_COLORS down_is, CUBE_COLORS front_is, 
-		CUBE_COLORS rear_is, CUBE_COLORS left_is, CUBE_COLORS right_is)
+void mp_task_rubik_cube_solver::initiate(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is, 
+		CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is)
 {
 	cube_state = new CubeState(up_is, down_is, front_is, rear_is, left_is, right_is);
 	
@@ -324,7 +324,7 @@ bool mp_task_rubik_cube_solver::execute_manipulation_sequence()
 
 
 
-bool mp_task_rubik_cube_solver::manipulate(CUBE_COLORS face_to_turn, CUBE_TURN_ANGLE turn_angle )
+bool mp_task_rubik_cube_solver::manipulate(CUBE_COLOR face_to_turn, CUBE_TURN_ANGLE turn_angle )
 {
 
 	if (face_to_turn == cube_state->up)
@@ -1038,9 +1038,9 @@ void mp_task_rubik_cube_solver::main_task_algorithm(void)
     // odczyt konfiguracji manipulacji
     if (cube_initial_state) delete[] cube_initial_state;
 	cube_initial_state = config->return_string_value("cube_initial_state");
-	//	enum CUBE_COLORS {UKNOWN, RED, YELLOW, GREEN, BLUE, ORANGE, WHITE};
-	//	 cube_state::set_state(CUBE_COLORS up_is, CUBE_COLORS down_is, CUBE_COLORS front_is, 
-	//		CUBE_COLORS rear_is, CUBE_COLORS left_is, CUBE_COLORS right_is)
+	//	enum CUBE_COLOR {UKNOWN, RED, YELLOW, GREEN, BLUE, ORANGE, WHITE};
+	//	 cube_state::set_state(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is, 
+	//		CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is)
 
 	initiate (read_cube_color(cube_initial_state[0]), 
 		read_cube_color(cube_initial_state[1]), read_cube_color(cube_initial_state[2]),  read_cube_color(cube_initial_state[3]), 

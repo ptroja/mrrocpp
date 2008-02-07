@@ -39,8 +39,8 @@ public:
 	// stl'owa lista manipulacji
 	std::list<SingleManipulation> manipulation_list;
 
-	void initiate (CUBE_COLORS up_is, CUBE_COLORS down_is, CUBE_COLORS front_is, 
-		CUBE_COLORS rear_is, CUBE_COLORS left_is, CUBE_COLORS right_is);
+	void initiate (CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is, 
+		CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is);
 
     // konstruktor
     mp_task_rubik_cube_solver();
@@ -50,7 +50,7 @@ public:
 	
 	// MANIPULACJA
 	// manipulacja pojedyncza sciana
-	bool manipulate (CUBE_COLORS face_to_turn, CUBE_TURN_ANGLE turn_angle );
+	bool manipulate (CUBE_COLOR face_to_turn, CUBE_TURN_ANGLE turn_angle );
 
 	// wykonanie sekwecji manipulacji poszczegolnymi scianami
 	bool execute_manipulation_sequence();

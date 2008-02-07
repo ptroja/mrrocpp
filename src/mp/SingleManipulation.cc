@@ -1,11 +1,11 @@
 #include "mp/SingleManipulation.h"
 
-void SingleManipulation::set_state (CUBE_COLORS face_to_turn_l, CUBE_TURN_ANGLE turn_angle_l)
+void SingleManipulation::set_state (CUBE_COLOR face_to_turn_l, CUBE_TURN_ANGLE turn_angle_l)
 	{ face_to_turn = face_to_turn_l; turn_angle = turn_angle_l;};
 
 // konstruktory
 SingleManipulation::SingleManipulation(void){};
-SingleManipulation::SingleManipulation(CUBE_COLORS face_to_turn_l, CUBE_TURN_ANGLE turn_angle_l)
+SingleManipulation::SingleManipulation(CUBE_COLOR face_to_turn_l, CUBE_TURN_ANGLE turn_angle_l)
 	{ };
 SingleManipulation::SingleManipulation (const SingleManipulation& cs)
 	{ set_state(cs.face_to_turn, cs.turn_angle);};

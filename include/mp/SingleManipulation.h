@@ -11,13 +11,13 @@ CUBE_TURN_ANGLE read_cube_turn_angle (char input_char);
 class SingleManipulation
 {
 public:
-	CUBE_COLORS face_to_turn;
+	CUBE_COLOR face_to_turn;
 	CUBE_TURN_ANGLE turn_angle;
 	
-	void set_state (CUBE_COLORS face_to_turn_l, CUBE_TURN_ANGLE turn_angle_l);
+	void set_state (CUBE_COLOR face_to_turn_l, CUBE_TURN_ANGLE turn_angle_l);
 	
 	SingleManipulation(void);
-	SingleManipulation(CUBE_COLORS face_to_turn_l, CUBE_TURN_ANGLE turn_angle_l);
+	SingleManipulation(CUBE_COLOR face_to_turn_l, CUBE_TURN_ANGLE turn_angle_l);
 	SingleManipulation (const SingleManipulation& cs);
 };
 

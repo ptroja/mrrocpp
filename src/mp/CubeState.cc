@@ -13,8 +13,8 @@ CubeState::CubeState ()
 };
 
 
-CubeState::CubeState (CUBE_COLORS up_is, CUBE_COLORS down_is, CUBE_COLORS front_is, 
-	CUBE_COLORS rear_is, CUBE_COLORS left_is, CUBE_COLORS right_is)
+CubeState::CubeState (CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is, 
+	CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is)
 {
 	set_state(up_is, down_is, front_is, rear_is, left_is, right_is);
 };
@@ -35,8 +35,8 @@ CubeState& CubeState::operator= (const CubeState& cs)
 };
 
 
-void CubeState::set_state(CUBE_COLORS up_is, CUBE_COLORS down_is, CUBE_COLORS front_is, 
-		CUBE_COLORS rear_is, CUBE_COLORS left_is, CUBE_COLORS right_is)
+void CubeState::set_state(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is, 
+		CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is)
 {
 	up = up_is;
 	down = down_is;
@@ -47,7 +47,7 @@ void CubeState::set_state(CUBE_COLORS up_is, CUBE_COLORS down_is, CUBE_COLORS fr
 };
 
 
-void CubeState::print_face_color(CUBE_COLORS face_name)
+void CubeState::print_face_color(CUBE_COLOR face_name)
 {
 	switch (face_name)
 	{
@@ -92,7 +92,7 @@ void CubeState::print_cube_colors()
 	printf("\n");
 };
 
-CUBE_COLORS read_cube_color(char input_char)
+CUBE_COLOR read_cube_color(char input_char)
 {
 	switch (input_char)
 	{
