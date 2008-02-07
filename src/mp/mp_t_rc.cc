@@ -26,11 +26,6 @@
 #include "ecp_mp/ecp_mp_s_vis.h"
 #include "ecp_mp/ecp_mp_tr_rc_windows.h"
 
-
-// MP_TASK_RUBIK_CUBE_SOLVER
-
-
-
 void mp_task_rubik_cube_solver::initiate(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is, 
 		CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is)
 {
@@ -56,7 +51,7 @@ bool mp_task_rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogl
 	//sekwencja poczatkowa w kolejnosci: UP, DOWN, FRONT, BACK, LEFT, RIGHT
 	//cube_initial_state=BGROWY
 	
-	// manianka	
+	// manianka
 	cube_state->set_state(BLUE, GREEN, RED, ORANGE, WHITE, YELLOW);
 	
 	CUBE_TURN_ANGLE changing_order[]={CL_0, CL_0, CL_180, CL_0, CL_180, CL_0};
@@ -68,7 +63,7 @@ bool mp_task_rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogl
 			return true;
 			    
 		usleep(1000*5000); //30 000 - OK //unrem		   //3000 - na lato na zime 5000 
-		sensor_m[SENSOR_CAMERA_ON_TRACK]->initiate_reading();			
+		sensor_m[SENSOR_CAMERA_ON_TRACK]->initiate_reading();
 		usleep(1000*1000);	
 		sensor_m[SENSOR_CAMERA_ON_TRACK]->get_reading();
 		
@@ -660,7 +655,7 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 		break;
 		default:
 		break;			
-	}	
+	}
 
 	*cube_state = tmp_cube_state;
 
@@ -854,14 +849,14 @@ void mp_task_rubik_cube_solver::task_initialization(void)
 	sensor_m[SENSOR_CAMERA_SA] = 
 		new ecp_mp_vis_sensor (SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 	
-	// Konfiguracja wszystkich czujnikow	
+	// Konfiguracja wszystkich czujnikow
 	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 		 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
 		sensor_m_iterator->second->configure_sensor();
 	}
-			
+
 	usleep(1000*100);
 	
 	// dodanie transmitter'a
@@ -891,16 +886,16 @@ void mp_task_rubik_cube_solver::main_task_algorithm(void)
 
 	 // printf("przed wait for start \n");
       // Oczekiwanie na zlecenie START od UI  
-    	sr_ecp_msg->message("MP dla kostki Rubika - wcisnij start");
-      wait_for_start ();
-	      // Wyslanie START do wszystkich ECP 
-      start_all (robot_m);
+	sr_ecp_msg->message("MP dla kostki Rubika - wcisnij start");
+	wait_for_start ();
+	// Wyslanie START do wszystkich ECP 
+	start_all (robot_m);
 
-    for (;;) {  // Wewnetrzna petla
+	for (;;) {  // Wewnetrzna petla
 
        	// Zlecenie wykonania kolejnego makrokroku
 		// printf("po start all \n");
-		  for(;;) {
+		for(;;) {
 			sr_ecp_msg->message("Nowa seria");
 			for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 				 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
@@ -908,8 +903,6 @@ void mp_task_rubik_cube_solver::main_task_algorithm(void)
 				sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
 				sensor_m_iterator->second->configure_sensor();
 			}
-
-			
 
 
 			// przechwycenie kostki
@@ -933,9 +926,7 @@ void mp_task_rubik_cube_solver::main_task_algorithm(void)
 			   	break_state = true;
 		          break;
 		    }
-		    
-			
-						    
+
 		    // wykonanie sekwencji manipulacji
 		     if (face_turn_op(CL_0)){
 		        	break_state = true;
@@ -987,4 +978,3 @@ void mp_task_rubik_cube_solver::main_task_algorithm(void)
         break; 
       } // koniec: for(;;) - wewnetrzna petla
 };
-

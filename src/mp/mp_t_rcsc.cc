@@ -17,10 +17,6 @@
 #include "ecp_mp/ecp_mp_s_vis.h"
 #include "ecp_mp/ecp_mp_tr_rc_windows.h"
 
-
-// MP_RUBIK_CUBE_SOLVER_CLASS
-
-
 void mp_task_rubik_cube_solver::initiate(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is, 
 		CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is)
 {
@@ -39,19 +35,16 @@ mp_task_rubik_cube_solver::mp_task_rubik_cube_solver() : mp_task()
 
 mp_task_rubik_cube_solver::~mp_task_rubik_cube_solver()
 {
-    		delete cube_state;
+	delete cube_state;
 }	
 	
-
-
 bool mp_task_rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogladanie scian)
 {
 
 	//sekwencja poczatkowa w kolejnosci: UP, DOWN, FRONT, BACK, LEFT, RIGHT
 	//cube_initial_state=BGROWY
 	
-
-	// manianka		
+	// manianka
 	cube_state->set_state(BLUE, GREEN, RED, ORANGE, WHITE, YELLOW);
 	
 	CUBE_TURN_ANGLE changing_order[]={CL_0, CL_0, CL_180, CL_0, CL_180, CL_0};

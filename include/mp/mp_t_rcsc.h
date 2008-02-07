@@ -11,13 +11,10 @@
 #include "mp/mp.h"
 #include "ecp_mp/ecp_mp_t_rcsc.h"
 
-#include "mp/CubeState.h"
-#include "mp/SingleManipulation.h"
-
 #include <list>
 
-class mp_rubik_cube_solver_task_class;
-
+#include "mp/CubeState.h"
+#include "mp/SingleManipulation.h"
 
 class mp_task_rubik_cube_solver : public mp_task  
 {

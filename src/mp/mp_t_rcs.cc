@@ -28,18 +28,12 @@
 #include "ecp_mp/ecp_mp_s_rcs_kociemba.h"
 #include "ecp_mp/ecp_mp_s_rcs_korf.h"
 
-
-
-// MP_RUBIK_CUBE_SOLVER_CLASS
-
-
 void mp_task_rubik_cube_solver::initiate(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is, 
 		CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is)
 {
 	cube_state = new CubeState(up_is, down_is, front_is, rear_is, left_is, right_is);
 	
 	cube_initial_state = NULL;
-	
 };
 
 
@@ -50,19 +44,16 @@ mp_task_rubik_cube_solver::mp_task_rubik_cube_solver() : mp_task()
 
 mp_task_rubik_cube_solver::~mp_task_rubik_cube_solver()
 {
-    		delete cube_state;
+	delete cube_state;
 }	
 	
-
-
 bool mp_task_rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogladanie scian)
 {
 
 	//sekwencja poczatkowa w kolejnosci: UP, DOWN, FRONT, BACK, LEFT, RIGHT
 	//cube_initial_state=BGROWY
 	
-
-	// manianka		
+	// manianka
 	cube_state->set_state(BLUE, GREEN, RED, ORANGE, WHITE, YELLOW);
 	
 	CUBE_TURN_ANGLE changing_order[]={CL_0, CL_0, CL_180, CL_0, CL_180, CL_0};
@@ -82,7 +73,7 @@ bool mp_task_rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogl
 
 	    
 		if (wait_ms(5000)) {  return true;  } //30 000 - OK //unrem		   //3000 - na lato na zime 5000 
-		sensor_m[SENSOR_CAMERA_ON_TRACK]->initiate_reading();			
+		sensor_m[SENSOR_CAMERA_ON_TRACK]->initiate_reading();
 		if (wait_ms(1000)) {  return true;  }	
 		sensor_m[SENSOR_CAMERA_ON_TRACK]->get_reading();
 		
@@ -987,11 +978,11 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 	*cube_state = tmp_cube_state;
 
 	//	cube_state->print_cube_colors();
+
 	return false;
 };
 
 
- 
 // dojscie
 bool mp_task_rubik_cube_solver::approach_op(int mode)
 {
@@ -1218,6 +1209,7 @@ void mp_task_rubik_cube_solver::task_initialization(void)
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
 		sensor_m_iterator->second->configure_sensor();
 	}
+
 	usleep(1000*100);
 	
 	// dodanie transmitter'a
@@ -1251,6 +1243,7 @@ void mp_task_rubik_cube_solver::main_task_algorithm(void)
     // odczyt konfiguracji manipulacji
     if (cube_initial_state) delete[] cube_initial_state;
 	cube_initial_state = config->return_string_value("cube_initial_state");
+
 	//	enum CUBE_COLOR {UKNOWN, RED, YELLOW, GREEN, BLUE, ORANGE, WHITE};
 	//	 cube_state::set_state(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is, 
 	//		CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is)
@@ -1266,13 +1259,11 @@ void mp_task_rubik_cube_solver::main_task_algorithm(void)
 	// Wyslanie START do wszystkich ECP 
 	start_all (robot_m);
 
-	for (;;)
-	{  // Wewnetrzna petla
+	for (;;) {  // Wewnetrzna petla
 
        	// Zlecenie wykonania kolejnego makrokroku
 		// printf("po start all \n");
-		 for(;;)
-		{
+		for(;;) {
 			sr_ecp_msg->message("Nowa seria");
 			// Konfiguracja czujnikow sily
 			sensor_m[SENSOR_FORCE_ON_TRACK]->to_vsp.parameters=1; // biasowanie czujnika
@@ -1311,7 +1302,7 @@ void mp_task_rubik_cube_solver::main_task_algorithm(void)
 			   	break_state = true;
 		          break;
 		    }
-					    
+
 		    // wykonanie sekwencji manipulacji
 		     if (face_turn_op(CL_0)){
 		        	break_state = true;
@@ -1355,7 +1346,7 @@ void mp_task_rubik_cube_solver::main_task_algorithm(void)
 			break;
 		}	
         // Oczekiwanie na STOP od UI
-	  //          printf("w mp przed wait for stop\n");
+  //          printf("w mp przed wait for stop\n");
         wait_for_stop (MP_THROW);// by Y - wlaczony tryb
   
         // Wyslanie STOP do wszystkich ECP po zakonczeniu programu uzytkownika

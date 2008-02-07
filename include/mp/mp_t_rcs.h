@@ -16,8 +16,6 @@
 #include "mp/CubeState.h"
 #include "mp/SingleManipulation.h"
 
-class mp_rubik_cube_solver_task_class;
-
 class mp_task_rubik_cube_solver : public mp_task  
 {
 protected:

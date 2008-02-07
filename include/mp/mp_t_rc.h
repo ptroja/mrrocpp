@@ -14,9 +14,6 @@
 #include "mp/CubeState.h"
 #include "mp/SingleManipulation.h"
 
-class mp_rubik_cube_solver_task_class;
-
-
 class mp_task_rubik_cube_solver : public mp_task  
 {
 protected:
@@ -34,21 +31,21 @@ protected:
  
 public:
 
-	void initiate (CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is, 
-		CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is);
-
 	// stl'owa lista manipulacji
 	std::list<SingleManipulation> manipulation_list;
+
+	void initiate (CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is, 
+		CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is);
 
     // konstruktor
     mp_task_rubik_cube_solver();
 	
     ~mp_task_rubik_cube_solver();
-	
+
 	
 	// MANIPULACJA
 	// manipulacja pojedyncza sciana
-	bool manipulate(CUBE_COLOR face_to_turn, CUBE_TURN_ANGLE turn_angle );
+	bool manipulate (CUBE_COLOR face_to_turn, CUBE_TURN_ANGLE turn_angle );
 
 	// wykonanie sekwecji manipulacji poszczegolnymi scianami
 	bool execute_manipulation_sequence();
@@ -78,9 +75,7 @@ public:
 	// methods for mp template
 	void task_initialization(void);
 	void main_task_algorithm(void);
-	
 
 }; // end : class MP_nose_run_force_generator
-
 
 #endif
