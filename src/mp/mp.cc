@@ -8,6 +8,7 @@
 // Funkcje do konstruowania procesow MP
 
 #include <unistd.h>
+#include <string.h>
 
 #include "common/typedefs.h"
 #include "common/impconst.h"
