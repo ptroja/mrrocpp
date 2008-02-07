@@ -330,7 +330,7 @@ bool mp_task::run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_
 // inicjacja polaczen, rejestracja nazwy MP, odszukanie UI, SR by Y&W
 // -------------------------------------------------------------------
 
-int mp_task::mp_receive_pulse (mp_receive_pulse_struct_tdef* outputs, MP_RECEIVE_PULS_ENUM tryb) {
+int mp_task::mp_receive_pulse (mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PULS_ENUM tryb) {
 
 	struct sigevent event;
 	int  wyjscie = 0;
@@ -396,7 +396,7 @@ int mp_task::mp_receive_pulse (mp_receive_pulse_struct_tdef* outputs, MP_RECEIVE
 			if (outputs->pulse_msg.hdr.type >= _IO_BASE && outputs->pulse_msg.hdr.type <= _IO_MAX) {
 				// 	  printf("w MP_TRIGGER _IO_BASE _IO_MAX %d\n",_IO_CONNECT );
 				//  MsgError(rcvid, ENOSYS);
-//			  printf("mp_receive_ecp_pulse_return_td name_open: %d, %d\n", info.pid, info.scoid);
+//			  printf("mp_receive_ecp_pulse_return_t name_open: %d, %d\n", info.pid, info.scoid);
 				MsgReply (outputs->rcvid, EOK, 0, 0);
 				wyjscie++;
 				//		ret.rt = false;
@@ -414,7 +414,7 @@ int mp_task::mp_receive_pulse (mp_receive_pulse_struct_tdef* outputs, MP_RECEIVE
 
 
 
-int mp_task::check_and_optional_wait_for_new_pulse (mp_receive_pulse_struct_tdef* outputs,
+int mp_task::check_and_optional_wait_for_new_pulse (mp_receive_pulse_struct_t* outputs,
         WAIT_FOR_NEW_PULSE_ENUM process_mode, MP_RECEIVE_PULS_ENUM desired_wait_mode) {
 
 	int ret;
@@ -511,8 +511,8 @@ int mp_task::check_and_optional_wait_for_new_pulse (mp_receive_pulse_struct_tdef
 }
 
 
-// int mp_task::mp_wait_for_name_open_ecp_pulse(mp_receive_pulse_struct_tdef* outputs, uint32_t nd, pid_t ECP_pid)
-int mp_task::mp_wait_for_name_open_ecp_pulse(mp_receive_pulse_struct_tdef* outputs) {
+// int mp_task::mp_wait_for_name_open_ecp_pulse(mp_receive_pulse_struct_t* outputs, uint32_t nd, pid_t ECP_pid)
+int mp_task::mp_wait_for_name_open_ecp_pulse(mp_receive_pulse_struct_t* outputs) {
 
 	int ret;
 	bool wyjscie = false;
@@ -566,7 +566,7 @@ int mp_task::mp_wait_for_name_open_ecp_pulse(mp_receive_pulse_struct_tdef* outpu
 int mp_task::mp_wait_for_ui_name_open() {
 
 	int ret;
-	mp_receive_pulse_struct_tdef outputs;
+	mp_receive_pulse_struct_t outputs;
 	bool wyjscie = false;
 
 	while (!wyjscie) {
@@ -603,7 +603,7 @@ bool mp_task::mp_receive_ui_or_ecp_pulse
 
 	MP_STATE_ENUM mp_state = MP_STATE_RUNNING;
 	int rcvid;
-	mp_receive_pulse_struct_tdef input;
+	mp_receive_pulse_struct_t input;
 
 	bool ui_exit_from_while = false;
 	bool ecp_exit_from_while = false;
@@ -718,7 +718,7 @@ bool mp_task::mp_receive_ui_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m, short*
 
 	MP_STATE_ENUM mp_state = MP_STATE_RUNNING;
 	int rcvid;
-	mp_receive_pulse_struct_tdef input;
+	mp_receive_pulse_struct_t input;
 
 	bool wyjscie = false;
 
@@ -965,9 +965,9 @@ bool mp_task::scheduller_run () {
 
 	short trigger;
 
-	// mp_receive_ecp_pulse_return_td ret;
+	// mp_receive_ecp_pulse_return_t ret;
 	int ret;
-	mp_receive_pulse_struct_tdef input;
+	mp_receive_pulse_struct_t input;
 
 	if (gen_list.empty()) {
 		printf ("gen_list empty w scheduller_run\n");
@@ -1147,7 +1147,7 @@ void mp_task::wait_for_start () {
 	// Oczekiwanie na zlecenie START od UI
 
 	bool wyjscie = false;
-	mp_receive_pulse_struct_tdef input;
+	mp_receive_pulse_struct_t input;
 
 	while (!wyjscie) {
 		check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, WITHOUT_TIMEOUT);
@@ -1172,7 +1172,7 @@ void mp_task::wait_for_stop (WAIT_FOR_STOP_ENUM tryb) {// by Y zmodyfikowane w c
 
 	int rcvid;
 	bool wyjscie = false;
-	mp_receive_pulse_struct_tdef input;
+	mp_receive_pulse_struct_t input;
 
 
 	while (!wyjscie) {
@@ -1211,7 +1211,7 @@ void mp_task::start_all (map <ROBOT_ENUM, mp_robot*>& _robot_m) {
 
 	int ret;
 	map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator;
-	mp_receive_pulse_struct_tdef input;
+	mp_receive_pulse_struct_t input;
 
 	map <ROBOT_ENUM, mp_robot*> robots_m_tmp, robots_m_tmp2;
 
@@ -1264,7 +1264,7 @@ void mp_task::execute_all (map <ROBOT_ENUM, mp_robot*>& _robot_m) {
 
 	int ret;
 	map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator;
-	mp_receive_pulse_struct_tdef input;
+	mp_receive_pulse_struct_t input;
 
 	map <ROBOT_ENUM, mp_robot*> robots_m_tmp, robots_m_tmp2;
 
@@ -1317,7 +1317,7 @@ void mp_task::terminate_all (map <ROBOT_ENUM, mp_robot*>& _robot_m) {
 // Zatrzymanie wszystkich ECP
 	int ret;
 	map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator;
-	mp_receive_pulse_struct_tdef input;
+	mp_receive_pulse_struct_t input;
 
 	map <ROBOT_ENUM, mp_robot*> robots_m_tmp, robots_m_tmp2;
 

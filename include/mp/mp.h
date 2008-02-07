@@ -30,7 +30,7 @@ class mp_generator;
 
 
 // struktura zwracana przez funkcje mp_receive_ecp_pulse
-typedef struct {
+typedef struct mp_receive_ecp_pulse_return {
 	uint32_t nd; // deskryptor wezla na ktorym jest powolane ECP
 	pid_t ECP_pid;
 	bool rt;
@@ -38,16 +38,16 @@ typedef struct {
 	char pulse_code;
 	int rcvid;
 	uint64_t e; // errno
-} mp_receive_ecp_pulse_return_td;
+} mp_receive_ecp_pulse_return_t;
 
 
 // struktura wykorzystywana przez funkcje mp_receive_pulse
-typedef struct {
+typedef struct mp_receive_pulse_struct {
 	_msg_info msg_info;
 	_pulse_msg pulse_msg;
 	int rcvid;
 	uint64_t e;       // Kod bledu systemowego
-} mp_receive_pulse_struct_tdef;
+} mp_receive_pulse_struct_t;
 
 // klasa globalna dla calego procesu MP
 class mp_task: public ecp_mp_task  {
@@ -101,15 +101,15 @@ public:
 	bool wait_ms (int _ms_delay); // zamiast delay
 
 
-	int mp_receive_pulse (mp_receive_pulse_struct_tdef* outputs, MP_RECEIVE_PULS_ENUM tryb);
-	int check_and_optional_wait_for_new_pulse (mp_receive_pulse_struct_tdef* outputs,
+	int mp_receive_pulse (mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PULS_ENUM tryb);
+	int check_and_optional_wait_for_new_pulse (mp_receive_pulse_struct_t* outputs,
 		WAIT_FOR_NEW_PULSE_ENUM process_mode, MP_RECEIVE_PULS_ENUM desired_wait_mode);
 	int mp_wait_for_ui_name_open(void);
 
-	// mp_receive_ecp_pulse_return_td mp_receive_ecp_pulse (int tryb);
+	// mp_receive_ecp_pulse_return_t mp_receive_ecp_pulse (int tryb);
 	// oczekwianie na name_open do kanalu do przesylania pulsow miedzy ECP i MP
-	// int mp_wait_for_name_open_ecp_pulse (mp_receive_pulse_struct_tdef* outputs, uint32_t nd, pid_t ECP_pid);
-	int mp_wait_for_name_open_ecp_pulse(mp_receive_pulse_struct_tdef* outputs);
+	// int mp_wait_for_name_open_ecp_pulse (mp_receive_pulse_struct_t* outputs, uint32_t nd, pid_t ECP_pid);
+	int mp_wait_for_name_open_ecp_pulse(mp_receive_pulse_struct_t* outputs);
 
 	// Oczekiwanie na zlecenie START od UI
 	void wait_for_start (void);// by Y&W

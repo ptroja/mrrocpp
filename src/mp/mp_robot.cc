@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
-//                              mp.cc
 //
 // MP Master Process - methods
+//
 // -------------------------------------------------------------------------
 
 #include <string.h>
@@ -21,7 +21,7 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task*
 
 	fprintf(stderr, "mp_robot::mp_robot(..., %s, ...);\n", _section_name);
 
-	mp_receive_pulse_struct_tdef input;
+	mp_receive_pulse_struct_t input;
 
 	mp_object = mp_object_l;
 	robot_name = l_robot_name;
