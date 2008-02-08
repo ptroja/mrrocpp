@@ -3,7 +3,6 @@
 // 
 // MP Master Process - methods for rubik cube solver task
 // 
-// Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
 
