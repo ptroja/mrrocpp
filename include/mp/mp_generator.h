@@ -3,6 +3,11 @@
 
 #include "mp/mp_robot.h"
 #include "mp/mp_task.h"
+#include "common/sensor.h"
+#include "ecp_mp/transmitter.h"
+
+class mp_task;
+class mp_robot;
 
 #include <map>
 

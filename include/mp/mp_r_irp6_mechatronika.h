@@ -1,37 +1,12 @@
-// -------------------------------------------------------------------------
-//                            mp.h
-// Definicje struktur danych i metod dla procesow MP
-// -------------------------------------------------------------------------
+#if !defined(MP_R_IRP6_MECHATRONIKA_H_)
+#define MP_R_IRP6_MECHATRONIKA_H_
 
-#if !defined(__MP_R_IRP6_MECHATRONIKA_H)
-#define __MP_R_IRP6_MECHATRONIKA_H
+#include "mp/mp_r_irp6s_and_conv.h"
 
-#include "mp/mp.h"
-
-// ---------------------------------------------------------------
-class mp_irp6_mechatronika_robot: public mp_robot {
+class mp_irp6_mechatronika_robot: public mp_irp6s_and_conv_robot {
 
  public:
-  mp_irp6_mechatronika_robot (mp_task* mp_object_l); // Konstruktor
+  mp_irp6_mechatronika_robot (mp_task* mp_object_l);
+};
 
-// virtual void execute_motion (void); // Zlecenie wykonania ruchu przez robota
-                                      // na poziomie MP jest to polecenie dla ECP
-// virtual void terminate_ecp (void); // Zlecenie STOP
- // virtual void start_ecp ( void );      // Zlecenie START
-
-  virtual void create_next_pose_command (void);
-    // wypelnia bufor wysylkowy do EDP na podstawie danych zawartych w swych skladowych
-	// Ten bufor znajduje sie w robocie
-
-  virtual void get_reply (void);
-  virtual void get_input_reply (void);
-  virtual void get_arm_reply (void);
-  virtual void get_rmodel_reply (void);
-    // pobiera z pakietu przeslanego z EDP informacje (aktualnie znajdujace sie
-    // w kla sie robot) i wstawia je do odpowiednich swoich skladowych
-	// Ten bufor znajduje sie w robocie
-
-}; // end: class mp_irp6_postument_robot
-// --------------------------------------------------------------------------
-
-#endif
+#endif /*MP_R_IRP6_MECHATRONIKA_H_*/
