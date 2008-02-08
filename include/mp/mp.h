@@ -137,7 +137,6 @@ struct robot_ECP_transmission_data {
 
 // by Y  do sily
 
-
 	short gripper_reg_state; // stan w ktorym znajduje sie regulator chwytaka
 	double current_gripper_coordinate; // odczytanu stopien rozwarcia chwytaka
 	double next_gripper_coordinate; // zadany stopien rozwarcia chwytaka

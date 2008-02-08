@@ -1,12 +1,3 @@
-// -------------------------------------------------------------------------
-//                              mp.cc
-//
-// MP Master Process - methods
-//
-// Ostatnia modyfikacja: 2007
-// -------------------------------------------------------------------------
-// Funkcje do konstruowania procesow MP
-
 #include "common/impconst.h"
 #include "common/com_buf.h"
 
@@ -14,14 +5,12 @@
 #include "lib/srlib.h"
 #include "mp/mp_r_irp6_postument.h"
 
-
-// DLA ROBOTA IRP6_POSTUMENT
-
 mp_irp6_postument_robot::mp_irp6_postument_robot (mp_task* mp_object_l) :
-	mp_robot (ROBOT_IRP6_POSTUMENT, "[ecp_irp6_postument]", mp_object_l) {}; // Konstruktor
+		mp_robot (ROBOT_IRP6_POSTUMENT, "[ecp_irp6_postument]", mp_object_l)
+{}
 
-// --------------------------------------------------------------------------
-void mp_irp6_postument_robot::create_next_pose_command (void) {
+void mp_irp6_postument_robot::create_next_pose_command (void)
+{
 	// wypelnia bufor wysylkowy do ECP na podstawie danych
 	// zawartych w skladowych generatora lub warunku
 
@@ -107,27 +96,27 @@ void mp_irp6_postument_robot::create_next_pose_command (void) {
 					case  POSE_FORCE_TORQUE_AT_FRAME:
 						for(int i=0;i<6;i++) {
 							mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.inertia[i]
-								=ecp_td.MPtoECP_inertia[i];
+							=ecp_td.MPtoECP_inertia[i];
 							mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.reciprocal_damping[i]
-								=ecp_td.MPtoECP_reciprocal_damping[i];
+							=ecp_td.MPtoECP_reciprocal_damping[i];
 
-								/*
+							/*
 							mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.selection_vector[i]
-								=ecp_td.MPselection_vector[i];
-								*/
+							=ecp_td.MPselection_vector[i];
+							*/
 
 							mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i]
-								=ecp_td.MPtoECP_force_xyz_torque_xyz[i];
-						    mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.behaviour[i]
- 	   	     	  		     = ecp_td.MPtoECP_behaviour[i]; // pozycja docelowa
+							=ecp_td.MPtoECP_force_xyz_torque_xyz[i];
+							mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.behaviour[i]
+							= ecp_td.MPtoECP_behaviour[i]; // pozycja docelowa
 						}
 						for (int i=0; i<IRP6_POSTUMENT_NUM_OF_SERVOS ; i++) {
 							mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.position_velocity[i]
-								=ecp_td.MPtoECP_position_velocity[i];
+							=ecp_td.MPtoECP_position_velocity[i];
 
 						}
 						mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.gripper_coordinate
-							=ecp_td.next_gripper_coordinate;
+						=ecp_td.next_gripper_coordinate;
 						break;
 					case  JOINT:
 						for (int j=0; j<IRP6_POSTUMENT_NUM_OF_SERVOS ; j++) {
@@ -153,11 +142,10 @@ void mp_irp6_postument_robot::create_next_pose_command (void) {
 		default: // blad: nieprawidlowe polecenie
 			throw MP_error (NON_FATAL_ERROR, INVALID_ECP_COMMAND);
 	}
-}; // end: mp_irp6_postument_robot::create_next_pose_command
-// ---------------------------------------------------------------
+}
 
-// ---------------------------------------------------------------------
-void mp_irp6_postument_robot::get_reply (void) {
+void mp_irp6_postument_robot::get_reply (void)
+{
 	// pobiera z pakietu przeslanego z ECP informacje i wstawia je do
 	// odpowiednich skladowych generatora lub warunku
 	ecp_td.ecp_reply = ecp_reply.reply;
@@ -189,21 +177,18 @@ void mp_irp6_postument_robot::get_reply (void) {
 		case ARM_RMODEL:
 			get_arm_reply();
 			get_rmodel_reply();
-		break;
+			break;
 		default:  // bledna przesylka
-		throw MP_error (NON_FATAL_ERROR, INVALID_EDP_REPLY);
-
-	}; // end: switch (reply_type)
-}; // end: mp_irp6_postument_robot::get_reply (robot& r)
-// --------------------------------------------------------------------------
-
+			throw MP_error (NON_FATAL_ERROR, INVALID_EDP_REPLY);
+	}
+}
 
 void mp_irp6_postument_robot::get_input_reply (void)
 {
 	ecp_td.input_values = ecp_reply.ecp_reply.reply_package.input_values;
-	for (int i=0; i<8; i++) ecp_td.analog_input[i]=ecp_reply.ecp_reply.reply_package.analog_input[i];
+	for (int i=0; i<8; i++)
+		ecp_td.analog_input[i]=ecp_reply.ecp_reply.reply_package.analog_input[i];
 }
-
 
 void mp_irp6_postument_robot::get_arm_reply (void)
 {
@@ -213,13 +198,13 @@ void mp_irp6_postument_robot::get_arm_reply (void)
 				ecp_td.current_motor_arm_coordinates[i] = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
 			}
 			ecp_td.gripper_reg_state = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
-		break;
+			break;
 		case JOINT:
 			for (int i=0; i<IRP6_POSTUMENT_NUM_OF_SERVOS; i++) {
 				ecp_td.current_joint_arm_coordinates[i] = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
 			}
 			ecp_td.gripper_reg_state = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
-		break;
+			break;
 		case FRAME:
 			copy_frame(ecp_td.current_arm_frame_m, ecp_reply.ecp_reply.reply_package.arm.frame_def.arm_frame_m);
 			ecp_td.gripper_reg_state = ecp_reply.ecp_reply.reply_package.arm.frame_def.gripper_reg_state;
@@ -231,33 +216,32 @@ void mp_irp6_postument_robot::get_arm_reply (void)
 			}
 			ecp_td.gripper_reg_state = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
 			ecp_td.current_gripper_coordinate = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_coordinate;
-		break;
+			break;
 		case POSE_FORCE_TORQUE_AT_FRAME:
 			copy_frame(ecp_td.MPcurrent_beggining_arm_frame_m,
-							ecp_reply.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.beggining_arm_frame_m);
+			           ecp_reply.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.beggining_arm_frame_m);
 			copy_frame(ecp_td.MPcurrent_predicted_arm_frame_m,
-							ecp_reply.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.predicted_arm_frame_m);
+			           ecp_reply.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.predicted_arm_frame_m);
 			copy_frame(ecp_td.MPcurrent_present_arm_frame_m,
-							ecp_reply.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.present_arm_frame_m);
+			           ecp_reply.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.present_arm_frame_m);
 			for(int i = 0;i<6;i++) {
 				ecp_td.ECPtoMP_force_xyz_torque_xyz[i] =
-				ecp_reply.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i];
+				    ecp_reply.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i];
 			}
 			ecp_td.gripper_reg_state = ecp_reply.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.gripper_reg_state;
 			ecp_td.current_gripper_coordinate = ecp_reply.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.gripper_coordinate;
-		break;
+			break;
 		case XYZ_ANGLE_AXIS:
 			for (int i=0; i<6; i++) {
 				ecp_td.current_XYZ_AA_arm_coordinates[i] = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
 			}
 			ecp_td.gripper_reg_state = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
 			ecp_td.current_gripper_coordinate = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_coordinate;
-		break;
+			break;
 		default:
-		throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}
 }
-
 
 void mp_irp6_postument_robot::get_rmodel_reply (void)
 {
@@ -268,32 +252,32 @@ void mp_irp6_postument_robot::get_rmodel_reply (void)
 		case TOOL_XYZ_ANGLE_AXIS:
 			for (int i=0; i<6; i++) {
 				ecp_td.current_XYZ_AA_tool_coordinates[i] =
-				ecp_reply.ecp_reply.reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
+				    ecp_reply.ecp_reply.reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
 			}
 			break;
 		case TOOL_XYZ_EULER_ZYZ:
 			for (int i=0; i<6; i++) {
 				ecp_td.current_XYZ_ZYZ_tool_coordinates[i] =
-				ecp_reply.ecp_reply.reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
+				    ecp_reply.ecp_reply.reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
 			}
 			break;
 		case TOOL_AS_XYZ_EULER_ZY:
 			for (int i=0; i<6; i++) {
 				ecp_td.current_XYZ_ZYZ_tool_coordinates[i] =
-				ecp_reply.ecp_reply.reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
+				    ecp_reply.ecp_reply.reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
 			}
 			break;
 		case ARM_KINEMATIC_MODEL:
 			ecp_td.current_kinematic_model_no =
-			ecp_reply.ecp_reply.reply_package.rmodel.kinematic_model.kinematic_model_no;
+			    ecp_reply.ecp_reply.reply_package.rmodel.kinematic_model.kinematic_model_no;
 
 			break;
 		case SERVO_ALGORITHM:
 			for(int j=0; j<IRP6_POSTUMENT_NUM_OF_SERVOS; j++) {
 				ecp_td.current_servo_algorithm_no[j] =
-				ecp_reply.ecp_reply.reply_package.rmodel.servo_algorithm.servo_algorithm_no[j];
+				    ecp_reply.ecp_reply.reply_package.rmodel.servo_algorithm.servo_algorithm_no[j];
 				ecp_td.current_servo_parameters_no[j] =
-				ecp_reply.ecp_reply.reply_package.rmodel.servo_algorithm.servo_parameters_no[j];
+				    ecp_reply.ecp_reply.reply_package.rmodel.servo_algorithm.servo_parameters_no[j];
 			}
 			break;
 		default: // bledny typ specyfikacji modelu robota

@@ -20,7 +20,8 @@
 #include "lib/mathtr.h"
 #include "mp/mp_common_generators.h"
 
-void mp_short_move_up(mp_task& mp_object){
+void mp_short_move_up(mp_task& mp_object)
+{
 
 	trajectory_description tdes;
 
@@ -44,11 +45,12 @@ void mp_short_move_up(mp_task& mp_object){
 }
 
 
- // konstruktor
-    mp_tff_single_robot_nose_run_generator::mp_tff_single_robot_nose_run_generator(mp_task& _mp_task, int step):
-		mp_generator (_mp_task) {
-        step_no = step;
-    };
+// konstruktor
+mp_tff_single_robot_nose_run_generator::mp_tff_single_robot_nose_run_generator(mp_task& _mp_task, int step):
+		mp_generator (_mp_task)
+{
+	step_no = step;
+};
 
 
 
@@ -57,14 +59,15 @@ void mp_short_move_up(mp_task& mp_object){
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_tff_single_robot_nose_run_generator::first_step () {
-  // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
-  // Funkcja zwraca false gdy koniec generacji trajektorii
-  // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-//  cout << "first_step" << endl;
- // 	irp6 = robot_list->E_ptr;
-   	irp6 = robot_m.begin()->second;
-   	irp6->communicate = true;
+bool mp_tff_single_robot_nose_run_generator::first_step ()
+{
+	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+	//  cout << "first_step" << endl;
+	// 	irp6 = robot_list->E_ptr;
+	irp6 = robot_m.begin()->second;
+	irp6->communicate = true;
 
 	vsp_force = sensor_m.begin()->second;
 
@@ -88,15 +91,13 @@ bool mp_tff_single_robot_nose_run_generator::first_step () {
 	Homog_matrix tool_frame_m(0.0, 0.0, 0.25);
 	tool_frame_m.get_frame_tab(irp6->ecp_td.next_tool_frame_m);
 
-	for(int i=0;i<6;i++)
-	 {
+	for(int i=0;i<6;i++) {
 		irp6->ecp_td.MPtoECP_position_velocity[i] = 0;
 		irp6->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
 		//	irp6->ecp_td.MPselection_vector[i] = FORCE_SV_AX;
 	}
 
-	for (int i=0;i<3;i++)
-	{
+	for (int i=0;i<3;i++) {
 		irp6->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
 		irp6->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
 		irp6->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
@@ -104,28 +105,28 @@ bool mp_tff_single_robot_nose_run_generator::first_step () {
 	}
 
 
-//  cout << "first_step 2" << endl;
+	//  cout << "first_step 2" << endl;
 	copy_generator_command( robot_m );
 
-//	  cout << "first_step 3" << endl;
+	//	  cout << "first_step 3" << endl;
 	return true;
-}; // end: mp_tff_single_robot_nose_run_generator::first_step()
+}
 
 // ----------------------------------------------------------------------------------------------
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_tff_single_robot_nose_run_generator::next_step () {
- // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
- // Funkcja zwraca false gdy koniec generacji trajektorii
- // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
- // UWAGA: dzialamy na jednoelementowej liscie robotow
+bool mp_tff_single_robot_nose_run_generator::next_step ()
+{
+	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	node_counter++;
 	if ( idle_step_counter ) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 
 		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
-			 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-		{
+		        sensor_m_iterator != sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
 		}
@@ -136,15 +137,13 @@ bool mp_tff_single_robot_nose_run_generator::next_step () {
 
 	vsp_force->base_period=1;
 
-	if (trigger)
-	{
+	if (trigger) {
 		trigger = false; // trzeba kasowac trigger
 		// printf("trigger\n");
 		return false;
 	}
 
- 	copy_data( robot_m );
-
+	copy_data( robot_m );
 
 	irp6->ecp_td.next_gripper_coordinate = irp6->ecp_td.current_gripper_coordinate;
 
@@ -154,38 +153,36 @@ bool mp_tff_single_robot_nose_run_generator::next_step () {
 	if ( irp6->ecp_td.ecp_reply == TASK_TERMINATED ) {
 		sr_ecp_msg->message("w mp task terminated");
 		return false;
-	} else return true;
-}; // end: bool mp_tff_single_robot_nose_run_generator::next_step ()
+	} else
+		return true;
+}
 
+mp_tff_nose_run_generator::mp_tff_nose_run_generator(mp_task& _mp_task, int step): mp_generator (_mp_task), irp6ot_con(1), irp6p_con(1)
+{
+	step_no = step;
+}
 
-
-
-    mp_tff_nose_run_generator::mp_tff_nose_run_generator(mp_task& _mp_task, int step): mp_generator (_mp_task), irp6ot_con(1), irp6p_con(1){
-        step_no = step;
-    };
-
-
-
-
-	void mp_tff_nose_run_generator::configure(unsigned short l_irp6ot_con , unsigned short l_irp6p_con )
-	{ irp6ot_con = l_irp6ot_con;	irp6p_con = l_irp6p_con;	};
-
+void mp_tff_nose_run_generator::configure(unsigned short l_irp6ot_con , unsigned short l_irp6p_con )
+{
+	irp6ot_con = l_irp6ot_con;
+	irp6p_con = l_irp6p_con;
+}
 
 // ----------------------------------------------------------------------------------------------
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_tff_nose_run_generator::first_step () {
-  // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
-  // Funkcja zwraca false gdy koniec generacji trajektorii
-  // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-  // cout << "first_step" << endl;
+bool mp_tff_nose_run_generator::first_step ()
+{
+	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+	// cout << "first_step" << endl;
 	irp6ot = robot_m[ROBOT_IRP6_ON_TRACK];
 	irp6p = robot_m[ROBOT_IRP6_POSTUMENT];
 
 	irp6ot->communicate = true;
 	irp6p->communicate = true;
-
 
 	vsp_force_irp6ot = sensor_m[SENSOR_FORCE_ON_TRACK];
 	vsp_force_irp6p = sensor_m[SENSOR_FORCE_POSTUMENT];
@@ -213,10 +210,14 @@ bool mp_tff_nose_run_generator::first_step () {
 		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
 		irp6ot->ecp_td.MPtoECP_position_velocity[i+3] = 0;
 		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
-		if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-			else irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
-		if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-			else irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
+		if(irp6ot_con)
+			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+		else
+			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
+		if(irp6ot_con)
+			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		else
+			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
 
 		irp6ot->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
 		irp6ot->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
@@ -224,7 +225,6 @@ bool mp_tff_nose_run_generator::first_step () {
 
 	Homog_matrix tool_frame_m(0.0, 0.0, 0.25);
 	tool_frame_m.get_frame_tab(irp6ot->ecp_td.next_tool_frame_m);
-
 
 	irp6p->ecp_td.mp_command = NEXT_POSE;
 	irp6p->ecp_td.instruction_type = GET;
@@ -245,38 +245,40 @@ bool mp_tff_nose_run_generator::first_step () {
 		irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
 		irp6p->ecp_td.MPtoECP_position_velocity[i+3] = 0;
 		irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
-		if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-			else irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
-		if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-			else irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
+		if(irp6p_con)
+			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+		else
+			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
+		if(irp6p_con)
+			irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		else
+			irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
 		irp6p->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
 		irp6p->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
 	}
 
-//  cout << "first_step 2" << endl;
+	//  cout << "first_step 2" << endl;
 	copy_generator_command( robot_m );
 
-//	  cout << "first_step 3" << endl;
+	//	  cout << "first_step 3" << endl;
 	return true;
-}; // end: tight_coop_generator::first_step()
-
-
+}
 
 // ----------------------------------------------------------------------------------------------
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_tff_nose_run_generator::next_step () {
- // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
- // Funkcja zwraca false gdy koniec generacji trajektorii
- // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
- // UWAGA: dzialamy na jednoelementowej liscie robotow
-//	cout << "next_step" << endl;
+bool mp_tff_nose_run_generator::next_step ()
+{
+	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+	// UWAGA: dzialamy na jednoelementowej liscie robotow
+	//	cout << "next_step" << endl;
 	node_counter++;
 	if ( idle_step_counter ) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
-			 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-		{
+		        sensor_m_iterator != sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
 		}
@@ -287,19 +289,16 @@ bool mp_tff_nose_run_generator::next_step () {
 	vsp_force_irp6ot->base_period=1;
 	vsp_force_irp6p->base_period=1;
 
-
-	if (trigger)
-	{
+	if (trigger) {
 		trigger = false; // trzeba kasowac trigger
 		// printf("trigger\n");
 		return false;
 	}
 
- 	copy_data( robot_m );
+	copy_data( robot_m );
 
- 	if (node_counter==3)
- 	{
-	 	irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
+	if (node_counter==3) {
+		irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
 		irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
 	}
 
@@ -309,43 +308,40 @@ bool mp_tff_nose_run_generator::next_step () {
 	copy_generator_command( robot_m );
 
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
-	if (( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) || ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED )){
+	if (( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) || ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED )) {
 		sr_ecp_msg->message("w mp task terminated");
 		return false;
-	} else return true;
-}; // end: bool tight_coop_generator::next_step ()
+	} else
+		return true;
+}
 
-
-
-
-    mp_haptic_generator::mp_haptic_generator(mp_task& _mp_task, int step): mp_generator (_mp_task), irp6ot_con(1), irp6p_con(1),
+mp_haptic_generator::mp_haptic_generator(mp_task& _mp_task, int step): mp_generator (_mp_task), irp6ot_con(1), irp6p_con(1),
 		global_base (1, 0, 0, -0.08,		0, 1, 0, 2.08,		0, 0, 1, -0.015)
-	{
-        step_no = step;
-    };
+{
+	step_no = step;
+}
 
-
-
-
-	void mp_haptic_generator::configure(unsigned short l_irp6ot_con , unsigned short l_irp6p_con )
-	{ irp6ot_con = l_irp6ot_con;	irp6p_con = l_irp6p_con;	};
-
+void mp_haptic_generator::configure(unsigned short l_irp6ot_con , unsigned short l_irp6p_con )
+{
+	irp6ot_con = l_irp6ot_con;
+	irp6p_con = l_irp6p_con;
+}
 
 // ----------------------------------------------------------------------------------------------
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_haptic_generator::first_step () {
-  // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
-  // Funkcja zwraca false gdy koniec generacji trajektorii
-  // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-  // cout << "first_step" << endl;
+bool mp_haptic_generator::first_step ()
+{
+	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+	// cout << "first_step" << endl;
 	irp6ot = robot_m[ROBOT_IRP6_ON_TRACK];
 	irp6p = robot_m[ROBOT_IRP6_POSTUMENT];
 
 	irp6ot->communicate = true;
 	irp6p->communicate = true;
-
 
 	vsp_force_irp6ot = sensor_m[SENSOR_FORCE_ON_TRACK];
 	vsp_force_irp6p = sensor_m[SENSOR_FORCE_POSTUMENT];
@@ -425,58 +421,54 @@ bool mp_haptic_generator::first_step () {
 		*/
 	}
 
-//  cout << "first_step 2" << endl;
+	//  cout << "first_step 2" << endl;
 	copy_generator_command( robot_m );
 
-//	  cout << "first_step 3" << endl;
+	//	  cout << "first_step 3" << endl;
 	return true;
-}; // end: mp_haptic_generator::first_step()
-
-
+}
 
 // ----------------------------------------------------------------------------------------------
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_haptic_generator::next_step () {
- // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
- // Funkcja zwraca false gdy koniec generacji trajektorii
- // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
- // UWAGA: dzialamy na jednoelementowej liscie robotow
-//	cout << "next_step" << endl;
+bool mp_haptic_generator::next_step ()
+{
+	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+	// UWAGA: dzialamy na jednoelementowej liscie robotow
+	//	cout << "next_step" << endl;
 	node_counter++;
 	if (node_counter<3) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
-			 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-		{
+		        sensor_m_iterator != sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
 		}
 		return true;
 	}
-/*
-	vsp_force_irp6ot->base_period=1;
-	vsp_force_irp6p->base_period=1;
-	*/
+	/*
+		vsp_force_irp6ot->base_period=1;
+		vsp_force_irp6p->base_period=1;
+		*/
 
-	if (trigger)
-	{
+	if (trigger) {
 		trigger = false; // trzeba kasowac trigger
 		// printf("trigger\n");
 		return false;
 	}
 
- 	copy_data (robot_m);
+	copy_data (robot_m);
 
- 	if (node_counter==3)
- 	{
-	 	vsp_force_irp6ot->base_period=1;
+	if (node_counter==3) {
+		vsp_force_irp6ot->base_period=1;
 		vsp_force_irp6p->base_period=1;
 
 		irp6ot->ecp_td.instruction_type = SET;
 		irp6p->ecp_td.instruction_type = SET;
 
-	 	irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
+		irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
 		irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
 	}
 
@@ -503,15 +495,13 @@ bool mp_haptic_generator::next_step () {
 	Ft_v_vector irp6p_ECPtoMP_force_xyz_torque_xyz (irp6p->ecp_td.ECPtoMP_force_xyz_torque_xyz);
 
 
-	 for (int i=0; i<6; i++)
-	 {
+	for (int i=0; i<6; i++) {
 		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = -irp6p_ECPtoMP_force_xyz_torque_xyz[i];
 	}
 
-	if ( (node_counter % 10) == 0)
-	{
+	if ( (node_counter % 10) == 0) {
 		std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n" << irp6p_ECPtoMP_force_xyz_torque_xyz << std::endl;
-	//	std::cout << "irp6p_goal_xyz_angle_axis_increment_in_end_effector\n" << irp6p_goal_xyz_angle_axis_increment_in_end_effector << std::endl;
+		//	std::cout << "irp6p_goal_xyz_angle_axis_increment_in_end_effector\n" << irp6p_goal_xyz_angle_axis_increment_in_end_effector << std::endl;
 
 	}
 
@@ -520,58 +510,52 @@ bool mp_haptic_generator::next_step () {
 	copy_generator_command (robot_m);
 
 
-	if (( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) || ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED )){
+	if (( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) || ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED )) {
 		sr_ecp_msg->message("w mp task terminated");
 		return false;
-	} else return true;
-}; // end: bool mp_haptic_generator::next_step ()
+	} else
+		return true;
+}
 
+mp_tff_rubik_grab_generator::mp_tff_rubik_grab_generator(mp_task& _mp_task, int step): mp_generator (_mp_task), irp6ot_con(0), irp6p_con(0)
+{
+	step_no = step;
+}
 
+void mp_tff_rubik_grab_generator::configure(unsigned short l_irp6ot_con, unsigned short l_irp6p_con, double l_goal_position,
+        double l_position_increment, int l_min_node_counter, bool l_irp6p_both_axes_running, bool l_irp6ot_both_axes_running)
+{
+	irp6ot_con = l_irp6ot_con;
+	irp6p_con = l_irp6p_con;
+	goal_position = l_goal_position;
+	position_increment = l_position_increment;
+	min_node_counter = l_min_node_counter;
+	irp6p_both_axes_running = l_irp6p_both_axes_running;
+	irp6ot_both_axes_running = l_irp6ot_both_axes_running;
 
+}
 
-
-    mp_tff_rubik_grab_generator::mp_tff_rubik_grab_generator(mp_task& _mp_task, int step): mp_generator (_mp_task), irp6ot_con(0), irp6p_con(0) {
-        step_no = step;
-    };
-
-	void mp_tff_rubik_grab_generator::configure(unsigned short l_irp6ot_con, unsigned short l_irp6p_con, double l_goal_position,
-		double l_position_increment, int l_min_node_counter, bool l_irp6p_both_axes_running, bool l_irp6ot_both_axes_running)
-	{
-		irp6ot_con = l_irp6ot_con;
-		irp6p_con = l_irp6p_con;
-		goal_position = l_goal_position;
-		position_increment = l_position_increment;
-		min_node_counter = l_min_node_counter;
-		irp6p_both_axes_running = l_irp6p_both_axes_running;
-		irp6ot_both_axes_running = l_irp6ot_both_axes_running;
-
-	};
-
-
-
-bool mp_tff_rubik_grab_generator::first_step () {
-  // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
-  // Funkcja zwraca false gdy koniec generacji trajektorii
-  // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+bool mp_tff_rubik_grab_generator::first_step ()
+{
+	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 	irp6ot = robot_m[ROBOT_IRP6_ON_TRACK];
 	irp6p = robot_m[ROBOT_IRP6_POSTUMENT];
 
 
-	if (irp6ot_con) irp6ot->communicate=true;
-		else
-		{
-			 irp6ot->communicate=false;
-			 irp6ot->robot_new_pulse_checked = true;
-		}
-	if (irp6p_con) irp6p->communicate=true;
-		else
-		{
-			 irp6p->communicate=false;
-			 irp6p->robot_new_pulse_checked = true;
-		 }
-
-
-
+	if (irp6ot_con)
+		irp6ot->communicate=true;
+	else {
+		irp6ot->communicate=false;
+		irp6ot->robot_new_pulse_checked = true;
+	}
+	if (irp6p_con)
+		irp6p->communicate=true;
+	else {
+		irp6p->communicate=false;
+		irp6p->robot_new_pulse_checked = true;
+	}
 
 	vsp_force_irp6ot = sensor_m[SENSOR_FORCE_ON_TRACK];
 	vsp_force_irp6p = sensor_m[SENSOR_FORCE_POSTUMENT];
@@ -602,25 +586,32 @@ bool mp_tff_rubik_grab_generator::first_step () {
 		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
 		irp6ot->ecp_td.MPtoECP_position_velocity[i+3] = 0;
 		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
-		if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-			else irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
-		if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-			else irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
+		if(irp6ot_con)
+			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+		else
+			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
+		if(irp6ot_con)
+			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		else
+			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
 
 		irp6ot->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
 		irp6ot->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
 	}
 
-
 	if (irp6ot_con) {
-		if(irp6ot_both_axes_running) for(int i=0;i<2;i++) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+		if(irp6ot_both_axes_running)
+			for(int i=0;i<2;i++)
+				irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 		else {
 			irp6ot->ecp_td.MPtoECP_reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
 			irp6ot->ecp_td.MPtoECP_reciprocal_damping[0] = 0;
 		}
-		for(int i=2;i<6;i++) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
-	}
-	else for(int i=0;i<6;i++) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
+		for(int i=2;i<6;i++)
+			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
+	} else
+		for(int i=0;i<6;i++)
+			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
 
 	irp6p->ecp_td.mp_command = NEXT_POSE;
 	irp6p->ecp_td.instruction_type = GET;
@@ -641,45 +632,51 @@ bool mp_tff_rubik_grab_generator::first_step () {
 		irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
 		irp6p->ecp_td.MPtoECP_position_velocity[i+3] = 0;
 		irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
-		if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-			else irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
-		if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-			else irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
+		if(irp6p_con)
+			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+		else
+			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
+		if(irp6p_con)
+			irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		else
+			irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
 		irp6p->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
 		irp6p->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
 	}
 
-
 	if(irp6p_con) {
-		if(irp6p_both_axes_running) for(int i=0;i<2;i++) irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+		if(irp6p_both_axes_running)
+			for(int i=0;i<2;i++)
+				irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 		else {
 			irp6p->ecp_td.MPtoECP_reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
 			irp6p->ecp_td.MPtoECP_reciprocal_damping[0] = 0;
 		}
-		for(int i=2;i<6;i++) irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
-	}
-	else for(int i=0;i<6;i++) irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
-
+		for(int i=2;i<6;i++)
+			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
+	} else
+		for(int i=0;i<6;i++)
+			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
 
 	copy_generator_command( robot_m );
 	return true;
-}; // end: tight_coop_generator::first_step()
+}
 
 // ----------------------------------------------------------------------------------------------
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_tff_rubik_grab_generator::next_step () {
- // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
- // Funkcja zwraca false gdy koniec generacji trajektorii
- // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
- // UWAGA: dzialamy na jednoelementowej liscie robotow
+bool mp_tff_rubik_grab_generator::next_step ()
+{
+	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+	// UWAGA: dzialamy na jednoelementowej liscie robotow
 
 	node_counter++;
 	if ( idle_step_counter ) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
-			 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-		{
+		        sensor_m_iterator != sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
 		}
@@ -691,30 +688,29 @@ bool mp_tff_rubik_grab_generator::next_step () {
 	vsp_force_irp6ot->base_period=1;
 	vsp_force_irp6p->base_period=1;
 
-	if (trigger)
-	{
+	if (trigger) {
 		trigger = false; // trzeba kasowac trigger
 		// printf("trigger\n");
 		return false;
 	}
- 	copy_data( robot_m );
+	copy_data( robot_m );
 
- 	// if (irp6ot->new_pulse) printf("irp6ot: \n");
-  	// if (irp6p->new_pulse) printf("irp6p: \n");
+	// if (irp6ot->new_pulse) printf("irp6ot: \n");
+	// if (irp6p->new_pulse) printf("irp6p: \n");
 
- 	if (node_counter==2) {
- 		irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
+	if (node_counter==2) {
+		irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
 		irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
 	}
 
 	if(irp6ot_con) {
 		if ((irp6ot->ecp_td.next_gripper_coordinate > goal_position) || (node_counter < min_node_counter))
-			 irp6ot->ecp_td.next_gripper_coordinate -= position_increment;
+			irp6ot->ecp_td.next_gripper_coordinate -= position_increment;
 		else {
 			return false;
 		}
-	}
-	else irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
+	} else
+		irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
 
 	if(irp6p_con) {
 		if ((irp6p->ecp_td.next_gripper_coordinate > goal_position) || (node_counter < min_node_counter))
@@ -722,8 +718,8 @@ bool mp_tff_rubik_grab_generator::next_step () {
 		else {
 			return false;
 		}
-	}
-	else irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
+	} else
+		irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
 
 	irp6ot->ecp_td.instruction_type = SET;
 	irp6p->ecp_td.instruction_type = SET;
@@ -732,22 +728,26 @@ bool mp_tff_rubik_grab_generator::next_step () {
 	if ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) {
 		sr_ecp_msg->message("w mp task terminated");
 		return false;
-	} else return true;
-}; // end: bool tight_coop_generator::next_step ()
+	} else
+		return true;
+}
 
+mp_tff_rubik_face_rotate_generator::mp_tff_rubik_face_rotate_generator(mp_task& _mp_task, int step): mp_generator (_mp_task), irp6ot_con(1), irp6p_con(1)
+{
+	step_no = step;
+}
 
-    mp_tff_rubik_face_rotate_generator::mp_tff_rubik_face_rotate_generator(mp_task& _mp_task, int step): mp_generator (_mp_task), irp6ot_con(1), irp6p_con(1){
-        step_no = step;
-    };
+void mp_tff_rubik_face_rotate_generator::configure(double l_irp6ot_con, double l_irp6p_con)
+{
+	irp6ot_con = l_irp6ot_con;
+	irp6p_con = l_irp6p_con;
+}
 
-	void mp_tff_rubik_face_rotate_generator::configure(double l_irp6ot_con, double l_irp6p_con)
-	{ irp6ot_con = l_irp6ot_con;	irp6p_con = l_irp6p_con;	};
-
-
-bool mp_tff_rubik_face_rotate_generator::first_step () {
-  // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
-  // Funkcja zwraca false gdy koniec generacji trajektorii
-  // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+bool mp_tff_rubik_face_rotate_generator::first_step ()
+{
+	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 	irp6ot = robot_m[ROBOT_IRP6_ON_TRACK];
 	irp6p = robot_m[ROBOT_IRP6_POSTUMENT];
 	irp6ot->communicate = true;
@@ -782,24 +782,32 @@ bool mp_tff_rubik_face_rotate_generator::first_step () {
 		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
 		irp6ot->ecp_td.MPtoECP_position_velocity[i+3] = 0;
 		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
-		if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-			else irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
-		if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-			else irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
+		if(irp6ot_con)
+			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+		else
+			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
+		if(irp6ot_con)
+			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		else
+			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
 
 		irp6ot->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
 		irp6ot->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
 	}
 
 	if(-0.1 < irp6ot_con && irp6ot_con < 0.1) {
-		for(int i=0;i<6;i++) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
-	}
-	else {
-		for(int i=0;i<3;i++) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-		for(int i=3;i<5;i++) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
+		for(int i=0;i<6;i++)
+			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
+	} else {
+		for(int i=0;i<3;i++)
+			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+		for(int i=3;i<5;i++)
+			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
 		irp6ot->ecp_td.MPtoECP_reciprocal_damping[5] = TORQUE_RECIPROCAL_DAMPING;
-		if(irp6ot_con > 0.0) irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[5] = -5;
-		if(irp6ot_con < 0.0) irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[5] = 5;
+		if(irp6ot_con > 0.0)
+			irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[5] = -5;
+		if(irp6ot_con < 0.0)
+			irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[5] = 5;
 	}
 	irp6p->ecp_td.mp_command = NEXT_POSE;
 	irp6p->ecp_td.instruction_type = GET;
@@ -812,7 +820,6 @@ bool mp_tff_rubik_face_rotate_generator::first_step () {
 	irp6p->ecp_td.motion_type = PF_VELOCITY;
 	irp6p->ecp_td.motion_steps = td.internode_step_no;
 	irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
-
 
 	tool_frame_m.get_frame_tab(irp6p->ecp_td.next_tool_frame_m);
 
@@ -827,36 +834,38 @@ bool mp_tff_rubik_face_rotate_generator::first_step () {
 		irp6p->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
 	}
 
-
-
 	if(-0.1 < irp6p_con && irp6p_con < 0.1) {
-		for(int i=0;i<6;i++) irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
-	}
-	else {
-		for(int i=0;i<3;i++) irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-		for(int i=3;i<5;i++) irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
+		for(int i=0;i<6;i++)
+			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
+	} else {
+		for(int i=0;i<3;i++)
+			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+		for(int i=3;i<5;i++)
+			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
 		irp6p->ecp_td.MPtoECP_reciprocal_damping[5] = TORQUE_RECIPROCAL_DAMPING;
-		if(irp6p_con > 0.0) irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[5] = -5;
-		if(irp6p_con < 0.0) irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[5] = 5;
+		if(irp6p_con > 0.0)
+			irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[5] = -5;
+		if(irp6p_con < 0.0)
+			irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[5] = 5;
 	}
 	copy_generator_command( robot_m );
 	return true;
-}; // end: tight_coop_generator::first_step()
+}
 
 // ----------------------------------------------------------------------------------------------
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_tff_rubik_face_rotate_generator::next_step () {
- // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
- // Funkcja zwraca false gdy koniec generacji trajektorii
- // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
- // UWAGA: dzialamy na jednoelementowej liscie robotow
+bool mp_tff_rubik_face_rotate_generator::next_step ()
+{
+	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	node_counter++;
 	if ( idle_step_counter ) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
-			 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-		{
+		        sensor_m_iterator != sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
 		}
@@ -876,12 +885,10 @@ bool mp_tff_rubik_face_rotate_generator::next_step () {
 			if (xyz_eul_zyz[5] + angle_to_move < -M_PI) {
 				irp6ot_stored_gamma = 2 * M_PI + xyz_eul_zyz[5] + angle_to_move;
 				irp6ot_range_change = true;
-			}
-			else if(xyz_eul_zyz[5] + angle_to_move > M_PI) {
+			} else if(xyz_eul_zyz[5] + angle_to_move > M_PI) {
 				irp6ot_stored_gamma = -2 * M_PI + xyz_eul_zyz[5] + angle_to_move;
 				irp6ot_range_change = true;
-			}
-			else {
+			} else {
 				irp6ot_stored_gamma = xyz_eul_zyz[5] + angle_to_move;
 				irp6ot_range_change = false;
 			}
@@ -894,12 +901,10 @@ bool mp_tff_rubik_face_rotate_generator::next_step () {
 			if (xyz_eul_zyz[5] + angle_to_move < -M_PI) {
 				irp6p_stored_gamma = 2 * M_PI + xyz_eul_zyz[5] + angle_to_move;
 				irp6p_range_change = true;
-			}
-			else if(xyz_eul_zyz[5] + angle_to_move > M_PI) {
+			} else if(xyz_eul_zyz[5] + angle_to_move > M_PI) {
 				irp6p_stored_gamma = -2 * M_PI + xyz_eul_zyz[5] + angle_to_move;
 				irp6p_range_change = true;
-			}
-			else {
+			} else {
 				irp6p_stored_gamma = xyz_eul_zyz[5] + angle_to_move;
 				irp6p_range_change = false;
 			}
@@ -913,11 +918,12 @@ bool mp_tff_rubik_face_rotate_generator::next_step () {
 			double current_gamma = xyz_eul_zyz[5];
 			if(!irp6p_range_change) {
 				if((	irp6p_con < 0.0 && irp6p_stored_gamma > current_gamma) || (
-					irp6p_con > 0.0 && irp6p_stored_gamma < current_gamma)) return false;
-			}
-			else {
+				            irp6p_con > 0.0 && irp6p_stored_gamma < current_gamma))
+					return false;
+			} else {
 				if((	irp6p_con < 0.0 && irp6p_stored_gamma < current_gamma) || (
-					irp6p_con > 0.0 && irp6p_stored_gamma > current_gamma)) irp6p_range_change = false;
+				            irp6p_con > 0.0 && irp6p_stored_gamma > current_gamma))
+					irp6p_range_change = false;
 			}
 		}
 		if(irp6ot_con < -0.1 || 0.1 < irp6ot_con) {
@@ -927,52 +933,53 @@ bool mp_tff_rubik_face_rotate_generator::next_step () {
 			double current_gamma = xyz_eul_zyz[5];
 			if(!irp6ot_range_change) {
 				if((	irp6ot_con < 0.0 && irp6ot_stored_gamma > current_gamma) || (
-					irp6ot_con > 0.0 && irp6ot_stored_gamma < current_gamma)) {
-						return false;
+				            irp6ot_con > 0.0 && irp6ot_stored_gamma < current_gamma)) {
+					return false;
 				}
-			}
-			else {
+			} else {
 				if((	irp6ot_con < 0.0 && irp6p_stored_gamma < current_gamma) || (
-					irp6ot_con > 0.0 && irp6p_stored_gamma > current_gamma)) {
-						irp6ot_range_change = false;
+				            irp6ot_con > 0.0 && irp6p_stored_gamma > current_gamma)) {
+					irp6ot_range_change = false;
 				}
 			}
 		}
 	}
 	vsp_force_irp6ot->base_period=1;
 	vsp_force_irp6p->base_period=1;
-	if (trigger)
-	{
+	if (trigger) {
 		trigger = false; // trzeba kasowac trigger
 		// printf("trigger\n");
 		return false;
 	}
- 	copy_data( robot_m );
- 	irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
+	copy_data( robot_m );
+	irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
 	irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
 	copy_generator_command( robot_m );
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) {
 		sr_ecp_msg->message("w mp task terminated");
 		return false;
-	}
-	else return true;
-}; // end: bool tight_coop_generator::next_step ()
+	} else
+		return true;
+}
 
+mp_tff_gripper_approach_generator::mp_tff_gripper_approach_generator(mp_task& _mp_task, int step): mp_generator (_mp_task), irp6ot_speed(1.0), irp6p_speed(1.0)
+{
+	step_no = step;
+}
 
+void mp_tff_gripper_approach_generator::configure(double l_irp6ot_speed, double l_irp6p_speed, int l_motion_time)
+{
+	irp6ot_speed = l_irp6ot_speed;
+	irp6p_speed = l_irp6p_speed;
+	motion_time = l_motion_time;
+}
 
-    mp_tff_gripper_approach_generator::mp_tff_gripper_approach_generator(mp_task& _mp_task, int step): mp_generator (_mp_task), irp6ot_speed(1.0), irp6p_speed(1.0){
-        step_no = step;
-    };
-
-	void mp_tff_gripper_approach_generator::configure(double l_irp6ot_speed, double l_irp6p_speed, int l_motion_time)
-	{ irp6ot_speed = l_irp6ot_speed; irp6p_speed = l_irp6p_speed; motion_time = l_motion_time;	};
-
-
-bool mp_tff_gripper_approach_generator::first_step () {
-  // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
-  // Funkcja zwraca false gdy koniec generacji trajektorii
-  // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+bool mp_tff_gripper_approach_generator::first_step ()
+{
+	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 	irp6ot = robot_m[ROBOT_IRP6_ON_TRACK];
 	irp6p = robot_m[ROBOT_IRP6_POSTUMENT];
 
@@ -1003,8 +1010,7 @@ bool mp_tff_gripper_approach_generator::first_step () {
 	Homog_matrix tool_frame_m(0.0, 0.0, 0.25);
 	tool_frame_m.get_frame_tab(irp6ot->ecp_td.next_tool_frame_m);
 
-	for (int i=0;i<3;i++)
-	{
+	for (int i=0;i<3;i++) {
 		irp6ot->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
 		irp6ot->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
 	}
@@ -1016,9 +1022,9 @@ bool mp_tff_gripper_approach_generator::first_step () {
 
 	irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[2] = -irp6ot_speed;
 
-	for (int i=0;i<6;i++) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
+	for (int i=0;i<6;i++)
+		irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
 	irp6ot->ecp_td.MPtoECP_reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING;
-
 
 	irp6p->ecp_td.mp_command = NEXT_POSE;
 	irp6p->ecp_td.instruction_type = GET;
@@ -1034,8 +1040,7 @@ bool mp_tff_gripper_approach_generator::first_step () {
 
 	tool_frame_m.get_frame_tab(irp6p->ecp_td.next_tool_frame_m);
 
-	for (int i=0;i<3;i++)
-	{
+	for (int i=0;i<3;i++) {
 		irp6p->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
 		irp6p->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
 	}
@@ -1045,26 +1050,27 @@ bool mp_tff_gripper_approach_generator::first_step () {
 		irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
 	}
 
-	for(int i=0;i<6;i++) irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
+	for(int i=0;i<6;i++)
+		irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
 
 	copy_generator_command( robot_m );
 	return true;
-}; // end: mp_tff_gripper_approach_generator::first_step()
+}
 
 // ----------------------------------------------------------------------------------------------
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_tff_gripper_approach_generator::next_step () {
- // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
- // Funkcja zwraca false gdy koniec generacji trajektorii
- // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
- // UWAGA: dzialamy na jednoelementowej liscie robotow
+bool mp_tff_gripper_approach_generator::next_step ()
+{
+	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	node_counter++;
 	if ( idle_step_counter ) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
-			 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-		{
+		        sensor_m_iterator != sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
 		}
@@ -1080,12 +1086,12 @@ bool mp_tff_gripper_approach_generator::next_step () {
 	}
 
 	if(node_counter >= 3) {
-		if (node_counter > motion_time) return false;
+		if (node_counter > motion_time)
+			return false;
 	}
 	vsp_force_irp6ot->base_period=1;
 	vsp_force_irp6p->base_period=1;
-	if (trigger)
-	{
+	if (trigger) {
 		trigger = false; // trzeba kasowac trigger
 		// printf("trigger\n");
 		return false;
@@ -1097,24 +1103,24 @@ bool mp_tff_gripper_approach_generator::next_step () {
 	if ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) {
 		sr_ecp_msg->message("w mp task terminated");
 		return false;
-	}
-	else return true;
-}; // end: bool mp_tff_gripper_approach_generator::next_step ()
-
+	} else
+		return true;
+}
 
 // ----------------------------------------------------------------------------------------------
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
+mp_nose_run_force_generator::mp_nose_run_force_generator(mp_task& _mp_task, int step): mp_generator (_mp_task)
+{
+	step_no = step;
+}
 
-    mp_nose_run_force_generator::mp_nose_run_force_generator(mp_task& _mp_task, int step): mp_generator (_mp_task){
-        step_no = step;
-    };
-
-bool mp_nose_run_force_generator::first_step () {
-  // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
-  // Funkcja zwraca false gdy koniec generacji trajektorii
-  // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+bool mp_nose_run_force_generator::first_step ()
+{
+	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 
 
 	irp6ot = robot_m[ROBOT_IRP6_ON_TRACK];
@@ -1138,11 +1144,10 @@ bool mp_nose_run_force_generator::first_step () {
 	vsp_force_irp6ot->base_period=1;
 	vsp_force_irp6p->base_period=1;
 
-
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 
-     // track
+	// track
 	irp6ot->ecp_td.mp_command = NEXT_POSE;
 	irp6ot->ecp_td.instruction_type = GET;
 	irp6ot->ecp_td.get_type = ARM_DV;
@@ -1159,7 +1164,7 @@ bool mp_nose_run_force_generator::first_step () {
 
 	for (int j=0; j<6 ; j++)	{
 		irp6ot->ecp_td.position_increment[j]=0.0;
-	}
+}
 
 	irp6ot->ecp_td.dyslocation_matrix[0][0]=1;
 	irp6ot->ecp_td.dyslocation_matrix[1][1]=1;
@@ -1175,7 +1180,7 @@ bool mp_nose_run_force_generator::first_step () {
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 
 
-    // postument
+	   // postument
 	irp6p->ecp_td.mp_command = NEXT_POSE;
 	irp6p->ecp_td.instruction_type = GET;
 	irp6p->ecp_td.get_type = ARM_DV;
@@ -1196,7 +1201,7 @@ bool mp_nose_run_force_generator::first_step () {
 
 	for (int j=0; j<6 ; j++)	{
 		irp6p->ecp_td.position_increment[j]=0.0;
-	}
+}
 
 	irp6p->ecp_td.dyslocation_matrix[0][0]=1;
 	irp6p->ecp_td.dyslocation_matrix[1][1]=1;
@@ -1211,10 +1216,10 @@ bool mp_nose_run_force_generator::first_step () {
 	irp6p->ecp_td.motion_steps = td.internode_step_no;
 	irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
 
-*/
+	*/
 
-     // conveyor
- 	conv->ecp_td.mp_command = NEXT_POSE;
+	// conveyor
+	conv->ecp_td.mp_command = NEXT_POSE;
 	conv->ecp_td.instruction_type = GET;
 	conv->ecp_td.get_type = ARM_DV;
 	conv->ecp_td.set_type = ARM_DV;
@@ -1229,27 +1234,27 @@ bool mp_nose_run_force_generator::first_step () {
 
 	return true;
 
-}; // end: tight_coop_generator::first_step()
+}
 
 // ----------------------------------------------------------------------------------------------
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_nose_run_force_generator::next_step () {
- // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
- // Funkcja zwraca false gdy koniec generacji trajektorii
- // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
- // UWAGA: dzialamy na jednoelementowej liscie robotow
+bool mp_nose_run_force_generator::next_step ()
+{
+	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+	// UWAGA: dzialamy na jednoelementowej liscie robotow
 
-   int i; // licznik kolejnych wspolrzednych wektora [0..6]
+	int i; // licznik kolejnych wspolrzednych wektora [0..6]
 
 	node_counter++;
 
 	if ( idle_step_counter ) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		// wylaczenie pomiaru sily
 		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
-			 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-		{
+		        sensor_m_iterator != sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
 		}
@@ -1265,8 +1270,8 @@ bool mp_nose_run_force_generator::next_step () {
 		return false;
 	}
 
- 	copy_data( robot_m ); // Kopiowanie danych z bufora przyslanego z ECP do
-                          // obrazu danych wykorzystywanych przez generator
+	copy_data( robot_m ); // Kopiowanie danych z bufora przyslanego z ECP do
+	// obrazu danych wykorzystywanych przez generator
 
 	irp6ot->ecp_td.instruction_type = SET;
 
@@ -1278,27 +1283,21 @@ bool mp_nose_run_force_generator::next_step () {
 	conv->ecp_td.get_type = NOTHING_DV;
 	conv->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
 
-	for (i=0; i<6; i++)
-	{
+	for (i=0; i<6; i++) {
 		conv->ecp_td.next_joint_arm_coordinates[i]=conv->ecp_td.current_joint_arm_coordinates[i];
 	}
 
+	copy_generator_command( robot_m );
 
+	// UWAGA: dzialamy na jednoelementowej liscie robotow
+	if ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) {
+		sr_ecp_msg->message("w mp task terminated");
+		return false;
+	} else {
+		return true;
+	}
 
-   copy_generator_command( robot_m );
-
- // UWAGA: dzialamy na jednoelementowej liscie robotow
-   if ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) {
-   sr_ecp_msg->message("w mp task terminated");
-     return false;
-   }
-   else {
-     return true;
-   }
-
-}; // end: bool tight_coop_generator::next_step ()
-
-
+}
 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 //
@@ -1307,12 +1306,13 @@ bool mp_nose_run_force_generator::next_step () {
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
-    mp_drawing_teach_in_force_generator::mp_drawing_teach_in_force_generator(mp_task& _mp_task, int step): mp_teach_in_generator (_mp_task){
-        step_no = step;
-    };
+mp_drawing_teach_in_force_generator::mp_drawing_teach_in_force_generator(mp_task& _mp_task, int step): mp_teach_in_generator (_mp_task)
+{
+	step_no = step;
+}
 
-
-bool mp_drawing_teach_in_force_generator::first_step () {
+bool mp_drawing_teach_in_force_generator::first_step ()
+{
 
 	idle_step_counter = 1;
 
@@ -1329,216 +1329,211 @@ bool mp_drawing_teach_in_force_generator::first_step () {
 	vsp_force_irp6ot = sensor_m[SENSOR_FORCE_ON_TRACK];
 	vsp_force_irp6p = sensor_m[SENSOR_FORCE_POSTUMENT];
 
-if (teach_or_move == YG_MOVE) {
+	if (teach_or_move == YG_MOVE) {
 
-// 	the_robot.set_ecp_reply (ECP_ACKNOWLEDGE);
+		// 	the_robot.set_ecp_reply (ECP_ACKNOWLEDGE);
 
-	for (int i=0; i<6; i++)
-		delta[i]=0.0;
+		for (int i=0; i<6; i++)
+			delta[i]=0.0;
 
-	initiate_pose_list();
+		initiate_pose_list();
 
-	gen_state = next_gen_state = 4; // jazda w powietrzu
-	prev_gen_state = 0;
+		gen_state = next_gen_state = 4; // jazda w powietrzu
+		prev_gen_state = 0;
 
-// 	the_robot.get_mp_command ();
-	node_counter = 0;
+		// 	the_robot.get_mp_command ();
+		node_counter = 0;
 
-	td.interpolation_node_no = 1;
-	td.internode_step_no = step_no;
-	td.value_in_step_no = td.internode_step_no - 2;
+		td.interpolation_node_no = 1;
+		td.internode_step_no = step_no;
+		td.value_in_step_no = td.internode_step_no - 2;
 
+		// on_track
 
-	// on_track
+		irp6ot->ecp_td.instruction_type = GET;
+		irp6ot->ecp_td.get_type = ARM_DV;
+		irp6ot->ecp_td.set_type = ARM_DV;
+		/*
+		irp6ot->ecp_td.force_move_mode=2;
+		irp6ot->ecp_td.position_set_mode=1; // przyrostowo
 
-	irp6ot->ecp_td.instruction_type = GET;
-	irp6ot->ecp_td.get_type = ARM_DV;
-	irp6ot->ecp_td.set_type = ARM_DV;
-	/*
-	irp6ot->ecp_td.force_move_mode=2;
-	irp6ot->ecp_td.position_set_mode=1; // przyrostowo
+		irp6ot->ecp_td.force_axis_quantity=1;
 
-	irp6ot->ecp_td.force_axis_quantity=1;
+		irp6ot->ecp_td.relative_force_vector[0]=0.0;
+		irp6ot->ecp_td.relative_force_vector[1]=0.0;
+		irp6ot->ecp_td.relative_force_vector[2]=1.0;
 
-	irp6ot->ecp_td.relative_force_vector[0]=0.0;
-	irp6ot->ecp_td.relative_force_vector[1]=0.0;
-	irp6ot->ecp_td.relative_force_vector[2]=1.0;
+		normalize_vector(irp6ot->ecp_td.relative_force_vector, irp6ot->ecp_td.relative_force_vector, 3);
 
-	normalize_vector(irp6ot->ecp_td.relative_force_vector, irp6ot->ecp_td.relative_force_vector, 3);
+		irp6ot->ecp_td.set_arm_type = POSE_FORCE_LINEAR;
+		irp6ot->ecp_td.get_arm_type = POSE_FORCE_LINEAR;
+		irp6ot->ecp_td.motion_type = ABSOLUTE;
+		irp6ot->ecp_td.motion_steps = td.internode_step_no;
+		irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 
-	irp6ot->ecp_td.set_arm_type = POSE_FORCE_LINEAR;
-	irp6ot->ecp_td.get_arm_type = POSE_FORCE_LINEAR;
-	irp6ot->ecp_td.motion_type = ABSOLUTE;
-	irp6ot->ecp_td.motion_steps = td.internode_step_no;
-	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
+		irp6ot->ecp_td.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
 
-	irp6ot->ecp_td.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
+		irp6ot->ecp_td.dyslocation_matrix[0][0]=1;
+		irp6ot->ecp_td.dyslocation_matrix[1][1]=1;
+		irp6ot->ecp_td.dyslocation_matrix[2][2]=1;
+		irp6ot->ecp_td.dyslocation_matrix[3][3]=0;
+		irp6ot->ecp_td.dyslocation_matrix[4][4]=0;
+		irp6ot->ecp_td.dyslocation_matrix[5][5]=0;
 
-	irp6ot->ecp_td.dyslocation_matrix[0][0]=1;
-	irp6ot->ecp_td.dyslocation_matrix[1][1]=1;
-	irp6ot->ecp_td.dyslocation_matrix[2][2]=1;
-	irp6ot->ecp_td.dyslocation_matrix[3][3]=0;
-	irp6ot->ecp_td.dyslocation_matrix[4][4]=0;
-	irp6ot->ecp_td.dyslocation_matrix[5][5]=0;
+		// postument
 
+		irp6p->ecp_td.instruction_type = GET;
+		irp6p->ecp_td.get_type = ARM_DV;
+		irp6p->ecp_td.set_type = ARM_DV;
+		irp6p->ecp_td.force_move_mode=2;
+		irp6p->ecp_td.position_set_mode=1; // przyrostowo
 
-	// postument
+		irp6p->ecp_td.force_axis_quantity=1;
 
-	irp6p->ecp_td.instruction_type = GET;
-	irp6p->ecp_td.get_type = ARM_DV;
-	irp6p->ecp_td.set_type = ARM_DV;
-	irp6p->ecp_td.force_move_mode=2;
-	irp6p->ecp_td.position_set_mode=1; // przyrostowo
+		irp6p->ecp_td.relative_force_vector[0]=0.0;
+		irp6p->ecp_td.relative_force_vector[1]=0.0;
+		irp6p->ecp_td.relative_force_vector[2]=1.0;
 
-	irp6p->ecp_td.force_axis_quantity=1;
+		normalize_vector(irp6p->ecp_td.relative_force_vector, irp6p->ecp_td.relative_force_vector, 3);
 
-	irp6p->ecp_td.relative_force_vector[0]=0.0;
-	irp6p->ecp_td.relative_force_vector[1]=0.0;
-	irp6p->ecp_td.relative_force_vector[2]=1.0;
+		irp6p->ecp_td.set_arm_type = POSE_FORCE_LINEAR;
+		irp6p->ecp_td.get_arm_type = POSE_FORCE_LINEAR;
+		irp6p->ecp_td.motion_type = ABSOLUTE;
+		irp6p->ecp_td.motion_steps = td.internode_step_no;
+		irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
 
-	normalize_vector(irp6p->ecp_td.relative_force_vector, irp6p->ecp_td.relative_force_vector, 3);
+		irp6p->ecp_td.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
 
-	irp6p->ecp_td.set_arm_type = POSE_FORCE_LINEAR;
-	irp6p->ecp_td.get_arm_type = POSE_FORCE_LINEAR;
-	irp6p->ecp_td.motion_type = ABSOLUTE;
-	irp6p->ecp_td.motion_steps = td.internode_step_no;
-	irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
+		irp6p->ecp_td.dyslocation_matrix[0][0]=1;
+		irp6p->ecp_td.dyslocation_matrix[1][1]=1;
+		irp6p->ecp_td.dyslocation_matrix[2][2]=1;
+		irp6p->ecp_td.dyslocation_matrix[3][3]=0;
+		irp6p->ecp_td.dyslocation_matrix[4][4]=0;
+		irp6p->ecp_td.dyslocation_matrix[5][5]=0;
+		*/
 
-	irp6p->ecp_td.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
+		// conveyor
+		conv->ecp_td.mp_command = NEXT_POSE;
+		conv->ecp_td.instruction_type = GET;
+		conv->ecp_td.get_type = ARM_DV;
+		conv->ecp_td.set_type = ARM_DV;
 
-	irp6p->ecp_td.dyslocation_matrix[0][0]=1;
-	irp6p->ecp_td.dyslocation_matrix[1][1]=1;
-	irp6p->ecp_td.dyslocation_matrix[2][2]=1;
-	irp6p->ecp_td.dyslocation_matrix[3][3]=0;
-	irp6p->ecp_td.dyslocation_matrix[4][4]=0;
-	irp6p->ecp_td.dyslocation_matrix[5][5]=0;
-*/
-
-     // conveyor
- 	conv->ecp_td.mp_command = NEXT_POSE;
-	conv->ecp_td.instruction_type = GET;
-	conv->ecp_td.get_type = ARM_DV;
-	conv->ecp_td.set_type = ARM_DV;
-
-	conv->ecp_td.set_arm_type = JOINT;
-	conv->ecp_td.get_arm_type = JOINT;
-	conv->ecp_td.motion_type = ABSOLUTE;
-	conv->ecp_td.motion_steps = td.internode_step_no;
-	conv->ecp_td.value_in_step_no = td.value_in_step_no;
+		conv->ecp_td.set_arm_type = JOINT;
+		conv->ecp_td.get_arm_type = JOINT;
+		conv->ecp_td.motion_type = ABSOLUTE;
+		conv->ecp_td.motion_steps = td.internode_step_no;
+		conv->ecp_td.value_in_step_no = td.value_in_step_no;
 
 
-	copy_generator_command( robot_m );
+		copy_generator_command( robot_m );
 
-	return true;
+		return true;
 
-	// UCZENIE
+		// UCZENIE
 
 	} else if (teach_or_move == YG_TEACH) {
 
-	// the_robot.set_ecp_reply (ECP_ACKNOWLEDGE);
+		// the_robot.set_ecp_reply (ECP_ACKNOWLEDGE);
 
-	// zerowanie odczytow
-	vsp_force_irp6ot->to_vsp.parameters=1;
-	vsp_force_irp6ot->configure_sensor();
-	vsp_force_irp6ot->to_vsp.parameters=4;
-	vsp_force_irp6ot->configure_sensor();
+		// zerowanie odczytow
+		vsp_force_irp6ot->to_vsp.parameters=1;
+		vsp_force_irp6ot->configure_sensor();
+		vsp_force_irp6ot->to_vsp.parameters=4;
+		vsp_force_irp6ot->configure_sensor();
 
-// 	vsp_force_irp6p->to_vsp.parameters=1;
-// 	vsp_force_irp6p->configure_sensor();
-// 	vsp_force_irp6p->to_vsp.parameters=4;
-// 	vsp_force_irp6p->configure_sensor();
-
-
-	gen_state = 0; // nie zapisuje trajektorii dopoki nie osiagnie chociaz raz podloza
-
-	for (int i=0; i<6; i++)
-		delta[i]=0.0;
-
-	create_pose_list_head(emptyps, 0.0, 2, delta);
-
-	// 	the_robot.get_mp_command ();
-	node_counter = 0;
-
-	td.interpolation_node_no = 1;
-	td.internode_step_no = step_no;
-	td.value_in_step_no = td.internode_step_no - 2;
+		// 	vsp_force_irp6p->to_vsp.parameters=1;
+		// 	vsp_force_irp6p->configure_sensor();
+		// 	vsp_force_irp6p->to_vsp.parameters=4;
+		// 	vsp_force_irp6p->configure_sensor();
 
 
-	irp6ot->ecp_td.instruction_type = GET;
-	irp6ot->ecp_td.get_type = ARM_DV;
-	irp6ot->ecp_td.set_type = ARM_DV;
+		gen_state = 0; // nie zapisuje trajektorii dopoki nie osiagnie chociaz raz podloza
 
+		for (int i=0; i<6; i++)
+			delta[i]=0.0;
 
-/*
-	irp6ot->ecp_td.force_axis_quantity=3;
+		create_pose_list_head(emptyps, 0.0, 2, delta);
 
-	irp6ot->ecp_td.set_arm_type = POSE_FORCE_LINEAR;
-	irp6ot->ecp_td.get_arm_type = POSE_FORCE_LINEAR;
-	irp6ot->ecp_td.motion_type = ABSOLUTE;
-	irp6ot->ecp_td.motion_steps = td.internode_step_no;
-	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
+		// 	the_robot.get_mp_command ();
+		node_counter = 0;
 
-	irp6ot->ecp_td.ECPtoEDP_force_coordinates[0]=0;
-	irp6ot->ecp_td.ECPtoEDP_force_coordinates[1]=0;
-	irp6ot->ecp_td.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
+		td.interpolation_node_no = 1;
+		td.internode_step_no = step_no;
+		td.value_in_step_no = td.internode_step_no - 2;
 
-	for (int j=0; j<6 ; j++)	{
-		irp6ot->ecp_td.position_increment[j]=0.0;
-	}
-	// zerowy przyrost pozycji
+		irp6ot->ecp_td.instruction_type = GET;
+		irp6ot->ecp_td.get_type = ARM_DV;
+		irp6ot->ecp_td.set_type = ARM_DV;
 
-	irp6ot->ecp_td.dyslocation_matrix[0][0]=1;
-	irp6ot->ecp_td.dyslocation_matrix[1][1]=1;
-	irp6ot->ecp_td.dyslocation_matrix[2][2]=1;
-	irp6ot->ecp_td.dyslocation_matrix[3][3]=0;
-	irp6ot->ecp_td.dyslocation_matrix[4][4]=0;
-	irp6ot->ecp_td.dyslocation_matrix[5][5]=0;
+		/*
+			irp6ot->ecp_td.force_axis_quantity=3;
+		 
+			irp6ot->ecp_td.set_arm_type = POSE_FORCE_LINEAR;
+			irp6ot->ecp_td.get_arm_type = POSE_FORCE_LINEAR;
+			irp6ot->ecp_td.motion_type = ABSOLUTE;
+			irp6ot->ecp_td.motion_steps = td.internode_step_no;
+			irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
+		 
+			irp6ot->ecp_td.ECPtoEDP_force_coordinates[0]=0;
+			irp6ot->ecp_td.ECPtoEDP_force_coordinates[1]=0;
+			irp6ot->ecp_td.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
+		 
+			for (int j=0; j<6 ; j++)	{
+				irp6ot->ecp_td.position_increment[j]=0.0;
+			}
+			// zerowy przyrost pozycji
+		 
+			irp6ot->ecp_td.dyslocation_matrix[0][0]=1;
+			irp6ot->ecp_td.dyslocation_matrix[1][1]=1;
+			irp6ot->ecp_td.dyslocation_matrix[2][2]=1;
+			irp6ot->ecp_td.dyslocation_matrix[3][3]=0;
+			irp6ot->ecp_td.dyslocation_matrix[4][4]=0;
+			irp6ot->ecp_td.dyslocation_matrix[5][5]=0;
+		 
+			 // postument
+		 	irp6p->ecp_td.mp_command = NEXT_POSE;
+			irp6p->ecp_td.instruction_type = GET;
+			irp6p->ecp_td.get_type = ARM_DV;
+			irp6p->ecp_td.set_type = ARM_DV;
+		 
+			irp6p->ecp_td.set_arm_type = JOINT;
+			irp6p->ecp_td.get_arm_type = JOINT;
+			irp6p->ecp_td.motion_type = ABSOLUTE;
+			irp6p->ecp_td.motion_steps = td.internode_step_no;
+			irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
+		*/
 
-	 // postument
- 	irp6p->ecp_td.mp_command = NEXT_POSE;
-	irp6p->ecp_td.instruction_type = GET;
-	irp6p->ecp_td.get_type = ARM_DV;
-	irp6p->ecp_td.set_type = ARM_DV;
+		// conveyor
+		conv->ecp_td.mp_command = NEXT_POSE;
+		conv->ecp_td.instruction_type = GET;
+		conv->ecp_td.get_type = ARM_DV;
+		conv->ecp_td.set_type = ARM_DV;
 
-	irp6p->ecp_td.set_arm_type = JOINT;
-	irp6p->ecp_td.get_arm_type = JOINT;
-	irp6p->ecp_td.motion_type = ABSOLUTE;
-	irp6p->ecp_td.motion_steps = td.internode_step_no;
-	irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
-*/
+		conv->ecp_td.set_arm_type = JOINT;
+		conv->ecp_td.get_arm_type = JOINT;
+		conv->ecp_td.motion_type = ABSOLUTE;
+		conv->ecp_td.motion_steps = td.internode_step_no;
+		conv->ecp_td.value_in_step_no = td.value_in_step_no;
 
-	// conveyor
- 	conv->ecp_td.mp_command = NEXT_POSE;
-	conv->ecp_td.instruction_type = GET;
-	conv->ecp_td.get_type = ARM_DV;
-	conv->ecp_td.set_type = ARM_DV;
+		copy_generator_command( robot_m );
 
-	conv->ecp_td.set_arm_type = JOINT;
-	conv->ecp_td.get_arm_type = JOINT;
-	conv->ecp_td.motion_type = ABSOLUTE;
-	conv->ecp_td.motion_steps = td.internode_step_no;
-	conv->ecp_td.value_in_step_no = td.value_in_step_no;
-
-	copy_generator_command( robot_m );
-
-	return true;
+		return true;
 
 	}
 
 	return true;
-}; // end: bool mp_drawing_teach_in_force_generator::first_step ( )
+}
 // --------------------------------------------------------------------------
 
 
 
 // --------------------------------------------------------------------------
-bool mp_drawing_teach_in_force_generator::next_step () {
-
+bool mp_drawing_teach_in_force_generator::next_step ()
+{
 	if ( idle_step_counter ) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		// wylaczenie pomiaru sily
 		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
-			 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-		{
+		        sensor_m_iterator != sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
 		}
@@ -1550,386 +1545,388 @@ bool mp_drawing_teach_in_force_generator::next_step () {
 	vsp_force_irp6ot->base_period=1;
 	vsp_force_irp6p->base_period=1;
 
-if (teach_or_move == YG_MOVE) {
+	if (teach_or_move == YG_MOVE) {
 
 
-	mp_taught_in_pose tip;      // Nauczona pozycja
+		mp_taught_in_pose tip;      // Nauczona pozycja
 
-	if (!(is_pose_list_element())) { // Koniec odcinka
-		vsp_force_irp6ot->to_vsp.parameters = 6;
-		vsp_force_irp6ot->configure_sensor();
-
-		vsp_force_irp6p->to_vsp.parameters = 6;
-		vsp_force_irp6p->configure_sensor();
-	// 	the_robot.get_mp_command ();
-		// flush_pose_list();
-		return false;
-	}
-
-
- 	copy_data( robot_m ); // Kopiowanie danych z bufora przyslanego z ECP do
-                          // obrazu danych wykorzystywanych przez generator
-
-
-	// irp6_on_track
-	irp6ot->ecp_td.instruction_type = SET;
-
-	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-	irp6p->ecp_td.instruction_type = SET;
-
-	// wersja dwurobotowa
-	conv->ecp_td.instruction_type = SET;
-	conv->ecp_td.get_type = NOTHING_DV;
-	conv->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
-
-
-	node_counter++;
-
-	get_pose (tip);
-
-	gen_state=next_gen_state;
-
-	switch (gen_state) {
-	case 0:
-	break;
-	case 1:
-	break;
-	case 2:  // powierzchnia
-
-		if (prev_gen_state != gen_state)	{ sr_ecp_msg->message("ECP Powierzchnia"); }
-
-		td.interpolation_node_no = 1;
-		td.internode_step_no = step_no;
-		td.value_in_step_no = td.internode_step_no - 2;
-/*
-		irp6p->ecp_td.force_axis_quantity=1;
-
-		irp6p->ecp_td.motion_steps = td.internode_step_no;
-		irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
-
-		// inkrementacja numeru iteracji dla biezacego stanu
-		in_state_iteration++;
-
-		#define ST2_LOW_SEGMENT 20
-
-		if (in_state_iteration < ST2_LOW_SEGMENT)
-		{
-			irp6ot->ecp_td.ECPtoEDP_force_coordinates[2]= (short) (MIN_SILA_DOCISKUEDP +
-				(in_state_iteration)*(SILA_DOCISKUEDP - MIN_SILA_DOCISKUEDP) /	(ST2_LOW_SEGMENT));
-			irp6p->ecp_td.ECPtoEDP_force_coordinates[2]= (short) (MIN_SILA_DOCISKUEDP +
-				(in_state_iteration)*(SILA_DOCISKUEDP - MIN_SILA_DOCISKUEDP) /	(ST2_LOW_SEGMENT));
-		} else
-		{
-			irp6ot->ecp_td.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
-			irp6p->ecp_td.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
-		}
-
-
-		irp6ot->ecp_td.position_increment[0]=tip.coordinates[0];
-		// ponizej wersja jednorobotowa
-		// irp6ot->ecp_td.position_increment[1]=tip.coordinates[1];
-		// wariant z tasmociagiem na osi Y
-		irp6ot->ecp_td.position_increment[1]=0.0;
-		irp6ot->ecp_td.position_increment[2]=0.0;
-		irp6ot->ecp_td.position_increment[3]=0.0;
-		irp6ot->ecp_td.position_increment[4]=0.0;
-		irp6ot->ecp_td.position_increment[5]=0.0;
-
-
-		irp6p->ecp_td.position_increment[0]=tip.coordinates[0];
-		// ponizej wersja jednorobotowa
-		// irp6ot->ecp_td.position_increment[1]=tip.coordinates[1];
-		// wariant z tasmociagiem na osi Y
-		irp6p->ecp_td.position_increment[1]=0.0;
-		irp6p->ecp_td.position_increment[2]=0.0;
-		irp6p->ecp_td.position_increment[3]=0.0;
-		irp6p->ecp_td.position_increment[4]=0.0;
-		irp6p->ecp_td.position_increment[5]=0.0;
-
-		// drugi robot - usunac w wersji jednorobotowej
-		conv_summar_inc+=tip.coordinates[1];
-
-		if ((tip.extra_info == 3)||(tip.extra_info == 4)||(tip.extra_info == 5)) {
-			// nauczona trajektoria przeszla w unoszenie
-			next_gen_state = 3;
-			in_state_iteration = 0;
-		} else {
-			next_pose_list_ptr ();
-		}
-*/
-	break;
-
-	case 3:  // unoszenie
-		if (prev_gen_state != gen_state)	{ sr_ecp_msg->message("ECP Unoszenie"); }
-
-		td.interpolation_node_no = 1;
-		td.internode_step_no = 500;
-		td.value_in_step_no = td.internode_step_no - 2;
-
-/*
-		irp6ot->ecp_td.force_axis_quantity=0;
-
-		irp6ot->ecp_td.motion_steps = td.internode_step_no;
-		irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
-
-		irp6ot->ecp_td.position_increment[0]=0.0;
-		irp6ot->ecp_td.position_increment[1]=0.0;
-		irp6ot->ecp_td.position_increment[2]=0.01;
-		irp6ot->ecp_td.position_increment[3]=0.0;
-		irp6ot->ecp_td.position_increment[4]=0.0;
-		irp6ot->ecp_td.position_increment[5]=0.0;
-
-
-		irp6p->ecp_td.force_axis_quantity=0;
-
-		irp6p->ecp_td.motion_steps = td.internode_step_no;
-		irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
-
-		irp6p->ecp_td.position_increment[0]=0.0;
-		irp6p->ecp_td.position_increment[1]=0.0;
-		irp6p->ecp_td.position_increment[2]=0.01;
-		irp6p->ecp_td.position_increment[3]=0.0;
-		irp6p->ecp_td.position_increment[4]=0.0;
-		irp6p->ecp_td.position_increment[5]=0.0;
-*/
-		next_gen_state = 4;
-
-	break;
-
-	case 4: // uniesienie
-
-		if (prev_gen_state != gen_state)	{ sr_ecp_msg->message("ECP Uniesienie"); }
-
-		td.interpolation_node_no = 1;
-		td.internode_step_no = step_no;
-		td.value_in_step_no = td.internode_step_no - 2;
-
-/*
-		irp6ot->ecp_td.force_axis_quantity = 0;
-
-		irp6ot->ecp_td.motion_steps = td.internode_step_no;
-		irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
-
-		irp6ot->ecp_td.position_increment[0]=tip.coordinates[0];
-		// ponziej wersja jednorobotowa
-		// irp6ot->ecp_td.position_increment[1]=tip.coordinates[1];
-		// wariant z tasmociagiem na osi Y
-		irp6ot->ecp_td.position_increment[1]=0.0;
-		irp6ot->ecp_td.position_increment[2]=0.0;
-		irp6ot->ecp_td.position_increment[3]=0.0;
-		irp6ot->ecp_td.position_increment[4]=0.0;
-		irp6ot->ecp_td.position_increment[5]=0.0;
-
-
-		irp6p->ecp_td.force_axis_quantity = 0;
-
-		irp6p->ecp_td.motion_steps = td.internode_step_no;
-		irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
-
-		irp6p->ecp_td.position_increment[0]=tip.coordinates[0];
-		// ponziej wersja jednorobotowa
-		// irp6ot->ecp_td.position_increment[1]=tip.coordinates[1];
-		// wariant z tasmociagiem na osi Y
-		irp6p->ecp_td.position_increment[1]=0.0;
-		irp6p->ecp_td.position_increment[2]=0.0;
-		irp6p->ecp_td.position_increment[3]=0.0;
-		irp6p->ecp_td.position_increment[4]=0.0;
-		irp6p->ecp_td.position_increment[5]=0.0;
-*/
-		// drugi robot - usunac w wersji jednorobotowej
-		conv_summar_inc+=tip.coordinates[1];
-
-
-		if (tip.extra_info == 2) { // nauczona trajektoria osiagnela powierzchnie
-			next_gen_state = 5;
-			vsp_force_irp6ot->to_vsp.parameters = 5;
+		if (!(is_pose_list_element())) { // Koniec odcinka
+			vsp_force_irp6ot->to_vsp.parameters = 6;
 			vsp_force_irp6ot->configure_sensor();
-			vsp_force_irp6p->to_vsp.parameters = 5;
+
+			vsp_force_irp6p->to_vsp.parameters = 6;
 			vsp_force_irp6p->configure_sensor();
-		} else {
-			next_pose_list_ptr ();
+			// 	the_robot.get_mp_command ();
+			// flush_pose_list();
+			return false;
 		}
 
-	break;
+		copy_data( robot_m ); // Kopiowanie danych z bufora przyslanego z ECP do
+		// obrazu danych wykorzystywanych przez generator
 
-	case 5: // opuszczanie
 
-		if (prev_gen_state != gen_state)	{ sr_ecp_msg->message("ECP Opuszczanie"); }
+		// irp6_on_track
+		irp6ot->ecp_td.instruction_type = SET;
 
-// 		if (vsp_force_irp6ot->image.force.event_type == 2) {
+		// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
+		irp6p->ecp_td.instruction_type = SET;
 
-		if ((vsp_force_irp6ot->image.force.event_type == 2)&&(vsp_force_irp6p->image.force.event_type == 2)) {
-			// czujnik wyczul powierzchnie
-			next_gen_state = 6;
-			in_state_iteration=0;
-		} else {
+		// wersja dwurobotowa
+		conv->ecp_td.instruction_type = SET;
+		conv->ecp_td.get_type = NOTHING_DV;
+		conv->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
 
-			td.interpolation_node_no = 1;
-			td.internode_step_no = step_no;
-			td.value_in_step_no = td.internode_step_no - 2;
-/*
-			irp6ot->ecp_td.force_axis_quantity=1;
-			irp6ot->ecp_td.motion_steps = td.internode_step_no;
-			irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
-			irp6ot->ecp_td.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP_OPADANIE;
+		node_counter++;
 
-			irp6ot->ecp_td.position_increment[0]=0.0;
-			irp6ot->ecp_td.position_increment[1]=0.0;
-			irp6ot->ecp_td.position_increment[2]=0.0;
-			irp6ot->ecp_td.position_increment[3]=0.0;
-			irp6ot->ecp_td.position_increment[4]=0.0;
-			irp6ot->ecp_td.position_increment[5]=0.0;
+		get_pose (tip);
 
-			irp6p->ecp_td.force_axis_quantity=1;
-			irp6p->ecp_td.motion_steps = td.internode_step_no;
-			irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
-			irp6p->ecp_td.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP_OPADANIE;
+		gen_state=next_gen_state;
 
-			irp6p->ecp_td.position_increment[0]=0.0;
-			irp6p->ecp_td.position_increment[1]=0.0;
-			irp6p->ecp_td.position_increment[2]=0.0;
-			irp6p->ecp_td.position_increment[3]=0.0;
-			irp6p->ecp_td.position_increment[4]=0.0;
-			irp6p->ecp_td.position_increment[5]=0.0;
-			*/
-		}
+		switch (gen_state) {
+			case 0:
+				break;
+			case 1:
+				break;
+			case 2:  // powierzchnia
 
-	break;
-	case 6: // zetkniecie z kartka
+				if (prev_gen_state != gen_state)	{
+					sr_ecp_msg->message("ECP Powierzchnia");
+				}
 
-		if (prev_gen_state != gen_state)	{ sr_ecp_msg->message("ECP Zetkniecie"); }
+				td.interpolation_node_no = 1;
+				td.internode_step_no = step_no;
+				td.value_in_step_no = td.internode_step_no - 2;
+				/*
+						irp6p->ecp_td.force_axis_quantity=1;
+				 
+						irp6p->ecp_td.motion_steps = td.internode_step_no;
+						irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
+				 
+						// inkrementacja numeru iteracji dla biezacego stanu
+						in_state_iteration++;
+				 
+						#define ST2_LOW_SEGMENT 20
+				 
+						if (in_state_iteration < ST2_LOW_SEGMENT)
+						{
+							irp6ot->ecp_td.ECPtoEDP_force_coordinates[2]= (short) (MIN_SILA_DOCISKUEDP +
+								(in_state_iteration)*(SILA_DOCISKUEDP - MIN_SILA_DOCISKUEDP) /	(ST2_LOW_SEGMENT));
+							irp6p->ecp_td.ECPtoEDP_force_coordinates[2]= (short) (MIN_SILA_DOCISKUEDP +
+								(in_state_iteration)*(SILA_DOCISKUEDP - MIN_SILA_DOCISKUEDP) /	(ST2_LOW_SEGMENT));
+						} else
+						{
+							irp6ot->ecp_td.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
+							irp6p->ecp_td.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
+						}
+				 
+				 
+						irp6ot->ecp_td.position_increment[0]=tip.coordinates[0];
+						// ponizej wersja jednorobotowa
+						// irp6ot->ecp_td.position_increment[1]=tip.coordinates[1];
+						// wariant z tasmociagiem na osi Y
+						irp6ot->ecp_td.position_increment[1]=0.0;
+						irp6ot->ecp_td.position_increment[2]=0.0;
+						irp6ot->ecp_td.position_increment[3]=0.0;
+						irp6ot->ecp_td.position_increment[4]=0.0;
+						irp6ot->ecp_td.position_increment[5]=0.0;
+				 
+				 
+						irp6p->ecp_td.position_increment[0]=tip.coordinates[0];
+						// ponizej wersja jednorobotowa
+						// irp6ot->ecp_td.position_increment[1]=tip.coordinates[1];
+						// wariant z tasmociagiem na osi Y
+						irp6p->ecp_td.position_increment[1]=0.0;
+						irp6p->ecp_td.position_increment[2]=0.0;
+						irp6p->ecp_td.position_increment[3]=0.0;
+						irp6p->ecp_td.position_increment[4]=0.0;
+						irp6p->ecp_td.position_increment[5]=0.0;
+				 
+						// drugi robot - usunac w wersji jednorobotowej
+						conv_summar_inc+=tip.coordinates[1];
+				 
+						if ((tip.extra_info == 3)||(tip.extra_info == 4)||(tip.extra_info == 5)) {
+							// nauczona trajektoria przeszla w unoszenie
+							next_gen_state = 3;
+							in_state_iteration = 0;
+						} else {
+							next_pose_list_ptr ();
+						}
+				*/
+				break;
 
-		in_state_iteration++;
+			case 3:  // unoszenie
+				if (prev_gen_state != gen_state)	{
+					sr_ecp_msg->message("ECP Unoszenie");
+				}
 
-		td.interpolation_node_no = 1;
-		td.internode_step_no = step_no;
-		td.value_in_step_no = td.internode_step_no - 2;
-		/*
-		irp6ot->ecp_td.force_axis_quantity=1;
-		irp6ot->ecp_td.motion_steps = td.internode_step_no;
-		irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
+				td.interpolation_node_no = 1;
+				td.internode_step_no = 500;
+				td.value_in_step_no = td.internode_step_no - 2;
 
-		irp6ot->ecp_td.position_increment[0]=0.0;
-		irp6ot->ecp_td.position_increment[1]=0.0;
-		irp6ot->ecp_td.position_increment[2]=0.0;
-		irp6ot->ecp_td.position_increment[3]=0.0;
-		irp6ot->ecp_td.position_increment[4]=0.0;
-		irp6ot->ecp_td.position_increment[5]=0.0;
+				/*
+						irp6ot->ecp_td.force_axis_quantity=0;
+				 
+						irp6ot->ecp_td.motion_steps = td.internode_step_no;
+						irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
+				 
+						irp6ot->ecp_td.position_increment[0]=0.0;
+						irp6ot->ecp_td.position_increment[1]=0.0;
+						irp6ot->ecp_td.position_increment[2]=0.01;
+						irp6ot->ecp_td.position_increment[3]=0.0;
+						irp6ot->ecp_td.position_increment[4]=0.0;
+						irp6ot->ecp_td.position_increment[5]=0.0;
+				 
+				 
+						irp6p->ecp_td.force_axis_quantity=0;
+				 
+						irp6p->ecp_td.motion_steps = td.internode_step_no;
+						irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
+				 
+						irp6p->ecp_td.position_increment[0]=0.0;
+						irp6p->ecp_td.position_increment[1]=0.0;
+						irp6p->ecp_td.position_increment[2]=0.01;
+						irp6p->ecp_td.position_increment[3]=0.0;
+						irp6p->ecp_td.position_increment[4]=0.0;
+						irp6p->ecp_td.position_increment[5]=0.0;
+				*/
+				next_gen_state = 4;
 
-		irp6p->ecp_td.force_axis_quantity=1;
-		irp6p->ecp_td.motion_steps = td.internode_step_no;
-		irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
+				break;
 
-		irp6p->ecp_td.position_increment[0]=0.0;
-		irp6p->ecp_td.position_increment[1]=0.0;
-		irp6p->ecp_td.position_increment[2]=0.0;
-		irp6p->ecp_td.position_increment[3]=0.0;
-		irp6p->ecp_td.position_increment[4]=0.0;
-		irp6p->ecp_td.position_increment[5]=0.0;
+			case 4: // uniesienie
 
-		#define ST6_LOW_SEGMENT 100
+				if (prev_gen_state != gen_state)	{
+					sr_ecp_msg->message("ECP Uniesienie");
+				}
 
-		// dobor sily docisku - chcemy ladnie uderzyc w powierzchnie
-		if (in_state_iteration<ST6_LOW_SEGMENT)
-		{
-			irp6ot->ecp_td.ECPtoEDP_force_coordinates[2]=MIN_SILA_DOCISKUEDP;
-			irp6p->ecp_td.ECPtoEDP_force_coordinates[2]=MIN_SILA_DOCISKUEDP;
+				td.interpolation_node_no = 1;
+				td.internode_step_no = step_no;
+				td.value_in_step_no = td.internode_step_no - 2;
+
+				/*
+						irp6ot->ecp_td.force_axis_quantity = 0;
+				 
+						irp6ot->ecp_td.motion_steps = td.internode_step_no;
+						irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
+				 
+						irp6ot->ecp_td.position_increment[0]=tip.coordinates[0];
+						// ponziej wersja jednorobotowa
+						// irp6ot->ecp_td.position_increment[1]=tip.coordinates[1];
+						// wariant z tasmociagiem na osi Y
+						irp6ot->ecp_td.position_increment[1]=0.0;
+						irp6ot->ecp_td.position_increment[2]=0.0;
+						irp6ot->ecp_td.position_increment[3]=0.0;
+						irp6ot->ecp_td.position_increment[4]=0.0;
+						irp6ot->ecp_td.position_increment[5]=0.0;
+				 
+				 
+						irp6p->ecp_td.force_axis_quantity = 0;
+				 
+						irp6p->ecp_td.motion_steps = td.internode_step_no;
+						irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
+				 
+						irp6p->ecp_td.position_increment[0]=tip.coordinates[0];
+						// ponziej wersja jednorobotowa
+						// irp6ot->ecp_td.position_increment[1]=tip.coordinates[1];
+						// wariant z tasmociagiem na osi Y
+						irp6p->ecp_td.position_increment[1]=0.0;
+						irp6p->ecp_td.position_increment[2]=0.0;
+						irp6p->ecp_td.position_increment[3]=0.0;
+						irp6p->ecp_td.position_increment[4]=0.0;
+						irp6p->ecp_td.position_increment[5]=0.0;
+				*/
+				// drugi robot - usunac w wersji jednorobotowej
+				conv_summar_inc+=tip.coordinates[1];
+
+				if (tip.extra_info == 2) { // nauczona trajektoria osiagnela powierzchnie
+					next_gen_state = 5;
+					vsp_force_irp6ot->to_vsp.parameters = 5;
+					vsp_force_irp6ot->configure_sensor();
+					vsp_force_irp6p->to_vsp.parameters = 5;
+					vsp_force_irp6p->configure_sensor();
+				} else {
+					next_pose_list_ptr ();
+				}
+
+				break;
+
+			case 5: // opuszczanie
+
+				if (prev_gen_state != gen_state)	{
+					sr_ecp_msg->message("ECP Opuszczanie");
+				}
+
+				// 		if (vsp_force_irp6ot->image.force.event_type == 2) {
+
+				if ((vsp_force_irp6ot->image.force.event_type == 2)&&(vsp_force_irp6p->image.force.event_type == 2)) {
+					// czujnik wyczul powierzchnie
+					next_gen_state = 6;
+					in_state_iteration=0;
+				} else {
+
+					td.interpolation_node_no = 1;
+					td.internode_step_no = step_no;
+					td.value_in_step_no = td.internode_step_no - 2;
+					/*
+								irp6ot->ecp_td.force_axis_quantity=1;
+								irp6ot->ecp_td.motion_steps = td.internode_step_no;
+								irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
+								irp6ot->ecp_td.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP_OPADANIE;
+					 
+								irp6ot->ecp_td.position_increment[0]=0.0;
+								irp6ot->ecp_td.position_increment[1]=0.0;
+								irp6ot->ecp_td.position_increment[2]=0.0;
+								irp6ot->ecp_td.position_increment[3]=0.0;
+								irp6ot->ecp_td.position_increment[4]=0.0;
+								irp6ot->ecp_td.position_increment[5]=0.0;
+					 
+								irp6p->ecp_td.force_axis_quantity=1;
+								irp6p->ecp_td.motion_steps = td.internode_step_no;
+								irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
+								irp6p->ecp_td.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP_OPADANIE;
+					 
+								irp6p->ecp_td.position_increment[0]=0.0;
+								irp6p->ecp_td.position_increment[1]=0.0;
+								irp6p->ecp_td.position_increment[2]=0.0;
+								irp6p->ecp_td.position_increment[3]=0.0;
+								irp6p->ecp_td.position_increment[4]=0.0;
+								irp6p->ecp_td.position_increment[5]=0.0;
+								*/
+				}
+
+				break;
+			case 6: // zetkniecie z kartka
+
+				if (prev_gen_state != gen_state)	{
+					sr_ecp_msg->message("ECP Zetkniecie");
+				}
+
+				in_state_iteration++;
+
+				td.interpolation_node_no = 1;
+				td.internode_step_no = step_no;
+				td.value_in_step_no = td.internode_step_no - 2;
+				/*
+				irp6ot->ecp_td.force_axis_quantity=1;
+				irp6ot->ecp_td.motion_steps = td.internode_step_no;
+				irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
+
+				irp6ot->ecp_td.position_increment[0]=0.0;
+				irp6ot->ecp_td.position_increment[1]=0.0;
+				irp6ot->ecp_td.position_increment[2]=0.0;
+				irp6ot->ecp_td.position_increment[3]=0.0;
+				irp6ot->ecp_td.position_increment[4]=0.0;
+				irp6ot->ecp_td.position_increment[5]=0.0;
+
+				irp6p->ecp_td.force_axis_quantity=1;
+				irp6p->ecp_td.motion_steps = td.internode_step_no;
+				irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
+
+				irp6p->ecp_td.position_increment[0]=0.0;
+				irp6p->ecp_td.position_increment[1]=0.0;
+				irp6p->ecp_td.position_increment[2]=0.0;
+				irp6p->ecp_td.position_increment[3]=0.0;
+				irp6p->ecp_td.position_increment[4]=0.0;
+				irp6p->ecp_td.position_increment[5]=0.0;
+
+				#define ST6_LOW_SEGMENT 100
+
+				// dobor sily docisku - chcemy ladnie uderzyc w powierzchnie
+				if (in_state_iteration<ST6_LOW_SEGMENT)
+			{
+					irp6ot->ecp_td.ECPtoEDP_force_coordinates[2]=MIN_SILA_DOCISKUEDP;
+					irp6p->ecp_td.ECPtoEDP_force_coordinates[2]=MIN_SILA_DOCISKUEDP;
 		} else
-		{
-			next_gen_state = 2;
-			in_state_iteration=0;
+			{
+					next_gen_state = 2;
+					in_state_iteration=0;
 		}
-*/
-	break;
-	default:
+				*/
+				break;
+			default:
 
-	break;
-	}
+				break;
+		}
 
-	prev_gen_state=gen_state;
+		prev_gen_state=gen_state;
 
-	// DRUGI ROBOT - CONVEYOR
-	conv->ecp_td.next_joint_arm_coordinates[0]=
-		conv->ecp_td.current_joint_arm_coordinates[0]+conv_summar_inc;
+		// DRUGI ROBOT - CONVEYOR
+		conv->ecp_td.next_joint_arm_coordinates[0]=
+		    conv->ecp_td.current_joint_arm_coordinates[0]+conv_summar_inc;
 
-   copy_generator_command( robot_m );
+		copy_generator_command( robot_m );
 
-	return true;
+		return true;
 
-	// UCZENIE
+		// UCZENIE
 
 	} else if (teach_or_move == YG_TEACH) {
 
-	int i; // licznik kolejnych wspolrzednych wektora [0..6]
+		int i; // licznik kolejnych wspolrzednych wektora [0..6]
 
-	double inc_delta[6]={0.0,0.0,0.0,0.0,0.0,0.0};
+		double inc_delta[6]={0.0,0.0,0.0,0.0,0.0,0.0};
 
-	if (trigger) { // Koniec odcinka
-	// 	the_robot.get_mp_command ();
-		trigger = false;
-		initiate_pose_list();
-		return false;
-	}
-
-
-	for (i=0; i<6;i++) {
-		inc_delta[i]=-irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
-	}
-
- 	copy_data( robot_m ); // Kopiowanie danych z bufora przyslanego z ECP do
-                          // obrazu danych wykorzystywanych przez generator
+		if (trigger) { // Koniec odcinka
+			// 	the_robot.get_mp_command ();
+			trigger = false;
+			initiate_pose_list();
+			return false;
+		}
 
 
-	for (i=0; i<6;i++) {
-		inc_delta[i]+=irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
-	}
+		for (i=0; i<6;i++) {
+			inc_delta[i]=-irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
+		}
 
-	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-	irp6ot->ecp_td.instruction_type = SET;
-	node_counter++;
-
-
-	// irp6_postument
-	irp6p->ecp_td.instruction_type = SET;
-	irp6p->ecp_td.get_type = NOTHING_DV;
-	irp6p->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
-
-	for (i=0; i<6; i++)
-	{
-		irp6p->ecp_td.next_joint_arm_coordinates[i]=irp6p->ecp_td.current_joint_arm_coordinates[i];
-	}
-
-	irp6p->ecp_td.instruction_type = SET;
-	irp6p->ecp_td.get_type = NOTHING_DV;
-	irp6p->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
+		copy_data( robot_m ); // Kopiowanie danych z bufora przyslanego z ECP do
+		// obrazu danych wykorzystywanych przez generator
 
 
-	// wersja dwurobotowa
-	conv->ecp_td.instruction_type = SET;
-	conv->ecp_td.get_type = NOTHING_DV;
-	conv->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
+		for (i=0; i<6;i++) {
+			inc_delta[i]+=irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
+		}
 
-	conv->ecp_td.next_joint_arm_coordinates[0]=
-		conv->ecp_td.current_joint_arm_coordinates[0];
+		// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
+		irp6ot->ecp_td.instruction_type = SET;
+		node_counter++;
 
+		// irp6_postument
+		irp6p->ecp_td.instruction_type = SET;
+		irp6p->ecp_td.get_type = NOTHING_DV;
+		irp6p->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
 
-// 	if (vsp_force_irp6ot->image.force.event_type==2) {
-	if (vsp_force_irp6ot->image.force.event_type==2) {
-		gen_state = 1;
-	}
+		for (i=0; i<6; i++) {
+			irp6p->ecp_td.next_joint_arm_coordinates[i]=irp6p->ecp_td.current_joint_arm_coordinates[i];
+		}
 
-	if (gen_state == 1) {
-		insert_pose_list_element(emptyps, 0.0, vsp_force_irp6ot->image.force.event_type, inc_delta);
-	}
+		irp6p->ecp_td.instruction_type = SET;
+		irp6p->ecp_td.get_type = NOTHING_DV;
+		irp6p->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
 
+		// wersja dwurobotowa
+		conv->ecp_td.instruction_type = SET;
+		conv->ecp_td.get_type = NOTHING_DV;
+		conv->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
 
-   copy_generator_command( robot_m );
+		conv->ecp_td.next_joint_arm_coordinates[0]=
+		    conv->ecp_td.current_joint_arm_coordinates[0];
 
-	return true;
+		// 	if (vsp_force_irp6ot->image.force.event_type==2) {
+		if (vsp_force_irp6ot->image.force.event_type==2) {
+			gen_state = 1;
+		}
+
+		if (gen_state == 1) {
+			insert_pose_list_element(emptyps, 0.0, vsp_force_irp6ot->image.force.event_type, inc_delta);
+		}
+
+		copy_generator_command( robot_m );
+
+		return true;
 
 	}
 
 	return true;
 
-}; // end: bool mp_drawing_teach_in_force_generator::next_step ( )
+}
 // --------------------------------------------------------------------------
