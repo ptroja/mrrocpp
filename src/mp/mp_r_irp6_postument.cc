@@ -51,7 +51,6 @@ void mp_irp6_postument_robot::create_next_pose_command (void)
 					case ARM_KINEMATIC_MODEL:
 						mp_command.mp_package.instruction.rmodel.kinematic_model.kinematic_model_no
 						= ecp_td.next_kinematic_model_no;
-
 						break;
 					case SERVO_ALGORITHM:
 						for (int j=0; j<IRP6_POSTUMENT_NUM_OF_SERVOS; j++) {
@@ -116,7 +115,7 @@ void mp_irp6_postument_robot::create_next_pose_command (void)
 
 						}
 						mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.gripper_coordinate
-						=ecp_td.next_gripper_coordinate;
+							=ecp_td.next_gripper_coordinate;
 						break;
 					case  JOINT:
 						for (int j=0; j<IRP6_POSTUMENT_NUM_OF_SERVOS ; j++) {
@@ -186,8 +185,9 @@ void mp_irp6_postument_robot::get_reply (void)
 void mp_irp6_postument_robot::get_input_reply (void)
 {
 	ecp_td.input_values = ecp_reply.ecp_reply.reply_package.input_values;
-	for (int i=0; i<8; i++)
+	for (int i=0; i<8; i++) {
 		ecp_td.analog_input[i]=ecp_reply.ecp_reply.reply_package.analog_input[i];
+	}
 }
 
 void mp_irp6_postument_robot::get_arm_reply (void)
@@ -197,12 +197,14 @@ void mp_irp6_postument_robot::get_arm_reply (void)
 			for (int i=0; i<IRP6_POSTUMENT_NUM_OF_SERVOS; i++) {
 				ecp_td.current_motor_arm_coordinates[i] = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
 			}
+
 			ecp_td.gripper_reg_state = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
 			break;
 		case JOINT:
 			for (int i=0; i<IRP6_POSTUMENT_NUM_OF_SERVOS; i++) {
 				ecp_td.current_joint_arm_coordinates[i] = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
 			}
+
 			ecp_td.gripper_reg_state = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
 			break;
 		case FRAME:
@@ -235,10 +237,11 @@ void mp_irp6_postument_robot::get_arm_reply (void)
 			for (int i=0; i<6; i++) {
 				ecp_td.current_XYZ_AA_arm_coordinates[i] = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
 			}
+
 			ecp_td.gripper_reg_state = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
 			ecp_td.current_gripper_coordinate = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_coordinate;
 			break;
-		default:
+		default: // bledny typ specyfikacji pozycji
 			throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}
 }
@@ -270,7 +273,6 @@ void mp_irp6_postument_robot::get_rmodel_reply (void)
 		case ARM_KINEMATIC_MODEL:
 			ecp_td.current_kinematic_model_no =
 			    ecp_reply.ecp_reply.reply_package.rmodel.kinematic_model.kinematic_model_no;
-
 			break;
 		case SERVO_ALGORITHM:
 			for(int j=0; j<IRP6_POSTUMENT_NUM_OF_SERVOS; j++) {
