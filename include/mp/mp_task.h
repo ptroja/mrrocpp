@@ -3,7 +3,6 @@
 
 #include "mp/mp_generator.h"
 #include "mp/mp_robot.h"
-
 #include "mp/mp.h"
 
 #include <list>

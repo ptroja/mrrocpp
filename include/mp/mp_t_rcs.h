@@ -43,7 +43,6 @@ public:
     mp_task_rubik_cube_solver();
 	
     ~mp_task_rubik_cube_solver();
-
 	
 	// MANIPULACJA
 	// manipulacja pojedyncza sciana
