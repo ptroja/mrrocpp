@@ -189,16 +189,14 @@ void mp_irp6_on_track_robot::get_arm_reply (void)
 	switch (ecp_reply.ecp_reply.reply_package.arm_type) {
 		case MOTOR:
 			for (int i=0; i<IRP6_ON_TRACK_NUM_OF_SERVOS; i++) {
-				ecp_td.current_motor_arm_coordinates[i] =
+				ecp_td.current_motor_arm_coordinates[i] = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
 			}
-			ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
 			ecp_td.gripper_reg_state = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
 			break;
 		case JOINT:
 			for (int i=0; i<IRP6_ON_TRACK_NUM_OF_SERVOS; i++) {
-				ecp_td.current_joint_arm_coordinates[i] =
+				ecp_td.current_joint_arm_coordinates[i] = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
 			}
-			ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
 			ecp_td.gripper_reg_state = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
 			break;
 		case FRAME:
@@ -229,9 +227,8 @@ void mp_irp6_on_track_robot::get_arm_reply (void)
 			break;
 		case XYZ_ANGLE_AXIS:
 			for (int i=0; i<6; i++) {
-				ecp_td.current_XYZ_AA_arm_coordinates[i] =
+				ecp_td.current_XYZ_AA_arm_coordinates[i] = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
 			}
-			ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
 			ecp_td.gripper_reg_state = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
 			ecp_td.current_gripper_coordinate = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_coordinate;
 			break;

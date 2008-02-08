@@ -197,14 +197,12 @@ void mp_irp6_postument_robot::get_arm_reply (void)
 			for (int i=0; i<IRP6_POSTUMENT_NUM_OF_SERVOS; i++) {
 				ecp_td.current_motor_arm_coordinates[i] = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
 			}
-
 			ecp_td.gripper_reg_state = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
 			break;
 		case JOINT:
 			for (int i=0; i<IRP6_POSTUMENT_NUM_OF_SERVOS; i++) {
 				ecp_td.current_joint_arm_coordinates[i] = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
 			}
-
 			ecp_td.gripper_reg_state = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
 			break;
 		case FRAME:
@@ -237,7 +235,6 @@ void mp_irp6_postument_robot::get_arm_reply (void)
 			for (int i=0; i<6; i++) {
 				ecp_td.current_XYZ_AA_arm_coordinates[i] = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
 			}
-
 			ecp_td.gripper_reg_state = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
 			ecp_td.current_gripper_coordinate = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.gripper_coordinate;
 			break;

@@ -8,9 +8,7 @@
 mp_irp6_mechatronika_robot::mp_irp6_mechatronika_robot (mp_task* mp_object_l) :
 		mp_robot (ROBOT_IRP6_MECHATRONIKA, "[ecp_irp6_mechatronika]", mp_object_l)
 {}
-; // Konstruktor
 
-// --------------------------------------------------------------------------
 void mp_irp6_mechatronika_robot::create_next_pose_command (void)
 {
 	// wypelnia bufor wysylkowy do ECP na podstawie danych
@@ -53,7 +51,6 @@ void mp_irp6_mechatronika_robot::create_next_pose_command (void)
 					case ARM_KINEMATIC_MODEL:
 						mp_command.mp_package.instruction.rmodel.kinematic_model.kinematic_model_no
 						= ecp_td.next_kinematic_model_no;
-
 						break;
 					case SERVO_ALGORITHM:
 						for (int j=0; j<IRP6_MECHATRONIKA_NUM_OF_SERVOS; j++) {
@@ -68,7 +65,7 @@ void mp_irp6_mechatronika_robot::create_next_pose_command (void)
 				}
 			}
 
-			if (ecp_td.set_type & ARM_DV) { // tylko ramie
+			if (ecp_td.set_type & ARM_DV) { // ramie
 				mp_command.mp_package.instruction.motion_type = ecp_td.motion_type;
 				mp_command.mp_package.instruction.motion_steps = ecp_td.motion_steps;
 				mp_command.mp_package.instruction.value_in_step_no = ecp_td.value_in_step_no;
@@ -151,17 +148,16 @@ void mp_irp6_mechatronika_robot::get_reply (void)
 			break;
 		default:  // bledna przesylka
 			throw MP_error (NON_FATAL_ERROR, INVALID_EDP_REPLY);
-
 	}
 }
 
 void mp_irp6_mechatronika_robot::get_input_reply (void)
 {
 	ecp_td.input_values = ecp_reply.ecp_reply.reply_package.input_values;
-	for (int i=0; i<8; i++)
+	for (int i=0; i<8; i++) {
 		ecp_td.analog_input[i]=ecp_reply.ecp_reply.reply_package.analog_input[i];
+	}
 }
-
 
 void mp_irp6_mechatronika_robot::get_arm_reply (void)
 {
@@ -189,7 +185,7 @@ void mp_irp6_mechatronika_robot::get_arm_reply (void)
 				ecp_td.current_XYZ_AA_arm_coordinates[i] = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
 			}
 			break;
-		default:
+		default: // bledny typ specyfikacji pozycji
 			throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}
 }
@@ -221,7 +217,6 @@ void mp_irp6_mechatronika_robot::get_rmodel_reply (void)
 		case ARM_KINEMATIC_MODEL:
 			ecp_td.current_kinematic_model_no =
 			    ecp_reply.ecp_reply.reply_package.rmodel.kinematic_model.kinematic_model_no;
-
 			break;
 		case SERVO_ALGORITHM:
 			for(int j=0; j<IRP6_MECHATRONIKA_NUM_OF_SERVOS; j++) {
