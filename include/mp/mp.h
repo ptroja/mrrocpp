@@ -16,7 +16,6 @@
 #include "lib/mp_timer.h"
 
 class mp_generator;
-class mp_task;
 class mp_robot;
 
 enum WAIT_FOR_STOP_ENUM {
