@@ -25,13 +25,11 @@ void mp_conveyor_robot::create_next_pose_command (void)
 	switch (ecp_td.instruction_type) {
 		case SET:
 		case SET_GET:
-
-			if (ecp_td.set_type & RMODEL_DV) { // tylko narzedzie
+			if (ecp_td.set_type & RMODEL_DV) {
 				switch (ecp_td.set_rmodel_type) {
 					case ARM_KINEMATIC_MODEL:
 						mp_command.mp_package.instruction.rmodel.kinematic_model.kinematic_model_no
 						= ecp_td.next_kinematic_model_no;
-
 						break;
 					case SERVO_ALGORITHM:
 						for (int j=0; j<CONVEYOR_NUM_OF_SERVOS; j++) {
@@ -53,26 +51,28 @@ void mp_conveyor_robot::create_next_pose_command (void)
 				// Wypelniamy czesc zwiazana z polozeniem ramienia
 				switch (ecp_td.set_arm_type) {
 					case  JOINT:
-						for (int j=0; j<CONVEYOR_NUM_OF_SERVOS ; j++)
+						for (int j=0; j<CONVEYOR_NUM_OF_SERVOS ; j++) {
 							mp_command.mp_package.instruction.arm.coordinate_def.arm_coordinates[j]
 							= ecp_td.next_joint_arm_coordinates[j];
+						}
 						break;
 					case  MOTOR:
-							for (int j=0; j<CONVEYOR_NUM_OF_SERVOS ; j++)
-								mp_command.mp_package.instruction.arm.coordinate_def.arm_coordinates[j]
-								= ecp_td.next_motor_arm_coordinates[j];
+						for (int j=0; j<CONVEYOR_NUM_OF_SERVOS ; j++) {
+							mp_command.mp_package.instruction.arm.coordinate_def.arm_coordinates[j]
+							= ecp_td.next_motor_arm_coordinates[j];
+						}
 						break;
 					default: // Blad: niewlasciwy sposob zadawania polozenia ramienia
-							throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+						throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 				}
 			}
 			break;
 		case GET:
-			case SYNCHRO:
-				case QUERY:
-						break;
+		case SYNCHRO:
+		case QUERY:
+			break;
 		default: // blad: nieprawidlowe polecenie
-				throw MP_error (NON_FATAL_ERROR, INVALID_ECP_COMMAND);
+			throw MP_error (NON_FATAL_ERROR, INVALID_ECP_COMMAND);
 	}
 }
 
@@ -80,7 +80,6 @@ void mp_conveyor_robot::get_reply (void)
 {
 	// pobiera z pakietu przeslanego z ECP informacje i wstawia je do
 	// odpowiednich skladowych generatora lub warunku
-
 	ecp_td.ecp_reply = ecp_reply.reply;
 	ecp_td.reply_type = ecp_reply.ecp_reply.reply_package.reply_type;
 	switch (ecp_td.reply_type) {
@@ -111,7 +110,6 @@ void mp_conveyor_robot::get_reply (void)
 			get_arm_reply();
 			get_rmodel_reply();
 			break;
-
 		default:  // bledna przesylka
 			throw MP_error (NON_FATAL_ERROR, INVALID_EDP_REPLY);
 	}
@@ -120,28 +118,29 @@ void mp_conveyor_robot::get_reply (void)
 void mp_conveyor_robot::get_input_reply (void)
 {
 	ecp_td.input_values = ecp_reply.ecp_reply.reply_package.input_values;
-	for (int i=0; i<8; i++)
+	for (int i=0; i<8; i++) {
 		ecp_td.analog_input[i]=ecp_reply.ecp_reply.reply_package.analog_input[i];
+	}
 }
 
 void mp_conveyor_robot::get_arm_reply (void)
 {
 
 	switch (ecp_reply.ecp_reply.reply_package.arm_type) {
-		case MOTOR: {
-				for (int i=0; i<CONVEYOR_NUM_OF_SERVOS; i++)
-					ecp_td.current_motor_arm_coordinates[i] =
-					    ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
-				break;
+		case MOTOR:
+			for (int i=0; i<CONVEYOR_NUM_OF_SERVOS; i++) {
+				ecp_td.current_motor_arm_coordinates[i] = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
 			}
-		case JOINT: {
-				    for (int i=0; i<CONVEYOR_NUM_OF_SERVOS; i++)
-				    ecp_td.current_joint_arm_coordinates[i] =
-				        ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
-				    break;
-				}
-			default: // bledny typ specyfikacji pozycji
-					throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+
+			break;
+		case JOINT:
+			for (int i=0; i<CONVEYOR_NUM_OF_SERVOS; i++) {
+				ecp_td.current_joint_arm_coordinates[i] = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
+			}
+
+			break;
+		default: // bledny typ specyfikacji pozycji
+			throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}
 }
 
@@ -151,7 +150,6 @@ void mp_conveyor_robot::get_rmodel_reply (void)
 		case ARM_KINEMATIC_MODEL:
 			ecp_td.current_kinematic_model_no =
 			    ecp_reply.ecp_reply.reply_package.rmodel.kinematic_model.kinematic_model_no;
-
 			break;
 		case SERVO_ALGORITHM:
 			for(int j=0; j<CONVEYOR_NUM_OF_SERVOS; j++) {
