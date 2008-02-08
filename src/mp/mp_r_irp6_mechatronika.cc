@@ -6,10 +6,13 @@
 #include "mp/mp_r_irp6_mechatronika.h"
 
 mp_irp6_mechatronika_robot::mp_irp6_mechatronika_robot (mp_task* mp_object_l) :
-	mp_robot (ROBOT_IRP6_MECHATRONIKA, "[ecp_irp6_mechatronika]", mp_object_l) {}; // Konstruktor
+		mp_robot (ROBOT_IRP6_MECHATRONIKA, "[ecp_irp6_mechatronika]", mp_object_l)
+{}
+; // Konstruktor
 
 // --------------------------------------------------------------------------
-void mp_irp6_mechatronika_robot::create_next_pose_command (void) {
+void mp_irp6_mechatronika_robot::create_next_pose_command (void)
+{
 	// wypelnia bufor wysylkowy do ECP na podstawie danych
 	// zawartych w skladowych generatora lub warunku
 
@@ -48,7 +51,7 @@ void mp_irp6_mechatronika_robot::create_next_pose_command (void) {
 						}
 						break;
 					case ARM_KINEMATIC_MODEL:
-						mp_command.mp_package.instruction.rmodel.kinematic_model.kinematic_model_no	
+						mp_command.mp_package.instruction.rmodel.kinematic_model.kinematic_model_no
 						= ecp_td.next_kinematic_model_no;
 
 						break;
@@ -60,11 +63,11 @@ void mp_irp6_mechatronika_robot::create_next_pose_command (void) {
 							= ecp_td.next_servo_parameters_no[j];
 						}
 						break;
-					default: // Blad: niewlasciwy typ modelu robota            
+					default: // Blad: niewlasciwy typ modelu robota
 						throw MP_error(NON_FATAL_ERROR, INVALID_RMODEL_TYPE);
 				}
 			}
-		
+
 			if (ecp_td.set_type & ARM_DV) { // tylko ramie
 				mp_command.mp_package.instruction.motion_type = ecp_td.motion_type;
 				mp_command.mp_package.instruction.motion_steps = ecp_td.motion_steps;
@@ -73,32 +76,32 @@ void mp_irp6_mechatronika_robot::create_next_pose_command (void) {
 				switch (ecp_td.set_arm_type) {
 					case FRAME:
 						copy_frame(mp_command.mp_package.instruction.arm.frame_def.arm_frame_m, ecp_td.next_arm_frame_m);
-					break;
+						break;
 					case  XYZ_ANGLE_AXIS:
 						for (int j=0; j<6 ; j++) {
 							mp_command.mp_package.instruction.arm.coordinate_def.arm_coordinates[j]
 							= ecp_td.next_XYZ_AA_arm_coordinates[j];
 						}
-					break;
+						break;
 					case  XYZ_EULER_ZYZ:
 						for (int j=0; j<6 ; j++) {
 							mp_command.mp_package.instruction.arm.coordinate_def.arm_coordinates[j]
 							= ecp_td.next_XYZ_ZYZ_arm_coordinates[j];
 						}
-					break;
+						break;
 					case  JOINT:
 						for (int j=0; j<IRP6_MECHATRONIKA_NUM_OF_SERVOS ; j++) {
 							mp_command.mp_package.instruction.arm.coordinate_def.arm_coordinates[j]
 							= ecp_td.next_joint_arm_coordinates[j];
 						}
-					break;
+						break;
 					case  MOTOR:
 						for (int j=0; j<IRP6_MECHATRONIKA_NUM_OF_SERVOS ; j++) {
 							mp_command.mp_package.instruction.arm.coordinate_def.arm_coordinates[j]
 							= ecp_td.next_motor_arm_coordinates[j];
 						}
-					break;
-					default: // Blad: niewlasciwy sposob zadawania polozenia ramienia            
+						break;
+					default: // Blad: niewlasciwy sposob zadawania polozenia ramienia
 						throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 				}
 			}
@@ -107,14 +110,13 @@ void mp_irp6_mechatronika_robot::create_next_pose_command (void) {
 		case SYNCHRO:
 		case QUERY:
 			break;
-		default: // blad: nieprawidlowe polecenie    
+		default: // blad: nieprawidlowe polecenie
 			throw MP_error (NON_FATAL_ERROR, INVALID_ECP_COMMAND);
 	}
-}; // end: mp_irp6_mechatronika_robot::create_next_pose_command
-// ---------------------------------------------------------------
+}
 
-// ---------------------------------------------------------------------
-void mp_irp6_mechatronika_robot::get_reply (void) {
+void mp_irp6_mechatronika_robot::get_reply (void)
+{
 	// pobiera z pakietu przeslanego z ECP informacje i wstawia je do
 	// odpowiednich skladowych generatora lub warunku
 	ecp_td.ecp_reply = ecp_reply.reply;
@@ -146,19 +148,18 @@ void mp_irp6_mechatronika_robot::get_reply (void) {
 		case ARM_RMODEL:
 			get_arm_reply();
 			get_rmodel_reply();
-		break;
+			break;
 		default:  // bledna przesylka
-		throw MP_error (NON_FATAL_ERROR, INVALID_EDP_REPLY);
+			throw MP_error (NON_FATAL_ERROR, INVALID_EDP_REPLY);
 
-	}; // end: switch (reply_type)
-}; // end: mp_irp6_mechatronika_robot::get_reply (robot& r)
-// --------------------------------------------------------------------------
-
+	}
+}
 
 void mp_irp6_mechatronika_robot::get_input_reply (void)
 {
 	ecp_td.input_values = ecp_reply.ecp_reply.reply_package.input_values;
-	for (int i=0; i<8; i++) ecp_td.analog_input[i]=ecp_reply.ecp_reply.reply_package.analog_input[i];
+	for (int i=0; i<8; i++)
+		ecp_td.analog_input[i]=ecp_reply.ecp_reply.reply_package.analog_input[i];
 }
 
 
@@ -169,13 +170,13 @@ void mp_irp6_mechatronika_robot::get_arm_reply (void)
 			for (int i=0; i<IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++) {
 				ecp_td.current_motor_arm_coordinates[i] = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
 			}
-		break;
+			break;
 		case JOINT:
 			for (int i=0; i<IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++) {
 				ecp_td.current_joint_arm_coordinates[i] = ecp_reply.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
 			}
-		break;
-		case FRAME: 
+			break;
+		case FRAME:
 			copy_frame(ecp_td.current_arm_frame_m, ecp_reply.ecp_reply.reply_package.arm.frame_def.arm_frame_m);
 			break;
 		case XYZ_EULER_ZYZ:
@@ -189,10 +190,9 @@ void mp_irp6_mechatronika_robot::get_arm_reply (void)
 			}
 			break;
 		default:
-		throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}
 }
-
 
 void mp_irp6_mechatronika_robot::get_rmodel_reply (void)
 {
@@ -203,32 +203,32 @@ void mp_irp6_mechatronika_robot::get_rmodel_reply (void)
 		case TOOL_XYZ_ANGLE_AXIS:
 			for (int i=0; i<6; i++) {
 				ecp_td.current_XYZ_AA_tool_coordinates[i] =
-				ecp_reply.ecp_reply.reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
+				    ecp_reply.ecp_reply.reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
 			}
 			break;
 		case TOOL_XYZ_EULER_ZYZ:
 			for (int i=0; i<6; i++) {
 				ecp_td.current_XYZ_ZYZ_tool_coordinates[i] =
-				ecp_reply.ecp_reply.reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
+				    ecp_reply.ecp_reply.reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
 			}
 			break;
 		case TOOL_AS_XYZ_EULER_ZY:
 			for (int i=0; i<6; i++) {
 				ecp_td.current_XYZ_ZYZ_tool_coordinates[i] =
-				ecp_reply.ecp_reply.reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
+				    ecp_reply.ecp_reply.reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
 			}
 			break;
 		case ARM_KINEMATIC_MODEL:
 			ecp_td.current_kinematic_model_no =
-			ecp_reply.ecp_reply.reply_package.rmodel.kinematic_model.kinematic_model_no;
+			    ecp_reply.ecp_reply.reply_package.rmodel.kinematic_model.kinematic_model_no;
 
 			break;
 		case SERVO_ALGORITHM:
 			for(int j=0; j<IRP6_MECHATRONIKA_NUM_OF_SERVOS; j++) {
 				ecp_td.current_servo_algorithm_no[j] =
-				ecp_reply.ecp_reply.reply_package.rmodel.servo_algorithm.servo_algorithm_no[j];
+				    ecp_reply.ecp_reply.reply_package.rmodel.servo_algorithm.servo_algorithm_no[j];
 				ecp_td.current_servo_parameters_no[j] =
-				ecp_reply.ecp_reply.reply_package.rmodel.servo_algorithm.servo_parameters_no[j];
+				    ecp_reply.ecp_reply.reply_package.rmodel.servo_algorithm.servo_parameters_no[j];
 			}
 			break;
 		default: // bledny typ specyfikacji modelu robota
