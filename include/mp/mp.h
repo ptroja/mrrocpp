@@ -10,24 +10,19 @@
 
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
-#include <map>
-#include <list>
 
 #include "ecp_mp/ecp_mp_task.h"
-// Konfigurator.
 #include "lib/configurator.h"
 #include "lib/mp_timer.h"
 
+class mp_generator;
+class mp_task;
+class mp_robot;
 
 enum WAIT_FOR_STOP_ENUM {
 	MP_EXIT,
 	MP_THROW
 };
-
-
-class mp_robot;
-class mp_generator;
-
 
 // struktura zwracana przez funkcje mp_receive_ecp_pulse
 typedef struct mp_receive_ecp_pulse_return {
@@ -40,7 +35,6 @@ typedef struct mp_receive_ecp_pulse_return {
 	uint64_t e; // errno
 } mp_receive_ecp_pulse_return_t;
 
-
 // struktura wykorzystywana przez funkcje mp_receive_pulse
 typedef struct mp_receive_pulse_struct {
 	_msg_info msg_info;
@@ -48,121 +42,6 @@ typedef struct mp_receive_pulse_struct {
 	int rcvid;
 	uint64_t e;       // Kod bledu systemowego
 } mp_receive_pulse_struct_t;
-
-// klasa globalna dla calego procesu MP
-class mp_task: public ecp_mp_task  {
-protected:
-	// lsita generatorow dla scheduller'a
-    std::list<mp_generator*> gen_list;
-    std::list<mp_generator*>::iterator gen_list_iterator;
-
-	bool all_gen_sets_waiting_for_ECP_pulse;
-
-public:
-	static name_attach_t *mp_trigger_attach;
-	static name_attach_t *mp_attach;
-
-	// mapa wszystkich robotow
-	static std::map <ROBOT_ENUM, mp_robot*> robot_m;
-
-        int32_t ui_scoid; // server connection id
-	  char ui_pulse_code; // kod pulsu ktory zostal wyslany przez ECP w celu zgloszenia gotowosci do komunikacji (wartosci w impconst.h)
- 	  bool ui_new_pulse; // okresla czy jest nowy puls
-
-	// KONSTRUKTORY
-	mp_task(void);
-	virtual ~mp_task(void);
-
-	// METODY
-	// funkcja odbierajaca pulsy z ECP
-
-	// -------------------------------------------------------------------
-	// inicjacja polaczen, rejestracja nazwy MP, odszukanie UI, SR by Y&W
-	// -------------------------------------------------------------------
-	void mp_initialize_communication (void);
-
-	// oczekiwanie na puls z ECP
-	enum MP_RECEIVE_PULS_ENUM {
-		WITH_TIMEOUT,
-		WITHOUT_TIMEOUT
-	};
-
-	enum WAIT_FOR_NEW_PULSE_ENUM {
-		NEW_ECP_PULSE,
-		NEW_UI_PULSE,
-		NEW_UI_OR_ECP_PULSE
-	};
-
-	bool set_next_ecps_state (int l_state, int l_variant, char* l_string, int number_of_robots, ... );
-	bool send_end_motion_to_ecps (int number_of_robots, ... );
-	bool run_ext_empty_gen (bool activate_trigger, int number_of_robots, ... );
-	bool run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-		(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ... );
-	bool wait_ms (int _ms_delay); // zamiast delay
-
-
-	int mp_receive_pulse (mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PULS_ENUM tryb);
-	int check_and_optional_wait_for_new_pulse (mp_receive_pulse_struct_t* outputs,
-		WAIT_FOR_NEW_PULSE_ENUM process_mode, MP_RECEIVE_PULS_ENUM desired_wait_mode);
-	int mp_wait_for_ui_name_open(void);
-
-	// mp_receive_ecp_pulse_return_t mp_receive_ecp_pulse (int tryb);
-	// oczekwianie na name_open do kanalu do przesylania pulsow miedzy ECP i MP
-	// int mp_wait_for_name_open_ecp_pulse (mp_receive_pulse_struct_t* outputs, uint32_t nd, pid_t ECP_pid);
-	int mp_wait_for_name_open_ecp_pulse(mp_receive_pulse_struct_t* outputs);
-
-	// Oczekiwanie na zlecenie START od UI
-	void wait_for_start (void);// by Y&W
-
-	// Oczekiwanie na zlecenie STOP od UI
-	void wait_for_stop ( WAIT_FOR_STOP_ENUM tryb);// by Y&W dodany tryb
-
-	// Wystartowanie wszystkich ECP
-	void start_all (std::map <ROBOT_ENUM, mp_robot*>& _robot_m);
-
-	// Zatrzymanie wszystkich ECP
-	void terminate_all (std::map <ROBOT_ENUM, mp_robot*>& _robot_m );
-
-	// Wyslanie rozkazu do wszystkich ECP
-	void execute_all (std::map <ROBOT_ENUM, mp_robot*>& _robot_m);
-
-	// funkcja odbierajaca pulsy z UI wykorzystywana w MOVE
-	bool mp_receive_ui_pulse (std::map <ROBOT_ENUM, mp_robot*>& _robot_m, short* trigger);
-
-	// funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
-	bool mp_receive_ui_or_ecp_pulse (std::map <ROBOT_ENUM, mp_robot*>& _robot_m, mp_generator& the_generator );
-
-	// Funkcja ruchu
-	bool Move ( mp_generator& the_generator );
-
-	// Funkcja oczekiwania na spelnienie warunku poczatkowego
-
-
-	// dla scheduller'a
-	bool add_gen (mp_generator* gen_l);
-	// not used anymore (ptrojane)
-	//bool rm_gen (mp_generator* gen_l);
-	bool clear_gen_list (void);
-
-	bool scheduller_run (void);
-
-	// obsluga sygnalu
-	virtual void catch_signal_in_mp_task(int sig);
-
-	// Zatrzymanie wszystkich ECP
-	static void kill_all_ECP (std::map <ROBOT_ENUM, mp_robot*>& _robot_m);
-
-	// utworzenie robotow
-	virtual bool create_robots(void);
-
-	// methods for MP template to redefine in concrete classes
-	virtual void task_initialization(void);
-	virtual void main_task_algorithm(void);
-};
-
-
-mp_task* return_created_mp_task (void);
-
 
 // ---------------------------------------------------------------
 class MP_main_error {  // Klasa obslugi bledow poziomie MP
@@ -173,8 +52,6 @@ class MP_main_error {  // Klasa obslugi bledow poziomie MP
 	 : error_class(err0), mp_error(err1) { };
 }; // end: class MP_main_error
 // ---------------------------------------------------------------
-
-
 
 // na podstawie ecp_taught_in_pose
 // ------------------------------------------------------------------------
@@ -195,8 +72,6 @@ public:
   mp_taught_in_pose (POSE_SPECIFICATION at, double mt, int e_info, double* c);
 }; // end:class mp_taught_in_pose
 // ------------------------------------------------------------------------
-
-
 
 // ------------------------------------------------------------------------
 struct robot_ECP_transmission_data {
@@ -328,308 +203,8 @@ struct robot_ECP_transmission_data {
 }; // end: robot_ECP_transmission_data
 // ------------------------------------------------------------------------
 
-// ==================== KLASY BAZOWE ============================
-
-
-
-// ---------------------------------------------------------------
-class mp_robot {
-   // Klasa bazowa dla robotow (klasa abstrakcyjna)
-   // Kazdy robot konkretny (wyprowadzony z klasy bazowej)
-   // musi zawierac pola danych (skladowe) dotyczace
-   // ostatnio zrealizowanej pozycji oraz pozycji zadanej
-protected:
-  MP_COMMAND_PACKAGE mp_command;      // Bufor z rozkazem dla ECP
-                                      // - uzytkownik nie powinien z tego korzystac
-  ECP_REPLY_PACKAGE ecp_reply;        // Bufor z odpowiedzia z ECP
-                                      // - uzytkownik nie powinien z tego korzystac
-
-mp_task* mp_object;
-
-
- public:
- sr_ecp* sr_ecp_msg;    // by Y - Wskaznik na obiekt do komunikacji z SR
-
-  ROBOT_ENUM robot_name;
-  uint32_t nd; // deskryptor wezla na ktorym jest powolane ECP
-  pid_t ECP_pid;
-  int32_t scoid; // server connection id
-  int ECP_fd;	// by Y&W do komunikacji, zamiast ECP_pid, ktore wystrczalo w QNX 4
-  char pulse_code; // kod pulsu ktory zostal wyslany przez ECP w celu zgloszenia gotowosci do komunikacji (wartosci w impconst.h)
-  bool new_pulse; // okresla czy jest nowy puls
-  bool robot_new_pulse_checked; // okresla czy czy nowy puls zostal juz uwzgledniony w generatorze
-   bool communicate; // okresla czy robot ma byc obslugiwany w execute_all
-
-  robot_ECP_transmission_data ecp_td; // Obraz danych robota wykorzystywanych przez generator
-                                      // - do uzytku uzytkownika (generatora)
-
-  mp_robot (ROBOT_ENUM l_robot_name, const char* _section_name, mp_task* mp_object_l);
-
-  class MP_error {  // Klasa obslugi bledow robotow
-    public:
-      const uint64_t error_class;
-      const uint64_t mp_error;
-      MP_error (uint64_t err0, uint64_t err1);
-  }; // end: class MP_error
-
-  virtual void execute_motion (void);
-    // Zlecenie wykonania ruchu przez robota
-    // (realizowane przez klase konkretna):
-    // na poziomie MP jest to polecenie dla ECP.
-
-  virtual void terminate_ecp (void);
-    // Zlecenie zakonczenia ruchu przez robota
-    // (realizowane przez klase konkretna):
-    // na poziomie MP jest to polecenie dla ECP.
-  virtual void start_ecp ( void );
-
-  virtual void create_command ( void );
-    // wypelnia bufor wysylkowy do EDP na podstawie danych zawartych w swych skladowych
-	// Ten bufor znajduje sie w robocie
-
-  virtual void create_next_pose_command (void) {};
-
-  virtual void get_reply ( void ) {};
-
-    // pobiera z pakietu przeslanego z EDP informacje i wstawia je do odpowiednich swoich skladowych
-}; // end: class mp_robot
-// ---------------------------------------------------------------
-
-// ---------------------------------------------------------------
-class mp_generator {
-    // Klasa bazowa dla generatorow trajektorii (klasa abstrakcyjna)
-    // Sluzy zarowno do wyznaczania nastepnej wartosci zadanej jak i
-    // sprawdzania spelnienia warunku koncowego
-
-protected:
-	sr_ecp* sr_ecp_msg;    // by Y - Wskaznik na obiekt do komunikacji z SR
-
-	int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
-
-public:
-
-	// zbior obejmujacy mozliwe stany obiektu klasy generator_set
-	enum GEN_SET_PHASE {
-		BEFORE_FIRST_STEP,
-		AFTER_STEP,
-		AFTER_INITIATE_READING,
-		WAITING_FOR_ECP_BEFORE_EXECUTE_MOTION,
-		AFTER_EXECUTE_MOTION,
-		AFTER_GET_READING,
-		GS_FINISHED
-	};
-
-	GEN_SET_PHASE phase; // faza w ktorej znajduje sie generator
-	bool new_pulse_checked; // czy nowy puls zostal sprawdzony (wykorzystywane w scheduller_run() )
-	bool wait_for_ECP_pulse; // okresla czy przed next step move ma sie zawieszac w oczekwianiu na puls z ECP
-		// wykorzystywane przy luznej i sporadycznej wspolpracy robotow.
-	mp_task& mp_t;
-
-	bool trigger; // informacja czy pszyszedl puls trigger
-
-	// mapa wszystkich czujnikow
-	std::map <SENSOR_ENUM, sensor*> sensor_m;
-
-	// mapa wszystkich transmiterow
-	std::map <TRANSMITTER_ENUM, transmitter*> transmitter_m;
-
-	// mapa wszystkich robotow
-	std::map <ROBOT_ENUM, mp_robot*> robot_m;
-
-	mp_generator(mp_task& _mp_task);
-
-	virtual ~mp_generator(void);
-	virtual bool first_step (void) = 0;
-	// generuje pierwszy krok ruchu -
-	// pierwszy krok czesto rozni sie od pozostalych,
-	// np. do jego generacji nie wykorzystuje sie czujnikow
-	// (zadanie realizowane przez klase konkretna)
-
-	virtual bool next_step (void) = 0;
-	// generuje kazdy nastepny krok ruchu
-	// (zadanie realizowane przez klase konkretna)
-
-	void re_run(void); // powrot do stanu wyjsciowego
-
-	// Kopiuje dane z robotow do generatora
-	void copy_data(std::map <ROBOT_ENUM, mp_robot*>& _robot_m);
-
-	// Kopiuje polecenie stworzone w generatorze do robotow
-	void copy_generator_command (std::map <ROBOT_ENUM, mp_robot*>& _robot_m);
-
-  class MP_error {  // Klasa obslugi bledow generatora na poziomie MP
-    public:
-      const uint64_t error_class;
-      const uint64_t mp_error;
-      MP_error (uint64_t err0, uint64_t err1);
-  }; // end: class MP_error
-
-}; // end: class mp_generator
-// ------------------------------------------------------------------------
-
-// ########################################################################################################
-// ########################################################################################################
-// ########################### GENERATORY RUCHU DLA ECP (opracowane by Jarosz) ############################
-// ########################################################################################################
-// ########################################################################################################
-
-// condition to wait for desired time in ms
-
-class mp_delay_ms_condition: public mp_generator
-{
-protected:
-	mp_timer* local_timer;
-	float sec;
-	int ms_delay;
-
-public:
-
-    // konstruktor
-    mp_delay_ms_condition(mp_task& _mp_task, int _ms_delay);
-    ~mp_delay_ms_condition();
-
-	void configure (int _ms_delay);
-
-	virtual bool first_step ();
-	virtual bool next_step ();
-
-}; // end : class mp_set_next_ecps_state_generator
-
-
-
-// generator for setting the next ecps state
-
-class mp_set_next_ecps_state_generator : public mp_generator
-{
-protected:
-	int mp_2_ecp_next_state, mp_2_ecp_next_state_variant;
-	char mp_2_ecp_next_state_string[MP_2_ECP_STRING_SIZE]; // skojarzone z NEXT_STATE
-
-public:
-
-    // konstruktor
-    mp_set_next_ecps_state_generator(mp_task& _mp_task);
-
-	void configure (int l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, char* l_mp_2_ecp_next_state_string);
-
-	bool first_step ();
-	bool next_step ();
-
-}; // end : class mp_set_next_ecps_state_generator
-
-
-// generator for sending end_motion mesage to ecps
-
-class mp_send_end_motion_to_ecps_generator : public mp_generator
-{
-public:
-
-    // konstruktor
-    mp_send_end_motion_to_ecps_generator(mp_task& _mp_task);
-
-	bool first_step ();
-	bool next_step ();
-
-}; // end : class mp_send_end_motion_to_ecps_state_generator
-
-
-
-// ####################################################################################################
-// Rozszerzony Generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
-// ####################################################################################################
-
-class mp_extended_empty_generator : public mp_generator {
-    // Klasa dla generatorow trajektorii
-    // Sluzy zarowno do wyznaczania nastepnej wartosci zadanej jak i
-    // sprawdzania spelnienia warunku koncowego
- protected:
-    bool activate_trigger;
-
- public:
-	mp_extended_empty_generator(mp_task& _mp_task);
-
-  ~mp_extended_empty_generator(){ };
-
-	void configure (bool l_activate_trigger);
-
-  bool first_step ();
-      // generuje pierwszy krok ruchu -
-      // pierwszy krok czesto rozni sie od pozostalych,
-      // np. do jego generacji nie wykorzystuje sie czujnikow
-      // (zadanie realizowane przez klase konkretna)
-  bool next_step ();
-     // generuje kazdy nastepny krok ruchu
-     // (zadanie realizowane przez klase konkretna)
-
-}; // end: class empty_generator
-
-
-// ####################################################################################################
-// Generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
-// ####################################################################################################
-
-class mp_empty_generator : public mp_generator {
-    // Klasa dla generatorow trajektorii
-    // Sluzy zarowno do wyznaczania nastepnej wartosci zadanej jak i
-    // sprawdzania spelnienia warunku koncowego
- public:
-	mp_empty_generator(mp_task& _mp_task);
-
-  ~mp_empty_generator(){ };
-
-  virtual bool first_step ();
-      // generuje pierwszy krok ruchu -
-      // pierwszy krok czesto rozni sie od pozostalych,
-      // np. do jego generacji nie wykorzystuje sie czujnikow
-      // (zadanie realizowane przez klase konkretna)
-  virtual bool next_step ();
-     // generuje kazdy nastepny krok ruchu
-     // (zadanie realizowane przez klase konkretna)
-
-}; // end: class empty_generator
-
-// ####################################################################################################
-// KLASA BAZOWA dla generatorow o zadany przyrost polozenia/orientacji
-// ####################################################################################################
-
-class mp_delta_generator : public mp_generator
-{
-protected:
-   int node_counter;               // biezacy wezel interpolacji
-
-public:
-	mp_delta_generator(mp_task& _mp_task);
-	trajectory_description irp6ot_td;
-	trajectory_description irp6p_td;
-
-}; // end : class MP_delta_generator
-
-// ####################################################################################################
-// Generator prostoliniowy o zadany przyrost polozenia/orientacji
-// ####################################################################################################
-
-class mp_tight_coop_generator : public mp_delta_generator
-{
-
-public:
-  // konstruktor
-	mp_tight_coop_generator(mp_task& _mp_task, trajectory_description irp6ot_tr_des, trajectory_description irp6p_tr_des);
-
-  // destruktor
-  ~mp_tight_coop_generator();
-
-  virtual bool first_step ();
-
-  virtual bool next_step ();
-
-}; // end: class tight_coop_generator
-
-
-
-// ########################################################################################################
-// ####################################    KONIEC GENERATOROW   ###########################################
-// ########################################################################################################
-
-
+#include "mp/mp_generator.h"
+#include "mp/mp_task.h"
+#include "mp/mp_robot.h"
 
 #endif

@@ -27,10 +27,10 @@
 #include "mp/mp_r_irp6_postument.h"
 #include "mp/mp_r_irp6_mechatronika.h"
 #include "mp/mp_r_speaker.h"
+#include "mp/mp_common_generators.h"
+#include "mp/mp_delay_ms_condition.h"
 
 using namespace std;
-
-// bool debug_tmp=false;
 
 // obsluga sygnalu
 void mp_task::catch_signal_in_mp_task(int sig) {
@@ -47,16 +47,13 @@ void mp_task::catch_signal_in_mp_task(int sig) {
 			signal(SIGSEGV, SIG_DFL);
 			break;
 	}
-};
-
+}
 
 name_attach_t* mp_task::mp_trigger_attach = NULL;
 name_attach_t* mp_task::mp_attach = NULL;
 
-
 // mapa wszystkich robotow z iteratorem
 map <ROBOT_ENUM, mp_robot*> mp_task::robot_m;
-
 
 // KONSTRUKTORY
 mp_task::mp_task() {
@@ -68,8 +65,8 @@ mp_task::mp_task() {
 	all_gen_sets_waiting_for_ECP_pulse = false;
 	ui_new_pulse = false;
 };
-mp_task::~mp_task() {
 
+mp_task::~mp_task() {
 	delete[] mrrocpp_network_path;
 };
 

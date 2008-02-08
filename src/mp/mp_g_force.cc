@@ -18,7 +18,7 @@
 #include "mp/mp.h"
 #include "mp/mp_g_force.h"
 #include "lib/mathtr.h"
-
+#include "mp/mp_common_generators.h"
 
 void mp_short_move_up(mp_task& mp_object){
 

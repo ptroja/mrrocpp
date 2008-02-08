@@ -21,6 +21,7 @@
 #include "mp/mp.h"
 #include "mp/mp_g_force.h"
 #include "mp/mp_g_vis.h"
+#include "mp/mp_common_generators.h"
 #include "mp/mp_t_rc.h"
 #include "ecp_mp/ecp_mp_s_schunk.h"
 #include "ecp_mp/ecp_mp_s_vis.h"

@@ -16,6 +16,7 @@
 #include "lib/srlib.h"
 #include "mp/mp.h"
 #include "mp/mp_t_c.h"
+#include "mp/mp_common_generators.h"
 
 mp_task* return_created_mp_task (void)
 {

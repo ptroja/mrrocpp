@@ -12,6 +12,7 @@
 #include "mp/mp.h"
 #include "mp/mp_g_force.h"
 #include "mp/mp_g_vis.h"
+#include "mp/mp_common_generators.h"
 #include "mp/mp_t_rcsc.h"
 #include "ecp_mp/ecp_mp_s_schunk.h"
 #include "ecp_mp/ecp_mp_s_vis.h"
@@ -44,7 +45,7 @@ bool mp_task_rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogl
 	// manianka
 	cube_state->set_state(BLUE, GREEN, RED, ORANGE, WHITE, YELLOW);
 
-	CUBE_TURN_ANGLE changing_order[]={CL_0, CL_0, CL_180, CL_0, CL_180, CL_0};
+	const CUBE_TURN_ANGLE changing_order[]={CL_0, CL_0, CL_180, CL_0, CL_180, CL_0};
 
 	for(int k=0; k<6; k++) {
 
