@@ -3,7 +3,6 @@
 // 
 // MP task for two robot haptic device
 // 
-// Ostatnia modyfikacja: 2007
 // -------------------------------------------------------------------------
 
 

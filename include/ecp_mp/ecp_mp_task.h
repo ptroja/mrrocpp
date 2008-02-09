@@ -70,7 +70,7 @@ class ECP_MP_main_error {  // Klasa obslugi bledow poziomie MP
     uint64_t error_class; 
     uint64_t mp_error;
     ECP_MP_main_error (uint64_t err0, uint64_t err1) { error_class = err0; mp_error = err1; }
-}; // end: class MP_main_error
+};
 // ---------------------------------------------------------------
 
 #endif /* _ECP_MP_H */

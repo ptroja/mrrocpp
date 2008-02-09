@@ -38,24 +38,21 @@ std::map <TRANSMITTER_ENUM, transmitter*> ecp_mp_task::transmitter_m;
 bool ecp_mp_task::operator_reaction (const char* question ) {
   ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
   UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
-  uint64_t e;     // kod bledu systemowego
+
   ecp_to_ui_msg.ecp_message = YES_NO;     // Polecenie odpowiedzi na zadane
   strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI podczas uczenia
 
-	ecp_to_ui_msg.hdr.type=0;
+  ecp_to_ui_msg.hdr.type=0;
 
-  if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
-	 e = errno;
+  if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(ECP_message), &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+	 uint64_t e = errno;
 	 perror("ECP operator_reaction(): Send() to UI failed");
 	 sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
 	 throw ECP_MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
   }
-  if (ui_to_ecp_rep.reply == ANSWER_YES) {
-     return true;
-  } else {
-     return false;
-  }
-}; // end: operator_reaction
+
+  return (ui_to_ecp_rep.reply == ANSWER_YES);
+}
 // --------------------------------------------------------------------------
 
 
@@ -65,24 +62,22 @@ BYTE ecp_mp_task::choose_option (const char* question, BYTE nr_of_options_input 
 {
 	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
-	uint64_t e;     // kod bledu systemowego
-	
+
 	ecp_to_ui_msg.ecp_message = CHOOSE_OPTION; // Polecenie odpowiedzi na zadane
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
-
 	ecp_to_ui_msg.nr_of_options = nr_of_options_input;
 
 	ecp_to_ui_msg.hdr.type=0;
 	
 	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
-		e = errno;
+		uint64_t e = errno;
 		perror("ECP: Send() to UI failed\n");
 		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
 		throw ECP_MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
-	};
+	}
 	
 	return ui_to_ecp_rep.reply; // by Y
-}; // end: irp6_on_track_input_double
+}
 // --------------------------------------------------------------------------
 
 
@@ -91,7 +86,6 @@ BYTE ecp_mp_task::choose_option (const char* question, BYTE nr_of_options_input 
 int ecp_mp_task::input_integer (const char* question ) {
   ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
   UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
-  uint64_t e;     // kod bledu systemowego
 
   ecp_to_ui_msg.ecp_message = INTEGER_NUMBER; // Polecenie odpowiedzi na zadane
   strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
@@ -99,14 +93,14 @@ int ecp_mp_task::input_integer (const char* question ) {
 	ecp_to_ui_msg.hdr.type=0;
 
   if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
-	e = errno;
+	uint64_t e = errno;
 	perror("ECP: Send() to UI failed\n");
 	sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
 	throw ECP_MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
   }
   
     return ui_to_ecp_rep.integer_number;
-}; // end: irp6_on_track_input_integer
+}
 // --------------------------------------------------------------------------
 
 
@@ -116,7 +110,6 @@ double ecp_mp_task::input_double (const char* question )
 {
 	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
-	uint64_t e;     // kod bledu systemowego
 	
 	ecp_to_ui_msg.ecp_message = DOUBLE_NUMBER; // Polecenie odpowiedzi na zadane
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
@@ -125,13 +118,13 @@ double ecp_mp_task::input_double (const char* question )
 
 	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0)
 	{// by Y&W
-		e = errno;
+		uint64_t e = errno;
 		perror("ECP: Send() to UI failed\n");
 		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
 		throw ECP_MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
-	};
+	}
 	return ui_to_ecp_rep.double_number; // by Y
-}; // end: irp6_on_track_input_double
+}
 // --------------------------------------------------------------------------
 
 
@@ -141,7 +134,6 @@ bool ecp_mp_task::show_message (const char* message)
 {
 	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
-	uint64_t e;     // kod bledu systemowego
 	
 	ecp_to_ui_msg.ecp_message = MESSAGE; // Polecenie wyswietlenia komunikatu
 	strcpy(ecp_to_ui_msg.string, message);
@@ -149,16 +141,14 @@ bool ecp_mp_task::show_message (const char* message)
 	ecp_to_ui_msg.hdr.type=0;
 
    if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
-	e = errno;
+	uint64_t e = errno;
 	perror("ECP: Send() to UI failed\n");
 	sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
 	throw ECP_MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
   }
-   if (ui_to_ecp_rep.reply == ANSWER_YES)
-     return true;
-   else
-     return false;
-}; // end: irp6_on_track_show_message
+
+   return (ui_to_ecp_rep.reply == ANSWER_YES);
+}
 // --------------------------------------------------------------------------
 
 
@@ -176,7 +166,7 @@ void ecp_mp_task::kill_all_VSP (std::map <SENSOR_ENUM, sensor*>& _sensor_m) {
 		}
 	}
 
-} // end: kill_all_VSP()
+}
 // ------------------------------------------------------------------------
 
 
@@ -195,8 +185,7 @@ void ecp_mp_task::all_sensors_initiate_reading (std::map <SENSOR_ENUM, sensor*>&
 			sensor_m_iterator->second->current_period--;
 		}
 	}
-};
-
+}
 
 void ecp_mp_task::all_sensors_get_reading (std::map <SENSOR_ENUM, sensor*>& _sensor_m)
 {
@@ -215,4 +204,4 @@ void ecp_mp_task::all_sensors_get_reading (std::map <SENSOR_ENUM, sensor*>& _sen
 		}
 	}
 
-};
+}

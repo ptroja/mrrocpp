@@ -42,7 +42,7 @@ class mp_task: public ecp_mp_task
 		void mp_initialize_communication (void);
 
 		// oczekiwanie na puls z ECP
-		enum MP_RECEIVE_PULS_ENUM {
+		enum MP_RECEIVE_PULSE_MODE {
 			WITH_TIMEOUT,
 			WITHOUT_TIMEOUT
 		};
@@ -60,9 +60,9 @@ class mp_task: public ecp_mp_task
 		(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ... );
 		bool wait_ms (int _ms_delay); // zamiast delay
 
-		int mp_receive_pulse (mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PULS_ENUM tryb);
+		int mp_receive_pulse (mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PULSE_MODE tryb);
 		int check_and_optional_wait_for_new_pulse (mp_receive_pulse_struct_t* outputs,
-		        WAIT_FOR_NEW_PULSE_ENUM process_mode, MP_RECEIVE_PULS_ENUM desired_wait_mode);
+		        WAIT_FOR_NEW_PULSE_ENUM process_mode, MP_RECEIVE_PULSE_MODE desired_wait_mode);
 		int mp_wait_for_ui_name_open(void);
 
 		// mp_receive_ecp_pulse_return_t mp_receive_ecp_pulse (int tryb);

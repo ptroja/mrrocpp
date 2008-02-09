@@ -3,7 +3,6 @@
 //
 // MP Master Process - methods
 //
-// Ostatnia modyfikacja: 2007
 // -------------------------------------------------------------------------
 // Funkcje do konstruowania procesow MP
 

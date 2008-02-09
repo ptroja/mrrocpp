@@ -1,9 +1,7 @@
 // -------------------------------------------------------------------------
-//                              mp_task_rk.cc
 // 
 // MP Master Process - methods for pouring task sporadic coordination
 // 
-// Ostatnia modyfikacja: styczen 2008
 // -------------------------------------------------------------------------
 
 

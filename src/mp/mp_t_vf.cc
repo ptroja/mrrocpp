@@ -1,9 +1,7 @@
 // ------------------------------------------------------------------------
-//             mp_m_pr.cc - powielanie rysunku - wersja wielorobotowa
 // 
 //                      MASTER PROCESS (MP) - main()
 // 
-// 			 Ostatnia modyfikacja: 2005
 // ------------------------------------------------------------------------
 
 

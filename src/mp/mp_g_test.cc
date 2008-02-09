@@ -1,12 +1,3 @@
-// -------------------------------------------------------------------------
-//                              mp.cc
-// 
-// MP Master Process - methods
-// 
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
-// Funkcje do konstruowania procesow MP
-
 #include <stdio.h>
 #include <math.h>
 #include <iostream>

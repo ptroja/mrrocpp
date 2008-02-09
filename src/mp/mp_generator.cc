@@ -31,9 +31,11 @@ mp_generator::MP_error::MP_error (uint64_t err0, uint64_t err1)
  : error_class(err0), mp_error(err1)
 {}
 
-mp_generator::mp_generator(mp_task& _mp_task) : sr_ecp_msg (*_mp_task.sr_ecp_msg) {
-	wait_for_ECP_pulse = false;	
-	trigger = false;
-	phase = BEFORE_FIRST_STEP;
-	new_pulse_checked = true;
+mp_generator::mp_generator(mp_task& _mp_task) 
+	: sr_ecp_msg (*_mp_task.sr_ecp_msg),
+	wait_for_ECP_pulse(false),
+	trigger(false),
+	phase(BEFORE_FIRST_STEP),
+	new_pulse_checked(true)
+{
 }

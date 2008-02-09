@@ -1,9 +1,7 @@
 // -------------------------------------------------------------------------
-//                              mp.cc
 //
 // MP Master Process - methods for force generators
 //
-// Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 // Funkcje do konstruowania procesow MP
 

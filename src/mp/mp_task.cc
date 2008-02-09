@@ -3,7 +3,6 @@
 //
 // MP Master Process - methods
 //
-// Ostatnia modyfikacja: 2007
 // -------------------------------------------------------------------------
 // Funkcje do konstruowania procesow MP
 
@@ -64,11 +63,11 @@ mp_task::mp_task() {
 	gen_list.clear();
 	all_gen_sets_waiting_for_ECP_pulse = false;
 	ui_new_pulse = false;
-};
+}
 
 mp_task::~mp_task() {
 	delete[] mrrocpp_network_path;
-};
+}
 
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 bool mp_task::create_robots() {
@@ -111,18 +110,15 @@ bool mp_task::create_robots() {
 	}
 
 	return true;
-
 }
 
 
 // methods for mp template to redefine in concrete classes
 void mp_task::task_initialization(void) {
 	sr_ecp_msg->message("MP loaded");
-};
-
+}
 
 void mp_task::main_task_algorithm(void) {};
-
 
 
 // metody do obslugi najczesniej uzywanych generatorow
@@ -144,26 +140,19 @@ bool mp_task::set_next_ecps_state (int l_state, int l_variant, char* l_string, i
 	va_end ( arguments );                  // Cleans up the list
 
 	mp_snes_gen.configure (l_state, l_variant, l_string);
-	if (Move ( mp_snes_gen)) {  return true;  }
-
-	return false;
+	
+	return (Move(mp_snes_gen));
 }
 
 // delay MP replacement
 bool mp_task::wait_ms (int _ms_delay) // zamiast delay
 {
-	//	delay (_ms_delay); // temporary
-
 	mp_delay_ms_condition mp_ds_ms (*this, _ms_delay);
 
 	mp_ds_ms.robot_m.clear();
 
-	if (Move (mp_ds_ms)) {  return true;  }
-
-	return false;
-
+	return (Move(mp_ds_ms));
 }
-
 
 
 bool mp_task::send_end_motion_to_ecps (int number_of_robots, ... ) {
@@ -183,9 +172,7 @@ bool mp_task::send_end_motion_to_ecps (int number_of_robots, ... ) {
 	}
 	va_end ( arguments );                  // Cleans up the list
 
-	if (Move ( mp_semte_gen)) {  return true;  }
-
-	return false;
+	return (Move(mp_semte_gen));
 }
 
 
@@ -208,9 +195,7 @@ bool mp_task::run_ext_empty_gen (bool activate_trigger, int number_of_robots, ..
 
 	mp_ext_empty_gen.configure (activate_trigger);
 
-	if (Move ( mp_ext_empty_gen)) {  return true;  }
-
-	return false;
+	return (Move(mp_ext_empty_gen));
 }
 
 
@@ -234,7 +219,7 @@ bool mp_task::run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_
 
 	// przypisanie robotow do zbiorow robots_to_move i robots_to_wait_for_task_termination, eliminacja robotow ktorych nie ma w systemie
 	va_start ( arguments, number_of_robots_to_wait_for_task_termin);
-	// najpierw zbior robots_to_move
+	// najpierw zbior robots_to_move...
 	for ( int x = 0; x < number_of_robots_to_move; x++ )        // Loop until all numbers are added
 	{
 		robot_l = (ROBOT_ENUM) (va_arg ( arguments, int )); // Adds the next value in argument list to sum.
@@ -245,7 +230,7 @@ bool mp_task::run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_
 			robots_to_move[robot_l] = robot_m[robot_l];
 		}
 	}
-	// najpierw zbior robots_to_wait_for_task_termination
+	// ...potem zbior robots_to_wait_for_task_termination
 	for ( int x = 0; x < number_of_robots_to_wait_for_task_termin; x++ )        // Loop until all numbers are added
 	{
 		robot_l = (ROBOT_ENUM) (va_arg ( arguments, int )); // Adds the next value in argument list to sum.
@@ -283,7 +268,7 @@ bool mp_task::run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_
 		robots_to_move_tmp = robots_to_move;
 		robots_to_wait_for_task_termination_tmp = robots_to_wait_for_task_termination;
 
-		// sprawdzenie zbior robots_to_move
+		// sprawdzenie zbioru robots_to_move
 		for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robots_to_move_tmp.begin();
 		        robot_m_iterator != robots_to_move_tmp.end(); robot_m_iterator++) {
 			if (robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED  ) {
@@ -327,11 +312,10 @@ bool mp_task::run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_
 // inicjacja polaczen, rejestracja nazwy MP, odszukanie UI, SR by Y&W
 // -------------------------------------------------------------------
 
-int mp_task::mp_receive_pulse (mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PULS_ENUM tryb) {
+int mp_task::mp_receive_pulse (mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PULSE_MODE tryb) {
 
 	struct sigevent event;
 	int  wyjscie = 0;
-
 
 	event.sigev_notify = SIGEV_UNBLOCK;
 
@@ -412,13 +396,13 @@ int mp_task::mp_receive_pulse (mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PU
 
 
 int mp_task::check_and_optional_wait_for_new_pulse (mp_receive_pulse_struct_t* outputs,
-        WAIT_FOR_NEW_PULSE_ENUM process_mode, MP_RECEIVE_PULS_ENUM desired_wait_mode) {
+        WAIT_FOR_NEW_PULSE_ENUM process_mode, MP_RECEIVE_PULSE_MODE desired_wait_mode) {
 
 	int ret;
 	bool exit_from_while = false;
 	bool desired_pulse_found = false;
 
-	MP_RECEIVE_PULS_ENUM current_wait_mode = WITH_TIMEOUT;
+	MP_RECEIVE_PULSE_MODE current_wait_mode = WITH_TIMEOUT;
 
 //	 printf("check_and_optional_wait_for_new_pulse start\n");
 
@@ -1171,7 +1155,6 @@ void mp_task::wait_for_stop (WAIT_FOR_STOP_ENUM tryb) {// by Y zmodyfikowane w c
 	bool wyjscie = false;
 	mp_receive_pulse_struct_t input;
 
-
 	while (!wyjscie) {
 		rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, WITHOUT_TIMEOUT);
 		if (rcvid == -1)/* Error condition, exit */
@@ -1206,7 +1189,6 @@ void mp_task::wait_for_stop (WAIT_FOR_STOP_ENUM tryb) {// by Y zmodyfikowane w c
 void mp_task::start_all (map <ROBOT_ENUM, mp_robot*>& _robot_m) {
 // Wystartowanie wszystkich ECP
 
-	int ret;
 	map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator;
 	mp_receive_pulse_struct_t input;
 
@@ -1244,7 +1226,7 @@ void mp_task::start_all (map <ROBOT_ENUM, mp_robot*>& _robot_m) {
 		robots_m_tmp = robots_m_tmp2;
 
 		if (!(robots_m_tmp.empty())) {
-			ret = check_and_optional_wait_for_new_pulse (&input, NEW_ECP_PULSE, WITHOUT_TIMEOUT);
+			check_and_optional_wait_for_new_pulse (&input, NEW_ECP_PULSE, WITHOUT_TIMEOUT);
 		}
 
 	} // end while (!(robots_m_tmp.empty()))
@@ -1259,7 +1241,6 @@ void mp_task::start_all (map <ROBOT_ENUM, mp_robot*>& _robot_m) {
 void mp_task::execute_all (map <ROBOT_ENUM, mp_robot*>& _robot_m) {
 // Wystartowanie wszystkich ECP
 
-	int ret;
 	map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator;
 	mp_receive_pulse_struct_t input;
 
@@ -1300,7 +1281,7 @@ void mp_task::execute_all (map <ROBOT_ENUM, mp_robot*>& _robot_m) {
 		robots_m_tmp = robots_m_tmp2;
 
 		if (!(robots_m_tmp.empty())) {
-			ret = check_and_optional_wait_for_new_pulse (&input, NEW_ECP_PULSE, WITHOUT_TIMEOUT);
+			check_and_optional_wait_for_new_pulse (&input, NEW_ECP_PULSE, WITHOUT_TIMEOUT);
 		}
 
 	} // end while (!(robots_m_tmp.empty()))
