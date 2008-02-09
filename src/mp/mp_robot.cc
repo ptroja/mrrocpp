@@ -21,7 +21,7 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task*
 
 	fprintf(stderr, "mp_robot::mp_robot(..., %s, ...);\n", _section_name);
 
-mp_receive_pulse_struct_t input;
+	mp_receive_pulse_struct_t input;
 
 	mp_object = mp_object_l;
 	robot_name = l_robot_name;
@@ -56,7 +56,7 @@ mp_receive_pulse_struct_t input;
 		perror ("Failed to spawn ECP process on node\n");
 		sr_ecp_msg->message(SYSTEM_ERROR, e, "MP: Failed to spawn ECP");
 		throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
-	} // end if ...pid<0
+	}
 
 	// oczekiwanie na zgloszenie procesu ECP
 	// ret = mp_object->mp_wait_for_name_open_ecp_pulse(&input, nd, ECP_pid);
@@ -81,7 +81,7 @@ mp_receive_pulse_struct_t input;
 
 	delete[] network_ecp_attach_point;
 
-} // end: mp_irp6_on_track_robot::mp_irp6_on_track_robot()
+}
 // -------------------------------------------------------------------
 
 
@@ -103,7 +103,7 @@ void mp_robot::start_ecp ( void ) {
 		printf("Error w start_ecp w ECP\n");
 		throw MP_main_error(NON_FATAL_ERROR, ECP_ERRORS);
 	}
-} // end: mp_irp6_on_track_robot::start_ecp()
+}
 // ------------------------------------------------------------------------
 
 
@@ -126,7 +126,6 @@ void mp_robot::execute_motion ( void ) { // zlecenie wykonania ruchu
 	// W.S. ...
 	// Ewentualna aktualizacja skladowych robota na podstawie ecp_reply
 }
-;// end: mp_irp6_on_track_robot::execute_motion()
 // ---------------------------------------------------------------
 
 
@@ -135,7 +134,7 @@ void mp_robot::execute_motion ( void ) { // zlecenie wykonania ruchu
 void mp_robot::terminate_ecp ( void ) { // zlecenie STOP zakonczenia ruchu
 	mp_command.command = STOP;
 	mp_command.hdr.type = 0;
-// if ( Send ( ECP_pid, &mp_command, &ecp_reply, sizeof(mp_command), sizeof(ecp_reply)) == -1) {
+
 	if ( MsgSend ( ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply, sizeof(ecp_reply)) == -1) {// by Y&W
 		// Blad komunikacji miedzyprocesowej - wyjatek
 		uint64_t e = errno;
@@ -149,7 +148,6 @@ void mp_robot::terminate_ecp ( void ) { // zlecenie STOP zakonczenia ruchu
 		throw MP_error (NON_FATAL_ERROR, ECP_ERRORS);
 	}
 }
-;// end: mp_robot::terminate_ecp()
 // ---------------------------------------------------------------
 
 

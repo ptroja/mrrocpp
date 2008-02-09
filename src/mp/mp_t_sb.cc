@@ -44,7 +44,7 @@ void mp_task_sb::task_initialization(void)
 	usleep(1000*100);
 	sr_ecp_msg->message("MP sb loaded");
 
-};
+}
  
 
 
@@ -94,7 +94,7 @@ void mp_task_sb::main_task_algorithm(void)
 		
 			add_gen (&mp_tff_fr_gen);
 			
-			if (scheduller_run ())
+			if (scheduler_run ())
 			{
 			    	break_state = true;
 		          break;
@@ -117,7 +117,7 @@ void mp_task_sb::main_task_algorithm(void)
 					
 			add_gen (&mp_tff_sr_fr_gen_p);
 			
-			if (scheduller_run ())
+			if (scheduler_run ())
 			{
 			    	break_state = true;
 		          break;
@@ -157,30 +157,30 @@ void mp_task_sb::main_task_algorithm(void)
 		    }
 			*/
 /*
-			if (scheduller_run ())
+			if (scheduler_run ())
 			{
 			    	break_state = true;
 		          break;
 	          }
 			if (mp_ti1_gen_gen_gen.phase == GS_FINISHED) std::cout << "za GS_FINISHED run 1" << std::endl;
-	          	std::cout << "za scheduller run 1" << mp_ti1_gen_gen_gen.phase << std::endl;
+	          	std::cout << "za scheduler run 1" << mp_ti1_gen_gen_gen.phase << std::endl;
 	         
-	         	if (scheduller_run ())
+	         	if (scheduler_run ())
 			{
 			    	break_state = true;
 		          break;
 	          }
 */	          
-	     	std::cout << "za scheduller run 2" << std::endl;
+	     	std::cout << "za scheduler run 2" << std::endl;
 	     	/*
 	     	mp_tff_sr_fr_gen_gen_p.re_run();
-	         	if (scheduller_run ())
+	         	if (scheduler_run ())
 			{
 			    	break_state = true;
 		          break;
 	          }
 	          
-	     	std::cout << "za scheduller run 3" << std::endl;
+	     	std::cout << "za scheduler run 3" << std::endl;
 	  */   	
 			// END EXPERIMENTAL
 			
@@ -205,4 +205,4 @@ void mp_task_sb::main_task_algorithm(void)
         terminate_all (robot_m);
         break; 
       } // koniec: for(;;) - wewnetrzna petla
-};
+}

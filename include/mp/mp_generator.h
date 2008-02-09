@@ -35,7 +35,7 @@ public:
 	};
 
 	GEN_SET_PHASE phase; // faza w ktorej znajduje sie generator
-	bool new_pulse_checked; // czy nowy puls zostal sprawdzony (wykorzystywane w scheduller_run() )
+	bool new_pulse_checked; // czy nowy puls zostal sprawdzony (wykorzystywane w scheduler_run() )
 	bool wait_for_ECP_pulse; // okresla czy przed next step move ma sie zawieszac w oczekwianiu na puls z ECP
 		// wykorzystywane przy luznej i sporadycznej wspolpracy robotow.
 
