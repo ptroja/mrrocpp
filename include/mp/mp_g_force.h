@@ -237,29 +237,6 @@ public:
 
 }; // end : class MP_nose_run_force_generator
 
-class mp_kd_generator : public mp_generator{
-
-protected:
-    int idle_step_counter;        //!< Licznik jalowych krokow sterowania (bez wykonywania ruchu)
-    int node_counter;             //!< biezacy wezel interpolacji
-  
-    mp_robot *irp6ot, *irp6p, *conv;
-    sensor *vsp_force_irp6ot, *vsp_force_irp6p;
- 
-public:
-    trajectory_description td;
-    int step_no;
-    double delta[6];
-
-    //!< konstruktor
-    mp_kd_generator(mp_task& _mp_task, int step=0);
-
-   virtual bool first_step ();    
-   virtual bool next_step ();    
-
-}; //!< end : class MP_kd_generator
-
-
 #define SILA_DOCISKUEDP_OPADANIE_EGG 15 
 #define PROG_ODLEGLOSCI_PODCZERWIEN_EGG 115 
 #define ODLEGLOSCI_PODCZERWIEN_MIN_VALUE 70
