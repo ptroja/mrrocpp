@@ -17,7 +17,7 @@ class mp_generator {
     // sprawdzania spelnienia warunku koncowego
 
 protected:
-	sr_ecp* sr_ecp_msg;    // by Y - Wskaznik na obiekt do komunikacji z SR
+	sr_ecp& sr_ecp_msg;    // by Y - Wskaznik na obiekt do komunikacji z SR
 
 	int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
 
@@ -38,8 +38,6 @@ public:
 	bool new_pulse_checked; // czy nowy puls zostal sprawdzony (wykorzystywane w scheduller_run() )
 	bool wait_for_ECP_pulse; // okresla czy przed next step move ma sie zawieszac w oczekwianiu na puls z ECP
 		// wykorzystywane przy luznej i sporadycznej wspolpracy robotow.
-	
-	mp_task& mp_t;
 
 	bool trigger; // informacja czy pszyszedl puls trigger
 

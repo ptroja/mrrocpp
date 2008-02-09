@@ -1,8 +1,7 @@
 // -------------------------------------------------------------------------
-//                            mp.h
+//
 // Definicje struktur danych i metod dla procesow MP - generatory silowe
 // 
-// Ostatnia modyfikacja: 2005
 // -------------------------------------------------------------------------
 
 #if !defined(__MP_GEN_FORCE_H)

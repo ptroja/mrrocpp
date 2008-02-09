@@ -382,7 +382,7 @@ else
 
  // UWAGA: dzialamy na jednoelementowej liscie robotow
    if ( robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.ecp_reply == TASK_TERMINATED ) {
-   sr_ecp_msg->message("w mp task terminated");
+   sr_ecp_msg.message("w mp task terminated");
      return false;
    }
    else {

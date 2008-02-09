@@ -151,7 +151,7 @@ bool mp_tff_single_robot_nose_run_generator::next_step ()
 	copy_generator_command( robot_m );
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if ( irp6->ecp_td.ecp_reply == TASK_TERMINATED ) {
-		sr_ecp_msg->message("w mp task terminated");
+		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else
 		return true;
@@ -309,7 +309,7 @@ bool mp_tff_nose_run_generator::next_step ()
 
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if (( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) || ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED )) {
-		sr_ecp_msg->message("w mp task terminated");
+		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else
 		return true;
@@ -511,7 +511,7 @@ bool mp_haptic_generator::next_step ()
 
 
 	if (( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) || ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED )) {
-		sr_ecp_msg->message("w mp task terminated");
+		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else
 		return true;
@@ -726,7 +726,7 @@ bool mp_tff_rubik_grab_generator::next_step ()
 	copy_generator_command( robot_m );
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) {
-		sr_ecp_msg->message("w mp task terminated");
+		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else
 		return true;
@@ -957,7 +957,7 @@ bool mp_tff_rubik_face_rotate_generator::next_step ()
 	copy_generator_command( robot_m );
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) {
-		sr_ecp_msg->message("w mp task terminated");
+		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else
 		return true;
@@ -1101,7 +1101,7 @@ bool mp_tff_gripper_approach_generator::next_step ()
 	copy_generator_command( robot_m );
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) {
-		sr_ecp_msg->message("w mp task terminated");
+		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else
 		return true;
@@ -1291,7 +1291,7 @@ bool mp_nose_run_force_generator::next_step ()
 
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) {
-		sr_ecp_msg->message("w mp task terminated");
+		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else {
 		return true;
@@ -1590,7 +1590,7 @@ bool mp_drawing_teach_in_force_generator::next_step ()
 			case 2:  // powierzchnia
 
 				if (prev_gen_state != gen_state)	{
-					sr_ecp_msg->message("ECP Powierzchnia");
+					sr_ecp_msg.message("ECP Powierzchnia");
 				}
 
 				td.interpolation_node_no = 1;
@@ -1656,7 +1656,7 @@ bool mp_drawing_teach_in_force_generator::next_step ()
 
 			case 3:  // unoszenie
 				if (prev_gen_state != gen_state)	{
-					sr_ecp_msg->message("ECP Unoszenie");
+					sr_ecp_msg.message("ECP Unoszenie");
 				}
 
 				td.interpolation_node_no = 1;
@@ -1696,7 +1696,7 @@ bool mp_drawing_teach_in_force_generator::next_step ()
 			case 4: // uniesienie
 
 				if (prev_gen_state != gen_state)	{
-					sr_ecp_msg->message("ECP Uniesienie");
+					sr_ecp_msg.message("ECP Uniesienie");
 				}
 
 				td.interpolation_node_no = 1;
@@ -1753,7 +1753,7 @@ bool mp_drawing_teach_in_force_generator::next_step ()
 			case 5: // opuszczanie
 
 				if (prev_gen_state != gen_state)	{
-					sr_ecp_msg->message("ECP Opuszczanie");
+					sr_ecp_msg.message("ECP Opuszczanie");
 				}
 
 				// 		if (vsp_force_irp6ot->image.force.event_type == 2) {
@@ -1798,7 +1798,7 @@ bool mp_drawing_teach_in_force_generator::next_step ()
 			case 6: // zetkniecie z kartka
 
 				if (prev_gen_state != gen_state)	{
-					sr_ecp_msg->message("ECP Zetkniecie");
+					sr_ecp_msg.message("ECP Zetkniecie");
 				}
 
 				in_state_iteration++;

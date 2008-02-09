@@ -188,7 +188,7 @@ bool mp_extended_empty_generator::next_step () {
 	for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
 	        robot_m_iterator != robot_m.end(); robot_m_iterator++) {
 		if ( robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED ) {
-			sr_ecp_msg->message("w mp task terminated");
+			sr_ecp_msg.message("w mp task terminated");
 			return false;
 		}
 
@@ -247,7 +247,7 @@ bool mp_empty_generator::next_step () {
 	for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
 	        robot_m_iterator != robot_m.end(); robot_m_iterator++) {
 		if ( robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED ) {
-			sr_ecp_msg->message("w mp task terminated");
+			sr_ecp_msg.message("w mp task terminated");
 			return false;
 		}
 	}

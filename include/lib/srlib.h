@@ -2,9 +2,6 @@
 //                            srlib.h
 // Definicje struktur danych i metod do komunikacji z SR
 // 
-// 
-// Ostatnia modyfikacja: 2006
-// Autor modyfikacji: yoyek
 // -------------------------------------------------------------------------
 
 #if !defined(__SRLIB_H)
@@ -15,10 +12,10 @@
 #include "messip/messip.h"
 #include "common/typedefs.h"
 
-#define SR_MSG_SERVED 0x11  // kod ustawiany po wyswietleniu komunikatu
-                             // poniewaz przychodza komunikaty o zdarzeniach
-			                 // zwiazanych z oknem i powodowalyby powtorzenie
-			                 // ostatniego komunikatu 
+#define SR_MSG_SERVED 0x11	// kod ustawiany po wyswietleniu komunikatu
+				// poniewaz przychodza komunikaty o zdarzeniach
+				// zwiazanych z oknem i powodowalyby powtorzenie
+				// ostatniego komunikatu 
 
 #define ERROR_TAB_SIZE   2   // Rozmiar tablicy zawierajacej kody bledow
 #define NAME_LENGTH     30   // Dlugosc nazwy
@@ -66,33 +63,32 @@ public :
   int message(const char *text);
   int message(word16 message_type, const char *text);
   virtual void interpret() = 0;
-}; // end: sr
+};
 
 class sr_edp: public sr {
 public:
   sr_edp(const word16 process_type, const char *process_name, const char *sr_name);
   virtual void interpret(void);  
-}; // end: sr_edp
+};
 
 class sr_ecp: public sr {
 public:
   sr_ecp(const word16 process_type, const char *process_name, const char *sr_name);
   virtual void interpret(void);  
-}; // end: sr_ecp
+};
   
-
 // obsluga komunikatow generowanych przez VSP
 class sr_vsp: public sr {
 public:
   sr_vsp(const word16 process_type, const char *process_name, const char *sr_name);
   virtual void interpret(void);
-}; // end: sr_vsp
+};
 
 // obsluga komunikatow generowanych przez UI// by Y
 class sr_ui: public sr {
 public:
   sr_ui(const word16 process_type, const char *process_name, const char *sr_name);
   virtual void interpret(void);
-}; // end: sr_ui
+};
   
 #endif 

@@ -1,8 +1,7 @@
 // -------------------------------------------------------------------------
-//                            mp.h
+//
 // Definicje struktur danych i metod dla procesow MP
 // 
-// Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
 #if !defined(__MP_G_TEACH_IN_H)
@@ -25,6 +24,7 @@ class mp_teach_in_generator : public mp_generator {
 protected:
     std::list<mp_taught_in_pose> pose_list;
     std::list<mp_taught_in_pose>::iterator pose_list_iterator;
+    const int UI_fd;
 
 public:
   // -------------------------------------------------------

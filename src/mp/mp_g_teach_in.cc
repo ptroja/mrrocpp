@@ -36,7 +36,12 @@ using namespace std;
 
 
 
-mp_teach_in_generator::mp_teach_in_generator(mp_task& _mp_task): mp_generator (_mp_task) { pose_list.clear(); pose_list_iterator = pose_list.end();};
+mp_teach_in_generator::mp_teach_in_generator(mp_task& _mp_task)
+	: mp_generator (_mp_task), UI_fd(_mp_task.UI_fd)
+{
+	pose_list.clear();
+	pose_list_iterator = pose_list.end();
+}
 
 // -------------------------------------------------------
 // destruktor
@@ -62,10 +67,10 @@ void mp_teach_in_generator::save_file (POSE_SPECIFICATION ps) {
 	ecp_to_ui_msg.ecp_message = SAVE_FILE;   // Polecenie wprowadzenia nazwy pliku
 	strcpy(ecp_to_ui_msg.string, "*.trj");   // Wzorzec nazwy pliku
 // if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(ECP_message), sizeof(UI_reply)) == -1) {
-	if (MsgSend(mp_t.UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
 		e = errno;
 		perror("ECP: Send() to UI failed\n");
-		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+		sr_ecp_msg.message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
 		throw mp_generator::MP_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
 	if ( ui_to_ecp_rep.reply == QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
@@ -257,10 +262,10 @@ bool mp_teach_in_generator::load_file () {
 	ecp_to_ui_msg.ecp_message = LOAD_FILE;   // Polecenie wprowadzenia nazwy odczytywanego pliku
 
 // if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(ECP_message), sizeof(UI_reply)) == -1) {
-	if (MsgSend(mp_t.UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
 		e = errno;
 		perror("ECP: Send() to UI failed\n");
-		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+		sr_ecp_msg.message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
 		throw mp_generator::MP_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
 	if ( ui_to_ecp_rep.reply == QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu

@@ -165,7 +165,7 @@ bool mp_vis_sac_generator::next_step () {
 		copy_generator_command( robot_m );
 		// UWAGA: dzialamy na jednoelementowej liscie robotow
 		if ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) {
-			sr_ecp_msg->message("w mp task terminated");
+			sr_ecp_msg.message("w mp task terminated");
 			return false;
 		} else return true;
 		
@@ -622,7 +622,7 @@ else
 	copy_generator_command( robot_m );
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) {
-		sr_ecp_msg->message("w mp task terminated");
+		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else return true;
 }; // end: bool tight_coop_generator::next_step ()

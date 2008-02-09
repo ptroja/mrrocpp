@@ -1,6 +1,3 @@
-SYS_HEADER_DIRS = $(QNX_TARGET)/usr/include/cpp \
-	$(QNX_TARGET)/usr/include/cpp/c $(QNX_TARGET)/usr/include
-
 # Linker, compilator, and default global flags for both
 CC = qcc
 CXX = QCC

@@ -21,7 +21,7 @@
 
 // Konstruktor.
 mp_two_robots_measures_generator::mp_two_robots_measures_generator(mp_task& _mp_task)
-	: mp_generator (_mp_task)
+	: mp_generator (_mp_task), UI_fd(_mp_task.UI_fd)
 {
 };//: mp_two_robots_measures_generator
 
@@ -130,22 +130,22 @@ void mp_two_robots_measures_generator::save_measures_to_file (void)
 	// Wzorzec nazwy pliku
 	strcpy(ecp_to_ui_msg.string,"*.*");
 	// Wyslanie polecenia pokazania okna wyboru pliku.
-	if (MsgSend(mp_t.UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0)
+	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0)
 	{
-		sr_ecp_msg->message (SYSTEM_ERROR, errno, "Send to UI failed");
+		sr_ecp_msg.message (SYSTEM_ERROR, errno, "Send to UI failed");
 		throw mp_generator::MP_error(SYSTEM_ERROR, (uint64_t) 0);
 	}//: if
 	// Sprawdzenie katalogu.
 	if ( chdir(ui_to_ecp_rep.path) != 0 )
 	{
-		sr_ecp_msg->message (NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		sr_ecp_msg.message (NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
 		return;
 	};//: if
 	// Otworzenie plik do zapisu.
 	ofstream to_file(ui_to_ecp_rep.filename); 
 	if (to_file == NULL)
 	{
-		sr_ecp_msg->message (NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		sr_ecp_msg.message (NON_FATAL_ERROR, NON_EXISTENT_FILE);
 		return;
 	};//: if
 	for(int m=0; m<measures.size(); m++)
@@ -159,5 +159,5 @@ void mp_two_robots_measures_generator::save_measures_to_file (void)
 		to_file<<"\n";
 	};//: for
 	to_file.close();
-	sr_ecp_msg->message("Measures were saved to file");
+	sr_ecp_msg.message("Measures were saved to file");
 };//: save_measures_to_file

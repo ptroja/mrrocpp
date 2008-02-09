@@ -33,6 +33,8 @@ protected:
     std::vector <two_robots_measure> measures;
     // Ostatni odczyt - do porownywania, czy pozycja jest nowa.
     two_robots_measure last_measure;
+    
+    const int UI_fd;
 public:	
 	// Konstruktor.
 	mp_two_robots_measures_generator(mp_task&);
