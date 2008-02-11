@@ -3,7 +3,6 @@
 
 #include <map>
 
-#include "lib/srlib.h"
 #include "ecp/common/ecp_task.h"
 #include "ecp/common/ecp_robot.h"
 #include "ecp_mp/ecp_mp_generator.h"

@@ -3,8 +3,6 @@
 
 #include "mp/mp_robot.h"
 #include "mp/mp_task.h"
-#include "common/sensor.h"
-#include "ecp_mp/transmitter.h"
 #include "ecp_mp/ecp_mp_generator.h"
 
 class mp_task;

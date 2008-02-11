@@ -15,7 +15,7 @@ void mp_generator::re_run(void) // powrot do stanu wyjsciowego
 void mp_generator::copy_data(std::map <ROBOT_ENUM, mp_robot*>& _robot_m) {
 	for (std::map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = _robot_m.begin();
 	        robot_m_iterator != _robot_m.end(); robot_m_iterator++) {
-		robot_m_iterator->second->get_reply(); // odpowiedz ECP
+		robot_m_iterator->second->get_reply(); // odpowiedz z ECP
 	}
 }
 
@@ -23,7 +23,7 @@ void mp_generator::copy_data(std::map <ROBOT_ENUM, mp_robot*>& _robot_m) {
 void mp_generator::copy_generator_command (std::map <ROBOT_ENUM, mp_robot*>& _robot_m) {
 	for (std::map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = _robot_m.begin();
 	        robot_m_iterator != _robot_m.end(); robot_m_iterator++) {
-		robot_m_iterator->second->create_command(); // odpowiedz ECP
+		robot_m_iterator->second->create_command(); // rozkaz dla ECP
 	}
 }
 

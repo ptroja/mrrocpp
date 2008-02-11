@@ -82,7 +82,7 @@ ecp_time: \
 ecp_playerpos: \
 		ecp_mp_tr_player.o \
 		../common/ecp_t_playerpos.o \
-		../common/ecp_g_ppg.o \
+		../common/ecp_g_playerpos.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ $(LIBDIR)/libplayerc.a
 
