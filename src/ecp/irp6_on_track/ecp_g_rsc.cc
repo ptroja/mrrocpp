@@ -113,7 +113,7 @@ void robot_stopped_condition::refresh_window(void){
 		// Wyslanie polecenia do UI -> Polecenie odswiezenia okna.
 		if (MsgSend(UI_fd, &ecp_ui_msg,  sizeof(ECP_message),  NULL, 0) < 0){
 			 perror("ECP trajectory_reproduce_thread(): Send() to UI failed");
-			 sr_ecp_msg->message (SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
+			 sr_ecp_msg.message (SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
 			};
 		}; // end: is_pose_list_element
 	}; // end: refresh_window
@@ -172,7 +172,7 @@ void robot_stopped_condition::save_rse_list(char* filename) {
 	robot_position_digital_scales_reading_element rse;
 	// Sprawdzenie, czy lista nie jest pusta.
 	if (rse_list_length() == 0){
-		sr_ecp_msg->message("TRE list empty.");
+		sr_ecp_msg.message("TRE list empty.");
 		return;
 		};
 try{
@@ -210,11 +210,11 @@ try{
 	// Zamkniecie pliku.
 	to_file.close();
 	// Komentarz - zapisanie pliku.
-	sr_ecp_msg->message ("Measures saved properly to file");
+	sr_ecp_msg.message ("Measures saved properly to file");
 	} // end: TRY
 catch(ECP_main_error e){
 	// Wylapanie i oblsuga bledow.
-	sr_ecp_msg->message (e.error_class, e.error_no);
+	sr_ecp_msg.message (e.error_class, e.error_no);
 	};
 	}; // end: save_rse_list
 

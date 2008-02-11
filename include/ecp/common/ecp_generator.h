@@ -12,8 +12,8 @@ class ecp_generator {
     // Sluzy zarowno do wyznaczania nastepnej wartosci zadanej jak i
     // sprawdzania spelnienia warunku 
   protected:
-    bool is_robot_active;
-	sr_ecp* sr_ecp_msg;    // by Y - Wskaznik na obiekt do komunikacji z SR
+	bool is_robot_active;
+	sr_ecp &sr_ecp_msg;    // by Y - obiekt do komunikacji z SR
 	ecp_task& ecp_t;
     	
  public:

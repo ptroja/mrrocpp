@@ -54,7 +54,7 @@ void ecp_teach_in_generator::teach (POSE_SPECIFICATION ps, const char *msg)
 
 			e = errno;
 			perror("ECP teach(): Send() to UI failed");
-			sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+			sr_ecp_msg.message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
 			throw ecp_generator::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
 		}
 		if ( ui_to_ecp_rep.reply == QUIT) // Koniec uczenia
@@ -95,7 +95,7 @@ void ecp_teach_in_generator::save_file (POSE_SPECIFICATION ps)
 	if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(ECP_message), &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
 		e = errno;
 		perror("ECP: Send() to UI failed\n");
-		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+		sr_ecp_msg.message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
 		throw ecp_generator::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
 	if ( ui_to_ecp_rep.reply == QUIT) { // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
@@ -172,7 +172,7 @@ bool ecp_teach_in_generator::load_file_from_ui ()
 	if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
 		e = errno;
 		perror("ECP: Send() to UI failed\n");
-		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+		sr_ecp_msg.message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
 		throw ecp_generator::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
 	if ( ui_to_ecp_rep.reply == QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu

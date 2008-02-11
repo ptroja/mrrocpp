@@ -434,7 +434,7 @@ void force_controlled_trajectory_generator::save_trajectory(char* filename) {
     ecp_taught_in_pose tip;
     int j;
     if (pose_list_length() == 0){
-        sr_ecp_msg->message("Empty trajectory");
+        sr_ecp_msg.message("Empty trajectory");
         return;
         };
 try{
@@ -474,11 +474,11 @@ try{
     to_file << '\n';
     // Zamkniecie pliku.
     to_file.close();
-    sr_ecp_msg->message("Trajectory saved properly");
+    sr_ecp_msg.message("Trajectory saved properly");
     } // end: TRY
 catch(ECP_error e){
     // Wylapanie i oblsuga bledow.
-    sr_ecp_msg->message (e.error_class, e.error_no);
+    sr_ecp_msg.message (e.error_class, e.error_no);
     };
     }; // end: save_trajectory
 
@@ -486,7 +486,7 @@ catch(ECP_error e){
 /*************************  SET DANGEROUS FORCE *****************************/
 void force_controlled_trajectory_generator::set_dangerous_force(){
 	dangerous_force = ecp_t.config->return_int_value("dangerous_force");
-	sr_ecp_msg->message("Dangerous force size readed properly from INI file");
+	sr_ecp_msg.message("Dangerous force size readed properly from INI file");
     }; // end: set_dangerous_force
 
 

@@ -1,17 +1,11 @@
 #include "ecp/common/ecp_generator.h"
 
 ecp_generator::ecp_generator (ecp_task& _ecp_task, bool _is_robot_active)
-	:
-		ecp_t(_ecp_task)
+	: ecp_t(_ecp_task),
+	is_robot_active(_is_robot_active),
+	sr_ecp_msg(*(ecp_t.sr_ecp_msg))
 {
-	is_robot_active = _is_robot_active;
-	//ecp_t = &(_ecp_task);
-	sr_ecp_msg = ecp_t.sr_ecp_msg;
-	if (is_robot_active) {
-		the_robot = ecp_t.ecp_m_robot;
-	} else {
-		the_robot = NULL;
-	}
+	the_robot = (is_robot_active) ? ecp_t.ecp_m_robot : NULL;
 	sensor_m.clear();
 }
 

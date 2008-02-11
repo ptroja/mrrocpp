@@ -247,7 +247,7 @@ void trajectory_reproduce_generator::check_force_condition(ecp_mp_force_sensor& 
 /*********************** DANGEROUS FORCE HANDLER **************************/
 void trajectory_reproduce_generator::dangerous_force_handler(ecp_generator::ECP_error e){
     // Komunikat o bledzie wysylamy do SR.
-    sr_ecp_msg->message (NON_FATAL_ERROR, e.error_no);
+    sr_ecp_msg.message (NON_FATAL_ERROR, e.error_no);
     // Wiadomosc wysylana do UI.
     ECP_message ecp_ui_msg;
     // Odswiezenie okna.
@@ -258,9 +258,9 @@ void trajectory_reproduce_generator::dangerous_force_handler(ecp_generator::ECP_
    memcpy(ecp_ui_msg.R2S.force_sensor_reading, last_force_sensor_reading, MAX_SERVOS_NR*sizeof(double));
     // Wyslanie polecenia do UI.
     if (MsgSend(UI_fd, &ecp_ui_msg,  sizeof(ECP_message),  NULL, 0) < 0){
-         sr_ecp_msg->message (SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
+         sr_ecp_msg.message (SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
     }else
-        sr_ecp_msg->message("Press TRY AGAIN to continue move.");
+        sr_ecp_msg.message("Press TRY AGAIN to continue move.");
     }; // end: dangerous_force_handler
 
 
@@ -348,15 +348,15 @@ try{
         }; // end: for
     // Zamkniecie pliku.
     from_file.close();
-    sr_ecp_msg->message("Trajectory readed properly.");
+    sr_ecp_msg.message("Trajectory readed properly.");
 }catch (ECP_main_error e){
     // Wylapanie i oblsuga bledow.
-    sr_ecp_msg->message (e.error_class, e.error_no);
+    sr_ecp_msg.message (e.error_class, e.error_no);
 }catch (...){
     // Wylapywanie niezdefiniowanych bledow.
-    sr_ecp_msg->message (NON_FATAL_ERROR, (uint64_t) ECP_UNIDENTIFIED_ERROR);
+    sr_ecp_msg.message (NON_FATAL_ERROR, (uint64_t) ECP_UNIDENTIFIED_ERROR);
     }; // end: catch
-    }; // end load_trajectory
+}; // end load_trajectory
 
 
 /*************************  SET DANGEROUS FORCE *****************************/
