@@ -19,8 +19,6 @@
 mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task* mp_object_l) { // Konstruktor mp_robot
 //  Powolanie i zaladowanie procesu ECP
 
-	fprintf(stderr, "mp_robot::mp_robot(..., %s, ...);\n", _section_name);
-
 	mp_receive_pulse_struct_t input;
 
 	mp_object = mp_object_l;
@@ -46,7 +44,6 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task*
 
 	ECP_pid = mp_object->config->process_spawn(_section_name);
 
-	// printf("robot_list->E_ptr->ECP_pid: %d\n", robot_list->E_ptr->ECP_pid);
 	new_pulse = false;
 	robot_new_pulse_checked = false;
 	communicate = true; // domyslnie robot jest aktywny
@@ -80,7 +77,6 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task*
 		};
 
 	delete[] network_ecp_attach_point;
-
 }
 // -------------------------------------------------------------------
 

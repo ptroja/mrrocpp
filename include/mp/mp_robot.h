@@ -21,14 +21,17 @@ class mp_robot
 		sr_ecp* sr_ecp_msg;    // by Y - Wskaznik na obiekt do komunikacji z SR
 
 		ROBOT_ENUM robot_name;
-		uint32_t nd; // deskryptor wezla na ktorym jest powolane ECP
+		
+		//! deskryptor wezla na ktorym jest powolane ECP oraz jego PID (dla mp_task::kill_all_ECP)
+		uint32_t nd;
 		pid_t ECP_pid;
+		
 		int32_t scoid; // server connection id
-		int ECP_fd;	// by Y&W do komunikacji, zamiast ECP_pid, ktore wystrczalo w QNX 4
+		int ECP_fd;	// deskryptor do komunikacji z ECP
 		char pulse_code; // kod pulsu ktory zostal wyslany przez ECP w celu zgloszenia gotowosci do komunikacji (wartosci w impconst.h)
 		bool new_pulse; // okresla czy jest nowy puls
 		bool robot_new_pulse_checked; // okresla czy czy nowy puls zostal juz uwzgledniony w generatorze
-		bool communicate; // okresla czy robot ma byc obslugiwany w execute_all
+		bool communicate; // okresla czy robot ma byc obslugiwany w mp_task::execute_all
 
 		robot_ECP_transmission_data ecp_td; // Obraz danych robota wykorzystywanych przez generator
 		// - do uzytku uzytkownika (generatora)
@@ -43,28 +46,28 @@ class mp_robot
 				MP_error (uint64_t err0, uint64_t err1);
 		};
 
-		virtual void execute_motion (void);
 		// Zlecenie wykonania ruchu przez robota
 		// (realizowane przez klase konkretna):
 		// na poziomie MP jest to polecenie dla ECP.
+		virtual void execute_motion (void);
 
-		virtual void terminate_ecp (void);
 		// Zlecenie zakonczenia ruchu przez robota
 		// (realizowane przez klase konkretna):
 		// na poziomie MP jest to polecenie dla ECP.
+		virtual void terminate_ecp (void);
+
 		virtual void start_ecp ( void );
 
-		virtual void create_command ( void );
 		// wypelnia bufor wysylkowy do EDP na podstawie danych zawartych w swych skladowych
 		// Ten bufor znajduje sie w robocie
+		virtual void create_command ( void );
 
 		virtual void create_next_pose_command (void)
 		{}
 
+		// pobiera z pakietu przeslanego z EDP informacje i wstawia je do odpowiednich swoich skladowych
 		virtual void get_reply ( void )
 		{}
-
-		// pobiera z pakietu przeslanego z EDP informacje i wstawia je do odpowiednich swoich skladowych
 }
 ; // end: class mp_robot
 

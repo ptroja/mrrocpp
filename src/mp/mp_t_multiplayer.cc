@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
-//                              mp_t_haptic.cc
+//                              mp_t_multiplayer.cc
 // 
-// MP task for two robot haptic device
+// MP task for two robot multiplayer device
 // 
 // -------------------------------------------------------------------------
 
@@ -17,51 +17,36 @@
 
 #include "lib/srlib.h"
 #include "mp/mp.h"
-#include "mp/mp_g_force.h"
-#include "mp/mp_t_haptic.h"
-#include "ecp_mp/ecp_mp_s_schunk.h"
+#include "mp/mp_t_multiplayer.h"
 
 mp_task* return_created_mp_task (void)
 {
-	return new mp_task_haptic();
+	return new mp_task_multiplayer();
 }
 
 // methods fo mp template to redefine in concete class
-void mp_task_haptic::task_initialization(void) 
+void mp_task_multiplayer::task_initialization(void) 
 {
 	// Powolanie czujnikow
-	sensor_m[SENSOR_FORCE_ON_TRACK] = 
+	transmitter_m[TRANSMITTER_PLAYER] = 
 		new ecp_mp_schunk_sensor (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
 		
-	sensor_m[SENSOR_FORCE_POSTUMENT] = 
-		new ecp_mp_schunk_sensor (SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
-		
-	// Konfiguracja wszystkich czujnikow	
-	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
-		 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-	{
-		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-		sensor_m_iterator->second->configure_sensor();
-	}
-			
-	usleep(1000*100);
-	
-	sr_ecp_msg->message("MP haptic device loaded");
+	sr_ecp_msg->message("MP multiplayer task loaded");
 };
  
-void mp_task_haptic::main_task_algorithm(void)
+void mp_task_multiplayer::main_task_algorithm(void)
 {
 
 	break_state = false;
 
-  	mp_haptic_generator mp_h_gen(*this, 10); 
+  	mp_multiplayer_generator mp_h_gen(*this, 10); 
    	mp_h_gen.robot_m = robot_m;
    	mp_h_gen.sensor_m[SENSOR_FORCE_ON_TRACK] = sensor_m[SENSOR_FORCE_ON_TRACK];
    	mp_h_gen.sensor_m[SENSOR_FORCE_POSTUMENT] = sensor_m[SENSOR_FORCE_POSTUMENT];
 
 	 // printf("przed wait for start \n");
       // Oczekiwanie na zlecenie START od UI  
-	sr_ecp_msg->message("MP haptic device - press start");
+	sr_ecp_msg->message("MP multiplayer device - press start");
 	wait_for_start ();
 	// Wyslanie START do wszystkich ECP 
 	start_all (robot_m);

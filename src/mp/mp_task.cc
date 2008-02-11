@@ -75,7 +75,6 @@ mp_task::~mp_task()
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 bool mp_task::create_robots()
 {
-
 	mp_robot* robot_tmp; // konieczne bo inaczej konstruktor dziala niepoprawnie w odbieranu pulsu od ECP
 	// ROBOT IRP6_ON_TRACK
 	if (config->return_int_value("is_irp6_on_track_active", "[ui]")) {
@@ -125,8 +124,6 @@ void mp_task::task_initialization(void)
 
 void mp_task::main_task_algorithm(void)
 {}
-;
-
 
 // metody do obslugi najczesniej uzywanych generatorow
 bool mp_task::set_next_ecps_state (int l_state, int l_variant, char* l_string, int number_of_robots, ... )
@@ -162,10 +159,9 @@ bool mp_task::wait_ms (int _ms_delay) // zamiast delay
 	return (Move(mp_ds_ms));
 }
 
-
+// send_end_motion
 bool mp_task::send_end_motion_to_ecps (int number_of_robots, ... )
 {
-	// send_end_motion
 	mp_send_end_motion_to_ecps_generator mp_semte_gen (*this);
 
 	mp_semte_gen.robot_m.clear();
@@ -187,7 +183,6 @@ bool mp_task::send_end_motion_to_ecps (int number_of_robots, ... )
 
 bool mp_task::run_ext_empty_gen (bool activate_trigger, int number_of_robots, ... )
 {
-
 	mp_extended_empty_generator mp_ext_empty_gen (*this);
 
 	mp_ext_empty_gen.robot_m.clear();
@@ -213,7 +208,6 @@ bool mp_task::run_ext_empty_gen (bool activate_trigger, int number_of_robots, ..
 bool mp_task::run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
 (int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ... )
 {
-
 	// CZYNNOSCI WSTEPNE
 	// utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
 	map <ROBOT_ENUM, mp_robot*> robots_to_move, robots_to_wait_for_task_termination;
@@ -238,8 +232,7 @@ bool mp_task::run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_
 		if (robot_m.count(robot_l) == 0)
 		{
 			sr_ecp_msg->message ("run_..._for_set_of_robots_... usunieto nadmiarowe roboty");
-		} else
-		{
+		} else {
 			robots_to_move[robot_l] = robot_m[robot_l];
 		}
 	}
@@ -250,8 +243,7 @@ bool mp_task::run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_
 		if (robot_m.count(robot_l) == 0)
 		{
 			sr_ecp_msg->message ("run_..._for_set_of_robots_... usunieto nadmiarowe roboty 2");
-		} else
-		{
+		} else {
 			robots_to_wait_for_task_termination[robot_l] = robot_m[robot_l];
 		}
 	}
@@ -499,7 +491,6 @@ int mp_task::check_and_optional_wait_for_new_pulse (mp_receive_pulse_struct_t* o
 }
 
 
-// int mp_task::mp_wait_for_name_open_ecp_pulse(mp_receive_pulse_struct_t* outputs, uint32_t nd, pid_t ECP_pid)
 int mp_task::mp_wait_for_name_open_ecp_pulse(mp_receive_pulse_struct_t* outputs)
 {
 
@@ -581,11 +572,9 @@ int mp_task::mp_wait_for_ui_name_open()
 
 // funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
 
-bool mp_task::mp_receive_ui_or_ecp_pulse
-(map <ROBOT_ENUM, mp_robot*>& _robot_m, mp_generator& the_generator )
+bool mp_task::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m, mp_generator& the_generator )
 {
 
-	//	static long licznik_w=0;
 	enum MP_STATE_ENUM
 	{
 	    MP_STATE_RUNNING,
@@ -597,32 +586,23 @@ bool mp_task::mp_receive_ui_or_ecp_pulse
 	mp_receive_pulse_struct_t input;
 
 	bool ui_exit_from_while = false;
-	bool ecp_exit_from_while = false;
+	bool ecp_exit_from_while = (the_generator.wait_for_ECP_pulse) ? false : true;
 
-	if (!(the_generator.wait_for_ECP_pulse))
-		ecp_exit_from_while = true;
-	// if (debug_tmp) printf("\np1:\n");
 	while (!(ui_exit_from_while && ecp_exit_from_while)) {
 
-		// if (debug_tmp)	 printf("qqqq: %d\n", licznik_w++);
-
 		if ((mp_state == MP_STATE_RUNNING) && (ecp_exit_from_while)) {
-			//  if (debug_tmp)	printf("1 \n");
 			rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_OR_ECP_PULSE, WITH_TIMEOUT);
 		} else if ((mp_state == MP_STATE_RUNNING) && (!ecp_exit_from_while)) {
-			//  if (debug_tmp)	printf("2 \n");
 			rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_OR_ECP_PULSE, WITHOUT_TIMEOUT);
-			// if (debug_tmp)		printf("3 \n");
 		} else if (mp_state == MP_STATE_PAUSED) {
 			rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, WITHOUT_TIMEOUT);
 		}
 
-		if (rcvid == -1) {/* Error condition */
-
+		if (rcvid == -1) {// Error condition
 			if (mp_state == MP_STATE_RUNNING) {
 				if (input.e != ETIMEDOUT) {// by Y zamiast creceive
 					// Blad komunikacji miedzyprocesowej - wyjatek
-					perror("Creceive STOP or PAUSE proxy from UI failed ?\n");
+					perror("Creceive STOP or PAUSE proxy from UI failed ?");
 					sr_ecp_msg->message(SYSTEM_ERROR, input.e, "MP:Creceive STOP pulse from UI failed");
 					throw MP_main_error (SYSTEM_ERROR, (uint64_t) 0);
 				} else {
@@ -635,9 +615,7 @@ bool mp_task::mp_receive_ui_or_ecp_pulse
 				throw MP_main_error (SYSTEM_ERROR, (uint64_t) 0);
 			}
 		} else if (rcvid == 0) {
-			// 	   printf("rcvid ==0:\n");
 			if (ui_new_pulse) {
-
 				ui_new_pulse = false;
 				if (ui_pulse_code == MP_STOP) {
 					terminate_all (_robot_m);
@@ -645,7 +623,7 @@ bool mp_task::mp_receive_ui_or_ecp_pulse
 				}
 
 				if (ui_pulse_code == MP_PAUSE) {
-					//				 printf("ui_new_pulse MP_PAUSED\n");
+					// printf("ui_new_pulse MP_PAUSED\n");
 					usleep(1000*1000);
 					mp_state = MP_STATE_PAUSED;
 					ui_exit_from_while = false;
@@ -666,14 +644,12 @@ bool mp_task::mp_receive_ui_or_ecp_pulse
 			} else {
 
 				if (mp_state == MP_STATE_RUNNING) {
-					//	printf("ui_exit_from_while MP_STATE_RUNNING\n");
 					ui_exit_from_while = true;
 				}
 
 			}
 
 			if (the_generator.wait_for_ECP_pulse) {
-				//	 if (debug_tmp)		printf(" wait_for_ECP_pulse\n");
 				for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
 				        robot_m_iterator != robot_m.end(); robot_m_iterator++) {
 					if ((robot_m_iterator->second->new_pulse) && (!(robot_m_iterator->second->robot_new_pulse_checked))) {
@@ -683,7 +659,6 @@ bool mp_task::mp_receive_ui_or_ecp_pulse
 					}
 				}
 			} else {
-				// if (debug_tmp)			printf("else wait_for_ECP_pulse\n");
 				ecp_exit_from_while = true;
 			}
 			continue;
@@ -692,11 +667,9 @@ bool mp_task::mp_receive_ui_or_ecp_pulse
 			printf("MP_TRIGGER server receive strange message of type: \n");
 		}
 	}
-	// if (debug_tmp) printf("koniec\n");
 	return false;
 
 }
-
 
 // funkcja odbierajaca pulsy z UI wykorzystywana w MOVE
 
@@ -713,9 +686,10 @@ bool mp_task::mp_receive_ui_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m, short*
 	int rcvid;
 	mp_receive_pulse_struct_t input;
 
-	bool wyjscie = false;
+	bool ui_exit_from_while = false;
 
-	while (!wyjscie) {
+
+	while (!ui_exit_from_while) {
 		if (mp_state == MP_STATE_RUNNING) {
 			rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, WITH_TIMEOUT);
 		} else {
@@ -726,11 +700,11 @@ bool mp_task::mp_receive_ui_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m, short*
 			if (mp_state == MP_STATE_RUNNING) {
 				if (input.e != ETIMEDOUT) {// by Y zamiast creceive
 					// Blad komunikacji miedzyprocesowej - wyjatek
-					perror("Creceive STOP or PAUSE proxy from UI failed ?\n");
+					perror("Creceive STOP or PAUSE proxy from UI failed ?");
 					sr_ecp_msg->message(SYSTEM_ERROR, input.e, "MP:Creceive STOP pulse from UI failed");
 					throw MP_main_error (SYSTEM_ERROR, (uint64_t) 0);
 				} else {
-					wyjscie = true;
+					ui_exit_from_while = true;
 					continue;
 				}
 			} else if (mp_state == MP_STATE_PAUSED) {
@@ -754,22 +728,21 @@ bool mp_task::mp_receive_ui_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m, short*
 				if (mp_state == MP_STATE_PAUSED) {// oczekujemy na resume
 					if (ui_pulse_code == MP_RESUME) { // odebrano resume
 						mp_state = MP_STATE_RUNNING;
-						wyjscie = true;
+						ui_exit_from_while = true;
 					}
 				} else {
 					if (ui_pulse_code == MP_TRIGGER) { // odebrano trigger
-						wyjscie = true;
+						ui_exit_from_while = true;
 						*trigger = true;
 					}
 				}
 			}
 			continue;
 
-		}	 else if (rcvid > 0) {
+		} else if (rcvid > 0) {
 			printf("MP_TRIGGER server receive strange message of type: \n");
 		}
 	}
-
 	return false;
 
 }
@@ -851,12 +824,10 @@ bool mp_task::Move ( mp_generator& the_generator )
 		}
 	}
 
-	//	if (debug_tmp)  	printf("w mp move start\n");
 	// by Y - linia ponizej dodana 26.02.2007 - usunac komentarz jak bedzie dzialalo
 	// ze wzgledu na obluge pulsow z UI w szczegolnosci stopu i wstrzymania
 	if (mp_receive_ui_or_ecp_pulse (robot_m, the_generator))
 		return true;
-	//			if (debug_tmp)  	printf("w mp move za mp_receive_ui_or_ecp_pulse\n");
 
 	// czyszczenie aby nie czekac na pulsy z ECP
 	for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
@@ -870,26 +841,20 @@ bool mp_task::Move ( mp_generator& the_generator )
 	if (!the_generator.first_step() )
 		return false;
 
-	// printf("w mp move przed do\n");
 	do { // realizacja ruchu
 
-		// ew. odbior pulsu
-		//		if (debug_tmp)  	printf("w mp move przed mp_receive_ui_pulse\n");
-		// 	if (trigger) printf("Y\n"); else printf("N\n");
 		// zadanie przygotowania danych od czujnikow
 		all_sensors_initiate_reading(the_generator.sensor_m);
-		//			if (debug_tmp) printf("w mp move przed execute_all\n");
-		// wykonanie kroku ruchu przez wybrane roboty (zmienna communicate)
+
+		// wykonanie kroku ruchu przez wybrane roboty (z flaga 'communicate')
 		execute_all(the_generator.robot_m);
-		//			if (debug_tmp) printf("w mp move przed all_sensors_get_reading\n");
+
 		// odczytanie danych z wszystkich czujnikow
 		all_sensors_get_reading(the_generator.sensor_m);
-		//		if (debug_tmp) printf("w mp move przed mp_receive_ui_or_ecp_pulse\n");
+
 		// oczekiwanie na puls z ECP lub UI
 		if (mp_receive_ui_or_ecp_pulse(robot_m, the_generator))
 			return true;
-		//	if (mp_receive_ui_pulse (robot_m, &trigger)) return true;
-		//			if (debug_tmp) printf("mp move za mp_receive_ui_pulse\n");
 
 	} while ( the_generator.next_step() );
 
@@ -1133,16 +1098,13 @@ void mp_task::wait_for_start ()
 {
 	// Oczekiwanie na zlecenie START od UI
 
-	bool wyjscie = false;
-	mp_receive_pulse_struct_t input;
-
-	while (!wyjscie) {
+	while (1) {
+		mp_receive_pulse_struct_t input;
 		check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, WITHOUT_TIMEOUT);
 		if (ui_new_pulse) {
 			ui_new_pulse = false;
 			if (ui_pulse_code == MP_START) {
-				wyjscie = true;
-				continue;
+				break;
 			}
 		}
 	}
@@ -1153,29 +1115,33 @@ void mp_task::wait_for_start ()
 
 
 void mp_task::wait_for_stop (WAIT_FOR_STOP_ENUM tryb)
-{// by Y zmodyfikowane w celu skrocenia kodu mp_m
+{
 	// Oczekiwanie na zlecenie STOP od UI
 
 	sr_ecp_msg->message("To terminate user program click STOP icon");
-
-	int rcvid;
 	bool wyjscie = false;
-	mp_receive_pulse_struct_t input;
 
 	while (!wyjscie) {
-		rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, WITHOUT_TIMEOUT);
+		mp_receive_pulse_struct_t input;
+		int rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, WITHOUT_TIMEOUT);
+
 		if (rcvid == -1)/* Error condition, exit */
 		{
 			if (input.e != ETIMEDOUT)
 			{
-				perror("Receive StopProxy failed (MP)\n");
+				perror("Receive StopProxy failed (MP)");
 				sr_ecp_msg->message(SYSTEM_ERROR, input.e, "MP: Receive StopProxy failed");
-				if (tryb == MP_THROW)
-					throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
-				else if (tryb == MP_EXIT)
-					exit(EXIT_FAILURE);
-				else
-					printf("bledny tryb w wait_for_stop\n");
+				switch (tryb) {
+					case MP_THROW:
+						throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+						break;
+					case MP_EXIT:
+						exit(EXIT_FAILURE);
+						break;
+					default:
+						printf("bledny tryb w wait_for_stop\n");
+						break;
+				}
 			}
 		} else {
 			// if UI pulse occured
@@ -1187,7 +1153,6 @@ void mp_task::wait_for_stop (WAIT_FOR_STOP_ENUM tryb)
 				}
 			}
 		}
-
 	}
 }
 // ------------------------------------------------------------------------
@@ -1201,12 +1166,8 @@ void mp_task::start_all (map <ROBOT_ENUM, mp_robot*>& _robot_m)
 	// Wystartowanie wszystkich ECP
 
 	map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator;
-	mp_receive_pulse_struct_t input;
-
 	map <ROBOT_ENUM, mp_robot*> robots_m_tmp, robots_m_tmp2;
 
-
-	// printf("start_all start\n");
 	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
 	robots_m_tmp = _robot_m;
 
@@ -1215,7 +1176,6 @@ void mp_task::start_all (map <ROBOT_ENUM, mp_robot*>& _robot_m)
 		// przygotowanie wersji tymczasowej do usuwania robotow
 		robots_m_tmp2.clear();
 
-		// printf("start_all iter\n");
 		for (robot_m_iterator = robots_m_tmp.begin(); robot_m_iterator != robots_m_tmp.end(); robot_m_iterator++) {
 			if (robot_m_iterator->second->new_pulse ) {
 				if (robot_m_iterator->second->pulse_code == ECP_WAIT_FOR_START) {
@@ -1230,20 +1190,16 @@ void mp_task::start_all (map <ROBOT_ENUM, mp_robot*>& _robot_m)
 				// dodaj robota do listy jeszcze nie obsluzonych
 				robots_m_tmp2[robot_m_iterator->first] = robot_m_iterator->second;
 			}
-		} // end: for
+		}
 
 		// ponowne przepisanie map
-		//robots_m_tmp.clear();
 		robots_m_tmp = robots_m_tmp2;
 
 		if (!(robots_m_tmp.empty())) {
+			mp_receive_pulse_struct_t input;
 			check_and_optional_wait_for_new_pulse (&input, NEW_ECP_PULSE, WITHOUT_TIMEOUT);
 		}
-
-	} // end while (!(robots_m_tmp.empty()))
-
-	// printf("start_all end\n");
-
+	}
 }
 // ------------------------------------------------------------------------
 
@@ -1302,9 +1258,7 @@ void mp_task::execute_all (map <ROBOT_ENUM, mp_robot*>& _robot_m)
 void mp_task::terminate_all (map <ROBOT_ENUM, mp_robot*>& _robot_m)
 {
 	// Zatrzymanie wszystkich ECP
-	int ret;
 	map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator;
-	mp_receive_pulse_struct_t input;
 
 	map <ROBOT_ENUM, mp_robot*> robots_m_tmp, robots_m_tmp2;
 
@@ -1312,7 +1266,6 @@ void mp_task::terminate_all (map <ROBOT_ENUM, mp_robot*>& _robot_m)
 	robots_m_tmp = _robot_m;
 
 	while (!(robots_m_tmp.empty())) {
-		//	ret = check_and_optional_wait_for_new_pulse (&input, NEW_ECP_PULSE, WITHOUT_TIMEOUT);
 
 		// przygotowanie wersji tymczasowej do usuwania robotow
 		robots_m_tmp2.clear();
@@ -1320,15 +1273,12 @@ void mp_task::terminate_all (map <ROBOT_ENUM, mp_robot*>& _robot_m)
 		for (robot_m_iterator = robots_m_tmp.begin(); robot_m_iterator != robots_m_tmp.end(); robot_m_iterator++) {
 
 			if (robot_m_iterator->second->new_pulse) {
-				//				if ((robot_m_iterator->second->pulse_code == ECP_WAIT_FOR_STOP) || (robot_m_iterator->second->pulse_code == ECP_WAIT_FOR_COMMAND))
+				//if ((robot_m_iterator->second->pulse_code == ECP_WAIT_FOR_STOP) || (robot_m_iterator->second->pulse_code == ECP_WAIT_FOR_COMMAND))
 				if (1) {
-
 					robot_m_iterator->second->new_pulse = false;
 					robot_m_iterator->second->robot_new_pulse_checked = false;
 					robot_m_iterator->second->terminate_ecp();
-
 				} else {
-
 					printf("phase 2 bledny kod pulsu w terminate_all\n");
 					throw MP_main_error(NON_FATAL_ERROR, INVALID_ECP_PULSE_IN_MP_TERMINATE_ALL);
 				}
@@ -1336,17 +1286,16 @@ void mp_task::terminate_all (map <ROBOT_ENUM, mp_robot*>& _robot_m)
 				// dodaj robota do listy jeszcze nie obsluzonych
 				robots_m_tmp2[robot_m_iterator->first] = robot_m_iterator->second;
 			}
-		} // end: for
+		}
+
 		// ponowne przepisanie map
-		// robots_m_tmp.clear();
 		robots_m_tmp = robots_m_tmp2;
 
 		if (!(robots_m_tmp.empty())) {
-			ret = check_and_optional_wait_for_new_pulse (&input, NEW_ECP_PULSE, WITHOUT_TIMEOUT);
+			mp_receive_pulse_struct_t input;
+			check_and_optional_wait_for_new_pulse (&input, NEW_ECP_PULSE, WITHOUT_TIMEOUT);
 		}
-
-	} // end while (!(robots_m_tmp.empty()))
-
+	}
 }
 // ------------------------------------------------------------------------
 
@@ -1354,13 +1303,10 @@ void mp_task::terminate_all (map <ROBOT_ENUM, mp_robot*>& _robot_m)
 // ------------------------------------------------------------------------
 void mp_task::kill_all_ECP (map <ROBOT_ENUM, mp_robot*>& _robot_m)
 {
-
 	// Zabicie wszystkich ECP z mapy
-
 	for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = _robot_m.begin();
 	        robot_m_iterator != _robot_m.end(); robot_m_iterator++) {
 		SignalKill(robot_m_iterator->second->nd, robot_m_iterator->second->ECP_pid, 0, SIGTERM, 0, 0);
 	}
-
 }
 // ------------------------------------------------------------------------

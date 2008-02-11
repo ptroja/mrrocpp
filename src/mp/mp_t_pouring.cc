@@ -203,7 +203,7 @@ bool mp_task_pouring::depart(void)
 mp_task_pouring::mp_task_pouring() : mp_task()
 {
 
-};
+}
 
 mp_task_pouring::~mp_task_pouring()
 {
@@ -302,4 +302,4 @@ void mp_task_pouring::main_task_algorithm(void)
     		terminate_all (robot_m);
     		break; 
     	} // koniec: for(;;) - wewnetrzna petla
-};
+}

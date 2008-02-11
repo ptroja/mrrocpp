@@ -1,5 +1,4 @@
 // -------------------------------------------------------------------------
-//                              mp.cc
 // 
 // MP Master Process - methods for visual generators
 // 
@@ -133,7 +132,7 @@ bool mp_seven_eye_generator::first_step () {
 	copy_generator_command( robot_m );   
 	
 	return true;
-}; // end: mp_seven_eye_generator::first_step()
+}
 
 // ----------------------------------------------------------------------------------------------
 // -----------------------------------  metoda	next_step -----------------------------------
@@ -528,8 +527,6 @@ else
 		printf("%f  ",irp6ot->ecp_td.next_XYZ_ZYZ_arm_coordinates[i]);
 	printf("\n");	
 #endif
-
-
 	
 	copy_generator_command( robot_m );
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
@@ -537,4 +534,4 @@ else
 		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else return true;
-}; // end: bool tight_coop_generator::next_step ()
+}

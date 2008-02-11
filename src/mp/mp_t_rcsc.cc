@@ -1181,43 +1181,43 @@ bool mp_task_rubik_cube_solver::gripper_opening(double track_increment, double p
 
 
 mp_task* return_created_mp_task (void)
-               {
-	               return new mp_task_rubik_cube_solver();
-               }
+{
+	return new mp_task_rubik_cube_solver();
+}
 
 
 
-               // methods fo mp template to redefine in concete class
-               void mp_task_rubik_cube_solver::task_initialization(void)
-               {
-	               // Powolanie czujnikow
-	               sensor_m[SENSOR_FORCE_ON_TRACK] =
-	                   new ecp_mp_schunk_sensor (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
+// methods fo mp template to redefine in concete class
+void mp_task_rubik_cube_solver::task_initialization(void)
+{
+	// Powolanie czujnikow
+	sensor_m[SENSOR_FORCE_ON_TRACK] =
+	    new ecp_mp_schunk_sensor (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
 
-	               sensor_m[SENSOR_FORCE_POSTUMENT] =
-	                   new ecp_mp_schunk_sensor (SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
+	sensor_m[SENSOR_FORCE_POSTUMENT] =
+	    new ecp_mp_schunk_sensor (SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
 
-	               sensor_m[SENSOR_CAMERA_ON_TRACK] =
-	                   new ecp_mp_vis_sensor (SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
+	sensor_m[SENSOR_CAMERA_ON_TRACK] =
+	    new ecp_mp_vis_sensor (SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
-	               sensor_m[SENSOR_CAMERA_SA] =
-	                   new ecp_mp_vis_sensor (SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+	sensor_m[SENSOR_CAMERA_SA] =
+	    new ecp_mp_vis_sensor (SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 
-	               // Konfiguracja wszystkich czujnikow
-	               for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
-	                       sensor_m_iterator != sensor_m.end(); sensor_m_iterator++) {
-		               sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-		               sensor_m_iterator->second->configure_sensor();
-	               }
+	// Konfiguracja wszystkich czujnikow
+	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	        sensor_m_iterator != sensor_m.end(); sensor_m_iterator++) {
+		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_m_iterator->second->configure_sensor();
+	}
 
-	               usleep(1000*100);
+	usleep(1000*100);
 
-	               // dodanie transmitter'a
-	               transmitter_m[TRANSMITTER_RC_WINDOWS] =
-	                   new rc_windows_transmitter (TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
+	// dodanie transmitter'a
+	transmitter_m[TRANSMITTER_RC_WINDOWS] =
+	    new rc_windows_transmitter (TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
 
-	               sr_ecp_msg->message("MP rcsc loaded");
-               };
+	sr_ecp_msg->message("MP rcsc loaded");
+}
 
 
 void mp_task_rubik_cube_solver::main_task_algorithm(void)
@@ -1310,4 +1310,4 @@ void mp_task_rubik_cube_solver::main_task_algorithm(void)
 		break;
 
 	} // koniec: for(;;) - zewnetrzna petla
-};
+}

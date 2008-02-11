@@ -535,12 +535,11 @@ void mp_tff_rubik_grab_generator::configure(unsigned short l_irp6ot_con, unsigne
 
 bool mp_tff_rubik_grab_generator::first_step ()
 {
-	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
+	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 	irp6ot = robot_m[ROBOT_IRP6_ON_TRACK];
 	irp6p = robot_m[ROBOT_IRP6_POSTUMENT];
-
 
 	if (irp6ot_con)
 		irp6ot->communicate=true;

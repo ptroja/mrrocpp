@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //                            mp_t_haptic.h
-//  header of
+// 
 // MP task for two robot haptic device
 // Ostatnia modyfikacja: 2007
 // -------------------------------------------------------------------------
@@ -21,6 +21,6 @@ public:
 	void task_initialization(void);
 	void main_task_algorithm(void);
 
-}; // end : class MP_nose_run_force_generator
+};
 
 #endif
