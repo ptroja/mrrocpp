@@ -35,7 +35,7 @@ libmrrocpp.a: \
 	srlib.o \
 	$(MESSIP_OBJECTS)
 	$(AR) $(ARFLAGS) $@ $?
-	cp $@ $(LIBDIR)
+	${INSTALL} $@ $(LIBDIR)
 
 #-----------------------------------------------------------------------------------------------------------------------#
 y_spawn_process: y_spawn_process.o
@@ -50,7 +50,7 @@ configsrv: configsrv.o cfgopts.o configsrv_m.o
 #======================================================#	
 #----------------------------------------------- Maintain rules ----------------------------------------------------#
 install: ${BINARIES}
-	cp ${BINARIES} $(BINDIR)
+	${INSTALL} ${BINARIES} $(BINDIR)
 	@$(MAKE) -C messip install
 #-----------------------------------------------------------------------------------------------------------------------#
 clean:
@@ -65,7 +65,7 @@ clean:
 #
 #%.o : %.cc
 #	@$(MAKEDEPEND); \
-#	cp $(df).d $(df).P; \
+#	${INSTALL} $(df).d $(df).P; \
 #	  sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
 #	  -e '/^$$/ d' -e 's/$$/ :/' < $(df).d >> $(df).P; \
 #	rm -f $(df).d

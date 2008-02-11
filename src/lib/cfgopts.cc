@@ -164,6 +164,7 @@ int input_config(const char *filename, struct Config_Tag configs[], const char *
       if ( fptr==NULL ) continue;
       lineno++;
       if ( line[0]=='#' ) continue;    // skip comments
+      if ( line[0]==';' ) continue;    // skip comments
       if ( line[0]=='[' ) continue;    // skip next header
       tok=strtok(line,"=\n\r");   // get first token
       if ( tok!=NULL )
@@ -470,6 +471,10 @@ int update_config(const char *filename, struct Config_Tag configs[], const char 
          if ( fptr==NULL ) continue;
          lineno++;
          if ( line[0]=='#' ) {
+            fprintf(outfile,"%s",line);
+            continue;  // skip comments
+         }
+         if ( line[0]==';' ) {
             fprintf(outfile,"%s",line);
             continue;  // skip comments
          }

@@ -1,19 +1,6 @@
 #
 # Application Makefile   
 #
-ifdef DBG
-DBG_RELEASE = -O3 -fomit-frame-pointer
-DBG_DEBUG = -O -gdwarf-2
-DEBUG=$(DBG_$(DBG))
-endif
-
-ifndef DEBUG
-DEBUG = -g
-endif
-
-ifndef OPTIM
-OPTIM = -O
-endif
 
 include	../abOfiles
 include ../indOfiles
@@ -27,23 +14,16 @@ include ../indHfiles
 include	../abWfiles
 include	../abLfiles
 
-PLATFORM=gcc_ntox86
 PHABOPTS= -l socket
 
-CC  = QCC -O2
-CXX = QCC -O2 -I $(HEADERSDIR) -I.
-LD  = QCC
+HOMEDIR = ../../../..
+include $(HOMEDIR)/common.mk
+ECP_DIR = $(HOMEDIR)/src/ecp
+HEADERSDIR = $(HOMEDIR)/include
 
-MROK = ../../../..
-ECP_DIR = $(MROK)/src/ecp
-ECP_MP_DIR = $(MROK)/src/ecp_mp
-HEADERSDIR = $(MROK)/include
-LIBDIR = $(MROK)/lib
-BINDIR = $(MROK)/bin
-
-CFLAGS  = -V$(PLATFORM) -w8 $(OPTIM) $(OPTIM) $(DEBUG) $(PHABOPTS) -I $(HEADERSDIR) -I.
-LDFLAGS = -V$(PLATFORM) -Bstatic $(DEBUG) -l phexlib $(ABLIB) $(PHABOPTS)
-SDFLAGS = -V$(PLATFORM) $(DEBUG) -l phexlib $(ABLIB) $(PHABOPTS)
+CXXFLAGS += -I $(HEADERSDIR) -I.
+LDFLAGS += -Bstatic -l phexlib $(ABLIB) $(PHABOPTS)
+SDFLAGS = -l phexlib $(ABLIB) $(PHABOPTS)
 
 MRROCOBJ = \
 	$(ECP_DIR)/irp6_on_track/ecp_local.o \
@@ -80,7 +60,7 @@ clean:
 		@rm -f *.o *.err *~ *.map ui
 
 install: ui
-		-cp ui $(MROK)/bin/
+		-${INSTALL} ui $(HOMEDIR)/bin/
 
 #
 # Headers

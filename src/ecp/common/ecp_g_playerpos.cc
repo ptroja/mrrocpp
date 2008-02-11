@@ -11,7 +11,7 @@
 
 playerpos_generator::playerpos_generator(ecp_task& _ecp_task):
 	ecp_generator (_ecp_task, true)
-{	
+{
 }
 
 bool playerpos_generator::first_step ( ) 

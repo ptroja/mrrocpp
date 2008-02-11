@@ -1,12 +1,3 @@
-// -------------------------------------------------------------------------
-// Proces: 	
-// Plik:			ecp_mp_t_player.h
-// System:	QNX/MRROCPP  v. 6.3
-// Opis:		Ogolna struktura obrazow czujnika
-// Autor:		tkornuta
-// Data:		10.11.2004
-// -------------------------------------------------------------------------
-
 #ifndef __ECP_MP_TR_RC_WINDOWS_H
 #define __ECP_MP_TR_RC_WINDOWS_H
 
@@ -40,6 +31,9 @@ class player_transmitter: public transmitter{
 	virtual bool t_read (bool wait);
 	// zapis
 	virtual bool t_write (void);
+	
+	int position_set_cmd_vel(double vx = 0.0, double vy = 0.0, double va = 0.0, int state = 1);
+	int position_set_cmd_pose(double gx = 0.0, double gy = 0.0, double ga = 0.0, int state = 1);
 }; 
 
 #endif

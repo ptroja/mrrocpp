@@ -5,13 +5,13 @@
 // 
 // -------------------------------------------------------------------------
 
-
 #include <stdio.h>
 #include <map>
 
 #include "lib/srlib.h"
 #include "mp/mp.h"
 #include "mp/mp_t_multiplayer.h"
+#include "mp/mp_g_playerpos.h"
 #include "ecp_mp/ecp_mp_tr_player.h"
 
 mp_task* return_created_mp_task (void)
@@ -25,62 +25,48 @@ void mp_task_multiplayer::task_initialization(void)
 	// Powolanie czujnikow
 	transmitter_m[TRANSMITTER_PLAYER] = 
 		new player_transmitter (TRANSMITTER_PLAYER, "[pcm1]", *this,
-		"localhost", 6665, "position", 3, 'a');
+		"192.168.18.30", 6665, "position", 3, 'a');
+	
+	printf("mp_task_multiplayer.transmitter_m.count() = %d @ %s:%d\n", transmitter_m.size(), __FILE__, __LINE__);
 		
 	sr_ecp_msg->message("MP multiplayer task loaded");
 }
  
 void mp_task_multiplayer::main_task_algorithm(void)
 {
-
-	break_state = false;
-
-	/*
-  	mp_playerpos_generator mp_playerpos_gen(*this, 10); 
-   	mp_h_gen.robot_m = robot_m;
-   	mp_h_gen.sensor_m[SENSOR_FORCE_ON_TRACK] = sensor_m[SENSOR_FORCE_ON_TRACK];
-   	mp_h_gen.sensor_m[SENSOR_FORCE_POSTUMENT] = sensor_m[SENSOR_FORCE_POSTUMENT];
-	*/
+  	mp_playerpos_generator playerpos_gen(*this, 1.0); 
+   	playerpos_gen.transmitter_m = this->transmitter_m;
+   	
+   	printf("this->transmitter_m.count() = %d @ %s:%d\n", this->transmitter_m.size(), __FILE__, __LINE__);
+   	printf("playerpos_gen.transmitter_m.count() = %d @ %s:%d\n", playerpos_gen.transmitter_m.size(), __FILE__, __LINE__);
 
 	// Oczekiwanie na zlecenie START od UI  
 	sr_ecp_msg->message("MP multiplayer device - press start");
 	wait_for_start ();
 	// Wyslanie START do wszystkich ECP 
 	start_all (robot_m);
+	
+	bool break_state = false;
 
 	for (;;) { 
 
 		// Zlecenie wykonania kolejnego makrokroku
-		for(;;) {
-			/*
-			sr_ecp_msg->message("New series");
-			for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
-				 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-			{
-				sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-				sensor_m_iterator->second->configure_sensor();
-			}
+		for (;;) {
+			sr_ecp_msg->message("Nowy makrokrok");
 
-			mp_h_gen.configure(1, 0);
-
-		    	sr_ecp_msg->message("Track podatny do czasu wcisniecia mp_trigger");
-			if (Move ( mp_h_gen)) {
+			if (Move ( playerpos_gen)) {
 		        	break_state = true;
 		        	break;
 			}
-			*/
 		}
-	 		 	
-		if (break_state) {
-			break;
-	
-		}	
 		
-	        // Oczekiwanie na STOP od UI
-	        wait_for_stop (MP_THROW);// by Y - wlaczony tryb
+		if (break_state)
+			break;
+
+        // Oczekiwanie na STOP od UI
+        wait_for_stop (MP_THROW);// by Y - wlaczony tryb
 	  
-	        // Wyslanie STOP do wszystkich ECP po zakonczeniu programu uzytkownika
-	        terminate_all (robot_m);
-	        break; 
-	} // koniec: for(;;) - wewnetrzna petla
+        // Wyslanie STOP do wszystkich ECP po zakonczeniu programu uzytkownika
+        terminate_all (robot_m);
+	}
 }

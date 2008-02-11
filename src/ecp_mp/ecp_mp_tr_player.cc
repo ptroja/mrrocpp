@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP) 
+// Proces: 	EFFECTOR CONTROL PROCESS (ECP)
 // Plik:			ecp_mp_sensor.h
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		Definicja konstruktora bazowej klasy czujnikow po stronie procesu ECP - jeden dla wszystkich.
@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <string.h>
+#include <math.h>
 
 #include "common/typedefs.h"
 #include "common/impconst.h"
@@ -19,47 +20,48 @@
 #include "player/playerc.h"
 
 player_transmitter::player_transmitter  (
-		TRANSMITTER_ENUM _transmitter_name, char* _section_name, ecp_mp_task& _ecp_mp_object,
-        const char *host, unsigned int port,
-        const char *devname, int devindex, int access
-        )  :
-			transmitter (_transmitter_name, _section_name, _ecp_mp_object) {
+    TRANSMITTER_ENUM _transmitter_name, char* _section_name, ecp_mp_task& _ecp_mp_object,
+    const char *host, unsigned int port,
+    const char *devname, int devindex, int access
+)  :
+		transmitter (_transmitter_name, _section_name, _ecp_mp_object)
+{
 
-    int err;
-    err = pthread_cond_init(&this->cond, NULL);
-    if (err) {
-	fprintf(stderr, "player_transmitter::player_transmitter(): pthread_cond_init(): %s\n",
-		strerror(err));
-    }
-    err = pthread_mutex_init(&this->mtx, NULL);
-    if (err) {
-	fprintf(stderr, "player_transmitter::player_transmitter(): pthread_mutex_init(): %s\n",
-		strerror(err));
-    }
+	int err;
+	err = pthread_cond_init(&this->cond, NULL);
+	if (err) {
+		fprintf(stderr, "player_transmitter::player_transmitter(): pthread_cond_init(): %s\n",
+		        strerror(err));
+	}
+	err = pthread_mutex_init(&this->mtx, NULL);
+	if (err) {
+		fprintf(stderr, "player_transmitter::player_transmitter(): pthread_mutex_init(): %s\n",
+		        strerror(err));
+	}
 
-    client = playerc_client_create(NULL, host, port);
+	client = playerc_client_create(NULL, host, port);
 
-    printf("1\n");
-    if (playerc_client_connect(client) != 0) {
-        fprintf(stderr, "error: %s\n", playerc_error_str());
-        return;
-    }
-    
-    printf("2\n");
-    if ((if_code = playerc_lookup_code(devname)) < 0) {
-        fprintf(stderr, "unknown Player device name\n");
-        return;
-    }
+	printf("1\n");
+	if (playerc_client_connect(client) != 0) {
+		fprintf(stderr, "error: %s\n", playerc_error_str());
+		return;
+	}
 
-    switch (if_code) {
+	printf("2\n");
+	if ((if_code = playerc_lookup_code(devname)) < 0) {
+		fprintf(stderr, "unknown Player device name\n");
+		return;
+	}
+
+	switch (if_code) {
 		case PLAYER_JOYSTICK_CODE:              // Joytstick
-            device = (playerc_device_t *) playerc_joystick_create(client, devindex);
-            fprintf(stderr, "jcreate\n");
-            break;
+			device = (playerc_device_t *) playerc_joystick_create(client, devindex);
+			fprintf(stderr, "jcreate\n");
+			break;
 		case PLAYER_POSITION_CODE:              // device that moves about
-            device = (playerc_device_t *) playerc_position_create(client, devindex);
-            fprintf(stderr, "pcreate\n");
-            break;
+			device = (playerc_device_t *) playerc_position_create(client, devindex);
+			fprintf(stderr, "pcreate\n");
+			break;
 		case PLAYER_PLAYER_CODE:                // the server itself
 		case PLAYER_POWER_CODE:                 // power subsystem
 		case PLAYER_GRIPPER_CODE:               // gripper
@@ -89,7 +91,7 @@ player_transmitter::player_transmitter  (
 		case PLAYER_POSITION3D_CODE:            // 3-D position
 		case PLAYER_SIMULATION_CODE:            // simulators
 		case PLAYER_SERVICE_ADV_CODE:           // LAN service advertisement
-		case PLAYER_BLINKENLIGHT_CODE:          // blinking lights 
+		case PLAYER_BLINKENLIGHT_CODE:          // blinking lights
 		case PLAYER_NOMAD_CODE:                 // Nomad robot
 		case PLAYER_CAMERA_CODE:
 		case PLAYER_MAP_CODE:                   // get a map
@@ -99,80 +101,86 @@ player_transmitter::player_transmitter  (
 		case PLAYER_MOTOR_CODE:                 // motor interface
 		case PLAYER_POSITION2D_CODE:            // 2-D position
 		case PLAYER_SPEECH_RECOGNITION_CODE:    // speech recognitionI/O
-            device = (playerc_device_t *) playerc_position_create(client, devindex);
-            fprintf(stderr, "pcreate\n");
+			device = (playerc_device_t *) playerc_position_create(client, devindex);
+			fprintf(stderr, "pcreate\n");
 		case PLAYER_OPAQUE_CODE:                // plugin interface
-        default:
-            break;
-    }
+		default:
+			break;
+	}
 
-    printf("3.1\n");
-    if (device == NULL) {
-        fprintf(stderr, "Player proxy creation error\n");
-        return;
-    }
+	printf("3.1\n");
+	if (device == NULL) {
+		fprintf(stderr, "Player proxy creation error\n");
+		return;
+	}
 
-    printf("drivername: %s\n", device->drivername);
-    printf("3\n");
-    if (playerc_device_subscribe(device, access) < 0) {
-        fprintf(stderr, "error: %s\n", playerc_error_str());
-        return;
-    }
-    printf("4\n");
+	printf("drivername: %s\n", device->drivername);
+	printf("3\n");
+	if (playerc_device_subscribe(device, access) < 0) {
+		fprintf(stderr, "error: %s\n", playerc_error_str());
+		return;
+	}
+	printf("4\n");
 
-    printf("pthread_create()..."); fflush(stdout);
-    pthread_create(&worker, NULL, query_loop, this);
-    printf("done\n");
+	printf("pthread_create()...");
+	fflush(stdout);
+	pthread_create(&worker, NULL, query_loop, this);
+	printf("done\n");
 }
 
 
-player_transmitter::~player_transmitter () {
-    // Shutdown and tidy up
-    printf("Player transmitter shutting down..."); fflush(stdout);
-    pthread_cancel(worker);
-    if(pthread_join(worker, NULL)) {
-        perror("Player:pthread_cancel()");
-    }
-    playerc_device_unsubscribe(device);
-    playerc_device_term(device);
-    playerc_client_disconnect(client);
-    playerc_client_destroy(client);
+player_transmitter::~player_transmitter ()
+{
+	// Shutdown and tidy up
+	printf("Player transmitter shutting down...");
+	fflush(stdout);
+	pthread_cancel(worker);
+	if(pthread_join(worker, NULL)) {
+		perror("Player:pthread_cancel()");
+	}
+	playerc_device_unsubscribe(device);
+	playerc_device_term(device);
+	playerc_client_disconnect(client);
+	playerc_client_destroy(client);
 
-    pthread_mutex_destroy(&this->mtx);
-    pthread_cond_destroy(&this->cond);
-    printf("done\n");
+	pthread_mutex_destroy(&this->mtx);
+	pthread_cond_destroy(&this->cond);
+	printf("done\n");
 }
 
-bool player_transmitter::t_write() {
-	
+bool player_transmitter::t_write()
+{
+
 	return 1;
 }
 
-bool player_transmitter::t_read(bool wait) {
+bool player_transmitter::t_read(bool wait)
+{
 
-    if (wait) {
-	pthread_mutex_lock(&this->mtx);
-	int rc = 0;
-	while (device->fresh == 0 && rc == 0) {
-	    printf("pthread_cond_wait()..."); fflush(stdout);
-	    rc = pthread_cond_wait(&this->cond, &this->mtx);
-	    printf("\n");
+	if (wait) {
+		pthread_mutex_lock(&this->mtx);
+		int rc = 0;
+		while (device->fresh == 0 && rc == 0) {
+			printf("pthread_cond_wait()...");
+			fflush(stdout);
+			rc = pthread_cond_wait(&this->cond, &this->mtx);
+			printf("\n");
+		}
 	}
-    }
 
-    switch (if_code) {
+	switch (if_code) {
 		case PLAYER_JOYSTICK_CODE:              // Joytstick
 			{
-			playerc_joystick_t *dev = (playerc_joystick_t *) device;
-			from_va.player_joystick = *dev;
+				playerc_joystick_t *dev = (playerc_joystick_t *) device;
+				from_va.player_joystick = *dev;
 			}
-            break;
+			break;
 		case PLAYER_POSITION_CODE:              // device that moves about
-	    {
-			playerc_position_t *dev = (playerc_position_t *) device;
-			from_va.player_position = *dev;
-	    }
-            break;
+			{
+				playerc_position_t *dev = (playerc_position_t *) device;
+				from_va.player_position = *dev;
+			}
+			break;
 		case PLAYER_PLAYER_CODE:                // the server itself
 		case PLAYER_POWER_CODE:                 // power subsystem
 		case PLAYER_GRIPPER_CODE:               // gripper
@@ -202,7 +210,7 @@ bool player_transmitter::t_read(bool wait) {
 		case PLAYER_POSITION3D_CODE:            // 3-D position
 		case PLAYER_SIMULATION_CODE:            // simulators
 		case PLAYER_SERVICE_ADV_CODE:           // LAN service advertisement
-		case PLAYER_BLINKENLIGHT_CODE:          // blinking lights 
+		case PLAYER_BLINKENLIGHT_CODE:          // blinking lights
 		case PLAYER_NOMAD_CODE:                 // Nomad robot
 		case PLAYER_CAMERA_CODE:
 		case PLAYER_MAP_CODE:                   // get a map
@@ -213,49 +221,86 @@ bool player_transmitter::t_read(bool wait) {
 		case PLAYER_POSITION2D_CODE:            // 2-D position
 		case PLAYER_SPEECH_RECOGNITION_CODE:    // speech recognitionI/O
 		case PLAYER_OPAQUE_CODE:                // plugin interface
-        default:
-            break;
-    }
+		default:
+			break;
+	}
 
-    if (wait) {
-	pthread_mutex_unlock(&this->mtx);
-    }
+	if (wait) {
+		pthread_mutex_unlock(&this->mtx);
+	}
 
-    device->fresh = 0;
+	device->fresh = 0;
 
-    return 1;
+	return 1;
 }
 
-void * player_transmitter::query_loop(void * arg) {
+void * player_transmitter::query_loop(void * arg)
+{
 
-    // Read data from the server
-    player_transmitter *me = (player_transmitter *) arg;
-    playerc_client_t *clnt = me->client;
+	// Read data from the server
+	player_transmitter *me = (player_transmitter *) arg;
+	playerc_client_t *clnt = me->client;
 
-    while(1) {
-       int rc;
-       playerc_client_read(clnt);
-       printf("playerc_client_read()\n");
-       
-       if ((rc = pthread_mutex_lock(&me->mtx))) {
-          fprintf(stderr, "player_transmitter::query_loop(): pthread_mutex_lock(): %s\n",
-		       strerror(rc));
-       }
+	while(1) {
+		int rc;
+		playerc_client_read(clnt);
+		printf("playerc_client_read()\n");
 
-       if(me->device->fresh) {
-	   rc = pthread_cond_signal(&me->cond);
-	   if (rc) {
-	       fprintf(stderr, "player_transmitter::query_loop(): pthread_cond_signal(): %s\n",
-		       strerror(rc));
-	   }
-	   printf("pthread_cond_signal()\n");
-       }
+		if ((rc = pthread_mutex_lock(&me->mtx))) {
+			fprintf(stderr, "player_transmitter::query_loop(): pthread_mutex_lock(): %s\n",
+			        strerror(rc));
+		}
 
-       if ((rc = pthread_mutex_unlock(&me->mtx))) {
-          fprintf(stderr, "player_transmitter::query_loop(): pthread_mutex_lock(): %s\n",
-		       strerror(rc));
-       }
+		if(me->device->fresh) {
+			rc = pthread_cond_signal(&me->cond);
+			if (rc) {
+				fprintf(stderr, "player_transmitter::query_loop(): pthread_cond_signal(): %s\n",
+				        strerror(rc));
+			}
+			printf("pthread_cond_signal()\n");
+		}
 
-       pthread_testcancel();
-    }
+		if ((rc = pthread_mutex_unlock(&me->mtx))) {
+			fprintf(stderr, "player_transmitter::query_loop(): pthread_mutex_lock(): %s\n",
+			        strerror(rc));
+		}
+
+		pthread_testcancel();
+	}
+}
+
+// Set the robot speed
+int player_transmitter::position_set_cmd_vel(double vx, double vy, double va, int state)
+{
+	if (if_code != PLAYER_POSITION_CODE)
+		return -1;
+
+	player_position_cmd_t cmd;
+
+	memset(&cmd, 0, sizeof(cmd));
+	cmd.xspeed = htonl((int) (vx * 1000.0));
+	cmd.yspeed = htonl((int) (vy * 1000.0));
+	cmd.yawspeed = htonl((int) (va * 180.0 / M_PI));
+	cmd.state = state;
+	cmd.type = 0;
+
+	return playerc_client_write(client, device, &cmd, sizeof(cmd));
+}
+
+// Set the target pose
+int player_transmitter::position_set_cmd_pose(double gx, double gy, double ga, int state)
+{
+	if (if_code != PLAYER_POSITION_CODE)
+		return -1;
+
+	player_position_cmd_t cmd;
+
+	memset(&cmd, 0, sizeof(cmd));
+	cmd.xpos = htonl((int) (gx * 1000.0));
+	cmd.ypos = htonl((int) (gy * 1000.0));
+	cmd.yaw = htonl((int) (ga * 180.0 / M_PI));
+	cmd.state = state;
+	cmd.type = 1;
+
+	return playerc_client_write(client, device, &cmd, sizeof(cmd));
 }

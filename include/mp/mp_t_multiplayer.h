@@ -5,9 +5,6 @@
 
 class mp_task_multiplayer : public mp_task  
 {
-protected:
-	bool break_state;
-  
 public:
 
 	// methods for mp template

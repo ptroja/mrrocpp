@@ -15,7 +15,7 @@ all: libplayerc.a
 
 libplayerc.a: ${OBJECTS}
 	$(AR) $(ARFLAGS) $@ $?
-	@cp $@ $(LIBDIR)
+	@${INSTALL} $@ $(LIBDIR)
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
 # plik.o: plik.cc plik1.h plik2.h ... itd
@@ -23,8 +23,8 @@ libplayerc.a: ${OBJECTS}
 #======================================================#	
 #----------------------------------------------- Maintain rules ----------------------------------------------------#
 #install:
-#	cp ${OBJECTS} $(LIBDIR)
-#	cp ${BINARIES} $(BINDIR)
+#	${INSTALL} ${OBJECTS} $(LIBDIR)
+#	${INSTALL} ${BINARIES} $(BINDIR)
 #-----------------------------------------------------------------------------------------------------------------------#
 clean:
 	@rm -f *.o *.err ${BINARIES} libplayerc.a

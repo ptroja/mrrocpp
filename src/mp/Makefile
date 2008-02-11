@@ -33,7 +33,8 @@ BINARIES = \
 	mp_rcs_test \
 	mp_rcs \
 	mp_haptic \
-	mp_pouring
+	mp_pouring \
+	mp_multiplayer
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -105,6 +106,9 @@ mp_rcs_test: mp_t_rcs_test.o ecp_mp_s_rcs_korf.o ecp_mp_s_rcs_kociemba.o CubeSta
 mp_pouring: mp_t_pouring.o ecp_mp_s_schunk.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
+mp_multiplayer: mp_t_multiplayer.o mp_g_playerpos.o ecp_mp_tr_player.o $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^ $(LIBDIR)/libplayerc.a
+
 mp_rcs: mp_t_rcs.o mp_g_teach_in.o ecp_mp_s_rcs_korf.o ecp_mp_s_rcs_kociemba.o ecp_mp_tr_rc_windows.o mp_g_vis.o mp_g_force.o ecp_mp_s_vis.o ecp_mp_s_schunk.o CubeState.o SingleManipulation.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
@@ -115,7 +119,7 @@ mp_rcs: mp_t_rcs.o mp_g_teach_in.o ecp_mp_s_rcs_korf.o ecp_mp_s_rcs_kociemba.o e
 #======================================================#	
 #----------------------------------------------- Maintain rules ----------------------------------------------------#
 install: ${BINARIES}
-	cp ${BINARIES} $(BINDIR)
+	${INSTALL} ${BINARIES} $(BINDIR)
 #-----------------------------------------------------------------------------------------------------------------------#
 clean:
 	@rm -f *.o *.err ${BINARIES} ${LIBMPROBOTS} ${LIBMPMAIN}
