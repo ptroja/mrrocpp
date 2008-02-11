@@ -346,28 +346,28 @@ void ecp_smooth_generator::calculate(void)
 	 		switch(i)
 	 		{
 	 			case 0:	
-					sr_ecp_msg->message("Redukcja predkosci w osi 0");
+					sr_ecp_msg.message("Redukcja predkosci w osi 0");
 					break;
 	 			case 1:	
-					sr_ecp_msg->message("Redukcja predkosci w osi 1");
+					sr_ecp_msg.message("Redukcja predkosci w osi 1");
 					break;
 	 			case 2:	
-					sr_ecp_msg->message("Redukcja predkosci w osi 2");
+					sr_ecp_msg.message("Redukcja predkosci w osi 2");
 					break;
 	 			case 3:	
-					sr_ecp_msg->message("Redukcja predkosci w osi 3");
+					sr_ecp_msg.message("Redukcja predkosci w osi 3");
 					break;
 	 			case 4:	
-					sr_ecp_msg->message("Redukcja predkosci w osi 4");
+					sr_ecp_msg.message("Redukcja predkosci w osi 4");
 					break;
 	 			case 5:	
-					sr_ecp_msg->message("Redukcja predkosci w osi 5");
+					sr_ecp_msg.message("Redukcja predkosci w osi 5");
 					break;
 	 			case 6:	
-					sr_ecp_msg->message("Redukcja predkosci w osi 6");
+					sr_ecp_msg.message("Redukcja predkosci w osi 6");
 					break;
 	 			case 7:	
-					sr_ecp_msg->message("Redukcja predkosci w osi 7");
+					sr_ecp_msg.message("Redukcja predkosci w osi 7");
 					break;
 	 		}
 	 		if(debug)

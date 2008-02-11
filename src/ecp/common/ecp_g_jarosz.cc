@@ -76,7 +76,7 @@ ecp_linear_generator::ecp_linear_generator (ecp_task& _ecp_task,
 	v_max_zyz[6] = 5.0;
 	a_max_aa[6] = 0.0;  // przyspieszenie katowe koncowki 1rad/s^2
 	v_max_aa[6] = 0.0;
-// 	EDP_command_and_reply_buffer.sr_ecp_msg->message("Skonstruowano obiekt klasy irp6p_irp6p_linear_generator");
+// 	EDP_command_and_reply_buffer.sr_ecp_msg.message("Skonstruowano obiekt klasy irp6p_irp6p_linear_generator");
 };
 
 // ----------------------------------------------------------------------------------------------
@@ -325,7 +325,7 @@ ecp_linear_parabolic_generator::ecp_linear_parabolic_generator (ecp_task& _ecp_t
     a_max_aa[6] = 0.0;  // przyspieszenie katowe koncowki 1rad/s^2
     v_max_aa[6] = 0.0;
     
-  // 	EDP_command_and_reply_buffer.sr_ecp_msg->message("Skonstruowano obiekt klasy ecp_linear_parabolic_generator");
+  // 	EDP_command_and_reply_buffer.sr_ecp_msg.message("Skonstruowano obiekt klasy ecp_linear_parabolic_generator");
 }; // end:konstruktor
 
 // ----------------------------------------------------------------------------------------------
@@ -533,13 +533,13 @@ bool ecp_linear_parabolic_generator::next_step ()
 				/* if ( fabs(acc[i]*(1/STEP*STEP) ) > a_max_motor[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_motor[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 				if ( fabs(vel[i] * (1/STEP) ) > v_max_motor[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_motor[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} */ // end : if
 					
@@ -567,13 +567,13 @@ bool ecp_linear_parabolic_generator::next_step ()
 				if ( fabs(acc[i]*(1/STEP*STEP) ) > a_max_joint[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_joint[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 				if ( fabs(vel[i] * (1/STEP) ) > v_max_joint[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_joint[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 				prev_s[i] = the_robot->EDP_data.next_joint_arm_coordinates[i];
@@ -609,13 +609,13 @@ bool ecp_linear_parabolic_generator::next_step ()
 				if ( fabs(acc[i]*(1/STEP*STEP) ) > a_max_zyz[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_zyz[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 				if ( fabs(vel[i] * (1/STEP) ) > v_max_zyz[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_zyz[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 					
@@ -660,13 +660,13 @@ bool ecp_linear_parabolic_generator::next_step ()
 				if ( fabs(acc[i]*(1/STEP*STEP) ) > a_max_aa[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_aa[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 				if ( fabs(vel[i] * (1/STEP) ) > v_max_aa[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_aa[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 				if (i==6) {		
@@ -838,7 +838,7 @@ ecp_cubic_generator::ecp_cubic_generator (ecp_task& _ecp_task,
     v_max_zyz[6] = 5.0;
     a_max_aa[6] = 0.0;  // przyspieszenie katowe koncowki 1rad/s^2
     v_max_aa[6] = 0.0;
-  // 	sr_ecp_msg->message("Skonstruowano obiekt klasy ecp_cubic_generator");  
+  // 	sr_ecp_msg.message("Skonstruowano obiekt klasy ecp_cubic_generator");  
 }; // end : konstruktor
 
 // ----------------------------------------------------------------------------------------------
@@ -935,7 +935,7 @@ bool ecp_cubic_generator::next_step (  )
 				if ( fabs(acc[i] ) > a_max_motor[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_motor[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 
@@ -945,7 +945,7 @@ bool ecp_cubic_generator::next_step (  )
 				if ( fabs(vel[i] ) > v_max_motor[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_motor[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 
@@ -967,7 +967,7 @@ A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter*node_counter) + A3[i]*( node_
 				if ( fabs(acc[i] ) > a_max_joint[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_joint[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 
@@ -977,7 +977,7 @@ A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter*node_counter) + A3[i]*( node_
 				if ( fabs(vel[i] ) > v_max_joint[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_joint[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 
@@ -997,14 +997,14 @@ A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter*node_counter) + A3[i]*( node_
 				if ( fabs(acc[i] * (1.0/(STEP*STEP)) ) > a_max_zyz[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_zyz[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 		  vel[i] = A1[i] + 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
 				if ( fabs(vel[i] * (1.0/STEP) ) > v_max_zyz[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_zyz[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 				if (i==6) {		
@@ -1030,14 +1030,14 @@ A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter*node_counter) + A3[i]*( node_
 				if ( fabs(acc[i] * (1.0/(STEP*STEP)) ) > a_max_aa[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_aa[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 		  vel[i] = A1[i] + 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
 				if ( fabs(vel[i] * (1.0/STEP) ) > v_max_aa[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_aa[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 			if (i==6) {		
@@ -1129,7 +1129,7 @@ ecp_quintic_generator::ecp_quintic_generator (ecp_task& _ecp_task,
     v_max_zyz[6] = 5.0;
     a_max_aa[6] = 0.0;  // przyspieszenie katowe koncowki 1rad/s^2
     v_max_aa[6] = 0.0;
- // 	sr_ecp_msg->message("Skonstruowano obiekt klasy ecp_quintic_generator");
+ // 	sr_ecp_msg.message("Skonstruowano obiekt klasy ecp_quintic_generator");
 }; // end : konstruktor
 
 // ----------------------------------------------------------------------------------------------
@@ -1224,7 +1224,7 @@ bool ecp_quintic_generator::next_step ()
 				if ( fabs(acc[i] * (1.0/(STEP*STEP)) ) > a_max_motor[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_motor[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 		  vel[i] = A1[i] + 2*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]*(node_counter*node_counter*node_counter) +
@@ -1232,7 +1232,7 @@ bool ecp_quintic_generator::next_step ()
 				if ( fabs(vel[i] * (1.0/STEP) ) > v_max_motor[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_motor[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 the_robot->EDP_data.next_motor_arm_coordinates[i] =
@@ -1254,7 +1254,7 @@ A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter*node_counter) + A3[i]*( node_
 				if ( fabs(acc[i] * (1.0/(STEP*STEP)) ) > a_max_joint[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_joint[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 		  vel[i] = A1[i] + 2*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]*(node_counter*node_counter*node_counter) +
@@ -1262,7 +1262,7 @@ A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter*node_counter) + A3[i]*( node_
 				if ( fabs(vel[i] * (1.0/STEP) ) > v_max_joint[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_joint[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 the_robot->EDP_data.next_joint_arm_coordinates[i] =
@@ -1284,7 +1284,7 @@ A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter*node_counter) + A3[i]*( node_
 				if ( fabs(acc[i] * (1.0/(STEP*STEP)) ) > a_max_zyz[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_zyz[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 		  vel[i] = A1[i] + 2*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]*(node_counter*node_counter*node_counter) +
@@ -1292,7 +1292,7 @@ A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter*node_counter) + A3[i]*( node_
 				if ( fabs(vel[i] * (1.0/STEP) ) > v_max_zyz[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_zyz[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 			if (i==6)
@@ -1323,7 +1323,7 @@ A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter*node_counter) + A3[i]*( node_
 				if ( fabs(acc[i] * (1.0/(STEP*STEP)) ) > a_max_aa[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_aa[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 		  vel[i] = A1[i] + 2*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]*(node_counter*node_counter*node_counter) +
@@ -1331,7 +1331,7 @@ A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter*node_counter) + A3[i]*( node_
 				if ( fabs(vel[i] * (1.0/STEP) ) > v_max_aa[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_aa[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 			if (i==6)
@@ -1424,7 +1424,7 @@ ecp_parabolic_teach_in_generator::ecp_parabolic_teach_in_generator (ecp_task& _e
     v_max_aa[i+3] = 0.0;
         // tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
   }
-   // 	sr_ecp_msg->message("Skonstruowano obiekt klasy ecp_parabolic_teach_in_generator");
+   // 	sr_ecp_msg.message("Skonstruowano obiekt klasy ecp_parabolic_teach_in_generator");
     a_max_zyz[6] = 5.0;  // przyspieszenie katowe koncowki 1rad/s^2
     v_max_zyz[6] = 5.0;
     a_max_aa[6] = 0.0;  // przyspieszenie katowe koncowki 1rad/s^2
@@ -1526,12 +1526,12 @@ bool ecp_parabolic_teach_in_generator::next_step (  ) {
 		  a[i] = 4.0*(tip.coordinates[i] - the_robot->EDP_data.current_motor_arm_coordinates[i])/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 		  if ( fabs(a[i]) > a_max_motor[i] ) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
             sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i+1, fabs(a[i]), a_max_motor[i]);
-            sr_ecp_msg->message(messg);
+            sr_ecp_msg.message(messg);
 			throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
           }
 		  if ( 0.5*fabs(a[i] * tip.motion_time) > v_max_motor[i] ) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
             sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i+1,0.5 * a[i] * tip.motion_time , v_max_motor[i]);
-            sr_ecp_msg->message(messg);
+            sr_ecp_msg.message(messg);
 			throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
           }
 		}
@@ -1542,12 +1542,12 @@ bool ecp_parabolic_teach_in_generator::next_step (  ) {
 		  a[i] = 4.0*(tip.coordinates[i] - the_robot->EDP_data.current_joint_arm_coordinates[i])/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 		  if ( fabs(a[i]) > a_max_joint[i] ) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
             sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i+1, fabs(a[i]), a_max_joint[i]);
-            sr_ecp_msg->message(messg);
+            sr_ecp_msg.message(messg);
 			throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
           }
 		  if ( 0.5*fabs(a[i] * tip.motion_time) > v_max_joint[i] ) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
             sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i+1, 0.5*a[i] * tip.motion_time , v_max_joint[i]);
-            sr_ecp_msg->message(messg);
+            sr_ecp_msg.message(messg);
 			throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
           }
 		}
@@ -1570,12 +1570,12 @@ bool ecp_parabolic_teach_in_generator::next_step (  ) {
 		  a[i] = 4.0*(Delta)/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 		  if ( fabs(a[i]) > a_max_zyz[i] ) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
             sprintf(messg,"Acceleration in coordinate %d is %f, max. acc = %f",i+1, fabs(a[i]), a_max_zyz[i]);
-            sr_ecp_msg->message(messg);
+            sr_ecp_msg.message(messg);
 			throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
           }
 		  if ( 0.5*fabs(a[i] * tip.motion_time) > v_max_zyz[i] ) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
             sprintf(messg,"Velocity in coordinate %d is %f, max. vel = %f",i+1, 0.5*a[i] * tip.motion_time , v_max_zyz[i]);
-            sr_ecp_msg->message(messg);
+            sr_ecp_msg.message(messg);
 			throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
           }
 		}
@@ -1592,12 +1592,12 @@ bool ecp_parabolic_teach_in_generator::next_step (  ) {
 
 		  if ( fabs(a[i]) > a_max_aa[i] ) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
             sprintf(messg,"Velocity in coordinate %d is %f, max. vel = %f",i+1,0.5* a[i] * tip.motion_time , v_max_aa[i]);
-            sr_ecp_msg->message(messg);
+            sr_ecp_msg.message(messg);
 			throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
           }
 		  if ( 0.5*fabs(a[i] * tip.motion_time) > v_max_aa[i] ) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
             sprintf(messg,"Velocity in coordinate %d is %f, max. vel = %f",i+1,0.5*a[i] * tip.motion_time , v_max_aa[i]);
-            sr_ecp_msg->message(messg);
+            sr_ecp_msg.message(messg);
 			throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
           }
 		}
@@ -1762,7 +1762,7 @@ ecp_calibration_generator::ecp_calibration_generator (ecp_task& _ecp_task, doubl
     v_max_aa[i+3] = 0.0;
         // tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
   }
-//  	sr_ecp_msg->message("Skonstruowano obiekt klasy ecp_calibration_generator");
+//  	sr_ecp_msg.message("Skonstruowano obiekt klasy ecp_calibration_generator");
     a_max_zyz[6] = 1000.0;  // przyspieszenie katowe koncowki 1rad/s^2
     v_max_zyz[6] = 1000.0;
     a_max_aa[6] = 0.0;  // przyspieszenie katowe koncowki 1rad/s^2
@@ -1866,12 +1866,12 @@ bool ecp_calibration_generator::next_step (  ) {
 		  a[i] = 4.0*(tip.coordinates[i] - the_robot->EDP_data.current_motor_arm_coordinates[i])/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 		  if ( fabs(a[i]) > a_max_motor[i] ) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
             sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i+1, fabs(a[i]), a_max_motor[i]);
-            sr_ecp_msg->message(messg);
+            sr_ecp_msg.message(messg);
 			throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
           }
 		  if ( fabs(0.5* a[i] * tip.motion_time) > v_max_motor[i] ) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
             sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i+1,0.5* a[i] * tip.motion_time , v_max_motor[i]);
-            sr_ecp_msg->message(messg);
+            sr_ecp_msg.message(messg);
 			throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
           }
 		}
@@ -1882,12 +1882,12 @@ bool ecp_calibration_generator::next_step (  ) {
 		  a[i] = 4.0*(tip.coordinates[i] - the_robot->EDP_data.current_joint_arm_coordinates[i])/(number_of_intervals*INTERVAL*number_of_intervals*INTERVAL);
 		  if ( fabs(a[i]) > a_max_joint[i] ) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
             sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i+1, fabs(a[i]), a_max_joint[i]);
-            sr_ecp_msg->message(messg);
+            sr_ecp_msg.message(messg);
 			throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
           }
 		  if ( fabs(0.5* a[i] * tip.motion_time) > v_max_joint[i] ) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
             sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i+1,0.5* a[i] * tip.motion_time , v_max_joint[i]);
-            sr_ecp_msg->message(messg);
+            sr_ecp_msg.message(messg);
 			throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
           }
 		}
@@ -1904,12 +1904,12 @@ bool ecp_calibration_generator::next_step (  ) {
 
 		  if ( fabs(a[i]) > a_max_zyz[i] ) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
             sprintf(messg,"Acceleration in coordinate %d is %f, max. acc = %f",i+1, fabs(a[i]), a_max_zyz[i]);
-            sr_ecp_msg->message(messg);
+            sr_ecp_msg.message(messg);
 			throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
           }
 		  if ( fabs(0.5* a[i] * tip.motion_time) > v_max_zyz[i] ) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
             sprintf(messg,"Velocity in coordinate %d is %f, max. vel = %f",i+1,0.5* a[i] * tip.motion_time , v_max_zyz[i]);
-            sr_ecp_msg->message(messg);
+            sr_ecp_msg.message(messg);
 			throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
           }
 		}
@@ -1925,12 +1925,12 @@ bool ecp_calibration_generator::next_step (  ) {
 			}
 		  if ( fabs(a[i]) > a_max_aa[i] ) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
             sprintf(messg,"Velocity in coordinate %d is %f, max. vel = %f",i+1,0.5* a[i] * tip.motion_time , v_max_aa[i]);
-            sr_ecp_msg->message(messg);
+            sr_ecp_msg.message(messg);
 			throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
           }
 		  if ( fabs(0.5* a[i] * tip.motion_time) > v_max_aa[i] ) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
             sprintf(messg,"Velocity in coordinate %d is %f, max. vel = %f",i+1,0.5* a[i] * tip.motion_time , v_max_aa[i]);
-            sr_ecp_msg->message(messg);
+            sr_ecp_msg.message(messg);
 			throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
           }
 		}
@@ -2128,7 +2128,7 @@ ecp_cubic_spline_generator::ecp_cubic_spline_generator(ecp_task& _ecp_task,
     v_max_zyz[6] = 5.0;
     a_max_aa[6] = 0.0;  // przyspieszenie katowe koncowki 1rad/s^2
     v_max_aa[6] = 0.0;
-   // 	sr_ecp_msg->message("Skonstruowano obiekt klasy ecp_cubic_spline_generator");
+   // 	sr_ecp_msg.message("Skonstruowano obiekt klasy ecp_cubic_spline_generator");
 
 }; // end : ecp_cubic_spline_generator::ecp_cubic_spline_generator
 
@@ -2313,14 +2313,14 @@ bool ecp_cubic_spline_generator::next_step()
 				if ( fabs(acc[i] * (1.0/(STEP*STEP)) ) > a_max_motor[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_motor[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 		  vel[i] = 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
 				if ( fabs(vel[i] * (1.0/STEP) ) > v_max_motor[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_motor[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 			the_robot->EDP_data.next_motor_arm_coordinates[i] =
@@ -2335,14 +2335,14 @@ bool ecp_cubic_spline_generator::next_step()
 				if ( fabs(acc[i] * (1.0/(STEP*STEP)) ) > a_max_joint[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_joint[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 		  vel[i] = 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
 				if ( fabs(vel[i] * (1.0/STEP) ) > v_max_joint[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_joint[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 		the_robot->EDP_data.next_joint_arm_coordinates[i] =
@@ -2356,14 +2356,14 @@ bool ecp_cubic_spline_generator::next_step()
 				if ( fabs(acc[i] * (1.0/(STEP*STEP)) ) > a_max_zyz[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_zyz[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 		  vel[i] = 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
 				if ( fabs(vel[i] * (1.0/STEP) ) > v_max_zyz[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_zyz[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 			if (i==6) 
@@ -2383,14 +2383,14 @@ bool ecp_cubic_spline_generator::next_step()
 				if ( fabs(acc[i] * (1.0/(STEP*STEP)) ) > a_max_aa[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_aa[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 		  vel[i] = 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
 				if ( fabs(vel[i] * (1.0/STEP) ) > v_max_aa[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_aa[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 					if (i==6) 
@@ -2432,7 +2432,7 @@ bool ecp_cubic_spline_generator::next_step()
    // Ruch do kolejnej pozycji na liscie pozycji nauczonych nie zostal
     // zakonczony - informacja dla Move()
 //    the_robot->create_command (); // Przygotowanie rozkazu dla EDP
-//    	sr_ecp_msg->message("koncowka next_step - if ( node_counter <= number_of_intervals 2)");
+//    	sr_ecp_msg.message("koncowka next_step - if ( node_counter <= number_of_intervals 2)");
        // Rozkaz zostanie wykonany przez Move i odpowiednie dane
       // zostana zaktualizowane w robocie
     return true;
@@ -2493,7 +2493,7 @@ ecp_smooth_cubic_spline_generator::ecp_smooth_cubic_spline_generator (ecp_task& 
     v_max_aa[i+3] = 0.0;
         // tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
   }
- // 	sr_ecp_msg->message("Skonstruowano obiekt klasy ecp_smooth_cubic_spline_generator");
+ // 	sr_ecp_msg.message("Skonstruowano obiekt klasy ecp_smooth_cubic_spline_generator");
     a_max_zyz[6] = 5.0;  // przyspieszenie katowe koncowki 1rad/s^2
     v_max_zyz[6] = 5.0;
     a_max_aa[6] = 0.0;  // przyspieszenie katowe koncowki 1rad/s^2
@@ -2506,7 +2506,7 @@ ecp_smooth_cubic_spline_generator::ecp_smooth_cubic_spline_generator (ecp_task& 
 
 void ecp_smooth_cubic_spline_generator::Build_Coeff (double *tt, double *yy, int nn, double vvp, double vvk, double *aa)
 {
-   	sr_ecp_msg->message("Metoda Build_Coeff wyznacza przyspieszenia w punktach wezlowych");
+   	sr_ecp_msg.message("Metoda Build_Coeff wyznacza przyspieszenia w punktach wezlowych");
 	int i,k;
 	double p,qn,sig,un;
 
@@ -2838,7 +2838,7 @@ bool ecp_smooth_cubic_spline_generator::next_step()
 				if ( fabs(acc[i] * (1.0/(STEP*STEP)) ) > a_max_motor[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_motor[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 
@@ -2848,7 +2848,7 @@ bool ecp_smooth_cubic_spline_generator::next_step()
 				if ( fabs(vel[i] * (1.0/STEP) ) > v_max_motor[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_motor[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 
@@ -2871,7 +2871,7 @@ bool ecp_smooth_cubic_spline_generator::next_step()
 				if ( fabs(acc[i] * (1.0/(STEP*STEP)) ) > a_max_joint[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_joint[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 
@@ -2881,7 +2881,7 @@ bool ecp_smooth_cubic_spline_generator::next_step()
 				if ( fabs(vel[i] * (1.0/STEP) ) > v_max_joint[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_joint[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 
@@ -2904,7 +2904,7 @@ bool ecp_smooth_cubic_spline_generator::next_step()
 				if ( fabs(acc[i] * (1.0/(STEP*STEP)) ) > a_max_zyz[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_zyz[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 
@@ -2914,7 +2914,7 @@ bool ecp_smooth_cubic_spline_generator::next_step()
 				if ( fabs(vel[i] * (1.0/STEP) ) > v_max_zyz[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_zyz[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 				if (i==6) 
@@ -2940,7 +2940,7 @@ bool ecp_smooth_cubic_spline_generator::next_step()
 				if ( fabs(acc[i] * (1.0/(STEP*STEP)) ) > a_max_aa[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_aa[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 
@@ -2950,7 +2950,7 @@ bool ecp_smooth_cubic_spline_generator::next_step()
 				if ( fabs(vel[i] * (1.0/STEP) ) > v_max_aa[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_aa[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 				if (i==6) 
@@ -3042,7 +3042,7 @@ ecp_quintic_spline_generator::ecp_quintic_spline_generator (ecp_task& _ecp_task,
     v_max_aa[i+3] = 0.0;
         // tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
   }
- // 	sr_ecp_msg->message("Skonstruowano obiekt klasy ecp_quintic_spline_generator");
+ // 	sr_ecp_msg.message("Skonstruowano obiekt klasy ecp_quintic_spline_generator");
      v_max_zyz[6] = 5.0;   // predkosc katowa 1rad/s
       // tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
     a_max_zyz[6] = 0.0;
@@ -3250,7 +3250,7 @@ bool ecp_quintic_spline_generator::next_step()
 				if ( fabs(acc[i] * (1.0/(STEP*STEP)) ) > a_max_motor[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_motor[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 		  vel[i] = 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]*(node_counter*node_counter*node_counter) +
@@ -3258,7 +3258,7 @@ bool ecp_quintic_spline_generator::next_step()
 				if ( fabs(vel[i] * (1.0/STEP) ) > v_max_motor[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_motor[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 			the_robot->EDP_data.next_motor_arm_coordinates[i] =
@@ -3276,7 +3276,7 @@ bool ecp_quintic_spline_generator::next_step()
 				if ( fabs(acc[i] * (1.0/(STEP*STEP)) ) > a_max_joint[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_joint[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 		  vel[i] = 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]*(node_counter*node_counter*node_counter) +
@@ -3284,7 +3284,7 @@ bool ecp_quintic_spline_generator::next_step()
 				if ( fabs(vel[i] * (1.0/STEP) ) > v_max_joint[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_joint[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 
@@ -3302,7 +3302,7 @@ bool ecp_quintic_spline_generator::next_step()
 				if ( fabs(acc[i] * (1.0/(STEP*STEP)) ) > a_max_zyz[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_zyz[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 		  vel[i] = 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]*(node_counter*node_counter*node_counter) +
@@ -3310,7 +3310,7 @@ bool ecp_quintic_spline_generator::next_step()
 				if ( fabs(vel[i] * (1.0/STEP) ) > v_max_zyz[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_zyz[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 
@@ -3338,7 +3338,7 @@ bool ecp_quintic_spline_generator::next_step()
 				if ( fabs(acc[i] * (1.0/(STEP*STEP)) ) > a_max_aa[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_aa[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 		  vel[i] = 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]*(node_counter*node_counter*node_counter) +
@@ -3346,7 +3346,7 @@ bool ecp_quintic_spline_generator::next_step()
 				if ( fabs(vel[i] * (1.0/STEP) ) > v_max_aa[i] )
 					{ // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_aa[i]);
-					sr_ecp_msg->message(messg);
+					sr_ecp_msg.message(messg);
 					throw ECP_error (NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
 					} // end : if
 			if (i==6) 

@@ -227,7 +227,7 @@ void manual_moves_automatic_measures_generator::refresh_window
 	// Wyslanie polecenia do UI -> Polecenie odswiezenia okna.
 	if (MsgSend(UI_fd, &ecp_ui_msg,  sizeof(ECP_message),  NULL, 0) < 0){
 		 perror("ECP trajectory_reproduce_thread(): Send() to UI failed");
-		 sr_ecp_msg->message (SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
+		 sr_ecp_msg.message (SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
 		};
 	}; //: refresh_window
 
@@ -280,7 +280,7 @@ void manual_moves_automatic_measures_generator::save_mam_element(ofstream& to_fi
 void manual_moves_automatic_measures_generator::save_mam_list(char* filename) {
 	// Sprawdzenie, czy lista nie jest pusta.
 	if (mam_list_length() == 0){
-		sr_ecp_msg->message("MAM list empty.");
+		sr_ecp_msg.message("MAM list empty.");
 		return;
 		};
 try{
@@ -301,10 +301,10 @@ try{
 	// Zamkniecie pliku.
 	to_file.close();
 	// Komentarz - zapisanie pliku.
-	sr_ecp_msg->message ("Measures saved properly to file");
+	sr_ecp_msg.message ("Measures saved properly to file");
 	} // end: TRY
 catch(ECP_main_error e){
 	// Wylapanie i oblsuga bledow.
-	sr_ecp_msg->message (e.error_class, e.error_no);
+	sr_ecp_msg.message (e.error_class, e.error_no);
 	};
 	}; //: save_mam_list

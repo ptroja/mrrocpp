@@ -241,7 +241,7 @@ bool y_egg_force_generator::next_step ( ) {
 	break;
 	case 1: // wodzenie za nos
 
-		if (prev_gen_state != gen_state)	{ sr_ecp_msg->message("Wodzenie za nos - aby zakonczyc nacisnij ECP_TRIGGER"); }
+		if (prev_gen_state != gen_state)	{ sr_ecp_msg.message("Wodzenie za nos - aby zakonczyc nacisnij ECP_TRIGGER"); }
 
 		td.interpolation_node_no = 1;
 		td.internode_step_no = step_no;
@@ -270,7 +270,7 @@ bool y_egg_force_generator::next_step ( ) {
 	break;
 	case 2:  // oczekiwanie na jajko (brak ruchu)
 
-		if (prev_gen_state != gen_state)	{ sr_ecp_msg->message("Wloz jajko i nacisnij ECP_TRIGGER"); }
+		if (prev_gen_state != gen_state)	{ sr_ecp_msg.message("Wloz jajko i nacisnij ECP_TRIGGER"); }
 
 		td.interpolation_node_no = 1;
 		td.internode_step_no = step_no;
@@ -308,7 +308,7 @@ bool y_egg_force_generator::next_step ( ) {
 
 	case 4: // jazda w dol (pozycyjna)
 
-		if (prev_gen_state != gen_state)	{ sr_ecp_msg->message("Pozycyjny ruch w dol"); }
+		if (prev_gen_state != gen_state)	{ sr_ecp_msg.message("Pozycyjny ruch w dol"); }
 
 		td.interpolation_node_no = 1;
 		td.internode_step_no = step_no;
@@ -352,7 +352,7 @@ bool y_egg_force_generator::next_step ( ) {
 
 	case 5: // jazda w dol (pozycyjna, po zetknieciu z jajkiem) - stan do rozbijania
 
-		if (prev_gen_state != gen_state)	{ sr_ecp_msg->message("Pozycyjny ruch w dol, po zetknieciu z jajkiem"); }
+		if (prev_gen_state != gen_state)	{ sr_ecp_msg.message("Pozycyjny ruch w dol, po zetknieciu z jajkiem"); }
 
 		td.interpolation_node_no = 1;
 		td.internode_step_no = step_no;
@@ -383,7 +383,7 @@ bool y_egg_force_generator::next_step ( ) {
 
 	case 6: // silowy ruch w dol
 
-		if (prev_gen_state != gen_state)	{ sr_ecp_msg->message("Silowy ruch w dol - aby zakonczyc nacisnij ECP_TRIGGER"); }
+		if (prev_gen_state != gen_state)	{ sr_ecp_msg.message("Silowy ruch w dol - aby zakonczyc nacisnij ECP_TRIGGER"); }
 
 		td.interpolation_node_no = 1;
 		td.internode_step_no = step_no;
@@ -415,7 +415,7 @@ bool y_egg_force_generator::next_step ( ) {
 	break;
 	case 7: // krotki ruch w gore
 
-		if (prev_gen_state != gen_state)	{ sr_ecp_msg->message("Unoszenie"); }
+		if (prev_gen_state != gen_state)	{ sr_ecp_msg.message("Unoszenie"); }
 
 		td.interpolation_node_no = 1;
 		td.internode_step_no = 1000;
@@ -1118,7 +1118,7 @@ if (teach_or_move == YG_MOVE) {
 	break;
 	case 2:  // powierzchnia
 
-		if (prev_gen_state != gen_state)	{ sr_ecp_msg->message("ECP Powierzchnia"); }
+		if (prev_gen_state != gen_state)	{ sr_ecp_msg.message("ECP Powierzchnia"); }
 
 		td.interpolation_node_no = 1;
 		td.internode_step_no = step_no;
@@ -1161,7 +1161,7 @@ if (teach_or_move == YG_MOVE) {
 	break;
 
 	case 3:  // unoszenie
-		if (prev_gen_state != gen_state)	{ sr_ecp_msg->message("ECP Unoszenie"); }
+		if (prev_gen_state != gen_state)	{ sr_ecp_msg.message("ECP Unoszenie"); }
 
 		td.interpolation_node_no = 1;
 		td.internode_step_no = 500;
@@ -1185,7 +1185,7 @@ if (teach_or_move == YG_MOVE) {
 
 	case 4: // uniesienie
 
-		if (prev_gen_state != gen_state)	{ sr_ecp_msg->message("ECP Uniesienie"); }
+		if (prev_gen_state != gen_state)	{ sr_ecp_msg.message("ECP Uniesienie"); }
 
 		td.interpolation_node_no = 1;
 		td.internode_step_no = step_no;
@@ -1214,7 +1214,7 @@ if (teach_or_move == YG_MOVE) {
 
 	case 5: // opuszczanie
 
-		if (prev_gen_state != gen_state)	{ sr_ecp_msg->message("ECP Opuszczanie"); }
+		if (prev_gen_state != gen_state)	{ sr_ecp_msg.message("ECP Opuszczanie"); }
 
 		if ((sensor_m.begin())->second->image.force.event_type == 2) {
 			// czujnik wyczul powierzchnie
@@ -1243,7 +1243,7 @@ if (teach_or_move == YG_MOVE) {
 	break;
 	case 6: // zetkniecie z kartka
 
-		if (prev_gen_state != gen_state)	{ sr_ecp_msg->message("ECP Zetkniecie"); }
+		if (prev_gen_state != gen_state)	{ sr_ecp_msg.message("ECP Zetkniecie"); }
 
 		in_state_iteration++;
 

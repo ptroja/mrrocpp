@@ -32,7 +32,7 @@ mp_generator::MP_error::MP_error (uint64_t err0, uint64_t err1)
 {}
 
 mp_generator::mp_generator(mp_task& _mp_task) 
-	: sr_ecp_msg (*_mp_task.sr_ecp_msg),
+	: ecp_mp_generator (*_mp_task.sr_ecp_msg),
 	wait_for_ECP_pulse(false),
 	trigger(false),
 	phase(BEFORE_FIRST_STEP),
