@@ -1,48 +1,33 @@
-#// *INDENT-OFF*
-#/////////////////////////////////////////////////////////////////////////////////////////////////////////
+#///////////////////////////////////////////////////////////////////////////////
 #//
-#//                                         TECHNICAL SPECIFICATION
+#//                              TECHNICAL SPECIFICATION
 #//
-#/////////////////////////////////////////////////////////////////////////////////////////////////////////
+#///////////////////////////////////////////////////////////////////////////////
 #// 
 #// $Id$
 #//
-#/////////////////////////////////////////////////////////////////////////////////////////////////////////
-#// File              : $HeadURL$
-#// Revision          : $LastChangedRevision$
-#// Application       : MRROC++
-#/////////////////////////////////////////////////////////////////////////////////////////////////////////
-#// Creation date     : 
-#// Last modification : $LastChangedDate$
-#// Developer         : $LastChangedBy$
-#//       (elka email): jnowacki@elka.pw.edu.pl
-#//       (nick)      : jarosz 
-#//       (real name) : Janusz Nowacki
-#/////////////////////////////////////////////////////////////////////////////////////////////////////////
-#// File modification history:
+#///////////////////////////////////////////////////////////////////////////////
+#// $URL$
 #//
-#// Date          User              Description
-#// ==========    ==============    ======================================================================
-#// 2007-10-03    janusz.nowacki    1) technical specification added
-#//                                 2) more instructions for the Doxygen doc creation
-#//                                 3) SVN keywords added to file properties
-#//
-#// ----------    --------------    ----------------------------------------------------------------------
-#// 2007-10-04    janusz.nowacki    1) layout changes
-#//                                 2) retab done in Vim, TAB key set to 2 spaces
-#//
-#/////////////////////////////////////////////////////////////////////////////////////////////////////////
+#// Revision  : $LastChangedRevision$
+#// Project   : MRROC++
+#///////////////////////////////////////////////////////////////////////////////
+#// Created   : 2007-01-12
+#// Developer : tkornuta
+#// Modified  : $LastChangedDate$
+#// By        : $LastChangedBy$
+#///////////////////////////////////////////////////////////////////////////////
 #// File description:
 #// 
-#//   README file for MRROC++ proect !!!.
+#//   README file for MRROC++ project !!!.
 #// 
-#/////////////////////////////////////////////////////////////////////////////////////////////////////////
-#// *INDENT-ON*
+#///////////////////////////////////////////////////////////////////////////////
 
 
-###############################################################################
+
+################################################################################
 #                     In QNX, in order to build and run MRROC++
-###############################################################################
+################################################################################
 Following commands should be executed from MRROC++ main catalog:
 #pwd
 some_path/mrrocpp
@@ -78,24 +63,29 @@ mrrocppbla.tar.gz
 to use aplication:
 run "gns -s" on one of qnx network node's
 
-###############################################################################
+################################################################################
 #           In Windows, in order to build MRROC++ Doxygen documentation
-###############################################################################
+################################################################################
 1)  Make sure you have Doxygen (http://www.stack.nl/~dimitri/doxygen/) 
     installed in "C:\Program Files\doxygen"
+    - make appropriate changes in DoxyMrok_pl and DoxyMrok_en if necessary 
+    (see below)
 2)  Make sure you have Graphviz (http://www.graphviz.org/) 
-    installed in "C:/Program Files/ATT/Graphviz"
+    installed in "C:/Program Files/ATT/Graphviz" 
+              or "C:/Program Files/Graphviz2.16"
+    - make appropriate changes in DoxyMrok_pl and DoxyMrok_en if necessary
+    (see below)
 3)  Make sure you have Perl installed 
     (e.g.: http://www.activestate.com/Products/ActivePerl/)
 
-#------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 to set the Doxygen configuration files in Doxywizard GUI run
 # DoxConfig.bat
 the configuration files are: DoxyMrok_pl, DoxyMrok_en for Polish & English 
 version respectively
 
 
-#------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 to build the Doxygen documentation:
 1)  change the appropriate settings in # buildDox.bat and cleanDox.bat
 2)  run # buildDox.bat
@@ -105,15 +95,15 @@ the Mozilla Firefox installed,
 in other cases you should modify the build.bat and set the proper HTML viewer 
 under the HTML_VIEWER variable
 
-#------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 when the documentation is already built and you just want to display it, 
 you can display it by running
 # Dox.bat
 
 
-###############################################################################
+################################################################################
 #               On-line Doxygen documentation (English only): 
 #
 #           http://www.jnowacki.pl/mrrocpp/dox/EN/html/index.html
-###############################################################################
+################################################################################
 

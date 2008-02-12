@@ -1,5 +1,3 @@
-// *INDENT-OFF*
-// \if DOXYGEN_SHOULD_SKIP_THIS
 ////////////////////////////////////////////////////////////////////////////////
 //
 //                              TECHNICAL SPECIFICATION
@@ -14,8 +12,8 @@
 // Revision  : $LastChangedRevision$
 // Project   : MRROC++
 ////////////////////////////////////////////////////////////////////////////////
-// Created   : 2007-01-12
-// Developer : 
+// Created   : 2007-10-03
+// Developer : janusz.nowacki
 // Modified  : $LastChangedDate$
 // By        : $LastChangedBy$
 ////////////////////////////////////////////////////////////////////////////////
@@ -24,65 +22,57 @@
 //  Main page for MRROC++ Doxygen documentation.
 // 
 ////////////////////////////////////////////////////////////////////////////////
-// \endif
-// *INDENT-ON*
 
-// *INDENT-OFF*
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 //                              FUNCTIONAL SPECIFICATION
 //                                 (Doxygen comments)
 //
 ////////////////////////////////////////////////////////////////////////////////
-/*! \file         mrrocpp/Mainpage.dox
+/** @file         mrrocpp/Mainpage.dox
  *
- *  \polish
- *    \brief      Strona g³owna dla dokumentacji projektu tworzonej za pomoca 
+ *  @polish
+ *    @brief      Strona g³owna dla dokumentacji projektu tworzonej za pomoca 
  *                Doxygena.
- *  \endpolish
+ *  @endpolish
  *
- *  \english
- *    \brief      Main page for the project's documentation created with 
+ *  @english
+ *    @brief      Main page for the project's documentation created with 
  *                Doxygen.
- *  \endenglish
+ *  @endenglish
  *
  *//////////////////////////////////////////////////////////////////////////////
-// *INDENT-ON*
 
-// *INDENT-OFF*
-// \if DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 //                              FILE SOURCE w/ Doxygen comments
 //
 ////////////////////////////////////////////////////////////////////////////////
-// \endif
-// *INDENT-ON*
-
-// *INDENT-OFF*
-/*! \mainpage
+/** @mainpage
  *
- *  \polish
- *    \section  secRevision Status dokumentacji: 
+ *  @polish
+ *    @section  secRevision Status dokumentacji: 
  *              <ul>  
  *                <li> Numer rewizji projektu do ktorego odnosi sie 
  *                     niniejsza dokumentacja: $WCREV$
  *                <li> Data rewizji na ktorej opiera sie dokumentacja: $WCDATE$
  *                <li> Data stworzenia dokumentacji: $WCNOW$
  *              </ul>
- *  \endpolish
- *  \english
- *    \section  secRevision Documentation status: 
+ *  @endpolish
+ *  @english
+ *    @section  secRevision Documentation status: 
  *              <ul>  
  *                <li> Project revision number to which this documentation 
  *                     coresponds: $WCREV$
  *                <li> Commit date of the documented revision: $WCDATE$
  *                <li> Documentation creation time: $WCNOW$
  *              </ul>
- *  \endenglish
+ *  @endenglish
  *
- *  \polish
- *    \section  secZawartosc  Zawartosc dokumentacji
+ *  @polish
+ *    @section  secZawartosc  Zawartosc dokumentacji
  *              <ul>
  *                <li>  Dokumentacj dostepna on-line: 
  *                      <a href="http://www.jnowacki.pl/projects.html">
@@ -104,7 +94,7 @@
  *                    <li>  struktur danych do komunikacji miedzyprocesowej, 
  *                          w <tt>mrrocpp/include/common/com_buf.h</tt>
  *                  </ul> 
- *\if DOXYGEN_SHOULD_SKIP_THIS
+ *  @if DOXYGEN_SHOULD_SKIP_THIS
  *                  <ul>
  *                    <li>  typow i stalych uzywanych w systemie, w 
  *                          <tt>mrrocpp/include/common/impconst.h</tt>
@@ -115,11 +105,11 @@
  *                        <li>  <tt>mrrocpp/include/ecp/common/ecp_gen_jarosz.h</tt>,
  *                      </ul> 
  *                  </ul> 
- *\endif
+ *  @endif
  *              </ul>
- *  \endpolish
- *  \english
- *    \section  secZawartosc  Contents    
+ *  @endpolish
+ *  @english
+ *    @section  secZawartosc  Contents    
  *              <ul>
  *                <li>  Documentation available on-line: 
  *                      <a href="http://www.jnowacki.pl/projects.html">
@@ -140,7 +130,7 @@
  *                    <li>  data structures for IPC, 
  *                          in <tt>mrrocpp/include/common/com_buf.h</tt>
  *                  </ul> 
- *\if DOXYGEN_SHOULD_SKIP_THIS
+ *  @if DOXYGEN_SHOULD_SKIP_THIS
  *                  <ul>                      
  *                    <li>  types and constants used in the system,
  *                          in <tt>mrrocpp/include/common/impconst.h</tt>
@@ -151,40 +141,40 @@
  *                        <li>  <tt>mrrocpp/include/ecp/common/ecp_gen_jarosz.h</tt>,
  *                      </ul> 
  *                  </ul> 
- *\endif
+ *  @endif
  *              </ul>
- *  \endenglish
+ *  @endenglish
  *
- *    \todo
+ *    @todo
  *
- *  \polish
+ *  @polish
  *              <ul>
  *                <li>  Uzupelnienie szablonow komentarzy w plikach, 
  *                      w ktorych nie zostalo to zrobione.
  *                <li>  Uzupelnienie opisow wszystkich istotnych struktur danych 
  *                      i metod.
- *\if DOXYGEN_SHOULD_SKIP_THIS
+ *  @if DOXYGEN_SHOULD_SKIP_THIS
  *                <li>  Uporzadkowanie kodu zrodlowego w C++ za pomoca
- *                      programu <tt>indent</tt> \ref ind "[WAK+02]", 
+ *                      programu <tt>indent</tt> @ref ind "[WAK+02]", 
  *                      wg. notacji GNU.
- *\endif              
+ *  @endif              
  *              </ul> 
- *  \endpolish
- *  \english
+ *  @endpolish
+ *  @english
  *              <ul>
  *                <li>  Completion of the doxygen templates in the files 
  *                      where they are absent.
  *                <li>  Adding doxygen comments to other data structures 
  *                      and methods.
- *\if DOXYGEN_SHOULD_SKIP_THIS
+ *  @if DOXYGEN_SHOULD_SKIP_THIS
  *                <li>  Indenting the C++ source code according the GNU notation
- *                      using the <tt>indent</tt> program \ref ind "[WAK+02]".
- *\endif
+ *                      using the <tt>indent</tt> program @ref ind "[WAK+02]".
+ *  @endif
  *              </ul> 
- *  \endenglish
+ *  @endenglish
  *
- *  \polish
- *    \section  secStrukturaRamowa  Struktura ramowa
+ *  @polish
+ *    @section  secStrukturaRamowa  Struktura ramowa
  *    
  *    Jest to narzedzie programistyczne do tworzenia programow, z ktorych kazdy 
  *    ma dzialac na odmiennej platformie sprzetowej i wykonywac odmienne zadania.
@@ -200,9 +190,9 @@
  *            juz istniejace w bibliotece nie byly wystarczajace do 
  *            zrealizowania projektu.
  *    </ul>
- *  \endpolish
- *  \english
- *    \section  secStrukturaRamowa  Framework
+ *  @endpolish
+ *  @english
+ *    @section  secStrukturaRamowa  Framework
  *    
  *    It is a developer's tool to create programs, each of which is to run 
  *    on a different platform and perform different tasks. The framework 
@@ -215,9 +205,9 @@
  *      <li>  Tools for creating new modules in case the existing ones 
  *            should turn insufficient.
  *    </ul>
- *  \endenglish
- *  \polish
- *    \section  secMRROCPP MRROC++
+ *  @endenglish
+ *  @polish
+ *    @section  secMRROCPP MRROC++
  *
  *    MRROC++ <i>(Multi-Robot Research Oriented Controler)</i> jest 
  *    programowa struktura ramowa, wspomagajaca tworzenie sterownikow 
@@ -226,10 +216,10 @@
  *    Kod dostepny jest na stronie robotyki IAiIS (http:/robotyka.ia.pw.edu.pl),
  *    Prace wchodzace w sklad dokumentacji analitycznej i projektowej 
  *    MRROC++ oraz prace naukowe dotyczace tego systemu przedstawione zostaly 
- *    w sekcji \ref secBib "Dokumenty zwiazane".
- *  \endpolish
- *  \english
- *    \section  secMRROCPP MRROC++
+ *    w sekcji @ref secBib "Dokumenty zwiazane".
+ *  @endpolish
+ *  @english
+ *    @section  secMRROCPP MRROC++
  *
  *    MRROC++ <i>(Multi-Robot Research Oriented Controler)</i> is 
  *    a framework supporting real-time application development for multi-robot 
@@ -237,31 +227,31 @@
  *    The source code itself is available at the IAiIS robotics team homepage
  *    (http://robotyka.ia.pw.edu.pl). All the analytical and project documentation 
  *    of MRROC++ as well as the scietific publications concernig the system 
- *    has been listed in the \ref secBib "Related documents" section below.
- *  \endenglish
+ *    has been listed in the @ref secBib "Related documents" section below.
+ *  @endenglish
  *
- *  \polish
- *    \section  secStrukturaKatalogow Struktura katalogow
+ *  @polish
+ *    @section  secStrukturaKatalogow Struktura katalogow
  *    
  *    Ponizej przedstawiono wszystkie katalogi znajdujace sie w katalogu 
  *    glownym projektu.
  *    W niniejszej dokumentacji generator wzial pod uwage tylko te zawierajace
  *    kod zrodlowy (zaznaczone pogrubiona linia).
  *  
- *    \image html dirs_pl.png "Struktura katalogow MRROC++" width=5cm
- *  \endpolish
- *  \english
- *    \section secStrukturaKatalogow Directory structure
+ *    @image html dirs_pl.png "Struktura katalogow MRROC++" width=5cm
+ *  @endpolish
+ *  @english
+ *    @section secStrukturaKatalogow Directory structure
  *    
  *    All the directories in the main MRROC++ directory are listed below.
  *    In this documentation the generator shows only the directories 
  *    containing source code (marked with thick lines).
  *  
- *    \image html dirs_en.png "MRROC++ directory structure" width=5cm
- *  \endenglish
+ *    @image html dirs_en.png "MRROC++ directory structure" width=5cm
+ *  @endenglish
  *
- *  \polish
- *    \section secBib Dokumenty zwiazane:
+ *  @polish
+ *    @section secBib Dokumenty zwiazane:
  *  
  *    <b>UWAGA:</b> Linki do ponizszych dokumentow beda dzialac jedynie 
  *    w przypadku istnienia na dysku katalogu <tt>mrrocpp_doc</tt>, 
@@ -269,103 +259,105 @@
  *    (nie dotyczy to oczywiscie linkow do stron internetowych).
  *
  *    Proces tworzenia niniejszej dokumentacji opisany zostal w pracy 
- *    magisterskiej \ref Now "[Now]".
+ *    magisterskiej @ref Now "[Now]".
  *    Sposob dokumentowania kodu i formaty komentarzy sa dokladnie opisane 
- *    w \ref Now07a "[Now07a]".
+ *    w @ref Now07a "[Now07a]".
  *
  *    Narzedzie Doxygen, uzyte do tworzenia dokumentacji kodu zrodlowego 
- *    zostalo opisane w  \ref Now "[Now]", \ref dox06 "[dox06]" 
- *    i \ref Hee07 "[Hee07]".
- *  \endpolish
- *  \english
- *    \section secBib Related documents:
+ *    zostalo opisane w  @ref Now "[Now]", @ref dox06 "[dox06]" 
+ *    i @ref Hee07 "[Hee07]".
+ *  @endpolish
+ *  @english
+ *    @section secBib Related documents:
  *    <b>CAUTION:</b> The links below will work provided that you have 
  *    a <tt>mrrocpp_doc</tt> directory on yur hard drive, located at the 
  *    same folder as  <tt>mrrocpp</tt>
  *    (some links lead to websites and they will of course work anyhow).
  *
  *    The creation process of this documentation is presented in 
- *    the Master's Thesis \ref Now "[Now]".
+ *    the Master's Thesis @ref Now "[Now]".
  *    Docuemnting the code process and various formats of the comments 
- *    are thoroughly described in \ref Now07 "[Now07a]".
+ *    are thoroughly described in @ref Now07 "[Now07a]".
  *
  *    Doxygen tool, used to create this source code documentation is 
- *    described in \ref Now "[Now]", \ref dox06 "[dox06]" 
- *    and \ref Hee07 "[Hee07]".
- *  \endenglish
+ *    described in @ref Now "[Now]", @ref dox06 "[dox06]" 
+ *    and @ref Hee07 "[Hee07]".
+ *  @endenglish
  *
- *                \if DOXYGEN_SHOULD_SKIP_THIS
+ *                @if DOXYGEN_SHOULD_SKIP_THIS
  *                ///////////////////////////////////////////////////////
  *                //      Common sections for both language versions:
  *                ///////////////////////////////////////////////////////
- *                \endif
+ *                @endif
  *  
- *  \polish
- *      \subsection sub_dok_narzedzi  Dokumentacja uzytych narzedzi:
- *  \endpolish
- *  \english
- *      \subsection sub_dok_narzedzi  Tools documentations:
- *  \endenglish
+ *  @polish
+ *      @subsection sub_dok_narzedzi  Dokumentacja uzytych narzedzi:
+ *  @endpolish
+ *  @english
+ *      @subsection sub_dok_narzedzi  Tools documentations:
+ *  @endenglish
  *      <ul>
- *        <li>  \anchor dox06 [dox06] 
+ *        <li>  @anchor dox06 [dox06] 
  *                <a href="http://www.stack.nl/~dimitri/doxygen/">
  *                  <i>Doxygen home page</i> [online].
  *                </a>
- *        <li>  \anchor Hee07 [Hee07] 
+ *        <li>  @anchor Hee07 [Hee07] 
  *                <a href="..\..\..\..\mrrocpp_doc\manuals\doxygen\doxygen_manual-1.5.4.pdf">
  *                  Heesh D. van: <i>Doxygen. Manual for version 1.5.4</i>, 1997-2007.
  *                </a>    
- *\if DOXYGEN_SHOULD_SKIP_THIS
- *        <li>  \anchor ind   [WAK+02] 
+ *  @if DOXYGEN_SHOULD_SKIP_THIS
+ *        <li>  @anchor ind   [WAK+02] 
  *                <a href="..\..\..\..\mrrocpp_doc\tools\indent\indent.pdf">
  *                  Wood C., Arceneaux J., Kingdon J., Ingamells D.: 
  *                  <i>Indent. Format C code</i>. Edition 2.2.9, for Indent Version 2.2.9, 
  *                  10 listopada 2002.
  *                </a>
- *\endif
+ *  @endif
  *      </ul>
  *
- *  \polish
- *      \subsection sub_dok_tech  Dokumentacja techniczna projektu:
- *  \endpolish
- *  \english
- *      \subsection sub_dok_tech  Project's technical documentation:
- *  \endenglish
+ *  @polish
+ *      @subsection sub_dok_tech  Dokumentacja techniczna projektu:
+ *  @endpolish
+ *  @english
+ *      @subsection sub_dok_tech  Project's technical documentation:
+ *  @endenglish
  *
  *      <ul>                        
- *        <li>  \anchor ZSW06b [ZSW+06a]  
+ *        <li>  @anchor ZSW06b [ZSW+06a]  
  *                <a href="..\..\..\..\mrrocpp-base-system-description\finall-pdf\MRROC++.pdf">
  *                  Zielinski C., Szynkiewicz W., Winiarski T., Kornuta T.:
  *                  <i>MRROC++ Based System Description</i>. 
  *                  Report no 06-09, Warsaw, November 2006.
  *                </a>
- *        <li>  \anchor Now07a [Now07a]  
+ *        <li>  @anchor Now07a [Now07a]  
  *                <a href="..\..\..\..\\mrrocpp_doc\tech_doc\doc_proj\Source_Code_Documentation.pdf">
  *                  Nowacki J. K.: <i>Technical Documentation. MRROC++. Source code documenting</i>. 
  *                  Warsaw, January 2008.
  *                </a>
- *\if DOXYGEN_SHOULD_SKIP_THIS
- *        <li>  \anchor Now07b [Now07b]  
+ *
+ *  @if DOXYGEN_SHOULD_SKIP_THIS
+ *        <li>  @anchor Now07b [Now07b]  
  *                <a href="..\..\..\..\\mrrocpp_doc\tech_doc\doc_proj\Version_Control.pdf">
  *                  Nowacki J. K.: <i>Technical Documentation. MRROC++. Code versioning</i>. 
  *                  Warsaw, January 2008.
  *                </a>                                                                                       
  *      </ul>
- *\endif
- *  \polish
- *      \subsection sub_dypl  Prace dypmlomowe dotyczace MRROC++: 
- *  \endpolish
- *  \english
- *      \subsection sub_dypl  Bachelor's and Master's theses concerning MRROC++:
- *  \endenglish
+ *  @endif
+ *
+ *  @polish
+ *      @subsection sub_dypl  Prace dypmlomowe dotyczace MRROC++: 
+ *  @endpolish
+ *  @english
+ *      @subsection sub_dypl  Bachelor's and Master's theses concerning MRROC++:
+ *  @endenglish
  *
  *      <ul>
- *        <li>  \anchor Now04 [Now04]
+ *        <li>  @anchor Now04 [Now04]
  *                <a href="..\..\..\..\mrrocpp_doc\theses\pdi_JanuszNowacki.pdf">
  *                  Nowacki J. K.: <i>Generatory trajektorii w systemie MRROC++</i>. 
  *                  Praca inzynierska. Warszawa, wrzesien 2004.
  *                </a>
- *        <li>  \anchor Now   [Now]
+ *        <li>  @anchor Now   [Now]
  *                <a href="..\..\..\..\mrrocpp_doc\theses\pdm_JanuszNowacki.pdf">
  *                  Nowacki J. K.: <i>Zastosowanie procesow, metod i narzedzi inzynierii oprogramowania
  *                  w refaktoryzacji i dokumentacji projektu MRROC++</i>. 
@@ -373,29 +365,27 @@
  *                </a>
  *      </ul>
  *
- *  \polish
- *      \section sub_zespol  Zespol programistow MRROC++:
- *  \endpolish
- *  \english
- *      \section sub_zespol  MRROC++ Developers team:
- *  \endenglish
+ *  @polish
+ *      @section sub_zespol  Zespol programistow MRROC++:
+ *  @endpolish
+ *  @english
+ *      @section sub_zespol  MRROC++ Developers team:
+ *  @endenglish
  *
  *      <ul>
- *        <li>  \anchor Y         <b>Y</b>              
+ *        <li>  @anchor Y         <b>Y</b>              
  *              Tomek Winiarski (yoyek),  twiniars@ia.pw.edu.pl
- *        <li>  \anchor W         <b>W</b>              
+ *        <li>  @anchor W         <b>W</b>              
  *              Wojciech Szynkiewicz,     W.Szynkiewicz@ia.pw.edu.pl
- *        <li>  \anchor tkornuta  <b>tkornuta</b>           
+ *        <li>  @anchor tkornuta  <b>tkornuta</b>           
  *              Tomasz Kornuta,           tkornuta@ia.pw.edu.pl
- *        <li>  \anchor 7         <b></b><b>7 (siodmy)</b>  
+ *        <li>  @anchor 7         <b></b><b>7 (siodmy)</b>  
  *              Maciej Staniak            mstaniak@elka.pw.edu.pl
- *        <li>  \anchor jarosz    <b>jarosz</b>         
+ *        <li>  @anchor jarosz    <b>jarosz</b>         
  *              Janusz Nowacki,           jnowacki@elka.pw.edu.pl
- *        <li>  \anchor kbochnia  <b>kbochnia</b>       
+ *        <li>  @anchor kbochnia  <b>kbochnia</b>       
  *              Krzysztof Bochnia,        kbochnia@elka.pw.edu.pl
- *        <li>  \anchor KD        <b>KD</b>             
+ *        <li>  @anchor KD        <b>KD</b>             
  *              Krzysztof Dziubek,        kdziubek@elka.pw.edu.pl   
  *      </ul>
  *//////////////////////////////////////////////////////////////////////////////
-// *INDENT-ON*
-//
