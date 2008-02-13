@@ -36,7 +36,7 @@ class edp_speaker_effector  : public edp_effector {
 	bool initialize_incorrect;
 	
 	//device  
-	int     card;
+	int     card; 
 	int     dev;
 	snd_pcm_t *pcm_handle;
 	int     mSamples;
