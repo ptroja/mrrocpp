@@ -534,7 +534,7 @@ private:
 
 protected:
  
-	// czy chwytak wlaczony ?
+	// czy chwytak wlaczony ? 
 	short is_gripper_active;
 	
 	pthread_t force_tid;
