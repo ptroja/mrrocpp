@@ -46,6 +46,7 @@ typedef struct _FROM_VA
 		} rc_windows;
 		playerc_joystick_t player_joystick;
 		playerc_position_t player_position;
+		playerc_speech_recognition_t player_speech_recognition;
 	};
 } FROM_VA;
 

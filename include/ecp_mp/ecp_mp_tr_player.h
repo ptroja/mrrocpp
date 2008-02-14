@@ -34,6 +34,7 @@ class player_transmitter: public transmitter{
 	
 	int position_set_cmd_vel(double vx = 0.0, double vy = 0.0, double va = 0.0, int state = 1);
 	int position_set_cmd_pose(double gx = 0.0, double gy = 0.0, double ga = 0.0, int state = 1);
+	int say(const char *str);
 }; 
 
 #endif

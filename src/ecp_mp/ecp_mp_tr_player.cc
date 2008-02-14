@@ -56,11 +56,11 @@ player_transmitter::player_transmitter  (
 	switch (if_code) {
 		case PLAYER_JOYSTICK_CODE:              // Joytstick
 			device = (playerc_device_t *) playerc_joystick_create(client, devindex);
-			fprintf(stderr, "jcreate\n");
+			fprintf(stderr, "playerc_joystick_created\n");
 			break;
 		case PLAYER_POSITION_CODE:              // device that moves about
 			device = (playerc_device_t *) playerc_position_create(client, devindex);
-			fprintf(stderr, "pcreate\n");
+			fprintf(stderr, "playerc_position_created\n");
 			break;
 		case PLAYER_PLAYER_CODE:                // the server itself
 		case PLAYER_POWER_CODE:                 // power subsystem
@@ -72,6 +72,9 @@ player_transmitter::player_transmitter  (
 		case PLAYER_AUDIO_CODE:                 // audio I/O
 		case PLAYER_FIDUCIAL_CODE:              // fiducial detector
 		case PLAYER_SPEECH_CODE:                // speech I/O
+			device = (playerc_device_t *) playerc_speech_create(client, devindex);
+			fprintf(stderr, "playerc_speech_created\n");
+			break;
 		case PLAYER_GPS_CODE:                   // GPS unit
 		case PLAYER_BUMPER_CODE:                // bumper array
 		case PLAYER_TRUTH_CODE:
@@ -101,8 +104,9 @@ player_transmitter::player_transmitter  (
 		case PLAYER_MOTOR_CODE:                 // motor interface
 		case PLAYER_POSITION2D_CODE:            // 2-D position
 		case PLAYER_SPEECH_RECOGNITION_CODE:    // speech recognitionI/O
-			device = (playerc_device_t *) playerc_position_create(client, devindex);
-			fprintf(stderr, "pcreate\n");
+			device = (playerc_device_t *) playerc_speech_recognition_create(client, devindex);
+			fprintf(stderr, "playerc_speech_recognition_created\n");
+			break;
 		case PLAYER_OPAQUE_CODE:                // plugin interface
 		default:
 			break;
@@ -150,8 +154,7 @@ player_transmitter::~player_transmitter ()
 
 bool player_transmitter::t_write()
 {
-
-	return 1;
+	return true;
 }
 
 bool player_transmitter::t_read(bool wait)
@@ -169,7 +172,7 @@ bool player_transmitter::t_read(bool wait)
 	}
 
 	switch (if_code) {
-		case PLAYER_JOYSTICK_CODE:              // Joytstick
+		case PLAYER_JOYSTICK_CODE:              // Joystick
 			{
 				playerc_joystick_t *dev = (playerc_joystick_t *) device;
 				from_va.player_joystick = *dev;
@@ -220,6 +223,11 @@ bool player_transmitter::t_read(bool wait)
 		case PLAYER_MOTOR_CODE:                 // motor interface
 		case PLAYER_POSITION2D_CODE:            // 2-D position
 		case PLAYER_SPEECH_RECOGNITION_CODE:    // speech recognitionI/O
+			{
+				playerc_speech_recognition_t *dev = (playerc_speech_recognition_t *) device;
+				from_va.player_speech_recognition = *dev;
+			}
+			break;
 		case PLAYER_OPAQUE_CODE:                // plugin interface
 		default:
 			break;
@@ -296,11 +304,28 @@ int player_transmitter::position_set_cmd_pose(double gx, double gy, double ga, i
 	player_position_cmd_t cmd;
 
 	memset(&cmd, 0, sizeof(cmd));
+	
 	cmd.xpos = htonl((int) (gx * 1000.0));
 	cmd.ypos = htonl((int) (gy * 1000.0));
 	cmd.yaw = htonl((int) (ga * 180.0 / M_PI));
 	cmd.state = state;
 	cmd.type = 1;
+
+	return playerc_client_write(client, device, &cmd, sizeof(cmd));
+}
+
+// say phrase
+int player_transmitter::say(const char *str)
+{
+	if (if_code != PLAYER_SPEECH_CODE)
+		return -1;
+		
+	player_speech_cmd_t cmd;
+
+	memset(&cmd, 0, sizeof(cmd));
+
+	if (str)
+		strncpy ((char *) (cmd.string), str, PLAYER_SPEECH_MAX_STRING_LEN);
 
 	return playerc_client_write(client, device, &cmd, sizeof(cmd));
 }
