@@ -288,7 +288,7 @@ while(1) {
 				PtWindowToFront (ABW_teaching_window);
 			}
 			PtLeave(0);
-			
+			ui_ecp_obj->trywait_sem();
 			ui_ecp_obj->take_sem();
 			
 			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
@@ -300,7 +300,7 @@ while(1) {
 			ApCreateModule (ABM_yes_no_window, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_pytanie, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
 			PtLeave(0);
-		
+			ui_ecp_obj->trywait_sem();
 			ui_ecp_obj->take_sem();
 		
 			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
@@ -327,7 +327,7 @@ while(1) {
 			ApCreateModule (ABM_wnd_input_double, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_input_double, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
 			PtLeave(0);
-		
+			ui_ecp_obj->trywait_sem();
 			ui_ecp_obj->take_sem();
 
 	        if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
@@ -340,7 +340,7 @@ while(1) {
 			ApCreateModule (ABM_wnd_input_integer, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_input_integer, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
 			PtLeave(0);
-		
+			ui_ecp_obj->trywait_sem();
 			ui_ecp_obj->take_sem();
 					
 		   	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
@@ -372,7 +372,7 @@ while(1) {
 			 }
 				
 			PtLeave(0);
-		
+			ui_ecp_obj->trywait_sem();
 			ui_ecp_obj->take_sem();
 		
 		    	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
@@ -402,6 +402,7 @@ while(1) {
 			}
 
 		          ui_ecp_obj->ui_rep.reply = FILE_LOADED;
+		          ui_ecp_obj->trywait_sem();
 		       	 ui_ecp_obj->take_sem();
 		
 		     	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
@@ -430,6 +431,7 @@ while(1) {
 			}
    
   		 ui_ecp_obj->ui_rep.reply = FILE_SAVED;
+  		 ui_ecp_obj->trywait_sem();
   		ui_ecp_obj->take_sem();
 
      	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {

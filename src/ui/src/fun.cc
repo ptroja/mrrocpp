@@ -465,6 +465,7 @@ close_file_selection_window( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 	{
 		ui_ecp_obj->ui_rep.reply = QUIT;
 	}
+	ui_ecp_obj->trywait_sem();
 	ui_ecp_obj->post_sem();
 	
 	PtDestroyWidget( ABW_file_selection_window );
@@ -487,6 +488,7 @@ close_teaching_window( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 	{
 		ui_ecp_obj->ui_rep.reply = QUIT;
 	}
+	ui_ecp_obj->trywait_sem();
 	ui_ecp_obj->post_sem();
 	
 	PtDestroyWidget( ABW_teaching_window );
@@ -2157,6 +2159,7 @@ close_yes_no_window( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 	{
 		ui_ecp_obj->ui_rep.reply = QUIT;
 	}
+	ui_ecp_obj->trywait_sem();
 	ui_ecp_obj->post_sem();
 	return( Pt_CONTINUE );
 
@@ -2175,6 +2178,7 @@ close_input_integer_window( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 	{
 		ui_ecp_obj->ui_rep.reply = QUIT;
 	}
+	ui_ecp_obj->trywait_sem();
 	ui_ecp_obj->post_sem();
 	return( Pt_CONTINUE );
 
@@ -2193,6 +2197,7 @@ close_input_double_window( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 	{
 		ui_ecp_obj->ui_rep.reply = QUIT;
 	}
+	ui_ecp_obj->trywait_sem();
 	ui_ecp_obj->post_sem();
 	return( Pt_CONTINUE );
 
@@ -2211,6 +2216,7 @@ close_choose_option_window( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 	{
 		ui_ecp_obj->ui_rep.reply = QUIT;
 	}
+	ui_ecp_obj->trywait_sem();
 	ui_ecp_obj->post_sem();
 	return( Pt_CONTINUE );
 
@@ -2269,6 +2275,7 @@ teaching_window_send_move( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 	ui_ecp_obj->ui_rep.double_number = *motion_time;
 	ui_ecp_obj->ui_rep.reply = NEXT;
 	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+	ui_ecp_obj->trywait_sem();
 	ui_ecp_obj->post_sem();
 	
 	return( Pt_CONTINUE );
