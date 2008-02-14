@@ -108,6 +108,8 @@ protected:
  double delta_eint;              // przyrost calki uchybu
  double delta_eint_old;          // przyrost calki uchybu w poprzednim kroku
  
+ 
+ 
  //
  double int_current_error;
  int display;
@@ -135,7 +137,7 @@ public:
      // obliczenie nastepnej wartosci zadanej dla napedu - metoda abstrakcyjna
 
  double get_set_value ( void );
-
+ double previous_abs_position; // poprzednia pozycja absolutna dla potrzeb trybu testowego
  void insert_new_step (double ns);
  void insert_meassured_current (int meassured_current_l);
  
@@ -245,6 +247,8 @@ int edp_caller;						// by 7&Y
  void clear_reply_status ( void );
 
  void clear_reply_status_tmp ( void );
+ 
+
 
 public:
 

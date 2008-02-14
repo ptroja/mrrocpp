@@ -75,6 +75,7 @@ bool servo_buffer::get_command (void) {
 			return false; // Potraktowac jakby nie bylo polecenia
 		} // end: if
 	    
+	    
 		// Uprzednio nie bylo bledu => wstepna analiza polecenia
 		switch (command_type()) {
 			case SYNCHRONISE:
@@ -190,6 +191,9 @@ void servo_buffer::Move_passive (void) { //
 
 /*-----------------------------------------------------------------------*/
 void servo_buffer::Move (void) {
+	
+	double new_increment[master->number_of_servos];
+	
  // wykonanie makrokroku ruchu
 
  // okreslenie momentu wyslania informacji o zakonczeniu pierwszej fazy ruchu  do READING_BUFFER
@@ -198,10 +202,14 @@ void servo_buffer::Move (void) {
  else
    send_after_last_step = false;
  
- /*
- regulator_ptr[0]->insert_new_step((command.parameters.move.abs_position[0] - hi->get_position(0)*(2*M_PI)/IRP6_POSTUMENT_AXE_0_TO_5_INC_PER_REVOLUTION) /
-		 (command.parameters.move.number_of_steps));
+	/*
+	regulator_ptr[0]->insert_new_step((command.parameters.move.abs_position[0] - hi->get_position(0)*(2*M_PI)/IRP6_POSTUMENT_AXE_0_TO_5_INC_PER_REVOLUTION) /
+		command.parameters.move.number_of_steps));
 	*/
+
+ for (int  k = 0; k < master->number_of_servos; k++) {
+   new_increment[k] = command.parameters.move.macro_step[k] / command.parameters.move.number_of_steps;
+ }; // end: for
 
 
  // realizacja makrokroku przez wszystkie napedy;  i - licznik krokow ruchu
@@ -224,8 +232,15 @@ void servo_buffer::Move (void) {
    
    
  for (int  k = 0; k < master->number_of_servos; k++) {
-   regulator_ptr[k]->insert_new_step(command.parameters.move.macro_step[k] / command.parameters.move.number_of_steps);
+   regulator_ptr[k]->insert_new_step(new_increment[k]);
+   if (master->test_mode) {
+		master->update_servo_current_motor_pos_abs(
+			regulator_ptr[k]->previous_abs_position + new_increment[k]*j ,k);	
+	}
  }; // end: for 
+   
+   
+   
    
    if ( Move_a_step() == NO_ERROR_DETECTED) { // NO_ERROR_DETECTED
 //  std::cout<<"NO_ERROR_DETECTED\n";
@@ -254,6 +269,11 @@ void servo_buffer::Move (void) {
      break; // przerwac ruch, bo byl blad
    }; // end: else od: if (Move_a_step ...) == NO_ERROR_DETECTED
  }; // end: for(j)
+
+    for ( int i = 0;  i < master->number_of_servos; i++) {
+		regulator_ptr[i]->previous_abs_position = command.parameters.move.abs_position[i];
+	}
+
 
 }; // end: servo_buffer::Move
 /*-----------------------------------------------------------------------*/

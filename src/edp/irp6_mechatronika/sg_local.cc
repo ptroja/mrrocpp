@@ -33,7 +33,10 @@ BYTE irp6m_servo_buffer::Move_a_step (void) {
   // by Y - do dokonczenia
 	  for (int i=0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
 	  {
+	  		if (!(master->test_mode))
+		{
     	     master->update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_MECHATRONIKA_AXE_0_TO_5_INC_PER_REVOLUTION, i);
+		}
      }
    
       master->servo_joints_and_frame_actualization_and_upload();// by Y - aktualizacja trasformatora

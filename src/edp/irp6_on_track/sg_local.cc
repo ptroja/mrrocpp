@@ -50,9 +50,6 @@ BYTE irp6ot_servo_buffer::Move_a_step (void) {
 				   	     master->update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_ON_TRACK_AXE_0_TO_5_INC_PER_REVOLUTION, i);	
 					break;
 				}
-			} else
-			{
-				master->update_servo_current_motor_pos_abs(command.parameters.move.abs_position[i],i);
 			}
 
 			/*
