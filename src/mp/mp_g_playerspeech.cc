@@ -27,7 +27,7 @@ bool mp_playerspeech_generator::first_step() {
 }
 
 bool mp_playerspeech_generator::next_step() {
-	player_tr->t_read(true);
+	//player_tr->t_read(true);
 	
-	return true;
+	return false;
 }
