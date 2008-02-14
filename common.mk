@@ -33,7 +33,7 @@ CPPFLAGS = -I$(HOMEDIR)/include
 FLAGS = ${DEBUG} ${OPTIM} ${WARN}
 CFLAGS = ${FLAGS}
 CXXFLAGS = ${FLAGS}
-LDFLAGS = ${DEBUG} -l m -l socket -l cpp
+LDFLAGS = ${DEBUG} -l m -l socket -l cpp -lang-c++
 
 LIBDIR = $(HOMEDIR)/lib
 BINDIR = $(HOMEDIR)/bin
