@@ -409,7 +409,7 @@ void edp_ATI3084_force_sensor::wait_for_event()
     }
     else
     {
-        sleep(1);
+        usleep(1000);
     }
 }
 ;
