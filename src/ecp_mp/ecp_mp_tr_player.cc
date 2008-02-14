@@ -161,10 +161,10 @@ bool player_transmitter::t_read(bool wait)
 		pthread_mutex_lock(&this->mtx);
 		int rc = 0;
 		while (device->fresh == 0 && rc == 0) {
-			printf("pthread_cond_wait()...");
-			fflush(stdout);
+			//fprintf(stderr, "pthread_cond_wait()...");
+			//fflush(stderr);
 			rc = pthread_cond_wait(&this->cond, &this->mtx);
-			printf("\n");
+			//fprintf(stderr, "\n");
 		}
 	}
 
@@ -244,7 +244,7 @@ void * player_transmitter::query_loop(void * arg)
 	while(1) {
 		int rc;
 		playerc_client_read(clnt);
-		printf("playerc_client_read()\n");
+		//fprintf(stderr, "playerc_client_read()\n");
 
 		if ((rc = pthread_mutex_lock(&me->mtx))) {
 			fprintf(stderr, "player_transmitter::query_loop(): pthread_mutex_lock(): %s\n",
@@ -257,7 +257,7 @@ void * player_transmitter::query_loop(void * arg)
 				fprintf(stderr, "player_transmitter::query_loop(): pthread_cond_signal(): %s\n",
 				        strerror(rc));
 			}
-			printf("pthread_cond_signal()\n");
+			//fprintf(stderr, "pthread_cond_signal()\n");
 		}
 
 		if ((rc = pthread_mutex_unlock(&me->mtx))) {

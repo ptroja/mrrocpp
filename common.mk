@@ -42,5 +42,5 @@ ECP_MPDIR = $(HOMEDIR)/src/ecp_mp
 AR = i386-pc-nto-qnx6.3.0-ar
 ARFLAGS = cru
 
-#INSTALL = ln -f
-INSTALL = cp
+INSTALL = ln -f
+#INSTALL = cp

@@ -3,10 +3,12 @@
 
 #include "mp/mp_generator.h"
 #include "ecp_mp/ecp_mp_tr_player.h"
+#include "player/playercommon.h"
 
 class mp_playerpos_generator : public mp_generator
 {
 	private:
+		double ang_eps, dist_eps;
 		double gx, gy, ga; // GoTo position
 		player_transmitter *player_tr; // underlaying Player transmitter
 
@@ -15,6 +17,8 @@ class mp_playerpos_generator : public mp_generator
 
 		bool first_step(void);
 		bool next_step(void);
+		
+		void set_target(double _gx = 0, double _gy = 0, double _ga = 0);
 };
 
 #endif /*MP_G_PLAYERPOS_H_*/

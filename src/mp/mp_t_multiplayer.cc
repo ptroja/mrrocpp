@@ -6,6 +6,7 @@
 // -------------------------------------------------------------------------
 
 #include <stdio.h>
+#include <math.h>
 #include <map>
 
 #include "lib/srlib.h"
@@ -19,7 +20,6 @@ mp_task* return_created_mp_task (void)
 	return new mp_task_multiplayer();
 }
 
-// methods fo mp template to redefine in concete class
 void mp_task_multiplayer::task_initialization(void) 
 {
 	// Powolanie czujnikow
@@ -27,38 +27,46 @@ void mp_task_multiplayer::task_initialization(void)
 		new player_transmitter (TRANSMITTER_PLAYER, "[pcm1]", *this,
 		"192.168.18.30", 6665, "position", 3, 'a');
 	
-	printf("mp_task_multiplayer.transmitter_m.count() = %d @ %s:%d\n", transmitter_m.size(), __FILE__, __LINE__);
-		
 	sr_ecp_msg->message("MP multiplayer task loaded");
 }
  
 void mp_task_multiplayer::main_task_algorithm(void)
 {
-  	mp_playerpos_generator playerpos_gen(*this, 1.0); 
+  	mp_playerpos_generator playerpos_gen(*this); 
    	playerpos_gen.transmitter_m = this->transmitter_m;
    	
-   	printf("this->transmitter_m.count() = %d @ %s:%d\n", this->transmitter_m.size(), __FILE__, __LINE__);
-   	printf("playerpos_gen.transmitter_m.count() = %d @ %s:%d\n", playerpos_gen.transmitter_m.size(), __FILE__, __LINE__);
+	bool break_state = false;
 
+	for (;;) { 
 	// Oczekiwanie na zlecenie START od UI  
 	sr_ecp_msg->message("MP multiplayer device - press start");
 	wait_for_start ();
 	// Wyslanie START do wszystkich ECP 
 	start_all (robot_m);
 	
-	bool break_state = false;
 
-	for (;;) { 
-
-		// Zlecenie wykonania kolejnego makrokroku
-		for (;;) {
+		do {
 			sr_ecp_msg->message("Nowy makrokrok");
 
-			if (Move ( playerpos_gen)) {
+			playerpos_gen.set_target(1.0, 0.0, 0.0);
+			if (Move(playerpos_gen)) {
 		        	break_state = true;
 		        	break;
 			}
-		}
+			
+			playerpos_gen.set_target(1.0, 0.0, M_PI_2);			
+			if (Move(playerpos_gen)) {
+		        	break_state = true;
+		        	break;
+			}
+
+			playerpos_gen.set_target(1.0, 0.5, M_PI_2);
+			if (Move(playerpos_gen)) {
+		        	break_state = true;
+		        	break;
+			}
+			
+		} while(0);
 		
 		if (break_state)
 			break;
