@@ -149,7 +149,7 @@ void *force_thread(void *arg)
 	}
 		
 	catch (sensor::sensor_error e){
-		printf("sensor_error w force thread  EDP\n");
+		printf("sensor_error w force thread EDP\n");
 		
 		switch(e.error_no){
 			case SENSOR_NOT_CONFIGURED:
