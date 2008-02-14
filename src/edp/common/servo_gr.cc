@@ -379,6 +379,7 @@ regulator::regulator(BYTE reg_no, BYTE reg_par_no) {
 servo_pos_increment_new_sum =0;// by Y
 
 step_new_over_constraint_sum = 0.0;
+previous_abs_position = 0.0;
 
 
  meassured_current = 0;                 // prad zmierzony
