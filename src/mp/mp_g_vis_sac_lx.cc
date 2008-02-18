@@ -156,7 +156,7 @@ bool mp_vis_sac_lx_generator::first_step () {
 
 	for(int i=0;i<6;i++) {
 		irp6ot->ecp_td.MPtoECP_position_velocity[i] = 0;
-		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
+//		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
 	//	irp6ot->ecp_td.MPselection_vector[i] = FORCE_SV_AX;
 //		 irp6ot->ecp_td.MPselection_vector[i] = POSE_SV_AX;
 	}
@@ -169,6 +169,8 @@ bool mp_vis_sac_lx_generator::first_step () {
 		irp6ot->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
 		irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 		irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		irp6ot->ecp_td.MPtoECP_behaviour[i] = GUARDED_MOTION;
+		irp6ot->ecp_td.MPtoECP_behaviour[i+3] = GUARDED_MOTION;
 	}
 
 

@@ -100,6 +100,8 @@ bool mp_tff_single_robot_nose_run_generator::first_step ()
 		irp6->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
 		irp6->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 		irp6->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		irp6->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+		irp6->ecp_td.MPtoECP_behaviour[i+3] = CONTACT;
 	}
 
 
@@ -209,13 +211,19 @@ bool mp_tff_nose_run_generator::first_step ()
 		irp6ot->ecp_td.MPtoECP_position_velocity[i+3] = 0;
 		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
 		if(irp6ot_con)
+		{
 			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+				irp6ot->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+			}
 		else
-			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
+			irp6ot->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
 		if(irp6ot_con)
+		{
 			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+				irp6ot->ecp_td.MPtoECP_behaviour[i+3] = CONTACT;
+			}
 		else
-			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
+			irp6ot->ecp_td.MPtoECP_behaviour[i+3] = UNGUARDED_MOTION;
 
 		irp6ot->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
 		irp6ot->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
@@ -244,13 +252,19 @@ bool mp_tff_nose_run_generator::first_step ()
 		irp6p->ecp_td.MPtoECP_position_velocity[i+3] = 0;
 		irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
 		if(irp6p_con)
+		{
 			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+				irp6p->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+			}
 		else
-			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
+			irp6p->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
 		if(irp6p_con)
+		{
 			irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+			irp6p->ecp_td.MPtoECP_behaviour[i+3] = CONTACT;
+		}
 		else
-			irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
+			irp6p->ecp_td.MPtoECP_behaviour[i+3] = UNGUARDED_MOTION;
 		irp6p->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
 		irp6p->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
 	}
@@ -368,6 +382,8 @@ bool mp_haptic_generator::first_step ()
 		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
 		irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 		irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		irp6ot->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+		irp6ot->ecp_td.MPtoECP_behaviour[i+3] = CONTACT;
 		/*
 		if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 			else irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
@@ -403,6 +419,8 @@ bool mp_haptic_generator::first_step ()
 		irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
 		irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 		irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		irp6p->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+		irp6p->ecp_td.MPtoECP_behaviour[i+3] = CONTACT;
 		/*
 		if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 			else irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
@@ -584,13 +602,22 @@ bool mp_tff_rubik_grab_generator::first_step ()
 		irp6ot->ecp_td.MPtoECP_position_velocity[i+3] = 0;
 		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
 		if(irp6ot_con)
+		{
 			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+			irp6ot->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+			}
 		else
-			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
+			{
+				irp6ot->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
+				
+			}
 		if(irp6ot_con)
+		{
 			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+			irp6ot->ecp_td.MPtoECP_behaviour[i+3] = CONTACT;
+			}
 		else
-			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
+			irp6ot->ecp_td.MPtoECP_behaviour[i+3] = UNGUARDED_MOTION;
 
 		irp6ot->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
 		irp6ot->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
@@ -599,16 +626,20 @@ bool mp_tff_rubik_grab_generator::first_step ()
 	if (irp6ot_con) {
 		if(irp6ot_both_axes_running)
 			for(int i=0;i<2;i++)
+			{
 				irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+				irp6ot->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+			}
 		else {
 			irp6ot->ecp_td.MPtoECP_reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
-			irp6ot->ecp_td.MPtoECP_reciprocal_damping[0] = 0;
+			irp6ot->ecp_td.MPtoECP_behaviour[0] = UNGUARDED_MOTION;
+			irp6ot->ecp_td.MPtoECP_behaviour[1] = CONTACT;
 		}
 		for(int i=2;i<6;i++)
-			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
+			irp6ot->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
 	} else
 		for(int i=0;i<6;i++)
-			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
+			irp6ot->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
 
 	irp6p->ecp_td.mp_command = NEXT_POSE;
 	irp6p->ecp_td.instruction_type = GET;
@@ -630,13 +661,19 @@ bool mp_tff_rubik_grab_generator::first_step ()
 		irp6p->ecp_td.MPtoECP_position_velocity[i+3] = 0;
 		irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
 		if(irp6p_con)
+			{
 			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+			irp6p->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+			}
 		else
-			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
+			irp6p->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
 		if(irp6p_con)
+		{
 			irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+			irp6p->ecp_td.MPtoECP_behaviour[i+3] = CONTACT;
+			}
 		else
-			irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
+			irp6p->ecp_td.MPtoECP_behaviour[i+3] = UNGUARDED_MOTION;
 		irp6p->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
 		irp6p->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
 	}
@@ -644,16 +681,20 @@ bool mp_tff_rubik_grab_generator::first_step ()
 	if(irp6p_con) {
 		if(irp6p_both_axes_running)
 			for(int i=0;i<2;i++)
+			{
 				irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+				irp6p->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+				}
 		else {
 			irp6p->ecp_td.MPtoECP_reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
-			irp6p->ecp_td.MPtoECP_reciprocal_damping[0] = 0;
+			irp6p->ecp_td.MPtoECP_behaviour[1] = CONTACT;
+			irp6p->ecp_td.MPtoECP_behaviour[0] = UNGUARDED_MOTION;
 		}
 		for(int i=2;i<6;i++)
-			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
+			irp6p->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
 	} else
 		for(int i=0;i<6;i++)
-			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
+			irp6p->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
 
 	copy_generator_command( robot_m );
 	return true;
@@ -780,13 +821,19 @@ bool mp_tff_rubik_face_rotate_generator::first_step ()
 		irp6ot->ecp_td.MPtoECP_position_velocity[i+3] = 0;
 		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
 		if(irp6ot_con)
+		{
 			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+				irp6ot->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+			}
 		else
-			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
+			irp6ot->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
 		if(irp6ot_con)
+		{
 			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+			irp6ot->ecp_td.MPtoECP_behaviour[i+3] = CONTACT;	
+			}
 		else
-			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
+			irp6ot->ecp_td.MPtoECP_behaviour[i+3] = UNGUARDED_MOTION;
 
 		irp6ot->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
 		irp6ot->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
@@ -794,13 +841,21 @@ bool mp_tff_rubik_face_rotate_generator::first_step ()
 
 	if(-0.1 < irp6ot_con && irp6ot_con < 0.1) {
 		for(int i=0;i<6;i++)
-			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
+			irp6ot->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
 	} else {
 		for(int i=0;i<3;i++)
+		{
 			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+			irp6ot->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+		}
 		for(int i=3;i<5;i++)
-			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
+		{
+			irp6ot->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
+			
+		}
 		irp6ot->ecp_td.MPtoECP_reciprocal_damping[5] = TORQUE_RECIPROCAL_DAMPING;
+		irp6ot->ecp_td.MPtoECP_behaviour[5] = CONTACT;
+		
 		if(irp6ot_con > 0.0)
 			irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[5] = -5;
 		if(irp6ot_con < 0.0)
@@ -829,17 +884,29 @@ bool mp_tff_rubik_face_rotate_generator::first_step ()
 		irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
 		irp6p->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
 		irp6p->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
+		irp6p->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+		irp6p->ecp_td.MPtoECP_behaviour[i+3] = CONTACT;
 	}
 
 	if(-0.1 < irp6p_con && irp6p_con < 0.1) {
 		for(int i=0;i<6;i++)
-			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
+		{
+			irp6p->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
+			}
 	} else {
 		for(int i=0;i<3;i++)
+			{
 			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+			irp6p->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+			}
 		for(int i=3;i<5;i++)
-			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
+		{
+			irp6p->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
+		}
+			
 		irp6p->ecp_td.MPtoECP_reciprocal_damping[5] = TORQUE_RECIPROCAL_DAMPING;
+		irp6p->ecp_td.MPtoECP_behaviour[5] = CONTACT;
+
 		if(irp6p_con > 0.0)
 			irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[5] = -5;
 		if(irp6p_con < 0.0)
@@ -1020,8 +1087,9 @@ bool mp_tff_gripper_approach_generator::first_step ()
 	irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[2] = -irp6ot_speed;
 
 	for (int i=0;i<6;i++)
-		irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
+		irp6ot->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
 	irp6ot->ecp_td.MPtoECP_reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING;
+	irp6ot->ecp_td.MPtoECP_behaviour[2] = CONTACT;
 
 	irp6p->ecp_td.mp_command = NEXT_POSE;
 	irp6p->ecp_td.instruction_type = GET;
@@ -1048,7 +1116,7 @@ bool mp_tff_gripper_approach_generator::first_step ()
 	}
 
 	for(int i=0;i<6;i++)
-		irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0;
+		irp6p->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
 
 	copy_generator_command( robot_m );
 	return true;
