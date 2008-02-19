@@ -156,8 +156,8 @@ bool ecp_vis_sac_lx_generator::first_step () {
 	vsp_vis_sac->current_period=0; //MAC7
 	//vsp_force_irp6p->base_period=1;
 	//td.interpolation_node_no = 1; //potrzebne? MAC7
-	td.internode_step_no = 80; //step_no; 40
-	td.value_in_step_no = td.internode_step_no - 10; //2
+	td.internode_step_no = 30; //step_no; 40
+	td.value_in_step_no = td.internode_step_no - 5; //2 //10
 
 	//TOOL
 
