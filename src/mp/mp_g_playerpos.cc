@@ -2,11 +2,14 @@
 #include <assert.h>
 
 #include "mp/mp_g_playerpos.h"
+#include "player/playerclient.h"
 
 mp_playerpos_generator::mp_playerpos_generator(mp_task& _mp_task, double _gx, double _gy, double _ga) :
 	mp_generator(_mp_task),
 	dist_eps(0.1), ang_eps(DTOR(1.0))
 {
+	PlayerClient robot("localhost", 6665);
+	PositionProxy(&robot, 0, 'w');
 	set_target(_gx, _gy, _ga);
 }
 

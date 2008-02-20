@@ -1,12 +1,3 @@
-// -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP)
-// Plik:			ecp_mp_sensor.h
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Definicja konstruktora bazowej klasy czujnikow po stronie procesu ECP - jeden dla wszystkich.
-// Autor:		yoyek/tkornuta
-// Data:		10.11.2005
-// -------------------------------------------------------------------------
-
 #include <unistd.h>
 #include <pthread.h>
 #include <string.h>

@@ -8,11 +8,14 @@ BINARIES = configsrv y_spawn_process
 HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 #======================================================#	
-.PHONY: all clean install depend libplayerc messip
+.PHONY: all clean install depend libplayerc libplayerclient messip
 #------------------------------------------------- Build rules -------------------------------------------------------#
-all: messip libplayerc libmrrocpp.a ${OBJECTS} ${BINARIES}
+all: messip libplayerc libplayerclient libmrrocpp.a ${OBJECTS} ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
 libplayerc:
+	@$(MAKE) -C $@
+
+libplayerclient:
 	@$(MAKE) -C $@
 
 messip:
@@ -56,6 +59,7 @@ install: ${BINARIES}
 clean:
 	@rm -f *.o *.err *.a ${BINARIES}
 	@$(MAKE) -C libplayerc clean
+	@$(MAKE) -C libplayerclient clean
 	@$(MAKE) -C messip clean
 #-----------------------------------------------------------------------------------------------------------------------#
 #DEPDIR = .deps
