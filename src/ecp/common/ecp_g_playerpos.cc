@@ -1,17 +1,21 @@
 #include <stdio.h>
 #include <math.h>
+#include <assert.h>
 
 #include "common/typedefs.h"
 #include "common/impconst.h"
 #include "common/com_buf.h"
 
-#include "lib/srlib.h"
 #include "ecp/common/ecp_g_playerpos.h"
 #include "ecp_mp/ecp_mp_tr_player.h"
 
 playerpos_generator::playerpos_generator(ecp_task& _ecp_task):
 	ecp_generator (_ecp_task, true)
 {
+	pc = new PlayerClient("192.168.1.64", 6665);
+	assert(pc);
+	pp = new PositionProxy(pc, 1, 'a');
+	assert(pp);
 }
 
 bool playerpos_generator::first_step ( ) 
@@ -48,13 +52,21 @@ bool playerpos_generator::next_step ( )
 		ecp_t.get_mp_command ();
 	}
 
-    transmitter_m[TRANSMITTER_PLAYER]->t_read(1);
-    printf("odometry: [%f, %f %f]\n",
-            transmitter_m[TRANSMITTER_PLAYER]->from_va.player_position.px,
-            transmitter_m[TRANSMITTER_PLAYER]->from_va.player_position.py,
-            transmitter_m[TRANSMITTER_PLAYER]->from_va.player_position.pa
-          );
-	
+#if 0
+    if(pc->Peek(0)) {
+    	pc->Read();
+    }
+#else
+   	pc->Read();
+#endif
+
+    if (pp->fresh) {
+    	printf("odometry: [%f, %f %f]\n", pp->xpos, pp->ypos, pp->theta);
+    	pp->fresh = false;
+    } else {
+    	printf("no new data\n");
+    }
+    
 	switch ( ecp_t.mp_command_type() ) 
 	{
 		case NEXT_POSE:

@@ -84,7 +84,7 @@ ecp_playerpos: \
 		../common/ecp_t_playerpos.o \
 		../common/ecp_g_playerpos.o \
 		$(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ $(LIBDIR)/libplayerc.a
+	$(LD) $(LDFLAGS) -o $@ $^ $(LIBDIR)/libplayerc.a $(LIBDIR)/libplayerclient.a
 
 ecp_pawel: \
 		../irp6_on_track/ecp_local.o \

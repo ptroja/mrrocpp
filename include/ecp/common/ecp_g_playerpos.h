@@ -1,21 +1,23 @@
 #if !defined(_ECP_GEN_PLAYERPOS_H)
 #define _ECP_GEN_PLAYERPOS_H
 
+#include "player/playerclient.h"
 #include "ecp/common/ecp_generator.h"
 
-class playerpos_generator : public ecp_generator 
+class playerpos_generator : public ecp_generator
 {
+	private:
+		PlayerClient *pc;
+		PositionProxy *pp;
 
-protected:
-	
-public:
-	// konstruktor
-	playerpos_generator(ecp_task& _ecp_task);
-	
-	virtual bool first_step ();
+	public:
+		// konstruktor
+		playerpos_generator(ecp_task& _ecp_task);
 
-	virtual bool next_step ();
+		virtual bool first_step ();
 
-}; // end:
+		virtual bool next_step ();
+
+}
 
 #endif /* _ECP_GEN_PLAYERPOS_H */

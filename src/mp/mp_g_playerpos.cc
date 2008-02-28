@@ -13,7 +13,6 @@ mp_playerpos_generator::mp_playerpos_generator(mp_task& _mp_task, double _gx, do
 	set_target(_gx, _gy, _ga);
 }
 
-
 void mp_playerpos_generator::set_target(double _gx, double _gy, double _ga)
 {
 	gx = _gx;
