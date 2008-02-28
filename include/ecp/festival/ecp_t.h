@@ -14,8 +14,7 @@
 #define _ECP_T_FESTIVAL_H
 
 #include "ecp/common/ecp_task.h"
-#include "ecp/common/ecp_generator_t.h"
-#include "ecp/common/ecp_t_rcsc.h"
+#include "ecp/festival/ecp_g_festival.h"
 
 class ecp_task_festival: public ecp_task  {
 protected:
