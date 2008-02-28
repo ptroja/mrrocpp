@@ -52,14 +52,14 @@ bool mp_task_rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogl
 		if(face_turn_op(CL_0))
 			return true;
 
-		if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "oglAdam kolory na Sciance", 1, ROBOT_SPEAKER)) {
+		if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "oglAdam kolory na Sciance", 1, ROBOT_FESTIVAL)) {
 			return true;
 		}
 
 		// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 		if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-		        (1, 1, ROBOT_SPEAKER,
-		         ROBOT_SPEAKER)) {
+		        (1, 1, ROBOT_FESTIVAL,
+		         ROBOT_FESTIVAL)) {
 			return true;
 		}
 
@@ -220,14 +220,14 @@ bool mp_task_rubik_cube_solver::communicate_with_windows_solver()
 	//mp_object.transmitter_m[TRANSMITTER_RC_WINDOWS]->to_va.rc_windows.rc_state[i]=patternx[i];
 	transmitter_m[TRANSMITTER_RC_WINDOWS]->to_va.rc_windows.rc_state[54]='\0';
 
-	if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "mySlE", 1, ROBOT_SPEAKER)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "mySlE", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-	        (1, 1, ROBOT_SPEAKER,
-	         ROBOT_SPEAKER)) {
+	        (1, 1, ROBOT_FESTIVAL,
+	         ROBOT_FESTIVAL)) {
 		return true;
 	}
 
@@ -318,14 +318,14 @@ bool mp_task_rubik_cube_solver::communicate_with_windows_solver()
 		manipulation_list.push_back(single_manipulation);
 	}
 
-	if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "juZ ukLadam", 1, ROBOT_SPEAKER)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "juZ ukLadam", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-	        (1, 1, ROBOT_SPEAKER,
-	         ROBOT_SPEAKER)) {
+	        (1, 1, ROBOT_FESTIVAL,
+	         ROBOT_FESTIVAL)) {
 		return true;
 	}
 
@@ -465,7 +465,7 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-	        (3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_SPEAKER,
+	        (3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {
 		return true;
 	}
@@ -500,7 +500,7 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-	        (2, 1, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER,
+	        (2, 1, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK)) {
 		return true;
 	}
@@ -540,7 +540,7 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 
 	switch (turn_angle) {
 		case CL_90:
-			if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "obracam kostkE", 1, ROBOT_SPEAKER)) {
+			if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "obracam kostkE", 1, ROBOT_FESTIVAL)) {
 				return true;
 			}
 			if (set_next_ecps_state ((int) ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) RCSC_CL_90, "", 1, ROBOT_IRP6_ON_TRACK)) {
@@ -548,14 +548,14 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 			}
 			// uruchomienie generatora empty_gen
 			if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-			        (2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER)) {
+			        (2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL)) {
 				return true;
 			}
 			break;
 		case CL_0:
 			break;
 		case CCL_90:
-			if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "obracam kostkE", 1, ROBOT_SPEAKER)) {
+			if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "obracam kostkE", 1, ROBOT_FESTIVAL)) {
 				return true;
 			}
 			if (set_next_ecps_state ((int) ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) RCSC_CCL_90, "", 1, ROBOT_IRP6_ON_TRACK)) {
@@ -563,12 +563,12 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 			}
 			// uruchomienie generatora empty_gen
 			if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-			        (2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER)) {
+			        (2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL)) {
 				return true;
 			}
 			break;
 		case CL_180:
-			if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "obracam kostkE", 1, ROBOT_SPEAKER)) {
+			if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "obracam kostkE", 1, ROBOT_FESTIVAL)) {
 				return true;
 			}
 			if (set_next_ecps_state ((int) ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) RCSC_CL_180, "", 1, ROBOT_IRP6_ON_TRACK)) {
@@ -576,7 +576,7 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 			}
 			// uruchomienie generatora empty_gen
 			if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-			        (2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER)) {
+			        (2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL)) {
 				return true;
 			}
 			break;
@@ -620,7 +620,7 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 
 	// zblizenie chwytakow
 
-	if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "przekLadam kostkE", 1, ROBOT_SPEAKER)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "przekLadam kostkE", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
 
@@ -676,7 +676,7 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-	        (3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_SPEAKER,
+	        (3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {
 		return true;
 	}
@@ -713,7 +713,7 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-	        (2, 1, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER,
+	        (2, 1, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK)) {
 		return true;
 	}
@@ -849,7 +849,7 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-	        (2, 1, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER,
+	        (2, 1, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK)) {
 		return true;
 	}
@@ -891,13 +891,13 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 // dojscie
 bool mp_task_rubik_cube_solver::approach_op(int mode)
 {
-	if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "jestem podatny", 1, ROBOT_SPEAKER)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "jestem podatny", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-	        (1, 1, ROBOT_SPEAKER, ROBOT_SPEAKER)) {
+	        (1, 1, ROBOT_FESTIVAL, ROBOT_FESTIVAL)) {
 		return true;
 	}
 
@@ -954,13 +954,13 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 	//	(1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 
 	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-	        (3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_SPEAKER,
+	        (3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {
 		return true;
 	}
 
 
-	if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "jestem robotem usLugowym", 1, ROBOT_SPEAKER)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "jestem robotem usLugowym", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
 	// wlaczenie generatora uczacego  robocie irp6ot
@@ -970,37 +970,37 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 	}
 	/*
 	   	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-	 		(3, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_SPEAKER, 
-			ROBOT_SPEAKER)) {  return true;  }
+	 		(3, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL, 
+			ROBOT_FESTIVAL)) {  return true;  }
 	*/
 
 	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-	        (3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_SPEAKER,
-	         ROBOT_SPEAKER, ROBOT_IRP6_ON_TRACK)) {
+	        (3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL,
+	         ROBOT_FESTIVAL, ROBOT_IRP6_ON_TRACK)) {
 		return true;
 	}
 
 	//	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "trj/rcsc/irp6ot_ap_2.trj", 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }
-	if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "uLoZe kostkE rubika", 1, ROBOT_SPEAKER)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "uLoZe kostkE rubika", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
 
 	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-	        (3, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_SPEAKER,
-	         ROBOT_SPEAKER)) {
+	        (3, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL,
+	         ROBOT_FESTIVAL)) {
 		return true;
 	}
 
 	// powiedzenie
-	if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "podaj kostkE", 1, ROBOT_SPEAKER)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "podaj kostkE", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
 
 
 	// uruchomienie generatora empty_gen
 	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-	        (2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER,
-	         ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER)) {
+	        (2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL,
+	         ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL)) {
 		return true;
 	}
 
@@ -1041,7 +1041,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 	}
 	// uruchomienie generatora empty_gen
 	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-	        (2, 1, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER,
+	        (2, 1, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK)) {
 		return true;
 	}
@@ -1051,18 +1051,18 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 	}
 	// uruchomienie generatora empty_gen
 	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-	        (2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER,
-	         ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER)) {
+	        (2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL,
+	         ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL)) {
 		return true;
 	}
 
-	if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "puSC kostkE", 1, ROBOT_SPEAKER)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "puSC kostkE", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-	        (1, 1, ROBOT_SPEAKER, ROBOT_SPEAKER)) {
+	        (1, 1, ROBOT_FESTIVAL, ROBOT_FESTIVAL)) {
 		return true;
 	}
 
@@ -1081,7 +1081,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 	//	(1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 
 	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-	        (3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_SPEAKER,
+	        (3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {
 		return true;
 	}
@@ -1095,7 +1095,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 bool mp_task_rubik_cube_solver::departure_op()
 {
 
-	if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "skoNczyLem", 1, ROBOT_SPEAKER)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "skoNczyLem", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
 
@@ -1111,19 +1111,19 @@ bool mp_task_rubik_cube_solver::departure_op()
 
 
 	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-	        (3, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_SPEAKER,
-	         ROBOT_SPEAKER)) {
+	        (3, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL,
+	         ROBOT_FESTIVAL)) {
 		return true;
 	}
 
-	if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "jadE pracowaC do angli.", 1, ROBOT_SPEAKER)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "jadE pracowaC do angli.", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
-	//	if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "jak sie paNstwu podobaLo", 1, ROBOT_SPEAKER)) {  return true;  }
+	//	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "jak sie paNstwu podobaLo", 1, ROBOT_FESTIVAL)) {  return true;  }
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-	        (3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_SPEAKER,
+	        (3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {
 		return true;
 	}

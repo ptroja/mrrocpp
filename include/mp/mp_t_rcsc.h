@@ -10,6 +10,7 @@
 
 #include "mp/mp.h"
 #include "ecp_mp/ecp_mp_t_rcsc.h"
+#include "ecp_mp/ecp_mp_t_festival.h"
 
 #include <list>
 
