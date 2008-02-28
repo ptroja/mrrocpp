@@ -106,10 +106,16 @@ bool mp_task::create_robots()
 		robot_m[ROBOT_IRP6_MECHATRONIKA] = robot_tmp;
 	}
 
-	// ROBOT VIRTUAL_ROBOT
+	// ROBOT_VIRTUAL
 	if (config->return_int_value("is_virtual_robot_active", "[ui]")) {
 		robot_tmp = new mp_robot (ROBOT_VIRTUAL, "[ecp_virtual]", this);
 		robot_m[ROBOT_VIRTUAL] = robot_tmp;
+	}
+	
+	// ROBOT_FESTIVAL
+	if (config->return_int_value("is_festival_active", "[ui]")) {
+		robot_tmp = new mp_robot (ROBOT_FESTIVAL, "[ecp_festival]", this);
+		robot_m[ROBOT_FESTIVAL] = robot_tmp;
 	}
 
 	return true;
