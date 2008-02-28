@@ -1,10 +1,3 @@
-// ------------------------------------------------------------------------
-//   ecp_t_tran.cc - przezroczyste wersja dla dowolnego z robotow 
-// 
-//                     EFFECTOR CONTROL PROCESS (ECP) - main()
-// 
-// Ostatnia modyfikacja: 2006
-// ------------------------------------------------------------------------
 
 #include <stdio.h>
 
@@ -16,6 +9,7 @@
 
 #include "ecp/festival/ecp_local.h"
 #include "ecp/festival/ecp_g_festival.h"
+#include "ecp_mp/ecp_mp_t_festival.h"
 #include "ecp/festival/ecp_t.h"
 
 
@@ -23,13 +17,7 @@
 // KONSTRUKTORY
 ecp_task_festival::ecp_task_festival() : ecp_task()
 {
-	gt = NULL;
-	nrg = NULL;
-	rgg = NULL;
-	gag = NULL;
-	rfrg = NULL;
-	tig = NULL;
-	sg = NULL;
+	fg = NULL;
 };
 ecp_task_festival::~ecp_task_festival(){};
 
