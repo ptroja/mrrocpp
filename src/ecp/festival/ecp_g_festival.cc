@@ -18,6 +18,8 @@ festival_generator::festival_generator(ecp_task& _ecp_task) :
 	ecp_generator (_ecp_task, true),
 	read_pending(false)
 {
+	host = ecp_t.config->return_string_value("server_host");
+	portnum = ecp_t.config->return_int_value("server_port");
 }
 
 bool festival_generator::first_step ( ) 
@@ -53,6 +55,8 @@ bool festival_generator::first_step ( )
 			"can't connect to Festival\n", host);
 		return false;
 	}
+	
+	delete [] host;
 
 	memcpy(&server.sin_addr, entp->h_addr_list[0], entp->h_length);
 
