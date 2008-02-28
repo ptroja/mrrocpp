@@ -6,7 +6,7 @@
 #include "common/impconst.h"
 #include "common/com_buf.h"
 
-#include "ecp/common/ecp_g_festival.h"
+#include "ecp/festival/ecp_g_festival.h"
 
 festival_generator::festival_generator(ecp_task& _ecp_task):
 	ecp_generator (_ecp_task, true),
@@ -173,6 +173,8 @@ bool festival_generator::next_step ( )
 
 		return false;
 	}
+
+	usleep(20000);
 
 	return true;
 }
