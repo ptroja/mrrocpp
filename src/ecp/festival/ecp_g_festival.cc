@@ -1,6 +1,12 @@
 #include <stdio.h>
 #include <math.h>
 #include <assert.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <string.h>
 
 #include "common/typedefs.h"
 #include "common/impconst.h"
@@ -8,7 +14,7 @@
 
 #include "ecp/festival/ecp_g_festival.h"
 
-festival_generator::festival_generator(ecp_task& _ecp_task):
+festival_generator::festival_generator(ecp_task& _ecp_task) :
 	ecp_generator (_ecp_task, true),
 	read_pending(false)
 {
@@ -47,6 +53,10 @@ bool festival_generator::first_step ( )
 			"can't connect to Festival\n", host);
 		return false;
 	}
+
+	memcpy(&server.sin_addr, entp->h_addr_list[0], entp->h_length);
+
+	server.sin_port = htons(portnum);
 
 	/* make a new socket */
 	if((sock = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
@@ -134,7 +144,7 @@ bool festival_generator::next_step ( )
 	bool has_data;
 
 	/* read the resultant string back */
-	switch (select(sock + 1, &rd, NULL, NULL, timeout)) {
+	switch (select(sock + 1, &rd, NULL, NULL, &timeout)) {
 		case -1:
 			perror("festival_generator::next_step(): select()");
 			break;
@@ -147,10 +157,10 @@ bool festival_generator::next_step ( )
 	}
 
 	if (has_data) {
-		if (numread < FESTIVAL_CODE_OK) {
+		if (numread < strlen(FESTIVAL_CODE_OK)) {
 			int numthisread;
 
-			if ((numthisread = read(sock,buf+numread, FESTIVAL_CODE_OK-numread)) == -1) {
+			if ((numthisread = read(sock, buf+numread, strlen(FESTIVAL_CODE_OK)-numread)) == -1) {
 				perror("festival_generator::next_step(): read()");
 			}
 

@@ -21,6 +21,10 @@ class festival_generator : public ecp_generator
 		char phrase[MAX_FESTIVAL_PHRASE];
 		bool read_pending;
 		int numread;
+		char buf[256];
+
+		int portnum;
+		char *host;
 
 	public:
 		// konstruktor
@@ -30,6 +34,6 @@ class festival_generator : public ecp_generator
 
 		virtual bool next_step ();
 
-}
+};
 
 #endif /* _ECP_GEN_FESTIVAL_H */
