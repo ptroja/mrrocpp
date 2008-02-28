@@ -20,7 +20,7 @@ VPATH = ../common $(ECP_MPDIR)
 all: ${BINARIES}
 #---------------------------------Special object build rules (user made)-------------------------------------#
 
-ecp_festival: ecp_task_festival.o ecp_g_.o $(SHOBJ)
+ecp_festival: ecp_t.o ecp_g_festival.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#
