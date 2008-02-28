@@ -34,6 +34,8 @@ class festival_generator : public ecp_generator
 
 		virtual bool next_step ();
 
+		char * set_phrase(const char *text);
+
 };
 
 #endif /* _ECP_GEN_FESTIVAL_H */

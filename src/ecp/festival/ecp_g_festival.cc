@@ -22,6 +22,11 @@ festival_generator::festival_generator(ecp_task& _ecp_task) :
 	portnum = ecp_t.config->return_int_value("server_port");
 }
 
+char * festival_generator::set_phrase(const char *text)
+{
+	return strncpy(phrase, text, sizeof(phrase));
+}
+
 bool festival_generator::first_step ( ) 
 {
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
