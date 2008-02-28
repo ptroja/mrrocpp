@@ -200,13 +200,12 @@ class sensor
 	// Pole do komunikacji za pomoca DEVCTL.
 	DEVCTL_MSG devmsg;			
 
-public:
+	// Odebranie odczytu od VSP.
+	virtual void get_reading (void)=0;
 	// Konfiguracja czujnika.
 	virtual void configure_sensor (void){};
 	// Zadanie odczytu od VSP.
 	virtual void initiate_reading (void){};
-	// Odebranie odczytu od VSP.
-	virtual void get_reading (void)=0;
 	// Rozkaz zakonczenia procesu VSP.
 	virtual void terminate (void){};
 

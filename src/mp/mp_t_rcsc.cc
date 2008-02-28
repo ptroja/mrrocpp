@@ -414,7 +414,7 @@ bool mp_task_rubik_cube_solver::manipulate(CUBE_COLOR face_to_turn, CUBE_TURN_AN
 		}
 	}
 	return false;
-};
+}
 
 
 
@@ -884,7 +884,7 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 
 	//	cube_state->print_cube_colors();
 	return false;
-};
+}
 
 
 
@@ -1088,7 +1088,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 
 
 	return false;
-};
+}
 
 
 // odejscie
@@ -1129,7 +1129,7 @@ bool mp_task_rubik_cube_solver::departure_op()
 	}
 
 	return false;
-};
+}
 
 
 bool mp_task_rubik_cube_solver::gripper_opening(double track_increment, double postument_increment, int motion_time)

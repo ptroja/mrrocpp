@@ -99,7 +99,7 @@ class edp_effector: public transformer_error
 		// (przechowuje typ odpowiedzi, gdy reply_type jest chwilowo zmienione)
 		REPLY_TYPE real_reply_type;
 
-		// bufor odpowiedzi wysylanych do ECP
+		// bufor odpowiedzi wysylanych do ECP/MP
 		r_buffer reply;
 
 		int caller;				// by 7&Y

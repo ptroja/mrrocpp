@@ -58,6 +58,7 @@ bool festival_generator::first_step ( )
 	{
 		fprintf(stderr, "festival_generator::first_step(): \"%s\" is unknown host; "
 			"can't connect to Festival\n", host);
+		delete [] host;
 		return false;
 	}
 	
@@ -176,7 +177,7 @@ bool festival_generator::next_step ( )
 			numread += numthisread;
 		}
 
-		if (numread != strlen(FESTIVAL_CODE_OK)) {
+		if (numread < strlen(FESTIVAL_CODE_OK)) {
 			fprintf(stderr, "festival_generator::next_step(): something went wrong, "
 					"expected %d bytes of code, but got %d\n",
 					(int) strlen(FESTIVAL_CODE_OK),numread);
@@ -189,6 +190,8 @@ bool festival_generator::next_step ( )
 		} else {
 			/* command OK */
 		}
+
+		close(sock);
 
 		return false;
 	}
