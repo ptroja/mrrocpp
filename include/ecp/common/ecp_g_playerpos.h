@@ -18,6 +18,6 @@ class playerpos_generator : public ecp_generator
 
 		virtual bool next_step ();
 
-}
+};
 
 #endif /* _ECP_GEN_PLAYERPOS_H */

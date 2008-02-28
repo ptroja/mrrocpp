@@ -4,7 +4,7 @@
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
-BINARIES = ecp_tran ecp_mam ecp_t ecp_nalewanie ecp_sk ecp_time ecp_pawel #ecp_playerpos
+BINARIES = ecp_tran ecp_mam ecp_t ecp_nalewanie ecp_sk ecp_time ecp_pawel ecp_playerpos
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -79,12 +79,11 @@ ecp_time: \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
-#ecp_playerpos: \
-#		ecp_mp_tr_player.o \
-#		../common/ecp_t_playerpos.o \
-#		../common/ecp_g_playerpos.o \
-#		$(SHOBJ)
-#	$(LD) $(LDFLAGS) -o $@ $^ $(LIBDIR)/libplayerc.a $(LIBDIR)/libplayerclient.a
+ecp_playerpos: \
+		../common/ecp_t_playerpos.o \
+		../common/ecp_g_playerpos.o \
+		$(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^ $(LIBDIR)/libplayerc.a $(LIBDIR)/libplayerclient.a
 
 ecp_pawel: \
 		../irp6_on_track/ecp_local.o \

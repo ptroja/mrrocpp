@@ -1,13 +1,6 @@
 #include <stdio.h>
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
-
-#include "lib/srlib.h"
-
 #include "ecp/common/ecp_g_playerpos.h"
-#include "ecp_mp/ecp_mp_tr_player.h"
 #include "ecp/common/ecp_t_playerpos.h"
 
 ecp_task_playerpos::ecp_task_playerpos() : ecp_task()
