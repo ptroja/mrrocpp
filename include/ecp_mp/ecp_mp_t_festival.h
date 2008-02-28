@@ -9,9 +9,6 @@
 #ifndef __ECP_MP_T_FESTIVAL_H
 #define __ECP_MP_T_FESTIVAL_H
 
-
 enum ECP_FESTIVAL_STATES {ECP_GEN_FESTIVAL = 0};
-
-
 
 #endif

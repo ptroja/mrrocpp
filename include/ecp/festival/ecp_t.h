@@ -18,7 +18,7 @@
 
 class ecp_task_festival: public ecp_task  {
 protected:
-	ecp_festival_generator* fg;
+	festival_generator* fg;
 
 public:
 	// KONSTRUKTORY
