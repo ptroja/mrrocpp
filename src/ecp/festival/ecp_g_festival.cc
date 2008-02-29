@@ -19,6 +19,7 @@ festival_generator::festival_generator(ecp_task& _ecp_task) :
 {
 	host = ecp_t.config->return_string_value("server_host");
 	portnum = ecp_t.config->return_int_value("server_port");
+	test_mode = ecp_t.config->return_int_value("test_mode");
 	voice = "";
 }
 
@@ -68,6 +69,24 @@ bool festival_generator::first_step ( )
 			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
 	}
 
+	int command_max_len = strlen(voice)
+		+strlen(FESTIVAL_SAY_STRING_PREFIX)+sizeof(phrase)+strlen(FESTIVAL_SAY_STRING_SUFFIX)
+		+1;
+	char command[command_max_len];
+
+	snprintf(command, command_max_len, "%s%s%s%s",
+			 voice,
+	         FESTIVAL_SAY_STRING_PREFIX,
+	         this->phrase,
+	         FESTIVAL_SAY_STRING_SUFFIX);
+
+	int command_len = strlen(command);
+
+	if (test_mode) {
+		printf("festival_command->%s:%d = %s", host, portnum, command);
+		return true;
+	}
+
 	struct sockaddr_in server;
 	struct hostent* entp;
 
@@ -106,20 +125,6 @@ bool festival_generator::first_step ( )
 		return false;
 	}
 
-	int command_max_len = strlen(voice)
-		+strlen(FESTIVAL_SAY_STRING_PREFIX)+sizeof(phrase)+strlen(FESTIVAL_SAY_STRING_SUFFIX)
-		+1;
-	char command[command_max_len];
-
-	snprintf(command, command_max_len, "%s%s%s%s",
-			 voice,
-	         FESTIVAL_SAY_STRING_PREFIX,
-	         this->phrase,
-	         FESTIVAL_SAY_STRING_SUFFIX);
-
-	int command_len = strlen(command);
-
-	printf("command: %s\n", command);
 	int written = write(sock, (const void *) command, command_len);
 	if (written == -1) {
 		perror("festival_generator::first_step(): write()");
@@ -157,6 +162,10 @@ bool festival_generator::next_step ( )
 		case INVALID_COMMAND:
 		default:
 			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
+	}
+	
+	if(test_mode) {
+		return false;
 	}
 
 	if (!read_pending_status) {

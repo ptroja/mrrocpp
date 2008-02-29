@@ -28,7 +28,9 @@ class festival_generator : public ecp_generator
 		char *host;
 		
 		char phrase[MAX_FESTIVAL_PHRASE];
-		char *voice;		
+		char *voice;
+		
+		int test_mode;	
 
 	public:
 		// konstruktor
