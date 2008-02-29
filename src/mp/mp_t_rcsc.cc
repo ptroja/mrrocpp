@@ -17,6 +17,8 @@
 #include "ecp_mp/ecp_mp_s_schunk.h"
 #include "ecp_mp/ecp_mp_s_vis.h"
 #include "ecp_mp/ecp_mp_tr_rc_windows.h"
+#include "ecp/festival/ecp_g_festival.h"
+#include "ecp_mp/ecp_mp_t_festival.h"
 
 void mp_task_rubik_cube_solver::initiate(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is,
         CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is)
@@ -891,7 +893,7 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 // dojscie
 bool mp_task_rubik_cube_solver::approach_op(int mode)
 {
-	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "jestem podatny", 1, ROBOT_FESTIVAL)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, festival_generator::POLISH_VOICE, "jestem podatny", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
 

@@ -12,10 +12,14 @@
 #include "lib/srlib.h"
 #include "mp/mp.h"
 #include "mp/mp_t_multiplayer.h"
+
+/*
 #include "mp/mp_g_playerpos.h"
 #include "mp/mp_g_playerspeech.h"
 #include "ecp_mp/ecp_mp_tr_player.h"
+*/
 #include "ecp_mp/ecp_mp_t_festival.h"
+#include "ecp/festival/ecp_g_festival.h"
 
 mp_task* return_created_mp_task (void)
 {
@@ -63,20 +67,29 @@ void mp_task_multiplayer::main_task_algorithm(void)
 		        	break_state = true;
 		        	break;
 			}
-			*/
-			
-			if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "hello world!", 1, ROBOT_FESTIVAL)) {
+			*/		
+
+			if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, festival_generator::ENGLISH_VOICE, "witam serdecznie!", 1, ROBOT_FESTIVAL)) {
 				break_state = true;
 		       	break;
 			}
-			
 			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 		        (1, 1, ROBOT_FESTIVAL, ROBOT_FESTIVAL)) {
-		    	printf("break_state = true\n");
 				break_state = true;
 		       	break;
 			}
+			
+			if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "dobry wieczo~r pan~stwu", 1, ROBOT_FESTIVAL)) {
+				break_state = true;
+		       	break;
+			}			
+			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+		        (1, 1, ROBOT_FESTIVAL, ROBOT_FESTIVAL)) {
+				break_state = true;
+		       	break;
+			}			
 
 			/*
 			playerspeech_gen.set_phrase("robot programming framework");
