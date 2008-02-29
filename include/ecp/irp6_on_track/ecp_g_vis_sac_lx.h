@@ -98,6 +98,8 @@ int step_no;
 	double torque_reciprocal_damping_;
 
 	double x2g;//=-0.07; //x nibytoola
+	
+	double x2g_begin;
 
 int vis_phase;// = 0;
 int steps2switch;//=0;

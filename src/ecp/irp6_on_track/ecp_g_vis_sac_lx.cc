@@ -124,6 +124,8 @@ ecp_vis_sac_lx_generator::ecp_vis_sac_lx_generator (ecp_task& _ecp_task, int ste
 
 	x2g=ecp_t.config->return_double_value("x2g"); //x nibytoola
 
+	 x2g_begin=x2g;
+
 	vis_phase = 0;
 	steps2switch=0;
 
@@ -156,7 +158,7 @@ bool ecp_vis_sac_lx_generator::first_step () {
 	vsp_vis_sac->current_period=0; //MAC7
 	//vsp_force_irp6p->base_period=1;
 	//td.interpolation_node_no = 1; //potrzebne? MAC7
-	td.internode_step_no = 30; //step_no; 40
+	td.internode_step_no = 40; //step_no; 40
 	td.value_in_step_no = td.internode_step_no - 5; //2 //10
 
 	//TOOL
@@ -359,7 +361,7 @@ std::cout <<"Rota C_T_Gxxx " << vsp_vis_sac->image.vis_sac.frame_E_r_G[5] <<" " 
 	}
 	else
 	{
-		x2g=-0.14;
+		x2g=x2g_begin;
 		steps2switch=0;
 	}
 
@@ -430,18 +432,42 @@ std::cout <<"x2g " << x2g << std::endl;
 	}	
 	//EIH
 	O_Tx_G__C2.get_xyz_angle_axis(O_r_G[0]);
+
+	std::cout << " SAC ";
+	for (int i=0; i<6; i++)
+	{
+		std::cout << O_rcom_G[0][i] << " ";
+	}
+	std::cout << std::endl;
+	
+	std::cout << " EIH ";
+	for (int i=0; i<6; i++)
+	{
+		std::cout << O_r_G[0][i]<< " ";
+	}
+	std::cout << std::endl;
+	
+
+	//jak cos przyjdzie glupiego
+	if(O_r_G[0][0]>100 || O_r_G[0][0]<-100)
+	{
+		for (int i=0; i<6; i++)
+		{
+			O_r_G[0][i]=O_r_G[1][i]; //EIH ONLY
+		}
+	}
 	
 	//BOTH
 		for (int i=0; i<6; i++)
 	{
 		//O_r_G[0][i]=0.5*O_r_G[0][i]+0.5*O_rcom_G[0][i]; //SAC+EIH
-		O_r_G[0][i]=O_rcom_G[0][i]; //SAC ONLY
-		//O_r_G[0][i]=O_r_G[0][i]; //EIH ONLY
+		//O_r_G[0][i]=O_rcom_G[0][i]; //SAC ONLY
+		O_r_G[0][i]=O_r_G[0][i]; //EIH ONLY
 	}
-
-
-
-
+	
+	
+	
+	
 	for (int i=0; i<6; i++)
 	{
 		O_eps_EG[0][i]=O_r_G[0][i]-O_r_E[0][i];

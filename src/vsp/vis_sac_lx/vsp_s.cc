@@ -49,7 +49,7 @@
 #define HOST "mieszko"
 #define PORT 30000
 
-#define HOST_EIH "bona"
+#define HOST_EIH "chrobry" //"bona"
 #define PORT_EIH 40000
 
 #define BUFFER_SIZE 8*256 //8*
