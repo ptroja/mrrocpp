@@ -429,9 +429,9 @@ bool ecp_teach_in_generator::next_step (  )
 		ecp_t.set_ecp_reply (TASK_TERMINATED);
 	}
 
-// printf("W irp6ot_teach_in_generator::next_step przed get_mp_command\n");
-	ecp_t.get_mp_command ();
-// printf("W irp6ot_teach_in_generator::next_step za get_mp_command\n");
+// printf("W irp6ot_teach_in_generator::next_step przed mp_buffer_receive_and_send\n");
+	ecp_t.mp_buffer_receive_and_send ();
+// printf("W irp6ot_teach_in_generator::next_step za mp_buffer_receive_and_send\n");
 
 	switch ( ecp_t.mp_command_type() ) {
 		case NEXT_POSE:

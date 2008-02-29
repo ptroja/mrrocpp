@@ -761,7 +761,7 @@ ecp_smooth_generator::ecp_smooth_generator (ecp_task& _ecp_task, bool _is_synchr
 bool ecp_smooth_generator::first_step ()
 {
   ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-  ecp_t.get_mp_command ();
+  ecp_t.mp_buffer_receive_and_send ();
   node_counter = 0;
   initiate_pose_list();
   get_pose();
@@ -910,7 +910,7 @@ bool ecp_smooth_generator::next_step ()
    	if(is_last_list_element())	//ostatni punkt
    	{
      	ecp_t.set_ecp_reply (TASK_TERMINATED);
-     	ecp_t.get_mp_command ();
+     	ecp_t.mp_buffer_receive_and_send ();
      	return false;
      }
      else
@@ -982,12 +982,12 @@ bool ecp_smooth_generator::next_step ()
 		 node_counter=0;
 
      	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-	     ecp_t.get_mp_command ();
+	     ecp_t.mp_buffer_receive_and_send ();
      }
    } //koniec: nastepny punkt trajektorii
    else { // w trakcie interpolacji
      ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-     ecp_t.get_mp_command ();
+     ecp_t.mp_buffer_receive_and_send ();
    }
    // Kopiowanie danych z bufora przyslanego z EDP do
    // obrazu danych wykorzystywanych przez generator
@@ -1149,7 +1149,7 @@ bool ecp_smooth_generator::next_step ()
 bool ecp_tool_change_generator::first_step ()
 {
 //  	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-// 	 ecp_t.get_mp_command ();
+// 	 ecp_t.mp_buffer_receive_and_send ();
 
  	Homog_matrix tool_frame(tool_parameters[0], tool_parameters[1], tool_parameters[2]);
  	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame_m);
@@ -1176,7 +1176,7 @@ bool ecp_tool_change_generator::next_step ()
 		ecp_t.set_ecp_reply (TASK_TERMINATED);
 	}
 
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 
 	switch ( ecp_t.mp_command_type() ) {
 		case NEXT_POSE:

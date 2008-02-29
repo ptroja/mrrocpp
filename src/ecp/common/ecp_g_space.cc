@@ -157,7 +157,7 @@ void irp6ot_hermite_spline_generator::calc_hermit()
 bool irp6ot_hermite_spline_generator::first_step (  ) {
 
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);  // Set the type of the response from the ECP to the MP: ECP_ACKNOWLEDGE
-	ecp_t.get_mp_command (); // Get command from MP
+	ecp_t.mp_buffer_receive_and_send (); // Get command from MP
 
 	switch ( ecp_t.mp_command_type() ) {
 	case NEXT_POSE:
@@ -474,7 +474,7 @@ bool irp6ot_natural_spline_generator::first_step ()
 {
 
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);  // Set the type of the response from the ECP to the MP: ECP_ACKNOWLEDGE
-	ecp_t.get_mp_command (); // Get the command from the MP
+	ecp_t.mp_buffer_receive_and_send (); // Get the command from the MP
 
     switch ( ecp_t.mp_command_type() ) {
     case NEXT_POSE:

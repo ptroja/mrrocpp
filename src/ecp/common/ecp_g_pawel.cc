@@ -69,7 +69,7 @@ bool pawel_generator::first_step ( )
 //	start = (double)time_start.tv_sec + ((double)(time_start.tv_nsec))/1000000000.0;
 
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	switch ( ecp_t.mp_command_type() ) 
 	{
 		case NEXT_POSE:
@@ -115,7 +115,7 @@ bool pawel_generator::next_step ( )
     	the_robot->get_reply();
     	
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	
 	x = sensor_m[SENSOR_PAWEL]->image.ball.x;
 	y = sensor_m[SENSOR_PAWEL]->image.ball.y;

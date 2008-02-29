@@ -33,7 +33,7 @@ bool y_simple_generator::first_step ( ) {
 	for (int i=0; i<6; i++)
 		delta[i]=0.0;
 
-	ecp_t->get_mp_command ();
+	ecp_t->mp_buffer_receive_and_send ();
 	node_counter = 0;
 	td.interpolation_node_no = 1;
 	td.internode_step_no = step_no;
@@ -80,13 +80,13 @@ bool y_simple_generator::next_step ( ) {
 //	printf("bbb\n");
 	if (ecp_t->pulse_check()) 
 	{
-		ecp_t->get_mp_command ();
+		ecp_t->mp_buffer_receive_and_send ();
 		return false;
 	}
 	else
 	{
 		ecp_t->set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t->get_mp_command ();
+		ecp_t->mp_buffer_receive_and_send ();
 	}
 	the_robot->get_reply();
 	the_robot->EDP_data.instruction_type = SET;

@@ -120,7 +120,7 @@ measure[i][j]=0;
 (sensor_m.begin())->second->base_period=0;
  (sensor_m.begin())->second->current_period=0;
 
- ecp_t.get_mp_command ();
+ ecp_t.mp_buffer_receive_and_send ();
    node_counter = 0;
 
  td.interpolation_node_no = 1;
@@ -276,12 +276,12 @@ bool seven_eye_run_linear_generator::next_step (  ) {
 clock_gettime( CLOCK_REALTIME , &s_time);
    if (ecp_t.pulse_check()) { // Koniec odcinka
 //    ecp_t.set_ecp_reply (TASK_TERMINATED);
-     ecp_t.get_mp_command ();
+     ecp_t.mp_buffer_receive_and_send ();
      return false;
    }
    else { // w trakcie interpolacji
      ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-     ecp_t.get_mp_command ();
+     ecp_t.mp_buffer_receive_and_send ();
   }
 
    // Kopiowanie danych z bufora przyslanego z EDP do

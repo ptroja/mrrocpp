@@ -28,7 +28,7 @@ bool ecp_generator_t::next_step (  ) {
   the_robot->copy_edp_to_mp_buffer (ecp_t.ecp_reply.ecp_reply.reply_package);
 
   ecp_t.set_ecp_reply( ECP_ACKNOWLEDGE ); 
-  ecp_t.get_mp_command ();
+  ecp_t.mp_buffer_receive_and_send ();
 
   switch ( ecp_t.mp_command_type() ) {
     case NEXT_POSE:

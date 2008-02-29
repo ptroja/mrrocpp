@@ -32,7 +32,7 @@ bool y_nose_run_force_generator::first_step ( )
 		delta[i]=0.0;
 	}
 
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	node_counter = 0;
 
 	td.interpolation_node_no = 1;
@@ -91,11 +91,11 @@ bool y_nose_run_force_generator::next_step ( ) {
 	struct timespec start[9];
 
 	if (ecp_t.pulse_check()) { // Koniec odcinka
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 		return false;
 	} else { // w trakcie interpolacji
 		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 	}
 
 	// Kopiowanie danych z bufora przyslanego z EDP do
@@ -158,7 +158,7 @@ bool y_egg_force_generator::first_step ( ) {
 	prev_gen_state = 0;
 
 
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	node_counter = 0;
 
 	td.interpolation_node_no = 1;
@@ -220,7 +220,7 @@ bool y_egg_force_generator::next_step ( ) {
 
 
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 
 	// Kopiowanie danych z bufora przyslanego z EDP do
 	// obrazu danych wykorzystywanych przez generator
@@ -484,7 +484,7 @@ bool y_edge_follow_force_generator::first_step ( )
 	create_pose_list_head(emptyps, 0.0, 2, delta);
 
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	td.interpolation_node_no = 1;
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
@@ -549,11 +549,11 @@ bool y_edge_follow_force_generator::next_step ( )
 	// static int count;
 	// struct timespec start[9];
 	if (ecp_t.pulse_check()) {
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 		return false;
 	} else {
 		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 	}
 
 
@@ -677,7 +677,7 @@ if (teach_or_move == YG_MOVE) {
 
 	initiate_pose_list();
 
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	node_counter = 0;
 
 	td.interpolation_node_no = 1;
@@ -738,7 +738,7 @@ if (teach_or_move == YG_MOVE) {
 
 	create_pose_list_head(emptyps,0.0,delta);
 
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	node_counter = 0;
 
 	td.interpolation_node_no = 1;
@@ -808,12 +808,12 @@ if (teach_or_move == YG_MOVE) {
 	ecp_taught_in_pose tip;      // Nauczona pozycja
 
 	if (!(is_pose_list_element())) { // Koniec odcinka
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 		// flush_pose_list();
 
 	} else { // w trakcie interpolacji
 		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 	}
 
 	// Kopiowanie danych z bufora przyslanego z EDP do
@@ -867,12 +867,12 @@ if (teach_or_move == YG_MOVE) {
 	double inc_delta[6]={0.0,0.0,0.0,0.0,0.0,0.0};
 
 	if (ecp_t.pulse_check()) { // Koniec odcinka
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 		initiate_pose_list();
 		return false;
 	} else { // w trakcie interpolacji
 		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 	}
 
 	for (i=0; i<6;i++) {
@@ -942,7 +942,7 @@ if (teach_or_move == YG_MOVE) {
 	gen_state = next_gen_state = 4; // jazda w powietrzu
 	prev_gen_state = 0;
 
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	node_counter = 0;
 
 	td.interpolation_node_no = 1;
@@ -1014,7 +1014,7 @@ if (teach_or_move == YG_MOVE) {
 
 	create_pose_list_head(emptyps, 0.0, 2, delta);
 
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	node_counter = 0;
 
 	td.interpolation_node_no = 1;
@@ -1087,13 +1087,13 @@ if (teach_or_move == YG_MOVE) {
 		(sensor_m.begin())->second->to_vsp.parameters = 6;
 		(sensor_m.begin())->second->configure_sensor();
 
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 		// flush_pose_list();
 //		return false;
 	}
 	else { // w trakcie interpolacji
 		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 	}
 
 	// Kopiowanie danych z bufora przyslanego z EDP do
@@ -1307,13 +1307,13 @@ if (teach_or_move == YG_MOVE) {
 	double inc_delta[6]={0.0,0.0,0.0,0.0,0.0,0.0};
 
 	if (ecp_t.pulse_check()) { // Koniec odcinka
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 		initiate_pose_list();
 		return false;
 	}
 	else { // w trakcie interpolacji
 		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 	}
 
 	for (i=0; i<6;i++) {
@@ -1398,7 +1398,7 @@ bool ecp_tff_nose_run_generator::first_step () {
 
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
 
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	node_counter = 0;
 
 	td.interpolation_node_no = 1;
@@ -1492,13 +1492,13 @@ bool ecp_tff_nose_run_generator::next_step () {
 	if (pulse_check_activated && ecp_t.pulse_check())
 	{ // Koniec odcinka
 		//	ecp_t.set_ecp_reply (TASK_TERMINATED);
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 		return false;
 	}
 	else
 	{ // w trakcie interpolacji
 		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 	}
 
 
@@ -1560,7 +1560,7 @@ bool ecp_tff_rubik_grab_generator::first_step () {
 
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
 
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	node_counter = 0;
 
 	td.interpolation_node_no = 1;
@@ -1644,7 +1644,7 @@ bool ecp_tff_rubik_grab_generator::next_step () {
 //	  cout << "next_step" << endl;
 
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 
 
 	// Kopiowanie danych z bufora przyslanego z EDP do
@@ -1666,7 +1666,7 @@ bool ecp_tff_rubik_grab_generator::next_step () {
 			 the_robot->EDP_data.next_gripper_coordinate -= position_increment;
 		else {
 			ecp_t.set_ecp_reply (TASK_TERMINATED);
-			ecp_t.get_mp_command ();
+			ecp_t.mp_buffer_receive_and_send ();
 			finished = true;
 		}
 
@@ -1713,7 +1713,7 @@ bool ecp_tff_rubik_face_rotate_generator::first_step () {
 
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
 
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	node_counter = 0;
     finished=false;
 
@@ -1796,7 +1796,7 @@ bool ecp_tff_rubik_face_rotate_generator::next_step () {
 	 // cout << "next_step" << endl;
 
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 
 
 	// Kopiowanie danych z bufora przyslanego z EDP do
@@ -1841,7 +1841,7 @@ bool ecp_tff_rubik_face_rotate_generator::next_step () {
 				if((	turn_angle < 0.0 && stored_gamma > current_gamma) || (
 					turn_angle > 0.0 && stored_gamma < current_gamma)) {
 						ecp_t.set_ecp_reply (TASK_TERMINATED);
-						ecp_t.get_mp_command ();
+						ecp_t.mp_buffer_receive_and_send ();
 						finished = true;
 				}
 			}
@@ -1904,7 +1904,7 @@ bool ecp_tff_gripper_approach_generator::first_step () {
 
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
 
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	node_counter = 0;
     finished=false;
 
@@ -1979,7 +1979,7 @@ bool ecp_tff_gripper_approach_generator::next_step () {
 	 // cout << "next_step" << endl;
 
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 
 
 	// Kopiowanie danych z bufora przyslanego z EDP do
@@ -1999,7 +1999,7 @@ bool ecp_tff_gripper_approach_generator::next_step () {
 		if (node_counter > motion_time)
 		{
 			ecp_t.set_ecp_reply (TASK_TERMINATED);
-			ecp_t.get_mp_command ();
+			ecp_t.mp_buffer_receive_and_send ();
 			finished = true;
 		}
 	}

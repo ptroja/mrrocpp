@@ -147,7 +147,7 @@ bool ecp_vis_sac_lx_generator::first_step () {
 
   //	the_robot = robot_m[ROBOT_IRP6_ON_TRACK];
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	vsp_vis_sac = sensor_m[SENSOR_CAMERA_SA];
 
 	node_counter=0;
@@ -239,7 +239,7 @@ bool ecp_vis_sac_lx_generator::next_step () {
 
 
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	the_robot->get_reply();
 
 	 	the_robot->EDP_data.set_type = ARM_DV;

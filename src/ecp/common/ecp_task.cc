@@ -95,8 +95,7 @@ void ecp_task::catch_signal_in_ecp_task(int sig)
 
 
 void ecp_task::terminate ( )
-{
-}
+{}
 
 
 // ---------------------------------------------------------------
@@ -174,9 +173,9 @@ void ecp_task::main_task_algorithm(void)
 
 void ecp_task::Move (ecp_generator& the_generator)
 {
-// Funkcja ruchu dla ECP
+	// Funkcja ruchu dla ECP
 
-// generacja pierwszego kroku ruchu
+	// generacja pierwszego kroku ruchu
 
 	if (!the_generator.first_step() ) {
 		return; // Warunek koncowy spelniony w pierwszym kroku
@@ -186,13 +185,13 @@ void ecp_task::Move (ecp_generator& the_generator)
 
 		// zadanie przygotowania danych od czujnikow
 		all_sensors_initiate_reading (the_generator.sensor_m);
-	//printf("przed move\n");
+		//printf("przed move\n");
 		// wykonanie kroku ruchu
 		if ((the_generator.the_robot) && the_generator.the_robot->communicate) {
 			// zlecenie ruchu SET oraz odczyt stanu robota GET
 			the_generator.the_robot->execute_motion();
 		}
-	//printf("za move\n");
+		//printf("za move\n");
 		// odczytanie danych z wszystkich czujnikow
 		all_sensors_get_reading(the_generator.sensor_m);
 	} while ( the_generator.next_step() ); // end: do
@@ -219,9 +218,9 @@ void ecp_task::set_ecp_reply ( ECP_REPLY ecp_r)
 // Informacja dla MP o zakonczeniu zadania uzytkownika
 void ecp_task::ecp_termination_notice (void)
 {
-	
+
 	set_ecp_reply (TASK_TERMINATED);
-	get_mp_command ();
+	mp_buffer_receive_and_send ();
 }
 
 // Wysyla puls do Mp przed oczekiwaniem na spotkanie
@@ -287,7 +286,7 @@ bool ecp_task::ecp_wait_for_start (void)
 	} // end: switch ( ecp_t->mp_command_type() )
 
 
-// if (Reply (caller, &ecp_reply, sizeof(ECP_REPLY_PACKAGE)) == -1 ) {
+	// if (Reply (caller, &ecp_reply, sizeof(ECP_REPLY_PACKAGE)) == -1 ) {
 	if ( MsgReply(caller, EOK, &ecp_reply, sizeof(ECP_REPLY_PACKAGE)) ==-1) {// by Y&W
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ECP: Reply to MP failed\n");
@@ -323,8 +322,6 @@ bool ecp_task::get_next_state (void)
 			set_ecp_reply (ECP_ACKNOWLEDGE);
 			ecp_stop = true;
 			break;
-		case NEXT_POSE:
-
 		default:
 			set_ecp_reply (INCORRECT_MP_COMMAND);
 			break;
@@ -349,7 +346,7 @@ bool ecp_task::get_next_state (void)
 }
 
 // Oczekiwanie na polecenie od MP
-void ecp_task::get_mp_command (void)
+void ecp_task::mp_buffer_receive_and_send (void)
 {
 	// Wyslanie pulsu do MP
 	send_pulse_to_mp ( ECP_WAIT_FOR_COMMAND, 1);
@@ -357,13 +354,10 @@ void ecp_task::get_mp_command (void)
 	int caller = receive_mp_message();
 
 	switch (mp_command_type() ) {
-		case NEXT_STATE:
-			break;
-		case STOP:
-			break;
 		case END_MOTION:
 			// dla ulatwienia programowania apliakcji wielorobotowych
-			if (ecp_reply.reply != ERROR_IN_ECP) set_ecp_reply (TASK_TERMINATED);
+			if (ecp_reply.reply != ERROR_IN_ECP)
+				set_ecp_reply (TASK_TERMINATED);
 			break;
 		default:
 			break;

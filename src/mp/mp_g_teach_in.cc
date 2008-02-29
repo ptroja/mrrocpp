@@ -523,9 +523,9 @@ bool mp_teach_in_generator::next_step () {
 	  else
 	    the_robot.set_ecp_reply (TASK_TERMINATED);
 	*/
-// printf("W mp_teach_in_generator::next_step przed get_mp_command\n");
-// the_robot.get_mp_command ();
-// printf("W mp_teach_in_generator::next_step za get_mp_command\n");
+// printf("W mp_teach_in_generator::next_step przed mp_buffer_receive_and_send\n");
+// the_robot.mp_buffer_receive_and_send ();
+// printf("W mp_teach_in_generator::next_step za mp_buffer_receive_and_send\n");
 
 	if (!is_pose_list_element ())
 		return false; // Jezeli lista jest pusta to konczymy generacje trajektorii

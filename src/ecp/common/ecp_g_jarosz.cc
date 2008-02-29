@@ -86,7 +86,7 @@ ecp_linear_generator::ecp_linear_generator (ecp_task& _ecp_task,
 bool ecp_linear_generator::first_step (  )
 {
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	node_counter = 0;
 	finished=false;
 
@@ -170,11 +170,11 @@ bool ecp_linear_generator::next_step (  )
 		} else {
 			ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
 		}
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 		finished=true;
 	} else { // w trakcie interpolacji
 		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 	}
 
 	// Kopiowanie danych z bufora przyslanego z EDP do
@@ -365,7 +365,7 @@ double ecp_linear_parabolic_generator::calculate_s ( const double t, const doubl
 bool ecp_linear_parabolic_generator::first_step ()
 {
   ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-  ecp_t.get_mp_command ();
+  ecp_t.mp_buffer_receive_and_send ();
   node_counter = 0;
 
   switch ( ecp_t.mp_command_type() )
@@ -490,12 +490,12 @@ bool ecp_linear_parabolic_generator::next_step ()
    // Kontakt z MP
    if (node_counter == td.interpolation_node_no) { // Koniec odcinka
      ecp_t.set_ecp_reply (TASK_TERMINATED);
-     ecp_t.get_mp_command ();
+     ecp_t.mp_buffer_receive_and_send ();
      return false;
    }
    else { // w trakcie interpolacji
      ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-     ecp_t.get_mp_command ();
+     ecp_t.mp_buffer_receive_and_send ();
    }
    // Kopiowanie danych z bufora przyslanego z EDP do
    // obrazu danych wykorzystywanych przez generator
@@ -716,7 +716,7 @@ bool ecp_linear_parabolic_generator::next_step ()
 bool ecp_polynomial_generator::first_step (  )
 {
   ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-  ecp_t.get_mp_command ();
+  ecp_t.mp_buffer_receive_and_send ();
   node_counter = 0;
 
   switch ( ecp_t.mp_command_type() )
@@ -899,12 +899,12 @@ bool ecp_cubic_generator::next_step (  )
    // Kontakt z MP
    if (node_counter == td.interpolation_node_no) { // Koniec odcinka
 //     ecp_t.set_ecp_reply (TASK_TERMINATED); // by Y
-     ecp_t.get_mp_command ();
+     ecp_t.mp_buffer_receive_and_send ();
      return false;
    }
    else { // w trakcie interpolacji
      ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-     ecp_t.get_mp_command ();
+     ecp_t.mp_buffer_receive_and_send ();
    }
    // Kopiowanie danych z bufora przyslanego z EDP do
    // obrazu danych wykorzystywanych przez generator
@@ -1189,12 +1189,12 @@ bool ecp_quintic_generator::next_step ()
  // Kontakt z MP
    if (node_counter == td.interpolation_node_no) { // Koniec odcinka
      ecp_t.set_ecp_reply (TASK_TERMINATED);
-     ecp_t.get_mp_command ();
+     ecp_t.mp_buffer_receive_and_send ();
      return false;
    }
    else { // w trakcie interpolacji
      ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-     ecp_t.get_mp_command ();
+     ecp_t.mp_buffer_receive_and_send ();
    }
    // Kopiowanie danych z bufora przyslanego z EDP do
    // obrazu danych wykorzystywanych przez generator
@@ -1438,7 +1438,7 @@ ecp_parabolic_teach_in_generator::ecp_parabolic_teach_in_generator (ecp_task& _e
 bool ecp_parabolic_teach_in_generator::first_step (  ) {
 
    ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-  ecp_t.get_mp_command (); // Kontakt z MP
+  ecp_t.mp_buffer_receive_and_send (); // Kontakt z MP
 
 
     // Poniewaz ten generator wykonuje ruch tylko do kolejnej pozycji na liscie,
@@ -1776,7 +1776,7 @@ ecp_calibration_generator::ecp_calibration_generator (ecp_task& _ecp_task, doubl
 bool ecp_calibration_generator::first_step (  ) {
 
   ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-  ecp_t.get_mp_command (); // Kontakt z MP
+  ecp_t.mp_buffer_receive_and_send (); // Kontakt z MP
 
 
     // Poniewaz ten generator wykonuje ruch tylko do kolejnej pozycji na liscie,
@@ -2142,11 +2142,11 @@ bool ecp_cubic_spline_generator::first_step()
 
   if (is_pose_list_element ()) {
     ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-       ecp_t.get_mp_command (); // Kontakt z MP
+       ecp_t.mp_buffer_receive_and_send (); // Kontakt z MP
   }
   else {
     ecp_t.set_ecp_reply (TASK_TERMINATED);
-        ecp_t.get_mp_command ();
+        ecp_t.mp_buffer_receive_and_send ();
     return false;
    }
 
@@ -2548,11 +2548,11 @@ bool ecp_smooth_cubic_spline_generator::first_step()
 
  if (is_pose_list_element ()) {
     ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-       ecp_t.get_mp_command (); // Kontakt z MP
+       ecp_t.mp_buffer_receive_and_send (); // Kontakt z MP
 }
 else {
     ecp_t.set_ecp_reply (TASK_TERMINATED);
-        ecp_t.get_mp_command ();
+        ecp_t.mp_buffer_receive_and_send ();
     return false;
     }
 
@@ -3059,7 +3059,7 @@ bool ecp_quintic_spline_generator::first_step()
 {
 
    ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-   ecp_t.get_mp_command (); // Kontakt z MP
+   ecp_t.mp_buffer_receive_and_send (); // Kontakt z MP
 
 
     // Poniewaz ten generator wykonuje ruch tylko do kolejnej pozycji na liscie,
@@ -3471,7 +3471,7 @@ bool ecp_elipsoid_generator::first_step (  )
 {
 
   ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-  ecp_t.get_mp_command (); // Kontakt z MP
+  ecp_t.mp_buffer_receive_and_send (); // Kontakt z MP
 
   // Zlecenie odczytu aktualnego polozenia ramienia
   switch ( ecp_t.mp_command_type() ) {

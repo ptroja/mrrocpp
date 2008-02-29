@@ -261,7 +261,7 @@ void ecp_task_mam::main_task_algorithm(void)
 	show_mam_window(UI_fd);
 	
 	set_ecp_reply(TASK_TERMINATED);
-	get_mp_command();
+	mp_buffer_receive_and_send();
 	
 	// Oczekiwanie na polecenie STOP od MP.
 	ecp_wait_for_stop();	

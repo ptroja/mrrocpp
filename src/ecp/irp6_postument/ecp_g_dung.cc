@@ -29,7 +29,7 @@ dung_generator::dung_generator(ecp_task& _ecp_task, int step):ecp_generator (_ec
 
 bool dung_generator::first_step ( ) {
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	td.interpolation_node_no = 1;
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
@@ -93,11 +93,11 @@ bool dung_generator::next_step ( ) {
 	// static int count;
 	// struct timespec start[9];
 	if (ecp_t.pulse_check()) {
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 		return false;
 	} else {
 		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 	}
 	the_robot->get_reply();
 	the_robot->EDP_data.instruction_type = SET_GET;

@@ -28,7 +28,7 @@ bool y_simple_generator::first_step ( ) {
 	for (int i=0; i<6; i++)
 		delta[i]=0.0;
 
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	node_counter = 0;
 
 	td.interpolation_node_no = 1;
@@ -69,11 +69,11 @@ bool y_simple_generator::next_step ( ) {
 	struct timespec start[9];
 	int i; // licznik kolejnych wspolrzednych wektora [0..6]
 	if (ecp_t.pulse_check()) { // Koniec odcinka
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 		return false;
 	} else { // w trakcie interpolacji
 		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 	}
 	// Kopiowanie danych z bufora przyslanego z EDP do
 	// obrazu danych wykorzystywanych przez generator

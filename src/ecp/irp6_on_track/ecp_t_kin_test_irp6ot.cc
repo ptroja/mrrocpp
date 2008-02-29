@@ -102,7 +102,7 @@ void ecp_task_kin_test_irp6ot::main_task_algorithm(void)
 	sr_ecp_msg->message("ECP GET finished");
        set_ecp_reply(TASK_TERMINATED);
 
-       get_mp_command();
+       mp_buffer_receive_and_send();
 
 	// Oczekiwanie na polecenie STOP od MP.
 	ecp_wait_for_stop();

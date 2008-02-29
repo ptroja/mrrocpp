@@ -43,7 +43,7 @@ bool speaking_generator::first_step ( ) {
 	//(sensor_m.begin())->second->base_period=1;
  	//(sensor_m.begin())->second->current_period=0;
 	the_robot->communicate = true;
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	node_counter = 0;
 
 	last_sg_state = new_sg_state = SG_FIRST_GET;
@@ -75,11 +75,11 @@ bool speaking_generator::next_step ( ) {
 
 /*
 	if (pulse_check(the_robot->trigger_attach)) { // Koniec odcinka
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 		return false;
 	} else { // w trakcie interpolacji
 		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 	}
 	*/ //odrem jako niezalezny od rcsc generator 
 	
@@ -88,12 +88,12 @@ bool speaking_generator::next_step ( ) {
 	if (last_sg_state != SG_FINISH)
 	{
 		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 	}
 	else
 	{
 		ecp_t.set_ecp_reply (TASK_TERMINATED);
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 	}
 	
 	

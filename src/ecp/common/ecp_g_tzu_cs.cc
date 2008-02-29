@@ -31,7 +31,7 @@ bool tzu_simple_generator :: first_step ( )
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
 	
 	/* znowu jakies odwolanie systemowe tym razem cos z pobraniem komendy z mp */
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 
 	/* kolejny licznik inicjalizujemy na zero, jest on inkrementowany  co krok ruchu*/	
 	first_run = true;
@@ -89,13 +89,13 @@ bool tzu_simple_generator::next_step ( )
 	if (ecp_t.pulse_check()) 
 	{
 		cout<<"pulse check"<<endl;
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 		return false;
 	}
 	else
 	{	
 		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 	}
 
 
@@ -145,7 +145,7 @@ bool tzu_simple_generator::next_step ( )
 		case MOVE_END:
 			cout<<"**END**"<<endl;		
 			ecp_t.set_ecp_reply (TASK_TERMINATED);
-			ecp_t.get_mp_command ();
+			ecp_t.mp_buffer_receive_and_send ();
 			finished = true;		
 			break;
 //		default:

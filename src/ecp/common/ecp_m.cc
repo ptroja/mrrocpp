@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 					/*Komunikat o bledzie wysylamy do SR */
 					ecp_t->sr_ecp_msg->message (NON_FATAL_ERROR, er.error_no);
 					ecp_t->set_ecp_reply (ERROR_IN_ECP);
-					ecp_t->get_mp_command();
+					ecp_t->mp_buffer_receive_and_send();
 					break;
 				default:
 					ecp_t->sr_ecp_msg->message (NON_FATAL_ERROR, 0, "ECP: Unidentified exception");
@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
 					/*Komunikat o bledzie wysylamy do SR */
 					ecp_t->sr_ecp_msg->message (NON_FATAL_ERROR, er.error_no);
 					ecp_t->set_ecp_reply (ERROR_IN_ECP);
-					ecp_t->get_mp_command();
+					ecp_t->mp_buffer_receive_and_send();
 					break;
 				case ECP_STOP_ACCEPTED:
 					ecp_t->sr_ecp_msg->message("pierwszy catch stop");

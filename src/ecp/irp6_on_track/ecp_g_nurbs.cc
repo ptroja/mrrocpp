@@ -65,7 +65,7 @@ bool irp6ot_nurbs_generator::first_step (  )
 {
 //	cout<<"firststep\n"<<flush;
   ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-  ecp_t.get_mp_command ();
+  ecp_t.mp_buffer_receive_and_send ();
   node_counter = 0;
   switch ( ecp_t.mp_command_type() ) {
     case NEXT_POSE:
@@ -134,11 +134,11 @@ bool irp6ot_nurbs_generator::next_step (  )
 			ecp_t.set_ecp_reply (TASK_TERMINATED);		}
 		else	{
 	     	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);     	}
-     	ecp_t.get_mp_command ();
+     	ecp_t.mp_buffer_receive_and_send ();
      	return false;} 
 	else { // w trakcie interpolacji
    		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-     	ecp_t.get_mp_command ();
+     	ecp_t.mp_buffer_receive_and_send ();
    }
 
    // Kopiowanie danych z bufora przyslanego z EDP do

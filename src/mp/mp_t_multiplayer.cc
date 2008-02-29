@@ -65,11 +65,17 @@ void mp_task_multiplayer::main_task_algorithm(void)
 			}
 			*/
 			
-			set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "hello world!", 1, ROBOT_FESTIVAL);
+			if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "hello world!", 1, ROBOT_FESTIVAL)) {
+				break_state = true;
+		       	break;
+			}
 			
 			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-			run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
-		        (1, 1, ROBOT_FESTIVAL, ROBOT_FESTIVAL);
+			if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+		        (1, 1, ROBOT_FESTIVAL, ROBOT_FESTIVAL)) {
+				break_state = true;
+		       	break;
+			}
 
 			/*
 			playerspeech_gen.set_phrase("robot programming framework");

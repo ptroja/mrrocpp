@@ -22,7 +22,7 @@ bool playerpos_generator::first_step ( )
 {
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
 
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 
 	switch ( ecp_t.mp_command_type() ) 
 	{
@@ -43,13 +43,13 @@ bool playerpos_generator::next_step ( )
 {
 	if (ecp_t.pulse_check()) 
 	{
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 		return false;
 	}
 	else
 	{
 		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 	}
 
 #if 0

@@ -26,7 +26,7 @@ bool progpanel_generator::first_step ( )
 	second_step = false;
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
 
-	ecp_t.get_mp_command ();
+	ecp_t.mp_buffer_receive_and_send ();
 	node_counter = 0;
 	td.interpolation_node_no = 1;
 	td.internode_step_no = step_no;
@@ -68,13 +68,13 @@ bool progpanel_generator::next_step ( )
 	// zmienne wykorzystywane przy rysowaniu
 	if (ecp_t.pulse_check()) 
 	{
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 		return false;
 	}
 	else
 	{
 		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.get_mp_command ();
+		ecp_t.mp_buffer_receive_and_send ();
 	}
 
 	// Kopiowanie danych z bufora przyslanego z EDP do

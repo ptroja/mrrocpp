@@ -183,7 +183,7 @@ printf("Elo - Wiadomosci z QNX IO!\n");
                     // Zakonczenie dzialania procesu.
                     TERMINATE = true;
                     ecp_t->set_ecp_reply(TASK_TERMINATED);
-                    ecp_t->get_mp_command();
+                    ecp_t->mp_buffer_receive_and_send();
                     break;
                 }; // end: switch
         if (from_ui_msg.command == TR_LOAD_TRAJECTORY){

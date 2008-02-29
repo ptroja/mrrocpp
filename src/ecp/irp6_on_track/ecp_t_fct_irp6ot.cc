@@ -147,7 +147,7 @@ printf("Zwykla wiadomosc!\n");
                     // Zakonczenie ruchu.
                     TERMINATE=true;
                     ecp_t->set_ecp_reply(TASK_TERMINATED);
-                    ecp_t->get_mp_command();
+                    ecp_t->mp_buffer_receive_and_send();
                     break;
                 }; // end: switch
         // Jesli trzeba odswiezyc okno.

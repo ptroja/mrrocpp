@@ -1406,7 +1406,7 @@ bool mp_drawing_teach_in_force_generator::first_step ()
 		gen_state = next_gen_state = 4; // jazda w powietrzu
 		prev_gen_state = 0;
 
-		// 	the_robot.get_mp_command ();
+		// 	the_robot.mp_buffer_receive_and_send ();
 		node_counter = 0;
 
 		td.interpolation_node_no = 1;
@@ -1519,7 +1519,7 @@ bool mp_drawing_teach_in_force_generator::first_step ()
 
 		create_pose_list_head(emptyps, 0.0, 2, delta);
 
-		// 	the_robot.get_mp_command ();
+		// 	the_robot.mp_buffer_receive_and_send ();
 		node_counter = 0;
 
 		td.interpolation_node_no = 1;
@@ -1621,7 +1621,7 @@ bool mp_drawing_teach_in_force_generator::next_step ()
 
 			vsp_force_irp6p->to_vsp.parameters = 6;
 			vsp_force_irp6p->configure_sensor();
-			// 	the_robot.get_mp_command ();
+			// 	the_robot.mp_buffer_receive_and_send ();
 			// flush_pose_list();
 			return false;
 		}
@@ -1932,7 +1932,7 @@ bool mp_drawing_teach_in_force_generator::next_step ()
 		double inc_delta[6]={0.0,0.0,0.0,0.0,0.0,0.0};
 
 		if (trigger) { // Koniec odcinka
-			// 	the_robot.get_mp_command ();
+			// 	the_robot.mp_buffer_receive_and_send ();
 			trigger = false;
 			initiate_pose_list();
 			return false;
