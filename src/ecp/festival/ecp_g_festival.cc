@@ -151,7 +151,7 @@ bool festival_generator::next_step ( )
 	timeout.tv_sec = 0;
 	timeout.tv_usec = 0;
 
-	bool has_data;
+	bool has_data = false;
 
 	/* read the resultant string back */
 	switch (select(sock + 1, &rd, NULL, NULL, &timeout)) {
