@@ -5,7 +5,7 @@
 
 #define MAX_FESTIVAL_PHRASE	255
 
-#define FESTIVAL_SAY_STRING_PREFIX "(SayText \""
+#define FESTIVAL_SAY_STRING_PREFIX "(voice_cstr_pl_em_diphone) (SayText \""
 #define FESTIVAL_SAY_STRING_SUFFIX "\")\n"
 
 #define FESTIVAL_QUIT_STRING "(quit)\n"

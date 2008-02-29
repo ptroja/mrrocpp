@@ -52,7 +52,7 @@ bool mp_task_rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogl
 		if(face_turn_op(CL_0))
 			return true;
 
-		if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "oglAdam kolory na Sciance", 1, ROBOT_FESTIVAL)) {
+		if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "oglo~dam kolory na s~ciance", 1, ROBOT_FESTIVAL)) {
 			return true;
 		}
 
@@ -220,7 +220,7 @@ bool mp_task_rubik_cube_solver::communicate_with_windows_solver()
 	//mp_object.transmitter_m[TRANSMITTER_RC_WINDOWS]->to_va.rc_windows.rc_state[i]=patternx[i];
 	transmitter_m[TRANSMITTER_RC_WINDOWS]->to_va.rc_windows.rc_state[54]='\0';
 
-	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "mySlE", 1, ROBOT_FESTIVAL)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "mys~le~", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
 
@@ -242,7 +242,7 @@ bool mp_task_rubik_cube_solver::communicate_with_windows_solver()
 	strcpy (manipulation_sequence,transmitter_m[TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence);
 
 	if ((manipulation_sequence[0]=='C') && (manipulation_sequence[1]=='u') && (manipulation_sequence[2]=='b') && (manipulation_sequence[3]=='e')) {
-		printf("Jam jest daltonista. ktory Ci nie ulozy kostki\n");
+		printf("Jam jest daltonista. ktory Ci nie uloz*y kostki\n");
 		manipulation_sequence_computed = false;
 		return false;
 	}
@@ -318,7 +318,7 @@ bool mp_task_rubik_cube_solver::communicate_with_windows_solver()
 		manipulation_list.push_back(single_manipulation);
 	}
 
-	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "juZ ukLadam", 1, ROBOT_FESTIVAL)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "juZ ukl/adam", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
 
@@ -540,7 +540,7 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 
 	switch (turn_angle) {
 		case CL_90:
-			if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "obracam kostkE", 1, ROBOT_FESTIVAL)) {
+			if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "obracam kostke~", 1, ROBOT_FESTIVAL)) {
 				return true;
 			}
 			if (set_next_ecps_state ((int) ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) RCSC_CL_90, "", 1, ROBOT_IRP6_ON_TRACK)) {
@@ -555,7 +555,7 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 		case CL_0:
 			break;
 		case CCL_90:
-			if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "obracam kostkE", 1, ROBOT_FESTIVAL)) {
+			if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "obracam kostke~", 1, ROBOT_FESTIVAL)) {
 				return true;
 			}
 			if (set_next_ecps_state ((int) ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) RCSC_CCL_90, "", 1, ROBOT_IRP6_ON_TRACK)) {
@@ -568,7 +568,7 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 			}
 			break;
 		case CL_180:
-			if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "obracam kostkE", 1, ROBOT_FESTIVAL)) {
+			if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "obracam kostke~", 1, ROBOT_FESTIVAL)) {
 				return true;
 			}
 			if (set_next_ecps_state ((int) ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) RCSC_CL_180, "", 1, ROBOT_IRP6_ON_TRACK)) {
@@ -620,7 +620,7 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 
 	// zblizenie chwytakow
 
-	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "przekLadam kostkE", 1, ROBOT_FESTIVAL)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "przekl/adam kostke~", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
 
@@ -960,7 +960,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 	}
 
 
-	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "jestem robotem usLugowym", 1, ROBOT_FESTIVAL)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "jestem robotem usl/ugowym", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
 	// wlaczenie generatora uczacego  robocie irp6ot
@@ -981,7 +981,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 	}
 
 	//	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "trj/rcsc/irp6ot_ap_2.trj", 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }
-	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "uLoZe kostkE rubika", 1, ROBOT_FESTIVAL)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "ul/oz*e~ kostke~ rubika", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
 
@@ -992,7 +992,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 	}
 
 	// powiedzenie
-	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "podaj kostkE", 1, ROBOT_FESTIVAL)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "podaj kostke~", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
 
@@ -1056,7 +1056,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 		return true;
 	}
 
-	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "puSC kostkE", 1, ROBOT_FESTIVAL)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "pus~c~ kostke~", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
 
@@ -1095,7 +1095,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 bool mp_task_rubik_cube_solver::departure_op()
 {
 
-	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "skoNczyLem", 1, ROBOT_FESTIVAL)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "skon~czyl/em", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
 
@@ -1116,7 +1116,7 @@ bool mp_task_rubik_cube_solver::departure_op()
 		return true;
 	}
 
-	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "jadE pracowaC do angli.", 1, ROBOT_FESTIVAL)) {
+	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "jade~ pracowac~ do anglii", 1, ROBOT_FESTIVAL)) {
 		return true;
 	}
 	//	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "jak sie paNstwu podobaLo", 1, ROBOT_FESTIVAL)) {  return true;  }
