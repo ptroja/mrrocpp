@@ -42,6 +42,7 @@ bool festival_generator::first_step ( )
 		case END_MOTION:
 		case INVALID_COMMAND:
 		default:
+			printf("first_step()::INVALID_MP_COMMAND = %d\n", INVALID_MP_COMMAND);
 			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
 	}
 

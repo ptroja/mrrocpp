@@ -15,6 +15,7 @@
 #include "mp/mp_g_playerpos.h"
 #include "mp/mp_g_playerspeech.h"
 #include "ecp_mp/ecp_mp_tr_player.h"
+#include "ecp_mp/ecp_mp_t_festival.h"
 
 mp_task* return_created_mp_task (void)
 {
@@ -23,14 +24,6 @@ mp_task* return_created_mp_task (void)
 
 void mp_task_multiplayer::task_initialization(void) 
 {
-	// Powolanie czujnikow
-	transmitter_m[TRANSMITTER_PLAYER] =
-		new player_transmitter (TRANSMITTER_PLAYER, "[pcm1]", *this,
-	/* 
-		"192.168.18.30", 6665, "position", 3, 'a');
-	*/
-		"192.168.1.64", 6665, "speech", 0, 'w');
-
 	sr_ecp_msg->message("MP multiplayer task loaded");
 }
  
@@ -38,8 +31,8 @@ void mp_task_multiplayer::main_task_algorithm(void)
 {
   	//mp_playerpos_generator playerpos_gen(*this); 
    	//playerpos_gen.transmitter_m = this->transmitter_m;
-  	mp_playerspeech_generator playerspeech_gen(*this); 
-   	playerspeech_gen.transmitter_m = this->transmitter_m;
+  	//mp_playerspeech_generator playerspeech_gen(*this); 
+   	//playerspeech_gen.transmitter_m = this->transmitter_m;
    	
 	bool break_state = false;
 
@@ -71,12 +64,20 @@ void mp_task_multiplayer::main_task_algorithm(void)
 		        	break;
 			}
 			*/
+			
+			set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "hello world!", 1, ROBOT_FESTIVAL);
+			
+			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
+			run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+		        (1, 1, ROBOT_FESTIVAL, ROBOT_FESTIVAL);
 
+			/*
 			playerspeech_gen.set_phrase("robot programming framework");
 			if (Move(playerspeech_gen)) {
 		        	break_state = true;
 		        	break;
 			}
+			*/
 			
 		} while(0);
 		
