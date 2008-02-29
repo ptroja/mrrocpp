@@ -67,7 +67,7 @@ bool mp_task_rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogl
 		if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "oglAdam kolory na Sciance", 1, ROBOT_SPEAKER)) {  return true;  }
 	
 	    	   	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-	   	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	   	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	 		(1, 1, ROBOT_SPEAKER, 
 			ROBOT_SPEAKER)) {  return true;  }	
 
@@ -192,7 +192,7 @@ bool mp_task_rubik_cube_solver::communicate_with_windows_solver()
 	if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "mySlE", 1, ROBOT_SPEAKER)) {  return true;  }
 
     	   	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-   	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+   	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
  		(1, 1, ROBOT_SPEAKER, 
 		ROBOT_SPEAKER)) {  return true;  }	
 	
@@ -275,7 +275,7 @@ bool mp_task_rubik_cube_solver::communicate_with_windows_solver()
 	if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "juZ ukLadam", 1, ROBOT_SPEAKER)) {  return true;  }
 
     	   	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-   	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+   	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
  		(1, 1, ROBOT_SPEAKER, 
 		ROBOT_SPEAKER)) {  return true;  }	
 
@@ -359,7 +359,7 @@ bool mp_task_rubik_cube_solver::find_rcs()
 	if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "mySlE", 1, ROBOT_SPEAKER)) {  return true;  }
 
     	   	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-   	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+   	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
  		(1, 1, ROBOT_SPEAKER, 
 		ROBOT_SPEAKER)) {  return true;  }	
 
@@ -420,7 +420,7 @@ bool mp_task_rubik_cube_solver::find_rcs()
 	if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "juZ ukLadam", 1, ROBOT_SPEAKER)) {  return true;  }
 
     	   	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-   	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+   	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
  		(1, 1, ROBOT_SPEAKER, 
 		ROBOT_SPEAKER)) {  return true;  }	
 
@@ -725,7 +725,7 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 	}
 
     	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-    	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+    	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	 	(3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_SPEAKER, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 
@@ -766,7 +766,7 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 			if (set_next_ecps_state ((int) ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) RCSC_CL_90, "", 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }
 
 			// uruchomienie generatora empty_gen
-		    	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+		    	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			 	(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER)) {  return true;  }
 
 		break;
@@ -777,7 +777,7 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 			if (set_next_ecps_state ((int) ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) RCSC_CCL_90, "", 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }
 
 			// uruchomienie generatora empty_gen
-		    	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+		    	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			 	(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER)) {  return true;  }
 		break;	
 		case CL_180:
@@ -785,7 +785,7 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 			if (set_next_ecps_state ((int) ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) RCSC_CL_180, "", 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }	
 
 			// uruchomienie generatora empty_gen
-		    	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+		    	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			 	(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER)) {  return true;  }
 
 		break;
@@ -849,7 +849,7 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 	}	
 
     	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-    	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+    	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	 	(3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_SPEAKER, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 
@@ -944,7 +944,7 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 	}	
 
     	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-    	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+    	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	 	(3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_SPEAKER, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 	
@@ -989,7 +989,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 	if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "jestem podatny", 1, ROBOT_SPEAKER)) {  return true;  }
 
     	   	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-   	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+   	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
  		(1, 1, ROBOT_SPEAKER, ROBOT_SPEAKER)) {  return true;  }	
 
 
@@ -1013,7 +1013,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 
 //	(1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }	
      
-    	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+    	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
  		(3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_SPEAKER, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 		
@@ -1022,13 +1022,13 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
    	// wlaczenie generatora uczacego  robocie irp6ot
     	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "../trj/rcsc/irp6ot_ap_2.trj", 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }
 
-   	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+   	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
  		(3, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_SPEAKER, 
 		ROBOT_SPEAKER)) {  return true;  }
 
 	if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "uLoZe kostkE rubika", 1, ROBOT_SPEAKER)) {  return true;  }     
 	
-   	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+   	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
  		(3, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_SPEAKER, 
 		ROBOT_SPEAKER)) {  return true;  }
      
@@ -1037,7 +1037,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 
 
 	// uruchomienie generatora empty_gen
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
  		(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER)) {  return true;  }
 
@@ -1069,20 +1069,20 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
     	// wlaczenie generatora zacisku na kostce w robocie irp6ot
     	if (set_next_ecps_state ((int) ECP_GEN_TFF_RUBIK_GRAB, (int) RCSC_RG_FROM_OPEARTOR_PHASE_1, "", 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }
 	// uruchomienie generatora empty_gen
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
  		(2, 1, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER, 
 		ROBOT_IRP6_ON_TRACK)) {  return true;  }
     	// wlaczenie generatora zacisku na kostce w robocie irp6ot
     	if (set_next_ecps_state ((int) ECP_GEN_TFF_RUBIK_GRAB, (int) RCSC_RG_FROM_OPEARTOR_PHASE_2, "", 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }
 	// uruchomienie generatora empty_gen
-   	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+   	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
  		(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_SPEAKER)) {  return true;  }
 
 	if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "puSC kostkE", 1, ROBOT_SPEAKER)) {  return true;  }
 
     	   	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-   	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+   	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
  		(1, 1, ROBOT_SPEAKER, ROBOT_SPEAKER)) {  return true;  }	
 
 	if (wait_ms(1000)) {  return true;  }
@@ -1094,7 +1094,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 
 //	(1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }	
      
-    	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+    	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
  		(3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_SPEAKER, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 
@@ -1114,7 +1114,7 @@ bool mp_task_rubik_cube_solver::departure_op()
 	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "../trj/rcsc/irp6p_de_1.trj", 1, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 
 
-    	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+    	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	 	(3, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_SPEAKER, 
 		ROBOT_SPEAKER)) {  return true;  }
 
@@ -1122,7 +1122,7 @@ bool mp_task_rubik_cube_solver::departure_op()
 	//	if (set_next_ecps_state ((int) ECP_GEN_SPEAK, 0, "jak sie paNstwu podobaLo", 1, ROBOT_SPEAKER)) {  return true;  }
 
     	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-    	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+    	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	 	(3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_SPEAKER, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 

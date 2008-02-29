@@ -42,21 +42,21 @@ public:
 // ####################################################################################################
 
 class mp_extended_empty_generator : public mp_generator {
-    // Klasa dla generatorow trajektorii
-    // Sluzy zarowno do wyznaczania nastepnej wartosci zadanej jak i
-    // sprawdzania spelnienia warunku koncowego
+	// Klasa dla generatorow trajektorii
+	// Sluzy zarowno do wyznaczania nastepnej wartosci zadanej jak i
+	// sprawdzania spelnienia warunku koncowego
  protected:
-    bool activate_trigger;
+	bool activate_trigger;
 
  public:
 	mp_extended_empty_generator(mp_task& _mp_task);
 
-  ~mp_extended_empty_generator(){ };
+	~mp_extended_empty_generator(){ };
 
 	void configure (bool l_activate_trigger);
 
-  bool first_step ();
-  bool next_step ();
+	bool first_step ();
+	bool next_step ();
 
 };
 

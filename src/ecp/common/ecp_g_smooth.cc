@@ -909,8 +909,7 @@ bool ecp_smooth_generator::next_step ()
    if (node_counter == td.interpolation_node_no) { // Koniec odcinka
    	if(is_last_list_element())	//ostatni punkt
    	{
-     	ecp_t.set_ecp_reply (TASK_TERMINATED);
-     	ecp_t.mp_buffer_receive_and_send ();
+     	ecp_t.ecp_termination_notice();
      	return false;
      }
      else

@@ -57,7 +57,7 @@ bool mp_task_rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogl
 		}
 
 		// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-		if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+		if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 		        (1, 1, ROBOT_FESTIVAL,
 		         ROBOT_FESTIVAL)) {
 			return true;
@@ -225,7 +225,7 @@ bool mp_task_rubik_cube_solver::communicate_with_windows_solver()
 	}
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	        (1, 1, ROBOT_FESTIVAL,
 	         ROBOT_FESTIVAL)) {
 		return true;
@@ -323,7 +323,7 @@ bool mp_task_rubik_cube_solver::communicate_with_windows_solver()
 	}
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	        (1, 1, ROBOT_FESTIVAL,
 	         ROBOT_FESTIVAL)) {
 		return true;
@@ -464,7 +464,7 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 	}
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	        (3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {
 		return true;
@@ -499,7 +499,7 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	        (2, 1, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK)) {
 		return true;
@@ -547,7 +547,7 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 				return true;
 			}
 			// uruchomienie generatora empty_gen
-			if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			        (2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL)) {
 				return true;
 			}
@@ -562,7 +562,7 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 				return true;
 			}
 			// uruchomienie generatora empty_gen
-			if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			        (2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL)) {
 				return true;
 			}
@@ -575,7 +575,7 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 				return true;
 			}
 			// uruchomienie generatora empty_gen
-			if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			        (2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL)) {
 				return true;
 			}
@@ -675,7 +675,7 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 	}
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	        (3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {
 		return true;
@@ -712,7 +712,7 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	        (2, 1, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK)) {
 		return true;
@@ -848,7 +848,7 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 	}
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	        (2, 1, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK)) {
 		return true;
@@ -896,7 +896,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 	}
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	        (1, 1, ROBOT_FESTIVAL, ROBOT_FESTIVAL)) {
 		return true;
 	}
@@ -953,7 +953,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 
 	//	(1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	        (3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {
 		return true;
@@ -969,12 +969,12 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 		return true;
 	}
 	/*
-	   	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	   	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	 		(3, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL, 
 			ROBOT_FESTIVAL)) {  return true;  }
 	*/
 
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	        (3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL,
 	         ROBOT_FESTIVAL, ROBOT_IRP6_ON_TRACK)) {
 		return true;
@@ -985,7 +985,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 		return true;
 	}
 
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	        (3, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL,
 	         ROBOT_FESTIVAL)) {
 		return true;
@@ -998,7 +998,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 
 
 	// uruchomienie generatora empty_gen
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	        (2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL)) {
 		return true;
@@ -1040,7 +1040,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 		return true;
 	}
 	// uruchomienie generatora empty_gen
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	        (2, 1, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK)) {
 		return true;
@@ -1050,7 +1050,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 		return true;
 	}
 	// uruchomienie generatora empty_gen
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	        (2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL)) {
 		return true;
@@ -1061,7 +1061,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 	}
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	        (1, 1, ROBOT_FESTIVAL, ROBOT_FESTIVAL)) {
 		return true;
 	}
@@ -1080,7 +1080,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 
 	//	(1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	        (3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {
 		return true;
@@ -1110,7 +1110,7 @@ bool mp_task_rubik_cube_solver::departure_op()
 	}
 
 
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	        (3, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL,
 	         ROBOT_FESTIVAL)) {
 		return true;
@@ -1122,7 +1122,7 @@ bool mp_task_rubik_cube_solver::departure_op()
 	//	if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "jak sie paNstwu podobaLo", 1, ROBOT_FESTIVAL)) {  return true;  }
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	        (3, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL,
 	         ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {
 		return true;

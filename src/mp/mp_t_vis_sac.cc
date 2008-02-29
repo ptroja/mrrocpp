@@ -94,7 +94,7 @@ void mp_task_vis_sac::main_task_algorithm(void)
 			}
 		
 			
-			if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
  				(1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_ON_TRACK)) 
 			{  	
 		
@@ -108,7 +108,7 @@ void mp_task_vis_sac::main_task_algorithm(void)
 				break_state = true;
 		          break; 
 			}
-			if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
  				(1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_ON_TRACK)) 
 			{  	
 				break_state = true;
@@ -148,7 +148,7 @@ void mp_task_vis_sac::main_task_algorithm(void)
 		          break; 
 			}
 			// uruchomienie generatora empty_gen
-			if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 		 		(1, 1, ROBOT_IRP6_ON_TRACK, 	ROBOT_IRP6_ON_TRACK)) 
 		    	{  	
 				break_state = true;
@@ -161,7 +161,7 @@ void mp_task_vis_sac::main_task_algorithm(void)
 		          break; 
 			}
 			// uruchomienie generatora empty_gen
-		   	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+		   	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 		 		(1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_ON_TRACK))
 			{  	
 				break_state = true;

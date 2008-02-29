@@ -211,7 +211,7 @@ bool mp_task::run_ext_empty_gen (bool activate_trigger, int number_of_robots, ..
 
 
 
-bool mp_task::run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+bool mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 (int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ... )
 {
 	// CZYNNOSCI WSTEPNE
@@ -273,7 +273,7 @@ bool mp_task::run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_
 		// aktualizacja ziorow robotow i sprawdzenie czy zbior robots_to_wait_for_task_termination nie jest juz pusty
 		// wtedy wyjscie z petli
 
-		//	if (debug_tmp) printf(" run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots 1\n");
+		//	if (debug_tmp) printf(" run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
 		// przygotowanie zapasowych list robotow
 		robots_to_move_tmp.clear();
 		robots_to_wait_for_task_termination_tmp.clear();
@@ -308,12 +308,12 @@ bool mp_task::run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_
 		mp_ext_empty_gen.robot_m.clear();
 		mp_ext_empty_gen.robot_m = robots_to_move;
 
-		//	if (debug_tmp) printf("PRZED MOVE run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots 1\n");
+		//	if (debug_tmp) printf("PRZED MOVE run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
 		// uruchomienie generatora
 		if (Move ( mp_ext_empty_gen)) {
 			return true;
 		}
-		//		if (debug_tmp) printf("ZA MOVE move run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots 1\n");
+		//		if (debug_tmp) printf("ZA MOVE move run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
 	} while (true);
 	// koniec petli
 

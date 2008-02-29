@@ -168,3 +168,21 @@ void mp_robot::create_command (void) {
 	}
 }
 // ---------------------------------------------------------------
+void mp_robot::get_reply(void) {
+	// pobiera z pakietu przeslanego z ECP informacje i wstawia je do
+	// odpowiednich skladowych generatora lub warunku
+
+	ecp_td.ecp_reply = ecp_reply.reply;
+	ecp_td.reply_type = ecp_reply.ecp_reply.reply_package.reply_type;
+
+	switch (ecp_td.reply_type) {
+		case ERROR:
+			ecp_td.error_no.error0 = ecp_reply.ecp_reply.reply_package.error_no.error0;
+			ecp_td.error_no.error1 = ecp_reply.ecp_reply.reply_package.error_no.error1;
+			break;
+		case ACKNOWLEDGE:
+			break;
+		default:  // bledna przesylka
+			throw MP_error (NON_FATAL_ERROR, INVALID_EDP_REPLY);
+	}
+}

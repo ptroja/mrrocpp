@@ -218,7 +218,6 @@ void ecp_task::set_ecp_reply ( ECP_REPLY ecp_r)
 // Informacja dla MP o zakonczeniu zadania uzytkownika
 void ecp_task::ecp_termination_notice (void)
 {
-
 	set_ecp_reply (TASK_TERMINATED);
 	mp_buffer_receive_and_send ();
 }
@@ -253,11 +252,12 @@ void ecp_task::ecp_wait_for_stop (void)
 		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Reply to MP failed");
 		throw ecp_generator::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
-	; // end: if
 
-	if (mp_command_type() != STOP)
+	if (mp_command_type() != STOP) {
+		fprintf(stderr, "ecp_generator::ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
+			__FILE__, __LINE__);
 		throw ecp_generator::ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-
+	}
 }
 
 // Oczekiwanie na polecenie START od MP
@@ -296,8 +296,11 @@ bool ecp_task::ecp_wait_for_start (void)
 	if (ecp_stop)
 		throw ecp_generator::ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 
-	if (ecp_reply.reply == INCORRECT_MP_COMMAND)
+	if (ecp_reply.reply == INCORRECT_MP_COMMAND) {
+		fprintf(stderr, "ecp_generator::ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
+			__FILE__, __LINE__);
 		throw ecp_generator::ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
+	}
 
 	sr_ecp_msg->message("ECP user program is running");
 	return false;
@@ -325,7 +328,6 @@ bool ecp_task::get_next_state (void)
 		default:
 			set_ecp_reply (INCORRECT_MP_COMMAND);
 			break;
-
 	}
 
 	if ( MsgReply(caller, EOK, &ecp_reply, sizeof(ECP_REPLY_PACKAGE)) ==-1) {// by Y&W
@@ -338,8 +340,11 @@ bool ecp_task::get_next_state (void)
 	if (ecp_stop)
 		throw ecp_generator::ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 
-	if (ecp_reply.reply == INCORRECT_MP_COMMAND)
+	if (ecp_reply.reply == INCORRECT_MP_COMMAND) {
+		fprintf(stderr, "ecp_generator::ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
+			__FILE__, __LINE__);
 		throw ecp_generator::ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
+	}
 
 	return false;
 
@@ -419,7 +424,7 @@ int ecp_task::receive_mp_message (void)
 			MsgReply(caller, EOK, 0, 0);
 			continue;
 		}
-
+		
 		return caller;
 	}
 }

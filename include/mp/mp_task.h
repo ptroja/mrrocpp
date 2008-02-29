@@ -56,7 +56,7 @@ class mp_task: public ecp_mp_task
 		bool set_next_ecps_state (int l_state, int l_variant, char* l_string, int number_of_robots, ... );
 		bool send_end_motion_to_ecps (int number_of_robots, ... );
 		bool run_ext_empty_gen (bool activate_trigger, int number_of_robots, ... );
-		bool run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+		bool run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 		(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ... );
 		bool wait_ms (int _ms_delay); // zamiast delay
 

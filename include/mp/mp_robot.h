@@ -66,9 +66,7 @@ class mp_robot
 		{}
 
 		// pobiera z pakietu przeslanego z EDP informacje i wstawia je do odpowiednich swoich skladowych
-		virtual void get_reply ( void )
-		{}
-}
-; // end: class mp_robot
+		virtual void get_reply ( void );
+};
 
 #endif /*MP_ROBOT_H_*/

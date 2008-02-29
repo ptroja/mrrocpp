@@ -29,7 +29,7 @@ void ecp_task_festival::task_initialization(void)
 
 void ecp_task_festival::main_task_algorithm(void)
 {
-	sr_ecp_msg->message("ECP festival  - wcisnij start");
+	sr_ecp_msg->message("ECP festival - wcisnij start");
 	ecp_wait_for_start();
 	for(;;) {
 
@@ -49,6 +49,8 @@ void ecp_task_festival::main_task_algorithm(void)
 					fprintf(stderr, "invalid mp_2_ecp_next_state (%d)\n", mp_command.mp_package.mp_2_ecp_next_state);
 					break;
 			}
+			
+			ecp_termination_notice();
 		}
 
 		// Oczekiwanie na STOP

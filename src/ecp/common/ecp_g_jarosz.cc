@@ -489,8 +489,7 @@ bool ecp_linear_parabolic_generator::next_step ()
 
    // Kontakt z MP
    if (node_counter == td.interpolation_node_no) { // Koniec odcinka
-     ecp_t.set_ecp_reply (TASK_TERMINATED);
-     ecp_t.mp_buffer_receive_and_send ();
+     ecp_t.ecp_termination_notice();
      return false;
    }
    else { // w trakcie interpolacji
@@ -1188,8 +1187,7 @@ bool ecp_quintic_generator::next_step ()
 
  // Kontakt z MP
    if (node_counter == td.interpolation_node_no) { // Koniec odcinka
-     ecp_t.set_ecp_reply (TASK_TERMINATED);
-     ecp_t.mp_buffer_receive_and_send ();
+     ecp_t.ecp_termination_notice();
      return false;
    }
    else { // w trakcie interpolacji
@@ -2145,8 +2143,7 @@ bool ecp_cubic_spline_generator::first_step()
        ecp_t.mp_buffer_receive_and_send (); // Kontakt z MP
   }
   else {
-    ecp_t.set_ecp_reply (TASK_TERMINATED);
-        ecp_t.mp_buffer_receive_and_send ();
+    ecp_t.ecp_termination_notice();
     return false;
    }
 
@@ -2551,8 +2548,7 @@ bool ecp_smooth_cubic_spline_generator::first_step()
        ecp_t.mp_buffer_receive_and_send (); // Kontakt z MP
 }
 else {
-    ecp_t.set_ecp_reply (TASK_TERMINATED);
-        ecp_t.mp_buffer_receive_and_send ();
+    ecp_t.ecp_termination_notice();
     return false;
     }
 

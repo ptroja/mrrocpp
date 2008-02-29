@@ -34,7 +34,7 @@ bool mp_task_pouring::approach(void)
 	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_ap.trj", 1, ROBOT_IRP6_POSTUMENT))
 	{	return true;}
 
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	 	(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 	
@@ -50,7 +50,7 @@ bool mp_task_pouring::grab(void)
 	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_grab.trj", 1, ROBOT_IRP6_POSTUMENT))
 	{	return true;}
 
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	 	(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }	
 	//Zacisniecie szczek chwytakow
@@ -60,7 +60,7 @@ bool mp_task_pouring::grab(void)
 	if(set_next_ecps_state( (int) GRIP, 0, "", 1, ROBOT_IRP6_POSTUMENT))
 	{	return true;}
 
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	 	(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 	
@@ -74,7 +74,7 @@ bool mp_task_pouring::weight(void)
 	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_weight.trj", 1, ROBOT_IRP6_POSTUMENT))
 	{	return true;}
 
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	 	(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 		
@@ -91,7 +91,7 @@ bool mp_task_pouring::meet(void)
 	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_meet.trj", 1, ROBOT_IRP6_POSTUMENT))
 	{	return true;}
 
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	 	(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 
@@ -144,7 +144,7 @@ bool mp_task_pouring::go_back(void)
 	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_go_back.trj", 1, ROBOT_IRP6_POSTUMENT))
 	{	return true;}
 
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	 	(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 
@@ -158,7 +158,7 @@ bool mp_task_pouring::put_back(void)
 	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_put_back.trj", 1, ROBOT_IRP6_POSTUMENT))
 	{	return true;}
 	
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	 	(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 
@@ -169,7 +169,7 @@ bool mp_task_pouring::put_back(void)
 	if(set_next_ecps_state( (int) LET_GO, 0, "", 1, ROBOT_IRP6_POSTUMENT))
 	{	return true;}
 
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	 	(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 
@@ -180,7 +180,7 @@ bool mp_task_pouring::put_back(void)
 	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_dep_1.trj", 1, ROBOT_IRP6_POSTUMENT))
 	{	return true;}
 
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	 	(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 }
@@ -192,7 +192,7 @@ bool mp_task_pouring::depart(void)
 	if(set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_dep_2.trj", 1, ROBOT_IRP6_POSTUMENT))
 	{	return true;}
 	
-	if (run_ext_empty_gen_for_set_of_robots_and_wait_for_task_termin_mess_of_another_set_of_robots
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	 	(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {  return true;  }
 	

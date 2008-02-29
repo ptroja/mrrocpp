@@ -162,8 +162,8 @@ void ecp_irp6_mechatronika_robot::get_reply (void) {
      break;
    default:  // bledna przesylka
      throw ECP_error (NON_FATAL_ERROR, INVALID_EDP_REPLY);
- }; // end: switch (EDP_data.reply_type)
-}; // end: ecp_irp6_mechatronika_robot::get_reply ()
+ }
+}
 
 
 

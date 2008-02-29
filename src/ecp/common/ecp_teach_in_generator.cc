@@ -390,7 +390,7 @@ int ecp_teach_in_generator::pose_list_length(void)
 }
 
 // ----------------------------------------------------------------------------------------------
-// ----------------------  metoda	first_step -------------------------------------------------
+// ----------------------  metoda    first_step -------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
 bool ecp_teach_in_generator::first_step (  )
@@ -412,10 +412,10 @@ bool ecp_teach_in_generator::first_step (  )
 	// printf("w irp6ot_teach_in_generator::first_step za initiate_pose_list\n");
 	// return next_step ();
 	return true;
-} // end: bool irp6ot_teach_in_generator::first_step ( )
+}
 
 // ----------------------------------------------------------------------------------------------
-// ----------------------  metoda	next_step --------------------------------------------------
+// ----------------------  metoda    next_step --------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
 bool ecp_teach_in_generator::next_step (  )
@@ -495,4 +495,4 @@ bool ecp_teach_in_generator::next_step (  )
 		default:
 			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
 	} // end: switch
-} // end: bool irp6ot_teach_in_generator::next_step ( )
+}

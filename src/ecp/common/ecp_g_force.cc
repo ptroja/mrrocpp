@@ -1665,8 +1665,7 @@ bool ecp_tff_rubik_grab_generator::next_step () {
 	if ((the_robot->EDP_data.next_gripper_coordinate > goal_position) || (node_counter < min_node_counter))
 			 the_robot->EDP_data.next_gripper_coordinate -= position_increment;
 		else {
-			ecp_t.set_ecp_reply (TASK_TERMINATED);
-			ecp_t.mp_buffer_receive_and_send ();
+			ecp_t.ecp_termination_notice();
 			finished = true;
 		}
 
@@ -1840,8 +1839,7 @@ bool ecp_tff_rubik_face_rotate_generator::next_step () {
 			if(!range_change) {
 				if((	turn_angle < 0.0 && stored_gamma > current_gamma) || (
 					turn_angle > 0.0 && stored_gamma < current_gamma)) {
-						ecp_t.set_ecp_reply (TASK_TERMINATED);
-						ecp_t.mp_buffer_receive_and_send ();
+						ecp_t.ecp_termination_notice();
 						finished = true;
 				}
 			}
@@ -1998,8 +1996,7 @@ bool ecp_tff_gripper_approach_generator::next_step () {
 	{
 		if (node_counter > motion_time)
 		{
-			ecp_t.set_ecp_reply (TASK_TERMINATED);
-			ecp_t.mp_buffer_receive_and_send ();
+			ecp_t.ecp_termination_notice();
 			finished = true;
 		}
 	}

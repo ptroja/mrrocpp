@@ -136,7 +136,7 @@ void* UI_communication_thread (void*  arg ){
         MsgReply(rcvid, EOK, NULL, 0);
         }; // end: while
           return NULL;
-    }; // end: UI_communication_thread
+    } // end: UI_communication_thread
 
 /*************************** MEASURES THREAD ******************************/
 void* measures_thread (void*  arg ){
@@ -159,7 +159,7 @@ void* measures_thread (void*  arg ){
     // koniec dzialania
     pthread_exit(value_ptr);
       return NULL;
-    }; // end: thrTrajectoryMove
+    }
 
 
 /*************************** SHOW MAM WINDOW *****************************/
@@ -186,14 +186,11 @@ void show_mam_window (int UI_fd) {
     pthread_create( NULL, &tattr, &measures_thread, (void *)i);
     // Odpalenie watku komunikacji z UI.
     UI_communication_thread((void *)i);
-    }; // end: show_trajectory_reproduce_window
-
-
+    }
 
 // KONSTRUKTORY
-ecp_task_mam::ecp_task_mam() : ecp_task(){};
-ecp_task_mam::~ecp_task_mam(){};
-
+ecp_task_mam::ecp_task_mam() : ecp_task(){}
+ecp_task_mam::~ecp_task_mam(){}
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_mam::task_initialization(void) 
@@ -237,8 +234,7 @@ void ecp_task_mam::task_initialization(void)
 	}
 
 
-};
-
+}
 
 void ecp_task_mam::main_task_algorithm(void)
 {
@@ -260,16 +256,13 @@ void ecp_task_mam::main_task_algorithm(void)
 	// Pokazanie okna .
 	show_mam_window(UI_fd);
 	
-	set_ecp_reply(TASK_TERMINATED);
-	mp_buffer_receive_and_send();
+	ecp_termination_notice();
 	
 	// Oczekiwanie na polecenie STOP od MP.
 	ecp_wait_for_stop();	
-	
-	
-};
+}
 
 ecp_task* return_created_ecp_task (void)
 {
 	return new ecp_task_mam();
-};
+}

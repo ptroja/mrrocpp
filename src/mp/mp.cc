@@ -135,10 +135,6 @@ void mp_extended_empty_generator::configure (bool l_activate_trigger) {
 
 bool mp_extended_empty_generator::first_step () {
 
-// Funkcja zwraca false gdy koniec generacji trajektorii
-// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-// Inicjacja generatora trajektorii
-
 	wait_for_ECP_pulse = true;
 	for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
 	        robot_m_iterator != robot_m.end(); robot_m_iterator++) {
@@ -162,8 +158,9 @@ bool mp_extended_empty_generator::next_step () {
 // Na podstawie ecp_reply dla poszczegolnych robotow nalezy okreslic czy
 // skonczono zadanie uzytkownika
 
-	copy_data( robot_m ); // Kopiowanie danych z bufora przyslanego z ECP do
-	// obrazu danych wykorzystywanych przez generator
+	// Kopiowanie danych z buforow przyslanych z ECP
+	// do obrazu danych wykorzystywanych przez generator
+	copy_data( robot_m );
 
 // 	if (trigger) printf("Yh\n"); else printf("N\n");
 // printf("mp next step\n");
@@ -182,7 +179,6 @@ bool mp_extended_empty_generator::next_step () {
 			robot_m_iterator->second->communicate = false;
 		}
 	}
-
 
 	for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
 	        robot_m_iterator != robot_m.end(); robot_m_iterator++) {
