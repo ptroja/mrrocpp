@@ -396,7 +396,8 @@ bool ecp_task::mp_buffer_receive_and_send (void)
     switch (mp_command_type() )
     {
     case NEXT_POSE:
-    	set_ecp_reply (ECP_ACKNOWLEDGE);
+   		  if ((ecp_reply.reply != TASK_TERMINATED)&&(ecp_reply.reply != ERROR_IN_ECP))
+            set_ecp_reply (ECP_ACKNOWLEDGE);
         break;
     case STOP:
         set_ecp_reply (ECP_ACKNOWLEDGE);
