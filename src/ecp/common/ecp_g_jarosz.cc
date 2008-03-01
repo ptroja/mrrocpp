@@ -85,13 +85,8 @@ ecp_linear_generator::ecp_linear_generator (ecp_task& _ecp_task,
 
 bool ecp_linear_generator::first_step (  )
 {
-	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-	ecp_t.mp_buffer_receive_and_send ();
-	node_counter = 0;
-	finished=false;
 
-	switch ( ecp_t.mp_command_type() ) {
-		case NEXT_POSE:
+
 
 			switch (td.arm_type) {
 				case MOTOR:
@@ -138,18 +133,6 @@ bool ecp_linear_generator::first_step (  )
 					throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			} // end : switch (td.arm_type)
 
-			the_robot->create_command ();
-			break;
-
-		case STOP:
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION:
-		case INVALID_COMMAND:
-		default:
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-
-	} // end: switch ( ecp_t.mp_command_type() )
-
 	return true;
 }
 ; // end: bool irp6p_irp6p_linear_generator::first_step ( )
@@ -171,23 +154,14 @@ bool ecp_linear_generator::next_step (  )
 			ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
 		}
 		ecp_t.mp_buffer_receive_and_send ();
-		finished=true;
-	} else { // w trakcie interpolacji
-		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.mp_buffer_receive_and_send ();
-	}
-
-	// Kopiowanie danych z bufora przyslanego z EDP do
-	// obrazu danych wykorzystywanych przez generator
-	the_robot->get_reply();
+		return false;
+	} 
 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 
 	the_robot->EDP_data.instruction_type = SET;
 	the_robot->EDP_data.get_type = NOTHING_DV;
 	the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
-
-	node_counter++;
 
 	switch ( td.arm_type ) {
 		case MOTOR:
@@ -245,23 +219,7 @@ bool ecp_linear_generator::next_step (  )
 	}// end:switch
 
 
-	switch ( ecp_t.mp_command_type() ) {
-		case NEXT_POSE:
-			if (finished) {
-				return false; // Jezeli lista jest pusta to konczymy generacje trajektorii
-			} else {
-				the_robot->create_command ();
-			}
-			return true;
-		case END_MOTION:  // Dla irp6ot_teach_in_generator ten przypadek jest nieakatywny,
-			return false;   // koniec determinuje ten generator a nie MP
-		case STOP:
-			// 		printf("STOP\n");
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case INVALID_COMMAND:
-		default:
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // end: switch
+	
 
 	return true;
 
@@ -364,15 +322,9 @@ double ecp_linear_parabolic_generator::calculate_s ( const double t, const doubl
 
 bool ecp_linear_parabolic_generator::first_step ()
 {
-  ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-  ecp_t.mp_buffer_receive_and_send ();
-  node_counter = 0;
+  
 
-  switch ( ecp_t.mp_command_type() )
-  {
-    case NEXT_POSE:
-
-	  switch ( td.arm_type ) {
+  	  switch ( td.arm_type ) {
 
         case MOTOR:
 			the_robot->EDP_data.instruction_type = GET;
@@ -418,16 +370,6 @@ bool ecp_linear_parabolic_generator::first_step ()
            throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	  } // end : switch ( td.arm_type )
 
-	  the_robot->create_command ();
-	  break;
-    case STOP:
-      throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-    case END_MOTION:
-    case INVALID_COMMAND:
-    default:
-       throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-  } // end: switch ( ecp_t.mp_command_type() )
-
   return true;
 
 }; // end: bool ecp_linear_parabolic_generator::first_step ( )
@@ -445,8 +387,7 @@ bool ecp_linear_parabolic_generator::next_step ()
  // ---------------------------------   FIRST INTERVAL    ---------------------------------------
  if ( first_interval )
  {
-    // Przepisanie danych z EDP_MASTER do obrazu robota
-    the_robot->get_reply();
+  
     // Ponizszych obliczen nie mozna wykonac w first_step, gdyz wtedy odczyt
     // aktualnego polozenia ramienia jeszcze nie zostanie zrealizowany. Zrobi
     // to dopiero execute_motion po wyjsciu z first_step.
@@ -492,13 +433,8 @@ bool ecp_linear_parabolic_generator::next_step ()
      ecp_t.ecp_termination_notice();
      return false;
    }
-   else { // w trakcie interpolacji
-     ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-     ecp_t.mp_buffer_receive_and_send ();
-   }
-   // Kopiowanie danych z bufora przyslanego z EDP do
-   // obrazu danych wykorzystywanych przez generator
-   the_robot->get_reply();
+
+
 
    // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 
@@ -681,19 +617,7 @@ bool ecp_linear_parabolic_generator::next_step ()
            throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
     }// end:switch
 
-// skopiowac przygotowany rozkaz dla EDP do bufora wysylkowego
 
-	switch ( ecp_t.mp_command_type() ) {
-		case NEXT_POSE:
-			the_robot->create_command ();
-		break;
-		case STOP:
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION:
-		case INVALID_COMMAND:
-		default:
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // end: switch
    return true;
 
 }; // end: bool ecp_linear_parabolic_generator::next_step ( )
@@ -714,13 +638,9 @@ bool ecp_linear_parabolic_generator::next_step ()
 
 bool ecp_polynomial_generator::first_step (  )
 {
-  ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-  ecp_t.mp_buffer_receive_and_send ();
-  node_counter = 0;
+  
 
-  switch ( ecp_t.mp_command_type() )
-  {
-    case NEXT_POSE:
+  
       // Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
       // wyznaczyc parametr A0 wielomianu, który wymaga znajomoœci pozycji aktualnej ramienia
       first_interval = true;
@@ -769,17 +689,6 @@ bool ecp_polynomial_generator::first_step (  )
         default:                
            throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);           
 	  } // end : switch ( td.arm_type )
-
-	  the_robot->create_command ();
-	  break;
-
-    case STOP:
-      throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-    case END_MOTION:
-    case INVALID_COMMAND:
-    default:
-       throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-  } // end: switch ( ecp_t.mp_command_type() )
 
   return true;
 }; // end: bool ecp_polynomial_generator::first_step ( )
@@ -854,9 +763,7 @@ bool ecp_cubic_generator::next_step (  )
 // ---------------------------------   FIRST INTERVAL    ---------------------------------------
  if ( first_interval )
  {
-    // Przepisanie danych z EDP_MASTER do obrazu robota
-    the_robot->get_reply();
-    // Ponizszych obliczen nie mozna wykonac w first_step, gdyz wtedy odczyt
+     // Ponizszych obliczen nie mozna wykonac w first_step, gdyz wtedy odczyt
     // aktualnego polozenia ramienia jeszcze nie zostanie zrealizowany. Zrobi
     // to dopiero execute_motion po wyjsciu z first_step.
 
@@ -901,13 +808,8 @@ bool ecp_cubic_generator::next_step (  )
      ecp_t.mp_buffer_receive_and_send ();
      return false;
    }
-   else { // w trakcie interpolacji
-     ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-     ecp_t.mp_buffer_receive_and_send ();
-   }
-   // Kopiowanie danych z bufora przyslanego z EDP do
-   // obrazu danych wykorzystywanych przez generator
-   the_robot->get_reply();
+
+
 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 
@@ -1056,17 +958,7 @@ A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter*node_counter) + A3[i]*( node_
 
 // skopiowac przygotowany rozkaz dla EDP do bufora wysylkowego
 
-	switch ( ecp_t.mp_command_type() ) {
-		case NEXT_POSE:
-			the_robot->create_command ();
-		break;
-		case STOP:
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION:
-		case INVALID_COMMAND:
-		default:
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // end: switch
+
 
    return true;
 }; // end: bool ecp_cubic_generator::next_step ( )
@@ -1144,8 +1036,7 @@ bool ecp_quintic_generator::next_step ()
 // ---------------------------------   FIRST INTERVAL    ---------------------------------------
  if ( first_interval )
  {
-    // Przepisanie danych z EDP_MASTER do obrazu robota
-    the_robot->get_reply();
+
     // Ponizszych obliczen nie mozna wykonac w first_step, gdyz wtedy odczyt
     // aktualnego polozenia ramienia jeszcze nie zostanie zrealizowany. Zrobi
     // to dopiero execute_motion po wyjsciu z first_step.
@@ -1190,13 +1081,8 @@ bool ecp_quintic_generator::next_step ()
      ecp_t.ecp_termination_notice();
      return false;
    }
-   else { // w trakcie interpolacji
-     ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-     ecp_t.mp_buffer_receive_and_send ();
-   }
-   // Kopiowanie danych z bufora przyslanego z EDP do
-   // obrazu danych wykorzystywanych przez generator
-   the_robot->get_reply();
+ 
+
 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 
@@ -1354,17 +1240,7 @@ A0[i] + A1[i]*(node_counter) + A2[i]*(node_counter*node_counter) + A3[i]*( node_
 
 // skopiowaæ przygotowany rozkaz dla EDP do bufora wysylkowego
 
-	switch ( ecp_t.mp_command_type() ) {
-		case NEXT_POSE:
-			the_robot->create_command ();
-		break;
-		case STOP:
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION:
-		case INVALID_COMMAND:
-		default:
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // end: switch
+	
    return true;
 
 }; // end: bool ecp_quintic_generator::next_step ( )
@@ -1435,16 +1311,12 @@ ecp_parabolic_teach_in_generator::ecp_parabolic_teach_in_generator (ecp_task& _e
 
 bool ecp_parabolic_teach_in_generator::first_step (  ) {
 
-   ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-  ecp_t.mp_buffer_receive_and_send (); // Kontakt z MP
-
 
     // Poniewaz ten generator wykonuje ruch tylko do kolejnej pozycji na liscie,
     // nie informuje MP o skonczeniu sie listy.
 
   // Zlecenie odczytu aktualnego polozenia ramienia
-  switch ( ecp_t.mp_command_type() ) {
-    case NEXT_POSE:
+
     	  if (!is_pose_list_element ())
 		    return false;
       // Pobranie kolejnej pozycji z listy i wstawienie danych do generatora
@@ -1478,18 +1350,8 @@ bool ecp_parabolic_teach_in_generator::first_step (  ) {
          default:
            throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
       } // end: switch
-      the_robot->create_command (); // Przygotowanie rozkazu dla EDP
-        // Rozkaz zostanie wykonany przez Move i odpowiednie dane
-        // zostana zaktualizowane w robocie
-      return true;
-    case STOP:
-      throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-    case END_MOTION:
-    case INVALID_COMMAND:
-    default:
-       throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-  } // end: switch
-
+   
+return true;
 }; // end: bool ecp_parabolic_teach_in_generator::first_step ( )
 
 // ----------------------------------------------------------------------------------------------
@@ -1503,8 +1365,7 @@ bool ecp_parabolic_teach_in_generator::next_step (  ) {
   int i;					// Licznik
 
   if ( first_interval ) {
-    // Przepisanie danych z EDP_MASTER do obrazu robota
-    the_robot->get_reply();
+
     // Ponizszych obliczen nie mozna wykonac w first_step, gdyz wtedy odczyt
     // aktualnego polozenia ramienia jeszcze nie zostanie zrealizowany. Zrobi
     // to dopiero execute_motion po wyjsciu z first_step.
@@ -1691,17 +1552,7 @@ bool ecp_parabolic_teach_in_generator::next_step (  ) {
   }
 
 
-	switch ( ecp_t.mp_command_type() ) {
-		case NEXT_POSE:
-			the_robot->create_command ();
-		break;
-		case STOP:
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION:
-		case INVALID_COMMAND:
-		default:
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // end: switch
+	
 
 
   // Czy skonczono interpolacje oraz zniwelowano blad interpolacji?
@@ -1773,9 +1624,6 @@ ecp_calibration_generator::ecp_calibration_generator (ecp_task& _ecp_task, doubl
 
 bool ecp_calibration_generator::first_step (  ) {
 
-  ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-  ecp_t.mp_buffer_receive_and_send (); // Kontakt z MP
-
 
     // Poniewaz ten generator wykonuje ruch tylko do kolejnej pozycji na liscie,
     // nie informuje MP o skonczeniu sie listy. Po skonczeniu listy potrzebny jest
@@ -1783,8 +1631,7 @@ bool ecp_calibration_generator::first_step (  ) {
     // wtedy mozna poinformowac MP o skonczeniu sie listy.
 
   // Zlecenie odczytu aktualnego polozenia ramienia
-  switch ( ecp_t.mp_command_type() ) {
-    case NEXT_POSE:
+
     	  if (!is_pose_list_element ())
   		  return false;
       // Pobranie kolejnej pozycji z listy i wstawienie danych do generatora
@@ -1818,17 +1665,8 @@ bool ecp_calibration_generator::first_step (  ) {
          default:
            throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
       } // end: switch
-      the_robot->create_command (); // Przygotowanie rozkazu dla EDP
-        // Rozkaz zostanie wykonany przez Move i odpowiednie dane
-        // zostana zaktualizowane w robocie
-      return true;
-    case STOP:
-      throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-    case END_MOTION:
-    case INVALID_COMMAND:
-    default:
-       throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-  } // end: switch
+   
+   return true;
 
 }; // end: bool ecp_calibration_generator::first_step ( )
 
@@ -1843,8 +1681,7 @@ bool ecp_calibration_generator::next_step (  ) {
   int i;                // licznik
 
   if ( first_interval ) {
-    // Przepisanie danych z EDP_MASTER do obrazu robota
-    the_robot->get_reply();
+
     // Ponizszych obliczen nie mozna wykonac w first_step, gdyz wtedy odczyt
     // aktualnego polozenia ramienia jeszcze nie zostanie zrealizowany. Zrobi
     // to dopiero execute_motion po wyjsciu z first_step.
@@ -2053,17 +1890,6 @@ bool ecp_calibration_generator::next_step (  ) {
   }
 
 
-	switch ( ecp_t.mp_command_type() ) {
-		case NEXT_POSE:
-			the_robot->create_command ();
-		break;
-		case STOP:
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION:
-		case INVALID_COMMAND:
-		default:
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // end: switch
 
 
   // Czy skonczono interpolacje oraz zniwelowano blad interpolacji?
@@ -2139,18 +1965,14 @@ bool ecp_cubic_spline_generator::first_step()
 
 
   if (is_pose_list_element ()) {
-    ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-       ecp_t.mp_buffer_receive_and_send (); // Kontakt z MP
+
   }
   else {
     ecp_t.ecp_termination_notice();
     return false;
    }
 
-  // Zlecenie odczytu aktualnego polozenia ramienia
-  switch ( ecp_t.mp_command_type() )
-  {
-    case NEXT_POSE:
+
       // Pobranie kolejnej pozycji z listy i wstawienie danych do generatora
       // Na podstawie odczytanej aktualnej pozycji oraz kolejnej pozycji na liscie
       // wyznaczane beda przedzialy interpolacji, czyli makrokroki do realizacji przez EDP.
@@ -2183,17 +2005,9 @@ bool ecp_cubic_spline_generator::first_step()
          default:
            throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
       } // end: switch
-      the_robot->create_command (); // Przygotowanie rozkazu dla EDP
-        // Rozkaz zostanie wykonany przez Move i odpowiednie dane
-        // zostana zaktualizowane w robocie
+     
       return true;
-    case STOP:
-      throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-    case END_MOTION:
-    case INVALID_COMMAND:
-    default:
-       throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-  } // end: switch
+
 }; // end : ecp_cubic_spline_generator::first_step()
 
 // ----------------------------------------------------------------------------------------------
@@ -2208,8 +2022,7 @@ bool ecp_cubic_spline_generator::next_step()
 
  // ---------------------------------   FIRST INTERVAL    ---------------------------------------
   if ( first_interval ) {
-    // Przepisanie danych z EDP_MASTER do obrazu robota
-    the_robot->get_reply();
+    
     // Ponizszych obliczen nie mozna wykonac w first_step, gdyz wtedy odczyt
     // aktualnego polozenia ramienia jeszcze nie zostanie zrealizowany. Zrobi
     // to dopiero execute_motion po wyjsciu z first_step.
@@ -2410,17 +2223,6 @@ bool ecp_cubic_spline_generator::next_step()
 // -----------------------------------------------------------------------------------------------------------------------------------------
 
 
-	switch ( ecp_t.mp_command_type() ) {
-		case NEXT_POSE:
-			the_robot->create_command ();
-		break;
-		case STOP:
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION:
-		case INVALID_COMMAND:
-		default:
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // end: switch
 
 
 
@@ -2544,8 +2346,7 @@ bool ecp_smooth_cubic_spline_generator::first_step()
 
 
  if (is_pose_list_element ()) {
-    ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-       ecp_t.mp_buffer_receive_and_send (); // Kontakt z MP
+    
 }
 else {
     ecp_t.ecp_termination_notice();
@@ -2553,9 +2354,7 @@ else {
     }
 
   // Zlecenie odczytu aktualnego polozenia ramienia
-  switch ( ecp_t.mp_command_type() )
-  {
-    case NEXT_POSE:
+
       // Pobranie kolejnej pozycji z listy i wstawienie danych do generatora
       // Na podstawie odczytanej aktualnej pozycji oraz kolejnej pozycji na liscie
       // wyznaczane beda przedzialy interpolacji, czyli makrokroki do realizacji przez EDP.
@@ -2588,18 +2387,7 @@ else {
          default:
            throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
       } // end: switch
-      the_robot->create_command (); // Przygotowanie rozkazu dla EDP
-        // Rozkaz zostanie wykonany przez Move i odpowiednie dane
-        // zostana zaktualizowane w robocie
-      return true;
-
-    case STOP:
-      throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-    case END_MOTION:
-    case INVALID_COMMAND:
-    default:
-       throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-  } // end: switch
+    
 
 }; // end :	 ecp_smooth_cubic_spline_generator::first_step
 
@@ -2617,7 +2405,7 @@ bool ecp_smooth_cubic_spline_generator::next_step()
   if ( build_coeff ) {
 
 	j=0;
-	the_robot->get_reply();
+	
 
 	switch ( tip.arm_type )
 	{
@@ -2761,8 +2549,7 @@ bool ecp_smooth_cubic_spline_generator::next_step()
  // ---------------------------------   FIRST INTERVAL    ---------------------------------------
   if ( first_interval ) {
     // Przepisanie danych z EDP_MASTER do obrazu robota
-    the_robot->get_reply();
-
+    
     // Ponizszych obliczen nie mozna wykonac w first_step, gdyz wtedy odczyt
     // aktualnego polozenia ramienia jeszcze nie zostanie zrealizowany. Zrobi
     // to dopiero execute_motion po wyjsciu z first_step.
@@ -2967,17 +2754,7 @@ bool ecp_smooth_cubic_spline_generator::next_step()
 // ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
 	// Czy skonczono interpolacje oraz zniwelowano blad interpolacji?
 	
-		switch ( ecp_t.mp_command_type() ) {
-		case NEXT_POSE:
-			the_robot->create_command ();
-		break;
-		case STOP:
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION:
-		case INVALID_COMMAND:
-		default:
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // end: switch
+		
 	
   	if ( node_counter <= t(j+1,1) ) {
    			// Ruch do kolejnej pozycji na liscie pozycji nauczonych nie zostal
@@ -3054,17 +2831,14 @@ ecp_quintic_spline_generator::ecp_quintic_spline_generator (ecp_task& _ecp_task,
 bool ecp_quintic_spline_generator::first_step()
 {
 
-   ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-   ecp_t.mp_buffer_receive_and_send (); // Kontakt z MP
+
 
 
     // Poniewaz ten generator wykonuje ruch tylko do kolejnej pozycji na liscie,
     // nie informuje MP o skonczeniu sie listy.
 
   // Zlecenie odczytu aktualnego polozenia ramienia
-  switch ( ecp_t.mp_command_type() )
-  {
-    case NEXT_POSE:
+  
       if (!is_pose_list_element ())
  		return false;
       // Pobranie kolejnej pozycji z listy i wstawienie danych do generatora
@@ -3099,17 +2873,9 @@ bool ecp_quintic_spline_generator::first_step()
          default:
            throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
       } // end: switch
-      the_robot->create_command (); // Przygotowanie rozkazu dla EDP
-        // Rozkaz zostanie wykonany przez Move i odpowiednie dane
-        // zostana zaktualizowane w robocie
+      
       return true;
-    case STOP:
-      throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-    case END_MOTION:
-    case INVALID_COMMAND:
-    default:
-       throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-  } // end: switch
+  
 }; // end : ecp_quintic_spline_generator::first_step()
 
 // ----------------------------------------------------------------------------------------------
@@ -3124,8 +2890,7 @@ bool ecp_quintic_spline_generator::next_step()
 
  // ---------------------------------   FIRST INTERVAL    ---------------------------------------
   if ( first_interval ) {
-    // Przepisanie danych z EDP_MASTER do obrazu robota
-    the_robot->get_reply();
+    
     // Ponizszych obliczen nie mozna wykonac w first_step, gdyz wtedy odczyt
     // aktualnego polozenia ramienia jeszcze nie zostanie zrealizowany. Zrobi
     // to dopiero execute_motion po wyjsciu z first_step.
@@ -3367,17 +3132,7 @@ bool ecp_quintic_spline_generator::next_step()
   } // end : if (node_counter <= number_of_intervals)
 // -----------------------------------------------------------------------------------------------------------------------------------------
 
-	switch ( ecp_t.mp_command_type() ) {
-		case NEXT_POSE:
-			the_robot->create_command ();
-		break;
-		case STOP:
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION:
-		case INVALID_COMMAND:
-		default:
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // end: switch
+
 
 
   // Czy skonczono interpolacje oraz zniwelowano blad interpolacji?
@@ -3466,12 +3221,8 @@ void ecp_elipsoid_generator::clear_buffer (void) { delete trj_ptr;};
 bool ecp_elipsoid_generator::first_step (  )
 {
 
-  ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-  ecp_t.mp_buffer_receive_and_send (); // Kontakt z MP
-
-  // Zlecenie odczytu aktualnego polozenia ramienia
-  switch ( ecp_t.mp_command_type() ) {
-    case NEXT_POSE:
+  
+  
       // Wstawienie danych do generatora
       // Na podstawie odczytanej aktualnej pozycji oraz kolejnej pozycji na liscie
       // wyznaczane beda przedzialy interpolacji, czyli makrokroki do realizacji przez EDP.
@@ -3506,17 +3257,9 @@ bool ecp_elipsoid_generator::first_step (  )
          default:
            throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
       } // end: switch
-      the_robot->create_command (); // Przygotowanie rozkazu dla EDP
-        // Rozkaz zostanie wykonany przez Move i odpowiednie dane
-        // zostana zaktualizowane w robocie
+ 
       return true;
-    case STOP:
-      throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-    case END_MOTION:
-    case INVALID_COMMAND:
-    default:
-       throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-  } // end: switch
+  
 
 }; // end: bool ecp_elipsoid_generator::first_step ( )
 // --------------------------------------------------------------------------
@@ -3526,8 +3269,7 @@ bool ecp_elipsoid_generator::first_step (  )
 bool ecp_elipsoid_generator::next_step (  ) {
 
 
-  // Przepisanie danych z EDP_MASTER do obrazu robota
-  the_robot->get_reply();
+  
 
   if ( first_interval ) {
     // Ponizszych obliczen nie mozna wykonac w first_step, gdyz wtedy odczyt
@@ -3635,17 +3377,7 @@ bool ecp_elipsoid_generator::next_step (  ) {
   }
 
 
-	switch ( ecp_t.mp_command_type() ) {
-		case NEXT_POSE:
-			the_robot->create_command ();
-		break;
-		case STOP:
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION:
-		case INVALID_COMMAND:
-		default:
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // end: switch
+	
 
   // Czy skonczono interpolacje oraz zniwelowano blad interpolacji?
   if ( node_counter < number_of_intervals) {

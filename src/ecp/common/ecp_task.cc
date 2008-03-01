@@ -191,6 +191,8 @@ void ecp_task::Move (ecp_generator& the_generator)
 
     // generacja pierwszego kroku ruchu
 	the_generator.node_counter = 0;
+	set_ecp_reply (ECP_ACKNOWLEDGE);
+	
     if ((!mp_buffer_receive_and_send())&&(!the_generator.first_step()) )
     {
         return; // Warunek koncowy spelniony w pierwszym kroku
