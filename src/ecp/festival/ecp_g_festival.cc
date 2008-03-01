@@ -53,21 +53,7 @@ bool festival_generator::set_voice(VOICE voice_id)
 
 bool festival_generator::first_step ( )
 {
-	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
 
-	ecp_t.mp_buffer_receive_and_send ();
-
-	switch ( ecp_t.mp_command_type() ) {
-		case NEXT_POSE:
-			break;
-		case STOP:
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION:
-		case INVALID_COMMAND:
-		default:
-			printf("first_step()::INVALID_MP_COMMAND = %d\n", INVALID_MP_COMMAND);
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	}
 
 	int command_max_len = strlen(voice)
 		+strlen(FESTIVAL_SAY_STRING_PREFIX)+sizeof(phrase)+strlen(FESTIVAL_SAY_STRING_SUFFIX)
@@ -147,22 +133,8 @@ bool festival_generator::next_step ( )
 	if (ecp_t.pulse_check()) {
 		ecp_t.mp_buffer_receive_and_send ();
 		return false;
-	} else {
-		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.mp_buffer_receive_and_send ();
-	}
+	} 
 
-	switch ( ecp_t.mp_command_type() ) {
-		case NEXT_POSE:
-			//the_robot->create_command ();
-			break;
-		case STOP:
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION:
-		case INVALID_COMMAND:
-		default:
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	}
 	
 	if(test_mode) {
 		return false;

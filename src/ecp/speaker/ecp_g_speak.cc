@@ -36,33 +36,21 @@ bool speaking_generator::configure(char* text)
 
 bool speaking_generator::first_step ( ) {
 
-	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
+
 	for (int i=0; i<6; i++)
 		delta[i]=0.0;
 
 	//(sensor_m.begin())->second->base_period=1;
  	//(sensor_m.begin())->second->current_period=0;
 	the_robot->communicate = true;
-	ecp_t.mp_buffer_receive_and_send ();
-	node_counter = 0;
+	
 
 	last_sg_state = new_sg_state = SG_FIRST_GET;
 
-	switch ( ecp_t.mp_command_type() ) {
-	case NEXT_POSE:
+
 		the_robot->EDP_data.instruction_type = GET;
 
-		the_robot->create_command ();
-	break;
-	case STOP:
-		throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-	case END_MOTION:
-		return false;
-	break;
-	case INVALID_COMMAND:
-	default:
-		throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // end: switch
+	
 
 	return true;
 }; // end: bool y_nose_run_force_generator::first_step ( )
@@ -87,8 +75,7 @@ bool speaking_generator::next_step ( ) {
 	
 	if (last_sg_state != SG_FINISH)
 	{
-		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.mp_buffer_receive_and_send ();
+
 	}
 	else
 	{
@@ -96,9 +83,6 @@ bool speaking_generator::next_step ( ) {
 	}
 	
 	
-	// Kopiowanie danych z bufora przyslanego z EDP do
-	// obrazu danych wykorzystywanych przez generator
-	the_robot->get_reply();
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 
 	switch (last_sg_state)
@@ -132,6 +116,7 @@ bool speaking_generator::next_step ( ) {
 			}
 		break;
 		case SG_FINISH:
+			return false;
 		break;
 		default:
 		break;
@@ -147,26 +132,7 @@ bool speaking_generator::next_step ( ) {
 	// strcpy( the_robot->EDP_data.text, "przesuñ kostkê w prawo" );
 	 
 
-	switch ( ecp_t.mp_command_type() ) {
-	case NEXT_POSE:
-		if (last_sg_state != SG_FINISH)
-		{
-			the_robot->create_command ();
-		}
-		else
-		{
-			return false;
-		}
-	break;
-	case STOP:
-		throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-	case END_MOTION:
-		return false;
-	break;
-	case INVALID_COMMAND:
-	default:
-		throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // // end: switch
+
 	return true; //false;
 }; //  end:  y_nose_run_force_generator::next_step ( )
 
