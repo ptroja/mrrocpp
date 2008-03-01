@@ -512,7 +512,6 @@ bool mp_teach_in_generator::next_step () {
 // printf("W mp_teach_in_generator::next_step\n");
 	if ( idle_step_counter ) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		idle_step_counter--;
-		copy_generator_command( robot_m );
 		return true;
 	}
 
@@ -624,7 +623,7 @@ bool mp_teach_in_generator::next_step () {
 				throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
 	}
-	copy_generator_command( robot_m );
+
 
 	next_pose_list_ptr (); // nastepna pozycja
 	return true;

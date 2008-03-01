@@ -25,7 +25,6 @@ private:
 	double oq6;
 
 protected:
-	int node_counter;
 	long run_counter;
 	bool second_step;
 	frame_tab previous_frame_m;

@@ -14,7 +14,7 @@
 
 class seven_eye_run_linear_generator : public ecp_generator {
 protected:
-int node_counter;
+
 	
 public:	
   trajectory_description td;

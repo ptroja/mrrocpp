@@ -16,7 +16,7 @@ enum speak_gen_state {SG_AFTER_SET, SG_FIRST_GET, SG_LAST_GET, SG_FINISH};
 class speaking_generator : public ecp_generator {
 
 protected:
-	int node_counter;
+
 	
 public:	
 	int step_no;

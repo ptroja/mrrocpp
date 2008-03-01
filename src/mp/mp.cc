@@ -84,7 +84,7 @@ bool mp_set_next_ecps_state_generator::first_step () {
 		robot_m_iterator->second->communicate = true;
 	}
 
-	copy_generator_command( robot_m );
+
 	return true;
 }
 
@@ -93,7 +93,6 @@ bool mp_set_next_ecps_state_generator::first_step () {
 // ----------------------------------------------------------------------------------------------
 
 bool mp_set_next_ecps_state_generator::next_step () {
-	copy_data( robot_m ); // Kopiowanie danych z bufora przyslanego z ECP do
 	return false;
 }
 
@@ -113,7 +112,7 @@ bool mp_send_end_motion_to_ecps_generator::first_step () {
 		robot_m_iterator->second->communicate = true;
 	}
 
-	copy_generator_command( robot_m );
+
 	return true;
 }
 
@@ -122,7 +121,6 @@ bool mp_send_end_motion_to_ecps_generator::first_step () {
 // ----------------------------------------------------------------------------------------------
 
 bool mp_send_end_motion_to_ecps_generator::next_step () {
-	copy_data( robot_m ); // Kopiowanie danych z bufora przyslanego z ECP do
 	return false;
 }
 
@@ -153,7 +151,6 @@ bool mp_extended_empty_generator::first_step () {
 		robot_m_iterator->second->communicate = false;
 	}
 
-	copy_generator_command( robot_m );
 
 	return true;
 }
@@ -168,9 +165,7 @@ bool mp_extended_empty_generator::next_step () {
 // Na podstawie ecp_reply dla poszczegolnych robotow nalezy okreslic czy
 // skonczono zadanie uzytkownika
 
-	// Kopiowanie danych z buforow przyslanych z ECP
-	// do obrazu danych wykorzystywanych przez generator
-	copy_data( robot_m );
+
 
 // 	if (trigger) printf("Yh\n"); else printf("N\n");
 // printf("mp next step\n");
@@ -227,7 +222,6 @@ bool mp_empty_generator::first_step () {
 		robot_m_iterator->second->communicate = true;
 	}
 
-	copy_generator_command( robot_m );
 
 	return true;
 }
@@ -242,7 +236,7 @@ bool mp_empty_generator::next_step () {
 // Na podstawie ecp_reply dla poszczegolnych robotow nalezy okreslic czy
 // skonczono zadanie uzytkownika
 
-	copy_data( robot_m ); // Kopiowanie danych z bufora przyslanego z ECP do
+
 	// obrazu danych wykorzystywanych przez generator
 
 // 	if (trigger) printf("Yh\n"); else printf("N\n");
@@ -279,7 +273,7 @@ bool mp_tight_coop_generator::first_step () {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-	node_counter = 0;
+	
 	idle_step_counter = 2;
 
 	for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
@@ -296,7 +290,7 @@ bool mp_tight_coop_generator::first_step () {
 		robot_m_iterator->second->communicate = true;
 	}
 
-	copy_generator_command( robot_m );
+
 	return true;
 }
 
@@ -316,12 +310,10 @@ bool mp_tight_coop_generator::next_step () {
 		return true;
 	}
 
-	if (node_counter == irp6ot_td.interpolation_node_no)
+	if (node_counter-1 == irp6ot_td.interpolation_node_no)
 		return false;
 
-	// Kopiowanie danych z bufora przyslanego z ECP do
-	// obrazu danych wykorzystywanych przez generator
-	copy_data( robot_m );
+
 
 	map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
 
@@ -329,7 +321,7 @@ bool mp_tight_coop_generator::next_step () {
 	robot_m_iterator->second->ecp_td.instruction_type = SET;
 	robot_m_iterator->second->ecp_td.get_type = NOTHING_DV;
 	robot_m_iterator->second->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
-	node_counter++;
+	
 	// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 	// (okreslenie kolejnego wezla interpolacji)
 	for (i = 0; i < 6; i++) // zakladamy, ze na liscie jest jeden robot
@@ -372,6 +364,6 @@ bool mp_tight_coop_generator::next_step () {
 	}
 
 	// skopiowac przygotowany rozkaz dla ECP do bufora wysylkowego
-	copy_generator_command( robot_m );
+
 	return true;
 }

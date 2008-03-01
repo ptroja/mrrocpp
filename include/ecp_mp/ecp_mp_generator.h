@@ -18,6 +18,8 @@ class ecp_mp_generator
 	public:
 		ecp_mp_generator(sr_ecp& _sr_ecp_msg);
 
+		int node_counter;  // biezacy wezel interpolacji
+
 		virtual ~ecp_mp_generator();
 
 		// mapa wszystkich czujnikow

@@ -15,7 +15,7 @@ class MP_vf_generator : public mp_generator
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
-   int node_counter;               // biezacy wezel interpolacji
+
   
 public:	
    trajectory_description td;

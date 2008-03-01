@@ -842,7 +842,7 @@ bool mp_task::Move ( mp_generator& the_generator )
 			robot_m_iterator->second->robot_new_pulse_checked = false;
 		}
 	}
-
+	the_generator.node_counter = 0;
 	// (Inicjacja) generacja pierwszego kroku ruchu
 	if (!the_generator.first_step() )
 		return false;
@@ -852,16 +852,21 @@ bool mp_task::Move ( mp_generator& the_generator )
 		// zadanie przygotowania danych od czujnikow
 		all_sensors_initiate_reading(the_generator.sensor_m);
 
+
+		the_generator.copy_generator_command( robot_m );
+
 		// wykonanie kroku ruchu przez wybrane roboty (z flaga 'communicate')
 		execute_all(the_generator.robot_m);
 
+		the_generator.copy_data( robot_m );
+		
 		// odczytanie danych z wszystkich czujnikow
 		all_sensors_get_reading(the_generator.sensor_m);
 
 		// oczekiwanie na puls z ECP lub UI
 		if (mp_receive_ui_or_ecp_pulse(robot_m, the_generator))
 			return true;
-
+		the_generator.node_counter++;
 	} while ( the_generator.next_step() );
 
 	return false;

@@ -16,7 +16,6 @@
 
 class ecp_vis_sac_lx_generator : public ecp_generator {
 protected:
-int node_counter;
 sensor *vsp_force_irp6ot, *vsp_force_irp6p, *vsp_vis_sac;
 
 public:	

@@ -189,7 +189,6 @@ protected:
 									// wykonywanemu przez EDP.
   bool first_interval;		// true  - jezeli ruch odbywa sie w pierwszym przedziale interpolacji
 									// false	- w przeciwnym przypadku
-  int node_counter;				// biezacy wezel interpolacji
   int number_of_intervals;      // Liczba przedzialow interpolacji - wynika z calkowitego czasu ruchu
   double INTERVAL;				// Dlugosc okresu interpolacji w [sek]
   double a_max_motor[MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
@@ -348,7 +347,7 @@ protected:
 
   bool first_interval;		// true  - jezeli ruch odbywa sie w pierwszym przedziale interpolacji
 								// false	- w przeciwnym przypadku
-  int node_counter;				// biezacy wezel interpolacji
+  
   int number_of_intervals;		// Liczba przedzialow interpolacji - wynika z calkowitego czasu ruchu
   int half_number_of_intervals;	// Polowa liczby przedzialow interpolacji
 

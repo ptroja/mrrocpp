@@ -91,7 +91,7 @@ class mp_empty_generator : public mp_generator {
 class mp_delta_generator : public mp_generator
 {
 protected:
-   int node_counter;               // biezacy wezel interpolacji
+
 
 public:
 	mp_delta_generator(mp_task& _mp_task);

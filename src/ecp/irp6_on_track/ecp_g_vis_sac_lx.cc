@@ -152,7 +152,7 @@ bool ecp_vis_sac_lx_generator::first_step () {
 	ecp_t.mp_buffer_receive_and_send ();
 	vsp_vis_sac = sensor_m[SENSOR_CAMERA_SA];
 
-	node_counter=0;
+	
 	idle_step_counter = 1;
 	vsp_vis_sac->base_period=0; //1
 	vsp_vis_sac->current_period=0; //MAC7
@@ -237,7 +237,7 @@ bool ecp_vis_sac_lx_generator::next_step () {
  // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
  // UWAGA: dzialamy na jednoelementowej liscie robotow
 
-	node_counter++;
+	
 
 
 	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
@@ -759,7 +759,7 @@ for(int i=0;i<6;i++) {
 
 
 	/*
-	copy_generator_command( robot_m );
+
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if ( the_robot->EDP_data.ecp_reply == TASK_TERMINATED ) {
 		mp_msg->message("w mp task terminated");

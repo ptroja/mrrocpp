@@ -66,7 +66,7 @@ bool irp6ot_nurbs_generator::first_step (  )
 //	cout<<"firststep\n"<<flush;
   ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
   ecp_t.mp_buffer_receive_and_send ();
-  node_counter = 0;
+  
   switch ( ecp_t.mp_command_type() ) {
     case NEXT_POSE:
 		EDP_data_next_ptr_=0;
@@ -154,7 +154,7 @@ bool irp6ot_nurbs_generator::next_step (  )
    the_robot->EDP_data.set_arm_type = atype_;
    the_robot->EDP_data.motion_type = ABSOLUTE;
 
-   node_counter++;
+   
 //	cout<<"nextstep: Start2 \n"<<flush;  
 //	cout<<"ntdes_ptr_ "<<(int)ntdes_ptr_<<"\n"<<flush;
 //	cout<<"ncptr "<<(int)ntdes_ptr_->ncptr<<"\n"<<flush;

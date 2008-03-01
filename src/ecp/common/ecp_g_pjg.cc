@@ -51,7 +51,7 @@ bool playerjoy_generator::next_step ( )
     the_robot->EDP_data.set_type = ARM_DV;
     the_robot->EDP_data.get_type = NOTHING_DV;
     the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
-    node_counter++;
+    
 
     transmitter_m[TRANSMITTER_PLAYER]->t_read(0);
     /*

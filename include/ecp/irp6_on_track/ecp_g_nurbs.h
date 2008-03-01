@@ -34,7 +34,6 @@ protected:
 public:
 	// konstruktor
 	irp6ot_nurbs_generator (ecp_task& _ecp_task, const nurbs_tdes& ntdes, int mp_communication_mode_arg = 1);
-	int node_counter;
 	
   virtual bool first_step ();
   virtual bool next_step ();

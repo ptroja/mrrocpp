@@ -8,7 +8,7 @@ class mp_seven_eye_generator : public mp_generator
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
-   int node_counter;               // biezacy wezel interpolacji
+
   
     mp_robot *irp6ot, *irp6p;
     sensor *vsp_force_irp6ot, *vsp_force_irp6p, *vsp_vis_sac;

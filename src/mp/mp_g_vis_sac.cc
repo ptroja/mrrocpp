@@ -104,7 +104,7 @@ bool mp_vis_sac_generator::first_step () {
 
 	vsp_vis_sac = sensor_m[SENSOR_CAMERA_SA];
 
-	node_counter=0;
+	
 	idle_step_counter = 1;
 	vsp_vis_sac->base_period=0; //1 
 	vsp_vis_sac->current_period=0; //MAC7
@@ -137,8 +137,6 @@ bool mp_vis_sac_generator::first_step () {
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 	
 	
-	copy_generator_command( robot_m );   
-	
 	return true;
 }; // end: mp_vis_sac_generator::first_step()
 
@@ -152,17 +150,15 @@ bool mp_vis_sac_generator::next_step () {
  // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
  // UWAGA: dzialamy na jednoelementowej liscie robotow
  	int i=0;
-	node_counter++;
+	
 	
 	if (trigger) return false;
- 	copy_data( robot_m );
-	
+ 	
 	if(node_counter==1 || node_counter==2)
 	{
 		irp6ot->ecp_td.instruction_type = GET;
 		irp6ot->ecp_td.get_type = ARM_DV | RMODEL_DV;
-		  		
-		copy_generator_command( robot_m );
+
 		// UWAGA: dzialamy na jednoelementowej liscie robotow
 		if ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) {
 			sr_ecp_msg.message("w mp task terminated");
@@ -618,8 +614,6 @@ else
 #endif
 
 
-	
-	copy_generator_command( robot_m );
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) {
 		sr_ecp_msg.message("w mp task terminated");

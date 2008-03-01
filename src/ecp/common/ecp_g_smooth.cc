@@ -949,7 +949,7 @@ bool ecp_smooth_generator::next_step ()
         } // end:switch
 
         first_interval = false;
-        node_counter=0;
+        
 
     }	// end:if FIRST INTERVAL
     // -------------------------------------------------------------------------------------------
@@ -1029,7 +1029,7 @@ bool ecp_smooth_generator::next_step ()
                 throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
             } // end:switch
 
-            node_counter=0;
+            
 
             ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
             ecp_t.mp_buffer_receive_and_send ();

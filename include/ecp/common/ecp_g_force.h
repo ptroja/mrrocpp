@@ -58,7 +58,7 @@ public:
 class y_egg_force_generator : public ecp_generator {
 
 protected:
-	int node_counter;
+
 	short gen_state, next_gen_state, prev_gen_state; // stan w ktorym znajduje sie generator 
 	int in_state_iteration; // numer interacji dla biezacego stanu generatora (powierzchni, uniesienia etc.)
 	
@@ -100,7 +100,7 @@ public:
 class y_drawing_teach_in_force_generator : public ecp_teach_in_generator {
 
 	protected:
-		int node_counter;
+		
 		POSE_SPECIFICATION emptyps;
 	
 	public:
@@ -139,7 +139,7 @@ public:
 class y_edge_follow_force_generator : public ecp_teach_in_generator {
 
 protected:
-	int node_counter;
+	
 	POSE_SPECIFICATION emptyps;
 	trajectory_description td;
 	int step_no;
@@ -169,7 +169,7 @@ public:
 class ecp_tff_nose_run_generator : public ecp_generator 
 {
 protected:
-   int node_counter;               // biezacy wezel interpolacji
+   
 
      trajectory_description td; 
 	// skladowesilowe i pozycyjne (zablokowane)  
@@ -198,7 +198,7 @@ public:
 class ecp_tff_rubik_grab_generator : public ecp_generator 
 {
 protected:
-   int node_counter;               // biezacy wezel interpolacji
+   
   
 
      trajectory_description td;
@@ -234,7 +234,7 @@ class ecp_tff_rubik_face_rotate_generator : public ecp_generator
 {
 protected:
 
-	int node_counter;               // biezacy wezel interpolacji
+	
      trajectory_description td;
 
     // do konfiguracji pracy generatora
@@ -266,7 +266,7 @@ public:
 class ecp_tff_gripper_approach_generator : public ecp_generator 
 {
 protected:
-	int node_counter;               // biezacy wezel interpolacji
+	
      trajectory_description td;
 
     // do konfiguracji pracy generatora

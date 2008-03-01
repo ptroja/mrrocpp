@@ -34,7 +34,7 @@ bool y_simple_generator::first_step ( ) {
 		delta[i]=0.0;
 
 	ecp_t->mp_buffer_receive_and_send ();
-	node_counter = 0;
+	
 	td.interpolation_node_no = 1;
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
@@ -93,7 +93,7 @@ bool y_simple_generator::next_step (std::map <SENSOR_ENUM, sensor*>& sensor_m ) 
 	the_robot->EDP_data.set_type = ARM_DV;
 	the_robot->EDP_data.get_type = NOTHING_DV;
 	the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
-	node_counter++;
+	
 
 	double axis_table[3][3] = {{1,0,0},{0,1,0},{0,0,1}};
 	vector x_axis(axis_table[0]);

@@ -21,7 +21,7 @@ class mp_tff_single_robot_nose_run_generator : public mp_generator
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
-   int node_counter;               // biezacy wezel interpolacji
+
   
     mp_robot *irp6;
     sensor *vsp_force;
@@ -50,7 +50,7 @@ class mp_tff_nose_run_generator : public mp_generator
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
-   int node_counter;               // biezacy wezel interpolacji
+   
   
     mp_robot *irp6ot, *irp6p;
     sensor *vsp_force_irp6ot, *vsp_force_irp6p;
@@ -84,7 +84,7 @@ public:
 class mp_haptic_generator : public mp_generator 
 {
 protected:
-   int node_counter;               // biezacy wezel interpolacji
+   
   
     mp_robot *irp6ot, *irp6p;
     sensor *vsp_force_irp6ot, *vsp_force_irp6p;
@@ -118,7 +118,7 @@ class mp_tff_rubik_grab_generator : public mp_generator
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
-   int node_counter;               // biezacy wezel interpolacji
+   
   
     mp_robot *irp6ot, *irp6p;
     sensor *vsp_force_irp6ot, *vsp_force_irp6p;
@@ -155,7 +155,7 @@ class mp_tff_rubik_face_rotate_generator : public mp_generator
 {
 protected:
 	int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
-	int node_counter;               // biezacy wezel interpolacji
+	
      trajectory_description td;
     mp_robot *irp6ot, *irp6p;
     sensor *vsp_force_irp6ot, *vsp_force_irp6p;
@@ -186,7 +186,7 @@ class mp_tff_gripper_approach_generator : public mp_generator
 {
 protected:
 	int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
-	int node_counter;               // biezacy wezel interpolacji
+	
      trajectory_description td;
     mp_robot *irp6ot, *irp6p;
     sensor *vsp_force_irp6ot, *vsp_force_irp6p;
@@ -219,7 +219,7 @@ class mp_nose_run_force_generator : public mp_generator
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
-   int node_counter;               // biezacy wezel interpolacji
+   
   
       mp_robot *irp6ot, *irp6p, *conv;
     sensor *vsp_force_irp6ot, *vsp_force_irp6p;
@@ -275,7 +275,7 @@ class mp_drawing_teach_in_force_generator : public mp_teach_in_generator {
         sensor *vsp_force_irp6ot, *vsp_force_irp6p;
         
     protected:
-        int node_counter;
+        
         POSE_SPECIFICATION emptyps;
     
     public:

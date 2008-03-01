@@ -16,7 +16,7 @@
 class y_simple_generator : public ecp_generator {
 
 protected:
-	int node_counter;
+
 	
 public:	
 	trajectory_description td;

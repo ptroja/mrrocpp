@@ -124,7 +124,7 @@ bool speaking_generator::next_step ( ) {
 	
 	
 //	printf("last %d\n",lastSET);
-	node_counter++;
+	
 	
 	// for mic
 	// printf("%d \n",(sensor_m.begin())->second->image.mic.word_id);

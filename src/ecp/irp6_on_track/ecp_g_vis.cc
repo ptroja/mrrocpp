@@ -121,7 +121,7 @@ measure[i][j]=0;
  (sensor_m.begin())->second->current_period=0;
 
  ecp_t.mp_buffer_receive_and_send ();
-   node_counter = 0;
+   
 
  td.interpolation_node_no = 1;
 		   td.internode_step_no = 40; //40
@@ -240,7 +240,7 @@ the_robot->EDP_data.next_tool_frame_m[2][2]=1; the_robot->EDP_data.next_tool_fra
        throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
   } // end: switch
 /* } else {
-   node_counter = 0;
+   
 
       the_robot->EDP_data.instruction_type = GET;
       the_robot->EDP_data.get_type = 0x04;
@@ -356,7 +356,7 @@ printf("%f ",the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i]);
 printf("\n");
 #endif
 // the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
-   node_counter++;
+   
    
    // for (int j=0; j<3 ; j++)
    //       	the_robot->EDP_data.next_tool_frame[3][j]+=0.001;

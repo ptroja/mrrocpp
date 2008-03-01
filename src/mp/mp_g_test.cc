@@ -38,7 +38,7 @@ bool MP_vf_generator::first_step () {
   // Funkcja zwraca false gdy koniec generacji trajektorii
   // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
   
-  node_counter=0;
+  
   
   
       idle_step_counter = 1;
@@ -100,7 +100,6 @@ bool MP_vf_generator::first_step () {
 	strcpy( robot_list->next->next->E_ptr->ecp_td.prosody, "joy" );
 */
     
-        copy_generator_command( robot_m );
     return true;
     
 
@@ -118,7 +117,7 @@ bool MP_vf_generator::next_step () {
 
    int i; // licznik kolejnych wspolrzednych wektora [0..6]
  
- node_counter++;
+ 
  
     if ( idle_step_counter ) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
      idle_step_counter--;   
@@ -127,9 +126,7 @@ bool MP_vf_generator::next_step () {
 
 
  
-   copy_data( robot_m ); // Kopiowanie danych z bufora przyslanego z ECP do
-                          // obrazu danych wykorzystywanych przez generator
-
+  
 	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.instruction_type = SET;
 	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.get_type = NOTHING_DV;
 	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
@@ -369,7 +366,6 @@ else
 		
 	}	
 
-   copy_generator_command( robot_m );
 
  // UWAGA: dzialamy na jednoelementowej liscie robotow
    if ( robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.ecp_reply == TASK_TERMINATED ) {

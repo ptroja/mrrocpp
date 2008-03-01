@@ -85,7 +85,7 @@ bool y_simple_generator::next_step ( )
     the_robot->EDP_data.set_type = ARM_DV;
     the_robot->EDP_data.get_type = NOTHING_DV;
     the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
-    node_counter++;
+    
 
     double axis_table[3][3] = {{1,0,0},{0,1,0},{0,0,1}};
     vector x_axis(axis_table[0]);

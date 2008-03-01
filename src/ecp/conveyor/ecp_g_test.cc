@@ -65,7 +65,7 @@ bool y_simple_generator::next_step ( )
 	the_robot->EDP_data.get_type = NOTHING_DV;
 	the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
 
-	node_counter++;
+	
 	// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 	// (okreslenie kolejnego wezla interpolacji)
 	if (((node_counter)%100)==0) {

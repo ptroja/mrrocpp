@@ -69,7 +69,7 @@ bool mp_tff_single_robot_nose_run_generator::first_step ()
 
 	vsp_force = sensor_m.begin()->second;
 
-	node_counter=0;
+	
 	idle_step_counter = 2;
 	vsp_force->base_period=1;
 	td.internode_step_no = step_no;
@@ -105,8 +105,7 @@ bool mp_tff_single_robot_nose_run_generator::first_step ()
 	}
 
 
-	//  cout << "first_step 2" << endl;
-	copy_generator_command( robot_m );
+
 
 	//	  cout << "first_step 3" << endl;
 	return true;
@@ -122,7 +121,7 @@ bool mp_tff_single_robot_nose_run_generator::next_step ()
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
-	node_counter++;
+	
 	if ( idle_step_counter ) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 
 		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
@@ -143,12 +142,12 @@ bool mp_tff_single_robot_nose_run_generator::next_step ()
 		return false;
 	}
 
-	copy_data( robot_m );
+
 
 	irp6->ecp_td.next_gripper_coordinate = irp6->ecp_td.current_gripper_coordinate;
 
 	irp6->ecp_td.instruction_type = SET;
-	copy_generator_command( robot_m );
+
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if ( irp6->ecp_td.ecp_reply == TASK_TERMINATED ) {
 		sr_ecp_msg.message("w mp task terminated");
@@ -187,7 +186,7 @@ bool mp_tff_nose_run_generator::first_step ()
 	vsp_force_irp6ot = sensor_m[SENSOR_FORCE_ON_TRACK];
 	vsp_force_irp6p = sensor_m[SENSOR_FORCE_POSTUMENT];
 
-	node_counter=0;
+	
 	idle_step_counter = 2;
 	vsp_force_irp6ot->base_period=1;
 	vsp_force_irp6p->base_period=1;
@@ -269,8 +268,7 @@ bool mp_tff_nose_run_generator::first_step ()
 		irp6p->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
 	}
 
-	//  cout << "first_step 2" << endl;
-	copy_generator_command( robot_m );
+	
 
 	//	  cout << "first_step 3" << endl;
 	return true;
@@ -287,7 +285,7 @@ bool mp_tff_nose_run_generator::next_step ()
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	//	cout << "next_step" << endl;
-	node_counter++;
+	
 	if ( idle_step_counter ) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 		        sensor_m_iterator != sensor_m.end(); sensor_m_iterator++) {
@@ -307,7 +305,7 @@ bool mp_tff_nose_run_generator::next_step ()
 		return false;
 	}
 
-	copy_data( robot_m );
+
 
 	if (node_counter==3) {
 		irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
@@ -317,7 +315,7 @@ bool mp_tff_nose_run_generator::next_step ()
 	irp6ot->ecp_td.instruction_type = SET;
 	irp6p->ecp_td.instruction_type = SET;
 
-	copy_generator_command( robot_m );
+
 
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if (( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) || ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED )) {
@@ -358,7 +356,7 @@ bool mp_haptic_generator::first_step ()
 	vsp_force_irp6ot = sensor_m[SENSOR_FORCE_ON_TRACK];
 	vsp_force_irp6p = sensor_m[SENSOR_FORCE_POSTUMENT];
 
-	node_counter=0;
+	
 	vsp_force_irp6ot->base_period=1;
 	vsp_force_irp6p->base_period=1;
 	td.internode_step_no = step_no;
@@ -437,8 +435,7 @@ bool mp_haptic_generator::first_step ()
 		*/
 	}
 
-	//  cout << "first_step 2" << endl;
-	copy_generator_command( robot_m );
+
 
 	//	  cout << "first_step 3" << endl;
 	return true;
@@ -455,7 +452,7 @@ bool mp_haptic_generator::next_step ()
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	//	cout << "next_step" << endl;
-	node_counter++;
+	
 	if (node_counter<3) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 		        sensor_m_iterator != sensor_m.end(); sensor_m_iterator++) {
@@ -475,8 +472,8 @@ bool mp_haptic_generator::next_step ()
 		return false;
 	}
 
-	copy_data (robot_m);
-
+	
+	
 	if (node_counter==3) {
 		vsp_force_irp6ot->base_period=1;
 		vsp_force_irp6p->base_period=1;
@@ -520,10 +517,6 @@ bool mp_haptic_generator::next_step ()
 		//	std::cout << "irp6p_goal_xyz_angle_axis_increment_in_end_effector\n" << irp6p_goal_xyz_angle_axis_increment_in_end_effector << std::endl;
 
 	}
-
-
-
-	copy_generator_command (robot_m);
 
 
 	if (( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) || ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED )) {
@@ -575,7 +568,7 @@ bool mp_tff_rubik_grab_generator::first_step ()
 	vsp_force_irp6ot = sensor_m[SENSOR_FORCE_ON_TRACK];
 	vsp_force_irp6p = sensor_m[SENSOR_FORCE_POSTUMENT];
 
-	node_counter=0;
+	
 	idle_step_counter = 1;
 	vsp_force_irp6ot->base_period=1;
 	vsp_force_irp6p->base_period=1;
@@ -696,7 +689,7 @@ bool mp_tff_rubik_grab_generator::first_step ()
 		for(int i=0;i<6;i++)
 			irp6p->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
 
-	copy_generator_command( robot_m );
+
 	return true;
 }
 
@@ -711,7 +704,7 @@ bool mp_tff_rubik_grab_generator::next_step ()
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 
-	node_counter++;
+	
 	if ( idle_step_counter ) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 		        sensor_m_iterator != sensor_m.end(); sensor_m_iterator++) {
@@ -731,7 +724,7 @@ bool mp_tff_rubik_grab_generator::next_step ()
 		// printf("trigger\n");
 		return false;
 	}
-	copy_data( robot_m );
+
 
 	// if (irp6ot->new_pulse) printf("irp6ot: \n");
 	// if (irp6p->new_pulse) printf("irp6p: \n");
@@ -761,7 +754,7 @@ bool mp_tff_rubik_grab_generator::next_step ()
 
 	irp6ot->ecp_td.instruction_type = SET;
 	irp6p->ecp_td.instruction_type = SET;
-	copy_generator_command( robot_m );
+
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) {
 		sr_ecp_msg.message("w mp task terminated");
@@ -794,7 +787,7 @@ bool mp_tff_rubik_face_rotate_generator::first_step ()
 	vsp_force_irp6ot = sensor_m[SENSOR_FORCE_ON_TRACK];
 	vsp_force_irp6p = sensor_m[SENSOR_FORCE_POSTUMENT];
 
-	node_counter=0;
+	
 	idle_step_counter = 1;
 	vsp_force_irp6ot->base_period=1;
 	vsp_force_irp6p->base_period=1;
@@ -912,7 +905,7 @@ bool mp_tff_rubik_face_rotate_generator::first_step ()
 		if(irp6p_con < 0.0)
 			irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[5] = 5;
 	}
-	copy_generator_command( robot_m );
+
 	return true;
 }
 
@@ -926,7 +919,7 @@ bool mp_tff_rubik_face_rotate_generator::next_step ()
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
-	node_counter++;
+	
 	if ( idle_step_counter ) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 		        sensor_m_iterator != sensor_m.end(); sensor_m_iterator++) {
@@ -1015,10 +1008,10 @@ bool mp_tff_rubik_face_rotate_generator::next_step ()
 		// printf("trigger\n");
 		return false;
 	}
-	copy_data( robot_m );
+
 	irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
 	irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
-	copy_generator_command( robot_m );
+
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) {
 		sr_ecp_msg.message("w mp task terminated");
@@ -1053,7 +1046,7 @@ bool mp_tff_gripper_approach_generator::first_step ()
 	vsp_force_irp6ot = sensor_m[SENSOR_FORCE_ON_TRACK];
 	vsp_force_irp6p = sensor_m[SENSOR_FORCE_POSTUMENT];
 
-	node_counter=0;
+	
 	idle_step_counter = 1;
 	vsp_force_irp6ot->base_period=1;
 	vsp_force_irp6p->base_period=1;
@@ -1118,7 +1111,7 @@ bool mp_tff_gripper_approach_generator::first_step ()
 	for(int i=0;i<6;i++)
 		irp6p->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
 
-	copy_generator_command( robot_m );
+
 	return true;
 }
 
@@ -1132,7 +1125,7 @@ bool mp_tff_gripper_approach_generator::next_step ()
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
-	node_counter++;
+	
 	if ( idle_step_counter ) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 		        sensor_m_iterator != sensor_m.end(); sensor_m_iterator++) {
@@ -1161,9 +1154,8 @@ bool mp_tff_gripper_approach_generator::next_step ()
 		// printf("trigger\n");
 		return false;
 	}
-	copy_data( robot_m );
 
-	copy_generator_command( robot_m );
+
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) {
 		sr_ecp_msg.message("w mp task terminated");
@@ -1199,8 +1191,7 @@ bool mp_nose_run_force_generator::first_step ()
 	vsp_force_irp6ot = sensor_m[SENSOR_FORCE_ON_TRACK];
 	vsp_force_irp6p = sensor_m[SENSOR_FORCE_POSTUMENT];
 
-	node_counter=0;
-
+	
 	idle_step_counter = 1;
 
 	for (int i=0; i<6; i++)
@@ -1295,8 +1286,6 @@ bool mp_nose_run_force_generator::first_step ()
 	conv->ecp_td.motion_steps = td.internode_step_no;
 	conv->ecp_td.value_in_step_no = td.value_in_step_no;
 
-	copy_generator_command( robot_m );
-
 	return true;
 
 }
@@ -1314,8 +1303,7 @@ bool mp_nose_run_force_generator::next_step ()
 
 	int i; // licznik kolejnych wspolrzednych wektora [0..6]
 
-	node_counter++;
-
+	
 	if ( idle_step_counter ) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		// wylaczenie pomiaru sily
 		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
@@ -1335,8 +1323,6 @@ bool mp_nose_run_force_generator::next_step ()
 		return false;
 	}
 
-	copy_data( robot_m ); // Kopiowanie danych z bufora przyslanego z ECP do
-	// obrazu danych wykorzystywanych przez generator
 
 	irp6ot->ecp_td.instruction_type = SET;
 
@@ -1352,7 +1338,6 @@ bool mp_nose_run_force_generator::next_step ()
 		conv->ecp_td.next_joint_arm_coordinates[i]=conv->ecp_td.current_joint_arm_coordinates[i];
 	}
 
-	copy_generator_command( robot_m );
 
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) {
@@ -1407,7 +1392,7 @@ bool mp_drawing_teach_in_force_generator::first_step ()
 		prev_gen_state = 0;
 
 		// 	the_robot.mp_buffer_receive_and_send ();
-		node_counter = 0;
+		
 
 		td.interpolation_node_no = 1;
 		td.internode_step_no = step_no;
@@ -1490,8 +1475,6 @@ bool mp_drawing_teach_in_force_generator::first_step ()
 		conv->ecp_td.value_in_step_no = td.value_in_step_no;
 
 
-		copy_generator_command( robot_m );
-
 		return true;
 
 		// UCZENIE
@@ -1520,7 +1503,7 @@ bool mp_drawing_teach_in_force_generator::first_step ()
 		create_pose_list_head(emptyps, 0.0, 2, delta);
 
 		// 	the_robot.mp_buffer_receive_and_send ();
-		node_counter = 0;
+		
 
 		td.interpolation_node_no = 1;
 		td.internode_step_no = step_no;
@@ -1580,8 +1563,6 @@ bool mp_drawing_teach_in_force_generator::first_step ()
 		conv->ecp_td.motion_steps = td.internode_step_no;
 		conv->ecp_td.value_in_step_no = td.value_in_step_no;
 
-		copy_generator_command( robot_m );
-
 		return true;
 
 	}
@@ -1626,9 +1607,7 @@ bool mp_drawing_teach_in_force_generator::next_step ()
 			return false;
 		}
 
-		copy_data( robot_m ); // Kopiowanie danych z bufora przyslanego z ECP do
-		// obrazu danych wykorzystywanych przez generator
-
+	
 
 		// irp6_on_track
 		irp6ot->ecp_td.instruction_type = SET;
@@ -1641,7 +1620,7 @@ bool mp_drawing_teach_in_force_generator::next_step ()
 		conv->ecp_td.get_type = NOTHING_DV;
 		conv->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
 
-		node_counter++;
+		
 
 		get_pose (tip);
 
@@ -1919,7 +1898,6 @@ bool mp_drawing_teach_in_force_generator::next_step ()
 		conv->ecp_td.next_joint_arm_coordinates[0]=
 		    conv->ecp_td.current_joint_arm_coordinates[0]+conv_summar_inc;
 
-		copy_generator_command( robot_m );
 
 		return true;
 
@@ -1943,9 +1921,7 @@ bool mp_drawing_teach_in_force_generator::next_step ()
 			inc_delta[i]=-irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
 		}
 
-		copy_data( robot_m ); // Kopiowanie danych z bufora przyslanego z ECP do
-		// obrazu danych wykorzystywanych przez generator
-
+	
 
 		for (i=0; i<6;i++) {
 			inc_delta[i]+=irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates[i];
@@ -1953,7 +1929,7 @@ bool mp_drawing_teach_in_force_generator::next_step ()
 
 		// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 		irp6ot->ecp_td.instruction_type = SET;
-		node_counter++;
+		
 
 		// irp6_postument
 		irp6p->ecp_td.instruction_type = SET;
@@ -1985,7 +1961,6 @@ bool mp_drawing_teach_in_force_generator::next_step ()
 			insert_pose_list_element(emptyps, 0.0, vsp_force_irp6ot->image.force.event_type, inc_delta);
 		}
 
-		copy_generator_command( robot_m );
 
 		return true;
 

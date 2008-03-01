@@ -471,7 +471,7 @@ bool ecp_linear_parabolic_generator::next_step ()
     the_robot->EDP_data.get_type = NOTHING_DV;
     the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
 
-    node_counter++;
+
 
     double acc[MAX_SERVOS_NR];
     double vel[MAX_SERVOS_NR];
@@ -853,7 +853,7 @@ bool ecp_cubic_generator::next_step (  )
     // -------------------------------------------------------------------------------------------
 
     // Kontakt z MP
-    if (node_counter == td.interpolation_node_no)
+    if (node_counter-1 == td.interpolation_node_no)
     { // Koniec odcinka
         //     ecp_t.set_ecp_reply (TASK_TERMINATED); // by Y
         ecp_t.mp_buffer_receive_and_send ();
@@ -868,7 +868,7 @@ bool ecp_cubic_generator::next_step (  )
     the_robot->EDP_data.get_type = NOTHING_DV;
     the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
 
-    node_counter++;
+
 
     double acc[MAX_SERVOS_NR];
     double vel[MAX_SERVOS_NR];
@@ -1141,7 +1141,7 @@ bool ecp_quintic_generator::next_step ()
     // -------------------------------------------------------------------------------------------
 
     // Kontakt z MP
-    if (node_counter == td.interpolation_node_no)
+    if (node_counter-1 == td.interpolation_node_no)
     { // Koniec odcinka
         ecp_t.ecp_termination_notice();
         return false;
@@ -1155,7 +1155,7 @@ bool ecp_quintic_generator::next_step ()
     the_robot->EDP_data.get_type = NOTHING_DV;
     the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
 
-    node_counter++;
+
 
     double acc[MAX_SERVOS_NR];
     double vel[MAX_SERVOS_NR];
@@ -1568,10 +1568,10 @@ bool ecp_parabolic_teach_in_generator::next_step (  )
         the_robot->EDP_data.motion_steps = (WORD) (INTERVAL/STEP);
         the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
         first_interval = false;
-        node_counter = 0; // inicjacja licznika wezlow (przedzialow) interpolacji
+        
     }
 
-    node_counter++; // Nastawic licznik na kolejny wezel interpolacji
+    
     // (ten, do ktorego zmierza ramie)
 
     if (node_counter <= number_of_intervals)
@@ -1908,10 +1908,10 @@ bool ecp_calibration_generator::next_step (  )
         the_robot->EDP_data.motion_steps = (WORD) (INTERVAL/STEP);
         the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
         first_interval = false;
-        node_counter = 0; // inicjacja licznika wezlow (przedzialow) interpolacji
+        
     }
 
-    node_counter++; // Nastawic licznik na kolejny wezel interpolacji
+    
     // (ten, do ktorego zmierza ramie)
 
     if (node_counter <= number_of_intervals)
@@ -2242,12 +2242,12 @@ bool ecp_cubic_spline_generator::next_step()
 
         first_interval = false;
 
-        node_counter = 0; 					// inicjalizacja licznika wezlow (przedzialow) interpolacji
+        
 
     } 	// end:if FIRST INTERVAL
     // -------------------------------------------------------------------------------------------
 
-    node_counter++; 			// Nastawic licznik na kolejny wezel interpolacji
+    
     // (ten, do ktorego zmierza ramie)
 
     // ---------------------------------  czy obliczono polozenie dla wszystkich wezlow?    ---------------------------------------
@@ -2711,7 +2711,7 @@ bool ecp_smooth_cubic_spline_generator::next_step()
         } // end:for DLA KAZDEJ WSPOLRZEDNEJ
 
         j=0;
-        node_counter = 0;		// zainicjowanie licznika wezlow (przedzialow) interpolacji
+        
         build_coeff = false;
         initiate_pose_list();	// powrot do pierwszej pozycji na liscie
         if (is_pose_list_element () )
@@ -2770,7 +2770,7 @@ bool ecp_smooth_cubic_spline_generator::next_step()
     } 	// end:if FIRST INTERVAL
     // -------------------------------------------------------------------------------------------
 
-    node_counter++; // Nastawic licznik na kolejny wezel interpolacji
+    
 
 
     if (node_counter <= t(j+1,1))
@@ -3180,12 +3180,12 @@ bool ecp_quintic_spline_generator::next_step()
 
         first_interval = false;
 
-        node_counter = 0; 					// inicjalizacja licznika wezlow (przedzialow) interpolacji
+        
 
     } 	// end:if FIRST INTERVAL
     // -------------------------------------------------------------------------------------------
 
-    node_counter++; 			// Nastawic licznik na kolejny wezel interpolacji
+    
     // (ten, do ktorego zmierza ramie)
 
     // ---------------------------------  czy obliczono polozenie dla wszystkich wezlow?    ---------------------------------------
@@ -3531,12 +3531,12 @@ bool ecp_elipsoid_generator::next_step (  )
         the_robot->EDP_data.motion_steps = (WORD) (INTERVAL/STEP);
         the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
         first_interval = false;
-        node_counter = 0; // inicjacja licznika wezlow (przedzialow) interpolacji
+        
     }
-    trj_ptr[node_counter].ctime = node_counter*INTERVAL;
-    memcpy(trj_ptr[node_counter].coordinates, the_robot->EDP_data.current_joint_arm_coordinates, MAX_SERVOS_NR*sizeof(double));
+    trj_ptr[node_counter-1].ctime = (node_counter-1)*INTERVAL;
+    memcpy(trj_ptr[node_counter-1].coordinates, the_robot->EDP_data.current_joint_arm_coordinates, MAX_SERVOS_NR*sizeof(double));
 
-    node_counter++; // Nastawic licznik na kolejny wezel interpolacji
+    
     // (ten, do ktorego zmierza ramie)
 
     if (node_counter < number_of_intervals)

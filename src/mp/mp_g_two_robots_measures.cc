@@ -44,7 +44,7 @@ bool mp_two_robots_measures_generator::first_step()
 	irp6p->ecp_td.get_arm_type = XYZ_EULER_ZYZ;
 	irp6p->ecp_td.motion_type = ABSOLUTE;
 	// Przepisanie polecen.
-	copy_generator_command( robot_m );
+
 	
 	// Wyczyszczenie listy.
 	measures.clear();
@@ -74,13 +74,12 @@ bool mp_two_robots_measures_generator::next_step()
 	if ( idle_step_counter )
 	{
 		// Przygotowanie nastepnego polecenia.
-		copy_generator_command( robot_m );
+
 		idle_step_counter--;
 		return true;
 	};//: if
 	// Pobranie odczytow.
- 	copy_data( robot_m );
-
+ 
 	// Przepisanie odczytow do wektora.
 	two_robots_measure current_measure;
 	memcpy(current_measure.irp6ot, irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates, 6*sizeof(double));
@@ -111,7 +110,7 @@ bool mp_two_robots_measures_generator::next_step()
 		std::cout<<"\a"<<std::endl;
 	}
 	// Przygotowanie nastepnego polecenia.
-	copy_generator_command( robot_m );
+
 	// Nastepny krok.
 	return true;
 }; //: next_step
