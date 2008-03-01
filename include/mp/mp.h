@@ -74,14 +74,13 @@ public:
 
 // ------------------------------------------------------------------------
 struct robot_ECP_transmission_data {
+public:
   MP_COMMAND mp_command;                // polecenie przesylane z MP do ECP
   ECP_REPLY  ecp_reply;                 // odpowiedz z ECP do MP
-
 
 	int mp_2_ecp_next_state; // skojarzone z NEXT_STATE
 	int mp_2_ecp_next_state_variant; // skojarzone z NEXT_STATE
 	char mp_2_ecp_next_state_string[MP_2_ECP_STRING_SIZE]; // skojarzone z NEXT_STATE
-
 
   char text[MAX_TEXT]; // MAC7
   char prosody[MAX_PROSODY]; // MAC7
@@ -179,8 +178,6 @@ struct robot_ECP_transmission_data {
 	frame_tab  MPcurrent_present_arm_frame_m;      // trojscian koncowki wzgledem ukladu bazowego
 	double ECPtoMP_force_xyz_torque_xyz[6];
 
-
-
   BYTE current_kinematic_model_no;                    // odczytany numer zestawu parametrow
                                                       // modelu kinematyki
   BYTE next_kinematic_model_no;                       // wygenerowany numer zestawu
@@ -201,6 +198,7 @@ struct robot_ECP_transmission_data {
 }; // end: robot_ECP_transmission_data
 // ------------------------------------------------------------------------
 
+// to fix forward declaration issues
 #include "mp/mp_generator.h"
 #include "mp/mp_task.h"
 #include "mp/mp_robot.h"

@@ -198,7 +198,7 @@ void ecp_task::Move (ecp_generator& the_generator)
 } // end: Move()
 
 // Przekazanie identyfikatora procesu MP
-void ecp_task::set_mp_pid ( pid_t mp_pid)
+void ecp_task::set_mp_pid (pid_t mp_pid)
 {
 	MP_pid = mp_pid;
 }

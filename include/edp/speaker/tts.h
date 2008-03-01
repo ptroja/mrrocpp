@@ -45,7 +45,7 @@ class Unit {
 
 		Unit();	// default constructor
 
-		void Unit::clear();
+		void clear();
 };
 
 unsigned long SayIt(char *pszInputText, char *pszEmotionType,short int *piBuffSpeechOut);

@@ -2137,7 +2137,7 @@ typedef struct
   playerc_device_t info;
 
   /// Recognized text
-  player_speech_recognition_data_t;
+  player_speech_recognition_data_t data;
 } playerc_speech_recognition_t;
 
 

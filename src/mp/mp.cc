@@ -31,17 +31,20 @@ mp_taught_in_pose::mp_taught_in_pose (POSE_SPECIFICATION at, double mt, double* 
 }
 
 mp_taught_in_pose::mp_taught_in_pose (POSE_SPECIFICATION at, double mt, int e_info, double* c)
-		: arm_type(at), motion_time(mt) { // by Y
+	: arm_type(at), motion_time(mt) { // by Y
 	memcpy(coordinates, c, MAX_SERVOS_NR*sizeof(double));
 	extra_info = e_info;
 }
 
 robot_ECP_transmission_data::robot_ECP_transmission_data (void)
-		: instruction_type(INVALID), reply_type(ACKNOWLEDGE) {};
+	: instruction_type(INVALID), reply_type(ACKNOWLEDGE)
+{
+}
 
 mp_robot::MP_error::MP_error (uint64_t err0, uint64_t err1)
- : error_class(err0), mp_error(err1)
-{}
+	: error_class(err0), mp_error(err1)
+{
+}
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // ##############################################################
@@ -56,7 +59,9 @@ mp_robot::MP_error::MP_error (uint64_t err0, uint64_t err1)
 // generator for setting the next ecps state
 
 mp_set_next_ecps_state_generator::mp_set_next_ecps_state_generator(mp_task& _mp_task):
-	mp_generator (_mp_task) {};
+	mp_generator (_mp_task)
+{
+}
 
 void mp_set_next_ecps_state_generator::configure (int l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant,
         char* l_mp_2_ecp_next_state_string) {
@@ -92,7 +97,10 @@ bool mp_set_next_ecps_state_generator::next_step () {
 	return false;
 }
 
-mp_send_end_motion_to_ecps_generator::mp_send_end_motion_to_ecps_generator(mp_task& _mp_task): mp_generator (_mp_task) {};
+mp_send_end_motion_to_ecps_generator::mp_send_end_motion_to_ecps_generator(mp_task& _mp_task)
+	: mp_generator (_mp_task)
+{
+}
 
 // ----------------------------------------------------------------------------------------------
 // ---------------------------------    metoda	first_step -------------------------------------
@@ -123,7 +131,9 @@ bool mp_send_end_motion_to_ecps_generator::next_step () {
 // ###############################################################
 
 mp_extended_empty_generator::mp_extended_empty_generator(mp_task& _mp_task):
-		mp_generator (_mp_task) { activate_trigger = true; };
+		mp_generator (_mp_task) {
+	activate_trigger = true;
+}
 
 void mp_extended_empty_generator::configure (bool l_activate_trigger) {
 	activate_trigger = l_activate_trigger;

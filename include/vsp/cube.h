@@ -86,10 +86,10 @@ public:
   void close();
   void clear();
 
-rubik_compare RubiksCube::compare(RubiksCube *k);
-int RubiksCube::findTile(int nr,RubiksCube *k);
-point_d RubiksCube::findShift(RubiksCube *k);
-bool RubiksCube::build(CMVision *vision);
+rubik_compare compare(RubiksCube *k);
+int findTile(int nr,RubiksCube *k);
+point_d findShift(RubiksCube *k);
+bool build(CMVision *vision);
 
   
 

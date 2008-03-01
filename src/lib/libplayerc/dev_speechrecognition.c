@@ -86,6 +86,6 @@ int playerc_speech_recognition_unsubscribe(playerc_speech_recognition_t *device)
 void playerc_speech_recognition_putdata (playerc_speech_recognition_t *device, player_msghdr_t *header,
 			    player_speech_recognition_data_t *data, size_t len)
 {
-    strncpy(device->text, data->text, strlen(data->text));
+    strncpy(device->data.text, data->text, strlen(data->text));
 }
 

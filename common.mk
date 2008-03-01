@@ -23,9 +23,11 @@
 
 
 # Linker, compilator, and default global flags for both
-CC = qcc
-CXX = QCC
-LD = QCC
+#VERSION=-V3.3.5,gcc_ntox86
+#VERSION=-V4.2.1,gcc_ntox86
+CC = qcc ${VERSION}
+CXX = QCC ${VERSION}
+LD = QCC ${VERSION}
 CPPFLAGS = -I$(HOMEDIR)/include
 #DEBUG = -g
 #OPTIM = -O2
@@ -40,6 +42,8 @@ BINDIR = $(HOMEDIR)/bin
 ECP_MPDIR = $(HOMEDIR)/src/ecp_mp
 
 AR = i386-pc-nto-qnx6.3.0-ar
+#AR = ntox86-ar
+#AR = ntox86-ar-2.17
 ARFLAGS = cru
 
 INSTALL = ln -f

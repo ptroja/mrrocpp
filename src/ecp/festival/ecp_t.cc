@@ -50,7 +50,7 @@ void ecp_task_festival::main_task_algorithm(void)
 					fprintf(stderr, "invalid mp_2_ecp_next_state (%d)\n", mp_command.mp_package.mp_2_ecp_next_state);
 					break;
 			}
-			
+
 			ecp_termination_notice();
 		}
 

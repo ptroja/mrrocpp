@@ -242,12 +242,12 @@ bool force_controlled_trajectory_generator::first_step(){
         the_sensor = (ecp_mp_force_sensor*)((sensor_m.begin())->second);
     }else{
         the_sensor = NULL;
-        };
+    }
     // Jesli mamy uzywac czujnika sily.
     if (the_sensor){
         // Sprawdzenie odczytow czujnika sily.
         check_force_condition(*the_sensor);
-        };
+    }
     // Pobranie obecnej pozycji robota.
     return_position(robot_position);
     // Obecna pozycja robota.
@@ -269,7 +269,7 @@ bool force_controlled_trajectory_generator::first_step(){
         tmp_position = tmp_position + tmp_delta;
         // Zapamietanie nastepnej pozycji.
         insert_position_list_element(tmp_position);
-        }; // end: while
+	}
     // Pozycja, w ktorej nalezy zaczac zwalniac.
     after_acceleration_position = tmp_position;
     // Faza ruchu ze stalym przesunieciem.
@@ -278,14 +278,14 @@ bool force_controlled_trajectory_generator::first_step(){
         tmp_position = tmp_position + tmp_delta;
         // Zapamietanie nastepnej pozycji.
         insert_position_list_element(tmp_position);
-        }; // end: while
+	}
     // Ostatnia faza - zwalnianie.
     while(decrement_delta(tmp_delta, dir*current_delta[number], current_delta_increment[number])){
         // Przesuniecie sie o delte.
         tmp_position = tmp_position + tmp_delta;
         // Zapamietanie nastepnej pozycji.
         insert_position_list_element(tmp_position);
-        }; // end: while
+	}
     // Przygotowanie rozkazu dla EDP.
     the_robot->EDP_data.instruction_type = SET;
     the_robot->EDP_data.set_type = ARM_DV; // ARM
@@ -304,7 +304,7 @@ bool force_controlled_trajectory_generator::first_step(){
     if(!is_position_list_element()){
         // Pusta tajektoria.
         return false;
-        };
+	}
     // Pobranie pierwszej pozycji.
     get_position_list_element(tmp_position);
     // Przesuniecie robota do pierwszej pozycji - na motorach.
@@ -319,7 +319,7 @@ bool force_controlled_trajectory_generator::first_step(){
     next_position_list_element();
     // Trajektoria przygotowana.
     return true;
-    }; // end: first_step
+}
 
 /******************************** NEXT STEP ***********************************/
 bool force_controlled_trajectory_generator::next_step ( ) {
@@ -332,7 +332,7 @@ bool force_controlled_trajectory_generator::next_step ( ) {
         the_sensor = (ecp_mp_force_sensor*)((sensor_m.begin())->second);
         // Sprawdzenie odczytow czujnika sily.
         	check_force_condition(*the_sensor);
-        };
+	}
         
     // Sprawdzenie, czy nie wykonano calej trajektorii.
     if(!is_position_list_element()){
@@ -340,7 +340,7 @@ bool force_controlled_trajectory_generator::next_step ( ) {
         flush_position_list();
         // Koniec ruchu.
         return false;
-        };
+	}
         
     // Pobranie elementu z listy.
     get_position_list_element(tmp_position);
@@ -356,7 +356,7 @@ bool force_controlled_trajectory_generator::next_step ( ) {
     next_position_list_element();
     // Nie wykonano jeszcze calego ruchu.
     return true;
-    }; // end: next_step
+}
 
 /*********************  CHECK FORCE CONDITION **************************/
 void force_controlled_trajectory_generator::check_force_condition(ecp_mp_force_sensor& the_sensor){
@@ -368,7 +368,7 @@ void force_controlled_trajectory_generator::check_force_condition(ecp_mp_force_s
         if (fabs(tmp_reading[i]) > dangerous_force)
                 throw ECP_error(NON_FATAL_ERROR, DANGEROUS_FORCE_DETECTED);
     // Sila w porzadku.
-    }; // end: check_force_condition
+}
 
 /***************************  INCREMENT DELTA ********************************/
 bool force_controlled_trajectory_generator::increment_delta(double &tmp_delta, double direction, double max_delta_increment, double delta_increment){
@@ -388,7 +388,7 @@ bool force_controlled_trajectory_generator::increment_delta(double &tmp_delta, d
         }; // end: else
     // Nie osiagnieto jeszcze maksymalnego przyspieszenia.
     return true;
-    }; // end: increment_delta
+}
 
 /*************************  SLOW DOWN CONDITION ****************************/
 bool force_controlled_trajectory_generator::slow_down_condition(double start_position, double after_acceleration_position, double current_position, double stop_position){

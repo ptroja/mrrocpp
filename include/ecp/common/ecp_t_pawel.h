@@ -10,7 +10,6 @@
 
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
-#include <stl.h>
 
 #include "common/impconst.h"
 #include "common/com_buf.h"
