@@ -143,8 +143,7 @@ bool manual_moves_automatic_measures_generator::first_step (){
     the_robot->EDP_data.get_type = ARM_DV; // ARM
     // Sprawdzenie rodzaju ramienia.
     the_robot->EDP_data.get_arm_type = MOTOR;
-    // Przepisanie rozkazu do bufora wysylkowego.
-    the_robot->create_command();
+ 
      // Mozna wykonac ruch - odebrac polozenie
     return true;
     }; // end: first_step
@@ -154,8 +153,7 @@ bool manual_moves_automatic_measures_generator::first_step (){
 bool manual_moves_automatic_measures_generator::next_step (){
     // Roznica miedzy polozeniami.
     double eps = 1e-2;
-    // Odebranie danych.
-    the_robot->get_reply();
+
 	// Czujnik - linialy.
 	ecp_mp_digital_scales_sensor* dss = (ecp_mp_digital_scales_sensor*)((sensor_m.begin())->second);
 	// Porownanie ostatniego polozenia z obecnym.

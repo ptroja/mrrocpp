@@ -20,21 +20,7 @@ playerpos_generator::playerpos_generator(ecp_task& _ecp_task):
 
 bool playerpos_generator::first_step ( ) 
 {
-	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-
-	ecp_t.mp_buffer_receive_and_send ();
-
-	switch ( ecp_t.mp_command_type() ) 
-	{
-		case NEXT_POSE:
-			break;
-		case STOP:
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION:
-		case INVALID_COMMAND:
-		default:
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	}
+	
 
 	return true;
 }
@@ -46,24 +32,7 @@ bool playerpos_generator::next_step ( )
 		ecp_t.mp_buffer_receive_and_send ();
 		return false;
 	}
-	else
-	{
-		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.mp_buffer_receive_and_send ();
-	}
-
-	switch ( ecp_t.mp_command_type() ) 
-	{
-		case NEXT_POSE:
-			//the_robot->create_command ();
-			break;
-		case STOP:
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION:
-		case INVALID_COMMAND:
-		default:
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	}	
+	
 	
 #if 0
 	// do not block
