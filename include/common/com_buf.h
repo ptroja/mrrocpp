@@ -26,6 +26,7 @@ enum POSE_SPECIFICATION { INVALID_END_EFFECTOR, FRAME, XYZ_ANGLE_AXIS, XYZ_EULER
 			 JOINT, MOTOR, POSE_FORCE_TORQUE_AT_FRAME };
 
 // Rodzaje odpowiedzi UI do ECP oraz polecen z UI (wcisniecie przycisku).
+#if 1
 const BYTE INVALID_REPLY = 0, NEXT = 1, QUIT = 2, ANSWER_YES = 3,
          ANSWER_NO = 4, FILE_LOADED = 5, FILE_SAVED = 6,
 
@@ -48,6 +49,53 @@ const BYTE INVALID_REPLY = 0, NEXT = 1, QUIT = 2, ANSWER_YES = 3,
              	// Rozkazy z okna MAM_wnd_manual_moves_automatic_measures.
 		MAM_START = 30, MAM_STOP = 31, MAM_CLEAR = 32, MAM_SAVE = 33,
 		MAM_EXIT = 34, MAM_CALIBRATE =35;
+#else
+enum {
+	INVALID_REPLY,
+	NEXT,
+	QUIT,
+	ANSWER_YES,
+	ANSWER_NO,
+	FILE_LOADED,
+	FILE_SAVED,
+
+	// Rozkazy z okna Force Control.,
+	FC_ADD_MACROSTEP,
+	FC_CALIBRATE_SENSOR,
+	FC_CHANGE_CONTROL,
+	FC_MOVE_ROBOT,
+	FC_SAVE_TRAJECTORY,
+	FC_NEW_TRAJECTORY,
+	FC_EXIT,
+	FC_GET_DATA,
+
+	// Rozkazy z okna Trajectory Render.,
+	TR_LOAD_TRAJECTORY,
+	TR_PAUSE_MOVE,
+	TR_START_MOVE,
+	TR_STOP_MOVE,
+	TR_EXIT,
+	TR_ZERO_POSITION,
+	TR_SAVE_READINGS,
+	TR_CALIBRATE_DIGITAL_SCALES_SENSOR,
+	TR_CALIBRATE_FORCE_SENSOR,
+	TR_TRY_MOVE_AGAIN,
+
+	// Odpowiedzi z okna z opcjami,
+	OPTION_ONE,
+	OPTION_TWO,
+	OPTION_THREE,
+	OPTION_FOUR,
+
+	// Rozkazy z okna MAM_wnd_manual_moves_automatic_measures.,
+	MAM_START,
+	MAM_STOP,
+	MAM_CLEAR,
+	MAM_SAVE,
+	MAM_EXIT,
+	MAM_CALIBRATE
+};
+#endif
 
 // Dlugosc komunikatu przesylanego z ECP lub MP do UI
 #define MSG_LENGTH 60
