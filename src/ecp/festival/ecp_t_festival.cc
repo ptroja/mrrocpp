@@ -7,7 +7,7 @@
 
 #include "ecp/festival/ecp_g_festival.h"
 #include "ecp_mp/ecp_mp_t_festival.h"
-#include "ecp/festival/ecp_t.h"
+#include "ecp/festival/ecp_t_festival.h"
 
 // KONSTRUKTORY
 ecp_task_festival::ecp_task_festival() : ecp_task()
@@ -37,7 +37,7 @@ void ecp_task_festival::main_task_algorithm(void)
 
 			get_next_state ();
 
-			sr_ecp_msg->message("Order received");
+			sr_ecp_msg->message("NEXT_STATE received");
 
 			switch ( (ECP_FESTIVAL_STATES) mp_command.mp_package.mp_2_ecp_next_state) {
 				case ECP_GEN_FESTIVAL:

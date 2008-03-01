@@ -53,8 +53,6 @@ bool festival_generator::set_voice(VOICE voice_id)
 
 bool festival_generator::first_step ( )
 {
-
-
 	int command_max_len = strlen(voice)
 		+strlen(FESTIVAL_SAY_STRING_PREFIX)+sizeof(phrase)+strlen(FESTIVAL_SAY_STRING_SUFFIX)
 		+1;
@@ -130,12 +128,6 @@ bool festival_generator::first_step ( )
 
 bool festival_generator::next_step ( )
 {
-	if (ecp_t.pulse_check()) {
-		ecp_t.mp_buffer_receive_and_send ();
-		return false;
-	} 
-
-	
 	if(test_mode) {
 		return false;
 	}

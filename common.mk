@@ -29,7 +29,7 @@ CC = qcc ${VERSION}
 CXX = QCC ${VERSION}
 LD = QCC ${VERSION}
 CPPFLAGS = -I$(HOMEDIR)/include
-#DEBUG = -g
+DEBUG= -g
 #OPTIM = -O2
 #WARN = -w9
 FLAGS = ${DEBUG} ${OPTIM} ${WARN}
@@ -41,8 +41,7 @@ LIBDIR = $(HOMEDIR)/lib
 BINDIR = $(HOMEDIR)/bin
 ECP_MPDIR = $(HOMEDIR)/src/ecp_mp
 
-AR = i386-pc-nto-qnx6.3.0-ar
-#AR = ntox86-ar
+AR = ntox86-ar
 #AR = ntox86-ar-2.17
 ARFLAGS = cru
 
