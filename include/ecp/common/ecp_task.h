@@ -60,7 +60,7 @@ public:
 	bool get_next_state (void);
 	
 	// Oczekiwanie na polecenie od MP
-	void mp_buffer_receive_and_send (void);
+	bool mp_buffer_receive_and_send (void);
 	
 	// Receive of mp message
 	int receive_mp_message (void);

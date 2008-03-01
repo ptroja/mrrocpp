@@ -18,8 +18,6 @@
 // Generator trajektorii dla zadan z wodzeniem za nos
 class y_nose_run_force_generator : public ecp_generator {
 
-protected:
-	int node_counter;
 	
 public:	
 	trajectory_description td;

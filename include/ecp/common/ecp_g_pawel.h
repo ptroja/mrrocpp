@@ -18,7 +18,7 @@
 class pawel_generator : public ecp_generator {
 
 protected:
-	int node_counter;
+
 	int state;
 	int step_no;	
 //    	double start_joint_arm_coordinates[MAX_SERVOS_NR];

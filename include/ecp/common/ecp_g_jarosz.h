@@ -31,7 +31,7 @@
 class ecp_delta_generator : public ecp_generator 
 {
 protected:
-  int node_counter;            // biezacy wezel interpolacji
+
   
   double a_max_motor[MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
   double v_max_motor[MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych

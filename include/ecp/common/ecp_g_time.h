@@ -20,7 +20,7 @@ class time_generator : public ecp_generator
 {
 
 protected:
-	int node_counter;
+
 	long run_counter;
 	bool second_step;
     double start_joint_arm_coordinates[MAX_SERVOS_NR];
