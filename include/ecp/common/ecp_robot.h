@@ -21,55 +21,111 @@ class ecp_buffer: public ecp_command_buffer, public edp_reply_buffer {
 };
 // ------------------------------------------------------------------------
 
-struct robot_EDP_transmission_data {
+struct robot_transmission_data {
+
+	robot_transmission_data (void)
+		: instruction_type(INVALID), reply_type(ACKNOWLEDGE)
+	{};
 	
-	char text[MAX_TEXT]; // MAC7
-	char prosody[MAX_PROSODY]; // MAC7
-	bool speaking; // MAC7
+	INSTRUCTION_TYPE instruction_type;		// typ instrukcji
+	REPLY_TYPE reply_type;					// typ odpowiedzi EDP
+	edp_error error_no;						// blad wykryty w EDP	
 	
-	INSTRUCTION_TYPE instruction_type;    // typ instrukcji
-	BYTE set_type;                        // typ instrukcji set: ARM/RMODEL/OUTPUTS
-	BYTE get_type;                        // typ instrukcji get: ARM/RMODEL/INPUTS
-	RMODEL_SPECIFICATION set_rmodel_type; // okreslenie modelu robota (narzedzia, serworegulatora, korektora kinematycznego) przy jego zadawaniu
-	RMODEL_SPECIFICATION get_rmodel_type; // okreslenie modelu robota (narzedzia, serworegulatora, korektora kinematycznego) przy jego odczycie
-	POSE_SPECIFICATION set_arm_type;      // sposob zdefiniowania polozenia zadanego koncowki
-	POSE_SPECIFICATION get_arm_type;      // sposob zdefiniowania polozenia odcztanego koncowki
-	WORD output_values;                   // zadane wartosci wyjsc binarnych
-	WORD input_values;                    // odczytane wartosci wejsc binarnych
-	BYTE analog_input[8];            // odczytane wartosci wejsc analogowych - 8 kanalow
-	MOTION_TYPE motion_type;       // sposob zadania ruchu: ABSOLUTE/RELATIVE
-	WORD motion_steps;             // liczba krokow ruchu zadanego (makrokroku)
-	WORD value_in_step_no;         // liczba krokow pierwszej fazy ruchu, czyli
-	// krok, w ktorym ma zostac przekazana
-	// informacja o realizacji pierwszej fazy
-	// ruchu:
-	// 0 < value_in_step_no <= motion_steps + 1
-	// Dla value_in_step_no = motion_steps
-	// wiadomosc dotrze po zrealizowaniu makrokroku,
-	// ale informacja o polozeniu bedzie dotyczyc
-	// realizacji przedostatniego kroku makrokroku.
-	// Dla value_in_step_no = motion_steps + 1
-	// wiadomosc dotrze po zrealizowaniu jednego
-	// kroku obiegu petli ruchu jalowego po
-	// zakonczeniu makrokroku,
-	// ale informacja o polozeniu bedzie dotyczyc
-	// realizacji calego makrokroku.
-	// Dla value_in_step_no < motion_steps
-	// wiadomosc dotrze przed zrealizowaniem makrokroku
-	// i informacja o polozeniu bedzie dotyczyc
-	// realizacji srodkowej fazy makrokroku.
-	frame_tab current_arm_frame_m;  // aktualne polozenie trojscianu koncowki
-	// wzgledem ukladu bazowego
-	frame_tab next_arm_frame_m;      // wygenerowane polozenie trojscianu koncowki
-	// wzgledem ukladu bazowego
+	BYTE set_type;							// typ instrukcji set: ARM/RMODEL/OUTPUTS
+	BYTE get_type;							// typ instrukcji get: ARM/RMODEL/INPUTS
 
-	double current_XYZ_ZYZ_arm_coordinates[8];  // aktualne wspolrzedne XYZ +
-	// orientacja koncowki wzgledem ukladu bazowego
+	// okreslenie modelu robota (narzedzia, serworegulatora, korektora kinematycznego)
+	RMODEL_SPECIFICATION set_rmodel_type;	// przy jego zadawaniu
+	RMODEL_SPECIFICATION get_rmodel_type;	// przy jego odczycie
+	
+	// sposob zdefiniowania polozenia koncowki
+	POSE_SPECIFICATION set_arm_type;		// przy jej zadawaniu
+	POSE_SPECIFICATION get_arm_type;		// przy jeg odczycie
+	
+	WORD output_values;						// zadane wartosci wyjsc binarnych
+	WORD input_values;						// odczytane wartosci wejsc binarnych	
+	BYTE analog_input[8];					// odczytane wartosci wejsc analogowych - 8 kanalow
+	
+	MOTION_TYPE motion_type;				// sposob zadania ruchu
+	
+	WORD motion_steps;						// liczba krokow ruchu zadanego (makrokroku)
+	/*
+	 liczba krokow pierwszej fazy ruchu, czyli krok,
+	 w ktorym ma zostac przekazana informacja o realizacji pierwszej fazy ruchu:
+	 0 < value_in_step_no <= motion_steps + 1
+	* dla value_in_step_no = motion_steps
+	  wiadomosc dotrze po zrealizowaniu makrokroku, ale informacja o polozeniu
+	  bedzie dotyczyc realizacji przedostatniego kroku makrokroku
+	* dla value_in_step_no = motion_steps + 1
+	  wiadomosc dotrze po zrealizowaniu jednego kroku obiegu petli ruchu jalowego
+	  po zakonczeniu makrokroku, ale informacja o polozeniu bedzie dotyczyc
+	  realizacji calego makrokroku
+	* dla value_in_step_no < motion_steps
+	  wiadomosc dotrze przed zrealizowaniem makrokroku i informacja o polozeniu
+	  bedzie dotyczyc realizacji srodkowej fazy makrokroku
+	*/
+	WORD value_in_step_no;         
+	
+	// polozenie trojscianu koncowki wzgledem ukladu bazowego
+	frame_tab current_arm_frame_m; 			// aktualne
+	frame_tab next_arm_frame_m;    			// wygenerowane
+	
+	// wspolrzedne XYZ + orientacja koncowki wzgledem ukladu bazowego
+	double current_XYZ_ZYZ_arm_coordinates[8];	// aktualne 
+	double next_XYZ_ZYZ_arm_coordinates[8];		// wygenerowane
+	
+	// wspolrzedne XYZ + orientacja koncowki wzgledem ukladu bazowego
+	double current_XYZ_AA_arm_coordinates[6];	// aktualne 
+	double next_XYZ_AA_arm_coordinates[6];		// wygenerowane
 
-	double next_XYZ_ZYZ_arm_coordinates[8];  // wygenerowane wspolrzedne XYZ +
-	// orientacja koncowki wzgledem ukladu bazowego
+	// trojscian narzedzia wzgledem kolnierza
+	frame_tab current_tool_frame_m;			// odczytany 
+	frame_tab next_tool_frame_m;			// wygenerowany
 
-	// by Y  do sily
+	// XYZ + orientacja ZYZ narzedzia wzgledem kolnierza
+	double current_XYZ_ZYZ_tool_coordinates[6];		// odczytane 
+	double next_XYZ_ZYZ_tool_coordinates[6];		// wygenerowane
+
+	// XYZ + orientacja AA narzedzia wzgledem kolnierza
+	double current_XYZ_AA_tool_coordinates[6];		// odczytane        
+	double next_XYZ_AA_tool_coordinates[6];			// wygenerowane	
+	
+	// wspolrzedne wewnetrzne
+	double current_joint_arm_coordinates[MAX_SERVOS_NR];	// aktualne 
+	double next_joint_arm_coordinates[MAX_SERVOS_NR];		// wygenerowane
+
+	// polozenia walow silnikow
+	double current_motor_arm_coordinates[MAX_SERVOS_NR];	// aktualne
+	double next_motor_arm_coordinates[MAX_SERVOS_NR];		// wygenerowane
+	
+	// stan w ktorym znajduje sie regulator chwytaka
+	short gripper_reg_state;
+	
+	// stopien rozwarcia chwytaka
+	double current_gripper_coordinate;		// odczytanu 
+	double next_gripper_coordinate;			// zadany
+
+	// numer zestawu parametrow
+	BYTE current_kinematic_model_no;		// odczytany 
+	BYTE next_kinematic_model_no;			// wygenerowany
+	
+	// numery algorytmow serworegulacji
+	BYTE current_servo_algorithm_no[MAX_SERVOS_NR];		// odczytane 
+	BYTE next_servo_algorithm_no[MAX_SERVOS_NR];		// wygenerowane
+	
+	// numery zestawow parametrow algorytmow serworegulacji
+	BYTE current_servo_parameters_no[MAX_SERVOS_NR];	// odczytane 
+	BYTE next_servo_parameters_no[MAX_SERVOS_NR];		// wygenerowane
+
+	// edp speaker data
+	char text[MAX_TEXT];
+	char prosody[MAX_PROSODY];
+	bool speaking;	
+};
+
+struct robot_EDP_transmission_data : robot_transmission_data {
+
+	// by Y - do sily
 
 	double ECPtoEDP_inertia[6], ECPtoEDP_reciprocal_damping[6];
 	double ECPtoEDP_position_velocity[MAX_SERVOS_NR], ECPtoEDP_force_xyz_torque_xyz[6];
@@ -82,57 +138,14 @@ struct robot_EDP_transmission_data {
 	frame_tab  current_present_arm_frame_m;      // trojscian koncowki wzgledem ukladu bazowego
 	// double pos_xyz_rot_xyz[6];
 	double EDPtoECP_force_xyz_torque_xyz[6];
-	short gripper_reg_state; // stan w ktorym znajduje sie regulator chwytaka
-	double current_gripper_coordinate; // odczytanu stopien rozwarcia chwytaka
-	double next_gripper_coordinate; // zadany stopien rozwarcia chwytaka
 
 	// end by Y
 
-	double current_XYZ_AA_arm_coordinates[6];  // aktualne wspolrzedne XYZ +
-	// orientacja koncowki wzgledem ukladu bazowego
-	double next_XYZ_AA_arm_coordinates[6];   // wygenerowane  wspolrzedne XYZ +
-	// orientacja koncowki wzgledem ukladu bazowego
-	double current_joint_arm_coordinates[MAX_SERVOS_NR];
-	// aktualne wspolrzedne wewnetrzne
-	double next_joint_arm_coordinates[MAX_SERVOS_NR];
 	// moment zadany dla Dunga
 	double desired_torque[MAX_SERVOS_NR];
-	// wygenerowane wspolrzedne wewnetrzne
-	double current_motor_arm_coordinates[MAX_SERVOS_NR];
-	// aktualne polozenia walow silnikow
-	double next_motor_arm_coordinates[MAX_SERVOS_NR];
-	// wygenerowane polozenia walow silnikow
-	frame_tab current_tool_frame_m;  // odczytany trojscian narzedzia wzgledem kolnierza
-	frame_tab next_tool_frame_m;     // wygenerowany trojscian narzedzia wzgledem kolnierza
-	double current_XYZ_ZYZ_tool_coordinates[6];         // odczytane XYZ + orientacja ZYZ
-	// narzedzia wzgledem kolnierza
-	double next_XYZ_ZYZ_tool_coordinates[6];            // wygenerowane XYZ + orientacja ZYZ
-	// narzedzia wzgledem kolnierza
-	double current_XYZ_AA_tool_coordinates[6];          // odczytane XYZ + orientacja AA
-	// narzedzia wzgledem kolnierza
-	double next_XYZ_AA_tool_coordinates[6];             // wygenerowane XYZ + orientacja AA
-	// narzedzia wzgledem kolnierza
 
-
-	BYTE current_kinematic_model_no;                    // odczytany numer zestawu parametrow
-	// modelu kinematyki
-	BYTE next_kinematic_model_no;                       // wygenerowany numer zestawu
-	// parametrow modelu kinematyki
-
-	BYTE current_servo_algorithm_no[MAX_SERVOS_NR];  // odczytane numery algorytmow
-	// serworegulacji
-	BYTE next_servo_algorithm_no[MAX_SERVOS_NR];     // wygenerowane numery algorytmow
-	// serworegulacji
-	BYTE current_servo_parameters_no[MAX_SERVOS_NR]; // odczytane numery zestawow parametrow
-	// algorytmow serworegulacji
-	BYTE next_servo_parameters_no[MAX_SERVOS_NR];    // wygenerowane numery zestawow parametrow
-	// algorytmow serworegulacji
-	edp_error error_no;                                 // blad wykryty w EDP
-	REPLY_TYPE reply_type;                           // typ odpowiedzi EDP
-
-	robot_EDP_transmission_data (void); // konstruktor
-
-}; // end: robot_EDP_transmission_data
+	robot_EDP_transmission_data(void);
+};
 
 class ecp_task;
 

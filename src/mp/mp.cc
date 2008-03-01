@@ -37,7 +37,7 @@ mp_taught_in_pose::mp_taught_in_pose (POSE_SPECIFICATION at, double mt, int e_in
 }
 
 robot_ECP_transmission_data::robot_ECP_transmission_data (void)
-	: instruction_type(INVALID), reply_type(ACKNOWLEDGE)
+	: robot_transmission_data()
 {
 }
 

@@ -7,10 +7,9 @@
 #include "ecp/common/ecp_task.h"
 
 robot_EDP_transmission_data::robot_EDP_transmission_data (void)
+	: robot_transmission_data()
 {
-	instruction_type = INVALID;
-	reply_type = ACKNOWLEDGE;
-} // konstruktor
+}
 
 // -------------------------------------------------------------------
 // Konstruktor klasy robot

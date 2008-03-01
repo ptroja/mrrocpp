@@ -11,6 +11,7 @@
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 
+#include "ecp/common/ecp_robot.h"
 #include "ecp_mp/ecp_mp_task.h"
 #include "lib/configurator.h"
 #include "lib/mp_timer.h"
@@ -73,7 +74,7 @@ public:
 // ------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------
-struct robot_ECP_transmission_data {
+struct robot_ECP_transmission_data : robot_transmission_data {
 	public:
 		MP_COMMAND mp_command;                // polecenie przesylane z MP do ECP
 		ECP_REPLY  ecp_reply;                 // odpowiedz z ECP do MP
@@ -82,78 +83,7 @@ struct robot_ECP_transmission_data {
 		int mp_2_ecp_next_state_variant; // skojarzone z NEXT_STATE
 		char mp_2_ecp_next_state_string[MP_2_ECP_STRING_SIZE]; // skojarzone z NEXT_STATE
 
-		char text[MAX_TEXT]; // MAC7
-		char prosody[MAX_PROSODY]; // MAC7
-		bool speaking; // MAC7
-
-		INSTRUCTION_TYPE instruction_type;    // typ instrukcji: SET, GET, SET_GET, SYNCHRO, QUERY
-		BYTE set_type;                        // typ instrukcji set: ARM/RMODEL/OUTPUTS
-		BYTE get_type;                        // typ instrukcji get: ARM/RMODEL/INPUTS
-		RMODEL_SPECIFICATION set_rmodel_type; // sposob zdefiniowania narzedzia przy jego zadawaniu
-		RMODEL_SPECIFICATION get_rmodel_type; // sposob zdefiniowania narzedzia przy jego odczycie
-		POSE_SPECIFICATION set_arm_type;      // sposob zdefiniowania polozenia zadanego
-		POSE_SPECIFICATION get_arm_type;      // sposob zdefiniowania polozenia odcztanego
-		WORD output_values;                   // zadane wartosci wyjsc binarnych
-		WORD input_values;                    // odczytane wartosci wejsc binarnych
-		BYTE analog_input[8];            // odczytane wartosci wejsc analogowych - 8 kanalow
-		MOTION_TYPE motion_type;       // sposob zadania ruchu: ABSOLUTE/RELATIVE
-		WORD motion_steps;             // liczba krokow ruchu zadanego (makrokroku)
-		WORD value_in_step_no;         // liczba krokow pierwszej fazy ruchu, czyli
-		// krok, w ktorym ma zostac przekazana
-		// informacja o realizacji pierwszej fazy
-		// ruchu:
-		// 0 < value_in_step_no <= motion_steps + 1
-		// Dla value_in_step_no = motion_steps
-		// wiadomosc dotrze po zrealizowaniu makrokroku,
-		// ale informacja o polozeniu bedzie dotyczyc
-		// realizacji przedostatniego kroku makrokroku.
-		// Dla value_in_step_no = motion_steps + 1
-		// wiadomosc dotrze po zrealizowaniu jednego
-		// kroku obiegu petli ruchu jalowego po
-		// zakonczeniu makrokroku,
-		// ale informacja o polozeniu bedzie dotyczyc
-		// realizacji calego makrokroku.
-		// Dla value_in_step_no < motion_steps
-		// wiadomosc dotrze przed zrealizowaniem makrokroku
-		// i informacja o polozeniu bedzie dotyczyc
-		// realizacji srodkowej fazy makrokroku.
-		
-		frame_tab current_arm_frame_m;   // aktualne polozenie trojscianu koncowki
-		// wzgledem ukladu bazowego
-		frame_tab next_arm_frame_m;      // wygenerowane polozenie trojscianu koncowki
-		// wzgledem ukladu bazowego
-		
-		double current_XYZ_ZYZ_arm_coordinates[6];  // aktualne wspolrzedne XYZ + orientacja koncowki wzgledem ukladu bazowego
-		double next_XYZ_ZYZ_arm_coordinates[6];  // wygenerowane wspolrzedne XYZ + orientacja koncowki wzgledem ukladu bazowego
-
 		// by Y  do sily
-
-		short gripper_reg_state; // stan w ktorym znajduje sie regulator chwytaka
-		double current_gripper_coordinate; // odczytanu stopien rozwarcia chwytaka
-		double next_gripper_coordinate; // zadany stopien rozwarcia chwytaka
-
-		double current_XYZ_AA_arm_coordinates[6];  // aktualne wspolrzedne XYZ +
-		// orientacja koncowki wzgledem ukladu bazowego
-		double next_XYZ_AA_arm_coordinates[6];   // wygenerowane  wspolrzedne XYZ +
-		// orientacja koncowki wzgledem ukladu bazowego
-		double current_joint_arm_coordinates[MAX_SERVOS_NR];
-		// aktualne wspolrzedne wewnetrzne
-		double next_joint_arm_coordinates[MAX_SERVOS_NR];
-		// wygenerowane wspolrzedne wewnetrzne
-		double current_motor_arm_coordinates[MAX_SERVOS_NR];
-		// aktualne polozenia walow silnikow
-		double next_motor_arm_coordinates[MAX_SERVOS_NR];
-		// wygenerowane polozenia walow silnikow
-		frame_tab current_tool_frame_m;  // odczytany trojscian narzedzia wzgledem kolnierza
-		frame_tab next_tool_frame_m;     // wygenerowany trojscian narzedzia wzgledem kolnierza
-		double current_XYZ_ZYZ_tool_coordinates[6];         // odczytane XYZ + orientacja ZYZ
-		// narzedzia wzgledem kolnierza
-		double next_XYZ_ZYZ_tool_coordinates[6];            // wygenerowane XYZ + orientacja ZYZ
-		// narzedzia wzgledem kolnierza
-		double current_XYZ_AA_tool_coordinates[6];          // odczytane XYZ + orientacja AA
-		// narzedzia wzgledem kolnierza
-		double next_XYZ_AA_tool_coordinates[6];             // wygenerowane XYZ + orientacja AA
-		// narzedzia wzgledem kolnierza
 
 		// dla POSE_FORCE_TORQUE_AT_FRAME
 		// c_buffer
@@ -169,24 +99,8 @@ struct robot_ECP_transmission_data {
 		frame_tab  MPcurrent_present_arm_frame_m;      // trojscian koncowki wzgledem ukladu bazowego
 		double ECPtoMP_force_xyz_torque_xyz[6];
 
-		BYTE current_kinematic_model_no;                    // odczytany numer zestawu parametrow
-		// modelu kinematyki
-		BYTE next_kinematic_model_no;                       // wygenerowany numer zestawu
-		// parametrow modelu kinematyki
-
-		BYTE current_servo_algorithm_no[MAX_SERVOS_NR];  // odczytane numery algorytmow
-		// serworegulacji
-		BYTE next_servo_algorithm_no[MAX_SERVOS_NR];     // wygenerowane numery algorytmow
-		// serworegulacji
-		BYTE current_servo_parameters_no[MAX_SERVOS_NR]; // odczytane numery zestawow parametrow
-		// algorytmow serworegulacji
-		BYTE next_servo_parameters_no[MAX_SERVOS_NR];    // wygenerowane numery zestawow parametrow
-		// algorytmow serworegulacji
-		edp_error error_no;                                 // blad wykryty w EDP
-		REPLY_TYPE reply_type;                              // typ odpowiedzi EDP
-
 		robot_ECP_transmission_data (void);
-}; // end: robot_ECP_transmission_data
+};
 // ------------------------------------------------------------------------
 
 // to fix forward declaration issues
