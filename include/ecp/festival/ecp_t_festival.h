@@ -9,7 +9,6 @@ protected:
 	festival_generator* fg;
 
 public:
-	// KONSTRUKTORY
 	ecp_task_festival();
 	~ecp_task_festival();
 	

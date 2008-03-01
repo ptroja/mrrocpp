@@ -22,18 +22,11 @@ speechrecognition_generator::~speechrecognition_generator()
 
 bool speechrecognition_generator::first_step ( )
 {
-
-
 	return true;
 }
 
 bool speechrecognition_generator::next_step ( )
 {
-	if (ecp_t.pulse_check()) {
-		ecp_t.mp_buffer_receive_and_send ();
-		return false;
-	}
-
 #if 1
 	// do not block
 	if(client->Peek(0)) {

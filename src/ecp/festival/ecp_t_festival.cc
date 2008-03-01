@@ -1,10 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
-
 #include "ecp/festival/ecp_g_festival.h"
 #include "ecp_mp/ecp_mp_t_festival.h"
 #include "ecp/festival/ecp_t_festival.h"

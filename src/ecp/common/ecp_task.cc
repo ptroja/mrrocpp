@@ -203,7 +203,7 @@ void ecp_task::Move (ecp_generator& the_generator)
 
 		// zadanie przygotowania danych od czujnikow
 		all_sensors_initiate_reading (the_generator.sensor_m);
-		//printf("przed move\n");
+
 		// wykonanie kroku ruchu
 		if ((the_generator.the_robot) && the_generator.the_robot->communicate)
 		{
@@ -212,12 +212,12 @@ void ecp_task::Move (ecp_generator& the_generator)
 			the_generator.the_robot->execute_motion();
 			the_generator.the_robot->get_reply();
 		}
-		//printf("za move\n");
+
 		// odczytanie danych z wszystkich czujnikow
 		all_sensors_get_reading(the_generator.sensor_m);
 		the_generator.node_counter++;
 	}
-	while ((mp_buffer_receive_and_send()) && (the_generator.next_step()) ); // end: do
+	while (mp_buffer_receive_and_send() && the_generator.next_step());
 }
 
 // Przekazanie identyfikatora procesu MP
