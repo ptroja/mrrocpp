@@ -16,84 +16,67 @@
 
 
 
-	progpanel_generator::progpanel_generator(ecp_task& _ecp_task, int step):
-	 ecp_generator (_ecp_task, true){ 		step_no = step;          	};  
-
-
-bool progpanel_generator::first_step ( ) 
+progpanel_generator::progpanel_generator(ecp_task& _ecp_task, int step):
+        ecp_generator (_ecp_task, true)
 {
-	run_counter = 0;
-	second_step = false;
-	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
+    step_no = step;
+};
 
-	ecp_t.mp_buffer_receive_and_send ();
-	node_counter = 0;
-	td.interpolation_node_no = 1;
-	td.internode_step_no = step_no;
-	td.value_in_step_no = td.internode_step_no - 2;
 
-	switch ( ecp_t.mp_command_type() ) 
-	{
-		case NEXT_POSE:
-			the_robot->EDP_data.instruction_type = GET;
-			the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-			the_robot->EDP_data.set_type = ARM_DV;
+bool progpanel_generator::first_step ( )
+{
+    run_counter = 0;
+    second_step = false;
 
-			the_robot->EDP_data.set_arm_type = JOINT;
-			the_robot->EDP_data.get_arm_type = JOINT;
+    td.interpolation_node_no = 1;
+    td.internode_step_no = step_no;
+    td.value_in_step_no = td.internode_step_no - 2;
 
-			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.motion_steps = td.internode_step_no;
-			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
-			the_robot->create_command ();
-			break;
-		case STOP:
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION:
-		case INVALID_COMMAND:
-		default:
-			printf("first step in mp comm: %d\n", ecp_t.mp_command_type());
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // end: switch
+    the_robot->EDP_data.instruction_type = GET;
+    the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
+    the_robot->EDP_data.set_type = ARM_DV;
 
-	return true;
-}; // end: bool progpanel_generator::first_step (map <SENSOR_ENUM, sensor*>& sensor_m, robot& the_robot )
+    the_robot->EDP_data.set_arm_type = JOINT;
+    the_robot->EDP_data.get_arm_type = JOINT;
+
+    the_robot->EDP_data.motion_type = ABSOLUTE;
+    the_robot->EDP_data.motion_steps = td.internode_step_no;
+    the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+
+
+
+    return true;
+}
+; // end: bool progpanel_generator::first_step (map <SENSOR_ENUM, sensor*>& sensor_m, robot& the_robot )
 // --------------------------------------------------------------------------
 
 
 // --------------------------------------------------------------------------
-bool progpanel_generator::next_step ( ) 
+bool progpanel_generator::next_step ( )
 {
-	// zmienne wykorzystywane przy rysowaniu
-	if (ecp_t.pulse_check()) 
-	{
-		ecp_t.mp_buffer_receive_and_send ();
-		return false;
-	}
-	else
-	{
-		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.mp_buffer_receive_and_send ();
-	}
-
-	// Kopiowanie danych z bufora przyslanego z EDP do
-	// obrazu danych wykorzystywanych przez generator
-	the_robot->get_reply();
-	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-	the_robot->EDP_data.instruction_type = SET;
-	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.get_type = NOTHING_DV;
-	the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
-	node_counter++;
-
-	ecp_mp_pp_sensor* pps = (ecp_mp_pp_sensor*)(sensor_m[SENSOR_PP]);
-	// Pobranie ostatniego odczytu z czujnika sily.
-//	pps->initiate_reading();
-//	pps->get_reading();
+    // zmienne wykorzystywane przy rysowaniu
+    if (ecp_t.pulse_check())
+    {
+        ecp_t.mp_buffer_receive_and_send ();
+        return false;
+    }
 
 
-//    transmitter_m[TRANSMITTER_PLAYER]->t_read(0);
+    // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
+    the_robot->EDP_data.instruction_type = SET;
+    the_robot->EDP_data.set_type = ARM_DV;
+    the_robot->EDP_data.get_type = NOTHING_DV;
+    the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
+
+
+    ecp_mp_pp_sensor* pps = (ecp_mp_pp_sensor*)(sensor_m[SENSOR_PP]);
+    // Pobranie ostatniego odczytu z czujnika sily.
+    //	pps->initiate_reading();
+    //	pps->get_reading();
+
+
+    //    transmitter_m[TRANSMITTER_PLAYER]->t_read(0);
     /*
     printf("%f %f 0x%04x\n",
             transmitter_m[TRANSMITTER_PLAYER]->from_va.player_joystick.px,
@@ -102,54 +85,46 @@ bool progpanel_generator::next_step ( )
           );
     */
 
-    if (node_counter <= 2) {
-    		memcpy(start_joint_arm_coordinates, the_robot->EDP_data.current_joint_arm_coordinates, 8*(sizeof(double)));
-    } else  {
-//printf ("Active_motors = %d\n", pps->image.pp.active_motors);
-		switch (pps->image.pp.active_motors)
-		{
-			case 0:
-               	start_joint_arm_coordinates[0] += pps->image.pp.joy[0];
-               	start_joint_arm_coordinates[1] += pps->image.pp.joy[1];
-               	start_joint_arm_coordinates[2] += pps->image.pp.joy[2];
-				break;
-			
-			case 1:
-               	start_joint_arm_coordinates[3] += pps->image.pp.joy[0];
-               	start_joint_arm_coordinates[4] += pps->image.pp.joy[1];
-               	start_joint_arm_coordinates[5] += pps->image.pp.joy[2];
-				break;
-				
-			case 2:
-               	start_joint_arm_coordinates[6] += pps->image.pp.joy[0];
-               	start_joint_arm_coordinates[7] += pps->image.pp.joy[1];
-				break;
-				
-			default:
-				break;
-		}
+    if (node_counter <= 2)
+    {
+        memcpy(start_joint_arm_coordinates, the_robot->EDP_data.current_joint_arm_coordinates, 8*(sizeof(double)));
+    }
+    else
+    {
+        //printf ("Active_motors = %d\n", pps->image.pp.active_motors);
+        switch (pps->image.pp.active_motors)
+        {
+        case 0:
+            start_joint_arm_coordinates[0] += pps->image.pp.joy[0];
+            start_joint_arm_coordinates[1] += pps->image.pp.joy[1];
+            start_joint_arm_coordinates[2] += pps->image.pp.joy[2];
+            break;
+
+        case 1:
+            start_joint_arm_coordinates[3] += pps->image.pp.joy[0];
+            start_joint_arm_coordinates[4] += pps->image.pp.joy[1];
+            start_joint_arm_coordinates[5] += pps->image.pp.joy[2];
+            break;
+
+        case 2:
+            start_joint_arm_coordinates[6] += pps->image.pp.joy[0];
+            start_joint_arm_coordinates[7] += pps->image.pp.joy[1];
+            break;
+
+        default:
+            break;
+        }
     }
 
-    		memcpy(the_robot->EDP_data.next_joint_arm_coordinates, start_joint_arm_coordinates, 8*(sizeof(double)));
+    memcpy(the_robot->EDP_data.next_joint_arm_coordinates, start_joint_arm_coordinates, 8*(sizeof(double)));
 
-/*    for (int i = 0; i < 8; i++)
-		printf("%f ", the_robot->EDP_data.next_joint_arm_coordinates[i]);
+    /*    for (int i = 0; i < 8; i++)
+    		printf("%f ", the_robot->EDP_data.next_joint_arm_coordinates[i]);
+     
+        printf("\n");
+    */
 
-    printf("\n");
-*/	
-	switch ( ecp_t.mp_command_type() ) 
-	{
-		case NEXT_POSE:
-			the_robot->create_command ();
-			break;
-		case STOP:
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION:
-		case INVALID_COMMAND:
-		default:
-			printf("next step in mp comm: %d\n", ecp_t.mp_command_type());
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // end: switch
 
-	return true;
-};  // end: bool progpanel_generator::next_step (, robot& the_robot )
+    return true;
+}
+;  // end: bool progpanel_generator::next_step (, robot& the_robot )

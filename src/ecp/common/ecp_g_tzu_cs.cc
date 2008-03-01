@@ -27,11 +27,6 @@ bool tzu_simple_generator :: first_step ( )
 	/* zmienna decydujaca o tym czy wykonalismy juz ostatni krok w zalozonym przez nas ruchu */
 	finished = false; 
 
-	/* sprawdzic co robi to odwolanie systemowe */
-	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-	
-	/* znowu jakies odwolanie systemowe tym razem cos z pobraniem komendy z mp */
-	ecp_t.mp_buffer_receive_and_send ();
 
 	/* kolejny licznik inicjalizujemy na zero, jest on inkrementowany  co krok ruchu*/	
 	first_run = true;
@@ -41,10 +36,7 @@ bool tzu_simple_generator :: first_step ( )
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 
-	/* pobieramy komende od mp i dzieki temu wiemy co mamy dalej wykonac*/
-	switch ( ecp_t.mp_command_type() ) 
-	{
-		case NEXT_POSE: 
+
 			cout<<"c1: "<<GET<<endl;
 			cout<<"c2: "<<ARM_DV<<endl;
 			cout<<"c3: "<<XYZ_EULER_ZYZ<<endl;
@@ -64,15 +56,7 @@ bool tzu_simple_generator :: first_step ( )
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
 			the_robot->create_command ();
-			break;
-		case STOP: cout<<"stop"<<endl;
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION: cout<<"end motion"<<endl;
-		case INVALID_COMMAND: cout<<"invalid command"<<endl;
-		default:
-			printf("first step in mp comm: %d\n", ecp_t.mp_command_type());
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // end: switch
+		
 	
 	/* pierwszy krok wygenerowany */
 	printf("KONIEC first step\n");
@@ -92,16 +76,8 @@ bool tzu_simple_generator::next_step ( )
 		ecp_t.mp_buffer_receive_and_send ();
 		return false;
 	}
-	else
-	{	
-		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.mp_buffer_receive_and_send ();
-	}
+	
 
-
-	// Kopiowanie danych z bufora przyslanego z EDP do
-	// obrazu danych wykorzystywanych przez generator
-	the_robot->get_reply();
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 	the_robot->EDP_data.instruction_type = SET;
 	the_robot->EDP_data.set_type = ARM_DV;
@@ -144,9 +120,8 @@ bool tzu_simple_generator::next_step ( )
 //			break;
 		case MOVE_END:
 			cout<<"**END**"<<endl;		
-			ecp_t.set_ecp_reply (TASK_TERMINATED);
-			ecp_t.mp_buffer_receive_and_send ();
-			finished = true;		
+			ecp_t.ecp_termination_notice();		
+			return false;
 			break;
 //		default:
 //			cout<<"!!!nierozpoznana komenda!!!"<<endl;
@@ -196,25 +171,7 @@ bool tzu_simple_generator::next_step ( )
 	fprintf(file, "position: %f; %f; %f; %f; %f; %f\n", new_position[0], new_position[1], new_position[2], new_position[3], new_position[4], new_position[5]);
 	fclose(file);
 
-	switch ( ecp_t.mp_command_type() ) 
-	{
-		case NEXT_POSE:
-			if (!finished)
-				the_robot->create_command ();
-			else
-			{
-				cout<<"end?"<<endl;
-				return false;
-			}
-		break;
-		case STOP:
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION:
-		case INVALID_COMMAND:
-		default:
-			printf("next step in mp comm: %d\n", ecp_t.mp_command_type());
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	}
+	
 	
 	return true;
 };
