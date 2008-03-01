@@ -408,7 +408,7 @@ bool ecp_teach_in_generator::first_step (  )
 	the_robot->EDP_data.motion_steps = 8;
 	the_robot->EDP_data.value_in_step_no = 6;
 
-	the_robot->create_command ();
+
 	// printf("w irp6ot_teach_in_generator::first_step za initiate_pose_list\n");
 	// return next_step ();
 	return true;
@@ -424,20 +424,14 @@ bool ecp_teach_in_generator::next_step (  )
 
 // printf("W irp6ot_teach_in_generator::next_step\n");
 	if (is_pose_list_element ()) {
-		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
+
 	} else {
-		ecp_t.set_ecp_reply (TASK_TERMINATED);
+	    ecp_t.ecp_termination_notice();
+        return false;
 	}
 
-// printf("W irp6ot_teach_in_generator::next_step przed mp_buffer_receive_and_send\n");
-	ecp_t.mp_buffer_receive_and_send ();
-// printf("W irp6ot_teach_in_generator::next_step za mp_buffer_receive_and_send\n");
 
-	switch ( ecp_t.mp_command_type() ) {
-		case NEXT_POSE:
-			if (!is_pose_list_element ())
-				return false; // Jezeli lista jest pusta to konczymy generacje trajektorii
-			//	printf("NEXT_POSE\n");
+
 			get_pose (tip);
 			// Przepisanie pozycji z listy
 			switch ( tip.arm_type ) {
@@ -483,16 +477,8 @@ bool ecp_teach_in_generator::next_step (  )
 				default:
 					throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			} // end: switch
-			the_robot->create_command ();
+		
 			next_pose_list_ptr (); // nastepna pozycja
 			return true;
-		case END_MOTION:  // Dla irp6ot_teach_in_generator ten przypadek jest nieakatywny,
-			return false;   // koniec determinuje ten generator a nie MP
-		case STOP:
-			// 		printf("STOP\n");
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case INVALID_COMMAND:
-		default:
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // end: switch
+		
 }
