@@ -127,7 +127,7 @@ typedef struct _pulse msg_header_t;
 
 typedef struct  { // wiadomosc odbierana przez readera
     msg_header_t hdr;
-    int data;
+    int data;	// TODO: to pole chyba nie jest potrzebne (ptroja)  
 } _pulse_msg;
 
 typedef short word16;

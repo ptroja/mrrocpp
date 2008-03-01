@@ -61,7 +61,7 @@ void manual_moves_automatic_measures_generator::get_mam_list_data (double* robot
 	memcpy(robot_position, mam_list_iterator->robot_position, axes_number*sizeof(double));
 	// Przepisanie odczytow z czujnikow.
 	memcpy(sensor_reading, mam_list_iterator->sensor_reading, 6*sizeof(double));
-	};
+};
 			
 bool manual_moves_automatic_measures_generator::is_mam_list_element ( void ) {
 	// sprawdza czy aktualnie wskazywany jest element listy, czy lista sie skonczyla
@@ -69,7 +69,7 @@ bool manual_moves_automatic_measures_generator::is_mam_list_element ( void ) {
 		return true;
 	else
 		return false;
-	};
+};
 	
 bool manual_moves_automatic_measures_generator::is_mam_list_last_element ( void ) {
 	// sprawdza czy aktualnie wskazywany element listy ma nastepnik
@@ -79,16 +79,16 @@ bool manual_moves_automatic_measures_generator::is_mam_list_last_element ( void 
 		if ((++mam_list_iterator) != mam_list.end())
 		{
 			mam_list_iterator--;
-		    return false;
-			 }
-		    else
-		    {
-		    		mam_list_iterator--;
-			    return true;
-			}
-		}; // end if
+			return false;
+		}
+		else
+		{
+			mam_list_iterator--;
+			return true;
+		}
+	}; // end if
 	return false;
-	};
+};
 
 void manual_moves_automatic_measures_generator::create_mam_list_head (double* robot_position, double* sensor_reading) {
 	// Wstawienie glowy.
@@ -104,7 +104,7 @@ void manual_moves_automatic_measures_generator::insert_mam_list_element (double*
 
 int manual_moves_automatic_measures_generator::mam_list_length(void) {
 	return mam_list.size();
-	};
+};
 
 /****************** KONIEC: METODY ZWIAZANE Z LISTA MAM ********************/
 

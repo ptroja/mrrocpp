@@ -21,7 +21,6 @@ ecp_task_festival::~ecp_task_festival()
 // methods for ECP template to redefine in concrete classes
 void ecp_task_festival::task_initialization(void)
 {
-
 	fg = new festival_generator (*this);
 
 	sr_ecp_msg->message("ECP loaded");
