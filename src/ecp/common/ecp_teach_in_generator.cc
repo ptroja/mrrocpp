@@ -395,7 +395,7 @@ int ecp_teach_in_generator::pose_list_length(void)
 
 bool ecp_teach_in_generator::first_step (  )
 {
-	// printf("w irp6ot_teach_in_generator::first_step\n");
+//	 printf("w irp6ot_teach_in_generator::first_step\n");
 	initiate_pose_list();
 	the_robot->EDP_data.get_type = ARM_DV;		// ARM
 
@@ -409,7 +409,7 @@ bool ecp_teach_in_generator::first_step (  )
 	the_robot->EDP_data.value_in_step_no = 6;
 
 
-	// printf("w irp6ot_teach_in_generator::first_step za initiate_pose_list\n");
+//	 printf("w irp6ot_teach_in_generator::first_step za initiate_pose_list\n");
 	// return next_step ();
 	return true;
 }

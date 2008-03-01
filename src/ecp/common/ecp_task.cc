@@ -193,8 +193,9 @@ void ecp_task::Move (ecp_generator& the_generator)
 	the_generator.node_counter = 0;
 	set_ecp_reply (ECP_ACKNOWLEDGE);
 	
-    if ((!mp_buffer_receive_and_send())&&(!the_generator.first_step()) )
+    if (!((mp_buffer_receive_and_send())&&(the_generator.first_step())) )
     {
+
         return; // Warunek koncowy spelniony w pierwszym kroku
     }
 
@@ -388,7 +389,10 @@ bool ecp_task::get_next_state (void)
 // Oczekiwanie na polecenie od MP
 bool ecp_task::mp_buffer_receive_and_send (void)
 {
-    bool rt = true;
+	
+//	printf("mp_buffer_receive_and_send\n");
+	
+    bool returned_value = true;
     bool ecp_stop = false;
     // Wyslanie pulsu do MP
     send_pulse_to_mp ( ECP_WAIT_FOR_COMMAND, 1);
@@ -409,7 +413,7 @@ bool ecp_task::mp_buffer_receive_and_send (void)
         // dla ulatwienia programowania apliakcji wielorobotowych
         if (ecp_reply.reply != ERROR_IN_ECP)
             set_ecp_reply (TASK_TERMINATED);
-        rt = false;
+        returned_value = false;
         break;
     default:
         set_ecp_reply (INCORRECT_MP_COMMAND);
@@ -435,7 +439,7 @@ bool ecp_task::mp_buffer_receive_and_send (void)
         throw ecp_generator::ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
     }
 
-    return rt;
+    return returned_value;
 
 }
 
