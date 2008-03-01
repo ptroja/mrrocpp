@@ -1,4 +1,3 @@
-#-----------ecp_mp/common catalog makefile of the MRROC++ frame system ---------------------#
 #======================================================#
 
 SOURCES = ${wildcard *.cc}
@@ -27,6 +26,7 @@ all: libecp.a
 
 libecp.a: $(ECPOBJ)
 	$(AR) $(ARFLAGS) $@ $?
+	${INSTALL} $@ $(LIBDIR)
 
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:

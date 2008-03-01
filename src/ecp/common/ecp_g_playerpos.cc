@@ -52,21 +52,6 @@ bool playerpos_generator::next_step ( )
 		ecp_t.mp_buffer_receive_and_send ();
 	}
 
-#if 0
-    if(pc->Peek(0)) {
-    	pc->Read();
-    }
-#else
-   	pc->Read();
-#endif
-
-    if (pp->fresh) {
-    	printf("odometry: [%f, %f %f]\n", pp->xpos, pp->ypos, pp->theta);
-    	pp->fresh = false;
-    } else {
-    	printf("no new data\n");
-    }
-    
 	switch ( ecp_t.mp_command_type() ) 
 	{
 		case NEXT_POSE:
@@ -78,7 +63,24 @@ bool playerpos_generator::next_step ( )
 		case INVALID_COMMAND:
 		default:
 			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	}
+	}	
+	
+#if 0
+	// do not block
+    if(pc->Peek(0)) {
+    	pc->Read();
+    }
+#else
+    // block
+   	pc->Read();
+#endif
+
+    if (pp->fresh) {
+    	printf("odometry: [%f, %f %f]\n", pp->xpos, pp->ypos, pp->theta);
+    	pp->fresh = false;
+    } else {
+    	printf("no new data\n");
+    }
 
 	return true;
 }

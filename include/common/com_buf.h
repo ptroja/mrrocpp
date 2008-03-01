@@ -13,17 +13,41 @@
 #include "common/typedefs.h"
 #include "common/impconst.h"
 
-enum SERVO_COMMAND {MOVE, READ, SYNCHRONISE, SERVO_ALGORITHM_AND_PARAMETERS};
+enum SERVO_COMMAND {
+	MOVE,
+	READ,
+	SYNCHRONISE,
+	SERVO_ALGORITHM_AND_PARAMETERS
+};
 
 // Typ polecenia przesylanego z MP do ECP
 // NEXT_STATE // by Y - the next ECP state
-enum MP_COMMAND {INVALID_COMMAND, START_TASK, NEXT_POSE, END_MOTION, NEXT_STATE, STOP};
+enum MP_COMMAND {
+	INVALID_COMMAND,
+	START_TASK,
+	NEXT_POSE,
+	END_MOTION,
+	NEXT_STATE,
+	STOP
+};
 
 // Typ odpowiedzi ECP na polecenie od MP
-enum ECP_REPLY { INCORRECT_MP_COMMAND, ERROR_IN_ECP, ECP_ACKNOWLEDGE, TASK_TERMINATED };
+enum ECP_REPLY {
+	INCORRECT_MP_COMMAND,
+	ERROR_IN_ECP,
+	ECP_ACKNOWLEDGE,
+	TASK_TERMINATED
+};
 
-enum POSE_SPECIFICATION { INVALID_END_EFFECTOR, FRAME, XYZ_ANGLE_AXIS, XYZ_EULER_ZYZ,
-	JOINT, MOTOR, POSE_FORCE_TORQUE_AT_FRAME };
+enum POSE_SPECIFICATION {
+	INVALID_END_EFFECTOR,
+	FRAME,
+	XYZ_ANGLE_AXIS,
+	XYZ_EULER_ZYZ,
+	JOINT,
+	MOTOR,
+	POSE_FORCE_TORQUE_AT_FRAME
+};
 
 // Rodzaje odpowiedzi UI do ECP oraz polecen z UI (wcisniecie przycisku).
 enum {
@@ -190,7 +214,6 @@ struct trajectory_description { // Opis trajektorii do interpolacji dowolnego ty
 };
 
 // ############################################################################
-
 
 // Rodzaje procesow w systemie MRROC++
 enum {

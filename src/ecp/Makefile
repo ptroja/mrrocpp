@@ -4,7 +4,7 @@
 HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 
-SOURCEDIRS = irp6_on_track conveyor irp6_postument speaker irp6_mechatronika festival multi_robot_binaries common
+SOURCEDIRS = irp6_on_track conveyor irp6_postument speaker irp6_mechatronika festival player multi_robot_binaries common
 CLEANDIRS = ${SOURCEDIRS}
 INSTALLDIRS = ${SOURCEDIRS}
 # Data for makedepend 

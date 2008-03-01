@@ -1,4 +1,3 @@
-#-------- ecp_mp/irp6_postument catalog makefile of the MRROC++ frame system --------------#
 #======================================================#
 
 SOURCES = ${wildcard *.cc}

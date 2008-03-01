@@ -1,0 +1,8 @@
+#ifndef __ECP_MP_T_PLAYER_H
+#define __ECP_MP_T_PLAYER_H
+
+enum ECP_PLAYER_STATES {
+	ECP_GEN_SPEECHRECOGNITION
+};
+
+#endif /* __ECP_MP_T_PLAYER_H */

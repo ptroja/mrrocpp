@@ -2,14 +2,13 @@
 
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-BINARIES = 	ecp_test_conv ecp_kon
-				
+BINARIES = ecp_speechrecognition
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
-SHOBJ = ecp_local.o ../common/libecp.a $(LIBDIR)/libmrrocpp.a
+SHOBJ = $(LIBDIR)/libecp.a $(LIBDIR)/libmrrocpp.a $(LIBDIR)/libplayerclient.a
 # path for SHOBJ
 # search path for make, if you want create dependencies from files from other directory than ".", 
 # then place that directory in the VPATH variable
@@ -20,11 +19,8 @@ VPATH = ../common $(ECP_MPDIR)
 all: ${BINARIES}
 #---------------------------------Special object build rules (user made)-------------------------------------#
 
-ecp_test_conv: ecp_t_test.o ecp_g_test.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
-
-ecp_kon: ecp_t_kon.o ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
+ecp_speechrecognition: ecp_t_speechrecognition.o ecp_g_speechrecognition.o $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # e.g:
