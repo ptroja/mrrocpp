@@ -979,7 +979,7 @@ bool ecp_smooth_generator::next_step ()
             get_pose();
 
             // Przepisanie danych z EDP_MASTER do obrazu robota
-            the_robot->get_reply();
+    
 
             switch ( td.arm_type )
             {

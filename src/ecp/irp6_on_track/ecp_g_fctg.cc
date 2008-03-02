@@ -314,7 +314,7 @@ bool force_controlled_trajectory_generator::first_step(){
     if (current_control == XYZ_EULER_ZYZ)
         the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[number] = tmp_position;
     // Przepisanie rozkazu do bufora wysylkowego.
-    the_robot->create_command();
+
     // Przesuniecie na nastepny element z listy.
     next_position_list_element();
     // Trajektoria przygotowana.
@@ -351,7 +351,7 @@ bool force_controlled_trajectory_generator::next_step ( ) {
     if (current_control == XYZ_EULER_ZYZ)
         the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[number] = tmp_position;
     // Przepisanie rozkazu do bufora wysylkowego.
-    the_robot->create_command();
+
     // Przesuniecie na nastepny element z listy.
     next_position_list_element();
     // Nie wykonano jeszcze calego ruchu.

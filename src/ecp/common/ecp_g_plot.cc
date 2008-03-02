@@ -56,7 +56,7 @@ bool y_simple_generator::first_step ( )
     the_robot->EDP_data.motion_steps = td.internode_step_no;
     the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
-    the_robot->create_command ();
+
 
 
     return true;
@@ -259,14 +259,14 @@ bool y_simple_generator::next_step ( )
             nowa_pozycja[0] += 0.0001;
             if(nowa_pozycja[0] - pozycja[0]>0.04/2)
             {
-                the_robot->create_command ();
+           
                 return true;
             }
             the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] += 0.0001;
             temp = sqrt(pow(0.04/2, 2) - pow((nowa_pozycja[0] - pozycja[0]), 2));
             if(temp ==0)
             {
-                the_robot->create_command ();
+             
                 return true;
             }
             //			nowa_pozycja[1] += (0.02 - temp) - (nowa_pozycja[1] - pozycja[1]);
@@ -274,7 +274,7 @@ bool y_simple_generator::next_step ( )
             nowa_pozycja[1] += (0.04/2 - temp) - roznica;
             if((0.04/2 - temp) - roznica >= 0.001)
             {
-                the_robot->create_command ();
+         
                 return true;
             }
 
@@ -296,7 +296,7 @@ bool y_simple_generator::next_step ( )
             {
                 ruch = 2;
                 fprintf(file, "\nznacznik_1\n");
-                the_robot->create_command ();
+          
                 return true;
             }
             the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] += 0.0001;
@@ -310,7 +310,7 @@ bool y_simple_generator::next_step ( )
             {
                 ruch = 2;
                 fprintf(file, "\nznacznik_2\n");
-                the_robot->create_command ();
+      
                 ruch = 99;
             }
             printf("dwa: %f; %f  <%f; %f>\n", nowa_pozycja[0], nowa_pozycja[1], the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0],
@@ -346,7 +346,7 @@ bool y_simple_generator::next_step ( )
             the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] += -temp;
             if(nowa_pozycja[0] - pozycja[0] > 0.04)
             {
-                the_robot->create_command ();
+           
                 ruch = 99;
             }
             fprintf(file, "cztery: %f; %f\n", nowa_pozycja[0], nowa_pozycja[1]);

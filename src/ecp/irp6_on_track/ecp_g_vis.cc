@@ -101,7 +101,7 @@ bool seven_eye_run_linear_generator::first_step (  ) {
   // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
   // Funkcja zwraca false gdy koniec generacji trajektorii
   // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-  ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
+
 
 // if ((mp_comm_counter++)==100) {// by Y - lekka manianka
 // 	mp_comm_counter=0;
@@ -120,7 +120,7 @@ measure[i][j]=0;
 (sensor_m.begin())->second->base_period=0;
  (sensor_m.begin())->second->current_period=0;
 
- ecp_t.mp_buffer_receive_and_send ();
+
    
 
  td.interpolation_node_no = 1;
@@ -216,8 +216,6 @@ the_robot->EDP_data.next_tool_frame_m[2][2]=1; the_robot->EDP_data.next_tool_fra
 
 
 
-  switch ( ecp_t.mp_command_type() ) {
-    case NEXT_POSE:
       the_robot->EDP_data.instruction_type = SET_GET;
       // the_robot->EDP_data.get_type =  ARM_DV + RMODEL_DV;
       // the_robot->EDP_data.set_type =  ARM_DV + RMODEL_DV;
@@ -230,15 +228,7 @@ the_robot->EDP_data.next_tool_frame_m[2][2]=1; the_robot->EDP_data.next_tool_fra
       the_robot->EDP_data.motion_type = ABSOLUTE;
       the_robot->EDP_data.motion_steps = td.internode_step_no;
       the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-      the_robot->create_command ();
-      break;
-    case STOP:
-      throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-    case END_MOTION:
-    case INVALID_COMMAND:
-    default:
-       throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-  } // end: switch
+   
 /* } else {
    
 
@@ -276,17 +266,11 @@ bool seven_eye_run_linear_generator::next_step (  ) {
 clock_gettime( CLOCK_REALTIME , &s_time);
    if (ecp_t.pulse_check()) { // Koniec odcinka
 //    ecp_t.set_ecp_reply (TASK_TERMINATED);
-     ecp_t.mp_buffer_receive_and_send ();
+
      return false;
    }
-   else { // w trakcie interpolacji
-     ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-     ecp_t.mp_buffer_receive_and_send ();
-  }
 
-   // Kopiowanie danych z bufora przyslanego z EDP do
-   // obrazu danych wykorzystywanych przez generator
-   the_robot->get_reply();
+
 
    // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
  
@@ -299,20 +283,7 @@ clock_gettime( CLOCK_REALTIME , &s_time);
    the_first=0;
 the_second=1;
    
-   switch ( ecp_t.mp_command_type() ) {
-    case NEXT_POSE:
-
-      the_robot->create_command ();
-      break;
-    case STOP:
-      throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-    case END_MOTION:
-    case INVALID_COMMAND:
-    default:
-       throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-       
-       
-  } // end: switch
+  
   nr++;
     return true;
    
@@ -784,18 +755,7 @@ else
 clock_gettime( CLOCK_REALTIME , &crr_time);
 
 
-  switch ( ecp_t.mp_command_type() ) {
-    case NEXT_POSE:
 
-      the_robot->create_command ();
-      break;
-    case STOP:
-      throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-    case END_MOTION:
-    case INVALID_COMMAND:
-    default:
-       throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-  } // end: switch
 
 clock_gettime( CLOCK_REALTIME , &e_time);
 // printf( "ECP= %f %f %f\n",(double)(e_time.tv_nsec), (double)(crr_time.tv_nsec), (double)(s_time.tv_nsec));

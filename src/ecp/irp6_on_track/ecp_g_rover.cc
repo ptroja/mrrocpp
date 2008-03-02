@@ -146,8 +146,7 @@ bool ecp_vis_sac_lx_generator::first_step () {
 //			measure[i][j]=0;
 
   //	the_robot = robot_m[ROBOT_IRP6_ON_TRACK];
-	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-	ecp_t.mp_buffer_receive_and_send ();
+
 	vsp_vis_sac = sensor_m[SENSOR_CAMERA_SA];
 
 	
@@ -161,8 +160,6 @@ bool ecp_vis_sac_lx_generator::first_step () {
 
 	//TOOL
 
-	switch ( ecp_t.mp_command_type() ) {
-	case NEXT_POSE:
 	the_robot->EDP_data.next_tool_frame_m[0][0]=1; the_robot->EDP_data.next_tool_frame_m[1][0]=0;
 	the_robot->EDP_data.next_tool_frame_m[2][0]=0; the_robot->EDP_data.next_tool_frame_m[0][3]=0;
 
@@ -209,18 +206,6 @@ bool ecp_vis_sac_lx_generator::first_step () {
 		the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i+3] = torque_reciprocal_damping_;
 	}
 
-		the_robot->create_command ();
-	break;
-	case STOP:
-		throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-	case END_MOTION:
-	case INVALID_COMMAND:
-	default:
-		printf("first step in mp comm: %d\n", ecp_t.mp_command_type());
-		throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // end: switch
-
-
 
 	return true;
 }; // end: mp_vis_sac_lx_generator::first_step()
@@ -236,12 +221,6 @@ bool ecp_vis_sac_lx_generator::next_step () {
  // UWAGA: dzialamy na jednoelementowej liscie robotow
 
 	
-
-
-	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-	ecp_t.mp_buffer_receive_and_send ();
-	the_robot->get_reply();
-
 	 	the_robot->EDP_data.set_type = ARM_DV;
 		the_robot->EDP_data.instruction_type = SET_GET;
 	  	//the_robot->EDP_data.get_type = NOTHING_DV;
@@ -763,17 +742,5 @@ for(int i=0;i<6;i++) {
 	} else return true;
 	*/
 
-	switch ( ecp_t.mp_command_type() )
-	{
-		case NEXT_POSE:
-			the_robot->create_command ();
-		break;
-		case STOP:
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION:
-		case INVALID_COMMAND:
-		default:
-			printf("next step in mp comm: %d\n", ecp_t.mp_command_type());
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // end: switch
+return true;
 }; // end: bool tight_coop_generator::next_step ()

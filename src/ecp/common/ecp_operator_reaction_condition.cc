@@ -115,7 +115,7 @@ bool ecp_operator_reaction_condition::next_step ()
 //  the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;// W.S.
 	the_robot->EDP_data.get_arm_type = MOTOR;
 
-	the_robot->create_command();
+
 	// Sprawdzenie warunku poczatkowego - reakcji operatora
 	if (  ecp_t.operator_reaction ("Next motion?") ) {
 		// Oczekiwanie skonczone
@@ -124,7 +124,7 @@ bool ecp_operator_reaction_condition::next_step ()
 		the_robot->execute_motion();
 		the_robot->communicate = false; // wylaczamy robota
 		// aktualizacja stanu the_robot na podstawie danych przyslanych z EDP
-		the_robot->get_reply();
+
 		if (!is_supplementary_list_head()) { // Czy wskaznik na glowe listy jest NULL
 			// Tworzymy glowe listy
 //      create_supplementary_list_head(XYZ_EULER_ZYZ, 0.0, the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates); // W.S.

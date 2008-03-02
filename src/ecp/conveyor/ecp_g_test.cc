@@ -49,15 +49,8 @@ bool y_simple_generator::next_step ( )
 	struct timespec start[9];
 	int i; // licznik kolejnych wspolrzednych wektora [0..6]
 	if (ecp_t.pulse_check()) { // Koniec odcinka
-		ecp_t.mp_buffer_receive_and_send ();
 		return false;
-	} else { // w trakcie interpolacji
-		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t.mp_buffer_receive_and_send ();
-	}
-	// Kopiowanie danych z bufora przyslanego z EDP do
-	// obrazu danych wykorzystywanych przez generator
-	the_robot->get_reply();
+	} 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 
 	// nie aktualizujemy pozycjio na podstawie odczytu z EDP
@@ -91,17 +84,6 @@ bool y_simple_generator::next_step ( )
 		the_robot->EDP_data.next_motor_arm_coordinates[i] =
 		    the_robot->EDP_data.current_motor_arm_coordinates[i]	+ td.coordinate_delta[i];
 	}
-	switch ( ecp_t.mp_command_type() ) {
-		case NEXT_POSE:
-			the_robot->create_command ();
-			break;
-		case STOP:
-			throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-		case END_MOTION:
-		case INVALID_COMMAND:
-		default:
-			printf("post next step in mp comm: %d\n", ecp_t.mp_command_type());
-			throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	}
+	
 	return true;
 }

@@ -55,7 +55,7 @@ bool tzu_simple_generator :: first_step ( )
 			the_robot->EDP_data.motion_steps = td.internode_step_no;
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
-			the_robot->create_command ();
+	
 		
 	
 	/* pierwszy krok wygenerowany */

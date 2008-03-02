@@ -29,18 +29,17 @@ bool y_simple_generator::first_step ( ) {
 	for (int j=0; j<3; j++)
 		for (int i=0; i<4; i++)
 			previous_frame[i][j]=0;
-	ecp_t->set_ecp_reply (ECP_ACKNOWLEDGE);
+
 	for (int i=0; i<6; i++)
 		delta[i]=0.0;
 
-	ecp_t->mp_buffer_receive_and_send ();
+
 	
 	td.interpolation_node_no = 1;
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 
-	switch ( ecp_t->mp_command_type() ) {
-	case NEXT_POSE:
+
 		the_robot->EDP_data.instruction_type = SET_GET;
 		the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
 		the_robot->EDP_data.set_type = RMODEL_DV;
@@ -56,16 +55,7 @@ bool y_simple_generator::first_step ( ) {
 		the_robot->EDP_data.motion_type = ABSOLUTE;
 		the_robot->EDP_data.motion_steps = td.internode_step_no;
 		the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-		the_robot->create_command ();
-		break;
-	case STOP:
-		throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-	case END_MOTION:
-	case INVALID_COMMAND:
-	default:
-		printf("first step in mp comm: %d\n", ecp_t->mp_command_type());
-		throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // end: switch
+	
 
 	return true;
 }; // end: bool y_simple_generator::first_step (std::map <SENSOR_ENUM, sensor*>& sensor_m, robot& the_robot )
@@ -80,15 +70,10 @@ bool y_simple_generator::next_step (std::map <SENSOR_ENUM, sensor*>& sensor_m ) 
 //	printf("bbb\n");
 	if (ecp_t->pulse_check()) 
 	{
-		ecp_t->mp_buffer_receive_and_send ();
 		return false;
 	}
-	else
-	{
-		ecp_t->set_ecp_reply (ECP_ACKNOWLEDGE);
-		ecp_t->mp_buffer_receive_and_send ();
-	}
-	the_robot->get_reply();
+	
+
 	the_robot->EDP_data.instruction_type = SET;
 	the_robot->EDP_data.set_type = ARM_DV;
 	the_robot->EDP_data.get_type = NOTHING_DV;
@@ -138,19 +123,7 @@ bool y_simple_generator::next_step (std::map <SENSOR_ENUM, sensor*>& sensor_m ) 
 	copy_frame(the_robot->EDP_data.next_arm_frame, previous_frame);
 						// przepisanie nowej ramki do EDP
 	the_robot->EDP_data.next_gripper_coordinate=the_robot->EDP_data.current_gripper_coordinate;
-	switch ( ecp_t->mp_command_type() ) {
-	case NEXT_POSE:
-
-	the_robot->create_command ();
-	break;
-	case STOP:
-	throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-	case END_MOTION:
-	case INVALID_COMMAND:
-	default:
-	printf("next step in mp comm: %d\n", ecp_t->mp_command_type());
-	throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	} // end: switch
+	
 // // 	if(++run_counter==1000) return false;	
 	return true;
 };  // end:  y_simple_generator::next_step (, robot& the_robot )

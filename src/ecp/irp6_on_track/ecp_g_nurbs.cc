@@ -63,12 +63,7 @@ irp6ot_nurbs_generator::irp6ot_nurbs_generator (ecp_task& _ecp_task,
 
 bool irp6ot_nurbs_generator::first_step (  )
 {
-//	cout<<"firststep\n"<<flush;
-  ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-  ecp_t.mp_buffer_receive_and_send ();
-  
-  switch ( ecp_t.mp_command_type() ) {
-    case NEXT_POSE:
+
 		EDP_data_next_ptr_=0;
 //		cout<<"firststep(): B4 dynamic_cast \n"<<flush;
 //		if (ntdes_ptr_->ncptr==NULL) cerr<<"Blad: ntdes.ncptr==NULL\n";
@@ -106,15 +101,7 @@ bool irp6ot_nurbs_generator::first_step (  )
 			throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION); }
 //		cout<<"firststep: after dynamic_cast\n"<<flush;
 		
-  	  	the_robot->create_command ();
-	  	break;
-  	case STOP:
-     	throw ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-    case END_MOTION:
-    case INVALID_COMMAND:
-    default:
-     	throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
-  } // end: switch ( ecp_t.mp_command_type() )
+  	  
 
   return true;
 }; // end: bool irp6ot_irp6ot_nurbs_generator::first_step ( )
@@ -135,15 +122,10 @@ bool irp6ot_nurbs_generator::next_step (  )
 		else	{
 	     	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);     	}
      	ecp_t.mp_buffer_receive_and_send ();
-     	return false;} 
-	else { // w trakcie interpolacji
-   		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-     	ecp_t.mp_buffer_receive_and_send ();
-   }
+     	return false;
+     	} 
 
-   // Kopiowanie danych z bufora przyslanego z EDP do
-   // obrazu danych wykorzystywanych przez generator
-   the_robot->get_reply();
+
 
    // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 
@@ -169,7 +151,7 @@ bool irp6ot_nurbs_generator::next_step (  )
 //	cout<<"nextstep: start3 \n"<<flush;
 
 	// skopiowac przygotowany rozkaz dla EDP do bufora wysylkowego
-	the_robot->create_command ();
+	
 	return true;
 
 }; // end:  irp6ot_nurbs_generator::next_step ( )
