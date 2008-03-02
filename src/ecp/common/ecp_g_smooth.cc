@@ -956,7 +956,7 @@ bool ecp_smooth_generator::next_step ()
 
 
     // Kontakt z MP
-    if (node_counter == td.interpolation_node_no)
+    if (node_counter-1 == td.interpolation_node_no)
     { // Koniec odcinka
         if(is_last_list_element())	//ostatni punkt
         {
@@ -1028,18 +1028,11 @@ bool ecp_smooth_generator::next_step ()
             default:
                 throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
             } // end:switch
+      		 node_counter=1;
 
-            
-
-            ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-            ecp_t.mp_buffer_receive_and_send ();
         }
     } //koniec: nastepny punkt trajektorii
-    else
-    { // w trakcie interpolacji
-        ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-        ecp_t.mp_buffer_receive_and_send ();
-    }
+
 
     // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 
