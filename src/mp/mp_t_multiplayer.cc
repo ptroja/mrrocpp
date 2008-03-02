@@ -19,6 +19,7 @@
 #include "ecp_mp/ecp_mp_tr_player.h"
 */
 #include "ecp_mp/ecp_mp_t_festival.h"
+#include "ecp_mp/ecp_mp_t_player.h"
 #include "ecp/festival/ecp_g_festival.h"
 
 mp_task_multiplayer::mp_task_multiplayer(configurator &_config) : mp_task(_config)
@@ -53,27 +54,19 @@ void mp_task_multiplayer::main_task_algorithm(void)
 	
 		do {
 			sr_ecp_msg->message("Nowy makrokrok");
-			/*
-			playerpos_gen.set_target(1.0, 0.0, 0.0);
-			if (Move(playerpos_gen)) {
-		        	break_state = true;
-		        	break;
+
+			if (set_next_ecps_state (ECP_GEN_SPEECHRECOGNITION, 0, NULL, 1, ROBOT_SPEECHRECOGNITION)) {
+				break_state = true;
+		       	break;
 			}
+			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+		        (1, 1, ROBOT_SPEECHRECOGNITION, ROBOT_SPEECHRECOGNITION)) {
+				break_state = true;
+		       	break;
+			}		
 			
-			playerpos_gen.set_target(1.0, 0.0, M_PI_2);			
-			if (Move(playerpos_gen)) {
-		        	break_state = true;
-		        	break;
-			}
-
-			playerpos_gen.set_target(1.0, 0.5, M_PI_2);
-			if (Move(playerpos_gen)) {
-		        	break_state = true;
-		        	break;
-			}
-			*/		
-
-			if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, festival_generator::ENGLISH_VOICE, "witam serdecznie!", 1, ROBOT_FESTIVAL)) {
+			if (set_next_ecps_state (ECP_GEN_FESTIVAL, festival_generator::POLISH_VOICE, "komenda odebrana", 1, ROBOT_FESTIVAL)) {
 				break_state = true;
 		       	break;
 			}
@@ -82,27 +75,7 @@ void mp_task_multiplayer::main_task_algorithm(void)
 		        (1, 1, ROBOT_FESTIVAL, ROBOT_FESTIVAL)) {
 				break_state = true;
 		       	break;
-			}
-			
-			if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "dobry wieczo~r pan~stwu", 1, ROBOT_FESTIVAL)) {
-				break_state = true;
-		       	break;
-			}			
-			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-		        (1, 1, ROBOT_FESTIVAL, ROBOT_FESTIVAL)) {
-				break_state = true;
-		       	break;
-			}			
-
-			/*
-			playerspeech_gen.set_phrase("robot programming framework");
-			if (Move(playerspeech_gen)) {
-		        	break_state = true;
-		        	break;
-			}
-			*/
-			
+			}		
 		} while(0);
 		
 		if (break_state)

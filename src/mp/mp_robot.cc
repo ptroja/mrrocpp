@@ -18,9 +18,7 @@
 // -------------------------------------------------------------------
 mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task* mp_object_l) { // Konstruktor mp_robot
 //  Powolanie i zaladowanie procesu ECP
-
-	mp_receive_pulse_struct_t input;
-
+	
 	mp_object = mp_object_l;
 	robot_name = l_robot_name;
 	sr_ecp_msg = mp_object->sr_ecp_msg;
@@ -55,6 +53,8 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task*
 		throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
 
+	mp_receive_pulse_struct_t input;
+	
 	// oczekiwanie na zgloszenie procesu ECP
 	// ret = mp_object->mp_wait_for_name_open_ecp_pulse(&input, nd, ECP_pid);
 	mp_object->mp_wait_for_name_open_ecp_pulse(&input);

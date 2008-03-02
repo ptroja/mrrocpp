@@ -112,6 +112,12 @@ bool mp_task::create_robots()
 		robot_m[ROBOT_VIRTUAL] = robot_tmp;
 	}
 	
+	// ROBOT_SPEECHRECOGNITION
+	if (config.return_int_value("is_speechrecognition_active", "[ui]")) {
+		robot_tmp = new mp_robot (ROBOT_SPEECHRECOGNITION, "[ecp_speechrecognition]", this);
+		robot_m[ROBOT_SPEECHRECOGNITION] = robot_tmp;
+	}	
+	
 	// ROBOT_FESTIVAL
 	if (config.return_int_value("is_festival_active", "[ui]")) {
 		robot_tmp = new mp_robot (ROBOT_FESTIVAL, "[ecp_festival]", this);
