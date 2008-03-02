@@ -119,8 +119,6 @@ void ecp_task::initialize_communication ()
     char* ui_net_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "ui_attach_point", "[ui]");
     char* mp_pulse_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "mp_pulse_attach_point", "[mp]");
 
-    mrrocpp_network_path = config.return_mrrocpp_network_path();
-
     if (( sr_ecp_msg = new sr_ecp(ECP, ecp_attach_point, sr_net_attach_point)) == NULL)
     { // Obiekt do komuniacji z SR
         e = errno;

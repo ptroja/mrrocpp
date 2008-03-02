@@ -35,6 +35,12 @@ std::map <TRANSMITTER_ENUM, transmitter*> ecp_mp_task::transmitter_m;
 ecp_mp_task::ecp_mp_task(configurator &_config)
 	: config(_config)
 {
+	mrrocpp_network_path = config.return_mrrocpp_network_path();
+}
+
+ecp_mp_task::~ecp_mp_task()
+{
+	delete [] mrrocpp_network_path;
 }
 		
 

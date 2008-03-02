@@ -209,8 +209,6 @@ bool mp_task::run_ext_empty_gen (bool activate_trigger, int number_of_robots, ..
 	return (Move(mp_ext_empty_gen));
 }
 
-
-
 bool mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 (int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ... )
 {
@@ -764,10 +762,6 @@ void mp_task::mp_initialize_communication()
 	char* mp_attach_point =	config.return_attach_point_name(configurator::CONFIG_SERVER, "mp_attach_point");
 	char* mp_pulse_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "mp_pulse_attach_point");
 
-	mrrocpp_network_path = config.return_mrrocpp_network_path();
-
-	// 	printf("sr_net_attach_point: %s\n",sr_net_attach_point);
-	// byc moze do poprawki
 	if (( sr_ecp_msg = new sr_ecp(MP, mp_attach_point, sr_net_attach_point)) == NULL) { // Obiekt do komuniacji z SR
 		e = errno;
 		perror ( "Unable to locate aSR\n");

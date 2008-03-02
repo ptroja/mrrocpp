@@ -27,6 +27,7 @@ class ecp_mp_task {
 public:
 	
 	ecp_mp_task(configurator &_config);
+	~ecp_mp_task();
 
 	// mapa wszystkich czujnikow
 	static std::map <SENSOR_ENUM, sensor*> sensor_m;
