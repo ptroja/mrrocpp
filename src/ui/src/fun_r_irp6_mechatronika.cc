@@ -167,7 +167,7 @@ EDP_irp6_mechatronika_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 	char tmp2_string[100];
 	
 	FILE* file;					// do sprawdzenia czy istnieje /net/node_name/dev/TWOJ_ROBOT
-	controller_state_typedef robot_controller_initial_state_tmp;
+	controller_state_t robot_controller_initial_state_tmp;
 
 	try { // dla bledow robot :: ECP_error
 	

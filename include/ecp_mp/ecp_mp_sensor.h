@@ -5,7 +5,7 @@
 
 #include "messip/messip.h"
 
-// XXX Forward declaration
+// TODO: Forward declaration
 class ecp_mp_task;
 
 // Klasa bazowa czujnikow po stronie procesu ECP.
@@ -34,7 +34,7 @@ public:
 	virtual void initiate_reading();
 	virtual void terminate();
 	virtual void get_reading();
-	virtual void get_reading(SENSOR_IMAGE*  sensor_image);
-};// : ecp_mp_sensor
+	virtual void get_reading(SENSOR_IMAGE *sensor_image);
+};
 
 #endif /* _ECP_MP_SENSOR_H */

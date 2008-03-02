@@ -655,14 +655,13 @@ typedef union {   // rmodel
 	} servo_algorithm;
 } r_buffer_rmodel;
 
-typedef struct {
+typedef struct _controller_state_t {
 	bool is_synchronised;        // czy robot jest zsynchronizowany
 	bool is_power_on;        // czy wzmacniacze mocy sa zasilane
 	bool is_wardrobe_on;        // czy szafa jest wlaczona
 	bool is_controller_card_present;        // czy karta kontrolera robota jest w zamontowana w komputerze
 	bool is_robot_blocked;        // czy wyzerowana sterowanie na silnikach po awarii sprzetowej
-} controller_state_typedef;
-
+} controller_state_t;
 
 typedef union {   // arm
 	struct {
@@ -703,20 +702,25 @@ typedef union {   // arm
 
 
 struct r_buffer {
-
-	REPLY_TYPE reply_type; // typ odpowiedzi: ERROR, ACKNOWLEDGE, SYNCHRO_OK, ARM, RMODEL, INPUTS,
-	//           ARM_RMODEL, ARM_INPUTS, RMODEL_INPUTS, ARM_RMODEL_INPUT, CONTROLLER_STATE
-	// by Y - rozszerzone o sile
-	edp_error error_no;                     // numer bledu, jezeli wystapil
-	RMODEL_SPECIFICATION rmodel_type;   // sposob zdefiniowania narzedzia przy jego odczycie:
-	// TOOL_FRAME / TOOL_XYZ_EULER_ZYZ / TOOL_XYZ_ANGLE_AXIS / TOOL_AS_XYZ_EULER_ZY /
-	// ARM_KINEMATIC_MODEL / SERVO_ALGORITHM
-	POSE_SPECIFICATION arm_type;    // sposob zdefiniowania polozenia zadanego
-	// koncowki: MOTOR / JOINT / FRAME
-	// XYZ_EULER_ZYZ / POSE_FORCE_LINEAR / XYZ_ANGLE_AXIS / POSE_FORCE_TORQUE_AT_FRAME
-	WORD input_values;                 // wartosci wejsc binarnych
-	BYTE analog_input[8];		// wejscie analogowe
-	controller_state_typedef controller_state;
+	// typ odpowiedzi
+	REPLY_TYPE reply_type;
+	
+	// numer bledu, jezeli wystapil
+	edp_error error_no;                     
+	
+	// sposob zdefiniowania narzedzia przy jego odczycie
+	RMODEL_SPECIFICATION rmodel_type;
+	
+	// sposob zdefiniowania polozenia zadanego koncowki
+	POSE_SPECIFICATION arm_type;
+	
+	// wartosci wejsc binarnych
+	WORD input_values;
+	
+	// wejscie analogowe
+	BYTE analog_input[8];
+	
+	controller_state_t controller_state;
 
 	unsigned long servo_step;       // by Y numer kroku servo
 

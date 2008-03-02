@@ -53,7 +53,7 @@ class ui_conveyor_robot: public ecp_conveyor_robot {
 
 
   // by Y - do odczytu stanu poczatkowego robota
-  bool get_controller_state (controller_state_typedef* robot_controller_initial_state_l);
+  bool get_controller_state (controller_state_t* robot_controller_initial_state_l);
 
   // Zlecenie ruchu
   bool move_motors ( double final_position[CONVEYOR_NUM_OF_SERVOS] );

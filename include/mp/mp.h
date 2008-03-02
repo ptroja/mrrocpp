@@ -98,8 +98,6 @@ struct robot_ECP_transmission_data : robot_transmission_data {
 		frame_tab  MPcurrent_predicted_arm_frame_m;      // trojscian koncowki wzgledem ukladu bazowego
 		frame_tab  MPcurrent_present_arm_frame_m;      // trojscian koncowki wzgledem ukladu bazowego
 		double ECPtoMP_force_xyz_torque_xyz[6];
-
-		robot_ECP_transmission_data (void);
 };
 // ------------------------------------------------------------------------
 

@@ -143,8 +143,6 @@ struct robot_EDP_transmission_data : robot_transmission_data {
 
 	// moment zadany dla Dunga
 	double desired_torque[MAX_SERVOS_NR];
-
-	robot_EDP_transmission_data(void);
 };
 
 class ecp_task;

@@ -137,7 +137,7 @@ class edp_effector: public transformer_error
 #endif /* USE_MESSIP_SRR */
 	
 		edp_effector (ROBOT_ENUM l_robot_name);       // konstruktor
-		controller_state_typedef controller_state_edp_buf; // do okreslenia stanu robota
+		controller_state_t controller_state_edp_buf; // do okreslenia stanu robota
 	
 		int test_mode;
 	

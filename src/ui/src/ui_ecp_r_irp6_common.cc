@@ -171,7 +171,7 @@ bool ui_common_robot::get_servo_algorithm ( BYTE algorithm_no[],
 
 
 // do odczytu stanu poczatkowego robota
-bool ui_common_robot::get_controller_state (controller_state_typedef* robot_controller_initial_state_l)
+bool ui_common_robot::get_controller_state (controller_state_t* robot_controller_initial_state_l)
 {
 
 	// Zlecenie odczytu numeru modelu i korektora kinematyki

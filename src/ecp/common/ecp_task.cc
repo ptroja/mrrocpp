@@ -222,7 +222,7 @@ void ecp_task::set_ecp_reply ( ECP_REPLY ecp_r)
 void ecp_task::ecp_termination_notice (void)
 {
     set_ecp_reply (TASK_TERMINATED);
-    mp_buffer_receive_and_send ();
+    mp_buffer_receive_and_send();
 }
 
 // Wysyla puls do Mp przed oczekiwaniem na spotkanie
@@ -366,17 +366,15 @@ bool ecp_task::get_next_state (void)
 // Oczekiwanie na polecenie od MP
 bool ecp_task::mp_buffer_receive_and_send (void)
 {
-	
-//	printf("mp_buffer_receive_and_send\n");
-	
     bool returned_value = true;
     bool ecp_stop = false;
+    
     // Wyslanie pulsu do MP
     send_pulse_to_mp ( ECP_WAIT_FOR_COMMAND, 1);
 
     int caller = receive_mp_message();
 
-    switch (mp_command_type() )
+    switch (mp_command_type())
     {
     	case NEXT_POSE:
     		if ((ecp_reply.reply != TASK_TERMINATED)&&(ecp_reply.reply != ERROR_IN_ECP))
@@ -405,7 +403,6 @@ bool ecp_task::mp_buffer_receive_and_send (void)
         throw ecp_robot::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
     }
 
-
     if (ecp_stop)
         throw ecp_generator::ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 
@@ -417,7 +414,6 @@ bool ecp_task::mp_buffer_receive_and_send (void)
     }
 
     return returned_value;
-
 }
 
 

@@ -6,11 +6,6 @@
 #include "ecp/common/ecp_robot.h"
 #include "ecp/common/ecp_task.h"
 
-robot_EDP_transmission_data::robot_EDP_transmission_data (void)
-	: robot_transmission_data()
-{
-}
-
 // -------------------------------------------------------------------
 // Konstruktor klasy robot
 // -------------------------------------------------------------------

@@ -126,7 +126,7 @@ const uint64_t OVER_CURRENT                        = 0x0000000000000010ULL;
 const uint64_t HARDWARE_ERROR_MASK = 0xE739CCE739CE739CULL;
 const uint64_t MASK_RESOLVER_ZERO = 0x3F7BDEF7BDEF7BDEULL;
 
-const uint16_t MP_2_ECP_STRING_SIZE = 100;
+#define MP_2_ECP_STRING_SIZE	100
 
 #ifdef __cplusplus
 }

@@ -36,11 +36,6 @@ mp_taught_in_pose::mp_taught_in_pose (POSE_SPECIFICATION at, double mt, int e_in
 	extra_info = e_info;
 }
 
-robot_ECP_transmission_data::robot_ECP_transmission_data (void)
-	: robot_transmission_data()
-{
-}
-
 mp_robot::MP_error::MP_error (uint64_t err0, uint64_t err1)
 	: error_class(err0), mp_error(err1)
 {
@@ -86,7 +81,6 @@ bool mp_set_next_ecps_state_generator::first_step () {
 		robot_m_iterator->second->communicate = true;
 	}
 
-
 	return true;
 }
 
@@ -113,7 +107,6 @@ bool mp_send_end_motion_to_ecps_generator::first_step () {
 		robot_m_iterator->second->ecp_td.mp_command = END_MOTION;
 		robot_m_iterator->second->communicate = true;
 	}
-
 
 	return true;
 }
@@ -152,7 +145,6 @@ bool mp_extended_empty_generator::first_step () {
 		robot_m_iterator->second->ecp_td.instruction_type = QUERY;
 		robot_m_iterator->second->communicate = false;
 	}
-
 
 	return true;
 }
@@ -193,11 +185,9 @@ bool mp_extended_empty_generator::next_step () {
 			sr_ecp_msg.message("w mp task terminated");
 			return false;
 		}
-
 	}
 
 	return true;
-
 }
 
 // ###############################################################
@@ -224,7 +214,6 @@ bool mp_empty_generator::first_step () {
 		robot_m_iterator->second->communicate = true;
 	}
 
-
 	return true;
 }
 
@@ -237,7 +226,6 @@ bool mp_empty_generator::next_step () {
 // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 // Na podstawie ecp_reply dla poszczegolnych robotow nalezy okreslic czy
 // skonczono zadanie uzytkownika
-
 
 	// obrazu danych wykorzystywanych przez generator
 

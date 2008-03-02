@@ -49,7 +49,7 @@ class ui_irp6_on_track_robot: public ecp_irp6_on_track_robot {
   virtual void get_current_position ( double c_position[IRP6_ON_TRACK_NUM_OF_SERVOS] );  // Pobranie aktualnych polozen
 
   // by Y - do odczytu stanu poczatkowego robota
-  bool get_controller_state (controller_state_typedef* robot_controller_initial_state_l);
+  bool get_controller_state (controller_state_t* robot_controller_initial_state_l);
 
   // Zlecenie ruchu
   bool move_motors ( double final_position[IRP6_ON_TRACK_NUM_OF_SERVOS] );
