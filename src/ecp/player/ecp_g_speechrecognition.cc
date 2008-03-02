@@ -6,10 +6,10 @@
 speechrecognition_generator::speechrecognition_generator(ecp_task& _ecp_task)
 	: ecp_generator (_ecp_task, true)
 {
-	hostname = ecp_t.config->return_string_value("player_hostname");
+	hostname = ecp_t.config.return_string_value("player_hostname");
 	assert(hostname);
 
-	device_index = ecp_t.config->return_int_value("device_index");
+	device_index = ecp_t.config.return_int_value("device_index");
 
 	client = new PlayerClient(hostname, PLAYER_PORTNUM);
 	device = new SpeechRecognitionProxy(client, device_index, 'r');		

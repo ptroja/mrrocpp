@@ -23,12 +23,12 @@
 #include "ecp/irp6_on_track/ecp_t_playerjoy_irp6ot.h"
 
 // KONSTRUKTORY
-ecp_task_playerjoy_irp6ot::ecp_task_playerjoy_irp6ot() : ecp_task()
+ecp_task_playerjoy_irp6ot::ecp_task_playerjoy_irp6ot(configurator &_config) : ecp_task(_config)
 {
 	pjg = NULL;
-};
-ecp_task_playerjoy_irp6ot::~ecp_task_playerjoy_irp6ot(){};
+}
 
+ecp_task_playerjoy_irp6ot::~ecp_task_playerjoy_irp6ot(){}
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_playerjoy_irp6ot::task_initialization(void) 
@@ -43,8 +43,7 @@ void ecp_task_playerjoy_irp6ot::task_initialization(void)
                    
    	pjg = new playerjoy_generator(*this, 8);
 	pjg->transmitter_m = transmitter_m;
-};
-
+}
 
 void ecp_task_playerjoy_irp6ot::main_task_algorithm(void)
 {
@@ -64,9 +63,9 @@ void ecp_task_playerjoy_irp6ot::main_task_algorithm(void)
 		break;
 	} // koniec: for(;;) wewnetrznej
 	
-};
+}
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_playerjoy_irp6ot();
-};
+	return new ecp_task_playerjoy_irp6ot(_config);
+}

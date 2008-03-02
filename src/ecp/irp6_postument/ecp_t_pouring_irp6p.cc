@@ -28,7 +28,7 @@
 
 
 // KONSTRUKTORY
-ecp_task_pouring_irp6p::ecp_task_pouring_irp6p() : ecp_task()
+ecp_task_pouring_irp6p::ecp_task_pouring_irp6p(configurator &_config) : ecp_task(_config)
 {
 	sg = NULL;
 };
@@ -113,7 +113,7 @@ void ecp_task_pouring_irp6p::main_task_algorithm(void)
 	
 };
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_pouring_irp6p();
+	return new ecp_task_pouring_irp6p(_config);
 };

@@ -21,7 +21,7 @@ class mp_task: public ecp_mp_task
 	public:
 		static name_attach_t *mp_trigger_attach;
 		static name_attach_t *mp_attach;
-
+		
 		/// mapa wszystkich robotow
 		static std::map <ROBOT_ENUM, mp_robot*> robot_m;
 
@@ -30,7 +30,7 @@ class mp_task: public ecp_mp_task
 		bool ui_new_pulse; // okresla czy jest nowy puls
 
 		/// KONSTRUKTORY
-		mp_task(void);
+		mp_task(configurator &_config);
 		virtual ~mp_task(void);
 
 		// METODY
@@ -116,6 +116,6 @@ class mp_task: public ecp_mp_task
 		virtual void main_task_algorithm(void);
 };
 
-mp_task* return_created_mp_task (void);
+mp_task* return_created_mp_task (configurator &_config);
 
 #endif /*MP_TASK_H_*/

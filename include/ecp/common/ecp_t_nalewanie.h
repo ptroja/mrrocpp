@@ -22,7 +22,7 @@ protected:
 
 public:
 	// KONSTRUKTORY
-	ecp_task_nalewanie();
+	ecp_task_nalewanie(configurator &_config);
 	~ecp_task_nalewanie();
 	
 	// methods for ECP template to redefine in concrete classes

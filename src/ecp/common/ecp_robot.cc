@@ -91,7 +91,7 @@ ecp_robot::ecp_robot(ROBOT_ENUM _robot_name, ecp_task& _ecp_object)
 			break;
 	}
 
-	if (edp_section) connect_to_edp (_ecp_object.config->return_attach_point_name
+	if (edp_section) connect_to_edp (_ecp_object.config.return_attach_point_name
 	                (configurator::CONFIG_SERVER, 	"resourceman_attach_point",	edp_section));
 
 }

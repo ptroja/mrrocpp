@@ -9,7 +9,7 @@ protected:
 	festival_generator* fg;
 
 public:
-	ecp_task_festival();
+	ecp_task_festival(configurator &_config);
 	~ecp_task_festival();
 	
 	// methods for ECP template to redefine in concrete classes

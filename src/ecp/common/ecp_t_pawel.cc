@@ -1,31 +1,5 @@
-// ------------------------------------------------------------------------
-//   ecp_t_pawel.cc
-// 
-// Ostatnia modyfikacja: 2007
-// ------------------------------------------------------------------------
-
-
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
 #include <string.h>
-#include <signal.h>
-#include <process.h>
-#include <fstream>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <sys/sched.h>
-#include <string.h>
-#include <sys/netmgr.h>
-
-#include <fcntl.h>
-#include <errno.h>
-#include <sys/neutrino.h>
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include <unistd.h>
 
 #include "lib/srlib.h"
 #include "ecp_mp/ecp_mp_s_force.h"
@@ -36,11 +10,8 @@
 #include "ecp/common/ecp_g_pawel.h"
 #include "ecp/common/ecp_t_pawel.h"
 
-
-
-
 // KONSTRUKTORY
-ecp_task_pawel::ecp_task_pawel() : ecp_task()
+ecp_task_pawel::ecp_task_pawel(configurator &_config) : ecp_task(_config)
 {
 	pg = NULL;
 };
@@ -52,9 +23,9 @@ ecp_task_pawel::~ecp_task_pawel(){};
 void ecp_task_pawel::task_initialization(void) 
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
-	if (strcmp(config->section_name, "[ecp_irp6_on_track]") == 0)
+	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 		{ ecp_m_robot = new ecp_irp6_on_track_robot (*this); }
-	else if (strcmp(config->section_name, "[ecp_irp6_postument]") == 0)
+	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
 		{ ecp_m_robot = new ecp_irp6_postument_robot (*this); }
 
 	
@@ -80,9 +51,7 @@ void ecp_task_pawel::task_initialization(void)
 		default:
 		break;
 	}
-	
-
-};
+}
 
 
 void ecp_task_pawel::main_task_algorithm(void)
@@ -95,12 +64,12 @@ void ecp_task_pawel::main_task_algorithm(void)
 	    Move( *pg );
 //	    ecp_wait_for_stop();
 	}
-};
+}
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_pawel();
-};
+	return new ecp_task_pawel(_config);
+}
 
 
 

@@ -25,6 +25,8 @@
 class ecp_mp_task {
 
 public:
+	
+	ecp_mp_task(configurator &_config);
 
 	// mapa wszystkich czujnikow
 	static std::map <SENSOR_ENUM, sensor*> sensor_m;
@@ -33,7 +35,8 @@ public:
 	static std::map <TRANSMITTER_ENUM, transmitter*> transmitter_m;
 
 	static sr_ecp* sr_ecp_msg;
-	configurator *config;
+	configurator &config;
+
 	int UI_fd;
 	char* mrrocpp_network_path;
 	

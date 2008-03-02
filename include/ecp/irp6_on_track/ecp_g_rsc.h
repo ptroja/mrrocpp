@@ -64,7 +64,6 @@ class robot_stopped_condition : public ecp_generator {
 		double last_force_sensor_reading[6];
 	public:
 		int UI_fd;
-		ecp_task ecp_object;
 		robot_stopped_condition(ecp_task& _ecp_task);
 		~robot_stopped_condition(void);
 		// Przygotowanie warunku do ruchu.

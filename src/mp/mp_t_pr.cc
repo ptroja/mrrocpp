@@ -19,9 +19,13 @@
 #include "mp/mp_t_pr.h"
 
 
-mp_task* return_created_mp_task (void)
+mp_task* return_created_mp_task (configurator &_config)
 {
-	return new mp_task_pr();
+	return new mp_task_pr(_config);
+}
+
+mp_task_pr::mp_task_pr(configurator &_config) : mp_task(_config)
+{
 }
 
 // methods for mp template to redefine in concrete class

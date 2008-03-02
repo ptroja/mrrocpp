@@ -24,10 +24,10 @@ ecp_mp_sensor::ecp_mp_sensor(SENSOR_ENUM _sensor_name, const char* _section_name
 	// Ustawienie domyslnego okresu pracy czujnika.
 	base_period=current_period=1;
 
-	node_name = _ecp_mp_object.config->return_string_value("node_name", _section_name);
+	node_name = _ecp_mp_object.config.return_string_value("node_name", _section_name);
 
 #if !defined(USE_MESSIP_SRR)
-	VSP_NAME = _ecp_mp_object.config->return_attach_point_name(configurator::CONFIG_RESOURCEMAN_GLOBAL, "resourceman_attach_point", _section_name);
+	VSP_NAME = _ecp_mp_object.config.return_attach_point_name(configurator::CONFIG_RESOURCEMAN_GLOBAL, "resourceman_attach_point", _section_name);
 
  	// cout<<"VSP_NAME = "<<VSP_NAME<<endl;
 
@@ -39,7 +39,7 @@ ecp_mp_sensor::ecp_mp_sensor(SENSOR_ENUM _sensor_name, const char* _section_name
 		pid = 0; // tymczasowo
 	} else {
 	// Stworzenie nowego procesu.
-	if ((pid = _ecp_mp_object.config->process_spawn(_section_name)) == -1)
+	if ((pid = _ecp_mp_object.config.process_spawn(_section_name)) == -1)
 		throw sensor_error(SYSTEM_ERROR, CANNOT_SPAWN_VSP);
 		// Proba otworzenie urzadzenia.
 	}

@@ -13,7 +13,7 @@
 #include "ecp/irp6_on_track/ecp_t_tzu_cs_irp6ot.h"
 
 /** konstruktor **/
-ecp_task_tzu_cs_irp6ot::ecp_task_tzu_cs_irp6ot() : ecp_task()
+ecp_task_tzu_cs_irp6ot::ecp_task_tzu_cs_irp6ot(configurator &_config) : ecp_task(_config)
 {
 };
 
@@ -55,8 +55,8 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 };
 
 // sprawdzic co robi ta metoda, gdzie, w jakich przypadkach jest uzywana
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_tzu_cs_irp6ot();
+	return new ecp_task_tzu_cs_irp6ot(_config);
 };
 

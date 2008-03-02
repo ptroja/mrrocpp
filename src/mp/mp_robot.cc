@@ -25,12 +25,12 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task*
 	robot_name = l_robot_name;
 	sr_ecp_msg = mp_object->sr_ecp_msg;
 
-	char *node_name = mp_object->config->return_string_value("node_name", _section_name);
-	nd = mp_object->config->return_node_number(node_name);
+	char *node_name = mp_object->config.return_string_value("node_name", _section_name);
+	nd = mp_object->config.return_node_number(node_name);
 	delete[] node_name;
 
 	char * network_ecp_attach_point;
-	network_ecp_attach_point = mp_object->config->return_attach_point_name
+	network_ecp_attach_point = mp_object->config.return_attach_point_name
 	                           (configurator::CONFIG_SERVER, "ecp_attach_point", _section_name);
 
 	char tmp_string[100];
@@ -42,7 +42,7 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task*
 		throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
 
-	ECP_pid = mp_object->config->process_spawn(_section_name);
+	ECP_pid = mp_object->config.process_spawn(_section_name);
 
 	new_pulse = false;
 	robot_new_pulse_checked = false;

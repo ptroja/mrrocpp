@@ -17,9 +17,9 @@
 festival_generator::festival_generator(ecp_task& _ecp_task) :
 		ecp_generator (_ecp_task, true)
 {
-	host = ecp_t.config->return_string_value("server_host");
-	portnum = ecp_t.config->return_int_value("server_port");
-	test_mode = ecp_t.config->return_int_value("test_mode");
+	host = ecp_t.config.return_string_value("server_host");
+	portnum = ecp_t.config.return_int_value("server_port");
+	test_mode = ecp_t.config.return_int_value("test_mode");
 	voice = "";
 }
 

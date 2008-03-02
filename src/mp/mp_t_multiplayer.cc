@@ -21,9 +21,13 @@
 #include "ecp_mp/ecp_mp_t_festival.h"
 #include "ecp/festival/ecp_g_festival.h"
 
-mp_task* return_created_mp_task (void)
+mp_task_multiplayer::mp_task_multiplayer(configurator &_config) : mp_task(_config)
 {
-	return new mp_task_multiplayer();
+}
+
+mp_task* return_created_mp_task (configurator &_config)
+{
+	return new mp_task_multiplayer(_config);
 }
 
 void mp_task_multiplayer::task_initialization(void) 

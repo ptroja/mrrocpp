@@ -1,9 +1,3 @@
-// -------------------------------------------------------------------------
-//                            ecp_t_rcsc.h dla QNX6
-// Definicje struktur danych i metod dla procesow ECP
-// 
-// -------------------------------------------------------------------------
-
 #if !defined(_ECP_TASK_POURING_H)
 #define _ECP_TASK_POURING_H
 

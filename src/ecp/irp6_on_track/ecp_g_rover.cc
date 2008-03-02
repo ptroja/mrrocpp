@@ -82,47 +82,47 @@ ecp_vis_sac_lx_generator::ecp_vis_sac_lx_generator (ecp_task& _ecp_task, int ste
 	gain[5]=0.5;
 */
 
-	measure_border_u[0]=ecp_t.config->return_double_value("measure_border_u0");
-	measure_border_u[1]=ecp_t.config->return_double_value("measure_border_u1");
-	measure_border_u[2]=ecp_t.config->return_double_value("measure_border_u2");
-	measure_border_u[3]=ecp_t.config->return_double_value("measure_border_u3");
-	measure_border_u[4]=ecp_t.config->return_double_value("measure_border_u4");
-	measure_border_u[5]=ecp_t.config->return_double_value("measure_border_u5");
+	measure_border_u[0]=ecp_t.config.return_double_value("measure_border_u0");
+	measure_border_u[1]=ecp_t.config.return_double_value("measure_border_u1");
+	measure_border_u[2]=ecp_t.config.return_double_value("measure_border_u2");
+	measure_border_u[3]=ecp_t.config.return_double_value("measure_border_u3");
+	measure_border_u[4]=ecp_t.config.return_double_value("measure_border_u4");
+	measure_border_u[5]=ecp_t.config.return_double_value("measure_border_u5");
 
-	measure_border_d[0]=ecp_t.config->return_double_value("measure_border_d0");
-	measure_border_d[1]=ecp_t.config->return_double_value("measure_border_d1");
-	measure_border_d[2]=ecp_t.config->return_double_value("measure_border_d2");
-	measure_border_d[3]=ecp_t.config->return_double_value("measure_border_d3");
-	measure_border_d[4]=ecp_t.config->return_double_value("measure_border_d4");
-	measure_border_d[5]=ecp_t.config->return_double_value("measure_border_d5");
+	measure_border_d[0]=ecp_t.config.return_double_value("measure_border_d0");
+	measure_border_d[1]=ecp_t.config.return_double_value("measure_border_d1");
+	measure_border_d[2]=ecp_t.config.return_double_value("measure_border_d2");
+	measure_border_d[3]=ecp_t.config.return_double_value("measure_border_d3");
+	measure_border_d[4]=ecp_t.config.return_double_value("measure_border_d4");
+	measure_border_d[5]=ecp_t.config.return_double_value("measure_border_d5");
 
-	d_u_max[0]=ecp_t.config->return_double_value("d_u_max0");
-	d_u_max[1]=ecp_t.config->return_double_value("d_u_max1");
-	d_u_max[2]=ecp_t.config->return_double_value("d_u_max2");
-	d_u_max[3]=ecp_t.config->return_double_value("d_u_max3");
-	d_u_max[4]=ecp_t.config->return_double_value("d_u_max4");
-	d_u_max[5]=ecp_t.config->return_double_value("d_u_max5");
+	d_u_max[0]=ecp_t.config.return_double_value("d_u_max0");
+	d_u_max[1]=ecp_t.config.return_double_value("d_u_max1");
+	d_u_max[2]=ecp_t.config.return_double_value("d_u_max2");
+	d_u_max[3]=ecp_t.config.return_double_value("d_u_max3");
+	d_u_max[4]=ecp_t.config.return_double_value("d_u_max4");
+	d_u_max[5]=ecp_t.config.return_double_value("d_u_max5");
 
-	d2_u_max[0]=ecp_t.config->return_double_value("d2_u_max0");
-	d2_u_max[1]=ecp_t.config->return_double_value("d2_u_max1");
-	d2_u_max[2]=ecp_t.config->return_double_value("d2_u_max2");
-	d2_u_max[3]=ecp_t.config->return_double_value("d2_u_max3");
-	d2_u_max[4]=ecp_t.config->return_double_value("d2_u_max4");
-	d2_u_max[5]=ecp_t.config->return_double_value("d2_u_max5");
+	d2_u_max[0]=ecp_t.config.return_double_value("d2_u_max0");
+	d2_u_max[1]=ecp_t.config.return_double_value("d2_u_max1");
+	d2_u_max[2]=ecp_t.config.return_double_value("d2_u_max2");
+	d2_u_max[3]=ecp_t.config.return_double_value("d2_u_max3");
+	d2_u_max[4]=ecp_t.config.return_double_value("d2_u_max4");
+	d2_u_max[5]=ecp_t.config.return_double_value("d2_u_max5");
 
-	gain[0]=ecp_t.config->return_double_value("gain0");
-	gain[1]=ecp_t.config->return_double_value("gain1");
-	gain[2]=ecp_t.config->return_double_value("gain2");
-	gain[3]=ecp_t.config->return_double_value("gain3");
-	gain[4]=ecp_t.config->return_double_value("gain4");
-	gain[5]=ecp_t.config->return_double_value("gain5");
+	gain[0]=ecp_t.config.return_double_value("gain0");
+	gain[1]=ecp_t.config.return_double_value("gain1");
+	gain[2]=ecp_t.config.return_double_value("gain2");
+	gain[3]=ecp_t.config.return_double_value("gain3");
+	gain[4]=ecp_t.config.return_double_value("gain4");
+	gain[5]=ecp_t.config.return_double_value("gain5");
 
-	force_inertia_=ecp_t.config->return_double_value("force_inertia_");
-	torque_inertia_=ecp_t.config->return_double_value("torque_inertia_");
-	force_reciprocal_damping_=ecp_t.config->return_double_value("force_reciprocal_damping_");
-	torque_reciprocal_damping_=ecp_t.config->return_double_value("torque_reciprocal_damping_");
+	force_inertia_=ecp_t.config.return_double_value("force_inertia_");
+	torque_inertia_=ecp_t.config.return_double_value("torque_inertia_");
+	force_reciprocal_damping_=ecp_t.config.return_double_value("force_reciprocal_damping_");
+	torque_reciprocal_damping_=ecp_t.config.return_double_value("torque_reciprocal_damping_");
 
-	x2g=ecp_t.config->return_double_value("x2g"); //x nibytoola
+	x2g=ecp_t.config.return_double_value("x2g"); //x nibytoola
 
 	vis_phase = 0;
 	steps2switch=0;

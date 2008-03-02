@@ -189,16 +189,16 @@ void show_mam_window (int UI_fd) {
     }
 
 // KONSTRUKTORY
-ecp_task_mam::ecp_task_mam() : ecp_task(){}
+ecp_task_mam::ecp_task_mam(configurator &_config) : ecp_task(_config){}
 ecp_task_mam::~ecp_task_mam(){}
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_mam::task_initialization(void) 
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
-	if (strcmp(config->section_name, "[ecp_irp6_on_track]") == 0)
+	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 		{ ecp_m_robot = new ecp_irp6_on_track_robot (*this); }
-	else if (strcmp(config->section_name, "[ecp_irp6_postument]") == 0)
+	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
 		{ ecp_m_robot = new ecp_irp6_postument_robot (*this); }
 
 			
@@ -262,7 +262,7 @@ void ecp_task_mam::main_task_algorithm(void)
 	ecp_wait_for_stop();	
 }
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_mam();
+	return new ecp_task_mam(_config);
 }

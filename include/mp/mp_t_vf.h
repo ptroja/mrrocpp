@@ -13,6 +13,8 @@
 class mp_task_vf: public mp_task  {
 	
 public:
+	
+	mp_task_vf(configurator &_config);
 
 	// methods fo mp template to redefine in concete class
 	void task_initialization(void);

@@ -1,62 +1,62 @@
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "ecp/festival/ecp_g_festival.h"
 #include "ecp_mp/ecp_mp_t_festival.h"
 #include "ecp/festival/ecp_t_festival.h"
 
 // KONSTRUKTORY
-ecp_task_festival::ecp_task_festival() : ecp_task()
+ecp_task_festival::ecp_task_festival(configurator &_config)
+	: ecp_task(_config)
 {
-	fg = NULL;
+	fg = new festival_generator (*this);
 }
 
 ecp_task_festival::~ecp_task_festival()
-{}
+{
+	delete fg;
+}
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_festival::task_initialization(void)
 {
-	fg = new festival_generator (*this);
-
 	sr_ecp_msg->message("ECP loaded");
 }
 
 void ecp_task_festival::main_task_algorithm(void)
 {
 	sr_ecp_msg->message("ECP festival - wcisnij start");
+
 	ecp_wait_for_start();
+
 	for(;;) {
+		sr_ecp_msg->message("Waiting for MP order");
 
-		for(;;) {
-			sr_ecp_msg->message("Waiting for MP order");
+		get_next_state ();
 
-			get_next_state ();
+		sr_ecp_msg->message("NEXT_STATE received");
 
-			sr_ecp_msg->message("NEXT_STATE received");
-
-			switch ( (ECP_FESTIVAL_STATES) mp_command.mp_package.mp_2_ecp_next_state) {
-				case ECP_GEN_FESTIVAL:
-					fg->set_voice((festival_generator::VOICE) mp_command.mp_package.mp_2_ecp_next_state_variant);
-					fg->set_phrase(mp_command.mp_package.mp_2_ecp_next_state_string);
-					Move (*fg);
-					break;
-				default:
-					fprintf(stderr, "invalid mp_2_ecp_next_state (%d)\n", mp_command.mp_package.mp_2_ecp_next_state);
-					break;
-			}
-
-			ecp_termination_notice();
+		switch ( (ECP_FESTIVAL_STATES) mp_command.mp_package.mp_2_ecp_next_state) {
+			case ECP_GEN_FESTIVAL:
+				fg->set_voice((festival_generator::VOICE) mp_command.mp_package.mp_2_ecp_next_state_variant);
+				fg->set_phrase(mp_command.mp_package.mp_2_ecp_next_state_string);
+				Move (*fg);
+				break;
+			default:
+				fprintf(stderr, "invalid mp_2_ecp_next_state (%d)\n", mp_command.mp_package.mp_2_ecp_next_state);
+				break;
 		}
 
-		// Oczekiwanie na STOP
-		printf("przed wait for stop\n");
-		ecp_wait_for_stop ();
-		break;
+		ecp_termination_notice();
 	}
+
+	// Oczekiwanie na STOP
+	printf("przed wait for stop\n");
+	ecp_wait_for_stop ();
 }
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_festival();
+	return new ecp_task_festival(_config);
 }

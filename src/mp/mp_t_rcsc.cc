@@ -30,7 +30,7 @@ void mp_task_rubik_cube_solver::initiate(CUBE_COLOR up_is, CUBE_COLOR down_is, C
 
 }
 
-mp_task_rubik_cube_solver::mp_task_rubik_cube_solver() : mp_task()
+mp_task_rubik_cube_solver::mp_task_rubik_cube_solver(configurator &_config) : mp_task(_config)
 {}
 
 mp_task_rubik_cube_solver::~mp_task_rubik_cube_solver()
@@ -903,7 +903,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 		return true;
 	}
 
-	if ((config->exists("irp6p_compliant")) && ((bool) config->return_int_value("irp6p_compliant"))) {
+	if ((config.exists("irp6p_compliant")) && ((bool) config.return_int_value("irp6p_compliant"))) {
 
 		// wlaczenie genrator tff_nose_run_generator w tracku
 		if (set_next_ecps_state ((int) ECP_GEN_TFF_NOSE_RUN, (int) 0, "", 1, ROBOT_IRP6_POSTUMENT)) {
@@ -1182,9 +1182,9 @@ bool mp_task_rubik_cube_solver::gripper_opening(double track_increment, double p
 
 
 
-mp_task* return_created_mp_task (void)
+mp_task* return_created_mp_task (configurator &_config)
 {
-	return new mp_task_rubik_cube_solver();
+	return new mp_task_rubik_cube_solver(_config);
 }
 
 
@@ -1230,7 +1230,7 @@ void mp_task_rubik_cube_solver::main_task_algorithm(void)
 	// odczyt konfiguracji manipulacji
 	if (cube_initial_state)
 		delete[] cube_initial_state;
-	cube_initial_state = config->return_string_value("cube_initial_state");
+	cube_initial_state = config.return_string_value("cube_initial_state");
 	//	enum CUBE_COLOR {UKNOWN, RED, YELLOW, GREEN, BLUE, ORANGE, WHITE};
 	//	 cube_state::set_state(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is,
 	//		CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is)
@@ -1259,7 +1259,7 @@ void mp_task_rubik_cube_solver::main_task_algorithm(void)
 			}
 
 			// przechwycenie kostki
-			if (approach_op( config->return_int_value("vis_servoing"))) {
+			if (approach_op( config.return_int_value("vis_servoing"))) {
 
 				break;
 			}

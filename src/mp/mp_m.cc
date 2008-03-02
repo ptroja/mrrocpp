@@ -35,9 +35,9 @@ int main (int argc, char *argv[], char **arge)
 		}
 
 		try	{
-			mp_t = return_created_mp_task();
-
-			mp_t->config = new configurator(argv[1], argv[2], argv[3], "[mp]", argv[5]);
+			configurator * _config = new configurator(argv[1], argv[2], argv[3], "[mp]", argv[5]);
+			
+			mp_t = return_created_mp_task(*_config);
 
 			set_thread_priority(pthread_self() , MAX_PRIORITY-4);
 			signal(SIGTERM, &(catch_signal_in_mp));

@@ -485,7 +485,7 @@ catch(ECP_error e){
 
 /*************************  SET DANGEROUS FORCE *****************************/
 void force_controlled_trajectory_generator::set_dangerous_force(){
-	dangerous_force = ecp_t.config->return_int_value("dangerous_force");
+	dangerous_force = ecp_t.config.return_int_value("dangerous_force");
 	sr_ecp_msg.message("Dangerous force size readed properly from INI file");
     }; // end: set_dangerous_force
 

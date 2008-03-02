@@ -16,6 +16,8 @@ protected:
 	bool break_state;
   
 public:
+	
+	mp_task_haptic(configurator &_config);
 
 	// methods for mp template
 	void task_initialization(void);

@@ -21,9 +21,13 @@
 #include "ecp_mp/ecp_mp_s_schunk.h"
 #include "ecp_mp/ecp_mp_t_rcsc.h"
 
-mp_task* return_created_mp_task (void)
+mp_task* return_created_mp_task (configurator &_config)
 {
-	return new mp_task_vis_pbeclsac();
+	return new mp_task_vis_pbeclsac(_config);
+}
+
+mp_task_vis_pbeclsac::mp_task_vis_pbeclsac(configurator &_config) : mp_task(_config)
+{
 }
 
 // methods fo mp template to redefine in concete class

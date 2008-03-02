@@ -24,7 +24,7 @@
 #include "lib/mathtr.h"
 
 // KONSTRUKTORY
-ecp_task_nalewanie::ecp_task_nalewanie() : ecp_task()
+ecp_task_nalewanie::ecp_task_nalewanie(configurator &_config) : ecp_task(_config)
 {
 	sg = NULL;
 };
@@ -36,9 +36,9 @@ void ecp_task_nalewanie::task_initialization(void)
 {
 	int i;
 	
-	if (strcmp(config->section_name, "[ecp_irp6_on_track]") == 0)
+	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 		{ ecp_m_robot = new ecp_irp6_on_track_robot (*this); }
-	else if (strcmp(config->section_name, "[ecp_irp6_postument]") == 0)
+	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
 		{ ecp_m_robot = new ecp_irp6_postument_robot (*this); }
 	
 	sg = new ecp_smooth_generator (*this, true, true);
@@ -73,7 +73,7 @@ void ecp_task_nalewanie::main_task_algorithm(void)
 	
 };
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_nalewanie();
+	return new ecp_task_nalewanie(_config);
 };

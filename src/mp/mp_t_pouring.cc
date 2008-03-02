@@ -200,7 +200,7 @@ bool mp_task_pouring::depart(void)
 
 }
 
-mp_task_pouring::mp_task_pouring() : mp_task()
+mp_task_pouring::mp_task_pouring(configurator &_config) : mp_task(_config)
 {
 
 }
@@ -210,9 +210,9 @@ mp_task_pouring::~mp_task_pouring()
  
 }	
 
-mp_task* return_created_mp_task (void)
+mp_task* return_created_mp_task (configurator &_config)
 {
-	return new mp_task_pouring();
+	return new mp_task_pouring(_config);
 }
 
 

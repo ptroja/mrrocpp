@@ -3,7 +3,7 @@
 #include "ecp/common/ecp_g_playerpos.h"
 #include "ecp/common/ecp_t_playerpos.h"
 
-ecp_task_playerpos::ecp_task_playerpos() : ecp_task()
+ecp_task_playerpos::ecp_task_playerpos(configurator &_config) : ecp_task(_config)
 {
 	ppg = NULL;
 }
@@ -32,7 +32,7 @@ void ecp_task_playerpos::main_task_algorithm(void)
 	}
 }
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_playerpos();
+	return new ecp_task_playerpos(_config);
 }

@@ -10,7 +10,7 @@ protected:
 
 public:
 	// KONSTRUKTORY
-	ecp_task_speechrecognition();
+	ecp_task_speechrecognition(configurator &_config);
 	~ecp_task_speechrecognition();
 	
 	// methods for ECP template to redefine in concrete classes

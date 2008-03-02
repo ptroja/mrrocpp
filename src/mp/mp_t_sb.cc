@@ -18,9 +18,13 @@
 #include "mp/mp_t_sb.h"
 #include "ecp_mp/ecp_mp_s_schunk.h"
 
-mp_task* return_created_mp_task (void)
+mp_task* return_created_mp_task (configurator &_config)
 {
-	return new mp_task_sb();
+	return new mp_task_sb(_config);
+}
+
+mp_task_sb::mp_task_sb(configurator &_config) : mp_task(_config)
+{	
 }
 
 // methods fo mp template to redefine in concete class

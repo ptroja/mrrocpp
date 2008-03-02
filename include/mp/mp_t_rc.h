@@ -38,7 +38,7 @@ public:
 		CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is);
 
     // konstruktor
-    mp_task_rubik_cube_solver();
+    mp_task_rubik_cube_solver(configurator &_config);
 	
     ~mp_task_rubik_cube_solver();
 

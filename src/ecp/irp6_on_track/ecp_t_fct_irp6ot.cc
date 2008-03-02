@@ -1,12 +1,3 @@
-// ------------------------------------------------------------------------
-//   ecp_t_tran.cc - przezroczyste wersja dla dowolnego z robotow 
-// 
-//                     EFFECTOR CONTROL PROCESS (ECP) - main()
-// 
-// Ostatnia modyfikacja: 2006
-// ------------------------------------------------------------------------
-
-
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
@@ -262,7 +253,7 @@ void show_force_control_window (int UI_fd) {
 
 
 // KONSTRUKTORY
-ecp_task_fct_irp6ot::ecp_task_fct_irp6ot() : ecp_task() {};
+ecp_task_fct_irp6ot::ecp_task_fct_irp6ot(configurator &_config) : ecp_task(_config) {};
 ecp_task_fct_irp6ot::~ecp_task_fct_irp6ot(){};
 
 
@@ -287,7 +278,7 @@ void ecp_task_fct_irp6ot::task_initialization(void)
     // Stworzenie generatora trajektorii.
     fctg = new force_controlled_trajectory_generator(*this);
     // Sprawdzanie, czy nalezy uzywac czujnik sily.
-    short use_force_sensor = config->return_int_value("use_force_sensor");
+    short use_force_sensor = config.return_int_value("use_force_sensor");
     if (use_force_sensor == 1){
         sr_ecp_msg->message("Using force sensor for move control");
             // Stworzenie obiektu czujnik.
@@ -325,7 +316,7 @@ void ecp_task_fct_irp6ot::main_task_algorithm(void)
 	
 };
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_fct_irp6ot();
+	return new ecp_task_fct_irp6ot(_config);
 };

@@ -20,7 +20,7 @@
 #include "ecp/common/ecp_teach_in_generator.h"
 
 // KONSTRUKTORY
-ecp_task_teach_irp6ot::ecp_task_teach_irp6ot() : ecp_task()
+ecp_task_teach_irp6ot::ecp_task_teach_irp6ot(configurator &_config) : ecp_task(_config)
 {
 	tig = NULL;
 };
@@ -30,11 +30,11 @@ ecp_task_teach_irp6ot::~ecp_task_teach_irp6ot(){};
 // methods for ECP template to redefine in concrete classes
 void ecp_task_teach_irp6ot::task_initialization(void) 
 {
-	if (strcmp(config->section_name, "[ecp_irp6_on_track]") == 0)
+	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 		{ ecp_m_robot = new ecp_irp6_on_track_robot (*this); }
-	else if (strcmp(config->section_name, "[ecp_irp6_postument]") == 0)
+	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
 		{ ecp_m_robot = new ecp_irp6_postument_robot (*this); }
-	else if (strcmp(config->section_name, "[ecp_irp6_mechatronika]") == 0)
+	else if (strcmp(config.section_name, "[ecp_irp6_mechatronika]") == 0)
 		{ ecp_m_robot = new ecp_irp6_mechatronika_robot (*this); }
 	
 	tig = new ecp_teach_in_generator (*this);
@@ -85,7 +85,7 @@ void ecp_task_teach_irp6ot::main_task_algorithm(void)
 	
 };
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_teach_irp6ot();
+	return new ecp_task_teach_irp6ot(_config);
 };

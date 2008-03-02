@@ -19,7 +19,7 @@ protected:
 
 public:
     // konstruktor
-    mp_task_pouring();
+    mp_task_pouring(configurator &_config);
 	
     ~mp_task_pouring();
 

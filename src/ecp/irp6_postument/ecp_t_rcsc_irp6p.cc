@@ -1,12 +1,3 @@
-// ------------------------------------------------------------------------
-//   ecp_t_tran.cc - przezroczyste wersja dla dowolnego z robotow 
-// 
-//                     EFFECTOR CONTROL PROCESS (ECP) - main()
-// 
-// Ostatnia modyfikacja: 2006
-// ------------------------------------------------------------------------
-
-
 #include <stdio.h>
 
 #include "common/typedefs.h"
@@ -23,10 +14,8 @@
 #include "ecp/common/ecp_t_rcsc.h"
 #include "ecp/irp6_postument/ecp_t_rcsc_irp6p.h"
 
-
-
 // KONSTRUKTORY
-ecp_task_rcsc_irp6p::ecp_task_rcsc_irp6p() : ecp_task()
+ecp_task_rcsc_irp6p::ecp_task_rcsc_irp6p(configurator &_config) : ecp_task(_config)
 {
 	gt = NULL;
 	nrg = NULL;
@@ -199,7 +188,7 @@ void ecp_task_rcsc_irp6p::main_task_algorithm(void)
 	
 };
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_rcsc_irp6p();
+	return new ecp_task_rcsc_irp6p(_config);
 };

@@ -1,11 +1,3 @@
-// ------------------------------------------------------------------------
-//   ecp_t_tran.cc - przezroczyste wersja dla dowolnego z robotow 
-// 
-//                     EFFECTOR CONTROL PROCESS (ECP) - main()
-// 
-// Ostatnia modyfikacja: 2006
-// ------------------------------------------------------------------------
-
 #include <time.h>
 #include <string.h>
 #include <fstream>
@@ -26,7 +18,7 @@
 #define BILLION  1000000000L;
 
 // KONSTRUKTORY
-ecp_task_kin_test_irp6ot::ecp_task_kin_test_irp6ot() : ecp_task() {};
+ecp_task_kin_test_irp6ot::ecp_task_kin_test_irp6ot(configurator &_config) : ecp_task(_config) {};
 ecp_task_kin_test_irp6ot::~ecp_task_kin_test_irp6ot(){};
 
 
@@ -109,7 +101,7 @@ void ecp_task_kin_test_irp6ot::main_task_algorithm(void)
 	
 };
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_kin_test_irp6ot();
+	return new ecp_task_kin_test_irp6ot(_config);
 };

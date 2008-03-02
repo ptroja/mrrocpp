@@ -19,7 +19,7 @@ class ecp_task_mam: public ecp_task  {
 
 public:
 	// KONSTRUKTORY
-	ecp_task_mam();
+	ecp_task_mam(configurator &_config);
 	~ecp_task_mam();
 	
 	// methods for ECP template to redefine in concrete classes

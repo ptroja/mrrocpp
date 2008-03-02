@@ -15,6 +15,8 @@ protected:
 
 	bool break_state;
 public:
+	
+	mp_task_vis_pbeclsac(configurator &_config);
 
 	// methods for mp template
 	void task_initialization(void);

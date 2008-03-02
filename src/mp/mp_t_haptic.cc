@@ -21,9 +21,13 @@
 #include "mp/mp_t_haptic.h"
 #include "ecp_mp/ecp_mp_s_schunk.h"
 
-mp_task* return_created_mp_task (void)
+mp_task* return_created_mp_task (configurator &_config)
 {
-	return new mp_task_haptic();
+	return new mp_task_haptic(_config);
+}
+
+mp_task_haptic::mp_task_haptic(configurator &_config) : mp_task(_config)
+{
 }
 
 // methods fo mp template to redefine in concete class

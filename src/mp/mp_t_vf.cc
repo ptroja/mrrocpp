@@ -19,9 +19,13 @@
 #include "ecp_mp/ecp_mp_s_schunk.h"
 #include "ecp_mp/ecp_mp_s_vis.h"
 
-mp_task* return_created_mp_task (void)
+mp_task* return_created_mp_task (configurator &_config)
 {
-	return new mp_task_vf();
+	return new mp_task_vf(_config);
+}
+
+mp_task_vf::mp_task_vf(configurator &_config) : mp_task(_config)
+{
 }
 
 // methods fo mp template to redefine in concete class

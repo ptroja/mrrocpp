@@ -24,7 +24,7 @@
 #include "ecp/irp6_postument/ecp_g_dung.h"
 
 // KONSTRUKTORY
-ecp_task_dung::ecp_task_dung() : ecp_task()
+ecp_task_dung::ecp_task_dung(configurator &_config) : ecp_task(_config)
 {
 
 };
@@ -69,7 +69,7 @@ void ecp_task_dung::main_task_algorithm(void)
 
 };
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_dung();
+	return new ecp_task_dung(_config);
 };

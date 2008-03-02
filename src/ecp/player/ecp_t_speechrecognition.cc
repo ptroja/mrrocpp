@@ -10,20 +10,20 @@
 #include "ecp_mp/ecp_mp_t_player.h"
 
 // KONSTRUKTORY
-ecp_task_speechrecognition::ecp_task_speechrecognition() : ecp_task()
+ecp_task_speechrecognition::ecp_task_speechrecognition(configurator &_config)
+	: ecp_task(_config)
 {
-	srg = NULL;
+	srg = new speechrecognition_generator (*this);
 }
 
 ecp_task_speechrecognition::~ecp_task_speechrecognition()
 {
+	delete srg;
 }
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_speechrecognition::task_initialization(void)
 {
-	srg = new speechrecognition_generator (*this);
-
 	sr_ecp_msg->message("ECP loaded");
 }
 
@@ -31,35 +31,32 @@ void ecp_task_speechrecognition::main_task_algorithm(void)
 {
 	sr_ecp_msg->message("ECP speechrecognition - wcisnij start");
 	ecp_wait_for_start();
+
 	for(;;) {
+		sr_ecp_msg->message("Waiting for MP order");
 
-		for(;;) {
-			sr_ecp_msg->message("Waiting for MP order");
+		get_next_state ();
 
-			get_next_state ();
+		sr_ecp_msg->message("Order received");
 
-			sr_ecp_msg->message("Order received");
-
-			switch ( (ECP_PLAYER_STATES) mp_command.mp_package.mp_2_ecp_next_state) {
-				case ECP_GEN_SPEECHRECOGNITION:
-					Move (*srg);
-					break;
-				default:
-					fprintf(stderr, "invalid mp_2_ecp_next_state (%d)\n", mp_command.mp_package.mp_2_ecp_next_state);
-					break;
-			}
-
-			ecp_termination_notice();
+		switch ( (ECP_PLAYER_STATES) mp_command.mp_package.mp_2_ecp_next_state) {
+			case ECP_GEN_SPEECHRECOGNITION:
+				Move (*srg);
+				break;
+			default:
+				fprintf(stderr, "invalid mp_2_ecp_next_state (%d)\n", mp_command.mp_package.mp_2_ecp_next_state);
+				break;
 		}
 
-		// Oczekiwanie na STOP
-		printf("przed wait for stop\n");
-		ecp_wait_for_stop ();
-		break;
+		ecp_termination_notice();
 	}
+
+	// Oczekiwanie na STOP
+	printf("przed wait for stop\n");
+	ecp_wait_for_stop ();
 }
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_speechrecognition();
+	return new ecp_task_speechrecognition(_config);
 }

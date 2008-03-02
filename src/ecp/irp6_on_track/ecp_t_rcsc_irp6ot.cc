@@ -25,7 +25,7 @@
 
 
 // KONSTRUKTORY
-ecp_task_rcsc_irp6ot::ecp_task_rcsc_irp6ot() : ecp_task()
+ecp_task_rcsc_irp6ot::ecp_task_rcsc_irp6ot(configurator &_config) : ecp_task(_config)
 {
 	gt = NULL;
 	nrg = NULL;
@@ -198,7 +198,7 @@ void ecp_task_rcsc_irp6ot::main_task_algorithm(void)
 	
 };
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_rcsc_irp6ot();
+	return new ecp_task_rcsc_irp6ot(_config);
 };

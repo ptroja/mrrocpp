@@ -225,7 +225,6 @@ robot_stopped_condition::robot_stopped_condition (ecp_task& _ecp_task):
 	// Ustawienie elementow list na NULL.
 	rse_list.clear();
 	 UI_fd = _ecp_task.UI_fd;
-	 ecp_object = _ecp_task;
 
 	};
 

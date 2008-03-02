@@ -24,7 +24,7 @@ class ecp_task_conveyor_test: public ecp_task
 
 public:
 	// KONSTRUKTORY
-	ecp_task_conveyor_test();
+	ecp_task_conveyor_test(configurator &_config);
 	~ecp_task_conveyor_test();
 	
 	// methods for ECP template to redefine in concrete classes

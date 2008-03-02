@@ -26,12 +26,11 @@
 #include "ecp/irp6_postument/ecp_g_test.h"
 
 // KONSTRUKTORY
-ecp_task_test_irp6p::ecp_task_test_irp6p() : ecp_task()
+ecp_task_test_irp6p::ecp_task_test_irp6p(configurator &_config) : ecp_task(_config)
 {
+}
 
-};
-
-ecp_task_test_irp6p::~ecp_task_test_irp6p(){};
+ecp_task_test_irp6p::~ecp_task_test_irp6p(){}
 
 
 // methods for ECP template to redefine in concrete classes
@@ -84,7 +83,7 @@ void ecp_task_test_irp6p::main_task_algorithm(void)
 
 };
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_test_irp6p();
+	return new ecp_task_test_irp6p(_config);
 };

@@ -32,6 +32,12 @@ sr_ecp* ecp_mp_task::sr_ecp_msg = NULL;
 std::map <SENSOR_ENUM, sensor*> ecp_mp_task::sensor_m;
 std::map <TRANSMITTER_ENUM, transmitter*> ecp_mp_task::transmitter_m;
 
+ecp_mp_task::ecp_mp_task(configurator &_config)
+	: config(_config)
+{
+}
+		
+
 // --------------------------------------------------------------------------
 // Odpowiedz operatora typu (Yes/No) na zadane pytanie (question)
 bool ecp_mp_task::operator_reaction (const char* question )

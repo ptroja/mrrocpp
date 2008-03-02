@@ -14,7 +14,7 @@
 #include "ecp/irp6_postument/ecp_t_jarosz_irp6p.h"
 
 // KONSTRUKTORY
-ecp_task_jarosz_irp6p::ecp_task_jarosz_irp6p() : ecp_task()
+ecp_task_jarosz_irp6p::ecp_task_jarosz_irp6p(configurator &_config) : ecp_task(_config)
 {
 }
 
@@ -321,7 +321,7 @@ void ecp_task_jarosz_irp6p::main_task_algorithm(void)
 	} // koniec: for(;;) wewnetrznej
 }
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_jarosz_irp6p();
+	return new ecp_task_jarosz_irp6p(_config);
 }

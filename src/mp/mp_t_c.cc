@@ -9,15 +9,18 @@
 #include "mp/mp_t_c.h"
 #include "mp/mp_common_generators.h"
 
-mp_task* return_created_mp_task (void)
+mp_task* return_created_mp_task (configurator &_config)
 {
-	return new mp_task_c();
+	return new mp_task_c(_config);
+}
+
+mp_task_c::mp_task_c(configurator &_config) : mp_task(_config)
+{
 }
 
 // methods for mp template to redefine in concrete class
 void mp_task_c::task_initialization(void) 
 {
-	//usleep(1000*100);
 	sr_ecp_msg->message("MP c loaded");
 }
  

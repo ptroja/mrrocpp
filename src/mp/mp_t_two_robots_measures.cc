@@ -14,11 +14,15 @@
 #include "mp/mp_g_two_robots_measures.h"
 
 // Zwrocenie obiektu - zadania.
-mp_task* return_created_mp_task(void)
+mp_task* return_created_mp_task(configurator &_config)
 {
-	return new mp_two_robots_measures_task();
-}//: return_created_mp_task
+	return new mp_two_robots_measures_task(_config);
+}
 
+mp_two_robots_measures_task::mp_two_robots_measures_task(configurator &_config)
+: mp_task(_config)
+{
+}
 	
 // Inicjalizacja obiektow uzywanych prez zadanie.
 void mp_two_robots_measures_task::task_initialization(void) 
@@ -28,8 +32,8 @@ void mp_two_robots_measures_task::task_initialization(void)
 	rmg->robot_m = robot_m;
 
 	sr_ecp_msg->message("Two robots measurements task is ready for work.");
-};//: task_initialisation
- 
+}
+
 // Wlasciwe zadanie.
 void mp_two_robots_measures_task::main_task_algorithm(void)
 {
@@ -47,4 +51,4 @@ void mp_two_robots_measures_task::main_task_algorithm(void)
 
 	// Wyslanie STOP do wszystkich ECP po zakonczeniu programu uzytkownika.
 	terminate_all (robot_m);
-};//: main_task_algorithm
+}

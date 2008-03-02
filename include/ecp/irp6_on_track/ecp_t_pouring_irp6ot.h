@@ -1,11 +1,3 @@
-// -------------------------------------------------------------------------
-//                            ecp.h dla QNX6
-// Zadanie przelewania - ECP dla IRP6_ON_TRACK
-//
-// Ostatnia modyfikacja: styczen 2008
-// autor: Przemek Pilacinski
-// -------------------------------------------------------------------------
-
 #if !defined(_ECP_T_POURING_IRP6OT_H)
 #define _ECP_T_POURING_IRP6OT_H
 
@@ -19,7 +11,7 @@ protected:
 
 public:
 	// KONSTRUKTORY
-	ecp_task_pouring_irp6ot();
+	ecp_task_pouring_irp6ot(configurator &_config);
 	~ecp_task_pouring_irp6ot();
 	
 	// methods for ECP template to redefine in concrete classes

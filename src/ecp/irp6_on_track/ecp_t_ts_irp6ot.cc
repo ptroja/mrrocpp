@@ -1,11 +1,3 @@
-// ------------------------------------------------------------------------
-//   ecp_t_tran.cc - przezroczyste wersja dla dowolnego z robotow 
-// 
-//                     EFFECTOR CONTROL PROCESS (ECP) - main()
-// 
-// Ostatnia modyfikacja: 2006
-// ------------------------------------------------------------------------
-
 #include <fstream>
 #include <string>
 
@@ -21,9 +13,6 @@
 #include "ecp/irp6_on_track/ecp_local.h"
 #include "ecp/irp6_on_track/ecp_g_nurbs.h"
 #include "ecp/irp6_on_track/ecp_t_ts_irp6ot.h"
-
-
-
 
 std::ifstream& operator>>(std::ifstream& s, std::valarray<double>& v) {
 	size_t i=0;
@@ -47,7 +36,7 @@ extern ostream& operator<<(ostream& s, const valarray<double>& v);
 
 
 // KONSTRUKTORY
-ecp_task_ts_irp6ot::ecp_task_ts_irp6ot() : ecp_task()
+ecp_task_ts_irp6ot::ecp_task_ts_irp6ot(configurator &_config) : ecp_task(_config)
 {
 
 };
@@ -187,7 +176,7 @@ void ecp_task_ts_irp6ot::main_task_algorithm(void)
    } // koniec: for(;;) wewnetrznej
 };
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_ts_irp6ot();
+	return new ecp_task_ts_irp6ot(_config);
 };

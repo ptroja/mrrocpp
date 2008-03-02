@@ -1,9 +1,3 @@
-// -------------------------------------------------------------------------
-//                            ecp_t_time.h
-// 
-// 
-// -------------------------------------------------------------------------
-
 #if !defined(_ECP_T_SK_H)
 #define _ECP_T_SK_H
 
@@ -16,7 +10,7 @@ protected:
 
 public:
 	// KONSTRUKTORY
-	ecp_task_time();
+	ecp_task_time(configurator &_config);
 	~ecp_task_time();
 	
 	// methods for ECP template to redefine in concrete classes

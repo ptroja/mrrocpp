@@ -8,7 +8,7 @@
 #include "ecp/conveyor/ecp_g_test.h"
 
 // KONSTRUKTORY
-ecp_task_conveyor_test::ecp_task_conveyor_test() : ecp_task()
+ecp_task_conveyor_test::ecp_task_conveyor_test(configurator &_config) : ecp_task(_config)
 {}
 
 ecp_task_conveyor_test::~ecp_task_conveyor_test()
@@ -46,7 +46,7 @@ void ecp_task_conveyor_test::main_task_algorithm(void)
 	} // koniec: for(;;) wewnetrznej
 }
 
-ecp_task* return_created_ecp_task (void)
-                {
-	                return new ecp_task_conveyor_test();
-                }
+ecp_task* return_created_ecp_task (configurator &_config)
+{
+	return new ecp_task_conveyor_test(_config);
+}

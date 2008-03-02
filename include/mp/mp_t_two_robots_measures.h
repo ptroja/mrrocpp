@@ -21,6 +21,9 @@ class mp_two_robots_measures_task : public mp_task
 protected:
 	mp_two_robots_measures_generator *rmg;
 public:
+	
+	mp_two_robots_measures_task(configurator &_config);
+	
 	// Object initialization.
 	void task_initialization(void);
 	// Exact task algorithm.

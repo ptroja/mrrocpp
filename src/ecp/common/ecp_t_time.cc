@@ -22,7 +22,7 @@
 
 
 // KONSTRUKTORY
-ecp_task_time::ecp_task_time() : ecp_task()
+ecp_task_time::ecp_task_time(configurator &_config) : ecp_task(_config)
 {
 	tfg = NULL;
 };
@@ -34,9 +34,9 @@ ecp_task_time::~ecp_task_time(){};
 void ecp_task_time::task_initialization(void) 
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
-	if (strcmp(config->section_name, "[ecp_irp6_on_track]") == 0)
+	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 		{ ecp_m_robot = new ecp_irp6_on_track_robot (*this); }
-	else if (strcmp(config->section_name, "[ecp_irp6_postument]") == 0)
+	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
 		{ ecp_m_robot = new ecp_irp6_postument_robot (*this); }
 	
 	// Powolanie czujnikow
@@ -75,7 +75,7 @@ void ecp_task_time::main_task_algorithm(void)
 
 };
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_time();
+	return new ecp_task_time(_config);
 };

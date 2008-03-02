@@ -37,13 +37,13 @@ int main(int argc, char *argv[])
 			printf("Za malo argumentow ECP\n");
 			return -1;
 		}
-		
-		ecp_t = return_created_ecp_task();
 
 		// configuration read
-		ecp_t->config = new configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
+		configurator * _config = new configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
+		
+		ecp_t = return_created_ecp_task(*_config);
 
-		set_thread_priority(pthread_self() , MAX_PRIORITY-3);
+		set_thread_priority(pthread_self(), MAX_PRIORITY-3);
 		signal(SIGTERM, &(catch_signal_in_ecp));
 		signal(SIGSEGV, &(catch_signal_in_ecp));
 
@@ -52,41 +52,36 @@ int main(int argc, char *argv[])
 		ecp_t->task_initialization();
 	}
 	catch (ECP_MP_main_error e) {
-		/* Obsluga bledow ECP_MP_main_error */
 		if (e.error_class == SYSTEM_ERROR)
 			exit(EXIT_FAILURE);
-	} /*end: catch */
+	}
 	catch (ecp_robot::ECP_main_error e) {
 		if (e.error_class == SYSTEM_ERROR)
 			exit(EXIT_FAILURE);
-	} catch (sensor::sensor_error e) {
-		/* Wyswietlenie komunikatu. */
-		ecp_t->sr_ecp_msg->message (e.error_class, e.error_no);
+	}
+	catch (sensor::sensor_error e) {
+		ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 		printf("ecp_m.cc: Mam blad czujnika section 1\n");
-	} /* end: catch sensor_error  */
+	}
 	catch (transmitter::transmitter_error e) {
-		/* Wyswietlenie komunikatu. */
-		ecp_t->sr_ecp_msg->message (e.error_class, e.error_no);
+		ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 		printf("ecp_m.cc: Mam blad trasnmittera section 1\n");
-	} /* end: catch sensor_error  */
-
+	}
 
 	for (;;) { // Zewnetrzna petla nieskonczona
 
 		try {
 			ecp_t->main_task_algorithm();
-		} // : end try zewnetrzne
+		}
 
 		catch (ECP_MP_main_error e) {
-			/* Obsluga bledow ECP_MP_main_error */
 			if (e.error_class == SYSTEM_ERROR)
 				exit(EXIT_FAILURE);
-		} /*end: catch */
+		}
 		catch (ECP_main_error e) {
-			/* Obsluga bledow ECP */
 			if (e.error_class == SYSTEM_ERROR)
 				exit(EXIT_FAILURE);
-		} /*end: catch */
+		}
 
 		catch (ecp_robot::ECP_error er) {
 			/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP*/
@@ -146,15 +141,13 @@ int main(int argc, char *argv[])
 			} /* end: switch*/
 		} /*end: catch */
 		catch (sensor::sensor_error e) {
-			/* Wyswietlenie komunikatu. */
 			ecp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 			printf("Mam blad czujnika section 2n");
-		} /* end: catch sensor_error  */
+		}
 		catch (transmitter::transmitter_error e) {
-			/* Wyswietlenie komunikatu. */
 			ecp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 			printf("Mam blad trasnmittera section 2n");
-		} /* end: catch sensor_error  */
+		}
 
 		catch (...) {  /* Dla zewnetrznej petli try*/
 			/* Wylapywanie niezdefiniowanych bledow*/

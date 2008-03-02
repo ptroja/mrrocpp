@@ -19,7 +19,7 @@ class ecp_task_conveyor_kon: public ecp_task  {
 
 public:
 	// KONSTRUKTORY
-	ecp_task_conveyor_kon();
+	ecp_task_conveyor_kon(configurator &_config);
 	~ecp_task_conveyor_kon();
 	
 	// methods for ECP template to redefine in concrete classes

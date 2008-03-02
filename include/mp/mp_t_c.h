@@ -1,10 +1,3 @@
-// -------------------------------------------------------------------------
-//                            mp_task_rc.h
-// Definicje struktur danych i metod dla procesow MP - wersja common
-// 
-// Ostatnia modyfikacja: 2007
-// -------------------------------------------------------------------------
-
 #if !defined(__MP_TASK_C_H)
 #define __MP_TASK_C_H
 
@@ -14,6 +7,8 @@ class mp_task_c: public mp_task
 {
 	
 public:
+	
+	mp_task_c(configurator &_config);
 
 	// methods fo mp template to redefine in concete class
 	void task_initialization(void);

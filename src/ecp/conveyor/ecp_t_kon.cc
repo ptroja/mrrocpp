@@ -11,7 +11,7 @@
 #include "ecp/common/ecp_g_jarosz.h"
 
 // KONSTRUKTORY
-ecp_task_conveyor_kon::ecp_task_conveyor_kon() : ecp_task()
+ecp_task_conveyor_kon::ecp_task_conveyor_kon(configurator &_config) : ecp_task(_config)
 {
 }
 
@@ -154,7 +154,7 @@ void ecp_task_conveyor_kon::main_task_algorithm(void)
 
 }
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_conveyor_kon();
+	return new ecp_task_conveyor_kon(_config);
 }

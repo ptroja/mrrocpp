@@ -1,10 +1,3 @@
-// -------------------------------------------------------------------------
-//                            ecp.h dla QNX6
-// Zadanie przelewania - ECP dla IRP6_POSTUMENT
-// Ostatnia modyfikacja: styczen 2008
-// autor: Przemek Pilacinski
-// -------------------------------------------------------------------------
-
 #if !defined(_ECP_T_POURING_IRP6P_H)
 #define _ECP_T_POURING_IRP6P_H
 
@@ -17,7 +10,7 @@ protected:
 
 public:
 	// KONSTRUKTORY
-	ecp_task_pouring_irp6p();
+	ecp_task_pouring_irp6p(configurator &_config);
 	~ecp_task_pouring_irp6p();
 	
 	// methods for ECP template to redefine in concrete classes

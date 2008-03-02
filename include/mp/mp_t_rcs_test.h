@@ -15,7 +15,7 @@ class mp_task_rcs_test : public mp_task
 public:
 
     // konstruktor
-    mp_task_rcs_test();
+    mp_task_rcs_test(configurator &_config);
 	
     // destruktor
     ~mp_task_rcs_test();

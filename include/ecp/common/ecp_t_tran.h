@@ -19,7 +19,7 @@ class ecp_task_tran: public ecp_task  {
 
 public:
 	// KONSTRUKTORY
-	ecp_task_tran();
+	ecp_task_tran(configurator &_config);
 	~ecp_task_tran();
 	
 	// methods for ECP template to redefine in concrete classes

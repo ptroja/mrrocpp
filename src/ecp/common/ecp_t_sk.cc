@@ -25,7 +25,7 @@
 
 
 // KONSTRUKTORY
-ecp_task_sk::ecp_task_sk() : ecp_task()
+ecp_task_sk::ecp_task_sk(configurator &_config) : ecp_task(_config)
 {
 	nrg = NULL;
 	yefg = NULL;
@@ -38,9 +38,9 @@ ecp_task_sk::~ecp_task_sk(){};
 void ecp_task_sk::task_initialization(void) 
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
-	if (strcmp(config->section_name, "[ecp_irp6_on_track]") == 0)
+	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 		{ ecp_m_robot = new ecp_irp6_on_track_robot (*this); }
-	else if (strcmp(config->section_name, "[ecp_irp6_postument]") == 0)
+	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
 		{ ecp_m_robot = new ecp_irp6_postument_robot (*this); }
 	
 	// Powolanie czujnikow
@@ -92,9 +92,9 @@ void ecp_task_sk::task_initialization(void)
 	}
 	
 	// sprawdzenie dodatkowej opcji w konfiguracji dotyczacej uruchomienie zapamietywania trajektorii do pliku
-	if (config->exists("save_activated"))
+	if (config.exists("save_activated"))
 	{
-		save_activated = (bool) config->return_int_value("save_activated");
+		save_activated = (bool) config.return_int_value("save_activated");
 	}
 	else
 	{
@@ -146,7 +146,7 @@ void ecp_task_sk::main_task_algorithm(void)
 
 };
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_sk();
+	return new ecp_task_sk(_config);
 };

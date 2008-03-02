@@ -1,12 +1,3 @@
-// ------------------------------------------------------------------------
-//   ecp_t_tran.cc - przezroczyste wersja dla dowolnego z robotow 
-// 
-//                     EFFECTOR CONTROL PROCESS (ECP) - main()
-// 
-// Ostatnia modyfikacja: 2006
-// ------------------------------------------------------------------------
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -342,7 +333,7 @@ void show_trajectory_reproduce_window (int UI_fd) {
 
 
 // KONSTRUKTORY
-ecp_task_tr_irp6ot::ecp_task_tr_irp6ot() : ecp_task()
+ecp_task_tr_irp6ot::ecp_task_tr_irp6ot(configurator &_config) : ecp_task(_config)
 {
 
 };
@@ -386,7 +377,7 @@ void ecp_task_tr_irp6ot::task_initialization(void)
 	rsc->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR] = sensor_m[SENSOR_DIGITAL_SCALE_SENSOR];
 
     // Sprawdzanie, czy nalezy uzywac czujnik sily.
-    short use_force_sensor = config->return_int_value("use_force_sensor");
+    short use_force_sensor = config.return_int_value("use_force_sensor");
     if (use_force_sensor == 1){
             sr_ecp_msg->message("Using force sensor for move control");
             // Stworzenie obiektu czujnik.
@@ -420,7 +411,7 @@ void ecp_task_tr_irp6ot::main_task_algorithm(void)
 	ecp_wait_for_stop();
 };
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_tr_irp6ot();
+	return new ecp_task_tr_irp6ot(_config);
 };

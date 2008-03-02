@@ -1,12 +1,3 @@
-// ------------------------------------------------------------------------
-//   ecp_t_tran.cc - przezroczyste wersja dla dowolnego z robotow 
-// 
-//                     EFFECTOR CONTROL PROCESS (ECP) - main()
-// 
-// Ostatnia modyfikacja: 2006
-// ------------------------------------------------------------------------
-
-
 #include <stdio.h>
 #include <unistd.h>
 
@@ -49,17 +40,15 @@ void ecp_short_move_up (ecp_task& ecp_object)
 }
 
 // KONSTRUKTORY
-ecp_task_pr_irp6ot::ecp_task_pr_irp6ot() : ecp_task()
+ecp_task_pr_irp6ot::ecp_task_pr_irp6ot(configurator &_config) : ecp_task(_config)
 {
 	tig = NULL;
-	
-};
+}
 
 ecp_task_pr_irp6ot::~ecp_task_pr_irp6ot()
 {
 	delete tig;
-};
-
+}
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_pr_irp6ot::task_initialization(void) 
@@ -80,7 +69,7 @@ void ecp_task_pr_irp6ot::task_initialization(void)
 	
 	usleep(1000*100);
 	
-	ecp_tryb = config->return_int_value("tryb");
+	ecp_tryb = config.return_int_value("tryb");
 
 	ynrlg = new y_nose_run_force_generator (*this, 8);
 	ynrlg->sensor_m = sensor_m;
@@ -178,7 +167,7 @@ for(;;) { // Wewnetrzna petla nieskonczona
 	
 };
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_pr_irp6ot();
+	return new ecp_task_pr_irp6ot(_config);
 };

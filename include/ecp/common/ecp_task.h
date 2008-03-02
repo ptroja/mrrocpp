@@ -22,7 +22,7 @@ public:
 	ecp_robot* ecp_m_robot;
 	
 	// KONSTRUKTORY
-	ecp_task();
+	ecp_task(configurator &_config);
 	// dla gcc: `'class Foo' has virtual functions but non-virtualdestructor` warning.
 	virtual ~ecp_task();
 	
@@ -79,6 +79,6 @@ public:
 	BYTE convert (POSE_SPECIFICATION ps);
 };
 
-ecp_task* return_created_ecp_task (void);
+ecp_task* return_created_ecp_task (configurator &_config);
 
 #endif /* _ECP_TASK_H */

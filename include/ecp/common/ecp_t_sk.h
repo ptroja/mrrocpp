@@ -1,10 +1,3 @@
-// -------------------------------------------------------------------------
-//                            ecp_t_sk.h
-// 
-// 
-// Ostatnia modyfikacja: 2007
-// -------------------------------------------------------------------------
-
 #if !defined(_ECP_T_SK_H)
 #define _ECP_T_SK_H
 
@@ -18,7 +11,7 @@ protected:
 	
 public:
 	// KONSTRUKTORY
-	ecp_task_sk();
+	ecp_task_sk(configurator &_config);
 	~ecp_task_sk();
 	
 	// methods for ECP template to redefine in concrete classes

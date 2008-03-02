@@ -56,7 +56,7 @@ name_attach_t* mp_task::mp_attach = NULL;
 map <ROBOT_ENUM, mp_robot*> mp_task::robot_m;
 
 // KONSTRUKTORY
-mp_task::mp_task()
+mp_task::mp_task(configurator &_config) : ecp_mp_task(_config)
 {
 	robot_m.clear();
 	sensor_m.clear();
@@ -77,43 +77,43 @@ bool mp_task::create_robots()
 {
 	mp_robot* robot_tmp; // konieczne bo inaczej konstruktor dziala niepoprawnie w odbieranu pulsu od ECP
 	// ROBOT IRP6_ON_TRACK
-	if (config->return_int_value("is_irp6_on_track_active", "[ui]")) {
+	if (config.return_int_value("is_irp6_on_track_active", "[ui]")) {
 		robot_tmp = new mp_irp6_on_track_robot (this);
 		robot_m[ROBOT_IRP6_ON_TRACK] = robot_tmp;
 	}
 
 	// ROBOT IRP6_POSTUMENT
-	if (config->return_int_value("is_irp6_postument_active", "[ui]")) {
+	if (config.return_int_value("is_irp6_postument_active", "[ui]")) {
 		robot_tmp = new mp_irp6_postument_robot (this);
 		robot_m[ROBOT_IRP6_POSTUMENT] = robot_tmp;
 	}
 
 	// ROBOT CONVEYOR
-	if (config->return_int_value("is_conveyor_active", "[ui]")) {
+	if (config.return_int_value("is_conveyor_active", "[ui]")) {
 		robot_tmp = new mp_conveyor_robot (this);
 		robot_m[ROBOT_CONVEYOR] = robot_tmp;
 	}
 
 	// ROBOT SPEAKER
-	if (config->return_int_value("is_speaker_active", "[ui]")) {
+	if (config.return_int_value("is_speaker_active", "[ui]")) {
 		robot_tmp = new mp_speaker_robot (this);
 		robot_m[ROBOT_SPEAKER] = robot_tmp;
 	}
 
 	// ROBOT IRP6_MECHATRONIKA
-	if (config->return_int_value("is_irp6_mechatronika_active", "[ui]")) {
+	if (config.return_int_value("is_irp6_mechatronika_active", "[ui]")) {
 		robot_tmp = new mp_irp6_mechatronika_robot (this);
 		robot_m[ROBOT_IRP6_MECHATRONIKA] = robot_tmp;
 	}
 
 	// ROBOT_VIRTUAL
-	if (config->return_int_value("is_virtual_robot_active", "[ui]")) {
+	if (config.return_int_value("is_virtual_robot_active", "[ui]")) {
 		robot_tmp = new mp_robot (ROBOT_VIRTUAL, "[ecp_virtual]", this);
 		robot_m[ROBOT_VIRTUAL] = robot_tmp;
 	}
 	
 	// ROBOT_FESTIVAL
-	if (config->return_int_value("is_festival_active", "[ui]")) {
+	if (config.return_int_value("is_festival_active", "[ui]")) {
 		robot_tmp = new mp_robot (ROBOT_FESTIVAL, "[ecp_festival]", this);
 		robot_m[ROBOT_FESTIVAL] = robot_tmp;
 	}
@@ -759,12 +759,12 @@ void mp_task::mp_initialize_communication()
 	uint64_t e;     // kod bledu systemowego
 	short tmp;
 
-	char* sr_net_attach_point = config->return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
-	char* ui_net_attach_point = config->return_attach_point_name(configurator::CONFIG_SERVER, "ui_attach_point", "[ui]");
-	char* mp_attach_point =	config->return_attach_point_name(configurator::CONFIG_SERVER, "mp_attach_point");
-	char* mp_pulse_attach_point = config->return_attach_point_name(configurator::CONFIG_SERVER, "mp_pulse_attach_point");
+	char* sr_net_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
+	char* ui_net_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "ui_attach_point", "[ui]");
+	char* mp_attach_point =	config.return_attach_point_name(configurator::CONFIG_SERVER, "mp_attach_point");
+	char* mp_pulse_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "mp_pulse_attach_point");
 
-	mrrocpp_network_path = config->return_mrrocpp_network_path();
+	mrrocpp_network_path = config.return_mrrocpp_network_path();
 
 	// 	printf("sr_net_attach_point: %s\n",sr_net_attach_point);
 	// byc moze do poprawki

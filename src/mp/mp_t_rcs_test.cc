@@ -21,12 +21,12 @@
 #include "ecp_mp/ecp_mp_s_rcs_kociemba.h"
 
 
-mp_task* return_created_mp_task (void)
+mp_task* return_created_mp_task (configurator &_config)
 {
-	return new mp_task_rcs_test();
+	return new mp_task_rcs_test(_config);
 }
 
-mp_task_rcs_test::mp_task_rcs_test() : mp_task()
+mp_task_rcs_test::mp_task_rcs_test(configurator &_config) : mp_task(_config)
 {
     printf("MP Construct\n");
 };
@@ -111,7 +111,7 @@ void mp_task_rcs_test::main_task_algorithm(void)
 	while (!kociemba_found && sol_possible && sol_needed) {
 
 		time_t t1, t2;
-		int timeout = config->return_int_value("korf_timeout");
+		int timeout = config.return_int_value("korf_timeout");
 		t1 = time(NULL);
 		time_elapsed = false;
 		while (!korf_found && !time_elapsed && sol_possible && sol_needed) {

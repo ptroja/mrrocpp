@@ -361,27 +361,8 @@ try{
 
 /*************************  SET DANGEROUS FORCE *****************************/
 void trajectory_reproduce_generator::set_dangerous_force(void){
-    // Struktura do pobierania zanych z pliku konfiguracyjnego.
-    /*
-    struct Config_Tag configs[] = {
-        // Pobierane pole - sila, przy ktorej nalezy przerwac ruch.
-        { "dangerous_force", Int_Tag, &dangerous_force},
-        // Pole konczace.
-        { NULL , Error_Tag, NULL }
-        };
-    // Odczytanie wielkosci sily, przy ktorej nalezy przerwac ruch.
-    if (input_config(ini_con->config_directories->configs_network_path, configs, ini_con->ecp_irp6_on_track->section_name)<1){
-        printf("Dangerous force size not found in INI file.\n");
-        // Sila przy ktorej nalezy przerwac ruch.
-        dangerous_force = 100;
-    }else{
-        msg->message("Dangerous force size readed properly from INI file");
-        }; // end: else
-        
-        */
-        dangerous_force = ecp_t.config->return_int_value("dangerous_force");
-        
-    }; // end: set_dangerous_force
+	dangerous_force = ecp_t.config.return_int_value("dangerous_force");
+}
 
 
 /*****************************  KONSTRUKTOR *********************************/

@@ -16,7 +16,7 @@
 #include "ecp_mp/ecp_mp_t_rcsc.h"
 
 // KONSTRUKTORY
-ecp_task_rcsc_speaker::ecp_task_rcsc_speaker() : ecp_task()
+ecp_task_rcsc_speaker::ecp_task_rcsc_speaker(configurator &_config) : ecp_task(_config)
 {
 	gt = NULL;
 	speak = NULL;
@@ -72,7 +72,7 @@ void ecp_task_rcsc_speaker::main_task_algorithm(void)
 	
 };
 
-ecp_task* return_created_ecp_task (void)
+ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_rcsc_speaker();
+	return new ecp_task_rcsc_speaker(_config);
 };

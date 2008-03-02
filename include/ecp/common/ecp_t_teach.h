@@ -22,7 +22,7 @@ protected:
 
 public:
 	// KONSTRUKTORY
-	ecp_task_teach_irp6ot();
+	ecp_task_teach_irp6ot(configurator &_config);
 	~ecp_task_teach_irp6ot();
 	
 	// methods for ECP template to redefine in concrete classes
