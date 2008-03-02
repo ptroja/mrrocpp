@@ -116,47 +116,29 @@ void ecp_task::initialize_communication ()
     char* sr_net_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
     char* ecp_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "ecp_attach_point");
     char* trigger_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "trigger_attach_point");
-    char* ui_net_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "ui_attach_point", "[ui]");
     char* mp_pulse_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "mp_pulse_attach_point", "[mp]");
 
     if (( sr_ecp_msg = new sr_ecp(ECP, ecp_attach_point, sr_net_attach_point)) == NULL)
     { // Obiekt do komuniacji z SR
-        e = errno;
         perror ( "Unable to locate SR\n");
         throw ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
     }
 
-    // kilka sekund  (~1) na otworzenie urzadzenia
-    short tmp = 0;
-    while ((UI_fd = name_open(ui_net_attach_point, NAME_FLAG_ATTACH_GLOBAL))  < 0)
-        if ((tmp++)<CONNECT_RETRY)
-            usleep(1000*CONNECT_DELAY);
-        else
-        {
-            e = errno;
-            perror("Connect to UI failed");
-            sr_ecp_msg->message (SYSTEM_ERROR, e, "Connect to UI failed");
-            throw ecp_robot::ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
-        };
-
-    // wywalone by Y
-
     // Lokalizacja procesu MP - okreslenie identyfikatora (pid)
     if ( (MP_fd = name_open(mp_pulse_attach_point, NAME_FLAG_ATTACH_GLOBAL))  < 0 )
-    {// by W
+    {
         e = errno;
         perror("ECP: Unable to locate MP_MASTER process\n");
-        throw ecp_robot::ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
-    };
+        throw ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+    }
 
     // Rejstracja procesu ECP
-
     if ((ecp_attach = name_attach(NULL, ecp_attach_point, NAME_FLAG_ATTACH_GLOBAL)) == NULL)
     {
         e = errno;
         perror("Failed to attach Effector Control Process\n");
         sr_ecp_msg->message (SYSTEM_ERROR, e, "Failed to attach Effector Control Process");
-        throw ecp_robot::ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+        throw ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
     }
 
     if ((trigger_attach = name_attach(NULL, trigger_attach_point, NAME_FLAG_ATTACH_GLOBAL)) == NULL)
@@ -164,13 +146,12 @@ void ecp_task::initialize_communication ()
         e = errno;
         perror("Failed to attach TRIGGER pulse chanel for ecp\n");
         sr_ecp_msg->message (SYSTEM_ERROR, e, "Failed  Failed to name attach (trigger pulse)");
-        throw ecp_robot::ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+        throw ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
     }
 
     delete [] ecp_attach_point;
     delete [] sr_net_attach_point;
     delete [] trigger_attach_point;
-    delete [] ui_net_attach_point;
     delete [] mp_pulse_attach_point;
 
 }

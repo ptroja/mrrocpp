@@ -44,7 +44,7 @@ int main (int argc, char *argv[], char **arge)
 			signal(SIGINT,  &(catch_signal_in_mp));
 			signal(SIGSEGV, &(catch_signal_in_mp));
 
-			mp_t->mp_initialize_communication();
+			mp_t->initialize_communication();
 
 			// Utworzenie listy robotow, powolanie procesow ECP i nawiazanie komunikacji z nimi
 			mp_t->create_robots();

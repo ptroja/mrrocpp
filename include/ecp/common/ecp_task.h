@@ -26,18 +26,15 @@ public:
 	// dla gcc: `'class Foo' has virtual functions but non-virtualdestructor` warning.
 	virtual ~ecp_task();
 	
+	void initialize_communication (void);
+	
 	// Przekazanie identyfikatora procesu MP
 	void set_mp_pid ( pid_t mp_pid);
-	
-	// METODY
-	// funkcja odbierajaca pulsy z ECP
 	
 	// obsluga sygnalu
 	virtual void catch_signal_in_ecp_task(int sig);
 	
 	virtual void terminate();
-	
-	void initialize_communication ();
 	
 	// --------------------------------------------------------------------------
 	// Zlecenie ruchu dla EDP

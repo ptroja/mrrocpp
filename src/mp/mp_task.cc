@@ -751,37 +751,21 @@ bool mp_task::mp_receive_ui_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m, short*
 
 }
 
-void mp_task::mp_initialize_communication()
+void mp_task::initialize_communication()
 {
-
 	uint64_t e;     // kod bledu systemowego
 	short tmp;
 
 	char* sr_net_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
-	char* ui_net_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "ui_attach_point", "[ui]");
 	char* mp_attach_point =	config.return_attach_point_name(configurator::CONFIG_SERVER, "mp_attach_point");
 	char* mp_pulse_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "mp_pulse_attach_point");
 
 	if (( sr_ecp_msg = new sr_ecp(MP, mp_attach_point, sr_net_attach_point)) == NULL) { // Obiekt do komuniacji z SR
-		e = errno;
-		perror ( "Unable to locate aSR\n");
+		perror ( "Unable to locate SR\n");
 		throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
 
-	tmp = 0;
-	// kilka sekund  (~1) na otworzenie urzadzenia
-	while ((UI_fd = name_open(ui_net_attach_point, NAME_FLAG_ATTACH_GLOBAL))  < 0)
-		if ((tmp++) < CONNECT_RETRY)
-			usleep(1000 * CONNECT_DELAY);
-		else {
-			e = errno;
-			perror("Connect to UI afailed\n");
-			sr_ecp_msg->message (SYSTEM_ERROR, e, "MP: Connect to UI failed");		// TO NIE DZIALA
-			throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
-		};
-
 	// Rejestracja procesu MP
-	// if ( (id_MP_name = qnx_name_attach(0L, argv[1])) == -1) {
 	if ((mp_attach = name_attach(NULL, mp_attach_point, NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		e = errno;
 		perror("Failed to attach Master Process\n");
@@ -801,7 +785,6 @@ void mp_task::mp_initialize_communication()
 
 	delete [] mp_attach_point;
 	delete [] sr_net_attach_point;
-	delete [] ui_net_attach_point;
 	delete [] mp_pulse_attach_point;
 
 }

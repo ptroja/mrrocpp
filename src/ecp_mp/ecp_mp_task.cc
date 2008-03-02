@@ -25,6 +25,7 @@
 #include "lib/srlib.h"
 #include "ecp_mp/ecp_mp_task.h"
 #include "ecp_mp/ecp_mp_sensor.h"
+#include "ecp/common/ECP_main_error.h"
 
 sr_ecp* ecp_mp_task::sr_ecp_msg = NULL;
 
@@ -36,6 +37,24 @@ ecp_mp_task::ecp_mp_task(configurator &_config)
 	: config(_config)
 {
 	mrrocpp_network_path = config.return_mrrocpp_network_path();
+	
+	char* ui_net_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "ui_attach_point", "[ui]");
+
+    // kilka sekund  (~1) na otworzenie urzadzenia
+    short tmp = 0;
+    while ((UI_fd = name_open(ui_net_attach_point, NAME_FLAG_ATTACH_GLOBAL)) < 0) {
+        if ((tmp++)<CONNECT_RETRY)
+            usleep(1000*CONNECT_DELAY);
+        else
+        {
+            int e = errno;
+            perror("Connect to UI failed");
+            sr_ecp_msg->message (SYSTEM_ERROR, e, "Connect to UI failed");
+            throw ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+        }
+    }
+    
+    delete [] ui_net_attach_point;
 }
 
 ecp_mp_task::~ecp_mp_task()

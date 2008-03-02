@@ -33,14 +33,8 @@ class mp_task: public ecp_mp_task
 		mp_task(configurator &_config);
 		virtual ~mp_task(void);
 
-		// METODY
-		// funkcja odbierajaca pulsy z ECP
-
-		// -------------------------------------------------------------------
-		// inicjacja polaczen, rejestracja nazwy MP, odszukanie UI, SR by Y&W
-		// -------------------------------------------------------------------
-		void mp_initialize_communication (void);
-
+		void initialize_communication (void);
+		
 		// oczekiwanie na puls z ECP
 		enum MP_RECEIVE_PULSE_MODE {
 			WITH_TIMEOUT,
