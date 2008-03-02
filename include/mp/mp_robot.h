@@ -15,12 +15,12 @@ class mp_robot
 		ECP_REPLY_PACKAGE ecp_reply;        // Bufor z odpowiedzia z ECP
 		// - uzytkownik nie powinien z tego korzystac
 
-		mp_task* mp_object;
+		mp_task &mp_object;
 
 	public:
-		sr_ecp* sr_ecp_msg;    // by Y - Wskaznik na obiekt do komunikacji z SR
+		sr_ecp &sr_ecp_msg;    // by Y - Wskaznik na obiekt do komunikacji z SR
 
-		ROBOT_ENUM robot_name;
+		const ROBOT_ENUM robot_name;
 		
 		//! deskryptor wezla na ktorym jest powolane ECP oraz jego PID (dla mp_task::kill_all_ECP)
 		uint32_t nd;
@@ -36,7 +36,7 @@ class mp_robot
 		robot_ECP_transmission_data ecp_td; // Obraz danych robota wykorzystywanych przez generator
 		// - do uzytku uzytkownika (generatora)
 
-		mp_robot (ROBOT_ENUM l_robot_name, const char* _section_name, mp_task* mp_object_l);
+		mp_robot (ROBOT_ENUM l_robot_name, const char* _section_name, mp_task &mp_object_l);
 
 		class MP_error
 		{  // Klasa obslugi bledow robotow

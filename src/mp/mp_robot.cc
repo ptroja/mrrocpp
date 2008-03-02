@@ -14,21 +14,20 @@
 
 #include "lib/srlib.h"
 #include "mp/mp.h"
+#include "mp/mp_task.h"
 
 // -------------------------------------------------------------------
-mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task* mp_object_l) { // Konstruktor mp_robot
-//  Powolanie i zaladowanie procesu ECP
-	
-	mp_object = mp_object_l;
-	robot_name = l_robot_name;
-	sr_ecp_msg = mp_object->sr_ecp_msg;
-
-	char *node_name = mp_object->config.return_string_value("node_name", _section_name);
-	nd = mp_object->config.return_node_number(node_name);
+mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task &mp_object_l) :
+	robot_name(l_robot_name),
+	mp_object(mp_object_l),
+	sr_ecp_msg(*(mp_object_l.sr_ecp_msg))
+{
+	char *node_name = mp_object.config.return_string_value("node_name", _section_name);
+	nd = mp_object.config.return_node_number(node_name);
 	delete[] node_name;
 
 	char * network_ecp_attach_point;
-	network_ecp_attach_point = mp_object->config.return_attach_point_name
+	network_ecp_attach_point = mp_object.config.return_attach_point_name
 	                           (configurator::CONFIG_SERVER, "ecp_attach_point", _section_name);
 
 	char tmp_string[100];
@@ -36,11 +35,11 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task*
 
 	// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny ECP
 	if (access(tmp_string, R_OK) == 0 ) {
-		sr_ecp_msg->message("ECP already exists");
+		sr_ecp_msg.message("ECP already exists");
 		throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
 
-	ECP_pid = mp_object->config.process_spawn(_section_name);
+	ECP_pid = mp_object.config.process_spawn(_section_name);
 
 	new_pulse = false;
 	robot_new_pulse_checked = false;
@@ -49,15 +48,15 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task*
 	if ( ECP_pid < 0) {
 		uint64_t e = errno; // kod bledu
 		perror ("Failed to spawn ECP process on node\n");
-		sr_ecp_msg->message(SYSTEM_ERROR, e, "MP: Failed to spawn ECP");
+		sr_ecp_msg.message(SYSTEM_ERROR, e, "MP: Failed to spawn ECP");
 		throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
 
 	mp_receive_pulse_struct_t input;
 	
 	// oczekiwanie na zgloszenie procesu ECP
-	// ret = mp_object->mp_wait_for_name_open_ecp_pulse(&input, nd, ECP_pid);
-	mp_object->mp_wait_for_name_open_ecp_pulse(&input);
+	// ret = mp_object.mp_wait_for_name_open_ecp_pulse(&input, nd, ECP_pid);
+	mp_object.mp_wait_for_name_open_ecp_pulse(&input);
 
 	scoid = input.msg_info.scoid;
 
@@ -71,7 +70,7 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task*
 		else {
 			uint64_t e = errno; // kod bledu
 			perror("Connect to ECP failed");
-			sr_ecp_msg->message (SYSTEM_ERROR, e, "Connect to ECP failed");
+			sr_ecp_msg.message (SYSTEM_ERROR, e, "Connect to ECP failed");
 			delete[] network_ecp_attach_point;
 			throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
 		};
@@ -89,7 +88,7 @@ void mp_robot::start_ecp ( void ) {
 	if ( MsgSend ( ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply, sizeof(ecp_reply)) == -1) {// by Y&W
 		uint64_t e = errno;
 		perror("Send to ECP failed\n");
-		sr_ecp_msg->message(SYSTEM_ERROR, e, "MP: Send to ECP failed");
+		sr_ecp_msg.message(SYSTEM_ERROR, e, "MP: Send to ECP failed");
 		throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
 	// by Y - ECP_ACKNOWLEDGE zamienione na TASK_TERMINATED
@@ -111,7 +110,7 @@ void mp_robot::execute_motion ( void ) { // zlecenie wykonania ruchu
 		// Blad komunikacji miedzyprocesowej - wyjatek
 		uint64_t e = errno;
 		perror("Send to ECP failed ?\n");
-		sr_ecp_msg->message(SYSTEM_ERROR, e, "MP: Send() to ECP failed");
+		sr_ecp_msg.message(SYSTEM_ERROR, e, "MP: Send() to ECP failed");
 		throw MP_error (SYSTEM_ERROR, (uint64_t) 0);
 	}
 
@@ -135,7 +134,7 @@ void mp_robot::terminate_ecp ( void ) { // zlecenie STOP zakonczenia ruchu
 		// Blad komunikacji miedzyprocesowej - wyjatek
 		uint64_t e = errno;
 		perror("Send to ECP failed ?\n");
-		sr_ecp_msg->message(SYSTEM_ERROR, e, "MP: Send() to ECP failed");
+		sr_ecp_msg.message(SYSTEM_ERROR, e, "MP: Send() to ECP failed");
 		throw MP_error (SYSTEM_ERROR, (uint64_t) 0);
 	}
 

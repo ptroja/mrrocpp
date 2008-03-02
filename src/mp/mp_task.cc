@@ -78,49 +78,49 @@ bool mp_task::create_robots()
 	mp_robot* robot_tmp; // konieczne bo inaczej konstruktor dziala niepoprawnie w odbieranu pulsu od ECP
 	// ROBOT IRP6_ON_TRACK
 	if (config.return_int_value("is_irp6_on_track_active", "[ui]")) {
-		robot_tmp = new mp_irp6_on_track_robot (this);
+		robot_tmp = new mp_irp6_on_track_robot (*this);
 		robot_m[ROBOT_IRP6_ON_TRACK] = robot_tmp;
 	}
 
 	// ROBOT IRP6_POSTUMENT
 	if (config.return_int_value("is_irp6_postument_active", "[ui]")) {
-		robot_tmp = new mp_irp6_postument_robot (this);
+		robot_tmp = new mp_irp6_postument_robot (*this);
 		robot_m[ROBOT_IRP6_POSTUMENT] = robot_tmp;
 	}
 
 	// ROBOT CONVEYOR
 	if (config.return_int_value("is_conveyor_active", "[ui]")) {
-		robot_tmp = new mp_conveyor_robot (this);
+		robot_tmp = new mp_conveyor_robot (*this);
 		robot_m[ROBOT_CONVEYOR] = robot_tmp;
 	}
 
 	// ROBOT SPEAKER
 	if (config.return_int_value("is_speaker_active", "[ui]")) {
-		robot_tmp = new mp_speaker_robot (this);
+		robot_tmp = new mp_speaker_robot (*this);
 		robot_m[ROBOT_SPEAKER] = robot_tmp;
 	}
 
 	// ROBOT IRP6_MECHATRONIKA
 	if (config.return_int_value("is_irp6_mechatronika_active", "[ui]")) {
-		robot_tmp = new mp_irp6_mechatronika_robot (this);
+		robot_tmp = new mp_irp6_mechatronika_robot (*this);
 		robot_m[ROBOT_IRP6_MECHATRONIKA] = robot_tmp;
 	}
 
 	// ROBOT_VIRTUAL
 	if (config.return_int_value("is_virtual_robot_active", "[ui]")) {
-		robot_tmp = new mp_robot (ROBOT_VIRTUAL, "[ecp_virtual]", this);
+		robot_tmp = new mp_robot (ROBOT_VIRTUAL, "[ecp_virtual]", *this);
 		robot_m[ROBOT_VIRTUAL] = robot_tmp;
 	}
 	
 	// ROBOT_SPEECHRECOGNITION
 	if (config.return_int_value("is_speechrecognition_active", "[ui]")) {
-		robot_tmp = new mp_robot (ROBOT_SPEECHRECOGNITION, "[ecp_speechrecognition]", this);
+		robot_tmp = new mp_robot (ROBOT_SPEECHRECOGNITION, "[ecp_speechrecognition]", *this);
 		robot_m[ROBOT_SPEECHRECOGNITION] = robot_tmp;
 	}	
 	
 	// ROBOT_FESTIVAL
 	if (config.return_int_value("is_festival_active", "[ui]")) {
-		robot_tmp = new mp_robot (ROBOT_FESTIVAL, "[ecp_festival]", this);
+		robot_tmp = new mp_robot (ROBOT_FESTIVAL, "[ecp_festival]", *this);
 		robot_m[ROBOT_FESTIVAL] = robot_tmp;
 	}
 

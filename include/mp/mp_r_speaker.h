@@ -12,7 +12,7 @@
 class mp_speaker_robot: public mp_robot {
 
  public:
-  mp_speaker_robot (mp_task* mp_object_l); // Konstruktor
+  mp_speaker_robot (mp_task &mp_object_l); // Konstruktor
 
 // virtual void execute_motion (void); // Zlecenie wykonania ruchu przez robota
                                       // na poziomie MP jest to polecenie dla ECP

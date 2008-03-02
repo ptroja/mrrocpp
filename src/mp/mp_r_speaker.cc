@@ -7,7 +7,7 @@
 #include "lib/srlib.h"
 #include "mp/mp_r_speaker.h"
 
-mp_speaker_robot::mp_speaker_robot (mp_task* mp_object_l) :
+mp_speaker_robot::mp_speaker_robot (mp_task &mp_object_l) :
 		mp_robot (ROBOT_SPEAKER, "[ecp_speaker]", mp_object_l)
 {}
 

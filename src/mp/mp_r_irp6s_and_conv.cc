@@ -5,7 +5,7 @@
 #include "lib/srlib.h"
 #include "mp/mp_r_irp6s_and_conv.h"
 
-mp_irp6s_and_conv_robot::mp_irp6s_and_conv_robot (ROBOT_ENUM l_robot_name, const char* _section_name, mp_task* mp_object_l) :
+mp_irp6s_and_conv_robot::mp_irp6s_and_conv_robot (ROBOT_ENUM l_robot_name, const char* _section_name, mp_task &mp_object_l) :
 		mp_robot ( l_robot_name, _section_name, mp_object_l),
 		servos_number(0), has_gripper(false)
 {

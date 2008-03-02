@@ -6,7 +6,7 @@
 class mp_irp6_postument_robot: public mp_irp6s_and_conv_robot {
 
  public:
-  mp_irp6_postument_robot (mp_task* mp_object_l);
+  mp_irp6_postument_robot (mp_task &mp_object_l);
 };
 
 #endif /*MP_R_IRP6_POSTUMENT_H_*/
