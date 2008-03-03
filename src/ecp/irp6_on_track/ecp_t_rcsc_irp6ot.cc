@@ -88,7 +88,7 @@ void ecp_task_rcsc_irp6ot::main_task_algorithm(void)
 			
 			sr_ecp_msg->message("Order received");
 			
-			switch ( (RCSC_ECP_STATES) mp_command.mp_package.mp_2_ecp_next_state)
+			switch ( (RCSC_ECP_STATES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state)
 			{
 				case ECP_GEN_TRANSPARENT:
 					Move (*gt);
@@ -97,7 +97,7 @@ void ecp_task_rcsc_irp6ot::main_task_algorithm(void)
 					Move (*nrg);
 				break;
 				case ECP_GEN_TFF_RUBIK_GRAB:
-					switch ( (RCSC_RUBIK_GRAB_PHASES) mp_command.mp_package.mp_2_ecp_next_state_variant)
+					switch ( (RCSC_RUBIK_GRAB_PHASES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_variant)
 					{
 						case RCSC_RG_FROM_OPEARTOR_PHASE_1:
 							rgg->configure(0.057, 0.00005, 0);
@@ -127,7 +127,7 @@ void ecp_task_rcsc_irp6ot::main_task_algorithm(void)
 					Move (*gag);
 				break;
 				case ECP_GEN_TFF_RUBIK_FACE_ROTATE:
-					switch ( (RCSC_TURN_ANGLES) mp_command.mp_package.mp_2_ecp_next_state_variant)
+					switch ( (RCSC_TURN_ANGLES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_variant)
 					{
 						case RCSC_CCL_90:
 							rfrg->configure(-90.0);
@@ -147,7 +147,7 @@ void ecp_task_rcsc_irp6ot::main_task_algorithm(void)
 					Move (*rfrg);
 				break;
 				case RCSC_GRIPPER_OPENING:
-					switch ( (RCSC_TURN_ANGLES) mp_command.mp_package.mp_2_ecp_next_state_variant)
+					switch ( (RCSC_TURN_ANGLES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_variant)
 					{
 						case RCSC_GO_VAR_1:
 							ecp_gripper_opening ( *this, 0.002, 1000);
@@ -160,11 +160,11 @@ void ecp_task_rcsc_irp6ot::main_task_algorithm(void)
 					}							
 				break;	
 				case ECP_GEN_TEACH_IN:
-				  	size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.mp_package.mp_2_ecp_next_state_string);				  	
+				  	size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);				  	
 					path1 = new char[size];
 					// Stworzenie sciezki do pliku.
 					strcpy(path1, mrrocpp_network_path);
-					sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.mp_package.mp_2_ecp_next_state_string);
+					sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
 					tig->flush_pose_list();
 					tig->load_file_with_path (path1);
 			//		printf("\nTRACK ECP_GEN_TEACH_IN :%s\n\n", path1);
@@ -173,11 +173,11 @@ void ecp_task_rcsc_irp6ot::main_task_algorithm(void)
 					Move (*tig);
 				break;
 				case ECP_GEN_SMOOTH:
-				  	size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.mp_package.mp_2_ecp_next_state_string);				  	
+				  	size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);				  	
 					path1 = new char[size];
 					// Stworzenie sciezki do pliku.
 					strcpy(path1, mrrocpp_network_path);
-					sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.mp_package.mp_2_ecp_next_state_string);
+					sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
 					sg->load_file_with_path (path1);
 	//				printf("\nTRACK ECP_GEN_SMOOTH :%s\n\n", path1);
 					delete[] path1;

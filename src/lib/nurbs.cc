@@ -431,8 +431,8 @@ int NurbsLibImp::NurbsCurve<Pnt_>::knotInsertion(double t, int r){
    
 	
 	k=distance(T_.begin(), upper_bound(T_.begin()+p, T_.end()-p, t))-1;
-
 	s=	k-(distance(T_.begin(), lower_bound(T_.begin()+p, T_.end()-p, t))-1);	
+
 /*	//Ten kod tez dziala,
 	if(t<=T_[k]){
 		s = 1 ;
@@ -509,6 +509,7 @@ template <class Pnt_>
 void NurbsLibImp::NurbsCurve<Pnt_>::removeKnot(int  nr, int num)
 {
   const int s = count(T_.begin(), T_.end(), T_[nr]);  // s  the multiplicity of the knot
+ 
 //  cout<< "Wielokrotnosc wezla s = "<<s<<"\n";
 //  cout<< "Numer i wartosc = "<<nr<<", "<<T_[nr]<<"\n";
   const int m = T_.size() ;

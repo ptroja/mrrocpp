@@ -7,9 +7,6 @@
 class speechrecognition_generator : public ecp_generator
 {
 	private:
-		char *hostname;
-		int device_index;
-		
 		PlayerClient *client;
 		SpeechRecognitionProxy *device;
 

@@ -155,9 +155,7 @@ void mp_robot::create_command (void) {
 
 	switch (mp_command.command) {
 		case NEXT_STATE:
-			mp_command.mp_package.mp_2_ecp_next_state = ecp_td.mp_2_ecp_next_state;
-			mp_command.mp_package.mp_2_ecp_next_state_variant = ecp_td.mp_2_ecp_next_state_variant;
-			strcpy (mp_command.mp_package.mp_2_ecp_next_state_string, ecp_td.mp_2_ecp_next_state_string);
+			mp_command.mp_package.ecp_next_state = ecp_td.ecp_next_state;
 			break;
 		case NEXT_POSE:
 			create_next_pose_command();

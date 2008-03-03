@@ -1,32 +1,37 @@
 #include <assert.h>
 #include <unistd.h>
 
-#include "ecp/player/ecp_g_speechrecognition.h"
+#include "ecp/player/ecp_g_playerpos.h"
 
-speechrecognition_generator::speechrecognition_generator(ecp_task& _ecp_task)
+playerpos_generator::playerpos_generator(ecp_task& _ecp_task)
 	: ecp_generator (_ecp_task, true)
 {
-	char * hostname = ecp_t.config.return_string_value("player_hostname");
+	char *hostname = ecp_t.config.return_string_value("player_hostname");
 	assert(hostname);
 	client = new PlayerClient(hostname, PLAYER_PORTNUM);
 	delete [] hostname;
-	
+
 	int device_index = ecp_t.config.return_int_value("device_index");
-	device = new SpeechRecognitionProxy(client, device_index, 'r');		
+	device = new PositionProxy(client, device_index, 'r');
 }
 
-speechrecognition_generator::~speechrecognition_generator()
+playerpos_generator::~playerpos_generator()
 {
 	delete device;
 	delete client;
 }
 
-bool speechrecognition_generator::first_step ( )
+void playerpos_generator::set_goal(playerpos_goal_t &_playerpos_goal)
+{
+	this->playerpos_goal = _playerpos_goal;
+}
+
+bool playerpos_generator::first_step ( )
 {
 	return true;
 }
 
-bool speechrecognition_generator::next_step ( )
+bool playerpos_generator::next_step ( )
 {
 #if 1
 	// do not block
@@ -40,7 +45,6 @@ bool speechrecognition_generator::next_step ( )
 #endif
 	
 	if (device->fresh) {
-		device->Clear();
 		device->fresh = false;
 		return false;
 	}

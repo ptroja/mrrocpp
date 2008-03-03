@@ -106,10 +106,10 @@ bool mp_task::create_robots()
 		robot_m[ROBOT_IRP6_MECHATRONIKA] = robot_tmp;
 	}
 
-	// ROBOT_VIRTUAL
-	if (config.return_int_value("is_virtual_robot_active", "[ui]")) {
-		robot_tmp = new mp_robot (ROBOT_VIRTUAL, "[ecp_virtual]", *this);
-		robot_m[ROBOT_VIRTUAL] = robot_tmp;
+	// ROBOT_ELECTRON
+	if (config.return_int_value("is_electron_robot_active", "[ui]")) {
+		robot_tmp = new mp_robot (ROBOT_ELECTRON, "[ecp_electron]", *this);
+		robot_m[ROBOT_ELECTRON] = robot_tmp;
 	}
 	
 	// ROBOT_SPEECHRECOGNITION
@@ -136,6 +136,21 @@ void mp_task::task_initialization(void)
 
 void mp_task::main_task_algorithm(void)
 {}
+
+// metody do obslugi najczesniej uzywanych generatorow
+bool mp_task::set_next_playerpos_goal (ROBOT_ENUM robot_l, double x, double y, double t)
+{
+	// setting the next ecps state
+	mp_set_next_ecps_state_generator mp_snes_gen(*this);
+
+	mp_snes_gen.robot_m.clear();
+
+	mp_snes_gen.robot_m[robot_l] = robot_m[robot_l];
+
+	mp_snes_gen.configure(x, y, t);
+
+	return (Move(mp_snes_gen));
+}
 
 // metody do obslugi najczesniej uzywanych generatorow
 bool mp_task::set_next_ecps_state (int l_state, int l_variant, char* l_string, int number_of_robots, ... )

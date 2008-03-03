@@ -2,7 +2,7 @@
 
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-BINARIES = ecp_speechrecognition
+BINARIES = ecp_speechrecognition ecp_playerpos
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
@@ -20,6 +20,9 @@ all: ${BINARIES}
 #---------------------------------Special object build rules (user made)-------------------------------------#
 
 ecp_speechrecognition: ecp_t_speechrecognition.o ecp_g_speechrecognition.o $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
+
+ecp_playerpos: ecp_t_playerpos.o ecp_g_playerpos.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#

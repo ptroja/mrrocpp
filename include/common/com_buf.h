@@ -736,6 +736,20 @@ struct r_buffer {
 };
 /************************ r_buffer ****************************/
 
+// pozycja docelowa dla robota mobilnego
+struct playerpos_goal_t {
+	double x, y, t;
+};
+
+// zlecenie zmiany stanu ECP skojarzone z NEXT_STATE
+struct ecp_next_state_t {
+	int mp_2_ecp_next_state;
+	int mp_2_ecp_next_state_variant;
+	char mp_2_ecp_next_state_string[MP_2_ECP_STRING_SIZE];
+
+	// pozycja docelowa dla robota mobilnego
+	playerpos_goal_t playerpos_goal;
+};
 
 // ------------------------------------------------------------------------
 class ecp_command_buffer {
@@ -744,9 +758,7 @@ public:
 	c_buffer instruction;     // bufor polecen przysylanych z ECP do EDP
 
 	// zlecenie zmiany stanu skojarzone z NEXT_STATE
-	int mp_2_ecp_next_state;
-	int mp_2_ecp_next_state_variant; // skojarzone z NEXT_STATE
-	char mp_2_ecp_next_state_string[MP_2_ECP_STRING_SIZE]; // skojarzone z NEXT_STATE
+	ecp_next_state_t ecp_next_state;
 
 	bool is_set_rmodel() const  { return (bool) (instruction.set_type & RMODEL_DV); }; // zmienic narzedzie?
 	bool is_set_arm() const   { return (bool) (instruction.set_type & ARM_DV); }; // zmienic polozenie ramienia?

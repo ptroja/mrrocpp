@@ -60,11 +60,17 @@ mp_set_next_ecps_state_generator::mp_set_next_ecps_state_generator(mp_task& _mp_
 
 void mp_set_next_ecps_state_generator::configure (int l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant,
         char* l_mp_2_ecp_next_state_string) {
-	mp_2_ecp_next_state = l_mp_2_ecp_next_state;
-	mp_2_ecp_next_state_variant = l_mp_2_ecp_next_state_variant;
+	ecp_next_state.mp_2_ecp_next_state = l_mp_2_ecp_next_state;
+	ecp_next_state.mp_2_ecp_next_state_variant = l_mp_2_ecp_next_state_variant;
 	if (l_mp_2_ecp_next_state_string) {
-		strcpy (mp_2_ecp_next_state_string, l_mp_2_ecp_next_state_string);
+		strcpy (ecp_next_state.mp_2_ecp_next_state_string, l_mp_2_ecp_next_state_string);
 	}
+}
+
+void mp_set_next_ecps_state_generator::configure (double _x, double _y, double _t) {
+	x = _x;
+	y = _y;
+	t = _t;
 }
 
 // ----------------------------------------------------------------------------------------------
@@ -74,10 +80,11 @@ void mp_set_next_ecps_state_generator::configure (int l_mp_2_ecp_next_state, int
 bool mp_set_next_ecps_state_generator::first_step () {
 	for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
 	        robot_m_iterator != robot_m.end(); robot_m_iterator++) {
+		
 		robot_m_iterator->second->ecp_td.mp_command = NEXT_STATE;
-		robot_m_iterator->second->ecp_td.mp_2_ecp_next_state = mp_2_ecp_next_state;
-		robot_m_iterator->second->ecp_td.mp_2_ecp_next_state_variant = mp_2_ecp_next_state_variant;
-		strcpy (robot_m_iterator->second->ecp_td.mp_2_ecp_next_state_string, mp_2_ecp_next_state_string);
+		
+		robot_m_iterator->second->ecp_td.ecp_next_state = ecp_next_state;
+		
 		robot_m_iterator->second->communicate = true;
 	}
 

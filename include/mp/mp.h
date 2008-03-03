@@ -79,9 +79,7 @@ struct robot_ECP_transmission_data : robot_transmission_data {
 		MP_COMMAND mp_command;                // polecenie przesylane z MP do ECP
 		ECP_REPLY  ecp_reply;                 // odpowiedz z ECP do MP
 
-		int mp_2_ecp_next_state; // skojarzone z NEXT_STATE
-		int mp_2_ecp_next_state_variant; // skojarzone z NEXT_STATE
-		char mp_2_ecp_next_state_string[MP_2_ECP_STRING_SIZE]; // skojarzone z NEXT_STATE
+		ecp_next_state_t ecp_next_state;
 
 		// by Y  do sily
 

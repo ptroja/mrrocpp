@@ -47,6 +47,7 @@ class mp_task: public ecp_mp_task
 		    NEW_UI_OR_ECP_PULSE
 		};
 
+		bool set_next_playerpos_goal (ROBOT_ENUM robot_l, double x, double y, double t);
 		bool set_next_ecps_state (int l_state, int l_variant, char* l_string, int number_of_robots, ... );
 		bool send_end_motion_to_ecps (int number_of_robots, ... );
 		bool run_ext_empty_gen (bool activate_trigger, int number_of_robots, ... );
