@@ -75,55 +75,60 @@ mp_task::~mp_task()
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 bool mp_task::create_robots()
 {
-	// konieczne bo inaczej konstruktor dziala niepoprawnie w odbieranu pulsu od ECP
-	mp_robot* robot_tmp;
+	/*
+	 * this is necessary to first create robot and then assign it to robot_m
+	 * reason: mp_robot() constructor uses this map (by calling
+	 * mp_task::mp_wait_for_name_open_ecp_pulse() so needs the map to be in
+	 * a consistent state
+	 */
+	mp_robot* created_robot;
 	
 	// ROBOT IRP6_ON_TRACK
 	if (config.return_int_value("is_irp6_on_track_active", "[ui]")) {
-		robot_tmp = new mp_irp6_on_track_robot (*this);
-		robot_m[ROBOT_IRP6_ON_TRACK] = robot_tmp;
+		created_robot = new mp_irp6_on_track_robot (*this);
+		robot_m[ROBOT_IRP6_ON_TRACK] = created_robot;
 	}
 
 	// ROBOT IRP6_POSTUMENT
 	if (config.return_int_value("is_irp6_postument_active", "[ui]")) {
-		robot_tmp = new mp_irp6_postument_robot (*this);
-		robot_m[ROBOT_IRP6_POSTUMENT] = robot_tmp;
+		created_robot = new mp_irp6_postument_robot (*this);
+		robot_m[ROBOT_IRP6_POSTUMENT] = created_robot;
 	}
 
 	// ROBOT CONVEYOR
 	if (config.return_int_value("is_conveyor_active", "[ui]")) {
-		robot_tmp = new mp_conveyor_robot (*this);
-		robot_m[ROBOT_CONVEYOR] = robot_tmp;
+		created_robot = new mp_conveyor_robot (*this);
+		robot_m[ROBOT_CONVEYOR] = created_robot;
 	}
 
 	// ROBOT SPEAKER
 	if (config.return_int_value("is_speaker_active", "[ui]")) {
-		robot_tmp = new mp_speaker_robot (*this);
-		robot_m[ROBOT_SPEAKER] = robot_tmp;
+		created_robot = new mp_speaker_robot (*this);
+		robot_m[ROBOT_SPEAKER] = created_robot;
 	}
 
 	// ROBOT IRP6_MECHATRONIKA
 	if (config.return_int_value("is_irp6_mechatronika_active", "[ui]")) {
-		robot_tmp = new mp_irp6_mechatronika_robot (*this);
-		robot_m[ROBOT_IRP6_MECHATRONIKA] = robot_tmp;
+		created_robot = new mp_irp6_mechatronika_robot (*this);
+		robot_m[ROBOT_IRP6_MECHATRONIKA] = created_robot;
 	}
 
 	// ROBOT_ELECTRON
 	if (config.return_int_value("is_electron_robot_active", "[ui]")) {
-		robot_tmp = new mp_robot (ROBOT_ELECTRON, "[ecp_electron]", *this);
-		robot_m[ROBOT_ELECTRON] = robot_tmp;
+		created_robot = new mp_robot (ROBOT_ELECTRON, "[ecp_electron]", *this);
+		robot_m[ROBOT_ELECTRON] = created_robot;
 	}
 	
 	// ROBOT_SPEECHRECOGNITION
 	if (config.return_int_value("is_speechrecognition_active", "[ui]")) {
-		robot_tmp = new mp_robot (ROBOT_SPEECHRECOGNITION, "[ecp_speechrecognition]", *this);
-		robot_m[ROBOT_SPEECHRECOGNITION] = robot_tmp;
+		created_robot = new mp_robot (ROBOT_SPEECHRECOGNITION, "[ecp_speechrecognition]", *this);
+		robot_m[ROBOT_SPEECHRECOGNITION] = created_robot;
 	}	
 	
 	// ROBOT_FESTIVAL
 	if (config.return_int_value("is_festival_active", "[ui]")) {
-		robot_tmp = new mp_robot (ROBOT_FESTIVAL, "[ecp_festival]", *this);
-		robot_m[ROBOT_FESTIVAL] = robot_tmp;
+		created_robot = new mp_robot (ROBOT_FESTIVAL, "[ecp_festival]", *this);
+		robot_m[ROBOT_FESTIVAL] = created_robot;
 	}
 	
 	return true;
