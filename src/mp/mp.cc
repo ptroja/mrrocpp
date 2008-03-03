@@ -16,28 +16,38 @@
 #include "lib/srlib.h"
 #include "mp/mp.h"
 
+#include "ecp_mp/ecp_mp_t_player.h"
+
 using namespace std;
 
-mp_taught_in_pose:: mp_taught_in_pose (void) {};
-mp_taught_in_pose::mp_taught_in_pose (POSE_SPECIFICATION at, double mt, double* c)
-		: arm_type(at), motion_time(mt) {
+mp_taught_in_pose::mp_taught_in_pose(void)
+{
+}
+
+mp_taught_in_pose::mp_taught_in_pose(POSE_SPECIFICATION at, double mt, double* c) :
+	arm_type(at), motion_time(mt)
+{
 	memcpy(coordinates, c, MAX_SERVOS_NR*sizeof(double));
 }
 
-mp_taught_in_pose::mp_taught_in_pose (POSE_SPECIFICATION at, double mt, double* c, double* irp6p_c)
-		: arm_type(at), motion_time(mt) {
+mp_taught_in_pose::mp_taught_in_pose(POSE_SPECIFICATION at, double mt,
+		double* c, double* irp6p_c) :
+	arm_type(at), motion_time(mt)
+{
 	memcpy(coordinates, c, MAX_SERVOS_NR*sizeof(double));
 	memcpy(irp6p_coordinates, irp6p_c, MAX_SERVOS_NR*sizeof(double));
 }
 
-mp_taught_in_pose::mp_taught_in_pose (POSE_SPECIFICATION at, double mt, int e_info, double* c)
-	: arm_type(at), motion_time(mt) { // by Y
+mp_taught_in_pose::mp_taught_in_pose(POSE_SPECIFICATION at, double mt,
+		int e_info, double* c) :
+	arm_type(at), motion_time(mt)
+{ // by Y
 	memcpy(coordinates, c, MAX_SERVOS_NR*sizeof(double));
 	extra_info = e_info;
 }
 
-mp_robot::MP_error::MP_error (uint64_t err0, uint64_t err1)
-	: error_class(err0), mp_error(err1)
+mp_robot::MP_error::MP_error(uint64_t err0, uint64_t err1) :
+	error_class(err0), mp_error(err1)
 {
 }
 
@@ -67,10 +77,9 @@ void mp_set_next_ecps_state_generator::configure (int l_mp_2_ecp_next_state, int
 	}
 }
 
-void mp_set_next_ecps_state_generator::configure (double _x, double _y, double _t) {
-	x = _x;
-	y = _y;
-	t = _t;
+void mp_set_next_ecps_state_generator::configure (playerpos_goal_t &_goal) {
+	ecp_next_state.mp_2_ecp_next_state = ECP_GEN_PLAYERPOS;
+	ecp_next_state.playerpos_goal = _goal;
 }
 
 // ----------------------------------------------------------------------------------------------

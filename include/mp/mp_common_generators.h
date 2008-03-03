@@ -11,14 +11,14 @@ class mp_set_next_ecps_state_generator : public mp_generator
 protected:
 	ecp_next_state_t ecp_next_state;
 	
-	double x, y, t;
+	playerpos_goal_t goal;
 
 public:
 
     mp_set_next_ecps_state_generator(mp_task& _mp_task);
 
 	void configure (int l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, char* l_mp_2_ecp_next_state_string);
-	void configure (double _x, double _y, double _t);
+	void configure (playerpos_goal_t &_goal);
 
 	bool first_step ();
 	bool next_step ();

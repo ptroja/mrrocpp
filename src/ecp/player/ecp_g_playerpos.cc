@@ -12,7 +12,9 @@ playerpos_generator::playerpos_generator(ecp_task& _ecp_task)
 	delete [] hostname;
 
 	int device_index = ecp_t.config.return_int_value("device_index");
-	device = new PositionProxy(client, device_index, 'r');
+	device = new PositionProxy(client, device_index, 'a');
+	
+	test_mode = ecp_t.config.return_int_value("test_mode");
 }
 
 playerpos_generator::~playerpos_generator()
@@ -21,21 +23,27 @@ playerpos_generator::~playerpos_generator()
 	delete client;
 }
 
-void playerpos_generator::set_goal(playerpos_goal_t &_playerpos_goal)
+void playerpos_generator::set_goal(playerpos_goal_t &_goal)
 {
-	this->playerpos_goal = _playerpos_goal;
+	printf("playerpos_generator::set_goal({%.2f, %.2f, %.2f})\n",
+			_goal.x, _goal.y, _goal.t);
+	this->goal = _goal;
 }
 
-bool playerpos_generator::first_step ( )
+bool playerpos_generator::first_step()
 {
+	device->SelectPositionMode(1);
+	printf("playerpos_generator::first_step() -> {%.2f, %.2f, %.2f}\n",
+			goal.x, goal.y, goal.t);
+	device->GoTo(goal.x, goal.y, goal.t);
 	return true;
 }
 
-bool playerpos_generator::next_step ( )
+bool playerpos_generator::next_step()
 {
-#if 1
+#if 0
 	// do not block
-	if(client->Peek(0)) {
+	if (client->Peek(0)) {
 		client->Read();
 	}
 	usleep(20000);
@@ -43,10 +51,10 @@ bool playerpos_generator::next_step ( )
 	// block
 	client->Read();
 #endif
-	
+
 	if (device->fresh) {
 		device->fresh = false;
-		return false;
+		return (device->speed || device->turnrate);
 	}
 
 	return true;

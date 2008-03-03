@@ -54,8 +54,7 @@ void mp_task_multiplayer::main_task_algorithm(void)
 	
 		do {
 			sr_ecp_msg->message("Nowy makrokrok");
-
-			/*
+/*
 			if (set_next_ecps_state (ECP_GEN_SPEECHRECOGNITION, 0, NULL, 1, ROBOT_SPEECHRECOGNITION)) {
 				break_state = true;
 		       	break;
@@ -66,12 +65,9 @@ void mp_task_multiplayer::main_task_algorithm(void)
 				break_state = true;
 		       	break;
 			}
-			*/
-			
-			/*
+
 			char *qq = robot_m[ROBOT_SPEECHRECOGNITION]->ecp_td.commandRecognized;
 			printf("commandRecognized = \"%s\"\n", qq);
-			*/
 			
 			if (set_next_ecps_state (ECP_GEN_FESTIVAL, festival_generator::POLISH_VOICE, "raz dwa trzy cztery pie~c~ szes~c~ siedem osiem", 1, ROBOT_FESTIVAL)) {
 				break_state = true;
@@ -82,7 +78,25 @@ void mp_task_multiplayer::main_task_algorithm(void)
 		        (1, 1, ROBOT_FESTIVAL, ROBOT_FESTIVAL)) {
 				break_state = true;
 		       	break;
-			}		
+			}
+*/
+
+			playerpos_goal_t goal;
+			goal.x = 1.0;
+			goal.y = 0.0;
+			goal.t = 0.0;
+			
+			if (set_next_playerpos_goal (ROBOT_ELECTRON, goal)) {
+				break_state = true;
+		       	break;
+			}
+			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+		        (1, 1, ROBOT_ELECTRON, ROBOT_ELECTRON)) {
+				break_state = true;
+		       	break;
+			}
+			
 		} while(0);
 		
 		if (break_state)

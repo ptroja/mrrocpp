@@ -10,7 +10,9 @@ class playerpos_generator : public ecp_generator
 		PlayerClient *client;
 		PositionProxy *device;
 		
-		playerpos_goal_t playerpos_goal;
+		playerpos_goal_t goal;
+		
+		int test_mode;
 
 	public:
 		// konstruktor
@@ -21,7 +23,7 @@ class playerpos_generator : public ecp_generator
 
 		virtual bool next_step ();
 		
-		void set_goal(playerpos_goal_t &_playerpos_goal);
+		void set_goal(playerpos_goal_t &_goal);
 };
 
 #endif /* _ECP_GEN_PLAYERPOS_H */

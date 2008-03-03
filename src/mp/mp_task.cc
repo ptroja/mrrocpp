@@ -75,7 +75,9 @@ mp_task::~mp_task()
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 bool mp_task::create_robots()
 {
-	mp_robot* robot_tmp; // konieczne bo inaczej konstruktor dziala niepoprawnie w odbieranu pulsu od ECP
+	// konieczne bo inaczej konstruktor dziala niepoprawnie w odbieranu pulsu od ECP
+	mp_robot* robot_tmp;
+	
 	// ROBOT IRP6_ON_TRACK
 	if (config.return_int_value("is_irp6_on_track_active", "[ui]")) {
 		robot_tmp = new mp_irp6_on_track_robot (*this);
@@ -123,7 +125,7 @@ bool mp_task::create_robots()
 		robot_tmp = new mp_robot (ROBOT_FESTIVAL, "[ecp_festival]", *this);
 		robot_m[ROBOT_FESTIVAL] = robot_tmp;
 	}
-
+	
 	return true;
 }
 
@@ -138,16 +140,16 @@ void mp_task::main_task_algorithm(void)
 {}
 
 // metody do obslugi najczesniej uzywanych generatorow
-bool mp_task::set_next_playerpos_goal (ROBOT_ENUM robot_l, double x, double y, double t)
+bool mp_task::set_next_playerpos_goal (ROBOT_ENUM robot_l, playerpos_goal_t &goal)
 {
 	// setting the next ecps state
 	mp_set_next_ecps_state_generator mp_snes_gen(*this);
-
+	
 	mp_snes_gen.robot_m.clear();
 
 	mp_snes_gen.robot_m[robot_l] = robot_m[robot_l];
 
-	mp_snes_gen.configure(x, y, t);
+	mp_snes_gen.configure(goal);
 
 	return (Move(mp_snes_gen));
 }
