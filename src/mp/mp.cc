@@ -296,7 +296,6 @@ bool mp_tight_coop_generator::first_step () {
 		robot_m_iterator->second->communicate = true;
 	}
 
-
 	return true;
 }
 

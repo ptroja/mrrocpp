@@ -58,11 +58,7 @@ map <ROBOT_ENUM, mp_robot*> mp_task::robot_m;
 // KONSTRUKTORY
 mp_task::mp_task(configurator &_config) : ecp_mp_task(_config)
 {
-	robot_m.clear();
-	sensor_m.clear();
-
 	// dla scheduler'a
-	gen_list.clear();
 	all_gen_sets_waiting_for_ECP_pulse = false;
 	ui_new_pulse = false;
 }
@@ -150,8 +146,6 @@ bool mp_task::set_next_playerpos_goal (ROBOT_ENUM robot_l, playerpos_goal_t &goa
 	// setting the next ecps state
 	mp_set_next_ecps_state_generator mp_snes_gen(*this);
 	
-	mp_snes_gen.robot_m.clear();
-
 	mp_snes_gen.robot_m[robot_l] = robot_m[robot_l];
 
 	mp_snes_gen.configure(goal);
@@ -164,8 +158,6 @@ bool mp_task::set_next_ecps_state (int l_state, int l_variant, char* l_string, i
 {
 	// setting the next ecps state
 	mp_set_next_ecps_state_generator mp_snes_gen (*this);
-
-	mp_snes_gen.robot_m.clear();
 
 	va_list arguments;                     // A place to store the list of arguments
 	ROBOT_ENUM robot_l;
@@ -188,8 +180,6 @@ bool mp_task::wait_ms (int _ms_delay) // zamiast delay
 {
 	mp_delay_ms_condition mp_ds_ms (*this, _ms_delay);
 
-	mp_ds_ms.robot_m.clear();
-
 	return (Move(mp_ds_ms));
 }
 
@@ -197,8 +187,6 @@ bool mp_task::wait_ms (int _ms_delay) // zamiast delay
 bool mp_task::send_end_motion_to_ecps (int number_of_robots, ... )
 {
 	mp_send_end_motion_to_ecps_generator mp_semte_gen (*this);
-
-	mp_semte_gen.robot_m.clear();
 
 	va_list arguments;                     // A place to store the list of arguments
 	ROBOT_ENUM robot_l;
@@ -218,8 +206,6 @@ bool mp_task::send_end_motion_to_ecps (int number_of_robots, ... )
 bool mp_task::run_ext_empty_gen (bool activate_trigger, int number_of_robots, ... )
 {
 	mp_extended_empty_generator mp_ext_empty_gen (*this);
-
-	mp_ext_empty_gen.robot_m.clear();
 
 	va_list arguments;                     // A place to store the list of arguments
 	ROBOT_ENUM robot_l;
