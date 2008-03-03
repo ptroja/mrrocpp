@@ -59,7 +59,7 @@ class edp_speaker_effector  : public edp_effector {
 	unsigned uicSamplesNo;
 
     // Konstruktor.
-    edp_speaker_effector ();
+    edp_speaker_effector (configurator &_config);
     int init ();
     // Destruktor
     virtual ~edp_speaker_effector ();

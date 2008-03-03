@@ -25,40 +25,41 @@
 extern master_trans_t_buffer mt_tt_obj;
 
 // Konstruktor.
-edp_irp6ot_effector::edp_irp6ot_effector () : 
-	edp_irp6s_postument_track_effector (ROBOT_IRP6_ON_TRACK)
+edp_irp6ot_effector::edp_irp6ot_effector (configurator &_config) :
+        edp_irp6s_postument_track_effector (_config, ROBOT_IRP6_ON_TRACK)
 {
-  //  Stworzenie listy dostepnych kinematyk.
-  create_kinematic_models_for_given_robot();
+    //  Stworzenie listy dostepnych kinematyk.
+    create_kinematic_models_for_given_robot();
 
-	if (is_gripper_active)
-		number_of_servos = IRP6_ON_TRACK_NUM_OF_SERVOS;
-	else 
-		number_of_servos = IRP6_ON_TRACK_NUM_OF_SERVOS-1;
+    if (is_gripper_active)
+        number_of_servos = IRP6_ON_TRACK_NUM_OF_SERVOS;
+    else
+        number_of_servos = IRP6_ON_TRACK_NUM_OF_SERVOS-1;
 
-	gripper_servo_nr = IRP6OT_GRIPPER_CATCH_AXE;
+    gripper_servo_nr = IRP6OT_GRIPPER_CATCH_AXE;
 
-	reset_variables();
+    reset_variables();
 
-	
-};//: edp_irp6ot_effector
+
+}
+;//: edp_irp6ot_effector
 
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na torze.
 void edp_irp6ot_effector::create_kinematic_models_for_given_robot(void)
 {
-	// Stworzenie wszystkich modeli kinematyki.
-	add_kinematic_model(new kinematic_model_irp6ot_with_wrist());
-	add_kinematic_model(new kinematic_model_irp6ot_with_track());
-	add_kinematic_model(new kinematic_model_calibrated_irp6ot_with_wrist());
-	add_kinematic_model(new kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist());
-	// Ustawienie aktywnego modelu.
-	set_kinematic_model(0);
+    // Stworzenie wszystkich modeli kinematyki.
+    add_kinematic_model(new kinematic_model_irp6ot_with_wrist());
+    add_kinematic_model(new kinematic_model_irp6ot_with_track());
+    add_kinematic_model(new kinematic_model_calibrated_irp6ot_with_wrist());
+    add_kinematic_model(new kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist());
+    // Ustawienie aktywnego modelu.
+    set_kinematic_model(0);
 }//: create_kinematic_models_for_given_robot
 
 
 // Stworzenie obiektu edp_irp6p_effector.
-edp_effector* return_created_efector ()
-{
-	return new edp_irp6ot_effector ();
-}//: return_created_efector
+edp_effector* return_created_efector (configurator &_config)
+                    {
+                        return new edp_irp6ot_effector (_config);
+                    }//: return_created_efector

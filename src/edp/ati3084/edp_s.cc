@@ -52,9 +52,9 @@
 int sint_id;
 struct sigevent sevent;
 
-extern configurator* config;
 
-// aaa = config->return_double_value("x_axis");
+
+// aaa = master->config.return_double_value("x_axis");
 
 
 struct mds_data
@@ -324,10 +324,10 @@ void edp_ATI3084_force_sensor::configure_sensor (void)
 
                 Homog_matrix sensor_frame = Homog_matrix(0, 1, 0, 0,	-1, 0, 0, 0,	0, 0, 1, 0.09);
 
-                double weight = config->return_double_value("weight");
-                double point[3] ={	config->return_double_value("x_axis_arm"),
-                                   config->return_double_value("y_axis_arm"),
-                                   config->return_double_value("z_axis_arm")};
+                double weight = master->config.return_double_value("weight");
+                double point[3] ={	master->config.return_double_value("x_axis_arm"),
+                                   master->config.return_double_value("y_axis_arm"),
+                                   master->config.return_double_value("z_axis_arm")};
                 K_vector pointofgravity(point);
                 gravity_transformation = new ForceTrans(FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
             }

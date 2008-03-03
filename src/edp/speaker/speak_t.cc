@@ -21,7 +21,7 @@
 
 /********************************* GLOBALS **********************************/
 
-extern sr_vsp *sr_msg;		// komunikacja z SR
+
 
 extern edp_speaker_effector *master;  // by Y
 extern master_trans_t_buffer mt_tt_obj;

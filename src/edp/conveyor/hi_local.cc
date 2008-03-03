@@ -39,7 +39,7 @@
 struct sigevent event;
 
 extern edp_conveyor_effector* master;
-extern sr_edp* msg; // Wskaznik do obiektu klasy sluzacej do komunikacji z SR
+
 
 int int_id;                       // Identyfikator obslugi przerwania
 volatile motor_data md; // Dane przesylane z/do funkcji obslugi przerwania
@@ -291,12 +291,12 @@ int hi_conv::hi_int_wait (int inter_mode, int lag)
 	iw_ret=InterruptWait (0, NULL); 
 
 	if (iw_ret==-1) { // jesli przerwanie nie przyjdzie na czas
-		if (interrupt_error == 1) msg->message(NON_FATAL_ERROR, "Nie odebrano przerwania - sprawdz szafe");
+		if (interrupt_error == 1) master->msg->message(NON_FATAL_ERROR, "Nie odebrano przerwania - sprawdz szafe");
 		 interrupt_error++;
 		 master->controller_state_edp_buf.is_wardrobe_on = false;
 	} else {
 
-		if (interrupt_error >= 1) msg->message("Przywrocono obsluge przerwania");
+		if (interrupt_error >= 1) master->msg->message("Przywrocono obsluge przerwania");
 		 interrupt_error = 0;
 		 master->controller_state_edp_buf.is_wardrobe_on = true;
 	}
@@ -305,7 +305,7 @@ int hi_conv::hi_int_wait (int inter_mode, int lag)
 	
 	if ((interrupt_error>2) || (!master->controller_state_edp_buf.is_power_on))
 	{
-		if ((msg_send++) == 0) msg->message(NON_FATAL_ERROR, "Wylaczono moc - robot zablokowany");
+		if ((msg_send++) == 0) master->msg->message(NON_FATAL_ERROR, "Wylaczono moc - robot zablokowany");
 		   md.is_robot_blocked = true;
 	}
 	

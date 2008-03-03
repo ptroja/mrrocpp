@@ -27,8 +27,8 @@ extern reader_buffer rb_obj;
 
 
 // Konstruktor.
-edp_conveyor_effector::edp_conveyor_effector () :
-	edp_irp6s_and_conv_effector (ROBOT_CONVEYOR)
+edp_conveyor_effector::edp_conveyor_effector (configurator &_config) :
+	edp_irp6s_and_conv_effector (_config, ROBOT_CONVEYOR)
 {
   //  Stworzenie listy dostepnych kinematyk.
   create_kinematic_models_for_given_robot();
@@ -245,7 +245,7 @@ void edp_conveyor_effector::create_kinematic_models_for_given_robot(void)
 
 
 // Stworzenie obiektu edp_conveyor_effector.
-edp_effector* return_created_efector ()
+edp_effector* return_created_efector (configurator &_config)
 {
-	return new edp_conveyor_effector ();
+	return new edp_conveyor_effector (_config);
 }//: return_created_efector

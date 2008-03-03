@@ -117,13 +117,18 @@ class edp_effector: public transformer_error
 		WORD value_in_step_no;           
 
 	public:
+	configurator &config;
+	sr_edp *msg;
+	
+	bool initialize_communication (void);
+	
 #if !defined(USE_MESSIP_SRR)
 		name_attach_t *attach;
 #else /* USE_MESSIP_SRR */
 		messip_channel_t *attach;
 #endif /* USE_MESSIP_SRR */
 	
-		edp_effector (ROBOT_ENUM l_robot_name);       // konstruktor
+		edp_effector (configurator &_config, ROBOT_ENUM l_robot_name);       // konstruktor
 		controller_state_t controller_state_edp_buf; // do okreslenia stanu robota
 	
 		int test_mode;
@@ -292,7 +297,7 @@ void reset_variables ();
 
 public:
 
-	edp_irp6s_and_conv_effector (ROBOT_ENUM l_robot_name);       // konstruktor
+	edp_irp6s_and_conv_effector (configurator &_config, ROBOT_ENUM l_robot_name);       // konstruktor
 	
 	virtual void set_rmodel (c_buffer *instruction);                    // zmiana narzedzia
 	virtual void get_rmodel (c_buffer *instruction);                    // odczytanie narzedzia
@@ -485,7 +490,7 @@ void tool_axially_symmetrical_xyz_eul_zy_2_frame(c_buffer *instruction);
 
 public:
 
-	edp_irp6s_effector (ROBOT_ENUM l_robot_name );       // konstruktor
+	edp_irp6s_effector (configurator &_config, ROBOT_ENUM l_robot_name );       // konstruktor
 	
 
 	void set_rmodel (c_buffer *instruction);                    // zmiana narzedzia
@@ -555,7 +560,7 @@ protected:
     
 public:
 
-	edp_irp6s_postument_track_effector (ROBOT_ENUM l_robot_name );       // konstruktor
+	edp_irp6s_postument_track_effector (configurator &_config, ROBOT_ENUM l_robot_name );       // konstruktor
 	
 	int force_tryb;
 	
@@ -738,6 +743,6 @@ public:
 
 
 // Zwrocenie stworzonego obiektu - efektora. Funkcja implementowana w plikach efektorow konkretnych (jadro).
-edp_effector* return_created_efector ();
+edp_effector* return_created_efector (configurator &_config);
 
 #endif

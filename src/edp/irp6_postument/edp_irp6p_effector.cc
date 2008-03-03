@@ -28,8 +28,8 @@
 extern master_trans_t_buffer mt_tt_obj;
 
 // Konstruktor.
-edp_irp6p_effector::edp_irp6p_effector () : 
-	edp_irp6s_postument_track_effector (ROBOT_IRP6_POSTUMENT)
+edp_irp6p_effector::edp_irp6p_effector (configurator &_config) : 
+	edp_irp6s_postument_track_effector (_config, ROBOT_IRP6_POSTUMENT)
 {
   //  Stworzenie listy dostepnych kinematyk.
   create_kinematic_models_for_given_robot();
@@ -65,8 +65,8 @@ void edp_irp6p_effector::create_kinematic_models_for_given_robot(void)
 
 
 // Stworzenie obiektu edp_irp6p_effector.
-edp_effector* return_created_efector ()
+edp_effector* return_created_efector (configurator &_config)
 {
-	return new edp_irp6p_effector ();
+	return new edp_irp6p_effector (_config);
 }//: return_created_efector
 

@@ -35,7 +35,7 @@
 #define START_TO_READ_FAILURE 0.002
 
 
-extern configurator* config;
+
 extern edp_irp6s_postument_track_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
 extern sr_vsp *sr_msg;       //!< Wskaznik na lacze z SR
 extern edp_force_sensor *vs;
@@ -398,10 +398,10 @@ void edp_ATI6284_force_sensor::configure_sensor (void)
                 // Homog_matrix sensor_frame = Homog_matrix(-1, 0, 0,	0, -1, 0,	0, 0, 1,	0, 0, 0.09);
                 Homog_matrix sensor_frame = Homog_matrix(-1, 0, 0, 0,	0, -1, 0, 0,	0, 0, 1, 0.09);
 
-                double weight = config->return_double_value("weight");
-                double point[3] ={	config->return_double_value("x_axis_arm"),
-                                   config->return_double_value("y_axis_arm"),
-                                   config->return_double_value("z_axis_arm")};
+                double weight = master->config.return_double_value("weight");
+                double point[3] ={	master->config.return_double_value("x_axis_arm"),
+                                   master->config.return_double_value("y_axis_arm"),
+                                   master->config.return_double_value("z_axis_arm")};
                 K_vector pointofgravity(point);
                 gravity_transformation = new ForceTrans(FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
             }

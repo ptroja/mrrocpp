@@ -29,9 +29,8 @@
 #include "lib/mis_fun.h"
 #include "edp/common/edp.h"
 
-sr_edp *msg;                // Wskaznik na obiekt do komunikacji z SR
+// sr_edp *msg;                // Wskaznik na obiekt do komunikacji z SR
 
-configurator* config;
 
 // obiekt do komuniacji miedzy watkami master a transformation
 master_trans_t_buffer mt_tt_obj;
@@ -43,146 +42,100 @@ static _clockperiod old_cp;
 /* Przechwycenie sygnalu */
 void catch_signal(int sig)
 {
-	switch (sig) {
-		case SIGTERM :
-			ClockPeriod(CLOCK_REALTIME, &old_cp, NULL, 0);
-			msg->message("EDP terminated");
-			_exit(EXIT_SUCCESS);
-			break;
-		case SIGSEGV:
-			fprintf(stderr, "Segmentation fault in EDP process\n");
-			signal(SIGSEGV, SIG_DFL);
-			break;
-	} // end: switch
+    switch (sig)
+    {
+    case SIGTERM :
+        ClockPeriod(CLOCK_REALTIME, &old_cp, NULL, 0);
+        master->msg->message("EDP terminated");
+        _exit(EXIT_SUCCESS);
+        break;
+    case SIGSEGV:
+        fprintf(stderr, "Segmentation fault in EDP process\n");
+        signal(SIGSEGV, SIG_DFL);
+        break;
+    } // end: switch
 }
 
 int main(int argc, char *argv[], char **arge)
 {
-	char* server_attach_point;
 
-	// STATE next_state;    // stan nastepny, do ktorego przejdzie EDP_MASTER
+    // STATE next_state;    // stan nastepny, do ktorego przejdzie EDP_MASTER
 
-	try {
-		if (argc < 6) {
-			fprintf(stderr, "Usage: edp_m ui_node_name mrrocpp_path config_file edp_config_section <session_name>\n");
-			exit(EXIT_FAILURE);
-		}
+    try
+    {
+        if (argc < 6)
+        {
+            fprintf(stderr, "Usage: edp_m ui_node_name mrrocpp_path config_file edp_config_section <session_name>\n");
+            exit(EXIT_FAILURE);
+        }
 
-		// zmniejszenie stalej czasowej ticksize dla szeregowania
-		_clockperiod new_cp;
-		new_cp.nsec=TIME_SLICE; // impconst.h
-		new_cp.fract=0;
-		ClockPeriod( CLOCK_REALTIME, &new_cp, &old_cp, 0 );
+        // zmniejszenie stalej czasowej ticksize dla szeregowania
+        _clockperiod new_cp;
+        new_cp.nsec=TIME_SLICE; // impconst.h
+        new_cp.fract=0;
+        ClockPeriod( CLOCK_REALTIME, &new_cp, &old_cp, 0 );
 
-		// przechwycenie SIGTERM
-		signal(SIGTERM, &catch_signal);
-		signal(SIGSEGV, &catch_signal);
+        // przechwycenie SIGTERM
+        signal(SIGTERM, &catch_signal);
+        signal(SIGSEGV, &catch_signal);
 
-		// odczytanie konfiguracji
-		config = new configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
+        // odczytanie konfiguracji
+        configurator * _config = new configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
 
-		server_attach_point = config->return_attach_point_name(configurator::CONFIG_SERVER, "resourceman_attach_point");
 
-		/* Lokalizacja procesu wywietlania komunikatow SR */
-		if ((msg = new sr_edp(EDP, config->return_string_value("resourceman_attach_point"),
-		                      config->return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL) {
-			perror ( "Unable to locate SR ");
-			throw System_error();
-		}
-		//	printf("przed\n");
-		//		delay(10000);
-		//			printf("za\n");
-		master = return_created_efector();
 
-		master->create_threads();
+        /* Lokalizacja procesu wywietlania komunikatow SR */
+        /*
+        if ((msg = new sr_edp(EDP, config->return_string_value("resourceman_attach_point"),
+                              config->return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL) {
+        	perror ( "Unable to locate SR ");
+        	throw System_error();
+    }
+        */
+        //	printf("przed\n");
+        //		delay(10000);
+        //			printf("za\n");
+        master = return_created_efector(*_config);
 
-		// obsluga mechanizmu sygnalizacji zajetosci sprzetu
-		if (!(master->test_mode))
-		{
-			char* hardware_busy_attach_point;
-			char full_path_to_hardware_busy_attach_point[100];
-			name_attach_t *tmp_attach;
-			
-			hardware_busy_attach_point = config->return_string_value("hardware_busy_attach_point");
-			sprintf(full_path_to_hardware_busy_attach_point, "/dev/name/global/%s", hardware_busy_attach_point);
-			
-			// sprawdzenie czy nie jakis proces EDP nie zajmuje juz sprzetu
-			if ( access(full_path_to_hardware_busy_attach_point, R_OK)== 0 ) {
-				fprintf( stderr, "EDP: hardware busy\n");
-				return EXIT_FAILURE;
-			}
-		
-			tmp_attach = name_attach(NULL, hardware_busy_attach_point, NAME_FLAG_ATTACH_GLOBAL);
+        master->create_threads();
 
-			if ( tmp_attach == NULL ) {
-				msg->message(SYSTEM_ERROR, errno, "EDP: hardware_busy_attach_point failed to attach");
-				fprintf( stderr, "hardware_busy_attach_point name_attach() failed: %s\n", strerror( errno ) );
-				return EXIT_FAILURE;
-			}
-		
-			delete[] hardware_busy_attach_point;
-		}
-		
-		char full_path_to_server_attach_point[100];
-		sprintf(full_path_to_server_attach_point, "/dev/name/global/%s", server_attach_point);
+        if (!master->initialize_communication())
+        {
+        	return EXIT_FAILURE;	
+        }
 
-		// sprawdzenie czy nie jest juz zarejestrowany server EDP
-		if ( access(full_path_to_server_attach_point, R_OK)== 0 ) {
-			fprintf( stderr, "edp already exists() failed: %s\n", strerror( errno ) );
-			return EXIT_FAILURE;
-		}
+        //	printf("1\n");
+        //	delay (20000);
+        master->main_loop();
+        //	printf("end\n");
+    } // end: try
 
-		/* Ustawienie priorytetu procesu */
+    catch (System_error fe)
+    {
+        // Obsluga bledow systemowych
+        /*
+          // Wystapil blad w komunikacji miedzyprocesowej, oczekiwanie na jawne
+          // zabicie procesu przez operatora
+          for (;;) {
+            delay(100);
+        //   printf("\a"); // Sygnal dzwiekowy
+          }
+          */
+    } // end: catch(System_error fe)
 
-		set_thread_priority(pthread_self() , MAX_PRIORITY-2);
-
-		master->attach = 
-#if !defined(USE_MESSIP_SRR)
-			name_attach(NULL, server_attach_point, NAME_FLAG_ATTACH_GLOBAL);
-#else /* USE_MESSIP_SRR */
-			messip_channel_create(NULL, server_attach_point, MESSIP_NOTIMEOUT, 0);
-#endif /* USE_MESSIP_SRR */
-
-		delete [] server_attach_point;
-
-		if ( master->attach == NULL ) {
-			msg->message(SYSTEM_ERROR, errno, "EDP: resmg failed to attach");
-			fprintf( stderr, "name_attach() failed: %s\n", strerror( errno ) );
-			return EXIT_FAILURE;
-		}
-
-		msg->message("EDP loaded");
-
-//	printf("1\n");
-//	delay (20000);
-		master->main_loop();
-//	printf("end\n");
-	} // end: try
-
-	catch (System_error fe) {
-// Obsluga bledow systemowych
-		/*
-		  // Wystapil blad w komunikacji miedzyprocesowej, oczekiwanie na jawne
-		  // zabicie procesu przez operatora
-		  for (;;) {
-		    delay(100);
-		//   printf("\a"); // Sygnal dzwiekowy
-		  }
-		  */
-	} // end: catch(System_error fe)
-
-	catch (...) {   // Dla zewnetrznej petli try
-		perror("Unidentified error in EDP");
-		// Komunikat o bledzie wysylamy do SR
-		msg->message (FATAL_ERROR, EDP_UNIDENTIFIED_ERROR);
-		/*
-		  // Wystapil niezidentyfikowany blad, oczekiwanie na jawne zabicie procesu
-		  // przez operatora
-		 
-		  for (;;) {
-		    delay(100);
-		  // printf("\a"); // Sygnal dzwiekowy
-		  }
-		  */
-	} // end: catch
+    catch (...)
+    {   // Dla zewnetrznej petli try
+        perror("Unidentified error in EDP");
+        // Komunikat o bledzie wysylamy do SR
+        master->msg->message (FATAL_ERROR, EDP_UNIDENTIFIED_ERROR);
+        /*
+          // Wystapil niezidentyfikowany blad, oczekiwanie na jawne zabicie procesu
+          // przez operatora
+         
+          for (;;) {
+            delay(100);
+          // printf("\a"); // Sygnal dzwiekowy
+          }
+          */
+    } // end: catch
 } //   end:   main( )

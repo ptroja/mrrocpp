@@ -22,8 +22,8 @@
 extern reader_buffer rb_obj;
 
 /*--------------------------------------------------------------------------*/
-edp_irp6s_effector::edp_irp6s_effector (ROBOT_ENUM l_robot_name) : 
-	edp_irp6s_and_conv_effector (l_robot_name)
+edp_irp6s_effector::edp_irp6s_effector (configurator &_config, ROBOT_ENUM l_robot_name) : 
+	edp_irp6s_and_conv_effector (_config, l_robot_name)
 {
 
 };

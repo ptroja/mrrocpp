@@ -32,8 +32,8 @@ extern reader_buffer rb_obj;
 
 
 // Konstruktor.
-edp_irp6m_effector::edp_irp6m_effector () :
-	edp_irp6s_effector (ROBOT_IRP6_MECHATRONIKA)
+edp_irp6m_effector::edp_irp6m_effector (configurator &_config) :
+	edp_irp6s_effector (_config, ROBOT_IRP6_MECHATRONIKA)
 {
 	
   //  Stworzenie listy dostepnych kinematyk.
@@ -337,7 +337,7 @@ void edp_irp6m_effector::create_kinematic_models_for_given_robot(void)
 
 
 // Stworzenie obiektu edp_irp6m_effector.
-edp_effector* return_created_efector ()
+edp_effector* return_created_efector (configurator &_config)
 {
-	return new edp_irp6m_effector ();
+	return new edp_irp6m_effector (_config);
 }//: return_created_efector

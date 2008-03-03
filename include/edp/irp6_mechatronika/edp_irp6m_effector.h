@@ -32,7 +32,7 @@ class edp_irp6m_effector  : public edp_irp6s_effector {
 
   public:
     // Konstruktor.
-    edp_irp6m_effector ();
+    edp_irp6m_effector (configurator &_config);
     
     	void servo_joints_and_frame_actualization_and_upload(void);// by Y
     

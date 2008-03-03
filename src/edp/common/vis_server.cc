@@ -14,10 +14,10 @@
 
 #define MAXBUFLEN 100
 
-extern configurator* config;
+
 
 extern edp_irp6s_effector* master;  
-extern sr_edp* msg; // Wskaznik do obiektu klasy sluzacej do komunikacji z SR
+
 
 void visualisation_thread(void * arg)
 {
@@ -34,9 +34,9 @@ void visualisation_thread(void * arg)
 	int i;
 	uint16_t port;
 
-	port = config->return_int_value("visual_udp_port");
+	port = master->config.return_int_value("visual_udp_port");
 	if (port == 0) {
-		msg->message("visualisation_thread bad or missing <visual_udp_port> config entry");
+		master->msg->message("visualisation_thread bad or missing <visual_udp_port> config entry");
 		return;
 	}
 

@@ -22,7 +22,7 @@ class edp_conveyor_effector  : public edp_irp6s_and_conv_effector {
 
   public:
     // Konstruktor.
-    edp_conveyor_effector ();
+    edp_conveyor_effector (configurator &_config);
 
 	void set_rmodel (c_buffer *instruction);                    // zmiana narzedzia
 	void get_rmodel (c_buffer *instruction);                    // odczytanie narzedzia

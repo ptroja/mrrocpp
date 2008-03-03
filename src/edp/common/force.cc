@@ -40,7 +40,7 @@ void *edp_vsp_thread(void* arg);
 
 extern edp_irp6s_postument_track_effector* master;  
 
-extern configurator* config;
+
 extern reader_buffer rb_obj;					
 extern bool force_sensor_do_configure; // FLAGA ZLECENIA KONFIGURACJI CZUJNIKA					
 edp_force_sensor *vs;
@@ -61,7 +61,7 @@ void *edp_vsp_thread(void *arg)
 	
 	//!< zarejestrowanie nazwy identyfikujacej serwer
 	
-	if ((edp_vsp_attach = name_attach(NULL, config->return_attach_point_name(configurator::CONFIG_SERVER, "edp_vsp_attach_point"),
+	if ((edp_vsp_attach = name_attach(NULL, master->config.return_attach_point_name(configurator::CONFIG_SERVER, "edp_vsp_attach_point"),
 		NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		e = errno;
 		perror("Failed to attach EDP_VSP\n");
@@ -139,8 +139,8 @@ void *force_thread(void *arg)
 	set_thread_priority(pthread_self() , MAX_PRIORITY-1);
 	sem_init( &new_ms, 0, 0);      
 	/*!Lokalizacja procesu wywietlania komunikatow SR */ 
-	if ((sr_msg = new sr_vsp(EDP, config->return_attach_point_name(configurator::CONFIG_SERVER, "edp_vsp_attach_point"),	
-		config->return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL) 
+	if ((sr_msg = new sr_vsp(EDP, master->config.return_attach_point_name(configurator::CONFIG_SERVER, "edp_vsp_attach_point"),	
+		master->config.return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL) 
 	{
 		printf("communication with SR not ready\n");
 	}	
