@@ -1,11 +1,3 @@
-// ------------------------------------------------------------------------
-//   ecp_t_tran.cc - przezroczyste wersja dla dowolnego z robotow 
-// 
-//                     EFFECTOR CONTROL PROCESS (ECP) - main()
-// 
-// Ostatnia modyfikacja: 2006
-// ------------------------------------------------------------------------
-
 #include <stdio.h>
 
 #include "common/typedefs.h"
@@ -22,54 +14,45 @@
 #include "ecp/common/ecp_t_rcsc.h"
 #include "ecp/irp6_on_track/ecp_t_rcsc_irp6ot.h"
 
-
-
-// KONSTRUKTORY
-ecp_task_rcsc_irp6ot::ecp_task_rcsc_irp6ot(configurator &_config) : ecp_task(_config)
+ecp_task_rcsc_irp6ot::ecp_task_rcsc_irp6ot(configurator &_config) :
+	ecp_task(_config)
 {
-	gt = NULL;
-	nrg = NULL;
-	rgg = NULL;
-	gag = NULL;
-	rfrg = NULL;
-	tig = NULL;
-	sg = NULL;
-};
-ecp_task_rcsc_irp6ot::~ecp_task_rcsc_irp6ot(){};
+}
 
+ecp_task_rcsc_irp6ot::~ecp_task_rcsc_irp6ot()
+{
+}
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_rcsc_irp6ot::task_initialization(void) 
+void ecp_task_rcsc_irp6ot::task_initialization(void)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	 ecp_m_robot = new ecp_irp6_on_track_robot (*this); 
-	
+	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+
 	// powolanie czujnikow
-	sensor_m[SENSOR_FORCE_ON_TRACK] = 
-		new ecp_mp_schunk_sensor (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
+	sensor_m[SENSOR_FORCE_ON_TRACK] = new ecp_mp_schunk_sensor (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
 
 	gt = new ecp_generator_t (*this, true);
-	
+
 	nrg = new ecp_tff_nose_run_generator (*this, 8);
-//	nrg->configure(false, false, true, false, false, false, false);
+	//	nrg->configure(false, false, true, false, false, false, false);
 	nrg->sensor_m = sensor_m;
-	
+
 	rgg = new ecp_tff_rubik_grab_generator (*this, 8);
 	rgg->sensor_m = sensor_m;
-	
+
 	gag = new ecp_tff_gripper_approach_generator (*this, 8);
 	gag->sensor_m = sensor_m;
-	
+
 	rfrg = new ecp_tff_rubik_face_rotate_generator (*this, 8);
 	rfrg->sensor_m = sensor_m;
-	
-	tig = new ecp_teach_in_generator (*this);
-	
-	sg = new ecp_smooth_generator (*this, true);
-		
-	sr_ecp_msg->message("ECP loaded");
-};
 
+	tig = new ecp_teach_in_generator (*this);
+
+	sg = new ecp_smooth_generator (*this, true);
+
+	sr_ecp_msg->message("ECP loaded");
+}
 
 void ecp_task_rcsc_irp6ot::main_task_algorithm(void)
 {
@@ -196,9 +179,9 @@ void ecp_task_rcsc_irp6ot::main_task_algorithm(void)
 		break;
 	} // koniec: for(;;) wewnetrznej
 	
-};
+}
 
-ecp_task* return_created_ecp_task (configurator &_config)
+ecp_task* return_created_ecp_task(configurator &_config)
 {
 	return new ecp_task_rcsc_irp6ot(_config);
-};
+}

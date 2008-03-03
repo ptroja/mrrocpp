@@ -11,17 +11,18 @@ BINARIES =		ecp_pr \
 				ecp_jajko \
 				ecp_kbochnia \
 				ecp_fct \
-				ecp_tr\
-				ecp_nurbs\
-				ecp_plot\
-				ecp_pt\
-				ecp_playerjoy\
-				ecp_progpanel\
-				ecp_fr\
-				ecp_kin_test_irp6ot\
-				ecp_irp6ot_rcsc\
-				ecp_irp6ot_pouring\
-				ecp_tzu_cs
+				ecp_tr \
+				ecp_nurbs \
+				ecp_plot \
+				ecp_pt \
+				ecp_playerjoy \
+				ecp_progpanel \
+				ecp_fr \
+				ecp_kin_test_irp6ot \
+				ecp_irp6ot_rcsc \
+				ecp_irp6ot_pouring \
+				ecp_tzu_cs \
+				ecp_irp6ot_multiplayer
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -95,6 +96,10 @@ ecp_plot: ecp_t_plot_irp6ot.o ecp_g_plot.o $(SHOBJ)
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_tzu_cs: ecp_t_tzu_cs_irp6ot.o ecp_g_tzu_cs.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
+#-----------------------------------------------------------------------------------------------------------------------#
+ecp_irp6ot_multiplayer: ecp_t_multiplayer_irp6ot.o ecp_t_rcsc.o ecp_mp_s_schunk.o ecp_g_smooth.o \
+	ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^ 	
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
 # plik.o: plik.cc plik1.h plik2.h ... itd

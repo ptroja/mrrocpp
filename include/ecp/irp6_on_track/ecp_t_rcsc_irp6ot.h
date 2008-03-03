@@ -16,14 +16,12 @@ protected:
 	ecp_smooth_generator* sg;
 
 public:
-	// KONSTRUKTORY
 	ecp_task_rcsc_irp6ot(configurator &_config);
 	~ecp_task_rcsc_irp6ot();
 	
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);
 	void main_task_algorithm(void);
-	
 };
 
 #endif
