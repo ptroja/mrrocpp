@@ -60,6 +60,8 @@ int step_no;
 	Homog_matrix O_Tx_G__C2;
 	Homog_matrix E_Tx_C2;
 	Homog_matrix C2_Tx_G;
+	Homog_matrix O_Tx_G__fEIH;
+	Homog_matrix CEIH_Tx_G__f;
 
 	Homog_matrix O_Tx_EE;	
 	double O_r_G__C2[3][6];
@@ -72,6 +74,7 @@ int step_no;
 	
 	double O_r_G[3][6];
 	double O_rcom_G[3][6];
+	double O_r_G__fEIH[3][6];
 	double E_r_G[3][6];
 	double E_r_Ep[3][6];
 	

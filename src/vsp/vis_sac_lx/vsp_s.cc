@@ -54,6 +54,8 @@
 
 #define BUFFER_SIZE 8*256 //8*
 
+#define BUFFER_EIH_SIZE 14*256
+
 int sockfd, portno, n;
 struct sockaddr_in serv_addr;
 struct hostent *server;
@@ -90,6 +92,15 @@ int z_sac=0;
 int a_sac=0;
 int b_sac=0;
 int g_sac=0;
+
+int x_jack_eih=0;
+int y_jack_eih=0;
+int z_jack_eih=0;
+
+int a_jack_eih=0;
+int b_jack_eih=0;
+int g_jack_eih=0;
+
 
 int C_T_G[16];
 
@@ -251,13 +262,12 @@ void vsp_vis_sac_lx_sensor::initiate_reading (void){
 	n_eih = write(sockfd_eih,"x",strlen("x"));
     if (n_eih < 0) 
          printf("ERROR writing to socket");
-    bzero(buffer_eih,BUFFER_SIZE);
-    n_eih = read(sockfd_eih,buffer_eih,BUFFER_SIZE);
+    bzero(buffer_eih,BUFFER_EIH_SIZE);
+    n_eih = read(sockfd_eih,buffer_eih,BUFFER_EIH_SIZE);
 	if (n_eih < 0) 
          printf("ERROR reading from socket");
-	sscanf(buffer_eih,"%d %d %d %d %d %d", &x,&y,&z, &a, &b, &g);
-	printf("VSP - %d %d %d %d %d %d\n", x,y,z, a, b, g);
-
+	sscanf(buffer_eih,"%d %d %d %d %d %d %d %d %d %d %d %d", &x,&y,&z, &a, &b, &g, &x_jack_eih, &y_jack_eih, &z_jack_eih, &a_jack_eih, &b_jack_eih, &g_jack_eih);
+	printf("VSP - %d %d %d %d %d %d %d %d %d %d %d %d\n", x,y,z, a, b, g, x_jack_eih, y_jack_eih, z_jack_eih, a_jack_eih, b_jack_eih, g_jack_eih);
 
 //for(int i=0; i<12; i++)
 /*
@@ -359,6 +369,13 @@ double aux=0;
 	//		from_vsp.comm_image.vis_sac.frame_E_T_G[15]=1;
 	//else
 	//		from_vsp.comm_image.vis_sac.frame_E_T_G[15]=0;
+	
+	from_vsp.comm_image.vis_sac.frame_E_r_G__CEIH[0]=(double) x_jack_eih/10000;
+	from_vsp.comm_image.vis_sac.frame_E_r_G__CEIH[1]=(double) y_jack_eih/10000;	
+	from_vsp.comm_image.vis_sac.frame_E_r_G__CEIH[2]=(double) z_jack_eih/10000;
+	from_vsp.comm_image.vis_sac.frame_E_r_G__CEIH[3]=(double) a_jack_eih/100000;
+	from_vsp.comm_image.vis_sac.frame_E_r_G__CEIH[4]=(double) b_jack_eih/100000;
+	from_vsp.comm_image.vis_sac.frame_E_r_G__CEIH[5]=(double) g_jack_eih/100000;
 	
 	from_vsp.comm_image.vis_sac.frame_E_r_G__f[0]=(double) x/10000;
 	from_vsp.comm_image.vis_sac.frame_E_r_G__f[1]=(double) y/10000;	

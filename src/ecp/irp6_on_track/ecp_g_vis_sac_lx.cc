@@ -325,7 +325,7 @@ std::cout << "C_T_G" << std::endl;
 	C_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G[0],vsp_vis_sac->image.vis_sac.frame_E_r_G[1],
 -vsp_vis_sac->image.vis_sac.frame_E_r_G[2],
 
-vsp_vis_sac->image.vis_sac.frame_E_r_G[5],0,0.05);
+vsp_vis_sac->image.vis_sac.frame_E_r_G[5],0,-0.05);
 std::cout <<"Rota C_T_Gxxx " << vsp_vis_sac->image.vis_sac.frame_E_r_G[5] <<" " << O_r_G[0][4] << " "<< O_r_G[0][5] <<std::endl;
 
 //EIH
@@ -338,6 +338,11 @@ std::cout <<"Rota C_T_Gxxx " << vsp_vis_sac->image.vis_sac.frame_E_r_G[5] <<" " 
 
 	C_Tx_G.get_xyz_rpy(C_r_G[0]);
 	
+	CEIH_Tx_G__f.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[0],vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[1],
+-vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[2],
+-vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[3]
+,0,0);
+
 
 
 //podjazd gdy sie nie ruszamy
@@ -415,6 +420,14 @@ std::cout <<"x2g " << x2g << std::endl;
 
 	C2_Tx_G=C2_Tx_G*G_Tx_S;
 	O_Tx_G__C2=O_Tx_E*C2_Tx_G; //rota O_Tx_E 0,0,0
+	
+	//EIHJACK
+	CEIH_Tx_G__f.get_xyz_angle_axis(O_r_G__fEIH[0]);
+
+
+	CEIH_Tx_G__f=CEIH_Tx_G__f*G_Tx_S;
+	O_Tx_G__fEIH=O_Tx_E*CEIH_Tx_G__f; //rota O_Tx_E 0,0,0
+	O_Tx_G__fEIH.get_xyz_angle_axis(O_r_G__fEIH[0]);	
 
 	//SAC
 	O_Tx_G.get_xyz_angle_axis(O_r_G[0]);
@@ -437,6 +450,13 @@ std::cout <<"x2g " << x2g << std::endl;
 	for (int i=0; i<6; i++)
 	{
 		std::cout << O_r_G[0][i]<< " ";
+	}
+	std::cout << std::endl;
+	
+	std::cout << " EIH_JACK ";
+	for (int i=0; i<6; i++)
+	{
+		std::cout << O_r_G__fEIH[0][i]<< " ";
 	}
 	std::cout << std::endl;
 	

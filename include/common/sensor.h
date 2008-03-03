@@ -72,6 +72,7 @@ typedef struct{
 			double frame_O_T_G[16];
 			double frame_E_T_G[16];
 			double frame_E_r_G[6];
+			double frame_E_r_G__CEIH[6];
 			double frame_E_r_G__f[6];
 		} vis_sac;
 		
