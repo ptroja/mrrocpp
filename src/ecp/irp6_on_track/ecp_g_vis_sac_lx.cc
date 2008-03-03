@@ -325,7 +325,7 @@ std::cout << "C_T_G" << std::endl;
 	C_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G[0],vsp_vis_sac->image.vis_sac.frame_E_r_G[1],
 -vsp_vis_sac->image.vis_sac.frame_E_r_G[2],
 
-vsp_vis_sac->image.vis_sac.frame_E_r_G[5],0,0);
+vsp_vis_sac->image.vis_sac.frame_E_r_G[5],0,0.05);
 std::cout <<"Rota C_T_Gxxx " << vsp_vis_sac->image.vis_sac.frame_E_r_G[5] <<" " << O_r_G[0][4] << " "<< O_r_G[0][5] <<std::endl;
 
 //EIH
@@ -400,6 +400,12 @@ std::cout <<"x2g " << x2g << std::endl;
 	O_Tx_E=O_Tx_E*!G_Tx_G2;
 	O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
 
+	std::cout << " O_T_E ";
+	for (int i=0; i<6; i++)
+	{
+		std::cout << O_r_E[0][i] << " ";
+	}
+	std::cout << std::endl;	
 
 	O_Tx_EE.set_frame_tab(the_robot->EDP_data.current_arm_frame_m);
 
@@ -448,8 +454,8 @@ std::cout <<"x2g " << x2g << std::endl;
 		for (int i=0; i<6; i++)
 	{
 		//O_r_G[0][i]=0.5*O_r_G[0][i]+0.5*O_rcom_G[0][i]; //SAC+EIH
-		//O_r_G[0][i]=O_rcom_G[0][i]; //SAC ONLY
-		O_r_G[0][i]=O_r_G[0][i]; //EIH ONLY
+		O_r_G[0][i]=O_rcom_G[0][i]; //SAC ONLY
+		//O_r_G[0][i]=O_r_G[0][i]; //EIH ONLY
 	}
 	
 	
