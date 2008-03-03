@@ -55,6 +55,7 @@ void mp_task_multiplayer::main_task_algorithm(void)
 		do {
 			sr_ecp_msg->message("Nowy makrokrok");
 
+			/*
 			if (set_next_ecps_state (ECP_GEN_SPEECHRECOGNITION, 0, NULL, 1, ROBOT_SPEECHRECOGNITION)) {
 				break_state = true;
 		       	break;
@@ -65,13 +66,14 @@ void mp_task_multiplayer::main_task_algorithm(void)
 				break_state = true;
 		       	break;
 			}
+			*/
 			
 			/*
 			char *qq = robot_m[ROBOT_SPEECHRECOGNITION]->ecp_td.commandRecognized;
 			printf("commandRecognized = \"%s\"\n", qq);
 			*/
 			
-			if (set_next_ecps_state (ECP_GEN_FESTIVAL, festival_generator::POLISH_VOICE, "komenda odebrana", 1, ROBOT_FESTIVAL)) {
+			if (set_next_ecps_state (ECP_GEN_FESTIVAL, festival_generator::POLISH_VOICE, "raz dwa trzy cztery pie~c~ szes~c~ siedem osiem", 1, ROBOT_FESTIVAL)) {
 				break_state = true;
 		       	break;
 			}

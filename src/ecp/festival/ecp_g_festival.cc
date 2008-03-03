@@ -21,6 +21,7 @@ festival_generator::festival_generator(ecp_task& _ecp_task) :
 	portnum = ecp_t.config.return_int_value("server_port");
 	test_mode = ecp_t.config.return_int_value("test_mode");
 	voice = "";
+	sock = -1;
 }
 
 festival_generator::~festival_generator()
@@ -83,13 +84,18 @@ bool festival_generator::first_step ( )
 	if((entp = gethostbyname(host)) == NULL) {
 		fprintf(stderr, "festival_generator::first_step(): \"%s\" is unknown host; "
 		        "can't connect to Festival\n", host);
-		delete [] host;
 		return false;
 	}
 
 	memcpy(&server.sin_addr, entp->h_addr_list[0], entp->h_length);
 
 	server.sin_port = htons(portnum);
+	
+	if (sock >=0) {
+		if (close(sock) == -1) {
+			perror("festival_generator::first_step(): close()");
+		}
+	}
 
 	/* make a new socket */
 	if((sock = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
@@ -133,7 +139,10 @@ bool festival_generator::next_step ( )
 	}
 
 	if (!read_pending_status) {
-		close(sock);
+		if (close(sock) == -1) {
+			perror("festival_generator::first_step(): close()");
+		}
+		sock = -1;
 		return false;
 	}
 
@@ -156,7 +165,7 @@ bool festival_generator::next_step ( )
 			/* timeout */
 			break;
 		default:
-			has_data = true;
+			has_data = (FD_ISSET(sock, &rd)) ? true : false;
 			break;
 	}
 
@@ -177,6 +186,7 @@ bool festival_generator::next_step ( )
 			        "expected %d bytes of code, but got %d\n",
 			        (int) strlen(FESTIVAL_CODE_OK),numread);
 			close(sock);
+			sock = -1;
 			return false;
 		}
 
