@@ -322,9 +322,9 @@ Homog_matrix::Homog_matrix(double r[3][3], double t[3])
 
 
 // Utworzenie macierzy jednorodnej na podstawie zawartosci tablicy podanej jako argument.
-Homog_matrix::Homog_matrix(const frame_tab frame_m)
+Homog_matrix::Homog_matrix(const frame_tab frame)
 {
-	set_frame_tab(frame_m);
+	set_frame_tab(frame);
 };//: Homog_matrix::Homog_matrix(frame_tab frame)
 
 
@@ -437,16 +437,16 @@ Homog_matrix::Homog_matrix(POSE_SPECIFICATION mtr_ps, double x, double y, double
 
 
 // Zwrocenie obecnej tablicy, zawierajacej dane macierzy jednorodnej.
-void Homog_matrix::get_frame_tab(frame_tab frame_m) const
+void Homog_matrix::get_frame_tab(frame_tab frame) const
 {
-	copy_frame(frame_m, matrix_m);
+	copy_frame(frame, matrix_m);
 };//: get_frame_tab
 
 
 // Ustawienie tablicy, ktora zawiera dane macierzy jednorodnej.
-void Homog_matrix::set_frame_tab(const frame_tab frame_m)
+void Homog_matrix::set_frame_tab(const frame_tab frame)
 {
-	copy_frame(matrix_m, frame_m);
+	copy_frame(matrix_m, frame);
 };//: set_frame_tab
 
 
@@ -1520,7 +1520,7 @@ Wyznaczenie uchybu pozycji tzn. róznicy pozycji aktualnej i zadanej
 Sibi
  ------------------------------------------------------------------------ */	
 	
-void Ft_v_vector::position_distance(frame_tab* local_current_end_effector_frame_m, frame_tab* local_desired_end_effector_frame_m)
+void Ft_v_vector::position_distance(frame_tab* local_current_end_effector_frame, frame_tab* local_desired_end_effector_frame)
 {
 
 double n_t[3], n_d[3], o_t[3], o_d[3], a_t[3], a_d[3];
@@ -1528,29 +1528,29 @@ double n_t[3], n_d[3], o_t[3], o_d[3], a_t[3], a_d[3];
 //Wyliczenie wektora przesuniecia : w - predkosc katowa
 // n, o, a - wektory normalny, orientacji i zbli¿enia 
 
-n_t[0]=(*local_current_end_effector_frame_m)[0][0];
-n_t[1]=(*local_current_end_effector_frame_m)[1][0];
-n_t[2]=(*local_current_end_effector_frame_m)[2][0];
+n_t[0]=(*local_current_end_effector_frame)[0][0];
+n_t[1]=(*local_current_end_effector_frame)[1][0];
+n_t[2]=(*local_current_end_effector_frame)[2][0];
 
-n_d[0]=(*local_desired_end_effector_frame_m)[0][0];
-n_d[1]=(*local_desired_end_effector_frame_m)[1][0];
-n_d[2]=(*local_desired_end_effector_frame_m)[2][0];
+n_d[0]=(*local_desired_end_effector_frame)[0][0];
+n_d[1]=(*local_desired_end_effector_frame)[1][0];
+n_d[2]=(*local_desired_end_effector_frame)[2][0];
 
-o_t[0]=(*local_current_end_effector_frame_m)[0][1];
-o_t[1]=(*local_current_end_effector_frame_m)[1][1];
-o_t[2]=(*local_current_end_effector_frame_m)[2][1];
+o_t[0]=(*local_current_end_effector_frame)[0][1];
+o_t[1]=(*local_current_end_effector_frame)[1][1];
+o_t[2]=(*local_current_end_effector_frame)[2][1];
 
-o_d[0]=(*local_desired_end_effector_frame_m)[0][1];
-o_d[1]=(*local_desired_end_effector_frame_m)[1][1];
-o_d[2]=(*local_desired_end_effector_frame_m)[2][1];
+o_d[0]=(*local_desired_end_effector_frame)[0][1];
+o_d[1]=(*local_desired_end_effector_frame)[1][1];
+o_d[2]=(*local_desired_end_effector_frame)[2][1];
 
-a_t[0]=(*local_current_end_effector_frame_m)[0][2];
-a_t[1]=(*local_current_end_effector_frame_m)[1][2];
-a_t[2]=(*local_current_end_effector_frame_m)[2][2];
+a_t[0]=(*local_current_end_effector_frame)[0][2];
+a_t[1]=(*local_current_end_effector_frame)[1][2];
+a_t[2]=(*local_current_end_effector_frame)[2][2];
 
-a_d[0]=(*local_desired_end_effector_frame_m)[0][2];
-a_d[1]=(*local_desired_end_effector_frame_m)[1][2];
-a_d[2]=(*local_desired_end_effector_frame_m)[2][2];
+a_d[0]=(*local_desired_end_effector_frame)[0][2];
+a_d[1]=(*local_desired_end_effector_frame)[1][2];
+a_d[2]=(*local_desired_end_effector_frame)[2][2];
 
 //Wyliczenie wektora przesuniecia : v - predkosc obrotowa
 
@@ -1560,9 +1560,9 @@ w[2]=(0.5)*((n_t[0]*n_d[1]-n_t[1]*n_d[0])+(o_t[0]*o_d[1]-o_t[1]*o_d[0])+(a_t[0]*
 
 //Wyliczenie wektora przesuniecia : v - predkosc liniowa
 
-w[3]=(*local_desired_end_effector_frame_m)[0][3]-(*local_current_end_effector_frame_m)[0][3];
-w[4]=(*local_desired_end_effector_frame_m)[1][3]-(*local_current_end_effector_frame_m)[1][3];
-w[5]=(*local_desired_end_effector_frame_m)[2][3]-(*local_current_end_effector_frame_m)[2][3];
+w[3]=(*local_desired_end_effector_frame)[0][3]-(*local_current_end_effector_frame)[0][3];
+w[4]=(*local_desired_end_effector_frame)[1][3]-(*local_current_end_effector_frame)[1][3];
+w[5]=(*local_desired_end_effector_frame)[2][3]-(*local_current_end_effector_frame)[2][3];
 }// end Ft_v_vector::position_distance(frame_tab*, frame_tab* )
 	
 K_vector Ft_v_vector::get_force_K_vector() const

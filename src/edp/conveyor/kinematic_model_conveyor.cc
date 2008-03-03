@@ -97,22 +97,22 @@ void kinematic_model_conveyor::i2mp_transform(double* local_desired_motor_pos_ne
   * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ) 
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
-void kinematic_model_conveyor::direct_kinematics_transform(double* local_current_joints, frame_tab* local_current_end_effector_frame_m)
+void kinematic_model_conveyor::direct_kinematics_transform(double* local_current_joints, frame_tab* local_current_end_effector_frame)
 {
 
   // Proste zadanie kinematyki.
-  (*local_current_end_effector_frame_m)[0][0] = 0.0;
-  (*local_current_end_effector_frame_m)[0][1] = 0.0;
-  (*local_current_end_effector_frame_m)[0][2] = 0.0;
-  (*local_current_end_effector_frame_m)[0][3] = local_current_joints[0];
-  (*local_current_end_effector_frame_m)[1][0] = 0.0;
-  (*local_current_end_effector_frame_m)[1][1] = 0.0;
-  (*local_current_end_effector_frame_m)[1][2] = 0.0;
-  (*local_current_end_effector_frame_m)[1][3] = 0.0;
-  (*local_current_end_effector_frame_m)[2][0] = 0.0;
-  (*local_current_end_effector_frame_m)[2][1] = 0.0;
-  (*local_current_end_effector_frame_m)[2][2] = 0.0;
-  (*local_current_end_effector_frame_m)[2][3] = 0.0;
+  (*local_current_end_effector_frame)[0][0] = 0.0;
+  (*local_current_end_effector_frame)[0][1] = 0.0;
+  (*local_current_end_effector_frame)[0][2] = 0.0;
+  (*local_current_end_effector_frame)[0][3] = local_current_joints[0];
+  (*local_current_end_effector_frame)[1][0] = 0.0;
+  (*local_current_end_effector_frame)[1][1] = 0.0;
+  (*local_current_end_effector_frame)[1][2] = 0.0;
+  (*local_current_end_effector_frame)[1][3] = 0.0;
+  (*local_current_end_effector_frame)[2][0] = 0.0;
+  (*local_current_end_effector_frame)[2][1] = 0.0;
+  (*local_current_end_effector_frame)[2][2] = 0.0;
+  (*local_current_end_effector_frame)[2][3] = 0.0;
 
   // Obliczenia zwiazane z przeksztalceniami do globalnego ukladu odniesienia.
 
@@ -133,9 +133,9 @@ void kinematic_model_conveyor::direct_kinematics_transform(double* local_current
   Wyjscie:
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno d0, q1, q2, ...)
  ------------------------------------------------------------------------ */
-void kinematic_model_conveyor::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame_m)
+void kinematic_model_conveyor::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
 {
-    local_desired_joints[0] = (*local_desired_end_effector_frame_m)[0][3];
+    local_desired_joints[0] = (*local_desired_end_effector_frame)[0][3];
 }; //: inverse_kinematics_transform()
 
 

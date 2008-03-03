@@ -54,14 +54,14 @@ kinematic_model_irp6p_jacobian_with_wrist::kinematic_model_irp6p_jacobian_with_w
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
  ------------------------------------------------------------------------ */
 
-void kinematic_model_irp6p_jacobian_with_wrist::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame_m)
+void kinematic_model_irp6p_jacobian_with_wrist::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
 {
 
   double K=1; 			//Zadane wzmocnienie
   double E=0.00001;		//Uchyb dla którego rozwiazanie zaakceptowane
   double Max;			//pomocnbicza zmienna - max element wektora
 
-  frame_tab local_current_end_effector_frame_m;	//Ramka odpowiadajaca aktualnej pozycji 
+  frame_tab local_current_end_effector_frame;	//Ramka odpowiadajaca aktualnej pozycji 
   Ft_v_vector desired_distance_new;				//odleglosc do pokonania
   Ft_v_vector delta_q;									//przyrost zmieenych przegubowych na jedna iteracje
   Ft_v_vector current_joints;							//wartosci aktualnych zmiennych przegubowych reprezentowane jako wektor
@@ -71,9 +71,9 @@ void kinematic_model_irp6p_jacobian_with_wrist::inverse_kinematics_transform(dou
   attached_tool_computations = false;
   
   //wyliczenie prostego zadania kinematyki dla aktualnej konfiguracji	  
-  i2e_transform(local_current_joints, &local_current_end_effector_frame_m);
+  i2e_transform(local_current_joints, &local_current_end_effector_frame);
   attached_tool_computations = true;
-  desired_distance_new.position_distance(&local_current_end_effector_frame_m, local_desired_end_effector_frame_m);
+  desired_distance_new.position_distance(&local_current_end_effector_frame, local_desired_end_effector_frame);
 
  // printf("jacobian inverse\n");
 	
@@ -95,11 +95,11 @@ while(fabs(Max)>E){
 
     //wyliczenie prostego zadania kinematyki dla nowo wyliczonej konfiguracji		   
 	attached_tool_computations = false;
-	i2e_transform(local_current_joints, &local_current_end_effector_frame_m);
+	i2e_transform(local_current_joints, &local_current_end_effector_frame);
 	attached_tool_computations = true;
 	
 	//Wyliczenie uchybu pozycji dla zadanej tymczasowej i porzadanej ramki 	  
-	desired_distance_new.position_distance(&local_current_end_effector_frame_m, local_desired_end_effector_frame_m);
+	desired_distance_new.position_distance(&local_current_end_effector_frame, local_desired_end_effector_frame);
 		  
 	Max=desired_distance_new.max_element(); 
 	desired_distance_new=desired_distance_new*K;	  

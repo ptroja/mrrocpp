@@ -1197,7 +1197,7 @@ bool ecp_tool_change_generator::first_step ()
 
 
     Homog_matrix tool_frame(tool_parameters[0], tool_parameters[1], tool_parameters[2]);
-    tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame_m);
+    tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
     the_robot->EDP_data.instruction_type = SET;
     the_robot->EDP_data.get_type = ARM_DV;

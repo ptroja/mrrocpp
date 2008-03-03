@@ -525,7 +525,7 @@ struct servo_group_reply // wzorzec odpowiedzi przesylanej z SERVO_GROUP do EDP_
 
 typedef union { // rmodel
 	struct {
-		frame_tab tool_frame_m; // trojscian narzedzia wzgledem kolnierza
+		frame_tab tool_frame; // trojscian narzedzia wzgledem kolnierza
 		// 	BYTE address_byte;         // bajt do obliczania dlugosci rozkazu
 	} tool_frame_def;
 	struct {
@@ -550,7 +550,7 @@ typedef union { // arm
 		int command;        // wariat zapytania o get_state
 	} get_state_def;
 	struct {
-		frame_tab arm_frame_m;        // trojscian koncowki wzgledem ukladu bazowego
+		frame_tab arm_frame;        // trojscian koncowki wzgledem ukladu bazowego
 		double gripper_coordinate; // stopien rozwarcia chwytaka
 		// 	BYTE address_byte;                // bajt do obliczania dlugosci rozkazu
 	} frame_def;
@@ -636,7 +636,7 @@ struct c_buffer {
 
 typedef union {   // rmodel
 	struct {
-		frame_tab tool_frame_m;         // Macierz reprezentujaca narzedzie
+		frame_tab tool_frame;         // Macierz reprezentujaca narzedzie
 		// wzgledem konca lancucha kinematycznego
 		//		BYTE address_byte;             // bajt do obliczania dlugosci odpowiedzi
 	} tool_frame_def;
@@ -667,7 +667,7 @@ typedef union {   // arm
 	struct {
 		word16 PWM_value[MAX_SERVOS_NR];               // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
 		word16 current[MAX_SERVOS_NR];                 // prad sterujacy -- zazwyczaj zbedne
-		frame_tab arm_frame_m;           // Macierz reprezentujaca koncowke
+		frame_tab arm_frame;           // Macierz reprezentujaca koncowke
 		// wzgledem bazy manipulator
 		short gripper_reg_state; // stan w ktorym znajduje sie regulator chwytaka
 		double gripper_coordinate; // stopien rozwarcia chwytaka
@@ -684,9 +684,9 @@ typedef union {   // arm
 	struct { // by Y do sterowania pozycyjno silowego
 		word16 PWM_value[MAX_SERVOS_NR];               // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
 		word16 current[MAX_SERVOS_NR];
-		frame_tab   beggining_arm_frame_m;        // trojscian koncowki wzgledem ukladu bazowego
-		frame_tab   predicted_arm_frame_m;        // trojscian koncowki wzgledem ukladu bazowego
-		frame_tab   present_arm_frame_m;        // trojscian koncowki wzgledem ukladu bazowego
+		frame_tab   beggining_arm_frame;        // trojscian koncowki wzgledem ukladu bazowego
+		frame_tab   predicted_arm_frame;        // trojscian koncowki wzgledem ukladu bazowego
+		frame_tab   present_arm_frame;        // trojscian koncowki wzgledem ukladu bazowego
 		// double pos_xyz_rot_xyz[6];
 		double force_xyz_torque_xyz[6];
 		short gripper_reg_state; // stan w ktorym znajduje sie regulator chwytaka

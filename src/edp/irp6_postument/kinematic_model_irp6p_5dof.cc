@@ -61,7 +61,7 @@ void kinematic_model_irp6p_5dof::set_kinematic_parameters(void)
   metoda musi byc pusta - przedefiniowanie standardowej metody.
   W prostym zadaniu narzedzue jest "dolaczone" normalnie.
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6p_5dof::attached_tool_inverse_transform(frame_tab* local_current_end_effector_frame_m)
+void kinematic_model_irp6p_5dof::attached_tool_inverse_transform(frame_tab* local_current_end_effector_frame)
 {
 	return;
 };//: attached_tool_inverse_transform
@@ -78,7 +78,7 @@ void kinematic_model_irp6p_5dof::attached_tool_inverse_transform(frame_tab* loca
   * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ) 
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6p_5dof::direct_kinematics_transform(double* local_current_joints, frame_tab* local_current_end_effector_frame_m)
+void kinematic_model_irp6p_5dof::direct_kinematics_transform(double* local_current_joints, frame_tab* local_current_end_effector_frame)
 {
 
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
@@ -97,18 +97,18 @@ void kinematic_model_irp6p_5dof::direct_kinematics_transform(double* local_curre
   double c5 = cos(local_current_joints[4]);
 
   // Proste zadanie kinematyki.
-  (*local_current_end_effector_frame_m)[0][0] = (c5*s4*c1+s1*s5);
-  (*local_current_end_effector_frame_m)[0][1] = (-s5*s4*c1+s1*c5);
-  (*local_current_end_effector_frame_m)[0][2] = c4*c1;
-  (*local_current_end_effector_frame_m)[0][3] = c1*(d6*c4+a3*c3+a2*c2);
-  (*local_current_end_effector_frame_m)[1][0] = (c5*s4*s1-c1*s5);
-  (*local_current_end_effector_frame_m)[1][1] = (-s5*s4*s1-c1*c5);
-  (*local_current_end_effector_frame_m)[1][2] = c4*s1;
-  (*local_current_end_effector_frame_m)[1][3] = d6*c4*s1 + a3*c3*s1 + a2*s1*c2;
-  (*local_current_end_effector_frame_m)[2][0] = (c4*c5);
-  (*local_current_end_effector_frame_m)[2][1] = (-c4*s5);
-  (*local_current_end_effector_frame_m)[2][2] = -s4;
-  (*local_current_end_effector_frame_m)[2][3] = -d6*s4 - a3*s3 - a2*s2 + d1;
+  (*local_current_end_effector_frame)[0][0] = (c5*s4*c1+s1*s5);
+  (*local_current_end_effector_frame)[0][1] = (-s5*s4*c1+s1*c5);
+  (*local_current_end_effector_frame)[0][2] = c4*c1;
+  (*local_current_end_effector_frame)[0][3] = c1*(d6*c4+a3*c3+a2*c2);
+  (*local_current_end_effector_frame)[1][0] = (c5*s4*s1-c1*s5);
+  (*local_current_end_effector_frame)[1][1] = (-s5*s4*s1-c1*c5);
+  (*local_current_end_effector_frame)[1][2] = c4*s1;
+  (*local_current_end_effector_frame)[1][3] = d6*c4*s1 + a3*c3*s1 + a2*s1*c2;
+  (*local_current_end_effector_frame)[2][0] = (c4*c5);
+  (*local_current_end_effector_frame)[2][1] = (-c4*s5);
+  (*local_current_end_effector_frame)[2][2] = -s4;
+  (*local_current_end_effector_frame)[2][3] = -d6*s4 - a3*s3 - a2*s2 + d1;
 
 } //:: i2e_transform()
 
@@ -124,7 +124,7 @@ void kinematic_model_irp6p_5dof::direct_kinematics_transform(double* local_curre
   Wyjscie:
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6p_5dof::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame_m)
+void kinematic_model_irp6p_5dof::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
 {
   // Stale 
  // const double a2_2 = a2*a2;
@@ -151,9 +151,9 @@ void kinematic_model_irp6p_5dof::inverse_kinematics_transform(double* local_desi
 	old_theta[i] = local_current_joints[i];
 
 	
-  q0[0] = (*local_desired_end_effector_frame_m)[0][3];
-  q0[1] = (*local_desired_end_effector_frame_m)[1][3];
-  q0[2] = (*local_desired_end_effector_frame_m)[2][3];
+  q0[0] = (*local_desired_end_effector_frame)[0][3];
+  q0[1] = (*local_desired_end_effector_frame)[1][3];
+  q0[2] = (*local_desired_end_effector_frame)[2][3];
 
   // Pobranie danych narzedzia.
   frame_tab tmp_tool_m;
@@ -163,9 +163,9 @@ void kinematic_model_irp6p_5dof::inverse_kinematics_transform(double* local_desi
   q6[1] = tmp_tool_m[1][3];
   q6[2] = tmp_tool_m[2][3];
 		
-  v0[0] = (*local_desired_end_effector_frame_m)[0][0];
-  v0[1] = (*local_desired_end_effector_frame_m)[1][0];
-  v0[2] = (*local_desired_end_effector_frame_m)[2][0];// tutaj byl minus, ale dlaczego???
+  v0[0] = (*local_desired_end_effector_frame)[0][0];
+  v0[1] = (*local_desired_end_effector_frame)[1][0];
+  v0[2] = (*local_desired_end_effector_frame)[2][0];// tutaj byl minus, ale dlaczego???
 
   v6[0] = tmp_tool_m[0][0];
   v6[1] = tmp_tool_m[1][0];

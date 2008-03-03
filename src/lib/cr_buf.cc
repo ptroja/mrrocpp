@@ -28,16 +28,16 @@ c_buffer::c_buffer (void) :
   for (int i=0; i<4; i++)
     for (int j=0; j<3; j++)
       if (i==j)
-        arm.frame_def.arm_frame_m[j][i] = 1.0;
+        arm.frame_def.arm_frame[j][i] = 1.0;
       else
-        arm.frame_def.arm_frame_m[j][i] = 0.0;
+        arm.frame_def.arm_frame[j][i] = 0.0;
         
   for (int i=0; i<4; i++)
     for (int j=0; j<3; j++)
       if (i==j)
-        rmodel.tool_frame_def.tool_frame_m[j][i] = 1.0;
+        rmodel.tool_frame_def.tool_frame[j][i] = 1.0;
       else
-        rmodel.tool_frame_def.tool_frame_m[j][i] = 0.0;
+        rmodel.tool_frame_def.tool_frame[j][i] = 0.0;
  // rmodel.tool_frame_def.address_byte = 0;
 }; // end: c_buffer::c_buffer
 /*--------------------------------------------------------------------------*/
@@ -59,15 +59,15 @@ r_buffer::r_buffer (void) :
   for (int i=0; i<4; i++)
     for (int j=0; j<3; j++)
       if (i==j)
-        arm.frame_def.arm_frame_m[j][i] = 1.0;
+        arm.frame_def.arm_frame[j][i] = 1.0;
       else
-        arm.frame_def.arm_frame_m[j][i] = 0.0;
+        arm.frame_def.arm_frame[j][i] = 0.0;
   for (int i=0; i<4; i++)
     for (int j=0; j<3; j++)
       if (i==j)
-        rmodel.tool_frame_def.tool_frame_m[j][i] = 1.0;
+        rmodel.tool_frame_def.tool_frame[j][i] = 1.0;
       else
-        rmodel.tool_frame_def.tool_frame_m[j][i] = 0.0;
+        rmodel.tool_frame_def.tool_frame[j][i] = 0.0;
 //  rmodel.tool_frame_def.address_byte = 0;
 }; // end: r_buffer::r_buffer
 /*--------------------------------------------------------------------------*/

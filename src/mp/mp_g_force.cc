@@ -86,8 +86,8 @@ bool mp_tff_single_robot_nose_run_generator::first_step ()
 	irp6->ecp_td.motion_steps = td.internode_step_no;
 	irp6->ecp_td.value_in_step_no = td.value_in_step_no;
 
-	Homog_matrix tool_frame_m(0.0, 0.0, 0.25);
-	tool_frame_m.get_frame_tab(irp6->ecp_td.next_tool_frame_m);
+	Homog_matrix tool_frame(0.0, 0.0, 0.25);
+	tool_frame.get_frame_tab(irp6->ecp_td.next_tool_frame);
 
 	for(int i=0;i<6;i++) {
 		irp6->ecp_td.MPtoECP_position_velocity[i] = 0;
@@ -228,8 +228,8 @@ bool mp_tff_nose_run_generator::first_step ()
 		irp6ot->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
 	}
 
-	Homog_matrix tool_frame_m(0.0, 0.0, 0.25);
-	tool_frame_m.get_frame_tab(irp6ot->ecp_td.next_tool_frame_m);
+	Homog_matrix tool_frame(0.0, 0.0, 0.25);
+	tool_frame.get_frame_tab(irp6ot->ecp_td.next_tool_frame);
 
 	irp6p->ecp_td.mp_command = NEXT_POSE;
 	irp6p->ecp_td.instruction_type = GET;
@@ -243,7 +243,7 @@ bool mp_tff_nose_run_generator::first_step ()
 	irp6p->ecp_td.motion_steps = td.internode_step_no;
 	irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
 
-	tool_frame_m.get_frame_tab(irp6p->ecp_td.next_tool_frame_m);
+	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
 		irp6p->ecp_td.MPtoECP_position_velocity[i] = 0;
@@ -392,8 +392,8 @@ bool mp_haptic_generator::first_step ()
 		irp6ot->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
 	}
 
-	Homog_matrix tool_frame_m(0.0, 0.0, 0.25);
-	tool_frame_m.get_frame_tab(irp6ot->ecp_td.next_tool_frame_m);
+	Homog_matrix tool_frame(0.0, 0.0, 0.25);
+	tool_frame.get_frame_tab(irp6ot->ecp_td.next_tool_frame);
 
 
 	irp6p->ecp_td.mp_command = NEXT_POSE;
@@ -408,7 +408,7 @@ bool mp_haptic_generator::first_step ()
 	irp6p->ecp_td.motion_steps = td.internode_step_no;
 	irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
 
-	tool_frame_m.get_frame_tab(irp6p->ecp_td.next_tool_frame_m);
+	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
 		irp6p->ecp_td.MPtoECP_position_velocity[i] = 0;
@@ -486,8 +486,8 @@ bool mp_haptic_generator::next_step ()
 	}
 
 
-	Homog_matrix irp6ot_current_predicted_arm_frame (irp6ot->ecp_td.MPcurrent_predicted_arm_frame_m);
-	Homog_matrix irp6p_current_predicted_arm_frame (irp6p->ecp_td.MPcurrent_predicted_arm_frame_m);
+	Homog_matrix irp6ot_current_predicted_arm_frame (irp6ot->ecp_td.MPcurrent_predicted_arm_frame);
+	Homog_matrix irp6p_current_predicted_arm_frame (irp6p->ecp_td.MPcurrent_predicted_arm_frame);
 
 	Homog_matrix irp6p_goal_frame (global_base*irp6ot_current_predicted_arm_frame);
 	irp6p_goal_frame.get_xyz_angle_axis (irp6p->ecp_td.MPtoECP_position_velocity);
@@ -586,8 +586,8 @@ bool mp_tff_rubik_grab_generator::first_step ()
 	irp6ot->ecp_td.motion_steps = td.internode_step_no;
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 
-	Homog_matrix tool_frame_m(0.0, 0.0, 0.25);
-	tool_frame_m.get_frame_tab(irp6ot->ecp_td.next_tool_frame_m);
+	Homog_matrix tool_frame(0.0, 0.0, 0.25);
+	tool_frame.get_frame_tab(irp6ot->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
 		irp6ot->ecp_td.MPtoECP_position_velocity[i] = 0;
@@ -646,7 +646,7 @@ bool mp_tff_rubik_grab_generator::first_step ()
 	irp6p->ecp_td.motion_steps = td.internode_step_no;
 	irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
 
-	tool_frame_m.get_frame_tab(irp6p->ecp_td.next_tool_frame_m);
+	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
 		irp6p->ecp_td.MPtoECP_position_velocity[i] = 0;
@@ -805,8 +805,8 @@ bool mp_tff_rubik_face_rotate_generator::first_step ()
 	irp6ot->ecp_td.motion_steps = td.internode_step_no;
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 
-	Homog_matrix tool_frame_m(0.0, 0.0, 0.25);
-	tool_frame_m.get_frame_tab(irp6ot->ecp_td.next_tool_frame_m);
+	Homog_matrix tool_frame(0.0, 0.0, 0.25);
+	tool_frame.get_frame_tab(irp6ot->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
 		irp6ot->ecp_td.MPtoECP_position_velocity[i] = 0;
@@ -866,7 +866,7 @@ bool mp_tff_rubik_face_rotate_generator::first_step ()
 	irp6p->ecp_td.motion_steps = td.internode_step_no;
 	irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
 
-	tool_frame_m.get_frame_tab(irp6p->ecp_td.next_tool_frame_m);
+	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
 		irp6p->ecp_td.MPtoECP_position_velocity[i] = 0;
@@ -935,7 +935,7 @@ bool mp_tff_rubik_face_rotate_generator::next_step ()
 		irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
 		irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
 		if(irp6ot_con < -0.1 || 0.1 < irp6ot_con) {
-			Homog_matrix frame(irp6ot->ecp_td.MPcurrent_beggining_arm_frame_m);
+			Homog_matrix frame(irp6ot->ecp_td.MPcurrent_beggining_arm_frame);
 			double xyz_eul_zyz[6];
 			frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double angle_to_move = (irp6ot_con / 180.0) * M_PI;
@@ -951,7 +951,7 @@ bool mp_tff_rubik_face_rotate_generator::next_step ()
 			}
 		}
 		if(irp6p_con < -0.1 || 0.1 < irp6p_con) {
-			Homog_matrix frame(irp6p->ecp_td.MPcurrent_beggining_arm_frame_m);
+			Homog_matrix frame(irp6p->ecp_td.MPcurrent_beggining_arm_frame);
 			double xyz_eul_zyz[6];
 			frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double angle_to_move = (irp6p_con / 180.0) * M_PI;
@@ -969,7 +969,7 @@ bool mp_tff_rubik_face_rotate_generator::next_step ()
 	}
 	if(node_counter >= 3) {
 		if(irp6p_con < -0.1 || 0.1 < irp6p_con) {
-			Homog_matrix current_frame(irp6p->ecp_td.MPcurrent_predicted_arm_frame_m);
+			Homog_matrix current_frame(irp6p->ecp_td.MPcurrent_predicted_arm_frame);
 			double xyz_eul_zyz[6];
 			current_frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double current_gamma = xyz_eul_zyz[5];
@@ -984,7 +984,7 @@ bool mp_tff_rubik_face_rotate_generator::next_step ()
 			}
 		}
 		if(irp6ot_con < -0.1 || 0.1 < irp6ot_con) {
-			Homog_matrix current_frame(irp6ot->ecp_td.MPcurrent_predicted_arm_frame_m);
+			Homog_matrix current_frame(irp6ot->ecp_td.MPcurrent_predicted_arm_frame);
 			double xyz_eul_zyz[6];
 			current_frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double current_gamma = xyz_eul_zyz[5];
@@ -1064,8 +1064,8 @@ bool mp_tff_gripper_approach_generator::first_step ()
 	irp6ot->ecp_td.motion_steps = td.internode_step_no;
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 
-	Homog_matrix tool_frame_m(0.0, 0.0, 0.25);
-	tool_frame_m.get_frame_tab(irp6ot->ecp_td.next_tool_frame_m);
+	Homog_matrix tool_frame(0.0, 0.0, 0.25);
+	tool_frame.get_frame_tab(irp6ot->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
 		irp6ot->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
@@ -1096,7 +1096,7 @@ bool mp_tff_gripper_approach_generator::first_step ()
 	irp6p->ecp_td.motion_steps = td.internode_step_no;
 	irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
 
-	tool_frame_m.get_frame_tab(irp6p->ecp_td.next_tool_frame_m);
+	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
 		irp6p->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;

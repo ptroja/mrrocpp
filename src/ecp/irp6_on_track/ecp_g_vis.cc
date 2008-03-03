@@ -204,14 +204,14 @@ the_robot->EDP_data.next_tool_frame[2][2]=cos(xbeta); the_robot->EDP_data.next_t
 
 // TOOL jednostkowy
 
-the_robot->EDP_data.next_tool_frame_m[0][0]=1; the_robot->EDP_data.next_tool_frame_m[1][0]=0;
-the_robot->EDP_data.next_tool_frame_m[2][0]=0; the_robot->EDP_data.next_tool_frame_m[0][3]=0;
+the_robot->EDP_data.next_tool_frame[0][0]=1; the_robot->EDP_data.next_tool_frame[1][0]=0;
+the_robot->EDP_data.next_tool_frame[2][0]=0; the_robot->EDP_data.next_tool_frame[0][3]=0;
 
-the_robot->EDP_data.next_tool_frame_m[0][1]=0; the_robot->EDP_data.next_tool_frame_m[1][1]=1;
-the_robot->EDP_data.next_tool_frame_m[2][1]=0; the_robot->EDP_data.next_tool_frame_m[1][3]=0;
+the_robot->EDP_data.next_tool_frame[0][1]=0; the_robot->EDP_data.next_tool_frame[1][1]=1;
+the_robot->EDP_data.next_tool_frame[2][1]=0; the_robot->EDP_data.next_tool_frame[1][3]=0;
 
-the_robot->EDP_data.next_tool_frame_m[0][2]=0; the_robot->EDP_data.next_tool_frame_m[1][2]=0;
-the_robot->EDP_data.next_tool_frame_m[2][2]=1; the_robot->EDP_data.next_tool_frame_m[2][3]=0.25;
+the_robot->EDP_data.next_tool_frame[0][2]=0; the_robot->EDP_data.next_tool_frame[1][2]=0;
+the_robot->EDP_data.next_tool_frame[2][2]=1; the_robot->EDP_data.next_tool_frame[2][3]=0.25;
 
 
 

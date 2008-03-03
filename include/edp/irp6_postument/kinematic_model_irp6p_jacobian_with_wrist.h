@@ -27,7 +27,7 @@ public:
   kinematic_model_irp6p_jacobian_with_wrist (void);
 
   //Rozwiazanie odwrotnego zagadnienia kinematyki.
-  virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame_m); 
+  virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame); 
 
 };//: kinematic_model_irp6p_jacobian_with_wrist
 

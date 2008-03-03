@@ -25,7 +25,7 @@ public:
 	int step_no;
 	double delta[6];
      
-     frame_tab my_goal_frame_m;
+     frame_tab my_goal_frame;
      
 	Homog_matrix C_Tx_G;
 	Homog_matrix C_Tx_E;

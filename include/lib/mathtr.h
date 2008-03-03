@@ -136,9 +136,9 @@ public:
 	Homog_matrix return_with_with_removed_rotation() const;
 
 	// Zwrocenie tablicy zawierajacej dane macierzy jednorodnej.
-	void get_frame_tab(frame_tab frame_m) const;
+	void get_frame_tab(frame_tab frame) const;
 	// Ustawienie tablicy zawierajacej dane macierzy jednorodnej.
-	void set_frame_tab(const frame_tab frame_m);
+	void set_frame_tab(const frame_tab frame);
 
      // Przeksztalcenie do formy XYZ_EULER_ZYZ i zwrocenie w tablicy.
 	void get_xyz_euler_zyz(double t[6]) const;
@@ -229,9 +229,9 @@ public:
 	int is_valid() const;
 
 	// Kopiowanie macierzy jednorodnej do DEST z SOURCE.
-	inline static void copy_frame_tab(frame_tab destination_frame_m,   frame_tab source_frame_m)
+	inline static void copy_frame_tab(frame_tab destination_frame,   frame_tab source_frame)
 	{
-		memcpy(destination_frame_m, source_frame_m, sizeof(frame_tab));
+		memcpy(destination_frame, source_frame, sizeof(frame_tab));
 	};//: copy_frame
 
 	// Kopiowanie macierzy jednorodnej w postaci XYZ_ANGLE_AXIS do DEST z SOURCE.
@@ -279,7 +279,7 @@ public:
 	
 	//Sibi
 	 //Wektor predkosci jako odleglosc dwuch pozycji zadanych w postaci ramek 
-	void position_distance(frame_tab* local_current_end_effector_frame_m, frame_tab* local_desired_end_effector_frame_m);
+	void position_distance(frame_tab* local_current_end_effector_frame, frame_tab* local_desired_end_effector_frame);
 
 	
 	K_vector get_force_K_vector()  const;

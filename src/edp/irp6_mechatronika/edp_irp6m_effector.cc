@@ -63,7 +63,7 @@ void edp_irp6m_effector::arm_abs_xyz_eul_zyz_2_frame (double *p) {
 	gamma = p[5];
 	Homog_matrix A_B_T (Homog_matrix::MTR_MECH_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
 	//Homog_matrix A_B_T (XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
-	A_B_T.get_frame_tab(desired_end_effector_frame_m);
+	A_B_T.get_frame_tab(desired_end_effector_frame);
 
 }; // end: edp_irp6s_effector::arm_abs_xyz_eul_zyz_2_frame
 /*--------------------------------------------------------------------------*/
@@ -76,7 +76,7 @@ void edp_irp6m_effector::arm_frame_2_xyz_eul_zyz () {
                            // FRAME do postaci XYZ_EULER_ZYZ
                            // oraz przepisanie wyniku przeksztacenia do
                            // wewntrznych struktur danych REPLY_BUFFER
-	Homog_matrix A(current_end_effector_frame_m);
+	Homog_matrix A(current_end_effector_frame);
 	switch (reply.reply_type) {
 		case ARM:
 		case ARM_INPUTS:
@@ -285,19 +285,19 @@ if (read_hardware)
      case FRAME:
         // przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
         get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-        get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame_m); 
+        get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame); 
         arm_frame_2_frame();
         break;
      case   XYZ_ANGLE_AXIS:
         // przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
         get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-        get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame_m); 
+        get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame); 
         arm_frame_2_xyz_aa();
         break;
      case   XYZ_EULER_ZYZ:
         // przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
         get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-        get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame_m); 
+        get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame); 
         arm_frame_2_xyz_eul_zyz();   // dla sterowania pozycyjnego
         reply.arm_type = XYZ_EULER_ZYZ;
         break;

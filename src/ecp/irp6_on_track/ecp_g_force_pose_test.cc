@@ -82,15 +82,15 @@ bool y_simple_generator::next_step ( ) {
 	else the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate-0.0001;
 	
 /*	
-	frame_tab beggining_frame_m;
+	frame_tab beggining_frame;
 	copy_frame(beggining_frame,the_robot->EDP_data.current_beggining_arm_frame);
 	homog_matrix beg_frame = homog_matrix(beggining_frame);
 	cout << endl << "ecp: beginning_frame" << endl << endl << beg_frame;
-	frame_tab present_frame_m;
+	frame_tab present_frame;
 	copy_frame(present_frame,the_robot->EDP_data.current_present_arm_frame);
 	homog_matrix pres_frame = homog_matrix(present_frame);
 	cout << endl << "ecp: present_frame" << endl << endl << pres_frame;
-	frame_tab predicted_frame_m;
+	frame_tab predicted_frame;
 	copy_frame(predicted_frame,the_robot->EDP_data.current_predicted_arm_frame);
 	homog_matrix pred_frame = homog_matrix(predicted_frame);
 	cout << endl << "ecp: predicted_frame" << endl << endl<< pred_frame;

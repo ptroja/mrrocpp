@@ -67,8 +67,8 @@ struct robot_transmission_data {
 	WORD value_in_step_no;         
 	
 	// polozenie trojscianu koncowki wzgledem ukladu bazowego
-	frame_tab current_arm_frame_m; 			// aktualne
-	frame_tab next_arm_frame_m;    			// wygenerowane
+	frame_tab current_arm_frame; 			// aktualne
+	frame_tab next_arm_frame;    			// wygenerowane
 	
 	// wspolrzedne XYZ + orientacja koncowki wzgledem ukladu bazowego
 	double current_XYZ_ZYZ_arm_coordinates[8];	// aktualne 
@@ -79,8 +79,8 @@ struct robot_transmission_data {
 	double next_XYZ_AA_arm_coordinates[6];		// wygenerowane
 
 	// trojscian narzedzia wzgledem kolnierza
-	frame_tab current_tool_frame_m;			// odczytany 
-	frame_tab next_tool_frame_m;			// wygenerowany
+	frame_tab current_tool_frame;			// odczytany 
+	frame_tab next_tool_frame;			// wygenerowany
 
 	// XYZ + orientacja ZYZ narzedzia wzgledem kolnierza
 	double current_XYZ_ZYZ_tool_coordinates[6];		// odczytane 
@@ -133,9 +133,9 @@ struct robot_EDP_transmission_data : robot_transmission_data {
 	//	bool selection_vector[6];
 
 	// r_buffer
-	frame_tab  current_beggining_arm_frame_m;      // trojscian koncowki wzgledem ukladu bazowego
-	frame_tab  current_predicted_arm_frame_m;      // trojscian koncowki wzgledem ukladu bazowego
-	frame_tab  current_present_arm_frame_m;      // trojscian koncowki wzgledem ukladu bazowego
+	frame_tab  current_beggining_arm_frame;      // trojscian koncowki wzgledem ukladu bazowego
+	frame_tab  current_predicted_arm_frame;      // trojscian koncowki wzgledem ukladu bazowego
+	frame_tab  current_present_arm_frame;      // trojscian koncowki wzgledem ukladu bazowego
 	// double pos_xyz_rot_xyz[6];
 	double EDPtoECP_force_xyz_torque_xyz[6];
 

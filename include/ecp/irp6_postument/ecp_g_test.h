@@ -19,7 +19,7 @@ class y_simple_generator : public ecp_generator {
 protected:
 	long run_counter;
 	bool second_step;
-	frame_tab previous_frame_m;
+	frame_tab previous_frame;
 	
 public:	
 	trajectory_description td;

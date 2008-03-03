@@ -66,7 +66,7 @@ void edp_irp6s_effector::compute_xyz_euler_zyz (c_buffer *instruction) {
    }; // end: switch (instruction.motion_type)
 
 // Przeliczenie wspolrzednych zewnetrznych na wspolrzedne wewnetrzne
-   get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, &desired_end_effector_frame_m);
+   get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, &desired_end_effector_frame);
 // Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
    get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
    
@@ -115,7 +115,7 @@ void edp_irp6s_effector::compute_xyz_angle_axis (c_buffer *instruction) {
         throw NonFatal_error_2(INVALID_MOTION_TYPE);
    }; // end: switch (instruction.motion_type)
 	// Przeliczenie wspolrzednych zewnetrznych na wspolrzedne wewnetrzne
-	get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, &desired_end_effector_frame_m);
+	get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, &desired_end_effector_frame);
 	// Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
 	get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
 	// kinematyka nie stwierdzila bledow, przepisanie wartosci
@@ -140,7 +140,7 @@ void edp_irp6s_effector::compute_frame (c_buffer *instruction) {
 		motion_steps = (*instruction).motion_steps;
 		value_in_step_no = (*instruction).value_in_step_no;
 		
-		copy_frame(p_m, (*instruction).arm.frame_def.arm_frame_m);
+		copy_frame(p_m, (*instruction).arm.frame_def.arm_frame);
 		
 	} // end: then
 	
@@ -164,7 +164,7 @@ void edp_irp6s_effector::compute_frame (c_buffer *instruction) {
 			throw NonFatal_error_2(INVALID_MOTION_TYPE);
 	} // end: switch (instruction.motion_type)
 	// Przeliczenie wspolrzednych zewnetrznych na wspolrzedne wewnetrzne
-	get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, &desired_end_effector_frame_m);
+	get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, &desired_end_effector_frame);
 	// Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
 	get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
    
@@ -231,7 +231,7 @@ void edp_irp6s_effector::tool_frame_2_frame_rep (void)
 		case RMODEL_INPUTS:
 		case ARM_RMODEL:
 		case ARM_RMODEL_INPUTS:
-			get_current_kinematic_model()->tool.get_frame_tab(reply.rmodel.tool_frame_def.tool_frame_m);
+			get_current_kinematic_model()->tool.get_frame_tab(reply.rmodel.tool_frame_def.tool_frame);
 			break;
 		default:
 			// Blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia.
@@ -341,7 +341,7 @@ void edp_irp6s_effector::tool_frame_2_frame (c_buffer *instruction) {
 	if ( is_set_rmodel(instruction) || is_set_arm(instruction))
 	{
 		// Przyslano dane dotyczace narzedzia i koncowki.
-		Homog_matrix A_B_T ((*instruction).rmodel.tool_frame_def.tool_frame_m);
+		Homog_matrix A_B_T ((*instruction).rmodel.tool_frame_def.tool_frame);
  		// Sprawdzenie poprawnosci macierzy
 	 	if (!(A_B_T.is_valid()))
 	    		throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
@@ -375,7 +375,7 @@ void edp_irp6s_effector::arm_abs_xyz_aa_2_frame (double *p) {
  	if((alfa   < ALFA_SENSITIVITY) && (alfa > -ALFA_SENSITIVITY)) 
  	{
  		Homog_matrix A_B_T(x, y, z);
- 		A_B_T.get_frame_tab(desired_end_effector_frame_m); 		// przepisanie uzyskanego wyniku do transformera
+ 		A_B_T.get_frame_tab(desired_end_effector_frame); 		// przepisanie uzyskanego wyniku do transformera
  	}
  	else
  	{
@@ -383,7 +383,7 @@ void edp_irp6s_effector::arm_abs_xyz_aa_2_frame (double *p) {
  		ky = ky/alfa;
  		kz = kz/alfa;
  		Homog_matrix A_B_T(kx, ky, kz, alfa, x, y, z);
- 		A_B_T.get_frame_tab(desired_end_effector_frame_m); 		// przepisanie uzyskanego wyniku do transformera
+ 		A_B_T.get_frame_tab(desired_end_effector_frame); 		// przepisanie uzyskanego wyniku do transformera
 	}
 }; // end: edp_irp6s_effector::arm_abs_xyz_aa_2_frame
 /*--------------------------------------------------------------------------*/
@@ -401,7 +401,7 @@ void edp_irp6s_effector::arm_abs_frame_2_frame (frame_tab p_m) {
                            // Przepisanie definicji koncowki danej
                            // w postaci TRANS wyraonej bezwzgldnie
                            // do wewntrznych struktur danych TRANSFORMATORa
-	copy_frame(desired_end_effector_frame_m, p_m);
+	copy_frame(desired_end_effector_frame, p_m);
 
 
 }; // end: edp_irp6s_effector::arm_abs_frame_2_frame
@@ -419,7 +419,7 @@ void edp_irp6s_effector::arm_rel_xyz_aa_2_frame (double* p) {
  	Homog_matrix G_R_T;
  	
  	// pobranie aktualnej macierzy przeksztalcenia
- 	Homog_matrix G_K_T(current_end_effector_frame_m);
+ 	Homog_matrix G_K_T(current_end_effector_frame);
  	
  	// przepisanie z tablicy pakietu komunikacyjnego
  	x = p[0];
@@ -447,7 +447,7 @@ void edp_irp6s_effector::arm_rel_xyz_aa_2_frame (double* p) {
  		Homog_matrix K_R_T(kx, ky, kz, alfa, x, y, z);
 		G_R_T = G_K_T * K_R_T;			// obliczenie macierzy przeksztalcenia
  	}
-	G_R_T.get_frame_tab(desired_end_effector_frame_m);
+	G_R_T.get_frame_tab(desired_end_effector_frame);
 
 }; // end: edp_irp6s_effector::arm_rel_xyz_aa_2_frame
 /*--------------------------------------------------------------------------*/
@@ -467,9 +467,9 @@ void edp_irp6s_effector::arm_rel_xyz_eul_zyz_2_frame (double* p) {
  	beta = p[4];
  	gamma = p[5];
 	Homog_matrix K_R_T (Homog_matrix::MTR_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
-	Homog_matrix G_K_T(current_end_effector_frame_m);	// pobranie aktualnej macierzy przeksztalcenia
+	Homog_matrix G_K_T(current_end_effector_frame);	// pobranie aktualnej macierzy przeksztalcenia
 	Homog_matrix G_R_T = G_K_T * K_R_T;
-	G_R_T.get_frame_tab(desired_end_effector_frame_m);			// przepisanie uzyskanego wyniku do transformera
+	G_R_T.get_frame_tab(desired_end_effector_frame);			// przepisanie uzyskanego wyniku do transformera
 
 }; // end: edp_irp6s_effector::arm_rel_xyz_eul_zyz_2_frame
 /*--------------------------------------------------------------------------*/
@@ -482,9 +482,9 @@ void edp_irp6s_effector::arm_rel_frame_2_frame (frame_tab p_m) {
 				// do wewntrznych struktur danych TRANSFORMATORa
 	// Przepisanie z przemnozeniem
 	Homog_matrix A_B_T_arg(p_m);
-	Homog_matrix A_B_T_des (desired_end_effector_frame_m);
+	Homog_matrix A_B_T_des (desired_end_effector_frame);
 	A_B_T_des *= A_B_T_arg;
-	A_B_T_des.get_frame_tab(desired_end_effector_frame_m);
+	A_B_T_des.get_frame_tab(desired_end_effector_frame);
  
  	// matrix_mult(desired_end_effector_frame, *p);
  // sprawdzi przekroczenie dopuszczalnego zakresu oraz poprawno macierzy jednorodnej
@@ -495,7 +495,7 @@ void edp_irp6s_effector::arm_rel_frame_2_frame (frame_tab p_m) {
 /*--------------------------------------------------------------------------*/
 void edp_irp6s_effector::arm_frame_2_xyz_aa (void) {
 
-	Homog_matrix A(current_end_effector_frame_m);
+	Homog_matrix A(current_end_effector_frame);
 	reply.arm_type = XYZ_ANGLE_AXIS;
 	switch (reply.reply_type) 
 	{
@@ -670,7 +670,7 @@ void edp_irp6s_effector::arm_frame_2_frame (void) {
 		case ARM_INPUTS:
 		case ARM_RMODEL:
 		case ARM_RMODEL_INPUTS:
-			Homog_matrix::copy_frame_tab(reply.arm.frame_def.arm_frame_m, current_end_effector_frame_m);
+			Homog_matrix::copy_frame_tab(reply.arm.frame_def.arm_frame, current_end_effector_frame);
 			for(int i=0; i < 6; i++) {
 				reply.PWM_value[i] = PWM_value[i];
 				reply.current[i] = current[i];

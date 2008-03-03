@@ -114,14 +114,14 @@ bool mp_vis_sac_generator::first_step () {
 	td.value_in_step_no = td.internode_step_no - 10; //2
 	
 	//TOOL
-	irp6ot->ecp_td.next_tool_frame_m[0][0]=1; irp6ot->ecp_td.next_tool_frame_m[1][0]=0; 
-	irp6ot->ecp_td.next_tool_frame_m[2][0]=0; irp6ot->ecp_td.next_tool_frame_m[0][0]=0;
+	irp6ot->ecp_td.next_tool_frame[0][0]=1; irp6ot->ecp_td.next_tool_frame[1][0]=0; 
+	irp6ot->ecp_td.next_tool_frame[2][0]=0; irp6ot->ecp_td.next_tool_frame[0][0]=0;
 
-	irp6ot->ecp_td.next_tool_frame_m[0][1]=0; irp6ot->ecp_td.next_tool_frame_m[1][1]=1;
-	irp6ot->ecp_td.next_tool_frame_m[2][1]=0; irp6ot->ecp_td.next_tool_frame_m[1][3]=0;
+	irp6ot->ecp_td.next_tool_frame[0][1]=0; irp6ot->ecp_td.next_tool_frame[1][1]=1;
+	irp6ot->ecp_td.next_tool_frame[2][1]=0; irp6ot->ecp_td.next_tool_frame[1][3]=0;
 
-	irp6ot->ecp_td.next_tool_frame_m[0][2]=0; irp6ot->ecp_td.next_tool_frame_m[1][2]=0;
-	irp6ot->ecp_td.next_tool_frame_m[2][2]=1; irp6ot->ecp_td.next_tool_frame_m[2][3]=0.25;
+	irp6ot->ecp_td.next_tool_frame[0][2]=0; irp6ot->ecp_td.next_tool_frame[1][2]=0;
+	irp6ot->ecp_td.next_tool_frame[2][2]=1; irp6ot->ecp_td.next_tool_frame[2][3]=0.25;
 
 	
 	irp6ot->ecp_td.mp_command = NEXT_POSE; 

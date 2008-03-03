@@ -488,7 +488,7 @@ void kinematic_model_irp6m_with_wrist::i2mp_transform(double* local_desired_moto
   * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ) 
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6m_with_wrist::direct_kinematics_transform(double* local_current_joints, frame_tab* local_current_end_effector_frame_m) {
+void kinematic_model_irp6m_with_wrist::direct_kinematics_transform(double* local_current_joints, frame_tab* local_current_end_effector_frame) {
 
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
   check_joints (local_current_joints);
@@ -508,18 +508,18 @@ void kinematic_model_irp6m_with_wrist::direct_kinematics_transform(double* local
   double c6 = cos(local_current_joints[5]);
 
   // Proste zadanie kinematyki.
-  (*local_current_end_effector_frame_m)[0][0] = (c1*s4*c5+s1*s5)*c6+c1*c4*s6;		//NX
-  (*local_current_end_effector_frame_m)[0][1] = -(c1*s4*c5+s1*s5)*s6+c1*c4*c6;	//OX
-  (*local_current_end_effector_frame_m)[0][2] = c1*s4*s5-s1*c5;							//AX
-  (*local_current_end_effector_frame_m)[0][3] = c1*(a2*c2+a3*c3+d5*c4);				//PX
-  (*local_current_end_effector_frame_m)[1][0] = (s1*s4*c5-c1*s5)*c6+s1*c4*s6;		//NY
-  (*local_current_end_effector_frame_m)[1][1] = -(s1*s4*c5-c1*s5)*s6+s1*c4*c6;		//OY
-  (*local_current_end_effector_frame_m)[1][2] = s1*s4*s5+c1*c5;							//AY
-  (*local_current_end_effector_frame_m)[1][3] = s1*(a2*c2+a3*c3+d5*c4);				//PY
-  (*local_current_end_effector_frame_m)[2][0] = c4*c5*c6-s4*s6;							//NZ
-  (*local_current_end_effector_frame_m)[2][1] = -c4*c5*s6-s4*c6;							//OZ
-  (*local_current_end_effector_frame_m)[2][2] = c4*s5;										//AZ
-  (*local_current_end_effector_frame_m)[2][3] = -a2*s2-a3*s3-d5*s4;						//PZ
+  (*local_current_end_effector_frame)[0][0] = (c1*s4*c5+s1*s5)*c6+c1*c4*s6;		//NX
+  (*local_current_end_effector_frame)[0][1] = -(c1*s4*c5+s1*s5)*s6+c1*c4*c6;	//OX
+  (*local_current_end_effector_frame)[0][2] = c1*s4*s5-s1*c5;							//AX
+  (*local_current_end_effector_frame)[0][3] = c1*(a2*c2+a3*c3+d5*c4);				//PX
+  (*local_current_end_effector_frame)[1][0] = (s1*s4*c5-c1*s5)*c6+s1*c4*s6;		//NY
+  (*local_current_end_effector_frame)[1][1] = -(s1*s4*c5-c1*s5)*s6+s1*c4*c6;		//OY
+  (*local_current_end_effector_frame)[1][2] = s1*s4*s5+c1*c5;							//AY
+  (*local_current_end_effector_frame)[1][3] = s1*(a2*c2+a3*c3+d5*c4);				//PY
+  (*local_current_end_effector_frame)[2][0] = c4*c5*c6-s4*s6;							//NZ
+  (*local_current_end_effector_frame)[2][1] = -c4*c5*s6-s4*c6;							//OZ
+  (*local_current_end_effector_frame)[2][2] = c4*s5;										//AZ
+  (*local_current_end_effector_frame)[2][3] = -a2*s2-a3*s3-d5*s4;						//PZ
 */
 
 // Parametry pomocnicze - przeliczenie zmiennych.
@@ -538,21 +538,21 @@ void kinematic_model_irp6m_with_wrist::direct_kinematics_transform(double* local
 
  
  //Proste zadanie kinematyki.
-  (*local_current_end_effector_frame_m)[0][0] = asin(s4);											//NX
+  (*local_current_end_effector_frame)[0][0] = asin(s4);											//NX
   if(s5>0)
-  (*local_current_end_effector_frame_m)[0][1] = asin(s5);										//OX
+  (*local_current_end_effector_frame)[0][1] = asin(s5);										//OX
   else
-  (*local_current_end_effector_frame_m)[0][1] = -asin(s5);	
-  (*local_current_end_effector_frame_m)[0][2] = 0.000;										//AX
-  (*local_current_end_effector_frame_m)[1][0] = 1;												//PX
-  (*local_current_end_effector_frame_m)[1][1] = 1;												//NY
-  (*local_current_end_effector_frame_m)[1][2] = 1;												//OY
-  (*local_current_end_effector_frame_m)[2][0] = 1;												//AY
-  (*local_current_end_effector_frame_m)[2][1] = 1;												//PY
-  (*local_current_end_effector_frame_m)[2][2] = 1;												//NZ
-  (*local_current_end_effector_frame_m)[0][3] = a2*c1*c2+a3*c1*c3+d6*c4*c1 ;		//OZ
-  (*local_current_end_effector_frame_m)[1][3] = a2*s1*c2+a3*s1*c3+d6*c4*s1;		//AZ
-  (*local_current_end_effector_frame_m)[2][3] = d1 - a2*s2-a3*s3-d6*s4;				//PZ
+  (*local_current_end_effector_frame)[0][1] = -asin(s5);	
+  (*local_current_end_effector_frame)[0][2] = 0.000;										//AX
+  (*local_current_end_effector_frame)[1][0] = 1;												//PX
+  (*local_current_end_effector_frame)[1][1] = 1;												//NY
+  (*local_current_end_effector_frame)[1][2] = 1;												//OY
+  (*local_current_end_effector_frame)[2][0] = 1;												//AY
+  (*local_current_end_effector_frame)[2][1] = 1;												//PY
+  (*local_current_end_effector_frame)[2][2] = 1;												//NZ
+  (*local_current_end_effector_frame)[0][3] = a2*c1*c2+a3*c1*c3+d6*c4*c1 ;		//OZ
+  (*local_current_end_effector_frame)[1][3] = a2*s1*c2+a3*s1*c3+d6*c4*s1;		//AZ
+  (*local_current_end_effector_frame)[2][3] = d1 - a2*s2-a3*s3-d6*s4;				//PZ
 
 
 } //:: direct_kinematics_transform()
@@ -569,7 +569,7 @@ void kinematic_model_irp6m_with_wrist::direct_kinematics_transform(double* local
   Wyjscie:
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6m_with_wrist::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame_m)
+void kinematic_model_irp6m_with_wrist::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
 {
 
   // Stale 
@@ -583,12 +583,12 @@ void kinematic_model_irp6m_with_wrist::inverse_kinematics_transform(double* loca
   double delta1, delta2, temp1, temp2, a, b, d;
   delta1=1, delta2=1;			
  // Przepisanie zmiennych.
-  Nx= (*local_desired_end_effector_frame_m)[0][0];   // alfa
-  Ny= (*local_desired_end_effector_frame_m)[0][1];   // beta
-  Nz= (*local_desired_end_effector_frame_m)[0][2];   // gamma
-  Px= (*local_desired_end_effector_frame_m)[0][3];   // x
-  Py= (*local_desired_end_effector_frame_m)[1][3];   // y
-  Pz= (*local_desired_end_effector_frame_m)[2][3];   // z
+  Nx= (*local_desired_end_effector_frame)[0][0];   // alfa
+  Ny= (*local_desired_end_effector_frame)[0][1];   // beta
+  Nz= (*local_desired_end_effector_frame)[0][2];   // gamma
+  Px= (*local_desired_end_effector_frame)[0][3];   // x
+  Py= (*local_desired_end_effector_frame)[1][3];   // y
+  Pz= (*local_desired_end_effector_frame)[2][3];   // z
 	
 	local_desired_joints[0]=(atan2(Py, Px));
 	s0 = 	sin(local_desired_joints[0]);

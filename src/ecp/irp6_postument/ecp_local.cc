@@ -42,7 +42,7 @@ void ecp_irp6_postument_robot::create_command (void) {
         if (EDP_data.set_type & RMODEL_DV) {
           switch (EDP_data.set_rmodel_type) {
             case TOOL_FRAME:
-            copy_frame(EDP_command_and_reply_buffer.instruction.rmodel.tool_frame_def.tool_frame_m, EDP_data.next_tool_frame_m);
+            copy_frame(EDP_command_and_reply_buffer.instruction.rmodel.tool_frame_def.tool_frame, EDP_data.next_tool_frame);
               break;
             case TOOL_XYZ_ANGLE_AXIS:
               for (j=0; j<6; j++)
@@ -85,7 +85,7 @@ void ecp_irp6_postument_robot::create_command (void) {
           // Wypelniamy czesc zwiazana z polozeniem ramienia
           switch (EDP_data.set_arm_type) {
             case FRAME:
-            copy_frame(EDP_command_and_reply_buffer.instruction.arm.frame_def.arm_frame_m, EDP_data.next_arm_frame_m);
+            copy_frame(EDP_command_and_reply_buffer.instruction.arm.frame_def.arm_frame, EDP_data.next_arm_frame);
             EDP_command_and_reply_buffer.instruction.arm.frame_def.gripper_coordinate
 	                  = EDP_data.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka
                break;
@@ -229,7 +229,7 @@ void ecp_irp6_postument_robot::get_arm_reply (void)
             	EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.gripper_reg_state;
          break;
        case FRAME:
-       copy_frame(EDP_data.current_arm_frame_m, EDP_command_and_reply_buffer.reply_package.arm.frame_def.arm_frame_m);
+       copy_frame(EDP_data.current_arm_frame, EDP_command_and_reply_buffer.reply_package.arm.frame_def.arm_frame);
        EDP_data.gripper_reg_state =
             	EDP_command_and_reply_buffer.reply_package.arm.frame_def.gripper_reg_state;
        EDP_data.current_gripper_coordinate =
@@ -250,12 +250,12 @@ void ecp_irp6_postument_robot::get_arm_reply (void)
     	        EDP_data.EDPtoECP_force_xyz_torque_xyz[i] =
 		  	 EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i];
 		   }
-		   copy_frame(EDP_data.current_beggining_arm_frame_m,
-				EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.beggining_arm_frame_m);
-		   copy_frame(EDP_data.current_predicted_arm_frame_m,
-				EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.predicted_arm_frame_m);
-		   copy_frame(EDP_data.current_present_arm_frame_m,
-				EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.present_arm_frame_m);
+		   copy_frame(EDP_data.current_beggining_arm_frame,
+				EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.beggining_arm_frame);
+		   copy_frame(EDP_data.current_predicted_arm_frame,
+				EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.predicted_arm_frame);
+		   copy_frame(EDP_data.current_present_arm_frame,
+				EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.present_arm_frame);
 		EDP_data.gripper_reg_state =
             	EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.gripper_reg_state;
 		EDP_data.current_gripper_coordinate =
@@ -282,7 +282,7 @@ void ecp_irp6_postument_robot::get_rmodel_reply (void)
 {
 	switch (EDP_command_and_reply_buffer.reply_package.rmodel_type) {
 		case TOOL_FRAME:
-			copy_frame(EDP_data.current_tool_frame_m, EDP_command_and_reply_buffer.reply_package.rmodel.tool_frame_def.tool_frame_m);
+			copy_frame(EDP_data.current_tool_frame, EDP_command_and_reply_buffer.reply_package.rmodel.tool_frame_def.tool_frame);
 			break;
 		case TOOL_XYZ_ANGLE_AXIS:
 			for (int i=0; i<6; i++)

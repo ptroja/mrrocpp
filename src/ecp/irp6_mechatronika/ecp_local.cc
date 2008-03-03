@@ -41,7 +41,7 @@ void ecp_irp6_mechatronika_robot::create_command (void) {
         if (EDP_data.set_type & RMODEL_DV) {
           switch (EDP_data.set_rmodel_type) {
             case TOOL_FRAME:
-            copy_frame(EDP_command_and_reply_buffer.instruction.rmodel.tool_frame_def.tool_frame_m, EDP_data.next_tool_frame_m);
+            copy_frame(EDP_command_and_reply_buffer.instruction.rmodel.tool_frame_def.tool_frame, EDP_data.next_tool_frame);
               break;
             case TOOL_XYZ_ANGLE_AXIS:
               for (int j=0; j<6; j++)
@@ -84,7 +84,7 @@ void ecp_irp6_mechatronika_robot::create_command (void) {
           // Wypelniamy czesc zwiazana z polozeniem ramienia
           switch (EDP_data.set_arm_type) {
             case FRAME:
-            copy_frame(EDP_command_and_reply_buffer.instruction.arm.frame_def.arm_frame_m, EDP_data.next_arm_frame_m);
+            copy_frame(EDP_command_and_reply_buffer.instruction.arm.frame_def.arm_frame, EDP_data.next_arm_frame);
                break;
             case  XYZ_ANGLE_AXIS:
               for (int j=0; j<6 ; j++)
@@ -190,7 +190,7 @@ void ecp_irp6_mechatronika_robot::get_arm_reply (void)
              EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[i];
                break;
        case FRAME:
-       copy_frame(EDP_data.current_arm_frame_m, EDP_command_and_reply_buffer.reply_package.arm.frame_def.arm_frame_m);
+       copy_frame(EDP_data.current_arm_frame, EDP_command_and_reply_buffer.reply_package.arm.frame_def.arm_frame);
         break;
        case XYZ_EULER_ZYZ:
         for (int i=0; i<6; i++)
@@ -213,7 +213,7 @@ void ecp_irp6_mechatronika_robot::get_rmodel_reply (void)
 {
 	switch (EDP_command_and_reply_buffer.reply_package.rmodel_type) {
 		case TOOL_FRAME:
-			copy_frame(EDP_data.current_tool_frame_m, EDP_command_and_reply_buffer.reply_package.rmodel.tool_frame_def.tool_frame_m);
+			copy_frame(EDP_data.current_tool_frame, EDP_command_and_reply_buffer.reply_package.rmodel.tool_frame_def.tool_frame);
 			break;
 		case TOOL_XYZ_ANGLE_AXIS:
 			for (int i=0; i<6; i++)

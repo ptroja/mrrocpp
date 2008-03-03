@@ -29,7 +29,7 @@ bool y_simple_generator::first_step ( ) {
 	td.value_in_step_no = td.internode_step_no - 2;
 
 	Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame_m);
+	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
 
 		the_robot->EDP_data.instruction_type = GET;
@@ -126,15 +126,15 @@ printf("sensor: z: %f\n", the_robot->EDP_data.EDPtoECP_force_xyz_torque_xyz[2]);
 //	else the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate-0.0001;
 	
 /*	
-	frame_tab beggining_frame_m;
+	frame_tab beggining_frame;
 	copy_frame(beggining_frame,the_robot->EDP_data.current_beggining_arm_frame);
 	Homog_matrix beg_frame = Homog_matrix(beggining_frame);
 	cout << endl << "ecp: beginning_frame" << endl << endl << beg_frame;
-	frame_tab present_frame_m;
+	frame_tab present_frame;
 	copy_frame(present_frame,the_robot->EDP_data.current_present_arm_frame);
 	Homog_matrix pres_frame = Homog_matrix(present_frame);
 	cout << endl << "ecp: present_frame" << endl << endl << pres_frame;
-	frame_tab predicted_frame_m;
+	frame_tab predicted_frame;
 	copy_frame(predicted_frame,the_robot->EDP_data.current_predicted_arm_frame);
 	Homog_matrix pred_frame = Homog_matrix(predicted_frame);
 	cout << endl << "ecp: predicted_frame" << endl << endl<< pred_frame;

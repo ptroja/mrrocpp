@@ -48,7 +48,7 @@ void mp_irp6s_and_conv_robot::create_next_pose_command (void)
 			if (ecp_td.set_type & RMODEL_DV) {
 				switch (ecp_td.set_rmodel_type) {
 					case TOOL_FRAME:
-						copy_frame(mp_command.mp_package.instruction.rmodel.tool_frame_def.tool_frame_m, ecp_td.next_tool_frame_m);
+						copy_frame(mp_command.mp_package.instruction.rmodel.tool_frame_def.tool_frame, ecp_td.next_tool_frame);
 						break;
 					case TOOL_XYZ_ANGLE_AXIS:
 						for (int j=0; j<6; j++) {
@@ -95,7 +95,7 @@ void mp_irp6s_and_conv_robot::create_next_pose_command (void)
 				// Wypelniamy czesc zwiazana z polozeniem ramienia
 				switch (ecp_td.set_arm_type) {
 					case FRAME:
-						copy_frame(mp_command.mp_package.instruction.arm.frame_def.arm_frame_m, ecp_td.next_arm_frame_m);
+						copy_frame(mp_command.mp_package.instruction.arm.frame_def.arm_frame, ecp_td.next_arm_frame);
 						if (has_gripper) {
 							mp_command.mp_package.instruction.arm.frame_def.gripper_coordinate
 								= ecp_td.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka
@@ -244,7 +244,7 @@ void mp_irp6s_and_conv_robot::get_arm_reply (void)
 		case FRAME:
 			if (robot_name == ROBOT_CONVEYOR)
 				throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
-			copy_frame(ecp_td.current_arm_frame_m, ecp_reply_package.ecp_reply.reply_package.arm.frame_def.arm_frame_m);
+			copy_frame(ecp_td.current_arm_frame, ecp_reply_package.ecp_reply.reply_package.arm.frame_def.arm_frame);
 			if (has_gripper) {
 				ecp_td.gripper_reg_state = ecp_reply_package.ecp_reply.reply_package.arm.frame_def.gripper_reg_state;
 				ecp_td.current_gripper_coordinate = ecp_reply_package.ecp_reply.reply_package.arm.frame_def.gripper_coordinate;
@@ -264,12 +264,12 @@ void mp_irp6s_and_conv_robot::get_arm_reply (void)
 		case POSE_FORCE_TORQUE_AT_FRAME:
 			if (!has_gripper)
 				throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
-			copy_frame(ecp_td.MPcurrent_beggining_arm_frame_m,
-					ecp_reply_package.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.beggining_arm_frame_m);
-			copy_frame(ecp_td.MPcurrent_predicted_arm_frame_m,
-					ecp_reply_package.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.predicted_arm_frame_m);
-			copy_frame(ecp_td.MPcurrent_present_arm_frame_m,
-					ecp_reply_package.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.present_arm_frame_m);
+			copy_frame(ecp_td.MPcurrent_beggining_arm_frame,
+					ecp_reply_package.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.beggining_arm_frame);
+			copy_frame(ecp_td.MPcurrent_predicted_arm_frame,
+					ecp_reply_package.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.predicted_arm_frame);
+			copy_frame(ecp_td.MPcurrent_present_arm_frame,
+					ecp_reply_package.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.present_arm_frame);
 			for(int i = 0;i<6;i++) {
 				ecp_td.ECPtoMP_force_xyz_torque_xyz[i] =
 					ecp_reply_package.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i];
@@ -300,7 +300,7 @@ void mp_irp6s_and_conv_robot::get_rmodel_reply (void)
 			if (robot_name != ROBOT_IRP6_POSTUMENT && robot_name != ROBOT_IRP6_ON_TRACK && robot_name != ROBOT_IRP6_MECHATRONIKA) {
 				throw MP_error(NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			}
-			copy_frame(ecp_td.current_tool_frame_m, ecp_reply_package.ecp_reply.reply_package.rmodel.tool_frame_def.tool_frame_m);
+			copy_frame(ecp_td.current_tool_frame, ecp_reply_package.ecp_reply.reply_package.rmodel.tool_frame_def.tool_frame);
 			break;
 		case TOOL_XYZ_ANGLE_AXIS:
 			if (robot_name != ROBOT_IRP6_POSTUMENT && robot_name != ROBOT_IRP6_ON_TRACK && robot_name != ROBOT_IRP6_MECHATRONIKA) {

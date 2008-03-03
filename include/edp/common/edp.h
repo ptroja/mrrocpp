@@ -36,7 +36,7 @@ struct servo_command_amend {
 	short motion_steps;
 	short value_in_step_no;
 	double arm_coordinates[6];
-	frame_tab desired_arm_frame_m;
+	frame_tab desired_arm_frame;
 	double gripper_coordinate;
 };
 
@@ -480,7 +480,7 @@ void tool_axially_symmetrical_xyz_eul_zy_2_frame(c_buffer *instruction);
 	double servo_real_kartez_acc[6]; // by Y predkosc we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
 
 
-   frame_tab desired_end_effector_frame_m;      //  XXXXX
+   frame_tab desired_end_effector_frame;      //  XXXXX
                                 // Podstawowa postac reprezentujaca zadane
                                 // wspolrzedne zewnetrzne koncowki manipulatora
                                 // wzgledem ukladu bazowego (polozenie w mm)
@@ -491,7 +491,7 @@ void tool_axially_symmetrical_xyz_eul_zy_2_frame(c_buffer *instruction);
                                 // wspolrzedne zewnetrzne koncowki manipulatora
                       // wzgledem ukladu bazowego (polozenie w mm)       przed sprawdzeniem na ograniczenia kinematyczne                            
                                 
-   frame_tab current_end_effector_frame_m;
+   frame_tab current_end_effector_frame;
                                 // Podstawowa postac reprezentujaca ostatnio
                                 // odczytane wspolrzedne zewnetrzne koncowki
                                 // manipulatora wzgledem ukladu bazowego (polozenie w mm)
@@ -579,7 +579,7 @@ public:
 	// ruch pozycyjno silowo dla staqlej orientacji i kierukow liniowych
 	virtual void pose_force_linear_move (c_buffer *instruction);
 	
-	void pose_force_torque_at_frame_move (c_buffer *instruction);
+	void pose_force_torque_at_frameove (c_buffer *instruction);
 	
 	void servo_joints_and_frame_actualization_and_upload(void);// by Y
 
@@ -594,7 +594,7 @@ public:
 	// przepisanie lokalnego zestawu lokalnego edp_servo na globalny (chronione mutexem)
 	void master_joints_and_frame_download(void);// by Y przepisanie z zestawu globalnego na lokalny dla edp_master	
 	
-	frame_tab force_current_end_effector_frame_m;// by Y dla watku EDP_FORCE
+	frame_tab force_current_end_effector_frame;// by Y dla watku EDP_FORCE
 	
 	void force_msr_download(double *new_value, double *old_value);// by Y odczytanie globalnego zestawu danych
 	

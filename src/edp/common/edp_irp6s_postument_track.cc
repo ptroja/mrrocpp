@@ -51,7 +51,7 @@ void edp_irp6s_postument_track_effector::arm_frame_2_xyz_eul_zyz () {
                            // FRAME do postaci XYZ_EULER_ZYZ
                            // oraz przepisanie wyniku przeksztacenia do
                            // wewntrznych struktur danych REPLY_BUFFER
-	Homog_matrix A(current_end_effector_frame_m);
+	Homog_matrix A(current_end_effector_frame);
 	switch (reply.reply_type) {
 		case ARM:
 		case ARM_INPUTS:
@@ -92,7 +92,7 @@ void edp_irp6s_postument_track_effector::arm_abs_xyz_eul_zyz_2_frame (double *p)
 	gamma = p[5];
 	//Homog_matrix A_B_T (Homog_matrix::MTR_MECH_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
 	Homog_matrix A_B_T (Homog_matrix::MTR_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
-	A_B_T.get_frame_tab(desired_end_effector_frame_m);
+	A_B_T.get_frame_tab(desired_end_effector_frame);
 
 }; // end: edp_irp6s_effector::arm_abs_xyz_eul_zyz_2_frame
 /*--------------------------------------------------------------------------*/
@@ -178,13 +178,13 @@ void edp_irp6s_postument_track_effector::arm_frame_2_pose_force_torque_at_frame 
 		{
 			if(*read_hardware){
 				is_get_arm_read_hardware = true;
-				copy_frame(reply.arm.pose_force_torque_at_frame_def.beggining_arm_frame_m, current_end_effector_frame_m);
-				copy_frame(reply.arm.pose_force_torque_at_frame_def.predicted_arm_frame_m, current_end_effector_frame_m);
-				copy_frame(reply.arm.pose_force_torque_at_frame_def.present_arm_frame_m, current_end_effector_frame_m);
+				copy_frame(reply.arm.pose_force_torque_at_frame_def.beggining_arm_frame, current_end_effector_frame);
+				copy_frame(reply.arm.pose_force_torque_at_frame_def.predicted_arm_frame, current_end_effector_frame);
+				copy_frame(reply.arm.pose_force_torque_at_frame_def.present_arm_frame, current_end_effector_frame);
 			}
 
 			Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
-			Ft_v_tr ft_tr_inv_current_frame_matrix (!current_frame_wo_offset, Ft_v_tr::FT);
+			Ft_v_tr ft_tr_inv_current_frameatrix (!current_frame_wo_offset, Ft_v_tr::FT);
 
 			Homog_matrix current_tool(get_current_kinematic_model()->tool);
 			Ft_v_tr ft_tr_inv_tool_matrix (!current_tool, Ft_v_tr::FT);
@@ -193,7 +193,7 @@ void edp_irp6s_postument_track_effector::arm_frame_2_pose_force_torque_at_frame 
 			// sprowadzenie sil z ukladu bazowego do ukladu kisci
 			// modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
 
-			Ft_v_vector current_force_torque (ft_tr_inv_tool_matrix *  ft_tr_inv_current_frame_matrix * Ft_v_vector (current_force));
+			Ft_v_vector current_force_torque (ft_tr_inv_tool_matrix *  ft_tr_inv_current_frameatrix * Ft_v_vector (current_force));
 
 			current_force_torque.to_table (reply.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz);
 
@@ -218,7 +218,7 @@ void edp_irp6s_postument_track_effector::arm_frame_2_pose_force_torque_at_frame 
 
 // ruch pozycyjno silowy dla ramki TFF - testowane tylko dla trybu RELATIVE
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buffer *instruction)
+void edp_irp6s_postument_track_effector::pose_force_torque_at_frameove (c_buffer *instruction)
 {
 //	static int debugi=0;
 	debugi++;
@@ -257,7 +257,7 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 
 	double beginning_gripper_coordinate;
 	static double ending_gripper_coordinate;
-	static frame_tab local_force_end_effector_frame_m;
+	static frame_tab local_force_end_effector_frame;
 
 	static unsigned long last_force_step_counter = step_counter;
 
@@ -267,11 +267,11 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 
  	// WYLICZENIE POZYCJI POCZATKOWEJ
 	double begining_joints[MAX_SERVOS_NR], tmp_joints[MAX_SERVOS_NR], tmp_motor_pos[MAX_SERVOS_NR];
-	frame_tab begining_frame_m;
+	frame_tab begining_frame;
 
 	get_current_kinematic_model()->mp2i_transform (desired_motor_pos_new, begining_joints);
-	get_current_kinematic_model()->i2e_transform (begining_joints, &begining_frame_m);
-	Homog_matrix begining_end_effector_frame (begining_frame_m);
+	get_current_kinematic_model()->i2e_transform (begining_joints, &begining_frame);
+	Homog_matrix begining_end_effector_frame (begining_frame);
 	Homog_matrix next_frame = begining_end_effector_frame;
 
 
@@ -347,7 +347,7 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 
 	Ft_v_vector base_pos_xyz_rot_xyz_vector (pos_xyz_rot_xyz);
 
-	copy_frame (reply.arm.pose_force_torque_at_frame_def.beggining_arm_frame_m, begining_frame_m);
+	copy_frame (reply.arm.pose_force_torque_at_frame_def.beggining_arm_frame, begining_frame);
 
 	beginning_gripper_coordinate = begining_joints[gripper_servo_nr];
 
@@ -367,10 +367,10 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 
 		Homog_matrix current_frame_wo_offset = return_current_frame (WITHOUT_TRANSLATION);
 
-		Ft_v_tr ft_tr_current_frame_matrix (current_frame_wo_offset, Ft_v_tr::FT);
-		Ft_v_tr ft_tr_inv_current_frame_matrix = !ft_tr_current_frame_matrix;
-		Ft_v_tr v_tr_current_frame_matrix (current_frame_wo_offset, Ft_v_tr::V);
-		Ft_v_tr v_tr_inv_current_frame_matrix = !v_tr_current_frame_matrix;
+		Ft_v_tr ft_tr_current_frameatrix (current_frame_wo_offset, Ft_v_tr::FT);
+		Ft_v_tr ft_tr_inv_current_frameatrix = !ft_tr_current_frameatrix;
+		Ft_v_tr v_tr_current_frameatrix (current_frame_wo_offset, Ft_v_tr::V);
+		Ft_v_tr v_tr_inv_current_frameatrix = !v_tr_current_frameatrix;
 
 		force_msr_download (current_force, previous_force);
 		// sprowadzenie sil z ukladu bazowego do ukladu kisci
@@ -392,9 +392,9 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 
 		// koniec dla trybu FIXED
 
-		Ft_v_vector current_force_torque (ft_tr_inv_tool_matrix *  ft_tr_inv_current_frame_matrix * Ft_v_vector (current_force));
+		Ft_v_vector current_force_torque (ft_tr_inv_tool_matrix *  ft_tr_inv_current_frameatrix * Ft_v_vector (current_force));
 //		Ft_v_vector tmp_force_torque (Ft_v_tr((!current_tool) * (!current_frame_wo_offset), Ft_v_tr::FT) * Ft_v_vector (current_force));
-		Ft_v_vector previous_force_torque (ft_tr_inv_tool_matrix *  ft_tr_inv_current_frame_matrix * Ft_v_vector (previous_force));
+		Ft_v_vector previous_force_torque (ft_tr_inv_tool_matrix *  ft_tr_inv_current_frameatrix * Ft_v_vector (previous_force));
 /*
 		switch (motion_type)
 		{
@@ -420,7 +420,7 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 		}
 
 
-		previous_move_rot_vector =  v_tr_inv_tool_matrix * v_tr_inv_current_frame_matrix * previous_move_rot_vector;
+		previous_move_rot_vector =  v_tr_inv_tool_matrix * v_tr_inv_current_frameatrix * previous_move_rot_vector;
 /*
 		switch (motion_type)
 		{
@@ -487,7 +487,7 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 
 
 
-		previous_move_rot_vector =  v_tr_current_frame_matrix * v_tr_tool_matrix * move_rot_vector;
+		previous_move_rot_vector =  v_tr_current_frameatrix * v_tr_tool_matrix * move_rot_vector;
 		// 	end: sprowadzenie predkosci ruchu do orientacji  ukladu bazowego lub ukladu koncowki
 
 //		if (debugi%10==0) printf("aaa: %f\n", force_xyz_torque_xyz[0] + force_torque[0]);
@@ -502,12 +502,12 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 			next_frame.get_xyz_euler_zyz(rb_obj.step_data.current_kartez_position);
 		rb_obj.unlock_mutex();
 
-		next_frame.get_frame_tab(desired_end_effector_frame_m);
+		next_frame.get_frame_tab(desired_end_effector_frame);
 		desired_joints_tmp[gripper_servo_nr] = beginning_gripper_coordinate +
 			(((desired_gripper_coordinate - beginning_gripper_coordinate) / ECP_motion_steps) * step);
 
 		// Przeliczenie wspolrzednych zewnetrznych na wspolrzedne wewnetrzne
-		get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, &desired_end_effector_frame_m);
+		get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, &desired_end_effector_frame);
 		// Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
 		get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
 		// kinematyka nie stwierdzila bledow, przepisanie wartosci
@@ -521,13 +521,13 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 		move_servos ();
 		if (step == ECP_value_in_step_no)
 		{ // przygotowanie predicted frame dla ECP
-			next_frame.get_frame_tab(reply.arm.pose_force_torque_at_frame_def.present_arm_frame_m);
+			next_frame.get_frame_tab(reply.arm.pose_force_torque_at_frame_def.present_arm_frame);
 			Homog_matrix predicted_frame = next_frame;
 			for (int i=0; i< ECP_motion_steps-ECP_value_in_step_no; i++)
 			{
 				 predicted_frame = predicted_frame * rot_frame;
 			}
-			predicted_frame.get_frame_tab(reply.arm.pose_force_torque_at_frame_def.predicted_arm_frame_m);
+			predicted_frame.get_frame_tab(reply.arm.pose_force_torque_at_frame_def.predicted_arm_frame);
 
 			for (int i=0; i<6; i++)
 			{
@@ -540,7 +540,7 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 
 	}
 
-	next_frame.get_frame_tab (local_force_end_effector_frame_m);
+	next_frame.get_frame_tab (local_force_end_effector_frame);
 	ending_gripper_coordinate = desired_gripper_coordinate;
 
 }
@@ -593,7 +593,7 @@ void edp_irp6s_postument_track_effector::move_arm (c_buffer *instruction) { // p
 		mt_tt_obj.trans_t_to_master_order_status_ready();
        break;
 	case POSE_FORCE_TORQUE_AT_FRAME:
-		pose_force_torque_at_frame_move (instruction);
+		pose_force_torque_at_frameove (instruction);
     break;
     default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
        throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
@@ -650,26 +650,26 @@ if (read_hardware)
      case FRAME:
         // przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
         get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-        get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame_m);
+        get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
         arm_frame_2_frame();
         break;
      case   XYZ_ANGLE_AXIS:
         // przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
         get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-        get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame_m);
+        get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
         arm_frame_2_xyz_aa();
         break;
      case   XYZ_EULER_ZYZ:
         // przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
         get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-        get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame_m);
+        get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
         arm_frame_2_xyz_eul_zyz();   // dla sterowania pozycyjnego
         reply.arm_type = XYZ_EULER_ZYZ;
      break;
     case   POSE_FORCE_TORQUE_AT_FRAME:
         // przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
         get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-        get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame_m);
+        get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
         arm_frame_2_pose_force_torque_at_frame(&read_hardware);   // dla sterowania pozycyjno - silowego
         reply.arm_type = POSE_FORCE_TORQUE_AT_FRAME;
         break;

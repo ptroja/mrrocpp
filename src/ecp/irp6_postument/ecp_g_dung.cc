@@ -34,7 +34,7 @@ bool dung_generator::first_step ( ) {
 	td.value_in_step_no = td.internode_step_no - 2;
 
 	Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame_m);
+	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
 
 		the_robot->EDP_data.instruction_type = GET;

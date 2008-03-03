@@ -160,14 +160,14 @@ bool ecp_vis_sac_lx_generator::first_step () {
 
 	//TOOL
 
-	the_robot->EDP_data.next_tool_frame_m[0][0]=1; the_robot->EDP_data.next_tool_frame_m[1][0]=0;
-	the_robot->EDP_data.next_tool_frame_m[2][0]=0; the_robot->EDP_data.next_tool_frame_m[0][3]=0;
+	the_robot->EDP_data.next_tool_frame[0][0]=1; the_robot->EDP_data.next_tool_frame[1][0]=0;
+	the_robot->EDP_data.next_tool_frame[2][0]=0; the_robot->EDP_data.next_tool_frame[0][3]=0;
 
-	the_robot->EDP_data.next_tool_frame_m[0][1]=0; the_robot->EDP_data.next_tool_frame_m[1][1]=1;
-	the_robot->EDP_data.next_tool_frame_m[2][1]=0; the_robot->EDP_data.next_tool_frame_m[1][3]=0;
+	the_robot->EDP_data.next_tool_frame[0][1]=0; the_robot->EDP_data.next_tool_frame[1][1]=1;
+	the_robot->EDP_data.next_tool_frame[2][1]=0; the_robot->EDP_data.next_tool_frame[1][3]=0;
 
-	the_robot->EDP_data.next_tool_frame_m[0][2]=0; the_robot->EDP_data.next_tool_frame_m[1][2]=0;
-	the_robot->EDP_data.next_tool_frame_m[2][2]=1; the_robot->EDP_data.next_tool_frame_m[2][3]=0.25; //0.25;
+	the_robot->EDP_data.next_tool_frame[0][2]=0; the_robot->EDP_data.next_tool_frame[1][2]=0;
+	the_robot->EDP_data.next_tool_frame[2][2]=1; the_robot->EDP_data.next_tool_frame[2][3]=0.25; //0.25;
 
 
 //	the_robot->EDP_data.mp_command = NEXT_POSE;
@@ -238,11 +238,11 @@ bool ecp_vis_sac_lx_generator::next_step () {
 	{
 	std::cout  << std::endl << std::endl << std::endl << std::endl << std::endl;
 
-		O_Tx_E.set_frame_tab(the_robot->EDP_data.current_predicted_arm_frame_m); // zarem
+		O_Tx_E.set_frame_tab(the_robot->EDP_data.current_predicted_arm_frame); // zarem
 		std::cout << "YYY " << 	O_Tx_E  << std::endl;
 
 
-		//O_Tx_E.set_frame_tab(the_robot->EDP_data.current_arm_frame_m); // zarem
+		//O_Tx_E.set_frame_tab(the_robot->EDP_data.current_arm_frame); // zarem
 		O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
 
 		std::cout << "MMM " << node_counter << std::endl;
@@ -412,11 +412,11 @@ vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]
 
 	O_Tx_G.get_xyz_angle_axis(O_r_G[0]);
 
-	O_Tx_E.set_frame_tab(the_robot->EDP_data.current_predicted_arm_frame_m);
+	O_Tx_E.set_frame_tab(the_robot->EDP_data.current_predicted_arm_frame);
 	O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
 
 
-	O_Tx_EE.set_frame_tab(the_robot->EDP_data.current_arm_frame_m);
+	O_Tx_EE.set_frame_tab(the_robot->EDP_data.current_arm_frame);
 
 	//EIH
 	O_Tx_G__C2=O_Tx_E*C2_Tx_G; //O_Tx_E*E_Tx_C2*C2_Tx_G;

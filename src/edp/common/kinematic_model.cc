@@ -164,14 +164,14 @@ void kinematic_model::local_corrector_inverse_transform(Homog_matrix& desired_en
 -> Dodac opis kolejnosci obliczen.
 
  ------------------------------------------------------------------------ */
-void kinematic_model::i2e_transform(double* local_current_joints, frame_tab* local_current_end_effector_frame_m)
+void kinematic_model::i2e_transform(double* local_current_joints, frame_tab* local_current_end_effector_frame)
 {
 
 	// Rozwiazanie prostego zagadnienia kinematyki.
-	direct_kinematics_transform(local_current_joints, local_current_end_effector_frame_m);
+	direct_kinematics_transform(local_current_joints, local_current_end_effector_frame);
 
 	// Stworzenie macierzy, ktora bedzie uzywana w dalszych obliczeniach.
-	Homog_matrix local_current_end_effector_matrix (*local_current_end_effector_frame_m);
+	Homog_matrix local_current_end_effector_matrix (*local_current_end_effector_frame);
 
 	// Obliczenia zwiazane z przeksztalceniami do globalnego ukladu odniesienia.
 	if(global_frame_computations)
@@ -186,7 +186,7 @@ void kinematic_model::i2e_transform(double* local_current_joints, frame_tab* loc
 		attached_tool_transform(local_current_end_effector_matrix);
 
 	// Przepisanie wyniku z macierzy.
-	local_current_end_effector_matrix.get_frame_tab(*local_current_end_effector_frame_m);
+	local_current_end_effector_matrix.get_frame_tab(*local_current_end_effector_frame);
 };//: i2e_transform
 
 
@@ -196,10 +196,10 @@ void kinematic_model::i2e_transform(double* local_current_joints, frame_tab* loc
 -> Dodac opis kolejnosci obliczen.
 
  ------------------------------------------------------------------------ */
-void kinematic_model::e2i_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame_m)
+void kinematic_model::e2i_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
 {
 	// Stworzenie macierzy, ktora bedzie uzywana w dalszych obliczeniach.
-	Homog_matrix local_desired_end_effector_matrix (*local_desired_end_effector_frame_m);
+	Homog_matrix local_desired_end_effector_matrix (*local_desired_end_effector_frame);
 
 	// Przeksztalcenie odwrotne polozenia koncowki zwiazane z uzytym narzedziem (chwytakiem).
 	if (attached_tool_computations)
@@ -214,10 +214,10 @@ void kinematic_model::e2i_transform(double* local_desired_joints, double* local_
 		global_frame_inverse_transform(local_desired_end_effector_matrix);
 
 	// Przepisanie wyniku z macierzy.
-	local_desired_end_effector_matrix.get_frame_tab(*local_desired_end_effector_frame_m);
+	local_desired_end_effector_matrix.get_frame_tab(*local_desired_end_effector_frame);
 
 	// Rozwiazanie odwrotnego zagadnienia kinematyki.
-	inverse_kinematics_transform(local_desired_joints, local_current_joints, local_desired_end_effector_frame_m);
+	inverse_kinematics_transform(local_desired_joints, local_current_joints, local_desired_end_effector_frame);
 	
 /*	printf("Ramka w e2i\n");
 printf("%lf; %lf; %lf; %lf \n",(*local_desired_end_effector_frame)[0][0], (*local_desired_end_effector_frame)[0][1], (*local_desired_end_effector_frame)[0][2], (*local_desired_end_effector_frame)[0][3]);

@@ -34,7 +34,7 @@ bool y_simple_generator::first_step ( )
     second_step = false;
     for (int j=0; j<3; j++)
         for (int i=0; i<4; i++)
-            previous_frame_m[j][i]=0;
+            previous_frame[j][i]=0;
 
     for (int i=0; i<6; i++)
         delta[i]=0.0;
