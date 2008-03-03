@@ -38,10 +38,11 @@ bool speechrecognition_generator::next_step ( )
 	// block
 	client->Read();
 #endif
-	
+
 	if (device->fresh) {
 		device->Clear();
 		device->fresh = false;
+		strncpy(ecp_t.ecp_reply.commandRecognized, device->rawText, SPEECH_RECOGNITION_TEXT_LEN);
 		return false;
 	}
 

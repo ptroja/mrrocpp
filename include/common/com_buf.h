@@ -782,10 +782,15 @@ struct MP_COMMAND_PACKAGE {
 // ------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------
+#ifndef SPEECH_RECOGNITION_TEXT_LEN
+  #define SPEECH_RECOGNITION_TEXT_LEN 256
+#endif 
+
 // Odpowiedz ECP do MP
 struct ECP_REPLY_PACKAGE {
 	ECP_REPLY reply;
 	edp_reply_buffer ecp_reply;
+	char commandRecognized[SPEECH_RECOGNITION_TEXT_LEN];
 };
 // ------------------------------------------------------------------------
 

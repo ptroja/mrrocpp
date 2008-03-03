@@ -64,7 +64,12 @@ void mp_task_multiplayer::main_task_algorithm(void)
 		        (1, 1, ROBOT_SPEECHRECOGNITION, ROBOT_SPEECHRECOGNITION)) {
 				break_state = true;
 		       	break;
-			}		
+			}
+			
+			/*
+			char *qq = robot_m[ROBOT_SPEECHRECOGNITION]->ecp_td.commandRecognized;
+			printf("commandRecognized = \"%s\"\n", qq);
+			*/
 			
 			if (set_next_ecps_state (ECP_GEN_FESTIVAL, festival_generator::POLISH_VOICE, "komenda odebrana", 1, ROBOT_FESTIVAL)) {
 				break_state = true;

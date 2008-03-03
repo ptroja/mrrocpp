@@ -85,7 +85,7 @@ void mp_robot::start_ecp ( void ) {
 
 	mp_command.command = START_TASK;
 	mp_command.hdr.type = 0;
-	if ( MsgSend ( ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply, sizeof(ecp_reply)) == -1) {// by Y&W
+	if ( MsgSend ( ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply_package, sizeof(ecp_reply_package)) == -1) {// by Y&W
 		uint64_t e = errno;
 		perror("Send to ECP failed\n");
 		sr_ecp_msg.message(SYSTEM_ERROR, e, "MP: Send to ECP failed");
@@ -93,7 +93,7 @@ void mp_robot::start_ecp ( void ) {
 	}
 	// by Y - ECP_ACKNOWLEDGE zamienione na TASK_TERMINATED
 	// w celu uproszczenia oprogramowania zadan wielorobotowych
-	if (ecp_reply.reply != TASK_TERMINATED ) {
+	if (ecp_reply_package.reply != TASK_TERMINATED ) {
 		// Odebrano od ECP informacje o bledzie
 		printf("Error w start_ecp w ECP\n");
 		throw MP_main_error(NON_FATAL_ERROR, ECP_ERRORS);
@@ -106,7 +106,7 @@ void mp_robot::start_ecp ( void ) {
 void mp_robot::execute_motion ( void ) { // zlecenie wykonania ruchu
 
 	mp_command.hdr.type = 0;
-	if ( MsgSend ( ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply, sizeof(ecp_reply)) == -1) {// by Y&W
+	if ( MsgSend ( ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply_package, sizeof(ecp_reply_package)) == -1) {// by Y&W
 		// Blad komunikacji miedzyprocesowej - wyjatek
 		uint64_t e = errno;
 		perror("Send to ECP failed ?\n");
@@ -114,7 +114,7 @@ void mp_robot::execute_motion ( void ) { // zlecenie wykonania ruchu
 		throw MP_error (SYSTEM_ERROR, (uint64_t) 0);
 	}
 
-	if (ecp_reply.reply == ERROR_IN_ECP ) {
+	if (ecp_reply_package.reply == ERROR_IN_ECP ) {
 		// Odebrano od ECP informacje o bledzie
 		throw MP_error (NON_FATAL_ERROR, ECP_ERRORS);
 	}
@@ -130,7 +130,7 @@ void mp_robot::terminate_ecp ( void ) { // zlecenie STOP zakonczenia ruchu
 	mp_command.command = STOP;
 	mp_command.hdr.type = 0;
 
-	if ( MsgSend ( ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply, sizeof(ecp_reply)) == -1) {// by Y&W
+	if ( MsgSend ( ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply_package, sizeof(ecp_reply_package)) == -1) {// by Y&W
 		// Blad komunikacji miedzyprocesowej - wyjatek
 		uint64_t e = errno;
 		perror("Send to ECP failed ?\n");
@@ -138,7 +138,7 @@ void mp_robot::terminate_ecp ( void ) { // zlecenie STOP zakonczenia ruchu
 		throw MP_error (SYSTEM_ERROR, (uint64_t) 0);
 	}
 
-	if (ecp_reply.reply == ERROR_IN_ECP) {
+	if (ecp_reply_package.reply == ERROR_IN_ECP) {
 		// Odebrano od ECP informacje o bledzie
 		throw MP_error (NON_FATAL_ERROR, ECP_ERRORS);
 	}
@@ -169,13 +169,18 @@ void mp_robot::get_reply(void) {
 	// pobiera z pakietu przeslanego z ECP informacje i wstawia je do
 	// odpowiednich skladowych generatora lub warunku
 
-	ecp_td.ecp_reply = ecp_reply.reply;
-	ecp_td.reply_type = ecp_reply.ecp_reply.reply_package.reply_type;
+	ecp_td.ecp_reply = ecp_reply_package.reply;
+	ecp_td.reply_type = ecp_reply_package.ecp_reply.reply_package.reply_type;
+	
+	// TODO: czy warto wprowadzac klase potomna?
+	if (robot_name == ROBOT_SPEECHRECOGNITION) {
+		strncpy(ecp_td.commandRecognized, ecp_reply_package.commandRecognized, SPEECH_RECOGNITION_TEXT_LEN);
+	}
 
 	switch (ecp_td.reply_type) {
 		case ERROR:
-			ecp_td.error_no.error0 = ecp_reply.ecp_reply.reply_package.error_no.error0;
-			ecp_td.error_no.error1 = ecp_reply.ecp_reply.reply_package.error_no.error1;
+			ecp_td.error_no.error0 = ecp_reply_package.ecp_reply.reply_package.error_no.error0;
+			ecp_td.error_no.error1 = ecp_reply_package.ecp_reply.reply_package.error_no.error1;
 			break;
 		case ACKNOWLEDGE:
 			break;

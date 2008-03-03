@@ -80,6 +80,9 @@ struct robot_ECP_transmission_data : robot_transmission_data {
 		ECP_REPLY  ecp_reply;                 // odpowiedz z ECP do MP
 
 		ecp_next_state_t ecp_next_state;
+		
+		// speech command interface
+		char commandRecognized[SPEECH_RECOGNITION_TEXT_LEN];
 
 		// by Y  do sily
 

@@ -39,16 +39,16 @@ void mp_speaker_robot::get_reply (void)
 	// pobiera z pakietu przeslanego z ECP informacje i wstawia je do
 	// odpowiednich skladowych generatora lub warunku
 
-	ecp_td.ecp_reply = ecp_reply.reply;
-	ecp_td.reply_type = ecp_reply.ecp_reply.reply_package.reply_type;
+	ecp_td.ecp_reply = ecp_reply_package.reply;
+	ecp_td.reply_type = ecp_reply_package.ecp_reply.reply_package.reply_type;
 
 	switch (ecp_td.reply_type) {
 		case ERROR:
-			ecp_td.error_no.error0 = ecp_reply.ecp_reply.reply_package.error_no.error0;
-			ecp_td.error_no.error1 = ecp_reply.ecp_reply.reply_package.error_no.error1;
+			ecp_td.error_no.error0 = ecp_reply_package.ecp_reply.reply_package.error_no.error0;
+			ecp_td.error_no.error1 = ecp_reply_package.ecp_reply.reply_package.error_no.error1;
 			break;
 		case ACKNOWLEDGE:
-			ecp_td.speaking = ecp_reply.ecp_reply.reply_package.arm.text_def.speaking;
+			ecp_td.speaking = ecp_reply_package.ecp_reply.reply_package.arm.text_def.speaking;
 			break;
 		default:  // bledna przesylka
 			throw MP_error (NON_FATAL_ERROR, INVALID_EDP_REPLY);

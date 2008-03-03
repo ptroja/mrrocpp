@@ -12,7 +12,7 @@ class mp_robot
 	protected:
 		MP_COMMAND_PACKAGE mp_command;      // Bufor z rozkazem dla ECP
 		// - uzytkownik nie powinien z tego korzystac
-		ECP_REPLY_PACKAGE ecp_reply;        // Bufor z odpowiedzia z ECP
+		ECP_REPLY_PACKAGE ecp_reply_package;        // Bufor z odpowiedzia z ECP
 		// - uzytkownik nie powinien z tego korzystac
 
 		mp_task &mp_object;
