@@ -30,6 +30,9 @@ class edp_speaker_effector  : public edp_effector {
 	STATE next_state;   // stan nastepny, do ktorego przejdzie EDP_MASTER
 
   public:
+  
+  
+  void initialize (void);
 	char text2speak[MAX_TEXT]; // MAC 7
 	char prosody[MAX_PROSODY]; // MAC 7 
 	bool speaking; // MAC7

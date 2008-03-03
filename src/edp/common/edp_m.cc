@@ -97,11 +97,13 @@ int main(int argc, char *argv[], char **arge)
         //			printf("za\n");
         master = return_created_efector(*_config);
 
+        master->initialize();
+
         master->create_threads();
 
         if (!master->initialize_communication())
         {
-        	return EXIT_FAILURE;	
+            return EXIT_FAILURE;
         }
 
         //	printf("1\n");

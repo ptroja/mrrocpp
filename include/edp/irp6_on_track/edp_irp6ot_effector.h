@@ -27,6 +27,7 @@ class edp_irp6ot_effector  : public edp_irp6s_postument_track_effector {
 
   public:
     // Konstruktor.
+    virtual void initialize (void);
     edp_irp6ot_effector (configurator &_config);
 	
 }; //: edp_irp6ot_effector

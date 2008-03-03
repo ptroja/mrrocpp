@@ -28,6 +28,12 @@ edp_irp6s_effector::edp_irp6s_effector (configurator &_config, ROBOT_ENUM l_robo
 
 };
 
+void edp_irp6s_effector::initialize (void)
+{
+}
+;
+
+
 /*--------------------------------------------------------------------------*/
 void edp_irp6s_effector::compute_xyz_euler_zyz (c_buffer *instruction) {
  // obliczenia dla ruchu ramienia (kocwk: XYZ_EULER_ZYZ)

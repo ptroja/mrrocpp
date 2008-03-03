@@ -104,6 +104,12 @@ edp_irp6s_and_conv_effector::edp_irp6s_and_conv_effector (configurator &_config,
 };
 
 
+
+void edp_irp6s_and_conv_effector::initialize (void)
+{}
+;
+
+
 /*--------------------------------------------------------------------------*/
 void edp_irp6s_and_conv_effector::create_threads ()
 {

@@ -28,6 +28,13 @@ extern master_trans_t_buffer mt_tt_obj;
 edp_irp6ot_effector::edp_irp6ot_effector (configurator &_config) :
         edp_irp6s_postument_track_effector (_config, ROBOT_IRP6_ON_TRACK)
 {
+
+}
+;//: edp_irp6ot_effector
+
+
+void edp_irp6ot_effector::initialize (void)
+{
     //  Stworzenie listy dostepnych kinematyk.
     create_kinematic_models_for_given_robot();
 
@@ -40,9 +47,8 @@ edp_irp6ot_effector::edp_irp6ot_effector (configurator &_config) :
 
     reset_variables();
 
-
 }
-;//: edp_irp6ot_effector
+;
 
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na torze.

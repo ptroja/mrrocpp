@@ -15,17 +15,18 @@
 #include "edp/common/edp.h"
 
 // Klasa reprezentujaca tasmociag.
-class edp_conveyor_effector  : public edp_irp6s_and_conv_effector {
-  protected:
+class edp_conveyor_effector  : public edp_irp6s_and_conv_effector
+{
+protected:
     // Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
-    virtual void create_kinematic_models_for_given_robot(void);        
+    virtual void create_kinematic_models_for_given_robot(void);
 
-  public:
+public:
     // Konstruktor.
     edp_conveyor_effector (configurator &_config);
-
-	void set_rmodel (c_buffer *instruction);                    // zmiana narzedzia
-	void get_rmodel (c_buffer *instruction);                    // odczytanie narzedzia
+    void initialize (void);
+    void set_rmodel (c_buffer *instruction);                    // zmiana narzedzia
+    void get_rmodel (c_buffer *instruction);                    // odczytanie narzedzia
 
     // Przemieszczenie ramienia.
     void move_arm (c_buffer *instruction);
@@ -34,6 +35,7 @@ class edp_conveyor_effector  : public edp_irp6s_and_conv_effector {
     // Aktualizacja polozenia.
     void servo_joints_and_frame_actualization_and_upload(void);
 
-}; //: edp_conveyor_effector
+}
+; //: edp_conveyor_effector
 
 #endif

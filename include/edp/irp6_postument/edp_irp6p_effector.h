@@ -20,15 +20,18 @@
 #define IRP6P_GRIPPER_TURN_AXE 5
 
 // Klasa reprezentujaca robota IRp-6 na postumencie.
-class edp_irp6p_effector  : public edp_irp6s_postument_track_effector {
-  protected:
+class edp_irp6p_effector  : public edp_irp6s_postument_track_effector
+{
+protected:
     // Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
-    virtual void create_kinematic_models_for_given_robot(void);        
+    virtual void create_kinematic_models_for_given_robot(void);
 
-  public:
+public:
+    void initialize (void);
     // Konstruktor.
     edp_irp6p_effector (configurator &_config);
-	
-}; //: edp_irp6p_effector
+
+}
+; //: edp_irp6p_effector
 
 #endif

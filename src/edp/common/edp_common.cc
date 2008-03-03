@@ -74,6 +74,10 @@ edp_effector::edp_effector (configurator &_config, ROBOT_ENUM l_robot_name)
 
 };
 
+void edp_effector::initialize (void)
+{
+}
+;
 
 /*--------------------------------------------------------------------------*/
 bool edp_effector::initialize_communication ()
@@ -142,7 +146,7 @@ bool edp_effector::initialize_communication ()
     }
 
     msg->message("EDP loaded");
-    
+
     return true;
 }
 ;

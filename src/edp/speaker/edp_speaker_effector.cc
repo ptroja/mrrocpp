@@ -62,6 +62,13 @@ edp_speaker_effector::edp_speaker_effector (configurator &_config)
         : edp_effector(_config, ROBOT_SPEAKER)
 {
 
+
+}
+;
+
+
+void edp_speaker_effector::initialize (void)
+{
     real_reply_type = ACKNOWLEDGE;
     // inicjacja deskryptora pliku by 7&Y
     // serwo_fd = name_open(EDP_ATTACH_POINT, 0);
@@ -75,7 +82,9 @@ edp_speaker_effector::edp_speaker_effector (configurator &_config)
 
     edp_tid=1;// numer watku edp_master
 
-};
+}
+;
+
 
 int edp_speaker_effector::init ()
 {
