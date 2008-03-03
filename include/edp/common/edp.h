@@ -312,7 +312,7 @@ protected:
     short servo_gripper_reg_state;
 
 public:
-
+    int servo_to_tt_chid;
     virtual void initialize (void);
 
     edp_irp6s_and_conv_effector (configurator &_config, ROBOT_ENUM l_robot_name);       // konstruktor

@@ -43,7 +43,7 @@
 bool force_sensor_do_configure; // FLAGA ZLECENIA KONFIGURACJI CZUJNIKA
 
 
-int servo_to_tt_chid;
+
 
 extern master_trans_t_buffer mt_tt_obj;
 
