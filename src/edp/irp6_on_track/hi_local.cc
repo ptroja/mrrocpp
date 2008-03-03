@@ -39,6 +39,7 @@ struct sigevent event;
 
 // extern ini_configs* ini_con;
 extern edp_irp6ot_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
+extern sr_edp* msg; // Wskaznik do obiektu klasy sluzacej do komunikacji z SR
    
 int int_id;                 // Identyfikator obslugi przerwania
 volatile motor_data md; // Dane przesylane z/do funkcji obslugi przerwania

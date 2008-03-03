@@ -53,6 +53,8 @@
 
 extern void * speak_t_thread(void* arg);
 
+extern sr_edp* msg; // Wskaznik do obiektu klasy sluzacej do komunikacji z SR
+
 
 extern master_trans_t_buffer mt_tt_obj;
 

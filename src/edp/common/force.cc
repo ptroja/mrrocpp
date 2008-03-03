@@ -40,7 +40,9 @@ void *edp_vsp_thread(void* arg);
 
 extern edp_irp6s_postument_track_effector* master;  
 
-extern reader_buffer rb_obj;										
+extern configurator* config;
+extern reader_buffer rb_obj;					
+extern bool force_sensor_do_configure; // FLAGA ZLECENIA KONFIGURACJI CZUJNIKA					
 edp_force_sensor *vs;
 
 static bool TERMINATE=false;			//!< zakonczenie obydwu watkow

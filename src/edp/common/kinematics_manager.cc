@@ -18,6 +18,7 @@
 #include "edp/common/kinematics_manager.h"
 #include "edp/common/kinematic_model.h"
 
+extern sr_edp* msg; // Wskaznik do obiektu klasy sluzacej do komunikacji z SR
 
 // Konstruktor - tworzy liste kinematyk.
 kinematics_manager::kinematics_manager(void)

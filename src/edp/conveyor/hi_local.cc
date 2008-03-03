@@ -39,6 +39,7 @@
 struct sigevent event;
 
 extern edp_conveyor_effector* master;
+extern sr_edp* msg; // Wskaznik do obiektu klasy sluzacej do komunikacji z SR
 
 int int_id;                       // Identyfikator obslugi przerwania
 volatile motor_data md; // Dane przesylane z/do funkcji obslugi przerwania

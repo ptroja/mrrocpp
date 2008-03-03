@@ -14,7 +14,10 @@
 
 #define MAXBUFLEN 100
 
+extern configurator* config;
+
 extern edp_irp6s_effector* master;  
+extern sr_edp* msg; // Wskaznik do obiektu klasy sluzacej do komunikacji z SR
 
 void visualisation_thread(void * arg)
 {

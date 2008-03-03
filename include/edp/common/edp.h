@@ -25,20 +25,7 @@
 // Konfigurator
 #include "lib/configurator.h"
 
-extern configurator* config;
 
-extern bool force_sensor_do_configure; // FLAGA ZLECENIA KONFIGURACJI CZUJNIKA
-
-extern sr_edp* msg; // Wskaznik do obiektu klasy sluzacej do komunikacji z SR
-
-// by Y do przekazywania paramterow dla servo w sterowaniu pozycyjno - silowym
-struct servo_command_amend {
-	short motion_steps;
-	short value_in_step_no;
-	double arm_coordinates[6];
-	frame_tab desired_arm_frame;
-	double gripper_coordinate;
-};
 
 enum STATE { GET_STATE, GET_SYNCHRO, SYNCHRO_TERMINATED, GET_INSTRUCTION, EXECUTE_INSTRUCTION, WAIT, WAIT_Q };
 // extern int errno;

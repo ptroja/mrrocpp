@@ -43,6 +43,9 @@ extern void * force_thread(void* arg);
 extern void * edp_vsp_thread(void* arg);
 
 extern int debugi;
+extern configurator* config;
+extern bool force_sensor_do_configure; // FLAGA ZLECENIA KONFIGURACJI CZUJNIKA
+extern sr_edp* msg; // Wskaznik do obiektu klasy sluzacej do komunikacji z SR
 
 /*--------------------------------------------------------------------------*/
 void edp_irp6s_postument_track_effector::arm_frame_2_xyz_eul_zyz () {

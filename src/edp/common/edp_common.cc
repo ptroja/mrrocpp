@@ -26,6 +26,9 @@
 
 #include "messip/messip.h"
 
+extern configurator* config;
+extern sr_edp* msg; // Wskaznik do obiektu klasy sluzacej do komunikacji z SR
+
 transformer_error::Fatal_error::Fatal_error (uint64_t err_no_0, uint64_t err_no_1)
             : error0(err_no_0), error1(err_no_1) {}; // konstruktor obiektu
 transformer_error::NonFatal_error_1::NonFatal_error_1 (uint64_t err_no)

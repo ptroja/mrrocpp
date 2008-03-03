@@ -41,6 +41,7 @@
 #include "edp/common/kinematic_model.h"
 
 bool force_sensor_do_configure; // FLAGA ZLECENIA KONFIGURACJI CZUJNIKA
+extern sr_edp* msg; // Wskaznik do obiektu klasy sluzacej do komunikacji z SR
 
 int servo_to_tt_chid;
 

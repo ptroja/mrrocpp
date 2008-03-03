@@ -31,6 +31,8 @@
 #include "edp/common/edp.h"
 
 reader_buffer rb_obj;
+extern configurator* config;
+extern sr_edp* msg; // Wskaznik do obiektu klasy sluzacej do komunikacji z SR
 
 inline void check_config(const char* string, uint8_t* input )
 {
