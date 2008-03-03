@@ -3,6 +3,7 @@
 ecp_generator::ecp_generator (ecp_task& _ecp_task, bool _is_robot_active)
 	: ecp_t(_ecp_task),
 	is_robot_active(_is_robot_active),
+	communicate_with_mp_in_move(true),
 	ecp_mp_generator(*(ecp_t.sr_ecp_msg))
 {
 	the_robot = (is_robot_active) ? ecp_t.ecp_m_robot : NULL;

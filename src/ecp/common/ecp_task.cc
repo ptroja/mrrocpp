@@ -10,7 +10,7 @@
 #include "ecp/common/ecp_teach_in_generator.h"
 
 ecp_task::ecp_task(configurator &_config)
-	: ecp_mp_task(_config)
+        : ecp_mp_task(_config)
 {
     sensor_m.clear();
 }
@@ -89,18 +89,18 @@ bool ecp_task::pulse_check()
 
 void ecp_task::catch_signal_in_ecp_task(int sig)
 {
-	switch (sig)
-	{
-		case SIGTERM :
-			kill_all_VSP (sensor_m);
-			sr_ecp_msg->message ("ECP terminated");
-			_exit (EXIT_SUCCESS);
-			break;
-		case SIGSEGV:
-			fprintf(stderr, "\n\nSegmentation fault in ECP process\n\n");
-			signal(SIGSEGV, SIG_DFL);
-			break;
-	}
+    switch (sig)
+    {
+    case SIGTERM :
+        kill_all_VSP (sensor_m);
+        sr_ecp_msg->message ("ECP terminated");
+        _exit (EXIT_SUCCESS);
+        break;
+    case SIGSEGV:
+        fprintf(stderr, "\n\nSegmentation fault in ECP process\n\n");
+        signal(SIGSEGV, SIG_DFL);
+        break;
+    }
 }
 
 
@@ -167,37 +167,39 @@ void ecp_task::main_task_algorithm(void)
 
 void ecp_task::Move (ecp_generator& the_generator)
 {
-	// Funkcja ruchu dla ECP
+    // Funkcja ruchu dla ECP
 
-	// generacja pierwszego kroku ruchu
-	the_generator.node_counter = 0;
-	set_ecp_reply (ECP_ACKNOWLEDGE);
+    // generacja pierwszego kroku ruchu
+    the_generator.node_counter = 0;
+    set_ecp_reply (ECP_ACKNOWLEDGE);
 
-	if (!mp_buffer_receive_and_send() || !the_generator.first_step())
-	{
-		return; // Warunek koncowy spelniony w pierwszym kroku
-	}
+    if (!(!the_generator.communicate_with_mp_in_move || mp_buffer_receive_and_send())
+            || !the_generator.first_step())
+    {
+        return; // Warunek koncowy spelniony w pierwszym kroku
+    }
 
-	do
-	{ // realizacja ruchu
+    do
+    { // realizacja ruchu
 
-		// zadanie przygotowania danych od czujnikow
-		all_sensors_initiate_reading (the_generator.sensor_m);
+        // zadanie przygotowania danych od czujnikow
+        all_sensors_initiate_reading (the_generator.sensor_m);
 
-		// wykonanie kroku ruchu
-		if ((the_generator.the_robot) && the_generator.the_robot->communicate)
-		{
-			the_generator.the_robot->create_command ();
-			// zlecenie ruchu SET oraz odczyt stanu robota GET
-			the_generator.the_robot->execute_motion();
-			the_generator.the_robot->get_reply();
-		}
+        // wykonanie kroku ruchu
+        if ((the_generator.the_robot) && the_generator.the_robot->communicate)
+        {
+            the_generator.the_robot->create_command ();
+            // zlecenie ruchu SET oraz odczyt stanu robota GET
+            the_generator.the_robot->execute_motion();
+            the_generator.the_robot->get_reply();
+        }
 
-		// odczytanie danych z wszystkich czujnikow
-		all_sensors_get_reading(the_generator.sensor_m);
-		the_generator.node_counter++;
-	}
-	while (mp_buffer_receive_and_send() && the_generator.next_step());
+        // odczytanie danych z wszystkich czujnikow
+        all_sensors_get_reading(the_generator.sensor_m);
+        the_generator.node_counter++;
+    }
+    while ((!the_generator.communicate_with_mp_in_move || mp_buffer_receive_and_send())
+            && the_generator.next_step());
 }
 
 // Przekazanie identyfikatora procesu MP
@@ -245,11 +247,11 @@ void ecp_task::ecp_wait_for_stop (void)
 
     if (mp_command_type() == STOP)
     {
-    	set_ecp_reply (ECP_ACKNOWLEDGE);
+        set_ecp_reply (ECP_ACKNOWLEDGE);
     }
     else
     {
-    	set_ecp_reply (ERROR_IN_ECP);
+        set_ecp_reply (ERROR_IN_ECP);
     }
 
     // Wyslanie odpowiedzi.
@@ -281,17 +283,17 @@ bool ecp_task::ecp_wait_for_start (void)
 
     switch (mp_command_type() )
     {
-    	case START_TASK:
-    		// by Y - ECP_ACKNOWLEDGE zamienione na TASK_TERMINATED w celu uproszczenia oprogramowania zadan wielorobotowych
-    		set_ecp_reply (TASK_TERMINATED);
-    		break;
-    	case STOP:
-    		set_ecp_reply (TASK_TERMINATED);
-    		ecp_stop = true;
-    		break;
-    	default:
-    		set_ecp_reply (INCORRECT_MP_COMMAND);
-    		break;
+    case START_TASK:
+        // by Y - ECP_ACKNOWLEDGE zamienione na TASK_TERMINATED w celu uproszczenia oprogramowania zadan wielorobotowych
+        set_ecp_reply (TASK_TERMINATED);
+        break;
+    case STOP:
+        set_ecp_reply (TASK_TERMINATED);
+        ecp_stop = true;
+        break;
+    default:
+        set_ecp_reply (INCORRECT_MP_COMMAND);
+        break;
     }
 
     // if (Reply (caller, &ecp_reply, sizeof(ECP_REPLY_PACKAGE)) == -1 ) {
@@ -329,16 +331,16 @@ bool ecp_task::get_next_state (void)
 
     switch (mp_command_type() )
     {
-    	case NEXT_STATE:
-    		set_ecp_reply (ECP_ACKNOWLEDGE);
-    		break;
-    	case STOP:
-    		set_ecp_reply (ECP_ACKNOWLEDGE);
-    		ecp_stop = true;
-    		break;
-    	default:
-    		set_ecp_reply (INCORRECT_MP_COMMAND);
-    		break;
+    case NEXT_STATE:
+        set_ecp_reply (ECP_ACKNOWLEDGE);
+        break;
+    case STOP:
+        set_ecp_reply (ECP_ACKNOWLEDGE);
+        ecp_stop = true;
+        break;
+    default:
+        set_ecp_reply (INCORRECT_MP_COMMAND);
+        break;
     }
 
     if ( MsgReply(caller, EOK, &ecp_reply, sizeof(ECP_REPLY_PACKAGE)) ==-1)
@@ -368,7 +370,7 @@ bool ecp_task::mp_buffer_receive_and_send (void)
 {
     bool returned_value = true;
     bool ecp_stop = false;
-    
+
     // Wyslanie pulsu do MP
     send_pulse_to_mp ( ECP_WAIT_FOR_COMMAND, 1);
 
@@ -376,23 +378,23 @@ bool ecp_task::mp_buffer_receive_and_send (void)
 
     switch (mp_command_type())
     {
-    	case NEXT_POSE:
-    		if ((ecp_reply.reply != TASK_TERMINATED)&&(ecp_reply.reply != ERROR_IN_ECP))
-    			set_ecp_reply (ECP_ACKNOWLEDGE);
-    		break;
-    	case STOP:
-    		set_ecp_reply (ECP_ACKNOWLEDGE);
-    		ecp_stop = true;
-    		break;
-    	case END_MOTION:
-    		// dla ulatwienia programowania apliakcji wielorobotowych
-    		if (ecp_reply.reply != ERROR_IN_ECP)
-    			set_ecp_reply (TASK_TERMINATED);
-    		returned_value = false;
-    		break;
-    	default:
-    		set_ecp_reply (INCORRECT_MP_COMMAND);
-    		break;
+    case NEXT_POSE:
+        if ((ecp_reply.reply != TASK_TERMINATED)&&(ecp_reply.reply != ERROR_IN_ECP))
+            set_ecp_reply (ECP_ACKNOWLEDGE);
+        break;
+    case STOP:
+        set_ecp_reply (ECP_ACKNOWLEDGE);
+        ecp_stop = true;
+        break;
+    case END_MOTION:
+        // dla ulatwienia programowania apliakcji wielorobotowych
+        if (ecp_reply.reply != ERROR_IN_ECP)
+            set_ecp_reply (TASK_TERMINATED);
+        returned_value = false;
+        break;
+    default:
+        set_ecp_reply (INCORRECT_MP_COMMAND);
+        break;
     }
 
     if ( MsgReply(caller, EOK, &ecp_reply, sizeof(ecp_reply)) ==-1)
@@ -477,18 +479,18 @@ int ecp_task::receive_mp_message (void)
 
 BYTE ecp_task::convert (POSE_SPECIFICATION ps)
 {
-	switch (ps)
-	{
-		case MOTOR:
-			return C_MOTOR;
-		case JOINT:
-			return C_JOINT;
-		case XYZ_ANGLE_AXIS:
-			return C_XYZ_ANGLE_AXIS;
-		case XYZ_EULER_ZYZ:
-			return C_XYZ_EULER_ZYZ;
-		default:
-			return C_MOTOR;
-	}
-	return C_MOTOR;
+    switch (ps)
+    {
+    case MOTOR:
+        return C_MOTOR;
+    case JOINT:
+        return C_JOINT;
+    case XYZ_ANGLE_AXIS:
+        return C_XYZ_ANGLE_AXIS;
+    case XYZ_EULER_ZYZ:
+        return C_XYZ_EULER_ZYZ;
+    default:
+        return C_MOTOR;
+    }
+    return C_MOTOR;
 }
