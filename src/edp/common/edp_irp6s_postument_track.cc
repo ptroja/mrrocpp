@@ -124,6 +124,8 @@ edp_irp6s_postument_track_effector::edp_irp6s_postument_track_effector (configur
     else
         is_gripper_active = 1;
 
+	TERMINATE=false;
+
 };
 
 

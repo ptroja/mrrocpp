@@ -28,18 +28,11 @@
 #include "lib/srlib.h"
 #include "lib/mis_fun.h"
 #include "edp/common/edp.h"
-#include "edp/common/edp_force_sensor.h"
+#include "edp/common/edp_irp6s_postument_track.h"
 	
 /********************************* GLOBALS **********************************/
 
-sr_vsp *sr_msg;		//!< komunikacja z SR
 
-static sem_t new_ms; //!< semafor dostepu do nowej wiadomosci dla vsp
-
-			
-edp_force_sensor *vs;
-
-static bool TERMINATE=false;			//!< zakonczenie obydwu watkow
 
 //!< watek do komunikacji miedzy edp a vsp
 

@@ -11,7 +11,7 @@
 
 
 #include "edp/common/edp.h"
-
+#include "edp/common/edp_force_sensor.h"
 
 
 
@@ -61,6 +61,11 @@ protected:
     pthread_mutex_t force_mutex;	// mutex do sily   XXXXXX
 
 public:
+
+    sr_vsp *sr_msg;		//!< komunikacja z SR
+    sem_t new_ms; //!< semafor dostepu do nowej wiadomosci dla vsp
+    edp_force_sensor *vs;
+    bool TERMINATE;			//!< zakonczenie obydwu watkow
 
     static void *edp_vsp_thread_start(void* arg);
     void *edp_vsp_thread(void* arg);

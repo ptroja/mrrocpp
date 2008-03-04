@@ -42,7 +42,7 @@
 
 #include "lib/srlib.h"
 #include "edp/ati3084/edp_s.h"
-#include "edp/common/edp.h"
+#include "edp/common/edp_irp6s_postument_track.h"
 
 // Konfigurator
 #include "lib/configurator.h"
@@ -82,8 +82,7 @@ unsigned int int_attached=0;// informacja o tym, czy obsluga przerwanie jestjuz 
 
 struct timespec start[9];
 
-extern sr_vsp *sr_msg;       // Wskaznik na lacze z SR
-// extern pthread_mutex_t smutex;
+
 
 // #pragma off(check_stack);
 
@@ -284,7 +283,7 @@ void edp_ATI3084_force_sensor::configure_sensor (void)
 {// by Y
     is_sensor_configured=true;
     //  printf("EDP Sensor configured\n");
-    sr_msg->message ("EDP Sensor configured");
+    master->sr_msg->message ("EDP Sensor configured");
     if (!(master->test_mode))
     {
         mds.intr_mode=0;
@@ -382,7 +381,7 @@ void edp_ATI3084_force_sensor::wait_for_event()
             {
                 if (iter_counter==1)
                 {
-                    sr_msg->message (NON_FATAL_ERROR, "Force / Torque read error - check sensor controller");
+                    master->sr_msg->message (NON_FATAL_ERROR, "Force / Torque read error - check sensor controller");
                 }
                 if (iter_counter%10==0)  // raz na 10
                 {
@@ -400,7 +399,7 @@ void edp_ATI3084_force_sensor::wait_for_event()
             {
                 if (iter_counter>1)
                 {
-                    sr_msg->message ("Force / Torque sensor connection reastablished");
+                    master->sr_msg->message ("Force / Torque sensor connection reastablished");
                 }
             }
 
