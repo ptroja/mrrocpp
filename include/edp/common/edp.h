@@ -593,6 +593,13 @@ protected:
     pthread_mutex_t force_mutex;	// mutex do sily   XXXXXX
 
 public:
+
+    static void *edp_vsp_thread_start(void* arg);
+    void *edp_vsp_thread(void* arg);
+    static void *force_thread_start(void* arg);
+    void *force_thread(void* arg);
+
+
     bool force_sensor_do_configure; // FLAGA ZLECENIA KONFIGURACJI CZUJNIKA
     virtual void initialize (void);
     edp_irp6s_postument_track_effector (configurator &_config, ROBOT_ENUM l_robot_name );       // konstruktor

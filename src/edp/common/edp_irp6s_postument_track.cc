@@ -39,10 +39,6 @@
 
 
 
-extern void * force_thread(void* arg);
-extern void * edp_vsp_thread(void* arg);
-
-
 
 void edp_irp6s_postument_track_effector::initialize (void)
 {}
@@ -139,7 +135,6 @@ void edp_irp6s_postument_track_effector::pose_force_linear_move (c_buffer *instr
 
 
 
-
 /*--------------------------------------------------------------------------*/
 void edp_irp6s_postument_track_effector::create_threads ()
 {
@@ -150,7 +145,7 @@ void edp_irp6s_postument_track_effector::create_threads ()
     if (force_tryb > 0)
     {
         // byY - utworzenie watku pomiarow sily
-        if (pthread_create (&force_tid, NULL, force_thread, NULL)!=EOK)
+        if (pthread_create (&force_tid, NULL, &force_thread_start, (void *) this)!=EOK)
         {
             msg->message(SYSTEM_ERROR, errno, "EDP: Failed to spawn READER");
             char buf[20];
@@ -160,7 +155,7 @@ void edp_irp6s_postument_track_effector::create_threads ()
         }
 
         // by Y - utworzenie watku komunikacji miedzy EDP a VSP
-        if (pthread_create (&edp_vsp_tid, NULL, edp_vsp_thread, NULL)!=EOK)
+        if (pthread_create (&edp_vsp_tid, NULL, &edp_vsp_thread_start, (void *) this)!=EOK)
         {
             msg->message(SYSTEM_ERROR, errno, "EDP: Failed to spawn READER");
             char buf[20];

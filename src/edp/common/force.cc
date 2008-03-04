@@ -38,9 +38,6 @@ static sem_t new_ms; //!< semafor dostepu do nowej wiadomosci dla vsp
 
 void *edp_vsp_thread(void* arg);
 
-extern edp_irp6s_postument_track_effector* master;  
-
-
 			
 edp_force_sensor *vs;
 
@@ -48,7 +45,15 @@ static bool TERMINATE=false;			//!< zakonczenie obydwu watkow
 
 //!< watek do komuniakcji miedzy edp a vsp
 
-void *edp_vsp_thread(void *arg)
+
+void * edp_irp6s_postument_track_effector::edp_vsp_thread_start(void* arg)
+{
+	 static_cast<edp_irp6s_postument_track_effector*> (arg)->edp_vsp_thread(arg);
+}
+
+
+
+void * edp_irp6s_postument_track_effector::edp_vsp_thread(void *arg)
  {
 	name_attach_t *edp_vsp_attach;	 
 	uint64_t e;     //!< kod bledu systemowego
@@ -60,7 +65,7 @@ void *edp_vsp_thread(void *arg)
 	
 	//!< zarejestrowanie nazwy identyfikujacej serwer
 	
-	if ((edp_vsp_attach = name_attach(NULL, master->config.return_attach_point_name(configurator::CONFIG_SERVER, "edp_vsp_attach_point"),
+	if ((edp_vsp_attach = name_attach(NULL, config.return_attach_point_name(configurator::CONFIG_SERVER, "edp_vsp_attach_point"),
 		NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		e = errno;
 		perror("Failed to attach EDP_VSP\n");
@@ -102,23 +107,23 @@ void *edp_vsp_thread(void *arg)
 		}
 		
 		if (vsp_edp_command.konfigurowac)
-			master->force_sensor_do_configure = true;//!< jesli otrzymano od VSP polecenie konfiguracji czujnika
+			force_sensor_do_configure = true;//!< jesli otrzymano od VSP polecenie konfiguracji czujnika
 		//!< oczekiwanie nowego pomiaru			
 		sem_wait(&new_ms);
 		//!< przygotowanie struktury do wyslania
 		
 		// uwaga sila nie przemnozona przez tool'a i current frame orientation						
-		master->force_msr_download(edp_vsp_reply.force, 0);
+		force_msr_download(edp_vsp_reply.force, 0);
 		
 		counter++;	
 									
-		master->rb_obj->lock_mutex();
-		edp_vsp_reply.servo_step=master->rb_obj->step_data.step;
+		rb_obj->lock_mutex();
+		edp_vsp_reply.servo_step=rb_obj->step_data.step;
 		for (int i=0;i<=5;i++)
 		{
-			edp_vsp_reply.current_present_XYZ_ZYZ_arm_coordinates[i]=master->rb_obj->step_data.current_kartez_position[i];  
+			edp_vsp_reply.current_present_XYZ_ZYZ_arm_coordinates[i]=rb_obj->step_data.current_kartez_position[i];  
 		}		
-		master->rb_obj->unlock_mutex();
+		rb_obj->unlock_mutex();
 		
 		//!< wyslanie danych
 		if ( MsgReply(vsp_caller, EOK, &edp_vsp_reply, sizeof(edp_vsp_reply)) ==-1) //!< by Y&W
@@ -131,15 +136,22 @@ void *edp_vsp_thread(void *arg)
 	return 0;
 }
 
+void * edp_irp6s_postument_track_effector::force_thread_start(void* arg)
+{
+	 static_cast<edp_irp6s_postument_track_effector*> (arg)->force_thread(arg);
+}
+
+
+
 //!< watek do komunikacji ze sprzetem
-void *force_thread(void *arg)
+void * edp_irp6s_postument_track_effector::force_thread(void *arg)
 {
 
 	set_thread_priority(pthread_self() , MAX_PRIORITY-1);
 	sem_init( &new_ms, 0, 0);      
 	/*!Lokalizacja procesu wywietlania komunikatow SR */ 
-	if ((sr_msg = new sr_vsp(EDP, master->config.return_attach_point_name(configurator::CONFIG_SERVER, "edp_vsp_attach_point"),	
-		master->config.return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL) 
+	if ((sr_msg = new sr_vsp(EDP, config.return_attach_point_name(configurator::CONFIG_SERVER, "edp_vsp_attach_point"),	
+		config.return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL) 
 	{
 		printf("communication with SR not ready\n");
 	}	
@@ -172,9 +184,9 @@ void *force_thread(void *arg)
 	{
 		try{
 		
-		if (master->force_sensor_do_configure){ //!< jesli otrzymano polecenie konfiguracji czujnika		
+		if (force_sensor_do_configure){ //!< jesli otrzymano polecenie konfiguracji czujnika		
 			vs->configure_sensor();			
-			master->force_sensor_do_configure = false;	//!< ustawienie flagi ze czujnik jest ponownie skonfigurowany
+			force_sensor_do_configure = false;	//!< ustawienie flagi ze czujnik jest ponownie skonfigurowany
 			sem_trywait(&new_ms);
 			sem_post(&new_ms);	 //!< jest gotowy nowy pomiar	
 		} 
@@ -185,7 +197,7 @@ void *force_thread(void *arg)
 		
 				vs->initiate_reading();
 		//!< 		cout << "Initiate reading" << endl;
-				if (master->force_sensor_do_configure == false) {
+				if (force_sensor_do_configure == false) {
 					sem_trywait(&new_ms);
 					sem_post(&new_ms);	 //!< jest gotowy nowy pomiar				
 				}
