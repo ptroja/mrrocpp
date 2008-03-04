@@ -30,7 +30,7 @@ edp_irp6ot_effector::edp_irp6ot_effector (configurator &_config) :
 {
 
 }
-;//: edp_irp6ot_effector
+;
 
 
 void edp_irp6ot_effector::initialize (void)

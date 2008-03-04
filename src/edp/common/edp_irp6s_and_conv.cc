@@ -43,8 +43,6 @@
 bool force_sensor_do_configure; // FLAGA ZLECENIA KONFIGURACJI CZUJNIKA
 
 
-in_out_buffer in_out_obj; // bufor wejsc wyjsc
-
 
 /*--------------------------------------------------------------------------*/
 edp_irp6s_and_conv_effector::edp_irp6s_and_conv_effector (configurator &_config, ROBOT_ENUM l_robot_name) :
@@ -94,8 +92,8 @@ edp_irp6s_and_conv_effector::edp_irp6s_and_conv_effector (configurator &_config,
     ThreadCtl (_NTO_TCTL_IO, NULL);
 
     rb_obj = new reader_buffer();
-
     mt_tt_obj = new master_trans_t_buffer();
+    in_out_obj = new in_out_buffer(); // bufor wejsc wyjsc
 
 };
 
@@ -668,7 +666,7 @@ void edp_irp6s_and_conv_effector::send_to_SERVO_GROUP ()
 void edp_irp6s_and_conv_effector::set_outputs (c_buffer *instruction)
 {
     // ustawienie wyjsc binarnych
-    in_out_obj.set_output(&((*instruction).output_values));
+    in_out_obj->set_output(&((*instruction).output_values));
     // throw NonFatal_error_2(NOT_IMPLEMENTED_YET);
     // printf(" OUTPUTS SET\n");
 }
@@ -680,7 +678,7 @@ void edp_irp6s_and_conv_effector::set_outputs (c_buffer *instruction)
 void edp_irp6s_and_conv_effector::get_inputs (r_buffer *local_reply)
 {
     // odczytanie wejsc binarnych
-    in_out_obj.get_input(&((*local_reply).input_values), ((*local_reply).analog_input));
+    in_out_obj->get_input(&((*local_reply).input_values), ((*local_reply).analog_input));
     // throw NonFatal_error_2(NOT_IMPLEMENTED_YET);
     // printf(" INPUTS GET\n");
 }
@@ -1459,7 +1457,7 @@ void in_out_buffer::set_output(WORD *out_value)
 {
 
     InterruptLock(&output_spinlock);
-    in_out_obj.set_output_flag=true;   // aby f. obslugi przerwania wiedziala ze ma ustawic wyjscie
+    set_output_flag=true;   // aby f. obslugi przerwania wiedziala ze ma ustawic wyjscie
     binary_output=*out_value;
 
     InterruptUnlock(&output_spinlock);
