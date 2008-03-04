@@ -118,7 +118,7 @@ void edp_irp6s_and_conv_effector::initialize (void)
 void edp_irp6s_and_conv_effector::create_threads ()
 {
     // Y&W - utworzenie watku serwa
-    if (pthread_create (&serwo_tid, NULL, servo_thread, NULL)!=EOK)
+    if (pthread_create (&serwo_tid, NULL, &servo_thread_start, (void *) this)!=EOK)
     {
         msg->message(SYSTEM_ERROR, errno, "EDP: Failed to create SERVO_GROUP");
         char buf[20];

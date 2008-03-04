@@ -198,6 +198,8 @@ protected:
     void *reader_thread(void* arg);
     static void *trans_thread_start(void* arg);
     void *trans_thread(void* arg);
+    static void *servo_thread_start(void* arg);
+    void *servo_thread(void* arg);
 
     int serwo_fd;
 
