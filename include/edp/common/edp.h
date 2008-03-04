@@ -179,8 +179,7 @@ public:
     const ROBOT_ENUM robot_name;
 
     POSE_SPECIFICATION previous_set_arm_type; // by Y poprzedni sposob zadawania pozycji
-}
-; // end: class edp_effector
+};
 /************************ EDP_EFFECTOR ****************************/
 
 
@@ -192,6 +191,8 @@ class edp_irp6s_and_conv_effector : public edp_effector, public kinematics_manag
 {
 
 protected:
+	
+	static void *reader_thread(void* arg);
 
     int serwo_fd;
 
@@ -204,8 +205,6 @@ protected:
     pthread_t trans_t_tid;
     pthread_t vis_t_tid;
     STATE next_state;    // stan nastepny, do ktorego przejdzie EDP_MASTER
-
-
 
     edp_master_command servo_command;    // Polecenie z EDP_MASTER dla SERVO_GROUP
 
@@ -364,8 +363,7 @@ public:
     // Czy robot zsynchronizowany? // by Y - wziete z ecp
     bool is_synchronised ( void ) const;
 
-}
-; // end: class edp_irp6s_effector
+}; 
 /************************ edp_irp6s_and_conv_effector ****************************/
 
 
@@ -529,8 +527,7 @@ public:
 
     virtual void create_threads ();
 
-}
-; // end: class edp_irp6s_effector
+};
 /************************ edp_irp6s_effector ****************************/
 
 
@@ -614,8 +611,7 @@ public:
 
     void create_threads ();
 
-}
-; // end: class edp_irp6s_postument_track_effector
+};
 /************************ edp_irp6s_effector ****************************/
 
 
@@ -624,10 +620,9 @@ public:
 
 class System_error
 {
-    // Klasa bledow syztemowych zawiazanych z komunikacja miedzyprocesowa
+    // Klasa bledow systemowych zawiazanych z komunikacja miedzyprocesowa
 
-}
-; // end: class System_error
+}; // end: class System_error
 
 
 
@@ -768,8 +763,7 @@ public:
     void set_input (WORD *binary_in_value, BYTE *analog_in_table);
     void get_input (WORD *binary_in_value, BYTE *analog_in_table);
 
-}
-; // end: class edp_irp6s_effector
+};
 /**************************** IN_OUT_BUFFER *****************************/
 
 

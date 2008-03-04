@@ -42,7 +42,7 @@ inline void check_config(const char* string, uint8_t* input )
         *input=0;
 }
 
-void *reader_thread(void* arg)
+void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 {
     int i;
     uint64_t k;

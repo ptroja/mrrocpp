@@ -50,7 +50,7 @@ extern master_trans_t_buffer mt_tt_obj;
 in_out_buffer in_out_obj; // bufor wejsc wyjsc
 
 extern void * servo_thread(void* arg);
-extern void * reader_thread(void* arg);
+//extern void * reader_thread(void* arg);
 extern void * trans_t_thread(void* arg);
 extern void * visualisation_thread(void* arg);
 
@@ -124,7 +124,7 @@ void edp_irp6s_and_conv_effector::create_threads ()
     }
 
     // Y&W - utworzenie watku readera
-    if (pthread_create (&reader_tid, NULL, reader_thread, NULL)!=EOK)
+    if (pthread_create (&reader_tid, NULL, &reader_thread, NULL)!=EOK)
     {
         msg->message(SYSTEM_ERROR, errno, "EDP: Failed to create READER");
         char buf[20];
