@@ -132,6 +132,7 @@ public:
     configurator &config;
     sr_edp *msg;
 
+    void edp_effector::check_config(const char* string, uint8_t* input);
     bool initialize_communication (void);
 
     virtual void initialize (void);
@@ -192,10 +193,10 @@ class edp_irp6s_and_conv_effector : public edp_effector, public kinematics_manag
 {
 
 protected:
-	
-	static void *reader_thread_start(void* arg);
-	
-	void *reader_thread(void* arg);
+
+    static void *reader_thread_start(void* arg);
+
+    void *reader_thread(void* arg);
 
     int serwo_fd;
 
@@ -316,8 +317,8 @@ protected:
 public:
     int servo_to_tt_chid;
     virtual void initialize (void);
-	reader_buffer *rb_obj;
-	master_trans_t_buffer *mt_tt_obj;
+    reader_buffer *rb_obj;
+    master_trans_t_buffer *mt_tt_obj;
     edp_irp6s_and_conv_effector (configurator &_config, ROBOT_ENUM l_robot_name);       // konstruktor
 
     virtual void set_rmodel (c_buffer *instruction);                    // zmiana narzedzia
@@ -367,7 +368,7 @@ public:
     // Czy robot zsynchronizowany? // by Y - wziete z ecp
     bool is_synchronised ( void ) const;
 
-}; 
+};
 /************************ edp_irp6s_and_conv_effector ****************************/
 
 
@@ -626,7 +627,8 @@ class System_error
 {
     // Klasa bledow systemowych zawiazanych z komunikacja miedzyprocesowa
 
-}; // end: class System_error
+}
+; // end: class System_error
 
 
 

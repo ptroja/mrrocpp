@@ -33,13 +33,6 @@
 
  //extern edp_effector *master;  // by Y
 
-inline void check_config(const char* string, uint8_t* input, edp_effector *master )
-{
-    if ((master->config.exists(string))&&(master->config.return_int_value(string)))
-        *input=1;
-    else
-        *input=0;
-}
 
 void * edp_irp6s_and_conv_effector::reader_thread_start(void* arg)
 {
@@ -95,8 +88,8 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
         nr_of_samples=1000;
 
     rb_obj->reader_cnf.step=1;
-    check_config("servo_tryb", &(rb_obj->reader_cnf.servo_tryb), this);
-    check_config("msec", &(rb_obj->reader_cnf.msec), this);
+    check_config("servo_tryb", &(rb_obj->reader_cnf.servo_tryb));
+    check_config("msec", &(rb_obj->reader_cnf.msec));
 
     char tmp_string[50];
     char tmp2_string[3];
@@ -107,57 +100,57 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
         strcpy(tmp_string,"desired_inc_");
         strcat(tmp_string, tmp2_string);
-        check_config(tmp_string, &(rb_obj->reader_cnf.desired_inc[j]), this);
+        check_config(tmp_string, &(rb_obj->reader_cnf.desired_inc[j]));
 
         strcpy(tmp_string,"current_inc_");
         strcat(tmp_string, tmp2_string);
-        check_config(tmp_string, &(rb_obj->reader_cnf.current_inc[j]), this);
+        check_config(tmp_string, &(rb_obj->reader_cnf.current_inc[j]));
 
         strcpy(tmp_string,"pwm_");
         strcat(tmp_string, tmp2_string);
-        check_config(tmp_string, &(rb_obj->reader_cnf.pwm[j]), this);
+        check_config(tmp_string, &(rb_obj->reader_cnf.pwm[j]));
 
         strcpy(tmp_string,"uchyb_");
         strcat(tmp_string, tmp2_string);
-        check_config(tmp_string, &(rb_obj->reader_cnf.uchyb[j]), this);
+        check_config(tmp_string, &(rb_obj->reader_cnf.uchyb[j]));
 
         strcpy(tmp_string,"abs_pos_");
         strcat(tmp_string, tmp2_string);
-        check_config(tmp_string, &(rb_obj->reader_cnf.abs_pos[j]), this);
+        check_config(tmp_string, &(rb_obj->reader_cnf.abs_pos[j]));
 
         strcpy(tmp_string,"current_joints_");
         strcat(tmp_string, tmp2_string);
-        check_config(tmp_string, &(rb_obj->reader_cnf.current_joints[j]), this);
+        check_config(tmp_string, &(rb_obj->reader_cnf.current_joints[j]));
 
         if (j<6)
         {
             strcpy(tmp_string,"force_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj->reader_cnf.force[j]), this);
+            check_config(tmp_string, &(rb_obj->reader_cnf.force[j]));
 
             strcpy(tmp_string,"desired_force_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj->reader_cnf.desired_force[j]), this);
+            check_config(tmp_string, &(rb_obj->reader_cnf.desired_force[j]));
 
             strcpy(tmp_string,"filtered_force_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj->reader_cnf.filtered_force[j]), this);
+            check_config(tmp_string, &(rb_obj->reader_cnf.filtered_force[j]));
 
             strcpy(tmp_string,"current_kartez_position_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj->reader_cnf.current_kartez_position[j]), this);
+            check_config(tmp_string, &(rb_obj->reader_cnf.current_kartez_position[j]));
 
             strcpy(tmp_string,"real_kartez_position_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj->reader_cnf.real_kartez_position[j]), this);
+            check_config(tmp_string, &(rb_obj->reader_cnf.real_kartez_position[j]));
 
             strcpy(tmp_string,"real_kartez_vel_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj->reader_cnf.real_kartez_vel[j]), this);
+            check_config(tmp_string, &(rb_obj->reader_cnf.real_kartez_vel[j]));
 
             strcpy(tmp_string,"real_kartez_acc_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj->reader_cnf.real_kartez_acc[j]), this);
+            check_config(tmp_string, &(rb_obj->reader_cnf.real_kartez_acc[j]));
         }
     }
 

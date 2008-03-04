@@ -28,8 +28,9 @@
 
 #include "messip/messip.h"
 
-// extern configurator* config;
-// extern sr_edp* msg; // Wskaznik do obiektu klasy sluzacej do komunikacji z SR
+
+
+
 
 transformer_error::Fatal_error::Fatal_error (uint64_t err_no_0, uint64_t err_no_1)
         : error0(err_no_0), error1(err_no_1)
@@ -78,6 +79,15 @@ void edp_effector::initialize (void)
 {
 }
 ;
+
+void edp_effector::check_config(const char* string, uint8_t* input)
+{
+    if ((config.exists(string))&&(config.return_int_value(string)))
+        *input=1;
+    else
+        *input=0;
+}
+
 
 /*--------------------------------------------------------------------------*/
 bool edp_effector::initialize_communication ()

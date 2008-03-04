@@ -51,10 +51,6 @@
 // char prosody[MAX_PROSODY]; // MAC 7
 // bool speaking; // MAC7
 
-extern void * speak_t_thread(void* arg);
-
-
-
 
 
 
@@ -221,7 +217,7 @@ edp_speaker_effector::~edp_speaker_effector ()
 void edp_speaker_effector::create_threads ()
 {
 
-    if (pthread_create (&speak_t_tid, NULL, speak_t_thread, NULL)!=EOK)
+    if (pthread_create (&speak_t_tid, NULL, &speak_thread_start, (void *) this)!=EOK)
     {
         msg->message(SYSTEM_ERROR, errno, "EDP: Failed to spawn SPEAKER");
         char buf[20];

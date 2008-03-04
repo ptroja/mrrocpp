@@ -22,44 +22,49 @@
 
 
 // Klasa reprezentujaca speaker'a.
-class edp_speaker_effector  : public edp_effector {
-  protected:
+class edp_speaker_effector  : public edp_effector
+{
+protected:
 
-	pthread_t edp_tid;
-	pthread_t speak_t_tid;
-	STATE next_state;   // stan nastepny, do ktorego przejdzie EDP_MASTER
+    pthread_t edp_tid;
+    pthread_t speak_t_tid;
+    STATE next_state;   // stan nastepny, do ktorego przejdzie EDP_MASTER
 
-  public:
-  
-  master_trans_t_buffer *mt_tt_obj;
-  void initialize (void);
-	char text2speak[MAX_TEXT]; // MAC 7
-	char prosody[MAX_PROSODY]; // MAC 7 
-	bool speaking; // MAC7
-	bool initialize_incorrect;
-	
-	//device  
-	int     card; 
-	int     dev;
-	snd_pcm_t *pcm_handle;
-	int     mSamples;
-	int     mSampleRate;
-	int     mSampleChannels;
-	int     mSampleBits;
+    static void *speak_thread_start(void* arg);
 
-	int     rtn;
-	snd_pcm_channel_info_t pi;
-	snd_mixer_t *mixer_handle;
-	snd_mixer_group_t group;
-	snd_pcm_channel_params_t pp;
-	snd_pcm_channel_setup_t setup;
+    void *speak_thread(void* arg);
 
-	int n;
-	fd_set  rfds, wfds;
-	struct timespec b_time;
-	struct timespec e_time;
-	short int *piBuffSpeechOut;
-	unsigned uicSamplesNo;
+public:
+
+    master_trans_t_buffer *mt_tt_obj;
+    void initialize (void);
+    char text2speak[MAX_TEXT]; // MAC 7
+    char prosody[MAX_PROSODY]; // MAC 7
+    bool speaking; // MAC7
+    bool initialize_incorrect;
+
+    //device
+    int     card;
+    int     dev;
+    snd_pcm_t *pcm_handle;
+    int     mSamples;
+    int     mSampleRate;
+    int     mSampleChannels;
+    int     mSampleBits;
+
+    int     rtn;
+    snd_pcm_channel_info_t pi;
+    snd_mixer_t *mixer_handle;
+    snd_mixer_group_t group;
+    snd_pcm_channel_params_t pp;
+    snd_pcm_channel_setup_t setup;
+
+    int n;
+    fd_set  rfds, wfds;
+    struct timespec b_time;
+    struct timespec e_time;
+    short int *piBuffSpeechOut;
+    unsigned uicSamplesNo;
 
     // Konstruktor.
     edp_speaker_effector (configurator &_config);
@@ -69,18 +74,19 @@ class edp_speaker_effector  : public edp_effector {
 
     // Interpretuje otrzymana z ECP instrukcje, przygotowuje odpowiedz dla ECP.
     void interpret_instruction (c_buffer *instruction);
-	// Ustalenie formatu odpowiedzi.
-	REPLY_TYPE rep_type (c_buffer *instruction);
+    // Ustalenie formatu odpowiedzi.
+    REPLY_TYPE rep_type (c_buffer *instruction);
 
     // Glowna petla.
     void main_loop();
     // Tworzenie watkkow.
-    void create_threads (); 
+    void create_threads ();
 
-	// Wypowiedzenie tresci.
-	void get_spoken (bool read_hardware, c_buffer *instruction);
-	int speak (c_buffer *instruction); 
-	
-}; //: edp_speaker_effector
+    // Wypowiedzenie tresci.
+    void get_spoken (bool read_hardware, c_buffer *instruction);
+    int speak (c_buffer *instruction);
+
+}
+; //: edp_speaker_effector
 
 #endif
