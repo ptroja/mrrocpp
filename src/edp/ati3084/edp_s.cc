@@ -54,7 +54,7 @@ struct sigevent sevent;
 
 
 
-// aaa = master->config.return_double_value("x_axis");
+// aaa = master.config.return_double_value("x_axis");
 
 
 struct mds_data
@@ -71,8 +71,6 @@ struct sigevent tim_event;
 intrspin_t* spinlock;
 
 // short schunk_ms[7];
-
-extern edp_irp6s_postument_track_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
 
 struct pci_dev_info info;// do karty advantech 1751pci
 uintptr_t base_io_adress; // do obslugi karty advantech pci1751
@@ -143,9 +141,10 @@ const struct sigevent * schunk_int_handler (void *arg, int sint_id)
 // #pragma on(check_stack);
 
 // Rejstracja procesu VSP
-edp_ATI3084_force_sensor::edp_ATI3084_force_sensor(void) : edp_force_sensor()
+edp_ATI3084_force_sensor::edp_ATI3084_force_sensor(edp_irp6s_postument_track_effector &_master)
+        : edp_force_sensor(_master)
 {
-    if (!(master->test_mode))
+    if (!(master.test_mode))
     {
         // 	printf("Konstruktor VSP!\n");
 
@@ -268,7 +267,7 @@ edp_ATI3084_force_sensor::edp_ATI3084_force_sensor(void) : edp_force_sensor()
 
 edp_ATI3084_force_sensor::~edp_ATI3084_force_sensor(void)
 {
-    if (!(master->test_mode))
+    if (!(master.test_mode))
     {
         pci_detach_device( hdl ); // odlacza driver od danego urzadzenia na PCI
         pci_detach( phdl );    // Disconnect from the PCI server
@@ -283,8 +282,8 @@ void edp_ATI3084_force_sensor::configure_sensor (void)
 {// by Y
     is_sensor_configured=true;
     //  printf("EDP Sensor configured\n");
-    master->sr_msg->message ("EDP Sensor configured");
-    if (!(master->test_mode))
+    master.sr_msg->message ("EDP Sensor configured");
+    if (!(master.test_mode))
     {
         mds.intr_mode=0;
 
@@ -307,13 +306,13 @@ void edp_ATI3084_force_sensor::configure_sensor (void)
         mds.byte_counter=0;
         // cout << "Przed konf" << endl;
         // jesli ma byc wykorzytstywana biblioteka transformacji sil
-        if (master->force_tryb == 2)
+        if (master.force_tryb == 2)
         {
             // synchronize gravity transformation
-            //		printf("master->force_tryb == 2\n");
+            //		printf("master.force_tryb == 2\n");
             // polozenie kisci bez narzedzia wzgledem bazy
-            Homog_matrix frame = master->return_current_frame(WITH_TRANSLATION);			// FORCE Transformation by Slawomir Bazant
-            // Homog_matrix frame(master->force_current_end_effector_frame); // pobranie aktualnej ramki
+            Homog_matrix frame = master.return_current_frame(WITH_TRANSLATION);			// FORCE Transformation by Slawomir Bazant
+            // Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
             if (!gravity_transformation) // nie powolano jeszcze obiektu
             {
                 // polozenie czujnika wzgledem kisci (bez narzedzia)
@@ -323,10 +322,10 @@ void edp_ATI3084_force_sensor::configure_sensor (void)
 
                 Homog_matrix sensor_frame = Homog_matrix(0, 1, 0, 0,	-1, 0, 0, 0,	0, 0, 1, 0.09);
 
-                double weight = master->config.return_double_value("weight");
-                double point[3] = {master->config.return_double_value("x_axis_arm"),
-                                   master->config.return_double_value("y_axis_arm"),
-                                   master->config.return_double_value("z_axis_arm")};
+                double weight = master.config.return_double_value("weight");
+                double point[3] = {master.config.return_double_value("x_axis_arm"),
+                                   master.config.return_double_value("y_axis_arm"),
+                                   master.config.return_double_value("z_axis_arm")};
                 K_vector pointofgravity(point);
                 gravity_transformation = new ForceTrans(FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
             }
@@ -344,7 +343,7 @@ void edp_ATI3084_force_sensor::wait_for_event()
     int iw_ret;
     int iter_counter=0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
-    if (!(master->test_mode))
+    if (!(master.test_mode))
     {
 
         if (!(int_attached))
@@ -381,7 +380,7 @@ void edp_ATI3084_force_sensor::wait_for_event()
             {
                 if (iter_counter==1)
                 {
-                    master->sr_msg->message (NON_FATAL_ERROR, "Force / Torque read error - check sensor controller");
+                    master.sr_msg->message (NON_FATAL_ERROR, "Force / Torque read error - check sensor controller");
                 }
                 if (iter_counter%10==0)  // raz na 10
                 {
@@ -399,7 +398,7 @@ void edp_ATI3084_force_sensor::wait_for_event()
             {
                 if (iter_counter>1)
                 {
-                    master->sr_msg->message ("Force / Torque sensor connection reastablished");
+                    master.sr_msg->message ("Force / Torque sensor connection reastablished");
                 }
             }
 
@@ -423,13 +422,13 @@ void edp_ATI3084_force_sensor::initiate_reading (void)
     if(!is_sensor_configured)
         throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
-    if (master->test_mode)
+    if (master.test_mode)
     {
         for (int i = 0; i < 6; ++i)
         {
             kartez_force[i] = 0.0;
         }
-        master->force_msr_upload(kartez_force);
+        master.force_msr_upload(kartez_force);
     }
     else
     {
@@ -448,30 +447,30 @@ void edp_ATI3084_force_sensor::initiate_reading (void)
             is_reading_ready=true;
 
             // jesli ma byc wykorzytstywana biblioteka transformacji sil
-            if (master->force_tryb == 2 && gravity_transformation)
+            if (master.force_tryb == 2 && gravity_transformation)
             {
                 for(int i=0;i<3;i++)
                     ft_table[i]/=20;
                 //			for(int i=3;i<6;i++) ft_table[i]/=333;
                 for(int i=3;i<6;i++)
                     ft_table[i]/=1000; // by Y - korekta
-                Homog_matrix frame = master->return_current_frame(WITH_TRANSLATION);
-                // Homog_matrix frame(master->force_current_end_effector_frame);
+                Homog_matrix frame = master.return_current_frame(WITH_TRANSLATION);
+                // Homog_matrix frame(master.force_current_end_effector_frame);
                 double* output = gravity_transformation->getForce (ft_table, frame);
-                master->force_msr_upload(output);
+                master.force_msr_upload(output);
                 /*		if (!((ms_nr++)%1000)) {
-        				cerr << "Output\t";
-        				for(int i=0;i<3;i++) output[i]*=20;
-        				for(int i=3;i<6;i++) output[i]*=333;
-        				for(int i=0;i<6;i++) cerr << ceil(output[i]) << "  ";
-        				cerr << endl;// << "Input\t";
-        				for(int i=6;i<12;i++) cerr << ceil(output[i]) << "  ";
-        				cerr << endl << endl;// << "Gravity\t";
-        				for(int i=12;i<18;i++) cerr << ceil(output[i]) << "  ";
-        				cerr << endl << "Bias\t";
-        				for(int i=18;i<24;i++) cerr << ceil(output[i]) << "  ";
-        				cerr << endl << endl;
-        				cerr << frame << endl;
+                cerr << "Output\t";
+                for(int i=0;i<3;i++) output[i]*=20;
+                for(int i=3;i<6;i++) output[i]*=333;
+                for(int i=0;i<6;i++) cerr << ceil(output[i]) << "  ";
+                cerr << endl;// << "Input\t";
+                for(int i=6;i<12;i++) cerr << ceil(output[i]) << "  ";
+                cerr << endl << endl;// << "Gravity\t";
+                for(int i=12;i<18;i++) cerr << ceil(output[i]) << "  ";
+                cerr << endl << "Bias\t";
+                for(int i=18;i<24;i++) cerr << ceil(output[i]) << "  ";
+                cerr << endl << endl;
+                cerr << frame << endl;
                 		}
                 */
                 delete[] output;
@@ -928,7 +927,7 @@ void clear_intr(void)
 }
 
 
-edp_force_sensor* return_created_edp_force_sensor (void)
+edp_force_sensor* return_created_edp_force_sensor (edp_irp6s_postument_track_effector &_master)
                         {
-                            return new edp_ATI3084_force_sensor();
+                            return new edp_ATI3084_force_sensor(_master);
                         }// : return_created_sensor

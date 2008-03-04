@@ -29,6 +29,8 @@ class reader_buffer;
 class master_trans_t_buffer;
 class in_out_buffer;
 
+class edp_irp6s_postument_track_effector;
+
 enum STATE { GET_STATE, GET_SYNCHRO, SYNCHRO_TERMINATED, GET_INSTRUCTION, EXECUTE_INSTRUCTION, WAIT, WAIT_Q };
 // extern int errno;
 

@@ -36,9 +36,7 @@
 
 
 
-extern edp_irp6s_postument_track_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
 
-extern edp_force_sensor *vs;
 
 static struct  sigevent hi_event;
 struct  sigevent ati6284event;
@@ -104,12 +102,13 @@ const struct sigevent *isr_handler (void *area, int id)
 
 // // // // // // // // // // // // // // /   konfiguracja czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
-edp_ATI6284_force_sensor::edp_ATI6284_force_sensor(void) : edp_force_sensor()
+edp_ATI6284_force_sensor::edp_ATI6284_force_sensor(edp_irp6s_postument_track_effector &_master)
+        : edp_force_sensor(_master)
 {
 
     // unsigned  uCount;  //!< Count index
     // unsigned  uStatus; //!< Flag to indicate FIFO not empty
-    if (!(master->test_mode))
+    if (!(master.test_mode))
     {
         Total_Number_of_Samples=6;
         index=1;
@@ -205,7 +204,7 @@ edp_ATI6284_force_sensor::edp_ATI6284_force_sensor(void) : edp_force_sensor()
 
 edp_ATI6284_force_sensor::~edp_ATI6284_force_sensor(void)
 {
-    if (!(master->test_mode))
+    if (!(master.test_mode))
     {
         delete theSTC;
         delete board;
@@ -227,7 +226,7 @@ edp_ATI6284_force_sensor::~edp_ATI6284_force_sensor(void)
 // // // // // // // // // // // // // // /   inicjacja odczytu // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 void edp_ATI6284_force_sensor::configure_sensor (void)
 {
-    if (!(master->test_mode))
+    if (!(master.test_mode))
     {
         // double kartez_force[6];
         // short  measure_report;
@@ -294,7 +293,7 @@ void edp_ATI6284_force_sensor::configure_sensor (void)
                     printf("aa :%f\n", sec);
                     if(show_no_result==0)
                     {
-                        master->sr_msg->message ("EDP Sensor configure_sensor - brak wyniku");
+                        master.sr_msg->message ("EDP Sensor configure_sensor - brak wyniku");
                         show_no_result=1;
                     }
                 }
@@ -302,7 +301,7 @@ void edp_ATI6284_force_sensor::configure_sensor (void)
                 {
                     if(show_no_result==1)
                     {
-                        master->sr_msg->message ("EDP Sensor configure_sensor - wynik otrzymany");
+                        master.sr_msg->message ("EDP Sensor configure_sensor - wynik otrzymany");
                         show_no_result=0;
                     }
                 }
@@ -365,7 +364,7 @@ void edp_ATI6284_force_sensor::configure_sensor (void)
             //!< jesli pomiar byl poprawny
             if (invalid_value == 0)
             {
-                master->sr_msg->message ("EDP Sensor configure_sensor - OK");
+                master.sr_msg->message ("EDP Sensor configure_sensor - OK");
                 sensor_overload=0;
                 overload=0;
                 is_sensor_configured=true;
@@ -374,7 +373,7 @@ void edp_ATI6284_force_sensor::configure_sensor (void)
             {
                 if (overload==0)
                 {
-                    master->sr_msg->message ("EDP Sensor configure_sensor - OVERLOAD!!!");
+                    master.sr_msg->message ("EDP Sensor configure_sensor - OVERLOAD!!!");
                 }
                 sensor_overload=1;
                 overload=1;
@@ -384,12 +383,12 @@ void edp_ATI6284_force_sensor::configure_sensor (void)
 
         for(int j=0;j<6;j++)
             sBias[j]=sVolt[j];
-        if (master->force_tryb == 2)
+        if (master.force_tryb == 2)
         {
             //!< synchronize gravity transformation
             // polozenie kisci bez narzedzia wzgledem bazy
-            Homog_matrix frame = master->return_current_frame(WITH_TRANSLATION);			//!< FORCE Transformation by Slawomir Bazant
-            // Homog_matrix frame(master->force_current_end_effector_frame); // pobranie aktualnej pozycji
+            Homog_matrix frame = master.return_current_frame(WITH_TRANSLATION);			//!< FORCE Transformation by Slawomir Bazant
+            // Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej pozycji
             if (!gravity_transformation) // nie powolano jeszcze obiektu
             {
                 // polozenie czujnika wzgledem kisci (bez narzedzia)
@@ -398,10 +397,10 @@ void edp_ATI6284_force_sensor::configure_sensor (void)
                 // Homog_matrix sensor_frame = Homog_matrix(-1, 0, 0,	0, -1, 0,	0, 0, 1,	0, 0, 0.09);
                 Homog_matrix sensor_frame = Homog_matrix(-1, 0, 0, 0,	0, -1, 0, 0,	0, 0, 1, 0.09);
 
-                double weight = master->config.return_double_value("weight");
-                double point[3] ={	master->config.return_double_value("x_axis_arm"),
-                                   master->config.return_double_value("y_axis_arm"),
-                                   master->config.return_double_value("z_axis_arm")};
+                double weight = master.config.return_double_value("weight");
+                double point[3] ={	master.config.return_double_value("x_axis_arm"),
+                                   master.config.return_double_value("y_axis_arm"),
+                                   master.config.return_double_value("z_axis_arm")};
                 K_vector pointofgravity(point);
                 gravity_transformation = new ForceTrans(FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
             }
@@ -421,7 +420,7 @@ void edp_ATI6284_force_sensor::configure_sensor (void)
 
 void edp_ATI6284_force_sensor::wait_for_event()
 {
-    if (!(master->test_mode))
+    if (!(master.test_mode))
     {
         mp_timer local_timer;
         float sec;
@@ -485,7 +484,7 @@ void edp_ATI6284_force_sensor::initiate_reading (void)
     if(!is_reading_ready)
         throw sensor_error (FATAL_ERROR, READING_NOT_READY);
 
-    if (!(master->test_mode))
+    if (!(master.test_mode))
     {
 #if	 WITHOUT_INTERRUPT
 
@@ -571,7 +570,7 @@ void edp_ATI6284_force_sensor::initiate_reading (void)
             {
                 if(show_no_result==0)
                 {
-                    master->sr_msg->message ("EDP Sensor initiate_reading - brak wyniku");
+                    master.sr_msg->message ("EDP Sensor initiate_reading - brak wyniku");
                     show_no_result=1;
                     sensor_status=EDP_FORCE_SENSOR_READING_ERROR;
                 }
@@ -580,7 +579,7 @@ void edp_ATI6284_force_sensor::initiate_reading (void)
             {
                 if (overload==0)
                 {
-                    master->sr_msg->message ("EDP Sensor initiate_reading - OVERLOAD!!!");
+                    master.sr_msg->message ("EDP Sensor initiate_reading - OVERLOAD!!!");
                     overload=1;
                     sensor_status=EDP_FORCE_SENSOR_OVERLOAD;
                 }
@@ -594,14 +593,14 @@ void edp_ATI6284_force_sensor::initiate_reading (void)
         {
             if(show_no_result==1)
             {
-                master->sr_msg->message ("EDP Sensor initiate_reading - wynik otrzymany");
+                master.sr_msg->message ("EDP Sensor initiate_reading - wynik otrzymany");
                 show_no_result=0;
             }
             else
             {
                 if (overload ==1)
                 {
-                    master->sr_msg->message ("EDP Sensor initiate_reading - OVERLOAD REMOVED");
+                    master.sr_msg->message ("EDP Sensor initiate_reading - OVERLOAD REMOVED");
                     overload=0;
                 }
             }
@@ -620,7 +619,7 @@ void edp_ATI6284_force_sensor::initiate_reading (void)
 #endif
         // // // // // // // // // // // // // // / PRZEPISANIE WYNIKU // // // // // // // // // // // // // // // // // // // // // // // //
         double kartez_force[6], root_force[6];
-        if(master->force_tryb ==1)
+        if(master.force_tryb ==1)
         {
             for(int i=0; i<6; i++)
             {
@@ -635,20 +634,20 @@ void edp_ATI6284_force_sensor::initiate_reading (void)
                 root_force[i] = force_torque[i];
             }
             from_vsp.comm_image.force.force_reading_status=sensor_status;
-            master->force_msr_upload(kartez_force);//!< wpisanie sily do zmiennych globalnych dla calego procesu
+            master.force_msr_upload(kartez_force);//!< wpisanie sily do zmiennych globalnych dla calego procesu
         }
-        else if (master->force_tryb == 2 && gravity_transformation)
+        else if (master.force_tryb == 2 && gravity_transformation)
         {
             for (int i=0;i<6;i++)
                 root_force[i] = force_torque[i];
 
-            Homog_matrix frame = master->return_current_frame(WITH_TRANSLATION);
-            // Homog_matrix frame(master->force_current_end_effector_frame);
+            Homog_matrix frame = master.return_current_frame(WITH_TRANSLATION);
+            // Homog_matrix frame(master.force_current_end_effector_frame);
             double* output = gravity_transformation->getForce (root_force, frame);
 
             //		printf("output: %f, %f, %f, %f, %f, %f\n", output[0], output[1], output[2], output[3], output[4], output[5]);
             //		printf("output: %f, %f, %f, %f, %f, %f\n", root_force[0], root_force[1], root_force[2], root_force[3], root_force[4], root_force[5]);
-            master->force_msr_upload(output);
+            master.force_msr_upload(output);
             /*		if (show==1000){
             			cerr << "Output\t";
             			for(int i=0;i<3;i++) {
@@ -680,7 +679,7 @@ void edp_ATI6284_force_sensor::initiate_reading (void)
         {
             kartez_force[i] = 0.0;
         }
-        master->force_msr_upload(kartez_force);
+        master.force_msr_upload(kartez_force);
     }
     show++;
     is_reading_ready=true;
@@ -1147,8 +1146,8 @@ void edp_ATI6284_force_sensor::AI_Start_The_Acquisition(void)
 }
 
 
-edp_force_sensor* return_created_edp_force_sensor (void)
+edp_force_sensor* return_created_edp_force_sensor (edp_irp6s_postument_track_effector &_master)
                         {
-                            return new edp_ATI6284_force_sensor();
+                            return new edp_ATI6284_force_sensor(_master);
                         }//!< : return_created_sensor
 

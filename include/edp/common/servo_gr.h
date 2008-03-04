@@ -133,7 +133,7 @@ protected:
 
 public:
     edp_irp6s_and_conv_effector &master;
-    regulator ( BYTE reg_no, BYTE reg_par_no,    edp_irp6s_and_conv_effector &master ); // konstruktor
+    regulator ( BYTE reg_no, BYTE reg_par_no,    edp_irp6s_and_conv_effector &_master ); // konstruktor
 
     virtual BYTE compute_set_value ( void ) = 0;
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda abstrakcyjna

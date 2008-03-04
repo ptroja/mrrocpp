@@ -32,7 +32,7 @@ public:
 
 	short ERROR_CODE;
 	
-	edp_ATI6284_force_sensor();       //!< konstruktor uruchamiaj¹cy czujnik i ustawiaj¹cuy bias
+	edp_ATI6284_force_sensor(edp_irp6s_postument_track_effector &_master);       //!< konstruktor uruchamiaj¹cy czujnik i ustawiaj¹cuy bias
 	virtual ~edp_ATI6284_force_sensor();    //!< destruktor od³¹czaj¹cy kartê z magistrali PCI
 
 	void configure_sensor (void);           //!<  konfiguracja czujnika

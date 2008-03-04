@@ -146,7 +146,7 @@ void * edp_irp6s_postument_track_effector::force_thread(void *arg)
 	{
 		printf("communication with SR not ready\n");
 	}	
-	vs = return_created_edp_force_sensor();		//!< czujnik wirtualny
+	vs = return_created_edp_force_sensor(*this);		//!< czujnik wirtualny
 	
 	try{
 		vs->configure_sensor();
