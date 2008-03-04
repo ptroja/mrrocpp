@@ -137,7 +137,7 @@ void edp_irp6s_and_conv_effector::create_threads ()
         throw System_error();
     }
 
-    if (pthread_create (&trans_t_tid, NULL, trans_t_thread, NULL)!=EOK)
+    if (pthread_create (&trans_t_tid, NULL, &trans_thread_start, (void *) this)!=EOK)
     {
         msg->message(SYSTEM_ERROR, errno, "EDP: Failed to create TRANSFORMER");
         char buf[20];

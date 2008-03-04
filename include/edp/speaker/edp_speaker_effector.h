@@ -31,7 +31,6 @@ protected:
     STATE next_state;   // stan nastepny, do ktorego przejdzie EDP_MASTER
 
     static void *speak_thread_start(void* arg);
-
     void *speak_thread(void* arg);
 
 public:

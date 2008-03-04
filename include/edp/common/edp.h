@@ -195,8 +195,9 @@ class edp_irp6s_and_conv_effector : public edp_effector, public kinematics_manag
 protected:
 
     static void *reader_thread_start(void* arg);
-
     void *reader_thread(void* arg);
+    static void *trans_thread_start(void* arg);
+    void *trans_thread(void* arg);
 
     int serwo_fd;
 
