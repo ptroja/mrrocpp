@@ -36,14 +36,12 @@ sr_vsp *sr_msg;		//!< komunikacja z SR
 
 static sem_t new_ms; //!< semafor dostepu do nowej wiadomosci dla vsp
 
-void *edp_vsp_thread(void* arg);
-
 			
 edp_force_sensor *vs;
 
 static bool TERMINATE=false;			//!< zakonczenie obydwu watkow
 
-//!< watek do komuniakcji miedzy edp a vsp
+//!< watek do komunikacji miedzy edp a vsp
 
 
 void * edp_irp6s_postument_track_effector::edp_vsp_thread_start(void* arg)
