@@ -20,9 +20,6 @@
 #include "edp/common/servo_gr.h"
 
 
-extern edp_irp6s_and_conv_effector* master;   // by Y
-
-
 
 
 BYTE servo_buffer::Move_a_step (void)
@@ -62,7 +59,8 @@ void servo_buffer::get_all_positions (void)
 ;
 
 
-servo_buffer::servo_buffer (void)
+servo_buffer::servo_buffer (edp_irp6s_and_conv_effector &_master)
+        : master(_master)
 {}
 ;             // konstruktor
 
@@ -84,7 +82,7 @@ bool servo_buffer::get_command (void)
     msg_event.sigev_notify = SIGEV_UNBLOCK;// by Y zamiast creceive
 
     TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE,  &msg_event, NULL, NULL ); // by Y zamiast creceive i flagi z EDP_MASTER
-    if ((edp_caller = MsgReceive(master->servo_to_tt_chid, &command, sizeof(command), NULL)) != -1)
+    if ((edp_caller = MsgReceive(master.servo_to_tt_chid, &command, sizeof(command), NULL)) != -1)
     { // jezeli jest nowa wiadomosc
 
         /* Otrzymano nowe polecenie */
@@ -138,24 +136,24 @@ BYTE servo_buffer::Move_1_step (void)
 
     struct timespec step_time;
 
-    master->rb_obj->set_new_step();// odwieszenie watku edp_reader - teraz moze odczytac dane pomiarowe
+    master.rb_obj->set_new_step();// odwieszenie watku edp_reader - teraz moze odczytac dane pomiarowe
 
     reply_status_tmp.error1 = compute_all_set_values();  // obliczenie nowej wartosci zadanej dla regulatorow
     reply_status_tmp.error0 = hi->read_write_hardware();  // realizacja kroku przez wszystkie napedy oraz
     // odczyt poprzedniego polozenia
-    master->step_counter++;
+    master.step_counter++;
 
-    master->rb_obj->lock_mutex();
+    master.rb_obj->lock_mutex();
 
     if( clock_gettime( CLOCK_REALTIME , &step_time) == -1 )
     {
         printf("blad pomiaru czasu");
     }
 
-    master->rb_obj->step_data.step =  master->step_counter;
-    master->rb_obj->step_data.msec=(int)(step_time.tv_nsec/1000000);
+    master.rb_obj->step_data.step =  master.step_counter;
+    master.rb_obj->step_data.msec=(int)(step_time.tv_nsec/1000000);
 
-    master->rb_obj->unlock_mutex();
+    master.rb_obj->unlock_mutex();
 
 
     if ( reply_status_tmp.error0 || reply_status_tmp.error1 )
@@ -170,6 +168,11 @@ BYTE servo_buffer::Move_1_step (void)
 /*-----------------------------------------------------------------------*/
 
 
+servo_buffer* return_created_servo_buffer (edp_irp6s_and_conv_effector &_master)
+                    {
+                        return new servo_buffer (_master);
+                    };
+
 
 /*-----------------------------------------------------------------------*/
 BYTE servo_buffer::convert_error (void)
@@ -179,7 +182,7 @@ BYTE servo_buffer::convert_error (void)
 
     // wycinamy po dwa najmlodsze bity z kazdej piatki zwiazanej z napedem
     uint64_t err1 = OK;
-    for (int i = 0; i < master->number_of_servos; i++)
+    for (int i = 0; i < master.number_of_servos; i++)
     {
         reply_status_tmp.error0 >>= 2;
         err1 |= (reply_status_tmp.error0 & 0x07) << (3*i);
@@ -203,7 +206,7 @@ void servo_buffer::Move_passive (void)
 { //
     // stanie w miejscu - krok bierny
 
-    for (int j = 0; j < master->number_of_servos; j++)
+    for (int j = 0; j < master.number_of_servos; j++)
     {
         regulator_ptr[j]->insert_new_step(0.0); // zerowy przyrost polozenia dla wszystkich napedow
     }
@@ -234,7 +237,7 @@ void servo_buffer::Move_passive (void)
 void servo_buffer::Move (void)
 {
 
-    double new_increment[master->number_of_servos];
+    double new_increment[master.number_of_servos];
 
     // wykonanie makrokroku ruchu
 
@@ -249,7 +252,7 @@ void servo_buffer::Move (void)
     	command.parameters.move.number_of_steps));
     */
 
-    for (int  k = 0; k < master->number_of_servos; k++)
+    for (int  k = 0; k < master.number_of_servos; k++)
     {
         new_increment[k] = command.parameters.move.macro_step[k] / command.parameters.move.number_of_steps;
     }
@@ -277,12 +280,12 @@ void servo_buffer::Move (void)
         // sprawdzeniem, czy w jakims serwomechanizmie nastapila awaria
 
 
-        for (int  k = 0; k < master->number_of_servos; k++)
+        for (int  k = 0; k < master.number_of_servos; k++)
         {
             regulator_ptr[k]->insert_new_step(new_increment[k]);
-            if (master->test_mode)
+            if (master.test_mode)
             {
-                master->update_servo_current_motor_pos_abs(
+                master.update_servo_current_motor_pos_abs(
                     regulator_ptr[k]->previous_abs_position + new_increment[k]*j ,k);
             }
         }
@@ -328,7 +331,7 @@ void servo_buffer::Move (void)
     }
     ; // end: for(j)
 
-    for ( int i = 0;  i < master->number_of_servos; i++)
+    for ( int i = 0;  i < master.number_of_servos; i++)
     {
         regulator_ptr[i]->previous_abs_position = command.parameters.move.abs_position[i];
     }
@@ -381,7 +384,7 @@ servo_buffer::~servo_buffer(void)
 {
     // Destruktor grupy regulatorow
     // Zniszcyc regulatory
-    for (int j = 0; j < master->number_of_servos; j++)
+    for (int j = 0; j < master.number_of_servos; j++)
         delete regulator_ptr[j];
 }
 ; // end: regulator_group::~regulator_group
@@ -405,7 +408,7 @@ void servo_buffer::Read (void)
 void servo_buffer::Change_algorithm (void)
 {
     // Zmiana numeru algorytmu regulacji oraz numeru zestawu jego parametrow
-    for (int j = 0; j < master->number_of_servos; j++)
+    for (int j = 0; j < master.number_of_servos; j++)
     {
         regulator_ptr[j]->insert_algorithm_no(command.parameters.servo_alg_par.servo_algorithm_no[j]);
         regulator_ptr[j]->insert_algorithm_parameters_no(command.parameters.servo_alg_par.servo_parameters_no[j]);
@@ -422,7 +425,8 @@ void servo_buffer::Change_algorithm (void)
 
 
 /*-----------------------------------------------------------------------*/
-regulator::regulator(BYTE reg_no, BYTE reg_par_no)
+regulator::regulator(BYTE reg_no, BYTE reg_par_no, edp_irp6s_and_conv_effector &_master)
+        : master(_master)
 {
     // Konstruktor abstrakcyjnego regulatora
     // Inicjuje zmienne, ktore kazdy regulator konkretny musi miec i aktualizowac,
@@ -714,7 +718,8 @@ BYTE regulator::get_algorithm_parameters_no ( void )
 }
 ; // end: get_algorithm_parameters_no ( )
 
-void regulator::clear_regulator (void)
+void regulator::clear_regulator ()
+
 {
     // zerowanie wszystkich zmiennych regulatora
     position_increment_old = 0.0;
@@ -735,8 +740,8 @@ void regulator::clear_regulator (void)
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator::NL_regulator (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff)
-        : regulator(reg_no, reg_par_no)
+NL_regulator::NL_regulator (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master)
+        : regulator(reg_no, reg_par_no, _master)
 {
     // Konstruktor regulatora konkretnego
     // Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly

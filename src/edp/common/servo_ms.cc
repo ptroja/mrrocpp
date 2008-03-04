@@ -29,7 +29,7 @@ void * edp_irp6s_and_conv_effector::servo_thread(void* arg)
 
     //		printf("servo 1\n");
 
-    servo_buffer* sb = return_created_servo_buffer(); // bufor do komunikacji z EDP_MASTER
+    servo_buffer* sb = return_created_servo_buffer(*this); // bufor do komunikacji z EDP_MASTER
 
     //	 printf("servo 2\n");
 

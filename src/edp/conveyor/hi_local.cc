@@ -41,12 +41,12 @@ struct sigevent event;
 extern edp_conveyor_effector* master;
 
 
-int int_id;                       // Identyfikator obslugi przerwania
+
 volatile motor_data md; // Dane przesylane z/do funkcji obslugi przerwania
 
 
 // ------------------------------------------------------------------------
-hi_conv::hi_conv ( void ) : hardware_interface ()
+hi_conv::hi_conv ( edp_conveyor_effector &_master ) : hardware_interface (_master), master(_master)
 {
 	int irq_no;     // Numer przerwania sprzetowego 
 	int i;            // Zmienna pomocnicze
@@ -65,7 +65,7 @@ hi_conv::hi_conv ( void ) : hardware_interface ()
 	memset(&event, 0, sizeof(event));// by y&w
 	event.sigev_notify = SIGEV_INTR;// by y&w
 	
-	if(master->test_mode) {
+	if(master.test_mode) {
 		irq_no = 0;    // Przerwanie od zegara o okre sie 1ms
 	} else {
 		irq_no = IRQ_REAL;    // Numer przerwania sprzetowego od karty ISA
@@ -81,7 +81,7 @@ hi_conv::hi_conv ( void ) : hardware_interface ()
 	if (hi_int_wait(INT_EMPTY,0)==-1) // jesli sie nie przyjdzie na czas
 	{
 		// inicjacja wystawiania przerwan
-		if(master->test_mode==0)
+		if(master.test_mode==0)
 		{
 			// Ustawienie czestotliwosci przerwan
 			int_freq = SET_INT_FREQUENCY | INT_FREC_DIVIDER;
@@ -93,7 +93,7 @@ hi_conv::hi_conv ( void ) : hardware_interface ()
 	}
 
 	// robot conveyor jest domyslnie zsynchronizowany
-	master->controller_state_edp_buf.is_synchronised = md.is_synchronised = true;
+	master.controller_state_edp_buf.is_synchronised = md.is_synchronised = true;
 			
 	// Zakaz pracy recznej we wszystkich osiach
 	
@@ -109,7 +109,7 @@ hi_conv::hi_conv ( void ) : hardware_interface ()
 	
 	};
 	
-	if(master->test_mode==0) {
+	if(master.test_mode==0) {
 		/*out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i); 
 		out16(SERVO_COMMAND_1_ADR,RESET_MANUAL_MODE); // Zerowanie ruchow recznych 
 		out16(SERVO_COMMAND_1_ADR, PROHIBIT_MANUAL_MODE); // Zabrania ruchow za pomoca przyciskow w szafie*/
@@ -123,7 +123,7 @@ hi_conv::hi_conv ( void ) : hardware_interface ()
 		hi_int_wait(INT_SINGLE_COMMAND, 2);
 	}
 	
-	if(master->test_mode==0) {
+	if(master.test_mode==0) {
 		// Zerowanie licznikow polozenia wszystkich osi
 		reset_counters(); 
 		is_hardware_error();		
@@ -138,7 +138,7 @@ hi_conv::hi_conv ( void ) : hardware_interface ()
 // ------------------------------------------------------------------------
 hi_conv::~hi_conv ( void )    // destruktor
 {
-	if(master->test_mode==0)
+	if(master.test_mode==0)
 	{
 		reset_counters();
 		// Zezwolenie na prace reczna 
@@ -172,7 +172,7 @@ uint64_t hi_conv::read_write_hardware ( void )
 	// oczekiwanie na przerwanie
 	hi_int_wait(INT_SERVOING, 0);
 
-	if(master->test_mode) {
+	if(master.test_mode) {
 		// Tylko dla testow
 		return md.hardware_error;
 	}
@@ -291,25 +291,25 @@ int hi_conv::hi_int_wait (int inter_mode, int lag)
 	iw_ret=InterruptWait (0, NULL); 
 
 	if (iw_ret==-1) { // jesli przerwanie nie przyjdzie na czas
-		if (interrupt_error == 1) master->msg->message(NON_FATAL_ERROR, "Nie odebrano przerwania - sprawdz szafe");
+		if (interrupt_error == 1) master.msg->message(NON_FATAL_ERROR, "Nie odebrano przerwania - sprawdz szafe");
 		 interrupt_error++;
-		 master->controller_state_edp_buf.is_wardrobe_on = false;
+		 master.controller_state_edp_buf.is_wardrobe_on = false;
 	} else {
 
-		if (interrupt_error >= 1) master->msg->message("Przywrocono obsluge przerwania");
+		if (interrupt_error >= 1) master.msg->message("Przywrocono obsluge przerwania");
 		 interrupt_error = 0;
-		 master->controller_state_edp_buf.is_wardrobe_on = true;
+		 master.controller_state_edp_buf.is_wardrobe_on = true;
 	}
 	
-	master->controller_state_edp_buf.is_power_on = md.is_power_on;
+	master.controller_state_edp_buf.is_power_on = md.is_power_on;
 	
-	if ((interrupt_error>2) || (!master->controller_state_edp_buf.is_power_on))
+	if ((interrupt_error>2) || (!master.controller_state_edp_buf.is_power_on))
 	{
-		if ((msg_send++) == 0) master->msg->message(NON_FATAL_ERROR, "Wylaczono moc - robot zablokowany");
+		if ((msg_send++) == 0) master.msg->message(NON_FATAL_ERROR, "Wylaczono moc - robot zablokowany");
 		   md.is_robot_blocked = true;
 	}
 	
-	master->controller_state_edp_buf.is_robot_blocked = md.is_robot_blocked;
+	master.controller_state_edp_buf.is_robot_blocked = md.is_robot_blocked;
 	
 	if (lag!=0) delay(lag); // opoznienie niezbedne do przyjecia niektorych komend
 	

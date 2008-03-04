@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 //                            hi_rydz.h
 // Definicje struktur danych i metod dla interfejsu sprzetowego
-// 
+//
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
@@ -33,12 +33,12 @@ const unsigned short int INT_FREC_DIVIDER = 4; // Dzielnik czestotliwosci przerw
 #define SERVO_REPLY_REG_2_ADR     0x20A + ISA_CARD_OFFSET
 
 // Polecenia dla sterownikow mikroprocesorowych osi
-#define RESET_POSITION_COUNTER    0x0400 // Zerowanie licznika polozenia 
+#define RESET_POSITION_COUNTER    0x0400 // Zerowanie licznika polozenia
 #define RESET_MANUAL_MODE         0x0800 // Zerowanie pracy recznej
-#define RESET_ALARM               0x0C00 // Zerowanie alarmu sytuacji awaryjnej 
+#define RESET_ALARM               0x0C00 // Zerowanie alarmu sytuacji awaryjnej
 #define PROHIBIT_MANUAL_MODE      0x1000 // Zakaz pracy recznej
 #define ALLOW_MANUAL_MODE         0x1400 // Zezwolenie na prace reczna
-#define START_SYNCHRO             0x1800 // Rozpoczecie synchronizacji 
+#define START_SYNCHRO             0x1800 // Rozpoczecie synchronizacji
 #define FINISH_SYNCHRO            0x1C00 // Zakoncz synchronizacje osi
 #define SET_INT_FREQUENCY         0x2000 // Ustaw dzielnik czestotliowsci przerwan
 #define SET_MAX_CURRENT           0x2400 // Ustaw prad maksymalny
@@ -53,12 +53,12 @@ const unsigned short int INT_FREC_DIVIDER = 4; // Dzielnik czestotliwosci przerw
 #define IRP6_ON_TRACK_AXE_5_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
 #define IRP6_ON_TRACK_AXE_6_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
 #define IRP6_ON_TRACK_AXE_7_MAX_CURRENT           0x2410 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-																// 13,7 j na amper
-																
+// 13,7 j na amper
+
 #define IRP6_ON_TRACK_AXE_8_MAX_CURRENT           0x2427 // ustawienie pradu maksymalnego dla zacisku chwytaka
-																// by Y - UWAGA nieczulosc nieznana, rozdzielczosc do ustalenia	
-																// 25,3 j na 100ma, strefa nieczulosci na poziomie 40ma
-															
+// by Y - UWAGA nieczulosc nieznana, rozdzielczosc do ustalenia
+// 25,3 j na 100ma, strefa nieczulosci na poziomie 40ma
+
 
 
 #define LM629_VIA_MICROCONTROLLER_MODE 0x4C01
@@ -75,29 +75,31 @@ const unsigned short int INT_FREC_DIVIDER = 4; // Dzielnik czestotliwosci przerw
 
 
 // ------------------------------------------------------------------------
-//                HARDWARE_INTERFACE class                                 
+//                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-class hi_irp6ot : public hardware_interface {
+class hi_irp6ot : public hardware_interface
+{
 
 
 public:
-  hi_irp6ot( void );    // Konstruktor
-  ~hi_irp6ot( void );   // Destruktor
-  bool is_hardware_error ( void); // Sprawdzenie czy wystapil blad sprzetowy
+    hi_irp6ot( edp_irp6ot_effector &_master );    // Konstruktor
+    ~hi_irp6ot( void );   // Destruktor
+    bool is_hardware_error ( void); // Sprawdzenie czy wystapil blad sprzetowy
+    edp_irp6ot_effector &master;
+    uint64_t read_write_hardware ( void );    // Obsluga sprzetu
+    void reset_counters ( void );  // Zerowanie licznikow polozenia
 
-  uint64_t read_write_hardware ( void );    // Obsluga sprzetu 
-  void reset_counters ( void );  // Zerowanie licznikow polozenia
+    void start_synchro ( int drive_number );
 
-  void start_synchro ( int drive_number );
+    void finish_synchro ( int drive_number );
 
-  void finish_synchro ( int drive_number );
-  
-  	// oczekiwanie na przerwanie - tryb obslugi i delay(lag) po odebraniu przerwania
-	int hi_int_wait (int inter_mode, int lag);
+    // oczekiwanie na przerwanie - tryb obslugi i delay(lag) po odebraniu przerwania
+    int hi_int_wait (int inter_mode, int lag);
 
-  
-}; // koniec: class hardware_interface
 
-#endif // __HI_RYDZ_H 
+}
+; // koniec: class hardware_interface
+
+#endif // __HI_RYDZ_H
 

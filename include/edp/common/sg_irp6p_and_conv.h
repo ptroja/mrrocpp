@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 //                            servo_gr.h
 // Definicje struktur danych i metod dla procesu SERVO_GROUP
-// 
+//
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
@@ -44,133 +44,149 @@
 
 
 /*-----------------------------------------------------------------------*/
-class NL_regulator_1_irp6p: public NL_regulator {
- /* Klasa regulatorow konkretnych */
- // Obiekt z algorytmem regulacji
+class NL_regulator_1_irp6p: public NL_regulator
+{
+    /* Klasa regulatorow konkretnych */
+    // Obiekt z algorytmem regulacji
 
 public:
-  NL_regulator_1_irp6p (BYTE reg_no, BYTE reg_par_no,
-          double aa, double bb0, double bb1, double k_ff); // konstruktor
+    NL_regulator_1_irp6p (BYTE reg_no, BYTE reg_par_no,
+                          double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master); // konstruktor
 
-  virtual BYTE compute_set_value ( void ); 
-     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
+    virtual BYTE compute_set_value ( void );
+    // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}; // end: class NL_regulator_1
+}
+; // end: class NL_regulator_1
 // ----------------------------------------------------------------------
 
 /*-----------------------------------------------------------------------*/
-class NL_regulator_2_irp6p: public NL_regulator {
- /* Klasa regulatorow konkretnych */
- // Obiekt z algorytmem regulacji
+class NL_regulator_2_irp6p: public NL_regulator
+{
+    /* Klasa regulatorow konkretnych */
+    // Obiekt z algorytmem regulacji
 
 public:
-  NL_regulator_2_irp6p (BYTE reg_no, BYTE reg_par_no,
-          double aa, double bb0, double bb1, double k_ff); // konstruktor
+    NL_regulator_2_irp6p (BYTE reg_no, BYTE reg_par_no,
+                          double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master); // konstruktor
 
-  virtual BYTE compute_set_value ( void ); 
-     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
+    virtual BYTE compute_set_value ( void );
+    // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}; // end: class NL_regulator_2
+}
+; // end: class NL_regulator_2
 // ----------------------------------------------------------------------
 
 /*-----------------------------------------------------------------------*/
-class NL_regulator_3_irp6p: public NL_regulator {
- /* Klasa regulatorow konkretnych */
- // Obiekt z algorytmem regulacji
+class NL_regulator_3_irp6p: public NL_regulator
+{
+    /* Klasa regulatorow konkretnych */
+    // Obiekt z algorytmem regulacji
 
 public:
-  NL_regulator_3_irp6p (BYTE reg_no, BYTE reg_par_no,
-          double aa, double bb0, double bb1, double k_ff); // konstruktor
+    NL_regulator_3_irp6p (BYTE reg_no, BYTE reg_par_no,
+                          double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master); // konstruktor
 
-  virtual BYTE compute_set_value ( void ); 
-     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
+    virtual BYTE compute_set_value ( void );
+    // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}; // end: class NL_regulator_3
+}
+; // end: class NL_regulator_3
 // ----------------------------------------------------------------------
 
 /*-----------------------------------------------------------------------*/
-class NL_regulator_4_irp6p: public NL_regulator {
- /* Klasa regulatorow konkretnych */
- // Obiekt z algorytmem regulacji
+class NL_regulator_4_irp6p: public NL_regulator
+{
+    /* Klasa regulatorow konkretnych */
+    // Obiekt z algorytmem regulacji
 
 public:
-  NL_regulator_4_irp6p (BYTE reg_no, BYTE reg_par_no,
-          double aa, double bb0, double bb1, double k_ff); // konstruktor
+    NL_regulator_4_irp6p (BYTE reg_no, BYTE reg_par_no,
+                          double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master); // konstruktor
 
-  virtual BYTE compute_set_value ( void ); 
-     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
+    virtual BYTE compute_set_value ( void );
+    // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}; // end: class NL_regulator_4
-// ----------------------------------------------------------------------
-
-
-/*-----------------------------------------------------------------------*/
-class NL_regulator_5_irp6p: public NL_regulator {
- /* Klasa regulatorow konkretnych */
- // Obiekt z algorytmem regulacji
-
-public:
-bool first;
-  NL_regulator_5_irp6p (BYTE reg_no, BYTE reg_par_no,
-          double aa, double bb0, double bb1, double k_ff); // konstruktor
-
-  virtual BYTE compute_set_value ( void ); 
-     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
-
-}; // end: class NL_regulator_5
+}
+; // end: class NL_regulator_4
 // ----------------------------------------------------------------------
 
 
 /*-----------------------------------------------------------------------*/
-class NL_regulator_6_irp6p: public NL_regulator {
- /* Klasa regulatorow konkretnych */
- // Obiekt z algorytmem regulacji
+class NL_regulator_5_irp6p: public NL_regulator
+{
+    /* Klasa regulatorow konkretnych */
+    // Obiekt z algorytmem regulacji
 
 public:
-  NL_regulator_6_irp6p (BYTE reg_no, BYTE reg_par_no,
-          double aa, double bb0, double bb1, double k_ff); // konstruktor
+    bool first;
+    NL_regulator_5_irp6p (BYTE reg_no, BYTE reg_par_no,
+                          double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master); // konstruktor
 
-  virtual BYTE compute_set_value ( void ); 
-     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
+    virtual BYTE compute_set_value ( void );
+    // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}; // end: class NL_regulator_6
+}
+; // end: class NL_regulator_5
 // ----------------------------------------------------------------------
 
 
 /*-----------------------------------------------------------------------*/
-class NL_regulator_7_irp6p: public NL_regulator {
- /* Klasa regulatorow konkretnych */
- // Obiekt z algorytmem regulacji
+class NL_regulator_6_irp6p: public NL_regulator
+{
+    /* Klasa regulatorow konkretnych */
+    // Obiekt z algorytmem regulacji
 
 public:
-  NL_regulator_7_irp6p (BYTE reg_no, BYTE reg_par_no,
-          double aa, double bb0, double bb1, double k_ff); // konstruktor
+    NL_regulator_6_irp6p (BYTE reg_no, BYTE reg_par_no,
+                          double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master); // konstruktor
 
-  virtual BYTE compute_set_value ( void ); 
-     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
+    virtual BYTE compute_set_value ( void );
+    // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}; // end: class NL_regulator_7
+}
+; // end: class NL_regulator_6
 // ----------------------------------------------------------------------
 
 
 /*-----------------------------------------------------------------------*/
-class NL_regulator_8_irp6p: public NL_regulator {
- /* Klasa regulatorow konkretnych */
- // Obiekt z algorytmem regulacji
-
-  long gripper_blocked_start_time;
-  int sum_of_currents, current_index;
-  int currents [MAX_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS];
-  
+class NL_regulator_7_irp6p: public NL_regulator
+{
+    /* Klasa regulatorow konkretnych */
+    // Obiekt z algorytmem regulacji
 
 public:
-  NL_regulator_8_irp6p (BYTE reg_no, BYTE reg_par_no,
-          double aa, double bb0, double bb1, double k_ff); // konstruktor
+    NL_regulator_7_irp6p (BYTE reg_no, BYTE reg_par_no,
+                          double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master); // konstruktor
 
-  virtual BYTE compute_set_value ( void ); 
-     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
+    virtual BYTE compute_set_value ( void );
+    // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}; // end: class NL_regulator_8
+}
+; // end: class NL_regulator_7
+// ----------------------------------------------------------------------
+
+
+/*-----------------------------------------------------------------------*/
+class NL_regulator_8_irp6p: public NL_regulator
+{
+    /* Klasa regulatorow konkretnych */
+    // Obiekt z algorytmem regulacji
+
+    long gripper_blocked_start_time;
+    int sum_of_currents, current_index;
+    int currents [MAX_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS];
+
+
+public:
+    NL_regulator_8_irp6p (BYTE reg_no, BYTE reg_par_no,
+                          double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master); // konstruktor
+
+    virtual BYTE compute_set_value ( void );
+    // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
+
+}
+; // end: class NL_regulator_8
 // ----------------------------------------------------------------------
 
 

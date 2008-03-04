@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 //                            servo_gr.h
 // Definicje struktur danych i metod dla procesu SERVO_GROUP
-// 
+//
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
@@ -11,6 +11,7 @@
 #ifndef __SERVO_GR_H
 #define __SERVO_GR_H
 
+#include "edp/common/edp.h"
 #include "edp/common/hi_rydz.h"
 
 // stale dla automatu w regulatorze chwytka
@@ -18,7 +19,7 @@
 #define MAX_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS 10
 
 
- #define MAX_INC 80
+#define MAX_INC 80
 // #define MAX_INCR 469
 // #define MAX_INCR2 234
 // #define MAX_INCR3 30 // 15
@@ -68,136 +69,142 @@ const double SG_REG_8_MAX_ACC = 1000.0;
 // typedef struct reader_data reader_data;
 
 /*-----------------------------------------------------------------------*/
-class regulator {
- /* Klasa bazowa (i abstrakcyjna) dla poszczegolnych regulatorow konkretnych */
+class regulator
+{
+    /* Klasa bazowa (i abstrakcyjna) dla poszczegolnych regulatorow konkretnych */
 
 protected:
 
- // Zmienne lokalne klasy oraz funkcje wykorzystywane jedynie 
- // wewnatrz tej klasy, tzn. przez algorytm regulacji.
- // Niezaleznie od zmiennych uzywanych przez algorytm konkretny
- // ponizsze zmienne musza byc zawsze aktualizowany, ze wzgledu na
- // "bezszelestne" przelaczanie algorytmow.
+    // Zmienne lokalne klasy oraz funkcje wykorzystywane jedynie
+    // wewnatrz tej klasy, tzn. przez algorytm regulacji.
+    // Niezaleznie od zmiennych uzywanych przez algorytm konkretny
+    // ponizsze zmienne musza byc zawsze aktualizowany, ze wzgledu na
+    // "bezszelestne" przelaczanie algorytmow.
 
- int meassured_current; // wartosc zmierzona pradu
+    int meassured_current; // wartosc zmierzona pradu
 
- double position_increment_old;  // przedosatnio odczytany przyrost polozenie (delta y[k-2] 
-                                 // -- mierzone w impulsach)
- double position_increment_new;  // ostatnio odczytany przyrost polozenie (delta y[k-1] 
-                                 // -- mierzone w impulsach)
- double pos_increment_new_sum;   // suma odczytanych przyrostow polozenia w trakcie realizacji makrokroku
-                                 // (mierzona w impulsach)// by Y dla EDP_master
- double servo_pos_increment_new_sum;   // suma odczytanych przyrostow polozenia w trakcie realizacji makrokroku
-                                 // (mierzona w impulsach)// by Y dla EDP_servo                             
- double step_old_pulse;                // poprzednia wartosc zadana dla jednego kroku regulacji
-                                 // (przyrost wartosci zadanej polozenia -- delta r[k-2] 
-                                 // -- mierzone w radianach)
- double step_new;                // nastepna wartosc zadana dla jednego kroku regulacji
-                                 // (przyrost wartosci zadanej polozenia -- delta r[k-1] 
-                                 // -- mierzone w radianach)
- double step_old;       // poprzednia wartosc zadana dla jednego kroku regulacji
-                                 // (przyrost wartosci zadanej polozenia -- delta r[k-1] 
-                                 // -- mierzone w radianach)                                 
-                                 
- double step_new_over_constraint_sum;
-                                 
-                                 
- double set_value_new;           // wielkosc kroku do realizacji przez HI (wypelnienie PWM -- u[k])
- double set_value_old;           // wielkosc kroku do realizacji przez HI (wypelnienie PWM -- u[k-1])
- double set_value_very_old;      // wielkosc kroku do realizacji przez HI (wypelnienie PWM -- u[k-2])
- double delta_eint;              // przyrost calki uchybu
- double delta_eint_old;          // przyrost calki uchybu w poprzednim kroku
- 
- 
- 
- //
- double int_current_error;
- int display;
- //
+    double position_increment_old;  // przedosatnio odczytany przyrost polozenie (delta y[k-2]
+    // -- mierzone w impulsach)
+    double position_increment_new;  // ostatnio odczytany przyrost polozenie (delta y[k-1]
+    // -- mierzone w impulsach)
+    double pos_increment_new_sum;   // suma odczytanych przyrostow polozenia w trakcie realizacji makrokroku
+    // (mierzona w impulsach)// by Y dla EDP_master
+    double servo_pos_increment_new_sum;   // suma odczytanych przyrostow polozenia w trakcie realizacji makrokroku
+    // (mierzona w impulsach)// by Y dla EDP_servo
+    double step_old_pulse;                // poprzednia wartosc zadana dla jednego kroku regulacji
+    // (przyrost wartosci zadanej polozenia -- delta r[k-2]
+    // -- mierzone w radianach)
+    double step_new;                // nastepna wartosc zadana dla jednego kroku regulacji
+    // (przyrost wartosci zadanej polozenia -- delta r[k-1]
+    // -- mierzone w radianach)
+    double step_old;       // poprzednia wartosc zadana dla jednego kroku regulacji
+    // (przyrost wartosci zadanej polozenia -- delta r[k-1]
+    // -- mierzone w radianach)
 
- int PWM_value;                  // zadane wypelnienie PWM 
- BYTE algorithm_no;              // przeslany numer algorytmu
- BYTE current_algorithm_no;      // numer aktualnie uzywanego algorytmu
- BYTE algorithm_parameters_no;   // przeslany numer zestawu parametrow algorytmu
- BYTE current_algorithm_parameters_no;  // numer aktualnie uzywanego zestawu parametrow algorytmu
- 
- GRIPPER_STATE_ENUM reg_state, next_reg_state, prev_reg_state; // stany w ktorych moze byc regulator
+    double step_new_over_constraint_sum;
 
-// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-// stara wersja - nieuzywana
-// void constraint_detector(double max_acc_local, double max_vel_local, double max_diff_local, bool debug = false);
-// nowa wersja
-void constraint_detector(double max_acc_local, double max_vel_local, bool debug = false);
+
+    double set_value_new;           // wielkosc kroku do realizacji przez HI (wypelnienie PWM -- u[k])
+    double set_value_old;           // wielkosc kroku do realizacji przez HI (wypelnienie PWM -- u[k-1])
+    double set_value_very_old;      // wielkosc kroku do realizacji przez HI (wypelnienie PWM -- u[k-2])
+    double delta_eint;              // przyrost calki uchybu
+    double delta_eint_old;          // przyrost calki uchybu w poprzednim kroku
+
+
+
+    //
+    double int_current_error;
+    int display;
+    //
+
+    int PWM_value;                  // zadane wypelnienie PWM
+    BYTE algorithm_no;              // przeslany numer algorytmu
+    BYTE current_algorithm_no;      // numer aktualnie uzywanego algorytmu
+    BYTE algorithm_parameters_no;   // przeslany numer zestawu parametrow algorytmu
+    BYTE current_algorithm_parameters_no;  // numer aktualnie uzywanego zestawu parametrow algorytmu
+
+    GRIPPER_STATE_ENUM reg_state, next_reg_state, prev_reg_state; // stany w ktorych moze byc regulator
+
+    // BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
+    // stara wersja - nieuzywana
+    // void constraint_detector(double max_acc_local, double max_vel_local, double max_diff_local, bool debug = false);
+    // nowa wersja
+    void constraint_detector(double max_acc_local, double max_vel_local, bool debug = false);
 
 public:
+    edp_irp6s_and_conv_effector &master;
+    regulator ( BYTE reg_no, BYTE reg_par_no,    edp_irp6s_and_conv_effector &master ); // konstruktor
 
- regulator ( BYTE reg_no, BYTE reg_par_no ); // konstruktor
+    virtual BYTE compute_set_value ( void ) = 0;
+    // obliczenie nastepnej wartosci zadanej dla napedu - metoda abstrakcyjna
 
- virtual BYTE compute_set_value ( void ) = 0; 
-     // obliczenie nastepnej wartosci zadanej dla napedu - metoda abstrakcyjna
-
- double get_set_value ( void );
- double previous_abs_position; // poprzednia pozycja absolutna dla potrzeb trybu testowego
- void insert_new_step (double ns);
- void insert_meassured_current (int meassured_current_l);
- 
-
- double return_new_step () ;
-
- void insert_new_pos_increment (double inc);
-
- double get_position_inc ( int tryb );
-
- int get_meassured_current ( void );
-
- int get_PWM_value ( void );
-
-// do odczytu stanu regulatora (w szczegolnosci regulatora chwytaka)
- int get_reg_state ( void ) ;
+    double get_set_value ( void );
+    double previous_abs_position; // poprzednia pozycja absolutna dla potrzeb trybu testowego
+    void insert_new_step (double ns);
+    void insert_meassured_current (int meassured_current_l);
 
 
- int get_actual_inc ( void ) ;
+    double return_new_step () ;
 
-// double get_desired_inc ( int axe_nr );
+    void insert_new_pos_increment (double inc);
 
- void insert_algorithm_no ( BYTE new_number );
+    double get_position_inc ( int tryb );
 
- BYTE get_algorithm_no ( void ) ;
+    int get_meassured_current ( void );
 
- void insert_algorithm_parameters_no ( BYTE new_number );
+    int get_PWM_value ( void );
 
- BYTE get_algorithm_parameters_no ( void );
+    // do odczytu stanu regulatora (w szczegolnosci regulatora chwytaka)
+    int get_reg_state ( void ) ;
 
- void clear_regulator (void);
-}; // end: class regulator
+
+    int get_actual_inc ( void ) ;
+
+    // double get_desired_inc ( int axe_nr );
+
+    void insert_algorithm_no ( BYTE new_number );
+
+    BYTE get_algorithm_no ( void ) ;
+
+    void insert_algorithm_parameters_no ( BYTE new_number );
+
+    BYTE get_algorithm_parameters_no ( void );
+
+    void clear_regulator (void);
+}
+; // end: class regulator
 /*-----------------------------------------------------------------------*/
 
 
 
 /*-----------------------------------------------------------------------*/
-class NL_regulator: public regulator {
- /* Klasa regulatorow konkretnych */
- // Obiekt z algorytmem regulacji
+class NL_regulator: public regulator
+{
+    /* Klasa regulatorow konkretnych */
+    // Obiekt z algorytmem regulacji
 
 protected:
-  // zmienne lokalne klasy oraz funkcje wykorzystywane jedynie 
-  //  wewnatrz tej klasy, tzn. przez algorytm regulacji
-  double a, b0, b1;               // parametry regulatora
-  double k_feedforward;           // wzmocnienie w petli "feedforward" 
-  double EPS;     // Dokladnosc zera dla przyrostow
-  unsigned int integrator_off; // Liczba krokow zerowego PWM po ktorej wylaczmy calkowanie
-  unsigned int counter;        // Licznik krokow zerowego PWM
-  double MAX_PWM;
-  
-  
+    // zmienne lokalne klasy oraz funkcje wykorzystywane jedynie
+    //  wewnatrz tej klasy, tzn. przez algorytm regulacji
+    double a, b0, b1;               // parametry regulatora
+    double k_feedforward;           // wzmocnienie w petli "feedforward"
+    double EPS;     // Dokladnosc zera dla przyrostow
+    unsigned int integrator_off; // Liczba krokow zerowego PWM po ktorej wylaczmy calkowanie
+    unsigned int counter;        // Licznik krokow zerowego PWM
+    double MAX_PWM;
+
+
 public:
-  NL_regulator (BYTE reg_no, BYTE reg_par_no,
-          double aa, double bb0, double bb1, double k_ff); // konstruktor
 
-  virtual BYTE compute_set_value ( void ) = 0; 
-     // obliczenie nastepnej wartosci zadanej dla napedu - metoda abstrakcyjna
+    NL_regulator (BYTE reg_no, BYTE reg_par_no,
+                  double aa, double bb0, double bb1, double k_ff,
+                  edp_irp6s_and_conv_effector &_master); // konstruktor
 
-}; // end: class NL_regulator
+    virtual BYTE compute_set_value ( void ) = 0;
+    // obliczenie nastepnej wartosci zadanej dla napedu - metoda abstrakcyjna
+
+}
+; // end: class NL_regulator
 // ----------------------------------------------------------------------
 
 
@@ -208,73 +215,77 @@ public:
 /*-----------------------------------------------------------------------*/
 class servo_buffer
 {
-  // Bufor polecen przysylanych z EDP_MASTER dla SERVO
-  // Obiekt z algorytmem regulacji
-	private:
-int edp_caller;						// by 7&Y
-  
-  protected: 
-  
- hardware_interface* hi;    // obiekt odpowiedzialny za kontakt ze sprzetem
+    // Bufor polecen przysylanych z EDP_MASTER dla SERVO
+    // Obiekt z algorytmem regulacji
+private:
+    int edp_caller;						// by 7&Y
 
-// regulator_group
+protected:
 
- regulator* regulator_ptr[MAX_SERVOS_NR];
-                           // tablica wskaznikow na regulatory bazowe,
-                           // ktore zostana zastapione regulatorami konkretnymi
+    hardware_interface* hi;    // obiekt odpowiedzialny za kontakt ze sprzetem
+
+    // regulator_group
+
+    regulator* regulator_ptr[MAX_SERVOS_NR];
+    // tablica wskaznikow na regulatory bazowe,
+    // ktore zostana zastapione regulatorami konkretnymi
 
 
-// input_buffer
- edp_master_command command; // polecenie z EDP_MASTER dla SERVO
- 
- // output_buffer
- servo_group_reply servo_data;    // informacja przesylana do EDP_MASTER 
+    // input_buffer
+    edp_master_command command; // polecenie z EDP_MASTER dla SERVO
 
- name_attach_t *attach; // 7&Y
- bool send_after_last_step;    // decyduje, czy po realizacji ostatniego 
-                                  // kroku makrokroku ma byc wyslane aktualne 
-                                  // polozenie walu silnika do EDP_MASTER
- edp_error reply_status;          // okresla blad jaki nalezy zasygnalizowac
-                                  // przy nastepnym kontakcie z EDP_MASTER 
- edp_error reply_status_tmp;      // okresla blad jaki wystapil ostatnim kroku
- // pid_t caller;                    // Identyfikator EDP_MASTER
+    // output_buffer
+    servo_group_reply servo_data;    // informacja przesylana do EDP_MASTER
 
- BYTE Move_1_step (void);         // wykonac ruch o krok
- virtual BYTE Move_a_step (void);         // wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH i SYNCHRO_T
- BYTE convert_error (void);       // kompresja numeru bledu w reply_status.error0
- void reply_to_EDP_MASTER (void); // przeslanie stanu SERVO do EDP_MASTER
+    name_attach_t *attach; // 7&Y
+    bool send_after_last_step;    // decyduje, czy po realizacji ostatniego
+    // kroku makrokroku ma byc wyslane aktualne
+    // polozenie walu silnika do EDP_MASTER
+    edp_error reply_status;          // okresla blad jaki nalezy zasygnalizowac
+    // przy nastepnym kontakcie z EDP_MASTER
+    edp_error reply_status_tmp;      // okresla blad jaki wystapil ostatnim kroku
+    // pid_t caller;                    // Identyfikator EDP_MASTER
 
- void clear_reply_status ( void );
+    BYTE Move_1_step (void);         // wykonac ruch o krok
+    virtual BYTE Move_a_step (void);         // wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH i SYNCHRO_T
+    BYTE convert_error (void);       // kompresja numeru bledu w reply_status.error0
+    void reply_to_EDP_MASTER (void); // przeslanie stanu SERVO do EDP_MASTER
 
- void clear_reply_status_tmp ( void );
- 
+    void clear_reply_status ( void );
+
+    void clear_reply_status_tmp ( void );
+
 
 
 public:
 
-// input_buffer
-SERVO_COMMAND command_type(void); // by Yoyek & 7 -  typ returna na SERVO_COMMAND
- 
- // output_buffer
- virtual void get_all_positions (void); 
+    edp_irp6s_and_conv_effector &master;
 
- servo_buffer (void);             // konstruktor
- virtual ~servo_buffer (void);      // destruktor
- bool get_command (void);      // odczytanie polecenia z EDP_MASTER 
-                                  // o ile zostalo przyslane
- void Move_passive (void);        // stanie w miejscu
- void Move (void);                // wykonac makrokrok ruchu 
- void Read (void);                // odczytac aktualne polozenie 
- void Change_algorithm (void);    // zmienic algorytm serworegulacji lub jego parametry
- virtual void synchronise (void);         // synchronizacja
- virtual uint64_t compute_all_set_values (void); 
+    // input_buffer
+    SERVO_COMMAND command_type(void);
+    // by Yoyek & 7 -  typ returna na SERVO_COMMAND
+
+    // output_buffer
+    virtual void get_all_positions (void);
+    //servo_buffer ();             // konstruktor
+    servo_buffer (edp_irp6s_and_conv_effector &_master);             // konstruktor
+    virtual ~servo_buffer (void);      // destruktor
+    bool get_command (void);      // odczytanie polecenia z EDP_MASTER
+    // o ile zostalo przyslane
+    void Move_passive (void);        // stanie w miejscu
+    void Move (void);                // wykonac makrokrok ruchu
+    void Read (void);                // odczytac aktualne polozenie
+    void Change_algorithm (void);    // zmienic algorytm serworegulacji lub jego parametry
+    virtual void synchronise (void);         // synchronizacja
+    virtual uint64_t compute_all_set_values (void);
     // obliczenie nastepnej wartosci zadanej dla wszystkich napedow
 
- void ppp (void) const;                 // wydruk - do celow uruchomieniowych !!!
-}; // end: class servo_buffer 
+    void ppp (void) const;                 // wydruk - do celow uruchomieniowych !!!
+}
+; // end: class servo_buffer
 /*-----------------------------------------------------------------------*/
 
 // Zwrocenie stworzonego obiektu - servo_buffer. Funkcja implementowana w plikach efektorow konkretnych (jadro).
-servo_buffer* return_created_servo_buffer ();
+servo_buffer* return_created_servo_buffer (edp_irp6s_and_conv_effector &_master);
 
 #endif

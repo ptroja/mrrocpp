@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 //                            hi_rydz.h
 // Definicje struktur danych i metod dla interfejsu sprzetowego dla robota iconveyor
-// 
+//
 // Ostatnia modyfikacja: 2005
 // -------------------------------------------------------------------------
 
@@ -33,12 +33,12 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 #define SERVO_REPLY_REG_2_ADR     0x20A + ISA_CARD_OFFSET
 
 // Polecenia dla sterownikow mikroprocesorowych osi
-#define RESET_POSITION_COUNTER    0x0400 // Zerowanie licznika polozenia 
+#define RESET_POSITION_COUNTER    0x0400 // Zerowanie licznika polozenia
 #define RESET_MANUAL_MODE         0x0800 // Zerowanie pracy recznej
-#define RESET_ALARM               0x0C00 // Zerowanie alarmu sytuacji awaryjnej 
+#define RESET_ALARM               0x0C00 // Zerowanie alarmu sytuacji awaryjnej
 #define PROHIBIT_MANUAL_MODE      0x1000 // Zakaz pracy recznej
 #define ALLOW_MANUAL_MODE         0x1400 // Zezwolenie na prace reczna
-#define START_SYNCHRO             0x1800 // Rozpoczecie synchronizacji 
+#define START_SYNCHRO             0x1800 // Rozpoczecie synchronizacji
 #define FINISH_SYNCHRO            0x1C00 // Zakoncz synchronizacje osi
 #define SET_INT_FREQUENCY         0x2000 // Ustaw dzielnik czestotliowsci przerwan
 #define SET_MAX_CURRENT           0x2400 // Ustaw prad maksymalny
@@ -58,31 +58,33 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 #define INT_CHECK_STATE 3 // do odczytu stanu z adresu 0x220
 
 #define CONVEYOR_AXE_1_MAX_CURRENT 0x2430
-		// 13,7 j na A
+// 13,7 j na A
 
 
-  
+
 
 // ------------------------------------------------------------------------
-//                HARDWARE_INTERFACE class                                 
+//                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-class hi_conv : public hardware_interface {
+class hi_conv : public hardware_interface
+{
 
 
 public:
-  hi_conv( void );    // Konstruktor
-  ~hi_conv( void );   // Destruktor
-  bool is_hardware_error ( void); // Sprawdzenie czy wystapil blad sprzetowy
- 
-  uint64_t read_write_hardware ( void );    // Obsluga sprzetu 
-  void reset_counters ( void );  // Zerowanie licznikow polozenia
+    hi_conv( edp_conveyor_effector &_master );    // Konstruktor
+    ~hi_conv( void );   // Destruktor
+    bool is_hardware_error ( void); // Sprawdzenie czy wystapil blad sprzetowy
+    edp_conveyor_effector &master;
+    uint64_t read_write_hardware ( void );    // Obsluga sprzetu
+    void reset_counters ( void );  // Zerowanie licznikow polozenia
 
 
-	// oczekiwanie na przerwanie - tryb obslugi i delay(lag) po odebraniu przerwania
-	int hi_int_wait (int inter_mode, int lag);
+    // oczekiwanie na przerwanie - tryb obslugi i delay(lag) po odebraniu przerwania
+    int hi_int_wait (int inter_mode, int lag);
 
-}; // koniec: class hardware_interface
+}
+; // koniec: class hardware_interface
 
-#endif // __HI_RYDZ_H 
+#endif // __HI_RYDZ_H
 

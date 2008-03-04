@@ -29,23 +29,23 @@ BYTE irp6p_servo_buffer::Move_a_step (void)
     // wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH ora SYNCHRO_ZERO
 
     Move_1_step ();
-    if (master->is_synchronised())
+    if (master.is_synchronised())
     {// by Y aktualizacja transformera am jedynie sens po synchronizacji (kiedy robot zna swoja pozycje)
         // by Y - do dokonczenia
         for (int i=0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++)
         {
-            if (!(master->test_mode))
+            if (!(master.test_mode))
             {
                 switch (i)
                 {
                 case IRP6P_GRIPPER_CATCH_AXE:
-                    master->update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_POSTUMENT_AXE_7_INC_PER_REVOLUTION, i);
+                    master.update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_POSTUMENT_AXE_7_INC_PER_REVOLUTION, i);
                     break;
                 case IRP6P_GRIPPER_TURN_AXE:
-                    master->update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_POSTUMENT_AXE_6_INC_PER_REVOLUTION, i);
+                    master.update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_POSTUMENT_AXE_6_INC_PER_REVOLUTION, i);
                     break;
                 default:
-                    master->update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_POSTUMENT_AXE_0_TO_5_INC_PER_REVOLUTION, i);
+                    master.update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_POSTUMENT_AXE_0_TO_5_INC_PER_REVOLUTION, i);
                     break;
                 }
             }
@@ -53,18 +53,18 @@ BYTE irp6p_servo_buffer::Move_a_step (void)
             /*
             	if (i==6) 
         {
-              master->update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_POSTUMENT_AXE_7_INC_PER_REVOLUTION,  i);
+              master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_POSTUMENT_AXE_7_INC_PER_REVOLUTION,  i);
         } else if (i==5) 
         {		
-            master->update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_POSTUMENT_AXE_6_INC_PER_REVOLUTION,  i);
+            master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_POSTUMENT_AXE_6_INC_PER_REVOLUTION,  i);
         } else 
         {		
-            master->update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_POSTUMENT_AXE_0_TO_5_INC_PER_REVOLUTION,  i);
+            master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_POSTUMENT_AXE_0_TO_5_INC_PER_REVOLUTION,  i);
         } 
             */
         }
 
-        master->servo_joints_and_frame_actualization_and_upload();// by Y - aktualizacja trasformatora
+        master.servo_joints_and_frame_actualization_and_upload();// by Y - aktualizacja trasformatora
     }
     return convert_error();
 }
@@ -73,33 +73,33 @@ BYTE irp6p_servo_buffer::Move_a_step (void)
 
 
 /*-----------------------------------------------------------------------*/
-irp6p_servo_buffer::irp6p_servo_buffer (void) : servo_buffer()
+irp6p_servo_buffer::irp6p_servo_buffer ( edp_irp6p_effector &_master) : servo_buffer(_master), master(_master)
 {
 
-    hi = new hi_irp6p();
+    hi = new hi_irp6p(_master);
 
     // utworzenie tablicy regulatorow
     // Serwomechanizm 1
 
     // regulator_ptr[1] = new NL_regulator_2 (0, 0, 0.71, 13./4, 12.57/4, 0.35);
     // kolumna dla irp6 postument
-    regulator_ptr[0] = new NL_regulator_2_irp6p (0, 0, 0.429, 6.834, 6.606, 0.35); // kolumna dla irp6 postument
+    regulator_ptr[0] = new NL_regulator_2_irp6p (0, 0, 0.429, 6.834, 6.606, 0.35, master); // kolumna dla irp6 postument
 
-    regulator_ptr[1] = new NL_regulator_3_irp6p (0, 0, 0.64, 9.96/4, 9.54/4, 0.35);
+    regulator_ptr[1] = new NL_regulator_3_irp6p (0, 0, 0.64, 9.96/4, 9.54/4, 0.35, master);
 
     // regulator_ptr[3] = new NL_regulator_4 (0, 0, 0.62, 9.85/4, 9.39/4, 0.35);
-    regulator_ptr[2] = new NL_regulator_4_irp6p (0, 0, 0.333, 5.693, 5.427, 0.35);
+    regulator_ptr[2] = new NL_regulator_4_irp6p (0, 0, 0.333, 5.693, 5.427, 0.35, master);
 
-    regulator_ptr[3] = new NL_regulator_5_irp6p (0, 0, 0.56, 7.98/2, 7.55/2, 0.35);
+    regulator_ptr[3] = new NL_regulator_5_irp6p (0, 0, 0.56, 7.98/2, 7.55/2, 0.35, master);
 
     // regulator_ptr[5] = new NL_regulator_6 (0, 0, 0.3079*2, 0.6, 0.6, 0.35);
-    regulator_ptr[4] = new NL_regulator_6_irp6p (0, 0, 0.39, 8.62/2., 7.89/2., 0.35);
+    regulator_ptr[4] = new NL_regulator_6_irp6p (0, 0, 0.39, 8.62/2., 7.89/2., 0.35, master);
     // regulator_ptr[0] = new NL_regulator_1 (0, 0, 0.64, 16.61/5., 15.89/5., 0.35);
 
-    regulator_ptr[5] = new NL_regulator_7_irp6p (0, 0, 0.39, 8.62/2., 7.89/2., 0.35);
+    regulator_ptr[5] = new NL_regulator_7_irp6p (0, 0, 0.39, 8.62/2., 7.89/2., 0.35, master);
 
     // chwytak
-    regulator_ptr[6] = new NL_regulator_8_irp6p (0, 0, 0.39, 8.62/2., 7.89/2., 0.35);
+    regulator_ptr[6] = new NL_regulator_8_irp6p (0, 0, 0.39, 8.62/2., 7.89/2., 0.35, master);
 
 
     send_after_last_step = false;
@@ -128,7 +128,7 @@ void irp6p_servo_buffer::synchronise (void) {
  
  double synchro_step = 0.0;   // zadany przyrost polozenia
  
-	if(master->test_mode) {
+	if(master.test_mode) {
 		// W.S. Tylko przy testowaniu
 		clear_reply_status();  
 		clear_reply_status_tmp();
@@ -182,7 +182,7 @@ void irp6p_servo_buffer::synchronise (void)
 
     double synchro_step = 0.0;   // zadany przyrost polozenia
 
-    if(master->test_mode)
+    if(master.test_mode)
     {
         // W.S. Tylko przy testowaniu
         clear_reply_status();
@@ -191,7 +191,7 @@ void irp6p_servo_buffer::synchronise (void)
         return;
     }
 
-    for (int j = 0; j < (master->number_of_servos); j++)
+    for (int j = 0; j < (master.number_of_servos); j++)
     {
 
         command.parameters.move.abs_position[j]=0.0;
@@ -200,14 +200,14 @@ void irp6p_servo_buffer::synchronise (void)
 
 
     // szeregowa synchronizacja serwomechanizmow
-    for (int k = 0; k < (master->number_of_servos); k++)
+    for (int k = 0; k < (master.number_of_servos); k++)
     {
-        int j = ((k+IRP6P_SYN_INIT_AXE)%(master->number_of_servos));
+        int j = ((k+IRP6P_SYN_INIT_AXE)%(master.number_of_servos));
 
         // printf("os synchronizopwana: %d \n",j);
-        for (int l= 0; l < (master->number_of_servos); l++)
+        for (int l= 0; l < (master.number_of_servos); l++)
         {
-            int i = ((l+IRP6P_SYN_INIT_AXE)%(master->number_of_servos));
+            int i = ((l+IRP6P_SYN_INIT_AXE)%(master.number_of_servos));
             // zerowy przyrost polozenia dla wszystkich napedow procz j-tego
             if ( i == j)
             {
@@ -481,9 +481,9 @@ void irp6p_servo_buffer::synchronise (void)
     ; // end: for (int j = 0; j < IRP6_POSTUMENT_NUM_OF_SERVOS)
 
     // zatrzymanie na chwile robota
-    for (int k = 0; k < (master->number_of_servos); k++)
+    for (int k = 0; k < (master.number_of_servos); k++)
     {
-        int j = ((k+IRP6P_SYN_INIT_AXE)%(master->number_of_servos));
+        int j = ((k+IRP6P_SYN_INIT_AXE)%(master.number_of_servos));
         synchro_step=0.0;
         crp = regulator_ptr[j];
         crp->insert_new_step(synchro_step);
@@ -506,8 +506,7 @@ void irp6p_servo_buffer::synchronise (void)
 
 /*-----------------------------------------------------------------------*/
 irp6p_servo_buffer::~irp6p_servo_buffer(void)
-{
-}
+{}
 ; // end: regulator_group::~regulator_group
 /*-----------------------------------------------------------------------*/
 
@@ -555,14 +554,14 @@ uint64_t irp6p_servo_buffer::compute_all_set_values (void)
     // obliczenie nastepnej wartosci zadanej dla wszystkich napedow
     uint64_t status = OK; // kumuluje numer bledu
 
-    master->rb_obj->lock_mutex();
-    master->force_msr_download (master->rb_obj->step_data.force,(int) 0);
-    master->rb_obj->unlock_mutex();
+    master.rb_obj->lock_mutex();
+    master.force_msr_download (master.rb_obj->step_data.force,(int) 0);
+    master.rb_obj->unlock_mutex();
 
 
     for (int j = 0; j < IRP6_POSTUMENT_NUM_OF_SERVOS; j++)
     {
-        if (master->test_mode)
+        if (master.test_mode)
         {
             switch (j)
             {
@@ -598,7 +597,7 @@ uint64_t irp6p_servo_buffer::compute_all_set_values (void)
 
 
 
-servo_buffer* return_created_servo_buffer ()
+servo_buffer* return_created_servo_buffer (edp_irp6p_effector &_master)
                     {
-                        return new irp6p_servo_buffer ();
-                    }
+                        return new irp6p_servo_buffer (_master);
+                    };

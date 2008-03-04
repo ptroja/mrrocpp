@@ -18,7 +18,7 @@
 #include "edp/common/kinematics_manager.h"
 #include "edp/common/kinematic_model.h"
 
-extern edp_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
+ extern edp_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
 
 // Konstruktor - tworzy liste kinematyk.
 kinematics_manager::kinematics_manager(void)

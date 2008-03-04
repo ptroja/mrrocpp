@@ -18,7 +18,7 @@
 // Klasa irp6ot_servo_buffer.
 #include "edp/irp6_on_track/sg_local.h"
 
-extern edp_irp6ot_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
+ 
 
 
 
@@ -31,24 +31,24 @@ BYTE irp6ot_servo_buffer::Move_a_step (void)
     Move_1_step ();
     //	printf("bbb\n");
     // by Y aktualizacja transformera ma jedynie sens po synchronizacji (kiedy robot zna swoja pozycje)
-    if (master->is_synchronised())
+    if (master.is_synchronised())
     {
 
 
         for (int i=0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
         {
-            if (!(master->test_mode))
+            if (!(master.test_mode))
             {
                 switch (i)
                 {
                 case IRP6OT_GRIPPER_CATCH_AXE:
-                    master->update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_ON_TRACK_AXE_7_INC_PER_REVOLUTION, i);
+                    master.update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_ON_TRACK_AXE_7_INC_PER_REVOLUTION, i);
                     break;
                 case IRP6OT_GRIPPER_TURN_AXE:
-                    master->update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_ON_TRACK_AXE_6_INC_PER_REVOLUTION, i);
+                    master.update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_ON_TRACK_AXE_6_INC_PER_REVOLUTION, i);
                     break;
                 default:
-                    master->update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_ON_TRACK_AXE_0_TO_5_INC_PER_REVOLUTION, i);
+                    master.update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_ON_TRACK_AXE_0_TO_5_INC_PER_REVOLUTION, i);
                     break;
                 }
             }
@@ -56,13 +56,13 @@ BYTE irp6ot_servo_buffer::Move_a_step (void)
             /*
             		if (i==7) 
         {
-            	  master->update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_ON_TRACK_AXE_7_INC_PER_REVOLUTION,  i);
+            	  master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_ON_TRACK_AXE_7_INC_PER_REVOLUTION,  i);
              } else if (i==6) 
         {		
-            	master->update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_ON_TRACK_AXE_6_INC_PER_REVOLUTION,  i);
+            	master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_ON_TRACK_AXE_6_INC_PER_REVOLUTION,  i);
              } else 
         {		
-            	master->update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_ON_TRACK_AXE_0_TO_5_INC_PER_REVOLUTION,  i);
+            	master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_ON_TRACK_AXE_0_TO_5_INC_PER_REVOLUTION,  i);
              } 
             */
         }
@@ -72,7 +72,7 @@ BYTE irp6ot_servo_buffer::Move_a_step (void)
 
         //		printf("aallalal\n");
         // by Y - aktualizacja trasformatora
-        master->servo_joints_and_frame_actualization_and_upload();
+        master.servo_joints_and_frame_actualization_and_upload();
 
     }
     return convert_error();
@@ -82,32 +82,32 @@ BYTE irp6ot_servo_buffer::Move_a_step (void)
 
 
 /*-----------------------------------------------------------------------*/
-irp6ot_servo_buffer::irp6ot_servo_buffer (void) : servo_buffer()
+irp6ot_servo_buffer::irp6ot_servo_buffer (edp_irp6ot_effector &_master ) : servo_buffer(_master), master(_master)
 {
 
-    hi = new hi_irp6ot();
+    hi = new hi_irp6ot(_master);
 
     // utworzenie tablicy regulatorow
     // Serwomechanizm 1
     // regulator_ptr[0] = new NL_regulator_1 (0, 0, 0.64, 16.61/5., 15.89/5., 0.35);
-    regulator_ptr[0] = new NL_regulator_1_irp6ot (0, 0, 0.333, 6.2, 5.933, 0.35);
+    regulator_ptr[0] = new NL_regulator_1_irp6ot (0, 0, 0.333, 6.2, 5.933, 0.35, master);
     // Serwomechanizm 2
     // regulator_ptr[1] = new NL_regulator_2 (0, 0, 0.71, 13./4, 12.57/4, 0.35);
-    regulator_ptr[1] = new NL_regulator_2_irp6ot (0, 0, 0.429, 6.834, 6.606, 0.35);
+    regulator_ptr[1] = new NL_regulator_2_irp6ot (0, 0, 0.429, 6.834, 6.606, 0.35, master);
     // Serwomechanizm 3
-    regulator_ptr[2] = new NL_regulator_3_irp6ot (0, 0, 0.64, 9.96/4, 9.54/4, 0.35);
+    regulator_ptr[2] = new NL_regulator_3_irp6ot (0, 0, 0.64, 9.96/4, 9.54/4, 0.35, master);
     // Serwomechanizm 4
     // regulator_ptr[3] = new NL_regulator_4 (0, 0, 0.62, 9.85/4, 9.39/4, 0.35);
-    regulator_ptr[3] = new NL_regulator_4_irp6ot (0, 0, 0.333, 5.693, 5.427, 0.35);
+    regulator_ptr[3] = new NL_regulator_4_irp6ot (0, 0, 0.333, 5.693, 5.427, 0.35, master);
     // Serwomechanizm 5
-    regulator_ptr[4] = new NL_regulator_5_irp6ot (0, 0, 0.56, 7.98/2, 7.55/2, 0.35);
+    regulator_ptr[4] = new NL_regulator_5_irp6ot (0, 0, 0.56, 7.98/2, 7.55/2, 0.35, master);
     // Serwomechanizm 6
     // regulator_ptr[5] = new NL_regulator_6 (0, 0, 0.3079*2, 0.6, 0.6, 0.35);
-    regulator_ptr[5] = new NL_regulator_6_irp6ot (0, 0, 0.39, 8.62/2., 7.89/2., 0.35);
+    regulator_ptr[5] = new NL_regulator_6_irp6ot (0, 0, 0.39, 8.62/2., 7.89/2., 0.35, master);
 
-    regulator_ptr[6] = new NL_regulator_7_irp6ot (0, 0, 0.39, 8.62/2., 7.89/2., 0.35);
+    regulator_ptr[6] = new NL_regulator_7_irp6ot (0, 0, 0.39, 8.62/2., 7.89/2., 0.35, master);
 
-    regulator_ptr[7] = new NL_regulator_8_irp6ot (0, 0, 0.39, 8.62/2., 7.89/2., 0.35);
+    regulator_ptr[7] = new NL_regulator_8_irp6ot (0, 0, 0.39, 8.62/2., 7.89/2., 0.35, master);
 
     send_after_last_step = false;
     clear_reply_status();
@@ -126,7 +126,7 @@ void irp6ot_servo_buffer::synchronise (void)
 
     double synchro_step = 0.0;   // zadany przyrost polozenia
 
-    if(master->test_mode)
+    if(master.test_mode)
     {
         // W.S. Tylko przy testowaniu
         clear_reply_status();
@@ -135,21 +135,21 @@ void irp6ot_servo_buffer::synchronise (void)
         return;
     }
 
-    for (int j = 0; j < master->number_of_servos; j++)
+    for (int j = 0; j < master.number_of_servos; j++)
     {
         command.parameters.move.abs_position[j]=0.0;
     } // end: for
 
 
     // szeregowa synchronizacja serwomechanizmow
-    for (int k = 0; k < master->number_of_servos; k++)
+    for (int k = 0; k < master.number_of_servos; k++)
     {
-        int j = ((k+IRP6OT_SYN_INIT_AXE)%master->number_of_servos);
+        int j = ((k+IRP6OT_SYN_INIT_AXE)%master.number_of_servos);
 
         // printf("os synchronizopwana: %d \n",j);
-        for (int l= 0; l < master->number_of_servos; l++)
+        for (int l= 0; l < master.number_of_servos; l++)
         {
-            int i = ((l+IRP6OT_SYN_INIT_AXE)%master->number_of_servos);
+            int i = ((l+IRP6OT_SYN_INIT_AXE)%master.number_of_servos);
             // zerowy przyrost polozenia dla wszystkich napedow procz j-tego
             if ( i == j)
             {
@@ -425,9 +425,9 @@ void irp6ot_servo_buffer::synchronise (void)
     ; // end: for (int j = 0; j < IRP6_ON_TRACK_NUM_OF_SERVOS)
 
     // zatrzymanie na chwile robota
-    for (int k = 0; k < master->number_of_servos; k++)
+    for (int k = 0; k < master.number_of_servos; k++)
     {
-        int j = ((k+IRP6OT_SYN_INIT_AXE)%master->number_of_servos);
+        int j = ((k+IRP6OT_SYN_INIT_AXE)%master.number_of_servos);
         synchro_step=0.0;
         crp = regulator_ptr[j];
         crp->insert_new_step(synchro_step);
@@ -499,7 +499,7 @@ uint64_t irp6ot_servo_buffer::compute_all_set_values (void)
 
     for (int j = 0; j < IRP6_ON_TRACK_NUM_OF_SERVOS; j++)
     {
-        if (master->test_mode)
+        if (master.test_mode)
         {
             switch (j)
             {
@@ -537,8 +537,8 @@ uint64_t irp6ot_servo_buffer::compute_all_set_values (void)
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_1_irp6ot::NL_regulator_1_irp6ot (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff)
-        : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff)
+NL_regulator_1_irp6ot::NL_regulator_1_irp6ot (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master)
+        : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
     // Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
@@ -549,8 +549,8 @@ NL_regulator_1_irp6ot::NL_regulator_1_irp6ot (BYTE reg_no, BYTE reg_par_no, doub
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_2_irp6ot::NL_regulator_2_irp6ot (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff)
-        : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff)
+NL_regulator_2_irp6ot::NL_regulator_2_irp6ot (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master)
+        : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
     // Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
@@ -561,8 +561,8 @@ NL_regulator_2_irp6ot::NL_regulator_2_irp6ot (BYTE reg_no, BYTE reg_par_no, doub
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_3_irp6ot::NL_regulator_3_irp6ot (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff)
-        : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff)
+NL_regulator_3_irp6ot::NL_regulator_3_irp6ot (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master)
+        : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
     // Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
@@ -573,8 +573,8 @@ NL_regulator_3_irp6ot::NL_regulator_3_irp6ot (BYTE reg_no, BYTE reg_par_no, doub
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_4_irp6ot::NL_regulator_4_irp6ot (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff)
-        : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff)
+NL_regulator_4_irp6ot::NL_regulator_4_irp6ot (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master)
+        : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
     // Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
@@ -585,8 +585,8 @@ NL_regulator_4_irp6ot::NL_regulator_4_irp6ot (BYTE reg_no, BYTE reg_par_no, doub
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_5_irp6ot::NL_regulator_5_irp6ot (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff)
-        : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff)
+NL_regulator_5_irp6ot::NL_regulator_5_irp6ot (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master)
+        : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
     // Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
@@ -598,8 +598,8 @@ NL_regulator_5_irp6ot::NL_regulator_5_irp6ot (BYTE reg_no, BYTE reg_par_no, doub
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_6_irp6ot::NL_regulator_6_irp6ot (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff)
-        : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff)
+NL_regulator_6_irp6ot::NL_regulator_6_irp6ot (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master)
+        : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
     // Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
@@ -610,8 +610,8 @@ NL_regulator_6_irp6ot::NL_regulator_6_irp6ot (BYTE reg_no, BYTE reg_par_no, doub
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_7_irp6ot::NL_regulator_7_irp6ot (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff)
-        : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff)
+NL_regulator_7_irp6ot::NL_regulator_7_irp6ot (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master)
+        : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
     // Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
@@ -622,8 +622,8 @@ NL_regulator_7_irp6ot::NL_regulator_7_irp6ot (BYTE reg_no, BYTE reg_par_no, doub
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_8_irp6ot::NL_regulator_8_irp6ot (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff)
-        : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff)
+NL_regulator_8_irp6ot::NL_regulator_8_irp6ot (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master)
+        : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
 
     reg_state = next_reg_state = prev_reg_state = GRIPPER_START_STATE;
@@ -821,18 +821,18 @@ BYTE NL_regulator_1_irp6ot::compute_set_value (void)
     ;  // end: switch (algorithm_no)
 
 
-    master->rb_obj->lock_mutex();
+    master.rb_obj->lock_mutex();
 
 
 
-    master->rb_obj->step_data.desired_inc[0] = (float) step_new_pulse; // pozycja osi 0
-    master->rb_obj->step_data.current_inc[0] = (short int) position_increment_new;
-    master->rb_obj->step_data.pwm[0] = (float) set_value_new;
-    master->rb_obj->step_data.uchyb[0]=(float) (step_new_pulse - position_increment_new);
+    master.rb_obj->step_data.desired_inc[0] = (float) step_new_pulse; // pozycja osi 0
+    master.rb_obj->step_data.current_inc[0] = (short int) position_increment_new;
+    master.rb_obj->step_data.pwm[0] = (float) set_value_new;
+    master.rb_obj->step_data.uchyb[0]=(float) (step_new_pulse - position_increment_new);
 
-    master->force_msr_download (master->rb_obj->step_data.force,(int) 0);
+    ((edp_irp6s_postument_track_effector&)(master)).force_msr_download (master.rb_obj->step_data.force,(int) 0);
 
-    master->rb_obj->unlock_mutex();
+    master.rb_obj->unlock_mutex();
 
     // ograniczenie na sterowanie
     if (set_value_new > MAX_PWM)
@@ -1029,16 +1029,16 @@ BYTE NL_regulator_2_irp6ot::compute_set_value (void)
 
     // printf("banana1: %f\n", set_value_new);
 
-    master->rb_obj->lock_mutex();
+    master.rb_obj->lock_mutex();
 
 
-    master->rb_obj->step_data.desired_inc[1] = (float) step_new_pulse; // pozycja osi 0
-    master->rb_obj->step_data.current_inc[1] = (short int) position_increment_new;
-    master->rb_obj->step_data.pwm[1] = (float) set_value_new;
-    master->rb_obj->step_data.uchyb[1]=(float) (step_new_pulse - position_increment_new);
+    master.rb_obj->step_data.desired_inc[1] = (float) step_new_pulse; // pozycja osi 0
+    master.rb_obj->step_data.current_inc[1] = (short int) position_increment_new;
+    master.rb_obj->step_data.pwm[1] = (float) set_value_new;
+    master.rb_obj->step_data.uchyb[1]=(float) (step_new_pulse - position_increment_new);
 
 
-    master->rb_obj->unlock_mutex();
+    master.rb_obj->unlock_mutex();
 
     // ograniczenie na sterowanie
     if (set_value_new > MAX_PWM)
@@ -1226,14 +1226,14 @@ BYTE NL_regulator_3_irp6ot::compute_set_value (void)
     ;  // end: switch (algorithm_no)
 
 
-    master->rb_obj->lock_mutex();
+    master.rb_obj->lock_mutex();
 
-    master->rb_obj->step_data.desired_inc[2] = (float) step_new_pulse; // pozycja osi 0
-    master->rb_obj->step_data.current_inc[2] = (short int) position_increment_new;
-    master->rb_obj->step_data.pwm[2] = (float) set_value_new;
-    master->rb_obj->step_data.uchyb[2]=(float) (step_new_pulse - position_increment_new);
+    master.rb_obj->step_data.desired_inc[2] = (float) step_new_pulse; // pozycja osi 0
+    master.rb_obj->step_data.current_inc[2] = (short int) position_increment_new;
+    master.rb_obj->step_data.pwm[2] = (float) set_value_new;
+    master.rb_obj->step_data.uchyb[2]=(float) (step_new_pulse - position_increment_new);
 
-    master->rb_obj->unlock_mutex();
+    master.rb_obj->unlock_mutex();
 
     // ograniczenie na sterowanie
     if (set_value_new > MAX_PWM)
@@ -1423,15 +1423,15 @@ BYTE NL_regulator_4_irp6ot::compute_set_value (void)
 
 
 
-    master->rb_obj->lock_mutex();
+    master.rb_obj->lock_mutex();
 
-    master->rb_obj->step_data.desired_inc[3] = (float) step_new_pulse; // pozycja osi 0
-    master->rb_obj->step_data.current_inc[3] = (short int) position_increment_new;
-    master->rb_obj->step_data.pwm[3] = (float) set_value_new;
-    master->rb_obj->step_data.uchyb[3]=(float) (step_new_pulse - position_increment_new);
-    // master->rb_obj->step_data.uchyb[3]=(float) (step_new_pulse - position_increment_new);
+    master.rb_obj->step_data.desired_inc[3] = (float) step_new_pulse; // pozycja osi 0
+    master.rb_obj->step_data.current_inc[3] = (short int) position_increment_new;
+    master.rb_obj->step_data.pwm[3] = (float) set_value_new;
+    master.rb_obj->step_data.uchyb[3]=(float) (step_new_pulse - position_increment_new);
+    // master.rb_obj->step_data.uchyb[3]=(float) (step_new_pulse - position_increment_new);
 
-    master->rb_obj->unlock_mutex();
+    master.rb_obj->unlock_mutex();
 
     // ograniczenie na sterowanie
     if (set_value_new > MAX_PWM)
@@ -1619,14 +1619,14 @@ BYTE NL_regulator_5_irp6ot::compute_set_value (void)
     }
     ;  // end: switch (algorithm_no)
 
-    master->rb_obj->lock_mutex();
+    master.rb_obj->lock_mutex();
 
-    master->rb_obj->step_data.desired_inc[4] = (float) step_new_pulse; // pozycja osi 0
-    master->rb_obj->step_data.current_inc[4] = (short int) position_increment_new;
-    master->rb_obj->step_data.pwm[4] = (float) set_value_new;
-    master->rb_obj->step_data.uchyb[4]=(float) (step_new_pulse - position_increment_new);
+    master.rb_obj->step_data.desired_inc[4] = (float) step_new_pulse; // pozycja osi 0
+    master.rb_obj->step_data.current_inc[4] = (short int) position_increment_new;
+    master.rb_obj->step_data.pwm[4] = (float) set_value_new;
+    master.rb_obj->step_data.uchyb[4]=(float) (step_new_pulse - position_increment_new);
 
-    master->rb_obj->unlock_mutex();
+    master.rb_obj->unlock_mutex();
 
     // ograniczenie na sterowanie
     if (set_value_new > MAX_PWM)
@@ -1834,14 +1834,14 @@ BYTE NL_regulator_6_irp6ot::compute_set_value (void)
     if (set_value_new- set_value_old < -IRP6_ON_TRACK_AXE6_MAX_PWM_INCREMENT)
         set_value_new = set_value_old - IRP6_ON_TRACK_AXE6_MAX_PWM_INCREMENT;
 
-    master->rb_obj->lock_mutex();
+    master.rb_obj->lock_mutex();
 
-    master->rb_obj->step_data.desired_inc[5] = (float) step_new_pulse; // pozycja osi 0
-    master->rb_obj->step_data.current_inc[5] = (short int) position_increment_new;
-    master->rb_obj->step_data.pwm[5] = (float) set_value_new;
-    master->rb_obj->step_data.uchyb[5]=(float) (step_new_pulse - position_increment_new);
+    master.rb_obj->step_data.desired_inc[5] = (float) step_new_pulse; // pozycja osi 0
+    master.rb_obj->step_data.current_inc[5] = (short int) position_increment_new;
+    master.rb_obj->step_data.pwm[5] = (float) set_value_new;
+    master.rb_obj->step_data.uchyb[5]=(float) (step_new_pulse - position_increment_new);
 
-    master->rb_obj->unlock_mutex();
+    master.rb_obj->unlock_mutex();
 
     // if (set_value_new > 0.0) {
     //  cprintf("svn = %lf  pin = %lf\n",set_value_new, position_increment_new);
@@ -2059,14 +2059,14 @@ BYTE NL_regulator_7_irp6ot::compute_set_value (void)
     if (set_value_new- set_value_old < -IRP6_ON_TRACK_AXE7_MAX_PWM_INCREMENT)
         set_value_new = set_value_old - IRP6_ON_TRACK_AXE7_MAX_PWM_INCREMENT;
 
-    master->rb_obj->lock_mutex();
+    master.rb_obj->lock_mutex();
 
-    master->rb_obj->step_data.desired_inc[6] = (float) step_new_pulse; // pozycja osi 0
-    master->rb_obj->step_data.current_inc[6] = (short int) position_increment_new;
-    master->rb_obj->step_data.pwm[6] = (float) set_value_new;
-    master->rb_obj->step_data.uchyb[6]=(float) (step_new_pulse - position_increment_new);
+    master.rb_obj->step_data.desired_inc[6] = (float) step_new_pulse; // pozycja osi 0
+    master.rb_obj->step_data.current_inc[6] = (short int) position_increment_new;
+    master.rb_obj->step_data.pwm[6] = (float) set_value_new;
+    master.rb_obj->step_data.uchyb[6]=(float) (step_new_pulse - position_increment_new);
 
-    master->rb_obj->unlock_mutex();
+    master.rb_obj->unlock_mutex();
 
     // if (set_value_new > 0.0) {
     //  cprintf("svn = %lf  pin = %lf\n",set_value_new, position_increment_new);
@@ -2302,14 +2302,14 @@ BYTE NL_regulator_8_irp6ot::compute_set_value (void)
     if (set_value_new- set_value_old < -IRP6_ON_TRACK_AXE8_MAX_PWM_INCREMENT)
         set_value_new = set_value_old - IRP6_ON_TRACK_AXE8_MAX_PWM_INCREMENT;
 
-    master->rb_obj->lock_mutex();
+    master.rb_obj->lock_mutex();
 
-    master->rb_obj->step_data.desired_inc[7] = (float) step_new_pulse; // pozycja osi 0
-    master->rb_obj->step_data.current_inc[7] = (short int) position_increment_new;
-    master->rb_obj->step_data.pwm[7] = (float) set_value_new;
-    master->rb_obj->step_data.uchyb[7]=(float) (step_new_pulse - position_increment_new);
+    master.rb_obj->step_data.desired_inc[7] = (float) step_new_pulse; // pozycja osi 0
+    master.rb_obj->step_data.current_inc[7] = (short int) position_increment_new;
+    master.rb_obj->step_data.pwm[7] = (float) set_value_new;
+    master.rb_obj->step_data.uchyb[7]=(float) (step_new_pulse - position_increment_new);
 
-    master->rb_obj->unlock_mutex();
+    master.rb_obj->unlock_mutex();
 
     // if (set_value_new > 0.0) {
     //  cprintf("svn = %lf  pin = %lf\n",set_value_new, position_increment_new);
@@ -2328,7 +2328,7 @@ BYTE NL_regulator_8_irp6ot::compute_set_value (void)
     // AUTOMAT ZABEZPIECZAJACY SILNIK CHWYTAKA PRZED PRZEGRZANIEM
 
     // wyznaczenie pradu na zalozonych horyzoncie wstecz
-    if (master->step_counter > IRP6_ON_TRACK_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS)
+    if (master.step_counter > IRP6_ON_TRACK_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS)
     {
         sum_of_currents -= currents [current_index];
     }
@@ -2352,14 +2352,14 @@ BYTE NL_regulator_8_irp6ot::compute_set_value (void)
         if (sum_of_currents > IRP6_ON_TRACK_GRIPPER_SUM_OF_CURRENTS_MAX_VALUE)
         {
             next_reg_state = GRIPPER_BLOCKED_STATE;
-            gripper_blocked_start_time = master->step_counter;
+            gripper_blocked_start_time = master.step_counter;
             //		printf("gripper GRIPPER_BLOCKED_STATE state\n");
         }
         break;
 
     case GRIPPER_BLOCKED_STATE:
 
-        if (((master->step_counter - gripper_blocked_start_time) > GRIPPER_BLOCKED_TIME_PERIOD)
+        if (((master.step_counter - gripper_blocked_start_time) > GRIPPER_BLOCKED_TIME_PERIOD)
                 && (!(sum_of_currents > IRP6_ON_TRACK_GRIPPER_SUM_OF_CURRENTS_MAX_VALUE)))
         {
             //			printf("gripper GRIPPER_START_STATE state\n");
@@ -2392,8 +2392,8 @@ BYTE NL_regulator_8_irp6ot::compute_set_value (void)
 ; // end: NL_regulator_8::compute_set_value
 /*-----------------------------------------------------------------------*/
 
-servo_buffer* return_created_servo_buffer ()
+servo_buffer* return_created_servo_buffer (edp_irp6ot_effector &_master)
                     {
-                        return new irp6ot_servo_buffer ();
-                    }
+                        return new irp6ot_servo_buffer (_master);
+                    };
 
