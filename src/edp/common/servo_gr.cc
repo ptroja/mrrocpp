@@ -168,11 +168,6 @@ BYTE servo_buffer::Move_1_step (void)
 /*-----------------------------------------------------------------------*/
 
 
-servo_buffer* return_created_servo_buffer (edp_irp6s_and_conv_effector &_master)
-                    {
-                        return new servo_buffer (_master);
-                    };
-
 
 /*-----------------------------------------------------------------------*/
 BYTE servo_buffer::convert_error (void)

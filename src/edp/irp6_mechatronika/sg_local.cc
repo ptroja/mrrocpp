@@ -429,9 +429,9 @@ uint64_t irp6m_servo_buffer::compute_all_set_values (void)
 
 
 
-servo_buffer* return_created_servo_buffer (edp_irp6m_effector &_master)
+servo_buffer* return_created_servo_buffer (edp_irp6s_and_conv_effector &_master)
                     {
-                        return new irp6m_servo_buffer (_master);
+                        return new irp6m_servo_buffer ((edp_irp6m_effector &)(_master));
                     };
 
 

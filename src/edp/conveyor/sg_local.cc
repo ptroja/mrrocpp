@@ -186,9 +186,9 @@ uint64_t conveyor_servo_buffer::compute_all_set_values (void)
 /*-----------------------------------------------------------------------*/
 
 
-servo_buffer* return_created_servo_buffer (edp_conveyor_effector &_master)
+servo_buffer* return_created_servo_buffer (edp_irp6s_and_conv_effector &_master)
                     {
-                        return new conveyor_servo_buffer (_master);
+                        return new conveyor_servo_buffer ((edp_conveyor_effector &)(_master));
                     }
 
 
