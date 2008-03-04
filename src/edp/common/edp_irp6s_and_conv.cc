@@ -124,7 +124,7 @@ void edp_irp6s_and_conv_effector::create_threads ()
     }
 
     // Y&W - utworzenie watku readera
-    if (pthread_create (&reader_tid, NULL, &reader_thread, NULL)!=EOK)
+    if (pthread_create (&reader_tid, NULL, &reader_thread_start, (void *) this)!=EOK)
     {
         msg->message(SYSTEM_ERROR, errno, "EDP: Failed to create READER");
         char buf[20];
@@ -148,7 +148,6 @@ void edp_irp6s_and_conv_effector::create_threads ()
         msg->message(SYSTEM_ERROR, errno, "EDP: Failed to create VISUALISATION THREAD");
         throw System_error();
     }
-
 };
 
 

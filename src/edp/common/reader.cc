@@ -32,9 +32,9 @@
 
 reader_buffer rb_obj;
 
-extern edp_effector *master;  // by Y
+ //extern edp_effector *master;  // by Y
 
-inline void check_config(const char* string, uint8_t* input )
+inline void check_config(const char* string, uint8_t* input, edp_effector *master )
 {
     if ((master->config.exists(string))&&(master->config.return_int_value(string)))
         *input=1;
@@ -42,8 +42,18 @@ inline void check_config(const char* string, uint8_t* input )
         *input=0;
 }
 
+void * edp_irp6s_and_conv_effector::reader_thread_start(void* arg)
+{
+//	 edp_irp6s_and_conv_effector *master = (edp_irp6s_and_conv_effector *) arg;
+	
+	 static_cast<edp_irp6s_and_conv_effector*> (arg)->reader_thread(arg);
+}
+
 void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 {
+	
+	//edp_irp6s_and_conv_effector *master = (edp_irp6s_and_conv_effector *) arg;
+	
     int i;
     uint64_t k;
     uint64_t nr_of_samples;  // maksymalna liczba pomiarow
@@ -69,25 +79,25 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
     // czytanie konfiguracji
     char*	reader_meassures_dir;
-    if (master->config.exists("reader_meassures_dir"))
+    if (config.exists("reader_meassures_dir"))
     {
-        reader_meassures_dir = master->config.return_string_value("reader_meassures_dir", "[ui]");
+        reader_meassures_dir = config.return_string_value("reader_meassures_dir", "[ui]");
     }
     else
     {
-        reader_meassures_dir = master->config.return_default_reader_measures_path();
+        reader_meassures_dir = config.return_default_reader_measures_path();
     }
 
-    char* robot_name = master->config.return_string_value("reader_attach_point");
+    char* robot_name = config.return_string_value("reader_attach_point");
 
-    if (master->config.exists("reader_samples"))
-        nr_of_samples=master->config.return_int_value("reader_samples");
+    if (config.exists("reader_samples"))
+        nr_of_samples=config.return_int_value("reader_samples");
     else
         nr_of_samples=1000;
 
     rb_obj.reader_cnf.step=1;
-    check_config("servo_tryb", &(rb_obj.reader_cnf.servo_tryb));
-    check_config("msec", &(rb_obj.reader_cnf.msec));
+    check_config("servo_tryb", &(rb_obj.reader_cnf.servo_tryb), this);
+    check_config("msec", &(rb_obj.reader_cnf.msec), this);
 
     char tmp_string[50];
     char tmp2_string[3];
@@ -98,57 +108,57 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
         strcpy(tmp_string,"desired_inc_");
         strcat(tmp_string, tmp2_string);
-        check_config(tmp_string, &(rb_obj.reader_cnf.desired_inc[j]));
+        check_config(tmp_string, &(rb_obj.reader_cnf.desired_inc[j]), this);
 
         strcpy(tmp_string,"current_inc_");
         strcat(tmp_string, tmp2_string);
-        check_config(tmp_string, &(rb_obj.reader_cnf.current_inc[j]));
+        check_config(tmp_string, &(rb_obj.reader_cnf.current_inc[j]), this);
 
         strcpy(tmp_string,"pwm_");
         strcat(tmp_string, tmp2_string);
-        check_config(tmp_string, &(rb_obj.reader_cnf.pwm[j]));
+        check_config(tmp_string, &(rb_obj.reader_cnf.pwm[j]), this);
 
         strcpy(tmp_string,"uchyb_");
         strcat(tmp_string, tmp2_string);
-        check_config(tmp_string, &(rb_obj.reader_cnf.uchyb[j]));
+        check_config(tmp_string, &(rb_obj.reader_cnf.uchyb[j]), this);
 
         strcpy(tmp_string,"abs_pos_");
         strcat(tmp_string, tmp2_string);
-        check_config(tmp_string, &(rb_obj.reader_cnf.abs_pos[j]));
+        check_config(tmp_string, &(rb_obj.reader_cnf.abs_pos[j]), this);
 
         strcpy(tmp_string,"current_joints_");
         strcat(tmp_string, tmp2_string);
-        check_config(tmp_string, &(rb_obj.reader_cnf.current_joints[j]));
+        check_config(tmp_string, &(rb_obj.reader_cnf.current_joints[j]), this);
 
         if (j<6)
         {
             strcpy(tmp_string,"force_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj.reader_cnf.force[j]));
+            check_config(tmp_string, &(rb_obj.reader_cnf.force[j]), this);
 
             strcpy(tmp_string,"desired_force_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj.reader_cnf.desired_force[j]));
+            check_config(tmp_string, &(rb_obj.reader_cnf.desired_force[j]), this);
 
             strcpy(tmp_string,"filtered_force_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj.reader_cnf.filtered_force[j]));
+            check_config(tmp_string, &(rb_obj.reader_cnf.filtered_force[j]), this);
 
             strcpy(tmp_string,"current_kartez_position_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj.reader_cnf.current_kartez_position[j]));
+            check_config(tmp_string, &(rb_obj.reader_cnf.current_kartez_position[j]), this);
 
             strcpy(tmp_string,"real_kartez_position_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj.reader_cnf.real_kartez_position[j]));
+            check_config(tmp_string, &(rb_obj.reader_cnf.real_kartez_position[j]), this);
 
             strcpy(tmp_string,"real_kartez_vel_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj.reader_cnf.real_kartez_vel[j]));
+            check_config(tmp_string, &(rb_obj.reader_cnf.real_kartez_vel[j]), this);
 
             strcpy(tmp_string,"real_kartez_acc_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj.reader_cnf.real_kartez_acc[j]));
+            check_config(tmp_string, &(rb_obj.reader_cnf.real_kartez_acc[j]), this);
         }
     }
 
@@ -159,12 +169,12 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
     r_measptr = new reader_data[nr_of_samples];
 
     // powolanie kanalu komunikacyjnego do odbioru pulsow sterujacych
-    if ((my_attach = name_attach(NULL, master->config.return_attach_point_name(configurator::CONFIG_SERVER, "reader_attach_point"),
+    if ((my_attach = name_attach(NULL, config.return_attach_point_name(configurator::CONFIG_SERVER, "reader_attach_point"),
                                  NAME_FLAG_ATTACH_GLOBAL)) == NULL)
     {// by Y komuniakicja pomiedzy ui i reader'em rozwiazalem poprzez pulsy
         e = errno;
         perror("Failed to attach pulse chanel for READER\n");
-        master->msg->message ("Failed to attach pulse chanel for READER");
+        msg->message ("Failed to attach pulse chanel for READER");
         //  throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
     }
 
@@ -222,7 +232,7 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
         }
 
-        master->msg->message("measures started");
+        msg->message("measures started");
         set_thread_priority(pthread_self() , MAX_PRIORITY+1);
 
         rb_obj.reader_wait_for_new_step();
@@ -311,7 +321,7 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
 
         set_thread_priority(pthread_self() , 1);// Najnizszy priorytet podczas proby zapisu do pliku
-        master->msg->message("measures stopped");
+        msg->message("measures stopped");
 
         // przygotowanie nazwy pliku do ktorego beda zapisane pomiary
         time_of_day = time( NULL );
@@ -327,7 +337,7 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
         {
             std::cerr << "Cannot open file: " << file_name << '\n';
             perror("because of");
-            master->msg->message("cannot open destination file");
+            msg->message("cannot open destination file");
         } else
         { // jesli plik istnieje
 
@@ -435,7 +445,7 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
             // zamkniecie pliku
             outfile.close();
-            master->msg->message("file writing is finished");
+            msg->message("file writing is finished");
         }
 
         set_thread_priority(pthread_self() , MAX_PRIORITY-10);
