@@ -31,8 +31,6 @@
 #include "vsp/rcs/Kociemba/KociembaException.h"
 
 
-// Deskryptor pliku.
-int int_id;
 
 // Zmienne konfiguracyjne.
 extern configurator* config;

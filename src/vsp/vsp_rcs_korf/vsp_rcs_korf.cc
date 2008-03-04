@@ -27,8 +27,7 @@
 #include "vsp/rcs/Korf/KorfException.h"
 
 
-// Deskryptor pliku.
-int int_id;
+
 
 // Zmienne konfiguracyjne.
 extern configurator* config;

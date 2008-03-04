@@ -24,8 +24,6 @@
 #include "vsp/vsp_force_sensor.h"
 
 
-// Deskryptor pliku.
-int int_id;
 
 // Zmienne konfiguracyjne.
 // edp_schunk_config* edp_schunk_c;

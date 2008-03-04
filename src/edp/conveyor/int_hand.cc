@@ -30,7 +30,7 @@
 #include "edp/conveyor/hi_local.h"
 
 // Zmienne globalne do komunikacji z procedura obslugi przerwan
-extern int int_id;      // Identyfikator zwiazany z procedura obslugi przerwania
+
 extern struct sigevent event; // by y&w
 extern volatile motor_data md; // Aktualne dane we/wy (obsluga przerwania)
 

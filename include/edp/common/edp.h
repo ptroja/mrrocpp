@@ -133,7 +133,7 @@ public:
     configurator &config;
     sr_edp *msg;
 
-    void edp_effector::check_config(const char* string, uint8_t* input);
+    void check_config(const char* string, uint8_t* input);
     bool initialize_communication (void);
 
     virtual void initialize (void);
