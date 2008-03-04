@@ -14,7 +14,7 @@
 #define __EDP_IRP6_POSTUMENT_H
 
 // Klasa edp_irp6s_robot.
-#include "edp/common/edp.h"
+#include "edp/common/edp_irp6s_postument_track.h"
 
 #define IRP6P_GRIPPER_CATCH_AXE 6
 #define IRP6P_GRIPPER_TURN_AXE 5

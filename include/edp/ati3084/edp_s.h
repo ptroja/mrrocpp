@@ -10,7 +10,7 @@
 #if !defined(_EDP_S_ATI3084_H)
 #define _EDP_S_ATI3084_H
 
-#include "edp/common/edp_force_sensor.h"
+#include "edp/common/edp_irp6s_postument_track.h"
 
 // Z PLIKU cz_defs.h
 
@@ -155,7 +155,7 @@ private:
 
 public:
 	
-	edp_ATI3084_force_sensor();
+	edp_ATI3084_force_sensor(edp_irp6s_postument_track_effector &_master);
 	virtual ~edp_ATI3084_force_sensor();
 
 	void configure_sensor (void);	// konfiguracja czujnika
