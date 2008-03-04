@@ -43,7 +43,6 @@ extern void * force_thread(void* arg);
 extern void * edp_vsp_thread(void* arg);
 
 
-extern bool force_sensor_do_configure; // FLAGA ZLECENIA KONFIGURACJI CZUJNIKA
 
 void edp_irp6s_postument_track_effector::initialize (void)
 {}

@@ -42,7 +42,6 @@ extern edp_irp6s_postument_track_effector* master;
 
 
 			
-extern bool force_sensor_do_configure; // FLAGA ZLECENIA KONFIGURACJI CZUJNIKA					
 edp_force_sensor *vs;
 
 static bool TERMINATE=false;			//!< zakonczenie obydwu watkow
@@ -103,7 +102,7 @@ void *edp_vsp_thread(void *arg)
 		}
 		
 		if (vsp_edp_command.konfigurowac)
-			force_sensor_do_configure = true;//!< jesli otrzymano od VSP polecenie konfiguracji czujnika
+			master->force_sensor_do_configure = true;//!< jesli otrzymano od VSP polecenie konfiguracji czujnika
 		//!< oczekiwanie nowego pomiaru			
 		sem_wait(&new_ms);
 		//!< przygotowanie struktury do wyslania
@@ -173,9 +172,9 @@ void *force_thread(void *arg)
 	{
 		try{
 		
-		if (force_sensor_do_configure){ //!< jesli otrzymano polecenie konfiguracji czujnika		
+		if (master->force_sensor_do_configure){ //!< jesli otrzymano polecenie konfiguracji czujnika		
 			vs->configure_sensor();			
-			force_sensor_do_configure = false;	//!< ustawienie flagi ze czujnik jest ponownie skonfigurowany
+			master->force_sensor_do_configure = false;	//!< ustawienie flagi ze czujnik jest ponownie skonfigurowany
 			sem_trywait(&new_ms);
 			sem_post(&new_ms);	 //!< jest gotowy nowy pomiar	
 		} 
@@ -186,7 +185,7 @@ void *force_thread(void *arg)
 		
 				vs->initiate_reading();
 		//!< 		cout << "Initiate reading" << endl;
-				if (force_sensor_do_configure == false) {
+				if (master->force_sensor_do_configure == false) {
 					sem_trywait(&new_ms);
 					sem_post(&new_ms);	 //!< jest gotowy nowy pomiar				
 				}

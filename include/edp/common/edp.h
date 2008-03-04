@@ -325,7 +325,7 @@ public:
     void master_joints_read (double*);
     int servo_to_tt_chid;
     virtual void initialize (void);
-    
+
     in_out_buffer* in_out_obj; // bufor wejsc wyjsc
     reader_buffer *rb_obj;
     master_trans_t_buffer *mt_tt_obj;
@@ -593,6 +593,7 @@ protected:
     pthread_mutex_t force_mutex;	// mutex do sily   XXXXXX
 
 public:
+    bool force_sensor_do_configure; // FLAGA ZLECENIA KONFIGURACJI CZUJNIKA
     virtual void initialize (void);
     edp_irp6s_postument_track_effector (configurator &_config, ROBOT_ENUM l_robot_name );       // konstruktor
 

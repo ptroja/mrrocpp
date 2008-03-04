@@ -40,8 +40,6 @@
 
 #include "edp/common/kinematic_model.h"
 
-bool force_sensor_do_configure; // FLAGA ZLECENIA KONFIGURACJI CZUJNIKA
-
 
 
 /*--------------------------------------------------------------------------*/
