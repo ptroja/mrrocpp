@@ -155,7 +155,7 @@ private:
 
 public:
 	
-	edp_ATI3084_force_sensor(edp_irp6s_postument_track_effector &_master);
+	edp_ATI3084_force_sensor();
 	virtual ~edp_ATI3084_force_sensor();
 
 	void configure_sensor (void);	// konfiguracja czujnika
