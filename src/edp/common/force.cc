@@ -41,7 +41,7 @@ void *edp_vsp_thread(void* arg);
 extern edp_irp6s_postument_track_effector* master;  
 
 
-extern reader_buffer rb_obj;					
+			
 extern bool force_sensor_do_configure; // FLAGA ZLECENIA KONFIGURACJI CZUJNIKA					
 edp_force_sensor *vs;
 
@@ -113,13 +113,13 @@ void *edp_vsp_thread(void *arg)
 		
 		counter++;	
 									
-		rb_obj.lock_mutex();
-		edp_vsp_reply.servo_step=rb_obj.step_data.step;
+		master->rb_obj->lock_mutex();
+		edp_vsp_reply.servo_step=master->rb_obj->step_data.step;
 		for (int i=0;i<=5;i++)
 		{
-			edp_vsp_reply.current_present_XYZ_ZYZ_arm_coordinates[i]=rb_obj.step_data.current_kartez_position[i];  
+			edp_vsp_reply.current_present_XYZ_ZYZ_arm_coordinates[i]=master->rb_obj->step_data.current_kartez_position[i];  
 		}		
-		rb_obj.unlock_mutex();
+		master->rb_obj->unlock_mutex();
 		
 		//!< wyslanie danych
 		if ( MsgReply(vsp_caller, EOK, &edp_vsp_reply, sizeof(edp_vsp_reply)) ==-1) //!< by Y&W

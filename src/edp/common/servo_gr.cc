@@ -22,7 +22,6 @@
 
 extern edp_irp6s_and_conv_effector* master;   // by Y
 
-extern reader_buffer rb_obj;
 
 
 
@@ -139,24 +138,24 @@ BYTE servo_buffer::Move_1_step (void)
 
     struct timespec step_time;
 
-    rb_obj.set_new_step();// odwieszenie watku edp_reader - teraz moze odczytac dane pomiarowe
+    master->rb_obj->set_new_step();// odwieszenie watku edp_reader - teraz moze odczytac dane pomiarowe
 
     reply_status_tmp.error1 = compute_all_set_values();  // obliczenie nowej wartosci zadanej dla regulatorow
     reply_status_tmp.error0 = hi->read_write_hardware();  // realizacja kroku przez wszystkie napedy oraz
     // odczyt poprzedniego polozenia
     master->step_counter++;
 
-    rb_obj.lock_mutex();
+    master->rb_obj->lock_mutex();
 
     if( clock_gettime( CLOCK_REALTIME , &step_time) == -1 )
     {
         printf("blad pomiaru czasu");
     }
 
-    rb_obj.step_data.step =  master->step_counter;
-    rb_obj.step_data.msec=(int)(step_time.tv_nsec/1000000);
+    master->rb_obj->step_data.step =  master->step_counter;
+    master->rb_obj->step_data.msec=(int)(step_time.tv_nsec/1000000);
 
-    rb_obj.unlock_mutex();
+    master->rb_obj->unlock_mutex();
 
 
     if ( reply_status_tmp.error0 || reply_status_tmp.error1 )

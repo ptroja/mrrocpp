@@ -30,7 +30,6 @@
 #include "lib/mis_fun.h"
 #include "edp/common/edp.h"
 
-reader_buffer rb_obj;
 
  //extern edp_effector *master;  // by Y
 
@@ -95,9 +94,9 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
     else
         nr_of_samples=1000;
 
-    rb_obj.reader_cnf.step=1;
-    check_config("servo_tryb", &(rb_obj.reader_cnf.servo_tryb), this);
-    check_config("msec", &(rb_obj.reader_cnf.msec), this);
+    rb_obj->reader_cnf.step=1;
+    check_config("servo_tryb", &(rb_obj->reader_cnf.servo_tryb), this);
+    check_config("msec", &(rb_obj->reader_cnf.msec), this);
 
     char tmp_string[50];
     char tmp2_string[3];
@@ -108,57 +107,57 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
         strcpy(tmp_string,"desired_inc_");
         strcat(tmp_string, tmp2_string);
-        check_config(tmp_string, &(rb_obj.reader_cnf.desired_inc[j]), this);
+        check_config(tmp_string, &(rb_obj->reader_cnf.desired_inc[j]), this);
 
         strcpy(tmp_string,"current_inc_");
         strcat(tmp_string, tmp2_string);
-        check_config(tmp_string, &(rb_obj.reader_cnf.current_inc[j]), this);
+        check_config(tmp_string, &(rb_obj->reader_cnf.current_inc[j]), this);
 
         strcpy(tmp_string,"pwm_");
         strcat(tmp_string, tmp2_string);
-        check_config(tmp_string, &(rb_obj.reader_cnf.pwm[j]), this);
+        check_config(tmp_string, &(rb_obj->reader_cnf.pwm[j]), this);
 
         strcpy(tmp_string,"uchyb_");
         strcat(tmp_string, tmp2_string);
-        check_config(tmp_string, &(rb_obj.reader_cnf.uchyb[j]), this);
+        check_config(tmp_string, &(rb_obj->reader_cnf.uchyb[j]), this);
 
         strcpy(tmp_string,"abs_pos_");
         strcat(tmp_string, tmp2_string);
-        check_config(tmp_string, &(rb_obj.reader_cnf.abs_pos[j]), this);
+        check_config(tmp_string, &(rb_obj->reader_cnf.abs_pos[j]), this);
 
         strcpy(tmp_string,"current_joints_");
         strcat(tmp_string, tmp2_string);
-        check_config(tmp_string, &(rb_obj.reader_cnf.current_joints[j]), this);
+        check_config(tmp_string, &(rb_obj->reader_cnf.current_joints[j]), this);
 
         if (j<6)
         {
             strcpy(tmp_string,"force_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj.reader_cnf.force[j]), this);
+            check_config(tmp_string, &(rb_obj->reader_cnf.force[j]), this);
 
             strcpy(tmp_string,"desired_force_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj.reader_cnf.desired_force[j]), this);
+            check_config(tmp_string, &(rb_obj->reader_cnf.desired_force[j]), this);
 
             strcpy(tmp_string,"filtered_force_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj.reader_cnf.filtered_force[j]), this);
+            check_config(tmp_string, &(rb_obj->reader_cnf.filtered_force[j]), this);
 
             strcpy(tmp_string,"current_kartez_position_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj.reader_cnf.current_kartez_position[j]), this);
+            check_config(tmp_string, &(rb_obj->reader_cnf.current_kartez_position[j]), this);
 
             strcpy(tmp_string,"real_kartez_position_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj.reader_cnf.real_kartez_position[j]), this);
+            check_config(tmp_string, &(rb_obj->reader_cnf.real_kartez_position[j]), this);
 
             strcpy(tmp_string,"real_kartez_vel_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj.reader_cnf.real_kartez_vel[j]), this);
+            check_config(tmp_string, &(rb_obj->reader_cnf.real_kartez_vel[j]), this);
 
             strcpy(tmp_string,"real_kartez_acc_");
             strcat(tmp_string, tmp2_string);
-            check_config(tmp_string, &(rb_obj.reader_cnf.real_kartez_acc[j]), this);
+            check_config(tmp_string, &(rb_obj->reader_cnf.real_kartez_acc[j]), this);
         }
     }
 
@@ -235,29 +234,29 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
         msg->message("measures started");
         set_thread_priority(pthread_self() , MAX_PRIORITY+1);
 
-        rb_obj.reader_wait_for_new_step();
+        rb_obj->reader_wait_for_new_step();
         // dopoki nie przyjdzie puls stopu
         do
         {
             // czekamy na opuszcenie semafora przez watek EDP_SERVO (co mikrokrok)
-            rb_obj.reader_wait_for_new_step();
+            rb_obj->reader_wait_for_new_step();
 
             // sekcja krytyczna odczytu danych pomiarowych dla biezacego kroku
-            rb_obj.lock_mutex();
+            rb_obj->lock_mutex();
 
             if (ui_trigger)
             {
-                rb_obj.step_data.ui_trigger = 1;
+                rb_obj->step_data.ui_trigger = 1;
             }
             else
             {
-                rb_obj.step_data.ui_trigger = 0;
+                rb_obj->step_data.ui_trigger = 0;
             }
 
             // przepisanie danych dla biezacego kroku do bufora lokalnego reader
-            memcpy( &(r_measptr[msr_nr]), &rb_obj.step_data, sizeof(reader_data) );
+            memcpy( &(r_measptr[msr_nr]), &rb_obj->step_data, sizeof(reader_data) );
 
-            rb_obj.unlock_mutex();
+            rb_obj->unlock_mutex();
 
             // wykrycie przepelnienia
             if ((++msr_nr)>=nr_of_samples)
@@ -364,22 +363,22 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
                 // zapis pomiarow z biezacego kroku do pliku
 
                 outfile << r_measptr[k].step << " ";
-                if (rb_obj.reader_cnf.msec)
+                if (rb_obj->reader_cnf.msec)
                     outfile << r_measptr[k].msec << " ";
-                if (rb_obj.reader_cnf.servo_tryb)
+                if (rb_obj->reader_cnf.servo_tryb)
                     outfile << r_measptr[k].servo_tryb << " ";
 
                 for (int j=0; j<MAX_SERVOS_NR; j++)
                 {
-                    if (rb_obj.reader_cnf.desired_inc[j])
+                    if (rb_obj->reader_cnf.desired_inc[j])
                         outfile << r_measptr[k].desired_inc[j] << " ";
-                    if (rb_obj.reader_cnf.current_inc[j])
+                    if (rb_obj->reader_cnf.current_inc[j])
                         outfile << r_measptr[k].current_inc[j] << " ";
-                    if (rb_obj.reader_cnf.pwm[j])
+                    if (rb_obj->reader_cnf.pwm[j])
                         outfile << r_measptr[k].pwm[j] << " ";
-                    if (rb_obj.reader_cnf.uchyb[j])
+                    if (rb_obj->reader_cnf.uchyb[j])
                         outfile << r_measptr[k].uchyb[j] << " ";
-                    if (rb_obj.reader_cnf.abs_pos[j])
+                    if (rb_obj->reader_cnf.abs_pos[j])
                         outfile << r_measptr[k].abs_pos[j] << " ";
                 }
 
@@ -387,7 +386,7 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
                 for (int j=0; j<MAX_SERVOS_NR; j++)
                 {
-                    if (rb_obj.reader_cnf.current_joints[j])
+                    if (rb_obj->reader_cnf.current_joints[j])
                         outfile << r_measptr[k].current_joints[j] << " ";
                 }
 
@@ -395,11 +394,11 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
                 for (int j=0; j<6; j++)
                 {
-                    if (rb_obj.reader_cnf.force[j])
+                    if (rb_obj->reader_cnf.force[j])
                         outfile << r_measptr[k].force[j] << " ";
-                    if (rb_obj.reader_cnf.desired_force[j])
+                    if (rb_obj->reader_cnf.desired_force[j])
                         outfile << r_measptr[k].desired_force[j] << " ";
-                    if (rb_obj.reader_cnf.filtered_force[j])
+                    if (rb_obj->reader_cnf.filtered_force[j])
                         outfile << r_measptr[k].filtered_force[j] << " ";
                 }
 
@@ -408,7 +407,7 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
                 for (int j=0; j<6; j++)
                 {
-                    if (rb_obj.reader_cnf.current_kartez_position[j])
+                    if (rb_obj->reader_cnf.current_kartez_position[j])
                         outfile << r_measptr[k].current_kartez_position[j] << " ";
                 }
 
@@ -416,7 +415,7 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
                 for (int j=0; j<6; j++)
                 {
-                    if (rb_obj.reader_cnf.real_kartez_position[j])
+                    if (rb_obj->reader_cnf.real_kartez_position[j])
                         outfile << r_measptr[k].real_kartez_position[j] << " ";
                 }
 
@@ -424,7 +423,7 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
                 for (int j=0; j<6; j++)
                 {
-                    if (rb_obj.reader_cnf.real_kartez_vel[j])
+                    if (rb_obj->reader_cnf.real_kartez_vel[j])
                         outfile << r_measptr[k].real_kartez_vel[j] << " ";
                 }
 
@@ -432,7 +431,7 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
                 for (int j=0; j<6; j++)
                 {
-                    if (rb_obj.reader_cnf.real_kartez_acc[j])
+                    if (rb_obj->reader_cnf.real_kartez_acc[j])
                         outfile << r_measptr[k].real_kartez_acc[j] << " ";
                 }
 

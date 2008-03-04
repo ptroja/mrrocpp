@@ -23,7 +23,7 @@
 #include "edp/conveyor/kinematic_model_conveyor.h"
 
 extern master_trans_t_buffer mt_tt_obj;
-extern reader_buffer rb_obj;
+
 
 
 // Konstruktor.
@@ -254,9 +254,9 @@ void edp_conveyor_effector::get_arm_position (bool read_hardware, c_buffer *inst
     }
     ; // end: switch (instruction.get_arm_type)
 
-    rb_obj.lock_mutex();// by Y
-    reply.servo_step=rb_obj.step_data.step;
-    rb_obj.unlock_mutex();
+    rb_obj->lock_mutex();// by Y
+    reply.servo_step=rb_obj->step_data.step;
+    rb_obj->unlock_mutex();
 
 }
 ; //: get_arm_position

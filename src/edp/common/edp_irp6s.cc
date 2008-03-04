@@ -9,8 +9,25 @@
 // Data:		14.02.2007
 // -------------------------------------------------------------------------
 
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
 #include <math.h>
+#include <iostream>
+#include <signal.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <sys/neutrino.h>
+#include <sys/sched.h>
+#include <sys/iofunc.h>
+#include <sys/dispatch.h>
+#include <errno.h>
+#include <pthread.h>
 #include <semaphore.h>
+#include <process.h>
+#include <sys/netmgr.h>
 
 #include "common/typedefs.h"
 #include "common/impconst.h"
@@ -19,7 +36,7 @@
 #include "edp/common/edp.h"
 #include "lib/mathtr.h"
 
-extern reader_buffer rb_obj;
+
 
 /*--------------------------------------------------------------------------*/
 edp_irp6s_effector::edp_irp6s_effector (configurator &_config, ROBOT_ENUM l_robot_name) : 
@@ -48,7 +65,7 @@ void edp_irp6s_effector::compute_xyz_euler_zyz (c_buffer *instruction) {
 		value_in_step_no = (*instruction).value_in_step_no;
 		p = (double*) (*instruction).arm.coordinate_def.arm_coordinates;
 	}
-	for (int i=0;i<6;i++) rb_obj.step_data.current_kartez_position[i] = (*instruction).arm.coordinate_def.arm_coordinates[i];
+	for (int i=0;i<6;i++) rb_obj->step_data.current_kartez_position[i] = (*instruction).arm.coordinate_def.arm_coordinates[i];
 	
 	// dla robotow track i postument - oblicz chwytak
 	if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))

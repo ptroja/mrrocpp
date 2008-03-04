@@ -14,7 +14,7 @@
 #include "edp/common/edp.h"
 #include "lib/mis_fun.h"
 
-extern reader_buffer rb_obj;
+extern edp_irp6s_and_conv_effector* master;
 
 /*********************************************************************************/
 /*                                                                       													      */
@@ -42,9 +42,9 @@ void *servo_thread(void* arg)
 		if (!(sb->get_command())) 
 		{
 			
-			rb_obj.lock_mutex();
-			rb_obj.step_data.servo_tryb = 0;  // bierny
-			rb_obj.unlock_mutex();
+			master->rb_obj->lock_mutex();
+			master->rb_obj->step_data.servo_tryb = 0;  // bierny
+			master->rb_obj->unlock_mutex();
 			
 			/* Nie otrzymano nowego polecenia */
 			/* Krok bierny - zerowy przyrost polozenia */
@@ -52,9 +52,9 @@ void *servo_thread(void* arg)
 			sb->Move_passive();
 		} else { // nowe polecenie
 			
-			rb_obj.lock_mutex();
-			rb_obj.step_data.servo_tryb = 1;  // czynny
-			rb_obj.unlock_mutex();
+			master->rb_obj->lock_mutex();
+			master->rb_obj->step_data.servo_tryb = 1;  // czynny
+			master->rb_obj->unlock_mutex();
 			
 			switch (sb->command_type()) {
 				case SYNCHRONISE:

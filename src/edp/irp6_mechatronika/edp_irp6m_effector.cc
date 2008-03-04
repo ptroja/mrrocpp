@@ -26,8 +26,6 @@
 #include "edp/irp6_mechatronika/kinematic_model_irp6m_5dof.h"
 
 extern master_trans_t_buffer mt_tt_obj;
-extern reader_buffer rb_obj;
-
 
 
 
@@ -36,7 +34,6 @@ edp_irp6m_effector::edp_irp6m_effector (configurator &_config) :
         edp_irp6s_effector (_config, ROBOT_IRP6_MECHATRONIKA)
 {
 
-  
 
 }
 ; //: edp_irp6m_effector
@@ -45,7 +42,7 @@ edp_irp6m_effector::edp_irp6m_effector (configurator &_config) :
 
 void edp_irp6m_effector::initialize (void)
 {
-  //  Stworzenie listy dostepnych kinematyk.
+    //  Stworzenie listy dostepnych kinematyk.
     create_kinematic_models_for_given_robot();
 
     number_of_servos = IRP6_MECHATRONIKA_NUM_OF_SERVOS;
@@ -94,9 +91,9 @@ void edp_irp6m_effector::arm_frame_2_xyz_eul_zyz ()
     case ARM_RMODEL:
     case ARM_RMODEL_INPUTS:
         A.get_mech_xyz_euler_zyz(reply.arm.coordinate_def.arm_coordinates);
-        A.get_mech_xyz_euler_zyz(rb_obj.step_data.current_kartez_position);
+        A.get_mech_xyz_euler_zyz(rb_obj->step_data.current_kartez_position);
         //A.get_xyz_euler_zyz(reply.arm.coordinate_def.arm_coordinates);
-        //A.get_xyz_euler_zyz(rb_obj.step_data.current_kartez_position);
+        //A.get_xyz_euler_zyz(rb_obj->step_data.current_kartez_position);
         break;
     default: // blad:
         throw NonFatal_error_2(STRANGE_GET_ARM_REQUEST);
@@ -136,14 +133,14 @@ void edp_irp6m_effector::move_arm (c_buffer *instruction)
     case XYZ_EULER_ZYZ:
 
         // zapisanie wartosci zadanej dla readera
-        rb_obj.lock_mutex();
+        rb_obj->lock_mutex();
 
         for (int i=0; i<6;i++)
         {
-            rb_obj.step_data.current_kartez_position[i]=(*instruction).arm.coordinate_def.arm_coordinates[i];
+            rb_obj->step_data.current_kartez_position[i]=(*instruction).arm.coordinate_def.arm_coordinates[i];
         }
 
-        rb_obj.unlock_mutex();
+        rb_obj->unlock_mutex();
 
         compute_xyz_euler_zyz(instruction);
         move_servos ();
@@ -192,14 +189,14 @@ void edp_irp6m_effector::servo_joints_and_frame_actualization_and_upload (void)
     {
         get_current_kinematic_model()->mp2i_transform(servo_current_motor_pos, servo_current_joints);
 
-        rb_obj.lock_mutex();
+        rb_obj->lock_mutex();
 
         for (int j = 0; j < number_of_servos; j++)
         {
-            rb_obj.step_data.current_joints[j] = servo_current_joints[j];
+            rb_obj->step_data.current_joints[j] = servo_current_joints[j];
         }
 
-        rb_obj.unlock_mutex();
+        rb_obj->unlock_mutex();
 
 
 
@@ -215,15 +212,15 @@ void edp_irp6m_effector::servo_joints_and_frame_actualization_and_upload (void)
 
 
         // zapisanie wartosci rzeczywistej dla readera
-        rb_obj.lock_mutex();
+        rb_obj->lock_mutex();
 
         for (int i=0; i<6; i++)
         {
-            rb_obj.step_data.real_kartez_position[i] = servo_real_kartez_pos[i];
+            rb_obj->step_data.real_kartez_position[i] = servo_real_kartez_pos[i];
 
         }
 
-        rb_obj.unlock_mutex();
+        rb_obj->unlock_mutex();
 
         // Jesli obliczenia zwiazane z baza maja byc wykonane.
         if (get_current_kinematic_model()->global_frame_computations)
@@ -337,9 +334,9 @@ void edp_irp6m_effector::get_arm_position (bool read_hardware, c_buffer *instruc
     }
     ; // end: switch (instruction.get_arm_type)
 
-    rb_obj.lock_mutex();// by Y
-    reply.servo_step=rb_obj.step_data.step;
-    rb_obj.unlock_mutex();
+    rb_obj->lock_mutex();// by Y
+    reply.servo_step=rb_obj->step_data.step;
+    rb_obj->unlock_mutex();
 
 }
 ; // end: edp_irp6m_effector::get_arm_position

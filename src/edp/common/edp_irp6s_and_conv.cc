@@ -101,6 +101,8 @@ edp_irp6s_and_conv_effector::edp_irp6s_and_conv_effector (configurator &_config,
 
     ThreadCtl (_NTO_TCTL_IO, NULL);
 
+    rb_obj = new reader_buffer();
+
 };
 
 
