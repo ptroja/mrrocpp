@@ -43,16 +43,8 @@
 bool force_sensor_do_configure; // FLAGA ZLECENIA KONFIGURACJI CZUJNIKA
 
 
-
-
-
-
 in_out_buffer in_out_obj; // bufor wejsc wyjsc
 
-extern void * servo_thread(void* arg);
-//extern void * reader_thread(void* arg);
-extern void * trans_t_thread(void* arg);
-extern void * visualisation_thread(void* arg);
 
 /*--------------------------------------------------------------------------*/
 edp_irp6s_and_conv_effector::edp_irp6s_and_conv_effector (configurator &_config, ROBOT_ENUM l_robot_name) :
@@ -114,6 +106,17 @@ void edp_irp6s_and_conv_effector::initialize (void)
 ;
 
 
+void edp_irp6s_and_conv_effector::master_joints_read (double* output)
+{ // by Y
+    pthread_mutex_lock( &edp_irp6s_effector_mutex );
+    // przepisanie danych na zestaw lokalny dla edp_master
+    for (int i=0; i < number_of_servos; i++)
+    {
+        output[i]=global_current_joints[i];
+    }
+    pthread_mutex_unlock( &edp_irp6s_effector_mutex );
+};
+
 /*--------------------------------------------------------------------------*/
 void edp_irp6s_and_conv_effector::create_threads ()
 {
@@ -147,7 +150,7 @@ void edp_irp6s_and_conv_effector::create_threads ()
     }
 
     // PT - utworzenie watku wizualizacji
-    if (pthread_create (&vis_t_tid, NULL, visualisation_thread, NULL)!=EOK)
+    if (pthread_create (&vis_t_tid, NULL, &visualisation_thread_start, (void *) this)!=EOK)
     {
         msg->message(SYSTEM_ERROR, errno, "EDP: Failed to create VISUALISATION THREAD");
         throw System_error();

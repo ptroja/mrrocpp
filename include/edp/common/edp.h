@@ -200,6 +200,8 @@ protected:
     void *trans_thread(void* arg);
     static void *servo_thread_start(void* arg);
     void *servo_thread(void* arg);
+    static void *visualisation_thread_start(void* arg);
+    void *visualisation_thread(void* arg);
 
     int serwo_fd;
 
@@ -318,6 +320,8 @@ protected:
     short servo_gripper_reg_state;
 
 public:
+
+    void master_joints_read (double*);
     int servo_to_tt_chid;
     virtual void initialize (void);
     reader_buffer *rb_obj;
@@ -527,7 +531,7 @@ public:
     virtual void get_arm_position (bool read_hardware, c_buffer *instruction); // odczytanie pozycji ramienia
 
     virtual void servo_joints_and_frame_actualization_and_upload(void);// by Y
-    void master_joints_read (double*);
+
 
     // wyznaczenie polozenia lokalnego i globalnego transformera
     // przepisanie lokalnego zestawu lokalnego edp_servo na globalny (chronione mutexem)
