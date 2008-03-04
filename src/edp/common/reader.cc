@@ -31,8 +31,6 @@
 #include "edp/common/edp.h"
 
 
- //extern edp_effector *master;  // by Y
-
 
 void * edp_irp6s_and_conv_effector::reader_thread_start(void* arg)
 {

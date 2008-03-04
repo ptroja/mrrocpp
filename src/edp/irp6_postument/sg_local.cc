@@ -17,7 +17,6 @@
 // Klasa irp6p_servo_buffer.
 #include "edp/irp6_postument/sg_local.h"
 
-extern edp_irp6p_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
 
 // extern uint64_t kk;				  // numer pomiaru od momentu startu pomiarow
 

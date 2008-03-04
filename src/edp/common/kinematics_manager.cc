@@ -18,7 +18,7 @@
 #include "edp/common/kinematics_manager.h"
 #include "edp/common/kinematic_model.h"
 
- extern edp_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
+// extern edp_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
 
 // Konstruktor - tworzy liste kinematyk.
 kinematics_manager::kinematics_manager(void)
@@ -45,7 +45,7 @@ void kinematics_manager::set_kinematic_model (int _desired_kinematic_model_nr)
     current_kinematic_model = (kinematic_model*) (kinematic_models_list[_desired_kinematic_model_nr]);
     current_kinematic_model_no = _desired_kinematic_model_nr;
     // Wypisanie nazwy modelu kinematyki.
-    master->msg->message(current_kinematic_model->get_kinematic_model_label());
+  //  master->msg->message(current_kinematic_model->get_kinematic_model_label());
 }
 ;//: set_kinematic_model
 
