@@ -25,7 +25,7 @@
 #include "edp/irp6_postument/kinematic_model_irp6p_jacobian_with_wrist.h"
 #include "edp/irp6_postument/kinematic_model_irp6p_jacobian_transpose_with_wrist.h"
 
-extern master_trans_t_buffer mt_tt_obj;
+
 
 // Konstruktor.
 edp_irp6p_effector::edp_irp6p_effector (configurator &_config) :

@@ -56,13 +56,13 @@ extern void * speak_t_thread(void* arg);
 
 
 
-extern master_trans_t_buffer mt_tt_obj;
+
 
 edp_speaker_effector::edp_speaker_effector (configurator &_config)
         : edp_effector(_config, ROBOT_SPEAKER)
 {
 
-
+    mt_tt_obj = new master_trans_t_buffer();
 }
 ;
 
@@ -252,17 +252,17 @@ void edp_speaker_effector::interpret_instruction (c_buffer *instruction)
         reply.arm.text_def.speaking=speaking;
         if(!speaking)
         {
-            mt_tt_obj.master_to_trans_t_order(MT_MOVE_ARM, 0);
+            mt_tt_obj->master_to_trans_t_order(MT_MOVE_ARM, 0);
         }
         break;
     case GET:
         reply.arm.text_def.speaking=speaking;
-        // mt_tt_obj.master_to_trans_t_order(MT_GET_ARM_POSITION, true);
+        // mt_tt_obj->master_to_trans_t_order(MT_GET_ARM_POSITION, true);
         break;
     case SET_GET:
         reply.arm.text_def.speaking=speaking;
-        mt_tt_obj.master_to_trans_t_order(MT_MOVE_ARM, 0);
-        // mt_tt_obj.master_to_trans_t_order(MT_GET_ARM_POSITION, true);
+        mt_tt_obj->master_to_trans_t_order(MT_MOVE_ARM, 0);
+        // mt_tt_obj->master_to_trans_t_order(MT_GET_ARM_POSITION, true);
         break;
     default: // blad
         // ustawi numer bledu

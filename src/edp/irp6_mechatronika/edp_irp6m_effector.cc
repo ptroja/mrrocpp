@@ -25,7 +25,7 @@
 #include "edp/irp6_mechatronika/kinematic_model_irp6m_with_wrist.h"
 #include "edp/irp6_mechatronika/kinematic_model_irp6m_5dof.h"
 
-extern master_trans_t_buffer mt_tt_obj;
+
 
 
 
@@ -123,12 +123,12 @@ void edp_irp6m_effector::move_arm (c_buffer *instruction)
     case MOTOR:
         compute_motors(instruction);
         move_servos ();
-        mt_tt_obj.trans_t_to_master_order_status_ready();
+        mt_tt_obj->trans_t_to_master_order_status_ready();
         break;
     case JOINT:
         compute_joints(instruction);
         move_servos ();
-        mt_tt_obj.trans_t_to_master_order_status_ready();
+        mt_tt_obj->trans_t_to_master_order_status_ready();
         break;
     case XYZ_EULER_ZYZ:
 
@@ -144,18 +144,18 @@ void edp_irp6m_effector::move_arm (c_buffer *instruction)
 
         compute_xyz_euler_zyz(instruction);
         move_servos ();
-        mt_tt_obj.trans_t_to_master_order_status_ready();
+        mt_tt_obj->trans_t_to_master_order_status_ready();
 
         break;
     case XYZ_ANGLE_AXIS:
         compute_xyz_angle_axis(instruction);
         move_servos ();
-        mt_tt_obj.trans_t_to_master_order_status_ready();
+        mt_tt_obj->trans_t_to_master_order_status_ready();
         break;
     case FRAME:
         compute_frame(instruction);
         move_servos ();
-        mt_tt_obj.trans_t_to_master_order_status_ready();
+        mt_tt_obj->trans_t_to_master_order_status_ready();
         break;
     default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
         throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);

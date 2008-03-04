@@ -22,7 +22,7 @@
 #include "edp/irp6_on_track/kinematic_model_calibrated_irp6ot_with_wrist.h"
 #include "edp/irp6_on_track/kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist.h"
 
-extern master_trans_t_buffer mt_tt_obj;
+
 
 // Konstruktor.
 edp_irp6ot_effector::edp_irp6ot_effector (configurator &_config) :

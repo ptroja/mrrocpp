@@ -45,7 +45,7 @@ bool force_sensor_do_configure; // FLAGA ZLECENIA KONFIGURACJI CZUJNIKA
 
 
 
-extern master_trans_t_buffer mt_tt_obj;
+
 
 in_out_buffer in_out_obj; // bufor wejsc wyjsc
 
@@ -102,6 +102,8 @@ edp_irp6s_and_conv_effector::edp_irp6s_and_conv_effector (configurator &_config,
     ThreadCtl (_NTO_TCTL_IO, NULL);
 
     rb_obj = new reader_buffer();
+
+    mt_tt_obj = new master_trans_t_buffer();
 
 };
 
@@ -258,12 +260,12 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer *instruction)
         if (is_set_rmodel(instruction))
             // zmiana modelu robota
             // set_rmodel();
-            mt_tt_obj.master_to_trans_t_order(MT_SET_RMODEL, 0);
+            mt_tt_obj->master_to_trans_t_order(MT_SET_RMODEL, 0);
         if (is_set_arm(instruction))
         {
             // przemieszczenie koncowki
             // move_arm();
-            mt_tt_obj.master_to_trans_t_order(MT_MOVE_ARM, 0);
+            mt_tt_obj->master_to_trans_t_order(MT_MOVE_ARM, 0);
             (*instruction).get_arm_type = (*instruction).set_arm_type;
             get_arm_position(false, instruction); // Aktualizacja transformera
             (*instruction).get_arm_type = INVALID_END_EFFECTOR;
@@ -279,19 +281,19 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer *instruction)
         case CONTROLLER_STATE:
             // odczytanie TCP i orientacji koncowki
             // get_arm_position(true);
-            mt_tt_obj.master_to_trans_t_order(MT_GET_CONTROLLER_STATE, 0);
+            mt_tt_obj->master_to_trans_t_order(MT_GET_CONTROLLER_STATE, 0);
             break;
         case ARM:
             // odczytanie TCP i orientacji koncowki
             // get_arm_position(true);
-            mt_tt_obj.master_to_trans_t_order(MT_GET_ARM_POSITION, true);
+            mt_tt_obj->master_to_trans_t_order(MT_GET_ARM_POSITION, true);
             break;
         case RMODEL:
             // ewentualna aktualizacja numerow algorytmow i ich zestawow parametrow
             if ((*instruction).get_rmodel_type == SERVO_ALGORITHM)
             {
                 // get_algorithms();
-                mt_tt_obj.master_to_trans_t_order(MT_GET_ALGORITHMS, 0);
+                mt_tt_obj->master_to_trans_t_order(MT_GET_ALGORITHMS, 0);
             };
             // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
@@ -304,7 +306,7 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer *instruction)
         case ARM_RMODEL:
             // odczytanie TCP i orientacji koncowki
             // get_arm_position(true);
-            mt_tt_obj.master_to_trans_t_order(MT_GET_ARM_POSITION, true);
+            mt_tt_obj->master_to_trans_t_order(MT_GET_ARM_POSITION, true);
             // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             get_rmodel(instruction);
@@ -314,13 +316,13 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer *instruction)
             get_inputs(&reply);
             // odczytanie TCP i orientacji koncowki
             // get_arm_position(true);
-            mt_tt_obj.master_to_trans_t_order(MT_GET_ARM_POSITION, true);
+            mt_tt_obj->master_to_trans_t_order(MT_GET_ARM_POSITION, true);
             break;
         case RMODEL_INPUTS:
             // ewentualna aktualizacja numerow algorytmow i ich zestawow parametrow
             if ((*instruction).get_rmodel_type == SERVO_ALGORITHM)
                 // get_algorithms();
-                mt_tt_obj.master_to_trans_t_order(MT_GET_ALGORITHMS, 0);
+                mt_tt_obj->master_to_trans_t_order(MT_GET_ALGORITHMS, 0);
             // odczytanie wej
             get_inputs(&reply);
             // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
@@ -332,7 +334,7 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer *instruction)
             get_inputs(&reply);
             // odczytanie TCP i orientacji koncowki
             // get_arm_position(true);
-            mt_tt_obj.master_to_trans_t_order(MT_GET_ARM_POSITION, true);
+            mt_tt_obj->master_to_trans_t_order(MT_GET_ARM_POSITION, true);
             // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             get_rmodel(instruction);
@@ -353,11 +355,11 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer *instruction)
             // zmiana aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             //        set_rmodel();
-            mt_tt_obj.master_to_trans_t_order(MT_SET_RMODEL, 0);
+            mt_tt_obj->master_to_trans_t_order(MT_SET_RMODEL, 0);
         if (is_set_arm(instruction))
             // przemieszczenie koncowki
             // move_arm();
-            mt_tt_obj.master_to_trans_t_order(MT_MOVE_ARM, 0);
+            mt_tt_obj->master_to_trans_t_order(MT_MOVE_ARM, 0);
         // Cz GET
         // ustalenie formatu odpowiedzi
         switch (rep_type(instruction))
@@ -365,7 +367,7 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer *instruction)
         case CONTROLLER_STATE:
             // odczytanie TCP i orientacji koncowki
             // get_arm_position(true);
-            mt_tt_obj.master_to_trans_t_order(MT_GET_CONTROLLER_STATE, 0);
+            mt_tt_obj->master_to_trans_t_order(MT_GET_CONTROLLER_STATE, 0);
             break;
         case ARM:
             // odczytanie TCP i orientacji koncowki
@@ -373,14 +375,14 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer *instruction)
                 get_arm_position(false, instruction);
             else
                 // get_arm_position(true);
-                mt_tt_obj.master_to_trans_t_order(MT_GET_ARM_POSITION, true);
+                mt_tt_obj->master_to_trans_t_order(MT_GET_ARM_POSITION, true);
             break;
         case RMODEL:
             if(!is_set_arm(instruction))
                 // ewentualna aktualizacja numerow algorytmow i ich zestawow parametrow
                 if ((*instruction).get_rmodel_type == SERVO_ALGORITHM)
                     // get_algorithms();
-                    mt_tt_obj.master_to_trans_t_order(MT_GET_ALGORITHMS, 0);
+                    mt_tt_obj->master_to_trans_t_order(MT_GET_ALGORITHMS, 0);
             // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             get_rmodel(instruction);
@@ -395,7 +397,7 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer *instruction)
                 get_arm_position(false, instruction);
             else
                 // get_arm_position(true);
-                mt_tt_obj.master_to_trans_t_order(MT_GET_ARM_POSITION, true);
+                mt_tt_obj->master_to_trans_t_order(MT_GET_ARM_POSITION, true);
             // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             get_rmodel(instruction);
@@ -408,14 +410,14 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer *instruction)
                 get_arm_position(false, instruction);
             else
                 // get_arm_position(true);
-                mt_tt_obj.master_to_trans_t_order(MT_GET_ARM_POSITION, true);
+                mt_tt_obj->master_to_trans_t_order(MT_GET_ARM_POSITION, true);
             break;
         case RMODEL_INPUTS:
             if(!is_set_arm(instruction))
                 // ewentualna aktualizacja numerow algorytmow i ich zestawow parametrow
                 if ((*instruction).get_rmodel_type == SERVO_ALGORITHM)
                     //   get_algorithms();
-                    mt_tt_obj.master_to_trans_t_order(MT_GET_ALGORITHMS, 0);
+                    mt_tt_obj->master_to_trans_t_order(MT_GET_ALGORITHMS, 0);
             // odczytanie wej
             get_inputs(&reply);
             // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
@@ -429,7 +431,7 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer *instruction)
                 get_arm_position(false, instruction);
             else
                 // get_arm_position(true);
-                mt_tt_obj.master_to_trans_t_order(MT_GET_ARM_POSITION, true);
+                mt_tt_obj->master_to_trans_t_order(MT_GET_ARM_POSITION, true);
             // odczytanie aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             get_rmodel(instruction);
@@ -1003,7 +1005,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
 
                     if ((rep_type(&new_instruction)) == CONTROLLER_STATE)
                     {
-                        // mt_tt_obj.master_to_trans_t_order(MT_GET_CONTROLLER_STATE, 0);
+                        // mt_tt_obj->master_to_trans_t_order(MT_GET_CONTROLLER_STATE, 0);
                         interpret_instruction (&(new_instruction));
                     }
                     else
@@ -1144,7 +1146,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
                     insert_reply_type(ACKNOWLEDGE);
                     reply_to_instruction();
                     /* Zlecenie wykonania synchronizacji */
-                    mt_tt_obj.master_to_trans_t_order(MT_SYNCHRONISE, 0);   // by Y przejscie przez watek transfor w celu ujednolicenia
+                    mt_tt_obj->master_to_trans_t_order(MT_SYNCHRONISE, 0);   // by Y przejscie przez watek transfor w celu ujednolicenia
                     // synchronise();
                     // Jezeli synchronizacja okae sie niemoliwa, to zostanie zgloszony wyjatek:
                     /* Oczekiwanie na poprawne zakoczenie synchronizacji */

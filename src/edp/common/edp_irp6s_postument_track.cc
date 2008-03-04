@@ -36,7 +36,7 @@
 #include "edp/common/edp.h"
 #include "lib/mathtr.h"
 
-extern master_trans_t_buffer mt_tt_obj;
+
 
 
 extern void * force_thread(void* arg);
@@ -237,7 +237,7 @@ void edp_irp6s_postument_track_effector::arm_frame_2_pose_force_torque_at_frame 
 void edp_irp6s_postument_track_effector::pose_force_torque_at_frameove (c_buffer *instruction)
 {
     //	static int debugi=0;
- //   debugi++;
+    //   debugi++;
 
     motion_type = (*instruction).motion_type;
 
@@ -549,7 +549,7 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frameove (c_buffer
             {
                 reply.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i] = current_force_torque[i];
             }
-            mt_tt_obj.trans_t_to_master_order_status_ready();
+            mt_tt_obj->trans_t_to_master_order_status_ready();
         }
 
         last_force_step_counter = step_counter;
@@ -576,12 +576,12 @@ void edp_irp6s_postument_track_effector::move_arm (c_buffer *instruction)
     case MOTOR:
         compute_motors(instruction);
         move_servos ();
-        mt_tt_obj.trans_t_to_master_order_status_ready();
+        mt_tt_obj->trans_t_to_master_order_status_ready();
         break;
     case JOINT:
         compute_joints(instruction);
         move_servos ();
-        mt_tt_obj.trans_t_to_master_order_status_ready();
+        mt_tt_obj->trans_t_to_master_order_status_ready();
         break;
     case XYZ_EULER_ZYZ:
 
@@ -597,18 +597,18 @@ void edp_irp6s_postument_track_effector::move_arm (c_buffer *instruction)
 
         compute_xyz_euler_zyz(instruction);
         move_servos ();
-        mt_tt_obj.trans_t_to_master_order_status_ready();
+        mt_tt_obj->trans_t_to_master_order_status_ready();
 
         break;
     case XYZ_ANGLE_AXIS:
         compute_xyz_angle_axis(instruction);
         move_servos ();
-        mt_tt_obj.trans_t_to_master_order_status_ready();
+        mt_tt_obj->trans_t_to_master_order_status_ready();
         break;
     case FRAME:
         compute_frame(instruction);
         move_servos ();
-        mt_tt_obj.trans_t_to_master_order_status_ready();
+        mt_tt_obj->trans_t_to_master_order_status_ready();
         break;
     case POSE_FORCE_TORQUE_AT_FRAME:
         pose_force_torque_at_frameove (instruction);

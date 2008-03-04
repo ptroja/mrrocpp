@@ -26,6 +26,7 @@
 #include "lib/configurator.h"
 
 class reader_buffer;
+class master_trans_t_buffer;
 
 enum STATE { GET_STATE, GET_SYNCHRO, SYNCHRO_TERMINATED, GET_INSTRUCTION, EXECUTE_INSTRUCTION, WAIT, WAIT_Q };
 // extern int errno;
@@ -316,6 +317,7 @@ public:
     int servo_to_tt_chid;
     virtual void initialize (void);
 	reader_buffer *rb_obj;
+	master_trans_t_buffer *mt_tt_obj;
     edp_irp6s_and_conv_effector (configurator &_config, ROBOT_ENUM l_robot_name);       // konstruktor
 
     virtual void set_rmodel (c_buffer *instruction);                    // zmiana narzedzia

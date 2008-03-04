@@ -31,7 +31,7 @@ class edp_speaker_effector  : public edp_effector {
 
   public:
   
-  
+  master_trans_t_buffer *mt_tt_obj;
   void initialize (void);
 	char text2speak[MAX_TEXT]; // MAC 7
 	char prosody[MAX_PROSODY]; // MAC 7 
