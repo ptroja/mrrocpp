@@ -322,27 +322,33 @@ std::cout << "C_T_G" << std::endl;
 
 
 //SAC
-	C_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G[0],vsp_vis_sac->image.vis_sac.frame_E_r_G[1],
+	CSAC_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G[0],vsp_vis_sac->image.vis_sac.frame_E_r_G[1],
 -vsp_vis_sac->image.vis_sac.frame_E_r_G[2],
 
 vsp_vis_sac->image.vis_sac.frame_E_r_G[5],0,-0.05);
 std::cout <<"Rota C_T_Gxxx " << vsp_vis_sac->image.vis_sac.frame_E_r_G[5] <<" " << O_r_G[0][4] << " "<< O_r_G[0][5] <<std::endl;
 
 //EIH
-	C2_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0],vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1],
+	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0],vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1],
 -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2],
 -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3]
 ,0,0);
 
-	C2_Tx_G.get_xyz_rpy(C_r_G[0]);
+//	CEIH_Tx_G.get_xyz_rpy(C_r_G[0]);
 
-	C_Tx_G.get_xyz_rpy(C_r_G[0]);
 	
 	CEIH_Tx_G__f.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[0],vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[1],
 -vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[2],
 -vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[3]
 ,0,0);
 
+
+std::cout << "FROMVSP EIH_JACK ";
+	for (int i=0; i<6; i++)
+	{
+		std::cout << vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[i] << " ";
+	}
+	std::cout << std::endl;
 
 
 //podjazd gdy sie nie ruszamy
@@ -386,24 +392,29 @@ std::cout <<"Rota C_T_Gxxx " << vsp_vis_sac->image.vis_sac.frame_E_r_G[5] <<" " 
 std::cout <<"x2g " << x2g << std::endl;
 	G_Tx_S.set_xyz_rpy(x2g, 0, 0, 0, 0, 0);
 
-
-
-	O_Tx_C.set_xyz_rpy( 0.950+0.058, //-0.09,
-	0.000-0.06,
- 	0.265+0.900+0.05-0.105,
-	0,0,0);
-
-
-	O_Tx_G=O_Tx_C*C_Tx_G;
-
-
-	//skrot myslowy
-	O_Tx_G=O_Tx_G*G_Tx_S;
-
-	O_Tx_G.get_xyz_angle_axis(O_r_G[0]);
 	O_Tx_E.set_frame_tab(the_robot->EDP_data.current_predicted_arm_frame);
 	O_Tx_E=O_Tx_E*!G_Tx_G2;
 	O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
+
+	//SAC
+	O_Tx_CSAC.set_xyz_rpy( 0.950+0.058, //-0.09,
+	0.000-0.06,
+ 	0.265+0.900+0.05-0.105,
+	0,0,0);
+	O_Tx_G__CSAC=O_Tx_CSAC*CSAC_Tx_G;
+	O_Tx_G__CSAC=O_Tx_G__CSAC*G_Tx_S; 	//skrot myslowy
+	O_Tx_G__CSAC.get_xyz_angle_axis(O_r_G__CSAC[0]);
+
+	//EIH
+	CEIH_Tx_G=CEIH_Tx_G*G_Tx_S;
+	O_Tx_G__CEIH=O_Tx_E*CEIH_Tx_G; //rota O_Tx_E 0,0,0 //E_TX_CEIH=1
+	O_Tx_G__CEIH.get_xyz_angle_axis(O_r_G__CEIH[0]);
+	
+	//EIHJACK
+	CEIH_Tx_G__f=CEIH_Tx_G__f*G_Tx_S;
+	O_Tx_G__fEIH=O_Tx_E*CEIH_Tx_G__f; //rota O_Tx_E 0,0,0
+	O_Tx_G__fEIH.get_xyz_angle_axis(O_r_G__fEIH[0]);	
+	
 
 	std::cout << " O_T_E ";
 	for (int i=0; i<6; i++)
@@ -411,33 +422,6 @@ std::cout <<"x2g " << x2g << std::endl;
 		std::cout << O_r_E[0][i] << " ";
 	}
 	std::cout << std::endl;	
-
-	O_Tx_EE.set_frame_tab(the_robot->EDP_data.current_arm_frame);
-
-	//EIH
-	C2_Tx_G.get_xyz_angle_axis(O_r_G[0]);
-
-
-	C2_Tx_G=C2_Tx_G*G_Tx_S;
-	O_Tx_G__C2=O_Tx_E*C2_Tx_G; //rota O_Tx_E 0,0,0
-	
-	//EIHJACK
-	CEIH_Tx_G__f.get_xyz_angle_axis(O_r_G__fEIH[0]);
-
-
-	CEIH_Tx_G__f=CEIH_Tx_G__f*G_Tx_S;
-	O_Tx_G__fEIH=O_Tx_E*CEIH_Tx_G__f; //rota O_Tx_E 0,0,0
-	O_Tx_G__fEIH.get_xyz_angle_axis(O_r_G__fEIH[0]);	
-
-	//SAC
-	O_Tx_G.get_xyz_angle_axis(O_r_G[0]);
-	
-	for (int i=0; i<6; i++)
-	{
-		O_rcom_G[0][i]=O_r_G[0][i];
-	}	
-	//EIH
-	O_Tx_G__C2.get_xyz_angle_axis(O_r_G[0]);
 
 	std::cout << " SAC ";
 	for (int i=0; i<6; i++)
@@ -449,7 +433,7 @@ std::cout <<"x2g " << x2g << std::endl;
 	std::cout << " EIH ";
 	for (int i=0; i<6; i++)
 	{
-		std::cout << O_r_G[0][i]<< " ";
+		std::cout << O_r_G__CEIH[0][i]<< " ";
 	}
 	std::cout << std::endl;
 	
@@ -461,21 +445,22 @@ std::cout <<"x2g " << x2g << std::endl;
 	std::cout << std::endl;
 	
 
-	//jak cos przyjdzie glupiego
-	if(O_r_G[0][0]>100 || O_r_G[0][0]<-100)
+	//jak cos przyjdzie glupiego z CEIH
+	if(O_r_G__CEIH[0][0]>100 || O_r_G__CEIH[0][0]<-100)
 	{
 		for (int i=0; i<6; i++)
 		{
-			O_r_G[0][i]=O_r_G[1][i]; //EIH ONLY
+			O_r_G__CEIH[0][i]=O_r_G__CEIH[1][i]; //EIH ONLY
 		}
 	}
 	
 	//BOTH
 		for (int i=0; i<6; i++)
 	{
-		//O_r_G[0][i]=0.5*O_r_G[0][i]+0.5*O_rcom_G[0][i]; //SAC+EIH
-		O_r_G[0][i]=O_rcom_G[0][i]; //SAC ONLY
-		//O_r_G[0][i]=O_r_G[0][i]; //EIH ONLY
+		//O_r_G[0][i]=0.5*O_r_G__CEIH[0][i]+0.5*O_r_G__CSAC[0][i]; //SAC+EIH
+		//O_r_G[0][i]=O_r_G__CSAC[0][i]; //SAC ONLY
+		//O_r_G[0][i]=O_r_G__CEIH[0][i]; //EIH ONLY
+		O_r_G[0][i]=O_r_G__fEIH[0][i]; //EIH JACK ONLY
 	}
 	
 	

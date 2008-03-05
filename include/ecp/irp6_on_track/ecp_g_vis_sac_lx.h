@@ -39,15 +39,18 @@ int step_no;
      frame_tab my_goal_frame;
      
 	Homog_matrix C_Tx_G;
+	Homog_matrix CSAC_Tx_G;
 	Homog_matrix C_Tx_E;
 	Homog_matrix O_Tx_E;
 	Homog_matrix O_Tx_Ep;
 	Homog_matrix O_Tx_G;
+	Homog_matrix O_Tx_G__CSAC;
 	Homog_matrix G_Tx_G2;
 	
 	Homog_matrix G_Tx_S;
 	
 	Homog_matrix O_Tx_C;
+	Homog_matrix O_Tx_CSAC;
 	Homog_matrix O_Tx_E__C;
 	Homog_matrix O_Tx_G__C;
 
@@ -58,9 +61,11 @@ int step_no;
 	
 	//EIH
 	Homog_matrix O_Tx_G__C2;
+	Homog_matrix O_Tx_G__CEIH;
 	Homog_matrix E_Tx_C2;
 	Homog_matrix C2_Tx_G;
 	Homog_matrix O_Tx_G__fEIH;
+	Homog_matrix CEIH_Tx_G;
 	Homog_matrix CEIH_Tx_G__f;
 
 	Homog_matrix O_Tx_EE;	
@@ -74,6 +79,8 @@ int step_no;
 	
 	double O_r_G[3][6];
 	double O_rcom_G[3][6];
+	double O_r_G__CSAC[3][6];
+	double O_r_G__CEIH[3][6];
 	double O_r_G__fEIH[3][6];
 	double E_r_G[3][6];
 	double E_r_Ep[3][6];
