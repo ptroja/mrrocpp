@@ -44,13 +44,18 @@ typedef struct mp_receive_pulse_struct {
 } mp_receive_pulse_struct_t;
 
 // ---------------------------------------------------------------
-class MP_main_error {  // Klasa obslugi bledow poziomie MP
-  public:
-    const ERROR_CLASS error_class;
-    const uint64_t mp_error;
-    MP_main_error (ERROR_CLASS err0, uint64_t err1)
-	 : error_class(err0), mp_error(err1) { };
-}; // end: class MP_main_error
+class MP_main_error
+{ // Klasa obslugi bledow poziomie MP
+	public:
+		const ERROR_CLASS error_class;
+		const uint64_t mp_error;
+		MP_main_error(ERROR_CLASS err0, uint64_t err1, const char *file, int line) :
+			error_class(err0), mp_error(err1)
+		{
+			fprintf(stderr, "ECP_MP_main_error @ %s:%d\n", file, line);
+		}
+#define MP_main_error(e0,e1)	MP_main_error((e0),(e1), __FILE__, __LINE__)		
+};
 // ---------------------------------------------------------------
 
 // na podstawie ecp_taught_in_pose

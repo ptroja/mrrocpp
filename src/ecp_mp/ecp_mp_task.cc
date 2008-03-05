@@ -79,7 +79,7 @@ bool ecp_mp_task::operator_reaction (const char* question )
 		uint64_t e = errno;
 		perror("ECP operator_reaction(): Send() to UI failed");
 		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw ECP_MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+		throw ECP_MP_main_error(SYSTEM_ERROR, 0);
 	}
 
 	return (ui_to_ecp_rep.reply == ANSWER_YES);
@@ -104,7 +104,7 @@ BYTE ecp_mp_task::choose_option (const char* question, BYTE nr_of_options_input 
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed\n");
 		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw ECP_MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+		throw ECP_MP_main_error(SYSTEM_ERROR, 0);
 	}
 
 	return ui_to_ecp_rep.reply; // by Y
@@ -128,7 +128,7 @@ int ecp_mp_task::input_integer (const char* question )
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed\n");
 		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw ECP_MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+		throw ECP_MP_main_error(SYSTEM_ERROR, 0);
 	}
 
 	return ui_to_ecp_rep.integer_number;
@@ -152,7 +152,7 @@ double ecp_mp_task::input_double (const char* question )
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed\n");
 		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw ECP_MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+		throw ECP_MP_main_error(SYSTEM_ERROR, 0);
 	}
 	return ui_to_ecp_rep.double_number; // by Y
 }
@@ -175,7 +175,7 @@ bool ecp_mp_task::show_message (const char* message)
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed\n");
 		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw ECP_MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+		throw ECP_MP_main_error(SYSTEM_ERROR, 0);
 	}
 
 	return (ui_to_ecp_rep.reply == ANSWER_YES);

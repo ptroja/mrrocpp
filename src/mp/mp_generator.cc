@@ -27,11 +27,6 @@ void mp_generator::copy_generator_command (std::map <ROBOT_ENUM, mp_robot*>& _ro
 	}
 }
 
-mp_generator::MP_error::MP_error(ERROR_CLASS err0, uint64_t err1) :
-	error_class(err0), mp_error(err1)
-{
-}
-
 mp_generator::mp_generator(mp_task& _mp_task) 
 	: ecp_mp_generator (*_mp_task.sr_ecp_msg),
 	wait_for_ECP_pulse(false),
