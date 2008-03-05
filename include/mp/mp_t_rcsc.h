@@ -17,68 +17,71 @@
 #include "mp/CubeState.h"
 #include "mp/SingleManipulation.h"
 
-class mp_task_rubik_cube_solver : public mp_task  
+class mp_task_rubik_cube_solver : public mp_task
 {
 protected:
-// sekwencja (lista) manipulacji
+    // sekwencja (lista) manipulacji
 
-// stan kostki
-// kolory scian patrzac przez os ramienia tracka (od kolumny), w plaszczynie ziemi
- 	CubeState* cube_state;
- 
-	bool break_state;
-  	bool manipulation_sequence_computed;
+    // stan kostki
+    // kolory scian patrzac przez os ramienia tracka (od kolumny), w plaszczynie ziemi
+    CubeState* cube_state;
+
+    bool break_state;
+    bool manipulation_sequence_computed;
     // odczyt konfiguracji manipulacji
-	char* cube_initial_state;
- 
- 
+    char* cube_initial_state;
+
+    bool configure_edp_force_sensor(bool configure_track, bool configure_postument);
+
+
 public:
 
-	// stl'owa lista manipulacji
-	std::list<SingleManipulation> manipulation_list;
+    // stl'owa lista manipulacji
+    std::list<SingleManipulation> manipulation_list;
 
-	void initiate (CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is, 
-		CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is);
+    void initiate (CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is,
+                   CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is);
 
     // konstruktor
     mp_task_rubik_cube_solver(configurator &_config);
-	
+
     ~mp_task_rubik_cube_solver();
 
-	
-	// MANIPULACJA
-	// manipulacja pojedyncza sciana
-	bool manipulate (CUBE_COLOR face_to_turn, CUBE_TURN_ANGLE turn_angle );
 
-	// wykonanie sekwecji manipulacji poszczegolnymi scianami
-	bool execute_manipulation_sequence();
-	
-	//wykonanie sekwencji manipulacji w celu identyfikacji kolorow
-	bool identify_colors();
-	
-	bool communicate_with_windows_solver();
-	
-	// OPERACJE
-	
-	// obrot sciany
-	bool face_turn_op (CUBE_TURN_ANGLE turn_angle);
-	// zmiana sciany (przelozenie kostki)
-	bool face_change_op (CUBE_TURN_ANGLE turn_angle);
-	// dojscie
-	bool approach_op (int mode);
-	// odejscie
-	bool departure_op ();
+    // MANIPULACJA
+    // manipulacja pojedyncza sciana
+    bool manipulate (CUBE_COLOR face_to_turn, CUBE_TURN_ANGLE turn_angle );
+
+    // wykonanie sekwecji manipulacji poszczegolnymi scianami
+    bool execute_manipulation_sequence();
+
+    //wykonanie sekwencji manipulacji w celu identyfikacji kolorow
+    bool identify_colors();
+
+    bool communicate_with_windows_solver();
+
+    // OPERACJE
+
+    // obrot sciany
+    bool face_turn_op (CUBE_TURN_ANGLE turn_angle);
+    // zmiana sciany (przelozenie kostki)
+    bool face_change_op (CUBE_TURN_ANGLE turn_angle);
+    // dojscie
+    bool approach_op (int mode);
+    // odejscie
+    bool departure_op ();
 
 
-	// METODY POMOCNICZE
-	
-	// rozwieranie chwytakow
-	bool gripper_opening(double track_increment, double postument_increment, int motion_time);
-	
-	// methods for mp template
-	void task_initialization(void);
-	void main_task_algorithm(void);
+    // METODY POMOCNICZE
 
-}; // end : class MP_nose_run_force_generator
+    // rozwieranie chwytakow
+    bool gripper_opening(double track_increment, double postument_increment, int motion_time);
+
+    // methods for mp template
+    void task_initialization(void);
+    void main_task_algorithm(void);
+
+}
+; // end : class MP_nose_run_force_generator
 
 #endif

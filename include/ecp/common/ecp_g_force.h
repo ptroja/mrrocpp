@@ -192,6 +192,25 @@ public:
 
 
 
+
+
+
+// --------------------------------------------------------------------------
+// Generator do lapania kostki
+
+class bias_edp_force_generator : public ecp_generator 
+{
+ 
+public:
+
+    // konstruktor
+    bias_edp_force_generator(ecp_task& _ecp_task);
+		
+	virtual bool first_step ();    
+	virtual bool next_step ();    
+}; 
+
+
 // --------------------------------------------------------------------------
 // Generator do lapania kostki
 

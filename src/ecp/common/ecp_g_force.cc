@@ -19,6 +19,9 @@
 
 
 
+
+
+
 y_nose_run_force_generator::y_nose_run_force_generator(ecp_task& _ecp_task, int step):
         ecp_generator (_ecp_task, true)
 {
@@ -432,6 +435,36 @@ bool y_egg_force_generator::next_step ( )
     return true;
 }
 ; // end: bool y_egg_force_generator::next_step ( )
+
+
+
+
+
+bias_edp_force_generator::bias_edp_force_generator(ecp_task& _ecp_task):
+        ecp_generator (_ecp_task, true)
+{}
+
+
+
+bool bias_edp_force_generator::first_step ( )
+{
+    the_robot->EDP_data.instruction_type = SET;
+    the_robot->EDP_data.set_type = RMODEL_DV;
+    the_robot->EDP_data.set_rmodel_type = FORCE_BIAS;
+    ecp_t.set_ecp_reply (TASK_TERMINATED);
+
+    return true;
+}
+
+// --------------------------------------------------------------------------
+
+
+// --------------------------------------------------------------------------
+bool bias_edp_force_generator::next_step ( )
+{
+    return false;
+}
+
 
 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
@@ -980,7 +1013,7 @@ bool y_advanced_drawing_teach_in_force_generator::next_step ( )
 
         // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
         the_robot->EDP_data.instruction_type = SET;
-  
+
         get_pose (tip);
 
         gen_state=next_gen_state;
@@ -1217,7 +1250,7 @@ bool y_advanced_drawing_teach_in_force_generator::next_step ( )
 
         // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
         the_robot->EDP_data.instruction_type = SET;
-   
+
         if ((sensor_m.begin())->second->image.force.event_type==2)
         {
             gen_state = 1;
