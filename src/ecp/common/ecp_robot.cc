@@ -47,7 +47,7 @@ ecp_robot::ecp_robot(ROBOT_ENUM _robot_name, configurator &_config, sr_ecp *_sr_
 	}
 
 	EDP_MASTER_Pid = _config.process_spawn(edp_section);
-
+//	delay(10000);
 	if (edp_section) connect_to_edp (_config.return_attach_point_name
 	                (configurator::CONFIG_SERVER, 	"resourceman_attach_point",	edp_section));
 

@@ -128,6 +128,7 @@ void * edp_irp6s_postument_track_effector::edp_vsp_thread(void *arg)
     return 0;
 }
 
+
 void * edp_irp6s_postument_track_effector::force_thread_start(void* arg)
 {
     static_cast<edp_irp6s_postument_track_effector*> (arg)->force_thread(arg);
@@ -143,6 +144,8 @@ void * edp_irp6s_postument_track_effector::force_thread(void *arg)
 
 
     vs = return_created_edp_force_sensor(*this);		//!< czujnik wirtualny
+
+	sem_post(&force_master_sem);
 
     try
     {

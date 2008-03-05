@@ -35,6 +35,9 @@
 #include "lib/mis_fun.h"
 #include "edp/common/edp_irp6s_postument_track.h"
 #include "lib/mathtr.h"
+#include "lib/srlib.h"
+
+
 
 
 
@@ -247,11 +250,14 @@ edp_irp6s_postument_track_effector::edp_irp6s_postument_track_effector (configur
     else
         force_tryb = 0;
 
+
     // ustalenie ilosci stopni swobody dla funkcji obslugi przerwania i synchronizacji w zaleznosci od aktywnosci chwytaka
     if (config.exists("is_gripper_active"))
         is_gripper_active = config.return_int_value("is_gripper_active");
     else
         is_gripper_active = 1;
+        
+            sem_init( &force_master_sem, 0, 0);
 
 };
 
@@ -272,6 +278,7 @@ void edp_irp6s_postument_track_effector::create_threads ()
     // jesli wlaczono obsluge sily
     if (force_tryb > 0)
     {
+    
         // byY - utworzenie watku pomiarow sily
         if (pthread_create (&force_tid, NULL, &force_thread_start, (void *) this)!=EOK)
         {
@@ -281,6 +288,8 @@ void edp_irp6s_postument_track_effector::create_threads ()
             printf (" Failed to thread FORCE_thread on node: %s\n", buf);
             throw System_error();
         }
+
+		sem_wait(&force_master_sem);
 
         // by Y - utworzenie watku komunikacji miedzy EDP a VSP
         if (pthread_create (&edp_vsp_tid, NULL, &edp_vsp_thread_start, (void *) this)!=EOK)

@@ -58,6 +58,7 @@ void catch_signal(int sig)
 int main(int argc, char *argv[], char **arge)
 {
 
+//	delay(10000);
     // STATE next_state;    // stan nastepny, do ktorego przejdzie EDP_MASTER
 
     try
@@ -98,7 +99,7 @@ int main(int argc, char *argv[], char **arge)
 
         master->initialize();
 
-        master->create_threads();
+        master->create_threads();                
 
         if (!master->initialize_communication())
         {
