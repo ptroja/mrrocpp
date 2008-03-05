@@ -72,8 +72,6 @@ public:
 	void send_pulse_to_mp (char pulse_code, long pulse_value);
 	
 	bool pulse_check(); // by Y - sprawdza czy przeszedl puls do ECP lub MP
-	
-	BYTE convert (POSE_SPECIFICATION ps);
 };
 
 ecp_task* return_created_ecp_task (configurator &_config);

@@ -51,7 +51,7 @@ enum POSE_SPECIFICATION {
 };
 
 // Rodzaje odpowiedzi UI do ECP oraz polecen z UI (wcisniecie przycisku).
-enum {
+enum UI_TO_ECP_COMMAND {
     INVALID_REPLY,
     NEXT,
     QUIT,
@@ -97,6 +97,29 @@ enum {
     MAM_CALIBRATE
 };
 
+// Rodzaje polecen ECP dla UI:
+enum ECP_TO_UI_COMMAND {
+    C_INVALID_END_EFFECTOR,
+    C_FRAME,
+    C_XYZ_ANGLE_AXIS,
+    C_XYZ_EULER_ZYZ,
+    C_JOINT,
+    C_MOTOR,
+    YES_NO,
+    DOUBLE_NUMBER,
+    INTEGER_NUMBER,
+    SAVE_FILE,
+    LOAD_FILE,
+    MESSAGE,
+    OPEN_FORCE_SENSOR_MOVE_WINDOW,
+    OPEN_TRAJECTORY_REPRODUCE_WINDOW,
+    TR_REFRESH_WINDOW,
+    TR_DANGEROUS_FORCE_DETECTED,
+    CHOOSE_OPTION,
+    MAM_OPEN_WINDOW,
+    MAM_REFRESH_WINDOW
+};
+
 // Dlugosc komunikatu przesylanego z ECP lub MP do UI
 #define MSG_LENGTH 60
 
@@ -104,7 +127,7 @@ enum {
 struct ECP_message
 {
     msg_header_t hdr;
-    BYTE ecp_message;   // typ polecenia
+    ECP_TO_UI_COMMAND ecp_message;   // typ polecenia
     ROBOT_ENUM robot_name; // by Y
     BYTE nr_of_options; // by Y ilosc dostepnych opcji - od 2 do 4 - dla trybu CHOOSE_OPTION
     union{
@@ -148,8 +171,8 @@ struct UI_reply
 struct UI_ECP_message
 {
     msg_header_t hdr;
-    BYTE command ;
-    union{
+    UI_TO_ECP_COMMAND command;
+    union {
         // nazwa pliku
         char filename[100];
         // czas ruchu
@@ -158,7 +181,7 @@ struct UI_ECP_message
         short move_type;
         // zmiana rodzaju sterowania
         POSE_SPECIFICATION ps;
-    }; // koniec unii
+    };
 };
 
 // by Y - do komuniakcji vsp z edp
@@ -191,29 +214,6 @@ struct EDP_VSP_reply
 // !!! UWAGA !!!//
 // POWIAZANY Z C_MOTOR C_JOINT etc. UWAZAC NA INDEKSY
 
-// Rodzaje polecen ECP dla UI:
-enum {
-    C_INVALID_END_EFFECTOR,
-    C_FRAME,
-    C_XYZ_ANGLE_AXIS,
-    C_XYZ_EULER_ZYZ,
-    C_JOINT,
-    C_MOTOR,
-    YES_NO,
-    DOUBLE_NUMBER,
-    INTEGER_NUMBER,
-    SAVE_FILE,
-    LOAD_FILE,
-    MESSAGE,
-    OPEN_FORCE_SENSOR_MOVE_WINDOW,
-    OPEN_TRAJECTORY_REPRODUCE_WINDOW,
-    TR_REFRESH_WINDOW,
-    TR_DANGEROUS_FORCE_DETECTED,
-    CHOOSE_OPTION,
-    MAM_OPEN_WINDOW,
-    MAM_REFRESH_WINDOW
-};
-
 // -----------------------------------------------------------------------------------------------------------------------------
 struct trajectory_description
 { // Opis trajektorii do interpolacji dowolnego typu
@@ -229,7 +229,7 @@ struct trajectory_description
 // ############################################################################
 
 // Rodzaje procesow w systemie MRROC++
-enum {
+enum PROCESS_TYPE {
     UNKNOWN_PROCESS_TYPE,
     EDP,
     ECP,
@@ -537,88 +537,78 @@ struct servo_group_reply // wzorzec odpowiedzi przesylanej z SERVO_GROUP do EDP_
     BYTE algorithm_parameters_no[MAX_SERVOS_NR];
     short gripper_reg_state; // stan w ktorym znajduje sie regulator chwytaka
     // numery uzywanych zestawow parametrow algorytmow regulacji
-}
-; // end: servo_group_reply
+};
 /*--------------------------------------------------------------------------*/
 
 /****************************** c_buffer *******************************/
 
 
-typedef union { // rmodel
+typedef union c_buffer_rmodel { // rmodel
     struct
     {
         frame_tab tool_frame; // trojscian narzedzia wzgledem kolnierza
         // 	BYTE address_byte;         // bajt do obliczania dlugosci rozkazu
-    }
-    tool_frame_def;
+    } tool_frame_def;
     struct
     {
         double tool_coordinates[6];   // XYZ + orientacja narzedzia wzgledem kolnierza
         // 	BYTE address_byte;               // bajt do obliczania dlugosci rozkazu
-    }
-    tool_coordinate_def;
+    } tool_coordinate_def;
     struct
     {
         BYTE kinematic_model_no;               // numer zestawu parametrow modelu kinematyki
 
         // 	BYTE address_byte;               // bajt do obliczania dlugosci rozkazu
-    }
-    kinematic_model;
+    } kinematic_model;
     struct
     {
         BYTE servo_algorithm_no[MAX_SERVOS_NR];   // numery algorytmow serworegulacji
         BYTE servo_parameters_no[MAX_SERVOS_NR]; // numery zestawu parametrow algorytmow serworegulacji
         // 		BYTE address_byte;               // bajt do obliczania dlugosci rozkazu
-    }
-    servo_algorithm;
+    } servo_algorithm;
     struct
     {
         double position[3];
         double weight;
-    }
-    force_tool;
-} c_buffer_rmodel;
+    } force_tool;
+} c_buffer_rmodel_t;
 
 
-typedef union { // arm
-    struct
-    {
-        int command;        // wariat zapytania o get_state
-    }
-    get_state_def;
-    struct
-    {
-        frame_tab arm_frame;        // trojscian koncowki wzgledem ukladu bazowego
-        double gripper_coordinate; // stopien rozwarcia chwytaka
-        // 	BYTE address_byte;                // bajt do obliczania dlugosci rozkazu
-    }
-    frame_def;
-    struct
-    {
-        double arm_coordinates[MAX_SERVOS_NR];    // XYZ + orientacja koncowki wzgledem ukladu bazowego
-        double desired_torque[MAX_SERVOS_NR]; // zadany moment dla dunga
-        // 	BYTE address_byte;                // bajt do obliczania dlugosci rozkazu
-        double gripper_coordinate; // stopien rozwarcia chwytaka
-    }
-    coordinate_def;
-    struct
-    { // by Y do sterowania pozycyjno silowego
-        double inertia[6], reciprocal_damping[6];
-        double position_velocity [MAX_SERVOS_NR];
-        double force_xyz_torque_xyz[6];
-        BEHAVIOUR_SPECIFICATION behaviour[6];
-        double gripper_coordinate; // stopien rozwarcia chwytaka
-        // 	BYTE address_byte;                // bajt do obliczania dlugosci rozkazu
-    }
-    pose_force_torque_at_frame_def; // end by Y
-    struct
-    {
-        char text[MAX_TEXT]; // MAC7
-        char prosody[MAX_PROSODY]; // MAC7
-        // 	BYTE address_byte;
-    }
-    text_def;
-} c_buffer_arm;
+typedef union c_buffer_arm
+{ // arm
+		struct
+		{
+				int command; // wariat zapytania o get_state
+		} get_state_def;
+		struct
+		{
+				frame_tab arm_frame; // trojscian koncowki wzgledem ukladu bazowego
+				double gripper_coordinate; // stopien rozwarcia chwytaka
+				// 	BYTE address_byte;                // bajt do obliczania dlugosci rozkazu
+		} frame_def;
+		struct
+		{
+				double arm_coordinates[MAX_SERVOS_NR]; // XYZ + orientacja koncowki wzgledem ukladu bazowego
+				double desired_torque[MAX_SERVOS_NR]; // zadany moment dla dunga
+				// 	BYTE address_byte;                // bajt do obliczania dlugosci rozkazu
+				double gripper_coordinate; // stopien rozwarcia chwytaka
+		} coordinate_def;
+		struct
+		{ // by Y do sterowania pozycyjno silowego
+				double inertia[6], reciprocal_damping[6];
+				double position_velocity [MAX_SERVOS_NR];
+				double force_xyz_torque_xyz[6];
+				BEHAVIOUR_SPECIFICATION behaviour[6];
+				double gripper_coordinate; // stopien rozwarcia chwytaka
+				// 	BYTE address_byte;                // bajt do obliczania dlugosci rozkazu
+		} pose_force_torque_at_frame_def; // end by Y
+		struct
+		{
+				char text[MAX_TEXT]; // MAC7
+				char prosody[MAX_PROSODY]; // MAC7
+				// 	BYTE address_byte;
+		} text_def;
+} c_buffer_arm_t;
 
 
 struct c_buffer
@@ -628,7 +618,7 @@ struct c_buffer
     struct _pulse hdr;
 #endif
 
-    INSTRUCTION_TYPE instruction_type; // typ instrukcji: SET, GET, SET_GET, SYNCHRO, QUERY
+    INSTRUCTION_TYPE instruction_type; // typ instrukcji
 
     BYTE set_type;                            // typ instrukcji set
     BYTE get_type;                            // typ instrukcji get
@@ -661,8 +651,8 @@ struct c_buffer
     // i informacja o polozeniu bedzie dotyczyc
     // realizacji srodkowej fazy makrokroku.
 
-    c_buffer_rmodel rmodel;
-    c_buffer_arm arm;
+    c_buffer_rmodel_t rmodel;
+    c_buffer_arm_t arm;
 
     c_buffer (void);// by W odkomentowane
 
@@ -681,40 +671,36 @@ struct c_buffer
 /************************ r_buffer ****************************/
 
 
-typedef union {   // rmodel
-    struct
-    {
-        frame_tab tool_frame;         // Macierz reprezentujaca narzedzie
-        // wzgledem konca lancucha kinematycznego
-        //		BYTE address_byte;             // bajt do obliczania dlugosci odpowiedzi
-    }
-    tool_frame_def;
-    struct
-    {
-        double tool_coordinates[6]; // XYZ + orientacja narzedzia wzgledem kolnierza
-        //		BYTE address_byte;             // bajt do obliczania dlugosci odpowiedzi
-    }
-    tool_coordinate_def;
-    struct
-    {
-        BYTE kinematic_model_no;       // numer modelu kinematyki
+typedef union r_buffer_rmodel
+{ // rmodel
+		struct
+		{
+				frame_tab tool_frame; // Macierz reprezentujaca narzedzie
+				// wzgledem konca lancucha kinematycznego
+				//		BYTE address_byte;             // bajt do obliczania dlugosci odpowiedzi
+		} tool_frame_def;
+		struct
+		{
+				double tool_coordinates[6]; // XYZ + orientacja narzedzia wzgledem kolnierza
+				//		BYTE address_byte;             // bajt do obliczania dlugosci odpowiedzi
+		} tool_coordinate_def;
+		struct
+		{
+				BYTE kinematic_model_no; // numer modelu kinematyki
 
-        //		BYTE address_byte;               // bajt do obliczania dlugosci rozkazu
-    }
-    kinematic_model;
-    struct
-    {
-        BYTE servo_algorithm_no[MAX_SERVOS_NR];   // numery algorytmow serworegulacji
-        BYTE servo_parameters_no[MAX_SERVOS_NR]; // numery zestawu parametrow algorytmow serworegulacji
-    }
-    servo_algorithm;
-    struct
-    {
-        double position[3];
-        double weight;
-    }
-    force_tool;
-} r_buffer_rmodel;
+				//		BYTE address_byte;               // bajt do obliczania dlugosci rozkazu
+		} kinematic_model;
+		struct
+		{
+				BYTE servo_algorithm_no[MAX_SERVOS_NR]; // numery algorytmow serworegulacji
+				BYTE servo_parameters_no[MAX_SERVOS_NR]; // numery zestawu parametrow algorytmow serworegulacji
+		} servo_algorithm;
+		struct
+		{
+				double position[3];
+				double weight;
+		} force_tool;
+} r_buffer_rmodel_t;
 
 typedef struct _controller_state_t
 {
@@ -723,52 +709,48 @@ typedef struct _controller_state_t
     bool is_wardrobe_on;        // czy szafa jest wlaczona
     bool is_controller_card_present;        // czy karta kontrolera robota jest w zamontowana w komputerze
     bool is_robot_blocked;        // czy wyzerowana sterowanie na silnikach po awarii sprzetowej
-}
-controller_state_t;
+} controller_state_t;
 
-typedef union {   // arm
-    struct
-    {
-        word16 PWM_value[MAX_SERVOS_NR];               // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
-        word16 current[MAX_SERVOS_NR];                 // prad sterujacy -- zazwyczaj zbedne
-        frame_tab arm_frame;           // Macierz reprezentujaca koncowke
-        // wzgledem bazy manipulator
-        short gripper_reg_state; // stan w ktorym znajduje sie regulator chwytaka
-        double gripper_coordinate; // stopien rozwarcia chwytaka
-        // 	BYTE address_byte;             // bajt do obliczania dlugosci odpowiedzi
-    }
-    frame_def;
-    struct
-    {
-        word16 PWM_value[MAX_SERVOS_NR];               // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
-        word16 current[MAX_SERVOS_NR];                 // prad sterujacy -- zazwyczaj zbedne
-        double arm_coordinates[MAX_SERVOS_NR];   // XYZ + orientacja koncowki wzgledem ukladu bazowego
-        short gripper_reg_state; // stan w ktorym znajduje sie regulator chwytaka
-        double gripper_coordinate; // stopien rozwarcia chwytaka
-        // 	BYTE address_byte;             // bajt do obliczania dlugosci odpowiedzi
-    }
-    coordinate_def;
-    struct
-    { // by Y do sterowania pozycyjno silowego
-        word16 PWM_value[MAX_SERVOS_NR];               // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
-        word16 current[MAX_SERVOS_NR];
-        frame_tab   beggining_arm_frame;        // trojscian koncowki wzgledem ukladu bazowego
-        frame_tab   predicted_arm_frame;        // trojscian koncowki wzgledem ukladu bazowego
-        frame_tab   present_arm_frame;        // trojscian koncowki wzgledem ukladu bazowego
-        // double pos_xyz_rot_xyz[6];
-        double force_xyz_torque_xyz[6];
-        short gripper_reg_state; // stan w ktorym znajduje sie regulator chwytaka
-        double gripper_coordinate; // stopien rozwarcia chwytaka
-        // 	BYTE address_byte;                // bajt do obliczania dlugosci rozkazu
-    }
-    pose_force_torque_at_frame_def; // end by Y
-    struct
-    {
-        int speaking; // czy mowi
-        // BYTE address_byte;
-    }
-    text_def;
-} r_buffer_arm;
+typedef union r_buffer_arm
+{ // arm
+		struct
+		{
+				word16 PWM_value[MAX_SERVOS_NR]; // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
+				word16 current[MAX_SERVOS_NR]; // prad sterujacy -- zazwyczaj zbedne
+				frame_tab arm_frame; // Macierz reprezentujaca koncowke
+				// wzgledem bazy manipulator
+				short gripper_reg_state; // stan w ktorym znajduje sie regulator chwytaka
+				double gripper_coordinate; // stopien rozwarcia chwytaka
+				// 	BYTE address_byte;             // bajt do obliczania dlugosci odpowiedzi
+		} frame_def;
+		struct
+		{
+				word16 PWM_value[MAX_SERVOS_NR]; // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
+				word16 current[MAX_SERVOS_NR]; // prad sterujacy -- zazwyczaj zbedne
+				double arm_coordinates[MAX_SERVOS_NR]; // XYZ + orientacja koncowki wzgledem ukladu bazowego
+				short gripper_reg_state; // stan w ktorym znajduje sie regulator chwytaka
+				double gripper_coordinate; // stopien rozwarcia chwytaka
+				// 	BYTE address_byte;             // bajt do obliczania dlugosci odpowiedzi
+		} coordinate_def;
+		struct
+		{ // by Y do sterowania pozycyjno silowego
+				word16 PWM_value[MAX_SERVOS_NR]; // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
+				word16 current[MAX_SERVOS_NR];
+				frame_tab beggining_arm_frame; // trojscian koncowki wzgledem ukladu bazowego
+				frame_tab predicted_arm_frame; // trojscian koncowki wzgledem ukladu bazowego
+				frame_tab present_arm_frame; // trojscian koncowki wzgledem ukladu bazowego
+				// double pos_xyz_rot_xyz[6];
+				double force_xyz_torque_xyz[6];
+				short gripper_reg_state; // stan w ktorym znajduje sie regulator chwytaka
+				double gripper_coordinate; // stopien rozwarcia chwytaka
+				// 	BYTE address_byte;                // bajt do obliczania dlugosci rozkazu
+		} pose_force_torque_at_frame_def; // end by Y
+		struct
+		{
+				int speaking; // czy mowi
+				// BYTE address_byte;
+		} text_def;
+} r_buffer_arm_t;
 
 
 struct r_buffer
@@ -800,8 +782,8 @@ struct r_buffer
     word16 PWM_value[MAX_SERVOS_NR];             // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
     word16 current[MAX_SERVOS_NR];                // prad sterujacy -- zazwyczaj zbedne
 
-    r_buffer_rmodel rmodel;
-    r_buffer_arm arm;
+    r_buffer_rmodel_t rmodel;
+    r_buffer_arm_t arm;
 
     r_buffer (void); // W odkomentowane
 };

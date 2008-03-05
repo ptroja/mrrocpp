@@ -476,21 +476,3 @@ int ecp_task::receive_mp_message (void)
         return caller;
     }
 }
-
-BYTE ecp_task::convert (POSE_SPECIFICATION ps)
-{
-    switch (ps)
-    {
-    case MOTOR:
-        return C_MOTOR;
-    case JOINT:
-        return C_JOINT;
-    case XYZ_ANGLE_AXIS:
-        return C_XYZ_ANGLE_AXIS;
-    case XYZ_EULER_ZYZ:
-        return C_XYZ_EULER_ZYZ;
-    default:
-        return C_MOTOR;
-    }
-    return C_MOTOR;
-}

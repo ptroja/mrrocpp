@@ -11,6 +11,7 @@
 
 #include "messip/messip.h"
 #include "common/typedefs.h"
+#include "common/com_buf.h"
 
 #define SR_MSG_SERVED 0x11	// kod ustawiany po wyswietleniu komunikatu
 				// poniewaz przychodza komunikaty o zdarzeniach
@@ -25,16 +26,16 @@ const unsigned int TEXT_LENGTH = 256; // Dlugosc tekstu z wiadomoscia do SR
 /* -------------------------------------------------------------------- */
 /* Paczka danych przesylanych do procesu SR                             */
 /* -------------------------------------------------------------------- */
-typedef struct {
+typedef struct sr_package {
 #if !defined(USE_MESSIP_SRR)
   msg_header_t hdr;
 #endif
   struct timespec ts;       // czas generacji wiadomosci
-  word16 process_type;      // rodzaj procesu; EDP, ECP, MP, VSP, UI
+  PROCESS_TYPE process_type;      // rodzaj procesu
   word16 message_type;      // typ wiadomosci: blad lub komunikat
   char process_name[NAME_LENGTH];  // nazwa globalna procesu np: /irp6_on_track/EDP1
   char description[TEXT_LENGTH];  // tresc wiadomosci
-} sr_package;
+} sr_package_t;
 
 /* -------------------------------------------------------------------- */
 /* Klasa komunikacji z procesem SR                                      */
@@ -51,11 +52,11 @@ class sr {
 #endif /* !USE_MESSIP_SRR */
 protected:
   uint64_t error_tab[ERROR_TAB_SIZE]; // tablica slow 64-bitowych zawierajacych kody bledow
-  sr_package sr_message;          // paczka z wiadomoscia dla SR
+  sr_package_t sr_message;          // paczka z wiadomoscia dla SR
   int send_package(void);
   
 public :
-  sr(const word16 process_type, const char *process_name, const char *sr_name);
+  sr(PROCESS_TYPE process_type, const char *process_name, const char *sr_name);
   virtual ~sr(void);
   int message(word16 message_type, uint64_t error_code);
   int message(word16 message_type, uint64_t error_code0, uint64_t error_code1);
@@ -67,27 +68,27 @@ public :
 
 class sr_edp: public sr {
 public:
-  sr_edp(const word16 process_type, const char *process_name, const char *sr_name);
+  sr_edp(PROCESS_TYPE process_type, const char *process_name, const char *sr_name);
   virtual void interpret(void);  
 };
 
 class sr_ecp: public sr {
 public:
-  sr_ecp(const word16 process_type, const char *process_name, const char *sr_name);
+  sr_ecp(PROCESS_TYPE process_type, const char *process_name, const char *sr_name);
   virtual void interpret(void);  
 };
   
 // obsluga komunikatow generowanych przez VSP
 class sr_vsp: public sr {
 public:
-  sr_vsp(const word16 process_type, const char *process_name, const char *sr_name);
+  sr_vsp(PROCESS_TYPE process_type, const char *process_name, const char *sr_name);
   virtual void interpret(void);
 };
 
 // obsluga komunikatow generowanych przez UI// by Y
 class sr_ui: public sr {
 public:
-  sr_ui(const word16 process_type, const char *process_name, const char *sr_name);
+  sr_ui(PROCESS_TYPE process_type, const char *process_name, const char *sr_name);
   virtual void interpret(void);
 };
   

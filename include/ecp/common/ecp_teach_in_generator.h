@@ -84,7 +84,9 @@ public:
   virtual bool next_step ();
      // generuje kazdy nastepny krok ruchu
      // (zadanie realizowane przez klase konkretna)
+  
+  ECP_TO_UI_COMMAND convert(POSE_SPECIFICATION ps) const;
 
-}; // end: class irp6ot_teach_in_generator
+};
 
 #endif /* _ECP_TEACH_IN_GENERATOR_H */

@@ -24,7 +24,7 @@
 
 #if !defined(USE_MESSIP_SRR)
 // Konstruktor
-sr::sr(const word16 process_type, const char *process_name, const char *sr_name) {
+sr::sr(PROCESS_TYPE process_type, const char *process_name, const char *sr_name) {
     int tmp = 0;
  	// kilka sekund  (~1) na otworzenie urzadzenia
 	while((fd = name_open(sr_name, NAME_FLAG_ATTACH_GLOBAL)) < 0) {
@@ -163,7 +163,7 @@ int sr::message(word16 message_type, uint64_t error_code0, uint64_t error_code1)
 // --------------------------------------------------------------------
 // interpretacja bledu dla EDP robota irp6_on_track
 
-  sr_edp::sr_edp(const word16 process_type, const char *process_name, const char *sr_name) : 
+  sr_edp::sr_edp(PROCESS_TYPE process_type, const char *process_name, const char *sr_name) : 
               sr(process_type, process_name, sr_name) { };
 
 
@@ -322,7 +322,7 @@ void sr_edp::interpret(void) {
 } // end: sr_edp::interpret()
 // ---------------------------------------------------------------------
 
-  sr_ecp::sr_ecp(const word16 process_type, const char *process_name, const char *sr_name) : 
+  sr_ecp::sr_ecp(PROCESS_TYPE process_type, const char *process_name, const char *sr_name) : 
               sr(process_type, process_name, sr_name) { };
 
 
@@ -418,7 +418,7 @@ switch (sr_message.message_type) {
 } // end: switch (sr_message.message_type)
 } // end: sr_ecp::interpret()
 // ---------------------------------------------------------------------
-  sr_ui::sr_ui(const word16 process_type, const char *process_name, const char *sr_name) : 
+  sr_ui::sr_ui(PROCESS_TYPE process_type, const char *process_name, const char *sr_name) : 
               sr(process_type, process_name, sr_name) { };
 
 // Interpretacja bledow generowanych w UI // by Y - UWAGA UZUPELNIC
@@ -450,7 +450,7 @@ switch (sr_message.message_type) {
 } // end: switch (sr_message.message_type)
 } // end: sr_vsp::interpret()
 
-  sr_vsp::sr_vsp(const word16 process_type, const char *process_name, const char *sr_name) : 
+  sr_vsp::sr_vsp(PROCESS_TYPE process_type, const char *process_name, const char *sr_name) : 
               sr(process_type, process_name, sr_name) { };
 
 // Interpretacja bledow generowanych w VSP

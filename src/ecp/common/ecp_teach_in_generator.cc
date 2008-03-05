@@ -46,7 +46,7 @@ void ecp_teach_in_generator::teach (POSE_SPECIFICATION ps, const char *msg)
 
     ecp_to_ui_msg.robot_name = the_robot->robot_name;
 
-    ecp_to_ui_msg.ecp_message = ecp_t.convert(ps); // Rodzaj wspolrzednych, w ktorych uczony jest robot
+    ecp_to_ui_msg.ecp_message = convert(ps); // Rodzaj wspolrzednych, w ktorych uczony jest robot
     strncpy(ecp_to_ui_msg.string, msg, MSG_LENGTH);   // Komunikat przesylany do UI podczas uczenia
     for (;;)
     {
@@ -526,4 +526,21 @@ bool ecp_teach_in_generator::next_step (  )
     next_pose_list_ptr (); // nastepna pozycja
     return true;
 
+}
+
+
+ECP_TO_UI_COMMAND ecp_teach_in_generator::convert(POSE_SPECIFICATION ps) const
+{
+	switch (ps) {
+		case MOTOR:
+			return C_MOTOR;
+		case JOINT:
+			return C_JOINT;
+		case XYZ_ANGLE_AXIS:
+			return C_XYZ_ANGLE_AXIS;
+		case XYZ_EULER_ZYZ:
+			return C_XYZ_EULER_ZYZ;
+		default:
+			return C_MOTOR;
+	}
 }

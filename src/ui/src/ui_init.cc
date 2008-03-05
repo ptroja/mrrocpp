@@ -72,7 +72,7 @@ ofstream *log_file_outfile;
 void *sr_thread(void* arg)
 {
 	// printf("watek testowy dziala\n");		// by Y&W
-	sr_package sr_msg;
+	sr_package_t sr_msg;
 	// 	char current_line[40];
 	// 	char current_line[80];
 	word16 status;
@@ -159,7 +159,7 @@ void *sr_thread(void* arg)
 #warning "use messip :)"
 void *sr_thread(void* arg)
 {
-	sr_package sr_msg;
+	sr_package_t sr_msg;
 	word16 status;
 
 	messip_channel_t *ch;

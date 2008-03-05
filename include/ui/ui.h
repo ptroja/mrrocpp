@@ -245,7 +245,7 @@ private:
 	pthread_mutex_t mutex; // = PTHREAD_MUTEX_INITIALIZER ;
 
 public:
-	sr_package message_buffer[UI_SR_BUFFER_LENGHT];
+	sr_package_t message_buffer[UI_SR_BUFFER_LENGHT];
 	int writer_buf_position;
 	int reader_buf_position;
 	
