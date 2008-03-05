@@ -12,25 +12,7 @@
 
 #include "vsp/vsp_sensor.h"
 
-// Przesylka z VSP do EDP
-struct VSP_EDP_message
-{
-    msg_header_t hdr;
-    char vsp_name[20];
-    short konfigurowac;
-};
 
-// Odpowiedz EDP do VSP
-struct EDP_VSP_reply
-{
-    unsigned long servo_step;       // by Y numer kroku servo
-    double current_present_XYZ_ZYZ_arm_coordinates[6];   // aktualne wspolrzedne XYZ +
-    double force[6];
-    short force_reading_status; // informacja o odczycie sil
-    // EDP_FORCE_SENSOR_OVERLOAD lub EDP_FORCE_SENSOR_READING_ERROR
-    // EDP_FORCE_SENSOR_READING_CORRECT
-
-};
 
 /********** klasa czujnikow po stronie VSP **************/
 class vsp_force_sensor : public vsp_sensor {
