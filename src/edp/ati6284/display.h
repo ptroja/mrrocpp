@@ -17,5 +17,3 @@
 #define WITHOUT_INTERRUPT 1
 
 #endif // ___DISPLAY_H___ 
-
-

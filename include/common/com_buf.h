@@ -12,6 +12,7 @@
 
 #include "common/typedefs.h"
 #include "common/impconst.h"
+#include "messip/messip.h"
 
 enum SERVO_COMMAND {
     MOVE,
@@ -622,28 +623,23 @@ typedef union { // arm
 
 struct c_buffer
 {
+#ifndef USE_MESSIP_SRR
+	// this is a message buffer, so need a message header
     struct _pulse hdr;
+#endif
 
     INSTRUCTION_TYPE instruction_type; // typ instrukcji: SET, GET, SET_GET, SYNCHRO, QUERY
 
-    BYTE set_type;                            // typ instrukcji set: ARM/RMODEL/OUTPUTS
-    BYTE get_type;                            // typ instrukcji get: ARM/RMODEL/INPUTS
-    RMODEL_SPECIFICATION set_rmodel_type;   // sposob zdefiniowania narzedzia przy jego zadawaniu:
-    // TOOL_FRAME / TOOL_XYZ_EULER_ZYZ / TOOL_XYZ_ANGLE_AXIS / TOOL_AS_XYZ_EULER_ZY /
-    // ARM_KINEMATIC_MODEL / SERVO_ALGORITHM
-    RMODEL_SPECIFICATION get_rmodel_type;   // sposob zdefiniowania narzedzia przy jego odczycie:
-    // TOOL_FRAME / TOOL_XYZ_EULER_ZYZ / TOOL_XYZ_ANGLE_AXIS / TOOL_AS_XYZ_EULER_ZY /
-    // ARM_KINEMATIC_MODEL / SERVO_ALGORITHM
-    POSE_SPECIFICATION set_arm_type;    // sposob zdefiniowania polozenia zadanego
-    // koncowki: MOTOR / JOINT /
-    // FRAME / XYZ_EULER_ZYZ / XYZ_ANGLE_AXIS /
-    POSE_SPECIFICATION get_arm_type;    // sposob zdefiniowania polozenia odcztanego
-    // koncowki: MOTOR / JOINT /
-    // FRAME / XYZ_EULER_ZYZ / XYZ_ANGLE_AXIS
+    BYTE set_type;                            // typ instrukcji set
+    BYTE get_type;                            // typ instrukcji get
+    RMODEL_SPECIFICATION set_rmodel_type;   // sposob zdefiniowania narzedzia przy jego zadawaniu
+    RMODEL_SPECIFICATION get_rmodel_type;   // sposob zdefiniowania narzedzia przy jego odczycie
+    POSE_SPECIFICATION set_arm_type;    // sposob zdefiniowania polozenia zadanego koncowki
+    POSE_SPECIFICATION get_arm_type;    // sposob zdefiniowania polozenia odcztanego koncowki 
     WORD output_values;                     // wartosci wyjsc binarnych
     BYTE address_byte;                       // bajt do obliczania dlugosci rozkazu
 
-    MOTION_TYPE motion_type;        // sposob zadania ruchu: ABSOLUTE/RELATIVE
+    MOTION_TYPE motion_type;        // sposob zadania ruchu
     WORD motion_steps;                // liczba krokow ruchu zadanego (makrokroku)
     WORD value_in_step_no;           // liczba krokow pierwszej fazy ruchu, czyli
     // krok, w ktorym ma zostac przekazana
@@ -773,7 +769,6 @@ typedef union {   // arm
     }
     text_def;
 } r_buffer_arm;
-
 
 
 struct r_buffer
