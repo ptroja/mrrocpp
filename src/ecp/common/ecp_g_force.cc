@@ -576,7 +576,7 @@ bool y_edge_follow_force_generator::next_step ( )
 
     // sprowadzenie sil do ukladu kisci
     Ft_v_vector force_torque = Ft_v_tr (!(Homog_matrix(the_robot->EDP_data.current_present_arm_frame)), Ft_v_tr::FT) *
-                               Ft_v_vector (sensor_m.begin()->second->image.force.rez);
+                               Ft_v_vector (the_robot->EDP_data.EDPtoECP_force_xyz_torque_xyz);
 
 
     double wx = force_torque[0];
