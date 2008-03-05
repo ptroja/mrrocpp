@@ -11,6 +11,7 @@
 #define _VSP_SCHUNK_H
 
 #include "vsp/vsp_sensor.h"
+#include "vsp/vsp_force_sensor.h"
 
 #define VSP_MSG_SEND_TIMEOUT_HIGH 10000000
 

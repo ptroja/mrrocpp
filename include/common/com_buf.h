@@ -22,11 +22,10 @@ enum SERVO_COMMAND {
 };
 
 // Typ polecenia przesylanego z MP do ECP
-// NEXT_STATE // by Y - the next ECP state
 enum MP_COMMAND {
     INVALID_COMMAND,
     START_TASK,
-    NEXT_POSE,
+    NEXT_POSE,	// by Y - the next ECP state
     END_MOTION,
     NEXT_STATE,
     STOP
@@ -183,29 +182,6 @@ struct UI_ECP_message
         POSE_SPECIFICATION ps;
     };
 };
-
-// by Y - do komuniakcji vsp z edp
-// Przesylka z VSP do EDP
-struct VSP_EDP_message
-{
-    msg_header_t hdr;
-    char vsp_name[20];
-    short konfigurowac;
-};
-
-// Odpowiedz EDP do VSP
-struct EDP_VSP_reply
-{
-    unsigned long servo_step;       // by Y numer kroku servo
-    double current_present_XYZ_ZYZ_arm_coordinates[6];   // aktualne wspolrzedne XYZ +
-    double force[6];
-    short force_reading_status; // informacja o odczycie sil
-    // EDP_FORCE_SENSOR_OVERLOAD lub EDP_FORCE_SENSOR_READING_ERROR
-    // EDP_FORCE_SENSOR_READING_CORRECT
-
-};
-
-// koniec by Y
 
 // #############################################################################################################################
 
@@ -416,20 +392,9 @@ enum ERROR_CLASS {
 #define CYCLIC_BUFFER_UNDERRUN                  0x09ULL
 #define CYCLIC_BUFFER_OVERFLOW                  0x10ULL
 
-
-#define EDP_SYSTEM_ERROR                         0x1ULL
-#define ECP_SYSTEM_ERROR                         0x2ULL
-#define MP_SYSTEM_ERROR                          0x3ULL
-#define EDP_FATAL_ERROR                          0x4ULL
-#define EDP_NON_FATAL_ERROR                      0x5ULL
-#define ECP_ERROR                                0x6ULL
-#define MP_ERROR                                 0x7ULL
-
-
 // crs - bledy dotyczace CRS - znajdywania rozwiazania dla kostki Rubika
 #define RCS_INVALID_STATE                       0x10ULL
 #define RCS_EXCEPTION                           0x11ULL
-
 
 enum GRIPPER_STATE_ENUM {
     GRIPPER_START_STATE,
@@ -479,6 +444,7 @@ enum REPLY_TYPE {
     CONTROLLER_STATE
 };
 
+// TODO: rename from "behavior"
 enum BEHAVIOUR_SPECIFICATION {
     UNGUARDED_MOTION,
     GUARDED_MOTION,
@@ -488,9 +454,8 @@ enum BEHAVIOUR_SPECIFICATION {
 /*--------------------------------------------------------------------------*/
 struct edp_master_command // wzorzec polecenia przesylanego z EDP_MASTER do SERVO_GROUP
 {
-    SERVO_COMMAND instruction_code;        // kod polecenia, ktore ma zreallizowac proces
-    // SERVO_GROUP
-    BYTE address_byte;                         // bajt do obliczania dlugosci rozkazu
+    SERVO_COMMAND instruction_code;        // kod polecenia
+    //BYTE address_byte;                     // bajt do obliczania dlugosci rozkazu
     union {
         struct
         {

@@ -25,7 +25,7 @@ playerpos_generator::~playerpos_generator()
 	delete client;
 }
 
-void playerpos_generator::set_goal(playerpos_goal_t &_goal)
+void playerpos_generator::set_goal(const playerpos_goal_t &_goal)
 {
 	printf("playerpos_generator::set_goal({%.2f, %.2f, %.2f})\n",
 			_goal.x, _goal.y, _goal.t);

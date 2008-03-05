@@ -50,13 +50,10 @@ private:
 	SENSOR_IMAGE last;
 	VECTOR a,v;	// przyspieszenie i predkosc
 	VECTOR ball;
-	//int edp_vsp_fd; // do polaczenia z EDP	
 	struct timespec start[9];
 	int fd;
 	int size_read;
 	unsigned short buffer[600000];
-	VSP_EDP_message vsp_edp_command;// by Y do komuniacji z EDP
-	EDP_VSP_reply edp_vsp_reply;
 	Tpix pix;
 	Thsv hsv;
 	unsigned short kol[XMAX][YMAX];

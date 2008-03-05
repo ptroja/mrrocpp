@@ -23,8 +23,8 @@ class ecp_generator : public ecp_mp_generator {
 
 		class ECP_error {  // Klasa obslugi bledow generatora
 			public:
-				uint64_t error_class;
-				uint64_t error_no;
+				const uint64_t error_class;
+				const uint64_t error_no;
 				edp_error error;
 
 				ECP_error ( uint64_t err_cl, uint64_t err_no, uint64_t err0 = 0, uint64_t err1 = 0);

@@ -23,7 +23,7 @@ class playerpos_generator : public ecp_generator
 
 		virtual bool next_step ();
 		
-		void set_goal(playerpos_goal_t &_goal);
+		void set_goal(const playerpos_goal_t &_goal);
 };
 
 #endif /* _ECP_GEN_PLAYERPOS_H */

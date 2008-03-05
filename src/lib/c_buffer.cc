@@ -9,7 +9,7 @@ c_buffer::c_buffer (void) :
   set_arm_type(FRAME),
   get_arm_type(FRAME),
   output_values(0),
-  address_byte(0),
+  //address_byte(0),
   motion_type(ABSOLUTE),
   motion_steps(0),
   value_in_step_no(0)
