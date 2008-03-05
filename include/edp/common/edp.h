@@ -528,8 +528,8 @@ public:
     edp_irp6s_effector (configurator &_config, ROBOT_ENUM l_robot_name );       // konstruktor
 
 
-    void set_rmodel (c_buffer *instruction);                    // zmiana narzedzia
-    void get_rmodel (c_buffer *instruction);                    // odczytanie narzedzia
+    virtual void set_rmodel (c_buffer *instruction);                    // zmiana narzedzia
+    virtual void get_rmodel (c_buffer *instruction);                    // odczytanie narzedzia
 
     virtual void move_arm (c_buffer *instruction);            // przemieszczenie ramienia
 

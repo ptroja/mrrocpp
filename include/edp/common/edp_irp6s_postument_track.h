@@ -62,6 +62,9 @@ protected:
 
 public:
 
+    void set_rmodel (c_buffer *instruction);                    // zmiana narzedzia
+    void get_rmodel (c_buffer *instruction);                    // odczytanie narzedzia
+
     sr_vsp *sr_msg;		//!< komunikacja z SR
     sem_t new_ms; //!< semafor dostepu do nowej wiadomosci dla vsp
     edp_force_sensor *vs;

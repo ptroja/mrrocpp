@@ -32,6 +32,9 @@ protected:
     void arm_frame_2_xyz_eul_zyz ();
 
 public:
+
+    void set_rmodel (c_buffer *instruction);                    // zmiana narzedzia
+    void get_rmodel (c_buffer *instruction);                    // odczytanie narzedzia
     // Konstruktor.
     void initialize (void);
     edp_irp6m_effector (configurator &_config);

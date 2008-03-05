@@ -109,6 +109,8 @@ void edp_irp6s_effector::compute_xyz_euler_zyz (c_buffer *instruction)
 /*------------------------------------------------------------------*/
 
 
+
+
 /*--------------------------------------------------------------------------*/
 void edp_irp6s_effector::compute_xyz_angle_axis (c_buffer *instruction)
 {
@@ -762,113 +764,12 @@ void edp_irp6s_effector::arm_frame_2_frame (void)
 ; // end: edp_irp6s_effector::arm_frame_2_frame
 /*--------------------------------------------------------------------------*/
 
-
-/*--------------------------------------------------------------------------*/
 void edp_irp6s_effector::set_rmodel (c_buffer *instruction)
-{
-    // BYTE previous_model;
-    // BYTE previous_corrector;
-    int i; // licznik obiegow petli
-    //printf(" SET RMODEL: ");
-    switch ((*instruction).set_rmodel_type)
-    {
-    case TOOL_FRAME:
-        //printf("TOOL_FRAME\n");
-        // przepisa specyfikacj do TRANSFORMATORa
-        tool_frame_2_frame(instruction);
-        break;
-    case TOOL_XYZ_ANGLE_AXIS:
-        //printf("TOOL_XYZ_ANGLE_AXIS\n");
-        // przeksztaci i przepisa specyfikacj do TRANSFORMATORa
-        tool_xyz_aa_2_frame(instruction);
-        break;
-    case TOOL_XYZ_EULER_ZYZ:
-        //printf("TOOL_XYZ_EULER_ZYZ\n");
-        // przeksztaci i przepisa specyfikacj do TRANSFORMATORa
-        tool_xyz_eul_zyz_2_frame(instruction);
-        break;
-    case ARM_KINEMATIC_MODEL:
-        //printf("ARM_KINEMATIC_MODEL\n");
-        // Ustawienie modelu kinematyki.
-        set_kinematic_model((*instruction).rmodel.kinematic_model.kinematic_model_no);
-        break;
-
-    case SERVO_ALGORITHM:
-        // ustawienie algorytmw serworegulacji oraz ich parametrow
-        // zmiana algorytmu regulacji
-        /* Uformowanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow dla procesu SERVO_GROUP */
-        servo_command.instruction_code = SERVO_ALGORITHM_AND_PARAMETERS;
-        for (i = 0; i<number_of_servos; i++)
-        {
-            servo_command.parameters.servo_alg_par.servo_algorithm_no[i] = servo_algorithm_ecp[i] = (*instruction).rmodel.servo_algorithm.servo_algorithm_no[i];
-            servo_command.parameters.servo_alg_par.servo_parameters_no[i] = servo_parameters_ecp[i] = (*instruction).rmodel.servo_algorithm.servo_parameters_no[i];
-        }
-        ; // end: for
-        /* Wyslanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow procesowi SERVO_GROUP */
-        send_to_SERVO_GROUP (); //
-        break;
-
-    default: // blad: nie istniejca specyfikacja modelu robota
-        // ustawi numer bledu
-        throw NonFatal_error_2(INVALID_SET_RMODEL_TYPE);
-    }
-    ; // end: switch (set_rmodel_type)
-}
-; // end: edp_irp6s_effector::set_rmodel
-/*--------------------------------------------------------------------------*/
-
-
-
-/*--------------------------------------------------------------------------*/
+{}
+;                    // zmiana narzedzia
 void edp_irp6s_effector::get_rmodel (c_buffer *instruction)
-{
-    int i; // licznik obiegow petli
-    //printf(" GET RMODEL: ");
-    switch ((*instruction).get_rmodel_type)
-    {
-    case TOOL_FRAME:
-        //printf("TOOL_FRAME\n");
-        // przepisa specyfikacj z TRANSFORMATORa do bufora wysykowego
-        tool_frame_2_frame_rep();
-        break;
-    case TOOL_XYZ_ANGLE_AXIS:
-        //printf("TOOL_XYZ_ANGLE_AXIS\n");
-        // przeksztaci i przepisa specyfikacj z TRANSFORMATORa do bufora wysykowego
-        tool_frame_2_xyz_aa();
-        break;
-    case TOOL_XYZ_EULER_ZYZ:
-        //printf("TOOL_XYZ_EULER_ZYZ\n");
-        // przeksztaci i przepisa specyfikacj z TRANSFORMATORa do bufora wysykowego
-        tool_frame_2_xyz_eul_zyz();
-        break;
-    case ARM_KINEMATIC_MODEL:
-        reply.rmodel_type = ARM_KINEMATIC_MODEL;
-        // okreslenie numeru zestawu parametrow przelicznika kinematycznego oraz jego korektora
-        reply.rmodel.kinematic_model.kinematic_model_no = get_current_kinematic_model_no();
-        break;
-    case SERVO_ALGORITHM:
-        reply.rmodel_type = SERVO_ALGORITHM;
-        // ustawienie numeru algorytmu serworegulatora oraz numeru jego zestawu parametrow
-        for (i = 0; i<number_of_servos; i++)
-            if ( is_get_arm(instruction) )
-            {
-                reply.rmodel.servo_algorithm.servo_algorithm_no[i] = servo_algorithm_sg[i];
-                reply.rmodel.servo_algorithm.servo_parameters_no[i] = servo_parameters_sg[i];
-            }
-            else
-            {
-                reply.rmodel.servo_algorithm.servo_algorithm_no[i] = servo_algorithm_sg[i];
-                reply.rmodel.servo_algorithm.servo_parameters_no[i] = servo_parameters_sg[i];
-            }
-        break;
-    default: // blad: nie istniejaca specyfikacja modelu robota
-        // ustawie numer bledu
-        throw NonFatal_error_2(INVALID_GET_RMODEL_TYPE);
-    }
-    ; // end: switch (get_rmodel_type)
-}
-; // end: edp_irp6s_effector::get_rmodel
-/*--------------------------------------------------------------------------*/
+{}
+;     
 
 void edp_irp6s_effector::master_joints_and_frame_download (void)
 { // by Y
