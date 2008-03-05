@@ -121,6 +121,13 @@ struct robot_transmission_data {
 	char text[MAX_TEXT];
 	char prosody[MAX_PROSODY];
 	bool speaking;	
+	
+	// EDP force sensor interaction
+    double next_force_tool_position[3];
+    double next_force_tool_weight;
+    double current_force_tool_position[3];
+    double current_force_tool_weight;
+    
 };
 
 struct robot_EDP_transmission_data : robot_transmission_data {
@@ -143,6 +150,8 @@ struct robot_EDP_transmission_data : robot_transmission_data {
 
 	// moment zadany dla Dunga
 	double desired_torque[MAX_SERVOS_NR];
+	
+  
 };
 
 class ecp_task;
