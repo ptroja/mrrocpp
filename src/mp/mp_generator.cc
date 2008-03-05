@@ -27,7 +27,7 @@ void mp_generator::copy_generator_command (std::map <ROBOT_ENUM, mp_robot*>& _ro
 	}
 }
 
-mp_generator::MP_error::MP_error(uint64_t err0, uint64_t err1) :
+mp_generator::MP_error::MP_error(ERROR_CLASS err0, uint64_t err1) :
 	error_class(err0), mp_error(err1)
 {
 }

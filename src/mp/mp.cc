@@ -46,7 +46,7 @@ mp_taught_in_pose::mp_taught_in_pose(POSE_SPECIFICATION at, double mt,
 	extra_info = e_info;
 }
 
-mp_robot::MP_error::MP_error(uint64_t err0, uint64_t err1) :
+mp_robot::MP_error::MP_error(ERROR_CLASS err0, uint64_t err1) :
 	error_class(err0), mp_error(err1)
 {
 }

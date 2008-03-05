@@ -350,10 +350,12 @@ enum PROCESS_TYPE {
 #define SYNCHRO_DELAY_ERROR                     0x001C000000000000ULL
 
 // Klasy bledow
-#define NEW_MESSAGE                              0x1ULL
-#define SYSTEM_ERROR                             0x2ULL
-#define FATAL_ERROR                              0x3ULL
-#define NON_FATAL_ERROR                          0x4ULL
+enum ERROR_CLASS {
+	NEW_MESSAGE,
+	SYSTEM_ERROR,
+	FATAL_ERROR,
+	NON_FATAL_ERROR
+};
 
 // Bledy szczegolowe generowane przez ECP i MP
 #define INVALID_MP_COMMAND                       0x1ULL

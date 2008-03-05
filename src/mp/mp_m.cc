@@ -22,7 +22,7 @@ void catch_signal_in_mp(int sig)
 {
 	mp_t->catch_signal_in_mp_task(sig);
 	delete mp_t;
-};
+}
 
 int main (int argc, char *argv[], char **arge)
 {
@@ -219,4 +219,4 @@ int main (int argc, char *argv[], char **arge)
 	} /* end: catch  */
 
 
-};
+}

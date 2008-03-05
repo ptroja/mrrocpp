@@ -43,7 +43,6 @@
 
 void edp_irp6s_postument_track_effector::initialize (void)
 {}
-;
 
 
 /*--------------------------------------------------------------------------*/
@@ -107,9 +106,7 @@ void edp_irp6s_postument_track_effector::set_rmodel (c_buffer *instruction)
         // ustawi numer bledu
         throw NonFatal_error_2(INVALID_SET_RMODEL_TYPE);
     }
-    ; // end: switch (set_rmodel_type)
 }
-; // end: edp_irp6s_postument_track_effector::set_rmodel
 /*--------------------------------------------------------------------------*/
 
 
@@ -167,9 +164,7 @@ void edp_irp6s_postument_track_effector::get_rmodel (c_buffer *instruction)
         // ustawie numer bledu
         throw NonFatal_error_2(INVALID_GET_RMODEL_TYPE);
     }
-    ; // end: switch (get_rmodel_type)
 }
-; // end: edp_irp6s_postument_track_effector::get_rmodel
 /*--------------------------------------------------------------------------*/
 
 
@@ -198,7 +193,6 @@ void edp_irp6s_postument_track_effector::arm_frame_2_xyz_eul_zyz ()
     default: // blad:
         throw NonFatal_error_2(STRANGE_GET_ARM_REQUEST);
     }
-    ; // end: switch (reply.reply_type)
     // dla robotow track i postument - oblicz chwytak
     if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
     {
@@ -207,7 +201,6 @@ void edp_irp6s_postument_track_effector::arm_frame_2_xyz_eul_zyz ()
     }
 
 }
-; // end: edp_irp6s_effector::arm_frame_2_xyz_eul_zyz
 /*--------------------------------------------------------------------------*/
 
 
@@ -231,7 +224,6 @@ void edp_irp6s_postument_track_effector::arm_abs_xyz_eul_zyz_2_frame (double *p)
     A_B_T.get_frame_tab(desired_end_effector_frame);
 
 }
-; // end: edp_irp6s_effector::arm_abs_xyz_eul_zyz_2_frame
 /*--------------------------------------------------------------------------*/
 
 
@@ -259,14 +251,13 @@ edp_irp6s_postument_track_effector::edp_irp6s_postument_track_effector (configur
         
             sem_init( &force_master_sem, 0, 0);
 
-};
+}
 
 
 
 
 void edp_irp6s_postument_track_effector::pose_force_linear_move (c_buffer *instruction)
 {}
-;
 
 
 
@@ -305,7 +296,7 @@ void edp_irp6s_postument_track_effector::create_threads ()
     
         edp_irp6s_effector::create_threads();
     
-};
+}
 
 
 
@@ -353,7 +344,7 @@ void edp_irp6s_postument_track_effector::arm_frame_2_pose_force_torque_at_frame 
     default:
         throw NonFatal_error_2 (STRANGE_GET_ARM_REQUEST);
         break;
-    };
+    }
     // dla robotow track i postument - oblicz chwytak
     reply.arm.pose_force_torque_at_frame_def.gripper_reg_state = servo_gripper_reg_state;
 
@@ -363,7 +354,6 @@ void edp_irp6s_postument_track_effector::arm_frame_2_pose_force_torque_at_frame 
     }
 
 }
-; // end: edp_irp6s_postument_track_effector::arm_frame_2_xyz_eul_zyz
 /*--------------------------------------------------------------------------*/
 
 
@@ -751,15 +741,12 @@ void edp_irp6s_postument_track_effector::move_arm (c_buffer *instruction)
     default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
         throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
     }
-    ; // end:   switch (instruction.set_arm_type)
-
 
 
     // by Y - uwaga na wyjatki, po rzuceniu wyjatku nie zostanie zaktualizowany previous_set_arm_type
     previous_set_arm_type = (*instruction).set_arm_type;
 
 }
-; // end: edp_irp6s_postument_track_effector::move_arm
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
@@ -799,7 +786,6 @@ void edp_irp6s_postument_track_effector::get_arm_position (bool read_hardware, c
         }
 
     }
-    ; // end: if
 
     // okreslenie rodzaju wspolrzednych, ktore maja by odczytane
     // oraz adekwatne wypelnienie bufora odpowiedzi
@@ -843,14 +829,12 @@ void edp_irp6s_postument_track_effector::get_arm_position (bool read_hardware, c
         printf("EFF_TYPE: %d\n",(*instruction).get_arm_type);
         throw NonFatal_error_2(INVALID_GET_END_EFFECTOR_TYPE);
     }
-    ; // end: switch (instruction.get_arm_type)
 
     rb_obj->lock_mutex();// by Y
     reply.servo_step=rb_obj->step_data.step;
     rb_obj->unlock_mutex();
 
 }
-; // end: edp_irp6s_postument_track_effector::get_arm_position
 /*--------------------------------------------------------------------------*/
 
 
@@ -957,22 +941,22 @@ void edp_irp6s_postument_track_effector::servo_joints_and_frame_actualization_an
             Homog_matrix tmp_eem(servo_current_frame_wo_tool);
             get_current_kinematic_model()->global_frame_transform(tmp_eem);
             tmp_eem.get_frame_tab(servo_current_frame_wo_tool);
-        }//: if
+        }
 
         if ( (force_tryb > 0)&&(!force_sensor_configured)&&(synchronised))
         {
             vs->force_sensor_do_configure = true;
             force_sensor_configured = true;
         }
-        ;//: if
+
         catch_nr=0;
-    }//: try
+    }
 
     catch (...)
     {
         if ((++catch_nr) == 1)
             printf("servo thread servo_joints_and_frame_actualization_and_upload throw catch exception\n");
-    }//: catch
+    }
 
     pthread_mutex_lock( &edp_irp6s_effector_mutex );
     // przepisnie danych na zestaw globalny
@@ -981,13 +965,11 @@ void edp_irp6s_postument_track_effector::servo_joints_and_frame_actualization_an
         global_current_motor_pos[i]=servo_current_motor_pos[i];
         global_current_joints[i]=servo_current_joints[i];
     }
-    ;//: for
     //	printf("lala: %f\n", servo_current_joints[1]);
     copy_frame(global_current_frame_wo_tool, servo_current_frame_wo_tool);
 
     pthread_mutex_unlock( &edp_irp6s_effector_mutex );
 }
-;//: edp_irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_upload
 
 
 Homog_matrix edp_irp6s_postument_track_effector::return_current_frame (TRANSLATION_ENUM translation_mode)

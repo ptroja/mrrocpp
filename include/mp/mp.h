@@ -46,9 +46,9 @@ typedef struct mp_receive_pulse_struct {
 // ---------------------------------------------------------------
 class MP_main_error {  // Klasa obslugi bledow poziomie MP
   public:
-    const uint64_t error_class;
+    const ERROR_CLASS error_class;
     const uint64_t mp_error;
-    MP_main_error (uint64_t err0, uint64_t err1)
+    MP_main_error (ERROR_CLASS err0, uint64_t err1)
 	 : error_class(err0), mp_error(err1) { };
 }; // end: class MP_main_error
 // ---------------------------------------------------------------
@@ -106,5 +106,6 @@ struct robot_ECP_transmission_data : robot_transmission_data {
 #include "mp/mp_generator.h"
 #include "mp/mp_task.h"
 #include "mp/mp_robot.h"
+#include "../common/com_buf.h"
 
 #endif

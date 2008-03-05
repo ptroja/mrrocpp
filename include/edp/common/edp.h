@@ -47,48 +47,43 @@ public:
     class Fatal_error
     { // klasa wyjatku obslugujacego bledy fatalne
     public:
-        uint64_t error0;   // Blad powstaly w servomechanizmie
-        uint64_t error1;   // Blad powstaly w servomechanizmie
+        const uint64_t error0;   // Blad powstaly w servomechanizmie
+        const uint64_t error1;   // Blad powstaly w servomechanizmie
         Fatal_error (uint64_t err_no_0, uint64_t err_no_1);
         // przekazywanego procedurze obslugi wyjatku
-    }
-    ;   // end: class Fatal_error
+    };
 
     class NonFatal_error_1
     { // klasa wyjatku obslugujacego bledy, ktore nie sa fatalne, a naleza do pierwszej grupy
     public:
-        uint64_t error;   // Blad powstaly przy przeliczaniu wspolrzednych
+        const uint64_t error;   // Blad powstaly przy przeliczaniu wspolrzednych
         NonFatal_error_1 (uint64_t err_no);
         // przekazywanego procedurze obslugi wyjatku
-    }
-    ;   // end: class NonFatal_error_1
+    };
 
     class NonFatal_error_2
     { // klasa wyjatku obslugujacego bledy, ktore nie sa fatalne, a naleza do drugiej grupy
     public:
-        uint64_t error;   // Blad
+        const uint64_t error;   // Blad
         NonFatal_error_2 (uint64_t err_no);
         // przekazywanego procedurze obslugi wyjatku
-    }
-    ;   // end: class NonFatal_error_2
+    };
 
     class NonFatal_error_3
     { // klasa wyjatku obslugujacego bledy, ktore nie sa fatalne, a naleza do drugiej grupy
     public:
-        uint64_t error;   // Blad powstaly przy przeliczaniu wspolrzednych
+        const uint64_t error;   // Blad powstaly przy przeliczaniu wspolrzednych
         NonFatal_error_3 (uint64_t err_no);
         // przekazywanego procedurze obslugi wyjatku
-    }
-    ;   // end: class NonFatal_error_3
+    };
 
     class NonFatal_error_4
     { // klasa wyjatku obslugujacego bledy, ktore nie sa fatalne
     public:
-        uint64_t error;   // Blad
+        const uint64_t error;   // Blad
         NonFatal_error_4 (uint64_t err_no);
         // przekazywanego procedurze obslugi wyjatku
-    }
-    ;   // end: class NonFatal_error_4
+    };
 
 };
 
@@ -636,8 +631,8 @@ public:
 
 /**************************** master_trans_t_buffer *****************************/
 
-typedef enum MT_ORDER { MT_GET_CONTROLLER_STATE, MT_SET_RMODEL, MT_GET_ARM_POSITION, MT_GET_ALGORITHMS, MT_MOVE_ARM, MT_SYNCHRONISE};
-typedef enum ERROR_TYPE { NO_ERROR, Fatal_erroR, NonFatal_erroR_1, NonFatal_erroR_2, NonFatal_erroR_3, NonFatal_erroR_4, System_erroR};
+enum MT_ORDER { MT_GET_CONTROLLER_STATE, MT_SET_RMODEL, MT_GET_ARM_POSITION, MT_GET_ALGORITHMS, MT_MOVE_ARM, MT_SYNCHRONISE};
+enum ERROR_TYPE { NO_ERROR, Fatal_erroR, NonFatal_erroR_1, NonFatal_erroR_2, NonFatal_erroR_3, NonFatal_erroR_4, System_erroR};
 
 
 class master_trans_t_buffer : public transformer_error

@@ -54,9 +54,9 @@ class mp_generator : public ecp_mp_generator
 		class MP_error
 		{
 			public:
-				const uint64_t error_class;
+				const ERROR_CLASS error_class;
 				const uint64_t mp_error;
-				MP_error (uint64_t err0, uint64_t err1);
+				MP_error (ERROR_CLASS err0, uint64_t err1);
 		};
 };
 

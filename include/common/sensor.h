@@ -13,7 +13,6 @@
 #include <stdint.h>
 #include <time.h>
 
-// XXX
 #include "lib/srlib.h"
 
 /*********** stale dla wszystkich czujnikow *************/
@@ -166,62 +165,75 @@ enum SENSOR_ENUM {
 
 // Klasa obslugi bledow procesu VSP.
 class VSP_main_error
-{  
-    public:
-	uint64_t error_class;
-	uint64_t error_no;
-	VSP_main_error(){};
-	VSP_main_error ( uint64_t err_cl, uint64_t err_no)
-                 { error_class = err_cl; error_no = err_no; };
-}; // end: VSP_main_error
+{
+	public:
+		const ERROR_CLASS error_class;
+		const uint64_t error_no;
+		VSP_main_error(ERROR_CLASS err_cl, uint64_t err_no) :
+			error_class(err_cl), error_no(err_no)
+		{
+		}
+};
 
 
 // Klasa bazowa dla czujnikow (klasa abstrakcyjna)
 // Czujniki konkretne wyprowadzane sa z klasy bazowej
 class sensor
 {
-  public:
-	// Wielkosc przesylanej unii - dla kazdego obrazu inny.
-	uint32_t union_size;
+	public:
+		// Wielkosc przesylanej unii - dla kazdego obrazu inny.
+		uint32_t union_size;
 
-   	// ponizsze zmienne pozwalaja na odczyty z roznym okresem z czujnikow (mierzonym w krokach generatora)
-  	// w szczegolnosci mozliwe jest unikniecie odczytu po first stepie (nalezy base_period ustawic na 0)
-  	short base_period; // by Y okresla co ile krokow generatora ma nastapic odczyt z czujnika
-  	short current_period; // by Y ilosc krokow pozostajaca do odczytu z czujnika
-  	
-	int pid; // pid vsp
-	char* node_name; // nazwa wezla na ktorym jest powolane vsp
+		// ponizsze zmienne pozwalaja na odczyty z roznym okresem z czujnikow (mierzonym w krokach generatora)
+		// w szczegolnosci mozliwe jest unikniecie odczytu po first stepie (nalezy base_period ustawic na 0)
+		short base_period; // by Y okresla co ile krokow generatora ma nastapic odczyt z czujnika
+		short current_period; // by Y ilosc krokow pozostajaca do odczytu z czujnika
 
-	// Obraz czujnika.
-	SENSOR_IMAGE image;
-	// Bufor na odczyty otrzymywane z VSP.
-	ECP_VSP_MSG to_vsp;
-	// Bufor na odczyty otrzymywane z VSP.
-	VSP_ECP_MSG from_vsp;
-	// Pole do komunikacji za pomoca DEVCTL.
-	DEVCTL_MSG devmsg;			
+		int pid; // pid vsp
+		char* node_name; // nazwa wezla na ktorym jest powolane vsp
 
-	// Odebranie odczytu od VSP.
-	virtual void get_reading (void)=0;
-	// Konfiguracja czujnika.
-	virtual void configure_sensor (void){};
-	// Zadanie odczytu od VSP.
-	virtual void initiate_reading (void){};
-	// Rozkaz zakonczenia procesu VSP.
-	virtual void terminate (void){};
+		// Obraz czujnika.
+		SENSOR_IMAGE image;
+		// Bufor na odczyty otrzymywane z VSP.
+		ECP_VSP_MSG to_vsp;
+		// Bufor na odczyty otrzymywane z VSP.
+		VSP_ECP_MSG from_vsp;
+		// Pole do komunikacji za pomoca DEVCTL.
+		DEVCTL_MSG devmsg;
 
-	virtual ~sensor(){};
+		// Odebranie odczytu od VSP.
+		virtual void get_reading(void)=0;
+		// Konfiguracja czujnika.
+		virtual void configure_sensor(void)
+		{
+		}
 
-	// Klasa obslugi bledow czujnikow
-	class sensor_error
-	{
-	    public:
-	      uint64_t error_class;
-	      uint64_t error_no;
+		// Zadanie odczytu od VSP.
+		virtual void initiate_reading(void)
+		{
+		}
 
-	      sensor_error ( uint64_t err_cl, uint64_t err_no)
-                      { error_class = err_cl; error_no = err_no;};
-	}; // end: sensor_error 
-}; // end: sensor
+		// Rozkaz zakonczenia procesu VSP.
+		virtual void terminate(void)
+		{
+		}
+
+		virtual ~sensor()
+		{
+		}
+
+		// Klasa obslugi bledow czujnikow
+		class sensor_error
+		{
+			public:
+				const ERROR_CLASS error_class;
+				uint64_t error_no;
+
+				sensor_error(ERROR_CLASS err_cl, uint64_t err_no) :
+					error_class(err_cl), error_no(err_no)
+				{
+				}
+		};
+};
 
 #endif /* _SENSOR_H */
