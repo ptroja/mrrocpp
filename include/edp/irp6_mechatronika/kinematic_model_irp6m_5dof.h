@@ -156,16 +156,16 @@ protected:
 
 THETA_NODE *Theta_1(double q0[3], double v0[3],
 		    double q6[3], double v6[3],
-		    word16 *result,
+		    int16_t *result,
 		    double old_theta[5],
 		    double interpolation_period,
-		    word16 no_of_solutions);
+		    int16_t no_of_solutions);
 
 THETA_NODE *Theta_2(THETA_NODE *theta1_pointer, THETA_NODE *theta4_pointer,
 	    double u0[3], double v0[3], double q0[3], double u6[3],
 	    double q6[3], double v6[3], double radius_2,
-	    word16 *result, double old_theta[5],	    
-	    double interpolation_period, word16 no_of_solutions);
+	    int16_t *result, double old_theta[5],	    
+	    double interpolation_period, int16_t no_of_solutions);
 
 THETA_NODE* Theta_3(THETA_NODE *theta1_pointer, 
 		    THETA_NODE *theta2_pointer,
@@ -173,16 +173,16 @@ THETA_NODE* Theta_3(THETA_NODE *theta1_pointer,
 		    double e, double f, 
 		    double q0[3], double q6[3],
 		    double v0[3], double v6[3],
-		    word16 *result, double old_theta[5],
+		    int16_t *result, double old_theta[5],
 		    double interpolation_period,
-		    word16 no_of_solutions);
+		    int16_t no_of_solutions);
 
 THETA_NODE* Theta_4(THETA_NODE *theta1_pointer,
 		    double u0[3], double v0[3], double u6[3], double v6[3],
 		    double q0[3], double q6[3], double radius_2,
-		    word16 *result, double old_theta[5],
+		    int16_t *result, double old_theta[5],
 		    double interpolation_period,
-		    word16 no_of_solutions);
+		    int16_t no_of_solutions);
 
 THETA_NODE* Theta_5(THETA_NODE *theta1_pointer, 
 		    THETA_NODE *theta2_pointer,
@@ -190,40 +190,40 @@ THETA_NODE* Theta_5(THETA_NODE *theta1_pointer,
 		    THETA_NODE *theta4_pointer,
 		    double q0[3], double q6[3],
 		    double v0[3], double v6[3],
-		    word16 *result, double old_theta[5],
+		    int16_t *result, double old_theta[5],
 		    double interpolation_period,
-		    word16 no_of_solutions);
+		    int16_t no_of_solutions);
 
-word16 QuadraticEquation(double a, double b, double c,
+int16_t QuadraticEquation(double a, double b, double c,
 				double *x1, double *x2, double delta);
 
-word16 Ecos_Fsin_G(double e, double f, double g,
+int16_t Ecos_Fsin_G(double e, double f, double g,
 			  double *theta1_ptr, double *theta2_ptr, 
 			  double lower_limit, double upper_limit, 
 			  double max_theta_inc, double OldTheta,
-			  word16 no_of_solutions);
+			  int16_t no_of_solutions);
 
-word16 Check_cos_Theta1(double cos_theta1, double *sin_theta1,
+int16_t Check_cos_Theta1(double cos_theta1, double *sin_theta1,
 			       double *theta1,
 			       double p, double r, double t,
 			       double max_theta1_inc,
-			       word16 no_of_solutions,
+			       int16_t no_of_solutions,
 			       double OldTheta1);
 
-word16 Check_Theta5(double *theta5, double c5, double s5,
+int16_t Check_Theta5(double *theta5, double c5, double s5,
 		    double q0[3], double q6[3], double v0[3], double v6[3],
 		    THETA_NODE *theta1_pointer, THETA_NODE *theta2_pointer,
 		    THETA_NODE *theta3_pointer, THETA_NODE *theta4_pointer,
-		    word16 no_of_solutions,
+		    int16_t no_of_solutions,
 		    double max_theta5_inc,
 		    double OldTheta5);
 
-word16 Flange(double u0[3], double v0[3], double u6[3],
+int16_t Flange(double u0[3], double v0[3], double u6[3],
 		     double radius_2,
 		     THETA_NODE *theta1_pointer, THETA_NODE *theta4_pointer,
 		     double o06_prim[3], double o06_bis[3]);
 
-word16 Flange_exception(double u0[3], double v0[3], double u6[3],
+int16_t Flange_exception(double u0[3], double v0[3], double u6[3],
 	     double radius_2,
 	 THETA_NODE *theta1_pointer, THETA_NODE *theta4_pointer,
 	   double abd_1[3], double abd_2[3]);
@@ -231,8 +231,8 @@ word16 Flange_exception(double u0[3], double v0[3], double u6[3],
 THETA_NODE* Add_Theta(double Theta, double cosTheta, double sinTheta);
 
 THETA_NODE* Create1(double x, double p, double r, double t,
-		    word16 *result,
-		    double max_theta_inc, word16 no_of_solutions,
+		    int16_t *result,
+		    double max_theta_inc, int16_t no_of_solutions,
 		    double OldTheta);
 
 void Delete_Theta_Tree(THETA_NODE *root_ptr);

@@ -40,7 +40,7 @@ extern ui_state_def ui_state;
 // PID ECP.
 extern int ECPfd;
 // Komenda wysylana z okna FileDialog po wcisnieciu accept.
-BYTE FDCommand;
+UI_TO_ECP_COMMAND FDCommand;
 
 int FLbtnAcceptFile( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo ){
 	PtFileSelItem_t *item;

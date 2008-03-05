@@ -130,6 +130,4 @@ typedef struct  { // wiadomosc odbierana przez readera
     int data;	// TODO: to pole chyba nie jest potrzebne (ptroja)  
 } _pulse_msg;
 
-typedef short word16;
-
 #endif /* __TYPEDEFS_H */ 

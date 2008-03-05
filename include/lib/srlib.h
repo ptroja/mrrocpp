@@ -32,7 +32,7 @@ typedef struct sr_package {
 #endif
   struct timespec ts;       // czas generacji wiadomosci
   PROCESS_TYPE process_type;      // rodzaj procesu
-  word16 message_type;      // typ wiadomosci: blad lub komunikat
+  int16_t message_type;      // typ wiadomosci: blad lub komunikat
   char process_name[NAME_LENGTH];  // nazwa globalna procesu np: /irp6_on_track/EDP1
   char description[TEXT_LENGTH];  // tresc wiadomosci
 } sr_package_t;
@@ -58,11 +58,11 @@ protected:
 public :
   sr(PROCESS_TYPE process_type, const char *process_name, const char *sr_name);
   virtual ~sr(void);
-  int message(word16 message_type, uint64_t error_code);
-  int message(word16 message_type, uint64_t error_code0, uint64_t error_code1);
-  int message(word16 message_type, uint64_t error_code, const char *text);
+  int message(int16_t message_type, uint64_t error_code);
+  int message(int16_t message_type, uint64_t error_code0, uint64_t error_code1);
+  int message(int16_t message_type, uint64_t error_code, const char *text);
   int message(const char *text);
-  int message(word16 message_type, const char *text);
+  int message(int16_t message_type, const char *text);
   virtual void interpret() = 0;
 };
 

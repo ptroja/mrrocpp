@@ -75,7 +75,7 @@ void *sr_thread(void* arg)
 	sr_package_t sr_msg;
 	// 	char current_line[40];
 	// 	char current_line[80];
-	word16 status;
+	int16_t status;
 	// 	int flags=0;
 	
 	name_attach_t *attach;
@@ -160,7 +160,7 @@ void *sr_thread(void* arg)
 void *sr_thread(void* arg)
 {
 	sr_package_t sr_msg;
-	word16 status;
+	int16_t status;
 
 	messip_channel_t *ch;
 	int32_t type, subtype;

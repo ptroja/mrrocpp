@@ -290,8 +290,8 @@ protected:
     // ostatnio odczytany przyrost polozenia
     // walow silnikow (w radianach)
 
-    word16 PWM_value[MAX_SERVOS_NR];             // wartosci zadane wypelnienia PWM
-    word16 current[MAX_SERVOS_NR];                // prad sterujacy
+    int16_t PWM_value[MAX_SERVOS_NR];             // wartosci zadane wypelnienia PWM
+    int16_t current[MAX_SERVOS_NR];                // prad sterujacy
     MOTION_TYPE motion_type;        // sposob zadania ruchu: ABSOLUTE/RELATIVE
 
 

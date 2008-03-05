@@ -510,8 +510,7 @@ struct edp_master_command // wzorzec polecenia przesylanego z EDP_MASTER do SERV
         }
         servo_alg_par;
     } parameters;
-}
-; // end: edp_master_command
+};
 /*--------------------------------------------------------------------------*/
 
 
@@ -531,8 +530,8 @@ struct servo_group_reply // wzorzec odpowiedzi przesylanej z SERVO_GROUP do EDP_
     double position[MAX_SERVOS_NR];   // przyrost polozenia walu silnika
     // osiagniety od ostatniego odczytu
     double abs_position[MAX_SERVOS_NR];   // by Y - bezwzgledna pozycja stawow w radianach
-    word16 PWM_value[MAX_SERVOS_NR]; // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
-    word16 current[MAX_SERVOS_NR];    // prad sterujacy -- zazwyczaj zbedne
+    int16_t PWM_value[MAX_SERVOS_NR]; // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
+    int16_t current[MAX_SERVOS_NR];    // prad sterujacy -- zazwyczaj zbedne
     BYTE algorithm_no[MAX_SERVOS_NR];// numery uzywanych algorytmow regulacji
     BYTE algorithm_parameters_no[MAX_SERVOS_NR];
     short gripper_reg_state; // stan w ktorym znajduje sie regulator chwytaka
@@ -715,8 +714,8 @@ typedef union r_buffer_arm
 { // arm
 		struct
 		{
-				word16 PWM_value[MAX_SERVOS_NR]; // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
-				word16 current[MAX_SERVOS_NR]; // prad sterujacy -- zazwyczaj zbedne
+				int16_t PWM_value[MAX_SERVOS_NR]; // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
+				int16_t current[MAX_SERVOS_NR]; // prad sterujacy -- zazwyczaj zbedne
 				frame_tab arm_frame; // Macierz reprezentujaca koncowke
 				// wzgledem bazy manipulator
 				short gripper_reg_state; // stan w ktorym znajduje sie regulator chwytaka
@@ -725,8 +724,8 @@ typedef union r_buffer_arm
 		} frame_def;
 		struct
 		{
-				word16 PWM_value[MAX_SERVOS_NR]; // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
-				word16 current[MAX_SERVOS_NR]; // prad sterujacy -- zazwyczaj zbedne
+				int16_t PWM_value[MAX_SERVOS_NR]; // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
+				int16_t current[MAX_SERVOS_NR]; // prad sterujacy -- zazwyczaj zbedne
 				double arm_coordinates[MAX_SERVOS_NR]; // XYZ + orientacja koncowki wzgledem ukladu bazowego
 				short gripper_reg_state; // stan w ktorym znajduje sie regulator chwytaka
 				double gripper_coordinate; // stopien rozwarcia chwytaka
@@ -734,8 +733,8 @@ typedef union r_buffer_arm
 		} coordinate_def;
 		struct
 		{ // by Y do sterowania pozycyjno silowego
-				word16 PWM_value[MAX_SERVOS_NR]; // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
-				word16 current[MAX_SERVOS_NR];
+				int16_t PWM_value[MAX_SERVOS_NR]; // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
+				int16_t current[MAX_SERVOS_NR];
 				frame_tab beggining_arm_frame; // trojscian koncowki wzgledem ukladu bazowego
 				frame_tab predicted_arm_frame; // trojscian koncowki wzgledem ukladu bazowego
 				frame_tab present_arm_frame; // trojscian koncowki wzgledem ukladu bazowego
@@ -779,8 +778,8 @@ struct r_buffer
 
     BYTE address_byte;                 // bajt do obliczania dlugosci odpowiedzi
 
-    word16 PWM_value[MAX_SERVOS_NR];             // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
-    word16 current[MAX_SERVOS_NR];                // prad sterujacy -- zazwyczaj zbedne
+    int16_t PWM_value[MAX_SERVOS_NR];             // wartosci zadane wypelnienia PWM -- zazwyczaj zbedne
+    int16_t current[MAX_SERVOS_NR];                // prad sterujacy -- zazwyczaj zbedne
 
     r_buffer_rmodel_t rmodel;
     r_buffer_arm_t arm;

@@ -54,7 +54,7 @@ int sr::send_package(void) {
 	if(fd == -1)// by all
 		return -1;
 
-	word16 status;
+	int16_t status;
     sr_message.hdr.type=0;
 
 	clock_gettime(CLOCK_REALTIME, &sr_message.ts);
@@ -62,7 +62,7 @@ int sr::send_package(void) {
 }
 #else /* USE_MESSIP_SRR */
 // Konstruktor
-sr::sr(const word16 process_type, const char *process_name, const char *sr_name) {
+sr::sr(const int16_t process_type, const char *process_name, const char *sr_name) {
 
 	int tmp = 0;
 	while ((ch = messip_channel_connect(NULL, sr_name, MESSIP_NOTIMEOUT)) == NULL) {
@@ -97,7 +97,7 @@ int sr::send_package(void) {
 		return -1;
 
 	int32_t answer;
-	word16 status;
+	int16_t status;
   
 	clock_gettime(CLOCK_REALTIME, &sr_message.ts);
 	return messip_send(ch, 0, 0, &sr_message, sizeof(sr_message),
@@ -122,7 +122,7 @@ int sr::message(const char *text) {
 } // end: sr::message()
 
 
-int sr::message(word16 message_type, const char *text) {
+int sr::message(int16_t message_type, const char *text) {
   sr_message.message_type = message_type;
   if(text == NULL)
     sr_message.description[0] = '\0';
@@ -136,7 +136,7 @@ int sr::message(word16 message_type, const char *text) {
 } // end: sr::message()
 
 
-int sr::message(word16 message_type, uint64_t error_code, const char *text) {
+int sr::message(int16_t message_type, uint64_t error_code, const char *text) {
   sr_message.message_type = message_type;
   error_tab[0] = error_code;
   interpret();
@@ -144,14 +144,14 @@ int sr::message(word16 message_type, uint64_t error_code, const char *text) {
   return send_package();
 } // end: sr::message()
 
-int sr::message(word16 message_type, uint64_t error_code) {
+int sr::message(int16_t message_type, uint64_t error_code) {
   sr_message.message_type = message_type;
   error_tab[0] = error_code;
   interpret();
   return send_package();
 } // end: sr::message()
 
-int sr::message(word16 message_type, uint64_t error_code0, uint64_t error_code1) {
+int sr::message(int16_t message_type, uint64_t error_code0, uint64_t error_code1) {
   sr_message.message_type = message_type;
   error_tab[0] = error_code0;
   error_tab[1] = error_code1;
@@ -175,12 +175,12 @@ void sr_edp::interpret(void) {
   sr_message.description[0] = '\0';
   switch (sr_message.message_type) {
   case SYSTEM_ERROR: // interpretacja do funkcji:
-          // message(word16 message_type, uint64_t error_code, char *text)
+          // message(int16_t message_type, uint64_t error_code, char *text)
 
     break;
   case FATAL_ERROR: 
   case NON_FATAL_ERROR: // interpretacja do funkcji:
-          // message(word16 message_type, uint64_t error_code0, uint64_t error_code1) 
+          // message(int16_t message_type, uint64_t error_code0, uint64_t error_code1) 
     s_error = error_tab[0];
     for (j = 0; j < MAX_SERVOS_NR; j++) {
 	  if ( s_error & 0x00000001 ) {
@@ -358,8 +358,8 @@ switch (sr_message.message_type) {
 	  };
       break; // FATAL_ERROR
   case NON_FATAL_ERROR: // interpretacja do funkcji:
-          // message(word16 message_type, uint64_t error_code) 
-          // message(word16 message_type, uint64_t error_code, char *text)
+          // message(int16_t message_type, uint64_t error_code) 
+          // message(int16_t message_type, uint64_t error_code, char *text)
     switch (error_tab[0]) {
       case EDP_ERROR: 
            sprintf (sr_message.description, "ERROR IN EDP"); break;

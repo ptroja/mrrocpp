@@ -172,7 +172,7 @@ void kinematic_model_irp6m_5dof::inverse_kinematics_transform(double* local_desi
   v6[2] = tmp_tool_m[2][0];
 
   THETA_NODE *tree_ptr;   /* wskaznik korzenia drzewa rozwiaza`n */
-  word16 res;      /* wynik dzialania Theta_1 - OK lub nie */
+  int16_t res;      /* wynik dzialania Theta_1 - OK lub nie */
 
   tree_ptr = Theta_1( q0, v0, q6, v6, &res, old_theta, interpolation_period, SINGLE_SOLUTION);
 
@@ -250,7 +250,7 @@ DANE WEJSCIOWE:
 
   double interpolation_period   - okres makrointerpolacji w [ms]
 
-  word16 no_of_solutions - zmienna booleowska okreslajaca, czy maja
+  int16_t no_of_solutions - zmienna booleowska okreslajaca, czy maja
 				  byc obliczone wszystkie rozwiazania, czy
 				  tez jedynie to lezace najblizej
 				  poprzedniego
@@ -263,7 +263,7 @@ DANE WYJSCIOWE:
 		      pierwsza dopuszczalna wartosc THETA1 lub NULL,
 		      gdy jej brak.
 
-    word16 *result - czy wynik dzialania poprawny
+    int16_t *result - czy wynik dzialania poprawny
 
     *result = OK - stworzono drzewo rozwiaza`n.
     *result = NEGATIVE_DISCRIMINANT_THETA1
@@ -286,23 +286,23 @@ ZMIENNE ZEWNeTRZNE:
 
 THETA_NODE* kinematic_model_irp6m_5dof::Theta_1(double q0[3], double v0[3],
 		    double q6[3], double v6[3],
-		    word16 *result,
+		    int16_t *result,
 		    double old_theta[5],
 		    double interpolation_period,
-		    word16 no_of_solutions)
+		    int16_t no_of_solutions)
 {
    double u0[3];       /* wsp. srodka okregu wzgledem ukl. bazowego */
    double u6[3];       /* wsp. srodka okregu wzgledem ukl. kolnierza */
    double radius_2;    /* kwadrat promienia okregu */
    double temp1;       /* zmienna pomocnicza */
    double temp2;       /* zmienna pomocnicza */
-   word16 i;           /* licznik petli */
+   int16_t i;           /* licznik petli */
    double sum;         /* sumator */
    double x1;          /* zmienna pomocnicza przeznaczona na przechowywanie
 			  pierwszego rozwiaza`n rownania kwadratowego */
    double x2;          /* zmienna pomocnicza przeznaczona na przechowywanie
 			  drugiego rozwiazania rownania kwadratowego */
-   word16 res;         /* zmienna pomocnicza przeznaczona na przechowywanie
+   int16_t res;         /* zmienna pomocnicza przeznaczona na przechowywanie
 			  rodzaju rozwiaza`nia rownania kwadratowego */
    double p;           /* zmienna pomocnicza wykorzystywana przy obliczaniu 
 			  wspolczynnikow rownania kwadratowego */
@@ -592,7 +592,7 @@ DANE WEJSCIOWE:
 
   double interpolation_period   - okres makrointerpolacji w [ms]
 
-  word16 no_of_solutions - zmienna booleowska okreslajaca, czy maja
+  int16_t no_of_solutions - zmienna booleowska okreslajaca, czy maja
 				  byc obliczone wszystkie rozwiazania, czy
 				  tez jedynie to lezace najblizej
 				  poprzedniego
@@ -605,7 +605,7 @@ DANE WYJSCIOWE:
 		      pierwsza dopuszczalna wartosc THETA4 lub NULL,
 		      gdy jej brak.
 
-    word16 *result - czy wynik dzialania poprawny
+    int16_t *result - czy wynik dzialania poprawny
 
     *result = OK - stworzono drzewo rozwiaza`n.
     *result = THETA2_OUT_OF_RANGE
@@ -627,8 +627,8 @@ ZMIENNE ZEWNeTRZNE:
 THETA_NODE* kinematic_model_irp6m_5dof::Theta_2(THETA_NODE *theta1_pointer, THETA_NODE *theta4_pointer,
 	    double u0[3], double v0[3], double q0[3], double u6[3],
 	    double q6[3], double v6[3], double radius_2,
-	    word16 *result, double old_theta[5],	    
-	    double interpolation_period, word16 no_of_solutions)
+	    int16_t *result, double old_theta[5],	    
+	    double interpolation_period, int16_t no_of_solutions)
 {
  double theta_x1;   /* zmiena pomocnicza przeznaczona na przechowywanie
 		       pierwszego rozwiazania rownania E cos + F sin - G = 0 */
@@ -638,9 +638,9 @@ THETA_NODE* kinematic_model_irp6m_5dof::Theta_2(THETA_NODE *theta1_pointer, THET
 			 bazowego */
  double o06_bis[3]; /* polozenia srodka kolnierza wzgledem ukladu
 			 bazowego */
- word16 rrr;        /* zmienna pomocnicza przeznaczona na przechowywanie
+ int16_t rrr;        /* zmienna pomocnicza przeznaczona na przechowywanie
 			 liczby rozwiaza`n dla kolnierza */
- word16 res;        /* zmienna pomocnicza przeznaczona na przechowywanie
+ int16_t res;        /* zmienna pomocnicza przeznaczona na przechowywanie
 			 rodzaju rozwiaza`nia rownania kwadratowego */
  double e1;         /* parametr E pierwszego zestawu parametrow rownania: 
 			  E cos + F sin - G = 0 */
@@ -921,7 +921,7 @@ DANE WEJSCIOWE:
 
   double interpolation_period   - okres makrointerpolacji w [ms]
 
-  word16 no_of_solutions - zmienna booleowska okreslajaca, czy maja
+  int16_t no_of_solutions - zmienna booleowska okreslajaca, czy maja
 				  byc obliczone wszystkie rozwiazania, czy
 				  tez jedynie to lezace najblizej
 				  poprzedniego
@@ -933,7 +933,7 @@ DANE WYJSCIOWE:
    THETA_NODE *ptr - wskaznik na wezel poddrzewa rozwiaza`n zawierajacy
 		      dopuszczalna wartosc THETA3 lub NULL, gdy jej brak.
 
-    word16 *result - czy wynik dzialania poprawny
+    int16_t *result - czy wynik dzialania poprawny
 
     *result = OK - stworzono drzewo rozwiaza`n.
     *result = OUT_OF_MEMORY
@@ -960,9 +960,9 @@ THETA_NODE* kinematic_model_irp6m_5dof::Theta_3(THETA_NODE *theta1_pointer,
 		    double e, double f, 
 		    double q0[3], double q6[3],
 		    double v0[3], double v6[3],
-		    word16 *result, double old_theta[5],
+		    int16_t *result, double old_theta[5],
 		    double interpolation_period,
-		    word16 no_of_solutions)
+		    int16_t no_of_solutions)
 {
    double eee;                /* zmienna pomocnicza: e - a2*cos(THETA2) */
    double fff;                /* zmienna pomocnicza: f - a2*sin(THETA2) */
@@ -1081,7 +1081,7 @@ DANE WEJSCIOWE:
 
   double interpolation_period   - okres makrointerpolacji w [ms]
 
-  word16 no_of_solutions - zmienna booleowska okreslajaca, czy maja
+  int16_t no_of_solutions - zmienna booleowska okreslajaca, czy maja
 				  byc obliczone wszystkie rozwiazania, czy
 				  tez jedynie to lezace najblizej
 				  poprzedniego
@@ -1094,7 +1094,7 @@ DANE WYJSCIOWE:
 		      pierwsza dopuszczalna wartosc THETA4 lub NULL,
 		      gdy jej brak.
 
-    word16 *result - czy wynik dzialania poprawny
+    int16_t *result - czy wynik dzialania poprawny
 
     *result = OK - stworzono drzewo rozwiaza`n.
     *result = THETA4_OUT_OF_RANGE
@@ -1115,15 +1115,15 @@ ZMIENNE ZEWNeTRZNE:
 THETA_NODE* kinematic_model_irp6m_5dof::Theta_4(THETA_NODE *theta1_pointer,
 		    double u0[3], double v0[3], double u6[3], double v6[3],
 		    double q0[3], double q6[3], double radius_2,
-		    word16 *result, double old_theta[5],
+		    int16_t *result, double old_theta[5],
 		    double interpolation_period,
-		    word16 no_of_solutions)
+		    int16_t no_of_solutions)
 {
  double theta_x1;   /* zmiena pomocnicza przeznaczona na przechowywanie
 		       pierwszego rozwiazania rownania E cos + F sin - G = 0 */
  double theta_x2;   /* zmiena pomocnicza przeznaczona na przechowywanie
 		       drugiego rozwiazania rownania E cos + F sin - G = 0 */
- word16 res; /* zmienna pomocnicza przeznaczona na przechowywanie
+ int16_t res; /* zmienna pomocnicza przeznaczona na przechowywanie
 			 rodzaju rozwiaza`nia rownania kwadratowego */
  double e;           /* parametr E zestawu parametrow rownania: 
 			  E cos + F sin - G = 0 */
@@ -1283,7 +1283,7 @@ DANE WEJSCIOWE:
 
   double interpolation_period   - okres makrointerpolacji w [ms]
 
-  word16 no_of_solutions - zmienna booleowska okreslajaca, czy maja
+  int16_t no_of_solutions - zmienna booleowska okreslajaca, czy maja
 				  byc obliczone wszystkie rozwiazania, czy
 				  tez jedynie to lezace najblizej
 				  poprzedniego
@@ -1296,7 +1296,7 @@ DANE WYJSCIOWE:
 		      pierwsza dopuszczalna wartosc THETA4 lub NULL,
 		      gdy jej brak.
 
-    word16 *result - czy wynik dzialania poprawny
+    int16_t *result - czy wynik dzialania poprawny
 
     *result = OK - stworzono drzewo rozwiaza`n.
     *result = INCONSISTENT_DATA_THETA5
@@ -1322,16 +1322,16 @@ THETA_NODE* kinematic_model_irp6m_5dof::Theta_5(THETA_NODE *theta1_pointer,
 		    THETA_NODE *theta4_pointer,
 		    double q0[3], double q6[3],
 		    double v0[3], double v6[3],
-		    word16 *result, double old_theta[5],
+		    int16_t *result, double old_theta[5],
 		    double interpolation_period,
-		    word16 no_of_solutions)
+		    int16_t no_of_solutions)
 
 {
  double theta_x1;   /* zmiena pomocnicza przeznaczona na przechowywanie
 		       pierwszego rozwiazania rownania E cos + F sin - G = 0 */
  double theta_x2;   /* zmiena pomocnicza przeznaczona na przechowywanie
 		       drugiego rozwiazania rownania E cos + F sin - G = 0 */
- word16 res; /* zmienna pomocnicza przeznaczona na przechowywanie
+ int16_t res; /* zmienna pomocnicza przeznaczona na przechowywanie
 		       rodzaju rozwiaza`nia rownania E cos + F sin - G = 0 */
  double e;           /* parametr E zestawu parametrow rownania: 
 			  E cos + F sin - G = 0 */
@@ -1342,7 +1342,7 @@ THETA_NODE* kinematic_model_irp6m_5dof::Theta_5(THETA_NODE *theta1_pointer,
  double s5;          /* sin(THETA5) */
  double c5;          /* cos(THETA5) */
 
- word16 special_case;  /* gdy C4 == 0 && S4 > 0   special_case =  1
+ int16_t special_case;  /* gdy C4 == 0 && S4 > 0   special_case =  1
 		       gdy C4 == 0 && S4 < 0   special_case = -1
 		       gdy C4 != 0             special_case =  0 */
 
@@ -1535,7 +1535,7 @@ UWAGA! Jezeli ktorys z otrzymanych pierwiastkow nieznacznie
 #define EPS 1.0e-15
 #define ROUND_OFF 1.0e-8
 
-word16 kinematic_model_irp6m_5dof::QuadraticEquation(double a, double b, double c,
+int16_t kinematic_model_irp6m_5dof::QuadraticEquation(double a, double b, double c,
 				double *x1, double *x2, double delta)
 {
   double sqrt_delta;    /* pierwiastek wyroznika rownania kwadratowego */
@@ -1663,7 +1663,7 @@ DANE WEJSCIOWE:
  double OldTheta      - poprzednia wartosc wejsciowej
 			wspolrzednej wewnetrznej
 
- word16 no_of_solutions - zmienna booleowska okreslajaca, czy maja
+ int16_t no_of_solutions - zmienna booleowska okreslajaca, czy maja
 				 byc obliczone wszystkie rozwiazania, czy
 				 tez jedynie to lezace najblizej
 				 poprzedniego
@@ -1706,11 +1706,11 @@ DANE WYJSCIOWE:
 #define OFFSET 1.0e-4
 
 
-word16 kinematic_model_irp6m_5dof::Ecos_Fsin_G(double e, double f, double g,
+int16_t kinematic_model_irp6m_5dof::Ecos_Fsin_G(double e, double f, double g,
 			  double *theta1_ptr, double *theta2_ptr, 
 			  double lower_limit, double upper_limit, 
 			  double max_theta_inc, double OldTheta,
-			  word16 no_of_solutions)
+			  int16_t no_of_solutions)
 {
   double r_2;  /* kwadrat promienia hipotetycznego okregu */
   double g_2;  /* g^2 */
@@ -1720,7 +1720,7 @@ word16 kinematic_model_irp6m_5dof::Ecos_Fsin_G(double e, double f, double g,
   double pitf; /* PI - tf */
   double rt;   /* sqrt(r_2 - g_2) */
 
-  word16 wynik;  /* liczba rozwiaza`n rownania */
+  int16_t wynik;  /* liczba rozwiaza`n rownania */
 
 /* Poczatek Ecos_Fsin_G() */
 
@@ -1917,7 +1917,7 @@ DANE WEJSCIOWE:
   double max_theta1_inc - maksymalny dopuszczalny przyrost ka`ta
 			 THETA1 w 1 kroku makro-interpolacji
 
-  word16 no_of_solutions - zmienna booleowska okreslajaca, czy maja
+  int16_t no_of_solutions - zmienna booleowska okreslajaca, czy maja
 				  byc obliczone wszystkie rozwiazania, czy
 				  tez jedynie to lezace najblizej
 				  poprzedniego
@@ -1932,7 +1932,7 @@ DANE WYJSCIOWE:
   double *sin_theta1   - sinus kata theta1
 
   Wartosci funkcji:
-    word16 res
+    int16_t res
 
     res = REJECT  - obliczony kat nie jest w przestrzeni roboczej
     res = ACCEPT  - obliczony kat jest w przestrzeni roboczej
@@ -1946,11 +1946,11 @@ DANE WYJSCIOWE:
 #define EQUATION_EPS 1.0E-10
 
 
-word16 kinematic_model_irp6m_5dof::Check_cos_Theta1(double cos_theta1, double *sin_theta1,
+int16_t kinematic_model_irp6m_5dof::Check_cos_Theta1(double cos_theta1, double *sin_theta1,
 			       double *theta1,
 			       double p, double r, double t,
 			       double max_theta1_inc,
-			       word16 no_of_solutions,
+			       int16_t no_of_solutions,
 			       double OldTheta1)
 
 {
@@ -2036,7 +2036,7 @@ DANE WEJSCIOWE:
 			       dotyczace THETA3
   THETA_NODE *theta4_pointer - wskaznik na strukture zawierajaca dane
 			       dotyczace THETA4
-  word16 no_of_solutions - zmienna booleowska okreslajaca, czy maja
+  int16_t no_of_solutions - zmienna booleowska okreslajaca, czy maja
 				  byc obliczone wszystkie rozwiazania, czy
 				  tez jedynie to lezace najblizej
 				  poprzedniego
@@ -2050,7 +2050,7 @@ DANE WYJSCIOWE:
 
   Wartosc funkcji:
 
-   word16 res
+   int16_t res
 
     res = ACCEPT
     res = REJECT
@@ -2060,11 +2060,11 @@ DANE WYJSCIOWE:
 #define EQUATION_EPS 1.0E-2
 #define ANGLE_EPS    1.0E-9
 
-word16 kinematic_model_irp6m_5dof::Check_Theta5(double *theta5, double c5, double s5,
+int16_t kinematic_model_irp6m_5dof::Check_Theta5(double *theta5, double c5, double s5,
 		    double q0[3], double q6[3], double v0[3], double v6[3],
 		    THETA_NODE *theta1_pointer, THETA_NODE *theta2_pointer,
 		    THETA_NODE *theta3_pointer, THETA_NODE *theta4_pointer,
-		    word16 no_of_solutions,
+		    int16_t no_of_solutions,
 		    double max_theta5_inc,
 		    double OldTheta5)
 
@@ -2207,7 +2207,7 @@ DANE WEJSCIOWE:
 DANE WYJSCIOWE:
 
   Wartosci funkcji:
-    word16 r
+    int16_t r
 
     r = NO_SOLUTION
     r = ONE_SOLUTION
@@ -2233,7 +2233,7 @@ DANE WYJSCIOWE:
 #define EPS 1.0E-8
 #define EEPS 1.0E-10
 
-word16 kinematic_model_irp6m_5dof::Flange(double u0[3], double v0[3], double u6[3],
+int16_t kinematic_model_irp6m_5dof::Flange(double u0[3], double v0[3], double u6[3],
 		     double radius_2,
 		     THETA_NODE *theta1_pointer, THETA_NODE *theta4_pointer,
 		     double o06_prim[3], double o06_bis[3])
@@ -2253,7 +2253,7 @@ word16 kinematic_model_irp6m_5dof::Flange(double u0[3], double v0[3], double u6[
    double aaa;     /* zmienna pomocnicza */
    double ww;      /* wartosc wyznacznika glownego, gdy v0[Z]=0 */
    double w;       /* wartosc wyznacznika glownego */
-   word16 result;      /* do przechowywania wyniku dzialania funkcji
+   int16_t result;      /* do przechowywania wyniku dzialania funkcji
 				 Flange_exception */
 
 /* Poczatek Flange() */
@@ -2381,7 +2381,7 @@ DANE WEJSCIOWE:
 DANE WYJSCIOWE:
 
   Wartosci funkcji:
-    word16 r
+    int16_t r
 
     r = NO_SOLUTION
 	 r = TRIVIAL_EQUATION
@@ -2408,12 +2408,12 @@ DANE WYJSCIOWE:
 #define EEPS 1.0E-7
 
 
-word16 kinematic_model_irp6m_5dof::Flange_exception(double u0[3], double v0[3], double u6[3],
+int16_t kinematic_model_irp6m_5dof::Flange_exception(double u0[3], double v0[3], double u6[3],
 	     double radius_2,
 	 THETA_NODE *theta1_pointer, THETA_NODE *theta4_pointer,
 	   double abd_1[3], double abd_2[3])
 {
-   word16 result;  /* do przechowywania wyniku dzialania funkcji
+   int16_t result;  /* do przechowywania wyniku dzialania funkcji
 			     rozwiazujacej rownanie kwadratowe */
    double delta;                /* wyroznik rownania kwadratowego */
    double uuu;            /* u0[Y]*cos(THETA1) - u0[X]*sin(THETA1) */
@@ -2591,7 +2591,7 @@ DANE WEJSCIOWE:
   double max_theta_inc - maksymalny dopuszczalny przyrost ka`ta
 			 THETA w 1 kroku makro-interpolacji
 
-  word16 no_of_solutions - zmienna booleowska okreslajaca, czy maja
+  int16_t no_of_solutions - zmienna booleowska okreslajaca, czy maja
 				  byc obliczone wszystkie rozwiazania, czy
 				  tez jedynie to lezace najblizej
 				  poprzedniego
@@ -2605,7 +2605,7 @@ DANE WYJSCIOWE:
   Wartosc funkcji:
    THETA_NODE *ptr   - wskaznik na korze`n w poddrzewie rozwiaza`n
 
-   word16 *result
+   int16_t *result
     *result = OUT_OF_RANGE
     *result = ONE_NODE
     *result = TWO_NODES
@@ -2619,8 +2619,8 @@ DANE WYJSCIOWE:
 #define OFFSET 1.0e-4
 
 THETA_NODE* kinematic_model_irp6m_5dof::Create1(double x, double p, double r, double t,
-		    word16 *result,
-		    double max_theta_inc, word16 no_of_solutions,
+		    int16_t *result,
+		    double max_theta_inc, int16_t no_of_solutions,
 		    double OldTheta)
 {
    double s;                  /* sin(THETA1) */
