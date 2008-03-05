@@ -106,15 +106,6 @@ protected:
 
     int caller;				// by 7&Y
 
-    bool is_get_controller_state(c_buffer *instruction) const; // odczytac wejscia?
-    bool is_get_inputs(c_buffer *instruction) const; // odczytac wejscia?
-    bool is_get_rmodel(c_buffer *instruction) const ; // odczytac narzedzie?
-    bool is_get_arm(c_buffer *instruction) const ; // odczytac polozenie ramienia?
-
-    bool is_set_outputs(c_buffer *instruction) const ;  // ustawic wyjscia?
-    bool is_set_rmodel(c_buffer *instruction) const ; // zmienic narzedzie?
-    bool is_set_arm(c_buffer *instruction) const ;  // zmienic polozenie ramienia?
-
     WORD motion_steps;            // liczba krokow ruchu zadanego (makrokroku)
 
     //Liczba krokow pierwszej fazy ruchu, czyli krok, w ktorym ma zostac
@@ -346,7 +337,7 @@ public:
     virtual void get_arm_position (bool read_hardware, c_buffer *instruction); // odczytanie pozycji ramienia
 
     void synchronise (); // synchronizacja robota
-    virtual void servo_joints_and_frame_actualization_and_upload(void) ; // by Y
+    virtual void servo_joints_and_frame_actualization_and_upload(void); // by Y
 
     void main_loop(); // main loop
     virtual void create_threads ();

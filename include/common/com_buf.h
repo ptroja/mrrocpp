@@ -623,7 +623,6 @@ typedef union { // arm
 
 struct c_buffer
 {
-
     struct _pulse hdr;
 
     INSTRUCTION_TYPE instruction_type; // typ instrukcji: SET, GET, SET_GET, SYNCHRO, QUERY
@@ -671,6 +670,15 @@ struct c_buffer
     c_buffer_arm arm;
 
     c_buffer (void);// by W odkomentowane
+
+    bool is_get_controller_state() const; // odczytac wejscia?
+    bool is_get_inputs() const; // odczytac wejscia?
+    bool is_get_rmodel() const ; // odczytac narzedzie?
+    bool is_get_arm() const ; // odczytac polozenie ramienia?
+
+    bool is_set_outputs() const ;  // ustawic wyjscia?
+    bool is_set_rmodel() const ; // zmienic narzedzie?
+    bool is_set_arm() const ;  // zmienic polozenie ramienia?
 };
 /****************************** c_buffer *******************************/
 
@@ -825,25 +833,23 @@ struct ecp_next_state_t
 // ------------------------------------------------------------------------
 class ecp_command_buffer
 {
-public:
+	public:
 
-    c_buffer instruction;     // bufor polecen przysylanych z ECP do EDP
+		// zlecenie zmiany stanu skojarzone z NEXT_STATE
+		ecp_next_state_t ecp_next_state;
+		
+		c_buffer instruction; // bufor polecen przysylanych z ECP do EDP
 
-    // zlecenie zmiany stanu skojarzone z NEXT_STATE
-    ecp_next_state_t ecp_next_state;
+		bool is_set_rmodel() const
+		{
+			return (bool) (instruction.set_type & RMODEL_DV);
+		}
 
-    bool is_set_rmodel() const
-    {
-        return (bool) (instruction.set_type & RMODEL_DV);
-    }
-    ; // zmienic narzedzie?
-    bool is_set_arm() const
-    {
-        return (bool) (instruction.set_type & ARM_DV);
-    }
-    ; // zmienic polozenie ramienia?
-}
-; // end: class command_buffer
+		bool is_set_arm() const
+		{
+			return (bool) (instruction.set_type & ARM_DV);
+		}
+};
 // ------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------
@@ -851,8 +857,7 @@ class edp_reply_buffer
 {
 public:
     r_buffer reply_package;           // bufor odpowiedzi wysylanych do ECP
-}
-; // end: class reply_buffer
+}; // end: class reply_buffer
 // ------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------

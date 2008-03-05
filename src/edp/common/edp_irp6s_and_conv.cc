@@ -93,13 +93,13 @@ edp_irp6s_and_conv_effector::edp_irp6s_and_conv_effector (configurator &_config,
     mt_tt_obj = new master_trans_t_buffer();
     in_out_obj = new in_out_buffer(); // bufor wejsc wyjsc
 
-};
+}
 
 
 
-void edp_irp6s_and_conv_effector::initialize (void)
-{}
-;
+void edp_irp6s_and_conv_effector::initialize(void)
+{
+}
 
 
 void edp_irp6s_and_conv_effector::master_joints_read (double* output)
@@ -111,7 +111,7 @@ void edp_irp6s_and_conv_effector::master_joints_read (double* output)
         output[i]=global_current_joints[i];
     }
     pthread_mutex_unlock( &edp_irp6s_effector_mutex );
-};
+}
 
 /*--------------------------------------------------------------------------*/
 void edp_irp6s_and_conv_effector::create_threads ()
@@ -151,7 +151,7 @@ void edp_irp6s_and_conv_effector::create_threads ()
         msg->message(SYSTEM_ERROR, errno, "EDP: Failed to create VISUALISATION THREAD");
         throw System_error();
     }
-};
+}
 
 
 // kasuje zmienne - uwaga najpierw nalezy ustawic number_of_servos
@@ -166,7 +166,6 @@ void edp_irp6s_and_conv_effector::reset_variables ()
         servo_algorithm_sg[i] = 0;
         servo_parameters_sg[i] = 0;
     }
-    ; // end: for
 
     for (i=0; i<number_of_servos; i++)
     {
@@ -190,23 +189,20 @@ void edp_irp6s_and_conv_effector::reset_variables ()
         motor_pos_increment_reading[i] = 0.0;
         servo_current_motor_pos[i]=0.0;   // Polozenia walow silnikow -// dla watku edp_servo
     }
-    ; // end: for
 
+}
 
-};
-
-
-void edp_irp6s_and_conv_effector::move_arm (c_buffer *instruction)
-{}
-;            // przemieszczenie ramienia
-
+// przemieszczenie ramienia
+void edp_irp6s_and_conv_effector::move_arm(c_buffer *instruction)
+{
+}
+            
+// odczytanie pozycji ramienia
 void edp_irp6s_and_conv_effector::get_arm_position (bool read_hardware, c_buffer *instruction)
 {}
-; // odczytanie pozycji ramienia
 
 void edp_irp6s_and_conv_effector::servo_joints_and_frame_actualization_and_upload(void)
 {}
-; // by Y
 
 bool edp_irp6s_and_conv_effector::is_power_on() const
 {
@@ -253,14 +249,14 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer *instruction)
     case SET:
         // tu wykonanie instrukcji SET
 
-        if (is_set_outputs(instruction))
+        if (instruction->is_set_outputs())
             // ustawienie wyjsc
             set_outputs(instruction);
-        if (is_set_rmodel(instruction))
+        if (instruction->is_set_rmodel())
             // zmiana modelu robota
             // set_rmodel();
             mt_tt_obj->master_to_trans_t_order(MT_SET_RMODEL, 0);
-        if (is_set_arm(instruction))
+        if (instruction->is_set_arm())
         {
             // przemieszczenie koncowki
             // move_arm();
@@ -347,15 +343,15 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer *instruction)
     case SET_GET:
         // tu wykonanie instrukcji SET i GET
         // Cz SET
-        if (is_set_outputs(instruction))
+        if (instruction->is_set_outputs())
             // ustawienie wyj
             set_outputs(instruction);
-        if (is_set_rmodel(instruction))
+        if (instruction->is_set_rmodel())
             // zmiana aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
             //        set_rmodel();
             mt_tt_obj->master_to_trans_t_order(MT_SET_RMODEL, 0);
-        if (is_set_arm(instruction))
+        if (instruction->is_set_arm())
             // przemieszczenie koncowki
             // move_arm();
             mt_tt_obj->master_to_trans_t_order(MT_MOVE_ARM, 0);
@@ -370,14 +366,14 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer *instruction)
             break;
         case ARM:
             // odczytanie TCP i orientacji koncowki
-            if(is_set_arm(instruction))
+            if(instruction->is_set_arm())
                 get_arm_position(false, instruction);
             else
                 // get_arm_position(true);
                 mt_tt_obj->master_to_trans_t_order(MT_GET_ARM_POSITION, true);
             break;
         case RMODEL:
-            if(!is_set_arm(instruction))
+            if(!instruction->is_set_arm())
                 // ewentualna aktualizacja numerow algorytmow i ich zestawow parametrow
                 if ((*instruction).get_rmodel_type == SERVO_ALGORITHM)
                     // get_algorithms();
@@ -392,7 +388,7 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer *instruction)
             break;
         case ARM_RMODEL:
             // odczytanie TCP i orientacji koncowki
-            if(is_set_arm(instruction))
+            if(instruction->is_set_arm())
                 get_arm_position(false, instruction);
             else
                 // get_arm_position(true);
@@ -405,14 +401,14 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer *instruction)
             // odczytanie wejsc
             get_inputs(&reply);
             // odczytanie TCP i orientacji koncowki
-            if(is_set_arm(instruction))
+            if(instruction->is_set_arm())
                 get_arm_position(false, instruction);
             else
                 // get_arm_position(true);
                 mt_tt_obj->master_to_trans_t_order(MT_GET_ARM_POSITION, true);
             break;
         case RMODEL_INPUTS:
-            if(!is_set_arm(instruction))
+            if(!instruction->is_set_arm())
                 // ewentualna aktualizacja numerow algorytmow i ich zestawow parametrow
                 if ((*instruction).get_rmodel_type == SERVO_ALGORITHM)
                     //   get_algorithms();
@@ -426,7 +422,7 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer *instruction)
         case ARM_RMODEL_INPUTS:
             // odczytanie wejsc
             get_inputs(&reply);
-            if(is_set_arm(instruction))
+            if(instruction->is_set_arm())
                 get_arm_position(false, instruction);
             else
                 // get_arm_position(true);
@@ -714,20 +710,18 @@ REPLY_TYPE edp_irp6s_and_conv_effector::rep_type (c_buffer *instruction)
 {
     // ustalenie formatu odpowiedzi
     reply.reply_type = ACKNOWLEDGE;
-    if (is_get_inputs(instruction))
+    if (instruction->is_get_inputs())
     {
         reply.reply_type = INPUTS;
     }
-    ; // end: if (is_get_inputs())
-    if (is_get_rmodel(instruction))
+    if (instruction->is_get_rmodel())
     {
         if (reply.reply_type == ACKNOWLEDGE)
             reply.reply_type = RMODEL;
         else
             reply.reply_type = RMODEL_INPUTS;
     }
-    ; // end: if (is_get_rmodel())
-    if (is_get_arm(instruction))
+    if (instruction->is_get_arm())
     {
         switch (reply.reply_type)
         {
@@ -746,10 +740,9 @@ REPLY_TYPE edp_irp6s_and_conv_effector::rep_type (c_buffer *instruction)
         default:
             break;
         }
-        ; // end: switch
     }
     real_reply_type = reply.reply_type;
-    if (is_set_arm(instruction))
+    if (instruction->is_set_arm())
     {// by Y ORIGINAL
         // if (is_set_arm()||is_set_force()) {// by Y DEBUG
         switch (reply.reply_type)
@@ -769,11 +762,9 @@ REPLY_TYPE edp_irp6s_and_conv_effector::rep_type (c_buffer *instruction)
         default:
             break;
         }
-        ; // end: switch
     }
-    ; // end: if (is_set_arm())
     // by Y
-    if (is_get_controller_state(instruction))
+    if (instruction->is_get_controller_state())
     {
         reply.reply_type=CONTROLLER_STATE;
     }

@@ -29,7 +29,7 @@ libmrrocpp.a: \
 	ForceTrans.o \
 	cfgopts.o \
 	configurator.o \
-	cr_buf.o \
+	c_buffer.o r_buffer.o \
 	mathtr.o \
 	matrix.o \
 	mis_fun.o \

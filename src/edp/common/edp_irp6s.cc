@@ -58,7 +58,7 @@ void edp_irp6s_effector::compute_xyz_euler_zyz (c_buffer *instruction)
     /* Zlecenie transformerowi przeliczenie wspolrzednych */
 
     double* p;   // wskanik miejsca w strukturze przesanej z ECP, w ktorym znajduj sie wspolrzedne
-    if (is_set_arm(instruction))
+    if (instruction->is_set_arm())
     {
         // przyslano dane dotyczace koncowki
         motion_type = (*instruction).motion_type;
@@ -75,7 +75,6 @@ void edp_irp6s_effector::compute_xyz_euler_zyz (c_buffer *instruction)
         desired_joints_tmp[gripper_servo_nr] = (*instruction).arm.coordinate_def.gripper_coordinate;
     }
 
-
     // if ( (value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )
     if ( (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )// by Y
         throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
@@ -90,7 +89,6 @@ void edp_irp6s_effector::compute_xyz_euler_zyz (c_buffer *instruction)
     default:
         throw NonFatal_error_2(INVALID_MOTION_TYPE);
     }
-    ; // end: switch (instruction.motion_type)
 
     // Przeliczenie wspolrzednych zewnetrznych na wspolrzedne wewnetrzne
     get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, &desired_end_effector_frame);
@@ -118,7 +116,7 @@ void edp_irp6s_effector::compute_xyz_angle_axis (c_buffer *instruction)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
     /* Zlecenie transformerowi przeliczenie wspolrzednych */
     double* p;   // wskanik miejsca w strukturze przesanej z ECP, w ktorym znajduj sie wspolrzedne
-    if ( is_set_arm(instruction) || is_set_rmodel(instruction) )
+    if ( instruction->is_set_arm() || instruction->is_set_rmodel() )
     {
         // przyslano dane dotyczace narzedzia i koncowki
         motion_type = (*instruction).motion_type;
@@ -170,7 +168,7 @@ void edp_irp6s_effector::compute_frame (c_buffer *instruction)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
     /* Zlecenie transformerowi przeliczenie wspolrzednych */
     frame_tab p_m;   // wskanik miejsca w strukturze przesanej z ECP, w ktorym znajduj sie wspolrzedne
-    if ( is_set_rmodel(instruction) || is_set_arm(instruction) )
+    if ( instruction->is_set_rmodel() || instruction->is_set_arm() )
     {
         // przyslano dane dotyczace narzedzia lub koncowki
         motion_type = (*instruction).motion_type;
@@ -386,7 +384,7 @@ void edp_irp6s_effector::tool_frame_2_frame (c_buffer *instruction)
     // Sprawdzenie czy przepisana macierz jest jednorodna
     // Jezeli nie, to wyzwalany jest wyjatek.
 
-    if ( is_set_rmodel(instruction) || is_set_arm(instruction))
+    if ( instruction->is_set_rmodel() || instruction->is_set_arm())
     {
         // Przyslano dane dotyczace narzedzia i koncowki.
         Homog_matrix A_B_T ((*instruction).rmodel.tool_frame_def.tool_frame);

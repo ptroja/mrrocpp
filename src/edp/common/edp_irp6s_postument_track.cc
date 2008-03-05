@@ -139,7 +139,7 @@ void edp_irp6s_postument_track_effector::get_rmodel (c_buffer *instruction)
         reply.rmodel_type = SERVO_ALGORITHM;
         // ustawienie numeru algorytmu serworegulatora oraz numeru jego zestawu parametrow
         for (i = 0; i<number_of_servos; i++)
-            if ( is_get_arm(instruction) )
+            if (instruction->is_get_arm())
             {
                 reply.rmodel.servo_algorithm.servo_algorithm_no[i] = servo_algorithm_sg[i];
                 reply.rmodel.servo_algorithm.servo_parameters_no[i] = servo_parameters_sg[i];
