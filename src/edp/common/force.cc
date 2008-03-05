@@ -97,9 +97,10 @@ void * edp_irp6s_postument_track_effector::edp_vsp_thread(void *arg)
             MsgReply(vsp_caller, EOK, 0, 0);
             continue;
         }
-
-        if (vsp_edp_command.konfigurowac)
-            vs->force_sensor_do_configure = true;//!< jesli otrzymano od VSP polecenie konfiguracji czujnika
+        /*
+                if (vsp_edp_command.konfigurowac)
+                    vs->force_sensor_do_configure = true;//!< jesli otrzymano od VSP polecenie konfiguracji czujnika
+                    */
         //!< oczekiwanie nowego pomiaru
         sem_wait(&(vs->new_ms));
         //!< przygotowanie struktury do wyslania
@@ -145,7 +146,7 @@ void * edp_irp6s_postument_track_effector::force_thread(void *arg)
 
     vs = return_created_edp_force_sensor(*this);		//!< czujnik wirtualny
 
-	sem_post(&force_master_sem);
+    sem_post(&force_master_sem);
 
     try
     {
@@ -185,12 +186,8 @@ void * edp_irp6s_postument_track_effector::force_thread(void *arg)
                 {
                     vs->configure_sensor();
                     vs->set_command_execution_finish();
+                    vs->force_sensor_do_configure = false;	//!< ustawienie flagi ze czujnik jest ponownie skonfigurowany
                 }
-                else
-                {
-                    vs->configure_sensor();
-                }
-                vs->force_sensor_do_configure = false;	//!< ustawienie flagi ze czujnik jest ponownie skonfigurowany
             }
             else if (vs->force_sensor_set_tool)
             {
@@ -198,12 +195,8 @@ void * edp_irp6s_postument_track_effector::force_thread(void *arg)
                 {
                     vs->set_force_tool();
                     vs->set_command_execution_finish();
+                    vs->force_sensor_set_tool = false;
                 }
-                else
-                {
-                    vs->set_force_tool();
-                }
-                vs->force_sensor_set_tool = false;
             }
             else
             {
