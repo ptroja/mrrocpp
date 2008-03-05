@@ -38,14 +38,9 @@
 
 
 
-
-
 void edp_irp6s_postument_track_effector::initialize (void)
 {}
 ;
-
-
-
 
 
 /*--------------------------------------------------------------------------*/
@@ -53,7 +48,7 @@ void edp_irp6s_postument_track_effector::set_rmodel (c_buffer *instruction)
 {
     // BYTE previous_model;
     // BYTE previous_corrector;
-    int i; // licznik obiegow petli
+
     //printf(" SET RMODEL: ");
     switch ((*instruction).set_rmodel_type)
     {
@@ -82,7 +77,7 @@ void edp_irp6s_postument_track_effector::set_rmodel (c_buffer *instruction)
         // zmiana algorytmu regulacji
         /* Uformowanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow dla procesu SERVO_GROUP */
         servo_command.instruction_code = SERVO_ALGORITHM_AND_PARAMETERS;
-        for (i = 0; i<number_of_servos; i++)
+        for (int i = 0; i<number_of_servos; i++)
         {
             servo_command.parameters.servo_alg_par.servo_algorithm_no[i] = servo_algorithm_ecp[i] = (*instruction).rmodel.servo_algorithm.servo_algorithm_no[i];
             servo_command.parameters.servo_alg_par.servo_parameters_no[i] = servo_parameters_ecp[i] = (*instruction).rmodel.servo_algorithm.servo_parameters_no[i];
@@ -92,10 +87,18 @@ void edp_irp6s_postument_track_effector::set_rmodel (c_buffer *instruction)
         send_to_SERVO_GROUP (); //
         break;
     case FORCE_TOOL:
+
+        vs->force_sensor_set_tool = true;
+        for (int i = 0; i<3; i++)
+        {
+            vs->next_force_tool_position[i] = (*instruction).rmodel.force_tool.position[i];
+        }
+        vs->next_force_tool_weight = (*instruction).rmodel.force_tool.weight;
+        vs->check_for_command_execution_finish();
         break;
     case FORCE_BIAS:
-        break;
-    case FORCE_TOOL_AND_BIAS:
+        vs->force_sensor_do_configure = true;
+        vs->check_for_command_execution_finish();
         break;
     default: // blad: nie istniejca specyfikacja modelu robota
         // ustawi numer bledu
@@ -151,8 +154,11 @@ void edp_irp6s_postument_track_effector::get_rmodel (c_buffer *instruction)
             }
         break;
     case FORCE_TOOL:
-    case FORCE_BIAS:
-    case FORCE_TOOL_AND_BIAS:
+        for (int i = 0; i<3; i++)
+        {
+            reply.rmodel.force_tool.position[i] = vs->current_force_tool_position[i];
+        }
+        reply.rmodel.force_tool.weight = vs->current_force_tool_weight;
         break;
     default: // blad: nie istniejaca specyfikacja modelu robota
         // ustawie numer bledu
@@ -225,6 +231,7 @@ void edp_irp6s_postument_track_effector::arm_abs_xyz_eul_zyz_2_frame (double *p)
 ; // end: edp_irp6s_effector::arm_abs_xyz_eul_zyz_2_frame
 /*--------------------------------------------------------------------------*/
 
+
 /*--------------------------------------------------------------------------*/
 edp_irp6s_postument_track_effector::edp_irp6s_postument_track_effector (configurator &_config, ROBOT_ENUM l_robot_name) :
         edp_irp6s_effector (_config, l_robot_name)
@@ -246,7 +253,7 @@ edp_irp6s_postument_track_effector::edp_irp6s_postument_track_effector (configur
     else
         is_gripper_active = 1;
 
-    TERMINATE=false;
+    vs->TERMINATE=false;
 
 };
 
@@ -944,7 +951,7 @@ void edp_irp6s_postument_track_effector::servo_joints_and_frame_actualization_an
 
         if (((!force_sensor_configured)&&(synchronised)))
         {
-            force_sensor_do_configure = true;
+            vs->force_sensor_do_configure = true;
             force_sensor_configured = true;
         }
         ;//: if

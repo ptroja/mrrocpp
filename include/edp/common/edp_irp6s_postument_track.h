@@ -65,10 +65,8 @@ public:
     void set_rmodel (c_buffer *instruction);                    // zmiana narzedzia
     void get_rmodel (c_buffer *instruction);                    // odczytanie narzedzia
 
-    sr_vsp *sr_msg;		//!< komunikacja z SR
-    sem_t new_ms; //!< semafor dostepu do nowej wiadomosci dla vsp
+
     edp_force_sensor *vs;
-    bool TERMINATE;			//!< zakonczenie obydwu watkow
 
     static void *edp_vsp_thread_start(void* arg);
     void *edp_vsp_thread(void* arg);
@@ -76,7 +74,7 @@ public:
     void *force_thread(void* arg);
 
 
-    bool force_sensor_do_configure; // FLAGA ZLECENIA KONFIGURACJI CZUJNIKA
+ 
     virtual void initialize (void);
     edp_irp6s_postument_track_effector (configurator &_config, ROBOT_ENUM l_robot_name );       // konstruktor
 

@@ -282,7 +282,7 @@ void edp_ATI3084_force_sensor::configure_sensor (void)
 {// by Y
     is_sensor_configured=true;
     //  printf("EDP Sensor configured\n");
-    master.sr_msg->message ("EDP Sensor configured");
+    sr_msg->message ("EDP Sensor configured");
     if (!(master.test_mode))
     {
         mds.intr_mode=0;
@@ -380,7 +380,7 @@ void edp_ATI3084_force_sensor::wait_for_event()
             {
                 if (iter_counter==1)
                 {
-                    master.sr_msg->message (NON_FATAL_ERROR, "Force / Torque read error - check sensor controller");
+                    sr_msg->message (NON_FATAL_ERROR, "Force / Torque read error - check sensor controller");
                 }
                 if (iter_counter%10==0)  // raz na 10
                 {
@@ -398,7 +398,7 @@ void edp_ATI3084_force_sensor::wait_for_event()
             {
                 if (iter_counter>1)
                 {
-                    master.sr_msg->message ("Force / Torque sensor connection reastablished");
+                    sr_msg->message ("Force / Torque sensor connection reastablished");
                 }
             }
 

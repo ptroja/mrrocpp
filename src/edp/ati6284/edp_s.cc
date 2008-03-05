@@ -293,7 +293,7 @@ void edp_ATI6284_force_sensor::configure_sensor (void)
                     printf("aa :%f\n", sec);
                     if(show_no_result==0)
                     {
-                        master.sr_msg->message ("EDP Sensor configure_sensor - brak wyniku");
+                        sr_msg->message ("EDP Sensor configure_sensor - brak wyniku");
                         show_no_result=1;
                     }
                 }
@@ -301,7 +301,7 @@ void edp_ATI6284_force_sensor::configure_sensor (void)
                 {
                     if(show_no_result==1)
                     {
-                        master.sr_msg->message ("EDP Sensor configure_sensor - wynik otrzymany");
+                        sr_msg->message ("EDP Sensor configure_sensor - wynik otrzymany");
                         show_no_result=0;
                     }
                 }
@@ -364,7 +364,7 @@ void edp_ATI6284_force_sensor::configure_sensor (void)
             //!< jesli pomiar byl poprawny
             if (invalid_value == 0)
             {
-                master.sr_msg->message ("EDP Sensor configure_sensor - OK");
+                sr_msg->message ("EDP Sensor configure_sensor - OK");
                 sensor_overload=0;
                 overload=0;
                 is_sensor_configured=true;
@@ -373,7 +373,7 @@ void edp_ATI6284_force_sensor::configure_sensor (void)
             {
                 if (overload==0)
                 {
-                    master.sr_msg->message ("EDP Sensor configure_sensor - OVERLOAD!!!");
+                    sr_msg->message ("EDP Sensor configure_sensor - OVERLOAD!!!");
                 }
                 sensor_overload=1;
                 overload=1;
@@ -570,7 +570,7 @@ void edp_ATI6284_force_sensor::initiate_reading (void)
             {
                 if(show_no_result==0)
                 {
-                    master.sr_msg->message ("EDP Sensor initiate_reading - brak wyniku");
+                    sr_msg->message ("EDP Sensor initiate_reading - brak wyniku");
                     show_no_result=1;
                     sensor_status=EDP_FORCE_SENSOR_READING_ERROR;
                 }
@@ -579,7 +579,7 @@ void edp_ATI6284_force_sensor::initiate_reading (void)
             {
                 if (overload==0)
                 {
-                    master.sr_msg->message ("EDP Sensor initiate_reading - OVERLOAD!!!");
+                    sr_msg->message ("EDP Sensor initiate_reading - OVERLOAD!!!");
                     overload=1;
                     sensor_status=EDP_FORCE_SENSOR_OVERLOAD;
                 }
@@ -593,14 +593,14 @@ void edp_ATI6284_force_sensor::initiate_reading (void)
         {
             if(show_no_result==1)
             {
-                master.sr_msg->message ("EDP Sensor initiate_reading - wynik otrzymany");
+                sr_msg->message ("EDP Sensor initiate_reading - wynik otrzymany");
                 show_no_result=0;
             }
             else
             {
                 if (overload ==1)
                 {
-                    master.sr_msg->message ("EDP Sensor initiate_reading - OVERLOAD REMOVED");
+                    sr_msg->message ("EDP Sensor initiate_reading - OVERLOAD REMOVED");
                     overload=0;
                 }
             }
