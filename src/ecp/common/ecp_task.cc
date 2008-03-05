@@ -13,6 +13,7 @@ ecp_task::ecp_task(configurator &_config)
         : ecp_mp_task(_config)
 {
     sensor_m.clear();
+    ecp_m_robot = NULL;
 }
 
 ecp_task::~ecp_task()
