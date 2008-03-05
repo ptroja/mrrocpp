@@ -103,7 +103,7 @@ int main(int argc, char *argv[], char **arge)
         if (!master->initialize_communication())
         {
             return EXIT_FAILURE;
-        }
+        }        
 
         //	printf("1\n");
         //	delay (20000);

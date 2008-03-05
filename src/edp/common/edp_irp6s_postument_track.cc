@@ -253,8 +253,6 @@ edp_irp6s_postument_track_effector::edp_irp6s_postument_track_effector (configur
     else
         is_gripper_active = 1;
 
-    vs->TERMINATE=false;
-
 };
 
 
@@ -270,7 +268,6 @@ void edp_irp6s_postument_track_effector::pose_force_linear_move (c_buffer *instr
 void edp_irp6s_postument_track_effector::create_threads ()
 {
 
-    edp_irp6s_effector::create_threads();
 
     // jesli wlaczono obsluge sily
     if (force_tryb > 0)
@@ -295,6 +292,10 @@ void edp_irp6s_postument_track_effector::create_threads ()
             throw System_error();
         }
     }
+    
+    
+        edp_irp6s_effector::create_threads();
+    
 };
 
 
@@ -949,7 +950,7 @@ void edp_irp6s_postument_track_effector::servo_joints_and_frame_actualization_an
             tmp_eem.get_frame_tab(servo_current_frame_wo_tool);
         }//: if
 
-        if (((!force_sensor_configured)&&(synchronised)))
+        if ( (force_tryb > 0)&&(!force_sensor_configured)&&(synchronised))
         {
             vs->force_sensor_do_configure = true;
             force_sensor_configured = true;

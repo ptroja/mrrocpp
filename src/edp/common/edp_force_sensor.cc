@@ -7,6 +7,25 @@
 // Ostatnia modyfikacja: styczen 2005
 // -------------------------------------------------------------------------
 
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <stddef.h>
+#include <unistd.h>
+#include <sys/iofunc.h>
+#include <sys/dispatch.h>
+#include <devctl.h>
+#include <string.h>
+#include <signal.h>
+#include <process.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <sys/sched.h>
+#include <sys/netmgr.h>
+#include <semaphore.h>
+#include <fstream>
+
 #include <edp/common/edp.h>
 #include "edp/common/edp_irp6s_postument_track.h"
 
@@ -18,9 +37,19 @@ edp_force_sensor::edp_force_sensor(edp_irp6s_postument_track_effector &_master)
     is_reading_ready=false;				//!< nie ma zadnego gotowego odczytu
     force_sensor_do_configure = false;
     force_sensor_set_tool = false;
+    TERMINATE = false;
 
     sem_init( &new_ms, 0, 0);
     sem_init( &new_ms_for_edp, 0, 0);
+    
+    
+    /*!Lokalizacja procesu wywietlania komunikatow SR */
+    if ((sr_msg = new sr_vsp(EDP, master.config.return_attach_point_name(configurator::CONFIG_SERVER, "edp_vsp_attach_point"),
+                                 master.config.return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL)
+    {
+        printf("communication with SR not ready\n");
+    }
+    
 };
 
 void edp_force_sensor::wait_for_event(void)

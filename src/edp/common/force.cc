@@ -141,12 +141,7 @@ void * edp_irp6s_postument_track_effector::force_thread(void *arg)
 
     set_thread_priority(pthread_self() , MAX_PRIORITY-1);
 
-    /*!Lokalizacja procesu wywietlania komunikatow SR */
-    if ((vs->sr_msg = new sr_vsp(EDP, config.return_attach_point_name(configurator::CONFIG_SERVER, "edp_vsp_attach_point"),
-                                 config.return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL)
-    {
-        printf("communication with SR not ready\n");
-    }
+
     vs = return_created_edp_force_sensor(*this);		//!< czujnik wirtualny
 
     try
