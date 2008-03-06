@@ -2,7 +2,9 @@
 
 ecp_mp_generator::ecp_mp_generator(sr_ecp& _sr_ecp_msg) :
 	sr_ecp_msg(_sr_ecp_msg)
-{}
+{
+}
 
 ecp_mp_generator::~ecp_mp_generator()
-{}
+{
+}
