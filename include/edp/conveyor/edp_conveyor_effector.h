@@ -29,13 +29,12 @@ public:
     void get_rmodel (c_buffer *instruction);                    // odczytanie narzedzia
 
     // Przemieszczenie ramienia.
-    void move_arm (const c_buffer &instruction);
+    void move_arm (c_buffer &instruction);
     // Odczytanie pozycji ramienia.
     void get_arm_position (bool read_hardware, c_buffer *instruction);
     // Aktualizacja polozenia.
     void servo_joints_and_frame_actualization_and_upload(void);
 
-}
-; //: edp_conveyor_effector
+};
 
 #endif

@@ -191,11 +191,6 @@ void edp_irp6s_and_conv_effector::reset_variables ()
     }
 
 }
-
-// przemieszczenie ramienia
-void edp_irp6s_and_conv_effector::move_arm(const c_buffer &instruction)
-{
-}
             
 // odczytanie pozycji ramienia
 void edp_irp6s_and_conv_effector::get_arm_position (bool read_hardware, c_buffer *instruction)
@@ -207,7 +202,7 @@ void edp_irp6s_and_conv_effector::servo_joints_and_frame_actualization_and_uploa
 bool edp_irp6s_and_conv_effector::is_power_on() const
 {
     return controller_state_edp_buf.is_power_on;
-};
+}
 
 bool edp_irp6s_and_conv_effector::pre_synchro_motion(c_buffer *instruction)
 // sprawdzenie czy jest to dopuszczalny rozkaz ruchu

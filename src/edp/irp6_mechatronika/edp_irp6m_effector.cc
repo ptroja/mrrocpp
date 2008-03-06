@@ -211,7 +211,7 @@ void edp_irp6m_effector::arm_frame_2_xyz_eul_zyz ()
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6m_effector::move_arm (const c_buffer &instruction)
+void edp_irp6m_effector::move_arm (c_buffer &instruction)
 { // przemieszczenie ramienia
     // Wypenienie struktury danych transformera na podstawie parametrow polecenia
     // otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych

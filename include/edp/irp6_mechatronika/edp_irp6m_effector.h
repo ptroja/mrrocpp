@@ -41,7 +41,7 @@ public:
 
     void servo_joints_and_frame_actualization_and_upload(void);// by Y
 
-    void move_arm (const c_buffer &instruction);            // przemieszczenie ramienia
+    void move_arm (c_buffer &instruction);            // przemieszczenie ramienia
 
     void get_arm_position (bool read_hardware, c_buffer *instruction); // odczytanie pozycji ramienia
 

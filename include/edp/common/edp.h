@@ -325,7 +325,7 @@ public:
     short number_of_servos; // by Y ilosc serwomechanizmow  XXX
     // w zaleznosci od tego czy chwytak ma byc aktywny czy nie
 
-    virtual void move_arm (const c_buffer &instruction);            // przemieszczenie ramienia
+    virtual void move_arm (c_buffer &instruction) = 0;            // przemieszczenie ramienia
 
     virtual void get_arm_position (bool read_hardware, c_buffer *instruction); // odczytanie pozycji ramienia
 
@@ -515,7 +515,7 @@ public:
     virtual void set_rmodel (c_buffer *instruction);                    // zmiana narzedzia
     virtual void get_rmodel (c_buffer *instruction);                    // odczytanie narzedzia
 
-    virtual void move_arm (c_buffer *instruction);            // przemieszczenie ramienia
+    //virtual void move_arm (c_buffer &instruction) = 0;            // przemieszczenie ramienia
 
     virtual void get_arm_position (bool read_hardware, c_buffer *instruction); // odczytanie pozycji ramienia
 

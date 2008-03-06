@@ -784,10 +784,7 @@ void edp_irp6s_effector::master_joints_and_frame_download (void)
 void edp_irp6s_effector::create_threads ()
 {
     edp_irp6s_and_conv_effector::create_threads();
-};
-
-void edp_irp6s_effector::move_arm (c_buffer *instruction)
-{} // przemieszczenie ramienia
+}
 
 /*--------------------------------------------------------------------------*/
 
@@ -797,4 +794,3 @@ void edp_irp6s_effector::get_arm_position (bool read_hardware, c_buffer *instruc
 // sprawdza stan EDP zaraz po jego uruchomieniu
 void edp_irp6s_effector::servo_joints_and_frame_actualization_and_upload (void)
 {}
-;

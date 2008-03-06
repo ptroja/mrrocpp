@@ -156,7 +156,7 @@ void edp_conveyor_effector::servo_joints_and_frame_actualization_and_upload (voi
 
 
 // Przemieszczenie tasmociagu.
-void edp_conveyor_effector::move_arm (const c_buffer &instruction)
+void edp_conveyor_effector::move_arm (c_buffer &instruction)
 {
     // Wypenienie struktury danych transformera na podstawie parametrow polecenia
     // otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
