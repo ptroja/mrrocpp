@@ -1060,6 +1060,7 @@ bool mp_task_rubik_cube_solver::configure_edp_force_sensor(bool configure_track,
             return true;
         }
     }
+    return false;
 }
 
 // dojscie

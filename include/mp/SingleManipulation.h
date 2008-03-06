@@ -22,3 +22,4 @@ public:
 };
 
 #endif /*SINGLE_MANIPULATION_H_*/
+

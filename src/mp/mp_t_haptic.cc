@@ -81,6 +81,7 @@ bool mp_task_haptic::configure_edp_force_sensor(bool configure_track, bool confi
             return true;
         }
     }
+        return false;
 }
 
  

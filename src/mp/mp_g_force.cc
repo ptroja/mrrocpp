@@ -353,12 +353,7 @@ bool mp_haptic_generator::first_step ()
 	irp6ot->communicate = true;
 	irp6p->communicate = true;
 
-	vsp_force_irp6ot = sensor_m[SENSOR_FORCE_ON_TRACK];
-	vsp_force_irp6p = sensor_m[SENSOR_FORCE_POSTUMENT];
 
-	
-	vsp_force_irp6ot->base_period=1;
-	vsp_force_irp6p->base_period=1;
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 	irp6ot->ecp_td.mp_command = NEXT_POSE;
@@ -454,11 +449,7 @@ bool mp_haptic_generator::next_step ()
 	//	cout << "next_step" << endl;
 	
 	if (node_counter<3) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
-		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
-		        sensor_m_iterator != sensor_m.end(); sensor_m_iterator++) {
-			sensor_m_iterator->second->base_period=0;
-			sensor_m_iterator->second->current_period=0;
-		}
+
 		return true;
 	}
 	/*
@@ -475,8 +466,7 @@ bool mp_haptic_generator::next_step ()
 	
 	
 	if (node_counter==3) {
-		vsp_force_irp6ot->base_period=1;
-		vsp_force_irp6p->base_period=1;
+
 
 		irp6ot->ecp_td.instruction_type = SET;
 		irp6p->ecp_td.instruction_type = SET;
