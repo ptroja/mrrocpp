@@ -275,34 +275,35 @@ void manual_moves_automatic_measures_generator::save_mam_element(ofstream& to_fi
 	to_file << '\n';
 }//: save_mam_element
 
-void manual_moves_automatic_measures_generator::save_mam_list(char* filename) {
+void manual_moves_automatic_measures_generator::save_mam_list(char* filename)
+{
 	// Sprawdzenie, czy lista nie jest pusta.
-	if (mam_list_length() == 0){
+	if (mam_list_length() == 0) {
 		sr_ecp_msg.message("MAM list empty.");
 		return;
-		};
-try{
-	// Otworzenie pliku.
-	ofstream to_file(filename);
-	if (!to_file)
+	}
+	try {
+		// Otworzenie pliku.
+		ofstream to_file(filename);
+		if (!to_file)
 		throw ECP_main_error(FATAL_ERROR, SAVE_FILE_ERROR);
-	// Przejscie na poczatek listy.
-	initiate_mam_list();
-	// Zapisywanie kolejnych elementow.
-	while (!is_mam_list_last_element()){
+		// Przejscie na poczatek listy.
+		initiate_mam_list();
+		// Zapisywanie kolejnych elementow.
+		while (!is_mam_list_last_element()) {
+			save_mam_element(to_file);
+			// Nastepna pozycja.
+			next_mam_list_element();
+		}
+		// zapisanie ostatniego elementu
 		save_mam_element(to_file);
-		// Nastepna pozycja.
-		next_mam_list_element();
-		};
-	// zapisanie ostatniego elementu
-	save_mam_element(to_file);
-	// Zamkniecie pliku.
-	to_file.close();
-	// Komentarz - zapisanie pliku.
-	sr_ecp_msg.message ("Measures saved properly to file");
-	} // end: TRY
-catch(ECP_main_error e){
-	// Wylapanie i oblsuga bledow.
-	sr_ecp_msg.message (e.error_class, e.error_no);
-	};
-	}; //: save_mam_list
+		// Zamkniecie pliku.
+		to_file.close();
+		// Komentarz - zapisanie pliku.
+		sr_ecp_msg.message ("Measures saved properly to file");
+	}
+	catch(ECP_main_error e) {
+		// Wylapanie i oblsuga bledow.
+		sr_ecp_msg.message (e.error_class, e.error_no);
+	}
+}

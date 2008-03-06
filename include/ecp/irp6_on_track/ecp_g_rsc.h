@@ -56,7 +56,7 @@ class robot_stopped_condition : public ecp_generator {
 		void get_rse_list_element (robot_position_digital_scales_reading_element& rse);
 		void create_rse_list_head (double robot_position[6], double sensor_reading[6]);
 		void insert_rse_list_element (double robot_position[6], double sensor_reading[6]);
-		int rse_list_length(void);
+		int rse_list_length(void) const;
 		// Sprawdzenie, czy nie pusty.
 		bool is_rse_list_element (void);
 		bool is_rse_list_last_element ( void );

@@ -165,11 +165,6 @@ bool edp_effector::is_reply_type_ERROR() const
 	return (reply.reply_type==ERROR);
 }
 
-INSTRUCTION_TYPE edp_effector::type_of_instruction(c_buffer *instruction) const
-{
-	return (*instruction).instruction_type;
-}
-
 void edp_effector::main_loop()
 {
 }

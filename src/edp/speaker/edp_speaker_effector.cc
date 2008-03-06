@@ -380,12 +380,11 @@ void edp_speaker_effector::main_loop (void)
                 { // instrukcja wlasciwa =>
                     // zle jej wykonanie, czyli wyslij odpowiedz
                     reply_to_instruction();
-                } // end: then: if ( type_of_instruction() == QUERY )
+                }
                 else
                 { // blad: powinna byla nadejsc instrukcja QUERY
                     throw edp_irp6s_effector::NonFatal_error_3(QUERY_EXPECTED);
                 }
-                ; // end: else: if ( type_of_instruction() == QUERY )
                 next_state = GET_INSTRUCTION;
                 break;
             default:

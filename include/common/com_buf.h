@@ -14,12 +14,6 @@
 #include "common/impconst.h"
 #include "messip/messip.h"
 
-enum SERVO_COMMAND {
-    MOVE,
-    READ,
-    SYNCHRONISE,
-    SERVO_ALGORITHM_AND_PARAMETERS
-};
 
 // Typ polecenia przesylanego z MP do ECP
 enum MP_COMMAND {
@@ -452,6 +446,27 @@ enum BEHAVIOUR_SPECIFICATION {
 };
 
 /*--------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------------*/
+struct edp_error // struktura zawierajaca zakodowana przyczyne bledu
+{
+    uint64_t error0;
+    uint64_t error1;
+};
+/*--------------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------------*/
+enum SERVO_COMMAND {
+    MOVE,
+    READ,
+    SYNCHRONISE,
+    SERVO_ALGORITHM_AND_PARAMETERS
+};
+
 struct edp_master_command // wzorzec polecenia przesylanego z EDP_MASTER do SERVO_GROUP
 {
     SERVO_COMMAND instruction_code;        // kod polecenia
@@ -478,19 +493,7 @@ struct edp_master_command // wzorzec polecenia przesylanego z EDP_MASTER do SERV
         servo_alg_par;
     } parameters;
 };
-/*--------------------------------------------------------------------------*/
 
-
-/*--------------------------------------------------------------------------*/
-struct edp_error // struktura zawierajaca zakodowana przyczyne bledu
-{
-    uint64_t error0;
-    uint64_t error1;
-};
-/*--------------------------------------------------------------------------*/
-
-
-/*--------------------------------------------------------------------------*/
 struct servo_group_reply // wzorzec odpowiedzi przesylanej z SERVO_GROUP do EDP_MASTER
 {
     edp_error error;                           // struktura zawierajaca zakodowana przyczyne bledu
@@ -776,21 +779,10 @@ struct ecp_next_state_t
 class ecp_command_buffer
 {
 	public:
-
 		// zlecenie zmiany stanu skojarzone z NEXT_STATE
 		ecp_next_state_t ecp_next_state;
 		
 		c_buffer instruction; // bufor polecen przysylanych z ECP do EDP
-
-		bool is_set_rmodel() const
-		{
-			return (bool) (instruction.set_type & RMODEL_DV);
-		}
-
-		bool is_set_arm() const
-		{
-			return (bool) (instruction.set_type & ARM_DV);
-		}
 };
 // ------------------------------------------------------------------------
 

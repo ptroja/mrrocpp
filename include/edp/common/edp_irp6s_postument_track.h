@@ -35,7 +35,7 @@ protected:
     pthread_t edp_vsp_tid;
 
 
-    void arm_abs_xyz_eul_zyz_2_frame (double *p);
+    void arm_abs_xyz_eul_zyz_2_frame (const double *p);
     // Przeksztalcenie definicji koncowki z postaci
     // XYZ_EULER_ZYZ wyrazonej bezwzglednie do postaci
     // FRAME oraz przepisanie wyniku przeksztalcenia do
@@ -80,18 +80,18 @@ public:
 
     int force_tryb;
 
-    void move_arm (c_buffer *instruction);            // przemieszczenie ramienia
+    void move_arm (c_buffer &instruction);            // przemieszczenie ramienia
 
-    void get_arm_position (bool read_hardware, c_buffer *instruction); // odczytanie pozycji ramienia
+    void get_arm_position (bool read_hardware, const c_buffer &instruction); // odczytanie pozycji ramienia
 
     // ruch pozycyjno silowo dla staqlej orientacji i kierukow liniowych
-    virtual void pose_force_linear_move (c_buffer *instruction);
+    virtual void pose_force_linear_move (c_buffer &instruction);
 
-    void pose_force_torque_at_frameove (c_buffer *instruction);
+    void pose_force_torque_at_frameove (c_buffer &instruction);
 
     void servo_joints_and_frame_actualization_and_upload(void);// by Y
 
-    void force_msr_upload(double *new_value);// by Y wgranie globalnego zestawu danych
+    void force_msr_upload(const double *new_value);// by Y wgranie globalnego zestawu danych
 
     // value to 7 elemetnowa tablica short
     // tryb - 0 zestaw kartezjanski, 1 zestaw nieprzetworzony

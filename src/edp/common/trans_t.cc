@@ -66,7 +66,7 @@ void * edp_irp6s_and_conv_effector::trans_thread(void *arg)
                 mt_tt_obj->trans_t_to_master_order_status_ready();
                 break;
             case MT_MOVE_ARM:
-                move_arm(&(current_instruction)); 	 // wariant dla watku edp_trans_t
+                move_arm(current_instruction); 	 // wariant dla watku edp_trans_t
                 break;
             default: // blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia
                 break;

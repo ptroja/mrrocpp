@@ -23,7 +23,7 @@ protected:
     // Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
     virtual void create_kinematic_models_for_given_robot(void);
 
-    void arm_abs_xyz_eul_zyz_2_frame (double *p);
+    void arm_abs_xyz_eul_zyz_2_frame (const double *p);
     // Przeksztalcenie definicji koncowki z postaci
     // XYZ_EULER_ZYZ wyrazonej bezwzglednie do postaci
     // FRAME oraz przepisanie wyniku przeksztalcenia do
@@ -41,12 +41,11 @@ public:
 
     void servo_joints_and_frame_actualization_and_upload(void);// by Y
 
-    void move_arm (c_buffer *instruction);            // przemieszczenie ramienia
+    void move_arm (const c_buffer &instruction);            // przemieszczenie ramienia
 
     void get_arm_position (bool read_hardware, c_buffer *instruction); // odczytanie pozycji ramienia
 
 
-}
-; //: edp_irp6m_effector
+};
 
 #endif

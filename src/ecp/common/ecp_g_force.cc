@@ -524,17 +524,13 @@ bool y_edge_follow_force_generator::first_step ( )
         the_robot->EDP_data.ECPtoEDP_behaviour[i] = UNGUARDED_MOTION;
     }
 
-
     the_robot->EDP_data.ECPtoEDP_reciprocal_damping[0] = FORCE_RECIPROCAL_DAMPING;
     the_robot->EDP_data.ECPtoEDP_behaviour[0] = CONTACT;
     // Sila dosciku do rawedzi
     the_robot->EDP_data.ECPtoEDP_force_xyz_torque_xyz[0] = -4;
 
-
-
     return true;
 }
-; // end: bool y_edge_follow_force_generator::first_step ( )
 // --------------------------------------------------------------------------
 
 

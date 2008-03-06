@@ -35,7 +35,6 @@ edp_irp6m_effector::edp_irp6m_effector (configurator &_config) :
 {
 
 }
-; //: edp_irp6m_effector
 
 
 
@@ -45,7 +44,6 @@ void edp_irp6m_effector::set_rmodel (c_buffer *instruction)
 {
     // BYTE previous_model;
     // BYTE previous_corrector;
-    int i; // licznik obiegow petli
     //printf(" SET RMODEL: ");
     switch ((*instruction).set_rmodel_type)
     {
@@ -75,23 +73,20 @@ void edp_irp6m_effector::set_rmodel (c_buffer *instruction)
         // zmiana algorytmu regulacji
         /* Uformowanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow dla procesu SERVO_GROUP */
         servo_command.instruction_code = SERVO_ALGORITHM_AND_PARAMETERS;
-        for (i = 0; i<number_of_servos; i++)
+        for (int i = 0; i<number_of_servos; i++)
         {
             servo_command.parameters.servo_alg_par.servo_algorithm_no[i] = servo_algorithm_ecp[i] = (*instruction).rmodel.servo_algorithm.servo_algorithm_no[i];
             servo_command.parameters.servo_alg_par.servo_parameters_no[i] = servo_parameters_ecp[i] = (*instruction).rmodel.servo_algorithm.servo_parameters_no[i];
         }
-        ; // end: for
         /* Wyslanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow procesowi SERVO_GROUP */
         send_to_SERVO_GROUP (); //
         break;
 
-    default: // blad: nie istniejca specyfikacja modelu robota
-        // ustawi numer bledu
+    default: // blad: nie istniejaca specyfikacja modelu robota
+        // ustawia numer bledu
         throw NonFatal_error_2(INVALID_SET_RMODEL_TYPE);
     }
-    ; // end: switch (set_rmodel_type)
 }
-; // end: edp_irp6s_effector::set_rmodel
 /*--------------------------------------------------------------------------*/
 
 
@@ -99,7 +94,6 @@ void edp_irp6m_effector::set_rmodel (c_buffer *instruction)
 /*--------------------------------------------------------------------------*/
 void edp_irp6m_effector::get_rmodel (c_buffer *instruction)
 {
-    int i; // licznik obiegow petli
     //printf(" GET RMODEL: ");
     switch ((*instruction).get_rmodel_type)
     {
@@ -126,7 +120,7 @@ void edp_irp6m_effector::get_rmodel (c_buffer *instruction)
     case SERVO_ALGORITHM:
         reply.rmodel_type = SERVO_ALGORITHM;
         // ustawienie numeru algorytmu serworegulatora oraz numeru jego zestawu parametrow
-        for (i = 0; i<number_of_servos; i++)
+        for (int i = 0; i<number_of_servos; i++)
             if ( instruction->is_get_arm() )
             {
                 reply.rmodel.servo_algorithm.servo_algorithm_no[i] = servo_algorithm_sg[i];
@@ -142,9 +136,7 @@ void edp_irp6m_effector::get_rmodel (c_buffer *instruction)
         // ustawie numer bledu
         throw NonFatal_error_2(INVALID_GET_RMODEL_TYPE);
     }
-    ; // end: switch (get_rmodel_type)
 }
-; // end: edp_irp6s_effector::get_rmodel
 /*--------------------------------------------------------------------------*/
 
 
@@ -161,7 +153,7 @@ void edp_irp6m_effector::initialize (void)
 ;
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6m_effector::arm_abs_xyz_eul_zyz_2_frame (double *p)
+void edp_irp6m_effector::arm_abs_xyz_eul_zyz_2_frame (const double *p)
 {
 
     double x, y, z;					// wspolrzedne wektora przesuniecia
@@ -180,7 +172,6 @@ void edp_irp6m_effector::arm_abs_xyz_eul_zyz_2_frame (double *p)
     A_B_T.get_frame_tab(desired_end_effector_frame);
 
 }
-; // end: edp_irp6s_effector::arm_abs_xyz_eul_zyz_2_frame
 /*--------------------------------------------------------------------------*/
 
 
@@ -207,7 +198,7 @@ void edp_irp6m_effector::arm_frame_2_xyz_eul_zyz ()
     default: // blad:
         throw NonFatal_error_2(STRANGE_GET_ARM_REQUEST);
     }
-    ; // end: switch (reply.reply_type)
+ 
     // dla robotow track i postument - oblicz chwytak
     if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
     {
@@ -216,18 +207,17 @@ void edp_irp6m_effector::arm_frame_2_xyz_eul_zyz ()
     }
 
 }
-; // end: edp_irp6s_effector::arm_frame_2_xyz_eul_zyz
 /*--------------------------------------------------------------------------*/
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6m_effector::move_arm (c_buffer *instruction)
+void edp_irp6m_effector::move_arm (const c_buffer &instruction)
 { // przemieszczenie ramienia
     // Wypenienie struktury danych transformera na podstawie parametrow polecenia
     // otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
 
-    switch ((*instruction).set_arm_type)
+    switch (instruction.set_arm_type)
     {
     case MOTOR:
         compute_motors(instruction);
@@ -246,7 +236,7 @@ void edp_irp6m_effector::move_arm (c_buffer *instruction)
 
         for (int i=0; i<6;i++)
         {
-            rb_obj->step_data.current_kartez_position[i]=(*instruction).arm.coordinate_def.arm_coordinates[i];
+            rb_obj->step_data.current_kartez_position[i]=instruction.arm.coordinate_def.arm_coordinates[i];
         }
 
         rb_obj->unlock_mutex();
@@ -269,15 +259,11 @@ void edp_irp6m_effector::move_arm (c_buffer *instruction)
     default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
         throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
     }
-    ; // end:   switch (instruction.set_arm_type)
-
-
 
     // by Y - uwaga na wyjatki, po rzuceniu wyjatku nie zostanie zaktualizowany previous_set_arm_type
-    previous_set_arm_type = (*instruction).set_arm_type;
+    previous_set_arm_type = instruction.set_arm_type;
 
 }
-; // end: edp_irp6m_effector::move_arm
 /*--------------------------------------------------------------------------*/
 
 
@@ -289,9 +275,7 @@ void edp_irp6m_effector::move_arm (c_buffer *instruction)
 
 void edp_irp6m_effector::servo_joints_and_frame_actualization_and_upload (void)
 {
-    int i;
     static int catch_nr=0;
-
 
     // wyznaczenie nowych wartosci joints and frame dla obliczen w servo
     try
@@ -347,16 +331,15 @@ void edp_irp6m_effector::servo_joints_and_frame_actualization_and_upload (void)
     {
         if ((++catch_nr) == 1)
             printf("servo thread servo_joints_and_frame_actualization_and_upload throw catch exception\n");
-    }//: catch
+    }
 
     pthread_mutex_lock( &edp_irp6s_effector_mutex );
     // przepisnie danych na zestaw globalny
-    for (i=0; i < number_of_servos; i++)
+    for (int i=0; i < number_of_servos; i++)
     {
         global_current_motor_pos[i]=servo_current_motor_pos[i];
         global_current_joints[i]=servo_current_joints[i];
     }
-    ;//: for
 
     // T.K.: Nad tym trzeba pomyslec - co w tym momencie dzieje sie z global_current_end_effector_frame?
     // Jezeli zmienna ta przechowyje polozenie bez narzedzia, to nazwa jest nie tylko nieadekwatna, a wrecz mylaca.
@@ -364,7 +347,6 @@ void edp_irp6m_effector::servo_joints_and_frame_actualization_and_upload (void)
 
     pthread_mutex_unlock( &edp_irp6s_effector_mutex );
 }
-;//: edp_irp6m_effector::servo_joints_and_frame_actualization_and_upload
 
 
 /*--------------------------------------------------------------------------*/
@@ -404,7 +386,6 @@ void edp_irp6m_effector::get_arm_position (bool read_hardware, c_buffer *instruc
         }
 
     }
-    ; // end: if
 
     // okreslenie rodzaju wspolrzednych, ktore maja by odczytane
     // oraz adekwatne wypelnienie bufora odpowiedzi
@@ -441,14 +422,12 @@ void edp_irp6m_effector::get_arm_position (bool read_hardware, c_buffer *instruc
         printf("EFF_TYPE: %d\n",(*instruction).get_arm_type);
         throw NonFatal_error_2(INVALID_GET_END_EFFECTOR_TYPE);
     }
-    ; // end: switch (instruction.get_arm_type)
-
+    
     rb_obj->lock_mutex();// by Y
     reply.servo_step=rb_obj->step_data.step;
     rb_obj->unlock_mutex();
 
 }
-; // end: edp_irp6m_effector::get_arm_position
 /*--------------------------------------------------------------------------*/
 
 
@@ -463,11 +442,11 @@ void edp_irp6m_effector::create_kinematic_models_for_given_robot(void)
     add_kinematic_model(new kinematic_model_irp6m_5dof());
     // Ustawienie aktywnego modelu.
     set_kinematic_model(0);
-}//: create_kinematic_models_for_given_robot
+}
 
 
 // Stworzenie obiektu edp_irp6m_effector.
-edp_effector* return_created_efector (configurator &_config)
-                    {
-                        return new edp_irp6m_effector (_config);
-                    }//: return_created_efector
+edp_effector* return_created_efector(configurator &_config)
+{
+	return new edp_irp6m_effector (_config);
+}

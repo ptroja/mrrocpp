@@ -114,7 +114,6 @@ void edp_irp6s_postument_track_effector::set_rmodel (c_buffer *instruction)
 /*--------------------------------------------------------------------------*/
 void edp_irp6s_postument_track_effector::get_rmodel (c_buffer *instruction)
 {
-    int i; // licznik obiegow petli
     //printf(" GET RMODEL: ");
     switch ((*instruction).get_rmodel_type)
     {
@@ -141,7 +140,7 @@ void edp_irp6s_postument_track_effector::get_rmodel (c_buffer *instruction)
     case SERVO_ALGORITHM:
         reply.rmodel_type = SERVO_ALGORITHM;
         // ustawienie numeru algorytmu serworegulatora oraz numeru jego zestawu parametrow
-        for (i = 0; i<number_of_servos; i++)
+        for (int i = 0; i<number_of_servos; i++)
             if (instruction->is_get_arm())
             {
                 reply.rmodel.servo_algorithm.servo_algorithm_no[i] = servo_algorithm_sg[i];
@@ -205,7 +204,7 @@ void edp_irp6s_postument_track_effector::arm_frame_2_xyz_eul_zyz ()
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_postument_track_effector::arm_abs_xyz_eul_zyz_2_frame (double *p)
+void edp_irp6s_postument_track_effector::arm_abs_xyz_eul_zyz_2_frame (const double *p)
 {
 
     double x, y, z;					// wspolrzedne wektora przesuniecia
@@ -256,7 +255,7 @@ edp_irp6s_postument_track_effector::edp_irp6s_postument_track_effector (configur
 
 
 
-void edp_irp6s_postument_track_effector::pose_force_linear_move (c_buffer *instruction)
+void edp_irp6s_postument_track_effector::pose_force_linear_move (c_buffer &instruction)
 {}
 
 
@@ -359,16 +358,16 @@ void edp_irp6s_postument_track_effector::arm_frame_2_pose_force_torque_at_frame 
 
 // ruch pozycyjno silowy dla ramki TFF - testowane tylko dla trybu RELATIVE
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_postument_track_effector::pose_force_torque_at_frameove (c_buffer *instruction)
+void edp_irp6s_postument_track_effector::pose_force_torque_at_frameove (c_buffer &instruction)
 {
     //	static int debugi=0;
     //   debugi++;
 
-    motion_type = (*instruction).motion_type;
+    motion_type = instruction.motion_type;
 
     // zmienne z bufora wejsciowego
-    WORD ECP_motion_steps = instruction->motion_steps;	// liczba krokow w makrokroku
-    int ECP_value_in_step_no = instruction->value_in_step_no;	// liczba krokow po ktorych bedzie wyslana odpowiedz do ECP o przewidywanym zakonczeniu ruchu
+    WORD ECP_motion_steps = instruction.motion_steps;	// liczba krokow w makrokroku
+    int ECP_value_in_step_no = instruction.value_in_step_no;	// liczba krokow po ktorych bedzie wyslana odpowiedz do ECP o przewidywanym zakonczeniu ruchu
 
     const unsigned long PREVIOUS_MOVE_VECTOR_NULL_STEP_VALUE = 10;
     double pos_xyz_rot_xyz[6];			// wartosci ruchu pozycyjnego
@@ -378,11 +377,11 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frameove (c_buffer
     double reciprocal_damping[6];
     BEHAVIOUR_SPECIFICATION behaviour[6];
 
-    memcpy (inertia, instruction->arm.pose_force_torque_at_frame_def.inertia, sizeof (double[6]) );
-    memcpy (reciprocal_damping, instruction->arm.pose_force_torque_at_frame_def.reciprocal_damping, sizeof (double[6]) );
-    memcpy (behaviour, instruction->arm.pose_force_torque_at_frame_def.behaviour, sizeof (BEHAVIOUR_SPECIFICATION[6]) );
-    memcpy (force_xyz_torque_xyz, instruction->arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz, sizeof (double[6]) );
-    double desired_gripper_coordinate = instruction->arm.pose_force_torque_at_frame_def.gripper_coordinate;
+    memcpy (inertia, instruction.arm.pose_force_torque_at_frame_def.inertia, sizeof (double[6]) );
+    memcpy (reciprocal_damping, instruction.arm.pose_force_torque_at_frame_def.reciprocal_damping, sizeof (double[6]) );
+    memcpy (behaviour, instruction.arm.pose_force_torque_at_frame_def.behaviour, sizeof (BEHAVIOUR_SPECIFICATION[6]) );
+    memcpy (force_xyz_torque_xyz, instruction.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz, sizeof (double[6]) );
+    double desired_gripper_coordinate = instruction.arm.pose_force_torque_at_frame_def.gripper_coordinate;
     switch (motion_type)
     {
     case ABSOLUTE:
@@ -426,35 +425,35 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frameove (c_buffer
     switch (motion_type)
     {
     case PF_XYZ_ANGLE_AXIS_ABSOLUTE_POSE:
-        goal_frame.set_xyz_angle_axis (instruction->arm.pose_force_torque_at_frame_def.position_velocity);
+        goal_frame.set_xyz_angle_axis (instruction.arm.pose_force_torque_at_frame_def.position_velocity);
         break;
     case PF_XYZ_ANGLE_AXIS_RELATIVE_POSE:
-        goal_frame.set_xyz_angle_axis (instruction->arm.pose_force_torque_at_frame_def.position_velocity); // tutaj goal_frame jako zmienna tymczasowa
+        goal_frame.set_xyz_angle_axis (instruction.arm.pose_force_torque_at_frame_def.position_velocity); // tutaj goal_frame jako zmienna tymczasowa
         goal_frame = begining_end_effector_frame * goal_frame;
         break;
     case PF_JOINTS_ABSOLUTE_POSITION:
         get_current_kinematic_model()->i2e_transform
-        (instruction->arm.pose_force_torque_at_frame_def.position_velocity, &goal_frame_tab);
+        (instruction.arm.pose_force_torque_at_frame_def.position_velocity, &goal_frame_tab);
         goal_frame.set_frame_tab (goal_frame_tab);
         break;
     case PF_JOINTS_RELATIVE_POSITION:
         for (int i = 0; i < MAX_SERVOS_NR; i++)
         {
-            tmp_joints[i] = begining_joints[i] + instruction->arm.pose_force_torque_at_frame_def.position_velocity[i];
+            tmp_joints[i] = begining_joints[i] + instruction.arm.pose_force_torque_at_frame_def.position_velocity[i];
         }
         get_current_kinematic_model()->i2e_transform (tmp_joints, &goal_frame_tab);
         goal_frame.set_frame_tab (goal_frame_tab);
         break;
     case PF_MOTORS_ABSOLUTE_POSITION:
         get_current_kinematic_model()->mp2i_transform
-        (instruction->arm.pose_force_torque_at_frame_def.position_velocity, tmp_joints);
+        (instruction.arm.pose_force_torque_at_frame_def.position_velocity, tmp_joints);
         get_current_kinematic_model()->i2e_transform (tmp_joints, &goal_frame_tab);
         goal_frame.set_frame_tab (goal_frame_tab);
         break;
     case PF_MOTORS_RELATIVE_POSITION:
         for (int i = 0; i < MAX_SERVOS_NR; i++)
         {
-            tmp_motor_pos[i] = desired_motor_pos_new[i] + instruction->arm.pose_force_torque_at_frame_def.position_velocity[i];
+            tmp_motor_pos[i] = desired_motor_pos_new[i] + instruction.arm.pose_force_torque_at_frame_def.position_velocity[i];
         }
         get_current_kinematic_model()->mp2i_transform (tmp_motor_pos, tmp_joints);
         get_current_kinematic_model()->i2e_transform (tmp_joints, &goal_frame_tab);
@@ -482,7 +481,7 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frameove (c_buffer
         }
         break;
     case PF_VELOCITY:
-        memcpy (pos_xyz_rot_xyz, instruction->arm.pose_force_torque_at_frame_def.position_velocity, sizeof (double[6]) );
+        memcpy (pos_xyz_rot_xyz, instruction.arm.pose_force_torque_at_frame_def.position_velocity, sizeof (double[6]) );
         break;
     }
 
@@ -690,13 +689,13 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frameove (c_buffer
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_postument_track_effector::move_arm (c_buffer *instruction)
+void edp_irp6s_postument_track_effector::move_arm (c_buffer &instruction)
 { // przemieszczenie ramienia
     // Wypenienie struktury danych transformera na podstawie parametrow polecenia
     // otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
 
-    switch ((*instruction).set_arm_type)
+    switch (instruction.set_arm_type)
     {
     case MOTOR:
         compute_motors(instruction);
@@ -715,7 +714,7 @@ void edp_irp6s_postument_track_effector::move_arm (c_buffer *instruction)
 
         for (int i=0; i<6;i++)
         {
-            rb_obj->step_data.current_kartez_position[i]=(*instruction).arm.coordinate_def.arm_coordinates[i];
+            rb_obj->step_data.current_kartez_position[i]=instruction.arm.coordinate_def.arm_coordinates[i];
         }
 
         rb_obj->unlock_mutex();
@@ -742,15 +741,14 @@ void edp_irp6s_postument_track_effector::move_arm (c_buffer *instruction)
         throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
     }
 
-
     // by Y - uwaga na wyjatki, po rzuceniu wyjatku nie zostanie zaktualizowany previous_set_arm_type
-    previous_set_arm_type = (*instruction).set_arm_type;
+    previous_set_arm_type = instruction.set_arm_type;
 
 }
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_postument_track_effector::get_arm_position (bool read_hardware, c_buffer *instruction)
+void edp_irp6s_postument_track_effector::get_arm_position (bool read_hardware, const c_buffer &instruction)
 { // odczytanie pozycji ramienia
 
     //   printf(" GET ARM\n");
@@ -789,7 +787,7 @@ void edp_irp6s_postument_track_effector::get_arm_position (bool read_hardware, c
 
     // okreslenie rodzaju wspolrzednych, ktore maja by odczytane
     // oraz adekwatne wypelnienie bufora odpowiedzi
-    switch ((*instruction).get_arm_type)
+    switch (instruction.get_arm_type)
     {
     case FRAME:
         // przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
@@ -826,7 +824,7 @@ void edp_irp6s_postument_track_effector::get_arm_position (bool read_hardware, c
         arm_motors_2_motors();
         break;
     default:   // blad: nieznany sposob zapisu wspolrzednych koncowki
-        printf("EFF_TYPE: %d\n",(*instruction).get_arm_type);
+        printf("EFF_TYPE: %d\n",instruction.get_arm_type);
         throw NonFatal_error_2(INVALID_GET_END_EFFECTOR_TYPE);
     }
 
@@ -985,7 +983,7 @@ Homog_matrix edp_irp6s_postument_track_effector::return_current_frame (TRANSLATI
             return return_frame;
         }
 
-        void edp_irp6s_postument_track_effector::force_msr_upload(double *new_value)
+        void edp_irp6s_postument_track_effector::force_msr_upload(const double *new_value)
         {// by Y wgranie globalnego zestawu danych
             pthread_mutex_lock( &force_mutex );
             for (int i=0;i<=5;i++)

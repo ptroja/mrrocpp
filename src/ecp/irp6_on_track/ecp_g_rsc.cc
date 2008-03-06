@@ -166,142 +166,157 @@ void robot_stopped_condition::add_rse_element(ecp_mp_digital_scales_sensor& the_
 */	};
 
 /**************************** SAVE RSE ELEMENTS ******************************/
-void robot_stopped_condition::save_rse_list(char* filename) {
+void robot_stopped_condition::save_rse_list(char* filename)
+{
 	int i;
 	// Element listy.
 	robot_position_digital_scales_reading_element rse;
 	// Sprawdzenie, czy lista nie jest pusta.
-	if (rse_list_length() == 0){
+	if (rse_list_length() == 0) {
 		sr_ecp_msg.message("TRE list empty.");
 		return;
-		};
-try{
-	// Otworzenie pliku.
-	std::ofstream to_file(filename);
-	if (!to_file)
+	}
+	try {
+		// Otworzenie pliku.
+		std::ofstream to_file(filename);
+		if (!to_file)
 		throw ECP_main_error(FATAL_ERROR, SAVE_FILE_ERROR);
-	// Przejscie na poczatek listy.
-	initiate_rse_list();
-	// Zapisywanie kolejnych elementow.
-	while (!is_rse_list_last_element()){
-		// Pobranie elementu.
+		// Przejscie na poczatek listy.
+		initiate_rse_list();
+		// Zapisywanie kolejnych elementow.
+		while (!is_rse_list_last_element()) {
+			// Pobranie elementu.
+			get_rse_list_element (rse);
+			// Zapis polozenia robota.
+			for(i=0; i<6; i++)
+			to_file << rse.robot_position[i] << ' ';
+			// Zapis odczytow z czujnika
+			for(i=0; i<6; i++)
+			to_file << rse.sensor_reading[i] << ' ';
+			// Nastepna linia.
+			to_file << '\n';
+			// Nastepna pozycja.
+			next_rse_list_element();
+		}
+		// zapisanie ostatniego elementu
 		get_rse_list_element (rse);
 		// Zapis polozenia robota.
 		for(i=0; i<6; i++)
-			to_file << rse.robot_position[i] << ' ';
+		to_file << rse.robot_position[i] << ' ';
 		// Zapis odczytow z czujnika
 		for(i=0; i<6; i++)
-			to_file << rse.sensor_reading[i] << ' ';
+		to_file << rse.sensor_reading[i] << ' ';
 		// Nastepna linia.
 		to_file << '\n';
-		// Nastepna pozycja.
-		next_rse_list_element();
-		};
-	// zapisanie ostatniego elementu
-	get_rse_list_element (rse);
-	// Zapis polozenia robota.
-	for(i=0; i<6; i++)
-		to_file << rse.robot_position[i] << ' ';
-	// Zapis odczytow z czujnika
-	for(i=0; i<6; i++)
-		to_file << rse.sensor_reading[i] << ' ';
-	// Nastepna linia.
-	to_file << '\n';
-	// Zamkniecie pliku.
-	to_file.close();
-	// Komentarz - zapisanie pliku.
-	sr_ecp_msg.message ("Measures saved properly to file");
+		// Zamkniecie pliku.
+		to_file.close();
+		// Komentarz - zapisanie pliku.
+		sr_ecp_msg.message ("Measures saved properly to file");
 	} // end: TRY
-catch(ECP_main_error e){
-	// Wylapanie i oblsuga bledow.
-	sr_ecp_msg.message (e.error_class, e.error_no);
-	};
-	}; // end: save_rse_list
+	catch(ECP_main_error e) {
+		// Wylapanie i oblsuga bledow.
+		sr_ecp_msg.message (e.error_class, e.error_no);
+	}
+}
 
 /*****************************  KONSTRUKTOR *********************************/
-robot_stopped_condition::robot_stopped_condition (ecp_task& _ecp_task):
-	 ecp_generator(_ecp_task, true)
- {
+robot_stopped_condition::robot_stopped_condition(ecp_task& _ecp_task) :
+	ecp_generator(_ecp_task, true)
+{
 	// Ustawienie elementow list na NULL.
 	rse_list.clear();
-	 UI_fd = _ecp_task.UI_fd;
+	UI_fd = _ecp_task.UI_fd;
 
-	};
+}
+
 
 /******************************  DESTRUKTOR **********************************/
-robot_stopped_condition::~robot_stopped_condition (void) {
+robot_stopped_condition::~robot_stopped_condition(void)
+{
 	// Usuniecie elementow z listy TRE.
 	flush_rse_list();
-	};
+}
 
 /*********************** METODY ZWIAZANE Z LISTA RSE ************************/
-void robot_stopped_condition::flush_rse_list ( void ) {
+void robot_stopped_condition::flush_rse_list(void)
+{
 	// Jezeli sa jakies elementy
 	rse_list.clear();
-	}; // end: flush_tre_list
+}
+; // end: flush_tre_list
 
-void robot_stopped_condition::initiate_rse_list(void) {
+void robot_stopped_condition::initiate_rse_list(void)
+{
 	rse_list_iterator = rse_list.begin();
-	};
+}
+;
 
-void robot_stopped_condition::next_rse_list_element (void) {
+void robot_stopped_condition::next_rse_list_element(void)
+{
 	// Przejscie na nastepny element.
 	rse_list_iterator++;
-	};
+}
+;
 
-void robot_stopped_condition::get_rse_list_element (robot_position_digital_scales_reading_element& rse){
+void robot_stopped_condition::get_rse_list_element(robot_position_digital_scales_reading_element& rse)
+{
 	// Przepisanie pozycji robota.
-	memcpy(rse.robot_position, rse_list_iterator->robot_position, 6*sizeof(double));
+	memcpy(rse.robot_position, rse_list_iterator->robot_position, 6
+			*sizeof(double));
 	// Przepisanie odczytow z czujnikow.
-	memcpy(rse.sensor_reading, rse_list_iterator->sensor_reading, 6*sizeof(double));
-	};
+	memcpy(rse.sensor_reading, rse_list_iterator->sensor_reading, 6
+			*sizeof(double));
+}
 
-void robot_stopped_condition::get_rse_list_data (double robot_position[6], double sensor_reading[6]){
+void robot_stopped_condition::get_rse_list_data(double robot_position[6], double sensor_reading[6])
+{
 	// Przepisanie pozycji robota.
 	memcpy(robot_position, rse_list_iterator->robot_position, 6*sizeof(double));
 	// Przepisanie odczytow z czujnikow.
 	memcpy(sensor_reading, rse_list_iterator->sensor_reading, 6*sizeof(double));
-	};
-			
-bool robot_stopped_condition::is_rse_list_element ( void ) {
+}
+
+bool robot_stopped_condition::is_rse_list_element(void)
+{
 	// sprawdza czy aktualnie wskazywany jest element listy, czy lista sie skonczyla
 	if (rse_list_iterator != rse_list.end())
 		return true;
 	else
 		return false;
-	};
-			
-bool robot_stopped_condition::is_rse_list_last_element ( void ) {
+}
+
+bool robot_stopped_condition::is_rse_list_last_element(void)
+{
 	// sprawdza czy aktualnie wskazywany element listy ma nastepnik
 	// jesli <> nulla
-	if ( rse_list_iterator != rse_list.end() ){
-		if ( (++rse_list_iterator) != rse_list.end() )
-		{
+	if (rse_list_iterator != rse_list.end() ) {
+		if ( (++rse_list_iterator) != rse_list.end() ) {
 			--rse_list_iterator;
-		    return false;
-		}  else
-		{
+			return false;
+		} else {
 			--rse_list_iterator;
-		    return true;
+			return true;
 		}; // end if
 	}
 	return false;
-	};
+}
 
-void robot_stopped_condition::create_rse_list_head (double robot_position[6], double sensor_reading[6]) {
+void robot_stopped_condition::create_rse_list_head(double robot_position[6], double sensor_reading[6])
+{
 	// Wstawienie glowy.
-    	rse_list.push_back(robot_position_digital_scales_reading_element(robot_position, sensor_reading));
+	rse_list.push_back(robot_position_digital_scales_reading_element(robot_position, sensor_reading));
 	rse_list_iterator = rse_list.begin();
-	};
-			
-void robot_stopped_condition::insert_rse_list_element (double robot_position[6], double sensor_reading[6]) {
-    	rse_list.push_back(robot_position_digital_scales_reading_element(robot_position, sensor_reading));
-	rse_list_iterator = rse_list.begin();
-	};
+}
 
-int robot_stopped_condition::rse_list_length(void) {
+void robot_stopped_condition::insert_rse_list_element(double robot_position[6], double sensor_reading[6])
+{
+	rse_list.push_back(robot_position_digital_scales_reading_element(robot_position, sensor_reading));
+	rse_list_iterator = rse_list.begin();
+}
+
+int robot_stopped_condition::rse_list_length(void) const
+{
 	return rse_list.size();
-	};
-
+}
 
 /****************** KONIEC: METODY ZWIAZANE Z LISTA RSE ********************/

@@ -51,28 +51,28 @@ void edp_irp6s_effector::initialize (void)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::compute_xyz_euler_zyz (c_buffer *instruction)
+void edp_irp6s_effector::compute_xyz_euler_zyz (const c_buffer &instruction)
 {
     // obliczenia dla ruchu ramienia (kocwk: XYZ_EULER_ZYZ)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
     /* Zlecenie transformerowi przeliczenie wspolrzednych */
 
-    double* p;   // wskanik miejsca w strukturze przesanej z ECP, w ktorym znajduj sie wspolrzedne
-    if (instruction->is_set_arm())
+    const double* p;   // wskanik miejsca w strukturze przesanej z ECP, w ktorym znajduj sie wspolrzedne
+    if (instruction.is_set_arm())
     {
         // przyslano dane dotyczace koncowki
-        motion_type = (*instruction).motion_type;
-        motion_steps = (*instruction).motion_steps;
-        value_in_step_no = (*instruction).value_in_step_no;
-        p = (double*) (*instruction).arm.coordinate_def.arm_coordinates;
+        motion_type = instruction.motion_type;
+        motion_steps = instruction.motion_steps;
+        value_in_step_no = instruction.value_in_step_no;
+        p = (double*) instruction.arm.coordinate_def.arm_coordinates;
     }
     for (int i=0;i<6;i++)
-        rb_obj->step_data.current_kartez_position[i] = (*instruction).arm.coordinate_def.arm_coordinates[i];
+        rb_obj->step_data.current_kartez_position[i] = instruction.arm.coordinate_def.arm_coordinates[i];
 
     // dla robotow track i postument - oblicz chwytak
     if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
     {
-        desired_joints_tmp[gripper_servo_nr] = (*instruction).arm.coordinate_def.gripper_coordinate;
+        desired_joints_tmp[gripper_servo_nr] = instruction.arm.coordinate_def.gripper_coordinate;
     }
 
     // if ( (value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )
@@ -103,32 +103,31 @@ void edp_irp6s_effector::compute_xyz_euler_zyz (c_buffer *instruction)
     }
 
 }
-; // end: edp_irp6s_effector::compute_xyz_euler_zyz
 /*------------------------------------------------------------------*/
 
 
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::compute_xyz_angle_axis (c_buffer *instruction)
+void edp_irp6s_effector::compute_xyz_angle_axis (const c_buffer &instruction)
 {
     // obliczenia dla ruchu ramienia (kocwk: XYZ_ANGLE_AXIS)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
     /* Zlecenie transformerowi przeliczenie wspolrzednych */
-    double* p;   // wskanik miejsca w strukturze przesanej z ECP, w ktorym znajduj sie wspolrzedne
-    if ( instruction->is_set_arm() || instruction->is_set_rmodel() )
+    const double* p;   // wskanik miejsca w strukturze przesanej z ECP, w ktorym znajduj sie wspolrzedne
+    if ( instruction.is_set_arm() || instruction.is_set_rmodel() )
     {
         // przyslano dane dotyczace narzedzia i koncowki
-        motion_type = (*instruction).motion_type;
-        motion_steps = (*instruction).motion_steps;
-        value_in_step_no = (*instruction).value_in_step_no;
-        p = &(*instruction).arm.coordinate_def.arm_coordinates[0];
-    } // end: then
+        motion_type = instruction.motion_type;
+        motion_steps = instruction.motion_steps;
+        value_in_step_no = instruction.value_in_step_no;
+        p = &instruction.arm.coordinate_def.arm_coordinates[0];
+    }
 
     // dla robotow track i postument - oblicz chwytak
     if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
     {
-        desired_joints_tmp[gripper_servo_nr] = (*instruction).arm.coordinate_def.gripper_coordinate;
+        desired_joints_tmp[gripper_servo_nr] = instruction.arm.coordinate_def.gripper_coordinate;
     }
 
     // if ( (value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )
@@ -145,7 +144,7 @@ void edp_irp6s_effector::compute_xyz_angle_axis (c_buffer *instruction)
     default:
         throw NonFatal_error_2(INVALID_MOTION_TYPE);
     }
-    ; // end: switch (instruction.motion_type)
+    
     // Przeliczenie wspolrzednych zewnetrznych na wspolrzedne wewnetrzne
     get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, &desired_end_effector_frame);
     // Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
@@ -155,34 +154,33 @@ void edp_irp6s_effector::compute_xyz_angle_axis (c_buffer *instruction)
     {
         desired_joints[i] = desired_joints_tmp[i];
         desired_motor_pos_new[i] = desired_motor_pos_new_tmp[i];
-    } //: for
+    }
 }
-; // end: edp_irp6s_effector::compute_xyz_angle_axis
 /*--------------------------------------------------------------------------*/
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::compute_frame (c_buffer *instruction)
+void edp_irp6s_effector::compute_frame (const c_buffer &instruction)
 {
     // obliczenia dla ruchu ramienia (kocwk: FRAME)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
     /* Zlecenie transformerowi przeliczenie wspolrzednych */
     frame_tab p_m;   // wskanik miejsca w strukturze przesanej z ECP, w ktorym znajduj sie wspolrzedne
-    if ( instruction->is_set_rmodel() || instruction->is_set_arm() )
+    if ( instruction.is_set_rmodel() || instruction.is_set_arm() )
     {
         // przyslano dane dotyczace narzedzia lub koncowki
-        motion_type = (*instruction).motion_type;
-        motion_steps = (*instruction).motion_steps;
-        value_in_step_no = (*instruction).value_in_step_no;
+        motion_type = instruction.motion_type;
+        motion_steps = instruction.motion_steps;
+        value_in_step_no = instruction.value_in_step_no;
 
-        copy_frame(p_m, (*instruction).arm.frame_def.arm_frame);
+        copy_frame(p_m, instruction.arm.frame_def.arm_frame);
 
     } // end: then
 
     // dla robotow track i postument - oblicz chwytak
     if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
     {
-        desired_joints_tmp[gripper_servo_nr] = (*instruction).arm.frame_def.gripper_coordinate;
+        desired_joints_tmp[gripper_servo_nr] = instruction.arm.frame_def.gripper_coordinate;
     }
 
     if ( (value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )
@@ -210,9 +208,8 @@ void edp_irp6s_effector::compute_frame (c_buffer *instruction)
     {
         desired_joints[i] = desired_joints_tmp[i];
         desired_motor_pos_new[i] = desired_motor_pos_new_tmp[i];
-    } //: for
+    }
 }
-; // end: edp_irp6s_effector::compute_frame
 /*--------------------------------------------------------------------------*/
 
 // Przeksztacenie definicji narzedzia z postaci
@@ -401,7 +398,7 @@ void edp_irp6s_effector::tool_frame_2_frame (c_buffer *instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::arm_abs_xyz_aa_2_frame (double *p)
+void edp_irp6s_effector::arm_abs_xyz_aa_2_frame (const double *p)
 {
     double alfa;				// kat obrotu
     double x, y, z;			// wspolrzedne wektora przesuniecia
@@ -435,14 +432,12 @@ void edp_irp6s_effector::arm_abs_xyz_aa_2_frame (double *p)
         A_B_T.get_frame_tab(desired_end_effector_frame); 		// przepisanie uzyskanego wyniku do transformera
     }
 }
-; // end: edp_irp6s_effector::arm_abs_xyz_aa_2_frame
 /*--------------------------------------------------------------------------*/
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::arm_abs_xyz_eul_zyz_2_frame (double *p)
+void edp_irp6s_effector::arm_abs_xyz_eul_zyz_2_frame (const double *p)
 {}
-;
 
 
 /*--------------------------------------------------------------------------*/
@@ -463,7 +458,7 @@ void edp_irp6s_effector::arm_abs_frame_2_frame (frame_tab p_m)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::arm_rel_xyz_aa_2_frame (double* p)
+void edp_irp6s_effector::arm_rel_xyz_aa_2_frame (const double* p)
 {
 
     double alfa;			// kat obrotu
@@ -505,12 +500,11 @@ void edp_irp6s_effector::arm_rel_xyz_aa_2_frame (double* p)
     G_R_T.get_frame_tab(desired_end_effector_frame);
 
 }
-; // end: edp_irp6s_effector::arm_rel_xyz_aa_2_frame
 /*--------------------------------------------------------------------------*/
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::arm_rel_xyz_eul_zyz_2_frame (double* p)
+void edp_irp6s_effector::arm_rel_xyz_eul_zyz_2_frame (const double* p)
 {
 
     double x, y, z;			// wspolrzedne wektora przesuniecia

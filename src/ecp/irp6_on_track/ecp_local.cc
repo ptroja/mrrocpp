@@ -15,11 +15,11 @@
 ecp_irp6_on_track_robot::ecp_irp6_on_track_robot (configurator &_config, sr_ecp *_sr_ecp):
         ecp_robot ( ROBOT_IRP6_ON_TRACK, _config, _sr_ecp)
 {}
-;
+
 ecp_irp6_on_track_robot::ecp_irp6_on_track_robot (ecp_task& _ecp_object):
         ecp_robot ( ROBOT_IRP6_ON_TRACK, _ecp_object)
 {}
-;
+
 
 // --------------------------------------------------------------------------
 void ecp_irp6_on_track_robot::create_command (void)

@@ -156,12 +156,12 @@ void edp_conveyor_effector::servo_joints_and_frame_actualization_and_upload (voi
 
 
 // Przemieszczenie tasmociagu.
-void edp_conveyor_effector::move_arm (c_buffer *instruction)
+void edp_conveyor_effector::move_arm (const c_buffer &instruction)
 {
     // Wypenienie struktury danych transformera na podstawie parametrow polecenia
     // otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
-    switch ((*instruction).set_arm_type)
+    switch (instruction.set_arm_type)
     {
     case MOTOR:
         compute_motors(instruction);
@@ -172,10 +172,9 @@ void edp_conveyor_effector::move_arm (c_buffer *instruction)
     default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
         throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
     }
-    ; // end:   switch (instruction.set_arm_type)
 
     // wykonanie ruchu
-    switch ((*instruction).set_arm_type)
+    switch (instruction.set_arm_type)
     {
     case MOTOR:
     case JOINT:
@@ -189,14 +188,11 @@ void edp_conveyor_effector::move_arm (c_buffer *instruction)
     default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
         throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
     }
-    ; // end:   switch (instruction.set_arm_type)
-
+    
     // by Y - uwaga na wyjatki, po rzuceniu wyjatku nie zostanie zaktualizowany previous_set_arm_type
-    previous_set_arm_type = (*instruction).set_arm_type;
+    previous_set_arm_type = instruction.set_arm_type;
 
 }
-; //: move_arm
-
 
 // Odczytanie pozycji tasmociagu.
 void edp_conveyor_effector::get_arm_position (bool read_hardware, c_buffer *instruction)

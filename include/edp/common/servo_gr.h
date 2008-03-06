@@ -171,8 +171,7 @@ public:
     BYTE get_algorithm_parameters_no ( void );
 
     void clear_regulator (void);
-}
-; // end: class regulator
+};
 /*-----------------------------------------------------------------------*/
 
 
@@ -203,8 +202,7 @@ public:
     virtual BYTE compute_set_value ( void ) = 0;
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda abstrakcyjna
 
-}
-; // end: class NL_regulator
+};
 // ----------------------------------------------------------------------
 
 
@@ -281,8 +279,7 @@ public:
     // obliczenie nastepnej wartosci zadanej dla wszystkich napedow
 
     void ppp (void) const;                 // wydruk - do celow uruchomieniowych !!!
-}
-; // end: class servo_buffer
+};
 /*-----------------------------------------------------------------------*/
 
 // Zwrocenie stworzonego obiektu - servo_buffer. Funkcja implementowana w plikach efektorow konkretnych (jadro).

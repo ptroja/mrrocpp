@@ -153,8 +153,6 @@ public:
 
     bool is_reply_type_ERROR() const;
 
-    INSTRUCTION_TYPE type_of_instruction (c_buffer *instruction) const;
-
     void establish_error (uint64_t err0, uint64_t err1);
 
     REPLY_TYPE is_reply_type (void) const;
@@ -208,16 +206,16 @@ protected:
 
     servo_group_reply sg_reply;            // bufor na informacje przesylane z SERVO_GROUP
 
-    void set_outputs (c_buffer *instruction);                // ustawienie wyjsc binarnych
+    void set_outputs (const c_buffer &instruction);                // ustawienie wyjsc binarnych
 
     void get_inputs (r_buffer *local_reply);                 // odczytanie wejsc binarnych
 
     // kasuje zmienne - uwaga najpierw nalezy ustawic number_of_servos
     void reset_variables ();
 
-    void compute_motors (c_buffer *instruction);             // obliczenia dla ruchu ramienia (silnikami)
+    void compute_motors (const c_buffer &instruction);             // obliczenia dla ruchu ramienia (silnikami)
 
-    void compute_joints (c_buffer *instruction);             // obliczenia dla ruchu ramienia (stawami)
+    void compute_joints (const c_buffer &instruction);             // obliczenia dla ruchu ramienia (stawami)
 
     void move_servos ();
 
@@ -327,7 +325,7 @@ public:
     short number_of_servos; // by Y ilosc serwomechanizmow  XXX
     // w zaleznosci od tego czy chwytak ma byc aktywny czy nie
 
-    virtual void move_arm (c_buffer *instruction);            // przemieszczenie ramienia
+    virtual void move_arm (const c_buffer &instruction);            // przemieszczenie ramienia
 
     virtual void get_arm_position (bool read_hardware, c_buffer *instruction); // odczytanie pozycji ramienia
 
@@ -380,11 +378,11 @@ class edp_irp6s_effector: public edp_irp6s_and_conv_effector
 
 protected:
 
-    void compute_xyz_euler_zyz (c_buffer *instruction);     // obliczenia dla ruchu ramienia (koncowka: XYZ_EULER_ZYZ)
+    void compute_xyz_euler_zyz (const c_buffer &instruction);     // obliczenia dla ruchu ramienia (koncowka: XYZ_EULER_ZYZ)
 
-    void compute_xyz_angle_axis (c_buffer *instruction); // obliczenia dla ruchu ramienia (koncowka: XYZ_ANGLE_AXIS)
+    void compute_xyz_angle_axis (const c_buffer &instruction); // obliczenia dla ruchu ramienia (koncowka: XYZ_ANGLE_AXIS)
 
-    void compute_frame (c_buffer *instruction);             // obliczenia dla ruchu ramienia (koncowka: FRAME)
+    void compute_frame (const c_buffer &instruction);             // obliczenia dla ruchu ramienia (koncowka: FRAME)
 
 
     // r_buffer
@@ -447,12 +445,12 @@ protected:
     void tool_frame_2_frame (c_buffer *instruction);
     // Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
     // do wewnetrznych struktur danych TRANSFORMATORa
-    void arm_abs_xyz_aa_2_frame (double *p);
+    void arm_abs_xyz_aa_2_frame (const double *p);
     // Przeksztalcenie definicji koncowki z postaci
     // XYZ_ANGLE_AXIS wyrazonej bezwzglednie do postaci
     // FRAME oraz przepisanie wyniku przeksztalcenia do
     // wewnetrznych struktur danych TRANSFORMATORa
-    virtual void arm_abs_xyz_eul_zyz_2_frame (double *p);
+    virtual void arm_abs_xyz_eul_zyz_2_frame (const double *p);
     // Przeksztalcenie definicji koncowki z postaci
     // XYZ_EULER_ZYZ wyrazonej bezwzglednie do postaci
     // FRAME oraz przepisanie wyniku przeksztalcenia do
@@ -461,12 +459,12 @@ protected:
     // Przepisanie definicji koncowki danej
     // w postaci FRAME wyrazonej bezwzglednie
     // do wewnetrznych struktur danych TRANSFORMATORa
-    void arm_rel_xyz_aa_2_frame (double*);
+    void arm_rel_xyz_aa_2_frame (const double*);
     // Przeksztalcenie definicji koncowki z postaci
     // XYZ_ANGLE_AXIS wyrazonej wzglednie do postaci
     // FRAME oraz przepisanie wyniku przeksztalcenia do
     // wewnetrznych struktur danych TRANSFORMATORa
-    void arm_rel_xyz_eul_zyz_2_frame (double*);
+    void arm_rel_xyz_eul_zyz_2_frame (const double*);
     // Przeksztalcenie definicji koncowki z postaci
     // XYZ_EULER_ZYZ wyrazonej wzglednie do postaci
     // FRAME oraz przepisanie wyniku przeksztalcenia do
@@ -541,8 +539,7 @@ class System_error
 {
     // Klasa bledow systemowych zawiazanych z komunikacja miedzyprocesowa
 
-}
-; // end: class System_error
+};
 
 
 
@@ -678,11 +675,10 @@ public:
     in_out_buffer();
 
     BYTE set_output_flag; // flaga czy ustawic wyjcie na robota
-    void set_output (WORD *out_value);
+    void set_output (const WORD *out_value);
     void get_output (WORD *out_value);
-    void set_input (WORD *binary_in_value, BYTE *analog_in_table);
+    void set_input (const WORD *binary_in_value, const BYTE *analog_in_table);
     void get_input (WORD *binary_in_value, BYTE *analog_in_table);
-
 };
 /**************************** IN_OUT_BUFFER *****************************/
 

@@ -193,7 +193,7 @@ void edp_irp6s_and_conv_effector::reset_variables ()
 }
 
 // przemieszczenie ramienia
-void edp_irp6s_and_conv_effector::move_arm(c_buffer *instruction)
+void edp_irp6s_and_conv_effector::move_arm(const c_buffer &instruction)
 {
 }
             
@@ -251,7 +251,7 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer *instruction)
 
         if (instruction->is_set_outputs())
             // ustawienie wyjsc
-            set_outputs(instruction);
+            set_outputs(*instruction);
         if (instruction->is_set_rmodel())
             // zmiana modelu robota
             // set_rmodel();
@@ -345,7 +345,7 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer *instruction)
         // Cz SET
         if (instruction->is_set_outputs())
             // ustawienie wyj
-            set_outputs(instruction);
+            set_outputs(*instruction);
         if (instruction->is_set_rmodel())
             // zmiana aktualnie uzywanego modelu robota (narzedzie, model kinematyczny,
             // jego korektor, nr algorytmu regulacji i zestawu jego parametrow)
@@ -657,14 +657,13 @@ void edp_irp6s_and_conv_effector::send_to_SERVO_GROUP ()
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_and_conv_effector::set_outputs (c_buffer *instruction)
+void edp_irp6s_and_conv_effector::set_outputs (const c_buffer &instruction)
 {
     // ustawienie wyjsc binarnych
-    in_out_obj->set_output(&((*instruction).output_values));
+    in_out_obj->set_output(&instruction.output_values);
     // throw NonFatal_error_2(NOT_IMPLEMENTED_YET);
     // printf(" OUTPUTS SET\n");
 }
-; // end: edp_irp6s_and_conv_effector::set_outputs
 /*--------------------------------------------------------------------------*/
 
 
@@ -775,27 +774,27 @@ REPLY_TYPE edp_irp6s_and_conv_effector::rep_type (c_buffer *instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_and_conv_effector::compute_motors(c_buffer *instruction)
+void edp_irp6s_and_conv_effector::compute_motors(const c_buffer &instruction)
 {
     // obliczenia dla ruchu ramienia (silnikami)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
     /* Zlecenie transformerowi przeliczenie wspolrzednych */
-    double* p;   // wskanik miejsca w strukturze przesanej z ECP, w ktorym znajduj sie wspolrzedne
-    int i; // Liczniki petli
-    motion_type = (*instruction).motion_type;
-    motion_steps = (*instruction).motion_steps;
-    value_in_step_no = (*instruction).value_in_step_no;
-    p = &(*instruction).arm.coordinate_def.arm_coordinates[0];
+    const double* p;   // wskanik miejsca w strukturze przesanej z ECP, w ktorym znajduj sie wspolrzedne
+
+    motion_type = instruction.motion_type;
+    motion_steps = instruction.motion_steps;
+    value_in_step_no = instruction.value_in_step_no;
+    p = &instruction.arm.coordinate_def.arm_coordinates[0];
     if ( (motion_steps <= 0) /* || (value_in_step_no < 0) */ )
         throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
     switch (motion_type)
     {
     case ABSOLUTE:   // ruch bezwzgledny
-        for (i=0; i<number_of_servos; i++)
+        for (int i=0; i<number_of_servos; i++)
         {
             desired_motor_pos_new_tmp[i] = p[i];
             //          printf("i: %d, d: %f, p: %f\n",i, desired_motor_pos_new[i], p[i]); // DEBUG
-        };
+        }
         // sprawdzi przekroczenie dopuszczalnego zakresu
         // check_motor_position(desired_motor_pos_new);
 
@@ -803,10 +802,10 @@ void edp_irp6s_and_conv_effector::compute_motors(c_buffer *instruction)
         get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
         break;
     case RELATIVE:   // ruch wzgledny
-        for (i=0; i<number_of_servos; i++)
+        for (int i=0; i<number_of_servos; i++)
         {
             desired_motor_pos_new_tmp[i] = p[i] + desired_motor_pos_new[i];
-        };
+        }
         // Jesli robot zsynchronizowany sprawdzi przekroczenie dopuszczalnego zakresu
         if (synchronised)
         {
@@ -819,7 +818,6 @@ void edp_irp6s_and_conv_effector::compute_motors(c_buffer *instruction)
     default:
         throw NonFatal_error_2(INVALID_MOTION_TYPE);
     }
-    ; // end: switch (instruction.motion_type)
 
     // kinematyka nie stwierdzila bledow, przepisanie wartosci
     for (int i=0; i< number_of_servos; i++)
@@ -830,32 +828,31 @@ void edp_irp6s_and_conv_effector::compute_motors(c_buffer *instruction)
 
     // printf("P=%lf\n",desired_motor_pos_new[0]);
 }
-; // end: edp_irp6s_and_conv_effector::compute_motors
 /*--------------------------------------------------------------------------*/
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_and_conv_effector::compute_joints (c_buffer *instruction)
+void edp_irp6s_and_conv_effector::compute_joints (const c_buffer &instruction)
 {
     // obliczenia dla ruchu ramienia (stawami)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
     /* Zlecenie transformerowi przeliczenie wspolrzednych */
-    double* p; // wskanik miejsca w strukturze przeslanej z ECP, w ktorym znajduje sie wspolrzedne
-    int i; // Liczniki petli
-    motion_type = (*instruction).motion_type;
-    motion_steps = (*instruction).motion_steps;
-    value_in_step_no = (*instruction).value_in_step_no;
-    p = &(*instruction).arm.coordinate_def.arm_coordinates[0];
+    const double* p; // wskanik miejsca w strukturze przeslanej z ECP, w ktorym znajduje sie wspolrzedne
+
+    motion_type = instruction.motion_type;
+    motion_steps = instruction.motion_steps;
+    value_in_step_no = instruction.value_in_step_no;
+    p = &instruction.arm.coordinate_def.arm_coordinates[0];
     if ( (value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )
         throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
     switch (motion_type)
     {
     case ABSOLUTE:   // ruch bezwzgledny
-        for (i=0; i<number_of_servos; i++)
+        for (int i=0; i<number_of_servos; i++)
             desired_joints_tmp[i] = p[i];
         break;
     case RELATIVE:   // ruch wzgledny
-            for (i=0; i<number_of_servos; i++)
+            for (int i=0; i<number_of_servos; i++)
                 desired_joints_tmp[i] = desired_joints[i] + p[i];
         break;
     default:
@@ -871,10 +868,9 @@ void edp_irp6s_and_conv_effector::compute_joints (c_buffer *instruction)
         desired_motor_pos_new[i] = desired_motor_pos_new_tmp[i];
     }
 
-    for (i=0; i<number_of_servos; i++)
+    for (int i=0; i<number_of_servos; i++)
         previous_joints[i] = desired_joints[i];
 }
-; // end: edp_irp6s_and_conv_effector::compute_joints
 /*--------------------------------------------------------------------------*/
 
 
@@ -1019,12 +1015,11 @@ void edp_irp6s_and_conv_effector::main_loop ()
                 { // instrukcja wlasciwa =>
                     // zle jej wykonanie, czyli wyslij odpowiedz
                     reply_to_instruction();
-                } // end: then: if ( type_of_instruction() == QUERY )
+                }
                 else
                 { // blad: powinna byla nadejsc instrukcja QUERY
                     throw edp_irp6s_and_conv_effector::NonFatal_error_3 ( QUERY_EXPECTED );
                 }
-                ; // end: else: if ( type_of_instruction() == QUERY )
 
                 /*
                 if (test_mode == 0) 
@@ -1169,7 +1164,6 @@ void edp_irp6s_and_conv_effector::main_loop ()
                     /* Informacja o bedzie polegajcym na braku polecenia synchronizacji */
                     throw edp_irp6s_and_conv_effector::NonFatal_error_1(INVALID_INSTRUCTION_TYPE);
                 }
-                ; // end: switch ( type_of_instruction() )
                 break;
             case SYNCHRO_TERMINATED:
                 /* Oczekiwanie na zapytanie od ECP o status zakonczenia synchronizacji (QUERY) */
@@ -1181,12 +1175,11 @@ void edp_irp6s_and_conv_effector::main_loop ()
                     next_state = GET_INSTRUCTION;
                     if (msg->message("Robot is synchronised"))
                         printf(" Nie znaleziono SR\n");
-                } // end: then: if ( type_of_instruction() == QUERY )
+                }
                 else
                 { // blad: powinna byla nadejsc instrukcja QUERY
                     throw edp_irp6s_and_conv_effector::NonFatal_error_4(QUERY_EXPECTED);
                 }
-                ; // end: else: if ( type_of_instruction() == QUERY )
                 break;
             case WAIT_Q:
                 /* Oczekiwanie na zapytanie od ECP o status zakonczenia synchronizacji (QUERY) */
@@ -1195,12 +1188,11 @@ void edp_irp6s_and_conv_effector::main_loop ()
                     // Budowa adekwatnej odpowiedzi
                     reply_to_instruction();
                     next_state = GET_SYNCHRO;
-                } // end: then: if ( type_of_instruction() == QUERY )
+                }
                 else
                 { // blad: powinna byla nadejsc instrukcja QUERY
                     throw edp_irp6s_and_conv_effector::NonFatal_error_3(QUERY_EXPECTED);
                 }
-                ; // end: else: if ( type_of_instruction() == QUERY )
                 break;
             default:
                 break;
@@ -1285,7 +1277,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
                 reply_to_instruction();
                 printf("QQQ\n");
                 receive_instruction();
-            } // end: if ( type_of_instruction() != QUERY )
+            }
             insert_reply_type(ERROR);
             establish_error(fe.error0, fe.error1);
             reply_to_instruction();
@@ -1341,12 +1333,11 @@ void edp_irp6s_and_conv_effector::main_loop ()
                 { // instrukcja wlasciwa =>
                     // zle jej wykonanie, czyli wyslij odpowiedz
                     reply_to_instruction();
-                } // end: then: if ( type_of_instruction() == QUERY )
+                }
                 else
                 { // blad: powinna byla nadejsc instrukcja QUERY
                     throw edp_irp6s_and_conv_effector::NonFatal_error_3(QUERY_EXPECTED);
                 }
-                ; // end: else: if ( type_of_instruction() == QUERY )
                 next_state = GET_INSTRUCTION;
                 break;
             default:
@@ -1442,7 +1433,7 @@ in_out_buffer::in_out_buffer()
 
 
 // ustawienie wyjsc
-void in_out_buffer::set_output(WORD *out_value)
+void in_out_buffer::set_output(const WORD *out_value)
 {
 
     InterruptLock(&output_spinlock);
@@ -1450,7 +1441,7 @@ void in_out_buffer::set_output(WORD *out_value)
     binary_output=*out_value;
 
     InterruptUnlock(&output_spinlock);
-};
+}
 
 // odczytanie wyjsc
 void in_out_buffer::get_output(WORD *out_value)
@@ -1460,11 +1451,11 @@ void in_out_buffer::get_output(WORD *out_value)
     *out_value=binary_output;
 
     InterruptUnlock(&output_spinlock );
-};
+}
 
 
 // ustawienie wejsc
-void in_out_buffer::set_input (WORD *binary_in_value, BYTE *analog_in_table)
+void in_out_buffer::set_input (const WORD *binary_in_value, const BYTE *analog_in_table)
 {
 
     InterruptLock(&input_spinlock );
@@ -1480,7 +1471,7 @@ void in_out_buffer::set_input (WORD *binary_in_value, BYTE *analog_in_table)
     	binary_in_value =   & read_binary;*/
 
     // printf("%x\n", 0x00FF&(~odczyt));
-};
+}
 
 
 // odczytanie wejsc
@@ -1509,6 +1500,6 @@ void in_out_buffer::get_input (WORD *binary_in_value, BYTE *analog_in_table)
     	binary_in_value =   & read_binary;*/
 
     // printf("%x\n", 0x00FF&(~odczyt));
-};
+}
 
 /**************************** IN_OUT_BUFFER *****************************/

@@ -163,7 +163,6 @@ class ecp_robot {
 		// musi zawierac pola danych (skladowe) dotyczace
 		// ostatnio zrealizowanej pozycji oraz pozycji zadanej
 	
-		// int fd;	// by Y&W
 	protected:
 
 		// int UI_fd; // by Y&W - przeniesione z procesu master
@@ -179,12 +178,12 @@ class ecp_robot {
 		// by Y&W - przerzucenie zainicjowania komunikacji z procesu master do klasy
 		void connect_to_edp (const char* edp_net_attach_point);
 
+		ecp_buffer EDP_command_and_reply_buffer;
 	public:
 		bool synchronised; // Flaga synchronizacji robota (true - zsynchronizowany, false - nie)
 
 		int number_of_servos;
-
-		ecp_buffer EDP_command_and_reply_buffer;
+		
 #if !defined(USE_MESSIP_SRR)
 		int EDP_fd;	// by Y&W
 #else
@@ -241,8 +240,8 @@ class ecp_robot {
 
 		class ECP_main_error {  // Klasa obslugi bledow ECP
 			public:
-				uint64_t error_class;
-				uint64_t error_no;
+				const uint64_t error_class;
+				const uint64_t error_no;
 
 				ECP_main_error ( uint64_t err_cl, uint64_t err_no);
 		}; // end: class ECP_main_error // by Y&W przerzucone do wnetrza klasy

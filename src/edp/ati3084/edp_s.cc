@@ -496,30 +496,28 @@ void edp_ATI3084_force_sensor::terminate(void)
 
 int edp_ATI3084_force_sensor::parallel_do_send_command(char* command)
 {
-    char a;
-    short value=0;
-    struct timespec rqtp;
+	char a;
+	short value=0;
+	struct timespec rqtp;
 
-    rqtp.tv_sec=0;
-    rqtp.tv_nsec=100000;
+	rqtp.tv_sec=0;
+	rqtp.tv_nsec=100000;
 
-    while(( a = *command++ )!=0 )
-    {
-        value=short(a);
-        set_output(value);
-        while(!check_ack())
-            ;
-        set_obf(0);
-        nanosleep(&rqtp,NULL);
+	while ((a = *command++ )!=0) {
+		value=short(a);
+		set_output(value);
+		while (!check_ack());
+		set_obf(0);
+		nanosleep(&rqtp, NULL);
 
-        if (value!=23)
-            while(check_ack())
-                ;	// jesli polcecenie rozne od RESET
-        else
-            delay(1);
-        set_obf(1);
-    }
-    return 1;
+		if (value!=23)
+			while (check_ack())
+				; // jesli polcecenie rozne od RESET
+		else
+			delay(1);
+		set_obf(1);
+	}
+	return 1;
 }
 
 
