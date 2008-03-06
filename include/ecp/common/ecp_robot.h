@@ -8,6 +8,9 @@
 
 #include "messip/messip.h"
 
+
+class ui_common_robot;
+
 // ------------------------------------------------------------------------
 class ecp_buffer: public ecp_command_buffer, public edp_reply_buffer
 {
@@ -30,6 +33,7 @@ class ecp_task;
 
 class ecp_robot : public ecp_mp_robot
 {
+	friend ui_common_robot;
 
     // Klasa bazowa dla robotow (klasa abstrakcyjna)
     // Kazdy robot konkretny (wyprowadzony z klasy bazowej)
@@ -52,11 +56,11 @@ protected:
     // by Y&W - przerzucenie zainicjowania komunikacji z procesu master do klasy
     void connect_to_edp (const char* edp_net_attach_point);
     
-
+    ecp_buffer EDP_command_and_reply_buffer;
 
 public:
 
-    ecp_buffer EDP_command_and_reply_buffer;
+
     bool synchronised; // Flaga synchronizacji robota (true - zsynchronizowany, false - nie)
 
     int number_of_servos;
