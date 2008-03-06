@@ -136,16 +136,16 @@ bool ecp_robot::is_synchronised ( void ) const
 
 
 // Kopiowanie bufora przesylanego z MP do bufora wysylanego do EDP
-void ecp_robot::copy_mp_to_edp_buffer (c_buffer& mp_buffer)
+void ecp_robot::copy_mp_to_edp_buffer(c_buffer& mp_buffer)
 {
-    memcpy( &EDP_command_and_reply_buffer.instruction, &mp_buffer, sizeof(c_buffer));
+	memcpy( &EDP_command_and_reply_buffer.instruction, &mp_buffer, sizeof(c_buffer));
 }
 
 // by Y - o dziwo tego nie bylo !!!
 // Kopiowanie bufora przesylanego z EDP do bufora wysylanego do MP
-void ecp_robot::copy_edp_to_mp_buffer (r_buffer& mp_buffer)
+void ecp_robot::copy_edp_to_mp_buffer(r_buffer& mp_buffer)
 {
-    memcpy( &mp_buffer, &EDP_command_and_reply_buffer.reply_package, sizeof(r_buffer));
+	memcpy( &mp_buffer, &EDP_command_and_reply_buffer.reply_package, sizeof(r_buffer));
 }
 
 

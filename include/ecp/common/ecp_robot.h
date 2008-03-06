@@ -33,12 +33,20 @@ class ecp_task;
 class ecp_robot : public ecp_mp_robot
 {
 	friend class ui_common_robot;
+	friend class ecp_generator_t;
 
     // Klasa bazowa dla robotow (klasa abstrakcyjna)
     // Kazdy robot konkretny (wyprowadzony z klasy bazowej)
     // musi zawierac pola danych (skladowe) dotyczace
     // ostatnio zrealizowanej pozycji oraz pozycji zadanej
+private:
+    // Kopiowanie bufora przesylanego z MP do bufora wysylanego do EDP
+    virtual void copy_mp_to_edp_buffer (c_buffer& mp_buffer);
 
+    // by Y - o dziwo tego nie bylo !!!
+    // Kopiowanie bufora przesylanego z EDP do bufora wysylanego do MP
+    virtual void copy_edp_to_mp_buffer (r_buffer& mp_buffer);
+    
     // int fd;	// by Y&W
 protected:
 
@@ -58,7 +66,6 @@ protected:
     ecp_buffer EDP_command_and_reply_buffer;
 
 public:
-
 
     bool synchronised; // Flaga synchronizacji robota (true - zsynchronizowany, false - nie)
 
@@ -99,13 +106,6 @@ public:
     // pobiera z pakietu przeslanego z EDP informacje i wstawia je do
     // odpowiednich skladowych obrazu robota wykorzystywanych przez generator
     // Ten bufor znajduje sie w robocie
-
-    // Kopiowanie bufora przesylanego z MP do bufora wysylanego do EDP
-    virtual void copy_mp_to_edp_buffer (c_buffer& mp_buffer);
-
-    // by Y - o dziwo tego nie bylo !!!
-    // Kopiowanie bufora przesylanego z EDP do bufora wysylanego do MP
-    virtual void copy_edp_to_mp_buffer (r_buffer& mp_buffer);
 
     bool is_synchronised ( void ) const; // Czy robot zsynchronizowany?
 

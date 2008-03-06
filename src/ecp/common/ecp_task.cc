@@ -166,48 +166,42 @@ void ecp_task::task_initialization(void)
 void ecp_task::main_task_algorithm(void)
 {}
 
-void ecp_task::Move (ecp_generator& the_generator)
+void ecp_task::Move(ecp_generator& the_generator)
 {
-    // Funkcja ruchu dla ECP
+	// Funkcja ruchu dla ECP
 
-    // generacja pierwszego kroku ruchu
-    the_generator.node_counter = 0;
-    set_ecp_reply (ECP_ACKNOWLEDGE);
+	// generacja pierwszego kroku ruchu
+	the_generator.node_counter = 0;
+	set_ecp_reply(ECP_ACKNOWLEDGE);
 
-    if (!(!the_generator.communicate_with_mp_in_move || mp_buffer_receive_and_send())
-            || !the_generator.first_step())
-    {
-        return; // Warunek koncowy spelniony w pierwszym kroku
-    }
+	if (!(!the_generator.communicate_with_mp_in_move
+			|| mp_buffer_receive_and_send()) || !the_generator.first_step()) {
+		return; // Warunek koncowy spelniony w pierwszym kroku
+	}
 
-    do
-    { // realizacja ruchu
+	do { // realizacja ruchu
 
-        // zadanie przygotowania danych od czujnikow
-        all_sensors_initiate_reading (the_generator.sensor_m);
+		// zadanie przygotowania danych od czujnikow
+		all_sensors_initiate_reading(the_generator.sensor_m);
 
-        // wykonanie kroku ruchu
-        if ((the_generator.the_robot) && the_generator.the_robot->communicate)
-        {
-            if (the_generator.copy_edp_buffers_in_move)
-	{
- the_generator.the_robot->create_command ();
- }
-            // zlecenie ruchu SET oraz odczyt stanu robota GET
-            the_generator.the_robot->execute_motion();
-            
-                        if (the_generator.copy_edp_buffers_in_move)
-	{
-            the_generator.the_robot->get_reply();
-            }
-        }
+		// wykonanie kroku ruchu
+		if ((the_generator.the_robot) && the_generator.the_robot->communicate) {
+			if (the_generator.copy_edp_buffers_in_move) {
+				the_generator.the_robot->create_command();
+			}
+			// zlecenie ruchu SET oraz odczyt stanu robota GET
+			the_generator.the_robot->execute_motion();
 
-        // odczytanie danych z wszystkich czujnikow
-        all_sensors_get_reading(the_generator.sensor_m);
-        the_generator.node_counter++;
-    }
-    while ((!the_generator.communicate_with_mp_in_move || mp_buffer_receive_and_send())
-            && the_generator.next_step());
+			if (the_generator.copy_edp_buffers_in_move) {
+				the_generator.the_robot->get_reply();
+			}
+		}
+
+		// odczytanie danych z wszystkich czujnikow
+		all_sensors_get_reading(the_generator.sensor_m);
+		the_generator.node_counter++;
+	} while ((!the_generator.communicate_with_mp_in_move
+			|| mp_buffer_receive_and_send()) && the_generator.next_step());
 }
 
 // Przekazanie identyfikatora procesu MP
