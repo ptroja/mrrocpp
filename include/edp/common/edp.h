@@ -448,7 +448,7 @@ protected:
     // XYZ_ANGLE_AXIS wyrazonej bezwzglednie do postaci
     // FRAME oraz przepisanie wyniku przeksztalcenia do
     // wewnetrznych struktur danych TRANSFORMATORa
-    virtual void arm_abs_xyz_eul_zyz_2_frame (const double *p);
+    virtual void arm_abs_xyz_eul_zyz_2_frame (const double *p) = 0;
     // Przeksztalcenie definicji koncowki z postaci
     // XYZ_EULER_ZYZ wyrazonej bezwzglednie do postaci
     // FRAME oraz przepisanie wyniku przeksztalcenia do

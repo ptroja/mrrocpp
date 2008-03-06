@@ -427,14 +427,6 @@ void edp_irp6s_effector::arm_abs_xyz_aa_2_frame (const double *p)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::arm_abs_xyz_eul_zyz_2_frame (const double *p)
-{}
-
-
-/*--------------------------------------------------------------------------*/
-
-
-/*--------------------------------------------------------------------------*/
 void edp_irp6s_effector::arm_abs_frame_2_frame (frame_tab p_m)
 {
     // Przepisanie definicji koncowki danej
@@ -444,7 +436,6 @@ void edp_irp6s_effector::arm_abs_frame_2_frame (frame_tab p_m)
 
 
 }
-; // end: edp_irp6s_effector::arm_abs_frame_2_frame
 /*--------------------------------------------------------------------------*/
 
 
@@ -514,7 +505,6 @@ void edp_irp6s_effector::arm_rel_xyz_eul_zyz_2_frame (const double* p)
     G_R_T.get_frame_tab(desired_end_effector_frame);			// przepisanie uzyskanego wyniku do transformera
 
 }
-; // end: edp_irp6s_effector::arm_rel_xyz_eul_zyz_2_frame
 /*--------------------------------------------------------------------------*/
 
 
@@ -533,7 +523,6 @@ void edp_irp6s_effector::arm_rel_frame_2_frame (frame_tab p_m)
     // matrix_mult(desired_end_effector_frame, *p);
     // sprawdzi przekroczenie dopuszczalnego zakresu oraz poprawno macierzy jednorodnej
 }
-; // end: edp_irp6s_effector::arm_rel_frame_2_frame
 /*--------------------------------------------------------------------------*/
 
 
@@ -568,7 +557,6 @@ void edp_irp6s_effector::arm_frame_2_xyz_aa (void)
     }
 
 }
-; // end: edp_irp6s_effector::arm_frame_2_xyz_aa
 /*--------------------------------------------------------------------------*/
 
 
@@ -705,7 +693,6 @@ void edp_irp6s_effector::tool_axially_symmetrical_xyz_eul_zy_2_frame (c_buffer *
     get_current_kinematic_model()->tool = G_R_T;
 
 }
-; // end: edp_irp6s_effector::tool_axially_symmetrical_xyz_eul_zy_2_frame
 /*--------------------------------------------------------------------------*/
 
 
@@ -742,7 +729,6 @@ void edp_irp6s_effector::arm_frame_2_frame (void)
     }
 
 }
-; // end: edp_irp6s_effector::arm_frame_2_frame
 /*--------------------------------------------------------------------------*/
 
 void edp_irp6s_effector::master_joints_and_frame_download (void)
