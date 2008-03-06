@@ -26,11 +26,6 @@ public:
 // ------------------------------------------------------------------------
 
 
-struct robot_EDP_transmission_data : robot_transmission_data
-{
-
-};
-
 class ecp_task;
 
 class ecp_robot : public ecp_mp_robot
@@ -72,7 +67,7 @@ public:
     messip_channel_t *EDP_fd;
 #endif
 
-     robot_EDP_transmission_data EDP_data; // Obraz robota wykorzystywany przez generator
+    robot_transmission_data EDP_data; // Obraz robota wykorzystywany przez generator
 
     virtual void execute_motion (void);
     // Zlecenie wykonania ruchu przez robota (realizowane przez klase konkretna):

@@ -10,10 +10,11 @@
 struct robot_transmission_data
 {
 
-    robot_transmission_data (void)
-            : instruction_type(INVALID), reply_type(ACKNOWLEDGE)
-    {}
-    ;
+	robot_transmission_data(void) :
+			instruction_type(INVALID), reply_type(ACKNOWLEDGE)
+		{
+		}
+
 
     INSTRUCTION_TYPE instruction_type;		// typ instrukcji
     REPLY_TYPE reply_type;					// typ odpowiedzi EDP
