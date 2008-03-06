@@ -348,7 +348,7 @@ void edp_irp6s_postument_track_effector::arm_frame_2_pose_force_torque_at_frame 
 
 // ruch pozycyjno silowy dla ramki TFF - testowane tylko dla trybu RELATIVE
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_postument_track_effector::pose_force_torque_at_frameove (c_buffer &instruction)
+void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buffer &instruction)
 {
     //	static int debugi=0;
     //   debugi++;
@@ -725,7 +725,7 @@ void edp_irp6s_postument_track_effector::move_arm (c_buffer &instruction)
         mt_tt_obj->trans_t_to_master_order_status_ready();
         break;
     case POSE_FORCE_TORQUE_AT_FRAME:
-        pose_force_torque_at_frameove (instruction);
+        pose_force_torque_at_frame_move (instruction);
         break;
     default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
         throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);

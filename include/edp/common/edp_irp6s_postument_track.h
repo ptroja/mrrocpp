@@ -77,7 +77,7 @@ public:
     // TODO: rename ruch pozycyjno silowo dla staqlej orientacji i kierukow liniowych
     virtual void pose_force_linear_move (c_buffer &instruction);
 
-    void pose_force_torque_at_frameove (c_buffer &instruction);
+    void pose_force_torque_at_frame_move (c_buffer &instruction);
 
     void servo_joints_and_frame_actualization_and_upload(void);// by Y
 
