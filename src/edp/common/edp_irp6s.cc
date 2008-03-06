@@ -561,15 +561,6 @@ void edp_irp6s_effector::arm_frame_2_xyz_aa (void)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::arm_frame_2_xyz_eul_zyz ()
-{}
-;
-
-/*--------------------------------------------------------------------------*/
-
-
-
-/*--------------------------------------------------------------------------*/
 void edp_irp6s_effector::tool_xyz_aa_2_frame (c_buffer &instruction)
 {
     // Przeksztacenie definicji narzedzia z postaci

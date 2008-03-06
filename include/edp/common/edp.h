@@ -411,7 +411,7 @@ protected:
     // FRAME do postaci XYZ_ANGLE_AXIS
     // oraz przepisanie wyniku przeksztalcenia do
     // wewnetrznych struktur danych REPLY_BUFFER
-    virtual void arm_frame_2_xyz_eul_zyz ();
+    virtual void arm_frame_2_xyz_eul_zyz () = 0;
 
 
     void arm_frame_2_frame (void);
