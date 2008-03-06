@@ -513,7 +513,7 @@ bool mp_haptic_generator::next_step ()
 		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else
-		return true;
+		return true;				
 }
 
 mp_tff_rubik_grab_generator::mp_tff_rubik_grab_generator(mp_task& _mp_task, int step): mp_generator (_mp_task), irp6ot_con(0), irp6p_con(0)
