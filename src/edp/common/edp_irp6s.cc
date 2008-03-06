@@ -758,16 +758,6 @@ void edp_irp6s_effector::master_joints_and_frame_download (void)
     pthread_mutex_unlock( &edp_irp6s_effector_mutex );
 }
 
-
-
-
-
-/*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::create_threads ()
-{
-    edp_irp6s_and_conv_effector::create_threads();
-}
-
 /*--------------------------------------------------------------------------*/
 
 // sprawdza stan EDP zaraz po jego uruchomieniu

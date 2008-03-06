@@ -133,7 +133,7 @@ public:
     void insert_reply_type (REPLY_TYPE rt);
 
     virtual void main_loop(); // main loop
-    virtual void create_threads ();
+    virtual void create_threads () = 0;
 
     bool is_reply_type_ERROR() const;
 
@@ -332,8 +332,8 @@ public:
     virtual void servo_joints_and_frame_actualization_and_upload(void); // by Y
 
     void main_loop(); // main loop
+    
     virtual void create_threads ();
-
 
     void interpret_instruction (c_buffer &instruction);
     // interpretuje otrzymana z ECP instrukcje;
@@ -513,8 +513,6 @@ public:
     // wyznaczenie polozenia lokalnego i globalnego transformera
     // przepisanie lokalnego zestawu lokalnego edp_servo na globalny (chronione mutexem)
     void master_joints_and_frame_download(void);// by Y przepisanie z zestawu globalnego na lokalny dla edp_master
-
-    virtual void create_threads ();
 
 };
 /************************ edp_irp6s_effector ****************************/

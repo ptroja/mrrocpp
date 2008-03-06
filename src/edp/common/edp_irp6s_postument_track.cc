@@ -256,40 +256,35 @@ void edp_irp6s_postument_track_effector::pose_force_linear_move (c_buffer &instr
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_postument_track_effector::create_threads ()
+void edp_irp6s_postument_track_effector::create_threads()
 {
+	// jesli wlaczono obsluge sily
+	if (force_tryb > 0) {
 
-
-    // jesli wlaczono obsluge sily
-    if (force_tryb > 0)
-    {
-    
-        // byY - utworzenie watku pomiarow sily
-        if (pthread_create (&force_tid, NULL, &force_thread_start, (void *) this)!=EOK)
-        {
-            msg->message(SYSTEM_ERROR, errno, "EDP: Failed to spawn READER");
-            char buf[20];
-            netmgr_ndtostr(ND2S_LOCAL_STR, ND_LOCAL_NODE, buf, sizeof(buf));
-            printf (" Failed to thread FORCE_thread on node: %s\n", buf);
-            throw System_error();
-        }
+		// byY - utworzenie watku pomiarow sily
+		if (pthread_create(&force_tid, NULL, &force_thread_start, (void *) this)
+				!=EOK) {
+			msg->message(SYSTEM_ERROR, errno, "EDP: Failed to spawn READER");
+			char buf[20];
+			netmgr_ndtostr(ND2S_LOCAL_STR, ND_LOCAL_NODE, buf, sizeof(buf));
+			printf(" Failed to thread FORCE_thread on node: %s\n", buf);
+			throw System_error();
+		}
 
 		sem_wait(&force_master_sem);
 
-        // by Y - utworzenie watku komunikacji miedzy EDP a VSP
-        if (pthread_create (&edp_vsp_tid, NULL, &edp_vsp_thread_start, (void *) this)!=EOK)
-        {
-            msg->message(SYSTEM_ERROR, errno, "EDP: Failed to spawn READER");
-            char buf[20];
-            netmgr_ndtostr(ND2S_LOCAL_STR, ND_LOCAL_NODE, buf, sizeof(buf));
-            printf (" Failed to thread EDP_VSP_thread on node: %s\n", buf);
-            throw System_error();
-        }
-    }
-    
-    
-        edp_irp6s_effector::create_threads();
-    
+		// by Y - utworzenie watku komunikacji miedzy EDP a VSP
+		if (pthread_create(&edp_vsp_tid, NULL, &edp_vsp_thread_start, (void *) this)
+				!=EOK) {
+			msg->message(SYSTEM_ERROR, errno, "EDP: Failed to spawn READER");
+			char buf[20];
+			netmgr_ndtostr(ND2S_LOCAL_STR, ND_LOCAL_NODE, buf, sizeof(buf));
+			printf(" Failed to thread EDP_VSP_thread on node: %s\n", buf);
+			throw System_error();
+		}
+	}
+
+	edp_irp6s_effector::create_threads();
 }
 
 

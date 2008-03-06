@@ -165,10 +165,6 @@ void edp_effector::main_loop()
 {
 }
 
-void edp_effector::create_threads()
-{
-}
-
 void edp_effector::establish_error(uint64_t err0, uint64_t err1)
 {
 	reply.reply_type = ERROR;

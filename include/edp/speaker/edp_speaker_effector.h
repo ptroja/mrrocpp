@@ -20,7 +20,6 @@
 //#include "edp/speaker/sound.h" // MAC7
 
 
-
 // Klasa reprezentujaca speaker'a.
 class edp_speaker_effector  : public edp_effector
 {
@@ -85,7 +84,6 @@ public:
     void get_spoken (bool read_hardware, c_buffer *instruction);
     int speak (c_buffer *instruction);
 
-}
-; //: edp_speaker_effector
+};
 
 #endif
