@@ -9,11 +9,14 @@
 #define __MP_T_HAPTIC_H
 
 #include "mp/mp.h"
+#include "ecp_mp/ecp_mp_t_rcsc.h"
 
 class mp_task_haptic : public mp_task  
 {
 protected:
 	bool break_state;
+  
+      bool configure_edp_force_sensor(bool configure_track, bool configure_postument);
   
 public:
 	

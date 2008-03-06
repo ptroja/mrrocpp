@@ -585,7 +585,10 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 
 
     // wlaczenie generatora do konfiguracji czujnika w EDP w obydwu robotach
-    configure_edp_force_sensor(true, true);
+   			    if (configure_edp_force_sensor(true, true))
+			    {
+		return true;		    
+			    }
 
 
 
@@ -831,7 +834,10 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
     // zacisniecie tracka na kostce
 
     // wlaczenie generatora do konfiguracji czujnika w EDP w obydwu robotach
-    configure_edp_force_sensor(true, true);
+    			    if (configure_edp_force_sensor(true, true))
+			    {
+	return true;	    
+			    }
 
 
 
@@ -1062,7 +1068,10 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
 
     //pierwsza konfiguracja czujnikow
     // wlaczenie generatora do konfiguracji czujnika w EDP w obydwu robotach
-    configure_edp_force_sensor(true, true);
+   			    if (configure_edp_force_sensor(true, true))
+			    {
+			 return true;
+			    }
 
 
 
