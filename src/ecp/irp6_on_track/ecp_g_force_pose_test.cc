@@ -71,7 +71,7 @@ bool y_simple_generator::next_step ( ) {
 	the_robot->EDP_data.ECPtoEDP_force_tool_frame[3][2] = 0.18;
 	for(int i=0;i<6;i++) {
 		the_robot->EDP_data.ECPtoEDP_pos_xyz_rot_xyz[i] = 0;
-		the_robot->EDP_data.ECPtoEDP_force_xyz_torque_xyz[i] = 0;	
+		the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;	
 		the_robot->EDP_data.selection_vector[i] = FORCE_SV_AX;
 	}
 //	the_robot->EDP_data.ECPtoEDP_force_xyz_torque_xyz[2] = -5;
@@ -95,7 +95,7 @@ bool y_simple_generator::next_step ( ) {
 	homog_matrix pred_frame = homog_matrix(predicted_frame);
 	cout << endl << "ecp: predicted_frame" << endl << endl<< pred_frame;
 	double force[6];
-	for (int i=0;i<6;i++) force[i] = the_robot->EDP_data.EDPtoECP_force_xyz_torque_xyz[i];
+	for (int i=0;i<6;i++) force[i] = the_robot->EDP_data.current_force_xyz_torque_xyz[i];
 	cout << "force" << endl << endl;
 	for(int i=0;i<6;i++) cout << force[i] << "  " ;
 	cout << endl;

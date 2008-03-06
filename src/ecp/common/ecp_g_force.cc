@@ -511,23 +511,23 @@ bool y_edge_follow_force_generator::first_step ( )
 
     for(int i=0;i<3;i++)
     {
-        the_robot->EDP_data.ECPtoEDP_inertia[i] = FORCE_INERTIA;
-        the_robot->EDP_data.ECPtoEDP_inertia[i+3] = TORQUE_INERTIA;
+        the_robot->EDP_data.next_inertia[i] = FORCE_INERTIA;
+        the_robot->EDP_data.next_inertia[i+3] = TORQUE_INERTIA;
     }
 
 
     for(int i=0;i<6;i++)
     {
-        the_robot->EDP_data.ECPtoEDP_position_velocity[i] = 0;
-        the_robot->EDP_data.ECPtoEDP_force_xyz_torque_xyz[i] = 0;
+        the_robot->EDP_data.next_position_velocity[i] = 0;
+        the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
         //	the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i] = 0.0;
-        the_robot->EDP_data.ECPtoEDP_behaviour[i] = UNGUARDED_MOTION;
+        the_robot->EDP_data.next_behaviour[i] = UNGUARDED_MOTION;
     }
 
-    the_robot->EDP_data.ECPtoEDP_reciprocal_damping[0] = FORCE_RECIPROCAL_DAMPING;
-    the_robot->EDP_data.ECPtoEDP_behaviour[0] = CONTACT;
+    the_robot->EDP_data.next_reciprocal_damping[0] = FORCE_RECIPROCAL_DAMPING;
+    the_robot->EDP_data.next_behaviour[0] = CONTACT;
     // Sila dosciku do rawedzi
-    the_robot->EDP_data.ECPtoEDP_force_xyz_torque_xyz[0] = -4;
+    the_robot->EDP_data.next_force_xyz_torque_xyz[0] = -4;
 
     return true;
 }
@@ -572,7 +572,7 @@ bool y_edge_follow_force_generator::next_step ( )
 
     // sprowadzenie sil do ukladu kisci
     Ft_v_vector force_torque = Ft_v_tr (!(Homog_matrix(the_robot->EDP_data.current_present_arm_frame)), Ft_v_tr::FT) *
-                               Ft_v_vector (the_robot->EDP_data.EDPtoECP_force_xyz_torque_xyz);
+                               Ft_v_vector (the_robot->EDP_data.current_force_xyz_torque_xyz);
 
 
     double wx = force_torque[0];
@@ -583,7 +583,7 @@ bool y_edge_follow_force_generator::next_step ( )
     double s_alfa = wy / v;
     double c_alfa = - wx / v;
 
-    the_robot->EDP_data.ECPtoEDP_position_velocity[1] = -0.002*v;
+    the_robot->EDP_data.next_position_velocity[1] = -0.002*v;
     //	the_robot->EDP_data.ECPtoEDP_position_velocity[1] = 0.0;
 
     // basic_rot_frame = Homog_matrix(c_alfa, s_alfa, 0.0,	-s_alfa, c_alfa, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
@@ -1325,8 +1325,8 @@ bool ecp_tff_nose_run_generator::first_step ()
 
     for (int i=0;i<6;i++)
     {
-        the_robot->EDP_data.ECPtoEDP_position_velocity[i] = 0;
-        the_robot->EDP_data.ECPtoEDP_force_xyz_torque_xyz[i] = 0;
+        the_robot->EDP_data.next_position_velocity[i] = 0;
+        the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
         //		the_robot->EDP_data.selection_vector[i] = selection_vector_l[i];
         //	the_robot->EDP_data.selection_vector[i] = POSE_SV_AX;
     }
@@ -1335,27 +1335,27 @@ bool ecp_tff_nose_run_generator::first_step ()
     {
         if (selection_vector_l[i])
         {
-            the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-            the_robot->EDP_data.ECPtoEDP_behaviour[i] = CONTACT;
+            the_robot->EDP_data.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+            the_robot->EDP_data.next_behaviour[i] = CONTACT;
         }
         else
         {
-            the_robot->EDP_data.ECPtoEDP_behaviour[i] = UNGUARDED_MOTION;
+            the_robot->EDP_data.next_behaviour[i] = UNGUARDED_MOTION;
         }
 
         if (selection_vector_l[i+3])
         {
-            the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-            the_robot->EDP_data.ECPtoEDP_behaviour[i+3] = CONTACT;
+            the_robot->EDP_data.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+            the_robot->EDP_data.next_behaviour[i+3] = CONTACT;
         }
         else
         {
             //	the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i+3] = 0;
-            the_robot->EDP_data.ECPtoEDP_behaviour[i+3] = UNGUARDED_MOTION;
+            the_robot->EDP_data.next_behaviour[i+3] = UNGUARDED_MOTION;
         }
 
-        the_robot->EDP_data.ECPtoEDP_inertia[i] = FORCE_INERTIA;
-        the_robot->EDP_data.ECPtoEDP_inertia[i+3] = TORQUE_INERTIA;
+        the_robot->EDP_data.next_inertia[i] = FORCE_INERTIA;
+        the_robot->EDP_data.next_inertia[i+3] = TORQUE_INERTIA;
 
     }
 
@@ -1454,33 +1454,33 @@ bool ecp_tff_rubik_grab_generator::first_step ()
 
     for(int i=0;i<6;i++)
     {
-        the_robot->EDP_data.ECPtoEDP_force_xyz_torque_xyz[i] = 0;
-        the_robot->EDP_data.ECPtoEDP_position_velocity[i] = 0;
+        the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
+        the_robot->EDP_data.next_position_velocity[i] = 0;
     }
 
     for(int i=0;i<3;i++)
     {
-        the_robot->EDP_data.ECPtoEDP_inertia[i] = FORCE_INERTIA;
-        the_robot->EDP_data.ECPtoEDP_inertia[i+3] = TORQUE_INERTIA;
+        the_robot->EDP_data.next_inertia[i] = FORCE_INERTIA;
+        the_robot->EDP_data.next_inertia[i+3] = TORQUE_INERTIA;
     }
 
 
     if (both_axes_running)
         for(int i=0;i<2;i++)
         {
-            the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-            the_robot->EDP_data.ECPtoEDP_behaviour[i] = CONTACT;
+            the_robot->EDP_data.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+            the_robot->EDP_data.next_behaviour[i] = CONTACT;
         }
     else
     {
-        the_robot->EDP_data.ECPtoEDP_reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
-        the_robot->EDP_data.ECPtoEDP_behaviour[1] = CONTACT;
-        the_robot->EDP_data.ECPtoEDP_behaviour[0] = UNGUARDED_MOTION;
+        the_robot->EDP_data.next_reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
+        the_robot->EDP_data.next_behaviour[1] = CONTACT;
+        the_robot->EDP_data.next_behaviour[0] = UNGUARDED_MOTION;
     }
 
     for(int i=2;i<6;i++)
     {
-        the_robot->EDP_data.ECPtoEDP_behaviour[i] = UNGUARDED_MOTION;
+        the_robot->EDP_data.next_behaviour[i] = UNGUARDED_MOTION;
     }
 
 
@@ -1580,39 +1580,39 @@ bool ecp_tff_rubik_face_rotate_generator::first_step ()
 
     for(int i=0;i<6;i++)
     {
-        the_robot->EDP_data.ECPtoEDP_force_xyz_torque_xyz[i] = 0;
-        the_robot->EDP_data.ECPtoEDP_position_velocity[i] = 0;
+        the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
+        the_robot->EDP_data.next_position_velocity[i] = 0;
     }
 
     for (int i=0;i<3;i++)
     {
-        the_robot->EDP_data.ECPtoEDP_inertia[i] = FORCE_INERTIA;
-        the_robot->EDP_data.ECPtoEDP_inertia[i+3] = TORQUE_INERTIA;
+        the_robot->EDP_data.next_inertia[i] = FORCE_INERTIA;
+        the_robot->EDP_data.next_inertia[i+3] = TORQUE_INERTIA;
     }
 
-    the_robot->EDP_data.ECPtoEDP_reciprocal_damping[5] = TORQUE_RECIPROCAL_DAMPING/4;
-    the_robot->EDP_data.ECPtoEDP_behaviour[5] = CONTACT;
+    the_robot->EDP_data.next_reciprocal_damping[5] = TORQUE_RECIPROCAL_DAMPING/4;
+    the_robot->EDP_data.next_behaviour[5] = CONTACT;
 
     if (-0.1 < turn_angle && turn_angle < 0.1)
     {
         for(int i=0;i<6;i++)
-            the_robot->EDP_data.ECPtoEDP_behaviour[i] = UNGUARDED_MOTION;
+            the_robot->EDP_data.next_behaviour[i] = UNGUARDED_MOTION;
     }
     else
     {
         for(int i=0;i<3;i++)
         {
-            the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-            the_robot->EDP_data.ECPtoEDP_behaviour[i] = CONTACT;
+            the_robot->EDP_data.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+            the_robot->EDP_data.next_behaviour[i] = CONTACT;
         }
         for(int i=3;i<5;i++)
-            the_robot->EDP_data.ECPtoEDP_behaviour[i] = UNGUARDED_MOTION;
-        the_robot->EDP_data.ECPtoEDP_reciprocal_damping[5] = TORQUE_RECIPROCAL_DAMPING;
-        the_robot->EDP_data.ECPtoEDP_behaviour[5] = CONTACT;
+            the_robot->EDP_data.next_behaviour[i] = UNGUARDED_MOTION;
+        the_robot->EDP_data.next_reciprocal_damping[5] = TORQUE_RECIPROCAL_DAMPING;
+        the_robot->EDP_data.next_behaviour[5] = CONTACT;
         if(turn_angle > 0.0)
-            the_robot->EDP_data.ECPtoEDP_force_xyz_torque_xyz[5] = -5;
+            the_robot->EDP_data.next_force_xyz_torque_xyz[5] = -5;
         if(turn_angle < 0.0)
-            the_robot->EDP_data.ECPtoEDP_force_xyz_torque_xyz[5] = 5;
+            the_robot->EDP_data.next_force_xyz_torque_xyz[5] = 5;
     }
 
 
@@ -1760,26 +1760,26 @@ bool ecp_tff_gripper_approach_generator::first_step ()
 
     for(int i=0;i<6;i++)
     {
-        the_robot->EDP_data.ECPtoEDP_force_xyz_torque_xyz[i] = 0;
-        the_robot->EDP_data.ECPtoEDP_position_velocity[i] = 0;
+        the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
+        the_robot->EDP_data.next_position_velocity[i] = 0;
     }
 
     for (int i=0;i<6;i++)
     {
-        the_robot->EDP_data.ECPtoEDP_inertia[i] = 0;
+        the_robot->EDP_data.next_inertia[i] = 0;
     }
 
-    the_robot->EDP_data.ECPtoEDP_inertia[2] = FORCE_INERTIA / 4;
-    the_robot->EDP_data.ECPtoEDP_force_xyz_torque_xyz[2] = -speed;
+    the_robot->EDP_data.next_inertia[2] = FORCE_INERTIA / 4;
+    the_robot->EDP_data.next_force_xyz_torque_xyz[2] = -speed;
 
     for (int i=0;i<6;i++)
     {
-        the_robot->EDP_data.ECPtoEDP_behaviour[i] = UNGUARDED_MOTION;
+        the_robot->EDP_data.next_behaviour[i] = UNGUARDED_MOTION;
         //		the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i] = 0;
     }
 
-    the_robot->EDP_data.ECPtoEDP_behaviour[2] = CONTACT;
-    the_robot->EDP_data.ECPtoEDP_reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING / 2;
+    the_robot->EDP_data.next_behaviour[2] = CONTACT;
+    the_robot->EDP_data.next_reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING / 2;
 
 
 

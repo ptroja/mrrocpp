@@ -189,8 +189,8 @@ bool ecp_vis_sac_lx_generator::first_step () {
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
 	for(int i=0;i<6;i++) {
-		the_robot->EDP_data.ECPtoEDP_position_velocity[i] = 0;
-		the_robot->EDP_data.ECPtoEDP_force_xyz_torque_xyz[i] = 0;
+		the_robot->EDP_data.next_position_velocity[i] = 0;
+		the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
 	//	the_robot->EDP_data.MPselection_vector[i] = FORCE_SV_AX;
 //		 the_robot->EDP_data.MPselection_vector[i] = POSE_SV_AX;
 	}
@@ -199,11 +199,11 @@ bool ecp_vis_sac_lx_generator::first_step () {
 
 	for (int i=0;i<3;i++)
 	{
-		the_robot->EDP_data.ECPtoEDP_inertia[i] = force_inertia_; // FORCE_INERTIA;
-		the_robot->EDP_data.ECPtoEDP_inertia[i+3] = torque_inertia_; //TORQUE_INERTIA;
+		the_robot->EDP_data.next_inertia[i] = force_inertia_; // FORCE_INERTIA;
+		the_robot->EDP_data.next_inertia[i+3] = torque_inertia_; //TORQUE_INERTIA;
 
-		the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i] = force_reciprocal_damping_;
-		the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i+3] = torque_reciprocal_damping_;
+		the_robot->EDP_data.next_reciprocal_damping[i] = force_reciprocal_damping_;
+		the_robot->EDP_data.next_reciprocal_damping[i+3] = torque_reciprocal_damping_;
 	}
 
 
@@ -708,7 +708,7 @@ for(int i=3;i<5;i++) {
 
 
 for(int i=0;i<6;i++) {
-the_robot->EDP_data.ECPtoEDP_position_velocity[i] = O_r_Ep[0][i];
+the_robot->EDP_data.next_position_velocity[i] = O_r_Ep[0][i];
 }
 /*
 for(int i=0;i<6;i++) {

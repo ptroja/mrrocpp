@@ -154,9 +154,9 @@ void mp_irp6s_and_conv_robot::create_next_pose_command (void)
                 for(int i=0;i<6;i++)
                 {
                     mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.inertia[i]
-                    =ecp_td.MPtoECP_inertia[i];
+                    =ecp_td.next_inertia[i];
                     mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.reciprocal_damping[i]
-                    =ecp_td.MPtoECP_reciprocal_damping[i];
+                    =ecp_td.next_reciprocal_damping[i];
 
                     /*
                     mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.selection_vector[i]
@@ -164,14 +164,14 @@ void mp_irp6s_and_conv_robot::create_next_pose_command (void)
                     */
 
                     mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i]
-                    =ecp_td.MPtoECP_force_xyz_torque_xyz[i];
+                    =ecp_td.next_force_xyz_torque_xyz[i];
                     mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.behaviour[i]
-                    = ecp_td.MPtoECP_behaviour[i]; // pozycja docelowa
+                    = ecp_td.next_behaviour[i]; // pozycja docelowa
                 }
                 for (int i=0; i<servos_number ; i++)
                 {
                     mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.position_velocity[i]
-                    =ecp_td.MPtoECP_position_velocity[i];
+                    =ecp_td.next_position_velocity[i];
 
                 }
                 mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.gripper_coordinate
@@ -304,15 +304,15 @@ void mp_irp6s_and_conv_robot::get_arm_reply (void)
     case POSE_FORCE_TORQUE_AT_FRAME:
         if (!has_gripper)
             throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
-        copy_frame(ecp_td.MPcurrent_beggining_arm_frame,
+        copy_frame(ecp_td.current_beggining_arm_frame,
                    ecp_reply_package.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.beggining_arm_frame);
-        copy_frame(ecp_td.MPcurrent_predicted_arm_frame,
+        copy_frame(ecp_td.current_predicted_arm_frame,
                    ecp_reply_package.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.predicted_arm_frame);
-        copy_frame(ecp_td.MPcurrent_present_arm_frame,
+        copy_frame(ecp_td.current_present_arm_frame,
                    ecp_reply_package.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.present_arm_frame);
         for(int i = 0;i<6;i++)
         {
-            ecp_td.ECPtoMP_force_xyz_torque_xyz[i] =
+            ecp_td.current_force_xyz_torque_xyz[i] =
                 ecp_reply_package.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i];
         }
         ecp_td.gripper_reg_state = ecp_reply_package.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.gripper_reg_state;

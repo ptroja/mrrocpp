@@ -47,19 +47,19 @@ bool y_simple_generator::first_step ( ) {
 		
 
 		for(int i=0;i<6;i++) {
-			the_robot->EDP_data.ECPtoEDP_position_velocity[i] = 0;
-			the_robot->EDP_data.ECPtoEDP_force_xyz_torque_xyz[i] = 0;	
+			the_robot->EDP_data.next_position_velocity[i] = 0;
+			the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;	
 		//	the_robot->EDP_data.selection_vector[i] = FORCE_SV_AX;
 		}
 		
-		the_robot->EDP_data.ECPtoEDP_force_xyz_torque_xyz[2] = -5;
+		the_robot->EDP_data.next_force_xyz_torque_xyz[2] = -5;
 		
 		for (int i=0;i<3;i++)
 		{
-			the_robot->EDP_data.ECPtoEDP_inertia[i] = FORCE_INERTIA;
-			the_robot->EDP_data.ECPtoEDP_inertia[i+3] = TORQUE_INERTIA;
-			the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-			the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+			the_robot->EDP_data.next_inertia[i] = FORCE_INERTIA;
+			the_robot->EDP_data.next_inertia[i+3] = TORQUE_INERTIA;
+			the_robot->EDP_data.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+			the_robot->EDP_data.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
 		}
 		
 		//	the_robot->EDP_data.selection_vector[0] = POSE_SV_AX;
@@ -120,7 +120,7 @@ bool y_simple_generator::next_step ( ) {
 printf("sensor: x: %+d, y: %+d, v:%+d\n", (int)round(wx),  (int)round(wy), (int)round(v));
 */
 
-printf("sensor: z: %f\n", the_robot->EDP_data.EDPtoECP_force_xyz_torque_xyz[2]);
+printf("sensor: z: %f\n", the_robot->EDP_data.current_force_xyz_torque_xyz[2]);
 
 
 //	else the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate-0.0001;
@@ -139,7 +139,7 @@ printf("sensor: z: %f\n", the_robot->EDP_data.EDPtoECP_force_xyz_torque_xyz[2]);
 	Homog_matrix pred_frame = Homog_matrix(predicted_frame);
 	cout << endl << "ecp: predicted_frame" << endl << endl<< pred_frame;
 	double force[6];
-	for (int i=0;i<6;i++) force[i] = the_robot->EDP_data.EDPtoECP_force_xyz_torque_xyz[i];
+	for (int i=0;i<6;i++) force[i] = the_robot->EDP_data.current_force_xyz_torque_xyz[i];
 	cout << "force" << endl << endl;
 	for(int i=0;i<6;i++) cout << force[i] << "  " ;
 	cout << endl;

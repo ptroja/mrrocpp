@@ -128,23 +128,23 @@ void ecp_irp6_postument_robot::create_command (void)
                     for (j=0; j<6 ; j++)
                     {
                         EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.inertia[j]
-                        = EDP_data.ECPtoEDP_inertia[j];
+                        = EDP_data.next_inertia[j];
                         EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.reciprocal_damping[j]
-                        = EDP_data.ECPtoEDP_reciprocal_damping[j];
+                        = EDP_data.next_reciprocal_damping[j];
 
                         /*
                         EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.selection_vector[j]
                         = EDP_data.selection_vector[j];	 // zadana sila
                         */
                         EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[j]
-                        = EDP_data.ECPtoEDP_force_xyz_torque_xyz[j]; // pozycja docelowa
+                        = EDP_data.next_force_xyz_torque_xyz[j]; // pozycja docelowa
                         EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.behaviour[j]
-                        = EDP_data.ECPtoEDP_behaviour[j]; // pozycja docelowa
+                        = EDP_data.next_behaviour[j]; // pozycja docelowa
                     }
                 for (j=0; j<IRP6_POSTUMENT_NUM_OF_SERVOS ; j++)
                 {
                     EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.position_velocity[j]
-                    = EDP_data.ECPtoEDP_position_velocity[j];	 // pozycja poczatkowa
+                    = EDP_data.next_position_velocity[j];	 // pozycja poczatkowa
 
                 }
 
@@ -278,7 +278,7 @@ void ecp_irp6_postument_robot::get_arm_reply (void)
     case POSE_FORCE_TORQUE_AT_FRAME:
             for (int i=0; i<6; i++)
             {
-                EDP_data.EDPtoECP_force_xyz_torque_xyz[i] =
+                EDP_data.current_force_xyz_torque_xyz[i] =
                     EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i];
             }
         copy_frame(EDP_data.current_beggining_arm_frame,

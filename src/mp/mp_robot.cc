@@ -18,7 +18,7 @@
 
 // -------------------------------------------------------------------
 mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task &mp_object_l) :
-	robot_name(l_robot_name),
+	ecp_mp_robot(l_robot_name),
 	mp_object(mp_object_l),
 	sr_ecp_msg(*(mp_object_l.sr_ecp_msg))
 {

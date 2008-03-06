@@ -90,18 +90,18 @@ bool mp_tff_single_robot_nose_run_generator::first_step ()
 	tool_frame.get_frame_tab(irp6->ecp_td.next_tool_frame);
 
 	for(int i=0;i<6;i++) {
-		irp6->ecp_td.MPtoECP_position_velocity[i] = 0;
-		irp6->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
+		irp6->ecp_td.next_position_velocity[i] = 0;
+		irp6->ecp_td.next_force_xyz_torque_xyz[i] = 0;
 		//	irp6->ecp_td.MPselection_vector[i] = FORCE_SV_AX;
 	}
 
 	for (int i=0;i<3;i++) {
-		irp6->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
-		irp6->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
-		irp6->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-		irp6->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-		irp6->ecp_td.MPtoECP_behaviour[i] = CONTACT;
-		irp6->ecp_td.MPtoECP_behaviour[i+3] = CONTACT;
+		irp6->ecp_td.next_inertia[i] = FORCE_INERTIA;
+		irp6->ecp_td.next_inertia[i+3] = TORQUE_INERTIA;
+		irp6->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+		irp6->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		irp6->ecp_td.next_behaviour[i] = CONTACT;
+		irp6->ecp_td.next_behaviour[i+3] = CONTACT;
 	}
 
 
@@ -205,27 +205,27 @@ bool mp_tff_nose_run_generator::first_step ()
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 
 	for (int i=0;i<3;i++) {
-		irp6ot->ecp_td.MPtoECP_position_velocity[i] = 0;
-		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
-		irp6ot->ecp_td.MPtoECP_position_velocity[i+3] = 0;
-		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
+		irp6ot->ecp_td.next_position_velocity[i] = 0;
+		irp6ot->ecp_td.next_force_xyz_torque_xyz[i] = 0;
+		irp6ot->ecp_td.next_position_velocity[i+3] = 0;
+		irp6ot->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
 		if(irp6ot_con)
 		{
-			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-				irp6ot->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+			irp6ot->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+				irp6ot->ecp_td.next_behaviour[i] = CONTACT;
 			}
 		else
-			irp6ot->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
+			irp6ot->ecp_td.next_behaviour[i] = UNGUARDED_MOTION;
 		if(irp6ot_con)
 		{
-			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-				irp6ot->ecp_td.MPtoECP_behaviour[i+3] = CONTACT;
+			irp6ot->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+				irp6ot->ecp_td.next_behaviour[i+3] = CONTACT;
 			}
 		else
-			irp6ot->ecp_td.MPtoECP_behaviour[i+3] = UNGUARDED_MOTION;
+			irp6ot->ecp_td.next_behaviour[i+3] = UNGUARDED_MOTION;
 
-		irp6ot->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
-		irp6ot->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
+		irp6ot->ecp_td.next_inertia[i] = FORCE_INERTIA;
+		irp6ot->ecp_td.next_inertia[i+3] = TORQUE_INERTIA;
 	}
 
 	Homog_matrix tool_frame(0.0, 0.0, 0.25);
@@ -246,26 +246,26 @@ bool mp_tff_nose_run_generator::first_step ()
 	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
-		irp6p->ecp_td.MPtoECP_position_velocity[i] = 0;
-		irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
-		irp6p->ecp_td.MPtoECP_position_velocity[i+3] = 0;
-		irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
+		irp6p->ecp_td.next_position_velocity[i] = 0;
+		irp6p->ecp_td.next_force_xyz_torque_xyz[i] = 0;
+		irp6p->ecp_td.next_position_velocity[i+3] = 0;
+		irp6p->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
 		if(irp6p_con)
 		{
-			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-				irp6p->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+			irp6p->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+				irp6p->ecp_td.next_behaviour[i] = CONTACT;
 			}
 		else
-			irp6p->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
+			irp6p->ecp_td.next_behaviour[i] = UNGUARDED_MOTION;
 		if(irp6p_con)
 		{
-			irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-			irp6p->ecp_td.MPtoECP_behaviour[i+3] = CONTACT;
+			irp6p->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+			irp6p->ecp_td.next_behaviour[i+3] = CONTACT;
 		}
 		else
-			irp6p->ecp_td.MPtoECP_behaviour[i+3] = UNGUARDED_MOTION;
-		irp6p->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
-		irp6p->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
+			irp6p->ecp_td.next_behaviour[i+3] = UNGUARDED_MOTION;
+		irp6p->ecp_td.next_inertia[i] = FORCE_INERTIA;
+		irp6p->ecp_td.next_inertia[i+3] = TORQUE_INERTIA;
 	}
 
 	
@@ -374,22 +374,22 @@ bool mp_haptic_generator::first_step ()
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 
 	for (int i=0;i<3;i++) {
-		irp6ot->ecp_td.MPtoECP_position_velocity[i] = 0;
-		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
-		irp6ot->ecp_td.MPtoECP_position_velocity[i+3] = 0;
-		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
-		irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-		irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-		irp6ot->ecp_td.MPtoECP_behaviour[i] = CONTACT;
-		irp6ot->ecp_td.MPtoECP_behaviour[i+3] = CONTACT;
+		irp6ot->ecp_td.next_position_velocity[i] = 0;
+		irp6ot->ecp_td.next_force_xyz_torque_xyz[i] = 0;
+		irp6ot->ecp_td.next_position_velocity[i+3] = 0;
+		irp6ot->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
+		irp6ot->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+		irp6ot->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		irp6ot->ecp_td.next_behaviour[i] = CONTACT;
+		irp6ot->ecp_td.next_behaviour[i+3] = CONTACT;
 		/*
 		if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 			else irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
 		if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
 			else irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
 		*/
-		irp6ot->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
-		irp6ot->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
+		irp6ot->ecp_td.next_inertia[i] = FORCE_INERTIA;
+		irp6ot->ecp_td.next_inertia[i+3] = TORQUE_INERTIA;
 	}
 
 	Homog_matrix tool_frame(0.0, 0.0, 0.25);
@@ -411,14 +411,14 @@ bool mp_haptic_generator::first_step ()
 	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
-		irp6p->ecp_td.MPtoECP_position_velocity[i] = 0;
-		irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
-		irp6p->ecp_td.MPtoECP_position_velocity[i+3] = 0;
-		irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
-		irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-		irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-		irp6p->ecp_td.MPtoECP_behaviour[i] = CONTACT;
-		irp6p->ecp_td.MPtoECP_behaviour[i+3] = CONTACT;
+		irp6p->ecp_td.next_position_velocity[i] = 0;
+		irp6p->ecp_td.next_force_xyz_torque_xyz[i] = 0;
+		irp6p->ecp_td.next_position_velocity[i+3] = 0;
+		irp6p->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
+		irp6p->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+		irp6p->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		irp6p->ecp_td.next_behaviour[i] = CONTACT;
+		irp6p->ecp_td.next_behaviour[i+3] = CONTACT;
 		/*
 		if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 			else irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
@@ -426,8 +426,8 @@ bool mp_haptic_generator::first_step ()
 			else irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
 			*/
 
-		irp6p->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
-		irp6p->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
+		irp6p->ecp_td.next_inertia[i] = FORCE_INERTIA;
+		irp6p->ecp_td.next_inertia[i+3] = TORQUE_INERTIA;
 
 		/*
 		irp6p->ecp_td.MPtoECP_inertia[i] = 0.0;
@@ -486,11 +486,11 @@ bool mp_haptic_generator::next_step ()
 	}
 
 
-	Homog_matrix irp6ot_current_predicted_arm_frame (irp6ot->ecp_td.MPcurrent_predicted_arm_frame);
-	Homog_matrix irp6p_current_predicted_arm_frame (irp6p->ecp_td.MPcurrent_predicted_arm_frame);
+	Homog_matrix irp6ot_current_predicted_arm_frame (irp6ot->ecp_td.current_predicted_arm_frame);
+	Homog_matrix irp6p_current_predicted_arm_frame (irp6p->ecp_td.current_predicted_arm_frame);
 
 	Homog_matrix irp6p_goal_frame (global_base*irp6ot_current_predicted_arm_frame);
-	irp6p_goal_frame.get_xyz_angle_axis (irp6p->ecp_td.MPtoECP_position_velocity);
+	irp6p_goal_frame.get_xyz_angle_axis (irp6p->ecp_td.next_position_velocity);
 
 	/*
 	Homog_matrix irp6p_goal_frame_increment_in_end_effector ((!irp6p_current_predicted_arm_frame)*irp6p_goal_frame);
@@ -505,11 +505,11 @@ bool mp_haptic_generator::next_step ()
 	*/
 	//	irp6p->ecp_td.MPtoECP_position_velocity[2] = 0.01;
 
-	Ft_v_vector irp6p_ECPtoMP_force_xyz_torque_xyz (irp6p->ecp_td.ECPtoMP_force_xyz_torque_xyz);
+	Ft_v_vector irp6p_ECPtoMP_force_xyz_torque_xyz (irp6p->ecp_td.current_force_xyz_torque_xyz);
 
 
 	for (int i=0; i<6; i++) {
-		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = -irp6p_ECPtoMP_force_xyz_torque_xyz[i];
+		irp6ot->ecp_td.next_force_xyz_torque_xyz[i] = -irp6p_ECPtoMP_force_xyz_torque_xyz[i];
 	}
 
 	if ( (node_counter % 10) == 0) {
@@ -590,49 +590,49 @@ bool mp_tff_rubik_grab_generator::first_step ()
 	tool_frame.get_frame_tab(irp6ot->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
-		irp6ot->ecp_td.MPtoECP_position_velocity[i] = 0;
-		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
-		irp6ot->ecp_td.MPtoECP_position_velocity[i+3] = 0;
-		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
+		irp6ot->ecp_td.next_position_velocity[i] = 0;
+		irp6ot->ecp_td.next_force_xyz_torque_xyz[i] = 0;
+		irp6ot->ecp_td.next_position_velocity[i+3] = 0;
+		irp6ot->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
 		if(irp6ot_con)
 		{
-			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-			irp6ot->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+			irp6ot->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+			irp6ot->ecp_td.next_behaviour[i] = CONTACT;
 			}
 		else
 			{
-				irp6ot->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
+				irp6ot->ecp_td.next_behaviour[i] = UNGUARDED_MOTION;
 				
 			}
 		if(irp6ot_con)
 		{
-			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-			irp6ot->ecp_td.MPtoECP_behaviour[i+3] = CONTACT;
+			irp6ot->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+			irp6ot->ecp_td.next_behaviour[i+3] = CONTACT;
 			}
 		else
-			irp6ot->ecp_td.MPtoECP_behaviour[i+3] = UNGUARDED_MOTION;
+			irp6ot->ecp_td.next_behaviour[i+3] = UNGUARDED_MOTION;
 
-		irp6ot->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
-		irp6ot->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
+		irp6ot->ecp_td.next_inertia[i] = FORCE_INERTIA;
+		irp6ot->ecp_td.next_inertia[i+3] = TORQUE_INERTIA;
 	}
 
 	if (irp6ot_con) {
 		if(irp6ot_both_axes_running)
 			for(int i=0;i<2;i++)
 			{
-				irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-				irp6ot->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+				irp6ot->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+				irp6ot->ecp_td.next_behaviour[i] = CONTACT;
 			}
 		else {
-			irp6ot->ecp_td.MPtoECP_reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
-			irp6ot->ecp_td.MPtoECP_behaviour[0] = UNGUARDED_MOTION;
-			irp6ot->ecp_td.MPtoECP_behaviour[1] = CONTACT;
+			irp6ot->ecp_td.next_reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
+			irp6ot->ecp_td.next_behaviour[0] = UNGUARDED_MOTION;
+			irp6ot->ecp_td.next_behaviour[1] = CONTACT;
 		}
 		for(int i=2;i<6;i++)
-			irp6ot->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
+			irp6ot->ecp_td.next_behaviour[i] = UNGUARDED_MOTION;
 	} else
 		for(int i=0;i<6;i++)
-			irp6ot->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
+			irp6ot->ecp_td.next_behaviour[i] = UNGUARDED_MOTION;
 
 	irp6p->ecp_td.mp_command = NEXT_POSE;
 	irp6p->ecp_td.instruction_type = GET;
@@ -649,45 +649,45 @@ bool mp_tff_rubik_grab_generator::first_step ()
 	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
-		irp6p->ecp_td.MPtoECP_position_velocity[i] = 0;
-		irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
-		irp6p->ecp_td.MPtoECP_position_velocity[i+3] = 0;
-		irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
+		irp6p->ecp_td.next_position_velocity[i] = 0;
+		irp6p->ecp_td.next_force_xyz_torque_xyz[i] = 0;
+		irp6p->ecp_td.next_position_velocity[i+3] = 0;
+		irp6p->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
 		if(irp6p_con)
 			{
-			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-			irp6p->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+			irp6p->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+			irp6p->ecp_td.next_behaviour[i] = CONTACT;
 			}
 		else
-			irp6p->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
+			irp6p->ecp_td.next_behaviour[i] = UNGUARDED_MOTION;
 		if(irp6p_con)
 		{
-			irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-			irp6p->ecp_td.MPtoECP_behaviour[i+3] = CONTACT;
+			irp6p->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+			irp6p->ecp_td.next_behaviour[i+3] = CONTACT;
 			}
 		else
-			irp6p->ecp_td.MPtoECP_behaviour[i+3] = UNGUARDED_MOTION;
-		irp6p->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
-		irp6p->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
+			irp6p->ecp_td.next_behaviour[i+3] = UNGUARDED_MOTION;
+		irp6p->ecp_td.next_inertia[i] = FORCE_INERTIA;
+		irp6p->ecp_td.next_inertia[i+3] = TORQUE_INERTIA;
 	}
 
 	if(irp6p_con) {
 		if(irp6p_both_axes_running)
 			for(int i=0;i<2;i++)
 			{
-				irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-				irp6p->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+				irp6p->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+				irp6p->ecp_td.next_behaviour[i] = CONTACT;
 				}
 		else {
-			irp6p->ecp_td.MPtoECP_reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
-			irp6p->ecp_td.MPtoECP_behaviour[1] = CONTACT;
-			irp6p->ecp_td.MPtoECP_behaviour[0] = UNGUARDED_MOTION;
+			irp6p->ecp_td.next_reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
+			irp6p->ecp_td.next_behaviour[1] = CONTACT;
+			irp6p->ecp_td.next_behaviour[0] = UNGUARDED_MOTION;
 		}
 		for(int i=2;i<6;i++)
-			irp6p->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
+			irp6p->ecp_td.next_behaviour[i] = UNGUARDED_MOTION;
 	} else
 		for(int i=0;i<6;i++)
-			irp6p->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
+			irp6p->ecp_td.next_behaviour[i] = UNGUARDED_MOTION;
 
 
 	return true;
@@ -809,50 +809,50 @@ bool mp_tff_rubik_face_rotate_generator::first_step ()
 	tool_frame.get_frame_tab(irp6ot->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
-		irp6ot->ecp_td.MPtoECP_position_velocity[i] = 0;
-		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
-		irp6ot->ecp_td.MPtoECP_position_velocity[i+3] = 0;
-		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
+		irp6ot->ecp_td.next_position_velocity[i] = 0;
+		irp6ot->ecp_td.next_force_xyz_torque_xyz[i] = 0;
+		irp6ot->ecp_td.next_position_velocity[i+3] = 0;
+		irp6ot->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
 		if(irp6ot_con)
 		{
-			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-				irp6ot->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+			irp6ot->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+				irp6ot->ecp_td.next_behaviour[i] = CONTACT;
 			}
 		else
-			irp6ot->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
+			irp6ot->ecp_td.next_behaviour[i] = UNGUARDED_MOTION;
 		if(irp6ot_con)
 		{
-			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-			irp6ot->ecp_td.MPtoECP_behaviour[i+3] = CONTACT;	
+			irp6ot->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+			irp6ot->ecp_td.next_behaviour[i+3] = CONTACT;	
 			}
 		else
-			irp6ot->ecp_td.MPtoECP_behaviour[i+3] = UNGUARDED_MOTION;
+			irp6ot->ecp_td.next_behaviour[i+3] = UNGUARDED_MOTION;
 
-		irp6ot->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
-		irp6ot->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
+		irp6ot->ecp_td.next_inertia[i] = FORCE_INERTIA;
+		irp6ot->ecp_td.next_inertia[i+3] = TORQUE_INERTIA;
 	}
 
 	if(-0.1 < irp6ot_con && irp6ot_con < 0.1) {
 		for(int i=0;i<6;i++)
-			irp6ot->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
+			irp6ot->ecp_td.next_behaviour[i] = UNGUARDED_MOTION;
 	} else {
 		for(int i=0;i<3;i++)
 		{
-			irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-			irp6ot->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+			irp6ot->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+			irp6ot->ecp_td.next_behaviour[i] = CONTACT;
 		}
 		for(int i=3;i<5;i++)
 		{
-			irp6ot->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
+			irp6ot->ecp_td.next_behaviour[i] = UNGUARDED_MOTION;
 			
 		}
-		irp6ot->ecp_td.MPtoECP_reciprocal_damping[5] = TORQUE_RECIPROCAL_DAMPING;
-		irp6ot->ecp_td.MPtoECP_behaviour[5] = CONTACT;
+		irp6ot->ecp_td.next_reciprocal_damping[5] = TORQUE_RECIPROCAL_DAMPING;
+		irp6ot->ecp_td.next_behaviour[5] = CONTACT;
 		
 		if(irp6ot_con > 0.0)
-			irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[5] = -5;
+			irp6ot->ecp_td.next_force_xyz_torque_xyz[5] = -5;
 		if(irp6ot_con < 0.0)
-			irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[5] = 5;
+			irp6ot->ecp_td.next_force_xyz_torque_xyz[5] = 5;
 	}
 	irp6p->ecp_td.mp_command = NEXT_POSE;
 	irp6p->ecp_td.instruction_type = GET;
@@ -869,41 +869,41 @@ bool mp_tff_rubik_face_rotate_generator::first_step ()
 	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
-		irp6p->ecp_td.MPtoECP_position_velocity[i] = 0;
-		irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
-		irp6p->ecp_td.MPtoECP_position_velocity[i+3] = 0;
-		irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[i+3] = 0;
-		irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-		irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-		irp6p->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
-		irp6p->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
-		irp6p->ecp_td.MPtoECP_behaviour[i] = CONTACT;
-		irp6p->ecp_td.MPtoECP_behaviour[i+3] = CONTACT;
+		irp6p->ecp_td.next_position_velocity[i] = 0;
+		irp6p->ecp_td.next_force_xyz_torque_xyz[i] = 0;
+		irp6p->ecp_td.next_position_velocity[i+3] = 0;
+		irp6p->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
+		irp6p->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+		irp6p->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		irp6p->ecp_td.next_inertia[i] = FORCE_INERTIA;
+		irp6p->ecp_td.next_inertia[i+3] = TORQUE_INERTIA;
+		irp6p->ecp_td.next_behaviour[i] = CONTACT;
+		irp6p->ecp_td.next_behaviour[i+3] = CONTACT;
 	}
 
 	if(-0.1 < irp6p_con && irp6p_con < 0.1) {
 		for(int i=0;i<6;i++)
 		{
-			irp6p->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
+			irp6p->ecp_td.next_behaviour[i] = UNGUARDED_MOTION;
 			}
 	} else {
 		for(int i=0;i<3;i++)
 			{
-			irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-			irp6p->ecp_td.MPtoECP_behaviour[i] = CONTACT;
+			irp6p->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+			irp6p->ecp_td.next_behaviour[i] = CONTACT;
 			}
 		for(int i=3;i<5;i++)
 		{
-			irp6p->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
+			irp6p->ecp_td.next_behaviour[i] = UNGUARDED_MOTION;
 		}
 			
-		irp6p->ecp_td.MPtoECP_reciprocal_damping[5] = TORQUE_RECIPROCAL_DAMPING;
-		irp6p->ecp_td.MPtoECP_behaviour[5] = CONTACT;
+		irp6p->ecp_td.next_reciprocal_damping[5] = TORQUE_RECIPROCAL_DAMPING;
+		irp6p->ecp_td.next_behaviour[5] = CONTACT;
 
 		if(irp6p_con > 0.0)
-			irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[5] = -5;
+			irp6p->ecp_td.next_force_xyz_torque_xyz[5] = -5;
 		if(irp6p_con < 0.0)
-			irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[5] = 5;
+			irp6p->ecp_td.next_force_xyz_torque_xyz[5] = 5;
 	}
 
 	return true;
@@ -935,7 +935,7 @@ bool mp_tff_rubik_face_rotate_generator::next_step ()
 		irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
 		irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
 		if(irp6ot_con < -0.1 || 0.1 < irp6ot_con) {
-			Homog_matrix frame(irp6ot->ecp_td.MPcurrent_beggining_arm_frame);
+			Homog_matrix frame(irp6ot->ecp_td.current_beggining_arm_frame);
 			double xyz_eul_zyz[6];
 			frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double angle_to_move = (irp6ot_con / 180.0) * M_PI;
@@ -951,7 +951,7 @@ bool mp_tff_rubik_face_rotate_generator::next_step ()
 			}
 		}
 		if(irp6p_con < -0.1 || 0.1 < irp6p_con) {
-			Homog_matrix frame(irp6p->ecp_td.MPcurrent_beggining_arm_frame);
+			Homog_matrix frame(irp6p->ecp_td.current_beggining_arm_frame);
 			double xyz_eul_zyz[6];
 			frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double angle_to_move = (irp6p_con / 180.0) * M_PI;
@@ -969,7 +969,7 @@ bool mp_tff_rubik_face_rotate_generator::next_step ()
 	}
 	if(node_counter >= 3) {
 		if(irp6p_con < -0.1 || 0.1 < irp6p_con) {
-			Homog_matrix current_frame(irp6p->ecp_td.MPcurrent_predicted_arm_frame);
+			Homog_matrix current_frame(irp6p->ecp_td.current_predicted_arm_frame);
 			double xyz_eul_zyz[6];
 			current_frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double current_gamma = xyz_eul_zyz[5];
@@ -984,7 +984,7 @@ bool mp_tff_rubik_face_rotate_generator::next_step ()
 			}
 		}
 		if(irp6ot_con < -0.1 || 0.1 < irp6ot_con) {
-			Homog_matrix current_frame(irp6ot->ecp_td.MPcurrent_predicted_arm_frame);
+			Homog_matrix current_frame(irp6ot->ecp_td.current_predicted_arm_frame);
 			double xyz_eul_zyz[6];
 			current_frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double current_gamma = xyz_eul_zyz[5];
@@ -1068,21 +1068,21 @@ bool mp_tff_gripper_approach_generator::first_step ()
 	tool_frame.get_frame_tab(irp6ot->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
-		irp6ot->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
-		irp6ot->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
+		irp6ot->ecp_td.next_inertia[i] = FORCE_INERTIA;
+		irp6ot->ecp_td.next_inertia[i+3] = TORQUE_INERTIA;
 	}
 
 	for(int i=0;i<6;i++) {
-		irp6ot->ecp_td.MPtoECP_position_velocity[i] = 0;
-		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
+		irp6ot->ecp_td.next_position_velocity[i] = 0;
+		irp6ot->ecp_td.next_force_xyz_torque_xyz[i] = 0;
 	}
 
-	irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[2] = -irp6ot_speed;
+	irp6ot->ecp_td.next_force_xyz_torque_xyz[2] = -irp6ot_speed;
 
 	for (int i=0;i<6;i++)
-		irp6ot->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
-	irp6ot->ecp_td.MPtoECP_reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING;
-	irp6ot->ecp_td.MPtoECP_behaviour[2] = CONTACT;
+		irp6ot->ecp_td.next_behaviour[i] = UNGUARDED_MOTION;
+	irp6ot->ecp_td.next_reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING;
+	irp6ot->ecp_td.next_behaviour[2] = CONTACT;
 
 	irp6p->ecp_td.mp_command = NEXT_POSE;
 	irp6p->ecp_td.instruction_type = GET;
@@ -1099,17 +1099,17 @@ bool mp_tff_gripper_approach_generator::first_step ()
 	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
-		irp6p->ecp_td.MPtoECP_inertia[i] = FORCE_INERTIA;
-		irp6p->ecp_td.MPtoECP_inertia[i+3] = TORQUE_INERTIA;
+		irp6p->ecp_td.next_inertia[i] = FORCE_INERTIA;
+		irp6p->ecp_td.next_inertia[i+3] = TORQUE_INERTIA;
 	}
 
 	for (int i=0;i<6;i++) {
-		irp6p->ecp_td.MPtoECP_position_velocity[i] = 0;
-		irp6p->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
+		irp6p->ecp_td.next_position_velocity[i] = 0;
+		irp6p->ecp_td.next_force_xyz_torque_xyz[i] = 0;
 	}
 
 	for(int i=0;i<6;i++)
-		irp6p->ecp_td.MPtoECP_behaviour[i] = UNGUARDED_MOTION;
+		irp6p->ecp_td.next_behaviour[i] = UNGUARDED_MOTION;
 
 
 	return true;

@@ -78,34 +78,6 @@ public:
 }; // end:class mp_taught_in_pose
 // ------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------
-struct robot_ECP_transmission_data : robot_transmission_data {
-	public:
-		MP_COMMAND mp_command;                // polecenie przesylane z MP do ECP
-		ECP_REPLY  ecp_reply;                 // odpowiedz z ECP do MP
-
-		ecp_next_state_t ecp_next_state;
-		
-		// speech command interface
-		char commandRecognized[SPEECH_RECOGNITION_TEXT_LEN];
-
-		// by Y  do sily
-
-		// dla POSE_FORCE_TORQUE_AT_FRAME
-		// c_buffer
-
-		double MPtoECP_inertia[6], MPtoECP_reciprocal_damping[6];
-		double MPtoECP_position_velocity[MAX_SERVOS_NR], MPtoECP_force_xyz_torque_xyz[6];
-		BEHAVIOUR_SPECIFICATION MPtoECP_behaviour[6];
-		//	bool MPselection_vector[6];
-
-		// r_buffer
-		frame_tab  MPcurrent_beggining_arm_frame;      // trojscian koncowki wzgledem ukladu bazowego
-		frame_tab  MPcurrent_predicted_arm_frame;      // trojscian koncowki wzgledem ukladu bazowego
-		frame_tab  MPcurrent_present_arm_frame;      // trojscian koncowki wzgledem ukladu bazowego
-		double ECPtoMP_force_xyz_torque_xyz[6];
-};
-// ------------------------------------------------------------------------
 
 // to fix forward declaration issues
 #include "mp/mp_generator.h"
