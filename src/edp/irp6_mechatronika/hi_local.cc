@@ -80,6 +80,16 @@ hi_irp6m::hi_irp6m ( edp_irp6m_effector &_master )   : hardware_interface(_maste
         // domyslnie robot nie jest zsynchronizowany
         md.is_synchronised = false;
     }
+    
+    	// inicjacja wystawiania przerwan
+		if(master.test_mode==0)
+		{
+			// konieczne dla skasowania przyczyny przerwania
+			out8(ADR_OF_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR);
+			in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
+			in16(SERVO_REPLY_INT_ADR);
+		}
+    
 
     if ( (int_id =InterruptAttach (irq_no, int_handler, (void *) &md , sizeof(md), 0)) == -1)
     {
@@ -382,6 +392,7 @@ int hi_irp6m::hi_int_wait (int inter_mode, int lag)
             master.msg->message("Przywrocono obsluge przerwania");
         interrupt_error = 0;
         master.controller_state_edp_buf.is_wardrobe_on = true;
+           master.controller_state_edp_buf.is_power_on = md.is_power_on;
     }
 
     /*
@@ -390,7 +401,7 @@ int hi_irp6m::hi_int_wait (int inter_mode, int lag)
     		md.robot_control[5].adr_offset_plus_0, md.current_absolute_position[4]);
     */
 
-    master.controller_state_edp_buf.is_power_on = md.is_power_on;
+
 
     if ((interrupt_error>2) || (!master.controller_state_edp_buf.is_power_on))
     {

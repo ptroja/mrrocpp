@@ -48,6 +48,7 @@ int_handler (void *arg, int int_id)
 	short int low_word, high_word;
 	int i;
 
+
 	md.hardware_error = (uint64_t) ALL_RIGHT; // Nie ma bledow sprzetowych
 	
 	if(master->test_mode)

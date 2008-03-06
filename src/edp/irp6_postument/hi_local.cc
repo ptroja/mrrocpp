@@ -37,7 +37,6 @@
 struct sigevent event;
 
 
-
 volatile motor_data md; // Dane przesylane z/do funkcji obslugi przerwania
 
 
@@ -76,6 +75,16 @@ hi_irp6p::hi_irp6p (  edp_irp6p_effector &_master )   : hardware_interface(_mast
 		md.is_synchronised = false;
 	}
 
+	// inicjacja wystawiania przerwan
+		if(master.test_mode==0)
+		{
+			// konieczne dla skasowania przyczyny przerwania
+			out8(ADR_OF_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR);
+			in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
+			in16(SERVO_REPLY_INT_ADR);
+		}
+
+
 	if ( (int_id =InterruptAttach (irq_no, int_handler, (void *) &md , sizeof(md), 0)) == -1) 
 	{
 		// Obsluga bledu
@@ -88,12 +97,14 @@ hi_irp6p::hi_irp6p (  edp_irp6p_effector &_master )   : hardware_interface(_mast
 		// inicjacja wystawiania przerwan
 		if(master.test_mode==0)
 		{
+		
 			// Ustawienie czestotliwosci przerwan
 			int_freq = SET_INT_FREQUENCY | INT_FREC_DIVIDER;
 			out8(ADR_OF_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR);
 			out16(SERVO_COMMAND_1_ADR, int_freq);
 			delay(10);
 			out16(SERVO_COMMAND_1_ADR, START_CLOCK_INTERRUPTS); 
+			
 		}
 	}
 
@@ -174,7 +185,7 @@ uint64_t hi_irp6p::read_write_hardware ( void )
 	{
 		md.robot_control[i].adr_offset_plus_0 = robot_control[i].adr_offset_plus_0;
 	}
-	
+
 	// oczekiwanie na przerwanie
 	hi_int_wait(INT_SERVOING, 0);
 
@@ -356,14 +367,18 @@ printf("1: %x, %x, %x, %x, %x, %x, %x\n", robot_control[0].adr_offset_plus_0, ro
 	iw_ret=InterruptWait (0, NULL); 
 
 	if (iw_ret==-1) { // jesli przerwanie nie przyjdzie na czas
+
 		if (interrupt_error == 1) master.msg->message(NON_FATAL_ERROR, "Nie odebrano przerwania - sprawdz szafe");
 		 interrupt_error++;
 		 master.controller_state_edp_buf.is_wardrobe_on = false;
 	} else {
+
 		if (interrupt_error >= 1) master.msg->message("Przywrocono obsluge przerwania");
 		 interrupt_error = 0;
 		 master.controller_state_edp_buf.is_wardrobe_on = true;
+	 	master.controller_state_edp_buf.is_power_on = md.is_power_on;
 	}
+
 	
 	/*
 		if ((md.robot_control[5].adr_offset_plus_0 > 810) && (md.robot_control[5].adr_offset_plus_0 < 900))  
@@ -371,7 +386,7 @@ printf("1: %x, %x, %x, %x, %x, %x, %x\n", robot_control[0].adr_offset_plus_0, ro
 			md.robot_control[5].adr_offset_plus_0, md.current_absolute_position[4]);
 	*/
 	
-	master.controller_state_edp_buf.is_power_on = md.is_power_on;
+
 	
 	if ((interrupt_error>2) || (!master.controller_state_edp_buf.is_power_on))
 	{
