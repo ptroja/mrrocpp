@@ -225,7 +225,6 @@ void edp_irp6s_effector::tool_frame_2_xyz_aa (void)
         throw NonFatal_error_2(ERROR_IN_RMODEL_REQUEST);
     } // end: switch (reply_type)
 }
-; // end: edp_irp6s_effector::tool_frame_2_xyz_aa
 
 
 // Przeksztacenie definicji narzedzia z postaci
@@ -245,9 +244,8 @@ void edp_irp6s_effector::tool_frame_2_xyz_eul_zyz (void)
     default:
         // Blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia.
         throw NonFatal_error_2(ERROR_IN_RMODEL_REQUEST);
-    } // end: switch (reply_type)
+    }
 }
-; // end: edp_irp6s_effector::tool_frame_2_xyz_eul_zyz
 
 
 // Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
@@ -269,7 +267,6 @@ void edp_irp6s_effector::tool_frame_2_frame_rep (void)
         throw NonFatal_error_2(ERROR_IN_RMODEL_REQUEST);
     } // end: switch (reply_type)
 }
-; // end: edp_irp6s_effector::tool_frame_2_frame_rep
 
 
 /*--------------------------------------------------------------------------*/
@@ -331,7 +328,6 @@ void edp_irp6s_effector::tool_axially_symmetrical_frame_2_xyz_eul_zy (void)
     reply.rmodel.tool_coordinate_def.tool_coordinates[5]= 0;
 
 }
-; // end: edp_irp6s_effector::tool_axially_symmetrical_frame_2_xyz_eul_zyz
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
@@ -736,7 +732,3 @@ void edp_irp6s_effector::master_joints_and_frame_download (void)
 }
 
 /*--------------------------------------------------------------------------*/
-
-// sprawdza stan EDP zaraz po jego uruchomieniu
-void edp_irp6s_effector::servo_joints_and_frame_actualization_and_upload (void)
-{}

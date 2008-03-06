@@ -329,7 +329,7 @@ public:
     virtual void get_arm_position (bool read_hardware, c_buffer &instruction) = 0; // odczytanie pozycji ramienia
 
     void synchronise (); // synchronizacja robota
-    virtual void servo_joints_and_frame_actualization_and_upload(void); // by Y
+    virtual void servo_joints_and_frame_actualization_and_upload(void) = 0; // by Y
 
     void main_loop(); // main loop
     
@@ -507,8 +507,6 @@ protected:
 
 public:
     edp_irp6s_effector (configurator &_config, ROBOT_ENUM l_robot_name );       // konstruktor
-
-    virtual void servo_joints_and_frame_actualization_and_upload(void);// by Y
 
     // wyznaczenie polozenia lokalnego i globalnego transformera
     // przepisanie lokalnego zestawu lokalnego edp_servo na globalny (chronione mutexem)
