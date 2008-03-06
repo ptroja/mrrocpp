@@ -108,7 +108,7 @@ void FiducialProxy::Print()
 	   beacons[i].pose[0], beacons[i].pose[1], beacons[i].pose[2],
 	   beacons[i].upose[0], beacons[i].upose[1], beacons[i].upose[2]);
     if (beacons[i].type!=0){
-printf("%d\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\n", beacons[i].type,
+printf("%d\t%d\t%d\t%.3f\t%.3f\t%.3f\t%.3f\n", beacons[i].type,
 beacons[i].begin_index,
 beacons[i].end_index,
 beacons[i].begin_x,

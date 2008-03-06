@@ -29,8 +29,7 @@ public:
 struct robot_EDP_transmission_data : robot_transmission_data
 {
 
-}
-;
+};
 
 class ecp_task;
 
@@ -57,13 +56,14 @@ protected:
 
     // by Y&W - przerzucenie zainicjowania komunikacji z procesu master do klasy
     void connect_to_edp (const char* edp_net_attach_point);
+    
+    ecp_buffer EDP_command_and_reply_buffer;
 
 public:
     bool synchronised; // Flaga synchronizacji robota (true - zsynchronizowany, false - nie)
 
     int number_of_servos;
 
-    ecp_buffer EDP_command_and_reply_buffer;
 #if !defined(USE_MESSIP_SRR)
 
     int EDP_fd;	// by Y&W
@@ -72,8 +72,7 @@ public:
     messip_channel_t *EDP_fd;
 #endif
 
- 
-    robot_EDP_transmission_data EDP_data; // Obraz robota wykorzystywany przez generator
+     robot_EDP_transmission_data EDP_data; // Obraz robota wykorzystywany przez generator
 
     virtual void execute_motion (void);
     // Zlecenie wykonania ruchu przez robota (realizowane przez klase konkretna):
@@ -118,8 +117,7 @@ public:
         edp_error error;
 
         ECP_error ( uint64_t err_cl, uint64_t err_no, uint64_t err0 = 0, uint64_t err1 = 0);
-    }
-    ; // end: class ECP_error
+    };
 
     class ECP_main_error
     {  // Klasa obslugi bledow ECP
@@ -128,8 +126,7 @@ public:
         uint64_t error_no;
 
         ECP_main_error ( uint64_t err_cl, uint64_t err_no);
-    }
-    ; // end: class ECP_main_error // by Y&W przerzucone do wnetrza klasy
+    };
 
 };
 
