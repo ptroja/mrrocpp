@@ -84,6 +84,8 @@ void ecp_irp6_on_track_robot::create_command (void)
                 EDP_command_and_reply_buffer.instruction.rmodel.force_tool.weight =
                     EDP_data.next_force_tool_weight;
                 break;
+            case FORCE_BIAS:
+            break;
             default: // Blad: niewlasciwy typ modelu robota
                 throw ECP_error(NON_FATAL_ERROR, INVALID_RMODEL_TYPE);
             } // end: switch (set_rmodel_type)

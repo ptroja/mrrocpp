@@ -101,6 +101,8 @@ void mp_irp6s_and_conv_robot::create_next_pose_command (void)
                 mp_command.mp_package.instruction.rmodel.force_tool.weight =
                     ecp_td.next_force_tool_weight;
                 break;
+            case FORCE_BIAS:
+            break;                
             default: // Blad: niewlasciwy typ modelu robota
                 throw MP_error(NON_FATAL_ERROR, INVALID_RMODEL_TYPE);
             }

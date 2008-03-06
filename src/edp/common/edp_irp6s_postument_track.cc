@@ -943,7 +943,8 @@ void edp_irp6s_postument_track_effector::servo_joints_and_frame_actualization_an
 
         if ( (force_tryb > 0)&&(!force_sensor_configured)&&(synchronised))
         {
-            vs->force_sensor_do_configure = true;
+        vs->force_sensor_do_configure = true;
+        vs->check_for_command_execution_finish();
             force_sensor_configured = true;
         }
 
