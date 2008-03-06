@@ -73,8 +73,6 @@ edp_irp6s_and_conv_effector::edp_irp6s_and_conv_effector (configurator &_config,
 
 
     motion_type = ABSOLUTE;
-    motion_steps = 0;
-    value_in_step_no = 0;
     synchronised = false;
 
 

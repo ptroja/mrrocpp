@@ -27,6 +27,7 @@ private:
     bool force_sensor_configured;
 
 protected:
+    
         sem_t force_master_sem; //!< semafor dostepu do nowej wiadomosci dla vsp
     // czy chwytak wlaczony ?
     short is_gripper_active;

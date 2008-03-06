@@ -4,6 +4,7 @@
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
+SOURCES = ${wildcard *.cc}
 EDPOBJ = edp_common.o edp_m.o \
 	edp_irp6s.o edp_irp6s_and_conv.o \
 	edp_force_sensor.o force.o \

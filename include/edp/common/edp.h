@@ -88,7 +88,7 @@ public:
 };
 
 // Glowna klasa efektora EDP
-class edp_effector: public transformer_error
+class edp_effector : public transformer_error
 {
 protected:
 
@@ -100,22 +100,6 @@ protected:
     r_buffer reply;
 
     int caller;				// by 7&Y
-
-    WORD motion_steps;            // liczba krokow ruchu zadanego (makrokroku)
-
-    //Liczba krokow pierwszej fazy ruchu, czyli krok, w ktorym ma zostac
-    //przekazana informacja o realizacji pierwszej fazy ruchu:
-    //0 < value_in_step_no <= motion_steps + 1
-    //Dla value_in_step_no = motion_steps wiadomosc dotrze po zrealizowaniu
-    //makrokroku, ale informacja o polozeniu bedzie dotyczyc realizacji
-    //przedostatniego kroku makrokroku.
-    //Dla value_in_step_no = motion_steps + 1 wiadomosc dotrze po zrealizowaniu
-    //jednego kroku obiegu petli ruchu jalowego po zakonczeniu makrokroku,
-    //ale informacja o polozeniu bedzie dotyczyc realizacji calego makrokroku.
-    //Dla value_in_step_no < motion_steps wiadomosc dotrze przed zrealizowaniem
-    //makrokroku i informacja o polozeniu bedzie dotyczyc realizacji srodkowej
-    //fazy makrokroku.
-    WORD value_in_step_no;
 
 public:
     configurator &config;
@@ -180,7 +164,6 @@ class edp_irp6s_and_conv_effector : public edp_effector, public kinematics_manag
 {
 
 protected:
-
     static void *reader_thread_start(void* arg);
     void *reader_thread(void* arg);
     static void *trans_thread_start(void* arg);
@@ -189,6 +172,22 @@ protected:
     void *servo_thread(void* arg);
     static void *visualisation_thread_start(void* arg);
     void *visualisation_thread(void* arg);
+
+    WORD motion_steps;            // liczba krokow ruchu zadanego (makrokroku)
+
+    //Liczba krokow pierwszej fazy ruchu, czyli krok, w ktorym ma zostac
+    //przekazana informacja o realizacji pierwszej fazy ruchu:
+    //0 < value_in_step_no <= motion_steps + 1
+    //Dla value_in_step_no = motion_steps wiadomosc dotrze po zrealizowaniu
+    //makrokroku, ale informacja o polozeniu bedzie dotyczyc realizacji
+    //przedostatniego kroku makrokroku.
+    //Dla value_in_step_no = motion_steps + 1 wiadomosc dotrze po zrealizowaniu
+    //jednego kroku obiegu petli ruchu jalowego po zakonczeniu makrokroku,
+    //ale informacja o polozeniu bedzie dotyczyc realizacji calego makrokroku.
+    //Dla value_in_step_no < motion_steps wiadomosc dotrze przed zrealizowaniem
+    //makrokroku i informacja o polozeniu bedzie dotyczyc realizacji srodkowej
+    //fazy makrokroku.
+    WORD value_in_step_no;	
 
     int serwo_fd;
 
@@ -377,7 +376,6 @@ class edp_irp6s_effector: public edp_irp6s_and_conv_effector
 {
 
 protected:
-
     void compute_xyz_euler_zyz (const c_buffer &instruction);     // obliczenia dla ruchu ramienia (koncowka: XYZ_EULER_ZYZ)
 
     void compute_xyz_angle_axis (const c_buffer &instruction); // obliczenia dla ruchu ramienia (koncowka: XYZ_ANGLE_AXIS)
