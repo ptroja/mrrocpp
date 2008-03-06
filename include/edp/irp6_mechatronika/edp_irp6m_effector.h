@@ -17,7 +17,7 @@
 #include "edp/common/edp.h"
 
 // Klasa reprezentujaca robota IRp-6 na postumencie.
-class edp_irp6m_effector  : public edp_irp6s_effector
+class edp_irp6m_effector : public edp_irp6s_effector
 {
 protected:
     // Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
@@ -33,8 +33,8 @@ protected:
 
 public:
 
-    void set_rmodel (c_buffer *instruction);                    // zmiana narzedzia
-    void get_rmodel (c_buffer *instruction);                    // odczytanie narzedzia
+    void set_rmodel (c_buffer &instruction);                    // zmiana narzedzia
+    void get_rmodel (c_buffer &instruction);                    // odczytanie narzedzia
     // Konstruktor.
     void initialize (void);
     edp_irp6m_effector (configurator &_config);
@@ -43,9 +43,7 @@ public:
 
     void move_arm (c_buffer &instruction);            // przemieszczenie ramienia
 
-    void get_arm_position (bool read_hardware, c_buffer *instruction); // odczytanie pozycji ramienia
-
-
+    void get_arm_position (bool read_hardware, c_buffer &instruction); // odczytanie pozycji ramienia
 };
 
 #endif

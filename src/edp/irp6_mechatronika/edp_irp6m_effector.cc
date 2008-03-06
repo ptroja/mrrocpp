@@ -40,12 +40,12 @@ edp_irp6m_effector::edp_irp6m_effector (configurator &_config) :
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6m_effector::set_rmodel (c_buffer *instruction)
+void edp_irp6m_effector::set_rmodel (c_buffer &instruction)
 {
     // BYTE previous_model;
     // BYTE previous_corrector;
     //printf(" SET RMODEL: ");
-    switch ((*instruction).set_rmodel_type)
+    switch (instruction.set_rmodel_type)
     {
     case TOOL_FRAME:
         //printf("TOOL_FRAME\n");
@@ -65,7 +65,7 @@ void edp_irp6m_effector::set_rmodel (c_buffer *instruction)
     case ARM_KINEMATIC_MODEL:
         //printf("ARM_KINEMATIC_MODEL\n");
         // Ustawienie modelu kinematyki.
-        set_kinematic_model((*instruction).rmodel.kinematic_model.kinematic_model_no);
+        set_kinematic_model(instruction.rmodel.kinematic_model.kinematic_model_no);
         break;
 
     case SERVO_ALGORITHM:
@@ -75,8 +75,8 @@ void edp_irp6m_effector::set_rmodel (c_buffer *instruction)
         servo_command.instruction_code = SERVO_ALGORITHM_AND_PARAMETERS;
         for (int i = 0; i<number_of_servos; i++)
         {
-            servo_command.parameters.servo_alg_par.servo_algorithm_no[i] = servo_algorithm_ecp[i] = (*instruction).rmodel.servo_algorithm.servo_algorithm_no[i];
-            servo_command.parameters.servo_alg_par.servo_parameters_no[i] = servo_parameters_ecp[i] = (*instruction).rmodel.servo_algorithm.servo_parameters_no[i];
+            servo_command.parameters.servo_alg_par.servo_algorithm_no[i] = servo_algorithm_ecp[i] = instruction.rmodel.servo_algorithm.servo_algorithm_no[i];
+            servo_command.parameters.servo_alg_par.servo_parameters_no[i] = servo_parameters_ecp[i] = instruction.rmodel.servo_algorithm.servo_parameters_no[i];
         }
         /* Wyslanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow procesowi SERVO_GROUP */
         send_to_SERVO_GROUP (); //
@@ -92,10 +92,10 @@ void edp_irp6m_effector::set_rmodel (c_buffer *instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6m_effector::get_rmodel (c_buffer *instruction)
+void edp_irp6m_effector::get_rmodel (c_buffer &instruction)
 {
     //printf(" GET RMODEL: ");
-    switch ((*instruction).get_rmodel_type)
+    switch (instruction.get_rmodel_type)
     {
     case TOOL_FRAME:
         //printf("TOOL_FRAME\n");
@@ -121,7 +121,7 @@ void edp_irp6m_effector::get_rmodel (c_buffer *instruction)
         reply.rmodel_type = SERVO_ALGORITHM;
         // ustawienie numeru algorytmu serworegulatora oraz numeru jego zestawu parametrow
         for (int i = 0; i<number_of_servos; i++)
-            if ( instruction->is_get_arm() )
+            if ( instruction.is_get_arm() )
             {
                 reply.rmodel.servo_algorithm.servo_algorithm_no[i] = servo_algorithm_sg[i];
                 reply.rmodel.servo_algorithm.servo_parameters_no[i] = servo_parameters_sg[i];
@@ -150,7 +150,6 @@ void edp_irp6m_effector::initialize (void)
 
     reset_variables();
 }
-;
 
 /*--------------------------------------------------------------------------*/
 void edp_irp6m_effector::arm_abs_xyz_eul_zyz_2_frame (const double *p)
@@ -350,7 +349,7 @@ void edp_irp6m_effector::servo_joints_and_frame_actualization_and_upload (void)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6m_effector::get_arm_position (bool read_hardware, c_buffer *instruction)
+void edp_irp6m_effector::get_arm_position (bool read_hardware, c_buffer &instruction)
 { // odczytanie pozycji ramienia
 
     //   printf(" GET ARM\n");
@@ -389,7 +388,7 @@ void edp_irp6m_effector::get_arm_position (bool read_hardware, c_buffer *instruc
 
     // okreslenie rodzaju wspolrzednych, ktore maja by odczytane
     // oraz adekwatne wypelnienie bufora odpowiedzi
-    switch ((*instruction).get_arm_type)
+    switch (instruction.get_arm_type)
     {
     case FRAME:
         // przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
@@ -419,7 +418,7 @@ void edp_irp6m_effector::get_arm_position (bool read_hardware, c_buffer *instruc
         arm_motors_2_motors();
         break;
     default:   // blad: nieznany sposob zapisu wspolrzednych koncowki
-        printf("EFF_TYPE: %d\n",(*instruction).get_arm_type);
+        printf("EFF_TYPE: %d\n", instruction.get_arm_type);
         throw NonFatal_error_2(INVALID_GET_END_EFFECTOR_TYPE);
     }
     

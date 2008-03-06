@@ -32,7 +32,7 @@ class ecp_task;
 
 class ecp_robot : public ecp_mp_robot
 {
-	friend ui_common_robot;
+	friend class ui_common_robot;
 
     // Klasa bazowa dla robotow (klasa abstrakcyjna)
     // Kazdy robot konkretny (wyprowadzony z klasy bazowej)

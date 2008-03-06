@@ -41,18 +41,14 @@
 
 
 
-void edp_irp6s_postument_track_effector::initialize (void)
-{}
-
-
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_postument_track_effector::set_rmodel (c_buffer *instruction)
+void edp_irp6s_postument_track_effector::set_rmodel (c_buffer &instruction)
 {
     // BYTE previous_model;
     // BYTE previous_corrector;
 
     //printf(" SET RMODEL: ");
-    switch ((*instruction).set_rmodel_type)
+    switch (instruction.set_rmodel_type)
     {
     case TOOL_FRAME:
         //printf("TOOL_FRAME\n");
@@ -72,7 +68,7 @@ void edp_irp6s_postument_track_effector::set_rmodel (c_buffer *instruction)
     case ARM_KINEMATIC_MODEL:
         //printf("ARM_KINEMATIC_MODEL\n");
         // Ustawienie modelu kinematyki.
-        set_kinematic_model((*instruction).rmodel.kinematic_model.kinematic_model_no);
+        set_kinematic_model(instruction.rmodel.kinematic_model.kinematic_model_no);
         break;
     case SERVO_ALGORITHM:
         // ustawienie algorytmw serworegulacji oraz ich parametrow
@@ -81,10 +77,9 @@ void edp_irp6s_postument_track_effector::set_rmodel (c_buffer *instruction)
         servo_command.instruction_code = SERVO_ALGORITHM_AND_PARAMETERS;
         for (int i = 0; i<number_of_servos; i++)
         {
-            servo_command.parameters.servo_alg_par.servo_algorithm_no[i] = servo_algorithm_ecp[i] = (*instruction).rmodel.servo_algorithm.servo_algorithm_no[i];
-            servo_command.parameters.servo_alg_par.servo_parameters_no[i] = servo_parameters_ecp[i] = (*instruction).rmodel.servo_algorithm.servo_parameters_no[i];
+            servo_command.parameters.servo_alg_par.servo_algorithm_no[i] = servo_algorithm_ecp[i] = instruction.rmodel.servo_algorithm.servo_algorithm_no[i];
+            servo_command.parameters.servo_alg_par.servo_parameters_no[i] = servo_parameters_ecp[i] = instruction.rmodel.servo_algorithm.servo_parameters_no[i];
         }
-        ; // end: for
         /* Wyslanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow procesowi SERVO_GROUP */
         send_to_SERVO_GROUP (); //
         break;
@@ -93,9 +88,9 @@ void edp_irp6s_postument_track_effector::set_rmodel (c_buffer *instruction)
         vs->force_sensor_set_tool = true;
         for (int i = 0; i<3; i++)
         {
-            vs->next_force_tool_position[i] = (*instruction).rmodel.force_tool.position[i];
+            vs->next_force_tool_position[i] = instruction.rmodel.force_tool.position[i];
         }
-        vs->next_force_tool_weight = (*instruction).rmodel.force_tool.weight;
+        vs->next_force_tool_weight = instruction.rmodel.force_tool.weight;
         vs->check_for_command_execution_finish();
         break;
     case FORCE_BIAS:
@@ -112,10 +107,10 @@ void edp_irp6s_postument_track_effector::set_rmodel (c_buffer *instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_postument_track_effector::get_rmodel (c_buffer *instruction)
+void edp_irp6s_postument_track_effector::get_rmodel (c_buffer &instruction)
 {
     //printf(" GET RMODEL: ");
-    switch ((*instruction).get_rmodel_type)
+    switch (instruction.get_rmodel_type)
     {
     case TOOL_FRAME:
         //printf("TOOL_FRAME\n");
@@ -141,7 +136,7 @@ void edp_irp6s_postument_track_effector::get_rmodel (c_buffer *instruction)
         reply.rmodel_type = SERVO_ALGORITHM;
         // ustawienie numeru algorytmu serworegulatora oraz numeru jego zestawu parametrow
         for (int i = 0; i<number_of_servos; i++)
-            if (instruction->is_get_arm())
+            if (instruction.is_get_arm())
             {
                 reply.rmodel.servo_algorithm.servo_algorithm_no[i] = servo_algorithm_sg[i];
                 reply.rmodel.servo_algorithm.servo_parameters_no[i] = servo_parameters_sg[i];
@@ -748,7 +743,7 @@ void edp_irp6s_postument_track_effector::move_arm (c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_postument_track_effector::get_arm_position (bool read_hardware, const c_buffer &instruction)
+void edp_irp6s_postument_track_effector::get_arm_position (bool read_hardware, c_buffer &instruction)
 { // odczytanie pozycji ramienia
 
     //   printf(" GET ARM\n");

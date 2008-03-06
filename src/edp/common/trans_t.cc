@@ -46,15 +46,15 @@ void * edp_irp6s_and_conv_effector::trans_thread(void *arg)
             switch (mt_tt_obj->trans_t_task)
             {
             case MT_GET_CONTROLLER_STATE:
-                get_controller_state(&(current_instruction));
+                get_controller_state(current_instruction);
                 mt_tt_obj->trans_t_to_master_order_status_ready();
                 break;
             case MT_SET_RMODEL:
-                set_rmodel(&(current_instruction));
+                set_rmodel(current_instruction);
                 mt_tt_obj->trans_t_to_master_order_status_ready();
                 break;
             case MT_GET_ARM_POSITION:
-                get_arm_position(mt_tt_obj->trans_t_tryb, &(current_instruction));
+                get_arm_position(mt_tt_obj->trans_t_tryb, current_instruction);
                 mt_tt_obj->trans_t_to_master_order_status_ready();
                 break;
             case MT_GET_ALGORITHMS:
@@ -70,8 +70,7 @@ void * edp_irp6s_and_conv_effector::trans_thread(void *arg)
                 break;
             default: // blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia
                 break;
-            } // end: switch (reply_type)
-
+            }
         }
 
         // sekcja przechwytujaca bledy i przygotowujaca do ich rzucania w watku master
@@ -81,42 +80,42 @@ void * edp_irp6s_and_conv_effector::trans_thread(void *arg)
             mt_tt_obj->error_pointer= new transformer_error::NonFatal_error_1(nfe);
             mt_tt_obj->error = NonFatal_erroR_1;
             mt_tt_obj->trans_t_to_master_order_status_ready();
-        } // end: catch(transformer::NonFatal_error_1 nfe)
+        }
 
         catch(transformer_error::NonFatal_error_2 nfe)
         {
             mt_tt_obj->error_pointer= new transformer_error::NonFatal_error_2(nfe);
             mt_tt_obj->error = NonFatal_erroR_2;
             mt_tt_obj->trans_t_to_master_order_status_ready();
-        } // end: catch(transformer::NonFatal_error_2 nfe)
+        }
 
         catch(transformer_error::NonFatal_error_3 nfe)
         {
             mt_tt_obj->error_pointer= new transformer_error::NonFatal_error_3(nfe);
             mt_tt_obj->error = NonFatal_erroR_3;
             mt_tt_obj->trans_t_to_master_order_status_ready();
-        } // end: catch(transformer::NonFatal_error_3 nfe)
+        }
 
         catch(transformer_error::NonFatal_error_4 nfe)
         {
             mt_tt_obj->error_pointer= new transformer_error::NonFatal_error_4(nfe);
             mt_tt_obj->error = NonFatal_erroR_4;
             mt_tt_obj->trans_t_to_master_order_status_ready();
-        } // end: catch(transformer::NonFatal_error nfe4)
+        }
 
         catch(transformer_error::Fatal_error fe)
         {
             mt_tt_obj->error_pointer= new transformer_error::Fatal_error(fe);
             mt_tt_obj->error = Fatal_erroR;
             mt_tt_obj->trans_t_to_master_order_status_ready();
-        } // end: catch(transformer::Fatal_error fe)
+        }
 
         catch (System_error fe)
         {
             mt_tt_obj->error_pointer= new System_error(fe);
             mt_tt_obj->error = System_erroR;
             mt_tt_obj->trans_t_to_master_order_status_ready();
-        } // end: catch(System_error fe)
+        }
 
         catch (...)
         {
@@ -126,6 +125,5 @@ void * edp_irp6s_and_conv_effector::trans_thread(void *arg)
             // Wylapywanie niezdefiniowanych bledow
             // printf("zlapane cos");// by Y&W
         }
-
-    } // end  while
+    }
 }

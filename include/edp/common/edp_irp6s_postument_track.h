@@ -62,10 +62,6 @@ protected:
 
 public:
 
-    void set_rmodel (c_buffer *instruction);                    // zmiana narzedzia
-    void get_rmodel (c_buffer *instruction);                    // odczytanie narzedzia
-
-
     edp_force_sensor *vs;
 
     static void *edp_vsp_thread_start(void* arg);
@@ -73,18 +69,11 @@ public:
     static void *force_thread_start(void* arg);
     void *force_thread(void* arg);
 
-
- 
-    virtual void initialize (void);
     edp_irp6s_postument_track_effector (configurator &_config, ROBOT_ENUM l_robot_name );       // konstruktor
 
     int force_tryb;
 
-    void move_arm (c_buffer &instruction);            // przemieszczenie ramienia
-
-    void get_arm_position (bool read_hardware, const c_buffer &instruction); // odczytanie pozycji ramienia
-
-    // ruch pozycyjno silowo dla staqlej orientacji i kierukow liniowych
+    // TODO: rename ruch pozycyjno silowo dla staqlej orientacji i kierukow liniowych
     virtual void pose_force_linear_move (c_buffer &instruction);
 
     void pose_force_torque_at_frameove (c_buffer &instruction);
@@ -107,7 +96,11 @@ public:
     void force_msr_download(double *new_value, double *old_value);// by Y odczytanie globalnego zestawu danych
 
     void create_threads ();
-
+    
+    void set_rmodel (c_buffer &);
+    void get_rmodel (c_buffer &);
+    void move_arm (c_buffer &);
+    void get_arm_position(bool, c_buffer &);
 };
 /************************ edp_irp6s_effector ****************************/
 

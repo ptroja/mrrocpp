@@ -110,7 +110,7 @@ int main(int argc, char *argv[], char **arge)
         //	delay (20000);
         master->main_loop();
         //	printf("end\n");
-    } // end: try
+    }
 
     catch (System_error fe)
     {
@@ -139,5 +139,5 @@ int main(int argc, char *argv[], char **arge)
           // printf("\a"); // Sygnal dzwiekowy
           }
           */
-    } // end: catch
-} //   end:   main( )
+    }
+}

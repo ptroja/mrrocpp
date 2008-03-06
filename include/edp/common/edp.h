@@ -124,7 +124,7 @@ public:
     void check_config(const char* string, uint8_t* input);
     bool initialize_communication (void);
 
-    virtual void initialize (void);
+    virtual void initialize (void) = 0;
 
 #if !defined(USE_MESSIP_SRR)
 
@@ -310,15 +310,15 @@ public:
 
     void master_joints_read (double*);
     int servo_to_tt_chid;
-    virtual void initialize (void);
+    virtual void initialize (void) = 0;
 
     in_out_buffer* in_out_obj; // bufor wejsc wyjsc
     reader_buffer *rb_obj;
     master_trans_t_buffer *mt_tt_obj;
     edp_irp6s_and_conv_effector (configurator &_config, ROBOT_ENUM l_robot_name);       // konstruktor
 
-    virtual void set_rmodel (c_buffer *instruction);                    // zmiana narzedzia
-    virtual void get_rmodel (c_buffer *instruction);                    // odczytanie narzedzia
+    virtual void set_rmodel (c_buffer &instruction) = 0;                    // zmiana narzedzia
+    virtual void get_rmodel (c_buffer &instruction) = 0;                    // odczytanie narzedzia
 
     unsigned long step_counter;
 
@@ -327,7 +327,7 @@ public:
 
     virtual void move_arm (c_buffer &instruction) = 0;            // przemieszczenie ramienia
 
-    virtual void get_arm_position (bool read_hardware, c_buffer *instruction); // odczytanie pozycji ramienia
+    virtual void get_arm_position (bool read_hardware, c_buffer &instruction) = 0; // odczytanie pozycji ramienia
 
     void synchronise (); // synchronizacja robota
     virtual void servo_joints_and_frame_actualization_and_upload(void); // by Y
@@ -336,7 +336,7 @@ public:
     virtual void create_threads ();
 
 
-    void interpret_instruction (c_buffer *instruction);
+    void interpret_instruction (c_buffer &instruction);
     // interpretuje otrzymana z ECP instrukcje;
     // wypelnaia struktury danych TRANSFORMATORa;
     // przygotowuje odpowied¦ dla ECP
@@ -344,7 +344,7 @@ public:
     // odczytanie numerow algorytmow i numerow zestawow ich parametrow
     void get_algorithms ();
 
-    void get_controller_state(c_buffer *instruction); // by Y
+    void get_controller_state(c_buffer &instruction); // by Y
 
     bool is_power_on() const;
 
@@ -352,11 +352,11 @@ public:
     void update_servo_current_motor_pos_abs(double abs_motor_position, int i);
 
     // ustalenie formatu odpowiedzi
-    REPLY_TYPE rep_type (c_buffer *instruction);
+    REPLY_TYPE rep_type (c_buffer &instruction);
 
     // sprawdzenie czy jest to dopuszczalny rozkaz ruchu
     // przed wykonaniem synchronizacji robota
-    bool pre_synchro_motion(c_buffer *instruction);
+    bool pre_synchro_motion(c_buffer &instruction);
 
     // by Y czy ostatnio bylo get_arm w trybie sprzetowym??
     bool is_get_arm_read_hardware;
@@ -424,7 +424,7 @@ protected:
     // c_buffer
 
 
-    void tool_xyz_aa_2_frame (c_buffer *instruction);
+    void tool_xyz_aa_2_frame (c_buffer &instruction);
     // Przeksztalcenie definicji narzedzia z postaci
     // TOOL_XYZ_ANGLE_AXIS do postaci TOOL_FRAME oraz przepisanie wyniku
     // przeksztalcenia do wewnetrznych struktur danych
@@ -437,12 +437,12 @@ protected:
 
 
     ///////////////////////////K
-    void tool_xyz_eul_zyz_2_frame (c_buffer *instruction);
+    void tool_xyz_eul_zyz_2_frame (c_buffer &instruction);
     // Przeksztalcenie definicji narzedzia z postaci
     // TOOL_XYZ_EULER_ZYZ do postaci TOOL_FRAME oraz przepisanie wyniku
     // przeksztalcenia do wewnetrznych struktur danych
     // TRANSFORMATORa
-    void tool_frame_2_frame (c_buffer *instruction);
+    void tool_frame_2_frame (c_buffer &instruction);
     // Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
     // do wewnetrznych struktur danych TRANSFORMATORa
     void arm_abs_xyz_aa_2_frame (const double *p);
@@ -508,19 +508,9 @@ protected:
     // manipulatora wzgledem ukladu bazowego (polozenie w mm)
 
 public:
-    virtual void initialize (void);
     edp_irp6s_effector (configurator &_config, ROBOT_ENUM l_robot_name );       // konstruktor
 
-
-    virtual void set_rmodel (c_buffer *instruction);                    // zmiana narzedzia
-    virtual void get_rmodel (c_buffer *instruction);                    // odczytanie narzedzia
-
-    //virtual void move_arm (c_buffer &instruction) = 0;            // przemieszczenie ramienia
-
-    virtual void get_arm_position (bool read_hardware, c_buffer *instruction); // odczytanie pozycji ramienia
-
     virtual void servo_joints_and_frame_actualization_and_upload(void);// by Y
-
 
     // wyznaczenie polozenia lokalnego i globalnego transformera
     // przepisanie lokalnego zestawu lokalnego edp_servo na globalny (chronione mutexem)

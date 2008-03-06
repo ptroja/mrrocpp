@@ -31,7 +31,6 @@ edp_conveyor_effector::edp_conveyor_effector (configurator &_config) :
         edp_irp6s_and_conv_effector (_config, ROBOT_CONVEYOR)
 {
 }
-;//: edp_conveyor_effector
 
 
 void edp_conveyor_effector::initialize (void)
@@ -43,21 +42,20 @@ void edp_conveyor_effector::initialize (void)
 
     reset_variables();
 }
-;
 
 
 /*--------------------------------------------------------------------------*/
-void edp_conveyor_effector::set_rmodel (c_buffer *instruction)
+void edp_conveyor_effector::set_rmodel (c_buffer &instruction)
 {
     // BYTE previous_model;
     // BYTE previous_corrector;
     //printf(" SET RMODEL: ");
-    switch ((*instruction).set_rmodel_type)
+    switch (instruction.set_rmodel_type)
     {
     case ARM_KINEMATIC_MODEL:
         //printf("ARM_KINEMATIC_MODEL\n");
         // Ustawienie modelu kinematyki.
-        set_kinematic_model((*instruction).rmodel.kinematic_model.kinematic_model_no);
+        set_kinematic_model(instruction.rmodel.kinematic_model.kinematic_model_no);
         break;
 
     case SERVO_ALGORITHM:
@@ -67,10 +65,9 @@ void edp_conveyor_effector::set_rmodel (c_buffer *instruction)
         servo_command.instruction_code = SERVO_ALGORITHM_AND_PARAMETERS;
         for (int i = 0; i<number_of_servos; i++)
         {
-            servo_command.parameters.servo_alg_par.servo_algorithm_no[i] = servo_algorithm_ecp[i] = (*instruction).rmodel.servo_algorithm.servo_algorithm_no[i];
-            servo_command.parameters.servo_alg_par.servo_parameters_no[i] = servo_parameters_ecp[i] = (*instruction).rmodel.servo_algorithm.servo_parameters_no[i];
+            servo_command.parameters.servo_alg_par.servo_algorithm_no[i] = servo_algorithm_ecp[i] = instruction.rmodel.servo_algorithm.servo_algorithm_no[i];
+            servo_command.parameters.servo_alg_par.servo_parameters_no[i] = servo_parameters_ecp[i] = instruction.rmodel.servo_algorithm.servo_parameters_no[i];
         }
-        ; // end: for
         /* Wyslanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow procesowi SERVO_GROUP */
         send_to_SERVO_GROUP (); //
         break;
@@ -79,19 +76,17 @@ void edp_conveyor_effector::set_rmodel (c_buffer *instruction)
         // ustawi numer bledu
         throw NonFatal_error_2(INVALID_SET_RMODEL_TYPE);
     }
-    ; // end: switch (set_rmodel_type)
 }
-; // end: edp_conveyor_effector::set_rmodel
 /*--------------------------------------------------------------------------*/
 
 
 
 /*--------------------------------------------------------------------------*/
-void edp_conveyor_effector::get_rmodel (c_buffer *instruction)
+void edp_conveyor_effector::get_rmodel (c_buffer &instruction)
 {
     int i; // licznik obiegow petli
     //printf(" GET RMODEL: ");
-    switch ((*instruction).get_rmodel_type)
+    switch (instruction.get_rmodel_type)
     {
     case ARM_KINEMATIC_MODEL:
         reply.rmodel_type = ARM_KINEMATIC_MODEL;
@@ -102,7 +97,7 @@ void edp_conveyor_effector::get_rmodel (c_buffer *instruction)
         reply.rmodel_type = SERVO_ALGORITHM;
         // ustawienie numeru algorytmu serworegulatora oraz numeru jego zestawu parametrow
         for (i = 0; i<number_of_servos; i++)
-            if ( instruction->is_get_arm() )
+            if ( instruction.is_get_arm() )
             {
                 reply.rmodel.servo_algorithm.servo_algorithm_no[i] = servo_algorithm_sg[i];
                 reply.rmodel.servo_algorithm.servo_parameters_no[i] = servo_parameters_sg[i];
@@ -117,9 +112,7 @@ void edp_conveyor_effector::get_rmodel (c_buffer *instruction)
         // ustawie numer bledu
         throw NonFatal_error_2(INVALID_GET_RMODEL_TYPE);
     }
-    ; // end: switch (get_rmodel_type)
 }
-; // end: edp_conveyor_effector::get_rmodel
 /*--------------------------------------------------------------------------*/
 
 
@@ -195,7 +188,7 @@ void edp_conveyor_effector::move_arm (c_buffer &instruction)
 }
 
 // Odczytanie pozycji tasmociagu.
-void edp_conveyor_effector::get_arm_position (bool read_hardware, c_buffer *instruction)
+void edp_conveyor_effector::get_arm_position (bool read_hardware, c_buffer &instruction)
 {
 
     if (read_hardware)
@@ -233,7 +226,7 @@ void edp_conveyor_effector::get_arm_position (bool read_hardware, c_buffer *inst
 
     // okreslenie rodzaju wspolrzednych, ktore maja by odczytane
     // oraz adekwatne wypelnienie bufora odpowiedzi
-    switch ((*instruction).get_arm_type)
+    switch (instruction.get_arm_type)
     {
     case   JOINT:
         // przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
@@ -244,10 +237,9 @@ void edp_conveyor_effector::get_arm_position (bool read_hardware, c_buffer *inst
         arm_motors_2_motors();
         break;
     default:   // blad: nieznany sposob zapisu wspolrzednych koncowki
-        printf("EFF_TYPE: %d\n",(*instruction).get_arm_type);
+        printf("EFF_TYPE: %d\n", instruction.get_arm_type);
         throw NonFatal_error_2(INVALID_GET_END_EFFECTOR_TYPE);
     }
-    ; // end: switch (instruction.get_arm_type)
 
     rb_obj->lock_mutex();// by Y
     reply.servo_step=rb_obj->step_data.step;

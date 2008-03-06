@@ -28,10 +28,7 @@ protected:
 
 public:
     void initialize (void);
-    // Konstruktor.
     edp_irp6p_effector (configurator &_config);
-
-}
-; //: edp_irp6p_effector
+};
 
 #endif

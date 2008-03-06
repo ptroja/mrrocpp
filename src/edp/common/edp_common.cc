@@ -73,10 +73,6 @@ edp_effector::edp_effector(configurator &_config, ROBOT_ENUM l_robot_name) :
 
 }
 
-void edp_effector::initialize(void)
-{
-}
-
 void edp_effector::check_config(const char* string, uint8_t* input)
 {
 	if ((config.exists(string))&&(config.return_int_value(string)))

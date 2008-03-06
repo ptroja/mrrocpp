@@ -43,12 +43,6 @@ edp_irp6s_effector::edp_irp6s_effector (configurator &_config, ROBOT_ENUM l_robo
         edp_irp6s_and_conv_effector (_config, l_robot_name)
 {
 }
-;
-
-void edp_irp6s_effector::initialize (void)
-{}
-;
-
 
 /*--------------------------------------------------------------------------*/
 void edp_irp6s_effector::compute_xyz_euler_zyz (const c_buffer &instruction)
@@ -341,7 +335,7 @@ void edp_irp6s_effector::tool_axially_symmetrical_frame_2_xyz_eul_zy (void)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::tool_xyz_eul_zyz_2_frame (c_buffer *instruction)
+void edp_irp6s_effector::tool_xyz_eul_zyz_2_frame (c_buffer &instruction)
 {
     // Przeksztacenie definicji narzedzia z postaci
     // TOOL_XYZ_EULER_ZYZ do postaci TOOL_FRAME oraz przepisanie wyniku
@@ -353,13 +347,13 @@ void edp_irp6s_effector::tool_xyz_eul_zyz_2_frame (c_buffer *instruction)
     double alfa, beta, gamma;	// Katy Eulera
 
     // przepisanie z tablicy pakietu komunikacyjnego
-    x = (*instruction).rmodel.tool_coordinate_def.tool_coordinates[0];
-    y = (*instruction).rmodel.tool_coordinate_def.tool_coordinates[1];
-    z = (*instruction).rmodel.tool_coordinate_def.tool_coordinates[2];
+    x = instruction.rmodel.tool_coordinate_def.tool_coordinates[0];
+    y = instruction.rmodel.tool_coordinate_def.tool_coordinates[1];
+    z = instruction.rmodel.tool_coordinate_def.tool_coordinates[2];
 
-    alfa = (*instruction).rmodel.tool_coordinate_def.tool_coordinates[3];
-    beta = (*instruction).rmodel.tool_coordinate_def.tool_coordinates[4];
-    gamma = (*instruction).rmodel.tool_coordinate_def.tool_coordinates[5];
+    alfa = instruction.rmodel.tool_coordinate_def.tool_coordinates[3];
+    beta = instruction.rmodel.tool_coordinate_def.tool_coordinates[4];
+    gamma = instruction.rmodel.tool_coordinate_def.tool_coordinates[5];
 
     Homog_matrix A_B_T (Homog_matrix::MTR_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
     // Sprawdzenie, czy macierz jest jednorodna.
@@ -369,31 +363,28 @@ void edp_irp6s_effector::tool_xyz_eul_zyz_2_frame (c_buffer *instruction)
     get_current_kinematic_model()->tool = A_B_T;
 
 }
-; // end: edp_irp6s_effector::tool_xyz_eul_zyz_2_frame
 /*--------------------------------------------------------------------------*/
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::tool_frame_2_frame (c_buffer *instruction)
+void edp_irp6s_effector::tool_frame_2_frame (c_buffer &instruction)
 {
     // Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
     // do wewntrznych struktur danych TRANSFORMATORa
     // Sprawdzenie czy przepisana macierz jest jednorodna
     // Jezeli nie, to wyzwalany jest wyjatek.
 
-    if ( instruction->is_set_rmodel() || instruction->is_set_arm())
+    if ( instruction.is_set_rmodel() || instruction.is_set_arm())
     {
         // Przyslano dane dotyczace narzedzia i koncowki.
-        Homog_matrix A_B_T ((*instruction).rmodel.tool_frame_def.tool_frame);
+        Homog_matrix A_B_T (instruction.rmodel.tool_frame_def.tool_frame);
         // Sprawdzenie poprawnosci macierzy
         if (!(A_B_T.is_valid()))
             throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
         // Przepisanie do kinematyki.
         get_current_kinematic_model()->tool = A_B_T;
     }
-    ;//: if
 }
-; // end: edp_irp6s_effector::tool_frame_2_frame
 /*--------------------------------------------------------------------------*/
 
 
@@ -591,7 +582,7 @@ void edp_irp6s_effector::arm_frame_2_xyz_eul_zyz ()
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::tool_xyz_aa_2_frame (c_buffer *instruction)
+void edp_irp6s_effector::tool_xyz_aa_2_frame (c_buffer &instruction)
 {
     // Przeksztacenie definicji narzedzia z postaci
     // TOOL_XYZ_ANGLE_AXIS do postaci TOOL_FRAME oraz przepisanie wyniku
@@ -605,18 +596,17 @@ void edp_irp6s_effector::tool_xyz_aa_2_frame (c_buffer *instruction)
     double kx, ky, kz;		// specyfikacja wektora, wokol ktorego obracany jest uklad
 
     // przepisanie z tablicy pakietu komunikacyjnego
-    x = (*instruction).rmodel.tool_coordinate_def.tool_coordinates[0];
-    y = (*instruction).rmodel.tool_coordinate_def.tool_coordinates[1];
-    z = (*instruction).rmodel.tool_coordinate_def.tool_coordinates[2];
+    x = instruction.rmodel.tool_coordinate_def.tool_coordinates[0];
+    y = instruction.rmodel.tool_coordinate_def.tool_coordinates[1];
+    z = instruction.rmodel.tool_coordinate_def.tool_coordinates[2];
 
     // przepisane wartosci pomnozone sa przez kat alfa
-    kx = (*instruction).rmodel.tool_coordinate_def.tool_coordinates[3];
-    ky = (*instruction).rmodel.tool_coordinate_def.tool_coordinates[4];
-    kz = (*instruction).rmodel.tool_coordinate_def.tool_coordinates[5];
+    kx = instruction.rmodel.tool_coordinate_def.tool_coordinates[3];
+    ky = instruction.rmodel.tool_coordinate_def.tool_coordinates[4];
+    kz = instruction.rmodel.tool_coordinate_def.tool_coordinates[5];
 
     // obliczenie kata obrotu alfa i wartosci funkcji trygonometrycznych
     alfa = sqrt(kx*kx + ky*ky + kz*kz);
-
 
     // korekta wartosci x, y, z
     if((alfa   < ALFA_SENSITIVITY) && (alfa > -ALFA_SENSITIVITY))
@@ -641,7 +631,6 @@ void edp_irp6s_effector::tool_xyz_aa_2_frame (c_buffer *instruction)
         get_current_kinematic_model()->tool = A_B_T;
     }
 }
-; // end: edp_irp6s_effector::tool_xyz_aa_2_frame
 /*--------------------------------------------------------------------------*/
 
 
@@ -756,13 +745,6 @@ void edp_irp6s_effector::arm_frame_2_frame (void)
 ; // end: edp_irp6s_effector::arm_frame_2_frame
 /*--------------------------------------------------------------------------*/
 
-void edp_irp6s_effector::set_rmodel (c_buffer *instruction)
-{}
-;                    // zmiana narzedzia
-void edp_irp6s_effector::get_rmodel (c_buffer *instruction)
-{}
-;     
-
 void edp_irp6s_effector::master_joints_and_frame_download (void)
 { // by Y
     pthread_mutex_lock( &edp_irp6s_effector_mutex );
@@ -774,7 +756,7 @@ void edp_irp6s_effector::master_joints_and_frame_download (void)
     }
     copy_frame(servo_current_frame_wo_tool, global_current_frame_wo_tool);
     pthread_mutex_unlock( &edp_irp6s_effector_mutex );
-};
+}
 
 
 
@@ -787,9 +769,6 @@ void edp_irp6s_effector::create_threads ()
 }
 
 /*--------------------------------------------------------------------------*/
-
-void edp_irp6s_effector::get_arm_position (bool read_hardware, c_buffer *instruction)
-{} // odczytanie pozycji ramienia
 
 // sprawdza stan EDP zaraz po jego uruchomieniu
 void edp_irp6s_effector::servo_joints_and_frame_actualization_and_upload (void)
