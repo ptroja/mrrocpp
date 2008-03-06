@@ -1,14 +1,12 @@
 #--------------------- src catalog makefile of the MRROC++ frame system ----------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ..
-UIDIR = ui
 # Data for makedepend 
-DEPENDDIRS = lib vsp edp ecp ecp_mp mp
-SOURCEDIRS = $(DEPENDDIRS) $(UIDIR)
+SOURCEDIRS = lib vsp edp ecp ecp_mp mp ui
 CLEANDIRS = ${SOURCEDIRS}
 INSTALLDIRS = ${CLEANDIRS}
 #======================================================#	
-.PHONY: all clean install depend $(SOURCEDIRS) $(CLEANDIRS) $(INSTALLDIRS) $(DEPENDDIRS)
+.PHONY: all clean install depend $(SOURCEDIRS) $(CLEANDIRS) $(INSTALLDIRS)
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: $(SOURCEDIRS) $(UIDIR)
 #-----------------------------------------------------------------------------------------------------------------------#
@@ -32,7 +30,7 @@ install:
 	done
 #-----------------------------------------------------------------------------------------------------------------------#
 depend:
-	@for i in ${DEPENDDIRS}; do \
+	@for i in ${SOURCEDIRS}; do \
 		($(MAKE) -C $$i depend); \
 	done
 #======================================================#	

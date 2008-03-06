@@ -16,3 +16,6 @@ clean:
 install:
 	@for i in ${DIRS} ; do (cd $$i && $(MAKE) install) ; done
 
+depend:
+	@for i in ${DIRS} ; do (cd $$i && $(MAKE) depend) ; done
+

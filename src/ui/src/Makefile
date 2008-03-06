@@ -14,3 +14,7 @@ clean:
 
 install:
 	@for i in ${DIRS} ; do (cd $$i && $(MAKE) install) ; done
+
+HOMEDIR = ../../..
+SOURCES = ${wildcard *.cc}
+include $(HOMEDIR)/depend.mk
