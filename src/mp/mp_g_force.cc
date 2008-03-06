@@ -412,8 +412,8 @@ bool mp_haptic_generator::first_step ()
 		irp6p->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
 		irp6p->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 		irp6p->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-		irp6p->ecp_td.next_behaviour[i] = CONTACT;
-		irp6p->ecp_td.next_behaviour[i+3] = CONTACT;
+		irp6p->ecp_td.next_behaviour[i] = GUARDED_MOTION;
+		irp6p->ecp_td.next_behaviour[i+3] = GUARDED_MOTION;
 		/*
 		if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 			else irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;

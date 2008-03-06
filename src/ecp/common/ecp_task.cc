@@ -189,10 +189,17 @@ void ecp_task::Move (ecp_generator& the_generator)
         // wykonanie kroku ruchu
         if ((the_generator.the_robot) && the_generator.the_robot->communicate)
         {
-            the_generator.the_robot->create_command ();
+            if (the_generator.copy_edp_buffers_in_move)
+	{
+ the_generator.the_robot->create_command ();
+ }
             // zlecenie ruchu SET oraz odczyt stanu robota GET
             the_generator.the_robot->execute_motion();
+            
+                        if (the_generator.copy_edp_buffers_in_move)
+	{
             the_generator.the_robot->get_reply();
+            }
         }
 
         // odczytanie danych z wszystkich czujnikow

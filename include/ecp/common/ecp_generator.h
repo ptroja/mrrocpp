@@ -13,6 +13,7 @@ class ecp_generator : public ecp_mp_generator {
 
 	public:
 		bool communicate_with_mp_in_move;
+		bool copy_edp_buffers_in_move;
 		ecp_robot* the_robot;
 
 		ecp_generator(ecp_task& _ecp_task, bool _is_robot_active);

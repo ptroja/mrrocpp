@@ -1,7 +1,9 @@
 #include "ecp/common/ecp_generator_t.h"
 
 ecp_generator_t::ecp_generator_t (ecp_task& _ecp_task, bool _is_robot_active): 
-	ecp_generator (_ecp_task, _is_robot_active){};
+	ecp_generator (_ecp_task, _is_robot_active){
+copy_edp_buffers_in_move=false;
+};
 
 
 // ----------------------------------------------------------------------------------------------
@@ -9,9 +11,11 @@ ecp_generator_t::ecp_generator_t (ecp_task& _ecp_task, bool _is_robot_active):
 // ----------------------------------------------------------------------------------------------
 
 bool ecp_generator_t::first_step (  ) {
+
+
 	return next_step ();
 
-}; // end: bool conveyor_generator_t::first_step ( )
+}
 
 // ----------------------------------------------------------------------------------------------
 // -----------------------------------  metoda	next_step --------------------------------------
@@ -28,4 +32,4 @@ bool ecp_generator_t::next_step (  ) {
   the_robot->copy_mp_to_edp_buffer (ecp_t.mp_command.mp_package.instruction);
    return true;
   
-}; // end: bool conveyor_generator_t::next_step ( )
+}

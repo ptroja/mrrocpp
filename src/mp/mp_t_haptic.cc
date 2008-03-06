@@ -118,7 +118,6 @@ void mp_task_haptic::main_task_algorithm(void)
 			    }
 
 
-
 			    // wlaczenie generatora transparentnego w obu robotach
 			    if (set_next_ecps_state ((int) ECP_GEN_TRANSPARENT, (int) 0, "", 1, ROBOT_IRP6_ON_TRACK))
 			    {
@@ -131,8 +130,6 @@ void mp_task_haptic::main_task_algorithm(void)
 		        	break;
 			    }
 			
-			
-
 			// mp_h_gen.sensor_m = sensor_m;
 			mp_h_gen.configure(1, 0);
 		    	sr_ecp_msg->message("Track podatny do czasu wcisniecia mp_trigger");
