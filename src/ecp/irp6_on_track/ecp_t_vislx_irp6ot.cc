@@ -11,6 +11,7 @@
 	
 
 #include "ecp/irp6_on_track/ecp_local.h"
+#include "ecp/common/ecp_g_force.h"
 #include "ecp/irp6_on_track/ecp_g_vis_sac_lx.h"
 #include "ecp_mp/ecp_mp_s_vis.h"
 #include "ecp/irp6_on_track/ecp_t_vislx_irp6ot.h"
@@ -35,8 +36,8 @@ void ecp_task_vislx_irp6ot::task_initialization(void)
 
 	
 	// Powolanie czujnikow
-	sensor_m[SENSOR_FORCE_ON_TRACK] = 
-		new ecp_mp_schunk_sensor (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
+/*	sensor_m[SENSOR_FORCE_ON_TRACK] = 
+		new ecp_mp_schunk_sensor (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);*/
 		
 	sensor_m[SENSOR_CAMERA_SA] = 
 		new ecp_mp_vis_sac_lx_sensor (SENSOR_CAMERA_SA, "[vsp_vis]", *this); //change if SENSOR_CAMERA_SA used for nonnn recog (vsp_vis_pbeolsac)
@@ -63,11 +64,18 @@ void ecp_task_vislx_irp6ot::main_task_algorithm(void)
 	ecp_vis_sac_lx_generator ynrlg(*this, 4);
 	ynrlg.sensor_m = sensor_m;
 	
+	   bias_edp_force_generator befg(*this);
+	
 	   for(;;) { // Wewnetrzna petla nieskoczona
 
 
 		for(;;) {
+		
 			sr_ecp_msg->message("NOWA SERIA");
+			
+           sr_ecp_msg->message("FORCE SENSOR BIAS");
+            Move ( befg);
+			
 			Move ( ynrlg);
 		
 		 }

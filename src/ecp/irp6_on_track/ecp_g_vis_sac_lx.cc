@@ -326,7 +326,14 @@ std::cout << "C_T_G" << std::endl;
 -vsp_vis_sac->image.vis_sac.frame_E_r_G[2],
 
 vsp_vis_sac->image.vis_sac.frame_E_r_G[5],0,-0.05);
-std::cout <<"Rota C_T_Gxxx " << vsp_vis_sac->image.vis_sac.frame_E_r_G[5] <<" " << O_r_G[0][4] << " "<< O_r_G[0][5] <<std::endl;
+//std::cout <<"Rota C_T_Gxxx " << vsp_vis_sac->image.vis_sac.frame_E_r_G[5] <<" " << O_r_G[0][4] << " "<< O_r_G[0][5] <<std::endl;
+std::cout <<"VVVVVVVVVVVVVVV C_T_Gxxx ";
+for(int i=0; i<6; i++)
+{
+std::cout  << vsp_vis_sac->image.vis_sac.frame_E_r_G[i];
+}
+std::cout<<std::endl;
+
 
 //EIH
 	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0],vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1],
@@ -426,7 +433,7 @@ std::cout <<"x2g " << x2g << std::endl;
 	std::cout << " SAC ";
 	for (int i=0; i<6; i++)
 	{
-		std::cout << O_rcom_G[0][i] << " ";
+		std::cout << O_r_G__CSAC[0][i] << " ";
 	}
 	std::cout << std::endl;
 	

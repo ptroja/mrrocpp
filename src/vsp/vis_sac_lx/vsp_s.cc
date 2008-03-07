@@ -235,7 +235,7 @@ void vsp_vis_sac_lx_sensor::configure_sensor (void){
 	};
 	
 void vsp_vis_sac_lx_sensor::wait_for_event(){
-
+//	delay(10);
 };	
 
 /*************************** inicjacja odczytu ******************************/
@@ -244,8 +244,10 @@ void vsp_vis_sac_lx_sensor::initiate_reading (void){
 	if(!is_sensor_configured)
 	     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
-//SAC
 
+try
+{
+//SAC
 	n = write(sockfd,"x",strlen("x"));
     if (n < 0) 
          printf("ERROR writing to socket");
@@ -268,7 +270,11 @@ void vsp_vis_sac_lx_sensor::initiate_reading (void){
          printf("ERROR reading from socket");
 	sscanf(buffer_eih,"%d %d %d %d %d %d %d %d %d %d %d %d", &x,&y,&z, &a, &b, &g, &x_jack_eih, &y_jack_eih, &z_jack_eih, &a_jack_eih, &b_jack_eih, &g_jack_eih);
 	printf("VSP - %d %d %d %d %d %d %d %d %d %d %d %d\n", x,y,z, a, b, g, x_jack_eih, y_jack_eih, z_jack_eih, a_jack_eih, b_jack_eih, g_jack_eih);
-
+}
+catch(...)
+{
+     sr_msg->message ("Catched ERROR"); // 7 
+}
 //for(int i=0; i<12; i++)
 /*
 	sscanf(buffer,"%d %d %d %d %d %d %d %d %d %d %d %d",
@@ -399,7 +405,7 @@ double aux=0;
 	std::cout << "from VSP" << std::endl;
 	for(int i=0; i<6; i++)
 		//std::cout << from_vsp.comm_image.vis_sac.frame_E_T_G[i] << " ";
-		std::cout << from_vsp.comm_image.vis_sac.frame_E_r_G__f[i] << " ";
+		std::cout << from_vsp.comm_image.vis_sac.frame_E_r_G[i] << " ";
 	std::cout << std::endl;
 	// for(int i=0; i<16; i++)
 	// 	from_vsp.comm_image.camera.frame[i] = 0.5;

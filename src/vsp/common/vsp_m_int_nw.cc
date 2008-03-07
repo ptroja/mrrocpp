@@ -273,9 +273,11 @@ int main(int argc, char *argv[]) {
 		/* start the resource manager message loop */
 		sr_msg->message ("Device is waiting for clients...");
 		while(!TERMINATE) { // for(;;)
+//printf("VSP: main loop begin\n");
 			if((ctp = dispatch_block(ctp)) == NULL)
 				throw VSP_main_error(SYSTEM_ERROR, DISPATCH_LOOP_ERROR);	// wyrzucany blad
 			dispatch_handler(ctp);
+//printf("VSP: main loop end\n");
 	 		} // end for(;;)
           sr_msg->message ("VSP terminated");
 		} // koniec TRY
@@ -288,6 +290,7 @@ int main(int argc, char *argv[]) {
 
 /**************************** WRITE_TO_SENSOR ******************************/
 void write_to_sensor(VSP_COMMAND i_code){
+//printf("VSP: write_to_sensor begin\n");
 	switch(i_code){
 		case VSP_CONFIGURE_SENSOR:
 			ret_msg.vsp_report=VSP_REPLY_OK;
@@ -340,10 +343,12 @@ void write_to_sensor(VSP_COMMAND i_code){
 		default :
 			throw VSP_main_error(NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
 		};
+//printf("VSP: write_to_sensor_end\n");
 }
 
 /********************************* IO_READ **********************************/
 int io_read (resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb){
+//printf("VSP: io_read begin\n");
     int status;
 	if ((status = iofunc_read_verify (ctp, msg, ocb, NULL)) != EOK)
 		return (status);
@@ -375,10 +380,12 @@ int io_read (resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb){
      resmgr_msgwrite(ctp, &ret_msg, sizeof(VSP_REPORT) + vs->union_size, 0);
 	INITIATE_FLAG = false;
 	return(EOK);
+//printf("VSP: io_read end\n");
 }	// end io_read
 
 /********************************* IO_WRITE *********************************/
 int io_write (resmgr_context_t *ctp, io_write_t *msg, RESMGR_OCB_T *ocb){                                                                                 
+//printf("VSP: io_write begin\n");
     int     status;                                                               
 	if ((status = iofunc_write_verify(ctp, msg, ocb, NULL)) != EOK)
 		return (status);
@@ -388,11 +395,13 @@ int io_write (resmgr_context_t *ctp, io_write_t *msg, RESMGR_OCB_T *ocb){
 	resmgr_msgread(ctp, &vs->to_vsp, msg->i.nbytes, sizeof(msg->i));
 	write_to_sensor(vs->to_vsp.i_code);
 	return (EOK);
+printf("VSP: io_write end\n");
 } // end io_write
 
 
 /******************************** IO_DEVCTL *********************************/
 int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb) {
+//printf("VSP: io_devctl end\n");
     unsigned int status;
 	int *addr;
     if ((status = iofunc_devctl_default(ctp, msg, ocb)) != _RESMGR_DEFAULT)
