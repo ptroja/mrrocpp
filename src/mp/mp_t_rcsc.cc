@@ -681,12 +681,16 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
     {
         return true;
     }
+    
+  
     // uruchomienie generatora empty_gen
     if (run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK))
     {
         return true;
     }
     // wlaczenie generatora zacisku na kostce w robocie irp6ot
+
+
 
     // odejscie tracka od postumenta
 
@@ -1420,8 +1424,13 @@ void mp_task_rubik_cube_solver::task_initialization(void)
     sensor_m[SENSOR_CAMERA_ON_TRACK] =
         new ecp_mp_vis_sensor (SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
+    if (config.return_int_value("vis_servoing"))
+    {
+
     sensor_m[SENSOR_CAMERA_SA] =
         new ecp_mp_vis_sensor (SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+        
+        }
 
     // Konfiguracja wszystkich czujnikow
     for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();

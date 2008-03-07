@@ -149,7 +149,7 @@ bool ecp_linear_generator::next_step (  )
     int i; // licznik kolejnych wspolrzednych wektora [0..5]
 
     // Kontakt z MP
-    if (node_counter == td.interpolation_node_no)
+    if (node_counter-1 == td.interpolation_node_no)
     { // Koniec odcinka
         if (mp_communication_mode==1)
         {// by Y w zaleznosci od argumentow inicjacji generatora
@@ -457,7 +457,7 @@ bool ecp_linear_parabolic_generator::next_step ()
 
 
     // Kontakt z MP
-    if (node_counter == td.interpolation_node_no)
+    if (node_counter-1 == td.interpolation_node_no)
     { // Koniec odcinka
         ecp_t.ecp_termination_notice();
         return false;
