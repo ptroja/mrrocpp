@@ -1936,7 +1936,7 @@ wnd_irp6ot_xyz_zyz_ts_copy_cur_to_desired( PtWidget_t *widget, ApInfo_t *apinfo,
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p5, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]) , 0);
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_read_p6, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]) , 0);
 
-			for (int i=0; i< IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
+			for (int i=0; i< 6; i++)
 			{
 				wektor[i] = *wektor_ptgr[i];
 			}
@@ -1977,17 +1977,16 @@ irp6ot_xyz_euler_zyz_set_tool( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	{
 	if ( ui_state.irp6_on_track.edp.is_synchronised )
 	{
-	
 		PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_ts_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
-			
+
 		for(int i=0; i<6; i++)
 		{
-			tool_vector[i] = *wektor[i];			
+			tool_vector[i] = *wektor[i];
 		}
 	
 		// zlecenie wykonania ruchu
