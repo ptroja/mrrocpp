@@ -314,7 +314,7 @@ void edp_irp6s_postument_track_effector::arm_frame_2_pose_force_torque_at_frame 
             }
 
             Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
-            Ft_v_tr ft_tr_inv_current_frameatrix (!current_frame_wo_offset, Ft_v_tr::FT);
+            Ft_v_tr ft_tr_inv_current_frame_matrix (!current_frame_wo_offset, Ft_v_tr::FT);
 
             Homog_matrix current_tool(get_current_kinematic_model()->tool);
             Ft_v_tr ft_tr_inv_tool_matrix (!current_tool, Ft_v_tr::FT);
@@ -323,7 +323,7 @@ void edp_irp6s_postument_track_effector::arm_frame_2_pose_force_torque_at_frame 
             // sprowadzenie sil z ukladu bazowego do ukladu kisci
             // modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
 
-            Ft_v_vector current_force_torque (ft_tr_inv_tool_matrix *  ft_tr_inv_current_frameatrix * Ft_v_vector (current_force));
+            Ft_v_vector current_force_torque (ft_tr_inv_tool_matrix *  ft_tr_inv_current_frame_matrix * Ft_v_vector (current_force));
 
             current_force_torque.to_table (reply.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz);
 
@@ -497,10 +497,10 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 
         Homog_matrix current_frame_wo_offset = return_current_frame (WITHOUT_TRANSLATION);
 
-        Ft_v_tr ft_tr_current_frameatrix (current_frame_wo_offset, Ft_v_tr::FT);
-        Ft_v_tr ft_tr_inv_current_frameatrix = !ft_tr_current_frameatrix;
-        Ft_v_tr v_tr_current_frameatrix (current_frame_wo_offset, Ft_v_tr::V);
-        Ft_v_tr v_tr_inv_current_frameatrix = !v_tr_current_frameatrix;
+        Ft_v_tr ft_tr_current_frame_matrix (current_frame_wo_offset, Ft_v_tr::FT);
+        Ft_v_tr ft_tr_inv_current_frame_matrix = !ft_tr_current_frame_matrix;
+        Ft_v_tr v_tr_current_frame_matrix (current_frame_wo_offset, Ft_v_tr::V);
+        Ft_v_tr v_tr_inv_current_frame_matrix = !v_tr_current_frame_matrix;
 
         force_msr_download (current_force, previous_force);
         // sprowadzenie sil z ukladu bazowego do ukladu kisci
@@ -522,9 +522,9 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 
         // koniec dla trybu FIXED
 
-        Ft_v_vector current_force_torque (ft_tr_inv_tool_matrix *  ft_tr_inv_current_frameatrix * Ft_v_vector (current_force));
+        Ft_v_vector current_force_torque (ft_tr_inv_tool_matrix *  ft_tr_inv_current_frame_matrix * Ft_v_vector (current_force));
         //		Ft_v_vector tmp_force_torque (Ft_v_tr((!current_tool) * (!current_frame_wo_offset), Ft_v_tr::FT) * Ft_v_vector (current_force));
-        Ft_v_vector previous_force_torque (ft_tr_inv_tool_matrix *  ft_tr_inv_current_frameatrix * Ft_v_vector (previous_force));
+        Ft_v_vector previous_force_torque (ft_tr_inv_tool_matrix *  ft_tr_inv_current_frame_matrix * Ft_v_vector (previous_force));
         /*
         		switch (motion_type)
         		{
@@ -550,7 +550,7 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
         }
 
 
-        previous_move_rot_vector =  v_tr_inv_tool_matrix * v_tr_inv_current_frameatrix * previous_move_rot_vector;
+        previous_move_rot_vector =  v_tr_inv_tool_matrix * v_tr_inv_current_frame_matrix * previous_move_rot_vector;
         /*
         		switch (motion_type)
         		{
@@ -617,7 +617,7 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
 
 
 
-        previous_move_rot_vector =  v_tr_current_frameatrix * v_tr_tool_matrix * move_rot_vector;
+        previous_move_rot_vector =  v_tr_current_frame_matrix * v_tr_tool_matrix * move_rot_vector;
         // 	end: sprowadzenie predkosci ruchu do orientacji  ukladu bazowego lub ukladu koncowki
 
         //		if (debugi%10==0) printf("aaa: %f\n", force_xyz_torque_xyz[0] + force_torque[0]);
