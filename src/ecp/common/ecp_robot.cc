@@ -89,21 +89,25 @@ void ecp_robot::connect_to_edp(configurator &config, bool spawn_edp)
 	switch (robot_name) {
 		case ROBOT_IRP6_ON_TRACK:
 			edp_section = "[edp_irp6_on_track]";
+			number_of_servos = IRP6_ON_TRACK_NUM_OF_SERVOS;
 			break;
 		case ROBOT_IRP6_POSTUMENT:
 			edp_section = "[edp_irp6_postument]";
+			number_of_servos = IRP6_POSTUMENT_NUM_OF_SERVOS;
 			break;
 		case ROBOT_CONVEYOR:
 			edp_section = "[edp_conveyor]";
+			number_of_servos = CONVEYOR_NUM_OF_SERVOS;
 			break;
 		case ROBOT_SPEAKER:
 			edp_section = "[edp_speaker]";
 			break;
 		case ROBOT_IRP6_MECHATRONIKA:
 			edp_section = "[edp_irp6_mechatronika]";
+			number_of_servos = IRP6_MECHATRONIKA_NUM_OF_SERVOS;
 			break;
 		default:
-			printf("ERROR: unknown robot name in ecp_robot constructor\n");
+			fprintf(stderr, "ERROR: unknown robot name in ecp_robot constructor\n");
 			edp_section = NULL;
 			break;
 	}
