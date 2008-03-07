@@ -27,7 +27,6 @@ public:
 };
 // ------------------------------------------------------------------------
 
-
 class ecp_task;
 
 class ecp_robot : public ecp_mp_robot
@@ -41,17 +40,18 @@ class ecp_robot : public ecp_mp_robot
     // ostatnio zrealizowanej pozycji oraz pozycji zadanej
 private:
     // Kopiowanie bufora przesylanego z MP do bufora wysylanego do EDP
-    virtual void copy_mp_to_edp_buffer (c_buffer& mp_buffer);
+    void copy_mp_to_edp_buffer (c_buffer& mp_buffer);
 
     // by Y - o dziwo tego nie bylo !!!
     // Kopiowanie bufora przesylanego z EDP do bufora wysylanego do MP
-    virtual void copy_edp_to_mp_buffer (r_buffer& mp_buffer);
+    void copy_edp_to_mp_buffer (r_buffer& mp_buffer);
     
-    // int fd;	// by Y&W
-protected:
+    // zainicjowanie komunikacji
+    void connect_to_edp (configurator &config, bool spawn_edp);
 
-    // int UI_fd; // by Y&W - przeniesione z procesu master
     pid_t EDP_MASTER_Pid; // Identyfikator procesu driver'a edp_m
+
+protected:
 
     // strukture EDP_command_and_reply_buffer.instruction, ktora jest
     // nastepnie wyslana przez funkcje execute_motion() do EDP.
@@ -59,9 +59,6 @@ protected:
     // odpowiedz EDP na wyslany rozkaz, ktora moze byc wykorzystana
     // przez generator.next_step()
     // Funkcja generator.next_step() przygotowuje rozkazy dla EDP wypelniajac
-
-    // by Y&W - przerzucenie zainicjowania komunikacji z procesu master do klasy
-    void connect_to_edp (const char* edp_net_attach_point);
     
     ecp_buffer EDP_command_and_reply_buffer;
 
@@ -93,7 +90,7 @@ public:
     // destruktor by Y - do usuniecia obiektu do komunikacji z SR
     virtual ~ecp_robot(void);
 
-    virtual void synchronise ( void );
+    void synchronise(void);
     // Zlecenie synchronizacji robota
     // Pobranie aktualnych polozen
 

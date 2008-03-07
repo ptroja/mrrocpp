@@ -6,93 +6,22 @@
 #include "ecp/common/ecp_robot.h"
 #include "ecp/common/ecp_task.h"
 
-// -------------------------------------------------------------------
-// Konstruktor klasy robot
-// -------------------------------------------------------------------
-
 // konstruktor wywolywany z UI
-ecp_robot::ecp_robot(ROBOT_ENUM _robot_name, configurator &_config, sr_ecp *_sr_ecp_msg)
-        :
-        ecp_mp_robot(_robot_name)
+ecp_robot::ecp_robot(ROBOT_ENUM _robot_name, configurator &_config, sr_ecp *_sr_ecp_msg) :
+	ecp_mp_robot(_robot_name)
 {
-    char *edp_section;
+	EDP_command_and_reply_buffer.sr_ecp_msg = _sr_ecp_msg;
 
-    communicate = true; // domyslnie robot jest aktywny
-    EDP_command_and_reply_buffer.sr_ecp_msg = _sr_ecp_msg;
-
-    // name of the edp_section depends on _robot_name
-    switch (_robot_name)
-    {
-    case ROBOT_IRP6_ON_TRACK:
-        edp_section = "[edp_irp6_on_track]";
-        number_of_servos = IRP6_ON_TRACK_NUM_OF_SERVOS;
-        break;
-    case ROBOT_IRP6_POSTUMENT:
-        edp_section = "[edp_irp6_postument]";
-        number_of_servos = IRP6_POSTUMENT_NUM_OF_SERVOS;
-        break;
-    case ROBOT_CONVEYOR:
-        edp_section = "[edp_conveyor]";
-        break;
-    case ROBOT_SPEAKER:
-        edp_section = "[edp_speaker]";
-        break;
-    case ROBOT_IRP6_MECHATRONIKA:
-        edp_section = "[edp_irp6_mechatronika]";
-        number_of_servos = IRP6_MECHATRONIKA_NUM_OF_SERVOS;
-        break;
-    default:
-        printf("ERROR: unknown robot name in ecp_robot constructor\n");
-        edp_section = NULL;
-        break;
-    }
-
-    EDP_MASTER_Pid = _config.process_spawn(edp_section);
-    //	delay(10000);
-    if (edp_section)
-        connect_to_edp (_config.return_attach_point_name
-                                      (configurator::CONFIG_SERVER, 	"resourceman_attach_point",	edp_section));
-
+	connect_to_edp(_config, true);
 }
 
 // konstruktor wywolywany z ECP
-ecp_robot::ecp_robot(ROBOT_ENUM _robot_name, ecp_task& _ecp_object)
-        :
-          ecp_mp_robot(_robot_name)
+ecp_robot::ecp_robot(ROBOT_ENUM _robot_name, ecp_task& _ecp_object) :
+	ecp_mp_robot(_robot_name)
 {
-    char *edp_section;
+	EDP_command_and_reply_buffer.sr_ecp_msg = _ecp_object.sr_ecp_msg;
 
-    communicate = true; // domyslnie robot jest aktywny
-    EDP_command_and_reply_buffer.sr_ecp_msg = _ecp_object.sr_ecp_msg;
-
-    // name of the edp_section depends on _robot_name
-    switch (_robot_name)
-    {
-    case ROBOT_IRP6_ON_TRACK:
-        edp_section = "[edp_irp6_on_track]";
-        break;
-    case ROBOT_IRP6_POSTUMENT:
-        edp_section = "[edp_irp6_postument]";
-        break;
-    case ROBOT_CONVEYOR:
-        edp_section = "[edp_conveyor]";
-        break;
-    case ROBOT_SPEAKER:
-        edp_section = "[edp_speaker]";
-        break;
-    case ROBOT_IRP6_MECHATRONIKA:
-        edp_section = "[edp_irp6_mechatronika]";
-        break;
-    default:
-        printf("ERROR: unknown robot name in ecp_robot constructor\n");
-        edp_section = NULL;
-        break;
-    }
-
-    if (edp_section)
-        connect_to_edp (_ecp_object.config.return_attach_point_name
-                        (configurator::CONFIG_SERVER, 	"resourceman_attach_point",	edp_section));
-
+	connect_to_edp(_ecp_object.config, false);
 }
 
 // -------------------------------------------------------------------
@@ -150,131 +79,140 @@ void ecp_robot::copy_edp_to_mp_buffer(r_buffer& mp_buffer)
 
 
 // ---------------------------------------------------------------
-void ecp_robot::connect_to_edp (const char* edp_net_attach_point)
+void ecp_robot::connect_to_edp(configurator &config, bool spawn_edp)
 {
-    uint64_t e;     // kod bledu systemowego
-    short tmp = 0;
+	communicate = false;
+	
+	char *edp_section;
+	
+    // name of the edp_section depends on _robot_name
+	switch (robot_name) {
+		case ROBOT_IRP6_ON_TRACK:
+			edp_section = "[edp_irp6_on_track]";
+			break;
+		case ROBOT_IRP6_POSTUMENT:
+			edp_section = "[edp_irp6_postument]";
+			break;
+		case ROBOT_CONVEYOR:
+			edp_section = "[edp_conveyor]";
+			break;
+		case ROBOT_SPEAKER:
+			edp_section = "[edp_speaker]";
+			break;
+		case ROBOT_IRP6_MECHATRONIKA:
+			edp_section = "[edp_irp6_mechatronika]";
+			break;
+		default:
+			printf("ERROR: unknown robot name in ecp_robot constructor\n");
+			edp_section = NULL;
+			break;
+	}
+	
+	EDP_MASTER_Pid = (spawn_edp) ? config.process_spawn(edp_section) : -1;
+	
+	const char* edp_net_attach_point =
+			config.return_attach_point_name(configurator::CONFIG_SERVER, "resourceman_attach_point", edp_section);
 
-    printf("connect_to_edp...");
-    fflush (stdout);
+	printf("connect_to_edp");
+	fflush(stdout);
 
-    // kilka sekund  (~5) na otworzenie urzadzenia
+	short tmp = 0;
 #if !defined(USE_MESSIP_SRR)
-
-    while ((EDP_fd = name_open( edp_net_attach_point, NAME_FLAG_ATTACH_GLOBAL)) <0 )
-    {
+	while ((EDP_fd = name_open(edp_net_attach_point, NAME_FLAG_ATTACH_GLOBAL)) < 0)
 #else
-        while ((EDP_fd = messip_channel_connect(NULL, edp_net_attach_point, MESSIP_NOTIMEOUT)) == NULL )
-        {
+	while ((EDP_fd = messip_channel_connect(NULL, edp_net_attach_point, MESSIP_NOTIMEOUT)) == NULL )
 #endif
-            if ((tmp++)<CONNECT_RETRY)
-            {
-                usleep(1000*CONNECT_DELAY);
-                printf(",");
-                fflush(stdout);
-            }
-            else
-            {
-                e = errno;
-                perror("Unable to locate EDP_MASTER process\n");
-                EDP_command_and_reply_buffer.sr_ecp_msg->message (SYSTEM_ERROR, e, "Unable to locate EDP_MASTER process");
-                throw ecp_robot::ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
-            }
-        }
-        printf("done\n");
+	{
+		if ((tmp++)<CONNECT_RETRY) {
+			usleep(1000*CONNECT_DELAY);
+			printf(".");
+			fflush(stdout);
+		} else {
+			int e = errno; // kod bledu systemowego
+			perror("Unable to locate EDP_MASTER process\n");
+			EDP_command_and_reply_buffer.sr_ecp_msg->message(SYSTEM_ERROR, e, "Unable to locate EDP_MASTER process");
+			throw ecp_robot::ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+		}
+	}
+	printf(".done\n");
+	
+    communicate = true;
+}
 
-    }
-    // -------------------------------------------------------------------
+void ecp_robot::synchronise(void)
+{
+	// Zlecenie synchronizacji robota
 
+	/*
+	 // maskowanie sygnalu SIGTERM 
+	 // w celu zapobierzenia przerwania komunikacji ECP z EDP pomiedzy SET a QUERY - usuniete
 
-    // ---------------------------------------------------------------
-    void ecp_robot::synchronise ( void )
-    {
-        // Zlecenie synchronizacji robota
-        //  printf("\n synchronizacja fd=%d",fd);  // debug
+	 sigset_t set;
 
-        /*
-        // maskowanie sygnalu SIGTERM 
-        // w celu zapobierzenia przerwania komunikacji ECP z EDP pomiedzy SET a QUERY - usuniete
+	 sigemptyset( &set );
+	 sigaddset( &set, SIGTERM );
 
-        sigset_t set;
+	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1) 
+	 {
+	 printf ("blad w ECP procmask signal\n");
+	 }
+	 */
+	// komunikacja wlasciwa
+	EDP_command_and_reply_buffer.instruction.instruction_type = SYNCHRO;
 
-        sigemptyset( &set );
-        sigaddset( &set, SIGTERM );
+	EDP_command_and_reply_buffer.send(EDP_fd); // Wyslanie zlecenia synchronizacji
+	EDP_command_and_reply_buffer.query(EDP_fd); // Odebranie wyniku zlecenia
 
-        if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1) 
-        {
-        	 printf ("blad w ECP procmask signal\n");
-    }
-        */
-        // komunikacja wlasciwa
-        EDP_command_and_reply_buffer.instruction.instruction_type = SYNCHRO;
-        EDP_command_and_reply_buffer.send(EDP_fd);  // Wyslanie zlecenia synchronizacji
-        EDP_command_and_reply_buffer.query(EDP_fd); // Odebranie wyniku zlecenia
-        if (EDP_command_and_reply_buffer.reply_package.reply_type == SYNCHRO_OK)
-        {
-            synchronised = true;
-        }
-        else
-        {
-            synchronised = false;
-        }
-        /*
-        // odmaskowanie sygnalu SIGTERM 
-          	sigemptyset( &set );
+	synchronised = (EDP_command_and_reply_buffer.reply_package.reply_type == SYNCHRO_OK);
+			
+	/*
+	 // odmaskowanie sygnalu SIGTERM 
+	 sigemptyset( &set );
 
-        if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1) 
-        {
-        printf ("blad w ECP procmask signal\n");
-    }
-        */
-    } // end: irp6_on_track_robot::synchronise ()
-    // ---------------------------------------------------------------
+	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1) 
+	 {
+	 printf ("blad w ECP procmask signal\n");
+	 }
+	 */
+}
 
 
+    void ecp_robot::execute_motion(void)
+{
+	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
+	/*
+	 // maskowanie sygnalu SIGTERM 
+	 // w celu zapobierzenia przerwania komunikacji ECP z EDP pomiedzy SET a QUERY - usuniete
 
-    // ---------------------------------------------------------------
-    // virtual // wywalam Y&W - zmiana w kompilatorze
-    void ecp_robot::execute_motion (void)
-    {
-        // Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
-        /*
-        // maskowanie sygnalu SIGTERM 
-        // w celu zapobierzenia przerwania komunikacji ECP z EDP pomiedzy SET a QUERY - usuniete
+	 sigset_t set;
 
-        sigset_t set;
+	 sigemptyset( &set );
+	 sigaddset( &set, SIGTERM );
 
-        sigemptyset( &set );
-        sigaddset( &set, SIGTERM );
+	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1) 
+	 {
+	 printf ("blad w ECP procmask signal\n");
+	 }
+	 */
+	// komunikacja wlasciwa
+	EDP_command_and_reply_buffer.send(EDP_fd);
+	if (EDP_command_and_reply_buffer.reply_package.reply_type == ERROR) {
+		EDP_command_and_reply_buffer.query(EDP_fd);
+		throw ECP_error (NON_FATAL_ERROR, EDP_ERROR);
+	}
+	EDP_command_and_reply_buffer.query(EDP_fd);
 
-        if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1) 
-        {
-        	 printf ("blad w ECP procmask signal\n");
-    }
-        */
-        // komunikacja wlasciwa
-        EDP_command_and_reply_buffer.send(EDP_fd);
-        if (EDP_command_and_reply_buffer.reply_package.reply_type == ERROR)
-        {
-            EDP_command_and_reply_buffer.query(EDP_fd);
-            throw ECP_error (NON_FATAL_ERROR, EDP_ERROR);
-        }
-        EDP_command_and_reply_buffer.query(EDP_fd);
+	/*
+	 // odmaskowanie sygnalu SIGTERM 
 
-        /*
-        // odmaskowanie sygnalu SIGTERM 
+	 sigemptyset( &set );
 
-        sigemptyset( &set );
-
-        if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1) 
-        {
-        printf ("blad w ECP procmask signal\n");
-    }
-        */
-        if (EDP_command_and_reply_buffer.reply_package.reply_type == ERROR)
-        {
-            throw ECP_error (NON_FATAL_ERROR, EDP_ERROR);
-        }
-
-    } // end: irp6_on_track_robot::execute_motion (void)
-    /*---------------------------------------------------------------------*/
+	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1) 
+	 {
+	 printf ("blad w ECP procmask signal\n");
+	 }
+	 */
+	if (EDP_command_and_reply_buffer.reply_package.reply_type == ERROR) {
+		throw ECP_error (NON_FATAL_ERROR, EDP_ERROR);
+	}
+}

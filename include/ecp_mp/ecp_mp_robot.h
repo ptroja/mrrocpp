@@ -6,7 +6,6 @@
 #include "common/sensor.h"
 #include "ecp_mp/transmitter.h"
 
-
 struct robot_transmission_data
 {
 
@@ -138,13 +137,8 @@ struct robot_transmission_data
 
 };
 
-
 class ecp_mp_robot
 {
-
-protected:
-
-
 public:
     const ROBOT_ENUM robot_name; // by Y - nazwa robota (track, postument etc.)
     bool communicate; // okresla czy robot ma byc obslugiwany w Move
@@ -153,7 +147,6 @@ public:
 
     // destruktor by Y - do usuniecia obiektu do komunikacji z SR
     virtual ~ecp_mp_robot(void);
-
 };
 
 #endif
