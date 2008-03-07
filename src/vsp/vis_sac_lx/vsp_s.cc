@@ -54,7 +54,7 @@
 
 #define BUFFER_SIZE 8*256 //8*
 
-#define BUFFER_EIH_SIZE 14*256
+#define BUFFER_EIH_SIZE 14*256 //14
 
 int sockfd, portno, n;
 struct sockaddr_in serv_addr;
@@ -101,6 +101,15 @@ int a_jack_eih=0;
 int b_jack_eih=0;
 int g_jack_eih=0;
 
+int f1x_eih=0;
+int f2x_eih=0;
+int f3x_eih=0;
+int f4x_eih=0;
+
+int f1y_eih=0;
+int f2y_eih=0;
+int f3y_eih=0;
+int f4y_eih=0;
 
 int C_T_G[16];
 
@@ -256,7 +265,7 @@ try
 	if (n < 0) 
          printf("ERROR reading from socket");
 	sscanf(buffer,"%d %d %d %d %d %d", &x_sac,&y_sac,&z_sac, &a_sac, &b_sac, &g_sac);
-	printf("VSP_SAC - %d %d %d %d %d %d\n", x_sac,y_sac,z_sac, a_sac, b_sac, g_sac);
+//	printf("VSP_SAC - %d %d %d %d %d %d\n", x_sac,y_sac,z_sac, a_sac, b_sac, g_sac);
 
 
 //EIH
@@ -268,8 +277,10 @@ try
     n_eih = read(sockfd_eih,buffer_eih,BUFFER_EIH_SIZE);
 	if (n_eih < 0) 
          printf("ERROR reading from socket");
-	sscanf(buffer_eih,"%d %d %d %d %d %d %d %d %d %d %d %d", &x,&y,&z, &a, &b, &g, &x_jack_eih, &y_jack_eih, &z_jack_eih, &a_jack_eih, &b_jack_eih, &g_jack_eih);
-	printf("VSP - %d %d %d %d %d %d %d %d %d %d %d %d\n", x,y,z, a, b, g, x_jack_eih, y_jack_eih, z_jack_eih, a_jack_eih, b_jack_eih, g_jack_eih);
+	sscanf(buffer_eih,"%d %d %d %d %d %d %d %d %d %d %d %d", // %d %d %d %d %d %d %d %d", 
+&x,&y,&z, &a, &b, &g, &x_jack_eih, &y_jack_eih, &z_jack_eih, &a_jack_eih, &b_jack_eih, &g_jack_eih);
+//&f1x_eih, &f1y_eih, &f2x_eih, &f2y_eih, &f3x_eih, &f3y_eih, &f4x_eih, &f4y_eih);
+//	printf("VSP - %d %d %d %d %d %d %d %d %d %d %d %d\n", x,y,z, a, b, g, x_jack_eih, y_jack_eih, z_jack_eih, a_jack_eih, b_jack_eih, g_jack_eih);
 }
 catch(...)
 {
@@ -402,11 +413,11 @@ double aux=0;
 	//for(int i=2; i<6; i++)
 	//	from_vsp.comm_image.vis_sac.frame_E_r_G__f[i]=0;
 	
-	std::cout << "from VSP" << std::endl;
-	for(int i=0; i<6; i++)
+	//std::cout << "from VSP" << std::endl;
+	//for(int i=0; i<6; i++)
 		//std::cout << from_vsp.comm_image.vis_sac.frame_E_T_G[i] << " ";
-		std::cout << from_vsp.comm_image.vis_sac.frame_E_r_G[i] << " ";
-	std::cout << std::endl;
+	//	std::cout << from_vsp.comm_image.vis_sac.frame_E_r_G[i] << " ";
+	//std::cout << std::endl;
 	// for(int i=0; i<16; i++)
 	// 	from_vsp.comm_image.camera.frame[i] = 0.5;
      // sr_msg->message ("VSP Get reading ok");   

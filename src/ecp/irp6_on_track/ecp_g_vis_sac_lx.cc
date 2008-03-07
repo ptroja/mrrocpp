@@ -327,12 +327,7 @@ std::cout << "C_T_G" << std::endl;
 
 vsp_vis_sac->image.vis_sac.frame_E_r_G[5],0,-0.05);
 //std::cout <<"Rota C_T_Gxxx " << vsp_vis_sac->image.vis_sac.frame_E_r_G[5] <<" " << O_r_G[0][4] << " "<< O_r_G[0][5] <<std::endl;
-std::cout <<"VVVVVVVVVVVVVVV C_T_Gxxx ";
-for(int i=0; i<6; i++)
-{
-std::cout  << vsp_vis_sac->image.vis_sac.frame_E_r_G[i];
-}
-std::cout<<std::endl;
+
 
 
 //EIH
@@ -349,20 +344,20 @@ std::cout<<std::endl;
 -vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[3]
 ,0,0);
 
-
+/*
 std::cout << "FROMVSP EIH_JACK ";
 	for (int i=0; i<6; i++)
 	{
 		std::cout << vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[i] << " ";
 	}
 	std::cout << std::endl;
-
+*/
 
 //podjazd gdy sie nie ruszamy
 	if(fabs(O_r_G[1][0]-O_r_G[0][0])<=0.02 && fabs(O_r_G[1][1]-O_r_G[0][1])<=0.02) //0.007
 	{
 		steps2switch++;
-		std::cout << "STOPPED" << std::endl;
+
 	}
 	else
 	{
@@ -396,7 +391,7 @@ std::cout << "FROMVSP EIH_JACK ";
 //	}
 
 	//x2g=-0.07;
-std::cout <<"x2g " << x2g << std::endl;
+
 	G_Tx_S.set_xyz_rpy(x2g, 0, 0, 0, 0, 0);
 
 	O_Tx_E.set_frame_tab(the_robot->EDP_data.current_predicted_arm_frame);
@@ -687,7 +682,7 @@ O_Tx_Ep=O_Tx_Ep*G_Tx_G2;
 
 O_Tx_Ep.get_xyz_angle_axis(O_r_Ep[0]);
 
-std::cout <<"Rota Epppp " << O_r_Ep[0][3] <<" " << O_r_Ep[0][4] << " "<< O_r_Ep[0][5] <<std::endl;
+//std::cout <<"Rota Epppp " << O_r_Ep[0][3] <<" " << O_r_Ep[0][4] << " "<< O_r_Ep[0][5] <<std::endl;
 
 
 //	O_Tx_Ep.get_frame_tab( the_robot->EDP_data.next_arm_frame); //jesli ABSOLUTNIE zadajemy O_Tx_E

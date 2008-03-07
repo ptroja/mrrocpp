@@ -35,11 +35,8 @@ void ecp_mp_vis_sac_lx_sensor::get_reading(){
 	if(from_vsp.vsp_report == VSP_REPLY_OK)
 	{
 	
-		memcpy( &image.vis_sac, &(from_vsp.comm_image.vis_sac) , union_size);				std::cout << "ECP_MP " << sizeof(image.vis_sac) <<" " << sizeof(from_vsp.comm_image.vis_sac) << std::endl;
-		for(int i=0; i<16; i++)
-			std::cout << from_vsp.comm_image.vis_sac.frame_E_T_G[i] << " ";
-		std::cout << std::endl;
+		memcpy( &image.vis_sac, &(from_vsp.comm_image.vis_sac) , union_size);				
 
 	}			
-	std::cout << "OUT of block" << std::endl;
+
 };
