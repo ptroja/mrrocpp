@@ -20,7 +20,7 @@
 #include "lib/mathtr.h"
 
 y_simple_generator::y_simple_generator(ecp_task& _ecp_task, int step):
-	 ecp_generator (_ecp_task, true){ 	step_no = step;	};
+	 ecp_generator (_ecp_task){ 	step_no = step;	};
 
 bool y_simple_generator::first_step ( ) {
 

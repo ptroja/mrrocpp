@@ -207,44 +207,45 @@ void mp_irp6s_and_conv_robot::create_next_pose_command (void)
     }
 }
 
-void mp_irp6s_and_conv_robot::get_reply (void)
+void mp_irp6s_and_conv_robot::get_reply(void)
 {
-    // pobiera z pakietu przeslanego z ECP informacje i wstawia je do
-    // odpowiednich skladowych generatora lub warunku
-    ecp_td.ecp_reply = ecp_reply_package.reply;
-    ecp_td.reply_type = ecp_reply_package.ecp_reply.reply_package.reply_type;
-    switch (ecp_td.reply_type)
-    {
-    case ERROR:
-        ecp_td.error_no.error0 = ecp_reply_package.ecp_reply.reply_package.error_no.error0;
-        ecp_td.error_no.error1 = ecp_reply_package.ecp_reply.reply_package.error_no.error1;
-        break;
-    case ACKNOWLEDGE:
-        break;
-    case SYNCHRO_OK:
-        break;
-    case ARM_INPUTS:
-        get_input_reply();
-    case ARM:
-        get_arm_reply();
-        break;
-    case RMODEL_INPUTS:
-        get_input_reply();
-    case RMODEL:
-        get_rmodel_reply();
-        break;
-    case INPUTS:
-        get_input_reply();
-        break;
-    case ARM_RMODEL_INPUTS:
-        get_input_reply();
-    case ARM_RMODEL:
-        get_arm_reply();
-        get_rmodel_reply();
-        break;
-    default:  // bledna przesylka
-        throw MP_error (NON_FATAL_ERROR, INVALID_EDP_REPLY);
-    }
+	// pobiera z pakietu przeslanego z ECP informacje i wstawia je do
+	// odpowiednich skladowych generatora lub warunku
+	ecp_td.ecp_reply = ecp_reply_package.reply;
+	ecp_td.reply_type = ecp_reply_package.ecp_reply.reply_package.reply_type;
+	switch (ecp_td.reply_type) {
+		case ERROR:
+			ecp_td.error_no.error0
+					= ecp_reply_package.ecp_reply.reply_package.error_no.error0;
+			ecp_td.error_no.error1
+					= ecp_reply_package.ecp_reply.reply_package.error_no.error1;
+			break;
+		case ACKNOWLEDGE:
+			break;
+		case SYNCHRO_OK:
+			break;
+		case ARM_INPUTS:
+			get_input_reply();
+		case ARM:
+			get_arm_reply();
+			break;
+		case RMODEL_INPUTS:
+			get_input_reply();
+		case RMODEL:
+			get_rmodel_reply();
+			break;
+		case INPUTS:
+			get_input_reply();
+			break;
+		case ARM_RMODEL_INPUTS:
+			get_input_reply();
+		case ARM_RMODEL:
+			get_arm_reply();
+			get_rmodel_reply();
+			break;
+		default: // bledna przesylka
+			throw MP_error (NON_FATAL_ERROR, INVALID_EDP_REPLY);
+	}
 }
 
 void mp_irp6s_and_conv_robot::get_input_reply (void)

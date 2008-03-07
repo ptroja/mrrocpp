@@ -17,7 +17,7 @@
 // ####################################################################################################
 
 ecp_teach_in_generator::ecp_teach_in_generator (ecp_task& _ecp_task):
-        ecp_generator (_ecp_task, true)
+        ecp_generator (_ecp_task)
 {
     pose_list.clear();
     pose_list_iterator = pose_list.end();

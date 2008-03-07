@@ -51,7 +51,7 @@ ostream& operator<<(ostream& s, const valarray<double>& v) {
 
 irp6ot_nurbs_generator::irp6ot_nurbs_generator (ecp_task& _ecp_task,
 	 const nurbs_tdes &ntdes, int mp_communication_mode_arg)
-: ecp_generator (_ecp_task, true) 
+: ecp_generator (_ecp_task) 
 {
 	mp_communication_mode_=mp_communication_mode_arg;
 	ntdes_ptr_ = &ntdes;

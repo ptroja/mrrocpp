@@ -7,7 +7,7 @@
 class ecp_generator_t : public ecp_generator {
 
 public:
-	ecp_generator_t(ecp_task& _ecp_task, bool _is_robot_active);
+	ecp_generator_t(ecp_task& _ecp_task);
 	
 	bool first_step ();
 	bool next_step ();

@@ -137,8 +137,7 @@ printf("Zwykla wiadomosc!\n");
                 case FC_EXIT:
                     // Zakonczenie ruchu.
                     TERMINATE=true;
-                    ecp_t->set_ecp_reply(TASK_TERMINATED);
-                    ecp_t->mp_buffer_receive_and_send();
+                    ecp_t->ecp_termination_notice();
                     break;
                 }; // end: switch
         // Jesli trzeba odswiezyc okno.

@@ -113,15 +113,15 @@ printf("Elo - Oczekiwanie na wiadomosc!\n");
                     break;
                 default:
                     break;
-                }; // end switch
+                }
             continue;
-            };
+            }
 printf("Elo - Wiadomosci z QNX IO!\n");
         // Wiadomosci z QNX IO.
         if (from_ui_msg.hdr.type >= _IO_BASE && from_ui_msg.hdr.type <= _IO_MAX) {
             MsgReply(rcvid, EOK, 0, 0);
             continue;
-            };
+            }
         // Zwykla wiadomosc.
         switch(from_ui_msg.command){
                 case TR_LOAD_TRAJECTORY:
@@ -173,10 +173,9 @@ printf("Elo - Wiadomosci z QNX IO!\n");
                 case TR_EXIT:
                     // Zakonczenie dzialania procesu.
                     TERMINATE = true;
-                    ecp_t->set_ecp_reply(TASK_TERMINATED);
-                    ecp_t->mp_buffer_receive_and_send();
+                    ecp_t->ecp_termination_notice();
                     break;
-                }; // end: switch
+                }
         if (from_ui_msg.command == TR_LOAD_TRAJECTORY){
             // Odsylamy liczbe elementow na liscie.
             macrosteps = trg->pose_list_length();
@@ -184,10 +183,10 @@ printf("Elo - Wiadomosci z QNX IO!\n");
         }else{
             // Odeslanie pustej odpowiedzi.
             MsgReply(rcvid, EOK, NULL, 0);
-            }; // end: else
-        }; // end: while
+            }
+        }
           return NULL;
-    }; // end: UI_communication_thread
+    }
 
 /*********************** TRAJECTORY RENDER THREAD *************************/
 void* trajectory_reproduce_thread (void*  arg ){

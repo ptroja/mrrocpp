@@ -30,14 +30,12 @@ public:
 	int step_no;
 	
 	// konstruktor
-	time_generator();
 	time_generator(ecp_task& _ecp_task, int step=0);  
 	
 	virtual bool first_step ();
 
 	virtual bool next_step ();
 
-}; // end:
-// --------------------------------------------------------------------------
+};
 
 #endif

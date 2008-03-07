@@ -12,10 +12,10 @@
 
 #include "lib/mathtr.h"
 
-tzu_simple_generator :: tzu_simple_generator(ecp_task& _ecp_task, int step) : ecp_generator (_ecp_task, true)
+tzu_simple_generator :: tzu_simple_generator(ecp_task& _ecp_task, int step) : ecp_generator (_ecp_task)
 { 		
 	step_no = step;          	
-};
+}
 
 static FILE *file;
 
@@ -62,11 +62,8 @@ bool tzu_simple_generator :: first_step ( )
 	printf("KONIEC first step\n");
 	sleep(10);
 	return true;
-}; // end: bool tzu_simple_generator::first_step (map <SENSOR_ENUM, sensor*>& sensor_m, robot& the_robot )
-// --------------------------------------------------------------------------
+}
 
-
-// --------------------------------------------------------------------------
 bool tzu_simple_generator::next_step ( ) 
 {
 	/* wskakuje tu jak w mp wcistne pulse ecp trigger */
@@ -174,5 +171,5 @@ bool tzu_simple_generator::next_step ( )
 	
 	
 	return true;
-};
+}
 

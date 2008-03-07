@@ -23,7 +23,7 @@
 
 
 y_nose_run_force_generator::y_nose_run_force_generator(ecp_task& _ecp_task, int step):
-        ecp_generator (_ecp_task, true)
+        ecp_generator (_ecp_task)
 {
     step_no = step;
 };
@@ -123,7 +123,7 @@ bool y_nose_run_force_generator::next_step ( )
 
 
 y_egg_force_generator::y_egg_force_generator(ecp_task& _ecp_task, int step, int mode):
-        ecp_generator (_ecp_task, true)
+        ecp_generator (_ecp_task)
 {
     step_no = step;
     int_mode = mode;
@@ -441,7 +441,7 @@ bool y_egg_force_generator::next_step ( )
 
 
 bias_edp_force_generator::bias_edp_force_generator(ecp_task& _ecp_task):
-        ecp_generator (_ecp_task, true)
+        ecp_generator (_ecp_task)
 {}
 
 
@@ -1272,12 +1272,12 @@ bool y_advanced_drawing_teach_in_force_generator::next_step ( )
 
 
 ecp_tff_nose_run_generator::ecp_tff_nose_run_generator(ecp_task& _ecp_task, int step):
-        ecp_generator (_ecp_task, true)
+        ecp_generator (_ecp_task)
 {
     step_no = step;
     // domyslnie wszytkie osie podatne a pulse_check nieaktywne
     configure (true, true, true, true, true, true, false);
-};
+}
 
 // decyduje ktore osie maja byc podatne
 void ecp_tff_nose_run_generator::configure(bool x, bool y, bool z, bool g, bool b, bool a, bool pulse_check_activated_l)
@@ -1404,10 +1404,10 @@ bool ecp_tff_nose_run_generator::next_step ()
 
 
 ecp_tff_rubik_grab_generator::ecp_tff_rubik_grab_generator(ecp_task& _ecp_task, int step):
-        ecp_generator (_ecp_task, true)
+        ecp_generator (_ecp_task)
 {
     step_no = step;
-};
+}
 
 
 void ecp_tff_rubik_grab_generator::configure(double l_goal_position, double l_position_increment,
@@ -1535,15 +1535,15 @@ bool ecp_tff_rubik_grab_generator::next_step ()
 
 
 ecp_tff_rubik_face_rotate_generator::ecp_tff_rubik_face_rotate_generator(ecp_task& _ecp_task, int step):
-        ecp_generator (_ecp_task, true)
+        ecp_generator (_ecp_task)
 {
     step_no = step;
-};
+}
 
 void ecp_tff_rubik_face_rotate_generator::configure(double l_turn_angle)
 {
     turn_angle = l_turn_angle;
-};
+}
 
 
 // ----------------------------------------------------------------------------------------------
@@ -1711,7 +1711,7 @@ bool ecp_tff_rubik_face_rotate_generator::next_step ()
 
 
 ecp_tff_gripper_approach_generator::ecp_tff_gripper_approach_generator(ecp_task& _ecp_task, int step):
-        ecp_generator (_ecp_task, true)
+        ecp_generator (_ecp_task)
 {
     step_no = step;
 };

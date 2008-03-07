@@ -221,7 +221,7 @@ void robot_stopped_condition::save_rse_list(char* filename)
 
 /*****************************  KONSTRUKTOR *********************************/
 robot_stopped_condition::robot_stopped_condition(ecp_task& _ecp_task) :
-	ecp_generator(_ecp_task, true)
+	ecp_generator(_ecp_task)
 {
 	// Ustawienie elementow list na NULL.
 	rse_list.clear();

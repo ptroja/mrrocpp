@@ -110,10 +110,10 @@ int manual_moves_automatic_measures_generator::mam_list_length(void) {
 
 
 /*****************************  KONSTRUKTOR *********************************/
-manual_moves_automatic_measures_generator::manual_moves_automatic_measures_generator
-	 (ecp_task& _ecp_task, int _axes_number): ecp_generator (_ecp_task, true)
- {
-	 UI_fd = _ecp_task.UI_fd;
+manual_moves_automatic_measures_generator::manual_moves_automatic_measures_generator(ecp_task& _ecp_task, int _axes_number) :
+	ecp_generator(_ecp_task)
+{
+	UI_fd = _ecp_task.UI_fd;
 	// Ustawienie elementow list na NULL.
 	mam_list.clear();
 	// Przepisanie liczby osi robota.
@@ -121,19 +121,20 @@ manual_moves_automatic_measures_generator::manual_moves_automatic_measures_gener
 	// Przydzielenie pamieci na pozycje z ostatniego ruchu.
 	last_motor_position = new double [axes_number];
 	// Wyzerowanie ostatniego polozenia.
-	for(int i =0; i<axes_number; i++)
+	for (int i =0; i<axes_number; i++)
 		last_motor_position[i] = 0;
 	// Pomiar nie zostal dodany do listy.
 	measure_added = false;
-    }; // end: manual_moves_automatic_measures_generator
+}
 
 /******************************  DESTRUKTOR **********************************/
-manual_moves_automatic_measures_generator::~manual_moves_automatic_measures_generator (void) {
+manual_moves_automatic_measures_generator::~manual_moves_automatic_measures_generator(void)
+{
 	// Usuniecie elementow z listy MAM.
 	flush_mam_list();
 	// Zwolnienie pamieci.
 	delete(last_motor_position);
-    }; // end: manual_moves_automatic_measures_generator
+}
 
 
 /******************************** FIRST STEP ***********************************/

@@ -27,7 +27,7 @@
 #include "ecp/common/ecp_g_jarosz.h"
 
 ecp_delta_generator::ecp_delta_generator(ecp_task& _ecp_task):
-        ecp_generator (_ecp_task, true)
+        ecp_generator (_ecp_task)
 {}
 
 // ####################################################################################################

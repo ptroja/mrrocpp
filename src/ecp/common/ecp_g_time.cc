@@ -17,10 +17,10 @@
 #include "lib/mathtr.h"
 
 time_generator::time_generator(ecp_task& _ecp_task, int step):
-        ecp_generator (_ecp_task, true)
+        ecp_generator (_ecp_task)
 {
     step_no = step;
-};
+}
 
 
 bool time_generator::first_step ( )
@@ -49,7 +49,6 @@ bool time_generator::first_step ( )
 
     return true;
 }
-; // end: bool time_generator::first_step (map <SENSOR_ENUM, sensor*>& sensor_m, robot& the_robot )
 // --------------------------------------------------------------------------
 
 
@@ -62,8 +61,6 @@ bool time_generator::next_step ( )
         ecp_t.mp_buffer_receive_and_send ();
         return false;
     }
-
-
 
     // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
     the_robot->EDP_data.instruction_type = SET;
@@ -106,4 +103,3 @@ bool time_generator::next_step ( )
 
     return true;
 }
-;  // end: bool time_generator::next_step (, robot& the_robot )

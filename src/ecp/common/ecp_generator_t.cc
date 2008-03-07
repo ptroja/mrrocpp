@@ -1,7 +1,7 @@
 #include "ecp/common/ecp_generator_t.h"
 
-ecp_generator_t::ecp_generator_t(ecp_task& _ecp_task, bool _is_robot_active) :
-	ecp_generator(_ecp_task, _is_robot_active)
+ecp_generator_t::ecp_generator_t(ecp_task& _ecp_task) :
+	ecp_generator(_ecp_task)
 {
 	copy_edp_buffers_in_move=false;
 }

@@ -28,7 +28,7 @@ void ecp_task_rcsc_irp6ot::task_initialization(void)
     ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
 
-    gt = new ecp_generator_t (*this, true);
+    gt = new ecp_generator_t (*this);
 
     nrg = new ecp_tff_nose_run_generator (*this, 8);
     //	nrg->configure(false, false, true, false, false, false, false);

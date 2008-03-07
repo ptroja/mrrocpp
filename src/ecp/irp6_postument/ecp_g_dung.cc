@@ -20,15 +20,15 @@
 #include "lib/mathtr.h"
 #include "math.h"
 
-dung_generator::dung_generator(ecp_task& _ecp_task, int step):ecp_generator (_ecp_task, true)
-{ 	
-	step_no = step;	
-	//
+dung_generator::dung_generator(ecp_task& _ecp_task, int step) :
+	ecp_generator(_ecp_task)
+{
+	step_no = step;
 	oq1 = oq2 = oq3 = oq4 = oq5 = oq6 = 200.0;
-};
+}
 
-bool dung_generator::first_step ( ) {
-
+bool dung_generator::first_step()
+{
 	td.interpolation_node_no = 1;
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
@@ -36,25 +36,18 @@ bool dung_generator::first_step ( ) {
 	Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
-
-		the_robot->EDP_data.instruction_type = GET;
-		the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-		the_robot->EDP_data.set_type = ARM_DV;
-		the_robot->EDP_data.set_arm_type = JOINT;
-		the_robot->EDP_data.get_arm_type = JOINT;
-		the_robot->EDP_data.motion_type = ABSOLUTE;
-		the_robot->EDP_data.motion_steps = td.internode_step_no;
-		the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-
-		
-	
+	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
+	the_robot->EDP_data.set_type = ARM_DV;
+	the_robot->EDP_data.set_arm_type = JOINT;
+	the_robot->EDP_data.get_arm_type = JOINT;
+	the_robot->EDP_data.motion_type = ABSOLUTE;
+	the_robot->EDP_data.motion_steps = td.internode_step_no;
+	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
 	return true;
-}; // end: bool y_simple_generator::first_step (map <SENSOR_ENUM, sensor*>& sensor_m, robot& the_robot )
-//--------------------------------------------------------------------------
+}
 
-
-// --------------------------------------------------------------------------
 bool dung_generator::next_step ( ) {
 	// define variable
 	double	g[6];
@@ -260,4 +253,4 @@ bool dung_generator::next_step ( ) {
 	
 	
 	return true;
-}; // end:  y_simple_generator::next_step (, robot& the_robot )
+}

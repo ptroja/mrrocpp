@@ -24,7 +24,7 @@ class ecp_speaker_robot: public ecp_robot
 	// robota wykorzystywanych przez generator
 	// Ten bufor znajduje sie w robocie
 
-	virtual void get_reply (void);
+	void get_reply (void);
 
 }; // end: class ecp_speaker_robot
 // ---------------------------------------------------------------

@@ -204,12 +204,6 @@ void ecp_task::Move(ecp_generator& the_generator)
 			|| mp_buffer_receive_and_send()) && the_generator.next_step());
 }
 
-// Przekazanie identyfikatora procesu MP
-void ecp_task::set_mp_pid (pid_t mp_pid)
-{
-    MP_pid = mp_pid;
-}
-
 // Badanie typu polecenia z MP
 MP_COMMAND ecp_task::mp_command_type (void) const
 {
@@ -230,9 +224,9 @@ void ecp_task::ecp_termination_notice (void)
 }
 
 // Wysyla puls do Mp przed oczekiwaniem na spotkanie
-void ecp_task::send_pulse_to_mp (char pulse_code, long pulse_value)
+void ecp_task::send_pulse_to_mp (int pulse_code, int pulse_value)
 {
-    if (MsgSendPulse (MP_fd , sched_get_priority_min(SCHED_FIFO),  pulse_code,  pulse_value)==-1)
+    if (MsgSendPulse (MP_fd , sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value) == -1)
     {
         perror("Blad w wysylaniu pulsu do mp\n");
     }

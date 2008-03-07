@@ -28,7 +28,6 @@ public:
 	trajectory_description td;
 	
 	// konstruktor
-	pawel_generator();
 	~pawel_generator();
 	pawel_generator(ecp_task& _ecp_task, int step);  
 	

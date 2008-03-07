@@ -10,7 +10,7 @@
 #include "ecp/conveyor/ecp_g_test.h"
 
 y_simple_generator::y_simple_generator(ecp_task& _ecp_task, int step):
-		ecp_generator (_ecp_task, true)
+		ecp_generator (_ecp_task)
 {
 	step_no = step;
 }

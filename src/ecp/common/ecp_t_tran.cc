@@ -57,7 +57,7 @@ void ecp_task_tran::main_task_algorithm(void)
 	
 	ecp_wait_for_start();
 
-	ecp_generator_t gt (*this, true);
+	ecp_generator_t gt (*this);
 	
 	for(;;) { // Wewnetrzna petla nieskonczona
 		

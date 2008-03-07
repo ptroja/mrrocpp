@@ -43,7 +43,7 @@ FILE* research;
 
 
 pawel_generator::pawel_generator(ecp_task& _ecp_task, int step):
-        ecp_generator (_ecp_task, true)
+        ecp_generator (_ecp_task)
 {
 
     step_no = step;

@@ -10,7 +10,7 @@
 #include "ecp_mp/ecp_mp_tr_player.h"
 
 playerjoy_generator::playerjoy_generator(ecp_task& _ecp_task, int step):
-        ecp_generator (_ecp_task, true)
+        ecp_generator (_ecp_task)
 {
     step_no = step;
 }

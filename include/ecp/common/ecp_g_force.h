@@ -25,7 +25,6 @@ public:
 	double delta[6];
 	
 	// konstruktor
-	y_nose_run_force_generator();
 	y_nose_run_force_generator(ecp_task& _ecp_task, int step=0);  
 	
 	virtual bool first_step ();

@@ -19,10 +19,10 @@
 #include "lib/mathtr.h"
 
 y_simple_generator::y_simple_generator(ecp_task& _ecp_task, int step):
-        ecp_generator (_ecp_task, true)
+        ecp_generator (_ecp_task)
 {
     step_no = step;
-};
+}
 
 static FILE *file;
 
@@ -61,7 +61,6 @@ bool y_simple_generator::first_step ( )
 
     return true;
 }
-; // end: bool y_simple_generator::first_step (map <SENSOR_ENUM, sensor*>& sensor_m, robot& the_robot )
 // --------------------------------------------------------------------------
 
 
@@ -365,4 +364,4 @@ bool y_simple_generator::next_step ( )
 
 
     return true;
-};
+}

@@ -27,7 +27,7 @@ public:
 	speaking_generator(ecp_task& _ecp_task, int step=0);  
 	
 	virtual bool first_step ();
-	bool configure(char* text);
+	bool configure(const char* text);
 	virtual bool next_step ();
 
 }; // end:

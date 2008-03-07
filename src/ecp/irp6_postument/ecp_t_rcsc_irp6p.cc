@@ -36,7 +36,7 @@ void ecp_task_rcsc_irp6p::task_initialization(void)
     // the robot is choose dependendat on the section of configuration file sent as argv[4]
     ecp_m_robot = new ecp_irp6_postument_robot (*this);
 
-    gt = new ecp_generator_t (*this, true);
+    gt = new ecp_generator_t (*this);
 
     nrg = new ecp_tff_nose_run_generator (*this, 8);
 

@@ -17,10 +17,10 @@
 
 
 progpanel_generator::progpanel_generator(ecp_task& _ecp_task, int step):
-        ecp_generator (_ecp_task, true)
+        ecp_generator (_ecp_task)
 {
     step_no = step;
-};
+}
 
 
 bool progpanel_generator::first_step ( )
@@ -48,7 +48,6 @@ bool progpanel_generator::first_step ( )
 
     return true;
 }
-; // end: bool progpanel_generator::first_step (map <SENSOR_ENUM, sensor*>& sensor_m, robot& the_robot )
 // --------------------------------------------------------------------------
 
 
@@ -127,4 +126,3 @@ bool progpanel_generator::next_step ( )
 
     return true;
 }
-;  // end: bool progpanel_generator::next_step (, robot& the_robot )

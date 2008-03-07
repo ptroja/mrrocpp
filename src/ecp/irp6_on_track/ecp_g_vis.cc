@@ -94,7 +94,7 @@ int steps2switch=0;
 // double frame1[4][4];
 
 	seven_eye_run_linear_generator::seven_eye_run_linear_generator(ecp_task& _ecp_task, int step): 
-		ecp_generator (_ecp_task, true) { 		step_no = step;          	};  
+		ecp_generator (_ecp_task) { 		step_no = step;          	};  
 
 
 bool seven_eye_run_linear_generator::first_step (  ) {

@@ -17,9 +17,9 @@
 #include "ecp/speaker/ecp_g_speak.h"
 
 speaking_generator::speaking_generator(ecp_task& _ecp_task, int step):
-	 ecp_generator(_ecp_task, true){	step_no = step;  };  
+	 ecp_generator(_ecp_task){	step_no = step;  };  
 
-bool speaking_generator::configure(char* text)
+bool speaking_generator::configure(const char* text)
 {
 
 	if (text!=NULL)

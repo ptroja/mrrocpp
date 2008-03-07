@@ -4,7 +4,7 @@
 #include "ecp/player/ecp_g_speechrecognition.h"
 
 speechrecognition_generator::speechrecognition_generator(ecp_task& _ecp_task)
-	: ecp_generator (_ecp_task, true)
+	: ecp_generator (_ecp_task)
 {
 	char * hostname = ecp_t.config.return_string_value("player_hostname");
 	assert(hostname);
