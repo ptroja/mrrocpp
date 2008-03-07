@@ -92,6 +92,8 @@ int step_no;
 	double O_eps_EG[3][6];
 	double E_eps_EG[3][6]; //E_r_G; - prawdopodobnie to samo
   	
+  	double fEIH_G[8];
+  	
   	double measure_border_u[6];//={1.090, 0.150, 0.305, 0.606, 1.57, 3.12}; //Zmienic ogranicz Z
 	double measure_border_d[6];//={0.82, -0.150, 0.155, -0.606, 1.267, 2.5}; // gamma 1.8
 

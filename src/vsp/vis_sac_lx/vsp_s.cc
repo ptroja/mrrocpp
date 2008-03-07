@@ -40,7 +40,7 @@
 
 #define BUFFER_SIZE 8*256 //8*
 
-#define BUFFER_EIH_SIZE 14*256 //14
+#define BUFFER_EIH_SIZE 22*256 //14
 
 int sockfd_sac, portno;
 struct sockaddr_in serv_addr;
@@ -254,12 +254,13 @@ void vsp_vis_sac_lx_sensor::initiate_reading(void)
 			exit(-1);
 		}
 		
-		if (sscanf(buffer_eih,"%d %d %d %d %d %d %d %d %d %d %d %d", // %d %d %d %d %d %d %d %d", 
-						&x,&y,&z, &a, &b, &g, &x_jack_eih, &y_jack_eih, &z_jack_eih, &a_jack_eih, &b_jack_eih, &g_jack_eih) != 12) {
+		if (sscanf(buffer_eih,"%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d", 
+						&x,&y,&z, &a, &b, &g, &x_jack_eih, &y_jack_eih, &z_jack_eih, &a_jack_eih, &b_jack_eih, &g_jack_eih,
+						&f1x_eih, &f1y_eih, &f2x_eih, &f2y_eih, &f3x_eih, &f3y_eih, &f4x_eih, &f4y_eih) != 20) { //12
 			fprintf(stderr, "sscanf(buffer) failed\n");
 			exit(-1);
 		}
-		//&f1x_eih, &f1y_eih, &f2x_eih, &f2y_eih, &f3x_eih, &f3y_eih, &f4x_eih, &f4y_eih);
+		//printf("VSP_EIH - %d %d %d %d %d %d %d %d\n", f1x_eih, f1y_eih, f2x_eih, f2y_eih, f3x_eih, f3y_eih, f4x_eih, f4y_eih);
 		//printf("VSP_EIH - %d %d %d %d %d %d %d %d %d %d %d %d\n", x,y,z, a, b, g, x_jack_eih, y_jack_eih, z_jack_eih, a_jack_eih, b_jack_eih, g_jack_eih);
 //	}
 //	catch(...)
@@ -370,6 +371,16 @@ void vsp_vis_sac_lx_sensor::get_reading(void)
 	from_vsp.comm_image.vis_sac.frame_E_r_G[3]=(double) a_sac/100000;
 	from_vsp.comm_image.vis_sac.frame_E_r_G[4]=(double) b_sac/100000;
 	from_vsp.comm_image.vis_sac.frame_E_r_G[5]=(double) g_sac/100000;
+	
+	from_vsp.comm_image.vis_sac.fEIH_G[0]=(double) f1x_eih/1000;
+	from_vsp.comm_image.vis_sac.fEIH_G[1]=(double) f1y_eih/1000;
+	from_vsp.comm_image.vis_sac.fEIH_G[2]=(double) f2x_eih/1000;
+	from_vsp.comm_image.vis_sac.fEIH_G[3]=(double) f2y_eih/1000;
+	from_vsp.comm_image.vis_sac.fEIH_G[4]=(double) f3x_eih/1000;
+	from_vsp.comm_image.vis_sac.fEIH_G[5]=(double) f3y_eih/1000;
+	from_vsp.comm_image.vis_sac.fEIH_G[6]=(double) f4x_eih/1000;
+	from_vsp.comm_image.vis_sac.fEIH_G[7]=(double) f4y_eih/1000;
+	
 
 	//for(int i=2; i<6; i++)
 	//	from_vsp.comm_image.vis_sac.frame_E_r_G__f[i]=0;

@@ -344,6 +344,11 @@ vsp_vis_sac->image.vis_sac.frame_E_r_G[5],0,-0.05);
 -vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[3]
 ,0,0);
 
+for(int i=0; i<8; i++)
+{
+	fEIH_G[i]=vsp_vis_sac->image.vis_sac.fEIH_G[i];
+}
+
 /*
 std::cout << "FROMVSP EIH_JACK ";
 	for (int i=0; i<6; i++)
@@ -446,7 +451,13 @@ std::cout << "FROMVSP EIH_JACK ";
 	}
 	std::cout << std::endl;
 	
-
+	std::cout << " EIH_FEAT ";
+	for (int i=0; i<8; i++)
+	{
+		std::cout << fEIH_G[i]<< " ";
+	}
+	std::cout << std::endl;
+	
 	//jak cos przyjdzie glupiego z CEIH
 	if(O_r_G__CEIH[0][0]>100 || O_r_G__CEIH[0][0]<-100)
 	{

@@ -73,6 +73,7 @@ typedef struct{
 			double frame_E_r_G[6];
 			double frame_E_r_G__CEIH[6];
 			double frame_E_r_G__f[6];
+			double fEIH_G[8];
 		} vis_sac;
 		
 		// rcs - rozwiazanie kostki Rubika
