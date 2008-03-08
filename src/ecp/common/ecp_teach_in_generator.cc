@@ -470,7 +470,7 @@ bool ecp_teach_in_generator::next_step (  )
     }
     else
     {
-        ecp_t.ecp_termination_notice();
+
         return false;
     }
 

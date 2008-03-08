@@ -207,7 +207,7 @@ bool y_simple_generator::next_step ( )
 
 
             printf ("-=KONIEC=-");
-            ecp_t.ecp_termination_notice();
+
             return false;
 
 
@@ -355,7 +355,7 @@ bool y_simple_generator::next_step ( )
     else if(ruch == 99)
     {
         printf ("-=KONIEC=-");
-        ecp_t.ecp_termination_notice();
+
         return false;
     }
 

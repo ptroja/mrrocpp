@@ -101,7 +101,7 @@ void ecp_task_pouring_irp6p::main_task_algorithm(void)
 				default:
 				break;
 			} // end switch
-			
+			ecp_termination_notice();
 			
 		} //end for
 		

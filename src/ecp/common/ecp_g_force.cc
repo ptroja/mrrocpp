@@ -442,7 +442,9 @@ bool y_egg_force_generator::next_step ( )
 
 bias_edp_force_generator::bias_edp_force_generator(ecp_task& _ecp_task):
         ecp_generator (_ecp_task)
-{}
+{
+
+}
 
 
 
@@ -451,7 +453,7 @@ bool bias_edp_force_generator::first_step ( )
     the_robot->EDP_data.instruction_type = SET;
     the_robot->EDP_data.set_type = RMODEL_DV;
     the_robot->EDP_data.set_rmodel_type = FORCE_BIAS;
-    ecp_t.set_ecp_reply (TASK_TERMINATED);
+   
 
     return true;
 }
@@ -1521,7 +1523,6 @@ bool ecp_tff_rubik_grab_generator::next_step ()
         the_robot->EDP_data.next_gripper_coordinate -= position_increment;
     else
     {
-        ecp_t.ecp_termination_notice();
         return false;
     }
 
@@ -1683,7 +1684,6 @@ bool ecp_tff_rubik_face_rotate_generator::next_step ()
                 if((	turn_angle < 0.0 && stored_gamma > current_gamma) || (
                             turn_angle > 0.0 && stored_gamma < current_gamma))
                 {
-                    ecp_t.ecp_termination_notice();
                     return false;
                 }
             }
@@ -1815,7 +1815,6 @@ bool ecp_tff_gripper_approach_generator::next_step ()
     {
         if (node_counter > motion_time)
         {
-            ecp_t.ecp_termination_notice();
             return false;
         }
     }

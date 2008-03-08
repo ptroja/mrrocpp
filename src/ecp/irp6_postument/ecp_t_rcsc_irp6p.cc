@@ -177,7 +177,7 @@ void ecp_task_rcsc_irp6p::main_task_algorithm(void)
                 break;
             } // end switch
 
-
+            ecp_termination_notice();
         } //end for
 
         // Oczekiwanie na STOP

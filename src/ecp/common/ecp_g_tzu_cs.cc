@@ -117,7 +117,7 @@ bool tzu_simple_generator::next_step ( )
 //			break;
 		case MOVE_END:
 			cout<<"**END**"<<endl;		
-			ecp_t.ecp_termination_notice();		
+	
 			return false;
 			break;
 //		default:

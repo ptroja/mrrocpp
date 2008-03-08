@@ -73,14 +73,6 @@ bool speaking_generator::next_step ( ) {
 	
 	last_sg_state = new_sg_state;
 	
-	if (last_sg_state != SG_FINISH)
-	{
-
-	}
-	else
-	{
-		ecp_t.ecp_termination_notice();
-	}
 	
 	
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji

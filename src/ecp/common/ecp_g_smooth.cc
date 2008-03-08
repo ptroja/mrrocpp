@@ -960,7 +960,7 @@ bool ecp_smooth_generator::next_step ()
     { // Koniec odcinka
         if(is_last_list_element())	//ostatni punkt
         {
-            ecp_t.ecp_termination_notice();
+
             return false;
         }
         else
@@ -1216,22 +1216,9 @@ bool ecp_tool_change_generator::first_step ()
 
 bool ecp_tool_change_generator::next_step ()
 {
-    if (first_interval)
-    {
-        ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
-    }
-    else
-    {
-        ecp_t.ecp_termination_notice();
-        return false;
-    }
 
 
-
-
-    first_interval=false;
-
-    return true;
+    return false;
 
 } // end: BOOLEAN ecp_smooth_pouring_generator::next_step ( )
 

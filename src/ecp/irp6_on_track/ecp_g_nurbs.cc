@@ -117,11 +117,7 @@ bool irp6ot_nurbs_generator::next_step (  )
 
    // Kontakt z MP
 	if (node_counter >= ntdes_ptr_->interpolation_node_no)  { // Koniec odcinka
-     	if (mp_communication_mode_==1){
-			ecp_t.set_ecp_reply (TASK_TERMINATED);		}
-		else	{
-	     	ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);     	}
-     	ecp_t.mp_buffer_receive_and_send ();
+     
      	return false;
      	} 
 

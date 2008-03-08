@@ -248,7 +248,7 @@ bool mp_empty_generator::next_step () {
 // 	if (trigger) printf("Yh\n"); else printf("N\n");
 // printf("mp next step\n");
 // UWAGA: dzialamy na jednoelementowej liscie robotow
-/*
+
 	for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
 	        robot_m_iterator != robot_m.end(); robot_m_iterator++) {
 		if ( robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED ) {
@@ -256,7 +256,7 @@ bool mp_empty_generator::next_step () {
 			return false;
 		}
 	}
-*/
+
 	return true;
 }
 
