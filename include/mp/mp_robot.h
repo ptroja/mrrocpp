@@ -38,9 +38,7 @@ protected:
     mp_task &mp_object;
 
 public:
-    sr_ecp &sr_ecp_msg;    // by Y - Wskaznik na obiekt do komunikacji z SR
-
-
+    sr_ecp &sr_ecp_msg;    // obiekt do komunikacji z SR
 
     //! deskryptor wezla na ktorym jest powolane ECP oraz jego PID (dla mp_task::kill_all_ECP)
     uint32_t nd;
@@ -68,18 +66,18 @@ public:
     // Zlecenie wykonania ruchu przez robota
     // (realizowane przez klase konkretna):
     // na poziomie MP jest to polecenie dla ECP.
-    virtual void execute_motion (void);
+    void execute_motion (void);
 
     // Zlecenie zakonczenia ruchu przez robota
     // (realizowane przez klase konkretna):
     // na poziomie MP jest to polecenie dla ECP.
-    virtual void terminate_ecp (void);
+    void terminate_ecp (void);
 
-    virtual void start_ecp ( void );
+    void start_ecp ( void );
 
     // wypelnia bufor wysylkowy do EDP na podstawie danych zawartych w swych skladowych
     // Ten bufor znajduje sie w robocie
-    virtual void create_command ( void );
+    void create_command ( void );
 
     virtual void create_next_pose_command (void)
     {}
