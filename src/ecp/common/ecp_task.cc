@@ -219,8 +219,14 @@ void ecp_task::set_ecp_reply ( ECP_REPLY ecp_r)
 // Informacja dla MP o zakonczeniu zadania uzytkownika
 void ecp_task::ecp_termination_notice (void)
 {
+	
+	if (mp_command_type()!= END_MOTION)
+	{
+	
     set_ecp_reply (TASK_TERMINATED);
     mp_buffer_receive_and_send();
+    
+	}
 }
 
 // Wysyla puls do Mp przed oczekiwaniem na spotkanie
