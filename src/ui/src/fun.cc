@@ -1083,8 +1083,9 @@ int initiate_configuration()
 	 
  	 if (access(ui_state.config_file_relativepath, R_OK)!= 0 ) 
 	{
-	 	printf ("Wrong entry in default_file.cfg - change it manually: %s\n", ui_state.config_file_relativepath);
-		PtExit( EXIT_SUCCESS );
+	 	printf ("Wrong entry in default_file.cfg - load another configuration than: %s\n", ui_state.config_file_relativepath);
+		strcpy(ui_state.config_file_relativepath,"../configs/common.ini");
+	
 	 }
 
 	// sprawdzenie czy nazwa sesji jest unikalna
@@ -1159,9 +1160,9 @@ reload_whole_configuration() {
 
  	 if (access(ui_state.config_file_relativepath, R_OK) != 0 ) 
 	{
-	 	printf ("Wrong entry in default_file.cfg - change it manually: %s\n", ui_state.config_file_relativepath);
-		PtExit( EXIT_SUCCESS );
-	 }	
+	 	printf ("Wrong entry in default_file.cfg - load another configuration than: %s\n", ui_state.config_file_relativepath);
+		strcpy(ui_state.config_file_relativepath,"../configs/common.ini");
+		 }	
 
  
 	if ((ui_state.mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (ui_state.mp.state == UI_MP_PERMITED_TO_RUN) ){ // jesli nie dziala mp podmien mp ecp vsp
