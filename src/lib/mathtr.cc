@@ -11,6 +11,7 @@
 
 #include <math.h>
 #include <stdio.h>
+#include <iostream>
 
 #include "lib/mis_fun.h"
 #include "lib/mathtr.h"
@@ -815,23 +816,25 @@ void Homog_matrix::set_xyz_quaternion(double eta, double eps1, double eps2, doub
 {
 	// Macierz rotacji
 	
+
 	matrix_m[0][0] = 2*(eta*eta + eps1*eps1) -1;
-	matrix_m[0][1] = 2*(eps1*eps2 + eta*eps3);
-	matrix_m[0][2] = 2*(eps1*eps3 - eta*eps2);
+	matrix_m[1][0] = 2*(eps1*eps2 + eta*eps3);
+	matrix_m[2][0] = 2*(eps1*eps3 - eta*eps2);
 	
-	matrix_m[1][0] = 2*(eps1*eps2 - eta*eps3);
+	matrix_m[0][1] = 2*(eps1*eps2 - eta*eps3);
 	matrix_m[1][1] = 2*(eta*eta + eps2*eps2) - 1;
-	matrix_m[1][2] = 2*(eps2*eps3 + eta*eps1);
+	matrix_m[2][1] = 2*(eps2*eps3 + eta*eps1);
 	
-	matrix_m[2][0] = 2*(eps1*eps3 + eta*eps2);
-	matrix_m[2][1] = 2*(eps2*eps3 - eta*eps1);
+	matrix_m[0][2] = 2*(eps1*eps3 + eta*eps2);
+	matrix_m[1][2] = 2*(eps2*eps3 - eta*eps1);
 	matrix_m[2][2] = 2*(eta*eta + eps3*eps3) - 1;
 	
 	// Uzupelnienie macierzy wspolrzednymi polozenia
 	
-	matrix_m[3][0] = x;
-	matrix_m[3][1] = y;
-	matrix_m[3][2] = z;
+	matrix_m[0][3] = x;
+	matrix_m[1][3] = y;
+	matrix_m[2][3] = z;
+
 }// Homog_matrix::set_xyz_quaternion(double eta, K_vector eps, double x, double y, double z)
 
 
@@ -1892,7 +1895,7 @@ Ft_v_tr Ft_v_tr::operator* (const Ft_v_tr & m) const
 {
 // mnozenie macierzy
 
-	Ft_v_tr zwracana;
+//	Ft_v_tr zwracana;
 					
 	// REMOVED BECAUSE IT IS PROBABLY NOT CORRECT TO MULTIPLY IN SUCH A WAY
 	/*
@@ -1914,8 +1917,8 @@ Ft_v_tr Ft_v_tr::operator* (const Ft_v_tr & m) const
 		}
 	}
 */
-	zwracana.variant = variant;
-	zwracana.base_frame = base_frame * m.base_frame;
+
+Ft_v_tr zwracana(base_frame * m.base_frame, variant) ;
 
 return zwracana;
 }// end Homog_matrix::operator* (const Homog_matrix & m) const
@@ -1932,8 +1935,8 @@ Ft_v_vector Ft_v_tr::operator*(const Ft_v_vector & w) const
 	for(j=0;j<6;j++)
 		for(i=0;i<6;i++)
 			zwracany.w[j] += matrix_m[j][i] * w.w[i];
-
-	
+//	std::cout << "zwracany " << zwracany <<std::endl;
+//	std::cout << "w " << zwracany <<std::endl;
 return zwracany;
 }// Ft_v_tr::operator*(const Ft_v_vector & w) const
 
