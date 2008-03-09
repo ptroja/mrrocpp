@@ -14,7 +14,7 @@
 extern "C" {
 #endif
 
-#define CONNECT_RETRY	50
+#define CONNECT_RETRY	100
 #define CONNECT_DELAY	50
 
 // ----------------------- PRZYDATNE STALE ---------------------------
