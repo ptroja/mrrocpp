@@ -1876,7 +1876,7 @@ wnd_irp6p_xyz_zyz_ts_copy_cur_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, 
 			PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_ts_read_p5, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]) , 0);
 			PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_ts_read_p6, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]) , 0);
 
-			for (int i=0; i< IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
+			for (int i=0; i< 6; i++)
 			{
 				wektor[i] = *wektor_ptgr[i];
 			}
