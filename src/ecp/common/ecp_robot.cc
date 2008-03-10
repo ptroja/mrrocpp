@@ -81,7 +81,7 @@ void ecp_robot::copy_edp_to_mp_buffer(r_buffer& mp_buffer)
 // ---------------------------------------------------------------
 void ecp_robot::connect_to_edp(configurator &config, bool spawn_edp)
 {
-	communicate = false;
+
 	
 	char *edp_section;
 	
@@ -140,7 +140,7 @@ void ecp_robot::connect_to_edp(configurator &config, bool spawn_edp)
 	}
 	printf(".done\n");
 	
-    communicate = true;
+
 }
 
 void ecp_robot::synchronise(void)

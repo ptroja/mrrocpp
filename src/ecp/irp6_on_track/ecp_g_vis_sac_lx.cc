@@ -471,9 +471,9 @@ std::cout << "FROMVSP EIH_JACK ";
 		for (int i=0; i<6; i++)
 	{
 		//O_r_G[0][i]=0.5*O_r_G__CEIH[0][i]+0.5*O_r_G__CSAC[0][i]; //SAC+EIH
-		//O_r_G[0][i]=O_r_G__CSAC[0][i]; //SAC ONLY
+		O_r_G[0][i]=O_r_G__CSAC[0][i]; //SAC ONLY
 		//O_r_G[0][i]=O_r_G__CEIH[0][i]; //EIH ONLY
-		O_r_G[0][i]=O_r_G__fEIH[0][i]; //EIH JACK ONLY
+		//O_r_G[0][i]=O_r_G__fEIH[0][i]; //EIH JACK ONLY
 	}
 	
 	

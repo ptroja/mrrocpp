@@ -38,6 +38,8 @@ protected:
     mp_task &mp_object;
 
 public:
+    bool communicate; // okresla czy robot ma byc obslugiwany w Move
+
     sr_ecp &sr_ecp_msg;    // obiekt do komunikacji z SR
 
     //! deskryptor wezla na ktorym jest powolane ECP oraz jego PID (dla mp_task::kill_all_ECP)

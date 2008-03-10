@@ -29,7 +29,7 @@
 
 /*************************** CONDITION VALUE ********************************/
 bool robot_stopped_condition::first_step (){
-	the_robot->communicate=false;
+	communicate_with_edp=false;
 	return true;
 	};
 	
@@ -83,9 +83,9 @@ void robot_stopped_condition::get_current_position(double current_position[6]){
 	// Przepisanie rozkazu do bufora wysylkowego.
 	the_robot->create_command();	
 	// Zlecenie ruchu robota.
-	the_robot->communicate=true;
+	communicate_with_edp=true;
 	the_robot->execute_motion();
-	the_robot->communicate=false;
+	communicate_with_edp=false;
 	// Odebranie danych.
 	the_robot->get_reply();
 	// Przepisanie obecnego polozenia robota do bufora w zaleznosci od rodzaju wspolrzednych.
@@ -132,9 +132,9 @@ void robot_stopped_condition::add_rse_element(ecp_mp_digital_scales_sensor& the_
 	// Stworzenie rozkazu.
 	the_robot->create_command();
 	// Wyslanie rozkazu.
-	the_robot->communicate=true;
+	communicate_with_edp=true;
 	the_robot->execute_motion();
-	the_robot->communicate=false;
+	communicate_with_edp=false;
 	// Odebranie odczytow polozenia.
 	the_robot->get_reply();
 	// Pobranie odczytow z linialow.

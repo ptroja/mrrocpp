@@ -141,7 +141,6 @@ class ecp_mp_robot
 {
 public:
     const ROBOT_ENUM robot_name; // by Y - nazwa robota (track, postument etc.)
-    bool communicate; // okresla czy robot ma byc obslugiwany w Move
 
     ecp_mp_robot(ROBOT_ENUM _robot_name);
 

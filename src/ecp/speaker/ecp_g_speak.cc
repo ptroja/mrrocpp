@@ -42,7 +42,7 @@ bool speaking_generator::first_step ( ) {
 
 	//(sensor_m.begin())->second->base_period=1;
  	//(sensor_m.begin())->second->current_period=0;
-	the_robot->communicate = true;
+	communicate_with_edp = true;
 	
 
 	last_sg_state = new_sg_state = SG_FIRST_GET;
@@ -99,7 +99,7 @@ bool speaking_generator::next_step ( ) {
 			if (the_robot->EDP_data.speaking==0)
 			{
 				new_sg_state=SG_FINISH;	
-				the_robot->communicate = false;
+				communicate_with_edp = false;
 			}
 			else
 			{

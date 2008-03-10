@@ -185,7 +185,7 @@ void ecp_task::Move(ecp_generator& the_generator)
 		all_sensors_initiate_reading(the_generator.sensor_m);
 
 		// wykonanie kroku ruchu
-		if ((the_generator.the_robot) && the_generator.the_robot->communicate) {
+		if ((the_generator.the_robot) && the_generator.communicate_with_edp) {
 			if (the_generator.copy_edp_buffers_in_move) {
 				the_generator.the_robot->create_command();
 			}
