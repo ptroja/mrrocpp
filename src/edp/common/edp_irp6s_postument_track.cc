@@ -323,10 +323,8 @@ void edp_irp6s_postument_track_effector::arm_frame_2_pose_force_torque_at_frame 
             // sprowadzenie sil z ukladu bazowego do ukladu kisci
             // modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
 
-            Ft_v_vector current_force_torque (ft_tr_inv_tool_matrix *  ft_tr_inv_current_frame_matrix * Ft_v_vector (current_force));
-
+           Ft_v_vector current_force_torque (ft_tr_inv_tool_matrix *  ft_tr_inv_current_frame_matrix * Ft_v_vector (current_force));
             current_force_torque.to_table (reply.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz);
-
 
         }
         break;
@@ -658,11 +656,12 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
                 predicted_frame = predicted_frame * rot_frame;
             }
             predicted_frame.get_frame_tab(reply.arm.pose_force_torque_at_frame_def.predicted_arm_frame);
-
+/*
             for (int i=0; i<6; i++)
             {
                 reply.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i] = current_force_torque[i];
             }
+            */
             mt_tt_obj->trans_t_to_master_order_status_ready();
         }
 

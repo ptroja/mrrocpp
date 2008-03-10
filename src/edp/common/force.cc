@@ -104,9 +104,20 @@ void * edp_irp6s_postument_track_effector::edp_vsp_thread(void *arg)
         //!< oczekiwanie nowego pomiaru
         sem_wait(&(vs->new_ms));
         //!< przygotowanie struktury do wyslania
+		    double current_force[6];
+		    
+            Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
+            Ft_v_tr ft_tr_inv_current_frame_matrix (!current_frame_wo_offset, Ft_v_tr::FT);
 
+            Homog_matrix current_tool(get_current_kinematic_model()->tool);
+            Ft_v_tr ft_tr_inv_tool_matrix (!current_tool, Ft_v_tr::FT);		    
+		    
         // uwaga sila nie przemnozona przez tool'a i current frame orientation
-        force_msr_download(edp_vsp_reply.force, 0);
+        force_msr_download(current_force, 0);
+        
+                   Ft_v_vector current_force_torque (ft_tr_inv_tool_matrix *  ft_tr_inv_current_frame_matrix * Ft_v_vector (current_force));
+            current_force_torque.to_table (edp_vsp_reply.force);
+        
 
         counter++;
 

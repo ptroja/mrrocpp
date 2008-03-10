@@ -573,8 +573,7 @@ bool y_edge_follow_force_generator::next_step ( )
     the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;
 
     // sprowadzenie sil do ukladu kisci
-    Ft_v_vector force_torque = Ft_v_tr (!(Homog_matrix(the_robot->EDP_data.current_present_arm_frame)), Ft_v_tr::FT) *
-                               Ft_v_vector (the_robot->EDP_data.current_force_xyz_torque_xyz);
+    Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
 
 
     double wx = force_torque[0];
@@ -582,10 +581,16 @@ bool y_edge_follow_force_generator::next_step ( )
 
     double v = sqrt (wx*wx + wy*wy);
 
-    double s_alfa = wy / v;
+
+
+	if (v!=0.0)
+	{
+	
+	    double s_alfa = wy / v;
     double c_alfa = - wx / v;
 
     the_robot->EDP_data.next_position_velocity[1] = -0.002*v;
+   //     the_robot->EDP_data.next_position_velocity[1] = -0.00;
     //	the_robot->EDP_data.ECPtoEDP_position_velocity[1] = 0.0;
 
     // basic_rot_frame = Homog_matrix(c_alfa, s_alfa, 0.0,	-s_alfa, c_alfa, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
@@ -625,13 +630,13 @@ bool y_edge_follow_force_generator::next_step ( )
 
     printf("sensor: x: %+d, y: %+d, v:%+d, %f\n", (int) round(wx),  (int) round(wy), (int) round(v),
            atan2(s_alfa, c_alfa)*DEGREES_TO_RADIANS);
-
+	}
 
 
     return true;
 
 }
-; // end: bool y_edge_follow_force_generator::next_step ( )
+
 
 
 
