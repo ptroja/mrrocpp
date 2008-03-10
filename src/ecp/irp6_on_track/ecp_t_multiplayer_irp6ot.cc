@@ -64,6 +64,9 @@ void ecp_task_multiplayer_irp6ot::main_task_algorithm(void)
 				default:
 					break;
 			}
+			
+				ecp_termination_notice();
+			
 		}
 
 		// Oczekiwanie na STOP
