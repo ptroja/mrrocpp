@@ -19,7 +19,58 @@
 
 
 
+weight_meassure_generator::weight_meassure_generator(ecp_task& _ecp_task, double _weight_difference):
+ecp_generator (_ecp_task),
+weight_difference(_weight_difference),
+current_buffer_pointer(0),
+initial_weight(0.0)
+{
 
+
+}
+
+double weight_meassure_generator::count_weight(double fx, double fy, double fz) const
+{
+
+
+}
+
+void weight_meassure_generator::insert_in_buffer(double fx)
+{
+
+
+}
+
+void weight_meassure_generator::clear_buffer()
+{
+
+
+}
+
+
+double weight_meassure_generator::check_average_wieght_in_buffer(void) const
+{
+
+
+}
+
+void set_weight_difference(double _weight_difference)
+{
+
+
+}
+
+bool weight_meassure_generator::first_step()
+{
+
+
+}
+
+bool weight_meassure_generator::next_step()
+{
+
+
+}
 
 
 y_nose_run_force_generator::y_nose_run_force_generator(ecp_task& _ecp_task, int step):
