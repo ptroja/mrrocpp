@@ -39,7 +39,7 @@
 
 void * edp_irp6s_postument_track_effector::edp_vsp_thread_start(void* arg)
 {
-    static_cast<edp_irp6s_postument_track_effector*> (arg)->edp_vsp_thread(arg);
+    return static_cast<edp_irp6s_postument_track_effector*> (arg)->edp_vsp_thread(arg);
 }
 
 
@@ -143,7 +143,7 @@ void * edp_irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 
 void * edp_irp6s_postument_track_effector::force_thread_start(void* arg)
 {
-    static_cast<edp_irp6s_postument_track_effector*> (arg)->force_thread(arg);
+    return static_cast<edp_irp6s_postument_track_effector*> (arg)->force_thread(arg);
 }
 
 
