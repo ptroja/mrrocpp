@@ -61,6 +61,7 @@ void ecp_task_sk::task_initialization(void)
     yefg = new y_edge_follow_force_generator (*this, 8);
     befg = new bias_edp_force_generator(*this);
 
+
     switch (ecp_m_robot->robot_name)
     {
     case ROBOT_IRP6_ON_TRACK:
@@ -90,6 +91,10 @@ void ecp_task_sk::main_task_algorithm(void)
 {
     sr_ecp_msg->message("ECP sledzenie konturu - wcisnij start");
     ecp_wait_for_start();
+    
+//   weight_meassure_generator wmg(*this, -0.3);
+    
+    
     for(;;)
     { // Wewnetrzna petla nieskonczona
 
@@ -101,6 +106,8 @@ void ecp_task_sk::main_task_algorithm(void)
             sr_ecp_msg->message("Wodzenie do pozycji sledzenia konturu");
             sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
             Move ( *nrg);
+//		 sr_ecp_msg->message("wazenie");
+//            Move ( wmg);
 
             // usuniecie listy o ile istnieje
             yefg->flush_pose_list();

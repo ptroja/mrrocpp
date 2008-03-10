@@ -8,7 +8,9 @@
 
 #include <stdio.h>
 #include <fstream>
+#include <iostream>
 #include <time.h>
+#include <unistd.h>
 
 #include "common/typedefs.h"
 #include "common/impconst.h"
@@ -24,15 +26,12 @@ ecp_generator (_ecp_task),
 weight_difference(_weight_difference),
 current_buffer_pointer(0),
 initial_weight(0.0),
-initial_weight_counted(false)
+initial_weight_counted(false),
+catch_lag(CATCH_LAG),
+terminate_state_recognized(false)
 {
 clear_buffer();
 
-}
-
-double weight_meassure_generator::count_weight(double fx, double fy, double fz) const
-{
-	return sqrt(fx*fx+fy*fy+fz*fz);
 }
 
 void weight_meassure_generator::insert_in_buffer(double fx)
@@ -54,6 +53,9 @@ void weight_meassure_generator::clear_buffer()
 		weight_in_cyclic_buffer[current_buffer_pointer] = 0.0;
 	}	
 	current_buffer_pointer=0;
+    	initial_weight_counted = false;
+    	catch_lag = CATCH_LAG;
+    	terminate_state_recognized = false;
 }
 
 
@@ -65,7 +67,7 @@ double weight_meassure_generator::check_average_weight_in_buffer(void) const
 	{
 			returned_value += weight_in_cyclic_buffer[current_buffer_pointer];
 	}	
-
+	returned_value/=10;
 	return returned_value;
 }
 
@@ -76,11 +78,12 @@ void weight_meassure_generator::set_weight_difference(double _weight_difference)
 
 bool weight_meassure_generator::first_step()
 {
+
+	clear_buffer();
+
     the_robot->EDP_data.instruction_type = GET;
     the_robot->EDP_data.get_type = ARM_DV;
     the_robot->EDP_data.get_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
-    
-    	initial_weight_counted = false;
     
     return true;
 }
@@ -88,14 +91,26 @@ bool weight_meassure_generator::first_step()
 bool weight_meassure_generator::next_step()
 {
 
+	usleep(10000);
+
     if (ecp_t.pulse_check())
     { // Koniec odcinka
+    	printf("pulse_check\n");
         return false;
     }
+    		// transformacja ciezaru do osi z ukladu bazowego
+        Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_present_arm_frame);
+        current_frame_wo_offset.remove_translation();
 
-	insert_in_buffer (count_weight(the_robot->EDP_data.current_force_xyz_torque_xyz[0], 
-		the_robot->EDP_data.current_force_xyz_torque_xyz[1],
-		the_robot->EDP_data.current_force_xyz_torque_xyz[2]));
+//	std::cout << 	current_frame_wo_offset << std::endl;
+
+
+	    Ft_v_vector force_torque(Ft_v_tr (current_frame_wo_offset, Ft_v_tr::FT) * Ft_v_vector(the_robot->EDP_data.current_force_xyz_torque_xyz));
+
+
+	insert_in_buffer (-force_torque[2]);
+	
+	//std::cout << 	-force_torque[2] << std::endl;
 
 	// nie wyznaczono jeszczew wagi poczatkowej
 	if(!initial_weight_counted)
@@ -112,13 +127,30 @@ bool weight_meassure_generator::next_step()
 	//  wyznaczono wage poczatkowa
 	{
 		
-		if ((check_average_weight_in_buffer() - initial_weight) > weight_difference)
-		{
+		if (((weight_difference>0)&&(check_average_weight_in_buffer() - initial_weight) > weight_difference)||
+			((weight_difference<0)&&(check_average_weight_in_buffer() - initial_weight) < weight_difference))
 		
-			return false;
+		{
+			// wszytkie potweridzenia warunku koncowego musza wystapic pod rzad
+			if (!terminate_state_recognized)
+			{
+				catch_lag = CATCH_LAG;
+			}
+		
+			terminate_state_recognized = true;
+			//    	printf("check_average_weight_in_buffer: %f, %f\n", check_average_weight_in_buffer(), initial_weight );	
+			if ((--catch_lag) == 0)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
 		}
 		else
 		{
+			terminate_state_recognized = false;
 			return true;
 		}
 	
