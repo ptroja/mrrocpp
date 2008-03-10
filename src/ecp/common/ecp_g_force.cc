@@ -20,150 +20,157 @@
 #include "ecp/common/ecp_g_force.h"
 
 
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
+//
+// 			weight_meassure_generator
+//
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
+
+
 
 weight_meassure_generator::weight_meassure_generator(ecp_task& _ecp_task, double _weight_difference):
-ecp_generator (_ecp_task),
-weight_difference(_weight_difference),
-current_buffer_pointer(0),
-initial_weight(0.0),
-initial_weight_counted(false),
-catch_lag(CATCH_LAG),
-terminate_state_recognized(false)
+        ecp_generator (_ecp_task),
+        weight_difference(_weight_difference),
+        current_buffer_pointer(0),
+        initial_weight(0.0),
+        initial_weight_counted(false),
+        catch_lag(CATCH_LAG),
+        terminate_state_recognized(false)
 {
-clear_buffer();
+    clear_buffer();
 
 }
 
 void weight_meassure_generator::insert_in_buffer(double fx)
 {
-	
-	weight_in_cyclic_buffer[current_buffer_pointer] = fx;
-	
-	if ((++current_buffer_pointer)==WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE)
-	{
-		current_buffer_pointer=0;
-	}
+
+    weight_in_cyclic_buffer[current_buffer_pointer] = fx;
+
+    if ((++current_buffer_pointer)==WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE)
+    {
+        current_buffer_pointer=0;
+    }
 
 }
 
 void weight_meassure_generator::clear_buffer()
 {
-	for (int i=0; i<WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE; i++)
-	{
-		weight_in_cyclic_buffer[current_buffer_pointer] = 0.0;
-	}	
-	current_buffer_pointer=0;
-    	initial_weight_counted = false;
-    	catch_lag = CATCH_LAG;
-    	terminate_state_recognized = false;
+    for (int i=0; i<WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE; i++)
+    {
+        weight_in_cyclic_buffer[current_buffer_pointer] = 0.0;
+    }
+    current_buffer_pointer=0;
+    initial_weight_counted = false;
+    catch_lag = CATCH_LAG;
+    terminate_state_recognized = false;
 }
 
 
 double weight_meassure_generator::check_average_weight_in_buffer(void) const
 {
-	double returned_value=0.0;
-	
-	for (int i=0; i<WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE; i++)
-	{
-			returned_value += weight_in_cyclic_buffer[current_buffer_pointer];
-	}	
-	returned_value/=10;
-	return returned_value;
+    double returned_value=0.0;
+
+    for (int i=0; i<WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE; i++)
+    {
+        returned_value += weight_in_cyclic_buffer[current_buffer_pointer];
+    }
+    returned_value/=10;
+    return returned_value;
 }
 
 void weight_meassure_generator::set_weight_difference(double _weight_difference)
 {
-	weight_difference = _weight_difference;
+    weight_difference = _weight_difference;
 }
 
 bool weight_meassure_generator::first_step()
 {
 
-	clear_buffer();
+    clear_buffer();
 
     the_robot->EDP_data.instruction_type = GET;
     the_robot->EDP_data.get_type = ARM_DV;
     the_robot->EDP_data.get_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
-    
+
     return true;
 }
 
 bool weight_meassure_generator::next_step()
 {
 
-	usleep(10000);
+    usleep(10000);
 
     if (ecp_t.pulse_check())
     { // Koniec odcinka
-    	printf("pulse_check\n");
+        printf("pulse_check\n");
         return false;
     }
-    		// transformacja ciezaru do osi z ukladu bazowego
-        Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_present_arm_frame);
-        current_frame_wo_offset.remove_translation();
+    // transformacja ciezaru do osi z ukladu bazowego
+    Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_present_arm_frame);
+    current_frame_wo_offset.remove_translation();
 
-//	std::cout << 	current_frame_wo_offset << std::endl;
-
-
-	    Ft_v_vector force_torque(Ft_v_tr (current_frame_wo_offset, Ft_v_tr::FT) * Ft_v_vector(the_robot->EDP_data.current_force_xyz_torque_xyz));
+    //	std::cout << 	current_frame_wo_offset << std::endl;
 
 
-	insert_in_buffer (-force_torque[2]);
-	
-	//std::cout << 	-force_torque[2] << std::endl;
+    Ft_v_vector force_torque(Ft_v_tr (current_frame_wo_offset, Ft_v_tr::FT) * Ft_v_vector(the_robot->EDP_data.current_force_xyz_torque_xyz));
 
-	// nie wyznaczono jeszczew wagi poczatkowej
-	if(!initial_weight_counted)
-	{
-		if (current_buffer_pointer==0)
-		{
-			initial_weight_counted = true;
-			initial_weight = check_average_weight_in_buffer();			
-		}
-	
-	    return true;
-	}
-	else
-	//  wyznaczono wage poczatkowa
-	{
-		
-		if (((weight_difference>0)&&(check_average_weight_in_buffer() - initial_weight) > weight_difference)||
-			((weight_difference<0)&&(check_average_weight_in_buffer() - initial_weight) < weight_difference))
-		
-		{
-			// wszytkie potweridzenia warunku koncowego musza wystapic pod rzad
-			if (!terminate_state_recognized)
-			{
-				catch_lag = CATCH_LAG;
-			}
-		
-			terminate_state_recognized = true;
-			//    	printf("check_average_weight_in_buffer: %f, %f\n", check_average_weight_in_buffer(), initial_weight );	
-			if ((--catch_lag) == 0)
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
-		}
-		else
-		{
-			terminate_state_recognized = false;
-			return true;
-		}
-	
-	}
-	
-	
-    
+
+    insert_in_buffer (-force_torque[2]);
+
+    //std::cout << 	-force_torque[2] << std::endl;
+
+    // nie wyznaczono jeszczew wagi poczatkowej
+    if(!initial_weight_counted)
+    {
+        if (current_buffer_pointer==0)
+        {
+            initial_weight_counted = true;
+            initial_weight = check_average_weight_in_buffer();
+        }
+
+        return true;
+    }
+    else
+        //  wyznaczono wage poczatkowa
+    {
+
+        if (((weight_difference>0)&&(check_average_weight_in_buffer() - initial_weight) > weight_difference)||
+                ((weight_difference<0)&&(check_average_weight_in_buffer() - initial_weight) < weight_difference))
+
+        {
+            // wszytkie potweridzenia warunku koncowego musza wystapic pod rzad
+            if (!terminate_state_recognized)
+            {
+                catch_lag = CATCH_LAG;
+            }
+
+            terminate_state_recognized = true;
+            //    	printf("check_average_weight_in_buffer: %f, %f\n", check_average_weight_in_buffer(), initial_weight );
+            if ((--catch_lag) == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        else
+        {
+            terminate_state_recognized = false;
+            return true;
+        }
+    }
 
     return true;
-
 }
 
 
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
+//
+// 			y_nose_run_force_generator
+//
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
 
@@ -586,11 +593,17 @@ bool y_egg_force_generator::next_step ( )
 
 
 
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
+//
+// 			bias_edp_force_generator
+//
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
+
+
+
 bias_edp_force_generator::bias_edp_force_generator(ecp_task& _ecp_task):
         ecp_generator (_ecp_task)
-{
-
-}
+{}
 
 
 
@@ -599,7 +612,7 @@ bool bias_edp_force_generator::first_step ( )
     the_robot->EDP_data.instruction_type = SET;
     the_robot->EDP_data.set_type = RMODEL_DV;
     the_robot->EDP_data.set_rmodel_type = FORCE_BIAS;
-   
+
 
     return true;
 }
@@ -729,54 +742,54 @@ bool y_edge_follow_force_generator::next_step ( )
 
 
 
-	if (v!=0.0)
-	{
-	
-	    double s_alfa = wy / v;
-    double c_alfa = - wx / v;
+    if (v!=0.0)
+    {
 
-    the_robot->EDP_data.next_position_velocity[1] = -0.002*v;
-   //     the_robot->EDP_data.next_position_velocity[1] = -0.00;
-    //	the_robot->EDP_data.ECPtoEDP_position_velocity[1] = 0.0;
+        double s_alfa = wy / v;
+        double c_alfa = - wx / v;
 
-    // basic_rot_frame = Homog_matrix(c_alfa, s_alfa, 0.0,	-s_alfa, c_alfa, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
-    basic_rot_frame = Homog_matrix(c_alfa, -s_alfa, 0.0, 0.0, 	 s_alfa, c_alfa, 0.0, 0.0,		0.0, 0.0, 1, 0.0);
+        the_robot->EDP_data.next_position_velocity[1] = -0.002*v;
+        //     the_robot->EDP_data.next_position_velocity[1] = -0.00;
+        //	the_robot->EDP_data.ECPtoEDP_position_velocity[1] = 0.0;
 
-
-    // dodatkowa macierz obracajaca kierunek wywieranej sily tak aby stabilizowac jej wartosc
-    double alfa_r = 0.2*(v-4);
-    double s_alfa_r = sin (alfa_r);
-    double c_alfa_r = cos (alfa_r);
-
-    // ex_rot_frame = Homog_matrix(c_alfa_r, s_alfa_r, 0.0,	-s_alfa_r, c_alfa_r, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
-    ex_rot_frame = Homog_matrix(c_alfa_r, -s_alfa_r, 0.0, 0.0,		s_alfa_r,  c_alfa_r, 0.0,	0.0,		0.0, 0.0, 1, 0.0);
-
-    // obrocenie pierwotnej macierzy
-    basic_rot_frame = basic_rot_frame  * ex_rot_frame;
+        // basic_rot_frame = Homog_matrix(c_alfa, s_alfa, 0.0,	-s_alfa, c_alfa, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
+        basic_rot_frame = Homog_matrix(c_alfa, -s_alfa, 0.0, 0.0, 	 s_alfa, c_alfa, 0.0, 0.0,		0.0, 0.0, 1, 0.0);
 
 
-    basic_rot_frame = !basic_rot_frame;
+        // dodatkowa macierz obracajaca kierunek wywieranej sily tak aby stabilizowac jej wartosc
+        double alfa_r = 0.2*(v-4);
+        double s_alfa_r = sin (alfa_r);
+        double c_alfa_r = cos (alfa_r);
 
-    tool_frame = tool_frame * basic_rot_frame;
-    // basic_rot_frame.set_translation_vector(0, 0, 0.25);
+        // ex_rot_frame = Homog_matrix(c_alfa_r, s_alfa_r, 0.0,	-s_alfa_r, c_alfa_r, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
+        ex_rot_frame = Homog_matrix(c_alfa_r, -s_alfa_r, 0.0, 0.0,		s_alfa_r,  c_alfa_r, 0.0,	0.0,		0.0, 0.0, 1, 0.0);
 
-    tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
+        // obrocenie pierwotnej macierzy
+        basic_rot_frame = basic_rot_frame  * ex_rot_frame;
+
+
+        basic_rot_frame = !basic_rot_frame;
+
+        tool_frame = tool_frame * basic_rot_frame;
+        // basic_rot_frame.set_translation_vector(0, 0, 0.25);
+
+        tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
 
 
-    //	ECPtoEDP_ref_frame.get_frame_tab(the_robot->EDP_data.ECPtoEDP_reference_frame);
+        //	ECPtoEDP_ref_frame.get_frame_tab(the_robot->EDP_data.ECPtoEDP_reference_frame);
 
-    /*
-    	the_robot->EDP_data.ECPtoEDP_reference_frame[0][0] = c_alfa;
-    the_robot->EDP_data.ECPtoEDP_reference_frame[0][1] = s_alfa;
+        /*
+        	the_robot->EDP_data.ECPtoEDP_reference_frame[0][0] = c_alfa;
+        the_robot->EDP_data.ECPtoEDP_reference_frame[0][1] = s_alfa;
 
-    the_robot->EDP_data.ECPtoEDP_reference_frame[1][0] = -s_alfa;
-    the_robot->EDP_data.ECPtoEDP_reference_frame[1][1] = c_alfa;
-    */
+        the_robot->EDP_data.ECPtoEDP_reference_frame[1][0] = -s_alfa;
+        the_robot->EDP_data.ECPtoEDP_reference_frame[1][1] = c_alfa;
+        */
 
-    printf("sensor: x: %+d, y: %+d, v:%+d, %f\n", (int) round(wx),  (int) round(wy), (int) round(v),
-           atan2(s_alfa, c_alfa)*DEGREES_TO_RADIANS);
-	}
+        printf("sensor: x: %+d, y: %+d, v:%+d, %f\n", (int) round(wx),  (int) round(wy), (int) round(v),
+               atan2(s_alfa, c_alfa)*DEGREES_TO_RADIANS);
+    }
 
 
     return true;
@@ -794,7 +807,7 @@ bool y_edge_follow_force_generator::next_step ( )
 
 
 y_drawing_teach_in_force_generator::y_drawing_teach_in_force_generator(ecp_task& _ecp_task, int step):
-ecp_teach_in_generator (_ecp_task)
+        ecp_teach_in_generator (_ecp_task)
 {
     step_no=step;
 };

@@ -44,7 +44,7 @@ void ecp_task_rcsc_irp6ot::task_initialization(void)
     befg = new bias_edp_force_generator (*this);
 
     sg = new ecp_smooth_generator (*this, true);
-   wmg = new weight_meassure_generator(*this, 1);
+    wmg = new weight_meassure_generator(*this, 1);
 
     sr_ecp_msg->message("ECP loaded");
 }
@@ -172,8 +172,8 @@ void ecp_task_rcsc_irp6ot::main_task_algorithm(void)
             default:
                 break;
             }
-            
-            	ecp_termination_notice();
+
+            ecp_termination_notice();
 
         } //end for
 
