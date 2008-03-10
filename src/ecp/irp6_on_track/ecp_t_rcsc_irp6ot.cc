@@ -44,6 +44,7 @@ void ecp_task_rcsc_irp6ot::task_initialization(void)
     befg = new bias_edp_force_generator (*this);
 
     sg = new ecp_smooth_generator (*this, true);
+   wmg = new weight_meassure_generator(*this, 1);
 
     sr_ecp_msg->message("ECP loaded");
 }
@@ -69,6 +70,9 @@ void ecp_task_rcsc_irp6ot::main_task_algorithm(void)
 
             switch ( (RCSC_ECP_STATES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state)
             {
+            case ECP_WEIGHT_MEASURE_GENERATOR:
+                Move (*wmg);
+                break;
             case ECP_GEN_TRANSPARENT:
                 Move (*gt);
                 break;

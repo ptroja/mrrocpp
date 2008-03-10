@@ -23,54 +23,117 @@ weight_meassure_generator::weight_meassure_generator(ecp_task& _ecp_task, double
 ecp_generator (_ecp_task),
 weight_difference(_weight_difference),
 current_buffer_pointer(0),
-initial_weight(0.0)
+initial_weight(0.0),
+initial_weight_counted(false)
 {
-
+clear_buffer();
 
 }
 
 double weight_meassure_generator::count_weight(double fx, double fy, double fz) const
 {
-
-
+	return sqrt(fx*fx+fy*fy+fz*fz);
 }
 
 void weight_meassure_generator::insert_in_buffer(double fx)
 {
-
+	
+	weight_in_cyclic_buffer[current_buffer_pointer] = fx;
+	
+	if ((++current_buffer_pointer)==WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE)
+	{
+		current_buffer_pointer=0;
+	}
 
 }
 
 void weight_meassure_generator::clear_buffer()
 {
-
-
+	for (int i=0; i<WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE; i++)
+	{
+		weight_in_cyclic_buffer[current_buffer_pointer] = 0.0;
+	}	
+	current_buffer_pointer=0;
 }
 
 
-double weight_meassure_generator::check_average_wieght_in_buffer(void) const
+double weight_meassure_generator::check_average_weight_in_buffer(void) const
 {
+	double returned_value=0.0;
+	
+	for (int i=0; i<WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE; i++)
+	{
+			returned_value += weight_in_cyclic_buffer[current_buffer_pointer];
+	}	
 
-
+	return returned_value;
 }
 
-void set_weight_difference(double _weight_difference)
+void weight_meassure_generator::set_weight_difference(double _weight_difference)
 {
-
-
+	weight_difference = _weight_difference;
 }
 
 bool weight_meassure_generator::first_step()
 {
-
-
+    the_robot->EDP_data.instruction_type = GET;
+    the_robot->EDP_data.get_type = ARM_DV;
+    the_robot->EDP_data.get_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
+    
+    	initial_weight_counted = false;
+    
+    return true;
 }
 
 bool weight_meassure_generator::next_step()
 {
 
+    if (ecp_t.pulse_check())
+    { // Koniec odcinka
+        return false;
+    }
+
+	insert_in_buffer (count_weight(the_robot->EDP_data.current_force_xyz_torque_xyz[0], 
+		the_robot->EDP_data.current_force_xyz_torque_xyz[1],
+		the_robot->EDP_data.current_force_xyz_torque_xyz[2]));
+
+	// nie wyznaczono jeszczew wagi poczatkowej
+	if(!initial_weight_counted)
+	{
+		if (current_buffer_pointer==0)
+		{
+			initial_weight_counted = true;
+			initial_weight = check_average_weight_in_buffer();			
+		}
+	
+	    return true;
+	}
+	else
+	//  wyznaczono wage poczatkowa
+	{
+		
+		if ((check_average_weight_in_buffer() - initial_weight) > weight_difference)
+		{
+		
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	
+	}
+	
+	
+    
+
+    return true;
 
 }
+
+
+
+
 
 
 y_nose_run_force_generator::y_nose_run_force_generator(ecp_task& _ecp_task, int step):

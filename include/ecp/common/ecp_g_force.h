@@ -24,6 +24,7 @@ private:
 	double weight_in_cyclic_buffer[WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE];
 	int current_buffer_pointer;
 	double initial_weight; // pierwszy zmierzony ciezar
+	bool initial_weight_counted; // czy wyznaczono jzu poczatkowy ciezar
 	
 	// wstawienie elementu do bufora cyklicznego
 	void insert_in_buffer(const double fx);
@@ -32,7 +33,7 @@ private:
 	double count_weight(const double fx, const double fy, const double fz) const; 
 	
 	// wyznaczenie sredniej arytmetycznej ciezarow zapisanych w buforze
-	double check_average_wieght_in_buffer(void) const;
+	double check_average_weight_in_buffer(void) const;
 	
 public:	
 

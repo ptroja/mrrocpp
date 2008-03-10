@@ -16,6 +16,7 @@ protected:
     ecp_teach_in_generator* tig;
     ecp_smooth_generator* sg;
     bias_edp_force_generator* befg;
+    weight_meassure_generator* wmg;
 
 public:
     ecp_task_rcsc_irp6ot(configurator &_config);
