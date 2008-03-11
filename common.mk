@@ -44,7 +44,7 @@ ECP_MPDIR=$(HOMEDIR)/src/ecp_mp
 
 AR=ntox86-ar
 ARFLAGS=cru
-AR = ntox86-ar-2.17
+#AR=ntox86-ar-2.17
 
 INSTALL=ln -f
 #INSTALL = cp
