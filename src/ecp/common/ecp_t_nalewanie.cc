@@ -19,7 +19,6 @@
 
 #include "ecp/irp6_on_track/ecp_local.h"
 #include "ecp/irp6_postument/ecp_local.h"
-#include "ecp/common/ecp_t_rcsc.h"
 #include "ecp/common/ecp_t_nalewanie.h"
 #include "lib/mathtr.h"
 

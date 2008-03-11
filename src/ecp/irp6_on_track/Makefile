@@ -87,7 +87,7 @@ ecp_progpanel: ecp_t_progpanel_irp6ot.o ../common/ecp_g_pp.o ecp_mp_s_pp.o $(SHO
 ecp_fr: ecp_t_fr_irp6ot.o ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_irp6ot_pouring: ecp_t_pouring_irp6ot.o ecp_t_pouring.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o \
+ecp_irp6ot_pouring: ecp_t_pouring_irp6ot.o ecp_st_go.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o \
 	ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#

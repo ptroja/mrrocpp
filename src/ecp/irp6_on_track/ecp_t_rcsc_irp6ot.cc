@@ -26,24 +26,17 @@ void ecp_task_rcsc_irp6ot::task_initialization(void)
     // the robot is choose dependendat on the section of configuration file sent as argv[4]
     ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
-
     gt = new ecp_generator_t (*this);
-
     nrg = new ecp_tff_nose_run_generator (*this, 8);
-    //	nrg->configure(false, false, true, false, false, false, false);
-
     rgg = new ecp_tff_rubik_grab_generator (*this, 8);
-
     gag = new ecp_tff_gripper_approach_generator (*this, 8);
-
     rfrg = new ecp_tff_rubik_face_rotate_generator (*this, 8);
-
     tig = new ecp_teach_in_generator (*this);
-
     befg = new bias_edp_force_generator (*this);
-
     sg = new ecp_smooth_generator (*this, true);
     wmg = new weight_meassure_generator(*this, 1);
+
+    go_st = new ecp_sub_task_go(*this);
 
     sr_ecp_msg->message("ECP loaded");
 }
@@ -135,10 +128,12 @@ void ecp_task_rcsc_irp6ot::main_task_algorithm(void)
                 switch ( (RCSC_TURN_ANGLES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_variant)
                 {
                 case RCSC_GO_VAR_1:
-                    ecp_gripper_opening ( *this, 0.002, 1000);
+                    go_st->configure(0.002, 1000);
+                    go_st->execute();
                     break;
                 case RCSC_GO_VAR_2:
-                    ecp_gripper_opening ( *this, 0.02, 1000);
+                    go_st->configure(0.02, 1000);
+                    go_st->execute();
                     break;
                 default:
                     break;

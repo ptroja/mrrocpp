@@ -39,7 +39,7 @@ ecp_jarosz_irp6p: ecp_t_jarosz_irp6p.o ecp_g_jarosz.o ecp_operator_reaction_cond
 ecp_dung: ecp_t_dung.o ecp_g_dung.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@  $^
 
-ecp_irp6p_pouring: ecp_t_pouring_irp6p.o ecp_t_pouring.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o \
+ecp_irp6p_pouring: ecp_t_pouring_irp6p.o ecp_st_go.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o \
 	ecp_operator_reaction_condition.o ecp_mp_s_schunk.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 	
