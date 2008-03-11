@@ -46,6 +46,7 @@ void ecp_sub_task_go::configure (double gripper_increment, int motion_time)
 {
 
     tdes.internode_step_no = motion_time;
+    tdes.value_in_step_no = tdes.internode_step_no - 2;
     tdes.coordinate_delta[6] = gripper_increment;   // przyrost wspolrzednej PSI
 
 }
