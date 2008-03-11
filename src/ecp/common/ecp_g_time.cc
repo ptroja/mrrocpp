@@ -56,9 +56,8 @@ bool time_generator::first_step ( )
 bool time_generator::next_step ( )
 {
     // zmienne wykorzystywane przy rysowaniu
-    if (ecp_t.pulse_check())
+    if (check_and_null_trigger())
     {
-        ecp_t.mp_buffer_receive_and_send ();
         return false;
     }
 

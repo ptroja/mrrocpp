@@ -100,9 +100,8 @@ bool weight_meassure_generator::next_step()
 
     usleep(10000);
 
-    if (ecp_t.pulse_check())
-    { // Koniec odcinka
-        printf("pulse_check\n");
+    if (check_and_null_trigger())
+    {
         return false;
     }
     // transformacja ciezaru do osi z ukladu bazowego
@@ -240,8 +239,8 @@ bool y_nose_run_force_generator::next_step ( )
 {
     struct timespec start[9];
 
-    if (ecp_t.pulse_check())
-    { // Koniec odcinka
+    if (check_and_null_trigger())
+    {
         return false;
     }
 
@@ -385,7 +384,9 @@ bool y_egg_force_generator::next_step ( )
         // inkrementacja numeru iteracji dla biezacego stanu
         in_state_iteration++;
 
-        if (ecp_t.pulse_check())
+
+
+        if (check_and_null_trigger())
         {
             in_state_iteration=0;
             next_gen_state = 2;
@@ -416,7 +417,8 @@ bool y_egg_force_generator::next_step ( )
         			the_robot->EDP_data.position_increment[j]=0.0;
         		}
         */
-        if (ecp_t.pulse_check())
+
+        if (check_and_null_trigger())
         {
             in_state_iteration=0;
             next_gen_state = 3;
@@ -543,7 +545,7 @@ bool y_egg_force_generator::next_step ( )
         			the_robot->EDP_data.position_increment[j]=0.0;
         		}
         */
-        if (ecp_t.pulse_check())
+        if (check_and_null_trigger())
         {
             in_state_iteration=0;
             next_gen_state = 7;
@@ -702,7 +704,7 @@ bool y_edge_follow_force_generator::next_step ( )
     double inc_delta[6], tmp_delta[6];
     // static int count;
     // struct timespec start[9];
-    if (ecp_t.pulse_check())
+    if (check_and_null_trigger())
     {
         return false;
     }
@@ -975,7 +977,7 @@ bool y_drawing_teach_in_force_generator::next_step ( )
 
         double inc_delta[6]={0.0,0.0,0.0,0.0,0.0,0.0};
 
-        if (ecp_t.pulse_check())
+        if (check_and_null_trigger())
         { // Koniec odcinka
             initiate_pose_list();
             return false;
@@ -1391,7 +1393,7 @@ bool y_advanced_drawing_teach_in_force_generator::next_step ( )
 
         double inc_delta[6]={0.0,0.0,0.0,0.0,0.0,0.0};
 
-        if (ecp_t.pulse_check())
+        if (check_and_null_trigger())
         { // Koniec odcinka
             initiate_pose_list();
             return false;
@@ -1543,7 +1545,7 @@ bool ecp_tff_nose_run_generator::next_step ()
     // UWAGA: dzialamy na jednoelementowej liscie robotow
     // cout << "next_step" << endl;
 
-    if (pulse_check_activated && ecp_t.pulse_check())
+    if (pulse_check_activated && check_and_null_trigger())
     { // Koniec odcinka
         //	ecp_t.set_ecp_reply (TASK_TERMINATED);
 

@@ -181,7 +181,7 @@ bool mp_extended_empty_generator::next_step () {
 // printf("mp next step\n");
 // UWAGA: dzialamy na jednoelementowej liscie robotow
 
-	if (trigger && activate_trigger) {
+	if (check_and_null_trigger() && activate_trigger) {
 		return false;
 	}
 

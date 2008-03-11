@@ -61,11 +61,11 @@ bool mp_two_robots_measures_generator::first_step()
 bool mp_two_robots_measures_generator::next_step()
 {
 	// Sprawdzenie, czy nadeszlo polecenie zakonczenia zbierania pomiarow.
-	if (trigger) 
+	if (check_and_null_trigger()) 
 	{
 		std::cout<<"Liczba zebranych pozycji: "<<measures.size()<<std::endl;
 		// Zresetowanie przerwania.
-		trigger = false;
+
 		// Zapis do pliku.
 		save_measures_to_file();
 		return false;

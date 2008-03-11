@@ -264,7 +264,7 @@ bool seven_eye_run_linear_generator::next_step (  ) {
 // if ((mp_comm_counter++)==100) {// by Y - lekka manianka
 // mp_comm_counter=0; // 2004.02.25
 clock_gettime( CLOCK_REALTIME , &s_time);
-   if (ecp_t.pulse_check()) { // Koniec odcinka
+   if (check_and_null_trigger()) { // Koniec odcinka
 //    ecp_t.set_ecp_reply (TASK_TERMINATED);
 
      return false;

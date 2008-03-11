@@ -144,7 +144,7 @@ bool mp_seven_eye_generator::next_step () {
  	int i=0;
 	
 	
-	if (trigger) return false;
+	if (check_and_null_trigger()) return false;
  	
 	if(node_counter==1 || node_counter==2)
 	{

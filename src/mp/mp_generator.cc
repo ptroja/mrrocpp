@@ -30,7 +30,6 @@ void mp_generator::copy_generator_command (std::map <ROBOT_ENUM, mp_robot*>& _ro
 mp_generator::mp_generator(mp_task& _mp_task) 
 	: ecp_mp_generator (*_mp_task.sr_ecp_msg),
 	wait_for_ECP_pulse(false),
-	trigger(false),
 	phase(BEFORE_FIRST_STEP),
 	new_pulse_checked(true)
 {

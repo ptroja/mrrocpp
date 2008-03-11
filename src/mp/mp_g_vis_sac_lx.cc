@@ -189,7 +189,7 @@ bool mp_vis_sac_lx_generator::next_step () {
 
 	
 
-	if (trigger) return false;
+	if (check_and_null_trigger()) return false;
  
 	if(node_counter==1 || node_counter==2)
 	{

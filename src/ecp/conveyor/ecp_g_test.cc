@@ -48,7 +48,7 @@ bool y_simple_generator::next_step ( )
 {
 	struct timespec start[9];
 	int i; // licznik kolejnych wspolrzednych wektora [0..6]
-	if (ecp_t.pulse_check()) { // Koniec odcinka
+	if (check_and_null_trigger()) { // Koniec odcinka
 		return false;
 	} 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji

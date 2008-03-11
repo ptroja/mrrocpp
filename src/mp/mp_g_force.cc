@@ -136,8 +136,7 @@ bool mp_tff_single_robot_nose_run_generator::next_step ()
 
 	vsp_force->base_period=1;
 
-	if (trigger) {
-		trigger = false; // trzeba kasowac trigger
+	if (check_and_null_trigger()) {
 		// printf("trigger\n");
 		return false;
 	}
@@ -299,8 +298,8 @@ bool mp_tff_nose_run_generator::next_step ()
 	vsp_force_irp6ot->base_period=1;
 	vsp_force_irp6p->base_period=1;
 
-	if (trigger) {
-		trigger = false; // trzeba kasowac trigger
+	if (check_and_null_trigger()) {
+
 		// printf("trigger\n");
 		return false;
 	}
@@ -457,8 +456,8 @@ bool mp_haptic_generator::next_step ()
 		vsp_force_irp6p->base_period=1;
 		*/
 
-	if (trigger) {
-		trigger = false; // trzeba kasowac trigger
+	if (check_and_null_trigger()) {
+
 		// printf("trigger\n");
 		return false;
 	}
@@ -709,8 +708,8 @@ bool mp_tff_rubik_grab_generator::next_step ()
 	vsp_force_irp6ot->base_period=1;
 	vsp_force_irp6p->base_period=1;
 
-	if (trigger) {
-		trigger = false; // trzeba kasowac trigger
+	if (check_and_null_trigger()) {
+
 		// printf("trigger\n");
 		return false;
 	}
@@ -993,8 +992,8 @@ bool mp_tff_rubik_face_rotate_generator::next_step ()
 	}
 	vsp_force_irp6ot->base_period=1;
 	vsp_force_irp6p->base_period=1;
-	if (trigger) {
-		trigger = false; // trzeba kasowac trigger
+	if (check_and_null_trigger()) {
+
 		// printf("trigger\n");
 		return false;
 	}
@@ -1139,8 +1138,8 @@ bool mp_tff_gripper_approach_generator::next_step ()
 	}
 	vsp_force_irp6ot->base_period=1;
 	vsp_force_irp6p->base_period=1;
-	if (trigger) {
-		trigger = false; // trzeba kasowac trigger
+	if (check_and_null_trigger()) {
+
 		// printf("trigger\n");
 		return false;
 	}
@@ -1308,8 +1307,8 @@ bool mp_nose_run_force_generator::next_step ()
 	vsp_force_irp6ot->base_period=1;
 	vsp_force_irp6p->base_period=1;
 	// Koniec wodzenia za nos
-	if (trigger) {
-		trigger=false;
+	if (check_and_null_trigger()) {
+
 		return false;
 	}
 
@@ -1899,9 +1898,9 @@ bool mp_drawing_teach_in_force_generator::next_step ()
 
 		double inc_delta[6]={0.0,0.0,0.0,0.0,0.0,0.0};
 
-		if (trigger) { // Koniec odcinka
+		if (check_and_null_trigger()) { // Koniec odcinka
 			// 	the_robot.mp_buffer_receive_and_send ();
-			trigger = false;
+
 			initiate_pose_list();
 			return false;
 		}

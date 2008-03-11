@@ -22,6 +22,9 @@ private:
     // Badanie typu polecenia z MP
     MP_COMMAND mp_command_type(void) const;
 
+    // sprawdza czy przeszedl puls do ECP lub MP
+    bool pulse_check();
+
 protected:
     // Oczekiwanie na polecenie START od MP
     bool ecp_wait_for_start(void);
@@ -74,8 +77,6 @@ public: // TODO: what follows should be private method
     // Ustawienie typu odpowiedzi z ECP do MP
     void set_ecp_reply(ECP_REPLY ecp_r);
 
-    // sprawdza czy przeszedl puls do ECP lub MP
-    bool pulse_check();
 };
 
 ecp_task* return_created_ecp_task (configurator &_config);

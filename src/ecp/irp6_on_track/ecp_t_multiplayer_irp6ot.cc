@@ -9,12 +9,14 @@
 #include "ecp/common/ecp_g_force.h"
 #include "ecp/irp6_on_track/ecp_t_multiplayer_irp6ot.h"
 
+
 ecp_task_multiplayer_irp6ot::ecp_task_multiplayer_irp6ot(configurator &_config) :
         ecp_task(_config)
 {}
 
 ecp_task_multiplayer_irp6ot::~ecp_task_multiplayer_irp6ot()
 {}
+
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_multiplayer_irp6ot::task_initialization(void)

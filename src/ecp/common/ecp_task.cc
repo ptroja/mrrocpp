@@ -174,8 +174,8 @@ void ecp_task::Move(ecp_generator& the_generator)
     the_generator.node_counter = 0;
     set_ecp_reply(ECP_ACKNOWLEDGE);
 
-    if (!the_generator.first_step() || (!(!the_generator.communicate_with_mp_in_move
-                                          || mp_buffer_receive_and_send())))
+    if (!the_generator.first_step() ||
+            (!(!the_generator.communicate_with_mp_in_move || mp_buffer_receive_and_send())))
     {
         return; // Warunek koncowy spelniony w pierwszym kroku
     }
@@ -205,6 +205,11 @@ void ecp_task::Move(ecp_generator& the_generator)
         // odczytanie danych z wszystkich czujnikow
         all_sensors_get_reading(the_generator.sensor_m);
         the_generator.node_counter++;
+        if (pulse_check())
+        {
+            the_generator.trigger = true;
+        }
+
     }
     while (the_generator.next_step() && (!the_generator.communicate_with_mp_in_move
                                          || mp_buffer_receive_and_send()));

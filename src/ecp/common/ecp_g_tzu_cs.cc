@@ -67,10 +67,9 @@ bool tzu_simple_generator :: first_step ( )
 bool tzu_simple_generator::next_step ( ) 
 {
 	/* wskakuje tu jak w mp wcistne pulse ecp trigger */
-	if (ecp_t.pulse_check()) 
+	if (check_and_null_trigger()) 
 	{
-		cout<<"pulse check"<<endl;
-		ecp_t.mp_buffer_receive_and_send ();
+
 		return false;
 	}
 	

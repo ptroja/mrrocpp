@@ -33,7 +33,7 @@ class mp_generator : public ecp_mp_generator
 		bool new_pulse_checked; 	// czy nowy puls zostal sprawdzony (wykorzystywane w scheduler_run() )
 		bool wait_for_ECP_pulse;	// okresla czy przed next step move ma sie zawieszac w oczekwianiu na puls z ECP
 		// wykorzystywane przy luznej i sporadycznej wspolpracy robotow.
-		bool trigger; 				// informacja czy pszyszedl puls trigger
+
 
 		// mapa wszystkich robotow
 		std::map <ROBOT_ENUM, mp_robot*> robot_m;

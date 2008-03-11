@@ -77,9 +77,8 @@ bool y_simple_generator::next_step ( )
 
 
     //	struct timespec start[9];
-    if (ecp_t.pulse_check())
+    if (check_and_null_trigger())
     {
-        ecp_t.mp_buffer_receive_and_send ();
         return false;
     }
 
