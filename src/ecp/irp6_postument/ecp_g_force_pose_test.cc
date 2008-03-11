@@ -47,7 +47,7 @@ bool y_simple_generator::first_step ( ) {
 		
 
 		for(int i=0;i<6;i++) {
-			the_robot->EDP_data.next_position_velocity[i] = 0;
+			the_robot->EDP_data.next_velocity[i] = 0;
 			the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;	
 		//	the_robot->EDP_data.selection_vector[i] = FORCE_SV_AX;
 		}
@@ -127,15 +127,15 @@ printf("sensor: z: %f\n", the_robot->EDP_data.current_force_xyz_torque_xyz[2]);
 	
 /*	
 	frame_tab beggining_frame;
-	copy_frame(beggining_frame,the_robot->EDP_data.current_beggining_arm_frame);
+	copy_frame(beggining_frame,the_robot->EDP_data.current_arm_frame);
 	Homog_matrix beg_frame = Homog_matrix(beggining_frame);
 	cout << endl << "ecp: beginning_frame" << endl << endl << beg_frame;
 	frame_tab present_frame;
-	copy_frame(present_frame,the_robot->EDP_data.current_present_arm_frame);
+	copy_frame(present_frame,the_robot->EDP_data.current_arm_frame);
 	Homog_matrix pres_frame = Homog_matrix(present_frame);
 	cout << endl << "ecp: present_frame" << endl << endl << pres_frame;
 	frame_tab predicted_frame;
-	copy_frame(predicted_frame,the_robot->EDP_data.current_predicted_arm_frame);
+	copy_frame(predicted_frame,the_robot->EDP_data.current_arm_frame);
 	Homog_matrix pred_frame = Homog_matrix(predicted_frame);
 	cout << endl << "ecp: predicted_frame" << endl << endl<< pred_frame;
 	double force[6];

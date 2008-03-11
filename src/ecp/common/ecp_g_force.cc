@@ -105,7 +105,7 @@ bool weight_meassure_generator::next_step()
         return false;
     }
     // transformacja ciezaru do osi z ukladu bazowego
-    Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_present_arm_frame);
+    Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
     current_frame_wo_offset.remove_translation();
 
     //	std::cout << 	current_frame_wo_offset << std::endl;
@@ -681,7 +681,7 @@ bool y_edge_follow_force_generator::first_step ( )
 
     for(int i=0;i<6;i++)
     {
-        the_robot->EDP_data.next_position_velocity[i] = 0;
+        the_robot->EDP_data.next_velocity[i] = 0;
         the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
         //	the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i] = 0.0;
         the_robot->EDP_data.next_behaviour[i] = UNGUARDED_MOTION;
@@ -712,14 +712,14 @@ bool y_edge_follow_force_generator::next_step ( )
 
 
     // 	wstawienie nowego przyrostu pozyji do przyrostowej trajektorii ruchu do zapisu do pliku
-    Homog_matrix tmp_matrix (the_robot->EDP_data.current_beggining_arm_frame);
+    Homog_matrix tmp_matrix (the_robot->EDP_data.current_arm_frame);
     tmp_matrix.get_xyz_euler_zyz (inc_delta);
 
     for (int i=0; i<6;i++)
         inc_delta[i] = -inc_delta[i];
 
 
-    tmp_matrix.set_frame_tab (the_robot->EDP_data.current_beggining_arm_frame);
+    tmp_matrix.set_frame_tab (the_robot->EDP_data.current_arm_frame);
     tmp_matrix.get_xyz_euler_zyz (tmp_delta);
 
     for (int i=0; i<6;i++)
@@ -750,8 +750,8 @@ bool y_edge_follow_force_generator::next_step ( )
         double s_alfa = wy / v;
         double c_alfa = - wx / v;
 
-        the_robot->EDP_data.next_position_velocity[1] = -0.002*v;
-        //     the_robot->EDP_data.next_position_velocity[1] = -0.00;
+        the_robot->EDP_data.next_velocity[1] = -0.002*v;
+        //     the_robot->EDP_data.next_velocity[1] = -0.00;
         //	the_robot->EDP_data.ECPtoEDP_position_velocity[1] = 0.0;
 
         // basic_rot_frame = Homog_matrix(c_alfa, s_alfa, 0.0,	-s_alfa, c_alfa, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
@@ -1493,7 +1493,7 @@ bool ecp_tff_nose_run_generator::first_step ()
 
     for (int i=0;i<6;i++)
     {
-        the_robot->EDP_data.next_position_velocity[i] = 0;
+        the_robot->EDP_data.next_velocity[i] = 0;
         the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
         //		the_robot->EDP_data.selection_vector[i] = selection_vector_l[i];
         //	the_robot->EDP_data.selection_vector[i] = POSE_SV_AX;
@@ -1623,7 +1623,7 @@ bool ecp_tff_rubik_grab_generator::first_step ()
     for(int i=0;i<6;i++)
     {
         the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
-        the_robot->EDP_data.next_position_velocity[i] = 0;
+        the_robot->EDP_data.next_velocity[i] = 0;
     }
 
     for(int i=0;i<3;i++)
@@ -1748,7 +1748,7 @@ bool ecp_tff_rubik_face_rotate_generator::first_step ()
     for(int i=0;i<6;i++)
     {
         the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
-        the_robot->EDP_data.next_position_velocity[i] = 0;
+        the_robot->EDP_data.next_velocity[i] = 0;
     }
 
     for (int i=0;i<3;i++)
@@ -1814,7 +1814,7 @@ bool ecp_tff_rubik_face_rotate_generator::next_step ()
         the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;
         if(turn_angle < -0.1 || 0.1 < turn_angle)
         {
-            Homog_matrix frame(the_robot->EDP_data.current_beggining_arm_frame);
+            Homog_matrix frame(the_robot->EDP_data.current_arm_frame);
             double xyz_eul_zyz[6];
             frame.get_xyz_euler_zyz(xyz_eul_zyz);
             double angle_to_move = (turn_angle / 180.0) * M_PI;
@@ -1841,7 +1841,7 @@ bool ecp_tff_rubik_face_rotate_generator::next_step ()
 
         if (turn_angle < -0.1 || 0.1 < turn_angle)
         {
-            Homog_matrix current_frame(the_robot->EDP_data.current_predicted_arm_frame);
+            Homog_matrix current_frame(the_robot->EDP_data.current_arm_frame);
             double xyz_eul_zyz[6];
             current_frame.get_xyz_euler_zyz(xyz_eul_zyz);
             double current_gamma = xyz_eul_zyz[5];
@@ -1927,7 +1927,7 @@ bool ecp_tff_gripper_approach_generator::first_step ()
     for(int i=0;i<6;i++)
     {
         the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
-        the_robot->EDP_data.next_position_velocity[i] = 0;
+        the_robot->EDP_data.next_velocity[i] = 0;
     }
 
     for (int i=0;i<6;i++)

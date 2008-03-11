@@ -356,18 +356,18 @@ bool ui_irp6_mechatronika_robot::move_motors ( double final_position[IRP6_MECHAT
   if (nr_of_steps < 1) // Nie wykowywac bo zadano ruch do aktualnej pozycji
     return true; 
   for (j = 0; j < IRP6_MECHATRONIKA_NUM_OF_SERVOS; j++) 
-    EDP_command_and_reply_buffer.instruction.arm.coordinate_def.arm_coordinates[j] = final_position[j];
+    EDP_command_and_reply_buffer.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
    /* 
     printf("ui_ecp_aa: %f, %f, %f, %f, %f, %f, %f, %d\n", final_position[0], final_position[1], final_position[2], final_position[3],
     		 final_position[4], final_position[5], final_position[6], EDP_command_and_reply_buffer.instruction.motion_steps);
     */
-// printf("\n ilosc krokow: %d, po ilu komun: %d, odleglosc 1: %f\n",EDP_command_and_reply_buffer.instruction.motion_steps, EDP_command_and_reply_buffer.instruction.value_in_step_no, EDP_command_and_reply_buffer.instruction.arm.coordinate_def.arm_coordinates[1]);
+// printf("\n ilosc krokow: %d, po ilu komun: %d, odleglosc 1: %f\n",EDP_command_and_reply_buffer.instruction.motion_steps, EDP_command_and_reply_buffer.instruction.value_in_step_no, EDP_command_and_reply_buffer.instruction.arm.pf_def.arm_coordinates[1]);
 
   execute_motion();
 
   if (is_synchronised()) 
     for (j = 0; j < IRP6_MECHATRONIKA_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
-      current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[j];
+      current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[j];
 
   return true;
 };// end: ui_irp6_mechatronika_robot::move_motors()
@@ -411,12 +411,12 @@ bool ui_irp6_mechatronika_robot::move_joints (double final_position[IRP6_MECHATR
     return true; 
 
   for (j = 0; j < IRP6_MECHATRONIKA_NUM_OF_SERVOS; j++) 
-    EDP_command_and_reply_buffer.instruction.arm.coordinate_def.arm_coordinates[j] = final_position[j];
+    EDP_command_and_reply_buffer.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
 
  execute_motion();
 
   for (j = 0; j < IRP6_MECHATRONIKA_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
-    current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[j];
+    current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[j];
 
   return true;
 };// end: ui_irp6_mechatronika_robot::move_internal()
@@ -467,13 +467,13 @@ bool ui_irp6_mechatronika_robot::move_xyz_euler_zyz ( double final_position[7] )
  
   for (j = 0; j < 6; j++) 
   {
-    EDP_command_and_reply_buffer.instruction.arm.coordinate_def.arm_coordinates[j] = final_position[j];
+    EDP_command_and_reply_buffer.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
     }
 
  execute_motion();
 
   for (j = 0; j < 6; j++) { // Przepisanie aktualnych polozen
-    current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[j];
+    current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[j];
   }
 
   return true;
@@ -546,13 +546,13 @@ bool ui_irp6_mechatronika_robot::move_xyz_angle_axis ( double final_position[7] 
 
   for (j = 0; j < 6; j++) 
   {
-    EDP_command_and_reply_buffer.instruction.arm.coordinate_def.arm_coordinates[j] = final_position[j];
+    EDP_command_and_reply_buffer.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
     }
 
  execute_motion();
 
   for (j = 0; j < 6; j++) { // Przepisanie aktualnych polozen
-    current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[j];
+    current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[j];
   }
 
 	
@@ -573,8 +573,8 @@ bool ui_irp6_mechatronika_robot::read_motors ( double current_position[IRP6_MECH
 execute_motion();
 // printf("dalej za query read motors\n");
   for (j = 0; j < IRP6_MECHATRONIKA_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
-// { // printf("current position: %f\n",EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[j]);
-    current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[j];
+// { // printf("current position: %f\n",EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[j]);
+    current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[j];
 		// 			    }
 // printf("koniec read motors\n");
   return true;
@@ -593,7 +593,7 @@ bool ui_irp6_mechatronika_robot::read_joints ( double current_position[IRP6_MECH
  execute_motion();
 
   for (j = 0; j < IRP6_MECHATRONIKA_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
-    current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[j];
+    current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[j];
   return true;
 };// end: ui_irp6_mechatronika_robot::read_joints()
 // ---------------------------------------------------------------
@@ -611,7 +611,7 @@ execute_motion();
 
   for (j = 0; j < 6; j++) // Przepisanie aktualnych polozen
   {
-    current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[j];
+    current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[j];
   }
   
   return true;
@@ -629,7 +629,7 @@ execute_motion();
   
   for(int i=0; i<6; i++)
   {
-      current_position[i] = EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[i];
+      current_position[i] = EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[i];
 }
 
 

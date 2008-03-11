@@ -119,15 +119,12 @@ struct robot_transmission_data
     // by Y - do sily
 
     double next_inertia[6], next_reciprocal_damping[6];
-    double next_position_velocity[MAX_SERVOS_NR], next_force_xyz_torque_xyz[6];
+    double next_velocity[MAX_SERVOS_NR], next_force_xyz_torque_xyz[6];
     BEHAVIOUR_SPECIFICATION next_behaviour[6];
     //	bool selection_vector[6];
 
     // r_buffer
-    frame_tab  current_beggining_arm_frame;      // trojscian koncowki wzgledem ukladu bazowego
-    frame_tab  current_predicted_arm_frame;      // trojscian koncowki wzgledem ukladu bazowego
-    frame_tab  current_present_arm_frame;      // trojscian koncowki wzgledem ukladu bazowego
-    // double pos_xyz_rot_xyz[6];
+     // double pos_xyz_rot_xyz[6];
     double current_force_xyz_torque_xyz[6];
 
     // end by Y

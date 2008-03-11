@@ -192,7 +192,7 @@ bool ecp_vis_sac_lx_generator::first_step () {
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
 	for(int i=0;i<6;i++) {
-		the_robot->EDP_data.next_position_velocity[i] = 0;
+		the_robot->EDP_data.next_velocity[i] = 0;
 		the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
 	//	the_robot->EDP_data.MPselection_vector[i] = FORCE_SV_AX;
 //		 the_robot->EDP_data.MPselection_vector[i] = POSE_SV_AX;
@@ -252,7 +252,7 @@ bool ecp_vis_sac_lx_generator::next_step () {
 	{
 	std::cout  << std::endl << std::endl << std::endl << std::endl << std::endl;
 
-		O_Tx_E.set_frame_tab(the_robot->EDP_data.current_predicted_arm_frame); // zarem
+		O_Tx_E.set_frame_tab(the_robot->EDP_data.current_arm_frame); // zarem
 		std::cout << "YYY " << 	O_Tx_E  << std::endl;
 
 
@@ -399,7 +399,7 @@ std::cout << "FROMVSP EIH_JACK ";
 
 	G_Tx_S.set_xyz_rpy(x2g, 0, 0, 0, 0, 0);
 
-	O_Tx_E.set_frame_tab(the_robot->EDP_data.current_predicted_arm_frame);
+	O_Tx_E.set_frame_tab(the_robot->EDP_data.current_arm_frame);
 	O_Tx_E=O_Tx_E*!G_Tx_G2;
 	O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
 
@@ -744,7 +744,7 @@ for(int i=3;i<5;i++) {
 
 
 for(int i=0;i<6;i++) {
-the_robot->EDP_data.next_position_velocity[i] = O_r_Ep[0][i];
+the_robot->EDP_data.next_velocity[i] = O_r_Ep[0][i];
 }
 /*
 for(int i=0;i<6;i++) {

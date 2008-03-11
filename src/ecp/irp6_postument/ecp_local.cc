@@ -108,63 +108,63 @@ void ecp_irp6_postument_robot::create_command (void)
             switch (EDP_data.set_arm_type)
             {
             case FRAME:
-                copy_frame(EDP_command_and_reply_buffer.instruction.arm.frame_def.arm_frame, EDP_data.next_arm_frame);
-                EDP_command_and_reply_buffer.instruction.arm.frame_def.gripper_coordinate
+                copy_frame(EDP_command_and_reply_buffer.instruction.arm.pf_def.arm_frame, EDP_data.next_arm_frame);
+                EDP_command_and_reply_buffer.instruction.arm.pf_def.gripper_coordinate
                 = EDP_data.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka
                 break;
             case  XYZ_ANGLE_AXIS:
                 for (j=0; j<6 ; j++)
-                    EDP_command_and_reply_buffer.instruction.arm.coordinate_def.arm_coordinates[j]
+                    EDP_command_and_reply_buffer.instruction.arm.pf_def.arm_coordinates[j]
                     = EDP_data.next_XYZ_AA_arm_coordinates[j];
-                EDP_command_and_reply_buffer.instruction.arm.coordinate_def.gripper_coordinate
+                EDP_command_and_reply_buffer.instruction.arm.pf_def.gripper_coordinate
                 = EDP_data.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka
                 break;
             case  XYZ_EULER_ZYZ:
                     for (j=0; j<6 ; j++)
-                        EDP_command_and_reply_buffer.instruction.arm.coordinate_def.arm_coordinates[j]
+                        EDP_command_and_reply_buffer.instruction.arm.pf_def.arm_coordinates[j]
                         = EDP_data.next_XYZ_ZYZ_arm_coordinates[j];
-                EDP_command_and_reply_buffer.instruction.arm.coordinate_def.gripper_coordinate
+                EDP_command_and_reply_buffer.instruction.arm.pf_def.gripper_coordinate
                 = EDP_data.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka
                 break;
             case  POSE_FORCE_TORQUE_AT_FRAME:
                     for (j=0; j<6 ; j++)
                     {
-                        EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.inertia[j]
+                        EDP_command_and_reply_buffer.instruction.arm.pf_def.inertia[j]
                         = EDP_data.next_inertia[j];
-                        EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.reciprocal_damping[j]
+                        EDP_command_and_reply_buffer.instruction.arm.pf_def.reciprocal_damping[j]
                         = EDP_data.next_reciprocal_damping[j];
 
                         /*
-                        EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.selection_vector[j]
+                        EDP_command_and_reply_buffer.instruction.arm.pf_def.selection_vector[j]
                         = EDP_data.selection_vector[j];	 // zadana sila
                         */
-                        EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[j]
+                        EDP_command_and_reply_buffer.instruction.arm.pf_def.force_xyz_torque_xyz[j]
                         = EDP_data.next_force_xyz_torque_xyz[j]; // pozycja docelowa
-                        EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.behaviour[j]
+                        EDP_command_and_reply_buffer.instruction.arm.pf_def.behaviour[j]
                         = EDP_data.next_behaviour[j]; // pozycja docelowa
                     }
                 for (j=0; j<IRP6_POSTUMENT_NUM_OF_SERVOS ; j++)
                 {
-                    EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.position_velocity[j]
-                    = EDP_data.next_position_velocity[j];	 // pozycja poczatkowa
+                    EDP_command_and_reply_buffer.instruction.arm.pf_def.arm_coordinates[j]
+                    = EDP_data.next_velocity[j];	 // pozycja poczatkowa
 
                 }
 
-                EDP_command_and_reply_buffer.instruction.arm.pose_force_torque_at_frame_def.gripper_coordinate
+                EDP_command_and_reply_buffer.instruction.arm.pf_def.gripper_coordinate
                 = EDP_data.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka
                 break;
             case  JOINT:
                 for (j=0; j<IRP6_POSTUMENT_NUM_OF_SERVOS ; j++)
                 {
-                    EDP_command_and_reply_buffer.instruction.arm.coordinate_def.desired_torque[j]
+                    EDP_command_and_reply_buffer.instruction.arm.pf_def.desired_torque[j]
                     = EDP_data.desired_torque[j];
-                    EDP_command_and_reply_buffer.instruction.arm.coordinate_def.arm_coordinates[j]
+                    EDP_command_and_reply_buffer.instruction.arm.pf_def.arm_coordinates[j]
                     = EDP_data.next_joint_arm_coordinates[j];
                 }
                 break;
             case  MOTOR:
                 for (j=0; j<IRP6_POSTUMENT_NUM_OF_SERVOS ; j++)
-                    EDP_command_and_reply_buffer.instruction.arm.coordinate_def.arm_coordinates[j]
+                    EDP_command_and_reply_buffer.instruction.arm.pf_def.arm_coordinates[j]
                     = EDP_data.next_motor_arm_coordinates[j];
                 break;
             default: // Blad: niewlasciwy sposob zadawania polozenia ramienia
@@ -247,61 +247,57 @@ void ecp_irp6_postument_robot::get_arm_reply (void)
     case MOTOR:
         for (int i=0; i<IRP6_POSTUMENT_NUM_OF_SERVOS; i++)
             EDP_data.current_motor_arm_coordinates[i] =
-                EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[i];
+                EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[i];
         EDP_data.gripper_reg_state =
-            EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.gripper_reg_state;
+            EDP_command_and_reply_buffer.reply_package.arm.pf_def.gripper_reg_state;
         break;
     case JOINT:
             for (int i=0; i<IRP6_POSTUMENT_NUM_OF_SERVOS; i++)
                 EDP_data.current_joint_arm_coordinates[i] =
-                    EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[i];
+                    EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[i];
         EDP_data.gripper_reg_state =
-            EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.gripper_reg_state;
+            EDP_command_and_reply_buffer.reply_package.arm.pf_def.gripper_reg_state;
         break;
     case FRAME:
-            copy_frame(EDP_data.current_arm_frame, EDP_command_and_reply_buffer.reply_package.arm.frame_def.arm_frame);
+            copy_frame(EDP_data.current_arm_frame, EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_frame);
         EDP_data.gripper_reg_state =
-            EDP_command_and_reply_buffer.reply_package.arm.frame_def.gripper_reg_state;
+            EDP_command_and_reply_buffer.reply_package.arm.pf_def.gripper_reg_state;
         EDP_data.current_gripper_coordinate =
-            EDP_command_and_reply_buffer.reply_package.arm.frame_def.gripper_coordinate;
+            EDP_command_and_reply_buffer.reply_package.arm.pf_def.gripper_coordinate;
         break;
     case XYZ_EULER_ZYZ:
             for (int i=0; i<6; i++)
                 EDP_data.current_XYZ_ZYZ_arm_coordinates[i] =
-                    EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[i];
+                    EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[i];
         EDP_data.gripper_reg_state =
-            EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.gripper_reg_state;
+            EDP_command_and_reply_buffer.reply_package.arm.pf_def.gripper_reg_state;
         EDP_data.current_gripper_coordinate =
-            EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.gripper_coordinate;
+            EDP_command_and_reply_buffer.reply_package.arm.pf_def.gripper_coordinate;
         break;
 
     case POSE_FORCE_TORQUE_AT_FRAME:
             for (int i=0; i<6; i++)
             {
                 EDP_data.current_force_xyz_torque_xyz[i] =
-                    EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i];
+                    EDP_command_and_reply_buffer.reply_package.arm.pf_def.force_xyz_torque_xyz[i];
             }
-        copy_frame(EDP_data.current_beggining_arm_frame,
-                   EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.beggining_arm_frame);
-        copy_frame(EDP_data.current_predicted_arm_frame,
-                   EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.predicted_arm_frame);
-        copy_frame(EDP_data.current_present_arm_frame,
-                   EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.present_arm_frame);
+        copy_frame(EDP_data.current_arm_frame,
+                   EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_frame);
         EDP_data.gripper_reg_state =
-            EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.gripper_reg_state;
+            EDP_command_and_reply_buffer.reply_package.arm.pf_def.gripper_reg_state;
         EDP_data.current_gripper_coordinate =
-            EDP_command_and_reply_buffer.reply_package.arm.pose_force_torque_at_frame_def.gripper_coordinate;
+            EDP_command_and_reply_buffer.reply_package.arm.pf_def.gripper_coordinate;
 
         break;
 
     case XYZ_ANGLE_AXIS:
         for (int i=0; i<6; i++)
             EDP_data.current_XYZ_AA_arm_coordinates[i] =
-                EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[i];
+                EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[i];
         EDP_data.gripper_reg_state =
-            EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.gripper_reg_state;
+            EDP_command_and_reply_buffer.reply_package.arm.pf_def.gripper_reg_state;
         EDP_data.current_gripper_coordinate =
-            EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.gripper_coordinate;
+            EDP_command_and_reply_buffer.reply_package.arm.pf_def.gripper_coordinate;
         break;
 
     default: // bledny typ specyfikacji pozycji

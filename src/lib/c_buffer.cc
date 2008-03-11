@@ -15,13 +15,13 @@ c_buffer::c_buffer (void) :
   value_in_step_no(0)
 {
 	// konstruktor (inicjalizator) bufora polecen z ECP
-
+/*
 	for (int i=0; i<4; i++)
 		for (int j=0; j<3; j++)
 			if (i==j)
-				arm.frame_def.arm_frame[j][i] = 1.0;
+				arm.pf_def.arm_frame[j][i] = 1.0;
 			else
-				arm.frame_def.arm_frame[j][i] = 0.0;
+				arm.pf_def.arm_frame[j][i] = 0.0;
 
 	for (int i=0; i<4; i++)
 		for (int j=0; j<3; j++)
@@ -30,6 +30,7 @@ c_buffer::c_buffer (void) :
 			else
 				rmodel.tool_frame_def.tool_frame[j][i] = 0.0;
 	// rmodel.tool_frame_def.address_byte = 0;
+	 * */
 }
 
 // odczytac XXX co?

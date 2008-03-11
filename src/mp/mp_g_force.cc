@@ -68,7 +68,7 @@ bool mp_tff_single_robot_nose_run_generator::first_step ()
 	tool_frame.get_frame_tab(irp6->ecp_td.next_tool_frame);
 
 	for(int i=0;i<6;i++) {
-		irp6->ecp_td.next_position_velocity[i] = 0;
+		irp6->ecp_td.next_velocity[i] = 0;
 		irp6->ecp_td.next_force_xyz_torque_xyz[i] = 0;
 		//	irp6->ecp_td.MPselection_vector[i] = FORCE_SV_AX;
 	}
@@ -182,9 +182,9 @@ bool mp_tff_nose_run_generator::first_step ()
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 
 	for (int i=0;i<3;i++) {
-		irp6ot->ecp_td.next_position_velocity[i] = 0;
+		irp6ot->ecp_td.next_velocity[i] = 0;
 		irp6ot->ecp_td.next_force_xyz_torque_xyz[i] = 0;
-		irp6ot->ecp_td.next_position_velocity[i+3] = 0;
+		irp6ot->ecp_td.next_velocity[i+3] = 0;
 		irp6ot->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
 		if(irp6ot_con)
 		{
@@ -223,9 +223,9 @@ bool mp_tff_nose_run_generator::first_step ()
 	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
-		irp6p->ecp_td.next_position_velocity[i] = 0;
+		irp6p->ecp_td.next_velocity[i] = 0;
 		irp6p->ecp_td.next_force_xyz_torque_xyz[i] = 0;
-		irp6p->ecp_td.next_position_velocity[i+3] = 0;
+		irp6p->ecp_td.next_velocity[i+3] = 0;
 		irp6p->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
 		if(irp6p_con)
 		{
@@ -346,9 +346,9 @@ bool mp_haptic_generator::first_step ()
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 
 	for (int i=0;i<3;i++) {
-		irp6ot->ecp_td.next_position_velocity[i] = 0;
+		irp6ot->ecp_td.next_velocity[i] = 0;
 		irp6ot->ecp_td.next_force_xyz_torque_xyz[i] = 0;
-		irp6ot->ecp_td.next_position_velocity[i+3] = 0;
+		irp6ot->ecp_td.next_velocity[i+3] = 0;
 		irp6ot->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
 		irp6ot->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 		irp6ot->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
@@ -383,9 +383,9 @@ bool mp_haptic_generator::first_step ()
 	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
-		irp6p->ecp_td.next_position_velocity[i] = 0;
+		irp6p->ecp_td.next_velocity[i] = 0;
 		irp6p->ecp_td.next_force_xyz_torque_xyz[i] = 0;
-		irp6p->ecp_td.next_position_velocity[i+3] = 0;
+		irp6p->ecp_td.next_velocity[i+3] = 0;
 		irp6p->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
 		irp6p->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 		irp6p->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
@@ -453,14 +453,14 @@ bool mp_haptic_generator::next_step ()
 	}
 
 
-	Homog_matrix irp6ot_current_predicted_arm_frame (irp6ot->ecp_td.current_predicted_arm_frame);
-	Homog_matrix irp6p_current_predicted_arm_frame (irp6p->ecp_td.current_predicted_arm_frame);
+	Homog_matrix irp6ot_current_arm_frame (irp6ot->ecp_td.current_arm_frame);
+	Homog_matrix irp6p_current_arm_frame (irp6p->ecp_td.current_arm_frame);
 
-	Homog_matrix irp6p_goal_frame (global_base*irp6ot_current_predicted_arm_frame);
-	irp6p_goal_frame.get_xyz_angle_axis (irp6p->ecp_td.next_position_velocity);
+	Homog_matrix irp6p_goal_frame (global_base*irp6ot_current_arm_frame);
+	irp6p_goal_frame.get_xyz_angle_axis (irp6p->ecp_td.next_velocity);
 
 	/*
-	Homog_matrix irp6p_goal_frame_increment_in_end_effector ((!irp6p_current_predicted_arm_frame)*irp6p_goal_frame);
+	Homog_matrix irp6p_goal_frame_increment_in_end_effector ((!irp6p_current_arm_frame)*irp6p_goal_frame);
 	Ft_v_vector irp6p_goal_xyz_angle_axis_increment_in_end_effector;
 
 	irp6p_goal_frame_increment_in_end_effector.get_xyz_angle_axis(irp6p_goal_xyz_angle_axis_increment_in_end_effector);
@@ -557,9 +557,9 @@ bool mp_tff_rubik_grab_generator::first_step ()
 	tool_frame.get_frame_tab(irp6ot->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
-		irp6ot->ecp_td.next_position_velocity[i] = 0;
+		irp6ot->ecp_td.next_velocity[i] = 0;
 		irp6ot->ecp_td.next_force_xyz_torque_xyz[i] = 0;
-		irp6ot->ecp_td.next_position_velocity[i+3] = 0;
+		irp6ot->ecp_td.next_velocity[i+3] = 0;
 		irp6ot->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
 		if(irp6ot_con)
 		{
@@ -616,9 +616,9 @@ bool mp_tff_rubik_grab_generator::first_step ()
 	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
-		irp6p->ecp_td.next_position_velocity[i] = 0;
+		irp6p->ecp_td.next_velocity[i] = 0;
 		irp6p->ecp_td.next_force_xyz_torque_xyz[i] = 0;
-		irp6p->ecp_td.next_position_velocity[i+3] = 0;
+		irp6p->ecp_td.next_velocity[i+3] = 0;
 		irp6p->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
 		if(irp6p_con)
 			{
@@ -776,9 +776,9 @@ bool mp_tff_rubik_face_rotate_generator::first_step ()
 	tool_frame.get_frame_tab(irp6ot->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
-		irp6ot->ecp_td.next_position_velocity[i] = 0;
+		irp6ot->ecp_td.next_velocity[i] = 0;
 		irp6ot->ecp_td.next_force_xyz_torque_xyz[i] = 0;
-		irp6ot->ecp_td.next_position_velocity[i+3] = 0;
+		irp6ot->ecp_td.next_velocity[i+3] = 0;
 		irp6ot->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
 		if(irp6ot_con)
 		{
@@ -836,9 +836,9 @@ bool mp_tff_rubik_face_rotate_generator::first_step ()
 	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
 
 	for (int i=0;i<3;i++) {
-		irp6p->ecp_td.next_position_velocity[i] = 0;
+		irp6p->ecp_td.next_velocity[i] = 0;
 		irp6p->ecp_td.next_force_xyz_torque_xyz[i] = 0;
-		irp6p->ecp_td.next_position_velocity[i+3] = 0;
+		irp6p->ecp_td.next_velocity[i+3] = 0;
 		irp6p->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
 		irp6p->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 		irp6p->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
@@ -902,7 +902,7 @@ bool mp_tff_rubik_face_rotate_generator::next_step ()
 		irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
 		irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
 		if(irp6ot_con < -0.1 || 0.1 < irp6ot_con) {
-			Homog_matrix frame(irp6ot->ecp_td.current_beggining_arm_frame);
+			Homog_matrix frame(irp6ot->ecp_td.current_arm_frame);
 			double xyz_eul_zyz[6];
 			frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double angle_to_move = (irp6ot_con / 180.0) * M_PI;
@@ -918,7 +918,7 @@ bool mp_tff_rubik_face_rotate_generator::next_step ()
 			}
 		}
 		if(irp6p_con < -0.1 || 0.1 < irp6p_con) {
-			Homog_matrix frame(irp6p->ecp_td.current_beggining_arm_frame);
+			Homog_matrix frame(irp6p->ecp_td.current_arm_frame);
 			double xyz_eul_zyz[6];
 			frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double angle_to_move = (irp6p_con / 180.0) * M_PI;
@@ -936,7 +936,7 @@ bool mp_tff_rubik_face_rotate_generator::next_step ()
 	}
 	if(node_counter >= 3) {
 		if(irp6p_con < -0.1 || 0.1 < irp6p_con) {
-			Homog_matrix current_frame(irp6p->ecp_td.current_predicted_arm_frame);
+			Homog_matrix current_frame(irp6p->ecp_td.current_arm_frame);
 			double xyz_eul_zyz[6];
 			current_frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double current_gamma = xyz_eul_zyz[5];
@@ -951,7 +951,7 @@ bool mp_tff_rubik_face_rotate_generator::next_step ()
 			}
 		}
 		if(irp6ot_con < -0.1 || 0.1 < irp6ot_con) {
-			Homog_matrix current_frame(irp6ot->ecp_td.current_predicted_arm_frame);
+			Homog_matrix current_frame(irp6ot->ecp_td.current_arm_frame);
 			double xyz_eul_zyz[6];
 			current_frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double current_gamma = xyz_eul_zyz[5];
@@ -1040,7 +1040,7 @@ bool mp_tff_gripper_approach_generator::first_step ()
 	}
 
 	for(int i=0;i<6;i++) {
-		irp6ot->ecp_td.next_position_velocity[i] = 0;
+		irp6ot->ecp_td.next_velocity[i] = 0;
 		irp6ot->ecp_td.next_force_xyz_torque_xyz[i] = 0;
 	}
 
@@ -1071,7 +1071,7 @@ bool mp_tff_gripper_approach_generator::first_step ()
 	}
 
 	for (int i=0;i<6;i++) {
-		irp6p->ecp_td.next_position_velocity[i] = 0;
+		irp6p->ecp_td.next_velocity[i] = 0;
 		irp6p->ecp_td.next_force_xyz_torque_xyz[i] = 0;
 	}
 

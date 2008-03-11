@@ -65,12 +65,12 @@ void ecp_conveyor_robot::create_command (void) {
           switch (EDP_data.set_arm_type) {
             case  JOINT:
               for (int j=0; j<CONVEYOR_NUM_OF_SERVOS ; j++)
-                EDP_command_and_reply_buffer.instruction.arm.coordinate_def.arm_coordinates[j]
+                EDP_command_and_reply_buffer.instruction.arm.pf_def.arm_coordinates[j]
                    = EDP_data.next_joint_arm_coordinates[j];
               break;
             case  MOTOR:
               for (int j=0; j<CONVEYOR_NUM_OF_SERVOS ; j++)
-                EDP_command_and_reply_buffer.instruction.arm.coordinate_def.arm_coordinates[j]
+                EDP_command_and_reply_buffer.instruction.arm.pf_def.arm_coordinates[j]
                    = EDP_data.next_motor_arm_coordinates[j];
               break;
             default: // Blad: niewlasciwy sposob zadawania polozenia ramienia
@@ -148,12 +148,12 @@ void ecp_conveyor_robot::get_arm_reply (void)
        case MOTOR:
          for (int i=0; i<CONVEYOR_NUM_OF_SERVOS; i++)
            EDP_data.current_motor_arm_coordinates[i] =
-             EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[i];
+             EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[i];
          break;
        case JOINT:
          for (int i=0; i<CONVEYOR_NUM_OF_SERVOS; i++)
            EDP_data.current_joint_arm_coordinates[i] =
-             EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[i];
+             EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[i];
          break;
 
        default: // bledny typ specyfikacji pozycji

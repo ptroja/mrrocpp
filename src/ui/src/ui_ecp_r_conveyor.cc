@@ -238,15 +238,15 @@ bool ui_conveyor_robot::move_motors ( double final_position[CONVEYOR_NUM_OF_SERV
   if (nr_of_steps < 1) // Nie wykowywac bo zadano ruch do aktualnej pozycji
     return true; 
   for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) 
-    EDP_command_and_reply_buffer.instruction.arm.coordinate_def.arm_coordinates[j] = final_position[j];
+    EDP_command_and_reply_buffer.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
     
-// printf("\n ilosc krokow: %d, po ilu komun: %d, odleglosc 1: %f\n",EDP_command_and_reply_buffer.instruction.motion_steps, EDP_command_and_reply_buffer.instruction.value_in_step_no, EDP_command_and_reply_buffer.instruction.arm.coordinate_def.arm_coordinates[1]);
+// printf("\n ilosc krokow: %d, po ilu komun: %d, odleglosc 1: %f\n",EDP_command_and_reply_buffer.instruction.motion_steps, EDP_command_and_reply_buffer.instruction.value_in_step_no, EDP_command_and_reply_buffer.instruction.arm.pf_def.arm_coordinates[1]);
 
  execute_motion();
 
   if (is_synchronised()) 
     for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
-      current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[j];
+      current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[j];
 
   return true;
 };// end: ui_conveyor_robot::move_motors()
@@ -289,12 +289,12 @@ bool ui_conveyor_robot::move_joints (double final_position[CONVEYOR_NUM_OF_SERVO
     return true; 
 
   for (j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) 
-    EDP_command_and_reply_buffer.instruction.arm.coordinate_def.arm_coordinates[j] = final_position[j];
+    EDP_command_and_reply_buffer.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
 
  execute_motion();
 
   for (j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
-    current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[j];
+    current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[j];
 
   return true;
 };// end: ui_conveyor_robot::move_internal()
@@ -317,8 +317,8 @@ execute_motion();
     return false;  
 // printf("dalej za query read motors\n");
   for (j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
-// { // printf("current position: %f\n",EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[j]);
-    current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[j];
+// { // printf("current position: %f\n",EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[j]);
+    current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[j];
 		// 			    }
 // printf("koniec read motors\n");
   return true;
@@ -337,7 +337,7 @@ bool ui_conveyor_robot::read_joints ( double current_position[CONVEYOR_NUM_OF_SE
 execute_motion();
 
   for (j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
-    current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.coordinate_def.arm_coordinates[j];
+    current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[j];
 //   printf("read_joints: %f\n", current_position[0]);
   return true;
 };// end: ui_conveyor_robot::read_joints()

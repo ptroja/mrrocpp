@@ -102,7 +102,7 @@ void mp_irp6s_and_conv_robot::create_next_pose_command (void)
                     ecp_td.next_force_tool_weight;
                 break;
             case FORCE_BIAS:
-            break;                
+                break;
             default: // Blad: niewlasciwy typ modelu robota
                 throw MP_error(NON_FATAL_ERROR, INVALID_RMODEL_TYPE);
             }
@@ -117,34 +117,34 @@ void mp_irp6s_and_conv_robot::create_next_pose_command (void)
             switch (ecp_td.set_arm_type)
             {
             case FRAME:
-                copy_frame(mp_command.mp_package.instruction.arm.frame_def.arm_frame, ecp_td.next_arm_frame);
+                copy_frame(mp_command.mp_package.instruction.arm.pf_def.arm_frame, ecp_td.next_arm_frame);
                 if (has_gripper)
                 {
-                    mp_command.mp_package.instruction.arm.frame_def.gripper_coordinate
+                    mp_command.mp_package.instruction.arm.pf_def.gripper_coordinate
                     = ecp_td.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka
                 }
                 break;
             case XYZ_ANGLE_AXIS:
                 for (int j=0; j<6 ; j++)
                 {
-                    mp_command.mp_package.instruction.arm.coordinate_def.arm_coordinates[j]
+                    mp_command.mp_package.instruction.arm.pf_def.arm_coordinates[j]
                     = ecp_td.next_XYZ_AA_arm_coordinates[j];
                 }
                 if (has_gripper)
                 {
-                    mp_command.mp_package.instruction.arm.coordinate_def.gripper_coordinate
+                    mp_command.mp_package.instruction.arm.pf_def.gripper_coordinate
                     = ecp_td.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka
                 }
                 break;
             case XYZ_EULER_ZYZ:
                 for (int j=0; j<6 ; j++)
                 {
-                    mp_command.mp_package.instruction.arm.coordinate_def.arm_coordinates[j]
+                    mp_command.mp_package.instruction.arm.pf_def.arm_coordinates[j]
                     = ecp_td.next_XYZ_ZYZ_arm_coordinates[j];
                 }
                 if (has_gripper)
                 {
-                    mp_command.mp_package.instruction.arm.coordinate_def.gripper_coordinate
+                    mp_command.mp_package.instruction.arm.pf_def.gripper_coordinate
                     = ecp_td.next_gripper_coordinate; // zadany stopien rozwarcia chwytaka
                 }
                 break;
@@ -155,41 +155,41 @@ void mp_irp6s_and_conv_robot::create_next_pose_command (void)
                 }
                 for(int i=0;i<6;i++)
                 {
-                    mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.inertia[i]
+                    mp_command.mp_package.instruction.arm.pf_def.inertia[i]
                     =ecp_td.next_inertia[i];
-                    mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.reciprocal_damping[i]
+                    mp_command.mp_package.instruction.arm.pf_def.reciprocal_damping[i]
                     =ecp_td.next_reciprocal_damping[i];
 
                     /*
-                    mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.selection_vector[i]
+                    mp_command.mp_package.instruction.arm.pf_def.selection_vector[i]
                     =ecp_td.MPselection_vector[i];
                     */
 
-                    mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i]
+                    mp_command.mp_package.instruction.arm.pf_def.force_xyz_torque_xyz[i]
                     =ecp_td.next_force_xyz_torque_xyz[i];
-                    mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.behaviour[i]
+                    mp_command.mp_package.instruction.arm.pf_def.behaviour[i]
                     = ecp_td.next_behaviour[i]; // pozycja docelowa
                 }
                 for (int i=0; i<servos_number ; i++)
                 {
-                    mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.position_velocity[i]
-                    =ecp_td.next_position_velocity[i];
+                    mp_command.mp_package.instruction.arm.pf_def.arm_coordinates[i]
+                    =ecp_td.next_velocity[i];
 
                 }
-                mp_command.mp_package.instruction.arm.pose_force_torque_at_frame_def.gripper_coordinate
+                mp_command.mp_package.instruction.arm.pf_def.gripper_coordinate
                 =ecp_td.next_gripper_coordinate;
                 break;
             case  JOINT:
                 for (int j=0; j<servos_number ; j++)
                 {
-                    mp_command.mp_package.instruction.arm.coordinate_def.arm_coordinates[j]
+                    mp_command.mp_package.instruction.arm.pf_def.arm_coordinates[j]
                     = ecp_td.next_joint_arm_coordinates[j];
                 }
                 break;
             case  MOTOR:
                 for (int j=0; j<servos_number ; j++)
                 {
-                    mp_command.mp_package.instruction.arm.coordinate_def.arm_coordinates[j]
+                    mp_command.mp_package.instruction.arm.pf_def.arm_coordinates[j]
                     = ecp_td.next_motor_arm_coordinates[j];
                 }
                 break;
@@ -209,43 +209,44 @@ void mp_irp6s_and_conv_robot::create_next_pose_command (void)
 
 void mp_irp6s_and_conv_robot::get_reply(void)
 {
-	// pobiera z pakietu przeslanego z ECP informacje i wstawia je do
-	// odpowiednich skladowych generatora lub warunku
-	ecp_td.ecp_reply = ecp_reply_package.reply;
-	ecp_td.reply_type = ecp_reply_package.ecp_reply.reply_package.reply_type;
-	switch (ecp_td.reply_type) {
-		case ERROR:
-			ecp_td.error_no.error0
-					= ecp_reply_package.ecp_reply.reply_package.error_no.error0;
-			ecp_td.error_no.error1
-					= ecp_reply_package.ecp_reply.reply_package.error_no.error1;
-			break;
-		case ACKNOWLEDGE:
-			break;
-		case SYNCHRO_OK:
-			break;
-		case ARM_INPUTS:
-			get_input_reply();
-		case ARM:
-			get_arm_reply();
-			break;
-		case RMODEL_INPUTS:
-			get_input_reply();
-		case RMODEL:
-			get_rmodel_reply();
-			break;
-		case INPUTS:
-			get_input_reply();
-			break;
-		case ARM_RMODEL_INPUTS:
-			get_input_reply();
-		case ARM_RMODEL:
-			get_arm_reply();
-			get_rmodel_reply();
-			break;
-		default: // bledna przesylka
-			throw MP_error (NON_FATAL_ERROR, INVALID_EDP_REPLY);
-	}
+    // pobiera z pakietu przeslanego z ECP informacje i wstawia je do
+    // odpowiednich skladowych generatora lub warunku
+    ecp_td.ecp_reply = ecp_reply_package.reply;
+    ecp_td.reply_type = ecp_reply_package.ecp_reply.reply_package.reply_type;
+    switch (ecp_td.reply_type)
+    {
+    case ERROR:
+        ecp_td.error_no.error0
+        = ecp_reply_package.ecp_reply.reply_package.error_no.error0;
+        ecp_td.error_no.error1
+        = ecp_reply_package.ecp_reply.reply_package.error_no.error1;
+        break;
+    case ACKNOWLEDGE:
+        break;
+    case SYNCHRO_OK:
+        break;
+    case ARM_INPUTS:
+        get_input_reply();
+    case ARM:
+        get_arm_reply();
+        break;
+    case RMODEL_INPUTS:
+        get_input_reply();
+    case RMODEL:
+        get_rmodel_reply();
+        break;
+    case INPUTS:
+        get_input_reply();
+        break;
+    case ARM_RMODEL_INPUTS:
+        get_input_reply();
+    case ARM_RMODEL:
+        get_arm_reply();
+        get_rmodel_reply();
+        break;
+    default: // bledna przesylka
+        throw MP_error (NON_FATAL_ERROR, INVALID_EDP_REPLY);
+    }
 }
 
 void mp_irp6s_and_conv_robot::get_input_reply (void)
@@ -264,31 +265,31 @@ void mp_irp6s_and_conv_robot::get_arm_reply (void)
     case MOTOR:
         for (int i=0; i<servos_number; i++)
         {
-            ecp_td.current_motor_arm_coordinates[i] = ecp_reply_package.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
+            ecp_td.current_motor_arm_coordinates[i] = ecp_reply_package.ecp_reply.reply_package.arm.pf_def.arm_coordinates[i];
         }
         if (has_gripper)
         {
-            ecp_td.gripper_reg_state = ecp_reply_package.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
+            ecp_td.gripper_reg_state = ecp_reply_package.ecp_reply.reply_package.arm.pf_def.gripper_reg_state;
         }
         break;
     case JOINT:
         for (int i=0; i<servos_number; i++)
         {
-            ecp_td.current_joint_arm_coordinates[i] = ecp_reply_package.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
+            ecp_td.current_joint_arm_coordinates[i] = ecp_reply_package.ecp_reply.reply_package.arm.pf_def.arm_coordinates[i];
         }
         if (has_gripper)
         {
-            ecp_td.gripper_reg_state = ecp_reply_package.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
+            ecp_td.gripper_reg_state = ecp_reply_package.ecp_reply.reply_package.arm.pf_def.gripper_reg_state;
         }
         break;
     case FRAME:
         if (robot_name == ROBOT_CONVEYOR)
             throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
-        copy_frame(ecp_td.current_arm_frame, ecp_reply_package.ecp_reply.reply_package.arm.frame_def.arm_frame);
+        copy_frame(ecp_td.current_arm_frame, ecp_reply_package.ecp_reply.reply_package.arm.pf_def.arm_frame);
         if (has_gripper)
         {
-            ecp_td.gripper_reg_state = ecp_reply_package.ecp_reply.reply_package.arm.frame_def.gripper_reg_state;
-            ecp_td.current_gripper_coordinate = ecp_reply_package.ecp_reply.reply_package.arm.frame_def.gripper_coordinate;
+            ecp_td.gripper_reg_state = ecp_reply_package.ecp_reply.reply_package.arm.pf_def.gripper_reg_state;
+            ecp_td.current_gripper_coordinate = ecp_reply_package.ecp_reply.reply_package.arm.pf_def.gripper_coordinate;
         }
         break;
     case XYZ_EULER_ZYZ:
@@ -296,42 +297,39 @@ void mp_irp6s_and_conv_robot::get_arm_reply (void)
             throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
         for (int i=0; i<6; i++)
         {
-            ecp_td.current_XYZ_ZYZ_arm_coordinates[i] = ecp_reply_package.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
+            ecp_td.current_XYZ_ZYZ_arm_coordinates[i] = ecp_reply_package.ecp_reply.reply_package.arm.pf_def.arm_coordinates[i];
         }
         if (has_gripper)
         {
-            ecp_td.gripper_reg_state = ecp_reply_package.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
-            ecp_td.current_gripper_coordinate = ecp_reply_package.ecp_reply.reply_package.arm.coordinate_def.gripper_coordinate;
+            ecp_td.gripper_reg_state = ecp_reply_package.ecp_reply.reply_package.arm.pf_def.gripper_reg_state;
+            ecp_td.current_gripper_coordinate = ecp_reply_package.ecp_reply.reply_package.arm.pf_def.gripper_coordinate;
         }
         break;
     case POSE_FORCE_TORQUE_AT_FRAME:
         if (!has_gripper)
             throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
-        copy_frame(ecp_td.current_beggining_arm_frame,
-                   ecp_reply_package.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.beggining_arm_frame);
-        copy_frame(ecp_td.current_predicted_arm_frame,
-                   ecp_reply_package.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.predicted_arm_frame);
-        copy_frame(ecp_td.current_present_arm_frame,
-                   ecp_reply_package.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.present_arm_frame);
+        copy_frame(ecp_td.current_arm_frame,
+                   ecp_reply_package.ecp_reply.reply_package.arm.pf_def.arm_frame);
+
         for(int i = 0;i<6;i++)
         {
             ecp_td.current_force_xyz_torque_xyz[i] =
-                ecp_reply_package.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i];
+                ecp_reply_package.ecp_reply.reply_package.arm.pf_def.force_xyz_torque_xyz[i];
         }
-        ecp_td.gripper_reg_state = ecp_reply_package.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.gripper_reg_state;
-        ecp_td.current_gripper_coordinate = ecp_reply_package.ecp_reply.reply_package.arm.pose_force_torque_at_frame_def.gripper_coordinate;
+        ecp_td.gripper_reg_state = ecp_reply_package.ecp_reply.reply_package.arm.pf_def.gripper_reg_state;
+        ecp_td.current_gripper_coordinate = ecp_reply_package.ecp_reply.reply_package.arm.pf_def.gripper_coordinate;
         break;
     case XYZ_ANGLE_AXIS:
         if (robot_name == ROBOT_CONVEYOR)
             throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
         for (int i=0; i<6; i++)
         {
-            ecp_td.current_XYZ_AA_arm_coordinates[i] = ecp_reply_package.ecp_reply.reply_package.arm.coordinate_def.arm_coordinates[i];
+            ecp_td.current_XYZ_AA_arm_coordinates[i] = ecp_reply_package.ecp_reply.reply_package.arm.pf_def.arm_coordinates[i];
         }
         if (has_gripper)
         {
-            ecp_td.gripper_reg_state = ecp_reply_package.ecp_reply.reply_package.arm.coordinate_def.gripper_reg_state;
-            ecp_td.current_gripper_coordinate = ecp_reply_package.ecp_reply.reply_package.arm.coordinate_def.gripper_coordinate;
+            ecp_td.gripper_reg_state = ecp_reply_package.ecp_reply.reply_package.arm.pf_def.gripper_reg_state;
+            ecp_td.current_gripper_coordinate = ecp_reply_package.ecp_reply.reply_package.arm.pf_def.gripper_coordinate;
         }
         break;
     default: // bledny typ specyfikacji pozycji

@@ -189,9 +189,9 @@ void edp_irp6m_effector::arm_frame_2_xyz_eul_zyz ()
     case ARM_INPUTS:
     case ARM_RMODEL:
     case ARM_RMODEL_INPUTS:
-        A.get_mech_xyz_euler_zyz(reply.arm.coordinate_def.arm_coordinates);
+        A.get_mech_xyz_euler_zyz(reply.arm.pf_def.arm_coordinates);
         A.get_mech_xyz_euler_zyz(rb_obj->step_data.current_kartez_position);
-        //A.get_xyz_euler_zyz(reply.arm.coordinate_def.arm_coordinates);
+        //A.get_xyz_euler_zyz(reply.arm.pf_def.arm_coordinates);
         //A.get_xyz_euler_zyz(rb_obj->step_data.current_kartez_position);
         break;
     default: // blad:
@@ -201,8 +201,8 @@ void edp_irp6m_effector::arm_frame_2_xyz_eul_zyz ()
     // dla robotow track i postument - oblicz chwytak
     if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
     {
-        reply.arm.coordinate_def.gripper_reg_state = servo_gripper_reg_state;
-        reply.arm.coordinate_def.gripper_coordinate = current_joints[gripper_servo_nr];
+        reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
+        reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
     }
 
 }
@@ -235,7 +235,7 @@ void edp_irp6m_effector::move_arm (c_buffer &instruction)
 
         for (int i=0; i<6;i++)
         {
-            rb_obj->step_data.current_kartez_position[i]=instruction.arm.coordinate_def.arm_coordinates[i];
+            rb_obj->step_data.current_kartez_position[i]=instruction.arm.pf_def.arm_coordinates[i];
         }
 
         rb_obj->unlock_mutex();

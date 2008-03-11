@@ -179,9 +179,9 @@ void edp_irp6s_postument_track_effector::arm_frame_2_xyz_eul_zyz ()
     case ARM_INPUTS:
     case ARM_RMODEL:
     case ARM_RMODEL_INPUTS:
-        //A.get_mech_xyz_euler_zyz(reply.arm.coordinate_def.arm_coordinates);
+        //A.get_mech_xyz_euler_zyz(reply.arm.pf_def.arm_coordinates);
         //A.get_mech_xyz_euler_zyz(rb_obj->step_data.current_kartez_position);
-        A.get_xyz_euler_zyz(reply.arm.coordinate_def.arm_coordinates);
+        A.get_xyz_euler_zyz(reply.arm.pf_def.arm_coordinates);
         A.get_xyz_euler_zyz(rb_obj->step_data.current_kartez_position);
         break;
     default: // blad:
@@ -190,8 +190,8 @@ void edp_irp6s_postument_track_effector::arm_frame_2_xyz_eul_zyz ()
     // dla robotow track i postument - oblicz chwytak
     if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
     {
-        reply.arm.coordinate_def.gripper_reg_state = servo_gripper_reg_state;
-        reply.arm.coordinate_def.gripper_coordinate = current_joints[gripper_servo_nr];
+        reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
+        reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
     }
 
 }
@@ -308,9 +308,7 @@ void edp_irp6s_postument_track_effector::arm_frame_2_pose_force_torque_at_frame 
             if(*read_hardware)
             {
                 is_get_arm_read_hardware = true;
-                copy_frame(reply.arm.pose_force_torque_at_frame_def.beggining_arm_frame, current_end_effector_frame);
-                copy_frame(reply.arm.pose_force_torque_at_frame_def.predicted_arm_frame, current_end_effector_frame);
-                copy_frame(reply.arm.pose_force_torque_at_frame_def.present_arm_frame, current_end_effector_frame);
+                copy_frame(reply.arm.pf_def.arm_frame, current_end_effector_frame);
             }
 
             Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
@@ -324,7 +322,7 @@ void edp_irp6s_postument_track_effector::arm_frame_2_pose_force_torque_at_frame 
             // modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
 
            Ft_v_vector current_force_torque (ft_tr_inv_tool_matrix *  ft_tr_inv_current_frame_matrix * Ft_v_vector (current_force));
-            current_force_torque.to_table (reply.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz);
+            current_force_torque.to_table (reply.arm.pf_def.force_xyz_torque_xyz);
 
         }
         break;
@@ -333,11 +331,11 @@ void edp_irp6s_postument_track_effector::arm_frame_2_pose_force_torque_at_frame 
         break;
     }
     // dla robotow track i postument - oblicz chwytak
-    reply.arm.pose_force_torque_at_frame_def.gripper_reg_state = servo_gripper_reg_state;
+    reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
 
     if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
     {
-        reply.arm.pose_force_torque_at_frame_def.gripper_coordinate = current_joints[gripper_servo_nr];
+        reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
     }
 
 }
@@ -365,11 +363,11 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
     double reciprocal_damping[6];
     BEHAVIOUR_SPECIFICATION behaviour[6];
 
-    memcpy (inertia, instruction.arm.pose_force_torque_at_frame_def.inertia, sizeof (double[6]) );
-    memcpy (reciprocal_damping, instruction.arm.pose_force_torque_at_frame_def.reciprocal_damping, sizeof (double[6]) );
-    memcpy (behaviour, instruction.arm.pose_force_torque_at_frame_def.behaviour, sizeof (BEHAVIOUR_SPECIFICATION[6]) );
-    memcpy (force_xyz_torque_xyz, instruction.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz, sizeof (double[6]) );
-    double desired_gripper_coordinate = instruction.arm.pose_force_torque_at_frame_def.gripper_coordinate;
+    memcpy (inertia, instruction.arm.pf_def.inertia, sizeof (double[6]) );
+    memcpy (reciprocal_damping, instruction.arm.pf_def.reciprocal_damping, sizeof (double[6]) );
+    memcpy (behaviour, instruction.arm.pf_def.behaviour, sizeof (BEHAVIOUR_SPECIFICATION[6]) );
+    memcpy (force_xyz_torque_xyz, instruction.arm.pf_def.force_xyz_torque_xyz, sizeof (double[6]) );
+    double desired_gripper_coordinate = instruction.arm.pf_def.gripper_coordinate;
     switch (motion_type)
     {
     case ABSOLUTE:
@@ -413,35 +411,35 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
     switch (motion_type)
     {
     case PF_XYZ_ANGLE_AXIS_ABSOLUTE_POSE:
-        goal_frame.set_xyz_angle_axis (instruction.arm.pose_force_torque_at_frame_def.position_velocity);
+        goal_frame.set_xyz_angle_axis (instruction.arm.pf_def.arm_coordinates);
         break;
     case PF_XYZ_ANGLE_AXIS_RELATIVE_POSE:
-        goal_frame.set_xyz_angle_axis (instruction.arm.pose_force_torque_at_frame_def.position_velocity); // tutaj goal_frame jako zmienna tymczasowa
+        goal_frame.set_xyz_angle_axis (instruction.arm.pf_def.arm_coordinates); // tutaj goal_frame jako zmienna tymczasowa
         goal_frame = begining_end_effector_frame * goal_frame;
         break;
     case PF_JOINTS_ABSOLUTE_POSITION:
         get_current_kinematic_model()->i2e_transform
-        (instruction.arm.pose_force_torque_at_frame_def.position_velocity, &goal_frame_tab);
+        (instruction.arm.pf_def.arm_coordinates, &goal_frame_tab);
         goal_frame.set_frame_tab (goal_frame_tab);
         break;
     case PF_JOINTS_RELATIVE_POSITION:
         for (int i = 0; i < MAX_SERVOS_NR; i++)
         {
-            tmp_joints[i] = begining_joints[i] + instruction.arm.pose_force_torque_at_frame_def.position_velocity[i];
+            tmp_joints[i] = begining_joints[i] + instruction.arm.pf_def.arm_coordinates[i];
         }
         get_current_kinematic_model()->i2e_transform (tmp_joints, &goal_frame_tab);
         goal_frame.set_frame_tab (goal_frame_tab);
         break;
     case PF_MOTORS_ABSOLUTE_POSITION:
         get_current_kinematic_model()->mp2i_transform
-        (instruction.arm.pose_force_torque_at_frame_def.position_velocity, tmp_joints);
+        (instruction.arm.pf_def.arm_coordinates, tmp_joints);
         get_current_kinematic_model()->i2e_transform (tmp_joints, &goal_frame_tab);
         goal_frame.set_frame_tab (goal_frame_tab);
         break;
     case PF_MOTORS_RELATIVE_POSITION:
         for (int i = 0; i < MAX_SERVOS_NR; i++)
         {
-            tmp_motor_pos[i] = desired_motor_pos_new[i] + instruction.arm.pose_force_torque_at_frame_def.position_velocity[i];
+            tmp_motor_pos[i] = desired_motor_pos_new[i] + instruction.arm.pf_def.arm_coordinates[i];
         }
         get_current_kinematic_model()->mp2i_transform (tmp_motor_pos, tmp_joints);
         get_current_kinematic_model()->i2e_transform (tmp_joints, &goal_frame_tab);
@@ -469,13 +467,13 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
         }
         break;
     case PF_VELOCITY:
-        memcpy (pos_xyz_rot_xyz, instruction.arm.pose_force_torque_at_frame_def.position_velocity, sizeof (double[6]) );
+        memcpy (pos_xyz_rot_xyz, instruction.arm.pf_def.arm_coordinates, sizeof (double[6]) );
         break;
     }
 
     Ft_v_vector base_pos_xyz_rot_xyz_vector (pos_xyz_rot_xyz);
 
-    copy_frame (reply.arm.pose_force_torque_at_frame_def.beggining_arm_frame, begining_frame);
+ //   copy_frame (reply.arm.pf_def.beggining_arm_frame, begining_frame);
 
     beginning_gripper_coordinate = begining_joints[gripper_servo_nr];
 
@@ -649,17 +647,17 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move (c_buff
         move_servos ();
         if (step == ECP_value_in_step_no)
         { // przygotowanie predicted frame dla ECP
-            next_frame.get_frame_tab(reply.arm.pose_force_torque_at_frame_def.present_arm_frame);
+            next_frame.get_frame_tab(reply.arm.pf_def.arm_frame);
             Homog_matrix predicted_frame = next_frame;
             for (int i=0; i< ECP_motion_steps-ECP_value_in_step_no; i++)
             {
                 predicted_frame = predicted_frame * rot_frame;
             }
-            predicted_frame.get_frame_tab(reply.arm.pose_force_torque_at_frame_def.predicted_arm_frame);
+//            predicted_frame.get_frame_tab(reply.arm.pf_def.predicted_arm_frame);
 /*
             for (int i=0; i<6; i++)
             {
-                reply.arm.pose_force_torque_at_frame_def.force_xyz_torque_xyz[i] = current_force_torque[i];
+                reply.arm.pf_def.force_xyz_torque_xyz[i] = current_force_torque[i];
             }
             */
             mt_tt_obj->trans_t_to_master_order_status_ready();
@@ -703,7 +701,7 @@ void edp_irp6s_postument_track_effector::move_arm (c_buffer &instruction)
 
         for (int i=0; i<6;i++)
         {
-            rb_obj->step_data.current_kartez_position[i]=instruction.arm.coordinate_def.arm_coordinates[i];
+            rb_obj->step_data.current_kartez_position[i]=instruction.arm.pf_def.arm_coordinates[i];
         }
 
         rb_obj->unlock_mutex();

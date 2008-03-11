@@ -484,7 +484,7 @@ void edp_irp6s_and_conv_effector::arm_motors_2_motors (void)
         {
             reply.PWM_value[i] = PWM_value[i];
             reply.current[i] = current[i];
-            reply.arm.coordinate_def.arm_coordinates[i] = current_motor_pos[i];
+            reply.arm.pf_def.arm_coordinates[i] = current_motor_pos[i];
         }
         break;
     default: // blad:
@@ -493,8 +493,8 @@ void edp_irp6s_and_conv_effector::arm_motors_2_motors (void)
 
     if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
     {
-        reply.arm.coordinate_def.gripper_reg_state = servo_gripper_reg_state;
-        reply.arm.coordinate_def.gripper_coordinate = current_joints[gripper_servo_nr];
+        reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
+        reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
     }
 
 }
@@ -517,7 +517,7 @@ void edp_irp6s_and_conv_effector::arm_joints_2_joints (void)
     case ARM_RMODEL:
     case ARM_RMODEL_INPUTS:
         for (int i=0; i<number_of_servos; i++)
-            reply.arm.coordinate_def.arm_coordinates[i] = current_joints[i];
+            reply.arm.pf_def.arm_coordinates[i] = current_joints[i];
         break;
     default: // blad:
             throw NonFatal_error_2(STRANGE_GET_ARM_REQUEST);
@@ -525,8 +525,8 @@ void edp_irp6s_and_conv_effector::arm_joints_2_joints (void)
 
     if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
     {
-        reply.arm.coordinate_def.gripper_reg_state = servo_gripper_reg_state;
-        reply.arm.coordinate_def.gripper_coordinate = current_joints[gripper_servo_nr];
+        reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
+        reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
     }
 
 }
@@ -747,7 +747,7 @@ void edp_irp6s_and_conv_effector::compute_motors(const c_buffer &instruction)
     motion_type = instruction.motion_type;
     motion_steps = instruction.motion_steps;
     value_in_step_no = instruction.value_in_step_no;
-    p = &instruction.arm.coordinate_def.arm_coordinates[0];
+    p = &instruction.arm.pf_def.arm_coordinates[0];
     if ( (motion_steps <= 0) /* || (value_in_step_no < 0) */ )
         throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
     switch (motion_type)
@@ -805,7 +805,7 @@ void edp_irp6s_and_conv_effector::compute_joints (const c_buffer &instruction)
     motion_type = instruction.motion_type;
     motion_steps = instruction.motion_steps;
     value_in_step_no = instruction.value_in_step_no;
-    p = &instruction.arm.coordinate_def.arm_coordinates[0];
+    p = &instruction.arm.pf_def.arm_coordinates[0];
     if ( (value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )
         throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
     switch (motion_type)

@@ -41,8 +41,7 @@
 /*--------------------------------------------------------------------------*/
 edp_irp6s_effector::edp_irp6s_effector (configurator &_config, ROBOT_ENUM l_robot_name) :
         edp_irp6s_and_conv_effector (_config, l_robot_name)
-{
-}
+{}
 
 /*--------------------------------------------------------------------------*/
 void edp_irp6s_effector::compute_xyz_euler_zyz (const c_buffer &instruction)
@@ -58,15 +57,15 @@ void edp_irp6s_effector::compute_xyz_euler_zyz (const c_buffer &instruction)
         motion_type = instruction.motion_type;
         motion_steps = instruction.motion_steps;
         value_in_step_no = instruction.value_in_step_no;
-        p = (double*) instruction.arm.coordinate_def.arm_coordinates;
+        p = (double*) instruction.arm.pf_def.arm_coordinates;
     }
     for (int i=0;i<6;i++)
-        rb_obj->step_data.current_kartez_position[i] = instruction.arm.coordinate_def.arm_coordinates[i];
+        rb_obj->step_data.current_kartez_position[i] = instruction.arm.pf_def.arm_coordinates[i];
 
     // dla robotow track i postument - oblicz chwytak
     if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
     {
-        desired_joints_tmp[gripper_servo_nr] = instruction.arm.coordinate_def.gripper_coordinate;
+        desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate;
     }
 
     // if ( (value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )
@@ -115,13 +114,13 @@ void edp_irp6s_effector::compute_xyz_angle_axis (const c_buffer &instruction)
         motion_type = instruction.motion_type;
         motion_steps = instruction.motion_steps;
         value_in_step_no = instruction.value_in_step_no;
-        p = &instruction.arm.coordinate_def.arm_coordinates[0];
+        p = &instruction.arm.pf_def.arm_coordinates[0];
     }
 
     // dla robotow track i postument - oblicz chwytak
     if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
     {
-        desired_joints_tmp[gripper_servo_nr] = instruction.arm.coordinate_def.gripper_coordinate;
+        desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate;
     }
 
     // if ( (value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )
@@ -138,7 +137,7 @@ void edp_irp6s_effector::compute_xyz_angle_axis (const c_buffer &instruction)
     default:
         throw NonFatal_error_2(INVALID_MOTION_TYPE);
     }
-    
+
     // Przeliczenie wspolrzednych zewnetrznych na wspolrzedne wewnetrzne
     get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, &desired_end_effector_frame);
     // Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
@@ -167,14 +166,14 @@ void edp_irp6s_effector::compute_frame (const c_buffer &instruction)
         motion_steps = instruction.motion_steps;
         value_in_step_no = instruction.value_in_step_no;
 
-        copy_frame(p_m, instruction.arm.frame_def.arm_frame);
+        copy_frame(p_m, instruction.arm.pf_def.arm_frame);
 
     } // end: then
 
     // dla robotow track i postument - oblicz chwytak
     if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
     {
-        desired_joints_tmp[gripper_servo_nr] = instruction.arm.frame_def.gripper_coordinate;
+        desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate;
     }
 
     if ( (value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )
@@ -534,7 +533,7 @@ void edp_irp6s_effector::arm_frame_2_xyz_aa (void)
     case ARM_INPUTS:
     case ARM_RMODEL:
     case ARM_RMODEL_INPUTS:
-        A.get_xyz_angle_axis(reply.arm.coordinate_def.arm_coordinates);
+        A.get_xyz_angle_axis(reply.arm.pf_def.arm_coordinates);
         break;
         // case FORCE:
 
@@ -548,8 +547,8 @@ void edp_irp6s_effector::arm_frame_2_xyz_aa (void)
     // dla robotow track i postument - oblicz chwytak
     if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
     {
-        reply.arm.coordinate_def.gripper_reg_state = servo_gripper_reg_state;
-        reply.arm.coordinate_def.gripper_coordinate = current_joints[gripper_servo_nr];
+        reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
+        reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
     }
 
 }
@@ -697,7 +696,7 @@ void edp_irp6s_effector::arm_frame_2_frame (void)
     case ARM_INPUTS:
     case ARM_RMODEL:
     case ARM_RMODEL_INPUTS:
-        Homog_matrix::copy_frame_tab(reply.arm.frame_def.arm_frame, current_end_effector_frame);
+        Homog_matrix::copy_frame_tab(reply.arm.pf_def.arm_frame, current_end_effector_frame);
         for(int i=0; i < 6; i++)
         {
             reply.PWM_value[i] = PWM_value[i];
@@ -711,8 +710,8 @@ void edp_irp6s_effector::arm_frame_2_frame (void)
     // dla robotow track i postument - oblicz chwytak
     if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
     {
-        reply.arm.coordinate_def.gripper_reg_state = servo_gripper_reg_state;
-        reply.arm.frame_def.gripper_coordinate = current_joints[gripper_servo_nr];
+        reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
+        reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
     }
 
 }

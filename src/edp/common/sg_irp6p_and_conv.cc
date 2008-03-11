@@ -554,7 +554,7 @@ BYTE NL_regulator_2_irp6p::compute_set_value (void)
         break;
     case 2:  // algorytm nr 2 - sterowanie pradowe
         // DUNG START
-        current_desired = 0.4*9.52 * (master.new_instruction.arm.coordinate_def.desired_torque[0] / 158);
+        current_desired = 0.4*9.52 * (master.new_instruction.arm.pf_def.desired_torque[0] / 158);
         current_measured = (meassured_current - 128 - 3)*0.035;
         current_error = current_desired - current_measured;
         int_current_error =  int_current_error + current_error*0.02;		// 500Hz => 0.02s
@@ -565,7 +565,7 @@ BYTE NL_regulator_2_irp6p::compute_set_value (void)
         if (display >= 500)
         {
             display = 0;
-            //printf("joint 1:   desired_current = %f,    current_error = %f,    out = %f\n", master.new_instruction.arm.coordinate_def.desired_torque[0] / 158, current_error, -30 * current_error - 4.0*int_current_error);
+            //printf("joint 1:   desired_current = %f,    current_error = %f,    out = %f\n", master.new_instruction.arm.pf_def.desired_torque[0] / 158, current_error, -30 * current_error - 4.0*int_current_error);
         }
         // DUNG END
         break;
@@ -794,7 +794,7 @@ BYTE NL_regulator_3_irp6p::compute_set_value (void)
         break;
     case 2:  // algorytm nr 2 - sterowanie pradowe
         // DUNG START
-        current_desired = 0.4*9.52 * (master.new_instruction.arm.coordinate_def.desired_torque[1] / 158);
+        current_desired = 0.4*9.52 * (master.new_instruction.arm.pf_def.desired_torque[1] / 158);
         current_measured = (meassured_current - 128 - 3)*0.035;
         current_error = current_desired - current_measured;
         int_current_error =  int_current_error + current_error*0.02;		// 500Hz => 0.02s
@@ -1034,7 +1034,7 @@ BYTE NL_regulator_4_irp6p::compute_set_value (void)
         break;
     case 2:  // algorytm nr 2 - sterowanie pradowe
         // DUNG START
-        current_desired = 0.4*9.52 * (master.new_instruction.arm.coordinate_def.desired_torque[2] / 158);
+        current_desired = 0.4*9.52 * (master.new_instruction.arm.pf_def.desired_torque[2] / 158);
         current_measured = (meassured_current - 128 - 3)*0.035;
         current_error = current_desired - current_measured;
         int_current_error =  int_current_error + current_error*0.02;		// 500Hz => 0.02s
@@ -1272,7 +1272,7 @@ BYTE NL_regulator_5_irp6p::compute_set_value (void)
         break;
     case 2:  // algorytm nr 2 - sterowanie pradowe
         // DUNG START
-        current_desired = 0.4*9.52 * (master.new_instruction.arm.coordinate_def.desired_torque[3] / 158);
+        current_desired = 0.4*9.52 * (master.new_instruction.arm.pf_def.desired_torque[3] / 158);
         current_measured = (meassured_current - 128 - 3)*0.035;
         current_error = current_desired - current_measured;
         int_current_error =  int_current_error + current_error*0.02;		// 500Hz => 0.02s
@@ -1283,7 +1283,7 @@ BYTE NL_regulator_5_irp6p::compute_set_value (void)
         if (display >= 500)
         {
             display = 0;
-            printf("joint 4:   desired_current = %f,    current_error = %f,    out = %f\n", master.new_instruction.arm.coordinate_def.desired_torque[3] / 158, current_error, -30 * current_error - 4.0*int_current_error);
+            printf("joint 4:   desired_current = %f,    current_error = %f,    out = %f\n", master.new_instruction.arm.pf_def.desired_torque[3] / 158, current_error, -30 * current_error - 4.0*int_current_error);
         }
         // DUNG END
         break;
@@ -1514,7 +1514,7 @@ BYTE NL_regulator_6_irp6p::compute_set_value (void)
         break;
     case 2:  // algorytm nr 2 - sterowanie pradowe
         // DUNG START
-        current_desired = 0.4*9.52 * (master.new_instruction.arm.coordinate_def.desired_torque[4] / 158);
+        current_desired = 0.4*9.52 * (master.new_instruction.arm.pf_def.desired_torque[4] / 158);
         current_measured = (meassured_current - 128 - 3)*0.035;
         current_error = current_desired - current_measured;
         int_current_error =  int_current_error + current_error*0.02;		// 500Hz => 0.02s
@@ -1525,7 +1525,7 @@ BYTE NL_regulator_6_irp6p::compute_set_value (void)
         if (display >= 500)
         {
             display = 0;
-            //printf("joint 5:   desired_current = %f,    current_error = %f,    out = %f\n", master.new_instruction.arm.coordinate_def.desired_torque[4] / 158, current_error, -30 * current_error - 4.0*int_current_error);
+            //printf("joint 5:   desired_current = %f,    current_error = %f,    out = %f\n", master.new_instruction.arm.pf_def.desired_torque[4] / 158, current_error, -30 * current_error - 4.0*int_current_error);
         }
         // DUNG END
         break;
@@ -1759,7 +1759,7 @@ BYTE NL_regulator_7_irp6p::compute_set_value (void)
         break;
     case 2:  // algorytm nr 2 - sterowanie pradowe
         // DUNG START
-        current_desired = 0.4*9.52 * (master.new_instruction.arm.coordinate_def.desired_torque[5] / 158);
+        current_desired = 0.4*9.52 * (master.new_instruction.arm.pf_def.desired_torque[5] / 158);
         current_measured = (meassured_current - 128 - 3)*0.02;
         current_error = current_desired - current_measured;
         int_current_error =  int_current_error + current_error*0.02;		// 500Hz => 0.02s
@@ -1770,7 +1770,7 @@ BYTE NL_regulator_7_irp6p::compute_set_value (void)
         if (display >= 500)
         {
             display = 0;
-            printf("joint 6:   desired_current = %f,    current_error = %f,    out = %f\n", master.new_instruction.arm.coordinate_def.desired_torque[5] / 158, current_error, -30 * current_error - 4.0*int_current_error);
+            printf("joint 6:   desired_current = %f,    current_error = %f,    out = %f\n", master.new_instruction.arm.pf_def.desired_torque[5] / 158, current_error, -30 * current_error - 4.0*int_current_error);
         }
         // DUNG END
         break;
