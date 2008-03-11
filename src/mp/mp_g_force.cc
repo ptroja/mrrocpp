@@ -39,7 +39,7 @@ void mp_short_move_up(mp_task& mp_object)
 	// Generator trajektorii prostoliniowej
 	mp_tight_coop_generator tcg(mp_object, tdes, tdes);
 	tcg.robot_m = mp_object.robot_m;
-	mp_object.Move (tcg);
+	tcg.Move();
 }
 
 

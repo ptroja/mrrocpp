@@ -15,40 +15,39 @@
 
 // Zwrocenie obiektu - zadania.
 mp_task* return_created_mp_task(configurator &_config)
-{
-	return new mp_two_robots_measures_task(_config);
-}
+               {
+                   return new mp_two_robots_measures_task(_config);
+               }
 
-mp_two_robots_measures_task::mp_two_robots_measures_task(configurator &_config)
-: mp_task(_config)
-{
-}
-	
-// Inicjalizacja obiektow uzywanych prez zadanie.
-void mp_two_robots_measures_task::task_initialization(void) 
-{
-	// Stworzenie generatora.
-	rmg = new mp_two_robots_measures_generator(*this);
-	rmg->robot_m = robot_m;
+               mp_two_robots_measures_task::mp_two_robots_measures_task(configurator &_config)
+                       : mp_task(_config)
+               {}
 
-	sr_ecp_msg->message("Two robots measurements task is ready for work.");
-}
+               // Inicjalizacja obiektow uzywanych prez zadanie.
+               void mp_two_robots_measures_task::task_initialization(void)
+               {
+                   // Stworzenie generatora.
+                   rmg = new mp_two_robots_measures_generator(*this);
+                   rmg->robot_m = robot_m;
 
-// Wlasciwe zadanie.
-void mp_two_robots_measures_task::main_task_algorithm(void)
-{
-	// Oczekiwanie na polecenie START od UI.
-	wait_for_start ();
-	// Wyslanie START do wszystkich procesow ECP.
-	start_all (robot_m);
-	
-	sr_ecp_msg->message("Started!!");
-	Move(*rmg);
-	sr_ecp_msg->message("Po move");
+                   sr_ecp_msg->message("Two robots measurements task is ready for work.");
+               }
 
-	// Oczekiwanie na STOP od UI.
-	wait_for_stop (MP_THROW);
+               // Wlasciwe zadanie.
+               void mp_two_robots_measures_task::main_task_algorithm(void)
+               {
+                   // Oczekiwanie na polecenie START od UI.
+                   wait_for_start ();
+                   // Wyslanie START do wszystkich procesow ECP.
+                   start_all (robot_m);
 
-	// Wyslanie STOP do wszystkich ECP po zakonczeniu programu uzytkownika.
-	terminate_all (robot_m);
-}
+                   sr_ecp_msg->message("Started!!");
+                   rmg->Move();
+                   sr_ecp_msg->message("Po move");
+
+                   // Oczekiwanie na STOP od UI.
+                   wait_for_stop (MP_THROW);
+
+                   // Wyslanie STOP do wszystkich ECP po zakonczeniu programu uzytkownika.
+                   terminate_all (robot_m);
+               }

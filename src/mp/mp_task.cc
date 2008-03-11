@@ -150,7 +150,7 @@ bool mp_task::set_next_playerpos_goal (ROBOT_ENUM robot_l, playerpos_goal_t &goa
 
 	mp_snes_gen.configure(goal);
 
-	return (Move(mp_snes_gen));
+	return (mp_snes_gen.Move());
 }
 
 // metody do obslugi najczesniej uzywanych generatorow
@@ -172,7 +172,7 @@ bool mp_task::set_next_ecps_state (int l_state, int l_variant, char* l_string, i
 
 	mp_snes_gen.configure (l_state, l_variant, l_string);
 
-	return (Move(mp_snes_gen));
+	return (mp_snes_gen.Move());
 }
 
 // delay MP replacement
@@ -180,7 +180,7 @@ bool mp_task::wait_ms (int _ms_delay) // zamiast delay
 {
 	mp_delay_ms_condition mp_ds_ms (*this, _ms_delay);
 
-	return (Move(mp_ds_ms));
+	return (mp_ds_ms.Move());
 }
 
 // send_end_motion
@@ -199,7 +199,7 @@ bool mp_task::send_end_motion_to_ecps (int number_of_robots, ... )
 	}
 	va_end ( arguments );                  // Cleans up the list
 
-	return (Move(mp_semte_gen));
+	return (mp_semte_gen.Move());
 }
 
 
@@ -220,7 +220,7 @@ bool mp_task::run_ext_empty_gen (bool activate_trigger, int number_of_robots, ..
 
 	mp_ext_empty_gen.configure (activate_trigger);
 
-	return (Move(mp_ext_empty_gen));
+	return (mp_ext_empty_gen.Move());
 }
 
 bool mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
@@ -322,7 +322,7 @@ bool mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_t
 
 		//	if (debug_tmp) printf("PRZED MOVE run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
 		// uruchomienie generatora
-		if (Move ( mp_ext_empty_gen)) {
+		if (mp_ext_empty_gen.Move()) {
 			return true;
 		}
 		//		if (debug_tmp) printf("ZA MOVE move run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
@@ -803,66 +803,6 @@ void mp_task::initialize_communication()
 
 }
 // -------------------------------------------------------------------
-
-
-
-
-// ---------------------------------------------------------------
-bool mp_task::Move ( mp_generator& the_generator )
-{
-	// Funkcja zwraca false gdy samoistny koniec ruchu
-	// Funkcja zwraca true gdy koniec ruchu wywolany jest przez STOP
-
-	// czyszczenie aby nie czekac na pulsy z ECP
-	for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
-	        robot_m_iterator != robot_m.end(); robot_m_iterator++) {
-		if (robot_m_iterator->second->new_pulse) {
-			robot_m_iterator->second->robot_new_pulse_checked = false;
-		}
-	}
-
-	// by Y - linia ponizej dodana 26.02.2007 - usunac komentarz jak bedzie dzialalo
-	// ze wzgledu na obluge pulsow z UI w szczegolnosci stopu i wstrzymania
-	if (mp_receive_ui_or_ecp_pulse (robot_m, the_generator))
-		return true;
-
-	// czyszczenie aby nie czekac na pulsy z ECP
-	for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
-	        robot_m_iterator != robot_m.end(); robot_m_iterator++) {
-		if (robot_m_iterator->second->new_pulse) {
-			robot_m_iterator->second->robot_new_pulse_checked = false;
-		}
-	}
-	the_generator.node_counter = 0;
-	// (Inicjacja) generacja pierwszego kroku ruchu
-	if (!the_generator.first_step() )
-		return false;
-
-	do { // realizacja ruchu
-
-		// zadanie przygotowania danych od czujnikow
-		all_sensors_initiate_reading(the_generator.sensor_m);
-
-
-		the_generator.copy_generator_command( robot_m );
-
-		// wykonanie kroku ruchu przez wybrane roboty (z flaga 'communicate')
-		execute_all(the_generator.robot_m);
-
-		the_generator.copy_data( robot_m );
-		
-		// odczytanie danych z wszystkich czujnikow
-		all_sensors_get_reading(the_generator.sensor_m);
-
-		// oczekiwanie na puls z ECP lub UI
-		if (mp_receive_ui_or_ecp_pulse(robot_m, the_generator))
-			return true;
-		the_generator.node_counter++;
-	} while ( the_generator.next_step() );
-
-	return false;
-}
-// ------------------------------------------------------------------------
 
 
 

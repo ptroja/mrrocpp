@@ -133,7 +133,7 @@ void mp_task_haptic::main_task_algorithm(void)
 			// mp_h_gen.sensor_m = sensor_m;
 			mp_h_gen.configure(1, 0);
 		    	sr_ecp_msg->message("Track podatny do czasu wcisniecia mp_trigger");
-			if (Move ( mp_h_gen)) {
+			if (mp_h_gen.Move()) {
 		        	break_state = true;
 		        	break;
 	         }

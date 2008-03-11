@@ -85,7 +85,7 @@ void mp_task_pr::main_task_algorithm(void)
  			sr_ecp_msg->message("Wodzenie za nos do pozycji rozpoczecia nauki");
 			sr_ecp_msg->message("Nastepny etap - nacisnij PULSE MP trigger");
 			
-			if (Move ( mp_nrf_gen)){
+			if (mp_nrf_gen.Move()){
 		        	break_state = true;
 		          break;
 	          }
@@ -98,7 +98,7 @@ void mp_task_pr::main_task_algorithm(void)
 			
 				sr_ecp_msg->message("Wodzenie za nos");
 				sr_ecp_msg->message("Nastepny etap - nacisnij PULSE MP trigger");
-				if (Move ( mp_nrf_gen)){
+				if (mp_nrf_gen.Move()){
 			        	break_state = true;
 			          break;
 		          }
@@ -108,7 +108,7 @@ void mp_task_pr::main_task_algorithm(void)
 			
 				mp_dtif_gen.flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
 				mp_dtif_gen.teach_or_move=YG_TEACH;
-				if (Move ( mp_dtif_gen)){
+				if (mp_dtif_gen.Move()){
 			        	break_state = true;
 			          break;
 		          }
@@ -118,7 +118,7 @@ void mp_task_pr::main_task_algorithm(void)
 				
 				sr_ecp_msg->message("Wodzenie za nos");
 				sr_ecp_msg->message("Nastepny etap - nacisnij PULSE MP trigger");
-				if (Move ( mp_nrf_gen)){
+				if (mp_nrf_gen.Move()){
 			        	break_state = true;
 			          break;
 		          }
@@ -128,7 +128,7 @@ void mp_task_pr::main_task_algorithm(void)
 			{
 				sr_ecp_msg->message("Wodzenie za nos do poczatku odtwarzania");
 				sr_ecp_msg->message("Nastepny etap - nacisnij PULSE MP trigger");
-				if (Move ( mp_nrf_gen)){
+				if (mp_nrf_gen.Move()){
 			        	break_state = true;
 			          break;
 		          }
@@ -136,7 +136,7 @@ void mp_task_pr::main_task_algorithm(void)
 				sr_ecp_msg->message("Odtwarzanie nauczonej trajektorii");
 	
 				mp_dtif_gen.teach_or_move=YG_MOVE;
-				if (Move ( mp_dtif_gen)){
+				if (mp_dtif_gen.Move()){
 			        	break_state = true;
 			          break;
 		          }
@@ -146,7 +146,7 @@ void mp_task_pr::main_task_algorithm(void)
 
 				sr_ecp_msg->message("Wodzenie za nos");
 				sr_ecp_msg->message("Nastepny etap - nacisnij PULSE MP trigger");
-				if (Move ( mp_nrf_gen)){
+				if (mp_nrf_gen.Move()){
 			        	break_state = true;
 			          break;
 		          }

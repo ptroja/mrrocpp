@@ -67,7 +67,7 @@ void mp_task_vf::main_task_algorithm(void)
       for (;;) {  // Wewnetrzna petla    
         // Zlecenie wykonania kolejnego makrokroku
 	  // printf("po start all \n");
-        if ( Move ( vf_gen) ) 
+        if ( vf_gen.Move() ) 
           break;
 
         // Oczekiwanie na STOP od UI

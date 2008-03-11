@@ -141,7 +141,7 @@ printf("AAAAAAAAA\n");
 		
 		printf("BBBBBBBBBBBBBB\n");
 		
-			if (Move ( eyegen) )
+			if (eyegen.Move() )
 			{  	
 				break_state = true;
 	          	break; 

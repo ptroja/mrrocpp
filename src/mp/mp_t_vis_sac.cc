@@ -132,7 +132,7 @@ void mp_task_vis_sac::main_task_algorithm(void)
 			//if (mode)
 			//{
 		
-			if (Move ( eyegen) )
+			if (eyegen.Move() )
 			{  	
 				break_state = true;
 	          	break; 

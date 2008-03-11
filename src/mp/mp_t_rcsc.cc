@@ -1234,7 +1234,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
         eyegen.robot_m[ROBOT_IRP6_ON_TRACK] = robot_m[ROBOT_IRP6_ON_TRACK];
         eyegen.sensor_m[SENSOR_CAMERA_SA] = sensor_m[SENSOR_CAMERA_SA];
 
-        if (Move ( eyegen) )
+        if (eyegen.Move())
         {
             return true;
         }
@@ -1403,7 +1403,7 @@ bool mp_task_rubik_cube_solver::gripper_opening(double track_increment, double p
     mp_tight_coop_generator tcg(*this, tdes, tdes2);
     tcg.robot_m = robot_m;
 
-    if (Move ( tcg))
+    if (tcg.Move())
     {
         return true;
     }

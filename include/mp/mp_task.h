@@ -86,8 +86,6 @@ class mp_task: public ecp_mp_task
 		// funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
 		bool mp_receive_ui_or_ecp_pulse (std::map <ROBOT_ENUM, mp_robot*>& _robot_m, mp_generator& the_generator );
 
-		// Funkcja ruchu
-		bool Move ( mp_generator& the_generator );
 
 		// dla scheduler'a
 		bool add_gen (mp_generator* gen_l);

@@ -37,7 +37,7 @@ void mp_task_c::main_task_algorithm(void)
 	do {  // Wewnetrzna petla    
 		
 		// Zlecenie wykonania kolejnego makrokroku
-		if ( Move (empty_gen) )
+		if ( empty_gen.Move() )
 			break;
 
 		// Oczekiwanie na STOP od UI
