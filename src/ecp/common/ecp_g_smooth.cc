@@ -833,6 +833,7 @@ bool ecp_smooth_generator::first_step ()
         the_robot->EDP_data.set_arm_type = MOTOR;
         the_robot->EDP_data.get_arm_type = MOTOR;
         the_robot->EDP_data.motion_type = ABSOLUTE;
+         the_robot->EDP_data.interpolation_type = MOTORS_INTERPOLATION;
         break;
     case JOINT:
         the_robot->EDP_data.instruction_type = GET;
@@ -841,6 +842,7 @@ bool ecp_smooth_generator::first_step ()
         the_robot->EDP_data.set_arm_type = JOINT;
         the_robot->EDP_data.get_arm_type = JOINT;
         the_robot->EDP_data.motion_type = ABSOLUTE;
+         the_robot->EDP_data.interpolation_type = MOTORS_INTERPOLATION;
         break;
     case XYZ_EULER_ZYZ:
         the_robot->EDP_data.instruction_type = GET;
@@ -849,6 +851,7 @@ bool ecp_smooth_generator::first_step ()
         the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
         the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;
         the_robot->EDP_data.motion_type = ABSOLUTE;
+         the_robot->EDP_data.interpolation_type = MOTORS_INTERPOLATION;
         break;
     case XYZ_ANGLE_AXIS:
         the_robot->EDP_data.instruction_type = GET;
@@ -857,6 +860,7 @@ bool ecp_smooth_generator::first_step ()
         the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
         the_robot->EDP_data.get_arm_type = XYZ_ANGLE_AXIS;
         the_robot->EDP_data.motion_type = ABSOLUTE;
+         the_robot->EDP_data.interpolation_type = MOTORS_INTERPOLATION;
         break;
     default:
         throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
@@ -1048,6 +1052,7 @@ bool ecp_smooth_generator::next_step ()
         the_robot->EDP_data.set_type = ARM_DV; // ARM
         the_robot->EDP_data.set_arm_type = MOTOR;
         the_robot->EDP_data.motion_type = ABSOLUTE;
+         the_robot->EDP_data.interpolation_type = MOTORS_INTERPOLATION;
         the_robot->EDP_data.motion_steps = td.internode_step_no;
         the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -1086,6 +1091,7 @@ bool ecp_smooth_generator::next_step ()
         the_robot->EDP_data.set_type = ARM_DV; // ARM
         the_robot->EDP_data.set_arm_type = JOINT;
         the_robot->EDP_data.motion_type = ABSOLUTE;
+         the_robot->EDP_data.interpolation_type = MOTORS_INTERPOLATION;
         the_robot->EDP_data.motion_steps = td.internode_step_no;
         the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -1125,6 +1131,7 @@ bool ecp_smooth_generator::next_step ()
         the_robot->EDP_data.set_type = ARM_DV; // ARM
         the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
         the_robot->EDP_data.motion_type = ABSOLUTE;
+         the_robot->EDP_data.interpolation_type = MOTORS_INTERPOLATION;
         the_robot->EDP_data.motion_steps = td.internode_step_no;
         the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -1160,6 +1167,7 @@ bool ecp_smooth_generator::next_step ()
         the_robot->EDP_data.set_type = ARM_DV; // ARM
         the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
         the_robot->EDP_data.motion_type = ABSOLUTE;
+         the_robot->EDP_data.interpolation_type = MOTORS_INTERPOLATION;
         the_robot->EDP_data.motion_steps = td.internode_step_no;
         the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -1207,6 +1215,7 @@ bool ecp_tool_change_generator::first_step ()
     the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
     the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;
     the_robot->EDP_data.motion_type = ABSOLUTE;
+     the_robot->EDP_data.interpolation_type = MOTORS_INTERPOLATION;
 
 
     return true;

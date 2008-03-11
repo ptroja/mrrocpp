@@ -35,6 +35,7 @@ struct robot_transmission_data
     BYTE analog_input[8];					// odczytane wartosci wejsc analogowych - 8 kanalow
 
     MOTION_TYPE motion_type;				// sposob zadania ruchu
+    INTERPOLATION_TYPE interpolation_type; // sposob interpolacji
 
     WORD motion_steps;						// liczba krokow ruchu zadanego (makrokroku)
     /*

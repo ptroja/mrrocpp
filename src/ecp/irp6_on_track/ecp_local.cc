@@ -94,6 +94,7 @@ void ecp_irp6_on_track_robot::create_command (void)
         if (EDP_data.set_type & ARM_DV)
         {
             EDP_command_and_reply_buffer.instruction.motion_type = EDP_data.motion_type;
+            EDP_command_and_reply_buffer.instruction.interpolation_type = EDP_data.interpolation_type;
             EDP_command_and_reply_buffer.instruction.motion_steps = EDP_data.motion_steps;
             EDP_command_and_reply_buffer.instruction.value_in_step_no = EDP_data.value_in_step_no;
             // Wypelniamy czesc zwiazana z polozeniem ramienia

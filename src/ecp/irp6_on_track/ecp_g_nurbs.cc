@@ -94,6 +94,7 @@ bool irp6ot_nurbs_generator::first_step (  )
 			the_robot->EDP_data.set_arm_type = atype_;
 			the_robot->EDP_data.get_arm_type = atype_;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
+			 the_robot->EDP_data.interpolation_type = MOTORS_INTERPOLATION;
 			the_robot->EDP_data.motion_steps = ntdes_ptr_->internode_step_no;
 			the_robot->EDP_data.value_in_step_no = ntdes_ptr_->value_in_step_no; }
 		else {
@@ -131,6 +132,7 @@ bool irp6ot_nurbs_generator::next_step (  )
    the_robot->EDP_data.set_type = ARM_DV; // ARM
    the_robot->EDP_data.set_arm_type = atype_;
    the_robot->EDP_data.motion_type = ABSOLUTE;
+    the_robot->EDP_data.interpolation_type = MOTORS_INTERPOLATION;
 
    
 //	cout<<"nextstep: Start2 \n"<<flush;  

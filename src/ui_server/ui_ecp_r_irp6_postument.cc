@@ -337,6 +337,7 @@ bool ui_irp6_postument_robot::move_motors ( double final_position[IRP6_POSTUMENT
     // Parametry zlecenia ruchu i odczytu polozenia
     EDP_command_and_reply_buffer.instruction.instruction_type = SET_GET;
     EDP_command_and_reply_buffer.instruction.motion_type = ABSOLUTE;
+        EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
   }
   else {  
 // printf("!is_synchronised: %f \n",MOTOR_STEP);
@@ -354,6 +355,7 @@ bool ui_irp6_postument_robot::move_motors ( double final_position[IRP6_POSTUMENT
 
     EDP_command_and_reply_buffer.instruction.instruction_type = SET;
     EDP_command_and_reply_buffer.instruction.motion_type = RELATIVE;
+        EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
   }; // end: else
   EDP_command_and_reply_buffer.instruction.get_type = ARM_DV; // ARM
   EDP_command_and_reply_buffer.instruction.get_arm_type = MOTOR;
@@ -416,6 +418,7 @@ bool ui_irp6_postument_robot::move_joints (double final_position[IRP6_POSTUMENT_
   EDP_command_and_reply_buffer.instruction.set_type = ARM_DV; // ARM
   EDP_command_and_reply_buffer.instruction.set_arm_type = JOINT;
   EDP_command_and_reply_buffer.instruction.motion_type = ABSOLUTE;
+      EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
   EDP_command_and_reply_buffer.instruction.motion_steps = nr_of_steps;
   EDP_command_and_reply_buffer.instruction.value_in_step_no = nr_of_steps;
 
@@ -475,6 +478,7 @@ bool ui_irp6_postument_robot::move_xyz_euler_zyz ( double final_position[7] ) {
   EDP_command_and_reply_buffer.instruction.set_type = ARM_DV; // ARM
   EDP_command_and_reply_buffer.instruction.set_arm_type = XYZ_EULER_ZYZ;
   EDP_command_and_reply_buffer.instruction.motion_type = ABSOLUTE;
+      EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
   EDP_command_and_reply_buffer.instruction.motion_steps = nr_of_steps;
   EDP_command_and_reply_buffer.instruction.value_in_step_no = nr_of_steps;
 
@@ -565,6 +569,7 @@ bool ui_irp6_postument_robot::move_xyz_angle_axis ( double final_position[7] )
 	EDP_command_and_reply_buffer.instruction.set_type = ARM_DV; // ARM
 	EDP_command_and_reply_buffer.instruction.set_arm_type = XYZ_ANGLE_AXIS;
 	EDP_command_and_reply_buffer.instruction.motion_type = ABSOLUTE;
+	    EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
 	EDP_command_and_reply_buffer.instruction.motion_steps = nr_of_steps;
 	EDP_command_and_reply_buffer.instruction.value_in_step_no = nr_of_steps;
 
