@@ -17,12 +17,38 @@
 #include "mp/mp_g_force.h"
 #include "ecp_mp/ecp_mp_s_schunk.h"
 #include "mp/mp_t_pr.h"
+#include "mp/mp_common_generators.h"
 
 
 mp_task* return_created_mp_task (configurator &_config)
 {
 	return new mp_task_pr(_config);
 }
+
+void mp_task_pr::mp_short_move_up(void)
+{
+
+	trajectory_description tdes;
+
+	tdes.arm_type = XYZ_EULER_ZYZ;
+	tdes.interpolation_node_no = 1;
+	tdes.internode_step_no = 200;
+	tdes.value_in_step_no = tdes.internode_step_no - 2;
+	// Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
+	tdes.coordinate_delta[0] = 0.0; // przyrost wspolrzednej X
+	tdes.coordinate_delta[1] = 0.0;// przyrost wspolrzednej Y
+	tdes.coordinate_delta[2] = 0.005;   // przyrost wspolrzednej Z
+	tdes.coordinate_delta[3] = 0.0;   // przyrost wspolrzednej FI
+	tdes.coordinate_delta[4] = 0.0;   // przyrost wspolrzednej TETA
+	tdes.coordinate_delta[5] = 0.0;   // przyrost wspolrzednej PSI
+	tdes.coordinate_delta[6] = 0.0;   // przyrost wspolrzednej PSI
+
+	// Generator trajektorii prostoliniowej
+	mp_tight_coop_generator tcg(*this, tdes, tdes);
+	tcg.robot_m = robot_m;
+	tcg.Move();
+}
+
 
 mp_task_pr::mp_task_pr(configurator &_config) : mp_task(_config)
 {
@@ -114,7 +140,7 @@ void mp_task_pr::main_task_algorithm(void)
 		          }
 				
 				sr_ecp_msg->message("Krotki ruch w gore");
-				mp_short_move_up(*this);
+				mp_short_move_up();
 				
 				sr_ecp_msg->message("Wodzenie za nos");
 				sr_ecp_msg->message("Nastepny etap - nacisnij PULSE MP trigger");
@@ -142,7 +168,7 @@ void mp_task_pr::main_task_algorithm(void)
 		          }
 			
 				sr_ecp_msg->message("Krotki ruch w gore");
-				mp_short_move_up(*this);
+				mp_short_move_up();
 
 				sr_ecp_msg->message("Wodzenie za nos");
 				sr_ecp_msg->message("Nastepny etap - nacisnij PULSE MP trigger");

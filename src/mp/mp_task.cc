@@ -1252,3 +1252,11 @@ void mp_task::kill_all_ECP (map <ROBOT_ENUM, mp_robot*>& _robot_m)
 	}
 }
 // ------------------------------------------------------------------------
+
+
+
+
+mp_sub_task::mp_sub_task(mp_task &_mp_t):
+        mp_t(_mp_t)
+{}
+

@@ -11,8 +11,7 @@
 
 #include "mp/mp_g_teach_in.h"
 
-// krotki ruch w gore w wersji dla mp
-void mp_short_move_up(mp_task& mp_object);
+
 
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji

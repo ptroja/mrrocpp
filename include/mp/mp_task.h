@@ -111,4 +111,16 @@ class mp_task: public ecp_mp_task
 
 mp_task* return_created_mp_task (configurator &_config);
 
+
+// klasa podzadania
+class mp_sub_task
+{
+
+protected:
+    mp_task &mp_t;
+
+public:
+    mp_sub_task(mp_task &_mp_t);
+};
+
 #endif /*MP_TASK_H_*/
