@@ -29,7 +29,6 @@ void ecp_sub_task_go::init()
     tdes.arm_type = XYZ_EULER_ZYZ;
     tdes.interpolation_node_no = 1;
     tdes.internode_step_no = 0;
-    tdes.value_in_step_no = tdes.internode_step_no - 2;
     // Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
     tdes.coordinate_delta[0] = 0.0; // przyrost wspolrzednej X
     tdes.coordinate_delta[1] = 0.0;// przyrost wspolrzednej Y
