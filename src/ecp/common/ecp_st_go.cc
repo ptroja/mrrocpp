@@ -14,46 +14,37 @@
 #include "ecp/common/ecp_g_jarosz.h"
 #include "ecp/common/ecp_st_go.h"
 
-
-
-
-ecp_sub_task_go::ecp_sub_task_go(ecp_task &_ecp_t):
-        ecp_sub_task(_ecp_t)
+ecp_sub_task_gripper_opening::ecp_sub_task_gripper_opening(ecp_task &_ecp_t) :
+	ecp_sub_task(_ecp_t)
 {
-    init();
+	init();
 }
 
-
-void ecp_sub_task_go::init()
+void ecp_sub_task_gripper_opening::init()
 {
-    tdes.arm_type = XYZ_EULER_ZYZ;
-    tdes.interpolation_node_no = 1;
-    // Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
-    tdes.coordinate_delta[0] = 0.0; // przyrost wspolrzednej X
-    tdes.coordinate_delta[1] = 0.0;// przyrost wspolrzednej Y
-    tdes.coordinate_delta[2] = 0.0;   // przyrost wspolrzednej Z
-    tdes.coordinate_delta[3] = 0.0;   // przyrost wspolrzednej FI
-    tdes.coordinate_delta[4] = 0.0;   // przyrost wspolrzednej TETA
-    tdes.coordinate_delta[5] = 0.0;   // przyrost wspolrzednej PSI
-    //	tdes.coordinate_delta[6] = 0.0;   // przyrost wspolrzednej PSI
+	tdes.arm_type = XYZ_EULER_ZYZ;
+	tdes.interpolation_node_no = 1;
+	// Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
+	tdes.coordinate_delta[0] = 0.0; // przyrost wspolrzednej X
+	tdes.coordinate_delta[1] = 0.0;// przyrost wspolrzednej Y
+	tdes.coordinate_delta[2] = 0.0; // przyrost wspolrzednej Z
+	tdes.coordinate_delta[3] = 0.0; // przyrost wspolrzednej FI
+	tdes.coordinate_delta[4] = 0.0; // przyrost wspolrzednej TETA
+	tdes.coordinate_delta[5] = 0.0; // przyrost wspolrzednej PSI
+	//	tdes.coordinate_delta[6] = 0.0;   // przyrost wspolrzednej PSI
 }
 
-
-void ecp_sub_task_go::configure (double gripper_increment, int motion_time)
+void ecp_sub_task_gripper_opening::configure(double gripper_increment, int motion_time)
 {
-
-    tdes.internode_step_no = motion_time;
-    tdes.value_in_step_no = tdes.internode_step_no - 2;
-    tdes.coordinate_delta[6] = gripper_increment;   // przyrost wspolrzednej PSI
-
+	tdes.internode_step_no = motion_time;
+	tdes.value_in_step_no = tdes.internode_step_no - 2;
+	tdes.coordinate_delta[6] = gripper_increment; // przyrost wspolrzednej PSI
 }
 
-
-void ecp_sub_task_go::execute ()
+void ecp_sub_task_gripper_opening::execute()
 {
-    // Generator trajektorii prostoliniowej
-    ecp_linear_generator lg(ecp_t, tdes, 1);
-    lg.Move();
-
-};
+	// Generator trajektorii prostoliniowej
+	ecp_linear_generator lg(ecp_t, tdes, 1);
+	lg.Move();
+}
 

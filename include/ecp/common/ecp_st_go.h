@@ -7,7 +7,7 @@
 
 #include "ecp/common/ecp_task.h"
 
-class ecp_sub_task_go : public ecp_sub_task
+class ecp_sub_task_gripper_opening : public ecp_sub_task
 {
 
 private:
@@ -16,7 +16,7 @@ private:
     void init();
 
 public:
-    ecp_sub_task_go(ecp_task &_ecp_t);
+    ecp_sub_task_gripper_opening(ecp_task &_ecp_t);
     void configure(double gripper_increment, int motion_time);
     void execute();
 };

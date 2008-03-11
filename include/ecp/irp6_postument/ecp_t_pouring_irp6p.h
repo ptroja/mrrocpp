@@ -10,7 +10,7 @@ class ecp_task_pouring_irp6p: public ecp_task
 protected:
     ecp_smooth_generator* sg;
     //podzadania
-    ecp_sub_task_go* go_st;
+    ecp_sub_task_gripper_opening* go_st;
 
 public:
     // KONSTRUKTORY

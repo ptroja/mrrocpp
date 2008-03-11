@@ -56,7 +56,7 @@ void ecp_task_pouring_irp6p::task_initialization(void)
     */
     sg = new ecp_smooth_generator (*this, true);
 
-    go_st = new ecp_sub_task_go(*this);
+    go_st = new ecp_sub_task_gripper_opening(*this);
 
     sr_ecp_msg->message("ECP loaded");
 };

@@ -19,7 +19,7 @@ protected:
     bias_edp_force_generator* befg;
     weight_meassure_generator* wmg;
     //podzadania
-    ecp_sub_task_go* go_st;
+    ecp_sub_task_gripper_opening* go_st;
 
 public:
     ecp_task_rcsc_irp6ot(configurator &_config);

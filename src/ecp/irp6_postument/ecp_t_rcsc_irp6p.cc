@@ -44,7 +44,7 @@ void ecp_task_rcsc_irp6p::task_initialization(void)
     befg = new bias_edp_force_generator (*this);
     sg = new ecp_smooth_generator (*this, true);
 
-    go_st = new ecp_sub_task_go(*this);
+    go_st = new ecp_sub_task_gripper_opening(*this);
 
     sr_ecp_msg->message("ECP loaded");
 };

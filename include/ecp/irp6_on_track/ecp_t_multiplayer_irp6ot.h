@@ -15,7 +15,7 @@ private:
     weight_meassure_generator* wmg;
     
     //podzadania
-    ecp_sub_task_go* go_st;
+    ecp_sub_task_gripper_opening* go_st;
     
 
 public:
