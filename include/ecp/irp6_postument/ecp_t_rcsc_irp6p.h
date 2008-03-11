@@ -3,11 +3,12 @@
 
 #include "ecp/common/ecp_task.h"
 #include "ecp/common/ecp_generator_t.h"
-#include "ecp/common/ecp_t_rcsc.h"
+#include "ecp/common/ecp_st_go.h"
 
 class ecp_task_rcsc_irp6p: public ecp_task
 {
 protected:
+    //generatory
     ecp_generator_t* gt;
     ecp_tff_nose_run_generator* nrg;
     ecp_tff_rubik_grab_generator* rgg;
@@ -17,6 +18,8 @@ protected:
     ecp_smooth_generator* sg;
     bias_edp_force_generator* befg;
     weight_meassure_generator* wmg;
+    //podzadania
+    ecp_sub_task_go* go_st;
 
 public:
     // KONSTRUKTORY

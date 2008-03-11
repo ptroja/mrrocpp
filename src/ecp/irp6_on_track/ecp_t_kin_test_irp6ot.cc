@@ -12,7 +12,6 @@
 
 #include "ecp/irp6_on_track/ecp_local.h"
 #include "ecp/common/ecp_g_force.h"
-#include "ecp/common/ecp_t_rcsc.h"
 #include "ecp/irp6_on_track/ecp_t_kin_test_irp6ot.h"
 
 #define BILLION  1000000000L;

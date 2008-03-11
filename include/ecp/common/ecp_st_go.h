@@ -7,8 +7,6 @@
 
 #include "ecp/common/ecp_task.h"
 
-void ecp_gripper_opening (ecp_task& ecp_object, double gripper_increment, int motion_time);
-
 class ecp_sub_task_go : public ecp_sub_task
 {
 

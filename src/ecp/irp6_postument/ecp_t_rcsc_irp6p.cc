@@ -11,7 +11,6 @@
 #include "ecp/irp6_postument/ecp_local.h"
 #include "ecp/common/ecp_g_force.h"
 #include "ecp/common/ecp_g_smooth.h"
-#include "ecp/common/ecp_t_rcsc.h"
 #include "ecp/irp6_postument/ecp_t_rcsc_irp6p.h"
 
 // KONSTRUKTORY

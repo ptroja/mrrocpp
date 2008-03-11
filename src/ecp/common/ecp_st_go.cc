@@ -16,18 +16,6 @@
 
 
 
-class ecp_sub_task_go : public ecp_sub_task
-{
-
-private:
-    trajectory_description tdes;
-
-public:
-    ecp_sub_task_go(ecp_task &_ecp_t);
-    void init();
-    void configure(double gripper_increment, int motion_time);
-    void execute();
-};
 
 ecp_sub_task_go::ecp_sub_task_go(ecp_task &_ecp_t):
         ecp_sub_task(_ecp_t)
