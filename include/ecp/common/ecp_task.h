@@ -22,8 +22,6 @@ private:
     // Badanie typu polecenia z MP
     MP_COMMAND mp_command_type(void) const;
 
-    // sprawdza czy przeszedl puls do ECP lub MP
-    bool pulse_check();
 
 protected:
     // Oczekiwanie na polecenie START od MP
@@ -45,6 +43,9 @@ public: // TODO: following packages should be 'protected'
 public:
     ecp_robot* ecp_m_robot;
 
+    // sprawdza czy przeszedl puls do ECP lub MP
+    bool pulse_check();
+
     // KONSTRUKTOR
     ecp_task(configurator &_config);
 
@@ -58,9 +59,6 @@ public:
 
     virtual void terminate();
 
-    // --------------------------------------------------------------------------
-    // Zlecenie ruchu dla EDP
-    void Move(ecp_generator& the_generator);
 
     // methods for ECP template to redefine in concrete classes
     virtual void task_initialization(void);

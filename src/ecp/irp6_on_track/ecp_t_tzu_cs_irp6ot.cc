@@ -46,7 +46,7 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 	while(true)			
 	{ 
 		// sprawdzic co robi metoda move znajdujaca sie pewnie w ecp_task
-		Move (sg);
+sg.Move();
 		cout<<"wait for stop\n"<<endl;
 		ecp_wait_for_stop();
 		break;

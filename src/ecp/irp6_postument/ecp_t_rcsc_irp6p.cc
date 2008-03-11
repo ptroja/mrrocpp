@@ -72,13 +72,13 @@ void ecp_task_rcsc_irp6p::main_task_algorithm(void)
             switch ( (RCSC_ECP_STATES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state)
             {
             case ECP_GEN_TRANSPARENT:
-                Move (*gt);
+                gt->Move();
                 break;
             case ECP_GEN_BIAS_EDP_FORCE:
-                Move (*befg);
+                befg->Move();
                 break;
             case ECP_GEN_TFF_NOSE_RUN:
-                Move (*nrg);
+                nrg->Move();
                 break;
             case ECP_GEN_TFF_RUBIK_GRAB:
                 switch ( (RCSC_RUBIK_GRAB_PHASES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_variant)
@@ -104,11 +104,11 @@ void ecp_task_rcsc_irp6p::main_task_algorithm(void)
                 default:
                     break;
                 }
-                Move (*rgg);
+                rgg->Move();
                 break;
             case ECP_GEN_TFF_GRIPPER_APPROACH:
                 gag->configure(5.0, 150);
-                Move (*gag);
+                gag->Move();
                 break;
             case ECP_GEN_TFF_RUBIK_FACE_ROTATE:
                 switch ( (RCSC_TURN_ANGLES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_variant)
@@ -128,7 +128,7 @@ void ecp_task_rcsc_irp6p::main_task_algorithm(void)
                 default:
                     break;
                 }
-                Move (*rfrg);
+                rfrg->Move();
                 break;
             case RCSC_GRIPPER_OPENING:
                 switch ( (RCSC_TURN_ANGLES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_variant)
@@ -156,7 +156,7 @@ void ecp_task_rcsc_irp6p::main_task_algorithm(void)
                 //	printf("\nPOSTUMENT ECP_GEN_TEACH_IN :%s\n\n", path1);
                 tig->initiate_pose_list();
                 delete[] path1;
-                Move (*tig);
+                tig->Move();
                 break;
             case ECP_GEN_SMOOTH:
                 size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
@@ -167,7 +167,7 @@ void ecp_task_rcsc_irp6p::main_task_algorithm(void)
                 sg->load_file_with_path (path1);
                 //	printf("\nPOSTUMENT ECP_GEN_SMOOTH :%s\n\n", path1);
                 delete[] path1;
-                Move (*sg);
+                sg->Move();
                 break;
             default:
                 break;

@@ -71,7 +71,7 @@ void ecp_task_test_irp6p::main_task_algorithm(void)
 			sr_ecp_msg->message("NOWA SERIA");
 			sr_ecp_msg->message("Ruch");
 			sr_ecp_msg->message("Zakocz - nacisnij PULSE ECP trigger");
-			Move ( ysg);
+		ysg.Move();
 		
 		}
 		

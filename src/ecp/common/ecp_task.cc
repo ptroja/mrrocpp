@@ -166,54 +166,6 @@ void ecp_task::task_initialization(void)
 void ecp_task::main_task_algorithm(void)
 {}
 
-void ecp_task::Move(ecp_generator& the_generator)
-{
-    // Funkcja ruchu dla ECP
-
-    // generacja pierwszego kroku ruchu
-    the_generator.node_counter = 0;
-    set_ecp_reply(ECP_ACKNOWLEDGE);
-
-    if (!the_generator.first_step() ||
-            (!(!the_generator.communicate_with_mp_in_move || mp_buffer_receive_and_send())))
-    {
-        return; // Warunek koncowy spelniony w pierwszym kroku
-    }
-
-    do
-    { // realizacja ruchu
-
-        // zadanie przygotowania danych od czujnikow
-        all_sensors_initiate_reading(the_generator.sensor_m);
-
-        // wykonanie kroku ruchu
-        if ((the_generator.the_robot) && the_generator.communicate_with_edp)
-        {
-            if (the_generator.copy_edp_buffers_in_move)
-            {
-                the_generator.the_robot->create_command();
-            }
-            // zlecenie ruchu SET oraz odczyt stanu robota GET
-            the_generator.the_robot->execute_motion();
-
-            if (the_generator.copy_edp_buffers_in_move)
-            {
-                the_generator.the_robot->get_reply();
-            }
-        }
-
-        // odczytanie danych z wszystkich czujnikow
-        all_sensors_get_reading(the_generator.sensor_m);
-        the_generator.node_counter++;
-        if (pulse_check())
-        {
-            the_generator.trigger = true;
-        }
-
-    }
-    while (the_generator.next_step() && (!the_generator.communicate_with_mp_in_move
-                                         || mp_buffer_receive_and_send()));
-}
 
 // Badanie typu polecenia z MP
 MP_COMMAND ecp_task::mp_command_type (void) const

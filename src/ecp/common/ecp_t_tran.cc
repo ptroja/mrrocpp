@@ -1,8 +1,8 @@
 // ------------------------------------------------------------------------
-//   ecp_t_tran.cc - przezroczyste wersja dla dowolnego z robotow 
-// 
+//   ecp_t_tran.cc - przezroczyste wersja dla dowolnego z robotow
+//
 //                     EFFECTOR CONTROL PROCESS (ECP) - main()
-// 
+//
 // Ostatnia modyfikacja: 2006
 // ------------------------------------------------------------------------
 
@@ -24,57 +24,67 @@
 
 // KONSTRUKTORY
 ecp_task_tran::ecp_task_tran(configurator &_config) :
-	ecp_task(_config)
-{
-}
+        ecp_task(_config)
+{}
 
 ecp_task_tran::~ecp_task_tran()
-{
-}
+{}
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_tran::task_initialization(void) 
+void ecp_task_tran::task_initialization(void)
 {
-	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	if (!strcmp(config.section_name, "[ecp_irp6_on_track]"))
-		{ ecp_m_robot = new ecp_irp6_on_track_robot (*this); }
-	else if (!strcmp(config.section_name, "[ecp_irp6_postument]"))
-		{ ecp_m_robot = new ecp_irp6_postument_robot (*this); }
-	else if (!strcmp(config.section_name, "[ecp_conveyor]"))
-		{ ecp_m_robot = new ecp_conveyor_robot (*this); }
-	else if (!strcmp(config.section_name, "[ecp_speaker]"))
-		{ ecp_m_robot = new ecp_speaker_robot (*this); }
-	else if (!strcmp(config.section_name, "[ecp_irp6_mechatronika]"))
-		{ ecp_m_robot = new ecp_irp6_mechatronika_robot (*this); }
-	
-	sr_ecp_msg->message("ECP loaded");
+    // the robot is choose dependendat on the section of configuration file sent as argv[4]
+    if (!strcmp(config.section_name, "[ecp_irp6_on_track]"))
+    {
+        ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+    }
+    else if (!strcmp(config.section_name, "[ecp_irp6_postument]"))
+    {
+        ecp_m_robot = new ecp_irp6_postument_robot (*this);
+    }
+    else if (!strcmp(config.section_name, "[ecp_conveyor]"))
+    {
+        ecp_m_robot = new ecp_conveyor_robot (*this);
+    }
+    else if (!strcmp(config.section_name, "[ecp_speaker]"))
+    {
+        ecp_m_robot = new ecp_speaker_robot (*this);
+    }
+    else if (!strcmp(config.section_name, "[ecp_irp6_mechatronika]"))
+    {
+        ecp_m_robot = new ecp_irp6_mechatronika_robot (*this);
+    }
+
+    sr_ecp_msg->message("ECP loaded");
 }
 
 
 void ecp_task_tran::main_task_algorithm(void)
 {
-	sr_ecp_msg->message("ECP transparentne - wcisnij start");
-	
-	ecp_wait_for_start();
+    sr_ecp_msg->message("ECP transparentne - wcisnij start");
 
-	ecp_generator_t gt (*this);
-	
-	for(;;) { // Wewnetrzna petla nieskonczona
-		
-		for(;;) {
-			sr_ecp_msg->message("Ruch");
+    ecp_wait_for_start();
 
-			Move (gt);
-		}
-		
-		// Oczekiwanie na STOP
-		printf("przed wait for stop\n");
-		ecp_wait_for_stop ();
-		break;
-	} // koniec: for(;;) wewnetrznej
+    ecp_generator_t gt (*this);
+
+    for(;;)
+    { // Wewnetrzna petla nieskonczona
+
+        for(;;)
+        {
+            sr_ecp_msg->message("Ruch");
+
+            gt.Move();
+        }
+
+        // Oczekiwanie na STOP
+        printf("przed wait for stop\n");
+        ecp_wait_for_stop ();
+        break;
+    } // koniec: for(;;) wewnetrznej
 }
 
 ecp_task* return_created_ecp_task (configurator &_config)
-{
-	return new ecp_task_tran(_config);
-}
+                {
+                    return new ecp_task_tran(_config);
+                }

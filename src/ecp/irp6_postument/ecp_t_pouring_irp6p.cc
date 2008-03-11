@@ -90,7 +90,7 @@ void ecp_task_pouring_irp6p::main_task_algorithm(void)
                 sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
                 sg->load_file_with_path (path1);
                 delete[] path1;
-                Move (*sg);
+                sg->Move();
                 break;
             case GRIP:
                 go_st->configure(-0.018, 1000);

@@ -79,16 +79,16 @@ void ecp_task_pouring_irp6ot::main_task_algorithm(void)
                 //printf("\nON_TRACK ECP_GEN_SMOOTH :%s\n\n", path1);
                 delete[] path1;
                 //printf("OT po delete\n");
-                Move (*sg);
+                sg->Move();
                 //printf("OT po move\n");
                 break;
             case ECP_GEN_POURING:
                 tcg->set_tool_parameters(-0.18, 0.0, 0.25);
-                Move (*tcg);
+                tcg->Move();
                 break;
             case ECP_END_POURING:
                 tcg->set_tool_parameters(0.0, 0.0, 0.25);
-                Move (*tcg);
+                tcg->Move();
                 break;
             case GRIP:
                 go_st->configure(-0.03, 1000);

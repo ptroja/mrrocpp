@@ -41,7 +41,7 @@ void ecp_task_festival::main_task_algorithm(void)
 			case ECP_GEN_FESTIVAL:
 				fg->set_voice((festival_generator::VOICE) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_variant);
 				fg->set_phrase(mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
-				Move (*fg);
+				fg->Move();
 				break;
 			default:
 				fprintf(stderr, "invalid ecp_next_state.mp_2_ecp_next_state (%d)\n", mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state);

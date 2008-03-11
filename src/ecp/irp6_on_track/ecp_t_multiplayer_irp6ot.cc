@@ -33,7 +33,7 @@ void ecp_task_multiplayer_irp6ot::task_initialization(void)
     gt = new ecp_generator_t (*this);
 
     go_st = new ecp_sub_task_go(*this);
-    
+
     sr_ecp_msg->message("ECP loaded");
 }
 
@@ -58,13 +58,13 @@ void ecp_task_multiplayer_irp6ot::main_task_algorithm(void)
             switch ( (RCSC_ECP_STATES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state)
             {
             case ECP_WEIGHT_MEASURE_GENERATOR:
-                Move (*wmg);
+                wmg->Move();
                 break;
             case ECP_GEN_TRANSPARENT:
-                Move (*gt);
+                gt->Move();
                 break;
             case ECP_GEN_BIAS_EDP_FORCE:
-                Move (*befg);
+                befg->Move();
                 break;
             case RCSC_GRIPPER_OPENING:
                 switch ( (RCSC_TURN_ANGLES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_variant)
@@ -91,7 +91,7 @@ void ecp_task_multiplayer_irp6ot::main_task_algorithm(void)
                 sg->load_file_with_path(path1);
                 //printf("\nTRACK ECP_GEN_SMOOTH :%s\n\n", path1);
                 delete[] path1;
-                Move(*sg);
+                sg->Move();
                 break;
             default:
                 break;

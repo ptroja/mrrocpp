@@ -165,7 +165,7 @@ void ecp_task_ts_irp6ot::main_task_algorithm(void)
 		irp6ot_nurbs_generator ng(*this, ntdes,0);
 		ng.sensor_m = sensor_m;
 	  	sr_ecp_msg->message("Generator created.");
-		Move ( ng);
+ng.Move();
 	} //end while(1)
 	 
 	 

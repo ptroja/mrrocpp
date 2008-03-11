@@ -1,8 +1,8 @@
 // ------------------------------------------------------------------------
 //   ecp_t_progpanel_irp6ot.cc
-// 
+//
 //                     EFFECTOR CONTROL PROCESS (ECP) - main()
-// 
+//
 // Ostatnia modyfikacja: 2007
 // ------------------------------------------------------------------------
 
@@ -12,7 +12,7 @@
 
 #include "lib/srlib.h"
 //#include "ecp_mp/ecp_mp_t_rcsc.h"
-#include "ecp_mp/ecp_mp_s_pp.h"	
+#include "ecp_mp/ecp_mp_s_pp.h"
 
 #include "lib/srlib.h"
 #include "ecp/irp6_on_track/ecp_local.h"
@@ -27,7 +27,7 @@
 	for(i=1;i<=6;i++) coordinates[i] = 1.0;
 	return 0;
 }
-
+ 
 int create_grab_path(double *object_coordinates, ecp_teach_in_generator generator)
 {
 	int i;
@@ -56,52 +56,55 @@ int create_grab_path(double *object_coordinates, ecp_teach_in_generator generato
 // KONSTRUKTORY
 ecp_task_progpanel_irp6ot::ecp_task_progpanel_irp6ot(configurator &_config) : ecp_task(_config)
 {
-//	tig = NULL;
-	ppg = NULL;
+    //	tig = NULL;
+    ppg = NULL;
 };
-ecp_task_progpanel_irp6ot::~ecp_task_progpanel_irp6ot(){};
+ecp_task_progpanel_irp6ot::~ecp_task_progpanel_irp6ot()
+{}
+;
 
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_progpanel_irp6ot::task_initialization(void) 
+void ecp_task_progpanel_irp6ot::task_initialization(void)
 {
-	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
-	
-	// powolanie czujnikow
-	sensor_m[SENSOR_PP] = 
-		new ecp_mp_pp_sensor (SENSOR_PP, "[vsp_pp_irp6ot]", *this);
-	// Konfiguracja czujnika.
-	sensor_m.begin()->second->configure_sensor();
-	// Stworzenie generatora.
-	ppg = new progpanel_generator (*this, 16);
-	// Przepisanie listy czujnikow.
-	ppg->sensor_m = sensor_m;
-	sr_ecp_msg->message("ECP loaded");
+    ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+
+    // powolanie czujnikow
+    sensor_m[SENSOR_PP] =
+        new ecp_mp_pp_sensor (SENSOR_PP, "[vsp_pp_irp6ot]", *this);
+    // Konfiguracja czujnika.
+    sensor_m.begin()->second->configure_sensor();
+    // Stworzenie generatora.
+    ppg = new progpanel_generator (*this, 16);
+    // Przepisanie listy czujnikow.
+    ppg->sensor_m = sensor_m;
+    sr_ecp_msg->message("ECP loaded");
 };
 
 
 void ecp_task_progpanel_irp6ot::main_task_algorithm(void)
 {
-	 
-	sr_ecp_msg->message("ECP progpanel irp6ot  - wcisnij start");
-	ecp_wait_for_start();
-   
-   for(;;) { // Wewnetrzna petla nieskonczona
-	
-//	ecp_load_file_from_ui(*tig);
-//	ecp_load_file_with_path(*tig, config->return_string_value("trajektoria"));
-	
-//	 Move (*tig);
-	Move (*ppg);
-		
-     ecp_wait_for_stop();
-     break; // W.S. ??? czy powinna byc ta instrukcja
-   } // koniec: for(;;) wewnetrznej
 
-	
+    sr_ecp_msg->message("ECP progpanel irp6ot  - wcisnij start");
+    ecp_wait_for_start();
+
+    for(;;)
+    { // Wewnetrzna petla nieskonczona
+
+        //	ecp_load_file_from_ui(*tig);
+        //	ecp_load_file_with_path(*tig, config->return_string_value("trajektoria"));
+
+        //	 Move (*tig);
+        ppg->Move();
+
+        ecp_wait_for_stop();
+        break; // W.S. ??? czy powinna byc ta instrukcja
+    } // koniec: for(;;) wewnetrznej
+
+
 };
 
 ecp_task* return_created_ecp_task (configurator &_config)
-{
-	return new ecp_task_progpanel_irp6ot(_config);
-};
+                {
+                    return new ecp_task_progpanel_irp6ot(_config);
+                };

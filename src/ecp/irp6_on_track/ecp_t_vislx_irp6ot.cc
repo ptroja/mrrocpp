@@ -74,9 +74,9 @@ void ecp_task_vislx_irp6ot::main_task_algorithm(void)
 			sr_ecp_msg->message("NOWA SERIA");
 			
            sr_ecp_msg->message("FORCE SENSOR BIAS");
-            Move ( befg);
+            befg.Move();
 			
-			Move ( ynrlg);
+			ynrlg.Move();
 		
 		 }
 

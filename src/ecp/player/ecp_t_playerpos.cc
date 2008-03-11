@@ -43,7 +43,7 @@ void ecp_task_playerpos::main_task_algorithm(void)
 		switch ( (ECP_PLAYER_STATES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state) {
 			case ECP_GEN_PLAYERPOS:
 				ppg->set_goal(mp_command.mp_package.ecp_next_state.playerpos_goal);
-				Move(*ppg);
+				ppg->Move();
 				break;
 			default:
 				fprintf(stderr, "invalid ecp_next_state.mp_2_ecp_next_state (%d)\n", mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state);

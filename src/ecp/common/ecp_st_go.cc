@@ -55,7 +55,7 @@ void ecp_sub_task_go::execute ()
 {
     // Generator trajektorii prostoliniowej
     ecp_linear_generator lg(ecp_t, tdes, 1);
-    ecp_t.Move (lg);
+    lg.Move();
 
 };
 

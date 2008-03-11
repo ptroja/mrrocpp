@@ -83,7 +83,7 @@ void ecp_task_jajko_irp6ot::main_task_algorithm(void)
 			yefg->sensor_m = sensor_m;
 		
 			sr_ecp_msg->message("NOWA SERIA");
-			Move ( *yefg);
+			yefg->Move();
 		}
 		
 		// Oczekiwanie na STOP

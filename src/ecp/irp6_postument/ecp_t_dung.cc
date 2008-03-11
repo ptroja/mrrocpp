@@ -57,7 +57,7 @@ void ecp_task_dung::main_task_algorithm(void)
 		for(;;) {
 			sr_ecp_msg->message("NEW SERIES");
 
-			Move ( dg);
+			dg.Move();
 		
 		}
 		

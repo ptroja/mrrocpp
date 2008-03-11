@@ -201,7 +201,7 @@ void* forcesensor_move_thread (void* arg){
             try{
                 // Proba wykonania ruchu w danym kierunku.
             printf("MOVE\n");
-                ecp_t->Move(*fctg);
+                fctg->Move();
             printf("po MOVE\n");
             } // end try
             catch (ecp_generator::ECP_error e){

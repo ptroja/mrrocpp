@@ -102,20 +102,19 @@ void ecp_task_sk::main_task_algorithm(void)
         {
             sr_ecp_msg->message("NOWA SERIA");
             sr_ecp_msg->message("FORCE SENSOR BIAS");
-            Move ( *befg);
+befg->Move();
             sr_ecp_msg->message("Wodzenie do pozycji sledzenia konturu");
             sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
-            Move ( *nrg);
+nrg->Move();
 //		 sr_ecp_msg->message("wazenie");
-//            Move ( wmg);
+//        wmg.Move();
 
             // usuniecie listy o ile istnieje
             yefg->flush_pose_list();
 
             sr_ecp_msg->message("Sledzenie konturu");
             sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
-            Move ( *yefg);
-
+            yefg->Move();
             if ( save_activated && operator_reaction ("Save drawing ") )
             {
                 sr_ecp_msg->message("Zapisywanie trajektorii");

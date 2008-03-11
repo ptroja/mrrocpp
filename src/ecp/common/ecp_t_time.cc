@@ -64,7 +64,7 @@ void ecp_task_time::main_task_algorithm(void)
 	for(;;) { // Wewnetrzna petla nieskonczona
 				
 		for(;;) {
-			Move ( *tfg);
+tfg->Move();
 		}
 		
 		// Oczekiwanie na STOP

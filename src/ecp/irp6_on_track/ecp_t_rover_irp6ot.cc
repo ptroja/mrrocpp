@@ -68,7 +68,7 @@ void ecp_task_vislx_irp6ot::main_task_algorithm(void)
 
 		for(;;) {
 			sr_ecp_msg->message("NOWA SERIA");
-			Move ( ynrlg);
+			ynrlg.Move();
 		
 		 }
 
