@@ -20,6 +20,7 @@
 */
 #include "ecp_mp/ecp_mp_t_festival.h"
 #include "ecp_mp/ecp_mp_t_player.h"
+#include "ecp_mp/ecp_mp_t_multiplayer.h"
 #include "ecp/festival/ecp_g_festival.h"
 
 mp_task_multiplayer::mp_task_multiplayer(configurator &_config) : mp_task(_config)

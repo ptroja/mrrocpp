@@ -22,7 +22,7 @@ void ecp_task_multiplayer_irp6ot::task_initialization(void)
     ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
     // powolanie czujnikow
-  
+
 
     befg = new bias_edp_force_generator (*this);
 
@@ -30,6 +30,8 @@ void ecp_task_multiplayer_irp6ot::task_initialization(void)
     wmg = new weight_meassure_generator(*this, 1);
     gt = new ecp_generator_t (*this);
 
+    go_st = new ecp_sub_task_go(*this);
+    
     sr_ecp_msg->message("ECP loaded");
 }
 
@@ -61,6 +63,21 @@ void ecp_task_multiplayer_irp6ot::main_task_algorithm(void)
                 break;
             case ECP_GEN_BIAS_EDP_FORCE:
                 Move (*befg);
+                break;
+            case RCSC_GRIPPER_OPENING:
+                switch ( (RCSC_TURN_ANGLES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_variant)
+                {
+                case RCSC_GO_VAR_1:
+                    go_st->configure(0.002, 1000);
+                    go_st->execute();
+                    break;
+                case RCSC_GO_VAR_2:
+                    go_st->configure(0.02, 1000);
+                    go_st->execute();
+                    break;
+                default:
+                    break;
+                }
                 break;
             case ECP_GEN_SMOOTH:
                 size = strlen(mrrocpp_network_path)
