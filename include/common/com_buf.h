@@ -449,11 +449,7 @@ enum BEHAVIOUR_SPECIFICATION {
     GUARDED_MOTION,
     CONTACT
 };
-
 /*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
-
 
 /*--------------------------------------------------------------------------*/
 struct edp_error // struktura zawierajaca zakodowana przyczyne bledu
@@ -755,9 +751,19 @@ struct r_buffer
 /************************ r_buffer ****************************/
 
 // pozycja docelowa dla robota mobilnego
-struct playerpos_goal_t
+class playerpos_goal_t
 {
-    double x, y, t;
+	private:
+		double x, y, t;
+
+	public:
+		void forward(double length);
+		void turn(double angle);
+		void setGoal(double _x, double _y, double _z);
+
+		double getX() const;
+		double getY() const;
+		double getT() const;
 };
 
 // zlecenie zmiany stanu ECP skojarzone z NEXT_STATE
@@ -787,8 +793,7 @@ class edp_reply_buffer
 {
 public:
     r_buffer reply_package;           // bufor odpowiedzi wysylanych do ECP
-}
-; // end: class reply_buffer
+};
 // ------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------

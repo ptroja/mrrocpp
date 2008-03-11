@@ -27,17 +27,17 @@ playerpos_generator::~playerpos_generator()
 
 void playerpos_generator::set_goal(const playerpos_goal_t &_goal)
 {
-	printf("playerpos_generator::set_goal({%.2f, %.2f, %.2f})\n",
-			_goal.x, _goal.y, _goal.t);
 	this->goal = _goal;
 }
 
 bool playerpos_generator::first_step()
 {
+	//device->ResetOdometry();
 	device->SelectPositionMode(1);
 	printf("playerpos_generator::first_step() -> {%.2f, %.2f, %.2f}\n",
-			goal.x, goal.y, goal.t);
-	device->GoTo(goal.x, goal.y, goal.t);
+			goal.getX(), goal.getY(), goal.getT());
+	device->GoTo(goal.getX(), goal.getY(), goal.getT());
+	client->Read();
 	return true;
 }
 

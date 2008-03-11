@@ -22,7 +22,7 @@ all: ${BINARIES}
 ecp_speechrecognition: ecp_t_speechrecognition.o ecp_g_speechrecognition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
-ecp_playerpos: ecp_t_playerpos.o ecp_g_playerpos.o $(SHOBJ)
+ecp_playerpos: ecp_t_playerpos.o ecp_g_playerpos.o playerpos_goal.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#

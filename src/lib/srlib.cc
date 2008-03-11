@@ -164,7 +164,7 @@ int sr::message(int16_t message_type, uint64_t error_code0, uint64_t error_code1
 // interpretacja bledu dla EDP robota irp6_on_track
 
   sr_edp::sr_edp(PROCESS_TYPE process_type, const char *process_name, const char *sr_name) : 
-              sr(process_type, process_name, sr_name) { };
+              sr(process_type, process_name, sr_name) { }
 
 
 void sr_edp::interpret(void) { 
@@ -323,7 +323,7 @@ void sr_edp::interpret(void) {
 // ---------------------------------------------------------------------
 
   sr_ecp::sr_ecp(PROCESS_TYPE process_type, const char *process_name, const char *sr_name) : 
-              sr(process_type, process_name, sr_name) { };
+              sr(process_type, process_name, sr_name) { }
 
 
 // ---------------------------------------------------------------------
@@ -419,7 +419,7 @@ switch (sr_message.message_type) {
 } // end: sr_ecp::interpret()
 // ---------------------------------------------------------------------
   sr_ui::sr_ui(PROCESS_TYPE process_type, const char *process_name, const char *sr_name) : 
-              sr(process_type, process_name, sr_name) { };
+              sr(process_type, process_name, sr_name) { }
 
 // Interpretacja bledow generowanych w UI // by Y - UWAGA UZUPELNIC
 void sr_ui::interpret(void) { 
@@ -451,7 +451,7 @@ switch (sr_message.message_type) {
 } // end: sr_vsp::interpret()
 
   sr_vsp::sr_vsp(PROCESS_TYPE process_type, const char *process_name, const char *sr_name) : 
-              sr(process_type, process_name, sr_name) { };
+              sr(process_type, process_name, sr_name) { }
 
 // Interpretacja bledow generowanych w VSP
 void sr_vsp::interpret(void) { 
