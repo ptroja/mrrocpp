@@ -16,7 +16,7 @@
 
 #include "ecp/common/ecp_g_jarosz.h"
 
-void ecp_short_move_up (ecp_task& ecp_object)
+void ecp_task_pr_irp6ot::short_move_up ()
 {
 
 	trajectory_description tdes;
@@ -34,8 +34,8 @@ void ecp_short_move_up (ecp_task& ecp_object)
 	tdes.coordinate_delta[5] = 0.0;   // przyrost wspolrzednej PSI
 	tdes.coordinate_delta[6] = 0.0;   // przyrost dla rozwarcia chwytaka
 	// Generator trajektorii prostoliniowej
-	ecp_linear_generator lg(ecp_object, tdes, 0);
-	ecp_object.Move (lg);
+	ecp_linear_generator lg(*this, tdes, 0);
+	Move (lg);
 
 }
 
@@ -127,7 +127,7 @@ for(;;) { // Wewnetrzna petla nieskonczona
 			Move (*tig);
 			
 			sr_ecp_msg->message("Krotki ruch w gore");
-			ecp_short_move_up(*this);
+			short_move_up();
 			
 			sr_ecp_msg->message("Wodzenie za nos");
 			sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
@@ -145,7 +145,7 @@ for(;;) { // Wewnetrzna petla nieskonczona
 			Move (*tig);
 				
 			sr_ecp_msg->message("Krotki ruch w gore");
-			ecp_short_move_up(*this);
+			short_move_up();
 
 			sr_ecp_msg->message("Wodzenie za nos");
 			sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
