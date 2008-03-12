@@ -21,6 +21,9 @@
 
 #include "lib/srlib.h"
 #include "vsp/vsp_vis_sac_lx.h"
+
+#include "lib/configurator.h"
+
 //#include "vsp/cmvision.h"
 //#include "vsp/cube.h"
 
@@ -41,6 +44,8 @@
 #define BUFFER_SIZE 8*256 //8*
 
 #define BUFFER_EIH_SIZE 22*256 //14
+
+extern configurator* config;
 
 int sockfd_sac, portno;
 struct sockaddr_in serv_addr;
@@ -119,7 +124,8 @@ struct timespec crr_time, s_time, e_time;
 
 int debug=0;
 
-
+char SAC_node_name[20]; 
+char EIH_node_name[20]; 
 
 int ret=0;
 //CMVision vision;
@@ -138,49 +144,58 @@ vsp_vis_sac_lx_sensor::vsp_vis_sac_lx_sensor(void)
 
 	z=0;
 	x=0;
+	
+	strcpy(SAC_node_name, config->return_string_value("SAC_node_name"));
+	strcpy(EIH_node_name, config->return_string_value("EIH_node_name"));
 
 	//SAC
-	portno = PORT;
-	sockfd_sac = socket(AF_INET, SOCK_STREAM, 0);
-	if (sockfd_sac < 0) {
-		printf("ERROR opening socket");
-		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	if(strcmp( SAC_node_name, "NULL" )!=0)
+	{
+		portno = PORT;
+		sockfd_sac = socket(AF_INET, SOCK_STREAM, 0);
+		if (sockfd_sac < 0) {
+			printf("ERROR opening socket");
+			throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		}
+		//server = gethostbyname(HOST);
+		server = gethostbyname(SAC_node_name);
+		if (server == NULL) {
+			printf("ERROR, no such host\n");
+			throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		}
+		bzero((char *) &serv_addr, sizeof(serv_addr));
+		serv_addr.sin_family = AF_INET;
+		bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
+		serv_addr.sin_port = htons(portno);
+		if (connect(sockfd_sac, (const struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+			printf("ERROR connecting");
+			throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		}
 	}
-	server = gethostbyname(HOST);
-	if (server == NULL) {
-		printf("ERROR, no such host\n");
-		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	//EIH
+	if(strcmp( EIH_node_name, "NULL" )!=0)
+	{	
+		portno_eih = PORT_EIH;
+		sockfd_eih = socket(AF_INET, SOCK_STREAM, 0);
+		if (sockfd_eih < 0) {
+			printf("ERROR opening socket");
+			throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		}
+		//server_eih = gethostbyname(HOST_EIH);
+		server_eih = gethostbyname(EIH_node_name);	
+		if (server_eih == NULL) {
+			printf("ERROR, no such host\n");
+			throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		}
+		bzero((char *) &serv_addr_eih, sizeof(serv_addr_eih));
+		serv_addr_eih.sin_family = AF_INET;
+		bcopy((char *)server_eih->h_addr, (char *)&serv_addr_eih.sin_addr.s_addr, server_eih->h_length);
+		serv_addr_eih.sin_port = htons(portno_eih);
+		if (connect(sockfd_eih, (const struct sockaddr *) &serv_addr_eih, sizeof(serv_addr_eih)) < 0) {
+			printf("ERROR connecting");
+			throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		}
 	}
-	bzero((char *) &serv_addr, sizeof(serv_addr));
-	serv_addr.sin_family = AF_INET;
-	bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
-	serv_addr.sin_port = htons(portno);
-	if (connect(sockfd_sac, (const struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-		printf("ERROR connecting");
-		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
-	}
-
-	//EIH	
-	portno_eih = PORT_EIH;
-	sockfd_eih = socket(AF_INET, SOCK_STREAM, 0);
-	if (sockfd_eih < 0) {
-		printf("ERROR opening socket");
-		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
-	}
-	server_eih = gethostbyname(HOST_EIH);
-	if (server_eih == NULL) {
-		printf("ERROR, no such host\n");
-		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
-	}
-	bzero((char *) &serv_addr_eih, sizeof(serv_addr_eih));
-	serv_addr_eih.sin_family = AF_INET;
-	bcopy((char *)server_eih->h_addr, (char *)&serv_addr_eih.sin_addr.s_addr, server_eih->h_length);
-	serv_addr_eih.sin_port = htons(portno_eih);
-	if (connect(sockfd_eih, (const struct sockaddr *) &serv_addr_eih, sizeof(serv_addr_eih)) < 0) {
-		printf("ERROR connecting");
-		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
-	}
-
 	sr_msg->message("VSP VIS PB-ECL-SAC LX started");
 }
 
@@ -213,7 +228,8 @@ void vsp_vis_sac_lx_sensor::initiate_reading(void)
 //	{
 		int n;
 		//SAC
-
+	if(strcmp( SAC_node_name, "NULL" )!=0)
+	{
 		if (write(sockfd_sac,"x",1) != 1) {
 			perror("write() to sockfd_sac error");
 			exit(-1);
@@ -234,10 +250,12 @@ void vsp_vis_sac_lx_sensor::initiate_reading(void)
 			exit(-1);
 		}
 		//printf("VSP_SAC - %d %d %d %d %d %d\n", x_sac,y_sac,z_sac, a_sac, b_sac, g_sac);
-
+	}
 
 		//EIH
-
+	if(strcmp( EIH_node_name, "NULL" )!=0)
+	{
+	
 		if (write(sockfd_eih,"x",1) != 1) {
 			perror("write() to sockfd_eih error");
 			exit(-1);
@@ -260,6 +278,7 @@ void vsp_vis_sac_lx_sensor::initiate_reading(void)
 			fprintf(stderr, "sscanf(buffer) failed\n");
 			exit(-1);
 		}
+	}
 		//printf("VSP_EIH - %d %d %d %d %d %d %d %d\n", f1x_eih, f1y_eih, f2x_eih, f2y_eih, f3x_eih, f3y_eih, f4x_eih, f4y_eih);
 		//printf("VSP_EIH - %d %d %d %d %d %d %d %d %d %d %d %d\n", x,y,z, a, b, g, x_jack_eih, y_jack_eih, z_jack_eih, a_jack_eih, b_jack_eih, g_jack_eih);
 //	}
