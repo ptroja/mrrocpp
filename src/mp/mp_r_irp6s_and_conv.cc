@@ -111,7 +111,7 @@ void mp_irp6s_and_conv_robot::create_next_pose_command (void)
         if (ecp_td.set_type & ARM_DV)
         { // ramie
             mp_command.mp_package.instruction.motion_type = ecp_td.motion_type;
-            mp_command.mp_package.instruction.interpolation_type = ecp_td.interpolation_type;
+            mp_command.mp_package.instruction.interpolation_type = ecp_td.next_interpolation_type;
             mp_command.mp_package.instruction.motion_steps = ecp_td.motion_steps;
             mp_command.mp_package.instruction.value_in_step_no = ecp_td.value_in_step_no;
             // Wypelniamy czesc zwiazana z polozeniem ramienia

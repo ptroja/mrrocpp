@@ -68,7 +68,7 @@ bool MP_vf_generator::first_step () {
 	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.set_arm_type = JOINT;
 	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.get_arm_type = JOINT;
 	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.motion_type = ABSOLUTE;
-	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.interpolation_type = MOTORS_INTERPOLATION;
+	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.next_interpolation_type = MOTORS_INTERPOLATION;
 	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.motion_steps = td.internode_step_no;
 	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.value_in_step_no = td.value_in_step_no;
     
@@ -82,7 +82,7 @@ bool MP_vf_generator::first_step () {
 	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.set_arm_type = JOINT;
 	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.get_arm_type = JOINT;
 	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.motion_type = ABSOLUTE;
-	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.interpolation_type = MOTORS_INTERPOLATION;
+	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.next_interpolation_type = MOTORS_INTERPOLATION;
 	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.motion_steps = td.internode_step_no;
 	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.value_in_step_no = td.value_in_step_no;
  

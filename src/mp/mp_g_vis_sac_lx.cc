@@ -158,7 +158,7 @@ bool mp_vis_sac_lx_generator::first_step ()
     irp6ot->ecp_td.get_rmodel_type = TOOL_FRAME;
     //irp6ot->ecp_td.motion_type = ABSOLUTE; //RELATIVE;
     irp6ot->ecp_td.motion_type = PF_XYZ_ANGLE_AXIS_ABSOLUTE_POSE; //PF_FIXED_FRAME_WITH_DESIRED_FORCE_OR_SPEED;
-    irp6ot->ecp_td.interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
+    irp6ot->ecp_td.next_interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
 
     irp6ot->ecp_td.motion_steps = td.internode_step_no;
     irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;

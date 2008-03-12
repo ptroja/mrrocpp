@@ -125,7 +125,7 @@ bool mp_seven_eye_generator::first_step () {
 	irp6ot->ecp_td.set_rmodel_type = TOOL_FRAME;
 	irp6ot->ecp_td.get_rmodel_type = TOOL_FRAME;
 	irp6ot->ecp_td.motion_type = ABSOLUTE; //RELATIVE;
-			irp6ot->ecp_td.interpolation_type = MOTORS_INTERPOLATION;
+			irp6ot->ecp_td.next_interpolation_type = MOTORS_INTERPOLATION;
 	irp6ot->ecp_td.motion_steps = td.internode_step_no;
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 	

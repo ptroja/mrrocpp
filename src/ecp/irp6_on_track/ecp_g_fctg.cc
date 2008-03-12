@@ -291,7 +291,7 @@ bool force_controlled_trajectory_generator::first_step(){
     the_robot->EDP_data.set_type = ARM_DV; // ARM
     the_robot->EDP_data.set_arm_type = current_control;
     the_robot->EDP_data.motion_type = ABSOLUTE;
-     the_robot->EDP_data.interpolation_type = MOTORS_INTERPOLATION;
+     the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
     the_robot->EDP_data.motion_steps = 70;
     the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-5;
     // Zerowe przesuniecie na innych osiach.

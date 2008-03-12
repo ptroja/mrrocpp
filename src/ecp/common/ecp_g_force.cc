@@ -209,7 +209,7 @@ bool y_nose_run_force_generator::first_step ( )
     the_robot->EDP_data.set_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
     the_robot->EDP_data.get_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
     the_robot->EDP_data.motion_type = PF_VELOCITY;
-    the_robot->EDP_data.interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
+    the_robot->EDP_data.next_interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
     the_robot->EDP_data.motion_steps = td.internode_step_no;
     the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
     /*
@@ -668,7 +668,7 @@ bool y_edge_follow_force_generator::first_step ( )
     the_robot->EDP_data.set_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
     the_robot->EDP_data.get_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
     the_robot->EDP_data.motion_type = PF_VELOCITY;
-     the_robot->EDP_data.interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
+     the_robot->EDP_data.next_interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
     the_robot->EDP_data.motion_steps = td.internode_step_no;
     the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -1490,7 +1490,7 @@ bool ecp_tff_nose_run_generator::first_step ()
     the_robot->EDP_data.set_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
     the_robot->EDP_data.get_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
     the_robot->EDP_data.motion_type = PF_VELOCITY;
-     the_robot->EDP_data.interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
+     the_robot->EDP_data.next_interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
     the_robot->EDP_data.motion_steps = td.internode_step_no;
     the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -1619,7 +1619,7 @@ bool ecp_tff_rubik_grab_generator::first_step ()
     the_robot->EDP_data.set_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
     the_robot->EDP_data.get_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
     the_robot->EDP_data.motion_type = PF_VELOCITY;
-     the_robot->EDP_data.interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
+     the_robot->EDP_data.next_interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
     the_robot->EDP_data.motion_steps = td.internode_step_no;
     the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -1746,7 +1746,7 @@ bool ecp_tff_rubik_face_rotate_generator::first_step ()
     the_robot->EDP_data.set_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
     the_robot->EDP_data.get_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
     the_robot->EDP_data.motion_type = PF_VELOCITY;
-     the_robot->EDP_data.interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
+     the_robot->EDP_data.next_interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
     the_robot->EDP_data.motion_steps = td.internode_step_no;
     the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -1926,7 +1926,7 @@ bool ecp_tff_gripper_approach_generator::first_step ()
     the_robot->EDP_data.set_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
     the_robot->EDP_data.get_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
     the_robot->EDP_data.motion_type = PF_VELOCITY;
-     the_robot->EDP_data.interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
+     the_robot->EDP_data.next_interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
     the_robot->EDP_data.motion_steps = td.internode_step_no;
     the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 

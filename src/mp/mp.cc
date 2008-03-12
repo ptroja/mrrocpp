@@ -325,7 +325,7 @@ bool mp_tight_coop_generator::first_step ()
         robot_m_iterator->second->ecp_td.set_arm_type = XYZ_EULER_ZYZ;
         robot_m_iterator->second->ecp_td.get_arm_type = XYZ_EULER_ZYZ;
         robot_m_iterator->second->ecp_td.motion_type = ABSOLUTE;
-        robot_m_iterator->second->ecp_td.interpolation_type = MOTORS_INTERPOLATION;
+        robot_m_iterator->second->ecp_td.next_interpolation_type = MOTORS_INTERPOLATION;
         robot_m_iterator->second->ecp_td.motion_steps = irp6ot_td.internode_step_no;
         robot_m_iterator->second->ecp_td.value_in_step_no = irp6ot_td.value_in_step_no;
         robot_m_iterator->second->communicate = true;

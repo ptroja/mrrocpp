@@ -42,7 +42,7 @@ bool dung_generator::first_step()
     the_robot->EDP_data.set_arm_type = JOINT;
     the_robot->EDP_data.get_arm_type = JOINT;
     the_robot->EDP_data.motion_type = ABSOLUTE;
-     the_robot->EDP_data.interpolation_type = MOTORS_INTERPOLATION;
+     the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
     the_robot->EDP_data.motion_steps = td.internode_step_no;
     the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
