@@ -42,6 +42,8 @@ void ecp_irp6_postument_robot::create_command(void)
 	EDP_command_and_reply_buffer.instruction.get_arm_type = EDP_data.get_arm_type;
 	EDP_command_and_reply_buffer.instruction.output_values = EDP_data.output_values;
 
+	EDP_command_and_reply_buffer.instruction.interpolation_type = EDP_data.next_interpolation_type;
+
 	switch (EDP_data.instruction_type) {
 		case SET:
 		case SET_GET:
@@ -98,7 +100,6 @@ void ecp_irp6_postument_robot::create_command(void)
 
 			if (EDP_data.set_type & ARM_DV) {
 				EDP_command_and_reply_buffer.instruction.motion_type = EDP_data.motion_type;
-				EDP_command_and_reply_buffer.instruction.interpolation_type = EDP_data.next_interpolation_type;
 				EDP_command_and_reply_buffer.instruction.motion_steps = EDP_data.motion_steps;
 				EDP_command_and_reply_buffer.instruction.value_in_step_no = EDP_data.value_in_step_no;
 				// Wypelniamy czesc zwiazana z polozeniem ramienia
@@ -231,6 +232,7 @@ void ecp_irp6_postument_robot::get_input_reply(void)
 
 void ecp_irp6_postument_robot::get_arm_reply(void)
 {
+
 	switch (EDP_command_and_reply_buffer.reply_package.arm_type) {
 		case MOTOR:
 			for (int i=0; i<IRP6_POSTUMENT_NUM_OF_SERVOS; i++)

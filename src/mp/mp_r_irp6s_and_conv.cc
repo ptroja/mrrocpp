@@ -41,6 +41,7 @@ void mp_irp6s_and_conv_robot::create_next_pose_command(void)
 	mp_command.mp_package.instruction.set_arm_type = ecp_td.set_arm_type;
 	mp_command.mp_package.instruction.get_arm_type = ecp_td.get_arm_type;
 	mp_command.mp_package.instruction.output_values = ecp_td.output_values;
+	mp_command.mp_package.instruction.interpolation_type = ecp_td.next_interpolation_type;
 	switch (ecp_td.instruction_type) {
 		case SET:
 		case SET_GET:
@@ -98,7 +99,7 @@ void mp_irp6s_and_conv_robot::create_next_pose_command(void)
 
 			if (ecp_td.set_type & ARM_DV) { // ramie
 				mp_command.mp_package.instruction.motion_type = ecp_td.motion_type;
-				mp_command.mp_package.instruction.interpolation_type = ecp_td.next_interpolation_type;
+
 				mp_command.mp_package.instruction.motion_steps = ecp_td.motion_steps;
 				mp_command.mp_package.instruction.value_in_step_no = ecp_td.value_in_step_no;
 				// Wypelniamy czesc zwiazana z polozeniem ramienia
@@ -265,20 +266,17 @@ void mp_irp6s_and_conv_robot::get_arm_reply(void)
 		default: // bledny typ specyfikacji pozycji
 			throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}
-	
-	
+
 	for (int i = 0; i<6; i++) {
 		ecp_td.current_force_xyz_torque_xyz[i]
 				= ecp_reply_package.ecp_reply.reply_package.arm.pf_def.force_xyz_torque_xyz[i];
 	}
-	
+
 	if (has_gripper) {
 		ecp_td.gripper_reg_state = ecp_reply_package.ecp_reply.reply_package.arm.pf_def.gripper_reg_state;
-		ecp_td.current_gripper_coordinate
-				= ecp_reply_package.ecp_reply.reply_package.arm.pf_def.gripper_coordinate;
+		ecp_td.current_gripper_coordinate = ecp_reply_package.ecp_reply.reply_package.arm.pf_def.gripper_coordinate;
 	}
-	
-	
+
 }
 
 void mp_irp6s_and_conv_robot::get_rmodel_reply(void)

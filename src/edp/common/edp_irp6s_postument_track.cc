@@ -741,8 +741,7 @@ void edp_irp6s_postument_track_effector::get_arm_position(bool read_hardware, c_
 				printf("EFF_TYPE: %d\n", instruction.get_arm_type);
 				throw NonFatal_error_2(INVALID_GET_END_EFFECTOR_TYPE);
 		}
-	}
-	if (instruction.interpolation_type == EXTERNAL_INTERPOLATION_WITH_FORCE) {
+	} else if (instruction.interpolation_type == EXTERNAL_INTERPOLATION_WITH_FORCE) {
 		// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
 		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 		get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
