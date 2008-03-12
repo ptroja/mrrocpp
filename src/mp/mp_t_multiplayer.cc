@@ -12,12 +12,6 @@
 #include "lib/srlib.h"
 #include "mp/mp.h"
 #include "mp/mp_t_multiplayer.h"
-
-/*
-#include "mp/mp_g_playerpos.h"
-#include "mp/mp_g_playerspeech.h"
-#include "ecp_mp/ecp_mp_tr_player.h"
-*/
 #include "ecp_mp/ecp_mp_t_festival.h"
 #include "ecp_mp/ecp_mp_t_player.h"
 #include "ecp_mp/ecp_mp_t_multiplayer.h"
@@ -81,10 +75,50 @@ void mp_task_multiplayer::main_task_algorithm(void)
 		       	break;
 			}
 #endif
-#if 1
+	
 			// pozycja robota mobilnego
 			playerpos_goal_t goal;
 			
+			goal.setGoal(1.0, 0.0, 0.0);
+
+			if (set_next_playerpos_goal (ROBOT_ELECTRON, goal)) {
+				break_state = true;
+		       	break;
+			}
+			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+		        (1, 1, ROBOT_ELECTRON, ROBOT_ELECTRON)) {
+				break_state = true;
+		       	break;
+			}
+			
+			goal.turn(-1.5*M_PI_2);
+
+			if (set_next_playerpos_goal (ROBOT_ELECTRON, goal)) {
+				break_state = true;
+		       	break;
+			}
+			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+		        (1, 1, ROBOT_ELECTRON, ROBOT_ELECTRON)) {
+				break_state = true;
+		       	break;
+			}
+
+			goal.forward(1.0);
+
+			if (set_next_playerpos_goal (ROBOT_ELECTRON, goal)) {
+				break_state = true;
+		       	break;
+			}
+			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+		        (1, 1, ROBOT_ELECTRON, ROBOT_ELECTRON)) {
+				break_state = true;
+		       	break;
+			}			
+#if 0
+	
 			// USTAWIENIE POCZATKOWE
 			if (set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/multiplayer/irp6ot_sm_init.trj", 1, ROBOT_IRP6_ON_TRACK) ||
 				set_next_ecps_state (ECP_GEN_FESTIVAL, festival_generator::POLISH_VOICE, "inicjalizuje~ zadanie", 1, ROBOT_FESTIVAL)) {

@@ -764,6 +764,9 @@ class playerpos_goal_t
 		double getX() const;
 		double getY() const;
 		double getT() const;
+		
+		playerpos_goal_t(double _x, double _y, double _t);
+		playerpos_goal_t();
 };
 
 // zlecenie zmiany stanu ECP skojarzone z NEXT_STATE

@@ -36,6 +36,7 @@ libmrrocpp.a: \
 	mp_timer.o \
 	nurbs.o \
 	srlib.o \
+	playerpos_goal.o \
 	$(MESSIP_OBJECTS)
 	$(AR) $(ARFLAGS) $@ $?
 	${INSTALL} $@ $(LIBDIR)

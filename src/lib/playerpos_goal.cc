@@ -34,3 +34,13 @@ double playerpos_goal_t::getT() const
 {
 	return t;
 }
+
+playerpos_goal_t::playerpos_goal_t() :
+	x(0.0), y(0.0), t(0.0)
+{
+}
+
+playerpos_goal_t::playerpos_goal_t(double _x, double _y, double _t) :
+	x(_x), y(_y), t(_t)
+{
+}
