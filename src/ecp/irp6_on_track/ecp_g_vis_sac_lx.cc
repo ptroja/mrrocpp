@@ -233,17 +233,20 @@ bool ecp_vis_sac_lx_generator::next_step()
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 
 
-	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.instruction_type = SET_GET;
-	//the_robot->EDP_data.get_type = NOTHING_DV;
-	//the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
-	//the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
+	 	the_robot->EDP_data.set_type = ARM_DV;
+		the_robot->EDP_data.instruction_type = SET_GET;
+	  	//the_robot->EDP_data.get_type = NOTHING_DV;
+	 	//the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
+	 	//the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
 
-	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 2.341);	//jesli chwytamy po przekatnej
-	G_Tx_G2.set_xyz_euler_zyz( 0, 0, 0, 0.002, 1.481+0.03, 3.141); // jesli chwytak na plasko
+		//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 2.341);	//jesli chwytamy po przekatnej
+	G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 3.141); // jesli chwytak na plasko
+	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 1.564, 3.142, 0.000); //rover
+
 
 
 	if (node_counter==1)
+
 	{
 		vsp_vis_sac->base_period=1;
 		vsp_vis_sac->current_period=1; //1
@@ -464,8 +467,8 @@ bool ecp_vis_sac_lx_generator::next_step()
 	for (int i=0; i<6; i++)
 	{
 		//O_r_G[0][i]=0.5*O_r_G__CEIH[0][i]+0.5*O_r_G__CSAC[0][i]; //SAC+EIH
-		O_r_G[0][i]=O_r_G__CSAC[0][i]; //SAC ONLY
-		//O_r_G[0][i]=O_r_G__CEIH[0][i]; //EIH ONLY
+		//O_r_G[0][i]=O_r_G__CSAC[0][i]; //SAC ONLY
+		O_r_G[0][i]=O_r_G__CEIH[0][i]; //EIH ONLY
 		//O_r_G[0][i]=O_r_G__fEIH[0][i]; //EIH JACK ONLY
 	}
 
