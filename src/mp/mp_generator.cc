@@ -67,7 +67,7 @@ bool mp_generator::Move ()
 
     // by Y - linia ponizej dodana 26.02.2007 - usunac komentarz jak bedzie dzialalo
     // ze wzgledu na obluge pulsow z UI w szczegolnosci stopu i wstrzymania
-    if (mp_t.mp_receive_ui_or_ecp_pulse (robot_m, *this))
+    if (mp_t.mp_receive_ui_or_ecp_pulse (mp_t.robot_m, *this))
         return true;
 
     // czyszczenie aby nie czekac na pulsy z ECP
@@ -102,7 +102,7 @@ bool mp_generator::Move ()
         mp_t.all_sensors_get_reading(sensor_m);
 
         // oczekiwanie na puls z ECP lub UI
-        if (mp_t.mp_receive_ui_or_ecp_pulse(robot_m, *this))
+        if (mp_t.mp_receive_ui_or_ecp_pulse(mp_t.robot_m, *this))
             return true;
         node_counter++;
     }
