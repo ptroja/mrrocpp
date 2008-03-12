@@ -11,7 +11,7 @@ void playerpos_goal_t::setGoal(double _x, double _y, double _t)
 
 void playerpos_goal_t::turn(double angle)
 {
-	t += angle;
+	t += 1.5*angle; //friction correction
 }
 
 void playerpos_goal_t::forward(double length)

@@ -17,6 +17,12 @@
 #include "ecp_mp/ecp_mp_t_multiplayer.h"
 #include "ecp/festival/ecp_g_festival.h"
 
+bool mp_task_multiplayer::move_electron_robot(const playerpos_goal_t &goal)
+{
+	set_next_playerpos_goal (ROBOT_ELECTRON, goal);
+	return run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, ROBOT_ELECTRON, ROBOT_ELECTRON);
+}
+
 mp_task_multiplayer::mp_task_multiplayer(configurator &_config) : mp_task(_config)
 {
 }
@@ -30,6 +36,8 @@ void mp_task_multiplayer::task_initialization(void)
 {
 	sr_ecp_msg->message("MP multiplayer task loaded");
 }
+
+#define FRICTION_CORRECTOR	1.5
  
 void mp_task_multiplayer::main_task_algorithm(void)
 {
@@ -63,62 +71,25 @@ void mp_task_multiplayer::main_task_algorithm(void)
 
 			char *qq = robot_m[ROBOT_SPEECHRECOGNITION]->ecp_td.commandRecognized;
 			printf("commandRecognized = \"%s\"\n", qq);
-			
-			if (set_next_ecps_state (ECP_GEN_FESTIVAL, festival_generator::POLISH_VOICE, "raz dwa trzy cztery pie~c~ szes~c~ siedem osiem", 1, ROBOT_FESTIVAL)) {
-				break_state = true;
-		       	break;
-			}
-			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
-			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-		        (1, 1, ROBOT_FESTIVAL, ROBOT_FESTIVAL)) {
-				break_state = true;
-		       	break;
-			}
 #endif
-	
 			// pozycja robota mobilnego
 			playerpos_goal_t goal;
+
+			// dojezdzanie
+			goal.forward(1.25); move_electron_robot(goal);
+			goal.turn(-M_PI_2); move_electron_robot(goal);
+			goal.forward(.8); move_electron_robot(goal);
+
+			// powrot
+			goal.turn(-M_PI_2); move_electron_robot(goal);
+			goal.turn(-M_PI_2); move_electron_robot(goal);
 			
-			goal.setGoal(1.0, 0.0, 0.0);
+			goal.forward(.8); move_electron_robot(goal);
+			goal.turn(M_PI_2); move_electron_robot(goal);
+			goal.turn(M_PI_2); move_electron_robot(goal);
+			goal.forward(1.25); move_electron_robot(goal);
 
-			if (set_next_playerpos_goal (ROBOT_ELECTRON, goal)) {
-				break_state = true;
-		       	break;
-			}
-			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
-			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-		        (1, 1, ROBOT_ELECTRON, ROBOT_ELECTRON)) {
-				break_state = true;
-		       	break;
-			}
-			
-			goal.turn(-1.5*M_PI_2);
-
-			if (set_next_playerpos_goal (ROBOT_ELECTRON, goal)) {
-				break_state = true;
-		       	break;
-			}
-			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
-			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-		        (1, 1, ROBOT_ELECTRON, ROBOT_ELECTRON)) {
-				break_state = true;
-		       	break;
-			}
-
-			goal.forward(1.0);
-
-			if (set_next_playerpos_goal (ROBOT_ELECTRON, goal)) {
-				break_state = true;
-		       	break;
-			}
-			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
-			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-		        (1, 1, ROBOT_ELECTRON, ROBOT_ELECTRON)) {
-				break_state = true;
-		       	break;
-			}			
-#if 0
-	
+#if 0			
 			// USTAWIENIE POCZATKOWE
 			if (set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/multiplayer/irp6ot_sm_init.trj", 1, ROBOT_IRP6_ON_TRACK) ||
 				set_next_ecps_state (ECP_GEN_FESTIVAL, festival_generator::POLISH_VOICE, "inicjalizuje~ zadanie", 1, ROBOT_FESTIVAL)) {
@@ -150,7 +121,7 @@ void mp_task_multiplayer::main_task_algorithm(void)
 			}
 			
 			// OCZEKIWANIE NA POLECENIE
-			if (set_next_ecps_state (ECP_GEN_FESTIVAL, festival_generator::POLISH_VOICE, "oczekuje~ na polecenie", 1, ROBOT_FESTIVAL)) {
+			if (set_next_ecps_state (ECP_GEN_FESTIVAL, festival_generator::POLISH_VOICE, "udaje z*e oczekuje~ na polecenie", 1, ROBOT_FESTIVAL)) {
 				break_state = true;
 		       	break;
 			}
@@ -162,7 +133,7 @@ void mp_task_multiplayer::main_task_algorithm(void)
 			}
 
 			// FAZA DOJEZDZANIA DO POZYCJI PODNOSZENIA KOSTKI
-			goal.setGoal(1.0, 0.0, 0.0);
+			goal.forward(1.25);
 			
 			if (set_next_playerpos_goal (ROBOT_ELECTRON, goal) ||
 				set_next_ecps_state (ECP_GEN_FESTIVAL, festival_generator::POLISH_VOICE, "jade~ przekazac~ kostke~", 1, ROBOT_FESTIVAL) ||
@@ -180,7 +151,7 @@ void mp_task_multiplayer::main_task_algorithm(void)
 				break;
 			}
 
-			goal.turn(-1.5*M_PI_2);
+			goal.turn(-M_PI_2); // wspolczynnik korekcji dla poslizgow robota
 
 			if (set_next_playerpos_goal (ROBOT_ELECTRON, goal)) {
 				break_state = true;
@@ -204,7 +175,7 @@ void mp_task_multiplayer::main_task_algorithm(void)
 		        (1, 1, ROBOT_ELECTRON, ROBOT_ELECTRON)) {
 				break_state = true;
 		       	break;
-			}			
+			}
 
 			// FAZA PRZECHWYTYWANIA KOSTKI
 			if (set_next_ecps_state (ECP_GEN_FESTIVAL, festival_generator::POLISH_VOICE, "teraz drugi robot podniesie kostke~!", 1, ROBOT_FESTIVAL)) {
@@ -244,8 +215,82 @@ void mp_task_multiplayer::main_task_algorithm(void)
 					)) {
 				break_state = true;
 				break;
-			}			
-#endif
+			}
+
+			// FAZA ODBIERANIA KOSTKI
+			if (set_next_ecps_state( (int) ECP_WEIGHT_MEASURE_GENERATOR, 0, NULL, 1, ROBOT_IRP6_ON_TRACK) ||
+				set_next_ecps_state (ECP_GEN_FESTIVAL, festival_generator::POLISH_VOICE, "prosze~ odbierz kostke~", 1, ROBOT_FESTIVAL)) {
+				break_state = true;
+				break;
+			}
+			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
+					2, 2,
+					ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL,
+					ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL
+					)) {
+				break_state = true;
+				break;
+			}
+			
+			// FAZA POWROTU DO USTAWIENIA POCZATKOWEGO
+			goal.turn(M_PI);
+
+			if (set_next_playerpos_goal (ROBOT_ELECTRON, goal) ||
+				set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/multiplayer/irp6ot_sm_init.trj", 1, ROBOT_IRP6_ON_TRACK) ||
+				set_next_ecps_state (ECP_GEN_FESTIVAL, festival_generator::POLISH_VOICE, "zadanie wykonane", 1, ROBOT_FESTIVAL)) {
+				break_state = true;
+				break;
+			}
+			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
+					3, 3,
+							ROBOT_ELECTRON, ROBOT_FESTIVAL, ROBOT_IRP6_ON_TRACK,
+							ROBOT_ELECTRON, ROBOT_FESTIVAL, ROBOT_IRP6_ON_TRACK
+					)) {
+				break_state = true;
+				break;
+			}
+
+			goal.forward(1.0);
+
+			if (set_next_playerpos_goal (ROBOT_ELECTRON, goal)) {
+				break_state = true;
+				break;
+			}
+			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
+					1, 1, ROBOT_ELECTRON, ROBOT_ELECTRON)) {
+				break_state = true;
+				break;
+			}
+
+			goal.turn(M_PI_2);
+
+			if (set_next_playerpos_goal (ROBOT_ELECTRON, goal)) {
+				break_state = true;
+				break;
+			}
+			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
+					1, 1, ROBOT_ELECTRON, ROBOT_ELECTRON)) {
+				break_state = true;
+				break;
+			}
+
+			goal.forward(1.25);
+
+			if (set_next_playerpos_goal (ROBOT_ELECTRON, goal)) {
+				break_state = true;
+				break;
+			}
+			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
+					1, 1, ROBOT_ELECTRON, ROBOT_ELECTRON)) {
+				break_state = true;
+				break;
+			}
+#endif			
 		} while(0);
 		
 		if (break_state)

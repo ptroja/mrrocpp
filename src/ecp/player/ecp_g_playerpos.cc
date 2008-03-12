@@ -15,6 +15,7 @@ playerpos_generator::playerpos_generator(ecp_task& _ecp_task)
 	
 	int device_index = ecp_t.config.return_int_value("device_index");
 	device = new PositionProxy(client, device_index, 'a');
+	device->SelectPositionMode(1);
 	
 	test_mode = ecp_t.config.return_int_value("test_mode");
 }
@@ -33,11 +34,15 @@ void playerpos_generator::set_goal(const playerpos_goal_t &_goal)
 bool playerpos_generator::first_step()
 {
 	//device->ResetOdometry();
-	device->SelectPositionMode(1);
 	printf("playerpos_generator::first_step() -> {%.2f, %.2f, %.2f}\n",
 			goal.getX(), goal.getY(), goal.getT());
 	device->GoTo(goal.getX(), goal.getY(), goal.getT());
-	client->Read();
+
+	do {
+		client->Read();
+	} while (!(device->fresh));
+	device->fresh = false;
+	
 	return true;
 }
 
@@ -60,7 +65,7 @@ bool playerpos_generator::next_step()
 #endif
 
 	if (device->fresh) {
-		device->Print();
+		//device->Print();
 		device->fresh = false;
 		if (goto_accepted && !device->speed && !device->turnrate)
 			return false;

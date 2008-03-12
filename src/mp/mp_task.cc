@@ -141,7 +141,7 @@ void mp_task::main_task_algorithm(void)
 {}
 
 // metody do obslugi najczesniej uzywanych generatorow
-bool mp_task::set_next_playerpos_goal (ROBOT_ENUM robot_l, playerpos_goal_t &goal)
+bool mp_task::set_next_playerpos_goal (ROBOT_ENUM robot_l, const playerpos_goal_t &goal)
 {
 	// setting the next ecps state
 	mp_set_next_ecps_state_generator mp_snes_gen(*this);
