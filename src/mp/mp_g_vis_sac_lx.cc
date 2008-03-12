@@ -165,7 +165,7 @@ bool mp_vis_sac_lx_generator::first_step ()
 
     for(int i=0;i<6;i++)
     {
-        irp6ot->ecp_td.next_velocity[i] = 0;
+        irp6ot->ecp_td.next_XYZ_AA_arm_coordinates[i] = 0;
         //		irp6ot->ecp_td.MPtoECP_force_xyz_torque_xyz[i] = 0;
         //	irp6ot->ecp_td.MPselection_vector[i] = FORCE_SV_AX;
         //		 irp6ot->ecp_td.MPselection_vector[i] = POSE_SV_AX;
@@ -660,7 +660,7 @@ bool mp_vis_sac_lx_generator::next_step ()
 
     for(int i=0;i<6;i++)
     {
-        irp6ot->ecp_td.next_velocity[i] = O_r_Ep[0][i];
+        irp6ot->ecp_td.next_XYZ_AA_arm_coordinates[i] = O_r_Ep[0][i];
     }
     /*
     for(int i=0;i<6;i++) {

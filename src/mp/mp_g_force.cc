@@ -361,9 +361,9 @@ bool mp_haptic_generator::first_step()
 	tool_frame.get_frame_tab(irp6p->ecp_td.next_tool_frame);
 
 	for (int i=0; i<3; i++) {
-		irp6p->ecp_td.next_velocity[i] = 0;
+		irp6p->ecp_td.next_XYZ_AA_arm_coordinates[i] = 0;
 		irp6p->ecp_td.next_force_xyz_torque_xyz[i] = 0;
-		irp6p->ecp_td.next_velocity[i+3] = 0;
+		irp6p->ecp_td.next_XYZ_AA_arm_coordinates[i+3] = 0;
 		irp6p->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
 		irp6p->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
 		irp6p->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
@@ -429,7 +429,7 @@ bool mp_haptic_generator::next_step()
 	Homog_matrix irp6p_current_arm_frame(irp6p->ecp_td.current_arm_frame);
 
 	Homog_matrix irp6p_goal_frame(global_base*irp6ot_current_arm_frame);
-	irp6p_goal_frame.get_xyz_angle_axis(irp6p->ecp_td.next_velocity);
+	irp6p_goal_frame.get_xyz_angle_axis(irp6p->ecp_td.next_XYZ_AA_arm_coordinates);
 
 	/*
 	 Homog_matrix irp6p_goal_frame_increment_in_end_effector ((!irp6p_current_arm_frame)*irp6p_goal_frame);
