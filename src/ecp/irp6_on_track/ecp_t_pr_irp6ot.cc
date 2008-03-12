@@ -168,7 +168,7 @@ void ecp_task_pr_irp6ot::main_task_algorithm(void)
             if ( operator_reaction ("Save drawing ") )
             {
                 sr_ecp_msg->message("Zapisywanie trajektorii");
-                tig->save_file (POSE_FORCE_TORQUE_AT_FRAME);
+                tig->save_file (PF_VELOCITY);
             }
         }
 

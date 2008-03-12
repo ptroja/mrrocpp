@@ -337,6 +337,7 @@ bool ui_conveyor_robot::read_motors ( double current_position[CONVEYOR_NUM_OF_SE
     EDP_command_and_reply_buffer.instruction.get_type = ARM_DV;
     EDP_command_and_reply_buffer.instruction.instruction_type = GET;
     EDP_command_and_reply_buffer.instruction.get_arm_type = MOTOR;
+    EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
 
     execute_motion();
     // printf("za query read motors\n");
@@ -362,6 +363,7 @@ bool ui_conveyor_robot::read_joints ( double current_position[CONVEYOR_NUM_OF_SE
     EDP_command_and_reply_buffer.instruction.instruction_type = GET;
     EDP_command_and_reply_buffer.instruction.get_type = ARM_DV;
     EDP_command_and_reply_buffer.instruction.get_arm_type = JOINT;
+    EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
 
     execute_motion();
 

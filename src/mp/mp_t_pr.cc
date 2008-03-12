@@ -182,7 +182,7 @@ void mp_task_pr::main_task_algorithm(void)
 			
 			if ( operator_reaction ("Save drawing ") ) {
 				sr_ecp_msg->message("Zapisywanie trajektorii");
-				mp_dtif_gen.save_file (POSE_FORCE_TORQUE_AT_FRAME);
+				mp_dtif_gen.save_file (PF_VELOCITY);
 			}
 		  
 	 	}

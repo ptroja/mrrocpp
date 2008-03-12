@@ -640,6 +640,7 @@ bool ui_common_robot::read_motors ( double current_position[] )
     ecp->EDP_command_and_reply_buffer.instruction.get_type = ARM_DV;
     ecp->EDP_command_and_reply_buffer.instruction.instruction_type = GET;
     ecp->EDP_command_and_reply_buffer.instruction.get_arm_type = MOTOR;
+    ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
 
     execute_motion();
     // printf("dalej za query read motors\n");
@@ -662,6 +663,7 @@ bool ui_common_robot::read_joints ( double current_position[] )
     ecp->EDP_command_and_reply_buffer.instruction.instruction_type = GET;
     ecp->EDP_command_and_reply_buffer.instruction.get_type = ARM_DV;
     ecp->EDP_command_and_reply_buffer.instruction.get_arm_type = JOINT;
+    ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
 
     execute_motion();
 
@@ -681,6 +683,7 @@ bool ui_common_robot::read_xyz_euler_zyz (double current_position[])
     ecp->EDP_command_and_reply_buffer.instruction.get_type = ARM_DV;
     ecp->EDP_command_and_reply_buffer.instruction.instruction_type = GET;
     ecp->EDP_command_and_reply_buffer.instruction.get_arm_type = XYZ_EULER_ZYZ;
+    ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
 
     execute_motion();
 
@@ -701,6 +704,7 @@ bool ui_common_robot::read_xyz_angle_axis (double current_position[])
     ecp->EDP_command_and_reply_buffer.instruction.get_type = ARM_DV;
     ecp->EDP_command_and_reply_buffer.instruction.instruction_type = GET;
     ecp->EDP_command_and_reply_buffer.instruction.get_arm_type = XYZ_ANGLE_AXIS;
+    ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
 
     execute_motion();
 

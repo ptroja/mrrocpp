@@ -118,7 +118,7 @@ nrg->Move();
             if ( save_activated && operator_reaction ("Save drawing ") )
             {
                 sr_ecp_msg->message("Zapisywanie trajektorii");
-                yefg->save_file (POSE_FORCE_TORQUE_AT_FRAME);
+                yefg->save_file (PF_VELOCITY);
             }
 
         }

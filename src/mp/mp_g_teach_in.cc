@@ -87,8 +87,8 @@ void mp_teach_in_generator::save_file (POSE_SPECIFICATION ps) {
 		case XYZ_EULER_ZYZ:
 			strcpy (coordinate_type, "XYZ_EULER_ZYZ");
 			break;
-		case POSE_FORCE_TORQUE_AT_FRAME:
-			strcpy (coordinate_type, "POSE_FORCE_TORQUE_AT_FRAME");
+		case PF_VELOCITY:
+			strcpy (coordinate_type, "PF_VELOCITY");
 			break;
 
 		default:
@@ -114,7 +114,7 @@ void mp_teach_in_generator::save_file (POSE_SPECIFICATION ps) {
 			to_file << tip.motion_time << ' ';
 			for (j = 0; j < MAX_SERVOS_NR; j++)
 				to_file << tip.coordinates[j] << ' ';
-			if (ps == POSE_FORCE_TORQUE_AT_FRAME) { // by Y
+			if (ps == PF_VELOCITY) { // by Y
 				to_file << tip.extra_info << ' ';
 			}
 			to_file << '\n';
@@ -177,8 +177,8 @@ bool mp_teach_in_generator::load_file_with_path (char* file_name, short robot_nu
 		ps = XYZ_ANGLE_AXIS;
 	else if ( !strcmp(coordinate_type, "XYZ_EULER_ZYZ") )
 		ps = XYZ_EULER_ZYZ;
-	else if ( !strcmp(coordinate_type, "POSE_FORCE_TORQUE_AT_FRAME") )
-		ps = POSE_FORCE_TORQUE_AT_FRAME;
+	else if ( !strcmp(coordinate_type, "PF_VELOCITY") )
+		ps = PF_VELOCITY;
 	else {
 		from_file.close();
 		throw mp_generator::MP_error(NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
@@ -305,8 +305,8 @@ bool mp_teach_in_generator::load_file () {
 		ps = XYZ_ANGLE_AXIS;
 	else if ( !strcmp(coordinate_type, "XYZ_EULER_ZYZ") )
 		ps = XYZ_EULER_ZYZ;
-	else if ( !strcmp(coordinate_type, "POSE_FORCE_TORQUE_AT_FRAME") )
-		ps = POSE_FORCE_TORQUE_AT_FRAME;
+	else if ( !strcmp(coordinate_type, "PF_VELOCITY") )
+		ps = PF_VELOCITY;
 	else {
 		from_file.close();
 		throw mp_generator::MP_error(NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
@@ -328,7 +328,7 @@ bool mp_teach_in_generator::load_file () {
 			}
 		}
 
-		if (ps == POSE_FORCE_TORQUE_AT_FRAME) { // by Y
+		if (ps == PF_VELOCITY) { // by Y
 			if ( !(from_file >> extra_info) ) { // Zabezpieczenie przed danymi nienumerycznymi
 				from_file.close();
 				throw mp_generator::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);

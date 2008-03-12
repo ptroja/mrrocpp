@@ -549,6 +549,7 @@ bool ui_irp6_mechatronika_robot::read_motors ( double current_position[IRP6_MECH
   EDP_command_and_reply_buffer.instruction.get_type = ARM_DV;
   EDP_command_and_reply_buffer.instruction.instruction_type = GET;
   EDP_command_and_reply_buffer.instruction.get_arm_type = MOTOR;
+  EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
  
 execute_motion();
 // printf("dalej za query read motors\n");
@@ -569,6 +570,7 @@ bool ui_irp6_mechatronika_robot::read_joints ( double current_position[IRP6_MECH
   EDP_command_and_reply_buffer.instruction.instruction_type = GET;
   EDP_command_and_reply_buffer.instruction.get_type = ARM_DV;
   EDP_command_and_reply_buffer.instruction.get_arm_type = JOINT;
+  EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
  
 execute_motion();
 
@@ -586,6 +588,7 @@ bool ui_irp6_mechatronika_robot::read_xyz_euler_zyz (double current_position[IRP
   EDP_command_and_reply_buffer.instruction.get_type = ARM_DV;
   EDP_command_and_reply_buffer.instruction.instruction_type = GET;
   EDP_command_and_reply_buffer.instruction.get_arm_type = XYZ_EULER_ZYZ;
+  EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
  
 execute_motion();
 
@@ -605,6 +608,7 @@ bool ui_irp6_mechatronika_robot::read_xyz_angle_axis (double current_position[IR
   EDP_command_and_reply_buffer.instruction.get_type = ARM_DV;
   EDP_command_and_reply_buffer.instruction.instruction_type = GET;
   EDP_command_and_reply_buffer.instruction.get_arm_type = XYZ_ANGLE_AXIS;
+  EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
  
 execute_motion();
   

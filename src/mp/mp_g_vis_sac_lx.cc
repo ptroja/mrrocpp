@@ -150,14 +150,14 @@ bool mp_vis_sac_lx_generator::first_step ()
     irp6ot->ecp_td.set_type = RMODEL_DV; //ARM_DV;
     //irp6ot->ecp_td.set_arm_type = FRAME; //XYZ_EULER_ZYZ; //POSE_FORCE_TORQUE_AT_FRAME;
     //irp6ot->ecp_td.set_arm_type = XYZ_ANGLE_AXIS;
-    irp6ot->ecp_td.set_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
+    irp6ot->ecp_td.set_arm_type = XYZ_ANGLE_AXIS;
 
-    irp6ot->ecp_td.get_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
+    irp6ot->ecp_td.get_arm_type = FRAME;
     //FRAME; //XYZ_EULER_ZYZ; //POSE_FORCE_TORQUE_AT_FRAME;
     irp6ot->ecp_td.set_rmodel_type = TOOL_FRAME;
     irp6ot->ecp_td.get_rmodel_type = TOOL_FRAME;
     //irp6ot->ecp_td.motion_type = ABSOLUTE; //RELATIVE;
-    irp6ot->ecp_td.motion_type = PF_XYZ_ANGLE_AXIS_ABSOLUTE_POSE; //PF_FIXED_FRAME_WITH_DESIRED_FORCE_OR_SPEED;
+    irp6ot->ecp_td.motion_type = ABSOLUTE; //PF_FIXED_FRAME_WITH_DESIRED_FORCE_OR_SPEED;
     irp6ot->ecp_td.next_interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
 
     irp6ot->ecp_td.motion_steps = td.internode_step_no;
