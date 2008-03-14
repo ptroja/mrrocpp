@@ -101,7 +101,7 @@ void ecp_task_rcsc_irp6ot::main_task_algorithm(void)
                 rgg->Move();
                 break;
             case ECP_GEN_TFF_GRIPPER_APPROACH:
-                gag->configure(5.0, 150);
+                gag->configure(0.005 , 150);
                 gag->Move();
                 break;
             case ECP_GEN_TFF_RUBIK_FACE_ROTATE:

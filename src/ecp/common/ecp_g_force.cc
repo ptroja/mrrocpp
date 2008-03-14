@@ -1857,7 +1857,7 @@ bool ecp_tff_gripper_approach_generator::first_step()
 	}
 
 	the_robot->EDP_data.next_inertia[2] = FORCE_INERTIA / 4;
-	the_robot->EDP_data.next_force_xyz_torque_xyz[2] = -speed;
+	the_robot->EDP_data.next_velocity[2] = speed;
 
 	for (int i=0; i<6; i++)
 	{
@@ -1865,7 +1865,7 @@ bool ecp_tff_gripper_approach_generator::first_step()
 		//		the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i] = 0;
 	}
 
-	the_robot->EDP_data.next_behaviour[2] = CONTACT;
+	the_robot->EDP_data.next_behaviour[2] = GUARDED_MOTION;
 	the_robot->EDP_data.next_reciprocal_damping[2]
 			= FORCE_RECIPROCAL_DAMPING / 2;
 
