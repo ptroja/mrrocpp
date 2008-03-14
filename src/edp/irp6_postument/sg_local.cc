@@ -553,11 +553,7 @@ uint64_t irp6p_servo_buffer::compute_all_set_values (void)
     // obliczenie nastepnej wartosci zadanej dla wszystkich napedow
     uint64_t status = OK; // kumuluje numer bledu
 
-    master.rb_obj->lock_mutex();
-    master.force_msr_download (master.rb_obj->step_data.force,(int) 0);
-    master.rb_obj->unlock_mutex();
-
-
+ 
     for (int j = 0; j < IRP6_POSTUMENT_NUM_OF_SERVOS; j++)
     {
         if (master.test_mode)

@@ -830,7 +830,7 @@ BYTE NL_regulator_1_irp6ot::compute_set_value (void)
     master.rb_obj->step_data.pwm[0] = (float) set_value_new;
     master.rb_obj->step_data.uchyb[0]=(float) (step_new_pulse - position_increment_new);
 
-    ((edp_irp6s_postument_track_effector&)(master)).force_msr_download (master.rb_obj->step_data.force,(int) 0);
+
 
     master.rb_obj->unlock_mutex();
 
