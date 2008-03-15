@@ -53,6 +53,7 @@ configurator::configurator (const char* _node, const char* _dir, const char* _in
 	sprintf(mrrocpp_network_path, "/net/%s%s", node, dir);
 
 #ifdef USE_MESSIP_SRR
+	printf("messip_channel_connect()");
 	if ((ch = messip_channel_connect(NULL, CONFIGSRV_CHANNEL_NAME, MESSIP_NOTIMEOUT)) == NULL) {
 		perror("messip_channel_connect()");
 	}

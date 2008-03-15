@@ -49,6 +49,7 @@ ecp_sk: \
 		../common/ecp_t_sk.o \
 		../common/ecp_g_force.o \
 		ecp_mp_s_schunk.o \
+		ecp_mp_s_cvfradia.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 

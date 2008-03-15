@@ -22,6 +22,7 @@
 #include "ecp_mp/ecp_mp_s_schunk.h"
 #include "ecp/common/ecp_t_sk.h"
 
+#include "ecp_mp/ecp_mp_s_cvfradia.h"
 
 
 // KONSTRUKTORY
@@ -39,6 +40,26 @@ ecp_task_sk::~ecp_task_sk()
 // methods for ECP template to redefine in concrete classes
 void ecp_task_sk::task_initialization(void)
 {
+/*try
+{
+	// Create cvFraDIA sensor - only for TESTING PURPOSES.
+	printf("ecp_task_sk::task_initialization\n");
+	sensor_m[SENSOR_CVFRADIA] = new ecp_mp_cvfradia_sensor(SENSOR_CVFRADIA, "[vsp_cvfradia]", *this);
+	printf("configure_sensor\n");
+	sensor_m[SENSOR_CVFRADIA]->configure_sensor();
+	printf("initiate_reading\n");
+	sensor_m[SENSOR_CVFRADIA]->initiate_reading();
+	printf("initiate_reading 2\n");
+	sensor_m[SENSOR_CVFRADIA]->initiate_reading();
+	printf("initiate_reading 3\n");
+	sensor_m[SENSOR_CVFRADIA]->initiate_reading();
+	printf("end\n");
+}
+catch(...)
+{
+	printf("EXCEPTION\n");
+}*/
+
     // the robot is choose dependendant on the section of configuration file sent as argv[4]
     if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     {

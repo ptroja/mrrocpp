@@ -31,8 +31,11 @@ typedef enum { RCS_INIT_SUCCESS, RCS_INIT_FAILURE} RCS_INIT;
 typedef enum { RCS_SOLUTION_FOUND, RCS_SOLUTION_NOTFOUND, RCS_SOLUTION_NOTNEEDED, RCS_SOLUTION_NOTPOSSIBLE} RCS_READING;
 
 
-/************ Struktura obrazow czujnika ***************/
-typedef struct{
+/*! \struct sensor_image_t
+ * \ Structure used for storing and passing sensors data.
+ * \author tkornuta
+ */
+typedef struct sensor_image_t{
 	// wlasciwe pola obrazu - unie!
 	union {
 		char begin;		// pole uzywane jako adres do wlasciwych eementow unii dla memcpy()
@@ -95,6 +98,15 @@ typedef struct{
 			struct timespec ts;
 		} time;
 		
+		/*
+		 * Structure for storing data retrieved from cvFraDIA.
+		 * For testing purposes.
+		 * \author tkornuta
+		 */
+		struct {
+			int a;
+		} cvFraDIA;
+
 	}; // koniec unii
 } SENSOR_IMAGE;
 
@@ -155,13 +167,16 @@ enum SENSOR_ENUM {
 	SENSOR_PP,
 	SENSOR_MIC,
 	SENSOR_PAWEL,
-	
 	// rcs - VSP znajdujace rozwiazanie dla kostki Rubika
 	SENSOR_RCS_KORF,
 	SENSOR_RCS_KOCIEMBA,
 
 	// time, testowy czujnik czasu (ptrojane)
-	SENSOR_TIME
+	SENSOR_TIME,
+	/*!
+	 * Sensor used for communication with the cvFraDIA.
+	 */
+	SENSOR_CVFRADIA
 };
 
 // Klasa obslugi bledow procesu VSP.

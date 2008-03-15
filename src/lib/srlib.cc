@@ -62,7 +62,7 @@ int sr::send_package(void) {
 }
 #else /* USE_MESSIP_SRR */
 // Konstruktor
-sr::sr(const int16_t process_type, const char *process_name, const char *sr_name) {
+sr::sr(const PROCESS_TYPE  process_type, const char *process_name, const char *sr_name) {
 
 	int tmp = 0;
 	while ((ch = messip_channel_connect(NULL, sr_name, MESSIP_NOTIMEOUT)) == NULL) {
