@@ -333,11 +333,20 @@ bool ecp_vis_sac_lx_generator::next_step()
 
 
 	//EIH
-		
+	//rover
+	/*
+	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]-0.05, //-0.03
+			vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1]+0.04,
+			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2]+0.02, // kalib Y w O
+			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3], 0, 0); //nomalnie
+			//0, 0, -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]);
+	*/
+	
 	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0],
 			vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1],
-			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2],
-			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3], 0, 0);
+			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2], // kalib Y w O
+			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3], 0, 0); 
+
 //jakby przyszlo cos glupiego
 	if (vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]>100 || vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]<-100)
 
@@ -418,16 +427,17 @@ bool ecp_vis_sac_lx_generator::next_step()
 	
 //jesli nie widzi kostki bo jest za blisko zostaw stare namiary
 	CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
-	//if(CEIH_r_G[0][0]>0.09)
 	
-	std::cout << " ZZZ " << CEIH_r_G[0][0] << std::endl;
-	if(CEIH_r_G[0][0]>0.15)
-	{
+	//rover
+	//std::cout << " ZZZ " << CEIH_r_G[0][0] << " " << -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5] << std::endl;
+	//if(CEIH_r_G[0][0]>0.12) //0.15
+	//{
 	//EIH
 	CEIH_Tx_G=CEIH_Tx_G*G_Tx_S;
 	O_Tx_G__CEIH=O_Tx_E*CEIH_Tx_G; //rota O_Tx_E 0,0,0 //E_TX_CEIH=1
 	O_Tx_G__CEIH.get_xyz_angle_axis(O_r_G__CEIH[0]);
-	}
+	//}
+	
 	
 printf("delta = %f %f %f", O_r_G__CEIH[0][0]-O_r_E[0][0], O_r_G__CEIH[0][1]-O_r_E[0][1], O_r_G__CEIH[0][2]-O_r_E[0][2]);
 
