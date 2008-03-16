@@ -21,7 +21,6 @@ BINARIES =		ecp_pr \
 				ecp_kin_test_irp6ot \
 				ecp_irp6ot_rcsc \
 				ecp_irp6ot_pouring \
-				ecp_tzu_cs \
 				ecp_irp6ot_multiplayer
 
 #-----------------------------------------------------------------------------------------------------------------------#
@@ -94,8 +93,8 @@ ecp_irp6ot_pouring: ecp_t_pouring_irp6ot.o ecp_st_go.o ecp_g_smooth.o ecp_genera
 ecp_plot: ecp_t_plot_irp6ot.o ecp_g_plot.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_tzu_cs: ecp_t_tzu_cs_irp6ot.o ecp_g_tzu_cs.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
+#ecp_tzu_cs: ecp_t_tzu_cs_irp6ot.o ecp_g_tzu_cs.o $(SHOBJ)
+#	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_irp6ot_multiplayer: ecp_t_multiplayer_irp6ot.o ecp_st_go.o ecp_mp_s_schunk.o ecp_g_smooth.o ecp_g_force.o \
 						ecp_g_smooth.o ecp_generator_t.o \

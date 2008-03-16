@@ -61,7 +61,7 @@ bool tzu_simple_generator :: first_step ( )
 	
 	/* pierwszy krok wygenerowany */
 	printf("KONIEC first step\n");
-	sleep(10);
+	//sleep(10);
 	return true;
 }
 
@@ -102,7 +102,11 @@ bool tzu_simple_generator::next_step ( )
 
 	// do zapisu logfile'a z ruchu	
 	file = fopen("logfile.txt", "a+");
-	
+	cout<<"wielkosc listy czujnikow: "<<sensor_m.size()<<endl;
+		cout<<"force_0: "<<sensor_m.begin()->second->image.force.rez[0]<<endl;
+		cout<<"force_1: "<<sensor_m.begin()->second->image.force.rez[1]<<endl;
+		cout<<"force_2: "<<sensor_m.begin()->second->image.force.rez[2]<<endl;
+cout<<"tu juz nie powinienem trafic"<<endl;
 	switch ( move_status ) 
 	{
 // tu na zasadzie eksperymentow dobrac to jak ustawic katy do takiej orientacji ramienia
