@@ -7,73 +7,78 @@ rem ////////////////////////////////////////////////////////////////////////////
 rem // Revision  : $LastChangedRevision$
 rem // Project   : MRROC++
 rem ////////////////////////////////////////////////////////////////////////////
-rem // Created   : 2007-05-12
+rem // Created   : 2008-03-16
 rem // Developer : janusz.nowacki
 rem // Modified  : $LastChangedDate$
 rem // By        : $LastChangedBy$
 rem ////////////////////////////////////////////////////////////////////////////
 rem // File description:
 rem // 
-rem //  Build file (for Windows system) for MRROC++ Doxygen documentation.
+rem //  A script for indenting code in Windows.
 rem // 
 rem ////////////////////////////////////////////////////////////////////////////
 
 echo Program: %0
 echo Date: %date% 
 echo Time: %time% 
-echo Building the Doxygen documentation for MRROC++ ...
+echo Indenting MRROC++ ...
+
 
 rem ----------------------------------------------------------------------------
 rem                           Settings
 rem ----------------------------------------------------------------------------
 
-set CLEAN=cleanDox.bat
-set DOX_VIEW=Dox.bat
-set PL=PL
-set EN=EN
-set DOX_DIR=dox
-set HTML_DOX=html
-set HTML_DOX_MAIN=index.html
-set LATEX_DOX=latex
-set MAN_DOX=man3
-set DOXYGEN=doxygen
-
-rem set DOX_PL=DOXYGEN_PL
-rem set DOX_EN=DOXYGEN_EN
-rem set BUILD_EN=Y
-rem set BUILD_PL=N
-
-set MROK_DIR=%CD%
-set DOX_MAINPAGE_TEMPLATE=Mainpage_template.dox
-set DOX_MAINPAGE=Mainpage.dox
-set SUBWCREV_DIR="C:\Program Files\TortoiseSVN\bin"
-set SUBWCREV=%SUBWCREV_DIR%\SubWCRev.exe
-
-rem if "%1" == "" set DOXYFILE_PL=DoxyMrok_pl
-rem if "%2" == "" set DOXYFILE_EN=DoxyMrok_en
-if "%1" == "" set DOXYFILE=DoxyMrok
+rem set INDENT="C:\Program Files\astyle\bin\AStyle.exe"
+set INDENT="C:\cygwin\bin\indent.exe"
+set FILE=%1
 
 rem ----------------------------------------------------------------------------
-echo %0 :: Calling clean.bat ...
+rem                       Indent options: 
 rem ----------------------------------------------------------------------------
-CALL %CLEAN%
+rem set BLANK_LINES=--blank-lines-after-declarations 
+rem                 --blank-lines-after-procedures 
+rem                 --leave-optional-blank-lines
+rem set BREAKING_LONG_LINES=
+rem set DECLARATIONS=--blank-lines-after-commas 
+rem                  --break-function-decl-args 
+rem                  --braces-after-struct-decl-line 
+rem                  --declaration-indentation1 
+rem                  --dont-break-procedure-type
+rem set STATEMENTS=--no-space-after-function-call-names 
+rem                --no-space-after-parentheses
+rem set COMMENTS=--dont-format-comments
+rem set INDENTATIONS=
+rem set MISC=--verbose"
+rem set COMMON_STYLES=
+rem set INVOKING_INDENT=
+rem ----------------------------------------------------------------------------
+set INDENT_STYLE=-gnu
+set INDENT_OPTIONS=--dont-format-comments
+rem set INDENT_OPTIONS=--style=linux 
+rem                    --indent=tab=4 
+rem                    --brackets=linux 
+rem                    --indent-classes 
+rem                    --indent-switches
+rem ----------------------------------------------------------------------------
+
+if "%1" == "" (goto indent_dir) else (goto indent_file)
+goto :EOF  
+
 
 rem ----------------------------------------------------------------------------
-echo %0 :: Calling SubWCRev on the current project dir ...
+:indent_dir
+echo %0 :: No file selected ... Indenting whole directory recursive
+	
+FOR %%i IN (*.h, *.cc, *.cpp) DO (CALL  %INDENT% %%i %INDENT_OPTIONS%)
+
+sleep 2
+exit
 rem ----------------------------------------------------------------------------
-CALL %SUBWCREV% %MROK_DIR% %DOX_MAINPAGE_TEMPLATE% %DOX_MAINPAGE%
+
 
 rem ----------------------------------------------------------------------------
-echo %0 :: Building the source code documentation ...
+:indent_file
+echo Indenting %1 ...
+CALL %INDENT% %1 %INDENT_OPTIONS%
 rem ----------------------------------------------------------------------------
-rem if  "%BUILD_PL%" == "Y" %DOXYGEN% %DOXYFILE_PL%
-rem if  "%BUILD_EN%" == "Y" %DOXYGEN% %DOXYFILE_EN%
-%DOXYGEN% %DOXYFILE%
-
-rem ----------------------------------------------------------------------------
-echo %0 :: View the documentation ...
-rem ----------------------------------------------------------------------------
-SLEEP 1
-CALL %DOX_VIEW%
-
 

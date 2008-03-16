@@ -1,8 +1,4 @@
 #///////////////////////////////////////////////////////////////////////////////
-#//
-#//                              TECHNICAL SPECIFICATION
-#//
-#///////////////////////////////////////////////////////////////////////////////
 #// 
 #// $URL$
 #//
@@ -10,16 +6,16 @@
 #// Revision  : $LastChangedRevision$
 #// Project   : MRROC++
 #///////////////////////////////////////////////////////////////////////////////
-#// Created   : 2007-05-12
+#// Created   : 2008-02-23
 #// Developer : janusz.nowacki
 #// Modified  : $LastChangedDate$
 #// By        : $LastChangedBy$
 #///////////////////////////////////////////////////////////////////////////////
 #// File description:
 #// 
-#//  Doxygen configuration file for the Polish version of MRROC++ 
-#//  source code documentation.
-#// 
+#//  Doxygen configuration file for MRROC++ source code documentation.
+#//  (in English)
+#//
 #//  Doxyfile 1.5.5
 #//
 #///////////////////////////////////////////////////////////////////////////////
@@ -33,9 +29,9 @@ PROJECT_NAME           = "MRROC++ : "
 PROJECT_NUMBER         = QNX_6.3.2A_sp3
 OUTPUT_DIRECTORY       = 
 CREATE_SUBDIRS         = NO
-OUTPUT_LANGUAGE        = Polish
+OUTPUT_LANGUAGE        = English
 BRIEF_MEMBER_DESC      = YES
-REPEAT_BRIEF           = NO
+REPEAT_BRIEF           = YES
 ABBREVIATE_BRIEF       = "The $name class" \
                          "The $name widget" \
                          "The $name file" \
@@ -52,7 +48,7 @@ INLINE_INHERITED_MEMB  = NO
 FULL_PATH_NAMES        = YES
 STRIP_FROM_PATH        = 
 STRIP_FROM_INC_PATH    = 
-SHORT_NAMES            = NO
+SHORT_NAMES            = YES
 JAVADOC_AUTOBRIEF      = YES
 QT_AUTOBRIEF           = NO
 MULTILINE_CPP_IS_BRIEF = YES
@@ -60,10 +56,7 @@ DETAILS_AT_TOP         = YES
 INHERIT_DOCS           = YES
 SEPARATE_MEMBER_PAGES  = NO
 TAB_SIZE               = 2
-ALIASES                = "english=\if english" \
-                         endenglish=\endif \
-                         "polish=\if polish" \
-                         endpolish=\endif
+ALIASES                = 
 OPTIMIZE_OUTPUT_FOR_C  = NO
 OPTIMIZE_OUTPUT_JAVA   = NO
 OPTIMIZE_FOR_FORTRAN   = NO
@@ -100,7 +93,7 @@ GENERATE_TODOLIST      = YES
 GENERATE_TESTLIST      = YES
 GENERATE_BUGLIST       = YES
 GENERATE_DEPRECATEDLIST= YES
-ENABLED_SECTIONS       = polish
+ENABLED_SECTIONS       = english
 MAX_INITIALIZER_LINES  = 30
 SHOW_USED_FILES        = YES
 SHOW_DIRECTORIES       = YES
@@ -114,7 +107,7 @@ WARN_IF_UNDOCUMENTED   = YES
 WARN_IF_DOC_ERROR      = YES
 WARN_NO_PARAMDOC       = YES
 WARN_FORMAT            = "$file:$line: $text"
-WARN_LOGFILE           = dox\doxwarn_pl.log
+WARN_LOGFILE           = dox\doxwarn.log
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
@@ -154,7 +147,6 @@ FILE_PATTERNS          = *.c \
                          *.dox \
                          *.py
 RECURSIVE              = YES
-#EXCLUDE                = dox
 EXCLUDE                = include\edp\ati3084 \
                          include\edp\ati6284 \
                          src\edp\ati3084 \
@@ -191,7 +183,7 @@ IGNORE_PREFIX          =
 # configuration options related to the HTML output
 #---------------------------------------------------------------------------
 GENERATE_HTML          = YES
-HTML_OUTPUT            = dox\PL\html
+HTML_OUTPUT            = dox\html
 HTML_FILE_EXTENSION    = .html
 HTML_HEADER            = 
 HTML_FOOTER            = 
@@ -215,7 +207,7 @@ TREEVIEW_WIDTH         = 250
 # configuration options related to the LaTeX output
 #---------------------------------------------------------------------------
 GENERATE_LATEX         = NO
-LATEX_OUTPUT           = dox\PL\latex
+LATEX_OUTPUT           = dox\latex
 LATEX_CMD_NAME         = latex
 MAKEINDEX_CMD_NAME     = makeindex
 COMPACT_LATEX          = YES
@@ -239,17 +231,17 @@ RTF_EXTENSIONS_FILE    =
 # configuration options related to the man page output
 #---------------------------------------------------------------------------
 GENERATE_MAN           = NO
-MAN_OUTPUT             = dox\PL\man
+MAN_OUTPUT             = dox\man
 MAN_EXTENSION          = .3
 MAN_LINKS              = YES
 #---------------------------------------------------------------------------
 # configuration options related to the XML output
 #---------------------------------------------------------------------------
 GENERATE_XML           = NO
-XML_OUTPUT             = dox\PL\xml
+XML_OUTPUT             = dox\xml
 XML_SCHEMA             = 
 XML_DTD                = 
-XML_PROGRAMLISTING     = YES
+XML_PROGRAMLISTING     = NO
 #---------------------------------------------------------------------------
 # configuration options for the AutoGen Definitions output
 #---------------------------------------------------------------------------
@@ -312,4 +304,4 @@ DOT_CLEANUP            = YES
 #---------------------------------------------------------------------------
 # Configuration::additions related to the search engine   
 #---------------------------------------------------------------------------
-SEARCHENGINE           = NO
+SEARCHENGINE           = YES

@@ -1,24 +1,20 @@
 ////////////////////////////////////////////////////////////////////////////////
-//
-//                              TECHNICAL SPECIFICATION
-//
-////////////////////////////////////////////////////////////////////////////////
 // 
-// $URL: https://OpenSVN.csie.org/mrrocpp_source/base/trunk/Makefile $
+// $URL$
 //
 ////////////////////////////////////////////////////////////////////////////////
-// Revision  : $LastChangedRevision: 1036 $
+// Revision  : $LastChangedRevision$
 // Project   : MRROC++
 ////////////////////////////////////////////////////////////////////////////////
 // Created   : 2007-11-07
 // Developer : janusz.nowacki
-// Modified  : $LastChangedDate: 2008-02-12 19:51:13 +0100 (Wt, 12 lut 2008) $
-// By        : $LastChangedBy: janusz.nowacki $
+// Modified  : $LastChangedDate$
+// By        : $LastChangedBy$
 ////////////////////////////////////////////////////////////////////////////////
 // File description:
 // 
 //   Template file for files' technical specifications 
-//   (C++ files, bash files etc...).
+//   (C++ files, shell script files, TeX files...).
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -36,27 +32,20 @@
 
 
 ////////////////////////////////////////////////////////////////////////////////
-//
-//                              TECHNICAL SPECIFICATION
-//
+/** @file                 <path>
+ *
+ *  <Brief desc.>. <Detailed desc> ... 
+ *
+ *  @author               <author>
+ *  @date                 yyyy-MM-dd
+ *  $URL$
+ *  $LastChangedRevision$
+ *  $LastChangedDate$  
+ *  $LastChangedBy$
+ *  
+ *  <@todo> 
+ */
 ////////////////////////////////////////////////////////////////////////////////
-/** @file     mrrocpp/<file_path>
- *
- *  @brief    <brief description>.
- *
- *            <long description>
- * 
- *	@bug			N/A
- *	@warning	N/A.            
- *
- *  @author   <username>
- *  @date     yyyy-MM-dd
- *
- *  $URL: $
- *  $LastChangedRevision: $
- *  $LastChangedDate: $  
- *  $LastChangedBy: $
- *//////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -67,23 +56,18 @@
                                        //******************
 
 
-
-#///////////////////////////////////////////////////////////////////////////////
-#//
-#//                              TECHNICAL SPECIFICATION
-#//
 #///////////////////////////////////////////////////////////////////////////////
 #// 
-#// $URL: https://OpenSVN.csie.org/mrrocpp_source/base/trunk/Makefile $
+#// $URL$
 #//
 #///////////////////////////////////////////////////////////////////////////////
-#// Revision  : $LastChangedRevision:  $
+#// Revision  : $LastChangedRevision$
 #// Project   : MRROC++
 #///////////////////////////////////////////////////////////////////////////////
 #// Created   : yyyy-MM-dd
 #// Developer : <username>
-#// Modified  : $LastChangedDate: $
-#// By        : $LastChangedBy: $
+#// Modified  : $LastChangedDate$
+#// By        : $LastChangedBy$
 #///////////////////////////////////////////////////////////////////////////////
 #// File description:
 #// 
@@ -94,29 +78,25 @@
 
 
 
-                                       //******************
-                                       // DOS script files:
-                                       //******************
+                                       //***********************
+                                       // Windows batch srcipt:
+                                       //***********************
 
 
 
 @echo off
 rem ////////////////////////////////////////////////////////////////////////////
-rem //
-rem //                              TECHNICAL SPECIFICATION
-rem //
-rem ////////////////////////////////////////////////////////////////////////////
 rem // 
-rem // $URL: https://OpenSVN.csie.org/mrrocpp_source/base/trunk/Makefile $
+rem // $URL$
 rem //
 rem ////////////////////////////////////////////////////////////////////////////
-rem // Revision  : $LastChangedRevision: $
+rem // Revision  : $LastChangedRevision$
 rem // Project   : MRROC++
 rem ////////////////////////////////////////////////////////////////////////////
 rem // Created   : yyyy-MM-dd
 rem // Developer : <username>
-rem // Modified  : $LastChangedDate: $
-rem // By        : $LastChangedBy: $
+rem // Modified  : $LastChangedDate$
+rem // By        : $LastChangedBy$
 rem ////////////////////////////////////////////////////////////////////////////
 rem // File description:
 rem // 
@@ -126,4 +106,31 @@ rem ////////////////////////////////////////////////////////////////////////////
 
 
 
+
+
+                                       //******************
+                                       //   TeX files:
+                                       //******************
+
+
+%///////////////////////////////////////////////////////////////////////////////
+%// 
+%// $URL$
+%//
+%///////////////////////////////////////////////////////////////////////////////
+%// Revision  : $LastChangedRevision$
+%// Project   : MRROC++
+%///////////////////////////////////////////////////////////////////////////////
+%// Created   : yyyy-MM-dd
+%// Developer : <username>
+%// Modified  : $LastChangedDate$
+%// By        : $LastChangedBy$
+%///////////////////////////////////////////////////////////////////////////////
+%// File description:
+%// 
+%// 	Document				:	
+%//		Document group	:	
+%//		File content		: 
+%// 
+%///////////////////////////////////////////////////////////////////////////////
 

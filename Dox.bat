@@ -1,20 +1,16 @@
 @echo off
 rem ////////////////////////////////////////////////////////////////////////////
-rem //
-rem //                              TECHNICAL SPECIFICATION
-rem //
-rem ////////////////////////////////////////////////////////////////////////////
 rem // 
-rem // $URL: $
+rem // $URL$
 rem //
 rem ////////////////////////////////////////////////////////////////////////////
-rem // Revision  : $LastChangedRevision: $
+rem // Revision  : $LastChangedRevision$
 rem // Project   : MRROC++
 rem ////////////////////////////////////////////////////////////////////////////
 rem // Created   : 2007-05-12
 rem // Developer : janusz.nowacki
-rem // Modified  : $LastChangedDate: $
-rem // By        : $LastChangedBy: $
+rem // Modified  : $LastChangedDate$
+rem // By        : $LastChangedBy$
 rem ////////////////////////////////////////////////////////////////////////////
 rem // File description:
 rem // 
@@ -31,8 +27,6 @@ rem ----------------------------------------------------------------------------
 rem                                   Settings
 rem ----------------------------------------------------------------------------
 
-set PL=PL
-set EN=EN
 set DOX_DIR=dox
 set HTML_DOX=html
 set HTML_DOX_MAIN=index.html
@@ -41,9 +35,7 @@ set HTML_DOX_MAIN=index.html
 rem ############################################################################
 echo %0 :: View the documentation ...
 rem ############################################################################
-START %DOX_DIR%\%PL%\%HTML_DOX%\%HTML_DOX_MAIN%
-sleep 1
-START %DOX_DIR%\%EN%\%HTML_DOX%\%HTML_DOX_MAIN%
+if exist "%DOX_DIR%\%HTML_DOX%\%HTML_DOX_MAIN%" START %DOX_DIR%\%HTML_DOX%\%HTML_DOX_MAIN%
 
 
 
