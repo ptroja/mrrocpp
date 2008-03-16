@@ -27,11 +27,11 @@
 
 
 weight_meassure_generator::weight_meassure_generator(ecp_task& _ecp_task,
-		double _weight_difference) :
+		double _weight_difference, double _catch_time) :
 	ecp_generator(_ecp_task), weight_difference(_weight_difference),
 			current_buffer_pointer(0), initial_weight(0.0),
-			initial_weight_counted(false), catch_lag(CATCH_LAG),
-			terminate_state_recognized(false)
+			initial_weight_counted(false), 
+			terminate_state_recognized(false), catch_time(_catch_time)
 {
 	clear_buffer();
 
@@ -57,8 +57,10 @@ void weight_meassure_generator::clear_buffer()
 	}
 	current_buffer_pointer=0;
 	initial_weight_counted = false;
-	catch_lag = CATCH_LAG;
 	terminate_state_recognized = false;
+	
+	catch_lag = initial_catch_lag = (int) 1000000*catch_lag/(USLEEP_TIME);
+	
 }
 
 double weight_meassure_generator::check_average_weight_in_buffer(void) const
@@ -95,7 +97,7 @@ bool weight_meassure_generator::first_step()
 bool weight_meassure_generator::next_step()
 {
 
-	usleep(10000);
+	usleep(USLEEP_TIME);
 
 	if (check_and_null_trigger())
 	{
@@ -139,12 +141,12 @@ bool weight_meassure_generator::next_step()
 			// wszytkie potweridzenia warunku koncowego musza wystapic pod rzad
 			if (!terminate_state_recognized)
 			{
-				catch_lag = CATCH_LAG;
+				catch_lag = initial_catch_lag;
 			}
 
 			terminate_state_recognized = true;
 			//    	printf("check_average_weight_in_buffer: %f, %f\n", check_average_weight_in_buffer(), initial_weight );
-			if ((--catch_lag) == 0)
+			if ((--catch_lag) <= 0)
 			{
 				return false;
 			}

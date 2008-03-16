@@ -18,7 +18,8 @@
 // Generator do wykrywania zmiany wagi chwytaka wraz z obiektem chwytanym
 // ciezary wyskalowane w newtonach
 #define WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE 10
-#define CATCH_LAG 100
+#define USLEEP_TIME 10000
+
 class weight_meassure_generator : public ecp_generator
 {
 private:
@@ -28,6 +29,8 @@ private:
     double initial_weight; // pierwszy zmierzony ciezar
     bool initial_weight_counted; // czy wyznaczono juz poczatkowy ciezar
     int catch_lag; // ilosc potwierdzen zmiany masy do zwrocenia false;
+    int initial_catch_lag; // ilosc potwierdzen zmiany masy do zwrocenia false;
+    double catch_time; // czas przez ktory ma byc stwierdzona zmian ciê¿aru
     bool terminate_state_recognized; // wykryto warunek koncowy
 
     // wstawienie elementu do bufora cyklicznego
@@ -45,7 +48,7 @@ public:
     void set_weight_difference(const double _weight_difference);
 
     // konstruktor
-    weight_meassure_generator(ecp_task& _ecp_task, double _weight_difference=0.0);
+    weight_meassure_generator(ecp_task& _ecp_task, double _weight_difference=0.0, double _catch_time = 1.0);
 
     bool first_step ();
     bool next_step ();
