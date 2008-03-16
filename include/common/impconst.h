@@ -82,10 +82,10 @@ enum FORCE_SENSOR_ENUM {
 //#define TORQUE_RECIPROCAL_DAMPING -0.005  
 
 // wartosci podstawowe dla sterowania silowego
-#define FORCE_INERTIA -20
-#define TORQUE_INERTIA -0.5
-#define FORCE_RECIPROCAL_DAMPING -0.005
-#define TORQUE_RECIPROCAL_DAMPING -0.1
+#define FORCE_INERTIA 20
+#define TORQUE_INERTIA 0.5
+#define FORCE_RECIPROCAL_DAMPING 0.005
+#define TORQUE_RECIPROCAL_DAMPING 0.1
 
 
 // Stale czasowe
