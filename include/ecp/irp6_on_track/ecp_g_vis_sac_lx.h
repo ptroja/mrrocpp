@@ -93,8 +93,16 @@ int step_no;
 	
 	double O_eps_EG[3][6];
 	double E_eps_EG[3][6]; //E_r_G; - prawdopodobnie to samo
+	
+	double O_eps_EG__CSAC[3][6];
+	double O_eps_EG__CEIH[3][6];
+	double O_eps_EG__fEIH[3][6];
   	
   	double fEIH_G[8];
+
+	double O_eps_EG__CSAC_norm;
+	double O_eps_EG__CEIH_norm;
+	double O_eps_EG__fEIH_norm;
   	
   	double measure_border_u[6];//={1.090, 0.150, 0.305, 0.606, 1.57, 3.12}; //Zmienic ogranicz Z
 	double measure_border_d[6];//={0.82, -0.150, 0.155, -0.606, 1.267, 2.5}; // gamma 1.8
@@ -116,6 +124,8 @@ int step_no;
 
 int vis_phase;// = 0;
 int steps2switch;//=0;
+
+	int phaseCEIH;	
   	
   // konstruktor
 	ecp_vis_sac_lx_generator(ecp_task& _ecp_task, int step=0);  

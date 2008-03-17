@@ -129,6 +129,8 @@ ecp_vis_sac_lx_generator::ecp_vis_sac_lx_generator(ecp_task& _ecp_task, int step
 	vis_phase = 0;
 	steps2switch=0;
 
+	phaseCEIH=0;
+
 }
 ;
 
@@ -486,13 +488,43 @@ bool ecp_vis_sac_lx_generator::next_step()
 		}
 	}
 
+	//SWITCH
+	O_eps_EG__CSAC_norm=0.0;
+	for (int i=0; i<6; i++)
+		{
+			O_eps_EG__CSAC[0][i]=(O_r_G__CSAC[0][i]-O_r_E[0][i]);
+			O_eps_EG__CSAC_norm+=O_eps_EG__CSAC[0][i]*O_eps_EG__CSAC[0][i];
+		}	
+/*
+	O_eps_EG__CSAC_norm=0.0;
+	for (int i=0; i<6; i++)
+		{
+			O_eps_EG__fEIH[0][i]=(O_r_G__CSAC[0][i]-O_r_E[0][i]);
+			O_eps_EG__fEIH_norm+=O_eps_EG__CSAC[0][i]*O_eps_EG__CSAC[0][i];
+		}	
+*/
+//std::cout << " EPS " << O_eps_EG__CSAC_norm << std::endl;
+
 	//BOTH
 	for (int i=0; i<6; i++)
 	{
 		//O_r_G[0][i]=0.5*O_r_G__CEIH[0][i]+0.5*O_r_G__CSAC[0][i]; //SAC+EIH
-		//O_r_G[0][i]=O_r_G__CSAC[0][i]; //SAC ONLY
+		O_r_G[0][i]=O_r_G__CSAC[0][i]; //SAC ONLY
 		//O_r_G[0][i]=O_r_G__CEIH[0][i]; //EIH ONLY
-		O_r_G[0][i]=O_r_G__fEIH[0][i]; //EIH JACK ONLY
+		//O_r_G[0][i]=O_r_G__fEIH[0][i]; //EIH JACK ONLY
+		
+		//SWITCH
+		/*
+		if(O_eps_EG__CSAC_norm>=0.008 && phaseCEIH==0)
+		{
+			O_r_G[0][i]=O_r_G__CSAC[0][i]; //SAC ONLY
+		}
+		else
+		{
+			//O_r_G[0][i]=O_r_G__fEIH[0][i]; //EIH JACK ONLY	
+			phaseCEIH=1;
+			O_r_G[0][i]=O_r_G__CEIH[0][i]; //EIH ONLY
+		}*/
 	}
 
 	for (int i=0; i<6; i++)
