@@ -348,29 +348,15 @@ bool ecp_vis_sac_lx_generator::next_step()
 			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3], 0, 0); 
 
 //jakby przyszlo cos glupiego
-	if (vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]>100 || vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]<-100)
-
-	//	CEIH_Tx_G.get_xyz_rpy(C_r_G[0]);
+//	if (vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]>100 || vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]<-100)
+//		CEIH_Tx_G.get_xyz_rpy(C_r_G[0]);
 
 
 	CEIH_Tx_G__f.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[0],
 			vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[1],
 			-vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[2],
-			-vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[3], 0, 0);
+			-vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[3], 0, 0); //-1
 
-	for (int i=0; i<8; i++)
-	{
-		fEIH_G[i]=vsp_vis_sac->image.vis_sac.fEIH_G[i];
-	}
-
-	/*
-	 std::cout << "FROMVSP EIH_JACK ";
-	 for (int i=0; i<6; i++)
-	 {
-	 std::cout << vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[i] << " ";
-	 }
-	 std::cout << std::endl;
-	 */
 
 	//podjazd gdy sie nie ruszamy
 	if (fabs(O_r_G[1][0]-O_r_G[0][0])<=0.02 && fabs(O_r_G[1][1]-O_r_G[0][1])
@@ -418,7 +404,7 @@ bool ecp_vis_sac_lx_generator::next_step()
 
 	//SAC
 	O_Tx_CSAC.set_xyz_rpy( 0.950+0.058, //-0.09,
-			0.000-0.06, 0.265+0.900+0.05-0.105, 0, 0, 0);
+			0.000-0.06, 0.265+0.900+0.06-0.105, 0, 0, 0);
 	O_Tx_G__CSAC=O_Tx_CSAC*CSAC_Tx_G;
 	O_Tx_G__CSAC=O_Tx_G__CSAC*G_Tx_S; //skrot myslowy
 	O_Tx_G__CSAC.get_xyz_angle_axis(O_r_G__CSAC[0]);
@@ -427,6 +413,16 @@ bool ecp_vis_sac_lx_generator::next_step()
 	
 //jesli nie widzi kostki bo jest za blisko zostaw stare namiary
 	CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
+	CEIH_Tx_G__f.get_xyz_angle_axis(CEIH_r_G__f[0]);
+	for (int i=0; i<6; i++)
+	{
+		std::cout << CEIH_r_G[0][i] << " ";
+	}
+	
+	for (int i=0; i<6; i++)
+	{
+		std::cout << CEIH_r_G__f[0][i] << " ";
+	}
 	
 	//rover
 	//std::cout << " ZZZ " << CEIH_r_G[0][0] << " " << -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5] << std::endl;
@@ -439,42 +435,42 @@ bool ecp_vis_sac_lx_generator::next_step()
 	//}
 	
 	
-printf("delta = %f %f %f", O_r_G__CEIH[0][0]-O_r_E[0][0], O_r_G__CEIH[0][1]-O_r_E[0][1], O_r_G__CEIH[0][2]-O_r_E[0][2]);
+//printf("delta = %f %f %f", O_r_G__CEIH[0][0]-O_r_E[0][0], O_r_G__CEIH[0][1]-O_r_E[0][1], O_r_G__CEIH[0][2]-O_r_E[0][2]);
 
 	//EIHJACK
 	CEIH_Tx_G__f=CEIH_Tx_G__f*G_Tx_S;
 	O_Tx_G__fEIH=O_Tx_E*CEIH_Tx_G__f; //rota O_Tx_E 0,0,0
 	O_Tx_G__fEIH.get_xyz_angle_axis(O_r_G__fEIH[0]);
 
-	std::cout << " O_T_E ";
+	//std::cout << " O_T_E ";
 	for (int i=0; i<6; i++)
 	{
 		std::cout << O_r_E[0][i] << " ";
 	}
-	std::cout << std::endl;
+	//std::cout << std::endl;
 
-	std::cout << " SAC ";
+	//std::cout << " SAC ";
 	for (int i=0; i<6; i++)
 	{
 		std::cout << O_r_G__CSAC[0][i] << " ";
 	}
-	std::cout << std::endl;
+	//std::cout << std::endl;
 
-	std::cout << " EIH ";
+	//std::cout << " EIH ";
 	for (int i=0; i<6; i++)
 	{
 		std::cout << O_r_G__CEIH[0][i]<< " ";
 	}
-	std::cout << std::endl;
+	//std::cout << std::endl;
 
-	std::cout << " EIH_JACK ";
+	//std::cout << " EIH_JACK ";
 	for (int i=0; i<6; i++)
 	{
 		std::cout << O_r_G__fEIH[0][i]<< " ";
 	}
-	std::cout << std::endl;
+	//std::cout << std::endl;
 
-	std::cout << " EIH_FEAT ";
+	//std::cout << " EIH_FEAT ";
 	for (int i=0; i<8; i++)
 	{
 		std::cout << fEIH_G[i]<< " ";
@@ -495,8 +491,8 @@ printf("delta = %f %f %f", O_r_G__CEIH[0][0]-O_r_E[0][0], O_r_G__CEIH[0][1]-O_r_
 	{
 		//O_r_G[0][i]=0.5*O_r_G__CEIH[0][i]+0.5*O_r_G__CSAC[0][i]; //SAC+EIH
 		//O_r_G[0][i]=O_r_G__CSAC[0][i]; //SAC ONLY
-		O_r_G[0][i]=O_r_G__CEIH[0][i]; //EIH ONLY
-		//O_r_G[0][i]=O_r_G__fEIH[0][i]; //EIH JACK ONLY
+		//O_r_G[0][i]=O_r_G__CEIH[0][i]; //EIH ONLY
+		O_r_G[0][i]=O_r_G__fEIH[0][i]; //EIH JACK ONLY
 	}
 
 	for (int i=0; i<6; i++)

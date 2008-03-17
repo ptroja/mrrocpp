@@ -87,6 +87,7 @@ int step_no;
 	
 	double C_r_G[3][6];
 	double CEIH_r_G[3][6];
+	double CEIH_r_G__f[3][6];
 	
 	double O_reul_Ep[3][6];
 	
