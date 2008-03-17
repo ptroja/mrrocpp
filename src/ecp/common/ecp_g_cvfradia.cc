@@ -43,7 +43,7 @@ bool ecp_cvfradia_generator::first_step()
 bool ecp_cvfradia_generator::next_step()
 {
 	// Wait for 1s.
-	msleep(1000);
+	usleep(1000000);
 	// Check trigger.
 	if (check_and_null_trigger())
 	{
