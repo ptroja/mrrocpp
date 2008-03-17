@@ -59,7 +59,8 @@ void weight_meassure_generator::clear_buffer()
 	initial_weight_counted = false;
 	terminate_state_recognized = false;
 	
-	catch_lag = initial_catch_lag = (int) 1000000*catch_lag/(USLEEP_TIME);
+	catch_lag = initial_catch_lag = (int) 1000000*catch_time/(USLEEP_TIME);
+	std::cout << "weight_meassure_generator" << initial_catch_lag << std::endl;
 	
 }
 

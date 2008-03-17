@@ -92,7 +92,7 @@ void ecp_task_sk::main_task_algorithm(void)
     sr_ecp_msg->message("ECP sledzenie konturu - wcisnij start");
     ecp_wait_for_start();
     
-//   weight_meassure_generator wmg(*this, -0.3);
+//   weight_meassure_generator wmg(*this, 0.3, 5);
     
     
     for(;;)
@@ -102,12 +102,12 @@ void ecp_task_sk::main_task_algorithm(void)
         {
             sr_ecp_msg->message("NOWA SERIA");
             sr_ecp_msg->message("FORCE SENSOR BIAS");
-befg->Move();
+		befg->Move();
             sr_ecp_msg->message("Wodzenie do pozycji sledzenia konturu");
             sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
-nrg->Move();
+		nrg->Move();
 //		 sr_ecp_msg->message("wazenie");
-//        wmg.Move();
+//       wmg.Move();
 
             // usuniecie listy o ile istnieje
             yefg->flush_pose_list();
