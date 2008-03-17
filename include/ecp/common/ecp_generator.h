@@ -1,3 +1,11 @@
+/*!
+ * \file ecp_generator.h
+ * \brief ECP generators base class.
+ * - class declaration
+ * \author twiniarsk
+ * \date 17.03.2008
+ */
+
 #if !defined(_ECP_GENERATOR_H)
 #define _ECP_GENERATOR_H
 

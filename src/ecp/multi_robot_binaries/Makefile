@@ -4,7 +4,7 @@
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
-BINARIES = ecp_tran ecp_mam ecp_t ecp_nalewanie ecp_sk ecp_time ecp_pawel ecp_tzu
+BINARIES = ecp_tran ecp_mam ecp_t ecp_nalewanie ecp_sk ecp_time ecp_pawel ecp_tzu ecp_cvfradia
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -49,7 +49,6 @@ ecp_sk: \
 		../common/ecp_t_sk.o \
 		../common/ecp_g_force.o \
 		ecp_mp_s_schunk.o \
-		ecp_mp_s_cvfradia.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
@@ -102,6 +101,14 @@ ecp_pawel: \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
+ecp_cvfradia: \
+		../irp6_on_track/ecp_local.o \
+		../irp6_postument/ecp_local.o \
+		../common/ecp_t_cvfradia.o \
+		../common/ecp_g_cvfradia.o \
+		ecp_mp_s_cvfradia.o \
+		$(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^ 
 
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:

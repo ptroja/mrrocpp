@@ -1,4 +1,5 @@
-/*! \file ecp_mp_s_cvfradia.cc
+/*!
+ * \file ecp_mp_s_cvfradia.h
  * \brief Virtual sensor on the ECP/MP side used for communication with cvFraDIA framework.
  * - class declaration
  * \author tkornuta
@@ -10,6 +11,12 @@
 
 #include "ecp_mp/ecp_mp_sensor.h"
 
+
+/*!
+ * \class ecp_mp_s_cvfradia.h
+ * \brief Virtual sensor on the ECP/MP side used for communication with cvFraDIA framework.
+ * \author tkornuta
+ */
 class ecp_mp_cvfradia_sensor : public ecp_mp_sensor
 {
   public:
