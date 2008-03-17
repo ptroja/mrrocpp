@@ -68,7 +68,7 @@ printf("po get server hostname\n");
 			printf("ERROR, no host %s\n", node_name);
 			throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 		}
-printf("reset bias\n");
+printf("reset socketaddr data\n");
 	// Reset socketaddr data.
 	bzero((char *) &serv_addr, sizeof(serv_addr));
 	// Fill data.
@@ -135,6 +135,21 @@ printf("vsp_cvfradia::initiate_reading(void)\n");
  */
 void vsp_cvfradia::get_reading(void)
 {
+printf("void vsp_cvfradia::get_reading(void)\t");
+
+	bzero(buffer,BUFFER_SIZE);
+		
+	int n = read(sockfd,buffer,BUFFER_SIZE);
+	if (n < 0)
+	{
+		perror("read() from socket");
+		exit(-1);
+	} else if (n == 0)
+	{
+		printf("read() from socket returned no data");
+		exit(-1);
+	}
+	printf("%s\n",buffer);
 	// Check the state of virtual sensor.
 /*	if (!is_sensor_configured)
 		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
