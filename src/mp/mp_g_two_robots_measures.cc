@@ -36,7 +36,7 @@ bool mp_two_robots_measures_generator::first_step()
 	irp6ot->ecp_td.get_type = ARM_DV;
 	irp6ot->ecp_td.get_arm_type = XYZ_EULER_ZYZ;
 	irp6ot->ecp_td.motion_type = ABSOLUTE;
-	irp6ot->ecp_td.next_interpolation_type = MOTORS_INTERPOLATION;
+	irp6ot->ecp_td.next_interpolation_type = MIM;
 	// Ustawienie polecen dla robota na postumencie.
 	irp6p = robot_m[ROBOT_IRP6_POSTUMENT];
 	irp6p->ecp_td.mp_command = NEXT_POSE; 
@@ -44,7 +44,7 @@ bool mp_two_robots_measures_generator::first_step()
 	irp6p->ecp_td.get_type = ARM_DV;
 	irp6p->ecp_td.get_arm_type = XYZ_EULER_ZYZ;
 	irp6p->ecp_td.motion_type = ABSOLUTE;
-		irp6p->ecp_td.next_interpolation_type = MOTORS_INTERPOLATION;
+		irp6p->ecp_td.next_interpolation_type = MIM;
 	// Przepisanie polecen.
 
 	

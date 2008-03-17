@@ -55,7 +55,7 @@ bool mp_tff_single_robot_nose_run_generator::first_step()
 	irp6->ecp_td.set_arm_type = PF_VELOCITY;
 	irp6->ecp_td.get_arm_type = FRAME;
 	irp6->ecp_td.motion_type = RELATIVE;
-	irp6->ecp_td.next_interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
+	irp6->ecp_td.next_interpolation_type = TCIM;
 	irp6->ecp_td.motion_steps = td.internode_step_no;
 	irp6->ecp_td.value_in_step_no = td.value_in_step_no;
 
@@ -168,7 +168,7 @@ bool mp_tff_nose_run_generator::first_step()
 	irp6ot->ecp_td.set_arm_type = PF_VELOCITY;
 	irp6ot->ecp_td.get_arm_type = FRAME;
 	irp6ot->ecp_td.motion_type = RELATIVE;
-	irp6ot->ecp_td.next_interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
+	irp6ot->ecp_td.next_interpolation_type = TCIM;
 	irp6ot->ecp_td.motion_steps = td.internode_step_no;
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 
@@ -204,7 +204,7 @@ bool mp_tff_nose_run_generator::first_step()
 	irp6p->ecp_td.set_arm_type = PF_VELOCITY;
 	irp6p->ecp_td.get_arm_type = FRAME;
 	irp6p->ecp_td.motion_type = RELATIVE;
-	irp6p->ecp_td.next_interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
+	irp6p->ecp_td.next_interpolation_type = TCIM;
 	irp6p->ecp_td.motion_steps = td.internode_step_no;
 	irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
 
@@ -319,7 +319,7 @@ bool mp_haptic_generator::first_step()
 	irp6ot->ecp_td.set_arm_type = PF_VELOCITY;
 	irp6ot->ecp_td.get_arm_type = FRAME;
 	irp6ot->ecp_td.motion_type = RELATIVE;
-	irp6ot->ecp_td.next_interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
+	irp6ot->ecp_td.next_interpolation_type = TCIM;
 	irp6ot->ecp_td.motion_steps = td.internode_step_no;
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 
@@ -354,7 +354,7 @@ bool mp_haptic_generator::first_step()
 	irp6p->ecp_td.set_arm_type = XYZ_ANGLE_AXIS;
 	irp6p->ecp_td.get_arm_type = FRAME;
 	irp6p->ecp_td.motion_type = ABSOLUTE;
-	irp6p->ecp_td.next_interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
+	irp6p->ecp_td.next_interpolation_type = TCIM;
 	irp6p->ecp_td.motion_steps = td.internode_step_no;
 	irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
 
@@ -519,7 +519,7 @@ bool mp_tff_rubik_grab_generator::first_step()
 	irp6ot->ecp_td.set_arm_type = PF_VELOCITY;
 	irp6ot->ecp_td.get_arm_type = FRAME;
 	irp6ot->ecp_td.motion_type = RELATIVE;
-	irp6ot->ecp_td.next_interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
+	irp6ot->ecp_td.next_interpolation_type = TCIM;
 	irp6ot->ecp_td.motion_steps = td.internode_step_no;
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 
@@ -574,7 +574,7 @@ bool mp_tff_rubik_grab_generator::first_step()
 	irp6p->ecp_td.set_arm_type = PF_VELOCITY;
 	irp6p->ecp_td.get_arm_type = FRAME;
 	irp6p->ecp_td.motion_type = RELATIVE;
-	irp6p->ecp_td.next_interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
+	irp6p->ecp_td.next_interpolation_type = TCIM;
 	irp6p->ecp_td.motion_steps = td.internode_step_no;
 	irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
 
@@ -727,7 +727,7 @@ bool mp_tff_rubik_face_rotate_generator::first_step()
 	irp6ot->ecp_td.set_arm_type = PF_VELOCITY;
 	irp6ot->ecp_td.get_arm_type = FRAME;
 	irp6ot->ecp_td.motion_type = RELATIVE;
-	irp6ot->ecp_td.next_interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
+	irp6ot->ecp_td.next_interpolation_type = TCIM;
 	irp6ot->ecp_td.motion_steps = td.internode_step_no;
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 
@@ -783,7 +783,7 @@ bool mp_tff_rubik_face_rotate_generator::first_step()
 	irp6p->ecp_td.set_arm_type = PF_VELOCITY;
 	irp6p->ecp_td.get_arm_type = FRAME;
 	irp6p->ecp_td.motion_type = RELATIVE;
-	irp6p->ecp_td.next_interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
+	irp6p->ecp_td.next_interpolation_type = TCIM;
 	irp6p->ecp_td.motion_steps = td.internode_step_no;
 	irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
 
@@ -981,7 +981,7 @@ bool mp_tff_gripper_approach_generator::first_step()
 	irp6ot->ecp_td.set_arm_type = PF_VELOCITY;
 	irp6ot->ecp_td.get_arm_type = FRAME;
 	irp6ot->ecp_td.motion_type = RELATIVE;
-	irp6ot->ecp_td.next_interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
+	irp6ot->ecp_td.next_interpolation_type = TCIM;
 	irp6ot->ecp_td.motion_steps = td.internode_step_no;
 	irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 
@@ -1014,7 +1014,7 @@ bool mp_tff_gripper_approach_generator::first_step()
 	irp6p->ecp_td.set_arm_type = PF_VELOCITY;
 	irp6p->ecp_td.get_arm_type = FRAME;
 	irp6p->ecp_td.motion_type = RELATIVE;
-	irp6p->ecp_td.next_interpolation_type = EXTERNAL_INTERPOLATION_WITH_FORCE;
+	irp6p->ecp_td.next_interpolation_type = TCIM;
 	irp6p->ecp_td.motion_steps = td.internode_step_no;
 	irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
 
@@ -1203,7 +1203,7 @@ bool mp_nose_run_force_generator::first_step()
 	conv->ecp_td.set_arm_type = JOINT;
 	conv->ecp_td.get_arm_type = JOINT;
 	conv->ecp_td.motion_type = ABSOLUTE;
-	conv->ecp_td.next_interpolation_type = MOTORS_INTERPOLATION;
+	conv->ecp_td.next_interpolation_type = MIM;
 	conv->ecp_td.motion_steps = td.internode_step_no;
 	conv->ecp_td.value_in_step_no = td.value_in_step_no;
 
@@ -1391,7 +1391,7 @@ bool mp_drawing_teach_in_force_generator::first_step()
 		conv->ecp_td.set_arm_type = JOINT;
 		conv->ecp_td.get_arm_type = JOINT;
 		conv->ecp_td.motion_type = ABSOLUTE;
-		conv->ecp_td.next_interpolation_type = MOTORS_INTERPOLATION;
+		conv->ecp_td.next_interpolation_type = MIM;
 		conv->ecp_td.motion_steps = td.internode_step_no;
 		conv->ecp_td.value_in_step_no = td.value_in_step_no;
 
@@ -1480,7 +1480,7 @@ bool mp_drawing_teach_in_force_generator::first_step()
 		conv->ecp_td.set_arm_type = JOINT;
 		conv->ecp_td.get_arm_type = JOINT;
 		conv->ecp_td.motion_type = ABSOLUTE;
-		conv->ecp_td.next_interpolation_type = MOTORS_INTERPOLATION;
+		conv->ecp_td.next_interpolation_type = MIM;
 		conv->ecp_td.motion_steps = td.internode_step_no;
 		conv->ecp_td.value_in_step_no = td.value_in_step_no;
 

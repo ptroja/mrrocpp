@@ -358,7 +358,7 @@ bool ui_common_robot::move_motors ( double final_position[] )
         // Parametry zlecenia ruchu i odczytu polozenia
         ecp->EDP_command_and_reply_buffer.instruction.instruction_type = SET_GET;
         ecp->EDP_command_and_reply_buffer.instruction.motion_type = ABSOLUTE;
-        ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
+        ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
     }
     else
     {
@@ -378,7 +378,7 @@ bool ui_common_robot::move_motors ( double final_position[] )
 
         ecp->EDP_command_and_reply_buffer.instruction.instruction_type = SET;
         ecp->EDP_command_and_reply_buffer.instruction.motion_type = RELATIVE;
-        ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
+        ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
     }
     ; // end: else
     ecp->EDP_command_and_reply_buffer.instruction.get_type = ARM_DV; // ARM
@@ -454,7 +454,7 @@ bool ui_common_robot::move_joints (double final_position[] )
     ecp->EDP_command_and_reply_buffer.instruction.set_type = ARM_DV; // ARM
     ecp->EDP_command_and_reply_buffer.instruction.set_arm_type = JOINT;
     ecp->EDP_command_and_reply_buffer.instruction.motion_type = ABSOLUTE;
-    ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
+    ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
     ecp->EDP_command_and_reply_buffer.instruction.motion_steps = nr_of_steps;
     ecp->EDP_command_and_reply_buffer.instruction.value_in_step_no = nr_of_steps;
 
@@ -516,7 +516,7 @@ bool ui_common_robot::move_xyz_euler_zyz ( double final_position[7] )
     ecp->EDP_command_and_reply_buffer.instruction.set_type = ARM_DV; // ARM
     ecp->EDP_command_and_reply_buffer.instruction.set_arm_type = XYZ_EULER_ZYZ;
     ecp->EDP_command_and_reply_buffer.instruction.motion_type = ABSOLUTE;
-    ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
+    ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
     ecp->EDP_command_and_reply_buffer.instruction.motion_steps = nr_of_steps;
     ecp->EDP_command_and_reply_buffer.instruction.value_in_step_no = nr_of_steps;
 
@@ -609,7 +609,7 @@ bool ui_common_robot::move_xyz_angle_axis ( double final_position[7] )
     ecp->EDP_command_and_reply_buffer.instruction.set_type = ARM_DV; // ARM
     ecp->EDP_command_and_reply_buffer.instruction.set_arm_type = XYZ_ANGLE_AXIS;
     ecp->EDP_command_and_reply_buffer.instruction.motion_type = ABSOLUTE;
-    ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
+    ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
     ecp->EDP_command_and_reply_buffer.instruction.motion_steps = nr_of_steps;
     ecp->EDP_command_and_reply_buffer.instruction.value_in_step_no = nr_of_steps;
 
@@ -640,7 +640,7 @@ bool ui_common_robot::read_motors ( double current_position[] )
     ecp->EDP_command_and_reply_buffer.instruction.get_type = ARM_DV;
     ecp->EDP_command_and_reply_buffer.instruction.instruction_type = GET;
     ecp->EDP_command_and_reply_buffer.instruction.get_arm_type = MOTOR;
-    ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
+    ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
 
     execute_motion();
     // printf("dalej za query read motors\n");
@@ -663,7 +663,7 @@ bool ui_common_robot::read_joints ( double current_position[] )
     ecp->EDP_command_and_reply_buffer.instruction.instruction_type = GET;
     ecp->EDP_command_and_reply_buffer.instruction.get_type = ARM_DV;
     ecp->EDP_command_and_reply_buffer.instruction.get_arm_type = JOINT;
-    ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
+    ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
 
     execute_motion();
 
@@ -683,7 +683,7 @@ bool ui_common_robot::read_xyz_euler_zyz (double current_position[])
     ecp->EDP_command_and_reply_buffer.instruction.get_type = ARM_DV;
     ecp->EDP_command_and_reply_buffer.instruction.instruction_type = GET;
     ecp->EDP_command_and_reply_buffer.instruction.get_arm_type = XYZ_EULER_ZYZ;
-    ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
+    ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
 
     execute_motion();
 
@@ -704,7 +704,7 @@ bool ui_common_robot::read_xyz_angle_axis (double current_position[])
     ecp->EDP_command_and_reply_buffer.instruction.get_type = ARM_DV;
     ecp->EDP_command_and_reply_buffer.instruction.instruction_type = GET;
     ecp->EDP_command_and_reply_buffer.instruction.get_arm_type = XYZ_ANGLE_AXIS;
-    ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
+    ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
 
     execute_motion();
 

@@ -97,7 +97,7 @@ bool ecp_linear_generator::first_step()
 			the_robot->EDP_data.set_arm_type = MOTOR;
 			the_robot->EDP_data.get_arm_type = MOTOR;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			the_robot->EDP_data.motion_steps = td.internode_step_no;
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
@@ -108,7 +108,7 @@ bool ecp_linear_generator::first_step()
 			the_robot->EDP_data.set_arm_type = JOINT;
 			the_robot->EDP_data.get_arm_type = JOINT;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			the_robot->EDP_data.motion_steps = td.internode_step_no;
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
@@ -119,7 +119,7 @@ bool ecp_linear_generator::first_step()
 			the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
 			the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			the_robot->EDP_data.motion_steps = td.internode_step_no;
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
@@ -130,7 +130,7 @@ bool ecp_linear_generator::first_step()
 			the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
 			the_robot->EDP_data.get_arm_type = XYZ_ANGLE_AXIS;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			the_robot->EDP_data.motion_steps = td.internode_step_no;
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
@@ -168,7 +168,7 @@ bool ecp_linear_generator::next_step()
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = MOTOR;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			for (i=0; i<MAX_SERVOS_NR; i++) {
 				the_robot->EDP_data.next_motor_arm_coordinates[i]
 						= the_robot->EDP_data.current_motor_arm_coordinates[i] + node_counter*td.coordinate_delta[i]
@@ -189,7 +189,7 @@ bool ecp_linear_generator::next_step()
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			for (i=0; i<6; i++) {
 				the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i]
 						= the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i] + node_counter*td.coordinate_delta[i]
@@ -204,7 +204,7 @@ bool ecp_linear_generator::next_step()
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			for (i=0; i<6; i++) {
 				the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i]
 						= the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i] + node_counter*td.coordinate_delta[i]
@@ -331,7 +331,7 @@ bool ecp_linear_parabolic_generator::first_step()
 			the_robot->EDP_data.set_arm_type = MOTOR;
 			the_robot->EDP_data.get_arm_type = MOTOR;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			the_robot->EDP_data.motion_steps = td.internode_step_no;
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
@@ -342,7 +342,7 @@ bool ecp_linear_parabolic_generator::first_step()
 			the_robot->EDP_data.set_arm_type = JOINT;
 			the_robot->EDP_data.get_arm_type = JOINT;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			the_robot->EDP_data.motion_steps = td.internode_step_no;
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
@@ -353,7 +353,7 @@ bool ecp_linear_parabolic_generator::first_step()
 			the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
 			the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			the_robot->EDP_data.motion_steps = td.internode_step_no;
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
@@ -364,7 +364,7 @@ bool ecp_linear_parabolic_generator::first_step()
 			the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
 			the_robot->EDP_data.get_arm_type = XYZ_ANGLE_AXIS;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			the_robot->EDP_data.motion_steps = td.internode_step_no;
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
@@ -451,7 +451,7 @@ bool ecp_linear_parabolic_generator::next_step()
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = MOTOR;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			for (i=0; i<MAX_SERVOS_NR; i++) {
 				double s = calculate_s((double)node_counter/td.interpolation_node_no, ta[i], tb[i]);
 				the_robot->EDP_data.next_motor_arm_coordinates[i]
@@ -483,7 +483,7 @@ bool ecp_linear_parabolic_generator::next_step()
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = JOINT;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			for (i=0; i<MAX_SERVOS_NR; i++) {
 				double s = calculate_s((double)node_counter/td.interpolation_node_no, ta[i], tb[i]);
 				the_robot->EDP_data.next_joint_arm_coordinates[i]
@@ -512,7 +512,7 @@ bool ecp_linear_parabolic_generator::next_step()
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			for (i=0; i<7; i++) {
 				double s = calculate_s((double)node_counter/td.interpolation_node_no, ta[i], tb[i]);
 
@@ -554,7 +554,7 @@ bool ecp_linear_parabolic_generator::next_step()
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			for (i=0; i<7; i++) {
 				double s = calculate_s((double)node_counter/td.interpolation_node_no, ta[i], tb[i]);
 
@@ -630,7 +630,7 @@ bool ecp_polynomial_generator::first_step()
 			the_robot->EDP_data.set_arm_type = MOTOR;
 			the_robot->EDP_data.get_arm_type = MOTOR;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			the_robot->EDP_data.motion_steps = td.internode_step_no;
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
@@ -641,7 +641,7 @@ bool ecp_polynomial_generator::first_step()
 			the_robot->EDP_data.set_arm_type = JOINT;
 			the_robot->EDP_data.get_arm_type = JOINT;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			the_robot->EDP_data.motion_steps = td.internode_step_no;
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
@@ -652,7 +652,7 @@ bool ecp_polynomial_generator::first_step()
 			the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
 			the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			the_robot->EDP_data.motion_steps = td.internode_step_no;
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
@@ -663,7 +663,7 @@ bool ecp_polynomial_generator::first_step()
 			the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
 			the_robot->EDP_data.get_arm_type = XYZ_ANGLE_AXIS;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			the_robot->EDP_data.motion_steps = td.internode_step_no;
 			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 			break;
@@ -803,7 +803,7 @@ bool ecp_cubic_generator::next_step()
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = MOTOR;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			for (i=0; i<MAX_SERVOS_NR; i++) {
 				acc[i] = ( 2.0*A2[i] + 6.0*A3[i]*(node_counter) ) * ( 1.0
 						/ (STEP*the_robot->EDP_data.motion_steps*STEP*the_robot->EDP_data.motion_steps));
@@ -833,7 +833,7 @@ bool ecp_cubic_generator::next_step()
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = JOINT;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			for (i=0; i<MAX_SERVOS_NR; i++) {
 				acc[i] = ( 2.0*A2[i] + 6.0*A3[i]*(node_counter) ) * ( 1.0 / (STEP*(the_robot->EDP_data.motion_steps)*STEP*(the_robot->EDP_data.motion_steps)));
 
@@ -862,7 +862,7 @@ bool ecp_cubic_generator::next_step()
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			for (i=0; i<7; i++) {
 				acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
 				if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
@@ -892,7 +892,7 @@ bool ecp_cubic_generator::next_step()
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			for (i=0; i<6; i++) {
 				acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
 				if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
@@ -1058,7 +1058,7 @@ bool ecp_quintic_generator::next_step()
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = MOTOR;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			for (int i=0; i<MAX_SERVOS_NR; i++) {
 				acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
 						*(node_counter*node_counter*node_counter);
@@ -1087,7 +1087,7 @@ bool ecp_quintic_generator::next_step()
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = JOINT;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			for (int i=0; i<MAX_SERVOS_NR; i++) {
 				acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
 						*(node_counter*node_counter*node_counter);
@@ -1116,7 +1116,7 @@ bool ecp_quintic_generator::next_step()
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			for (int i=0; i<6; i++) {
 				acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
 						*(node_counter*node_counter*node_counter);
@@ -1153,7 +1153,7 @@ bool ecp_quintic_generator::next_step()
 			the_robot->EDP_data.set_type = ARM_DV; // ARM
 			the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
 			the_robot->EDP_data.motion_type = ABSOLUTE;
-			the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+			the_robot->EDP_data.next_interpolation_type = MIM;
 			for (int i=0; i<6; i++) {
 				acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
 						*(node_counter*node_counter*node_counter);
@@ -1425,7 +1425,7 @@ bool ecp_parabolic_teach_in_generator::next_step()
 		the_robot->EDP_data.instruction_type = SET;
 		the_robot->EDP_data.set_type = ARM_DV; // ARM
 		the_robot->EDP_data.motion_type = ABSOLUTE;
-		the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+		the_robot->EDP_data.next_interpolation_type = MIM;
 		the_robot->EDP_data.motion_steps = (WORD) (INTERVAL/STEP);
 		the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
 		first_interval = false;
@@ -1737,7 +1737,7 @@ bool ecp_calibration_generator::next_step()
 		the_robot->EDP_data.instruction_type = SET;
 		the_robot->EDP_data.set_type = ARM_DV; // ARM
 		the_robot->EDP_data.motion_type = ABSOLUTE;
-		the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+		the_robot->EDP_data.next_interpolation_type = MIM;
 		the_robot->EDP_data.motion_steps = (WORD) (INTERVAL/STEP);
 		the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
 		first_interval = false;
@@ -2039,7 +2039,7 @@ bool ecp_cubic_spline_generator::next_step()
 		the_robot->EDP_data.instruction_type = SET;
 		the_robot->EDP_data.set_type = ARM_DV; // ARM
 		the_robot->EDP_data.motion_type = ABSOLUTE;
-		the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+		the_robot->EDP_data.next_interpolation_type = MIM;
 		the_robot->EDP_data.motion_steps = (WORD) (INTERVAL/STEP);
 		the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
 
@@ -2504,7 +2504,7 @@ bool ecp_smooth_cubic_spline_generator::next_step()
 		the_robot->EDP_data.instruction_type = SET;
 		the_robot->EDP_data.set_type = ARM_DV; // ARM
 		the_robot->EDP_data.motion_type = ABSOLUTE;
-		the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+		the_robot->EDP_data.next_interpolation_type = MIM;
 		the_robot->EDP_data.motion_steps = (WORD) (INTERVAL/STEP);
 		the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
 
@@ -2879,7 +2879,7 @@ bool ecp_quintic_spline_generator::next_step()
 		the_robot->EDP_data.instruction_type = SET;
 		the_robot->EDP_data.set_type = ARM_DV; // ARM
 		the_robot->EDP_data.motion_type = ABSOLUTE;
-		the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+		the_robot->EDP_data.next_interpolation_type = MIM;
 		the_robot->EDP_data.motion_steps = (WORD) (INTERVAL/STEP);
 		the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
 
@@ -3189,7 +3189,7 @@ bool ecp_elipsoid_generator::next_step()
 		the_robot->EDP_data.get_type = ARM_DV; // ARM
 		the_robot->EDP_data.get_arm_type = JOINT;
 		the_robot->EDP_data.motion_type = ABSOLUTE;
-		the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+		the_robot->EDP_data.next_interpolation_type = MIM;
 		the_robot->EDP_data.motion_steps = (WORD) (INTERVAL/STEP);
 		the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
 		first_interval = false;

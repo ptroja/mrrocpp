@@ -146,9 +146,9 @@ void ecp_irp6_postument_robot::create_command(void)
 				} // end: (set_arm_type)
 
 				switch (EDP_data.next_interpolation_type) {
-					case MOTORS_INTERPOLATION:
+					case MIM:
 						break;
-					case EXTERNAL_INTERPOLATION_WITH_FORCE:
+					case TCIM:
 						for (int j=0; j<6; j++) {
 							EDP_command_and_reply_buffer.instruction.arm.pf_def.inertia[j] = EDP_data.next_inertia[j];
 							EDP_command_and_reply_buffer.instruction.arm.pf_def.reciprocal_damping[j]

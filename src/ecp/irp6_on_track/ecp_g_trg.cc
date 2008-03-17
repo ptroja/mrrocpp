@@ -68,7 +68,7 @@ void trajectory_reproduce_generator::create_command_for_pose(ecp_taught_in_pose&
         the_robot->EDP_data.set_type = ARM_DV; // ARM
         the_robot->EDP_data.set_arm_type = MOTOR;
         the_robot->EDP_data.motion_type = ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+         the_robot->EDP_data.next_interpolation_type = MIM;
         the_robot->EDP_data.motion_steps = (WORD) ceil(tip.motion_time/STEP);
         the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
         memcpy (the_robot->EDP_data.next_motor_arm_coordinates, tip.coordinates, IRP6_ON_TRACK_NUM_OF_SERVOS*sizeof (double));
@@ -78,7 +78,7 @@ void trajectory_reproduce_generator::create_command_for_pose(ecp_taught_in_pose&
         the_robot->EDP_data.set_type = ARM_DV; // ARM
         the_robot->EDP_data.set_arm_type = JOINT;
         the_robot->EDP_data.motion_type = ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+         the_robot->EDP_data.next_interpolation_type = MIM;
         the_robot->EDP_data.motion_steps = (WORD) ceil(tip.motion_time/STEP);
         the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
         memcpy (the_robot->EDP_data.next_joint_arm_coordinates, tip.coordinates, IRP6_ON_TRACK_NUM_OF_SERVOS*sizeof (double));
@@ -88,7 +88,7 @@ void trajectory_reproduce_generator::create_command_for_pose(ecp_taught_in_pose&
         the_robot->EDP_data.set_type = ARM_DV; // ARM
         the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
         the_robot->EDP_data.motion_type = ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+         the_robot->EDP_data.next_interpolation_type = MIM;
         the_robot->EDP_data.motion_steps = (WORD) ceil(tip.motion_time/STEP);
         the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
         memcpy (the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
@@ -98,7 +98,7 @@ void trajectory_reproduce_generator::create_command_for_pose(ecp_taught_in_pose&
         the_robot->EDP_data.set_type = ARM_DV; // ARM
         the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
         the_robot->EDP_data.motion_type = ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+         the_robot->EDP_data.next_interpolation_type = MIM;
         the_robot->EDP_data.motion_steps = (WORD) ceil(tip.motion_time/STEP);
         the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
         memcpy (the_robot->EDP_data.next_XYZ_AA_arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));

@@ -231,7 +231,7 @@ bool ui_conveyor_robot::move_motors ( double final_position[CONVEYOR_NUM_OF_SERV
         // Parametry zlecenia ruchu i odczytu polozenia
         EDP_command_and_reply_buffer.instruction.instruction_type = SET_GET;
         EDP_command_and_reply_buffer.instruction.motion_type = ABSOLUTE;
-        EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
+        EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
     }
     else
     {
@@ -246,7 +246,7 @@ bool ui_conveyor_robot::move_motors ( double final_position[CONVEYOR_NUM_OF_SERV
 
         EDP_command_and_reply_buffer.instruction.instruction_type = SET;
         EDP_command_and_reply_buffer.instruction.motion_type = RELATIVE;
-        EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
+        EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
     }
     ; // end: else
     EDP_command_and_reply_buffer.instruction.get_type = ARM_DV; // ARM
@@ -304,7 +304,7 @@ bool ui_conveyor_robot::move_joints (double final_position[CONVEYOR_NUM_OF_SERVO
     EDP_command_and_reply_buffer.instruction.set_type = ARM_DV; // ARM
     EDP_command_and_reply_buffer.instruction.set_arm_type = JOINT;
     EDP_command_and_reply_buffer.instruction.motion_type = ABSOLUTE;
-    EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
+    EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
     EDP_command_and_reply_buffer.instruction.motion_steps = nr_of_steps;
     EDP_command_and_reply_buffer.instruction.value_in_step_no = nr_of_steps;
 
@@ -337,7 +337,7 @@ bool ui_conveyor_robot::read_motors ( double current_position[CONVEYOR_NUM_OF_SE
     EDP_command_and_reply_buffer.instruction.get_type = ARM_DV;
     EDP_command_and_reply_buffer.instruction.instruction_type = GET;
     EDP_command_and_reply_buffer.instruction.get_arm_type = MOTOR;
-    EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
+    EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
 
     execute_motion();
     // printf("za query read motors\n");
@@ -363,7 +363,7 @@ bool ui_conveyor_robot::read_joints ( double current_position[CONVEYOR_NUM_OF_SE
     EDP_command_and_reply_buffer.instruction.instruction_type = GET;
     EDP_command_and_reply_buffer.instruction.get_type = ARM_DV;
     EDP_command_and_reply_buffer.instruction.get_arm_type = JOINT;
-    EDP_command_and_reply_buffer.instruction.interpolation_type = MOTORS_INTERPOLATION;
+    EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
 
     execute_motion();
 

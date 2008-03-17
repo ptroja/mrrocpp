@@ -194,7 +194,7 @@ bool ecp_vis_sac_lx_generator::first_step()
 	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
 	//the_robot->EDP_data.motion_type = ABSOLUTE; //RELATIVE;
 	the_robot->EDP_data.next_interpolation_type
-			= EXTERNAL_INTERPOLATION_WITH_FORCE;
+			= TCIM;
 	the_robot->EDP_data.motion_type = ABSOLUTE; //PF_FIXED_FRAME_WITH_DESIRED_FORCE_OR_SPEED;
 
 	the_robot->EDP_data.motion_steps = td.internode_step_no;

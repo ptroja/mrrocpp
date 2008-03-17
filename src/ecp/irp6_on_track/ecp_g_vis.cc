@@ -226,7 +226,7 @@ the_robot->EDP_data.next_tool_frame[2][2]=1; the_robot->EDP_data.next_tool_frame
        the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
       the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
       the_robot->EDP_data.motion_type = ABSOLUTE;
-       the_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+       the_robot->EDP_data.next_interpolation_type = MIM;
       the_robot->EDP_data.motion_steps = td.internode_step_no;
       the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
    

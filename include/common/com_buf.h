@@ -505,9 +505,10 @@ enum MOTION_TYPE {
 };
 
 //------------------------------------------------------------------------------
+// MOTOR_INTERPOLATED_MOTION TASK_COORDINATES_INTERPOLATED_MOTION
 enum INTERPOLATION_TYPE
 {
-    MOTORS_INTERPOLATION, EXTERNAL_INTERPOLATION_WITH_FORCE
+    MIM, TCIM
 };
 
 //------------------------------------------------------------------------------

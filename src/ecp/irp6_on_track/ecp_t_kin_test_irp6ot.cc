@@ -52,7 +52,7 @@ void ecp_task_kin_test_irp6ot::main_task_algorithm(void)
         ecp_m_robot->EDP_data.get_type = ARM_DV;
         ecp_m_robot->EDP_data.get_arm_type = MOTOR;
         ecp_m_robot->EDP_data.motion_type = ABSOLUTE;
-        ecp_m_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+        ecp_m_robot->EDP_data.next_interpolation_type = MIM;
         ecp_m_robot->create_command();
         ecp_m_robot->execute_motion();
     }
@@ -81,7 +81,7 @@ void ecp_task_kin_test_irp6ot::main_task_algorithm(void)
         ecp_m_robot->EDP_data.set_type = ARM_DV;
         ecp_m_robot->EDP_data.set_arm_type = MOTOR;
         ecp_m_robot->EDP_data.motion_type = ABSOLUTE;
-        ecp_m_robot->EDP_data.next_interpolation_type = MOTORS_INTERPOLATION;
+        ecp_m_robot->EDP_data.next_interpolation_type = MIM;
         ecp_m_robot->EDP_data.motion_steps = (WORD) 1;
         ecp_m_robot->EDP_data.value_in_step_no = 1;
         memcpy (ecp_m_robot->EDP_data.next_motor_arm_coordinates, ecp_m_robot->EDP_data.current_motor_arm_coordinates, IRP6_ON_TRACK_NUM_OF_SERVOS*sizeof (double));

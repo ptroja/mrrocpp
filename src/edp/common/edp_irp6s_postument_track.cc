@@ -620,7 +620,7 @@ void edp_irp6s_postument_track_effector::move_arm(c_buffer &instruction)
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
-	if (instruction.interpolation_type == MOTORS_INTERPOLATION) {
+	if (instruction.interpolation_type == MIM) {
 		switch (instruction.set_arm_type) {
 			case MOTOR:
 				compute_motors(instruction);
@@ -661,7 +661,7 @@ void edp_irp6s_postument_track_effector::move_arm(c_buffer &instruction)
 			default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
 				throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
 		}
-	} else if (instruction.interpolation_type == EXTERNAL_INTERPOLATION_WITH_FORCE) {
+	} else if (instruction.interpolation_type == TCIM) {
 		pose_force_torque_at_frame_move(instruction);
 
 	}
@@ -708,7 +708,7 @@ void edp_irp6s_postument_track_effector::get_arm_position(bool read_hardware, c_
 
 	// okreslenie rodzaju wspolrzednych, ktore maja by odczytane
 	// oraz adekwatne wypelnienie bufora odpowiedzi
-	if (instruction.interpolation_type == MOTORS_INTERPOLATION) {
+	if (instruction.interpolation_type == MIM) {
 		switch (instruction.get_arm_type) {
 			case FRAME:
 				// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
@@ -741,7 +741,7 @@ void edp_irp6s_postument_track_effector::get_arm_position(bool read_hardware, c_
 				printf("EFF_TYPE: %d\n", instruction.get_arm_type);
 				throw NonFatal_error_2(INVALID_GET_END_EFFECTOR_TYPE);
 		}
-	} else if (instruction.interpolation_type == EXTERNAL_INTERPOLATION_WITH_FORCE) {
+	} else if (instruction.interpolation_type == TCIM) {
 		// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
 		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 		get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);

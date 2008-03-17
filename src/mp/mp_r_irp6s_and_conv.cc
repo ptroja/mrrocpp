@@ -143,9 +143,9 @@ void mp_irp6s_and_conv_robot::create_next_pose_command(void)
 				}
 
 				switch (ecp_td.next_interpolation_type) {
-					case MOTORS_INTERPOLATION:
+					case MIM:
 						break;
-					case EXTERNAL_INTERPOLATION_WITH_FORCE:
+					case TCIM:
 						for (int i=0; i<6; i++) {
 							mp_command.mp_package.instruction.arm.pf_def.inertia[i] =ecp_td.next_inertia[i];
 							mp_command.mp_package.instruction.arm.pf_def.reciprocal_damping[i]

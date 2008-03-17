@@ -542,7 +542,7 @@ bool mp_teach_in_generator::next_step () {
 			robot_m_iterator->second->ecp_td.set_type = ARM_DV; // ARM
 			robot_m_iterator->second->ecp_td.set_arm_type = MOTOR;
 			robot_m_iterator->second->ecp_td.motion_type = ABSOLUTE;
-			robot_m_iterator->second->ecp_td.next_interpolation_type = MOTORS_INTERPOLATION;
+			robot_m_iterator->second->ecp_td.next_interpolation_type = MIM;
 			robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
 			robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 			memcpy (robot_m_iterator->second->ecp_td.next_motor_arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
@@ -552,7 +552,7 @@ bool mp_teach_in_generator::next_step () {
 			robot_m_iterator->second->ecp_td.set_type = ARM_DV; // ARM
 			robot_m_iterator->second->ecp_td.set_arm_type = JOINT;
 			robot_m_iterator->second->ecp_td.motion_type = ABSOLUTE;
-			robot_m_iterator->second->ecp_td.next_interpolation_type = MOTORS_INTERPOLATION;
+			robot_m_iterator->second->ecp_td.next_interpolation_type = MIM;
 			robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
 			robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 			memcpy (robot_m_iterator->second->ecp_td.next_joint_arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
@@ -562,7 +562,7 @@ bool mp_teach_in_generator::next_step () {
 			robot_m_iterator->second->ecp_td.set_type = ARM_DV; // ARM
 			robot_m_iterator->second->ecp_td.set_arm_type = XYZ_EULER_ZYZ;
 			robot_m_iterator->second->ecp_td.motion_type = ABSOLUTE;
-			robot_m_iterator->second->ecp_td.next_interpolation_type = MOTORS_INTERPOLATION;
+			robot_m_iterator->second->ecp_td.next_interpolation_type = MIM;
 			robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
 			robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 			memcpy (robot_m_iterator->second->ecp_td.next_XYZ_ZYZ_arm_coordinates, tip.coordinates, 6*sizeof (double));
@@ -573,7 +573,7 @@ bool mp_teach_in_generator::next_step () {
 			robot_m_iterator->second->ecp_td.set_type = ARM_DV; // ARM
 			robot_m_iterator->second->ecp_td.set_arm_type = XYZ_ANGLE_AXIS;
 			robot_m_iterator->second->ecp_td.motion_type = ABSOLUTE;
-			robot_m_iterator->second->ecp_td.next_interpolation_type = MOTORS_INTERPOLATION;
+			robot_m_iterator->second->ecp_td.next_interpolation_type = MIM;
 			robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
 			robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 			memcpy (robot_m_iterator->second->ecp_td.next_XYZ_AA_arm_coordinates, tip.coordinates, 6*sizeof (double));
@@ -590,7 +590,7 @@ bool mp_teach_in_generator::next_step () {
 				robot_m_iterator->second->ecp_td.set_type = ARM_DV; // ARM
 				robot_m_iterator->second->ecp_td.set_arm_type = MOTOR;
 				robot_m_iterator->second->ecp_td.motion_type = ABSOLUTE;
-				robot_m_iterator->second->ecp_td.next_interpolation_type = MOTORS_INTERPOLATION;
+				robot_m_iterator->second->ecp_td.next_interpolation_type = MIM;
 				robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
 				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 				memcpy (robot_m_iterator->second->ecp_td.next_motor_arm_coordinates, tip.irp6p_coordinates, MAX_SERVOS_NR*sizeof (double));
@@ -600,7 +600,7 @@ bool mp_teach_in_generator::next_step () {
 				robot_m_iterator->second->ecp_td.set_type = ARM_DV; // ARM
 				robot_m_iterator->second->ecp_td.set_arm_type = JOINT;
 				robot_m_iterator->second->ecp_td.motion_type = ABSOLUTE;
-				robot_m_iterator->second->ecp_td.next_interpolation_type = MOTORS_INTERPOLATION;
+				robot_m_iterator->second->ecp_td.next_interpolation_type = MIM;
 				robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
 				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 				memcpy (robot_m_iterator->second->ecp_td.next_joint_arm_coordinates, tip.irp6p_coordinates, MAX_SERVOS_NR*sizeof (double));
@@ -610,7 +610,7 @@ bool mp_teach_in_generator::next_step () {
 				robot_m_iterator->second->ecp_td.set_type = ARM_DV; // ARM
 				robot_m_iterator->second->ecp_td.set_arm_type = XYZ_EULER_ZYZ;
 				robot_m_iterator->second->ecp_td.motion_type = ABSOLUTE;
-				robot_m_iterator->second->ecp_td.next_interpolation_type = MOTORS_INTERPOLATION;
+				robot_m_iterator->second->ecp_td.next_interpolation_type = MIM;
 				robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
 				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 				memcpy (robot_m_iterator->second->ecp_td.next_XYZ_ZYZ_arm_coordinates, tip.irp6p_coordinates, 6*sizeof (double));
@@ -621,7 +621,7 @@ bool mp_teach_in_generator::next_step () {
 				robot_m_iterator->second->ecp_td.set_type = ARM_DV; // ARM
 				robot_m_iterator->second->ecp_td.set_arm_type = XYZ_ANGLE_AXIS;
 				robot_m_iterator->second->ecp_td.motion_type = ABSOLUTE;
-				robot_m_iterator->second->ecp_td.next_interpolation_type = MOTORS_INTERPOLATION;
+				robot_m_iterator->second->ecp_td.next_interpolation_type = MIM;
 				robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
 				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 				memcpy (robot_m_iterator->second->ecp_td.next_XYZ_AA_arm_coordinates, tip.irp6p_coordinates, 6*sizeof (double));
