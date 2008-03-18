@@ -25,10 +25,16 @@ printf("ecp_mp_cvfradia_sensor::ecp_mp_cvfradia_sensor\n");
 
 	// Ustawienie domyslnego okresu pracy czujnika.
 	base_period=current_period=1;
+
+	node_name = _ecp_mp_object.config.return_string_value("node_name", _section_name);
+	VSP_NAME = _ecp_mp_object.config.return_attach_point_name(configurator::CONFIG_SERVER, "resourceman_attach_point", _section_name);
 	
 	// Retrieve cvfradia node name and port from configuration file.
 printf("retrieve data\n");
-	int port = _ecp_mp_object.config.return_int_value("port");
+	int cvfradia_port = _ecp_mp_object.config.return_int_value("cvfradia_port", _section_name);
+	char* cvfradia_node_name = _ecp_mp_object.config.return_string_value("cvfradia_node_name", _section_name);
+	printf("odczytalem post i nazwe nodu %s:%i\n", cvfradia_node_name, cvfradia_port);
+	
 	node_name = _ecp_mp_object.config.return_string_value("node_name", _section_name);
 	VSP_NAME = _ecp_mp_object.config.return_attach_point_name(configurator::CONFIG_SERVER, "resourceman_attach_point", _section_name);
 
@@ -46,10 +52,10 @@ printf("socket open\n");
 
 printf("get server hostname\n");
 	// Get server hostname.
-	server = gethostbyname(node_name);
+	server = gethostbyname(cvfradia_node_name);
 printf("po get server hostname\n");
 		if (server == NULL) {
-			printf("ERROR, no host %s\n", node_name);
+			printf("ERROR, no host %s\n", cvfradia_node_name);
 			throw sensor_error(SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 		}
 printf("reset socketaddr data\n");
@@ -58,7 +64,7 @@ printf("reset socketaddr data\n");
 	// Fill data.
 	serv_addr.sin_family = AF_INET;
 	bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
-	serv_addr.sin_port = htons(port);
+	serv_addr.sin_port = htons(cvfradia_port);
 
 printf("connect to cvfradia\n");
 	// Try to connect to cvFraDIA.
