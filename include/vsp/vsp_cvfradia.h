@@ -35,11 +35,10 @@ private:
       */
 	hostent *server;
 
-	/*!
-      * Buffer used by sockets during communication.
-      */
+	/*
+	 * Buffer used during communication.
+	 */
 	char buffer[BUFFER_SIZE];
-	
 public:
 	
 	/*!

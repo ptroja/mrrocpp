@@ -158,8 +158,7 @@ printf("void vsp_cvfradia::get_reading(void)\t");
 
 	from_vsp.vsp_report=VSP_REPLY_OK;
 	// Copy data to communication buffer.
-	from_vsp.comm_image.cvFraDIA.a = 1;
-	
+	// ...
 	is_reading_ready=false;
 }
 

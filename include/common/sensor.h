@@ -104,7 +104,7 @@ typedef struct sensor_image_t{
 		 * \author tkornuta
 		 */
 		struct {
-			int a;
+			int x,y;
 		} cvFraDIA;
 
 	}; // koniec unii

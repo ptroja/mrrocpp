@@ -43,24 +43,43 @@ private:
       */
 	char buffer[BUFFER_SIZE];
 
-	// Nazwa czujnika.
-	char *VSP_NAME;
-	
-	// Wskaznik na obiekt do komunikacji z SR
-	sr_ecp &sr_ecp_msg;
+	/*!
+      * Link to the SRP communication object.
+      */
+	sr_ecp& sr_ecp_msg;
+
+	/*!
+      * Sensor name.
+      */
+	SENSOR_ENUM sensor_name; 
 
 public:
 
-	const SENSOR_ENUM sensor_name; // nazwa czujnika z define w impconst.h  public:
 	/*!
-      * Constructor.
+      * Constructor. Creates socket connection to cvFraDIA.
       */
  	ecp_mp_cvfradia_sensor (SENSOR_ENUM _sensor_name, char* _section_name, ecp_mp_task& _ecp_mp_object);
-	void configure_sensor();
-	void initiate_reading();
+
+	/*!
+      * Sends sensor configuration to cvFraDIA.
+      */
+	void configure_sensor (void);	
+
+	/*!
+      * Sends initiation reading command to cvFraDIA.
+      */
+	void initiate_reading (void);
+
+	/*!
+      * Retrieves aggregated data from cvFraDIA.
+      */
+	void get_reading (void);
+
+	/*!
+      * Closes cvFraDIA socket connection.
+      */
 	void terminate();
-	void get_reading();
- 	
+
 }; 
 
 
