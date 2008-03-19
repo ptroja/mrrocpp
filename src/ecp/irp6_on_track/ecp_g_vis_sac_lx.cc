@@ -115,6 +115,49 @@ ecp_vis_sac_lx_generator::ecp_vis_sac_lx_generator(ecp_task& _ecp_task, int step
 	gain[4]=ecp_t.config.return_double_value("gain4");
 	gain[5]=ecp_t.config.return_double_value("gain5");
 
+	//SAC	
+	O_weight__SAC=ecp_t.config.return_double_value("O_weight__SAC");
+	O_gain__SAC[0]=ecp_t.config.return_double_value("O_gain0__SAC");
+	O_gain__SAC[1]=ecp_t.config.return_double_value("O_gain1__SAC");
+	O_gain__SAC[2]=ecp_t.config.return_double_value("O_gain2__SAC");
+	O_gain__SAC[3]=ecp_t.config.return_double_value("O_gain3__SAC");
+	O_gain__SAC[4]=ecp_t.config.return_double_value("O_gain4__SAC");
+	O_gain__SAC[5]=ecp_t.config.return_double_value("O_gain5__SAC");
+	
+	C_weight__SAC=ecp_t.config.return_double_value("C_weight__SAC");
+	C_gain__SAC[0]=ecp_t.config.return_double_value("C_gain0__SAC");
+	C_gain__SAC[1]=ecp_t.config.return_double_value("C_gain1__SAC");
+	C_gain__SAC[2]=ecp_t.config.return_double_value("C_gain2__SAC");
+	C_gain__SAC[3]=ecp_t.config.return_double_value("C_gain3__SAC");
+	C_gain__SAC[4]=ecp_t.config.return_double_value("C_gain4__SAC");
+	C_gain__SAC[5]=ecp_t.config.return_double_value("C_gain5__SAC");
+	
+	f_weight__SAC=ecp_t.config.return_double_value("f_weight__SAC");
+	f_gain__SAC[0]=ecp_t.config.return_double_value("f_gain0__SAC");
+	f_gain__SAC[1]=ecp_t.config.return_double_value("f_gain1__SAC");
+	f_gain__SAC[2]=ecp_t.config.return_double_value("f_gain2__SAC");
+	f_gain__SAC[3]=ecp_t.config.return_double_value("f_gain3__SAC");
+	f_gain__SAC[4]=ecp_t.config.return_double_value("f_gain4__SAC");
+	f_gain__SAC[5]=ecp_t.config.return_double_value("f_gain5__SAC");
+
+	//EIH
+	C_weight__EIH=ecp_t.config.return_double_value("C_weight__EIH");
+	C_gain__EIH[0]=ecp_t.config.return_double_value("C_gain0__EIH");
+	C_gain__EIH[1]=ecp_t.config.return_double_value("C_gain1__EIH");
+	C_gain__EIH[2]=ecp_t.config.return_double_value("C_gain2__EIH");
+	C_gain__EIH[3]=ecp_t.config.return_double_value("C_gain3__EIH");
+	C_gain__EIH[4]=ecp_t.config.return_double_value("C_gain4__EIH");
+	C_gain__EIH[5]=ecp_t.config.return_double_value("C_gain5__EIH");
+		
+	f_weight__EIH=ecp_t.config.return_double_value("f_weight__EIH");
+	f_gain__EIH[0]=ecp_t.config.return_double_value("f_gain0__EIH");
+	f_gain__EIH[1]=ecp_t.config.return_double_value("f_gain1__EIH");
+	f_gain__EIH[2]=ecp_t.config.return_double_value("f_gain2__EIH");
+	f_gain__EIH[3]=ecp_t.config.return_double_value("f_gain3__EIH");
+	f_gain__EIH[4]=ecp_t.config.return_double_value("f_gain4__EIH");
+	f_gain__EIH[5]=ecp_t.config.return_double_value("f_gain5__EIH");
+
+
 	force_inertia_=ecp_t.config.return_double_value("force_inertia_");
 	torque_inertia_=ecp_t.config.return_double_value("torque_inertia_");
 	force_reciprocal_damping_
@@ -406,12 +449,18 @@ bool ecp_vis_sac_lx_generator::next_step()
 
 	//SAC
 	O_Tx_CSAC.set_xyz_rpy( 0.950+0.058, //-0.09,
-			0.000-0.06, 0.265+0.900+0.06-0.105, 0, 0, 0);
+			0.000-0.06, 0.265+0.900+0.075-0.105, 0, 0, 0);
 	O_Tx_G__CSAC=O_Tx_CSAC*CSAC_Tx_G;
 	O_Tx_G__CSAC=O_Tx_G__CSAC*G_Tx_S; //skrot myslowy
 	O_Tx_G__CSAC.get_xyz_angle_axis(O_r_G__CSAC[0]);
 	
-	
+	O_eps_EG__CSAC_norm=0.0;
+	for (int i=0; i<6; i++)
+		{
+			O_eps_EG__CSAC[0][i]=(O_r_G__CSAC[0][i]-O_r_E[0][i]);
+			O_eps_EG__CSAC_norm+=O_eps_EG__CSAC[0][i]*O_eps_EG__CSAC[0][i];
+			O_eps_E__CSAC[0][i]=O_gain__SAC[i]*O_eps_EG__CSAC[0][i];		
+		}	
 	
 //jesli nie widzi kostki bo jest za blisko zostaw stare namiary
 	CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
@@ -436,6 +485,22 @@ bool ecp_vis_sac_lx_generator::next_step()
 	O_Tx_G__CEIH.get_xyz_angle_axis(O_r_G__CEIH[0]);
 	//}
 	
+	//jak cos przyjdzie glupiego z CEIH
+	if (O_r_G__CEIH[0][0]>100 || O_r_G__CEIH[0][0]<-100)
+	{
+		for (int i=0; i<6; i++)
+		{
+			O_r_G__CEIH[0][i]=O_r_G__CEIH[1][i]; //EIH ONLY
+		}
+	}
+	
+	O_eps_EG__CEIH_norm=0.0;
+	for (int i=0; i<6; i++)
+		{
+			O_eps_EG__CEIH[0][i]=(O_r_G__CEIH[0][i]-O_r_E[0][i]);
+			O_eps_EG__CEIH_norm+=O_eps_EG__CEIH[0][i]*O_eps_EG__CEIH[0][i];
+			O_eps_E__CEIH[0][i]=C_gain__EIH[i]*O_eps_EG__CEIH[0][i];		
+		}
 	
 //printf("delta = %f %f %f", O_r_G__CEIH[0][0]-O_r_E[0][0], O_r_G__CEIH[0][1]-O_r_E[0][1], O_r_G__CEIH[0][2]-O_r_E[0][2]);
 
@@ -443,6 +508,14 @@ bool ecp_vis_sac_lx_generator::next_step()
 	CEIH_Tx_G__f=CEIH_Tx_G__f*G_Tx_S;
 	O_Tx_G__fEIH=O_Tx_E*CEIH_Tx_G__f; //rota O_Tx_E 0,0,0
 	O_Tx_G__fEIH.get_xyz_angle_axis(O_r_G__fEIH[0]);
+	
+	O_eps_EG__fEIH_norm=0.0;
+	for (int i=0; i<6; i++)
+		{
+			O_eps_EG__fEIH[0][i]=(O_r_G__fEIH[0][i]-O_r_E[0][i]);
+			O_eps_EG__fEIH_norm+=O_eps_EG__fEIH[0][i]*O_eps_EG__fEIH[0][i];
+			O_eps_E__fEIH[0][i]=f_gain__EIH[i]*O_eps_EG__fEIH[0][i];		
+		}
 
 	//std::cout << " O_T_E ";
 	for (int i=0; i<6; i++)
@@ -479,22 +552,16 @@ bool ecp_vis_sac_lx_generator::next_step()
 	}
 	std::cout << std::endl;
 
-	//jak cos przyjdzie glupiego z CEIH
-	if (O_r_G__CEIH[0][0]>100 || O_r_G__CEIH[0][0]<-100)
-	{
-		for (int i=0; i<6; i++)
-		{
-			O_r_G__CEIH[0][i]=O_r_G__CEIH[1][i]; //EIH ONLY
-		}
-	}
+
 
 	//SWITCH
+	/*
 	O_eps_EG__CSAC_norm=0.0;
 	for (int i=0; i<6; i++)
 		{
 			O_eps_EG__CSAC[0][i]=(O_r_G__CSAC[0][i]-O_r_E[0][i]);
 			O_eps_EG__CSAC_norm+=O_eps_EG__CSAC[0][i]*O_eps_EG__CSAC[0][i];
-		}	
+		}	*/
 /*
 	O_eps_EG__CSAC_norm=0.0;
 	for (int i=0; i<6; i++)
@@ -529,8 +596,9 @@ bool ecp_vis_sac_lx_generator::next_step()
 
 	for (int i=0; i<6; i++)
 	{
-		O_eps_EG[0][i]=O_r_G[0][i]-O_r_E[0][i];
-		O_r_Ep[0][i]=O_r_E[0][i]+gain[i]*O_eps_EG[0][i]; //0.01
+	//	O_eps_EG[0][i]=O_r_G[0][i]-O_r_E[0][i];
+	//	O_r_Ep[0][i]=O_r_E[0][i]+gain[i]*O_eps_EG[0][i]; //0.01
+		O_r_Ep[0][i]=O_r_E[0][i]+O_weight__SAC*O_eps_E__CSAC[0][i]+C_weight__EIH*O_eps_E__CEIH[0][i]+f_weight__EIH*O_eps_E__fEIH[0][i];
 	}
 
 	//O_eps_EG[0][2]=O_r_G[0][2]-O_r_E[0][2];

@@ -97,6 +97,10 @@ int step_no;
 	double O_eps_EG__CSAC[3][6];
 	double O_eps_EG__CEIH[3][6];
 	double O_eps_EG__fEIH[3][6];
+	
+	double O_eps_E__CSAC[3][6];
+	double O_eps_E__CEIH[3][6];
+	double O_eps_E__fEIH[3][6];
   	
   	double fEIH_G[8];
 
@@ -112,6 +116,19 @@ int step_no;
 	double d2_u_max[6];//={0.1, 0.1, 0.01, 0.05, 0.05, 0.05}; //tylko ustalone dla Y
 
 	double gain[6];
+	
+	double O_gain__SAC[6];
+	double C_gain__SAC[6];
+	double f_gain__SAC[6];
+	double C_gain__EIH[6];
+	double f_gain__EIH[6];
+	
+	
+	double O_weight__SAC;
+	double C_weight__SAC;
+	double f_weight__SAC;
+	double C_weight__EIH;
+	double f_weight__EIH;
 	
 	double force_inertia_;
 	double torque_inertia_;
