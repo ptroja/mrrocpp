@@ -1791,6 +1791,31 @@ Ft_v_tr::Ft_v_tr()
 		
 }// end Ft_v_tr()
 
+/*
+Ft_v_tr::Ft_v_tr(VARIANT variant_l)
+{
+	// konstruktor domniemany
+	// tworzy macierz jednostkowa
+
+	// i - i-ta kolumna
+	// j - j-ty wiersz
+
+
+	for(int i=0; i<6; i++)
+		for(int j=0; j<6; j++)
+		{
+			if(i == j)
+				matrix_m[i][j] = 1;
+			else
+				matrix_m[i][j] = 0;
+		}
+		
+	variant = variant_l;
+		
+		
+}// end Ft_v_tr()
+*/
+
 Ft_v_tr::Ft_v_tr(const Homog_matrix & p, VARIANT variant_l)
 {
 	// macierz tworzona jest zgodnie ze wzorem 5.105 ze strony 196 (5.72 str 154 - wydanie angielskie)

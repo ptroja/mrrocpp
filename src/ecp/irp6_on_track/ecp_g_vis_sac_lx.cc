@@ -286,7 +286,7 @@ bool ecp_vis_sac_lx_generator::next_step()
 
 		//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 2.341);	//jesli chwytamy po przekatnej
 	G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 3.141); // jesli chwytak na plasko
-	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 1.564, 3.142, 0.000); //rover
+	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 1.564, 0.0, 0.000); //rover
 	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0,1.569070, 3.141593, 0.000000);
 
 
@@ -327,6 +327,14 @@ bool ecp_vis_sac_lx_generator::next_step()
 		//	for (int i=0; i<6; i++)
 		//		vsp_vis_sac->image.vis_sac.frame_E_r_G__f[i]=O_r_E[0][i]; //nie wiem czy potrzebne bo chyba  robot sie nie rusza
 
+
+	if (O_r_G__CEIH[0][0]>100 || O_r_G__CEIH[0][0]<-100)
+	{
+		for (int i=0; i<6; i++)
+		{
+			O_r_G__CEIH[0][i]=0.0; //EIH ONLY
+		}
+	}
 		
 
 		std::cout << node_counter
@@ -379,18 +387,20 @@ bool ecp_vis_sac_lx_generator::next_step()
 
 	//EIH
 	//rover
-	/*
+	
 	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]-0.05, //-0.03
 			vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1]+0.04,
 			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2]+0.02, // kalib Y w O
-			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3], 0, 0); //nomalnie
-			//0, 0, -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]);
-	*/
+			//-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3], 0, 0); //nomalnie
+			0, 0, -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]-0.785000);
 	
+	
+/*
 	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0],
 			vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1],
 			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2], // kalib Y w O
-			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3], 0, 0); 
+			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3], 0, 0); 	
+*/
 
 //jakby przyszlo cos glupiego
 //	if (vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]>100 || vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]<-100)
@@ -476,14 +486,18 @@ bool ecp_vis_sac_lx_generator::next_step()
 	}
 	
 	//rover
-	//std::cout << " ZZZ " << CEIH_r_G[0][0] << " " << -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5] << std::endl;
-	//if(CEIH_r_G[0][0]>0.12) //0.15
-	//{
+	std::cout << " ZZZ " << CEIH_r_G[0][0] << " " << -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5] << std::endl;
+	if(CEIH_r_G[0][0]>0.12) //0.15
+	{
 	//EIH
 	CEIH_Tx_G=CEIH_Tx_G*G_Tx_S;
 	O_Tx_G__CEIH=O_Tx_E*CEIH_Tx_G; //rota O_Tx_E 0,0,0 //E_TX_CEIH=1
 	O_Tx_G__CEIH.get_xyz_angle_axis(O_r_G__CEIH[0]);
-	//}
+	}
+	
+	O_rf_G__CEIH.set_values(O_r_G__CEIH[0]);
+	Ft_v_tr Jack(O_Tx_E,Ft_v_tr::V);
+	
 	
 	//jak cos przyjdzie glupiego z CEIH
 	if (O_r_G__CEIH[0][0]>100 || O_r_G__CEIH[0][0]<-100)
@@ -517,13 +531,29 @@ bool ecp_vis_sac_lx_generator::next_step()
 			O_eps_E__fEIH[0][i]=f_gain__EIH[i]*O_eps_EG__fEIH[0][i];		
 		}
 
-	//std::cout << " O_T_E ";
+CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
+
+	std::cout << " O_T_E ";
 	for (int i=0; i<6; i++)
 	{
 		std::cout << O_r_E[0][i] << " ";
 	}
-	//std::cout << std::endl;
+	std::cout << std::endl;
 
+	std::cout << " EIH ";
+	for (int i=0; i<6; i++)
+	{
+		std::cout << O_r_G__CEIH[0][i]<< " ";
+	}
+	std::cout << std::endl;
+	
+		std::cout << " EIH 2";
+	for (int i=0; i<6; i++)
+	{
+		std::cout << CEIH_r_G[0][i]<< " ";
+	}
+	std::cout << std::endl;
+	
 	//std::cout << " SAC ";
 	for (int i=0; i<6; i++)
 	{

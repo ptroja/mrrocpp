@@ -328,6 +328,7 @@ private:
 public:
 
 	Ft_v_tr ();																	// kostruktor domniemany
+//	Ft_v_tr(VARIANT variant_l);
 	Ft_v_tr (const Homog_matrix &, VARIANT variant_l);		
 	Ft_v_tr(const Ft_v_tr &);												// konstruktor kopiujacy
 
