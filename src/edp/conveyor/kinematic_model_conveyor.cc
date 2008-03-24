@@ -48,26 +48,26 @@ void kinematic_model_conveyor::set_kinematic_parameters(void)
 /* ------------------------------------------------------------------------
   Sprawdzenie ograniczen na polozenia katowe walow silnikow.
  ------------------------------------------------------------------------ */
-void kinematic_model_conveyor::check_motor_position(double motor_position[])
+void kinematic_model_conveyor::check_motor_position(const double motor_position[])
 {
 	return;
-}; // end: kinematic_model_conveyor::check_motor_position()
+}; // end: kinematic_model_conveyor::check_motor_position(const )
 
 
 /* ------------------------------------------------------------------------
   Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
  ------------------------------------------------------------------------ */
-void kinematic_model_conveyor::check_joints(double q[])
+void kinematic_model_conveyor::check_joints(const double q[])
 {
 	return;
-}; // end: kinematic_model_conveyor::check_joints()
+}; // end: kinematic_model_conveyor::check_joints(const )
 
 
 /* ------------------------------------------------------------------------
   Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne
   (mp2i - motor position to internal)
  ------------------------------------------------------------------------ */
-void kinematic_model_conveyor::mp2i_transform(double* local_current_motor_pos, double* local_current_joints)
+void kinematic_model_conveyor::mp2i_transform(const double* local_current_motor_pos, double* local_current_joints)
 {
   local_current_joints[0] = local_current_motor_pos[0] / motor_to_intext_ratio;
 }//: mp2i_transform
@@ -97,7 +97,7 @@ void kinematic_model_conveyor::i2mp_transform(double* local_desired_motor_pos_ne
   * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ) 
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
-void kinematic_model_conveyor::direct_kinematics_transform(double* local_current_joints, frame_tab* local_current_end_effector_frame)
+void kinematic_model_conveyor::direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame)
 {
 
   // Proste zadanie kinematyki.

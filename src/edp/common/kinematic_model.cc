@@ -173,7 +173,7 @@ void kinematic_model::local_corrector_inverse_transform(Homog_matrix& desired_en
 -> Dodac opis kolejnosci obliczen.
  
  ------------------------------------------------------------------------ */
-void kinematic_model::i2e_transform(double* local_current_joints, frame_tab* local_current_end_effector_frame)
+void kinematic_model::i2e_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame)
 {
 
     // Rozwiazanie prostego zagadnienia kinematyki.

@@ -67,22 +67,22 @@ protected:
 
 
   // Sprawdzenie ograniczen na polozenia katowe walow silnikow
-  virtual void check_motor_position(double motor_position[]);
+  virtual void check_motor_position(const double motor_position[]);
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne
-  virtual void check_joints(double q[]);
+  virtual void check_joints(const double q[]);
 
 public:
   // Konstruktor.
   kinematic_model_irp6ot_with_wrist ( void );
 
   // Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne.
-  virtual void mp2i_transform(double* local_current_motor_pos, double* local_current_joints); 
+  virtual void mp2i_transform(const double* local_current_motor_pos, double* local_current_joints); 
 
   // Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow.
   virtual void i2mp_transform(double* local_desired_motor_pos_new, double* local_desired_joints);
 
   // Rozwiazanie prostego zagadnienia kinematyki.
-  virtual void direct_kinematics_transform(double* local_current_joints, frame_tab* local_current_end_effector_frame);
+  virtual void direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame);
   
   // Rozwiazanie odwrotnego zagadnienia kinematyki.
   virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame);

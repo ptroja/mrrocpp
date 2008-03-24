@@ -245,7 +245,7 @@ public:
   kinematic_model_irp6p_5dof (void);
 
   // Rozwiazanie prostego zagadnienia kinematyki.
-  virtual void direct_kinematics_transform(double* local_current_joints, frame_tab* local_current_end_effector_frame);
+  virtual void direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame);
   
   // Rozwiazanie odwrotnego zagadnienia kinematyki.
   virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame);

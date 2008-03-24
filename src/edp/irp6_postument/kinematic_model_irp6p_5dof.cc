@@ -78,7 +78,7 @@ void kinematic_model_irp6p_5dof::attached_tool_inverse_transform(frame_tab* loca
   * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ) 
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6p_5dof::direct_kinematics_transform(double* local_current_joints, frame_tab* local_current_end_effector_frame)
+void kinematic_model_irp6p_5dof::direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame)
 {
 
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.

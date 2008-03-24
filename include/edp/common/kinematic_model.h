@@ -44,10 +44,10 @@ protected:
   virtual void set_kinematic_parameters(void) = 0;
 
   // Sprawdzenie ograniczen na polozenia katowe walow silnikow
-  virtual void check_motor_position(double motor_position[]) = 0;
+  virtual void check_motor_position(const double motor_position[]) = 0;
 
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne
-  virtual void check_joints(double q[]) = 0;
+  virtual void check_joints(const double q[]) = 0;
 
   // Wspolczynnik kalibracji.
   double h;
@@ -106,7 +106,7 @@ public:
   virtual void attached_tool_inverse_transform(Homog_matrix&);
 
   // Rozwiazanie prostego zagadnienia kinematyki.
-  virtual void direct_kinematics_transform(double* local_current_joints, frame_tab* local_current_end_effector_frame) = 0;
+  virtual void direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame) = 0;
   
   // Rozwiazanie odwrotnego zagadnienia kinematyki.
   virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame) = 0;

@@ -286,7 +286,7 @@ Zakresy ruchu poszczegolnych stopni swobody (w radianach lub milimetrach).
 /* ------------------------------------------------------------------------
   Sprawdzenie ograniczen na polozenia katowe walow silnikow.
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6m_with_wrist::check_motor_position(double motor_position[])
+void kinematic_model_irp6m_with_wrist::check_motor_position(const double motor_position[])
 {
 
 if (motor_position[0] < lower_limit_axis[0])   // Kat f1 mniejszy od minimalnego
@@ -315,13 +315,13 @@ else if (motor_position[4] > upper_limit_axis[4])   // Kat f5 wiekszy od maksyma
   throw transformer_error::NonFatal_error_2 (BEYOND_UPPER_LIMIT_AXIS_4);
   
   
-}; // end: kinematic_model_irp6m_with_wrist::check_motor_position()
+}; // end: kinematic_model_irp6m_with_wrist::check_motor_position(const )
 
 
 /* ------------------------------------------------------------------------
   Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6m_with_wrist::check_joints(double q[])
+void kinematic_model_irp6m_with_wrist::check_joints(const double q[])
 {
 
 	if (isnan(q[0])) throw  transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA1);
@@ -361,14 +361,14 @@ if (isnan(q[2])) throw  transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_
 
 
      
-}; // end: kinematic_model_irp6m_with_wrist::check_joints()
+}; // end: kinematic_model_irp6m_with_wrist::check_joints(const )
 
 
 /* ------------------------------------------------------------------------
   Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne
   (mp2i - motor position to internal)
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6m_with_wrist::mp2i_transform(double* local_current_motor_pos, double* local_current_joints) {
+void kinematic_model_irp6m_with_wrist::mp2i_transform(const double* local_current_motor_pos, double* local_current_joints) {
 
   // zmienne pomocnicze
   double c, d, l; 
@@ -488,7 +488,7 @@ void kinematic_model_irp6m_with_wrist::i2mp_transform(double* local_desired_moto
   * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ) 
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6m_with_wrist::direct_kinematics_transform(double* local_current_joints, frame_tab* local_current_end_effector_frame) {
+void kinematic_model_irp6m_with_wrist::direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame) {
 
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
   check_joints (local_current_joints);
