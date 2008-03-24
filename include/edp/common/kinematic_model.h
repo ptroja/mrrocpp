@@ -76,13 +76,13 @@ public:
   kinematic_model(void);
   
   // Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne.
-  virtual void mp2i_transform(double* local_current_motor_pos, double* local_current_joints) = 0; 
+  virtual void mp2i_transform(const double* local_current_motor_pos, double* local_current_joints) = 0; 
 
   // Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow.
   virtual void i2mp_transform(double* local_desired_motor_pos_new, double* local_desired_joints) = 0;
 
   // Przeliczenie polozenia ze wspolrzednych wewnetrznych na wspolrzedne zewnetrzne.
-  virtual void i2e_transform(double* local_current_joints, frame_tab* local_current_end_effector_frame);
+  virtual void i2e_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame);
 
   // Przeliczenie polozenia ze wspolrzednych zewnetrznych na wspolrzedne zewnetrzne.
    virtual void e2i_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame);

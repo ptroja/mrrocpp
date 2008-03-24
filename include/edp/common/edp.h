@@ -357,9 +357,7 @@ public:
     // przed wykonaniem synchronizacji robota
     bool pre_synchro_motion(c_buffer &instruction);
 
-    // by Y czy ostatnio bylo get_arm w trybie sprzetowym??
-    bool is_get_arm_read_hardware;
-
+  
     // Czy robot zsynchronizowany? // by Y - wziete z ecp
     bool is_synchronised ( void ) const;
 

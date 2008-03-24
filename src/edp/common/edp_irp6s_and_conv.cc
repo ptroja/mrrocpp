@@ -61,7 +61,7 @@ edp_irp6s_and_conv_effector::edp_irp6s_and_conv_effector (configurator &_config,
 
     trans_t_command = false;
 
-    is_get_arm_read_hardware=false;
+  //  is_get_arm_read_hardware=false;
     previous_set_arm_type = MOTOR;
     servo_to_tt_chid = ChannelCreate(_NTO_CHF_UNBLOCK);
 

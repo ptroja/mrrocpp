@@ -48,7 +48,7 @@ protected:
     // FRAME do postaci XYZ_EULER_ZYZ
     // oraz przepisanie wyniku przeksztalcenia do
     // wewnetrznych struktur danych REPLY_BUFFER
-    void arm_frame_2_pose_force_torque_at_frame (bool* = NULL);
+  //  void arm_frame_2_pose_force_torque_at_frame (bool* = NULL);
     // Przeksztalcenie definicji koncowki z postaci
     // FRAME do postaci XYZ_EULER_ZYZ
     // oraz przepisanie wyniku przeksztalcenia do
