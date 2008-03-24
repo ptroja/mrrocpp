@@ -576,6 +576,11 @@ void Homog_matrix::get_mech_xyz_euler_zyz(double t[6]) const
 	t[5] = matrix_m[0][2];
 };//: get_mech_xyz_euler_zyz
 
+void Homog_matrix::set_xyz_euler_zyz(const double t[6])
+{
+	set_xyz_euler_zyz(t[0], t[1], t[2], t[3], t[4], t[5]);
+}
+
 
 
 // Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_EULER_ZYZ.

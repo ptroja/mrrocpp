@@ -146,6 +146,7 @@ public:
 	void get_mech_xyz_euler_zyz(double t[6]) const;
 	// Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_EULER_ZYZ.
 	void set_xyz_euler_zyz(double x, double y, double z, double alfa, double beta, double gamma);
+	void set_xyz_euler_zyz(const double t[6]);
 	// Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_EULER_ZYZ dla robota IRP-6_MECHATRONIKA
 	void set_mech_xyz_euler_zyz(double x, double y, double z, double alfa, double beta, double gamma);
 	
