@@ -21,7 +21,8 @@ BINARIES =		ecp_pr \
 				ecp_kin_test_irp6ot \
 				ecp_irp6ot_rcsc \
 				ecp_irp6ot_pouring \
-				ecp_irp6ot_multiplayer
+				ecp_irp6ot_multiplayer\
+				ecp_tzu
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -100,6 +101,18 @@ ecp_irp6ot_multiplayer: ecp_t_multiplayer_irp6ot.o ecp_st_go.o ecp_mp_s_schunk.o
 						ecp_g_smooth.o ecp_generator_t.o \
 						ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 	
+#-----------------------------------------------------------------------------------------------------------------------#
+ecp_tzu: \
+		ecp_local.o \
+		../../ecp_mp/ecp_mp_s_force.o \
+		ecp_t_tzu_cs_irp6ot.o \
+		ecp_g_force.o \
+		ecp_g_smooth.o \
+		ecp_g_jarosz.o \
+		ecp_g_tzu.o \
+		../common/ecp_operator_reaction_condition.o \
+		$(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^  
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
 # plik.o: plik.cc plik1.h plik2.h ... itd
