@@ -387,20 +387,20 @@ bool ecp_vis_sac_lx_generator::next_step()
 
 	//EIH
 	//rover
-	
+	/*
 	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]-0.05, //-0.03
 			vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1]+0.04,
 			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2]+0.02, // kalib Y w O
-			//-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3], 0, 0); //nomalnie
-			0, 0, -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]-0.785000);
+		//	-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3], 0, 0); //nomalnie
+			0, 0, -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]-0.785000); //rover
+	*/
 	
-	
-/*
+
 	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0],
 			vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1],
 			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2], // kalib Y w O
 			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3], 0, 0); 	
-*/
+
 
 //jakby przyszlo cos glupiego
 //	if (vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]>100 || vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]<-100)
@@ -412,6 +412,10 @@ bool ecp_vis_sac_lx_generator::next_step()
 			-vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[2],
 			-vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[3], 0, 0); //-1
 
+	for (int i=0; i<8; i++)
+	{
+		fEIH_G[i]=vsp_vis_sac->image.vis_sac.fEIH_G[i];
+	}
 
 	//podjazd gdy sie nie ruszamy
 	if (fabs(O_r_G[1][0]-O_r_G[0][0])<=0.02 && fabs(O_r_G[1][1]-O_r_G[0][1])
@@ -485,15 +489,15 @@ bool ecp_vis_sac_lx_generator::next_step()
 		std::cout << CEIH_r_G__f[0][i] << " ";
 	}
 	
-	//rover
-	std::cout << " ZZZ " << CEIH_r_G[0][0] << " " << -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5] << std::endl;
-	if(CEIH_r_G[0][0]>0.12) //0.15
-	{
+//	//rover
+//	std::cout << " ZZZ " << CEIH_r_G[0][0] << " " << -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5] << std::endl;
+//	if(CEIH_r_G[0][0]>0.12) //0.15
+//	{
 	//EIH
 	CEIH_Tx_G=CEIH_Tx_G*G_Tx_S;
 	O_Tx_G__CEIH=O_Tx_E*CEIH_Tx_G; //rota O_Tx_E 0,0,0 //E_TX_CEIH=1
 	O_Tx_G__CEIH.get_xyz_angle_axis(O_r_G__CEIH[0]);
-	}
+//	}
 	
 	O_rf_G__CEIH.set_values(O_r_G__CEIH[0]);
 	Ft_v_tr Jack(O_Tx_E,Ft_v_tr::V);
@@ -533,26 +537,12 @@ bool ecp_vis_sac_lx_generator::next_step()
 
 CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 
-	std::cout << " O_T_E ";
+	//std::cout << " O_T_E ";
 	for (int i=0; i<6; i++)
 	{
 		std::cout << O_r_E[0][i] << " ";
 	}
-	std::cout << std::endl;
-
-	std::cout << " EIH ";
-	for (int i=0; i<6; i++)
-	{
-		std::cout << O_r_G__CEIH[0][i]<< " ";
-	}
-	std::cout << std::endl;
-	
-		std::cout << " EIH 2";
-	for (int i=0; i<6; i++)
-	{
-		std::cout << CEIH_r_G[0][i]<< " ";
-	}
-	std::cout << std::endl;
+	//std::cout << std::endl;
 	
 	//std::cout << " SAC ";
 	for (int i=0; i<6; i++)
@@ -580,9 +570,12 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	{
 		std::cout << fEIH_G[i]<< " ";
 	}
+	//std::cout << std::endl;
+
+	std::cout <<  O_eps_EG__CSAC_norm << " ";
+	
 	std::cout << std::endl;
-
-
+	
 
 	//SWITCH
 	/*
@@ -611,17 +604,21 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 		//O_r_G[0][i]=O_r_G__fEIH[0][i]; //EIH JACK ONLY
 		
 		//SWITCH
-		/*
-		if(O_eps_EG__CSAC_norm>=0.008 && phaseCEIH==0)
+		
+		if(O_eps_EG__CSAC_norm>=0.007 && phaseCEIH==0)
 		{
-			O_r_G[0][i]=O_r_G__CSAC[0][i]; //SAC ONLY
+			//O_r_G[0][i]=O_r_G__CSAC[0][i]; //SAC ONLY
+			O_weight__SAC=1;
 		}
 		else
 		{
 			//O_r_G[0][i]=O_r_G__fEIH[0][i]; //EIH JACK ONLY	
 			phaseCEIH=1;
-			O_r_G[0][i]=O_r_G__CEIH[0][i]; //EIH ONLY
-		}*/
+			//O_r_G[0][i]=O_r_G__CEIH[0][i]; //EIH ONLY
+			O_weight__SAC=0;
+			C_weight__EIH=1;			
+			
+		}
 	}
 
 	for (int i=0; i<6; i++)
