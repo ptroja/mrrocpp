@@ -59,7 +59,7 @@ void weight_meassure_generator::clear_buffer()
 	initial_weight_counted = false;
 	terminate_state_recognized = false;
 	
-	catch_lag = initial_catch_lag = (int) 1000000*catch_time/(USLEEP_TIME);
+	catch_lag = initial_catch_lag = (int) (1000000*catch_time/(USLEEP_TIME));
 	std::cout << "weight_meassure_generator" << initial_catch_lag << std::endl;
 	
 }
@@ -639,9 +639,8 @@ bool y_edge_follow_force_generator::first_step()
 	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
 	the_robot->EDP_data.set_arm_type = PF_VELOCITY;
 	the_robot->EDP_data.get_arm_type = FRAME;
-	the_robot->EDP_data.motion_type = RELATIVE;
-	the_robot->EDP_data.next_interpolation_type
-			= TCIM;
+	the_robot->EDP_data.motion_type = ABSOLUTE;
+	the_robot->EDP_data.next_interpolation_type = TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -704,6 +703,16 @@ bool y_edge_follow_force_generator::next_step()
 
 	the_robot->EDP_data.next_gripper_coordinate
 			= the_robot->EDP_data.current_gripper_coordinate;
+
+	for (int i=0; i<MAX_SERVOS_NR; i++)
+	{
+		the_robot->EDP_data.next_motor_arm_coordinates[i]=0.0;
+	}
+
+	
+
+
+
 
 	// sprowadzenie sil do ukladu kisci
 	Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
