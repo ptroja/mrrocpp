@@ -113,7 +113,7 @@ bool mp_tff_single_robot_nose_run_generator::next_step()
 
 	irp6->ecp_td.next_gripper_coordinate = irp6->ecp_td.current_gripper_coordinate;
 
-	irp6->ecp_td.instruction_type = SET;
+	irp6->ecp_td.instruction_type = SET_GET;
 
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if (irp6->ecp_td.ecp_reply == TASK_TERMINATED) {
@@ -269,8 +269,8 @@ bool mp_tff_nose_run_generator::next_step()
 		irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
 	}
 
-	irp6ot->ecp_td.instruction_type = SET;
-	irp6p->ecp_td.instruction_type = SET;
+	irp6ot->ecp_td.instruction_type = SET_GET;
+	irp6p->ecp_td.instruction_type = SET_GET;
 
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if ((irp6ot->ecp_td.ecp_reply == TASK_TERMINATED ) || (irp6ot->ecp_td.ecp_reply == TASK_TERMINATED )) {
@@ -418,8 +418,8 @@ bool mp_haptic_generator::next_step()
 
 	if (node_counter==3) {
 
-		irp6ot->ecp_td.instruction_type = SET;
-		irp6p->ecp_td.instruction_type = SET;
+		irp6ot->ecp_td.instruction_type = SET_GET;
+		irp6p->ecp_td.instruction_type = SET_GET;
 
 		irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
 		irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
@@ -677,8 +677,8 @@ bool mp_tff_rubik_grab_generator::next_step()
 	} else
 		irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
 
-	irp6ot->ecp_td.instruction_type = SET;
-	irp6p->ecp_td.instruction_type = SET;
+	irp6ot->ecp_td.instruction_type = SET_GET;
+	irp6p->ecp_td.instruction_type = SET_GET;
 
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	if (irp6ot->ecp_td.ecp_reply == TASK_TERMINATED) {
@@ -848,8 +848,8 @@ bool mp_tff_rubik_face_rotate_generator::next_step()
 		return true;
 	}
 	if (node_counter==3) {
-		irp6ot->ecp_td.instruction_type = SET;
-		irp6p->ecp_td.instruction_type = SET;
+		irp6ot->ecp_td.instruction_type = SET_GET;
+		irp6p->ecp_td.instruction_type = SET_GET;
 		irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
 		irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
 		if (irp6ot_con < -0.1 || 0.1 < irp6ot_con) {
@@ -1057,8 +1057,8 @@ bool mp_tff_gripper_approach_generator::next_step()
 		return true;
 	}
 	if (node_counter==3) {
-		irp6ot->ecp_td.instruction_type = SET;
-		irp6p->ecp_td.instruction_type = SET;
+		irp6ot->ecp_td.instruction_type = SET_GET;
+		irp6p->ecp_td.instruction_type = SET_GET;
 		irp6p->ecp_td.next_gripper_coordinate = irp6p->ecp_td.current_gripper_coordinate;
 		irp6ot->ecp_td.next_gripper_coordinate = irp6ot->ecp_td.current_gripper_coordinate;
 
@@ -1244,13 +1244,13 @@ bool mp_nose_run_force_generator::next_step()
 		return false;
 	}
 
-	irp6ot->ecp_td.instruction_type = SET;
+	irp6ot->ecp_td.instruction_type = SET_GET;
 
 	// irp6_postument
-	irp6p->ecp_td.instruction_type = SET;
+	irp6p->ecp_td.instruction_type = SET_GET;
 
 	// conveyor
-	conv->ecp_td.instruction_type = SET;
+	conv->ecp_td.instruction_type = SET_GET;
 	conv->ecp_td.get_type = NOTHING_DV;
 	conv->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
 
@@ -1527,13 +1527,13 @@ bool mp_drawing_teach_in_force_generator::next_step()
 		}
 
 		// irp6_on_track
-		irp6ot->ecp_td.instruction_type = SET;
+		irp6ot->ecp_td.instruction_type = SET_GET;
 
 		// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-		irp6p->ecp_td.instruction_type = SET;
+		irp6p->ecp_td.instruction_type = SET_GET;
 
 		// wersja dwurobotowa
-		conv->ecp_td.instruction_type = SET;
+		conv->ecp_td.instruction_type = SET_GET;
 		conv->ecp_td.get_type = NOTHING_DV;
 		conv->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
 
@@ -1838,10 +1838,10 @@ bool mp_drawing_teach_in_force_generator::next_step()
 		}
 
 		// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-		irp6ot->ecp_td.instruction_type = SET;
+		irp6ot->ecp_td.instruction_type = SET_GET;
 
 		// irp6_postument
-		irp6p->ecp_td.instruction_type = SET;
+		irp6p->ecp_td.instruction_type = SET_GET;
 		irp6p->ecp_td.get_type = NOTHING_DV;
 		irp6p->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
 
@@ -1849,12 +1849,12 @@ bool mp_drawing_teach_in_force_generator::next_step()
 			irp6p->ecp_td.next_joint_arm_coordinates[i]=irp6p->ecp_td.current_joint_arm_coordinates[i];
 		}
 
-		irp6p->ecp_td.instruction_type = SET;
+		irp6p->ecp_td.instruction_type = SET_GET;
 		irp6p->ecp_td.get_type = NOTHING_DV;
 		irp6p->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
 
 		// wersja dwurobotowa
-		conv->ecp_td.instruction_type = SET;
+		conv->ecp_td.instruction_type = SET_GET;
 		conv->ecp_td.get_type = NOTHING_DV;
 		conv->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
 
