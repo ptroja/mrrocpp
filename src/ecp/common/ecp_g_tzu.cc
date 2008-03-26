@@ -82,7 +82,7 @@ bool force_meassure_generator::first_step()
 	the_robot->EDP_data.get_type = ARM_DV;
 	the_robot->EDP_data.get_arm_type = FRAME;
 	the_robot->EDP_data.next_interpolation_type
-			= EXTERNAL_INTERPOLATION_WITH_FORCE;
+			= TCIM;
 
 	return true;
 }
