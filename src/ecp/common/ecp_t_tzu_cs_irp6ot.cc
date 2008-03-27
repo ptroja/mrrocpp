@@ -12,6 +12,7 @@
 #include "ecp_mp/ecp_mp_s_schunk.h"	
 
 #include "ecp/irp6_on_track/ecp_local.h"
+#include "ecp/irp6_postument/ecp_local.h"
 #include "ecp/irp6_on_track/ecp_t_tzu_cs_irp6ot.h"
 #include "lib/mathtr.h"
 #include "ecp/common/ecp_g_smooth.h"
@@ -33,7 +34,16 @@ ecp_task_tzu_cs_irp6ot::~ecp_task_tzu_cs_irp6ot()
 void ecp_task_tzu_cs_irp6ot::task_initialization(void) 
 {
 	cout<<"->inicjalizacja robota"<<endl;
-	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+	// ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
+	{
+		ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+	}
+	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
+	{
+		ecp_m_robot = new ecp_irp6_postument_robot (*this);
+	}
+	
 	sg = new ecp_smooth_generator (*this, true, true);
 	befg = new bias_edp_force_generator(*this);
 	wmg = new weight_meassure_generator(*this, 1);
@@ -84,7 +94,14 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 		double weight;
 		double torque_x;
 		double t_z;
-		sg->load_file_with_path("../trj/tzu/tzu_1.trj");
+		if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
+		{
+			sg->load_file_with_path("../trj/tzu/tzu_1_on_track.trj");
+		}
+		else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
+		{
+			sg->load_file_with_path("../trj/tzu/tzu_1_postument.trj");
+		}
 		sg->Move ();
 		cout<<"Piierwsza czesc ruchu skonczona"<<endl;
 		sr_ecp_msg->message("FORCE SENSOR BIAS");
@@ -92,11 +109,27 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 			befg->Move();
 		cout<<"Biasowanie czujnika sily dokonane..."<<endl;
 		sleep(2);
-		sg->load_file_with_path("../trj/tzu/tzu_2.trj");
+		if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
+		{
+			sg->load_file_with_path("../trj/tzu/tzu_2_on_track.trj");
+		}
+		else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
+		{
+			sg->load_file_with_path("../trj/tzu/tzu_2_postument.trj");
+		}
+		//sg->load_file_with_path("../trj/tzu/tzu_2.trj");
 		sg->Move ();
 		fmg->Move();
 		weight = fmg->get_meassurement()/2;
-		sg->load_file_with_path("../trj/tzu/tzu_3.trj");
+		if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
+		{
+			sg->load_file_with_path("../trj/tzu/tzu_3_on_track.trj");
+		}
+		else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
+		{
+			sg->load_file_with_path("../trj/tzu/tzu_3_postument.trj");
+		}
+		//sg->load_file_with_path("../trj/tzu/tzu_3.trj");
 		cout<<"Druga czesc ruchu skonczona, zmierzona waga: "<<weight<<endl;
 		sleep(2);
 		sg->Move ();
@@ -118,7 +151,7 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 //		cout<<"force_0: "<<sensor_m.begin()->second->image.force.rez[0]<<endl;
 //		cout<<"force_1: "<<sensor_m.begin()->second->image.force.rez[1]<<endl;
 //		cout<<"force_2: "<<sensor_m.begin()->second->image.force.rez[2]<<endl;
-
+		ecp_termination_notice();
 		ecp_wait_for_stop();
 		break;
 	}
