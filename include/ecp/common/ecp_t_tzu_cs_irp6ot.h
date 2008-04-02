@@ -24,6 +24,7 @@ protected:
 	weight_meassure_generator* wmg;
 	force_meassure_generator* fmg;
 	ecp_force_tool_change_generator* ftcg;
+	ecp_tool_change_generator* tcg;
 	char* trajectories[NUMBER_OF_TRAJECTORIES];
 public:
 	ecp_task_tzu_cs_irp6ot(configurator &_config);

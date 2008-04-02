@@ -23,6 +23,7 @@ ecp_task_tzu_cs_irp6ot::ecp_task_tzu_cs_irp6ot(configurator &_config) : ecp_task
 	sg = NULL;
 	befg = NULL;
 	ftcg = NULL;
+	tcg = NULL;
 };
 
 /** destruktor **/
@@ -58,6 +59,7 @@ void ecp_task_tzu_cs_irp6ot::task_initialization(void)
 	wmg = new weight_meassure_generator(*this, 1);
 	fmg = new force_meassure_generator(*this, Z_FORCE_MEASSURE);	
 	ftcg = new ecp_force_tool_change_generator(*this);
+	tcg = new ecp_tool_change_generator(*this,true);
 // to chyba nie bedzie potrzebne, zamiast tego bedzie mozna wykorzystac zrobiony prostsza metoda gotowy generator 
 //	short use_force_sensor = config.return_int_value("use_force_sensor");
 //    if (use_force_sensor == 1)
@@ -110,13 +112,16 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 		double t_x;
 		
 		// ETAP PIERWSZY
-//		sg->load_file_with_path(trajectories[TRAJECTORY_1]);
-//		sg->Move ();
-//		cout<<"Pierwsza czesc ruchu skonczona"<<endl;
-//		sr_ecp_msg->message("FORCE SENSOR BIAS");		
+		sg->load_file_with_path(trajectories[TRAJECTORY_1]);
+		sg->Move ();
+		cout<<"Pierwsza czesc ruchu skonczona"<<endl;
+		sr_ecp_msg->message("FORCE SENSOR BIAS");		
 		if(befg != NULL)
 			befg->Move();
 		ftcg->Move();
+
+		tcg->set_tool_parameters(0,0,0.09);
+		tcg->Move();		
 //		cout<<"Biasowanie czujnika sily dokonane..."<<endl;
 		sleep(2);
 		// ETAP DRUGI
