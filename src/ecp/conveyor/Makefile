@@ -2,7 +2,7 @@
 
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-BINARIES = 	ecp_test_conv ecp_kon
+BINARIES = 	ecp_test_conv ecp_kon ecp_legobrick
 				
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -22,10 +22,12 @@ all: ${BINARIES}
 
 ecp_test_conv: ecp_t_test.o ecp_g_test.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
-
+#-----------------------------------------------------------------------------------------------------------------------#
 ecp_kon: ecp_t_kon.o ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
-
+#-----------------------------------------------------------------------------------------------------------------------#
+ecp_legobrick: ecp_t_legobrick_conv.o ecp_g_test.o $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 # e.g:
 # plik.o: plik.cc plik1.h plik2.h ... itd

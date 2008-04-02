@@ -57,7 +57,7 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 #define INT_SINGLE_COMMAND 2 // do synchronizacji, inicjacji, etc.
 #define INT_CHECK_STATE 3 // do odczytu stanu z adresu 0x220
 
-#define CONVEYOR_AXE_1_MAX_CURRENT 0x2430
+#define CONVEYOR_AXE_1_MAX_CURRENT 0x2460
 // 13,7 j na A
 
 

@@ -38,7 +38,7 @@ void edp_conveyor_effector::initialize (void)
     //  Stworzenie listy dostepnych kinematyk.
     create_kinematic_models_for_given_robot();
 
-    //number_of_servos = CONVEYOR_NUM_OF_SERVOS;
+    number_of_servos = CONVEYOR_NUM_OF_SERVOS;
 
     reset_variables();
 }
