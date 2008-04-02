@@ -366,4 +366,18 @@ public:
 }
 ; // end : class ecp_tff_gripper_approach_generator
 
+class ecp_force_tool_change_generator : public ecp_generator
+{
+protected:
+	double tool_parameters[3]; // zobaczyc jeszcze co z tymi parametrami jak to bedzie w przypadku tego generatora
+	double weight;
+public:
+	ecp_force_tool_change_generator(ecp_task& _ecp_task);
+	//ecp_force_tool_change_generator(ecp_task& _ecp_task, bool _is_synchronised, bool _debug);
+	void set_tool_parameters(double x, double y, double z, double weight); // tez zobaczyc jakie tu mamy parametry
+	
+	virtual bool first_step();
+	virtual bool next_step();
+};
+
 #endif

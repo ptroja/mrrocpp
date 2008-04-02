@@ -104,7 +104,6 @@ ecp_tzu: \
 		../common/ecp_g_force.o \
 		../common/ecp_g_smooth.o \
 		../common/ecp_g_jarosz.o \
-		../common/ecp_g_tzu.o \
 		../common/ecp_operator_reaction_condition.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^  
