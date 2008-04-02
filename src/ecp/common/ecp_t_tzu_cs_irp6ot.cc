@@ -1,4 +1,4 @@
-#include <iostream.h>
+#include <iostream>
 #include <unistd.h>
 
 #include "common/typedefs.h"
@@ -16,6 +16,11 @@
 #include "ecp/common/ecp_t_tzu_cs_irp6ot.h"
 #include "lib/mathtr.h"
 #include "ecp/common/ecp_g_smooth.h"
+
+#define WEIGHT_FOR 10
+#define T1_FOR 10
+#define T2_FOR 10
+#define T3_FOR 10
 
 /** konstruktor **/
 ecp_task_tzu_cs_irp6ot::ecp_task_tzu_cs_irp6ot(configurator &_config) : ecp_task(_config)
@@ -35,7 +40,7 @@ ecp_task_tzu_cs_irp6ot::~ecp_task_tzu_cs_irp6ot()
 // methods for ECP template to redefine in concrete classes
 void ecp_task_tzu_cs_irp6ot::task_initialization(void) 
 {
-	cout<<"->inicjalizacja robota"<<endl;
+//	cout<<"->inicjalizacja robota"<<endl;
 	// ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	{
@@ -54,7 +59,7 @@ void ecp_task_tzu_cs_irp6ot::task_initialization(void)
 		trajectories[4] = "../trj/tzu/tzu_4_postument.trj";
 	}
 	
-	sg = new ecp_smooth_generator (*this, true, true);
+	sg = new ecp_smooth_generator (*this, true, false);
 	befg = new bias_edp_force_generator(*this);
 	wmg = new weight_meassure_generator(*this, 1);
 	fmg = new force_meassure_generator(*this, Z_FORCE_MEASSURE);	
@@ -104,76 +109,95 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 	while(true)			
 	{ 
 		double weight;
-		double torque_xc;
-		double torque_zd;
-		double torque_ze;
+		double torque_xc[6];
+		double torque_zd[6];
+		double torque_ze[6];
 		double t_z;
 		double t_y;
 		double t_x;
 		
 		// ETAP PIERWSZY
 		sg->load_file_with_path(trajectories[TRAJECTORY_1]);
-		sg->Move ();
-		cout<<"Pierwsza czesc ruchu skonczona"<<endl;
-		sr_ecp_msg->message("FORCE SENSOR BIAS");		
-		if(befg != NULL)
-			befg->Move();
+		sg->Move ();		
+		befg->Move();
 		ftcg->Move();
-
 		tcg->set_tool_parameters(0,0,0.09);
-		tcg->Move();		
-//		cout<<"Biasowanie czujnika sily dokonane..."<<endl;
-		sleep(2);
+		tcg->Move();
+		
 		// ETAP DRUGI
 		sg->load_file_with_path(trajectories[TRAJECTORY_2]);
-		//sg->load_file_with_path("../trj/tzu/tzu_2.trj");
 		sg->Move ();
-		fmg->Move();
-		weight = fmg->get_meassurement()/2;
+//		fmg->Move();
+//		weight = fmg->get_meassurement()/2;
+
+//		std::cout<<"pomiar 1: "<<fmg->weight<<std::endl;
+//		weight = fmg->weight[2]/2;
+//		std::cout<<"weight: "<<fmg->weight[2]/2<<std::endl;
+		for(int i = 0 ; i < WEIGHT_FOR ; i++)
+		{
+			fmg->Move();
+			weight = fmg->weight[2]/2;
+			std::cout<<"pomiar 1: "<<fmg->weight<<std::endl;
+			std::cout<<"weight_1"<<": "<<fmg->weight[2]/2<<std::endl;
+			sleep(1);
+		}
+		
+		
 		// ETAP TRZECI
 		sg->load_file_with_path(trajectories[TRAJECTORY_3]);
-//		cout<<"Druga czesc ruchu skonczona, zmierzona waga: "<<weight<<endl;
-		sleep(2);
 		sg->Move ();
-//		cout<<"Trzecia czesc ruchu skonczona, zmierzony moment obrotowy: "<<torque_xc<<endl;
-//		wmg->Move();
 		fmg->change_meassurement(X_TORQUE_MEASSURE);
-		fmg->Move();
-		torque_xc = fmg->get_meassurement();
-//		cout<<"koniec testow z czujnikiem sily"<<endl;
-//		cout<<"wait for stop\n"<<endl;
+//		fmg->Move();
+//		torque_xc = fmg->get_meassurement()/weight;
+//		std::cout<<"pomiar 2: "<<fmg->weight<<std::endl;
+//		std::cout<<"t1: "<<-(fmg->weight[4]/weight)<<std::endl;
+		for(int i = 0 ; i < T1_FOR ; i++)
+		{
+			fmg->Move();
+			std::cout<<"pomiar 2: "<<fmg->weight<<std::endl;
+			std::cout<<"t1: "<<-(fmg->weight[4]/weight)<<std::endl;
+			sleep(1);
+		}
 		// ETAP CZWARTY
 		befg->Move();
-		// sprawdzic czy dobrze wykonalem ten ruch
 		sg->load_file_with_path(trajectories[TRAJECTORY_4]);
 		sg->Move ();
 		fmg->change_meassurement(Z_TORQUE_MEASSURE);
-		fmg->Move();
-		torque_zd = fmg->get_meassurement();
+//		fmg->Move();
+//		torque_zd = fmg->get_meassurement()/weight;
+//		std::cout<<"pomiar 3: "<<fmg->weight<<std::endl;
+//		std::cout<<"t2: "<<fmg->weight[5]/weight<<std::endl;
+		for(int i = 0 ; i < T2_FOR ; i++)
+		{
+			fmg->Move();
+			std::cout<<"pomiar 3: "<<fmg->weight<<std::endl;
+			std::cout<<"t2: "<<fmg->weight[5]/weight<<std::endl;
+			sleep(1);
+		}
 		
 		// ETAP PIATY
 		befg->Move();
 		sg->load_file_with_path(trajectories[TRAJECTORY_3]);
 		sg->Move ();
 		fmg->change_meassurement(Z_TORQUE_MEASSURE);
-		fmg->Move();
-		torque_ze = fmg->get_meassurement();
+//		fmg->Move();
+//		torque_ze = -fmg->get_meassurement()/weight;
+//		std::cout<<"pomiar 4: "<<fmg->weight<<std::endl;
+//		std::cout<<"t3: "<<fmg->weight[5]/weight<<std::endl;
+		for(int i = 0 ; i < T3_FOR ; i++)
+		{
+			fmg->Move();
+			std::cout<<"pomiar 4: "<<fmg->weight<<std::endl;
+			std::cout<<"t3: "<<fmg->weight[5]/weight<<std::endl;
+			sleep(1);
+		}
+		//cout<<"weight: "<<weight<<endl<<"tx: "<<t_x<<endl<<"ty: "<<t_y<<endl<<"tz: "<<t_z<<endl; 
 		
-		cout<<"weight: "<<weight<<endl<<"tx: "<<t_x<<"ty: "<<t_y<<"tz: "<<t_z<<endl; 
-		//cout<<"mamy: "<<sensor_m<<endl;
-//		if(sensor_m.begin()->second != NULL)
-//			cout<<" rozne: "<<endl;
-//		else
-//			cout<<"a"<<endl;
-//		f->Move();
-//		cout<<"force_0: "<<sensor_m.begin()->second->image.force.rez[0]<<endl;
-//		cout<<"force_1: "<<sensor_m.begin()->second->image.force.rez[1]<<endl;
-//		cout<<"force_2: "<<sensor_m.begin()->second->image.force.rez[2]<<endl;
 		ecp_termination_notice();
 		ecp_wait_for_stop();
 		break;
 	}
-	cout<<"end\n"<<endl;
+	std::cout<<"end\n"<<std::endl;
 };
 
 // sprawdzic co robi ta metoda, gdzie, w jakich przypadkach jest uzywana
@@ -187,7 +211,8 @@ force_meassure_generator::force_meassure_generator(ecp_task& _ecp_task, int _wha
 	ecp_generator(_ecp_task)
 {
 	what_to_meassure = _what_to_meassure;
-	weight = 0;
+	for(int i  = 0 ; i < 6 ; i++)
+		weight[i] = 0;
 }
 
 bool force_meassure_generator::first_step()
@@ -201,9 +226,9 @@ bool force_meassure_generator::first_step()
 	return true;
 }
 
-double force_meassure_generator::get_meassurement()
+Ft_v_vector *force_meassure_generator::get_meassurement()
 {
-	return weight;
+	return &weight;
 }
 
 void force_meassure_generator::change_meassurement(int what)
@@ -219,11 +244,18 @@ bool force_meassure_generator::next_step()
 
 	//	std::cout <<"frame: " <<	current_frame_wo_offset << std::endl;
 
-	Ft_v_vector force_torque(Ft_v_tr(current_frame_wo_offset, Ft_v_tr::FT)
-			* Ft_v_vector(the_robot->EDP_data.current_force_xyz_torque_xyz));
+	Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
 
-	weight = -force_torque[what_to_meassure];
-
+	weight = force_torque;
+//	for(int i = 0 ; i < T3_FOR ; i++)
+//	{
+//		std::cout<<"w generatorze: "<<weight<<std::endl;
+//		sleep(1);
+//	}
+	// weight = -force_torque[what_to_meassure];
+	// for(int i  = 0 ; i < 6 ; i++)
+	//	weight[i] = -force_torque[i];
+	
 	return false;
 }
 

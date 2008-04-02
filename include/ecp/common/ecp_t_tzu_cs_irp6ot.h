@@ -41,15 +41,16 @@ public:
 class force_meassure_generator : public ecp_generator
 {
 private:
-    double weight; // pierwszy zmierzony ciezar
-    int what_to_meassure;
+    //double weight; // pierwszy zmierzony ciezar
+	int what_to_meassure;
     
 public:
+	Ft_v_vector weight;
     // konstruktor
     force_meassure_generator(ecp_task& _ecp_task, int what_to_meassure = 2);
 	
 	void change_meassurement(int what);
-	double get_meassurement();
+	Ft_v_vector* get_meassurement();
 	
     bool first_step ();
     bool next_step ();
