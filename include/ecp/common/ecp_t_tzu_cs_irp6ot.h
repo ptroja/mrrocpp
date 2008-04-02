@@ -7,10 +7,12 @@
 
 #define Z_FORCE_MEASSURE 2
 #define X_TORQUE_MEASSURE 3
+#define Z_TORQUE_MEASSURE 5
 #define NUMBER_OF_TRAJECTORIES 3
 #define TRAJECTORY_1 1
 #define TRAJECTORY_2 2
 #define TRAJECTORY_3 3
+#define TRAJECTORY_4 4
 
 class force_meassure_generator;
 

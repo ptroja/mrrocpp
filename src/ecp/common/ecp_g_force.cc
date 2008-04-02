@@ -60,7 +60,7 @@ void weight_meassure_generator::clear_buffer()
 	terminate_state_recognized = false;
 	
 	catch_lag = initial_catch_lag = (int) (1000000*catch_time/(USLEEP_TIME));
-	std::cout << "weight_meassure_generator" << initial_catch_lag << std::endl;
+	// std::cout << "weight_meassure_generator" << initial_catch_lag << std::endl;
 	
 }
 
@@ -1922,6 +1922,20 @@ bool ecp_tff_gripper_approach_generator::next_step()
 }
 ; // end: bool ecp_tff_gripper_approach_generator::next_step ()
 
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
+//
+// 			ecp_force_tool_change_generator
+//
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
+
+ecp_force_tool_change_generator::ecp_force_tool_change_generator (ecp_task& _ecp_task)
+        :ecp_generator (_ecp_task)
+{
+
+    set_tool_parameters(-0.18, 0.0, 0.25, 0);
+
+}
+
 bool ecp_force_tool_change_generator::first_step ()
 {
 	the_robot->EDP_data.instruction_type = SET;
@@ -1931,7 +1945,6 @@ bool ecp_force_tool_change_generator::first_step ()
 	for(int i = 0 ; i < 3 ; i++)
 		the_robot->EDP_data.next_force_tool_position[i] = tool_parameters[i];
 	the_robot->EDP_data.next_force_tool_weight = weight;
- 	
 	return true;
 }
 ; // end: bool ecp_smooth_pouring_generator::first_step ( )
@@ -1947,12 +1960,4 @@ void ecp_force_tool_change_generator::set_tool_parameters(double x, double y, do
     tool_parameters[1] = y;
     tool_parameters[2] = z;
     weight = v;
-}
-
-ecp_force_tool_change_generator::ecp_force_tool_change_generator (ecp_task& _ecp_task)
-        :ecp_generator (_ecp_task)
-{
-
-    set_tool_parameters(-0.18, 0.0, 0.25, 0);
-
 }

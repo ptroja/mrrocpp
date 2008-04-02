@@ -42,6 +42,7 @@ void ecp_task_tzu_cs_irp6ot::task_initialization(void)
 		trajectories[1] = "../trj/tzu/tzu_1_on_track.trj";
 		trajectories[2] = "../trj/tzu/tzu_2_on_track.trj";
 		trajectories[3] = "../trj/tzu/tzu_3_on_track.trj";
+		trajectories[4] = "../trj/tzu/tzu_4_on_track.trj";
 	}
 	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
 	{
@@ -49,6 +50,7 @@ void ecp_task_tzu_cs_irp6ot::task_initialization(void)
 		trajectories[1] = "../trj/tzu/tzu_1_postument.trj";
 		trajectories[2] = "../trj/tzu/tzu_2_postument.trj";
 		trajectories[3] = "../trj/tzu/tzu_3_postument.trj";
+		trajectories[4] = "../trj/tzu/tzu_4_postument.trj";
 	}
 	
 	sg = new ecp_smooth_generator (*this, true, true);
@@ -100,41 +102,59 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 	while(true)			
 	{ 
 		double weight;
-		double torque_x;
+		double torque_xc;
+		double torque_zd;
+		double torque_ze;
 		double t_z;
+		double t_y;
+		double t_x;
 		
-		sg->load_file_with_path(trajectories[TRAJECTORY_1]);
-		sg->Move ();
-		cout<<"Pierwsza czesc ruchu skonczona"<<endl;
-		sr_ecp_msg->message("FORCE SENSOR BIAS");		
-		//ftcg->Move();
+		// ETAP PIERWSZY
+//		sg->load_file_with_path(trajectories[TRAJECTORY_1]);
+//		sg->Move ();
+//		cout<<"Pierwsza czesc ruchu skonczona"<<endl;
+//		sr_ecp_msg->message("FORCE SENSOR BIAS");		
 		if(befg != NULL)
 			befg->Move();
-		cout<<"Biasowanie czujnika sily dokonane..."<<endl;
+		ftcg->Move();
+//		cout<<"Biasowanie czujnika sily dokonane..."<<endl;
 		sleep(2);
+		// ETAP DRUGI
 		sg->load_file_with_path(trajectories[TRAJECTORY_2]);
 		//sg->load_file_with_path("../trj/tzu/tzu_2.trj");
 		sg->Move ();
 		fmg->Move();
 		weight = fmg->get_meassurement()/2;
+		// ETAP TRZECI
 		sg->load_file_with_path(trajectories[TRAJECTORY_3]);
-		cout<<"Druga czesc ruchu skonczona, zmierzona waga: "<<weight<<endl;
+//		cout<<"Druga czesc ruchu skonczona, zmierzona waga: "<<weight<<endl;
 		sleep(2);
 		sg->Move ();
-		cout<<"Trzecia czesc ruchu skonczona, zmierzony moment obrotowy: "<<torque_x<<endl;
+//		cout<<"Trzecia czesc ruchu skonczona, zmierzony moment obrotowy: "<<torque_xc<<endl;
 //		wmg->Move();
 		fmg->change_meassurement(X_TORQUE_MEASSURE);
 		fmg->Move();
-		torque_x = fmg->get_meassurement();
-		cout<<"koniec testow z czujnikiem sily"<<endl;
-		cout<<"wait for stop\n"<<endl;
+		torque_xc = fmg->get_meassurement();
+//		cout<<"koniec testow z czujnikiem sily"<<endl;
+//		cout<<"wait for stop\n"<<endl;
+		// ETAP CZWARTY
 		befg->Move();
-		//cos
+		// sprawdzic czy dobrze wykonalem ten ruch
+		sg->load_file_with_path(trajectories[TRAJECTORY_4]);
+		sg->Move ();
+		fmg->change_meassurement(Z_TORQUE_MEASSURE);
+		fmg->Move();
+		torque_zd = fmg->get_meassurement();
+		
+		// ETAP PIATY
 		befg->Move();
 		sg->load_file_with_path(trajectories[TRAJECTORY_3]);
 		sg->Move ();
+		fmg->change_meassurement(Z_TORQUE_MEASSURE);
+		fmg->Move();
+		torque_ze = fmg->get_meassurement();
 		
-		cout<<"model czujnika si³y: "<<endl<<"weight: "<<weight<<endl<<"tz: "<<t_z<<endl; 
+		cout<<"weight: "<<weight<<endl<<"tx: "<<t_x<<"ty: "<<t_y<<"tz: "<<t_z<<endl; 
 		//cout<<"mamy: "<<sensor_m<<endl;
 //		if(sensor_m.begin()->second != NULL)
 //			cout<<" rozne: "<<endl;
