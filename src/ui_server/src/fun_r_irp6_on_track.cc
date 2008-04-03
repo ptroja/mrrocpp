@@ -743,21 +743,19 @@ int EDP_irp6_on_track_create()
 					fprintf( stderr, "EDP spawn failed: %s\n", strerror( errno ));
 					delete ui_robot.irp6_on_track;
 				} else {  // jesli spawn sie powiodl
-					
 					 tmp = 0;
-				 	// kilka sekund  (~1) na otworzenie urzadzenia
+				 	// kilka sekund  (~1) na otworzenie urzadzenia				 	
 					while((ui_state.irp6_on_track.edp.reader_fd = name_open(ui_state.irp6_on_track.edp.network_reader_attach_point, 
-						NAME_FLAG_ATTACH_GLOBAL))  < 0)
-						if((tmp++)<40) {
+						NAME_FLAG_ATTACH_GLOBAL))  < 0)						
+						if((tmp++)<40) {						
 							delay(50);
-						} else {
+						} else {						
 						   perror("blad odwolania do READER_OT");
 						   break;
 						}
 						
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)	
-
-					//ui_robot.irp6_on_track->get_controller_state(&robot_controller_initial_state_tmp);
+					ui_robot.irp6_on_track->get_controller_state(&robot_controller_initial_state_tmp);
 					ui_state.irp6_on_track.edp.state = 1; // edp wlaczone reader czeka na start
 					replySend(new Message('B','J','A',0,NULL,NULL));					
 					ui_state.irp6_on_track.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;

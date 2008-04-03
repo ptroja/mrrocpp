@@ -215,6 +215,7 @@ public:
 	Message(int robotId,int dialogId,int actionId,int varNum,double* v,char* m);
 	~Message();
 };
+
 void replySend ( Message *m );
 void *callfunc ( void *arg );
 void *reply_thread ( void *arg );
