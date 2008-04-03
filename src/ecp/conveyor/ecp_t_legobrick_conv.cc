@@ -3,9 +3,7 @@
 #include "lib/srlib.h"
 #include "ecp/conveyor/ecp_local.h"
 #include "ecp/conveyor/ecp_t_legobrick_conv.h"
-//#include "ecp_mp/ecp_mp_t_rcsc.h"
-//#include "ecp/common/ecp_g_jarosz.h"
-#include "ecp/conveyor/ecp_g_test.h"
+#include "ecp/conveyor/ecp_g_legobrick.h"
 
 // KONSTRUKTORY
 ecp_task_conveyor_lego_brick::ecp_task_conveyor_lego_brick(configurator &_config) : ecp_task(_config)
@@ -27,7 +25,7 @@ void ecp_task_conveyor_lego_brick::main_task_algorithm(void)
 {
 	sr_ecp_msg->message("ECP lego brick speaker  - wcisnij start");
 	ecp_wait_for_start();
-	y_simple_generator ysg(*this, 8);
+	conveyor_incremental_move ysg(*this, 100);
 	ysg.sensor_m = sensor_m;
 
 	for(;;) { // Wewnetrzna petla nieskonczona
