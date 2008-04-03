@@ -285,11 +285,10 @@ file_selection_window_send_location(char* Buffer)
 			strcpy(ui_state.teach_filesel_fullpath, ui_ecp_obj->ui_rep.path);
 			// opuszczenie semaforu dla watku UI_COMM
 			ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
-				
 		}
 	}
+	ui_ecp_obj->post_sem();
 	return(0);
-
 }
 
 int is_dir(char* filename)
