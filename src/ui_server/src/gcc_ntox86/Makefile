@@ -43,10 +43,10 @@ VPATH = ..
 shr: ui_server
 
 ui_server:	$(MYOBJ) $(MRROCOBJ)
-		$(LD) $(MYOBJ) $(MRROCOBJ) $(SDFLAGS) -M -o ui_server
+		$(LD) $(MYOBJ) $(MRROCOBJ) $(SDFLAGS) -M -o ui_server -lang-c++
 
 app:	$(ABOBJ) $(MYOBJ) $(MRROCOBJ)
-		$(LD) $(MYOBJ) $(MRROCOBJ) $(LDFLAGS) -M -o ui_server
+		$(LD) $(MYOBJ) $(MRROCOBJ) $(LDFLAGS) -M -o ui_server -lang-c++
 
 clean:
 		@rm -f *.o *.err *~ *.map ui_server
