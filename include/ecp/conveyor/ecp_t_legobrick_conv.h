@@ -15,8 +15,11 @@
 #include "ecp/common/ecp_task.h"
 #include "ecp/conveyor/ecp_local.h"
 
+#include "ecp/common/ecp_g_smooth.h"
+
 class ecp_task_conveyor_lego_brick: public ecp_task 
 {
+	double absolute_position;
 
 public:
 	// KONSTRUKTORY

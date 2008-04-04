@@ -26,7 +26,7 @@ ecp_test_conv: ecp_t_test.o ecp_g_test.o $(SHOBJ)
 ecp_kon: ecp_t_kon.o ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_legobrick_conv: ecp_t_legobrick_conv.o ecp_g_legobrick.o $(SHOBJ)
+ecp_legobrick_conv: ecp_t_legobrick_conv.o ecp_g_smooth.o ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 # e.g:
