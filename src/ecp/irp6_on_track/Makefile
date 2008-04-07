@@ -63,7 +63,7 @@ ecp_vis: ecp_t_vis_irp6ot.o ecp_g_vis.o ecp_mp_s_vis.o $(SHOBJ)
 ecp_vislx: ecp_t_vislx_irp6ot.o ecp_g_vis_sac_lx.o ecp_g_force.o ecp_mp_s_vis_sac_lx.o ecp_mp_s_schunk.o $(SHOBJ) 
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_rover: ecp_t_rover_irp6ot.o ecp_g_rover.o ecp_mp_s_vis_sac_lx.o ecp_mp_s_schunk.o $(SHOBJ) 
+ecp_rover: ecp_t_rover_irp6ot.o ecp_g_vis_sac_lx.o ecp_g_force.o ecp_mp_s_vis_sac_lx.o ecp_mp_s_schunk.o $(SHOBJ) 
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_nurbs: ecp_t_ts_irp6ot.o ecp_g_nurbs.o $(SHOBJ) 
