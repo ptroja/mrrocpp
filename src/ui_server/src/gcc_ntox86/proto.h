@@ -1,5 +1,7 @@
 
 /* ../fun.cc */
+int teaching_window_send_move(double *v);
+int teaching_window_end_motion();
 int manage_configuration_file ( void );
 int manage_interface ( void );
 int input_double_callback ( double *v );

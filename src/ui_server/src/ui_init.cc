@@ -62,6 +62,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/wait.h>
+#include <sys/timeb.h>
 #include <signal.h>
 #include <queue>
 #include <semaphore.h>
@@ -342,7 +343,7 @@ switch(RobotId)
 			{
 			case 'A':
 			{
-				slay_all();
+				//slay_all();
 				break;
 			}
 			}
@@ -505,6 +506,26 @@ switch(RobotId)
 			case 'O':
 			{
 				get_contents(Buffer);
+				break;
+			}
+			}
+			break;
+		}
+		/*DialogId = R (TeachingWindow)*/
+		case 'O':
+		{
+			switch(ActionId)
+			{
+			case 'U':
+			{
+				//SendMoveAnswer
+				teaching_window_send_move(v);
+				break;
+			}
+			case 'V':
+			{
+				//EndMotionAnswer
+				teaching_window_end_motion();
 				break;
 			}
 			}
@@ -1896,6 +1917,7 @@ void* reply_thread(void* arg)
 		}
 		usleep(1);
 	}
+	while(!q.empty()) q.pop();
 	pthread_exit(NULL);
 		
 }
@@ -1936,6 +1958,8 @@ void* server_thread(void*)
 	}
 
 	int id = 0;
+	timeb start,end;
+	fd_set sockets;
 	while(1)
 	{
 		sin_size = sizeof their_addr;
@@ -1944,7 +1968,16 @@ void* server_thread(void*)
 			perror("accept");
 			continue;
 		}
+		
 		printf("[SERVER] Got connection from %s\n",inet_ntoa(their_addr.sin_addr));
+		
+		FD_ZERO(&sockets);
+		FD_SET(new_fd,&sockets);
+		int selectValue;
+		ftime(&start);
+		struct timeval timeout;
+		timeout.tv_sec = 1;
+		timeout.tv_usec = 0;
 		while(1)
 		{
 			char* Buffer = new char[128];
@@ -1953,9 +1986,27 @@ void* server_thread(void*)
 			int pos;
 			memset(Buffer,'\0',128);
 			Buffer[127] = '\n';
+			
+			selectValue = select(FD_SETSIZE,&sockets,(fd_set*)0,(fd_set*)0,&timeout);
+			if(selectValue < 0)
+			{
+				perror("select");
+				exit(EXIT_FAILURE);
+			}
+			else if(selectValue == 0)
+			{
+				ftime(&end);
+				if((end.time - start.time)*1000 + (end.millitm - start.millitm) > 1000)
+				{
+					break;
+				}
+				continue;
+			}			
+
 			//printf("[SERVER] Waiting for data\n");
 			if ((size = recv(new_fd,&length,1,0)) == -1) perror("recv");
 			else if(!size) break;
+			
 			pos = 0;
 			while(length)
 			{
@@ -1966,6 +2017,8 @@ void* server_thread(void*)
 				length -= size;
 			}
 			if(!size) break;
+			ftime(&start);
+			
 			//printf("[SERVER] Received: %s\n",Buffer);
 			pthread_t tid;
 			pthread_t tid2;
@@ -2213,6 +2266,86 @@ while(1) {
 
       switch ( ui_ecp_obj->ecp_to_ui_msg.ecp_message ) { // rodzaj polecenia z ECP
 		//jk
+		case C_XYZ_ANGLE_AXIS:
+        case C_XYZ_EULER_ZYZ:
+        case C_JOINT:
+		case C_MOTOR:
+		
+			switch ( ui_ecp_obj->ecp_to_ui_msg.ecp_message )
+	{
+		case C_XYZ_ANGLE_AXIS:
+			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
+			{
+				case ROBOT_IRP6_ON_TRACK:
+					replySend(new Message('7','I','A',0,NULL,msg)); 
+				break;
+				case ROBOT_IRP6_POSTUMENT:
+					replySend(new Message('7','I','B',0,NULL,msg)); 
+				break;
+				case ROBOT_IRP6_MECHATRONIKA:
+					replySend(new Message('7','I','E',0,NULL,msg)); 
+				break;
+				default:
+				break;
+			}
+		break;
+		case C_XYZ_EULER_ZYZ:
+			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
+			{
+				case ROBOT_IRP6_ON_TRACK:
+					replySend(new Message('7','J','A',0,NULL,msg)); 
+				break;
+				case ROBOT_IRP6_POSTUMENT:
+					replySend(new Message('7','J','B',0,NULL,msg)); 
+				break;
+				case ROBOT_IRP6_MECHATRONIKA:
+					replySend(new Message('7','J','E',0,NULL,msg)); 
+				break;
+				default:
+				break;
+			}
+		break;
+		case C_JOINT:
+			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
+			{
+				case ROBOT_IRP6_ON_TRACK:
+					replySend(new Message('7','K','A',0,NULL,msg)); 
+				break;
+				case ROBOT_IRP6_POSTUMENT:
+					replySend(new Message('7','K','B',0,NULL,msg)); 
+				break;
+				case ROBOT_IRP6_MECHATRONIKA:
+					replySend(new Message('7','K','E',0,NULL,msg)); 
+				break;
+				default:
+				break;
+			}
+		break;
+		case C_MOTOR:
+			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
+			{
+				case ROBOT_IRP6_ON_TRACK:
+					replySend(new Message('7','L','A',0,NULL,msg)); 
+				break;
+				case ROBOT_IRP6_POSTUMENT:
+					replySend(new Message('7','L','B',0,NULL,msg)); 
+				break;
+				case ROBOT_IRP6_MECHATRONIKA:
+					replySend(new Message('7','L','E',0,NULL,msg)); 
+				break;
+				default:
+				break;
+			}
+		break;
+	}
+		ui_ecp_obj->trywait_sem();
+		ui_ecp_obj->take_sem();
+			
+		
+		if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
+				printf("Blad w UI reply\n");
+			}		
+		break;
 		case YES_NO:
 
 			len = strlen(ui_ecp_obj->ecp_to_ui_msg.string);

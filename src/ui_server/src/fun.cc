@@ -55,6 +55,50 @@ extern double irp6m_desired_pos[6]; // pozycja zadana
 //jk
 
 int
+teaching_window_send_move(double *v)
+{
+
+	switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
+	{
+		case ROBOT_IRP6_ON_TRACK:
+			for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
+				ui_ecp_obj->ui_rep.coordinates[i] = irp6ot_current_pos[i];
+		break;
+		case ROBOT_IRP6_POSTUMENT:
+	 		for (int i = 0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++)
+				ui_ecp_obj->ui_rep.coordinates[i] = irp6p_current_pos[i];
+		break;
+		case ROBOT_IRP6_MECHATRONIKA:
+ 			for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
+				ui_ecp_obj->ui_rep.coordinates[i] = irp6m_current_pos[i];
+		break;
+		default:
+		break;
+	}
+
+	ui_ecp_obj->ui_rep.double_number = v[0];
+	ui_ecp_obj->ui_rep.reply = NEXT;
+	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+	ui_ecp_obj->trywait_sem();
+	ui_ecp_obj->post_sem();
+
+	return 0;
+
+}
+
+int teaching_window_end_motion()
+{
+
+	ui_state.teachingstate = MP_RUNNING;
+	ui_ecp_obj->ui_rep.reply = QUIT;
+	
+	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+	
+	return 0;
+}
+
+
+int
 manage_configuration_file()
 
 	{
