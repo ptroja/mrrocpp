@@ -5,14 +5,16 @@
 #include "ecp/common/ecp_g_smooth.h"
 #include "ecp/common/ecp_g_force.h"
 
-#define Z_FORCE_MEASSURE 2
-#define X_TORQUE_MEASSURE 3
-#define Z_TORQUE_MEASSURE 5
+#define FORCE_X 0
+#define FORCE_Y 1
+#define FORCE_Z 2
+#define TORQUE_X 3
+#define TORQUE_Y 4
+#define TORQUE_Z 5
 #define NUMBER_OF_TRAJECTORIES 3
-#define TRAJECTORY_1 1
-#define TRAJECTORY_2 2
-#define TRAJECTORY_3 3
-#define TRAJECTORY_4 4
+#define TRAJECTORY_VERTICAL_DOWN 0
+#define TRAJECTORY_VERTCAL_UP 1
+#define TRAJECTORY_HORIZONTAL 2
 
 class force_meassure_generator;
 
@@ -26,6 +28,10 @@ protected:
 	ecp_force_tool_change_generator* ftcg;
 	ecp_tool_change_generator* tcg;
 	char* trajectories[NUMBER_OF_TRAJECTORIES];
+	double weight;
+	double P_x;
+	double P_y;
+	double P_z;
 public:
 	ecp_task_tzu_cs_irp6ot(configurator &_config);
 	~ecp_task_tzu_cs_irp6ot();
@@ -41,16 +47,15 @@ public:
 class force_meassure_generator : public ecp_generator
 {
 private:
-    //double weight; // pierwszy zmierzony ciezar
-	int what_to_meassure;
-    
+    //double weight;
+    int sleep_time;
+    int meassurement_count;
 public:
 	Ft_v_vector weight;
     // konstruktor
-    force_meassure_generator(ecp_task& _ecp_task, int what_to_meassure = 2);
-	
-	void change_meassurement(int what);
+    force_meassure_generator(ecp_task& _ecp_task, int _sleep_time = 0, int _meassurement_count = 1);
 	Ft_v_vector* get_meassurement();
+	bool force_meassure_generator::set_configuration(int _sleep_time, int _meassurement_count);
 	
     bool first_step ();
     bool next_step ();
