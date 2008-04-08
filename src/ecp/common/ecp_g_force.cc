@@ -1506,6 +1506,14 @@ bool ecp_tff_nose_run_generator::next_step()
 				= the_robot->EDP_data.current_gripper_coordinate;
 	}
 
+	// wyrzucanie odczytu sil
+//	Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
+//	current_frame_wo_offset.remove_translation();
+//	
+//	Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
+//		
+//	std::cout<<"force: "<<force_torque<<std::endl;
+	// koniec odczytu sily	
 	return true;
 
 }

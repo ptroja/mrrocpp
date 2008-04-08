@@ -4,7 +4,7 @@
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
-BINARIES = ecp_tran ecp_mam ecp_t ecp_nalewanie ecp_sk ecp_time ecp_pawel ecp_cvfradia ecp_tzu
+BINARIES = ecp_tran ecp_mam ecp_t ecp_nalewanie ecp_sk ecp_time ecp_pawel ecp_cvfradia ecp_tzu ecp_tzu_postument_test
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -101,6 +101,17 @@ ecp_tzu: \
 		../irp6_on_track/ecp_local.o \
 		../irp6_postument/ecp_local.o \
 		../common/ecp_t_tzu_cs_irp6ot.o \
+		../common/ecp_g_force.o \
+		../common/ecp_g_smooth.o \
+		../common/ecp_g_jarosz.o \
+		../common/ecp_operator_reaction_condition.o \
+		$(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
+
+ecp_tzu_postument_test: \
+		../irp6_on_track/ecp_local.o \
+		../irp6_postument/ecp_local.o \
+		../common/ecp_t_tzu_test.o \
 		../common/ecp_g_force.o \
 		../common/ecp_g_smooth.o \
 		../common/ecp_g_jarosz.o \
