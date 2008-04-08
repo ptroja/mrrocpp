@@ -747,7 +747,7 @@ void edp_irp6s_and_conv_effector::compute_motors(const c_buffer &instruction)
     motion_type = instruction.motion_type;
     motion_steps = instruction.motion_steps;
     value_in_step_no = instruction.value_in_step_no;
-    p = &instruction.arm.pf_def.arm_coordinates[0];
+    p = &instruction.arm.pf_def.arm_coordinates[0];    
     if ( (motion_steps <= 0) /* || (value_in_step_no < 0) */ )
         throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
     switch (motion_type)

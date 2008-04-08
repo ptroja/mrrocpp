@@ -11,7 +11,7 @@
 #define TORQUE_X 3
 #define TORQUE_Y 4
 #define TORQUE_Z 5
-#define NUMBER_OF_TRAJECTORIES 3
+#define NUMBER_OF_TRAJECTORIES 4
 #define TRAJECTORY_VERTICAL_DOWN 0
 #define TRAJECTORY_VERTCAL_UP 1
 #define TRAJECTORY_HORIZONTAL 2
@@ -23,10 +23,11 @@ class ecp_task_tzu_cs_irp6ot :  public ecp_task
 protected:
 	ecp_smooth_generator *sg;
 	bias_edp_force_generator *befg;
-	weight_meassure_generator* wmg;
+	// weight_meassure_generator* wmg;
 	force_meassure_generator* fmg;
 	ecp_force_tool_change_generator* ftcg;
 	ecp_tool_change_generator* tcg;
+	ecp_tff_nose_run_generator *ynrfg;
 	char* trajectories[NUMBER_OF_TRAJECTORIES];
 	double weight;
 	double P_x;
