@@ -74,6 +74,9 @@ int step_no;
 	Ft_v_tr Jack;//O_Tx_G__CEIH,Ft_v_tr::FT);
 	//	Ft_v_tr ft_tr_inv_tool_matrix (!current_tool, Ft_v_tr::FT);
 	
+	int CSAC_Tx_G_firstvalid;
+	int CEIH_Tx_G_firstvalid;
+	
 	double O_r_G__C2[3][6];
 	
 	

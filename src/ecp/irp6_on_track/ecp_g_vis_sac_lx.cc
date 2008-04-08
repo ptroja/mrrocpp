@@ -173,6 +173,9 @@ ecp_vis_sac_lx_generator::ecp_vis_sac_lx_generator(ecp_task& _ecp_task, int step
 	steps2switch=0;
 
 	phaseCEIH=0;
+	
+	CSAC_Tx_G_firstvalid=1;
+	CEIH_Tx_G_firstvalid=1;
 
 }
 ;
@@ -201,7 +204,7 @@ bool ecp_vis_sac_lx_generator::first_step()
 	vsp_vis_sac->current_period=0; //MAC7
 	//vsp_force_irp6p->base_period=1;
 	//td.interpolation_node_no = 1; //potrzebne? MAC7
-	td.internode_step_no = 10; //step_no; 40
+	td.internode_step_no = 50; //step_no; 40
 	td.value_in_step_no = td.internode_step_no - 5; //2 //10
 
 	//TOOL
@@ -236,8 +239,7 @@ bool ecp_vis_sac_lx_generator::first_step()
 	the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
 	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
 	//the_robot->EDP_data.motion_type = ABSOLUTE; //RELATIVE;
-	the_robot->EDP_data.next_interpolation_type
-			= TCIM;
+	the_robot->EDP_data.next_interpolation_type= MIM; //TCIM
 	the_robot->EDP_data.motion_type = ABSOLUTE; //PF_FIXED_FRAME_WITH_DESIRED_FORCE_OR_SPEED;
 
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
@@ -285,7 +287,10 @@ bool ecp_vis_sac_lx_generator::next_step()
 	 	//the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
 
 		//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 2.341);	//jesli chwytamy po przekatnej
-	G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 3.141); // jesli chwytak na plasko
+	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 3.141); // jesli chwytak na plasko oryginal
+	G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.00, 1.57, 3.141); // jesli chwytak na plasko
+	
+	
 	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 1.564, 0.0, 0.000); //rover
 	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0,1.569070, 3.141593, 0.000000);
 
@@ -335,7 +340,8 @@ bool ecp_vis_sac_lx_generator::next_step()
 			O_r_G__CEIH[0][i]=0.0; //EIH ONLY
 		}
 	}
-		
+	
+	
 
 		std::cout << node_counter
 				<<"------------------------------------------------------------------"
@@ -395,6 +401,8 @@ bool ecp_vis_sac_lx_generator::next_step()
 			//0, 0, -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]-0.785000); //rover
 			0, 0, -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]-0.8000); //rover
 	
+
+	
 //kostka	
 /*
 	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0],
@@ -404,29 +412,29 @@ bool ecp_vis_sac_lx_generator::next_step()
 */
 
 //jakby przyszlo cos glupiego
+/*
 	if (node_counter==1)
 	{
-	std::cout << "ZABEZPIECZENIE " << std::endl;
-	CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
-	for (int i=0; i<6; i++)
-			{
-				std::cout << CEIH_r_G[0][i] <<", "; //EIH ONLY
-			}
-	std::cout << std::endl;
-	
-		if (vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1]>10 || vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1]<-10)
+		std::cout << "ZABEZPIECZENIE " << vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0] << std::endl;
+		
+		if (vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]==0 && vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1]==0 && vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]==0)
 		{
-			
-			for (int i=0; i<6; i++)
-			{
-				CEIH_r_G[0][i]=0.0; //EIH ONLY
-				O_r_G__CEIH[1][i]; 
-			}
-		CEIH_Tx_G.set_xyz_rpy(CEIH_r_G[0][0], CEIH_r_G[0][1], CEIH_r_G[0][2], CEIH_r_G[0][3], CEIH_r_G[0][4], CEIH_r_G[0][5]);
-			std::cout << "COS GLUPIEGO " << vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0] << std::endl;
+			CSAC_Tx_G_firstvalid=0;
 		}
+		
 	}
 	
+	if (node_counter!=1)
+	{
+		//std::cout << "ZABEZPIECZENIE " << vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0] << std::endl;
+		
+		if (vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]!=0)
+		{
+			CSAC_Tx_G_firstvalid=1;
+		}
+		
+	}
+*/
 	CEIH_Tx_G__f.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[0],
 			vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[1],
 			-vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[2],
@@ -503,25 +511,49 @@ bool ecp_vis_sac_lx_generator::next_step()
 	{
 		std::cout << CEIH_r_G[0][i] << " ";
 	}
-	
+/*	
 	for (int i=0; i<6; i++)
 	{
 		std::cout << CEIH_r_G__f[0][i] << " ";
 	}
-	
+*/
 	//rover
 //	std::cout << " ZZZ " << CEIH_r_G[0][0] << " " << -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5] << std::endl;
-std::cout << " ZZZEIH " << CEIH_r_G[0][0] << std::endl;
-	if(CEIH_r_G[0][0]>0.12) //0.15
+
+
+	
+	if(CEIH_r_G[0][0]>0.12) // || CEIH_Tx_G_firstvalid==0) //0.15
 	{
 	//EIH
-	CEIH_Tx_G=CEIH_Tx_G*G_Tx_S;
+	CEIH_Tx_G=CEIH_Tx_G*G_Tx_S;	
 	O_Tx_G__CEIH=O_Tx_E*CEIH_Tx_G; //rota O_Tx_E 0,0,0 //E_TX_CEIH=1
 	O_Tx_G__CEIH.get_xyz_angle_axis(O_r_G__CEIH[0]);
 	}
-
+	/*
+		std::cout << std::endl;
+		std::cout << " CEIH_Tx_G ";
+			std::cout << std::endl;
+	std::cout << CEIH_Tx_G;
+		std::cout << std::endl;
+		
+	std::cout << " O_Tx_E ";
+	std::cout << std::endl;
+	std::cout << O_Tx_E;
+		std::cout << std::endl;
+	std::cout << " O_Tx_G_CEIH ";
+	std::cout << std::endl;
+	std::cout << O_Tx_G__CEIH;
+		std::cout << std::endl;
+	std::cout << " O_r_G_CEIH ";
+	for (int i=0; i<6; i++)
+	{
+		std::cout << O_r_G__CEIH[0][i]<< " ";
+	}
+	std::cout << std::endl;
+	*/
+//std::cout << " ZZZ " << CEIH_r_G[0][2] << std::endl;
 //rover
-std::cout << " ZZZ " << O_r_E[0][2] << std::endl;
+//std::cout << " ZZZ " << O_r_E[0][2] << std::endl;
 	//wyjdz
 	if(O_r_E[0][2]<=0.04) //0.715
 	{
@@ -566,27 +598,27 @@ std::cout << " ZZZ " << O_r_E[0][2] << std::endl;
 
 CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 
-	std::cout << " O_T_E ";
+//	std::cout << " O_T_E ";
 	for (int i=0; i<6; i++)
 	{
 		std::cout << O_r_E[0][i] << " ";
 	}
-	std::cout << std::endl;
-	
-	std::cout << " SAC ";
+//	std::cout << std::endl;
+/*	
+	//std::cout << " SAC ";
 	for (int i=0; i<6; i++)
 	{
 		std::cout << O_r_G__CSAC[0][i] << " ";
 	}
-	std::cout << std::endl;
-
-	std::cout << " EIH ";
+	//std::cout << std::endl;
+*/
+//	std::cout << " EIH ";
 	for (int i=0; i<6; i++)
 	{
 		std::cout << O_r_G__CEIH[0][i]<< " ";
 	}
-	std::cout << std::endl;
-
+//	std::cout << std::endl;
+/*
 	//std::cout << " EIH_JACK ";
 	for (int i=0; i<6; i++)
 	{
@@ -602,7 +634,7 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	//std::cout << std::endl;
 
 	std::cout <<  O_eps_EG__CSAC_norm << " ";
-	
+*/	
 	std::cout << std::endl;
 	
 
