@@ -63,7 +63,7 @@ ecp_vis: ecp_t_vis_irp6ot.o ecp_g_vis.o ecp_mp_s_vis.o $(SHOBJ)
 ecp_vislx: ecp_t_vislx_irp6ot.o ecp_g_vis_sac_lx.o ecp_g_force.o ecp_mp_s_vis_sac_lx.o ecp_mp_s_schunk.o $(SHOBJ) 
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_rover: ecp_t_rover_irp6ot.o ecp_g_vis_sac_lx.o ecp_g_force.o ecp_mp_s_vis_sac_lx.o ecp_mp_s_schunk.o $(SHOBJ) 
+ecp_rover: ecp_t_rover_irp6ot.o ecp_g_rover.o ecp_g_force.o ecp_mp_s_vis_sac_lx.o ecp_mp_s_schunk.o $(SHOBJ) 
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_nurbs: ecp_t_ts_irp6ot.o ecp_g_nurbs.o $(SHOBJ) 
@@ -103,6 +103,7 @@ ecp_irp6ot_legobrick: ecp_t_legobrick_irp6ot.o ecp_g_smooth.o ecp_g_jarosz.o ecp
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_irp6ot_multiplayer: ecp_t_multiplayer_irp6ot.o ecp_st_go.o ecp_mp_s_schunk.o ecp_g_smooth.o ecp_g_force.o \
 						ecp_g_smooth.o ecp_generator_t.o \
+						ecp_g_rover.o ecp_mp_s_vis_sac_lx.o \
 						ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 	
 #---------------------------------Special object build rules (user made)-------------------------------------#

@@ -74,7 +74,7 @@ void mp_task_multiplayer::main_task_algorithm(void)
 #endif
 			// pozycja robota mobilnego
 			playerpos_goal_t goal;
-
+#if 0
 			// dojezdzanie
 			goal.forward(1.25); move_electron_robot(goal);
 			goal.turn(-M_PI_2); move_electron_robot(goal);
@@ -88,6 +88,7 @@ void mp_task_multiplayer::main_task_algorithm(void)
 			goal.turn(M_PI_2); move_electron_robot(goal);
 			goal.turn(M_PI_2); move_electron_robot(goal);
 			goal.forward(1.25); move_electron_robot(goal);
+#endif
 
 #if 0			
 			// USTAWIENIE POCZATKOWE
@@ -194,13 +195,109 @@ void mp_task_multiplayer::main_task_algorithm(void)
 				break_state = true;
 		       	break;
 			}
+			
 			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 		        (1, 1, ROBOT_FESTIVAL, ROBOT_FESTIVAL)) {
 				break_state = true;
 		       	break;
 			}
-
+			#endif
+			
+				//biasowanie czujnika sily
+			if (set_next_ecps_state (ECP_GEN_BIAS_EDP_FORCE, 0, "", 1, ROBOT_IRP6_ON_TRACK)) {
+				break_state = true;
+		       	break;
+			}
+			
+			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+		        (1, 1, 	ROBOT_IRP6_ON_TRACK, 	ROBOT_IRP6_ON_TRACK)) {
+				break_state = true;
+		       	break;
+			}
+			
+			#if 1
+			//podjazd do chwytu obiektu przez serwowizje
+			if (set_next_ecps_state (ECP_GEN_TAKE_FROM_ROVER, 0, "", 1, ROBOT_IRP6_ON_TRACK)) {
+				break_state = true;
+		       	break;
+			}
+			
+			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+		        (1, 1, 	ROBOT_IRP6_ON_TRACK, 	ROBOT_IRP6_ON_TRACK)) {
+				break_state = true;
+		       	break;
+			}
+			#endif
+			
+			//chwycenie
+			if (set_next_ecps_state (ECP_GEN_GRAB_FROM_ROVER, 0, "", 1, ROBOT_IRP6_ON_TRACK)) {
+				break_state = true;
+		       	break;
+			}
+			
+			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+		        (1, 1, 	ROBOT_IRP6_ON_TRACK, 	ROBOT_IRP6_ON_TRACK)) {
+				break_state = true;
+		       	break;
+			}
+			
+			
+			
+		//RUCH DO GORY
+			if (set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/multiplayer/irp6ot_sm_up.trj", 1, ROBOT_IRP6_ON_TRACK)) {
+				break_state = true;
+				break;
+			}
+			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
+					1, 1,
+					ROBOT_IRP6_ON_TRACK,
+					ROBOT_IRP6_ON_TRACK
+					)) {
+				break_state = true;
+				break;
+			}
+			
+			
+			
+			
+			//DOJEZDZANIE DO POZYCJI PRZEKAZANIA KOSTKI BEZ FESTIVALA
+			if (set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/multiplayer/irp6ot_sm_pass.trj", 1, ROBOT_IRP6_ON_TRACK)) {
+				break_state = true;
+				break;
+			}
+			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
+					1, 1,
+					ROBOT_IRP6_ON_TRACK,
+					ROBOT_IRP6_ON_TRACK
+					)) {
+				break_state = true;
+				break;
+			}
+			
+			
+			
+			//ROZWARCIE SZCZEK BEZ FESTIVALA
+			if (set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/multiplayer/irp6ot_sm_wide.trj", 1, ROBOT_IRP6_ON_TRACK)) {
+				break_state = true;
+				break;
+			}
+			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
+			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
+					1, 1,
+					ROBOT_IRP6_ON_TRACK,
+					ROBOT_IRP6_ON_TRACK
+					)) {
+				break_state = true;
+				break;
+			}
+			
+			#if 0
 			// DOJEZDZANIE DO POZYCJI PRZEKAZANIA KOSTKI
 			if (set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/multiplayer/irp6ot_sm_pass.trj", 1, ROBOT_IRP6_ON_TRACK) ||
 				set_next_ecps_state (ECP_GEN_FESTIVAL, festival_generator::POLISH_VOICE, "podaje kostke~", 1, ROBOT_FESTIVAL)) {

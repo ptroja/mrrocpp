@@ -4,6 +4,7 @@
 #include "ecp/common/ecp_task.h"
 #include "ecp/common/ecp_st_go.h"
 #include "ecp/common/ecp_generator_t.h"
+#include "ecp/irp6_on_track/ecp_g_vis_sac_lx.h"
 
 class ecp_task_multiplayer_irp6ot : public ecp_task
 {
@@ -16,6 +17,9 @@ private:
     
     //podzadania
     ecp_sub_task_gripper_opening* go_st;
+    
+   	ecp_vis_sac_lx_generator *takeg;
+	ecp_tff_rubik_grab_generator *rgg;
     
 
 public:
