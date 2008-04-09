@@ -43,7 +43,7 @@ void mp_task::catch_signal_in_mp_task(int sig)
 			_exit(EXIT_SUCCESS);
 			break;
 		case SIGSEGV:
-			fprintf(stderr, "Segmentation fault in MP process\n");
+			fprintf(stderr, "Segmentation fault in MP process %s\n", config.section_name);
 			signal(SIGSEGV, SIG_DFL);
 			break;
 	}

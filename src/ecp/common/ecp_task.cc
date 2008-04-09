@@ -98,7 +98,7 @@ void ecp_task::catch_signal_in_ecp_task(int sig)
         _exit (EXIT_SUCCESS);
         break;
     case SIGSEGV:
-        fprintf(stderr, "\n\nSegmentation fault in ECP process\n\n");
+        fprintf(stderr, "Segmentation fault in ECP process %s\n", config.section_name);
         signal(SIGSEGV, SIG_DFL);
         break;
     }

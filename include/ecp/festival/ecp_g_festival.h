@@ -15,6 +15,18 @@
 #define FESTIVAL_CODE_ERR "ER\n"
 #define FESTIVAL_RETURN_LEN 39
 
+/*
+ * polskie znaki w standardzie iso-8859-2 lub odpowiedniki 7-bit:
+ * o~ - oun
+ * c~ - tsi
+ * e~ - eun
+ * l/ - eu
+ * n~ - eni
+ * s~ - esi
+ * z~ - ziet
+ * z* - rzet
+ */
+
 class festival_generator : public ecp_generator
 {
 	private:

@@ -79,12 +79,12 @@ int main (int argc, char *argv[], char **arge)
 		catch (sensor::sensor_error e) {
 			/* Wyswietlenie komunikatu. */
 			mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
-			printf("Mam blad czujnika section 1\n");
+			printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		} /* end: catch sensor_error  */
 		catch (transmitter::transmitter_error e) {
 			/* Wyswietlenie komunikatu. */
 			mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
-			printf("Mam blad trasnmittera section 1\n");
+			printf("Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		} /* end: catch sensor_error  */
 		catch (...) {  /* Dla zewnetrznej petli try*/
 			/*   Wylapywanie niezdfiniowanych bledow  */
@@ -92,8 +92,6 @@ int main (int argc, char *argv[], char **arge)
 			mp_t->sr_ecp_msg->message (NON_FATAL_ERROR, (uint64_t) MP_UNIDENTIFIED_ERROR);
 			exit(EXIT_FAILURE);
 		} /*end: catch  */
-
-
 
 		for (;;) {  // Zewnetrzna petla nieskonczona
 
@@ -192,12 +190,12 @@ int main (int argc, char *argv[], char **arge)
 			catch (sensor::sensor_error e) {
 				/* Wyswietlenie komunikatu. */
 				mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
-				printf("Mam blad czujnika section 2\n");
+				printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
 			} /* end: catch sensor_error  */
 			catch (transmitter::transmitter_error e) {
 				/* Wyswietlenie komunikatu. */
 				mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
-				printf("Mam blad trasnmittera section 2\n");
+				printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);
 			} /* end: catch sensor_error  */
 
 			catch (...) {  /* Dla zewnetrznej petli try*/
@@ -213,7 +211,7 @@ int main (int argc, char *argv[], char **arge)
 	catch (...) {  /* Dla zewnetrznej petli try*/
 		/* Wylapywanie niezdfiniowanych bledow  */
 		/* Komunikat o bledzie wysylamy do SR */
-		printf("unexpected exception throw from catch section\n");
+		printf("unexpected exception throw from catch section (@%s:%d)\n", __FILE__, __LINE__);
 		mp_t->sr_ecp_msg->message (NON_FATAL_ERROR, (uint64_t) MP_UNIDENTIFIED_ERROR);
 		exit(EXIT_FAILURE);
 	} /* end: catch  */

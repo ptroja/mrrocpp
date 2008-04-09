@@ -44,6 +44,7 @@ int main(int argc, char *argv[])
 		ecp_t = return_created_ecp_task(*_config);
 
 		set_thread_priority(pthread_self(), MAX_PRIORITY-3);
+
 		signal(SIGTERM, &(catch_signal_in_ecp));
 		signal(SIGSEGV, &(catch_signal_in_ecp));
 
@@ -61,11 +62,11 @@ int main(int argc, char *argv[])
 	}
 	catch (sensor::sensor_error e) {
 		ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
-		printf("ecp_m.cc: Mam blad czujnika section 1\n");
+		printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
 	}
 	catch (transmitter::transmitter_error e) {
 		ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
-		printf("ecp_m.cc: Mam blad trasnmittera section 1\n");
+		printf("ecp_m.cc: Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
 	}
 
 	for (;;) { // Zewnetrzna petla nieskonczona
@@ -142,11 +143,11 @@ int main(int argc, char *argv[])
 		} /*end: catch */
 		catch (sensor::sensor_error e) {
 			ecp_t->sr_ecp_msg->message (e.error_class, e.error_no);
-			printf("Mam blad czujnika section 2n");
+			printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
 		}
 		catch (transmitter::transmitter_error e) {
 			ecp_t->sr_ecp_msg->message (e.error_class, e.error_no);
-			printf("Mam blad trasnmittera section 2n");
+			printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);
 		}
 
 		catch (...) {  /* Dla zewnetrznej petli try*/

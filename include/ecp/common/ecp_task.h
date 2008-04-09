@@ -22,7 +22,6 @@ private:
     // Badanie typu polecenia z MP
     MP_COMMAND mp_command_type(void) const;
 
-
 protected:
     // Oczekiwanie na polecenie START od MP
     bool ecp_wait_for_start(void);
@@ -59,7 +58,6 @@ public:
 
     virtual void terminate();
 
-
     // methods for ECP template to redefine in concrete classes
     virtual void task_initialization(void);
     virtual void main_task_algorithm(void);
@@ -74,7 +72,6 @@ public: // TODO: what follows should be private method
 
     // Ustawienie typu odpowiedzi z ECP do MP
     void set_ecp_reply(ECP_REPLY ecp_r);
-
 };
 
 ecp_task* return_created_ecp_task (configurator &_config);
