@@ -392,6 +392,7 @@ int conveyor_move_to_position2()
 
 int EDP_conveyor_synchronise()
 {
+	set_ui_state_notification(UI_N_SYNCHRONISATION);
 	try
 	{
 		if ((ui_state.conveyor.edp.state > 0) && (ui_state.conveyor.edp.is_synchronised == false))
@@ -409,6 +410,8 @@ int EDP_conveyor_synchronise()
 
 int EDP_conveyor_create()
 {
+	set_ui_state_notification(UI_N_PROCESS_CREATION);	
+
 	short tmp;
 	char tmp_string[100];
 	char tmp2_string[100];

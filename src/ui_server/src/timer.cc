@@ -170,7 +170,7 @@ OnTimer()
 		printf("UI CLOSED\n");
 		exit(0);
 	}  else {
-		//set_ui_ready_state_notification();
+		set_ui_ready_state_notification();
 	}
 	
 

@@ -93,6 +93,8 @@ int teaching_window_end_motion()
 	ui_ecp_obj->ui_rep.reply = QUIT;
 	
 	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+	ui_ecp_obj->trywait_sem();
+	ui_ecp_obj->post_sem();
 	
 	return 0;
 }
@@ -590,6 +592,8 @@ int EDP_all_robots_slay()
 }
 int MPup()
 {
+
+	set_ui_state_notification(UI_N_PROCESS_CREATION);
 	char tmp_string[100];
 
 	if (ui_state.mp.pid ==-1)
@@ -856,7 +860,18 @@ int EDP_all_robots_synchronise()
 	EDP_irp6_mechatronika_synchronise();
 	EDP_irp6_postument_synchronise();
 }
-//~jk
+
+int set_ui_busy_state_notification () 
+{
+	set_ui_state_notification(UI_N_BUSY);
+	return 0;
+}
+
+int set_ui_ready_state_notification () 
+{
+	set_ui_state_notification(UI_N_READY);
+	return 0;
+}
 
 int set_ui_state_notification (UI_NOTIFICATION_STATE_ENUM new_notifacion)
 {
@@ -867,53 +882,35 @@ int set_ui_state_notification (UI_NOTIFICATION_STATE_ENUM new_notifacion)
 		switch (new_notifacion)
 		{
 			case UI_N_STARTING:
-				//PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "STARTING", 0);
-				//PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_MAGENTA, 0);
+			replySend(new Message('9','A','A',0,NULL,NULL));
 			break;
 			case UI_N_READY:
-				//PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "READY", 0);
-				//PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_BLUE, 0);
+			replySend(new Message('9','B','A',0,NULL,NULL));
 			break;
 			case UI_N_BUSY:
-				//PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "BUSY", 0);
-				//PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
+			replySend(new Message('9','C','A',0,NULL,NULL));
 			break;
 			case UI_N_EXITING:
-				//PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "EXITING", 0);
-				//PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_MAGENTA, 0);
+			replySend(new Message('9','D','A',0,NULL,NULL));
 			break;			
 			case UI_N_COMMUNICATION:
-				//PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "COMMUNICATION", 0);
-				//PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
+			replySend(new Message('9','E','A',0,NULL,NULL));
 			break;
 			case UI_N_SYNCHRONISATION:
-				//PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "SYNCHRONISATION", 0);
-				//PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
+			replySend(new Message('9','F','A',0,NULL,NULL));
 			break;
 			case UI_N_PROCESS_CREATION:
-				//PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "PROCESS CREATION", 0);
-				//PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
+			replySend(new Message('9','G','A',0,NULL,NULL));
 			break;
 		}
-		
-		//PtDamageWidget(ABW_PtLabel_ready_busy);
-		//PtFlush();
-	
 	return 1;
-	
 	}
-
 	return 0;
-
 }
 
-
-
-int
-quit()
-
-	{
-	int do_close=0; // czy zamykac naprawde??
+int quit()
+{
+	int do_close=1; // czy zamykac naprawde??
 
 	if (do_close) // jesli apliakcja ma byc zamknieta
 	{
@@ -924,8 +921,9 @@ quit()
 
 	}
 	return 0;
-
 }
+//~jk
+
 
 
 int clear_all_configuration_lists()

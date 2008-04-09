@@ -158,7 +158,8 @@ int speaker_check_state()
 
 int EDP_speaker_create()
 {
-	char tmp_string[100];
+	set_ui_state_notification(UI_N_PROCESS_CREATION);	
+char tmp_string[100];
 	char tmp2_string[100];
 	FILE* file;
 

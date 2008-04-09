@@ -1,5 +1,7 @@
 
 /* ../fun.cc */
+int set_ui_busy_state_notification ();
+int set_ui_ready_state_notification () ;
 int teaching_window_send_move(double *v);
 int teaching_window_end_motion();
 int manage_configuration_file ( void );

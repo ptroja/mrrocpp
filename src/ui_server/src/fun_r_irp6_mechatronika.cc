@@ -407,7 +407,8 @@ int irp6m_inc_motion(double* v)
 }
 int EDP_irp6_mechatronika_synchronise()
 {
-	try
+set_ui_state_notification(UI_N_SYNCHRONISATION);	
+try
 	{
 		if ((ui_state.irp6_mechatronika.edp.state > 0)&&(ui_state.irp6_mechatronika.edp.is_synchronised == false))
 		{
@@ -647,7 +648,8 @@ int irp6m_servo_algorithm_set(double* v)
 
 int EDP_irp6_mechatronika_create()
 {
-	short tmp;
+	set_ui_state_notification(UI_N_PROCESS_CREATION);	
+short tmp;
 	char tmp_string[100];
 	char tmp2_string[100];
 	

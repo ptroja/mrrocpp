@@ -2033,12 +2033,13 @@ void* server_thread(void*)
 			}
 			id = 1;
 		}
-		printf("[SERVER] Connection closed\n"); 
+		printf("[SERVER] Connection closed - Unloading all\n"); 
 		id = 0;
 		sem_wait(&sem);
 		rid = 0;
 		sem_post(&sem);
 		close(new_fd);
+		unload_all();
 	}
 	return 0;
 }
