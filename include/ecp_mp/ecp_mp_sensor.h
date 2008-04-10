@@ -26,8 +26,6 @@ protected:
 public:
 
 	const SENSOR_ENUM sensor_name; // nazwa czujnika z define w impconst.h
-	
-	VSP_REPORT vsp_report;
 
 	// Wlasciwy konstruktor czujnika wirtualnego.
 	ecp_mp_sensor(SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object);

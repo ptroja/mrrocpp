@@ -18,6 +18,7 @@ class ecp_vis_sac_lx_generator : public ecp_generator {
 protected:
 sensor *vsp_force_irp6ot, *vsp_force_irp6p, *vsp_vis_sac;
 
+
 public:	
   trajectory_description td;
 /*  
@@ -96,6 +97,8 @@ int step_no;
 	double C_r_G[3][6];
 	double CEIH_r_G[3][6];
 	double CEIH_r_G__f[3][6];
+	
+	double CEIH_rpy_G[3][6];
 	
 	double O_reul_Ep[3][6];
 	

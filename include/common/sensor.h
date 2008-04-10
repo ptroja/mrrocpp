@@ -217,6 +217,8 @@ class sensor
 		// Pole do komunikacji za pomoca DEVCTL.
 		DEVCTL_MSG devmsg;
 
+		VSP_REPORT vsp_report_aux; //pomocniczy report dla ECP
+
 		// Odebranie odczytu od VSP.
 		virtual void get_reading(void)=0;
 		// Konfiguracja czujnika.

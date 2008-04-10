@@ -43,42 +43,7 @@ ecp_vis_sac_lx_generator::ecp_vis_sac_lx_generator(ecp_task& _ecp_task, int step
 {
 	step_no = step;
 
-	/*
-	 measure_border_u[0]=1.090;
-	 measure_border_u[1]=0.150;
-	 measure_border_u[2]=0.305;
-	 measure_border_u[3]=0.606;
-	 measure_border_u[4]=1.57;
-	 measure_border_u[5]=3.12;
 
-	 measure_border_d[0]=0.82;
-	 measure_border_d[1]=-0.150;
-	 measure_border_d[2]=0.155;
-	 measure_border_d[3]=-0.606;
-	 measure_border_d[4]=1.267;
-	 measure_border_d[5]=2.5;
-
-	 d_u_max[0]=0.3;
-	 d_u_max[1]=0.3;
-	 d_u_max[2]=0.1;
-	 d_u_max[3]=0.3;
-	 d_u_max[4]=0.3;
-	 d_u_max[5]=0.3;
-
-	 d2_u_max[0]=0.1;
-	 d2_u_max[1]=0.1;
-	 d2_u_max[2]=0.01;
-	 d2_u_max[3]=0.05;
-	 d2_u_max[4]=0.05;
-	 d2_u_max[5]=0.05;
-
-	 gain[0]=0.5;
-	 gain[1]=0.5;
-	 gain[2]=0.2;
-	 gain[3]=0.5;
-	 gain[4]=0.5;
-	 gain[5]=0.5;
-	 */
 
 	measure_border_u[0]=ecp_t.config.return_double_value("measure_border_u0");
 	measure_border_u[1]=ecp_t.config.return_double_value("measure_border_u1");
@@ -207,7 +172,7 @@ bool ecp_vis_sac_lx_generator::first_step()
 		printf("KAMERA, KAMERA2 \n\n");
 	//vsp_force_irp6p->base_period=1;
 	//td.interpolation_node_no = 1; //potrzebne? MAC7
-	td.internode_step_no = 50; //step_no; 40
+	td.internode_step_no = 50; //step_no; 50
 	td.value_in_step_no = td.internode_step_no - 5; //2 //10
 
 	//TOOL
@@ -329,21 +294,23 @@ bool ecp_vis_sac_lx_generator::next_step()
 			O_r_Ep[1][i]=O_r_E[0][i];
 			O_r_Ep[2][i]=O_r_E[0][i];
 
-			O_r_Ep_d[i][1]=0;
-			O_r_Ep_d[i][2]=0;
+			//O_r_Ep_d[i][1]=0;
+			//O_r_Ep_d[i][2]=0;
+			
+			O_r_Ep_d[1][i]=0;
+			O_r_Ep_d[1][i]=0;
+			O_r_Ep_d[2][i]=0;
+			
+			CEIH_rpy_G[0][i]=0;
+			CEIH_rpy_G[1][i]=0;
+			CEIH_rpy_G[2][i]=0;
+			
 		}
 		//	for (int i=0; i<6; i++)
 		//		vsp_vis_sac->image.vis_sac.frame_E_r_G__f[i]=O_r_E[0][i]; //nie wiem czy potrzebne bo chyba  robot sie nie rusza
 
 
-	if (O_r_G__CEIH[0][0]>100 || O_r_G__CEIH[0][0]<-100)
-	{
-		for (int i=0; i<6; i++)
-		{
-			O_r_G__CEIH[0][i]=0.0; //EIH ONLY
-		}
-	}
-	
+
 	
 
 		std::cout << node_counter
@@ -351,38 +318,7 @@ bool ecp_vis_sac_lx_generator::next_step()
 				<< std::endl;
 	}
 
-	//0_T_E=
-	//-0.001652 0.000348 0.999999 0.950214
-	//0.717719 -0.696331 0.001428 0.000358
-	//0.696331 0.717721 0.000901 0.265080
-
-
-	// x+=10cm
-	/*
-	 my_goal_frame[0][0]=-0.001276; my_goal_frame[1][0]=-0.000117; my_goal_frame[2][0]=0.999999; my_goal_frame[3][0]=1.000204;
-	 my_goal_frame[0][1]=0.717735; my_goal_frame[1][1]=-0.696316; my_goal_frame[2][1]=0.000834; my_goal_frame[3][1]=0.000053;
-	 my_goal_frame[0][2]=0.696315; my_goal_frame[1][2]=0.717735; my_goal_frame[2][2]=0.000973; my_goal_frame[3][2]=0.264818;
-	 */
-	//	O_Tx_G.set_frame_tab(my_goal_frame);
-
-	/*
-	 std::cout << "C_T_G" << std::endl;
-	 for(int i=0; i<4; i++)
-	 {
-	 for(int j=0; j<4; j++)
-	 {
-	 std::cout << vsp_vis_sac->image.vis_sac.frame_E_T_G[4*i+j];
-	 }
-	 std::cout << std::endl;
-	 }
-	 */
-
-	//std::cout << "C_T_G" << std::endl;
-	//	for(int j=0; j<6; j++)
-	//		{
-	//			std::cout << vsp_vis_sac->image.vis_sac.frame_E_r_G__f[j] << ",";
-	//		}
-	//	std::cout << std::endl;
+	
 
 
 	//SAC
@@ -395,17 +331,61 @@ bool ecp_vis_sac_lx_generator::next_step()
 
 
 	//EIH
-	//rover
+	//rover VSP_REPORT::
+	//jesli byl odczyt z czujnika to przepisz odczytane wartosci - jesli nie przepisz stare 
 	
-	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]-0.015, //-0.15
+	if(vsp_vis_sac->vsp_report_aux==VSP_REPLY_OK)
+	{
+		CEIH_rpy_G[0][0]=vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]-0.015; //-0.15
+		CEIH_rpy_G[0][1]=vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1]+0.03; //0.04
+		CEIH_rpy_G[0][2]=-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2]+0.01; // kalib Y w O //+0.02
+		CEIH_rpy_G[0][3]=0;
+	 	CEIH_rpy_G[0][4]=0; 
+		CEIH_rpy_G[0][5]=-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]-0.800; //rover //0.8
+	}
+	else
+	{
+		for(int i=0; i<6; i++)
+		{
+			CEIH_rpy_G[0][i]=CEIH_rpy_G[1][i];
+		}
+		std::cout<<"NOTREADING " <<std::cout;
+	}
+
+	//w pierwszym kroku przychodza jakies smieci
+	if (node_counter==1)
+	{
+		for(int i=0; i<6; i++)
+		{
+			CEIH_rpy_G[0][i]=0.0;
+		}		
+	}
+	std::cout<<"FROM VSPX: ";
+		
+		for(int i=0; i<6; i++)
+		{
+			printf("%f ",vsp_vis_sac->image.vis_sac.frame_E_r_G__f[i]);
+		}
+
+	std::cout<<std::endl;
+
+	CEIH_Tx_G.set_xyz_rpy(CEIH_rpy_G[0][0], CEIH_rpy_G[0][1], CEIH_rpy_G[0][2], CEIH_rpy_G[0][3], CEIH_rpy_G[0][4], CEIH_rpy_G[0][5]);
+		
+
+		
+	/*
+		CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]-0.015, //-0.15
 			vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1]+0.03, //0.04
 			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2]+0.01, // kalib Y w O //+0.02
 		//	-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3], 0, 0); //nomalnie
 			//0, 0, -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]-0.785000); //rover
 			0, 0, -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]-0.800); //rover //0.8
+	*/
+		
 	
+	
+//vsp_vis_sac->vsp_report_aux==VSP_REPORT::VSP_REPLY_OK
 
-	
 //kostka	
 /*
 	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0],
@@ -414,30 +394,7 @@ bool ecp_vis_sac_lx_generator::next_step()
 			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3], 0, 0); 	
 */
 
-//jakby przyszlo cos glupiego
-/*
-	if (node_counter==1)
-	{
-		std::cout << "ZABEZPIECZENIE " << vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0] << std::endl;
-		
-		if (vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]==0 && vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1]==0 && vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]==0)
-		{
-			CSAC_Tx_G_firstvalid=0;
-		}
-		
-	}
-	
-	if (node_counter!=1)
-	{
-		//std::cout << "ZABEZPIECZENIE " << vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0] << std::endl;
-		
-		if (vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]!=0)
-		{
-			CSAC_Tx_G_firstvalid=1;
-		}
-		
-	}
-*/
+
 	CEIH_Tx_G__f.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[0],
 			vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[1],
 			-vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[2],
@@ -523,27 +480,20 @@ bool ecp_vis_sac_lx_generator::next_step()
 	//rover
 //	std::cout << " ZZZ " << CEIH_r_G[0][0] << " " << -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5] << std::endl;
 
-
-	
-	if(CEIH_r_G[0][0]>0.12) // || CEIH_Tx_G_firstvalid==0) //0.15
+	if(CEIH_r_G[0][0]>0.12  
+|| (CEIH_rpy_G[0][0]==0.0 && CEIH_rpy_G[0][1]==0.0 && CEIH_rpy_G[0][2]==0.0 &&
+ CEIH_rpy_G[0][3]==0.0 && CEIH_rpy_G[0][4]==0.0 && CEIH_rpy_G[0][5]==0.0)) // || CEIH_Tx_G_firstvalid==0) //0.15
 	{
 	//EIH
 	CEIH_Tx_G=CEIH_Tx_G*G_Tx_S;	
 	O_Tx_G__CEIH=O_Tx_E*CEIH_Tx_G; //rota O_Tx_E 0,0,0 //E_TX_CEIH=1
 	O_Tx_G__CEIH.get_xyz_angle_axis(O_r_G__CEIH[0]);
+	
 	}
-	/*
-		std::cout << std::endl;
-		std::cout << " CEIH_Tx_G ";
-			std::cout << std::endl;
-	std::cout << CEIH_Tx_G;
-		std::cout << std::endl;
-		
-	std::cout << " O_Tx_E ";
-	std::cout << std::endl;
-	std::cout << O_Tx_E;
-		std::cout << std::endl;
-	std::cout << " O_Tx_G_CEIH ";
+	
+	
+/*	
+std::cout << " O_Tx_G_CEIH ";
 	std::cout << std::endl;
 	std::cout << O_Tx_G__CEIH;
 		std::cout << std::endl;
@@ -563,11 +513,12 @@ bool ecp_vis_sac_lx_generator::next_step()
 		return false;
 	}
 	
-	O_rf_G__CEIH.set_values(O_r_G__CEIH[0]);
-	Ft_v_tr Jack(O_Tx_E,Ft_v_tr::V);
+//	O_rf_G__CEIH.set_values(O_r_G__CEIH[0]);
+//	Ft_v_tr Jack(O_Tx_E,Ft_v_tr::V);
 	
 	
 	//jak cos przyjdzie glupiego z CEIH
+	//VSP_REPORT::VSP_REPLY_OK
 	if (O_r_G__CEIH[0][0]>100 || O_r_G__CEIH[0][0]<-100)
 	{
 		for (int i=0; i<6; i++)
@@ -615,7 +566,7 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	}
 	//std::cout << std::endl;
 */
-//	std::cout << " EIH ";
+	std::cout << " EIH ";
 	for (int i=0; i<6; i++)
 	{
 		std::cout << O_r_G__CEIH[0][i]<< " ";
@@ -685,12 +636,18 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 		}
 */
 	}
+	
+		
+
+	std::cout<<std::endl;
+
 
 	for (int i=0; i<6; i++)
 	{
 	//	O_eps_EG[0][i]=O_r_G[0][i]-O_r_E[0][i];
 	//	O_r_Ep[0][i]=O_r_E[0][i]+gain[i]*O_eps_EG[0][i]; //0.01
-		O_r_Ep[0][i]=O_r_E[0][i];//+O_weight__SAC*O_eps_E__CSAC[0][i]+C_weight__EIH*O_eps_E__CEIH[0][i]+f_weight__EIH*O_eps_E__fEIH[0][i];
+		//O_r_Ep[0][i]=O_r_E[0][i];//+O_weight__SAC*O_eps_E__CSAC[0][i]+C_weight__EIH*O_eps_E__CEIH[0][i]+f_weight__EIH*O_eps_E__fEIH[0][i];
+		O_r_Ep[0][i]=O_r_E[0][i]+C_weight__EIH*O_eps_E__CEIH[0][i];
 	}
 
 	//O_eps_EG[0][2]=O_r_G[0][2]-O_r_E[0][2];
@@ -713,7 +670,7 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	//O_r_Ep[0][0]=O_r_E[0][0];
 	//O_r_Ep[0][1]=O_r_E[0][1];
 
-
+	//WAZNE - NIE RUSZAC SIE W 1SZYM KROKU
 	if (node_counter==1)
 	{
 		for (int i=0; i<6; i++)
@@ -808,17 +765,17 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	//ograniczenie przyspieszenia
 	for (int i=0; i<6; i++)
 	{
-		O_r_Ep_d2[i][0]=O_r_Ep_d[i][0]-O_r_Ep_d[i][1];
+		O_r_Ep_d2[0][i]=O_r_Ep_d[0][i]-O_r_Ep_d[1][i];
 	}
 
 	//krancowki na sterowaniu - nie wiemy jakie krancowki dla angle axis
 	for (int i=0; i<3; i++)
 	{
-		if (O_r_Ep[i][0]<measure_border_d[i])
-			O_r_Ep[i][0]=measure_border_d[i];
+		if (O_r_Ep[0][i]<measure_border_d[i])
+			O_r_Ep[0][i]=measure_border_d[i];
 
-		if (O_r_Ep[i][0]>measure_border_u[i])
-			O_r_Ep[i][0]=measure_border_u[i];
+		if (O_r_Ep[0][i]>measure_border_u[i])
+			O_r_Ep[0][i]=measure_border_u[i];
 	}
 
 	//std::cout << std::endl;
@@ -883,12 +840,23 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	{
 		O_r_Ep[2][i]=O_r_Ep[1][i];
 		O_r_Ep[1][i]=O_r_Ep[0][i];
-		O_r_Ep_d[i][2]=O_r_Ep_d[i][1];
-		O_r_Ep_d[i][1]=O_r_Ep_d[i][0];
+//		O_r_Ep_d[i][2]=O_r_Ep_d[i][1];
+//		O_r_Ep_d[i][1]=O_r_Ep_d[i][0];
+
+		O_r_Ep_d[2][i]=O_r_Ep_d[2][i];
+		O_r_Ep_d[1][i]=O_r_Ep_d[1][i];
 
 		O_r_G[1][i]=O_r_G[0][i];
 		C_r_G[1][i]=C_r_G[0][i];
+		
+		
+		CEIH_r_G[1][i]=CEIH_r_G[0][i];
+		CEIH_r_G__f[1][i]=CEIH_r_G__f[0][i];
+		CEIH_rpy_G[1][i]=CEIH_rpy_G[1][i];
+		
 	}
+
+
 
 	//zmiana roty
 	//O_Tx_E=O_Tx_E*G_Tx_G2;
@@ -896,89 +864,20 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 
 	O_Tx_Ep.get_xyz_angle_axis(O_r_Ep[0]);
 
-	//std::cout <<"Rota Epppp " << O_r_Ep[0][3] <<" " << O_r_Ep[0][4] << " "<< O_r_Ep[0][5] <<std::endl;
 
-
-	//	O_Tx_Ep.get_frame_tab( the_robot->EDP_data.next_arm_frame); //jesli ABSOLUTNIE zadajemy O_Tx_E
-	/*
-	 if(node_counter==4)
-	 {
-	 vsp_vis_sac->base_period=1;
-	 vsp_vis_sac->current_period=1; //1
-	 }
-	 */
-
-	//pose regulator
-	/*
-	 for (int i=0; i<6; i++)
-	 {
-	 the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i]=E_r_Ep[0][i];
-	 }
-	 */
-
-	//force regulator
-	//sterujemy predkoscia
-	/*
-	 for(int i=0;i<3; i++) {
-
-	 the_robot->EDP_data.ECPtoEDP_position_velocity[i] = 0; //1.5*E_r_Ep[0][i];//*2*td.internode_step_no;
-	 }
-
-	 for(int i=3;i<5;i++) {
-
-	 the_robot->EDP_data.ECPtoEDP_position_velocity[i] = 0; //0.9*E_r_Ep[0][i];//*2*td.internode_step_no;
-	 }
-
-	 for(int i=0;i<3; i++) {
-
-	 the_robot->EDP_data.ECPtoEDP_position_velocity[i] = E_r_Ep[0][i]*
-	 (double) (1/ ( ((double)STEP)*((double)step_no)*1) ); //1.5*E_r_Ep[0][i];//*2*td.internode_step_no;
-	 }
-
-	 for(int i=3;i<5;i++) {
-
-	 the_robot->EDP_data.ECPtoEDP_position_velocity[i] = E_r_Ep[0][i]*
-	 (double) (1/ ( ((double)STEP)*((double)step_no)*1) );//*2*td.internode_step_no;
-	 }
-	 */
-
-	//sterujemy polozeniem
 
 
 	for (int i=0; i<6; i++)
 	{
 		the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = O_r_Ep[0][i];
 	}
-	/*
-	 for(int i=0;i<6;i++) {
-	 the_robot->EDP_data.ECPtoEDP_force_xyz_torque_xyz[i] = -E_r_Ep[0][i]*5000;
-	 the_robot->EDP_data.ECPtoEDP_force_xyz_torque_xyz[i] = -E_r_Ep[0][i]*100;
 
-
-	 }
-
-	 */
-	//	if(the_robot_con) irp6p->EDP_data.MPselection_vector[i] = FORCE_SV_AX;
-	//	else
-	// the_robot->EDP_data.MPselection_vector[i] = POSE_SV_AX;
-
-
-	//	}
 
 
 	the_robot->EDP_data.next_gripper_coordinate
 			=the_robot->EDP_data.current_gripper_coordinate;
 
-	/*******************************************************/
 
-	/*
-
-	 // UWAGA: dzialamy na jednoelementowej liscie robotow
-	 if ( the_robot->EDP_data.ecp_reply == TASK_TERMINATED ) {
-	 mp_msg->message("w mp task terminated");
-	 return false;
-	 } else return true;
-	 */
 	return true;
 }
 ; // end: bool tight_coop_generator::next_step ()
