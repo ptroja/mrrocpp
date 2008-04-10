@@ -20,7 +20,7 @@ class ecp_mp_vis_sac_lx_sensor: public ecp_mp_sensor{
 	// Konstruktor czujnika wirtualnego - wywolanie konstruktora klasy bazowej.
  	ecp_mp_vis_sac_lx_sensor (SENSOR_ENUM _sensor_name, char* _section_name, ecp_mp_task& _ecp_mp_object);
 											// konstruktor czujnika virtualnego
-	void get_reading (void);			// odebranie odczytu od VSP
+//	void get_reading (void);			// odebranie odczytu od VSP
 }; 
 
 #endif

@@ -687,7 +687,7 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	{
 	//	O_eps_EG[0][i]=O_r_G[0][i]-O_r_E[0][i];
 	//	O_r_Ep[0][i]=O_r_E[0][i]+gain[i]*O_eps_EG[0][i]; //0.01
-		O_r_Ep[0][i]=O_r_E[0][i]+O_weight__SAC*O_eps_E__CSAC[0][i]+C_weight__EIH*O_eps_E__CEIH[0][i]+f_weight__EIH*O_eps_E__fEIH[0][i];
+		O_r_Ep[0][i]=O_r_E[0][i]; //+O_weight__SAC*O_eps_E__CSAC[0][i]+C_weight__EIH*O_eps_E__CEIH[0][i]+f_weight__EIH*O_eps_E__fEIH[0][i];
 	}
 
 	//O_eps_EG[0][2]=O_r_G[0][2]-O_r_E[0][2];

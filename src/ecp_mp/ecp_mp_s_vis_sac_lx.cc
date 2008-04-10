@@ -27,7 +27,8 @@ ecp_mp_vis_sac_lx_sensor::ecp_mp_vis_sac_lx_sensor (SENSOR_ENUM _sensor_name, ch
   
   };//: ecp_mp_vis_sac_sensor
 
-// odebranie odczytu od VSP
+// odebranie odczytu od VSP //
+/*
 void ecp_mp_vis_sac_lx_sensor::get_reading(){
  	if(read(sd, &from_vsp, sizeof(VSP_ECP_MSG))==-1)
 		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);   
@@ -40,3 +41,4 @@ void ecp_mp_vis_sac_lx_sensor::get_reading(){
 	}			
 
 };
+*/
