@@ -7,7 +7,8 @@ BINARIES = 	ecp_test_irp6p \
 				ecp_jarosz_irp6p\
 				ecp_irp6p_rcsc\
 				ecp_dung\
-				ecp_irp6p_pouring
+				ecp_irp6p_pouring\
+				ecp_legobrick_irp6p
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -28,10 +29,16 @@ all: ${BINARIES}
 ecp_test_irp6p: ecp_t_test_irp6p.o ecp_g_force_pose_test.o  ecp_mp_s_schunk.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
+#-----------------------------------------------------------------------------------------------------------------------#
 ecp_irp6p_rcsc: ecp_t_rcsc_irp6p.o ecp_g_smooth.o ecp_g_force.o  ecp_st_go.o ecp_mp_s_schunk.o ecp_generator_t.o \
 		ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 	
+#-----------------------------------------------------------------------------------------------------------------------#
+ecp_legobrick_irp6p: ecp_t_legobrick_irp6p.o ecp_g_smooth.o ecp_g_force.o  ecp_st_go.o ecp_mp_s_schunk.o ecp_generator_t.o \
+		ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^ 
+
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_jarosz_irp6p: ecp_t_jarosz_irp6p.o ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@  $^
