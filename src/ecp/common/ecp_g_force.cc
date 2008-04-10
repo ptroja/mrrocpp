@@ -1384,8 +1384,14 @@ ecp_tff_nose_run_generator::ecp_tff_nose_run_generator(ecp_task& _ecp_task,
 	ecp_generator(_ecp_task)
 {
 	step_no = step;
+	force_meassure = false;
 	// domyslnie wszytkie osie podatne a pulse_check nieaktywne
 	configure(true, true, true, true, true, true, false);
+}
+
+void ecp_tff_nose_run_generator::set_force_meassure(bool fm)
+{
+	force_meassure = fm;
 }
 
 // decyduje ktore osie maja byc podatne
@@ -1507,13 +1513,15 @@ bool ecp_tff_nose_run_generator::next_step()
 	}
 
 	// wyrzucanie odczytu sil
-//	Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
-//	current_frame_wo_offset.remove_translation();
-//	
-//	Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
-//		
-//	std::cout<<"force: "<<force_torque<<std::endl;
-	// koniec odczytu sily	
+	if(force_meassure)
+	{
+		Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
+		current_frame_wo_offset.remove_translation();
+		
+		Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
+			
+		std::cout<<"force: "<<force_torque<<std::endl;
+	}	
 	return true;
 
 }

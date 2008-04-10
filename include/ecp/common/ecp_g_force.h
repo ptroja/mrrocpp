@@ -229,6 +229,7 @@ protected:
     bool selection_vector_l[6];
     // czy pulse_check ma byc aktywne
     bool pulse_check_activated;
+	bool force_meassure;
 
 public:
     int step_no;
@@ -240,6 +241,8 @@ public:
     void configure(bool x, bool y, bool z, bool g, bool b, bool a, bool pulse_check_activated_l);
     virtual bool first_step ();
     virtual bool next_step ();
+    
+    void set_force_meassure(bool fm);
 
 }
 ; // end : class ecp_tff_nose_run_generator

@@ -11,10 +11,15 @@
 #define TORQUE_X 3
 #define TORQUE_Y 4
 #define TORQUE_Z 5
-#define NUMBER_OF_TRAJECTORIES 4
+#define NUMBER_OF_TEST_TRAJECTORIES 1
+#define NUMBER_OF_TRAJECTORIES 3
 #define TRAJECTORY_VERTICAL_DOWN 0
 #define TRAJECTORY_VERTCAL_UP 1
 #define TRAJECTORY_HORIZONTAL 2
+#define POSTUMENT 0
+#define ON_TRACK 1
+#define STANDARD 0
+#define ALTERNATIVE 1
 
 class force_meassure_generator;
 
@@ -27,12 +32,16 @@ protected:
 	force_meassure_generator* fmg;
 	ecp_force_tool_change_generator* ftcg;
 	ecp_tool_change_generator* tcg;
-	ecp_tff_nose_run_generator *ynrfg;
+	ecp_tff_nose_run_generator *etnrg;
 	char* trajectories[NUMBER_OF_TRAJECTORIES];
+	char* test_trajectories[NUMBER_OF_TEST_TRAJECTORIES];
 	double weight;
 	double P_x;
 	double P_y;
 	double P_z;
+	int robot;
+	void set_trajectory(int robot_type, int procedure_type);
+	void set_test_trajectory(int robot_type);
 public:
 	ecp_task_tzu_cs_irp6ot(configurator &_config);
 	~ecp_task_tzu_cs_irp6ot();

@@ -1,10 +1,10 @@
 #include <iostream>
+#include <fstream>
 #include <unistd.h>
 
 #include "common/typedefs.h"
 #include "common/impconst.h"
 #include "common/com_buf.h"
-#include <fstream>
 
 #include "ecp_mp/ecp_mp_s_force.h"
 #include "lib/srlib.h"
@@ -25,6 +25,7 @@ ecp_task_tzu_cs_irp6ot::ecp_task_tzu_cs_irp6ot(configurator &_config) : ecp_task
 	befg = NULL;
 	ftcg = NULL;
 	tcg = NULL;
+	etnrg = NULL;
 };
 
 /** destruktor **/
@@ -36,34 +37,24 @@ ecp_task_tzu_cs_irp6ot::~ecp_task_tzu_cs_irp6ot()
 // methods for ECP template to redefine in concrete classes
 void ecp_task_tzu_cs_irp6ot::task_initialization(void) 
 {
-	// ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	{
 		ecp_m_robot = new ecp_irp6_on_track_robot (*this);
-		trajectories[0] = "../trj/tzu/tzu_1_on_track.trj";
-		trajectories[1] = "../trj/tzu/tzu_2_on_track.trj";
-		trajectories[2] = "../trj/tzu/tzu_3_on_track.trj";
-		trajectories[3] = "../trj/tzu/tzu_4_on_track.trj";
+		robot = ON_TRACK;
 	}
 	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
 	{
 		ecp_m_robot = new ecp_irp6_postument_robot (*this);
-		trajectories[0] = "../trj/tzu/tzu_1_postument.trj";
-		trajectories[1] = "../trj/tzu/tzu_2_postument.trj";
-		trajectories[2] = "../trj/tzu/tzu_3_postument.trj";
-		trajectories[3] = "../trj/tzu/tzu_4_postument.trj";
+		robot = POSTUMENT;
 	}
 	
 	sg = new ecp_smooth_generator (*this, true, false);
 	befg = new bias_edp_force_generator(*this);
-	//wmg = new weight_meassure_generator(*this, 1);
 	fmg = new force_meassure_generator(*this);	
-	// test
-//	fmg->set_configuration(1,5);
-	// test
+	// fmg->set_configuration(1,5);
 	ftcg = new ecp_force_tool_change_generator(*this);
 	tcg = new ecp_tool_change_generator(*this,true);
-	ynrfg = new ecp_tff_nose_run_generator(*this,8);
+	etnrg = new ecp_tff_nose_run_generator(*this,8);
 	sr_ecp_msg->message("ECP loaded");
 };
 
@@ -71,9 +62,28 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 {
 	sr_ecp_msg->message("ECP cs irp6ot  - pushj start in tzu");
 	ecp_wait_for_start();
+	int procedure_type;
+	char* additional_move;
 	
-	/* stworzenie generatora ruchu */
+	if(robot == ON_TRACK)
+		additional_move = "../trj/tzu/tzu_on_track_1.trj";
+	else
+		additional_move = "../trj/tzu/tzu_postument_1.trj";
 	
+	if (choose_option ("1 - Metoda standardowa, 2 - Metoda alternatywna", 2) == OPTION_ONE)
+    {
+    	sr_ecp_msg->message("Wyznaczanie modelu metoda standardowa");
+   		procedure_type = STANDARD;
+   	}
+    else
+    {
+		sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna");
+		procedure_type = ALTERNATIVE;
+		// generalnie sciezka alternatywna powinna miec na pewno inne trajektorie ruchu
+	}
+	
+    set_trajectory(robot, procedure_type);
+            
 	while(true)			
 	{ 
 		// ETAP PIERWSZY - chwytka skierowany pionowo do dolu, biasowanie odczytow, 
@@ -84,7 +94,6 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 		ftcg->Move();
 		tcg->set_tool_parameters(0,0,0.09);
 		tcg->Move();
-// test		fmg->Move();
 	
 		// ETAP DRUGI - chwytak skierowany pionowo do gory, odczyt i obliczenie trzech pierwszych parametrow
 		// wagi, parametrow translacji?!?
@@ -94,10 +103,11 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 		weight = (-(fmg->weight[FORCE_Z]))/2;
 		P_x = fmg->weight[TORQUE_Y]/(2*weight);
 		P_y = -fmg->weight[TORQUE_X]/(2*weight);
-		cout<<"torque_x: "<<fmg->weight[TORQUE_X]<<endl;
-		cout<<"torque_y: "<<fmg->weight[TORQUE_Y]<<endl;
-		//cout<<"test funkcji: "<<*(fmg->get_meassurement())<<endl;
-/*		for(int i = 0 ; i < 10 ; i++)
+		// cout<<"torque_x: "<<fmg->weight[TORQUE_X]<<endl;
+		// cout<<"torque_y: "<<fmg->weight[TORQUE_Y]<<endl;
+		// cout<<"test funkcji: "<<*(fmg->get_meassurement())<<endl;
+/*		
+ 		for(int i = 0 ; i < 10 ; i++)
 		{
 			fmg->Move();
 			//weight = fmg->weight[2]/2;
@@ -105,7 +115,7 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 			std::cout<<"weight_1"<<": "<<fmg->weight[2]/2<<std::endl;
 			sleep(1);
 		}
-		*/
+*/
 		// ETAP TRZECI - chwytak skierowany horyzontalnie, obliczenie ostatniego z parametrów modelu
 		sg->load_file_with_path(trajectories[TRAJECTORY_HORIZONTAL]);
 		
@@ -113,35 +123,38 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 		fmg->Move();
 
 		P_z = -fmg->weight[TORQUE_Y]/weight;
-		cout<<"torque_y: "<<fmg->weight[TORQUE_Y]<<endl;
-/*		for(int i = 0 ; i < 10 ; i++)
+		// cout<<"torque_y: "<<fmg->weight[TORQUE_Y]<<endl;
+/*		
+ 		for(int i = 0 ; i < 10 ; i++)
 		{
 			fmg->Move();
 			std::cout<<"pomiar 2: "<<fmg->weight<<std::endl;
 			std::cout<<"t1: "<<-(fmg->weight[4]/weight)<<std::endl;
 			sleep(1);
 		}
-		*/
+*/
 		cout<<"Parametry modelu srodka ciezkosci narzedzia"<<endl
 			<<"weight: "<<weight<<endl<<"P_x: "<<P_x<<endl<<"P_y: "<<P_y<<endl<<"P_z: "<<P_z<<endl; 
 	
-		cout<<"trj: "<<trajectories[3]<<endl;
 		// test nose - start
-		sg->load_file_with_path(trajectories[3]);
-		cout<<"trajektoria wczytana"<<endl;
+		sg->load_file_with_path(additional_move);
 		sg->Move();
 		befg->Move();
-		// x,y,z,weight		
-//		ftcg->set_tool_parameters(0.004,0.0,0.066,10.8);
 		
+		// x,y,z,weight		
+		// ustawienia zgodne z plikiem konfiguracyjnym
+		// ftcg->set_tool_parameters(0.004,0.0,0.066,10.8);
+		
+		// ustawienie wyznaczonego modelu i procedury testowania go
 		ftcg->set_tool_parameters(P_x,P_y,P_z,weight);
 		ftcg->Move();
 		
 		befg->Move();	
+		etnrg->set_force_meassure(true);
+		etnrg->Move();
+		// koniec testowania przy pomocy nose generatora
 		
-//		cout<<"nose"<<endl;
-		ynrfg->Move();
-		// test nose - stop
+		// testy polegajace na ustawianiu manipulatora w roznych pozycjach i sprawdzaniu uzyskanych odczytow sily
 		ecp_termination_notice();
 		ecp_wait_for_stop();
 		break;
@@ -153,6 +166,46 @@ ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_tzu_cs_irp6ot(_config);
 };
+
+void ecp_task_tzu_cs_irp6ot::set_trajectory(int robot_type, int procedure_type)
+{
+	if((robot_type == POSTUMENT) && (procedure_type == STANDARD))
+	{
+		trajectories[0] = "../trj/tzu/standard/tzu_1_postument.trj";
+		trajectories[1] = "../trj/tzu/standard/tzu_2_postument.trj";
+		trajectories[2] = "../trj/tzu/standard/tzu_3_postument.trj";
+	}
+	if((robot_type == POSTUMENT) && (procedure_type == ALTERNATIVE))
+	{
+		trajectories[0] = "../trj/tzu/alternative/tzu_1_postument_alt.trj";
+		trajectories[1] = "../trj/tzu/alternative/tzu_2_postument_alt.trj";
+		trajectories[2] = "../trj/tzu/alternative/tzu_3_postument_alt.trj";
+	}
+	if((robot_type == ON_TRACK) && (procedure_type == STANDARD))
+	{
+		trajectories[0] = "../trj/tzu/standard/tzu_1_on_track.trj";
+		trajectories[1] = "../trj/tzu/standard/tzu_2_on_track.trj";
+		trajectories[2] = "../trj/tzu/standard/tzu_3_on_track.trj";
+	}
+	if((robot_type == ON_TRACK) && (procedure_type == ALTERNATIVE))
+	{
+		trajectories[0] = "../trj/tzu/alternative/tzu_1_on_track_alt.trj";
+		trajectories[1] = "../trj/tzu/alternative/tzu_2_on_track_alt.trj";
+		trajectories[2] = "../trj/tzu/alternative/tzu_3_on_track_alt.trj";
+	}
+}
+
+void ecp_task_tzu_cs_irp6ot::set_test_trajectory(int robot_type)
+{
+	if(robot_type == POSTUMENT)
+	{
+		test_trajectories[0] = "../trj/tzu/tzu_1_postument_test.trj";
+	}
+	else
+	{
+		test_trajectories[0] = "../trj/tzu/tzu_1_on_track_test.trj";
+	}
+}
 
 /**** force meassure generator ****/
 
