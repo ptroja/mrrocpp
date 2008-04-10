@@ -69,21 +69,32 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 		additional_move = "../trj/tzu/tzu_on_track_1.trj";
 	else
 		additional_move = "../trj/tzu/tzu_postument_1.trj";
-	
-	if (choose_option ("1 - Metoda standardowa, 2 - Metoda alternatywna", 2) == OPTION_ONE)
+
+	int option = choose_option ("1 - std z, 2 - alt x, 3 - alt y, 4 - alt x ", 4);
+	if (option == OPTION_ONE)
     {
-    	sr_ecp_msg->message("Wyznaczanie modelu metoda standardowa");
+    		sr_ecp_msg->message("Wyznaczanie modelu metoda standardowa");
    		procedure_type = STANDARD;
    	}
-    else
+    else if (option == OPTION_TWO)
     {
-		sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna");
-		procedure_type = ALTERNATIVE;
-		// generalnie sciezka alternatywna powinna miec na pewno inne trajektorie ruchu
+		sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna x");
+		procedure_type = ALTERNATIVE_X;
+	}
+	else if (option == OPTION_THREE)
+	{
+		sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna y");
+		procedure_type = ALTERNATIVE_Y;
+	}
+	else
+	{
+		sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna x2");
+		procedure_type = ALTERNATIVE_X_2;
 	}
 	
     set_trajectory(robot, procedure_type);
-            
+if(procedure_type == STANDARD)
+{            
 	while(true)			
 	{ 
 		// ETAP PIERWSZY - chwytka skierowany pionowo do dolu, biasowanie odczytow, 
@@ -137,29 +148,128 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 			<<"weight: "<<weight<<endl<<"P_x: "<<P_x<<endl<<"P_y: "<<P_y<<endl<<"P_z: "<<P_z<<endl; 
 	
 		// test nose - start
-		sg->load_file_with_path(additional_move);
-		sg->Move();
-		befg->Move();
+		sleep(1);
+		// test
+///		set_test_trajectory(robot);
+///		sg->load_file_with_path(test_trajectories[0]);
+///		sg->Move();
+		// test
+///		sg->load_file_with_path(additional_move);
+///		sg->Move();
+//		befg->Move();
 		
 		// x,y,z,weight		
 		// ustawienia zgodne z plikiem konfiguracyjnym
-		// ftcg->set_tool_parameters(0.004,0.0,0.066,10.8);
+//		ftcg->set_tool_parameters(0.004,0.0,0.066,10.8);
+//		ftcg->Move();
+//		fmg->Move();
+//		cout<<"pomiar1: "<<fmg->weight<<endl;
 		
+//		befg->Move();
 		// ustawienie wyznaczonego modelu i procedury testowania go
-		ftcg->set_tool_parameters(P_x,P_y,P_z,weight);
-		ftcg->Move();
+///		ftcg->set_tool_parameters(P_x,P_y,P_z,weight);
+///		ftcg->Move();
 		
-		befg->Move();	
-		etnrg->set_force_meassure(true);
-		etnrg->Move();
+///		befg->Move();	
+///		etnrg->set_force_meassure(true);
+///		etnrg->Move();
 		// koniec testowania przy pomocy nose generatora
 		
 		// testy polegajace na ustawianiu manipulatora w roznych pozycjach i sprawdzaniu uzyskanych odczytow sily
+		// na 6 joint obrot
+//		fmg->Move();
+//		cout<<"pomiar2: "<<fmg->weight<<endl;
+//		set_test_trajectory(robot);
+//		sg->load_file_with_path(test_trajectories[0]);
+//		sg->Move();
+//		fmg->Move();
+//		cout<<"pomiar3: "<<fmg->weight<<endl;
+		// koniec testow
 		ecp_termination_notice();
 		ecp_wait_for_stop();
 		break;
 	}
-	std::cout<<"end\n"<<std::endl;
+}
+else if(procedure_type == ALTERNATIVE_X)
+{
+	cout<<"-> sciezka alternatywna x"<<endl;
+	while(true)			
+	{
+		//befg->Move();
+		ftcg->Move();
+		tcg->set_tool_parameters(0,0,0.09);
+		tcg->Move();
+		sg->load_file_with_path(trajectories[0]);
+		sg->Move ();		
+		fmg->Move();
+		cout<<"pomiar alternative1: "<<fmg->weight<<endl;
+		befg->Move();
+		sg->load_file_with_path(trajectories[1]);
+		sg->Move ();		
+		fmg->Move();
+		cout<<"pomiar alternative2: "<<fmg->weight<<endl;
+		weight = (-(fmg->weight[0]))/2;
+		cout<<"weight: "<<weight<<endl;
+		ecp_termination_notice();
+		ecp_wait_for_stop();
+		break;
+	}
+}
+else if(procedure_type == ALTERNATIVE_Y)
+{
+	cout<<"-> sciezka alternatywna y"<<endl;
+	while(true)			
+	{
+		//befg->Move();
+		ftcg->Move();
+		tcg->set_tool_parameters(0,0,0.09);
+		tcg->Move();
+		sg->load_file_with_path(trajectories[0]);
+		sg->Move ();		
+		fmg->Move();
+		cout<<"pomiar alternative1: "<<fmg->weight<<endl;
+		befg->Move();
+		
+		sg->load_file_with_path(trajectories[1]);
+		sg->Move ();		
+		fmg->Move();
+		cout<<"pomiar alternative2: "<<fmg->weight<<endl;
+		weight = (-(fmg->weight[1]))/2;
+		cout<<"weight: "<<weight<<endl;
+		ecp_termination_notice();
+		ecp_wait_for_stop();
+		break;
+	}
+}
+else
+{
+	cout<<"-> sciezka alternatywna x2"<<endl;
+	while(true)			
+	{
+		//befg->Move();
+		ftcg->Move();
+		tcg->set_tool_parameters(0,0,0.09);
+		tcg->Move();
+		sg->load_file_with_path(trajectories[1]);
+		sg->Move ();		
+		fmg->Move();
+		cout<<"pomiar alternative1: "<<fmg->weight<<endl;
+		befg->Move();
+		
+		sg->load_file_with_path(trajectories[0]);
+		sg->Move ();		
+		fmg->Move();
+		cout<<"pomiar alternative2: "<<fmg->weight<<endl;
+		// weight = (-(fmg->weight[1]))/2;
+		weight = (-(fmg->weight[0]))/2;
+		cout<<"weight: "<<weight<<endl;
+		ecp_termination_notice();
+		ecp_wait_for_stop();
+		break;
+	}
+}
+
+std::cout<<"end\n"<<std::endl;
 };
 
 ecp_task* return_created_ecp_task (configurator &_config)
@@ -171,27 +281,51 @@ void ecp_task_tzu_cs_irp6ot::set_trajectory(int robot_type, int procedure_type)
 {
 	if((robot_type == POSTUMENT) && (procedure_type == STANDARD))
 	{
-		trajectories[0] = "../trj/tzu/standard/tzu_1_postument.trj";
-		trajectories[1] = "../trj/tzu/standard/tzu_2_postument.trj";
-		trajectories[2] = "../trj/tzu/standard/tzu_3_postument.trj";
+		trajectories[0] = "../trj/tzu/standard/postument/tzu_1_postument.trj";
+		trajectories[1] = "../trj/tzu/standard/postument/tzu_2_postument.trj";
+		trajectories[2] = "../trj/tzu/standard/postument/tzu_3_postument.trj";
 	}
-	if((robot_type == POSTUMENT) && (procedure_type == ALTERNATIVE))
+	if((robot_type == POSTUMENT) && (procedure_type == ALTERNATIVE_X))
 	{
-		trajectories[0] = "../trj/tzu/alternative/tzu_1_postument_alt.trj";
-		trajectories[1] = "../trj/tzu/alternative/tzu_2_postument_alt.trj";
-		trajectories[2] = "../trj/tzu/alternative/tzu_3_postument_alt.trj";
+		trajectories[0] = "../trj/tzu/alternative/postument/tzu_1_postument_alt.trj";
+		trajectories[1] = "../trj/tzu/alternative/postument/tzu_2_postument_alt.trj";
+		trajectories[2] = "../trj/tzu/alternative/postument/tzu_3_postument_alt.trj";
+	}
+	if((robot_type == POSTUMENT) && (procedure_type == ALTERNATIVE_Y))
+	{
+		trajectories[0] = "../trj/tzu/alternative/postument/tzu_1_postument_alt_y.trj";
+		trajectories[1] = "../trj/tzu/alternative/postument/tzu_2_postument_alt_y.trj";
+		trajectories[2] = "../trj/tzu/alternative/postument/tzu_3_postument_alt_y.trj";
+	}
+	if((robot_type == POSTUMENT) && (procedure_type == ALTERNATIVE_X_2))
+	{
+		trajectories[0] = "../trj/tzu/tzu_1_postument_alt_y_2.trj";
+		trajectories[1] = "../trj/tzu/tzu_2_postument_alt_y_2.trj";
+//		trajectories[2] = "../trj/tzu/alternative/postument/tzu_3_postument_alt_y.trj";
 	}
 	if((robot_type == ON_TRACK) && (procedure_type == STANDARD))
 	{
-		trajectories[0] = "../trj/tzu/standard/tzu_1_on_track.trj";
-		trajectories[1] = "../trj/tzu/standard/tzu_2_on_track.trj";
-		trajectories[2] = "../trj/tzu/standard/tzu_3_on_track.trj";
+		trajectories[0] = "../trj/tzu/standard/on_track/tzu_1_on_track.trj";
+		trajectories[1] = "../trj/tzu/standard/on_track/tzu_2_on_track.trj";
+		trajectories[2] = "../trj/tzu/standard/on_track/tzu_3_on_track.trj";
 	}
-	if((robot_type == ON_TRACK) && (procedure_type == ALTERNATIVE))
+	if((robot_type == ON_TRACK) && (procedure_type == ALTERNATIVE_X))
 	{
-		trajectories[0] = "../trj/tzu/alternative/tzu_1_on_track_alt.trj";
-		trajectories[1] = "../trj/tzu/alternative/tzu_2_on_track_alt.trj";
-		trajectories[2] = "../trj/tzu/alternative/tzu_3_on_track_alt.trj";
+		trajectories[0] = "../trj/tzu/alternative/on_track/tzu_1_on_track_alt.trj";
+		trajectories[1] = "../trj/tzu/alternative/on_track/tzu_2_on_track_alt.trj";
+		trajectories[2] = "../trj/tzu/alternative/on_track/tzu_3_on_track_alt.trj";
+	}
+	if((robot_type == ON_TRACK) && (procedure_type == ALTERNATIVE_Y))
+	{
+		trajectories[0] = "../trj/tzu/alternative/on_track/tzu_1_on_track_alt_y.trj";
+		trajectories[1] = "../trj/tzu/alternative/on_track/tzu_2_on_track_alt_y.trj";
+		trajectories[2] = "../trj/tzu/alternative/on_track/tzu_3_on_track_alt_y.trj";
+	}   
+	if((robot_type == ON_TRACK) && (procedure_type == ALTERNATIVE_X_2))
+	{
+//		trajectories[0] = "../trj/tzu/alternative/on_track/tzu_1_on_track_alt.trj";
+//		trajectories[1] = "../trj/tzu/alternative/on_track/tzu_2_on_track_alt.trj";
+//		trajectories[2] = "../trj/tzu/alternative/on_track/tzu_3_on_track_alt.trj";
 	}
 }
 
@@ -200,10 +334,12 @@ void ecp_task_tzu_cs_irp6ot::set_test_trajectory(int robot_type)
 	if(robot_type == POSTUMENT)
 	{
 		test_trajectories[0] = "../trj/tzu/tzu_1_postument_test.trj";
+		test_trajectories[1] = "../trj/tzu/tzu_2_postument_test.trj";
 	}
 	else
 	{
 		test_trajectories[0] = "../trj/tzu/tzu_1_on_track_test.trj";
+		test_trajectories[1] = "../trj/tzu/tzu_2_on_track_test.trj";
 	}
 }
 
@@ -250,7 +386,7 @@ bool force_meassure_generator::next_step()
 	sleep(2);
 	for(int i = 0 ; i < meassurement_count ; i++)
 	{
-		cout<<"pomiar: "<<weight<<endl; 
+		//cout<<"pomiar: "<<weight<<endl; 
 		Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
 		current_frame_wo_offset.remove_translation();
 	

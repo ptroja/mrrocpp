@@ -11,7 +11,7 @@
 #define TORQUE_X 3
 #define TORQUE_Y 4
 #define TORQUE_Z 5
-#define NUMBER_OF_TEST_TRAJECTORIES 1
+#define NUMBER_OF_TEST_TRAJECTORIES 2
 #define NUMBER_OF_TRAJECTORIES 3
 #define TRAJECTORY_VERTICAL_DOWN 0
 #define TRAJECTORY_VERTCAL_UP 1
@@ -19,7 +19,9 @@
 #define POSTUMENT 0
 #define ON_TRACK 1
 #define STANDARD 0
-#define ALTERNATIVE 1
+#define ALTERNATIVE_X 1
+#define ALTERNATIVE_Y 2
+#define ALTERNATIVE_X_2 3
 
 class force_meassure_generator;
 
