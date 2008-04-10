@@ -144,6 +144,7 @@ void ecp_mp_sensor::get_reading(SENSOR_IMAGE* sensor_image) {
 				&status, &from_vsp, sizeof(VSP_ECP_MSG), MESSIP_NOTIMEOUT) < 0)
 #endif /* !USE_MESSIP_SRR */
 		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);   
+		vsp_report = from_vsp.vsp_report;
 	// jesli odczyt sie powodl, przepisanie pol obrazu z bufora komunikacyjnego do image;
 	if(from_vsp.vsp_report == VSP_REPLY_OK) {
 		memcpy( &(sensor_image->begin), &(from_vsp.comm_image.begin), union_size);
