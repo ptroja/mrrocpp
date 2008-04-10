@@ -124,7 +124,7 @@ manage_interface_irp6p ()
 			{		
 	
 				replySend(new Message('C','M','H',0,NULL,NULL));
-				replySend(new Message('A','F','A',0,NULL,NULL));
+				replySend(new Message('A','G','A',0,NULL,NULL));
 			}
 		break;
 		default:

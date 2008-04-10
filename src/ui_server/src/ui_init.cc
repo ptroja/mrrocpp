@@ -76,6 +76,14 @@
 #define SA_RESTART 1
 
 sem_t sem;
+sem_t sem_ui;
+sem_t sem_mp;
+sem_t sem_irp6_on_track;
+sem_t sem_irp6_mechatronika;
+sem_t sem_irp6_postument;
+sem_t sem_conveyor;
+sem_t sem_speaker;
+
 int rid;
 std::queue<Message*> q;
 
@@ -126,6 +134,14 @@ void* callfunc(void* arg)
 	int RobotId = Buffer[0];
 	int DialogId = Buffer[1];
 	int ActionId = Buffer[2];
+	int block_mp = 0;
+	int block_ui = 0;
+	int block_conveyor = 0;
+	int block_irp6_on_track = 0;
+	int block_irp6_postument = 0;
+	int block_irp6_mechatronika = 0;
+	int block_speaker = 0;
+	
 	
 	if(strlen(Buffer)>5 && Buffer[3] == 65)
 	{
@@ -168,12 +184,34 @@ switch(RobotId)
 			/*ActionId = A (Set configuration)*/
 			case 'N':
 			{
-				set_config(Buffer);
+				sem_wait(&sem_ui);
+				if(block_ui)
+				{
+					sem_post(&sem_ui);
+					return (void*)NULL;
+				}
+				block_ui = 1;
+				sem_post(&sem_ui);
+				set_config(Buffer);												
+				sem_wait(&sem_ui);
+				block_ui = 0;
+				sem_post(&sem_ui);
 				break;
 			}
 			case 'O':
 			{
-				get_configs();
+				sem_wait(&sem_ui);
+				if(block_ui)
+				{
+					sem_post(&sem_ui);
+					return (void*)NULL;
+				}
+				block_ui = 1;
+				sem_post(&sem_ui);
+				get_configs();				
+				sem_wait(&sem_ui);
+				block_ui = 0;
+				sem_post(&sem_ui);
 				break;
 			}
 
@@ -202,7 +240,7 @@ switch(RobotId)
 								break;
 					case 5:	pulse_reader_all_robots_start();
 								break;			
-				}
+				}				
 				break;
 			}
 			/*ActionId = B (Reader Stop)*/
@@ -222,7 +260,7 @@ switch(RobotId)
 								break;
 					case 5:	pulse_reader_all_robots_stop();
 								break;			
-				}
+				}				
 				break;
 			}
 			/*ActionId = C (Reader Trigger)*/
@@ -242,7 +280,7 @@ switch(RobotId)
 								break;
 					case 5:	pulse_reader_all_robots_trigger();
 								break;			
-				}
+				}				
 				break;
 			}
 			/*ActionId = D (ECP Trigger)*/
@@ -262,19 +300,19 @@ switch(RobotId)
 								break;
 					case 5:	pulse_ecp_all_robots();
 								break;			
-				}
+				}				
 				break;
 			}	
 			/*ActionId = E (MP Start)*/
 			case 'E':
 			{
-				pulse_start_mp();
+				pulse_start_mp();				
 				break;
 			}
 			/*ActionId = F (MP Stop)*/
 			case 'F':
 			{
-				pulse_stop_mp();
+				pulse_stop_mp();				
 				break;
 			}
 			/*ActionId = G (MP Trigger)*/
@@ -320,7 +358,18 @@ switch(RobotId)
 				break;
 			}
 			}
-			process_control_window_init();
+			sem_wait(&sem_ui);
+			if(block_ui)
+			{
+				sem_post(&sem_ui);
+				return (void*)NULL;
+			}
+			block_ui = 1;
+			sem_post(&sem_ui);
+			process_control_window_init();			
+			sem_wait(&sem_ui);
+			block_ui = 0;
+			sem_post(&sem_ui);
 			break;
 		}
 		/*DialogId = C  (Unload All)*/
@@ -343,7 +392,7 @@ switch(RobotId)
 			{
 			case 'A':
 			{
-				//slay_all();
+				slay_all();
 				break;
 			}
 			}
@@ -474,19 +523,52 @@ switch(RobotId)
 			case 'P':
 			{
 				//Yes/No Answer
+				sem_wait(&sem_ui);
+				if(block_ui)
+				{
+					sem_post(&sem_ui);
+					return (void*)NULL;
+				}
+				block_ui = 1;
+				sem_post(&sem_ui);
 				yes_no_callback(v);
+				sem_wait(&sem_ui);
+				block_ui = 0;
+				sem_post(&sem_ui);
 				break;
 			}
 			case 'R':
 			{
 				//InputDoubleAnswer
+				sem_wait(&sem_ui);
+				if(block_ui)
+				{
+					sem_post(&sem_ui);
+					return (void*)NULL;
+				}
+				block_ui = 1;
+				sem_post(&sem_ui);
 				input_double_callback(v);
+				sem_wait(&sem_ui);
+				block_ui = 0;
+				sem_post(&sem_ui);
 				break;
 			}
 			case 'S':
 			{
 				//InputIntegerAnswer
+				sem_wait(&sem_ui);
+				if(block_ui)
+				{
+					sem_post(&sem_ui);
+					return (void*)NULL;
+				}
+				block_ui = 1;
+				sem_post(&sem_ui);
 				input_integer_callback(v);
+				sem_wait(&sem_ui);
+				block_ui = 0;
+				sem_post(&sem_ui);
 				break;
 			}
 			}
@@ -500,12 +582,34 @@ switch(RobotId)
 			/*ActionId = A (Set configuration)*/
 			case 'T':
 			{
+				sem_wait(&sem_ui);
+				if(block_ui)
+				{
+					sem_post(&sem_ui);
+					return (void*)NULL;
+				}
+				block_ui = 1;
+				sem_post(&sem_ui);
 				file_selection_window_send_location(Buffer);
+				sem_wait(&sem_ui);
+				block_ui = 0;
+				sem_post(&sem_ui);
 				break;
 			}
 			case 'O':
 			{
+				sem_wait(&sem_ui);
+				if(block_ui)
+				{
+					sem_post(&sem_ui);
+					return (void*)NULL;
+				}
+				block_ui = 1;
+				sem_post(&sem_ui);
 				get_contents(Buffer);
+				sem_wait(&sem_ui);
+				block_ui = 0;
+				sem_post(&sem_ui);
 				break;
 			}
 			}
@@ -519,13 +623,35 @@ switch(RobotId)
 			case 'U':
 			{
 				//SendMoveAnswer
+				sem_wait(&sem_ui);
+				if(block_ui)
+				{
+					sem_post(&sem_ui);
+					return (void*)NULL;
+				}
+				block_ui = 1;
+				sem_post(&sem_ui);
 				teaching_window_send_move(v);
+				sem_wait(&sem_ui);
+				block_ui = 0;
+				sem_post(&sem_ui);
 				break;
 			}
 			case 'V':
 			{
 				//EndMotionAnswer
+				sem_wait(&sem_ui);
+				if(block_ui)
+				{
+					sem_post(&sem_ui);
+					return (void*)NULL;
+				}
+				block_ui = 1;
+				sem_post(&sem_ui);
 				teaching_window_end_motion();
+				sem_wait(&sem_ui);
+				block_ui = 0;
+				sem_post(&sem_ui);
 				break;
 			}
 			}
@@ -537,6 +663,14 @@ switch(RobotId)
 	/*RobotId = B (IRP6 On Track)*/
 	case 'B':
 	{
+		sem_wait(&sem_irp6_on_track);
+		if(block_irp6_on_track == 1)
+		{
+			sem_post(&sem_irp6_on_track);
+			return (void*)NULL;
+		}
+		block_irp6_on_track = 1;
+		sem_post(&sem_irp6_on_track);
 		switch(DialogId)
 		{
 		/*DialogId = A (Kinematic)*/
@@ -895,11 +1029,22 @@ switch(RobotId)
 			break;
 		}
 		}
+		sem_wait(&sem_irp6_on_track);
+		block_irp6_on_track = 0;
+		sem_post(&sem_irp6_on_track);
 		break;
 	}
 	/*RobotId = C (IRP6 Postument)*/
 	case 'C':
 	{
+		sem_wait(&sem_irp6_postument);
+		if(block_irp6_postument)
+		{
+			sem_post(&sem_irp6_postument);
+			return (void*)NULL;
+		}
+		block_irp6_postument = 1;
+		sem_post(&sem_irp6_postument);
 		switch(DialogId)
 		{
 		/*DialogId = A (Kinematic)*/
@@ -1258,11 +1403,22 @@ switch(RobotId)
 			break;
 		}
 		}
+		sem_wait(&sem_irp6_postument);
+		block_irp6_postument = 0;
+		sem_post(&sem_irp6_postument);
 		break;
 	}
 	/*RobotId = D (Conveyor)*/
 	case 'D':
 	{
+		sem_wait(&sem_conveyor);
+		if(block_conveyor)
+		{
+			sem_post(&sem_conveyor);
+			return (void*)NULL;
+		}
+		block_conveyor = 1;
+		sem_post(&sem_conveyor);
 		switch(DialogId)
 		{
 		/*DialogId = A (Move)*/
@@ -1433,11 +1589,22 @@ switch(RobotId)
 			break;
 		}
 		}
+		sem_wait(&sem_conveyor);
+		block_conveyor = 0;
+		sem_post(&sem_conveyor);
 		break;
 	}
 	/*RobotId = E (Speaker)*/
 	case 'E':
 	{
+		sem_wait(&sem_speaker);
+		if(block_speaker)
+		{
+			sem_post(&sem_speaker);
+			return (void*)NULL;
+		}
+		block_speaker = 1;
+		sem_post(&sem_speaker);
 		switch(DialogId)
 		{
 		/*DialogId = A (Play)*/
@@ -1526,6 +1693,9 @@ switch(RobotId)
 			break;
 		}	
 		}
+		sem_wait(&sem_speaker);
+		block_speaker = 0;
+		sem_post(&sem_speaker);
 		break;
 	} 
 	/*RobotId = F (IRP6 Mechatronika)*/
@@ -1889,6 +2059,9 @@ switch(RobotId)
 			break;
 		}
 		}
+		sem_wait(&sem_irp6_mechatronika);
+		block_irp6_mechatronika = 0;
+		sem_post(&sem_irp6_mechatronika);
 		break;
 	}
 }
@@ -2512,7 +2685,7 @@ int init()
 
 	{
 	//jk
-	if(sem_init(&sem,0,1) == -1)
+	if(sem_init(&sem,0,1) == -1 || sem_init(&sem_conveyor,0,1) == -1 || sem_init(&sem_irp6_on_track,0,1) == -1 || sem_init(&sem_irp6_postument,0,1) == -1 || sem_init(&sem_irp6_mechatronika,0,1) == -1 || sem_init(&sem_speaker,0,1) == -1 || sem_init(&sem_ui,0,1) == -1 || sem_init(&sem_mp,0,1) == -1)
 	{
 		perror("Unable to initialize semaphore\n");	
 		return NULL;
