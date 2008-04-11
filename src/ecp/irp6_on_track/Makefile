@@ -102,7 +102,7 @@ ecp_irp6ot_legobrick: ecp_t_legobrick_irp6ot.o ecp_g_smooth.o ecp_g_jarosz.o ecp
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_irp6ot_multiplayer: ecp_t_multiplayer_irp6ot.o ecp_st_go.o ecp_mp_s_schunk.o ecp_g_smooth.o ecp_g_force.o \
-						ecp_g_smooth.o ecp_generator_t.o \
+						ecp_generator_t.o \
 						ecp_g_rover.o ecp_mp_s_vis_sac_lx.o \
 						ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 	
