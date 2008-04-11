@@ -23,6 +23,10 @@ speechrecognition_generator::~speechrecognition_generator()
 
 bool speechrecognition_generator::first_step ( )
 {
+	if (device->fresh) {
+			device->Clear();
+			device->fresh = false;
+	}
 	return true;
 }
 

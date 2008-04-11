@@ -43,7 +43,7 @@ void ecp_task_multiplayer_irp6ot::task_initialization(void)
 	befg = new bias_edp_force_generator (*this);
 
 	sg = new ecp_smooth_generator (*this, true);
-	wmg = new weight_meassure_generator(*this, 1);
+	wmg = new weight_meassure_generator(*this, -0.3, 2);
 	gt = new ecp_generator_t (*this);
 
 	go_st = new ecp_sub_task_gripper_opening(*this);
