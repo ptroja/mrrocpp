@@ -341,7 +341,14 @@ bool ecp_vis_sac_lx_generator::next_step()
 		CEIH_rpy_G[0][2]=-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2]+0.01; // kalib Y w O //+0.02
 		CEIH_rpy_G[0][3]=0;
 	 	CEIH_rpy_G[0][4]=0; 
-		CEIH_rpy_G[0][5]=-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]-0.800; //rover //0.8
+	 	if(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]<=0)
+	 	{
+			CEIH_rpy_G[0][5]=-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]-0.800; //rover //0.8
+		}
+		else
+		{
+			CEIH_rpy_G[0][5]=-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]+0.800; //rover //0.8
+		}
 	}
 	else
 	{
@@ -360,11 +367,11 @@ bool ecp_vis_sac_lx_generator::next_step()
 			CEIH_rpy_G[0][i]=0.0;
 		}		
 	}
-	std::cout<<"FROM VSPX: ";
+	std::cout<<"RPY: ";
 		
 		for(int i=0; i<6; i++)
 		{
-			printf("%f ",vsp_vis_sac->image.vis_sac.frame_E_r_G__f[i]);
+			printf("%f ",CEIH_rpy_G[0][i]);
 		}
 
 	std::cout<<std::endl;
