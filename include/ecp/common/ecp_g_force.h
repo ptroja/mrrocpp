@@ -212,6 +212,32 @@ public:
 }
 ; // end:
 // --------------------------------------------------------------------------
+//
+class legobrick_detach_force_generator : public ecp_teach_in_generator
+{
+
+protected:
+
+    POSE_SPECIFICATION emptyps;
+    trajectory_description td;
+    int step_no;
+    double delta[6];
+    Homog_matrix basic_rot_frame;
+    Homog_matrix tool_frame;
+    Homog_matrix ex_rot_frame;
+
+public:
+
+    // konstruktor
+    legobrick_detach_force_generator(ecp_task& _ecp_task, int step);
+
+    virtual bool first_step ();
+
+    virtual bool next_step ();
+
+}
+; // end:
+// --------------------------------------------------------------------------
 
 
 
