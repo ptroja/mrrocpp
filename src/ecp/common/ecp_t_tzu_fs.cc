@@ -13,7 +13,7 @@
 
 #include "ecp/irp6_on_track/ecp_local.h"
 #include "ecp/irp6_postument/ecp_local.h"
-#include "ecp/common/ecp_t_tzu_cs_irp6ot.h"
+#include "ecp/common/ecp_t_tzu_fs.h"
 #include "lib/mathtr.h"
 #include "ecp/common/ecp_g_smooth.h"
 
@@ -51,7 +51,6 @@ void ecp_task_tzu_cs_irp6ot::task_initialization(void)
 	sg = new ecp_smooth_generator (*this, true, false);
 	befg = new bias_edp_force_generator(*this);
 	fmg = new force_meassure_generator(*this);	
-	// fmg->set_configuration(1,5);
 	ftcg = new ecp_force_tool_change_generator(*this);
 	tcg = new ecp_tool_change_generator(*this,true);
 	etnrg = new ecp_tff_nose_run_generator(*this,8);
@@ -70,7 +69,7 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 	else
 		additional_move = "../trj/tzu/tzu_postument_1.trj";
 
-	int option = choose_option ("1 - std z, 2 - alt x, 3 - alt y, 4 - alt x ", 4);
+	int option = choose_option ("1 - Metoda standardowa, 2 - Metody alternatywne", 2);
 	if (option == OPTION_ONE)
     {
     		sr_ecp_msg->message("Wyznaczanie modelu metoda standardowa");
@@ -79,18 +78,22 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
     else if (option == OPTION_TWO)
     {
 		sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna x");
-		procedure_type = ALTERNATIVE_X;
+//		procedure_type = ALTERNATIVE_X;
 	}
 	else if (option == OPTION_THREE)
 	{
 		sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna y");
-		procedure_type = ALTERNATIVE_Y;
+//		procedure_type = ALTERNATIVE_Y;
 	}
 	else
 	{
 		sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna x2");
-		procedure_type = ALTERNATIVE_X_2;
+//		procedure_type = ALTERNATIVE_X_2;
 	}
+	
+	choose_option ("1 - dupa, 2 - Metody alternatywne", 2);
+
+	
 	
     set_trajectory(robot, procedure_type);
 if(procedure_type == STANDARD)
@@ -190,7 +193,7 @@ if(procedure_type == STANDARD)
 		break;
 	}
 }
-else if(procedure_type == ALTERNATIVE_X)
+else if(procedure_type == ALTERNATIVE_Y_METHOD_2)
 {
 	cout<<"-> sciezka alternatywna x"<<endl;
 	while(true)			
@@ -215,7 +218,7 @@ else if(procedure_type == ALTERNATIVE_X)
 		break;
 	}
 }
-else if(procedure_type == ALTERNATIVE_Y)
+else if(procedure_type == ALTERNATIVE_Y_METHOD_2)
 {
 	cout<<"-> sciezka alternatywna y"<<endl;
 	while(true)			
@@ -285,53 +288,59 @@ void ecp_task_tzu_cs_irp6ot::set_trajectory(int robot_type, int procedure_type)
 		trajectories[1] = "../trj/tzu/standard/postument/tzu_2_postument.trj";
 		trajectories[2] = "../trj/tzu/standard/postument/tzu_3_postument.trj";
 	}
-	if((robot_type == POSTUMENT) && (procedure_type == ALTERNATIVE_X))
+	else if((robot_type == POSTUMENT) && (procedure_type == ALTERNATIVE_X_METHOD_1))
 	{
-		trajectories[0] = "../trj/tzu/alternative/postument/tzu_1_postument_alt.trj";
-		trajectories[1] = "../trj/tzu/alternative/postument/tzu_2_postument_alt.trj";
-		trajectories[2] = "../trj/tzu/alternative/postument/tzu_3_postument_alt.trj";
+		trajectories[0] = "../trj/tzu/alternative/postument/x_weight_meassure/method_1/tzu_1_postument.trj";
+		trajectories[1] = "../trj/tzu/alternative/postument/x_weight_meassure/method_1/tzu_2_postument.trj";
 	}
-	if((robot_type == POSTUMENT) && (procedure_type == ALTERNATIVE_Y))
+	else if((robot_type == POSTUMENT) && (procedure_type == ALTERNATIVE_X_METHOD_2))
 	{
-		trajectories[0] = "../trj/tzu/alternative/postument/tzu_1_postument_alt_y.trj";
-		trajectories[1] = "../trj/tzu/alternative/postument/tzu_2_postument_alt_y.trj";
-		trajectories[2] = "../trj/tzu/alternative/postument/tzu_3_postument_alt_y.trj";
+		trajectories[0] = "../trj/tzu/alternative/postument/x_weight_meassure/method_2/tzu_1_postument.trj";
+		trajectories[1] = "../trj/tzu/alternative/postument/x_weight_meassure/method_2/tzu_2_postument.trj";
 	}
-	if((robot_type == POSTUMENT) && (procedure_type == ALTERNATIVE_X_2))
+	else if((robot_type == POSTUMENT) && (procedure_type == ALTERNATIVE_Y_METHOD_1))
 	{
-		trajectories[0] = "../trj/tzu/tzu_1_postument_alt_y_2.trj";
-		trajectories[1] = "../trj/tzu/tzu_2_postument_alt_y_2.trj";
-//		trajectories[2] = "../trj/tzu/alternative/postument/tzu_3_postument_alt_y.trj";
+		trajectories[0] = "../trj/tzu/alternative/postument/y_weight_meassure/method_1/tzu_1_postument.trj";
+		trajectories[1] = "../trj/tzu/alternative/postument/y_weight_meassure/method_1/tzu_2_postument.trj";
 	}
-	if((robot_type == ON_TRACK) && (procedure_type == STANDARD))
+	else if((robot_type == POSTUMENT) && (procedure_type == ALTERNATIVE_Y_METHOD_2))
+	{
+		trajectories[0] = "../trj/tzu/alternative/postument/y_weight_meassure/method_2/tzu_1_postument.trj";
+		trajectories[1] = "../trj/tzu/alternative/postument/y_weight_meassure/method_2/tzu_2_postument.trj";
+	}
+	
+	else if((robot_type == ON_TRACK) && (procedure_type == STANDARD))
 	{
 		trajectories[0] = "../trj/tzu/standard/on_track/tzu_1_on_track.trj";
 		trajectories[1] = "../trj/tzu/standard/on_track/tzu_2_on_track.trj";
 		trajectories[2] = "../trj/tzu/standard/on_track/tzu_3_on_track.trj";
 	}
-	if((robot_type == ON_TRACK) && (procedure_type == ALTERNATIVE_X))
+	else if((robot_type == ON_TRACK) && (procedure_type == ALTERNATIVE_X_METHOD_1))
 	{
-		trajectories[0] = "../trj/tzu/alternative/on_track/tzu_1_on_track_alt.trj";
-		trajectories[1] = "../trj/tzu/alternative/on_track/tzu_2_on_track_alt.trj";
-		trajectories[2] = "../trj/tzu/alternative/on_track/tzu_3_on_track_alt.trj";
+		trajectories[0] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_1/tzu_1_postument.trj";
+		trajectories[1] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_1/tzu_1_postument.trj";
 	}
-	if((robot_type == ON_TRACK) && (procedure_type == ALTERNATIVE_Y))
+	else if((robot_type == ON_TRACK) && (procedure_type == ALTERNATIVE_X_METHOD_2))
 	{
-		trajectories[0] = "../trj/tzu/alternative/on_track/tzu_1_on_track_alt_y.trj";
-		trajectories[1] = "../trj/tzu/alternative/on_track/tzu_2_on_track_alt_y.trj";
-		trajectories[2] = "../trj/tzu/alternative/on_track/tzu_3_on_track_alt_y.trj";
+		trajectories[0] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_2/tzu_1_postument.trj";
+		trajectories[1] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_2/tzu_1_postument.trj";
 	}   
-	if((robot_type == ON_TRACK) && (procedure_type == ALTERNATIVE_X_2))
+	else if((robot_type == ON_TRACK) && (procedure_type == ALTERNATIVE_Y_METHOD_1))
 	{
-//		trajectories[0] = "../trj/tzu/alternative/on_track/tzu_1_on_track_alt.trj";
-//		trajectories[1] = "../trj/tzu/alternative/on_track/tzu_2_on_track_alt.trj";
-//		trajectories[2] = "../trj/tzu/alternative/on_track/tzu_3_on_track_alt.trj";
+		trajectories[0] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_1/tzu_1_postument.trj";
+		trajectories[1] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_1/tzu_1_postument.trj";
+	}
+	else if((robot_type == ON_TRACK) && (procedure_type == ALTERNATIVE_Y_METHOD_2))
+	{
+		trajectories[0] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_2/tzu_1_postument.trj";
+		trajectories[1] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_2/tzu_1_postument.trj";
 	}
 }
 
 void ecp_task_tzu_cs_irp6ot::set_test_trajectory(int robot_type)
 {
-	if(robot_type == POSTUMENT)
+/*
+ 	if(robot_type == POSTUMENT)
 	{
 		test_trajectories[0] = "../trj/tzu/tzu_1_postument_test.trj";
 		test_trajectories[1] = "../trj/tzu/tzu_2_postument_test.trj";
@@ -341,6 +350,7 @@ void ecp_task_tzu_cs_irp6ot::set_test_trajectory(int robot_type)
 		test_trajectories[0] = "../trj/tzu/tzu_1_on_track_test.trj";
 		test_trajectories[1] = "../trj/tzu/tzu_2_on_track_test.trj";
 	}
+*/
 }
 
 /**** force meassure generator ****/

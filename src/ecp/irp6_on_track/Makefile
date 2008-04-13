@@ -94,7 +94,7 @@ ecp_irp6ot_pouring: ecp_t_pouring_irp6ot.o ecp_st_go.o ecp_g_smooth.o ecp_genera
 ecp_plot: ecp_t_plot_irp6ot.o ecp_g_plot.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-#ecp_tzu_cs: ecp_t_tzu_cs_irp6ot.o ecp_g_tzu_cs.o $(SHOBJ)
+#ecp_tzu_cs: ecp_t_tzu_fs.o ecp_g_tzu_cs.o $(SHOBJ)
 #	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_irp6ot_legobrick: ecp_t_legobrick_irp6ot.o ecp_g_smooth.o ecp_g_jarosz.o ecp_g_force.o \

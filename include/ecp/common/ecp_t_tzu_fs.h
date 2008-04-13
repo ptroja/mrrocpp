@@ -1,5 +1,5 @@
-#if !defined(_ECP_T_TZU_CS_IRP6OT_H)
-#define _ECP_T_TZU_CS_IRP6OT_H
+#if !defined(_ECP_T_TZU_FS_H)
+#define _ECP_T_TZU_FS_H
 
 #include "ecp/common/ecp_task.h"
 #include "ecp/common/ecp_g_smooth.h"
@@ -19,9 +19,14 @@
 #define POSTUMENT 0
 #define ON_TRACK 1
 #define STANDARD 0
-#define ALTERNATIVE_X 1
-#define ALTERNATIVE_Y 2
-#define ALTERNATIVE_X_2 3
+#define ALTERNATIVE_X_METHOD_1 1
+#define ALTERNATIVE_X_METHOD_2 2
+#define ALTERNATIVE_Y_METHOD_1 3
+#define ALTERNATIVE_Y_METHOD_2 4
+#define ALTERNATIVE_X_METHOD_1 5
+#define ALTERNATIVE_X_METHOD_2 6
+#define ALTERNATIVE_Y_METHOD_1 7
+#define ALTERNATIVE_Y_METHOD_2 8
 
 class force_meassure_generator;
 

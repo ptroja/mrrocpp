@@ -100,7 +100,7 @@ ecp_cvfradia: \
 ecp_tzu: \
 		../irp6_on_track/ecp_local.o \
 		../irp6_postument/ecp_local.o \
-		../common/ecp_t_tzu_cs_irp6ot.o \
+		../common/ecp_t_tzu_fs.o \
 		../common/ecp_g_force.o \
 		../common/ecp_g_smooth.o \
 		../common/ecp_g_jarosz.o \
