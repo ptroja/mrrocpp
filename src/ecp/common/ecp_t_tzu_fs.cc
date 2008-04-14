@@ -26,11 +26,13 @@ ecp_task_tzu_cs_irp6ot::ecp_task_tzu_cs_irp6ot(configurator &_config) : ecp_task
 	ftcg = NULL;
 	tcg = NULL;
 	etnrg = NULL;
+	str.open("../results.txt",ios::app);
 };
 
 /** destruktor **/
 ecp_task_tzu_cs_irp6ot::~ecp_task_tzu_cs_irp6ot()
 {
+	str.close();
 };
 
 
@@ -59,7 +61,11 @@ void ecp_task_tzu_cs_irp6ot::task_initialization(void)
 
 void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 {
+	bool automatic = false;
 	sr_ecp_msg->message("ECP cs irp6ot  - pushj start in tzu");
+//	str.open("../results.txt");
+//	str<<"test dupa"<<endl;
+//	str.close();
 	ecp_wait_for_start();
 	int procedure_type;
 	char* additional_move;
@@ -72,32 +78,124 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 	int option = choose_option ("1 - Metoda standardowa, 2 - Metody alternatywne", 2);
 	if (option == OPTION_ONE)
     {
-    		sr_ecp_msg->message("Wyznaczanie modelu metoda standardowa");
+    	sr_ecp_msg->message("Wyznaczanie modelu metoda standardowa");
    		procedure_type = STANDARD;
    	}
-    else if (option == OPTION_TWO)
+    else
     {
 		sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna x");
-//		procedure_type = ALTERNATIVE_X;
+		option = choose_option ("1 - x1, 2 - x2, 3 - x3, 4 - x4", 4);
+		if (option == OPTION_ONE)
+		{
+			sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna x1");
+			procedure_type = ALTERNATIVE_X_METHOD_1;
+		}
+		else if (option == OPTION_TWO)
+		{
+			sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna x2");
+			procedure_type = ALTERNATIVE_X_METHOD_2;
+		}
+		else if (option == OPTION_THREE)
+		{
+			sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna y1");
+			procedure_type = ALTERNATIVE_Y_METHOD_1;
+		}
+		else if (option == OPTION_FOUR)
+		{
+			sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna y2");
+			procedure_type = ALTERNATIVE_Y_METHOD_2;
+		}
+
 	}
-	else if (option == OPTION_THREE)
+	
+	set_trajectory(robot, procedure_type);
+
+	int T;
+	if(automatic)
 	{
-		sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna y");
-//		procedure_type = ALTERNATIVE_Y;
+		T = 5;
+		procedure_type = 0;
 	}
 	else
+		T = 1;
+	while(true)
 	{
-		sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna x2");
-//		procedure_type = ALTERNATIVE_X_2;
+		if(procedure_type == STANDARD)
+		{   
+			method_standard();
+		}
+		else if(procedure_type == ALTERNATIVE_X_METHOD_1)
+		{
+			int sequence[] = {0,1}; 
+			method_alternative(0,sequence,1);
+		}
+		else if(procedure_type == ALTERNATIVE_X_METHOD_2)
+		{
+			int sequence[] = {0,1};
+			int sequence_reverse[] = {1,0}; 
+			method_alternative(0,sequence,1);
+			method_alternative(0,sequence_reverse,1);
+		}
+		else if(procedure_type == ALTERNATIVE_Y_METHOD_1)
+		{
+			int sequence[] = {0,1}; 
+			method_alternative(0,sequence,1);
+		}
+		else if(procedure_type == ALTERNATIVE_Y_METHOD_2)
+		{
+			int sequence[] = {0,1};
+			int sequence_reverse[] = {1,0}; 
+			method_alternative(0,sequence,1);
+			method_alternative(0,sequence_reverse,1);
+		}
+		
+		if(automatic)
+			procedure_type++;
+		T--;
+		if(T == 0)
+			break;
 	}
 	
-	choose_option ("1 - dupa, 2 - Metody alternatywne", 2);
+std::cout<<"end\n"<<std::endl;
+};
 
-	
-	
-    set_trajectory(robot, procedure_type);
-if(procedure_type == STANDARD)
-{            
+ecp_task* return_created_ecp_task (configurator &_config)
+{
+	return new ecp_task_tzu_cs_irp6ot(_config);
+};
+
+void ecp_task_tzu_cs_irp6ot::method_alternative(int type, int sequence[], int T)
+{
+	for(int i = 0 ; i < T ; i++)
+	{
+		while(true)			
+		{
+			ftcg->Move();
+			tcg->set_tool_parameters(0,0,0.09);
+			tcg->Move();
+			sg->load_file_with_path(trajectories[sequence[0]]);
+			sg->Move ();		
+			fmg->Move();
+			cout<<"pomiar alternative1: "<<fmg->weight<<endl;
+			str<<fmg->weight<<endl;
+			befg->Move();
+			sg->load_file_with_path(trajectories[sequence[1]]);
+			sg->Move ();		
+			fmg->Move();
+			cout<<"pomiar alternative2: "<<fmg->weight<<endl;
+			str<<fmg->weight<<endl;
+			weight = (-(fmg->weight[type]))/2;
+			cout<<"weight: "<<weight<<endl;
+			str<<weight<<endl;
+			ecp_termination_notice();
+			ecp_wait_for_stop();
+			break;
+		}
+	}
+}
+
+void ecp_task_tzu_cs_irp6ot::method_standard()
+{
 	while(true)			
 	{ 
 		// ETAP PIERWSZY - chwytka skierowany pionowo do dolu, biasowanie odczytow, 
@@ -149,7 +247,8 @@ if(procedure_type == STANDARD)
 */
 		cout<<"Parametry modelu srodka ciezkosci narzedzia"<<endl
 			<<"weight: "<<weight<<endl<<"P_x: "<<P_x<<endl<<"P_y: "<<P_y<<endl<<"P_z: "<<P_z<<endl; 
-	
+		str<<"Parametry modelu srodka ciezkosci narzedzia"<<endl
+			<<"weight: "<<weight<<endl<<"P_x: "<<P_x<<endl<<"P_y: "<<P_y<<endl<<"P_z: "<<P_z<<endl;
 		// test nose - start
 		sleep(1);
 		// test
@@ -193,92 +292,6 @@ if(procedure_type == STANDARD)
 		break;
 	}
 }
-else if(procedure_type == ALTERNATIVE_Y_METHOD_2)
-{
-	cout<<"-> sciezka alternatywna x"<<endl;
-	while(true)			
-	{
-		//befg->Move();
-		ftcg->Move();
-		tcg->set_tool_parameters(0,0,0.09);
-		tcg->Move();
-		sg->load_file_with_path(trajectories[0]);
-		sg->Move ();		
-		fmg->Move();
-		cout<<"pomiar alternative1: "<<fmg->weight<<endl;
-		befg->Move();
-		sg->load_file_with_path(trajectories[1]);
-		sg->Move ();		
-		fmg->Move();
-		cout<<"pomiar alternative2: "<<fmg->weight<<endl;
-		weight = (-(fmg->weight[0]))/2;
-		cout<<"weight: "<<weight<<endl;
-		ecp_termination_notice();
-		ecp_wait_for_stop();
-		break;
-	}
-}
-else if(procedure_type == ALTERNATIVE_Y_METHOD_2)
-{
-	cout<<"-> sciezka alternatywna y"<<endl;
-	while(true)			
-	{
-		//befg->Move();
-		ftcg->Move();
-		tcg->set_tool_parameters(0,0,0.09);
-		tcg->Move();
-		sg->load_file_with_path(trajectories[0]);
-		sg->Move ();		
-		fmg->Move();
-		cout<<"pomiar alternative1: "<<fmg->weight<<endl;
-		befg->Move();
-		
-		sg->load_file_with_path(trajectories[1]);
-		sg->Move ();		
-		fmg->Move();
-		cout<<"pomiar alternative2: "<<fmg->weight<<endl;
-		weight = (-(fmg->weight[1]))/2;
-		cout<<"weight: "<<weight<<endl;
-		ecp_termination_notice();
-		ecp_wait_for_stop();
-		break;
-	}
-}
-else
-{
-	cout<<"-> sciezka alternatywna x2"<<endl;
-	while(true)			
-	{
-		//befg->Move();
-		ftcg->Move();
-		tcg->set_tool_parameters(0,0,0.09);
-		tcg->Move();
-		sg->load_file_with_path(trajectories[1]);
-		sg->Move ();		
-		fmg->Move();
-		cout<<"pomiar alternative1: "<<fmg->weight<<endl;
-		befg->Move();
-		
-		sg->load_file_with_path(trajectories[0]);
-		sg->Move ();		
-		fmg->Move();
-		cout<<"pomiar alternative2: "<<fmg->weight<<endl;
-		// weight = (-(fmg->weight[1]))/2;
-		weight = (-(fmg->weight[0]))/2;
-		cout<<"weight: "<<weight<<endl;
-		ecp_termination_notice();
-		ecp_wait_for_stop();
-		break;
-	}
-}
-
-std::cout<<"end\n"<<std::endl;
-};
-
-ecp_task* return_created_ecp_task (configurator &_config)
-{
-	return new ecp_task_tzu_cs_irp6ot(_config);
-};
 
 void ecp_task_tzu_cs_irp6ot::set_trajectory(int robot_type, int procedure_type)
 {

@@ -23,10 +23,6 @@
 #define ALTERNATIVE_X_METHOD_2 2
 #define ALTERNATIVE_Y_METHOD_1 3
 #define ALTERNATIVE_Y_METHOD_2 4
-#define ALTERNATIVE_X_METHOD_1 5
-#define ALTERNATIVE_X_METHOD_2 6
-#define ALTERNATIVE_Y_METHOD_1 7
-#define ALTERNATIVE_Y_METHOD_2 8
 
 class force_meassure_generator;
 
@@ -47,8 +43,11 @@ protected:
 	double P_y;
 	double P_z;
 	int robot;
+	ofstream str;
 	void set_trajectory(int robot_type, int procedure_type);
 	void set_test_trajectory(int robot_type);
+	void method_alternative(int type, int sequence[], int T);
+	void method_standard();
 public:
 	ecp_task_tzu_cs_irp6ot(configurator &_config);
 	~ecp_task_tzu_cs_irp6ot();
