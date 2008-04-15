@@ -33,17 +33,8 @@ void ecp_task_cvfradia::task_initialization(void)
 	{
 		// Create cvFraDIA sensor - for testing purposes.
 		sensor_m[SENSOR_CVFRADIA] = new ecp_mp_cvfradia_sensor(SENSOR_CVFRADIA, "[vsp_cvfradia]", *this);
-		// Configure senso.
+		// Configure sensor.
 		sensor_m[SENSOR_CVFRADIA]->configure_sensor();
-		// Create generator and pass sensor to it.
-		cvg = new ecp_cvfradia_generator(*this);
-	 	cvg->sensor_m = sensor_m;
-	}
-	catch(...)
-	{
-		printf("EXCEPTION\n");
-	}
-
     // Create an adequate robot. - depending on the ini section name.
     if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     {
@@ -55,6 +46,15 @@ void ecp_task_cvfradia::task_initialization(void)
         ecp_m_robot = new ecp_irp6_postument_robot (*this);
         sr_ecp_msg->message("IRp6p loaded");
     }
+		// Create generator and pass sensor to it.
+		cvg = new ecp_cvfradia_generator(*this);
+	 	cvg->sensor_m = sensor_m;
+	}
+	catch(...)
+	{
+		printf("EXCEPTION\n");
+	}
+
 
 
 };

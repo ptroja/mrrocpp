@@ -103,7 +103,7 @@ void ecp_mp_cvfradia_sensor::get_reading() {
 		memcpy( &(image.begin), &(from_vsp.comm_image.begin), union_size);
 	else 
 		sr_ecp_msg.message ("Reply from VSP not ok");
-	cout<<"cvFraDIA: ("<<image.cvFraDIA.x<<","<<image.cvFraDIA.y<<")\n";
+	cout<<"cvFraDIA: ("<<image.cvFraDIA.x<<","<<image.cvFraDIA.y<<") size: "<<image.cvFraDIA.width<<","<<image.cvFraDIA.height<<")\n";
 };
 
 
