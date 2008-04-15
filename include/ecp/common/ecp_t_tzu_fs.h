@@ -47,7 +47,7 @@ protected:
 	void set_trajectory(int robot_type, int procedure_type);
 	void set_test_trajectory(int robot_type);
 	void method_alternative(int type, int sequence[], int T);
-	void method_standard();
+	void method_standard(int T);
 public:
 	ecp_task_tzu_cs_irp6ot(configurator &_config);
 	~ecp_task_tzu_cs_irp6ot();
