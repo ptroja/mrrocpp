@@ -32,6 +32,7 @@ ecp_task_tzu_cs_irp6ot::ecp_task_tzu_cs_irp6ot(configurator &_config) : ecp_task
 /** destruktor **/
 ecp_task_tzu_cs_irp6ot::~ecp_task_tzu_cs_irp6ot()
 {
+	str<<"--- KONIEC ---"<<endl;
 	str.close();
 };
 
@@ -61,7 +62,7 @@ void ecp_task_tzu_cs_irp6ot::task_initialization(void)
 
 void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 {
-	bool automatic = true;
+	bool automatic = false;
 	sr_ecp_msg->message("ECP cs irp6ot  - pushj start in tzu");
 //	str.open("../results.txt");
 //	str<<"test dupa"<<endl;
@@ -75,16 +76,16 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 	else
 		additional_move = "../trj/tzu/tzu_postument_1.trj";
 
-	int option = choose_option ("1 - Metoda standardowa, 2 - Metody alternatywne", 2);
+	int option = choose_option ("1 - Metoda standardowa, 2 - Metody alternatywne, 3 - Auitomat", 3);
 	if (option == OPTION_ONE)
     {
     	sr_ecp_msg->message("Wyznaczanie modelu metoda standardowa");
    		procedure_type = STANDARD;
    	}
-    else
+    else if (option == OPTION_TWO)
     {
 		sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna x");
-		option = choose_option ("1 - x1, 2 - x2, 3 - x3, 4 - x4", 4);
+		option = choose_option ("1 - x1, 2 - x2, 3 - y1, 4 - y2", 4);
 		if (option == OPTION_ONE)
 		{
 			sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna x1");
@@ -107,6 +108,10 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 		}
 
 	}
+	else if(option == OPTION_THREE)
+	{
+		automatic = true;
+	}
 	
 	// set_trajectory(robot, procedure_type);
 
@@ -126,7 +131,8 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 	int count = 2;
 	while(true)
 	{
-		procedure_type = map_tab[i];
+		if(automatic)
+			procedure_type = map_tab[i];
 		cout<<"procedure type: "<<procedure_type<<endl;
 		set_trajectory(robot, procedure_type);
 		if(procedure_type == STANDARD)
@@ -152,15 +158,15 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 		{
 			str<<"ALTERNATIVE_Y_METHOD_1"<<endl;
 			int sequence[] = {0,1}; 
-			method_alternative(0,sequence,count);
+			method_alternative(1,sequence,count);
 		}
 		else if(procedure_type == ALTERNATIVE_Y_METHOD_2)
 		{
 			str<<"ALTERNATIVE_Y_METHOD_2"<<endl;
 			int sequence[] = {0,1};
 			int sequence_reverse[] = {1,0}; 
-			method_alternative(0,sequence,count);
-			method_alternative(0,sequence_reverse,count);
+			method_alternative(1,sequence,count);
+			method_alternative(1,sequence_reverse,count);
 		}
 		
 		if(automatic)
@@ -349,23 +355,23 @@ void ecp_task_tzu_cs_irp6ot::set_trajectory(int robot_type, int procedure_type)
 	}
 	else if((robot_type == ON_TRACK) && (procedure_type == ALTERNATIVE_X_METHOD_1))
 	{
-		trajectories[0] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_1/tzu_1_postument.trj";
-		trajectories[1] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_1/tzu_1_postument.trj";
+		trajectories[0] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_1/tzu_1_on_track.trj";
+		trajectories[1] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_1/tzu_2_on_track.trj";
 	}
 	else if((robot_type == ON_TRACK) && (procedure_type == ALTERNATIVE_X_METHOD_2))
 	{
-		trajectories[0] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_2/tzu_1_postument.trj";
-		trajectories[1] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_2/tzu_1_postument.trj";
+		trajectories[0] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_2/tzu_1_on_track.trj";
+		trajectories[1] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_2/tzu_2_on_track.trj";
 	}   
 	else if((robot_type == ON_TRACK) && (procedure_type == ALTERNATIVE_Y_METHOD_1))
 	{
-		trajectories[0] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_1/tzu_1_postument.trj";
-		trajectories[1] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_1/tzu_1_postument.trj";
+		trajectories[0] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_1/tzu_1_on_track.trj";
+		trajectories[1] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_1/tzu_2_on_track.trj";
 	}
 	else if((robot_type == ON_TRACK) && (procedure_type == ALTERNATIVE_Y_METHOD_2))
 	{
-		trajectories[0] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_2/tzu_1_postument.trj";
-		trajectories[1] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_2/tzu_1_postument.trj";
+		trajectories[0] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_2/tzu_1_on_track.trj";
+		trajectories[1] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_2/tzu_2_on_track.trj";
 	}
 }
 
