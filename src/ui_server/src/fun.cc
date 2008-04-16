@@ -322,13 +322,19 @@ file_selection_window_send_location(char* Buffer)
 	type = Buffer[0];
 		if (ui_state.file_window_mode==FSTRAJECTORY)
 		{
-				strncpy(ui_ecp_obj->ui_rep.filename,rindex(Buffer,'/')+1,strlen(rindex(Buffer,'/'))-1);
-				ui_ecp_obj->ui_rep.filename[strlen(rindex(Buffer,'/'))-1]='\0';
-				strncpy(ui_ecp_obj->ui_rep.path,Buffer,strlen(Buffer)-strlen(rindex(Buffer,'/')));
-				ui_ecp_obj->ui_rep.path[strlen(Buffer)-strlen(rindex(Buffer,'/'))]='\0';
+			char * newBuffer = new char[strlen(ui_state.mrrocpp_local_path)+strlen(Buffer)+1];
+			strcpy(newBuffer,ui_state.mrrocpp_local_path);
+			strcpy(newBuffer+strlen(ui_state.mrrocpp_local_path)-1,Buffer);
+			newBuffer[strlen(ui_state.mrrocpp_local_path)+strlen(Buffer)-1] = '\0';			
+			Buffer = newBuffer;
+			strncpy(ui_ecp_obj->ui_rep.filename,rindex(Buffer,'/')+1,strlen(rindex(Buffer,'/'))-1);
+			ui_ecp_obj->ui_rep.filename[strlen(rindex(Buffer,'/'))-1]='\0';
+			strncpy(ui_ecp_obj->ui_rep.path,Buffer,strlen(Buffer)-strlen(rindex(Buffer,'/')));
+			ui_ecp_obj->ui_rep.path[strlen(Buffer)-strlen(rindex(Buffer,'/'))]='\0';
 			
 			// kopiowanie biezacej sciezki, aby w nastepnym wywolaniu okna od niej zaczynac
-			strcpy(ui_state.teach_filesel_fullpath, ui_ecp_obj->ui_rep.path);
+//			strcpy(ui_state.teach_filesel_fullpath, ui_ecp_obj->ui_rep.path);
+			strcpy(ui_state.teach_filesel_fullpath,newBuffer);
 			// opuszczenie semaforu dla watku UI_COMM
 			ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 		}
