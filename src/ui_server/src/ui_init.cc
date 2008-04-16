@@ -95,6 +95,7 @@ int block_irp6_mechatronika = 0;
 int block_speaker = 0;
 
 int rid;
+int id = 0;
 std::queue<Message*> q;
 
 Message::Message(int robotId,int dialogId,int actionId,int varNum,double* v,char* m) : RobotId(robotId),DialogId(dialogId),ActionId(actionId)
@@ -2780,10 +2781,10 @@ void* server_thread(void*)
 		exit(1);
 	}
 
-	int id = 0;
 	timeb start,end;
 	fd_set sockets;
-	while(1)
+	rid = 1;
+	while(rid)
 	{
 		sin_size = sizeof their_addr;
 		printf("[SERVER] Waiting for connection\n");
@@ -2846,25 +2847,38 @@ void* server_thread(void*)
 			pthread_t tid;
 			pthread_t tid2;
 			//if(id) callfunc((void*)Buffer);
-			if(id)	pthread_create(&tid,NULL,callfunc,(void*)Buffer);
+			sem_wait(&sem);
+			if(id)
+			{
+					sem_post(&sem);
+					pthread_create(&tid,NULL,callfunc,(void*)Buffer);
+			}
 			else
 			{
+				id = 1;
+				sem_post(&sem);
 				if(send(new_fd,strcat(Buffer,"\n"),pos+1, 0) == -1) perror("send");
-				rid = 1;
 				pthread_create(&tid2,NULL,reply_thread,(void*)new_fd);
 				manage_interface();
 			}
-			id = 1;
 		}
 		printf("[SERVER] Connection closed - Unloading all\n"); 
-		id = 0;
 		sem_wait(&sem);
+		id = 0;
 		rid = 0;
 		sem_post(&sem);
 		close(new_fd);
 		unload_all();
 	}
 	return 0;
+}
+
+void disconnect()
+{
+		sem_wait(&sem);
+		id = 0;
+		rid = 0;
+		sem_post(&sem);
 }
 //~jk
 

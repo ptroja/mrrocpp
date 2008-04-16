@@ -480,6 +480,11 @@ int get_contents(char* Buffer)
 	struct dirent *ep;
 	char* fn;	
 	char* path;
+	char * newBuffer = new char[strlen(ui_state.mrrocpp_local_path)+strlen(Buffer)+1];
+	strcpy(newBuffer,ui_state.mrrocpp_local_path);
+	strcpy(newBuffer+strlen(ui_state.mrrocpp_local_path),Buffer);
+	newBuffer[strlen(ui_state.mrrocpp_local_path)+strlen(Buffer)] = '\0';
+	Buffer = newBuffer;
 	dp = opendir(Buffer);
 	if(dp != NULL)
 	{
@@ -490,7 +495,7 @@ int get_contents(char* Buffer)
 			strcpy(path,Buffer);
 			strcpy(path+strlen(Buffer),"/");
 			strcpy(path+strlen(Buffer)+1,ep->d_name);
-			path[strlen(ep->d_name)+strlen(Buffer)+1] = '\0';
+			path[strlen(ep->d_name)+strlen(Buffer)+1] = '\0';			
 			strcpy(fn+1,ep->d_name);
 			if(is_dir(path) == 1) fn[0] = 'd';
 			else fn[0] = 'f';
