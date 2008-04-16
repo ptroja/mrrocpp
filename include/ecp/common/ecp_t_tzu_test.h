@@ -11,10 +11,11 @@
 #define TORQUE_X 3
 #define TORQUE_Y 4
 #define TORQUE_Z 5
-#define NUMBER_OF_TRAJECTORIES 4
-#define TRAJECTORY_VERTICAL_DOWN 0
-#define TRAJECTORY_VERTCAL_UP 1
-#define TRAJECTORY_HORIZONTAL 2
+#define NUMBER_OF_TEST_TRAJECTORIES 4
+#define NOSE 0
+#define TEST 1
+#define ON_TRACK 0
+#define POSTUMENT 1
 
 class force_meassure_generator;
 
@@ -23,16 +24,21 @@ class ecp_task_tzu_postument_test :  public ecp_task
 protected:
 	ecp_smooth_generator *sg;
 	bias_edp_force_generator *befg;
-	// weight_meassure_generator* wmg;
 	force_meassure_generator* fmg;
 	ecp_force_tool_change_generator* ftcg;
 	ecp_tool_change_generator* tcg;
 	ecp_tff_nose_run_generator *ynrfg;
-	char* trajectories[NUMBER_OF_TRAJECTORIES];
+	char* test_trajectories[NUMBER_OF_TEST_TRAJECTORIES];
 	double weight;
 	double P_x;
 	double P_y;
 	double P_z;
+	int procedure_type;
+	ofstream str;
+	int robot;
+	void nose_generator_test(void);
+	void trajectories_test(void);
+	void set_trajectories();
 public:
 	ecp_task_tzu_postument_test(configurator &_config);
 	~ecp_task_tzu_postument_test();

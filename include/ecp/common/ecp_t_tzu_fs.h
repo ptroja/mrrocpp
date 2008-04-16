@@ -31,7 +31,6 @@ class ecp_task_tzu_cs_irp6ot :  public ecp_task
 protected:
 	ecp_smooth_generator *sg;
 	bias_edp_force_generator *befg;
-	// weight_meassure_generator* wmg;
 	force_meassure_generator* fmg;
 	ecp_force_tool_change_generator* ftcg;
 	ecp_tool_change_generator* tcg;

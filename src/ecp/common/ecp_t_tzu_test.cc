@@ -25,11 +25,15 @@ ecp_task_tzu_postument_test::ecp_task_tzu_postument_test(configurator &_config) 
 	tcg = NULL;
 	fmg = NULL;
 	ynrfg = NULL;
+	sg = NULL;
+	str.open("../results_test.txt",ios::app);
 };
 
 /** destruktor **/
 ecp_task_tzu_postument_test::~ecp_task_tzu_postument_test()
 {
+	str<<"--- KONIEC ---"<<endl;
+	str.close();
 };
 
 
@@ -40,17 +44,22 @@ void ecp_task_tzu_postument_test::task_initialization(void)
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	{
 		ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+		robot = ON_TRACK;
 	}
 	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
 	{
 		ecp_m_robot = new ecp_irp6_postument_robot (*this);
+		robot = POSTUMENT;
 	}
+	
+	// inicjalizacja generatorow
+	sg = new ecp_smooth_generator (*this, true, false);
 	befg = new bias_edp_force_generator(*this);
 	fmg = new force_meassure_generator(*this);	
-	// fmg->set_configuration(1,5);
 	ftcg = new ecp_force_tool_change_generator(*this);
 	tcg = new ecp_tool_change_generator(*this,true);
 	ynrfg = new ecp_tff_nose_run_generator(*this,8);
+	
 	sr_ecp_msg->message("ECP loaded");
 };
 
@@ -59,23 +68,92 @@ void ecp_task_tzu_postument_test::main_task_algorithm(void)
 	sr_ecp_msg->message("ECP cs irp6ot  - pushj start in tzu");
 	ecp_wait_for_start();
 	
+	
+	int option = choose_option ("1 - NoseGenerator, 2 - Test", 2);
+	if (option == OPTION_ONE)
+    {
+    		sr_ecp_msg->message("NoseGenerator");
+   		procedure_type = NOSE;
+   	}
+    else if (option == OPTION_TWO)
+    {
+ 		sr_ecp_msg->message("Test");
+		procedure_type = TEST;
+	}
+  
+	set_trajectories();
+    if(procedure_type == NOSE)
+    {
+		nose_generator_test();
+	}
+	else if(procedure_type == TEST)
+	{
+		trajectories_test();
+	}
+	ecp_termination_notice();
+	ecp_wait_for_stop();
+	std::cout<<"end\n"<<std::endl;
+};
+
+void ecp_task_tzu_postument_test::nose_generator_test(void)
+{
 	while(true)			
 	{
-		cout<<"START"<<endl;
+		cout<<"START NOSE"<<endl;
 		befg->Move();
 		cout<<"Biasowanie dokonane"<<endl;
 		tcg->set_tool_parameters(0,0,0.09); 
 		tcg->Move();
 		cout<<"Puszczenie nose generatora"<<endl;
 		sleep(1);
+		ynrfg->set_force_meassure(true);
 		ynrfg->Move();
-		ecp_termination_notice();
-		ecp_wait_for_stop();
 		break;
 	}
-	std::cout<<"end\n"<<std::endl;
-};
+}
 
+void ecp_task_tzu_postument_test::trajectories_test(void)
+{
+	while(true)			
+	{
+		cout<<"START TRAJECTORIES TEST"<<endl;
+		befg->Move();
+		cout<<"Biasowanie dokonane"<<endl;
+		tcg->set_tool_parameters(0,0,0.09); // to tutaj chyba trzeba przesunac o te 25 cm czyli argumenty powinny wygladac jakos tak (0,0,0.25)
+		tcg->Move();
+		cout<<"Puszczenie nose generatora"<<endl;
+		sleep(1);
+
+		break;
+	}
+}
+
+void ecp_task_tzu_postument_test::set_trajectories() // mozna wywalic zmienna robot z klasy i wtedy jawnie przekazywac ja tu do funkcji
+{
+	if(robot == ON_TRACK)
+	{
+		test_trajectories[0] = "../trj/tzu/test/on_track/tzu_1_on_track.trj";
+		test_trajectories[1] = "../trj/tzu/test/on_track/tzu_2_on_track.trj";
+		test_trajectories[2] = "../trj/tzu/test/on_track/tzu_3_on_track.trj";
+		test_trajectories[3] = "../trj/tzu/test/on_track/tzu_4_on_track.trj";
+		test_trajectories[4] = "../trj/tzu/test/on_track/tzu_5_on_track.trj";
+		test_trajectories[5] = "../trj/tzu/test/on_track/tzu_6_on_track.trj";
+		test_trajectories[6] = "../trj/tzu/test/on_track/tzu_7_on_track.trj";
+		test_trajectories[7] = "../trj/tzu/test/on_track/tzu_8_on_track.trj";
+	}	
+	else if(robot == POSTUMENT)
+	{
+		test_trajectories[0] = "../trj/tzu/test/postument/tzu_1_on_track.trj";
+		test_trajectories[1] = "../trj/tzu/test/postument/tzu_2_on_track.trj";
+		test_trajectories[2] = "../trj/tzu/test/postument/tzu_3_on_track.trj";
+		test_trajectories[3] = "../trj/tzu/test/postument/tzu_4_on_track.trj";
+		test_trajectories[4] = "../trj/tzu/test/postument/tzu_5_on_track.trj";
+		test_trajectories[5] = "../trj/tzu/test/postument/tzu_6_on_track.trj";
+		test_trajectories[6] = "../trj/tzu/test/postument/tzu_7_on_track.trj";
+		test_trajectories[7] = "../trj/tzu/test/postument/tzu_8_on_track.trj";
+	}
+}
+// reszte skonczyc w domu, bo przeciez do opracowania tego nie bede potrzebowal robota
 ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_tzu_postument_test(_config);
