@@ -227,7 +227,6 @@ void *server_thread ( void *);
 void *sr_thread ( void *arg );
 void *sr_thread ( void *arg );
 void *comm_thread ( void *arg );
-void disconnect();
 void catch_signal ( int sig );
 int init ( void );
 int main ( void );

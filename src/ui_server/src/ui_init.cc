@@ -74,6 +74,7 @@
 #endif
 
 #define SA_RESTART 1
+	pthread_t server_tid;
 
 sem_t sem;
 sem_t sem_ui;
@@ -2714,6 +2715,11 @@ switch(RobotId)
 		block_irp6_mechatronika = 0;
 		sem_post(&sem_irp6_mechatronika);
 		break;
+	default:
+	{
+		replySend(new Message(RobotId,DialogId,ActionId,0,NULL,NULL));
+		break;
+	}
 	}
 }
 
@@ -2783,8 +2789,7 @@ void* server_thread(void*)
 
 	timeb start,end;
 	fd_set sockets;
-	rid = 1;
-	while(rid)
+	while(1)
 	{
 		sin_size = sizeof their_addr;
 		printf("[SERVER] Waiting for connection\n");
@@ -2856,6 +2861,7 @@ void* server_thread(void*)
 			else
 			{
 				id = 1;
+				rid = 1;
 				sem_post(&sem);
 				if(send(new_fd,strcat(Buffer,"\n"),pos+1, 0) == -1) perror("send");
 				pthread_create(&tid2,NULL,reply_thread,(void*)new_fd);
@@ -2871,14 +2877,6 @@ void* server_thread(void*)
 		unload_all();
 	}
 	return 0;
-}
-
-void disconnect()
-{
-		sem_wait(&sem);
-		id = 0;
-		rid = 0;
-		sem_post(&sem);
 }
 //~jk
 
@@ -3365,7 +3363,7 @@ int init()
 	pthread_t sr_tid;
 	
 	//jk
-	pthread_t server_tid;
+
 	//~jk
 	
 	signal( SIGINT, &catch_signal );// by y aby uniemozliwic niekontrolowane zakonczenie aplikacji ctrl-c z kalwiatury

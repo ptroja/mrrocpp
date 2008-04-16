@@ -149,7 +149,6 @@ OnTimer()
 		closing_delay_counter=20;// opoznienie zamykania
 		ui_state.ui_state=3;
 // 		delay(5000);
-		disconnect();
 		MPslay();
 		ui_msg.ui->message("closing");
 	} else if (ui_state.ui_state==3) {// odliczanie
