@@ -34,7 +34,9 @@ edp_force_sensor::edp_force_sensor(edp_irp6s_postument_track_effector &_master)
 {
     gravity_transformation = NULL;
     is_sensor_configured=false;	//!< czujnik niezainicjowany
+    first_configure_done=false;
     is_reading_ready=false;				//!< nie ma zadnego gotowego odczytu
+    force_sensor_do_first_configure = false;
     force_sensor_do_configure = false;
     force_sensor_set_tool = false;
     TERMINATE = false;

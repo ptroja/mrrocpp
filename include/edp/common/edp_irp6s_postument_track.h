@@ -22,9 +22,6 @@
 class edp_irp6s_postument_track_effector: public edp_irp6s_effector
 {
 
-private:
-    // informacja czy czujnik sily zostal skonfigurowany po synchronizacji robota
-    bool force_sensor_configured;
 
 protected:
     

@@ -179,7 +179,14 @@ void * edp_irp6s_postument_track_effector::force_thread(void *arg)
 	{
 		try
 		{
-			if (vs->force_sensor_do_configure)
+			if (vs->force_sensor_do_first_configure)
+			{ //!< jesli otrzymano polecenie konfiguracji czujnika
+		//		printf("force_sensor_do_first_configure\n");
+					vs->configure_sensor();
+					vs->force_sensor_do_first_configure = false; //!< ustawienie flagi ze czujnik jest ponownie skonfigurowany
+					vs->first_configure_done = true;
+			}
+			else if (vs->force_sensor_do_configure)
 			{ //!< jesli otrzymano polecenie konfiguracji czujnika
 				if (vs->new_edp_command)
 				{

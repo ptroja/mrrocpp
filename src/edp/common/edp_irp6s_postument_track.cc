@@ -220,7 +220,7 @@ edp_irp6s_postument_track_effector::edp_irp6s_postument_track_effector(configura
     pthread_mutex_init(&force_mutex, NULL);
 
     // czujnik sil nie zostal jeszcze skonfigurowany po synchronizacji robota
-    force_sensor_configured = false;
+
 
     if (config.exists("force_tryb"))
         force_tryb = config.return_int_value("force_tryb");
@@ -865,11 +865,9 @@ void edp_irp6s_postument_track_effector::servo_joints_and_frame_actualization_an
             tmp_eem.get_frame_tab(servo_current_frame_wo_tool);
         }
 
-        if ( (force_tryb> 0)&&(!force_sensor_configured)&&(synchronised))
+        if ( (force_tryb> 0)&&(synchronised)&&(!(vs->first_configure_done))&&(!(vs->force_sensor_do_first_configure)))
         {
-            vs->force_sensor_do_configure = true;
-            vs->check_for_command_execution_finish();
-            force_sensor_configured = true;
+            vs->force_sensor_do_first_configure = true;
         }
 
         catch_nr=0;

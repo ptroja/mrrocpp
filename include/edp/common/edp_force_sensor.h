@@ -25,7 +25,7 @@ extern "C"
 
     protected:
 
-        short is_sensor_configured;		// czy czujnik skonfigurowany?
+
         short is_reading_ready;			// czy jakikolwiek odczyt jest gotowy?
 
         ForceTrans *gravity_transformation; // klasa likwidujaca wplyw grawitacji na czujnik
@@ -35,7 +35,8 @@ extern "C"
         sem_t new_ms; //!< semafor dostepu do nowej wiadomosci dla vsp
         sem_t new_ms_for_edp; //!< semafor dostepu do nowej wiadomosci dla edp
         bool TERMINATE;			//!< zakonczenie obydwu watkow
-
+        short is_sensor_configured;		// czy czujnik skonfigurowany?
+        bool first_configure_done;
         int	set_command_execution_finish() ;
         int	check_for_command_execution_finish();
 
@@ -46,6 +47,7 @@ extern "C"
 
 		bool new_edp_command;
         bool force_sensor_do_configure; // FLAGA ZLECENIA KONFIGURACJI CZUJNIKA
+        bool force_sensor_do_first_configure; // pierwsza konfiguracja po synchronizacji lub uruchomieniu
         bool force_sensor_set_tool; // FLAGA ZLECENIA ZMIANY NARZEDZIA
 
         edp_irp6s_postument_track_effector &master;
