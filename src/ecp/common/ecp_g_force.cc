@@ -781,8 +781,14 @@ bool y_edge_follow_force_generator::next_step()
 //////////////////////////////////////////////////////////////////////////////////////////////////
 legobrick_detach_force_generator::legobrick_detach_force_generator(
 		ecp_task& _ecp_task, int step) :
-	ecp_teach_in_generator(_ecp_task), tool_frame(0.0, 0.0, 0.25)
+	ecp_teach_in_generator(_ecp_task)//, tool_frame(0.026551, -0.011313, 0.25 + 0.028)
 {
+	//macierz jednorodna przejscia na uklad narzedzia do przemieszczania klockow
+	frame_tab tmp_tool_frame = {{cos(M_PI/4), -1 * sin (M_PI/4), 0, 0.02655}
+				, {sin(M_PI/4), cos(M_PI/4), 0, -0.011313}
+				, {0, 0, 1, 0.25 + 0.028}};
+
+	tool_frame = Homog_matrix(tmp_tool_frame);
 	step_no=step;
 }
 ;
@@ -820,18 +826,46 @@ bool legobrick_detach_force_generator::first_step()
 		the_robot->EDP_data.next_inertia[i+3] = TORQUE_INERTIA;
 	}
 
-	for (int i=0; i<6; i++)
+	/*for (int i=0; i<6; i++)
 	{
 		the_robot->EDP_data.next_velocity[i] = 0;
 		the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
 		//	the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i] = 0.0;
 		the_robot->EDP_data.next_behaviour[i] = UNGUARDED_MOTION;
-	}
+	}*/
 
+	//os x
 	the_robot->EDP_data.next_reciprocal_damping[0] = FORCE_RECIPROCAL_DAMPING;
+	the_robot->EDP_data.next_velocity[0] = 0;
+	the_robot->EDP_data.next_force_xyz_torque_xyz[0] = -0.1;
 	the_robot->EDP_data.next_behaviour[0] = CONTACT;
-	// Sila dosciku do rawedzi
-	the_robot->EDP_data.next_force_xyz_torque_xyz[0] = -4;
+
+	//the_robot->EDP_data.next_reciprocal_damping[3] = 0.0;
+	the_robot->EDP_data.next_velocity[3] = 0;
+	the_robot->EDP_data.next_force_xyz_torque_xyz[3] = 0;
+	the_robot->EDP_data.next_behaviour[3] = UNGUARDED_MOTION;
+
+	//os y (obrotu)
+	the_robot->EDP_data.next_reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
+	the_robot->EDP_data.next_velocity[1] = 0;
+	the_robot->EDP_data.next_force_xyz_torque_xyz[1] = 0;
+	the_robot->EDP_data.next_behaviour[1] = CONTACT;
+
+	//the_robot->EDP_data.next_reciprocal_damping[4] = 0.0;
+	the_robot->EDP_data.next_velocity[4] = 0;
+	the_robot->EDP_data.next_force_xyz_torque_xyz[4] = 0.001;
+	the_robot->EDP_data.next_behaviour[4] = GUARDED_MOTION;
+
+	//os z 
+	the_robot->EDP_data.next_reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING;
+	the_robot->EDP_data.next_velocity[2] = 0;
+	the_robot->EDP_data.next_force_xyz_torque_xyz[2] = -0.5;
+	the_robot->EDP_data.next_behaviour[2] = CONTACT;
+
+	//the_robot->EDP_data.next_reciprocal_damping[5] = 0.0;
+	the_robot->EDP_data.next_velocity[5] = 0;
+	the_robot->EDP_data.next_force_xyz_torque_xyz[5] = 0;
+	the_robot->EDP_data.next_behaviour[5] = UNGUARDED_MOTION;
 
 	return true;
 }
@@ -849,13 +883,13 @@ bool legobrick_detach_force_generator::next_step()
 
 	// 	wstawienie nowego przyrostu pozyji do przyrostowej trajektorii ruchu do zapisu do pliku
 	Homog_matrix tmp_matrix(the_robot->EDP_data.current_arm_frame);
-	tmp_matrix.get_xyz_euler_zyz(inc_delta);
+	tmp_matrix.get_xyz_angle_axis(inc_delta);
 
 	for (int i=0; i<6; i++)
 		inc_delta[i] = -inc_delta[i];
 
 	tmp_matrix.set_frame_tab(the_robot->EDP_data.current_arm_frame);
-	tmp_matrix.get_xyz_euler_zyz(tmp_delta);
+	tmp_matrix.get_xyz_angle_axis(tmp_delta);
 
 	for (int i=0; i<6; i++)
 		inc_delta[i]+=tmp_delta[i];

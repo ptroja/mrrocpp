@@ -9,7 +9,7 @@
 //#include "ecp_mp/ecp_mp_s_schunk.h"
 
 #include "ecp/irp6_postument/ecp_local.h"
-//#include "ecp/common/ecp_g_force.h"
+#include "ecp/common/ecp_g_force.h"
 //#include "ecp/common/ecp_g_smooth.h"
 #include "ecp/irp6_postument/ecp_t_legobrick_irp6p.h"
 
@@ -77,10 +77,13 @@ void ecp_task_lego_brick_irp6p::main_task_algorithm(void)
     }
     gen.create_pose_list_head(ps, vp, vk, v, a, coordinates);
 
+// generator oparty na detekcji sily
+    legobrick_detach_force_generator force_gen(*this, 100);
     for(;;){
     	//for(;;){
 		sr_ecp_msg->message("Ruch");
-    		gen.Move();
+    		//gen.Move();
+		force_gen.Move();
 	//}
 	ecp_wait_for_stop();
 	break;
