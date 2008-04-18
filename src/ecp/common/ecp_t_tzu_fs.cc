@@ -26,7 +26,6 @@ ecp_task_tzu_cs_irp6ot::ecp_task_tzu_cs_irp6ot(configurator &_config) : ecp_task
 	ftcg = NULL;
 	tcg = NULL;
 	etnrg = NULL;
-	str.open("../results.txt",ios::app);
 };
 
 /** destruktor **/
@@ -44,11 +43,13 @@ void ecp_task_tzu_cs_irp6ot::task_initialization(void)
 	{
 		ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 		robot = ON_TRACK;
+		str.open("../on_track_results.txt");
 	}
 	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
 	{
 		ecp_m_robot = new ecp_irp6_postument_robot (*this);
 		robot = POSTUMENT;
+		str.open("../postument_results.txt");
 	}
 	
 	sg = new ecp_smooth_generator (*this, true, false);
@@ -65,7 +66,7 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 	bool automatic = false;
 	sr_ecp_msg->message("ECP cs irp6ot  - pushj start in tzu");
 //	str.open("../results.txt");
-//	str<<"test dupa"<<endl;
+//	str<<"test"<<endl;
 //	str.close();
 	ecp_wait_for_start();
 	int procedure_type;

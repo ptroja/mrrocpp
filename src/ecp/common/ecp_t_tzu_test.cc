@@ -117,11 +117,28 @@ void ecp_task_tzu_postument_test::trajectories_test(void)
 	while(true)			
 	{
 		cout<<"START TRAJECTORIES TEST"<<endl;
-		befg->Move();
+		// befg->Move();
 		cout<<"Biasowanie dokonane"<<endl;
-		tcg->set_tool_parameters(0,0,0.09); // to tutaj chyba trzeba przesunac o te 25 cm czyli argumenty powinny wygladac jakos tak (0,0,0.25)
+		tcg->set_tool_parameters(0,0,0.25); // to tutaj chyba trzeba przesunac o te 25 cm czyli argumenty powinny wygladac jakos tak (0,0,0.25)
 		tcg->Move();
-		cout<<"Puszczenie nose generatora"<<endl;
+		cout<<"Rozpoczecie testowania dla roznych trajektorii"<<endl;
+		
+		for(int i = 0 ; i < NUMBER_OF_TEST_TRAJECTORIES ; i++)
+		{
+			if(i == 0)	// zbiasowanie czujnika dla pierwszego polozenia, w takim wypadku odczyt sily jaki op tym nastapi pewnie nie bedzie mial wiekszego sensu
+				befg->Move();
+			sg->load_file_with_path(test_trajectories[i]);
+			sg->Move();
+			fmg->Move();
+			cout<<"pomiar "<<i<<": "<<fmg->weight<<endl;
+			str<<"pomiar "<<i<<": "<<fmg->weight<<endl;
+		}
+		// pomiar w pozycji wyjsciowej
+		sg->load_file_with_path(test_trajectories[1]);
+		sg->Move();
+		fmg->Move();
+		cout<<"pomiar "<<1<<": "<<fmg->weight<<endl;
+		str<<"pomiar "<<1<<": "<<fmg->weight<<endl;
 		sleep(1);
 
 		break;
@@ -130,27 +147,34 @@ void ecp_task_tzu_postument_test::trajectories_test(void)
 
 void ecp_task_tzu_postument_test::set_trajectories() // mozna wywalic zmienna robot z klasy i wtedy jawnie przekazywac ja tu do funkcji
 {
+	// sprawdzic czy wszystkie tak wrzucone ruchy maja wiekszy sens
 	if(robot == ON_TRACK)
 	{
-		test_trajectories[0] = "../trj/tzu/test/on_track/tzu_1_on_track.trj";
-		test_trajectories[1] = "../trj/tzu/test/on_track/tzu_2_on_track.trj";
-		test_trajectories[2] = "../trj/tzu/test/on_track/tzu_3_on_track.trj";
-		test_trajectories[3] = "../trj/tzu/test/on_track/tzu_4_on_track.trj";
-		test_trajectories[4] = "../trj/tzu/test/on_track/tzu_5_on_track.trj";
-		test_trajectories[5] = "../trj/tzu/test/on_track/tzu_6_on_track.trj";
-		test_trajectories[6] = "../trj/tzu/test/on_track/tzu_7_on_track.trj";
-		test_trajectories[7] = "../trj/tzu/test/on_track/tzu_8_on_track.trj";
+		test_trajectories[0] = "../trj/tzu/standard/on_track/tzu_3_on_track.trj";
+		test_trajectories[1] = "../trj/tzu/standard/on_track/tzu_2_on_track.trj";
+		test_trajectories[2] = "../trj/tzu/standard/on_track/tzu_1_on_track.trj";
+		test_trajectories[3] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_1/tzu_1_on_track.trj";
+		test_trajectories[4] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_1/tzu_2_on_track.trj";
+		test_trajectories[5] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_2/tzu_1_on_track.trj";
+		test_trajectories[6] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_2/tzu_2_on_track.trj";
+		test_trajectories[7] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_1/tzu_1_on_track.trj";
+		test_trajectories[8] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_1/tzu_2_on_track.trj";
+		test_trajectories[9] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_2/tzu_1_on_track.trj";
+		test_trajectories[10] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_2/tzu_2_on_track.trj";
 	}	
 	else if(robot == POSTUMENT)
 	{
-		test_trajectories[0] = "../trj/tzu/test/postument/tzu_1_on_track.trj";
-		test_trajectories[1] = "../trj/tzu/test/postument/tzu_2_on_track.trj";
-		test_trajectories[2] = "../trj/tzu/test/postument/tzu_3_on_track.trj";
-		test_trajectories[3] = "../trj/tzu/test/postument/tzu_4_on_track.trj";
-		test_trajectories[4] = "../trj/tzu/test/postument/tzu_5_on_track.trj";
-		test_trajectories[5] = "../trj/tzu/test/postument/tzu_6_on_track.trj";
-		test_trajectories[6] = "../trj/tzu/test/postument/tzu_7_on_track.trj";
-		test_trajectories[7] = "../trj/tzu/test/postument/tzu_8_on_track.trj";
+		test_trajectories[0] = "../trj/tzu/standard/postument/tzu_3_postument.trj";
+		test_trajectories[1] = "../trj/tzu/standard/postument/tzu_2_postument.trj";
+		test_trajectories[2] = "../trj/tzu/standard/postument/tzu_1_postument.trj";
+		test_trajectories[3] = "../trj/tzu/alternative/postument/x_weight_meassure/method_1/tzu_1_postument.trj";
+		test_trajectories[4] = "../trj/tzu/alternative/postument/x_weight_meassure/method_1/tzu_2_postument.trj";
+		test_trajectories[5] = "../trj/tzu/alternative/postument/x_weight_meassure/method_2/tzu_1_postument.trj";
+		test_trajectories[6] = "../trj/tzu/alternative/postument/x_weight_meassure/method_2/tzu_2_postument.trj";
+		test_trajectories[7] = "../trj/tzu/alternative/postument/y_weight_meassure/method_1/tzu_1_postument.trj";
+		test_trajectories[8] = "../trj/tzu/alternative/postument/y_weight_meassure/method_1/tzu_2_postument.trj";
+		test_trajectories[9] = "../trj/tzu/alternative/postument/y_weight_meassure/method_2/tzu_1_postument.trj";
+		test_trajectories[10] = "../trj/tzu/alternative/postument/y_weight_meassure/method_2/tzu_2_postument.trj";
 	}
 }
 // reszte skonczyc w domu, bo przeciez do opracowania tego nie bede potrzebowal robota

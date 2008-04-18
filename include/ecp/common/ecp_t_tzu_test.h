@@ -11,7 +11,7 @@
 #define TORQUE_X 3
 #define TORQUE_Y 4
 #define TORQUE_Z 5
-#define NUMBER_OF_TEST_TRAJECTORIES 4
+#define NUMBER_OF_TEST_TRAJECTORIES 11
 #define NOSE 0
 #define TEST 1
 #define ON_TRACK 0
