@@ -19,7 +19,7 @@
 
 using namespace std;
 /** konstruktor **/
-ecp_task_tzu_cs_irp6ot::ecp_task_tzu_cs_irp6ot(configurator &_config) : ecp_task(_config)
+ecp_task_tzu_fs::ecp_task_tzu_fs(configurator &_config) : ecp_task(_config)
 {
 	sg = NULL;
 	befg = NULL;
@@ -29,7 +29,7 @@ ecp_task_tzu_cs_irp6ot::ecp_task_tzu_cs_irp6ot(configurator &_config) : ecp_task
 };
 
 /** destruktor **/
-ecp_task_tzu_cs_irp6ot::~ecp_task_tzu_cs_irp6ot()
+ecp_task_tzu_fs::~ecp_task_tzu_fs()
 {
 	str<<"--- KONIEC ---"<<endl;
 	str.close();
@@ -37,7 +37,7 @@ ecp_task_tzu_cs_irp6ot::~ecp_task_tzu_cs_irp6ot()
 
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_tzu_cs_irp6ot::task_initialization(void) 
+void ecp_task_tzu_fs::task_initialization(void) 
 {
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	{
@@ -61,9 +61,10 @@ void ecp_task_tzu_cs_irp6ot::task_initialization(void)
 	sr_ecp_msg->message("ECP loaded");
 };
 
-void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
+void ecp_task_tzu_fs::main_task_algorithm(void)
 {
 	bool automatic = false;
+	bool correction = false;
 	sr_ecp_msg->message("ECP cs irp6ot  - pushj start in tzu");
 //	str.open("../results.txt");
 //	str<<"test"<<endl;
@@ -77,7 +78,7 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 	else
 		additional_move = "../trj/tzu/tzu_postument_1.trj";
 
-	int option = choose_option ("1 - Metoda standardowa, 2 - Metody alternatywne, 3 - Auitomat", 3);
+	int option = choose_option ("1 - Standard, 2 - Alternative, 3 - Auto, 4 - Correction", 4);
 	if (option == OPTION_ONE)
     {
     	sr_ecp_msg->message("Wyznaczanie modelu metoda standardowa");
@@ -113,9 +114,22 @@ void ecp_task_tzu_cs_irp6ot::main_task_algorithm(void)
 	{
 		automatic = true;
 	}
-	
+	else if(option == OPTION_FOUR)
+	{
+		correction = true;
+	}
 	// set_trajectory(robot, procedure_type);
 
+	// w domu zastanowic sie nad jakims sprytnym uporzadkowaniem tego
+	if(correction)
+	{
+		// przerobic to bo korekcja modelu moze miec sens tylko po jego wyznaczeniu
+		// ustawienie odpowiednich trajektorii
+		set_correction_trajectories();
+		double test_model[] = {1,2,3,4};
+		model_correction(test_model);
+	}
+	
 	int T;
 	if(automatic)
 	{
@@ -184,10 +198,10 @@ std::cout<<"end\n"<<std::endl;
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_tzu_cs_irp6ot(_config);
+	return new ecp_task_tzu_fs(_config);
 };
 
-void ecp_task_tzu_cs_irp6ot::method_alternative(int type, int sequence[], int T)
+void ecp_task_tzu_fs::method_alternative(int type, int sequence[], int T)
 {
 	for(int i = 0 ; i < T ; i++)
 	{
@@ -218,7 +232,7 @@ void ecp_task_tzu_cs_irp6ot::method_alternative(int type, int sequence[], int T)
 	}
 }
 
-void ecp_task_tzu_cs_irp6ot::method_standard(int T)
+void ecp_task_tzu_fs::method_standard(int T)
 {
 	for(int i = 0 ; i < T ; i++)
 	{
@@ -319,7 +333,7 @@ void ecp_task_tzu_cs_irp6ot::method_standard(int T)
 	}
 }
 
-void ecp_task_tzu_cs_irp6ot::set_trajectory(int robot_type, int procedure_type)
+void ecp_task_tzu_fs::set_trajectory(int robot_type, int procedure_type)
 {
 	if((robot_type == POSTUMENT) && (procedure_type == STANDARD))
 	{
@@ -376,7 +390,99 @@ void ecp_task_tzu_cs_irp6ot::set_trajectory(int robot_type, int procedure_type)
 	}
 }
 
-void ecp_task_tzu_cs_irp6ot::set_test_trajectory(int robot_type)
+void ecp_task_tzu_fs::set_correction_trajectories() // mozna wywalic zmienna robot z klasy i wtedy jawnie przekazywac ja tu do funkcji
+{
+	// sprawdzic czy wszystkie tak wrzucone ruchy maja wiekszy sens
+	if(robot == ON_TRACK)
+	{
+		test_trajectories[0] = "../trj/tzu/standard/on_track/tzu_3_on_track.trj";
+		test_trajectories[1] = "../trj/tzu/standard/on_track/tzu_2_on_track.trj";
+		test_trajectories[2] = "../trj/tzu/standard/on_track/tzu_1_on_track.trj";
+		test_trajectories[3] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_1/tzu_1_on_track.trj";
+		test_trajectories[4] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_1/tzu_2_on_track.trj";
+		test_trajectories[5] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_2/tzu_1_on_track.trj";
+		test_trajectories[6] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_2/tzu_2_on_track.trj";
+		test_trajectories[7] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_1/tzu_1_on_track.trj";
+		test_trajectories[8] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_1/tzu_2_on_track.trj";
+		test_trajectories[9] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_2/tzu_1_on_track.trj";
+		test_trajectories[10] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_2/tzu_2_on_track.trj";
+	}	
+	else if(robot == POSTUMENT)
+	{
+		test_trajectories[0] = "../trj/tzu/standard/postument/tzu_3_postument.trj";
+		test_trajectories[1] = "../trj/tzu/standard/postument/tzu_2_postument.trj";
+		test_trajectories[2] = "../trj/tzu/standard/postument/tzu_1_postument.trj";
+		test_trajectories[3] = "../trj/tzu/alternative/postument/x_weight_meassure/method_1/tzu_1_postument.trj";
+		test_trajectories[4] = "../trj/tzu/alternative/postument/x_weight_meassure/method_1/tzu_2_postument.trj";
+		test_trajectories[5] = "../trj/tzu/alternative/postument/x_weight_meassure/method_2/tzu_1_postument.trj";
+		test_trajectories[6] = "../trj/tzu/alternative/postument/x_weight_meassure/method_2/tzu_2_postument.trj";
+		test_trajectories[7] = "../trj/tzu/alternative/postument/y_weight_meassure/method_1/tzu_1_postument.trj";
+		test_trajectories[8] = "../trj/tzu/alternative/postument/y_weight_meassure/method_1/tzu_2_postument.trj";
+		test_trajectories[9] = "../trj/tzu/alternative/postument/y_weight_meassure/method_2/tzu_1_postument.trj";
+		test_trajectories[10] = "../trj/tzu/alternative/postument/y_weight_meassure/method_2/tzu_2_postument.trj";
+	}
+}
+
+int ecp_task_tzu_fs::czy_miesci_sie_w_zakladanej_dokladnosci(double dokladnosc, double pomiar)
+{
+	// zero jest "pozycja" od ktorej maja odiegac dane pomiary
+	if(pomiar >= dokladnosc)		// zastanowic sie czy nie zwracac tu jakiejs odleglosci bledu
+		return 1;
+	else if(pomiar >= -dokladnosc)
+		return -1;
+	return 0;
+}
+void ecp_task_tzu_fs::model_correction(double model[])
+{
+	double zadana_dokladnosc = 0.5; // czyli maksymalne odchylenie od zera w tym przypadku ma wynosci maksymalnie +/- 0.5
+	double krok_korekty = 0.01;
+	int ilosc_krokow_korekcyjnych = 10;
+	while(true)			
+	{
+		cout<<"START MODEL CORRECTION"<<endl;
+		// befg->Move();
+		cout<<"Biasowanie dokonane"<<endl;
+		tcg->set_tool_parameters(0,0,0.09); // spytac sie jak to jest dokladnie z ustawianiem tego przesuniecia u jakie powinno ono byc w tym przypadku
+		tcg->Move();
+		cout<<"Rozpoczecie procedur korekcyjnych dla roznych trajektorii"<<endl;
+		
+		for(int i = 0 ; i < NUMBER_OF_TEST_TRAJECTORIES ; i++)
+		{
+			sg->load_file_with_path(test_trajectories[i]);
+			sg->Move();
+			fmg->Move();
+			cout<<"pomiar korekcyjny "<<i<<": "<<fmg->weight<<endl;
+			str<<"pomiar korekcyjny "<<i<<": "<<fmg->weight<<endl;
+			// jak to jest z korekcja gdy odkladaja nam sie momenty sil
+			// akualnie testy/przemyslenia jedynie dla sil
+			for(int j = 0 ; j < 3 ; j++)
+			{
+				
+				for(int k = 0 ; k < ilosc_krokow_korekcyjnych ; k++)
+				{
+					int kor = czy_miesci_sie_w_zakladanej_dokladnosci(zadana_dokladnosc,fmg->weight[i]);
+					if(kor != 0) // czy korygowac
+					{
+						// korygowac
+						if(kor > 0)
+						{
+							model[i] -= krok_korekty;
+						}
+						else
+						{
+							model[i] += krok_korekty;
+						}
+					}
+					else
+						break; // nie korygujemy
+				}
+			}
+		}
+		break;
+	}
+}
+
+void ecp_task_tzu_fs::set_test_trajectory(int robot_type)
 {
 /*
  	if(robot_type == POSTUMENT)

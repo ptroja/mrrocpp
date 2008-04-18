@@ -26,7 +26,7 @@
 
 class force_meassure_generator;
 
-class ecp_task_tzu_cs_irp6ot :  public ecp_task  
+class ecp_task_tzu_fs :  public ecp_task  
 {
 protected:
 	ecp_smooth_generator *sg;
@@ -47,9 +47,13 @@ protected:
 	void set_test_trajectory(int robot_type);
 	void method_alternative(int type, int sequence[], int T);
 	void method_standard(int T);
+	
+	void set_correction_trajectories();
+	int czy_miesci_sie_w_zakladanej_dokladnosci(double dokladnosc, double pomiar);
+	void model_correction(double model[]);
 public:
-	ecp_task_tzu_cs_irp6ot(configurator &_config);
-	~ecp_task_tzu_cs_irp6ot();
+	ecp_task_tzu_fs(configurator &_config);
+	~ecp_task_tzu_fs();
 	
 	// methods for ECP template to redefine in concrete classes
 	/** metoda odpowiedzialna za inicjalizacje zmiennych zadania **/

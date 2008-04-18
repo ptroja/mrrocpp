@@ -26,7 +26,7 @@ ecp_task_tzu_postument_test::ecp_task_tzu_postument_test(configurator &_config) 
 	fmg = NULL;
 	ynrfg = NULL;
 	sg = NULL;
-	str.open("../results_test.txt",ios::app);
+	str.open("../results_test.txt"/*,ios::app*/);
 };
 
 /** destruktor **/
@@ -134,11 +134,11 @@ void ecp_task_tzu_postument_test::trajectories_test(void)
 			str<<"pomiar "<<i<<": "<<fmg->weight<<endl;
 		}
 		// pomiar w pozycji wyjsciowej
-		sg->load_file_with_path(test_trajectories[1]);
+		sg->load_file_with_path(test_trajectories[0]);
 		sg->Move();
 		fmg->Move();
-		cout<<"pomiar "<<1<<": "<<fmg->weight<<endl;
-		str<<"pomiar "<<1<<": "<<fmg->weight<<endl;
+		cout<<"pomiar "<<0<<": "<<fmg->weight<<endl;
+		str<<"pomiar "<<0<<": "<<fmg->weight<<endl;
 		sleep(1);
 
 		break;
