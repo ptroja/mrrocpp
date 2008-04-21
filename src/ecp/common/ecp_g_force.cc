@@ -784,8 +784,8 @@ legobrick_detach_force_generator::legobrick_detach_force_generator(
 	ecp_teach_in_generator(_ecp_task)//, tool_frame(0.026551, -0.011313, 0.25 + 0.028)
 {
 	//macierz jednorodna przejscia na uklad narzedzia do przemieszczania klockow
-	frame_tab tmp_tool_frame = {{cos(M_PI/4), -1 * sin (M_PI/4), 0, 0.02655}
-				, {sin(M_PI/4), cos(M_PI/4), 0, -0.011313}
+	frame_tab tmp_tool_frame = {{cos(-M_PI/4), -1 * sin (-M_PI/4), 0, 0.02655}
+				, {sin(-M_PI/4), cos(-M_PI/4), 0, -0.011313}
 				, {0, 0, 1, 0.25 + 0.028}};
 
 	tool_frame = Homog_matrix(tmp_tool_frame);
@@ -822,7 +822,7 @@ bool legobrick_detach_force_generator::first_step()
 
 	for (int i=0; i<3; i++)
 	{
-		the_robot->EDP_data.next_inertia[i] = FORCE_INERTIA;
+		the_robot->EDP_data.next_inertia[i] = FORCE_INERTIA/4;
 		the_robot->EDP_data.next_inertia[i+3] = TORQUE_INERTIA;
 	}
 
@@ -837,8 +837,9 @@ bool legobrick_detach_force_generator::first_step()
 	//os x
 	the_robot->EDP_data.next_reciprocal_damping[0] = FORCE_RECIPROCAL_DAMPING;
 	the_robot->EDP_data.next_velocity[0] = 0;
-	the_robot->EDP_data.next_force_xyz_torque_xyz[0] = -0.1;
+	the_robot->EDP_data.next_force_xyz_torque_xyz[0] = 0.0;
 	the_robot->EDP_data.next_behaviour[0] = CONTACT;
+	//the_robot->EDP_data.next_behaviour[0] = UNGUARDED_MOTION;
 
 	//the_robot->EDP_data.next_reciprocal_damping[3] = 0.0;
 	the_robot->EDP_data.next_velocity[3] = 0;
@@ -848,18 +849,20 @@ bool legobrick_detach_force_generator::first_step()
 	//os y (obrotu)
 	the_robot->EDP_data.next_reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
 	the_robot->EDP_data.next_velocity[1] = 0;
-	the_robot->EDP_data.next_force_xyz_torque_xyz[1] = 0;
+	the_robot->EDP_data.next_force_xyz_torque_xyz[1] = 0.0;
+	//the_robot->EDP_data.next_behaviour[1] = UNGUARDED_MOTION;//CONTACT;
 	the_robot->EDP_data.next_behaviour[1] = CONTACT;
 
-	//the_robot->EDP_data.next_reciprocal_damping[4] = 0.0;
-	the_robot->EDP_data.next_velocity[4] = 0;
-	the_robot->EDP_data.next_force_xyz_torque_xyz[4] = 0.001;
+	the_robot->EDP_data.next_reciprocal_damping[4] = TORQUE_RECIPROCAL_DAMPING;
+	the_robot->EDP_data.next_velocity[4] = -0.05;
+	the_robot->EDP_data.next_force_xyz_torque_xyz[4] = 0.0;
 	the_robot->EDP_data.next_behaviour[4] = GUARDED_MOTION;
 
 	//os z 
-	the_robot->EDP_data.next_reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING;
+	the_robot->EDP_data.next_reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING/4;
 	the_robot->EDP_data.next_velocity[2] = 0;
-	the_robot->EDP_data.next_force_xyz_torque_xyz[2] = -0.5;
+	the_robot->EDP_data.next_force_xyz_torque_xyz[2] = -20.0;
+	//the_robot->EDP_data.next_behaviour[2] = UNGUARDED_MOTION;//CONTACT;
 	the_robot->EDP_data.next_behaviour[2] = CONTACT;
 
 	//the_robot->EDP_data.next_reciprocal_damping[5] = 0.0;
@@ -894,7 +897,7 @@ bool legobrick_detach_force_generator::next_step()
 	for (int i=0; i<6; i++)
 		inc_delta[i]+=tmp_delta[i];
 
-	insert_pose_list_element(emptyps, 0.0, 2, inc_delta);
+	//insert_pose_list_element(emptyps, 0.0, 2, inc_delta);
 
 	// wyznaczenie nowej macierzy referencyjnej i predkosci ruchu
 
@@ -911,7 +914,7 @@ bool legobrick_detach_force_generator::next_step()
 	
 
 
-
+/*
 
 	// sprowadzenie sil do ukladu kisci
 	Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
@@ -964,11 +967,11 @@ bool legobrick_detach_force_generator::next_step()
 		 the_robot->EDP_data.ECPtoEDP_reference_frame[1][1] = c_alfa;
 		 */
 
-		printf("sensor: x: %+d, y: %+d, v:%+d, %f\n", (int) round(wx),
+		/*printf("sensor: x: %+d, y: %+d, v:%+d, %f\n", (int) round(wx),
 				(int) round(wy), (int) round(v), atan2(s_alfa, c_alfa)
 						*DEGREES_TO_RADIANS);
 	}
-
+*/
 	return true;
 
 }

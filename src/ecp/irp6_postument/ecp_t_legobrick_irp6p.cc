@@ -32,7 +32,7 @@ void ecp_task_lego_brick_irp6p::task_initialization(void)
     //gag = new ecp_tff_gripper_approach_generator (*this, 8);
     //rfrg = new ecp_tff_rubik_face_rotate_generator (*this, 8);
     //tig = new ecp_teach_in_generator (*this);
-    //befg = new bias_edp_force_generator (*this);
+    befg = new bias_edp_force_generator (*this);
     sg = new ecp_smooth_generator (*this, true);
     //wmg = new weight_meassure_generator(*this, 1);
 
@@ -78,11 +78,12 @@ void ecp_task_lego_brick_irp6p::main_task_algorithm(void)
     gen.create_pose_list_head(ps, vp, vk, v, a, coordinates);
 
 // generator oparty na detekcji sily
-    legobrick_detach_force_generator force_gen(*this, 100);
+    legobrick_detach_force_generator force_gen(*this, 10);
     for(;;){
     	//for(;;){
 		sr_ecp_msg->message("Ruch");
-    		//gen.Move();
+    		gen.Move();
+		befg->Move();
 		force_gen.Move();
 	//}
 	ecp_wait_for_stop();
