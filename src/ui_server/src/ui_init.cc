@@ -150,7 +150,7 @@ void* callfunc(void* arg)
 	if(strlen(Buffer)>5 && Buffer[3] == 65)
 	{
 		int varNum = Buffer[4];
-		char* pos2 = Buffer+6;
+		char* pos2 = Buffer+5;
 		char Buffer2[16];
 		v = new double[varNum];
 		for(int i = 0;i < varNum;++i)
@@ -158,8 +158,9 @@ void* callfunc(void* arg)
 			memset(Buffer2,'\0',16);
 			int val = atoi(pos2);
 			v[i] = (double)val/10000.0;
-			sprintf(Buffer2,"%+d",val);
+			sprintf(Buffer2,"%-d",val);
 			pos2+= strlen(Buffer2);
+			if(val >= 0) ++pos2;			
 			if(pos2 >= Buffer + strlen(Buffer) && i < varNum - 1)
 			{
 				perror("[ERROR] Not enough variables!!");
