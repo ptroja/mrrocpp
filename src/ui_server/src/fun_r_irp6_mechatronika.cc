@@ -288,7 +288,6 @@ int irp6m_move_to_synchro_position()
 	{
 		if (ui_state.irp6_mechatronika.edp.pid!=-1)
 		{
-
 			if (ui_state.irp6_mechatronika.edp.is_synchronised)
 			{// powrot do pozycji synchronizacji
 				for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)

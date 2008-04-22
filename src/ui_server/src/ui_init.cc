@@ -67,6 +67,8 @@
 #include <queue>
 #include <semaphore.h>
 
+#include "ui/ui_ecp.h"
+
 #define PORT 3490
 
 #ifdef SA_RESTART
@@ -94,6 +96,8 @@ int block_irp6_on_track = 0;
 int block_irp6_postument = 0;
 int block_irp6_mechatronika = 0;
 int block_speaker = 0;
+
+extern ui_robot_def ui_robot;
 
 int rid;
 int id = 0;
@@ -1317,7 +1321,7 @@ switch(RobotId)
 	case 'B':
 	{
 		sem_wait(&sem_irp6_on_track);
-		if(block_irp6_on_track == 1)
+		if(block_irp6_on_track == 1 || (!ui_robot.irp6_on_track && RobotId != 'B'))
 		{
 			sem_post(&sem_irp6_on_track);
 			return (void*)NULL;
@@ -1691,7 +1695,7 @@ switch(RobotId)
 	case 'C':
 	{
 		sem_wait(&sem_irp6_postument);
-		if(block_irp6_postument)
+		if(block_irp6_postument ||  (!ui_robot.irp6_postument && RobotId != 'C'))
 		{
 			sem_post(&sem_irp6_postument);
 			return (void*)NULL;
@@ -2063,9 +2067,9 @@ switch(RobotId)
 	}
 	/*RobotId = D (Conveyor)*/
 	case 'D':
-	{
+	{	
 		sem_wait(&sem_conveyor);
-		if(block_conveyor)
+		if(block_conveyor || (!ui_robot.conveyor  && RobotId != 'D'))
 		{
 			sem_post(&sem_conveyor);
 			return (void*)NULL;
@@ -2244,6 +2248,7 @@ switch(RobotId)
 		}
 		sem_wait(&sem_conveyor);
 		block_conveyor = 0;
+		
 		sem_post(&sem_conveyor);
 		break;
 	}
@@ -2251,7 +2256,7 @@ switch(RobotId)
 	case 'E':
 	{
 		sem_wait(&sem_speaker);
-		if(block_speaker)
+		if(block_speaker || (!ui_robot.speaker && RobotId != 'E'))
 		{
 			sem_post(&sem_speaker);
 			return (void*)NULL;
@@ -2353,7 +2358,14 @@ switch(RobotId)
 	} 
 	/*RobotId = F (IRP6 Mechatronika)*/
 	case 'F':
-	{
+	{	sem_wait(&sem_irp6_mechatronika);
+		if(block_irp6_mechatronika == 1 || (!ui_robot.irp6_mechatronika && RobotId != 'F'))
+		{
+			sem_post(&sem_irp6_mechatronika);
+			return (void*)NULL;
+		}
+		block_irp6_mechatronika = 1;
+		sem_post(&sem_irp6_mechatronika);
 		switch(DialogId)
 		{
 		/*DialogId = A (Kinematic)*/
