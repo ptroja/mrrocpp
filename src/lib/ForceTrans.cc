@@ -22,19 +22,20 @@ ForceTrans::ForceTrans(const short l_force_sensor_name, const Homog_matrix & ini
 {
 
 	sensor_frame = s_frame;
-	sensor_frame_translation = Homog_matrix (sensor_frame.return_with_with_removed_rotation());
+//	sensor_frame_translation = Homog_matrix (sensor_frame.return_with_with_removed_rotation());
 	// sensor_frame_translation.remove_rotation();
-	sensor_frame_rotation  = Homog_matrix (sensor_frame.return_with_with_removed_translation());
+//	sensor_frame_rotation  = Homog_matrix (sensor_frame.return_with_with_removed_translation());
 	// sensor_frame_rotation.remove_translation();
 	// cout << sensor_frame;
 
-	ft_tr_sensor_translation_matrix = Ft_v_tr (sensor_frame_translation, Ft_v_tr::FT);
+	ft_tr_sensor_in_wrist = Ft_v_tr (sensor_frame, Ft_v_tr::FT);
+
 	// ft_tr_inv_sensor_translation_matrix = !ft_tr_sensor_translation_matrix;
-	ft_tr_sensor_rotation_matrix = Ft_v_tr (sensor_frame_rotation, Ft_v_tr::FT);;
+//	ft_tr_sensor_rotation_matrix = Ft_v_tr (sensor_frame_rotation, Ft_v_tr::FT);;
 	// ft_tr_inv_sensor_rotation_matrix = !ft_tr_sensor_rotation_matrix;
 
 	tool_weight = weight;
-	gravity_arm_in_sensor = point_of_gravity;
+	gravity_arm_in_wrist = point_of_gravity;
 	
 	synchro(init_frame);
 	defineTool(init_frame, weight, point_of_gravity);
@@ -45,7 +46,7 @@ ForceTrans::ForceTrans(const short l_force_sensor_name, const Homog_matrix & ini
 void ForceTrans::defineTool(const Homog_matrix & init_frame, const double weight, const K_vector & point_of_gravity)
 {
 	tool_weight = weight;
-	gravity_arm_in_sensor = point_of_gravity;
+	gravity_arm_in_wrist = point_of_gravity;
 //	gravity_force_in_base = K_vector (0.0, 0.0, tool_weight);
 	gravity_force_torque_in_base = Ft_v_vector (0.0, 0.0, -tool_weight, 0.0, 0.0, 0.0);
 
@@ -101,7 +102,7 @@ double* ForceTrans::getForce(const double inputForceTorque[6], const Homog_matri
 		K_vector input_torque((double*) inputForceTorque+3);
 */
 		// sprowadzenie sil i momentow sil do ukladu umieszczonego w srodku czujnika ale z orientacja koncowki
-		Ft_v_vector input_force_torque (ft_tr_sensor_rotation_matrix * Ft_v_vector ((double*) inputForceTorque));
+		Ft_v_vector input_force_torque (ft_tr_sensor_in_wrist * Ft_v_vector ((double*) inputForceTorque));
 		/*
 		if ((debugi%10==0)&&(force_sensor_name==FORCE_SENSOR_ATI3084)&&(last_debugi!=debugi))
 		{
@@ -152,8 +153,7 @@ double* ForceTrans::getForce(const double inputForceTorque[6], const Homog_matri
 		*/
 			
 
-		output_force_torque = Ft_v_tr (current_orientation, Ft_v_tr::FT) * ft_tr_sensor_translation_matrix * 
-			output_force_torque;	
+		output_force_torque = Ft_v_tr (current_orientation, Ft_v_tr::FT) * output_force_torque;	
 
 //		Ft_v_vector tmp_force_torque = Ft_v_tr (current_orientation*sensor_frame_translation, FT_VARIANT) * output_force_torque;	
 		
@@ -214,5 +214,5 @@ void ForceTrans::synchro(const Homog_matrix & init_frame)
 {
 
 	//initialisation_frame = init_frame;
-	if (initialized) defineTool (init_frame, tool_weight, gravity_arm_in_sensor);
+	if (initialized) defineTool (init_frame, tool_weight, gravity_arm_in_wrist);
  }

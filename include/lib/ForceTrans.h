@@ -20,21 +20,24 @@ const short force_sensor_name;
 	//	K_vector gravity_force_in_base;
 	Ft_v_vector gravity_force_torque_in_base;
 	Ft_v_vector reaction_force_torque_in_sensor;
-	K_vector gravity_arm_in_sensor;
+	K_vector gravity_arm_in_wrist;
 	
 	//	K_vector reaction_force_in_sensor;
 	//	K_vector reaction_torque_in_sensor;
 	//	Homog_matrix initialisation_frame;
 		Homog_matrix sensor_frame;
-		Homog_matrix sensor_frame_translation;
-		Homog_matrix sensor_frame_rotation;
+//		Homog_matrix sensor_frame_translation;
+//		Homog_matrix sensor_frame_rotation;
 	
 	Ft_v_tr ft_tool_mass_center_translation;
 	
-	Ft_v_tr ft_tr_sensor_translation_matrix;
-	Ft_v_tr ft_tr_inv_sensor_translation_matrix;
-	Ft_v_tr ft_tr_sensor_rotation_matrix;
-	Ft_v_tr ft_tr_inv_sensor_rotation_matrix;
+	Ft_v_tr ft_tr_sensor_in_wrist;
+
+	
+//	Ft_v_tr ft_tr_sensor_translation_matrix;
+//	Ft_v_tr ft_tr_inv_sensor_translation_matrix;
+//	Ft_v_tr ft_tr_sensor_rotation_matrix;
+//	Ft_v_tr ft_tr_inv_sensor_rotation_matrix;
 	
 public:
 	//	ForceTrans(const Homog_matrix & init_frame, const Homog_matrix & s_frame);										// standardowy tool
