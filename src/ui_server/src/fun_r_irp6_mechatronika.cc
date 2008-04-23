@@ -320,6 +320,7 @@ int irp6m_move_to_position0()
 				irp6m_desired_pos[i] = ui_state.irp6_mechatronika.edp.preset_position[0][i];
 			}
 		}
+
 		ui_robot.irp6_mechatronika->move_motors(irp6m_desired_pos);
 		irp6m_read_joints();
 		irp6m_read_post_angle_axis();
