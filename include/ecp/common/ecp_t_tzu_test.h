@@ -26,7 +26,7 @@ protected:
 	bias_edp_force_generator *befg;
 	force_meassure_generator* fmg;
 	ecp_force_tool_change_generator* ftcg;
-	ecp_tool_change_generator* tcg;
+//	ecp_tool_change_generator* tcg;
 	ecp_tff_nose_run_generator *ynrfg;
 	char* test_trajectories[NUMBER_OF_TEST_TRAJECTORIES];
 	double weight;

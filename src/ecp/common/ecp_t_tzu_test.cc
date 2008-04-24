@@ -4,6 +4,7 @@
 #include "common/impconst.h"
 #include "common/com_buf.h"
 #include <fstream>
+#include <iostream>
 
 #include "ecp_mp/ecp_mp_s_force.h"
 #include "lib/srlib.h"
@@ -22,7 +23,7 @@ ecp_task_tzu_postument_test::ecp_task_tzu_postument_test(configurator &_config) 
 {
 	befg = NULL;
 	ftcg = NULL;
-	tcg = NULL;
+//	tcg = NULL;
 	fmg = NULL;
 	ynrfg = NULL;
 	sg = NULL;
@@ -57,7 +58,7 @@ void ecp_task_tzu_postument_test::task_initialization(void)
 	befg = new bias_edp_force_generator(*this);
 	fmg = new force_meassure_generator(*this);	
 	ftcg = new ecp_force_tool_change_generator(*this);
-	tcg = new ecp_tool_change_generator(*this,true);
+//	tcg = new ecp_tool_change_generator(*this,true);
 	ynrfg = new ecp_tff_nose_run_generator(*this,8);
 	
 	sr_ecp_msg->message("ECP loaded");
@@ -102,8 +103,8 @@ void ecp_task_tzu_postument_test::nose_generator_test(void)
 		cout<<"START NOSE"<<endl;
 		befg->Move();
 		cout<<"Biasowanie dokonane"<<endl;
-		tcg->set_tool_parameters(0,0,0.09); 
-		tcg->Move();
+		//tcg->set_tool_parameters(0,0,0.09); 
+		//tcg->Move();
 		cout<<"Puszczenie nose generatora"<<endl;
 		sleep(1);
 		ynrfg->set_force_meassure(true);
@@ -119,14 +120,21 @@ void ecp_task_tzu_postument_test::trajectories_test(void)
 		cout<<"START TRAJECTORIES TEST"<<endl;
 		// befg->Move();
 		cout<<"Biasowanie dokonane"<<endl;
-		tcg->set_tool_parameters(0,0,0.25); // to tutaj chyba trzeba przesunac o te 25 cm czyli argumenty powinny wygladac jakos tak (0,0,0.25)
-		tcg->Move();
+		//tcg->set_tool_parameters(0,0,0.25); // to tutaj chyba trzeba przesunac o te 25 cm czyli argumenty powinny wygladac jakos tak (0,0,0.25)
+		//tcg->Move();
 		cout<<"Rozpoczecie testowania dla roznych trajektorii"<<endl;
 		
 		for(int i = 0 ; i < NUMBER_OF_TEST_TRAJECTORIES ; i++)
 		{
 			if(i == 0)	// zbiasowanie czujnika dla pierwszego polozenia, w takim wypadku odczyt sily jaki op tym nastapi pewnie nie bedzie mial wiekszego sensu
+			{	
+				cout<<"pomiar przed biasem "<<i<<": "<<fmg->weight<<endl;
+				str<<"pomiar przed biasem "<<i<<": "<<fmg->weight<<endl;
 				befg->Move();
+				fmg->Move();
+				cout<<"pomiar po biasie "<<i<<": "<<fmg->weight<<endl;
+				str<<"pomiar po biasie "<<i<<": "<<fmg->weight<<endl;
+			}
 			sg->load_file_with_path(test_trajectories[i]);
 			sg->Move();
 			fmg->Move();
@@ -227,7 +235,7 @@ bool force_meassure_generator::next_step()
 	sleep(2);
 	for(int i = 0 ; i < meassurement_count ; i++)
 	{
-		cout<<"pomiar: "<<weight<<endl; 
+//		cout<<"pomiar: "<<weight<<endl; 
 		Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
 		current_frame_wo_offset.remove_translation();
 	
@@ -240,4 +248,3 @@ bool force_meassure_generator::next_step()
 		weight[i] = weight[i]/meassurement_count;
 	return false;
 }
-#include <iostream>

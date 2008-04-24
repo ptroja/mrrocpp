@@ -24,7 +24,7 @@ ecp_task_tzu_fs::ecp_task_tzu_fs(configurator &_config) : ecp_task(_config)
 	sg = NULL;
 	befg = NULL;
 	ftcg = NULL;
-	tcg = NULL;
+//	tcg = NULL;
 	etnrg = NULL;
 };
 
@@ -56,7 +56,7 @@ void ecp_task_tzu_fs::task_initialization(void)
 	befg = new bias_edp_force_generator(*this);
 	fmg = new force_meassure_generator(*this);	
 	ftcg = new ecp_force_tool_change_generator(*this);
-	tcg = new ecp_tool_change_generator(*this,true);
+//	tcg = new ecp_tool_change_generator(*this,true);
 	etnrg = new ecp_tff_nose_run_generator(*this,8);
 	sr_ecp_msg->message("ECP loaded");
 };
@@ -81,7 +81,7 @@ void ecp_task_tzu_fs::main_task_algorithm(void)
 	int option = choose_option ("1 - Standard, 2 - Alternative, 3 - Auto, 4 - Correction", 4);
 	if (option == OPTION_ONE)
     {
-    	sr_ecp_msg->message("Wyznaczanie modelu metoda standardowa");
+    		sr_ecp_msg->message("Wyznaczanie modelu metoda standardowa");
    		procedure_type = STANDARD;
    	}
     else if (option == OPTION_TWO)
@@ -209,8 +209,8 @@ void ecp_task_tzu_fs::method_alternative(int type, int sequence[], int T)
 		{	
 			str<<"->pomiar: "<<i<<endl;
 			ftcg->Move();
-			tcg->set_tool_parameters(0,0,0.09);
-			tcg->Move();
+//			tcg->set_tool_parameters(0,0,0.09);
+//			tcg->Move();
 			sg->load_file_with_path(trajectories[sequence[0]]);
 			sg->Move ();		
 			fmg->Move();
@@ -245,8 +245,8 @@ void ecp_task_tzu_fs::method_standard(int T)
 			sg->Move ();		
 			befg->Move();
 			ftcg->Move();
-			tcg->set_tool_parameters(0,0,0.09);
-			tcg->Move();
+//			tcg->set_tool_parameters(0,0,0.09);
+//			tcg->Move();
 		
 			// ETAP DRUGI - chwytak skierowany pionowo do gory, odczyt i obliczenie trzech pierwszych parametrow
 			// wagi, parametrow translacji?!?
@@ -442,8 +442,8 @@ void ecp_task_tzu_fs::model_correction(double model[])
 		cout<<"START MODEL CORRECTION"<<endl;
 		// befg->Move();
 		cout<<"Biasowanie dokonane"<<endl;
-		tcg->set_tool_parameters(0,0,0.09); // spytac sie jak to jest dokladnie z ustawianiem tego przesuniecia u jakie powinno ono byc w tym przypadku
-		tcg->Move();
+//		tcg->set_tool_parameters(0,0,0.09); // spytac sie jak to jest dokladnie z ustawianiem tego przesuniecia u jakie powinno ono byc w tym przypadku
+//		tcg->Move();
 		cout<<"Rozpoczecie procedur korekcyjnych dla roznych trajektorii"<<endl;
 		
 		for(int i = 0 ; i < NUMBER_OF_TEST_TRAJECTORIES ; i++)
