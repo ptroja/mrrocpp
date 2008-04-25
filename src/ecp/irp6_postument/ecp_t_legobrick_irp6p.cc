@@ -10,7 +10,6 @@
 
 #include "ecp/irp6_postument/ecp_local.h"
 #include "ecp/common/ecp_g_force.h"
-//#include "ecp/common/ecp_g_smooth.h"
 #include "ecp/irp6_postument/ecp_t_legobrick_irp6p.h"
 
 ecp_task_lego_brick_irp6p::ecp_task_lego_brick_irp6p(configurator &_config) :
@@ -26,17 +25,10 @@ void ecp_task_lego_brick_irp6p::task_initialization(void)
     // the robot is choose dependendat on the section of configuration file sent as argv[4]
     ecp_m_robot = new ecp_irp6_postument_robot (*this);
 
-    //gt = new ecp_generator_t (*this);
-    //nrg = new ecp_tff_nose_run_generator (*this, 8);
-    //rgg = new ecp_tff_rubik_grab_generator (*this, 8);
-    //gag = new ecp_tff_gripper_approach_generator (*this, 8);
-    //rfrg = new ecp_tff_rubik_face_rotate_generator (*this, 8);
-    //tig = new ecp_teach_in_generator (*this);
     befg = new bias_edp_force_generator (*this);
     sg = new ecp_smooth_generator (*this, true);
-    //wmg = new weight_meassure_generator(*this, 1);
-
-    //go_st = new ecp_sub_task_gripper_opening(*this);
+    afg = new legobrick_attach_force_generator(*this, 10);
+    dfg = new legobrick_detach_force_generator(*this, 10);
 
     sr_ecp_msg->message("ECP loaded");
 }
@@ -50,8 +42,7 @@ void ecp_task_lego_brick_irp6p::main_task_algorithm(void)
     sr_ecp_msg->message("ECP lego brick irp6p  - wcisnij start");
     ecp_wait_for_start();
 
-    ecp_smooth_generator gen(*this, true, true);
-    gen.flush_pose_list();
+    sg->flush_pose_list();
 
     POSE_SPECIFICATION ps = JOINT;
 
@@ -75,16 +66,20 @@ void ecp_task_lego_brick_irp6p::main_task_algorithm(void)
 	v[i] = 0.1;
 	a[i] = 0.02;
     }
-    gen.create_pose_list_head(ps, vp, vk, v, a, coordinates);
+    sg->create_pose_list_head(ps, vp, vk, v, a, coordinates);
 
 // generator oparty na detekcji sily
-    legobrick_detach_force_generator force_gen(*this, 10);
+ //   legobrick_detach_force_generator force_gen(*this, 10);
     for(;;){
     	//for(;;){
-		sr_ecp_msg->message("Ruch");
-    		gen.Move();
+		sr_ecp_msg->message("Ruch smooth");
+    		sg->Move();
+		sr_ecp_msg->message("Ruch bias");
 		befg->Move();
-		force_gen.Move();
+		sr_ecp_msg->message("Ruch attach");
+		afg->Move();
+		sr_ecp_msg->message("Ruch detach");
+		dfg->Move();
 	//}
 	ecp_wait_for_stop();
 	break;

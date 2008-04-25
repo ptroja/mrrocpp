@@ -3,24 +3,17 @@
 
 #include "ecp/common/ecp_task.h"
 #include "ecp/common/ecp_g_smooth.h"
-//#include "ecp/common/ecp_generator_t.h"
-//#include "ecp/common/ecp_st_go.h"
+#include "ecp/common/ecp_g_force.h"
 
 class ecp_task_lego_brick_irp6p: public ecp_task
 {
 protected:
     //generatory
-    /*ecp_generator_t* gt;
-    ecp_tff_nose_run_generator* nrg;
-    ecp_tff_rubik_grab_generator* rgg;
-    ecp_tff_gripper_approach_generator* gag;
-    ecp_tff_rubik_face_rotate_generator* rfrg;
-    ecp_teach_in_generator* tig;*/
     ecp_smooth_generator* sg;
     bias_edp_force_generator* befg;
-    //weight_meassure_generator* wmg;
-    //podzadania
-    //ecp_sub_task_gripper_opening* go_st;
+    legobrick_attach_force_generator* afg;
+    legobrick_detach_force_generator* dfg;
+
 public:
     ecp_task_lego_brick_irp6p(configurator &_config);
     ~ecp_task_lego_brick_irp6p();

@@ -776,10 +776,10 @@ bool y_edge_follow_force_generator::next_step()
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// legobrick_detach_force_generator
+// legobrick_attach_force_generator
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////
-legobrick_detach_force_generator::legobrick_detach_force_generator(
+legobrick_attach_force_generator::legobrick_attach_force_generator(
 		ecp_task& _ecp_task, int step) :
 	ecp_teach_in_generator(_ecp_task)//, tool_frame(0.026551, -0.011313, 0.25 + 0.028)
 {
@@ -791,9 +791,8 @@ legobrick_detach_force_generator::legobrick_detach_force_generator(
 	tool_frame = Homog_matrix(tmp_tool_frame);
 	step_no=step;
 }
-;
-
-bool legobrick_detach_force_generator::first_step()
+//--------------------------------------------------------------------------------------
+bool legobrick_attach_force_generator::first_step()
 {
 
 	for (int i=0; i<6; i++)
@@ -822,17 +821,149 @@ bool legobrick_detach_force_generator::first_step()
 
 	for (int i=0; i<3; i++)
 	{
-		the_robot->EDP_data.next_inertia[i] = FORCE_INERTIA/4;
+		the_robot->EDP_data.next_inertia[i] = FORCE_INERTIA;
 		the_robot->EDP_data.next_inertia[i+3] = TORQUE_INERTIA;
 	}
 
-	/*for (int i=0; i<6; i++)
+	//os x
+	//the_robot->EDP_data.next_reciprocal_damping[0] = FORCE_RECIPROCAL_DAMPING;
+	the_robot->EDP_data.next_velocity[0] = 0;
+	the_robot->EDP_data.next_force_xyz_torque_xyz[0] = 0.0;
+	//the_robot->EDP_data.next_behaviour[0] = CONTACT;
+	the_robot->EDP_data.next_behaviour[0] = UNGUARDED_MOTION;
+
+	//the_robot->EDP_data.next_reciprocal_damping[3] = 0.0;
+	the_robot->EDP_data.next_velocity[3] = 0;
+	the_robot->EDP_data.next_force_xyz_torque_xyz[3] = 0;
+	the_robot->EDP_data.next_behaviour[3] = UNGUARDED_MOTION;
+
+	//os y (obrotu)
+	//the_robot->EDP_data.next_reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
+	the_robot->EDP_data.next_velocity[1] = 0;
+	the_robot->EDP_data.next_force_xyz_torque_xyz[1] = 0.0;
+	the_robot->EDP_data.next_behaviour[1] = UNGUARDED_MOTION;
+	//the_robot->EDP_data.next_behaviour[1] = CONTACT;
+
+	//the_robot->EDP_data.next_reciprocal_damping[4] = TORQUE_RECIPROCAL_DAMPING;
+	the_robot->EDP_data.next_velocity[4] = 0.0;
+	the_robot->EDP_data.next_force_xyz_torque_xyz[4] = 0.0;
+	//the_robot->EDP_data.next_behaviour[4] = GUARDED_MOTION;
+	the_robot->EDP_data.next_behaviour[4] = UNGUARDED_MOTION;
+
+	//os z 
+	the_robot->EDP_data.next_reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING;
+	the_robot->EDP_data.next_velocity[2] = 0;
+	the_robot->EDP_data.next_force_xyz_torque_xyz[2] = -5.0;
+	//the_robot->EDP_data.next_behaviour[2] = UNGUARDED_MOTION;
+	the_robot->EDP_data.next_behaviour[2] = CONTACT;
+
+	//the_robot->EDP_data.next_reciprocal_damping[5] = 0.0;
+	the_robot->EDP_data.next_velocity[5] = 0;
+	the_robot->EDP_data.next_force_xyz_torque_xyz[5] = 0;
+	the_robot->EDP_data.next_behaviour[5] = UNGUARDED_MOTION;
+
+	return true;
+}
+//--------------------------------------------------------------------------------------
+bool legobrick_attach_force_generator::next_step()
+{
+	// tablice pomocnicze do utworzenia przyrostowej trajektorii ruchu do zapisu do pliku
+	double inc_delta[6], tmp_delta[6];
+	// static int count;
+	// struct timespec start[9];
+	if (check_and_null_trigger())
 	{
-		the_robot->EDP_data.next_velocity[i] = 0;
-		the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
-		//	the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i] = 0.0;
-		the_robot->EDP_data.next_behaviour[i] = UNGUARDED_MOTION;
-	}*/
+		return false;
+	}
+
+	// 	wstawienie nowego przyrostu pozyji do przyrostowej trajektorii ruchu do zapisu do pliku
+	Homog_matrix tmp_matrix(the_robot->EDP_data.current_arm_frame);
+	tmp_matrix.get_xyz_angle_axis(inc_delta);
+
+	for (int i=0; i<6; i++)
+		inc_delta[i] = -inc_delta[i];
+
+	tmp_matrix.set_frame_tab(the_robot->EDP_data.current_arm_frame);
+	tmp_matrix.get_xyz_angle_axis(tmp_delta);
+
+	for (int i=0; i<6; i++)
+		inc_delta[i]+=tmp_delta[i];
+
+	//insert_pose_list_element(emptyps, 0.0, 2, inc_delta);
+
+	// wyznaczenie nowej macierzy referencyjnej i predkosci ruchu
+
+	the_robot->EDP_data.instruction_type = SET_GET;
+
+	the_robot->EDP_data.next_gripper_coordinate
+			= the_robot->EDP_data.current_gripper_coordinate;
+
+	for (int i=0; i<MAX_SERVOS_NR; i++)
+	{
+		the_robot->EDP_data.next_motor_arm_coordinates[i]=0.0;
+	}
+	
+	Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
+
+	double wz = force_torque[2];
+	
+	//warunek stopu
+	if(wz <= -5.0) return false;
+
+	return true;
+
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// legobrick_detach_force_generator
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////
+legobrick_detach_force_generator::legobrick_detach_force_generator(
+		ecp_task& _ecp_task, int step) :
+	ecp_teach_in_generator(_ecp_task)//, tool_frame(0.026551, -0.011313, 0.25 + 0.028)
+{
+	//macierz jednorodna przejscia na uklad narzedzia do przemieszczania klockow
+	frame_tab tmp_tool_frame = {{cos(-M_PI/4), -1 * sin (-M_PI/4), 0, 0.02655}
+				, {sin(-M_PI/4), cos(-M_PI/4), 0, -0.011313}
+				, {0, 0, 1, 0.25 + 0.028}};
+
+	tool_frame = Homog_matrix(tmp_tool_frame);
+	step_no=step;
+}
+//--------------------------------------------------------------------------------------
+bool legobrick_detach_force_generator::first_step()
+{
+
+	for (int i=0; i<6; i++)
+		delta[i]=0.0;
+
+	create_pose_list_head(emptyps, 0.0, 2, delta);
+
+	td.interpolation_node_no = 1;
+	td.internode_step_no = step_no;
+	td.value_in_step_no = td.internode_step_no - 2;
+
+	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
+	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
+	//	the_robot->EDP_data.set_type = ARM_DV;
+	the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
+	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
+	the_robot->EDP_data.set_arm_type = PF_VELOCITY;
+	the_robot->EDP_data.get_arm_type = FRAME;
+	the_robot->EDP_data.motion_type = ABSOLUTE;
+	the_robot->EDP_data.next_interpolation_type = TCIM;
+	the_robot->EDP_data.motion_steps = td.internode_step_no;
+	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+
+	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
+	start_position_w3 = the_robot->EDP_data.current_XYZ_AA_arm_coordinates[5];
+
+	for (int i=0; i<3; i++)
+	{
+		the_robot->EDP_data.next_inertia[i] = FORCE_INERTIA/4;
+		the_robot->EDP_data.next_inertia[i+3] = TORQUE_INERTIA;
+	}
 
 	//os x
 	the_robot->EDP_data.next_reciprocal_damping[0] = FORCE_RECIPROCAL_DAMPING;
@@ -911,67 +1042,13 @@ bool legobrick_detach_force_generator::next_step()
 		the_robot->EDP_data.next_motor_arm_coordinates[i]=0.0;
 	}
 
-	
+	//warunek stopu
+	double stop_position_w3 = the_robot->EDP_data.current_XYZ_AA_arm_coordinates[5];
 
+	if(fabs(start_position_w3 - stop_position_w3) > 0.06) return false;
 
-/*
+	printf("Start: %f , Stop: %f", start_position_w3, stop_position_w3);
 
-	// sprowadzenie sil do ukladu kisci
-	Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
-
-	double wx = force_torque[0];
-	double wy = force_torque[1];
-
-	double v = sqrt(wx*wx + wy*wy);
-
-	if (v!=0.0)
-	{
-
-		double s_alfa = wy / v;
-		double c_alfa = -wx / v;
-
-		the_robot->EDP_data.next_velocity[1] = -0.002*v;
-		//     the_robot->EDP_data.next_velocity[1] = -0.00;
-		//	the_robot->EDP_data.ECPtoEDP_position_velocity[1] = 0.0;
-
-		// basic_rot_frame = Homog_matrix(c_alfa, s_alfa, 0.0,	-s_alfa, c_alfa, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
-		basic_rot_frame = Homog_matrix(c_alfa, -s_alfa, 0.0, 0.0, s_alfa,
-				c_alfa, 0.0, 0.0, 0.0, 0.0, 1, 0.0);
-
-		// dodatkowa macierz obracajaca kierunek wywieranej sily tak aby stabilizowac jej wartosc
-		double alfa_r = 0.2*(v-4);
-		double s_alfa_r = sin(alfa_r);
-		double c_alfa_r = cos(alfa_r);
-
-		// ex_rot_frame = Homog_matrix(c_alfa_r, s_alfa_r, 0.0,	-s_alfa_r, c_alfa_r, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
-		ex_rot_frame = Homog_matrix(c_alfa_r, -s_alfa_r, 0.0, 0.0, s_alfa_r,
-				c_alfa_r, 0.0, 0.0, 0.0, 0.0, 1, 0.0);
-
-		// obrocenie pierwotnej macierzy
-		basic_rot_frame = basic_rot_frame * ex_rot_frame;
-
-		basic_rot_frame = !basic_rot_frame;
-
-		tool_frame = tool_frame * basic_rot_frame;
-		// basic_rot_frame.set_translation_vector(0, 0, 0.25);
-
-		tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
-
-		//	ECPtoEDP_ref_frame.get_frame_tab(the_robot->EDP_data.ECPtoEDP_reference_frame);
-
-		/*
-		 the_robot->EDP_data.ECPtoEDP_reference_frame[0][0] = c_alfa;
-		 the_robot->EDP_data.ECPtoEDP_reference_frame[0][1] = s_alfa;
-
-		 the_robot->EDP_data.ECPtoEDP_reference_frame[1][0] = -s_alfa;
-		 the_robot->EDP_data.ECPtoEDP_reference_frame[1][1] = c_alfa;
-		 */
-
-		/*printf("sensor: x: %+d, y: %+d, v:%+d, %f\n", (int) round(wx),
-				(int) round(wy), (int) round(v), atan2(s_alfa, c_alfa)
-						*DEGREES_TO_RADIANS);
-	}
-*/
 	return true;
 
 }
