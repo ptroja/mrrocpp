@@ -5,6 +5,7 @@
 #include "common/com_buf.h"
 #include <fstream>
 #include <iostream>
+#include <unistd.h>
 
 #include "ecp_mp/ecp_mp_s_force.h"
 #include "lib/srlib.h"
@@ -23,7 +24,7 @@ ecp_task_tzu_postument_test::ecp_task_tzu_postument_test(configurator &_config) 
 {
 	befg = NULL;
 	ftcg = NULL;
-//	tcg = NULL;
+	tcg = NULL;
 	fmg = NULL;
 	ynrfg = NULL;
 	sg = NULL;
@@ -58,7 +59,7 @@ void ecp_task_tzu_postument_test::task_initialization(void)
 	befg = new bias_edp_force_generator(*this);
 	fmg = new force_meassure_generator(*this);	
 	ftcg = new ecp_force_tool_change_generator(*this);
-//	tcg = new ecp_tool_change_generator(*this,true);
+	tcg = new ecp_tool_change_generator(*this,true);
 	ynrfg = new ecp_tff_nose_run_generator(*this,8);
 	
 	sr_ecp_msg->message("ECP loaded");
@@ -70,33 +71,64 @@ void ecp_task_tzu_postument_test::main_task_algorithm(void)
 	ecp_wait_for_start();
 	
 	
-	int option = choose_option ("1 - NoseGenerator, 2 - Test", 2);
+	int option = choose_option ("1 - NoseGenerator, 2 - Test, 3 - Eksperyment", 3);
+	int tool = -1;
 	if (option == OPTION_ONE)
     {
     		sr_ecp_msg->message("NoseGenerator");
    		procedure_type = NOSE;
-   	}
+ 		option = choose_option ("1 - std, 2 - wyliczony", 2);
+	  	if (option == OPTION_ONE)
+    			tool = 0;
+		else if (option == OPTION_TWO)
+    			tool = 1;
+	}
     else if (option == OPTION_TWO)
     {
  		sr_ecp_msg->message("Test");
 		procedure_type = TEST;
 	}
+  	else if (option == OPTION_THREE)
+    {
+ 		sr_ecp_msg->message("Eksperyment z naciskaniem");
+		procedure_type = EKSPERYMENT;
+	}
   
 	set_trajectories();
     if(procedure_type == NOSE)
     {
-		nose_generator_test();
+		nose_generator_test(tool);
 	}
 	else if(procedure_type == TEST)
 	{
 		trajectories_test();
+	}
+	else if(procedure_type == EKSPERYMENT)
+	{
+		naciskanie_test();
 	}
 	ecp_termination_notice();
 	ecp_wait_for_stop();
 	std::cout<<"end\n"<<std::endl;
 };
 
-void ecp_task_tzu_postument_test::nose_generator_test(void)
+void ecp_task_tzu_postument_test::naciskanie_test()
+{
+	tcg->set_tool_parameters(0,0,0); 
+	tcg->Move();
+//	sg->load_file_with_path(get_trajectorie(0.759997, -1.5707, 0, 1.5707, 1.5707, 0 ,0.07 ,POSTUMENT));
+//	sg->Move();
+	befg->Move();
+	cout<<"START NACISKANIE TEST"<<endl;
+	while(true)			
+	{
+		usleep(10);
+		fmg->Move();
+		cout<<"pomiar: "<<fmg->weight<<endl;
+	}
+}
+
+void ecp_task_tzu_postument_test::nose_generator_test(int tool)
 {
 	while(true)			
 	{
@@ -105,11 +137,26 @@ void ecp_task_tzu_postument_test::nose_generator_test(void)
 		trj = "../trj/tzu/standard/postument/tzu_2_postument.trj";
 		if(robot == ON_TRACK)
 			trj = "../trj/tzu/standard/on_track/tzu_2_on_track.trj";
-
+		
+		if(tool == 0)
+		{
+			cout<<"parametry z common.ini"<<endl;
+			ftcg->set_tool_parameters(0.004,0.0,0.156,10.8);
+			ftcg->Move();
+		}
+		else if(tool == 1)
+		{
+			cout<<"parametry wyliczone"<<endl;
+			ftcg->set_tool_parameters(-0.00622889, -0.000365208, 0.167449, 13.2519);
+			ftcg->Move();
+		}
+		
+		sg->load_file_with_path(trj);
+		sg->Move();
 		befg->Move();
 		cout<<"Biasowanie dokonane"<<endl;
-		//tcg->set_tool_parameters(0,0,0.09); 
-		//tcg->Move();
+		tcg->set_tool_parameters(0,0,0); 
+		tcg->Move();
 		cout<<"Puszczenie nose generatora"<<endl;
 		sleep(1);
 		ynrfg->set_force_meassure(true);
@@ -120,6 +167,7 @@ void ecp_task_tzu_postument_test::nose_generator_test(void)
 
 void ecp_task_tzu_postument_test::trajectories_test(void)
 {
+/*
 	while(true)			
 	{
 		cout<<"START TRAJECTORIES TEST"<<endl;
@@ -156,6 +204,62 @@ void ecp_task_tzu_postument_test::trajectories_test(void)
 
 		break;
 	}
+*/	
+
+	tcg->set_tool_parameters(0,0,0); // to tutaj chyba trzeba przesunac o te 25 cm czyli argumenty powinny wygladac jakos tak (0,0,0.25)
+	tcg->Move();
+	for(int j = 0 ; j < 4 ; j++)
+	{
+		cout<<"START TRAJECTORIES TEST"<<endl;
+		// parametry modelu z common.ini
+//		cout<<"parametry z common.ini"<<endl;
+//		ftcg->set_tool_parameters(0.004,0.0,0.156,10.8);
+//		ftcg->Move();
+		// parametry modelu z procedury wyznaczania modelu
+//		cout<<"parametry wyliczone"<<endl;
+//		ftcg->set_tool_parameters(-0.00311298, -0.00382255, -0.1010115, 13.179675);
+//		ftcg->Move();
+		if(j == 0 || j == 2)
+		{
+			test_trajectories[0] = "../trj/tzu/0_o.trj";
+			test_trajectories[1] = "../trj/tzu/1_o.trj";
+			test_trajectories[2] = "../trj/tzu/0_o.trj";
+			test_trajectories[3] = "../trj/tzu/2_o.trj";
+			test_trajectories[4] = "../trj/tzu/3_o.trj";
+		}
+		if(j == 1 || j == 3)
+		{
+			test_trajectories[0] = "../trj/tzu/0.trj";
+			test_trajectories[1] = "../trj/tzu/1.trj";
+			test_trajectories[2] = "../trj/tzu/0.trj";
+			test_trajectories[3] = "../trj/tzu/2.trj";
+			test_trajectories[4] = "../trj/tzu/3.trj";
+		}
+		
+		if(j == 0 || j == 1)
+		{
+			cout<<"parametry z common.ini"<<endl;
+			ftcg->set_tool_parameters(0.004,0.0,0.156,10.8);
+			ftcg->Move();
+		}
+		else if(j == 2 || j == 3)
+		{
+			cout<<"parametry wyliczone"<<endl;
+			ftcg->set_tool_parameters(-0.00622889, -0.000365208, 0.167449, 13.2519);
+			ftcg->Move();
+		}
+		
+		for(int i = 0 ; i < 5 ; i++)
+		{
+			sg->load_file_with_path(test_trajectories[i]);
+			sg->Move();
+			if(i == 0)
+				befg->Move();
+			fmg->Move();
+			cout<<"pomiar "<<i<<": "<<fmg->weight<<endl;
+			str<<"pomiar "<<i<<": "<<fmg->weight<<endl;
+		}
+	}
 }
 
 void ecp_task_tzu_postument_test::set_trajectories() // mozna wywalic zmienna robot z klasy i wtedy jawnie przekazywac ja tu do funkcji
@@ -177,6 +281,7 @@ void ecp_task_tzu_postument_test::set_trajectories() // mozna wywalic zmienna ro
 	}	
 	else if(robot == POSTUMENT)
 	{
+
 		test_trajectories[0] = "../trj/tzu/standard/postument/tzu_3_postument.trj";
 		test_trajectories[1] = "../trj/tzu/standard/postument/tzu_2_postument.trj";
 		test_trajectories[2] = "../trj/tzu/standard/postument/tzu_1_postument.trj";
@@ -188,9 +293,35 @@ void ecp_task_tzu_postument_test::set_trajectories() // mozna wywalic zmienna ro
 		test_trajectories[8] = "../trj/tzu/alternative/postument/y_weight_meassure/method_1/tzu_2_postument.trj";
 		test_trajectories[9] = "../trj/tzu/alternative/postument/y_weight_meassure/method_2/tzu_1_postument.trj";
 		test_trajectories[10] = "../trj/tzu/alternative/postument/y_weight_meassure/method_2/tzu_2_postument.trj";
+/*
+		test_trajectories[0] = "../trj/tzu/standard/postument/tzu_2_postument.trj";
+		test_trajectories[1] = "../trj/tzu/standard/postument/tzu_3_postument.trj";
+		test_trajectories[2] = "../trj/tzu/standard/postument/tzu_2_postument.trj";
+		test_trajectories[3] = "../trj/tzu/alternative/postument/y_weight_meassure/method_2/tzu_1_postument.trj";
+		test_trajectories[4] = "../trj/tzu/alternative/postument/y_weight_meassure/method_2/tzu_2_postument.trj";
+*/
 	}
 }
-// reszte skonczyc w domu, bo przeciez do opracowania tego nie bede potrzebowal robota
+
+
+char* ecp_task_tzu_postument_test::get_trajectorie(double x1, double x2, double x3, double x4, double x5, double x6 ,double x7 ,int robot) // mozna wywalic zmienna robot z klasy i wtedy jawnie przekazywac ja tu do funkcji
+{
+	ofstream temp;
+	//char* file = "../trj/tzu/temp.trj";
+	temp.open("../trj/tzu/temp.trj");
+	temp<<"JOINT"<<endl;
+	temp<<"1"<<endl;
+	temp<<"0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"<<endl;
+	temp<<"0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"<<endl;
+	temp<<"0.3 0.3 0.3 0.3 0.3 0.3 0.3 1.0"<<endl;
+	temp<<"0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.01"<<endl;
+	if(robot == POSTUMENT)
+		temp<<x1<<" "<<x2<<" "<<x3<<" "<<x4<<" "<<x5<<" "<<x6<<" "<<x7<<" 0"<<endl;
+	else if(robot == ON_TRACK)
+		temp<<"0 "<<x1<<" "<<x2<<" "<<x3<<" "<<x4<<" "<<x5<<" "<<x6<<" "<<x7<<endl;
+	temp.close();
+	return "../trj/tzu/temp.trj";
+}
 ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_tzu_postument_test(_config);

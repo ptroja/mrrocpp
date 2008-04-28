@@ -24,7 +24,7 @@ ecp_task_tzu_fs::ecp_task_tzu_fs(configurator &_config) : ecp_task(_config)
 	sg = NULL;
 	befg = NULL;
 	ftcg = NULL;
-//	tcg = NULL;
+	tcg = NULL;
 	etnrg = NULL;
 };
 
@@ -56,7 +56,7 @@ void ecp_task_tzu_fs::task_initialization(void)
 	befg = new bias_edp_force_generator(*this);
 	fmg = new force_meassure_generator(*this);	
 	ftcg = new ecp_force_tool_change_generator(*this);
-//	tcg = new ecp_tool_change_generator(*this,true);
+	tcg = new ecp_tool_change_generator(*this,true);
 	etnrg = new ecp_tff_nose_run_generator(*this,8);
 	sr_ecp_msg->message("ECP loaded");
 };
@@ -143,7 +143,7 @@ void ecp_task_tzu_fs::main_task_algorithm(void)
 	// trzeba stworzyc tablice mapujaca kolejnosc wykonywanych ruchow
 	int map_tab[] = {0,1,3,2,4};
 	int i = 0;
-	int count = 2;
+	int count = 4;
 	while(true)
 	{
 		if(automatic)
@@ -209,8 +209,8 @@ void ecp_task_tzu_fs::method_alternative(int type, int sequence[], int T)
 		{	
 			str<<"->pomiar: "<<i<<endl;
 			ftcg->Move();
-//			tcg->set_tool_parameters(0,0,0.09);
-//			tcg->Move();
+			tcg->set_tool_parameters(0,0,0);
+			tcg->Move();
 			sg->load_file_with_path(trajectories[sequence[0]]);
 			sg->Move ();		
 			fmg->Move();
@@ -234,6 +234,10 @@ void ecp_task_tzu_fs::method_alternative(int type, int sequence[], int T)
 
 void ecp_task_tzu_fs::method_standard(int T)
 {
+	double weight_s = 0;
+	double P_x_s = 0;
+	double P_y_s = 0;
+	double P_z_s = 0;
 	for(int i = 0 ; i < T ; i++)
 	{
 		while(true)			
@@ -245,9 +249,8 @@ void ecp_task_tzu_fs::method_standard(int T)
 			sg->Move ();		
 			befg->Move();
 			ftcg->Move();
-//			tcg->set_tool_parameters(0,0,0.09);
-//			tcg->Move();
-		
+			tcg->set_tool_parameters(0,0,0);
+			tcg->Move();
 			// ETAP DRUGI - chwytak skierowany pionowo do gory, odczyt i obliczenie trzech pierwszych parametrow
 			// wagi, parametrow translacji?!?
 			sg->load_file_with_path(trajectories[TRAJECTORY_VERTCAL_UP]);
@@ -292,6 +295,10 @@ void ecp_task_tzu_fs::method_standard(int T)
 				<<"weight: "<<weight<<endl<<"P_x: "<<P_x<<endl<<"P_y: "<<P_y<<endl<<"P_z: "<<P_z<<endl;
 			// test nose - start
 			sleep(1);
+			weight_s += weight;
+			P_x_s += P_x;
+			P_y_s += P_y;
+			P_z_s += P_z;
 			// test
 	///		set_test_trajectory(robot);
 	///		sg->load_file_with_path(test_trajectories[0]);
@@ -331,6 +338,8 @@ void ecp_task_tzu_fs::method_standard(int T)
 			break;
 		}
 	}
+	cout<<"Parametry modelu srodka ciezkosci narzedzia srednio"<<endl
+				<<"weight: "<<weight_s/T<<endl<<"P_x: "<<P_x_s/T<<endl<<"P_y: "<<P_y_s/T<<endl<<"P_z: "<<P_z_s/T<<endl;
 }
 
 void ecp_task_tzu_fs::set_trajectory(int robot_type, int procedure_type)

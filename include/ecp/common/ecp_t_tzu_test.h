@@ -14,6 +14,7 @@
 #define NUMBER_OF_TEST_TRAJECTORIES 11
 #define NOSE 0
 #define TEST 1
+#define EKSPERYMENT 2
 #define ON_TRACK 0
 #define POSTUMENT 1
 
@@ -26,7 +27,7 @@ protected:
 	bias_edp_force_generator *befg;
 	force_meassure_generator* fmg;
 	ecp_force_tool_change_generator* ftcg;
-//	ecp_tool_change_generator* tcg;
+	ecp_tool_change_generator* tcg;
 	ecp_tff_nose_run_generator *ynrfg;
 	char* test_trajectories[NUMBER_OF_TEST_TRAJECTORIES];
 	double weight;
@@ -36,9 +37,11 @@ protected:
 	int procedure_type;
 	ofstream str;
 	int robot;
-	void nose_generator_test(void);
+	void nose_generator_test(int tool);
 	void trajectories_test(void);
 	void set_trajectories();
+	char* get_trajectorie(double x1, double x2, double x3, double x4, double x5, double x6 ,double x7 ,int robot);
+	void naciskanie_test();
 public:
 	ecp_task_tzu_postument_test(configurator &_config);
 	~ecp_task_tzu_postument_test();
