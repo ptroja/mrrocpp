@@ -101,6 +101,11 @@ void ecp_task_tzu_postument_test::nose_generator_test(void)
 	while(true)			
 	{
 		cout<<"START NOSE"<<endl;
+		char* trj;
+		trj = "../trj/tzu/standard/postument/tzu_2_postument.trj";
+		if(robot == ON_TRACK)
+			trj = "../trj/tzu/standard/on_track/tzu_2_on_track.trj";
+
 		befg->Move();
 		cout<<"Biasowanie dokonane"<<endl;
 		//tcg->set_tool_parameters(0,0,0.09); 
