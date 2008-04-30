@@ -20,7 +20,7 @@
 
 class force_meassure_generator;
 
-class ecp_task_tzu_postument_test :  public ecp_task  
+class ecp_task_tzu_test :  public ecp_task  
 {
 protected:
 	ecp_smooth_generator *sg;
@@ -40,11 +40,12 @@ protected:
 	void nose_generator_test(int tool);
 	void trajectories_test(void);
 	void set_trajectories();
-	char* get_trajectorie(double x1, double x2, double x3, double x4, double x5, double x6 ,double x7 ,int robot);
+	char* get_trajectory(double x[]);
 	void naciskanie_test();
+	void eksperyment_test();
 public:
-	ecp_task_tzu_postument_test(configurator &_config);
-	~ecp_task_tzu_postument_test();
+	ecp_task_tzu_test(configurator &_config);
+	~ecp_task_tzu_test();
 	
 	// methods for ECP template to redefine in concrete classes
 	/** metoda odpowiedzialna za inicjalizacje zmiennych zadania **/

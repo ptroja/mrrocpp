@@ -17,6 +17,9 @@
 #include "lib/mathtr.h"
 #include "ecp/common/ecp_g_smooth.h"
 
+/*
+ * przy najblizszej okazji zrobic tu porzadek przy wykorzystaniu jakiegos porzadnego edytora!!!
+ */
 using namespace std;
 /** konstruktor **/
 ecp_task_tzu_fs::ecp_task_tzu_fs(configurator &_config) : ecp_task(_config)
@@ -121,6 +124,7 @@ void ecp_task_tzu_fs::main_task_algorithm(void)
 	// set_trajectory(robot, procedure_type);
 
 	// w domu zastanowic sie nad jakims sprytnym uporzadkowaniem tego
+	// bo aktualnie nie ma jeszcze przeciez korekcji
 	if(correction)
 	{
 		// przerobic to bo korekcja modelu moze miec sens tylko po jego wyznaczeniu
@@ -140,7 +144,6 @@ void ecp_task_tzu_fs::main_task_algorithm(void)
 	else
 		T = 1;
 		
-	// trzeba stworzyc tablice mapujaca kolejnosc wykonywanych ruchow
 	int map_tab[] = {0,1,3,2,4};
 	int i = 0;
 	int count = 4;
@@ -259,82 +262,21 @@ void ecp_task_tzu_fs::method_standard(int T)
 			weight = (-(fmg->weight[FORCE_Z]))/2;
 			P_x = fmg->weight[TORQUE_Y]/(2*weight);
 			P_y = -fmg->weight[TORQUE_X]/(2*weight);
-			// cout<<"torque_x: "<<fmg->weight[TORQUE_X]<<endl;
-			// cout<<"torque_y: "<<fmg->weight[TORQUE_Y]<<endl;
-			// cout<<"test funkcji: "<<*(fmg->get_meassurement())<<endl;
-	/*		
-	 		for(int i = 0 ; i < 10 ; i++)
-			{
-				fmg->Move();
-				//weight = fmg->weight[2]/2;
-				std::cout<<"pomiar 1: "<<fmg->weight<<std::endl;
-				std::cout<<"weight_1"<<": "<<fmg->weight[2]/2<<std::endl;
-				sleep(1);
-			}
-	*/
 			// ETAP TRZECI - chwytak skierowany horyzontalnie, obliczenie ostatniego z parametrów modelu
 			sg->load_file_with_path(trajectories[TRAJECTORY_HORIZONTAL]);
-			
 			sg->Move ();
 			fmg->Move();
-	
 			P_z = -fmg->weight[TORQUE_Y]/weight;
-			// cout<<"torque_y: "<<fmg->weight[TORQUE_Y]<<endl;
-	/*		
-	 		for(int i = 0 ; i < 10 ; i++)
-			{
-				fmg->Move();
-				std::cout<<"pomiar 2: "<<fmg->weight<<std::endl;
-				std::cout<<"t1: "<<-(fmg->weight[4]/weight)<<std::endl;
-				sleep(1);
-			}
-	*/
+			
 			cout<<"Parametry modelu srodka ciezkosci narzedzia"<<endl
 				<<"weight: "<<weight<<endl<<"P_x: "<<P_x<<endl<<"P_y: "<<P_y<<endl<<"P_z: "<<P_z<<endl; 
 			str<<"Parametry modelu srodka ciezkosci narzedzia"<<endl
 				<<"weight: "<<weight<<endl<<"P_x: "<<P_x<<endl<<"P_y: "<<P_y<<endl<<"P_z: "<<P_z<<endl;
-			// test nose - start
 			sleep(1);
 			weight_s += weight;
 			P_x_s += P_x;
 			P_y_s += P_y;
 			P_z_s += P_z;
-			// test
-	///		set_test_trajectory(robot);
-	///		sg->load_file_with_path(test_trajectories[0]);
-	///		sg->Move();
-			// test
-	///		sg->load_file_with_path(additional_move);
-	///		sg->Move();
-	//		befg->Move();
-			
-			// x,y,z,weight		
-			// ustawienia zgodne z plikiem konfiguracyjnym
-	//		ftcg->set_tool_parameters(0.004,0.0,0.066,10.8);
-	//		ftcg->Move();
-	//		fmg->Move();
-	//		cout<<"pomiar1: "<<fmg->weight<<endl;
-			
-	//		befg->Move();
-			// ustawienie wyznaczonego modelu i procedury testowania go
-	///		ftcg->set_tool_parameters(P_x,P_y,P_z,weight);
-	///		ftcg->Move();
-			
-	///		befg->Move();	
-	///		etnrg->set_force_meassure(true);
-	///		etnrg->Move();
-			// koniec testowania przy pomocy nose generatora
-			
-			// testy polegajace na ustawianiu manipulatora w roznych pozycjach i sprawdzaniu uzyskanych odczytow sily
-			// na 6 joint obrot
-	//		fmg->Move();
-	//		cout<<"pomiar2: "<<fmg->weight<<endl;
-	//		set_test_trajectory(robot);
-	//		sg->load_file_with_path(test_trajectories[0]);
-	//		sg->Move();
-	//		fmg->Move();
-	//		cout<<"pomiar3: "<<fmg->weight<<endl;
-			// koniec testow
 			break;
 		}
 	}
@@ -491,20 +433,22 @@ void ecp_task_tzu_fs::model_correction(double model[])
 	}
 }
 
-void ecp_task_tzu_fs::set_test_trajectory(int robot_type)
+char*ecp_task_tzu_fs::get_trajectory(double x[])
 {
-/*
- 	if(robot_type == POSTUMENT)
-	{
-		test_trajectories[0] = "../trj/tzu/tzu_1_postument_test.trj";
-		test_trajectories[1] = "../trj/tzu/tzu_2_postument_test.trj";
-	}
-	else
-	{
-		test_trajectories[0] = "../trj/tzu/tzu_1_on_track_test.trj";
-		test_trajectories[1] = "../trj/tzu/tzu_2_on_track_test.trj";
-	}
-*/
+	ofstream temp;
+	temp.open("../trj/tzu/temp.trj");
+	temp<<"JOINT"<<endl;
+	temp<<"1"<<endl;
+	temp<<"0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"<<endl;
+	temp<<"0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"<<endl;
+	temp<<"0.3 0.3 0.3 0.3 0.3 0.3 0.3 1.0"<<endl;
+	temp<<"0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.01"<<endl;
+	if(robot == POSTUMENT)
+		temp<<x[0]<<" "<<x[1]<<" "<<x[2]<<" "<<x[3]<<" "<<x[4]<<" "<<x[5]<<" "<<x[6]<<" 0"<<endl;
+	else if(robot == ON_TRACK)
+		temp<<"0 "<<x[0]<<" "<<x[1]<<" "<<x[2]<<" "<<x[3]<<" "<<x[4]<<" "<<x[5]<<" "<<x[6]<<endl;
+	temp.close();
+	return "../trj/tzu/temp.trj";
 }
 
 /**** force meassure generator ****/
@@ -550,7 +494,6 @@ bool force_meassure_generator::next_step()
 	sleep(2);
 	for(int i = 0 ; i < meassurement_count ; i++)
 	{
-		//cout<<"pomiar: "<<weight<<endl; 
 		Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
 		current_frame_wo_offset.remove_translation();
 	
@@ -559,12 +502,6 @@ bool force_meassure_generator::next_step()
 		weight = force_torque;
 		sleep(sleep_time);
 	}
-//	double test1 = 22.2;
-//	int test2 = 2;
-//	cout<<"dzielenie: "<<test1/test2<<endl;
-
-//	for(int i = 0 ; i < 6 ; i++)
-//		weight[i] = weight[i]/meassurement_count;
 	return false;
 }
 
