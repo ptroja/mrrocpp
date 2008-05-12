@@ -148,10 +148,12 @@ void ecp_task_tzu_test::nose_generator_test(int tool)
 	{
 		sr_ecp_msg->message("START NOSE");
 		
+		// 0.004 0.0 0.13
+		// weight=13.18
 		if(tool == 0)
 		{
 			sr_ecp_msg->message("parametry z common.ini");
-			ftcg->set_tool_parameters(0.004,0.0,0.156,10.8);
+			ftcg->set_tool_parameters(0.004,0.0,0.13,13.18);
 			ftcg->Move();
 		}
 		else if(tool == 1)

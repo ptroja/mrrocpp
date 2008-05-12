@@ -304,6 +304,7 @@ void edp_ATI3084_force_sensor::configure_sensor(void)
 				for (int i=0; i<6; i++)
 					tab[i] = strtod( tmp, &tmp );
 				sensor_frame = Homog_matrix(Homog_matrix::MTR_XYZ_ANGLE_AXIS, tab[0], tab[1], tab[2], tab[3], tab[4], tab[5]);
+				// std::cout<<sensor_frame<<std::endl;
 			} 
 			else 
 				sensor_frame = Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
