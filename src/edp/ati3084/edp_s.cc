@@ -8,7 +8,6 @@
 // Autor: Yoyek (Tomek Winiarski)
 // na podstawie szablonu vsp Tomka Kornuty i programu obslugi czujnika Artura Zarzyckiego
 // -------------------------------------------------------------------------
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -296,12 +295,28 @@ void edp_ATI3084_force_sensor::configure_sensor(void)
 			//frame_tab sensor_rot = {{0, -1, 0}, {1, 0, 0}, {0, 0, 1}, {0, 0, 0}};
 			// polozenie czujnika wzgledem  koncowki lancucha kinematycznego
 			// Homog_matrix sensor_frame = Homog_matrix(0, -1, 0,		1, 0, 0,	0, 0, 1,	0, 0, 0.09);
-
-			Homog_matrix sensor_frame = Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
+			
+			double tab[6];
+			Homog_matrix sensor_frame;
+			if (master.config.exists("sensor_in_wrist"))
+			{
+				char *tmp = master.config.return_string_value("sensor_in_wrist");
+				for (int i=0; i<6; i++)
+					tab[i] = strtod( tmp, &tmp );
+				sensor_frame = Homog_matrix(Homog_matrix::MTR_XYZ_ANGLE_AXIS, tab[0], tab[1], tab[2], tab[3], tab[4], tab[5]);
+			} 
+			else 
+				sensor_frame = Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
+			// Homog_matrix sensor_frame = Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
 
 			double weight = master.config.return_double_value("weight");
-			double point[3] = { master.config.return_double_value("x_axis_arm"),
-					master.config.return_double_value("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
+			
+			double point[3];
+			char *tmp = master.config.return_string_value("default_mass_center_in_wrist");
+			for (int i=0; i<3; i++)
+				point[i] = strtod( tmp, &tmp );
+			// double point[3] = { master.config.return_double_value("x_axis_arm"),
+			//		master.config.return_double_value("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
 			K_vector pointofgravity(point);
 			gravity_transformation = new ForceTrans(FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
 

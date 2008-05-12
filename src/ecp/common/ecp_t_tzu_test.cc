@@ -162,7 +162,7 @@ void ecp_task_tzu_test::nose_generator_test(int tool)
 		}
 		
 		// ustawienie manipulatora pionowo do gory
-		double tmp[] = {0.759997, -1.5707, 0, 1.5707, 1.5707, 0 ,0.07};
+		double tmp[] = {0.759997, -1.5707, 0, 1.132, 1.5707, 0 ,0.07};
 		sg->load_file_with_path(get_trajectory(tmp));
 		sg->Move();
 		befg->Move();
