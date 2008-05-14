@@ -533,7 +533,7 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffe
             }
 
             // PRAWO STEROWANIA
-            move_rot_vector[i] = ((-reciprocal_damping[i] * (force_xyz_torque_xyz[i] - current_force_torque[i])
+            move_rot_vector[i] = ((reciprocal_damping[i] * (force_xyz_torque_xyz[i] - current_force_torque[i])
                                    + pos_xyz_rot_xyz_vector[i] ) * STEP * STEP + reciprocal_damping[i] * inertia[i]
                                   * previous_move_rot_vector[i]) / (STEP + reciprocal_damping[i] * inertia[i]);
         }

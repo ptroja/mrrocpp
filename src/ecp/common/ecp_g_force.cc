@@ -663,7 +663,7 @@ bool y_edge_follow_force_generator::first_step()
 	the_robot->EDP_data.next_reciprocal_damping[0] = FORCE_RECIPROCAL_DAMPING;
 	the_robot->EDP_data.next_behaviour[0] = CONTACT;
 	// Sila dosciku do rawedzi
-	the_robot->EDP_data.next_force_xyz_torque_xyz[0] = -4;
+	the_robot->EDP_data.next_force_xyz_torque_xyz[0] = 4;
 
 	return true;
 }
@@ -2011,9 +2011,9 @@ bool ecp_tff_rubik_face_rotate_generator::first_step()
 				= TORQUE_RECIPROCAL_DAMPING;
 		the_robot->EDP_data.next_behaviour[5] = CONTACT;
 		if (turn_angle > 0.0)
-			the_robot->EDP_data.next_force_xyz_torque_xyz[5] = -5;
-		if (turn_angle < 0.0)
 			the_robot->EDP_data.next_force_xyz_torque_xyz[5] = 5;
+		if (turn_angle < 0.0)
+			the_robot->EDP_data.next_force_xyz_torque_xyz[5] = -5;
 	}
 
 	return true;

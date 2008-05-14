@@ -153,7 +153,7 @@ double* ForceTrans::getForce(const double inputForceTorque[6], const Homog_matri
 		*/
 			
 
-		output_force_torque = Ft_v_tr (current_orientation, Ft_v_tr::FT) * output_force_torque;	
+		output_force_torque = Ft_v_tr (current_orientation, Ft_v_tr::FT) * (-output_force_torque);	
 
 //		Ft_v_vector tmp_force_torque = Ft_v_tr (current_orientation*sensor_frame_translation, FT_VARIANT) * output_force_torque;	
 		
