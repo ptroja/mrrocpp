@@ -726,15 +726,16 @@ bool y_edge_follow_force_generator::next_step()
 	{
 
 		double s_alfa = wy / v;
-		double c_alfa = -wx / v;
+		double c_alfa = wx / v;
 
-		the_robot->EDP_data.next_velocity[1] = -0.002*v;
+		the_robot->EDP_data.next_velocity[1] = 0.002*v;
 		//     the_robot->EDP_data.next_velocity[1] = -0.00;
 		//	the_robot->EDP_data.ECPtoEDP_position_velocity[1] = 0.0;
 
 		// basic_rot_frame = Homog_matrix(c_alfa, s_alfa, 0.0,	-s_alfa, c_alfa, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
-		basic_rot_frame = Homog_matrix(c_alfa, -s_alfa, 0.0, 0.0, s_alfa,
-				c_alfa, 0.0, 0.0, 0.0, 0.0, 1, 0.0);
+		basic_rot_frame = Homog_matrix(c_alfa, -s_alfa, 0.0, 0.0,
+			 s_alfa, c_alfa, 0.0, 0.0, 
+			 0.0, 0.0, 1, 0.0);
 
 		// dodatkowa macierz obracajaca kierunek wywieranej sily tak aby stabilizowac jej wartosc
 		double alfa_r = 0.2*(v-4);
@@ -742,13 +743,14 @@ bool y_edge_follow_force_generator::next_step()
 		double c_alfa_r = cos(alfa_r);
 
 		// ex_rot_frame = Homog_matrix(c_alfa_r, s_alfa_r, 0.0,	-s_alfa_r, c_alfa_r, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
-		ex_rot_frame = Homog_matrix(c_alfa_r, -s_alfa_r, 0.0, 0.0, s_alfa_r,
-				c_alfa_r, 0.0, 0.0, 0.0, 0.0, 1, 0.0);
+		ex_rot_frame = Homog_matrix(c_alfa_r, -s_alfa_r, 0.0, 0.0, 
+			s_alfa_r, c_alfa_r, 0.0, 0.0,
+			 0.0, 0.0, 1, 0.0);
 
 		// obrocenie pierwotnej macierzy
 		basic_rot_frame = basic_rot_frame * ex_rot_frame;
 
-		basic_rot_frame = !basic_rot_frame;
+//		basic_rot_frame = !basic_rot_frame;
 
 		tool_frame = tool_frame * basic_rot_frame;
 		// basic_rot_frame.set_translation_vector(0, 0, 0.25);
@@ -1791,6 +1793,7 @@ bool ecp_tff_nose_run_generator::next_step()
 	}
 
 	// wyrzucanie odczytu sil
+
 	if(force_meassure)
 	{
 		Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
