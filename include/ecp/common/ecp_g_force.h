@@ -254,6 +254,7 @@ protected:
     Homog_matrix ex_rot_frame;
 
     double start_position_w3;
+    bool isStart;
 
 public:
 

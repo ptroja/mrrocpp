@@ -855,7 +855,7 @@ bool legobrick_attach_force_generator::first_step()
 	//os z 
 	the_robot->EDP_data.next_reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING;
 	the_robot->EDP_data.next_velocity[2] = 0;
-	the_robot->EDP_data.next_force_xyz_torque_xyz[2] = -5.0;
+	the_robot->EDP_data.next_force_xyz_torque_xyz[2] = 5.0;
 	//the_robot->EDP_data.next_behaviour[2] = UNGUARDED_MOTION;
 	the_robot->EDP_data.next_behaviour[2] = CONTACT;
 
@@ -869,31 +869,10 @@ bool legobrick_attach_force_generator::first_step()
 //--------------------------------------------------------------------------------------
 bool legobrick_attach_force_generator::next_step()
 {
-	// tablice pomocnicze do utworzenia przyrostowej trajektorii ruchu do zapisu do pliku
-	double inc_delta[6], tmp_delta[6];
-	// static int count;
-	// struct timespec start[9];
 	if (check_and_null_trigger())
 	{
 		return false;
 	}
-
-	// 	wstawienie nowego przyrostu pozyji do przyrostowej trajektorii ruchu do zapisu do pliku
-	Homog_matrix tmp_matrix(the_robot->EDP_data.current_arm_frame);
-	tmp_matrix.get_xyz_angle_axis(inc_delta);
-
-	for (int i=0; i<6; i++)
-		inc_delta[i] = -inc_delta[i];
-
-	tmp_matrix.set_frame_tab(the_robot->EDP_data.current_arm_frame);
-	tmp_matrix.get_xyz_angle_axis(tmp_delta);
-
-	for (int i=0; i<6; i++)
-		inc_delta[i]+=tmp_delta[i];
-
-	//insert_pose_list_element(emptyps, 0.0, 2, inc_delta);
-
-	// wyznaczenie nowej macierzy referencyjnej i predkosci ruchu
 
 	the_robot->EDP_data.instruction_type = SET_GET;
 
@@ -910,7 +889,7 @@ bool legobrick_attach_force_generator::next_step()
 	double wz = force_torque[2];
 	
 	//warunek stopu
-	if(wz <= -5.0) return false;
+	if(wz >= 5.0) return false;
 
 	return true;
 
@@ -931,6 +910,7 @@ legobrick_detach_force_generator::legobrick_detach_force_generator(
 
 	tool_frame = Homog_matrix(tmp_tool_frame);
 	step_no=step;
+	isStart = true;
 }
 //--------------------------------------------------------------------------------------
 bool legobrick_detach_force_generator::first_step()
@@ -952,14 +932,13 @@ bool legobrick_detach_force_generator::first_step()
 	the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
 	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
 	the_robot->EDP_data.set_arm_type = PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = FRAME;
+	the_robot->EDP_data.get_arm_type = XYZ_ANGLE_AXIS;
 	the_robot->EDP_data.motion_type = ABSOLUTE;
 	the_robot->EDP_data.next_interpolation_type = TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
-	start_position_w3 = the_robot->EDP_data.current_XYZ_AA_arm_coordinates[5];
 
 	for (int i=0; i<3; i++)
 	{
@@ -994,7 +973,7 @@ bool legobrick_detach_force_generator::first_step()
 	//os z 
 	the_robot->EDP_data.next_reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING/4;
 	the_robot->EDP_data.next_velocity[2] = 0;
-	the_robot->EDP_data.next_force_xyz_torque_xyz[2] = -20.0;
+	the_robot->EDP_data.next_force_xyz_torque_xyz[2] = 20.0;
 	//the_robot->EDP_data.next_behaviour[2] = UNGUARDED_MOTION;//CONTACT;
 	the_robot->EDP_data.next_behaviour[2] = CONTACT;
 
@@ -1008,31 +987,10 @@ bool legobrick_detach_force_generator::first_step()
 //--------------------------------------------------------------------------------------
 bool legobrick_detach_force_generator::next_step()
 {
-	// tablice pomocnicze do utworzenia przyrostowej trajektorii ruchu do zapisu do pliku
-	double inc_delta[6], tmp_delta[6];
-	// static int count;
-	// struct timespec start[9];
 	if (check_and_null_trigger())
 	{
 		return false;
 	}
-
-	// 	wstawienie nowego przyrostu pozyji do przyrostowej trajektorii ruchu do zapisu do pliku
-	Homog_matrix tmp_matrix(the_robot->EDP_data.current_arm_frame);
-	tmp_matrix.get_xyz_angle_axis(inc_delta);
-
-	for (int i=0; i<6; i++)
-		inc_delta[i] = -inc_delta[i];
-
-	tmp_matrix.set_frame_tab(the_robot->EDP_data.current_arm_frame);
-	tmp_matrix.get_xyz_angle_axis(tmp_delta);
-
-	for (int i=0; i<6; i++)
-		inc_delta[i]+=tmp_delta[i];
-
-	//insert_pose_list_element(emptyps, 0.0, 2, inc_delta);
-
-	// wyznaczenie nowej macierzy referencyjnej i predkosci ruchu
 
 	the_robot->EDP_data.instruction_type = SET_GET;
 
@@ -1044,12 +1002,20 @@ bool legobrick_detach_force_generator::next_step()
 		the_robot->EDP_data.next_motor_arm_coordinates[i]=0.0;
 	}
 
+	if(isStart){
+		start_position_w3 = 3 * the_robot->EDP_data.current_XYZ_AA_arm_coordinates[5];
+		isStart = false;
+	}
+
 	//warunek stopu
-	double stop_position_w3 = the_robot->EDP_data.current_XYZ_AA_arm_coordinates[5];
+	double stop_position_w3 = 3 * the_robot->EDP_data.current_XYZ_AA_arm_coordinates[5];
 
-	if(fabs(start_position_w3 - stop_position_w3) > 0.06) return false;
+	printf("Start: %f , Stop: %f\n", start_position_w3, stop_position_w3);
+	printf("Roznica %f\n", start_position_w3 - stop_position_w3);
 
-	printf("Start: %f , Stop: %f", start_position_w3, stop_position_w3);
+	if(fabs(start_position_w3 - stop_position_w3) > 0.8) return false;
+
+	//printf("Start: %f , Stop: %f\n", start_position_w3, stop_position_w3);
 
 	return true;
 

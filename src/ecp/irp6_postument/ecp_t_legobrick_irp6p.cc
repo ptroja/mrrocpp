@@ -80,6 +80,8 @@ void ecp_task_lego_brick_irp6p::main_task_algorithm(void)
 		afg->Move();
 		sr_ecp_msg->message("Ruch detach");
 		dfg->Move();
+		sr_ecp_msg->message("Ruch smooth");
+    		sg->Move();
 	//}
 	ecp_wait_for_stop();
 	break;
