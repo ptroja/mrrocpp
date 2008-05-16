@@ -259,14 +259,14 @@ void ecp_task_tzu_fs::method_standard(int T)
 			sg->load_file_with_path(trajectories[TRAJECTORY_VERTCAL_UP]);
 			sg->Move ();
 			fmg->Move();
-			weight = (-(fmg->weight[FORCE_Z]))/2;
-			P_x = fmg->weight[TORQUE_Y]/(2*weight);
-			P_y = -fmg->weight[TORQUE_X]/(2*weight);
+			weight = (fmg->weight[FORCE_Z])/2;
+			P_x = -fmg->weight[TORQUE_Y]/(2*weight);
+			P_y = fmg->weight[TORQUE_X]/(2*weight);
 			// ETAP TRZECI - chwytak skierowany horyzontalnie, obliczenie ostatniego z parametrów modelu
 			sg->load_file_with_path(trajectories[TRAJECTORY_HORIZONTAL]);
 			sg->Move ();
 			fmg->Move();
-			P_z = P_x - fmg->weight[TORQUE_Y]/weight;
+			P_z = fmg->weight[TORQUE_Y]/weight + P_x;
 			
 			cout<<"Parametry modelu srodka ciezkosci narzedzia"<<endl
 				<<"weight: "<<weight<<endl<<"P_x: "<<P_x<<endl<<"P_y: "<<P_y<<endl<<"P_z: "<<P_z<<endl; 
