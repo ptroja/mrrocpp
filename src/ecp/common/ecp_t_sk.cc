@@ -54,9 +54,8 @@ void ecp_task_sk::task_initialization(void)
     nrg = new ecp_tff_nose_run_generator(*this, 8);
 
 
-    nrg->configure (true, true, true, true, true, true, true);
-    // tylko kierunki liniowe podatne
-    // nrg->configure (true, true, true, false, false, false, true);
+ //   nrg->configure (true, true, true, true, true, true, true);
+     nrg->configure (false, false, true, false, false, false, true);
 
     yefg = new y_edge_follow_force_generator (*this, 8);
     befg = new bias_edp_force_generator(*this);

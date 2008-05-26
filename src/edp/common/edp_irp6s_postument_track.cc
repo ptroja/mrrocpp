@@ -803,12 +803,19 @@ void edp_irp6s_postument_track_effector::servo_joints_and_frame_actualization_an
         //Uwaga: w edp_conveyor_effector jest podobnie.
 
         get_current_kinematic_model()->direct_kinematics_transform(servo_current_joints, &servo_current_frame_wo_tool);
-        Homog_matrix A(servo_current_frame_wo_tool);
+ //    
 
+    // Stworzenie macierzy, ktora bedzie uzywana w dalszych obliczeniach.
+    Homog_matrix servo_current_frame (servo_current_frame_wo_tool);
+
+        get_current_kinematic_model()->global_frame_transform(servo_current_frame);
+//        get_current_kinematic_model()->local_corrector_transform(servo_current_frame);
+        get_current_kinematic_model()->attached_tool_transform(servo_current_frame);
+
+
+        servo_current_frame.get_xyz_euler_zyz(servo_real_kartez_pos);
+        
 #ifdef EXTRA_COMPUTATION
-
-        A.get_xyz_euler_zyz(servo_real_kartez_pos);
-
         get_current_kinematic_model()->i2e_transform(servo_current_joints, &tmp);
         servo_current_end_effector_frame_with_tool_and_base.set_frame_tab(tmp);
         servo_current_end_effector_frame_with_tool_and_base_wo_offset = servo_current_end_effector_frame_with_tool_and_base;

@@ -1699,7 +1699,7 @@ bool ecp_tff_nose_run_generator::first_step()
 		if (selection_vector_l[i])
 		{
 			the_robot->EDP_data.next_reciprocal_damping[i]
-					= FORCE_RECIPROCAL_DAMPING;
+					= FORCE_RECIPROCAL_DAMPING*3;
 			the_robot->EDP_data.next_behaviour[i] = CONTACT;
 		}
 		else
@@ -1719,7 +1719,7 @@ bool ecp_tff_nose_run_generator::first_step()
 			the_robot->EDP_data.next_behaviour[i+3] = UNGUARDED_MOTION;
 		}
 
-		the_robot->EDP_data.next_inertia[i] = FORCE_INERTIA;
+		the_robot->EDP_data.next_inertia[i] = 0;
 		the_robot->EDP_data.next_inertia[i+3] = TORQUE_INERTIA;
 
 	}
