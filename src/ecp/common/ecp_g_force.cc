@@ -617,7 +617,7 @@ y_edge_follow_force_generator::y_edge_follow_force_generator(
 {
 	step_no=step;
 }
-;
+
 
 bool y_edge_follow_force_generator::first_step()
 {
@@ -1694,12 +1694,14 @@ bool ecp_tff_nose_run_generator::first_step()
 		//	the_robot->EDP_data.selection_vector[i] = POSE_SV_AX;
 	}
 
+	//	the_robot->EDP_data.next_velocity[2] = 0.2;
+
 	for (int i=0; i<3; i++)
 	{
 		if (selection_vector_l[i])
 		{
 			the_robot->EDP_data.next_reciprocal_damping[i]
-					= FORCE_RECIPROCAL_DAMPING*3;
+					= FORCE_RECIPROCAL_DAMPING*1.3;
 			the_robot->EDP_data.next_behaviour[i] = CONTACT;
 		}
 		else
