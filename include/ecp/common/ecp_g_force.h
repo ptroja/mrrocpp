@@ -286,6 +286,14 @@ protected:
     // czy pulse_check ma byc aktywne
     bool pulse_check_activated;
 	bool force_meassure;
+	
+	struct generator_edp_data_type
+	{
+		double next_inertia[6], next_reciprocal_damping[6];
+		double next_velocity[MAX_SERVOS_NR], next_force_xyz_torque_xyz[6];
+		BEHAVIOUR_SPECIFICATION next_behaviour[6];
+	} generator_edp_data;
+	
 
 public:
     int step_no;
@@ -293,8 +301,14 @@ public:
     // konstruktor
     ecp_tff_nose_run_generator(ecp_task& _ecp_task, int step=0);
 
-    // decyduje ktore osie maja byc podatne
-    void configure(bool x, bool y, bool z, bool g, bool b, bool a, bool pulse_check_activated_l);
+	void configure_behaviour(BEHAVIOUR_SPECIFICATION x, BEHAVIOUR_SPECIFICATION y, BEHAVIOUR_SPECIFICATION z,
+		 BEHAVIOUR_SPECIFICATION ax, BEHAVIOUR_SPECIFICATION ay, BEHAVIOUR_SPECIFICATION az);
+	void configure_pulse_check(bool pulse_check_activated_l);
+	void configure_velocity(double x, double y, double z,	 double ax, double ay, double az);
+	void configure_force(double x, double y, double z,	 double ax, double ay, double az);
+	void configure_reciprocal_damping(double x, double y, double z, double ax, double ay, double az);
+	void configure_inertia(double x, double y, double z,	 double ax, double ay, double az);
+	
     virtual bool first_step ();
     virtual bool next_step ();
     

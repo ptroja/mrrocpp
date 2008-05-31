@@ -1630,29 +1630,91 @@ ecp_tff_nose_run_generator::ecp_tff_nose_run_generator(ecp_task& _ecp_task,
 	ecp_generator(_ecp_task)
 {
 	step_no = step;
-	force_meassure = false;
 	// domyslnie wszytkie osie podatne a pulse_check nieaktywne
-	configure(true, true, true, true, true, true, false);
+	configure_behaviour(CONTACT, CONTACT, CONTACT, CONTACT, CONTACT, CONTACT);
+	configure_pulse_check (false);
+	configure_velocity (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+	configure_force (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+	configure_reciprocal_damping (FORCE_RECIPROCAL_DAMPING, FORCE_RECIPROCAL_DAMPING, FORCE_RECIPROCAL_DAMPING,
+		 TORQUE_RECIPROCAL_DAMPING, TORQUE_RECIPROCAL_DAMPING, TORQUE_RECIPROCAL_DAMPING);
+	configure_inertia (FORCE_INERTIA, FORCE_INERTIA, FORCE_INERTIA, TORQUE_INERTIA, TORQUE_INERTIA, TORQUE_INERTIA);
+	
+	set_force_meassure (false);
+	
+	
 }
+
+
 
 void ecp_tff_nose_run_generator::set_force_meassure(bool fm)
 {
 	force_meassure = fm;
 }
 
-// decyduje ktore osie maja byc podatne
-void ecp_tff_nose_run_generator::configure(bool x, bool y, bool z, bool g,
-		bool b, bool a, bool pulse_check_activated_l)
-{
 
-	selection_vector_l[0] = x;
-	selection_vector_l[1] = y;
-	selection_vector_l[2] = z;
-	selection_vector_l[3] = g;
-	selection_vector_l[4] = b;
-	selection_vector_l[5] = a;
+void ecp_tff_nose_run_generator::configure_pulse_check(bool pulse_check_activated_l)
+{
 	pulse_check_activated = pulse_check_activated_l;
 }
+
+
+void ecp_tff_nose_run_generator::configure_behaviour(BEHAVIOUR_SPECIFICATION x, BEHAVIOUR_SPECIFICATION y, BEHAVIOUR_SPECIFICATION z,
+	 BEHAVIOUR_SPECIFICATION ax, BEHAVIOUR_SPECIFICATION ay, BEHAVIOUR_SPECIFICATION az)
+ {
+	generator_edp_data.next_behaviour[0] = x;
+	generator_edp_data.next_behaviour[1] = y;
+	generator_edp_data.next_behaviour[2] = z;
+	generator_edp_data.next_behaviour[3] = ax;
+	generator_edp_data.next_behaviour[4] = ay;
+	generator_edp_data.next_behaviour[5] = az;
+ }
+
+
+void ecp_tff_nose_run_generator::configure_velocity(double x, double y, double z, double ax, double ay, double az)
+{
+	generator_edp_data.next_velocity[0] = x;
+	generator_edp_data.next_velocity[1] = y;
+	generator_edp_data.next_velocity[2] = z;
+	generator_edp_data.next_velocity[3] = ax;
+	generator_edp_data.next_velocity[4] = ay;
+	generator_edp_data.next_velocity[5] = az;
+}
+
+	
+void ecp_tff_nose_run_generator::configure_force(double x, double y, double z, double ax, double ay, double az)
+{
+	generator_edp_data.next_force_xyz_torque_xyz[0] = x;
+	generator_edp_data.next_force_xyz_torque_xyz[1] = y;
+	generator_edp_data.next_force_xyz_torque_xyz[2] = z;
+	generator_edp_data.next_force_xyz_torque_xyz[3] = ax;
+	generator_edp_data.next_force_xyz_torque_xyz[4] = ay;
+	generator_edp_data.next_force_xyz_torque_xyz[5] = az;
+}
+
+	
+void ecp_tff_nose_run_generator::configure_reciprocal_damping(double x, double y, double z, double ax, double ay, double az)
+{
+	generator_edp_data.next_reciprocal_damping[0] = x;
+	generator_edp_data.next_reciprocal_damping[1] = y;
+	generator_edp_data.next_reciprocal_damping[2] = z;
+	generator_edp_data.next_reciprocal_damping[3] = ax;
+	generator_edp_data.next_reciprocal_damping[4] = ay;
+	generator_edp_data.next_reciprocal_damping[5] = az;
+}
+
+
+void ecp_tff_nose_run_generator::configure_inertia(double x, double y, double z, double ax, double ay, double az)
+{
+	generator_edp_data.next_inertia[0] = x;
+	generator_edp_data.next_inertia[1] = y;
+	generator_edp_data.next_inertia[2] = z;
+	generator_edp_data.next_inertia[3] = ax;
+	generator_edp_data.next_inertia[4] = ay;
+	generator_edp_data.next_inertia[5] = az;	
+}
+
+
+
 
 // ----------------------------------------------------------------------------------------------
 // ---------------------------------    metoda	first_step -------------------------------------
@@ -1681,50 +1743,19 @@ bool ecp_tff_nose_run_generator::first_step()
 	the_robot->EDP_data.set_arm_type = PF_VELOCITY;
 	the_robot->EDP_data.get_arm_type = FRAME;
 	the_robot->EDP_data.motion_type = RELATIVE;
-	the_robot->EDP_data.next_interpolation_type
-			= TCIM;
+	the_robot->EDP_data.next_interpolation_type = TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
 	for (int i=0; i<6; i++)
 	{
-		the_robot->EDP_data.next_velocity[i] = 0;
-		the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
-		//		the_robot->EDP_data.selection_vector[i] = selection_vector_l[i];
-		//	the_robot->EDP_data.selection_vector[i] = POSE_SV_AX;
+		 the_robot->EDP_data.next_behaviour[i] = generator_edp_data.next_behaviour[i];
+		 the_robot->EDP_data.next_velocity[i] = generator_edp_data.next_velocity[i];
+		 the_robot->EDP_data.next_force_xyz_torque_xyz[i] = generator_edp_data.next_force_xyz_torque_xyz[i];
+		 the_robot->EDP_data.next_reciprocal_damping[i] = generator_edp_data.next_reciprocal_damping[i];
+		 the_robot->EDP_data.next_inertia[i] = generator_edp_data.next_inertia[i];
 	}
 
-	//	the_robot->EDP_data.next_velocity[2] = 0.2;
-
-	for (int i=0; i<3; i++)
-	{
-		if (selection_vector_l[i])
-		{
-			the_robot->EDP_data.next_reciprocal_damping[i]
-					= FORCE_RECIPROCAL_DAMPING*1.3;
-			the_robot->EDP_data.next_behaviour[i] = CONTACT;
-		}
-		else
-		{
-			the_robot->EDP_data.next_behaviour[i] = UNGUARDED_MOTION;
-		}
-
-		if (selection_vector_l[i+3])
-		{
-			the_robot->EDP_data.next_reciprocal_damping[i+3]
-					= TORQUE_RECIPROCAL_DAMPING;
-			the_robot->EDP_data.next_behaviour[i+3] = CONTACT;
-		}
-		else
-		{
-			//	the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i+3] = 0;
-			the_robot->EDP_data.next_behaviour[i+3] = UNGUARDED_MOTION;
-		}
-
-		the_robot->EDP_data.next_inertia[i] = 0;
-		the_robot->EDP_data.next_inertia[i+3] = TORQUE_INERTIA;
-
-	}
 
 	return true;
 }
