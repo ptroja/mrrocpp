@@ -55,19 +55,26 @@ void ecp_task_tw::task_initialization(void)
 
 
 
-//     nrg->configure (false, false, true, false, false, false, true);
+	nrg->configure_behaviour(UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION);
+//	nrg->configure_pulse_check (false);
+	nrg->configure_velocity (0.0, 0.0, 0.1, 0.0, 0.0, 0.0);
+//	nrg->configure_force (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+//	nrg->configure_reciprocal_damping (FORCE_RECIPROCAL_DAMPING, FORCE_RECIPROCAL_DAMPING, FORCE_RECIPROCAL_DAMPING,
+//		 TORQUE_RECIPROCAL_DAMPING, TORQUE_RECIPROCAL_DAMPING, TORQUE_RECIPROCAL_DAMPING);
+//	nrg->configure_inertia (FORCE_INERTIA, FORCE_INERTIA, FORCE_INERTIA, TORQUE_INERTIA, TORQUE_INERTIA, TORQUE_INERTIA);
+	
 
-    yefg = new y_edge_follow_force_generator (*this, 8);
+
     befg = new bias_edp_force_generator(*this);
 
 
     switch (ecp_m_robot->robot_name)
     {
     case ROBOT_IRP6_ON_TRACK:
-        sr_ecp_msg->message("ECP sk irp6ot loaded");
+        sr_ecp_msg->message("ECP tw ex irp6ot loaded");
         break;
     case ROBOT_IRP6_POSTUMENT:
-        sr_ecp_msg->message("ECP sk irp6p loaded");
+        sr_ecp_msg->message("ECP tw ex irp6p loaded");
         break;
     default:
         fprintf(stderr, "%s:%d unknown robot type\n", __FILE__, __LINE__);
@@ -88,7 +95,7 @@ void ecp_task_tw::task_initialization(void)
 
 void ecp_task_tw::main_task_algorithm(void)
 {
-    sr_ecp_msg->message("ECP sledzenie konturu - wcisnij start");
+    sr_ecp_msg->message("ECP tw ex - wcisnij start");
     ecp_wait_for_start();
     
 //   weight_meassure_generator wmg(*this, 0.3, 2);
@@ -105,20 +112,7 @@ void ecp_task_tw::main_task_algorithm(void)
 			sr_ecp_msg->message("Wodzenie do pozycji sledzenia konturu");
 			sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
 			nrg->Move();
-//			sr_ecp_msg->message("wazenie");
-//			wmg.Move();
-
-            // usuniecie listy o ile istnieje
-            yefg->flush_pose_list();
-
-            sr_ecp_msg->message("Sledzenie konturu");
-            sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
-            yefg->Move();
-            if ( save_activated && operator_reaction ("Save drawing ") )
-            {
-                sr_ecp_msg->message("Zapisywanie trajektorii");
-                yefg->save_file (PF_VELOCITY);
-            }
+ 
 
         }
 
