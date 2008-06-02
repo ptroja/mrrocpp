@@ -38,6 +38,29 @@ ecp_task_tzu_test::~ecp_task_tzu_test()
 	str.close();
 };
 
+void ecp_task_tzu_test::force_measurrement()
+{
+	sleep(1);
+	double pom_tmp[6];
+	for(int i = 0 ; i < 6 ; i++)
+		pom_tmp[i] = 0;
+		
+	for(int i = 0 ; i < 20 ; i++)
+	{
+		fmg->Move();
+		// cout<<"pomiar1: "<<fmg->weight<<endl;
+		for(int j = 0 ; j < 6 ; j++)
+			pom_tmp[j] += fmg->weight[j];
+	}
+	
+	// cout<<"pomiar2: "<<pom_tmp<<endl;	
+	
+	for(int i = 0 ; i < 6 ; i++)
+		pom[i] = pom_tmp[i]/20;
+	
+//	for(int i = 0 ; i < 6 ; i++)
+//	 cout<<"pomiar3: "<<pom[i]<<endl;
+};
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_tzu_test::task_initialization(void) 
@@ -57,7 +80,7 @@ void ecp_task_tzu_test::task_initialization(void)
 	// inicjalizacja generatorow
 	sg = new ecp_smooth_generator (*this, true, false);
 	befg = new bias_edp_force_generator(*this);
-	fmg = new force_meassure_generator(*this);	
+	fmg = new force_meassure_generator(*this,0,1);	
 	ftcg = new ecp_force_tool_change_generator(*this);
 	tcg = new ecp_tool_change_generator(*this,true);
 	ynrfg = new ecp_tff_nose_run_generator(*this,8);
@@ -137,8 +160,13 @@ void ecp_task_tzu_test::naciskanie_test()
 	while(true)			
 	{
 		usleep(10);
-		fmg->Move();
-		cout<<"pomiar: "<<fmg->weight<<endl;
+		// fmg->Move();
+		force_measurrement();
+		cout<<"pomiar: ";
+		for(int i = 0 ; i < 6 ; i++)
+			cout<<pom[i]<<", ";
+		cout<<endl;
+		// cout<<"pomiar: "<<fmg->weight<<endl;
 	}
 }
 
@@ -244,18 +272,42 @@ void ecp_task_tzu_test::trajectories_test(void)
 		else if(j == 2 || j == 3)
 		{
 			cout<<"parametry wyliczone"<<endl;
-			ftcg->set_tool_parameters(-0.00622889, -0.000365208, 0.167449, 13.2519);
+			cout<<"weight: 13.1243, P_x: 0.007698, P_y: 0.000848, P_z: 0.161029"<<endl;
+			// weight: 13.0715
+			// P_x: -0.00562063
+			// P_y: -0.000988634
+			// P_z: 0.157906
+			//ftcg->set_tool_parameters(-0.00562063, -0.000988634, 0.157906, 13.0715);
+			// weight: 13.745
+			// P_x: -0.00524009
+			// P_y: -0.00149684
+			// P_z: 0.150014
+			// ftcg->set_tool_parameters(-0.00524009, -0.00149684, 0.150014, 13.745);
+			// weight: 13.1884
+			// P_x: -0.000333794
+			// P_y: 0.000202744
+			// P_z: 0.138832
+			ftcg->set_tool_parameters(-0.000333794, 0.000202744, 0.138832, 13.1884);
 			ftcg->Move();
 		}
-		
+			
 		for(int i = 0 ; i < 5 ; i++)
 		{
 			sg->load_file_with_path(get_trajectory(tmp[j%2][i]));
 			sg->Move();
 			if(i == 0)
+			{
+				sleep(2);
 				befg->Move();
-			fmg->Move();
-			cout<<"pomiar "<<i<<": "<<fmg->weight<<endl;
+			}
+			// fmg->Move();
+			force_measurrement();
+			// cout<<"pomiar "<<i<<": "<<fmg->weight<<endl;
+			cout<<"pomiar: ";
+			for(int k = 0 ; k < 6 ; k++)
+				cout<<pom[k]<<", ";
+			cout<<endl;
+		
 			str<<"pomiar "<<i<<": "<<fmg->weight<<endl;
 		}
 	}
@@ -359,7 +411,9 @@ Ft_v_vector *force_meassure_generator::get_meassurement()
 /** next step **/
 bool force_meassure_generator::next_step()
 {
-	sleep(2);
+//	cout<<"sleep time: "<<sleep_time<<endl;
+//	cout<<"meassurement_count: "<<meassurement_count<<endl;
+	//sleep(sleep_time);
 	for(int i = 0 ; i < meassurement_count ; i++)
 	{
 		Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
@@ -368,9 +422,13 @@ bool force_meassure_generator::next_step()
 		Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
 		weight += force_torque;
 		weight = force_torque;
-		sleep(sleep_time);
+		usleep(50000);
+//		cout<<"force torque: "<<force_torque<<endl;
 	}
+	
+//	cout<<"weight przed: "<<weight<<endl;
 	for(int i = 0 ; i < 6 ; i++)
 		weight[i] = weight[i]/meassurement_count;
+//	cout<<"weight po: "<<weight<<endl;
 	return false;
 }

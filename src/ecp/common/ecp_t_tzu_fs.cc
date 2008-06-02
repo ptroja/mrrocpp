@@ -38,6 +38,29 @@ ecp_task_tzu_fs::~ecp_task_tzu_fs()
 	str.close();
 };
 
+void ecp_task_tzu_fs::force_measurrement()
+{
+	sleep(1);
+	double pom_tmp[6];
+	for(int i = 0 ; i < 6 ; i++)
+		pom_tmp[i] = 0;
+		
+	for(int i = 0 ; i < 20 ; i++)
+	{
+		fmg->Move();
+		// cout<<"pomiar1: "<<fmg->weight<<endl;
+		for(int j = 0 ; j < 6 ; j++)
+			pom_tmp[j] += fmg->weight[j];
+	}
+	
+	// cout<<"pomiar2: "<<pom_tmp<<endl;	
+	
+	for(int i = 0 ; i < 6 ; i++)
+		pom[i] = pom_tmp[i]/20;
+	
+//	for(int i = 0 ; i < 6 ; i++)
+//	 cout<<"pomiar3: "<<pom[i]<<endl;
+};
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_tzu_fs::task_initialization(void) 
@@ -57,7 +80,7 @@ void ecp_task_tzu_fs::task_initialization(void)
 	
 	sg = new ecp_smooth_generator (*this, true, false);
 	befg = new bias_edp_force_generator(*this);
-	fmg = new force_meassure_generator(*this);	
+	fmg = new force_meassure_generator(*this,0,1);	
 	ftcg = new ecp_force_tool_change_generator(*this);
 	tcg = new ecp_tool_change_generator(*this,true);
 	etnrg = new ecp_tff_nose_run_generator(*this,8);
@@ -250,6 +273,7 @@ void ecp_task_tzu_fs::method_standard(int T)
 			// zmiana narzedzia kinematycznego, ustawienie end-effector frame E jako sensor frame S
 			sg->load_file_with_path(trajectories[TRAJECTORY_VERTICAL_DOWN]);
 			sg->Move ();		
+			sleep(2);
 			befg->Move();
 			ftcg->Move();
 			tcg->set_tool_parameters(0,0,0);
@@ -258,15 +282,21 @@ void ecp_task_tzu_fs::method_standard(int T)
 			// wagi, parametrow translacji?!?
 			sg->load_file_with_path(trajectories[TRAJECTORY_VERTCAL_UP]);
 			sg->Move ();
-			fmg->Move();
-			weight = (fmg->weight[FORCE_Z])/2;
-			P_x = -fmg->weight[TORQUE_Y]/(2*weight);
-			P_y = fmg->weight[TORQUE_X]/(2*weight);
+			// fmg->Move();
+			force_measurrement();
+			// weight = (fmg->weight[FORCE_Z])/2;
+			weight = (pom[FORCE_Z])/2;
+			P_x = -pom[TORQUE_Y]/(2*weight);
+			P_y = pom[TORQUE_X]/(2*weight);
+			// P_x = -fmg->weight[TORQUE_Y]/(2*weight);
+			// P_y = fmg->weight[TORQUE_X]/(2*weight);
 			// ETAP TRZECI - chwytak skierowany horyzontalnie, obliczenie ostatniego z parametrów modelu
 			sg->load_file_with_path(trajectories[TRAJECTORY_HORIZONTAL]);
 			sg->Move ();
-			fmg->Move();
-			P_z = fmg->weight[TORQUE_Y]/weight + P_x;
+			// fmg->Move();
+			force_measurrement();
+			// P_z = fmg->weight[TORQUE_Y]/weight + P_x;
+			P_z = pom[TORQUE_Y]/weight + P_x;
 			
 			cout<<"Parametry modelu srodka ciezkosci narzedzia"<<endl
 				<<"weight: "<<weight<<endl<<"P_x: "<<P_x<<endl<<"P_y: "<<P_y<<endl<<"P_z: "<<P_z<<endl; 
@@ -488,6 +518,7 @@ Ft_v_vector *force_meassure_generator::get_meassurement()
 }
 
 /** next step **/
+/*
 bool force_meassure_generator::next_step()
 {
 	//Ft_v_vector average_meassurement[meassurement_count];
@@ -504,4 +535,28 @@ bool force_meassure_generator::next_step()
 	}
 	return false;
 }
-
+*/
+bool force_meassure_generator::next_step()
+{
+//	cout<<"sleep time: "<<sleep_time<<endl;
+//	cout<<"meassurement_count: "<<meassurement_count<<endl;
+//	sleep(sleep_time);
+	for(int i = 0 ; i < meassurement_count ; i++)
+	{
+		Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
+		current_frame_wo_offset.remove_translation();
+	
+		Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
+		weight += force_torque;
+		weight = force_torque;
+		usleep(50000);
+//		sleep(1);
+//		cout<<"force torque: "<<force_torque<<endl;
+	}
+	
+//	cout<<"weight przed: "<<weight<<endl;
+	for(int i = 0 ; i < 6 ; i++)
+		weight[i] = weight[i]/meassurement_count;
+//	cout<<"weight po: "<<weight<<endl;
+	return false;
+}

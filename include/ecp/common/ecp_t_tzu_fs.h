@@ -52,6 +52,8 @@ protected:
 	int czy_miesci_sie_w_zakladanej_dokladnosci(double dokladnosc, double pomiar);
 	void model_correction(double model[]);
 	char* get_trajectory(double x[]);
+	void force_measurrement(void);
+	double pom[6]; 
 public:
 	ecp_task_tzu_fs(configurator &_config);
 	~ecp_task_tzu_fs();

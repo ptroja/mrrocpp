@@ -37,16 +37,17 @@ protected:
 	int procedure_type;
 	ofstream str;
 	int robot;
+	double pom[6]; 
 	void nose_generator_test(int tool);
 	void trajectories_test(void);
 	void set_trajectories();
 	char* get_trajectory(double x[]);
 	void naciskanie_test();
 	void eksperyment_test();
+	void force_measurrement(void);
 public:
 	ecp_task_tzu_test(configurator &_config);
 	~ecp_task_tzu_test();
-	
 	// methods for ECP template to redefine in concrete classes
 	/** metoda odpowiedzialna za inicjalizacje zmiennych zadania **/
 	void task_initialization(void);
