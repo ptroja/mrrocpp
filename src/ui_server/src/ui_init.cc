@@ -2889,6 +2889,8 @@ void* server_thread(void*)
 		close(new_fd);
 		unload_all();
 	}
+	close(sockfd);
+	
 	return 0;
 }
 //~jk
@@ -3359,6 +3361,7 @@ void catch_signal(int sig) {
 int init()
 
 	{
+
 	//jk
 	if(sem_init(&sem,0,1) == -1 || sem_init(&sem_conveyor,0,1) == -1 || sem_init(&sem_irp6_on_track,0,1) == -1 || sem_init(&sem_irp6_postument,0,1) == -1 || sem_init(&sem_irp6_mechatronika,0,1) == -1 || sem_init(&sem_speaker,0,1) == -1 || sem_init(&sem_ui,0,1) == -1 || sem_init(&sem_mp,0,1) == -1)
 	{
@@ -3366,6 +3369,9 @@ int init()
 		return NULL;
 		
 	}//~jk
+	
+
+
 	
 	set_ui_state_notification(UI_N_STARTING);
 
@@ -3468,7 +3474,6 @@ int init()
 	ui_state.conveyor.edp.is_synchronised = false;
 	ui_state.speaker.edp.is_synchronised = false;
 	ui_state.irp6_mechatronika.edp.is_synchronised = false;
-
 	// ustalenie katalogow UI
 
     if( uname( &sysinfo ) == -1 ) {

@@ -111,7 +111,9 @@ manage_configuration_file()
 
 	// sprawdza czy sa postawione gns's i ew. stawia je
 	// uwaga serwer musi byc wczesniej postawiony
-	check_gns();
+   	printf("a2\n");
+   	fflush(stdout);
+	check_gns();	
 
 	return 0;
 
@@ -1598,14 +1600,14 @@ check_gns()
 		 } 
 		
 		// uruchomienie serwera
-		system("gns -s");
+		system("/usr/sbin/gns -s");
    	}
    	
    	
     	// sprawdzanie lokalne
   	 if ((dirp = opendir( "/proc/mount/dev/name" )) == NULL) 
-	{
-		system("gns");
+	{	
+		system("/usr/sbin/gns");		
 	 } else 
 	{
 		 closedir( dirp );
@@ -1632,9 +1634,9 @@ check_gns()
 			{
 				char system_command[100];
 															
-				strcpy(system_command, "on -f ");
+				strcpy(system_command, "/bin/on -f ");
 				strcat(system_command, *node_list_iterator);
-				strcat(system_command, " gns");
+				strcat(system_command, " /usr/sbin/gns");
 			
 				system(system_command);
 			 }  else 
