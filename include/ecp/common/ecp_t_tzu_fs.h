@@ -48,9 +48,6 @@ protected:
 	void method_alternative(int type, int sequence[], int T);
 	void method_standard(int T);
 	
-	void set_correction_trajectories();
-	int czy_miesci_sie_w_zakladanej_dokladnosci(double dokladnosc, double pomiar);
-	void model_correction(double model[]);
 	char* get_trajectory(double x[]);
 	void force_measurrement(void);
 	double pom[6]; 
