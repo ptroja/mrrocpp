@@ -37,18 +37,14 @@ protected:
 	int procedure_type;
 	ofstream str;
 	int robot;
-	double pom[6]; 
 	void nose_generator_test(int tool);
-	void trajectories_test(void);
+	void trajectories_test(int count);
 	void set_trajectories();
 	char* get_trajectory(double x[]);
 	void naciskanie_test();
-	void eksperyment_test();
-	void force_measurrement(void);
 public:
 	ecp_task_tzu_test(configurator &_config);
 	~ecp_task_tzu_test();
-	// methods for ECP template to redefine in concrete classes
 	/** metoda odpowiedzialna za inicjalizacje zmiennych zadania **/
 	void task_initialization(void);
 	/** metoda odpowiedzialna za wykonanie zadania **/
@@ -62,11 +58,12 @@ private:
     //double weight;
     int sleep_time;
     int meassurement_count;
-public:
+    int init_meassurement_count;
 	Ft_v_vector weight;
+public:
     // konstruktor
     force_meassure_generator(ecp_task& _ecp_task, int _sleep_time = 0, int _meassurement_count = 1);
-	Ft_v_vector* get_meassurement();
+	Ft_v_vector& get_meassurement();
 	bool force_meassure_generator::set_configuration(int _sleep_time, int _meassurement_count);
 	
     bool first_step ();

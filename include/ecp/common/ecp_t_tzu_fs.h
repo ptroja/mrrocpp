@@ -49,8 +49,6 @@ protected:
 	void method_standard(int T);
 	
 	char* get_trajectory(double x[]);
-	void force_measurrement(void);
-	double pom[6]; 
 public:
 	ecp_task_tzu_fs(configurator &_config);
 	~ecp_task_tzu_fs();
@@ -69,11 +67,12 @@ private:
     //double weight;
     int sleep_time;
     int meassurement_count;
-public:
+    int init_meassurement_count;
 	Ft_v_vector weight;
+public:
     // konstruktor
     force_meassure_generator(ecp_task& _ecp_task, int _sleep_time = 0, int _meassurement_count = 1);
-	Ft_v_vector* get_meassurement();
+	Ft_v_vector& get_meassurement();
 	bool force_meassure_generator::set_configuration(int _sleep_time, int _meassurement_count);
 	
     bool first_step ();

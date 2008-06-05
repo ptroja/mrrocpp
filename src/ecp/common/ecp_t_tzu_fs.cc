@@ -38,31 +38,6 @@ ecp_task_tzu_fs::~ecp_task_tzu_fs()
 	str.close();
 };
 
-void ecp_task_tzu_fs::force_measurrement()
-{
-	sleep(1);
-	double pom_tmp[6];
-	for(int i = 0 ; i < 6 ; i++)
-		pom_tmp[i] = 0;
-		
-	for(int i = 0 ; i < 20 ; i++)
-	{
-		fmg->Move();
-//		cout<<"pomiar1: "<<fmg->weight<<endl;
-		for(int j = 0 ; j < 6 ; j++)
-			pom_tmp[j] += fmg->weight[j];
-	}
-	
-//	cout<<"pomiar2: "<<pom_tmp<<endl;	
-	
-	for(int i = 0 ; i < 6 ; i++)
-		pom[i] = pom_tmp[i]/20;
-	
-//	for(int i = 0 ; i < 6 ; i++)
-//	 cout<<"pomiar3: "<<pom[i]<<endl;
-};
-
-// methods for ECP template to redefine in concrete classes
 void ecp_task_tzu_fs::task_initialization(void) 
 {
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
@@ -141,9 +116,6 @@ void ecp_task_tzu_fs::main_task_algorithm(void)
 		automatic = true;
 	}
 	// set_trajectory(robot, procedure_type);
-
-	// w domu zastanowic sie nad jakims sprytnym uporzadkowaniem tego
-	// bo aktualnie nie ma jeszcze przeciez korekcji
 	
 	int T;
 	if(automatic)
@@ -152,7 +124,6 @@ void ecp_task_tzu_fs::main_task_algorithm(void)
 		//procedure_type = 0;
 		cout<<"T: "<<T<<endl;
 	}
-	else
 		T = 1;
 		
 	int map_tab[] = {0,1,3,2,4};
@@ -207,7 +178,7 @@ void ecp_task_tzu_fs::main_task_algorithm(void)
 	ecp_termination_notice();
 	ecp_wait_for_stop();
 	
-std::cout<<"end\n"<<std::endl;
+	cout<<"end\n"<<std::endl;
 };
 
 ecp_task* return_created_ecp_task (configurator &_config)
@@ -228,15 +199,15 @@ void ecp_task_tzu_fs::method_alternative(int type, int sequence[], int T)
 			sg->load_file_with_path(trajectories[sequence[0]]);
 			sg->Move ();		
 			fmg->Move();
-			cout<<"pomiar alternative1: "<<fmg->weight<<endl;
+			cout<<"pomiar alternative1: "<<fmg->get_meassurement()<<endl;
 			//str<<fmg->weight<<endl;
 			befg->Move();
 			sg->load_file_with_path(trajectories[sequence[1]]);
 			sg->Move ();		
 			fmg->Move();
-			cout<<"pomiar alternative2: "<<fmg->weight<<endl;
-			str<<fmg->weight<<endl;
-			weight = (-(fmg->weight[type]))/2;
+			cout<<"pomiar alternative2: "<<fmg->get_meassurement()<<endl;
+			str<<fmg->get_meassurement()<<endl;
+			weight = (-(fmg->get_meassurement()[type]))/2;
 			cout<<"weight: "<<weight<<endl;
 			str<<weight<<endl;
 //			ecp_termination_notice();
@@ -270,21 +241,19 @@ void ecp_task_tzu_fs::method_standard(int T)
 			// wagi, parametrow translacji?!?
 			sg->load_file_with_path(trajectories[TRAJECTORY_VERTCAL_UP]);
 			sg->Move ();
-			// fmg->Move();
-			force_measurrement();
+			fmg->Move();
 			// weight = (fmg->weight[FORCE_Z])/2;
-			weight = (pom[FORCE_Z])/2;
-			P_x = -pom[TORQUE_Y]/(2*weight);
-			P_y = pom[TORQUE_X]/(2*weight);
+			weight = (fmg->get_meassurement()[FORCE_Z])/2;
+			P_x = -fmg->get_meassurement()[TORQUE_Y]/(2*weight);
+			P_y = fmg->get_meassurement()[TORQUE_X]/(2*weight);
 			// P_x = -fmg->weight[TORQUE_Y]/(2*weight);
 			// P_y = fmg->weight[TORQUE_X]/(2*weight);
 			// ETAP TRZECI - chwytak skierowany horyzontalnie, obliczenie ostatniego z parametrów modelu
 			sg->load_file_with_path(trajectories[TRAJECTORY_HORIZONTAL]);
 			sg->Move ();
-			// fmg->Move();
-			force_measurrement();
+			fmg->Move();
 			// P_z = fmg->weight[TORQUE_Y]/weight + P_x;
-			P_z = pom[TORQUE_Y]/weight + P_x;
+			P_z = fmg->get_meassurement()[TORQUE_Y]/weight + P_x;
 			
 			cout<<"Parametry modelu srodka ciezkosci narzedzia"<<endl
 				<<"weight: "<<weight<<endl<<"P_x: "<<P_x<<endl<<"P_y: "<<P_y<<endl<<"P_z: "<<P_z<<endl; 
@@ -385,6 +354,7 @@ force_meassure_generator::force_meassure_generator(ecp_task& _ecp_task, int _sle
 {
 	sleep_time = _sleep_time; 
 	meassurement_count = _meassurement_count;
+	init_meassurement_count = _meassurement_count;
 }
 
 /** ustawienie konfiguracji generatora **/
@@ -392,13 +362,14 @@ bool force_meassure_generator::set_configuration(int _sleep_time, int _meassurem
 {
 	sleep_time = _sleep_time; 
 	meassurement_count = _meassurement_count;
+	init_meassurement_count = _meassurement_count;
 }
 
 /** first step **/
 bool force_meassure_generator::first_step()
 {
 	the_robot->EDP_data.instruction_type = GET;
-	the_robot->EDP_data.get_type = ARM_DV;
+ 	the_robot->EDP_data.get_type = ARM_DV;
 	the_robot->EDP_data.get_arm_type = FRAME;
 	the_robot->EDP_data.next_interpolation_type
 			= TCIM;
@@ -408,49 +379,30 @@ bool force_meassure_generator::first_step()
 	return true;
 }
 
-Ft_v_vector *force_meassure_generator::get_meassurement()
+/** next step **/
+bool force_meassure_generator::next_step()
 {
-	return &weight;
+	usleep(sleep_time);
+	Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
+	current_frame_wo_offset.remove_translation();
+	
+	Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
+	weight += force_torque;
+	weight = force_torque;
+
+//	cout<<"force_torque: "<<force_torque<<endl;
+	meassurement_count--;
+	if(meassurement_count <= 0)
+	{
+		meassurement_count = init_meassurement_count;
+		return false;
+	}
+	return true;
 }
 
-/** next step **/
-/*
-bool force_meassure_generator::next_step()
+Ft_v_vector& force_meassure_generator::get_meassurement()
 {
-	//Ft_v_vector average_meassurement[meassurement_count];
-	sleep(2);
-	for(int i = 0 ; i < meassurement_count ; i++)
-	{
-		Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
-		current_frame_wo_offset.remove_translation();
-	
-		Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
-		weight += force_torque;
-		weight = force_torque;
-		sleep(sleep_time);
-	}
-	return false;
-}
-*/
-bool force_meassure_generator::next_step()
-{
-//	cout<<"sleep time: "<<sleep_time<<endl;
-//	cout<<"meassurement_count: "<<meassurement_count<<endl;
-//	sleep(sleep_time);
-	for(int i = 0 ; i < meassurement_count ; i++)
-	{
-		Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
-		current_frame_wo_offset.remove_translation();
-	
-		Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
-		weight += force_torque;
-		weight = force_torque;
-		usleep(50000);
-//		sleep(1);
-//		cout<<"force torque: "<<force_torque<<endl;
-	}
-	
 	for(int i = 0 ; i < 6 ; i++)
 		weight[i] = weight[i]/meassurement_count;
-	return false;
+	return weight;
 }
