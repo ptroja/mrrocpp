@@ -1,25 +1,18 @@
 #///////////////////////////////////////////////////////////////////////////////
-#// 
-#// $URL$
-#//
+# /** @file     DoxyMrok
+#  *
+#  *  Doxygen configuration file for MRROC++ source code documentation.
+#  *  (in English) - Doxyfile 1.5.6
+#  *
+#  *  @author   janusz.nowacki
+#  *  @date     2008-02-23
+#  *  $URL$
+#  *  $LastChangedRevision$
+#  *  $LastChangedDate$  
+#  *  $LastChangedBy$
+#  *  
+#  */
 #///////////////////////////////////////////////////////////////////////////////
-#// Revision  : $LastChangedRevision$
-#// Project   : MRROC++
-#///////////////////////////////////////////////////////////////////////////////
-#// Created   : 2008-02-23
-#// Developer : janusz.nowacki
-#// Modified  : $LastChangedDate$
-#// By        : $LastChangedBy$
-#///////////////////////////////////////////////////////////////////////////////
-#// File description:
-#// 
-#//  Doxygen configuration file for MRROC++ source code documentation.
-#//  (in English)
-#//
-#//  Doxyfile 1.5.5
-#//
-#///////////////////////////////////////////////////////////////////////////////
-
 
 #---------------------------------------------------------------------------
 # Project related configuration options
@@ -112,8 +105,10 @@ WARN_LOGFILE           = dox\doxwarn.log
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 INPUT                  = include\common \
+                         include\ecp\common \
                          Mainpage.dox \
-                         Dir.dox
+                         Dir.dox \
+                         include\ecp\common\ecp_g_jarosz.h \
 #INPUT                  = include \
 #                         src \
 #                         Mainpage.dox \

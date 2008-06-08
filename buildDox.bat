@@ -1,22 +1,19 @@
 @echo off
 rem ////////////////////////////////////////////////////////////////////////////
-rem // 
-rem // $URL$
-rem //
-rem //////////////////////////////////////////////////////////////////////////// 
-rem // Revision  : $LastChangedRevision$
-rem // Project   : MRROC++
+rem /** @file     buildDox.bat
+rem  *
+rem  *  Build file (for Windows system) for MRROC++ Doxygen documentation.
+rem  *
+rem  *  @author   janusz.nowacki
+rem  *  @date     2007-05-12
+rem  *  $URL$
+rem  *  $LastChangedRevision$
+rem  *  $LastChangedDate$  
+rem  *  $LastChangedBy$
+rem  *  
+rem  */
 rem ////////////////////////////////////////////////////////////////////////////
-rem // Created   : 2007-05-12
-rem // Developer : janusz.nowacki
-rem // Modified  : $LastChangedDate$
-rem // By        : $LastChangedBy$
-rem ////////////////////////////////////////////////////////////////////////////
-rem // File description:
-rem // 
-rem //  Build file (for Windows system) for MRROC++ Doxygen documentation.
-rem // 
-rem ////////////////////////////////////////////////////////////////////////////
+
 
 echo Program: %0
 echo Date: %date% 

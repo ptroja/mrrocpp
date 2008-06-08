@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////
-/** @file                 include/common/com_buf.h
+/** @file     include/common/com_buf.h
  *
  *  Data structures for IPC. 
  *
- *  @author               tkornuta
- *  @date                 2006-11-29
+ *  @author   tkornuta
+ *  @date     2006-11-29
  *  $URL$
  *  $LastChangedRevision$
  *  $LastChangedDate$  
@@ -35,7 +35,7 @@
 enum MP_COMMAND {
     INVALID_COMMAND,
     START_TASK,
-    /**< The next ECP state. */
+    /** The next ECP state. */
     NEXT_POSE,
     END_MOTION,
     NEXT_STATE,
@@ -609,7 +609,7 @@ struct servo_group_reply
     double abs_position[MAX_SERVOS_NR];
     /** Given values for PWM fill (Phase Wave Modulation) - (usualy unnecessary). */
     int16_t PWM_value[MAX_SERVOS_NR];
-    /** Steering current - (usualy unnecessary). */
+    /** Control current - (usualy unnecessary). */
     int16_t current[MAX_SERVOS_NR];
     /** Numbers for the regulation algorithms in use. */
     BYTE algorithm_no[MAX_SERVOS_NR];
@@ -631,10 +631,7 @@ typedef union c_buffer_rmodel
     //----------------------------------------------------------
     struct
     {
-        /**
-         *  Trojscian narzedzia wzgledem kolnierza.
-         *  @todo Translate to English. 
-         */
+        /** Tool trihedron ralative to the collar. */
         frame_tab tool_frame;
         //** Byte for calculating the command's length. */
         //	BYTE address_byte;
@@ -643,10 +640,7 @@ typedef union c_buffer_rmodel
     //----------------------------------------------------------
     struct
     {
-        /**
-         *  XYZ + orientacja narzedzia wzgledem kolnierza.
-         *  @todo Translate to English.
-         */
+        /** XYZ + tool orientation relative to the collar. */
         double tool_coordinates[6];
         //** Byte for calculating the command's length. */
         // 	BYTE address_byte;
@@ -655,10 +649,7 @@ typedef union c_buffer_rmodel
     //----------------------------------------------------------
     struct
     {
-        /**
-         *  Numer zestawu parametrow modelu kinematyki.
-         *  @todo Translate to English.
-         */
+        /** Parameter set number for the kinematic model. */
         BYTE kinematic_model_no;
         //** Byte for calculating the command's length. */
         // 	BYTE address_byte;
@@ -667,15 +658,9 @@ typedef union c_buffer_rmodel
     //----------------------------------------------------------
     struct
     {
-        /**
-         *  Numery algorytmow serworegulacji.
-         *  @todo Translate to English.
-         */
+        /** Numbers for the servo-regulation algorithms. */
         BYTE servo_algorithm_no[MAX_SERVOS_NR];
-        /**
-         *  Numery zestawu parametrow algorytmow serworegulacji.
-         *  @todo Translate to English.
-         */
+        /** Parameter set numbers for the servo-regulation algorithms. */        
         BYTE servo_parameters_no[MAX_SERVOS_NR];
         //** Byte for calculating the command's length. */
         // 	BYTE address_byte;
@@ -698,36 +683,24 @@ typedef union c_buffer_arm
 {
     struct
     {
-        /** get_state command variant. */
+        /** A get_state command variant. */
         int command;
     }
     get_state_def;
     //----------------------------------------------------------
     struct
     {
-        /**
-         *  Trojscian koncowki wzgledem ukladu bazowego.
-         *  @todo Translate to English.
-         */
+        /**  End's trihedron ralative to the base system. */      
         frame_tab arm_frame;
-        /**
-           *  XYZ + orientacja koncowki wzgledem ukladu bazowego.
-           *  @todo Translate to English.
-           */
+        /** XYZ + end's orientation relative to the base system. */
         double arm_coordinates[MAX_SERVOS_NR];
-        /**
-           *  Zadany moment dla dunga.
-           *  @todo Translate to English.
-           */
+        /** Given torque. */
         double desired_torque[MAX_SERVOS_NR];
         double inertia[6],
-        reciprocal_damping[6];
+               reciprocal_damping[6];
         double force_xyz_torque_xyz[6];
         BEHAVIOUR_SPECIFICATION behaviour[6];
-        /**
-           *  Stopien rozwarcia chwytaka.
-           *  @todo Translate to English.
-           */
+        /** Dilation degree of the gripper. */
         double gripper_coordinate;
         //** Byte for calculating the command's length. */
         // 	BYTE address_byte;
@@ -762,30 +735,15 @@ struct c_buffer
     BYTE set_type;
     /** Type of the GET instruction. */
     BYTE get_type;
-    /**
-     *  Sposob zdefiniowania narzedzia przy jego zadawaniu.
-     *  @todo Translate to English.
-     */
+    /** Tool definition type - setting. */
     RMODEL_SPECIFICATION set_rmodel_type;
-    /**
-     *  Sposob zdefiniowania narzedzia przy jego odczycie.
-     *  @todo Translate to English.
-     */
+    /** Tool definition type - reading. */
     RMODEL_SPECIFICATION get_rmodel_type;
-    /**
-     *  Sposob zdefiniowania polozenia zadanego koncowki.
-     *  @todo Translate to English.
-     */
+    /** Definition type of the end-effector's given position. */
     POSE_SPECIFICATION set_arm_type;
-    /**
-     *  Sposob zdefiniowania polozenia odcztanego koncowki.
-     *  @todo Translate to English.
-     */
+    /** Definition type of the end-effector's read position. */
     POSE_SPECIFICATION get_arm_type;
-    /**
-     *  Wartosci wyjsc binarnych.
-     *  @todo Translate to English.
-     */
+    /** Binary outputs values. */
     WORD output_values;
     //** Byte for calculating the command's length. */
     //BYTE address_byte;
@@ -973,7 +931,7 @@ typedef union r_buffer_arm
     {
         /** Given values for PWM fill (Phase Wave Modulation) - (usualy unnecessary). */
         int16_t PWM_value[MAX_SERVOS_NR];
-        /** Steering current - (usualy unnecessary). */
+        /** Control current - (usualy unnecessary). */
         int16_t current[MAX_SERVOS_NR];
         /**
          *  Macierz reprezentujaca koncowke wzgledem bazy manipulatora.
@@ -1047,7 +1005,7 @@ struct r_buffer
     BYTE address_byte;
     /** Given values for PWM fill (Phase Wave Modulation) - (usualy unnecessary). */
     int16_t PWM_value[MAX_SERVOS_NR];
-    /** Steering current - (usualy unnecessary). */
+    /** Control current - (usualy unnecessary). */
     int16_t current[MAX_SERVOS_NR];
     r_buffer_rmodel_t rmodel;
     r_buffer_arm_t arm;

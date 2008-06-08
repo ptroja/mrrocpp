@@ -74,32 +74,72 @@ public:
 
 
 
-// ####################################################################################################
-// Generator o zadany przyrost polozenia/orientacji
-// Interpolacja funckja liniowa z parabolicznymin odcinkami krzykowliniowymi,
-// czyli trapezoidalny profil predkosci
-// ####################################################################################################
 
+
+
+//------------------------------------------------------------------------------
+/**
+ *  Generator o zadany przyrost polozenia/orientacji.
+ * 	Interpolacja funkcja liniowa z parabolicznymi odcinkami krzywoliniowymi, 
+ * 	czyli trapezoidalny profil predkosci.
+ *  W wyniku wykorzystania do realizacji ruchu tego generatora mozliwe jest
+ * 	przesuniecie o pewien przyrost polozenia i orientacji, wyrazony we wspolrzednych
+ * 	zdefiniowanych w ::POSE_SPECIFICATION, zadany w strukturze ::trajectory_description
+ *	Poniewaz czysta interpolacja liniowa moze powodowac nieciaglosci predkosci w 
+ * 	poczatku i koncu ruchu, aby utworzyc gladka krzywa przemieszczenia i ciagla krzywa 
+ * 	predkosci nalezy dodac do funkcji liniowej fragmenty paraboli na poczatku i koncu ruchu. 
+ * 	W przedzialach czasu, ktore odpowiadaja zakrzywionym czesciom trajektorii, 
+ * 	przyspieszenie jest stale i zapewnia gladka zmiane predkosci. Funkcja liniowa i dwie 
+ * 	funkcje paraboliczne zostana sklejone razem tak, aby uzyskac ciagle krzywe 
+ * 	przemieszczen i predkosci.
+ */
 class ecp_linear_parabolic_generator : public ecp_delta_generator
 {
 protected:
-     int first_interval;             // flaga, mówiaca czy jest to pierwszy przedzial interpolacji
-	double calculate_s ( const double t , const double ta, const double tb);
+  /** Flaga, mowiaca czy jest to pierwszy przedzial interpolacji. */
+  int first_interval; 
 	double ta[MAX_SERVOS_NR];
 	double tb[MAX_SERVOS_NR];
-
 	double prev_s[MAX_SERVOS_NR];
 	double prev_vel_avg[MAX_SERVOS_NR];
-		
+
+  /** 
+   *  Metoda sluzy do obliczenia przyrostu drogi. 
+	 *  Wszystkie czasy znormalizowane sa do 1 (poprzez dzielenie przez liczbe 
+	 * 	makrokrokow) przy wywolaniu funkcji calculate_s w metodzie next_step.
+   *
+ 	 * 	@return obliczony przyrost drogi
+   * 	@param	const double t		aktualny czas
+	 * 	@param	const double ta		czas, w ktorym predkosc przestaje rosnac
+	 * 	@param	const double tb		czas, w ktorym predkosc zaczyna malec
+   * */  
+	double calculate_s ( const double t , const double ta, const double tb);
+
 public:	
 
- // ------- konstruktor -------------
- ecp_linear_parabolic_generator (ecp_task& _ecp_task, trajectory_description tr_des, const double *time_a , const double *time_b);	   
-   
+  /** Konstruktor domyslny. */
+  ecp_linear_parabolic_generator (ecp_task& _ecp_task, 
+                                  trajectory_description tr_des, 
+                                  const double *time_a , 
+                                  const double *time_b
+                                 );	   
+
+  /** Funkcja generujaca pierwszy krok ruchu. 
+   *  Jest to fukncja wirtualna - opisana zostanie przy kazdej z realizacji
+   *  w klasach pochodnych.
+   */
   virtual bool first_step ();
+
+  /** Generuje kazdy nastepny krok ruchu.
+   *  Jest to fukncja wirtualna - opisana zostanie przy kazdej z realizacji
+   *  w klasach pochodnych.
+   */
   virtual bool next_step ();
 
-}; // end: class irp6p_+linear_parabolic_generator
+}; // end: ecp_linear_parabolic_generator
+
+
+
 
 // ####################################################################################################
 // Klasa bazowa dla generatorow o zadany przyrost polozenia/orientacji 

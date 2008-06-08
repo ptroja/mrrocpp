@@ -1,23 +1,18 @@
 #///////////////////////////////////////////////////////////////////////////////
-#// 
-#// $URL$
-#//
+# /** @file     .astylerc
+#  *
+#  *  Config file for astyle ( Artistic Style ) 
+#  *  - code indenting tool  ( http://astyle.sourceforge.net/ )
+#  *
+#  *  @author   ptroja
+#  *  @date     2007-04-30
+#  *  $URL$
+#  *  $LastChangedRevision$
+#  *  $LastChangedDate$  
+#  *  $LastChangedBy$
+#  *  
+#  */
 #///////////////////////////////////////////////////////////////////////////////
-#// Revision  : $LastChangedRevision$
-#// Project   : MRROC++
-#///////////////////////////////////////////////////////////////////////////////
-#// Created   : 2007-04-30
-#// Developer : ptroja
-#// Modified  : $LastChangedDate$
-#// By        : $LastChangedBy$
-#///////////////////////////////////////////////////////////////////////////////
-#// File description:
-#// 
-#//   Config file for astyle ( Artistic Style ) 
-#//   - code indenting tool  ( http://astyle.sourceforge.net/ )
-#// 
-#///////////////////////////////////////////////////////////////////////////////
-
 
 --style=linux
 --indent=tab=4

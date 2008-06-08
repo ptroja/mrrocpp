@@ -1,22 +1,17 @@
 #///////////////////////////////////////////////////////////////////////////////
-#// 
-#// $URL$
-#//
+# /** @file     read_this
+#  *
+#  *  README file for MRROC++ project !!!.
+#  *
+#  *  @author   tkornuta
+#  *  @date     2007-01-12
+#  *  $URL$
+#  *  $LastChangedRevision$
+#  *  $LastChangedDate$  
+#  *  $LastChangedBy$
+#  *  
+#  */
 #///////////////////////////////////////////////////////////////////////////////
-#// Revision  : $LastChangedRevision$
-#// Project   : MRROC++
-#///////////////////////////////////////////////////////////////////////////////
-#// Created   : 2007-01-12
-#// Developer : tkornuta
-#// Modified  : $LastChangedDate$
-#// By        : $LastChangedBy$
-#///////////////////////////////////////////////////////////////////////////////
-#// File description:
-#// 
-#//   README file for MRROC++ project !!!.
-#// 
-#///////////////////////////////////////////////////////////////////////////////
-
 
 
 ################################################################################
@@ -99,6 +94,6 @@ you can display it by running
 #               On-line Doxygen documentation (English only): 
 #
 #                     (not completed yet ...)
-#                    http://mrrocpp.phpnet.us// 
+#                    http:/...// 
 ################################################################################
 

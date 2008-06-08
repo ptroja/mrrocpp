@@ -1,21 +1,17 @@
 @echo off
 rem ////////////////////////////////////////////////////////////////////////////
-rem // 
-rem // $URL$
-rem //
-rem ////////////////////////////////////////////////////////////////////////////
-rem // Revision  : $LastChangedRevision$
-rem // Project   : MRROC++
-rem ////////////////////////////////////////////////////////////////////////////
-rem // Created   : 2007-05-12
-rem // Developer : janusz.nowacki 
-rem // Modified  : $LastChangedDate$
-rem // By        : $LastChangedBy$
-rem ////////////////////////////////////////////////////////////////////////////
-rem // File description:
-rem // 
-rem //  Clean file - deleting (in Windows system) MRROC++ Doxygen documentation.
-rem // 
+rem /** @file     cleanDox.bat
+rem  *
+rem  *  Clean file - deleting (in Windows system) MRROC++ Doxygen documentation.
+rem  *
+rem  *  @author   janusz.nowacki
+rem  *  @date     2007-05-12
+rem  *  $URL$
+rem  *  $LastChangedRevision$
+rem  *  $LastChangedDate$  
+rem  *  $LastChangedBy$
+rem  *  
+rem  */
 rem ////////////////////////////////////////////////////////////////////////////
 
 echo Program: %0
