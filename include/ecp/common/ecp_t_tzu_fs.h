@@ -21,6 +21,8 @@
 #define ALTERNATIVE_X_METHOD_2 2
 #define ALTERNATIVE_Y_METHOD_1 3
 #define ALTERNATIVE_Y_METHOD_2 4
+#define NUMBER_OF_TRAJECTORIES 3
+#define NUMBER_OF_TEST_TRAJECTORIES 11
 
 class force_meassure_generator;
 
