@@ -92,7 +92,7 @@ void ecp_task_tzu_test::main_task_algorithm(void)
 		 * sil dla tych roznych przypadkow
 		 */
  		sr_ecp_msg->message("Test");
-		trajectories_test(10);
+		trajectories_test(1);
 	}
   	else if (option == OPTION_THREE)
     {
@@ -252,14 +252,16 @@ void ecp_task_tzu_test::trajectories_test(int count)
 	
 	// do matlabowych wykresow
 	
-	str<<"clear;"<<endl<<"x = 1:1:6;"<<endl<<"x1 = 0:.01:7;"<<endl;
+	ofstream matlab;
+	matlab.open("../matlab.m"/*,ios::app*/);
+	matlab<<"clear;"<<endl<<"x = 1:1:6;"<<endl<<"x1 = 0:.01:7;"<<endl;
 	for(int j = 0 ; j < count ; j++)
 	{
 		for(int i = 0 ; i < 10 ; i++)
 		{
 			for(int k = 0 ; k < 6 ; k++)
 			{
-				str<<"yc_"<<j<<"_"<<i<<"("<<k<<")="<<result_wyliczone[j][i][k]<<";"<<endl;
+				matlab<<"yc_"<<j<<"_"<<i<<"("<<k<<")="<<result_wyliczone[j][i][k]<<";"<<endl;
 			}
 		}
 	}
@@ -270,45 +272,45 @@ void ecp_task_tzu_test::trajectories_test(int count)
 		{
 			for(int k = 0 ; k < 6 ; k++)
 			{	
-				str<<"yw_"<<j<<"_"<<i<<"("<<k<<")="<<result_wyliczone[j][i][k]<<";"<<endl;
+				matlab<<"yw_"<<j<<"_"<<i<<"("<<k<<")="<<result_wyliczone[j][i][k]<<";"<<endl;
 			}
 		}
 	}
 	
-	str<<"figure(1);"<<endl;
+	matlab<<"figure(1);"<<endl;
 	for(int d = 1 ; d < 6 ; d++)
 	{
-		str<<"subplot(3,2,"<<d<<");plot(";
+		matlab<<"subplot(3,2,"<<d<<");plot(";
 		for(int j = 0 ; j < count ; j++)
 		{
-			str<<"x,yc_"<<j<<"_"<<d-1<<",'bx',";
+			matlab<<"x,yc_"<<j<<"_"<<d-1<<",'bx',";
 		}
 		
 		for(int j = 0 ; j < count ; j++)
 		{
-			str<<"x,yw_"<<j<<"_"<<d-1<<",'rx',";
+			matlab<<"x,yw_"<<j<<"_"<<d-1<<",'rx',";
 		}
 				
-		str<<"x1,0,'-g'"<<endl;	
+		matlab<<"x1,0,'-g'"<<endl;	
 	}	
 	
-	str<<"figure(2);"<<endl;
+	matlab<<"figure(2);"<<endl;
 	for(int d = 1 ; d < 6 ; d++)
 	{
-		str<<"subplot(3,2,"<<d<<");plot(";
+		matlab<<"subplot(3,2,"<<d<<");plot(";
 		for(int j = 0 ; j < count ; j++)
 		{
-			str<<"x,yc_"<<j<<"_"<<d-1+5<<",'bx',";
+			matlab<<"x,yc_"<<j<<"_"<<d-1+5<<",'bx',";
 		}
 		
 		for(int j = 0 ; j < count ; j++)
 		{
-			str<<"x,yw_"<<j<<"_"<<d-1+5<<",'rx',";
+			matlab<<"x,yw_"<<j<<"_"<<d-1+5<<",'rx',";
 		}
 				
-		str<<"x1,0,'-g'"<<endl;	
+		matlab<<"x1,0,'-g'"<<endl;	
 	}	
-	
+	matlab.close();
 	// do kwadratu
 	Ft_v_vector result_common_square[count][10];
 	Ft_v_vector result_wyliczone_square[count][10];
