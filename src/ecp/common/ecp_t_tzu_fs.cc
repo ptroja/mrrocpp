@@ -55,7 +55,7 @@ void ecp_task_tzu_fs::task_initialization(void)
 	
 	sg = new ecp_smooth_generator (*this, true, false);
 	befg = new bias_edp_force_generator(*this);
-	fmg = new force_meassure_generator(*this,0,1);	
+	fmg = new force_meassure_generator(*this,100000,20);	
 	ftcg = new ecp_force_tool_change_generator(*this);
 	tcg = new ecp_tool_change_generator(*this,true);
 	etnrg = new ecp_tff_nose_run_generator(*this,8);
@@ -65,28 +65,20 @@ void ecp_task_tzu_fs::task_initialization(void)
 void ecp_task_tzu_fs::main_task_algorithm(void)
 {
 	bool automatic = false;
-	bool correction = false;
-	sr_ecp_msg->message("ECP cs irp6ot  - pushj start in tzu");
-//	str.open("../results.txt");
-//	str<<"test"<<endl;
-//	str.close();
-	ecp_wait_for_start();
 	int procedure_type;
-	char* additional_move;
 	
-	if(robot == ON_TRACK)
-		additional_move = "../trj/tzu/tzu_on_track_1.trj";
-	else
-		additional_move = "../trj/tzu/tzu_postument_1.trj";
+	sr_ecp_msg->message("ECP cs irp6ot  - pushj start in tzu");
+	ecp_wait_for_start();
 
 	int option = choose_option ("1 - Standard, 2 - Alternative, 3 - Auto", 3);
 	if (option == OPTION_ONE)
     {
-    		sr_ecp_msg->message("Wyznaczanie modelu metoda standardowa");
+    	sr_ecp_msg->message("Wyznaczanie modelu metoda standardowa");
    		procedure_type = STANDARD;
    	}
     else if (option == OPTION_TWO)
     {
+    	// aktualnie wyznaczany jest tu tylko ciê¿ar narzêdzia, ale pomyœleæ równie¿ nad tym by w ró¿ny sposób wyznaczyæ ca³y model
 		sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna x");
 		option = choose_option ("1 - x1, 2 - x2, 3 - y1, 4 - y2", 4);
 		if (option == OPTION_ONE)
@@ -109,22 +101,16 @@ void ecp_task_tzu_fs::main_task_algorithm(void)
 			sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna y2");
 			procedure_type = ALTERNATIVE_Y_METHOD_2;
 		}
-
 	}
 	else if(option == OPTION_THREE)
 	{
 		automatic = true;
 	}
-	// set_trajectory(robot, procedure_type);
 	
 	int T;
-	if(automatic)
-	{
+	if(automatic) //przechodzimy przez wszystkit metody
 		T = 5;
-		//procedure_type = 0;
-		cout<<"T: "<<T<<endl;
-	}
-		T = 1;
+	T = 1;
 		
 	int map_tab[] = {0,1,3,2,4};
 	int i = 0;
@@ -133,7 +119,6 @@ void ecp_task_tzu_fs::main_task_algorithm(void)
 	{
 		if(automatic)
 			procedure_type = map_tab[i];
-		cout<<"procedure type: "<<procedure_type<<endl;
 		set_trajectory(robot, procedure_type);
 		if(procedure_type == STANDARD)
 		{   
@@ -192,7 +177,6 @@ void ecp_task_tzu_fs::method_alternative(int type, int sequence[], int T)
 	{
 		while(true)			
 		{	
-			str<<"->pomiar: "<<i<<endl;
 			ftcg->Move();
 			tcg->set_tool_parameters(0,0,0);
 			tcg->Move();
@@ -200,18 +184,17 @@ void ecp_task_tzu_fs::method_alternative(int type, int sequence[], int T)
 			sg->Move ();		
 			fmg->Move();
 			cout<<"pomiar alternative1: "<<fmg->get_meassurement()<<endl;
-			//str<<fmg->weight<<endl;
+			str<<"pomiar alternative1: "<<fmg->get_meassurement()<<endl;
+			sleep(2);
 			befg->Move();
 			sg->load_file_with_path(trajectories[sequence[1]]);
 			sg->Move ();		
 			fmg->Move();
 			cout<<"pomiar alternative2: "<<fmg->get_meassurement()<<endl;
-			str<<fmg->get_meassurement()<<endl;
+			str<<"pomiar alternative2: "<<fmg->get_meassurement()<<endl;
 			weight = (-(fmg->get_meassurement()[type]))/2;
 			cout<<"weight: "<<weight<<endl;
-			str<<weight<<endl;
-//			ecp_termination_notice();
-//			ecp_wait_for_stop();
+			str<<"weight: "<<weight<<endl;
 			break;
 		}
 	}
@@ -226,8 +209,7 @@ void ecp_task_tzu_fs::method_standard(int T)
 	for(int i = 0 ; i < T ; i++)
 	{
 		while(true)			
-		{	
-			str<<"->pomiar: "<<i<<endl; 
+		{	 
 			// ETAP PIERWSZY - chwytka skierowany pionowo do dolu, biasowanie odczytow, 
 			// zmiana narzedzia kinematycznego, ustawienie end-effector frame E jako sensor frame S
 			sg->load_file_with_path(trajectories[TRAJECTORY_VERTICAL_DOWN]);
@@ -238,28 +220,23 @@ void ecp_task_tzu_fs::method_standard(int T)
 			tcg->set_tool_parameters(0,0,0);
 			tcg->Move();
 			// ETAP DRUGI - chwytak skierowany pionowo do gory, odczyt i obliczenie trzech pierwszych parametrow
-			// wagi, parametrow translacji?!?
+			// wagi, oraz przesuniecia wzdluz osi x i y
 			sg->load_file_with_path(trajectories[TRAJECTORY_VERTCAL_UP]);
 			sg->Move ();
 			fmg->Move();
-			// weight = (fmg->weight[FORCE_Z])/2;
 			weight = (fmg->get_meassurement()[FORCE_Z])/2;
 			P_x = -fmg->get_meassurement()[TORQUE_Y]/(2*weight);
 			P_y = fmg->get_meassurement()[TORQUE_X]/(2*weight);
-			// P_x = -fmg->weight[TORQUE_Y]/(2*weight);
-			// P_y = fmg->weight[TORQUE_X]/(2*weight);
-			// ETAP TRZECI - chwytak skierowany horyzontalnie, obliczenie ostatniego z parametrów modelu
+			// ETAP TRZECI - chwytak skierowany horyzontalnie, obliczenie ostatniego z parametrów modelu, przesuniecia wzdluz osi z
 			sg->load_file_with_path(trajectories[TRAJECTORY_HORIZONTAL]);
 			sg->Move ();
 			fmg->Move();
-			// P_z = fmg->weight[TORQUE_Y]/weight + P_x;
 			P_z = fmg->get_meassurement()[TORQUE_Y]/weight + P_x;
 			
 			cout<<"Parametry modelu srodka ciezkosci narzedzia"<<endl
 				<<"weight: "<<weight<<endl<<"P_x: "<<P_x<<endl<<"P_y: "<<P_y<<endl<<"P_z: "<<P_z<<endl; 
 			str<<"Parametry modelu srodka ciezkosci narzedzia"<<endl
 				<<"weight: "<<weight<<endl<<"P_x: "<<P_x<<endl<<"P_y: "<<P_y<<endl<<"P_z: "<<P_z<<endl;
-			sleep(1);
 			weight_s += weight;
 			P_x_s += P_x;
 			P_y_s += P_y;
@@ -268,7 +245,9 @@ void ecp_task_tzu_fs::method_standard(int T)
 		}
 	}
 	cout<<"Parametry modelu srodka ciezkosci narzedzia srednio"<<endl
-				<<"weight: "<<weight_s/T<<endl<<"P_x: "<<P_x_s/T<<endl<<"P_y: "<<P_y_s/T<<endl<<"P_z: "<<P_z_s/T<<endl;
+		<<"weight: "<<weight_s/T<<endl<<"P_x: "<<P_x_s/T<<endl<<"P_y: "<<P_y_s/T<<endl<<"P_z: "<<P_z_s/T<<endl;
+	str<<"Parametry modelu srodka ciezkosci narzedzia srednio"<<endl
+		<<"weight: "<<weight_s/T<<endl<<"P_x: "<<P_x_s/T<<endl<<"P_y: "<<P_y_s/T<<endl<<"P_z: "<<P_z_s/T<<endl;
 }
 
 void ecp_task_tzu_fs::set_trajectory(int robot_type, int procedure_type)

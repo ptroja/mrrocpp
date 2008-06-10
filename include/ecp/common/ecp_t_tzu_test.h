@@ -11,12 +11,11 @@
 #define TORQUE_X 3
 #define TORQUE_Y 4
 #define TORQUE_Z 5
-#define NUMBER_OF_TEST_TRAJECTORIES 11
 #define NOSE 0
 #define TEST 1
-#define EKSPERYMENT 2
 #define ON_TRACK 0
 #define POSTUMENT 1
+#define NUMBER_OF_TEST_TRAJECTORIES 10
 
 class force_meassure_generator;
 

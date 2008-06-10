@@ -70,10 +70,10 @@ void ecp_task_tzu_test::main_task_algorithm(void)
 	ecp_wait_for_start();
 	
 	set_trajectories();
-	int option = choose_option ("1 - NoseGenerator, 2 - Test, 3 - Nacisk, 4 - Eksperyment", 4);
+	int option = choose_option ("1 - NoseGenerator, 2 - Test, 3 - Nacisk", 3);
 	if (option == OPTION_ONE)
     {
-    		/*
+    	/*
      	 * reczne obroty manipulatora przy ustawionym standardowym modelu (dane z common.ini) oraz przy modelu wyznaczonym przy 
      	 * pomocy stworzonej automatycznej procedury do wyznaczania narzedzia
      	 */  		
@@ -113,9 +113,7 @@ void ecp_task_tzu_test::naciskanie_test()
 {
 	tcg->set_tool_parameters(0,0,0); 
 	tcg->Move();
-//   aktualnie manipulator ustawiany jest recznie do odpowiedniej pozycji, a nastepnie wykonywane sa pomiary
-//	sg->load_file_with_path(get_trajectorie(0.759997, -1.5707, 0, 1.5707, 1.5707, 0 ,0.07 ,POSTUMENT));
-//	sg->Move();
+	sleep(2);
 	befg->Move();
 	sr_ecp_msg->message("START NACISKANIE TEST");
 	while(true)			
@@ -149,8 +147,8 @@ void ecp_task_tzu_test::nose_generator_test(int tool)
 		double tmp[] = {0.759997, -1.5707, 0, 1.132, 1.5707, 0 ,0.07};
 		sg->load_file_with_path(get_trajectory(tmp));
 		sg->Move();
+		sleep(2);
 		befg->Move();
-		sr_ecp_msg->message("biasowanie dokonane");
 		tcg->set_tool_parameters(0,0,0); 
 		tcg->Move();
 		ynrfg->set_force_meassure(true);
@@ -227,6 +225,159 @@ void ecp_task_tzu_test::trajectories_test(int count)
 			str<<"pomiar "<<i<<": "<<fmg->get_meassurement()<<endl;
 		}
 	}
+	// result_common mamy wyniki przy ustawieniach z common.ini natomiast w result_wyliczone mamy wyniki otrzymane przy wyliczonch ustawieniach
+	// roznica pomiedzy kolejnymi probami dla common.ini a tymi wyliczonymi
+	//Ft_v_vector result_difference_common[count][10];
+	//Ft_v_vector result_difference_wyliczone[count][10];
+	
+	for(int j = 0 ; j < count ; j++)
+	{
+		for(int i = 0 ; i < 10 ; i++)
+		{
+			for(int k = 0 ; k < 6 ; k++)
+			{
+				if(result_common[j][i][k] < 0)
+					result_common[j][i][k] = result_common[j][i][k]*-1;
+				if(result_wyliczone[j][i][k] < 0)
+					result_wyliczone[j][i][k] = result_wyliczone[j][i][k]*-1;	
+			}
+			// result_difference_common[j][i] = result_common[j][i];
+			// result_difference_wyliczone[j][i] = result_wyliczone[j][i];
+		}
+	}
+	cout<<"result_common: "<<endl<<result_common<<endl;
+	str<<"result_common: "<<endl<<result_common<<endl;
+	cout<<"result_wyliczone: "<<endl<<result_wyliczone<<endl;
+	str<<"result_wyliczone: "<<endl<<result_wyliczone<<endl;
+	
+	// do matlabowych wykresow
+	
+	str<<"clear;"<<endl<<"x = 1:1:6;"<<endl<<"x1 = 0:.01:7;"<<endl;
+	for(int j = 0 ; j < count ; j++)
+	{
+		for(int i = 0 ; i < 10 ; i++)
+		{
+			for(int k = 0 ; k < 6 ; k++)
+			{
+				str<<"yc_"<<j<<"_"<<i<<"("<<k<<")="<<result_wyliczone[j][i][k]<<";"<<endl;
+			}
+		}
+	}
+	
+	for(int j = 0 ; j < count ; j++)
+	{
+		for(int i = 0 ; i < 10 ; i++)
+		{
+			for(int k = 0 ; k < 6 ; k++)
+			{	
+				str<<"yw_"<<j<<"_"<<i<<"("<<k<<")="<<result_wyliczone[j][i][k]<<";"<<endl;
+			}
+		}
+	}
+	
+	str<<"figure(1);"<<endl;
+	for(int d = 1 ; d < 6 ; d++)
+	{
+		str<<"subplot(3,2,"<<d<<");plot(";
+		for(int j = 0 ; j < count ; j++)
+		{
+			str<<"x,yc_"<<j<<"_"<<d-1<<",'bx',";
+		}
+		
+		for(int j = 0 ; j < count ; j++)
+		{
+			str<<"x,yw_"<<j<<"_"<<d-1<<",'rx',";
+		}
+				
+		str<<"x1,0,'-g'"<<endl;	
+	}	
+	
+	str<<"figure(2);"<<endl;
+	for(int d = 1 ; d < 6 ; d++)
+	{
+		str<<"subplot(3,2,"<<d<<");plot(";
+		for(int j = 0 ; j < count ; j++)
+		{
+			str<<"x,yc_"<<j<<"_"<<d-1+5<<",'bx',";
+		}
+		
+		for(int j = 0 ; j < count ; j++)
+		{
+			str<<"x,yw_"<<j<<"_"<<d-1+5<<",'rx',";
+		}
+				
+		str<<"x1,0,'-g'"<<endl;	
+	}	
+	
+	// do kwadratu
+	Ft_v_vector result_common_square[count][10];
+	Ft_v_vector result_wyliczone_square[count][10];
+	
+	for(int j = 0 ; j < count ; j++)
+	{
+		for(int i = 0 ; i < 10 ; i++)
+		{
+			for(int k = 0 ; k < 6 ; k++)
+			{
+				result_common_square[j][i][k] = result_common[j][i][k]*result_common[j][i][k];
+				result_wyliczone_square[j][i][k] = result_wyliczone[j][i][k]*result_wyliczone[j][i][k];
+			}
+		}
+	}
+	cout<<"result_common_square: "<<endl<<result_common_square<<endl;
+	str<<"result_common_square: "<<endl<<result_common_square<<endl;
+	cout<<"result_wyliczone_square: "<<endl<<result_wyliczone_square<<endl;
+	str<<"result_wyliczone_square: "<<endl<<result_wyliczone_square<<endl;
+
+	// do matlabowych wykresow
+//	for(int j = 0 ; j < count ; j++)
+//	{
+//		for(int i = 0 ; i < 10 ; i++)
+//		{
+//			for(int k = 0 ; k < 6 ; k++)
+//			{
+//				str<<k<<" "<<result_difference_common_square[j][i][k]<<endl;
+//			}
+//		}
+//	}
+//	
+//	for(int j = 0 ; j < count ; j++)
+//	{
+//		for(int i = 0 ; i < 10 ; i++)
+//		{
+//			for(int k = 0 ; k < 6 ; k++)
+//			{
+//				str<<k<<" "<<result_difference_wyliczone_square[j][i][k]<<endl;
+//			}
+//		}
+//	}
+	
+	// suma bledow
+	double sum_of_errors_common[count];
+	double sum_of_errors_wyliczone[count];
+	for(int i = 0 ; i < count ; i++)
+	{
+		sum_of_errors_common[i] = 0;
+		sum_of_errors_wyliczone[i] = 0;
+	} 
+	
+	for(int j = 0 ; j < count ; j++)
+	{
+		for(int i = 0 ; i < 10 ; i++)
+		{
+			for(int k = 0 ; k < 6 ; k++)
+			{
+				sum_of_errors_common[j] += result_common[j][i][k];
+				sum_of_errors_wyliczone[j] += result_wyliczone[j][i][k];
+			}
+		}
+	}
+	
+	cout<<"sum_of_errors_common: "<<sum_of_errors_common<<endl;
+	str<<"sum_of_errors_common: "<<sum_of_errors_common<<endl;
+	cout<<"sum_of_errors_wyliczone: "<<sum_of_errors_wyliczone<<endl;
+	str<<"sum_of_errors_wyliczone: "<<sum_of_errors_wyliczone<<endl;
+	// pomyslec jeszcze jakie porownania mozna zrobic
 }
 
 void ecp_task_tzu_test::set_trajectories() // mozna wywalic zmienna robot z klasy i wtedy jawnie przekazywac ja tu do funkcji
