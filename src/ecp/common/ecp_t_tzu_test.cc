@@ -245,10 +245,27 @@ void ecp_task_tzu_test::trajectories_test(int count)
 			// result_difference_wyliczone[j][i] = result_wyliczone[j][i];
 		}
 	}
-	cout<<"result_common: "<<endl<<result_common<<endl;
-	str<<"result_common: "<<endl<<result_common<<endl;
-	cout<<"result_wyliczone: "<<endl<<result_wyliczone<<endl;
-	str<<"result_wyliczone: "<<endl<<result_wyliczone<<endl;
+	for(int j = 0 ; j < count ; j++)
+	{	
+		for(int i = 0 ; i < 10 ; i++)
+		{
+			cout<<"result_common: "<<endl<<result_common[j][i]<<endl;
+			str<<"result_common: "<<endl<<result_common[j][i]<<endl;
+		}
+	}
+	
+	for(int j = 0 ; j < count ; j++)
+	{	
+		for(int i = 0 ; i < 10 ; i++)
+		{
+			cout<<"result_wyliczone: "<<endl<<result_wyliczone[j][i]<<endl;
+			str<<"result_wyliczone: "<<endl<<result_wyliczone[j][i]<<endl;
+		}
+	}
+//	cout<<"result_common: "<<endl<<result_common<<endl;
+//	str<<"result_common: "<<endl<<result_common<<endl;
+//	cout<<"result_wyliczone: "<<endl<<result_wyliczone<<endl;
+//	str<<"result_wyliczone: "<<endl<<result_wyliczone<<endl;
 	
 	// do matlabowych wykresow
 	
