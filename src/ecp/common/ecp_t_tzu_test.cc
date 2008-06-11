@@ -343,10 +343,28 @@ void ecp_task_tzu_test::trajectories_test(int count)
 			}
 		}
 	}
-	cout<<"result_common_square: "<<endl<<result_common_square<<endl;
-	str<<"result_common_square: "<<endl<<result_common_square<<endl;
-	cout<<"result_wyliczone_square: "<<endl<<result_wyliczone_square<<endl;
-	str<<"result_wyliczone_square: "<<endl<<result_wyliczone_square<<endl;
+	
+	for(int j = 0 ; j < count ; j++)
+	{	
+		for(int i = 0 ; i < 10 ; i++)
+		{
+			cout<<"result_common_square: "<<endl<<result_common_square[j][i]<<endl;
+			str<<"result_common_square: "<<endl<<result_common_square[j][i]<<endl;
+		}
+	}
+	
+	for(int j = 0 ; j < count ; j++)
+	{	
+		for(int i = 0 ; i < 10 ; i++)
+		{
+			cout<<"result_wyliczone_square: "<<endl<<result_wyliczone_square[j][i]<<endl;
+			str<<"result_wyliczone_square: "<<endl<<result_wyliczone_square[j][i]<<endl;
+		}
+	}
+//	cout<<"result_common_square: "<<endl<<result_common_square<<endl;
+//	str<<"result_common_square: "<<endl<<result_common_square<<endl;
+//	cout<<"result_wyliczone_square: "<<endl<<result_wyliczone_square<<endl;
+//	str<<"result_wyliczone_square: "<<endl<<result_wyliczone_square<<endl;
 
 	// do matlabowych wykresow
 //	for(int j = 0 ; j < count ; j++)
@@ -392,10 +410,22 @@ void ecp_task_tzu_test::trajectories_test(int count)
 		}
 	}
 	
-	cout<<"sum_of_errors_common: "<<sum_of_errors_common<<endl;
-	str<<"sum_of_errors_common: "<<sum_of_errors_common<<endl;
-	cout<<"sum_of_errors_wyliczone: "<<sum_of_errors_wyliczone<<endl;
-	str<<"sum_of_errors_wyliczone: "<<sum_of_errors_wyliczone<<endl;
+	for(int j = 0 ; j < count ; j++)
+	{
+		cout<<"sum_of_errors_common: "<<sum_of_errors_common[j]<<endl;
+		str<<"sum_of_errors_common: "<<sum_of_errors_common[j]<<endl;
+	}
+	
+	for(int j = 0 ; j < count ; j++)
+	{
+		cout<<"sum_of_errors_wyliczone: "<<sum_of_errors_wyliczone[j]<<endl;
+		str<<"sum_of_errors_wyliczone: "<<sum_of_errors_wyliczone[j]<<endl;
+	}
+	
+//	cout<<"sum_of_errors_common: "<<sum_of_errors_common<<endl;
+//	str<<"sum_of_errors_common: "<<sum_of_errors_common<<endl;
+//	cout<<"sum_of_errors_wyliczone: "<<sum_of_errors_wyliczone<<endl;
+//	str<<"sum_of_errors_wyliczone: "<<sum_of_errors_wyliczone<<endl;
 	// pomyslec jeszcze jakie porownania mozna zrobic
 }
 
