@@ -90,13 +90,12 @@ bool mp_generator::Move ()
         // zadanie przygotowania danych od czujnikow
         mp_t.all_sensors_initiate_reading(sensor_m);
 
+        copy_generator_command(robot_m);
 
-        copy_generator_command( robot_m );
+		// wykonanie kroku ruchu przez wybrane roboty (z flaga 'communicate')
+		mp_t.execute_all(robot_m);
 
-        // wykonanie kroku ruchu przez wybrane roboty (z flaga 'communicate')
-        mp_t.execute_all(robot_m);
-
-        copy_data( robot_m );
+		copy_data(robot_m);
 
         // odczytanie danych z wszystkich czujnikow
         mp_t.all_sensors_get_reading(sensor_m);

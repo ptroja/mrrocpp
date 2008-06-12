@@ -271,8 +271,6 @@ clock_gettime( CLOCK_REALTIME , &s_time);
      return false;
    }
 
-
-
    // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
  
    if(the_first)

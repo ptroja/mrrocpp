@@ -229,7 +229,6 @@ bool mp_extended_empty_generator::next_step ()
 
 mp_empty_generator::mp_empty_generator(mp_task& _mp_task): mp_generator (_mp_task)
 {}
-;
 
 // ----------------------------------------------------------------------------------------------
 // ---------------------------------    metoda	first_step -------------------------------------
@@ -286,7 +285,6 @@ bool mp_empty_generator::next_step ()
 
 mp_delta_generator::mp_delta_generator(mp_task& _mp_task): mp_generator (_mp_task)
 {}
-;
 
 // ####################################################################################################
 // Generator prostoliniowy o zadany przyrost polozenia/orientacji
@@ -297,11 +295,10 @@ mp_tight_coop_generator::mp_tight_coop_generator(mp_task& _mp_task, trajectory_d
 {
     irp6ot_td = irp6ot_tr_des;
     irp6p_td = irp6p_tr_des;
-};
+}
 
 mp_tight_coop_generator::~mp_tight_coop_generator()
 { }
-;
 
 // ----------------------------------------------------------------------------------------------
 // ---------------------------------    metoda	first_step -------------------------------------

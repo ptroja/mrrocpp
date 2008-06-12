@@ -73,7 +73,7 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task 
 			sr_ecp_msg.message (SYSTEM_ERROR, e, "Connect to ECP failed");
 			delete[] network_ecp_attach_point;
 			throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
-		};
+		}
 
 	delete[] network_ecp_attach_point;
 }

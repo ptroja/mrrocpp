@@ -13,11 +13,11 @@ class ecp_mp_generator
 		// sprawdzania spelnienia warunku koncowego
 
 	protected:
-		sr_ecp& sr_ecp_msg;    // obiekt do komunikacji z SR
+		sr_ecp& sr_ecp_msg;		// obiekt do komunikacji z SR
+		bool trigger;			// informacja czy pszyszedl puls trigger
 
 	public:
 		ecp_mp_generator(sr_ecp& _sr_ecp_msg);
-		bool trigger; 				// informacja czy pszyszedl puls trigger
 		
 		bool check_and_null_trigger(); 		// zwraca wartosc trigger i zeruje go
 
