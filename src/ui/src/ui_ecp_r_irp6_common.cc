@@ -86,7 +86,6 @@ ui_common_robot::ui_common_robot (edp_state_def* _edp_state, configurator &_conf
     END_EFFECTOR_GRIPPER_STEP = 0.000005; // Przyrost wspolrzednej orientacji koncowki [rad]
 
 }
-;// end: ui_common_robot::ui_common_robot ()
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
@@ -114,7 +113,6 @@ void ui_common_robot::execute_motion (void)
     ecp->execute_motion();
 
 }
-; // end: irp6_on_track_robot::execute_motion (void)
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
@@ -125,7 +123,6 @@ void ui_common_robot::set_desired_position ( double d_position[] )
         desired_position[j] = d_position[j];
 
 }
-;// end: ui_common_robot::set_desired_position()
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
@@ -217,7 +214,6 @@ bool ui_common_robot::set_kinematic (BYTE kinematic_model_no)
 
     return true;
 }
-;// end: ui_common_robot::set_kinematic()
 // ---------------------------------------------------------------
 
 
@@ -240,7 +236,6 @@ bool ui_common_robot::set_servo_algorithm (BYTE algorithm_no[],
     execute_motion();
     return true;
 }
-;// end: ui_common_robot::set_servo_algorithm()
 // ---------------------------------------------------------------
 
 
@@ -380,7 +375,6 @@ bool ui_common_robot::move_motors ( double final_position[] )
         ecp->EDP_command_and_reply_buffer.instruction.motion_type = RELATIVE;
         ecp->EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
     }
-    ; // end: else
     ecp->EDP_command_and_reply_buffer.instruction.get_type = ARM_DV; // ARM
     ecp->EDP_command_and_reply_buffer.instruction.get_arm_type = MOTOR;
     ecp->EDP_command_and_reply_buffer.instruction.set_type = ARM_DV; // ARM
@@ -408,7 +402,6 @@ bool ui_common_robot::move_motors ( double final_position[] )
 
     return true;
 }
-;// end: ui_common_robot::move_motors()
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
@@ -474,7 +467,6 @@ bool ui_common_robot::move_joints (double final_position[] )
 
     return true;
 }
-;// end: ui_common_robot::move_internal()
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
@@ -543,7 +535,6 @@ bool ui_common_robot::move_xyz_euler_zyz ( double final_position[7] )
 
     return true;
 }
-;// end: ui_common_robot::move_xyz_euler_zyz()
 // ---------------------------------------------------------------
 
 
@@ -628,7 +619,7 @@ bool ui_common_robot::move_xyz_angle_axis ( double final_position[7] )
     current_position[6] = ecp->EDP_command_and_reply_buffer.reply_package.arm.pf_def.gripper_coordinate;
 
     return true;
-};
+}
 
 // ---------------------------------------------------------------
 bool ui_common_robot::read_motors ( double current_position[] )
@@ -651,7 +642,6 @@ bool ui_common_robot::read_motors ( double current_position[] )
     // printf("koniec read motors\n");
     return true;
 }
-;// end: ui_common_robot::read_motors()
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
@@ -671,7 +661,6 @@ bool ui_common_robot::read_joints ( double current_position[] )
         current_position[j] = ecp->EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[j];
     return true;
 }
-;// end: ui_common_robot::read_joints()
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
@@ -693,7 +682,6 @@ bool ui_common_robot::read_xyz_euler_zyz (double current_position[])
 
     return true;
 }
-;// end: ui_common_robot::read_external()
 // ---------------------------------------------------------------
 
 
@@ -713,4 +701,4 @@ bool ui_common_robot::read_xyz_angle_axis (double current_position[])
     current_position[6] = ecp->EDP_command_and_reply_buffer.reply_package.arm.pf_def.gripper_coordinate;
 
     return true;
-};
+}
