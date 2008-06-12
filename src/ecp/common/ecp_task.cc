@@ -34,7 +34,6 @@ bool ecp_task::pulse_check()
     if (rcvid == -1)
     {/* Error condition, exit */
         // perror("blad receive w reader\n");
-
     }
 
     if (rcvid == 0)

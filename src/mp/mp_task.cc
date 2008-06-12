@@ -608,11 +608,11 @@ bool mp_task::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m,
 
 	while (!(ui_exit_from_while && ecp_exit_from_while)) {
 
-		if ((mp_state == MP_STATE_RUNNING) && (ecp_exit_from_while)) {
-			rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_OR_ECP_PULSE, WITH_TIMEOUT);
-		} else if ((mp_state == MP_STATE_RUNNING) && (!ecp_exit_from_while)) {
-			rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_OR_ECP_PULSE, WITHOUT_TIMEOUT);
-		} else if (mp_state == MP_STATE_PAUSED) {
+		if (mp_state == MP_STATE_RUNNING)
+				rcvid = check_and_optional_wait_for_new_pulse (
+						&input, NEW_UI_OR_ECP_PULSE, 
+						ecp_exit_from_while ? WITH_TIMEOUT : WITHOUT_TIMEOUT);
+		} else {
 			rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, WITHOUT_TIMEOUT);
 		}
 
@@ -634,17 +634,18 @@ bool mp_task::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m,
 			}
 		} else if (rcvid == 0) {
 			if (ui_new_pulse) {
+
 				ui_new_pulse = false;
+
 				if (ui_pulse_code == MP_STOP) {
 					terminate_all (_robot_m);
 					return true;
 				}
 
 				if (ui_pulse_code == MP_PAUSE) {
-					// printf("ui_new_pulse MP_PAUSED\n");
-					usleep(1000*1000);
 					mp_state = MP_STATE_PAUSED;
 					ui_exit_from_while = false;
+					continue;
 				}
 
 				if (mp_state == MP_STATE_PAUSED) {// oczekujemy na resume
