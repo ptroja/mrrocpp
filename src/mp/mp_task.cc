@@ -608,7 +608,7 @@ bool mp_task::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m,
 
 	while (!(ui_exit_from_while && ecp_exit_from_while)) {
 
-		if (mp_state == MP_STATE_RUNNING)
+		if (mp_state == MP_STATE_RUNNING){
 				rcvid = check_and_optional_wait_for_new_pulse (
 						&input, NEW_UI_OR_ECP_PULSE, 
 						ecp_exit_from_while ? WITH_TIMEOUT : WITHOUT_TIMEOUT);
