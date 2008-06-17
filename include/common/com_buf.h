@@ -34,8 +34,7 @@
  */
 enum MP_COMMAND {
     INVALID_COMMAND,
-    START_TASK,
-    /** The next ECP state. */
+    START_TASK,    
     NEXT_POSE,
     END_MOTION,
     NEXT_STATE,

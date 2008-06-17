@@ -69,10 +69,8 @@ public:
     int number_of_servos;
 
 #if !defined(USE_MESSIP_SRR)
-
     int EDP_fd;	// by Y&W
 #else
-
     messip_channel_t *EDP_fd;
 #endif
 

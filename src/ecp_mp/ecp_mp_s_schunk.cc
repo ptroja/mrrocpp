@@ -14,8 +14,8 @@
 ecp_mp_schunk_sensor::ecp_mp_schunk_sensor (SENSOR_ENUM _sensor_name, char* _section_name, ecp_mp_task& _ecp_mp_object):
 	ecp_mp_sensor (_sensor_name, _section_name, _ecp_mp_object) {
   union_size = sizeof(image.force);
-};//: ecp_mp_schunk_sensor
+}
 
 // inicjacja odczytu dla VSP
 void ecp_mp_schunk_sensor::initiate_reading(){ // by Y - wywalone ze wzgledu na prace nieinteraktywna
-};
+}

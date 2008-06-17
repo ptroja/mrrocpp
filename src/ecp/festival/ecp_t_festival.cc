@@ -7,8 +7,8 @@
 #include "ecp/festival/ecp_t_festival.h"
 
 // KONSTRUKTORY
-ecp_task_festival::ecp_task_festival(configurator &_config)
-	: ecp_task(_config)
+ecp_task_festival::ecp_task_festival(configurator &_config) :
+	ecp_task(_config)
 {
 	fg = new festival_generator (*this);
 }
@@ -30,10 +30,10 @@ void ecp_task_festival::main_task_algorithm(void)
 
 	ecp_wait_for_start();
 
-	for(;;) {
+	for (;;) {
 		sr_ecp_msg->message("Waiting for MP order");
 
-		get_next_state ();
+		get_next_state();
 
 		sr_ecp_msg->message("NEXT_STATE received");
 
@@ -53,10 +53,10 @@ void ecp_task_festival::main_task_algorithm(void)
 
 	// Oczekiwanie na STOP
 	printf("przed wait for stop\n");
-	ecp_wait_for_stop ();
+	ecp_wait_for_stop();
 }
 
-ecp_task* return_created_ecp_task (configurator &_config)
+ecp_task* return_created_ecp_task(configurator &_config)
 {
 	return new ecp_task_festival(_config);
 }

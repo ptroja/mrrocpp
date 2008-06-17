@@ -48,7 +48,6 @@ void ecp_task_multiplayer_irp6ot::task_initialization(void)
 
 	go_st = new ecp_sub_task_gripper_opening(*this);
 	
-	
 	takeg = new ecp_vis_sac_lx_generator (*this, 4);
 	rgg = new ecp_tff_rubik_grab_generator (*this, 8);
 
@@ -127,7 +126,6 @@ void ecp_task_multiplayer_irp6ot::main_task_algorithm(void)
 			}
 
 			ecp_termination_notice();
-
 		}
 
 		// Oczekiwanie na STOP

@@ -109,7 +109,7 @@ void mp_robot::execute_motion ( void ) { // zlecenie wykonania ruchu
 	if ( MsgSend ( ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply_package, sizeof(ecp_reply_package)) == -1) {// by Y&W
 		// Blad komunikacji miedzyprocesowej - wyjatek
 		uint64_t e = errno;
-		perror("Send to ECP failed ?\n");
+		perror("Send to ECP failed\n");
 		sr_ecp_msg.message(SYSTEM_ERROR, e, "MP: Send() to ECP failed");
 		throw MP_error (SYSTEM_ERROR, (uint64_t) 0);
 	}

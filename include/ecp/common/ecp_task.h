@@ -30,7 +30,7 @@ protected:
     void ecp_wait_for_stop(void);
 
     // Oczekiwanie na nowy stan od MP
-    bool get_next_state(void);
+    void get_next_state(void);
 
 public: // TODO: following packages should be 'protected'
     // Odpowiedz ECP do MP, pola do ew. wypelnienia przez generatory

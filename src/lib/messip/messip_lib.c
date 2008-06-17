@@ -744,16 +744,16 @@ messip_channel_create( messip_cnx_t * cnx,
 		perror("resmgr_attach()");
 	}
 
-    /* Setup our message callback */
-    memset( &ch->message_attr, 0, sizeof( message_attr_t ) );
-    ch->message_attr.nparts_max = 1;
-    ch->message_attr.msg_max_size = 4096;
+	/* Setup our message callback */
+	memset( &ch->message_attr, 0, sizeof( message_attr_t ) );
+	ch->message_attr.nparts_max = 1;
+	ch->message_attr.msg_max_size = 4096;
 
 	/* Attach a callback (handler) for two message types */
 	if (message_attach( ch->dpp, &ch->message_attr,
                                  _IO_MAX + 1, _IO_MAX + 2, message_handler, ch )) {
         perror("message_attach()");
-    }
+	}
 
 	if (pulse_attach( ch->dpp, 0, _PULSE_CODE_DISCONNECT,
 						&message_handler, ch) != _PULSE_CODE_DISCONNECT) {
@@ -1090,7 +1090,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 		{
 		    perror("connect()");
 			fprintf( stderr, "%s %d:\n\tUnable to connect to host %s, port %d (name=%s)\n",
-			   __FILE__, __LINE__, inet_ntoa( sockaddr.sin_addr ), info->sin_port, name);
+			   __FILE__, __LINE__, inet_ntoa( sockaddr.sin_addr ), info->sin_port, name );
 			close( info->send_sockfd );
 			return NULL;
 		}

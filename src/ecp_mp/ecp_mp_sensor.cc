@@ -53,7 +53,7 @@ ecp_mp_sensor::ecp_mp_sensor(SENSOR_ENUM _sensor_name, const char* _section_name
 			usleep(1000*CONNECT_DELAY);
 		else				
 			throw sensor_error(SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);						
-	}// end: while
+	}
 #else /* USE_MESSIP_SRR */
 
 	VSP_NAME = _ecp_mp_object.config->return_attach_point_name(configurator::CONFIG_SERVER, "resourceman_attach_point", _section_name);
@@ -86,8 +86,7 @@ ecp_mp_sensor::ecp_mp_sensor(SENSOR_ENUM _sensor_name, const char* _section_name
 		}
 	}// end: while
 #endif /* !USE_MESSIP_SRR */
-}// end: ecp_mp_sensor
-
+}
 void ecp_mp_sensor::terminate() {
 	to_vsp.i_code=VSP_TERMINATE;
 #if !defined(USE_MESSIP_SRR)
@@ -103,7 +102,7 @@ void ecp_mp_sensor::terminate() {
 	else
 		messip_channel_disconnect(ch, MESSIP_NOTIMEOUT);
 #endif /* !USE_MESSIP_SRR */
-} // end: terminate()
+}
 
 void ecp_mp_sensor::initiate_reading() {
 	to_vsp.i_code=VSP_INITIATE_READING;
@@ -115,7 +114,7 @@ void ecp_mp_sensor::initiate_reading() {
 				&status, &from_vsp, sizeof(VSP_ECP_MSG), MESSIP_NOTIMEOUT) < 0)
 #endif /* !USE_MESSIP_SRR */
 		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);   
-};
+}
 
 void ecp_mp_sensor::configure_sensor() {
 	to_vsp.i_code=VSP_CONFIGURE_SENSOR;
@@ -127,11 +126,12 @@ void ecp_mp_sensor::configure_sensor() {
 				&status, &from_vsp, sizeof(VSP_ECP_MSG), MESSIP_NOTIMEOUT) < 0)
 #endif /* !USE_MESSIP_SRR */
 		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);   
-}; // end initiate_sensor
+}
+
 
 void ecp_mp_sensor::get_reading() {
 	get_reading(&image);
-};//: get_reading
+}
 
 void ecp_mp_sensor::get_reading(SENSOR_IMAGE* sensor_image) {
 	// Sprawdzenie, czy uzyc domyslnego obrazu.
@@ -151,4 +151,4 @@ void ecp_mp_sensor::get_reading(SENSOR_IMAGE* sensor_image) {
 	} else {
 		sr_ecp_msg.message ("Reply from VSP not ok");
 	}
-};//: get_reading
+}

@@ -329,8 +329,6 @@ bool mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_t
 	} while (true);
 	// koniec petli
 
-	// CZYNNOSCI KONCOWE
-
 	return false;
 }
 
@@ -548,9 +546,9 @@ int mp_task::mp_wait_for_name_open_ecp_pulse(mp_receive_pulse_struct_t* outputs)
 			if ((ND_NODE_CMP(outputs->msg_info.nd, nd) == 0)&&(outputs->msg_info.pid == ECP_pid)) {
 				wyjscie = true;
 				continue;
-		} else {
+			} else {
 				printf ("niewlasciwy proces zrobil name_open na kanale ECP_PULSE\n");
-		}
+			}
 			*/
 		}
 
@@ -586,7 +584,6 @@ int mp_task::mp_wait_for_ui_name_open()
 
 	return ret;
 }
-
 
 // funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
 
@@ -796,12 +793,11 @@ void mp_task::initialize_communication()
 		throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
 
-	mp_wait_for_ui_name_open();
-
 	delete [] mp_attach_point;
 	delete [] sr_net_attach_point;
-	delete [] mp_pulse_attach_point;
-
+	delete [] mp_pulse_attach_point;	
+	
+	mp_wait_for_ui_name_open();
 }
 // -------------------------------------------------------------------
 

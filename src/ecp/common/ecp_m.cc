@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 	try {
 	
 		// liczba argumentow
-		if(argc <6){
+		if(argc < 6) {
 			printf("Za malo argumentow ECP\n");
 			return -1;
 		}

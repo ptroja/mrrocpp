@@ -87,5 +87,5 @@ void ecp_generator::Move()
 
     }
     while (next_step() &&
-            (!communicate_with_mp_in_move  || ecp_t.mp_buffer_receive_and_send()));
+            (!communicate_with_mp_in_move || ecp_t.mp_buffer_receive_and_send()));
 }

@@ -81,8 +81,6 @@ void ecp_robot::copy_edp_to_mp_buffer(r_buffer& mp_buffer)
 // ---------------------------------------------------------------
 void ecp_robot::connect_to_edp(configurator &config, bool spawn_edp)
 {
-
-	
 	char *edp_section;
 	
     // name of the edp_section depends on _robot_name
@@ -140,7 +138,7 @@ void ecp_robot::connect_to_edp(configurator &config, bool spawn_edp)
 	}
 	printf(".done\n");
 	
-
+	delete [] edp_net_attach_point;
 }
 
 void ecp_robot::synchronise(void)
