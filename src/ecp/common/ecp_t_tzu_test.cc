@@ -529,7 +529,6 @@ bool force_meassure_generator::next_step()
 	
 	Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
 	weight += force_torque;
-	weight = force_torque;
 
 //	cout<<"force_torque: "<<force_torque<<endl;
 	meassurement_count--;

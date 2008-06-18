@@ -114,7 +114,7 @@ void ecp_task_tzu_fs::main_task_algorithm(void)
 		
 	int map_tab[] = {0,1,3,2,4};
 	int i = 0;
-	int count = 4;
+	int count = 10;
 	while(true)
 	{
 		if(automatic)
@@ -214,16 +214,21 @@ void ecp_task_tzu_fs::method_standard(int T)
 			// zmiana narzedzia kinematycznego, ustawienie end-effector frame E jako sensor frame S
 			sg->load_file_with_path(trajectories[TRAJECTORY_VERTICAL_DOWN]);
 			sg->Move ();		
+//			fmg->Move();
+//			cout<<"wynik1: "<< fmg->get_meassurement() << endl;
 			sleep(2);
 			befg->Move();
 			ftcg->Move();
 			tcg->set_tool_parameters(0,0,0);
 			tcg->Move();
+	//		fmg->Move();
+	//		cout<<"wynik2: "<< fmg->get_meassurement() << endl;
 			// ETAP DRUGI - chwytak skierowany pionowo do gory, odczyt i obliczenie trzech pierwszych parametrow
 			// wagi, oraz przesuniecia wzdluz osi x i y
 			sg->load_file_with_path(trajectories[TRAJECTORY_VERTCAL_UP]);
 			sg->Move ();
 			fmg->Move();
+			//cout<<"wynik3: "<< fmg->get_meassurement() << endl;
 			weight = (fmg->get_meassurement()[FORCE_Z])/2;
 			P_x = -fmg->get_meassurement()[TORQUE_Y]/(2*weight);
 			P_y = fmg->get_meassurement()[TORQUE_X]/(2*weight);
@@ -367,12 +372,12 @@ bool force_meassure_generator::next_step()
 	
 	Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
 	weight += force_torque;
-	weight = force_torque;
 
 //	cout<<"force_torque: "<<force_torque<<endl;
 	meassurement_count--;
 	if(meassurement_count <= 0)
 	{
+	//cout<<"in gen mes: "<<weight<<endl;
 		meassurement_count = init_meassurement_count;
 		return false;
 	}
@@ -381,7 +386,9 @@ bool force_meassure_generator::next_step()
 
 Ft_v_vector& force_meassure_generator::get_meassurement()
 {
+//cout<<"in gen mes bef: "<<weight<<endl;
 	for(int i = 0 ; i < 6 ; i++)
 		weight[i] = weight[i]/meassurement_count;
-	return weight;
+//cout<<"in gen mes aft: "<<weight<<endl;	
+return weight;
 }
