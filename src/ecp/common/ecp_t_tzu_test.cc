@@ -92,7 +92,7 @@ void ecp_task_tzu_test::main_task_algorithm(void)
 		 * sil dla tych roznych przypadkow
 		 */
  		sr_ecp_msg->message("Test");
-		trajectories_test(1);
+		trajectories_test(10);
 	}
   	else if (option == OPTION_THREE)
     {
@@ -180,8 +180,9 @@ void ecp_task_tzu_test::trajectories_test(int count)
 	cout<<"START TRAJECTORIES TEST"<<endl;
 	for(int j = 0 ; j < count ; j++)
 	{	
-		cout<<"parametry z common.ini"<<endl;
-		ftcg->set_tool_parameters(0.004,0.0,0.156,10.8);
+		cout<<"parametry z common.ini: "<<j<<endl;
+		//0.004 0.0 0.13		
+		ftcg->set_tool_parameters(0.004,0.0,0.13,13.18);
 		ftcg->Move();
 		
 		for(int i = 0 ; i < 10 ; i++)
@@ -204,8 +205,13 @@ void ecp_task_tzu_test::trajectories_test(int count)
 	
 	for(int j = 0 ; j < count ; j++)
 	{	
-		cout<<"parametry wyliczone"<<endl;
-		ftcg->set_tool_parameters(-0.000333794, 0.000202744, 0.138832, 13.1884);
+		cout<<"parametry wyliczone: "<<j<<endl;
+		// weight: 13.4494
+		// P_x: -0.00123971
+		// P_y: -0.000875034
+		// P_z: 0.136523
+
+		ftcg->set_tool_parameters(-0.00123971, -0.000875034, 0.136523, 13.4494);
 		ftcg->Move();
 		
 		for(int i = 0 ; i < 10 ; i++)
@@ -278,7 +284,7 @@ void ecp_task_tzu_test::trajectories_test(int count)
 		{
 			for(int k = 0 ; k < 6 ; k++)
 			{
-				matlab<<"yc_"<<j<<"_"<<i<<"("<<k<<")="<<result_wyliczone[j][i][k]<<";"<<endl;
+				matlab<<"yc_"<<j<<"_"<<i<<"("<<k<<")="<<result_common[j][i][k]<<";"<<endl;
 			}
 		}
 	}
@@ -410,17 +416,25 @@ void ecp_task_tzu_test::trajectories_test(int count)
 		}
 	}
 	
+	double sum_common = 0;
 	for(int j = 0 ; j < count ; j++)
 	{
 		cout<<"sum_of_errors_common: "<<sum_of_errors_common[j]<<endl;
 		str<<"sum_of_errors_common: "<<sum_of_errors_common[j]<<endl;
+		sum_common += sum_of_errors_common[j];
 	}
+	cout<<"sum_of_errors_common_general: "<<sum_common<<endl;
+	str<<"sum_of_errors_common_general: "<<sum_common<<endl;
 	
+	double sum_wyliczone = 0;
 	for(int j = 0 ; j < count ; j++)
 	{
 		cout<<"sum_of_errors_wyliczone: "<<sum_of_errors_wyliczone[j]<<endl;
 		str<<"sum_of_errors_wyliczone: "<<sum_of_errors_wyliczone[j]<<endl;
+		sum_wyliczone += sum_of_errors_wyliczone[j];
 	}
+	cout<<"sum_of_errors_wyliczone_general: "<<sum_wyliczone<<endl;
+	str<<"sum_of_errors_wyliczone_general: "<<sum_wyliczone<<endl;
 	
 //	cout<<"sum_of_errors_common: "<<sum_of_errors_common<<endl;
 //	str<<"sum_of_errors_common: "<<sum_of_errors_common<<endl;
@@ -535,6 +549,8 @@ bool force_meassure_generator::next_step()
 	if(meassurement_count <= 0)
 	{
 		meassurement_count = init_meassurement_count;
+		for(int i = 0 ; i < 6 ; i++)
+			weight[i] = weight[i]/meassurement_count;
 		return false;
 	}
 	return true;
@@ -542,7 +558,7 @@ bool force_meassure_generator::next_step()
 
 Ft_v_vector& force_meassure_generator::get_meassurement()
 {
-	for(int i = 0 ; i < 6 ; i++)
-		weight[i] = weight[i]/meassurement_count;
+//	for(int i = 0 ; i < 6 ; i++)
+//		weight[i] = weight[i]/meassurement_count;
 	return weight;
 }

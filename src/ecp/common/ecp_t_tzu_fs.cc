@@ -379,6 +379,8 @@ bool force_meassure_generator::next_step()
 	{
 	//cout<<"in gen mes: "<<weight<<endl;
 		meassurement_count = init_meassurement_count;
+		for(int i = 0 ; i < 6 ; i++)
+			weight[i] = weight[i]/meassurement_count;
 		return false;
 	}
 	return true;
@@ -387,8 +389,8 @@ bool force_meassure_generator::next_step()
 Ft_v_vector& force_meassure_generator::get_meassurement()
 {
 //cout<<"in gen mes bef: "<<weight<<endl;
-	for(int i = 0 ; i < 6 ; i++)
-		weight[i] = weight[i]/meassurement_count;
+//	for(int i = 0 ; i < 6 ; i++)
+//		weight[i] = weight[i]/meassurement_count;
 //cout<<"in gen mes aft: "<<weight<<endl;	
-return weight;
+	return weight;
 }
