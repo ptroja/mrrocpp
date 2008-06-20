@@ -120,6 +120,9 @@ struct ECP_VSP_MSG{
 	union {
 		short parameters;
 
+    // Name of the cvFraDIA task.
+    char cvfradia_task_name[80];
+
 		// rcs - rozwiazanie kostki Rubika
 		struct
 		{

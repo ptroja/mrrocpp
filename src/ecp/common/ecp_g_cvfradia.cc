@@ -42,13 +42,13 @@ bool ecp_cvfradia_generator::first_step()
  */
 bool ecp_cvfradia_generator::next_step()
 {
-	// Wait for 1s.
-	usleep(1000000);
+	// Wait for 0.2s.
+	usleep(200000);
 	// Check trigger.
-	if (check_and_null_trigger())
+/*	if (check_and_null_trigger())
 	{
 		return false;
-	}
+	}*/
 	return true;
 }
 
