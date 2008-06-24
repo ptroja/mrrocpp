@@ -107,6 +107,14 @@ typedef struct sensor_image_t{
 			int x, y, width, height;
 		} cvFraDIA;
 
+    // struktura z pozycja i katami pcbirda
+    struct {
+        float x, y, z;	// pozycja
+        float a, b, g;	// katy (a = azimuth, b = elevation, g = roll)
+        float distance;	// odleglosc
+        uint32_t ts_sec, ts_usec;	// timestamp
+    } pcbird;
+
 	}; // koniec unii
 } SENSOR_IMAGE;
 
@@ -179,7 +187,11 @@ enum SENSOR_ENUM {
 	/*!
 	 * Sensor used for communication with the cvFraDIA.
 	 */
-	SENSOR_CVFRADIA
+	SENSOR_CVFRADIA,
+	/*!
+	 * Sensor used for communication with the PCBird.
+	 */
+	SENSOR_PCBIRD
 };
 
 // Klasa obslugi bledow procesu VSP.
