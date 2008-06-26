@@ -71,6 +71,11 @@ int step_no;
 
 	Homog_matrix O_Tx_EE;	
 	
+	Homog_matrix O_Tx_G__D;
+	Homog_matrix G_Tx_D;
+	
+		Homog_matrix O_Tx_G__BLOCK;
+	
 	 Ft_v_vector O_rf_G__CEIH;
 	Ft_v_tr Jack;//O_Tx_G__CEIH,Ft_v_tr::FT);
 	//	Ft_v_tr ft_tr_inv_tool_matrix (!current_tool, Ft_v_tr::FT);
@@ -91,6 +96,8 @@ int step_no;
 	double O_r_G__CSAC[3][6];
 	double O_r_G__CEIH[3][6];
 	double O_r_G__fEIH[3][6];
+	double O_r_G__D[3][6];
+
 	double E_r_G[3][6];
 	double E_r_Ep[3][6];
 	
@@ -108,10 +115,12 @@ int step_no;
 	double O_eps_EG__CSAC[3][6];
 	double O_eps_EG__CEIH[3][6];
 	double O_eps_EG__fEIH[3][6];
+	double O_eps_EG__D[3][6];
 	
 	double O_eps_E__CSAC[3][6];
 	double O_eps_E__CEIH[3][6];
 	double O_eps_E__fEIH[3][6];
+	double O_eps_E__D[3][6];
   	
   	double fEIH_G[8];
 
@@ -151,11 +160,14 @@ int step_no;
 	double x2g;//=-0.07; //x nibytoola
 	
 	double x2g_begin;
+	
+	double x2d;
 
 int vis_phase;// = 0;
 int steps2switch;//=0;
 
 	int phaseCEIH;	
+	int phaseD;
   	
   // konstruktor
 	ecp_vis_sac_lx_generator(ecp_task& _ecp_task, int step=0);  

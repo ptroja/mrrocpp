@@ -169,10 +169,13 @@ ecp_vis_sac_lx_generator::ecp_vis_sac_lx_generator(ecp_task& _ecp_task, int step
 
 	x2g_begin=x2g;
 
+	x2d=0;
+
 	vis_phase = 0;
 	steps2switch=0;
 
 	phaseCEIH=0;
+	phaseD=0;
 	
 	CSAC_Tx_G_firstvalid=1;
 	CEIH_Tx_G_firstvalid=1;
@@ -263,6 +266,9 @@ bool ecp_vis_sac_lx_generator::first_step()
 		the_robot->EDP_data.next_reciprocal_damping[i+3]
 				= torque_reciprocal_damping_;
 	}
+
+	//w 1szym kroku niepoliczony
+	O_eps_EG__CSAC_norm=10;
 
 	return true;
 }
@@ -383,33 +389,38 @@ bool ecp_vis_sac_lx_generator::next_step()
 
 
 	//SAC
+	
+
+
 	CSAC_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G[0],
 			vsp_vis_sac->image.vis_sac.frame_E_r_G[1],
 			-vsp_vis_sac->image.vis_sac.frame_E_r_G[2],
 
 			vsp_vis_sac->image.vis_sac.frame_E_r_G[5], 0, -0.05);
+		
+			
 	//std::cout <<"Rota C_T_Gxxx " << vsp_vis_sac->image.vis_sac.frame_E_r_G[5] <<" " << O_r_G[0][4] << " "<< O_r_G[0][5] <<std::endl;
 
 
 	//EIH
 	//rover
-	
+/*
 	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]-0.015, //-0.05
 			vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1]+0.03, //0.04
 			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2]+0.01, // kalib Y w O //+0.02
 		//	-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3], 0, 0); //nomalnie
-			//0, 0, -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]-0.785000); //rover
+			
 			0, 0, -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]-0.8000); //rover
-	
+*/	
 
 	
 //kostka	
-/*
+
 	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0],
 			vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1],
 			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2], // kalib Y w O
 			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3], 0, 0); 	
-*/
+			
 
 //jakby przyszlo cos glupiego
 /*
@@ -507,10 +518,10 @@ bool ecp_vis_sac_lx_generator::next_step()
 //jesli nie widzi kostki bo jest za blisko zostaw stare namiary
 	CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	CEIH_Tx_G__f.get_xyz_angle_axis(CEIH_r_G__f[0]);
-	for (int i=0; i<6; i++)
-	{
-		std::cout << CEIH_r_G[0][i] << " ";
-	}
+//	for (int i=0; i<6; i++)
+//	{
+//		std::cout << CEIH_r_G[0][i] << " ";
+//	}
 /*	
 	for (int i=0; i<6; i++)
 	{
@@ -522,13 +533,13 @@ bool ecp_vis_sac_lx_generator::next_step()
 
 
 	
-	if(CEIH_r_G[0][0]>0.12) // || CEIH_Tx_G_firstvalid==0) //0.15
-	{
+	//if(CEIH_r_G[0][0]>0.12) //for rover
+	//{
 	//EIH
 	CEIH_Tx_G=CEIH_Tx_G*G_Tx_S;	
 	O_Tx_G__CEIH=O_Tx_E*CEIH_Tx_G; //rota O_Tx_E 0,0,0 //E_TX_CEIH=1
 	O_Tx_G__CEIH.get_xyz_angle_axis(O_r_G__CEIH[0]);
-	}
+	//}
 	/*
 		std::cout << std::endl;
 		std::cout << " CEIH_Tx_G ";
@@ -598,27 +609,27 @@ bool ecp_vis_sac_lx_generator::next_step()
 
 CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 
-//	std::cout << " O_T_E ";
+	//std::cout << " O_T_E ";
 	for (int i=0; i<6; i++)
 	{
 		std::cout << O_r_E[0][i] << " ";
 	}
-//	std::cout << std::endl;
-/*	
+	//std::cout << std::endl;
+	
 	//std::cout << " SAC ";
 	for (int i=0; i<6; i++)
 	{
 		std::cout << O_r_G__CSAC[0][i] << " ";
 	}
 	//std::cout << std::endl;
-*/
+
 //	std::cout << " EIH ";
 	for (int i=0; i<6; i++)
 	{
 		std::cout << O_r_G__CEIH[0][i]<< " ";
 	}
 //	std::cout << std::endl;
-/*
+
 	//std::cout << " EIH_JACK ";
 	for (int i=0; i<6; i++)
 	{
@@ -634,7 +645,7 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	//std::cout << std::endl;
 
 	std::cout <<  O_eps_EG__CSAC_norm << " ";
-*/	
+
 	std::cout << std::endl;
 	
 
@@ -683,11 +694,43 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 */
 	}
 
+	if(	O_eps_EG__CSAC_norm < 0.005 && phaseD==0)
+	{
+		O_weight__SAC=0.0;		
+	O_Tx_G__BLOCK=O_Tx_G__CSAC; //zablokowanie pomiaru	
+	phaseD=1;
+	}
+	if(phaseD)
+	{
+	
+	G_Tx_D.set_xyz_rpy(x2d, 0, 0, 0, 0, 0);
+	
+	O_Tx_G__D=O_Tx_G__BLOCK*G_Tx_D; //skrot myslowy
+	O_Tx_G__D.get_xyz_angle_axis(O_r_G__D[0]);
+	
+	//O_eps_EG__CSAC_norm=0.0;
+	for (int i=0; i<6; i++)
+		{
+			O_eps_EG__D[0][i]=(O_r_G__D[0][i]-O_r_E[0][i]);
+			//O_eps_EG__CSAC_norm+=O_eps_EG__CSAC[0][i]*O_eps_EG__CSAC[0][i];
+			O_eps_E__D[0][i]=O_gain__SAC[i]*O_eps_EG__D[0][i];		
+		}	
+		
+	if(x2d<(-x2g_begin))
+	{
+		x2d+=0.001;
+	}
+
+	}
+	
+	printf("AAAAA %f %f %f\n",O_weight__SAC,O_r_G__D[0][0],x2d);
+
 	for (int i=0; i<6; i++)
 	{
 	//	O_eps_EG[0][i]=O_r_G[0][i]-O_r_E[0][i];
 	//	O_r_Ep[0][i]=O_r_E[0][i]+gain[i]*O_eps_EG[0][i]; //0.01
-		O_r_Ep[0][i]=O_r_E[0][i]+O_weight__SAC*O_eps_E__CSAC[0][i]+C_weight__EIH*O_eps_E__CEIH[0][i]+f_weight__EIH*O_eps_E__fEIH[0][i];
+		O_r_Ep[0][i]=O_r_E[0][i]+O_weight__SAC*O_eps_E__CSAC[0][i]+C_weight__EIH*O_eps_E__CEIH[0][i]+f_weight__EIH*O_eps_E__fEIH[0][i]
+		+phaseD*O_eps_E__D[0][i];
 	}
 
 	//O_eps_EG[0][2]=O_r_G[0][2]-O_r_E[0][2];
