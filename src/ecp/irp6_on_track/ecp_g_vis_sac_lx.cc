@@ -645,6 +645,8 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	//std::cout << std::endl;
 
 	std::cout <<  O_eps_EG__CSAC_norm << " ";
+	
+	std::cout <<  phaseD << " ";
 
 	std::cout << std::endl;
 	
@@ -696,8 +698,18 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 
 	if(	O_eps_EG__CSAC_norm < 0.005 && phaseD==0)
 	{
-		O_weight__SAC=0.0;		
-	O_Tx_G__BLOCK=O_Tx_G__CSAC; //zablokowanie pomiaru	
+	if(O_weight__SAC==1)		
+		O_Tx_G__BLOCK=O_Tx_G__CSAC; //zablokowanie pomiaru	
+	if(C_weight__EIH==1)		
+		O_Tx_G__BLOCK=O_Tx_G__CEIH; //zablokowanie pomiaru	
+	if(f_weight__EIH==1)		
+		O_Tx_G__BLOCK=O_Tx_G__fEIH; //zablokowanie pomiaru	
+	
+	
+	O_weight__SAC=0.0;	
+	C_weight__EIH=0.0;
+	f_weight__EIH=0.0;
+	
 	phaseD=1;
 	}
 	if(phaseD)
@@ -723,7 +735,7 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 
 	}
 	
-	printf("AAAAA %f %f %f\n",O_weight__SAC,O_r_G__D[0][0],x2d);
+	//printf("AAAAA %f %f %f\n",O_weight__SAC,O_r_G__D[0][0],x2d);
 
 	for (int i=0; i<6; i++)
 	{
