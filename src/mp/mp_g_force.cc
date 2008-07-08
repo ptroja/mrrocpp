@@ -309,7 +309,7 @@ bool mp_haptic_generator::first_step()
 	irp6p->communicate = true;
 
 	td.internode_step_no = step_no;
-	td.value_in_step_no = td.internode_step_no - 2;
+	td.value_in_step_no = td.internode_step_no - 2;	
 	irp6ot->ecp_td.mp_command = NEXT_POSE;
 	irp6ot->ecp_td.instruction_type = GET;
 	irp6ot->ecp_td.get_type = ARM_DV;
@@ -328,8 +328,10 @@ bool mp_haptic_generator::first_step()
 		irp6ot->ecp_td.next_force_xyz_torque_xyz[i] = 0;
 		irp6ot->ecp_td.next_velocity[i+3] = 0;
 		irp6ot->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
-		irp6ot->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-		irp6ot->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+//		irp6ot->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+//		irp6ot->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		irp6ot->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING / 20;
+		irp6ot->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING / 20;
 		irp6ot->ecp_td.next_behaviour[i] = CONTACT;
 		irp6ot->ecp_td.next_behaviour[i+3] = CONTACT;
 		/*
@@ -338,8 +340,12 @@ bool mp_haptic_generator::first_step()
 		 if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
 		 else irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
 		 */
-		irp6ot->ecp_td.next_inertia[i] = FORCE_INERTIA;
-		irp6ot->ecp_td.next_inertia[i+3] = TORQUE_INERTIA;
+		//irp6ot->ecp_td.next_inertia[i] = FORCE_INERTIA;
+//		irp6ot->ecp_td.next_inertia[i+3] = TORQUE_INERTIA;
+		
+		irp6ot->ecp_td.next_inertia[i] = 0;
+		irp6ot->ecp_td.next_inertia[i+3] = 0;
+		
 	}
 
 	Homog_matrix tool_frame(0.0, 0.0, 0.25);
@@ -365,8 +371,10 @@ bool mp_haptic_generator::first_step()
 		irp6p->ecp_td.next_force_xyz_torque_xyz[i] = 0;
 		irp6p->ecp_td.next_XYZ_AA_arm_coordinates[i+3] = 0;
 		irp6p->ecp_td.next_force_xyz_torque_xyz[i+3] = 0;
-		irp6p->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-		irp6p->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+//		irp6p->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+//		irp6p->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		irp6p->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING/5;
+		irp6p->ecp_td.next_reciprocal_damping[i+3] = FORCE_RECIPROCAL_DAMPING/5;
 		irp6p->ecp_td.next_behaviour[i] = GUARDED_MOTION;
 		irp6p->ecp_td.next_behaviour[i+3] = GUARDED_MOTION;
 		/*
@@ -376,8 +384,11 @@ bool mp_haptic_generator::first_step()
 		 else irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
 		 */
 
-		irp6p->ecp_td.next_inertia[i] = FORCE_INERTIA;
-		irp6p->ecp_td.next_inertia[i+3] = TORQUE_INERTIA;
+//		irp6p->ecp_td.next_inertia[i] = FORCE_INERTIA;
+//		irp6p->ecp_td.next_inertia[i+3] = TORQUE_INERTIA;
+		
+		irp6p->ecp_td.next_inertia[i] = 0;
+		irp6p->ecp_td.next_inertia[i+3] = 0;
 
 		/*
 		 irp6p->ecp_td.MPtoECP_inertia[i] = 0.0;
