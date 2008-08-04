@@ -8,16 +8,16 @@
 #if !defined(EA_B10EA6BB_2E03_4f87_8E50_B6482560D9BB__INCLUDED_)
 #define EA_B10EA6BB_2E03_4f87_8E50_B6482560D9BB__INCLUDED_
 
-#include "ecp_visual_servo.h"
+#include "ecp/common/ecp_visual_servo.h"
 
 class ecp_vis_pb_eol_sac_irp6ot : public ecp_visual_servo
 {
 
 public:
-	ecp_vis_pb_eol_sac_irp6ot();
+	ecp_vis_pb_eol_sac_irp6ot(ecp_task& _ecp_task, int step=0);
 	virtual ~ecp_vis_pb_eol_sac_irp6ot();
 
-	virtual void next_step_without_constraints()();
+	virtual void next_step_without_constraints();
 	virtual void entertain_constraints();
 	virtual bool first_step(void);
 

@@ -615,13 +615,14 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 		std::cout << O_r_E[0][i] << " ";
 	}
 	//std::cout << std::endl;
-	
+/*	
 	//std::cout << " SAC ";
 	for (int i=0; i<6; i++)
 	{
 		std::cout << O_r_G__CSAC[0][i] << " ";
 	}
-	//std::cout << std::endl;
+//	std::cout << std::endl;
+*/	
 
 //	std::cout << " EIH ";
 	for (int i=0; i<6; i++)
@@ -635,8 +636,9 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	{
 		std::cout << O_r_G__fEIH[0][i]<< " ";
 	}
-	//std::cout << std::endl;
+	std::cout << std::endl;
 
+/*
 	//std::cout << " EIH_FEAT ";
 	for (int i=0; i<8; i++)
 	{
@@ -650,7 +652,7 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 
 	std::cout << std::endl;
 	
-
+*/
 	//SWITCH
 	/*
 	O_eps_EG__CSAC_norm=0.0;
@@ -695,7 +697,8 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 		}
 */
 	}
-
+//Dla dojezdzania
+/*
 	if(	O_eps_EG__CSAC_norm < 0.005 && phaseD==0)
 	{
 	if(O_weight__SAC==1)		
@@ -711,7 +714,10 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	f_weight__EIH=0.0;
 	
 	phaseD=1;
+	
 	}
+	*/
+	
 	if(phaseD)
 	{
 	

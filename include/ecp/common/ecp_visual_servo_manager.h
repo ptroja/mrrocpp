@@ -8,13 +8,13 @@
 #if !defined(EA_372F46B1_372D_4660_A605_52297559E64B__INCLUDED_)
 #define EA_372F46B1_372D_4660_A605_52297559E64B__INCLUDED_
 
-#include "ecp_visual_servo.h"
+#include "ecp/common/ecp_visual_servo.h"
 
 class ecp_visual_servo_manager : public ecp_visual_servo
 {
 
 public:
-	ecp_visual_servo_manager();
+	ecp_visual_servo_manager(ecp_task& _ecp_task, int step=0);
 	virtual ~ecp_visual_servo_manager();
 	ecp_visual_servo *m_ecp_visual_servo;
 

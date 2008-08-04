@@ -5,10 +5,9 @@
 //  Original author: tkornuta
 ///////////////////////////////////////////////////////////
 
-#include "ecp_visual_servo_manager.h"
+#include "ecp/common/ecp_visual_servo_manager.h"
 
-
-ecp_visual_servo_manager::ecp_visual_servo_manager(){
+ecp_visual_servo_manager::ecp_visual_servo_manager(ecp_task& _ecp_task, int step) : ecp_visual_servo(_ecp_task){
 
 }
 

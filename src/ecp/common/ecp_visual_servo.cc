@@ -5,10 +5,9 @@
 //  Original author: tkornuta
 ///////////////////////////////////////////////////////////
 
-#include "ecp_visual_servo.h"
-
-
-ecp_visual_servo::ecp_visual_servo(){
+#include "ecp/common/ecp_visual_servo.h"
+  
+ecp_visual_servo::ecp_visual_servo(ecp_task& _ecp_task, int step) : ecp_generator(_ecp_task){
 
 }
 

@@ -86,6 +86,8 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
 	char tmp_string[50];
 	char tmp2_string[3];
+	
+
 
 	for (int j=0; j<MAX_SERVOS_NR; j++) {
 		sprintf(tmp2_string, "%d", j);
@@ -208,6 +210,7 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 		}
 
 		msg->message("measures started");
+		
 		set_thread_priority(pthread_self() , MAX_PRIORITY+1);
 
 		rb_obj->reader_wait_for_new_step();
@@ -225,6 +228,7 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 				rb_obj->step_data.ui_trigger = 0;
 			}
 
+			// printf("EDPX: %f\n", rb_obj->step_data.current_kartez_position[1]); 
 			// przepisanie danych dla biezacego kroku do bufora lokalnego reader
 			memcpy( &(r_measptr[msr_nr]), &rb_obj->step_data, sizeof(reader_data));
 
@@ -317,6 +321,8 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 					k = 0;
 
 				// zapis pomiarow z biezacego kroku do pliku
+				// printf("EDP %f\n", r_measptr[k].current_kartez_position[1]);
+				
 
 				outfile << r_measptr[k].step << " ";
 				if (rb_obj->reader_cnf.msec)

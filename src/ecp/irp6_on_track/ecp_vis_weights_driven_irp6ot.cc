@@ -5,10 +5,10 @@
 //  Original author: tkornuta
 ///////////////////////////////////////////////////////////
 
-#include "ecp_vis_weights_driven_irp6ot.h"
+#include "ecp/irp6_on_track/ecp_vis_weights_driven_irp6ot.h"
 
 
-ecp_vis_weights_driven_irp6ot::ecp_vis_weights_driven_irp6ot(){
+ecp_vis_weights_driven_irp6ot::ecp_vis_weights_driven_irp6ot(ecp_task& _ecp_task, int step) : ecp_visual_servo_manager(_ecp_task){
 
 }
 

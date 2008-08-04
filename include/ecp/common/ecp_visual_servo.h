@@ -10,7 +10,7 @@
 #if !defined(EA_8CD1135B_079F_4b66_82F9_362F9BC528CE__INCLUDED_)
 #define EA_8CD1135B_079F_4b66_82F9_362F9BC528CE__INCLUDED_
 
-#include "ecp_mp_generator.h"
+#include "ecp/common/ecp_generator.h"
 
 // tutaj struktury
 //...
@@ -39,7 +39,7 @@ struct vis_constraints_t
 			 */
 			char character;
 		} tk_testexample;		
-	}
+	};
 };
 
 
@@ -48,7 +48,7 @@ struct vis_constraints_t
  * \brief Abstract class responsible for visual servo.
  * \author tkornuta/mstaniak
  */
-class ecp_visual_servo : public ecp_mp_generator
+class ecp_visual_servo : public ecp_generator
 {
 private:
 	/*!
@@ -60,14 +60,13 @@ public:
 	/*!
 	 * Constructor. 
 	 */
-	ecp_visual_servo();
-	
-	
+	ecp_visual_servo(ecp_task& _ecp_task, int step=0);
+	  
 	virtual ~ecp_visual_servo();
 
 	virtual void retrieve_parameters();
 	virtual bool next_step(void);
-	virtual void next_step_without_constraints()() =0;
+	virtual void next_step_without_constraints() =0;
 	virtual void entertain_constraints() =0;
 	void set_constraints();
 	void get_constraints();

@@ -5,10 +5,10 @@
 //  Original author: tkornuta
 ///////////////////////////////////////////////////////////
 
-#include "ecp_vis_pb_eol_sac_irp6ot.h"
+#include "ecp/irp6_on_track/ecp_vis_pb_eol_sac_irp6ot.h"
 
 
-ecp_vis_pb_eol_sac_irp6ot::ecp_vis_pb_eol_sac_irp6ot(){
+ecp_vis_pb_eol_sac_irp6ot::ecp_vis_pb_eol_sac_irp6ot(ecp_task& _ecp_task, int step) : ecp_visual_servo(_ecp_task){
 
 }
 
@@ -22,7 +22,7 @@ ecp_vis_pb_eol_sac_irp6ot::~ecp_vis_pb_eol_sac_irp6ot(){
 
 
 
-void ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints()(){
+void ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
 
 }
 
