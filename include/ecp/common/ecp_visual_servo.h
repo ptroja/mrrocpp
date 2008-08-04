@@ -10,6 +10,7 @@
 #if !defined(EA_8CD1135B_079F_4b66_82F9_362F9BC528CE__INCLUDED_)
 #define EA_8CD1135B_079F_4b66_82F9_362F9BC528CE__INCLUDED_
 
+#include "lib/mathtr.h"
 #include "ecp/common/ecp_generator.h"
 
 // tutaj struktury
@@ -40,6 +41,85 @@ struct vis_constraints_t
 			char character;
 		} tk_testexample;		
 	};
+};
+
+/*!
+ * \struct vis_entities_t
+ * \brief ... structure.
+ * \author tkornuta/mstaniak
+ */
+struct vis_entities_t
+{
+	/*!
+	 * \union vis_entities_union_t
+	 * \brief Union with entities' structures.
+	 */
+	union vis_entities_union_t
+	{
+		/*!
+		 * \struct pb_eol_sac_struct_t
+		 * \brief Structure used by PB-EOL-SAC.
+		 */
+		struct pb_eol_sac_struct_t
+		{
+			/*!
+			 * ^{C}T_{G} -- goal pose with respect to the camera frame.
+			 */
+/*
+				Homog_matrix C_Tx_G;
+				Homog_matrix C_Tx_E;
+				Homog_matrix O_Tx_G;
+				Homog_matrix O_Tx_Ep;
+				Homog_matrix O_Tx_E;
+*/				
+				double C_r_G[3][6];
+				double C_r_E[3][6];
+				double O_r_G[3][6];
+				double O_r_Ep[3][6];
+				double O_r_E[3][6];
+				
+				double O_eps_EG[3][6];
+				double O_eps_EG__CSAC_norm;
+				
+				double O_r_Ep_d[3][6]; //roznica 1szego
+				double O_r_Ep_d2[3][6]; //2giego stopnia
+			
+		} pb_eol_sac;		
+	};
+	
+};
+
+/*!
+ * \struct vis_operations_t
+ * \brief ... structure.
+ * \author tkornuta/mstaniak
+ */
+
+struct vis_operations_t
+{
+	/*!
+	 * \union vis_operations_union_t
+	 * \brief Union with operations' structures.
+	 */
+	union vis_operations_union_t
+	{
+		/*!
+		 * \struct pb_eol_sac_struct_t
+		 * \brief Structure used by PB-EOL-SAC.
+		 */
+		struct pb_eol_sac_struct_t
+		{
+		
+			//	Homog_matrix O_Tx_C;
+			/*!
+			 * ^{0}M^{*} -- gain.
+			 */		
+			double gain[6];
+			
+		} pb_eol_sac;		
+	};
+	//Homog_matrix G_Tx_G2;
+	//Homog_matrix G_Tx_S;
 };
 
 
