@@ -24,10 +24,8 @@ BINARIES =		ecp_pr \
 				ecp_irp6ot_multiplayer \
 				ecp_irp6ot_legobrick \
 				ecp_vis_pb_eol_sac_irp6ot \
-				ecp_vis_pb_eih_irp6ot
-#				ecp_vis_ib_eih_irp6ot \
-#				ecp_vis_pb_eih_irp6ot \
-#				ecp_vis_pb_eol_sac_irp6ot \
+				ecp_vis_pb_eih_irp6ot \
+				ecp_vis_ib_eih_irp6ot
 #				ecp_vis_weights_driven_irp6ot 
 
 #-----------------------------------------------------------------------------------------------------------------------#
@@ -118,6 +116,10 @@ ecp_vis_pb_eol_sac_irp6ot: ecp_t_vis_pb_eol_sac_irp6ot.o ecp_vis_pb_eol_sac_irp6
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_vis_pb_eih_irp6ot: ecp_t_vis_pb_eih_irp6ot.o ecp_vis_pb_eih_irp6ot.o ecp_g_force.o \
+						ecp_mp_s_vis_sac_lx.o ecp_mp_s_schunk.o $(SHOBJ) 
+	$(LD) $(LDFLAGS) -o $@ $^
+#-----------------------------------------------------------------------------------------------------------------------#
+ecp_vis_ib_eih_irp6ot: ecp_t_vis_ib_eih_irp6ot.o ecp_vis_ib_eih_irp6ot.o ecp_g_force.o \
 						ecp_mp_s_vis_sac_lx.o ecp_mp_s_schunk.o $(SHOBJ) 
 	$(LD) $(LDFLAGS) -o $@ $^
 #---------------------------------Special object build rules (user made)-------------------------------------#
