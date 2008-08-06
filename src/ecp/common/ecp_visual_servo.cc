@@ -18,9 +18,6 @@ ecp_visual_servo::~ecp_visual_servo(){
 }
 
 
-
-
-
 void ecp_visual_servo::retrieve_parameters(){
 
 }
@@ -28,11 +25,15 @@ void ecp_visual_servo::retrieve_parameters(){
 
 bool ecp_visual_servo::next_step(void){
 
-	return false;
+	next_step_without_constraints();
+	entertain_constraints();
+	
+	return true;
 }
 
 
 void ecp_visual_servo::set_constraints(){
+
 
 }
 

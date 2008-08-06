@@ -13,6 +13,8 @@
 #include "lib/mathtr.h"
 #include "ecp/common/ecp_generator.h"
 
+#if 0
+
 // tutaj struktury
 //...
 
@@ -43,6 +45,8 @@ struct vis_constraints_t
 	};
 };
 
+
+
 /*!
  * \struct vis_entities_t
  * \brief ... structure.
@@ -55,7 +59,7 @@ struct vis_entities_t
 	 * \brief Union with entities' structures.
 	 */
 	union vis_entities_union_t
-	{
+	{	
 		/*!
 		 * \struct pb_eol_sac_struct_t
 		 * \brief Structure used by PB-EOL-SAC.
@@ -65,9 +69,9 @@ struct vis_entities_t
 			/*!
 			 * ^{C}T_{G} -- goal pose with respect to the camera frame.
 			 */
-/*
-				Homog_matrix C_Tx_G;
-				Homog_matrix C_Tx_E;
+
+				Homog_matrix *C_Tx_G;
+/*				Homog_matrix C_Tx_E;
 				Homog_matrix O_Tx_G;
 				Homog_matrix O_Tx_Ep;
 				Homog_matrix O_Tx_E;
@@ -84,9 +88,13 @@ struct vis_entities_t
 				double O_r_Ep_d[3][6]; //roznica 1szego
 				double O_r_Ep_d2[3][6]; //2giego stopnia
 			
-		} pb_eol_sac;		
+		} pb_eol_sac;
+		
+		vis_entities_union_t(){
+		 pb_eol_sac.C_Tx_G = new Homog_matrix();
+		};		
 	};
-	
+		Homog_matrix C_Tx_E;
 };
 
 /*!
@@ -121,7 +129,7 @@ struct vis_operations_t
 	//Homog_matrix G_Tx_G2;
 	//Homog_matrix G_Tx_S;
 };
-
+#endif
 
 /*!
  * \class ecp_visual_servo
@@ -140,6 +148,12 @@ public:
 	/*!
 	 * Constructor. 
 	 */
+	 
+	double measure_border_u[6];
+	double measure_border_d[6];
+	double d_u_max[6];
+	double d2_u_max[6];
+	 
 	ecp_visual_servo(ecp_task& _ecp_task, int step=0);
 	  
 	virtual ~ecp_visual_servo();
@@ -154,7 +168,7 @@ public:
 	void get_entities();
 	void set_opartions();
 	void get_operations();
-	virtual void generate_config_labels() =0;
+	//virtual void generate_config_labels() =0;
 
 
 };
