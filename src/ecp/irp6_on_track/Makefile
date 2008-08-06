@@ -25,7 +25,7 @@ BINARIES =		ecp_pr \
 				ecp_irp6ot_legobrick \
 				ecp_vis_pb_eol_sac_irp6ot \
 				ecp_vis_pb_eih_irp6ot \
-				ecp_vis_ib_eih_irp6ot
+				ecp_vis_ib_eih_irp6ot 
 #				ecp_vis_weights_driven_irp6ot 
 
 #-----------------------------------------------------------------------------------------------------------------------#
