@@ -18,8 +18,12 @@
 #include "ecp/irp6_on_track/ecp_local.h"
 #include "ecp/irp6_on_track/ecp_vis_weights_driven_irp6ot.h"
 
+#include "ecp/irp6_on_track/ecp_vis_pb_eol_sac_irp6ot.h"
+
 
 ecp_vis_weights_driven_irp6ot::ecp_vis_weights_driven_irp6ot(ecp_task& _ecp_task, int step) : ecp_visual_servo_manager(_ecp_task){
+
+//	_ecp_taskw=_ecp_task;
 
 	O_weight__SAC=ecp_t.config.return_double_value("O_weight__SAC");
 	C_weight__EIH=ecp_t.config.return_double_value("C_weight__EIH");
@@ -39,7 +43,11 @@ void ecp_vis_weights_driven_irp6ot::initalize_switching_parameters(){
 
 }
 
-void ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
+void ecp_vis_weights_driven_irp6ot::next_step_without_constraints(){
+
+	//ecp_vis_pb_eol_sac_irp6ot pbeolsac(*_ecp_taskw, 4);
+	//ecp_vis_pb_eol_sac_irp6ot pbeolsac();
+//		ecp_vis_weights_driven_irp6ot ynrlg(*this, 4);
 
 	for (int i=0; i<6; i++)
 	{

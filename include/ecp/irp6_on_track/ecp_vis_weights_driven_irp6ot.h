@@ -21,6 +21,7 @@ public:
   	int step_no;
   	int idle_step_counter; 
 	double delta[6];
+//	ecp_task _ecp_taskw;
      
 	/*!
 	 * Entities:
@@ -65,7 +66,9 @@ public:
 
 	virtual void initalize_switching_parameters();
 	virtual bool first_step(void);
-	virtual bool next_step(void);
+	virtual void next_step_without_constraints();
+	virtual void entertain_constraints();
+	//virtual bool next_step(void);
 
 };
 #endif // !defined(EA_0ECAB625_4FB6_4695_B581_8BCA0028CF30__INCLUDED_)
