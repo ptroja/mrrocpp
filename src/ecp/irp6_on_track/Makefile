@@ -23,7 +23,8 @@ BINARIES =		ecp_pr \
 				ecp_irp6ot_pouring \
 				ecp_irp6ot_multiplayer \
 				ecp_irp6ot_legobrick \
-				ecp_tb
+				ecp_tb \
+				ecp_spots_recognition
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -41,6 +42,9 @@ all: ${BINARIES}
 ecp_tb: ecp_t_tb.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
+#-----------------------------------------------------------------------------------------------------------------------#
+ecp_spots_recognition: ecp_t_spots_recognition.o $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_kin_test_irp6ot: ecp_t_kin_test_irp6ot.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
