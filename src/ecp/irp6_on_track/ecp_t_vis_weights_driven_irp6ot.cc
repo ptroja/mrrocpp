@@ -12,9 +12,10 @@
 
 #include "ecp/irp6_on_track/ecp_local.h"
 #include "ecp/common/ecp_g_force.h"
+#include "ecp/irp6_on_track/ecp_vis_pb_eol_sac_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_vis_weights_driven_irp6ot.h"
 #include "ecp_mp/ecp_mp_s_vis.h"
-#include "ecp/irp6_on_track/ecp_t_vislx_irp6ot.h"
+#include "ecp/irp6_on_track/ecp_t_vis_weights_driven_irp6ot.h"
 
 #include "ecp_mp/ecp_mp_s_vis_sac_lx.h"
 #include "ecp_mp/ecp_mp_s_schunk.h"
@@ -63,6 +64,9 @@ void ecp_task_vislx_irp6ot::main_task_algorithm(void)
 	ecp_wait_for_start();
 	ecp_vis_weights_driven_irp6ot ynrlg(*this, 4);
 	ynrlg.sensor_m = sensor_m;
+	
+	pbeolsac = new ecp_vis_pb_eol_sac_irp6ot(*this, 4);
+	ynrlg.pbeolsac=pbeolsac;
 	
 	   bias_edp_force_generator befg(*this);
 	

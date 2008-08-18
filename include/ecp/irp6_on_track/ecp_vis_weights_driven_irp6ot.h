@@ -9,6 +9,7 @@
 #define EA_0ECAB625_4FB6_4695_B581_8BCA0028CF30__INCLUDED_
 
 #include "ecp/common/ecp_visual_servo_manager.h"
+#include "ecp/irp6_on_track/ecp_vis_pb_eol_sac_irp6ot.h"
 
 class ecp_vis_weights_driven_irp6ot : public ecp_visual_servo_manager
 {
@@ -21,7 +22,7 @@ public:
   	int step_no;
   	int idle_step_counter; 
 	double delta[6];
-//	ecp_task _ecp_taskw;
+	ecp_vis_pb_eol_sac_irp6ot* pbeolsac;
      
 	/*!
 	 * Entities:
