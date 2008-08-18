@@ -305,7 +305,6 @@ bool ecp_vis_pb_eol_sac_irp6ot::first_step(void){
 	for (int i=0; i<6; i++)
 	{
 		the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = 0;
-		the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
 	}
 	
 	O_eps_EG_norm=10;
