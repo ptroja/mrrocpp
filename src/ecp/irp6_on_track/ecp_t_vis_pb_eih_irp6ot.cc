@@ -7,17 +7,17 @@
 #include "common/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp_mp/ecp_mp_t_rcsc.h"
+//#include "ecp_mp/ecp_mp_t_rcsc.h"
 	
 
 #include "ecp/irp6_on_track/ecp_local.h"
-#include "ecp/common/ecp_g_force.h"
+//#include "ecp/common/ecp_g_force.h"
 #include "ecp/irp6_on_track/ecp_vis_pb_eih_irp6ot.h"
 #include "ecp_mp/ecp_mp_s_vis.h"
 #include "ecp/irp6_on_track/ecp_t_vislx_irp6ot.h"
 
 #include "ecp_mp/ecp_mp_s_vis_sac_lx.h"
-#include "ecp_mp/ecp_mp_s_schunk.h"
+//#include "ecp_mp/ecp_mp_s_schunk.h"
 
 // KONSTRUKTORY
 ecp_task_vislx_irp6ot::ecp_task_vislx_irp6ot(configurator &_config) : ecp_task(_config)
@@ -64,7 +64,7 @@ void ecp_task_vislx_irp6ot::main_task_algorithm(void)
 	ecp_vis_pb_eih_irp6ot ynrlg(*this, 4);
 	ynrlg.sensor_m = sensor_m;
 	
-	   bias_edp_force_generator befg(*this);
+	 //  bias_edp_force_generator befg(*this);
 	
 	   for(;;) { // Wewnetrzna petla nieskoczona
 
@@ -73,8 +73,8 @@ void ecp_task_vislx_irp6ot::main_task_algorithm(void)
 		
 			sr_ecp_msg->message("NOWA SERIA");
 			
-           sr_ecp_msg->message("FORCE SENSOR BIAS");
-            befg.Move();
+//           sr_ecp_msg->message("FORCE SENSOR BIAS");
+//            befg.Move();
 			
 			ynrlg.Move();
 		
