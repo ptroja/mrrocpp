@@ -2,6 +2,7 @@
 #define _ECP_T_TB_IRP6OT_H
 
 #include "ecp/common/ecp_task.h"
+#include "ecp/common/ecp_g_smooth.h"
 
 
 class ecp_t_tb_irp6ot: public ecp_task

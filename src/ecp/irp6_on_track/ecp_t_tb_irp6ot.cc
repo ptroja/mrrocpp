@@ -1,15 +1,12 @@
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
+//#include "common/typedefs.h"
+//#include "common/impconst.h"
+//#include "common/com_buf.h"
 
-#include "lib/srlib.h"
+//#include "lib/srlib.h"
 #include "ecp/irp6_on_track/ecp_local.h"
-#include "ecp/common/ecp_g_smooth.h"
 #include "ecp/irp6_on_track/ecp_t_tb_irp6ot.h"
-#include "ecp/common/ecp_generator_t.h"
-
 #include <stdio.h>
-#include <string.h>
+//#include "ecp/common/ecp_generator_t.h"
 
 //own libraries
 
@@ -29,11 +26,19 @@ void ecp_t_tb_irp6ot::task_initialization(void){
 };
 
 void ecp_t_tb_irp6ot::main_task_algorithm(void){
+	char *path="/net/home-host/home/mrrocpp/trj/draughts/pawn_moving.trj";
+	
 	sr_ecp_msg->message("ECP tb");
 	ecp_wait_for_start();
 	sr_ecp_msg->message("works");
-//	sgen->load_file_with_path("/usr/lib/gen.trj");
+	sgen->load_file_with_path(path);
+	sr_ecp_msg->message("works");
+	printf("%s\n",path);
+	sr_ecp_msg->message("works");
+	sgen->Move();
+	sr_ecp_msg->message("works");
 	ecp_termination_notice();
+	sr_ecp_msg->message("works");
 	ecp_wait_for_stop();
 };
 
