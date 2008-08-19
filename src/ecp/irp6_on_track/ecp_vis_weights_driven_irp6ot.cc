@@ -76,13 +76,12 @@ void ecp_vis_weights_driven_irp6ot::next_step_without_constraints(){
 	//ecp_vis_pb_eol_sac_irp6ot pbeolsac(*_ecp_taskw, 4);
 	//ecp_vis_pb_eol_sac_irp6ot pbeolsac();
 //		ecp_vis_weights_driven_irp6ot ynrlg(*this, 4);
-
+std::cout << "N: " << node_counter << " " << pbeolsac->node_counter << std::endl;
 	pbeolsac->next_step_without_constraints();
 
 	for (int i=0; i<6; i++)
 	{
 		O_r_Ep[0][i]=pbeolsac->O_r_Ep[0][i];
-			std::cout << "first node " << O_r_Ep[0][i] << std::endl;
 	}
 	
 	for (int i=0; i<6; i++)
@@ -92,12 +91,13 @@ void ecp_vis_weights_driven_irp6ot::next_step_without_constraints(){
 	
 	if (node_counter==1)
 	{
-	std::cout << "first node" << std::endl;
 		for (int i=0; i<6; i++)
 		{
 			O_r_Ep[0][i]=pbeolsac->O_r_E[0][i];
 		}
 	}
+	
+	pbeolsac->node_counter++;
 }
 
 void ecp_vis_weights_driven_irp6ot::entertain_constraints(){
@@ -172,7 +172,8 @@ void ecp_vis_weights_driven_irp6ot::entertain_constraints(){
 bool ecp_vis_weights_driven_irp6ot::first_step(void){
 
 	pbeolsac->vsp_vis_sac = sensor_m[SENSOR_CAMERA_SA];
-
+	pbeolsac->node_counter = 1;
+	pbeolsac->idle_step_counter = 1;
 	idle_step_counter = 1;
 	pbeolsac->vsp_vis_sac->base_period=0; //1
 	pbeolsac->vsp_vis_sac->current_period=0; //MAC7
