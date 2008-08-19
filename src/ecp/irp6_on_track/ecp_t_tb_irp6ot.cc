@@ -5,7 +5,6 @@
 #include "lib/srlib.h"
 #include "ecp/irp6_on_track/ecp_local.h"
 #include "ecp/common/ecp_g_smooth.h"
-#include "ecp/common/ecp_st_go.h"
 #include "ecp/irp6_on_track/ecp_t_tb_irp6ot.h"
 #include "ecp/common/ecp_generator_t.h"
 

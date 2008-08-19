@@ -7,7 +7,8 @@
 #include "ecp_mp/ecp_mp_s_schunk.h"
 
 #include "ecp/irp6_on_track/ecp_local.h"
-#include "ecp/irp6_on_track/ecp_t_tb.h"
+#include "ecp/common/ecp_g_smooth.h"
+#include "ecp/irp6_on_track/ecp_t_tb_irp6ot.h"
 //own libraries
 //Constructors
 ecp_t_tb_irp6ot::ecp_t_tb_irp6ot(configurator &_config): ecp_task(_config){
