@@ -28,17 +28,12 @@ void ecp_t_tb_irp6ot::task_initialization(void){
 void ecp_t_tb_irp6ot::main_task_algorithm(void){
 	char *path="/net/home-host/home/mrrocpp/trj/draughts/pawn_moving.trj";
 	
-	sr_ecp_msg->message("ECP tb");
+	sr_ecp_msg->message("ECP tb.... ready");
 	ecp_wait_for_start();
-	sr_ecp_msg->message("works");
+	//sr_ecp_msg->message("works");
 	sgen->load_file_with_path(path);
-	sr_ecp_msg->message("works");
-	printf("%s\n",path);
-	sr_ecp_msg->message("works");
 	sgen->Move();
-	sr_ecp_msg->message("works");
 	ecp_termination_notice();
-	sr_ecp_msg->message("works");
 	ecp_wait_for_stop();
 };
 
