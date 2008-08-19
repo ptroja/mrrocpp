@@ -12,6 +12,8 @@
 
 #include "ecp/irp6_on_track/ecp_local.h"
 #include "ecp/irp6_on_track/ecp_vis_pb_eol_sac_irp6ot.h"
+#include "ecp/irp6_on_track/ecp_vis_pb_eih_irp6ot.h"
+#include "ecp/irp6_on_track/ecp_vis_ib_eih_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_vis_weights_driven_irp6ot.h"
 #include "ecp_mp/ecp_mp_s_vis.h"
 #include "ecp/irp6_on_track/ecp_t_vis_weights_driven_irp6ot.h"
@@ -63,7 +65,12 @@ void ecp_task_vislx_irp6ot::main_task_algorithm(void)
 	
 	pbeolsac = new ecp_vis_pb_eol_sac_irp6ot(*this, 4);
 	ynrlg.pbeolsac=pbeolsac;
+		
+	pbeih = new ecp_vis_pb_eih_irp6ot(*this, 4);
+	ynrlg.pbeih=pbeih;
 	
+	ibeih = new ecp_vis_ib_eih_irp6ot(*this, 4);
+	ynrlg.pbeih=pbeih;
 	
 	   for(;;) { // Wewnetrzna petla nieskoczona
 

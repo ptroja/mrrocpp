@@ -19,6 +19,7 @@
 #include "ecp/irp6_on_track/ecp_vis_weights_driven_irp6ot.h"
 
 #include "ecp/irp6_on_track/ecp_vis_pb_eol_sac_irp6ot.h"
+#include "ecp/irp6_on_track/ecp_vis_pb_eih_irp6ot.h"
 
 #include "ecp_mp/ecp_mp_s_vis.h"
 #include "ecp/irp6_on_track/ecp_t_vis_weights_driven_irp6ot.h"
@@ -77,27 +78,33 @@ void ecp_vis_weights_driven_irp6ot::next_step_without_constraints(){
 	//ecp_vis_pb_eol_sac_irp6ot pbeolsac();
 //		ecp_vis_weights_driven_irp6ot ynrlg(*this, 4);
 std::cout << "N: " << node_counter << " " << pbeolsac->node_counter << std::endl;
-	pbeolsac->next_step_without_constraints();
+	//pbeolsac->next_step_without_constraints();
+	pbeih->next_step_without_constraints();
 
 	for (int i=0; i<6; i++)
 	{
-		O_r_Ep[0][i]=pbeolsac->O_r_Ep[0][i];
+		//O_r_Ep[0][i]=pbeolsac->O_r_Ep[0][i];
+		O_r_Ep[0][i]=pbeih->O_r_Ep[0][i];
 	}
 	
 	for (int i=0; i<6; i++)
 	{
-		O_r_E[0][i]=pbeolsac->O_r_E[0][i];
+		//O_r_E[0][i]=pbeolsac->O_r_E[0][i];
+		O_r_E[0][i]=pbeih->O_r_E[0][i];
 	}
 	
 	if (node_counter==1)
 	{
 		for (int i=0; i<6; i++)
 		{
-			O_r_Ep[0][i]=pbeolsac->O_r_E[0][i];
+			//O_r_Ep[0][i]=pbeolsac->O_r_E[0][i];
+			O_r_Ep[0][i]=pbeih->O_r_E[0][i];
 		}
 	}
 	
 	pbeolsac->node_counter++;
+	pbeih->node_counter++;
+	ibeih->node_counter++;
 }
 
 void ecp_vis_weights_driven_irp6ot::entertain_constraints(){
@@ -143,7 +150,8 @@ void ecp_vis_weights_driven_irp6ot::entertain_constraints(){
 	}
 
 	
-	O_Tx_Ep=O_Tx_Ep*pbeolsac->G_Tx_G2;
+	//O_Tx_Ep=O_Tx_Ep*pbeolsac->G_Tx_G2;
+	O_Tx_Ep=O_Tx_Ep*pbeih->G_Tx_G2;
 
 	O_Tx_Ep.get_xyz_angle_axis(O_r_Ep[0]);
 	
@@ -174,6 +182,15 @@ bool ecp_vis_weights_driven_irp6ot::first_step(void){
 	pbeolsac->vsp_vis_sac = sensor_m[SENSOR_CAMERA_SA];
 	pbeolsac->node_counter = 1;
 	pbeolsac->idle_step_counter = 1;
+	
+	pbeih->vsp_vis_sac = sensor_m[SENSOR_CAMERA_SA];
+	pbeih->node_counter = 1;
+	pbeih->idle_step_counter = 1;
+	
+	ibeih->vsp_vis_sac = sensor_m[SENSOR_CAMERA_SA];
+	ibeih->node_counter = 1;
+	ibeih->idle_step_counter = 1;
+	
 	idle_step_counter = 1;
 	pbeolsac->vsp_vis_sac->base_period=0; //1
 	pbeolsac->vsp_vis_sac->current_period=0; //MAC7

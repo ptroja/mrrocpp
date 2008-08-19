@@ -130,7 +130,7 @@ ecp_vis_pb_eih_irp6ot: ecp_t_vis_pb_eih_irp6ot.o ecp_vis_pb_eih_irp6ot.o \
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_vis_weights_driven_irp6ot: ecp_t_vis_weights_driven_irp6ot.o ecp_vis_weights_driven_irp6ot.o ecp_vis_pb_eol_sac_irp6ot.o \
-						ecp_mp_s_vis_sac_lx.o $(SHOBJ) 
+						ecp_vis_pb_eih_irp6ot.o ecp_vis_ib_eih_irp6ot.o ecp_mp_s_vis_sac_lx.o $(SHOBJ) 
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#
