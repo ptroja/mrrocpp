@@ -29,27 +29,73 @@ public:
 	 * ^{C}T_{G} -- goal pose with respect to the camera frame.
 	 */
 	Homog_matrix C_Tx_G;
+	/*!
+	 * ^{C}T_{E} -- end-effector pose with respect to the camera frame.
+	 */
 	Homog_matrix C_Tx_E;
+	/*!
+	 * ^{0}T_{G} -- goal pose with respect to the global frame.
+	 */
 	Homog_matrix O_Tx_G;
+	/*!
+	 * ^{C}T_{E'} -- end-effector next pose with respect to the global frame.
+	 */
 	Homog_matrix O_Tx_Ep;
+	/*!
+	 * ^{0}T_{E} -- goal pose with respect to the camera frame.
+	 */
 	Homog_matrix O_Tx_E;
-				
+	/*!
+	 * ^{C}r_{G} -- goal pose with respect to the camera frame (AA).
+	 */			
 	double C_r_G[3][6];
+	/*!
+	 * ^{C}r_{E} -- goal pose with respect to the camera frame (AA).
+	 */
 	double C_r_E[3][6];
+	/*!
+	 * ^{0}r_{G} -- end-effector pose with respect to the global frame (AA).
+	 */
 	double O_r_G[3][6];
+	/*!
+	 * ^{0}r_{E'} -- end-effector next pose with respect to the global frame (AA).
+	 */
 	double O_r_Ep[3][6];
+	/*!
+	 * ^{0}r_{E} -- end-effector pose with respect to the camera frame (AA).
+	 */
 	double O_r_E[3][6];
+	/*!
+	 * ^{0}\varepsilon_{E} -- goal pose with respect to the camera frame (AA).
+	 */
 	double O_eps_E[3][6];
+	/*!
+	 * ^{0}\varepsilon_{EG} -- goal error with respect to the global frame (AA).
+	 */
 	double O_eps_EG[3][6];
+	/*!
+	 * \left|| ^{0}\varepsilon_{E} \right|| -- Euclid norm of goal error with respect to the global frame (AA).
+	 */
 	double O_eps_EG_norm;
-				
-	double O_r_Ep_d[3][6]; //roznica 1szego
-	double O_r_Ep_d2[3][6]; //2giego stopnia
+	/*!
+	 * roznica 1szego
+	 */
+	double O_r_Ep_d[3][6]; 
+	/*!
+	 * 2giego stopnia
+	 */
+	double O_r_Ep_d2[3][6]; 
 	
 	/*!
 	 * Operations:
 	 */
+	 /*!
+	 * ^{0}r_{C} -- camera pose with respect to the camera frame.
+	 */
 	Homog_matrix O_Tx_C;
+	/*!
+	 * M -- gains.
+	 */
 	double gain[6];
 	
 	double x2g;
