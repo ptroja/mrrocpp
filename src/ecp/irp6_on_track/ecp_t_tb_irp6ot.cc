@@ -26,7 +26,8 @@ void ecp_t_tb_irp6ot::task_initialization(void){
 };
 
 void ecp_t_tb_irp6ot::main_task_algorithm(void){
-	char *path="/net/home-host/home/mrrocpp/trj/draughts/pawn_moving.trj";
+	//char *path="/net/home-host/home/mrrocpp/trj/draughts/pawn_moving.trj";
+	char *path="/net/lenin/mnt/trj/draughts/pawn_moving.trj";
 	
 	sr_ecp_msg->message("ECP tb.... ready");
 	ecp_wait_for_start();
