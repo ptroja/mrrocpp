@@ -8,6 +8,8 @@
  */
 
 #include "ecp/irp6_on_track/ecp_t_spots_recognition.h"
+#include "ecp/common/ecp_t_spots_recognition_prepare_vector.h"
+
 //own libraries
 //Constructors
 ecp_t_spots_recognition::ecp_t_spots_recognition(configurator &_config): ecp_task(_config)
