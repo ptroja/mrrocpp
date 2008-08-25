@@ -41,3 +41,5 @@ INSTALL=ln -f
 #INSTALL = cp
 #===== USEFILE - the file containing the usage message for the application. 
 USEFILE=
+
+#test zmiany repozytorium

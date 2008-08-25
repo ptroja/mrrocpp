@@ -662,7 +662,6 @@ bool mp_task::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m,
 				if (mp_state == MP_STATE_RUNNING) {
 					ui_exit_from_while = true;
 				}
-
 			}
 
 			if (the_generator.wait_for_ECP_pulse) {
@@ -680,18 +679,17 @@ bool mp_task::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m,
 			continue;
 
 		} else if (rcvid > 0) {
-			printf("MP_TRIGGER server receive strange message of type: \n");
+			fprintf(stderr, "MP_TRIGGER server receive strange message\n");
 		}
 	}
 	return false;
 
 }
 
-// funkcja odbierajaca pulsy z UI wykorzystywana w MOVE
+// funkcja odbierajaca pulsy z UI wykorzystywana w Move
 
 bool mp_task::mp_receive_ui_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m, short* trigger )
 {
-
 	enum MP_STATE_ENUM
 	{
 	    MP_STATE_RUNNING,
@@ -699,18 +697,14 @@ bool mp_task::mp_receive_ui_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m, short*
 	};
 
 	MP_STATE_ENUM mp_state = MP_STATE_RUNNING;
-	int rcvid;
-	mp_receive_pulse_struct_t input;
-
+	
 	bool ui_exit_from_while = false;
 
-
 	while (!ui_exit_from_while) {
-		if (mp_state == MP_STATE_RUNNING) {
-			rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, WITH_TIMEOUT);
-		} else {
-			rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, WITHOUT_TIMEOUT);
-		}
+		mp_receive_pulse_struct_t input;
+		int rcvid = check_and_optional_wait_for_new_pulse (
+				&input, NEW_UI_PULSE, 
+				(mp_state == MP_STATE_RUNNING) ? WITH_TIMEOUT : WITHOUT_TIMEOUT);
 
 		if (rcvid == -1) {// Error condition
 			if (mp_state == MP_STATE_RUNNING) {
@@ -760,7 +754,6 @@ bool mp_task::mp_receive_ui_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m, short*
 		}
 	}
 	return false;
-
 }
 
 void mp_task::initialize_communication()

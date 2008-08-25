@@ -34,13 +34,19 @@ class mp_generator : public ecp_mp_generator
 		    GS_FINISHED
 		};
 
-		GEN_SET_PHASE phase;		// faza w ktorej znajduje sie generator
-		bool new_pulse_checked; 	// czy nowy puls zostal sprawdzony (wykorzystywane w scheduler_run() )
-		bool wait_for_ECP_pulse;	// okresla czy przed next step move ma sie zawieszac w oczekwianiu na puls z ECP
-		// wykorzystywane przy luznej i sporadycznej wspolpracy robotow.
+		//! faza w ktorej znajduje sie generator
+		GEN_SET_PHASE phase;
+		
+		//! czy nowy puls zostal sprawdzony (wykorzystywane w scheduler_run() )
+		bool new_pulse_checked;
+		
+		/*!
+		 * okresla czy przed next step Move ma sie zawieszac w oczekwianiu na puls z ECP;
+		 * wykorzystywane przy luznej i sporadycznej wspolpracy robotow.
+		 */
+		bool wait_for_ECP_pulse;
 
-
-		// mapa wszystkich robotow
+		//! mapa wszystkich robotow
 		std::map <ROBOT_ENUM, mp_robot*> robot_m;
 
 		mp_generator(mp_task& _mp_task);
@@ -49,13 +55,13 @@ class mp_generator : public ecp_mp_generator
 
 		void re_run(void); // powrot do stanu wyjsciowego
 
-		// Kopiuje dane z robotow do generatora
+		//! Kopiuje dane z robotow do generatora
 		void copy_data(std::map <ROBOT_ENUM, mp_robot*>& _robot_m);
 
-		// Kopiuje polecenie stworzone w generatorze do robotow
+		//! Kopiuje polecenie stworzone w generatorze do robotow
 		void copy_generator_command (std::map <ROBOT_ENUM, mp_robot*>& _robot_m);
 
-		// Klasa obslugi bledow generatora na poziomie MP
+		//! Klasa obslugi bledow generatora na poziomie MP
 		class MP_error
 		{
 			public:
