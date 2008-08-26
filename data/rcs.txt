@@ -1,4 +1,4 @@
 Uwaga 
-rcs.tgz do pobrania z robotyka.ia.pw.edu.pl menu pliki.
+rcs.tgz do pobrania z robotyka.ia.pw.edu.pl menu pliki. 
 Plik zawiera tablice przeksztalcen stanow kostki (*.mtb) i funkcji heurystycznych odleglosci rozwiazania (*.ptb) dla algorytmu Korfa i Kociemby.
 Nalezy stworzyc nowy katalog rcs i umiescic w nim wszystkie tablice. 
