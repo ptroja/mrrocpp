@@ -24,7 +24,7 @@
 #include "ecp/common/ecp_t_cvfradia.h"
 
 #include "ecp/irp6_on_track/ecp_local.h"
-#include "ecp/common/ecp_g_smooth.h"
+#include "ecp/irp6_on_track/ecp_g_spots_recognition.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -35,12 +35,12 @@ class ecp_t_spots_recognition: public ecp_task
 {
 	protected:
 
-		ecp_smooth_generator* generator;
+		ecp_spots_generator* generator;
 
 		/*!
         * Generator used for communication with cvFraDIA.
         */
-	    ecp_cvfradia_generator* cvg;
+	    //ecp_cvfradia_generator* cvg;
 
 	public:
 		ecp_t_spots_recognition(configurator &_config);

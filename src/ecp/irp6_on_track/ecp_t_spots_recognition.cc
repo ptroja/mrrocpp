@@ -43,8 +43,8 @@ if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     sr_ecp_msg->message("IRp6 Postument loaded");
 }*/
 	// Create generator and pass sensor to it.
-	cvg = new ecp_cvfradia_generator(*this);
- 	cvg->sensor_m = sensor_m;
+	generator = new ecp_spots_generator(*this);
+ 	generator->sensor_m = sensor_m;
 }
 
 void ecp_t_spots_recognition::main_task_algorithm(void)
@@ -52,7 +52,9 @@ void ecp_t_spots_recognition::main_task_algorithm(void)
 	sr_ecp_msg->message("Press START");
 	ecp_wait_for_start();
 
-	cvg->Move();
+
+    for(;;)
+	    generator->Move();
 
 	sr_ecp_msg->message("Press STOP");
 	ecp_wait_for_stop();

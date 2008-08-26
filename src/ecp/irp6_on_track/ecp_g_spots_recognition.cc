@@ -12,11 +12,7 @@ ecp_spots_generator::ecp_spots_generator (ecp_task& _ecp_task)
         : ecp_smooth_generator (_ecp_task, false)
 {
 
-	sensor = (ecp_mp_cvfradia_sensor *)&sensor_m[SENSOR_CVFRADIA];
-
-
-
-
+	sensor = (ecp_mp_cvfradia_sensor *)sensor_m[SENSOR_CVFRADIA];
 
 
 
