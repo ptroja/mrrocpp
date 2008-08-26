@@ -33,6 +33,7 @@
 
 class ecp_t_spots_recognition: public ecp_task
 {
+		char * katalog;
 	protected:
 
 		ecp_spots_generator* generator;

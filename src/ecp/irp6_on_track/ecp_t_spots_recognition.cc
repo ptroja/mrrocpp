@@ -13,7 +13,7 @@
 //Constructors
 ecp_t_spots_recognition::ecp_t_spots_recognition(configurator &_config): ecp_task(_config)
 {
-
+    katalog = "../trj/spots/traj";
 }
 
 ecp_t_spots_recognition::~ecp_t_spots_recognition()
@@ -45,10 +45,15 @@ if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	// Create generator and pass sensor to it.
 	generator = new ecp_spots_generator(*this);
  	generator->sensor_m = sensor_m;
+
 }
 
 void ecp_t_spots_recognition::main_task_algorithm(void)
 {
+	char traj[36];
+	sprintf(traj, "%s%.2d.trj", katalog, 0);
+	generator->load_file_with_path(traj);
+
 	sr_ecp_msg->message("Press START");
 	ecp_wait_for_start();
 
