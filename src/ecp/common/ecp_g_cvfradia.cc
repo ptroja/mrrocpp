@@ -21,7 +21,7 @@
 
 
 /*!
- * First step method..
+ * First step method.. .
  */
 bool ecp_cvfradia_generator::first_step()
 {
@@ -31,7 +31,7 @@ bool ecp_cvfradia_generator::first_step()
 	the_robot->EDP_data.get_arm_type = FRAME;
 	the_robot->EDP_data.next_interpolation_type
 			= EXTERNAL_INTERPOLATION_WITH_FORCE;*/
-			
+
 	communicate_with_edp=false;
 
 	return true;
