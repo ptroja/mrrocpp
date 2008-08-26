@@ -51,7 +51,7 @@ private:
 	/*!
       * Sensor name.
       */
-	SENSOR_ENUM sensor_name; 
+	SENSOR_ENUM sensor_name;
 
 public:
 
@@ -63,12 +63,17 @@ public:
 	/*!
       * Sends sensor configuration to cvFraDIA.
       */
-	void configure_sensor (void);	
+	void configure_sensor (void);
 
 	/*!
       * Sends initiation reading command to cvFraDIA.
       */
 	void initiate_reading (void);
+
+	/*!
+      * Sends given reading command to cvFraDIA.
+      */
+	void send_reading (ECP_VSP_MSG);
 
 	/*!
       * Retrieves aggregated data from cvFraDIA.
@@ -80,7 +85,7 @@ public:
       */
 	void terminate();
 
-}; 
+};
 
 
 #endif

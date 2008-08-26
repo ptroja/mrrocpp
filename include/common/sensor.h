@@ -78,13 +78,19 @@ typedef struct sensor_image_t{
 			double frame_E_r_G__f[6];
 			double fEIH_G[8];
 		} vis_sac;
-		
+
 		// rcs - rozwiazanie kostki Rubika
 		struct {
 			RCS_INIT init_mode;
 			RCS_READING reading_mode;
 		 	char cube_solution[200];
 		} rcs;
+
+		//spots recognition
+		struct {
+			double x[4], y[4], z[4], dz;
+			int pic_count;
+		} sp_r;
 
 		// tlemanipulacja - vsp_pawel
 		struct{
@@ -97,7 +103,7 @@ typedef struct sensor_image_t{
 		struct {
 			struct timespec ts;
 		} time;
-		
+
 		/*
 		 * Structure for storing data retrieved from cvFraDIA.
 		 * For testing purposes.
@@ -138,6 +144,9 @@ struct ECP_VSP_MSG{
 			char cube_state[54];
 		} rcs;
 
+		//spots recognition
+		short command;
+
 	};//: koniec unii
 };
 
@@ -162,7 +171,7 @@ typedef union {
 #define DEVCTL_RW __DIOTF(_DCMD_MISC, 3, DEVCTL_MSG)
 
 
-// by Y - CZUJNIKI 
+// by Y - CZUJNIKI
 
 enum SENSOR_ENUM {
 	SENSOR_UNDEFINED,

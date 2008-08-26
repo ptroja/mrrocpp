@@ -19,7 +19,7 @@ using namespace std;
 /*!
  * Constructor. Creates socket connection to cvFraDIA.
  */
-ecp_mp_cvfradia_sensor::ecp_mp_cvfradia_sensor(SENSOR_ENUM _sensor_name, char* _section_name, ecp_mp_task& _ecp_mp_object) 
+ecp_mp_cvfradia_sensor::ecp_mp_cvfradia_sensor(SENSOR_ENUM _sensor_name, char* _section_name, ecp_mp_task& _ecp_mp_object)
 	: sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(_sensor_name)
 {
 	// Set size of passed message/union.
@@ -31,7 +31,7 @@ ecp_mp_cvfradia_sensor::ecp_mp_cvfradia_sensor(SENSOR_ENUM _sensor_name, char* _
 	// Retrieve cvfradia node name and port from configuration file.
 	int cvfradia_port = _ecp_mp_object.config.return_int_value("cvfradia_port", _section_name);
 	char* cvfradia_node_name = _ecp_mp_object.config.return_string_value("cvfradia_node_name", _section_name);
-	
+
 	// Try to open socket.
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0) {
@@ -75,7 +75,7 @@ void ecp_mp_cvfradia_sensor::configure_sensor() {
 	// Send adequate command to cvFraDIA.
 	to_vsp.i_code = VSP_CONFIGURE_SENSOR;
   // Name of required task is set in constructor.
-  
+
 //cout<<to_vsp.cvfradia_task_name;
 
 	if(write(sockfd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)
@@ -96,6 +96,17 @@ void ecp_mp_cvfradia_sensor::initiate_reading() {
 
 
 /*!
+ * Sends given reading command to cvFraDIA.
+ */
+void ecp_mp_cvfradia_sensor::send_reading(ECP_VSP_MSG to) {
+	// Send any command to cvFraDIA.
+
+	if(write(sockfd, &to, sizeof(ECP_VSP_MSG)) == -1)
+		throw sensor_error (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+};
+
+
+/*!
  * Retrieves aggregated data from cvFraDIA.
  */
 void ecp_mp_cvfradia_sensor::get_reading() {
@@ -111,7 +122,7 @@ void ecp_mp_cvfradia_sensor::get_reading() {
 	// Check and copy data from buffer to image.
 	if(from_vsp.vsp_report == VSP_REPLY_OK)
 		memcpy( &(image.begin), &(from_vsp.comm_image.begin), union_size);
-	else 
+	else
 		sr_ecp_msg.message ("Reply from VSP not ok");
 	//cout<<"cvFraDIA: ("<<image.cvFraDIA.x<<","<<image.cvFraDIA.y<<") size: "<<image.cvFraDIA.width<<","<<image.cvFraDIA.height<<")\n";
 };
