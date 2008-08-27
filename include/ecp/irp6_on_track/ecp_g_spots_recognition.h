@@ -23,6 +23,7 @@ class ecp_spots_generator : public ecp_smooth_generator
   public:
 	ecp_spots_generator(ecp_task& _ecp_task);
 	bool first_step();
+	bool next_step();
 };
 
 #endif /* ECP_G_SPOTS_RECOGNITION_H_ */
