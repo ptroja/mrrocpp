@@ -55,7 +55,7 @@ ecp_vis_pb_eol_sac_irp6ot::ecp_vis_pb_eol_sac_irp6ot(ecp_task& _ecp_task, int st
 	gain[3]=ecp_t.config.return_double_value("gain3");
 	gain[4]=ecp_t.config.return_double_value("gain4");
 	gain[5]=ecp_t.config.return_double_value("gain5");
-	
+
 	x2g=ecp_t.config.return_double_value("x2g");
 
 }
@@ -77,13 +77,13 @@ void ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
 
 	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 2.341);	//jesli chwytamy po przekatnej
 	G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.00, 1.57, 3.141); // jesli chwytak na plasko
-	
+
 
 
 	if (node_counter==1)
 	{
 		vsp_vis_sac->base_period=1;
-		vsp_vis_sac->current_period=1; 
+		vsp_vis_sac->current_period=1;
 	}
 
 	if (node_counter==1)
@@ -95,7 +95,7 @@ void ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
 		std::cout << "YYY " << O_Tx_E << std::endl;
 
 		O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
-		O_Tx_E=O_Tx_E*!G_Tx_G2;
+		O_Tx_E=O_Tx_E*!G_Tx_G2; //tool zamiast
 
 		std::cout << "MMM " << node_counter << std::endl;
 		std::cout << "YYY " << O_Tx_E << std::endl;
@@ -111,7 +111,7 @@ void ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
 			O_r_Ep_d[i][2]=0;
 		}
 
-	
+
 		std::cout << node_counter
 				<<"------------------------------------------------------------------"
 				<< std::endl;
@@ -121,9 +121,10 @@ void ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
 	C_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G[0],
 			vsp_vis_sac->image.vis_sac.frame_E_r_G[1],
 			-vsp_vis_sac->image.vis_sac.frame_E_r_G[2],
-			vsp_vis_sac->image.vis_sac.frame_E_r_G[5], 0, -0.05);
-		
-#if 0	
+			vsp_vis_sac->image.vis_sac.frame_E_r_G[5], 0, 0);
+		//	0, 0, -0.1);
+
+#if 0
 	//podjazd gdy sie nie ruszamy
 	if (fabs(O_r_G[1][0]-O_r_G[0][0])<=0.02 && fabs(O_r_G[1][1]-O_r_G[0][1])
 			<=0.02) //0.007
@@ -156,7 +157,9 @@ void ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
 
 	G_Tx_S.set_xyz_rpy(x2g, 0, 0, 0, 0, 0);
 	O_Tx_E.set_frame_tab(the_robot->EDP_data.current_arm_frame);
-	O_Tx_E=O_Tx_E*!G_Tx_G2;
+
+	O_Tx_E=O_Tx_E*!G_Tx_G2; //zmiana orientacji (teraz tool)
+
 	O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
 
 	//SAC
@@ -165,20 +168,20 @@ void ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
 	O_Tx_G=O_Tx_C*C_Tx_G;
 	O_Tx_G=O_Tx_G*G_Tx_S; //skrot myslowy
 	O_Tx_G.get_xyz_angle_axis(O_r_G[0]);
-	
+
 	O_eps_EG_norm=0.0;
 	for (int i=0; i<6; i++)
 		{
 			O_eps_EG[0][i]=(O_r_G[0][i]-O_r_E[0][i]);
 			O_eps_EG_norm+=O_eps_EG[0][i]*O_eps_EG[0][i];
-			O_eps_E[0][i]=gain[i]*O_eps_EG[0][i];		
-		}	
-	
+			O_eps_E[0][i]=gain[i]*O_eps_EG[0][i];
+		}
+
 	for (int i=0; i<6; i++)
 	{
 		O_r_Ep[0][i]=O_r_E[0][i]+O_eps_E[0][i];
 	}
-	
+
 	if (node_counter==1)
 	{
 		for (int i=0; i<6; i++)
@@ -216,9 +219,9 @@ void ecp_vis_pb_eol_sac_irp6ot::entertain_constraints(){
 			}
 		}
 	}
-	
+
 	O_Tx_Ep.set_xyz_angle_axis(O_r_Ep[0]);
-	
+
 	// ------------przepisanie wartosci-----
 	for (int i=0; i<6; i++)
 	{
@@ -231,19 +234,19 @@ void ecp_vis_pb_eol_sac_irp6ot::entertain_constraints(){
 		//C_r_G[1][i]=C_r_G[0][i];
 	}
 
-	
-	O_Tx_Ep=O_Tx_Ep*G_Tx_G2;
+
+	O_Tx_Ep=O_Tx_Ep*G_Tx_G2; //zmiana orientacji teraz tool
 
 	O_Tx_Ep.get_xyz_angle_axis(O_r_Ep[0]);
-	
+
 	std::cout << "ECP Ep: ";
-	
+
 	for (int i=0; i<6; i++)
 	{
 		the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = O_r_Ep[0][i];
-		std::cout << O_r_Ep[0][i] << " ";	
+		std::cout << O_r_Ep[0][i] << " ";
 	}
-	
+
 	std::cout << std::endl;
 	/*
 	for (int i=0; i<6; i++)
@@ -252,15 +255,15 @@ void ecp_vis_pb_eol_sac_irp6ot::entertain_constraints(){
 	}
 	*/
 
-	
+
 		the_robot->EDP_data.next_gripper_coordinate
 			=the_robot->EDP_data.current_gripper_coordinate;
-			
+
 }
 
 
 bool ecp_vis_pb_eol_sac_irp6ot::first_step(void){
-	
+
 	vsp_vis_sac = sensor_m[SENSOR_CAMERA_SA];
 
 	idle_step_counter = 1;
@@ -272,7 +275,6 @@ bool ecp_vis_pb_eol_sac_irp6ot::first_step(void){
 	td.value_in_step_no = td.internode_step_no - 5; //2 //10
 
 	//TOOL
-
 
 	the_robot->EDP_data.next_tool_frame[0][0]=1;
 	the_robot->EDP_data.next_tool_frame[1][0]=0;
@@ -287,17 +289,41 @@ bool ecp_vis_pb_eol_sac_irp6ot::first_step(void){
 	the_robot->EDP_data.next_tool_frame[0][2]=0;
 	the_robot->EDP_data.next_tool_frame[1][2]=0;
 	the_robot->EDP_data.next_tool_frame[2][2]=1;
-	the_robot->EDP_data.next_tool_frame[2][3]=0.25; 
+	the_robot->EDP_data.next_tool_frame[2][3]=0.25;
 
+	/*
+	the_robot->EDP_data.next_tool_frame[0][0]=0;
+		the_robot->EDP_data.next_tool_frame[0][1]=0;
+		the_robot->EDP_data.next_tool_frame[0][2]=1;
+		the_robot->EDP_data.next_tool_frame[0][3]=0;
+
+		the_robot->EDP_data.next_tool_frame[1][0]=0;
+		the_robot->EDP_data.next_tool_frame[1][1]=1;
+		the_robot->EDP_data.next_tool_frame[1][2]=0;
+		the_robot->EDP_data.next_tool_frame[1][3]=0;
+
+		the_robot->EDP_data.next_tool_frame[2][0]=1;
+		the_robot->EDP_data.next_tool_frame[2][1]=0;
+		the_robot->EDP_data.next_tool_frame[2][2]=0;
+		the_robot->EDP_data.next_tool_frame[2][3]=0.25;
+	*/
+/*
+	the_robot->EDP_data.next_XYZ_ZYZ_tool_coordinates[0]=0;
+	the_robot->EDP_data.next_XYZ_ZYZ_tool_coordinates[0]=0;
+	the_robot->EDP_data.next_XYZ_ZYZ_tool_coordinates[0]=0.25;
+	the_robot->EDP_data.next_XYZ_ZYZ_tool_coordinates[0]=0;//3.141;
+	the_robot->EDP_data.next_XYZ_ZYZ_tool_coordinates[0]=0; //1.57;
+	the_robot->EDP_data.next_XYZ_ZYZ_tool_coordinates[0]=0; //3.141;
+*/
 	the_robot->EDP_data.instruction_type = SET_GET;
 	the_robot->EDP_data.get_type = ARM_DV;
 	the_robot->EDP_data.set_type = RMODEL_DV;
 	the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
 	the_robot->EDP_data.get_arm_type = FRAME;
-	the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.next_interpolation_type= MIM; 
-	the_robot->EDP_data.motion_type = ABSOLUTE; 
+	the_robot->EDP_data.set_rmodel_type = TOOL_FRAME; //TOOL_XYZ_EULER_ZYZ; //TOOL_FRAME;
+	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME; //TOOL_XYZ_EULER_ZYZ;  //TOOL_FRAME;
+	the_robot->EDP_data.next_interpolation_type= MIM;
+	the_robot->EDP_data.motion_type = ABSOLUTE;
 
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
@@ -306,7 +332,7 @@ bool ecp_vis_pb_eol_sac_irp6ot::first_step(void){
 	{
 		the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = 0;
 	}
-	
+
 	O_eps_EG_norm=10;
 
 	return true;

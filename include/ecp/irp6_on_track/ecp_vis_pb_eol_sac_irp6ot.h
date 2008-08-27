@@ -19,9 +19,9 @@ public:
 	sensor *vsp_force_irp6ot, *vsp_force_irp6p, *vsp_vis_sac;
 	trajectory_description td;
   	int step_no;
-  	int idle_step_counter; 
+  	int idle_step_counter;
 	double delta[6];
-     
+#if 1
 	/*!
 	 * Entities:
 	 */
@@ -47,7 +47,7 @@ public:
 	Homog_matrix O_Tx_E;
 	/*!
 	 * ^{C}r_{G} -- goal pose with respect to the camera frame (AA).
-	 */			
+	 */
 	double C_r_G[3][6];
 	/*!
 	 * ^{C}r_{E} -- goal pose with respect to the camera frame (AA).
@@ -80,12 +80,12 @@ public:
 	/*!
 	 * roznica 1szego
 	 */
-	double O_r_Ep_d[3][6]; 
+	double O_r_Ep_d[3][6];
 	/*!
 	 * 2giego stopnia
 	 */
-	double O_r_Ep_d2[3][6]; 
-	
+	double O_r_Ep_d2[3][6];
+
 	/*!
 	 * Operations:
 	 */
@@ -97,10 +97,11 @@ public:
 	 * M -- gains.
 	 */
 	double gain[6];
-	
+
 	double x2g;
 	Homog_matrix G_Tx_G2;
 	Homog_matrix G_Tx_S;
+#endif
 
 	ecp_vis_pb_eol_sac_irp6ot(ecp_task& _ecp_task, int step=0);
 	virtual ~ecp_vis_pb_eol_sac_irp6ot();
