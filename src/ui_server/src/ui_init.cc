@@ -145,7 +145,8 @@ void replySend(Message* m)
 
 void* callfunc(void* arg)
 {
-	char* Buffer = (char*)arg;
+
+char* Buffer = (char*)arg;
 	double* v;
 	int RobotId = Buffer[0];
 	int DialogId = Buffer[1];
@@ -2722,7 +2723,7 @@ switch(RobotId)
 			}
 			}
 			break;
-		}
+ 		}
 		}
 		sem_wait(&sem_irp6_mechatronika);
 		block_irp6_mechatronika = 0;
@@ -2869,7 +2870,16 @@ void* server_thread(void*)
 			if(id)
 			{
 					sem_post(&sem);
-					pthread_create(&tid,NULL,callfunc,(void*)Buffer);
+					int RobotId = Buffer[0];
+					if(RobotId == 'X') replySend(new Message('C','A','A',0,NULL,NULL));
+					else
+					{
+					pthread_attr_t  attr;
+					pthread_attr_init(&attr);
+					pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+					
+					pthread_create(&tid,&attr,callfunc,(void*)Buffer);
+					}
 			}
 			else
 			{
