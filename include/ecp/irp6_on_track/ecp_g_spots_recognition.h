@@ -19,11 +19,19 @@ class ecp_spots_generator : public ecp_smooth_generator
 {
 	ECP_VSP_MSG comm_struct;
 	ecp_mp_cvfradia_sensor * sensor;
+	double tool_to_ground[16], plate_to_tool[16];
+	SENSOR_IMAGE calib_data;
+
+	double vec_1[3], vec_2[3], vec_3[3], vec_4[3];
 
   public:
 	ecp_spots_generator(ecp_task& _ecp_task);
 	bool first_step();
 	bool next_step();
+
+	void get_pic();
+	void get_frame();
+	void save_position();
 };
 
 #endif /* ECP_G_SPOTS_RECOGNITION_H_ */

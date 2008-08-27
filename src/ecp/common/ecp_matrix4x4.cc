@@ -186,3 +186,69 @@ void Matrix4x4::solveAxb4x4()
     }
     solved = true;
 }
+
+void Matrix4x4::rproduct4x4(double * m)
+{
+    double temp_m[16];
+    for (int i=0; i<4; i++)
+    {
+	for (int j=0; j<4; j++)
+	{
+	    double temp = 0;
+	    for(int k=0; k<4; k++)
+	        temp += A[4*i+k]*m[4*k+j];
+	    temp_m[4*i+j] = temp;
+	}
+    }
+
+    for(int i=0; i<16; i++)
+	A[i] = temp_m[i];
+}
+
+void Matrix4x4::lproduct4x4(double * m)
+{
+    double temp_m[16];
+    for (int i=0; i<4; i++)
+    {
+	for (int j=0; j<4; j++)
+	{
+	    double temp = 0;
+	    for(int k=0; k<4; k++)
+	        temp += m[4*i+k]*A[4*k+j];
+	    temp_m[4*i+j] = temp;
+	}
+    }
+
+    for(int i=0; i<16; i++)
+	A[i] = temp_m[i];
+}
+
+void Matrix4x4::product4x1(double * vec)
+{
+    double temp_v[4];
+    for (int j=0; j<4; j++)
+    {
+	double temp = 0;
+	for(int k=0; k<4; k++)
+	    temp += A[4*j+k]*vec[k];
+	temp_v[j] = temp;
+    }
+
+    for(int i=0; i<4; i++)
+	vec[i] = temp_v[i];
+}
+
+void Matrix4x4::product1x4(double * vec)
+{
+    double temp_v[4];
+    for (int j=0; j<4; j++)
+    {
+	double temp = 0;
+	for(int k=0; k<4; k++)
+	    temp += A[4*k+j]*vec[k];
+	temp_v[j] = temp;
+    }
+
+    for(int i=0; i<4; i++)
+	vec[i] = temp_v[i];
+}

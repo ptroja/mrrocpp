@@ -40,6 +40,11 @@ class Matrix4x4
     void adj4x4(double * out);
     void inv_matrix4x4();
     void solveAxb4x4();
+
+    void rproduct4x4(double *);
+    void lproduct4x4(double *);
+    void product4x1(double *);
+    void product1x4(double *);
 };
 
 
