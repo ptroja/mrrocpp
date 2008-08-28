@@ -5,6 +5,14 @@
 //  Original author: tkornuta
 ///////////////////////////////////////////////////////////
 
+/*!
+ * \file ecp_vis_weight_driven_irp6ot.h
+ * \brief Class implementing switching algorithm.
+ * - class declaration
+ * \author Maciej Staniak
+ * \date 20.08.2008
+ */
+
 #if !defined(EA_0ECAB625_4FB6_4695_B581_8BCA0028CF30__INCLUDED_)
 #define EA_0ECAB625_4FB6_4695_B581_8BCA0028CF30__INCLUDED_
 
@@ -12,6 +20,12 @@
 #include "ecp/irp6_on_track/ecp_vis_pb_eol_sac_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_vis_pb_eih_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_vis_ib_eih_irp6ot.h"
+
+/*!
+ * \class ecp_vis_weight_driven_irp6ot
+ * \brief Class implementing switching algorithm.
+ * \author Maciej Staniak
+ */
 
 class ecp_vis_weights_driven_irp6ot : public ecp_visual_servo_manager
 {

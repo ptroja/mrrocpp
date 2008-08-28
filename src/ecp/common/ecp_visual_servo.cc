@@ -5,6 +5,14 @@
 //  Original author: tkornuta
 ///////////////////////////////////////////////////////////
 
+/*!
+ * \file ecp_visual_servo.cc
+ * \brief Abstract class as a pattern for implementing any visual servo.
+ * - methods definition
+ * \author tkornuta/mstaniak
+ * \date 04.08.2008
+ */
+
 #include "ecp/common/ecp_visual_servo.h"
   
 ecp_visual_servo::ecp_visual_servo(ecp_task& _ecp_task, int step) : ecp_generator(_ecp_task){

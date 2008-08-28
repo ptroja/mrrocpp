@@ -5,6 +5,14 @@
 //  Original author: tkornuta
 ///////////////////////////////////////////////////////////
 
+/*!
+ * \file ecp_visual_servo_manager.cc
+ * \brief Abstract class as a pattern for implementing swiching/agregating basic visual servos.
+ * - method definition
+ * \author tkornuta/mstaniak
+ * \date 04.08.2008
+ */
+
 #include "ecp/common/ecp_visual_servo_manager.h"
 
 ecp_visual_servo_manager::ecp_visual_servo_manager(ecp_task& _ecp_task, int step) : ecp_visual_servo(_ecp_task){

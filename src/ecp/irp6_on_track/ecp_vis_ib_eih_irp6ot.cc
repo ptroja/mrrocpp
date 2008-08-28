@@ -5,6 +5,14 @@
 //  Original author: tkornuta
 ///////////////////////////////////////////////////////////
 
+/*!
+ * \file ecp_vis_ib_eih_irp6ot.cc
+ * \brief Class implementing IB-EIH algorithm.
+ * - methods definition
+ * \author Maciej Staniak
+ * \date 20.08.2008
+ */
+
 #include "ecp/irp6_on_track/ecp_vis_ib_eih_irp6ot.h"
 
 

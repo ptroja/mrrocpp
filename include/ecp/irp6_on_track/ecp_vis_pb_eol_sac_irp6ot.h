@@ -5,10 +5,24 @@
 //  Original author: tkornuta
 ///////////////////////////////////////////////////////////
 
+/*!
+ * \file ecp_vis_pb_eol_sac_irp6ot.h
+ * \brief Class implementing PB-EOL-SAC algorithm.
+ * - class declaration
+ * \author Maciej Staniak
+ * \date 20.08.2008
+ */
+
 #if !defined(EA_B10EA6BB_2E03_4f87_8E50_B6482560D9BB__INCLUDED_)
 #define EA_B10EA6BB_2E03_4f87_8E50_B6482560D9BB__INCLUDED_
 
 #include "ecp/common/ecp_visual_servo.h"
+
+/*!
+ * \class ecp_vis_pb_eol_sac_irp6ot
+ * \brief Class implementing PB-EOL-SAC algorithm.
+ * \author Maciej Staniak
+ */
 
 class ecp_vis_pb_eol_sac_irp6ot : public ecp_visual_servo
 {
@@ -103,11 +117,25 @@ public:
 	Homog_matrix G_Tx_S;
 #endif
 
+	/*!
+	* Constructor. Setting gains for controller from *.ini file.
+	*/
 	ecp_vis_pb_eol_sac_irp6ot(ecp_task& _ecp_task, int step=0);
+	/*!
+	* Destructor.
+	*/
 	virtual ~ecp_vis_pb_eol_sac_irp6ot();
-
+	/*!
+	* Method calcualting ^{0}r_{E'}
+	*/
 	virtual void next_step_without_constraints();
+	/*!
+	* Method aplying contrains -- AV()
+	*/
 	virtual void entertain_constraints();
+	/*!
+	* First step method -- setting tool frame, etc...
+	*/
 	virtual bool first_step(void);
 
 };

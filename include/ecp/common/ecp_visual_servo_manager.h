@@ -5,18 +5,38 @@
 //  Original author: tkornuta
 ///////////////////////////////////////////////////////////
 
+/*!
+ * \file ecp_visual_servo_manager.h
+ * \brief Abstract class as a pattern for implementing swiching/agregating basic visual servos.
+ * - class declaration
+ * \author tkornuta/mstaniak
+ * \date 04.08.2008
+ */
+
 #if !defined(EA_372F46B1_372D_4660_A605_52297559E64B__INCLUDED_)
 #define EA_372F46B1_372D_4660_A605_52297559E64B__INCLUDED_
 
 #include "ecp/common/ecp_visual_servo.h"
 
+/*!
+ * \class ecp_visual_servo_manager
+ * \brief Abstract class as a pattern for implementing swiching/agregating basic visual servos.
+ * \author tkornuta/mstaniak
+ */
+
 class ecp_visual_servo_manager : public ecp_visual_servo
 {
 
 public:
-	ecp_visual_servo_manager(ecp_task& _ecp_task, int step=0);
-	virtual ~ecp_visual_servo_manager();
 	ecp_visual_servo *m_ecp_visual_servo;
+	/*!
+	 * Constructor.
+	 */
+	ecp_visual_servo_manager(ecp_task& _ecp_task, int step=0);
+	/*!
+	 * Destructor.
+	 */
+	virtual ~ecp_visual_servo_manager();
 
 	virtual void initalize_switching_parameters() =0;
 

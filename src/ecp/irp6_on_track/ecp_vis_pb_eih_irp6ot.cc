@@ -4,6 +4,15 @@
 //  Created on:      04-sie-2008 14:26:04
 //  Original author: tkornuta
 ///////////////////////////////////////////////////////////
+
+/*!
+ * \file ecp_vis_pb_eih_irp6ot.cc
+ * \brief Class implementing PB-EIH algorithm.
+ * - methods definition
+ * \author Maciej Staniak
+ * \date 20.08.2008
+ */
+
 #include <stdio.h>
 #include <math.h>
 #include <iostream>

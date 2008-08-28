@@ -5,10 +5,24 @@
 //  Original author: tkornuta
 ///////////////////////////////////////////////////////////
 
+/*!
+ * \file ecp_vis_pb_eih_irp6ot.h
+ * \brief Class implementing PB-EOL-SAC algorithm.
+ * - class declaration
+ * \author Maciej Staniak
+ * \date 20.08.2008
+ */
+
 #if !defined(EA_F2A497C9_34AF_4480_B49D_A41B7D6E362F__INCLUDED_)
 #define EA_F2A497C9_34AF_4480_B49D_A41B7D6E362F__INCLUDED_
 
 #include "ecp/common/ecp_visual_servo.h"
+
+/*!
+ * \class ecp_vis_pb_eih_irp6ot
+ * \brief Class implementing PB-EIH algorithm.
+ * \author Maciej Staniak
+ */
 
 class ecp_vis_pb_eih_irp6ot : public ecp_visual_servo
 {

@@ -5,6 +5,14 @@
 //  Original author: tkornuta
 ///////////////////////////////////////////////////////////
 
+/*!
+ * \file ecp_vis_weight_driven_irp6ot.h
+ * \brief Class implementing switching algorithm.
+ * - methods definiotion
+ * \author Maciej Staniak
+ * \date 20.08.2008
+ */
+
 #include <stdio.h>
 #include <math.h>
 #include <iostream>

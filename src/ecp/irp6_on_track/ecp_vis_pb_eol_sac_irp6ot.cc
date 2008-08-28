@@ -5,6 +5,14 @@
 //  Original author: tkornuta
 ///////////////////////////////////////////////////////////
 
+/*!
+ * \file ecp_vis_pb_eol_sac_irp6ot.cc
+ * \brief Class implementing PB-EOL-SAC algorithm.
+ * - methods definition
+ * \author Maciej Staniak
+ * \date 20.08.2008
+ */
+
 #include <stdio.h>
 #include <math.h>
 #include <iostream>

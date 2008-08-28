@@ -1,7 +1,7 @@
 /*!
  * \file ecp_visual_servo.h
- * \brief Abstract class responsible for visual servo.
- * - class definition
+ * \brief Abstract class as a pattern for implementing any visual servo.
+ * - class declaration
  * \author tkornuta/mstaniak
  * \date 04.08.2008
  */
@@ -221,28 +221,47 @@ struct vis_operations_t
 class ecp_visual_servo : public ecp_generator
 {
 private:
-	/*!
-	 *	sfbveiaolmv
-	 */
+
 	int state;
 
 public:
 	/*!
+	* max control value
+	*/
+	double measure_border_u[6];
+	/*!
+	* min control value
+	*/
+	double measure_border_d[6];
+	/*!
+	* max velocity
+	*/
+	double d_u_max[6];
+	/*!
+	* max acceleration
+	*/
+	double d2_u_max[6];
+	/*!
 	 * Constructor.
 	 */
-
-	double measure_border_u[6];
-	double measure_border_d[6];
-	double d_u_max[6];
-	double d2_u_max[6];
-
 	ecp_visual_servo(ecp_task& _ecp_task, int step=0);
-
+	/*!
+	 * Destructor.
+	 */
 	virtual ~ecp_visual_servo();
 
 	virtual void retrieve_parameters();
+	/*!
+	 * The next step.
+	 */
 	virtual bool next_step(void);
+	/*!
+	* Method calcualting ^{0}r_{E'}
+	*/
 	virtual void next_step_without_constraints() =0;
+	/*!
+	* Method aplying contrains -- AV()
+	*/
 	virtual void entertain_constraints() =0;
 	void set_constraints();
 	void get_constraints();
