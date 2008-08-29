@@ -21,7 +21,7 @@
  * przy najblizszej okazji zrobic tu porzadek przy wykorzystaniu jakiegos porzadnego edytora!!!
  */
 using namespace std;
-/** konstruktor **/
+/** konstruktor konstruktor**/
 ecp_task_tzu_fs::ecp_task_tzu_fs(configurator &_config) : ecp_task(_config)
 {
 	sg = NULL;
