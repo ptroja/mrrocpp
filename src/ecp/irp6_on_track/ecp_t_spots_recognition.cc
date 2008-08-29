@@ -13,7 +13,9 @@
 //Constructors
 ecp_t_spots_recognition::ecp_t_spots_recognition(configurator &_config): ecp_task(_config)
 {
-    katalog = "../trj/spots/traj";
+    katalog_traj = "../trj/spots/traj";
+    katalog_dump = "~/mrroc_calib";
+    mkdir(katalog_dump, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 }
 
 ecp_t_spots_recognition::~ecp_t_spots_recognition()
@@ -42,26 +44,53 @@ if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     ecp_m_robot = new ecp_irp6_postument_robot (*this);
     sr_ecp_msg->message("IRp6 Postument loaded");
 }*/
-	// Create generator and pass sensor to it.
+	// Create spots generator and pass sensor to it.
 	generator = new ecp_spots_generator(*this);
  	generator->sensor_m = sensor_m;
+
+	// Create smooth generator.
+	smooth = new ecp_smooth_generator(*this, true, false);
 
 }
 
 void ecp_t_spots_recognition::main_task_algorithm(void)
 {
 	char traj[36];
-	sprintf(traj, "%s%.2d.trj", katalog, 0);
-	generator->load_file_with_path(traj);
 
-	sr_ecp_msg->message("Press START");
+	sr_ecp_msg->message("Press START to calibrate");
 	ecp_wait_for_start();
 
 
-    for(;;)
+    for(int i=0; i<=2; i++)
+    {
+    	/*!
+    	 * smooth generator odczytuje trajektorie z pliku
+    	 * po czym przesuwa sie do odpowiedniej pozycji
+    	 * jest 15 trajektorii + poczatkowa + kocowa (poza petla)
+    	 */
+    	sprintf(traj, "%s%.2d.trj", katalog_traj, i);
+    	//printf("teraz iteracja %d", i);
+    	smooth->load_file_with_path(traj);
+	    smooth->Move();
+
+	    /*!
+	     * nastepnie nalezy odczekac ok 1s, zanim mozna rozpoczac sesje zdjeciowa
+	     */
+	    sleep(1);
+
+	    /*!
+	     * zrob zdjecia, dokonaj obliczen
+	     */
 	    generator->Move();
 
-	sr_ecp_msg->message("Press STOP");
+	    //printf(" ... koniec\n");
+    }
+
+    sprintf(traj, "%s%.2d.trj", katalog_traj, 99);
+	smooth->load_file_with_path(traj);
+    smooth->Move();
+
+	sr_ecp_msg->message("Calibration finished. Press STOP");
 	ecp_wait_for_stop();
 }
 

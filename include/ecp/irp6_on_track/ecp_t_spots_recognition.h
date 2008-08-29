@@ -26,6 +26,8 @@
 #include "ecp/irp6_on_track/ecp_local.h"
 #include "ecp/irp6_on_track/ecp_g_spots_recognition.h"
 
+#include "ecp/common/ecp_g_smooth.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -33,10 +35,19 @@
 
 class ecp_t_spots_recognition: public ecp_task
 {
-		char * katalog;
+		/*!
+		 * katalog, w ktorym sa trajektorie
+		 */
+		char * katalog_traj;
+		/*!
+		 * katalog, w ktorym beda zapisywane dane kalibracyjne
+		 */
+		char * katalog_dump;
+
 	protected:
 
 		ecp_spots_generator* generator;
+		ecp_smooth_generator* smooth;
 
 		/*!
         * Generator used for communication with cvFraDIA.
