@@ -43,7 +43,7 @@ VPATH = ../common $(ECP_MPDIR)
 all: ${BINARIES}
 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_tb: ecp_t_tb_irp6ot.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
+ecp_tb: ecp_t_tb_irp6ot.o ecp_g_force.o ecp_st_go.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#
