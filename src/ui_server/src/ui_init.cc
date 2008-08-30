@@ -2871,7 +2871,7 @@ void* server_thread(void*)
 			{
 					sem_post(&sem);
 					int RobotId = Buffer[0];
-					if(RobotId == 'X') replySend(new Message('C','A','A',0,NULL,NULL));
+					if(RobotId == 'X') replySend(new Message('X','X','X',0,NULL,NULL));
 					else
 					{
 					pthread_attr_t  attr;
