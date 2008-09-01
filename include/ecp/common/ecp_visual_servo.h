@@ -131,7 +131,22 @@ struct vis_operations_t
 };
 #endif
 
-#if 0
+
+
+/*!
+ * \class ecp_visual_servo
+ * \brief Abstract class responsible for visual servo.
+ * \author tkornuta/mstaniak
+ */
+class ecp_visual_servo : public ecp_generator
+{
+private:
+
+	int state;
+
+public:
+
+#if 1
 /*!
 	 * Entities:
 	 */
@@ -213,18 +228,6 @@ struct vis_operations_t
 	Homog_matrix G_Tx_S;
 #endif
 
-/*!
- * \class ecp_visual_servo
- * \brief Abstract class responsible for visual servo.
- * \author tkornuta/mstaniak
- */
-class ecp_visual_servo : public ecp_generator
-{
-private:
-
-	int state;
-
-public:
 	/*!
 	* max control value
 	*/
@@ -262,7 +265,7 @@ public:
 	/*!
 	* Method aplying contrains -- AV()
 	*/
-	virtual void entertain_constraints() =0;
+	virtual void entertain_constraints();
 	void set_constraints();
 	void get_constraints();
 	void set_entities();

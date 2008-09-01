@@ -35,7 +35,8 @@ public:
   	int step_no;
   	int idle_step_counter;
 	double delta[6];
-#if 1
+
+#if 0
 	/*!
 	 * Entities:
 	 */
@@ -132,7 +133,7 @@ public:
 	/*!
 	* Method aplying contrains -- AV()
 	*/
-	virtual void entertain_constraints();
+	//virtual void entertain_constraints();
 	/*!
 	* First step method -- setting tool frame, etc...
 	*/

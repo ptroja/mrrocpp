@@ -199,7 +199,7 @@ void ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
 	}
 }
 
-
+#if 0
 void ecp_vis_pb_eol_sac_irp6ot::entertain_constraints(){
 	// roznica w kroku -> docelowo predkosc
 	for (int i=0; i<6; i++)
@@ -268,7 +268,7 @@ void ecp_vis_pb_eol_sac_irp6ot::entertain_constraints(){
 			=the_robot->EDP_data.current_gripper_coordinate;
 
 }
-
+#endif
 
 bool ecp_vis_pb_eol_sac_irp6ot::first_step(void){
 

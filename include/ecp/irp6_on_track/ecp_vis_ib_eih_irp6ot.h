@@ -35,7 +35,7 @@ public:
   	int step_no;
   	int idle_step_counter;
 	double delta[6];
-#if 1
+#if 0
 	/*!
 	 * Entities:
 	 */
@@ -74,7 +74,7 @@ public:
 	virtual ~ecp_vis_ib_eih_irp6ot();
 
 	virtual void next_step_without_constraints();
-	virtual void entertain_constraints();
+	//virtual void entertain_constraints();
 	virtual bool first_step(void);
 
 };

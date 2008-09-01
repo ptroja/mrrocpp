@@ -14,7 +14,7 @@
  */
 
 #include "ecp/common/ecp_visual_servo.h"
-  
+
 ecp_visual_servo::ecp_visual_servo(ecp_task& _ecp_task, int step) : ecp_generator(_ecp_task){
 
 }
@@ -35,7 +35,7 @@ bool ecp_visual_servo::next_step(void){
 
 	next_step_without_constraints();
 	entertain_constraints();
-	
+
 	return true;
 }
 
@@ -69,3 +69,74 @@ void ecp_visual_servo::set_opartions(){
 void ecp_visual_servo::get_operations(){
 
 }
+
+#if 1
+void ecp_visual_servo::entertain_constraints(){
+	// roznica w kroku -> docelowo predkosc
+	for (int i=0; i<6; i++)
+		O_r_Ep_d[0][i]=O_r_Ep[0][i]-O_r_E[0][i];
+
+	// roznica w 2 krokach -> docelowo przyspieszenie
+	for (int i=0; i<6; i++)
+		O_r_Ep_d2[0][i]=O_r_Ep_d[0][i]-O_r_Ep_d[1][i];
+
+	//ograniczenie przyspieszenia (opoznienie zalatwia regulator proporcjonalny)
+	for (int i=0; i<6; i++)
+	{
+		if ((fabs(O_r_Ep_d2[0][i])>=d2_u_max[i]) && (fabs(O_r_Ep_d[0][i])
+				>=fabs(O_r_Ep_d[1][i])))
+		{
+			if (O_r_Ep_d[0][i]>=0)
+			{
+				O_r_Ep_d[0][i]=O_r_Ep_d[1][i]+d2_u_max[i];
+				O_r_Ep[0][i]=O_r_E[0][i]+O_r_Ep_d[0][i];
+			}
+			else if (O_r_Ep_d[0][i]<0)
+			{
+				O_r_Ep_d[0][i]=O_r_Ep_d[1][i]-d2_u_max[i];
+				O_r_Ep[0][i]=O_r_E[0][i]+O_r_Ep_d[0][i];
+			}
+		}
+	}
+
+	O_Tx_Ep.set_xyz_angle_axis(O_r_Ep[0]);
+
+	// ------------przepisanie wartosci-----
+	for (int i=0; i<6; i++)
+	{
+		O_r_Ep[2][i]=O_r_Ep[1][i];
+		O_r_Ep[1][i]=O_r_Ep[0][i];
+		O_r_Ep_d[i][2]=O_r_Ep_d[i][1];
+		O_r_Ep_d[i][1]=O_r_Ep_d[i][0];
+
+		//O_r_G[1][i]=O_r_G[0][i];
+		//C_r_G[1][i]=C_r_G[0][i];
+	}
+
+
+	O_Tx_Ep=O_Tx_Ep*G_Tx_G2; //zmiana orientacji teraz tool
+
+	O_Tx_Ep.get_xyz_angle_axis(O_r_Ep[0]);
+
+	std::cout << "ECP Ep: ";
+
+	for (int i=0; i<6; i++)
+	{
+		the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = O_r_Ep[0][i];
+		std::cout << O_r_Ep[0][i] << " ";
+	}
+
+	std::cout << std::endl;
+	/*
+	for (int i=0; i<6; i++)
+	{
+		the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
+	}
+	*/
+
+
+		the_robot->EDP_data.next_gripper_coordinate
+			=the_robot->EDP_data.current_gripper_coordinate;
+
+}
+#endif
