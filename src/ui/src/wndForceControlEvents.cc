@@ -38,7 +38,7 @@
 
 
 
-#define FCDEBUG
+//#define FCDEBUG 1
 
 // Wiadomosc wysylana do ECP.
 UI_ECP_message ui_ecp_msg;
@@ -69,6 +69,11 @@ int FCwndForceControlRealised( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	#ifdef FCDEBUG
 		printf("FCwndForceControlRealised\n");
 	#endif
+
+
+	// Deaktywacja zmiany rodzaju sterowania!
+	SetButtonState(ABW_FCbtnChangeControl, false);
+
 	// Zerowy makrokrok.
 	macrostep_number=0;
 	// Stworzenie polaczenia.
@@ -92,7 +97,7 @@ int FCCreateConnection(void){
 	char *tmp_name;
 	// Stworzenie nazwy.
 	tmp_name = config->return_attach_point_name	(configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point", "[ecp_irp6_on_track]");
-	
+
 	#ifdef FCDEBUG
 		printf("FCCreateConnection: %s\n",tmp_name);
 	#endif
@@ -296,7 +301,7 @@ int FCbtnOnOffReader( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 	else
 		pulse_code=READER_START;// start
 	if (MsgSendPulse (ui_state.irp6_on_track.edp.reader_fd , sched_get_priority_min(SCHED_FIFO),  pulse_code,  pulse_value)==-1) {
-		 perror("FCbtnOnOffReader: Send pusle to Reader failed");
+		 perror("FCbtnOnOffReader: Send pulse to Reader failed");
 	}else{
 		// Reader wylaczony.
 		if(READER_ON){
@@ -431,7 +436,7 @@ int FCbtnMove3Left( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 	SendMoveCommand(-4);
 	return( Pt_CONTINUE );
 	};
-	
+
 int FCbtnMove4Left( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo ){
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)

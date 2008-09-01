@@ -42,21 +42,27 @@ void force_controlled_trajectory_generator::return_sensor_reading(ecp_mp_force_s
     }; // end: return_sensor_reading
 
 /*************************** RETURN  POSITION *******************************/
-void force_controlled_trajectory_generator::return_position (double robot_position[6]){
+void force_controlled_trajectory_generator::return_position (double robot_position[8]){
     // Sekcja krytyczna.
     pthread_mutex_lock(&ROBOT_POSITION_MUTEX);
         // Przepisanie pozycji z bufora.
-        memcpy(robot_position, current_position, 6*sizeof(double));
-    // Koniec sekcji krytycznej.
+        memcpy(robot_position, current_position, 8*sizeof(double));
+
+/*        printf("zwracam current position:\n");
+        for(int i=0; i<8; i++)
+            printf("%f\t", current_motor_position[i]);
+        printf("\n");*/
+
+        // Koniec sekcji krytycznej.
     pthread_mutex_unlock(&ROBOT_POSITION_MUTEX);
     }; // end: return_position
 
 /************************ RETURN  MOTOR POSITION ***************************/
-void force_controlled_trajectory_generator::return_motor_position (double robot_position[6]){
+void force_controlled_trajectory_generator::return_motor_position (double robot_position[8]){
     // Sekcja krytyczna.
     pthread_mutex_lock(&ROBOT_POSITION_MUTEX);
         // Przepisanie pozycji z bufora.
-        memcpy(robot_position, current_motor_position, 6*sizeof(double));
+        memcpy(robot_position, current_motor_position, 8*sizeof(double));
     // Koniec sekcji krytycznej.
     pthread_mutex_unlock(&ROBOT_POSITION_MUTEX);
     }; // end: return_position
@@ -78,8 +84,8 @@ void force_controlled_trajectory_generator::get_current_position (){
         the_robot->get_reply();
         // Przepisanie obecnego polozenia robota do bufora.
         if (current_control == MOTOR){
-            memcpy(current_position, the_robot->EDP_data.current_motor_arm_coordinates, 6*sizeof(double));
-            memcpy(current_motor_position, the_robot->EDP_data.current_motor_arm_coordinates, 6*sizeof(double));
+            memcpy(current_position, the_robot->EDP_data.current_motor_arm_coordinates, 8*sizeof(double));
+            memcpy(current_motor_position, the_robot->EDP_data.current_motor_arm_coordinates, 8*sizeof(double));
             }
         else if (current_control == XYZ_EULER_ZYZ){
             memcpy(current_position, the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates, 6*sizeof(double));
@@ -94,7 +100,7 @@ void force_controlled_trajectory_generator::get_current_position (){
             the_robot->execute_motion();
             // Odebranie danych.
             the_robot->get_reply();
-            memcpy(current_motor_position, the_robot->EDP_data.current_motor_arm_coordinates, 6*sizeof(double));
+            memcpy(current_motor_position, the_robot->EDP_data.current_motor_arm_coordinates, 8*sizeof(double));
             } // end: if*/
     // Koniec sekcji krytycznej.
     pthread_mutex_unlock(&ROBOT_POSITION_MUTEX);
@@ -111,9 +117,9 @@ void force_controlled_trajectory_generator::change_control(POSE_SPECIFICATION ps
         // Zmiana na sterowanie na silnikach.
         current_control = MOTOR;
         // Przepisanie zmiennych.
-        memcpy(current_delta, motor_delta, 6*sizeof(double));
-        memcpy(current_delta_increment, motor_delta_increment, 6*sizeof(double));
-        memcpy(current_max_delta_increment, motor_max_delta_increment, 6*sizeof(double));
+        memcpy(current_delta, motor_delta, 8*sizeof(double));
+        memcpy(current_delta_increment, motor_delta_increment, 8*sizeof(double));
+        memcpy(current_max_delta_increment, motor_max_delta_increment, 8*sizeof(double));
         }
     else if (ps == XYZ_EULER_ZYZ){
         // Zmiana na sterowanie we wspolrzednych zewnetrznych.
@@ -143,6 +149,8 @@ force_controlled_trajectory_generator::force_controlled_trajectory_generator (ec
     motor_delta[3] = 10;
     motor_delta[4] = -16;
     motor_delta[5] = 16;
+    motor_delta[6] = 0;
+    motor_delta[7] = 0;
     // Przyrost przesuniecia na motorach.
     motor_delta_increment[0] = 1;
     motor_delta_increment[1] = 0.5;
@@ -150,6 +158,8 @@ force_controlled_trajectory_generator::force_controlled_trajectory_generator (ec
     motor_delta_increment[3] = 0.5;
     motor_delta_increment[4] = 0.5;
     motor_delta_increment[5] = 0.5;
+    motor_delta_increment[6] = 0;
+    motor_delta_increment[7] = 0;
     // Maksymalny przyrost przesuniecia na motorach.
     motor_max_delta_increment[0] = 4;
     motor_max_delta_increment[1] = 2;
@@ -157,6 +167,8 @@ force_controlled_trajectory_generator::force_controlled_trajectory_generator (ec
     motor_max_delta_increment[3] = 2;
     motor_max_delta_increment[4] = 2;
     motor_max_delta_increment[5] = 2;
+    motor_max_delta_increment[6] = 0;
+    motor_max_delta_increment[7] = 0;
     // Dane dla wspolrzednych zewnetrznych.
     // Wypelnienie przesuniecia na wspolrzednych zewnetrznych.
     external_delta[0] = 0.02;
@@ -199,12 +211,11 @@ void force_controlled_trajectory_generator::add_step (int motion_time){
         insert_pose_list_element(MOTOR, motion_time, current_motor_position);
         }; // end else
     // Wyswietlenie dodanego elementu.
-/*  int i;
-    printf("Robot :: ");
-    for(i=0; i<6; i++)
+/*    printf("Robot :: ");
+    for(int i=0; i<8; i++)
         printf("%f\t", current_motor_position[i]);
-    printf("\n");
-*/  // Koniec sekcji krytycznej.
+    printf("\n");*/
+  // Koniec sekcji krytycznej.
     pthread_mutex_unlock(&ROBOT_POSITION_MUTEX);
     }; // end: add_step
 
@@ -224,7 +235,7 @@ void force_controlled_trajectory_generator::set_move_type(short move_type){
 /******************************** FIRST STEP ***********************************/
 bool force_controlled_trajectory_generator::first_step(){
     // Pozycja robota.
-    double robot_position[6];
+    double robot_position[8];
     // Pozycja - tymczasowa zmienna.
     double tmp_position;
     // Pozycja docelowa.
@@ -248,6 +259,7 @@ bool force_controlled_trajectory_generator::first_step(){
         // Sprawdzenie odczytow czujnika sily.
         check_force_condition(*the_sensor);
     }
+
     // Pobranie obecnej pozycji robota.
     return_position(robot_position);
     // Obecna pozycja robota.
@@ -294,11 +306,12 @@ bool force_controlled_trajectory_generator::first_step(){
      the_robot->EDP_data.next_interpolation_type = MIM;
     the_robot->EDP_data.motion_steps = 70;
     the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-5;
+
     // Zerowe przesuniecie na innych osiach.
     if (current_control == MOTOR)
-        memcpy(the_robot->EDP_data.next_motor_arm_coordinates, robot_position, 6*sizeof(double));
+        memcpy(the_robot->EDP_data.next_motor_arm_coordinates, robot_position, 8*sizeof(double));
     // Zerowe przesuniecie robota do danej pozycji - wspolrzedne zewnetrzne.
-    if (current_control == XYZ_EULER_ZYZ)
+    else if (current_control == XYZ_EULER_ZYZ)
         memcpy(the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates, robot_position, 6*sizeof(double));
     // Przesuniecie sie na pierwszy element listy.
     initiate_position_list();
@@ -334,7 +347,7 @@ bool force_controlled_trajectory_generator::next_step ( ) {
         // Sprawdzenie odczytow czujnika sily.
         	check_force_condition(*the_sensor);
 	}
-        
+
     // Sprawdzenie, czy nie wykonano calej trajektorii.
     if(!is_position_list_element()){
         // Oproznienie listy.
@@ -342,7 +355,7 @@ bool force_controlled_trajectory_generator::next_step ( ) {
         // Koniec ruchu.
         return false;
 	}
-        
+
     // Pobranie elementu z listy.
     get_position_list_element(tmp_position);
     // Przesuniecie robota do danej pozycji - na motorach.
@@ -456,7 +469,7 @@ try{
         // Zapis czasu trawnia kroku do pliku.
         to_file << tip.motion_time << ' ';
         // Zapis pozycji.
-        for (j = 0; j < 6; j++)
+        for (j = 0; j < 8; j++)
             to_file << tip.coordinates[j] << ' ';
         // Nastepna linia.
         to_file << '\n';
@@ -469,7 +482,7 @@ try{
     // Zapis czasu trawnia kroku do pliku.
     to_file << tip.motion_time << ' ';
     // Zapis pozycji.
-    for (j = 0; j < 6; j++)
+    for (j = 0; j < 8; j++)
         to_file << tip.coordinates[j] << ' ';
     // Nastepna linia.
     to_file << '\n';

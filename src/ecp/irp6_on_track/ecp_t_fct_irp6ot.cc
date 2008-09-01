@@ -13,7 +13,7 @@
 
 #include "lib/srlib.h"
 #include "ecp_mp/ecp_mp_t_rcsc.h"
-#include "ecp_mp/ecp_mp_s_schunk.h"	
+#include "ecp_mp/ecp_mp_s_schunk.h"
 
 #include "ecp/irp6_on_track/ecp_local.h"
 #include "ecp/irp6_on_track/ecp_t_fct_irp6ot.h"
@@ -77,7 +77,7 @@ void ecp_task_fct_irp6ot::catch_signal(int sig)
 // Cialo watku, ktorego zadaniem jest komunikacja z UI.
 void* UI_communication_thread(void* arg)
 {
-	printf("UI_communication_thread!\n");
+	//printf("UI_communication_thread!\n");
 	// Wiadomosc otrzymana z UI.
 	UI_ECP_message ui_msg;
 	// Wiadomosc wysylana do UI.
@@ -109,7 +109,7 @@ void* UI_communication_thread(void* arg)
 			MsgReply(rcvid, EOK, 0, 0);
 			continue;
 		}
-		printf("Zwykla wiadomosc!\n");
+		//printf("Zwykla wiadomosc!\n");
 		// Zwykla wiadomosc.
 		switch (ui_msg.command) {
 			case FC_ADD_MACROSTEP:
@@ -126,7 +126,7 @@ void* UI_communication_thread(void* arg)
 				break;
 			case FC_MOVE_ROBOT:
 				// Przepisanie rodzaju ruchu do zmiennej globalnej.
-				printf("nadeszlo %d\n", ui_msg.move_type);
+				//printf("nadeszlo %d\n", ui_msg.move_type);
 				MOVE_TYPE = ui_msg.move_type;
 				break;
 			case FC_SAVE_TRAJECTORY:
@@ -174,7 +174,6 @@ void* forcesensor_move_thread(void* arg)
 	fctg->get_current_position();
 	// Jezeli nie przyszedl rozkaz zakonczenia.
 	while (!TERMINATE) {
-		printf("przed do \n");
 		// Oczekiwanie na polecenie ruchu.
 		do {
 			usleep(1000*50);
@@ -198,13 +197,10 @@ void* forcesensor_move_thread(void* arg)
 			}
 		} while (MOVE_TYPE == 0);
 		// Ustawienie rodzaju ruchu.
-		printf("set_move_type\n");
 		fctg->set_move_type(MOVE_TYPE);
 		try {
 			// Proba wykonania ruchu w danym kierunku.
-			printf("MOVE\n");
 			fctg->Move();
-			printf("po MOVE\n");
 		}
 		catch (ecp_generator::ECP_error e) {
 			// Komunikat o bledzie wysylamy do SR.
@@ -264,17 +260,16 @@ ecp_task_fct_irp6ot::~ecp_task_fct_irp6ot()
 // methods for ECP template to redefine in concrete classes
 void ecp_task_fct_irp6ot::task_initialization(void)
 {
-
-	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 	// Nawiazanie komunikacji z EDP.
-	/*
-	 ecp_m_robot->initialize_communication(ini_con->edp_irp6_on_track->network_resourceman_attach_point, 
-	 ini_con->ecp_irp6_on_track->ecp_attach_point, 	ini_con->ecp_irp6_on_track->trigger_attach_point,
-	 ini_con->common->network_sr_attach_point, ini_con->common->network_ui_attach_point, &msg);		
-	 */
+	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+
+	// Stworzenie nazwy.
+	char *tmp_name;
+	tmp_name = config.return_attach_point_name	(configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point", "[ecp_irp6_on_track]");
 
 	// Dolaczenie globalnej nazwy procesu ECP - kanal do odbioru polecen z UI.
-	if ((UI_ECP_attach = name_attach(NULL, "ECP_M_FC", NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+	if ((UI_ECP_attach = name_attach(NULL, tmp_name, NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+//		printf("%s\n", tmp_name);
 		// W razie niepowodzenia.
 		throw ECP_main_error(SYSTEM_ERROR, NAME_ATTACH_ERROR);
 	}
@@ -306,7 +301,7 @@ void ecp_task_fct_irp6ot::task_initialization(void)
 
 void ecp_task_fct_irp6ot::main_task_algorithm(void)
 {
-	sr_ecp_msg->message("ECP kin test irp6ot  - wcisnij start");
+	sr_ecp_msg->message("ECP ecp_task_fct_irp6ot  - wcisnij start");
 
 	ecp_wait_for_start();
 

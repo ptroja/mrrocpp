@@ -56,13 +56,14 @@ void SetButtonState( PtWidget_t *widget, short active){
 
     // Aktywacja przycisku.
     if (active){
-    	PtSetResource(widget, Pt_ARG_FLAGS, Pt_FALSE, Pt_BLOCKED);
+    	PtSetResource(widget, Pt_ARG_FLAGS, Pt_FALSE, Pt_BLOCKED|Pt_GHOST);
     	PtSetResource(widget, Pt_ARG_FLAGS, Pt_TRUE, Pt_SELECTABLE);
+    	PtDamageWidget(widget);
     // Deaktywacja przycisku.
     }else{
-        	PtSetResource(widget, Pt_ARG_FLAGS, Pt_FALSE, Pt_SELECTABLE);
-    	PtSetResource(widget, Pt_ARG_FLAGS, Pt_TRUE, Pt_GHOST);
-
+			PtSetResource(widget, Pt_ARG_FLAGS, Pt_TRUE, Pt_BLOCKED|Pt_GHOST);
+			PtSetResource(widget, Pt_ARG_FLAGS, Pt_FALSE, Pt_SELECTABLE);
+			PtDamageWidget(widget);
         };
     // Ustawienie stanu.
 
@@ -251,7 +252,7 @@ int TRConnect( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo ){
     char *tmp_name;
     // Stworznie nazwy.
     tmp_name = config->return_attach_point_name	(configurator::CONFIG_SERVER, "ecp_third_chan_attach_point", "[ecp_irp6_on_track]");
-    
+
     #ifdef TRDEBUG
         printf("TRConnect: %s\n", tmp_name);
     #endif

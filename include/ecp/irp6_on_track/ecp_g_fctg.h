@@ -39,15 +39,15 @@ class force_controlled_trajectory_generator : public ecp_teach_in_generator
 		void create_position_list_head (double position);
 		void insert_position_list_element (double position);
 		// ~Aktualna pozycja - w roznych wspolrzednych.
-		double current_position[6];
+		double current_position[8];
 		// ~Aktualna pozycja - na motorach.
-		double current_motor_position[6];
+		double current_motor_position[8];
 		// Standardowe przesuniecia na motorach.
-		double motor_delta[6];
+		double motor_delta[8];
 		// Przyrost przesuniecia na motorach.
-		double motor_delta_increment[6];
+		double motor_delta_increment[8];
 		// Maksymalny przyrost przesuniecia na motorach.
-		double motor_max_delta_increment[6];
+		double motor_max_delta_increment[8];
 		// Standardowe przesuniecia na wspolrzednych zewnetrznych.
 		double external_delta[6];
 		// Przyrost przesuniecia na wspolrzednych zewnetrznych.
@@ -55,11 +55,11 @@ class force_controlled_trajectory_generator : public ecp_teach_in_generator
 		// Maksymalny przyrost przesuniecia na wspolrzednych zewnetrznych.
 		double external_max_delta_increment[6];
 		// Standardowe przesuniecia - aktualnie uzywane.
-		double current_delta[6];
+		double current_delta[8];
 		// Przyrost przesuniecia - aktualnie uzywane.
-		double current_delta_increment[6];
+		double current_delta_increment[8];
 		// Maksymalny przyrost - aktualnie uzywane.
-		double current_max_delta_increment[6];
+		double current_max_delta_increment[8];
 		// Obecne sterowanie.
 		POSE_SPECIFICATION current_control;
 		// Numer osi/wspolrzednej, kierunek - dane z przetworzonego polecenia ruchu.
@@ -91,9 +91,9 @@ class force_controlled_trajectory_generator : public ecp_teach_in_generator
 		// Wykonanie wlasciwej trajektorii.
 		virtual bool next_step ();
 		// Zwraca aktualnie posiadana pozycje.
-		void return_position (double robot_position[6]);
+		void return_position (double robot_position[8]);
 		// Zwraca aktualnie posiadana pozycje na motorach.
-		void return_motor_position (double robot_position[6]);
+		void return_motor_position (double robot_position[8]);
 		// Zwraca aktualne odczyty z czujnika sily.
 		void return_sensor_reading(ecp_mp_force_sensor& the_sensor, double sensor_reading[6]);
 		// Odczyt pozycji robota z EDP.
