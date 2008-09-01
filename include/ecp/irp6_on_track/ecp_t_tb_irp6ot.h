@@ -5,6 +5,7 @@
 #include "ecp/common/ecp_g_smooth.h"
 #include "ecp/common/ecp_g_force.h"
 #include "common/com_buf.h"
+#include "ecp/common/ecp_st_go.h"
 
 class ecp_t_tb_irp6ot: public ecp_task{
 	protected:
@@ -18,12 +19,14 @@ class ecp_t_tb_irp6ot: public ecp_task{
 		ecp_linear_generator *lgen;
 		//trajectory description from com_buf.h
 		trajectory_description tdes;
+		//sub_task_gripper_opening
+		ecp_sub_task_gripper_opening* go_st;
 
 	public:
 		ecp_t_tb_irp6ot(configurator &_config);
 		~ecp_t_tb_irp6ot();
 		void set_tdes(double, double, double, double, double, double, double);
-		void init_tdes(POSE_SPECIFICATION, int,int,int);
+		void init_tdes(POSE_SPECIFICATION, int);
 		void task_initialization(void);
 		void main_task_algorithm(void);
 };

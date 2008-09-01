@@ -27,6 +27,7 @@ void ecp_t_tb_irp6ot::task_initialization(void){
 	befgen=new bias_edp_force_generator(*this);
 	//gripper approach constructor (task&, no_of_steps)
 	gagen=new ecp_tff_gripper_approach_generator (*this, 8);
+	go_st = new ecp_sub_task_gripper_opening(*this);
 	sr_ecp_msg->message("ECP loaded tb");
 };
 
@@ -44,31 +45,26 @@ void ecp_t_tb_irp6ot::main_task_algorithm(void){
 	befgen->Move();
 	
 	//configuration of gripper approach configure(speed, time_period)
-	gagen->configure(0.1,2);
+	gagen->configure(0.01,500);
 	gagen->Move();
 	
 	//configuration and initalization of linear generator
-	init_tdes(XYZ_EULER_ZYZ,1,2,0);
-	set_tdes(0,0,0.000,0,0,0,0);	//podniesienie o 2mm
-	
+	init_tdes(XYZ_ANGLE_AXIS,500);
+	set_tdes(0.0, 0.0, 0.002, 0.0, 0.0, 0.0, 0.0);	//podniesienie o 2mm
+
 	// Generator trajektorii prostoliniowej
 	lgen=new ecp_linear_generator(*this,tdes,1);
-	sr_ecp_msg->message("test4");
-	//lgen->Move();
-	sr_ecp_msg->message("test4");
+	lgen->Move();
 	delete lgen;
 	
-	sr_ecp_msg->message("test5");
 	set_tdes(0,0,0,0,0,0,0.01);	//gripper closing
 	lgen=new ecp_linear_generator(*this,tdes,1);
-	sr_ecp_msg->message("test5");
-	//lgen->Move();
-	sr_ecp_msg->message("test5");
+	lgen->Move();
 	delete lgen;	
 	
 	set_tdes(0,0,0.02,0,0,0,0);	//podniesienie o 2cm
 	lgen=new ecp_linear_generator(*this,tdes,1);
-	//lgen->Move();
+	lgen->Move();
 	delete lgen;
 	
 	//char *path1="/net/lenin/mnt/trj/draughts/2_pawn_moving.trj";
@@ -97,9 +93,9 @@ void ecp_t_tb_irp6ot::set_tdes(double cor0, double cor1, double cor2, double cor
 }
 
 //inicjacja struktury tdes - trajectory description
-void ecp_t_tb_irp6ot::init_tdes(POSE_SPECIFICATION pspec, int interpolation_no, int internode_no, int value_no){
+void ecp_t_tb_irp6ot::init_tdes(POSE_SPECIFICATION pspec, int internode_no){
 	tdes.arm_type=pspec;
-	tdes.interpolation_node_no=interpolation_no;
+	tdes.interpolation_node_no=1;
 	tdes.internode_step_no=internode_no;	//motion time
-	tdes.value_in_step_no=value_no;			//motion time-2 ??
+	tdes.value_in_step_no=internode_no-2;			//motion time-2 ??
 } 
