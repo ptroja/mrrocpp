@@ -82,7 +82,10 @@ void edp_irp6s_postument_track_effector::set_rmodel(c_buffer &instruction)
         send_to_SERVO_GROUP(); //
         break;
     case FORCE_TOOL:
-
+		if(vs==NULL){
+			printf("Nie w³aczono force_tryb=2 w pliku ini\n");
+			break;
+		}
         vs->force_sensor_set_tool = true;
         for (int i = 0; i<3; i++)
         {
@@ -92,6 +95,10 @@ void edp_irp6s_postument_track_effector::set_rmodel(c_buffer &instruction)
         vs->check_for_command_execution_finish();
         break;
     case FORCE_BIAS:
+    	if(vs==NULL){
+			printf("Nie w³aczono force_tryb=2 w pliku ini\n");
+			break;
+		}
         vs->force_sensor_do_configure = true;
         vs->check_for_command_execution_finish();
         break;
