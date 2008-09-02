@@ -119,6 +119,7 @@ void ecp_spots_generator::save_position()
 	p_t_g.rproduct4x4(plate_to_tool);
 	//double * plate_to_ground = p_t_g.getA();
 
+FILE *fd = fopen("temp.txt", "a+");
 	for(int i=0; i<4; i++)
 	{
 		double vec_plate[4];
@@ -149,6 +150,9 @@ void ecp_spots_generator::save_position()
 		}
 		p_t_g.product4x1(vec_plate); // vec_plate := vec_ground
 
+for(int it=0; it<4; it++)
+	fprintf(fd, "%f ",vec_plate[it]);
+fprintf(fd, "%f %f %f 1.0 %f\n", 0.01*calib_data.sp_r.x[i], 0.01*calib_data.sp_r.y[i], 0.01*calib_data.sp_r.z[i], calib_data.sp_r.dz);
 		//double vec_cam[3];
 		//vec_cam[0] = calib_data.sp_r.x[i];
 		//vec_cam[1] = calib_data.sp_r.y[i];
@@ -161,15 +165,13 @@ void ecp_spots_generator::save_position()
 	D.setA(d_matrix, TYPE_D);
 
 
-FILE *fd = fopen("temp.txt", "w");
-	for (int i=0; i<4; i++)
-	{
-		for(int j=0; j<4; j++)
-			fprintf(fd, "%f  ", d_matrix[4*i+j]);
-		fprintf(fd, "\n");
-	}fprintf(fd, "\n");
 
-
+//	for (int i=0; i<4; i++)
+//	{
+//		for(int j=0; j<4; j++)
+//			fprintf(fd, "%f  ", d_matrix[4*i+j]);
+//		fprintf(fd, "\n");
+//	}fprintf(fd, "\n");
 
 	//after that vec_plate is spot postion in ground coordinates
 	//computation described in my thesis
@@ -196,17 +198,14 @@ FILE *fd = fopen("temp.txt", "w");
 		  default:
 			  break;
 		}
-for (int f=0; f<4; f++)
-	fprintf(fd, "%f, ", c[f]);
-fprintf(fd, "\n\n");
-		D.setb(c);
-		D.solveAxb4x4();
-		x = D.getx();
-
-		for (int j=0; j<4; j++)
-			t_matrix[4*j+i] = x[j];
+//		D.setb(c);
+//		D.solveAxb4x4();
+//		x = D.getx();
+//
+//		for (int j=0; j<4; j++)
+//			t_matrix[4*j+i] = x[j];
 	}
-	T.setA(t_matrix, TYPE_T);
+//	T.setA(t_matrix, TYPE_T);
 
 //	for (int i=0; i<4; i++)
 //	{

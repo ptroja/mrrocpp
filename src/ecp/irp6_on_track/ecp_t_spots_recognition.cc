@@ -61,7 +61,7 @@ void ecp_t_spots_recognition::main_task_algorithm(void)
 	ecp_wait_for_start();
 
 
-    for(int i=0; i<=2; i++)
+    for(int i=0; i<=15; i++)
     {
     	/*!
     	 * smooth generator odczytuje trajektorie z pliku
@@ -76,7 +76,7 @@ void ecp_t_spots_recognition::main_task_algorithm(void)
 	    /*!
 	     * nastepnie nalezy odczekac ok 1s, zanim mozna rozpoczac sesje zdjeciowa
 	     */
-	    sleep(1);
+	    sleep(2);
 
 	    /*!
 	     * zrob zdjecia, dokonaj obliczen
