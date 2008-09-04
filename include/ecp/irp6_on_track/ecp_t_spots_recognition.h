@@ -27,6 +27,7 @@
 #include "ecp/irp6_on_track/ecp_g_spots_recognition.h"
 
 #include "ecp/common/ecp_g_smooth.h"
+#include "ecp/common/ecp_g_sleep.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -48,6 +49,7 @@ class ecp_t_spots_recognition: public ecp_task
 
 		ecp_spots_generator* generator;
 		ecp_smooth_generator* smooth;
+		ecp_sleep_generator* sleep_g;
 
 		/*!
         * Generator used for communication with cvFraDIA.

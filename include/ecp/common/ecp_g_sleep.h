@@ -16,14 +16,14 @@ class ecp_sleep_generator : public ecp_generator
 	int wait_time;
 	int current_time;
 
-	int miliseconds;
+	int seconds;
 
   public:
-	ecp_sleep_generator(ecp_task& _ecp_task, int=1000);
+	ecp_sleep_generator(ecp_task& _ecp_task, int=1);
 	bool first_step();
 	bool next_step();
 
-	int init_time(int=1000);
+	int init_time(int=1);
 	bool is_now();
 };
 

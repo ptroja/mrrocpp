@@ -6,19 +6,20 @@
  */
 
 #include "ecp/common/ecp_g_sleep.h"
+#include <iostream>
 
-ecp_sleep_generator::ecp_sleep_generator (ecp_task& _ecp_task, int ms)
+ecp_sleep_generator::ecp_sleep_generator (ecp_task& _ecp_task, int s)
 : ecp_generator (_ecp_task)
 {
-	miliseconds = ms;
+	seconds = s;
     current_time = (int)time((time_t*)NULL);
     wait_time = (int)time((time_t*)NULL);
 }
 
-int ecp_sleep_generator::init_time(int ms)
+int ecp_sleep_generator::init_time(int s)
 {
-	miliseconds = ms;
-	wait_time = (int)time((time_t*)NULL) + ms;
+	seconds = s;
+	wait_time = (int)time((time_t*)NULL) + s;
 }
 
 bool ecp_sleep_generator::is_now()
@@ -31,13 +32,14 @@ bool ecp_sleep_generator::is_now()
 }
 bool ecp_sleep_generator::first_step()
 {
-	wait_time = (int)time((time_t*)NULL) + miliseconds;
+	wait_time = (int)time((time_t*)NULL) + seconds;
     return true;
 }
 
 bool ecp_sleep_generator::next_step()
 {
 	current_time = (int)time((time_t*)NULL);
+//std::cout << current_time << "        " << wait_time << std::endl;
 	if(current_time<wait_time)
 		return true;
 	else

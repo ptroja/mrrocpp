@@ -51,6 +51,8 @@ if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	// Create smooth generator.
 	smooth = new ecp_smooth_generator(*this, true, false);
 
+	sleep_g = new ecp_sleep_generator(*this);
+
 }
 
 void ecp_t_spots_recognition::main_task_algorithm(void)
@@ -76,7 +78,9 @@ void ecp_t_spots_recognition::main_task_algorithm(void)
 	    /*!
 	     * nastepnie nalezy odczekac ok 1s, zanim mozna rozpoczac sesje zdjeciowa
 	     */
-	    sleep(2);
+	    //sleep(2);
+	    sleep_g->init_time(2);
+	    sleep_g->Move();
 
 	    /*!
 	     * zrob zdjecia, dokonaj obliczen
