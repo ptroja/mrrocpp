@@ -20,10 +20,10 @@ ecp_spots_generator::ecp_spots_generator (ecp_task& _ecp_task)
 	plate_to_tool[12]=0; plate_to_tool[13]=0; plate_to_tool[14]=0; plate_to_tool[15]=1;
 
 	//spots in plate coordinates
-	vec_1[0]=-0.035; vec_1[1]=-0.035; vec_1[2]=0.001; vec_1[3]=1.;
-	vec_2[0]=-0.035; vec_2[1]=0.035; vec_2[2]=0.001; vec_2[3]=1.;
-	vec_3[0]=0.035; vec_3[1]=0.035; vec_3[2]=0.001; vec_3[3]=1.;
-	vec_4[0]=0.035; vec_4[1]=-0.035; vec_4[2]=0.001; vec_4[3]=1.;
+	vec_1[0]=-0.035; vec_1[1]=0.035; vec_1[2]=0.001; vec_1[3]=1.;
+	vec_2[0]=0.035; vec_2[1]=0.035; vec_2[2]=0.001; vec_2[3]=1.;
+	vec_3[0]=0.035; vec_3[1]=-0.035; vec_3[2]=0.001; vec_3[3]=1.;
+	vec_4[0]=-0.035; vec_4[1]=-0.035; vec_4[2]=0.001; vec_4[3]=1.;
 }
 
 bool ecp_spots_generator::first_step()
