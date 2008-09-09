@@ -101,6 +101,7 @@ void ecp_task_fsautomat_irp6ot::main_task_algorithm(void)
 				default:
 				break;
 			}
+			ecp_termination_notice();
 			
 			
 		} //end for

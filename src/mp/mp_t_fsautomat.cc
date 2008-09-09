@@ -148,7 +148,7 @@ std::list<State> * mp_task_fsautomat::takeStatesList()
 			
          xmlFree(stateType);
          xmlFree(stateName);
-      }
+		}
    }
    // free the document
    xmlFreeDoc(doc);
@@ -161,7 +161,7 @@ std::list<State> * mp_task_fsautomat::takeStatesList()
 
 bool mp_task_fsautomat::runEmptyGen(State &state)
 {
-	if (run_ext_empty_gen (false, 1, state.getRobot())) 
+	if (run_ext_empty_gen(false, 1, state.getRobot())) 
 	{
 		return true; 
 	}		
@@ -170,19 +170,31 @@ bool mp_task_fsautomat::runEmptyGen(State &state)
 
 bool mp_task_fsautomat::runEmptyGenForSet(State &state)
 {
-
+	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+			(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) 
+	{
+		return true;
+	}
+	return false;
+	/*
+	std::cout<<">>1"<<std::endl;
 	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	 	(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, 
 		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) 
 	{
+		std::cout<<">>2"<<std::endl;
 		return true;  
 	}	
-	return false;
+	std::cout<<">>3"<<std::endl;
+	return false; */
 }
 
 bool mp_task_fsautomat::executeMotion(State &state)
 {
 	if(set_next_ecps_state( (int) state.getGeneratorType(), 0, state.getTrajectoryFilePath(), 1, state.getRobot()))
+	{
+		return true;
+	}
 	return false;
 }
 
@@ -218,7 +230,6 @@ void mp_task_fsautomat::main_task_algorithm(void)
 			if(strcmp((*i).getType(), (const char *)"emptyGenForSet") == 0)
 			{
 				if(!runEmptyGenForSet((*i)))
-
 					std::cout<<(*i).getName()<<" -> zakonczony"<<std::endl;
 				continue;
 			}
