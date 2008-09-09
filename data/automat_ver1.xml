@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE TaskDescription [
+	<!ELEMENT TaskDescription (State+)>
+
+	<!ELEMENT State (ROBOT,ECPGeneratorType,TrajectoryFilePath)>
+		<!ATTLIST State name CDATA #REQUIRED>
+		<!ATTLIST State type CDATA #REQUIRED>
+
+	<!ELEMENT ROBOT (#PCDATA)>
+	<!ELEMENT ECPGeneratorType (#PCDATA)>
+	<!ELEMENT TrajectoryFilePath (#PCDATA)>
+]>
+<!--	
+	Autor: Marek Kisiel
+	Data: 2008
+	Zadanie nalewania: "pouring"
+-->
+<TaskDescription>
+	<State name="approach_1" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_ap.trj</TrajectoryFilePath>
+	</State>
+	<State name="approach_2" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_p_ap.trj</TrajectoryFilePath>
+	</State>
+	<State name="approach_end" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>		
+	</State>
+	<State name="grab_1" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_grab.trj</TrajectoryFilePath>
+	</State>
+	<State name="grab_2" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_p_grab.trj</TrajectoryFilePath>
+	</State>
+	<State name="grab_end_1" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>
+	</State>
+	<State name="grab_3" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TFF_RUBIK_GRAB</ECPGeneratorType>
+		<TrajectoryFilePath></TrajectoryFilePath>
+	</State>
+	<State name="grab_4" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TFF_RUBIK_GRAB</ECPGeneratorType>
+		<TrajectoryFilePath></TrajectoryFilePath>
+	</State>
+	<State name="grab_end_2" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>
+	</State>
+	<State name="weight_1" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_weight.trj</TrajectoryFilePath>
+	</State>
+	<State name="weight_2" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_p_weight.trj</TrajectoryFilePath>
+	</State>
+	<State name="weight_end" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>
+	</State>
+	<State name="meet_1" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_meet.trj</TrajectoryFilePath>
+	</State>
+	<State name="meet_2" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_p_meet.trj</TrajectoryFilePath>
+	</State>
+	<State name="meet_end_1" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>		
+	</State>
+	<State name="meet_3" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_track_meet.trj</TrajectoryFilePath>
+	</State>
+	<State name="meet_end_2" type="emptyGen">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>		
+	</State>
+	<State name="pour_1" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TFF_NOSE_RUN</ECPGeneratorType>
+		<TrajectoryFilePath></TrajectoryFilePath>
+	</State>
+	<State name="pour_end_1" type="emptyGen">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+	</State>
+	<State name="pour_2" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_pour_2.trj</TrajectoryFilePath>
+	</State>
+	<State name="pour_end_2" type="emptyGen">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+	</State>
+	<State name="pour_3" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_pour_3.trj</TrajectoryFilePath>
+	</State>
+	<State name="pour_end_3" type="emptyGen">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+	</State>
+	<State name="pour_4" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TEACH_IN</ECPGeneratorType>
+		<TrajectoryFilePath></TrajectoryFilePath>
+	</State>
+	<State name="pour_end_4" type="emptyGen">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+	</State>
+	<State name="pour_5" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_pour_4.trj</TrajectoryFilePath>
+	</State>
+	<State name="pour_end_5" type="emptyGen">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+	</State>
+	<State name="go_back_1" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_track_put_back.trj</TrajectoryFilePath>
+	</State>
+	<State name="go_back_end_1" type="emptyGen">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>		
+	</State>
+	<State name="go_back_2" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_go_back.trj</TrajectoryFilePath>
+	</State>
+	<State name="go_back_3" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_p_go_back.trj</TrajectoryFilePath>
+	</State>
+	<State name="go_back_end_2" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>		
+	</State>
+	<State name="put_back_1" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_put_back.trj</TrajectoryFilePath>
+	</State>
+	<State name="put_back_2" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_p_put_back.trj</TrajectoryFilePath>
+	</State>
+	<State name="put_back_end_1" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>		
+	</State>
+	<State name="put_back_3" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TFF_RUBIK_FACE_ROTATE</ECPGeneratorType>
+		<TrajectoryFilePath></TrajectoryFilePath>
+	</State>
+	<State name="put_back_4" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TFF_RUBIK_FACE_ROTATE</ECPGeneratorType>
+		<TrajectoryFilePath></TrajectoryFilePath>
+	</State>
+	<State name="put_back_end_2" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>
+	</State>
+	<State name="put_back_5" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_dep_1.trj</TrajectoryFilePath>
+	</State>
+	<State name="put_back_6" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_p_dep_1.trj</TrajectoryFilePath>
+	</State>
+	<State name="put_back_end_3" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>		
+	</State>
+	<State name="depart_1" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_dep_2.trj</TrajectoryFilePath>
+	</State>
+	<State name="depart_2" type="motionExecute">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_p_dep_2.trj</TrajectoryFilePath>
+	</State>
+	<State name="depart_end" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>		
+	</State>
+</TaskDescription>
