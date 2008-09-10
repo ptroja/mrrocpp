@@ -11,9 +11,9 @@
 #include <string.h>
 #include <iostream.h>
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-#include <libxml/tree.h>
+#include "libxml/xmlmemory.h"
+#include "libxml/parser.h"
+#include "libxml/tree.h"
 
 #include "common/typedefs.h"
 #include "common/impconst.h"

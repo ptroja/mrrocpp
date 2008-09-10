@@ -107,9 +107,6 @@ mp_rcs_test: mp_t_rcs_test.o ecp_mp_s_rcs_korf.o ecp_mp_s_rcs_kociemba.o CubeSta
 mp_pouring: mp_t_pouring.o ecp_mp_s_schunk.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
-mp_t_fsautomat.o: mp_t_fsautomat.cc
-	$(CXX) `${REPOSITORY_PATH}/opt/bin/xml2-config --cflags` -I${REPOSITORY_PATH}/opt/include -I$(HOMEDIR)/include -c -o $@ $^
-
 mp_fsautomat: mp_t_fsautomat.o State.o ecp_mp_s_schunk.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ `${REPOSITORY_PATH}/opt/bin/xml2-config --libs`
 
