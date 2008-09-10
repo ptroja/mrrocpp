@@ -108,7 +108,7 @@ mp_pouring: mp_t_pouring.o ecp_mp_s_schunk.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 mp_fsautomat: mp_t_fsautomat.o State.o ecp_mp_s_schunk.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ `${REPOSITORY_PATH}/opt/bin/xml2-config --libs`
+	$(LD) $(LDFLAGS) -o $@ $^ -L$(HOMEDIR)/lib/libxml -lxml2 -lz -liconv -lm -lsocket
 
 mp_multiplayer: mp_t_multiplayer.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
