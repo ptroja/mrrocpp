@@ -89,7 +89,6 @@
 	<State name="meet_end_2" type="emptyGen">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>		
 	</State>
-	<!--
 	<State name="pour_1" type="motionExecute">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_TFF_NOSE_RUN</ECPGeneratorType>
@@ -130,7 +129,6 @@
 	<State name="pour_end_5" type="emptyGen">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 	</State>
-	-->
 	<State name="go_back_1" type="motionExecute">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>

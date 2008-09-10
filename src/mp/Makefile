@@ -108,7 +108,7 @@ mp_pouring: mp_t_pouring.o ecp_mp_s_schunk.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 mp_t_fsautomat.o: mp_t_fsautomat.cc
-	$(CXX) `${REPOSITORY_PATH}/opt/bin/xml2-config --cflags` -I${QNX_TARGET}/opt/include -I$(HOMEDIR)/include -c -o $@ $^
+	$(CXX) `${REPOSITORY_PATH}/opt/bin/xml2-config --cflags` -I${REPOSITORY_PATH}/opt/include -I$(HOMEDIR)/include -c -o $@ $^
 
 mp_fsautomat: mp_t_fsautomat.o State.o ecp_mp_s_schunk.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ `${REPOSITORY_PATH}/opt/bin/xml2-config --libs`
