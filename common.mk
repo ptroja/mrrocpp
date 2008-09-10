@@ -33,6 +33,10 @@ LIBDIR=$(HOMEDIR)/lib
 BINDIR=$(HOMEDIR)/bin
 ECP_MPDIR=$(HOMEDIR)/src/ecp_mp
 
+ifeq (,$(findstring "host/qnx/x86",$(QNX_HOST)))
+REPOSITORY_PATH=$(QNX_TARGET)
+endif
+
 AR=ntox86-ar
 ARFLAGS=cru
 #AR=ntox86-ar-2.17
