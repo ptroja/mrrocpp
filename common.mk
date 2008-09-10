@@ -34,8 +34,10 @@ BINDIR=$(HOMEDIR)/bin
 ECP_MPDIR=$(HOMEDIR)/src/ecp_mp
 
 #ifeq (,$(findstring "host/qnx/x86",$(QNX_HOST)))
-ifeq (,$(findstring "host/qnx6/x86",$(QNX_HOST)))
+ifeq (,$(findstring *host/qnx6/x86,$(QNX_HOST)))
 REPOSITORY_PATH=
+else
+REPOSITORY_PATH=$(QNX_TARGET)
 endif
 
 AR=ntox86-ar

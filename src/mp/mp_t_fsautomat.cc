@@ -175,18 +175,6 @@ bool mp_task_fsautomat::runEmptyGenForSet(State &state)
 	{
 		return true;
 	}
-	return false;
-	/*
-	std::cout<<">>1"<<std::endl;
-	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-	 	(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, 
-		ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) 
-	{
-		std::cout<<">>2"<<std::endl;
-		return true;  
-	}	
-	std::cout<<">>3"<<std::endl;
-	return false; */
 }
 
 bool mp_task_fsautomat::executeMotion(State &state)
