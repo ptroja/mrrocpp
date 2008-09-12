@@ -47,6 +47,9 @@ protected:
 	
 	double s_przysp[MAX_SERVOS_NR];  //droga po etapie przyspieszania
 	double s_jedn[MAX_SERVOS_NR];  //droga po etapie ruchu jednostajnego
+	
+	int type; //1 - polozenie bezwzgledne , 2 - polozenie przyrostowe
+	bool first_coordinate;
 
 public:
 	ecp_smooth_generator(ecp_task& _ecp_task, bool _is_synchronised);
@@ -66,9 +69,15 @@ public:
 	void insert_pose_list_element (POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
 	int pose_list_length(void);
 
+	void set_relative(void); //zmiana na tryb przyrostowy
+	void set_absolute(void); //zmiana na tryb bezwzgledny
+	void reset(void);
+	int abc;
+	
 	bool load_a_v_max(char* file_name);
 	bool load_a_v_min (char* file_name);
 	bool load_file_with_path (char* file_name);
+	void load_coordinates(POSE_SPECIFICATION,double,double,double,double,double,double,double,double);
 
 	virtual bool first_step();
 	virtual bool next_step();

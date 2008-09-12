@@ -24,6 +24,14 @@
 #include "ecp/common/ecp_smooth_taught_in_pose.h"
 //#include "lib/y_math.h"
 
+void ecp_smooth_generator::set_relative(void){
+	type=2;
+}
+
+void ecp_smooth_generator::set_absolute(void){
+	type=1;
+}
+
 void ecp_smooth_generator::generate_next_coords (void)
 {
     //funkcja obliczajaca polozenie w danym makrokroku
@@ -282,6 +290,41 @@ bool ecp_smooth_generator::load_file_with_path (char* file_name)
     return true;
 }
 ; // end: load_file()
+
+void ecp_smooth_generator::reset(){
+	flush_pose_list();
+	first_coordinate=true;
+}
+
+//wczytuje wspolrzedne punktów poprzez funkcje
+//poki co przy zmiane trybu nalezy usunac instniejaca instancje smooth_generatora i stworzyc nowa.
+void ecp_smooth_generator::load_coordinates(POSE_SPECIFICATION ps, double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7){
+
+	double vp[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	double vk[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	double v[MAX_SERVOS_NR]={0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 5.0};
+	double a[MAX_SERVOS_NR]={0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.5};
+	double coordinates[MAX_SERVOS_NR];     // Wczytane wspolrzedne
+
+	if(first_coordinate)	//in case if there are some already read coordinates from file.
+		flush_pose_list();
+	
+	coordinates[0]=cor0;
+	coordinates[1]=cor1;
+	coordinates[2]=cor2;
+	coordinates[3]=cor3;
+	coordinates[4]=cor4;
+	coordinates[5]=cor5;
+	coordinates[6]=cor6;
+	coordinates[7]=cor7;
+
+	if (first_coordinate){	// Tworzymy glowe listy
+		first_coordinate=false;
+		create_pose_list_head(ps, vp, vk, v, a, coordinates);
+	}else					// Wstaw do listy nowa pozycje
+		insert_pose_list_element(ps, vp, vk, v, a, coordinates);
+
+}
 
 void ecp_smooth_generator::calculate(void)
 {
@@ -542,9 +585,11 @@ void ecp_smooth_generator::calculate(void)
 void ecp_smooth_generator::flush_pose_list ( void )
 {
     pose_list.clear();
+	 first_coordinate=true;
 }
 ; // end: flush_pose_list
-// -------------------------------------------------------
+
+// -------------------------------------------------------return iterator to beginning of the list
 void ecp_smooth_generator::initiate_pose_list(void)
 {
     pose_list_iterator = pose_list.begin();
@@ -555,7 +600,8 @@ void ecp_smooth_generator::next_pose_list_ptr (void)
     if (pose_list_iterator != pose_list.end())
         pose_list_iterator++;
 }
-// -------------------------------------------------------
+
+// -------------------------------------------------------get all previously saved elements from actual iterator
 void ecp_smooth_generator::get_pose (void)
 {
     int i;
@@ -569,6 +615,9 @@ void ecp_smooth_generator::get_pose (void)
         a[i]=pose_list_iterator->a[i];
         final_position[i]=pose_list_iterator->coordinates[i];
     }
+//	 if(type==2)
+//					for(i=0; i<MAX_SERVOS_NR; i++)
+//						final_position[i]+=start_position[i];
 
 }
 // -------------------------------------------------------
@@ -746,9 +795,10 @@ bool ecp_smooth_generator::load_a_v_max (char* file_name)
 
 ecp_smooth_generator::ecp_smooth_generator (ecp_task& _ecp_task, bool _is_synchronised)
         :
-        ecp_delta_generator (_ecp_task), debug(false)
+        ecp_delta_generator (_ecp_task), debug(false),first_coordinate(true)
 {
     int i;
+	 abc=1;
     double vp[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     double vk[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     double v[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
@@ -775,13 +825,14 @@ ecp_smooth_generator::ecp_smooth_generator (ecp_task& _ecp_task, bool _is_synchr
     delete[] path2;
 
     is_synchronised = _is_synchronised;
+	 type=1;
     //v_grip_min=5;
 }
 ; // end : konstruktor
 
 ecp_smooth_generator::ecp_smooth_generator (ecp_task& _ecp_task, bool _is_synchronised, bool _debug)
         :
-        ecp_delta_generator (_ecp_task)
+        ecp_delta_generator (_ecp_task), first_coordinate(true)
 {
     int i;
     double vp[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
@@ -811,16 +862,17 @@ ecp_smooth_generator::ecp_smooth_generator (ecp_task& _ecp_task, bool _is_synchr
 
     is_synchronised = _is_synchronised;
     debug = _debug;
+	 type=1;
     //v_grip_min=5;
 }
 ; // end : konstruktor
 
+//set necessary instructions, and other data for preparing the robot
 bool ecp_smooth_generator::first_step ()
 {
 
     initiate_pose_list();
     get_pose();
-
 
     first_interval=true;
     switch ( td.arm_type )
@@ -866,10 +918,7 @@ bool ecp_smooth_generator::first_step ()
         throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
     } // end : switch ( td.arm_type )
 
-
-
     return true;
-
 }
 ; // end: bool ecp_smooth_generator::first_step ( )
 
@@ -882,11 +931,8 @@ bool ecp_smooth_generator::next_step ()
     // ---------------------------------   FIRST INTERVAL    ---------------------------------------
     if ( first_interval )
     {
-        // printf("first interval\n");
-
         t_max=0;
         get_pose();
-
 
         // Ponizszych obliczen nie mozna wykonac w first_step, gdyz wtedy odczyt
         // aktualnego polozenia ramienia jeszcze nie zostanie zrealizowany. Zrobi
@@ -895,8 +941,11 @@ bool ecp_smooth_generator::next_step ()
         switch ( td.arm_type )
         {
         case MOTOR:
-            for(i=0;i<MAX_SERVOS_NR;i++)
+            for(i=0;i<MAX_SERVOS_NR;i++){
                 start_position[i]=the_robot->EDP_data.current_motor_arm_coordinates[i];
+					 if(type==2)
+						final_position[i]+=start_position[i];
+				}
             for(i=0; i<MAX_SERVOS_NR; i++)
             {
                 v_r[i]=v_max_motor[i]*v[i];
@@ -953,11 +1002,8 @@ bool ecp_smooth_generator::next_step ()
         } // end:switch
 
         first_interval = false;
-        
-
     }	// end:if FIRST INTERVAL
     // -------------------------------------------------------------------------------------------
-
 
     // Kontakt z MP
     if (node_counter-1 == td.interpolation_node_no)
@@ -970,9 +1016,12 @@ bool ecp_smooth_generator::next_step ()
         else
         {
             t_max=0;
-            for(i=0; i<MAX_SERVOS_NR; i++)
-                start_position[i]=pose_list_iterator->coordinates[i];
-
+            for(i=0; i<MAX_SERVOS_NR; i++){
+					if(type==1)
+						start_position[i]=pose_list_iterator->coordinates[i];
+					if(type==2)
+						start_position[i]+=pose_list_iterator->coordinates[i];
+				}
             next_pose_list_ptr();
 
             if(debug)
@@ -981,6 +1030,11 @@ bool ecp_smooth_generator::next_step ()
             }
 
             get_pose();
+				
+				if(type==2)
+					for(i=0; i<MAX_SERVOS_NR; i++)
+						final_position[i]+=start_position[i];
+				
 
             // Przepisanie danych z EDP_MASTER do obrazu robota
     

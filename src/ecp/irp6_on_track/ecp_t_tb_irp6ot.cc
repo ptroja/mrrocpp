@@ -39,6 +39,44 @@ void ecp_t_tb_irp6ot::main_task_algorithm(void){
 	sr_ecp_msg->message("ECP tb.... ready");
 	ecp_wait_for_start();
 	
+	//test part
+	//sgen=new ecp_smooth_generator(*this, true);
+	sgen->set_absolute();
+	sgen->load_coordinates(MOTOR,0,-30,0,0,0,0,0,0);
+	//sgen->Move();
+	delete sgen;
+	printf("rel\n");
+	
+	sgen=new ecp_smooth_generator(*this, true);
+	sgen->set_relative();
+	sgen->load_coordinates(MOTOR,0,-20,0,0,0,0,0,0);
+	sgen->load_coordinates(MOTOR,0,0,0,10,0,0,0,0);
+	sgen->load_coordinates(MOTOR,0,0,0,10,0,0,0,0);
+	sgen->load_coordinates(MOTOR,0,0,0,10,0,0,0,0);
+	//sgen->Move();
+	delete sgen;
+	
+	sgen=new ecp_smooth_generator(*this, true);
+	//sgen->set_absolute();
+	sgen->load_coordinates(MOTOR,0,0,0,0,0,0,0,0);
+	//sgen->Move();
+	delete sgen;
+
+	sgen=new ecp_smooth_generator(*this, true);
+	//sgen=new ecp_smooth_generator(*this, true);
+	sgen->load_file_with_path("/net/lenin/home/mrrocpp/trj/draughts/test2.trj");
+	sgen->Move();
+	//delete sgen;
+
+	//sgen=new ecp_smooth_generator(*this, true);
+	sgen->set_relative();
+	sgen->load_file_with_path("/net/lenin/home/mrrocpp/trj/draughts/test1.trj");
+	sgen->Move();
+	//delete sgen;
+	
+
+	
+	/* //moving pawn part
 	sgen->load_file_with_path(path);
 	sgen->Move();
 	
@@ -57,10 +95,10 @@ void ecp_t_tb_irp6ot::main_task_algorithm(void){
 	lgen->Move();
 	delete lgen;
 	
-	set_tdes(0,0,0,0,0,0,0.01);	//gripper closing
+	set_tdes(0,0,0,0,0,0,-0.020);	//gripper closing
 	lgen=new ecp_linear_generator(*this,tdes,1);
 	lgen->Move();
-	delete lgen;	
+	delete lgen;
 	
 	set_tdes(0,0,0.02,0,0,0,0);	//podniesienie o 2cm
 	lgen=new ecp_linear_generator(*this,tdes,1);
@@ -69,9 +107,9 @@ void ecp_t_tb_irp6ot::main_task_algorithm(void){
 	
 	char *path1="/net/lenin/home/mrrocpp/trj/draughts/2_pawn_moving.trj";
 	//char *path1="/net/home-host/home/mrrocpp/trj/draughts/2_pawn_moving.trj";
-	sr_ecp_msg->message(path1);
 	sgen->load_file_with_path(path1);
 	sgen->Move();
+	*/
 	
 	ecp_termination_notice();
 	ecp_wait_for_stop();
