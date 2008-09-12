@@ -39,41 +39,109 @@ void ecp_t_tb_irp6ot::main_task_algorithm(void){
 	sr_ecp_msg->message("ECP tb.... ready");
 	ecp_wait_for_start();
 	
+	double vp[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	double vk[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	double v[MAX_SERVOS_NR]={0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 5.0};
+	double a[MAX_SERVOS_NR]={0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.5};
+	double coordinates[MAX_SERVOS_NR];
+	
+	coordinates[0]=0;
+	coordinates[1]=-30;
+	coordinates[2]=0;
+	coordinates[3]=0;
+	coordinates[4]=0;
+	coordinates[5]=0;
+	coordinates[6]=0;
+	coordinates[7]=0;
+	
+	
+	
 	//test part
+	
+	//sgen=new ecp_smooth_generator(*this, true);
+	sgen->set_absolute();
+	sgen->load_coordinates(MOTOR,vp,vk,v,a,coordinates);
+	sgen->Move();
+	sgen->reset();
+	//delete sgen;
+	
+	//sgen=new ecp_smooth_generator(*this, true);
+	sgen->set_relative();
+	coordinates[0]=0;
+	coordinates[1]=-20;
+	coordinates[2]=0;
+	coordinates[3]=0;
+	coordinates[4]=0;
+	coordinates[5]=0;
+	coordinates[6]=0;
+	coordinates[7]=0;
+	sgen->load_coordinates(MOTOR,vp,vk,v,a,coordinates);
+		coordinates[0]=0;
+	coordinates[1]=0;
+	coordinates[2]=0;
+	coordinates[3]=10;
+	coordinates[4]=0;
+	coordinates[5]=0;
+	coordinates[6]=0;
+	coordinates[7]=0;
+	sgen->load_coordinates(MOTOR,vp,vk,v,a,coordinates);
+		coordinates[0]=0;
+	coordinates[1]=0;
+	coordinates[2]=0;
+	coordinates[3]=10;
+	coordinates[4]=0;
+	coordinates[5]=0;
+	coordinates[6]=0;
+	coordinates[7]=0;
+	sgen->load_coordinates(MOTOR,vp,vk,v,a,coordinates);
+		coordinates[0]=0;
+	coordinates[1]=0;
+	coordinates[2]=0;
+	coordinates[3]=10;
+	coordinates[4]=0;
+	coordinates[5]=0;
+	coordinates[6]=0;
+	coordinates[7]=0;
+	sgen->load_coordinates(MOTOR,vp,vk,v,a,coordinates);
+	sgen->Move();
+	delete sgen;
+	
+	/*
 	//sgen=new ecp_smooth_generator(*this, true);
 	sgen->set_absolute();
 	sgen->load_coordinates(MOTOR,0,-30,0,0,0,0,0,0);
-	//sgen->Move();
-	delete sgen;
-	printf("rel\n");
+	sgen->Move();
+	sgen->reset();
+	//delete sgen;
 	
-	sgen=new ecp_smooth_generator(*this, true);
+	//sgen=new ecp_smooth_generator(*this, true);
 	sgen->set_relative();
 	sgen->load_coordinates(MOTOR,0,-20,0,0,0,0,0,0);
 	sgen->load_coordinates(MOTOR,0,0,0,10,0,0,0,0);
 	sgen->load_coordinates(MOTOR,0,0,0,10,0,0,0,0);
 	sgen->load_coordinates(MOTOR,0,0,0,10,0,0,0,0);
-	//sgen->Move();
-	delete sgen;
+	sgen->Move();
+	delete sgen;*/
 	
+	/*
 	sgen=new ecp_smooth_generator(*this, true);
-	//sgen->set_absolute();
+	sgen->set_absolute();
 	sgen->load_coordinates(MOTOR,0,0,0,0,0,0,0,0);
-	//sgen->Move();
+	sgen->Move();
 	delete sgen;
 
 	sgen=new ecp_smooth_generator(*this, true);
-	//sgen=new ecp_smooth_generator(*this, true);
+	sgen=new ecp_smooth_generator(*this, true);
 	sgen->load_file_with_path("/net/lenin/home/mrrocpp/trj/draughts/test2.trj");
 	sgen->Move();
-	//delete sgen;
+	delete sgen;
 
-	//sgen=new ecp_smooth_generator(*this, true);
+	sgen=new ecp_smooth_generator(*this, true);
 	sgen->set_relative();
 	sgen->load_file_with_path("/net/lenin/home/mrrocpp/trj/draughts/test1.trj");
 	sgen->Move();
-	//delete sgen;
-	
+	delete sgen;
+	*/
 
 	
 	/* //moving pawn part

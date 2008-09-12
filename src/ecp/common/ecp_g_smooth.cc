@@ -296,8 +296,22 @@ void ecp_smooth_generator::reset(){
 	first_coordinate=true;
 }
 
+
 //wczytuje wspolrzedne punktów poprzez funkcje
 //poki co przy zmiane trybu nalezy usunac instniejaca instancje smooth_generatora i stworzyc nowa.
+void ecp_smooth_generator::load_coordinates(POSE_SPECIFICATION ps, double vp[MAX_SERVOS_NR], double vk[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]){
+
+	if(first_coordinate)	//in case if there are some already read coordinates from file.
+		flush_pose_list();
+
+	if (first_coordinate){	// Tworzymy glowe listy
+		first_coordinate=false;
+		create_pose_list_head(ps, vp, vk, v, a, coordinates);
+	}else					// Wstaw do listy nowa pozycje
+		insert_pose_list_element(ps, vp, vk, v, a, coordinates);
+
+}
+
 void ecp_smooth_generator::load_coordinates(POSE_SPECIFICATION ps, double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7){
 
 	double vp[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
@@ -798,7 +812,6 @@ ecp_smooth_generator::ecp_smooth_generator (ecp_task& _ecp_task, bool _is_synchr
         ecp_delta_generator (_ecp_task), debug(false),first_coordinate(true)
 {
     int i;
-	 abc=1;
     double vp[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     double vk[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     double v[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};

@@ -72,12 +72,12 @@ public:
 	void set_relative(void); //zmiana na tryb przyrostowy
 	void set_absolute(void); //zmiana na tryb bezwzgledny
 	void reset(void);
-	int abc;
 	
 	bool load_a_v_max(char* file_name);
 	bool load_a_v_min (char* file_name);
 	bool load_file_with_path (char* file_name);
 	void load_coordinates(POSE_SPECIFICATION,double,double,double,double,double,double,double,double);
+	void load_coordinates(POSE_SPECIFICATION,double[],double[],double[],double[],double[]);
 
 	virtual bool first_step();
 	virtual bool next_step();
