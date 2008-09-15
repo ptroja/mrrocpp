@@ -6,6 +6,7 @@
 #include "ecp/common/ecp_g_force.h"
 #include "common/com_buf.h"
 #include "ecp/common/ecp_st_go.h"
+#include "ecp/common/ecp_g_sleep.h"
 
 class ecp_t_tb_irp6ot: public ecp_task{
 	protected:
@@ -21,6 +22,8 @@ class ecp_t_tb_irp6ot: public ecp_task{
 		trajectory_description tdes;
 		//sub_task_gripper_opening
 		ecp_sub_task_gripper_opening* go_st;
+		//sleep generator
+		ecp_sleep_generator* sleepgen;
 
 	public:
 		ecp_t_tb_irp6ot(configurator &_config);

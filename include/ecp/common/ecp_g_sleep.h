@@ -1,8 +1,7 @@
 /*
  * ecp_g_sleep.h
  *
- *  Created on: Sep 3, 2008
- *      Author: ghard
+ *Author: Tomasz Bem
  */
 
 #ifndef ECP_G_SLEEP_H_
@@ -13,18 +12,16 @@
 
 class ecp_sleep_generator : public ecp_generator
 {
-	int wait_time;
-	int current_time;
+	private:
+		int seconds;		//seconds to wait
+		timespec wait;		//structure for nanosleep funciton
+		int remain;			//how much time remaining
 
-	int seconds;
-
-  public:
-	ecp_sleep_generator(ecp_task& _ecp_task, int=1);
-	bool first_step();
-	bool next_step();
-
-	int init_time(int=1);
-	bool is_now();
+	public:
+		ecp_sleep_generator(ecp_task& _ecp_task, int=1);		//constructor
+		bool first_step();		//first step generation
+		bool next_step();			//next step generation
+		int init_time(int=1);	//initialize time
 };
 
 #endif /* ECP_G_SLEEP_H_ */
