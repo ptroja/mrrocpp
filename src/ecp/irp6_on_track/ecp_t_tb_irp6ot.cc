@@ -6,7 +6,7 @@
 #include "ecp/irp6_on_track/ecp_local.h"
 #include "ecp/irp6_on_track/ecp_t_tb_irp6ot.h"
 #include <stdio.h>
-#define sim
+//#define sim
 
 //Constructors
 ecp_t_tb_irp6ot::ecp_t_tb_irp6ot(configurator &_config): ecp_task(_config){
