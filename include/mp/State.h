@@ -10,7 +10,7 @@
 #include "ecp_mp/ecp_mp_t_rcsc.h"
 #include "common/impconst.h"
 
-enum StateType { INITIALIZATION, MOTION_EXECUTE };
+//enum StateType { INITIALIZATION, MOTION_EXECUTE };
 
 class State
 {

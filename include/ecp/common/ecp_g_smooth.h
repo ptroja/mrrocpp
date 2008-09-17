@@ -14,6 +14,7 @@
 #include "ecp/common/ecp_smooth_taught_in_pose.h"
 
 #include "ecp/common/ecp_g_jarosz.h"
+#include "mp/Trajectory.h"
 
 class ecp_smooth_generator : public ecp_delta_generator
 {
@@ -76,8 +77,13 @@ public:
 	bool load_a_v_max(char* file_name);
 	bool load_a_v_min (char* file_name);
 	bool load_file_with_path (char* file_name);
+	
+	bool load_trajectory_from_xml(char* fileName, char* nodeName);
+	bool load_trajectory_from_xml(Trajectory &trajectory);
+
 	void load_coordinates(POSE_SPECIFICATION,double,double,double,double,double,double,double,double);
 	void load_coordinates(POSE_SPECIFICATION,double[],double[],double[],double[],double[]);
+
 
 	virtual bool first_step();
 	virtual bool next_step();

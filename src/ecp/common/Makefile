@@ -12,7 +12,7 @@ ECPOBJ = ECP_main_error.o ecp_m.o ecp_mp_generator.o ecp_generator.o \
 		ecp_task.o ecp_robot.o ecp_taught_in_pose.o ecp_teach_in_generator.o \
 		ecp_buffer.o ecp_smooth_taught_in_pose.o \
 		ecp_mp_sensor.o transmitter.o ecp_mp_task.o ecp_mp_robot.o \
-		ecp_visual_servo_manager.o ecp_visual_servo.o 
+		ecp_visual_servo_manager.o ecp_visual_servo.o ../../mp/Trajectory.o
 		
 # search path for make, if you want create dependencies from files from other directory than ".", 
 # then place that directory in the VPATH variable
@@ -26,7 +26,7 @@ all: libecp.a
 #-----------------------------------------------------------------------------------------------------------------------#
 
 libecp.a: $(ECPOBJ)
-	$(AR) $(ARFLAGS) $@ $?
+	$(AR) $(ARFLAGS) $@ $? 
 	${INSTALL} $@ $(LIBDIR)
 
 #---------------------------------Special object build rules (user made)-------------------------------------#

@@ -51,7 +51,7 @@ ecp_irp6p_pouring: ecp_t_pouring_irp6p.o ecp_st_go.o ecp_g_smooth.o ecp_generato
 	ecp_operator_reaction_condition.o ecp_mp_s_schunk.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
-ecp_irp6p_fsautomat: ecp_t_fsautomat_irp6p.o ecp_st_go.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o \
+ecp_irp6p_fsautomat: ecp_t_fsautomat_irp6p.o ../../mp/Trajectory.o ecp_st_go.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o \
 	ecp_operator_reaction_condition.o ecp_mp_s_schunk.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 	

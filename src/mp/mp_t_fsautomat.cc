@@ -5,7 +5,6 @@
 // -------------------------------------------------------------------------
 
 
-
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
@@ -171,16 +170,20 @@ bool mp_task_fsautomat::runEmptyGen(State &state)
 
 bool mp_task_fsautomat::runEmptyGenForSet(State &state)
 {
+	std::cout<<"wchdze... "<<state.getName()<<std::endl;
 	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) 
 	{
 		return true;
 	}
+	else
+		return false;
 }
 
 bool mp_task_fsautomat::executeMotion(State &state)
 {
-	if(set_next_ecps_state( (int) state.getGeneratorType(), 0, state.getTrajectoryFilePath(), 1, state.getRobot()))
+	//if(set_next_ecps_state( (int) state.getGeneratorType(), 0, state.getTrajectoryFilePath(), 1, state.getRobot()))
+	if(set_next_ecps_state( (int) state.getGeneratorType(), 0, state.getName(), 1, state.getRobot()))
 	{
 		return true;
 	}
@@ -220,6 +223,8 @@ void mp_task_fsautomat::main_task_algorithm(void)
 			{
 				if(!runEmptyGenForSet((*i)))
 					std::cout<<(*i).getName()<<" -> zakonczony"<<std::endl;
+				else
+					std::cout<<"Blad!! zwrocono false! "<<(*i).getName()<<std::endl;
 				continue;
 			}
 			if(strcmp((*i).getType(), (const char *)"emptyGen") == 0)

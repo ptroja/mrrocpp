@@ -62,7 +62,7 @@ ecp_pr: ecp_g_force.o ecp_t_pr_irp6ot.o ecp_mp_s_schunk.o \
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_irp6ot_rcsc: ecp_t_rcsc_irp6ot.o ecp_g_force.o ecp_st_go.o ecp_g_smooth.o ecp_generator_t.o \
 		ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
+	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_jarosz_irp6ot: ecp_t_jarosz_irp6ot.o ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@  $^
@@ -105,11 +105,11 @@ ecp_fr: ecp_t_fr_irp6ot.o ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHO
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_irp6ot_pouring: ecp_t_pouring_irp6ot.o ecp_st_go.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o \
 	ecp_operator_reaction_condition.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
+	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_irp6ot_fsautomat: ecp_t_fsautomat_irp6ot.o ecp_st_go.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o \
+ecp_irp6ot_fsautomat: ecp_t_fsautomat_irp6ot.o ../../mp/Trajectory.o ecp_st_go.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o \
 	ecp_operator_reaction_condition.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
+	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_plot: ecp_t_plot_irp6ot.o ecp_g_plot.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
@@ -119,13 +119,13 @@ ecp_plot: ecp_t_plot_irp6ot.o ecp_g_plot.o $(SHOBJ)
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_irp6ot_legobrick: ecp_t_legobrick_irp6ot.o ecp_g_smooth.o ecp_g_jarosz.o ecp_g_force.o \
 						ecp_operator_reaction_condition.o ecp_generator_t.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
+	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_irp6ot_multiplayer: ecp_t_multiplayer_irp6ot.o ecp_st_go.o ecp_mp_s_schunk.o ecp_g_smooth.o ecp_g_force.o \
 						ecp_generator_t.o \
 						ecp_g_rover.o ecp_mp_s_vis_sac_lx.o \
 						ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 	
+	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_vis_pb_eol_sac_irp6ot: ecp_t_vis_pb_eol_sac_irp6ot.o ecp_vis_pb_eol_sac_irp6ot.o \
 						ecp_mp_s_vis_sac_lx.o $(SHOBJ) 

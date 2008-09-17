@@ -12,6 +12,10 @@
 #include <math.h>
 #include <ctype.h>
 
+#include "libxml/xmlmemory.h"
+#include "libxml/parser.h"
+#include "libxml/tree.h"
+
 #include "common/typedefs.h"
 #include "common/impconst.h"
 #include "common/com_buf.h"
@@ -123,6 +127,148 @@ void ecp_smooth_generator::generate_next_coords (void)
     }
 
 }
+
+bool ecp_smooth_generator::load_trajectory_from_xml(Trajectory &trajectory)
+{
+	bool first_time = true;
+	std::list<Trajectory::Pose>::iterator it;
+	
+	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
+//	trajectory.showTime();
+	for(it = trajectory.getPoses()->begin(); it != trajectory.getPoses()->end(); ++it)
+	{
+		if (first_time)
+		{
+			// Tworzymy glowe listy
+			first_time = false;
+			create_pose_list_head(trajectory.getPoseSpecification(), (*it).startVelocity, (*it).endVelocity, (*it).velocity, (*it).accelerations, (*it).coordinates);
+		}
+		else
+		{
+			// Wstaw do listy nowa pozycje
+         insert_pose_list_element(trajectory.getPoseSpecification(), (*it).startVelocity, (*it).endVelocity, (*it).velocity, (*it).accelerations, (*it).coordinates);
+		}
+	}
+	return true;
+}
+	
+bool ecp_smooth_generator::load_trajectory_from_xml(char* fileName, char* nodeName)
+{
+    // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
+
+	 char *dataLine, *value;
+    POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
+    uint64_t number_of_poses; // Liczba zapamietanych pozycji
+    bool first_time = true; // Znacznik
+    double vp[MAX_SERVOS_NR];
+    double vk[MAX_SERVOS_NR];
+    double v[MAX_SERVOS_NR];
+    double a[MAX_SERVOS_NR];	// Wczytane wspolrzedne
+    double coordinates[MAX_SERVOS_NR];     // Wczytane wspolrzedne
+	
+	 xmlNode *cur_node, *child_node, *cchild_node, *ccchild_node;
+	 xmlChar *coordinateType, *numOfPoses;	 
+	 xmlChar *xmlDataLine;
+	 xmlChar *stateName;
+	 
+	 xmlDocPtr doc;
+	 doc = xmlParseFile(fileName);
+	 if(doc == NULL)
+	 {
+        throw ecp_generator::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+	 }
+				
+	 xmlNode *root = NULL;
+	 root = xmlDocGetRootElement(doc);
+	 if(!root || !root->name)
+	 {
+		 xmlFreeDoc(doc);
+		 throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+	 }
+ 
+	 flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
+	
+   for(cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
+   {
+      if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "State" ) )
+      {
+         stateName = xmlGetProp(cur_node, (const xmlChar *) "name");
+         if(stateName && !strcmp((const char *)stateName, nodeName))
+			{
+	         for(child_node = cur_node->children; child_node != NULL; child_node = child_node->next)
+	         {
+	            if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") )
+	            {
+						coordinateType = xmlGetProp(child_node, (const xmlChar *)"coordinateType");
+						ps = Trajectory::returnProperPS((char *)coordinateType);
+						numOfPoses = xmlGetProp(child_node, (const xmlChar *)"numOfPoses");
+						number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
+						for(cchild_node = child_node->children; cchild_node!=NULL; cchild_node = cchild_node->next)
+						{							
+	            		if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )
+							{
+								for(ccchild_node = cchild_node->children; ccchild_node!=NULL; ccchild_node = ccchild_node->next)
+								{
+	            				if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"StartVelocity") )
+									{	
+										xmlDataLine = xmlNodeGetContent(ccchild_node);
+										Trajectory::setValuesInArray(vp, (char *)xmlDataLine);
+										xmlFree(xmlDataLine);
+									}
+	            				if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"EndVelocity") )
+									{										
+										xmlDataLine = xmlNodeGetContent(ccchild_node);
+										Trajectory::setValuesInArray(vk, (char *)xmlDataLine);
+										xmlFree(xmlDataLine);
+									}
+	            				if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
+									{										
+										xmlDataLine = xmlNodeGetContent(ccchild_node);
+										Trajectory::setValuesInArray(v, (char *)xmlDataLine);
+										xmlFree(xmlDataLine);
+									}
+	            				if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
+									{										
+										xmlDataLine = xmlNodeGetContent(ccchild_node);
+										Trajectory::setValuesInArray(a, (char *)xmlDataLine);
+										xmlFree(xmlDataLine);
+									}
+	            				if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
+									{										
+										xmlDataLine = xmlNodeGetContent(ccchild_node);
+										Trajectory::setValuesInArray(coordinates, (char *)xmlDataLine);
+										xmlFree(xmlDataLine);
+									}
+								}
+        						if (first_time)
+								{
+									// Tworzymy glowe listy
+									first_time = false;
+									create_pose_list_head(ps, vp, vk, v, a, coordinates);
+									//printf("Pose list head: %d, %f, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0], coordinates[0]);
+								}
+								else
+								{
+									// Wstaw do listy nowa pozycje
+   					         insert_pose_list_element(ps, vp, vk, v, a, coordinates);
+					            //printf("Pose list element: %d, %f, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0], coordinates[0]);
+								}
+							}
+						}
+						xmlFree(coordinateType);
+						xmlFree(numOfPoses);
+	            }
+	         }
+			}
+			
+         xmlFree(stateName);
+		}
+	}
+	xmlFreeDoc(doc);
+	xmlCleanupParser();
+	return true;
+}
+; // end: load_file()
 
 bool ecp_smooth_generator::load_file_with_path (char* file_name)
 {
@@ -276,6 +422,21 @@ bool ecp_smooth_generator::load_file_with_path (char* file_name)
             // Tworzymy glowe listy
             first_time = false;
             create_pose_list_head(ps, vp, vk, v, a, coordinates);
+//				for(i=0;i<MAX_SERVOS_NR; i++)
+//					printf("\t%f", vp[i]);
+//				printf("\nvk\n");
+//				for(i=0;i<MAX_SERVOS_NR; i++)
+//					printf("\t%f", vk[i]);
+//				printf("\nv\n");
+//				for(i=0;i<MAX_SERVOS_NR; i++)
+//					printf("\t%f", v[i]);
+//				printf("\na\n");
+//				for(i=0;i<MAX_SERVOS_NR; i++)
+//					printf("\t%f", a[i]);
+//				printf("\ncoordinates\n");
+//				for(i=0;i<MAX_SERVOS_NR; i++)
+//					printf("\t%f", coordinates[i]);
+//				printf("\n\n");
             // printf("Pose list head: %d, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0]);
         }
         else
