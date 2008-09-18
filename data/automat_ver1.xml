@@ -136,7 +136,7 @@
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
 		<TrajectoryFilePath>trj/pouring/irp6_ot_meet.trj</TrajectoryFilePath>
-		<Trajectory coordinateType="MOTOR" numOfPoses="123">
+		<Trajectory coordinateType="MOTOR" numOfPoses="3">
 			<Pose>
 				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
 				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>

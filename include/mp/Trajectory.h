@@ -6,22 +6,10 @@
 
 #include "common/impconst.h"
 #include "common/com_buf.h"
+#include "ecp/common/ecp_smooth_taught_in_pose.h"
 
 class Trajectory
 {
-	public:
-		typedef struct {
-			double startVelocity[MAX_SERVOS_NR];
-			double endVelocity[MAX_SERVOS_NR];
-			double velocity[MAX_SERVOS_NR];
-			double accelerations[MAX_SERVOS_NR];
-			double coordinates[MAX_SERVOS_NR];
-		} Pose;
-		struct cmp_str{
-			bool operator()(char const *a, char const *b)
-			{	return std::strcmp(a,b)<0;	}
-		};
-
 	public:
 		Trajectory();
 		Trajectory(char *numOfPoses, char *trajectoryName, char *poseSpecification);
@@ -50,14 +38,14 @@ class Trajectory
 		double *getCoordinates() const;
 		void showTime();
 
-		std::list<Pose> * getPoses();
+		std::list<ecp_smooth_taught_in_pose> * getPoses();
 
 	private:
 		char * trjName;
 		uint64_t numOfPoses;		
 		POSE_SPECIFICATION poseSpec;
-		Pose *actPose;
-		std::list<Pose> *trjPoses;
+		ecp_smooth_taught_in_pose *actPose;
+		std::list<ecp_smooth_taught_in_pose> *trjPoses;
 };
 
 

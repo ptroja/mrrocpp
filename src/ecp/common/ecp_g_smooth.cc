@@ -131,11 +131,15 @@ void ecp_smooth_generator::generate_next_coords (void)
 bool ecp_smooth_generator::load_trajectory_from_xml(Trajectory &trajectory)
 {
 	bool first_time = true;
-	std::list<Trajectory::Pose>::iterator it;
+	int numOfPoses = trajectory.getNumberOfPoses();
+	trajectory.showTime();
+//	std::list<Trajectory::Pose>::iterator it;
 	
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
+	pose_list = trajectory.getPoses();
+	pose_list_iterator = pose_list->end();
 //	trajectory.showTime();
-	for(it = trajectory.getPoses()->begin(); it != trajectory.getPoses()->end(); ++it)
+	/*for(it = trajectory.getPoses()->begin(); it != trajectory.getPoses()->end(); ++it)
 	{
 		if (first_time)
 		{
@@ -148,7 +152,7 @@ bool ecp_smooth_generator::load_trajectory_from_xml(Trajectory &trajectory)
 			// Wstaw do listy nowa pozycje
          insert_pose_list_element(trajectory.getPoseSpecification(), (*it).startVelocity, (*it).endVelocity, (*it).velocity, (*it).accelerations, (*it).coordinates);
 		}
-	}
+	}*/
 	return true;
 }
 	
@@ -759,7 +763,7 @@ void ecp_smooth_generator::calculate(void)
 
 void ecp_smooth_generator::flush_pose_list ( void )
 {
-    pose_list.clear();
+    pose_list->clear();
 	 first_coordinate=true;
 }
 ; // end: flush_pose_list
@@ -767,12 +771,12 @@ void ecp_smooth_generator::flush_pose_list ( void )
 // -------------------------------------------------------return iterator to beginning of the list
 void ecp_smooth_generator::initiate_pose_list(void)
 {
-    pose_list_iterator = pose_list.begin();
+    pose_list_iterator = pose_list->begin();
 };
 // -------------------------------------------------------
 void ecp_smooth_generator::next_pose_list_ptr (void)
 {
-    if (pose_list_iterator != pose_list.end())
+    if (pose_list_iterator != pose_list->end())
         pose_list_iterator++;
 }
 
@@ -809,7 +813,7 @@ void ecp_smooth_generator::set_pose (POSE_SPECIFICATION ps, double vp[MAX_SERVOS
 bool ecp_smooth_generator::is_pose_list_element ( void )
 {
     // sprawdza czy aktualnie wskazywany jest element listy, czy lista sie skonczyla
-    if ( pose_list_iterator != pose_list.end())
+    if ( pose_list_iterator != pose_list->end())
     {
         return true;
     }
@@ -823,9 +827,9 @@ bool ecp_smooth_generator::is_last_list_element ( void )
 {
     // sprawdza czy aktualnie wskazywany element listy ma nastepnik
     // jesli <> nulla
-    if ( pose_list_iterator != pose_list.end() )
+    if ( pose_list_iterator != pose_list->end() )
     {
-        if ( (++pose_list_iterator) != pose_list.end() )
+        if ( (++pose_list_iterator) != pose_list->end() )
         {
             --pose_list_iterator;
             return false;
@@ -843,21 +847,21 @@ bool ecp_smooth_generator::is_last_list_element ( void )
 
 void ecp_smooth_generator::create_pose_list_head (POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR])
 {
-    pose_list.push_back(ecp_smooth_taught_in_pose(ps, v_p, v_k, v, a, coordinates));
-    pose_list_iterator = pose_list.begin();
+    pose_list->push_back(ecp_smooth_taught_in_pose(ps, v_p, v_k, v, a, coordinates));
+    pose_list_iterator = pose_list->begin();
 }
 
 
 void ecp_smooth_generator::insert_pose_list_element (POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR])
 {
-    pose_list.push_back(ecp_smooth_taught_in_pose(ps, v_p, v_k, v, a, coordinates));
+    pose_list->push_back(ecp_smooth_taught_in_pose(ps, v_p, v_k, v, a, coordinates));
     pose_list_iterator++;
 }
 
 // -------------------------------------------------------
 int ecp_smooth_generator::pose_list_length(void)
 {
-    return pose_list.size();
+    return pose_list->size();
 };
 
 bool ecp_smooth_generator::load_a_v_min (char* file_name)
@@ -978,7 +982,7 @@ ecp_smooth_generator::ecp_smooth_generator (ecp_task& _ecp_task, bool _is_synchr
     double v[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
     double a[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 
-
+	pose_list = new std::list<ecp_smooth_taught_in_pose>();
 
     int size = 1 + strlen(ecp_t.mrrocpp_network_path) + strlen("data/a_v_max.txt");
     char * path1 = new char[size];
@@ -1014,6 +1018,7 @@ ecp_smooth_generator::ecp_smooth_generator (ecp_task& _ecp_task, bool _is_synchr
     double v[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
     double a[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 
+	pose_list = new std::list<ecp_smooth_taught_in_pose>();
 
 
     int size = 1 + strlen(ecp_t.mrrocpp_network_path) + strlen("data/a_v_max.txt");

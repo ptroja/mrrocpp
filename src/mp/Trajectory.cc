@@ -8,7 +8,7 @@
 Trajectory::Trajectory()
 {
 	trjName = new char[80];
-	trjPoses	= new std::list<Pose>();
+	trjPoses	= new std::list<ecp_smooth_taught_in_pose>();
 }
 
 Trajectory::Trajectory(char *numOfPoses, char *trajectoryName, char *poseSpecification)
@@ -17,7 +17,7 @@ Trajectory::Trajectory(char *numOfPoses, char *trajectoryName, char *poseSpecifi
 	strcpy(trjName, trajectoryName);
 	this->numOfPoses = (uint64_t)atoi(numOfPoses);
 	poseSpec = returnProperPS(poseSpecification);
-	trjPoses	= new std::list<Pose>();
+	trjPoses	= new std::list<ecp_smooth_taught_in_pose>();
 	
 }
 
@@ -27,7 +27,7 @@ Trajectory::Trajectory(const Trajectory &trajectory)
 	strcpy(trjName, trajectory.trjName);
 	numOfPoses = trajectory.numOfPoses;
 	poseSpec = trajectory.poseSpec;
-	trjPoses = new std::list<Pose>(trajectory.trjPoses->begin(), trajectory.trjPoses->end());
+	trjPoses = new std::list<ecp_smooth_taught_in_pose>(trajectory.trjPoses->begin(), trajectory.trjPoses->end());
 }
 
 Trajectory::~Trajectory()
@@ -74,7 +74,8 @@ void Trajectory::setValuesInArray(double arrayToFill[], char *dataString)
 
 void Trajectory::createNewPose()
 {
-	actPose = new Pose();
+	actPose = new ecp_smooth_taught_in_pose();
+	actPose->arm_type = this->poseSpec;
 }
 
 void Trajectory::addPoseToTrajectory()
@@ -104,42 +105,42 @@ POSE_SPECIFICATION Trajectory::getPoseSpecification() const
 
 void Trajectory::setStartVelocities(char *startVelocities)
 {
-	setValuesInArray(actPose->startVelocity, startVelocities);
+	setValuesInArray(actPose->v_p, startVelocities);
 }
 
 double * Trajectory::getStartVelocities() const
 {
-	return actPose->startVelocity;
+	return actPose->v_p;
 }
 
 void Trajectory::setEndVelocities(char *endVelocities)
 {
-	setValuesInArray(actPose->endVelocity, endVelocities);
+	setValuesInArray(actPose->v_k, endVelocities);
 }
 
 double * Trajectory::getEndVelocities() const
 {
-	return actPose->endVelocity;
+	return actPose->v_k;
 }
 
 void Trajectory::setVelocities(char *Velocities)
 {
-	setValuesInArray(actPose->velocity, Velocities);
+	setValuesInArray(actPose->v, Velocities);
 }
 
 double * Trajectory::getVelocities() const
 {
-	return actPose->velocity;
+	return actPose->v;
 }
 
 void Trajectory::setAccelerations(char *accelerations)
 {
-	setValuesInArray(actPose->accelerations, accelerations);
+	setValuesInArray(actPose->a, accelerations);
 }
 
 double * Trajectory::getAccelerations() const
 {
-	return actPose->accelerations;
+	return actPose->a;
 }
 
 void Trajectory::setCoordinates(char *cCoordinates)
@@ -154,25 +155,25 @@ double * Trajectory::getCoordinates() const
 
 void Trajectory::showTime()
 {
-	std::list<Pose>::iterator it;
+	std::list<ecp_smooth_taught_in_pose>::iterator it;
 	printf("Nazwa: %s, PoseSpec: %d, NumOfPoses: %d\n", trjName, poseSpec, numOfPoses);
 	for(it=trjPoses->begin(); it!=trjPoses->end(); ++it)
 	{
-		printf("%f %f %f %f %f %f %f %f \n", (*it).startVelocity[0], (*it).startVelocity[1], (*it).startVelocity[2], (*it).startVelocity[3], 
-				(*it).startVelocity[4], (*it).startVelocity[5], (*it).startVelocity[6], (*it).startVelocity[7]);
-		printf("%f %f %f %f %f %f %f %f \n", (*it).endVelocity[0], (*it).endVelocity[1], (*it).endVelocity[2], (*it).endVelocity[3], 
-				(*it).endVelocity[4], (*it).endVelocity[5], (*it).endVelocity[6], (*it).endVelocity[7]);
-		printf("%f %f %f %f %f %f %f %f \n", (*it).velocity[0], (*it).velocity[1], (*it).velocity[2], (*it).velocity[3], 
-				(*it).velocity[4], (*it).velocity[5], (*it).velocity[6], (*it).velocity[7]);
-		printf("%f %f %f %f %f %f %f %f \n", (*it).accelerations[0], (*it).accelerations[1], (*it).accelerations[2], (*it).accelerations[3], 
-				(*it).accelerations[4], (*it).accelerations[5], (*it).accelerations[6], (*it).accelerations[7]);
+		printf("%f %f %f %f %f %f %f %f \n", (*it).v_p[0], (*it).v_p[1], (*it).v_p[2], (*it).v_p[3], 
+				(*it).v_p[4], (*it).v_p[5], (*it).v_p[6], (*it).v_p[7]);
+		printf("%f %f %f %f %f %f %f %f \n", (*it).v_k[0], (*it).v_k[1], (*it).v_k[2], (*it).v_k[3], 
+				(*it).v_k[4], (*it).v_k[5], (*it).v_k[6], (*it).v_k[7]);
+		printf("%f %f %f %f %f %f %f %f \n", (*it).v[0], (*it).v[1], (*it).v[2], (*it).v[3], 
+				(*it).v[4], (*it).v[5], (*it).v[6], (*it).v[7]);
+		printf("%f %f %f %f %f %f %f %f \n", (*it).a[0], (*it).a[1], (*it).a[2], (*it).a[3], 
+				(*it).a[4], (*it).a[5], (*it).a[6], (*it).a[7]);
 		printf("%f %f %f %f %f %f %f %f \n***\n\n", (*it).coordinates[0], (*it).coordinates[1], (*it).coordinates[2], (*it).coordinates[3], 
 				(*it).coordinates[4], (*it).coordinates[5], (*it).coordinates[6], (*it).coordinates[7]);
 	}
 
 }
 
-std::list<Trajectory::Pose> * Trajectory::getPoses()
+std::list<ecp_smooth_taught_in_pose> * Trajectory::getPoses()
 {
 	return trjPoses;
 }
