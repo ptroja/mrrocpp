@@ -49,7 +49,7 @@ class ecp_t_spots_recognition: public ecp_task
 
 		ecp_spots_generator* generator;
 		ecp_smooth_generator* smooth;
-		ecp_sleep_generator* sleep_g;
+		//ecp_sleep_generator* sleep_g;
 
 		/*!
         * Generator used for communication with cvFraDIA.
