@@ -34,7 +34,7 @@ class ecp_task_fsautomat_irp6p: public ecp_task
 		// methods for ECP template to redefine in concrete classes
 		void task_initialization(void);
 		void main_task_algorithm(void);
-		bool loadTrajectories();
+		bool loadTrajectories(char * fileName);
 	
 };
 

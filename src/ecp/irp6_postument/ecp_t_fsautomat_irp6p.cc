@@ -69,7 +69,7 @@ void ecp_task_fsautomat_irp6p::task_initialization(void)
 	sr_ecp_msg->message("ECP loaded");
 };
 
-bool ecp_task_fsautomat_irp6p::loadTrajectories()
+bool ecp_task_fsautomat_irp6p::loadTrajectories(char * fileName)
 {
 	int size;
 	char * filePath;
@@ -80,12 +80,12 @@ bool ecp_task_fsautomat_irp6p::loadTrajectories()
 	xmlChar *stateName, *stateType;
 	
 	xmlDocPtr doc;
-	size = 1 + strlen(mrrocpp_network_path) + strlen("data/automat_ver1.xml");				  	
+	size = 1 + strlen(mrrocpp_network_path) + strlen(fileName);				  	
 	filePath = new char[size];
 
 	// Stworzenie sciezki do pliku.
-	strcpy(filePath, mrrocpp_network_path);
-	sprintf(filePath, "%s%s", mrrocpp_network_path, "data/automat_ver1.xml");
+	//strcpy(filePath, mrrocpp_network_path);
+	sprintf(filePath, "%s%s", mrrocpp_network_path, fileName);
 	//printf("Plik: %s\n", filePath1);
 	doc = xmlParseFile(filePath);
 	if(doc == NULL)
@@ -189,9 +189,15 @@ void ecp_task_fsautomat_irp6p::main_task_algorithm(void)
 
 	int size;				  	
 	char * path1;
+	char * fileName = config.return_string_value("xml_file", "[xml_settings]");
+	int trjConf = config.return_int_value("trajectory_from_xml", "[xml_settings]");
+	int ecpLevel = config.return_int_value("trajectory_on_ecp_level", "[xml_settings]");
 
-	loadTrajectories();
-	printf("Mapa POSTUMENT zawiera: %d\n", trjMap->size());
+	if(trjConf && ecpLevel)
+	{
+		loadTrajectories(fileName);
+		printf("Lista ROBOT_IRP6_POSTUMENT zawiera: %d elementow\n", trjMap->size());
+	}
 	
 	sr_ecp_msg->message("ECP fsautomat irp6p  - wcisnij start");
 	ecp_wait_for_start();
@@ -207,22 +213,33 @@ void ecp_task_fsautomat_irp6p::main_task_algorithm(void)
 			switch ( (POURING_ECP_STATES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state)
 			{
 				case ECP_GEN_SMOOTH:
-				  	size = 1 + strlen(mrrocpp_network_path) + strlen("data/automat_ver1.xml");				  	
-					path1 = new char[size];
-					// Stworzenie sciezki do pliku.
-					strcpy(path1, mrrocpp_network_path);
-					sprintf(path1, "%s%s", mrrocpp_network_path, "data/automat_ver1.xml");
-					//sg->load_trajectory_from_xml(path1, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
-					sg->load_trajectory_from_xml((*trjMap)[mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string]);
-
-					//-----------------------------------------------------------------------------------------------------------------
-/*				  	size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);				  	
-					path1 = new char[size];
-					strcpy(path1, mrrocpp_network_path);
-					sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
-					sg->load_file_with_path (path1);
-*/
-					delete[] path1;
+					if(trjConf)
+					{
+						if(ecpLevel)
+						{
+							sg->load_trajectory_from_xml((*trjMap)[mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string]);
+						}
+						else
+						{
+				  			size = 1 + strlen(mrrocpp_network_path) + strlen(fileName);
+							path1 = new char[size];
+							// Stworzenie sciezki do pliku.
+							//strcpy(path1, mrrocpp_network_path);
+							sprintf(path1, "%s%s", mrrocpp_network_path, fileName);
+							sg->load_trajectory_from_xml(path1, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+							delete[] path1;
+						}
+					}
+					else
+					{
+					  	size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);				  	
+						path1 = new char[size];
+						// Stworzenie sciezki do pliku.
+						//strcpy(path1, mrrocpp_network_path);
+						sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+						sg->load_file_with_path (path1);
+						delete[] path1;
+					}
 					sg->Move();
 					break;
 				case GRIP:

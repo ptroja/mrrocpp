@@ -3,6 +3,9 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <libxml/xmlmemory.h>
+#include <libxml/parser.h>
+
 #include "mp/Trajectory.h"
 
 Trajectory::Trajectory()
@@ -70,6 +73,70 @@ void Trajectory::setValuesInArray(double arrayToFill[], char *dataString)
 	arrayToFill[index++] = atof(value);
 	while((value = strtok(NULL, " \t"))!=NULL)
 		arrayToFill[index++] = atof(value);
+}
+
+char * Trajectory::toString(double valArr[], int length)
+{
+	char * afterConv = new char[160];
+	for(int i=0; i<length; i++)
+	{
+		if(i==0)
+			sprintf(afterConv, "%g", valArr[i]);
+		else
+			sprintf(afterConv, "%s\t%g", afterConv, valArr[i]);
+	}
+//	std::cout<<afterConv<<std::endl;
+	return afterConv;
+}
+
+char * Trajectory::toString(int numberOfPoses)
+{
+	char * numStr = new char[10];
+	sprintf(numStr, "%d", numberOfPoses);
+
+	return numStr;
+}
+
+char * Trajectory::toString(POSE_SPECIFICATION ps)
+{
+	if ( ps == MOTOR )
+	{	return "MOTOR";	}
+	if ( ps == JOINT ) 
+	{	return "JOINT";	}
+	if ( ps == XYZ_ANGLE_AXIS ) 
+	{	return "XYZ_ANGLE_AXIS";	}
+	if ( ps == XYZ_EULER_ZYZ ) 
+	{	return "XYZ_EULER_ZYZ";	}
+	else
+		return "INVALID_END_EFFECTOR";
+}
+
+bool Trajectory::writeTrajectoryToXmlFile(char *fileName, POSE_SPECIFICATION ps, std::list<ecp_smooth_taught_in_pose> &poses)
+{
+	char * file = new char[80];
+	int posCount = poses.size();
+	xmlDocPtr doc;
+	xmlNodePtr tree, subtree;
+	std::list<ecp_smooth_taught_in_pose>::iterator it;
+		
+	doc = xmlNewDoc((const xmlChar *) "1.0");
+	
+	doc->children = xmlNewDocNode(doc, NULL, (const xmlChar *) "Trajectory", NULL);
+	xmlSetProp(doc->children, (const xmlChar *) "coordinateType", (const xmlChar *) Trajectory::toString(ps));
+	xmlSetProp(doc->children, (const xmlChar *) "numOfPoses", (const xmlChar *) Trajectory::toString(posCount));
+	for(it = poses.begin(); it != poses.end(); ++it)
+	{
+		tree = xmlNewChild(doc->children, NULL, (const xmlChar *) "Pose", NULL);
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"StartVelocity", (const xmlChar *)Trajectory::toString((*it).v_p, MAX_SERVOS_NR));
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"EndVelocity", (const xmlChar *)Trajectory::toString((*it).v_k, MAX_SERVOS_NR));
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Velocity", (const xmlChar *)Trajectory::toString((*it).v, MAX_SERVOS_NR));
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Accelerations", (const xmlChar *)Trajectory::toString((*it).a, MAX_SERVOS_NR));
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Coordinates", (const xmlChar *)Trajectory::toString((*it).coordinates, MAX_SERVOS_NR));
+	}
+	sprintf(file, "%s%s", fileName, ".xml");
+
+	xmlKeepBlanksDefault(0);
+	xmlSaveFormatFile(file, doc, 1);
 }
 
 void Trajectory::createNewPose()

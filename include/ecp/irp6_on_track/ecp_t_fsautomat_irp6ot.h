@@ -37,7 +37,7 @@ class ecp_task_fsautomat_irp6ot: public ecp_task
 		void task_initialization(void);
 		void main_task_algorithm(void);
 		void grip(double gripper_increment, int motion_time);
-		bool loadTrajectories();
+		bool loadTrajectories(char * fileName);
 	
 };
 

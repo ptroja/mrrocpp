@@ -170,7 +170,7 @@ bool mp_task_fsautomat::runEmptyGen(State &state)
 
 bool mp_task_fsautomat::runEmptyGenForSet(State &state)
 {
-	std::cout<<"wchdze... "<<state.getName()<<std::endl;
+//	std::cout<<"wchdze... "<<state.getName()<<std::endl;
 	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) 
 	{
@@ -182,11 +182,18 @@ bool mp_task_fsautomat::runEmptyGenForSet(State &state)
 
 bool mp_task_fsautomat::executeMotion(State &state)
 {
-	//if(set_next_ecps_state( (int) state.getGeneratorType(), 0, state.getTrajectoryFilePath(), 1, state.getRobot()))
-	if(set_next_ecps_state( (int) state.getGeneratorType(), 0, state.getName(), 1, state.getRobot()))
+	int trjConf = config.return_int_value("trajectory_from_xml", "[xml_settings]");
+	if(trjConf)
 	{
-		return true;
+		if(set_next_ecps_state( (int) state.getGeneratorType(), 0, state.getName(), 1, state.getRobot()))
+		{	return true;	}
 	}
+	else
+	{
+		if(set_next_ecps_state( (int) state.getGeneratorType(), 0, state.getTrajectoryFilePath(), 1, state.getRobot()))
+		{	return true;	}
+	}
+	
 	return false;
 }
 
@@ -197,6 +204,7 @@ void mp_task_fsautomat::main_task_algorithm(void)
 	std::list<State> *statesList = takeStatesList();
 	std::cout<<"Lista zawiera: "<<statesList->size()<<std::endl;
 	std::list<State>::iterator i;
+//	std::cout<<"Z konfiguracji: "<<config.return_int_value("trajectory_from_xml", "[xml_settings]")<<std::endl;
 	
 	
       // Oczekiwanie na zlecenie START od UI  
@@ -223,8 +231,8 @@ void mp_task_fsautomat::main_task_algorithm(void)
 			{
 				if(!runEmptyGenForSet((*i)))
 					std::cout<<(*i).getName()<<" -> zakonczony"<<std::endl;
-				else
-					std::cout<<"Blad!! zwrocono false! "<<(*i).getName()<<std::endl;
+				//else
+				//	std::cout<<"Blad!! zwrocono false! "<<(*i).getName()<<std::endl;
 				continue;
 			}
 			if(strcmp((*i).getType(), (const char *)"emptyGen") == 0)

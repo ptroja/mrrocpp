@@ -3,7 +3,7 @@
 //            Effector Control Process (ECP) - smooth generator
 // Generator nie wykorzystujacy informacji o czasie ruchu
 // autor: Przemek Pilacinski
-// Ostatnia modyfikacja: 2007r.
+// Ostatnia modyfikacja: 2008
 // -------------------------------------------------------------------------
 
 
@@ -270,6 +270,7 @@ bool ecp_smooth_generator::load_trajectory_from_xml(char* fileName, char* nodeNa
 	}
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
+	
 	return true;
 }
 ; // end: load_file()
@@ -452,6 +453,8 @@ bool ecp_smooth_generator::load_file_with_path (char* file_name)
         //		}
     } // end: for
     from_file.close();
+	// only for trajectory xml writing -> for now
+//	Trajectory::writeTrajectoryToXmlFile(file_name, ps, *pose_list);
     return true;
 }
 ; // end: load_file()
