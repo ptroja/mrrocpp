@@ -4,6 +4,9 @@
 #include "ecp_mp/ecp_mp_task.h"
 #include "ecp/common/ecp_robot.h"
 
+#include <map>
+#include "mp/Trajectory.h"
+
 class ecp_generator;
 
 // klasa globalna dla calego procesu MP
@@ -64,6 +67,13 @@ public:
 
     // Informacja dla MP o zakonczeniu zadania uzytkownika
     void ecp_termination_notice(void);
+
+	 // funkcjonalnosc dodana na potrzeby czytania trajektorii z pliku xml
+	 struct str_cmp{
+		 bool operator()(char const *a, char const *b) const;
+	 };		
+	 std::map<char*, Trajectory, str_cmp>* loadTrajectories(char * fileName, ROBOT_ENUM propRobot);
+
 
 public: // TODO: what follows should be private method
 

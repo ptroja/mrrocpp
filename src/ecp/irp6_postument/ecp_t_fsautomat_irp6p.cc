@@ -39,10 +39,10 @@ ecp_task_fsautomat_irp6p::ecp_task_fsautomat_irp6p(configurator &_config) : ecp_
 
 ecp_task_fsautomat_irp6p::~ecp_task_fsautomat_irp6p(){};
 
-bool ecp_task_fsautomat_irp6p::str_cmp::operator()(char const *a, char const *b) const
+/*bool ecp_task_fsautomat_irp6p::str_cmp::operator()(char const *a, char const *b) const
 {
 	return strcmp(a, b)<0;
-}
+}*/
 
 void ecp_task_fsautomat_irp6p::task_initialization(void) 
 {
@@ -69,7 +69,7 @@ void ecp_task_fsautomat_irp6p::task_initialization(void)
 	sr_ecp_msg->message("ECP loaded");
 };
 
-bool ecp_task_fsautomat_irp6p::loadTrajectories(char * fileName)
+/*bool ecp_task_fsautomat_irp6p::loadTrajectories(char * fileName)
 {
 	int size;
 	char * filePath;
@@ -182,7 +182,7 @@ bool ecp_task_fsautomat_irp6p::loadTrajectories(char * fileName)
 //		(*ii).second.showTime();
 			
 	return true;
-}
+}*/
 
 void ecp_task_fsautomat_irp6p::main_task_algorithm(void)
 {
@@ -195,7 +195,7 @@ void ecp_task_fsautomat_irp6p::main_task_algorithm(void)
 
 	if(trjConf && ecpLevel)
 	{
-		loadTrajectories(fileName);
+		trjMap = loadTrajectories(fileName, ROBOT_IRP6_POSTUMENT);
 		printf("Lista ROBOT_IRP6_POSTUMENT zawiera: %d elementow\n", trjMap->size());
 	}
 	
@@ -210,7 +210,7 @@ void ecp_task_fsautomat_irp6p::main_task_algorithm(void)
 			
 			sr_ecp_msg->message("Order received");
 			
-			switch ( (POURING_ECP_STATES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state)
+			switch ( (STATE_MACHINE_ECP_STATES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state)
 			{
 				case ECP_GEN_SMOOTH:
 					if(trjConf)
@@ -242,19 +242,18 @@ void ecp_task_fsautomat_irp6p::main_task_algorithm(void)
 					}
 					sg->Move();
 					break;
-				case GRIP:
-					go_st->configure(-0.018, 1000);
+				case RCSC_GRIPPER_OPENING:
+					double go_args[2];
+					Trajectory::setValuesInArray(go_args, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+					go_st->configure(go_args[0], (int)go_args[1]);
 					go_st->execute();
+					//delete[] args
 					break;
-				case LET_GO:
-					go_st->configure(0.015, 1000);
-					go_st->execute();
-					break;
-				case WEIGHT:
+/*				case WEIGHT:
 					printf("force0: %d\n", sensor_m.begin()->second->image.force.rez[0]);
 					printf("force1: %d\n", sensor_m.begin()->second->image.force.rez[0]);
 					printf("force2: %d\n", sensor_m.begin()->second->image.force.rez[0]);
-					break;
+					break;*/
 				default:
 				break;
 			} // end switch

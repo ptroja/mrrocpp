@@ -38,11 +38,6 @@ ecp_task_fsautomat_irp6ot::~ecp_task_fsautomat_irp6ot()
 	//EMPTY
 };
 
-bool ecp_task_fsautomat_irp6ot::str_cmp::operator()(char const *a, char const *b) const
-{
-	return strcmp(a, b)<0;
-}
-
 // methods for ECP template to redefine in concrete classes
 void ecp_task_fsautomat_irp6ot::task_initialization(void) 
 {
@@ -58,120 +53,6 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 };
 
 
-bool ecp_task_fsautomat_irp6ot::loadTrajectories(char * fileName)
-{
-	int size;
-	char * filePath;
-	Trajectory* actTrajectory;
-	xmlNode *cur_node, *child_node, *cchild_node, *ccchild_node;
-	xmlChar *coordinateType, *numOfPoses, *robot;	 
-	xmlChar *xmlDataLine;
-	xmlChar *stateName, *stateType;
-	
-	xmlDocPtr doc;
-	size = 1 + strlen(mrrocpp_network_path) + strlen(fileName);				  	
-	filePath = new char[size];
-
-	// Stworzenie sciezki do pliku.
-	//strcpy(filePath, mrrocpp_network_path);
-	sprintf(filePath, "%s%s", mrrocpp_network_path, fileName);
-	//printf("Plik: %s\n", filePath1);
-	doc = xmlParseFile(filePath);
-	if(doc == NULL)
-	{
-		throw ecp_generator::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
-	}
-	
-	xmlNode *root = NULL;
-	root = xmlDocGetRootElement(doc);
-	if(!root || !root->name)
-	{
-		xmlFreeDoc(doc);
-		throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
-	}
-	
-	trjMap = new std::map<char*, Trajectory, ecp_task_fsautomat_irp6ot::str_cmp>();
-	
-   for(cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
-   {
-      if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "State" ) )
-      {
-         stateName = xmlGetProp(cur_node, (const xmlChar *) "name");
-			stateType = xmlGetProp(cur_node, (const xmlChar *) "type");
-         if(stateName && !strcmp((const char *)stateType, (const char *)"motionExecute"))
-			{
-	         for(child_node = cur_node->children; child_node != NULL; child_node = child_node->next)
-	         {
-	            if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"ROBOT") )
-					{
-						robot = xmlNodeGetContent(child_node);
-					}
-	            if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") &&
-							!xmlStrcmp(robot, (const xmlChar *)"ROBOT_IRP6_ON_TRACK"))
-	            {
-						coordinateType = xmlGetProp(child_node, (const xmlChar *)"coordinateType");
-						numOfPoses = xmlGetProp(child_node, (const xmlChar *)"numOfPoses");
-						actTrajectory = new Trajectory((char *)numOfPoses, (char *)stateName, (char *)coordinateType);
-						for(cchild_node = child_node->children; cchild_node!=NULL; cchild_node = cchild_node->next)
-						{							
-	            		if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )
-							{
-								actTrajectory->createNewPose();
-								for(ccchild_node = cchild_node->children; ccchild_node!=NULL; ccchild_node = ccchild_node->next)
-								{
-	            				if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"StartVelocity") )
-									{	
-										xmlDataLine = xmlNodeGetContent(ccchild_node);
-										actTrajectory->setStartVelocities((char *)xmlDataLine);
-										xmlFree(xmlDataLine);
-									}
-	            				if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"EndVelocity") )
-									{										
-										xmlDataLine = xmlNodeGetContent(ccchild_node);
-										actTrajectory->setEndVelocities((char *)xmlDataLine);
-										xmlFree(xmlDataLine);
-									}
-	            				if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
-									{										
-										xmlDataLine = xmlNodeGetContent(ccchild_node);
-										actTrajectory->setVelocities((char *)xmlDataLine);
-										xmlFree(xmlDataLine);
-									}
-	            				if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
-									{										
-										xmlDataLine = xmlNodeGetContent(ccchild_node);
-										actTrajectory->setAccelerations((char *)xmlDataLine);
-										xmlFree(xmlDataLine);
-									}
-	            				if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
-									{										
-										xmlDataLine = xmlNodeGetContent(ccchild_node);
-										actTrajectory->setCoordinates((char *)xmlDataLine);
-										xmlFree(xmlDataLine);
-									}
-								}
-								actTrajectory->addPoseToTrajectory();
-							}
-							
-						}
-						xmlFree(coordinateType);
-						xmlFree(numOfPoses);
-						xmlFree(stateType);
-			         xmlFree(stateName);
-						trjMap->insert(std::map<char *, Trajectory>::value_type(actTrajectory->getName(), *actTrajectory));
-	            }
-	         }
-				xmlFree(robot);				
-			}
-		}
-	}
-	xmlFreeDoc(doc);
-	xmlCleanupParser();
-//	for(std::map<char *, Trajectory>::iterator ii = trjMap->begin(); ii != trjMap->end(); ++ii)
-//		(*ii).second.showTime();
-			
-	return true;
-}
 
 void ecp_task_fsautomat_irp6ot::main_task_algorithm(void)
 {
@@ -184,7 +65,7 @@ void ecp_task_fsautomat_irp6ot::main_task_algorithm(void)
 
 	if(trjConf && ecpLevel)
 	{
-		loadTrajectories(fileName);
+		trjMap = loadTrajectories(fileName, ROBOT_IRP6_ON_TRACK);
 		printf("Lista ROBOT_IRP6_ON_TRACK zawiera: %d elementow\n", trjMap->size());
 	}
 //	for(std::map<char *, Trajectory, ecp_task_fsautomat_irp6ot::str_cmp>::iterator ii = trjMap->begin(); ii != trjMap->end(); ++ii)
@@ -209,7 +90,7 @@ void ecp_task_fsautomat_irp6ot::main_task_algorithm(void)
 			
 			sr_ecp_msg->message("Order received");
 			
-			switch ( (POURING_ECP_STATES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state)
+			switch ( (STATE_MACHINE_ECP_STATES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state)
 			{
 				case ECP_GEN_SMOOTH:
 					if(trjConf)
@@ -244,21 +125,19 @@ void ecp_task_fsautomat_irp6ot::main_task_algorithm(void)
 					sg->Move();
 					//printf("OT po move\n");
 					break;
-				case ECP_GEN_POURING:				
-					tcg->set_tool_parameters(-0.18, 0.0, 0.25);
+				case ECP_TOOL_CHANGE_GENERATOR:
+					double tcg_args[3];
+					Trajectory::setValuesInArray(tcg_args, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+					tcg->set_tool_parameters(tcg_args[0], tcg_args[1], tcg_args[2]);
 					tcg->Move();
+					//delete[] tcg_args;
 					break;
-				case ECP_END_POURING:
-					tcg->set_tool_parameters(0.0, 0.0, 0.25);
-					tcg->Move();
-					break;
-				case GRIP:
-					go_st->configure(-0.03, 1000);
+				case RCSC_GRIPPER_OPENING:
+					double go_args[2];
+					Trajectory::setValuesInArray(go_args, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+					go_st->configure(go_args[0], (int)go_args[1]);
 					go_st->execute();
-					break;
-				case LET_GO:
-					go_st->configure(0.03, 1000);
-					go_st->execute();
+					//delete[] go_args;
 					break;
 				default:
 				break;

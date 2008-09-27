@@ -90,13 +90,13 @@
 	</State>
 	<State name="grab_3" type="motionExecute">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
-		<ECPGeneratorType>ECP_GEN_TFF_RUBIK_GRAB</ECPGeneratorType>
-		<TrajectoryFilePath></TrajectoryFilePath>
+		<ECPGeneratorType>RCSC_GRIPPER_OPENING</ECPGeneratorType>
+		<TrajectoryFilePath>-0.03	1000</TrajectoryFilePath>
 	</State>
 	<State name="grab_4" type="motionExecute">
 		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
-		<ECPGeneratorType>ECP_GEN_TFF_RUBIK_GRAB</ECPGeneratorType>
-		<TrajectoryFilePath></TrajectoryFilePath>
+		<ECPGeneratorType>RCSC_GRIPPER_OPENING</ECPGeneratorType>
+		<TrajectoryFilePath>-0.018	1000</TrajectoryFilePath>
 	</State>
 	<State name="grab_end_2" type="emptyGenForSet">
 		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>
@@ -196,8 +196,8 @@
 	</State>
 	<State name="pour_1" type="motionExecute">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
-		<ECPGeneratorType>ECP_GEN_TFF_NOSE_RUN</ECPGeneratorType>
-		<TrajectoryFilePath></TrajectoryFilePath>
+		<ECPGeneratorType>ECP_TOOL_CHANGE_GENERATOR</ECPGeneratorType>
+		<TrajectoryFilePath>-0.18	0.0	0.25</TrajectoryFilePath>
 	</State>
 	<State name="pour_end_1" type="emptyGen">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
@@ -238,8 +238,8 @@
 	</State>
 	<State name="pour_4" type="motionExecute">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
-		<ECPGeneratorType>ECP_GEN_TEACH_IN</ECPGeneratorType>
-		<TrajectoryFilePath></TrajectoryFilePath>
+		<ECPGeneratorType>ECP_TOOL_CHANGE_GENERATOR</ECPGeneratorType>
+		<TrajectoryFilePath>0.0	0.0	0.25</TrajectoryFilePath>
 	</State>
 	<State name="pour_end_4" type="emptyGen">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
@@ -265,13 +265,13 @@
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
 		<TrajectoryFilePath>trj/pouring/irp6_ot_track_put_back.trj</TrajectoryFilePath>
-		<Trajectory coordinateType="XYZ_EULER_ZYZ" numOfPoses="1">
+		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
 				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
-				<Velocity>0.01	0.01	0.01	0.01	0.01	0.01	1.0	1.0</Velocity>
-				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Accelerations>
-				<Coordinates>0.948 -0.309 0.145 -1.269 1.529 0.0 0.058 0.0</Coordinates>
+				<Velocity>0.05	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Velocity>
+				<Accelerations>0.05	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Accelerations>
+				<Coordinates>0.000000 1.247939 -1.305014 0.111729 1.424721 2.849218 1.431256 0.058</Coordinates>
 			</Pose>
 		</Trajectory>
 	</State>
@@ -356,13 +356,13 @@
 	</State>
 	<State name="put_back_3" type="motionExecute">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
-		<ECPGeneratorType>ECP_GEN_TFF_RUBIK_FACE_ROTATE</ECPGeneratorType>
-		<TrajectoryFilePath></TrajectoryFilePath>
+		<ECPGeneratorType>RCSC_GRIPPER_OPENING</ECPGeneratorType>
+		<TrajectoryFilePath>0.03	1000</TrajectoryFilePath>
 	</State>
 	<State name="put_back_4" type="motionExecute">
 		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
-		<ECPGeneratorType>ECP_GEN_TFF_RUBIK_FACE_ROTATE</ECPGeneratorType>
-		<TrajectoryFilePath></TrajectoryFilePath>
+		<ECPGeneratorType>RCSC_GRIPPER_OPENING</ECPGeneratorType>
+		<TrajectoryFilePath>0.015	1000</TrajectoryFilePath>
 	</State>
 	<State name="put_back_end_2" type="emptyGenForSet">
 		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>

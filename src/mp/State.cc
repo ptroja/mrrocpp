@@ -124,13 +124,19 @@ void State::setGeneratorType(char *genType)
 		this->generatorType = ECP_GEN_TFF_GRIPPER_APPROACH;	
 	else if(strcmp(genType, (const char *)"RCSC_GRIPPER_OPENING") == 0)
 		this->generatorType = RCSC_GRIPPER_OPENING;	
+	else if(strcmp(genType, (const char *)"ECP_GEN_BIAS_EDP_FORCE") == 0)
+		this->generatorType = ECP_GEN_BIAS_EDP_FORCE;	
+	else if(strcmp(genType, (const char *)"ECP_WEIGHT_MEASURE_GENERATOR") == 0)
+		this->generatorType = ECP_WEIGHT_MEASURE_GENERATOR;	
+	else if(strcmp(genType, (const char *)"ECP_TOOL_CHANGE_GENERATOR") == 0)
+		this->generatorType = ECP_TOOL_CHANGE_GENERATOR;	
 	else 
 		this->generatorType = ECP_GEN_SPEAK;	
 }
 
 //----------------------------------------------------------------------------------------------------------
 
-RCSC_ECP_STATES State::getGeneratorType() const
+STATE_MACHINE_ECP_STATES State::getGeneratorType() const
 {
 	return generatorType;
 }

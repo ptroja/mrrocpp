@@ -21,9 +21,9 @@ class ecp_task_fsautomat_irp6p: public ecp_task
 	protected:
 		ecp_smooth_generator* sg;
 		ecp_sub_task_gripper_opening* go_st;
-		struct str_cmp{
-			bool operator()(char const *a, char const *b) const;
-		};		
+//		struct str_cmp{
+//			bool operator()(char const *a, char const *b) const;
+//		};		
 		std::map<char*, Trajectory, str_cmp>* trjMap;
 
 	public:
@@ -34,7 +34,7 @@ class ecp_task_fsautomat_irp6p: public ecp_task
 		// methods for ECP template to redefine in concrete classes
 		void task_initialization(void);
 		void main_task_algorithm(void);
-		bool loadTrajectories(char * fileName);
+//		bool loadTrajectories(char * fileName);
 	
 };
 

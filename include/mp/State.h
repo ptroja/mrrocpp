@@ -7,7 +7,7 @@
 #if !defined(_STATE_H_)
 #define _STATE_H_
 
-#include "ecp_mp/ecp_mp_t_rcsc.h"
+#include "ecp_mp/ecp_mp_t_fsautomat.h"
 #include "common/impconst.h"
 
 //enum StateType { INITIALIZATION, MOTION_EXECUTE };
@@ -26,7 +26,7 @@ class State
 		void setRobot(char *robot);
 		ROBOT_ENUM getRobot() const;
 		void setGeneratorType(char *genType);
-		RCSC_ECP_STATES getGeneratorType() const;
+		STATE_MACHINE_ECP_STATES getGeneratorType() const;
 		void setTrajectoryFilePath(char *trajFilePath);
 		char *  getTrajectoryFilePath() const;
 
@@ -36,7 +36,7 @@ class State
 		char *name;
 		char *type;
 		ROBOT_ENUM robot;
-		RCSC_ECP_STATES generatorType;
+		STATE_MACHINE_ECP_STATES generatorType;
 		char *trajectoryFilePath;
 	
 };

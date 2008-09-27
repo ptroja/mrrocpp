@@ -97,6 +97,31 @@ char * Trajectory::toString(int numberOfPoses)
 	return numStr;
 }
 
+char * Trajectory::returnRobotName(ROBOT_ENUM robot)
+{
+
+	if(robot == ROBOT_IRP6_ON_TRACK)
+		return "ROBOT_IRP6_ON_TRACK";
+	else if(robot == ROBOT_IRP6_POSTUMENT)
+		return "ROBOT_IRP6_POSTUMENT";
+	else if(robot == ROBOT_CONVEYOR)
+		return "ROBOT_CONVEYOR";
+	else if(robot == ROBOT_SPEAKER)
+		return "ROBOT_SPEAKER";
+	else if(robot == ROBOT_IRP6_MECHATRONIKA)
+		return "ROBOT_IRP6_MECHATRONIKA";
+	else if(robot == ROBOT_ELECTRON)
+		return "ROBOT_ELECTRON";
+	else if(robot == ROBOT_FESTIVAL)
+		return "ROBOT_FESTIVAL";
+	else if(robot == ROBOT_HAND)
+		return "ROBOT_HAND";
+	else if(robot == ROBOT_SPEECHRECOGNITION)
+		return "ROBOT_SPEECHRECOGNITION";
+	else
+		return "ROBOT_UNDEFINED";	
+}
+
 char * Trajectory::toString(POSE_SPECIFICATION ps)
 {
 	if ( ps == MOTOR )
