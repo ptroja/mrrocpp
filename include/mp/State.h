@@ -21,23 +21,26 @@ class State
 		
 		void setName(char *name);
 		char * getName() const;
+		void setNumArgument(char *time);
+		int getNumArgument() const;
 		void setType(char *type);
 		char *  getType() const;
 		void setRobot(char *robot);
 		ROBOT_ENUM getRobot() const;
 		void setGeneratorType(char *genType);
 		STATE_MACHINE_ECP_STATES getGeneratorType() const;
-		void setTrajectoryFilePath(char *trajFilePath);
-		char *  getTrajectoryFilePath() const;
+		void setStringArgument(char *trajFilePath);
+		char *  getStringArgument() const;
 
 		void showStateContent() const;
 		
 	private:
+		int numArgument;
 		char *name;
 		char *type;
 		ROBOT_ENUM robot;
 		STATE_MACHINE_ECP_STATES generatorType;
-		char *trajectoryFilePath;
+		char *stringArgument;
 	
 };
 

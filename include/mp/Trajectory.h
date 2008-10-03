@@ -16,7 +16,7 @@ class Trajectory
 		Trajectory(const Trajectory &trajectory);
 		~Trajectory();
 
-		static void setValuesInArray(double arrayToFill[], char *dataString);
+		static int setValuesInArray(double arrayToFill[], char *dataString);
 		static POSE_SPECIFICATION returnProperPS(char *poseSpecification);
 		static char * toString(double valArr[], int length);
 		static char * toString(int numberOfPoses);

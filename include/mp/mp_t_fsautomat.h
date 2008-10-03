@@ -32,6 +32,8 @@ class mp_task_fsautomat : public mp_task
 		bool executeMotion(State &state);
 		bool runEmptyGenForSet(State &state);
 		bool runEmptyGen(State &state);
+		bool runWaitFunction(State &state);
+		bool stopProperGen(State &state);
 
 }; // end : class mp_task_fsautomat
 #endif

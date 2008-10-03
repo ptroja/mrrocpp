@@ -3,30 +3,29 @@
 #include <mp/State.h>
 #include <iostream>
 #include <string.h>
+#include <stdlib.h>
 
 State::State()
 {
+	numArgument = 0;
 	name = new char[40];
 	type =  new char[40];
 	//robot =  new char[40];
 	//generatorType =  new char[40];
-	trajectoryFilePath =  new char[40];
+	stringArgument =  new char[40];
 }
 //-----------------------------------------------------------------------------------------------------------
 State::State(const State &state)
 {
+	this->numArgument = state.numArgument;
 	name = new char[40];
 	type =  new char[40];
-	//robot =  new char[40];
-	//generatorType =  new char[40];
-	trajectoryFilePath =  new char[40];
+	stringArgument =  new char[40];
 	strcpy(this->name, state.name);
 	strcpy(this->type, state.type);
-	//strcpy(this->robot, state.robot);
 	robot = state.robot;
-	//strcpy(this->generatorType, state.generatorType);
 	generatorType = state.generatorType;
-	strcpy(this->trajectoryFilePath, state.trajectoryFilePath);
+	strcpy(this->stringArgument, state.stringArgument);
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -35,9 +34,7 @@ State::~State()
 {
 	delete[] name;
 	delete[] type;
-	//delete[] robot;
-	//delete[] generatorType;
-	delete[] trajectoryFilePath;
+	delete[] stringArgument;
 }
 
 
@@ -51,6 +48,20 @@ void State::setName(char *name)
 char* State::getName() const
 {
 	return name;
+}
+
+//-----------------------------------------------------------------------------------------------------------
+
+void State::setNumArgument(char *numArgument)
+{
+	this->numArgument = atoi(numArgument);
+}
+
+//-----------------------------------------------------------------------------------------------------------
+
+int State::getNumArgument() const
+{
+	return numArgument;
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -143,21 +154,21 @@ STATE_MACHINE_ECP_STATES State::getGeneratorType() const
 
 //----------------------------------------------------------------------------------------------------------
 
-void State::setTrajectoryFilePath(char* trajFilePath)
+void State::setStringArgument(char* trajFilePath)
 {
-	strcpy(this->trajectoryFilePath, trajFilePath);
+	strcpy(this->stringArgument, trajFilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------
 
-char* State::getTrajectoryFilePath() const
+char* State::getStringArgument() const
 {
-	return trajectoryFilePath;
+	return stringArgument;
 }
 
 //----------------------------------------------------------------------------------------------------------
 
 void State::showStateContent() const
 {
-	std::cout<<name<<std::endl<<type<<std::endl<<robot<<std::endl<<generatorType<<std::endl<<trajectoryFilePath<<std::endl;
+	std::cout<<name<<std::endl<<type<<std::endl<<robot<<std::endl<<generatorType<<std::endl<<stringArgument<<std::endl;
 }

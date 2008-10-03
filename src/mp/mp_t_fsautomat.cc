@@ -72,16 +72,21 @@ void mp_task_fsautomat::task_initialization(void)
 
 std::list<State> * mp_task_fsautomat::takeStatesList()
 {
-	
-	char *fileName = "../data/automat_ver1.xml";
+	int size;
+	char *filePath;
+	char *fileName = config.return_string_value("xml_file", "[xml_settings]");
    xmlNode *cur_node, *child_node;
    xmlChar *ecpGeneratorType, *robot;
-   xmlChar *stateName, *stateType, *trajectoryFilePath;
+   xmlChar *stateName, *stateType, *stringArgument, *numArgument;
 	std::list<State> *statesList = new std::list<State>();
 
+	size = 1 + strlen(mrrocpp_network_path) + strlen(fileName);				  	
+	filePath = new char[size];
+
+	sprintf(filePath, "%s%s", mrrocpp_network_path, fileName);
    // open xml document
    xmlDocPtr doc;
-   doc = xmlParseFile(fileName);
+   doc = xmlParseFile(filePath);
    if(doc == NULL)
 	{
       cout<<"ERROR: could not parse file: \""<<fileName<<"\"."<<endl;
@@ -136,12 +141,23 @@ std::list<State> * mp_task_fsautomat::takeStatesList()
                xmlFree(robot);
             }
             if ( cur_node->type == XML_ELEMENT_NODE  &&
-                  !xmlStrcmp(child_node->name, (const xmlChar *)"TrajectoryFilePath") )
+                  (!xmlStrcmp(child_node->name, (const xmlChar *)"TrajectoryFilePath") ||
+						 !xmlStrcmp(child_node->name, (const xmlChar *)"GeneratorCoordinates") ||
+						 !xmlStrcmp(child_node->name, (const xmlChar *)"Speech")))
             {
-               trajectoryFilePath = xmlNodeGetContent(child_node);
-               if(trajectoryFilePath)
-						actState->setTrajectoryFilePath((char*)trajectoryFilePath);
-               xmlFree(trajectoryFilePath);
+               stringArgument = xmlNodeGetContent(child_node);
+               if(stringArgument)
+						actState->setStringArgument((char*)stringArgument);
+               xmlFree(stringArgument);
+            }
+            if ( cur_node->type == XML_ELEMENT_NODE  &&
+                  (!xmlStrcmp(child_node->name, (const xmlChar *)"TimeSpan") ||
+						 !xmlStrcmp(child_node->name, (const xmlChar *)"AddArg")))
+            {
+               stringArgument = xmlNodeGetContent(child_node);
+               if(numArgument)
+						actState->setNumArgument((char*)numArgument);
+               xmlFree(numArgument);
             }
          }
 			statesList->push_back(*actState);
@@ -158,6 +174,23 @@ std::list<State> * mp_task_fsautomat::takeStatesList()
 	return statesList;
 }
 
+bool mp_task_fsautomat::stopProperGen(State &state)
+{
+	if (send_end_motion_to_ecps (1, state.getRobot()))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool mp_task_fsautomat::runWaitFunction(State &state)
+{
+	if(wait_ms(state.getNumArgument()))
+	{
+		return true;
+	}
+	return false;
+}
 
 bool mp_task_fsautomat::runEmptyGen(State &state)
 {
@@ -183,14 +216,14 @@ bool mp_task_fsautomat::runEmptyGenForSet(State &state)
 bool mp_task_fsautomat::executeMotion(State &state)
 {
 	int trjConf = config.return_int_value("trajectory_from_xml", "[xml_settings]");
-	if(trjConf)
+	if(trjConf && state.getGeneratorType() == ECP_GEN_SMOOTH)
 	{
-		if(set_next_ecps_state( (int) state.getGeneratorType(), 0, state.getName(), 1, state.getRobot()))
+		if(set_next_ecps_state( (int) state.getGeneratorType(), state.getNumArgument(), state.getName(), 1, state.getRobot()))
 		{	return true;	}
 	}
 	else
 	{
-		if(set_next_ecps_state( (int) state.getGeneratorType(), 0, state.getTrajectoryFilePath(), 1, state.getRobot()))
+		if(set_next_ecps_state( (int) state.getGeneratorType(), state.getNumArgument(), state.getStringArgument(), 1, state.getRobot()))
 		{	return true;	}
 	}
 	
@@ -221,7 +254,7 @@ void mp_task_fsautomat::main_task_algorithm(void)
 			//(*i).showStateContent();
 			//continue;
 			//cout<<"###### "<<(*i).getType()<<endl;
-			if(strcmp((*i).getType(), (const char *)"motionExecute") == 0)
+			if(strcmp((*i).getType(), (const char *)"runGenerator") == 0)
 			{
 				if(!executeMotion((*i)))
 					std::cout<<(*i).getName()<<" -> zakonczony"<<std::endl;
@@ -238,6 +271,18 @@ void mp_task_fsautomat::main_task_algorithm(void)
 			if(strcmp((*i).getType(), (const char *)"emptyGen") == 0)
 			{
 				if(!runEmptyGen((*i)))
+					std::cout<<(*i).getName()<<" -> zakonczony"<<std::endl;
+				continue;
+			}
+			if(strcmp((*i).getType(), (const char *)"wait") == 0)
+			{
+				if(!runWaitFunction((*i)))
+					std::cout<<(*i).getName()<<" -> zakonczony"<<std::endl;
+				continue;
+			}
+			if(strcmp((*i).getType(), (const char *)"stopGen") == 0)
+			{
+				if(!stopProperGen((*i)))
 					std::cout<<(*i).getName()<<" -> zakonczony"<<std::endl;
 				continue;
 			}

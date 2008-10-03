@@ -63,7 +63,7 @@ POSE_SPECIFICATION Trajectory::returnProperPS(char *poseSpecification)
 		return INVALID_END_EFFECTOR;
 }
 
-void Trajectory::setValuesInArray(double arrayToFill[], char *dataString)
+int Trajectory::setValuesInArray(double arrayToFill[], char *dataString)
 {
 	int index = 0;
 	char *value;
@@ -73,6 +73,7 @@ void Trajectory::setValuesInArray(double arrayToFill[], char *dataString)
 	arrayToFill[index++] = atof(value);
 	while((value = strtok(NULL, " \t"))!=NULL)
 		arrayToFill[index++] = atof(value);
+	return index;
 }
 
 char * Trajectory::toString(double valArr[], int length)

@@ -19,11 +19,20 @@
 class ecp_task_fsautomat_irp6p: public ecp_task
 {
 	protected:
+		// generatory
 		ecp_smooth_generator* sg;
+		ecp_tool_change_generator* tcg;
+		ecp_generator_t* gt;
+		ecp_tff_nose_run_generator* nrg;
+		ecp_tff_rubik_grab_generator* rgg;
+		ecp_tff_gripper_approach_generator* gag;		
+		ecp_tff_rubik_face_rotate_generator* rfrg;
+		ecp_teach_in_generator* tig;
+		bias_edp_force_generator* befg;
+		weight_meassure_generator* wmg;
+		//podzadania
 		ecp_sub_task_gripper_opening* go_st;
-//		struct str_cmp{
-//			bool operator()(char const *a, char const *b) const;
-//		};		
+
 		std::map<char*, Trajectory, str_cmp>* trjMap;
 
 	public:

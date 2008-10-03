@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE TaskDescription [
+	<!ELEMENT TaskDescription (State+)>
+
+	<!ELEMENT State ((ROBOT?|SetOfRobots+)?,ECPGeneratorType?,TrajectoryFilePath?,Trajectory?,taskInit?,
+							Speech?,AddArg?,Sensor?,TimeSpan?,GeneratorParameters?)>
+		<!ATTLIST State name CDATA #REQUIRED>
+		<!ATTLIST State type CDATA #REQUIRED>
+
+	<!ELEMENT SetOfRobots (ROBOT)+>
+		<!ATTLIST SetOfRobots type (first|second) "first">
+	<!ELEMENT ROBOT (#PCDATA)>
+	<!ELEMENT ECPGeneratorType (#PCDATA)>
+	<!ELEMENT TrajectoryFilePath (#PCDATA)>
+	<!ELEMENT Trajectory (Pose+)>
+		<!ATTLIST Trajectory coordinateType CDATA #REQUIRED>
+		<!ATTLIST Trajectory numOfPoses CDATA #REQUIRED>
+		
+	<!ELEMENT Pose (StartVelocity,EndVelocity,Velocity,Accelerations,Coordinates)>
+		<!ELEMENT StartVelocity (#PCDATA)>
+		<!ELEMENT EndVelocity (#PCDATA)>
+		<!ELEMENT Velocity (#PCDATA)>
+		<!ELEMENT Accelerations (#PCDATA)>
+		<!ELEMENT Coordinates (#PCDATA)>
+	
+	<!ELEMENT taskInit (ecp+,mp?)>
+	<!ELEMENT ecp (ecp_gen_t?,ecp_tff_nose_run_gen?,ecp_tff_rubik_grab_gen?,
+		ecp_tff_gripper_approach_gen?,ecp_tff_rubik_face_rotate_gen?,ecp_teach_in_gen?,
+		bias_edp_force_gen?,ecp_smooth_gen?,weight_measure_gen?,ecp_sub_task_gripper_opening?)>
+		<!ATTLIST ecp name CDATA #REQUIRED>
+		<!ELEMENT ecp_gen_t (#PCDATA)>
+		<!ELEMENT ecp_tff_nose_run_gen (#PCDATA)>
+		<!ELEMENT ecp_tff_rubik_grab_gen (#PCDATA)>
+		<!ELEMENT ecp_tff_gripper_approach_gen (#PCDATA)>
+		<!ELEMENT ecp_tff_rubik_face_rotate_gen (#PCDATA)>
+		<!ELEMENT ecp_teach_in_gen (#PCDATA)>
+		<!ELEMENT bias_edp_force_gen (#PCDATA)>
+		<!ELEMENT ecp_smooth_gen (#PCDATA)>
+		<!ELEMENT weight_measure_gen (#PCDATA)>
+		<!ELEMENT ecp_sub_task_gripper_opening (#PCDATA)>
+	
+	<!ELEMENT mp (#PCDATA)>
+	
+	<!ELEMENT Speech (#PCDATA)>
+	<!ELEMENT AddArg (#PCDATA)>
+	<!ELEMENT Sensor (#PCDATA)>
+	<!ELEMENT TimeSpan (#PCDATA)>
+	<!ELEMENT GeneratorParameters (#PCDATA)>
+]>
+
+		
+
+
+
+
+<TaskDescription>
+	<State name="systemInitialization" type="sysInit">
+		<taskInit>
+			<ecp name="ROBOT_IRP6_ON_TRACK">
+				<ecp_gen_t></ecp_gen_t>
+				<ecp_tff_nose_run_gen>8</ecp_tff_nose_run_gen>
+				<ecp_tff_rubik_grab_gen>8</ecp_tff_rubik_grab_gen>
+				<ecp_tff_gripper_approach_gen>8</ecp_tff_gripper_approach_gen>
+				<ecp_tff_rubik_face_rotate_gen>8</ecp_tff_rubik_face_rotate_gen>
+				<ecp_teach_in_gen></ecp_teach_in_gen>
+				<bias_edp_force_gen></bias_edp_force_gen>
+				<ecp_smooth_gen>true</ecp_smooth_gen>
+				<weight_measure_gen></weight_measure_gen>
+				<ecp_sub_task_gripper_opening></ecp_sub_task_gripper_opening>		
+			</ecp>
+			<ecp name="ROBOT_IRP6_POSTUMENT">
+				<ecp_gen_t></ecp_gen_t>
+				<ecp_tff_nose_run_gen>8</ecp_tff_nose_run_gen>
+				<ecp_tff_rubik_grab_gen>8</ecp_tff_rubik_grab_gen>
+				<ecp_tff_gripper_approach_gen>8</ecp_tff_gripper_approach_gen>
+				<ecp_tff_rubik_face_rotate_gen>8</ecp_tff_rubik_face_rotate_gen>
+				<ecp_teach_in_gen></ecp_teach_in_gen>
+				<bias_edp_force_gen></bias_edp_force_gen>
+				<ecp_smooth_gen>true</ecp_smooth_gen>
+				<ecp_sub_task_gripper_opening></ecp_sub_task_gripper_opening>		
+			</ecp>
+			<ecp name="FESTIVAL">
+				<!--
+				<festival_gen></festival_gen>
+				-->
+			</ecp>
+			<mp></mp>
+		</taskInit>
+	</State>
+	<!-- proba zapisania inicjalizacji elementow potrzebnych do wykonania zadania ukladania kostki (pomijam inicjalizaje na poziome ECP)  -->
+	<!-- configure_edp_force_sensor(true, true) -->
+	<!-- ########################################## APPROACH_OP ######################################################################## -->
+	<State name="rcTaskInit" type="INITIALIZATION">
+		<!--
+		<CubeStateInitialization/>
+		<SensorConfiguration/>
+		-->
+	</State>
+	<State name="approach_1" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_BIAS_EDP_FORCE</ECPGeneratorType>
+	</State>
+	<State name="approach_2" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_BIAS_EDP_FORCE</ECPGeneratorType>
+	</State>
+	<State name="approach_3" type="emptyGenForSet">
+		<SetOfRobots type="first">
+			<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+			<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+		</SetOfRobots>
+		<SetOfRobots type="second">
+			<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+			<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+		</SetOfRobots>
+	</State>
+
+	<!-- uruchomienie festivala, czyli wlaczenie generatora mowy  -->
+	<State name="approach_4" type="runGenerator">
+		<ROBOT>ROBOT_FESTIVAL</ROBOT>
+		<ECPGeneratorType>ECP_GEN_FESTIVAL</ECPGeneratorType>
+		<Speech>jestem podatny</Speech>
+		<AddArg>1</AddArg>
+	</State>
+	<State name="approach_5" type="emptyGenForSet">
+		<SetOfRobots type="first">
+			<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+		</SetOfRobots>
+		<SetOfRobots type="second">
+			<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+		</SetOfRobots>
+	</State>
+
+	<!-- sprawdzenie warunku z pliku konfiguracyjnego i wejscie w zbior stanow -->
+	<!-- dla POSTUMENT -->
+	<State name="approach_6" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_TFF_NOSE_RUN</ECPGeneratorType>
+	</State>
+	<State name="approach_7" type="emptyGen">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+	</State>
+	<State name="approach_8" type="stopGen">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+	</State>
+
+	<!-- dla ON_TRACK'a -->
+	<State name="approach_9" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_TFF_NOSE_RUN</ECPGeneratorType>
+	</State>
+	<State name="approach_10" type="emptyGen">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+	</State>
+	<State name="approach_11" type="stopGen">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>			
+	</State>
+	
+	<!-- wykonanie ruchu -->	
+	<State name="approach_12" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_ap_1.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="JOINT" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>0.000000 -0.087462 -1.541873 0.024063 1.218727 2.578164 -2.664387 0.059000</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="approach_13" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/rcsc/irp6p_sm_ap_1.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="JOINT" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>-0.100633 -1.541943 0.048591 1.197734 2.100977 -2.731195 0.074000 0.0</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="approach_14" type="emptyGenForSet">
+		<SetOfRobots type="first">
+			<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+			<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+			<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+		</SetOfRobots>
+		<SetOfRobots type="second">
+			<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+			<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+		</SetOfRobots>
+	</State>
+	
+	<!-- uruchomienie festivala, czyli wlaczenie generatora mowy i ON_TRACK'a -->
+	<State name="approach_15" type="runGenerator">
+		<ROBOT>ROBOT_FESTIVAL</ROBOT>
+		<ECPGeneratorType>ECP_GEN_FESTIVAL</ECPGeneratorType>
+		<Speech>jestem robotem usl/ugowym</Speech>
+	</State>
+	<State name="approach_16" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_ap_2.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="JOINT" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1.0</Velocity>
+				<Accelerations>0.3	0.3	0.3	0.3	0.3	0.3	0.3	1.0</Accelerations>
+				<Coordinates>0.000000 -0.000056 -1.570689 0.000365 1.559536 1.570215 -2.320805 0.088</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="approach_17" type="emptyGenForSet">
+		<SetOfRobots type="first">
+			<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+			<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+			<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+		</SetOfRobots>
+		<SetOfRobots type="second">
+			<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+			<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+		</SetOfRobots>
+	</State>
+
+	<!-- uruchomienie festivala, czyli wlaczenie generatora mowy -->
+	<State name="approach_18" type="runGenerator">
+		<ROBOT>ROBOT_FESTIVAL</ROBOT>
+		<ECPGeneratorType>ECP_GEN_FESTIVAL</ECPGeneratorType>
+		<Speech>ul/oz*e~ kostke~ rubika</Speech>
+	</State>
+	<State name="approach_19" type="emptyGenForSet">
+		<SetOfRobots type="first">
+			<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+			<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+			<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+		</SetOfRobots>
+		<SetOfRobots type="second">
+			<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+		</SetOfRobots>
+	</State>
+
+	<!-- uruchomienie festivala, czyli wlaczenie generatora mowy -->
+	<State name="approach_20" type="runGenerator">
+		<ROBOT>ROBOT_FESTIVAL</ROBOT>
+		<ECPGeneratorType>ECP_GEN_FESTIVAL</ECPGeneratorType>
+		<Speech>podaj kostke~</Speech>
+	</State>
+	<State name="approach_21" type="emptyGenForSet">
+		<SetOfRobots type="first">
+			<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+			<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+		</SetOfRobots>
+		<SetOfRobots type="second">
+			<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+			<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+		</SetOfRobots>
+	</State>
+
+	<!-- wlaczenie generatora transparentnego -->	
+	<State name="approach_22" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TRANSPARENT</ECPGeneratorType>
+	</State>
+	<State name="approach_23" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TRANSPARENT</ECPGeneratorType>
+	</State>
+	<!--
+	<State name="approach_24" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT;ROBOT_FESTIVAL</ROBOT>		
+	</State>
+	-->
+	
+	<!-- sprawdzenie warunku dla wlaczenia serwa wizyjnego i wlaczenie go -->	
+	<State name="approach_25" type="eyeGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<AddArg>4</AddArg>
+		<Sensor>SENSOR_CAMERA_SA</Sensor>
+	</State>
+	
+	<!-- zatrzymanie generatora dla robotow -->
+	<State name="approach_26" type="stopGen">
+		<SetOfRobots type="first">
+			<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+			<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+		</SetOfRobots>
+	</State>
+	
+	<!-- czekanie wsazana liczbe milisekund -->
+	<State name="approach_27" type="wait">
+		<TimeSpan>500</TimeSpan>
+	</State>
+	
+	<!-- zacisniecie chwytaka na kostce  -->
+	<State name="approach_28" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TFF_RUBIK_GRAB</ECPGeneratorType>
+		<GeneratorParameters>0.057	0.00005	0</GeneratorParameters>
+	</State>
+	<State name="approach_29" type="emptyGenForSet">
+		<SetOfRobots type="first">
+			<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+			<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+		</SetOfRobots>
+		<SetOfRobots type="second">
+			<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		</SetOfRobots>
+	</State>
+	<State name="approach_30" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TFF_RUBIK_GRAB</ECPGeneratorType>
+		<GeneratorParameters>0.057	0.00005	50</GeneratorParameters>
+	</State>
+	<State name="approach_31" type="emptyGenForSet">
+		<SetOfRobots type="first">
+			<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+			<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+		</SetOfRobots>
+		<SetOfRobots type="second">
+			<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+			<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+		</SetOfRobots>
+	</State>
+
+	<!-- uruchomienie festivala, czyli wlaczenie generatora mowy -->
+	<State name="approach_32" type="runGenerator">
+		<ROBOT>ROBOT_FESTIVAL</ROBOT>
+		<ECPGeneratorType>ECP_GEN_FESTIVAL</ECPGeneratorType>
+		<Speech>pus~c~ kostke~</Speech>
+	</State>
+	<State name="approach_33" type="emptyGenForSet">
+		<SetOfRobots type="first">
+			<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+		</SetOfRobots>
+		<SetOfRobots type="second">
+			<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+		</SetOfRobots>
+	</State>
+	<State name="approach_34" type="wait">
+		<TimeSpan>1000</TimeSpan>
+	</State>
+	
+	<!-- wykonanie ruchu -->	
+	<State name="approach_35" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_ap_3.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="JOINT" numOfPoses="4">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>0.000000 0.618665 -1.805564 0.094866 0.109006 1.526905 -2.077055 0.057</Coordinates>
+			</Pose>
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>0.000000 0.618665 -1.805564 0.094866 0.109006 1.526905 -2.077055 0.062</Coordinates>
+			</Pose>
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>0.000000 0.618665 -1.805564 0.094866 0.109006 1.526905 -2.077055 0.057</Coordinates>
+			</Pose>
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>0.160123 1.811557 -1.571591 0.185117 0.573102 2.502174 0.518841 0.057</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="approach_14" type="emptyGenForSet">
+		<SetOfRobots type="first">
+			<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+			<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+			<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+		</SetOfRobots>
+		<SetOfRobots type="second">
+			<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+			<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+		</SetOfRobots>
+	</State>
+	
+	<!-- ########################################## IDENTIFY_COLORS ######################################################################## -->
+	
+	<!--  -->
+	<!--  -->
+	
+</TaskDescription>
+
