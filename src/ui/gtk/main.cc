@@ -37,7 +37,7 @@ int set_tree_view(void)
 
 	renderer = gtk_cell_renderer_text_new();
 
-	column = gtk_tree_view_column_new_with_attributes("Program name", renderer, "text",
+	column = gtk_tree_view_column_new_with_attributes("Program name", renderer, "markup",
 			configurator::NAME_COLUMN, NULL);
 	gtk_tree_view_append_column(tree, column);
 

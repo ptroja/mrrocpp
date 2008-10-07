@@ -82,13 +82,26 @@ int configurator::populate_tree_model()
 			std::string program_name = this->get_string(query);
 
 			sprintf((char *) query, "/config/effectors/effector[@name='%s']/ecp/node_name", sensor_name);
-			std:: string node_name = this->get_string(query);
+			std::string node_name = this->get_string(query);
 
 			GtkTreeIter parent, child;
 			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(this->store), &parent, "2");
 
 			gtk_tree_store_append(this->store, &child, &parent);
 			gtk_tree_store_set(store, &child, NAME_COLUMN, program_name.c_str(), NODE_NAME_COLUMN, node_name.c_str(), IS_RUNNING_COLUMN, FALSE, -1);
+
+			sprintf((char *) query, "/config/effectors/effector[@name='%s']/edp/program_name", sensor_name);
+			program_name = this->get_string(query);
+			if (program_name.length()) {
+
+					sprintf((char *) query, "/config/effectors/effector[@name='%s']/edp/node_name", sensor_name);
+					node_name = this->get_string(query);
+
+					parent = child;
+					gtk_tree_store_append(this->store, &child, &parent);
+					gtk_tree_store_set(store, &child, NAME_COLUMN, program_name.c_str(), NODE_NAME_COLUMN,
+							node_name.c_str(), IS_RUNNING_COLUMN, FALSE, -1);
+				}
 		}
 		xmlXPathFreeObject (active_effectors);
 	}
@@ -160,13 +173,14 @@ configurator::~configurator()
 std::string configurator::get_string(const xmlChar *xpath)
 {
 	xmlXPathObjectPtr result = getnodeset(this->doc, xpath);
-	if (!result) return NULL;
+	if (!result) return std::string();
 	if (result->type != XPATH_NODESET) {
 		xmlXPathFreeObject(result);
 		return NULL;
 	}
 
-	std::string ret((char *) xmlNodeListGetString(this->doc, result->nodesetval->nodeTab[0]->children, 1));
+	xmlChar *node_string = xmlNodeListGetString(this->doc, result->nodesetval->nodeTab[0]->children, 1);
+	std::string ret = std::string((char *) node_string);
 	xmlXPathFreeObject(result);
 	return ret;
 }
