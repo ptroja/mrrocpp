@@ -44,7 +44,7 @@ public:
 
 	int open_config_file(const char *filename);
 
-	std::string get_string(const xmlChar *xpath);
+	char *get_string(const xmlChar *xpath);
 
     GtkTreeStore *getStore() const
     {
