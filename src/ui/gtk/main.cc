@@ -29,7 +29,7 @@ guint set_status(const char *msg)
 
 int set_tree_view(void)
 {
-	GtkTreeView *tree = GTK_TREE_VIEW (gtk_builder_get_object(builder, "treeview1"));
+	GtkTreeView *tree = GTK_TREE_VIEW (gtk_builder_get_object(builder, "process_treeview"));
 	gtk_tree_view_set_model(tree, GTK_TREE_MODEL(config->getStore()));
 
 	GtkCellRenderer *renderer;
@@ -84,6 +84,17 @@ void on_open_file_activate(GtkObject *object, gpointer user_data)
 	gtk_widget_destroy(dialog);
 }
 
+void on_process_treeview_row_activated(GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *col, gpointer userdata)
+{
+	gint depth = gtk_tree_path_get_depth(path);
+	gint *indices = gtk_tree_path_get_indices(path);
+
+	while(depth--) {
+		printf("%d:", *indices++);
+	}
+	printf("\n");
+}
+
 } /* extern "C" */
 
 int main(int argc, char *argv[])
@@ -101,17 +112,27 @@ int main(int argc, char *argv[])
 	gtk_builder_connect_signals(builder, NULL);
 
 	set_status("MRROC++ - the best robotic framework ever");
-	/*
 
-	 {
-	 GtkNotebook *notebook = GTK_NOTEBOOK (gtk_builder_get_object(builder, "notebook1"));
-	 GtkWidget *tab = GTK_WIDGET (gtk_builder_get_object(builder, "hbuttonbox1"));
+	for(int i = 0; i < 1; i++)
+	{
+		GtkWindow *window = GTK_WINDOW (gtk_builder_get_object(builder, "window1"));
 
-	 gtk_widget_unparent(tab);
-	 gtk_notebook_append_page(notebook, tab, NULL);
-	 }
+		GtkWidget *content = gtk_bin_get_child(GTK_BIN(window));
+		gtk_widget_unparent(content);
 
-	 */
+		GtkHBox *hbox = GTK_HBOX(gtk_hbox_new(FALSE, 5));
+		GtkImage *tabicon = GTK_IMAGE(gtk_image_new_from_stock(GTK_STOCK_EXECUTE, GTK_ICON_SIZE_BUTTON));
+		GtkLabel *tablabel = GTK_LABEL(gtk_label_new("lalalabel"));
+		GtkImage *tabcloseicon = GTK_IMAGE(gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU));
+		gtk_box_pack_start_defaults(GTK_BOX(hbox), GTK_WIDGET(tabicon));
+		gtk_box_pack_start_defaults(GTK_BOX(hbox), GTK_WIDGET(tablabel));
+		gtk_box_pack_start_defaults(GTK_BOX(hbox), GTK_WIDGET(tabcloseicon));
+		gtk_widget_show_all(GTK_WIDGET(hbox));
+
+		GtkNotebook *notebook = GTK_NOTEBOOK (gtk_builder_get_object(builder, "notebook1"));
+
+		gtk_notebook_append_page(notebook, content, GTK_WIDGET(hbox));
+	}
 
 	set_tree_view();
 

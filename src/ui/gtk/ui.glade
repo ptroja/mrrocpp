@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Wed Oct  8 00:48:00 2008 -->
+<!--Generated with glade3 3.4.5 on Wed Oct  8 21:07:29 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="width_request">600</property>
@@ -132,10 +132,19 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <child>
-                  <widget class="GtkTreeView" id="treeview1">
+                  <widget class="GtkScrolledWindow" id="scrolledwindow1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="headers_clickable">True</property>
+                    <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                    <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                    <child>
+                      <widget class="GtkTreeView" id="process_treeview">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="headers_clickable">True</property>
+                        <signal name="row_activated" handler="on_process_treeview_row_activated"/>
+                      </widget>
+                    </child>
                   </widget>
                   <packing>
                     <property name="resize">False</property>
@@ -153,9 +162,34 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label1">
+                      <widget class="GtkHBox" id="tablabel">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">page 1</property>
+                        <property name="spacing">5</property>
+                        <child>
+                          <widget class="GtkImage" id="image2">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-execute</property>
+                          </widget>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="label1">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">label</property>
+                          </widget>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkImage" id="image1">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-close</property>
+                            <property name="icon_size">1</property>
+                          </widget>
+                          <packing>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
                       </widget>
                       <packing>
                         <property name="type">tab</property>
