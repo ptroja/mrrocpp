@@ -50,9 +50,12 @@ class mp_task: public ecp_mp_task
 		bool set_next_playerpos_goal (ROBOT_ENUM robot_l, const playerpos_goal_t &goal);
 		bool set_next_ecps_state (int l_state, int l_variant, char* l_string, int number_of_robots, ... );
 		bool send_end_motion_to_ecps (int number_of_robots, ... );
+		bool send_end_motion_to_ecps (int number_of_robots, ROBOT_ENUM *properRobotsSet);
 		bool run_ext_empty_gen (bool activate_trigger, int number_of_robots, ... );
 		bool run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 		(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ... );
+		bool run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+		(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ROBOT_ENUM *robotsToMove, ROBOT_ENUM *robotsWaitingForTaskTermination);
 		bool wait_ms (int _ms_delay); // zamiast delay
 
 		int mp_receive_pulse (mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PULSE_MODE tryb);

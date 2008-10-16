@@ -202,6 +202,21 @@ bool mp_task::send_end_motion_to_ecps (int number_of_robots, ... )
 	return (mp_semte_gen.Move());
 }
 
+// send_end_motion
+bool mp_task::send_end_motion_to_ecps (int number_of_robots, ROBOT_ENUM *properRobotsSet)
+{
+	mp_send_end_motion_to_ecps_generator mp_semte_gen (*this);
+
+	ROBOT_ENUM robot_l;
+
+	for ( int x = 0; x < number_of_robots; x++ )        // Loop until all numbers are added
+	{
+		robot_l = properRobotsSet[x]; // Adds the next value in argument list to sum.
+		mp_semte_gen.robot_m[robot_l] = robot_m[robot_l];
+	}
+
+	return (mp_semte_gen.Move());
+}
 
 bool mp_task::run_ext_empty_gen (bool activate_trigger, int number_of_robots, ... )
 {
@@ -332,6 +347,114 @@ bool mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_t
 	return false;
 }
 
+bool mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ROBOT_ENUM *robotsToMove, ROBOT_ENUM *robotsWaitingForTaskTermination)
+{
+	// CZYNNOSCI WSTEPNE
+	// utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
+	map <ROBOT_ENUM, mp_robot*> robots_to_move, robots_to_wait_for_task_termination;
+	map <ROBOT_ENUM, mp_robot*> robots_to_move_tmp, robots_to_wait_for_task_termination_tmp;
+	map <ROBOT_ENUM, mp_robot*>::iterator robots_map_iter;
+
+	// powolanie generatora i jego konfiguracja
+	mp_extended_empty_generator mp_ext_empty_gen (*this);
+	mp_ext_empty_gen.configure (false);
+
+	// na podstawie argumentow wywolania biezacej metody
+	//va_list arguments;    // A place to store the list of arguments
+	ROBOT_ENUM robot_l;
+
+	// przypisanie robotow do zbiorow robots_to_move i robots_to_wait_for_task_termination, eliminacja robotow ktorych nie ma w systemie
+	//va_start ( arguments, number_of_robots_to_wait_for_task_termin);
+	// najpierw zbior robots_to_move...
+	for ( int x = 0; x < number_of_robots_to_move; x++ )        // Loop until all numbers are added
+	{
+		robot_l = robotsToMove[x]; // Adds the next value in argument list to sum.
+
+		if (robot_m.count(robot_l) == 0)
+		{
+			sr_ecp_msg->message ("run_..._for_set_of_robots_... usunieto nadmiarowe roboty");
+		} else {
+			robots_to_move[robot_l] = robot_m[robot_l];
+		}
+	}
+	// ...potem zbior robots_to_wait_for_task_termination
+	for ( int x = 0; x < number_of_robots_to_wait_for_task_termin; x++ )        // Loop until all numbers are added
+	{
+		robot_l = robotsWaitingForTaskTermination[x]; // Adds the next value in argument list to sum.
+		if (robot_m.count(robot_l) == 0)
+		{
+			sr_ecp_msg->message ("run_..._for_set_of_robots_... usunieto nadmiarowe roboty 2");
+		} else {
+			robots_to_wait_for_task_termination[robot_l] = robot_m[robot_l];
+		}
+	}
+	//va_end ( arguments );              // Cleans up the list
+
+	// sprawdzenie czy zbior robots_to_wait_for_task_termination nie zawiera robotow, ktorych nie ma w zbiorze robots_to_move
+
+	for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robots_to_wait_for_task_termination.begin();
+	        robot_m_iterator != robots_to_wait_for_task_termination.end(); robot_m_iterator++) {
+
+		robots_map_iter = robots_to_move.find(robot_m_iterator->first);
+		if (robots_map_iter == robots_to_move.end()) {
+			sr_ecp_msg->message (SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
+			throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+		}
+	}
+
+	// GLOWNA PETLA
+
+	do {
+		// aktualizacja ziorow robotow i sprawdzenie czy zbior robots_to_wait_for_task_termination nie jest juz pusty
+		// wtedy wyjscie z petli
+
+		//	if (debug_tmp) printf(" run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
+		// przygotowanie zapasowych list robotow
+		robots_to_move_tmp.clear();
+		robots_to_wait_for_task_termination_tmp.clear();
+
+		robots_to_move_tmp = robots_to_move;
+		robots_to_wait_for_task_termination_tmp = robots_to_wait_for_task_termination;
+
+		// sprawdzenie zbioru robots_to_move
+		for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robots_to_move_tmp.begin();
+		        robot_m_iterator != robots_to_move_tmp.end(); robot_m_iterator++) {
+			if (robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED  ) {
+				//	if (debug_tmp) robot_m_iterator->second->printf_state("1 ");
+				robots_to_move.erase (robot_m_iterator->first);
+			}
+		}
+
+		// sprawdzenie zbioru robots_to_wait_for_task_termination
+		for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robots_to_wait_for_task_termination_tmp.begin();
+		        robot_m_iterator != robots_to_wait_for_task_termination_tmp.end(); robot_m_iterator++) {
+			if (robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED  ) {
+				//	if (debug_tmp) robot_m_iterator->second->printf_state("2 ");
+				robots_to_wait_for_task_termination.erase (robot_m_iterator->first);
+			}
+		}
+
+		// sprawdzenie czy zbior robots_to_wait_for_task_termination jest pusty.
+		// Jesli tak wyjscie z petli i w konsekwencji wyjscie z calej metody
+		if (robots_to_wait_for_task_termination.empty())
+			break;
+
+		// przypisanie generatorowi mp_ext_empty_gen zbioru robots_to_move
+		mp_ext_empty_gen.robot_m.clear();
+		mp_ext_empty_gen.robot_m = robots_to_move;
+
+		//	if (debug_tmp) printf("PRZED MOVE run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
+		// uruchomienie generatora
+		if (mp_ext_empty_gen.Move()) {
+			return true;
+		}
+		//		if (debug_tmp) printf("ZA MOVE move run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
+	} while (true);
+	// koniec petli
+
+	return false;
+}
 
 
 // -------------------------------------------------------------------

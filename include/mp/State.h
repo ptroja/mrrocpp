@@ -7,8 +7,11 @@
 #if !defined(_STATE_H_)
 #define _STATE_H_
 
+#include <list>
+
 #include "ecp_mp/ecp_mp_t_fsautomat.h"
 #include "common/impconst.h"
+#include "mp/Transition.h"
 
 //enum StateType { INITIALIZATION, MOTION_EXECUTE };
 
@@ -18,9 +21,20 @@ class State
 		State();
 		State(const State &state);
 		~State();
-		
-		void setName(char *name);
-		char * getName() const;
+
+		typedef struct RobotSets{
+			RobotSets();
+			RobotSets(const RobotSets & robotSets);
+			~RobotSets();
+			
+			int firstSetCount;
+			int secondSetCount;
+			ROBOT_ENUM *firstSet;
+			ROBOT_ENUM *secondSet;
+		};
+		static ROBOT_ENUM returnProperRobot(char * robotName);
+		void setStateID(char *stateID);
+		char * getStateID() const;
 		void setNumArgument(char *time);
 		int getNumArgument() const;
 		void setType(char *type);
@@ -31,16 +45,22 @@ class State
 		STATE_MACHINE_ECP_STATES getGeneratorType() const;
 		void setStringArgument(char *trajFilePath);
 		char *  getStringArgument() const;
+		void setTransition(char *cond, char *target, configurator &_config);
+		char *returnNextStateID(StateHeap &sh);
+		std::list<Transition> * getTransitions() const;
 
 		void showStateContent() const;
 		
+		RobotSets *robotSet;
+		
 	private:
 		int numArgument;
-		char *name;
+		char *id;
 		char *type;
 		ROBOT_ENUM robot;
 		STATE_MACHINE_ECP_STATES generatorType;
 		char *stringArgument;
+		std::list<Transition> *stateTransitions;
 	
 };
 

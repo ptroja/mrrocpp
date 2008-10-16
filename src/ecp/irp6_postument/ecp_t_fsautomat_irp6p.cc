@@ -53,26 +53,159 @@ ecp_task_fsautomat_irp6p::~ecp_task_fsautomat_irp6p(){};
 
 void ecp_task_fsautomat_irp6p::task_initialization(void) 
 {
-	// TODO: initialize elements depending on initialization section in xml
 	 ecp_m_robot = new ecp_irp6_postument_robot (*this); 
 
-	// Powolanie czujnikow
-//	sensor_m[SENSOR_FORCE_POSTUMENT] = 
-//		new ecp_mp_schunk_sensor (SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
-				
-/*	// Konfiguracja wszystkich czujnikow	
-	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
-		sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
+	char * whichECP = "ROBOT_IRP6_POSTUMENT";
+
+	int size, conArg;
+	char *filePath;
+	char *fileName = config.return_string_value("xml_file", "[xml_settings]");
+   xmlNode *cur_node, *child_node;
+   xmlChar *robot;
+   xmlChar *stateType, *argument;
+
+	size = 1 + strlen(mrrocpp_network_path) + strlen(fileName);				  	
+	filePath = new char[size];
+
+	sprintf(filePath, "%s%s", mrrocpp_network_path, fileName);
+   // open xml document
+   xmlDocPtr doc;
+   doc = xmlParseFile(filePath);
+   if(doc == NULL)
 	{
-		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-		sensor_m_iterator->second->configure_sensor();
+      printf("ERROR in ecp initialization: could not parse file: %s\n",fileName);
+		return;
 	}
 
-	usleep(1000*100);
-*/
-	sg = new ecp_smooth_generator (*this, true);
+   // XML root
+   xmlNode *root = NULL;
+   root = xmlDocGetRootElement(doc);
+   if(!root || !root->name)
+   {
+      printf("ECP initialization ERROR: Bad root node name!");
+      xmlFreeDoc(doc);
+      return;
+   }
 
-	go_st = new ecp_sub_task_gripper_opening(*this);
+   // for each root children "state"
+   for(cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
+   {
+      if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "State" ) )
+      {
+         stateType = xmlGetProp(cur_node, (const xmlChar *) "type");
+			if(!xmlStrcmp(stateType, (const xmlChar *)"systemInitialization"))
+			{
+				while(xmlStrcmp(cur_node->children->name, (const xmlChar *)"taskInit"))
+					cur_node->children = cur_node->children->next;
+	         // For each child of state: i.e. Robot
+	         for(child_node = cur_node->children->children; child_node != NULL; child_node = child_node->next)
+	         {
+	            if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"ecp") )
+	            {						
+						robot = xmlGetProp(child_node, (const xmlChar *)"name");
+	               if(robot && !xmlStrcmp(robot, (const xmlChar *) whichECP))
+						{
+							for(;child_node->children; child_node->children = child_node->children->next)
+							{
+								if(child_node->children->type == XML_ELEMENT_NODE && 
+										!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_gen_t"))
+								{
+									argument = xmlNodeGetContent(child_node->children);
+									if(argument && xmlStrcmp(argument, (const xmlChar *)""));
+									gt = new ecp_generator_t(*this);
+									xmlFree(argument);
+								}
+								if(child_node->children->type == XML_ELEMENT_NODE && 
+										!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_tff_nose_run_gen"))
+								{
+									argument = xmlNodeGetContent(child_node->children);
+									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
+										nrg = new ecp_tff_nose_run_generator(*this, atoi((char *)argument));
+									xmlFree(argument);
+								}
+								if(child_node->children->type == XML_ELEMENT_NODE && 
+										!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_tff_rubik_grab_gen"))
+								{
+									argument = xmlNodeGetContent(child_node->children);
+									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
+										rgg = new ecp_tff_rubik_grab_generator(*this, atoi((char *)argument));
+									xmlFree(argument);
+								}
+								if(child_node->children->type == XML_ELEMENT_NODE && 
+										!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_tff_gripper_approach_gen"))
+								{
+									argument = xmlNodeGetContent(child_node->children);
+									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
+										gag = new ecp_tff_gripper_approach_generator(*this, atoi((char *)argument));
+									xmlFree(argument);
+								}
+								if(child_node->children->type == XML_ELEMENT_NODE && 
+										!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_tff_rubik_face_rotate_gen"))
+								{
+									argument = xmlNodeGetContent(child_node->children);
+									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
+										rfrg = new ecp_tff_rubik_face_rotate_generator(*this, atoi((char *)argument));
+									xmlFree(argument);
+								}
+								if(child_node->children->type == XML_ELEMENT_NODE && 
+										!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_teach_in_gen"))
+								{
+									argument = xmlNodeGetContent(child_node->children);
+									if(argument && xmlStrcmp(argument, (const xmlChar *)""));
+									tig = new ecp_teach_in_generator(*this);
+									xmlFree(argument);
+								}
+								if(child_node->children->type == XML_ELEMENT_NODE && 
+										!xmlStrcmp(child_node->children->name, (const xmlChar *)"bias_edp_force_gen"))
+								{
+									argument = xmlNodeGetContent(child_node->children);
+									if(argument && xmlStrcmp(argument, (const xmlChar *)""));
+									befg = new bias_edp_force_generator(*this);
+									xmlFree(argument);
+								}
+								if(child_node->children->type == XML_ELEMENT_NODE && 
+										!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_tool_change_gen"))
+								{
+									argument = xmlNodeGetContent(child_node->children);
+									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
+										tcg = new ecp_tool_change_generator(*this, atoi((char *)argument));
+									xmlFree(argument);
+								}
+								if(child_node->children->type == XML_ELEMENT_NODE && 
+										!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_smooth_gen"))
+								{
+									argument = xmlNodeGetContent(child_node->children);
+									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
+										sg = new ecp_smooth_generator(*this, (bool)atoi((char *)argument));
+									xmlFree(argument);
+								}
+								if(child_node->children->type == XML_ELEMENT_NODE && 
+										!xmlStrcmp(child_node->children->name, (const xmlChar *)"weight_meassure_gen"))
+								{
+									argument = xmlNodeGetContent(child_node->children);
+									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
+										wmg = new weight_meassure_generator(*this, atoi((char *)argument));
+									xmlFree(argument);
+								}
+								if(child_node->children->type == XML_ELEMENT_NODE && 
+										!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_sub_task_gripper_opening"))
+								{
+									argument = xmlNodeGetContent(child_node->children);
+									if(argument && xmlStrcmp(argument, (const xmlChar *)""));
+									go_st = new ecp_sub_task_gripper_opening(*this);
+									xmlFree(argument);
+								}
+							}
+						}
+	               xmlFree(robot);
+	            }
+	         }
+			}
+         xmlFree(stateType);
+		}
+   }
+   xmlFreeDoc(doc);
+   xmlCleanupParser();
 	
 	sr_ecp_msg->message("ECP loaded");
 };

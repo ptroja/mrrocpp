@@ -10,14 +10,14 @@
 
 Trajectory::Trajectory()
 {
-	trjName = new char[80];
+	trjID = new char[80];
 	trjPoses	= new std::list<ecp_smooth_taught_in_pose>();
 }
 
-Trajectory::Trajectory(char *numOfPoses, char *trajectoryName, char *poseSpecification)
+Trajectory::Trajectory(char *numOfPoses, char *trajectoryID, char *poseSpecification)
 {
-	trjName = new char[80];
-	strcpy(trjName, trajectoryName);
+	trjID = new char[80];
+	strcpy(trjID, trajectoryID);
 	this->numOfPoses = (uint64_t)atoi(numOfPoses);
 	poseSpec = returnProperPS(poseSpecification);
 	trjPoses	= new std::list<ecp_smooth_taught_in_pose>();
@@ -26,8 +26,8 @@ Trajectory::Trajectory(char *numOfPoses, char *trajectoryName, char *poseSpecifi
 
 Trajectory::Trajectory(const Trajectory &trajectory)
 {
-	trjName = new char[80];
-	strcpy(trjName, trajectory.trjName);
+	trjID = new char[80];
+	strcpy(trjID, trajectory.trjID);
 	numOfPoses = trajectory.numOfPoses;
 	poseSpec = trajectory.poseSpec;
 	trjPoses = new std::list<ecp_smooth_taught_in_pose>(trajectory.trjPoses->begin(), trajectory.trjPoses->end());
@@ -35,18 +35,18 @@ Trajectory::Trajectory(const Trajectory &trajectory)
 
 Trajectory::~Trajectory()
 {
-	delete []trjName;
+	delete []trjID;
 	delete trjPoses;
 }
 
-void Trajectory::setName(char *trjName)
+void Trajectory::setTrjID(char *trjID)
 {
-	strcpy(this->trjName, trjName);
+	strcpy(this->trjID, trjID);
 }
 
-char * Trajectory::getName() const
+char * Trajectory::getTrjID() const
 {
-	return trjName;
+	return trjID;
 }
 
 POSE_SPECIFICATION Trajectory::returnProperPS(char *poseSpecification)
@@ -249,7 +249,7 @@ double * Trajectory::getCoordinates() const
 void Trajectory::showTime()
 {
 	std::list<ecp_smooth_taught_in_pose>::iterator it;
-	printf("Nazwa: %s, PoseSpec: %d, NumOfPoses: %d\n", trjName, poseSpec, numOfPoses);
+	printf("Nazwa: %s, PoseSpec: %d, NumOfPoses: %d\n", trjID, poseSpec, numOfPoses);
 	for(it=trjPoses->begin(); it!=trjPoses->end(); ++it)
 	{
 		printf("%f %f %f %f %f %f %f %f \n", (*it).v_p[0], (*it).v_p[1], (*it).v_p[2], (*it).v_p[3], 

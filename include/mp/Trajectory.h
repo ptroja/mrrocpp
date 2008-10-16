@@ -27,8 +27,8 @@ class Trajectory
 		
 		void createNewPose();
 		void addPoseToTrajectory();
-		void setName(char *trjName);
-		char * getName() const;
+		void setTrjID(char *trjID);
+		char * getTrjID() const;
 		void setNumOfPoses(uint64_t numOfPoses);
 		uint64_t getNumberOfPoses() const;
 		void setPoseSpecification(char *poseSpecification);
@@ -48,7 +48,7 @@ class Trajectory
 		std::list<ecp_smooth_taught_in_pose> * getPoses();
 
 	private:
-		char * trjName;
+		char * trjID;
 		uint64_t numOfPoses;		
 		POSE_SPECIFICATION poseSpec;
 		ecp_smooth_taught_in_pose *actPose;
