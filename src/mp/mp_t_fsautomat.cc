@@ -398,7 +398,13 @@ bool mp_task_fsautomat::initializeCubeState(State &state)
 	
 bool mp_task_fsautomat::initiateSensorReading(State &state)
 {
-	char *sensorName = strdup(state.getStringArgument());
+        sensor_m[SENSOR_CAMERA_ON_TRACK]->initiate_reading();
+        if (wait_ms(1000))
+        {
+           return true;
+        }
+        sensor_m[SENSOR_CAMERA_ON_TRACK]->get_reading();
+/*	char *sensorName = strdup(state.getStringArgument());
 	SENSOR_ENUM whichSensor;		
 	if(!strcmp(sensorName, (const char *)"SENSOR_CAMERA_ON_TRACK"))
 		whichSensor = SENSOR_CAMERA_ON_TRACK;
@@ -406,13 +412,13 @@ bool mp_task_fsautomat::initiateSensorReading(State &state)
 		whichSensor = SENSOR_CAMERA_ON_TRACK;
 	
 	sensor_m[whichSensor]->initiate_reading();
-
+*/
 	return false;
 }
 
 bool mp_task_fsautomat::getSensorReading(State &state)
 {
-	char *sensorName = strdup(state.getStringArgument());
+/*	char *sensorName = strdup(state.getStringArgument());
 	SENSOR_ENUM whichSensor;		
 	if(!strcmp(sensorName, (const char *)"SENSOR_CAMERA_ON_TRACK"))
 		whichSensor = SENSOR_CAMERA_ON_TRACK;
@@ -420,7 +426,7 @@ bool mp_task_fsautomat::getSensorReading(State &state)
 		whichSensor = SENSOR_CAMERA_ON_TRACK;
 
 	sensor_m[whichSensor]->get_reading();
-
+*/
 	return false;
 }
 
@@ -487,8 +493,8 @@ bool mp_task_fsautomat::changeCubeState(State &state)
 
 bool mp_task_fsautomat::communicate_with_windows_solver(State &state)
 {
-		  state.setProperTransitionResult(true);
-		  return false;
+//		  state.setProperTransitionResult(true);
+//		  return false;
 		  
     char c_up, c_right, c_front, c_down, c_left, c_back;
     int s, str_size;

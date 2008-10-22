@@ -2234,7 +2234,7 @@
 		<Speech>juZ ukl/adam</Speech>
 		<transition condition="true" target="communicate_wws_5"/>
 	</State>
-	<State id="communicate_wws_6" type="emptyGenForSet">
+	<State id="communicate_wws_5" type="emptyGenForSet">
 		<SetOfRobots>
 			<FirstSet>
 				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
