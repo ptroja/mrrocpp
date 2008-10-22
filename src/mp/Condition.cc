@@ -103,6 +103,9 @@ bool Condition::checkCompareResult()
 	if(!strcmp(condition, (const char *) "true") || !strcmp(condition, (const char *) "TRUE"))
 		return true;
 	
+	if(!strcmp(condition, (const char *) "stateOperationResult"))
+		return result;
+	
 	if(strstr(condition, ".") != NULL)
 	{
 		bool result = checkContext(condition);
@@ -143,5 +146,10 @@ std::list<char *> * Condition::returnSplitedStr(char *toSplit)
 		splitedStr->push_back(element);
 
 	return splitedStr;
+}
+
+bool Condition::setResult(bool result)
+{
+	this->result = result;
 }
 

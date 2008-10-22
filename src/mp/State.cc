@@ -263,6 +263,18 @@ void State::setTransition(char *cond, char *target, configurator &_config)
 }
 
 //----------------------------------------------------------------------------------------------------------
+
+void State::setProperTransitionResult(bool result)
+{
+	for(std::list<Transition>::iterator it = stateTransitions->begin(); it != stateTransitions->end(); ++it)
+	{
+		if(!strcmp((*it).getConditionDescription(), (const char *)"stateOperationResult"))
+			(*it).setConditionResult(result);
+	}
+}
+
+//----------------------------------------------------------------------------------------------------------
+
 std::list<Transition> * State::getTransitions() const
 {
 	return stateTransitions;

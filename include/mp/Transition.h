@@ -15,7 +15,9 @@ class Transition
 
 		void showContent();
 		bool getConditionResult();
+		bool setConditionResult(bool result);
 		char * getTargetID(StateHeap &sh) const;
+		char * getConditionDescription() const;
 
 	private:
 		char *targetID;

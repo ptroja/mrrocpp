@@ -552,7 +552,7 @@
 	</State>
 	<State id="identify_colors_18" type="wait">
 		<TimeSpan>1000</TimeSpan>
-		<transition condition="true" target="fco_CL_0_1>>STOP"/>
+		<transition condition="true" target="fco_CL_0_1>>communicate_wws_1"/>
 	</State>
 	
 	<!-- ################################################################################################################################### -->
@@ -2203,6 +2203,143 @@
 	<State id="fco_CL_180_26" type="cubeStateChange">
 		<AddArg>90</AddArg>
 		<transition condition="true" target="_END_"/>
+	</State>
+	<!-- ################################################################################################################################### -->
+	
+	<!-- ########################################## COMMUNICATE_WITH_WINDOWS_SOLVER ######################################################## -->
+	<State id="communicate_wws_1" type="runGenerator">
+		<ROBOT>ROBOT_FESTIVAL</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TRANSPARENT</ECPGeneratorType>
+		<Speech>mys~le~</Speech>
+		<transition condition="true" target="communicate_wws_2"/>
+	</State>
+	<State id="communicate_wws_2" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="true" target="communicate_wws_3"/>
+	</State>
+	<State id="communicate_wws_3" type="communicateWithSolver">
+		<transition condition="stateOperationResult" target="communicate_wws_4"/>
+		<transition condition="true" target="depop_1"/>
+	</State>
+	<State id="communicate_wws_4" type="runGenerator">
+		<ROBOT>ROBOT_FESTIVAL</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TRANSPARENT</ECPGeneratorType>
+		<Speech>juZ ukl/adam</Speech>
+		<transition condition="true" target="communicate_wws_5"/>
+	</State>
+	<State id="communicate_wws_6" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="true" target="man_1"/>
+	</State>
+	
+	<!--  -->
+	<!-- ################################################################################################################################### -->
+
+	<!-- ########################################## MANIPULATE - SEQUENCE EXECUTION ######################################################## -->
+	<State id="man_1" type="intermediateState">
+		<transition condition="true" target="fto_CL_0_1>>man_2"/>
+	</State>
+	<State id="man_2" type="intermediateState">	
+		<transition condition="true" target="man_3>>depop_1"/>
+	</State>
+	<State id="man_3" type="intermediateState">	
+		<transition condition="true" target="man_4>>fco_CL_0_1"/>
+	</State>	
+
+	<State id="man_4" type="manipulationSeqTranslation">	
+		<transition condition="true" target="_END_"/>
+	</State>
+	<!--  -->
+	<!-- ########################################## DEPARTURE_OPERATION #################################################################### -->
+	<State id="depop_1" type="runGenerator">
+		<ROBOT>ROBOT_FESTIVAL</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TRANSPARENT</ECPGeneratorType>
+		<Speech>skon~czyl/em</Speech>
+		<transition condition="true" target="depop_2"/>
+	</State>
+	<State id="depop_2" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/rcsc/irp6ot_sm_de_1.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="JOINT" numOfPoses="2">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>0.000000 -0.087462 -1.541873 0.024063 1.218727 2.578164 -2.664387 0.057000</Coordinates>
+			</Pose>
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>0.000000 -0.087462 -1.541873 0.024063 1.218727 2.578164 -2.664387 0.065000</Coordinates>
+			</Pose>
+		</Trajectory>
+		<transition condition="true" target="depop_3"/>
+	</State>
+	<State id="depop_3" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/rcsc/irp6p_sm_de_1.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="JOINT" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>-0.100633 -1.541943 0.048591 1.197734 2.100977 -2.731195 0.074000 0.0</Coordinates>
+			</Pose>
+		</Trajectory>
+		<transition condition="true" target="depop_4"/>
+	</State>
+	<State id="depop_4" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="true" target="depop_5"/>
+	</State>
+	<State id="depop_5" type="runGenerator">
+		<ROBOT>ROBOT_FESTIVAL</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TRANSPARENT</ECPGeneratorType>
+		<Speech>jade~ pracowac~ do anglii</Speech>
+		<transition condition="true" target="depop_6"/>
+	</State>
+	<State id="depop_6" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="true" target="STOP"/>
 	</State>
 	
 	<!-- ################################################################################################################################### -->

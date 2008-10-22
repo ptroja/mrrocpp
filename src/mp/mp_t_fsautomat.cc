@@ -476,32 +476,251 @@ bool mp_task_fsautomat::writeCubeState(State &state)
 bool mp_task_fsautomat::changeCubeState(State &state)
 {
 	int turn_angle = state.getNumArgument();
-/*	CubeState tmp_cube_state;
+	CubeState tmp_cube_state;
 	
-	switch (turn_angle)
-	{
-		case 90:
-			tmp_cube_state.set_state(cube_state->left, cube_state->right, cube_state->up, cube_state->down,
-					cube_state->front, cube_state->rear);
-			break;
-		case 0:
-			tmp_cube_state.set_state(cube_state->front, cube_state->rear, cube_state->left, cube_state->right,
-					cube_state->up, cube_state->down);
-			break;
-		case 270:
-			tmp_cube_state.set_state(cube_state->right, cube_state->left, cube_state->down, cube_state->up,
-					cube_state->front, cube_state->rear);
-			break;
-		case 180:
-			tmp_cube_state.set_state(cube_state->front, cube_state->rear, cube_state->right, cube_state->left,
-					cube_state->down, cube_state->up);
-			break;
-		default:
-			break;
-	}
+	tmp_cube_state.set_state(*cube_state, turn_angle);
 	
 	*cube_state = tmp_cube_state;
-	*/
+	return false;
+}
+
+
+bool mp_task_fsautomat::communicate_with_windows_solver(State &state)
+{
+		  state.setProperTransitionResult(true);
+		  return false;
+		  
+    char c_up, c_right, c_front, c_down, c_left, c_back;
+    int s, str_size;
+    char cube_tab_send[54];
+    char manipulation_sequence[200];
+
+    for(int i=0; i<3; i++)
+        for(int j=0; j<3; j++)
+            cube_tab_send[2*9+3*i+j]=cube_state->cube_tab[0][3*i+j]; //rot cl 0
+
+    for(int i=0; i<3; i++)
+        for(int j=0; j<3; j++)
+            cube_tab_send[1*9+3*j+2-i]=cube_state->cube_tab[1][3*i+j]; //rot cl 90
+
+    for(int i=0; i<3; i++)
+        for(int j=0; j<3; j++)
+            cube_tab_send[3*9+3*(2-j)+i]=cube_state->cube_tab[2][3*i+j]; //rot ccl 90
+
+    for(int i=0; i<3; i++)
+        for(int j=0; j<3; j++)
+            cube_tab_send[5*9+3*i+j]=cube_state->cube_tab[3][3*i+j]; //rot cl 0
+
+    for(int i=0; i<3; i++)
+        for(int j=0; j<3; j++)
+            cube_tab_send[4*9+3*j+2-i]=cube_state->cube_tab[4][3*i+j]; //rot cl 90
+
+    for(int i=0; i<3; i++)
+        for(int j=0; j<3; j++)
+            cube_tab_send[0*9+3*j+2-i]=cube_state->cube_tab[5][3*i+j]; //rot cl 90
+
+    printf("SEQ IN COLOR : %s\n",cube_tab_send);
+
+    c_up=cube_tab_send[4];
+    c_right=cube_tab_send[13];
+    c_front=cube_tab_send[22];
+    c_down=cube_tab_send[31];
+    c_left=cube_tab_send[40];
+    c_back=cube_tab_send[49];
+
+    printf("%c %c %c %c %c %c\n", c_up, c_right, c_front, c_down, c_left, c_back);
+
+    for(int i=0; i<54; i++)
+    {
+        if (cube_tab_send[i] == c_up)
+            cube_tab_send[i]='u';
+        else if (cube_tab_send[i] == c_down)
+            cube_tab_send[i]='d';
+        else if (cube_tab_send[i] == c_front)
+            cube_tab_send[i]='f';
+        else if (cube_tab_send[i] == c_back)
+            cube_tab_send[i]='b';
+        else if (cube_tab_send[i] == c_right)
+            cube_tab_send[i]='r';
+        else if (cube_tab_send[i] == c_left)
+            cube_tab_send[i]='l';
+    }
+
+
+    cube_tab_send[54]='\0';
+
+    printf("SEQ FROM VIS : %s\n",cube_tab_send);
+
+    //reszta
+    // struktura pomiocnicza
+    SingleManipulation single_manipulation;
+
+    // czyszczenie listy
+    manipulation_list.clear();
+
+    for(int i=0; i<54; i++)
+    {
+        transmitter_m[TRANSMITTER_RC_WINDOWS]->to_va.rc_windows.rc_state[i]=cube_tab_send[i];
+    }
+    //mp_object.transmitter_m[TRANSMITTER_RC_WINDOWS]->to_va.rc_windows.rc_state[i]=patternx[i];
+    transmitter_m[TRANSMITTER_RC_WINDOWS]->to_va.rc_windows.rc_state[54]='\0';
+
+
+    transmitter_m[TRANSMITTER_RC_WINDOWS]->t_write();
+
+
+
+    transmitter_m[TRANSMITTER_RC_WINDOWS]->t_read(true);
+
+    printf ("OPS: %s", transmitter_m[TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence);
+
+    strcpy (manipulation_sequence,transmitter_m[TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence);
+
+    if ((manipulation_sequence[0]=='C') && (manipulation_sequence[1]=='u') && (manipulation_sequence[2]=='b') && (manipulation_sequence[3]=='e'))
+    {
+        printf("Jam jest daltonista. ktory Ci nie uloz*y kostki\n");
+        //manipulation_sequence_computed = false;
+		  state.setProperTransitionResult(false);
+        return false;
+    }
+
+    //sekwencja poczatkowa w kolejnosci: UP, DOWN, FRONT, BACK, LEFT, RIGHT
+    //cube_initial_state=BGROWY
+    s=0;
+    str_size=0;
+    for (unsigned int char_i=0; char_i < strlen(transmitter_m[TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence)-1; char_i ++)
+    {
+        if (s==0)
+        {
+            switch (transmitter_m[TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence[char_i])
+            {
+            case 'U':
+                manipulation_sequence[str_size] = 'B';
+                break;
+            case 'D':
+                manipulation_sequence[str_size] = 'G';
+                break;
+            case 'F':
+                manipulation_sequence[str_size] = 'O';
+                break;
+            case 'B':
+                manipulation_sequence[str_size] = 'R';
+                break;
+            case 'L':
+                manipulation_sequence[str_size] = 'W';
+                break;
+            case 'R':
+                manipulation_sequence[str_size] = 'Y';
+                break;
+            }
+            s=1;
+            str_size++;
+        }
+        else if (s==1)
+        {
+            switch (transmitter_m[TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence[char_i])
+            {
+            case ' ':
+                manipulation_sequence[str_size] = '1';
+                s=0;
+                break;
+            case '2':
+                manipulation_sequence[str_size] = '2';
+                s=2;
+                break;
+            case '\'':
+                manipulation_sequence[str_size] = '3';
+                s=2;
+                break;
+            }
+            str_size++;
+        }
+        else if (s==2)
+        {
+            s=0;
+        }
+
+    }
+
+    if (s==1)
+    {
+        str_size--;
+        manipulation_sequence[str_size] = '1';
+        str_size++;
+    }
+    manipulation_sequence[str_size]='\0';
+
+    printf ("\n%d %d\n",str_size,strlen(manipulation_sequence));
+    printf ("SEQ from win %s\n",transmitter_m[TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence);
+    printf ("\nSEQ2 %s\n",manipulation_sequence);
+
+    //pocztaek ukladania
+    // dodawanie manipulacji do listy
+    for (unsigned int char_i=0; char_i < strlen(manipulation_sequence)-1; char_i += 2)
+    {
+        single_manipulation.set_state(read_cube_color(manipulation_sequence[char_i]),
+                                      read_cube_turn_angle(manipulation_sequence[char_i+1]));
+        manipulation_list.push_back(single_manipulation);
+    }
+    //manipulation_sequence_computed = true;
+	 state.setProperTransitionResult(true);
+
+    return false;
+}
+
+bool mp_task_fsautomat::translateManipulationSequence(StateHeap &sh)
+{
+	manipulation_list.reverse();
+	for(std::list<SingleManipulation>::iterator manipulation_list_iterator = manipulation_list.begin();
+			manipulation_list_iterator != manipulation_list.end(); manipulation_list_iterator++)
+	{
+		switch(manipulation_list_iterator->turn_angle)
+		{
+			case CL_90:
+				sh.pushTargetName("fto_CL_90_1");
+				break;
+			case CL_0:
+				sh.pushTargetName("fto_CL_0_1");
+				break;
+			case CCL_90:
+				sh.pushTargetName("fto_CCL_90_1");
+				break;
+			case CL_180:
+				sh.pushTargetName("fto_CL_180_1");
+				break;
+			default:
+				break;
+		}
+		if (manipulation_list_iterator->face_to_turn == cube_state->getUp())
+		{	
+			sh.pushTargetName("fco_CL_90_1");
+		}
+		else if (manipulation_list_iterator->face_to_turn == cube_state->getDown())
+		{
+			sh.pushTargetName("fco_CCL_90_1");
+		}
+		else if (manipulation_list_iterator->face_to_turn == cube_state->getFront())
+		{
+			sh.pushTargetName("fco_CL_90_1");
+			sh.pushTargetName("fto_CL_0_1");
+			sh.pushTargetName("fco_CL_0_1");
+		}
+		else if (manipulation_list_iterator->face_to_turn == cube_state->getRear())
+		{
+			sh.pushTargetName("fco_CCL_90_1");
+			sh.pushTargetName("fto_CL_0_1");
+			sh.pushTargetName("fco_CL_0_1");
+		}
+		else if (manipulation_list_iterator->face_to_turn == cube_state->getLeft())
+		{
+			sh.pushTargetName("fco_CL_0_1");
+		}
+		else if (manipulation_list_iterator->face_to_turn == cube_state->getRight())
+		{
+			sh.pushTargetName("fco_CL_180_1");
+		}
+	}
+	// sh.pushTargetName("name");
 	return false;
 }
 
@@ -600,6 +819,18 @@ void mp_task_fsautomat::main_task_algorithm(void)
 			if(strcmp((*stateMap)[nextState].getType(), (const char *)"cubeStateChange") == 0)
 			{
 				if(!changeCubeState((*stateMap)[nextState]))
+					std::cout<<nextState<<" -> zakonczony"<<std::endl;
+				//continue;
+			}
+			if(strcmp((*stateMap)[nextState].getType(), (const char *)"communicateWithSolver") == 0)
+			{
+				if(!communicate_with_windows_solver((*stateMap)[nextState]))
+					std::cout<<nextState<<" -> zakonczony"<<std::endl;
+				//continue;
+			}
+			if(strcmp((*stateMap)[nextState].getType(), (const char *)"manipulationSeqTranslation") == 0)
+			{
+				if(!translateManipulationSequence(sh))
 					std::cout<<nextState<<" -> zakonczony"<<std::endl;
 				//continue;
 			}

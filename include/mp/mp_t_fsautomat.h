@@ -14,14 +14,20 @@
 //#include "ecp_mp/ecp_mp_t_fsautomat.h"
 #include "mp/State.h"
 #include "mp/CubeState.h"
+#include "mp/SingleManipulation.h"
 
 class mp_task_fsautomat : public mp_task  
 {
 	protected:
 		bool break_state;
     	CubeState *cube_state;
+		// should depend on init node in xml task definition or be computed in Condition
+    	bool manipulation_sequence_computed;
 
 	public:
+		// stl'owa lista manipulacji
+		std::list<SingleManipulation> manipulation_list;
+		
 	    // konstruktor
 	    mp_task_fsautomat(configurator &_config);
 	
@@ -44,6 +50,8 @@ class mp_task_fsautomat : public mp_task
 		bool getSensorReading(State &state);
 		bool writeCubeState(State &state);
 		bool changeCubeState(State &state);
+		bool communicate_with_windows_solver(State &state);
+		bool translateManipulationSequence(StateHeap &sh);
 
 		void configureProperSensor(char *propSensor);
 		void configureProperTransmitter(char *propTrans);

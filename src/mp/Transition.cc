@@ -32,6 +32,11 @@ bool Transition::getConditionResult()
 	return result;
 }
 
+bool Transition::setConditionResult(bool result)
+{
+	condition->setResult(result);
+}
+
 char * Transition::getTargetID(StateHeap &sh) const
 {
 	char *sp = ">>";
@@ -43,6 +48,11 @@ char * Transition::getTargetID(StateHeap &sh) const
 	}
 	else
 		return targetID;
+}
+
+char * Transition::getConditionDescription() const
+{
+	return condition->getCondDesc();
 }
 		
 void Transition::showContent()

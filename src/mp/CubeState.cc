@@ -46,6 +46,31 @@ void CubeState::set_state(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front
 	right = right_is;
 };
 
+void CubeState::set_state(CubeState &cubeState, int turnAngle)
+{
+	switch(turnAngle)
+	{		
+		case 90:
+			this->set_state(cubeState.left, cubeState.right, cubeState.up, cubeState.down,
+					cubeState.front, cubeState.rear);
+			break;
+		case 0:
+			this->set_state(cubeState.front, cubeState.rear, cubeState.left, cubeState.right,
+					cubeState.up, cubeState.down);
+			break;
+		case 270:
+			this->set_state(cubeState.right, cubeState.left, cubeState.down, cubeState.up,
+					cubeState.front, cubeState.rear);
+			break;
+		case 180:
+			this->set_state(cubeState.front, cubeState.rear, cubeState.right, cubeState.left,
+					cubeState.down, cubeState.up);
+			break;
+		default:
+			break;
+	}
+};
+
 
 void CubeState::print_face_color(CUBE_COLOR face_name)
 {
@@ -119,3 +144,34 @@ CUBE_COLOR read_cube_color(char input_char)
 		break;			
 	}	
 };
+
+CUBE_COLOR CubeState::getUp() const
+{
+	return up;
+}
+
+CUBE_COLOR CubeState::getDown() const
+{
+	return down;
+}
+
+CUBE_COLOR CubeState::getFront() const
+{
+	return front;
+}
+
+CUBE_COLOR CubeState::getRear() const
+{
+	return rear;
+}
+
+CUBE_COLOR CubeState::getLeft() const
+{
+	return left;
+}
+
+CUBE_COLOR CubeState::getRight() const
+{
+	return right;
+}
+

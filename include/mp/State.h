@@ -46,6 +46,7 @@ class State
 		void setStringArgument(char *trajFilePath);
 		char *  getStringArgument() const;
 		void setTransition(char *cond, char *target, configurator &_config);
+		void setProperTransitionResult(bool result);
 		char *returnNextStateID(StateHeap &sh);
 		std::list<Transition> * getTransitions() const;
 
