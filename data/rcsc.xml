@@ -1751,7 +1751,7 @@
 		<transition condition="true" target="fco_CL_0_26"/>
 	</State>
 	<State id="fco_CL_0_26" type="cubeStateChange">
-		<AddArg>90</AddArg>
+		<AddArg>0</AddArg>
 		<transition condition="true" target="_END_"/>
 	</State>
 	
@@ -1976,7 +1976,7 @@
 		<transition condition="true" target="fco_CCL_90_26"/>
 	</State>
 	<State id="fco_CCL_90_26" type="cubeStateChange">
-		<AddArg>90</AddArg>
+		<AddArg>270</AddArg>
 		<transition condition="true" target="_END_"/>
 	</State>
 	
@@ -2201,7 +2201,7 @@
 		<transition condition="true" target="fco_CL_180_26"/>
 	</State>
 	<State id="fco_CL_180_26" type="cubeStateChange">
-		<AddArg>90</AddArg>
+		<AddArg>180</AddArg>
 		<transition condition="true" target="_END_"/>
 	</State>
 	<!-- ################################################################################################################################### -->

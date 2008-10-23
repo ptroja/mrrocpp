@@ -54,7 +54,7 @@ mp_task* return_created_mp_task (configurator &_config)
 // methods fo mp template to redefine in concete class
 void mp_task_fsautomat::task_initialization(void) 
 {
-	int size, conArg;
+/*	int size, conArg;
 	char *filePath;
 	char *fileName = config.return_string_value("xml_file", "[xml_settings]");
    xmlNode *cur_node, *child_node;
@@ -133,6 +133,34 @@ void mp_task_fsautomat::task_initialization(void)
    }
    xmlFreeDoc(doc);
    xmlCleanupParser();
+	*/
+    sensor_m[SENSOR_CAMERA_ON_TRACK] =
+        new ecp_mp_vis_sensor (SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
+
+    if (config.return_int_value("vis_servoing"))
+    {
+
+    sensor_m[SENSOR_CAMERA_SA] =
+        new ecp_mp_vis_sensor (SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+        
+        }
+
+    // Konfiguracja wszystkich czujnikow
+    for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+            sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
+    {
+        sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
+        sensor_m_iterator->second->configure_sensor();
+    }
+
+    usleep(1000*100);
+
+    // dodanie transmitter'a
+    transmitter_m[TRANSMITTER_RC_WINDOWS] =
+        new rc_windows_transmitter (TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
+	
+	 cube_state = new CubeState();
+
 	sr_ecp_msg->message("MP fsautomat loaded");
 };
 
@@ -359,12 +387,13 @@ bool mp_task_fsautomat::executeMotion(State &state)
 
 bool mp_task_fsautomat::sensorInitialization()
 {
-	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+/*	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 			sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
 		sensor_m_iterator->second->configure_sensor();
 	}
+	*/
 	return false;
 }
 
@@ -398,12 +427,13 @@ bool mp_task_fsautomat::initializeCubeState(State &state)
 	
 bool mp_task_fsautomat::initiateSensorReading(State &state)
 {
-        sensor_m[SENSOR_CAMERA_ON_TRACK]->initiate_reading();
+/*        sensor_m[SENSOR_CAMERA_ON_TRACK]->initiate_reading();
         if (wait_ms(1000))
         {
            return true;
         }
         sensor_m[SENSOR_CAMERA_ON_TRACK]->get_reading();
+*/		  
 /*	char *sensorName = strdup(state.getStringArgument());
 	SENSOR_ENUM whichSensor;		
 	if(!strcmp(sensorName, (const char *)"SENSOR_CAMERA_ON_TRACK"))
@@ -433,7 +463,14 @@ bool mp_task_fsautomat::getSensorReading(State &state)
 bool mp_task_fsautomat::writeCubeState(State &state)
 {
 	int index = state.getNumArgument();
-
+        
+	sensor_m[SENSOR_CAMERA_ON_TRACK]->initiate_reading();
+	if (wait_ms(1000))
+	{
+		return true;
+	}
+	sensor_m[SENSOR_CAMERA_ON_TRACK]->get_reading();
+	
 	for(int i=0; i<3; i++)
 		for(int j=0; j<3; j++)
 			cube_state->cube_tab[index][3*i+j]=(char)sensor_m[SENSOR_CAMERA_ON_TRACK]->image.cube_face.colors[3*i+j];
@@ -752,6 +789,13 @@ void mp_task_fsautomat::main_task_algorithm(void)
 		// adding first state name
 		//strcmp(nextState, (char *)"INIT");
 		sprintf(nextState, "INIT");
+		// temporary sensor config in this place
+	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+			sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
+	{
+		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_m_iterator->second->configure_sensor();
+	}
 
 	//std::cout<<"###### "<<(*stateMap)[nextState].getType()<<std::endl;
 		for(;strcmp(nextState, (const char *)"STOP"); strcpy(nextState, (*stateMap)[nextState].returnNextStateID(sh)))
