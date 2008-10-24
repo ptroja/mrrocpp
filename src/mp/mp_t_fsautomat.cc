@@ -528,6 +528,16 @@ bool mp_task_fsautomat::changeCubeState(State &state)
 }
 
 
+bool mp_task_fsautomat::changeCubeState(int turn_angle)
+{
+	CubeState tmp_cube_state;
+	
+	tmp_cube_state.set_state(*cube_state, turn_angle);
+	
+	*cube_state = tmp_cube_state;
+	return false;
+}
+
 bool mp_task_fsautomat::communicate_with_windows_solver(State &state)
 {
 //		  state.setProperTransitionResult(true);
@@ -713,7 +723,92 @@ bool mp_task_fsautomat::communicate_with_windows_solver(State &state)
 
 bool mp_task_fsautomat::translateManipulationSequence(StateHeap &sh)
 {
-	manipulation_list.reverse();
+//	manipulation_list.reverse();
+
+	std::list<char *> *scenario = new std::list<char *>();
+	
+	for(std::list<SingleManipulation>::iterator manipulation_list_iterator = manipulation_list.begin();
+			manipulation_list_iterator != manipulation_list.end(); manipulation_list_iterator++)
+	{
+		if (manipulation_list_iterator->face_to_turn == cube_state->getUp())
+		{	
+			//sh.pushTargetName("fco_CL_90_1");
+			scenario->push_back("fco_CL_90_1");
+			changeCubeState(90);
+		}
+		else if (manipulation_list_iterator->face_to_turn == cube_state->getDown())
+		{
+			//sh.pushTargetName("fco_CCL_90_1");
+			scenario->push_back("fco_CCL_90_1");
+			changeCubeState(270);
+		}
+		else if (manipulation_list_iterator->face_to_turn == cube_state->getFront())
+		{
+			//sh.pushTargetName("fco_CL_0_1");
+			scenario->push_back("fco_CL_0_1");
+			changeCubeState(0);
+			//sh.pushTargetName("fto_CL_0_1");
+			scenario->push_back("fto_CL_0_1");
+			//sh.pushTargetName("fco_CL_90_1");
+			scenario->push_back("fco_CL_90_1");
+			changeCubeState(90);
+		}
+		else if (manipulation_list_iterator->face_to_turn == cube_state->getRear())
+		{
+			//sh.pushTargetName("fco_CL_0_1");
+			scenario->push_back("fco_CL_0_1");
+			changeCubeState(0);
+			//sh.pushTargetName("fto_CL_0_1");
+			scenario->push_back("fto_CL_0_1");
+			//sh.pushTargetName("fco_CCL_90_1");
+			scenario->push_back("fco_CCL_90_1");
+			changeCubeState(270);
+		}
+		else if (manipulation_list_iterator->face_to_turn == cube_state->getLeft())
+		{
+			//sh.pushTargetName("fco_CL_0_1");
+			scenario->push_back("fco_CL_0_1");
+			changeCubeState(0);
+		}
+		else if (manipulation_list_iterator->face_to_turn == cube_state->getRight())
+		{
+			//sh.pushTargetName("fco_CL_180_1");
+			scenario->push_back("fco_CL_180_1");
+			changeCubeState(180);
+		}
+		switch(manipulation_list_iterator->turn_angle)
+		{
+			case CL_90:
+				//sh.pushTargetName("fto_CL_90_1");
+				scenario->push_back("fto_CL_90_1");
+				break;
+			case CL_0:
+				//sh.pushTargetName("fto_CL_0_1");
+				scenario->push_back("fto_CL_0_1");
+				break;
+			case CCL_90:
+				//sh.pushTargetName("fto_CCL_90_1");
+				scenario->push_back("fto_CCL_90_1");
+				break;
+			case CL_180:
+				//sh.pushTargetName("fto_CL_180_1");
+				scenario->push_back("fto_CL_180_1");
+				break;
+			default:
+				break;
+		}
+	}
+
+	scenario->reverse();
+	for(std::list<char *>::iterator it = scenario->begin(); it != scenario->end(); ++it)
+	{
+		sh.pushTargetName((*it));
+	}
+	sh.showHeapContent();
+
+	delete scenario;
+
+/*	manipulation_list.reverse();
 	for(std::list<SingleManipulation>::iterator manipulation_list_iterator = manipulation_list.begin();
 			manipulation_list_iterator != manipulation_list.end(); manipulation_list_iterator++)
 	{
@@ -736,33 +831,40 @@ bool mp_task_fsautomat::translateManipulationSequence(StateHeap &sh)
 		}
 		if (manipulation_list_iterator->face_to_turn == cube_state->getUp())
 		{	
+         printf("cube_state->up\n");
 			sh.pushTargetName("fco_CL_90_1");
 		}
 		else if (manipulation_list_iterator->face_to_turn == cube_state->getDown())
 		{
+         printf("cube_state->down\n");
 			sh.pushTargetName("fco_CCL_90_1");
 		}
 		else if (manipulation_list_iterator->face_to_turn == cube_state->getFront())
 		{
+         printf("cube_state->front\n");
 			sh.pushTargetName("fco_CL_90_1");
 			sh.pushTargetName("fto_CL_0_1");
 			sh.pushTargetName("fco_CL_0_1");
 		}
 		else if (manipulation_list_iterator->face_to_turn == cube_state->getRear())
 		{
+         printf("cube_state->rear\n");
 			sh.pushTargetName("fco_CCL_90_1");
 			sh.pushTargetName("fto_CL_0_1");
 			sh.pushTargetName("fco_CL_0_1");
 		}
 		else if (manipulation_list_iterator->face_to_turn == cube_state->getLeft())
 		{
+         printf("cube_state->left\n");
 			sh.pushTargetName("fco_CL_0_1");
 		}
 		else if (manipulation_list_iterator->face_to_turn == cube_state->getRight())
 		{
+         printf("cube_state->right\n");
 			sh.pushTargetName("fco_CL_180_1");
 		}
 	}
+*/
 	// sh.pushTargetName("name");
 	return false;
 }

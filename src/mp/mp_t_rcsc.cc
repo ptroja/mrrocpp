@@ -49,7 +49,7 @@ bool mp_task_rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogl
 
     const CUBE_TURN_ANGLE changing_order[]=
         {
-            CL_0, CL_0, CL_180, CL_0, CL_180, CL_0
+            CL_0, CL_0, CL_180, CL_0, CL_180, CL_0    
         };
 
     for(int k=0; k<6; k++)
@@ -385,7 +385,7 @@ bool mp_task_rubik_cube_solver::manipulate(CUBE_COLOR face_to_turn, CUBE_TURN_AN
 
     if (face_to_turn == cube_state->up)
     {
-        // printf("cube_state->up\n");
+         printf("cube_state->up\n");
         if (face_change_op(CL_90))
         {
             return true;
@@ -397,7 +397,7 @@ bool mp_task_rubik_cube_solver::manipulate(CUBE_COLOR face_to_turn, CUBE_TURN_AN
     }
     else if (face_to_turn == cube_state->down)
     {
-        // printf("cube_state->down\n");
+         printf("cube_state->down\n");
         if (face_change_op(CCL_90))
         {
             return true;
@@ -410,7 +410,7 @@ bool mp_task_rubik_cube_solver::manipulate(CUBE_COLOR face_to_turn, CUBE_TURN_AN
     }
     else if (face_to_turn == cube_state->front)
     {
-        // printf("cube_state->front\n");
+         printf("cube_state->front\n");
         if (face_change_op(CL_0))
         {
             return true;
@@ -430,7 +430,7 @@ bool mp_task_rubik_cube_solver::manipulate(CUBE_COLOR face_to_turn, CUBE_TURN_AN
     }
     else if (face_to_turn == cube_state->rear)
     {
-        // printf("cube_state->rear\n");
+         printf("cube_state->rear\n");
         if (face_change_op(CL_0))
         {
             return true;
@@ -450,7 +450,7 @@ bool mp_task_rubik_cube_solver::manipulate(CUBE_COLOR face_to_turn, CUBE_TURN_AN
     }
     else if (face_to_turn == cube_state->left)
     {
-        // printf("cube_state->left\n");
+         printf("cube_state->left\n");
         if (face_change_op(CL_0))
         {
             return true;
@@ -462,7 +462,7 @@ bool mp_task_rubik_cube_solver::manipulate(CUBE_COLOR face_to_turn, CUBE_TURN_AN
     }
     else if (face_to_turn == cube_state->right)
     {
-        // printf("cube_state->right\n");
+         printf("cube_state->right\n");
         if (face_change_op(CL_180))
         {
             return true;
@@ -483,6 +483,7 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 
     // ustawienie chwytakow we wlasciwej wzajemnej orientacji
 
+	printf("face_turn_op_CL: %d\n", turn_angle);
 
     // wlaczenie generatora uczacego w obu robotach
     switch (turn_angle)
@@ -717,6 +718,8 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 
     // zblizenie chwytakow
 
+	printf("face_change_op_CL: %d\n", turn_angle);
+	
     if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "przekl/adam kostke~", 1, ROBOT_FESTIVAL))
     {
         return true;

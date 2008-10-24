@@ -50,6 +50,7 @@ class mp_task_fsautomat : public mp_task
 		bool getSensorReading(State &state);
 		bool writeCubeState(State &state);
 		bool changeCubeState(State &state);
+		bool changeCubeState(int turn_angle);
 		bool communicate_with_windows_solver(State &state);
 		bool translateManipulationSequence(StateHeap &sh);
 

@@ -24,7 +24,7 @@ void StateHeap::pushTargetName(char * stateName)
 		targetsHeap = new std::list<char *>();
 	targetsHeap->push_back(toAdd);
 	// showing content
-	showHeapContent();
+	//showHeapContent();
 }
 
 char * StateHeap::popTargetName()
