@@ -38,6 +38,7 @@ class mp_task_fsautomat : public mp_task
 		void main_task_algorithm(void);
 		
 		std::list<State> *takeStatesList(void);
+		State * createState(xmlNode *stateNode);
 		std::map<char *, State, ecp_task::str_cmp> * takeStatesMap();
 		bool executeMotion(State &state);
 		bool runEmptyGenForSet(State &state);

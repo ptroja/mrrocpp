@@ -11,9 +11,10 @@
 #include <iostream.h>
 
 #include "libxml/xmlmemory.h"
-#include "libxml/parser.h"
 #include "libxml/tree.h"
 #include "libxml/debugXML.h"
+#include "libxml/parser.h"
+#include "libxml/xinclude.h"
 
 #include "common/typedefs.h"
 #include "common/impconst.h"
@@ -164,15 +165,115 @@ void mp_task_fsautomat::task_initialization(void)
 	sr_ecp_msg->message("MP fsautomat loaded");
 };
 
-std::map<char *, State, ecp_task::str_cmp> * mp_task_fsautomat::takeStatesMap()
+State * mp_task_fsautomat::createState(xmlNode *stateNode)
 {
-	int size, index;
-	char *filePath;
-	char *fileName = config.return_string_value("xml_file", "[xml_settings]");
-   xmlNode *cur_node, *child_node, *cchild_node, *set_node;
+	int index;
+	State *actState;
+   xmlNode *child_node, *cchild_node, *set_node;
    xmlChar *ecpGeneratorType, *robot, *robotSet;
    xmlChar *stateID, *stateType, *stringArgument, *numArgument;
 	xmlChar *cond, *trans;
+			
+	
+	actState = new State();
+	stateID = xmlGetProp(stateNode, (const xmlChar *) "id");
+	
+	if(stateID)
+	{
+		actState->setStateID((char*)stateID);
+	}
+	stateType = xmlGetProp(stateNode, (const xmlChar *) "type");
+	if(stateType)
+	{
+		actState->setType((char*)stateType);
+	}
+	// For each child of state: i.e. Robot
+	for(child_node = stateNode->children; child_node != NULL; child_node = child_node->next)
+	{
+		if ( child_node->type == XML_ELEMENT_NODE  &&
+				!xmlStrcmp(child_node->name, (const xmlChar *)"ECPGeneratorType") )
+		{
+			ecpGeneratorType = xmlNodeGetContent(child_node);
+			if(ecpGeneratorType)
+				actState->setGeneratorType((char*)ecpGeneratorType);
+			xmlFree(ecpGeneratorType);
+		}
+		if ( child_node->type == XML_ELEMENT_NODE  &&
+				!xmlStrcmp(child_node->name, (const xmlChar *)"ROBOT") )
+		{
+			robot = xmlNodeGetContent(child_node);
+			if(robot)
+				actState->setRobot((char*)robot);
+			xmlFree(robot);
+		}
+		if ( child_node->type == XML_ELEMENT_NODE  &&
+				!xmlStrcmp(child_node->name, (const xmlChar *)"SetOfRobots") )
+		{
+			actState->robotSet = new State::RobotSets();
+			for(cchild_node = child_node->children; cchild_node != NULL; cchild_node = cchild_node->next)
+			{
+				if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"FirstSet") )
+				{
+					actState->robotSet->firstSetCount = ((xmlLsCountNode(cchild_node))-1)/2;
+					actState->robotSet->firstSet = new ROBOT_ENUM[actState->robotSet->firstSetCount];
+					index = 0;
+					for(set_node = cchild_node->children; set_node!=NULL; set_node = set_node->next)
+						if ( set_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(set_node->name, (const xmlChar *)"ROBOT") )
+							actState->robotSet->firstSet[index++] = State::returnProperRobot((char *)xmlNodeGetContent(set_node));
+				}
+				if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"SecSet") )
+				{
+					actState->robotSet->secondSetCount = ((xmlLsCountNode(cchild_node))-1)/2;
+					actState->robotSet->secondSet = new ROBOT_ENUM[actState->robotSet->secondSetCount];
+					index = 0;
+					for(set_node = cchild_node->children; set_node!=NULL; set_node = set_node->next)
+						if ( set_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(set_node->name, (const xmlChar *)"ROBOT") )
+							actState->robotSet->secondSet[index++] = State::returnProperRobot((char *)xmlNodeGetContent(set_node));
+				}
+			}
+		}
+		if ( child_node->type == XML_ELEMENT_NODE  &&
+				(!xmlStrcmp(child_node->name, (const xmlChar *)"TrajectoryFilePath") ||
+				 !xmlStrcmp(child_node->name, (const xmlChar *)"GeneratorParameters") ||
+				 !xmlStrcmp(child_node->name, (const xmlChar *)"Parameters") ||
+				 !xmlStrcmp(child_node->name, (const xmlChar *)"Sensor") ||
+				 !xmlStrcmp(child_node->name, (const xmlChar *)"Speech")))
+		{
+			stringArgument = xmlNodeGetContent(child_node);
+			if(stringArgument)
+				actState->setStringArgument((char*)stringArgument);
+			xmlFree(stringArgument);
+		}
+		if ( child_node->type == XML_ELEMENT_NODE  &&
+				(!xmlStrcmp(child_node->name, (const xmlChar *)"TimeSpan") ||
+				 !xmlStrcmp(child_node->name, (const xmlChar *)"AddArg")))
+		{
+			numArgument = xmlNodeGetContent(child_node);
+			if(numArgument)
+				actState->setNumArgument((char*)numArgument);
+			xmlFree(numArgument);
+		}
+		if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"transition") )
+		{
+			//printf("name: %s\n", (char *)child_node->name);
+			cond = xmlGetProp(child_node, (const xmlChar *) "condition");
+			trans = xmlGetProp(child_node, (const xmlChar *) "target");
+			if(cond && trans)
+				actState->setTransition((char *)cond, (char *)trans, config);
+		}
+	}
+	xmlFree(stateType);
+	xmlFree(stateID);
+
+	return actState;
+}
+
+std::map<char *, State, ecp_task::str_cmp> * mp_task_fsautomat::takeStatesMap()
+{
+	int size;
+	char *filePath;
+	char *fileName = config.return_string_value("xml_file", "[xml_settings]");
+   xmlNode *cur_node, *child_node;
 	std::map<char *, State, ecp_task::str_cmp> * statesMap = new std::map<char *, State, ecp_task::str_cmp>();
 
 	size = 1 + strlen(mrrocpp_network_path) + strlen(fileName);				  	
@@ -182,6 +283,7 @@ std::map<char *, State, ecp_task::str_cmp> * mp_task_fsautomat::takeStatesMap()
    // open xml document
    xmlDocPtr doc;
    doc = xmlParseFile(filePath);
+	xmlXIncludeProcess(doc);
    if(doc == NULL)
 	{
       cout<<"ERROR: could not parse file: \""<<fileName<<"\"."<<endl;
@@ -199,101 +301,27 @@ std::map<char *, State, ecp_task::str_cmp> * mp_task_fsautomat::takeStatesMap()
    }
 	State *actState = NULL;
 
-   // for each root children "state"
+   // for each root children
    for(cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
    {
       if ( cur_node->type == XML_ELEMENT_NODE  &&
+            !xmlStrcmp(cur_node->name, (const xmlChar *) "SubTask" ) )
+		{
+			for(child_node = cur_node->children; child_node != NULL; child_node = child_node->next)
+			{
+      		if ( child_node->type == XML_ELEMENT_NODE  &&
+						!xmlStrcmp(child_node->name, (const xmlChar *) "State" ) )
+				{
+					actState = createState(child_node);
+					statesMap->insert(std::map<char *, State>::value_type(actState->getStateID(), *actState));
+				}
+			}
+		}
+      if ( cur_node->type == XML_ELEMENT_NODE  &&
             !xmlStrcmp(cur_node->name, (const xmlChar *) "State" ) )
       {
-			actState = new State();
-         stateID = xmlGetProp(cur_node, (const xmlChar *) "id");
-         if(stateID)
-			{
-				actState->setStateID((char*)stateID);
-			}
-         stateType = xmlGetProp(cur_node, (const xmlChar *) "type");
-         if(stateType)
-         {
-				actState->setType((char*)stateType);
-         }
-         // For each child of state: i.e. Robot
-         for(child_node = cur_node->children; child_node != NULL; child_node = child_node->next)
-         {
-            if ( child_node->type == XML_ELEMENT_NODE  &&
-                  !xmlStrcmp(child_node->name, (const xmlChar *)"ECPGeneratorType") )
-            {
-               ecpGeneratorType = xmlNodeGetContent(child_node);
-               if(ecpGeneratorType)
-						actState->setGeneratorType((char*)ecpGeneratorType);
-               xmlFree(ecpGeneratorType);
-            }
-            if ( child_node->type == XML_ELEMENT_NODE  &&
-                  !xmlStrcmp(child_node->name, (const xmlChar *)"ROBOT") )
-            {
-               robot = xmlNodeGetContent(child_node);
-               if(robot)
-						actState->setRobot((char*)robot);
-               xmlFree(robot);
-            }
-            if ( child_node->type == XML_ELEMENT_NODE  &&
-                  !xmlStrcmp(child_node->name, (const xmlChar *)"SetOfRobots") )
-            {
-					actState->robotSet = new State::RobotSets();
-					for(cchild_node = child_node->children; cchild_node != NULL; cchild_node = cchild_node->next)
-					{
-		            if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"FirstSet") )
-						{
-							actState->robotSet->firstSetCount = ((xmlLsCountNode(cchild_node))-1)/2;
-							actState->robotSet->firstSet = new ROBOT_ENUM[actState->robotSet->firstSetCount];
-							index = 0;
-							for(set_node = cchild_node->children; set_node!=NULL; set_node = set_node->next)
-								if ( set_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(set_node->name, (const xmlChar *)"ROBOT") )
-									actState->robotSet->firstSet[index++] = State::returnProperRobot((char *)xmlNodeGetContent(set_node));
-						}
-		            if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"SecSet") )
-						{
-							actState->robotSet->secondSetCount = ((xmlLsCountNode(cchild_node))-1)/2;
-							actState->robotSet->secondSet = new ROBOT_ENUM[actState->robotSet->secondSetCount];
-							index = 0;
-							for(set_node = cchild_node->children; set_node!=NULL; set_node = set_node->next)
-								if ( set_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(set_node->name, (const xmlChar *)"ROBOT") )
-									actState->robotSet->secondSet[index++] = State::returnProperRobot((char *)xmlNodeGetContent(set_node));
-						}
-					}
-            }
-            if ( child_node->type == XML_ELEMENT_NODE  &&
-                  (!xmlStrcmp(child_node->name, (const xmlChar *)"TrajectoryFilePath") ||
-						 !xmlStrcmp(child_node->name, (const xmlChar *)"GeneratorParameters") ||
-						 !xmlStrcmp(child_node->name, (const xmlChar *)"Parameters") ||
-						 !xmlStrcmp(child_node->name, (const xmlChar *)"Sensor") ||
-						 !xmlStrcmp(child_node->name, (const xmlChar *)"Speech")))
-            {
-               stringArgument = xmlNodeGetContent(child_node);
-               if(stringArgument)
-						actState->setStringArgument((char*)stringArgument);
-               xmlFree(stringArgument);
-            }
-            if ( child_node->type == XML_ELEMENT_NODE  &&
-                  (!xmlStrcmp(child_node->name, (const xmlChar *)"TimeSpan") ||
-						 !xmlStrcmp(child_node->name, (const xmlChar *)"AddArg")))
-            {
-               numArgument = xmlNodeGetContent(child_node);
-               if(numArgument)
-						actState->setNumArgument((char*)numArgument);
-               xmlFree(numArgument);
-            }
-            if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"transition") )
-            {
-					//printf("name: %s\n", (char *)child_node->name);
-					cond = xmlGetProp(child_node, (const xmlChar *) "condition");
-					trans = xmlGetProp(child_node, (const xmlChar *) "target");
-					if(cond && trans)
-						actState->setTransition((char *)cond, (char *)trans, config);
-            }
-         }
+			actState = createState(cur_node);
 			statesMap->insert(std::map<char *, State>::value_type(actState->getStateID(), *actState));
-         xmlFree(stateType);
-         xmlFree(stateID);
 		}
    }
    // free the document
@@ -723,8 +751,6 @@ bool mp_task_fsautomat::communicate_with_windows_solver(State &state)
 
 bool mp_task_fsautomat::translateManipulationSequence(StateHeap &sh)
 {
-//	manipulation_list.reverse();
-
 	std::list<char *> *scenario = new std::list<char *>();
 	
 	for(std::list<SingleManipulation>::iterator manipulation_list_iterator = manipulation_list.begin();
@@ -732,66 +758,52 @@ bool mp_task_fsautomat::translateManipulationSequence(StateHeap &sh)
 	{
 		if (manipulation_list_iterator->face_to_turn == cube_state->getUp())
 		{	
-			//sh.pushTargetName("fco_CL_90_1");
 			scenario->push_back("fco_CL_90_1");
 			changeCubeState(90);
 		}
 		else if (manipulation_list_iterator->face_to_turn == cube_state->getDown())
 		{
-			//sh.pushTargetName("fco_CCL_90_1");
 			scenario->push_back("fco_CCL_90_1");
 			changeCubeState(270);
 		}
 		else if (manipulation_list_iterator->face_to_turn == cube_state->getFront())
 		{
-			//sh.pushTargetName("fco_CL_0_1");
 			scenario->push_back("fco_CL_0_1");
 			changeCubeState(0);
-			//sh.pushTargetName("fto_CL_0_1");
 			scenario->push_back("fto_CL_0_1");
-			//sh.pushTargetName("fco_CL_90_1");
 			scenario->push_back("fco_CL_90_1");
 			changeCubeState(90);
 		}
 		else if (manipulation_list_iterator->face_to_turn == cube_state->getRear())
 		{
-			//sh.pushTargetName("fco_CL_0_1");
 			scenario->push_back("fco_CL_0_1");
 			changeCubeState(0);
-			//sh.pushTargetName("fto_CL_0_1");
 			scenario->push_back("fto_CL_0_1");
-			//sh.pushTargetName("fco_CCL_90_1");
 			scenario->push_back("fco_CCL_90_1");
 			changeCubeState(270);
 		}
 		else if (manipulation_list_iterator->face_to_turn == cube_state->getLeft())
 		{
-			//sh.pushTargetName("fco_CL_0_1");
 			scenario->push_back("fco_CL_0_1");
 			changeCubeState(0);
 		}
 		else if (manipulation_list_iterator->face_to_turn == cube_state->getRight())
 		{
-			//sh.pushTargetName("fco_CL_180_1");
 			scenario->push_back("fco_CL_180_1");
 			changeCubeState(180);
 		}
 		switch(manipulation_list_iterator->turn_angle)
 		{
 			case CL_90:
-				//sh.pushTargetName("fto_CL_90_1");
 				scenario->push_back("fto_CL_90_1");
 				break;
 			case CL_0:
-				//sh.pushTargetName("fto_CL_0_1");
 				scenario->push_back("fto_CL_0_1");
 				break;
 			case CCL_90:
-				//sh.pushTargetName("fto_CCL_90_1");
 				scenario->push_back("fto_CCL_90_1");
 				break;
 			case CL_180:
-				//sh.pushTargetName("fto_CL_180_1");
 				scenario->push_back("fto_CL_180_1");
 				break;
 			default:
@@ -808,64 +820,6 @@ bool mp_task_fsautomat::translateManipulationSequence(StateHeap &sh)
 
 	delete scenario;
 
-/*	manipulation_list.reverse();
-	for(std::list<SingleManipulation>::iterator manipulation_list_iterator = manipulation_list.begin();
-			manipulation_list_iterator != manipulation_list.end(); manipulation_list_iterator++)
-	{
-		switch(manipulation_list_iterator->turn_angle)
-		{
-			case CL_90:
-				sh.pushTargetName("fto_CL_90_1");
-				break;
-			case CL_0:
-				sh.pushTargetName("fto_CL_0_1");
-				break;
-			case CCL_90:
-				sh.pushTargetName("fto_CCL_90_1");
-				break;
-			case CL_180:
-				sh.pushTargetName("fto_CL_180_1");
-				break;
-			default:
-				break;
-		}
-		if (manipulation_list_iterator->face_to_turn == cube_state->getUp())
-		{	
-         printf("cube_state->up\n");
-			sh.pushTargetName("fco_CL_90_1");
-		}
-		else if (manipulation_list_iterator->face_to_turn == cube_state->getDown())
-		{
-         printf("cube_state->down\n");
-			sh.pushTargetName("fco_CCL_90_1");
-		}
-		else if (manipulation_list_iterator->face_to_turn == cube_state->getFront())
-		{
-         printf("cube_state->front\n");
-			sh.pushTargetName("fco_CL_90_1");
-			sh.pushTargetName("fto_CL_0_1");
-			sh.pushTargetName("fco_CL_0_1");
-		}
-		else if (manipulation_list_iterator->face_to_turn == cube_state->getRear())
-		{
-         printf("cube_state->rear\n");
-			sh.pushTargetName("fco_CCL_90_1");
-			sh.pushTargetName("fto_CL_0_1");
-			sh.pushTargetName("fco_CL_0_1");
-		}
-		else if (manipulation_list_iterator->face_to_turn == cube_state->getLeft())
-		{
-         printf("cube_state->left\n");
-			sh.pushTargetName("fco_CL_0_1");
-		}
-		else if (manipulation_list_iterator->face_to_turn == cube_state->getRight())
-		{
-         printf("cube_state->right\n");
-			sh.pushTargetName("fco_CL_180_1");
-		}
-	}
-*/
-	// sh.pushTargetName("name");
 	return false;
 }
 
@@ -877,7 +831,7 @@ void mp_task_fsautomat::main_task_algorithm(void)
 //	std::list<State> *statesList = takeStatesList();
 	std::map<char *, State, ecp_task::str_cmp> * stateMap = takeStatesMap();
 	std::cout<<"Mapa zawiera: "<<stateMap->size()<<std::endl;
-	std::cout<<"ELEMENTOW INIT jest: "<<stateMap->count((const char *)"INIT")<<std::endl;
+//	std::cout<<"ELEMENTOW INIT jest: "<<stateMap->count((const char *)"INIT")<<std::endl;
 	
 
 	sr_ecp_msg->message("MP dla Automatu Skonczonego - wcisnij start");
@@ -892,14 +846,13 @@ void mp_task_fsautomat::main_task_algorithm(void)
 		//strcmp(nextState, (char *)"INIT");
 		sprintf(nextState, "INIT");
 		// temporary sensor config in this place
-	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
-			sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-	{
-		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-		sensor_m_iterator->second->configure_sensor();
-	}
+		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+				sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
+		{
+			sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
+			sensor_m_iterator->second->configure_sensor();
+		}
 
-	//std::cout<<"###### "<<(*stateMap)[nextState].getType()<<std::endl;
 		for(;strcmp(nextState, (const char *)"STOP"); strcpy(nextState, (*stateMap)[nextState].returnNextStateID(sh)))
 		{
 			if(!strcmp(nextState, (const char *)"_END_"))
