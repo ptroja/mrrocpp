@@ -15,6 +15,7 @@
 #include "libxml/xmlmemory.h"
 #include "libxml/parser.h"
 #include "libxml/tree.h"
+#include "libxml/xinclude.h"
 
 #include "common/typedefs.h"
 #include "common/impconst.h"
@@ -155,28 +156,92 @@ bool ecp_smooth_generator::load_trajectory_from_xml(Trajectory &trajectory)
 	}*/
 	return true;
 }
+
+void ecp_smooth_generator::set_pose_from_xml(xmlNode *stateNode, bool &first_time)
+{
+	char *dataLine, *value;
+	uint64_t number_of_poses; // Liczba zapamietanych pozycji
+	POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
+	double vp[MAX_SERVOS_NR];
+	double vk[MAX_SERVOS_NR];
+	double v[MAX_SERVOS_NR];
+	double a[MAX_SERVOS_NR];	// Wczytane wspolrzedne
+	double coordinates[MAX_SERVOS_NR];     // Wczytane wspolrzedne
 	
+	xmlNode *cchild_node, *ccchild_node;
+	xmlChar *coordinateType, *numOfPoses;	 
+	xmlChar *xmlDataLine;
+
+	coordinateType = xmlGetProp(stateNode, (const xmlChar *)"coordinateType");
+	ps = Trajectory::returnProperPS((char *)coordinateType);
+	numOfPoses = xmlGetProp(stateNode, (const xmlChar *)"numOfPoses");
+	number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
+	for(cchild_node = stateNode->children; cchild_node!=NULL; cchild_node = cchild_node->next)
+	{							
+		if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )							{
+			for(ccchild_node = cchild_node->children; ccchild_node!=NULL; ccchild_node = ccchild_node->next)
+			{
+				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"StartVelocity") )
+				{	
+					xmlDataLine = xmlNodeGetContent(ccchild_node);
+					Trajectory::setValuesInArray(vp, (char *)xmlDataLine);
+					xmlFree(xmlDataLine);
+				}
+				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"EndVelocity") )
+				{										
+					xmlDataLine = xmlNodeGetContent(ccchild_node);
+					Trajectory::setValuesInArray(vk, (char *)xmlDataLine);
+					xmlFree(xmlDataLine);
+				}
+				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
+				{										
+					xmlDataLine = xmlNodeGetContent(ccchild_node);
+					Trajectory::setValuesInArray(v, (char *)xmlDataLine);
+					xmlFree(xmlDataLine);
+				}
+				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
+				{										
+					xmlDataLine = xmlNodeGetContent(ccchild_node);
+					Trajectory::setValuesInArray(a, (char *)xmlDataLine);
+					xmlFree(xmlDataLine);
+				}
+				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
+				{										
+					xmlDataLine = xmlNodeGetContent(ccchild_node);
+					Trajectory::setValuesInArray(coordinates, (char *)xmlDataLine);
+					xmlFree(xmlDataLine);
+				}
+			}
+			if (first_time)
+			{
+				// Tworzymy glowe listy
+				first_time = false;
+				create_pose_list_head(ps, vp, vk, v, a, coordinates);
+				 //printf("Pose list head: %d, %f, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0], coordinates[0]);
+			}
+			else
+			{
+				// Wstaw do listy nowa pozycje
+   			insert_pose_list_element(ps, vp, vk, v, a, coordinates);
+				//printf("Pose list element: %d, %f, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0], coordinates[0]);
+			}
+		}
+	}
+	xmlFree(coordinateType);
+	xmlFree(numOfPoses);
+}
+
 bool ecp_smooth_generator::load_trajectory_from_xml(char* fileName, char* nodeName)
 {
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
-	 char *dataLine, *value;
-    POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
-    uint64_t number_of_poses; // Liczba zapamietanych pozycji
-    bool first_time = true; // Znacznik
-    double vp[MAX_SERVOS_NR];
-    double vk[MAX_SERVOS_NR];
-    double v[MAX_SERVOS_NR];
-    double a[MAX_SERVOS_NR];	// Wczytane wspolrzedne
-    double coordinates[MAX_SERVOS_NR];     // Wczytane wspolrzedne
-	
-	 xmlNode *cur_node, *child_node, *cchild_node, *ccchild_node;
-	 xmlChar *coordinateType, *numOfPoses;	 
-	 xmlChar *xmlDataLine;
-	 xmlChar *stateName;
+    bool first_time = true; // Znacznik	
+	 xmlNode *cur_node, *child_node, *subTaskNode;
+	 xmlChar *stateID;
 	 
 	 xmlDocPtr doc;
 	 doc = xmlParseFile(fileName);
+	 xmlXIncludeProcess(doc);
 	 if(doc == NULL)
 	 {
         throw ecp_generator::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
@@ -194,78 +259,41 @@ bool ecp_smooth_generator::load_trajectory_from_xml(char* fileName, char* nodeNa
 	
    for(cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
    {
+      if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "SubTask" ) )
+      {
+   		for(subTaskNode = cur_node->children; subTaskNode != NULL; subTaskNode = subTaskNode->next)
+			{
+      		if ( subTaskNode->type == XML_ELEMENT_NODE  && !xmlStrcmp(subTaskNode->name, (const xmlChar *) "State" ) )
+				{
+					stateID = xmlGetProp(subTaskNode, (const xmlChar *) "id");
+					if(stateID && !strcmp((const char *)stateID, nodeName))
+					{
+						for(child_node = subTaskNode->children; child_node != NULL; child_node = child_node->next)
+						{
+							if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") )
+							{
+								set_pose_from_xml(child_node, first_time);
+							}
+						}
+					}
+         		xmlFree(stateID);
+				}
+			}
+		}
       if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "State" ) )
       {
-         stateName = xmlGetProp(cur_node, (const xmlChar *) "name");
-         if(stateName && !strcmp((const char *)stateName, nodeName))
+         stateID = xmlGetProp(cur_node, (const xmlChar *) "id");
+         if(stateID && !strcmp((const char *)stateID, nodeName))
 			{
 	         for(child_node = cur_node->children; child_node != NULL; child_node = child_node->next)
 	         {
-	            if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") )
+	            if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") )
 	            {
-						coordinateType = xmlGetProp(child_node, (const xmlChar *)"coordinateType");
-						ps = Trajectory::returnProperPS((char *)coordinateType);
-						numOfPoses = xmlGetProp(child_node, (const xmlChar *)"numOfPoses");
-						number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
-						for(cchild_node = child_node->children; cchild_node!=NULL; cchild_node = cchild_node->next)
-						{							
-	            		if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )
-							{
-								for(ccchild_node = cchild_node->children; ccchild_node!=NULL; ccchild_node = ccchild_node->next)
-								{
-	            				if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"StartVelocity") )
-									{	
-										xmlDataLine = xmlNodeGetContent(ccchild_node);
-										Trajectory::setValuesInArray(vp, (char *)xmlDataLine);
-										xmlFree(xmlDataLine);
-									}
-	            				if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"EndVelocity") )
-									{										
-										xmlDataLine = xmlNodeGetContent(ccchild_node);
-										Trajectory::setValuesInArray(vk, (char *)xmlDataLine);
-										xmlFree(xmlDataLine);
-									}
-	            				if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
-									{										
-										xmlDataLine = xmlNodeGetContent(ccchild_node);
-										Trajectory::setValuesInArray(v, (char *)xmlDataLine);
-										xmlFree(xmlDataLine);
-									}
-	            				if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
-									{										
-										xmlDataLine = xmlNodeGetContent(ccchild_node);
-										Trajectory::setValuesInArray(a, (char *)xmlDataLine);
-										xmlFree(xmlDataLine);
-									}
-	            				if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
-									{										
-										xmlDataLine = xmlNodeGetContent(ccchild_node);
-										Trajectory::setValuesInArray(coordinates, (char *)xmlDataLine);
-										xmlFree(xmlDataLine);
-									}
-								}
-        						if (first_time)
-								{
-									// Tworzymy glowe listy
-									first_time = false;
-									create_pose_list_head(ps, vp, vk, v, a, coordinates);
-									//printf("Pose list head: %d, %f, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0], coordinates[0]);
-								}
-								else
-								{
-									// Wstaw do listy nowa pozycje
-   					         insert_pose_list_element(ps, vp, vk, v, a, coordinates);
-					            //printf("Pose list element: %d, %f, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0], coordinates[0]);
-								}
-							}
-						}
-						xmlFree(coordinateType);
-						xmlFree(numOfPoses);
+						set_pose_from_xml(child_node, first_time);
 	            }
 	         }
 			}
-			
-         xmlFree(stateName);
+         xmlFree(stateID);
 		}
 	}
 	xmlFreeDoc(doc);

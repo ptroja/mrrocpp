@@ -9,6 +9,7 @@
 
 #include "common/impconst.h"
 #include "common/com_buf.h"
+#include "libxml/tree.h"
 
 #include <list>
 #include "ecp/common/ecp_smooth_taught_in_pose.h"
@@ -78,6 +79,7 @@ public:
 	bool load_a_v_min (char* file_name);
 	bool load_file_with_path (char* file_name);
 	
+	void set_pose_from_xml(xmlNode *stateNode, bool &first_time);
 	bool load_trajectory_from_xml(char* fileName, char* nodeName);
 	bool load_trajectory_from_xml(Trajectory &trajectory);
 
