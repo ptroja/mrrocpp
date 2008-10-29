@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<Trajectory coordinateType="JOINT" numOfPoses="2">
+  <Pose>
+    <StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
+    <EndVelocity>0	0	0.01	0.01	0	0	0	0</EndVelocity>
+    <Velocity>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.5</Velocity>
+    <Accelerations>0.02	0.02	0.02	0.02	0.02	0.02	0.02	0.01</Accelerations>
+    <Coordinates>0.160129	1.73995	-1.50799	0.128912	0.604271	2.39757	0.577587	0.057</Coordinates>
+  </Pose>
+  <Pose>
+    <StartVelocity>0	0	0.01	0.01	0	0	0	0</StartVelocity>
+    <EndVelocity>0	0	0	0	0	0	0	0</EndVelocity>
+    <Velocity>0.01	0.01	0.01	0.01	0.01	0.01	0.01	0.05</Velocity>
+    <Accelerations>0.002	0.002	0.002	0.002	0.002	0.002	0.002	0.001</Accelerations>
+    <Coordinates>0.160123	1.71689	-1.48769	0.109636	0.615859	2.364	0.597401	0.057</Coordinates>
+  </Pose>
+</Trajectory>
