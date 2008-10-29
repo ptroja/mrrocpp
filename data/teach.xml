@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE TaskDescription SYSTEM "fsautomat.dtd" >
+
+<TaskDescription>
+	<State id="INIT" type="systemInitialization">
+		<taskInit>
+			<ecp name="ROBOT_IRP6_ON_TRACK">
+				<ecp_teach_in_gen></ecp_teach_in_gen>
+			</ecp>
+			<ecp name="ROBOT_IRP6_POSTUMENT">
+			</ecp>
+			<ecp name="FESTIVAL">
+				<!--
+				<festival_gen></festival_gen>
+				-->
+			</ecp>
+			<mp>
+			</mp>
+		</taskInit>
+		<transition condition="true" target="teach_1"/>
+	</State>
+	<!-- proba zapisania inicjalizacji elementow potrzebnych do wykonania zadania ukladania kostki (pomijam inicjalizaje na poziome ECP)  -->
+	<!-- configure_edp_force_sensor(true, true) -->
+	<!-- ########################################## APPROACH_OP ######################################################################## -->
+	<!--
+	<State id="rcTaskInit" type="configureAllSensors">
+		<AddArg>1</AddArg>
+		<transition condition="true" target="approach_1"/>
+	</State>
+	-->
+	<State id="teach_1" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TEACH_IN</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_ap.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="JOINT" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
+				<EndVelocity>0	0	0	0	0	0	0	0</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	0.05</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.1</Accelerations>
+				<Coordinates>0	0.1	-1.162	0.172	1.367	2.936	1.371	0.088</Coordinates>
+			</Pose>
+		</Trajectory>
+		<transition condition="true" target="teach_2"/>
+	</State>
+	<State id="teach_2" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="true" target="STOP"/>
+	</State>
+	
+</TaskDescription>
+

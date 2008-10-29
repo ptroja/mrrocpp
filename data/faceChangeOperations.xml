@@ -206,7 +206,7 @@
 				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</EndVelocity>
 				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1.0</Velocity>
 				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
-				<Coordinates>0.163091 1.676222 -1.718639 -0.014904 -0.607875 4.60 1.413001 0.057</Coordinates>
+				<Coordinates>0.163091 1.676222 -1.718639 -0.014904 -0.607875 4.60 1.413001 0.055</Coordinates>
 			</Pose>
 		</Trajectory>
 		<transition condition="true" target="fco_CL_90_25"/>
@@ -431,7 +431,7 @@
 				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</EndVelocity>
 				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1.0</Velocity>
 				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
-				<Coordinates>0.163091 1.676222 -1.718639 -0.014904 -0.607875 4.60 -0.179058 0.057</Coordinates>
+				<Coordinates>0.163091 1.676222 -1.718639 -0.014904 -0.607875 4.60 -0.179058 0.055</Coordinates>
 			</Pose>
 		</Trajectory>
 		<transition condition="true" target="fco_CL_0_25"/>
@@ -656,7 +656,7 @@
 				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</EndVelocity>
 				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1.0</Velocity>
 				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
-				<Coordinates>0.163091 1.676222 -1.718639 -0.014904 -0.607875 4.60 1.413001 0.057</Coordinates>
+				<Coordinates>0.163091 1.676222 -1.718639 -0.014904 -0.607875 4.60 1.413001 0.055</Coordinates>
 			</Pose>
 		</Trajectory>
 		<transition condition="true" target="fco_CCL_90_25"/>
@@ -881,7 +881,7 @@
 				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</EndVelocity>
 				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1.0</Velocity>
 				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
-				<Coordinates>0.163091 1.676222 -1.718639 -0.014904 -0.607875 4.60 -0.179058 0.057</Coordinates>
+				<Coordinates>0.163091 1.676222 -1.718639 -0.014904 -0.607875 4.60 -0.179058 0.055</Coordinates>
 			</Pose>
 		</Trajectory>
 		<transition condition="true" target="fco_CL_180_25"/>

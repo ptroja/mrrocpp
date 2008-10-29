@@ -254,10 +254,13 @@ void ecp_task_fsautomat_irp6ot::main_task_algorithm(void)
 					path1 = new char[size];
 					sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
 					tig->flush_pose_list();
-					tig->load_file_with_path (path1);
-					tig->initiate_pose_list();
+					//tig->load_file_with_path (path1);
+					//tig->initiate_pose_list();
+					tig->teach(MOTOR, "asdasdkjasdj");
+					if(operator_reaction("Save?"))
+						tig->save_file(MOTOR);
 					delete[] path1;
-					tig->Move();
+					//tig->Move();
 					break;
 				case ECP_GEN_SMOOTH:
 					if(trjConf)
