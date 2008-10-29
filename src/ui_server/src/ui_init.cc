@@ -203,7 +203,9 @@ switch(RobotId)
 			case 'N':
 			{
 				set_config(Buffer);												
+				printf("Duppa\n");
 				break;
+				
 			}
 			case 'O':
 			{
@@ -2871,7 +2873,13 @@ void* server_thread(void*)
 			{
 					sem_post(&sem);
 					int RobotId = Buffer[0];
+					int DialogId = Buffer[1];
 					if(RobotId == 'X') replySend(new Message('X','X','X',0,NULL,NULL));
+					else if(RobotId == 'A' && DialogId == 'Q')
+					{
+
+						exit(0);
+					}
 					else
 					{
 					pthread_attr_t  attr;
