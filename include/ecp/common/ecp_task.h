@@ -4,6 +4,8 @@
 #include "ecp_mp/ecp_mp_task.h"
 #include "ecp/common/ecp_robot.h"
 
+#include "libxml/tree.h"
+
 #include <map>
 #include "mp/Trajectory.h"
 
@@ -72,6 +74,7 @@ public:
 	 struct str_cmp{
 		 bool operator()(char const *a, char const *b) const;
 	 };		
+	 Trajectory * createTrajectory(xmlNode *actNode, xmlChar *stateID);
 	 std::map<char*, Trajectory, str_cmp>* loadTrajectories(char * fileName, ROBOT_ENUM propRobot);
 
 

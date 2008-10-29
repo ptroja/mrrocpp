@@ -163,6 +163,7 @@ bool Trajectory::writeTrajectoryToXmlFile(char *fileName, POSE_SPECIFICATION ps,
 
 	xmlKeepBlanksDefault(0);
 	xmlSaveFormatFile(file, doc, 1);
+	printf("-->  File \"%s\" was saved to XML file\n", fileName);
 }
 
 void Trajectory::createNewPose()
@@ -268,6 +269,6 @@ void Trajectory::showTime()
 
 std::list<ecp_smooth_taught_in_pose> * Trajectory::getPoses()
 {
-	return trjPoses;
+	return new std::list<ecp_smooth_taught_in_pose>(*trjPoses);
 }
 	

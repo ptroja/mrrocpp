@@ -480,9 +480,9 @@ bool ecp_smooth_generator::load_file_with_path (char* file_name)
         }
         //		}
     } // end: for
-    from_file.close();
 	// only for trajectory xml writing -> for now
-//	Trajectory::writeTrajectoryToXmlFile(file_name, ps, *pose_list);
+	//Trajectory::writeTrajectoryToXmlFile(file_name, ps, *pose_list);
+    from_file.close();
     return true;
 }
 ; // end: load_file()
