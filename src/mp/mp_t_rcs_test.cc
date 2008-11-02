@@ -73,7 +73,7 @@ void mp_task_rcs_test::main_task_algorithm(void)
     //char cube_test_state[55] = "gggggggggyyyyyyyyyrrrrrrrrrbbbbbbbbbwwwwwwwwowoooooooo";
     //char cube_test_state[55] = "ggggggowwgyygyygrrwrrwrrwrrryybbbbbbwwbwwboobooooooyyy";
     //char cube_test_state[55] = "gggggggbgyyyyyyyyyrrrrrrrorbbbbbbbgbwwwwwwwwwoooooooro";
-    char cube_test_state[55] = "wwggggbogyyyyyyyyywwoooowrogbbrbbwobrrogwgrworbgrrwrbb";
+    const char cube_test_state[55] = "wwggggbogyyyyyyyyywwoooowrogbbrbbwobrrogwgrworbgrrwrbb";
     //char cube_test_state[55] = "ryyggwggowrggyowyowwbwrrobbbrrbbgrwgwoobwbboyrrgyoyyoy";
 
 

@@ -144,7 +144,7 @@ vsp_vis_sensor::vsp_vis_sensor(void){
 	Tckk=vvector(3);
 	Rckk=matrix(3,3);
 
-	char * file_location = "../data/color.txt";
+	const char * file_location = "../data/color.txt";
 
 	//vision.loadColors("color.txt");
   	//printf("ret%d",ret);

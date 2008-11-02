@@ -2797,7 +2797,7 @@ main( int argc,
 	int reuse;
 	pthread_t tid;
 	pthread_attr_t attr;
-	char hostname[64] = "localhost";
+	const char hostname[64] = "localhost";
 	struct sigaction sa;
 	sigset_t set;
 	int port, port_http;

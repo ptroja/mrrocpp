@@ -53,7 +53,7 @@ ecp_task_fsautomat_irp6ot::~ecp_task_fsautomat_irp6ot()
 void ecp_task_fsautomat_irp6ot::task_initialization(void) 
 {
 	 ecp_m_robot = new ecp_irp6_on_track_robot (*this); 
-	char * whichECP = "ROBOT_IRP6_ON_TRACK";
+	const char * whichECP = "ROBOT_IRP6_ON_TRACK";
 
 	int size, conArg;
 	char *filePath;

@@ -39,7 +39,7 @@ bool Transition::setConditionResult(bool result)
 
 char * Transition::getTargetID(StateHeap &sh) const
 {
-	char *sp = ">>";
+	const char *sp = ">>";
 	if(strstr(targetID, sp) != NULL)
 	{
 		char *nextState = strtok(targetID, sp);

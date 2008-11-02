@@ -111,8 +111,8 @@ int speaker_play_exec()
 {
 	char local_text[MAX_TEXT];
 	char local_prosody[MAX_PROSODY];
-	char* ref_local_text = "test";
-	char* ref_local_prosody = "neutral";
+	const char* ref_local_text = "test";
+	const char* ref_local_prosody = "neutral";
 
 	try
 	{

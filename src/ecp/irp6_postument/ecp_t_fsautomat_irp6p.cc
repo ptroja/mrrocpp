@@ -55,7 +55,7 @@ void ecp_task_fsautomat_irp6p::task_initialization(void)
 {
 	 ecp_m_robot = new ecp_irp6_postument_robot (*this); 
 
-	char * whichECP = "ROBOT_IRP6_POSTUMENT";
+	const char * whichECP = "ROBOT_IRP6_POSTUMENT";
 
 	int size, conArg;
 	char *filePath;
