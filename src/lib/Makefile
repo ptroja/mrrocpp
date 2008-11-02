@@ -34,7 +34,6 @@ libmrrocpp.a: \
 	matrix.o \
 	mis_fun.o \
 	mp_timer.o \
-	nurbs.o \
 	srlib.o \
 	playerpos_goal.o \
 	$(MESSIP_OBJECTS)

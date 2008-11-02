@@ -12,7 +12,6 @@ BINARIES =		ecp_pr \
 				ecp_kbochnia \
 				ecp_fct \
 				ecp_tr \
-				ecp_nurbs \
 				ecp_plot \
 				ecp_pt \
 				ecp_playerjoy \
@@ -82,8 +81,8 @@ ecp_vislx: ecp_t_vislx_irp6ot.o ecp_g_vis_sac_lx.o ecp_g_force.o ecp_mp_s_vis_sa
 ecp_rover: ecp_t_rover_irp6ot.o ecp_g_rover.o ecp_g_force.o ecp_mp_s_vis_sac_lx.o ecp_mp_s_schunk.o $(SHOBJ) 
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_nurbs: ecp_t_ts_irp6ot.o ecp_g_nurbs.o $(SHOBJ) 
-	$(LD) $(LDFLAGS) -o $@ $^ 
+#ecp_nurbs: ecp_t_ts_irp6ot.o ecp_g_nurbs.o $(SHOBJ) 
+#	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_fct: ecp_t_fct_irp6ot.o ecp_g_fctg.o ecp_mp_s_force.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 

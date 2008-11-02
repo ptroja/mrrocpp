@@ -63,7 +63,7 @@ public:
     // konstruktor
     force_meassure_generator(ecp_task& _ecp_task, int _sleep_time = 0, int _meassurement_count = 1);
 	Ft_v_vector& get_meassurement();
-	bool force_meassure_generator::set_configuration(int _sleep_time, int _meassurement_count);
+	bool set_configuration(int _sleep_time, int _meassurement_count);
 	
     bool first_step ();
     bool next_step ();

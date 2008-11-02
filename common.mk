@@ -15,8 +15,8 @@
 
 # Linker, compilator, and default global flags for both
 #VERSION=-V2.95.3,gcc_ntox86
-VERSION=-V3.3.5,gcc_ntox86
-#VERSION=-V4.2.1,gcc_ntox86
+#VERSION=-V3.3.5,gcc_ntox86
+VERSION=-V4.2.4,gcc_ntox86
 CC=qcc ${VERSION}
 CXX=QCC ${VERSION}
 CXXFLAGS=${FLAGS}
@@ -44,8 +44,8 @@ AR=ntox86-ar
 ARFLAGS=cru
 #AR=ntox86-ar-2.17
 
-INSTALL=ln -f
-#INSTALL = cp
+#INSTALL=ln -f
+INSTALL = cp
 #===== USEFILE - the file containing the usage message for the application. 
 USEFILE=
 

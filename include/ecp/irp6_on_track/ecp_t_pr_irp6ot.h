@@ -10,7 +10,7 @@ protected:
 //	void *dtig;
 	y_nose_run_force_generator* ynrlg;
 
-	void ecp_task_pr_irp6ot::short_move_up ();
+	void short_move_up ();
 
 public:
 	// KONSTRUKTORY
