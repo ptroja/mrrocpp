@@ -276,7 +276,7 @@ int update_config(const char *filename, struct Config_Tag configs[], const char 
    int count=0,lineno=0,temp;
    FILE *infile,*outfile;
    char *fptr,*tok,*next;
-   static char *true_false[]={
+   static const char *true_false[]={
       "INCFG_ERROR","INCFG_false","INCFG_true"    };
 
    infile=fopen(filename,"r");

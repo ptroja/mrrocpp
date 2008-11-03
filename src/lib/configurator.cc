@@ -544,7 +544,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	// Argumenty wywolania procesu.	
 	char *child_arg[3];
 	child_arg[0]=spawn_process;
-	child_arg[1]="NET_SPAWN";
+	child_arg[1]=(char*)"NET_SPAWN";
 	child_arg[2]=NULL;
 	
 	// Odpalenie y_spawn_process.
