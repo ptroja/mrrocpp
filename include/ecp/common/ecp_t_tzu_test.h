@@ -28,7 +28,7 @@ protected:
 	ecp_force_tool_change_generator* ftcg;
 	ecp_tool_change_generator* tcg;
 	ecp_tff_nose_run_generator *ynrfg;
-	char* test_trajectories[NUMBER_OF_TEST_TRAJECTORIES];
+	const char* test_trajectories[NUMBER_OF_TEST_TRAJECTORIES];
 	double weight;
 	double P_x;
 	double P_y;
@@ -39,7 +39,7 @@ protected:
 	void nose_generator_test(int tool);
 	void trajectories_test(int count);
 	void set_trajectories();
-	char* get_trajectory(double x[]);
+	const char* get_trajectory(double x[]);
 	void naciskanie_test();
 public:
 	ecp_task_tzu_test(configurator &_config);

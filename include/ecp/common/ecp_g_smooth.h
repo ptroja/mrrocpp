@@ -77,7 +77,7 @@ public:
 	
 	bool load_a_v_max(char* file_name);
 	bool load_a_v_min (char* file_name);
-	bool load_file_with_path (char* file_name);
+	bool load_file_with_path (const char* file_name);
 	
 	void set_pose_from_xml(xmlNode *stateNode, bool &first_time);
 	bool load_trajectory_from_xml(char* fileName, char* nodeName);

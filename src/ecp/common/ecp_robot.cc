@@ -81,7 +81,7 @@ void ecp_robot::copy_edp_to_mp_buffer(r_buffer& mp_buffer)
 // ---------------------------------------------------------------
 void ecp_robot::connect_to_edp(configurator &config, bool spawn_edp)
 {
-	char *edp_section;
+	const char *edp_section;
 	
     // name of the edp_section depends on _robot_name
 	switch (robot_name) {

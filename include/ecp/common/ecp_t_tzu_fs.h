@@ -35,8 +35,8 @@ protected:
 	ecp_force_tool_change_generator* ftcg;
 	ecp_tool_change_generator* tcg;
 	ecp_tff_nose_run_generator *etnrg;
-	char* trajectories[NUMBER_OF_TRAJECTORIES];
-	char* test_trajectories[NUMBER_OF_TEST_TRAJECTORIES];
+	const char* trajectories[NUMBER_OF_TRAJECTORIES];
+	const char* test_trajectories[NUMBER_OF_TEST_TRAJECTORIES];
 	double weight;
 	double P_x;
 	double P_y;
@@ -48,7 +48,7 @@ protected:
 	void method_alternative(int type, int sequence[], int T);
 	void method_standard(int T);
 	
-	char* get_trajectory(double x[]);
+	const char* get_trajectory(double x[]);
 public:
 	ecp_task_tzu_fs(configurator &_config);
 	~ecp_task_tzu_fs();

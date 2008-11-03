@@ -20,7 +20,7 @@ using namespace std;
 /*!
  * Constructor. Creates socket connection to pcbird.
  */
-ecp_mp_pcbird_sensor::ecp_mp_pcbird_sensor(SENSOR_ENUM _sensor_name, char* _section_name, ecp_mp_task& _ecp_mp_object) 
+ecp_mp_pcbird_sensor::ecp_mp_pcbird_sensor(SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object) 
 	: sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(_sensor_name)
 {
 	// Set size of passed message/union.

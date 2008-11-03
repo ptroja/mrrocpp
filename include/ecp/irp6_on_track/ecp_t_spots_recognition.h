@@ -39,11 +39,11 @@ class ecp_t_spots_recognition: public ecp_task
 		/*!
 		 * katalog, w ktorym sa trajektorie
 		 */
-		char * katalog_traj;
+		const char * katalog_traj;
 		/*!
 		 * katalog, w ktorym beda zapisywane dane kalibracyjne
 		 */
-		char * katalog_dump;
+		const char * katalog_dump;
 
 	protected:
 

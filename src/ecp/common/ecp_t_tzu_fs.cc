@@ -312,7 +312,7 @@ void ecp_task_tzu_fs::set_trajectory(int robot_type, int procedure_type)
 	}
 }
 
-char*ecp_task_tzu_fs::get_trajectory(double x[])
+const char*ecp_task_tzu_fs::get_trajectory(double x[])
 {
 	ofstream temp;
 	temp.open("../trj/tzu/temp.trj");

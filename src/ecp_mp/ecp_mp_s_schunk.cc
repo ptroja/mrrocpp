@@ -11,7 +11,7 @@
 #include "ecp_mp/ecp_mp_s_schunk.h"		// zawiera klase ecp_mp_schunk_sensor
 
 /***************************** CONSTRUCTOR ********************************/
-ecp_mp_schunk_sensor::ecp_mp_schunk_sensor (SENSOR_ENUM _sensor_name, char* _section_name, ecp_mp_task& _ecp_mp_object):
+ecp_mp_schunk_sensor::ecp_mp_schunk_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object):
 	ecp_mp_sensor (_sensor_name, _section_name, _ecp_mp_object) {
   union_size = sizeof(image.force);
 }

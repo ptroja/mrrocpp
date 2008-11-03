@@ -37,10 +37,10 @@ class festival_generator : public ecp_generator
 		char buf[256];
 
 		int portnum;
-		char *host;
+		const char *host;
 		
 		char phrase[MAX_FESTIVAL_PHRASE];
-		char *voice;
+		const char *voice;
 		
 		int test_mode;	
 

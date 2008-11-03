@@ -477,7 +477,7 @@ void ecp_task_tzu_test::set_trajectories() // mozna wywalic zmienna robot z klas
 }
 
 
-char* ecp_task_tzu_test::get_trajectory(double x[])
+const char* ecp_task_tzu_test::get_trajectory(double x[])
 {
 	ofstream temp;
 	temp.open("../trj/tzu/temp.trj");

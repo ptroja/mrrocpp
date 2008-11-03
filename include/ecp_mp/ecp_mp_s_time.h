@@ -16,7 +16,7 @@
 class ecp_mp_time_sensor: public ecp_mp_sensor{
   public:
 	// Konstruktor czujnika wirtualnego - wywolanie konstruktora klasy bazowej.
- 	ecp_mp_time_sensor (SENSOR_ENUM _sensor_name, char* _section_name, ecp_mp_task& _ecp_mp_object);
+ 	ecp_mp_time_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object);
 
 };// end: class time_sensor
 

@@ -28,8 +28,8 @@ ecp_mp_rcs_kociemba::ecp_mp_rcs_kociemba(SENSOR_ENUM _sensor_name, char* _sectio
 	union_size = sizeof(image.rcs);
 	// Wyzerowanie odczytow.
 	image.rcs.cube_solution[0] = '\0';
-}; // end: ecp_mp_digital_scales_sensor
-
+}; // end: 
+	
 /************************** CONFIGURE SENSOR ******************************/
 void ecp_mp_rcs_kociemba::configure_sensor() {
 	// Rozkaz konfiguracjii czujnika.

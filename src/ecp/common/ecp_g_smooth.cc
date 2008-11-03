@@ -303,7 +303,7 @@ bool ecp_smooth_generator::load_trajectory_from_xml(char* fileName, char* nodeNa
 }
 ; // end: load_file()
 
-bool ecp_smooth_generator::load_file_with_path (char* file_name)
+bool ecp_smooth_generator::load_file_with_path (const char* file_name)
 {
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 

@@ -51,5 +51,3 @@ bool ecp_sleep_generator::next_step(){
 	}
 }
 
-
-	
