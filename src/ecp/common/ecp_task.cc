@@ -481,7 +481,7 @@ std::map<char*, Trajectory, ecp_task::str_cmp>* ecp_task::loadTrajectories(char 
 {
 	int size;
 	char * filePath;
-	char * robotName = Trajectory::returnRobotName(propRobot);
+	const char * robotName = Trajectory::returnRobotName(propRobot);
 	Trajectory* actTrajectory;
 	xmlNode *cur_node, *child_node, *subTaskNode;
 	xmlChar *coordinateType, *numOfPoses, *robot;

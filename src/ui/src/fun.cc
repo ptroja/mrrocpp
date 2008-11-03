@@ -689,7 +689,7 @@ file_selection_window_post_realize( PtWidget_t *widget, ApInfo_t *apinfo, PtCall
 	
 	char* p;
 	char* buffer;
-	char* delims = { "/" };
+	const char* delims = { "/" };
 	char current_path[100]; // biezacy katalog do porwnan
 	
 	int wyjscie=0;
@@ -1143,7 +1143,7 @@ int initiate_configuration()
 
 	// sczytanie listy sekcji
 	fill_section_list (ui_state.config_file_relativepath);
-	fill_section_list ("../configs/common.ini");
+	fill_section_list ((char*)"../configs/common.ini");
 	fill_node_list();
 	fill_program_node_list();
 
@@ -1201,7 +1201,7 @@ reload_whole_configuration() {
 		
 		// sczytanie listy sekcji
 		fill_section_list (ui_state.config_file_relativepath);
-		fill_section_list ("../configs/common.ini");
+		fill_section_list ((char*)"../configs/common.ini");
 		fill_node_list();
 		fill_program_node_list();
 		
