@@ -102,8 +102,8 @@ vsp_vis_pbeclsac_sensor::vsp_vis_pbeclsac_sensor(void){
 	irq_no = 0;
 	ThreadCtl (_NTO_TCTL_IO, NULL);  // by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi 
 	
-	char *file_location = "../data/color.txt";
-	char *file_location2= "../data/pattern.txt";
+	char *file_location = (char*)"../data/color.txt";
+	char *file_location2= (char*)"../data/pattern.txt";
 
 	
 	//vision.loadColors("color.txt");

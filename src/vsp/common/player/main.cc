@@ -1570,7 +1570,7 @@ int main( int argc, char *argv[] )
     if(clientdata->UpdateRequested(req) != device->access)
     {
       PLAYER_ERROR1("Initial subscription failed for driver [%s]",
-                    device->drivername);
+    		  device->drivername);
       return(false);
     }
   }

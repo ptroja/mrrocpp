@@ -168,8 +168,8 @@ CROSMDoc::CROSMDoc()
     //InitObiekt(22000, 6000, 0.5, 28, 1, 32, "001m",
 	//	"C:/automatyka2/MStaniak/RozpKom2/DATA");  //dla f=22kHz
 
-	InitObiekt(16000, 6000, 0.5, 32, 1, 24, "P16",
-		"C:/automatyka2/MStaniak/RozpKom2/DATA");  //dla f=16kHz
+	InitObiekt(16000, 6000, 0.5, 32, 1, 24, (char*)"P16",
+			(char*)"C:/automatyka2/MStaniak/RozpKom2/DATA");  //dla f=16kHz
 
 	//InitObiekt(8000, 6000, 1.0, 24, 1, 12, "Probki",
 	//	"C:/automatyka2/MStaniak/RozpKom2/DATA");  //dla f=8kHz

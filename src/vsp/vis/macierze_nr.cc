@@ -23,7 +23,7 @@ double *vvector(long n)
 {
 	double *v;
 	v=(double *)malloc((n+1)*sizeof(double));
-	if (!v) nrerror("allocation failure in vector()");
+	if (!v) nrerror((char*)"allocation failure in vector()");
 	*v=(double)n;
 	alloc_v++;
 	return v;
@@ -40,7 +40,7 @@ int *ivector(long n)
 {
 	int *v;
 	v=(int *)malloc((n+1)*sizeof(int));
-	if (!v) nrerror("allocation failure in ivector()");
+	if (!v) nrerror((char*)"allocation failure in ivector()");
 	*v=(int)n;
 	return v;
 }
@@ -57,7 +57,7 @@ double **matrix(long m, long n)
 
 	/* allocate pointers to rows */
 	ma=(double **) malloc((m+1)*sizeof(double*));
-	if (!ma) nrerror("allocation failure 1 in dmatrix()");
+	if (!ma) nrerror((char*)"allocation failure 1 in dmatrix()");
 	
 	/*
 	printf("wektor: ");
@@ -69,7 +69,7 @@ double **matrix(long m, long n)
 	{
 		//printf("m:%d n:%d aktualny wiersz:%d\n",m,n,i);
 		ma[i]=(double *)malloc((n+1)*sizeof(double));
-		//if (!ma[i]) nrerror("allocation failure 2 in dmatrix()");
+		//if (!ma[i]) nrerror((char*)"allocation failure 2 in dmatrix()");
 		}
 
 	/* return pointer to array of pointers to rows */
@@ -270,7 +270,7 @@ void m_gaussj(double **a, double **b)
 							irow=j;
 							icol=k;
 						}
-					} else if (ipiv[k] > 1)	nrerror("GAUSSJ: Singular Matrix-1");
+					} else if (ipiv[k] > 1)	nrerror((char*)"GAUSSJ: Singular Matrix-1");
 				}
 				++(ipiv[icol]);
 				if (irow !=	icol) {
@@ -279,7 +279,7 @@ void m_gaussj(double **a, double **b)
 				}
 				indxr[i]=irow;
 				indxc[i]=icol;
-				if (a[icol][icol] == 0.0) nrerror("GAUSSJ: Singular	Matrix-2");
+				if (a[icol][icol] == 0.0) nrerror((char*)"GAUSSJ: Singular	Matrix-2");
 				pivinv=1.0/a[icol][icol];
 				a[icol][icol]=1.0;
 				for	(l=1;l<=n;l++) a[icol][l] *= pivinv;
@@ -326,7 +326,7 @@ void m_inverse(double **a)
 							irow=j;
 							icol=k;
 						}
-					} else if (ipiv[k] > 1)	nrerror("GAUSSJ: Singular Matrix-1");
+					} else if (ipiv[k] > 1)	nrerror((char*)"GAUSSJ: Singular Matrix-1");
 				}
 				++(ipiv[icol]);
 				if (irow !=	icol) {
@@ -334,7 +334,7 @@ void m_inverse(double **a)
 				}
 				indxr[i]=irow;
 				indxc[i]=icol;
-				if (a[icol][icol] == 0.0) nrerror("GAUSSJ: Singular	Matrix-2");
+				if (a[icol][icol] == 0.0) nrerror((char*)"GAUSSJ: Singular	Matrix-2");
 				pivinv=1.0/a[icol][icol];
 				a[icol][icol]=1.0;
 				for	(l=1;l<=n;l++) a[icol][l] *= pivinv;
@@ -357,7 +357,7 @@ void m_inverse(double **a)
 
 void m_transpose(double **a, double **b)
 {	//transpozycja
-	if (a[0][1]!=b[1][0] || a[1][0]!=b[0][1]) nrerror("m_transpose: matrices do not mach");
+	if (a[0][1]!=b[1][0] || a[1][0]!=b[0][1]) nrerror((char*)"m_transpose: matrices do not mach");
 	for (int i=1; i<=a[1][0]; i++ ) 
 		for (int j=1; j<=a[0][1]; j++ ) 
 			b[j][i] = a[i][j];
@@ -392,7 +392,7 @@ void m_insert_v_c(double **a, double *b, int c)
 	/*
 	Funkcja wstawia (w miejscu) do macierzy a wektor b pionowo na miejscu c
 	*/
-	if (a[0][1]!=b[0]) nrerror("m_insert_v_c: matrix and vector do not mach");
+	if (a[0][1]!=b[0]) nrerror((char*)"m_insert_v_c: matrix and vector do not mach");
 	for (int i=1; i<=b[0]; i++ )
 		a[i][c]=b[i];
 }
@@ -475,9 +475,9 @@ void m_multiply_m(double **a, double **b, double **c)
 {	//mnozy macierze
 
 	
-if (a[0][1]!=b[1][0]) nrerror("m_multiply_m: input matrices do not match");
+if (a[0][1]!=b[1][0]) nrerror((char*)"m_multiply_m: input matrices do not match");
 //printf("A(%.1fx%.1f)*B(%.1fx%.1f)=C(%.1fx%.1f)\n",a[1][0],a[0][1],b[1][0],b[0][1],c[1][0],c[0][1]);
-if (a[1][0]!=c[1][0] || b[0][1]!=c[0][1]) nrerror("m_multiply_m: output matrix does not fit");
+if (a[1][0]!=c[1][0] || b[0][1]!=c[0][1]) nrerror((char*)"m_multiply_m: output matrix does not fit");
 	
 	int m=(int)a[1][0];
 	int n=(int)b[0][1];
@@ -498,7 +498,7 @@ void m_add_m(double **a,double **b, double **c)
 {	//dodaje macierze
 	
 	//printf("A(%.1fx%.1f)+B(%.1fx%.1f)=C(%.1fx%.1f)\n",a[1][0],a[0][1],b[1][0],b[0][1],c[1][0],c[0][1]);
-	if (a[1][0]!=b[1][0]&&a[1][0]!=c[1][0] || a[0][1]!=b[0][1]&&a[0][1]!=c[0][1]) nrerror("m_add_m: matrices do not match");
+	if (a[1][0]!=b[1][0]&&a[1][0]!=c[1][0] || a[0][1]!=b[0][1]&&a[0][1]!=c[0][1]) nrerror((char*)"m_add_m: matrices do not match");
 
 	int m=(int)a[1][0];
 	int n=(int)b[0][1];
@@ -513,8 +513,8 @@ void m_add_m(double **a,double **b, double **c)
 
 void m_substract_m(double **a,double **b, double **c)
 {
-	if (a[1][0]!=b[1][0] || a[0][1]!=b[0][1]) nrerror("m_substract_m: input matrices do not match");
-	if (a[1][0]!=c[1][0] || a[0][1]!=c[0][1]) nrerror("m_substract_m: output matrix does not fit");
+	if (a[1][0]!=b[1][0] || a[0][1]!=b[0][1]) nrerror((char*)"m_substract_m: input matrices do not match");
+	if (a[1][0]!=c[1][0] || a[0][1]!=c[0][1]) nrerror((char*)"m_substract_m: output matrix does not fit");
 
 	int m=(int)a[1][0];
 	int n=(int)b[0][1];
@@ -528,8 +528,8 @@ void m_substract_m(double **a,double **b, double **c)
 }
 void m_multiply_v(double **a, double *b, double *c)
 {
-	if (a[1][0]!=b[0]) nrerror("m_multiply_v: input matrix and vector do not match");
-	if (a[1][0]!=c[0]) nrerror("m_multiply_v: output vector does not fit");
+	if (a[1][0]!=b[0]) nrerror((char*)"m_multiply_v: input matrix and vector do not match");
+	if (a[1][0]!=c[0]) nrerror((char*)"m_multiply_v: output vector does not fit");
 	int m=(int)a[1][0];
 	int n=(int)b[0];
 	//c[0]=m;
@@ -545,7 +545,7 @@ void m_multiply_v(double **a, double *b, double *c)
 
 void m_copy(double **a, double **b)
 {
-	if (a[0][1]!=b[0][1] &&  a[1][0]!=b[1][0]) nrerror("nieprawid³owe rozmiary macierzy do kopiowania");
+	if (a[0][1]!=b[0][1] &&  a[1][0]!=b[1][0]) nrerror((char*)"nieprawid³owe rozmiary macierzy do kopiowania");
 
 	for(int i=1;i<=a[1][0];i++)
 		for(int j=1;j<=a[0][1];j++)

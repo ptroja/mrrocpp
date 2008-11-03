@@ -197,8 +197,8 @@ vsp_vis_sensor::vsp_vis_sensor(void){
 	Rckk=matrix(3,3);
 */
 	
-	char *file_location = "../data/color_eih.txt";
-	char *file_location2= "../data/pattern.txt";
+	char *file_location = (char*)"../data/color_eih.txt";
+	char *file_location2= (char*)"../data/pattern.txt";
 	
 	//vision.loadColors("color.txt");
   	//printf("ret%d",ret);
