@@ -44,8 +44,15 @@ AR=ntox86-ar
 ARFLAGS=cru
 #AR=ntox86-ar-2.17
 
-#INSTALL=ln -f
-INSTALL = cp
+
+ifeq ($(OS),Windows_NT)
+	INSTALL=cp
+else
+	INSTALL=ln -sf
+endif
+
+
+
 #===== USEFILE - the file containing the usage message for the application. 
 USEFILE=
 
