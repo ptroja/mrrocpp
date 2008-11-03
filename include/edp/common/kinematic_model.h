@@ -114,7 +114,7 @@ public:
   // Zwraca etykiete modelu kinematycznego.
   virtual char* get_kinematic_model_label(void);
   // Ustawia pokazywana etykiete modelu kinematycznego.
-  virtual void set_kinematic_model_label(char*);
+  virtual void set_kinematic_model_label(const char*);
   
 };//: kinematic_model
 

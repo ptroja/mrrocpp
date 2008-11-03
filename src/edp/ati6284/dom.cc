@@ -48,35 +48,35 @@ DOM_Exception_message(unsigned short exception)
 {
 	switch (exception) {
 		case DOM_NO_ERR:
-			return "The operation was successfull.";
+			return (char*)"The operation was successfull.";
 		case DOM_INDEX_SIZE_ERR:
-			return "The index specified was out of range.";
+			return (char*)"The index specified was out of range.";
 		case DOM_HIERARCHY_REQUEST_ERR:
-			return "The request violated tree hierarchy constraints.";
+			return (char*)"The request violated tree hierarchy constraints.";
 		case DOM_WRONG_DOCUMENT_ERR:
-			return "The document context is invalid.";
+			return (char*)"The document context is invalid.";
 		case DOM_INVALID_CHARACTER_ERR:
-			return "An inappropriate character was encountered.";
+			return (char*)"An inappropriate character was encountered.";
 		case DOM_NOT_FOUND_ERR:
-			return "The specified node was not found.";
+			return (char*)"The specified node was not found.";
 		case DOM_NOT_SUPPORTED_ERR:
-			return "The requested operation is not supported.";
+			return (char*)"The requested operation is not supported.";
 		case DOM_INUSE_ATTRIBUTE_ERR:
-			return "The attribute is being used elsewhere.";
+			return (char*)"The attribute is being used elsewhere.";
 		case DOM_NO_MEMORY_ERR:
-			return "No memory is available.";
+			return (char*)"No memory is available.";
 		case DOM_NULL_POINTER_ERR:
-			return "A parameter was null.";
+			return (char*)"A parameter was null.";
 		case DOM_SYSTEM_ERR:
-			return "An external function error occured.";
+			return (char*)"An external function error occured.";
 		case DOM_XML_PARSER_ERR:
-			return "An XML parser error occured.";
+			return (char*)"An XML parser error occured.";
 		case DOM_DOMSTRING_SIZE_ERR:
 		case DOM_NO_DATA_ALLOWED_ERR:
 		case DOM_NO_MODIFICATION_ALLOWED_ERR:
 			break;
 	}
-	return "No description available.";
+	return (char*)"No description available.";
 }
 
 
@@ -105,7 +105,7 @@ DOM_Implementation_createDocument(DOM_String *namespaceURI,
 
     doc = Document_createNode(NULL, DOM_DOCUMENT_NODE);
     if (doc) {
-        doc->nodeName = "#document";
+        doc->nodeName = (char*)"#document";
     }
 
     return doc;
@@ -422,7 +422,7 @@ DOM_Document_createDocumentFragment(DOM_Document *doc)
 
     frag = Document_createNode(doc, DOM_DOCUMENT_FRAGMENT_NODE);
     if (frag) {
-        frag->nodeName = "#document-fragment";
+        frag->nodeName = (char*)"#document-fragment";
     }
 
     return frag;
@@ -434,7 +434,7 @@ DOM_Document_createTextNode(DOM_Document *doc, const DOM_String *data)
 
     text = Document_createNode(doc, DOM_TEXT_NODE);
     if (text) {
-        text->nodeName = "#text";
+        text->nodeName = (char*)"#text";
         text->nodeValue = text->u.CharacterData.data = DOM_String_dup(data);
         if (text->nodeValue == NULL) {
 			DOM_Exception = DOM_NO_MEMORY_ERR;
@@ -453,7 +453,7 @@ DOM_Document_createComment(DOM_Document *doc, const DOM_String *data)
 
     comment = Document_createNode(doc, DOM_COMMENT_NODE);
     if (comment) {
-        comment->nodeName = "#comment";
+        comment->nodeName = (char*)"#comment";
         comment->nodeValue = comment->u.CharacterData.data = DOM_String_dup(data);
         if (comment->nodeValue == NULL) {
 			DOM_Exception = DOM_NO_MEMORY_ERR;
@@ -472,7 +472,7 @@ DOM_Document_createCDATASection(DOM_Document *doc, const DOM_String *data)
 
     cdata = Document_createNode(doc, DOM_CDATA_SECTION_NODE);
     if (cdata) {
-        cdata->nodeName = "#cdata-section";
+        cdata->nodeName = (char*)"#cdata-section";
         cdata->nodeValue = cdata->u.CharacterData.data = DOM_String_dup(data);
         if (cdata->u.CharacterData.data == NULL) {
 			DOM_Exception = DOM_NO_MEMORY_ERR;

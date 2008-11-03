@@ -252,7 +252,7 @@ char* kinematic_model::get_kinematic_model_label(void)
 /* ------------------------------------------------------------------------
   Ustawia etykiete modelu kinematycznego.
  ------------------------------------------------------------------------ */
-void kinematic_model::set_kinematic_model_label(char * _label)
+void kinematic_model::set_kinematic_model_label(const char * _label)
 {
     if (kinematic_model_label != NULL)
         delete(kinematic_model_label);

@@ -61,7 +61,7 @@ std::vector<unsigned char> fnReadF0(std::string sTextFile);
 //NLP:
 std::vector<Phoneme> PerformNLPAnalysis(std::string sText);
 
-void AddPhoneme (char *chPhonemeName, std::vector<Phoneme> *vphoPhonemes);
+void AddPhoneme (const char *chPhonemeName, std::vector<Phoneme> *vphoPhonemes);
 
 //select:
 

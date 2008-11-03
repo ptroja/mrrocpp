@@ -291,7 +291,7 @@ void init_buffers_from_files()
 };
 
 
-void AddPhoneme (char *chPhonemeName, vector<Phoneme> *vphoPhonemes)
+void AddPhoneme (const char *chPhonemeName, vector<Phoneme> *vphoPhonemes)
 	{
 	Phoneme phoPhoneme;
 	string sPhonemeName = string(chPhonemeName);

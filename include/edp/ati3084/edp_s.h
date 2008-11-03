@@ -145,10 +145,10 @@ private:
 	void solve_transducer_controller_failure(void);
 	unsigned char check_intr(void);
 	void check_cs(void);
-	int parallel_do_send_command(char* command);
+	int parallel_do_send_command(const char* command);
 	
-	short do_Wait(char* command);// by old schunk
-	short do_send_command(char* command);
+	short do_Wait(const char* command);// by old schunk
+	short do_send_command(const char* command);
 	short do_init(void);
 
 	short ERROR_CODE;

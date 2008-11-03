@@ -129,49 +129,49 @@ Calibration *createCalibration(char *CalFilePath,unsigned short index) {
 		return NULL;
 	}
 	eRoot=doc->u.Document.documentElement;
-	if (strcmp(eRoot->nodeName,"FTSensor")!=0) {        //!<  make sure we're loading the right kind of file
+	if (strcmp(eRoot->nodeName,(char*)"FTSensor")!=0) {        //!<  make sure we're loading the right kind of file
 		free(cal);
 		DOM_Document_destroyNode(doc, doc);    //!<  clean up DOM stuff
 		return NULL;
 	}
 
-	ReadAttribute(eRoot,&temp,"Serial",true,"");
+	ReadAttribute(eRoot,&temp,(char*)"Serial",true,(char*)"");
 	cal->Serial=ATI_strdup(temp);
 	free(temp);
-	ReadAttribute(eRoot,&temp,"BodyStyle",true,"");
+	ReadAttribute(eRoot,&temp,(char*)"BodyStyle",true,(char*)"");
 	cal->BodyStyle=ATI_strdup(temp);
 	free(temp);
-	ReadAttribute(eRoot,&temp,"NumGages",true,"");
+	ReadAttribute(eRoot,&temp,(char*)"NumGages",true,(char*)"");
 	cal->rt.NumChannels=atoi(temp)+1;	//!<  add one to NumGages for the temperature channel.
 	free(temp);
-	ReadAttribute(eRoot,&temp,"Family",true,"");
+	ReadAttribute(eRoot,&temp,(char*)"Family",true,(char*)"");
 	cal->Family=ATI_strdup(temp);
 	free(temp);
 	//!<  find calibration specified by index
-	calibrationNodelist=DOM_Element_getElementsByTagName(eRoot,"Calibration");
+	calibrationNodelist=DOM_Element_getElementsByTagName(eRoot,(char*)"Calibration");
 	if (calibrationNodelist->length<index) {    //!<  determine if invalid calibration index was used
 		return NULL;
 	}
 	eCalibration=DOM_NodeList_item(calibrationNodelist,index-1);	
 	
 	//!<  set Calibration structure attributes found in Calibration element
-	ReadAttribute(eCalibration,&temp,"PartNumber",true,"");
+	ReadAttribute(eCalibration,&temp,(char*)"PartNumber",true,(char*)"");
 	cal->PartNumber=ATI_strdup(temp);
 	free(temp);
-	ReadAttribute(eCalibration,&temp,"CalDate",true,"");
+	ReadAttribute(eCalibration,&temp,(char*)"CalDate",true,(char*)"");
 	cal->CalDate=ATI_strdup(temp);
 	free(temp);
-	ReadAttribute(eCalibration,&temp,"ForceUnits",true,"");
+	ReadAttribute(eCalibration,&temp,(char*)"ForceUnits",true,(char*)"");
 	cal->ForceUnits=ATI_strdup(temp);
 	free(temp);
-	ReadAttribute(eCalibration,&temp,"TorqueUnits",true,"");
+	ReadAttribute(eCalibration,&temp,(char*)"TorqueUnits",true,(char*)"");
 	cal->TorqueUnits=ATI_strdup(temp);
 	free(temp);
-	ReadAttribute(eCalibration,&temp,"DistUnits",true,"");
+	ReadAttribute(eCalibration,&temp,(char*)"DistUnits",true,(char*)"");
 	cal->BasicTransform.DistUnits=ATI_strdup(temp);
 	cal->cfg.UserTransform.DistUnits=ATI_strdup(temp);
 	free(temp);
-	ReadAttribute(eCalibration,&temp,"AngleUnits",false,"degrees");
+	ReadAttribute(eCalibration,&temp,(char*)"AngleUnits",false,(char*)"degrees");
 	cal->BasicTransform.AngleUnits=ATI_strdup(temp);
 	cal->cfg.UserTransform.AngleUnits=ATI_strdup(temp);
 	free(temp);
@@ -184,24 +184,24 @@ Calibration *createCalibration(char *CalFilePath,unsigned short index) {
 	cal->rt.thermistor=0;
 	
 	//!<  store basic matrix
-	axisNodelist=DOM_Element_getElementsByTagName(eCalibration,"Axis");
+	axisNodelist=DOM_Element_getElementsByTagName(eCalibration,(char*)"Axis");
 
 	cal->rt.NumAxes=(unsigned short) axisNodelist->length;
 	for (i=0;i<axisNodelist->length;i++) {
 		node=DOM_NodeList_item(axisNodelist,i);		
-		ReadAttribute(node, &temp, "scale", false,"1");
+		ReadAttribute(node, &temp,(char*)"scale", false,(char*)"1");
 		scale=(float) atof(temp);
 		free(temp);
-		ReadAttribute(node, &temp, "values", true,"");
+		ReadAttribute(node, &temp,(char*)"values", true,(char*)"");
 		Separate(temp,temparray,(unsigned short)(cal->rt.NumChannels-1));
 		for(j=0;j<cal->rt.NumChannels-1;j++) {
 			cal->BasicMatrix[i][j]=temparray[j]/scale;
 		}
 		free(temp);
-		ReadAttribute(node, &temp, "max", false,"0");
+		ReadAttribute(node, &temp,(char*)"max", false,(char*)"0");
 		cal->MaxLoads[i]=(float) atof(temp);
 		free(temp);		
-		ReadAttribute(node, &temp, "Name", true,"");
+		ReadAttribute(node, &temp,(char*)"Name", true,(char*)"");
 		cal->AxisNames[i]=ATI_strdup(temp);
 		free(temp);
 	}
@@ -209,37 +209,37 @@ Calibration *createCalibration(char *CalFilePath,unsigned short index) {
 	for (i=0; i < childNodelist->length; i++) {
 		node=DOM_NodeList_item(childNodelist,i);
 
-		if (strcmp(node->nodeName,"BasicTransform")==0) {
-			ReadAttribute(node, &temp, "Dx", false,"0");
+		if (strcmp(node->nodeName,(char*)"BasicTransform")==0) {
+			ReadAttribute(node, &temp,(char*)"Dx", false,(char*)"0");
             cal->BasicTransform.TT[0]=(float) atof(temp);
 			free(temp);
-            ReadAttribute(node, &temp, "Dy", false,"0");
+            ReadAttribute(node, &temp,(char*)"Dy", false,(char*)"0");
             cal->BasicTransform.TT[1]=(float) atof(temp);
 			free(temp);
-			ReadAttribute(node, &temp, "Dz", false,"0");
+			ReadAttribute(node, &temp,(char*)"Dz", false,(char*)"0");
             cal->BasicTransform.TT[2]=(float) atof(temp);
 			free(temp);
-			ReadAttribute(node, &temp, "Rx", false,"0");
+			ReadAttribute(node, &temp,(char*)"Rx", false,(char*)"0");
             cal->BasicTransform.TT[3]=(float) atof(temp);
 			free(temp);
-			ReadAttribute(node, &temp, "Ry", false,"0");
+			ReadAttribute(node, &temp,(char*)"Ry", false,(char*)"0");
             cal->BasicTransform.TT[4]=(float) atof(temp);
 			free(temp);
-			ReadAttribute(node, &temp, "Rz", false,"0");
+			ReadAttribute(node, &temp,(char*)"Rz", false,(char*)"0");
             cal->BasicTransform.TT[5]=(float) atof(temp);
 			free(temp);
-		} else if (strcmp(node->nodeName,"BiasSlope")==0) {
-			ReadAttribute(node, &temp, "values", true,"");
+		} else if (strcmp(node->nodeName,(char*)"BiasSlope")==0) {
+			ReadAttribute(node, &temp,(char*)"values", true,(char*)"");
             Separate(temp,cal->rt.bias_slopes,(unsigned short)(cal->rt.NumChannels-1));
 			free(temp);
             cal->TempCompAvailable = true;
-		} else if (strcmp(node->nodeName,"GainSlope")==0) {
-			ReadAttribute(node, &temp, "values", true,"");
+		} else if (strcmp(node->nodeName,(char*)"GainSlope")==0) {
+			ReadAttribute(node, &temp,(char*)"values", true,(char*)"");
             Separate(temp,cal->rt.gain_slopes,(unsigned short)(cal->rt.NumChannels-1));
 			free(temp);
             cal->TempCompAvailable = true;
-		} else if (strcmp(node->nodeName,"Thermistor")==0) {
-            ReadAttribute(node, &temp, "value", true,"");
+		} else if (strcmp(node->nodeName,(char*)"Thermistor")==0) {
+            ReadAttribute(node, &temp,(char*)"value", true,(char*)"");
 			cal->rt.thermistor = (float) atof(temp);
 			free(temp);
 		}
@@ -503,60 +503,60 @@ short TTM(Transform xform,float result[6][6],Units ForceUnits,Units TorqueUnits)
 } //!<  TTM()
 
 float ForceConv(Units units) {
-	if ((strcmp(units,"lb")==0) || (strcmp(units,"lbf")==0)) {
+	if ((strcmp(units,(char*)"lb")==0) || (strcmp(units,(char*)"lbf")==0)) {
         return (float) 1;
-	} else if ((strcmp(units,"klb")==0) || (strcmp(units,"klbf")==0)) {
+	} else if ((strcmp(units,(char*)"klb")==0) || (strcmp(units,(char*)"klbf")==0)) {
 		return (float) 0.001;
-	} else if (strcmp(units,"N")==0) {
+	} else if (strcmp(units,(char*)"N")==0) {
         return (float) 4.44822161526;
-	} else if (strcmp(units,"kN")==0) {
+	} else if (strcmp(units,(char*)"kN")==0) {
         return (float) 0.00444822161526;
-	} else if (strcmp(units,"kg")==0) {
+	} else if (strcmp(units,(char*)"kg")==0) {
         return (float) 0.45359237;
-	} else if (strcmp(units,"g")==0) {
+	} else if (strcmp(units,(char*)"g")==0) {
         return (float) 453.59237;
 	} else return (float) 0;
 } //!<  ForceConv()
 
 float TorqueConv(Units units) {
-	if ((strcmp(units,"in-lb")==0) || (strcmp(units,"in-lbf")==0) || (strcmp(units,"lb-in")==0) || (strcmp(units,"lbf-in")==0)) {
+	if ((strcmp(units,(char*)"in-lb")==0) || (strcmp(units,(char*)"in-lbf")==0) || (strcmp(units,(char*)"lb-in")==0) || (strcmp(units,(char*)"lbf-in")==0)) {
 		return (float) 1;
-	} else if ((strcmp(units,"ft-lb")==0) || (strcmp(units,"lb-ft")==0) || (strcmp(units,"ft-lbf")==0) || (strcmp(units,"lbf-ft")==0)) {
+	} else if ((strcmp(units,(char*)"ft-lb")==0) || (strcmp(units,(char*)"lb-ft")==0) || (strcmp(units,(char*)"ft-lbf")==0) || (strcmp(units,(char*)"lbf-ft")==0)) {
         return (float) 0.08333333333;
-	} else if ((strcmp(units,"N-m")==0) || (strcmp(units,"Nm")==0)) {
+	} else if ((strcmp(units,(char*)"N-m")==0) || (strcmp(units,(char*)"Nm")==0)) {
         return (float) 0.112984829028;
-	} else if ((strcmp(units,"N-mm")==0) || (strcmp(units,"Nmm")==0)) {
+	} else if ((strcmp(units,(char*)"N-mm")==0) || (strcmp(units,(char*)"Nmm")==0)) {
         return (float) 112.984829028;
-	} else if ((strcmp(units,"kg-cm")==0) || (strcmp(units,"kgcm")==0)) {
+	} else if ((strcmp(units,(char*)"kg-cm")==0) || (strcmp(units,(char*)"kgcm")==0)) {
         return (float) 1.1521246198;
 	} else return (float) 0;
 } //!<  TorqueConv()
 
 float DistConv(Units units) {
-	if (strcmp(units,"in")==0) {
+	if (strcmp(units,(char*)"in")==0) {
         return (float) 1;
-	} else if (strcmp(units,"m")==0) {
+	} else if (strcmp(units,(char*)"m")==0) {
         return (float) 0.0254;
-	} else if (strcmp(units,"cm")==0) {
+	} else if (strcmp(units,(char*)"cm")==0) {
         return (float) 2.54;
-	} else if (strcmp(units,"mm")==0) {
+	} else if (strcmp(units,(char*)"mm")==0) {
         return (float) 25.4;
-	} else if (strcmp(units,"ft")==0) {
+	} else if (strcmp(units,(char*)"ft")==0) {
         return (float) 0.08333333333;
 	} else return (float) 0;
 } //!<  DistConv()
 
 float AngleConv(Units u) {
-	if ((strcmp(u,"deg")==0) || (strcmp(u,"degrees")==0) || (strcmp(u,"degree")==0)) {
+	if ((strcmp(u,(char*)"deg")==0) || (strcmp(u,(char*)"degrees")==0) || (strcmp(u,(char*)"degree")==0)) {
 		return (float) 1;
-	} else if ((strcmp(u,"rad")==0) || (strcmp(u,"radians")==0) || (strcmp(u,"radian")==0)) {
+	} else if ((strcmp(u,(char*)"rad")==0) || (strcmp(u,(char*)"radians")==0) || (strcmp(u,(char*)"radian")==0)) {
 		return (float) PI / 180;
 	} else return (float) 0;
 } //!<  AngleConv()
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 short ReadAttribute(const DOM_Element *elem, char **attValue, char *attName, BOOL required, char *defaultValue) {
 	(*attValue)=DOM_Element_getAttribute(elem,attName);
-	if (strcmp(*attValue,"")==0) {
+	if (strcmp(*attValue,(char*)"")==0) {
 		if (required==true) {
 			return 1;
 		} else {

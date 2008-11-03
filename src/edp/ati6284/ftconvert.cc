@@ -49,7 +49,7 @@ int ftconvert(float SampleReading[6],float SampleBias[6],float FT[6]) {
 
 	// Set force units.
 	// This step is optional; by default, the units are inherited from the calibration file.
-	/*sts=SetForceUnits(cal,"N");
+	/*sts=SetForceUnits(cal,(char*)"N");
 	switch (sts) {
 		case 0: break;	// successful completion
 		case 1: printf("Invalid Calibration struct"); return 0;
@@ -59,7 +59,7 @@ int ftconvert(float SampleReading[6],float SampleBias[6],float FT[6]) {
 
 	// Set torque units.
 	// This step is optional; by default, the units are inherited from the calibration file.
-	sts=SetTorqueUnits(cal,"N-m");
+	sts=SetTorqueUnits(cal,(char*)"N-m");
 	switch (sts) {
 		case 0: break;	// successful completion
 		case 1: printf("Invalid Calibration struct"); return 0;
@@ -71,7 +71,7 @@ int ftconvert(float SampleReading[6],float SampleBias[6],float FT[6]) {
 	// This line is only required if you want to move or rotate the sensor's coordinate system.
 	// This example tool transform translates the coordinate system 20 mm along the Z-axis 
 	// and rotates it 45 degrees about the X-axis.
-	sts=SetToolTransform(cal,SampleTT,"mm","degrees");
+	sts=SetToolTransform(cal,SampleTT,(char*)"mm",(char*)"degrees");
 	switch (sts) {
 		case 0: break;	// successful completion
 		case 1: printf("Invalid Calibration struct"); return 0;

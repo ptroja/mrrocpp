@@ -470,7 +470,7 @@ void edp_ATI3084_force_sensor::terminate(void)
 }
 ;
 
-int edp_ATI3084_force_sensor::parallel_do_send_command(char* command)
+int edp_ATI3084_force_sensor::parallel_do_send_command(const char* command)
 {
 	char a;
 	short value=0;
@@ -634,7 +634,7 @@ void edp_ATI3084_force_sensor::check_cs(void)
 		printf("STB LOW\n");
 }
 
-short edp_ATI3084_force_sensor::do_Wait(char* command)
+short edp_ATI3084_force_sensor::do_Wait(const char* command)
 {
 	int iw_ret;
 
@@ -652,7 +652,7 @@ short edp_ATI3084_force_sensor::do_Wait(char* command)
 	return OK;
 }
 
-short edp_ATI3084_force_sensor::do_send_command(char* command)
+short edp_ATI3084_force_sensor::do_send_command(const char* command)
 {
 	char a;
 	unsigned int timeout;

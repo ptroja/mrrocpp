@@ -98,7 +98,7 @@ edp_ATI6284_force_sensor::edp_ATI6284_force_sensor(edp_irp6s_postument_track_eff
 	if (!(master.test_mode)) {
 		Total_Number_of_Samples=6;
 		index=1;
-		calfilepath="../data/ft6284.cal";
+		calfilepath=(char*)"../data/ft6284.cal";
 
 		for (int i=0; i<5; i++)
 			last_correct[i]=0;
