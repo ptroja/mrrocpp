@@ -15,7 +15,7 @@ public:
 
     mp_set_next_ecps_state_generator(mp_task& _mp_task);
 
-	void configure (int l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, char* l_mp_2_ecp_next_state_string);
+	void configure (int l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const char* l_mp_2_ecp_next_state_string);
 	void configure (const playerpos_goal_t &_goal);
 
 	bool first_step ();

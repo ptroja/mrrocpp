@@ -36,7 +36,7 @@ class rc_windows_transmitter: public transmitter{
   	
   public:
 	// Konstruktor
- 	rc_windows_transmitter (TRANSMITTER_ENUM _transmitter_name, char* _section_name, ecp_mp_task& _ecp_mp_object);
+ 	rc_windows_transmitter (TRANSMITTER_ENUM _transmitter_name, const char* _section_name, ecp_mp_task& _ecp_mp_object);
 											// konstruktor czujnika virtualnego
 	~rc_windows_transmitter();						// destruktor czujnika virtualnego
 

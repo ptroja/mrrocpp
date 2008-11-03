@@ -10,13 +10,13 @@ class StateHeap
 		StateHeap();
 		~StateHeap();
 
-		void pushTargetName(char * stateName);
-		char * popTargetName();
+		void pushTargetName(const char * stateName);
+		const char * popTargetName();
 
 		void showHeapContent();
 
 	private:
-		std::list<char *> *targetsHeap;
+		std::list<const char *> *targetsHeap;
 };
 
 #endif

@@ -18,7 +18,7 @@
 #include "ecp_mp/ecp_mp_s_vis_sac.h"		// zawiera klase ecp_mp_sensor
 	
 /***************************** CONSTRUCTOR ********************************/
-ecp_mp_vis_sac_sensor::ecp_mp_vis_sac_sensor (SENSOR_ENUM _sensor_name, char* _section_name, ecp_mp_task& _ecp_mp_object):
+ecp_mp_vis_sac_sensor::ecp_mp_vis_sac_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object):
 	ecp_mp_sensor (_sensor_name, _section_name, _ecp_mp_object) {
  
 //    printf("ecp_mp_vis_sac_sensor: [vsp_vis_sac_sac]\n");

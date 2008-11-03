@@ -137,7 +137,7 @@ void mp_task_multiplayer::main_task_algorithm(void)
 				char *qq = robot_m[ROBOT_SPEECHRECOGNITION]->ecp_td.commandRecognized;
 				printf("commandRecognized = \"%s\"\n", qq);
 				
-				char *komunikat;
+				const char *komunikat;
 				
 				if (!strcmp(qq, "PODAJ_KOSTKE")) {
 					komenda_rozpoznana = true;

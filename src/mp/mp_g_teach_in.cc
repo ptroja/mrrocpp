@@ -129,7 +129,7 @@ void mp_teach_in_generator::save_file (POSE_SPECIFICATION ps) {
 
 // --------------------------------------------------------------------------
 // Wczytanie trajektorii z pliku
-bool mp_teach_in_generator::load_file_with_path (char* file_name, short robot_number) {
+bool mp_teach_in_generator::load_file_with_path (const char* file_name, short robot_number) {
 // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 // false w przeciwnym razie
 // mp_taught_in_pose tip;        // Wczytana pozycja

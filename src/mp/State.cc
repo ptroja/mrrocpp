@@ -281,7 +281,7 @@ std::list<Transition> * State::getTransitions() const
 }
 
 //----------------------------------------------------------------------------------------------------------
-char * State::returnNextStateID(StateHeap &sh)
+const char * State::returnNextStateID(StateHeap &sh)
 {
 	for(std::list<Transition>::iterator it = stateTransitions->begin(); it != stateTransitions->end(); ++it)
 	{

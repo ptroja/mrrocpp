@@ -22,7 +22,7 @@
 
 
 /***************************** CONSTRUCTOR ********************************/
-ecp_mp_rcs_kociemba::ecp_mp_rcs_kociemba(SENSOR_ENUM _sensor_name, char* _section_name, ecp_mp_task& _ecp_mp_object)
+ecp_mp_rcs_kociemba::ecp_mp_rcs_kociemba(SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object)
 	: ecp_mp_sensor(_sensor_name, _section_name, _ecp_mp_object) {
 	// Ustawienie wielkosci przesylanej unii.
 	union_size = sizeof(image.rcs);

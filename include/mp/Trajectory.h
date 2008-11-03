@@ -18,10 +18,10 @@ class Trajectory
 
 		static int setValuesInArray(double arrayToFill[], char *dataString);
 		static POSE_SPECIFICATION returnProperPS(char *poseSpecification);
-		static char * toString(double valArr[], int length);
-		static char * toString(int numberOfPoses);
-		static char * toString(POSE_SPECIFICATION ps);
-		static char * returnRobotName(ROBOT_ENUM robot);
+		static const char * toString(double valArr[], int length);
+		static const char * toString(int numberOfPoses);
+		static const char * toString(POSE_SPECIFICATION ps);
+		static const char * returnRobotName(ROBOT_ENUM robot);
 
 		static bool writeTrajectoryToXmlFile(char *fileName, POSE_SPECIFICATION ps, std::list<ecp_smooth_taught_in_pose> &poses);
 		

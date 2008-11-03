@@ -16,18 +16,18 @@ StateHeap::~StateHeap()
 		delete targetsHeap;
 }
 
-void StateHeap::pushTargetName(char * stateName)
+void StateHeap::pushTargetName(const char * stateName)
 {
 	char *toAdd = new char[strlen(stateName)];
 	strcpy(toAdd, stateName);
 	if(targetsHeap == NULL)
-		targetsHeap = new std::list<char *>();
+		targetsHeap = new std::list<const char *>();
 	targetsHeap->push_back(toAdd);
 	// showing content
 	//showHeapContent();
 }
 
-char * StateHeap::popTargetName()
+const char * StateHeap::popTargetName()
 {
 	// showing content
 	printf("poping..\n");
@@ -46,7 +46,7 @@ char * StateHeap::popTargetName()
 
 void StateHeap::showHeapContent()
 {
-	for(std::list<char *>::iterator it = targetsHeap->begin(); it != targetsHeap->end(); ++it)
+	for(std::list<const char *>::iterator it = targetsHeap->begin(); it != targetsHeap->end(); ++it)
 	{
 		printf("### on heap: #%s#\n", (*it));
 	}

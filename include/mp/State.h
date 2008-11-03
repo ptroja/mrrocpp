@@ -47,7 +47,7 @@ class State
 		char *  getStringArgument() const;
 		void setTransition(char *cond, char *target, configurator &_config);
 		void setProperTransitionResult(bool result);
-		char *returnNextStateID(StateHeap &sh);
+		const char *returnNextStateID(StateHeap &sh);
 		std::list<Transition> * getTransitions() const;
 
 		void showStateContent() const;

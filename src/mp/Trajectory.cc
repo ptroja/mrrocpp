@@ -76,7 +76,7 @@ int Trajectory::setValuesInArray(double arrayToFill[], char *dataString)
 	return index;
 }
 
-char * Trajectory::toString(double valArr[], int length)
+const char * Trajectory::toString(double valArr[], int length)
 {
 	char * afterConv = new char[160];
 	for(int i=0; i<length; i++)
@@ -90,7 +90,7 @@ char * Trajectory::toString(double valArr[], int length)
 	return afterConv;
 }
 
-char * Trajectory::toString(int numberOfPoses)
+const char * Trajectory::toString(int numberOfPoses)
 {
 	char * numStr = new char[10];
 	sprintf(numStr, "%d", numberOfPoses);
@@ -98,7 +98,7 @@ char * Trajectory::toString(int numberOfPoses)
 	return numStr;
 }
 
-char * Trajectory::returnRobotName(ROBOT_ENUM robot)
+const char * Trajectory::returnRobotName(ROBOT_ENUM robot)
 {
 
 	if(robot == ROBOT_IRP6_ON_TRACK)
@@ -123,7 +123,7 @@ char * Trajectory::returnRobotName(ROBOT_ENUM robot)
 		return "ROBOT_UNDEFINED";	
 }
 
-char * Trajectory::toString(POSE_SPECIFICATION ps)
+const char * Trajectory::toString(POSE_SPECIFICATION ps)
 {
 	if ( ps == MOTOR )
 	{	return "MOTOR";	}

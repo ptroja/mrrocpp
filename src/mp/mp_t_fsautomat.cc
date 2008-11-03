@@ -751,7 +751,7 @@ bool mp_task_fsautomat::communicate_with_windows_solver(State &state)
 
 bool mp_task_fsautomat::translateManipulationSequence(StateHeap &sh)
 {
-	std::list<char *> *scenario = new std::list<char *>();
+	std::list<const char *> *scenario = new std::list<const char *>();
 	
 	for(std::list<SingleManipulation>::iterator manipulation_list_iterator = manipulation_list.begin();
 			manipulation_list_iterator != manipulation_list.end(); manipulation_list_iterator++)
@@ -812,7 +812,7 @@ bool mp_task_fsautomat::translateManipulationSequence(StateHeap &sh)
 	}
 
 	scenario->reverse();
-	for(std::list<char *>::iterator it = scenario->begin(); it != scenario->end(); ++it)
+	for(std::list<const char *>::iterator it = scenario->begin(); it != scenario->end(); ++it)
 	{
 		sh.pushTargetName((*it));
 	}

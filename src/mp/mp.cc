@@ -66,7 +66,7 @@ mp_set_next_ecps_state_generator::mp_set_next_ecps_state_generator(mp_task& _mp_
 {}
 
 void mp_set_next_ecps_state_generator::configure (int l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant,
-        char* l_mp_2_ecp_next_state_string)
+        const char* l_mp_2_ecp_next_state_string)
 {
     ecp_next_state.mp_2_ecp_next_state = l_mp_2_ecp_next_state;
     ecp_next_state.mp_2_ecp_next_state_variant = l_mp_2_ecp_next_state_variant;

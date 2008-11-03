@@ -48,7 +48,7 @@ class mp_task: public ecp_mp_task
 		};
 
 		bool set_next_playerpos_goal (ROBOT_ENUM robot_l, const playerpos_goal_t &goal);
-		bool set_next_ecps_state (int l_state, int l_variant, char* l_string, int number_of_robots, ... );
+		bool set_next_ecps_state (int l_state, int l_variant, const char* l_string, int number_of_robots, ... );
 		bool send_end_motion_to_ecps (int number_of_robots, ... );
 		bool send_end_motion_to_ecps (int number_of_robots, ROBOT_ENUM *properRobotsSet);
 		bool run_ext_empty_gen (bool activate_trigger, int number_of_robots, ... );

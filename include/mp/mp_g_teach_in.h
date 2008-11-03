@@ -43,7 +43,7 @@ public:
 	
 	// --------------------------------------------------------------------------
 	// Wczytanie trajektorii z pliku
-	bool load_file_with_path (char* file_name, short robot_number);
+	bool load_file_with_path (const char* file_name, short robot_number);
 	
 	// --------------------------------------------------------------------------
 	// Zapis trajektorii do pliku
