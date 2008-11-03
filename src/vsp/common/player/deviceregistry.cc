@@ -373,7 +373,7 @@ void NomadSonar_Register(DriverTable *driverTable);
  *
  * NOTE: the last element must be NULL
  */
-player_interface_t interfaces[] = {
+player_interface_t interfaces[] =  {
   {PLAYER_NULL_CODE, PLAYER_NULL_STRING},
   {PLAYER_LOG_CODE, PLAYER_LOG_STRING},
   {PLAYER_LASER_CODE, PLAYER_LASER_STRING},

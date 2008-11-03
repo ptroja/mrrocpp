@@ -102,24 +102,24 @@ char* CombinatorialsException::ToString()
 
 char *CombinatorialsException::ErrorText[] = 
   { 
-    "success",
-    "size cannot be negative",
-    "size cannot be eqal to zero",
-    "size is bigger than supported",
-    "composition is forbidden with this collection",
-    "composition only allowed for the same size collections",
-    "ordinal number cannot be negative", 
-    "ordinal number cannot be bigger that number of collections",
-    "cycle size must be positive",
-    "cycle cannot be longer than permutation",
-    "values in cycle must be from permutation's set",
-    "values in cycle cannot be repeated",
-    "collection size must be smaller than set size for combination",
-    "position number cannot be negative",
-    "position number must be smaller than size of variation",
-    "table with collection contains too small elements",
-    "table with collection contains too big elements",
-    "table with permutation/combination contains repeated values"
+	(char*) "success",
+	(char*) "size cannot be negative",
+	(char*) "size cannot be eqal to zero",
+	(char*) "size is bigger than supported",
+	(char*) "composition is forbidden with this collection",
+	(char*) "composition only allowed for the same size collections",
+	(char*) "ordinal number cannot be negative", 
+	(char*) "ordinal number cannot be bigger that number of collections",
+	(char*) "cycle size must be positive",
+	(char*) "cycle cannot be longer than permutation",
+	(char*) "values in cycle must be from permutation's set",
+	(char*) "values in cycle cannot be repeated",
+	(char*) "collection size must be smaller than set size for combination",
+	(char*) "position number cannot be negative",
+	(char*) "position number must be smaller than size of variation",
+	(char*) "table with collection contains too small elements",
+	(char*) "table with collection contains too big elements",
+	(char*) "table with permutation/combination contains repeated values"
   };
 
 const char* CombinatorialsException::GetErrorText()

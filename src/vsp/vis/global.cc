@@ -9,7 +9,7 @@
 
 extern int alloc_m, alloc_v;
 
-void nrerror(char error_text[])
+void nrerror(char* error_text)
 {
 	fprintf(stderr,"Numerical Recipes run-time error...\n");
 	fprintf(stderr,"%s\n",error_text);

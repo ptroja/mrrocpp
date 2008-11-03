@@ -123,11 +123,11 @@ char* CubeSolutionException::ToString()
 
 char* CubeSolutionException::ErrorText[] = 
   {  
-    "",  
-    "Invalid position of move in solution",
-    "Parsing failed on invalid move", 
-    "Parsing failed on invalid turn", 
-    "Parsing failed on invalid string format", 
+	  (char*)"",  
+	  (char*)"Invalid position of move in solution",
+	  (char*)"Parsing failed on invalid move", 
+	  (char*)"Parsing failed on invalid turn", 
+	  (char*)"Parsing failed on invalid string format", 
   };
 
 const char* CubeSolutionException::GetErrorText()
