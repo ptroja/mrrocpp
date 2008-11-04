@@ -11,8 +11,6 @@ extern ApEventLink_t AbInternalLinks[];
 extern ApWindowLink_t task_config_window;
 extern ApWindowLink_t yes_no_window;
 extern ApWindowLink_t teaching_window;
-extern ApWindowLink_t file_selection_window;
-extern ApWindowLink_t wndFileLocation;
 extern ApWindowLink_t wnd_irp6_postument_xyz_euler_zyz;
 extern ApWindowLink_t wndForceControl;
 extern ApWindowLink_t wnd_help_about;
@@ -50,6 +48,8 @@ extern ApWindowLink_t wnd_irp6_mechatronika_xyz_angle_axis;
 extern ApWindowLink_t wnd_irp6_mechatronika_xyz_angle_axis_ts;
 extern ApWindowLink_t wnd_irp6_mechatronika_xyz_euler_zyz;
 extern ApWindowLink_t wnd_irp6_mechatronika_xyz_euler_zyz_ts;
+extern ApWindowLink_t wndFileLocation;
+extern ApWindowLink_t file_selection_window;
 extern ApWidget_t AbWidgets[ 917 ];
 
 extern ApMenuLink_t file_menu;

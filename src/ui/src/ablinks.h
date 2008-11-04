@@ -24,238 +24,238 @@ ApWindowLink_t teaching_window = {
 	AbLinks_teaching_window, 9, 6
 	};
 
-ApWindowLink_t file_selection_window = {
-	"file_selection_window.wgtw",
-	&AbContext,
-	AbLinks_file_selection_window, 14, 4
-	};
-
-ApWindowLink_t wndFileLocation = {
-	"wndFileLocation.wgtw",
-	&AbContext,
-	AbLinks_wndFileLocation, 18, 2
-	};
-
 ApWindowLink_t wnd_irp6_postument_xyz_euler_zyz = {
 	"wnd_irp6_postument_xyz_euler_zyz.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_postument_xyz_euler_zyz, 23, 40
+	AbLinks_wnd_irp6_postument_xyz_euler_zyz, 14, 40
 	};
 
 ApWindowLink_t wndForceControl = {
 	"wndForceControl.wgtw",
 	&AbContext,
-	AbLinks_wndForceControl, 59, 21
+	AbLinks_wndForceControl, 50, 21
 	};
 
 ApWindowLink_t wnd_help_about = {
 	"wnd_help_about.wgtw",
 	&AbContext,
-	NULL, 114, 0
+	NULL, 105, 0
 	};
 
 ApWindowLink_t wnd_input_integer = {
 	"wnd_input_integer.wgtw",
 	&AbContext,
-	AbLinks_wnd_input_integer, 117, 5
+	AbLinks_wnd_input_integer, 108, 5
 	};
 
 ApWindowLink_t wnd_input_double = {
 	"wnd_input_double.wgtw",
 	&AbContext,
-	AbLinks_wnd_input_double, 122, 5
+	AbLinks_wnd_input_double, 113, 5
 	};
 
 ApWindowLink_t wnd_message = {
 	"wnd_message.wgtw",
 	&AbContext,
-	AbLinks_wnd_message, 127, 4
+	AbLinks_wnd_message, 118, 4
 	};
 
 ApWindowLink_t wnd_choose_option = {
 	"wnd_choose_option.wgtw",
 	&AbContext,
-	AbLinks_wnd_choose_option, 130, 11
+	AbLinks_wnd_choose_option, 121, 11
 	};
 
 ApWindowLink_t wnd_irp6_postument_xyz_angle_axis = {
 	"wnd_irp6_postument_xyz_angle_axis.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_postument_xyz_angle_axis, 137, 30
+	AbLinks_wnd_irp6_postument_xyz_angle_axis, 128, 30
 	};
 
 ApWindowLink_t base = {
 	"base.wgtw",
 	&AbContext,
-	AbLinks_base, 175, 14
+	AbLinks_base, 166, 14
 	};
 
 ApWindowLink_t wnd_speaker_play = {
 	"wnd_speaker_play.wgtw",
 	&AbContext,
-	AbLinks_wnd_speaker_play, 187, 7
+	AbLinks_wnd_speaker_play, 178, 7
 	};
 
 ApWindowLink_t wnd_irp6_on_track_xyz_euler_zyz = {
 	"wnd_irp6_on_track_xyz_euler_zyz.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_on_track_xyz_euler_zyz, 193, 44
+	AbLinks_wnd_irp6_on_track_xyz_euler_zyz, 184, 44
 	};
 
 ApWindowLink_t wnd_irp6_postument_xyz_angle_axis_ts = {
 	"wnd_irp6_postument_xyz_angle_axis_ts.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_postument_xyz_angle_axis_ts, 233, 10
+	AbLinks_wnd_irp6_postument_xyz_angle_axis_ts, 224, 10
 	};
 
 ApWindowLink_t wnd_irp6_on_track_xyz_angle_axis_ts = {
 	"wnd_irp6_on_track_xyz_angle_axis_ts.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_on_track_xyz_angle_axis_ts, 252, 10
+	AbLinks_wnd_irp6_on_track_xyz_angle_axis_ts, 243, 10
 	};
 
 ApWindowLink_t wnd_irp6_postument_xyz_euler_zyz_ts = {
 	"wnd_irp6_postument_xyz_euler_zyz_ts.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_postument_xyz_euler_zyz_ts, 271, 10
+	AbLinks_wnd_irp6_postument_xyz_euler_zyz_ts, 262, 10
 	};
 
 ApWindowLink_t wnd_irp6_on_track_xyz_euler_zyz_ts = {
 	"wnd_irp6_on_track_xyz_euler_zyz_ts.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_on_track_xyz_euler_zyz_ts, 288, 10
+	AbLinks_wnd_irp6_on_track_xyz_euler_zyz_ts, 279, 10
 	};
 
 ApWindowLink_t MAM_wnd_manual_moves_automatic_measures = {
 	"MAM_wnd_manual_moves_automatic_measures.wgtw",
 	&AbContext,
-	AbLinks_MAM_wnd_manual_moves_automatic_measures, 305, 7
+	AbLinks_MAM_wnd_manual_moves_automatic_measures, 296, 7
 	};
 
 ApWindowLink_t wndTrajectoryReproduce = {
 	"wndTrajectoryReproduce.wgtw",
 	&AbContext,
-	AbLinks_wndTrajectoryReproduce, 331, 11
+	AbLinks_wndTrajectoryReproduce, 322, 11
 	};
 
 ApWindowLink_t wnd_irp6_postument_inc = {
 	"wnd_irp6_postument_inc.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_postument_inc, 376, 40
+	AbLinks_wnd_irp6_postument_inc, 367, 40
 	};
 
 ApWindowLink_t wnd_irp6_on_track_kinematic = {
 	"wnd_irp6_on_track_kinematic.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_on_track_kinematic, 421, 8
+	AbLinks_wnd_irp6_on_track_kinematic, 412, 8
 	};
 
 ApWindowLink_t wnd_irp6_postument_kinematic = {
 	"wnd_irp6_postument_kinematic.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_postument_kinematic, 426, 8
+	AbLinks_wnd_irp6_postument_kinematic, 417, 8
 	};
 
 ApWindowLink_t wnd_irp6_on_track_servo_algorithm = {
 	"wnd_irp6_on_track_servo_algorithm.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_on_track_servo_algorithm, 431, 10
+	AbLinks_wnd_irp6_on_track_servo_algorithm, 422, 10
 	};
 
 ApWindowLink_t wnd_irp6_postument_servo_algorithm = {
 	"wnd_irp6_postument_servo_algorithm.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_postument_servo_algorithm, 467, 10
+	AbLinks_wnd_irp6_postument_servo_algorithm, 458, 10
 	};
 
 ApWindowLink_t wnd_irp6_on_track_inc = {
 	"wnd_irp6_on_track_inc.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_on_track_inc, 499, 44
+	AbLinks_wnd_irp6_on_track_inc, 490, 44
 	};
 
 ApWindowLink_t wnd_irp6_on_track_xyz_angle_axis = {
 	"wnd_irp6_on_track_xyz_angle_axis.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_on_track_xyz_angle_axis, 548, 34
+	AbLinks_wnd_irp6_on_track_xyz_angle_axis, 539, 34
 	};
 
 ApWindowLink_t wnd_irp6_on_track_int = {
 	"wnd_irp6_on_track_int.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_on_track_int, 590, 44
+	AbLinks_wnd_irp6_on_track_int, 581, 44
 	};
 
 ApWindowLink_t wnd_conveyor_servo_algorithm = {
 	"wnd_conveyor_servo_algorithm.wgtw",
 	&AbContext,
-	AbLinks_wnd_conveyor_servo_algorithm, 629, 8
+	AbLinks_wnd_conveyor_servo_algorithm, 620, 8
 	};
 
 ApWindowLink_t wnd_conveyor_moves = {
 	"wnd_conveyor_moves.wgtw",
 	&AbContext,
-	AbLinks_wnd_conveyor_moves, 636, 19
+	AbLinks_wnd_conveyor_moves, 627, 19
 	};
 
 ApWindowLink_t wnd_processes_control = {
 	"wnd_processes_control.wgtw",
 	&AbContext,
-	AbLinks_wnd_processes_control, 651, 46
+	AbLinks_wnd_processes_control, 642, 46
 	};
 
 ApWindowLink_t wnd_irp6_mechatronika_inc = {
 	"wnd_irp6_mechatronika_inc.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_mechatronika_inc, 687, 32
+	AbLinks_wnd_irp6_mechatronika_inc, 678, 32
 	};
 
 ApWindowLink_t wnd_irp6_postument_int = {
 	"wnd_irp6_postument_int.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_postument_int, 722, 40
+	AbLinks_wnd_irp6_postument_int, 713, 40
 	};
 
 ApWindowLink_t wnd_irp6_mechatronika_int = {
 	"wnd_irp6_mechatronika_int.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_mechatronika_int, 758, 32
+	AbLinks_wnd_irp6_mechatronika_int, 749, 32
 	};
 
 ApWindowLink_t wnd_irp6_mechatronika_kinematic = {
 	"wnd_irp6_mechatronika_kinematic.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_mechatronika_kinematic, 786, 8
+	AbLinks_wnd_irp6_mechatronika_kinematic, 777, 8
 	};
 
 ApWindowLink_t wnd_irp6_mechatronika_servo_algorithm = {
 	"wnd_irp6_mechatronika_servo_algorithm.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_mechatronika_servo_algorithm, 791, 10
+	AbLinks_wnd_irp6_mechatronika_servo_algorithm, 782, 10
 	};
 
 ApWindowLink_t wnd_irp6_mechatronika_xyz_angle_axis = {
 	"wnd_irp6_mechatronika_xyz_angle_axis.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_mechatronika_xyz_angle_axis, 815, 38
+	AbLinks_wnd_irp6_mechatronika_xyz_angle_axis, 806, 38
 	};
 
 ApWindowLink_t wnd_irp6_mechatronika_xyz_angle_axis_ts = {
 	"wnd_irp6_mechatronika_xyz_angle_axis_ts.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_mechatronika_xyz_angle_axis_ts, 849, 10
+	AbLinks_wnd_irp6_mechatronika_xyz_angle_axis_ts, 840, 10
 	};
 
 ApWindowLink_t wnd_irp6_mechatronika_xyz_euler_zyz = {
 	"wnd_irp6_mechatronika_xyz_euler_zyz.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_mechatronika_xyz_euler_zyz, 868, 36
+	AbLinks_wnd_irp6_mechatronika_xyz_euler_zyz, 859, 36
 	};
 
 ApWindowLink_t wnd_irp6_mechatronika_xyz_euler_zyz_ts = {
 	"wnd_irp6_mechatronika_xyz_euler_zyz_ts.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_mechatronika_xyz_euler_zyz_ts, 900, 10
+	AbLinks_wnd_irp6_mechatronika_xyz_euler_zyz_ts, 891, 10
+	};
+
+ApWindowLink_t wndFileLocation = {
+	"wndFileLocation.wgtw",
+	&AbContext,
+	AbLinks_wndFileLocation, 908, 2
+	};
+
+ApWindowLink_t file_selection_window = {
+	"file_selection_window.wgtw",
+	&AbContext,
+	AbLinks_file_selection_window, 913, 4
 	};
 
 static ApItem_t ApItems_file_menu[ 2 ] = {

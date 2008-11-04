@@ -122,28 +122,6 @@ extern const int ABN_PtButton_end_teaching;
 extern const int ABN_PtNumericFloat_move_time;
 #define ABW_PtNumericFloat_move_time         AbGetABW( ABN_PtNumericFloat_move_time )
 
-/* 'file_selection_window' Window link */
-extern const int ABN_file_selection_window;
-#define ABW_file_selection_window            AbGetABW( ABN_file_selection_window )
-extern const int ABN_PtButton_send_file_selection;
-#define ABW_PtButton_send_file_selection     AbGetABW( ABN_PtButton_send_file_selection )
-extern const int ABN_PtFileSel_sl;
-#define ABW_PtFileSel_sl                     AbGetABW( ABN_PtFileSel_sl )
-extern const int ABN_PtText_file_filename;
-#define ABW_PtText_file_filename             AbGetABW( ABN_PtText_file_filename )
-
-/* 'wndFileLocation' Window link */
-extern const int ABN_wndFileLocation;
-#define ABW_wndFileLocation                  AbGetABW( ABN_wndFileLocation )
-extern const int ABN_FLflsTrajectoryFile;
-#define ABW_FLflsTrajectoryFile              AbGetABW( ABN_FLflsTrajectoryFile )
-extern const int ABN_FLbtnAcceptFile;
-#define ABW_FLbtnAcceptFile                  AbGetABW( ABN_FLbtnAcceptFile )
-extern const int ABN_FLedtFilename;
-#define ABW_FLedtFilename                    AbGetABW( ABN_FLedtFilename )
-extern const int ABN_FLbtnExit;
-#define ABW_FLbtnExit                        AbGetABW( ABN_FLbtnExit )
-
 /* 'wnd_irp6_postument_xyz_euler_zyz' Window link */
 extern const int ABN_wnd_irp6_postument_xyz_euler_zyz;
 #define ABW_wnd_irp6_postument_xyz_euler_zyz AbGetABW( ABN_wnd_irp6_postument_xyz_euler_zyz )
@@ -2005,6 +1983,28 @@ extern const int ABN_PtButton_wind_irp6m_xyz_euler_zyz_ts_read;
 #define ABW_PtButton_wind_irp6m_xyz_euler_zyz_ts_read AbGetABW( ABN_PtButton_wind_irp6m_xyz_euler_zyz_ts_read )
 extern const int ABN_PtButton_wind_irp6m_xyz_euler_zyz_t_set_desired_as_current;
 #define ABW_PtButton_wind_irp6m_xyz_euler_zyz_t_set_desired_as_current AbGetABW( ABN_PtButton_wind_irp6m_xyz_euler_zyz_t_set_desired_as_current )
+
+/* 'wndFileLocation' Window link */
+extern const int ABN_wndFileLocation;
+#define ABW_wndFileLocation                  AbGetABW( ABN_wndFileLocation )
+extern const int ABN_FLflsTrajectoryFile;
+#define ABW_FLflsTrajectoryFile              AbGetABW( ABN_FLflsTrajectoryFile )
+extern const int ABN_FLbtnAcceptFile;
+#define ABW_FLbtnAcceptFile                  AbGetABW( ABN_FLbtnAcceptFile )
+extern const int ABN_FLedtFilename;
+#define ABW_FLedtFilename                    AbGetABW( ABN_FLedtFilename )
+extern const int ABN_FLbtnExit;
+#define ABW_FLbtnExit                        AbGetABW( ABN_FLbtnExit )
+
+/* 'file_selection_window' Window link */
+extern const int ABN_file_selection_window;
+#define ABW_file_selection_window            AbGetABW( ABN_file_selection_window )
+extern const int ABN_PtButton_send_file_selection;
+#define ABW_PtButton_send_file_selection     AbGetABW( ABN_PtButton_send_file_selection )
+extern const int ABN_PtText_file_filename;
+#define ABW_PtText_file_filename             AbGetABW( ABN_PtText_file_filename )
+extern const int ABN_PtFileSel_sl;
+#define ABW_PtFileSel_sl                     AbGetABW( ABN_PtFileSel_sl )
 
 #define AbGetABW( n ) ( AbWidgets[ n ].wgt )
 

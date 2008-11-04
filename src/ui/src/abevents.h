@@ -81,20 +81,6 @@ static const ApEventLink_t AbLinks_teaching_window[] = {
 	{ 0 }
 	};
 
-static const ApEventLink_t AbLinks_file_selection_window[] = {
-	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "file_selection_window", 1012, file_selection_window_post_realize, 0, 0, 0, 0, },
-	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "file_selection_window", 1013, clear_file_selection_window_flag, 0, 0, 0, 0, },
-	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "file_selection_window", 1013, close_file_selection_window, 0, 0, 0, 0, },
-	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_send_file_selection", 2009, file_selection_window_send_location, 0, 0, 0, 0, },
-	{ 0 }
-	};
-
-static const ApEventLink_t AbLinks_wndFileLocation[] = {
-	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "FLbtnAcceptFile", 2009, FLbtnAcceptFile, 0, 0, 0, 0, },
-	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "FLbtnExit", 2009, FLbtnExit, 0, 0, 0, 0, },
-	{ 0 }
-	};
-
 static const ApEventLink_t AbLinks_wnd_irp6_postument_xyz_euler_zyz[] = {
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_irp6_postument_xyz_euler_zyz", 1013, clear_wnd_irp6p_xyz_euler_zyz_flag, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_irp6_postument_xyz_euler_zyz", 2009, init_wnd_irp6_postument_xyz_euler_zyz, 0, 0, 0, 0, },
@@ -962,6 +948,20 @@ static const ApEventLink_t AbLinks_wnd_irp6_mechatronika_xyz_euler_zyz_ts[] = {
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_xyz_euler_zyz_ts_set_tool", 2009, init_wnd_irp6m_xyz_euler_zyz_ts, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_xyz_euler_zyz_ts_read", 2009, init_wnd_irp6m_xyz_euler_zyz_ts, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6m_xyz_euler_zyz_t_set_desired_as_current", 2009, wnd_irp6m_xyz_zyz_ts_copy_cur_to_des, 0, 0, 0, 0, },
+	{ 0 }
+	};
+
+static const ApEventLink_t AbLinks_wndFileLocation[] = {
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "FLbtnAcceptFile", 2009, FLbtnAcceptFile, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "FLbtnExit", 2009, FLbtnExit, 0, 0, 0, 0, },
+	{ 0 }
+	};
+
+static const ApEventLink_t AbLinks_file_selection_window[] = {
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "file_selection_window", 1012, file_selection_window_post_realize, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "file_selection_window", 1013, clear_file_selection_window_flag, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "file_selection_window", 1013, close_file_selection_window, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_send_file_selection", 2009, file_selection_window_send_location, 0, 0, 0, 0, },
 	{ 0 }
 	};
 
