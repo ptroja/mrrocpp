@@ -26,4 +26,31 @@ clean:
 	@rm -f *.o *.err ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
 
-include $(HOMEDIR)/depend.mk
+#include $(HOMEDIR)/depend.mk
+
+## Compilation scripts #################################################################################
+# Directory with dependences.
+DEPDIR = .deps
+df = $(DEPDIR)/$(*F)
+# Makedepend command.
+MAKEDEPEND = mkdir -p .deps; gcc -M $(CXXFLAGS) $(CPPFLAGS) -o $(DEPDIR)/$*.d $<
+#MAKEDEPEND_QCC = mkdir -p .deps; QCC -M $(CXXFLAGS) $(CPPFLAGS) -o $(DEPDIR)/$* $<
+
+# Overwritten command for *.cc compilation - also creates dependency files (*.P) in adequate directory.
+%.o : %.cc
+	@$(MAKEDEPEND); \
+#	@$(MAKEDEPEND_QCC); \
+	cp $(df).d $(df).P; \
+	sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+	-e '/^$$/ d' -e 's/$$/ :/' < $(df).d >> $(df).P; \
+#	rm -f $(df).d
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
+
+# Wildcards used during dependency include.
+#SOURCES = ${wildcard *.cc}
+DEPENDS = ${patsubst %.cc,$(DEPDIR)/%.P,${SOURCES}}
+
+# Include created dependency files.
+-include $(DEPENDS)
+
+
