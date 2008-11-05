@@ -1040,7 +1040,7 @@ int initiate_configuration()
 
 	// sczytanie listy sekcji
 	fill_section_list (ui_state.config_file_relativepath);
-	fill_section_list ("../configs/common.ini");
+	fill_section_list ((char*)"../configs/common.ini");
 	fill_node_list();
 	fill_program_node_list();
 
@@ -1098,7 +1098,7 @@ reload_whole_configuration() {
 		
 		// sczytanie listy sekcji
 		fill_section_list (ui_state.config_file_relativepath);
-		fill_section_list ("../configs/common.ini");
+		fill_section_list ((char*)"../configs/common.ini");
 		fill_node_list();
 		fill_program_node_list();
 		
