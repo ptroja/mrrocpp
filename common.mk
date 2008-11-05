@@ -15,8 +15,8 @@
 
 # Linker, compilator, and default global flags for both
 #VERSION=-V2.95.3,gcc_ntox86
-VERSION=-V3.3.5,gcc_ntox86
-#VERSION=-V4.2.4,gcc_ntox86
+#VERSION=-V3.3.5,gcc_ntox86
+VERSION=-V4.2.4,gcc_ntox86
 CC=qcc ${VERSION}
 CXX=QCC ${VERSION}
 CXXFLAGS=${FLAGS}
