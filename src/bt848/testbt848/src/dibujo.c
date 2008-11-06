@@ -75,7 +75,7 @@ void dibujo( PtWidget_t *widget, PhTile_t *damage )  {
    if( size_read == -1 ) \
    {
      perror( "Error reading myfile.dat" );
-     return EXIT_FAILURE;
+     exit;
    }
 
    /* Set the clipping area to be the raw widget's 
@@ -121,7 +121,7 @@ void dibujo( PtWidget_t *widget, PhTile_t *damage )  {
 		yyy=(int)((float)yyy/aaa);
 		printf("%d,%d, %d\n",xxx,yyy,size_read);
 */
-   if ( buffer != NULL)   
+ //  if ( buffer != NULL)   
   PgDrawImage( buffer, Pg_IMAGE_DIRECT_565, &pos, &ImageSize, ImageBPL, 0);   
 //    PgDrawImage( buffer1, Pg_IMAGE_DIRECT_565, &pos, &ImageSize, ImageBPL, 0);   
    close( fd );

@@ -1,5 +1,10 @@
 # Makefile for bbtvx and blit (visualization)
 
+
+
+HOMEDIR = ../../..
+include $(HOMEDIR)/common.mk
+
 CC=qcc
 CFLAGS= -ggdb3
 LDFLAGS=
@@ -9,6 +14,7 @@ OBJS=bttvx.o
 OBJS2=blit.o
 DIST=bttvx_0.2.2
 
+
 all: $(OBJS) bttvx 
 
 bttvx: $(OBJS)
@@ -16,5 +22,8 @@ bttvx: $(OBJS)
 
 
 clean:
-	rm -f bttvx
-	rm -rf *.o
+	@rm -f *.o *.err bttvx
+	
+install: bttvx
+	${INSTALL} bttvx $(BINDIR)
+

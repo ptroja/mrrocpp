@@ -2,7 +2,7 @@
 # Should be modified only by developers not by users
 HOMEDIR = ..
 # Data for makedepend 
-SOURCEDIRS = lib vsp edp ecp ecp_mp mp ui ui_server
+SOURCEDIRS = bt848 lib vsp edp ecp ecp_mp mp ui ui_server
 CLEANDIRS = ${SOURCEDIRS}
 INSTALLDIRS = ${CLEANDIRS}
 #======================================================#	

@@ -47,20 +47,20 @@ VPATH = ..
 #
 
 shr:	$(ABOBJ) $(MYOBJ)
-		$(LD) $(ABOBJ) $(MYOBJ) $(SDFLAGS) -M -o test
-		usemsg test ../Usemsg
-		phabbind test $(ABMOD)
+		$(LD) $(ABOBJ) $(MYOBJ) $(SDFLAGS) -M -o testbt848
+		usemsg testbt848 ../Usemsg
+		phabbind testbt848 $(ABMOD)
 
 app:	$(ABOBJ) $(MYOBJ)
-		$(LD) $(ABOBJ) $(MYOBJ) $(LDFLAGS) -M -o test
-		usemsg test ../Usemsg
-		phabbind test $(ABMOD)
+		$(LD) $(ABOBJ) $(MYOBJ) $(LDFLAGS) -M -o testbt848
+		usemsg testbt848 ../Usemsg
+		phabbind testbt848 $(ABMOD)
 
 clean:
-		rm -f *.o *.err *.map test
+		@rm -f *.o *.err *.map testbt848
 
 install:
-		-cp -vnf test /usr/photon/bin
+		-cp -vnf testbt848 /usr/photon/bin
 
 #
 # Headers
