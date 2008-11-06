@@ -31,6 +31,10 @@ include	../abLfiles
 PLATFORM=gcc_ntox86
 PHABOPTS= 
 
+HOMEDIR = ../../../../..
+include $(HOMEDIR)/common.mk
+
+
 CC  = qcc
 CXX = qcc
 LD  = qcc
@@ -59,8 +63,9 @@ app:	$(ABOBJ) $(MYOBJ)
 clean:
 		@rm -f *.o *.err *.map testbt848
 
-install:
-		-cp -vnf testbt848 /usr/photon/bin
+install: testbt848
+		-${INSTALL} testbt848 $(BINDIR)
+
 
 #
 # Headers

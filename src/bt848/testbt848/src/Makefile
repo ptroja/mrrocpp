@@ -1,16 +1,16 @@
 include abplatform
 
 shr:
-	for i in ${DIRS} ; do (cd $$i && $(MAKE) shr) ; done
+	@for i in ${DIRS} ; do (cd $$i && $(MAKE) shr) ; done
 
 app:
-	for i in ${DIRS} ; do (cd $$i && $(MAKE) app) ; done
+	@for i in ${DIRS} ; do (cd $$i && $(MAKE) app) ; done
 
 proto:
-	for i in ${DIRS} ; do (cd $$i && $(MAKE) proto) ; done
+	@for i in ${DIRS} ; do (cd $$i && $(MAKE) proto) ; done
 
 clean:
-	for i in ${ALLDIRS} ; do (cd $$i && $(MAKE) clean) ; done
+	@for i in ${ALLDIRS} ; do (cd $$i && $(MAKE) clean) ; done
 
 install:
-	for i in ${DIRS} ; do (cd $$i && $(MAKE) install) ; done
+	@for i in ${DIRS} ; do (cd $$i && $(MAKE) install) ; done

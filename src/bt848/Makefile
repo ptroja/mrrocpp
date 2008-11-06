@@ -2,7 +2,7 @@
 # Should be modified only by developers not by users
 HOMEDIR = ..
 # Data for makedepend 
-SOURCEDIRS = bttvxa test
+SOURCEDIRS = bttvxa testbt848
 CLEANDIRS = ${SOURCEDIRS}
 INSTALLDIRS = ${CLEANDIRS}
 #======================================================#	
@@ -27,6 +27,5 @@ install:
 	done
 #-----------------------------------------------------------------------------------------------------------------------#
 depend:
-
-	done
+	@true
 #======================================================#	
