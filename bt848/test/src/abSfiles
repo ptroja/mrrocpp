@@ -1,0 +1,1 @@
+ABSRC = ../RawActivate.c ../abmain.c ../dibujo.c ../raw_init.c 
