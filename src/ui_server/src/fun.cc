@@ -1534,11 +1534,14 @@ pulse_reader_execute( int coid, int pulse_code, int pulse_value)
 // sprawdza czy sa postawione gns's i ew. stawia je
 // uwaga serwer powinien byc wczesniej postawiony (dokladnie jeden w sieci)
 
+
+
 int
 check_gns()
 	{
 	DIR* dirp;
    	unsigned short number_of_gns_serwers = 0;
+	 char* gns_server_node;
 	 
  	 if (access("/etc/system/config/useqnet", R_OK)) 
 	{
@@ -1554,15 +1557,19 @@ check_gns()
 		strcpy(opendir_path, "/net/");
 		strcat(opendir_path, *node_list_iterator);
 		strcat(opendir_path, "/proc/mount/dev/name/gns_server");
+		//strcat(opendir_path, "/dev/name/gns_server");
 		
  	 	// sprawdzenie czy dziala serwer gns
  	   	 if ((dirp = opendir(opendir_path))!=NULL) 
 		{
 			number_of_gns_serwers++;
+			gns_server_node = new char[strlen(*node_list_iterator)];
+			strcpy(gns_server_node, *node_list_iterator);
 		 	closedir( dirp );
 		 }
 
 	}
+
    	
    	// there is more than one gns server in the QNX network
    	if (number_of_gns_serwers > 1)
@@ -1575,16 +1582,17 @@ check_gns()
 							
 			strcpy(opendir_path, "/net/");
 			strcat(opendir_path, *node_list_iterator);
+			//strcat(opendir_path, "/dev/name/gns_server");
 			strcat(opendir_path, "/proc/mount/dev/name/gns_server");
 			
 	 	 	// sprawdzenie czy dziala serwer gns
 	 	   	 if ((dirp = opendir(opendir_path))!=NULL) 
 			{
 			 	closedir( dirp );
-				printf ("There gns server is set on %s node\n", *node_list_iterator);
+				printf ("There is gns server on %s node\n", *node_list_iterator);
 			 }
 		}
-   		
+  	delete[] gns_server_node; 		
 		exit(0);
    	}
    	// gns server was not found in the QNX network
@@ -1593,21 +1601,45 @@ check_gns()
    		printf("UI: gns server was not found in the QNX network, it will be automatically run on local node\n");
 		
 		// ew. zabicie klienta gns
-		if ((dirp = opendir( "/proc/mount/dev/name" )) != NULL) 
+		if ((dirp = opendir( "/dev/name" )) != NULL) 
 		{
 			closedir( dirp );
 			system("slay gns");
 		 } 
 		
 		// uruchomienie serwera
-		system("/usr/sbin/gns -s");
+		system("gns -s");
+		
+		   	// poszukiwanie serwerow gns
+    	for (std::list<char*>::iterator node_list_iterator = ui_state.all_node_list.begin(); node_list_iterator != ui_state.all_node_list.end(); node_list_iterator++)
+	{
+   		char opendir_path[100];
+						
+		strcpy(opendir_path, "/net/");
+		strcat(opendir_path, *node_list_iterator);
+		strcat(opendir_path, "/proc/mount/dev/name/gns_server");
+	//	strcat(opendir_path, "/dev/name/gns_server");
+		
+ 	 	// sprawdzenie czy dziala serwer gns
+ 	   	 if ((dirp = opendir(opendir_path))!=NULL) 
+		{
+			number_of_gns_serwers++;
+			gns_server_node = new char[strlen(*node_list_iterator)];
+			strcpy(gns_server_node, *node_list_iterator);
+		 	closedir( dirp );
+		 }
+
+	}
+		
+		
    	}
-   	
-   	
     	// sprawdzanie lokalne
   	 if ((dirp = opendir( "/proc/mount/dev/name" )) == NULL) 
-	{	
-		system("/usr/sbin/gns");		
+	{
+			char system_command[100];
+			strcpy(system_command, "gns -c ");
+			strcat(system_command, gns_server_node);
+			system(system_command);
 	 } else 
 	{
 		 closedir( dirp );
@@ -1633,12 +1665,15 @@ check_gns()
 	 	   	 if ((dirp = opendir(opendir_path))==NULL) 
 			{
 				char system_command[100];
-															
-				strcpy(system_command, "/bin/on -f ");
+		
+				strcpy(system_command, "on -f ");
 				strcat(system_command, *node_list_iterator);
-				strcat(system_command, " /usr/sbin/gns");
+				strcat(system_command, " gns -c ");
+				strcat(system_command, gns_server_node);
 			
 				system(system_command);
+				
+				
 			 }  else 
 			{
 				 closedir( dirp );
@@ -1649,11 +1684,11 @@ check_gns()
 			printf("check_gns - Nie wykryto wezla: %s, ktory wystepuje w pliku konfiguracyjnym\n", *node_list_iterator);
 		}
 	}
+
 	
+
+	delete[] gns_server_node;
 
 	return 0;
 
 	};
-
-
-
