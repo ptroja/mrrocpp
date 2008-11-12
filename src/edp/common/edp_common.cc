@@ -70,6 +70,7 @@ edp_effector::edp_effector(configurator &_config, ROBOT_ENUM l_robot_name) :
 		test_mode = config.return_int_value("test_mode");
 	else
 		test_mode = 0;
+	mrrocpp_network_path = config.return_mrrocpp_network_path();
 
 }
 

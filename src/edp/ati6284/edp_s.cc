@@ -98,7 +98,14 @@ edp_ATI6284_force_sensor::edp_ATI6284_force_sensor(edp_irp6s_postument_track_eff
 	if (!(master.test_mode)) {
 		Total_Number_of_Samples=6;
 		index=1;
-		calfilepath=(char*)"../data/ft6284.cal";
+		
+		   int size = 1 + strlen(master.mrrocpp_network_path) + strlen("data/ft6284.cal");
+		    char * path1 = new char[size];
+		    // Stworzenie sciezki do pliku.
+		    strcpy(path1, master.mrrocpp_network_path);
+		    sprintf(path1, "%sdata/ft6284.cal", master.mrrocpp_network_path);
+		   
+		calfilepath=(char*)path1;
 
 		for (int i=0; i<5; i++)
 			last_correct[i]=0;
@@ -117,7 +124,7 @@ edp_ATI6284_force_sensor::edp_ATI6284_force_sensor(edp_irp6s_postument_track_eff
 			printf("Unable to connect to card\n");
 		spinlock = new intrspin_t;
 
-		bus = acquireBoard(0x10932CA0); //!< funkcja uruchamiaj¹ca kartê
+		bus = acquireBoard(0x10932CA0); //!< funkcja uruchamiajï¿½ca kartï¿½
 
 		if (bus == NULL) {
 			printf("Error accessing the PCI device.  Exiting.\n");
@@ -446,7 +453,7 @@ void edp_ATI6284_force_sensor::initiate_reading(void)
 
 	short int no_result =0; //brak wyniku
 	static short int show=0; //wyswietl
-	float force_torque[6]; //wektor z si³ami i napiêciami
+	float force_torque[6]; //wektor z siï¿½ami i napiï¿½ciami
 	// unsigned  uCount;  //!< Count index
 	unsigned uStatus; //!< Flag to indicate FIFO not empty
 	short int sensor_status=EDP_FORCE_SENSOR_READING_CORRECT;
