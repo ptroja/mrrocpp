@@ -540,13 +540,13 @@ pid_t configurator::process_spawn(const char*_section_name) {
 // cout<<"spawn_process: "<<spawn_process<<endl;
 
 	const int fd_map[] = { 0, 1, 2};
-
+//printf("conf a\n");
 	// Argumenty wywolania procesu.	
 	char *child_arg[3];
 	child_arg[0]=spawn_process;
 	child_arg[1]=(char*)"NET_SPAWN";
 	child_arg[2]=NULL;
-	
+	//printf("conf b: %s, %s\n", child_arg[0], child_arg[1]);
 	// Odpalenie y_spawn_process.
 	if ((child_pid=spawn( child_arg[0], 3, fd_map,  &inherit, child_arg, NULL)) ==-1)
 	{
@@ -564,7 +564,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 			fprintf( stderr, "Cannot open y_spawn_process.\n");
 			return -1;
 		};
-
+//printf("conf 1\n");
 	// Wiadomosci odbierane i wysylane.
 	my_data_t input;
 	my_reply_data_t output;
@@ -600,6 +600,8 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		fprintf(stderr, "Send to y_spawn_process failed.\n");
 		return -1;
 	}
+	
+	//printf("conf 2\n");
 	// Zamkniecie pliku.
    	name_close(fd);
   	// Zwolnienie pamieci.
