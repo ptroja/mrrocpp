@@ -15,6 +15,8 @@
 #include <sys/wait.h>
 #include <iostream>
 #include <strings.h>
+#include <sys/utsname.h>
+
 
 #if defined(__QNXNTO__)
 #include <process.h>
@@ -30,7 +32,7 @@
 
 // Konstruktor obiektu - konfiguratora.
 configurator::configurator (const char* _node, const char* _dir, const char* _ini_file, const char* _section_name,
-	const char* _session_name)
+		const char* _session_name)
 
 {
 	assert(_node);
@@ -77,19 +79,19 @@ void configurator::change_ini_file (const char* _ini_file)
 			&config_msg, sizeof(config_msg),
 			&answer, NULL, 0,
 			MESSIP_NOTIMEOUT);
-	
+
 	unlock_mutex();
 #else
 	lock_mutex();
 	if (ini_file) free(ini_file);
 	ini_file = strdup(_ini_file);
-	
+
 	delete [] file_location;	
 	delete [] common_file_location;	
-	
+
 	file_location = return_ini_file_path();
 	common_file_location = return_common_ini_file_path();
-	
+
 	unlock_mutex();
 #endif /* USE_MESSIP_SRR */
 }
@@ -122,19 +124,19 @@ char* configurator::return_attach_point_name (const int _type, const char* _key,
 {
 	const char *_section_name = (__section_name) ? __section_name : section_name;
 	char * name = NULL;
-	
+
 	if (_type == CONFIG_RESOURCEMAN_LOCAL)
 	{
 		// Odczytanie zmiennych z INI.
 		char* attach_point = return_string_value(_key, _section_name);
 		// Obliczenie dlugosci nazwy.
 		int size = 1 + strlen("/dev/") + strlen(attach_point)  + strlen(session_name);
-		
+
 		// Przydzielenie pamieci.
 		name = new char[size];
 		// Stworzenie nazwy.
 		sprintf(name, "/dev/%s%s", attach_point, session_name);
-		
+
 		// Zwalniam pamiec.
 		delete [] attach_point;
 	} else if (_type == CONFIG_RESOURCEMAN_GLOBAL)
@@ -142,14 +144,14 @@ char* configurator::return_attach_point_name (const int _type, const char* _key,
 		// Odczytanie zmiennych z INI.
 		char* node_name = return_string_value("node_name", _section_name);
 		char* attach_point = return_string_value(_key, _section_name);
-		
+
 		// Obliczenie dlugosci nazwy.
 		int size = 1 + strlen("/net/") + strlen(node_name) + strlen("/dev/") + strlen(attach_point)  + strlen(session_name);
 		// Przydzielenie pamieci.
 		name = new char[size];
 		// Stworzenie nazwy.
 		sprintf(name, "/net/%s/dev/%s%s", node_name, attach_point, session_name);
-		
+
 		// Zwalniam pamiec.
 		delete [] node_name;
 		delete [] attach_point;
@@ -166,13 +168,13 @@ char* configurator::return_attach_point_name (const int _type, const char* _key,
 		// Stworzenie nazwy.
 		name = new char[size];
 		sprintf(name, "%s%s", attach_point, session_name);
-		
+
 		// Zwalniam pamiec.
 		delete [] attach_point;
 	} else {
 		printf("Nieznany argument w metodzie configuratora return_attach_point_name\n");
 	}
-		
+
 	// Zwrocenie atach_point'a.	
 	return name;
 }// : return_created_resourceman_attach_point_name
@@ -245,16 +247,16 @@ bool configurator::exists(const char* _key, const char* __section_name)
 			MESSIP_NOTIMEOUT);
 
 	unlock_mutex();
-	
+
 	return value;
 #else
 	const char *_section_name = (__section_name) ? __section_name : section_name;
 	int value;
 	struct Config_Tag configs[] = {
-		// Pobierane pole.
-		{ (char *) _key, Int_Tag, &value},
-		// Pole konczace.
-		{ NULL , Error_Tag, NULL }
+			// Pobierane pole.
+			{ (char *) _key, Int_Tag, &value},
+			// Pole konczace.
+			{ NULL , Error_Tag, NULL }
 	};
 
 	lock_mutex();
@@ -263,7 +265,7 @@ bool configurator::exists(const char* _key, const char* __section_name)
 			unlock_mutex();
 			// Zwolnienie pamieci.
 
-			
+
 			return false;
 		}
 	}
@@ -294,18 +296,18 @@ int configurator::return_int_value(const char* _key, const char* __section_name)
 			MESSIP_NOTIMEOUT);
 
 	unlock_mutex();
-	
+
 	return value;
 #else
 	const char *_section_name = (__section_name) ? __section_name : section_name;
 	// Zwracana zmienna.
 	int value;
 	struct Config_Tag configs[] = {
-		// Pobierane pole.
-		{ (char *) _key, Int_Tag, &value},
-		// Pole konczace.
-		{ NULL , Error_Tag, NULL }
-		};
+			// Pobierane pole.
+			{ (char *) _key, Int_Tag, &value},
+			// Pole konczace.
+			{ NULL , Error_Tag, NULL }
+	};
 
 
 	// Odczytanie zmiennej.
@@ -317,7 +319,7 @@ int configurator::return_int_value(const char* _key, const char* __section_name)
 	}
 	unlock_mutex();
 
-// 	throw ERROR
+	// 	throw ERROR
 
 	// Zwrocenie wartosci.
 
@@ -347,31 +349,31 @@ double configurator::return_double_value(const char* _key, const char*__section_
 			MESSIP_NOTIMEOUT);
 
 	unlock_mutex();
-	
+
 	return value;
 #else
 	const char *_section_name = (__section_name) ? __section_name : section_name;
 	// Zwracana zmienna.
 	double value;
 	struct Config_Tag configs[] = {
-		// Pobierane pole.
-		{ (char *) _key, Double_Tag, &value},
-		// Pole konczace.
-		{ NULL , Error_Tag, NULL }
-		};
-		
+			// Pobierane pole.
+			{ (char *) _key, Double_Tag, &value},
+			// Pole konczace.
+			{ NULL , Error_Tag, NULL }
+	};
+
 
 	// Odczytanie zmiennej.
 	lock_mutex();
 	if (input_config(file_location, configs, _section_name)<1) {
 		if (input_config(common_file_location, configs, _section_name)<1) {
 			printf("Blad input_config() w return_double_value file_location:%s, _section_name:%s, _key:%s\n", 
-				file_location, _section_name, _key);
+					file_location, _section_name, _key);
 		}
 	}
 	unlock_mutex();
 
-// 	throw ERROR
+	// 	throw ERROR
 
 	// Zwrocenie wartosci.
 	return value;
@@ -415,22 +417,22 @@ char* configurator::return_string_value(const char* _key, const char*__section_n
 	// Zwracana zmienna.
 	char tmp[200];
 	struct Config_Tag configs[] = {
-		// Pobierane pole.
-		{ (char *) _key, String_Tag, tmp},
-		// Pole konczace.
-		{ NULL , Error_Tag, NULL }
-		};		
+			// Pobierane pole.
+			{ (char *) _key, String_Tag, tmp},
+			// Pole konczace.
+			{ NULL , Error_Tag, NULL }
+	};		
 
 	// Odczytanie zmiennej.
 	lock_mutex();
 	if (input_config(file_location, configs, _section_name)<1) {
 		if (input_config(common_file_location, configs, _section_name)<1) {
 			printf("Blad input_config() w return_string_value file_location:%s, _section_name:%s, _key:%s\n",
-				 file_location, _section_name, _key);
+					file_location, _section_name, _key);
 		}
 	}
 	unlock_mutex();
-// 	throw ERROR
+	// 	throw ERROR
 	// Przepisanie wartosci.
 	int size = 1 + strlen(tmp);
 	char * value = new char [size];
@@ -442,7 +444,7 @@ char* configurator::return_string_value(const char* _key, const char*__section_n
 }// : return_string_value
 
 
-pid_t configurator::process_spawn(const char*_section_name) {
+pid_t configurator::process_spawn_old(const char*_section_name) {
 #if defined(PROCESS_SPAWN_RSH)
 #warning configurator::process_spawn by RSH
 	pid_t child_pid = vfork();
@@ -451,34 +453,34 @@ pid_t configurator::process_spawn(const char*_section_name) {
 
 		char * spawned_program_name = return_string_value("program_name", _section_name);
 		char * spawned_node_name = return_string_value("node_name", _section_name);
-	
+
 		// Sciezka do binariow.
 		char bin_path[PATH_MAX];
 		if (exists("binpath", _section_name)) {
 			char * _bin_path = return_string_value("binpath", _section_name);
 			strcpy(bin_path, _bin_path);
 			if(strlen(bin_path) && bin_path[strlen(bin_path)-1] != '/') {
-					strcat(bin_path, "/");
+				strcat(bin_path, "/");
 			}
 			delete [] _bin_path;
 		} else {
 			snprintf(bin_path, sizeof(bin_path), "/net/%s%sbin/",
-				node, dir);
+					node, dir);
 		}
-	
+
 		char process_path[PATH_MAX];
 		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s",
 				bin_path, getenv("UI_HOST"),
 				bin_path, spawned_program_name,
 				node, dir, ini_file, _section_name
 				, session_name
-				);
+		);
 
 		delete [] spawned_program_name;
 
 		if (exists("username", _section_name)) {
 			char * username = return_string_value("username", _section_name);
-			
+
 			printf("rsh -l %s %s \"%s\"\n", username, spawned_node_name, process_path);
 
 			execlp("rsh",
@@ -487,11 +489,11 @@ pid_t configurator::process_spawn(const char*_section_name) {
 					spawned_node_name,
 					process_path,
 					NULL);
-			
+
 			delete [] username;
 		} else {
 			printf("rsh %s \"%s\"\n", spawned_node_name, process_path);
-	
+
 			execlp("rsh",
 					"rsh",
 					spawned_node_name,
@@ -514,13 +516,13 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	// Deskryptor pliku.
 	int fd;
 
-// printf("_section_name: %s,\n",_section_name);
+	// printf("_section_name: %s,\n",_section_name);
 
 	// Parametry stworzonego procesu.
 	struct inheritance inherit;
 	inherit.flags = SPAWN_SETGROUP;
 	inherit.pgroup = SPAWN_NEWPGROUP;
-	
+
 	// Sciezka do binariow.
 	char * bin_path;
 	int size = 1 + strlen("/net/") + strlen(node) +strlen(dir) + strlen("bin/");
@@ -537,10 +539,10 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	strcpy(spawn_process, bin_path);
 	strcat(spawn_process,"y_spawn_process");
 
-// cout<<"spawn_process: "<<spawn_process<<endl;
+	// cout<<"spawn_process: "<<spawn_process<<endl;
 
 	const int fd_map[] = { 0, 1, 2};
-//printf("conf a\n");
+	//printf("conf a\n");
 	// Argumenty wywolania procesu.	
 	char *child_arg[3];
 	child_arg[0]=spawn_process;
@@ -556,7 +558,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	}
 	// Proba komunikacji z procesem odpalajacym inne procesy.
 	short tmp = 0;
- 	// kilka sekund  (~1) na otworzenie urzadzenia
+	// kilka sekund  (~1) na otworzenie urzadzenia
 	while((fd = name_open(child_arg[1], 0))<0)
 		if((tmp++)<CONNECT_RETRY)
 			delay(CONNECT_DELAY);
@@ -564,20 +566,105 @@ pid_t configurator::process_spawn(const char*_section_name) {
 			fprintf( stderr, "Cannot open y_spawn_process.\n");
 			return -1;
 		};
-//printf("conf 1\n");
+		//printf("conf 1\n");
+		// Wiadomosci odbierane i wysylane.
+		my_data_t input;
+		my_reply_data_t output;
+		// Parametry wywolania procesu.
+		input.hdr.type=0;
+		input.msg_type=1;
+		// Odczytanie nazwy odpalanego pliku.
+		char * spawned_program_name = return_string_value("program_name", _section_name);
+		char * spawned_node_name = return_string_value("node_name", _section_name);
+
+		// printf("spawned_node_name:%s\n", spawned_node_name);
+
+		strcpy(input.node_name, spawned_node_name);
+		strcpy(input.program_name_and_args, spawned_program_name);
+		strcat(input.program_name_and_args, " ");
+		strcat(input.program_name_and_args, node);
+		strcat(input.program_name_and_args, " ");
+		strcat(input.program_name_and_args, dir);
+		strcat(input.program_name_and_args, " ");
+		strcat(input.program_name_and_args, ini_file);
+		strcat(input.program_name_and_args, " ");
+		strcat(input.program_name_and_args, _section_name);
+		strcat(input.program_name_and_args, " ");
+		strcat(input.program_name_and_args, session_name);
+		strcpy(input.binaries_path, bin_path);
+
+		// cout<<"config_spawn: "<<input.node_name<<endl;
+		// cout<<"config_spawn: "<<input.program_name_and_args<<endl;
+		// cout<<"config_spawn: "<<input.binaries_path<<endl;
+		// Wyslanie polecenia odpalenia procesu.
+		if (MsgSend(fd, &input, sizeof(input), &output, sizeof(output))<0)
+		{
+			fprintf(stderr, "Send to y_spawn_process failed.\n");
+			return -1;
+		}
+
+		//printf("conf 2\n");
+		// Zamkniecie pliku.
+		name_close(fd);
+		// Zwolnienie pamieci.
+		delete [] spawned_program_name;
+		delete [] spawned_node_name;
+		delete [] bin_path;
+		delete [] spawn_process;
+		// cout<<"Elo return"<<endl;
+		waitpid(child_pid, NULL, WEXITED);
+		// Zwrocenie wyniku.  	
+		return output.pid;
+#endif
+}// : spawn
+
+// Z wykorzystaniem rsh w odpowiedzi na buga w qnx 6.4.0
+pid_t configurator::process_spawn(const char*_section_name) {
+
+	// Deskryptor pliku.
+	int fd;
+	struct utsname sysinfo;
+	// printf("_section_name: %s,\n",_section_name);
+
+
+	// Sciezka do binariow.
+	char * bin_path;
+	int size = 1 + strlen("/net/") + strlen(node) +strlen(dir) + strlen("bin/");
+	bin_path = new char[size];
+	strcpy(bin_path,"/net/");
+	strcat(bin_path, node);
+	strcat(bin_path, dir);
+	strcat(bin_path,"bin/");
+
+
+	//printf("conf 1\n");
 	// Wiadomosci odbierane i wysylane.
 	my_data_t input;
 	my_reply_data_t output;
 	// Parametry wywolania procesu.
- 	input.hdr.type=0;
+	input.hdr.type=0;
 	input.msg_type=1;
 	// Odczytanie nazwy odpalanego pliku.
 	char * spawned_program_name = return_string_value("program_name", _section_name);
 	char * spawned_node_name = return_string_value("node_name", _section_name);
+    if( uname( &sysinfo ) == -1 ) {
+       perror( "uname" );
+    }
+    
+    
+    if (strcmp(sysinfo.nodename,spawned_node_name) == 0)
+    {
+    	strcpy(input.node_name, "localhost");
+    } else
+    {
+    	strcpy(input.node_name, spawned_node_name);
+    }
+	
+	
 
 	// printf("spawned_node_name:%s\n", spawned_node_name);
 
-	strcpy(input.node_name, spawned_node_name);
+	
 	strcpy(input.program_name_and_args, spawned_program_name);
 	strcat(input.program_name_and_args, " ");
 	strcat(input.program_name_and_args, node);
@@ -591,29 +678,25 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	strcat(input.program_name_and_args, session_name);
 	strcpy(input.binaries_path, bin_path);
 
-// cout<<"config_spawn: "<<input.node_name<<endl;
-// cout<<"config_spawn: "<<input.program_name_and_args<<endl;
-// cout<<"config_spawn: "<<input.binaries_path<<endl;
-	// Wyslanie polecenia odpalenia procesu.
-  	if (MsgSend(fd, &input, sizeof(input), &output, sizeof(output))<0)
-	{
-		fprintf(stderr, "Send to y_spawn_process failed.\n");
-		return -1;
-	}
 	
-	//printf("conf 2\n");
-	// Zamkniecie pliku.
-   	name_close(fd);
-  	// Zwolnienie pamieci.
-  	delete [] spawned_program_name;
-  	delete [] spawned_node_name;
-  	delete [] bin_path;
-  	delete [] spawn_process;
+	
+	char rsh_cmd[PATH_MAX];
+	snprintf(rsh_cmd, PATH_MAX, "rsh %s %s%s&",
+			input.node_name, input.binaries_path, input.program_name_and_args);
+
+	output.pid = 50;
+	
+	system(rsh_cmd);
+
+	// Zwolnienie pamieci.
+	delete [] spawned_program_name;
+	delete [] spawned_node_name;
+	delete [] bin_path;
+
 	// cout<<"Elo return"<<endl;
-	waitpid(child_pid, NULL, WEXITED);
-  	// Zwrocenie wyniku.  	
+
+	// Zwrocenie wyniku.  	
 	return output.pid;
-#endif
 }// : spawn
 
 

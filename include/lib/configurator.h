@@ -64,6 +64,8 @@ public:
 	char* return_default_reader_measures_path();
 	
 	// Odpalenie procesu zapisanego w danej sekcji INI.
+	pid_t process_spawn_old(const char* _section_name);
+	// Odpalenie procesu zapisanego w danej sekcji INI. RSH
 	pid_t process_spawn(const char* _section_name);
 
 	// Zwraca numer wezla.
