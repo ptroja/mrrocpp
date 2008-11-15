@@ -16,6 +16,7 @@
 #include <iostream>
 #include <strings.h>
 #include <sys/utsname.h>
+#include <time.h>
 
 
 #if defined(__QNXNTO__)
@@ -444,7 +445,7 @@ char* configurator::return_string_value(const char* _key, const char*__section_n
 }// : return_string_value
 
 
-pid_t configurator::process_spawn_old(const char*_section_name) {
+pid_t configurator::process_spawn(const char*_section_name) {
 #if defined(PROCESS_SPAWN_RSH)
 #warning configurator::process_spawn by RSH
 	pid_t child_pid = vfork();
@@ -510,12 +511,144 @@ pid_t configurator::process_spawn_old(const char*_section_name) {
 	}
 
 	return child_pid;
-#else
+#endif
+#if defined(PROCESS_SPAWN_YRSH)
+	// Deskryptor pliku.
+
+	struct utsname sysinfo;
+	// printf("_section_name: %s,\n",_section_name);
+
+	name_attach_t *my_attach;	// by Y
+	my_data_t msg;
+	int rcvid;
+	bool wyjscie=false; // okresla stan procesu: 0 -przed komunikacja, 1 - po komunikacji
+	_msg_info* info;
+	info = new  _msg_info;
+
+	// Sciezka do binariow.
+	char * bin_path;
+	int size = 1 + strlen("/net/") + strlen(node) +strlen(dir) + strlen("bin/");
+	bin_path = new char[size];
+	strcpy(bin_path,"/net/");
+	strcat(bin_path, node);
+	strcat(bin_path, dir);
+	strcat(bin_path,"bin/");
+
+
+	// printf("conf 1\n");
+	// Wiadomosci odbierane i wysylane.
+	my_data_t input;
+	my_reply_data_t output;
+	// Parametry wywolania procesu.
+	input.hdr.type=0;
+	input.msg_type=1;
+	// Odczytanie nazwy odpalanego pliku.
+	char * spawned_program_name = return_string_value("program_name", _section_name);
+	char * spawned_node_name = return_string_value("node_name", _section_name);
+	if( uname( &sysinfo ) == -1 ) {
+		perror( "uname" );
+	}
+
+
+	if (strcmp(sysinfo.nodename,spawned_node_name) == 0)
+	{
+		strcpy(input.node_name, "localhost");
+	} else
+	{
+		strcpy(input.node_name, spawned_node_name);
+	}
+
+	time_t time_of_day;
+	char rsp_attach[20];
+
+
+	time_of_day = time( NULL );
+	strftime( rsp_attach, 8, "rsp%H%M%S", localtime( &time_of_day ) );
+
+	// printf("spawned_node_name:%s\n", spawned_node_name);
+
+
+	strcpy(input.program_name_and_args, spawned_program_name);
+	strcat(input.program_name_and_args, " ");
+	strcat(input.program_name_and_args, node);
+	strcat(input.program_name_and_args, " ");
+	strcat(input.program_name_and_args, dir);
+	strcat(input.program_name_and_args, " ");
+	strcat(input.program_name_and_args, ini_file);
+	strcat(input.program_name_and_args, " ");
+	strcat(input.program_name_and_args, _section_name);
+	strcat(input.program_name_and_args, " ");
+	strcat(input.program_name_and_args, session_name);
+	strcat(input.program_name_and_args, " ");
+	strcat(input.program_name_and_args, rsp_attach);
+	strcpy(input.binaries_path, bin_path);
+
+	// Zwolnienie pamieci.
+	delete [] spawned_program_name;
+	delete [] spawned_node_name;
+	delete [] bin_path;
+	
+	char rsh_cmd[PATH_MAX];
+		snprintf(rsh_cmd, PATH_MAX, "rsh %s %s%s&",
+				input.node_name, input.binaries_path, input.program_name_and_args);
+
+	if ((my_attach = name_attach(NULL, rsp_attach, NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+		printf("process_spawn: blad name_attach\n");
+	}
+
+	
+	system(rsh_cmd);
+
+	
+	while (!wyjscie)
+	{
+		//printf("spawn_prc 3\n");
+
+		rcvid = MsgReceive(my_attach->chid, &msg, sizeof(msg), info);
+
+		if (rcvid == -1) {/* Error condition, exit */
+			perror("blad receive w rsh spawn\n");
+			break;
+		}
+
+		if (rcvid == 0) /* Pulse received */
+		{
+			//	printf("1\n");
+			switch (msg.hdr.code) {
+			case _PULSE_CODE_DISCONNECT:
+				ConnectDetach(msg.hdr.scoid);
+				wyjscie=true;
+			case _PULSE_CODE_UNBLOCK:
+				break;
+			default:
+				break;
+			}
+			continue;
+		}
+
+		/* A QNX IO message received, reject */
+		if (msg.hdr.type >= _IO_BASE && msg.hdr.type <= _IO_MAX) {
+			MsgReply(rcvid, EOK, 0, 0);
+			output.pid = info->pid;
+			//	printf("Child pid:%d\n", output.pid);
+			continue;
+		}
+		//printf("3\n");
+		MsgReply(rcvid, EOK, 0, 0);
+	} // // end while
+
+
+
+	name_detach(my_attach, 0);
+	// Zwrocenie wyniku.  	
+	return output.pid;
+#endif
+#if defined(PROCESS_SPAWN_SPAWN)
 	// Identyfikator stworzonego procesu.
 	int child_pid;
 	// Deskryptor pliku.
 	int fd;
-
+	
 	// printf("_section_name: %s,\n",_section_name);
 
 	// Parametry stworzonego procesu.
@@ -618,87 +751,20 @@ pid_t configurator::process_spawn_old(const char*_section_name) {
 #endif
 }// : spawn
 
-// Z wykorzystaniem rsh w odpowiedzi na buga w qnx 6.4.0
-pid_t configurator::process_spawn(const char*_section_name) {
+int configurator::answer_to_y_rsh_spawn(const char* rsh_spl)
+{
+	int spawn_fd = name_open(rsh_spl, NAME_FLAG_ATTACH_GLOBAL);
+	if (spawn_fd <0)
+	{
+		printf("Blad spawn name_open\n");
+	} else
+	{
+		name_close(spawn_fd);
+	}
 
-	// Deskryptor pliku.
-	int fd;
-	struct utsname sysinfo;
-	// printf("_section_name: %s,\n",_section_name);
+	return spawn_fd;
 
-
-	// Sciezka do binariow.
-	char * bin_path;
-	int size = 1 + strlen("/net/") + strlen(node) +strlen(dir) + strlen("bin/");
-	bin_path = new char[size];
-	strcpy(bin_path,"/net/");
-	strcat(bin_path, node);
-	strcat(bin_path, dir);
-	strcat(bin_path,"bin/");
-
-
-	//printf("conf 1\n");
-	// Wiadomosci odbierane i wysylane.
-	my_data_t input;
-	my_reply_data_t output;
-	// Parametry wywolania procesu.
-	input.hdr.type=0;
-	input.msg_type=1;
-	// Odczytanie nazwy odpalanego pliku.
-	char * spawned_program_name = return_string_value("program_name", _section_name);
-	char * spawned_node_name = return_string_value("node_name", _section_name);
-    if( uname( &sysinfo ) == -1 ) {
-       perror( "uname" );
-    }
-    
-    
-    if (strcmp(sysinfo.nodename,spawned_node_name) == 0)
-    {
-    	strcpy(input.node_name, "localhost");
-    } else
-    {
-    	strcpy(input.node_name, spawned_node_name);
-    }
-	
-	
-
-	// printf("spawned_node_name:%s\n", spawned_node_name);
-
-	
-	strcpy(input.program_name_and_args, spawned_program_name);
-	strcat(input.program_name_and_args, " ");
-	strcat(input.program_name_and_args, node);
-	strcat(input.program_name_and_args, " ");
-	strcat(input.program_name_and_args, dir);
-	strcat(input.program_name_and_args, " ");
-	strcat(input.program_name_and_args, ini_file);
-	strcat(input.program_name_and_args, " ");
-	strcat(input.program_name_and_args, _section_name);
-	strcat(input.program_name_and_args, " ");
-	strcat(input.program_name_and_args, session_name);
-	strcpy(input.binaries_path, bin_path);
-
-	
-	
-	char rsh_cmd[PATH_MAX];
-	snprintf(rsh_cmd, PATH_MAX, "rsh %s %s%s&",
-			input.node_name, input.binaries_path, input.program_name_and_args);
-
-	output.pid = 50;
-	
-	system(rsh_cmd);
-
-	// Zwolnienie pamieci.
-	delete [] spawned_program_name;
-	delete [] spawned_node_name;
-	delete [] bin_path;
-
-	// cout<<"Elo return"<<endl;
-
-	// Zwrocenie wyniku.  	
-	return output.pid;
-}// : spawn
-
+}
 
 configurator::~configurator() {
 	free(node);

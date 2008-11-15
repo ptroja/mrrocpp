@@ -17,6 +17,10 @@
 #include "messip/messip.h"
 
 //#define PROCESS_SPAWN_RSH
+// Z wykorzystaniem rsh w odpowiedzi na buga w qnx 6.4.0
+#define PROCESS_SPAWN_YRSH
+// by Y - jesli usuna buga to mozna powrocic do tego rozwiazania ale sadze ze nie warto
+//#define PROCESS_SPAWN_SPAWN
 
 class configurator
 {
@@ -63,9 +67,9 @@ public:
 
 	char* return_default_reader_measures_path();
 	
+	int answer_to_y_rsh_spawn(const char* rsh_spl);
+	
 	// Odpalenie procesu zapisanego w danej sekcji INI.
-	pid_t process_spawn_old(const char* _section_name);
-	// Odpalenie procesu zapisanego w danej sekcji INI. RSH
 	pid_t process_spawn(const char* _section_name);
 
 	// Zwraca numer wezla.

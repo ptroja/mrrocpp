@@ -173,13 +173,14 @@ int main(int argc, char *argv[]) {
 	signal(SIGSEGV, &catch_signal);
 
 	// liczba argumentow
-	if(argc <5){
+	if(argc <=6){
 		printf("Za malo argumentow VSP\n");
 		return -1;
 		};
 	
 	 // zczytanie konfiguracji calego systemu
  	config = new configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
+ 	if (argc>6) config->answer_to_y_rsh_spawn(argv[6]);
 	resourceman_attach_point = config->return_attach_point_name(configurator::CONFIG_RESOURCEMAN_LOCAL, "resourceman_attach_point");
 		
 	try{

@@ -236,7 +236,7 @@ void *comm_thread(void* arg) {
 while(1) {
 	// ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 	ui_ecp_obj->communication_state = UI_ECP_AFTER_REPLY;
-	rcvid = MsgReceive(attach->chid, &ui_ecp_obj->ecp_to_ui_msg, sizeof(ui_ecp_obj->ecp_to_ui_msg), NULL);
+	rcvid = MsgReceive(attach->chid, &ui_ecp_obj->ecp_to_ui_msg, sizeof(ui_ecp_obj->ecp_to_ui_msg), info);
 	ui_ecp_obj->communication_state = UI_ECP_AFTER_RECEIVE;
      if (rcvid == -1) {/* Error condition, exit */
    		  perror("UI: Receive failed\n");

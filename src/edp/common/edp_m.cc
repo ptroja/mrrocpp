@@ -60,10 +60,10 @@ int main(int argc, char *argv[], char **arge)
 
 //	delay(10000);
     // STATE next_state;    // stan nastepny, do ktorego przejdzie EDP_MASTER
-
+	
     try
     {
-        if (argc < 6)
+        if (argc <= 6)
         {
             fprintf(stderr, "Usage: edp_m ui_node_name mrrocpp_path config_file edp_config_section <session_name>\n");
             exit(EXIT_FAILURE);
@@ -82,6 +82,9 @@ int main(int argc, char *argv[], char **arge)
         // odczytanie konfiguracji
         configurator * _config = new configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
 
+        if (argc>6) _config->answer_to_y_rsh_spawn(argv[6]);      
+      
+        	
 
 
         /* Lokalizacja procesu wywietlania komunikatow SR */
