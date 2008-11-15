@@ -36,12 +36,15 @@ int main (int argc, char *argv[], char **arge)
 
 		try	{
 			configurator * _config = new configurator(argv[1], argv[2], argv[3], "[mp]", argv[5]);
-			if (argc>6) _config->answer_to_y_rsh_spawn(argv[6]); 
+			if (argc>6) {
+		 		_config->answer_to_y_rsh_spawn(argv[6]); 
+		 		signal(SIGINT, SIG_IGN);
+		 	}
 			mp_t = return_created_mp_task(*_config);
 
 			set_thread_priority(pthread_self() , MAX_PRIORITY-4);
 			signal(SIGTERM, &(catch_signal_in_mp));
-			signal(SIGINT,  &(catch_signal_in_mp));
+			//signal(SIGINT,  &(catch_signal_in_mp));
 			signal(SIGSEGV, &(catch_signal_in_mp));
 
 			mp_t->initialize_communication();

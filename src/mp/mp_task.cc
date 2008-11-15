@@ -36,7 +36,7 @@ void mp_task::catch_signal_in_mp_task(int sig)
 {
 	switch (sig) {
 		case SIGTERM:
-		case SIGINT:
+		//case SIGINT:
 			kill_all_ECP(robot_m);
 			kill_all_VSP(sensor_m);
 			sr_ecp_msg->message("MP terminated");

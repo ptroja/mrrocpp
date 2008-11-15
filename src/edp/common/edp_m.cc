@@ -78,11 +78,16 @@ int main(int argc, char *argv[], char **arge)
         // przechwycenie SIGTERM
         signal(SIGTERM, &catch_signal);
         signal(SIGSEGV, &catch_signal);
+        
 
         // odczytanie konfiguracji
         configurator * _config = new configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
 
-        if (argc>6) _config->answer_to_y_rsh_spawn(argv[6]);      
+        if (argc>6) 
+        	{
+        	_config->answer_to_y_rsh_spawn(argv[6]);  
+        	signal(SIGINT, SIG_IGN);
+        	}
       
         	
 
