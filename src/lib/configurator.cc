@@ -558,12 +558,14 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		strcpy(input.node_name, spawned_node_name);
 	}
 
+#define RSP_ATTACH_LENGTH 20
+	
 	time_t time_of_day;
-	char rsp_attach[20];
+	char rsp_attach[RSP_ATTACH_LENGTH];
 
 
 	time_of_day = time( NULL );
-	strftime( rsp_attach, 20, "rsp%H%M%S", localtime( &time_of_day ) );
+	strftime( rsp_attach, RSP_ATTACH_LENGTH, "rsp%H%M%S", localtime( &time_of_day ) );
 
 	//printf("rsp_attach: %s\n",rsp_attach);
 	
@@ -584,23 +586,35 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	strcat(input.program_name_and_args, " ");
 	strcat(input.program_name_and_args, rsp_attach);
 	
-	if (exists("std_out","[ui]"))
-	{
-		char* std_out = return_string_value("std_out", "[mp]");
-		strcat(input.program_name_and_args, " >> ");
-		strcat(input.program_name_and_args, std_out);
-		delete [] std_out;
-	} else if (exists("std_out", _section_name))
-	{
-		char* std_out = return_string_value("std_out", _section_name);
-		strcat(input.program_name_and_args, " >> ");
-		strcat(input.program_name_and_args, std_out);
-		delete [] std_out;
-	}
+	bool glob_std_out = exists("std_out","[ui]");
+	bool loc_std_out = exists("std_out", _section_name);
 
+	if (glob_std_out || loc_std_out)
+	{
+		char* std_out;
+		if (glob_std_out)
+		{
+			std_out = return_string_value("std_out", "[ui]");
+		} else if (loc_std_out)
+		{
+			std_out = return_string_value("std_out", _section_name);
+		}
+		if (access(std_out, R_OK) == 0)
+		{	
+			strcat(input.program_name_and_args, " >> ");
+			strcat(input.program_name_and_args, std_out);
+			
+		} else
+		{
+			printf("process_spawn: nie odnaleziono proponowanej konsoli\n");
+		}
+		delete [] std_out;
+		
+	}
 	
-	
-	
+
+
+		
 	strcpy(input.binaries_path, bin_path);
 
 	// Zwolnienie pamieci.
@@ -620,7 +634,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	//printf("rsh_cmd:\n%s\n",rsh_cmd);
 	system(rsh_cmd);
 	//printf("za rsh_cmd\n");
-	//fflush(stdout);
+	fflush(stdout);
 	
 	while (!wyjscie)
 	{
