@@ -584,14 +584,20 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	strcat(input.program_name_and_args, " ");
 	strcat(input.program_name_and_args, rsp_attach);
 	
-	if (exists("std_out","[mp]"))
+	if (exists("std_out","[ui]"))
 	{
 		char* std_out = return_string_value("std_out", "[mp]");
 		strcat(input.program_name_and_args, " >> ");
 		strcat(input.program_name_and_args, std_out);
 		delete [] std_out;
+	} else if (exists("std_out", _section_name))
+	{
+		char* std_out = return_string_value("std_out", _section_name);
+		strcat(input.program_name_and_args, " >> ");
+		strcat(input.program_name_and_args, std_out);
+		delete [] std_out;
 	}
-	
+
 	
 	
 	
