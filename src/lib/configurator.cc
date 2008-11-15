@@ -563,8 +563,10 @@ pid_t configurator::process_spawn(const char*_section_name) {
 
 
 	time_of_day = time( NULL );
-	strftime( rsp_attach, 8, "rsp%H%M%S", localtime( &time_of_day ) );
+	strftime( rsp_attach, 20, "rsp%H%M%S", localtime( &time_of_day ) );
 
+	//printf("rsp_attach: %s\n",rsp_attach);
+	
 	// printf("spawned_node_name:%s\n", spawned_node_name);
 
 
@@ -581,9 +583,22 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	strcat(input.program_name_and_args, session_name);
 	strcat(input.program_name_and_args, " ");
 	strcat(input.program_name_and_args, rsp_attach);
+	
+	if (exists("std_out","[mp]"))
+	{
+		char* std_out = return_string_value("std_out", "[mp]");
+		strcat(input.program_name_and_args, " >> ");
+		strcat(input.program_name_and_args, std_out);
+		delete [] std_out;
+	}
+	
+	
+	
+	
 	strcpy(input.binaries_path, bin_path);
 
 	// Zwolnienie pamieci.
+	
 	delete [] spawned_program_name;
 	delete [] spawned_node_name;
 	delete [] bin_path;
@@ -596,9 +611,10 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		printf("process_spawn: blad name_attach\n");
 	}
 
-	
+	//printf("rsh_cmd:\n%s\n",rsh_cmd);
 	system(rsh_cmd);
-
+	//printf("za rsh_cmd\n");
+	//fflush(stdout);
 	
 	while (!wyjscie)
 	{
