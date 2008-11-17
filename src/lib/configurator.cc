@@ -17,6 +17,9 @@
 #include <strings.h>
 #include <sys/utsname.h>
 #include <time.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 
 #if defined(__QNXNTO__)
