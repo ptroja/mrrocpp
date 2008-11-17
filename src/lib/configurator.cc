@@ -45,7 +45,7 @@ configurator::configurator (const char* _node, const char* _dir, const char* _in
 	node = strdup(_node);
 	dir = strdup(_dir);
 	ini_file = strdup(_ini_file);
-	section_name = strdup(_section_name); 
+	section_name = strdup(_section_name);
 	session_name = strdup(_session_name);
 
 	pthread_mutex_init(&mutex, NULL );
@@ -63,7 +63,7 @@ configurator::configurator (const char* _node, const char* _dir, const char* _in
 	assert(ch);
 #else
 	file_location = return_ini_file_path();
-	common_file_location = return_common_ini_file_path();	
+	common_file_location = return_common_ini_file_path();
 #endif /* USE_MESSIP_SRR */
 }// : configurator
 
@@ -87,8 +87,8 @@ void configurator::change_ini_file (const char* _ini_file)
 	if (ini_file) free(ini_file);
 	ini_file = strdup(_ini_file);
 
-	delete [] file_location;	
-	delete [] common_file_location;	
+	delete [] file_location;
+	delete [] common_file_location;
 
 	file_location = return_ini_file_path();
 	common_file_location = return_common_ini_file_path();
@@ -176,7 +176,7 @@ char* configurator::return_attach_point_name (const int _type, const char* _key,
 		printf("Nieznany argument w metodzie configuratora return_attach_point_name\n");
 	}
 
-	// Zwrocenie atach_point'a.	
+	// Zwrocenie atach_point'a.
 	return name;
 }// : return_created_resourceman_attach_point_name
 
@@ -272,7 +272,7 @@ bool configurator::exists(const char* _key, const char* __section_name)
 	}
 	unlock_mutex();
 
-	return true;	
+	return true;
 #endif /* USE_MESSIP_SRR */
 }
 
@@ -368,7 +368,7 @@ double configurator::return_double_value(const char* _key, const char*__section_
 	lock_mutex();
 	if (input_config(file_location, configs, _section_name)<1) {
 		if (input_config(common_file_location, configs, _section_name)<1) {
-			printf("Blad input_config() w return_double_value file_location:%s, _section_name:%s, _key:%s\n", 
+			printf("Blad input_config() w return_double_value file_location:%s, _section_name:%s, _key:%s\n",
 					file_location, _section_name, _key);
 		}
 	}
@@ -422,7 +422,7 @@ char* configurator::return_string_value(const char* _key, const char*__section_n
 			{ (char *) _key, String_Tag, tmp},
 			// Pole konczace.
 			{ NULL , Error_Tag, NULL }
-	};		
+	};
 
 	// Odczytanie zmiennej.
 	lock_mutex();
@@ -470,8 +470,9 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		}
 
 		char process_path[PATH_MAX];
+		char * = getenv("UI_HOST");
 		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s",
-				bin_path, getenv("UI_HOST"),
+				bin_path, ui_host ? ui_host : "",
 				bin_path, spawned_program_name,
 				node, dir, ini_file, _section_name
 				, session_name
@@ -559,7 +560,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	}
 
 #define RSP_ATTACH_LENGTH 20
-	
+
 	time_t time_of_day;
 	char rsp_attach[RSP_ATTACH_LENGTH];
 
@@ -568,7 +569,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	strftime( rsp_attach, RSP_ATTACH_LENGTH, "rsp%H%M%S", localtime( &time_of_day ) );
 
 	//printf("rsp_attach: %s\n",rsp_attach);
-	
+
 	// printf("spawned_node_name:%s\n", spawned_node_name);
 
 
@@ -585,7 +586,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	strcat(input.program_name_and_args, session_name);
 	strcat(input.program_name_and_args, " ");
 	strcat(input.program_name_and_args, rsp_attach);
-	
+
 	bool glob_std_out = exists("std_out","[ui]");
 	bool loc_std_out = exists("std_out", _section_name);
 
@@ -600,29 +601,29 @@ pid_t configurator::process_spawn(const char*_section_name) {
 			std_out = return_string_value("std_out", _section_name);
 		}
 		if (access(std_out, R_OK) == 0)
-		{	
+		{
 			strcat(input.program_name_and_args, " >> ");
 			strcat(input.program_name_and_args, std_out);
-			
+
 		} else
 		{
 			printf("process_spawn: nie odnaleziono proponowanej konsoli\n");
 		}
 		delete [] std_out;
-		
+
 	}
-	
 
 
-		
+
+
 	strcpy(input.binaries_path, bin_path);
 
 	// Zwolnienie pamieci.
-	
+
 	delete [] spawned_program_name;
 	delete [] spawned_node_name;
 	delete [] bin_path;
-	
+
 	char rsh_cmd[PATH_MAX];
 		snprintf(rsh_cmd, PATH_MAX, "rsh %s %s%s&",
 				input.node_name, input.binaries_path, input.program_name_and_args);
@@ -635,7 +636,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	system(rsh_cmd);
 	//printf("za rsh_cmd\n");
 	fflush(stdout);
-	
+
 	while (!wyjscie)
 	{
 		//printf("spawn_prc 3\n");
@@ -676,7 +677,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 
 
 	name_detach(my_attach, 0);
-	// Zwrocenie wyniku.  	
+	// Zwrocenie wyniku.
 	return output.pid;
 #endif
 #if defined(PROCESS_SPAWN_SPAWN)
@@ -684,7 +685,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	int child_pid;
 	// Deskryptor pliku.
 	int fd;
-	
+
 	// printf("_section_name: %s,\n",_section_name);
 
 	// Parametry stworzonego procesu.
@@ -712,7 +713,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 
 	const int fd_map[] = { 0, 1, 2};
 	//printf("conf a\n");
-	// Argumenty wywolania procesu.	
+	// Argumenty wywolania procesu.
 	char *child_arg[3];
 	child_arg[0]=spawn_process;
 	child_arg[1]=(char*)"NET_SPAWN";
@@ -782,7 +783,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		delete [] spawn_process;
 		// cout<<"Elo return"<<endl;
 		waitpid(child_pid, NULL, WEXITED);
-		// Zwrocenie wyniku.  	
+		// Zwrocenie wyniku.
 		return output.pid;
 #endif
 }// : spawn
@@ -812,7 +813,7 @@ configurator::~configurator() {
 #ifdef USE_MESSIP_SRR
 	messip_channel_disconnect(ch, MESSIP_NOTIMEOUT);
 #else
-	delete [] file_location;	
-	delete [] common_file_location;	
+	delete [] file_location;
+	delete [] common_file_location;
 #endif /* USE_MESSIP_SRR */
 }
