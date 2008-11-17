@@ -1,0 +1,9 @@
+- w pliku ini nie wolno uzywac spacji wokol znaku =. nie wolno tez pisac parametru i znaku = bez wartosci
+forma poprawna
+aaaa=bbbbb
+
+formy niepoprawne
+aaaa=
+aaaa =bbbbb
+aaaa= bbbbb
+aaaa = bbbb
