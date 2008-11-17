@@ -89,6 +89,7 @@ bool mp_task_rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogl
 
 
         printf("\nFACE FACE %d:\n",k);
+        flushall();
         for(int i=0; i<9; i++)
         {
             switch (cube_state->cube_tab[k][i])

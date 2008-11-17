@@ -34,11 +34,14 @@ using namespace std;
 // obsluga sygnalu
 void mp_task::catch_signal_in_mp_task(int sig)
 {
+	printf("catch_signal_in_mp\n");
 	switch (sig) {
 		case SIGTERM:
 		//case SIGINT:
 			kill_all_ECP(robot_m);
 			kill_all_VSP(sensor_m);
+			printf("catch_signal_in_mp\n");
+			flushall();
 			sr_ecp_msg->message("MP terminated");
 			_exit(EXIT_SUCCESS);
 			break;
@@ -47,6 +50,7 @@ void mp_task::catch_signal_in_mp_task(int sig)
 			signal(SIGSEGV, SIG_DFL);
 			break;
 	}
+	
 }
 
 name_attach_t* mp_task::mp_trigger_attach = NULL;

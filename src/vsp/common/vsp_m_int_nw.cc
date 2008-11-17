@@ -71,6 +71,8 @@ void catch_signal(int sig) {
   switch(sig) {
 	case SIGTERM :
 	  TERMINATE = true;
+	  printf("vsp sig term\n");
+	  flushall();
 	  sem_post( &(new_command_sem));
 	  vs->terminate();
 	  _exit(EXIT_SUCCESS);
@@ -273,7 +275,7 @@ int main(int argc, char *argv[]) {
 
 	   	// ustawienie priorytetow
 		setprio(0, 15);
-
+		flushall();
 		/* start the resource manager message loop */
 		sr_msg->message ("Device is waiting for clients...");
 		while(!TERMINATE) { // for(;;)

@@ -20,12 +20,17 @@ mp_task* mp_t;
 
 void catch_signal_in_mp(int sig)
 {
+	
 	mp_t->catch_signal_in_mp_task(sig);
 	delete mp_t;
+	printf("za catch_signal_in_mp\n");
+	flushall();
 }
 
 int main (int argc, char *argv[], char **arge)
 {
+	printf("MP\n");
+	flushall();
 	// zewnetrzne try
 	try {
 

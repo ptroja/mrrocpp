@@ -144,7 +144,16 @@ vsp_vis_sensor::vsp_vis_sensor(void){
 	Tckk=vvector(3);
 	Rckk=matrix(3,3);
 
-	const char * file_location = "../data/color.txt";
+	mrrocpp_network_path = config.return_mrrocpp_network_path();
+	
+	   int size = 1 + strlen(master.mrrocpp_network_path) + strlen("data/color.txt");
+	    char * path1 = new char[size];
+	    // Stworzenie sciezki do pliku.
+	    strcpy(path1, master.mrrocpp_network_path);
+	    sprintf(path1, "%sdata/color.txt", master.mrrocpp_network_path);
+	   
+	
+	const char * file_location = path1;
 
 	//vision.loadColors("color.txt");
   	//printf("ret%d",ret);

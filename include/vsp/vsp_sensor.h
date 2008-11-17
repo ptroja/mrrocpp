@@ -24,6 +24,7 @@ protected:
 	short is_reading_ready;
 	
 public:
+	char* mrrocpp_network_path;
 	// Metoda uzywana przy wspolpracy nieinteraktywnej.
 	virtual void wait_for_event(void);
 	

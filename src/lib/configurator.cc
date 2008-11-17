@@ -638,7 +638,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		printf("process_spawn: blad name_attach\n");
 	}
 
-	printf("rsh_cmd:\n%s\n",rsh_cmd);
+	//printf("rsh_cmd:\n%s\n",rsh_cmd);
 	system(rsh_cmd);
 	//printf("za rsh_cmd\n");
 	fflush(stdout);
