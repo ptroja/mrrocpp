@@ -1,6 +1,6 @@
 all: ui ui.xml
 
-CFLAGS=-g -O0 `pkg-config --cflags gtk+-2.0 libxml-2.0`
+CFLAGS=-Wall -g -O0 `pkg-config --cflags gtk+-2.0 libxml-2.0`
 CXXFLAGS=${CFLAGS}
 LDFLAGS=`pkg-config --libs gtk+-2.0 libxml-2.0` -export-dynamic
 

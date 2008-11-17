@@ -10,8 +10,10 @@
  ./tutorial
  */
 #include <gtk/gtk.h>
+#include <gtk/gtktreemodel.h>
 
 #include "configurator.h"
+#include "ui_model.h"
 
 GtkBuilder *builder;
 
@@ -30,7 +32,7 @@ guint set_status(const char *msg)
 int set_tree_view(void)
 {
 	GtkTreeView *tree = GTK_TREE_VIEW (gtk_builder_get_object(builder, "process_treeview"));
-	gtk_tree_view_set_model(tree, GTK_TREE_MODEL(config->getStore()));
+	gtk_tree_view_set_model(tree, GTK_TREE_MODEL(ui_model::instance().getStore()));
 
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
@@ -38,17 +40,19 @@ int set_tree_view(void)
 	renderer = gtk_cell_renderer_text_new();
 
 	column = gtk_tree_view_column_new_with_attributes("Program name", renderer, "markup",
-			configurator::NAME_COLUMN, NULL);
+			ui_model::NAME_COLUMN, NULL);
 	gtk_tree_view_append_column(tree, column);
 
 	column = gtk_tree_view_column_new_with_attributes("Node name", renderer, "text",
-			configurator::NODE_NAME_COLUMN, NULL);
+			ui_model::NODE_NAME_COLUMN, NULL);
 	gtk_tree_view_append_column(tree, column);
 
 	renderer = gtk_cell_renderer_toggle_new();
 	column = gtk_tree_view_column_new_with_attributes("Running", renderer, "active",
-			configurator::IS_RUNNING_COLUMN, NULL);
+			ui_model::IS_RUNNING_COLUMN, NULL);
 	gtk_tree_view_append_column(tree, column);
+
+	return 0;
 }
 
 extern "C" {
@@ -101,6 +105,7 @@ int main(int argc, char *argv[])
 {
 	GtkWidget *window;
 
+	printf("gtk_init()\n");
 	gtk_init(&argc, &argv);
 
 	config = new configurator();

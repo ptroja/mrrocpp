@@ -10,6 +10,8 @@
 #include <strings.h>
 #include <string.h>
 
+#include <cstdarg>
+
 #include "configurator.h"
 #include "ui_model.h"
 
@@ -42,7 +44,10 @@ configurator::getnodeset (xmlDocPtr doc, const xmlChar *xpath){
 void configurator::populate_tree_model_with_mp()
 {
 	xmlXPathObjectPtr mp = getnodeset(this->doc, (xmlChar *) "/config/mp[@active='true']");
+
 	if (mp) {
+		ui_config_entry & parent = ui_model::instance().add_ui_config_entry(ui_model::instance().getRootNode(), ui_config_entry::MP_PARENT, "Master Process");
+
 		xmlNodeSetPtr nodeset = mp->nodesetval;
 		for (int i = 0; i < nodeset->nodeNr; i++) {
 			// get name attribute of the sensors
@@ -50,30 +55,21 @@ void configurator::populate_tree_model_with_mp()
 			if (!mp_name)
 				continue;
 
-			xmlChar query[256];
-
-			sprintf((char *) query, "/config/mp[@name='%s']/program_name", mp_name);
-			char *program_name = this->get_string(query);
+			char *program_name = this->get_string("/config/mp[@name='%s']/program_name", mp_name);
 
 			if (!program_name) {
 				g_error("missing program name for %s MP process", mp_name);
 				continue;
 			}
 
-			sprintf((char *) query, "/config/mp[@name='%s']/node_name", mp_name);
-			char *node_name = this->get_string(query);
+			char *node_name = this->get_string("/config/mp[@name='%s']/node_name", mp_name);
 
 			if (!node_name) {
 				g_error("missing node name for %s MP process", mp_name);
 				continue;
 			}
 
-			GtkTreeIter parent, child;
-			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(this->store), &parent, "0");
-
-			gtk_tree_store_append(this->store, &child, &parent);
-			gtk_tree_store_set(store, &child, NAME_COLUMN, program_name, NODE_NAME_COLUMN, node_name,
-					IS_RUNNING_COLUMN, FALSE, -1);
+			ui_model::instance().add_ui_config_entry(parent, ui_config_entry::MP, program_name);
 		}
 		xmlXPathFreeObject(mp);
 	}
@@ -83,6 +79,9 @@ void configurator::populate_tree_model_with_sensors()
 {
 	xmlXPathObjectPtr active_sensors = getnodeset(this->doc, (xmlChar *) "/config/sensors/sensor[@active='true']");
 	if (active_sensors) {
+
+		ui_config_entry & parent = ui_model::instance().add_ui_config_entry(ui_model::instance().getRootNode(), ui_config_entry::SENSORS_PARENT, "Sensors");
+
 		xmlNodeSetPtr nodeset = active_sensors->nodesetval;
 		for (int i = 0; i < nodeset->nodeNr; i++) {
 			// get name attribute of the sensors
@@ -90,22 +89,11 @@ void configurator::populate_tree_model_with_sensors()
 			if (!sensor_name)
 				continue;
 
-			xmlChar query[256];
+			char *program_name = this->get_string("/config/sensors/sensor[@name='%s']/vsp/program_name", sensor_name);
 
-			sprintf((char *) query, "/config/sensors/sensor[@name='%s']/vsp/program_name", sensor_name);
-			char *program_name = this->get_string(query);
+			char *node_name = this->get_string("/config/sensors/sensor[@name='%s']/vsp/node_name", sensor_name);
 
-			sprintf((char *) query, "/config/sensors/sensor[@name='%s']/vsp/node_name", sensor_name);
-			char *node_name = this->get_string(query);
-
-			ui_config_entry *entry = new ui_config_entry(ui_config_entry::SENSOR, program_name, node_name);
-
-			GtkTreeIter parent, child;
-			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(this->store), &parent, "1");
-
-			gtk_tree_store_append(this->store, &child, &parent);
-			gtk_tree_store_set(store, &child, NAME_COLUMN, program_name, NODE_NAME_COLUMN, node_name,
-					IS_RUNNING_COLUMN, FALSE, -1);
+			ui_model::instance().add_ui_config_entry(parent, ui_config_entry::SENSOR, program_name, node_name);
 		}
 		xmlXPathFreeObject(active_sensors);
 	}
@@ -113,9 +101,11 @@ void configurator::populate_tree_model_with_sensors()
 
 void configurator::populate_tree_model_with_effectors()
 {
-	xmlXPathObjectPtr active_effectors = getnodeset(this->doc,
-			(xmlChar *) "/config/effectors/effector[@active='true']");
+	xmlXPathObjectPtr active_effectors = getnodeset(this->doc, (xmlChar *) "/config/effectors/effector[@active='true']");
 	if (active_effectors) {
+
+		ui_config_entry & parent = ui_model::instance().add_ui_config_entry(ui_model::instance().getRootNode(), ui_config_entry::EFFECTORS_PARENT, "Effectors");
+
 		xmlNodeSetPtr nodeset = active_effectors->nodesetval;
 		for (int i = 0; i < nodeset->nodeNr; i++) {
 			// get name attribute of the sensors
@@ -123,32 +113,18 @@ void configurator::populate_tree_model_with_effectors()
 			if (!effector_name)
 				continue;
 
-			xmlChar query[256];
+			char *program_name = this->get_string("/config/effectors/effector[@name='%s']/ecp/program_name", effector_name);
 
-			sprintf((char *) query, "/config/effectors/effector[@name='%s']/ecp/program_name", effector_name);
-			char *program_name = this->get_string(query);
+			char *node_name = this->get_string("/config/effectors/effector[@name='%s']/ecp/node_name", effector_name);
 
-			sprintf((char *) query, "/config/effectors/effector[@name='%s']/ecp/node_name", effector_name);
-			char *node_name = this->get_string(query);
+			ui_config_entry & ecp_entry = ui_model::instance().add_ui_config_entry(parent, ui_config_entry::EFFECTOR, program_name, node_name);
 
-			GtkTreeIter parent, child;
-			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(this->store), &parent, "2");
-
-			gtk_tree_store_append(this->store, &child, &parent);
-			gtk_tree_store_set(store, &child, NAME_COLUMN, program_name, NODE_NAME_COLUMN, node_name,
-					IS_RUNNING_COLUMN, FALSE, -1);
-
-			sprintf((char *) query, "/config/effectors/effector[@name='%s']/edp/program_name", effector_name);
-			program_name = this->get_string(query);
+			program_name = this->get_string("/config/effectors/effector[@name='%s']/edp/program_name", effector_name);
 			if (program_name) {
 
-				sprintf((char *) query, "/config/effectors/effector[@name='%s']/edp/node_name", effector_name);
-				node_name = this->get_string(query);
+				node_name = this->get_string("/config/effectors/effector[@name='%s']/edp/node_name", effector_name);
 
-				parent = child;
-				gtk_tree_store_append(this->store, &child, &parent);
-				gtk_tree_store_set(store, &child, NAME_COLUMN, program_name, NODE_NAME_COLUMN, node_name,
-						IS_RUNNING_COLUMN, FALSE, -1);
+				ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EFFECTOR, program_name, node_name);
 			}
 		}
 		xmlXPathFreeObject(active_effectors);
@@ -157,8 +133,6 @@ void configurator::populate_tree_model_with_effectors()
 
 void configurator::populate_tree_model()
 {
-	gtk_tree_store_clear(store);
-
     populate_tree_model_with_mp();
     populate_tree_model_with_sensors();
     populate_tree_model_with_effectors();
@@ -175,10 +149,6 @@ configurator::configurator()
 		*ptr = '\0';
 	}
 	strcat(config_dir, "/configs/xml");
-
-	// create TreeView model
-	store = gtk_tree_store_new(N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
-	ui_model = g_node_new(NULL);
 }
 
 int configurator::open_config_file(const char *filename)
@@ -200,6 +170,8 @@ int configurator::open_config_file(const char *filename)
 	}
 
 	this->populate_tree_model();
+
+	return 0;
 }
 
 configurator::~configurator()
@@ -211,16 +183,19 @@ configurator::~configurator()
 
 	// Cleanup function for the XML library.
 	xmlCleanupParser();
-
-	// remove reference to GtkTreeView model
-	g_object_unref(store);
-
-	g_node_destroy(ui_model);
 }
 
-char * configurator::get_string(const xmlChar *xpath)
+char * configurator::get_string(const char *xpath, ...)
 {
-	xmlXPathObjectPtr result = getnodeset(this->doc, xpath);
+	va_list ap;
+
+	va_start(ap, xpath);
+	xmlChar query[256];
+	vsprintf((char *) query, xpath, ap);
+	va_end(ap);
+
+	xmlXPathObjectPtr result = getnodeset(this->doc, query);
+
 	if (!result) return NULL;
 	if (result->type != XPATH_NODESET) {
 		xmlXPathFreeObject(result);
@@ -231,4 +206,3 @@ char * configurator::get_string(const xmlChar *xpath)
 	xmlXPathFreeObject(result);
 	return ret;
 }
-
