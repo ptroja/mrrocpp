@@ -31,9 +31,9 @@ int main(int argc, char *argv[])
 {
 
 	try {
-	
+
 		// liczba argumentow
-		if(argc <= 6) {
+		if(argc < 6) {
 			printf("Za malo argumentow ECP\n");
 			return -1;
 		}
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 		// configuration read
 		configurator * _config = new configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
 		if (argc>6) {
-			_config->answer_to_y_rsh_spawn(argv[6]); 
+			_config->answer_to_y_rsh_spawn(argv[6]);
 			signal(SIGINT, SIG_IGN);
 		}
 		ecp_t = return_created_ecp_task(*_config);

@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP) 
+// Proces: 	EFFECTOR CONTROL PROCESS (ECP)
 // Plik:			configurator.h
 // System:	QNX/MRROCPP  v. 6.3
 // Opis:		Plik zawiera klase configurator - obsluga konfiguracji z pliku INI.
@@ -16,9 +16,9 @@
 
 #include "messip/messip.h"
 
-//#define PROCESS_SPAWN_RSH
+#define PROCESS_SPAWN_RSH
 // Z wykorzystaniem rsh w odpowiedzi na buga w qnx 6.4.0
-#define PROCESS_SPAWN_YRSH
+//#define PROCESS_SPAWN_YRSH
 // by Y - jesli usuna buga to mozna powrocic do tego rozwiazania ale sadze ze nie warto
 //#define PROCESS_SPAWN_SPAWN
 
@@ -29,10 +29,10 @@ private:
 	char* dir;
 	char* ini_file;
 	char* mrrocpp_network_path;
-	
+
 	// do ochrony wylacznosci dostepu do pliku miedzy watkami jednego procesu
 	pthread_mutex_t mutex; // = PTHREAD_MUTEX_INITIALIZER ;
-	
+
 	int	lock_mutex(); // zajecie mutex'a
 	int	unlock_mutex(); // zwolnienie mutex'a
 
@@ -46,10 +46,10 @@ private:
 
 	// Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.
 	char* return_ini_file_path();
-	
+
 	// Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.
 	char* return_common_ini_file_path();
-	
+
 #endif /* USE_MESSIP_SRR */
 
 public:
@@ -61,14 +61,14 @@ public:
 	// Konstruktor obiektu - konfiguratora.
 	configurator(const char* _node, const char* _dir, const char* _ini_file, const char* _section_name,
 		const char* _session_name);
-	
+
 	// zmiana nazwy sesji z modyfikacja pliku konfiguracyjnego
 	void change_ini_file (const char* _ini_file);
 
 	char* return_default_reader_measures_path();
-	
+
 	int answer_to_y_rsh_spawn(const char* rsh_spl);
-	
+
 	// Odpalenie procesu zapisanego w danej sekcji INI.
 	pid_t process_spawn(const char* _section_name);
 
@@ -76,15 +76,15 @@ public:
 	static int return_node_number (const char* node_name_l);
 
 	// Zwraca attach point'a serwerow w zaleznosci od typu
-	
+
 	enum config_path_type {
 		CONFIG_RESOURCEMAN_LOCAL,
 		CONFIG_RESOURCEMAN_GLOBAL,
 		CONFIG_SERVER
 	};
-	
+
 	char* return_attach_point_name (const int _type, const char* _key, const char* __section_name = NULL);
-	
+
 	// Zwraca wartosc (int) dla klucza.
 	int return_int_value(const char* _key, const char* __section_name = NULL);
 
@@ -93,12 +93,12 @@ public:
 
 	// Zwraca wartosc (char*) dla klucza.
 	char* return_string_value(const char* _key, const char* __section_name = NULL);
-	
+
 	// Zwraca czy dany klucz istnieje
 	bool exists(const char* _key, const char* __section_name = NULL);
 
 	~configurator();
-	
+
 };// : configurator
 
 

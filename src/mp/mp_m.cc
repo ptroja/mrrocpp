@@ -29,7 +29,7 @@ int main (int argc, char *argv[], char **arge)
 	// zewnetrzne try
 	try {
 
-		if (argc <= 6) {
+		if (argc < 6) {
 			printf(" Usage: mp_m_c <ui_node_name> <mrrocpp_local_path> <config_file> <session_name>\n");
 			exit(EXIT_FAILURE);
 		}
@@ -37,7 +37,7 @@ int main (int argc, char *argv[], char **arge)
 		try	{
 			configurator * _config = new configurator(argv[1], argv[2], argv[3], "[mp]", argv[5]);
 			if (argc>6) {
-		 		_config->answer_to_y_rsh_spawn(argv[6]); 
+		 		_config->answer_to_y_rsh_spawn(argv[6]);
 		 		signal(SIGINT, SIG_IGN);
 		 	}
 			mp_t = return_created_mp_task(*_config);

@@ -77,24 +77,24 @@ void *sr_thread(void* arg)
 	// 	char current_line[80];
 	int16_t status;
 	// 	int flags=0;
-	
+
 	name_attach_t *attach;
 	// my_data_t msg;
 	int rcvid;
-	
-	if ((attach = name_attach(NULL, ui_state.sr_attach_point, NAME_FLAG_ATTACH_GLOBAL)) == NULL) 
+
+	if ((attach = name_attach(NULL, ui_state.sr_attach_point, NAME_FLAG_ATTACH_GLOBAL)) == NULL)
 	{
 		perror("BLAD SR ATTACH, przypuszczalnie nie uruchomiono gns, albo blad wczytywania konfiguracji");
 		return NULL;
 	}
 	// printf("PO ATTACH ");
 	// flushall();
-	
+
 	while(1)
 	{
-	
+
 		rcvid = MsgReceive_r(attach->chid, &sr_msg, sizeof(sr_msg), NULL);
-		
+
 		if (rcvid < 0) /* Error condition, exit */
 		{
 			if (rcvid == -EINTR) {
@@ -106,7 +106,7 @@ void *sr_thread(void* arg)
 			// 	  throw generator::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
 			break;
 		}
-		
+
 		if (rcvid == 0) /* Pulse received */
 		{
 			// printf("sr puls\n");
@@ -122,7 +122,7 @@ void *sr_thread(void* arg)
 			}
 			continue;
 		}
-		
+
 		/* A QNX IO message received, reject */
 		if (sr_msg.hdr.type >= _IO_BASE && sr_msg.hdr.type <= _IO_MAX)
 		{
@@ -131,28 +131,28 @@ void *sr_thread(void* arg)
 			MsgReply(rcvid, EOK, 0, 0);
 			continue;
 		}
-		
+
 		MsgReply(rcvid, EOK, &status, sizeof(status));
-		
+
 		if (strlen(sr_msg.process_name)>1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
 		{
-			
-			ui_sr_obj->lock_mutex(); 
-			
+
+			ui_sr_obj->lock_mutex();
+
 			ui_sr_obj->writer_buf_position++;
 			ui_sr_obj->writer_buf_position %= UI_SR_BUFFER_LENGHT;
-			
+
 			ui_sr_obj->message_buffer[ui_sr_obj->writer_buf_position]=sr_msg;
-			
-			ui_sr_obj->set_new_msg(); 
-			ui_sr_obj->unlock_mutex(); 
-		
+
+			ui_sr_obj->set_new_msg();
+			ui_sr_obj->unlock_mutex();
+
 		} else {
 			printf("SR(%s:%d) unexpected message\n", __FILE__, __LINE__);
 		}
-	
+
 	}
-	
+
 	return 0;
 };
 #else /* USE_MESSIP_SRR */
@@ -173,7 +173,7 @@ void *sr_thread(void* arg)
 
 	while(1)
 	{
-	
+
 		rcvid = messip_receive(ch, &type, &subtype, &sr_msg, sizeof(sr_msg), MESSIP_NOTIMEOUT);
 
 		if (rcvid == -1) /* Error condition, exit */
@@ -186,28 +186,28 @@ void *sr_thread(void* arg)
 			fprintf(stderr, "ie. MESSIP_MSG_DISCONNECT\n");
 			continue;
 		}
-	
+
 		status = 0;
 		messip_reply(ch, rcvid, EOK, &status, sizeof(status), MESSIP_NOTIMEOUT);
-		
+
 		if (strlen(sr_msg.process_name)>1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
 		{
-			ui_sr_obj->lock_mutex(); 
+			ui_sr_obj->lock_mutex();
 			// to sie zdarza choc nie wiem dlaczego
-			
+
 			ui_sr_obj->writer_buf_position++;
 			ui_sr_obj->writer_buf_position %= UI_SR_BUFFER_LENGHT;
-			
+
 			ui_sr_obj->message_buffer[ui_sr_obj->writer_buf_position]=sr_msg;
-			
-			ui_sr_obj->set_new_msg(); 
-			ui_sr_obj->unlock_mutex(); 
-		
+
+			ui_sr_obj->set_new_msg();
+			ui_sr_obj->unlock_mutex();
+
 		} else {
 			printf("SR(%s:%d) unexpected message\n", __FILE__, __LINE__);
 		}
 	}
-	
+
 	return 0;
 };
 #endif /* USE_MESSIP_SRR */
@@ -220,18 +220,18 @@ void *comm_thread(void* arg) {
 	// my_data_t msg;
 	int rcvid;
 	_msg_info* info;
-	
+
 	info = new  _msg_info;
-	
+
 	bool wyjscie;
-	
+
 	if ((attach = name_attach(NULL, ui_state.ui_attach_point, NAME_FLAG_ATTACH_GLOBAL)) == NULL)
 	{
 		// XXX TODO
 		// return EXIT_FAILURE;
 		// printf("NIE MA ATTACHA");
 	}
-	
+
 
 while(1) {
 	// ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
@@ -290,7 +290,7 @@ while(1) {
 			PtLeave(0);
 			ui_ecp_obj->trywait_sem();
 			ui_ecp_obj->take_sem();
-			
+
 			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
 				printf("Blad w UI reply\n");
 			}
@@ -302,27 +302,27 @@ while(1) {
 			PtLeave(0);
 			ui_ecp_obj->trywait_sem();
 			ui_ecp_obj->take_sem();
-		
+
 			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
 				printf("Blad w UI reply\n");
 			}
-		
+
           break;
         case MESSAGE:
-	
+
 			PtEnter(0);
 			ApCreateModule (ABM_wnd_message, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_message, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
 			PtLeave(0);
-		
+
 			ui_ecp_obj->ui_rep.reply = ANSWER_YES;
- 
+
 			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
 				printf("Blad w UI reply\n");
 			}
           break;
         case DOUBLE_NUMBER:
-		
+
 			PtEnter(0);
 			ApCreateModule (ABM_wnd_input_double, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_input_double, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
@@ -335,14 +335,14 @@ while(1) {
 	  	  	}
 		break;
         case INTEGER_NUMBER:
-		
+
 			PtEnter(0);
 			ApCreateModule (ABM_wnd_input_integer, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_input_integer, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
 			PtLeave(0);
 			ui_ecp_obj->trywait_sem();
 			ui_ecp_obj->take_sem();
-					
+
 		   	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
 			   	printf("Blad w UI reply\n");
 		   	}
@@ -352,38 +352,38 @@ while(1) {
 			PtEnter(0);
 			ApCreateModule (ABM_wnd_choose_option, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_choose_option, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
-			
+
 			// wybor ilosci dostepnych opcji w zaleznosci od wartosci ui_ecp_obj->ecp_to_ui_msg.nr_of_options
-	
-			if (ui_ecp_obj->ecp_to_ui_msg.nr_of_options==2) 
+
+			if (ui_ecp_obj->ecp_to_ui_msg.nr_of_options==2)
 			{
 				block_widget(ABW_PtButton_wind_choose_option_3);
 				block_widget(ABW_PtButton_wind_choose_option_4);
-			 } 
+			 }
 			else if (ui_ecp_obj->ecp_to_ui_msg.nr_of_options==3)
 			{
 			 	unblock_widget(ABW_PtButton_wind_choose_option_3);
 				block_widget(ABW_PtButton_wind_choose_option_4);
-			 } 
-			else if (ui_ecp_obj->ecp_to_ui_msg.nr_of_options==4) 
+			 }
+			else if (ui_ecp_obj->ecp_to_ui_msg.nr_of_options==4)
 			{
 				unblock_widget(ABW_PtButton_wind_choose_option_3);
 				unblock_widget(ABW_PtButton_wind_choose_option_4);
 			 }
-				
+
 			PtLeave(0);
 			ui_ecp_obj->trywait_sem();
 			ui_ecp_obj->take_sem();
-		
+
 		    	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
 			   	printf("Blad w UI reply\n");
 		    	}
-			    	
-          break;  
+
+          break;
         case LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
      //    printf("LOAD_FILE\n");
           if (ui_state.teachingstate == MP_RUNNING) {
-			
+
 			wyjscie=false;
 			while (!wyjscie)
 			{
@@ -404,11 +404,11 @@ while(1) {
 		          ui_ecp_obj->ui_rep.reply = FILE_LOADED;
 		          ui_ecp_obj->trywait_sem();
 		       	 ui_ecp_obj->take_sem();
-		
+
 		     	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
 			   	printf("Blad w UI reply\n");
 		    	}
-      
+
           }
           break;
         case SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
@@ -429,7 +429,7 @@ while(1) {
 					delay(1);
 				}
 			}
-   
+
   		 ui_ecp_obj->ui_rep.reply = FILE_SAVED;
   		 ui_ecp_obj->trywait_sem();
   		ui_ecp_obj->take_sem();
@@ -533,9 +533,7 @@ void catch_signal(int sig) {
 	pid_t child_pid;
   switch(sig) {
     case SIGINT :
-   		fprintf(stderr, "UI CLOSING\n");
-		delay(100);// czas na sutabilizowanie sie edp
-		ui_state.ui_state=2;// funcja OnTimer() dowie sie ze aplikacja ma byc zamknieta
+    	UI_close();
     break;
 	case SIGALRM:
 		printf("SIGALRM received\n");
@@ -546,7 +544,8 @@ void catch_signal(int sig) {
 	   break;
 	case SIGCHLD:
 
-	   child_pid = waitpid(-1, &status, WNOHANG);
+		printf("waitpid(...)"); fflush(stdout);
+	   child_pid = waitpid(-1, &status, /*WNOHANG*/ WEXITED);
 
 	   if (child_pid == -1) {
 		   perror("UI: waitpid()");
@@ -584,7 +583,12 @@ void catch_signal(int sig) {
   } // end: switch
 }
 
-
+void
+UI_close(void) {
+	printf("UI CLOSING\n");
+	delay(100);// czas na ustabilizowanie sie edp
+	ui_state.ui_state=2;// funcja OnTimer dowie sie ze aplikacja ma byc zamknieta
+}
 
 int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
@@ -614,7 +618,7 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	ui_state.ui_state=1;// ui working
 	ui_state.ui_attach_point = NULL;
 	ui_state.network_sr_attach_point = NULL;
-	
+
 	ui_state.irp6_on_track.edp.state=-1; // edp nieaktywne
 	ui_state.irp6_on_track.edp.last_state=-1; // edp nieaktywne
 	ui_state.irp6_on_track.ecp.trigger_fd = -1;
@@ -639,8 +643,8 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	ui_state.irp6_mechatronika.edp.last_state=-1; // edp nieaktywne
 	ui_state.irp6_mechatronika.ecp.trigger_fd = -1;
 	strcpy(ui_state.irp6_mechatronika.edp.section_name, "[edp_irp6_mechatronika]");
-	strcpy(ui_state.irp6_mechatronika.ecp.section_name, "[ecp_irp6_mechatronika]");	
-		
+	strcpy(ui_state.irp6_mechatronika.ecp.section_name, "[ecp_irp6_mechatronika]");
+
 	ui_state.file_window_mode=FSTRAJECTORY; // uczenie
 	ui_state.all_edps = UI_ALL_EDPS_NONE_EDP_LOADED;
 	ui_state.mp.state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
@@ -674,16 +678,16 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	ui_state.is_wind_irp6p_kinematic_open=false;
 	ui_state.is_wind_irp6m_kinematic_open=false;
 	ui_state.is_wind_speaker_play_open=false;
-	
+
 	ui_state.is_wind_irp6ot_servo_algorithm_open=false;
-	ui_state.is_wind_irp6p_servo_algorithm_open=false; 
-	ui_state.is_wind_irp6m_servo_algorithm_open=false; 
+	ui_state.is_wind_irp6p_servo_algorithm_open=false;
+	ui_state.is_wind_irp6m_servo_algorithm_open=false;
 	ui_state.is_wind_conv_servo_algorithm_open=false;
-	
+
 	ui_state.is_mp_and_ecps_active = false;
 	// ui_state.is_any_edp_active = false;
-	
-	
+
+
 	ui_state.irp6_on_track.edp.is_synchronised = false;
 	ui_state.irp6_postument.edp.is_synchronised = false;
 	ui_state.conveyor.edp.is_synchronised = false;
@@ -723,10 +727,10 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	strcat(ui_state.config_file_fullpath, ui_state.ui_node_name);
 	strcat(ui_state.config_file_fullpath, ui_state.mrrocpp_local_path);
 	strcat(ui_state.config_file_fullpath, "configs");
-	
+
 	// printf ("Remember to create gns server\n");
 
-	// pierwsze zczytanie pliku konfiguracyjnego (aby pobrac nazwy dla pozostalych watkow UI)	
+	// pierwsze zczytanie pliku konfiguracyjnego (aby pobrac nazwy dla pozostalych watkow UI)
 	if (get_default_configuration_file_name()>=1) // zczytaj nazwe pliku konfiguracyjnego
 	 {
 		initiate_configuration();
@@ -737,7 +741,7 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 		printf ("Blad manage_default_configuration_file\n");
 		PtExit( EXIT_SUCCESS );
 	}
-	
+
 	ui_sr_obj = new ui_sr_buffer();
 	ui_ecp_obj = new ui_ecp_buffer();
 
@@ -753,15 +757,15 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	// Zablokowanie domyslnej obslugi sygnalu SIGINT w watkach UI_SR i UI_COMM
 
 	sigset_t set;
-	
+
 	sigemptyset( &set );
 	sigaddset( &set, SIGINT );
 	sigaddset( &set, SIGALRM );
-	
+
 	if  (SignalProcmask(0, sr_tid, SIG_BLOCK, &set, NULL)==-1) {
 		 perror("SignalProcmask(sr_tid)");
 	}
-	
+
 	if  (SignalProcmask(0, ui_tid, SIG_BLOCK, &set, NULL)==-1) {
 		 perror("SignalProcmask(ui_tid)");
 	}
@@ -770,36 +774,36 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	if (get_default_configuration_file_name()==1) // zczytaj nazwe pliku konfiguracyjnego
 	 {
 		 reload_whole_configuration();
-			
+
 	} else {
 		printf ("Blad manage_default_configuration_file\n");
 		PtExit( EXIT_SUCCESS );
 	}
-	
+
 	// inicjacja pliku z logami sr
-	
+
 	time_t time_of_day;
 	char file_date[50];
 	char log_file_with_dir[100];
 	char file_name[50];
-	
+
 	time_of_day = time( NULL );
 	strftime( file_date, 40, "%g%m%d_%H-%M-%S", localtime( &time_of_day ) );
-	
+
 	sprintf(file_name,"/%s_sr_log", file_date);
-	
+
 	// 	strcpy(file_name,"/pomiar.p");
 	strcpy(log_file_with_dir, "../logs/");
 	strcat(log_file_with_dir, file_name);
-	
+
 	log_file_outfile = new ofstream(log_file_with_dir, ios::out);
-	
+
 	if (!(*log_file_outfile)) {
 		std::cerr << "Cannot open file: " << file_name << '\n';
 		perror("because of");
 	}
 
-	manage_interface();			
+	manage_interface();
 
 	return( Pt_CONTINUE );
 
