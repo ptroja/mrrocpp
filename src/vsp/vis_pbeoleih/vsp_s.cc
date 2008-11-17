@@ -197,8 +197,24 @@ vsp_vis_sensor::vsp_vis_sensor(void){
 	Rckk=matrix(3,3);
 */
 	
-	char *file_location = (char*)"../data/color_eih.txt";
-	char *file_location2= (char*)"../data/pattern.txt";
+	mrrocpp_network_path = config->return_mrrocpp_network_path();
+		
+		   int size = 1 + strlen(mrrocpp_network_path) + strlen("data/color_eih.txt");
+		    char * path1 = new char[size];
+		    // Stworzenie sciezki do pliku.
+		    strcpy(path1, mrrocpp_network_path);
+		    sprintf(path1, "%sdata/color_eih.txt", mrrocpp_network_path);
+		   
+		
+		 char * file_location = path1;
+		
+		   int size2 = 1 + strlen(mrrocpp_network_path) + strlen("data/pattern.txt");
+		    char * path2 = new char[size2];
+		    // Stworzenie sciezki do pliku.
+		    strcpy(path2, mrrocpp_network_path);
+		    sprintf(path2, "%sdata/pattern.txt", mrrocpp_network_path);
+		
+		     char * file_location2 = path2;
 	
 	//vision.loadColors("color.txt");
   	//printf("ret%d",ret);
@@ -209,9 +225,14 @@ vsp_vis_sensor::vsp_vis_sensor(void){
 				 vision.initEstim(file_location2);
 				 vision.initGrid();
 }
-else printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
+else 
+	{
+	printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
+	fflush(stdout);
+	}
 	fd = open("/dev/bttvx",O_RDWR); // bezposrednio odczyt ze sterownika zamiast konstruktora 
-		
+	printf("vsp fs:%d\n",fd);
+	fflush(stdout);	
 	z=0;
 	x=0;
 	
