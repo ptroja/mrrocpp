@@ -470,7 +470,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		}
 
 		char process_path[PATH_MAX];
-		char * = getenv("UI_HOST");
+		char *ui_host = getenv("UI_HOST");
 		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s",
 				bin_path, ui_host ? ui_host : "",
 				bin_path, spawned_program_name,

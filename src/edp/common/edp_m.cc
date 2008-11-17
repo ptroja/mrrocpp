@@ -31,121 +31,107 @@
 
 // sr_edp *msg;                // Wskaznik na obiekt do komunikacji z SR
 
-
-
-
-edp_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
+edp_effector* master; // Bufor polecen i odpowiedzi EDP_MASTER
 
 static _clockperiod old_cp;
 
 /* Przechwycenie sygnalu */
-void catch_signal(int sig)
-{
-    switch (sig)
-    {
-    case SIGTERM :
-        ClockPeriod(CLOCK_REALTIME, &old_cp, NULL, 0);
-        master->msg->message("EDP terminated");
-        _exit(EXIT_SUCCESS);
-        break;
-    case SIGSEGV:
-        fprintf(stderr, "Segmentation fault in EDP process\n");
-        signal(SIGSEGV, SIG_DFL);
-        break;
-    } // end: switch
+void catch_signal(int sig) {
+	switch (sig) {
+	case SIGTERM:
+		ClockPeriod(CLOCK_REALTIME, &old_cp, NULL, 0);
+		master->msg->message("EDP terminated");
+		_exit(EXIT_SUCCESS);
+		break;
+	case SIGSEGV:
+		fprintf(stderr, "Segmentation fault in EDP process\n");
+		signal(SIGSEGV, SIG_DFL);
+		break;
+	} // end: switch
 }
 
-int main(int argc, char *argv[], char **arge)
-{
+int main(int argc, char *argv[], char **arge) {
 
-//	delay(10000);
-    // STATE next_state;    // stan nastepny, do ktorego przejdzie EDP_MASTER
-	
-    try
-    {
-        if (argc <= 6)
-        {
-            fprintf(stderr, "Usage: edp_m ui_node_name mrrocpp_path config_file edp_config_section <session_name>\n");
-            exit(EXIT_FAILURE);
-        }
+	//	delay(10000);
+	// STATE next_state;    // stan nastepny, do ktorego przejdzie EDP_MASTER
 
-        // zmniejszenie stalej czasowej ticksize dla szeregowania
-        _clockperiod new_cp;
-        new_cp.nsec=TIME_SLICE; // impconst.h
-        new_cp.fract=0;
-        ClockPeriod( CLOCK_REALTIME, &new_cp, &old_cp, 0 );
+	try {
+		if (argc < 6) {
+			fprintf(
+					stderr, "Usage: edp_m ui_node_name mrrocpp_path config_file edp_config_section <session_name> [rsp_attach_name]\n");
+			exit(EXIT_FAILURE);
+		}
 
-        // przechwycenie SIGTERM
-        signal(SIGTERM, &catch_signal);
-        signal(SIGSEGV, &catch_signal);
-        
+		// zmniejszenie stalej czasowej ticksize dla szeregowania
+		_clockperiod new_cp;
+		new_cp.nsec = TIME_SLICE; // impconst.h
+		new_cp.fract = 0;
+		ClockPeriod(CLOCK_REALTIME, &new_cp, &old_cp, 0);
 
-        // odczytanie konfiguracji
-        configurator * _config = new configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
+		// przechwycenie SIGTERM
+		signal(SIGTERM, &catch_signal);
+		signal(SIGSEGV, &catch_signal);
 
-        if (argc>6) 
-        	{
-        	_config->answer_to_y_rsh_spawn(argv[6]);  
-        	signal(SIGINT, SIG_IGN);
-        	}
-      
-        	
+		// odczytanie konfiguracji
+		configurator * _config = new configurator(argv[1], argv[2], argv[3],
+				argv[4], argv[5]);
 
+		if (argc > 6) {
+			_config->answer_to_y_rsh_spawn(argv[6]);
+			signal(SIGINT, SIG_IGN);
+		}
 
-        /* Lokalizacja procesu wywietlania komunikatow SR */
-        /*
-        if ((msg = new sr_edp(EDP, config->return_string_value("resourceman_attach_point"),
-                              config->return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL) {
-        	perror ( "Unable to locate SR ");
-        	throw System_error();
-    }
-        */
-        //	printf("przed\n");
-        //		delay(10000);
-        //			printf("za\n");
-        master = return_created_efector(*_config);
+		/* Lokalizacja procesu wywietlania komunikatow SR */
+		/*
+		 if ((msg = new sr_edp(EDP, config->return_string_value("resourceman_attach_point"),
+		 config->return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL) {
+		 perror ( "Unable to locate SR ");
+		 throw System_error();
+		 }
+		 */
+		//	printf("przed\n");
+		//		delay(10000);
+		//			printf("za\n");
+		master = return_created_efector(*_config);
 
-        master->initialize();
+		master->initialize();
 
-        master->create_threads();                
+		master->create_threads();
 
-        if (!master->initialize_communication())
-        {
-            return EXIT_FAILURE;
-        }        
+		if (!master->initialize_communication()) {
+			return EXIT_FAILURE;
+		}
 
-        //	printf("1\n");
-        //	delay (20000);
-        master->main_loop();
-        //	printf("end\n");
-    }
+		//	printf("1\n");
+		//	delay (20000);
+		master->main_loop();
+		//	printf("end\n");
+	}
 
-    catch (System_error fe)
-    {
-        // Obsluga bledow systemowych
-        /*
-          // Wystapil blad w komunikacji miedzyprocesowej, oczekiwanie na jawne
-          // zabicie procesu przez operatora
-          for (;;) {
-            delay(100);
-        //   printf("\a"); // Sygnal dzwiekowy
-          }
-          */
-    } // end: catch(System_error fe)
+	catch (System_error fe) {
+		// Obsluga bledow systemowych
+		/*
+		 // Wystapil blad w komunikacji miedzyprocesowej, oczekiwanie na jawne
+		 // zabicie procesu przez operatora
+		 for (;;) {
+		 delay(100);
+		 //   printf("\a"); // Sygnal dzwiekowy
+		 }
+		 */
+	} // end: catch(System_error fe)
 
-    catch (...)
-    {   // Dla zewnetrznej petli try
-        perror("Unidentified error in EDP");
-        // Komunikat o bledzie wysylamy do SR
-        master->msg->message (FATAL_ERROR, EDP_UNIDENTIFIED_ERROR);
-        /*
-          // Wystapil niezidentyfikowany blad, oczekiwanie na jawne zabicie procesu
-          // przez operatora
-         
-          for (;;) {
-            delay(100);
-          // printf("\a"); // Sygnal dzwiekowy
-          }
-          */
-    }
+	catch (...) { // Dla zewnetrznej petli try
+		perror("Unidentified error in EDP");
+		// Komunikat o bledzie wysylamy do SR
+		master->msg->message(FATAL_ERROR, EDP_UNIDENTIFIED_ERROR);
+		/*
+		 // Wystapil niezidentyfikowany blad, oczekiwanie na jawne zabicie procesu
+		 // przez operatora
+
+		 for (;;) {
+		 delay(100);
+		 // printf("\a"); // Sygnal dzwiekowy
+		 }
+		 */
+	}
 }
