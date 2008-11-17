@@ -560,16 +560,17 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	}
 
 #define RSP_ATTACH_LENGTH 20
-
+	
 	time_t time_of_day;
 	char rsp_attach[RSP_ATTACH_LENGTH];
+	int fd_for_open;
 
 
 	time_of_day = time( NULL );
 	strftime( rsp_attach, RSP_ATTACH_LENGTH, "rsp%H%M%S", localtime( &time_of_day ) );
 
 	//printf("rsp_attach: %s\n",rsp_attach);
-
+	
 	// printf("spawned_node_name:%s\n", spawned_node_name);
 
 
@@ -586,44 +587,46 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	strcat(input.program_name_and_args, session_name);
 	strcat(input.program_name_and_args, " ");
 	strcat(input.program_name_and_args, rsp_attach);
-
+	
 	bool glob_std_out = exists("std_out","[ui]");
 	bool loc_std_out = exists("std_out", _section_name);
 
 	if (glob_std_out || loc_std_out)
 	{
 		char* std_out;
-		if (glob_std_out)
-		{
-			std_out = return_string_value("std_out", "[ui]");
-		} else if (loc_std_out)
+		if (loc_std_out)
 		{
 			std_out = return_string_value("std_out", _section_name);
+		} else 	if (glob_std_out)
+		{ 
+			std_out = return_string_value("std_out", "[ui]");
 		}
-		if (access(std_out, R_OK) == 0)
-		{
-			strcat(input.program_name_and_args, " >> ");
+			
+			
+		if (((fd_for_open=open(std_out, O_RDWR)) > 0)&&(isatty(fd_for_open)))
+		{	
+				strcat(input.program_name_and_args, " >> ");
 			strcat(input.program_name_and_args, std_out);
-
 		} else
 		{
 			printf("process_spawn: nie odnaleziono proponowanej konsoli\n");
 		}
+		close(fd_for_open);
 		delete [] std_out;
-
+		
 	}
+	
 
 
-
-
+		
 	strcpy(input.binaries_path, bin_path);
 
 	// Zwolnienie pamieci.
-
+	
 	delete [] spawned_program_name;
 	delete [] spawned_node_name;
 	delete [] bin_path;
-
+	
 	char rsh_cmd[PATH_MAX];
 		snprintf(rsh_cmd, PATH_MAX, "rsh %s %s%s&",
 				input.node_name, input.binaries_path, input.program_name_and_args);
@@ -632,11 +635,11 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		printf("process_spawn: blad name_attach\n");
 	}
 
-	//printf("rsh_cmd:\n%s\n",rsh_cmd);
+	printf("rsh_cmd:\n%s\n",rsh_cmd);
 	system(rsh_cmd);
 	//printf("za rsh_cmd\n");
 	fflush(stdout);
-
+	
 	while (!wyjscie)
 	{
 		//printf("spawn_prc 3\n");
@@ -677,7 +680,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 
 
 	name_detach(my_attach, 0);
-	// Zwrocenie wyniku.
+	// Zwrocenie wyniku.  	
 	return output.pid;
 #endif
 #if defined(PROCESS_SPAWN_SPAWN)
