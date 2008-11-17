@@ -91,11 +91,11 @@ int teaching_window_end_motion()
 
 	ui_state.teachingstate = MP_RUNNING;
 	ui_ecp_obj->ui_rep.reply = QUIT;
-	
+
 	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 	ui_ecp_obj->trywait_sem();
 	ui_ecp_obj->post_sem();
-	
+
 	return 0;
 }
 
@@ -113,14 +113,14 @@ manage_configuration_file()
 	// uwaga serwer musi byc wczesniej postawiony
    	printf("a2\n");
    	fflush(stdout);
-	check_gns();	
+	check_gns();
 
 	return 0;
 
 	}
 // funkcja odpowiedzialna za wyglad aplikacji na podstawie jej stanu
 int
-manage_interface() 
+manage_interface()
 {
 
 	check_edps_state_and_modify_mp_state();
@@ -137,7 +137,7 @@ manage_interface()
 
 	// Dla robota IRP6 ON_TRACK
 	manage_interface_irp6ot ();
-	
+
 	// Dla robota IRP6 POSTUMENT
 	manage_interface_irp6p ();
 
@@ -149,7 +149,7 @@ manage_interface()
 
 	// Dla robota IRP6 MECHATRONIKA
 	manage_interface_irp6m ();
-	
+
 	// zadanie
 	// kolorowanie menu all robots
 
@@ -166,10 +166,10 @@ manage_interface()
 //			printf("UI_ALL_EDPS_NONE_EDP_LOADED\n");
 			replySend(new Message('A','D','B',0,NULL,NULL));
 		break;
-		case UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED:			
+		case UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED:
 //			printf("UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED\n");
 			replySend(new Message('A','D','C',0,NULL,NULL));
-		break;		
+		break;
 		case UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
 //			printf("UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED\n");
 			replySend(new Message('A','D','D',0,NULL,NULL));
@@ -177,7 +177,7 @@ manage_interface()
 		case UI_ALL_EDPS_LOADED_AND_SYNCHRONISED:
 //			printf("UI_ALL_EDPS_LOADED_AND_SYNCHRONISED\n");
 		replySend(new Message('A','D','E',0,NULL,NULL));
-			
+
 			// w zaleznosci od stanu MP
 			switch (ui_state.mp.state)
 			{
@@ -189,14 +189,14 @@ manage_interface()
 				break;
 				case UI_MP_WAITING_FOR_START_PULSE:
 					replySend(new Message('A','D','H',0,NULL,NULL));
-				break;		
+				break;
 				case UI_MP_TASK_RUNNING:
 				case UI_MP_TASK_PAUSED:
 					replySend(new Message('A','D','I',0,NULL,NULL));
 				break;
 				default:
 				break;
-			}			
+			}
 		break;
 		default:
 		break;
@@ -205,7 +205,7 @@ manage_interface()
 	// wlasciwosci menu task_menu
 	switch (ui_state.mp.state)
 	{
-	
+
 		case UI_MP_NOT_PERMITED_TO_RUN:
 			replySend(new Message('A','E','A',0,NULL,NULL));
 		break;
@@ -214,7 +214,7 @@ manage_interface()
 		break;
 		case UI_MP_WAITING_FOR_START_PULSE:
 			replySend(new Message('A','E','C',0,NULL,NULL));
-		break;		
+		break;
 		case UI_MP_TASK_RUNNING:
 		case UI_MP_TASK_PAUSED:
 			replySend(new Message('A','E','D',0,NULL,NULL));
@@ -233,7 +233,7 @@ input_double_callback(double* v)
 	 {
 		ui_ecp_obj->ui_rep.reply = ANSWER_YES;
 		ui_ecp_obj->ui_rep.double_number = v[0];
-	}	
+	}
 	else
 	{
 		ui_ecp_obj->ui_rep.reply = QUIT;
@@ -252,11 +252,11 @@ yes_no_callback(double* v)
 	if(v[0] > 0) ui_ecp_obj->ui_rep.reply = ANSWER_NO;
 	else if(v[0] < 0) ui_ecp_obj->ui_rep.reply = QUIT;
 	else ui_ecp_obj->ui_rep.reply = ANSWER_YES;
-	
+
 	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
-	
+
 	ui_ecp_obj->post_sem();
-	
+
 	return 1;
 }
 
@@ -264,7 +264,7 @@ int
 input_integer_callback(double* v)
 
 {
-	
+
 	if(v[1] > 0)
 	{
 		ui_ecp_obj->ui_rep.reply = ANSWER_YES;
@@ -286,7 +286,7 @@ int
 choose_option_callback(double* v)
 {
 
-	int choice = (int)(v[0]);	
+	int choice = (int)(v[0]);
 	switch(choice)
 	{
 		case 1:
@@ -300,7 +300,7 @@ choose_option_callback(double* v)
 			break;
 		case 4:
 			ui_ecp_obj->ui_rep.reply = OPTION_FOUR;
-			break;			
+			break;
 		default:
 			ui_ecp_obj->ui_rep.reply = QUIT;
 			break;
@@ -327,13 +327,13 @@ file_selection_window_send_location(char* Buffer)
 			char * newBuffer = new char[strlen(ui_state.mrrocpp_local_path)+strlen(Buffer)+1];
 			strcpy(newBuffer,ui_state.mrrocpp_local_path);
 			strcpy(newBuffer+strlen(ui_state.mrrocpp_local_path)-1,Buffer);
-			newBuffer[strlen(ui_state.mrrocpp_local_path)+strlen(Buffer)-1] = '\0';			
+			newBuffer[strlen(ui_state.mrrocpp_local_path)+strlen(Buffer)-1] = '\0';
 			Buffer = newBuffer;
 			strncpy(ui_ecp_obj->ui_rep.filename,rindex(Buffer,'/')+1,strlen(rindex(Buffer,'/'))-1);
 			ui_ecp_obj->ui_rep.filename[strlen(rindex(Buffer,'/'))-1]='\0';
 			strncpy(ui_ecp_obj->ui_rep.path,Buffer,strlen(Buffer)-strlen(rindex(Buffer,'/')));
 			ui_ecp_obj->ui_rep.path[strlen(Buffer)-strlen(rindex(Buffer,'/'))]='\0';
-			
+
 			// kopiowanie biezacej sciezki, aby w nastepnym wywolaniu okna od niej zaczynac
 //			strcpy(ui_state.teach_filesel_fullpath, ui_ecp_obj->ui_rep.path);
 			strcpy(ui_state.teach_filesel_fullpath,newBuffer);
@@ -363,7 +363,7 @@ block_all_ecp_trigger_widgets()
 	{
 	double* tmp = new double[1];
 	tmp[0] = (ui_state.irp6_on_track.edp.is_synchronised ? 32:0)+(ui_state.irp6_postument.edp.is_synchronised ? 16:0)+(ui_state.conveyor.edp.is_synchronised ? 8:0)+(ui_state.speaker.edp.is_synchronised ? 4:0)+(ui_state.irp6_mechatronika.edp.is_synchronised ? 2:0)+1;
-	
+
 	replySend(new Message('A','H','C',1,tmp,NULL));
 
 	return 0;
@@ -405,19 +405,19 @@ process_control_window_init()
 	process_control_window_irp6p_section_init (wlacz_PtButton_wnd_processes_control_all_reader_start,
 		wlacz_PtButton_wnd_processes_control_all_reader_stop,
 		wlacz_PtButton_wnd_processes_control_all_reader_trigger);
-	
+
 	// Dla conveyor
 	process_control_window_conveyor_section_init (wlacz_PtButton_wnd_processes_control_all_reader_start,
 		wlacz_PtButton_wnd_processes_control_all_reader_stop,
 		wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
-	// Dla speakera - wylaczone	
+	// Dla speakera - wylaczone
 	// Dla irp6_mechatronika
 	process_control_window_irp6m_section_init (wlacz_PtButton_wnd_processes_control_all_reader_start,
 		wlacz_PtButton_wnd_processes_control_all_reader_stop,
 		wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
-	tmp = new double[2];	
+	tmp = new double[2];
 	tmp[0] = 5;
 	tmp[1] = (wlacz_PtButton_wnd_processes_control_all_reader_start ? 4:0)+(wlacz_PtButton_wnd_processes_control_all_reader_stop ? 2:0)+(wlacz_PtButton_wnd_processes_control_all_reader_trigger ? 1:0);
 	replySend(new Message('A','H','A',2,tmp,NULL));
@@ -426,33 +426,33 @@ process_control_window_init()
 if ((ui_state.mp.state!=ui_state.mp.last_state)||(ui_state.process_control_window_renew))
  {
 	ui_state.process_control_window_renew = false;
-	
+
 		switch (ui_state.mp.state)
 		{
 			case UI_MP_PERMITED_TO_RUN:
 				tmp = new double[1];
 				tmp[0] = 0;
-				replySend(new Message('A','H','B',1,tmp,NULL));			
-				
+				replySend(new Message('A','H','B',1,tmp,NULL));
+
 				block_all_ecp_trigger_widgets ();
 			break;
 			case UI_MP_WAITING_FOR_START_PULSE:
 				tmp = new double[1];
 				tmp[0] = 16;
-				replySend(new Message('A','H','B',1,tmp,NULL));			
-				
+				replySend(new Message('A','H','B',1,tmp,NULL));
+
 				block_all_ecp_trigger_widgets ();
 			break;
 			case UI_MP_TASK_RUNNING:
 				tmp = new double[1];
 				tmp[0] = 13;
-				replySend(new Message('A','H','B',1,tmp,NULL));			
+				replySend(new Message('A','H','B',1,tmp,NULL));
 				unblock_all_ecp_trigger_widgets ();
 			break;
 			case UI_MP_TASK_PAUSED:
 				tmp = new double[1];
 				tmp[0] = 10;
-				replySend(new Message('A','H','B',1,tmp,NULL));			
+				replySend(new Message('A','H','B',1,tmp,NULL));
 				block_all_ecp_trigger_widgets ();
 			break;
 			default:
@@ -466,11 +466,11 @@ int get_configs()
 {
 	DIR *dp;
 	struct dirent *ep;
-	char* fn;	
+	char* fn;
 	dp = opendir(ui_state.config_file_fullpath);
 	if(dp != NULL)
 	{
-		while(ep = readdir(dp)) 
+		while(ep = readdir(dp))
 		{
 			fn = new char[strlen(ep->d_name)+1];
 			strcpy(fn,ep->d_name);
@@ -486,7 +486,7 @@ int get_contents(char* Buffer)
 {
 	DIR *dp;
 	struct dirent *ep;
-	char* fn;	
+	char* fn;
 	char* path;
 	char * newBuffer = new char[strlen(ui_state.mrrocpp_local_path)+strlen(Buffer)+1];
 	strcpy(newBuffer,ui_state.mrrocpp_local_path);
@@ -496,14 +496,14 @@ int get_contents(char* Buffer)
 	dp = opendir(Buffer);
 	if(dp != NULL)
 	{
-		while(ep = readdir(dp)) 
+		while(ep = readdir(dp))
 		{
 			fn = new char[strlen(ep->d_name)+2];
-			path = new char[strlen(ep->d_name)+strlen(Buffer)+2];	
+			path = new char[strlen(ep->d_name)+strlen(Buffer)+2];
 			strcpy(path,Buffer);
 			strcpy(path+strlen(Buffer),"/");
 			strcpy(path+strlen(Buffer)+1,ep->d_name);
-			path[strlen(ep->d_name)+strlen(Buffer)+1] = '\0';			
+			path[strlen(ep->d_name)+strlen(Buffer)+1] = '\0';
 			strcpy(fn+1,ep->d_name);
 			if(is_dir(path) == 1) fn[0] = 'd';
 			else fn[0] = 'f';
@@ -529,8 +529,8 @@ int set_config(char* fn)
 int all_robots_move_to_synchro_position()
 {
 	if ((ui_state.mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (ui_state.mp.state == UI_MP_PERMITED_TO_RUN) || (ui_state.mp.state == UI_MP_WAITING_FOR_START_PULSE))
-	{	
-		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie		
+	{
+		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie
 		if ((ui_state.irp6_on_track.edp.state>0) && (ui_state.irp6_on_track.edp.is_synchronised ))
 			irp6ot_move_to_synchro_position();
 		if ((ui_state.irp6_postument.edp.state>0) && (ui_state.irp6_postument.edp.is_synchronised ))
@@ -545,8 +545,8 @@ int all_robots_move_to_synchro_position()
 int all_robots_move_to_position0()
 {
 	if ((ui_state.mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (ui_state.mp.state == UI_MP_PERMITED_TO_RUN) || (ui_state.mp.state == UI_MP_WAITING_FOR_START_PULSE))
-	{	
-		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie		
+	{
+		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie
 		if ((ui_state.irp6_on_track.edp.state>0) && (ui_state.irp6_on_track.edp.is_synchronised ))
 			irp6ot_move_to_position0();
 		if ((ui_state.irp6_postument.edp.state>0) && (ui_state.irp6_postument.edp.is_synchronised ))
@@ -560,8 +560,8 @@ int all_robots_move_to_position0()
 int all_robots_move_to_position1()
 {
 	if ((ui_state.mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (ui_state.mp.state == UI_MP_PERMITED_TO_RUN) || (ui_state.mp.state == UI_MP_WAITING_FOR_START_PULSE))
-	{	
-		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie		
+	{
+		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie
 		if ((ui_state.irp6_on_track.edp.state>0) && (ui_state.irp6_on_track.edp.is_synchronised ))
 			irp6ot_move_to_position1();
 		if ((ui_state.irp6_postument.edp.state>0) && (ui_state.irp6_postument.edp.is_synchronised ))
@@ -575,8 +575,8 @@ int all_robots_move_to_position1()
 int all_robots_move_to_position2()
 {
 	if ((ui_state.mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (ui_state.mp.state == UI_MP_PERMITED_TO_RUN) || (ui_state.mp.state == UI_MP_WAITING_FOR_START_PULSE))
-	{	
-		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie		
+	{
+		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie
 		if ((ui_state.irp6_on_track.edp.state>0) && (ui_state.irp6_on_track.edp.is_synchronised ))
 			irp6ot_move_to_position2();
 		if ((ui_state.irp6_postument.edp.state>0) && (ui_state.irp6_postument.edp.is_synchronised ))
@@ -612,10 +612,10 @@ int MPup()
 	if (ui_state.mp.pid ==-1)
 	{
 		ui_state.mp.node_nr = config->return_node_number(ui_state.mp.node_name);
-		
+
 		strcpy(tmp_string, "/dev/name/global/");
 		strcat(tmp_string, ui_state.mp.network_pulse_attach_point);
-			
+
 		// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny MP
 		if( access(tmp_string, R_OK)== 0  )
 		{
@@ -624,9 +624,9 @@ int MPup()
 		else
 		{
 			ui_state.mp.pid = config->process_spawn("[mp]");
-		
+
 			if(ui_state.mp.pid>0) {
-		
+
 				 short tmp = 0;
 			 	// kilka sekund  (~1) na otworzenie urzadzenia
 				while( (ui_state.mp.pulse_fd = name_open(ui_state.mp.network_pulse_attach_point, NAME_FLAG_ATTACH_GLOBAL))  < 0 )
@@ -636,7 +636,7 @@ int MPup()
 					   printf("blad odwolania do: %s,\n", ui_state.mp.network_pulse_attach_point);
 	   				   break;
 					};
-		
+
 			  ui_state.teachingstate = MP_RUNNING;
 			  replySend(new Message('A','A','A',0,NULL,NULL));
 			  ui_state.mp.state = UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
@@ -646,7 +646,7 @@ int MPup()
 				printf("Mp spawn failed\n");
 			}
 		}
-	}	
+	}
 	manage_interface();
 	return 0;
 }
@@ -656,7 +656,7 @@ bool deactivate_ecp_trigger (ecp_edp_ui_robot_def& robot_l)
 
 	if (robot_l.is_active)
 	{
-		if (robot_l.ecp.trigger_fd>=0) 
+		if (robot_l.ecp.trigger_fd>=0)
 		{
 			name_close(robot_l.ecp.trigger_fd);
 		}
@@ -664,7 +664,7 @@ bool deactivate_ecp_trigger (ecp_edp_ui_robot_def& robot_l)
 		robot_l.ecp.pid = -1;
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -679,14 +679,14 @@ execute_mp_pulse (char pulse_code)
 	// printf("w send pulse\n");
 	if (ui_state.mp.pulse_fd>0) {
 		if (ret == MsgSendPulse (ui_state.mp.pulse_fd , sched_get_priority_min(SCHED_FIFO),  pulse_code,  pulse_value)==-1) {
-	
+
 			  perror("Blad w wysylaniu pulsu do mp\n");
 			   fprintf( stderr, "Blad w wysylaniu pulsu do mp error: %s \n",       strerror( errno ) );
 			   delay(1000);
 		}
 	}
 	return ret;
-	
+
 }
 
 
@@ -706,7 +706,7 @@ int MPslay()
 	}
 	ui_state.mp.pid = -1;
 	ui_state.mp.pulse_fd = -1;
-	
+
 	deactivate_ecp_trigger (ui_state.irp6_on_track);
 	deactivate_ecp_trigger (ui_state.irp6_postument);
 	deactivate_ecp_trigger (ui_state.conveyor);
@@ -830,7 +830,7 @@ int slay_all()
 	for (std::list<program_node_def>::iterator program_node_list_iterator = ui_state.program_node_list.begin(); program_node_list_iterator != ui_state.program_node_list.end(); program_node_list_iterator++)
 	{
 		char system_command[100];
-#if defined(PROCESS_SPAWN_RSH)
+#if 0 && defined(PROCESS_SPAWN_RSH)
 		sprintf(system_command, "rsh %s killall -e -q -v %s",
 				program_node_list_iterator->node_name,
 				program_node_list_iterator->program_name
@@ -842,10 +842,10 @@ int slay_all()
 			   );
 #endif
 //		printf("aaa: %s\n", system_command);
-		system(system_command);		
-		
+		system(system_command);
+
 		delay(10);
-						
+
 #if defined(PROCESS_SPAWN_RSH)
 		sprintf(system_command, "rsh %s killall -e -q -v %s",
 				program_node_list_iterator->node_name,
@@ -860,9 +860,9 @@ int slay_all()
 //		printf("bbb: %s\n", system_command);
 		system(system_command);
 	}
-	
+
 	manage_interface();
-	
+
 	return 0;
 }
 
@@ -874,13 +874,13 @@ int EDP_all_robots_synchronise()
 	EDP_irp6_postument_synchronise();
 }
 
-int set_ui_busy_state_notification () 
+int set_ui_busy_state_notification ()
 {
 	set_ui_state_notification(UI_N_BUSY);
 	return 0;
 }
 
-int set_ui_ready_state_notification () 
+int set_ui_ready_state_notification ()
 {
 	set_ui_state_notification(UI_N_READY);
 	return 0;
@@ -891,7 +891,7 @@ int set_ui_state_notification (UI_NOTIFICATION_STATE_ENUM new_notifacion)
 	if (new_notifacion != ui_state.notification_state)
 	{
 		ui_state.notification_state = new_notifacion;
-		
+
 		switch (new_notifacion)
 		{
 			case UI_N_STARTING:
@@ -905,7 +905,7 @@ int set_ui_state_notification (UI_NOTIFICATION_STATE_ENUM new_notifacion)
 			break;
 			case UI_N_EXITING:
 			replySend(new Message('9','D','A',0,NULL,NULL));
-			break;			
+			break;
 			case UI_N_COMMUNICATION:
 			replySend(new Message('9','E','A',0,NULL,NULL));
 			break;
@@ -945,21 +945,21 @@ int clear_all_configuration_lists()
 	for (std::list<char*>::iterator list_iterator = ui_state.section_list.begin(); list_iterator != ui_state.section_list.end(); list_iterator++)
 	{
 		delete *list_iterator;
-	}	
+	}
 	ui_state.section_list.clear();
-	
+
 	for (std::list<char*>::iterator node_list_iterator = ui_state.config_node_list.begin(); node_list_iterator != ui_state.config_node_list.end(); node_list_iterator++)
 	{
 		delete *node_list_iterator;
 	}
 	ui_state.config_node_list.clear();
-	
+
 	for (std::list<char*>::iterator node_list_iterator = ui_state.all_node_list.begin(); node_list_iterator != ui_state.all_node_list.end(); node_list_iterator++)
 	{
 		delete *node_list_iterator;
 	}
 	ui_state.all_node_list.clear();
-	
+
 	for (std::list<program_node_def>::iterator program_node_list_iterator = ui_state.program_node_list.begin(); program_node_list_iterator != ui_state.program_node_list.end(); program_node_list_iterator++)
 	{
 		delete program_node_list_iterator->program_name;
@@ -971,24 +971,24 @@ int clear_all_configuration_lists()
 
 
 
-int initiate_configuration() 
+int initiate_configuration()
 {
-	
+
 	char* tmp;
-	
+
 	bool wyjscie = false;
-	 
- 	 if (access(ui_state.config_file_relativepath, R_OK)!= 0 ) 
+
+ 	 if (access(ui_state.config_file_relativepath, R_OK)!= 0 )
 	{
 	 	printf ("Wrong entry in default_file.cfg - load another configuration than: %s\n", ui_state.config_file_relativepath);
 		strcpy(ui_state.config_file_relativepath,"../configs/common.ini");
-	
+
 	 }
 
 	// sprawdzenie czy nazwa sesji jest unikalna
 
 	while (!wyjscie)
-	{	
+	{
 
         time_t time_of_day;
         char file_date[50];
@@ -999,43 +999,43 @@ int initiate_configuration()
 
         time_of_day = time( NULL );
         strftime( ui_state.session_name, 8, "_%H%M%S", localtime( &time_of_day ) );
-        
+
         if (config) delete config;
-		config = new configurator(ui_state.ui_node_name, ui_state.mrrocpp_local_path, ui_state.config_file, "[ui]", 
+		config = new configurator(ui_state.ui_node_name, ui_state.mrrocpp_local_path, ui_state.config_file, "[ui]",
 		ui_state.session_name);
-		
+
 		tmp = config->return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
 
 		// wykrycie identyczneych nazw sesji
 		wyjscie = true;
 		DIR* dirp;
 	    struct dirent* direntp;
-	
+
 	    dirp = opendir( "/dev/name/global" );
 	    if( dirp != NULL ) {
 	        for(;;) {
 	            direntp = readdir( dirp );
 	            if( direntp == NULL ) break;
-	
+
 	            // printf( "%s\n", direntp->d_name );
 	            if  (strcmp(direntp->d_name, tmp) == 0)
 	            {
 	            	wyjscie = false;
 	            }
 	        }
-	
+
 	        closedir( dirp );
-	 
+
 	    }
-	    
+
 	    delete[] tmp;
-		
+
 	}
-		
+
 	ui_state.ui_attach_point = config->return_attach_point_name(configurator::CONFIG_SERVER, "ui_attach_point", "[ui]");
 	ui_state.sr_attach_point = config->return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
 	ui_state.network_sr_attach_point = config->return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
-	
+
 	clear_all_configuration_lists();
 
 	// sczytanie listy sekcji
@@ -1044,65 +1044,65 @@ int initiate_configuration()
 	fill_node_list();
 	fill_program_node_list();
 
-		
+
 	return 1;
 }
 
 
 
-int 
+int
 reload_whole_configuration() {
 
 	char sr_msg_buf[100];
 
- 	 if (access(ui_state.config_file_relativepath, R_OK) != 0 ) 
+ 	 if (access(ui_state.config_file_relativepath, R_OK) != 0 )
 	{
 	 	printf ("Wrong entry in default_file.cfg - load another configuration than: %s\n", ui_state.config_file_relativepath);
 		strcpy(ui_state.config_file_relativepath,"../configs/common.ini");
-		 }	
+		 }
 
- 
+
 	if ((ui_state.mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (ui_state.mp.state == UI_MP_PERMITED_TO_RUN) ){ // jesli nie dziala mp podmien mp ecp vsp
-	
+
 		config->change_ini_file (ui_state.config_file);
-	
+
 		ui_state.is_mp_and_ecps_active = config->return_int_value("is_mp_and_ecps_active");
-	
+
 		switch (ui_state.all_edps)
 		{
 			case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
 			case UI_ALL_EDPS_NONE_EDP_LOADED:
-			
-				// dla robota irp6 on_track			
+
+				// dla robota irp6 on_track
 				reload_irp6ot_configuration ();
-		
-				// dla robota irp6 postument	
+
+				// dla robota irp6 postument
 				reload_irp6p_configuration ();
-				
+
 				// dla robota conveyor
 				reload_conveyor_configuration ();
-		
+
 				// dla robota speaker
 				reload_speaker_configuration ();
-				
-				// dla robota irp6 mechatronika	
+
+				// dla robota irp6 mechatronika
 				reload_irp6m_configuration ();
 			break;
 			default:
 			break;
 		}
-				
+
 
 		// clearing of lists
 		clear_all_configuration_lists();
-		
+
 		// sczytanie listy sekcji
 		fill_section_list (ui_state.config_file_relativepath);
 		fill_section_list ((char*)"../configs/common.ini");
 		fill_node_list();
 		fill_program_node_list();
-		
-	
+
+
 		//ui_state.section_list.clear();
 		// ui_state.section_list.push_front("ala");
 		//  ui_state.section_list.push_front("bala");
@@ -1112,44 +1112,44 @@ reload_whole_configuration() {
 			for (list<char*>::iterator list_iterator = ui_state.section_list.begin(); list_iterator != ui_state.section_list.end(); list_iterator++)
 			{
 				printf("section_name: %s\n", *list_iterator);
-			
+
 			}
-		
+
 			for (list<char*>::iterator node_list_iterator = ui_state.node_list.begin(); node_list_iterator != ui_state.node_list.end(); node_list_iterator++)
 			{
 				printf("node_name: %s\n", *node_list_iterator);
 			}
-			
+
 			for (list<program_node_def>::iterator program_node_list_iterator = ui_state.program_node_list.begin(); program_node_list_iterator != ui_state.program_node_list.end(); program_node_list_iterator++)
 			{
 				printf("node_name: %s\n", program_node_list_iterator->node_name);
 			}
 			*/
-		
+
 		// zczytanie konfiguracji UI
-			
-	
+
+
 		// zczytanie konfiguracji MP
-		
-		if (ui_state.is_mp_and_ecps_active) 
+
+		if (ui_state.is_mp_and_ecps_active)
 		{
-		
+
 			delete [] ui_state.mp.network_pulse_attach_point;
 			ui_state.mp.network_pulse_attach_point = config->return_attach_point_name	(configurator::CONFIG_SERVER, "mp_pulse_attach_point", "[mp]");
-			
+
 			delete [] ui_state.mp.node_name;
 			ui_state.mp.node_name = config->return_string_value ("node_name", "[mp]");
 
 			ui_state.mp.pid = -1;
 		}
-		
+
 		// inicjacja komunikacji z watkiem sr
 		if (ui_msg.ui == NULL)
 		{
 			if ((ui_msg.ui = new sr_ui(UI, ui_state.ui_attach_point, ui_state.network_sr_attach_point)) == NULL) {
 				perror ( "Unable to locate SR\n");
 			} else {
-				ui_msg.ui->message("started");	
+				ui_msg.ui->message("started");
 			}
 		}
 
@@ -1159,7 +1159,7 @@ reload_whole_configuration() {
 			if ((ui_msg.all_ecp = new sr_ecp(ECP, "ui_all_ecp" , ui_state.network_sr_attach_point)) == NULL) {
 				perror ( "Unable to locate SR\n");
 			} else {
-					
+
 			}
 		}
 
@@ -1170,11 +1170,11 @@ reload_whole_configuration() {
 			strcat(sr_msg_buf, " config file loaded");
 			ui_msg.ui->message(sr_msg_buf);
 		}
-	
+
 	}
 
 	manage_interface();
-	
+
 	return 1;
 }
 
@@ -1187,35 +1187,35 @@ int fill_section_list(char* file_name_and_path)
 	static char line[256];
 	// char program_name[50];
 	// char node_name[50];
-	
+
 	FILE *file;
   	char *fptr;
 	std::list<char*>::iterator list_iterator;
 
 	// otworz plik konfiguracyjny
 	file=fopen(file_name_and_path, "r");
-	if ( file==NULL ) 
+	if ( file==NULL )
 	{
 		printf ("UI fill_section_list Wrong file_name: %s\n", file_name_and_path);
 		exit(0);
 	}
-	 
+
 	// sczytaj nazwy wszytkich sekcji na liste dynamiczna
 	fptr = fgets(line,255,file);  // get input line
-	
+
 	// dopoki nie osiagnieto konca pliku
-	
+
 	while (!feof(file)	)
 	{
 		// jesli znaleziono nowa sekcje
 		if (( fptr!=NULL )&&( line[0]=='[' ))
 		{
 			char current_section[50];
-		    strncpy(current_section, line, strlen(line)-1); 
+		    strncpy(current_section, line, strlen(line)-1);
 		    current_section[strlen(line)-1]='\0';
 
 			//		printf("outside: %s\n", current_section);
-		
+
 			// checking if section is already considered
 			for (list_iterator = ui_state.section_list.begin(); list_iterator != ui_state.section_list.end(); list_iterator++)
 			{
@@ -1223,17 +1223,17 @@ int fill_section_list(char* file_name_and_path)
 			}
 
 			// if the section does not exists
-			if (list_iterator == ui_state.section_list.end()) 
+			if (list_iterator == ui_state.section_list.end())
 			{
 			//		printf("inside: %s\n", current_section);
 				char * tmp;
 				tmp = new char[50];
 				strcpy(tmp, current_section);
 				ui_state.section_list.push_back(tmp);
-			} 
-		
+			}
+
 		} // end 	if (( fptr!=NULL )&&( line[0]=='[' ))
-		
+
 		// odczytaj nowa lnie
 		fptr=fgets(line,255,file);  // get input line
 	} // end while (!feof(file)	)
@@ -1251,7 +1251,7 @@ int fill_node_list()
 {
 //	printf("fill_node_list\n");
 	std::list<char*>::iterator node_list_iterator;
-	
+
     DIR* dirp;
     struct dirent* direntp;
 
@@ -1273,34 +1273,34 @@ int fill_node_list()
         closedir( dirp );
 
     }
-	
-	
+
+
 	for (std::list<char*>::iterator section_list_iterator = ui_state.section_list.begin(); section_list_iterator != ui_state.section_list.end(); section_list_iterator++)
-	{	
-		
+	{
+
 		if (config->exists("node_name", *section_list_iterator))
 		{
 			char* tmp = config->return_string_value("node_name", *section_list_iterator);
 	//		printf("bbb: %s\n", config->return_string_value("node_name", *section_list_iterator));
-			
+
 			for (node_list_iterator = ui_state.config_node_list.begin(); node_list_iterator != ui_state.config_node_list.end(); node_list_iterator++)
 			{
-				if (strcmp(tmp, *node_list_iterator) == 0 ) 
+				if (strcmp(tmp, *node_list_iterator) == 0 )
 				{
 		//			printf("bbb\n");
 					break;
 				}
 			}
-			
+
 			// if the node does not exists
-			if (node_list_iterator == ui_state.config_node_list.end()) 
+			if (node_list_iterator == ui_state.config_node_list.end())
 			{
 		//		printf("aaa\n");
 				ui_state.config_node_list.push_back(tmp);
 			} else {
 				delete tmp;
 			}
-			
+
 		}
 
 	}
@@ -1314,23 +1314,23 @@ return 1;
 int fill_program_node_list()
 {
 //	printf("fill_program_node_list\n");
-	
+
 	for (std::list<char*>::iterator section_list_iterator = ui_state.section_list.begin(); section_list_iterator != ui_state.section_list.end(); section_list_iterator++)
-	{	
-		
+	{
+
 		if ((config->exists("program_name", *section_list_iterator) && config->exists("node_name", *section_list_iterator)))
 		{
 			//	char* tmp_p = config->return_string_value("program_name", *section_list_iterator);
 			//	char* tmp_n = config->return_string_value("node_name", *section_list_iterator);
-			
+
 			program_node_def* tmp_s;
 			tmp_s = new program_node_def;
-			
+
 			tmp_s->program_name = config->return_string_value("program_name", *section_list_iterator);
 			tmp_s->node_name = config->return_string_value("node_name", *section_list_iterator);
 
 			ui_state.program_node_list.push_back(*tmp_s);
-			
+
 		}
 	}
 
@@ -1353,20 +1353,20 @@ get_default_configuration_file_name() {
 		fgets(tmp_buf, 255,fp); // Uwaga na zwracanego NULLa
 		tmp_buf1=strtok(tmp_buf,"=\n\r");   // get first token
 		strcpy(ui_state.config_file, tmp_buf1);
-		
+
 		 strcpy(ui_state.config_file_relativepath, "../configs/");
 		 strcat(ui_state.config_file_relativepath, ui_state.config_file);
-			
+
 		delete tmp_buf;
 		fclose(fp);
-		return 1;			
-				
+		return 1;
+
 	} else {
-		// jesli plik z domyslna konfiguracja (default_file.cfg) nie istnieje to utworz go i wpisz do niego common.ini 
+		// jesli plik z domyslna konfiguracja (default_file.cfg) nie istnieje to utworz go i wpisz do niego common.ini
 		printf ("Utworzono plik default_file.cfg z konfiguracja common.ini\n");
 		fp = fopen("../configs/default_file.cfg","w");
 		fclose(fp);
-		
+
 		 strcpy(ui_state.config_file, "common.ini");
 		 strcpy(ui_state.config_file_relativepath, "../configs/");
 		 strcat(ui_state.config_file_relativepath, ui_state.config_file);
@@ -1374,13 +1374,13 @@ get_default_configuration_file_name() {
 		  ofstream outfile("../configs/default_file.cfg", ios::out);
 	      if (!outfile) {
 			  std::cerr << "Cannot open file: default_file.cfg\n";
-			perror("because of");	    
+			perror("because of");
 			}
           else
 			outfile << ui_state.config_file;
 
 	      outfile.close();
-		
+
 		return 2;
 	}
 
@@ -1399,14 +1399,14 @@ set_default_configuration_file_name() {
 
 	  ofstream outfile("../configs/default_file.cfg", ios::out);
       if (!outfile) {
-		  std::cerr << "Cannot open file: default_file.cfg\n";	
-		perror("because of");	    
+		  std::cerr << "Cannot open file: default_file.cfg\n";
+		perror("because of");
 		}
          else
 		outfile << ui_state.config_file;
 
       outfile.close();
-	
+
 	return 1;
 }
 
@@ -1430,12 +1430,12 @@ int check_edps_state_and_modify_mp_state ()
 	 (!(ui_state.speaker.is_active))
  	&&
  	(!(ui_state.irp6_mechatronika.is_active))
-	) 
+	)
 	{
 		ui_state.all_edps = UI_ALL_EDPS_NONE_EDP_ACTIVATED;
-		
+
 	// jesli wszystkie sa zsynchrnizowane
-	} else	 
+	} else
 	 if (
 	(((ui_state.irp6_postument.is_active)&&(ui_state.irp6_postument.edp.is_synchronised))||(!(ui_state.irp6_postument.is_active)))
 	&&
@@ -1446,10 +1446,10 @@ int check_edps_state_and_modify_mp_state ()
 	 (((ui_state.speaker.is_active)&&(ui_state.speaker.edp.is_synchronised))||(!(ui_state.speaker.is_active)))
  	&&
  	(((ui_state.irp6_mechatronika.is_active)&&(ui_state.irp6_mechatronika.edp.is_synchronised))||(!(ui_state.irp6_mechatronika.is_active)))
-	) 
+	)
 	{
-		ui_state.all_edps = UI_ALL_EDPS_LOADED_AND_SYNCHRONISED; 
-	
+		ui_state.all_edps = UI_ALL_EDPS_LOADED_AND_SYNCHRONISED;
+
 	// jesli wszystkie sa zaladowane
 	} else	 if (
 	(((ui_state.irp6_postument.is_active)&&(ui_state.irp6_postument.edp.state>0))||(!(ui_state.irp6_postument.is_active)))
@@ -1459,12 +1459,12 @@ int check_edps_state_and_modify_mp_state ()
 	 (((ui_state.conveyor.is_active)&&(ui_state.conveyor.edp.state>0))||(!(ui_state.conveyor.is_active)))
 	&&
 	 (((ui_state.speaker.is_active)&&(ui_state.speaker.edp.state>0))||(!(ui_state.speaker.is_active)))
-	&& 
+	&&
  	(((ui_state.irp6_mechatronika.is_active)&&(ui_state.irp6_mechatronika.edp.state>0))||(!(ui_state.irp6_mechatronika.is_active)))
-	) 
+	)
 	{
 		ui_state.all_edps = UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED;
-		
+
 	// jesli chociaz jeden jest zaladowany
 	} else	 if (
 	((ui_state.irp6_postument.is_active)&&(ui_state.irp6_postument.edp.state>0))
@@ -1474,17 +1474,17 @@ int check_edps_state_and_modify_mp_state ()
 	 ((ui_state.conveyor.is_active)&&(ui_state.conveyor.edp.state>0))
 	||
 	 ((ui_state.speaker.is_active)&&(ui_state.speaker.edp.state>0))
-	|| 
+	||
  	((ui_state.irp6_mechatronika.is_active)&&(ui_state.irp6_mechatronika.edp.state>0))
-	) 
-		
+	)
+
 	{
 		ui_state.all_edps = UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED;
-		
+
 	// jesli zaden nie jest zaladowany
 	} else {
 		ui_state.all_edps = UI_ALL_EDPS_NONE_EDP_LOADED;
-		
+
 	}
 
 	// modyfikacja stanu MP przez stan wysztkich EDP
@@ -1496,7 +1496,7 @@ int check_edps_state_and_modify_mp_state ()
 			if ((ui_state.mp.state == UI_MP_NOT_PERMITED_TO_RUN) && (ui_state.is_mp_and_ecps_active))
 			{
 				ui_state.mp.state = UI_MP_PERMITED_TO_RUN; // pozwol na uruchomienie mp
-			}	
+			}
 		break;
 
 		case UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
@@ -1519,18 +1519,18 @@ int
 pulse_reader_execute( int coid, int pulse_code, int pulse_value)
 
 {
-	
-	if (MsgSendPulse (coid, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value)==-1) 
+
+	if (MsgSendPulse (coid, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value)==-1)
 	{
 		perror("Blad w wysylaniu pulsu do redera");
 	}
-	
+
 	return 1;
 }
 
 
 
-	
+
 // sprawdza czy sa postawione gns's i ew. stawia je
 // uwaga serwer powinien byc wczesniej postawiony (dokladnie jeden w sieci)
 
@@ -1542,25 +1542,25 @@ check_gns()
 	DIR* dirp;
    	unsigned short number_of_gns_serwers = 0;
 	 char* gns_server_node;
-	 
- 	 if (access("/etc/system/config/useqnet", R_OK)) 
+
+ 	 if (access("/etc/system/config/useqnet", R_OK))
 	{
 	 	printf ("UI: There is no /etc/system/config/useqnet file; the qnet will not work properly.\n");
 		exit(0);
-	 }	
-   	
+	 }
+
    	// poszukiwanie serwerow gns
     	for (std::list<char*>::iterator node_list_iterator = ui_state.all_node_list.begin(); node_list_iterator != ui_state.all_node_list.end(); node_list_iterator++)
 	{
    		char opendir_path[100];
-						
+
 		strcpy(opendir_path, "/net/");
 		strcat(opendir_path, *node_list_iterator);
 		strcat(opendir_path, "/proc/mount/dev/name/gns_server");
 		//strcat(opendir_path, "/dev/name/gns_server");
-		
+
  	 	// sprawdzenie czy dziala serwer gns
- 	   	 if ((dirp = opendir(opendir_path))!=NULL) 
+ 	   	 if ((dirp = opendir(opendir_path))!=NULL)
 		{
 			number_of_gns_serwers++;
 			gns_server_node = new char[strlen(*node_list_iterator)];
@@ -1570,7 +1570,7 @@ check_gns()
 
 	}
 
-   	
+
    	// there is more than one gns server in the QNX network
    	if (number_of_gns_serwers > 1)
    	{
@@ -1579,49 +1579,49 @@ check_gns()
    	    	for (std::list<char*>::iterator node_list_iterator = ui_state.all_node_list.begin(); node_list_iterator != ui_state.all_node_list.end(); node_list_iterator++)
 		{
 	   		char opendir_path[100];
-							
+
 			strcpy(opendir_path, "/net/");
 			strcat(opendir_path, *node_list_iterator);
 			//strcat(opendir_path, "/dev/name/gns_server");
 			strcat(opendir_path, "/proc/mount/dev/name/gns_server");
-			
+
 	 	 	// sprawdzenie czy dziala serwer gns
-	 	   	 if ((dirp = opendir(opendir_path))!=NULL) 
+	 	   	 if ((dirp = opendir(opendir_path))!=NULL)
 			{
 			 	closedir( dirp );
 				printf ("There is gns server on %s node\n", *node_list_iterator);
 			 }
 		}
-  	delete[] gns_server_node; 		
+  	delete[] gns_server_node;
 		exit(0);
    	}
    	// gns server was not found in the QNX network
    	else if (!number_of_gns_serwers)
    	{
    		printf("UI: gns server was not found in the QNX network, it will be automatically run on local node\n");
-		
+
 		// ew. zabicie klienta gns
-		if ((dirp = opendir( "/dev/name" )) != NULL) 
+		if ((dirp = opendir( "/dev/name" )) != NULL)
 		{
 			closedir( dirp );
 			system("slay gns");
-		 } 
-		
+		 }
+
 		// uruchomienie serwera
 		system("gns -s");
-		
+
 		   	// poszukiwanie serwerow gns
     	for (std::list<char*>::iterator node_list_iterator = ui_state.all_node_list.begin(); node_list_iterator != ui_state.all_node_list.end(); node_list_iterator++)
 	{
    		char opendir_path[100];
-						
+
 		strcpy(opendir_path, "/net/");
 		strcat(opendir_path, *node_list_iterator);
 		strcat(opendir_path, "/proc/mount/dev/name/gns_server");
 	//	strcat(opendir_path, "/dev/name/gns_server");
-		
+
  	 	// sprawdzenie czy dziala serwer gns
- 	   	 if ((dirp = opendir(opendir_path))!=NULL) 
+ 	   	 if ((dirp = opendir(opendir_path))!=NULL)
 		{
 			number_of_gns_serwers++;
 			gns_server_node = new char[strlen(*node_list_iterator)];
@@ -1630,17 +1630,17 @@ check_gns()
 		 }
 
 	}
-		
-		
+
+
    	}
     	// sprawdzanie lokalne
-  	 if ((dirp = opendir( "/proc/mount/dev/name" )) == NULL) 
+  	 if ((dirp = opendir( "/proc/mount/dev/name" )) == NULL)
 	{
 			char system_command[100];
 			strcpy(system_command, "gns -c ");
 			strcat(system_command, gns_server_node);
 			system(system_command);
-	 } else 
+	 } else
 	{
 		 closedir( dirp );
 	}
@@ -1651,41 +1651,41 @@ check_gns()
 	{
 
 		char opendir_path[100];
-						
+
 		strcpy(opendir_path, "/net/");
 		strcat(opendir_path, *node_list_iterator);
-	
+
 		// sprawdzenie czy istnieje wezel
-		if ((dirp = opendir (opendir_path)) != NULL) 
+		if ((dirp = opendir (opendir_path)) != NULL)
 		{
 			closedir( dirp );
 			strcat(opendir_path, "/proc/mount/dev/name");
 
 	 	 	// sprawdzenie czy dziala gns
-	 	   	 if ((dirp = opendir(opendir_path))==NULL) 
+	 	   	 if ((dirp = opendir(opendir_path))==NULL)
 			{
 				char system_command[100];
-		
+
 				strcpy(system_command, "on -f ");
 				strcat(system_command, *node_list_iterator);
 				strcat(system_command, " gns -c ");
 				strcat(system_command, gns_server_node);
-			
+
 				system(system_command);
-				
-				
-			 }  else 
+
+
+			 }  else
 			{
 				 closedir( dirp );
 			}
-	
-		} else 
+
+		} else
 		{
 			printf("check_gns - Nie wykryto wezla: %s, ktory wystepuje w pliku konfiguracyjnym\n", *node_list_iterator);
 		}
 	}
 
-	
+
 
 	delete[] gns_server_node;
 
