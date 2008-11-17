@@ -2,8 +2,8 @@
 // Proces:		VIRTUAL SENSOR PROCESS (VSP)
 // Plik:            vsp_m_nint.cc
 // System:	QNX/MRROC++  v. 6.3
-// Opis:		Interaktywna (bez oczekiwania) powloka procesow VSP 
-// 
+// Opis:		Interaktywna (bez oczekiwania) powloka procesow VSP
+//
 // 	-	interaktywne odczytywanie stanu czujnika rzeczywistego, bez oczekiwania na zakonczenie wynnosci
 // 	-	operacje read-write + devctl->(write, read, rw)
 // 	-	dwuwatkowy
@@ -73,7 +73,7 @@ void catch_signal(int sig) {
 	  TERMINATE = true;
 	  sem_post( &(new_command_sem));
 	  vs->terminate();
-	  _exit(EXIT_SUCCESS);     
+	  _exit(EXIT_SUCCESS);
 	  break;
 	case SIGSEGV:
 	  fprintf(stderr, "Segmentation fault in VSP process\n");
@@ -130,7 +130,7 @@ void error_handler(ERROR e){
 			break;
 		default:
 			sr_msg->message (NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
-		} // end switch  
+		} // end switch
 	} // end error_handler
 
 /****************************** SECOND THREAD ******************************/
@@ -141,7 +141,7 @@ void* realize_command( void*  arg ){
     // aktywne oczekiwanie, az bedzie jakies zadanie do wykonania
 
 	sem_wait( &(new_command_sem));
-	
+
 	// Zadanie konfiguracji czujnika.
     if(sensor_configuration_task){
 	 CONFIGURE_FLAG = false;
@@ -184,36 +184,36 @@ int main(int argc, char *argv[]) {
     dispatch_context_t   *ctp;
     int                  id;
     	char* resourceman_attach_point;
-    	
+
     	static resmgr_connect_funcs_t   connect_funcs;
 	static resmgr_io_funcs_t        io_funcs;
 	static iofunc_attr_t            attr;
 
     sem_init( &(new_command_sem), 0, 0);
-    	
+
 	// wylapywanie sygnalow
 	signal(SIGTERM, &catch_signal);
 	signal(SIGSEGV, &catch_signal);
 
 	// liczba argumentow
-	if(argc <=6){
+	if(argc < 6){
 		printf("Za malo argumentow VSP\n");
 		return -1;
 		};
-	
+
 	 // zczytanie konfiguracji calego systemu
  	config = new configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
  	if (argc>6) {
- 		config->answer_to_y_rsh_spawn(argv[6]); 
+ 		config->answer_to_y_rsh_spawn(argv[6]);
  		signal(SIGINT, SIG_IGN);
  	}
 	resourceman_attach_point = config->return_attach_point_name(configurator::CONFIG_RESOURCEMAN_LOCAL, "resourceman_attach_point");
-	
+
 	try{
-	
-		/* Lokalizacja procesu wywietlania komunikatow SR */ 
+
+		/* Lokalizacja procesu wywietlania komunikatow SR */
 		if ((sr_msg = new sr_vsp(VSP, config->return_string_value("resourceman_attach_point"),
-			 config->return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL) 
+			 config->return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL)
 		{
 				printf("communication with SR not ready\n");
 		}
@@ -241,13 +241,13 @@ int main(int argc, char *argv[]) {
 		/* initialize functions for handling messages */
 		iofunc_func_init(_RESMGR_CONNECT_NFUNCS, &connect_funcs, _RESMGR_IO_NFUNCS, &io_funcs);
 		io_funcs.read = io_read;
-		io_funcs.write = io_write;                                        
+		io_funcs.write = io_write;
 		io_funcs.devctl = io_devctl;
-		
+
 		/* initialize attribute structure used by the device */
 		iofunc_attr_init(&attr, S_IFNAM | 0666, 0, 0);
 		attr.nbytes = sizeof(DEVCTL_MSG);
-   
+
 		/* attach our device name */
 		if ( (id = resmgr_attach
 				   (dpp,					/* dispatch handle        */
@@ -257,7 +257,7 @@ int main(int argc, char *argv[]) {
                        0,						 /* flags                  */
                        &connect_funcs,		/* connect routines       */
                        &io_funcs,				/* I/O routines           */
-                       &attr)) 	== -1){		/* handle                 */ 
+                       &attr)) 	== -1){		/* handle                 */
 			throw VSP_main_error(SYSTEM_ERROR, DEVICE_CREATION_ERROR);	// wyrzucany blad
 			};
 
@@ -273,7 +273,7 @@ int main(int argc, char *argv[]) {
 
 	   	// ustawienie priorytetow
 		setprio(0, 15);
-		
+
 		/* start the resource manager message loop */
 		sr_msg->message ("Device is waiting for clients...");
 		while(!TERMINATE) { // for(;;)
@@ -388,9 +388,9 @@ int io_read (resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb){
 }	// end io_read
 
 /********************************* IO_WRITE *********************************/
-int io_write (resmgr_context_t *ctp, io_write_t *msg, RESMGR_OCB_T *ocb){                                                                                 
+int io_write (resmgr_context_t *ctp, io_write_t *msg, RESMGR_OCB_T *ocb){
 //printf("VSP: io_write begin\n");
-    int     status;                                                               
+    int     status;
 	if ((status = iofunc_write_verify(ctp, msg, ocb, NULL)) != EOK)
 		return (status);
 	if (msg->i.xtype & _IO_XTYPE_MASK != _IO_XTYPE_NONE)
@@ -415,11 +415,11 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb) {
 	resmgr_msgread(ctp, &vs->to_vsp, msg->i.nbytes, sizeof(msg->i));
 
     switch (msg->i.dcmd) {
-    case DEVCTL_WT: 
+    case DEVCTL_WT:
 		   write_to_sensor(vs->to_vsp.i_code);
 		 return (EOK);
         break;
-    case DEVCTL_RD: 
+    case DEVCTL_RD:
 		  try{
 			if(!CONFIGURE_FLAG)
 				throw VSP_main_error(NON_FATAL_ERROR, SENSOR_NOT_CONFIGURED);
@@ -442,7 +442,7 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb) {
 			error_handler(e);
 			} // end CATCH
 		  // Count the start address of reply message content.
-		  /* 
+		  /*
 		  struct _io_devctl_reply {
 	          uint32_t                  zero;
 	          int32_t                   ret_val;
@@ -457,7 +457,7 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb) {
 			resmgr_msgwrite(ctp, &msg->o,  sizeof(msg->o) + sizeof(VSP_REPORT) + vs->union_size, 0);
 		return(EOK);
         break;
-    case DEVCTL_RW: 
+    case DEVCTL_RW:
 		  write_to_sensor(vs->to_vsp.i_code);
 		  // Count the start address of reply message content.
 		  addr = (int*)&msg->o +4;
@@ -466,7 +466,7 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb) {
 		return(EOK);
         break;
     default:
-        return(ENOSYS); 
+        return(ENOSYS);
     }
 	return(EOK);
 }
