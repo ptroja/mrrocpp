@@ -50,6 +50,9 @@ int main(int argc, char *argv[])
 
 		signal(SIGTERM, &(catch_signal_in_ecp));
 		signal(SIGSEGV, &(catch_signal_in_ecp));
+#if defined(PROCESS_SPAWN_RSH)
+		signal(SIGINT, SIG_IGN);
+#endif
 
 		ecp_t->initialize_communication();
 

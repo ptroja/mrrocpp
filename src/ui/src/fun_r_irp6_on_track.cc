@@ -2358,7 +2358,6 @@ EDP_irp6_on_track_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
 	// dla robota irp6_on_track
 	if (ui_state.irp6_on_track.edp.state>0)
 	 { // jesli istnieje EDP

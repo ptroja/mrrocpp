@@ -71,6 +71,10 @@ int main(int argc, char *argv[], char **arge) {
 		// przechwycenie SIGTERM
 		signal(SIGTERM, &catch_signal);
 		signal(SIGSEGV, &catch_signal);
+#if defined(PROCESS_SPAWN_RSH)
+		signal(SIGINT, SIG_IGN);
+#endif
+		
 
 		// odczytanie konfiguracji
 		configurator * _config = new configurator(argv[1], argv[2], argv[3],
