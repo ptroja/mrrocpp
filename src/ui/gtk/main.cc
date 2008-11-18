@@ -1,14 +1,3 @@
-/*
- First run tutorial.glade through gtk-builder-convert with this command:
- gtk-builder-convert tutorial.glade tutorial.xml
-
- Then save this file as main.c and compile it using this command
- (those are backticks, not single quotes):
- gcc -Wall -g -o tutorial main.c `pkg-config --cflags --libs gtk+-2.0` -export-dynamic
-
- Then execute it using:
- ./tutorial
- */
 #include <gtk/gtk.h>
 #include <gtk/gtktreemodel.h>
 
@@ -57,47 +46,47 @@ int set_tree_view(void)
 
 extern "C" {
 
-void on_window_destroy(GtkObject *object, gpointer user_data)
-{
-	gtk_main_quit();
-}
-
-void on_open_file_activate(GtkObject *object, gpointer user_data)
-{
-	GtkWidget *dialog;
-
-	dialog = gtk_file_chooser_dialog_new("Open File", NULL, //parent_window,
-			GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL,
-			GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
-
-	GtkFileFilter *filter = gtk_file_filter_new();
-	gtk_file_filter_add_pattern(filter, "*.xml");
-	gtk_file_filter_set_name(filter, "XML files");
-	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
-
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), config->getConfig_dir());
-
-	if (gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
-		char *filename;
-
-		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (dialog));
-		config->open_config_file(filename);
-		g_free(filename);
+	void on_window_destroy(GtkObject *object, gpointer user_data)
+	{
+		gtk_main_quit();
 	}
 
-	gtk_widget_destroy(dialog);
-}
+	void on_open_file_activate(GtkObject *object, gpointer user_data)
+	{
+		GtkWidget *dialog;
 
-void on_process_treeview_row_activated(GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *col, gpointer userdata)
-{
-	gint depth = gtk_tree_path_get_depth(path);
-	gint *indices = gtk_tree_path_get_indices(path);
+		dialog = gtk_file_chooser_dialog_new("Open File", NULL, //parent_window,
+				GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL,
+				GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
 
-	while(depth--) {
-		printf("%d:", *indices++);
+		GtkFileFilter *filter = gtk_file_filter_new();
+		gtk_file_filter_add_pattern(filter, "*.xml");
+		gtk_file_filter_set_name(filter, "XML files");
+		gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
+
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), config->getConfig_dir());
+
+		if (gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+			char *filename;
+
+			filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (dialog));
+			config->open_config_file(filename);
+			g_free(filename);
+		}
+
+		gtk_widget_destroy(dialog);
 	}
-	printf("\n");
-}
+
+	void on_process_treeview_row_activated(GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *col, gpointer userdata)
+	{
+		gint depth = gtk_tree_path_get_depth(path);
+		gint *indices = gtk_tree_path_get_indices(path);
+
+		while(depth--) {
+			printf("%d:", *indices++);
+		}
+		printf("\n");
+	}
 
 } /* extern "C" */
 
@@ -105,7 +94,6 @@ int main(int argc, char *argv[])
 {
 	GtkWidget *window;
 
-	printf("gtk_init()\n");
 	gtk_init(&argc, &argv);
 
 	config = new configurator();
@@ -120,9 +108,9 @@ int main(int argc, char *argv[])
 
 	for(int i = 0; i < 1; i++)
 	{
-		GtkWindow *window = GTK_WINDOW (gtk_builder_get_object(builder, "window1"));
+		GtkWindow *tab_window = GTK_WINDOW (gtk_builder_get_object(builder, "window1"));
 
-		GtkWidget *content = gtk_bin_get_child(GTK_BIN(window));
+		GtkWidget *content = gtk_bin_get_child(GTK_BIN(tab_window));
 		gtk_widget_unparent(content);
 
 		GtkHBox *hbox = GTK_HBOX(gtk_hbox_new(FALSE, 5));

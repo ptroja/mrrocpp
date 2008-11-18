@@ -133,9 +133,11 @@ void configurator::populate_tree_model_with_effectors()
 
 void configurator::populate_tree_model()
 {
+	ui_model::instance().clear();
     populate_tree_model_with_mp();
     populate_tree_model_with_sensors();
     populate_tree_model_with_effectors();
+//    ui_model::instance().getRootNode().remove_childs();
 }
 
 configurator::configurator()

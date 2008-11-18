@@ -10,9 +10,11 @@
 class ui_config_entry
 {
 	public:
-		const std::string id;
-		const std::string program_name;
-		const std::string node_name;
+		// these should be const's but it make std::vector fail
+		// see: http://groups.google.com/group/comp.lang.c++/msg/2cc5480095ca9b73?pli=1
+		std::string id;
+		std::string program_name;
+		std::string node_name;
 		std::string panel_model_file;
 		std::string panel_widget_name;
 
@@ -34,25 +36,32 @@ class ui_config_entry
 			EDP
 		} type;
 
-	ui_config_entry();
-	ui_config_entry(ui_config_entry_type _type, const char *program = NULL, const char *node = NULL);
+		ui_config_entry();
+		ui_config_entry(ui_config_entry_type _type, const char *program = NULL, const char *node = NULL);
+//		~ui_config_entry() {
+//			printf("destroy: %s\n", program_name.c_str());
+//		}
 
-    GtkTreeIter getTree_iter() const
-    {
-        return tree_iter;
-    }
+		GtkTreeIter getTree_iter() const
+		{
+			return tree_iter;
+		}
 
-    void setTree_iter(GtkTreeIter tree_iter)
-    {
-        this->tree_iter = tree_iter;
-    }
+		void setTree_iter(GtkTreeIter tree_iter)
+		{
+			this->tree_iter = tree_iter;
+		}
 
-    //void add_child(ui_config_entry & child);
+		void add_child(ui_config_entry & child);
+
+		void remove_childs(void);
+
+		bool is_empty(void);
 
 	private:
 
 		//! children nodes
-		std::vector <ui_config_entry> childs;
+		std::vector <ui_config_entry *> children;
 
 		GtkTreeIter tree_iter;
 };
@@ -114,6 +123,6 @@ struct ForceSingletonInitialization
 	}
 } instance;
 }
-*/
+ */
 
 #endif /* __UI_CONFIG_H */

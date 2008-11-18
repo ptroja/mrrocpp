@@ -1,8 +1,31 @@
 #include "ui_model.h"
 
-/*void ui_config_entry::add_child(ui_config_entry & child)  {
-	childs.insert(childs.begin(), child);
-}*/
+bool ui_config_entry::is_empty(void) {
+	return children.empty();
+}
+
+void ui_config_entry::add_child(ui_config_entry & child)  {
+	children.push_back(&child);
+}
+
+void ui_config_entry::remove_childs(void)  {
+
+	printf("remove_childs(%s).children = %d\n", program_name.c_str(), children.size());
+
+	std::vector<ui_config_entry *>::iterator Iter;
+
+	for (Iter = children.begin(); Iter != children.end();) {
+
+		if ((*Iter)->is_empty() == false) {
+			(*Iter)->remove_childs();
+		}
+
+		ui_config_entry *empty_child = (*Iter);
+		Iter++;
+		delete empty_child;
+	}
+	children.clear();
+}
 
 ui_config_entry::ui_config_entry() : type(ROOT) {
 }
@@ -28,6 +51,8 @@ ui_config_entry & ui_model::add_ui_config_entry(ui_config_entry & parent_entry, 
 
 	entry->setTree_iter(child);
 
+	parent_entry.add_child(*entry);
+
 	return *entry;
 }
 
@@ -39,9 +64,11 @@ ui_model& ui_model::instance()
 
 void ui_model::clear(void)
 {
-	// TODO: parse model and call delete();
+	printf("%s@%s:%d\n", __FUNCTION__, __FILE__, __LINE__);
 
-	gtk_tree_store_clear(store);
+	gtk_tree_store_clear(this->store);
+
+	this->getRootNode().remove_childs();
 }
 
 ui_model::ui_model()
