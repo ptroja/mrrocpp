@@ -52,24 +52,37 @@ void configurator::populate_tree_model_with_mp()
 		for (int i = 0; i < nodeset->nodeNr; i++) {
 			// get name attribute of the sensors
 			xmlChar *mp_name = xmlGetProp(nodeset->nodeTab[i], (xmlChar *) "name");
-			if (!mp_name)
+			if (!mp_name) {
+				g_warning("missing name for %s process", mp_name);
 				continue;
+			}
+
+			char *ui_def = NULL;
+
+			ui_def = (ui_def) ? ui_def : this->get_string("/config/mp[@name='%s']/@ui_def", mp_name);
+			ui_def = (ui_def) ? ui_def : this->get_string("/config/mp[@name='%s']/ui_def", mp_name);
+			ui_def = (ui_def) ? ui_def : this->get_string("/config/mp/@ui_def", mp_name);
+			ui_def = (ui_def) ? ui_def : this->get_string("/config/mp/ui_def", mp_name);
+
+			if(!ui_def) {
+				g_error("missing ui_def for %s process", mp_name);
+			}
 
 			char *program_name = this->get_string("/config/mp[@name='%s']/program_name", mp_name);
 
 			if (!program_name) {
-				g_error("missing program name for %s MP process", mp_name);
+				g_error("missing program name for %s process", mp_name);
 				continue;
 			}
 
 			char *node_name = this->get_string("/config/mp[@name='%s']/node_name", mp_name);
 
 			if (!node_name) {
-				g_error("missing node name for %s MP process", mp_name);
+				g_error("missing node name for %s process", mp_name);
 				continue;
 			}
 
-			ui_model::instance().add_ui_config_entry(parent, ui_config_entry::MP, program_name);
+			ui_model::instance().add_ui_config_entry(parent, ui_config_entry::MP, program_name, node_name, ui_def);
 		}
 		xmlXPathFreeObject(mp);
 	}
@@ -78,6 +91,7 @@ void configurator::populate_tree_model_with_mp()
 void configurator::populate_tree_model_with_sensors()
 {
 	xmlXPathObjectPtr active_sensors = getnodeset(this->doc, (xmlChar *) "/config/sensors/sensor[@active='true']");
+
 	if (active_sensors) {
 
 		ui_config_entry & parent = ui_model::instance().add_ui_config_entry(ui_model::instance().getRootNode(), ui_config_entry::SENSORS_PARENT, "Sensors");
@@ -90,8 +104,17 @@ void configurator::populate_tree_model_with_sensors()
 				continue;
 
 			char *program_name = this->get_string("/config/sensors/sensor[@name='%s']/vsp/program_name", sensor_name);
+			if (!program_name) {
+				g_error("missing program name for %s process", sensor_name);
+				continue;
+			}
 
 			char *node_name = this->get_string("/config/sensors/sensor[@name='%s']/vsp/node_name", sensor_name);
+
+			if (!node_name) {
+				g_error("missing node name for %s process", sensor_name);
+				continue;
+			}
 
 			ui_model::instance().add_ui_config_entry(parent, ui_config_entry::SENSOR, program_name, node_name);
 		}
@@ -114,8 +137,17 @@ void configurator::populate_tree_model_with_effectors()
 				continue;
 
 			char *program_name = this->get_string("/config/effectors/effector[@name='%s']/ecp/program_name", effector_name);
+			if (!program_name) {
+				g_error("missing program name for %s process", effector_name);
+				continue;
+			}
 
 			char *node_name = this->get_string("/config/effectors/effector[@name='%s']/ecp/node_name", effector_name);
+
+			if (!node_name) {
+				g_error("missing node name for %s process", effector_name);
+				continue;
+			}
 
 			ui_config_entry & ecp_entry = ui_model::instance().add_ui_config_entry(parent, ui_config_entry::EFFECTOR, program_name, node_name);
 
@@ -137,7 +169,6 @@ void configurator::populate_tree_model()
     populate_tree_model_with_mp();
     populate_tree_model_with_sensors();
     populate_tree_model_with_effectors();
-//    ui_model::instance().getRootNode().remove_childs();
 }
 
 configurator::configurator()

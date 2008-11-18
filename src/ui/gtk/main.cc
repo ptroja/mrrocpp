@@ -4,7 +4,8 @@
 #include "configurator.h"
 #include "ui_model.h"
 
-GtkBuilder *builder;
+// TODO: this should'n be global
+static GtkBuilder *builder;
 
 guint set_status(const char *msg)
 {
@@ -79,13 +80,12 @@ extern "C" {
 
 	void on_process_treeview_row_activated(GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *col, gpointer userdata)
 	{
-		gint depth = gtk_tree_path_get_depth(path);
-		gint *indices = gtk_tree_path_get_indices(path);
+//		printf("%s\n", gtk_tree_path_to_string(path));
 
-		while(depth--) {
-			printf("%d:", *indices++);
-		}
-		printf("\n");
+		ui_config_entry &entry = ui_model::instance().getNodeByPath(path);
+		printf("%s\n", entry.program_name.c_str());
+
+		entry.show_page(GTK_NOTEBOOK (gtk_builder_get_object(builder, "notebook1")));
 	}
 
 } /* extern "C" */
@@ -106,6 +106,7 @@ int main(int argc, char *argv[])
 
 	set_status("MRROC++ - the best robotic framework ever");
 
+/*
 	for(int i = 0; i < 1; i++)
 	{
 		GtkWindow *tab_window = GTK_WINDOW (gtk_builder_get_object(builder, "window1"));
@@ -126,6 +127,7 @@ int main(int argc, char *argv[])
 
 		gtk_notebook_append_page(notebook, content, GTK_WIDGET(hbox));
 	}
+*/
 
 	set_tree_view();
 

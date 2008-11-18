@@ -1,70 +1,9 @@
-#ifndef __UI_CONFIG_H
-
-#include <iostream>
-#include <vector>
-
-#include <gtk/gtkbuilder.h>
+#ifndef __UI_MODEL_H
+#define __UI_MODEL_H
 
 #include <gtk/gtk.h>
 
-class ui_config_entry
-{
-	public:
-		// these should be const's but it make std::vector fail
-		// see: http://groups.google.com/group/comp.lang.c++/msg/2cc5480095ca9b73?pli=1
-		std::string id;
-		std::string program_name;
-		std::string node_name;
-		std::string panel_model_file;
-		std::string panel_widget_name;
-
-		bool is_running;
-
-		GtkBuilder *panel_builder;
-		GtkWidget *panel_widget;
-
-		enum ui_config_entry_type {
-			ROOT,
-			MP_PARENT,
-			MP,
-			SENSORS_PARENT,
-			SENSOR,
-			VSP,
-			EFFECTORS_PARENT,
-			EFFECTOR,
-			ECP,
-			EDP
-		} type;
-
-		ui_config_entry();
-		ui_config_entry(ui_config_entry_type _type, const char *program = NULL, const char *node = NULL);
-//		~ui_config_entry() {
-//			printf("destroy: %s\n", program_name.c_str());
-//		}
-
-		GtkTreeIter getTree_iter() const
-		{
-			return tree_iter;
-		}
-
-		void setTree_iter(GtkTreeIter tree_iter)
-		{
-			this->tree_iter = tree_iter;
-		}
-
-		void add_child(ui_config_entry & child);
-
-		void remove_childs(void);
-
-		bool is_empty(void);
-
-	private:
-
-		//! children nodes
-		std::vector <ui_config_entry *> children;
-
-		GtkTreeIter tree_iter;
-};
+#include "ui_config_entry.h"
 
 class ui_model
 {
@@ -73,7 +12,7 @@ class ui_model
 
 		void clear(void);
 
-		ui_config_entry & add_ui_config_entry(ui_config_entry & parent, ui_config_entry::ui_config_entry_type entry_type, const char *program_name, const char *node_name_name = NULL);
+		ui_config_entry & add_ui_config_entry(ui_config_entry & parent, ui_config_entry::ui_config_entry_type entry_type, const char *program_name, const char *node_name = NULL, const char *ui_def = NULL);
 
 		GtkTreeStore *getStore() const
 		{
@@ -84,6 +23,8 @@ class ui_model
 		{
 			return root_entry;
 		}
+
+		ui_config_entry & getNodeByPath(GtkTreePath *path);
 
 		enum TREE_VIEW_COLUMNS
 		{
@@ -125,4 +66,4 @@ struct ForceSingletonInitialization
 }
  */
 
-#endif /* __UI_CONFIG_H */
+#endif /* __UI_MODEL_H */

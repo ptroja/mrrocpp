@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Wed Oct  8 21:07:29 2008 -->
+<!--Generated with glade3 3.4.5 on Tue Nov 18 21:00:19 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="width_request">600</property>
@@ -133,6 +133,7 @@
                 <property name="can_focus">True</property>
                 <child>
                   <widget class="GtkScrolledWindow" id="scrolledwindow1">
+                    <property name="width_request">280</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -181,10 +182,24 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkImage" id="image1">
+                          <widget class="GtkEventBox" id="eventbox1">
                             <property name="visible">True</property>
-                            <property name="stock">gtk-close</property>
-                            <property name="icon_size">1</property>
+                            <property name="visible_window">False</property>
+                            <child>
+                              <widget class="GtkImage" id="image1">
+                                <property name="visible">True</property>
+                                <property name="stock">gtk-close</property>
+                                <property name="icon_size">1</property>
+                                <signal name="leave_notify_event" handler="tabcloseicon_event_cb"/>
+                                <signal name="button_press_event" handler="tabcloseicon_event_cb"/>
+                                <signal name="focus_out_event" handler="tabcloseicon_event_cb"/>
+                                <signal name="focus_in_event" handler="tabcloseicon_event_cb"/>
+                                <signal name="keynav_failed" handler="tabcloseicon_event_cb"/>
+                                <signal name="key_press_event" handler="tabcloseicon_event_cb"/>
+                                <signal name="button_release_event" handler="tabcloseicon_event_cb"/>
+                                <signal name="key_release_event" handler="tabcloseicon_event_cb"/>
+                              </widget>
+                            </child>
                           </widget>
                           <packing>
                             <property name="position">2</property>
@@ -210,6 +225,7 @@
             </child>
             <child>
               <widget class="GtkVBox" id="vbox2">
+                <property name="height_request">40</property>
                 <property name="visible">True</property>
                 <child>
                   <widget class="GtkFrame" id="frame1">
@@ -264,46 +280,6 @@
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-      </widget>
-    </child>
-  </widget>
-  <widget class="GtkWindow" id="window1">
-    <child>
-      <widget class="GtkHButtonBox" id="hbuttonbox1">
-        <property name="visible">True</property>
-        <child>
-          <widget class="GtkButton" id="button1">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="label" translatable="yes">button</property>
-            <property name="response_id">0</property>
-          </widget>
-        </child>
-        <child>
-          <widget class="GtkToggleButton" id="togglebutton1">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="label" translatable="yes">togglebutton</property>
-            <property name="response_id">0</property>
-          </widget>
-          <packing>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkCheckButton" id="checkbutton1">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="label" translatable="yes">checkbutton</property>
-            <property name="response_id">0</property>
-            <property name="draw_indicator">True</property>
-          </widget>
-          <packing>
             <property name="position">2</property>
           </packing>
         </child>
