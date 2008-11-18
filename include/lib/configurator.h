@@ -11,6 +11,8 @@
 #define __CONFIGURATOR_H
 
 #include <pthread.h>
+#include <sys/utsname.h>
+
 // Typy zmiennych odczytywanych z pliku INI.
 #include "lib/cfgopts.h"
 
@@ -29,6 +31,7 @@ private:
 	char* dir;
 	char* ini_file;
 	char* mrrocpp_network_path;
+	struct utsname sysinfo;
 
 	// do ochrony wylacznosci dostepu do pliku miedzy watkami jednego procesu
 	pthread_mutex_t mutex; // = PTHREAD_MUTEX_INITIALIZER ;

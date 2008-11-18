@@ -52,6 +52,10 @@ configurator::configurator (const char* _node, const char* _dir, const char* _in
 	session_name = strdup(_session_name);
 
 	pthread_mutex_init(&mutex, NULL );
+	
+	if( uname( &sysinfo ) == -1 ) {
+		perror( "uname" );
+	}
 
 	int size = 1 + strlen("/net/") + strlen(node) + strlen(dir);
 	mrrocpp_network_path = new char[size];
@@ -458,6 +462,16 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		char * spawned_program_name = return_string_value("program_name", _section_name);
 		char * spawned_node_name = return_string_value("node_name", _section_name);
 
+		char rsh_spawn_node[PATH_MAX];
+		
+		if (strcmp(sysinfo.nodename,spawned_node_name) == 0)
+		{
+			strcpy(rsh_spawn_node, "localhost");
+		} else
+		{
+			strcpy(rsh_spawn_node, spawned_node_name);
+		}
+		
 		// Sciezka do binariow.
 		char bin_path[PATH_MAX];
 		if (exists("binpath", _section_name)) {
@@ -486,22 +500,22 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		if (exists("username", _section_name)) {
 			char * username = return_string_value("username", _section_name);
 
-			printf("rsh -l %s %s \"%s\"\n", username, spawned_node_name, process_path);
+			printf("rsh -l %s %s \"%s\"\n", username, rsh_spawn_node, process_path);
 
 			execlp("rsh",
 					"rsh",
 					"-l", username,
-					spawned_node_name,
+					rsh_spawn_node,
 					process_path,
 					NULL);
 
 			delete [] username;
 		} else {
-			printf("rsh %s \"%s\"\n", spawned_node_name, process_path);
+			printf("rsh %s \"%s\"\n", rsh_spawn_node, process_path);
 
 			execlp("rsh",
 					"rsh",
-					spawned_node_name,
+					rsh_spawn_node,
 					process_path,
 					NULL);
 		}
@@ -519,7 +533,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 #if defined(PROCESS_SPAWN_YRSH)
 	// Deskryptor pliku.
 
-	struct utsname sysinfo;
+
 	// printf("_section_name: %s,\n",_section_name);
 
 	name_attach_t *my_attach;	// by Y
@@ -549,9 +563,6 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	// Odczytanie nazwy odpalanego pliku.
 	char * spawned_program_name = return_string_value("program_name", _section_name);
 	char * spawned_node_name = return_string_value("node_name", _section_name);
-	if( uname( &sysinfo ) == -1 ) {
-		perror( "uname" );
-	}
 
 
 	if (strcmp(sysinfo.nodename,spawned_node_name) == 0)
