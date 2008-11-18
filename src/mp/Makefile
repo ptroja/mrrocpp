@@ -108,7 +108,7 @@ mp_pouring: mp_t_pouring.o ecp_mp_s_schunk.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 mp_fsautomat: mp_t_fsautomat.o StateHeap.o State.o Condition.o Transition.o ecp_mp_s_schunk.o mp_g_teach_in.o ecp_mp_s_rcs_korf.o ecp_mp_s_rcs_kociemba.o ecp_mp_tr_rc_windows.o mp_g_vis.o mp_g_force.o ecp_mp_s_vis.o ecp_mp_s_schunk.o CubeState.o SingleManipulation.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ -L$(HOMEDIR)/lib/libxml -lxml2 -lz -liconv -lm -lsocket
+	$(LD) $(LDFLAGS) -o $@ $^ -L$(HOMEDIR)/lib/libxml -lxml2 -lz -liconv
 
 mp_multiplayer: mp_t_multiplayer.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
