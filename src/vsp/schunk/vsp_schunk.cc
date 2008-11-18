@@ -40,7 +40,7 @@ vsp_sensor* return_created_sensor (void)
 vsp_schunk_sensor::vsp_schunk_sensor(void)
 {
 	// Wielkosc unii.
-	union_size = sizeof(image.force);
+	union_size = sizeof(image.sensor_union.force);
 
 	char* network_edp_vsp_attach_point = 
 		config->return_attach_point_name (configurator::CONFIG_SERVER, "edp_vsp_attach_point", 
@@ -200,19 +200,19 @@ void vsp_schunk_sensor::initiate_reading (void)
 
 	for (int i=0;i<=5;i++)
 	{
-		image.force.rez[i]=edp_vsp_reply.force[i];
-// 		image.force.rez[i]=0; // BY Y DEBUG
+		image.sensor_union.force.rez[i]=edp_vsp_reply.force[i];
+// 		image.sensor_union.force.rez[i]=0; // BY Y DEBUG
 	}
 
-	image.force.event_type=ap_state; // przepisanie stanbu aplikacji do bufora wysylanego do ECP
+	image.sensor_union.force.event_type=ap_state; // przepisanie stanbu aplikacji do bufora wysylanego do ECP
 
 	is_reading_ready=true;
 	if ((((ms_nr++)%5000)==0)&& (1)){// by Y - debug
 		if( clock_gettime( CLOCK_REALTIME , &start[0]) == -1 ) {
 		    printf("blad pomiaru czasu");
 	     }
-	//    printf("%d, %d, %d, %d, %d, %d VSP pomiarow: %d,  czas: %ld\n",image.force.rez[0], image.force.rez[1],
-	// 	image.force.rez[2], image.force.rez[3], image.force.rez[4],image.force.rez[5],ms_nr, start[0].tv_sec%100);
+	//    printf("%d, %d, %d, %d, %d, %d VSP pomiarow: %d,  czas: %ld\n",image.sensor_union.force.rez[0], image.sensor_union.force.rez[1],
+	// 	image.sensor_union.force.rez[2], image.sensor_union.force.rez[3], image.sensor_union.force.rez[4],image.sensor_union.force.rez[5],ms_nr, start[0].tv_sec%100);
 	}
 };
 
@@ -246,9 +246,9 @@ void vsp_schunk_sensor::get_reading (void)
 	// tutaj: czujnik skalibrowany, odczyt dokonany, zapisany w "image", przepisanie wszystkich pol
 	// przepisanie do bufora komunikacyjnego
 	for(int i=0; i<6; i++)
-		from_vsp.comm_image.force.rez[i] = image.force.rez[i];
+		from_vsp.comm_image.sensor_union.force.rez[i] = image.sensor_union.force.rez[i];
 	
-	from_vsp.comm_image.force.event_type = image.force.event_type; // stan w ktorym jest system wykryty w VSP
+	from_vsp.comm_image.sensor_union.force.event_type = image.sensor_union.force.event_type; // stan w ktorym jest system wykryty w VSP
 	
 	//    sr_msg->message ("VSP Get reading ok");
 	is_reading_ready=false;

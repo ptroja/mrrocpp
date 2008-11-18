@@ -96,9 +96,9 @@ bool y_simple_generator::next_step (std::map <SENSOR_ENUM, sensor*>& sensor_m ) 
 	const double TORQUE_TO_ROTATE_RATIO = 0.0008;
 	double move_tab[3] = {0,0,0};
 	bool force_mov[3] = {false,false,false};
-	double mov[3] = { move_tab[0] + force_mov[0]*FORCE_TO_MOVE_RATIO*(sensor_m.begin())->second->image.force.rez[0] , 		// tablica zmiany pozycji wzgledem sil
-							move_tab[1] + force_mov[1]*FORCE_TO_MOVE_RATIO*(sensor_m.begin())->second->image.force.rez[1] , 
-							move_tab[2] + force_mov[2]*FORCE_TO_MOVE_RATIO*(sensor_m.begin())->second->image.force.rez[2]};
+	double mov[3] = { move_tab[0] + force_mov[0]*FORCE_TO_MOVE_RATIO*(sensor_m.begin())->second->image.sensor_union.force.rez[0] , 		// tablica zmiany pozycji wzgledem sil
+							move_tab[1] + force_mov[1]*FORCE_TO_MOVE_RATIO*(sensor_m.begin())->second->image.sensor_union.force.rez[1] , 
+							move_tab[2] + force_mov[2]*FORCE_TO_MOVE_RATIO*(sensor_m.begin())->second->image.sensor_union.force.rez[2]};
 	vector move_vector(mov);
 	Homog_matrix temporary_frame;
 	if(!second_step) temporary_frame = curr_frame;
@@ -108,9 +108,9 @@ bool y_simple_generator::next_step (std::map <SENSOR_ENUM, sensor*>& sensor_m ) 
 	move_vector.to_table(mov);
 	double rot_tab[3] = {0,0,0/*.0001*/};
 	bool force_rot[3] = {false,false,false};
-	double rot[3] = {	rot_tab[0] + force_rot[0]*TORQUE_TO_ROTATE_RATIO*(sensor_m.begin())->second->image.force.rez[3] , 		// tablica zmiany orientacji wzgledem momentow sill
-							rot_tab[1] + force_rot[1]*TORQUE_TO_ROTATE_RATIO*(sensor_m.begin())->second->image.force.rez[4] , 
-							rot_tab[2] + force_rot[2]*TORQUE_TO_ROTATE_RATIO*(sensor_m.begin())->second->image.force.rez[5]};																			
+	double rot[3] = {	rot_tab[0] + force_rot[0]*TORQUE_TO_ROTATE_RATIO*(sensor_m.begin())->second->image.sensor_union.force.rez[3] , 		// tablica zmiany orientacji wzgledem momentow sill
+							rot_tab[1] + force_rot[1]*TORQUE_TO_ROTATE_RATIO*(sensor_m.begin())->second->image.sensor_union.force.rez[4] , 
+							rot_tab[2] + force_rot[2]*TORQUE_TO_ROTATE_RATIO*(sensor_m.begin())->second->image.sensor_union.force.rez[5]};																			
 	Homog_matrix move_frame(mov[0], mov[1], mov[2]);
 	
 	Homog_matrix rot_frame(x_axis, y_axis, z_axis, rot);											

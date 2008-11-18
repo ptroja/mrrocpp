@@ -119,7 +119,7 @@ vsp_pawel_sensor::vsp_pawel_sensor(void)
 {
 	struct timespec time_start, time_end;
 	printf("[vsp_pawel]\tconstructor\n");
-	union_size = sizeof(image.ball);
+	union_size = sizeof(image.sensor_union.ball);
  	ms_nr = 0; // numer odczytu z czujnika
  	
 	clock_gettime( CLOCK_REALTIME , &time_start);
@@ -261,16 +261,16 @@ void vsp_pawel_sensor::get_reading (void)
 	
 	clock_gettime( CLOCK_REALTIME , &time_start);
 
-	from_vsp.comm_image.ball.x  = ball.x;
-	from_vsp.comm_image.ball.y  = ball.y;
-	from_vsp.comm_image.ball.z  = ball.z;
-	from_vsp.comm_image.ball.nr = ++ms_nr;
+	from_vsp.comm_image.sensor_union.ball.x  = ball.x;
+	from_vsp.comm_image.sensor_union.ball.y  = ball.y;
+	from_vsp.comm_image.sensor_union.ball.z  = ball.z;
+	from_vsp.comm_image.sensor_union.ball.nr = ++ms_nr;
 		
 	from_vsp.vsp_report=VSP_REPLY_OK;
 
 	clock_gettime( CLOCK_REALTIME , &time_end);
 
-	from_vsp.comm_image.ball.ts = time_end;
+	from_vsp.comm_image.sensor_union.ball.ts = time_end;
 /*
 	float duration = ((float)(time_end.tv_nsec - time_start.tv_nsec))/1000000.0;
 	if( duration < 0 ) duration = ((float)(1000000000 - time_start.tv_nsec + time_end.tv_nsec))/1000000.0;

@@ -202,7 +202,7 @@ bool mp_seven_eye_generator::next_step () {
 	
 	for(int i=0; i<4; i++)
 		for(int j=0; j<4; j++)
-			frame1[i][j]=vsp_vis_sac->image.camera.frame[4*i+j];
+			frame1[i][j]=vsp_vis_sac->image.sensor_union.camera.frame[4*i+j];
 	
 	valid_measure=(int)frame1[3][3];
 

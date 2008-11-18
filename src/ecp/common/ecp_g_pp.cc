@@ -90,24 +90,24 @@ bool progpanel_generator::next_step ( )
     }
     else
     {
-        //printf ("Active_motors = %d\n", pps->image.pp.active_motors);
-        switch (pps->image.pp.active_motors)
+        //printf ("Active_motors = %d\n", pps->image.sensor_union.pp.active_motors);
+        switch (pps->image.sensor_union.pp.active_motors)
         {
         case 0:
-            start_joint_arm_coordinates[0] += pps->image.pp.joy[0];
-            start_joint_arm_coordinates[1] += pps->image.pp.joy[1];
-            start_joint_arm_coordinates[2] += pps->image.pp.joy[2];
+            start_joint_arm_coordinates[0] += pps->image.sensor_union.pp.joy[0];
+            start_joint_arm_coordinates[1] += pps->image.sensor_union.pp.joy[1];
+            start_joint_arm_coordinates[2] += pps->image.sensor_union.pp.joy[2];
             break;
 
         case 1:
-            start_joint_arm_coordinates[3] += pps->image.pp.joy[0];
-            start_joint_arm_coordinates[4] += pps->image.pp.joy[1];
-            start_joint_arm_coordinates[5] += pps->image.pp.joy[2];
+            start_joint_arm_coordinates[3] += pps->image.sensor_union.pp.joy[0];
+            start_joint_arm_coordinates[4] += pps->image.sensor_union.pp.joy[1];
+            start_joint_arm_coordinates[5] += pps->image.sensor_union.pp.joy[2];
             break;
 
         case 2:
-            start_joint_arm_coordinates[6] += pps->image.pp.joy[0];
-            start_joint_arm_coordinates[7] += pps->image.pp.joy[1];
+            start_joint_arm_coordinates[6] += pps->image.sensor_union.pp.joy[0];
+            start_joint_arm_coordinates[7] += pps->image.sensor_union.pp.joy[1];
             break;
 
         default:

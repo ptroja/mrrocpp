@@ -105,9 +105,9 @@ bool y_simple_generator::next_step ( )
     //	Homog_matrix sensor_rotation(rotation);
     double move_tab[3] = {0,0,0};
     bool force_mov[3] = {true,true,true};
-    double mov[3] = { move_tab[0] + force_mov[0]*FORCE_TO_MOVE_RATIO*(sensor_m.begin())->second->image.force.rez[0] , 		// tablica zmiany pozycji wzgledem sil
-                      move_tab[1] + force_mov[1]*FORCE_TO_MOVE_RATIO*(sensor_m.begin())->second->image.force.rez[1] ,
-                      move_tab[2] + force_mov[2]*FORCE_TO_MOVE_RATIO*(sensor_m.begin())->second->image.force.rez[2]};
+    double mov[3] = { move_tab[0] + force_mov[0]*FORCE_TO_MOVE_RATIO*(sensor_m.begin())->second->image.sensor_union.force.rez[0] , 		// tablica zmiany pozycji wzgledem sil
+                      move_tab[1] + force_mov[1]*FORCE_TO_MOVE_RATIO*(sensor_m.begin())->second->image.sensor_union.force.rez[1] ,
+                      move_tab[2] + force_mov[2]*FORCE_TO_MOVE_RATIO*(sensor_m.begin())->second->image.sensor_union.force.rez[2]};
     vector move_vector(mov);
     Homog_matrix temporary_frame;
     if(!second_step)
@@ -127,9 +127,9 @@ bool y_simple_generator::next_step ( )
         };
     double rot[3] =
         {
-            rot_tab[0] + force_rot[0]*TORQUE_TO_ROTATE_RATIO*(sensor_m.begin())->second->image.force.rez[3] , 		// tablica zmiany orientacji wzgledem momentow sill
-            rot_tab[1] + force_rot[1]*TORQUE_TO_ROTATE_RATIO*(sensor_m.begin())->second->image.force.rez[4] ,
-            rot_tab[2] + force_rot[2]*TORQUE_TO_ROTATE_RATIO*(sensor_m.begin())->second->image.force.rez[5]
+            rot_tab[0] + force_rot[0]*TORQUE_TO_ROTATE_RATIO*(sensor_m.begin())->second->image.sensor_union.force.rez[3] , 		// tablica zmiany orientacji wzgledem momentow sill
+            rot_tab[1] + force_rot[1]*TORQUE_TO_ROTATE_RATIO*(sensor_m.begin())->second->image.sensor_union.force.rez[4] ,
+            rot_tab[2] + force_rot[2]*TORQUE_TO_ROTATE_RATIO*(sensor_m.begin())->second->image.sensor_union.force.rez[5]
         }
         ;
     Homog_matrix move_frame(mov[0], mov[1], mov[2]);

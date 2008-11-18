@@ -263,7 +263,7 @@ bool mp_vis_sac_lx_generator::next_step ()
             O_r_Ep_d[i][2]=0;
         }
         for (int i=0; i<6; i++)
-            vsp_vis_sac->image.vis_sac.frame_E_r_G__f[i]=O_r_E[0][i]; //nie wiem czy potrzebne bo chyba  robot sie nie rusza
+            vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[i]=O_r_E[0][i]; //nie wiem czy potrzebne bo chyba  robot sie nie rusza
 
         std::cout << node_counter <<"------------------------------------------------------------------" << std::endl;
     }
@@ -291,7 +291,7 @@ bool mp_vis_sac_lx_generator::next_step ()
     	{
     		for(int j=0; j<4; j++)
     		{
-    			std::cout << vsp_vis_sac->image.vis_sac.frame_E_T_G[4*i+j];
+    			std::cout << vsp_vis_sac->image.sensor_union.vis_sac.frame_E_T_G[4*i+j];
     		}
     		std::cout << std::endl;
     	}
@@ -300,7 +300,7 @@ bool mp_vis_sac_lx_generator::next_step ()
     //std::cout << "C_T_G" << std::endl;
     //	for(int j=0; j<6; j++)
     //		{
-    //			std::cout << vsp_vis_sac->image.vis_sac.frame_E_r_G__f[j] << ",";
+    //			std::cout << vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[j] << ",";
     //		}
     //	std::cout << std::endl;
 
@@ -308,20 +308,20 @@ bool mp_vis_sac_lx_generator::next_step ()
 
 
 
-    C_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0],vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1],
-                       -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2],
-                       vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]
+    C_Tx_G.set_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0],vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[1],
+                       -vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[2],
+                       vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[5]
                        ,0,0);
-    //vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]);
+    //vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[5]);
 
     //std::cout << "MP C_T_G" << std::endl;
     //std::cout << C_Tx_G;
 
     //O_Tx_G.set_xyz_euler_zyz(0.950, 0.000, 0.265, 0.002, 1.481, 2.341);
 
-    //	O_Tx_G.set_xyz_euler_zyz(0.950+0.058+vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0],
-    //	0.000+vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1]-0.06,
-    // 	0.265+vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2]+0.900,
+    //	O_Tx_G.set_xyz_euler_zyz(0.950+0.058+vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0],
+    //	0.000+vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[1]-0.06,
+    // 	0.265+vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[2]+0.900,
     //	0.002, 1.481+0.03, 2.341);
 
     //std::cout << "MP O_T_G pierwsze" << std::endl;

@@ -96,8 +96,8 @@ bool y_simple_generator::next_step()
 	/*if(the_robot->EDP_data.current_gripper_coordinate < 0.058) */
 	the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;
 	/*
-	 double wx = sensor_m.begin()->second->image.force.rez[0];
-	 double wy = sensor_m.begin()->second->image.force.rez[1];
+	 double wx = sensor_m.begin()->second->image.sensor_union.force.rez[0];
+	 double wy = sensor_m.begin()->second->image.sensor_union.force.rez[1];
 	 
 	 double v = sqrt (wx*wx + wy*wy);
 

@@ -104,12 +104,12 @@ bool pawel_generator::next_step ( )
     the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;
 
 
-    x = sensor_m[SENSOR_PAWEL]->image.ball.x;
-    y = sensor_m[SENSOR_PAWEL]->image.ball.y;
-    z = sensor_m[SENSOR_PAWEL]->image.ball.z;
-    i = sensor_m[SENSOR_PAWEL]->image.ball.nr;
-    /*	t = (double) sensor_m[SENSOR_PAWEL]->image.ball.ts.tv_sec +
-    		((double)sensor_m[SENSOR_PAWEL]->image.ball.ts.tv_nsec)/1000000000 - start;*/
+    x = sensor_m[SENSOR_PAWEL]->image.sensor_union.ball.x;
+    y = sensor_m[SENSOR_PAWEL]->image.sensor_union.ball.y;
+    z = sensor_m[SENSOR_PAWEL]->image.sensor_union.ball.z;
+    i = sensor_m[SENSOR_PAWEL]->image.sensor_union.ball.nr;
+    /*	t = (double) sensor_m[SENSOR_PAWEL]->image.sensor_union.ball.ts.tv_sec +
+    		((double)sensor_m[SENSOR_PAWEL]->image.sensor_union.ball.ts.tv_nsec)/1000000000 - start;*/
     clock_gettime( CLOCK_REALTIME , &time_tmp);
     t = (double)(time_tmp.tv_sec - time_start.tv_sec) + ((double)(time_tmp.tv_nsec - time_start.tv_nsec))/1000000000.0;
 

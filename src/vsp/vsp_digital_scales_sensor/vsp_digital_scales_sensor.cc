@@ -70,11 +70,11 @@ void* digital_scale_thread(void*  arg ){
             // Pobranie odczytu.
             ds->get_reading();
             // Przeksztalcenie odczytu do postaci zmiennoprzecinkowej.
-        vs->image.ds.readings[number-1] = ds->transform_reading_to_double();
+        vs->image.sensor_union.ds.readings[number-1] = ds->transform_reading_to_double();
             } // end: try
         catch(sensor::sensor_error e){
             sr_msg->message(e.error_class, e.error_no);
-            vs->image.ds.readings[number-1] = 0;
+            vs->image.sensor_union.ds.readings[number-1] = 0;
             } // end: catch
         // Odczyt gotowy (zawieszenie na barierze).
         pthread_barrier_wait( &reading_ready_barrier);
@@ -85,7 +85,7 @@ void* digital_scale_thread(void*  arg ){
 /*****************************  KONSTRUKTOR *********************************/
 vsp_digital_scales_sensor::vsp_digital_scales_sensor(void){
 	// Wielkosc unii.
-	union_size = sizeof(image.ds);
+	union_size = sizeof(image.sensor_union.ds);
 
     // Struktura do pobierania danych z pliku konfiguracyjnego.
       number_of_scales = config->return_int_value("number_of_scales");
@@ -109,7 +109,7 @@ vsp_digital_scales_sensor::vsp_digital_scales_sensor(void){
     // Zerowe polozenia poczatkowe.
     for(int i=0; i<6; i++){
         position_zero[i] = 0;
-        image.ds.readings[i]=0;
+        image.sensor_union.ds.readings[i]=0;
         };
     // Ustawienie flagi stanu procesu.
     readings_initiated = false;
@@ -130,7 +130,7 @@ void vsp_digital_scales_sensor::configure_sensor (void){
     pthread_barrier_wait(&reading_ready_barrier);
     // Przepisanie obecnych odczytow jako polozania zerowego.
     for(int i=0; i<number_of_scales; i++)
-        position_zero[i] = image.ds.readings[i];
+        position_zero[i] = image.sensor_union.ds.readings[i];
     // Ustawienie flagi stanu procesu.
     readings_initiated = false;
     sr_msg->message ("Digital Scale sensor calibrated");
@@ -160,9 +160,9 @@ void vsp_digital_scales_sensor::get_reading (void){
     for(int i=0; i<6; i++)
         if(i<number_of_scales){
             // odczyt = obraz czujnika - polozenie zerowe
-            from_vsp.comm_image.ds.readings[i] = image.ds.readings[i] - position_zero[i];
+            from_vsp.comm_image.sensor_union.ds.readings[i] = image.sensor_union.ds.readings[i] - position_zero[i];
         }else
-            from_vsp.comm_image.ds.readings[i] = 0;
+            from_vsp.comm_image.sensor_union.ds.readings[i] = 0;
     // Ustawienie flagi stanu procesu.
     readings_initiated = false;
     };// end: get_reading

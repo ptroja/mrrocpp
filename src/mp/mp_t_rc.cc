@@ -69,7 +69,7 @@ bool mp_task_rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogl
 
         for(int i=0; i<3; i++)
             for(int j=0; j<3; j++)
-                cube_state->cube_tab[k][3*i+j]=(char)sensor_m[SENSOR_CAMERA_ON_TRACK]->image.cube_face.colors[3*i+j];
+                cube_state->cube_tab[k][3*i+j]=(char)sensor_m[SENSOR_CAMERA_ON_TRACK]->image.sensor_union.cube_face.colors[3*i+j];
 
 
         printf("\nFACE FACE %d:\n",k);

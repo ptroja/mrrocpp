@@ -16,8 +16,8 @@ ecp_mp_digital_scales_sensor::ecp_mp_digital_scales_sensor(SENSOR_ENUM _sensor_n
 	ecp_mp_sensor(_sensor_name, _section_name, _ecp_mp_object)
 {
 	// Ustawienie wielkosci przesylanej unii.
-	union_size = sizeof(image.ds);
+	union_size = sizeof(image.sensor_union.ds);
 	// Wyzerowanie odczytow.
 	for (int i =0; i<6; i++)
-		image.ds.readings[i] = 0;
+		image.sensor_union.ds.readings[i] = 0;
 }

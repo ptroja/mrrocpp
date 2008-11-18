@@ -52,7 +52,7 @@ vsp_rcs_korf::vsp_rcs_korf(void) {
 	bRCSErr = false;
 
 	// Ustawia wielkosc unii.
-	union_size = sizeof(image.rcs);
+	union_size = sizeof(image.sensor_union.rcs);
 
 	// Ustawia czujnik jako niezainicjowany.
 	is_sensor_configured = false;
@@ -61,7 +61,7 @@ vsp_rcs_korf::vsp_rcs_korf(void) {
 	is_reading_ready = false;
 
 	// Czysci odczyt.
-	image.rcs.cube_solution[0] = '\0';
+	image.sensor_union.rcs.cube_solution[0] = '\0';
 
 };// end: vsp_rcs_korf
 
@@ -162,7 +162,7 @@ void vsp_rcs_korf::get_reading (void) {
 	
 	// Niemozliwe znalezienie rozwiazania - wystapil blad podczas jego znajdywania
 	if (	bRCSErr) {
-		from_vsp.comm_image.rcs.reading_mode = RCS_SOLUTION_NOTPOSSIBLE;
+		from_vsp.comm_image.sensor_union.rcs.reading_mode = RCS_SOLUTION_NOTPOSSIBLE;
 
 	// Ustawia brak rozwiazania, gdy odczyt nie jest gotowy.
 	} else if (!is_reading_ready || pSol == NULL) {
@@ -170,11 +170,11 @@ void vsp_rcs_korf::get_reading (void) {
 
 	// Ustawia brak potrzeby rozwiazania, gdy rozwiazanie o dlugosci 0
 	} else if (pSol->GetLength() == 0) {
-		from_vsp.comm_image.rcs.reading_mode = RCS_SOLUTION_NOTNEEDED;
+		from_vsp.comm_image.sensor_union.rcs.reading_mode = RCS_SOLUTION_NOTNEEDED;
 
 	// Ustawia znalezione rozwiazanie do bufora
 	} else {
-		from_vsp.comm_image.rcs.reading_mode = RCS_SOLUTION_FOUND;
+		from_vsp.comm_image.sensor_union.rcs.reading_mode = RCS_SOLUTION_FOUND;
 		char *cSol = pSol->ToString();
 		char solution[200];
 		int j=0;
@@ -185,9 +185,9 @@ void vsp_rcs_korf::get_reading (void) {
 			}
 		}
 		solution[j] = '\0';
-		strcpy(from_vsp.comm_image.rcs.cube_solution, solution);
+		strcpy(from_vsp.comm_image.sensor_union.rcs.cube_solution, solution);
 		delete[] cSol;
-		printf("VSP KR SOLUTION=%s\n", from_vsp.comm_image.rcs.cube_solution);
+		printf("VSP KR SOLUTION=%s\n", from_vsp.comm_image.sensor_union.rcs.cube_solution);
 	}
 
 	// Ustawia odczyt jako juz odczytany

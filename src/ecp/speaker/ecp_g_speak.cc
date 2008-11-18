@@ -119,7 +119,7 @@ bool speaking_generator::next_step ( ) {
 	
 	
 	// for mic
-	// printf("%d \n",(sensor_m.begin())->second->image.mic.word_id);
+	// printf("%d \n",(sensor_m.begin())->second->image.sensor_union.mic.word_id);
 	
 	// strcpy( the_robot->EDP_data.text, "przesuñ kostkê w prawo" );
 	 

@@ -1726,9 +1726,9 @@ bool mp_drawing_teach_in_force_generator::next_step()
 					sr_ecp_msg.message("ECP Opuszczanie");
 				}
 
-				// 		if (vsp_force_irp6ot->image.force.event_type == 2) {
+				// 		if (vsp_force_irp6ot->image.sensor_union.force.event_type == 2) {
 
-				if ((vsp_force_irp6ot->image.force.event_type == 2)&&(vsp_force_irp6p->image.force.event_type == 2)) {
+				if ((vsp_force_irp6ot->image.sensor_union.force.event_type == 2)&&(vsp_force_irp6p->image.sensor_union.force.event_type == 2)) {
 					// czujnik wyczul powierzchnie
 					next_gen_state = 6;
 					in_state_iteration=0;
@@ -1871,13 +1871,13 @@ bool mp_drawing_teach_in_force_generator::next_step()
 
 		conv->ecp_td.next_joint_arm_coordinates[0]= conv->ecp_td.current_joint_arm_coordinates[0];
 
-		// 	if (vsp_force_irp6ot->image.force.event_type==2) {
-		if (vsp_force_irp6ot->image.force.event_type==2) {
+		// 	if (vsp_force_irp6ot->image.sensor_union.force.event_type==2) {
+		if (vsp_force_irp6ot->image.sensor_union.force.event_type==2) {
 			gen_state = 1;
 		}
 
 		if (gen_state == 1) {
-			insert_pose_list_element(emptyps, 0.0, vsp_force_irp6ot->image.force.event_type, inc_delta);
+			insert_pose_list_element(emptyps, 0.0, vsp_force_irp6ot->image.sensor_union.force.event_type, inc_delta);
 		}
 
 		return true;

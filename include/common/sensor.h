@@ -161,7 +161,7 @@ typedef struct sensor_image_t
 			uint32_t ts_sec, ts_usec; // timestamp
 		} pcbird;
 
-	}; // koniec unii
+	} sensor_union; // koniec unii
 } SENSOR_IMAGE;
 
 /*****************************************************/

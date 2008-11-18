@@ -147,7 +147,7 @@ void ecp_mp_sensor::get_reading(SENSOR_IMAGE* sensor_image) {
 		vsp_report_aux = from_vsp.vsp_report;
 	// jesli odczyt sie powodl, przepisanie pol obrazu z bufora komunikacyjnego do image;
 	if(from_vsp.vsp_report == VSP_REPLY_OK) {
-		memcpy( &(sensor_image->begin), &(from_vsp.comm_image.begin), union_size);
+		memcpy( &(sensor_image->sensor_union.begin), &(from_vsp.comm_image.sensor_union.begin), union_size);
 	} else {
 		sr_ecp_msg.message ("Reply from VSP not ok");
 	}

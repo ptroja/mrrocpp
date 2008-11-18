@@ -57,12 +57,12 @@ bool ecp_spots_generator::next_step()
     sensor->to_vsp.command = 0;
 
 
-	//printf("%d\n", sensor->from_vsp.comm_image.sp_r.pic_count);
+	//printf("%d\n", sensor->from_vsp.comm_image.sensor_union.sp_r.pic_count);
 
-    if(sensor->from_vsp.vsp_report == VSP_REPLY_OK && sensor->from_vsp.comm_image.sp_r.pic_count <= -2)
+    if(sensor->from_vsp.vsp_report == VSP_REPLY_OK && sensor->from_vsp.comm_image.sensor_union.sp_r.pic_count <= -2)
 		//this position failed
 		return false;
-    else if(sensor->from_vsp.vsp_report != VSP_REPLY_OK || sensor->from_vsp.comm_image.sp_r.pic_count <= 0)
+    else if(sensor->from_vsp.vsp_report != VSP_REPLY_OK || sensor->from_vsp.comm_image.sensor_union.sp_r.pic_count <= 0)
 		return true;
 
 		//teraz zabawa z wynikami
@@ -90,13 +90,13 @@ void ecp_spots_generator::get_frame()
 
 void ecp_spots_generator::get_pic()
 {
-	calib_data.sp_r.dz = sensor->from_vsp.comm_image.sp_r.dz;
-	calib_data.sp_r.pic_count = sensor->from_vsp.comm_image.sp_r.pic_count;
+	calib_data.sensor_union.sp_r.dz = sensor->from_vsp.comm_image.sensor_union.sp_r.dz;
+	calib_data.sensor_union.sp_r.pic_count = sensor->from_vsp.comm_image.sensor_union.sp_r.pic_count;
 	for (int i=0; i<4; i++)
 	{
-		calib_data.sp_r.x[i] = sensor->from_vsp.comm_image.sp_r.x[i];
-		calib_data.sp_r.y[i] = sensor->from_vsp.comm_image.sp_r.y[i];
-		calib_data.sp_r.z[i] = sensor->from_vsp.comm_image.sp_r.z[i];
+		calib_data.sensor_union.sp_r.x[i] = sensor->from_vsp.comm_image.sensor_union.sp_r.x[i];
+		calib_data.sensor_union.sp_r.y[i] = sensor->from_vsp.comm_image.sensor_union.sp_r.y[i];
+		calib_data.sensor_union.sp_r.z[i] = sensor->from_vsp.comm_image.sensor_union.sp_r.z[i];
 	}
 }
 
@@ -152,11 +152,11 @@ FILE *fd = fopen("temp.txt", "a+");
 
 for(int it=0; it<4; it++)
 	fprintf(fd, "%f ",vec_plate[it]);
-fprintf(fd, "%f %f %f 1.0 %f\n", 0.01*calib_data.sp_r.x[i], 0.01*calib_data.sp_r.y[i], 0.01*calib_data.sp_r.z[i], calib_data.sp_r.dz);
+fprintf(fd, "%f %f %f 1.0 %f\n", 0.01*calib_data.sensor_union.sp_r.x[i], 0.01*calib_data.sensor_union.sp_r.y[i], 0.01*calib_data.sensor_union.sp_r.z[i], calib_data.sensor_union.sp_r.dz);
 		//double vec_cam[3];
-		//vec_cam[0] = calib_data.sp_r.x[i];
-		//vec_cam[1] = calib_data.sp_r.y[i];
-		//vec_cam[2] = calib_data.sp_r.z[i];
+		//vec_cam[0] = calib_data.sensor_union.sp_r.x[i];
+		//vec_cam[1] = calib_data.sensor_union.sp_r.y[i];
+		//vec_cam[2] = calib_data.sensor_union.sp_r.z[i];
 
 		for(int j=0; j<4; j++)
 		    d_matrix[4*i+j] = vec_plate[j];
@@ -185,15 +185,15 @@ fprintf(fd, "%f %f %f 1.0 %f\n", 0.01*calib_data.sp_r.x[i], 0.01*calib_data.sp_r
 		{
 		  case 0:
 			for (int k=0; k<4; k++)
-				c[k] = 0.01*calib_data.sp_r.x[k];
+				c[k] = 0.01*calib_data.sensor_union.sp_r.x[k];
 			break;
 		  case 1:
 			for (int k=0; k<4; k++)
-				c[k] = 0.01*calib_data.sp_r.y[k];
+				c[k] = 0.01*calib_data.sensor_union.sp_r.y[k];
 			break;
 		  case 2:
 			for (int k=0; k<4; k++)
-				c[k] = 0.01*calib_data.sp_r.z[k];
+				c[k] = 0.01*calib_data.sensor_union.sp_r.z[k];
 			break;
 		  default:
 			  break;

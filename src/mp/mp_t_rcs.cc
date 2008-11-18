@@ -79,7 +79,7 @@ bool mp_task_rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogl
 		
 		for(int i=0; i<3; i++)
 			for(int j=0; j<3; j++)	
-				cube_state->cube_tab[k][3*i+j]=(char)sensor_m[SENSOR_CAMERA_ON_TRACK]->image.cube_face.colors[3*i+j];
+				cube_state->cube_tab[k][3*i+j]=(char)sensor_m[SENSOR_CAMERA_ON_TRACK]->image.sensor_union.cube_face.colors[3*i+j];
 
 				
 		printf("\nFACE FACE %d:\n",k);	
@@ -447,7 +447,7 @@ int mp_task_rubik_cube_solver::find_rcs_with_VSP(char* cube_state, char* cube_so
 	while (!korf_configured) {
 		strncpy(sensor_m[SENSOR_RCS_KORF]->to_vsp.rcs.cube_state, cube_state, 54);
 		sensor_m[SENSOR_RCS_KORF]->initiate_reading();
-		if (sensor_m[SENSOR_RCS_KORF]->image.rcs.init_mode == RCS_INIT_SUCCESS)
+		if (sensor_m[SENSOR_RCS_KORF]->image.sensor_union.rcs.init_mode == RCS_INIT_SUCCESS)
 			korf_configured = true;
 		else
 			sleep(1);
@@ -473,13 +473,13 @@ int mp_task_rubik_cube_solver::find_rcs_with_VSP(char* cube_state, char* cube_so
 		    // odczytuje wynik z czujnika dla algorytmu Korfa
 			sensor_m[SENSOR_RCS_KORF]->get_reading();
 			sleep(1);
-			if (sensor_m[SENSOR_RCS_KORF]->image.rcs.reading_mode == RCS_SOLUTION_NOTPOSSIBLE) {
+			if (sensor_m[SENSOR_RCS_KORF]->image.sensor_union.rcs.reading_mode == RCS_SOLUTION_NOTPOSSIBLE) {
 				sol_possible = false;
-			} else if (sensor_m[SENSOR_RCS_KORF]->image.rcs.reading_mode == RCS_SOLUTION_NOTNEEDED) {
+			} else if (sensor_m[SENSOR_RCS_KORF]->image.sensor_union.rcs.reading_mode == RCS_SOLUTION_NOTNEEDED) {
 				sol_needed = false;
-			} else if (sensor_m[SENSOR_RCS_KORF]->image.rcs.reading_mode == RCS_SOLUTION_FOUND) {
+			} else if (sensor_m[SENSOR_RCS_KORF]->image.sensor_union.rcs.reading_mode == RCS_SOLUTION_FOUND) {
 				sol_korf = new char[200];
-				strcpy(sol_korf, (char*) sensor_m[SENSOR_RCS_KORF]->image.rcs.cube_solution);
+				strcpy(sol_korf, (char*) sensor_m[SENSOR_RCS_KORF]->image.sensor_union.rcs.cube_solution);
 				printf("MP KR: %s\n", sol_korf);
 				korf_found = true;
 			}
@@ -497,13 +497,13 @@ int mp_task_rubik_cube_solver::find_rcs_with_VSP(char* cube_state, char* cube_so
 		// odczytuje ostanio znalezione rozwiazanie z czujnika dla algorytmu Kociemby
 		sensor_m[SENSOR_RCS_KOCIEMBA]->get_reading();
 		sleep(1);
-		if (sensor_m[SENSOR_RCS_KOCIEMBA]->image.rcs.reading_mode == RCS_SOLUTION_NOTPOSSIBLE) {
+		if (sensor_m[SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.reading_mode == RCS_SOLUTION_NOTPOSSIBLE) {
 			sol_possible = false;
-		} else if (sensor_m[SENSOR_RCS_KOCIEMBA]->image.rcs.reading_mode == RCS_SOLUTION_NOTNEEDED) {
+		} else if (sensor_m[SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.reading_mode == RCS_SOLUTION_NOTNEEDED) {
 			sol_needed = false;
-		} else if (sensor_m[SENSOR_RCS_KOCIEMBA]->image.rcs.reading_mode == RCS_SOLUTION_FOUND)  {
+		} else if (sensor_m[SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.reading_mode == RCS_SOLUTION_FOUND)  {
 			sol_kociemba = new char[200];
-			strcpy(sol_kociemba, (char*) sensor_m[SENSOR_RCS_KOCIEMBA]->image.rcs.cube_solution);
+			strcpy(sol_kociemba, (char*) sensor_m[SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.cube_solution);
 			printf("MP KC: %s\n", sol_kociemba);
 			kociemba_found = true;
 		}

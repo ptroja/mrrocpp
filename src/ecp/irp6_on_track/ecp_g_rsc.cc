@@ -59,7 +59,7 @@ bool robot_stopped_condition::next_step (){
 		// Pobranie ostatniego odczytu z czujnika sily.
 		fs->get_reading();
 		// Przepisanie obecnego polozenia robota do bufora w zaleznosci od rodzaju wspolrzednych.
-		memcpy(last_force_sensor_reading, fs->image.force.rez, 6*sizeof(double));
+		memcpy(last_force_sensor_reading, fs->image.sensor_union.force.rez, 6*sizeof(double));
 		};
 	// Odswiezenie okna.
 	refresh_window();
@@ -145,12 +145,12 @@ void robot_stopped_condition::add_rse_element(ecp_mp_digital_scales_sensor& the_
 		// Jesli glowa pusta.
 		create_rse_list_head(
 			the_robot->EDP_data.current_motor_arm_coordinates,
-			the_sensor.image.ds.readings);
+			the_sensor.image.sensor_union.ds.readings);
 	}else{
 		// Jesli nastepny element.
 		insert_rse_list_element(
 			the_robot->EDP_data.current_motor_arm_coordinates,
-			the_sensor.image.ds.readings);
+			the_sensor.image.sensor_union.ds.readings);
 		}; // end else
 	// Wyswietlenie dodanego elementu.
 /*	trajectory_reproduce_element tre;

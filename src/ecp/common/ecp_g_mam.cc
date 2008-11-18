@@ -200,7 +200,7 @@ void manual_moves_automatic_measures_generator::get_current_position(double* cur
 /*********************** RETURN SENSOR READING ***************************/
 void manual_moves_automatic_measures_generator::get_sensor_reading(ecp_mp_digital_scales_sensor& the_sensor, double* sensor_reading){
     // Przepisanie pozycji z bufora.
-    memcpy(sensor_reading, the_sensor.image.ds.readings, 6*sizeof(double));
+    memcpy(sensor_reading, the_sensor.image.sensor_union.ds.readings, 6*sizeof(double));
     }; // end: return_sensor_reading
 
 
@@ -238,12 +238,12 @@ void manual_moves_automatic_measures_generator::add_mam_element(ecp_mp_digital_s
 		// Jesli glowa pusta.
 		create_mam_list_head(
 			the_robot->EDP_data.current_motor_arm_coordinates,
-			the_sensor.image.ds.readings);
+			the_sensor.image.sensor_union.ds.readings);
 	}else{
 		// Jesli nastepny element.
 		insert_mam_list_element(
 			the_robot->EDP_data.current_motor_arm_coordinates,
-			the_sensor.image.ds.readings);
+			the_sensor.image.sensor_union.ds.readings);
 		}; // end else
 	// Wyswietlenie dodanego elementu.
 	mam_element mam;

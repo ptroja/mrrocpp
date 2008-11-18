@@ -41,7 +41,7 @@ vsp_sensor* return_created_sensor (void)
 // Konstruktor klasy czujnika wirtualnego, odpowiedzialnego za odczyty z czujnika sily.
 vsp_force_sensor::vsp_force_sensor(void){
 	// Wielkosc unii.
-	union_size = sizeof(image.force);
+	union_size = sizeof(image.sensor_union.force);
 
 	char* network_edp_vsp_attach_point = 
 		config->return_attach_point_name (configurator::CONFIG_SERVER, "edp_vsp_attach_point", 
@@ -98,7 +98,7 @@ void vsp_force_sensor::initiate_reading (void){
 	if(!is_sensor_configured)
 	     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	// Przepisanie odczytu do obrazu czujnika.
-	memcpy(image.force.rez, edp_vsp_reply.force, 6*sizeof(double));
+	memcpy(image.sensor_union.force.rez, edp_vsp_reply.force, 6*sizeof(double));
 	// Odczyt w porzadku.
 	is_reading_ready=true;
 	// Pomiar czasu.
@@ -120,7 +120,7 @@ void vsp_force_sensor::get_reading (void){
 	// Odczyt w porzadku.
 	from_vsp.vsp_report=VSP_REPLY_OK;
 	// Przepisanie pomiarow z obrazu czujnika do bufora komunikacyjnego.
-	memcpy(from_vsp.comm_image.force.rez, image.force.rez, 6*sizeof(double));
+	memcpy(from_vsp.comm_image.sensor_union.force.rez, image.sensor_union.force.rez, 6*sizeof(double));
 	// Obacny odczyt nie jest "nowy".
      is_reading_ready=false;
 	}; // end: get_reading

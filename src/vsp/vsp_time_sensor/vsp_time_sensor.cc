@@ -29,7 +29,7 @@ vsp_sensor* return_created_sensor (void)
 // Konstruktor klasy czujnika wirtualnego, odpowiedzialnego za odczyty z czujnika sily.
 vsp_time_sensor::vsp_time_sensor(void){
 	// Wielkosc unii.
-	union_size = sizeof(image.time);
+	union_size = sizeof(image.sensor_union.time);
 
 	// Czujnik niezainicjowany.
 	is_sensor_configured=false;	
@@ -66,7 +66,7 @@ void vsp_time_sensor::get_reading (void){
 	// Odczyt w porzadku.
 	from_vsp.vsp_report=VSP_REPLY_OK;
 
-	clock_gettime(CLOCK_REALTIME, &from_vsp.comm_image.time.ts);
+	clock_gettime(CLOCK_REALTIME, &from_vsp.comm_image.sensor_union.time.ts);
 
 	// Obacny odczyt nie jest "nowy".
 	is_reading_ready=false;

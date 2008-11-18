@@ -74,8 +74,8 @@ bool time_generator::next_step ( )
 #if 1
 
     printf("%lu.%09lu\n",
-           sensor_m[SENSOR_TIME]->image.time.ts.tv_sec,
-           sensor_m[SENSOR_TIME]->image.time.ts.tv_nsec
+           sensor_m[SENSOR_TIME]->image.sensor_union.time.ts.tv_sec,
+           sensor_m[SENSOR_TIME]->image.sensor_union.time.ts.tv_nsec
           );
 #endif
 

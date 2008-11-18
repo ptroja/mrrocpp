@@ -13,7 +13,7 @@
 /***************************** CONSTRUCTOR ********************************/
 ecp_mp_schunk_sensor::ecp_mp_schunk_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object):
 	ecp_mp_sensor (_sensor_name, _section_name, _ecp_mp_object) {
-  union_size = sizeof(image.force);
+  union_size = sizeof(image.sensor_union.force);
 }
 
 // inicjacja odczytu dla VSP

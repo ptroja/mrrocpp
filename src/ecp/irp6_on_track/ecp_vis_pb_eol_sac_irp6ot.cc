@@ -126,10 +126,10 @@ void ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
 	}
 
 	//SAC
-	C_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G[0],
-			vsp_vis_sac->image.vis_sac.frame_E_r_G[1],
-			-vsp_vis_sac->image.vis_sac.frame_E_r_G[2],
-			vsp_vis_sac->image.vis_sac.frame_E_r_G[5], 0, 0);
+	C_Tx_G.set_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[0],
+			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[1],
+			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[2],
+			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[5], 0, 0);
 		//	0, 0, -0.1);
 
 #if 0

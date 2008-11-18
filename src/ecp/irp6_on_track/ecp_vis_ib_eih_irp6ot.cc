@@ -115,10 +115,10 @@ void ecp_vis_ib_eih_irp6ot::next_step_without_constraints(){
 	}
 
 	//EIH - f
-	C_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[0],
-			vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[1],
-			-vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[2],
-			-vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[3], 0, 0); //-1
+	C_Tx_G.set_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__CEIH[0],
+			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__CEIH[1],
+			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__CEIH[2],
+			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__CEIH[3], 0, 0); //-1
 
 	G_Tx_S.set_xyz_rpy(x2g, 0, 0, 0, 0, 0);
 	O_Tx_E.set_frame_tab(the_robot->EDP_data.current_arm_frame);

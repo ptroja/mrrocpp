@@ -501,7 +501,7 @@ bool mp_task_fsautomat::writeCubeState(State &state)
 	
 	for(int i=0; i<3; i++)
 		for(int j=0; j<3; j++)
-			cube_state->cube_tab[index][3*i+j]=(char)sensor_m[SENSOR_CAMERA_ON_TRACK]->image.cube_face.colors[3*i+j];
+			cube_state->cube_tab[index][3*i+j]=(char)sensor_m[SENSOR_CAMERA_ON_TRACK]->image.sensor_union.cube_face.colors[3*i+j];
 	
 	
 	printf("\nFACE FACE %d:\n",index);

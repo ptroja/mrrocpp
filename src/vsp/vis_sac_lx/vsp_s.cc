@@ -135,7 +135,7 @@ int ret=0;
 vsp_vis_sac_lx_sensor::vsp_vis_sac_lx_sensor(void)
 {
 	// Wielkosc unii.
-	union_size = sizeof(image.vis_sac);
+	union_size = sizeof(image.sensor_union.vis_sac);
 
 	is_sensor_configured=false; // czujnik niezainicjowany 
 	is_reading_ready=false; // nie ma zadnego gotowego odczytu
@@ -333,84 +333,84 @@ void vsp_vis_sac_lx_sensor::get_reading(void)
 	for (int i=0; i<3; i++)
 		for (int j=0; j<3; j++) {
 			//		vision.E_Tx_G.get_value(j,i,aux);
-			from_vsp.comm_image.camera.frame[4*i+j]=aux;
+			from_vsp.comm_image.sensor_union.camera.frame[4*i+j]=aux;
 		}
 	for (int i=0; i<3; i++) {
 		//		vision.E_Tx_G.get_value(3,i,aux);
-		from_vsp.comm_image.camera.frame[4*i+3]=aux;
+		from_vsp.comm_image.sensor_union.camera.frame[4*i+3]=aux;
 	}
 	for (int j=0; j<3; j++)
-		from_vsp.comm_image.camera.frame[12+j]=0;
+		from_vsp.comm_image.sensor_union.camera.frame[12+j]=0;
 	//if (vision.whole_face)
-	//		from_vsp.comm_image.camera.frame[15]=1;
+	//		from_vsp.comm_image.sensor_union.camera.frame[15]=1;
 	//else
-	//		from_vsp.comm_image.camera.frame[15]=0;
+	//		from_vsp.comm_image.sensor_union.camera.frame[15]=0;
 
 	for (int i=0; i<3; i++)
 		for (int j=0; j<3; j++) {
 			//	vision.E_Tx_G.get_value(j,i,aux);
-			from_vsp.comm_image.vis_sac.frame_E_T_G[4*i+j]=aux;
+			from_vsp.comm_image.sensor_union.vis_sac.frame_E_T_G[4*i+j]=aux;
 		}
 	for (int i=0; i<3; i++) {
 		//		vision.E_Tx_G.get_value(3,i,aux);
-		from_vsp.comm_image.vis_sac.frame_E_T_G[4*i+3]=aux;
+		from_vsp.comm_image.sensor_union.vis_sac.frame_E_T_G[4*i+3]=aux;
 	}
 
 	/*
 	 for(int j=0; j<12; j++)
-	 from_vsp.comm_image.vis_sac.frame_E_T_G[j]=(double)  C_T_G[j]/10000;
+	 from_vsp.comm_image.sensor_union.vis_sac.frame_E_T_G[j]=(double)  C_T_G[j]/10000;
 	 
 	 for(int j=0; j<3; j++)
-	 from_vsp.comm_image.vis_sac.frame_E_T_G[12+j]=0;
+	 from_vsp.comm_image.sensor_union.vis_sac.frame_E_T_G[12+j]=0;
 	 
-	 from_vsp.comm_image.vis_sac.frame_E_T_G[15]=1;
+	 from_vsp.comm_image.sensor_union.vis_sac.frame_E_T_G[15]=1;
 	 */
 	//if (vision.whole_face)
-	//		from_vsp.comm_image.vis_sac.frame_E_T_G[15]=1;
+	//		from_vsp.comm_image.sensor_union.vis_sac.frame_E_T_G[15]=1;
 	//else
-	//		from_vsp.comm_image.vis_sac.frame_E_T_G[15]=0;
+	//		from_vsp.comm_image.sensor_union.vis_sac.frame_E_T_G[15]=0;
 
-	from_vsp.comm_image.vis_sac.frame_E_r_G__CEIH[0]=(double) x_jack_eih/10000;
-	from_vsp.comm_image.vis_sac.frame_E_r_G__CEIH[1]=(double) y_jack_eih/10000;
-	from_vsp.comm_image.vis_sac.frame_E_r_G__CEIH[2]=(double) z_jack_eih/10000;
-	from_vsp.comm_image.vis_sac.frame_E_r_G__CEIH[3]=(double) a_jack_eih/100000;
-	from_vsp.comm_image.vis_sac.frame_E_r_G__CEIH[4]=(double) b_jack_eih/100000;
-	from_vsp.comm_image.vis_sac.frame_E_r_G__CEIH[5]=(double) g_jack_eih/100000;
+	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G__CEIH[0]=(double) x_jack_eih/10000;
+	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G__CEIH[1]=(double) y_jack_eih/10000;
+	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G__CEIH[2]=(double) z_jack_eih/10000;
+	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G__CEIH[3]=(double) a_jack_eih/100000;
+	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G__CEIH[4]=(double) b_jack_eih/100000;
+	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G__CEIH[5]=(double) g_jack_eih/100000;
 
-	from_vsp.comm_image.vis_sac.frame_E_r_G__f[0]=(double) x/10000;
-	from_vsp.comm_image.vis_sac.frame_E_r_G__f[1]=(double) y/10000;
-	from_vsp.comm_image.vis_sac.frame_E_r_G__f[2]=(double) z/10000;
-	from_vsp.comm_image.vis_sac.frame_E_r_G__f[3]=(double) a/100000;
-	from_vsp.comm_image.vis_sac.frame_E_r_G__f[4]=(double) b/100000;
-	from_vsp.comm_image.vis_sac.frame_E_r_G__f[5]=(double) g/100000;
+	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G__f[0]=(double) x/10000;
+	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G__f[1]=(double) y/10000;
+	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G__f[2]=(double) z/10000;
+	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G__f[3]=(double) a/100000;
+	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G__f[4]=(double) b/100000;
+	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G__f[5]=(double) g/100000;
 
-	from_vsp.comm_image.vis_sac.frame_E_r_G[0]=(double) x_sac/10000;
-	from_vsp.comm_image.vis_sac.frame_E_r_G[1]=(double) y_sac/10000;
-	from_vsp.comm_image.vis_sac.frame_E_r_G[2]=(double) z_sac/10000;
-	from_vsp.comm_image.vis_sac.frame_E_r_G[3]=(double) a_sac/100000;
-	from_vsp.comm_image.vis_sac.frame_E_r_G[4]=(double) b_sac/100000;
-	from_vsp.comm_image.vis_sac.frame_E_r_G[5]=(double) g_sac/100000;
+	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G[0]=(double) x_sac/10000;
+	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G[1]=(double) y_sac/10000;
+	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G[2]=(double) z_sac/10000;
+	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G[3]=(double) a_sac/100000;
+	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G[4]=(double) b_sac/100000;
+	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G[5]=(double) g_sac/100000;
 	
-	from_vsp.comm_image.vis_sac.fEIH_G[0]=(double) f1x_eih/1000;
-	from_vsp.comm_image.vis_sac.fEIH_G[1]=(double) f1y_eih/1000;
-	from_vsp.comm_image.vis_sac.fEIH_G[2]=(double) f2x_eih/1000;
-	from_vsp.comm_image.vis_sac.fEIH_G[3]=(double) f2y_eih/1000;
-	from_vsp.comm_image.vis_sac.fEIH_G[4]=(double) f3x_eih/1000;
-	from_vsp.comm_image.vis_sac.fEIH_G[5]=(double) f3y_eih/1000;
-	from_vsp.comm_image.vis_sac.fEIH_G[6]=(double) f4x_eih/1000;
-	from_vsp.comm_image.vis_sac.fEIH_G[7]=(double) f4y_eih/1000;
+	from_vsp.comm_image.sensor_union.vis_sac.fEIH_G[0]=(double) f1x_eih/1000;
+	from_vsp.comm_image.sensor_union.vis_sac.fEIH_G[1]=(double) f1y_eih/1000;
+	from_vsp.comm_image.sensor_union.vis_sac.fEIH_G[2]=(double) f2x_eih/1000;
+	from_vsp.comm_image.sensor_union.vis_sac.fEIH_G[3]=(double) f2y_eih/1000;
+	from_vsp.comm_image.sensor_union.vis_sac.fEIH_G[4]=(double) f3x_eih/1000;
+	from_vsp.comm_image.sensor_union.vis_sac.fEIH_G[5]=(double) f3y_eih/1000;
+	from_vsp.comm_image.sensor_union.vis_sac.fEIH_G[6]=(double) f4x_eih/1000;
+	from_vsp.comm_image.sensor_union.vis_sac.fEIH_G[7]=(double) f4y_eih/1000;
 	
 
 	//for(int i=2; i<6; i++)
-	//	from_vsp.comm_image.vis_sac.frame_E_r_G__f[i]=0;
+	//	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G__f[i]=0;
 
 	//std::cout << "from VSP" << std::endl;
 	//for(int i=0; i<6; i++)
-	//std::cout << from_vsp.comm_image.vis_sac.frame_E_T_G[i] << " ";
-	//	std::cout << from_vsp.comm_image.vis_sac.frame_E_r_G[i] << " ";
+	//std::cout << from_vsp.comm_image.sensor_union.vis_sac.frame_E_T_G[i] << " ";
+	//	std::cout << from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G[i] << " ";
 	//std::cout << std::endl;
 	// for(int i=0; i<16; i++)
-	// 	from_vsp.comm_image.camera.frame[i] = 0.5;
+	// 	from_vsp.comm_image.sensor_union.camera.frame[i] = 0.5;
 	// sr_msg->message ("VSP Get reading ok");   
 	is_reading_ready=false; // 7
 }

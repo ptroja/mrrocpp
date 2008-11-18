@@ -240,7 +240,7 @@ void trajectory_reproduce_generator::check_force_condition(ecp_mp_force_sensor& 
 	SENSOR_IMAGE si;
 	// Pobranie odczytow z czujnika sily.
 	the_sensor.get_reading(&si);
-    memcpy(last_force_sensor_reading, si.force.rez, MAX_SERVOS_NR*sizeof(double));
+    memcpy(last_force_sensor_reading, si.sensor_union.force.rez, MAX_SERVOS_NR*sizeof(double));
     // Sprawdzenie, czy nie wystapila za duza sila.
     for (int i=0; i<6; i++)
         if (fabs(last_force_sensor_reading[i]) > dangerous_force)

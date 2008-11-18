@@ -18,12 +18,12 @@ ecp_mp_vis_sensor::ecp_mp_vis_sensor (SENSOR_ENUM _sensor_name, const char* _sec
   if (strcmp(_section_name, "[vsp_vis_eih]") == 0)
   {
 //    printf("ecp_mp_vis_sensor: [vsp_vis_eih]\n");
-    // EIH -> uzycie strunktury sizeof(image.cube_face);
-    union_size = sizeof(image.cube_face);
+    // EIH -> uzycie strunktury sizeof(image.sensor_union.cube_face);
+    union_size = sizeof(image.sensor_union.cube_face);
   } else {
 
 //    printf("ecp_mp_vis_sensor: [vsp_vis_sac]\n");
-    // SAC -> uzycie strunktury sizeof(image.camera);
-    union_size = sizeof(image.camera);
+    // SAC -> uzycie strunktury sizeof(image.sensor_union.camera);
+    union_size = sizeof(image.sensor_union.camera);
   }//: if
 };//: ecp_mp_vis_sensor

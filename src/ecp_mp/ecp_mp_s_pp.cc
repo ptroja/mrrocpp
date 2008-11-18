@@ -14,9 +14,9 @@ ecp_mp_pp_sensor::ecp_mp_pp_sensor(SENSOR_ENUM _sensor_name, const char* _sectio
 	ecp_mp_sensor(_sensor_name, _section_name, _ecp_mp_object)
 {
 	// Ustawienie wielkosci przesylanej unii.
-	union_size = sizeof(image.pp);
+	union_size = sizeof(image.sensor_union.pp);
 	// Wyzerowanie odczytow.
 	for (int i =0; i<3; i++)
-		image.pp.joy[i] = 0.0;
-	image.pp.active_motors = 0;
+		image.sensor_union.pp.joy[i] = 0.0;
+	image.sensor_union.pp.active_motors = 0;
 }

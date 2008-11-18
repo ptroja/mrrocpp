@@ -384,18 +384,18 @@ void vsp_mic::get_reading (void){
 /*
 	for(int i=0; i<3; i++)
 		for(int j=0; j<3; j++)
-			from_vsp.comm_image.camera.frame[4*i+j]=r.recog_word_id;
+			from_vsp.comm_image.sensor_union.camera.frame[4*i+j]=r.recog_word_id;
 	for(int i=0; i<3; i++)
-			from_vsp.comm_image.camera.frame[4*i+3]=7; //vision.cube_center[i+1];
+			from_vsp.comm_image.sensor_union.camera.frame[4*i+3]=7; //vision.cube_center[i+1];
 	for(int j=0; j<3; j++)
-			from_vsp.comm_image.camera.frame[12+j]=0;
+			from_vsp.comm_image.sensor_union.camera.frame[12+j]=0;
 
-			from_vsp.comm_image.camera.frame[15]=1;
+			from_vsp.comm_image.sensor_union.camera.frame[15]=1;
 */	
-	from_vsp.comm_image.mic.word_id=r.recog_word_id;
+	from_vsp.comm_image.sensor_union.mic.word_id=r.recog_word_id;
 	
 	// for(int i=0; i<16; i++)
-	// 	from_vsp.comm_image.camera.frame[i] = 0.5;
+	// 	from_vsp.comm_image.sensor_union.camera.frame[i] = 0.5;
      // sr_msg->message ("VSP Get reading ok");   
      is_reading_ready=false; // 7
 	

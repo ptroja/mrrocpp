@@ -338,7 +338,7 @@ bool y_egg_force_generator::next_step()
 
 	// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 	// (okreslenie kolejnego wezla interpolacji)
-	// 	printf("odczyt: %d, sila: %f\n", the_robot->EDP_data.analog_input[1], (sensor_m.begin())->second->image.force.rez[2]);
+	// 	printf("odczyt: %d, sila: %f\n", the_robot->EDP_data.analog_input[1], (sensor_m.begin())->second->image.sensor_union.force.rez[2]);
 
 	gen_state=next_gen_state;
 
@@ -452,7 +452,7 @@ bool y_egg_force_generator::next_step()
 		 ((the_robot->EDP_data.analog_input[1]<PROG_ODLEGLOSCI_PODCZERWIEN_EGG)
 		 &&(the_robot->EDP_data.analog_input[1]>ODLEGLOSCI_PODCZERWIEN_MIN_VALUE))|| // sieje zerami bugami
 		 */
-		((sensor_m.begin())->second->image.force.rez[2]>SILA_KONTAKTU_EGG) ))
+		((sensor_m.begin())->second->image.sensor_union.force.rez[2]>SILA_KONTAKTU_EGG) ))
 		{
 			in_state_iteration=0;
 			if (int_mode==0) // rozbijamy
@@ -1498,7 +1498,7 @@ bool y_advanced_drawing_teach_in_force_generator::next_step()
 				sr_ecp_msg.message("ECP Opuszczanie");
 			}
 
-			if ((sensor_m.begin())->second->image.force.event_type == 2)
+			if ((sensor_m.begin())->second->image.sensor_union.force.event_type == 2)
 			{
 				// czujnik wyczul powierzchnie
 				next_gen_state = 6;
@@ -1604,14 +1604,14 @@ bool y_advanced_drawing_teach_in_force_generator::next_step()
 		// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 		the_robot->EDP_data.instruction_type = SET;
 
-		if ((sensor_m.begin())->second->image.force.event_type==2)
+		if ((sensor_m.begin())->second->image.sensor_union.force.event_type==2)
 		{
 			gen_state = 1;
 		}
 
 		if (gen_state == 1)
 		{
-			insert_pose_list_element(emptyps, 0.0, (sensor_m.begin())->second->image.force.event_type, inc_delta);
+			insert_pose_list_element(emptyps, 0.0, (sensor_m.begin())->second->image.sensor_union.force.event_type, inc_delta);
 		}
 
 		return true;

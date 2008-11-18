@@ -214,7 +214,7 @@ bool mp_vis_pbeclsac_generator::next_step () {
 	{
 		for(int j=0; j<4; j++)
 		{
-			frame1[i][j]=vsp_vis_sac->image.camera.frame[4*i+j];
+			frame1[i][j]=vsp_vis_sac->image.sensor_union.camera.frame[4*i+j];
 		}
 	}
 	
@@ -223,8 +223,8 @@ bool mp_vis_pbeclsac_generator::next_step () {
 	{
 		for(int j=3; j>=0; j--)
 		{
-			//frame1[i][j]=vsp_vis_sac->image.camera.frame[4*i+j];
-			//aux=vsp_vis_sac->image.camera.frame[4*i+j];
+			//frame1[i][j]=vsp_vis_sac->image.sensor_union.camera.frame[4*i+j];
+			//aux=vsp_vis_sac->image.sensor_union.camera.frame[4*i+j];
 			E_Tx_G.set_value(j,i,frame1[i][j]);
 			E_Tx_G.get_value(j,i,aux);
 			E_Tx_G.get_value(3,0,aux2);

@@ -93,7 +93,7 @@ vsp_sensor* return_created_sensor (void)
 // Rejstracja procesu VSP
 vsp_vis_pbeclsac_sensor::vsp_vis_pbeclsac_sensor(void){
 	// Wielkosc unii.
-	union_size = sizeof(image.camera);
+	union_size = sizeof(image.sensor_union.camera);
 
 //	uint64_t e;			// kod bledu systemowego
 	
@@ -225,21 +225,21 @@ double aux=0;
 		for(int j=0; j<3; j++)
 		{
 			vision.E_Tx_G.get_value(j,i,aux);
-			from_vsp.comm_image.camera.frame[4*i+j]=aux;
+			from_vsp.comm_image.sensor_union.camera.frame[4*i+j]=aux;
 		}
 	for(int i=0; i<3; i++)
 	{
 			vision.E_Tx_G.get_value(3,i,aux);
-			from_vsp.comm_image.camera.frame[4*i+3]=aux; 
+			from_vsp.comm_image.sensor_union.camera.frame[4*i+3]=aux; 
 	}
 	for(int j=0; j<3; j++)
-			from_vsp.comm_image.camera.frame[12+j]=0;
+			from_vsp.comm_image.sensor_union.camera.frame[12+j]=0;
 	if (vision.whole_face)
-			from_vsp.comm_image.camera.frame[15]=1;
+			from_vsp.comm_image.sensor_union.camera.frame[15]=1;
 	else
-			from_vsp.comm_image.camera.frame[15]=0;
+			from_vsp.comm_image.sensor_union.camera.frame[15]=0;
 	// for(int i=0; i<16; i++)
-	// 	from_vsp.comm_image.camera.frame[i] = 0.5;
+	// 	from_vsp.comm_image.sensor_union.camera.frame[i] = 0.5;
      // sr_msg->message ("VSP Get reading ok");   
      is_reading_ready=false; // 7
 	};

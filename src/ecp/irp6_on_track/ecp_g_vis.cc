@@ -334,11 +334,11 @@ printf("\n");
 // Obliczenie zadanej pozycji posredniej w tym kroku ruchu
    // (okreslenie kolejnego wezla interpolacji)
 
-// itoa((sensor_m.begin())->second->image.force.rez[0], buf, 10);
+// itoa((sensor_m.begin())->second->image.sensor_union.force.rez[0], buf, 10);
 
 for(int i=0; i<4; i++)
 		for(int j=0; j<4; j++)
-			frame1[i][j]=(sensor_m.begin())->second->image.camera.frame[4*i+j];
+			frame1[i][j]=(sensor_m.begin())->second->image.sensor_union.camera.frame[4*i+j];
 
 //WYREM2DEBUG
 

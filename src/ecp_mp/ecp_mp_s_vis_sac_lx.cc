@@ -22,8 +22,8 @@ ecp_mp_vis_sac_lx_sensor::ecp_mp_vis_sac_lx_sensor (SENSOR_ENUM _sensor_name, co
 	ecp_mp_sensor (_sensor_name, _section_name, _ecp_mp_object) {
  
 //    printf("ecp_mp_vis_sac_sensor: [vsp_vis_sac_sac]\n");
-    // SAC -> uzycie strunktury sizeof(image.camera);
-    union_size = sizeof(image.vis_sac);
+    // SAC -> uzycie strunktury sizeof(image.sensor_union.camera);
+    union_size = sizeof(image.sensor_union.vis_sac);
   
   };//: ecp_mp_vis_sac_sensor
 
@@ -36,7 +36,7 @@ void ecp_mp_vis_sac_lx_sensor::get_reading(){
 	if(from_vsp.vsp_report == VSP_REPLY_OK)
 	{
 	
-		memcpy( &image.vis_sac, &(from_vsp.comm_image.vis_sac) , union_size);				
+		memcpy( &image.vis_sac, &(from_vsp.comm_image.sensor_union.vis_sac) , union_size);				
 
 	}			
 

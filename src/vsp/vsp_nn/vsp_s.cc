@@ -87,7 +87,7 @@ vsp_sensor* return_created_sensor (void)
 // Rejstracja procesu VSP
 vsp_nn_sensor::vsp_nn_sensor(void){
 	// Wielkosc unii.
-	union_size = sizeof(image.camera);
+	union_size = sizeof(image.sensor_union.camera);
 
 //	uint64_t e;			// kod bledu systemowego
 	
@@ -189,25 +189,25 @@ void vsp_nn_sensor::get_reading (void){
 
 	printf("get read\n");
 	// fill up frame
-	from_vsp.comm_image.camera.frame[4*1+0]=1; from_vsp.comm_image.camera.frame[4*1+1]= 0; from_vsp.comm_image.camera.frame[4*1+2]=0; from_vsp.comm_image.camera.frame[4*1+3]= 0.11*(y-288)/232+0.93+0.08;
-	from_vsp.comm_image.camera.frame[4*0+0]=0; from_vsp.comm_image.camera.frame[4*0+1]= 1; from_vsp.comm_image.camera.frame[4*0+2]= 0; from_vsp.comm_image.camera.frame[4*0+3]= 0.185*(x-384)/290;
-	from_vsp.comm_image.camera.frame[4*2+0]=0; from_vsp.comm_image.camera.frame[4*2+1]=0; from_vsp.comm_image.camera.frame[4*2+2]= 1; from_vsp.comm_image.camera.frame[4*2+3]= 982.285;
-	from_vsp.comm_image.camera.frame[4*3+0]=0; from_vsp.comm_image.camera.frame[4*3+1]=0; from_vsp.comm_image.camera.frame[4*3+2]= 0; from_vsp.comm_image.camera.frame[4*3+3]= 1;
+	from_vsp.comm_image.sensor_union.camera.frame[4*1+0]=1; from_vsp.comm_image.sensor_union.camera.frame[4*1+1]= 0; from_vsp.comm_image.sensor_union.camera.frame[4*1+2]=0; from_vsp.comm_image.sensor_union.camera.frame[4*1+3]= 0.11*(y-288)/232+0.93+0.08;
+	from_vsp.comm_image.sensor_union.camera.frame[4*0+0]=0; from_vsp.comm_image.sensor_union.camera.frame[4*0+1]= 1; from_vsp.comm_image.sensor_union.camera.frame[4*0+2]= 0; from_vsp.comm_image.sensor_union.camera.frame[4*0+3]= 0.185*(x-384)/290;
+	from_vsp.comm_image.sensor_union.camera.frame[4*2+0]=0; from_vsp.comm_image.sensor_union.camera.frame[4*2+1]=0; from_vsp.comm_image.sensor_union.camera.frame[4*2+2]= 1; from_vsp.comm_image.sensor_union.camera.frame[4*2+3]= 982.285;
+	from_vsp.comm_image.sensor_union.camera.frame[4*3+0]=0; from_vsp.comm_image.sensor_union.camera.frame[4*3+1]=0; from_vsp.comm_image.sensor_union.camera.frame[4*3+2]= 0; from_vsp.comm_image.sensor_union.camera.frame[4*3+3]= 1;
 	
 	
 	
 /*
 	for(int i=0; i<3; i++)
 		for(int j=0; j<3; j++)
-			from_vsp.comm_image.camera.frame[4*i+j]=vision.Rckk[i+1][j+1];
+			from_vsp.comm_image.sensor_union.camera.frame[4*i+j]=vision.Rckk[i+1][j+1];
 	for(int i=0; i<3; i++)
-			from_vsp.comm_image.camera.frame[4*i+3]=vision.Tckk[i+1]; //vision.cube_center[i+1];
+			from_vsp.comm_image.sensor_union.camera.frame[4*i+3]=vision.Tckk[i+1]; //vision.cube_center[i+1];
 	for(int j=0; j<3; j++)
-			from_vsp.comm_image.camera.frame[12+j]=0;
+			from_vsp.comm_image.sensor_union.camera.frame[12+j]=0;
 	if (vision.whole_face)
-			from_vsp.comm_image.camera.frame[15]=1;
+			from_vsp.comm_image.sensor_union.camera.frame[15]=1;
 	else
-			from_vsp.comm_image.camera.frame[15]=0;
+			from_vsp.comm_image.sensor_union.camera.frame[15]=0;
 */   
      is_reading_ready=false; // 7
 	};

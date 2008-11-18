@@ -70,7 +70,7 @@ vsp_sensor* return_created_sensor (void)
 /*****************************  KONSTRUKTOR *********************************/
 vsp_pp_sensor::vsp_pp_sensor(void){
 	// Wielkosc unii.
-	union_size = sizeof(image.pp);
+	union_size = sizeof(image.sensor_union.pp);
 
     // Zerowe polozenia poczatkowe.
     for(int i=0; i<3; i++){
@@ -79,12 +79,12 @@ vsp_pp_sensor::vsp_pp_sensor(void){
         position_lo_ext[i] = 0;
         position_hi_ext[i] = 0;
         axis_reading[i] = 0;
-        image.pp.joy[i]=0.0;
-	   from_vsp.comm_image.pp.joy[i] = 0.0;
+        image.sensor_union.pp.joy[i]=0.0;
+	   from_vsp.comm_image.sensor_union.pp.joy[i] = 0.0;
 	   joy_axis_img[i] = 0.0;
         };
-	image.pp.active_motors = 0;
-	from_vsp.comm_image.pp.active_motors = 0;
+	image.sensor_union.pp.active_motors = 0;
+	from_vsp.comm_image.sensor_union.pp.active_motors = 0;
 	Word_received = 0;
 	Word_to_send = 0;
 	Command_received = 0;
@@ -245,8 +245,8 @@ void vsp_pp_sensor::initiate_reading (void){
 			break;
 			
 		case 3:
-			from_vsp.comm_image.pp.active_motors += 1;
-			from_vsp.comm_image.pp.active_motors %= 3;
+			from_vsp.comm_image.sensor_union.pp.active_motors += 1;
+			from_vsp.comm_image.sensor_union.pp.active_motors %= 3;
 			break;
 			
 		default:
@@ -310,9 +310,9 @@ void vsp_pp_sensor::get_reading (void){
     if (!is_reading_ready)
         throw sensor_error (NON_FATAL_ERROR, READING_NOT_READY);
 
-	from_vsp.comm_image.pp.joy[0] = joy_axis_img[0];
-	from_vsp.comm_image.pp.joy[1] = joy_axis_img[1];
-	from_vsp.comm_image.pp.joy[2] = joy_axis_img[2];
+	from_vsp.comm_image.sensor_union.pp.joy[0] = joy_axis_img[0];
+	from_vsp.comm_image.sensor_union.pp.joy[1] = joy_axis_img[1];
+	from_vsp.comm_image.sensor_union.pp.joy[2] = joy_axis_img[2];
 
     // Odczyty sa gotowe.
     from_vsp.vsp_report=VSP_REPLY_OK;

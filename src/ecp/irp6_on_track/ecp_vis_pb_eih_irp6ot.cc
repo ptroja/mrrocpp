@@ -126,10 +126,10 @@ void ecp_vis_pb_eih_irp6ot::next_step_without_constraints(){
 	}
 
 	//EIH
-	C_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0],
-			vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1],
-			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2], // kalib Y w O
-			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3], 0, 0);
+	C_Tx_G.set_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0],
+			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[1],
+			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[2], // kalib Y w O
+			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[3], 0, 0);
 
 	G_Tx_S.set_xyz_rpy(x2g, 0, 0, 0, 0, 0);
 

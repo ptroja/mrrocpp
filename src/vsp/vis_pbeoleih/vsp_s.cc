@@ -143,7 +143,7 @@ vsp_sensor* return_created_sensor (void)
 // Rejstracja procesu VSP
 vsp_vis_sensor::vsp_vis_sensor(void){
 	// Wielkosc unii.
-	union_size = sizeof(image.cube_face);
+	union_size = sizeof(image.sensor_union.cube_face);
 
 //	uint64_t e;			// kod bledu systemowego
 	
@@ -550,24 +550,24 @@ void vsp_vis_sensor::get_reading (void){
 	/*
 	for(int i=0; i<3; i++)
 		for(int j=0; j<3; j++)
-			from_vsp.comm_image.camera.frame[4*i+j]=vision.Rckk[i+1][j+1];
+			from_vsp.comm_image.sensor_union.camera.frame[4*i+j]=vision.Rckk[i+1][j+1];
 	for(int i=0; i<3; i++)
-			from_vsp.comm_image.camera.frame[4*i+3]=vision.Tckk[i+1]; //vision.cube_center[i+1];
+			from_vsp.comm_image.sensor_union.camera.frame[4*i+3]=vision.Tckk[i+1]; //vision.cube_center[i+1];
 	for(int j=0; j<3; j++)
-			from_vsp.comm_image.camera.frame[12+j]=0;
+			from_vsp.comm_image.sensor_union.camera.frame[12+j]=0;
 	if (vision.whole_face)
-			from_vsp.comm_image.camera.frame[15]=1;
+			from_vsp.comm_image.sensor_union.camera.frame[15]=1;
 	else
-			from_vsp.comm_image.camera.frame[15]=0;
+			from_vsp.comm_image.sensor_union.camera.frame[15]=0;
 	*/
 	//fill up colors
 	
 	for(int i=0; i<3; i++)
 		for(int j=0; j<3; j++)
-			from_vsp.comm_image.cube_face.colors[3*i+j]=vision.face_colors[3*i+j];
+			from_vsp.comm_image.sensor_union.cube_face.colors[3*i+j]=vision.face_colors[3*i+j];
 	
 	// for(int i=0; i<16; i++)
-	// 	from_vsp.comm_image.camera.frame[i] = 0.5;
+	// 	from_vsp.comm_image.sensor_union.camera.frame[i] = 0.5;
      // sr_msg->message ("VSP Get reading ok");   
      is_reading_ready=false; // 7
 	};

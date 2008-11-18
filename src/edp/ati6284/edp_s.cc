@@ -577,16 +577,16 @@ void edp_ATI6284_force_sensor::initiate_reading(void)
 		double kartez_force[6], root_force[6];
 		if (master.force_tryb ==1) {
 			for (int i=0; i<6; i++) {
-				from_vsp.comm_image.force.rez[i]=force_torque[i];
+				from_vsp.comm_image.sensor_union.force.rez[i]=force_torque[i];
 			}
-			from_vsp.comm_image.force.rez[0] = force_torque[1]*20;
-			from_vsp.comm_image.force.rez[1] = force_torque[0]*20;
-			from_vsp.comm_image.force.rez[2] = -force_torque[2]*20;
+			from_vsp.comm_image.sensor_union.force.rez[0] = force_torque[1]*20;
+			from_vsp.comm_image.sensor_union.force.rez[1] = force_torque[0]*20;
+			from_vsp.comm_image.sensor_union.force.rez[2] = -force_torque[2]*20;
 			for (int i=0; i<6; i++) {
-				kartez_force[i] = from_vsp.comm_image.force.rez[i];
+				kartez_force[i] = from_vsp.comm_image.sensor_union.force.rez[i];
 				root_force[i] = force_torque[i];
 			}
-			from_vsp.comm_image.force.force_reading_status=sensor_status;
+			from_vsp.comm_image.sensor_union.force.force_reading_status=sensor_status;
 			master.force_msr_upload(kartez_force);//!< wpisanie sily do zmiennych globalnych dla calego procesu
 		} else if (master.force_tryb == 2 && gravity_transformation) {
 			for (int i=0; i<6; i++)

@@ -336,7 +336,7 @@ bool ecp_vis_sac_lx_generator::next_step()
 			O_r_Ep_d[i][2]=0;
 		}
 		//	for (int i=0; i<6; i++)
-		//		vsp_vis_sac->image.vis_sac.frame_E_r_G__f[i]=O_r_E[0][i]; //nie wiem czy potrzebne bo chyba  robot sie nie rusza
+		//		vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[i]=O_r_E[0][i]; //nie wiem czy potrzebne bo chyba  robot sie nie rusza
 
 
 	if (O_r_G__CEIH[0][0]>100 || O_r_G__CEIH[0][0]<-100)
@@ -374,7 +374,7 @@ bool ecp_vis_sac_lx_generator::next_step()
 	 {
 	 for(int j=0; j<4; j++)
 	 {
-	 std::cout << vsp_vis_sac->image.vis_sac.frame_E_T_G[4*i+j];
+	 std::cout << vsp_vis_sac->image.sensor_union.vis_sac.frame_E_T_G[4*i+j];
 	 }
 	 std::cout << std::endl;
 	 }
@@ -383,7 +383,7 @@ bool ecp_vis_sac_lx_generator::next_step()
 	//std::cout << "C_T_G" << std::endl;
 	//	for(int j=0; j<6; j++)
 	//		{
-	//			std::cout << vsp_vis_sac->image.vis_sac.frame_E_r_G__f[j] << ",";
+	//			std::cout << vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[j] << ",";
 	//		}
 	//	std::cout << std::endl;
 
@@ -392,43 +392,43 @@ bool ecp_vis_sac_lx_generator::next_step()
 	
 
 
-	CSAC_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G[0],
-			vsp_vis_sac->image.vis_sac.frame_E_r_G[1],
-			-vsp_vis_sac->image.vis_sac.frame_E_r_G[2],
+	CSAC_Tx_G.set_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[0],
+			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[1],
+			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[2],
 
-			vsp_vis_sac->image.vis_sac.frame_E_r_G[5], 0, -0.05);
+			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[5], 0, -0.05);
 		
 			
-	//std::cout <<"Rota C_T_Gxxx " << vsp_vis_sac->image.vis_sac.frame_E_r_G[5] <<" " << O_r_G[0][4] << " "<< O_r_G[0][5] <<std::endl;
+	//std::cout <<"Rota C_T_Gxxx " << vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G[5] <<" " << O_r_G[0][4] << " "<< O_r_G[0][5] <<std::endl;
 
 
 	//EIH
 	//rover
 /*
-	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]-0.015, //-0.05
-			vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1]+0.03, //0.04
-			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2]+0.01, // kalib Y w O //+0.02
-		//	-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3], 0, 0); //nomalnie
+	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0]-0.015, //-0.05
+			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[1]+0.03, //0.04
+			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[2]+0.01, // kalib Y w O //+0.02
+		//	-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[3], 0, 0); //nomalnie
 			
-			0, 0, -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5]-0.8000); //rover
+			0, 0, -vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[5]-0.8000); //rover
 */	
 
 	
 //kostka	
 
-	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0],
-			vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1],
-			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[2], // kalib Y w O
-			-vsp_vis_sac->image.vis_sac.frame_E_r_G__f[3], 0, 0); 	
+	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0],
+			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[1],
+			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[2], // kalib Y w O
+			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[3], 0, 0); 	
 			
 
 //jakby przyszlo cos glupiego
 /*
 	if (node_counter==1)
 	{
-		std::cout << "ZABEZPIECZENIE " << vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0] << std::endl;
+		std::cout << "ZABEZPIECZENIE " << vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0] << std::endl;
 		
-		if (vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]==0 && vsp_vis_sac->image.vis_sac.frame_E_r_G__f[1]==0 && vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]==0)
+		if (vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0]==0 && vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[1]==0 && vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0]==0)
 		{
 			CSAC_Tx_G_firstvalid=0;
 		}
@@ -437,23 +437,23 @@ bool ecp_vis_sac_lx_generator::next_step()
 	
 	if (node_counter!=1)
 	{
-		//std::cout << "ZABEZPIECZENIE " << vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0] << std::endl;
+		//std::cout << "ZABEZPIECZENIE " << vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0] << std::endl;
 		
-		if (vsp_vis_sac->image.vis_sac.frame_E_r_G__f[0]!=0)
+		if (vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0]!=0)
 		{
 			CSAC_Tx_G_firstvalid=1;
 		}
 		
 	}
 */
-	CEIH_Tx_G__f.set_xyz_rpy(vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[0],
-			vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[1],
-			-vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[2],
-			-vsp_vis_sac->image.vis_sac.frame_E_r_G__CEIH[3], 0, 0); //-1
+	CEIH_Tx_G__f.set_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__CEIH[0],
+			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__CEIH[1],
+			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__CEIH[2],
+			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__CEIH[3], 0, 0); //-1
 
 	for (int i=0; i<8; i++)
 	{
-		fEIH_G[i]=vsp_vis_sac->image.vis_sac.fEIH_G[i];
+		fEIH_G[i]=vsp_vis_sac->image.sensor_union.vis_sac.fEIH_G[i];
 	}
 
 	//podjazd gdy sie nie ruszamy
@@ -529,7 +529,7 @@ bool ecp_vis_sac_lx_generator::next_step()
 	}
 */
 	//rover
-//	std::cout << " ZZZ " << CEIH_r_G[0][0] << " " << -vsp_vis_sac->image.vis_sac.frame_E_r_G__f[5] << std::endl;
+//	std::cout << " ZZZ " << CEIH_r_G[0][0] << " " << -vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[5] << std::endl;
 
 
 	

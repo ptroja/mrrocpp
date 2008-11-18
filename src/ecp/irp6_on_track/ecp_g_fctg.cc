@@ -38,7 +38,7 @@ void force_controlled_trajectory_generator::return_sensor_reading(ecp_mp_force_s
 	// Nowe odczyty czujnika.
 	the_sensor.get_reading(&si);
 	// Przepisanie pozycji z bufora.
-	memcpy(sensor_reading, si.force.rez, 6*sizeof(double));
+	memcpy(sensor_reading, si.sensor_union.force.rez, 6*sizeof(double));
     }; // end: return_sensor_reading
 
 /*************************** RETURN  POSITION *******************************/
