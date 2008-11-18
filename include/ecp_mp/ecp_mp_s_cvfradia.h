@@ -58,7 +58,7 @@ public:
 	/*!
       * Constructor. Creates socket connection to cvFraDIA.
       */
- 	ecp_mp_cvfradia_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object);
+ 	ecp_mp_cvfradia_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object, int _union_size);
 
 	/*!
       * Sends sensor configuration to cvFraDIA.

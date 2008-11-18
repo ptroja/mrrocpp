@@ -28,7 +28,7 @@ void ecp_t_spots_recognition::task_initialization(void)
 {
 
 	// Create cvFraDIA sensor - for testing purposes.
-	sensor_m[SENSOR_CVFRADIA] = new ecp_mp_cvfradia_sensor(SENSOR_CVFRADIA, "[vsp_cvfradia]", *this);
+	sensor_m[SENSOR_CVFRADIA] = new ecp_mp_cvfradia_sensor(SENSOR_CVFRADIA, "[vsp_cvfradia]", *this, sizeof(sensor_image_t::sensor_union_t::sp_r_t));
 	// Configure sensor.
 	sensor_m[SENSOR_CVFRADIA]->configure_sensor();
 
