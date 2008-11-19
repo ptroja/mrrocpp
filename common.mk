@@ -17,12 +17,11 @@
 #VERSION=-V2.95.3,gcc_ntox86
 #VERSION=-V3.3.5,gcc_ntox86
 VERSION=-V4.2.4,gcc_ntox86
-RPATHV=-Wl,-rpath /usr/pkg/lib
 CC=qcc ${VERSION}
 CXX=QCC ${VERSION}
 CXXFLAGS=${FLAGS}
 LD=QCC ${VERSION}
-LDFLAGS=${DEBUG} -lm -lsocket -lcpp -lang-c++ $(RPATHV) -L$(QNX_TARGET)/mrlib/lib -lxml2 -lz -liconv
+LDFLAGS=${DEBUG} -lm -lsocket -lcpp -lang-c++ -L$(QNX_TARGET)/mrlib/lib -lxml2 -lz -liconv
 CPPFLAGS=-I$(HOMEDIR)/include -I$(QNX_TARGET)/mrlib/include
 #DEBUG=-g
 #OPTIM = -O2
