@@ -9,7 +9,7 @@
 
 #include "common/impconst.h"
 #include "common/com_buf.h"
-#include "libxml/tree.h"
+#include <libxml/tree.h>
 
 #include <list>
 #include "ecp/common/ecp_smooth_taught_in_pose.h"

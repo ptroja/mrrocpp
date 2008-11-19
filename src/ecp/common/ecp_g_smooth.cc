@@ -12,10 +12,10 @@
 #include <math.h>
 #include <ctype.h>
 
-#include "libxml/xmlmemory.h"
-#include "libxml/parser.h"
-#include "libxml/tree.h"
-#include "libxml/xinclude.h"
+#include <libxml/xmlmemory.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <libxml/xinclude.h>
 
 #include "common/typedefs.h"
 #include "common/impconst.h"

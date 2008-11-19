@@ -9,10 +9,10 @@
 #include "ecp/common/ECP_main_error.h"
 #include "ecp/common/ecp_teach_in_generator.h"
 
-#include "libxml/xmlmemory.h"
-#include "libxml/parser.h"
-#include "libxml/tree.h"
-#include "libxml/xinclude.h"
+#include <libxml/xmlmemory.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <libxml/xinclude.h>
 
 ecp_task::ecp_task(configurator &_config) :
 	ecp_mp_task(_config)
