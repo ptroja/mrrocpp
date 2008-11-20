@@ -28,7 +28,9 @@ BINARIES =		ecp_pr \
 				ecp_vis_ib_eih_irp6ot \
 				ecp_vis_weights_driven_irp6ot \
 				ecp_tb \
-				ecp_spots_recognition
+				ecp_spots_recognition\
+				ecp_pw\
+				ecp_pw_scena
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -41,7 +43,15 @@ VPATH = ../common $(ECP_MPDIR)
 .PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
+#-----------------------------------------------------------------------------------------------------------------------#
+ecp_pw_scena: ecp_g_pw_scena.o ecp_t_pw_scena_irp6ot.o  ecp_generator_t.o ecp_g_smooth.o ecp_g_jarosz.o\
+		ecp_operator_reaction_condition.o  ecp_mp_s_cvfradia.o  ecp_g_pw_scena.o  $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
 
+#-----------------------------------------------------------------------------------------------------------------------#
+ecp_pw: ecp_g_pw_kolo.o ecp_t_pw_irp6ot.o ecp_g_force.o ecp_st_go.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o\
+		ecp_operator_reaction_condition.o ecp_g_sleep.o ecp_g_pw_kolo.o  $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_tb: ecp_t_tb_irp6ot.o ecp_g_force.o ecp_st_go.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o ecp_operator_reaction_condition.o ecp_g_sleep.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
