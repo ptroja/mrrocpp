@@ -12,11 +12,9 @@ class ui_config_entry
 	public:
 		// these should be const's but it make std::vector fail
 		// see: http://groups.google.com/group/comp.lang.c++/msg/2cc5480095ca9b73?pli=1
-		std::string id;
-		std::string program_name;
-		std::string node_name;
-		std::string panel_model_file;
-		std::string panel_widget_name;
+		const std::string id;
+		const std::string program_name;
+		const std::string node_name;
 
 		bool is_running;
 
@@ -42,9 +40,9 @@ class ui_config_entry
 			return tree_iter;
 		}
 
-		void setTree_iter(GtkTreeIter tree_iter)
+		void setTree_iter(GtkTreeIter _tree_iter)
 		{
-			this->tree_iter = tree_iter;
+			this->tree_iter = _tree_iter;
 		}
 
 		void add_child(ui_config_entry & child);
@@ -56,7 +54,7 @@ class ui_config_entry
 		//! children nodes
 		std::vector <ui_config_entry *> children;
 
-		void show_page(GtkNotebook *notebook);
+		void show_page(bool visible);
 
 	private:
 
@@ -67,6 +65,14 @@ class ui_config_entry
 		bool page_visible;
 
 		GtkTreeIter tree_iter;
+
+		//! pagetab widgets
+		GtkHBox *hbox;
+		GtkImage *tabicon;
+		GtkLabel *tablabel;
+		GtkButton *tabbutton;
+		GtkImage *tabcloseicon;
+		GtkWidget *content;
 };
 
 #endif /* __UI_CONFIG_ENTRY_H */

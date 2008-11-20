@@ -14,7 +14,7 @@ mp.so: mp_uimodule.o
 	gtk-builder-convert $< $@
 
 clean:
-	rm -f ui.xml ui *.o
+	rm -f *.xml ui *.o *.so
 
 # Directory with dependences.
 DEPDIR = .deps

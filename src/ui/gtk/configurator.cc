@@ -53,7 +53,7 @@ void configurator::populate_tree_model_with_mp()
 			// get name attribute of the sensors
 			xmlChar *mp_name = xmlGetProp(nodeset->nodeTab[i], (xmlChar *) "name");
 			if (!mp_name) {
-				g_warning("missing name for %s process", mp_name);
+				g_warning("missing name for %s process", (char *) mp_name);
 				continue;
 			}
 
@@ -65,20 +65,20 @@ void configurator::populate_tree_model_with_mp()
 			ui_def = (ui_def) ? ui_def : this->get_string("/config/mp/ui_def", mp_name);
 
 			if(!ui_def) {
-				g_error("missing ui_def for %s process", mp_name);
+				g_error("missing ui_def for %s process", (char *) mp_name);
 			}
 
 			char *program_name = this->get_string("/config/mp[@name='%s']/program_name", mp_name);
 
 			if (!program_name) {
-				g_error("missing program name for %s process", mp_name);
+				g_error("missing program name for %s process", (char *) mp_name);
 				continue;
 			}
 
 			char *node_name = this->get_string("/config/mp[@name='%s']/node_name", mp_name);
 
 			if (!node_name) {
-				g_error("missing node name for %s process", mp_name);
+				g_error("missing node name for %s process", (char *) mp_name);
 				continue;
 			}
 
@@ -105,14 +105,14 @@ void configurator::populate_tree_model_with_sensors()
 
 			char *program_name = this->get_string("/config/sensors/sensor[@name='%s']/vsp/program_name", sensor_name);
 			if (!program_name) {
-				g_error("missing program name for %s process", sensor_name);
+				g_error("missing program name for %s process", (char *) sensor_name);
 				continue;
 			}
 
 			char *node_name = this->get_string("/config/sensors/sensor[@name='%s']/vsp/node_name", sensor_name);
 
 			if (!node_name) {
-				g_error("missing node name for %s process", sensor_name);
+				g_error("missing node name for %s process", (char *) sensor_name);
 				continue;
 			}
 
@@ -138,14 +138,14 @@ void configurator::populate_tree_model_with_effectors()
 
 			char *program_name = this->get_string("/config/effectors/effector[@name='%s']/ecp/program_name", effector_name);
 			if (!program_name) {
-				g_error("missing program name for %s process", effector_name);
+				g_error("missing program name for %s process", (char *) effector_name);
 				continue;
 			}
 
 			char *node_name = this->get_string("/config/effectors/effector[@name='%s']/ecp/node_name", effector_name);
 
 			if (!node_name) {
-				g_error("missing node name for %s process", effector_name);
+				g_error("missing node name for %s process", (char *) effector_name);
 				continue;
 			}
 
@@ -171,7 +171,7 @@ void configurator::populate_tree_model()
     populate_tree_model_with_effectors();
 }
 
-configurator::configurator()
+configurator::configurator() : doc(NULL)
 {
 	// get the [configs/xml] subdirectory
 	getcwd(config_dir, sizeof(config_dir));

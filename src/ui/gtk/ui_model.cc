@@ -35,7 +35,8 @@ ui_model::ui_model()
 
 	GtkTreeModelFlags flags = gtk_tree_model_get_flags(GTK_TREE_MODEL(store));
 	if (!(flags & GTK_TREE_MODEL_ITERS_PERSIST)) {
-		g_error("GTK internals changed: GTK_TREE_MODEL_ITERS_PERSIST check failed, %s@%s:%d\n", __FUNCTION__, __FILE__, __LINE__);
+		g_warn_if_reached();
+		g_error("GTK internals changed: GTK_TREE_MODEL_ITERS_PERSIST check failed\n");
 	}
 }
 

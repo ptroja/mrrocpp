@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Nov 18 21:00:19 2008 -->
+<!--Generated with glade3 3.4.5 on Thu Nov 20 21:33:12 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="width_request">600</property>
@@ -182,22 +182,17 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkEventBox" id="eventbox1">
+                          <widget class="GtkButton" id="button1">
                             <property name="visible">True</property>
-                            <property name="visible_window">False</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="relief">GTK_RELIEF_NONE</property>
+                            <property name="response_id">0</property>
                             <child>
                               <widget class="GtkImage" id="image1">
                                 <property name="visible">True</property>
                                 <property name="stock">gtk-close</property>
                                 <property name="icon_size">1</property>
-                                <signal name="leave_notify_event" handler="tabcloseicon_event_cb"/>
-                                <signal name="button_press_event" handler="tabcloseicon_event_cb"/>
-                                <signal name="focus_out_event" handler="tabcloseicon_event_cb"/>
-                                <signal name="focus_in_event" handler="tabcloseicon_event_cb"/>
-                                <signal name="keynav_failed" handler="tabcloseicon_event_cb"/>
-                                <signal name="key_press_event" handler="tabcloseicon_event_cb"/>
-                                <signal name="button_release_event" handler="tabcloseicon_event_cb"/>
-                                <signal name="key_release_event" handler="tabcloseicon_event_cb"/>
                               </widget>
                             </child>
                           </widget>

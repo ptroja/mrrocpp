@@ -3,9 +3,14 @@
 
 #include "configurator.h"
 #include "ui_model.h"
+#include "ui_utils.h"
 
 // TODO: this should'n be global
 static GtkBuilder *builder;
+
+GtkNotebook *getNotebook(void) {
+	return GTK_NOTEBOOK (gtk_builder_get_object (builder, "notebook1"));
+}
 
 guint set_status(const char *msg)
 {
@@ -83,55 +88,27 @@ extern "C" {
 //		printf("%s\n", gtk_tree_path_to_string(path));
 
 		ui_config_entry &entry = ui_model::instance().getNodeByPath(path);
-		printf("%s\n", entry.program_name.c_str());
-
-		entry.show_page(GTK_NOTEBOOK (gtk_builder_get_object(builder, "notebook1")));
+		entry.show_page(TRUE);
 	}
 
 } /* extern "C" */
 
 int main(int argc, char *argv[])
 {
-	GtkWidget *window;
-
 	gtk_init(&argc, &argv);
 
 	config = new configurator();
 
 	builder = gtk_builder_new();
 	gtk_builder_add_from_file(builder, "ui.xml", NULL);
-	window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
 
 	gtk_builder_connect_signals(builder, NULL);
 
 	set_status("MRROC++ - the best robotic framework ever");
 
-/*
-	for(int i = 0; i < 1; i++)
-	{
-		GtkWindow *tab_window = GTK_WINDOW (gtk_builder_get_object(builder, "window1"));
-
-		GtkWidget *content = gtk_bin_get_child(GTK_BIN(tab_window));
-		gtk_widget_unparent(content);
-
-		GtkHBox *hbox = GTK_HBOX(gtk_hbox_new(FALSE, 5));
-		GtkImage *tabicon = GTK_IMAGE(gtk_image_new_from_stock(GTK_STOCK_EXECUTE, GTK_ICON_SIZE_BUTTON));
-		GtkLabel *tablabel = GTK_LABEL(gtk_label_new("lalalabel"));
-		GtkImage *tabcloseicon = GTK_IMAGE(gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU));
-		gtk_box_pack_start_defaults(GTK_BOX(hbox), GTK_WIDGET(tabicon));
-		gtk_box_pack_start_defaults(GTK_BOX(hbox), GTK_WIDGET(tablabel));
-		gtk_box_pack_start_defaults(GTK_BOX(hbox), GTK_WIDGET(tabcloseicon));
-		gtk_widget_show_all(GTK_WIDGET(hbox));
-
-		GtkNotebook *notebook = GTK_NOTEBOOK (gtk_builder_get_object(builder, "notebook1"));
-
-		gtk_notebook_append_page(notebook, content, GTK_WIDGET(hbox));
-	}
-*/
-
 	set_tree_view();
 
-	gtk_widget_show(window);
+	gtk_widget_show(GTK_WIDGET (gtk_builder_get_object (builder, "window")));
 	gtk_main();
 
 	g_object_unref(G_OBJECT(builder));

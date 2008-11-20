@@ -7,13 +7,13 @@ extern "C" {
 
 	void on_button1_activate(GtkObject *object, gpointer user_data)
 	{
-		printf("%s@%s:%d\n", __FUNCTION__, __FILE__, __LINE__);
+		g_warn_if_reached();
 	}
 
 
 	void on_button1_clicked(GtkObject *object, gpointer user_data)
 	{
-		printf("%s@%s:%d\n", __FUNCTION__, __FILE__, __LINE__);
+		g_warn_if_reached();
 	}
 
 }
