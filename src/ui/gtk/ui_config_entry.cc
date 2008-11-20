@@ -11,6 +11,7 @@ extern "C" {
 }
 
 void ui_config_entry::show_page(bool visible) {
+	if (!content) return;
 	g_object_set(this->content, "visible", visible, NULL);
 
 //	if (visible) {
@@ -51,6 +52,7 @@ ui_config_entry::ui_config_entry() : type(ROOT), builder(NULL), window(NULL), mo
 ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program, const char *node, const char *ui_def) : program_name(program), node_name(node ? node : ""), type(_type) {
 	if (!ui_def) {
 		builder = NULL;
+		content = NULL;
 		module = NULL;
 		return;
 	}
