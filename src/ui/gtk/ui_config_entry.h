@@ -43,12 +43,22 @@ class ui_config_entry
 
 		void remove_childs(void);
 
-		bool is_empty(void);
+		int childrens(void);
 
 		//! children nodes
 		std::vector <ui_config_entry *> children;
 
 		void show_page(bool visible);
+
+		GtkBuilder & getBuilder(void) {
+			if (builder) {
+				return *((GtkBuilder*)&this->builder);
+			} else {
+				throw ("no GtkBuilder in module " + program_name);
+			}
+		}
+
+		std::vector <ui_config_entry *> getChildByType(ui_config_entry_type _type);
 
 	private:
 

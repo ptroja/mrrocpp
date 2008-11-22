@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sat Nov 22 13:24:00 2008 -->
+<!--Generated with glade3 3.4.5 on Sat Nov 22 22:06:54 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="width_request">600</property>
     <property name="height_request">450</property>
+    <property name="title" translatable="yes">MRROC++ User Interface</property>
     <signal name="destroy" handler="on_window_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox1">

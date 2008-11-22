@@ -2,7 +2,7 @@
 #include "ui_model.h"
 #include "ui_utils.h"
 
-#include <dlfcn.h>
+//#include <dlfcn.h>
 
 extern "C" {
 	void tabcloseicon_event_cb(GtkButton *button, gpointer userdata) {
@@ -34,19 +34,20 @@ void ui_config_entry::show_page(bool visible) {
 //	}
 }
 
-bool ui_config_entry::is_empty(void) {
-	return children.empty();
+int ui_config_entry::childrens(void) {
+	return children.size();
 }
 
 void ui_config_entry::add_child(ui_config_entry & child)  {
 	children.push_back(&child);
+//	std::cout << program_name << ".size() = " << children.size() << std::endl;
 }
 
 void ui_config_entry::remove_childs(void)  {
 
 	for (std::vector<ui_config_entry *>::iterator Iter = children.begin(); Iter != children.end(); Iter++) {
 
-		if ((*Iter)->is_empty() == false) {
+		if ((*Iter)->childrens()) {
 			(*Iter)->remove_childs();
 		}
 
@@ -89,8 +90,10 @@ ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program
 	std::string ui_lib = std::string(ui_def);
 	ui_lib.erase(ui_lib.find_last_of('.'));
 	ui_lib.insert(0, "./");
+/*
 
 	{
+		//! just to debug
 		void *handle = dlopen((ui_lib + ".so").c_str(), RTLD_LAZY|RTLD_GLOBAL);
 		if (!handle) {
 			fprintf(stderr, "dlopen(): %s\n", dlerror());
@@ -99,6 +102,7 @@ ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program
 		}
 	}
 
+*/
 	module = g_module_open(ui_lib.c_str(), (GModuleFlags) G_MODULE_BIND_LAZY);
 
 	if(module) {
@@ -106,11 +110,12 @@ ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program
 
 		gpointer symbol;
 		if (g_module_symbol(module, "ui_module_init", &symbol)) {
-			//typedef void (*ui_module_init_t)(ui_config_entry &entry);
-			typedef void (*ui_module_init_t)(void *);
 
-			ui_module_init_t init_func = (ui_module_init_t) symbol;
-			init_func(NULL);
+			typedef void (*ui_module_init_t)(ui_config_entry &entry);
+
+			ui_module_init_t ui_module_init = (ui_module_init_t) symbol;
+
+			ui_module_init(*this);
 		}
 	} else {
 		g_warning("failed to open module %s.%s\n", ui_lib.c_str(), G_MODULE_SUFFIX );
@@ -157,4 +162,22 @@ ui_config_entry::~ui_config_entry() {
 			fprintf(stderr, "error closing module %s", module_name);
 		}
 	}
+}
+
+std::vector <ui_config_entry *> ui_config_entry::getChildByType(ui_config_entry_type _type) {
+
+	std::vector <ui_config_entry *> ret;
+
+	for (std::vector<ui_config_entry *>::iterator Iter = children.begin(); Iter != children.end(); Iter++) {
+		if ((*Iter)->type == _type) {
+			ret.push_back((*Iter));
+		}
+
+		std::vector <ui_config_entry *> childrensOf = (*Iter)->getChildByType(_type);
+		for (std::vector<ui_config_entry *>::iterator Iter2 = childrensOf.begin(); Iter2 != childrensOf.end(); Iter2++) {
+			ret.push_back((*Iter2));
+		}
+	}
+
+	return ret;
 }
