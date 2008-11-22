@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="config">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="ui"/>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element ref="mp"/>
+          <xs:element ref="sensors"/>
+          <xs:element ref="transmitters"/>
+        </xs:choice>
+        <xs:element ref="effectors"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ui">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sr_attach_point"/>
+        <xs:element ref="ui_attach_point"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="sr_attach_point" type="xs:NCName"/>
+  <xs:element name="ui_attach_point" type="xs:NCName"/>
+  <xs:element name="mp">
+    <xs:complexType>
+      <xs:choice>
+        <xs:sequence>
+          <xs:element ref="program_name"/>
+          <xs:element ref="node_name"/>
+          <xs:element ref="cube_initial_state"/>
+          <xs:element ref="manipulation_sequence"/>
+          <xs:element ref="vis_servoing"/>
+          <xs:element ref="irp6p_compliant"/>
+        </xs:sequence>
+        <xs:sequence>
+          <xs:element ref="mp_pulse_attach_point"/>
+          <xs:element ref="mp_attach_point"/>
+        </xs:sequence>
+      </xs:choice>
+      <xs:attribute name="active" use="required" type="xs:boolean"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cube_initial_state" type="xs:NCName"/>
+  <xs:element name="manipulation_sequence" type="xs:NCName"/>
+  <xs:element name="vis_servoing" type="xs:integer"/>
+  <xs:element name="irp6p_compliant" type="xs:integer"/>
+  <xs:element name="mp_pulse_attach_point" type="xs:NCName"/>
+  <xs:element name="mp_attach_point" type="xs:NCName"/>
+  <xs:element name="sensors">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element maxOccurs="unbounded" ref="sensor"/>
+        <xs:element maxOccurs="unbounded" ref="vsp"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="sensor">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="vsp"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="transmitters">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="transmitter"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="transmitter">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="solver_hostname"/>
+        <xs:element ref="solver_port"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="solver_hostname" type="xs:NCName"/>
+  <xs:element name="solver_port" type="xs:integer"/>
+  <xs:element name="effectors">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="effector"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="effector">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ecp"/>
+        <xs:element minOccurs="0" ref="edp"/>
+      </xs:sequence>
+      <xs:attribute name="active" type="xs:boolean"/>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ecp">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="ecp_attach_point"/>
+          <xs:element ref="trigger_attach_point"/>
+        </xs:choice>
+        <xs:element minOccurs="0" ref="program_name"/>
+        <xs:element minOccurs="0" ref="player_hostname"/>
+        <xs:choice minOccurs="0">
+          <xs:element ref="device_index"/>
+          <xs:sequence>
+            <xs:element ref="server_host"/>
+            <xs:element ref="server_port"/>
+          </xs:sequence>
+        </xs:choice>
+        <xs:element minOccurs="0" ref="test_mode"/>
+        <xs:element minOccurs="0" ref="node_name"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ecp_attach_point" type="xs:NCName"/>
+  <xs:element name="trigger_attach_point" type="xs:NCName"/>
+  <xs:element name="player_hostname" type="xs:NMTOKEN"/>
+  <xs:element name="device_index" type="xs:integer"/>
+  <xs:element name="server_host" type="xs:NCName"/>
+  <xs:element name="server_port" type="xs:integer"/>
+  <xs:element name="edp">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="program_name"/>
+          <xs:element ref="resourceman_attach_point"/>
+          <xs:element ref="hardware_busy_attach_point"/>
+          <xs:element ref="reader_attach_point"/>
+        </xs:choice>
+        <xs:element minOccurs="0" ref="edp_vsp_attach_point"/>
+        <xs:element minOccurs="0" ref="reader_samples"/>
+        <xs:choice minOccurs="0">
+          <xs:element ref="is_gripper_active"/>
+          <xs:sequence>
+            <xs:element ref="test_mode"/>
+            <xs:element ref="node_name"/>
+          </xs:sequence>
+        </xs:choice>
+        <xs:element minOccurs="0" ref="force_tryb"/>
+        <xs:sequence minOccurs="0">
+          <xs:element ref="default_mass_center_in_wrist"/>
+          <xs:element ref="weight"/>
+        </xs:sequence>
+        <xs:element minOccurs="0" ref="visual_udp_port"/>
+        <xs:element minOccurs="0" ref="sensor_in_wrist"/>
+        <xs:sequence minOccurs="0">
+          <xs:element ref="force_0"/>
+          <xs:element ref="force_1"/>
+          <xs:element ref="force_2"/>
+          <xs:element ref="force_3"/>
+          <xs:element ref="force_4"/>
+          <xs:element ref="force_5"/>
+        </xs:sequence>
+        <xs:sequence minOccurs="0">
+          <xs:element ref="current_kartez_position_0"/>
+          <xs:element ref="current_kartez_position_1"/>
+          <xs:element ref="current_kartez_position_2"/>
+          <xs:element ref="current_kartez_position_3"/>
+          <xs:element ref="current_kartez_position_4"/>
+          <xs:element ref="current_kartez_position_5"/>
+        </xs:sequence>
+        <xs:sequence minOccurs="0">
+          <xs:element ref="servo_tryb"/>
+          <xs:element ref="preset_position_0"/>
+        </xs:sequence>
+        <xs:element minOccurs="0" ref="preset_position_1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="hardware_busy_attach_point" type="xs:NCName"/>
+  <xs:element name="reader_attach_point" type="xs:NCName"/>
+  <xs:element name="edp_vsp_attach_point" type="xs:NCName"/>
+  <xs:element name="reader_samples" type="xs:integer"/>
+  <xs:element name="is_gripper_active" type="xs:integer"/>
+  <xs:element name="force_tryb" type="xs:integer"/>
+  <xs:element name="default_mass_center_in_wrist" type="xs:string"/>
+  <xs:element name="weight" type="xs:decimal"/>
+  <xs:element name="visual_udp_port" type="xs:integer"/>
+  <xs:element name="sensor_in_wrist" type="xs:string"/>
+  <xs:element name="force_0" type="xs:integer"/>
+  <xs:element name="force_1" type="xs:integer"/>
+  <xs:element name="force_2" type="xs:integer"/>
+  <xs:element name="force_3" type="xs:integer"/>
+  <xs:element name="force_4" type="xs:integer"/>
+  <xs:element name="force_5" type="xs:integer"/>
+  <xs:element name="current_kartez_position_0" type="xs:integer"/>
+  <xs:element name="current_kartez_position_1" type="xs:integer"/>
+  <xs:element name="current_kartez_position_2" type="xs:integer"/>
+  <xs:element name="current_kartez_position_3" type="xs:integer"/>
+  <xs:element name="current_kartez_position_4" type="xs:integer"/>
+  <xs:element name="current_kartez_position_5" type="xs:integer"/>
+  <xs:element name="servo_tryb" type="xs:integer"/>
+  <xs:element name="preset_position_0" type="xs:string"/>
+  <xs:element name="preset_position_1" type="xs:string"/>
+  <xs:element name="vsp">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:sequence minOccurs="0">
+          <xs:element ref="program_name"/>
+          <xs:element ref="node_name"/>
+        </xs:sequence>
+        <xs:element ref="resourceman_attach_point"/>
+        <xs:element minOccurs="0" ref="edp_section"/>
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="edp_section" type="xs:string"/>
+  <xs:element name="program_name" type="xs:NCName"/>
+  <xs:element name="node_name" type="xs:NCName"/>
+  <xs:element name="test_mode" type="xs:integer"/>
+  <xs:element name="resourceman_attach_point" type="xs:NCName"/>
+</xs:schema>

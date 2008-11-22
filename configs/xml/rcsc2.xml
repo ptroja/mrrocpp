@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<config xmlns:xi="http://www.w3.org/2003/XInclude">
+
+	<xi:include href="common.xml" xpointer="xpointer(/config/*)"/>
+
+	<mp name="rcsc" active="true">
+		<program_name>mp_rcsc</program_name>
+		<node_name>qnx632</node_name>
+		<cube_initial_state>BGROWY</cube_initial_state>
+		<manipulation_sequence>B2G2R2O2Y2W2</manipulation_sequence>
+		<vis_servoing>0</vis_servoing>
+		<irp6p_compliant>0</irp6p_compliant>
+	</mp>
+
+	<transmitters>
+		<transmitter name="rc_windows">
+			<solver_hostname>qnx632</solver_hostname>
+			<solver_port>8081</solver_port>
+		</transmitter>
+	</transmitters>
+
+	<sensors>
+	    <sensor name="vis_eih" active="true">
+			<vsp>
+				<program_name>vsp_vis_pbeoleih</program_name>
+				<node_name>qnx632</node_name>
+				<resourceman_attach_point>VSP_VIS_EIH</resourceman_attach_point>
+			</vsp>
+		</sensor>
+	    <sensor name="vis_sac" active="true">
+			<vsp>
+				<program_name>vsp_vis_pbeolsac</program_name>
+				<node_name>qnx632</node_name>
+				<resourceman_attach_point>VSP_VIS_SAC</resourceman_attach_point>
+			</vsp>
+		</sensor>
+	</sensors>
+
+	<effectors>
+		<effector name="irp6_on_track" active="true">
+			<ecp>
+				<program_name>ecp_irp6ot_rcsc</program_name>
+				<node_name>qnx632</node_name>
+			</ecp>
+
+			<edp>
+				<test_mode>1</test_mode>
+				<node_name>qnx632</node_name>
+				<force_tryb>2</force_tryb>
+				<force_0>1</force_0>
+				<force_1>1</force_1>
+				<force_2>1</force_2>
+				<force_3>1</force_3>
+				<force_4>1</force_4>
+				<force_5>1</force_5>
+				<current_kartez_position_0>1</current_kartez_position_0>
+				<current_kartez_position_1>1</current_kartez_position_1>
+				<current_kartez_position_2>1</current_kartez_position_2>
+				<current_kartez_position_3>1</current_kartez_position_3>
+				<current_kartez_position_4>1</current_kartez_position_4>
+				<current_kartez_position_5>1</current_kartez_position_5>
+				<servo_tryb>1</servo_tryb>
+				<preset_position_0>0.000000 -17.320218 28.080863 12.934886 2.902058 77.203948
+					307.213204 0.000000</preset_position_0>
+				<preset_position_1>0.000000 -251.566947 -0.967353 1.446422 110.324258 163.501011
+					79.309507 881.609438</preset_position_1>
+			</edp>
+		</effector>
+
+		<effector name="irp6_postument" active="true">
+			<ecp>
+				<program_name>ecp_irp6p_rcsc</program_name>
+				<node_name>qnx632</node_name>
+			</ecp>
+
+			<edp>
+				<test_mode>1</test_mode>
+				<node_name>qnx632</node_name>
+				<force_tryb>2</force_tryb>
+				<force_0>1</force_0>
+				<force_1>1</force_1>
+				<force_2>1</force_2>
+				<force_3>1</force_3>
+				<force_4>1</force_4>
+				<force_5>1</force_5>
+				<servo_tryb>1</servo_tryb>
+				<preset_position_0>2.166128 14.341370 -3.702367 -5.034402 35.661789 343.950988
+					0.000000</preset_position_0>
+			</edp>
+		</effector>
+
+		<!--
+		<effector name="festival" active="true">
+			<ecp>
+				<test_mode>1</test_mode>
+				<node_name>qnx632</node_name>
+			</ecp>
+		</effector>
+		-->
+
+	</effectors>
+</config>

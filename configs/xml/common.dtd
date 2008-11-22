@@ -1,0 +1,148 @@
+<?xml encoding="UTF-8"?>
+
+<!ELEMENT config (ui,sensors,mp,effectors)>
+<!ATTLIST config
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ui (sr_attach_point,ui_attach_point,is_mp_and_ecps_active)>
+<!ATTLIST ui
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT sensors (sensor)+>
+<!ATTLIST sensors
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT mp (mp_pulse_attach_point,mp_attach_point)>
+<!ATTLIST mp
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT effectors (effector)+>
+<!ATTLIST effectors
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT sr_attach_point (#PCDATA)>
+<!ATTLIST sr_attach_point
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ui_attach_point (#PCDATA)>
+<!ATTLIST ui_attach_point
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT is_mp_and_ecps_active (#PCDATA)>
+<!ATTLIST is_mp_and_ecps_active
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT sensor (vsp)>
+<!ATTLIST sensor
+  xmlns CDATA #FIXED ''
+  name NMTOKEN #REQUIRED>
+
+<!ELEMENT mp_pulse_attach_point (#PCDATA)>
+<!ATTLIST mp_pulse_attach_point
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT mp_attach_point (#PCDATA)>
+<!ATTLIST mp_attach_point
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT effector (ecp,edp?)>
+<!ATTLIST effector
+  xmlns CDATA #FIXED ''
+  name NMTOKEN #REQUIRED>
+
+<!ELEMENT vsp (resourceman_attach_point,edp_section)>
+<!ATTLIST vsp
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ecp ((ecp_attach_point|trigger_attach_point)+,program_name?,player_hostname?,
+               (device_index|(server_host,server_port))?,test_mode?)>
+<!ATTLIST ecp
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT edp ((program_name|resourceman_attach_point|hardware_busy_attach_point
+                |reader_attach_point)+,
+               edp_vsp_attach_point?,reader_samples?,
+               (is_gripper_active,force_tryb,default_mass_center_in_wrist,weight)?,visual_udp_port?,
+               sensor_in_wrist?)>
+<!ATTLIST edp
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT edp_section (#PCDATA)>
+<!ATTLIST edp_section
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ecp_attach_point (#PCDATA)>
+<!ATTLIST ecp_attach_point
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT trigger_attach_point (#PCDATA)>
+<!ATTLIST trigger_attach_point
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT player_hostname (#PCDATA)>
+<!ATTLIST player_hostname
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT device_index (#PCDATA)>
+<!ATTLIST device_index
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT server_host (#PCDATA)>
+<!ATTLIST server_host
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT server_port (#PCDATA)>
+<!ATTLIST server_port
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT test_mode (#PCDATA)>
+<!ATTLIST test_mode
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT hardware_busy_attach_point (#PCDATA)>
+<!ATTLIST hardware_busy_attach_point
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT reader_attach_point (#PCDATA)>
+<!ATTLIST reader_attach_point
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT edp_vsp_attach_point (#PCDATA)>
+<!ATTLIST edp_vsp_attach_point
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT reader_samples (#PCDATA)>
+<!ATTLIST reader_samples
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT is_gripper_active (#PCDATA)>
+<!ATTLIST is_gripper_active
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT force_tryb (#PCDATA)>
+<!ATTLIST force_tryb
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT default_mass_center_in_wrist (#PCDATA)>
+<!ATTLIST default_mass_center_in_wrist
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT weight (#PCDATA)>
+<!ATTLIST weight
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT visual_udp_port (#PCDATA)>
+<!ATTLIST visual_udp_port
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT sensor_in_wrist (#PCDATA)>
+<!ATTLIST sensor_in_wrist
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT resourceman_attach_point (#PCDATA)>
+<!ATTLIST resourceman_attach_point
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT program_name (#PCDATA)>
+<!ATTLIST program_name
+  xmlns CDATA #FIXED ''>

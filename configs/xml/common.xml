@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<config id="base">
+    <ui>
+        <sr_attach_point>sr</sr_attach_point>
+        <ui_attach_point>ui</ui_attach_point>
+    </ui>
+
+    <sensors>
+        <sensor name="force_irp6ot">
+            <vsp>
+                <resourceman_attach_point>VSP_FORCE_T</resourceman_attach_point>
+                <edp_section>[edp_irp6_on_track]</edp_section>
+            </vsp>
+        </sensor>
+
+        <sensor name="force_irp6p">
+            <vsp>
+                <resourceman_attach_point>VSP_FORCE_P</resourceman_attach_point>
+                <edp_section>[edp_irp6_postument]</edp_section>
+            </vsp>
+        </sensor>
+    </sensors>
+
+    <mp active="false" ui_def="mp.xml" ui_module="mp.so">
+        <mp_pulse_attach_point>MP_PULSE</mp_pulse_attach_point>
+        <mp_attach_point>MP</mp_attach_point>
+    </mp>
+
+    <effectors>
+        <effector name="irp6_on_track" active="false" ui_def="irp6_on_track.xml">
+            <ecp>
+                <trigger_attach_point>ECP_TRIGGER_OT</trigger_attach_point>
+                <ecp_attach_point>ECP_OT</ecp_attach_point>
+            </ecp>
+
+            <edp>
+                <program_name>edp_irp6_on_track</program_name>
+                <resourceman_attach_point>irp6_on_track</resourceman_attach_point>
+                <hardware_busy_attach_point>HARDWARE_BUSY_EDP_IRP6_OT</hardware_busy_attach_point>
+                <reader_attach_point>READER_OT</reader_attach_point>
+                <edp_vsp_attach_point>EDP_FORCE_T</edp_vsp_attach_point>
+                <reader_samples>100000</reader_samples>
+                <is_gripper_active>1</is_gripper_active>
+                <force_tryb>0</force_tryb>
+                <default_mass_center_in_wrist>0.004 0.0 0.13</default_mass_center_in_wrist>
+                <weight>13.18</weight>
+                <visual_udp_port>50000</visual_udp_port>
+                <sensor_in_wrist>0.0 0.0 0.09 0.0 0.0 -1.571</sensor_in_wrist>
+            </edp>
+        </effector>
+
+        <effector name="irp6_postument" ui_def="irp6_on_track.xml">
+            <ecp>
+                <trigger_attach_point>ECP_TRIGGER_P</trigger_attach_point>
+                <ecp_attach_point>ECP_P</ecp_attach_point>
+            </ecp>
+            <edp>
+                <program_name>edp_irp6_postument</program_name>
+                <resourceman_attach_point>irp6_postument</resourceman_attach_point>
+                <hardware_busy_attach_point>HARDWARE_BUSY_EDP_IRP6_P</hardware_busy_attach_point>
+                <reader_attach_point>READER_P</reader_attach_point>
+                <edp_vsp_attach_point>EDP_FORCE_P</edp_vsp_attach_point>
+                <reader_samples>100000</reader_samples>
+                <is_gripper_active>1</is_gripper_active>
+                <force_tryb>0</force_tryb>
+                <default_mass_center_in_wrist>0.004 0.0 0.156</default_mass_center_in_wrist>
+                <weight>10.8</weight>
+                <visual_udp_port>50001</visual_udp_port>
+                <sensor_in_wrist>0.0 0.0 0.09 0.0 0.0 3.14159</sensor_in_wrist>
+            </edp>
+        </effector>
+
+        <effector name="conveyor">
+            <ecp>
+                <trigger_attach_point>ECP_TRIGGER_C</trigger_attach_point>
+                <ecp_attach_point>ECP_C</ecp_attach_point>
+            </ecp>
+            <edp>
+                <program_name>edp_conveyor</program_name>
+                <resourceman_attach_point>conveyor</resourceman_attach_point>
+                <hardware_busy_attach_point>HARDWARE_BUSY_EDP_C</hardware_busy_attach_point>
+                <reader_attach_point>READER_C</reader_attach_point>
+                <reader_samples>100000</reader_samples>
+                <visual_udp_port>50002</visual_udp_port>
+            </edp>
+        </effector>
+
+        <effector name="speaker">
+            <ecp>
+                <trigger_attach_point>ECP_TRIGGER_S</trigger_attach_point>
+                <ecp_attach_point>ECP_S</ecp_attach_point>
+            </ecp>
+            <edp>
+                <hardware_busy_attach_point>HARDWARE_BUSY_EDP_S</hardware_busy_attach_point>
+                <reader_attach_point>READER_S</reader_attach_point>
+                <resourceman_attach_point>speaker</resourceman_attach_point>
+                <program_name>edp_speaker</program_name>
+            </edp>
+        </effector>
+
+        <effector name="irp6_mechatronika">
+            <ecp>
+                <trigger_attach_point>ECP_TRIGGER_M</trigger_attach_point>
+                <ecp_attach_point>ECP_M</ecp_attach_point>
+            </ecp>
+            <edp>
+                <resourceman_attach_point>irp6_mechatron</resourceman_attach_point>
+                <program_name>edp_irp6_mechatronika</program_name>
+                <hardware_busy_attach_point>HARDWARE_BUSY_EDP_IRP6_M</hardware_busy_attach_point>
+                <reader_attach_point>READER_M</reader_attach_point>
+                <reader_samples>100000</reader_samples>
+            </edp>
+        </effector>
+
+        <effector name="electron">
+            <ecp>
+                <ecp_attach_point>ECP_E</ecp_attach_point>
+                <trigger_attach_point>ECP_TRIGGER_E</trigger_attach_point>
+                <program_name>ecp_playerpos</program_name>
+                <device_index>0</device_index>
+                <test_mode>0</test_mode>
+            </ecp>
+        </effector>
+
+        <effector name="festival">
+            <ecp>
+                <ecp_attach_point>ECP_F</ecp_attach_point>
+                <trigger_attach_point>ECP_TRIGGER_F</trigger_attach_point>
+                <program_name>ecp_festival</program_name>
+                <server_host>irp1</server_host>
+                <server_port>1314</server_port>
+                <test_mode>0</test_mode>
+            </ecp>
+        </effector>
+
+        <effector name="speechrecognition">
+            <ecp>
+                <ecp_attach_point>ECP_SR</ecp_attach_point>
+                <trigger_attach_point>ECP_TRIGGER_SR</trigger_attach_point>
+                <program_name>ecp_speechrecognition</program_name>
+                <player_hostname>192.168.1.64</player_hostname>
+                <device_index>0</device_index>
+            </ecp>
+        </effector>
+    </effectors>
+</config>
