@@ -10,6 +10,7 @@
 class ui_config_entry
 {
 	public:
+
 		// these should be const's but it make std::vector fail
 		// see: http://groups.google.com/group/comp.lang.c++/msg/2cc5480095ca9b73?pli=1
 		const std::string id;
@@ -35,15 +36,8 @@ class ui_config_entry
 		ui_config_entry(ui_config_entry_type _type, const char *program = NULL, const char *node = NULL, const char *ui_def = NULL);
 		~ui_config_entry();
 
-		GtkTreeIter getTree_iter() const
-		{
-			return tree_iter;
-		}
-
-		void setTree_iter(GtkTreeIter _tree_iter)
-		{
-			this->tree_iter = _tree_iter;
-		}
+		GtkTreeIter & getTree_iter() const;
+		void setTree_iter(GtkTreeIter & _tree_iter);
 
 		void add_child(ui_config_entry & child);
 

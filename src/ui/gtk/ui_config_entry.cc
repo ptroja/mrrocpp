@@ -2,12 +2,22 @@
 #include "ui_model.h"
 #include "ui_utils.h"
 
+#include <dlfcn.h>
+
 extern "C" {
 	void tabcloseicon_event_cb(GtkButton *button, gpointer userdata) {
 
 		ui_config_entry & entry = *(ui_config_entry *) userdata;
 		entry.show_page(FALSE);
 	}
+}
+
+GtkTreeIter & ui_config_entry::getTree_iter() const {
+	return *((GtkTreeIter*)&tree_iter);
+}
+
+void ui_config_entry::setTree_iter(GtkTreeIter & _tree_iter) {
+	this->tree_iter = (_tree_iter);
 }
 
 void ui_config_entry::show_page(bool visible) {
@@ -80,10 +90,28 @@ ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program
 	ui_lib.erase(ui_lib.find_last_of('.'));
 	ui_lib.insert(0, "./");
 
-	module = g_module_open(ui_lib.c_str(), (GModuleFlags) 0);
+	{
+		void *handle = dlopen((ui_lib + ".so").c_str(), RTLD_LAZY|RTLD_GLOBAL);
+		if (!handle) {
+			fprintf(stderr, "dlopen(): %s\n", dlerror());
+		} else {
+			dlclose(handle);
+		}
+	}
+
+	module = g_module_open(ui_lib.c_str(), (GModuleFlags) G_MODULE_BIND_LAZY);
 
 	if(module) {
 		gtk_builder_connect_signals(builder, this);
+
+		gpointer symbol;
+		if (g_module_symbol(module, "ui_module_init", &symbol)) {
+			//typedef void (*ui_module_init_t)(ui_config_entry &entry);
+			typedef void (*ui_module_init_t)(void *);
+
+			ui_module_init_t init_func = (ui_module_init_t) symbol;
+			init_func(NULL);
+		}
 	} else {
 		g_warning("failed to open module %s.%s\n", ui_lib.c_str(), G_MODULE_SUFFIX );
 	}

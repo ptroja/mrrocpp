@@ -1,14 +1,15 @@
 all: ui ui.xml mp.xml mp.so
 
-CFLAGS=-Wall -g -O0 `pkg-config --cflags gtk+-2.0 libxml-2.0`
-CXXFLAGS=${CFLAGS} -fpic
-LDFLAGS=`pkg-config --libs gtk+-2.0 libxml-2.0` -export-dynamic
+PACKAGES=gtk+-2.0 libxml-2.0
+CFLAGS=-Wall -g -O0 `pkg-config --cflags ${PACKAGES}`
+CXXFLAGS=${CFLAGS} -fpic -shared
+LDFLAGS=`pkg-config --libs ${PACKAGES}` -export-dynamic
 
 ui: main.o configurator.o ui_model.o ui_config_entry.o
 	$(CXX) -g -o $@ $^ ${LDFLAGS}
 
 mp.so: mp_uimodule.o
-	$(CXX) -shared -nostartfiles -o $@ $<
+	$(CXX) ${LDFLAGS} -shared -o $@ $<
 
 %.xml: %.glade
 	gtk-builder-convert $< $@
@@ -20,7 +21,7 @@ clean:
 DEPDIR = .deps
 df = $(DEPDIR)/$(*F)
 # Makedepend command.
-MAKEDEPEND = mkdir -p .deps; gcc -M `pkg-config --cflags gtk+-2.0 libxml-2.0` -o $(DEPDIR)/$*.d $<
+MAKEDEPEND = mkdir -p .deps; gcc -M `pkg-config --cflags ${PACKAGES}` -o $(DEPDIR)/$*.d $<
 
 # Overwritten command for *.cc compilation - also creates dependency files (*.P) in adequate directory.
 %.o : %.cc
@@ -37,4 +38,3 @@ DEPENDS = ${patsubst %.cc,$(DEPDIR)/%.P,${SOURCES}}
 
 # Include created dependency files.
 -include $(DEPENDS)
-
