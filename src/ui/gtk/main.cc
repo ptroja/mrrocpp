@@ -93,9 +93,27 @@ extern "C" {
 
 } /* extern "C" */
 
+gchar **config_files;
+
+static GOptionEntry entries[] =
+{
+  { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &config_files, "config file", NULL },
+  { NULL }
+};
+
 int main(int argc, char *argv[])
 {
-	gtk_init(&argc, &argv);
+	GError *error = NULL;
+	GOptionContext *context;
+
+	context = g_option_context_new ("- MRROC++ User Interface");
+	g_option_context_add_main_entries (context, entries, NULL);
+	g_option_context_add_group (context, gtk_get_option_group (TRUE));
+	if (!g_option_context_parse (context, &argc, &argv, &error)) {
+		g_print ("option parsing failed: %s\n", error->message);
+		exit (1);
+	}
+	//g_option_context_free(context);
 
 	config = new configurator();
 
@@ -109,6 +127,14 @@ int main(int argc, char *argv[])
 	set_tree_view();
 
 	gtk_widget_show(GTK_WIDGET (gtk_builder_get_object (builder, "window")));
+
+	if(config_files && *config_files) {
+		std::string config_file = config->getConfig_dir();
+		config_file += "/";
+		config_file += (*config_files);
+		config->open_config_file(config_file.c_str());
+	}
+
 	gtk_main();
 
 	g_object_unref(G_OBJECT(builder));

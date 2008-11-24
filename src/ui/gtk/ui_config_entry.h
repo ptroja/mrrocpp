@@ -51,8 +51,8 @@ class ui_config_entry
 		void show_page(bool visible);
 
 		GtkBuilder & getBuilder(void) {
-			if (builder) {
-				return *((GtkBuilder*)&this->builder);
+			if (this->builder) {
+				return *(GTK_BUILDER(this->builder));
 			} else {
 				throw ("no GtkBuilder in module " + program_name);
 			}

@@ -14,7 +14,7 @@ class ui_model
 
 		ui_config_entry & add_ui_config_entry(ui_config_entry & parent, ui_config_entry::ui_config_entry_type entry_type, const char *program_name, const char *node_name = NULL, const char *ui_def = NULL);
 
-		GtkTreeStore *getStore() const
+		GtkTreeStore * getStore() const
 		{
 			return store;
 		}
