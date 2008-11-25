@@ -12,12 +12,17 @@
 
 #include "ecp/common/ecp_generator.h"
 
+#define PI 3.14159265
+#define DEG 0.0174444 //Jeden stopien wyrazony w radianach
+
+
 class ecp_g_pw_kolo : public ecp_generator
 {
     trajectory_description td;
     double next_position[8];  
     int step_no;
-    double delta_y; //Przyrost zmiennej y.
+    double d_rad; //Przyrost k±ta w radianach.
+    double prev_rad; //Wcz¶niejszy k±t(koncowka, srodek kola)
     double r; //Promien rysowanego okregu.
     double y0; //¦rodek ko³a - wsp y.
     double z0; //¦rodek ko³a - wsp z.

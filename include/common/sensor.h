@@ -141,6 +141,12 @@ typedef struct sensor_image_t
 			struct timespec ts;
 		} time;
 
+		//uchyb vsp pwilkows
+		struct {
+			float x;
+			float y;
+		}deviation;
+
 		/*!
 		 * \struct fradia_t
 		 * Structure for storing data retrieved from cvFraDIA.

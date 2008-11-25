@@ -7,14 +7,12 @@
 ecp_g_pw_kolo::ecp_g_pw_kolo (ecp_task& _ecp_task)
         : ecp_generator (_ecp_task)
 {
-    delta_y = 0.005;
-    r = 0.28;
 }
 
 bool ecp_g_pw_kolo::first_step()
 {
 
-    //Tak by³o w teach_in_generatorze.
+    //Tak bylo w teach_in_generatorze.
     the_robot->EDP_data.get_type = ARM_DV; // ARM
 
     the_robot->EDP_data.instruction_type = GET;
@@ -27,19 +25,21 @@ bool ecp_g_pw_kolo::first_step()
     the_robot->EDP_data.motion_steps = 8;
     the_robot->EDP_data.value_in_step_no = 6;
 
-    step_no=1;
+    r = 0.20;
+    prev_rad = 0; // zaczynam od kata 0;
+    d_rad = 0.5*DEG;
 
-    printf("fs\n");
+    step_no=1;
 
     return true;
 }
 
 bool ecp_g_pw_kolo::next_step()
 {
-    printf("ss\n");
     double time; //Czas ruchu.
+//    double current_rad; //Aktualne polozenie w radianach.
 
-    /* W tym kroku doje¿d¿am koncówk± do ¶rodka okrêgu.*/
+    /* W tym kroku dojezdzam koncowka do srodka okregu.*/
     if(step_no==1)
     {
         next_position[0] = 0.899;		//x
@@ -50,58 +50,36 @@ bool ecp_g_pw_kolo::next_step()
         next_position[5] = 2.35145;
         next_position[6] = 0.074;
         next_position[7] = 0;
-        time = 4;
+        time = 10;
         step_no++;
     }
-    /* W tym kroku ustawiam koñcówkê w pozycji startowej - na okrêgu. */
+    /* W tym kroku ustawiam koncowke w pozycji startowej - na okregu. */
     else if(step_no==2)
     {
         next_position[0] = 0.899;
-        next_position[1] -= r;
-        y = next_position[1];
+        next_position[1] += r;
         next_position[2] = 0.30;
         next_position[3] = -0.115654;
         next_position[4] = 1.38944;
         next_position[5] = 2.35145;
         next_position[6] = 0.074;
         next_position[7] = 0;
-        time = 4;
+        time = 10;
         step_no++;
     }
-    /* Wlasciwy ruch po okrêgu. W ka¿dym kolejnym kroku obliczam pozycje y i z. */
-    else if(step_no < 2000)
+    /* Wlasciwy ruch po okregu. W kazdym kolejnym kroku obliczam pozycje y i z. */
+    else if(step_no < 1000)
     {
-        //Sprawdzam, czy nie nalezy zmienic znaku przyrostu delta_y.
-        if( next_position[1] + delta_y > y0 + r)
-        {
-            delta_y = -delta_y;
-            y = y0+r;
-            z = z0;
-        }
-        else if( next_position[1] + delta_y < y0 - r )
-        {
-            delta_y = -delta_y;
-            y = y0-r;
-            z = z0;
-        }
-        else
-        {
-            //Obliczam nowe polozenia y i z.
-            y += delta_y;
-            if (delta_y >= 0)
-                z = z0 + sqrt(r*r - (y -y0)*(y -y0));
-            else
-                z = z0 - sqrt(r*r - (y -y0)*(y -y0));
-        }
         next_position[0] = 0.899;
-        next_position[1] = y;
-        next_position[2] = z;
+    	next_position[1] = cos( prev_rad + d_rad )*r + y0;
+    	next_position[2] = sin( prev_rad + d_rad )*r + z0;
         next_position[3] = -0.115654;
         next_position[4] = 1.38944;
         next_position[5] = 2.35145;
         next_position[6] = 0.074;
         next_position[7] = 0;
-        time = 0.0000001;
+        time = 0.025;
+        prev_rad += d_rad;
         step_no++;
     }
     else
