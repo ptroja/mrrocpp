@@ -27,7 +27,7 @@
     </mp>
 
     <effectors>
-        <effector name="irp6_on_track" active="false" ui_def="irp6_on_track.xml">
+        <effector name="irp6_on_track" active="false">
             <ecp>
                 <trigger_attach_point>ECP_TRIGGER_OT</trigger_attach_point>
                 <ecp_attach_point>ECP_OT</ecp_attach_point>
@@ -49,7 +49,7 @@
             </edp>
         </effector>
 
-        <effector name="irp6_postument" ui_def="irp6_on_track.xml">
+        <effector name="irp6_postument">
             <ecp>
                 <trigger_attach_point>ECP_TRIGGER_P</trigger_attach_point>
                 <ecp_attach_point>ECP_P</ecp_attach_point>

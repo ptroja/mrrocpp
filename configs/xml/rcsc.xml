@@ -89,7 +89,7 @@
 			</edp>
 		</effector>
 
-		<effector name="festival" active="true">
+		<effector name="festival" active="true" ui_def="festival.xml">
 			<ecp>
 				<test_mode>1</test_mode>
 				<node_name>qnx632</node_name>
