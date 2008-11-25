@@ -1,4 +1,4 @@
-all: ui ui.xml mp.xml mp.so
+all: ui ui.xml mp.xml festival.xml mp.so festival.so
 
 PACKAGES=gtk+-2.0 libxml-2.0
 CFLAGS=-Wall -g -O0 `pkg-config --cflags ${PACKAGES}`
@@ -7,6 +7,9 @@ LDFLAGS=`pkg-config --libs ${PACKAGES}` -export-dynamic
 
 ui: main.o configurator.o ui_model.o ui_config_entry.o
 	$(CXX) -g -o $@ $^ ${LDFLAGS}
+
+festival.so: festival_uimodule.o
+	$(CXX) ${LDFLAGS} -shared -o $@ $<
 
 mp.so: mp_uimodule.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $<

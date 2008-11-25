@@ -59,8 +59,10 @@ void configurator::populate_tree_model_with_mp()
 
 			char *ui_def = NULL;
 
+			//! check in task specific config file
 			ui_def = (ui_def) ? ui_def : this->get_string("/config/mp[@name='%s']/@ui_def", mp_name);
 			ui_def = (ui_def) ? ui_def : this->get_string("/config/mp[@name='%s']/ui_def", mp_name);
+			//! check in common config file
 			ui_def = (ui_def) ? ui_def : this->get_string("/config/mp/@ui_def", mp_name);
 			ui_def = (ui_def) ? ui_def : this->get_string("/config/mp/ui_def", mp_name);
 
@@ -150,7 +152,12 @@ void configurator::populate_tree_model_with_effectors()
 				continue;
 			}
 
-			ui_config_entry & ecp_entry = ui_model::instance().add_ui_config_entry(parent, ui_config_entry::ECP, program_name, node_name);
+			char *ui_def = NULL;
+
+			ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='%s']/@ui_def", effector_name);
+			ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='%s']/ui_def", effector_name);
+
+			ui_config_entry & ecp_entry = ui_model::instance().add_ui_config_entry(parent, ui_config_entry::ECP, program_name, node_name, ui_def);
 
 			program_name = this->get_string("/config/effectors/effector[@name='%s']/edp/program_name", effector_name);
 			if (program_name) {

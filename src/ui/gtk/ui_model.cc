@@ -28,6 +28,38 @@ void ui_model::clear(void)
 	this->getRootNode().remove_childs();
 }
 
+extern "C" {
+	gint my_popup_handler(GtkWidget *widget, GdkEvent *event);
+}
+
+gint my_popup_handler(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+{
+	GtkMenu *menu;
+	GdkEventButton *event_button;
+
+	g_return_val_if_fail (widget != NULL, FALSE);
+	g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
+	g_return_val_if_fail (event != NULL, FALSE);
+
+	/* The "widget" is the menu that was supplied when
+	 * g_signal_connect_swapped() was called.
+	 */
+	menu = GTK_MENU (widget);
+
+	if (event->type == GDK_BUTTON_PRESS)
+	{
+		event_button = (GdkEventButton *) event;
+		if (event_button->button == 3)
+		{
+			gtk_menu_popup (menu, NULL, NULL, NULL, NULL,
+					event_button->button, event_button->time);
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
 ui_model::ui_model()
 {
 	// create TreeView model
@@ -38,6 +70,8 @@ ui_model::ui_model()
 		g_warn_if_reached();
 		g_error("GTK internals changed: GTK_TREE_MODEL_ITERS_PERSIST check failed\n");
 	}
+
+	//g_signal_connect_swapped(store, "button-press-event", G_CALLBACK(my_popup_handler), NULL);
 }
 
 ui_model::~ui_model()

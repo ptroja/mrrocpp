@@ -6,6 +6,12 @@
 #include "ui_config_entry.h"
 #include "ui_model.h"
 
+extern "C" {
+	void funkcja(GtkButton *button, gpointer user_data) {
+
+	}
+}
+
 void mp_module_init(ui_config_entry &entry) {
 
 	GtkBuilder & builder = (entry.getBuilder());
@@ -153,17 +159,6 @@ void mp_module_init(ui_config_entry &entry) {
 }
 
 extern "C" {
-
-	void on_button1_activate(GtkObject *object, gpointer user_data)
-	{
-		g_warn_if_reached();
-	}
-
-
-	void on_button1_clicked(GtkObject *object, gpointer user_data)
-	{
-		g_warn_if_reached();
-	}
 
 	void ui_module_init(ui_config_entry &entry) {
 		mp_module_init(entry);

@@ -61,6 +61,7 @@ ui_config_entry::ui_config_entry() : type(ROOT), builder(NULL), window(NULL), mo
 }
 
 ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program, const char *node, const char *ui_def) : program_name(program), node_name(node ? node : ""), type(_type) {
+
 	if (!ui_def) {
 		builder = NULL;
 		content = NULL;
@@ -90,8 +91,8 @@ ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program
 	std::string ui_lib = std::string(ui_def);
 	ui_lib.erase(ui_lib.find_last_of('.'));
 	ui_lib.insert(0, "./");
-/*
 
+/*
 	{
 		//! just to debug
 		void *handle = dlopen((ui_lib + ".so").c_str(), RTLD_LAZY|RTLD_GLOBAL);
@@ -142,7 +143,8 @@ ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program
 
 	gtk_notebook_append_page(getNotebook(), this->content, GTK_WIDGET(this->hbox));
 	gtk_notebook_set_tab_reorderable(getNotebook(), this->content, TRUE);
-	this->show_page(TRUE);
+
+	this->show_page(FALSE);
 }
 
 ui_config_entry::~ui_config_entry() {
