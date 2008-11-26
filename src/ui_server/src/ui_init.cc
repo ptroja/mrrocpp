@@ -146,6 +146,10 @@ void replySend(Message* m)
 void* callfunc(void* arg)
 {
 
+#ifdef PROCESS_SPAWN_RSH
+	signal( SIGCHLD, &catch_signal );
+#endif /* PROCESS_SPAWN_RSH */
+
 char* Buffer = (char*)arg;
 	double* v;
 	int RobotId = Buffer[0];
@@ -2887,7 +2891,8 @@ void* server_thread(void*)
 					pthread_attr_init(&attr);
 					pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 					
-					pthread_create(&tid,&attr,callfunc,(void*)Buffer);
+					callfunc((void*)Buffer);
+			//		pthread_create(&tid,&attr,callfunc,(void*)Buffer);
 					}
 			}
 			else
@@ -3336,7 +3341,7 @@ void catch_signal(int sig) {
 	   signal(SIGSEGV, SIG_DFL);
 	   break;
 	case SIGCHLD:
-
+		printf("waitpid(...)"); fflush(stdout);
 	   child_pid = waitpid(-1, &status, WNOHANG);
 
 	   if (child_pid == -1) {

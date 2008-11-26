@@ -826,7 +826,11 @@ int unload_all()
 
 int slay_all()
 {
-	unload_all();
+
+	unload_all ();
+
+	// brutal overkilling
+
 	for (std::list<program_node_def>::iterator program_node_list_iterator = ui_state.program_node_list.begin(); program_node_list_iterator != ui_state.program_node_list.end(); program_node_list_iterator++)
 	{
 		char system_command[100];
@@ -841,12 +845,12 @@ int slay_all()
 				program_node_list_iterator->program_name
 			   );
 #endif
-//		printf("aaa: %s\n", system_command);
+		printf("aaa: %s\n", system_command);
 		system(system_command);
 
 		delay(10);
-
-#if defined(PROCESS_SPAWN_RSH)
+printf("qwe\n");
+#if 0 && defined(PROCESS_SPAWN_RSH)
 		sprintf(system_command, "rsh %s killall -e -q -v %s",
 				program_node_list_iterator->node_name,
 				program_node_list_iterator->program_name
@@ -857,9 +861,12 @@ int slay_all()
 				program_node_list_iterator->program_name
 			   );
 #endif
-//		printf("bbb: %s\n", system_command);
+		printf("bbb: %s\n", system_command);
 		system(system_command);
+		printf("abc\n");
 	}
+
+
 
 	manage_interface();
 
