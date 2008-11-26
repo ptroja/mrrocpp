@@ -51,6 +51,7 @@ process_control_window_irp6m_section_init (bool &wlacz_PtButton_wnd_processes_co
 	bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
 	bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
 {
+
 double* tmp = new double[2];
 	if (ui_state.irp6_mechatronika.edp.state<=0) {// edp wylaczone
 		tmp[0] = 4;

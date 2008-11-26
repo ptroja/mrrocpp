@@ -2759,6 +2759,7 @@ void* reply_thread(void* arg)
 		if(m)
 		{
 			send(fd,m->message,strlen(m->message),0);
+//			if((m->message)[0] < 'X' ) printf("%s\n",m->message);
 			//delete m;
 		}
 		usleep(1);
@@ -2835,8 +2836,8 @@ void* server_thread(void*)
 			selectValue = select(FD_SETSIZE,&sockets,(fd_set*)0,(fd_set*)0,&timeout);
 			if(selectValue < 0)
 			{
-				perror("select");
-				exit(EXIT_FAILURE);
+			//	perror("select");
+			//	exit(EXIT_FAILURE);
 			}
 			else if(selectValue == 0)
 			{

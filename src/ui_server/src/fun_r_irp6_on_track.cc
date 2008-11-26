@@ -52,6 +52,7 @@ process_control_window_irp6ot_section_init (bool &wlacz_PtButton_wnd_processes_c
 	bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
 {
 double* tmp = new double[2];
+
 	if (ui_state.irp6_on_track.edp.state<=0) {// edp wylaczone
 		tmp[0] = 0;
 		tmp[1] = 0;
