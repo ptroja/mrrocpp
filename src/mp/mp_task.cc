@@ -35,6 +35,8 @@ using namespace std;
 void mp_task::catch_signal_in_mp_task(int sig)
 {
 	printf("catch_signal_in_mp\n");
+	pid_t child_pid;
+	int status;
 	switch (sig) {
 		case SIGTERM:
 		//case SIGINT:
@@ -49,6 +51,70 @@ void mp_task::catch_signal_in_mp_task(int sig)
 			fprintf(stderr, "Segmentation fault in MP process %s\n", config.section_name);
 			signal(SIGSEGV, SIG_DFL);
 			break;
+		case SIGCHLD:
+			printf("MP waitpid(...)"); fflush(stdout);
+		   child_pid = waitpid(-1, &status, /*WNOHANG*/ WEXITED);
+		   if (child_pid == -1) {
+				   perror("MP: waitpid()");
+			   } else if (child_pid == 0) {
+				   fprintf(stderr, "MP: no child exited\n");
+			   } else {
+				   //fprintf(stderr, "UI: child %d...\n", child_pid);
+				   if (WIFEXITED(status)) {
+					   fprintf(stderr, "MP: child %d exited normally with status %d\n",
+							   child_pid, WEXITSTATUS(status));
+				   }
+				   if (WIFSIGNALED(status)) {
+		#ifdef WCOREDUMP
+					   if (WCOREDUMP(status)) {
+						   fprintf(stderr, "MP: child %d terminated by signal %d (core dumped)\n",
+							   child_pid, WTERMSIG(status));
+					   }
+					   else
+		#endif /* WCOREDUMP */
+					   {
+						   fprintf(stderr, "MP: child %d terminated by signal %d\n",
+							   child_pid, WTERMSIG(status));
+					   }
+				   }
+				   if (WIFSTOPPED(status)) {
+					   fprintf(stderr, "MP: child %d stopped\n", child_pid);
+				   }
+				   if (WIFCONTINUED(status)) {
+					   fprintf(stderr, "MP: child %d resumed\n", child_pid);
+				   }
+			   }
+			   break;   if (child_pid == -1) {
+				   perror("MP: waitpid()");
+			   } else if (child_pid == 0) {
+				   fprintf(stderr, "MP: no child exited\n");
+			   } else {
+				   //fprintf(stderr, "UI: child %d...\n", child_pid);
+				   if (WIFEXITED(status)) {
+					   fprintf(stderr, "MP: child %d exited normally with status %d\n",
+							   child_pid, WEXITSTATUS(status));
+				   }
+				   if (WIFSIGNALED(status)) {
+		#ifdef WCOREDUMP
+					   if (WCOREDUMP(status)) {
+						   fprintf(stderr, "MP: child %d terminated by signal %d (core dumped)\n",
+							   child_pid, WTERMSIG(status));
+					   }
+					   else
+		#endif /* WCOREDUMP */
+					   {
+						   fprintf(stderr, "MP: child %d terminated by signal %d\n",
+							   child_pid, WTERMSIG(status));
+					   }
+				   }
+				   if (WIFSTOPPED(status)) {
+					   fprintf(stderr, "MP: child %d stopped\n", child_pid);
+				   }
+				   if (WIFCONTINUED(status)) {
+					   fprintf(stderr, "MP: child %d resumed\n", child_pid);
+				   }
+			   }
+			   break;
 	}
 	
 }

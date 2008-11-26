@@ -51,6 +51,7 @@ int main (int argc, char *argv[], char **arge)
 			signal(SIGTERM, &(catch_signal_in_mp));
 			//signal(SIGINT,  &(catch_signal_in_mp));
 			signal(SIGSEGV, &(catch_signal_in_mp));
+			signal(SIGCHLD, &(catch_signal_in_mp));
 #if defined(PROCESS_SPAWN_RSH)
 		signal(SIGINT, SIG_IGN);
 #endif
