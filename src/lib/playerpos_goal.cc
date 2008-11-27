@@ -16,8 +16,8 @@ void playerpos_goal_t::turn(double angle)
 
 void playerpos_goal_t::forward(double length)
 {
-	x += length*std::cos(t);
-	y += length*std::sin(t);
+	x += length*cos(t);
+	y += length*sin(t);
 }
 
 double playerpos_goal_t::getX() const

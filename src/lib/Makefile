@@ -2,7 +2,7 @@
 #======================================================#
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-BINARIES = configsrv y_spawn_process
+BINARIES = configsrv #y_spawn_process
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ../..
