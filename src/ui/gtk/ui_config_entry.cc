@@ -159,6 +159,16 @@ ui_config_entry::~ui_config_entry() {
 	}
 
 	if (module) {
+		gpointer symbol;
+		if (g_module_symbol(module, "ui_module_unload", &symbol)) {
+
+			typedef void (*ui_module_unload_t)(void);
+
+			ui_module_unload_t ui_module_unload = (ui_module_unload_t) symbol;
+
+			ui_module_unload();
+		}
+
 		if(!g_module_close(module)) {
 			const char *module_name = (char *) g_module_name(module);
 			fprintf(stderr, "error closing module %s", module_name);

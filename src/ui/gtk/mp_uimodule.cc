@@ -2,11 +2,13 @@
 #include <glib.h>
 #include <gtkmm.h>
 
+#include <vector>
 #include <iostream>
 
 #include "ui_config_entry.h"
 #include "ui_model.h"
 
+using namespace Glib;
 using namespace Gtk;
 
 extern "C" {
@@ -54,7 +56,24 @@ class ReaderButtonBox : public Gtk::HButtonBox {
 		PulseButton StartButton, TriggerButton;
 };
 
-void mp_module_init(ui_config_entry &entry) {
+class MpPanel {
+	public:
+		MpPanel(ui_config_entry &entry);
+
+		~MpPanel(void);
+
+	private:
+		std::vector<Gtk::Widget*> PanelWidgets;
+};
+
+MpPanel::~MpPanel(void) {
+	for (std::vector<Gtk::Widget *>::iterator Iter = PanelWidgets.begin(); Iter != PanelWidgets.end(); Iter++) {
+		delete (*Iter);
+	}
+	PanelWidgets.clear();
+}
+
+MpPanel::MpPanel(ui_config_entry &entry) {
 
 	GtkBuilder & builder = (entry.getBuilder());
 
@@ -63,50 +82,48 @@ void mp_module_init(ui_config_entry &entry) {
 	GtkTable *pulsetable = GTK_TABLE(gtk_builder_get_object(&builder, "pulsetable"));
 	g_assert(pulsetable);
 
-	gint ncolumns, nrows;
-	g_object_get(G_OBJECT(pulsetable), "n-columns", &ncolumns, "n-rows", &nrows, NULL);
-	printf("nc %d nr %d\n", ncolumns, nrows);
+	Gtk::Table & PulseTable = *Glib::wrap(pulsetable);
 
-	gtk_table_resize(pulsetable, nrows+ecps.size(), ncolumns);
-	g_object_get(G_OBJECT(pulsetable), "n-columns", &ncolumns, "n-rows", &nrows, NULL);
-	printf("nc %d nr %d\n", ncolumns, nrows);
+	gint ncolumns, nrows;
+	ncolumns = PulseTable.property_n_columns();
+	nrows = PulseTable.property_n_rows();
+
+	PulseTable.resize(nrows+ecps.size(), ncolumns);
 
 	int ecp_num = 0;
 	for (std::vector<ui_config_entry *>::iterator Iter = ecps.begin(); Iter != ecps.end(); Iter++, ecp_num++) {
 
 		//! create label widget
-		Gtk::Label *ecp_label = new Gtk::Label((*Iter)->program_name.c_str());
+		Gtk::Label *EcpLabel = new Gtk::Label((*Iter)->program_name.c_str());
+		PanelWidgets.push_back(EcpLabel);
 
-		//! attach label widget to table
-		gtk_table_attach(pulsetable, GTK_WIDGET(ecp_label->gobj()), // table, widget
+		PulseTable.attach(*EcpLabel,
 				0, 1, // left, right attach
 				2+ecp_num, 2+ecp_num+1, // top, bottom attach
-				(GtkAttachOptions) 0, (GtkAttachOptions) 0, // x,y options
-				0, 0 // x,y padding
-				);
+				(AttachOptions) 0, (AttachOptions) 0 // x, y options
+		);
 
 		ReaderButtonBox *rbb = new ReaderButtonBox();
+		PanelWidgets.push_back(rbb);
 
-		gtk_table_attach(pulsetable, GTK_WIDGET(rbb->gobj()), // table, widget
+		//! attach button box with default expand and padding
+		PulseTable.attach(*rbb,
 				2, 3, // left, right attach
-				2+ecp_num, 2+ecp_num+1, // top, bottom attach
-				(GtkAttachOptions) 0, (GtkAttachOptions) 0, // x,y options
-				0, 0 // x,y padding
-				);
+				2+ecp_num, 2+ecp_num+1); // top, bottom attach
 
-		gtk_container_child_set(GTK_CONTAINER(pulsetable), GTK_WIDGET(rbb->gobj()), "x-padding", 10, "x-options", GTK_EXPAND|GTK_FILL, NULL);
+		gtk_container_child_set(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(rbb->gobj()), "x-padding", 10, "x-options", GTK_EXPAND|GTK_FILL, NULL);
 
-		PulseButton *ecptriggertbutton = new PulseButton("Trigger", Gtk::Stock::INDEX);
+		PulseButton *EcpTriggerButton = new PulseButton("Trigger", Gtk::Stock::INDEX);
+		PanelWidgets.push_back(EcpTriggerButton);
 
-		gtk_table_attach(pulsetable, GTK_WIDGET(ecptriggertbutton->gobj()), // table, widget
+		PulseTable.attach(*EcpTriggerButton,
 				4, 5, // left, right attach
 				2+ecp_num, 2+ecp_num+1, // top, bottom attach
-				(GtkAttachOptions) 0, (GtkAttachOptions) 0, // x,y options
-				0, 0 // x,y padding
+				(AttachOptions) 0, (AttachOptions) 0 // x, y options
 		);
 
 		//! show all childer added to the table
-		gtk_widget_show_all(GTK_WIDGET(pulsetable));
+		PulseTable.show_all();
 	}
 
 	//! reposition horizontal separators
@@ -115,7 +132,7 @@ void mp_module_init(ui_config_entry &entry) {
 
 		bottom = 2;
 		top = 1;
-		gtk_container_child_set(GTK_CONTAINER(pulsetable), GTK_WIDGET(gtk_builder_get_object(&builder, "hseparatorLower")), "bottom-attach", bottom, "top-attach", top, NULL);
+		gtk_container_child_set(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(gtk_builder_get_object(&builder, "hseparatorLower")), "bottom-attach", bottom, "top-attach", top, NULL);
 
 		bottom = 2+ecps.size()+1;
 		top = 1+ecps.size()+1;
@@ -134,12 +151,12 @@ void mp_module_init(ui_config_entry &entry) {
 		guint bottom, top;
 		GObject *object = gtk_builder_get_object(&builder, *widget_name);
 
-		gtk_container_child_get(GTK_CONTAINER(pulsetable), GTK_WIDGET(object), "bottom-attach", &bottom, "top-attach", &top, NULL);
+		gtk_container_child_get(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(object), "bottom-attach", &bottom, "top-attach", &top, NULL);
 
 		bottom += ecps.size();
 		top += ecps.size();
 
-		gtk_container_child_set(GTK_CONTAINER(pulsetable), GTK_WIDGET(object), "bottom-attach", bottom, "top-attach", top, NULL);
+		gtk_container_child_set(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(object), "bottom-attach", bottom, "top-attach", top, NULL);
 
 		printf("widget_name = %s\n", *widget_name);
 	}
@@ -154,22 +171,31 @@ void mp_module_init(ui_config_entry &entry) {
 		guint bottom, top;
 		GObject *object = gtk_builder_get_object(&builder, *widget_name);
 
-		gtk_container_child_get(GTK_CONTAINER(pulsetable), GTK_WIDGET(object), "bottom-attach", &bottom, "top-attach", &top, NULL);
+		gtk_container_child_get(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(object), "bottom-attach", &bottom, "top-attach", &top, NULL);
 
 		bottom += ecps.size();
 		top = 0;
 
-		gtk_container_child_set(GTK_CONTAINER(pulsetable), GTK_WIDGET(object), "bottom-attach", bottom, "top-attach", top, NULL);
+		gtk_container_child_set(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(object), "bottom-attach", bottom, "top-attach", top, NULL);
 
 		printf("widget_name = %s\n", *widget_name);
 	}
 
 }
 
+static MpPanel *panel;
+
 extern "C" {
 
 	void ui_module_init(ui_config_entry &entry) {
-		mp_module_init(entry);
+		panel = new MpPanel(entry);
+		printf("module %s loaded\n", __FILE__);
 	}
 
+	void ui_module_unload(void) {
+		if (panel) {
+			delete panel;
+		}
+		printf("module %s unloaded\n", __FILE__);
+	}
 }
