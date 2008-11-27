@@ -111,7 +111,10 @@ MpPanel::MpPanel(ui_config_entry &entry) {
 				2, 3, // left, right attach
 				2+ecp_num, 2+ecp_num+1); // top, bottom attach
 
-		gtk_container_child_set(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(rbb->gobj()), "x-padding", 10, "x-options", GTK_EXPAND|GTK_FILL, NULL);
+		// there should be some C++ method insted C call
+		// http://bugzilla.gnome.org/show_bug.cgi?id=140515
+		gtk_container_child_set(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(rbb->gobj()),
+				"x-padding", 10, "x-options", GTK_EXPAND|GTK_FILL, NULL);
 
 		PulseButton *EcpTriggerButton = new PulseButton("Trigger", Gtk::Stock::INDEX);
 		PanelWidgets.push_back(EcpTriggerButton);
@@ -189,13 +192,13 @@ extern "C" {
 
 	void ui_module_init(ui_config_entry &entry) {
 		panel = new MpPanel(entry);
-		printf("module %s loaded\n", __FILE__);
+		fprintf(stderr, "module %s loaded\n", __FILE__);
 	}
 
 	void ui_module_unload(void) {
 		if (panel) {
 			delete panel;
 		}
-		printf("module %s unloaded\n", __FILE__);
+		fprintf(stderr, "module %s unloaded\n", __FILE__);
 	}
 }

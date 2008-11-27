@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Nov 24 20:17:27 2008 -->
+<!--Generated with glade3 3.4.5 on Thu Nov 27 23:15:29 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="width_request">600</property>
@@ -122,6 +122,84 @@
           </widget>
           <packing>
             <property name="expand">False</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkHBox" id="hbox1">
+            <property name="visible">True</property>
+            <child>
+              <widget class="GtkToolbar" id="toolbar1">
+                <property name="visible">True</property>
+                <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
+                <property name="show_arrow">False</property>
+                <property name="icon_size">GTK_ICON_SIZE_SMALL_TOOLBAR</property>
+                <property name="icon_size_set">True</property>
+                <child>
+                  <widget class="GtkToolButton" id="toolbutton1">
+                    <property name="visible">True</property>
+                    <property name="is_important">True</property>
+                    <property name="label" translatable="yes">MP Load</property>
+                    <property name="stock_id">gtk-connect</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkSeparatorToolItem" id="toolbutton2">
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkToolButton" id="toolbutton3">
+                    <property name="visible">True</property>
+                    <property name="is_important">True</property>
+                    <property name="label" translatable="yes">All EDP Load</property>
+                    <property name="stock_id">gtk-connect</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkSeparatorToolItem" id="toolbutton5">
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkToolbar" id="toolbar2">
+                <property name="visible">True</property>
+                <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
+                <property name="show_arrow">False</property>
+                <child>
+                  <widget class="GtkToolButton" id="toolbutton4">
+                    <property name="visible">True</property>
+                    <property name="is_important">True</property>
+                    <property name="label" translatable="yes">Slay all</property>
+                    <property name="stock_id">gtk-quit</property>
+                  </widget>
+                </child>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
@@ -267,7 +345,7 @@
             </child>
           </widget>
           <packing>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -277,7 +355,7 @@
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="position">2</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </widget>
