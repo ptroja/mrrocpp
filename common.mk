@@ -14,16 +14,25 @@
 #///////////////////////////////////////////////////////////////////////////////
 
 # Linker, compilator, and default global flags for both
-#VERSION=-V2.95.3,gcc_ntox86
-#VERSION=-V3.3.5,gcc_ntox86
-VERSION=-V4.2.4,gcc_ntox86
-RPATHV=-Wl,-rpath /usr/pkg/lib
-CC=qcc ${VERSION}
-CXX=QCC ${VERSION}
-CXXFLAGS=${FLAGS}
-LD=QCC ${VERSION}
-LDFLAGS=${DEBUG} -lm -lsocket -lcpp -lang-c++ $(RPATHV) -L$(QNX_TARGET)/mrlib/lib -lxml2 -liconv
-CPPFLAGS=-I$(HOMEDIR)/include -I$(QNX_TARGET)/mrlib/include
+ifeq ($(BUILD_TARGET), linux)
+  LD=g++
+  CC=gcc
+  CXX=g++
+  LDFLAGS=-lrt `pkg-config --libs libxml-2.0`
+  CPPFLAGS=-Wall -I$(HOMEDIR)/include `pkg-config --cflags libxml-2.0`
+else
+  #VERSION=-V2.95.3,gcc_ntox86
+  #VERSION=-V3.3.5,gcc_ntox86
+  VERSION=-V4.2.4,gcc_ntox86
+  RPATHV=-Wl,-rpath /usr/pkg/lib
+  CC=qcc ${VERSION}
+  CXX=QCC ${VERSION}
+  CXXFLAGS=${FLAGS}
+  LD=QCC ${VERSION}
+  LDFLAGS=${DEBUG} -lm -lsocket -lcpp -lang-c++ $(RPATHV) -L$(QNX_TARGET)/mrlib/lib -lxml2 -liconv
+  CPPFLAGS=-I$(HOMEDIR)/include -I$(QNX_TARGET)/mrlib/include
+endif
+
 #DEBUG=-g
 #OPTIM = -O2
 #WARN = -w9
