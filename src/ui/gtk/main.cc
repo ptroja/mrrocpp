@@ -1,6 +1,8 @@
 #include <gtk/gtk.h>
 #include <gtk/gtktreemodel.h>
 
+#include <gtkmm.h>
+
 #include "configurator.h"
 #include "ui_model.h"
 #include "ui_utils.h"
@@ -113,7 +115,10 @@ int main(int argc, char *argv[])
 		g_print ("option parsing failed: %s\n", error->message);
 		exit (1);
 	}
-	//g_option_context_free(context);
+	g_option_context_free(context);
+
+	//! Gtk::Main object initialized GTKMM for use in process tabs
+	Gtk::Main kit(argc, argv);
 
 	config = new configurator();
 

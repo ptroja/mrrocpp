@@ -1,6 +1,6 @@
 all: ui ui.xml mp.xml festival.xml mp.so festival.so
 
-PACKAGES=gtk+-2.0 libxml-2.0
+PACKAGES=gtk+-2.0 libxml-2.0 gtkmm-2.4
 CFLAGS=-Wall -g -O0 `pkg-config --cflags ${PACKAGES}`
 CXXFLAGS=${CFLAGS} -fpic -shared
 LDFLAGS=`pkg-config --libs ${PACKAGES}` -export-dynamic
