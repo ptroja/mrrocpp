@@ -3,7 +3,12 @@
 # Tworzy	: SHUNK VSP for QNX 6.2.1 (nieinteraktywna wspolpraca z czujnikiem sily)
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-VSPOBJS = vsp_m_int.o $(OBJECTS) $(SHOBJ)
+ifeq ($(BUILD_TARGET), linux)
+  VSPOBJS = vsp_m_int_srr.o
+else
+  VSPOBJS = vsp_m_int.o
+endif
+VSPOBJS+= $(OBJECTS) $(SHOBJ)
 BINARIES = vsp_time_sensor
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users

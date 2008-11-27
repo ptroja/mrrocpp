@@ -1,6 +1,10 @@
 #---------------- vsp/common catalog makefile of the MRROC++ frame system ---------------------#
 #======================================================#
-SOURCES = ${wildcard *.cc}
+ifeq ($(BUILD_TARGET), linux)
+  SOURCES = vsp_sensor.cc vsp_m_int_srr.cc
+else
+  SOURCES = ${wildcard *.cc}
+endif
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 #BINARIES = 
 #-----------------------------------------------------------------------------------------------------------------------#
@@ -9,9 +13,9 @@ HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
 #======================================================#	
-.PHONY: all clean install depend player
+.PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#
-all: ${OBJECTS} player
+all: ${OBJECTS}
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
 # plik.o: plik.cc plik1.h plik2.h ... itd
@@ -28,7 +32,8 @@ player:
 #-----------------------------------------------------------------------------------------------------------------------#
 clean:
 	@rm -f *.o *.err 
-	@$(MAKE) -C player clean
+
+#@$(MAKE) -C clean player
 #-----------------------------------------------------------------------------------------------------------------------#
 
 include $(HOMEDIR)/depend.mk
