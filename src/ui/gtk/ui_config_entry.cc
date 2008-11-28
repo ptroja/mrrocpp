@@ -24,6 +24,8 @@ void ui_config_entry::show_page(bool visible) {
 	if (!content) return;
 	g_object_set(this->content, "visible", visible, NULL);
 
+	ui_model::instance().show_page(visible);
+
 //	if (visible) {
 //		gtk_notebook_append_page(getNotebook(), this->content, GTK_WIDGET(this->hbox));
 //		gtk_notebook_set_tab_reorderable(getNotebook(), this->content, TRUE);

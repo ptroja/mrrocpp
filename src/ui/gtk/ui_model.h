@@ -39,6 +39,9 @@ class ui_model
 			MASTER_PROCESS_MAIN_ROW, SENSORS_MAIN_ROW, EFFECTORS_MAIN_ROW, N_ROWS
 		};
 
+		//! method to manage tab panel visibility
+		void show_page(bool visible);
+
 	private:
 		ui_model();
 
@@ -50,6 +53,8 @@ class ui_model
 		ui_model(ui_model const&); //not defined, not copyable
 		ui_model& operator=(ui_model const&); //not defined, not assignable
 		~ui_model();
+
+		int tabs_visible;
 };
 
 /*

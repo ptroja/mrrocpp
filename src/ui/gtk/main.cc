@@ -87,8 +87,6 @@ extern "C" {
 
 	void on_process_treeview_row_activated(GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *col, gpointer userdata)
 	{
-//		printf("%s\n", gtk_tree_path_to_string(path));
-
 		ui_config_entry &entry = ui_model::instance().getNodeByPath(path);
 		entry.show_page(TRUE);
 	}
@@ -145,4 +143,23 @@ int main(int argc, char *argv[])
 	g_object_unref(G_OBJECT(builder));
 
 	return 0;
+}
+
+extern "C" {
+	void mp_load_clicked(GtkToolButton *toolbutton,
+            gpointer       user_data) {
+		Gtk::ToolButton & LoadButton = *Glib::wrap(toolbutton);
+
+		LoadButton.set_label("MP Unload");
+		LoadButton.set_stock_id(Gtk::Stock::DISCONNECT);
+	}
+
+	void edp_load_clicked(GtkToolButton *toolbutton,
+            gpointer       user_data) {
+		Gtk::ToolButton & LoadButton = *Glib::wrap(toolbutton);
+
+		LoadButton.set_label("EDP Unload");
+		LoadButton.set_stock_id(Gtk::Stock::DISCONNECT);
+	}
+
 }

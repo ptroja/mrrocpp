@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 
 #include "ui_model.h"
+#include "ui_utils.h"
 
 ui_config_entry & ui_model::getNodeByPath(GtkTreePath *path) {
 	gint depth = gtk_tree_path_get_depth(path);
@@ -60,7 +61,7 @@ gint my_popup_handler(GtkWidget *widget, GdkEventButton *event, gpointer user_da
 	return FALSE;
 }
 
-ui_model::ui_model()
+ui_model::ui_model() : tabs_visible(0)
 {
 	// create TreeView model
 	store = gtk_tree_store_new(N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
@@ -104,4 +105,15 @@ ui_config_entry & ui_model::add_ui_config_entry(ui_config_entry & parent_entry, 
 	parent_entry.add_child(*entry);
 
 	return *entry;
+}
+
+void ui_model::show_page(bool visible) {
+	if (visible) {
+		tabs_visible++;
+	} else {
+		if (tabs_visible > 0) tabs_visible--;
+	}
+	//printf("tabs_visible = %d\n", tabs_visible);
+
+	//g_object_set(G_OBJECT(getNotebook()), "visible", tabs_visible ? TRUE : FALSE, NULL);
 }
