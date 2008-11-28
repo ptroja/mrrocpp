@@ -805,6 +805,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 #endif
 }// : spawn
 
+#if defined(PROCESS_SPAWN_YRSH)
 int configurator::answer_to_y_rsh_spawn(const char* rsh_spl)
 {
 	int spawn_fd = name_open(rsh_spl, NAME_FLAG_ATTACH_GLOBAL);
@@ -819,6 +820,7 @@ int configurator::answer_to_y_rsh_spawn(const char* rsh_spl)
 	return spawn_fd;
 
 }
+#endif
 
 configurator::~configurator() {
 	free(node);

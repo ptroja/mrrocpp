@@ -100,11 +100,12 @@ int main(int argc, char *argv[]) {
 #endif
 
 	// liczba argumentow
+#if defined(PROCESS_SPAWN_YRSH)
 	if(argc <=6){
 		printf("Za malo argumentow VSP\n");
 		return -1;
 		};
-	
+#endif
 	 // zczytanie konfiguracji calego systemu
  	config = new configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
 	if (argc>6) {

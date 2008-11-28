@@ -40,10 +40,12 @@ int main(int argc, char *argv[])
 
 		// configuration read
 		configurator * _config = new configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
+#if defined(PROCESS_SPAWN_YRSH)
 		if (argc>6) {
 			_config->answer_to_y_rsh_spawn(argv[6]);
 			signal(SIGINT, SIG_IGN);
 		}
+#endif
 		ecp_t = return_created_ecp_task(*_config);
 
 		set_thread_priority(pthread_self(), MAX_PRIORITY-3);

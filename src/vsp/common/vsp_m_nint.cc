@@ -183,10 +183,12 @@ int main(int argc, char *argv[]) {
 
 	 // zczytanie konfiguracji calego systemu
  	config = new configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
+#if defined(PROCESS_SPAWN_YRSH)
 	if (argc>6) {
  		config->answer_to_y_rsh_spawn(argv[6]);
  		signal(SIGINT, SIG_IGN);
  	}
+#endif
 	resourceman_attach_point = config->return_attach_point_name(configurator::CONFIG_RESOURCEMAN_LOCAL, "resourceman_attach_point");
 
 	try{
