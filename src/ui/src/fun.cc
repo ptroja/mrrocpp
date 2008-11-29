@@ -2388,7 +2388,7 @@ EDP_all_robots_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 int
 MPup( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -2408,36 +2408,35 @@ MPup( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 		if( access(tmp_string, R_OK)== 0  )
 		{
 			ui_msg.ui->message("MP already exists");
-			}
+		}
 		else
 		{
 			ui_state.mp.pid = config->process_spawn("[mp]");
 
 			if(ui_state.mp.pid>0) {
 
-				 short tmp = 0;
-			 	// kilka sekund  (~1) na otworzenie urzadzenia
+				short tmp = 0;
+				// kilka sekund  (~1) na otworzenie urzadzenia
 				while( (ui_state.mp.pulse_fd = name_open(ui_state.mp.network_pulse_attach_point, NAME_FLAG_ATTACH_GLOBAL))  < 0 )
 					if((tmp++)<CONNECT_RETRY)
 						delay(CONNECT_DELAY);
 					else{
-					   printf("blad odwolania do: %s,\n", ui_state.mp.network_pulse_attach_point);
-	   				   break;
+						printf("blad odwolania do: %s,\n", ui_state.mp.network_pulse_attach_point);
+						break;
 					};
 
-			  ui_state.teachingstate = MP_RUNNING;
+					ui_state.teachingstate = MP_RUNNING;
 
-			  ui_state.mp.state = UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
+					ui_state.mp.state = UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
 
-			start_process_control_window(widget, apinfo, cbinfo );
+					start_process_control_window(widget, apinfo, cbinfo );
 
-		  	} else {
-
-	  		printf("MP spawn failed\n");
-	    		}
-		manage_interface();
+			} else {
+				fprintf(stderr, "MP spawn failed\n");
+			}
+			manage_interface();
+		}
 	}
-  }
 
 	return( Pt_CONTINUE );
 }

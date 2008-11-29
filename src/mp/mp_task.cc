@@ -7,12 +7,15 @@
 // Funkcje do konstruowania procesow MP
 
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <signal.h>
 #include <stdarg.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <fstream>
+
 
 #include "common/typedefs.h"
 #include "common/impconst.h"
@@ -43,7 +46,9 @@ void mp_task::catch_signal_in_mp_task(int sig)
 			kill_all_ECP(robot_m);
 			kill_all_VSP(sensor_m);
 			printf("catch_signal_in_mp\n");
+#if defined(__QNXNTO__)
 			flushall();
+#endif
 			sr_ecp_msg->message("MP terminated");
 			_exit(EXIT_SUCCESS);
 			break;
@@ -116,7 +121,7 @@ void mp_task::catch_signal_in_mp_task(int sig)
 			   }
 			   break;
 	}
-	
+
 }
 
 name_attach_t* mp_task::mp_trigger_attach = NULL;
@@ -148,7 +153,7 @@ bool mp_task::create_robots()
 	 * a consistent state
 	 */
 	mp_robot* created_robot;
-	
+
 	// ROBOT IRP6_ON_TRACK
 	if (config.return_int_value("is_irp6_on_track_active", "[ui]")) {
 		created_robot = new mp_irp6_on_track_robot (*this);
@@ -184,19 +189,19 @@ bool mp_task::create_robots()
 		created_robot = new mp_robot (ROBOT_ELECTRON, "[ecp_electron]", *this);
 		robot_m[ROBOT_ELECTRON] = created_robot;
 	}
-	
+
 	// ROBOT_SPEECHRECOGNITION
 	if (config.return_int_value("is_speechrecognition_active", "[ui]")) {
 		created_robot = new mp_robot (ROBOT_SPEECHRECOGNITION, "[ecp_speechrecognition]", *this);
 		robot_m[ROBOT_SPEECHRECOGNITION] = created_robot;
-	}	
-	
+	}
+
 	// ROBOT_FESTIVAL
 	if (config.return_int_value("is_festival_active", "[ui]")) {
 		created_robot = new mp_robot (ROBOT_FESTIVAL, "[ecp_festival]", *this);
 		robot_m[ROBOT_FESTIVAL] = created_robot;
 	}
-	
+
 	return true;
 }
 
@@ -215,7 +220,7 @@ bool mp_task::set_next_playerpos_goal (ROBOT_ENUM robot_l, const playerpos_goal_
 {
 	// setting the next ecps state
 	mp_set_next_ecps_state_generator mp_snes_gen(*this);
-	
+
 	mp_snes_gen.robot_m[robot_l] = robot_m[robot_l];
 
 	mp_snes_gen.configure(goal);
@@ -800,7 +805,7 @@ bool mp_task::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m,
 
 		if (mp_state == MP_STATE_RUNNING){
 				rcvid = check_and_optional_wait_for_new_pulse (
-						&input, NEW_UI_OR_ECP_PULSE, 
+						&input, NEW_UI_OR_ECP_PULSE,
 						ecp_exit_from_while ? WITH_TIMEOUT : WITHOUT_TIMEOUT);
 		} else {
 			rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, WITHOUT_TIMEOUT);
@@ -890,13 +895,13 @@ bool mp_task::mp_receive_ui_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m, short*
 	};
 
 	MP_STATE_ENUM mp_state = MP_STATE_RUNNING;
-	
+
 	bool ui_exit_from_while = false;
 
 	while (!ui_exit_from_while) {
 		mp_receive_pulse_struct_t input;
 		int rcvid = check_and_optional_wait_for_new_pulse (
-				&input, NEW_UI_PULSE, 
+				&input, NEW_UI_PULSE,
 				(mp_state == MP_STATE_RUNNING) ? WITH_TIMEOUT : WITHOUT_TIMEOUT);
 
 		if (rcvid == -1) {// Error condition
@@ -952,7 +957,6 @@ bool mp_task::mp_receive_ui_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m, short*
 void mp_task::initialize_communication()
 {
 	uint64_t e;     // kod bledu systemowego
-	short tmp;
 
 	char* sr_net_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
 	char* mp_attach_point =	config.return_attach_point_name(configurator::CONFIG_SERVER, "mp_attach_point");
@@ -981,8 +985,8 @@ void mp_task::initialize_communication()
 
 	delete [] mp_attach_point;
 	delete [] sr_net_attach_point;
-	delete [] mp_pulse_attach_point;	
-	
+	delete [] mp_pulse_attach_point;
+
 	mp_wait_for_ui_name_open();
 }
 // -------------------------------------------------------------------
@@ -1085,7 +1089,7 @@ bool mp_task::scheduler_run ()
 			case mp_generator::AFTER_INITIATE_READING:
 				// odebranie wszystkich dostarczonych juz pulsow
 				/*
-				do 
+				do
 			{
 					ret = mp_receive_ecp_pulse (WITH_TIMEOUT);
 				//					if (ret.rcvid == 0) cout << "AFTER_INITIATE_READING rcvid 0" << endl;
@@ -1431,7 +1435,11 @@ void mp_task::kill_all_ECP (map <ROBOT_ENUM, mp_robot*>& _robot_m)
 	// Zabicie wszystkich ECP z mapy
 	for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = _robot_m.begin();
 	        robot_m_iterator != _robot_m.end(); robot_m_iterator++) {
+#if defined(PROCESS_SPAWN_RSH)
+		kill(robot_m_iterator->second->ECP_pid, SIGTERM);
+#else
 		SignalKill(robot_m_iterator->second->nd, robot_m_iterator->second->ECP_pid, 0, SIGTERM, 0, 0);
+#endif
 	}
 }
 // ------------------------------------------------------------------------

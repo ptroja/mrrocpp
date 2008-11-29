@@ -19,7 +19,7 @@ ifeq ($(BUILD_TARGET), linux)
   CC=gcc
   CXX=g++
   LDFLAGS=-lrt `pkg-config --libs libxml-2.0`
-  CPPFLAGS=-Wall -I$(HOMEDIR)/include `pkg-config --cflags libxml-2.0`
+  CPPFLAGS=-Wall -I$(HOMEDIR)/include `pkg-config --cflags libxml-2.0` -DUSE_MESSIP_SRR
 else
   #VERSION=-V2.95.3,gcc_ntox86
   #VERSION=-V3.3.5,gcc_ntox86

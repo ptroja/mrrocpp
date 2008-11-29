@@ -23,7 +23,7 @@
 mp_two_robots_measures_generator::mp_two_robots_measures_generator(mp_task& _mp_task)
 	: mp_generator (_mp_task), UI_fd(_mp_task.UI_fd)
 {
-};//: mp_two_robots_measures_generator
+}
 
 // Pierwszy krok generatora.
 bool mp_two_robots_measures_generator::first_step()
@@ -31,7 +31,7 @@ bool mp_two_robots_measures_generator::first_step()
 	idle_step_counter = 2;
 	// Ustawienie polecen dla robota na torze.
 	irp6ot = robot_m[ROBOT_IRP6_ON_TRACK];
-	irp6ot->ecp_td.mp_command = NEXT_POSE; 
+	irp6ot->ecp_td.mp_command = NEXT_POSE;
 	irp6ot->ecp_td.instruction_type = GET;
 	irp6ot->ecp_td.get_type = ARM_DV;
 	irp6ot->ecp_td.get_arm_type = XYZ_EULER_ZYZ;
@@ -39,7 +39,7 @@ bool mp_two_robots_measures_generator::first_step()
 	irp6ot->ecp_td.next_interpolation_type = MIM;
 	// Ustawienie polecen dla robota na postumencie.
 	irp6p = robot_m[ROBOT_IRP6_POSTUMENT];
-	irp6p->ecp_td.mp_command = NEXT_POSE; 
+	irp6p->ecp_td.mp_command = NEXT_POSE;
 	irp6p->ecp_td.instruction_type = GET;
 	irp6p->ecp_td.get_type = ARM_DV;
 	irp6p->ecp_td.get_arm_type = XYZ_EULER_ZYZ;
@@ -47,7 +47,6 @@ bool mp_two_robots_measures_generator::first_step()
 		irp6p->ecp_td.next_interpolation_type = MIM;
 	// Przepisanie polecen.
 
-	
 	// Wyczyszczenie listy.
 	measures.clear();
 	// Wyzerowanie ostatniego odczytu.
@@ -56,14 +55,14 @@ bool mp_two_robots_measures_generator::first_step()
 	for(int i=0; i<6; i++)
 		last_measure.irp6p[i] = 0.0;
 	return true;
-};// first_step()
+}
 
 
 // Nastepny krok generatora.
 bool mp_two_robots_measures_generator::next_step()
 {
 	// Sprawdzenie, czy nadeszlo polecenie zakonczenia zbierania pomiarow.
-	if (check_and_null_trigger()) 
+	if (check_and_null_trigger())
 	{
 		std::cout<<"Liczba zebranych pozycji: "<<measures.size()<<std::endl;
 		// Zresetowanie przerwania.
@@ -71,7 +70,7 @@ bool mp_two_robots_measures_generator::next_step()
 		// Zapis do pliku.
 		save_measures_to_file();
 		return false;
-	};//: if
+	}
 	// Oczekiwanie na odczyt aktualnego polozenia koncowki.
 	if ( idle_step_counter )
 	{
@@ -79,9 +78,9 @@ bool mp_two_robots_measures_generator::next_step()
 
 		idle_step_counter--;
 		return true;
-	};//: if
+	}
 	// Pobranie odczytow.
- 
+
 	// Przepisanie odczytow do wektora.
 	two_robots_measure current_measure;
 	memcpy(current_measure.irp6ot, irp6ot->ecp_td.current_XYZ_ZYZ_arm_coordinates, 6*sizeof(double));
@@ -101,7 +100,7 @@ bool mp_two_robots_measures_generator::next_step()
 		{
 			add_measurement = true;
 			break;
-		}//: if
+		}
 	// Ewenualne dodanie bierzacych pomiarow.
 	if (add_measurement)
 	{
@@ -115,7 +114,7 @@ bool mp_two_robots_measures_generator::next_step()
 
 	// Nastepny krok.
 	return true;
-}; //: next_step
+}
 
 
 // Zapis pomiarow do pliku.
@@ -135,20 +134,20 @@ void mp_two_robots_measures_generator::save_measures_to_file (void)
 	{
 		sr_ecp_msg.message (SYSTEM_ERROR, errno, "Send to UI failed");
 		throw mp_generator::MP_error(SYSTEM_ERROR, (uint64_t) 0);
-	}//: if
+	}
 	// Sprawdzenie katalogu.
 	if ( chdir(ui_to_ecp_rep.path) != 0 )
 	{
 		sr_ecp_msg.message (NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
 		return;
-	};//: if
+	}
 	// Otworzenie plik do zapisu.
-	ofstream to_file(ui_to_ecp_rep.filename); 
+	std::ofstream to_file(ui_to_ecp_rep.filename);
 	if (to_file == NULL)
 	{
 		sr_ecp_msg.message (NON_FATAL_ERROR, NON_EXISTENT_FILE);
 		return;
-	};//: if
+	}
 	for(int m=0; m<measures.size(); m++)
 	{
 		// Pobranie danego pomiaru.
@@ -158,7 +157,7 @@ void mp_two_robots_measures_generator::save_measures_to_file (void)
 		for(int i=0; i<6; i++)
 			to_file<< trm.irp6p[i] <<"\t";
 		to_file<<"\n";
-	};//: for
+	}
 	to_file.close();
 	sr_ecp_msg.message("Measures were saved to file");
-};//: save_measures_to_file
+}

@@ -1,14 +1,17 @@
 // -------------------------------------------------------------------------
 //
 // Definicje struktur danych i metod dla procesow MP
-// 
+//
 // -------------------------------------------------------------------------
 
 #if !defined(__MP_G_TEACH_IN_H)
 #define __MP_G_TEACH_IN_H
 
+#if defined(__QNXNTO__)
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
+#endif
+
 #include <map>
 #include <list>
 
@@ -35,21 +38,21 @@ public:
   // destruktor
   ~mp_teach_in_generator (void);
   // -------------------------------------------------------
-  
-  
+
+
 	// --------------------------------------------------------------------------
 	// Wczytanie trajektorii z pliku
 	bool load_file ();
-	
+
 	// --------------------------------------------------------------------------
 	// Wczytanie trajektorii z pliku
 	bool load_file_with_path (const char* file_name, short robot_number);
-	
+
 	// --------------------------------------------------------------------------
 	// Zapis trajektorii do pliku
 	void save_file (POSE_SPECIFICATION ps);
 	// --------------------------------------------------------------------------
-	  
+
   void flush_pose_list ( void );
   // -------------------------------------------------------
   void initiate_pose_list(void);;
@@ -60,15 +63,15 @@ public:
   // -------------------------------------------------------
   // Pobierz nastepna pozycje z listy
   void get_next_pose (double next_pose[MAX_SERVOS_NR]);
-  
+
     void get_next_pose (double next_pose[MAX_SERVOS_NR], double irp6_next_pose[MAX_SERVOS_NR]);
-  
+
     // -------------------------------------------------------
   void set_pose (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]);
-  
-    void set_pose (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR], 
+
+    void set_pose (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
 		double irp6p_coordinates[MAX_SERVOS_NR]);
-  
+
   // -------------------------------------------------------
   bool is_pose_list_element ( void );
   // -------------------------------------------------------
@@ -79,7 +82,7 @@ public:
 
   // by Y
 
-   void create_pose_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR], 
+   void create_pose_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
 		double irp6p_coordinates[MAX_SERVOS_NR]) ;
 
 
@@ -88,10 +91,10 @@ public:
   void insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]);
 
   // by Y
-  
-    void insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR], 
+
+    void insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
 		double irp6p_coordinates[MAX_SERVOS_NR]);
-  
+
 
   void insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]);
 

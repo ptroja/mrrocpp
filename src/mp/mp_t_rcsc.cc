@@ -49,7 +49,7 @@ bool mp_task_rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogl
 
     const CUBE_TURN_ANGLE changing_order[]=
         {
-            CL_0, CL_0, CL_180, CL_0, CL_180, CL_0    
+            CL_0, CL_0, CL_180, CL_0, CL_180, CL_0
         };
 
     for(int k=0; k<6; k++)
@@ -89,7 +89,9 @@ bool mp_task_rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogl
 
 
         printf("\nFACE FACE %d:\n",k);
+#if defined(__QNXNTO__)
         flushall();
+#endif
         for(int i=0; i<9; i++)
         {
             switch (cube_state->cube_tab[k][i])
@@ -215,7 +217,7 @@ bool mp_task_rubik_cube_solver::communicate_with_windows_solver()
     	  	case 'y': cube_tab_send[i]='r'; break;
     	  	case 'w': cube_tab_send[i]='l'; break;
     	 }
-}		
+}
     */
 
     cube_tab_send[54]='\0';
@@ -589,7 +591,7 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
     // wlaczenie generatora do konfiguracji czujnika w EDP w obydwu robotach
    			    if (configure_edp_force_sensor(true, true))
 			    {
-		return true;		    
+		return true;
 			    }
 
 
@@ -683,8 +685,8 @@ bool mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
     {
         return true;
     }
-    
-  
+
+
     // uruchomienie generatora empty_gen
     if (run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK))
     {
@@ -720,7 +722,7 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
     // zblizenie chwytakow
 
 //	printf("face_turn_op_CL: %d\n", turn_angle);
-	
+
     if (set_next_ecps_state ((int) ECP_GEN_FESTIVAL, 0, "przekl/adam kostke~", 1, ROBOT_FESTIVAL))
     {
         return true;
@@ -844,7 +846,7 @@ bool mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
     // wlaczenie generatora do konfiguracji czujnika w EDP w obydwu robotach
     			    if (configure_edp_force_sensor(true, true))
 			    {
-	return true;	    
+	return true;
 			    }
 
 
@@ -1180,7 +1182,7 @@ bool mp_task_rubik_cube_solver::approach_op(int mode)
     }
     /*
        	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-     		(3, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL, 
+     		(3, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_FESTIVAL,
     		ROBOT_FESTIVAL)) {  return true;  }
     */
 
@@ -1433,7 +1435,7 @@ void mp_task_rubik_cube_solver::task_initialization(void)
 
     sensor_m[SENSOR_CAMERA_SA] =
         new ecp_mp_vis_sensor (SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
-        
+
         }
 
     // Konfiguracja wszystkich czujnikow

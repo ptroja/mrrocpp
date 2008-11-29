@@ -13,6 +13,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <signal.h>
 #if defined(__QNXNTO__)
 #include <sys/neutrino.h>
 #include <sys/netmgr.h>
@@ -37,7 +38,7 @@ ecp_mp_task::ecp_mp_task(configurator &_config)
 	: config(_config)
 {
 	mrrocpp_network_path = config.return_mrrocpp_network_path();
-	
+
 	char* ui_net_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "ui_attach_point", "[ui]");
 
     // kilka sekund  (~1) na otworzenie urzadzenia
@@ -53,7 +54,7 @@ ecp_mp_task::ecp_mp_task(configurator &_config)
             throw ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
         }
     }
-    
+
     delete [] ui_net_attach_point;
 }
 
@@ -61,7 +62,7 @@ ecp_mp_task::~ecp_mp_task()
 {
 	delete [] mrrocpp_network_path;
 }
-		
+
 
 // --------------------------------------------------------------------------
 // Odpowiedz operatora typu (Yes/No) na zadane pytanie (question)
@@ -192,8 +193,12 @@ void ecp_mp_task::kill_all_VSP (std::map <SENSOR_ENUM, sensor*>& _sensor_m)
 	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = _sensor_m.begin();
 	        sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++) {
 		if (sensor_m_iterator->second->pid !=0) {
+#if defined(PROCESS_SPAWN_RSH)
+			kill(sensor_m_iterator->second->pid, SIGTERM);
+#else
 			SignalKill(configurator::return_node_number(sensor_m_iterator->second->node_name),
 			           sensor_m_iterator->second->pid, 0, SIGTERM, 0, 0);
+#endif
 		}
 	}
 

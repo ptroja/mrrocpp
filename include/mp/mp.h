@@ -8,8 +8,11 @@
 #if !defined(__MP_H)
 #define __MP_H
 
+#if defined(__QNXNTO__)
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
+#endif
+
 
 #include "ecp/common/ecp_robot.h"
 #include "ecp_mp/ecp_mp_task.h"
@@ -54,28 +57,28 @@ class MP_main_error
 		{
 			fprintf(stderr, "ECP_MP_main_error @ %s:%d\n", file, line);
 		}
-#define MP_main_error(e0,e1)	MP_main_error((e0),(e1), __FILE__, __LINE__)		
+#define MP_main_error(e0,e1)	MP_main_error((e0),(e1), __FILE__, __LINE__)
 };
 // ---------------------------------------------------------------
 
 // na podstawie ecp_taught_in_pose
 // ------------------------------------------------------------------------
 class mp_taught_in_pose {
-public:
-  POSE_SPECIFICATION arm_type;
-  double motion_time;
-  double coordinates[MAX_SERVOS_NR];
-  double irp6p_coordinates[MAX_SERVOS_NR];
+	public:
+		POSE_SPECIFICATION arm_type;
+		double motion_time;
+		double coordinates[MAX_SERVOS_NR];
+		double irp6p_coordinates[MAX_SERVOS_NR];
 
-  int extra_info; // by Y uzupelnienie struktury o dodatkowe pole, do dowolnego wykorzystania
+		int extra_info; // by Y uzupelnienie struktury o dodatkowe pole, do dowolnego wykorzystania
 
-  mp_taught_in_pose (void);
-  mp_taught_in_pose (POSE_SPECIFICATION at, double mt, double* c);
+		mp_taught_in_pose (void);
+		mp_taught_in_pose (POSE_SPECIFICATION at, double mt, double* c);
 
-  mp_taught_in_pose (POSE_SPECIFICATION at, double mt, double* c, double* irp6p_c);
+		mp_taught_in_pose (POSE_SPECIFICATION at, double mt, double* c, double* irp6p_c);
 
-  mp_taught_in_pose (POSE_SPECIFICATION at, double mt, int e_info, double* c);
-}; // end:class mp_taught_in_pose
+		mp_taught_in_pose (POSE_SPECIFICATION at, double mt, int e_info, double* c);
+};
 // ------------------------------------------------------------------------
 
 

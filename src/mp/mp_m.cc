@@ -20,17 +20,21 @@ mp_task* mp_t;
 
 void catch_signal_in_mp(int sig)
 {
-	
+
 	mp_t->catch_signal_in_mp_task(sig);
 	delete mp_t;
 	printf("za catch_signal_in_mp\n");
+#if defined(__QNXNTO__)
 	flushall();
+#endif
 }
 
 int main (int argc, char *argv[], char **arge)
 {
 	printf("MP\n");
+#if defined(__QNXNTO__)
 	flushall();
+#endif
 	// zewnetrzne try
 	try {
 
@@ -57,7 +61,7 @@ int main (int argc, char *argv[], char **arge)
 #if defined(PROCESS_SPAWN_RSH)
 		signal(SIGINT, SIG_IGN);
 #endif
-		
+
 			mp_t->initialize_communication();
 
 			// Utworzenie listy robotow, powolanie procesow ECP i nawiazanie komunikacji z nimi

@@ -31,7 +31,7 @@
 
 int pcbird_connect(const char *addr, unsigned short port)
 {
-    int s, t, len;
+    int s, len;
     struct sockaddr_in remote;
     struct hostent *he;
     
@@ -42,7 +42,6 @@ int pcbird_connect(const char *addr, unsigned short port)
         
     if ((s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1) 
         return -1;
-
 
     remote.sin_family = AF_INET;
     remote.sin_port = htons(port);

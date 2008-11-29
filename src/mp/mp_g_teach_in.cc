@@ -16,10 +16,13 @@
 #include <unistd.h>
 #include <math.h>
 #include <fstream>
+
+#if defined(__QNXNTO__)
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #include <sys/neutrino.h>
 #include <sys/netmgr.h>
+#endif
 
 #include "common/typedefs.h"
 #include "common/impconst.h"

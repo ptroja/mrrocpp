@@ -148,7 +148,7 @@ typedef struct{
 	} program_node_def;
 
 
-typedef struct{
+typedef struct {
 
 	UI_ALL_EDPS_STATE all_edps;
 	char binaries_network_path[100]; // sieciowa sciezka binariow mrrocpp
@@ -165,10 +165,10 @@ typedef struct{
 	char* network_sr_attach_point;
 	char* sr_attach_point;
 
-	// lista sekcji  iwezlow sieciowych plikow konfiguracyjnych
+	// listy sekcji i wezlow sieciowych plikow konfiguracyjnych
 	std::list<char*> section_list, config_node_list, all_node_list;
 	// lista nazw programow i wezlow na ktorych maja byc uruchamiane
-	std::list <program_node_def> program_node_list;
+	std::list<program_node_def> program_node_list;
 
 	char ui_node_name[30]; // nazwa wezla na ktorym jest uruchamiany UI
 	int	ui_node_nr; // numer wezla na ktorym jest uruchamiany UI

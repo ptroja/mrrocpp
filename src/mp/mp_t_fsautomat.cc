@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-#include <iostream.h>
+#include <iostream>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/tree.h>
@@ -286,7 +286,7 @@ std::map<char *, State, ecp_task::str_cmp> * mp_task_fsautomat::takeStatesMap()
 	xmlXIncludeProcess(doc);
    if(doc == NULL)
 	{
-      cout<<"ERROR: could not parse file: \""<<fileName<<"\"."<<endl;
+      std::cout<<"ERROR: could not parse file: \""<<fileName<<"\"."<<std::endl;
 		return statesMap;
 	}
 
@@ -295,7 +295,7 @@ std::map<char *, State, ecp_task::str_cmp> * mp_task_fsautomat::takeStatesMap()
    root = xmlDocGetRootElement(doc);
    if(!root || !root->name)
    {
-      cout<<"Bad root node name!"<<endl;
+      std::cout<<"Bad root node name!"<<std::endl;
       xmlFreeDoc(doc);
       return statesMap;
    }

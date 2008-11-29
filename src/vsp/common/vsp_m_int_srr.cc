@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
 	signal(SIGTERM, &catch_signal);
 	signal(SIGSEGV, &catch_signal);
 #if defined(PROCESS_SPAWN_RSH)
-		signal(SIGINT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
 #endif
 
 	// liczba argumentow

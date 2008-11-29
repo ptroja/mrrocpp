@@ -9,6 +9,13 @@ extern "C" {
 		ui_config_entry & entry = *(ui_config_entry *) userdata;
 		entry.show_page(FALSE);
 	}
+
+	void on_notebook1_page_reordered(GtkNotebook *notebook,
+	                                  GtkWidget   *child,
+	                                  guint        page_num,
+	                                  gpointer     user_data) {
+		printf("page_num = %d\n", page_num);
+	}
 }
 
 GtkNotebook *ui_config_entry::getNotebook(void) {
