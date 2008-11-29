@@ -320,7 +320,7 @@ bool ecp_smooth_generator::load_file_with_path (const char* file_name)
     double a[MAX_SERVOS_NR];	// Wczytane wspolrzedne
     double coordinates[MAX_SERVOS_NR];     // Wczytane wspolrzedne
 
-    ifstream from_file(file_name); // otworz plik do odczytu
+    std::ifstream from_file(file_name); // otworz plik do odczytu
     if (!from_file)
     {
         perror(file_name);
@@ -899,7 +899,7 @@ bool ecp_smooth_generator::load_a_v_min (char* file_name)
 {
     uint64_t e;       // Kod bledu systemowego
     uint64_t j;    // Liczniki petli
-    ifstream from_file(file_name); // otworz plik do odczytu
+    std::ifstream from_file(file_name); // otworz plik do odczytu
 
     if (!from_file)
     {
@@ -922,7 +922,7 @@ bool ecp_smooth_generator::load_a_v_max (char* file_name)
 {
     uint64_t e;       // Kod bledu systemowego
     uint64_t j;    // Liczniki petli
-    ifstream from_file(file_name); // otworz plik do odczytu
+    std::ifstream from_file(file_name); // otworz plik do odczytu
 
     if (!from_file)
     {
