@@ -63,6 +63,11 @@ gint my_popup_handler(GtkWidget *widget, GdkEventButton *event, gpointer user_da
 
 ui_model::ui_model() : tabs_visible(0)
 {
+	builder = gtk_builder_new();
+	gtk_builder_add_from_file(builder, "ui.xml", NULL);
+
+	gtk_builder_connect_signals(builder, NULL);
+
 	// create TreeView model
 	store = gtk_tree_store_new(N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
 
@@ -82,6 +87,7 @@ ui_model::~ui_model()
 
 	// remove reference to GtkTreeView model
 	g_object_unref(store);
+	g_object_unref(G_OBJECT(builder));
 }
 
 ui_config_entry & ui_model::add_ui_config_entry(ui_config_entry & parent_entry, ui_config_entry::ui_config_entry_type entry_type, const char *program_name, const char *node_name, const char *ui_def)
@@ -116,4 +122,16 @@ void ui_model::show_page(bool visible) {
 	//printf("tabs_visible = %d\n", tabs_visible);
 
 	//g_object_set(G_OBJECT(getNotebook()), "visible", tabs_visible ? TRUE : FALSE, NULL);
+}
+
+GObject *ui_model::getUiObject(const gchar *name) {
+	return gtk_builder_get_object(this->builder, name);
+}
+
+void ui_model::setMpLoadButton (bool sensitive, bool button_type_unload) {
+
+}
+
+void ui_model::setEdpsLoadButton (bool sensitive, bool button_type_unload) {
+
 }

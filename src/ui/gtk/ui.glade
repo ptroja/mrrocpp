@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Fri Nov 28 17:46:26 2008 -->
+<!--Generated with glade3 3.4.5 on Sat Nov 29 11:45:31 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="width_request">600</property>
@@ -137,6 +137,7 @@
                 <child>
                   <widget class="GtkToolButton" id="toolbutton1">
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">MP Load</property>
                     <property name="stock_id">gtk-connect</property>
@@ -158,6 +159,7 @@
                 <child>
                   <widget class="GtkToolButton" id="toolbutton3">
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">All EDP Load</property>
                     <property name="stock_id">gtk-connect</property>

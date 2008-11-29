@@ -42,6 +42,12 @@ class ui_model
 		//! method to manage tab panel visibility
 		void show_page(bool visible);
 
+		//! set properties of buttons
+		void setMpLoadButton (bool sensitive, bool button_type_unload);
+		void setEdpsLoadButton (bool sensitive, bool button_type_unload);
+
+		GObject *getUiObject(const gchar *name);
+
 	private:
 		ui_model();
 
@@ -55,6 +61,8 @@ class ui_model
 		~ui_model();
 
 		int tabs_visible;
+
+		GtkBuilder *builder;
 };
 
 /*

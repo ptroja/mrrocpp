@@ -7,11 +7,8 @@
 #include "ui_model.h"
 #include "ui_utils.h"
 
-// TODO: this should'n be global
-static GtkBuilder *builder;
-
 GtkNotebook *getNotebook(void) {
-	return GTK_NOTEBOOK (gtk_builder_get_object (builder, "notebook1"));
+	return GTK_NOTEBOOK (ui_model::instance().getUiObject("notebook1"));
 }
 
 guint set_status(const char *msg)
@@ -19,7 +16,7 @@ guint set_status(const char *msg)
 	GtkStatusbar *statusbar;
 	guint context_id;
 
-	statusbar = GTK_STATUSBAR (gtk_builder_get_object (builder, "statusbar"));
+	statusbar = GTK_STATUSBAR (ui_model::instance().getUiObject("statusbar"));
 
 	context_id = gtk_statusbar_get_context_id(statusbar, "base message");
 
@@ -28,7 +25,7 @@ guint set_status(const char *msg)
 
 int set_tree_view(void)
 {
-	GtkTreeView *tree = GTK_TREE_VIEW (gtk_builder_get_object(builder, "process_treeview"));
+	GtkTreeView *tree = GTK_TREE_VIEW (ui_model::instance().getUiObject("process_treeview"));
 	gtk_tree_view_set_model(tree, GTK_TREE_MODEL(ui_model::instance().getStore()));
 
 	GtkCellRenderer *renderer;
@@ -115,21 +112,16 @@ int main(int argc, char *argv[])
 	}
 	g_option_context_free(context);
 
-	//! Gtk::Main object initialized GTKMM for use in process tabs
+	//! Gtk::Main object initialized for use GTKMM in process tabs
 	Gtk::Main kit(argc, argv);
 
 	config = new configurator();
-
-	builder = gtk_builder_new();
-	gtk_builder_add_from_file(builder, "ui.xml", NULL);
-
-	gtk_builder_connect_signals(builder, NULL);
 
 	set_status("MRROC++ - the best robotic framework ever");
 
 	set_tree_view();
 
-	gtk_widget_show(GTK_WIDGET (gtk_builder_get_object (builder, "window")));
+	gtk_widget_show(GTK_WIDGET(ui_model::instance().getUiObject("window")));
 
 	if(config_files && *config_files) {
 		std::string config_file = config->getConfig_dir();
@@ -139,8 +131,6 @@ int main(int argc, char *argv[])
 	}
 
 	gtk_main();
-
-	g_object_unref(G_OBJECT(builder));
 
 	return 0;
 }
