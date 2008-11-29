@@ -100,18 +100,20 @@ int main(int argc, char *argv[]) {
 #endif
 
 	// liczba argumentow
-#if defined(PROCESS_SPAWN_YRSH)
+
 	if(argc <=6){
 		printf("Za malo argumentow VSP\n");
 		return -1;
 		};
-#endif
+
 	 // zczytanie konfiguracji calego systemu
  	config = new configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
+#if defined(PROCESS_SPAWN_YRSH)
 	if (argc>6) {
  		config->answer_to_y_rsh_spawn(argv[6]); 
  		signal(SIGINT, SIG_IGN);
  	}
+#endif
 	attach_point = config->return_attach_point_name(configurator::CONFIG_SERVER, "resourceman_attach_point");
 
 	try {
