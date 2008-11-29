@@ -1,6 +1,5 @@
 #include "ui_config_entry.h"
 #include "ui_model.h"
-#include "ui_utils.h"
 
 //#include <dlfcn.h>
 
@@ -10,6 +9,10 @@ extern "C" {
 		ui_config_entry & entry = *(ui_config_entry *) userdata;
 		entry.show_page(FALSE);
 	}
+}
+
+GtkNotebook *ui_config_entry::getNotebook(void) {
+	return GTK_NOTEBOOK(ui_model::instance().getUiGObject("notebook1"));
 }
 
 GtkTreeIter & ui_config_entry::getTree_iter() const {
@@ -25,6 +28,7 @@ void ui_config_entry::show_page(bool visible) {
 	g_object_set(this->content, "visible", visible, NULL);
 
 	ui_model::instance().show_page(visible);
+	ui_model::instance().set_current_page(pageIndex);
 
 //	if (visible) {
 //		gtk_notebook_append_page(getNotebook(), this->content, GTK_WIDGET(this->hbox));
@@ -143,7 +147,7 @@ ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program
 	gtk_box_pack_start_defaults(GTK_BOX(hbox), GTK_WIDGET(tabbutton));
 	gtk_widget_show_all(GTK_WIDGET(hbox));
 
-	gtk_notebook_append_page(getNotebook(), this->content, GTK_WIDGET(this->hbox));
+	pageIndex = gtk_notebook_append_page(getNotebook(), this->content, GTK_WIDGET(this->hbox));
 	gtk_notebook_set_tab_reorderable(getNotebook(), this->content, TRUE);
 
 	this->show_page(FALSE);

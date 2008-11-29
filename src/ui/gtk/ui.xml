@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!--Generated with glade3 3.4.5 on Sat Nov 29 11:45:31 2008 -->
+<!--Generated with glade3 3.4.5 on Sat Nov 29 12:55:07 2008 -->
 <interface>
   <object class="GtkUIManager" id="uimanager1">
     <child>
@@ -121,13 +121,13 @@
                 <property name="icon_size">GTK_ICON_SIZE_SMALL_TOOLBAR</property>
                 <property name="icon_size_set">True</property>
                 <child>
-                  <object class="GtkToolButton" id="toolbutton1">
+                  <object class="GtkToolButton" id="EdpsLoadButton">
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="is_important">True</property>
-                    <property name="label" translatable="yes">MP Load</property>
+                    <property name="label" translatable="yes">All EDP Load</property>
                     <property name="stock_id">gtk-connect</property>
-                    <signal handler="mp_load_clicked" name="clicked"/>
+                    <signal handler="edp_load_clicked" name="clicked"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -143,13 +143,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="toolbutton3">
+                  <object class="GtkToolButton" id="MpLoadButton">
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="is_important">True</property>
-                    <property name="label" translatable="yes">All EDP Load</property>
+                    <property name="label" translatable="yes">MP Load</property>
                     <property name="stock_id">gtk-connect</property>
-                    <signal handler="edp_load_clicked" name="clicked"/>
+                    <signal handler="mp_load_clicked" name="clicked"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>

@@ -2,6 +2,7 @@
 #define __UI_MODEL_H
 
 #include <gtk/gtk.h>
+#include <gtkmm.h>
 
 #include "ui_config_entry.h"
 
@@ -43,10 +44,17 @@ class ui_model
 		void show_page(bool visible);
 
 		//! set properties of buttons
-		void setMpLoadButton (bool sensitive, bool button_type_unload);
-		void setEdpsLoadButton (bool sensitive, bool button_type_unload);
+		void setMpLoadButton (bool sensitive, bool button_type_load);
+		void setEdpsLoadButton (bool sensitive, bool button_type_load);
 
-		GObject *getUiObject(const gchar *name);
+		//! set status bar message
+		guint set_status(const char *msg);
+
+		//! set current notebook page
+		void set_current_page(gint page_num);
+
+		GObject *getUiGObject(const gchar *name);
+		Glib::RefPtr<Glib::Object> getUiObject(const gchar *name);
 
 	private:
 		ui_model();
@@ -63,6 +71,8 @@ class ui_model
 		int tabs_visible;
 
 		GtkBuilder *builder;
+
+		int set_tree_view(void);
 };
 
 /*

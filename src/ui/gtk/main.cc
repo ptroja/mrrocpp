@@ -5,48 +5,9 @@
 
 #include "configurator.h"
 #include "ui_model.h"
-#include "ui_utils.h"
 
 GtkNotebook *getNotebook(void) {
-	return GTK_NOTEBOOK (ui_model::instance().getUiObject("notebook1"));
-}
-
-guint set_status(const char *msg)
-{
-	GtkStatusbar *statusbar;
-	guint context_id;
-
-	statusbar = GTK_STATUSBAR (ui_model::instance().getUiObject("statusbar"));
-
-	context_id = gtk_statusbar_get_context_id(statusbar, "base message");
-
-	return gtk_statusbar_push(statusbar, context_id, msg);
-}
-
-int set_tree_view(void)
-{
-	GtkTreeView *tree = GTK_TREE_VIEW (ui_model::instance().getUiObject("process_treeview"));
-	gtk_tree_view_set_model(tree, GTK_TREE_MODEL(ui_model::instance().getStore()));
-
-	GtkCellRenderer *renderer;
-	GtkTreeViewColumn *column;
-
-	renderer = gtk_cell_renderer_text_new();
-
-	column = gtk_tree_view_column_new_with_attributes("Program name", renderer, "markup",
-			ui_model::NAME_COLUMN, NULL);
-	gtk_tree_view_append_column(tree, column);
-
-	column = gtk_tree_view_column_new_with_attributes("Node name", renderer, "text",
-			ui_model::NODE_NAME_COLUMN, NULL);
-	gtk_tree_view_append_column(tree, column);
-
-	renderer = gtk_cell_renderer_toggle_new();
-	column = gtk_tree_view_column_new_with_attributes("Running", renderer, "active",
-			ui_model::IS_RUNNING_COLUMN, NULL);
-	gtk_tree_view_append_column(tree, column);
-
-	return 0;
+	return GTK_NOTEBOOK (ui_model::instance().getUiGObject("notebook1"));
 }
 
 extern "C" {
@@ -117,11 +78,9 @@ int main(int argc, char *argv[])
 
 	config = new configurator();
 
-	set_status("MRROC++ - the best robotic framework ever");
+	ui_model::instance().set_status("MRROC++ - the best robotic framework ever");
 
-	set_tree_view();
-
-	gtk_widget_show(GTK_WIDGET(ui_model::instance().getUiObject("window")));
+	gtk_widget_show(GTK_WIDGET(ui_model::instance().getUiGObject("window")));
 
 	if(config_files && *config_files) {
 		std::string config_file = config->getConfig_dir();

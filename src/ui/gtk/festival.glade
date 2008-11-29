@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Nov 27 23:12:57 2008 -->
+<!--Generated with glade3 3.4.5 on Sat Nov 29 13:26:39 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <child>
@@ -13,7 +13,7 @@
           </widget>
         </child>
         <child>
-          <widget class="GtkComboBox" id="combobox1">
+          <widget class="GtkComboBox" id="LanguageCombo">
             <property name="visible">True</property>
             <property name="add_tearoffs">True</property>
             <property name="items" translatable="yes">English

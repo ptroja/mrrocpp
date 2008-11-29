@@ -77,6 +77,10 @@ class ui_config_entry
 		GtkButton *tabbutton;
 		GtkImage *tabcloseicon;
 		GtkWidget *content;
+
+		GtkNotebook *getNotebook(void);
+
+		gint pageIndex;
 };
 
 #endif /* __UI_CONFIG_ENTRY_H */

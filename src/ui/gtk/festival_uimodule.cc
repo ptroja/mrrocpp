@@ -25,9 +25,10 @@ class FestivalPanel {
 };
 
 FestivalPanel::FestivalPanel(ui_config_entry &entry) {
-
-	//Gtk::Builder & builder = Glib::wrap(&entry.getBuilder());
 	GtkBuilder & builder = (entry.getBuilder());
+
+	GtkComboBox *LangCombo = GTK_COMBO_BOX(gtk_builder_get_object(&builder, "LanguageCombo"));
+	gtk_combo_box_set_active(LangCombo, 0);
 }
 
 static FestivalPanel *panel;

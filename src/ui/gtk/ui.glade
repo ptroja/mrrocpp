@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sat Nov 29 11:45:31 2008 -->
+<!--Generated with glade3 3.4.5 on Sat Nov 29 12:55:07 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="width_request">600</property>
@@ -135,13 +135,13 @@
                 <property name="icon_size">GTK_ICON_SIZE_SMALL_TOOLBAR</property>
                 <property name="icon_size_set">True</property>
                 <child>
-                  <widget class="GtkToolButton" id="toolbutton1">
+                  <widget class="GtkToolButton" id="EdpsLoadButton">
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="is_important">True</property>
-                    <property name="label" translatable="yes">MP Load</property>
+                    <property name="label" translatable="yes">All EDP Load</property>
                     <property name="stock_id">gtk-connect</property>
-                    <signal name="clicked" handler="mp_load_clicked"/>
+                    <signal name="clicked" handler="edp_load_clicked"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -157,13 +157,13 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkToolButton" id="toolbutton3">
+                  <widget class="GtkToolButton" id="MpLoadButton">
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="is_important">True</property>
-                    <property name="label" translatable="yes">All EDP Load</property>
+                    <property name="label" translatable="yes">MP Load</property>
                     <property name="stock_id">gtk-connect</property>
-                    <signal name="clicked" handler="edp_load_clicked"/>
+                    <signal name="clicked" handler="mp_load_clicked"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
