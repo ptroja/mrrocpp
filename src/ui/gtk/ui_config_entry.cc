@@ -9,13 +9,6 @@ extern "C" {
 		ui_config_entry & entry = *(ui_config_entry *) userdata;
 		entry.show_page(FALSE);
 	}
-
-	void on_notebook1_page_reordered(GtkNotebook *notebook,
-	                                  GtkWidget   *child,
-	                                  guint        page_num,
-	                                  gpointer     user_data) {
-		printf("page_num = %d\n", page_num);
-	}
 }
 
 GtkNotebook *ui_config_entry::getNotebook(void) {
@@ -35,7 +28,11 @@ void ui_config_entry::show_page(bool visible) {
 	g_object_set(this->content, "visible", visible, NULL);
 
 	ui_model::instance().show_page(visible);
-	ui_model::instance().set_current_page(pageIndex);
+
+	gint pageIndex = gtk_notebook_page_num(GTK_NOTEBOOK(ui_model::instance().getUiGObject("notebook1")), this->content);
+	if (pageIndex >= 0) {
+		ui_model::instance().set_current_page(pageIndex);
+	}
 
 //	if (visible) {
 //		gtk_notebook_append_page(getNotebook(), this->content, GTK_WIDGET(this->hbox));
@@ -154,7 +151,7 @@ ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program
 	gtk_box_pack_start_defaults(GTK_BOX(hbox), GTK_WIDGET(tabbutton));
 	gtk_widget_show_all(GTK_WIDGET(hbox));
 
-	pageIndex = gtk_notebook_append_page(getNotebook(), this->content, GTK_WIDGET(this->hbox));
+	gtk_notebook_append_page(getNotebook(), this->content, GTK_WIDGET(this->hbox));
 	gtk_notebook_set_tab_reorderable(getNotebook(), this->content, TRUE);
 
 	this->show_page(FALSE);

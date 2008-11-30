@@ -79,8 +79,6 @@ class ui_config_entry
 		GtkWidget *content;
 
 		GtkNotebook *getNotebook(void);
-
-		gint pageIndex;
 };
 
 #endif /* __UI_CONFIG_ENTRY_H */
