@@ -288,8 +288,6 @@ bool mp_task_rubik_cube_solver::communicate_with_windows_solver()
 bool mp_task_rubik_cube_solver::find_rcs()
 {
 	char c_up, c_right, c_front, c_down, c_left, c_back;
-	int s;
-	int str_size;
 	char cube_tab_send[55];
 	char cube_sol_rec[200];
 	char manipulation_sequence[200];
@@ -386,7 +384,7 @@ bool mp_task_rubik_cube_solver::find_rcs()
 	}
 	
 
-	for (int i=0; i<strlen(cube_sol_rec); i++) {
+	for (size_t i=0; i<strlen(cube_sol_rec); i++) {
 		switch (cube_sol_rec[i]) 
 		{
 			case 'U': manipulation_sequence[i] = 'B'; break;
@@ -436,7 +434,7 @@ int mp_task_rubik_cube_solver::find_rcs_with_VSP(char* cube_state, char* cube_so
 
 	// petle ustawiajace stan kostki w czujnikach, az do skutku
 	bool korf_configured = false;
-	bool kociemba_configured = false;
+	//bool kociemba_configured = false;
 	
 	// konfiguruje czujnik dla algorytmu Kociemby, ten od razu rozpoczyna prace	
 	sensor_m[SENSOR_RCS_KOCIEMBA]->to_vsp.rcs.configure_mode = RCS_CUBE_STATE;

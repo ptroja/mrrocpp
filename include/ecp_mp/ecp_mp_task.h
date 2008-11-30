@@ -2,7 +2,7 @@
 //                            ecp_mp_task.h dla QNX6
 // Definicje wspolnych struktur danych i metod dla procesow ECP i MP
 // w szczegolnosci zwiazanych z obsluga czujnikow wirtualnych
-// 
+//
 // Ostatnia modyfikacja: 03.11.2005
 // autor modyfikacji: tkornuta
 // -------------------------------------------------------------------------
@@ -25,47 +25,50 @@
 class ecp_mp_task {
 
 public:
-	
+
 	ecp_mp_task(configurator &_config);
 	~ecp_mp_task();
 
 	// mapa wszystkich czujnikow
 	static std::map <SENSOR_ENUM, sensor*> sensor_m;
-	
+
 	// mapa wszystkich transmiterow
 	static std::map <TRANSMITTER_ENUM, transmitter*> transmitter_m;
 
 	static sr_ecp* sr_ecp_msg;
 	configurator &config;
-
+#if !defined(USE_MESSIP_SRR)
 	int UI_fd;
+#else
+	messip_channel_t *UI_fd;
+#endif
 	char* mrrocpp_network_path;
-	
+
 	// METODY
 	// Odpowiedz operatora na zadane pytanie: (Yes/No)
 	bool operator_reaction (const char* question );
-	
+
 	// by Y - Wybor przez operatora jednej z opcji
 	BYTE choose_option (const char* question, BYTE nr_of_options_input );
-	
+
 	// Zadanie od operatora wprowadzenia liczby calkowitej (int)
 	int input_integer (const char* question);
-	
+
 	// --------------------------------------------------------------------------
 	// Zadanie od operatora wprowadzenia liczby rzeczywistej (double)
 	double input_double (const char* question);
-	
+
 	// --------------------------------------------------------------------------
 	// Wyswietlenie komunikatu
 	bool show_message (const char* message);
-	
+
 	// Zatrzymanie wszystkich VSP
 	static void kill_all_VSP (std::map <SENSOR_ENUM, sensor*>& _sensor_m);
-	
+
 	// funkcje do obslugi czujnikow
 	void all_sensors_initiate_reading (std::map <SENSOR_ENUM, sensor*>& _sensor_m);
 	void all_sensors_get_reading (std::map <SENSOR_ENUM, sensor*>& _sensor_m);
-	  
+
 };
 
 // ---------------------------------------------------------------

@@ -6,7 +6,7 @@
 #include "mp/Condition.h"
 
 /*Condition::Condition()
-{	
+{
 	this->condition = NULL;
 	this->lhValue = NULL;
 	this->rhValue = NULL;
@@ -15,7 +15,7 @@
 
 Condition::Condition(char *condDesc, configurator &_config)
 	: config(_config)
-{	
+{
 	this->condition = NULL;
 	this->lhValue = NULL;
 	this->rhValue = NULL;
@@ -30,7 +30,7 @@ Condition::Condition(char *condDesc, configurator &_config)
 
 Condition::Condition(const Condition &cond)
 	: config(cond.config)
-{	
+{
 	this->condition = NULL;
 	this->lhValue = NULL;
 	this->rhValue = NULL;
@@ -47,7 +47,7 @@ Condition::Condition(const Condition &cond)
 	{
 		size = strlen(cond.rhValue) + 1;
 		this->rhValue = new char[size];
-		strcpy(this->rhValue, cond.rhValue);		
+		strcpy(this->rhValue, cond.rhValue);
 	}
 	this->operationType = cond.operationType;
 }
@@ -71,7 +71,7 @@ Condition::RELATIONAL_OPERATOR Condition::splitCondExpr()
 	char *myExpr = strdup(condition);
 	char *res;
 	if(myExpr != NULL)
-	
+
 	for(int i=0; i<6; i++)
 	{
 		if((res = strstr(myExpr, opc[i])) != NULL)
@@ -102,10 +102,10 @@ bool Condition::checkCompareResult()
 {
 	if(!strcmp(condition, (const char *) "true") || !strcmp(condition, (const char *) "TRUE"))
 		return true;
-	
+
 	if(!strcmp(condition, (const char *) "stateOperationResult"))
 		return result;
-	
+
 	if(strstr(condition, ".") != NULL)
 	{
 		bool result = checkContext(condition);
@@ -148,7 +148,7 @@ std::list<char *> * Condition::returnSplitedStr(char *toSplit)
 	return splitedStr;
 }
 
-bool Condition::setResult(bool result)
+void Condition::setResult(bool result)
 {
 	this->result = result;
 }

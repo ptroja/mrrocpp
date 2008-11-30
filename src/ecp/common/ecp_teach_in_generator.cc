@@ -48,8 +48,13 @@ void ecp_teach_in_generator::teach(POSE_SPECIFICATION ps, const char *msg)
     for (;;)
       {
         // Polecenie uczenia do UI
-        if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(ECP_message),
-            &ui_to_ecp_rep, sizeof(UI_reply)) < 0)
+#if !defined(USE_MESSIP_SRR)
+    	if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(ECP_message), &ui_to_ecp_rep, sizeof(UI_reply)) < 0)
+#else
+    	int status;
+    	if(messip_send(ecp_t.UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
+    			&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0)
+#endif
           { // Y&W
 
             e = errno;
@@ -95,9 +100,14 @@ void ecp_teach_in_generator::save_file(POSE_SPECIFICATION ps)
     ecp_to_ui_msg.ecp_message = SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
     strcpy(ecp_to_ui_msg.string, "*.trj"); // Wzorzec nazwy pliku
     // if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(ECP_message), sizeof(UI_reply)) == -1) {
-    if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(ECP_message),
-        &ui_to_ecp_rep, sizeof(UI_reply)) < 0)
-      {// by Y&W
+#if !defined(USE_MESSIP_SRR)
+    if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(ECP_message), &ui_to_ecp_rep, sizeof(UI_reply)) < 0)
+#else
+    int status;
+    if(messip_send(ecp_t.UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
+    		&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0)
+#endif
+    {// by Y&W
         e = errno;
         perror("ECP: Send() to UI failed\n");
         sr_ecp_msg.message(SYSTEM_ERROR, e, "ECP: Send() to UI failed");
@@ -182,9 +192,14 @@ bool ecp_teach_in_generator::load_file_from_ui()
 
     ecp_to_ui_msg.ecp_message = LOAD_FILE; // Polecenie wprowadzenia nazwy odczytywanego pliku
 
-    if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(ECP_message),
-        &ui_to_ecp_rep, sizeof(UI_reply)) < 0)
-      {// by Y&W
+#if !defined(USE_MESSIP_SRR)
+    if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(ECP_message), &ui_to_ecp_rep, sizeof(UI_reply)) < 0)
+#else
+    int status;
+    if(messip_send(ecp_t.UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
+    		&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0)
+#endif
+    {// by Y&W
         e = errno;
         perror("ECP: Send() to UI failed\n");
         sr_ecp_msg.message(SYSTEM_ERROR, e, "ECP: Send() to UI failed");
@@ -348,7 +363,7 @@ void ecp_teach_in_generator::get_pose(ecp_taught_in_pose& tip)
     tip.arm_type = pose_list_iterator->arm_type;
     tip.motion_time = pose_list_iterator->motion_time;
     tip.extra_info = pose_list_iterator->extra_info;
-    memcpy(tip.coordinates, pose_list_iterator->coordinates, 
+    memcpy(tip.coordinates, pose_list_iterator->coordinates,
     MAX_SERVOS_NR*sizeof(double));
   }
 // -------------------------------------------------------
@@ -491,7 +506,7 @@ bool ecp_teach_in_generator::next_step()
       the_robot->EDP_data.next_interpolation_type = MIM;
       the_robot->EDP_data.motion_steps = (WORD) ceil(tip.motion_time/STEP);
       the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
-      memcpy(the_robot->EDP_data.next_motor_arm_coordinates, tip.coordinates, 
+      memcpy(the_robot->EDP_data.next_motor_arm_coordinates, tip.coordinates,
       MAX_SERVOS_NR*sizeof (double));
       break;
     case C_JOINT:
@@ -502,7 +517,7 @@ bool ecp_teach_in_generator::next_step()
       the_robot->EDP_data.next_interpolation_type = MIM;
       the_robot->EDP_data.motion_steps = (WORD) ceil(tip.motion_time/STEP);
       the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
-      memcpy(the_robot->EDP_data.next_joint_arm_coordinates, tip.coordinates, 
+      memcpy(the_robot->EDP_data.next_joint_arm_coordinates, tip.coordinates,
       MAX_SERVOS_NR*sizeof (double));
       // printf("lumpu: %f\n", the_robot->EDP_data.next_joint_arm_coordinates[6]);
       break;

@@ -43,7 +43,11 @@ ecp_mp_task::ecp_mp_task(configurator &_config)
 
     // kilka sekund  (~1) na otworzenie urzadzenia
     short tmp = 0;
+#if !defined(USE_MESSIP_SRR)
     while ((UI_fd = name_open(ui_net_attach_point, NAME_FLAG_ATTACH_GLOBAL)) < 0) {
+#else
+	while ((UI_fd = messip_channel_connect(NULL, ui_net_attach_point, MESSIP_NOTIMEOUT)) == NULL) {
+#endif
         if ((tmp++)<CONNECT_RETRY)
             usleep(1000*CONNECT_DELAY);
         else
@@ -75,8 +79,13 @@ bool ecp_mp_task::operator_reaction (const char* question )
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI podczas uczenia
 
 	ecp_to_ui_msg.hdr.type=0;
-
+#if !defined(USE_MESSIP_SRR)
 	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(ECP_message), &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+#else
+	int status;
+	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
+					&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0) {
+#endif
 		uint64_t e = errno;
 		perror("ECP operator_reaction(): Send() to UI failed");
 		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
@@ -100,8 +109,13 @@ BYTE ecp_mp_task::choose_option (const char* question, BYTE nr_of_options_input 
 	ecp_to_ui_msg.nr_of_options = nr_of_options_input;
 
 	ecp_to_ui_msg.hdr.type=0;
-
+#if !defined(USE_MESSIP_SRR)
 	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+#else
+	int status;
+	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
+					&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0) {
+#endif
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed\n");
 		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
@@ -124,8 +138,13 @@ int ecp_mp_task::input_integer (const char* question )
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
 
 	ecp_to_ui_msg.hdr.type=0;
-
+#if !defined(USE_MESSIP_SRR)
 	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+#else
+	int status;
+	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
+					&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0) {
+#endif
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed\n");
 		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
@@ -148,8 +167,13 @@ double ecp_mp_task::input_double (const char* question )
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
 
 	ecp_to_ui_msg.hdr.type=0;
-
+#if !defined(USE_MESSIP_SRR)
 	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+#else
+	int status;
+	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
+					&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0) {
+#endif
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed\n");
 		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
@@ -171,8 +195,13 @@ bool ecp_mp_task::show_message (const char* message)
 	strcpy(ecp_to_ui_msg.string, message);
 
 	ecp_to_ui_msg.hdr.type=0;
-
+#if !defined(USE_MESSIP_SRR)
 	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+#else
+	int status;
+	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
+					&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0) {
+#endif
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed\n");
 		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");

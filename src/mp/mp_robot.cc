@@ -30,6 +30,7 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task 
 	network_ecp_attach_point = mp_object.config.return_attach_point_name
 	                           (configurator::CONFIG_SERVER, "ecp_attach_point", _section_name);
 
+#if !defined(USE_MESSIP_SRR)
 	char tmp_string[100];
 	sprintf(tmp_string, "/dev/name/global/%s", network_ecp_attach_point);
 
@@ -38,12 +39,9 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task 
 		sr_ecp_msg.message("ECP already exists");
 		throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
+#endif
 
 	ECP_pid = mp_object.config.process_spawn(_section_name);
-
-	new_pulse = false;
-	robot_new_pulse_checked = false;
-	communicate = true; // domyslnie robot jest aktywny
 
 	if ( ECP_pid < 0) {
 		uint64_t e = errno; // kod bledu
@@ -52,8 +50,12 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task 
 		throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
 
+	new_pulse = false;
+	robot_new_pulse_checked = false;
+	communicate = true; // domyslnie robot jest aktywny
+
 	mp_receive_pulse_struct_t input;
-	
+
 	// oczekiwanie na zgloszenie procesu ECP
 	// ret = mp_object.mp_wait_for_name_open_ecp_pulse(&input, nd, ECP_pid);
 	mp_object.mp_wait_for_name_open_ecp_pulse(&input);
@@ -64,7 +66,11 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task 
 	short tmp = 0;
 	// kilka sekund  (~1) na otworzenie urzadzenia
 	// 	printf("aa: %s\n",	_config->return_attach_point_name	(CONFIG_SERVER, "ecp_attach_point", _section_name));
-	while ((ECP_fd = name_open(network_ecp_attach_point, NAME_FLAG_ATTACH_GLOBAL))  < 0)
+#if !defined(USE_MESSIP_SRR)
+	while ((ECP_fd = name_open(network_ecp_attach_point, NAME_FLAG_ATTACH_GLOBAL)) < 0)
+#else
+	while ((ECP_fd = messip_channel_connect(NULL, network_ecp_attach_point, MESSIP_NOTIMEOUT)) == NULL)
+#endif
 		if ((tmp++) < CONNECT_RETRY)
 			usleep(1000 * CONNECT_DELAY);
 		else {
@@ -80,17 +86,37 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task 
 // -------------------------------------------------------------------
 
 
+mp_robot::~mp_robot() {
+#if !defined(USE_MESSIP_SRR)
+	if (ECP_fd > 0) {
+		name_close(ECP_fd);
+	}
+#else /* USE_MESSIP_SRR */
+	if (ECP_fd) {
+		messip_channel_disconnect(ECP_fd, MESSIP_NOTIMEOUT);
+	}
+#endif /* USE_MESSIP_SRR */
+}
+
 // ------------------------------------------------------------------------
 void mp_robot::start_ecp ( void ) {
 
 	mp_command.command = START_TASK;
 	mp_command.hdr.type = 0;
+
+#if !defined(USE_MESSIP_SRR)
 	if ( MsgSend ( ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply_package, sizeof(ecp_reply_package)) == -1) {// by Y&W
+#else
+	int status;
+	if(messip_send(ECP_fd, 0, 0, &mp_command, sizeof(mp_command),
+				&status, &ecp_reply_package, sizeof(ecp_reply_package), MESSIP_NOTIMEOUT) < 0) {
+#endif
 		uint64_t e = errno;
 		perror("Send to ECP failed\n");
 		sr_ecp_msg.message(SYSTEM_ERROR, e, "MP: Send to ECP failed");
 		throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
+
 	// by Y - ECP_ACKNOWLEDGE zamienione na TASK_TERMINATED
 	// w celu uproszczenia oprogramowania zadan wielorobotowych
 	if (ecp_reply_package.reply != TASK_TERMINATED ) {
@@ -106,7 +132,14 @@ void mp_robot::start_ecp ( void ) {
 void mp_robot::execute_motion ( void ) { // zlecenie wykonania ruchu
 
 	mp_command.hdr.type = 0;
+
+#if !defined(USE_MESSIP_SRR)
 	if ( MsgSend ( ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply_package, sizeof(ecp_reply_package)) == -1) {// by Y&W
+#else
+	int status;
+	if(messip_send(ECP_fd, 0, 0, &mp_command, sizeof(mp_command),
+			&status, &ecp_reply_package, sizeof(ecp_reply_package), MESSIP_NOTIMEOUT) < 0) {
+#endif
 		// Blad komunikacji miedzyprocesowej - wyjatek
 		uint64_t e = errno;
 		perror("Send to ECP failed\n");
@@ -130,7 +163,13 @@ void mp_robot::terminate_ecp ( void ) { // zlecenie STOP zakonczenia ruchu
 	mp_command.command = STOP;
 	mp_command.hdr.type = 0;
 
+#if !defined(USE_MESSIP_SRR)
 	if ( MsgSend ( ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply_package, sizeof(ecp_reply_package)) == -1) {// by Y&W
+#else
+	int status;
+	if(messip_send(ECP_fd, 0, 0, &mp_command, sizeof(mp_command),
+			&status, &ecp_reply_package, sizeof(ecp_reply_package), MESSIP_NOTIMEOUT) < 0) {
+#endif
 		// Blad komunikacji miedzyprocesowej - wyjatek
 		uint64_t e = errno;
 		perror("Send to ECP failed ?\n");
@@ -171,7 +210,7 @@ void mp_robot::get_reply(void) {
 
 	ecp_td.ecp_reply = ecp_reply_package.reply;
 	ecp_td.reply_type = ecp_reply_package.ecp_reply.reply_package.reply_type;
-	
+
 	// TODO: czy warto wprowadzac klase potomna?
 	if (robot_name == ROBOT_SPEECHRECOGNITION) {
 		strncpy(ecp_td.commandRecognized, ecp_reply_package.commandRecognized, SPEECH_RECOGNITION_TEXT_LEN);

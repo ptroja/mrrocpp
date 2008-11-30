@@ -15,12 +15,11 @@ class ecp_buffer: public ecp_command_buffer, public edp_reply_buffer
 {
 public:
     sr_ecp* sr_ecp_msg;     // by Y - Wskaznik na obiekt do komunikacji z SR
-#if !defined(USE_MESSIP_SRR)
 
+#if !defined(USE_MESSIP_SRR)
     void send  (int);
     void query (int);
 #else
-
     void send  (messip_channel_t *);
     void query (messip_channel_t *);
 #endif
@@ -45,7 +44,7 @@ private:
     // by Y - o dziwo tego nie bylo !!!
     // Kopiowanie bufora przesylanego z EDP do bufora wysylanego do MP
     void copy_edp_to_mp_buffer (r_buffer& mp_buffer);
-    
+
     // zainicjowanie komunikacji
     void connect_to_edp (configurator &config, bool spawn_edp);
 
@@ -59,7 +58,7 @@ protected:
     // odpowiedz EDP na wyslany rozkaz, ktora moze byc wykorzystana
     // przez generator.next_step()
     // Funkcja generator.next_step() przygotowuje rozkazy dla EDP wypelniajac
-    
+
     ecp_buffer EDP_command_and_reply_buffer;
 
 public:

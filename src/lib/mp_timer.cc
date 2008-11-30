@@ -5,7 +5,7 @@
 #include <sys/syspage.h>
 #include <sys/neutrino.h>
 #else
-uint64_t ClockCycles(void);
+#include "common/typedefs.h"
 #endif /* __QNXNTO__ */
 
 #include "lib/mp_timer.h"
@@ -68,7 +68,7 @@ mp_timer_status_enum mp_timer::timer_stop(uint64_t *t)
 		last_status = TIMER_NOT_INITIALIZED;
 		return TIMER_NOT_INITIALIZED;
 	}
-		
+
 } // timer_stop
 
 
@@ -84,7 +84,7 @@ mp_timer_status_enum mp_timer::get_time(float *sec)
 		last_status = TIMER_RUNNING_OR_NOT_STARTED;
 		return TIMER_RUNNING_OR_NOT_STARTED;
 	}
-	
+
 } // get_time
 
 

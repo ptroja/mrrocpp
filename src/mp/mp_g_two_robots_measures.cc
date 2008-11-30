@@ -130,7 +130,13 @@ void mp_two_robots_measures_generator::save_measures_to_file (void)
 	// Wzorzec nazwy pliku
 	strcpy(ecp_to_ui_msg.string,"*.*");
 	// Wyslanie polecenia pokazania okna wyboru pliku.
-	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0)
+#if !defined(USE_MESSIP_SRR)
+	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(ECP_message), &ui_to_ecp_rep, sizeof(UI_reply)) < 0)
+#else
+	int status;
+	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
+					&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0)
+#endif
 	{
 		sr_ecp_msg.message (SYSTEM_ERROR, errno, "Send to UI failed");
 		throw mp_generator::MP_error(SYSTEM_ERROR, (uint64_t) 0);
@@ -148,7 +154,7 @@ void mp_two_robots_measures_generator::save_measures_to_file (void)
 		sr_ecp_msg.message (NON_FATAL_ERROR, NON_EXISTENT_FILE);
 		return;
 	}
-	for(int m=0; m<measures.size(); m++)
+	for(unsigned int m=0; m<measures.size(); m++)
 	{
 		// Pobranie danego pomiaru.
 		two_robots_measure trm = (two_robots_measure)measures[m];

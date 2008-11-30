@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 //                            ecp_mp_sensor.cc
 //            Effector Control Process (ECP) i MP - methods
-// 
+//
 // Wlasciwy konstruktor czujnika wirtualnego.
 // -------------------------------------------------------------------------
 
@@ -51,12 +51,12 @@ ecp_mp_sensor::ecp_mp_sensor(SENSOR_ENUM _sensor_name, const char* _section_name
 // 		cout<<tmp<<endl;
 		if((tmp++)<CONNECT_RETRY)
 			usleep(1000*CONNECT_DELAY);
-		else				
-			throw sensor_error(SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);						
+		else
+			throw sensor_error(SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
 #else /* USE_MESSIP_SRR */
 
-	VSP_NAME = _ecp_mp_object.config->return_attach_point_name(configurator::CONFIG_SERVER, "resourceman_attach_point", _section_name);
+	VSP_NAME = _ecp_mp_object.config.return_attach_point_name(configurator::CONFIG_SERVER, "resourceman_attach_point", _section_name);
 
  	// cout<<"VSP_NAME = "<<VSP_NAME<<endl;
 
@@ -70,7 +70,7 @@ ecp_mp_sensor::ecp_mp_sensor(SENSOR_ENUM _sensor_name, const char* _section_name
 	}
 
 	// Stworzenie nowego procesu.
-	if ((pid = _ecp_mp_object.config->process_spawn(_section_name)) == -1)
+	if ((pid = _ecp_mp_object.config.process_spawn(_section_name)) == -1)
 		throw sensor_error(SYSTEM_ERROR, CANNOT_SPAWN_VSP);
 
 	short tmp = 0;
@@ -82,7 +82,7 @@ ecp_mp_sensor::ecp_mp_sensor(SENSOR_ENUM _sensor_name, const char* _section_name
 			usleep(1000*CONNECT_DELAY);
 		else {
 			fprintf(stderr, "ecp_mp_sensor: messip_channel_connect(%s) failed\n", VSP_NAME);
-			throw sensor_error(SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);						
+			throw sensor_error(SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 		}
 	}// end: while
 #endif /* !USE_MESSIP_SRR */
@@ -91,14 +91,14 @@ void ecp_mp_sensor::terminate() {
 	to_vsp.i_code=VSP_TERMINATE;
 #if !defined(USE_MESSIP_SRR)
 	if(write(sd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)
-		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);   
+		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
 	else
 		close(sd);
 #else /* USE_MESSIP_SRR */
 	int status;
 	if(messip_send(ch, 0, 0, &to_vsp, sizeof(ECP_VSP_MSG),
 				&status, &from_vsp, sizeof(VSP_ECP_MSG), MESSIP_NOTIMEOUT) < 0)
-		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);   
+		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
 	else
 		messip_channel_disconnect(ch, MESSIP_NOTIMEOUT);
 #endif /* !USE_MESSIP_SRR */
@@ -113,7 +113,7 @@ void ecp_mp_sensor::initiate_reading() {
 	if(messip_send(ch, 0, 0, &to_vsp, sizeof(ECP_VSP_MSG),
 				&status, &from_vsp, sizeof(VSP_ECP_MSG), MESSIP_NOTIMEOUT) < 0)
 #endif /* !USE_MESSIP_SRR */
-		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);   
+		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
 }
 
 void ecp_mp_sensor::configure_sensor() {
@@ -125,7 +125,7 @@ void ecp_mp_sensor::configure_sensor() {
 	if(messip_send(ch, 0, 0, &to_vsp, sizeof(ECP_VSP_MSG),
 				&status, &from_vsp, sizeof(VSP_ECP_MSG), MESSIP_NOTIMEOUT) < 0)
 #endif /* !USE_MESSIP_SRR */
-		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);   
+		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
 }
 
 
@@ -143,7 +143,7 @@ void ecp_mp_sensor::get_reading(SENSOR_IMAGE* sensor_image) {
 	if(messip_send(ch, 0, 0, &to_vsp, sizeof(ECP_VSP_MSG),
 				&status, &from_vsp, sizeof(VSP_ECP_MSG), MESSIP_NOTIMEOUT) < 0)
 #endif /* !USE_MESSIP_SRR */
-		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);   
+		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
 		vsp_report_aux = from_vsp.vsp_report;
 	// jesli odczyt sie powodl, przepisanie pol obrazu z bufora komunikacyjnego do image;
 	if(from_vsp.vsp_report == VSP_REPLY_OK) {

@@ -160,8 +160,6 @@ MpPanel::MpPanel(ui_config_entry &entry) {
 		top += ecps.size();
 
 		gtk_container_child_set(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(object), "bottom-attach", bottom, "top-attach", top, NULL);
-
-		printf("widget_name = %s\n", *widget_name);
 	}
 
 	const char *vseparators[] = {
@@ -180,8 +178,6 @@ MpPanel::MpPanel(ui_config_entry &entry) {
 		top = 0;
 
 		gtk_container_child_set(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(object), "bottom-attach", bottom, "top-attach", top, NULL);
-
-		printf("widget_name = %s\n", *widget_name);
 	}
 
 }

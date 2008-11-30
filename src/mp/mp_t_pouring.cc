@@ -224,6 +224,8 @@ bool mp_task_pouring::put_back(void)
 	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT)) {
 		return true;
 	}
+	
+	return false;
 }
 
 bool mp_task_pouring::depart(void)

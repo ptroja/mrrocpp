@@ -13,7 +13,7 @@ Transition::Transition(char *cond, char *targetID, configurator &_config)
 }
 
 Transition::Transition(const Transition &transition)
-{	
+{
 	int size = strlen(transition.targetID) + 1;
 	this->targetID = new char[size];
 	strcpy(this->targetID, transition.targetID);
@@ -32,7 +32,7 @@ bool Transition::getConditionResult()
 	return result;
 }
 
-bool Transition::setConditionResult(bool result)
+void Transition::setConditionResult(bool result)
 {
 	condition->setResult(result);
 }
@@ -54,7 +54,7 @@ char * Transition::getConditionDescription() const
 {
 	return condition->getCondDesc();
 }
-		
+
 void Transition::showContent()
 {
 	printf(">> Condition: #%s#\n>> Target state: #%s#\n", condition->getCondDesc(), targetID);

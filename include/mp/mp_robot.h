@@ -46,8 +46,13 @@ public:
     uint32_t nd;
     pid_t ECP_pid;
 
-    int32_t scoid; // server connection id
+#if !defined(USE_MESSIP_SRR)
     int ECP_fd;	// deskryptor do komunikacji z ECP
+#else
+    messip_channel_t *ECP_fd;
+#endif
+
+    int32_t scoid; // server connection id
     char pulse_code; // kod pulsu ktory zostal wyslany przez ECP w celu zgloszenia gotowosci do komunikacji (wartosci w impconst.h)
     bool new_pulse; // okresla czy jest nowy puls
     bool robot_new_pulse_checked; // okresla czy czy nowy puls zostal juz uwzgledniony w generatorze
@@ -56,6 +61,7 @@ public:
     // - do uzytku uzytkownika (generatora)
 
     mp_robot (ROBOT_ENUM l_robot_name, const char* _section_name, mp_task &mp_object_l);
+    ~mp_robot();
 
     class MP_error
     {  // Klasa obslugi bledow robotow

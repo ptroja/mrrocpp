@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sun Nov 30 17:07:44 2008 -->
+<!--Generated with glade3 3.4.5 on Sun Nov 30 17:12:12 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="width_request">600</property>
@@ -229,7 +229,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="headers_clickable">True</property>
-                        <signal name="button_press_event" handler="my_popup_handler"/>
                         <signal name="row_activated" handler="on_process_treeview_row_activated"/>
                       </widget>
                     </child>
