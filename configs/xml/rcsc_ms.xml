@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config xmlns:xi="http://www.w3.org/2003/XInclude">
 
-	<xi:include href="common.xml" xpointer="xpointer(/config/*)"/>
+	<xi:include href="common_ms.xml" xpointer="xpointer(/config/*)"/>
 
 	<mp name="rcsc" active="true">
 		<program_name>mp_rcsc</program_name>
@@ -102,23 +102,36 @@
 				<node_name>qnx632</node_name>
 			</ecp>
 
-			<edp name="irp6_mechatronikaasdsad" active="true" ui_def="mech_xyz_axis.xml">
+			<edp name="edp_irp6m_axis_xyz" active="true" ui_def="mech_xyz_axis.xml">
 
-				<program_name>heyChangeMe</program_name>
+				<program_name>edp_irp6m_axis_xyz</program_name>
 				<node_name>qnx632</node_name>
 
-				<test_mode>1</test_mode>
+			</edp>
+			<edp name="edp_irp6m_axis_ts" active="true" ui_def="mech_ts_axis.xml">
+
+				<program_name>edp_irp6m_axis_ts</program_name>
 				<node_name>qnx632</node_name>
-				<force_tryb>2</force_tryb>
-				<force_0>1</force_0>
-				<force_1>1</force_1>
-				<force_2>1</force_2>
-				<force_3>1</force_3>
-				<force_4>1</force_4>
-				<force_5>1</force_5>
-				<servo_tryb>1</servo_tryb>
-				<preset_position_0>2.166128 14.341370 -3.702367 -5.034402 35.661789 343.950988
-					0.000000</preset_position_0>
+			</edp>
+			<edp name="edp_irp6m_euler_xyz" active="true" ui_def="mech_xyz_euler.xml">
+
+				<program_name>edp_irp6m_euler_xyz</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6m_inc" active="true" ui_def="mech_inc.xml">
+
+				<program_name>edp_irp6m_inc</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6m_int" active="true" ui_def="mech_int.xml">
+
+				<program_name>edp_irp6m_int</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6m_servo" active="true" ui_def="mech_servo_algorithm.xml">
+
+				<program_name>edp_irp6m_servo</program_name>
+				<node_name>qnx632</node_name>
 			</edp>
 
 		</effector>

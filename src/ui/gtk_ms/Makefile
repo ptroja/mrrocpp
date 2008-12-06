@@ -1,4 +1,4 @@
-all: ui ui.xml mp.xml festival.xml mech_xyz_axis.xml mp.so festival.so mech_xyz_axis.so 
+all: ui ui.xml mp.xml festival.xml mech_xyz_axis.xml mech_inc.xml mech_int.xml mech_xyz_euler.xml mech_ts_axis.xml mech_servo_algorithm.xml mp.so festival.so mech_xyz_axis.so mech_inc.so mech_int.so mech_xyz_euler.so mech_ts_axis.so mech_servo_algorithm.so
 
 PACKAGES=gtk+-2.0 libxml-2.0 gtkmm-2.4
 CFLAGS=-Wall -g -O0 `pkg-config --cflags ${PACKAGES}`
@@ -15,6 +15,21 @@ festival.so: festival_uimodule.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $<
 
 mech_xyz_axis.so: mech_xyz_axis_uimodule.o
+	$(CXX) ${LDFLAGS} -shared -o $@ $<
+
+mech_inc.so: mech_inc_uimodule.o
+	$(CXX) ${LDFLAGS} -shared -o $@ $<
+
+mech_int.so: mech_int_uimodule.o
+	$(CXX) ${LDFLAGS} -shared -o $@ $<
+
+mech_xyz_euler.so: mech_xyz_euler_uimodule.o
+	$(CXX) ${LDFLAGS} -shared -o $@ $<
+
+mech_ts_axis.so: mech_ts_axis_uimodule.o
+	$(CXX) ${LDFLAGS} -shared -o $@ $<
+
+mech_servo_algorithm.so: mech_servo_algorithm_uimodule.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $<
 
 %.xml: %.glade

@@ -15,6 +15,8 @@
 #include "configurator.h"
 #include "ui_model.h"
 
+const char *mech[] = {"axis_xyz","axis_ts", "euler_xyz", "inc", "int", "servo"};
+
 class configurator *config;
 
 xmlXPathObjectPtr
@@ -160,67 +162,20 @@ void configurator::populate_tree_model_with_effectors()
 			ui_config_entry & ecp_entry = ui_model::instance().add_ui_config_entry(parent, ui_config_entry::ECP, program_name, node_name, ui_def);
 
 			program_name = this->get_string("/config/effectors/effector[@name='%s']/edp/program_name", effector_name);
-			if (program_name) {
-
-				node_name = this->get_string("/config/effectors/effector[@name='%s']/edp/node_name", effector_name);
-		char *ui_def = NULL;
-			ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_mechatronika']/edp/@ui_def");
-			ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_mechatronika']/edp/ui_def");
-
+			if (program_name)
+			 {
+				for (int j=0; j<6; j++)
+				{
+				char *ui_def = NULL;
+				program_name = this->get_string("/config/effectors/effector[@name='irp6_mechatronika']/edp[@name='edp_irp6m_%s']/program_name", mech[j]);
+				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_mechatronika']/edp[@name='edp_irp6m_%s']/@ui_def", mech[j]);
+				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_mechatronika']/edp[@name='edp_irp6m_%s']/ui_def", mech[j]);
 				ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EDP, program_name, node_name, ui_def);
+				}
 			}
 		}
 		xmlXPathFreeObject(active_effectors);
 	}
-
-
-/*
-	xmlXPathObjectPtr active_edps = getnodeset(this->doc, (xmlChar *) "/config/effectors/effector/edp[@active='true']");
-
-	if (active_edps) {
-
-		ui_config_entry & parent = ui_model::instance().add_ui_config_entry(ui_model::instance().getRootNode(), ui_config_entry::EFFECTORS_PARENT, "Drivers");
-
-		xmlNodeSetPtr nodeset = active_edps->nodesetval;
-		for (int i = 0; i < nodeset->nodeNr; i++) {
-			// get name attribute of the sensors
-			xmlChar *edp_name = xmlGetProp(nodeset->nodeTab[i], (xmlChar *) "name");
-			if (!edp_name)
-				continue;
-
-			char *program_name = this->get_string("/config/effectors/effector/edp[@name='%s']/program_name", edp_name);
-			if (!program_name) {
-				g_error("missing program name for %s process", (char *) edp_name);
-				continue;
-			}
-
-			char *node_name = this->get_string("/config/effectors/effector/edp[@name='%s']/node_name", edp_name);
-
-			if (!node_name) {
-				g_error("missing node name for %s process", (char *) edp_name);
-				continue;
-			}
-
-			char *ui_def = NULL;
-
-			ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector/edp[@name='%s']/@ui_def", edp_name);
-			ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector/edp[@name='%s']/ui_def", edp_name);
-
-			ui_config_entry & ecp_entry = ui_model::instance().add_ui_config_entry(parent, ui_config_entry::EDP, program_name, node_name, ui_def);
-
-			program_name = this->get_string("/config/effectors/effector/edp[@name='%s']/edp/program_name", effector_name);
-			if (program_name) {
-
-				node_name = this->get_string("/config/effectors/effector[@name='%s']/edp/node_name", effector_name);
-
-				ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EDP, program_name, node_name);
-			}
-
-		}
-		xmlXPathFreeObject(active_effectors);
-	}
-
-*/
 }
 
 

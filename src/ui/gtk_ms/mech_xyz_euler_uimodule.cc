@@ -6,14 +6,14 @@
 #include "ui_config_entry.h"
 #include "ui_model.h"
 
-
 extern "C" { 	
 
 	void ui_module_init(ui_config_entry &entry) {
-		printf("UI dla irp6 mechatronika - xyz axis\n");
+		printf("UI dla irp6 mechatronika - xyz euler\n");
 	}
 
 }
+
 
 
 
