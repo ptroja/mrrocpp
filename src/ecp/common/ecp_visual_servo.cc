@@ -32,11 +32,11 @@ void ecp_visual_servo::retrieve_parameters(){
 
 
 bool ecp_visual_servo::next_step(void){
-
-	next_step_without_constraints();
-	entertain_constraints();
-
-	return true;
+	if (next_step_without_constraints()) {
+		entertain_constraints();
+		return true;
+	}//: if
+	return false;
 }
 
 

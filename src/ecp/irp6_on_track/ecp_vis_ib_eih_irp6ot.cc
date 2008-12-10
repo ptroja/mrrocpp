@@ -67,7 +67,7 @@ ecp_vis_ib_eih_irp6ot::~ecp_vis_ib_eih_irp6ot(){
 
 
 
-void ecp_vis_ib_eih_irp6ot::next_step_without_constraints(){
+bool ecp_vis_ib_eih_irp6ot::next_step_without_constraints(){
 
 	 the_robot->EDP_data.set_type = ARM_DV;
 	the_robot->EDP_data.instruction_type = SET_GET;

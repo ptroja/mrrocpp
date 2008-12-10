@@ -87,7 +87,7 @@ public:
 
 	virtual void initalize_switching_parameters();
 	virtual bool first_step(void);
-	virtual void next_step_without_constraints();
+	virtual bool next_step_without_constraints();
 	//virtual void entertain_constraints();
 	//virtual bool next_step(void);
 

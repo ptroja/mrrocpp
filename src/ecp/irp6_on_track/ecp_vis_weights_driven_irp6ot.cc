@@ -80,7 +80,7 @@ void ecp_vis_weights_driven_irp6ot::initalize_switching_parameters(){
 
 }
 
-void ecp_vis_weights_driven_irp6ot::next_step_without_constraints(){
+bool ecp_vis_weights_driven_irp6ot::next_step_without_constraints(){
 
 	//ecp_vis_pb_eol_sac_irp6ot pbeolsac(*_ecp_taskw, 4);
 	//ecp_vis_pb_eol_sac_irp6ot pbeolsac();

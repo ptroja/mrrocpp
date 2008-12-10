@@ -261,7 +261,7 @@ public:
 	/*!
 	* Method calcualting ^{0}r_{E'}
 	*/
-	virtual void next_step_without_constraints() =0;
+	virtual bool next_step_without_constraints() =0;
 	/*!
 	* Method aplying contrains -- AV()
 	*/
