@@ -21,11 +21,6 @@ void ecp_task_ttt::task_initialization(void)
 	
     sg = new ecp_smooth_generator (*this, true, true);
 
-
-	char path[666];
-	sprintf(path, "%s%s", mrrocpp_network_path, config.return_string_value("trajektoria"));
-    sg->load_file_with_path(path);
-
     sr_ecp_msg->message("ECP loaded");
 };
 
@@ -35,11 +30,33 @@ void ecp_task_ttt::main_task_algorithm(void)
     sr_ecp_msg->message("ECP Kolko-i-krzyzyk  - wcisnij start");
     ecp_wait_for_start();
 
-    for(;;)
-    {
-        sg->Move();
-        ecp_wait_for_stop();
-    }
+	char path[666];
+	int option = choose_option("1 - Euler, 2 - Joint",2);
+
+	int pathLoaded = 0;
+	while(!pathLoaded)
+	{
+		switch(option)
+		{	
+			case OPTION_ONE:
+				sprintf(path, "%s%s", mrrocpp_network_path, config.return_string_value("trajektoria_euler"));
+				pathLoaded = 1;
+			    sg->load_file_with_path(path);
+				sprintf(path,"%s loaded",config.return_string_value("trajektoria"));
+			    sr_ecp_msg->message("ECP Kolko-i-krzyzyk  - wcisnij start");
+				break;
+			case OPTION_TWO:
+				sprintf(path, "%s%s", mrrocpp_network_path, config.return_string_value("trajektoria_joint"));
+				pathLoaded = 1;
+			    sg->load_file_with_path(path);				
+				sprintf(path,"%s loaded",config.return_string_value("trajektoria2"));
+				break;
+		}
+	}
+
+    sg->Move();
+    ecp_termination_notice();
+    ecp_wait_for_stop();
 };
 
 ecp_task* return_created_ecp_task (configurator &_config)
