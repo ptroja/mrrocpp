@@ -18,9 +18,6 @@ ecp_task_ellipse::ecp_task_ellipse(configurator &_config) : ecp_task(_config) {}
 void ecp_task_ellipse::task_initialization(void)
 {
 	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
-	
-    sg = new ecp_smooth_generator (*this, true, true);
-
     sr_ecp_msg->message("ECP loaded");
 };
 
@@ -32,18 +29,26 @@ void ecp_task_ellipse::main_task_algorithm(void)
 
 	//Polosie elipsy
 	double a,b;
-
-	a = read_axis((char*)"a",MAX_MAJOR);	
-	b = read_axis((char*)"b",MAX_MINOR);
-    sg->Move();
+	
+	a = read_double((char*)"a",0,MAX_MAJOR);	
+	b = read_double((char*)"b",0,MAX_MINOR);
+    eg = new ecp_ellipse_generator(*this,a,b,100);	
+    eg->Move();
     ecp_termination_notice();
     ecp_wait_for_stop();
 };
 
-double ecp_task_ellipse::read_axis(char* name,double limit)
+double ecp_task_ellipse::read_double(char* name,double min,double max)
 {
 	double value;
 	int cnt = 0;
+
+	if(min > max)
+	{
+		min += max;
+		max = min - max;
+		min = min - max;
+	}
 	
 	//bufor pomocniczy
 	char tmp[666];
@@ -52,15 +57,15 @@ double ecp_task_ellipse::read_axis(char* name,double limit)
 	{
 		if(cnt > 0)
 		{
-			sprintf(tmp,"Nieprawidlowa wartosc\nPodaj wartosc polosi %s [0;%.3f]",name,limit);
+			sprintf(tmp,"BLAD! Podaj '%s' [%.3f;%.3f]",name,min,max);
 		}
 		else
 		{
-			sprintf(tmp,"Podaj wartosc polosi %s [0;%.3f]",name,limit);
+			sprintf(tmp,"Podaj '%s' [%.3f;%.3f]",name,min,max);
 		}
 		
 		value = input_double(tmp);
-		if(value >= 0 && value <= limit)
+		if(value >= min && value <= max)
 		{
 			return value;
 		}

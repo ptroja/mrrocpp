@@ -31,7 +31,8 @@ BINARIES =		ecp_pr \
 				ecp_spots_recognition\
 				ecp_pw\
 				ecp_pw_scena \
-				ecp_ttt
+				ecp_ttt \
+				ecp_ellipse
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -51,6 +52,11 @@ ecp_pw_scena: ecp_g_pw_scena.o ecp_t_pw_scena_irp6ot.o  ecp_generator_t.o ecp_g_
 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_ttt: ecp_t_ttt.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o \
+                ecp_operator_reaction_condition.o ecp_g_sleep.o $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
+
+#-----------------------------------------------------------------------------------------------------------------------#
+ecp_ellipse: ecp_t_ellipse.o ecp_g_ellipse.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o \
                 ecp_operator_reaction_condition.o ecp_g_sleep.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
