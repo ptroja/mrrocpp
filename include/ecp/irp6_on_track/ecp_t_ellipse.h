@@ -2,7 +2,7 @@
 #define _ECP_T_ELLIPSE_H
 
 #include "ecp_mp/ecp_mp_task.h"
-#include "ecp/common/ecp_g_smooth.h"
+#include "ecp/irp6_on_track/ecp_g_ellipse.h"
 
 //limity na wartosc polosi w metrach
 #define MAX_MAJOR 0.2
@@ -16,16 +16,17 @@ class ecp_task_ellipse: public ecp_task
 {
 protected:
 	//Generator ruchu
-	ecp_smooth_generator* sg;
+	ecp_ellipse_generator* eg;
 	
 	/**
-	 * Pobiera od uzytkownika wartosc polosi
-	 * @param name nazwa polosi
-	 * @param limit maksymalna wartosc polosi
-	 * @return wartosc polosi
+	 * Pobiera od uzytkownika wartosc typu double
+	 * @param name nazwa parametru
+	 * @param min minimalna wartosc parametru
+	 * @param max maksymalna wartosc parametru
+	 * @return pobrana wartosc parametru
 	 * @author jedrzej
 	 */
-	double read_axis(char * name,double limit);	
+	double read_double(char * name,double min,double max);	
 
 public:
 	/**

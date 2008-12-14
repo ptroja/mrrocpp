@@ -1,5 +1,5 @@
-#if !defined_ECP_G_ELLIPSE_H
-# define _ECP_G_ELLIPSE_H
+#if !defined_ecp_ellipse_generator_H
+# define _ecp_ellipse_generator_H
 
 #include <string.h>
 #include <math.h>
@@ -8,7 +8,7 @@
 
 #define PI 3.141592
 
-class ecp_g_ellipse : public ecp_generator
+class ecp_ellipse_generator : public ecp_generator
 {
 	private:
 		//wieksza polos
@@ -35,7 +35,7 @@ public:
 	 * @param max_steps ilosc krokow, w ktorych wykonany ma byc ruch po elipsie
 	 * @author jedrzej
 	 */
-    ecp_g_ellipse (ecp_task& _ecp_task,double major_axis,double minor_axis,int max_steps);
+    ecp_ellipse_generator (ecp_task& _ecp_task,double major_axis,double minor_axis,int max_steps);
     
     /**
      * Generuje pierwszy krok - ustawienie w pozycji (0,b)

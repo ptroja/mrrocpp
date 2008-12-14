@@ -97,6 +97,15 @@ ecp_ttt: \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
+ecp_ellipse: \
+		../irp6_on_track/ecp_local.o \
+		../common/ecp_t_ellipse.o \
+		../common/ecp_g_smooth.o \
+		../common/ecp_g_ellipse.o \		
+		../common/ecp_g_jarosz.o \
+		../common/ecp_operator_reaction_condition.o \
+		$(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
 
 ecp_pawel: \
 		../irp6_on_track/ecp_local.o \
