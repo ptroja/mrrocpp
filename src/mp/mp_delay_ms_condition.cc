@@ -6,7 +6,7 @@
 
 mp_delay_ms_condition::mp_delay_ms_condition(mp_task& _mp_task, int _ms_delay): mp_generator (_mp_task)
 {
-	local_timer = new mp_timer();
+	local_timer = new timer();
 	configure(_ms_delay);
 }
 

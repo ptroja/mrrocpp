@@ -8,9 +8,9 @@
 #include "common/typedefs.h"
 #endif /* __QNXNTO__ */
 
-#include "lib/mp_timer.h"
+#include "lib/timer.h"
 
-mp_timer::mp_timer(void)
+timer::timer(void)
 {
 	timer_initialized = 0;
 	timer_started = 0;
@@ -26,7 +26,7 @@ mp_timer::mp_timer(void)
 } // timer_init
 
 
-mp_timer_status_enum mp_timer::timer_start(uint64_t *t)
+timer_status_enum timer::timer_start(uint64_t *t)
 {
 	if (timer_initialized)
 	{
@@ -45,7 +45,7 @@ mp_timer_status_enum mp_timer::timer_start(uint64_t *t)
 } // timer_start
 
 
-mp_timer_status_enum mp_timer::timer_stop(uint64_t *t)
+timer_status_enum timer::timer_stop(uint64_t *t)
 {
 	if (timer_initialized)
 	{
@@ -72,7 +72,7 @@ mp_timer_status_enum mp_timer::timer_stop(uint64_t *t)
 } // timer_stop
 
 
-mp_timer_status_enum mp_timer::get_time(float *sec)
+timer_status_enum timer::get_time(float *sec)
 {
 	if (timer_stopped)
 	{
@@ -88,7 +88,7 @@ mp_timer_status_enum mp_timer::get_time(float *sec)
 } // get_time
 
 
-mp_timer_status_enum mp_timer::get_cycles(uint64_t *c, uint64_t *nc)
+timer_status_enum timer::get_cycles(uint64_t *c, uint64_t *nc)
 {
 	if (timer_stopped)
 	{
@@ -106,7 +106,7 @@ mp_timer_status_enum mp_timer::get_cycles(uint64_t *c, uint64_t *nc)
 
 } // get_cycles
 
-void mp_timer::print_last_status(void)
+void timer::print_last_status(void)
 {
 	switch(last_status)
 	{

@@ -17,7 +17,7 @@
 #include "ecp/common/ecp_robot.h"
 #include "ecp_mp/ecp_mp_task.h"
 #include "lib/configurator.h"
-#include "lib/mp_timer.h"
+#include "lib/timer.h"
 
 class mp_generator;
 class mp_robot;

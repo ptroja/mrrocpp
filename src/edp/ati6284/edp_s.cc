@@ -11,7 +11,7 @@
 #include "edp/common/edp_irp6s_postument_track.h"
 
 #include "lib/configurator.h"
-#include "lib/mp_timer.h"
+#include "lib/timer.h"
 #include "tSTC.h"
 #include "tESeries.h"
 #include "osiBus.h"
@@ -98,13 +98,13 @@ edp_ATI6284_force_sensor::edp_ATI6284_force_sensor(edp_irp6s_postument_track_eff
 	if (!(master.test_mode)) {
 		Total_Number_of_Samples=6;
 		index=1;
-		
+
 		   int size = 1 + strlen(master.mrrocpp_network_path) + strlen("data/ft6284.cal");
 		    char * path1 = new char[size];
 		    // Stworzenie sciezki do pliku.
 		    strcpy(path1, master.mrrocpp_network_path);
 		    sprintf(path1, "%sdata/ft6284.cal", master.mrrocpp_network_path);
-		   
+
 		calfilepath=(char*)path1;
 
 		for (int i=0; i<5; i++)
@@ -221,7 +221,7 @@ void edp_ATI6284_force_sensor::configure_sensor(void)
 		short int sensor_overload=0;
 		float force_torque[6];
 
-		mp_timer local_timer;
+		timer local_timer;
 		float sec;
 
 		overload=0;
@@ -355,7 +355,7 @@ void edp_ATI6284_force_sensor::configure_sensor(void)
 	} else {
 		is_sensor_configured=true;
 	}
-	
+
 	if (master.force_tryb == 2) {
 		//!< synchronize gravity transformation
 		// polozenie kisci bez narzedzia wzgledem bazy
@@ -367,7 +367,7 @@ void edp_ATI6284_force_sensor::configure_sensor(void)
 			// frame_tab sensor_rot = {{-1, 0, 0}, {0, -1, 0}, {0, 0, 1}, {0, 0, 0}};
 			// polozenie czujnika wzgledem  koncowki lancucha kinematycznego
 			// Homog_matrix sensor_frame = Homog_matrix(-1, 0, 0,	0, -1, 0,	0, 0, 1,	0, 0, 0.09);
-			
+
 			double tab[6];
 			Homog_matrix sensor_frame;
 			if (master.config.exists("sensor_in_wrist"))
@@ -376,14 +376,14 @@ void edp_ATI6284_force_sensor::configure_sensor(void)
 				for (int i=0; i<6; i++)
 					tab[i] = strtod( tmp, &tmp );
 				sensor_frame = Homog_matrix(Homog_matrix::MTR_XYZ_ANGLE_AXIS, tab[0], tab[1], tab[2], tab[3], tab[4], tab[5]);
-				
-			} 
-			else 
+
+			}
+			else
 				sensor_frame = Homog_matrix(-1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0.09);
 			// Homog_matrix sensor_frame = Homog_matrix(-1, 0, 0, 0,  0, -1, 0, 0,  0, 0, 1, 0.09);
 
 			double weight = master.config.return_double_value("weight");
-			
+
 			double point[3];
 			char *tmp = master.config.return_string_value("default_mass_center_in_wrist");
 			for (int i=0; i<3; i++)
@@ -405,7 +405,7 @@ void edp_ATI6284_force_sensor::configure_sensor(void)
 void edp_ATI6284_force_sensor::wait_for_event()
 {
 	if (!(master.test_mode)) {
-		mp_timer local_timer;
+		timer local_timer;
 		float sec;
 
 		if (!is_sensor_configured)
@@ -448,7 +448,7 @@ void edp_ATI6284_force_sensor::wait_for_event()
 
 void edp_ATI6284_force_sensor::initiate_reading(void)
 {
-	mp_timer local_timer;
+	timer local_timer;
 	float sec;
 
 	short int no_result =0; //brak wyniku
@@ -616,7 +616,7 @@ void edp_ATI6284_force_sensor::initiate_reading(void)
 			 cerr << endl << "Bias\t";
 			 for(int i=18;i<24;i++) cerr << ceil(output[i]) << "  ";
 			 cerr << endl << endl;
-			 cerr << frame; 
+			 cerr << frame;
 			 show=0;
 			 }
 			 */

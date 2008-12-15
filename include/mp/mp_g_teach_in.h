@@ -18,7 +18,7 @@
 #include "ecp_mp/ecp_mp_task.h"
 // Konfigurator.
 #include "lib/configurator.h"
-#include "lib/mp_timer.h"
+#include "lib/timer.h"
 
 
 

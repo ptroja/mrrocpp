@@ -8,7 +8,7 @@
 class mp_delay_ms_condition: public mp_generator
 {
 protected:
-	mp_timer* local_timer;
+	timer* local_timer;
 	float sec;
 	int ms_delay;
 

@@ -1,9 +1,9 @@
-#ifndef MP_TIMER_H
-#define MP_TIMER_H
+#ifndef TIMER_H
+#define TIMER_H
 
 #include <stdint.h>
 
-   enum mp_timer_status_enum {
+   enum timer_status_enum {
         TIMER_INITIALIZED,
         TIMER_STARTED,
         TIMER_STOPPED,
@@ -16,8 +16,8 @@
     };
 
 
-/**************************** mp_timer *****************************/
-class mp_timer {
+/**************************** timer *****************************/
+class timer {
 
 private:
 
@@ -27,19 +27,19 @@ private:
 	int timer_initialized;
 	int timer_started;
 	int timer_stopped;
-	mp_timer_status_enum last_status;
+	timer_status_enum last_status;
 
 public:
 
 	// konstruktor
-	mp_timer (void);
-	mp_timer_status_enum timer_start(uint64_t *t1);
-	mp_timer_status_enum timer_stop(uint64_t *t2);
-	mp_timer_status_enum get_time(float *sec);
-	mp_timer_status_enum get_cycles(uint64_t *c, uint64_t *nc);
+	timer (void);
+	timer_status_enum timer_start(uint64_t *t1);
+	timer_status_enum timer_stop(uint64_t *t2);
+	timer_status_enum get_time(float *sec);
+	timer_status_enum get_cycles(uint64_t *c, uint64_t *nc);
 	void print_last_status(void);
 
 }; // end: class edp_buffer
-/**************************** mp_timer *****************************/
+/**************************** timer *****************************/
 
 #endif
