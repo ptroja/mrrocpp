@@ -19,9 +19,14 @@ class mp_task: public ecp_mp_task
 		bool all_gen_sets_waiting_for_ECP_pulse;
 
 	public:
+#if !defined(USE_MESSIP_SRR)
 		static name_attach_t *mp_trigger_attach;
 		static name_attach_t *mp_attach;
-		
+#else
+		static messip_channel_t *mp_trigger_attach;
+		static messip_channel_t *mp_attach;
+#endif
+
 		/// mapa wszystkich robotow
 		static std::map <ROBOT_ENUM, mp_robot*> robot_m;
 
@@ -34,7 +39,7 @@ class mp_task: public ecp_mp_task
 		virtual ~mp_task(void);
 
 		void initialize_communication (void);
-		
+
 		// oczekiwanie na puls z ECP
 		enum MP_RECEIVE_PULSE_MODE {
 			WITH_TIMEOUT,

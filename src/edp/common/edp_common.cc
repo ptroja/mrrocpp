@@ -89,6 +89,7 @@ bool edp_effector::initialize_communication()
 	server_attach_point
 			= config.return_attach_point_name(configurator::CONFIG_SERVER, "resourceman_attach_point");
 
+#if !defined(USE_MESSIP_SRR)
 	// obsluga mechanizmu sygnalizacji zajetosci sprzetu
 	if (!(test_mode)) {
 		char* hardware_busy_attach_point;
@@ -102,6 +103,9 @@ bool edp_effector::initialize_communication()
 		// sprawdzenie czy nie jakis proces EDP nie zajmuje juz sprzetu
 		if (access(full_path_to_hardware_busy_attach_point, R_OK)== 0) {
 			fprintf( stderr, "EDP: hardware busy\n");
+
+			delete[] hardware_busy_attach_point;
+
 			return false;
 		}
 
@@ -111,11 +115,15 @@ bool edp_effector::initialize_communication()
 		if (tmp_attach == NULL) {
 			msg->message(SYSTEM_ERROR, errno, "EDP: hardware_busy_attach_point failed to attach");
 			fprintf( stderr, "hardware_busy_attach_point name_attach() failed: %s\n", strerror( errno ));
+
+			delete[] hardware_busy_attach_point;
+
 			return false;
 		}
 
 		delete[] hardware_busy_attach_point;
 	}
+#endif /* !defined(USE_MESSIP_SRR */
 
 	char full_path_to_server_attach_point[100];
 	sprintf(full_path_to_server_attach_point, "/dev/name/global/%s", server_attach_point);
@@ -132,10 +140,9 @@ bool edp_effector::initialize_communication()
 
 	attach =
 #if !defined(USE_MESSIP_SRR)
-			name_attach(NULL, server_attach_point, NAME_FLAG_ATTACH_GLOBAL);
+		name_attach(NULL, server_attach_point, NAME_FLAG_ATTACH_GLOBAL);
 #else /* USE_MESSIP_SRR */
-
-	messip_channel_create(NULL, server_attach_point, MESSIP_NOTIMEOUT, 0);
+		messip_channel_create(NULL, server_attach_point, MESSIP_NOTIMEOUT, 0);
 #endif /* USE_MESSIP_SRR */
 
 	delete [] server_attach_point;
