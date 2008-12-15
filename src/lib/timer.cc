@@ -1,40 +1,27 @@
-#include <inttypes.h>
 #include <stdio.h>
-
-#if defined(__QNXNTO__)
-#include <sys/syspage.h>
-#include <sys/neutrino.h>
-#else
-#include "common/typedefs.h"
-#endif /* __QNXNTO__ */
+#include <time.h>
 
 #include "lib/timer.h"
 
 timer::timer(void)
 {
-	timer_initialized = 0;
-	timer_started = 0;
-	timer_stopped = 0;
-#if defined(__QNXNTO__)
-	cycles = SYSPAGE_ENTRY(qtime)->cycles_per_sec;
-#endif /* __QNXNTO__ */
-	timer_initialized = 1;
-	timer_stopped = 0;
-	timer_started = 0;
+	timer_initialized = true;
+	timer_stopped = false;
+	timer_started = false;
 	last_status = TIMER_INITIALIZED;
 
 } // timer_init
 
 
-timer_status_enum timer::timer_start(uint64_t *t)
+timer_status_enum timer::timer_start(void)
 {
 	if (timer_initialized)
 	{
-		t1 = ClockCycles();
-		if (t!=NULL)
-			*t = t1;
-		timer_started = 1;
-		timer_stopped = 0;
+		if (clock_gettime(CLOCK_REALTIME, &t1) == -1) {
+			perror("clock_gettime()");
+		}
+		timer_started = true;
+		timer_stopped = false;
 		last_status = TIMER_STARTED;
 		return TIMER_STARTED;
 	} else {
@@ -45,18 +32,18 @@ timer_status_enum timer::timer_start(uint64_t *t)
 } // timer_start
 
 
-timer_status_enum timer::timer_stop(uint64_t *t)
+timer_status_enum timer::timer_stop(void)
 {
 	if (timer_initialized)
 	{
 		if (timer_started)
 		{
-			t2 = ClockCycles();
-			if (t!=NULL)
-				*t = t2;
-			// timer_started = 0; // by Y
-			timer_stopped = 1;
-			// timer_initialized = 0; // by Y
+			if (clock_gettime(CLOCK_REALTIME, &t2) == -1) {
+				perror("clock_gettime()");
+			}
+			// timer_started = false; // by Y
+			timer_stopped = true;
+			// timer_initialized = false; // by Y
 			last_status = TIMER_STOPPED;
 			return TIMER_STOPPED;
 		} else {
@@ -76,8 +63,9 @@ timer_status_enum timer::get_time(float *sec)
 {
 	if (timer_stopped)
 	{
-		ncycles = t2 - t1;
-		*sec = (float)ncycles / cycles;
+		float t = (t2.tv_sec + t2.tv_nsec) - (t1.tv_sec + t1.tv_nsec);
+		if (sec)
+			*sec = (t/1000000000);
 		last_status = TIME_RETRIVED;
 		return TIME_RETRIVED;
 	} else {
@@ -86,25 +74,6 @@ timer_status_enum timer::get_time(float *sec)
 	}
 
 } // get_time
-
-
-timer_status_enum timer::get_cycles(uint64_t *c, uint64_t *nc)
-{
-	if (timer_stopped)
-	{
-		if (c!=NULL)
-			*c = cycles;
-		if (nc!=NULL)
-			*nc = ncycles;
-		// timer_stopped = 0; // by Y
-		last_status = CYCLES_RETRIVED;
-		return CYCLES_RETRIVED;
-	} else {
-		last_status = TIMER_NOT_STOPPED;
-		return TIMER_NOT_STOPPED;
-	}
-
-} // get_cycles
 
 void timer::print_last_status(void)
 {

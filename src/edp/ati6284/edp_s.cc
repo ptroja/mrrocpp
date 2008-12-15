@@ -247,17 +247,17 @@ void edp_ATI6284_force_sensor::configure_sensor(void)
 				Samples_Acquired=0;
 				invalid_value=0;
 
-				local_timer.timer_start(NULL);
+				local_timer.timer_start();
 
 				do {
 					//!< odczekaj
 					InterruptWait(NULL, NULL);
-					local_timer.timer_stop(NULL);
+					local_timer.timer_stop();
 					local_timer.get_time(&sec);
 				} while (sec< START_TO_READ_TIME_INTERVAL);
 #if	 WITHOUT_INTERRUPT
 
-				local_timer.timer_start(NULL);
+				local_timer.timer_start();
 				do {
 					//!< this is the ISR
 					uStatus = theSTC->AI_Status_1.readRegister();
@@ -265,7 +265,7 @@ void edp_ATI6284_force_sensor::configure_sensor(void)
 						//!< If the FIFO is not empty, call the ISR.
 						Interrupt_Service_Routine();
 					}
-					local_timer.timer_stop(NULL);
+					local_timer.timer_stop();
 					local_timer.get_time(&sec);
 				} while ((Samples_Acquired<Total_Number_of_Samples)&&(sec<START_TO_READ_FAILURE));
 
@@ -287,11 +287,11 @@ void edp_ATI6284_force_sensor::configure_sensor(void)
 
 #if	 INTERRUPT
 
-			local_timer.timer_start(NULL);
+			local_timer.timer_start();
 			do
 			{
 				//!< odczekaj
-				local_timer.timer_stop(NULL);
+				local_timer.timer_stop();
 				local_timer.get_time(&sec);
 			}
 			while(sec<INTERRUPT_INTERVAL);
@@ -404,12 +404,12 @@ void edp_ATI6284_force_sensor::configure_sensor(void)
 
 void edp_ATI6284_force_sensor::wait_for_event()
 {
+	if (!is_sensor_configured)
+		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+
 	if (!(master.test_mode)) {
 		timer local_timer;
 		float sec;
-
-		if (!is_sensor_configured)
-			throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
 		//!< Clear ADC FIFO
 		Clear_FIFO();
@@ -428,13 +428,13 @@ void edp_ATI6284_force_sensor::wait_for_event()
 		Samples_Acquired=0;
 		invalid_value=0;
 
-		local_timer.timer_start(NULL);
+		local_timer.timer_start();
 
 		do {
 			//!< odczekaj
 			InterruptWait(NULL, NULL);
 
-			local_timer.timer_stop(NULL);
+			local_timer.timer_stop();
 			local_timer.get_time(&sec);
 		} while (sec< START_TO_READ_TIME_INTERVAL);
 	} else {
@@ -467,7 +467,7 @@ void edp_ATI6284_force_sensor::initiate_reading(void)
 	if (!(master.test_mode)) {
 #if	 WITHOUT_INTERRUPT
 
-		local_timer.timer_start(NULL);
+		local_timer.timer_start();
 
 		do {
 			//!< this is the ISR
@@ -477,7 +477,7 @@ void edp_ATI6284_force_sensor::initiate_reading(void)
 				Interrupt_Service_Routine();
 			}
 
-			local_timer.timer_stop(NULL);
+			local_timer.timer_stop();
 			local_timer.get_time(&sec);
 		} while ((Samples_Acquired<Total_Number_of_Samples)&&(sec<START_TO_READ_FAILURE));
 		if (sec>=START_TO_READ_FAILURE) {
@@ -491,11 +491,11 @@ void edp_ATI6284_force_sensor::initiate_reading(void)
 #endif
 
 #if	 INTERRUPT
-		local_timer.timer_start(NULL);
+		local_timer.timer_start();
 		do
 		{
 			//!< odczekaj
-			local_timer.timer_stop(NULL);
+			local_timer.timer_stop();
 			local_timer.get_time(&sec);
 		}
 		while(sec<INTERRUPT_INTERVAL);

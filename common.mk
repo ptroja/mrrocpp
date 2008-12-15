@@ -31,6 +31,7 @@ else
   LD=QCC ${VERSION}
   LDFLAGS=${DEBUG} -lm -lsocket -lcpp -lang-c++ $(RPATHV) -L$(QNX_TARGET)/mrlib/lib -lxml2 -liconv
   CPPFLAGS=-I$(HOMEDIR)/include -I$(QNX_TARGET)/mrlib/include
+  AR=ntox86-ar
 endif
 
 #DEBUG=-g
@@ -50,7 +51,6 @@ else
 REPOSITORY_PATH=$(QNX_TARGET)
 endif
 
-AR=ntox86-ar
 ARFLAGS=cru
 #AR=ntox86-ar-2.17
 
