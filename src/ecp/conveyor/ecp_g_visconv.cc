@@ -60,7 +60,7 @@ bool conveyor_incremental_move::next_step ( )
 	}*/
 
 	// Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
-	td.coordinate_delta[0] = 0.01;//move_length/td.internode_step_no;//((double)(((node_counter%2)*2)-1))/20;   // przyrost wspolrzednej X
+	td.coordinate_delta[0] = 0.0; //0.01//move_length/td.internode_step_no;//((double)(((node_counter%2)*2)-1))/20;   // przyrost wspolrzednej X
 	//td.coordinate_delta[1] = 0.0;   // przyrost wspolrzednej Y
 	//td.coordinate_delta[2] = 0.0;   // przyrost wspolrzednej Z
 

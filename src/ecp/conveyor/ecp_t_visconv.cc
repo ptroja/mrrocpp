@@ -30,19 +30,24 @@ void ecp_task_conveyor_lego_brick::main_task_algorithm(void)
 	ecp_wait_for_start();
 	//conveyor_incremental_move ysg(*this, 100);
 	ecp_smooth_generator gen(*this, true, true);
+	ecp_smooth_generator gen2(*this, true, true);
 	gen.flush_pose_list();
-
+	gen2.flush_pose_list();
+	
 	POSE_SPECIFICATION ps;
 	ps = JOINT;
 
 	double coordinates[MAX_SERVOS_NR];
+	double coordinates2[MAX_SERVOS_NR];
 	double vp[MAX_SERVOS_NR];
 	double vk[MAX_SERVOS_NR];
 	double v[MAX_SERVOS_NR];
 	double a[MAX_SERVOS_NR];
 
-	absolute_position-= 10;
-	coordinates[0] = absolute_position;
+	//absolute_position-= 0.25;
+	coordinates[0] = absolute_position-0.25;
+	coordinates2[0] = absolute_position;
+		
 	vp[0] = 0.0;
 	vk[0] = 0.0;
 	v[0] = 0.04;
@@ -53,9 +58,11 @@ void ecp_task_conveyor_lego_brick::main_task_algorithm(void)
 		v[i] = 0.0;
 		a[i] = 0.0;
 		coordinates[i] = 0.0;
+		coordinates2[i] = 0.0;
 	}
 
 	gen.create_pose_list_head(ps, vp, vk, v, a, coordinates);
+	gen2.create_pose_list_head(ps, vp, vk, v, a, coordinates2);
 	//ysg.sensor_m = sensor_m;
 	
 
@@ -65,6 +72,7 @@ void ecp_task_conveyor_lego_brick::main_task_algorithm(void)
 			sr_ecp_msg->message("Ruch");
 
 			gen.Move();
+			gen2.Move();
 		}
 
 		// Oczekiwanie na STOP
