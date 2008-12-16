@@ -102,6 +102,7 @@ bool ecp_vis_pb_eih_irp6ot::next_step_without_constraints(){
 		O_Tx_E.set_frame_tab(the_robot->EDP_data.current_arm_frame); // zarem
 		std::cout << "YYY " << O_Tx_E << std::endl;
 
+		O_Tx_E.get_xyz_angle_axis(O_r_E1);
 		O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
 		O_Tx_E=O_Tx_E*!G_Tx_G2;
 
@@ -124,7 +125,12 @@ bool ecp_vis_pb_eih_irp6ot::next_step_without_constraints(){
 				<<"------------------------------------------------------------------"
 				<< std::endl;
 	}
-
+	
+	if (node_counter==2)
+	{
+		O_Tx_E.set_frame_tab(the_robot->EDP_data.current_arm_frame); 
+		O_Tx_E.get_xyz_angle_axis(O_r_E1);
+	}
 	//EIH
 	C_Tx_G.set_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0],
 			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[1],
@@ -134,6 +140,16 @@ bool ecp_vis_pb_eih_irp6ot::next_step_without_constraints(){
 	G_Tx_S.set_xyz_rpy(x2g, 0, 0, 0, 0, 0);
 
 	O_Tx_E.set_frame_tab(the_robot->EDP_data.current_arm_frame);
+	
+	/**/
+	O_Tx_E.get_xyz_angle_axis(O_r_E[0]);	
+	for (int i=0; i<6; i++)
+		{
+			std::cout << O_r_E[0][i] << " ";
+		}
+	std::cout << std::endl;
+	/**/
+	
 	O_Tx_E=O_Tx_E*!G_Tx_G2;
 	O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
 

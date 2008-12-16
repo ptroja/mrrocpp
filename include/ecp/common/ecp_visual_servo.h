@@ -210,6 +210,10 @@ public:
 	 * 2giego stopnia
 	 */
 	double O_r_Ep_d2[3][6];
+	/*!
+		 * ^{0}r_{E1} -- end-effector pose with respect to the camera frame (AA) in the fisrt step.
+	*/
+	double O_r_E1[6];
 
 	/*!
 	 * Operations:
