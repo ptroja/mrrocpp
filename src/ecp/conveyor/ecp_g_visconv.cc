@@ -77,7 +77,7 @@ bool conveyor_incremental_move::next_step ( )
 
 
 	//next_pose = current_pose -0.005;
-	next_pose=begin_pose-0.1*(1-cos(3.14*0.01*step));
+	next_pose=begin_pose-0.1*(1-cos(3.14*0.02*step));
 	//next_pose=0.005*cos(3.14*0.01*step);
 	std::cout << "BGN: " << begin_pose << "ABS: " << next_pose << std::endl;
 	
@@ -85,7 +85,7 @@ bool conveyor_incremental_move::next_step ( )
 	//current_pose=next_pose;	
 	
 	step++;
-	step%=200;
+	step%=100;
 	
 	//   the_robot->EDP_data.current_joint_arm_coordinates[0]	+ td.coordinate_delta[0];
 	//}
