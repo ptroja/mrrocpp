@@ -18,6 +18,7 @@ class conveyor_incremental_move: public ecp_generator {
 	double current_pose;
 	double next_pose;
 	double begin_pose;
+	int stepno;
 	int first;
 	int step;
 public:	
