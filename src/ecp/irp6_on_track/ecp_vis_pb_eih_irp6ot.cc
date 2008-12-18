@@ -191,6 +191,13 @@ bool ecp_vis_pb_eih_irp6ot::next_step_without_constraints(){
 			O_r_Ep[0][i]=O_r_E[0][i];
 		}
 	}
+	
+	//pomiary
+	//for (int i=0; i<6; i++)
+	//	{
+			std::cout << O_r_G__CSAC[0][1] << " ";
+	//	}
+		std::cout << std::endl;
 
 }
 
