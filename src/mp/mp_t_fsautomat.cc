@@ -864,30 +864,39 @@ void mp_task_fsautomat::main_task_algorithm(void)
 			{
 				if(!executeMotion((*stateMap)[nextState]))
 					std::cout<<nextState<<" -> zakonczony"<<std::endl;
-				//continue;
+				else
+					break;
 			}
 			if(strcmp((*stateMap)[nextState].getType(), (const char *)"emptyGenForSet") == 0)
 			{
 				if(!runEmptyGenForSet((*stateMap)[nextState]))
 					std::cout<<nextState<<" -> zakonczony"<<std::endl;
+				else
+					break;
 				//continue;
 			}
 			if(strcmp((*stateMap)[nextState].getType(), (const char *)"emptyGen") == 0)
 			{
 				if(!runEmptyGen((*stateMap)[nextState]))
 					std::cout<<nextState<<" -> zakonczony"<<std::endl;
+				else
+					break;
 				//continue;
 			}
 			if(strcmp((*stateMap)[nextState].getType(), (const char *)"wait") == 0)
 			{
 				if(!runWaitFunction((*stateMap)[nextState]))
 					std::cout<<nextState<<" -> zakonczony"<<std::endl;
+				else
+					break;
 				//continue;
 			}
 			if(strcmp((*stateMap)[nextState].getType(), (const char *)"stopGen") == 0)
 			{
 				if(!stopProperGen((*stateMap)[nextState]))
 					std::cout<<nextState<<" -> zakonczony"<<std::endl;
+				else
+					break;
 				//continue;
 			}
 			if(strcmp((*stateMap)[nextState].getType(), (const char *)"systemInitialization") == 0)
@@ -895,48 +904,64 @@ void mp_task_fsautomat::main_task_algorithm(void)
 				std::cout<<"In sensor initialization.."<<std::endl;
 				if(!sensorInitialization())
 					std::cout<<nextState<<" -> zakonczony"<<std::endl;
+				else
+					break;
 				//continue;
 			}
 			if(strcmp((*stateMap)[nextState].getType(), (const char *)"cubeStateInit") == 0)
 			{
 				if(!initializeCubeState((*stateMap)[nextState]))
 					std::cout<<nextState<<" -> zakonczony"<<std::endl;
+				else
+					break;
 				//continue;
 			}
 			if(strcmp((*stateMap)[nextState].getType(), (const char *)"initiateSensorReading") == 0)
 			{
 				if(!initiateSensorReading((*stateMap)[nextState]))
 					std::cout<<nextState<<" -> zakonczony"<<std::endl;
+				else
+					break;
 				//continue;
 			}
 			if(strcmp((*stateMap)[nextState].getType(), (const char *)"getSensorReading") == 0)
 			{
 				if(!getSensorReading((*stateMap)[nextState]))
 					std::cout<<nextState<<" -> zakonczony"<<std::endl;
+				else
+					break;
 				//continue;
 			}
 			if(strcmp((*stateMap)[nextState].getType(), (const char *)"cubeStateWriting") == 0)
 			{
 				if(!writeCubeState((*stateMap)[nextState]))
 					std::cout<<nextState<<" -> zakonczony"<<std::endl;
+				else
+					break;
 				//continue;
 			}
 			if(strcmp((*stateMap)[nextState].getType(), (const char *)"cubeStateChange") == 0)
 			{
 				if(!changeCubeState((*stateMap)[nextState]))
 					std::cout<<nextState<<" -> zakonczony"<<std::endl;
+				else
+					break;
 				//continue;
 			}
 			if(strcmp((*stateMap)[nextState].getType(), (const char *)"communicateWithSolver") == 0)
 			{
 				if(!communicate_with_windows_solver((*stateMap)[nextState]))
 					std::cout<<nextState<<" -> zakonczony"<<std::endl;
+				else
+					break;
 				//continue;
 			}
 			if(strcmp((*stateMap)[nextState].getType(), (const char *)"manipulationSeqTranslation") == 0)
 			{
 				if(!translateManipulationSequence(sh))
 					std::cout<<nextState<<" -> zakonczony"<<std::endl;
+				else
+					break;
 				//continue;
 			}
 		}
