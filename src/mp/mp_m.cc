@@ -149,7 +149,7 @@ int main (int argc, char *argv[], char **arge)
 						mp_t->stop_and_terminate();
 						break;
 					case ECP_STOP_ACCEPTED:
-						mp_t->sr_ecp_msg->message(NON_FATAL_ERROR, e.mp_error);
+						mp_t->sr_ecp_msg->message("ECP STOP ACCEPTED");
 					break;
 					default:
 						perror("Unidentified mp error");
