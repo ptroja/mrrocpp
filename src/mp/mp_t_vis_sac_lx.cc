@@ -54,27 +54,13 @@ void mp_task_vis_sac_lx::task_initialization(void)
 
 void mp_task_vis_sac_lx::main_task_algorithm(void)
 {
-	break_state = false;
+
 
 	mp_vis_sac_lx_generator eyegen(*this, 4);
 	eyegen.robot_m[ROBOT_IRP6_ON_TRACK] = robot_m[ROBOT_IRP6_ON_TRACK];
 	eyegen.sensor_m[SENSOR_CAMERA_SA] = sensor_m[SENSOR_CAMERA_SA];
 
-	//mp_seven_eye_generator ynrlg(*this, ROBOT_IRP6_ON_TRACK, 4);
 
-	// printf("przed wait for start \n");
-	// Oczekiwanie na zlecenie START od UI  
-	sr_ecp_msg->message("PB-EOL,ECL,IB-ECL for SAC");
-	wait_for_start();
-	// Wyslanie START do wszystkich ECP 
-
-	//start_all (robot_m);
-	for (;;) { // Wewnetrzna petla    
-		//mp_seven_eye_generator ynrlg(*this, 4);
-		start_all(robot_m);
-		// Zlecenie wykonania kolejnego makrokroku
-		printf("po start all [linux] \n");
-		for (;;) {
 			sr_ecp_msg->message("New loop");
 
 			//mp_seven_eye_generator eyegen(*this, 4);
@@ -93,41 +79,21 @@ void mp_task_vis_sac_lx::main_task_algorithm(void)
 			 */
 			//dojazd by lapka byla widziana
 			/*	
-			 if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "../trj/rcsc/irp6ot_ap_1.trj", 1, ROBOT_IRP6_ON_TRACK)) 
-			 {  	
-			 break_state = true;
-			 break; 
-			 }
+			 set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "../trj/rcsc/irp6ot_ap_1.trj", 1, ROBOT_IRP6_ON_TRACK);
 			 
 			 
-			 if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-			 (1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_ON_TRACK)) 
-			 {  	
-			 
-			 break_state = true;
-			 break; 
-			 }
+			 run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+			 (1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_ON_TRACK);
 			 
 			 
-			 if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "../trj/irp6ot_vis_2.trj", 1, ROBOT_IRP6_ON_TRACK)) 
-			 {  	
-			 break_state = true;
-			 break; 
-			 }
-			 if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-			 (1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_ON_TRACK)) 
-			 {  	
-			 break_state = true;
-			 break; 
-			 }
+			 set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "../trj/irp6ot_vis_2.trj", 1, ROBOT_IRP6_ON_TRACK);
+			 run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+			 (1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_ON_TRACK);
 			 */
 			printf("AAAAAAAAA\n");
 
 			// wlaczenie generatora transparentnego w obu robotach
-			if (set_next_ecps_state((int) ECP_GEN_TRANSPARENT, (int) 0, "", 1, ROBOT_IRP6_ON_TRACK)) {
-				break_state = true;
-				break;
-			}
+			set_next_ecps_state((int) ECP_GEN_TRANSPARENT, (int) 0, "", 1, ROBOT_IRP6_ON_TRACK);
 
 			// opcjonalne serwo wizyjne
 			//if (mode)
@@ -135,48 +101,19 @@ void mp_task_vis_sac_lx::main_task_algorithm(void)
 
 			printf("BBBBBBBBBBBBBB\n");
 
-			if (eyegen.Move() ) {
-				break_state = true;
-				break;
-			}
+			eyegen.Move();
 			//}
 
-			if (send_end_motion_to_ecps(1, ROBOT_IRP6_ON_TRACK)) {
-				break_state = true;
-				break;
-			}
+			send_end_motion_to_ecps(1, ROBOT_IRP6_ON_TRACK);
 
 			// wlaczenie generatora zacisku na kostce w robocie irp6ot
-			if (set_next_ecps_state((int) ECP_GEN_TFF_RUBIK_GRAB, (int) RCSC_RG_FROM_OPEARTOR_PHASE_1, "", 1, ROBOT_IRP6_ON_TRACK)) {
-				break_state = true;
-				break;
-			}
+			set_next_ecps_state((int) ECP_GEN_TFF_RUBIK_GRAB, (int) RCSC_RG_FROM_OPEARTOR_PHASE_1, "", 1, ROBOT_IRP6_ON_TRACK);
 			// uruchomienie generatora empty_gen
-			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_ON_TRACK)) {
-				break_state = true;
-				break;
-			}
+			run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_ON_TRACK);
 			// wlaczenie generatora zacisku na kostce w robocie irp6ot
-			if (set_next_ecps_state((int) ECP_GEN_TFF_RUBIK_GRAB, (int) RCSC_RG_FROM_OPEARTOR_PHASE_2, "", 1, ROBOT_IRP6_ON_TRACK)) {
-				break_state = true;
-				break;
-			}
+			set_next_ecps_state((int) ECP_GEN_TFF_RUBIK_GRAB, (int) RCSC_RG_FROM_OPEARTOR_PHASE_2, "", 1, ROBOT_IRP6_ON_TRACK);
 			// uruchomienie generatora empty_gen
-			if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_ON_TRACK)) {
-				break_state = true;
-				break;
-			}
+			run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_ON_TRACK);
 
-		}
-
-		if (break_state)
-			break;
-		// Oczekiwanie na STOP od UI
-		printf("w mp przed wait for stop\n");
-		wait_for_stop(MP_THROW);// by Y - wlaczony tryb
-		terminate_all(robot_m);
-		// Wyslanie STOP do wszystkich ECP po zakonczeniu programu uzytkownika
-		//terminate_all (robot_m);
-		break;
-	} // koniec: for(;;) - wewnetrzna petla
+		
 }

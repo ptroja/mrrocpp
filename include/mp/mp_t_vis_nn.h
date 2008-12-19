@@ -13,7 +13,7 @@
 class mp_task_vis_nn: public mp_task  {
 protected:
 
-	bool break_state;
+
 public:
 	
 	mp_task_vis_nn(configurator &_config);

@@ -37,18 +37,11 @@ void mp_two_robots_measures_task::task_initialization(void)
 // Wlasciwe zadanie.
 void mp_two_robots_measures_task::main_task_algorithm(void)
 {
-	// Oczekiwanie na polecenie START od UI.
-	wait_for_start();
-	// Wyslanie START do wszystkich procesow ECP.
-	start_all(robot_m);
 
-	sr_ecp_msg->message("Started!!");
+
+
 	rmg->Move();
 	sr_ecp_msg->message("Po move");
 
-	// Oczekiwanie na STOP od UI.
-	wait_for_stop(MP_THROW);
-
-	// Wyslanie STOP do wszystkich ECP po zakonczeniu programu uzytkownika.
-	terminate_all(robot_m);
+	
 }

@@ -62,10 +62,7 @@ void mp_task_rcs_test::main_task_algorithm(void)
 {
     printf("MP Algorithm\n");
 
-    // Oczekiwanie na zlecenie START od UI  
-	sr_ecp_msg->message("MP dla testow RCS - wcisnij start");
-	wait_for_start ();
-    printf("MP Start\n");
+
 
 
     // Testowy stan kostki (URFDLB)
@@ -182,11 +179,6 @@ void mp_task_rcs_test::main_task_algorithm(void)
 	
 	}
 
-    printf("MP Wait for stop\n");
-    
-    // Oczekiwanie na STOP od UI    
-    wait_for_stop (MP_THROW); // by Y - wlaczony tryb
 
-    printf("MP Stop\n");
 
 }

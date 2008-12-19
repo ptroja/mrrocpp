@@ -869,6 +869,8 @@ void mp_task_rubik_cube_solver::main_task_algorithm(void)
 			face_change_op(CL_0);
 
 			departure_op();
+			
+			break;
 
 		}
 

@@ -25,7 +25,6 @@ protected:
 // kolory scian patrzac przez os ramienia tracka (od kolumny), w plaszczynie ziemi
  	CubeState* cube_state;
  
-	bool break_state;
   
     // odczyt konfiguracji manipulacji
 	char* cube_initial_state;
@@ -46,13 +45,13 @@ public:
 	
 	// MANIPULACJA
 	// manipulacja pojedyncza sciana
-	bool manipulate (CUBE_COLOR face_to_turn, CUBE_TURN_ANGLE turn_angle );
+	void manipulate (CUBE_COLOR face_to_turn, CUBE_TURN_ANGLE turn_angle );
 
 	// wykonanie sekwecji manipulacji poszczegolnymi scianami
-	bool execute_manipulation_sequence();
+	void execute_manipulation_sequence();
 	
 	//wykonanie sekwencji manipulacji w celu identyfikacji kolorow
-	bool identify_colors();
+	void identify_colors();
 	
 //	bool communicate_with_windows_solver();
 
@@ -69,19 +68,19 @@ public:
 	// OPERACJE
 	
 	// obrot sciany
-	bool face_turn_op (CUBE_TURN_ANGLE turn_angle);
+	void face_turn_op (CUBE_TURN_ANGLE turn_angle);
 	// zmiana sciany (przelozenie kostki)
-	bool face_change_op (CUBE_TURN_ANGLE turn_angle);
+	void face_change_op (CUBE_TURN_ANGLE turn_angle);
 	// dojscie
-	bool approach_op (int mode);
+	void approach_op (int mode);
 	// odejscie
-	bool departure_op ();
+	void departure_op ();
 
 
 	// METODY POMOCNICZE
 	
 	// rozwieranie chwytakow
-	bool gripper_opening(double track_increment, double postument_increment, int motion_time);
+	void gripper_opening(double track_increment, double postument_increment, int motion_time);
 	
 	// methods for mp template
 	void task_initialization(void);

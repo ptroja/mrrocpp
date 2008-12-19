@@ -13,7 +13,7 @@
 class mp_task_vis_pbeclsac: public mp_task  {
 protected:
 
-	bool break_state;
+
 public:
 	
 	mp_task_vis_pbeclsac(configurator &_config);

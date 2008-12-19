@@ -13,7 +13,7 @@
 class mp_task_sb: public mp_task  {
 protected:
 
-	bool break_state;
+
 public:
 	
 	mp_task_sb(configurator &_config);
