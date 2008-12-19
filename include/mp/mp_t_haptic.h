@@ -14,8 +14,7 @@
 class mp_task_haptic : public mp_task  
 {
 protected:
-	bool break_state;
-  
+ 
       bool configure_edp_force_sensor(bool configure_track, bool configure_postument);
   
 public:

@@ -15,7 +15,7 @@
 class mp_task_pouring : public mp_task  
 {
 protected:
-	bool break_state;
+
 
 public:
     // konstruktor
@@ -27,14 +27,14 @@ public:
 	void task_initialization(void);
 	void main_task_algorithm(void);
 
-	bool approach(void);
-	bool grab(void);
-	bool weight(void);
-	bool meet(void);
-	bool pour(void);
-	bool go_back(void);
-	bool put_back(void);
-	bool depart(void);
+	void approach(void);
+	void grab(void);
+	void weight(void);
+	void meet(void);
+	void pour(void);
+	void go_back(void);
+	void put_back(void);
+	void depart(void);
 
 }; // end : class mp_task_pouring
 #endif

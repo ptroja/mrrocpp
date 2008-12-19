@@ -50,7 +50,7 @@ mp_generator::mp_generator(mp_task& _mp_task)
 
 
 // ---------------------------------------------------------------
-bool mp_generator::Move ()
+void mp_generator::Move ()
 {
     // Funkcja zwraca false gdy samoistny koniec ruchu
     // Funkcja zwraca true gdy koniec ruchu wywolany jest przez STOP
@@ -67,8 +67,7 @@ bool mp_generator::Move ()
 
     // by Y - linia ponizej dodana 26.02.2007 - usunac komentarz jak bedzie dzialalo
     // ze wzgledu na obluge pulsow z UI w szczegolnosci stopu i wstrzymania
-    if (mp_t.mp_receive_ui_or_ecp_pulse (mp_t.robot_m, *this))
-        return true;
+    mp_t.mp_receive_ui_or_ecp_pulse (mp_t.robot_m, *this);
 
     // czyszczenie aby nie czekac na pulsy z ECP
     for (std::map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = mp_t.robot_m.begin();
@@ -82,7 +81,7 @@ bool mp_generator::Move ()
     node_counter = 0;
     // (Inicjacja) generacja pierwszego kroku ruchu
     if (!first_step() )
-        return false;
+        return;
 
     do
     { // realizacja ruchu
@@ -101,13 +100,11 @@ bool mp_generator::Move ()
         mp_t.all_sensors_get_reading(sensor_m);
 
         // oczekiwanie na puls z ECP lub UI
-        if (mp_t.mp_receive_ui_or_ecp_pulse(mp_t.robot_m, *this))
-            return true;
+        mp_t.mp_receive_ui_or_ecp_pulse(mp_t.robot_m, *this);
+
         node_counter++;
     }
     while ( next_step() );
-
-    return false;
 }
 // ------------------------------------------------------------------------
 

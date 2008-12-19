@@ -12,7 +12,6 @@
 
 class mp_task_pr: public mp_task  {
 protected:
-	bool break_state;
 	
 	void mp_short_move_up(void);
 	

@@ -21,7 +21,7 @@ class mp_generator : public ecp_mp_generator
 		mp_task& mp_t;
 
 		// Funkcja ruchu
-		bool Move ();
+		void Move (void);
 
 		// zbior obejmujacy mozliwe stany obiektu klasy generator_set
 		enum GEN_SET_PHASE {

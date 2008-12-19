@@ -6,7 +6,7 @@
 class mp_task_multiplayer : public mp_task
 {
 	private:
-		bool move_electron_robot(const playerpos_goal_t &goal);
+		void move_electron_robot(const playerpos_goal_t &goal);
 	public:
 
 		mp_task_multiplayer(configurator &_config);

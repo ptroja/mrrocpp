@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 // 
-// MP Master Process - methods for task sporadic coordination
+// MP Master Process - methodsï¿½for task sporadic coordination
 // 
 // -------------------------------------------------------------------------
 
@@ -359,61 +359,43 @@ void mp_task_fsautomat::configureProperTransmitter(char *propTrans)
         new rc_windows_transmitter (TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
 }
 
-bool mp_task_fsautomat::stopProperGen(State &state)
+void mp_task_fsautomat::stopProperGen(State &state)
 {
 	if(state.robotSet == NULL)
-		if (send_end_motion_to_ecps (1, state.getRobot()))
-		{	return true;	}
-	if (send_end_motion_to_ecps (state.robotSet->firstSetCount,state.robotSet->firstSet))
-	{	return true;	}
-	return false;
+		send_end_motion_to_ecps (1, state.getRobot());
+	send_end_motion_to_ecps (state.robotSet->firstSetCount,state.robotSet->firstSet);
 }
 
-bool mp_task_fsautomat::runWaitFunction(State &state)
+void mp_task_fsautomat::runWaitFunction(State &state)
 {
-	if(wait_ms(state.getNumArgument()))
-	{
-		return true;
-	}
-	return false;
+	wait_ms(state.getNumArgument());
 }
 
-bool mp_task_fsautomat::runEmptyGen(State &state)
+void mp_task_fsautomat::runEmptyGen(State &state)
 {
-	if (run_ext_empty_gen(state.getNumArgument(), 1, state.getRobot())) 
-	{
-		return true; 
-	}		
-	return false;
+	run_ext_empty_gen(state.getNumArgument(), 1, state.getRobot());
 }
 
-bool mp_task_fsautomat::runEmptyGenForSet(State &state)
+void mp_task_fsautomat::runEmptyGenForSet(State &state)
 {
-	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-			(state.robotSet->firstSetCount, state.robotSet->secondSetCount, state.robotSet->firstSet, state.robotSet->secondSet))
-	{	return true; }
-	else
-		return false;
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+			(state.robotSet->firstSetCount, state.robotSet->secondSetCount, state.robotSet->firstSet, state.robotSet->secondSet);
 }
 
-bool mp_task_fsautomat::executeMotion(State &state)
+void mp_task_fsautomat::executeMotion(State &state)
 {
 	int trjConf = config.return_int_value("trajectory_from_xml", "[xml_settings]");
 	if(trjConf && state.getGeneratorType() == ECP_GEN_SMOOTH)
 	{
-		if(set_next_ecps_state( (int) state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 1, state.getRobot()))
-		{	return true;	}
+		set_next_ecps_state( (int) state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 1, state.getRobot());
 	}
 	else
 	{
-		if(set_next_ecps_state( (int) state.getGeneratorType(), state.getNumArgument(), state.getStringArgument(), 1, state.getRobot()))
-		{	return true;	}
+		set_next_ecps_state( (int) state.getGeneratorType(), state.getNumArgument(), state.getStringArgument(), 1, state.getRobot());
 	}
-	
-	return false;
 }
 
-bool mp_task_fsautomat::sensorInitialization()
+void mp_task_fsautomat::sensorInitialization()
 {
 /*	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 			sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
@@ -422,10 +404,9 @@ bool mp_task_fsautomat::sensorInitialization()
 		sensor_m_iterator->second->configure_sensor();
 	}
 	*/
-	return false;
 }
 
-bool mp_task_fsautomat::initializeCubeState(State &state)
+void mp_task_fsautomat::initializeCubeState(State &state)
 {
 	CUBE_COLOR colors[6];
 	char *colorStr = strdup(state.getStringArgument());
@@ -450,10 +431,9 @@ bool mp_task_fsautomat::initializeCubeState(State &state)
 //	for(int i=0; i<6; i++)
 //		printf("c[%d]: %d\n", i, colors[i]);
 	cube_state->set_state(colors[0], colors[1], colors[2], colors[3], colors[4], colors[5]);
-	return false;
 }
 	
-bool mp_task_fsautomat::initiateSensorReading(State &state)
+void mp_task_fsautomat::initiateSensorReading(State &state)
 {
 /*        sensor_m[SENSOR_CAMERA_ON_TRACK]->initiate_reading();
         if (wait_ms(1000))
@@ -471,10 +451,9 @@ bool mp_task_fsautomat::initiateSensorReading(State &state)
 	
 	sensor_m[whichSensor]->initiate_reading();
 */
-	return false;
 }
 
-bool mp_task_fsautomat::getSensorReading(State &state)
+void mp_task_fsautomat::getSensorReading(State &state)
 {
 /*	char *sensorName = strdup(state.getStringArgument());
 	SENSOR_ENUM whichSensor;		
@@ -485,18 +464,14 @@ bool mp_task_fsautomat::getSensorReading(State &state)
 
 	sensor_m[whichSensor]->get_reading();
 */
-	return false;
 }
 
-bool mp_task_fsautomat::writeCubeState(State &state)
+void mp_task_fsautomat::writeCubeState(State &state)
 {
 	int index = state.getNumArgument();
         
 	sensor_m[SENSOR_CAMERA_ON_TRACK]->initiate_reading();
-	if (wait_ms(1000))
-	{
-		return true;
-	}
+	wait_ms(1000);
 	sensor_m[SENSOR_CAMERA_ON_TRACK]->get_reading();
 	
 	for(int i=0; i<3; i++)
@@ -541,10 +516,9 @@ bool mp_task_fsautomat::writeCubeState(State &state)
 	}
 	printf("\n");
 	
-	return false;
 }
 
-bool mp_task_fsautomat::changeCubeState(State &state)
+void mp_task_fsautomat::changeCubeState(State &state)
 {
 	int turn_angle = state.getNumArgument();
 	CubeState tmp_cube_state;
@@ -552,21 +526,19 @@ bool mp_task_fsautomat::changeCubeState(State &state)
 	tmp_cube_state.set_state(*cube_state, turn_angle);
 	
 	*cube_state = tmp_cube_state;
-	return false;
 }
 
 
-bool mp_task_fsautomat::changeCubeState(int turn_angle)
+void mp_task_fsautomat::changeCubeState(int turn_angle)
 {
 	CubeState tmp_cube_state;
 	
 	tmp_cube_state.set_state(*cube_state, turn_angle);
 	
 	*cube_state = tmp_cube_state;
-	return false;
 }
 
-bool mp_task_fsautomat::communicate_with_windows_solver(State &state)
+void mp_task_fsautomat::communicate_with_windows_solver(State &state)
 {
 //		  state.setProperTransitionResult(true);
 //		  return false;
@@ -662,7 +634,7 @@ bool mp_task_fsautomat::communicate_with_windows_solver(State &state)
         printf("Jam jest daltonista. ktory Ci nie uloz*y kostki\n");
         //manipulation_sequence_computed = false;
 		  state.setProperTransitionResult(false);
-        return false;
+        return;
     }
 
     //sekwencja poczatkowa w kolejnosci: UP, DOWN, FRONT, BACK, LEFT, RIGHT
@@ -746,10 +718,9 @@ bool mp_task_fsautomat::communicate_with_windows_solver(State &state)
     //manipulation_sequence_computed = true;
 	 state.setProperTransitionResult(true);
 
-    return false;
 }
 
-bool mp_task_fsautomat::translateManipulationSequence(StateHeap &sh)
+void mp_task_fsautomat::translateManipulationSequence(StateHeap &sh)
 {
 	std::list<const char *> *scenario = new std::list<const char *>();
 	
@@ -820,7 +791,6 @@ bool mp_task_fsautomat::translateManipulationSequence(StateHeap &sh)
 
 	delete scenario;
 
-	return false;
 }
 
 void mp_task_fsautomat::main_task_algorithm(void)
@@ -834,143 +804,104 @@ void mp_task_fsautomat::main_task_algorithm(void)
 //	std::cout<<"ELEMENTOW INIT jest: "<<stateMap->count((const char *)"INIT")<<std::endl;
 	
 
-	sr_ecp_msg->message("MP dla Automatu Skonczonego - wcisnij start");
-	wait_for_start ();
-	// Wyslanie START do wszystkich ECP 
-	start_all (robot_m);
 
-	for (;;)
-	{  // Wewnetrzna petla
-		sr_ecp_msg->message("Nowa seria");
-		// adding first state name
-		//strcmp(nextState, (char *)"INIT");
-		sprintf(nextState, "INIT");
-		// temporary sensor config in this place
-		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
-				sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
+	sr_ecp_msg->message("Nowa seria");
+	// adding first state name
+	//strcmp(nextState, (char *)"INIT");
+	sprintf(nextState, "INIT");
+	// temporary sensor config in this place
+	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+			sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
+	{
+		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_m_iterator->second->configure_sensor();
+	}
+
+	for(;strcmp(nextState, (const char *)"STOP"); strcpy(nextState, (*stateMap)[nextState].returnNextStateID(sh)))
+	{
+		if(!strcmp(nextState, (const char *)"_END_"))
+			strcpy(nextState, sh.popTargetName());
+		// protection from wrong targetID specyfication
+		if(stateMap->count(nextState)==0)
+			break;
+		if(strcmp((*stateMap)[nextState].getType(), (const char *)"runGenerator") == 0)
 		{
-			sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-			sensor_m_iterator->second->configure_sensor();
+			executeMotion((*stateMap)[nextState]);
+			std::cout<<nextState<<" -> zakonczony"<<std::endl;
 		}
-
-		for(;strcmp(nextState, (const char *)"STOP"); strcpy(nextState, (*stateMap)[nextState].returnNextStateID(sh)))
+		if(strcmp((*stateMap)[nextState].getType(), (const char *)"emptyGenForSet") == 0)
 		{
-			if(!strcmp(nextState, (const char *)"_END_"))
-				strcpy(nextState, sh.popTargetName());
-			// protection from wrong targetID specyfication
-			if(stateMap->count(nextState)==0)
-				break;
-			if(strcmp((*stateMap)[nextState].getType(), (const char *)"runGenerator") == 0)
-			{
-				if(!executeMotion((*stateMap)[nextState]))
-					std::cout<<nextState<<" -> zakonczony"<<std::endl;
-				else
-					break;
-			}
-			if(strcmp((*stateMap)[nextState].getType(), (const char *)"emptyGenForSet") == 0)
-			{
-				if(!runEmptyGenForSet((*stateMap)[nextState]))
-					std::cout<<nextState<<" -> zakonczony"<<std::endl;
-				else
-					break;
-				//continue;
-			}
-			if(strcmp((*stateMap)[nextState].getType(), (const char *)"emptyGen") == 0)
-			{
-				if(!runEmptyGen((*stateMap)[nextState]))
-					std::cout<<nextState<<" -> zakonczony"<<std::endl;
-				else
-					break;
-				//continue;
-			}
-			if(strcmp((*stateMap)[nextState].getType(), (const char *)"wait") == 0)
-			{
-				if(!runWaitFunction((*stateMap)[nextState]))
-					std::cout<<nextState<<" -> zakonczony"<<std::endl;
-				else
-					break;
-				//continue;
-			}
-			if(strcmp((*stateMap)[nextState].getType(), (const char *)"stopGen") == 0)
-			{
-				if(!stopProperGen((*stateMap)[nextState]))
-					std::cout<<nextState<<" -> zakonczony"<<std::endl;
-				else
-					break;
-				//continue;
-			}
-			if(strcmp((*stateMap)[nextState].getType(), (const char *)"systemInitialization") == 0)
-			{
-				std::cout<<"In sensor initialization.."<<std::endl;
-				if(!sensorInitialization())
-					std::cout<<nextState<<" -> zakonczony"<<std::endl;
-				else
-					break;
-				//continue;
-			}
-			if(strcmp((*stateMap)[nextState].getType(), (const char *)"cubeStateInit") == 0)
-			{
-				if(!initializeCubeState((*stateMap)[nextState]))
-					std::cout<<nextState<<" -> zakonczony"<<std::endl;
-				else
-					break;
-				//continue;
-			}
-			if(strcmp((*stateMap)[nextState].getType(), (const char *)"initiateSensorReading") == 0)
-			{
-				if(!initiateSensorReading((*stateMap)[nextState]))
-					std::cout<<nextState<<" -> zakonczony"<<std::endl;
-				else
-					break;
-				//continue;
-			}
-			if(strcmp((*stateMap)[nextState].getType(), (const char *)"getSensorReading") == 0)
-			{
-				if(!getSensorReading((*stateMap)[nextState]))
-					std::cout<<nextState<<" -> zakonczony"<<std::endl;
-				else
-					break;
-				//continue;
-			}
-			if(strcmp((*stateMap)[nextState].getType(), (const char *)"cubeStateWriting") == 0)
-			{
-				if(!writeCubeState((*stateMap)[nextState]))
-					std::cout<<nextState<<" -> zakonczony"<<std::endl;
-				else
-					break;
-				//continue;
-			}
-			if(strcmp((*stateMap)[nextState].getType(), (const char *)"cubeStateChange") == 0)
-			{
-				if(!changeCubeState((*stateMap)[nextState]))
-					std::cout<<nextState<<" -> zakonczony"<<std::endl;
-				else
-					break;
-				//continue;
-			}
-			if(strcmp((*stateMap)[nextState].getType(), (const char *)"communicateWithSolver") == 0)
-			{
-				if(!communicate_with_windows_solver((*stateMap)[nextState]))
-					std::cout<<nextState<<" -> zakonczony"<<std::endl;
-				else
-					break;
-				//continue;
-			}
-			if(strcmp((*stateMap)[nextState].getType(), (const char *)"manipulationSeqTranslation") == 0)
-			{
-				if(!translateManipulationSequence(sh))
-					std::cout<<nextState<<" -> zakonczony"<<std::endl;
-				else
-					break;
-				//continue;
-			}
+			runEmptyGenForSet((*stateMap)[nextState]);
+				std::cout<<nextState<<" -> zakonczony"<<std::endl;
+			
 		}
-		// Oczekiwanie na STOP od UI
-		wait_for_stop (MP_THROW);
-  
-   	// Wyslanie STOP do wszystkich ECP po zakonczeniu programu uzytkownika
-		terminate_all (robot_m);
-		break; 
-
-	} // koniec: for(;;) - wewnetrzna petla
+		if(strcmp((*stateMap)[nextState].getType(), (const char *)"emptyGen") == 0)
+		{
+			runEmptyGen((*stateMap)[nextState]);
+				std::cout<<nextState<<" -> zakonczony"<<std::endl;
+		
+		}
+		if(strcmp((*stateMap)[nextState].getType(), (const char *)"wait") == 0)
+		{
+			runWaitFunction((*stateMap)[nextState]);
+				std::cout<<nextState<<" -> zakonczony"<<std::endl;
+		
+		}
+		if(strcmp((*stateMap)[nextState].getType(), (const char *)"stopGen") == 0)
+		{
+			stopProperGen((*stateMap)[nextState]);
+				std::cout<<nextState<<" -> zakonczony"<<std::endl;
+			
+		}
+		if(strcmp((*stateMap)[nextState].getType(), (const char *)"systemInitialization") == 0)
+		{
+			std::cout<<"In sensor initialization.."<<std::endl;
+			sensorInitialization();
+				std::cout<<nextState<<" -> zakonczony"<<std::endl;
+			
+		}
+		if(strcmp((*stateMap)[nextState].getType(), (const char *)"cubeStateInit") == 0)
+		{
+			initializeCubeState((*stateMap)[nextState]);
+				std::cout<<nextState<<" -> zakonczony"<<std::endl;
+		
+		}
+		if(strcmp((*stateMap)[nextState].getType(), (const char *)"initiateSensorReading") == 0)
+		{
+			initiateSensorReading((*stateMap)[nextState]);
+				std::cout<<nextState<<" -> zakonczony"<<std::endl;
+		
+		}
+		if(strcmp((*stateMap)[nextState].getType(), (const char *)"getSensorReading") == 0)
+		{
+			getSensorReading((*stateMap)[nextState]);
+				std::cout<<nextState<<" -> zakonczony"<<std::endl;
+			
+		}
+		if(strcmp((*stateMap)[nextState].getType(), (const char *)"cubeStateWriting") == 0)
+		{
+			writeCubeState((*stateMap)[nextState]);
+				std::cout<<nextState<<" -> zakonczony"<<std::endl;
+		
+		}
+		if(strcmp((*stateMap)[nextState].getType(), (const char *)"cubeStateChange") == 0)
+		{
+			changeCubeState((*stateMap)[nextState]);
+				std::cout<<nextState<<" -> zakonczony"<<std::endl;
+			
+		}
+		if(strcmp((*stateMap)[nextState].getType(), (const char *)"communicateWithSolver") == 0)
+		{
+			communicate_with_windows_solver((*stateMap)[nextState]);
+			std::cout<<nextState<<" -> zakonczony"<<std::endl;
+			
+		}
+		if(strcmp((*stateMap)[nextState].getType(), (const char *)"manipulationSeqTranslation") == 0)
+		{
+			translateManipulationSequence(sh);
+				std::cout<<nextState<<" -> zakonczony"<<std::endl;
+			
+		}
+	}
+		
 }

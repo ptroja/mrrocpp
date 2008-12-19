@@ -229,7 +229,7 @@ void mp_task::main_task_algorithm(void)
 {}
 
 // metody do obslugi najczesniej uzywanych generatorow
-bool mp_task::set_next_playerpos_goal (ROBOT_ENUM robot_l, const playerpos_goal_t &goal)
+void mp_task::set_next_playerpos_goal (ROBOT_ENUM robot_l, const playerpos_goal_t &goal)
 {
 	// setting the next ecps state
 	mp_set_next_ecps_state_generator mp_snes_gen(*this);
@@ -238,11 +238,11 @@ bool mp_task::set_next_playerpos_goal (ROBOT_ENUM robot_l, const playerpos_goal_
 
 	mp_snes_gen.configure(goal);
 
-	return (mp_snes_gen.Move());
+	mp_snes_gen.Move();
 }
 
 // metody do obslugi najczesniej uzywanych generatorow
-bool mp_task::set_next_ecps_state (int l_state, int l_variant, const char* l_string, int number_of_robots, ... )
+void mp_task::set_next_ecps_state (int l_state, int l_variant, const char* l_string, int number_of_robots, ... )
 {
 	// setting the next ecps state
 	mp_set_next_ecps_state_generator mp_snes_gen (*this);
@@ -260,19 +260,19 @@ bool mp_task::set_next_ecps_state (int l_state, int l_variant, const char* l_str
 
 	mp_snes_gen.configure (l_state, l_variant, l_string);
 
-	return (mp_snes_gen.Move());
+	mp_snes_gen.Move();
 }
 
 // delay MP replacement
-bool mp_task::wait_ms (int _ms_delay) // zamiast delay
+void mp_task::wait_ms (int _ms_delay) // zamiast delay
 {
 	mp_delay_ms_condition mp_ds_ms (*this, _ms_delay);
 
-	return (mp_ds_ms.Move());
+	mp_ds_ms.Move();
 }
 
 // send_end_motion
-bool mp_task::send_end_motion_to_ecps (int number_of_robots, ... )
+void mp_task::send_end_motion_to_ecps (int number_of_robots, ... )
 {
 	mp_send_end_motion_to_ecps_generator mp_semte_gen (*this);
 
@@ -287,11 +287,11 @@ bool mp_task::send_end_motion_to_ecps (int number_of_robots, ... )
 	}
 	va_end ( arguments );                  // Cleans up the list
 
-	return (mp_semte_gen.Move());
+	mp_semte_gen.Move();
 }
 
 // send_end_motion
-bool mp_task::send_end_motion_to_ecps (int number_of_robots, ROBOT_ENUM *properRobotsSet)
+void mp_task::send_end_motion_to_ecps (int number_of_robots, ROBOT_ENUM *properRobotsSet)
 {
 	mp_send_end_motion_to_ecps_generator mp_semte_gen (*this);
 
@@ -303,10 +303,10 @@ bool mp_task::send_end_motion_to_ecps (int number_of_robots, ROBOT_ENUM *properR
 		mp_semte_gen.robot_m[robot_l] = robot_m[robot_l];
 	}
 
-	return (mp_semte_gen.Move());
+	mp_semte_gen.Move();
 }
 
-bool mp_task::run_ext_empty_gen (bool activate_trigger, int number_of_robots, ... )
+void mp_task::run_ext_empty_gen (bool activate_trigger, int number_of_robots, ... )
 {
 	mp_extended_empty_generator mp_ext_empty_gen (*this);
 
@@ -323,10 +323,10 @@ bool mp_task::run_ext_empty_gen (bool activate_trigger, int number_of_robots, ..
 
 	mp_ext_empty_gen.configure (activate_trigger);
 
-	return (mp_ext_empty_gen.Move());
+	mp_ext_empty_gen.Move();
 }
 
-bool mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+void mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 (int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ... )
 {
 	// CZYNNOSCI WSTEPNE
@@ -425,17 +425,15 @@ bool mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_t
 
 		//	if (debug_tmp) printf("PRZED MOVE run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
 		// uruchomienie generatora
-		if (mp_ext_empty_gen.Move()) {
-			return true;
-		}
+		mp_ext_empty_gen.Move();
 		//		if (debug_tmp) printf("ZA MOVE move run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
 	} while (true);
 	// koniec petli
 
-	return false;
+
 }
 
-bool mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+void mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 (int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ROBOT_ENUM *robotsToMove, ROBOT_ENUM *robotsWaitingForTaskTermination)
 {
 	// CZYNNOSCI WSTEPNE
@@ -534,14 +532,11 @@ bool mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_t
 
 		//	if (debug_tmp) printf("PRZED MOVE run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
 		// uruchomienie generatora
-		if (mp_ext_empty_gen.Move()) {
-			return true;
-		}
+		mp_ext_empty_gen.Move();
 		//		if (debug_tmp) printf("ZA MOVE move run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
 	} while (true);
 	// koniec petli
 
-	return false;
 }
 
 
@@ -798,7 +793,7 @@ int mp_task::mp_wait_for_ui_name_open()
 
 // funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
 
-bool mp_task::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m, mp_generator& the_generator )
+void mp_task::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m, mp_generator& the_generator )
 {
 
 	enum MP_STATE_ENUM
@@ -894,7 +889,7 @@ bool mp_task::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m,
 			fprintf(stderr, "MP_TRIGGER server receive strange message\n");
 		}
 	}
-	return false;
+//	return false;
 
 }
 
