@@ -148,6 +148,14 @@ mp_task::~mp_task()
 	delete[] mrrocpp_network_path;
 }
 
+
+void mp_task::stop_and_terminate()
+{
+	sr_ecp_msg->message("To terminate MP click STOP icon");
+	wait_for_stop (MP_EXIT);
+	terminate_all (robot_m);
+}
+
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 bool mp_task::create_robots()
 {
@@ -839,7 +847,8 @@ bool mp_task::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m,
 
 				if (ui_pulse_code == MP_STOP) {
 					terminate_all (_robot_m);
-					return true;
+					throw MP_main_error(NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+					//return true;
 				}
 
 				if (ui_pulse_code == MP_PAUSE) {

@@ -29,21 +29,7 @@ void mp_task_c::main_task_algorithm(void)
 	mp_empty_generator empty_gen (*this); // "Pusty" generator
 	empty_gen.robot_m = robot_m;
    
-	// Oczekiwanie na zlecenie START od UI  
-	wait_for_start ();
-	// Wyslanie START do wszystkich ECP 
-	start_all (robot_m);
+	// Zlecenie wykonania kolejnego makrokroku
+	empty_gen.Move(); 
 
-	do {  // Wewnetrzna petla    
-		
-		// Zlecenie wykonania kolejnego makrokroku
-		if ( empty_gen.Move() )
-			break;
-
-		// Oczekiwanie na STOP od UI
-		wait_for_stop (MP_THROW); // by Y - wlaczony tryb
-  
-        // Wyslanie STOP do wszystkich ECP po zakonczeniu programu uzytkownika
-        terminate_all (robot_m); 
-      } while(0);
 }

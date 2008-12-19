@@ -39,6 +39,7 @@ class mp_task: public ecp_mp_task
 		virtual ~mp_task(void);
 
 		void initialize_communication (void);
+		void stop_and_terminate (void);
 
 		// oczekiwanie na puls z ECP
 		enum MP_RECEIVE_PULSE_MODE {
