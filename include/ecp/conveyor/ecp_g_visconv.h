@@ -6,6 +6,7 @@
 
 #if !defined(_ECP_GEN_LEGOBRICK_CONV_H)
 #define _ECP_GEN_LEGOBRICK_CONV_H
+#include "sys/time.h"
 
 #include "common/com_buf.h"		// trajectory_description
 
@@ -21,6 +22,7 @@ class conveyor_incremental_move: public ecp_generator {
 	int stepno;
 	int first;
 	int step;
+	struct timeval acctime;
 public:	
 	trajectory_description td;
 	

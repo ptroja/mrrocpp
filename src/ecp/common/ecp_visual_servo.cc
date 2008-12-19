@@ -118,14 +118,14 @@ void ecp_visual_servo::entertain_constraints(){
 
 	O_Tx_Ep.get_xyz_angle_axis(O_r_Ep[0]);
 
-	std::cout << "ECP Ep: ";
+	//std::cout << "ECP Ep: ";
 
 	for (int i=0; i<6; i++)
 	{
 		the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = O_r_Ep[0][i];
-		std::cout << O_r_Ep[0][i] << " ";
+	//	std::cout << O_r_Ep[0][i] << " ";
 	}
-
+/*
 	std::cout << std::endl;
 	
 	std::cout << "ECP E: ";
@@ -135,7 +135,7 @@ void ecp_visual_servo::entertain_constraints(){
 		}
 
 		std::cout << std::endl;
-	
+*/
 	for (int i=0; i<1; i++)
 	{
 			the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = O_r_E1[i];

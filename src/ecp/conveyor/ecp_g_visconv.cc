@@ -18,7 +18,7 @@ conveyor_incremental_move::conveyor_incremental_move(ecp_task& _ecp_task, double
 bool conveyor_incremental_move::first_step ( )
 {
 	td.interpolation_node_no = 1;
-	td.internode_step_no = 100;//((int)move_length)*20;
+	td.internode_step_no = 50;//((int)move_length)*20;
 	td.value_in_step_no = td.internode_step_no - 2;
 
 
@@ -80,7 +80,11 @@ bool conveyor_incremental_move::next_step ( )
 	//next_pose = current_pose -0.005;
 	next_pose=begin_pose-0.1*(1-cos(3.14*2*step/((double)(stepno))));
 	//next_pose=0.005*cos(3.14*0.01*step);
-	std::cout << "BGN: " << begin_pose << "ABS: " << next_pose << std::endl;
+	//std::cout << "BGN: " << begin_pose << "ABS: " << next_pose << std::endl;
+	
+	gettimeofday(&acctime,NULL);
+	std::cout << acctime.tv_sec << " " << acctime.tv_usec << " " << next_pose << " ";
+	std::cout << std::endl;
 	
 	the_robot->EDP_data.next_joint_arm_coordinates[0] = next_pose;//the_robot->EDP_data.current_joint_arm_coordinates[0]; //next_pose;
 	//current_pose=next_pose;	
