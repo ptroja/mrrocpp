@@ -53,7 +53,7 @@
 				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
 			</SecSet>
 		</SetOfRobots>
-		<transition condition="true" target="STOP"/>
+		<transition condition="true" target="_STOP_"/>
 	</State>
 	
 </TaskDescription>

@@ -413,14 +413,14 @@
 			</SecSet>
 		</SetOfRobots>
 		<transition condition="true" target="identify_colors_1"/>
-		<transition condition="false" target="STOP"/>
+		<transition condition="false" target="_STOP_"/>
 	</State>
 	
 	<!-- ########################################## IDENTIFY_COLORS ######################################################################## -->
 	<State id="identify_colors_1" type="cubeStateInit">
 		<Parameters>BLUE	GREEN	RED	ORANGE	WHITE	YELLOW</Parameters>
 		<transition condition="true" target="ica_1>>identify_colors_2"/>
-		<transition condition="true" target="STOP"/>
+		<transition condition="true" target="_STOP_"/>
 	</State>
 	<State id="identify_colors_2" type="cubeStateWriting">
 		<AddArg>0</AddArg>
@@ -671,7 +671,7 @@
 				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
 			</SecSet>
 		</SetOfRobots>
-		<transition condition="true" target="STOP"/>
+		<transition condition="true" target="_STOP_"/>
 	</State>
 	
 	<!-- ################################################################################################################################### -->

@@ -817,7 +817,7 @@ void mp_task_fsautomat::main_task_algorithm(void)
 		sensor_m_iterator->second->configure_sensor();
 	}
 
-	for(;strcmp(nextState, (const char *)"STOP"); strcpy(nextState, (*stateMap)[nextState].returnNextStateID(sh)))
+	for(;strcmp(nextState, (const char *)"_STOP_"); strcpy(nextState, (*stateMap)[nextState].returnNextStateID(sh)))
 	{
 		if(!strcmp(nextState, (const char *)"_END_"))
 			strcpy(nextState, sh.popTargetName());

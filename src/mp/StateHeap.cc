@@ -34,7 +34,7 @@ const char * StateHeap::popTargetName()
 	showHeapContent();
 	if(targetsHeap == NULL || 
 			targetsHeap->empty())
-		return "STOP";
+		return "_STOP_";
 	else
 	{
 		char *toReturn = new char[strlen(targetsHeap->back())];

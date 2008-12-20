@@ -562,6 +562,6 @@
 				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
 			</SecSet>
 		</SetOfRobots>
-		<transition condition="true" target="STOP"></transition>
+		<transition condition="true" target="_STOP_"></transition>
 	</State>
 </TaskDescription>

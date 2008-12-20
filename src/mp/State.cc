@@ -289,7 +289,7 @@ const char * State::returnNextStateID(StateHeap &sh)
 			return (*it).getTargetID(sh);
 	}
 	// to avoid lock
-	return "STOP";
+	return "_STOP_";
 }
 //----------------------------------------------------------------------------------------------------------
 
