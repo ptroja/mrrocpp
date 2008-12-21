@@ -37,34 +37,44 @@
 	</sensors>
 
 	<effectors>
-		<effector name="irp6_on_track" active="true">
+		<effector name="irp6_ontrack" active="true">
 			<ecp>
-				<program_name>ecp_irp6ot_rcsc</program_name>
+				<program_name>ecp_irp6o_rcsc</program_name>
 				<node_name>qnx632</node_name>
 			</ecp>
 
-			<edp>
-				<test_mode>1</test_mode>
+			<edp name="edp_irp6o_axis_xyz" active="true" ui_def="irp6o_axis_xyz.xml">
+
+				<program_name>edp_irp6o_axis_xyz</program_name>
 				<node_name>qnx632</node_name>
-				<force_tryb>2</force_tryb>
-				<force_0>1</force_0>
-				<force_1>1</force_1>
-				<force_2>1</force_2>
-				<force_3>1</force_3>
-				<force_4>1</force_4>
-				<force_5>1</force_5>
-				<current_kartez_position_0>1</current_kartez_position_0>
-				<current_kartez_position_1>1</current_kartez_position_1>
-				<current_kartez_position_2>1</current_kartez_position_2>
-				<current_kartez_position_3>1</current_kartez_position_3>
-				<current_kartez_position_4>1</current_kartez_position_4>
-				<current_kartez_position_5>1</current_kartez_position_5>
-				<servo_tryb>1</servo_tryb>
-				<preset_position_0>0.000000 -17.320218 28.080863 12.934886 2.902058 77.203948
-					307.213204 0.000000</preset_position_0>
-				<preset_position_1>0.000000 -251.566947 -0.967353 1.446422 110.324258 163.501011
-					79.309507 881.609438</preset_position_1>
+
 			</edp>
+			<edp name="edp_irp6o_axis_ts" active="true" ui_def="irp6o_axis_ts.xml">
+
+				<program_name>edp_irp6o_axis_ts</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6o_euler_xyz" active="true" ui_def="irp6o_euler_xyz.xml">
+
+				<program_name>edp_irp6o_euler_xyz</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6o_inc" active="true" ui_def="irp6o_inc.xml">
+
+				<program_name>edp_irp6o_inc</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6o_int" active="true" ui_def="irp6o_int.xml">
+
+				<program_name>edp_irp6o_int</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6o_servo" active="true" ui_def="irp6o_servo_algorithm.xml">
+
+				<program_name>edp_irp6o_servo</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+
 		</effector>
 
 		<effector name="irp6_postument" active="true">
@@ -73,27 +83,38 @@
 				<node_name>qnx632</node_name>
 			</ecp>
 
-			<edp>
-				<test_mode>1</test_mode>
-				<node_name>qnx632</node_name>
-				<force_tryb>2</force_tryb>
-				<force_0>1</force_0>
-				<force_1>1</force_1>
-				<force_2>1</force_2>
-				<force_3>1</force_3>
-				<force_4>1</force_4>
-				<force_5>1</force_5>
-				<servo_tryb>1</servo_tryb>
-				<preset_position_0>2.166128 14.341370 -3.702367 -5.034402 35.661789 343.950988
-					0.000000</preset_position_0>
-			</edp>
-		</effector>
+			<edp name="edp_irp6p_axis_xyz" active="true" ui_def="irp6p_axis_xyz.xml">
 
-		<effector name="festival" active="true" ui_def="festival.xml">
-			<ecp>
-				<test_mode>1</test_mode>
+				<program_name>edp_irp6p_axis_xyz</program_name>
 				<node_name>qnx632</node_name>
-			</ecp>
+
+			</edp>
+			<edp name="edp_irp6p_euler_ts" active="true" ui_def="irp6p_euler_ts.xml">
+
+				<program_name>edp_irp6p_euler_ts</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6p_euler_xyz" active="true" ui_def="irp6p_euler_xyz.xml">
+
+				<program_name>edp_irp6p_euler_xyz</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6p_inc" active="true" ui_def="irp6p_inc.xml">
+
+				<program_name>edp_irp6p_inc</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6p_int" active="true" ui_def="irp6p_int.xml">
+
+				<program_name>edp_irp6p_int</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6p_servo" active="true" ui_def="irp6p_servo_algorithm.xml">
+
+				<program_name>edp_irp6p_servo</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+
 		</effector>
 
 		<effector name="irp6_mechatronika" active="true">
@@ -102,38 +123,45 @@
 				<node_name>qnx632</node_name>
 			</ecp>
 
-			<edp name="edp_irp6m_axis_xyz" active="true" ui_def="mech_xyz_axis.xml">
+			<edp name="edp_irp6m_axis_xyz" active="true" ui_def="irp6m_axis_xyz.xml">
 
 				<program_name>edp_irp6m_axis_xyz</program_name>
 				<node_name>qnx632</node_name>
 
 			</edp>
-			<edp name="edp_irp6m_axis_ts" active="true" ui_def="mech_ts_axis.xml">
+			<edp name="edp_irp6m_axis_ts" active="true" ui_def="irp6m_axis_ts.xml">
 
 				<program_name>edp_irp6m_axis_ts</program_name>
 				<node_name>qnx632</node_name>
 			</edp>
-			<edp name="edp_irp6m_euler_xyz" active="true" ui_def="mech_xyz_euler.xml">
+			<edp name="edp_irp6m_euler_xyz" active="true" ui_def="irp6m_euler_xyz.xml">
 
 				<program_name>edp_irp6m_euler_xyz</program_name>
 				<node_name>qnx632</node_name>
 			</edp>
-			<edp name="edp_irp6m_inc" active="true" ui_def="mech_inc.xml">
+			<edp name="edp_irp6m_inc" active="true" ui_def="irp6m_inc.xml">
 
 				<program_name>edp_irp6m_inc</program_name>
 				<node_name>qnx632</node_name>
 			</edp>
-			<edp name="edp_irp6m_int" active="true" ui_def="mech_int.xml">
+			<edp name="edp_irp6m_int" active="true" ui_def="irp6m_int.xml">
 
 				<program_name>edp_irp6m_int</program_name>
 				<node_name>qnx632</node_name>
 			</edp>
-			<edp name="edp_irp6m_servo" active="true" ui_def="mech_servo_algorithm.xml">
+			<edp name="edp_irp6m_servo" active="true" ui_def="irp6m_servo_algorithm.xml">
 
 				<program_name>edp_irp6m_servo</program_name>
 				<node_name>qnx632</node_name>
 			</edp>
 
+		</effector>
+
+		<effector name="festival" active="true" ui_def="festival.xml">
+			<ecp>
+				<test_mode>1</test_mode>
+				<node_name>qnx632</node_name>
+			</ecp>
 		</effector>
 
 	</effectors>
