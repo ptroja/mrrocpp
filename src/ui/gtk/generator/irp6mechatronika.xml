@@ -1,4 +1,8 @@
 <irp6mechatronika>
 	<name>irp6m_</name>
-	<irp6EDPNumber>2</irp6EDPNumber>
+	<irp6EDPNumber>5</irp6EDPNumber>
+	<axis_xyz>7</axis_xyz>
+	<axis_ts>7</axis_ts>
+	<euler_xyz>6</euler_xyz>
+	<euler_ts></euler_ts>
 </irp6mechatronika>
