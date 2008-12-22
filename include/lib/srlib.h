@@ -34,6 +34,7 @@ typedef struct sr_package {
   PROCESS_TYPE process_type;      // rodzaj procesu
   int16_t message_type;      // typ wiadomosci: blad lub komunikat
   char process_name[NAME_LENGTH];  // nazwa globalna procesu np: /irp6_on_track/EDP1
+  char host_name[NAME_LENGTH]; // nazwa hosta na ktorym uruchamiany jest proces
   char description[TEXT_LENGTH];  // tresc wiadomosci
 } sr_package_t;
 

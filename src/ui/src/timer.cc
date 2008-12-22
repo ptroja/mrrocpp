@@ -68,9 +68,13 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 		ui_sr_obj->reader_buf_position++;
 		ui_sr_obj->reader_buf_position %= UI_SR_BUFFER_LENGHT;
 		
-		strftime( current_line, 8, "%H:%M:%S",
+		
+		snprintf(current_line, 100, "%-10s",
+				ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].host_name);
+		strcat(current_line, "  ");
+		strftime( current_line+12, 100, "%H:%M:%S",
             localtime( &ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].ts.tv_sec ));
-		sprintf(current_line+8, ".%03d   ",
+		sprintf(current_line+20, ".%03d   ",
             ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].ts.tv_nsec/1000000);
 
 		switch (ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].process_type) {

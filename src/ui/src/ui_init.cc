@@ -112,12 +112,12 @@ void *sr_thread(void* arg)
 			// printf("sr puls\n");
 			switch (sr_msg.hdr.code)
 			{
-				case _PULSE_CODE_DISCONNECT:
-					ConnectDetach(sr_msg.hdr.scoid);
+			case _PULSE_CODE_DISCONNECT:
+				ConnectDetach(sr_msg.hdr.scoid);
 				break;
-				case _PULSE_CODE_UNBLOCK:
+			case _PULSE_CODE_UNBLOCK:
 				break;
-				default:
+			default:
 				break;
 			}
 			continue;
@@ -233,48 +233,48 @@ void *comm_thread(void* arg) {
 	}
 
 
-while(1) {
-	// ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
-	ui_ecp_obj->communication_state = UI_ECP_AFTER_REPLY;
-	rcvid = MsgReceive(attach->chid, &ui_ecp_obj->ecp_to_ui_msg, sizeof(ui_ecp_obj->ecp_to_ui_msg), info);
-	ui_ecp_obj->communication_state = UI_ECP_AFTER_RECEIVE;
-     if (rcvid == -1) {/* Error condition, exit */
-   		  perror("UI: Receive failed\n");
-		// 	  throw generator::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
-         break;
-     }
+	while(1) {
+		// ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+		ui_ecp_obj->communication_state = UI_ECP_AFTER_REPLY;
+		rcvid = MsgReceive(attach->chid, &ui_ecp_obj->ecp_to_ui_msg, sizeof(ui_ecp_obj->ecp_to_ui_msg), info);
+		ui_ecp_obj->communication_state = UI_ECP_AFTER_RECEIVE;
+		if (rcvid == -1) {/* Error condition, exit */
+			perror("UI: Receive failed\n");
+			// 	  throw generator::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+			break;
+		}
 
-     if (rcvid == 0) {/* Pulse received */
- 		// printf("sr puls\n");
-         switch (ui_ecp_obj->ecp_to_ui_msg.hdr.code) {
-         case _PULSE_CODE_DISCONNECT:
-             ConnectDetach(ui_ecp_obj->ecp_to_ui_msg.hdr.scoid);
-         break;
-         case _PULSE_CODE_UNBLOCK:
-         break;
-         default:
-         break;
-         }
-         continue;
-     }
+		if (rcvid == 0) {/* Pulse received */
+			// printf("sr puls\n");
+			switch (ui_ecp_obj->ecp_to_ui_msg.hdr.code) {
+			case _PULSE_CODE_DISCONNECT:
+				ConnectDetach(ui_ecp_obj->ecp_to_ui_msg.hdr.scoid);
+				break;
+			case _PULSE_CODE_UNBLOCK:
+				break;
+			default:
+				break;
+			}
+			continue;
+		}
 
-     /* A QNX IO message received, reject */
-     if (ui_ecp_obj->ecp_to_ui_msg.hdr.type >= _IO_BASE && ui_ecp_obj->ecp_to_ui_msg.hdr.type <= _IO_MAX) {
+		/* A QNX IO message received, reject */
+		if (ui_ecp_obj->ecp_to_ui_msg.hdr.type >= _IO_BASE && ui_ecp_obj->ecp_to_ui_msg.hdr.type <= _IO_MAX) {
 
-        MsgReply(rcvid, EOK, 0, 0);
-         continue;
-     }
+			MsgReply(rcvid, EOK, 0, 0);
+			continue;
+		}
 
-	if (ui_state.irp6_on_track.ecp.pid<=0) {
+		if (ui_state.irp6_on_track.ecp.pid<=0) {
 
-		ui_state.irp6_on_track.ecp.pid = info->pid;
+			ui_state.irp6_on_track.ecp.pid = info->pid;
 
-	}
+		}
 
-      switch ( ui_ecp_obj->ecp_to_ui_msg.ecp_message ) { // rodzaj polecenia z ECP
-        case C_XYZ_ANGLE_AXIS:
-        case C_XYZ_EULER_ZYZ:
-        case C_JOINT:
+		switch ( ui_ecp_obj->ecp_to_ui_msg.ecp_message ) { // rodzaj polecenia z ECP
+		case C_XYZ_ANGLE_AXIS:
+		case C_XYZ_EULER_ZYZ:
+		case C_JOINT:
 		case C_MOTOR:
 			//  printf("C_MOTOR\n");
 			ui_ecp_obj->trywait_sem();
@@ -294,7 +294,7 @@ while(1) {
 			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
 				printf("Blad w UI reply\n");
 			}
-		break;
+			break;
 		case YES_NO:
 			ui_ecp_obj->trywait_sem();
 			PtEnter(0);
@@ -307,8 +307,8 @@ while(1) {
 				printf("Blad w UI reply\n");
 			}
 
-          break;
-        case MESSAGE:
+			break;
+		case MESSAGE:
 			PtEnter(0);
 			ApCreateModule (ABM_wnd_message, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_message, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
@@ -319,33 +319,33 @@ while(1) {
 			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
 				printf("Blad w UI reply\n");
 			}
-          break;
-        case DOUBLE_NUMBER:
-        	ui_ecp_obj->trywait_sem();
+			break;
+		case DOUBLE_NUMBER:
+			ui_ecp_obj->trywait_sem();
 			PtEnter(0);
 			ApCreateModule (ABM_wnd_input_double, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_input_double, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
 			PtLeave(0);
 			ui_ecp_obj->take_sem();
 
-	        if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
-		  	 	printf("Blad w UI reply\n");
-	  	  	}
-		break;
-        case INTEGER_NUMBER:
-        	ui_ecp_obj->trywait_sem();
+			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
+				printf("Blad w UI reply\n");
+			}
+			break;
+		case INTEGER_NUMBER:
+			ui_ecp_obj->trywait_sem();
 			PtEnter(0);
 			ApCreateModule (ABM_wnd_input_integer, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_input_integer, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
 			PtLeave(0);
 			ui_ecp_obj->take_sem();
 
-		   	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
-			   	printf("Blad w UI reply\n");
-		   	}
- 		break;
-          case CHOOSE_OPTION:
-        	ui_ecp_obj->trywait_sem();
+			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
+				printf("Blad w UI reply\n");
+			}
+			break;
+		case CHOOSE_OPTION:
+			ui_ecp_obj->trywait_sem();
 			PtEnter(0);
 			ApCreateModule (ABM_wnd_choose_option, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_choose_option, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
@@ -356,170 +356,170 @@ while(1) {
 			{
 				block_widget(ABW_PtButton_wind_choose_option_3);
 				block_widget(ABW_PtButton_wind_choose_option_4);
-			 }
+			}
 			else if (ui_ecp_obj->ecp_to_ui_msg.nr_of_options==3)
 			{
-			 	unblock_widget(ABW_PtButton_wind_choose_option_3);
+				unblock_widget(ABW_PtButton_wind_choose_option_3);
 				block_widget(ABW_PtButton_wind_choose_option_4);
-			 }
+			}
 			else if (ui_ecp_obj->ecp_to_ui_msg.nr_of_options==4)
 			{
 				unblock_widget(ABW_PtButton_wind_choose_option_3);
 				unblock_widget(ABW_PtButton_wind_choose_option_4);
-			 }
+			}
 
 			PtLeave(0);
+			ui_ecp_obj->take_sem();
+
+			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
+				printf("Blad w UI reply\n");
+			}
+
+			break;
+		case LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+			//    printf("LOAD_FILE\n");
+			if (ui_state.teachingstate == MP_RUNNING) {
+				ui_ecp_obj->trywait_sem();
+				wyjscie=false;
+				while (!wyjscie)
+				{
+					if(!ui_state.is_file_selection_window_open)
+					{
+						ui_state.is_file_selection_window_open=1;
+						ui_state.file_window_mode=FSTRAJECTORY;	// wybor pliku z trajektoria
+						wyjscie = true;
+						PtEnter(0);
+						ApCreateModule (ABM_file_selection_window, ABW_base, NULL);
+						// 	PtRealizeWidget( ABW_file_selection_window );
+						PtLeave(0);
+					} else {
+						delay(1);
+					}
+				}
+
+				ui_ecp_obj->ui_rep.reply = FILE_LOADED;
 				ui_ecp_obj->take_sem();
 
-		    	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
-			   	printf("Blad w UI reply\n");
-		    	}
+				if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
+					printf("Blad w UI reply\n");
+				}
 
-          break;
-        case LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
-     //    printf("LOAD_FILE\n");
-          if (ui_state.teachingstate == MP_RUNNING) {
-        	  ui_ecp_obj->trywait_sem();
-			wyjscie=false;
-			while (!wyjscie)
-			{
-				if(!ui_state.is_file_selection_window_open)
+			}
+			break;
+		case SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+			//    printf("SAVE_FILE\n");
+			if (ui_state.teachingstate == MP_RUNNING) {
+				ui_ecp_obj->trywait_sem();
+				wyjscie = false;
+				while (!wyjscie)
 				{
-					ui_state.is_file_selection_window_open=1;
-					ui_state.file_window_mode=FSTRAJECTORY;	// wybor pliku z trajektoria
-					wyjscie = true;
-			          PtEnter(0);
-			          	ApCreateModule (ABM_file_selection_window, ABW_base, NULL);
-			   	     // 	PtRealizeWidget( ABW_file_selection_window );
-				  	 PtLeave(0);
-				} else {
-					delay(1);
+					if(!ui_state.is_file_selection_window_open)
+					{
+						ui_state.is_file_selection_window_open=1;
+						ui_state.file_window_mode=FSTRAJECTORY;	// wybor pliku z trajektoria
+						wyjscie = true;
+						PtEnter(0);
+						ApCreateModule (ABM_file_selection_window, ABW_base, NULL);
+						PtLeave(0);
+					} else {
+						delay(1);
+					}
+				}
+
+				ui_ecp_obj->ui_rep.reply = FILE_SAVED;
+				ui_ecp_obj->take_sem();
+
+				if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
+					printf("Blad w UI reply\n");
 				}
 			}
+			break;
+		case OPEN_FORCE_SENSOR_MOVE_WINDOW:
+			// obsluga sterowania silowego -> ForceSensorMove
+			// przejecie kontroli nad Fotonen
 
-		          ui_ecp_obj->ui_rep.reply = FILE_LOADED;
-			       	 ui_ecp_obj->take_sem();
-
-		     	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
-			   	printf("Blad w UI reply\n");
-		    	}
-
-          }
-          break;
-        case SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
-		   //    printf("SAVE_FILE\n");
-          if (ui_state.teachingstate == MP_RUNNING) {
-        	  ui_ecp_obj->trywait_sem();
-         		wyjscie = false;
-			while (!wyjscie)
-			{
-				if(!ui_state.is_file_selection_window_open)
-				{
-					ui_state.is_file_selection_window_open=1;
-					ui_state.file_window_mode=FSTRAJECTORY;	// wybor pliku z trajektoria
-					wyjscie = true;
-			          PtEnter(0);
-			          ApCreateModule (ABM_file_selection_window, ABW_base, NULL);
-				  	 PtLeave(0);
-				} else {
-					delay(1);
-				}
+			PtEnter(0);
+			// stworzenie okna wndForceControl
+			ApCreateModule (ABM_wndForceControl, ABW_base, NULL);
+			// 	oddanie kontroli
+			PtLeave(0);
+			// odeslanie -> odwieszenie ECP
+			if (MsgReply(rcvid, EOK, NULL, 0)<0) {
+				printf("Blad w UI reply\n");
 			}
-
-  		 ui_ecp_obj->ui_rep.reply = FILE_SAVED;
-  		ui_ecp_obj->take_sem();
-
-     	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
-		   	printf("Blad w UI reply\n");
-	    	}
-          }
-          break;
-	case OPEN_FORCE_SENSOR_MOVE_WINDOW:
-		// obsluga sterowania silowego -> ForceSensorMove
-		// przejecie kontroli nad Fotonen
-		
-		PtEnter(0);
-		// stworzenie okna wndForceControl
-		ApCreateModule (ABM_wndForceControl, ABW_base, NULL);
-   	     // 	oddanie kontroli
-	  	 PtLeave(0);
-		// odeslanie -> odwieszenie ECP
-		if (MsgReply(rcvid, EOK, NULL, 0)<0) {
-	 		printf("Blad w UI reply\n");
+			break;
+		case OPEN_TRAJECTORY_REPRODUCE_WINDOW:
+			// obsluga odtwarzania trajektorii
+			// przejecie kontroli nad Fotonen
+			PtEnter(0);
+			// stworzenie okna wndTrajectoryReproduce
+			ApCreateModule (ABM_wndTrajectoryReproduce, ABW_base, NULL);
+			// 	oddanie kontroli
+			PtLeave(0);
+			// odeslanie -> odwieszenie ECP
+			if (MsgReply(rcvid, EOK, NULL, 0)<0) {
+				printf("Blad w UI reply\n");
 			}
-          break;
-	case OPEN_TRAJECTORY_REPRODUCE_WINDOW:
-		// obsluga odtwarzania trajektorii
-		// przejecie kontroli nad Fotonen
-		PtEnter(0);
-		// stworzenie okna wndTrajectoryReproduce
-		ApCreateModule (ABM_wndTrajectoryReproduce, ABW_base, NULL);
-   	     // 	oddanie kontroli
-	  	 PtLeave(0);
-		// odeslanie -> odwieszenie ECP
-		if (MsgReply(rcvid, EOK, NULL, 0)<0) {
-	 		printf("Blad w UI reply\n");
+			break;
+		case TR_REFRESH_WINDOW:
+			// przejecie kontroli nad Fotonen
+			PtEnter(0);
+			// Odswiezenie okna
+			TRRefreshWindow(NULL, NULL, NULL);
+			// 	oddanie kontroli
+			PtLeave(0);
+			// odeslanie -> odwieszenie ECP
+			if (MsgReply(rcvid, EOK, NULL, 0)<0) {
+				printf("Blad w UI reply\n");
 			}
-          break;
-	case TR_REFRESH_WINDOW:
-		// przejecie kontroli nad Fotonen
-		PtEnter(0);
-		// Odswiezenie okna
-		TRRefreshWindow(NULL, NULL, NULL);
-   	     // 	oddanie kontroli
-	  	 PtLeave(0);
-		// odeslanie -> odwieszenie ECP
-		if (MsgReply(rcvid, EOK, NULL, 0)<0) {
-	 		printf("Blad w UI reply\n");
+			break;
+		case TR_DANGEROUS_FORCE_DETECTED:
+			// przejecie kontroli nad Fotonen
+			PtEnter(0);
+			// Ustawienie stanu przyciskow.
+			TRDangerousForceDetected(NULL, NULL, NULL);
+			// 	oddanie kontroli
+			PtLeave(0);
+			// odeslanie -> odwieszenie ECP
+			if (MsgReply(rcvid, EOK, NULL, 0)<0) {
+				printf("Blad w UI reply\n");
 			}
-          break;
-	case TR_DANGEROUS_FORCE_DETECTED:
-		// przejecie kontroli nad Fotonen
-		PtEnter(0);
-		// Ustawienie stanu przyciskow.
-		TRDangerousForceDetected(NULL, NULL, NULL);
-   	     // 	oddanie kontroli
-	  	 PtLeave(0);
-		// odeslanie -> odwieszenie ECP
-		if (MsgReply(rcvid, EOK, NULL, 0)<0) {
-	 		printf("Blad w UI reply\n");
-			}
-          break;
+			break;
 
 
-	case MAM_OPEN_WINDOW:
-		// Obsluga odtwarzania trajektorii.
-		// Przejecie kontroli nad Fotonen.
-		PtEnter(0);
-		// Stworzenie okna wnd_manual_moves_automatic_measures.
-//		ApCreateModule (ABM_wndTrajectoryReproduce, ABW_base, NULL);
-		ApCreateModule (ABM_MAM_wnd_manual_moves_automatic_measures, ABW_base, NULL);
-   	     // Oddanie kontroli.
-	  	 PtLeave(0);
-		// Odeslanie -> odwieszenie ECP.
-		if (MsgReply(rcvid, EOK, NULL, 0)<0) {
-	 		printf("Blad w UI reply\n");
+		case MAM_OPEN_WINDOW:
+			// Obsluga odtwarzania trajektorii.
+			// Przejecie kontroli nad Fotonen.
+			PtEnter(0);
+			// Stworzenie okna wnd_manual_moves_automatic_measures.
+			//		ApCreateModule (ABM_wndTrajectoryReproduce, ABW_base, NULL);
+			ApCreateModule (ABM_MAM_wnd_manual_moves_automatic_measures, ABW_base, NULL);
+			// Oddanie kontroli.
+			PtLeave(0);
+			// Odeslanie -> odwieszenie ECP.
+			if (MsgReply(rcvid, EOK, NULL, 0)<0) {
+				printf("Blad w UI reply\n");
 			}
-          break;
-	case MAM_REFRESH_WINDOW:
-		// Przejecie kontroli nad Photonen.
-		PtEnter(0);
-		// Odswiezenie okna.
-		MAM_refresh_window(NULL, NULL, NULL);
-   	     // 	oddanie kontroli
-	  	 PtLeave(0);
-		// Odeslanie -> odwieszenie ECP.
-		if (MsgReply(rcvid, EOK, NULL, 0)<0) {
-	 		printf("Blad w UI reply\n");
+			break;
+		case MAM_REFRESH_WINDOW:
+			// Przejecie kontroli nad Photonen.
+			PtEnter(0);
+			// Odswiezenie okna.
+			MAM_refresh_window(NULL, NULL, NULL);
+			// 	oddanie kontroli
+			PtLeave(0);
+			// Odeslanie -> odwieszenie ECP.
+			if (MsgReply(rcvid, EOK, NULL, 0)<0) {
+				printf("Blad w UI reply\n");
 			}
-          break;
+			break;
 
-	default:
-          perror ("Strange ECP message\n");
-	}; // end: switch
-}// end while
+		default:
+			perror ("Strange ECP message\n");
+		}; // end: switch
+	}// end while
 
-return 0;
+	return 0;
 };
 
 
@@ -527,56 +527,56 @@ return 0;
 void catch_signal(int sig) {
 	int status;
 	pid_t child_pid;
-  switch(sig) {
-    case SIGINT :
-    	UI_close();
-    break;
+	switch(sig) {
+	case SIGINT :
+		UI_close();
+		break;
 	case SIGALRM:
 		printf("SIGALRM received\n");
 		break;
-    case SIGSEGV:
-	   fprintf(stderr, "Segmentation fault in UI process\n");
-	   signal(SIGSEGV, SIG_DFL);
-	   break;
+	case SIGSEGV:
+		fprintf(stderr, "Segmentation fault in UI process\n");
+		signal(SIGSEGV, SIG_DFL);
+		break;
 	case SIGCHLD:
 
 		printf("waitpid(...)"); fflush(stdout);
-	   child_pid = waitpid(-1, &status, /*WNOHANG*/ WEXITED);
+		child_pid = waitpid(-1, &status, /*WNOHANG*/ WEXITED);
 
-	   if (child_pid == -1) {
-		   perror("UI: waitpid()");
-	   } else if (child_pid == 0) {
-		   fprintf(stderr, "UI: no child exited\n");
-	   } else {
-		   //fprintf(stderr, "UI: child %d...\n", child_pid);
-		   if (WIFEXITED(status)) {
-			   fprintf(stderr, "UI: child %d exited normally with status %d\n",
-					   child_pid, WEXITSTATUS(status));
-		   }
-		   if (WIFSIGNALED(status)) {
+		if (child_pid == -1) {
+			perror("UI: waitpid()");
+		} else if (child_pid == 0) {
+			fprintf(stderr, "UI: no child exited\n");
+		} else {
+			//fprintf(stderr, "UI: child %d...\n", child_pid);
+			if (WIFEXITED(status)) {
+				fprintf(stderr, "UI: child %d exited normally with status %d\n",
+						child_pid, WEXITSTATUS(status));
+			}
+			if (WIFSIGNALED(status)) {
 #ifdef WCOREDUMP
-			   if (WCOREDUMP(status)) {
-				   fprintf(stderr, "UI: child %d terminated by signal %d (core dumped)\n",
-					   child_pid, WTERMSIG(status));
-			   }
-			   else
+				if (WCOREDUMP(status)) {
+					fprintf(stderr, "UI: child %d terminated by signal %d (core dumped)\n",
+							child_pid, WTERMSIG(status));
+				}
+				else
 #endif /* WCOREDUMP */
-			   {
-				   fprintf(stderr, "UI: child %d terminated by signal %d\n",
-					   child_pid, WTERMSIG(status));
-			   }
-		   }
-		   if (WIFSTOPPED(status)) {
-			   fprintf(stderr, "UI: child %d stopped\n", child_pid);
-		   }
-		   if (WIFCONTINUED(status)) {
-			   fprintf(stderr, "UI: child %d resumed\n", child_pid);
-		   }
-	   }
-	   break;
+				{
+					fprintf(stderr, "UI: child %d terminated by signal %d\n",
+							child_pid, WTERMSIG(status));
+				}
+			}
+			if (WIFSTOPPED(status)) {
+				fprintf(stderr, "UI: child %d stopped\n", child_pid);
+			}
+			if (WIFCONTINUED(status)) {
+				fprintf(stderr, "UI: child %d resumed\n", child_pid);
+			}
+		}
+		break;
 	default:
-	   fprintf(stderr, "UI: unknown signal (%d)\n", sig);
-  } // end: switch
+		fprintf(stderr, "UI: unknown signal (%d)\n", sig);
+	} // end: switch
 }
 
 void
@@ -588,8 +588,8 @@ UI_close(void) {
 
 int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
-	{
-   	/* eliminate 'unreferenced' warnings */
+{
+	/* eliminate 'unreferenced' warnings */
 	link_instance = link_instance, apinfo = apinfo, cbinfo = cbinfo;
 
 	set_ui_state_notification(UI_N_STARTING);
@@ -601,13 +601,13 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	pthread_t sr_tid;
 
 	signal( SIGINT, &catch_signal );// by y aby uniemozliwic niekontrolowane zakonczenie aplikacji ctrl-c z kalwiatury
- 	signal( SIGALRM, &catch_signal );
- 	signal( SIGSEGV, &catch_signal );
+	signal( SIGALRM, &catch_signal );
+	signal( SIGSEGV, &catch_signal );
 #ifdef PROCESS_SPAWN_RSH
 	signal( SIGCHLD, &catch_signal );
 #endif /* PROCESS_SPAWN_RSH */
 
- 	set_thread_priority(pthread_self() , MAX_PRIORITY-6);
+	set_thread_priority(pthread_self() , MAX_PRIORITY-6);
 
 	config = NULL;
 
@@ -692,24 +692,24 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 
 	// ustalenie katalogow UI
 
-    if( uname( &sysinfo ) == -1 ) {
-       perror( "uname" );
-    }
+	if( uname( &sysinfo ) == -1 ) {
+		perror( "uname" );
+	}
 
 	cwd = getcwd( buff, PATH_MAX + 1 );
 	if( cwd == NULL ) {
 		perror( "Blad cwd w UI" );
 	}
 
-    strcpy(ui_state.ui_node_name, sysinfo.nodename);
+	strcpy(ui_state.ui_node_name, sysinfo.nodename);
 
-    strcpy(ui_state.binaries_local_path, cwd);
-    strncpy(ui_state.mrrocpp_local_path, cwd, strlen(cwd)-3); // kopiowanie lokalnej sciezki bez "bin" - 3 znaki
-    strcpy(ui_state.binaries_network_path, "/net/");
-    strcat(ui_state.binaries_network_path, ui_state.ui_node_name);
-    strcat(ui_state.binaries_network_path, ui_state.binaries_local_path);
-    strcat(ui_state.binaries_network_path, "/");// wysylane jako argument do procesow potomnych (mp_m i dalej)
-    // printf( "system name  : %s\n", ui_state.binaries_network_path);
+	strcpy(ui_state.binaries_local_path, cwd);
+	strncpy(ui_state.mrrocpp_local_path, cwd, strlen(cwd)-3); // kopiowanie lokalnej sciezki bez "bin" - 3 znaki
+	strcpy(ui_state.binaries_network_path, "/net/");
+	strcat(ui_state.binaries_network_path, ui_state.ui_node_name);
+	strcat(ui_state.binaries_network_path, ui_state.binaries_local_path);
+	strcat(ui_state.binaries_network_path, "/");// wysylane jako argument do procesow potomnych (mp_m i dalej)
+	// printf( "system name  : %s\n", ui_state.binaries_network_path);
 
 	// sciezka dla okna z wyborem pliku podczas wybor trajektorii dla uczenia
 	strcpy(ui_state.teach_filesel_fullpath, "/net/");
@@ -728,9 +728,9 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 
 	// pierwsze zczytanie pliku konfiguracyjnego (aby pobrac nazwy dla pozostalych watkow UI)
 	if (get_default_configuration_file_name()>=1) // zczytaj nazwe pliku konfiguracyjnego
-	 {
+	{
 		initiate_configuration();
-	 	// sprawdza czy sa postawione gns's i ew. stawia je
+		// sprawdza czy sa postawione gns's i ew. stawia je
 		// uwaga serwer musi byc wczesniej postawiony
 		check_gns();
 	} else {
@@ -741,13 +741,13 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	ui_sr_obj = new ui_sr_buffer();
 	ui_ecp_obj = new ui_ecp_buffer();
 
-  if (pthread_create (&sr_tid, NULL, sr_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
-	 printf (" Failed to thread sr_thread\n");
-  }
+	if (pthread_create (&sr_tid, NULL, sr_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
+		printf (" Failed to thread sr_thread\n");
+	}
 
-   if (pthread_create (&ui_tid, NULL, comm_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
-   		 printf (" Failed to thread comm_thread\n");
-  }
+	if (pthread_create (&ui_tid, NULL, comm_thread, NULL)!=EOK) {// Y&W - utowrzenie watku serwa
+		printf (" Failed to thread comm_thread\n");
+	}
 
 
 	// Zablokowanie domyslnej obslugi sygnalu SIGINT w watkach UI_SR i UI_COMM
@@ -759,17 +759,17 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	sigaddset( &set, SIGALRM );
 
 	if  (SignalProcmask(0, sr_tid, SIG_BLOCK, &set, NULL)==-1) {
-		 perror("SignalProcmask(sr_tid)");
+		perror("SignalProcmask(sr_tid)");
 	}
 
 	if  (SignalProcmask(0, ui_tid, SIG_BLOCK, &set, NULL)==-1) {
-		 perror("SignalProcmask(ui_tid)");
+		perror("SignalProcmask(ui_tid)");
 	}
 
 	// kolejne zczytanie pliku konfiguracyjnego
 	if (get_default_configuration_file_name()==1) // zczytaj nazwe pliku konfiguracyjnego
-	 {
-		 reload_whole_configuration();
+	{
+		reload_whole_configuration();
 
 	} else {
 		printf ("Blad manage_default_configuration_file\n");

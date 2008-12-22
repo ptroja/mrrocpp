@@ -14,6 +14,7 @@
 #include <stdint.h>
 #include <errno.h>
 #include <assert.h>
+#include <sys/utsname.h>
 
 #include "common/typedefs.h"
 #include "common/impconst.h"
@@ -25,6 +26,7 @@
 #if !defined(USE_MESSIP_SRR)
 // Konstruktor
 sr::sr(PROCESS_TYPE process_type, const char *process_name, const char *sr_name) {
+	struct utsname sysinfo;
     int tmp = 0;
  	// kilka sekund  (~1) na otworzenie urzadzenia
 	while((fd = name_open(sr_name, NAME_FLAG_ATTACH_GLOBAL)) < 0) {
@@ -35,7 +37,10 @@ sr::sr(PROCESS_TYPE process_type, const char *process_name, const char *sr_name)
 		    return;
 		};
 	}
-
+	if( uname( &sysinfo ) == -1 ) {
+		perror( "uname" );
+	}
+	strcpy(sr_message.host_name, sysinfo.nodename); 
 	sr_message.process_type = process_type;
 	sr_message.message_type = NEW_MESSAGE;
 	strcpy(sr_message.process_name, process_name);
