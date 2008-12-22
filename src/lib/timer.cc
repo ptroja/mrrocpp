@@ -63,9 +63,9 @@ timer_status_enum timer::get_time(float *sec)
 {
 	if (timer_stopped)
 	{
-		float t = (t2.tv_sec + t2.tv_nsec) - (t1.tv_sec + t1.tv_nsec);
+		float t = (t2.tv_sec + t2.tv_nsec/1e9) - (t1.tv_sec + t1.tv_nsect2.tv_nsec/1e9);
 		if (sec)
-			*sec = (t/1000000000);
+			*sec = (t/1e9);
 		last_status = TIME_RETRIVED;
 		return TIME_RETRIVED;
 	} else {
@@ -77,25 +77,34 @@ timer_status_enum timer::get_time(float *sec)
 
 void timer::print_last_status(void)
 {
-	switch(last_status)
+	switch (last_status)
 	{
-		case TIMER_INITIALIZED: printf("TIMER_INITIALIZED\n");
-		break;
-		case TIMER_STARTED: printf("TIMER_STARTED\n");
-		break;
-		case TIMER_STOPPED: printf("TIMER_STOPPED\n");
-		break;
-		case TIME_RETRIVED: printf("TIME_RETRIVED\n");
-		break;
-		case CYCLES_RETRIVED: printf("CYCLES_RETRIVED\n");
-		break;
-		case TIMER_NOT_INITIALIZED: printf("TIMER_NOT_INITIALIZED\n");
-		break;
-		case TIMER_NOT_STARTED: printf("TIMER_NOT_STARTED\n");
-		break;
-		case TIMER_NOT_STOPPED: printf("TIMER_NOT_STOPPED\n");
-		break;
-		case TIMER_RUNNING_OR_NOT_STARTED: printf("TIMER_RUNNING_OR_NOT_STARTED\n");
-		break;
+		case TIMER_INITIALIZED:
+			printf("TIMER_INITIALIZED\n");
+			break;
+		case TIMER_STARTED:
+			printf("TIMER_STARTED\n");
+			break;
+		case TIMER_STOPPED:
+			printf("TIMER_STOPPED\n");
+			break;
+		case TIME_RETRIVED:
+			printf("TIME_RETRIVED\n");
+			break;
+		case CYCLES_RETRIVED:
+			printf("CYCLES_RETRIVED\n");
+			break;
+		case TIMER_NOT_INITIALIZED:
+			printf("TIMER_NOT_INITIALIZED\n");
+			break;
+		case TIMER_NOT_STARTED:
+			printf("TIMER_NOT_STARTED\n");
+			break;
+		case TIMER_NOT_STOPPED:
+			printf("TIMER_NOT_STOPPED\n");
+			break;
+		case TIMER_RUNNING_OR_NOT_STARTED:
+			printf("TIMER_RUNNING_OR_NOT_STARTED\n");
+			break;
 	}
 } // print_last_status
