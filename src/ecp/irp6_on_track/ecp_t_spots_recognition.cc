@@ -13,9 +13,10 @@
 //Constructors
 ecp_t_spots_recognition::ecp_t_spots_recognition(configurator &_config): ecp_task(_config)
 {
-    katalog_traj = "../trj/spots/traj";
+    katalog_traj = "../trj/spots/standard/traj";
     katalog_dump = "~/mrroc_calib";
     mkdir(katalog_dump, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    remove("../pomiary/kalibracja.txt");
 }
 
 ecp_t_spots_recognition::~ecp_t_spots_recognition()
