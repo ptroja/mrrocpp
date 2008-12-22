@@ -22,8 +22,6 @@
 #include "ecp_mp/ecp_mp_s_cvfradia.h"
 #include "ecp/common/ecp_t_cvfradia.h"
 
-
-
 /*!
  * Initialize task - robot, sensors and generators.
  */
@@ -54,10 +52,7 @@ void ecp_task_cvfradia::task_initialization(void)
 	{
 		printf("EXCEPTION\n");
 	}
-
-
-
-};
+}
 
 
 /*!
@@ -65,15 +60,8 @@ void ecp_task_cvfradia::task_initialization(void)
  */
 void ecp_task_cvfradia::main_task_algorithm(void)
 {
-	// Wait for start.
-	sr_ecp_msg->message("ECP - cvFraDIA test - press start");
-	ecp_wait_for_start();
-	// External infinite loop.
 	cvg->Move();
-	// Wait for stop.
-	sr_ecp_msg->message("ECP - cvFraDIA test - press stop");
-	ecp_wait_for_stop();
-};
+}
 
 /*!
  * Returns created task object (Factory Method design pattern).
@@ -81,4 +69,4 @@ void ecp_task_cvfradia::main_task_algorithm(void)
 ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_cvfradia(_config);
-};
+}

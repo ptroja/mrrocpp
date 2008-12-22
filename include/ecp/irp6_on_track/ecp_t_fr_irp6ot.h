@@ -9,7 +9,7 @@ protected:
 	ecp_linear_parabolic_generator *adg1;
 	// parabolic_generator adg1(JOINT, 20., joint_pp);   // generator dla trajektorii dojscia we wsp. wew
 	// generator dla trajektorii dojscia we wsp. zew.
-	ecp_linear_parabolic_generator *adg2; 
+	ecp_linear_parabolic_generator *adg2;
 	ecp_elipsoid_generator *el;
 	double ta[MAX_SERVOS_NR];
 	double tb[MAX_SERVOS_NR];
@@ -17,8 +17,7 @@ protected:
 public:
 	// KONSTRUKTORY
 	ecp_task_fr_irp6ot(configurator &_config);
-	~ecp_task_fr_irp6ot();
-	
+
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);
 	void main_task_algorithm(void);

@@ -8,12 +8,11 @@ class ecp_task_test_irp6p: public ecp_task  {
 public:
 	// KONSTRUKTORY
 	ecp_task_test_irp6p(configurator &_config);
-	~ecp_task_test_irp6p();
-	
+
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);
 	void main_task_algorithm(void);
-	
+
 };
 
 #endif

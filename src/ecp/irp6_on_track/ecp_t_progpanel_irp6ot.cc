@@ -23,16 +23,16 @@
 /*int get_object_position(double *coordinates)
 {
 	int i;
-	
+
 	for(i=1;i<=6;i++) coordinates[i] = 1.0;
 	return 0;
 }
- 
+
 int create_grab_path(double *object_coordinates, ecp_teach_in_generator generator)
 {
 	int i;
 	double okolica[7], chwyt[7];
-	
+
 	okolica[0]=object_coordinates[0] - 10.0;
 	okolica[1]=object_coordinates[1] - 10.0;
 	okolica[2]=object_coordinates[2] - 10.0;
@@ -40,15 +40,15 @@ int create_grab_path(double *object_coordinates, ecp_teach_in_generator generato
 	okolica[4]=object_coordinates[4] - 10.0;
 	okolica[5]=object_coordinates[5] - 10.0;
 	okolica[6]=10.0;
-	
+
 	for(i=0; i<=5; i++) chwyt[i]=object_coordinates[i];
 	chwyt[6]=5.0;
-	
+
 	generator.flush_pose_list();
-   	generator.create_pose_list_head(XYZ_EULER_ZYZ, 3.0, okolica);  	
+   	generator.create_pose_list_head(XYZ_EULER_ZYZ, 3.0, okolica);
    	generator.insert_pose_list_element(XYZ_EULER_ZYZ, 3.0, object_coordinates);
- 	generator.insert_pose_list_element(XYZ_EULER_ZYZ, 3.0, chwyt);	
-	
+ 	generator.insert_pose_list_element(XYZ_EULER_ZYZ, 3.0, chwyt);
+
 	return 0;
 }*/
 
@@ -58,11 +58,7 @@ ecp_task_progpanel_irp6ot::ecp_task_progpanel_irp6ot(configurator &_config) : ec
 {
     //	tig = NULL;
     ppg = NULL;
-};
-ecp_task_progpanel_irp6ot::~ecp_task_progpanel_irp6ot()
-{}
-;
-
+}
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_progpanel_irp6ot::task_initialization(void)
@@ -79,32 +75,18 @@ void ecp_task_progpanel_irp6ot::task_initialization(void)
     // Przepisanie listy czujnikow.
     ppg->sensor_m = sensor_m;
     sr_ecp_msg->message("ECP loaded");
-};
-
+}
 
 void ecp_task_progpanel_irp6ot::main_task_algorithm(void)
 {
+	//	ecp_load_file_from_ui(*tig);
+	//	ecp_load_file_with_path(*tig, config->return_string_value("trajektoria"));
 
-    sr_ecp_msg->message("ECP progpanel irp6ot  - wcisnij start");
-    ecp_wait_for_start();
-
-    for(;;)
-    { // Wewnetrzna petla nieskonczona
-
-        //	ecp_load_file_from_ui(*tig);
-        //	ecp_load_file_with_path(*tig, config->return_string_value("trajektoria"));
-
-        //	 Move (*tig);
-        ppg->Move();
-
-        ecp_wait_for_stop();
-        break; // W.S. ??? czy powinna byc ta instrukcja
-    } // koniec: for(;;) wewnetrznej
-
-
-};
+	//	 Move (*tig);
+	ppg->Move();
+}
 
 ecp_task* return_created_ecp_task (configurator &_config)
-                {
-                    return new ecp_task_progpanel_irp6ot(_config);
-                };
+{
+	return new ecp_task_progpanel_irp6ot(_config);
+}

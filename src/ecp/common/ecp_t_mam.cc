@@ -242,26 +242,10 @@ void ecp_task_mam::task_initialization(void)
 
 void ecp_task_mam::main_task_algorithm(void)
 {
-	switch (ecp_m_robot->robot_name) {
-		case ROBOT_IRP6_ON_TRACK:
-			sr_ecp_msg->message("ECP mam irp6ot press start");
-			break;
-		case ROBOT_IRP6_POSTUMENT:
-			sr_ecp_msg->message("ECP mam irp6p press start");
-			break;
-		default:
-			break;
-	}
-
-	ecp_wait_for_start();
-
 	// Pokazanie okna .
 	show_mam_window(UI_fd);
 
 	ecp_termination_notice();
-
-	// Oczekiwanie na polecenie STOP od MP.
-	ecp_wait_for_stop();
 }
 
 ecp_task* return_created_ecp_task(configurator &_config)

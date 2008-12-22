@@ -13,12 +13,11 @@ protected:
 public:
 	// KONSTRUKTORY
 	ecp_task_rcsc_speaker(configurator &_config);
-	~ecp_task_rcsc_speaker();
-	
+
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);
 	void main_task_algorithm(void);
-	
+
 };
 
 #endif

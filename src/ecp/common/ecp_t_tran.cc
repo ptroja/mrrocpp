@@ -27,9 +27,6 @@ ecp_task_tran::ecp_task_tran(configurator &_config) :
         ecp_task(_config)
 {}
 
-ecp_task_tran::~ecp_task_tran()
-{}
-
 // methods for ECP template to redefine in concrete classes
 void ecp_task_tran::task_initialization(void)
 {
@@ -61,30 +58,16 @@ void ecp_task_tran::task_initialization(void)
 
 void ecp_task_tran::main_task_algorithm(void)
 {
-    sr_ecp_msg->message("ECP transparentne - wcisnij start");
-
-    ecp_wait_for_start();
-
     ecp_generator_t gt (*this);
-
     for(;;)
-    { // Wewnetrzna petla nieskonczona
+    {
+    	sr_ecp_msg->message("Ruch");
 
-        for(;;)
-        {
-            sr_ecp_msg->message("Ruch");
-
-            gt.Move();
-        }
-
-        // Oczekiwanie na STOP
-        printf("przed wait for stop\n");
-        ecp_wait_for_stop ();
-        break;
-    } // koniec: for(;;) wewnetrznej
+    	gt.Move();
+    }
 }
 
 ecp_task* return_created_ecp_task (configurator &_config)
-                {
-                    return new ecp_task_tran(_config);
-                }
+{
+	return new ecp_task_tran(_config);
+}

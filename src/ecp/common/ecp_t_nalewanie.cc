@@ -26,11 +26,7 @@
 ecp_task_nalewanie::ecp_task_nalewanie(configurator &_config) : ecp_task(_config)
 {
     sg = NULL;
-};
-ecp_task_nalewanie::~ecp_task_nalewanie()
-{}
-;
-
+}
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_nalewanie::task_initialization(void)
@@ -51,35 +47,25 @@ void ecp_task_nalewanie::task_initialization(void)
     sg->load_file_with_path ("../trj/rcsc/irp6ot_sm_ap_2.trj");
 
     sr_ecp_msg->message("ECP loaded");
-};
+}
 
 
 void ecp_task_nalewanie::main_task_algorithm(void)
 {
-    Homog_matrix *mat=new Homog_matrix();
+	/*
+	Homog_matrix *mat=new Homog_matrix();
     double qq[7];
 
-    /*mat->set_xyz_quaternion(1, 2, 3, 0.5, 0.5, 0.5, 0.5);
+	mat->set_xyz_quaternion(1, 2, 3, 0.5, 0.5, 0.5, 0.5);
     mat->get_xyz_quaternion(qq);
 
-    printf("%f, %f, %f, %f, %f, %f, %f\n", qq[0],qq[1],qq[2],qq[3],qq[4],qq[5],qq[6]);*/
+    printf("%f, %f, %f, %f, %f, %f, %f\n", qq[0],qq[1],qq[2],qq[3],qq[4],qq[5],qq[6]);
+    */
 
-    sr_ecp_msg->message("ECP nalewanie  - wcisnij start");
-    ecp_wait_for_start();
-
-    for(;;)
-    { // Wewnetrzna petla nieskonczona
-
-        sg->Move();
-
-        ecp_wait_for_stop();
-        break; // W.S. ??? czy powinna byc ta instrukcja
-    } // koniec: for(;;) wewnetrznej
-
-
-};
+    sg->Move();
+}
 
 ecp_task* return_created_ecp_task (configurator &_config)
-                {
-                    return new ecp_task_nalewanie(_config);
-                };
+{
+	return new ecp_task_nalewanie(_config);
+}

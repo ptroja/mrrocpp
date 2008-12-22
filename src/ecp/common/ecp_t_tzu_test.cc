@@ -10,7 +10,7 @@
 #include "ecp_mp/ecp_mp_s_force.h"
 #include "lib/srlib.h"
 #include "ecp_mp/ecp_mp_t_rcsc.h"
-#include "ecp_mp/ecp_mp_s_schunk.h"	
+#include "ecp_mp/ecp_mp_s_schunk.h"
 
 #include "ecp/irp6_on_track/ecp_local.h"
 #include "ecp/irp6_postument/ecp_local.h"
@@ -29,17 +29,17 @@ ecp_task_tzu_test::ecp_task_tzu_test(configurator &_config) : ecp_task(_config)
 	ynrfg = NULL;
 	sg = NULL;
 	str.open("../results_test.txt"/*,ios::app*/);
-};
+}
 
 /** destruktor **/
 ecp_task_tzu_test::~ecp_task_tzu_test()
 {
 	str<<"--- KONIEC ---"<<endl;
 	str.close();
-};
+}
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_tzu_test::task_initialization(void) 
+void ecp_task_tzu_test::task_initialization(void)
 {
 	// ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
@@ -52,31 +52,28 @@ void ecp_task_tzu_test::task_initialization(void)
 		ecp_m_robot = new ecp_irp6_postument_robot (*this);
 		robot = POSTUMENT;
 	}
-	
+
 	// inicjalizacja generatorow
 	sg = new ecp_smooth_generator (*this, true, false);
 	befg = new bias_edp_force_generator(*this);
-	fmg = new force_meassure_generator(*this,100000,20);	
+	fmg = new force_meassure_generator(*this,100000,20);
 	ftcg = new ecp_force_tool_change_generator(*this);
 	tcg = new ecp_tool_change_generator(*this,true);
 	ynrfg = new ecp_tff_nose_run_generator(*this,8);
-	
+
 	sr_ecp_msg->message("ECP loaded");
-};
+}
 
 void ecp_task_tzu_test::main_task_algorithm(void)
 {
-	sr_ecp_msg->message("ECP cs irp6ot  - pushj start in tzu");
-	ecp_wait_for_start();
-	
 	set_trajectories();
 	int option = choose_option ("1 - NoseGenerator, 2 - Test, 3 - Nacisk", 3);
 	if (option == OPTION_ONE)
     {
     	/*
-     	 * reczne obroty manipulatora przy ustawionym standardowym modelu (dane z common.ini) oraz przy modelu wyznaczonym przy 
+     	 * reczne obroty manipulatora przy ustawionym standardowym modelu (dane z common.ini) oraz przy modelu wyznaczonym przy
      	 * pomocy stworzonej automatycznej procedury do wyznaczania narzedzia
-     	 */  		
+     	 */
 		sr_ecp_msg->message("NoseGenerator");
  		option = choose_option ("1 - std, 2 - wyliczony", 2);
 	  	if (option == OPTION_ONE)
@@ -103,20 +100,18 @@ void ecp_task_tzu_test::main_task_algorithm(void)
 		sr_ecp_msg->message("Nacisk");
 		naciskanie_test();
 	}
-  
+
 	ecp_termination_notice();
-	ecp_wait_for_stop();
-	cout<<"end\n"<<endl;
-};
+}
 
 void ecp_task_tzu_test::naciskanie_test()
 {
-	tcg->set_tool_parameters(0,0,0); 
+	tcg->set_tool_parameters(0,0,0);
 	tcg->Move();
 	sleep(2);
 	befg->Move();
 	sr_ecp_msg->message("START NACISKANIE TEST");
-	while(true)			
+	while(true)
 	{
 		usleep(10);
 		fmg->Move();
@@ -126,10 +121,10 @@ void ecp_task_tzu_test::naciskanie_test()
 
 void ecp_task_tzu_test::nose_generator_test(int tool)
 {
-	while(true)			
+	while(true)
 	{
 		sr_ecp_msg->message("START NOSE");
-		
+
 		if(tool == 0)
 		{
 			sr_ecp_msg->message("parametry z common.ini");
@@ -142,14 +137,14 @@ void ecp_task_tzu_test::nose_generator_test(int tool)
 			ftcg->set_tool_parameters(-0.00622889, -0.000365208, 0.167449, 13.2519);
 			ftcg->Move();
 		}
-		
+
 		// ustawienie manipulatora pionowo do gory
 		double tmp[] = {0.759997, -1.5707, 0, 1.132, 1.5707, 0 ,0.07};
 		sg->load_file_with_path(get_trajectory(tmp));
 		sg->Move();
 		sleep(2);
 		befg->Move();
-		tcg->set_tool_parameters(0,0,0); 
+		tcg->set_tool_parameters(0,0,0);
 		tcg->Move();
 		ynrfg->set_force_meassure(true);
 		ynrfg->Move();
@@ -172,39 +167,39 @@ void ecp_task_tzu_test::trajectories_test(int count)
 							   {0, -1.570795, 0, 1.5, 1.5707, 1.5707, 0.07},
 							   {0, -1.570795, 0, 0, 1.5707, 1.5707, 0.07},
 							   {0, -1.570795, 0, 0, 3, 1.5707, 0.07},
-							   {0, -1.570795, 0, 0, 0.1, 1.5707, 0.07}};	
-	
+							   {0, -1.570795, 0, 0, 0.1, 1.5707, 0.07}};
+
 	tcg->set_tool_parameters(0,0,0);
 	tcg->Move();
-	
+
 	cout<<"START TRAJECTORIES TEST"<<endl;
 	for(int j = 0 ; j < count ; j++)
-	{	
+	{
 		cout<<"parametry z common.ini: "<<j<<endl;
-		//0.004 0.0 0.13		
+		//0.004 0.0 0.13
 		ftcg->set_tool_parameters(0.004,0.0,0.13,13.18);
 		ftcg->Move();
-		
+
 		for(int i = 0 ; i < 10 ; i++)
 		{
 			sg->load_file_with_path(get_trajectory(tmp[i]));
 			sg->Move();
-			
+
 			if(i == 0 || i == 5)
 			{
 				sleep(2);
 				befg->Move();
 			}
-			
+
 			fmg->Move();
 			result_common[j][i] = fmg->get_meassurement();
 			cout<<"pomiar "<<i<<": "<<fmg->get_meassurement()<<endl;
 			str<<"pomiar "<<i<<": "<<fmg->get_meassurement()<<endl;
 		}
 	}
-	
+
 	for(int j = 0 ; j < count ; j++)
-	{	
+	{
 		cout<<"parametry wyliczone: "<<j<<endl;
 		// weight: 13.4494
 		// P_x: -0.00123971
@@ -213,18 +208,18 @@ void ecp_task_tzu_test::trajectories_test(int count)
 
 		ftcg->set_tool_parameters(-0.00123971, -0.000875034, 0.136523, 13.4494);
 		ftcg->Move();
-		
+
 		for(int i = 0 ; i < 10 ; i++)
 		{
 			sg->load_file_with_path(get_trajectory(tmp[i]));
 			sg->Move();
-			
+
 			if(i == 0 || i == 5)
 			{
 				sleep(2);
 				befg->Move();
 			}
-			
+
 			fmg->Move();
 			result_wyliczone[j][i] = fmg->get_meassurement();
 			cout<<"pomiar "<<i<<": "<<fmg->get_meassurement()<<endl;
@@ -235,7 +230,7 @@ void ecp_task_tzu_test::trajectories_test(int count)
 	// roznica pomiedzy kolejnymi probami dla common.ini a tymi wyliczonymi
 	//Ft_v_vector result_difference_common[count][10];
 	//Ft_v_vector result_difference_wyliczone[count][10];
-	
+
 	for(int j = 0 ; j < count ; j++)
 	{
 		for(int i = 0 ; i < 10 ; i++)
@@ -245,23 +240,23 @@ void ecp_task_tzu_test::trajectories_test(int count)
 				if(result_common[j][i][k] < 0)
 					result_common[j][i][k] = result_common[j][i][k]*-1;
 				if(result_wyliczone[j][i][k] < 0)
-					result_wyliczone[j][i][k] = result_wyliczone[j][i][k]*-1;	
+					result_wyliczone[j][i][k] = result_wyliczone[j][i][k]*-1;
 			}
 			// result_difference_common[j][i] = result_common[j][i];
 			// result_difference_wyliczone[j][i] = result_wyliczone[j][i];
 		}
 	}
 	for(int j = 0 ; j < count ; j++)
-	{	
+	{
 		for(int i = 0 ; i < 10 ; i++)
 		{
 			cout<<"result_common: "<<endl<<result_common[j][i]<<endl;
 			str<<"result_common: "<<endl<<result_common[j][i]<<endl;
 		}
 	}
-	
+
 	for(int j = 0 ; j < count ; j++)
-	{	
+	{
 		for(int i = 0 ; i < 10 ; i++)
 		{
 			cout<<"result_wyliczone: "<<endl<<result_wyliczone[j][i]<<endl;
@@ -272,9 +267,9 @@ void ecp_task_tzu_test::trajectories_test(int count)
 //	str<<"result_common: "<<endl<<result_common<<endl;
 //	cout<<"result_wyliczone: "<<endl<<result_wyliczone<<endl;
 //	str<<"result_wyliczone: "<<endl<<result_wyliczone<<endl;
-	
+
 	// do matlabowych wykresow
-	
+
 	ofstream matlab;
 	matlab.open("../matlab.m"/*,ios::app*/);
 	matlab<<"clear;"<<endl<<"x = 1:1:6;"<<endl<<"x1 = 0:.01:7;"<<endl;
@@ -288,18 +283,18 @@ void ecp_task_tzu_test::trajectories_test(int count)
 			}
 		}
 	}
-	
+
 	for(int j = 0 ; j < count ; j++)
 	{
 		for(int i = 0 ; i < 10 ; i++)
 		{
 			for(int k = 0 ; k < 6 ; k++)
-			{	
+			{
 				matlab<<"yw_"<<j<<"_"<<i<<"("<<k<<")="<<result_wyliczone[j][i][k]<<";"<<endl;
 			}
 		}
 	}
-	
+
 	matlab<<"figure(1);"<<endl;
 	for(int d = 1 ; d < 6 ; d++)
 	{
@@ -308,15 +303,15 @@ void ecp_task_tzu_test::trajectories_test(int count)
 		{
 			matlab<<"x,yc_"<<j<<"_"<<d-1<<",'bx',";
 		}
-		
+
 		for(int j = 0 ; j < count ; j++)
 		{
 			matlab<<"x,yw_"<<j<<"_"<<d-1<<",'rx',";
 		}
-				
-		matlab<<"x1,0,'-g'"<<endl;	
-	}	
-	
+
+		matlab<<"x1,0,'-g'"<<endl;
+	}
+
 	matlab<<"figure(2);"<<endl;
 	for(int d = 1 ; d < 6 ; d++)
 	{
@@ -325,19 +320,19 @@ void ecp_task_tzu_test::trajectories_test(int count)
 		{
 			matlab<<"x,yc_"<<j<<"_"<<d-1+5<<",'bx',";
 		}
-		
+
 		for(int j = 0 ; j < count ; j++)
 		{
 			matlab<<"x,yw_"<<j<<"_"<<d-1+5<<",'rx',";
 		}
-				
-		matlab<<"x1,0,'-g'"<<endl;	
-	}	
+
+		matlab<<"x1,0,'-g'"<<endl;
+	}
 	matlab.close();
 	// do kwadratu
 	Ft_v_vector result_common_square[count][10];
 	Ft_v_vector result_wyliczone_square[count][10];
-	
+
 	for(int j = 0 ; j < count ; j++)
 	{
 		for(int i = 0 ; i < 10 ; i++)
@@ -349,18 +344,18 @@ void ecp_task_tzu_test::trajectories_test(int count)
 			}
 		}
 	}
-	
+
 	for(int j = 0 ; j < count ; j++)
-	{	
+	{
 		for(int i = 0 ; i < 10 ; i++)
 		{
 			cout<<"result_common_square: "<<endl<<result_common_square[j][i]<<endl;
 			str<<"result_common_square: "<<endl<<result_common_square[j][i]<<endl;
 		}
 	}
-	
+
 	for(int j = 0 ; j < count ; j++)
-	{	
+	{
 		for(int i = 0 ; i < 10 ; i++)
 		{
 			cout<<"result_wyliczone_square: "<<endl<<result_wyliczone_square[j][i]<<endl;
@@ -383,7 +378,7 @@ void ecp_task_tzu_test::trajectories_test(int count)
 //			}
 //		}
 //	}
-//	
+//
 //	for(int j = 0 ; j < count ; j++)
 //	{
 //		for(int i = 0 ; i < 10 ; i++)
@@ -394,7 +389,7 @@ void ecp_task_tzu_test::trajectories_test(int count)
 //			}
 //		}
 //	}
-	
+
 	// suma bledow
 	double sum_of_errors_common[count];
 	double sum_of_errors_wyliczone[count];
@@ -402,8 +397,8 @@ void ecp_task_tzu_test::trajectories_test(int count)
 	{
 		sum_of_errors_common[i] = 0;
 		sum_of_errors_wyliczone[i] = 0;
-	} 
-	
+	}
+
 	for(int j = 0 ; j < count ; j++)
 	{
 		for(int i = 0 ; i < 10 ; i++)
@@ -415,7 +410,7 @@ void ecp_task_tzu_test::trajectories_test(int count)
 			}
 		}
 	}
-	
+
 	double sum_common = 0;
 	for(int j = 0 ; j < count ; j++)
 	{
@@ -425,7 +420,7 @@ void ecp_task_tzu_test::trajectories_test(int count)
 	}
 	cout<<"sum_of_errors_common_general: "<<sum_common<<endl;
 	str<<"sum_of_errors_common_general: "<<sum_common<<endl;
-	
+
 	double sum_wyliczone = 0;
 	for(int j = 0 ; j < count ; j++)
 	{
@@ -435,7 +430,7 @@ void ecp_task_tzu_test::trajectories_test(int count)
 	}
 	cout<<"sum_of_errors_wyliczone_general: "<<sum_wyliczone<<endl;
 	str<<"sum_of_errors_wyliczone_general: "<<sum_wyliczone<<endl;
-	
+
 //	cout<<"sum_of_errors_common: "<<sum_of_errors_common<<endl;
 //	str<<"sum_of_errors_common: "<<sum_of_errors_common<<endl;
 //	cout<<"sum_of_errors_wyliczone: "<<sum_of_errors_wyliczone<<endl;
@@ -459,7 +454,7 @@ void ecp_task_tzu_test::set_trajectories() // mozna wywalic zmienna robot z klas
 		test_trajectories[8] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_1/tzu_2_on_track.trj";
 		test_trajectories[9] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_2/tzu_1_on_track.trj";
 		test_trajectories[10] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_2/tzu_2_on_track.trj";
-	}	
+	}
 	else if(robot == POSTUMENT)
 	{
 		test_trajectories[0] = "../trj/tzu/standard/postument/tzu_3_postument.trj";
@@ -507,7 +502,7 @@ ecp_task* return_created_ecp_task (configurator &_config)
 force_meassure_generator::force_meassure_generator(ecp_task& _ecp_task, int _sleep_time, int _meassurement_count) :
 	ecp_generator(_ecp_task)
 {
-	sleep_time = _sleep_time; 
+	sleep_time = _sleep_time;
 	meassurement_count = _meassurement_count;
 	init_meassurement_count = _meassurement_count;
 }
@@ -515,7 +510,7 @@ force_meassure_generator::force_meassure_generator(ecp_task& _ecp_task, int _sle
 /** ustawienie konfiguracji generatora **/
 bool force_meassure_generator::set_configuration(int _sleep_time, int _meassurement_count)
 {
-	sleep_time = _sleep_time; 
+	sleep_time = _sleep_time;
 	meassurement_count = _meassurement_count;
 	init_meassurement_count = _meassurement_count;
 }
@@ -530,7 +525,7 @@ bool force_meassure_generator::first_step()
 			= TCIM;
 	for(int i = 0; i < 6 ; i++)
 		weight[i] = 0;
-	
+
 	return true;
 }
 
@@ -540,7 +535,7 @@ bool force_meassure_generator::next_step()
 	usleep(sleep_time);
 	Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
 	current_frame_wo_offset.remove_translation();
-	
+
 	Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
 	weight += force_torque;
 

@@ -9,7 +9,7 @@
 #include "ecp_mp/ecp_mp_s_force.h"
 #include "lib/srlib.h"
 #include "ecp_mp/ecp_mp_t_rcsc.h"
-#include "ecp_mp/ecp_mp_s_schunk.h"	
+#include "ecp_mp/ecp_mp_s_schunk.h"
 
 #include "ecp/irp6_on_track/ecp_local.h"
 #include "ecp/irp6_postument/ecp_local.h"
@@ -38,7 +38,7 @@ ecp_task_tzu_fs::~ecp_task_tzu_fs()
 	str.close();
 };
 
-void ecp_task_tzu_fs::task_initialization(void) 
+void ecp_task_tzu_fs::task_initialization(void)
 {
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	{
@@ -52,10 +52,10 @@ void ecp_task_tzu_fs::task_initialization(void)
 		robot = POSTUMENT;
 		str.open("../postument_results.txt");
 	}
-	
+
 	sg = new ecp_smooth_generator (*this, true, false);
 	befg = new bias_edp_force_generator(*this);
-	fmg = new force_meassure_generator(*this,100000,20);	
+	fmg = new force_meassure_generator(*this,100000,20);
 	ftcg = new ecp_force_tool_change_generator(*this);
 	tcg = new ecp_tool_change_generator(*this,true);
 	etnrg = new ecp_tff_nose_run_generator(*this,8);
@@ -66,9 +66,6 @@ void ecp_task_tzu_fs::main_task_algorithm(void)
 {
 	bool automatic = false;
 	int procedure_type;
-	
-	sr_ecp_msg->message("ECP cs irp6ot  - pushj start in tzu");
-	ecp_wait_for_start();
 
 	int option = choose_option ("1 - Standard, 2 - Alternative, 3 - Auto", 3);
 	if (option == OPTION_ONE)
@@ -78,7 +75,7 @@ void ecp_task_tzu_fs::main_task_algorithm(void)
    	}
     else if (option == OPTION_TWO)
     {
-    	// aktualnie wyznaczany jest tu tylko ciê¿ar narzêdzia, ale pomyœleæ równie¿ nad tym by w ró¿ny sposób wyznaczyæ ca³y model
+    	// aktualnie wyznaczany jest tu tylko ciï¿½ï¿½ar narzï¿½dzia, ale pomyï¿½leï¿½ rï¿½wnieï¿½ nad tym by w rï¿½ï¿½ny sposï¿½b wyznaczyï¿½ caï¿½y model
 		sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna x");
 		option = choose_option ("1 - x1, 2 - x2, 3 - y1, 4 - y2", 4);
 		if (option == OPTION_ONE)
@@ -106,12 +103,12 @@ void ecp_task_tzu_fs::main_task_algorithm(void)
 	{
 		automatic = true;
 	}
-	
+
 	int T;
 	if(automatic) //przechodzimy przez wszystkit metody
 		T = 5;
 	T = 1;
-		
+
 	int map_tab[] = {0,1,3,2,4};
 	int i = 0;
 	int count = 10;
@@ -121,39 +118,39 @@ void ecp_task_tzu_fs::main_task_algorithm(void)
 			procedure_type = map_tab[i];
 		set_trajectory(robot, procedure_type);
 		if(procedure_type == STANDARD)
-		{   
+		{
 			str<<"STANDARD"<<endl;
 			method_standard(count);
 		}
 		else if(procedure_type == ALTERNATIVE_X_METHOD_1)
 		{
 			str<<"ALTERNATIVE_X_METHOD_1"<<endl;
-			int sequence[] = {0,1}; 
+			int sequence[] = {0,1};
 			method_alternative(0,sequence,count);
 		}
 		else if(procedure_type == ALTERNATIVE_X_METHOD_2)
 		{
 			str<<"ALTERNATIVE_X_METHOD_2"<<endl;
 			int sequence[] = {0,1};
-			int sequence_reverse[] = {1,0}; 
+			int sequence_reverse[] = {1,0};
 			method_alternative(0,sequence,count);
 			method_alternative(0,sequence_reverse,count);
 		}
 		else if(procedure_type == ALTERNATIVE_Y_METHOD_1)
 		{
 			str<<"ALTERNATIVE_Y_METHOD_1"<<endl;
-			int sequence[] = {0,1}; 
+			int sequence[] = {0,1};
 			method_alternative(1,sequence,count);
 		}
 		else if(procedure_type == ALTERNATIVE_Y_METHOD_2)
 		{
 			str<<"ALTERNATIVE_Y_METHOD_2"<<endl;
 			int sequence[] = {0,1};
-			int sequence_reverse[] = {1,0}; 
+			int sequence_reverse[] = {1,0};
 			method_alternative(1,sequence,count);
 			method_alternative(1,sequence_reverse,count);
 		}
-		
+
 		if(automatic)
 			i++;
 		T--;
@@ -161,9 +158,6 @@ void ecp_task_tzu_fs::main_task_algorithm(void)
 			break;
 	}
 	ecp_termination_notice();
-	ecp_wait_for_stop();
-	
-	cout<<"end\n"<<std::endl;
 };
 
 ecp_task* return_created_ecp_task (configurator &_config)
@@ -175,20 +169,20 @@ void ecp_task_tzu_fs::method_alternative(int type, int sequence[], int T)
 {
 	for(int i = 0 ; i < T ; i++)
 	{
-		while(true)			
-		{	
+		while(true)
+		{
 			ftcg->Move();
 			tcg->set_tool_parameters(0,0,0);
 			tcg->Move();
 			sg->load_file_with_path(trajectories[sequence[0]]);
-			sg->Move ();		
+			sg->Move ();
 			fmg->Move();
 			cout<<"pomiar alternative1: "<<fmg->get_meassurement()<<endl;
 			str<<"pomiar alternative1: "<<fmg->get_meassurement()<<endl;
 			sleep(2);
 			befg->Move();
 			sg->load_file_with_path(trajectories[sequence[1]]);
-			sg->Move ();		
+			sg->Move ();
 			fmg->Move();
 			cout<<"pomiar alternative2: "<<fmg->get_meassurement()<<endl;
 			str<<"pomiar alternative2: "<<fmg->get_meassurement()<<endl;
@@ -208,12 +202,12 @@ void ecp_task_tzu_fs::method_standard(int T)
 	double P_z_s = 0;
 	for(int i = 0 ; i < T ; i++)
 	{
-		while(true)			
-		{	 
-			// ETAP PIERWSZY - chwytka skierowany pionowo do dolu, biasowanie odczytow, 
+		while(true)
+		{
+			// ETAP PIERWSZY - chwytka skierowany pionowo do dolu, biasowanie odczytow,
 			// zmiana narzedzia kinematycznego, ustawienie end-effector frame E jako sensor frame S
 			sg->load_file_with_path(trajectories[TRAJECTORY_VERTICAL_DOWN]);
-			sg->Move ();		
+			sg->Move ();
 //			fmg->Move();
 //			cout<<"wynik1: "<< fmg->get_meassurement() << endl;
 			sleep(2);
@@ -232,14 +226,14 @@ void ecp_task_tzu_fs::method_standard(int T)
 			weight = (fmg->get_meassurement()[FORCE_Z])/2;
 			P_x = -fmg->get_meassurement()[TORQUE_Y]/(2*weight);
 			P_y = fmg->get_meassurement()[TORQUE_X]/(2*weight);
-			// ETAP TRZECI - chwytak skierowany horyzontalnie, obliczenie ostatniego z parametrów modelu, przesuniecia wzdluz osi z
+			// ETAP TRZECI - chwytak skierowany horyzontalnie, obliczenie ostatniego z parametrï¿½w modelu, przesuniecia wzdluz osi z
 			sg->load_file_with_path(trajectories[TRAJECTORY_HORIZONTAL]);
 			sg->Move ();
 			fmg->Move();
 			P_z = fmg->get_meassurement()[TORQUE_Y]/weight + P_x;
-			
+
 			cout<<"Parametry modelu srodka ciezkosci narzedzia"<<endl
-				<<"weight: "<<weight<<endl<<"P_x: "<<P_x<<endl<<"P_y: "<<P_y<<endl<<"P_z: "<<P_z<<endl; 
+				<<"weight: "<<weight<<endl<<"P_x: "<<P_x<<endl<<"P_y: "<<P_y<<endl<<"P_z: "<<P_z<<endl;
 			str<<"Parametry modelu srodka ciezkosci narzedzia"<<endl
 				<<"weight: "<<weight<<endl<<"P_x: "<<P_x<<endl<<"P_y: "<<P_y<<endl<<"P_z: "<<P_z<<endl;
 			weight_s += weight;
@@ -283,7 +277,7 @@ void ecp_task_tzu_fs::set_trajectory(int robot_type, int procedure_type)
 		trajectories[0] = "../trj/tzu/alternative/postument/y_weight_meassure/method_2/tzu_1_postument.trj";
 		trajectories[1] = "../trj/tzu/alternative/postument/y_weight_meassure/method_2/tzu_2_postument.trj";
 	}
-	
+
 	else if((robot_type == ON_TRACK) && (procedure_type == STANDARD))
 	{
 		trajectories[0] = "../trj/tzu/standard/on_track/tzu_1_on_track.trj";
@@ -299,7 +293,7 @@ void ecp_task_tzu_fs::set_trajectory(int robot_type, int procedure_type)
 	{
 		trajectories[0] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_2/tzu_1_on_track.trj";
 		trajectories[1] = "../trj/tzu/alternative/on_track/x_weight_meassure/method_2/tzu_2_on_track.trj";
-	}   
+	}
 	else if((robot_type == ON_TRACK) && (procedure_type == ALTERNATIVE_Y_METHOD_1))
 	{
 		trajectories[0] = "../trj/tzu/alternative/on_track/y_weight_meassure/method_1/tzu_1_on_track.trj";
@@ -336,7 +330,7 @@ const char*ecp_task_tzu_fs::get_trajectory(double x[])
 force_meassure_generator::force_meassure_generator(ecp_task& _ecp_task, int _sleep_time, int _meassurement_count) :
 	ecp_generator(_ecp_task)
 {
-	sleep_time = _sleep_time; 
+	sleep_time = _sleep_time;
 	meassurement_count = _meassurement_count;
 	init_meassurement_count = _meassurement_count;
 }
@@ -344,7 +338,7 @@ force_meassure_generator::force_meassure_generator(ecp_task& _ecp_task, int _sle
 /** ustawienie konfiguracji generatora **/
 bool force_meassure_generator::set_configuration(int _sleep_time, int _meassurement_count)
 {
-	sleep_time = _sleep_time; 
+	sleep_time = _sleep_time;
 	meassurement_count = _meassurement_count;
 	init_meassurement_count = _meassurement_count;
 }
@@ -359,7 +353,7 @@ bool force_meassure_generator::first_step()
 			= TCIM;
 	for(int i = 0; i < 6 ; i++)
 		weight[i] = 0;
-	
+
 	return true;
 }
 
@@ -369,7 +363,7 @@ bool force_meassure_generator::next_step()
 	usleep(sleep_time);
 	Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
 	current_frame_wo_offset.remove_translation();
-	
+
 	Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
 	weight += force_torque;
 
@@ -391,6 +385,6 @@ Ft_v_vector& force_meassure_generator::get_meassurement()
 //cout<<"in gen mes bef: "<<weight<<endl;
 //	for(int i = 0 ; i < 6 ; i++)
 //		weight[i] = weight[i]/meassurement_count;
-//cout<<"in gen mes aft: "<<weight<<endl;	
+//cout<<"in gen mes aft: "<<weight<<endl;
 	return weight;
 }

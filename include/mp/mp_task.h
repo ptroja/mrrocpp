@@ -20,10 +20,10 @@ class mp_task: public ecp_mp_task
 
 	public:
 #if !defined(USE_MESSIP_SRR)
-		static name_attach_t *mp_trigger_attach;
+		static name_attach_t *mp_pulse_attach;
 		static name_attach_t *mp_attach;
 #else
-		static messip_channel_t *mp_trigger_attach;
+		static messip_channel_t *mp_pulse_attach;
 		static messip_channel_t *mp_attach;
 #endif
 
@@ -67,12 +67,10 @@ class mp_task: public ecp_mp_task
 		int mp_receive_pulse (mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PULSE_MODE tryb);
 		int check_and_optional_wait_for_new_pulse (mp_receive_pulse_struct_t* outputs,
 		        WAIT_FOR_NEW_PULSE_ENUM process_mode, MP_RECEIVE_PULSE_MODE desired_wait_mode);
-		int mp_wait_for_ui_name_open(void);
 
 		// mp_receive_ecp_pulse_return_t mp_receive_ecp_pulse (int tryb);
 		// oczekwianie na name_open do kanalu do przesylania pulsow miedzy ECP i MP
-		// int mp_wait_for_name_open_ecp_pulse (mp_receive_pulse_struct_t* outputs, uint32_t nd, pid_t ECP_pid);
-		int mp_wait_for_name_open_ecp_pulse(mp_receive_pulse_struct_t* outputs);
+		int mp_wait_for_name_open(mp_receive_pulse_struct_t* outputs);
 
 		// Oczekiwanie na zlecenie START od UI
 		void wait_for_start (void);// by Y&W
@@ -90,7 +88,7 @@ class mp_task: public ecp_mp_task
 		void execute_all (std::map <ROBOT_ENUM, mp_robot*>& _robot_m);
 
 		// funkcja odbierajaca pulsy z UI wykorzystywana w MOVE
-		bool mp_receive_ui_pulse (std::map <ROBOT_ENUM, mp_robot*>& _robot_m, short* trigger);
+		bool mp_receive_ui_pulse (std::map <ROBOT_ENUM, mp_robot*>& _robot_m, bool* trigger);
 
 		// funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
 		void mp_receive_ui_or_ecp_pulse (std::map <ROBOT_ENUM, mp_robot*>& _robot_m, mp_generator& the_generator );

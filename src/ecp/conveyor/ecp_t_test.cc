@@ -25,25 +25,15 @@ void ecp_task_conveyor_test::task_initialization(void)
 
 void ecp_task_conveyor_test::main_task_algorithm(void)
 {
-	sr_ecp_msg->message("ECP rcsc speaker  - wcisnij start");
-	ecp_wait_for_start();
 	y_simple_generator ysg(*this, 8);
 	ysg.sensor_m = sensor_m;
 
-	for(;;) { // Wewnetrzna petla nieskonczona
-
-		for(;;) {
-			sr_ecp_msg->message("NOWA SERIA");
-			sr_ecp_msg->message("Ruch");
-			sr_ecp_msg->message("Zakocz - nacisnij PULSE ECP trigger");
-ysg.Move();
-		}
-
-		// Oczekiwanie na STOP
-		printf("przed wait for stop\n");
-		ecp_wait_for_stop ();
-		break;
-	} // koniec: for(;;) wewnetrznej
+	for(;;) {
+		sr_ecp_msg->message("NOWA SERIA");
+		sr_ecp_msg->message("Ruch");
+		sr_ecp_msg->message("Zakocz - nacisnij PULSE ECP trigger");
+		ysg.Move();
+	}
 }
 
 ecp_task* return_created_ecp_task (configurator &_config)

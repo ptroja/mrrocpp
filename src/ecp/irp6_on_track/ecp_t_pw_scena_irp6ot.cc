@@ -8,9 +8,6 @@ ecp_task_pw_scena_irp6ot::ecp_task_pw_scena_irp6ot(configurator &_config) :
 	ecp_task(_config) {
 }
 
-ecp_task_pw_scena_irp6ot::~ecp_task_pw_scena_irp6ot() {
-}
-
 void ecp_task_pw_scena_irp6ot::task_initialization(void) {
 
 	try {
@@ -34,8 +31,6 @@ void ecp_task_pw_scena_irp6ot::task_initialization(void) {
 }
 
 void ecp_task_pw_scena_irp6ot::main_task_algorithm(void) {
-	sr_ecp_msg->message("ECP pw irp6ot  - wcisnij start");
-	ecp_wait_for_start();
 
 	//#ifdef robot1
 	//	smooth_gen->load_file_with_path("/net/robot1/home/pwilkows/workspace/mrrocpp/trj/nad_stolem_joint.trj");
@@ -57,12 +52,8 @@ void ecp_task_pw_scena_irp6ot::main_task_algorithm(void) {
 
 	sr_ecp_msg->message("przed wait_for_stop\n");
 	ecp_termination_notice();
-	ecp_wait_for_stop();
-	sr_ecp_msg->message("po wait_for_stop\n");
-	sr_ecp_msg->message("po wait_for_stop\n");
 }
 
 ecp_task* return_created_ecp_task(configurator &_config) {
 	return new ecp_task_pw_scena_irp6ot(_config);
 }
-

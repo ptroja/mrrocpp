@@ -26,7 +26,7 @@ class ecp_task_fsautomat_irp6ot: public ecp_task
 		ecp_generator_t* gt;
 		ecp_tff_nose_run_generator* nrg;
 		ecp_tff_rubik_grab_generator* rgg;
-		ecp_tff_gripper_approach_generator* gag;		
+		ecp_tff_gripper_approach_generator* gag;
 		ecp_tff_rubik_face_rotate_generator* rfrg;
 		ecp_teach_in_generator* tig;
 		bias_edp_force_generator* befg;
@@ -34,19 +34,18 @@ class ecp_task_fsautomat_irp6ot: public ecp_task
 		//podzadania
 		ecp_sub_task_gripper_opening* go_st;
 
-		
+
 		std::map<char*, Trajectory, str_cmp>* trjMap;
 
 	public:
 		// KONSTRUKTORY
 		ecp_task_fsautomat_irp6ot(configurator &_config);
-		~ecp_task_fsautomat_irp6ot();
-	
+
 		// methods for ECP template to redefine in concrete classes
 		void task_initialization(void);
 		void main_task_algorithm(void);
 //		void grip(double gripper_increment, int motion_time);
-	
+
 };
 
 #endif// -------------------------------------------------------------------------

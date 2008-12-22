@@ -9,14 +9,13 @@ protected:
 	ecp_calibration_generator* cg;
 	// Warunek, ktorego spelnienie umozliwia realizacje ruchu do nastepnej nauczonej pozycji
 	ecp_operator_reaction_condition* orc;
-	int pll;                 // liczba nauczonych pozycji 
-	int i;                // licznik  
+	int pll;                 // liczba nauczonych pozycji
+	int i;                // licznik
 
 public:
 	// KONSTRUKTORY
 	ecp_task_pteach_irp6ot(configurator &_config);
-	~ecp_task_pteach_irp6ot();
-	
+
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);
 	void main_task_algorithm(void);

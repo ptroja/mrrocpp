@@ -16,7 +16,6 @@ protected:
 
 public:
     ecp_task_lego_brick_irp6p(configurator &_config);
-    ~ecp_task_lego_brick_irp6p();
 
     // methods for ECP template to redefine in concrete classes
     void task_initialization(void);

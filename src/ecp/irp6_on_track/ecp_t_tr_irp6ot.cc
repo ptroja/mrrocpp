@@ -346,10 +346,6 @@ ecp_task_tr_irp6ot::ecp_task_tr_irp6ot(configurator &_config) :
 {
 }
 
-ecp_task_tr_irp6ot::~ecp_task_tr_irp6ot()
-{
-}
-
 // methods for ECP template to redefine in concrete classes
 void ecp_task_tr_irp6ot::task_initialization(void)
 {
@@ -405,13 +401,8 @@ void ecp_task_tr_irp6ot::task_initialization(void)
 
 void ecp_task_tr_irp6ot::main_task_algorithm(void)
 {
-	sr_ecp_msg->message("ECP tr irp6ot  - wcisnij start");
-	ecp_wait_for_start();
-
 	// Pokazanie okna .
 	show_trajectory_reproduce_window(UI_fd);
-	// Oczekiwanie na polecenie STOP od MP.
-	ecp_wait_for_stop();
 }
 
 ecp_task* return_created_ecp_task(configurator &_config)

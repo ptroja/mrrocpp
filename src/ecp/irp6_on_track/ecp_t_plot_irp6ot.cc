@@ -17,11 +17,6 @@
 ecp_task_plot_irp6ot::ecp_task_plot_irp6ot(configurator &_config) : ecp_task(_config)
 {
 }
-;
-
-ecp_task_plot_irp6ot::~ecp_task_plot_irp6ot()
-{}
-;
 
 
 // methods for ECP template to redefine in concrete classes
@@ -30,35 +25,17 @@ void ecp_task_plot_irp6ot::task_initialization(void)
     ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
     sr_ecp_msg->message("ECP loaded");
-};
-
+}
 
 void ecp_task_plot_irp6ot::main_task_algorithm(void)
 {
-    sr_ecp_msg->message("ECP plot irp6ot  - wcisnij start");
-    ecp_wait_for_start();
     y_simple_generator ysg(*this, 8);
     ysg.sensor_m = sensor_m;
 
-    for(;;)			// Wewnetrzna petla nieskonczona
-    {
-
-        //					for(;;)
-        //					{
-        //						ecp_msg->message("NOWA SERIA");
-        //						ecp_msg->message("Ruch");
-        //						ecp_msg->message("Zakocz - nacisnij PULSE ECP trigger");
-        ysg.Move();
-        //					}
-
-        // Oczekiwanie na STOP
-        printf("przed wait for stop\n");
-        ecp_wait_for_stop();
-        break;
-    } // koniec: for(;;) wewnetrznej
-};
+    ysg.Move();
+}
 
 ecp_task* return_created_ecp_task (configurator &_config)
-                {
-                    return new ecp_task_plot_irp6ot(_config);
-                };
+{
+	return new ecp_task_plot_irp6ot(_config);
+}

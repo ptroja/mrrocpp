@@ -11,25 +11,21 @@
 // Konfigurator.
 #include "lib/configurator.h"
 
-
 class ecp_task_pawel: public ecp_task  {
-protected:
-//	ecp_tff_nose_run_generator* nrg;
-//	ecp_teach_in_generator* tig;
-	pawel_generator* pg;
-	double x,y,z;
+	protected:
+		//	ecp_tff_nose_run_generator* nrg;
+		//	ecp_teach_in_generator* tig;
+		pawel_generator* pg;
+		double x,y,z;
 
-	
-public:
-	// KONSTRUKTORY
-	ecp_task_pawel(configurator &_config);
-	~ecp_task_pawel();
-	
-	// methods for ECP template to redefine in concrete classes
-	void task_initialization(void);
-	void main_task_algorithm(void);
-	
+
+	public:
+		// KONSTRUKTORY
+		ecp_task_pawel(configurator &_config);
+
+		// methods for ECP template to redefine in concrete classes
+		void task_initialization(void);
+		void main_task_algorithm(void);
 };
-
 
 #endif

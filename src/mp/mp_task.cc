@@ -125,10 +125,10 @@ void mp_task::catch_signal_in_mp_task(int sig)
 }
 
 #if !defined(USE_MESSIP_SRR)
-name_attach_t* mp_task::mp_trigger_attach = NULL;
+name_attach_t* mp_task::mp_pulse_attach = NULL;
 name_attach_t* mp_task::mp_attach = NULL;
 #else
-messip_channel_t* mp_task::mp_trigger_attach = NULL;
+messip_channel_t* mp_task::mp_pulse_attach = NULL;
 messip_channel_t* mp_task::mp_attach = NULL;
 #endif
 
@@ -162,7 +162,7 @@ bool mp_task::create_robots()
 	/*
 	 * this is necessary to first create robot and then assign it to robot_m
 	 * reason: mp_robot() constructor uses this map (by calling
-	 * mp_task::mp_wait_for_name_open_ecp_pulse() so needs the map to be in
+	 * mp_task::mp_wait_for_name_open() so needs the map to be in
 	 * a consistent state
 	 */
 	mp_robot* created_robot;
@@ -558,7 +558,7 @@ int mp_task::mp_receive_pulse (mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PU
 			TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE,  &event, NULL, NULL );// by Y zamiast creceive
 		}
 
-		outputs->rcvid = MsgReceive (mp_trigger_attach->chid, &(outputs->pulse_msg), sizeof(_pulse_msg), &(outputs->msg_info));
+		outputs->rcvid = MsgReceive (mp_pulse_attach->chid, &(outputs->pulse_msg), sizeof(_pulse_msg), &(outputs->msg_info));
 
 		if (outputs->rcvid == -1) {/* Error condition, exit */
 
@@ -603,7 +603,7 @@ int mp_task::mp_receive_pulse (mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PU
 
 		if (outputs->rcvid > 0) {
 			/* A QNX IO message received, reject */
-			// ECP wywolalo name_open
+			// ECP lub UI wywolalo name_open
 			if (outputs->pulse_msg.hdr.type >= _IO_BASE && outputs->pulse_msg.hdr.type <= _IO_MAX) {
 				// 	  printf("w MP_TRIGGER _IO_BASE _IO_MAX %d\n",_IO_CONNECT );
 				//  MsgError(rcvid, ENOSYS);
@@ -713,9 +713,8 @@ int mp_task::check_and_optional_wait_for_new_pulse (mp_receive_pulse_struct_t* o
 }
 
 
-int mp_task::mp_wait_for_name_open_ecp_pulse(mp_receive_pulse_struct_t* outputs)
+int mp_task::mp_wait_for_name_open(mp_receive_pulse_struct_t* outputs)
 {
-
 	int ret;
 	bool wyjscie = false;
 
@@ -727,7 +726,7 @@ int mp_task::mp_wait_for_name_open_ecp_pulse(mp_receive_pulse_struct_t* outputs)
 			printf ("Blad MsgReceive() na kanale ecp_pusle w mp_wait_for_name_open_ecp_pulse\n");
 		} else if (ret == 0) {
 
-			// wstawiamy informacje o pulsie ktory przyszedl do innego robota
+			// wstawiamy informacje o pulsie ktory przyszedl od innego robota
 			for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
 			        robot_m_iterator != robot_m.end(); robot_m_iterator++) {
 				if (outputs->pulse_msg.hdr.scoid == robot_m_iterator->second->scoid) {
@@ -756,35 +755,6 @@ int mp_task::mp_wait_for_name_open_ecp_pulse(mp_receive_pulse_struct_t* outputs)
 				printf ("niewlasciwy proces zrobil name_open na kanale ECP_PULSE\n");
 			}
 			*/
-		}
-
-	}
-
-	return ret;
-}
-
-
-
-int mp_task::mp_wait_for_ui_name_open()
-{
-
-	int ret;
-	mp_receive_pulse_struct_t outputs;
-	bool wyjscie = false;
-
-	while (!wyjscie) {
-		ret = mp_receive_pulse (&outputs, WITHOUT_TIMEOUT);
-		// jakis inny robot wyslal puls
-		if (ret == -1) {
-			// tu ma byc wyjatek
-			printf ("Blad MsgReceive() na kanale ecp_pusle w mp_wait_for_name_open_ecp_pulse\n");
-		} else if (ret == 0) {
-			printf ("Blad mp_wait_for_ui_name_open ret = 0\n");
-		} else if (ret > 0) {
-			// jesli wlasciwy proces zrobil name_open
-			ui_scoid = outputs.msg_info.scoid;
-			wyjscie = true;
-			continue;
 		}
 	}
 
@@ -895,7 +865,7 @@ void mp_task::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m,
 
 // funkcja odbierajaca pulsy z UI wykorzystywana w Move
 
-bool mp_task::mp_receive_ui_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m, short* trigger )
+bool mp_task::mp_receive_ui_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m, bool* trigger )
 {
 	enum MP_STATE_ENUM
 	{
@@ -1001,11 +971,11 @@ void mp_task::initialize_communication()
 
 	char* mp_pulse_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "mp_pulse_attach_point");
 
-	// Rejestracja kanalu dla pulsow start z procesu UI i ECP
+	// Rejestracja kanalu dla pulsow z procesu UI i ECP
 #if !defined(USE_MESSIP_SRR)
-	if (( mp_trigger_attach = name_attach(NULL, mp_pulse_attach_point, NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+	if ((mp_pulse_attach = name_attach(NULL, mp_pulse_attach_point, NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 #else
-	if ((mp_attach = messip_channel_create(NULL, mp_pulse_attach_point, MESSIP_NOTIMEOUT, 0)) == NULL) {
+	if ((mp_pulse_attach = messip_channel_create(NULL, mp_pulse_attach_point, MESSIP_NOTIMEOUT, 0)) == NULL) {
 #endif
 		uint64_t e = errno; // kod bledu systemowego
 		perror("Failed to attach UI Pulse chanel for Master Process\n");
@@ -1019,8 +989,10 @@ void mp_task::initialize_communication()
 	delete [] mp_pulse_attach_point;
 
 
-
-	mp_wait_for_ui_name_open();
+	mp_receive_pulse_struct_t outputs;
+	if (mp_wait_for_name_open(&outputs) > 0) {
+		ui_scoid = outputs.msg_info.scoid;
+	}
 }
 // -------------------------------------------------------------------
 
@@ -1084,7 +1056,7 @@ bool mp_task::rm_gen (mp_generator* gen_l)
 bool mp_task::scheduler_run ()
 {
 
-	short trigger;
+	bool trigger;
 
 	// mp_receive_ecp_pulse_return_t ret;
 	int ret;

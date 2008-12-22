@@ -17,11 +17,7 @@ ecp_task_pteach_irp6ot::ecp_task_pteach_irp6ot(configurator &_config) : ecp_task
 {
     cg = NULL;
     orc = NULL;
-};
-ecp_task_pteach_irp6ot::~ecp_task_pteach_irp6ot()
-{}
-;
-
+}
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_pteach_irp6ot::task_initialization(void)
@@ -33,14 +29,12 @@ void ecp_task_pteach_irp6ot::task_initialization(void)
     orc = new ecp_operator_reaction_condition (*this);
 
     sr_ecp_msg->message("ECP loaded");
-};
+}
 
 
 void ecp_task_pteach_irp6ot::main_task_algorithm(void)
 {
-    sr_ecp_msg->message("ECP teach parabolic irp6ot  - wcisnij start");
-    ecp_wait_for_start();
-    if (  operator_reaction ("Teach in?") )
+	if (operator_reaction("Teach in?"))
     {
         cg->flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
         cg->teach ( MOTOR, "Teach-in the trajectory\n");
@@ -59,8 +53,6 @@ void ecp_task_pteach_irp6ot::main_task_algorithm(void)
     {
         // Informacja dla MP o zakonczeniu zadania uzytkownika
         ecp_termination_notice ();
-        // Oczekiwanie na STOP
-        ecp_wait_for_stop();
         return;
     }
 
@@ -85,13 +77,9 @@ void ecp_task_pteach_irp6ot::main_task_algorithm(void)
 
     // Informacja dla MP o zakonczeniu zadania uzytkownika
     ecp_termination_notice ();
-
-    // Oczekiwanie na STOP
-    ecp_wait_for_stop();
-
-};
+}
 
 ecp_task* return_created_ecp_task (configurator &_config)
-                {
-                    return new ecp_task_pteach_irp6ot(_config);
-                };
+{
+	return new ecp_task_pteach_irp6ot(_config);
+}

@@ -53,13 +53,13 @@ int main (int argc, char *argv[], char **arge)
 #endif
 			mp_t = return_created_mp_task(*_config);
 
-			set_thread_priority(pthread_self() , MAX_PRIORITY-4);
+			set_thread_priority(pthread_self(), MAX_PRIORITY-4);
 			signal(SIGTERM, &(catch_signal_in_mp));
 			//signal(SIGINT,  &(catch_signal_in_mp));
 			signal(SIGSEGV, &(catch_signal_in_mp));
 			signal(SIGCHLD, &(catch_signal_in_mp));
 #if defined(PROCESS_SPAWN_RSH)
-		signal(SIGINT, SIG_IGN);
+			signal(SIGINT, SIG_IGN);
 #endif
 
 			mp_t->initialize_communication();
@@ -236,6 +236,5 @@ int main (int argc, char *argv[], char **arge)
 		mp_t->sr_ecp_msg->message (NON_FATAL_ERROR, (uint64_t) MP_UNIDENTIFIED_ERROR);
 		exit(EXIT_FAILURE);
 	} /* end: catch  */
-
 
 }

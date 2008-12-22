@@ -27,9 +27,6 @@ void ecp_task_festival::task_initialization(void)
 void ecp_task_festival::main_task_algorithm(void)
 {
 	int isTest = config.return_int_value("test_mode");
-	sr_ecp_msg->message("ECP festival - wcisnij start");
-
-	ecp_wait_for_start();
 
 	for (;;) {
 		sr_ecp_msg->message("Waiting for MP order");
@@ -56,10 +53,6 @@ void ecp_task_festival::main_task_algorithm(void)
 
 		ecp_termination_notice();
 	}
-
-	// Oczekiwanie na STOP
-	printf("przed wait for stop\n");
-	ecp_wait_for_stop();
 }
 
 ecp_task* return_created_ecp_task(configurator &_config)

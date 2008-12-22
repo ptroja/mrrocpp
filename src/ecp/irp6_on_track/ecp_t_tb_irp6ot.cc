@@ -35,16 +35,14 @@ void ecp_t_tb_irp6ot::task_initialization(void){
 void ecp_t_tb_irp6ot::main_task_algorithm(void){
 	//char *path="/net/home-host/home/mrrocpp/trj/draughts/1_pawn_moving.trj";
 	//file with trajectory to smooth generator
-	
-	sr_ecp_msg->message("ECP tb.... ready");
-	ecp_wait_for_start();
-/*	
+
+/*
 	double vp[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 	double vk[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 	double v[MAX_SERVOS_NR]={0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 5.0};
 	double a[MAX_SERVOS_NR]={0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.5};
 	double coordinates[MAX_SERVOS_NR];
-	
+
 	coordinates[0]=0;
 	coordinates[1]=-30;
 	coordinates[2]=0;
@@ -54,8 +52,8 @@ void ecp_t_tb_irp6ot::main_task_algorithm(void){
 	coordinates[6]=0;
 	coordinates[7]=0;
 	*/
-	
-	
+
+
 	//test part
 	/*
 	//sgen=new ecp_smooth_generator(*this, true);
@@ -64,7 +62,7 @@ void ecp_t_tb_irp6ot::main_task_algorithm(void){
 	sgen->Move();
 	sgen->reset();
 	//delete sgen;
-	
+
 	//sgen=new ecp_smooth_generator(*this, true);
 	sgen->set_relative();
 	coordinates[0]=0;
@@ -113,7 +111,7 @@ void ecp_t_tb_irp6ot::main_task_algorithm(void){
 	sgen->Move();
 	sgen->reset();
 	//delete sgen;
-	
+
 	//sgen=new ecp_smooth_generator(*this, true);
 	sgen->set_relative();
 	sgen->load_coordinates(MOTOR,0,-20,0,0,0,0,0,0);
@@ -122,8 +120,8 @@ void ecp_t_tb_irp6ot::main_task_algorithm(void){
 	sgen->load_coordinates(MOTOR,0,0,0,10,0,0,0,0);
 	sgen->Move();
 	delete sgen;
-	
-	
+
+
 	sgen=new ecp_smooth_generator(*this, true);
 	sgen->set_absolute();
 	sgen->load_coordinates(MOTOR,0,0,0,0,0,0,0,0);
@@ -136,7 +134,7 @@ void ecp_t_tb_irp6ot::main_task_algorithm(void){
 	#else
 		sgen->load_file_with_path("/net/lenin/home/mrrocpp/trj/draughts/test2.trj");
 	#endif
-	
+
 	sgen->Move();
 	//delete sgen;
 	sleepgen->init_time(10);
@@ -161,7 +159,7 @@ void ecp_t_tb_irp6ot::main_task_algorithm(void){
 	sgen->load_coordinates(MOTOR,0,0,0,10,0,0,0,0);
 	sgen->load_coordinates(MOTOR,0,0,0,-10,0,0,0,0);
 	sgen->Move();
-	
+
 	sgen->set_absolute();
 	#ifdef sim
 		sgen->load_file_with_path("/net/home-host/home/mrrocpp/trj/draughts/test2.trj");
@@ -170,25 +168,25 @@ void ecp_t_tb_irp6ot::main_task_algorithm(void){
 	#endif
 	sgen->Move();
 	sgen->reset();
-	
+
 	sgen->load_coordinates(MOTOR,0,0,0,0,0,0,0,0);
 	sgen->Move();
 	*/
 	//sgen=new ecp_smooth_generator(*this, true);
-	
+
 
 	/*
 	//moving pawn part
 	char *path="/net/lenin/home/mrrocpp/trj/draughts/1_pawn_moving.trj";
 	sgen->load_file_with_path(path);
 	sgen->Move();
-	
+
 	befgen->Move();
-	
+
 	//configuration of gripper approach configure(speed, time_period)
 	gagen->configure(0.01,500);
 	gagen->Move();
-	
+
 	sgen->set_relative();
 	sgen->reset();
 	sgen->load_coordinates(MOTOR,0,0,0,-1,0,0,0,0);
@@ -207,12 +205,12 @@ void ecp_t_tb_irp6ot::main_task_algorithm(void){
 	lgen=new ecp_linear_generator(*this,tdes,1);
 	lgen->Move();
 	delete lgen;
-	
+
 	set_tdes(0,0,0,0,0,0,-0.020);	//gripper closing
 	lgen=new ecp_linear_generator(*this,tdes,1);
 	lgen->Move();
 	delete lgen;
-	
+
 	set_tdes(0,0,0.02,0,0,0,0);	//podniesienie o 2cm
 	lgen=new ecp_linear_generator(*this,tdes,1);
 	lgen->Move();
@@ -224,9 +222,8 @@ void ecp_t_tb_irp6ot::main_task_algorithm(void){
 	sgen->load_file_with_path(path1);
 	sgen->Move();
 	*/
-	
+
 	ecp_termination_notice();
-	ecp_wait_for_stop();
 };
 
 ecp_task* return_created_ecp_task(configurator &_config){
@@ -241,7 +238,7 @@ void ecp_t_tb_irp6ot::set_tdes(double cor0, double cor1, double cor2, double cor
 	tdes.coordinate_delta[3] = cor3; // przyrost wspolrzednej FI
 	tdes.coordinate_delta[4] = cor4; // przyrost wspolrzednej TETA
 	tdes.coordinate_delta[5] = cor5; // przyrost wspolrzednej PSI
-	tdes.coordinate_delta[6] = cor6; // przyrost wspolrzednej PSI	
+	tdes.coordinate_delta[6] = cor6; // przyrost wspolrzednej PSI
 }
 
 //inicjacja struktury tdes - trajectory description
@@ -250,4 +247,4 @@ void ecp_t_tb_irp6ot::init_tdes(POSE_SPECIFICATION pspec, int internode_no){
 	tdes.interpolation_node_no=1;
 	tdes.internode_step_no=internode_no;	//motion time
 	tdes.value_in_step_no=internode_no-2;			//motion time-2 ??
-} 
+}

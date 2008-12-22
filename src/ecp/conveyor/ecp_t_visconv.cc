@@ -26,14 +26,12 @@ void ecp_task_conveyor_lego_brick::task_initialization(void)
 
 void ecp_task_conveyor_lego_brick::main_task_algorithm(void)
 {
-	sr_ecp_msg->message("ECP lego brick - wcisnij start");
-	ecp_wait_for_start();
 	//conveyor_incremental_move ysg(*this, 100);
 	ecp_smooth_generator gen(*this, true, true);
 	ecp_smooth_generator gen2(*this, true, true);
 	gen.flush_pose_list();
 	gen2.flush_pose_list();
-	
+
 	POSE_SPECIFICATION ps;
 	ps = JOINT;
 
@@ -47,7 +45,7 @@ void ecp_task_conveyor_lego_brick::main_task_algorithm(void)
 	//absolute_position-= 0.25;
 	coordinates[0] = absolute_position-0.25;
 	coordinates2[0] = absolute_position;
-		
+
 	vp[0] = 0.0;
 	vk[0] = 0.0;
 	v[0] = 0.04;
@@ -64,22 +62,13 @@ void ecp_task_conveyor_lego_brick::main_task_algorithm(void)
 	gen.create_pose_list_head(ps, vp, vk, v, a, coordinates);
 	gen2.create_pose_list_head(ps, vp, vk, v, a, coordinates2);
 	//ysg.sensor_m = sensor_m;
-	
 
-	for(;;) { // Wewnetrzna petla nieskonczona
+	for(;;) {
+		sr_ecp_msg->message("Ruch");
 
-		for(;;) {
-			sr_ecp_msg->message("Ruch");
-
-			gen.Move();
-			gen2.Move();
-		}
-
-		// Oczekiwanie na STOP
-		//printf("przed wait for stop\n");
-		ecp_wait_for_stop ();
-		break;
-	} // koniec: for(;;) wewnetrznej
+		gen.Move();
+		gen2.Move();
+	}
 }
 
 ecp_task* return_created_ecp_task (configurator &_config)

@@ -17,7 +17,6 @@ class ecp_task_pw_irp6ot: public ecp_task  {
 public:
 	//Konstruktory.
 	ecp_task_pw_irp6ot(configurator &_config);
-	~ecp_task_pw_irp6ot();
 
 	//Methods for ECP template to redefine in concrete classes.
 	void task_initialization(void);

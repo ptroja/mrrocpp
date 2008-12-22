@@ -23,7 +23,6 @@ protected:
 
 public:
     ecp_task_rcsc_irp6ot(configurator &_config);
-    ~ecp_task_rcsc_irp6ot();
 
     // methods for ECP template to redefine in concrete classes
     void task_initialization(void);

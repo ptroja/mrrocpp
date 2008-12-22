@@ -15,7 +15,6 @@ protected:
 public:
     // KONSTRUKTORY
     ecp_task_pouring_irp6p(configurator &_config);
-    ~ecp_task_pouring_irp6p();
 
     // methods for ECP template to redefine in concrete classes
     void task_initialization(void);

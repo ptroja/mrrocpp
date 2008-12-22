@@ -26,11 +26,7 @@ ecp_task_pouring_irp6ot::ecp_task_pouring_irp6ot(configurator &_config) : ecp_ta
 {
     sg = NULL;
     tcg = NULL;
-};
-
-ecp_task_pouring_irp6ot::~ecp_task_pouring_irp6ot()
-{}
-;
+}
 
 
 // methods for ECP template to redefine in concrete classes
@@ -53,11 +49,6 @@ void ecp_task_pouring_irp6ot::main_task_algorithm(void)
 
     int size;
     char * path1;
-
-    sr_ecp_msg->message("ECP pouring irp6ot  - wcisnij start");
-    ecp_wait_for_start();
-    for(;;)
-    { // Wewnetrzna petla nieskonczona
 
         for(;;)
         {
@@ -104,16 +95,9 @@ void ecp_task_pouring_irp6ot::main_task_algorithm(void)
             ecp_termination_notice();
 
         } //end for
-
-        // Oczekiwanie na STOP
-        printf("przed wait for stop\n");
-        ecp_wait_for_stop ();
-        break;
-    } // koniec: for(;;) wewnetrznej
-
-};
+}
 
 ecp_task* return_created_ecp_task (configurator &_config)
-                {
-                    return new ecp_task_pouring_irp6ot(_config);
-                };
+{
+	return new ecp_task_pouring_irp6ot(_config);
+}

@@ -1,6 +1,6 @@
 // ------------------------------------------------------------------------
 //   ecp_t_time.cc - sledzenie konturu wersja dla dowolnego z robotow irp6
-// 
+//
 // Ostatnia modyfikacja: 2007
 // ------------------------------------------------------------------------
 
@@ -25,57 +25,41 @@
 ecp_task_time::ecp_task_time(configurator &_config) : ecp_task(_config)
 {
 	tfg = NULL;
-};
-
-ecp_task_time::~ecp_task_time(){};
-
+}
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_time::task_initialization(void) 
+void ecp_task_time::task_initialization(void)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 		{ ecp_m_robot = new ecp_irp6_on_track_robot (*this); }
 	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
 		{ ecp_m_robot = new ecp_irp6_postument_robot (*this); }
-	
+
 	// Powolanie czujnikow
 	sensor_m[SENSOR_TIME] = new ecp_mp_time_sensor (SENSOR_TIME, "[vsp_time]", *this);
-	
-	// Konfiguracja wszystkich czujnikow	
+
+	// Konfiguracja wszystkich czujnikow
 	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 		 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->configure_sensor();
 	}
-	
+
 	tfg = new time_generator(*this, 8);
 	tfg->sensor_m = sensor_m;
-	
-	sr_ecp_msg->message("ECP time loaded"); 
 
-};
-
+	sr_ecp_msg->message("ECP time loaded");
+}
 
 void ecp_task_time::main_task_algorithm(void)
 {
-	sr_ecp_msg->message("ECP time flowing - wcisnij start");
-	ecp_wait_for_start();
-	for(;;) { // Wewnetrzna petla nieskonczona
-				
-		for(;;) {
-tfg->Move();
-		}
-		
-		// Oczekiwanie na STOP
-		printf("przed wait for stop\n");
-		ecp_wait_for_stop();
-		break;
-	} // koniec: for(;;) wewnetrznej
-
-};
+	for(;;) {
+		tfg->Move();
+	}
+}
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_time(_config);
-};
+}

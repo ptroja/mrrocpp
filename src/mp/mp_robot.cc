@@ -37,6 +37,7 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task 
 	// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny ECP
 	if (access(tmp_string, R_OK) == 0 ) {
 		sr_ecp_msg.message("ECP already exists");
+		delete[] network_ecp_attach_point;
 		throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
 #endif
@@ -47,6 +48,7 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task 
 		uint64_t e = errno; // kod bledu
 		perror ("Failed to spawn ECP process on node\n");
 		sr_ecp_msg.message(SYSTEM_ERROR, e, "MP: Failed to spawn ECP");
+		delete[] network_ecp_attach_point;
 		throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
 
@@ -57,8 +59,8 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task 
 	mp_receive_pulse_struct_t input;
 
 	// oczekiwanie na zgloszenie procesu ECP
-	// ret = mp_object.mp_wait_for_name_open_ecp_pulse(&input, nd, ECP_pid);
-	mp_object.mp_wait_for_name_open_ecp_pulse(&input);
+	// ret = mp_object.mp_wait_for_name_open(&input, nd, ECP_pid);
+	mp_object.mp_wait_for_name_open(&input);
 
 	scoid = input.msg_info.scoid;
 
@@ -118,7 +120,7 @@ void mp_robot::start_ecp ( void ) {
 	}
 
 	// by Y - ECP_ACKNOWLEDGE zamienione na TASK_TERMINATED
-	// w celu uproszczenia oprogramowania zadan wielorobotowych
+	// w celu uproszczenia programowania zadan wielorobotowych
 	if (ecp_reply_package.reply != TASK_TERMINATED ) {
 		// Odebrano od ECP informacje o bledzie
 		printf("Error w start_ecp w ECP\n");
@@ -164,7 +166,7 @@ void mp_robot::terminate_ecp ( void ) { // zlecenie STOP zakonczenia ruchu
 	mp_command.hdr.type = 0;
 
 #if !defined(USE_MESSIP_SRR)
-	if ( MsgSend ( ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply_package, sizeof(ecp_reply_package)) == -1) {// by Y&W
+	if (MsgSend(ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply_package, sizeof(ecp_reply_package)) == -1) {// by Y&W
 #else
 	int status;
 	if(messip_send(ECP_fd, 0, 0, &mp_command, sizeof(mp_command),

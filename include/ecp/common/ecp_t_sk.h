@@ -9,16 +9,15 @@ protected:
 	y_edge_follow_force_generator* yefg;
 	bias_edp_force_generator* befg;
 	bool save_activated;
-	
+
 public:
 	// KONSTRUKTORY
 	ecp_task_sk(configurator &_config);
-	~ecp_task_sk();
-	
+
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);
 	void main_task_algorithm(void);
-	
+
 };
 
 #endif

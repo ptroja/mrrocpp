@@ -16,7 +16,11 @@ protected:
     std::list<ecp_taught_in_pose>::iterator pose_list_iterator;
 
 public:
-  	int UI_fd;
+#if !defined(USE_MESSIP_SRR)
+	int UI_fd;
+#else
+	messip_channel_t *UI_fd;
+#endif
   // konstruktor
 	ecp_operator_reaction_condition(ecp_task& _ecp_task);
 

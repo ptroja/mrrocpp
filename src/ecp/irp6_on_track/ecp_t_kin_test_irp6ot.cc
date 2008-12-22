@@ -19,11 +19,6 @@
 // KONSTRUKTORY
 ecp_task_kin_test_irp6ot::ecp_task_kin_test_irp6ot(configurator &_config) : ecp_task(_config)
 {}
-;
-ecp_task_kin_test_irp6ot::~ecp_task_kin_test_irp6ot()
-{}
-;
-
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_kin_test_irp6ot::task_initialization(void)
@@ -31,15 +26,11 @@ void ecp_task_kin_test_irp6ot::task_initialization(void)
     ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
     sr_ecp_msg->message("ECP kin test irp6ot loaded");
-};
+}
 
 
 void ecp_task_kin_test_irp6ot::main_task_algorithm(void)
 {
-    sr_ecp_msg->message("ECP kin test irp6ot  - wcisnij start");
-
-    ecp_wait_for_start();
-
     struct timespec start, stop;
     double accum;
     clock_gettime( CLOCK_REALTIME, &start);
@@ -95,17 +86,10 @@ void ecp_task_kin_test_irp6ot::main_task_algorithm(void)
             / (double)BILLION;
     std::cout<<"Time of  set = "<< accum<< "("<<n <<" sets set" <<")"<<std::endl;
 
-
-    sr_ecp_msg->message("ECP GET finished");
-
     ecp_termination_notice();
-
-    // Oczekiwanie na polecenie STOP od MP.
-    ecp_wait_for_stop();
-
-};
+}
 
 ecp_task* return_created_ecp_task (configurator &_config)
-                {
-                    return new ecp_task_kin_test_irp6ot(_config);
-                };
+{
+	return new ecp_task_kin_test_irp6ot(_config);
+}

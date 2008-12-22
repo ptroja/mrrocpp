@@ -82,7 +82,7 @@ void ecp_robot::copy_edp_to_mp_buffer(r_buffer& mp_buffer)
 void ecp_robot::connect_to_edp(configurator &config, bool spawn_edp)
 {
 	const char *edp_section;
-	
+
     // name of the edp_section depends on _robot_name
 	switch (robot_name) {
 		case ROBOT_IRP6_ON_TRACK:
@@ -109,9 +109,9 @@ void ecp_robot::connect_to_edp(configurator &config, bool spawn_edp)
 			edp_section = NULL;
 			break;
 	}
-	
+
 	EDP_MASTER_Pid = (spawn_edp) ? config.process_spawn(edp_section) : -1;
-	
+
 	const char* edp_net_attach_point =
 			config.return_attach_point_name(configurator::CONFIG_SERVER, "resourceman_attach_point", edp_section);
 
@@ -137,7 +137,7 @@ void ecp_robot::connect_to_edp(configurator &config, bool spawn_edp)
 		}
 	}
 	printf(".done\n");
-	
+
 	delete [] edp_net_attach_point;
 }
 
@@ -146,7 +146,7 @@ void ecp_robot::synchronise(void)
 	// Zlecenie synchronizacji robota
 
 	/*
-	 // maskowanie sygnalu SIGTERM 
+	 // maskowanie sygnalu SIGTERM
 	 // w celu zapobierzenia przerwania komunikacji ECP z EDP pomiedzy SET a QUERY - usuniete
 
 	 sigset_t set;
@@ -154,7 +154,7 @@ void ecp_robot::synchronise(void)
 	 sigemptyset( &set );
 	 sigaddset( &set, SIGTERM );
 
-	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1) 
+	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1)
 	 {
 	 printf ("blad w ECP procmask signal\n");
 	 }
@@ -166,12 +166,12 @@ void ecp_robot::synchronise(void)
 	EDP_command_and_reply_buffer.query(EDP_fd); // Odebranie wyniku zlecenia
 
 	synchronised = (EDP_command_and_reply_buffer.reply_package.reply_type == SYNCHRO_OK);
-			
+
 	/*
-	 // odmaskowanie sygnalu SIGTERM 
+	 // odmaskowanie sygnalu SIGTERM
 	 sigemptyset( &set );
 
-	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1) 
+	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1)
 	 {
 	 printf ("blad w ECP procmask signal\n");
 	 }
@@ -179,11 +179,11 @@ void ecp_robot::synchronise(void)
 }
 
 
-    void ecp_robot::execute_motion(void)
+void ecp_robot::execute_motion(void)
 {
 	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
 	/*
-	 // maskowanie sygnalu SIGTERM 
+	 // maskowanie sygnalu SIGTERM
 	 // w celu zapobierzenia przerwania komunikacji ECP z EDP pomiedzy SET a QUERY - usuniete
 
 	 sigset_t set;
@@ -191,7 +191,7 @@ void ecp_robot::synchronise(void)
 	 sigemptyset( &set );
 	 sigaddset( &set, SIGTERM );
 
-	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1) 
+	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1)
 	 {
 	 printf ("blad w ECP procmask signal\n");
 	 }
@@ -205,11 +205,11 @@ void ecp_robot::synchronise(void)
 	EDP_command_and_reply_buffer.query(EDP_fd);
 
 	/*
-	 // odmaskowanie sygnalu SIGTERM 
+	 // odmaskowanie sygnalu SIGTERM
 
 	 sigemptyset( &set );
 
-	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1) 
+	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1)
 	 {
 	 printf ("blad w ECP procmask signal\n");
 	 }

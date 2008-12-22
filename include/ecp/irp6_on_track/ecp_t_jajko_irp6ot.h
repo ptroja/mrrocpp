@@ -10,12 +10,11 @@ protected:
 public:
 	// KONSTRUKTORY
 	ecp_task_jajko_irp6ot(configurator &_config);
-	~ecp_task_jajko_irp6ot();
-	
+
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);
 	void main_task_algorithm(void);
-	
+
 };
 
 #endif

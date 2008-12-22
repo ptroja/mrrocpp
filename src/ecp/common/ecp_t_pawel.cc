@@ -14,12 +14,7 @@
 ecp_task_pawel::ecp_task_pawel(configurator &_config) : ecp_task(_config)
 {
     pg = NULL;
-};
-
-ecp_task_pawel::~ecp_task_pawel()
-{}
-;
-
+}
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_pawel::task_initialization(void)
@@ -33,7 +28,6 @@ void ecp_task_pawel::task_initialization(void)
     {
         ecp_m_robot = new ecp_irp6_postument_robot (*this);
     }
-
 
     // Powolanie czujnikow
 
@@ -62,44 +56,36 @@ void ecp_task_pawel::task_initialization(void)
 
 void ecp_task_pawel::main_task_algorithm(void)
 {
-    sr_ecp_msg->message("ECP pawel - wcisnij START");
-    ecp_wait_for_start();
-
     //	sensor_m[SENSOR_PAWEL]->get_reading();
     for(;;)
     {
         pg->Move();
-        //	    ecp_wait_for_stop();
     }
 }
 
 ecp_task* return_created_ecp_task (configurator &_config)
-                {
-                    return new ecp_task_pawel(_config);
-                }
+{
+	return new ecp_task_pawel(_config);
+}
+	//	nrg = new ecp_tff_nose_run_generator(*this, 8);
+	//	nrg->sensor_m = sensor_m;
+	//	nrg->configure (true, true, true, true, true, true, true);  // wszystkie podatne
+	//	tig = new ecp_teach_in_generator (*this);
+	//	pg = new pawel_generator (*this);
+	//	nrg->sensor_m = sensor_m;
 
+	/*
+		for (map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+			 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
+		{
+			sensor_m_iterator->second->to_vsp.parameters = 1; // biasowanie czujnika
+			sensor_m_iterator->second->configure_sensor();
+		}
+		*/
+	//			if ( operator_reaction ("[p] Load trajectory? ") ) {
+	//				ecp_load_file_from_ui (*tig);
+	//			}
+	//	sr_ecp_msg->message("[p] ECP aby zakonczyc wcisnij STOP");
 
-
-                //	nrg = new ecp_tff_nose_run_generator(*this, 8);
-                //	nrg->sensor_m = sensor_m;
-                //	nrg->configure (true, true, true, true, true, true, true);  // wszystkie podatne
-                //	tig = new ecp_teach_in_generator (*this);
-                //	pg = new pawel_generator (*this);
-                //	nrg->sensor_m = sensor_m;
-
-                /*
-                	for (map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
-                		 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-                	{
-                		sensor_m_iterator->second->to_vsp.parameters = 1; // biasowanie czujnika
-                		sensor_m_iterator->second->configure_sensor();
-                	}
-                	*/
-                //			if ( operator_reaction ("[p] Load trajectory? ") ) {
-                //				ecp_load_file_from_ui (*tig);
-                //			}
-                //	sr_ecp_msg->message("[p] ECP aby zakonczyc wcisnij STOP");
-
-                //			Move ( *nrg);
-                //	Move ( *tig);
-
+	//			Move ( *nrg);
+	//	Move ( *tig);

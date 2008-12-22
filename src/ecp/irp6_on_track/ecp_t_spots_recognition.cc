@@ -60,10 +60,6 @@ void ecp_t_spots_recognition::main_task_algorithm(void)
 {
 	char traj[36];
 
-	sr_ecp_msg->message("Press START to calibrate");
-	ecp_wait_for_start();
-
-
     for(int i=0; i<=15; i++)
     {
     	/*!
@@ -94,9 +90,6 @@ void ecp_t_spots_recognition::main_task_algorithm(void)
     sprintf(traj, "%s%.2d.trj", katalog_traj, 99);
 	smooth->load_file_with_path(traj);
     smooth->Move();
-
-	sr_ecp_msg->message("Calibration finished. Press STOP");
-	ecp_wait_for_stop();
 }
 
 ecp_task* return_created_ecp_task(configurator &_config)

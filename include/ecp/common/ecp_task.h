@@ -14,77 +14,76 @@ class ecp_generator;
 // klasa globalna dla calego procesu MP
 class ecp_task : public ecp_mp_task
 {
-private:
-    name_attach_t *ecp_attach, *trigger_attach; // by Y
+	private:
+		name_attach_t *ecp_attach, *trigger_attach; // by Y
 
-    int MP_fd;
-    // Wysyla puls do Mp przed oczekiwaniem na spotkanie
-    void send_pulse_to_mp(int pulse_code, int pulse_value);
+		int MP_fd;
+		// Wysyla puls do Mp przed oczekiwaniem na spotkanie
+		void send_pulse_to_mp(int pulse_code, int pulse_value);
 
-    // Receive of mp message
-    int receive_mp_message(void);
+		// Receive of mp message
+		int receive_mp_message(void);
 
-    // Badanie typu polecenia z MP
-    MP_COMMAND mp_command_type(void) const;
+		// Badanie typu polecenia z MP
+		MP_COMMAND mp_command_type(void) const;
 
-protected:
-    // Oczekiwanie na polecenie START od MP
-    bool ecp_wait_for_start(void);
+	protected:
+		// Oczekiwanie na nowy stan od MP
+		void get_next_state(void);
 
-    // Oczekiwanie na STOP
-    void ecp_wait_for_stop(void);
+	public: // TODO: following packages should be 'protected'
+		// Odpowiedz ECP do MP, pola do ew. wypelnienia przez generatory
+		ECP_REPLY_PACKAGE ecp_reply;
 
-    // Oczekiwanie na nowy stan od MP
-    void get_next_state(void);
+		// Polecenie od MP dla TASKa
+		MP_COMMAND_PACKAGE mp_command;
 
-public: // TODO: following packages should be 'protected'
-    // Odpowiedz ECP do MP, pola do ew. wypelnienia przez generatory
-    ECP_REPLY_PACKAGE ecp_reply;
+	public:
+		ecp_robot* ecp_m_robot;
 
-    // Polecenie od MP dla TASKa
-    MP_COMMAND_PACKAGE mp_command;
+		// sprawdza czy przeszedl puls do ECP lub MP
+		bool pulse_check();
 
-public:
-    ecp_robot* ecp_m_robot;
+		// KONSTRUKTOR
+		ecp_task(configurator &_config);
 
-    // sprawdza czy przeszedl puls do ECP lub MP
-    bool pulse_check();
+		// dla gcc: `'class Foo' has virtual functions but non-virtualdestructor` warning.
+		virtual ~ecp_task();
 
-    // KONSTRUKTOR
-    ecp_task(configurator &_config);
+		void initialize_communication(void);
 
-    // dla gcc: `'class Foo' has virtual functions but non-virtualdestructor` warning.
-    virtual ~ecp_task();
+		// obsluga sygnalu
+		virtual void catch_signal_in_ecp_task(int sig);
 
-    void initialize_communication(void);
+		virtual void terminate();
 
-    // obsluga sygnalu
-    virtual void catch_signal_in_ecp_task(int sig);
+		// methods for ECP template to redefine in concrete classes
+		virtual void task_initialization(void);
+		virtual void main_task_algorithm(void);
 
-    virtual void terminate();
+		// Informacja dla MP o zakonczeniu zadania uzytkownika
+		void ecp_termination_notice(void);
 
-    // methods for ECP template to redefine in concrete classes
-    virtual void task_initialization(void);
-    virtual void main_task_algorithm(void);
+		// Oczekiwanie na polecenie START od MP
+		bool ecp_wait_for_start(void);
 
-    // Informacja dla MP o zakonczeniu zadania uzytkownika
-    void ecp_termination_notice(void);
+		// Oczekiwanie na STOP
+		void ecp_wait_for_stop(void);
 
-	 // funkcjonalnosc dodana na potrzeby czytania trajektorii z pliku xml
-	 struct str_cmp{
-		 bool operator()(char const *a, char const *b) const;
-	 };		
-	 Trajectory * createTrajectory(xmlNode *actNode, xmlChar *stateID);
-	 std::map<char*, Trajectory, str_cmp>* loadTrajectories(char * fileName, ROBOT_ENUM propRobot);
+		// funkcjonalnosc dodana na potrzeby czytania trajektorii z pliku xml
+		struct str_cmp{
+			bool operator()(char const *a, char const *b) const;
+		};
+		Trajectory * createTrajectory(xmlNode *actNode, xmlChar *stateID);
+		std::map<char*, Trajectory, str_cmp>* loadTrajectories(char * fileName, ROBOT_ENUM propRobot);
 
+	public: // TODO: what follows should be private method
 
-public: // TODO: what follows should be private method
+		// Oczekiwanie na polecenie od MP
+		bool mp_buffer_receive_and_send(void);
 
-    // Oczekiwanie na polecenie od MP
-    bool mp_buffer_receive_and_send(void);
-
-    // Ustawienie typu odpowiedzi z ECP do MP
-    void set_ecp_reply(ECP_REPLY ecp_r);
+		// Ustawienie typu odpowiedzi z ECP do MP
+		void set_ecp_reply(ECP_REPLY ecp_r);
 };
 
 ecp_task* return_created_ecp_task (configurator &_config);
@@ -93,12 +92,11 @@ ecp_task* return_created_ecp_task (configurator &_config);
 // klasa podzadania
 class ecp_sub_task
 {
+	protected:
+		ecp_task &ecp_t;
 
-protected:
-    ecp_task &ecp_t;
-
-public:
-    ecp_sub_task(ecp_task &_ecp_t);
+	public:
+		ecp_sub_task(ecp_task &_ecp_t);
 };
 
 #endif /* _ECP_TASK_H */

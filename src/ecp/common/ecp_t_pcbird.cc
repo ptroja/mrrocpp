@@ -54,23 +54,15 @@ void ecp_task_pcbird::task_initialization(void)
 	{
 		printf("EXCEPTION\n");
 	}
-};
-
+}
 
 /*!
  * Main algorithm loop. Retrieves information from pcbird.
  */
 void ecp_task_pcbird::main_task_algorithm(void)
 {
-	// Wait for start.
-	sr_ecp_msg->message("ECP - pcbird test - press start");
-	ecp_wait_for_start();
-	// External infinite loop.
 	cvg->Move();
-	// Wait for stop.
-	sr_ecp_msg->message("ECP - pcbird test - press stop");
-	ecp_wait_for_stop();
-};
+}
 
 /*!
  * Returns created task object (Factory Method design pattern).
@@ -78,4 +70,4 @@ void ecp_task_pcbird::main_task_algorithm(void)
 ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_pcbird(_config);
-};
+}

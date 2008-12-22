@@ -19,24 +19,19 @@ void ecp_task_ellipse::task_initialization(void)
 {
 	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
     sr_ecp_msg->message("ECP loaded");
-};
-
+}
 
 void ecp_task_ellipse::main_task_algorithm(void)
 {
-    sr_ecp_msg->message("ECP Elipsorysowacz  - wcisnij start");
-    ecp_wait_for_start();
-
-	//Polosie elipsy
+ 	//Polosie elipsy
 	double a,b;
-	
-	a = read_double((char*)"a",0,MAX_MAJOR);	
+
+	a = read_double((char*)"a",0,MAX_MAJOR);
 	b = read_double((char*)"b",0,MAX_MINOR);
-    eg = new ecp_ellipse_generator(*this,a,b,100);	
+    eg = new ecp_ellipse_generator(*this,a,b,100);
     eg->Move();
     ecp_termination_notice();
-    ecp_wait_for_stop();
-};
+}
 
 double ecp_task_ellipse::read_double(char* name,double min,double max)
 {
@@ -49,7 +44,7 @@ double ecp_task_ellipse::read_double(char* name,double min,double max)
 		max = min - max;
 		min = min - max;
 	}
-	
+
 	//bufor pomocniczy
 	char tmp[666];
 
@@ -63,18 +58,18 @@ double ecp_task_ellipse::read_double(char* name,double min,double max)
 		{
 			sprintf(tmp,"Podaj '%s' [%.3f;%.3f]",name,min,max);
 		}
-		
+
 		value = input_double(tmp);
 		if(value >= min && value <= max)
 		{
 			return value;
 		}
-		
+
 		++cnt;
-	}	
+	}
 }
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_ellipse(_config);
-};
+}

@@ -3,7 +3,7 @@ all: ui ui.xml mp.xml festival.xml irp6m_axis_xyz.xml irp6m_inc.xml irp6m_int.xm
 PACKAGES=gtk+-2.0 libxml-2.0 gtkmm-2.4
 CFLAGS=-Wall -g -O0 `pkg-config --cflags ${PACKAGES}`
 CXXFLAGS=${CFLAGS} -fpic -shared
-LDFLAGS=`pkg-config --libs ${PACKAGES}` -export-dynamic
+LDFLAGS=`pkg-config --libs ${PACKAGES}` -export-dynamic -shared
 XSLTPROC=xsltproc robots.xml --xinclude
 
 ui: main.o configurator.o ui_model.o ui_config_entry.o
@@ -13,10 +13,10 @@ mp.so: mp_uimodule.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $<
 
 festival.so: festival_uimodule.o
-	$(CXX) ${LDFLAGS} -shared -o $@ $<
+	$(CXX) ${LDFLAGS} -o $@ $<
 
 irp6m_axis_xyz.so: irp6m_axis_xyz_uimodule.o
-	$(CXX) ${LDFLAGS} -shared -o $@ $<
+	$(CXX) ${LDFLAGS} -o $@ $<
 
 irp6m_inc.so: irp6m_inc_uimodule.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $<

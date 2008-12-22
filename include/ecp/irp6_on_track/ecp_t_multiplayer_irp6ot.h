@@ -14,17 +14,16 @@ private:
     ecp_smooth_generator* sg;
     bias_edp_force_generator* befg;
     weight_meassure_generator* wmg;
-    
+
     //podzadania
     ecp_sub_task_gripper_opening* go_st;
-    
+
    	ecp_vis_sac_lx_generator *takeg;
 	ecp_tff_rubik_grab_generator *rgg;
-    
+
 
 public:
     ecp_task_multiplayer_irp6ot(configurator &_config);
-    ~ecp_task_multiplayer_irp6ot();
 
     // methods for ECP template to redefine in concrete classes
     void task_initialization(void);

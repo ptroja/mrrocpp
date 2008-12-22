@@ -194,7 +194,7 @@ void ecp_task::send_pulse_to_mp(int pulse_code, int pulse_value)
 void ecp_task::ecp_wait_for_stop(void)
 {
 	// Wyslanie pulsu do MP
-	send_pulse_to_mp( ECP_WAIT_FOR_STOP, 1);
+	send_pulse_to_mp(ECP_WAIT_FOR_STOP, 1);
 
 	// Oczekiwanie na wiadomosc.
 	int caller = receive_mp_message();
@@ -264,13 +264,13 @@ bool ecp_task::ecp_wait_for_start(void)
 	return false;
 }
 
-// Oczekiwanie na polecenie START od MP
+// Oczekiwanie na kolejne zlecenie od MP
 void ecp_task::get_next_state(void)
 {
 	bool ecp_stop = false;
 
 	// Wyslanie pulsu do MP
-	send_pulse_to_mp( ECP_WAIT_FOR_NEXT_STATE, 1);
+	send_pulse_to_mp(ECP_WAIT_FOR_NEXT_STATE, 1);
 
 	int caller = receive_mp_message();
 
@@ -313,7 +313,7 @@ bool ecp_task::mp_buffer_receive_and_send(void)
 	bool ecp_stop = false;
 
 	// Wyslanie pulsu do MP
-	send_pulse_to_mp( ECP_WAIT_FOR_COMMAND, 1);
+	send_pulse_to_mp(ECP_WAIT_FOR_COMMAND, 1);
 
 	int caller = receive_mp_message();
 
@@ -424,44 +424,44 @@ Trajectory * ecp_task::createTrajectory(xmlNode *actNode, xmlChar *stateID)
 	xmlNode *cchild_node, *ccchild_node;
 	xmlChar *coordinateType, *numOfPoses, *robot;
 	xmlChar *xmlDataLine;
-	//xmlChar *stateID, *stateType;	
-	
+	//xmlChar *stateID, *stateType;
+
 	coordinateType = xmlGetProp(actNode, (const xmlChar *)"coordinateType");
 	numOfPoses = xmlGetProp(actNode, (const xmlChar *)"numOfPoses");
 	actTrajectory = new Trajectory((char *)numOfPoses, (char *)stateID, (char *)coordinateType);
 	for(cchild_node = actNode->children; cchild_node!=NULL; cchild_node = cchild_node->next)
-	{							
+	{
 		if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )
 		{
 			actTrajectory->createNewPose();
 			for(ccchild_node = cchild_node->children; ccchild_node!=NULL; ccchild_node = ccchild_node->next)
 			{
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"StartVelocity") )
-				{	
+				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
 					actTrajectory->setStartVelocities((char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"EndVelocity") )
-				{										
+				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
 					actTrajectory->setEndVelocities((char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
-				{										
+				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
 					actTrajectory->setVelocities((char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
-				{										
+				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
 					actTrajectory->setAccelerations((char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
-				{										
+				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
 					actTrajectory->setCoordinates((char *)xmlDataLine);
 					xmlFree(xmlDataLine);
@@ -469,7 +469,7 @@ Trajectory * ecp_task::createTrajectory(xmlNode *actNode, xmlChar *stateID)
 			}
 			actTrajectory->addPoseToTrajectory();
 		}
-		
+
 	}
 	xmlFree(coordinateType);
 	xmlFree(numOfPoses);
@@ -488,9 +488,9 @@ std::map<char*, Trajectory, ecp_task::str_cmp>* ecp_task::loadTrajectories(char 
 	xmlChar *xmlDataLine;
 	xmlChar *stateID, *stateType;
 	std::map<char*, Trajectory, str_cmp>* trajectoriesMap;
-	
+
 	xmlDocPtr doc;
-	size = 1 + strlen(mrrocpp_network_path) + strlen(fileName);				  	
+	size = 1 + strlen(mrrocpp_network_path) + strlen(fileName);
 	filePath = new char[size];
 
 	// Stworzenie sciezki do pliku.
@@ -501,7 +501,7 @@ std::map<char*, Trajectory, ecp_task::str_cmp>* ecp_task::loadTrajectories(char 
 	{
 		throw ecp_generator::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
-	
+
 	xmlNode *root = NULL;
 	root = xmlDocGetRootElement(doc);
 	if(!root || !root->name)
@@ -509,15 +509,15 @@ std::map<char*, Trajectory, ecp_task::str_cmp>* ecp_task::loadTrajectories(char 
 		xmlFreeDoc(doc);
 		throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
-	
+
 	trajectoriesMap = new std::map<char*, Trajectory, ecp_task::str_cmp>();
-	
+
    for(cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
    {
       if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "SubTask" ) )
 		{
    		for(subTaskNode = cur_node->children; subTaskNode != NULL; subTaskNode = subTaskNode->next)
-			{			
+			{
 				if ( subTaskNode->type == XML_ELEMENT_NODE  && !xmlStrcmp(subTaskNode->name, (const xmlChar *) "State" ) )
 				{
 					stateID = xmlGetProp(subTaskNode, (const xmlChar *) "id");
@@ -537,7 +537,7 @@ std::map<char*, Trajectory, ecp_task::str_cmp>* ecp_task::loadTrajectories(char 
 								trajectoriesMap->insert(std::map<char *, Trajectory>::value_type(actTrajectory->getTrjID(), *actTrajectory));
 							}
 						}
-						xmlFree(robot);				
+						xmlFree(robot);
 					}
 				}
 			}
@@ -561,7 +561,7 @@ std::map<char*, Trajectory, ecp_task::str_cmp>* ecp_task::loadTrajectories(char 
 						trajectoriesMap->insert(std::map<char *, Trajectory>::value_type(actTrajectory->getTrjID(), *actTrajectory));
 	            }
 	         }
-				xmlFree(robot);				
+				xmlFree(robot);
 			}
 		}
 	}
@@ -569,6 +569,6 @@ std::map<char*, Trajectory, ecp_task::str_cmp>* ecp_task::loadTrajectories(char 
 	xmlCleanupParser();
 //	for(std::map<char *, Trajectory>::iterator ii = trjMap->begin(); ii != trjMap->end(); ++ii)
 //		(*ii).second.showTime();
-			
+
 	return trajectoriesMap;
 }

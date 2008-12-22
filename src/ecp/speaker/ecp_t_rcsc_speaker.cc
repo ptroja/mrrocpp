@@ -20,11 +20,7 @@ ecp_task_rcsc_speaker::ecp_task_rcsc_speaker(configurator &_config) : ecp_task(_
 {
     gt = NULL;
     speak = NULL;
-};
-ecp_task_rcsc_speaker::~ecp_task_rcsc_speaker()
-{}
-;
-
+}
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_rcsc_speaker::task_initialization(void)
@@ -40,43 +36,31 @@ void ecp_task_rcsc_speaker::task_initialization(void)
 
 void ecp_task_rcsc_speaker::main_task_algorithm(void)
 {
-    sr_ecp_msg->message("ECP rcsc speaker  - wcisnij start");
-    ecp_wait_for_start();
-    for(;;)
-    { // Wewnetrzna petla nieskonczona
+	for(;;)
+	{
 
-        for(;;)
-        {
+		sr_ecp_msg->message("Waiting for MP order");
 
-            sr_ecp_msg->message("Waiting for MP order");
+		get_next_state ();
 
-            get_next_state ();
+		sr_ecp_msg->message("Order received");
 
-            sr_ecp_msg->message("Order received");
-
-            switch ( (RCSC_ECP_STATES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state)
-            {
-            case ECP_GEN_TRANSPARENT:
-                gt->Move();
-                break;
-            case ECP_GEN_SPEAK:
-                speak->configure(mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
-                speak->Move();
-                break;
-            default:
-                break;
-            }
-
-        }
-
-        // Oczekiwanie na STOP
-        ecp_wait_for_stop ();
-        break;
-    } // koniec: for(;;) wewnetrznej
-
-};
+		switch ( (RCSC_ECP_STATES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state)
+		{
+			case ECP_GEN_TRANSPARENT:
+				gt->Move();
+				break;
+			case ECP_GEN_SPEAK:
+				speak->configure(mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+				speak->Move();
+				break;
+			default:
+				break;
+		}
+	}
+}
 
 ecp_task* return_created_ecp_task (configurator &_config)
-                {
-                    return new ecp_task_rcsc_speaker(_config);
-                };
+{
+	return new ecp_task_rcsc_speaker(_config);
+}

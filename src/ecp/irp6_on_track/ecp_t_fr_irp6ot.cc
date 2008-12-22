@@ -25,12 +25,7 @@ ecp_task_fr_irp6ot::ecp_task_fr_irp6ot(configurator &_config) : ecp_task(_config
     adg1 = NULL;
     adg2 = NULL;
     el = NULL;
-};
-
-ecp_task_fr_irp6ot::~ecp_task_fr_irp6ot()
-{}
-;
-
+}
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_fr_irp6ot::task_initialization(void)
@@ -79,40 +74,30 @@ void ecp_task_fr_irp6ot::task_initialization(void)
 
 
     sr_ecp_msg->message("ECP loaded");
-};
+}
 
 
 void ecp_task_fr_irp6ot::main_task_algorithm(void)
 {
-    sr_ecp_msg->message("ECP fr irp6ot  - wcisnij start");
-    // Start?
-    ecp_wait_for_start();
-    if (  operator_reaction ("Start motion? ") )
-    {
-        // Odtwarzanie nauczonej lub wczytanej trajektorii zaczynamy od jej poczatku
-        // Trajektoria podejscia
-        adg1->Move();  // przejscie do nastepnej pozycji
-        if (  operator_reaction ("Start external motion? ") )
-            adg2->Move();
+	if (operator_reaction("Start motion? ")) {
+		// Odtwarzanie nauczonej lub wczytanej trajektorii zaczynamy od jej poczatku
+		// Trajektoria podejscia
+		adg1->Move(); // przejscie do nastepnej pozycji
+		if (operator_reaction("Start external motion? "))
+			adg2->Move();
 
-        if(  operator_reaction ("Start elipsoid trajectory? ") ) // Oczekiwanie na zezwolnie na frezowanie
-            el->Move();
-        if (  operator_reaction ("Save trajectory?") )
-            ecp_save_trajectory(*el, *this);
-        while ( !operator_reaction ("End motion? ") )
-            ; // Oczekiwanie na zezwolnie na frezowanie
-    }
+		if (operator_reaction("Start elipsoid trajectory? ")) // Oczekiwanie na zezwolnie na frezowanie
+			el->Move();
+		if (operator_reaction("Save trajectory?"))
+			ecp_save_trajectory(*el, *this);
+		while (!operator_reaction("End motion? ")); // Oczekiwanie na zezwolnie na frezowanie
+	}
 
-    // Informacja dla MP o zakonczeniu zadania uzytkownika
-    ecp_termination_notice ();
-
-    // Oczekiwanie na STOP
-    ecp_wait_for_stop();
-
-
-};
+	// Informacja dla MP o zakonczeniu zadania uzytkownika
+	ecp_termination_notice();
+}
 
 ecp_task* return_created_ecp_task (configurator &_config)
-                {
-                    return new ecp_task_fr_irp6ot(_config);
-                };
+{
+	return new ecp_task_fr_irp6ot(_config);
+}

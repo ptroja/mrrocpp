@@ -28,17 +28,11 @@ ecp_task_sk::ecp_task_sk(configurator &_config) : ecp_task(_config)
 {
     nrg = NULL;
     yefg = NULL;
-};
-
-ecp_task_sk::~ecp_task_sk()
-{}
-;
-
+}
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_sk::task_initialization(void)
 {
-
     // the robot is choose dependendant on the section of configuration file sent as argv[4]
     if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     {
@@ -87,14 +81,7 @@ void ecp_task_sk::task_initialization(void)
 
 void ecp_task_sk::main_task_algorithm(void)
 {
-    sr_ecp_msg->message("ECP sledzenie konturu - wcisnij start");
-    ecp_wait_for_start();
-    
 //   weight_meassure_generator wmg(*this, 0.3, 2);
-    
-    
-    for(;;)
-    { // Wewnetrzna petla nieskonczona
 
         for(;;)
         {
@@ -120,16 +107,9 @@ void ecp_task_sk::main_task_algorithm(void)
             }
 
         }
-
-        // Oczekiwanie na STOP
-        printf("przed wait for stop\n");
-        ecp_wait_for_stop();
-        break;
-    } // koniec: for(;;) wewnetrznej
-
-};
+}
 
 ecp_task* return_created_ecp_task (configurator &_config)
-                {
-                    return new ecp_task_sk(_config);
-                };
+{
+	return new ecp_task_sk(_config);
+}

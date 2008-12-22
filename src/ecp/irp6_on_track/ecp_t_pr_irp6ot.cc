@@ -18,7 +18,6 @@
 
 void ecp_task_pr_irp6ot::short_move_up ()
 {
-
     trajectory_description tdes;
 
     tdes.arm_type = XYZ_EULER_ZYZ;
@@ -36,7 +35,6 @@ void ecp_task_pr_irp6ot::short_move_up ()
     // Generator trajektorii prostoliniowej
     ecp_linear_generator lg(*this, tdes, 0);
     lg.Move();
-
 }
 
 // KONSTRUKTORY
@@ -47,7 +45,8 @@ ecp_task_pr_irp6ot::ecp_task_pr_irp6ot(configurator &_config) : ecp_task(_config
 
 ecp_task_pr_irp6ot::~ecp_task_pr_irp6ot()
 {
-    delete tig;
+    if (tig)
+    	delete tig;
 }
 
 // methods for ECP template to redefine in concrete classes
@@ -91,96 +90,83 @@ void ecp_task_pr_irp6ot::task_initialization(void)
         sr_ecp_msg->message("Bledny tryb pracy - popraw plik konfiguracyjny");
     }
 
-
     sr_ecp_msg->message("ECP loaded");
-};
+}
 
 
 void ecp_task_pr_irp6ot::main_task_algorithm(void)
 {
+	if (ecp_tryb==1)
+	{
+		sr_ecp_msg->message("ECP powielanie rysunku");
+	}
+	else if (ecp_tryb==2)
+	{
+		sr_ecp_msg->message("ECP zaawansowane powielanie rysunku");
+	}
 
-    if (ecp_tryb==1)
-    {
-        sr_ecp_msg->message("ECP powielanie rysunku - wcisnij start");
-    }
-    else if (ecp_tryb==2)
-    {
-        sr_ecp_msg->message("ECP zaawansowane powielanie rysunku - wcisnij start");
-    }
+	for(;;)
+	{
 
-    ecp_wait_for_start();
-    for(;;)
-    { // Wewnetrzna petla nieskonczona
+		sr_ecp_msg->message("NOWA SERIA");
+		sr_ecp_msg->message("Wodzenie za nos do pozycji rozpoczecia nauki");
+		sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
+		ynrlg->Move();
 
-        for(;;)
-        {
+		if (choose_option ("1 - Load drawing, 2 - Learn drawing", 2) == OPTION_ONE)
+		{
+			sr_ecp_msg->message("Wczytywanie trajektorii");
+			tig->load_file_from_ui ();
+		}
+		else
+		{
 
-            sr_ecp_msg->message("NOWA SERIA");
-            sr_ecp_msg->message("Wodzenie za nos do pozycji rozpoczecia nauki");
-            sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
-            ynrlg->Move();
+			sr_ecp_msg->message("Wodzenie za nos");
+			sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
+			ynrlg->Move();
 
-            if (choose_option ("1 - Load drawing, 2 - Learn drawing", 2) == OPTION_ONE)
-            {
-                sr_ecp_msg->message("Wczytywanie trajektorii");
-                tig->load_file_from_ui ();
-            }
-            else
-            {
+			sr_ecp_msg->message("Uczenie trajektorii");
+			sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
+			tig->flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
+			tig->teach_or_move=YG_TEACH;
+			tig->Move();
 
-                sr_ecp_msg->message("Wodzenie za nos");
-                sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
-                ynrlg->Move();
+			sr_ecp_msg->message("Krotki ruch w gore");
+			short_move_up();
 
-                sr_ecp_msg->message("Uczenie trajektorii");
-                sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
-                tig->flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
-                tig->teach_or_move=YG_TEACH;
-                tig->Move();
+			sr_ecp_msg->message("Wodzenie za nos");
+			sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
+			ynrlg->Move();
+		}
 
-                sr_ecp_msg->message("Krotki ruch w gore");
-                short_move_up();
+		while (operator_reaction ("Reproduce drawing?"))
+		{
+			sr_ecp_msg->message("Wodzenie za nos do poczatku odtwarzania");
+			sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
+			ynrlg->Move();
 
-                sr_ecp_msg->message("Wodzenie za nos");
-                sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
-                ynrlg->Move();
-            }
+			sr_ecp_msg->message("Odtwarzanie nauczonej trajektorii");
+			tig->teach_or_move=YG_MOVE;
+			tig->Move();
 
-            while (operator_reaction ("Reproduce drawing?"))
-            {
-                sr_ecp_msg->message("Wodzenie za nos do poczatku odtwarzania");
-                sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
-                ynrlg->Move();
+			sr_ecp_msg->message("Krotki ruch w gore");
+			short_move_up();
 
-                sr_ecp_msg->message("Odtwarzanie nauczonej trajektorii");
-                tig->teach_or_move=YG_MOVE;
-                tig->Move();
+			sr_ecp_msg->message("Wodzenie za nos");
+			sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
+			ynrlg->Move();
 
-                sr_ecp_msg->message("Krotki ruch w gore");
-                short_move_up();
+		}
 
-                sr_ecp_msg->message("Wodzenie za nos");
-                sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
-                ynrlg->Move();
-
-            }
-
-            if ( operator_reaction ("Save drawing ") )
-            {
-                sr_ecp_msg->message("Zapisywanie trajektorii");
-                tig->save_file (PF_VELOCITY);
-            }
-        }
-
-        // Oczekiwanie na STOP
-        ecp_wait_for_stop();
-        break;
-    } // koniec: for(;;) wewnetrznej
-
-
-};
+		if ( operator_reaction ("Save drawing ") )
+		{
+			sr_ecp_msg->message("Zapisywanie trajektorii");
+			tig->save_file (PF_VELOCITY);
+		}
+	}
+}
 
 ecp_task* return_created_ecp_task (configurator &_config)
-                {
-                    return new ecp_task_pr_irp6ot(_config);
-                };
+{
+	return new ecp_task_pr_irp6ot(_config);
+}

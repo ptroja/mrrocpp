@@ -25,7 +25,7 @@ protected:
       * Generator used for communication with pcbird.
       */
 	ecp_cvfradia_generator* cvg;
-	
+
 public:
 	/*!
       * Constructor.
@@ -33,7 +33,7 @@ public:
 	ecp_task_pcbird(configurator &_config)
 	  : ecp_task(_config)
 	{ }
-	
+
 	/*!
       * Initialize task - robot, sensors and generators.
       */
@@ -43,8 +43,7 @@ public:
       * Main algorithm loop. Retrieves information from pcbird.
       */
 	void main_task_algorithm(void);
-	
+
 };
 
 #endif
-

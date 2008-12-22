@@ -28,9 +28,6 @@ ecp_task_playerjoy_irp6ot::ecp_task_playerjoy_irp6ot(configurator &_config) : ec
     pjg = NULL;
 }
 
-ecp_task_playerjoy_irp6ot::~ecp_task_playerjoy_irp6ot()
-{}
-
 // methods for ECP template to redefine in concrete classes
 void ecp_task_playerjoy_irp6ot::task_initialization(void)
 {
@@ -48,25 +45,13 @@ void ecp_task_playerjoy_irp6ot::task_initialization(void)
 
 void ecp_task_playerjoy_irp6ot::main_task_algorithm(void)
 {
-    sr_ecp_msg->message("ECP playerjoy irp6ot  - wcisnij start");
-    ecp_wait_for_start();
-    for(;;)			// Wewnetrzna petla nieskonczona
-    {
-
-        for(;;)
-        {
-            pjg->Move();
-        }
-
-        // Oczekiwanie na STOP
-        printf("przed wait for stop\n");
-        ecp_wait_for_stop();
-        break;
-    } // koniec: for(;;) wewnetrznej
-
+	for(;;)
+	{
+		pjg->Move();
+	}
 }
 
 ecp_task* return_created_ecp_task (configurator &_config)
-                {
-                    return new ecp_task_playerjoy_irp6ot(_config);
-                }
+{
+	return new ecp_task_playerjoy_irp6ot(_config);
+}

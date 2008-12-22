@@ -26,14 +26,9 @@
 // KONSTRUKTORY
 ecp_task_tw::ecp_task_tw(configurator &_config) : ecp_task(_config)
 {
-    nrg = NULL;
-    yefg = NULL;
-};
-
-ecp_task_tw::~ecp_task_tw()
-{}
-;
-
+	nrg = NULL;
+	yefg = NULL;
+}
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_tw::task_initialization(void)
@@ -63,7 +58,7 @@ void ecp_task_tw::task_initialization(void)
 		 TORQUE_RECIPROCAL_DAMPING, TORQUE_RECIPROCAL_DAMPING, TORQUE_RECIPROCAL_DAMPING);
 	nrg->configure_inertia (FORCE_INERTIA, FORCE_INERTIA, FORCE_INERTIA/5, TORQUE_INERTIA, TORQUE_INERTIA, TORQUE_INERTIA);
 //	nrg->configure_inertia (0, 0, 0, 0, 0, 0);
-	
+
 
 
     befg = new bias_edp_force_generator(*this);
@@ -91,41 +86,24 @@ void ecp_task_tw::task_initialization(void)
         save_activated = false;
     }
 
-};
+}
 
 
 void ecp_task_tw::main_task_algorithm(void)
 {
-    sr_ecp_msg->message("ECP tw ex - wcisnij start");
-    ecp_wait_for_start();
-    
-//   weight_meassure_generator wmg(*this, 0.3, 2);
-    
-    
-    for(;;)
-    { // Wewnetrzna petla nieskonczona
+	//   weight_meassure_generator wmg(*this, 0.3, 2);
 
-        for(;;)
-        {
-			sr_ecp_msg->message("NOWA SERIA");
-			sr_ecp_msg->message("FORCE SENSOR BIAS");
-			befg->Move();
-			sr_ecp_msg->message("Wodzenie do pozycji sledzenia konturu");
-			sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
-			nrg->Move();
- 
-
-        }
-
-        // Oczekiwanie na STOP
-        printf("przed wait for stop\n");
-        ecp_wait_for_stop();
-        break;
-    } // koniec: for(;;) wewnetrznej
-
-};
+	for(;;) {
+		sr_ecp_msg->message("NOWA SERIA");
+		sr_ecp_msg->message("FORCE SENSOR BIAS");
+		befg->Move();
+		sr_ecp_msg->message("Wodzenie do pozycji sledzenia konturu");
+		sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
+		nrg->Move();
+	}
+}
 
 ecp_task* return_created_ecp_task (configurator &_config)
-                {
-                    return new ecp_task_tw(_config);
-                };
+{
+	return new ecp_task_tw(_config);
+}

@@ -23,11 +23,7 @@
 ecp_task_teach_irp6ot::ecp_task_teach_irp6ot(configurator &_config) : ecp_task(_config)
 {
     tig = NULL;
-};
-ecp_task_teach_irp6ot::~ecp_task_teach_irp6ot()
-{}
-;
-
+}
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_teach_irp6ot::task_initialization(void)
@@ -56,16 +52,15 @@ void ecp_task_teach_irp6ot::main_task_algorithm(void)
     switch (ecp_m_robot->robot_name)
     {
     case ROBOT_IRP6_ON_TRACK:
-        sr_ecp_msg->message("ECP teach irp6ot  - wcisnij start");
+        sr_ecp_msg->message("ECP teach irp6ot");
         break;
     case ROBOT_IRP6_POSTUMENT:
-        sr_ecp_msg->message("ECP teach irp6p  - wcisnij start");
+        sr_ecp_msg->message("ECP teach irp6p");
         break;
     default:
         fprintf(stderr, "%s:%d unknown robot type\n", __FILE__, __LINE__);
     }
 
-    ecp_wait_for_start();
     if ( operator_reaction ("Teach in? ") )
     {
         tig->flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
@@ -82,23 +77,17 @@ void ecp_task_teach_irp6ot::main_task_algorithm(void)
         tig->load_file_from_ui ();
     }
 
-    for(;;)
-    { // Wewnetrzna petla nieskonczona
-        // Aktualnie petla wykonuje sie jednokrotnie, gdyby MP przejal sterowanie
-        // to petle mozna przerwac przez STOP lub przez polecenie END_MOTION wydane
-        // przez MP
-        //  printf("w ecp for\n");
-        tig->Move();
-        // 	 printf("w ecp for za move\n");
-        // Oczekiwanie na STOP
-        ecp_termination_notice();
-        ecp_wait_for_stop();
-        break; // W.S. ??? czy powinna byc ta instrukcja
-    } // koniec: for(;;) wewnetrznej
-
-};
+    // Aktualnie petla wykonuje sie jednokrotnie, gdyby MP przejal sterowanie
+    // to petle mozna przerwac przez STOP lub przez polecenie END_MOTION wydane
+    // przez MP
+    //  printf("w ecp for\n");
+    tig->Move();
+    // 	 printf("w ecp for za move\n");
+    // Oczekiwanie na STOP
+    ecp_termination_notice();
+}
 
 ecp_task* return_created_ecp_task (configurator &_config)
-                {
-                    return new ecp_task_teach_irp6ot(_config);
-                };
+{
+	return new ecp_task_teach_irp6ot(_config);
+}

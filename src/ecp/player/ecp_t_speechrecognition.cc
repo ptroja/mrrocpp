@@ -29,9 +29,6 @@ void ecp_task_speechrecognition::task_initialization(void)
 
 void ecp_task_speechrecognition::main_task_algorithm(void)
 {
-    sr_ecp_msg->message("ECP speechrecognition - wcisnij start");
-    ecp_wait_for_start();
-
     for(;;)
     {
         sr_ecp_msg->message("Waiting for MP order");
@@ -52,13 +49,9 @@ void ecp_task_speechrecognition::main_task_algorithm(void)
 
         ecp_termination_notice();
     }
-
-    // Oczekiwanie na STOP
-    printf("przed wait for stop\n");
-    ecp_wait_for_stop ();
 }
 
 ecp_task* return_created_ecp_task (configurator &_config)
-                {
-                    return new ecp_task_speechrecognition(_config);
-                }
+{
+	return new ecp_task_speechrecognition(_config);
+}
