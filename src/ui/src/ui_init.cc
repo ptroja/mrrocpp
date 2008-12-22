@@ -277,6 +277,7 @@ while(1) {
         case C_JOINT:
 		case C_MOTOR:
 			//  printf("C_MOTOR\n");
+			ui_ecp_obj->trywait_sem();
 			if (ui_state.teachingstate == MP_RUNNING) {
 				ui_state.teachingstate = ECP_TEACHING;
 			}
@@ -288,7 +289,6 @@ while(1) {
 				PtWindowToFront (ABW_teaching_window);
 			}
 			PtLeave(0);
-			ui_ecp_obj->trywait_sem();
 			ui_ecp_obj->take_sem();
 
 			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
@@ -296,11 +296,11 @@ while(1) {
 			}
 		break;
 		case YES_NO:
+			ui_ecp_obj->trywait_sem();
 			PtEnter(0);
 			ApCreateModule (ABM_yes_no_window, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_pytanie, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
 			PtLeave(0);
-			ui_ecp_obj->trywait_sem();
 			ui_ecp_obj->take_sem();
 
 			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
@@ -309,7 +309,6 @@ while(1) {
 
           break;
         case MESSAGE:
-
 			PtEnter(0);
 			ApCreateModule (ABM_wnd_message, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_message, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
@@ -322,12 +321,11 @@ while(1) {
 			}
           break;
         case DOUBLE_NUMBER:
-
+        	ui_ecp_obj->trywait_sem();
 			PtEnter(0);
 			ApCreateModule (ABM_wnd_input_double, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_input_double, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
 			PtLeave(0);
-			ui_ecp_obj->trywait_sem();
 			ui_ecp_obj->take_sem();
 
 	        if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
@@ -335,12 +333,11 @@ while(1) {
 	  	  	}
 		break;
         case INTEGER_NUMBER:
-
+        	ui_ecp_obj->trywait_sem();
 			PtEnter(0);
 			ApCreateModule (ABM_wnd_input_integer, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_input_integer, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
 			PtLeave(0);
-			ui_ecp_obj->trywait_sem();
 			ui_ecp_obj->take_sem();
 
 		   	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
@@ -348,7 +345,7 @@ while(1) {
 		   	}
  		break;
           case CHOOSE_OPTION:
-
+        	ui_ecp_obj->trywait_sem();
 			PtEnter(0);
 			ApCreateModule (ABM_wnd_choose_option, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_choose_option, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
@@ -372,8 +369,7 @@ while(1) {
 			 }
 
 			PtLeave(0);
-			ui_ecp_obj->trywait_sem();
-			ui_ecp_obj->take_sem();
+				ui_ecp_obj->take_sem();
 
 		    	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
 			   	printf("Blad w UI reply\n");
@@ -383,7 +379,7 @@ while(1) {
         case LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
      //    printf("LOAD_FILE\n");
           if (ui_state.teachingstate == MP_RUNNING) {
-
+        	  ui_ecp_obj->trywait_sem();
 			wyjscie=false;
 			while (!wyjscie)
 			{
@@ -402,8 +398,7 @@ while(1) {
 			}
 
 		          ui_ecp_obj->ui_rep.reply = FILE_LOADED;
-		          ui_ecp_obj->trywait_sem();
-		       	 ui_ecp_obj->take_sem();
+			       	 ui_ecp_obj->take_sem();
 
 		     	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
 			   	printf("Blad w UI reply\n");
@@ -414,6 +409,7 @@ while(1) {
         case SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 		   //    printf("SAVE_FILE\n");
           if (ui_state.teachingstate == MP_RUNNING) {
+        	  ui_ecp_obj->trywait_sem();
          		wyjscie = false;
 			while (!wyjscie)
 			{
@@ -431,7 +427,6 @@ while(1) {
 			}
 
   		 ui_ecp_obj->ui_rep.reply = FILE_SAVED;
-  		 ui_ecp_obj->trywait_sem();
   		ui_ecp_obj->take_sem();
 
      	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
@@ -442,6 +437,7 @@ while(1) {
 	case OPEN_FORCE_SENSOR_MOVE_WINDOW:
 		// obsluga sterowania silowego -> ForceSensorMove
 		// przejecie kontroli nad Fotonen
+		
 		PtEnter(0);
 		// stworzenie okna wndForceControl
 		ApCreateModule (ABM_wndForceControl, ABW_base, NULL);
