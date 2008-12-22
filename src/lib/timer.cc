@@ -63,7 +63,7 @@ timer_status_enum timer::get_time(float *sec)
 {
 	if (timer_stopped)
 	{
-		float t = (t2.tv_sec + t2.tv_nsec/1e9) - (t1.tv_sec + t1.tv_nsect2.tv_nsec/1e9);
+		float t = (t2.tv_sec + t2.tv_nsec/1e9) - (t1.tv_sec + t1.tv_nsec/1e9);
 		if (sec)
 			*sec = (t/1e9);
 		last_status = TIME_RETRIVED;
