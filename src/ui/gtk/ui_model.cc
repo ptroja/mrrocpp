@@ -32,7 +32,17 @@ void ui_model::clear(void)
 ui_model::ui_model() : tabs_visible(0)
 {
 	builder = gtk_builder_new();
-	gtk_builder_add_from_file(builder, "ui.xml", NULL);
+
+	GError *error = NULL;
+	if (gtk_builder_add_from_file(builder, "ui.xml", &error) == 0) {
+		if (error) {
+			fprintf (stderr, "Unable to read file ui.xml: %s\n", error->message);
+			g_error_free(error);
+			exit(-1);
+		} else {
+			g_assert(0);
+		}
+	}
 
 	gtk_builder_connect_signals(builder, NULL);
 

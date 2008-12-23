@@ -75,6 +75,10 @@ irp6p_servo_algorithm.so: irp6p_servo_algorithm_uimodule.o
 clean:
 	rm -f *.xml ui.gtk *.o *.so
 
+# TODO: ponizsza regule "install" trzeba ladniej przepisac
+install:
+	cp ui.gtk *.xml *.so ../../../bin/
+
 # Directory with dependences.
 DEPDIR = .deps
 df = $(DEPDIR)/$(*F)
