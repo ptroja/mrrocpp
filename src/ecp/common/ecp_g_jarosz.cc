@@ -289,7 +289,7 @@ double ecp_linear_parabolic_generator::calculate_s(const double t, const double 
 {
 	double s=0;
 
-	if (t <0 || t >1 ){ 
+	if (t <0 || t >1 ){
 	throw ECP_error(NON_FATAL_ERROR, INVALID_TIME_SPECIFICATION);
 }
 
@@ -619,7 +619,7 @@ bool ecp_polynomial_generator::first_step()
 {
 
 	// Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
-	// wyznaczyc parametr A0 wielomianu, który wymaga znajomoœci pozycji aktualnej ramienia
+	// wyznaczyc parametr A0 wielomianu, ktï¿½ry wymaga znajomoï¿½ci pozycji aktualnej ramienia
 	first_interval = true;
 
 	switch (td.arm_type) {
@@ -676,7 +676,7 @@ bool ecp_polynomial_generator::first_step()
 ; // end: bool ecp_polynomial_generator::first_step ( )
 
 // ####################################################################################################
-// Generator o zadany przyrost polozenia/orientacji wykorzystuj¹cy do interpolacji wielomian 3 stopnia
+// Generator o zadany przyrost polozenia/orientacji wykorzystujï¿½cy do interpolacji wielomian 3 stopnia
 // ciaglosc predkosci
 // predkosc poczatkowa i koncowa moze byc zadawana
 // ####################################################################################################
@@ -736,7 +736,7 @@ ecp_cubic_generator::ecp_cubic_generator(ecp_task& _ecp_task, trajectory_descrip
 
 bool ecp_cubic_generator::next_step()
 {
-	int i; // licznik kolejnych wspólrzednych wektora [0..MAX_SERVOS_NR]
+	int i; // licznik kolejnych wspï¿½lrzednych wektora [0..MAX_SERVOS_NR]
 
 	char messg[128]; // komunikat do SR
 
@@ -1189,7 +1189,7 @@ bool ecp_quintic_generator::next_step()
 			throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}// end:switch
 
-	// skopiowaæ przygotowany rozkaz dla EDP do bufora wysylkowego
+	// skopiowaï¿½ przygotowany rozkaz dla EDP do bufora wysylkowego
 
 
 	return true;
@@ -3286,7 +3286,12 @@ void ecp_save_trajectory(ecp_elipsoid_generator& the_generator, ecp_task& _ecp_t
 	ecp_to_ui_msg.ecp_message = SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
 	strcpy(ecp_to_ui_msg.string, "*.dat"); // Wzorzec nazwy pliku
 	// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(ECP_message), sizeof(UI_reply)) == -1) {
+#if !defined(USE_MESSIP_SRR)
 	if (MsgSend(_ecp_task.UI_fd, &ecp_to_ui_msg, sizeof(ECP_message), &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+#else
+	int status;
+	if (messip_send(_ecp_task.UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message), &status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0) {
+#endif
 		e = errno;
 		perror("ECP: Send() to UI failed\n");
 		_ecp_task.sr_ecp_msg->message(SYSTEM_ERROR, e, "ECP: Send() to UI failed");
@@ -3340,7 +3345,12 @@ void ecp_save_extended_file(ecp_calibration_generator& the_generator, ecp_operat
 	ecp_to_ui_msg.ecp_message = SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
 	strcpy(ecp_to_ui_msg.string, "*.cdt"); // Wzorzec nazwy pliku
 	// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(ECP_message), sizeof(UI_reply)) == -1) {
+#if !defined(USE_MESSIP_SRR)
 	if (MsgSend(_ecp_task.UI_fd, &ecp_to_ui_msg, sizeof(ECP_message), &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+#else
+	int status;
+	if (messip_send(_ecp_task.UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message), &status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0) {
+#endif
 		e = errno;
 		perror("ECP: Send() to UI failed\n");
 		_ecp_task.sr_ecp_msg->message(SYSTEM_ERROR, e, "ECP: Send() to UI failed");

@@ -39,26 +39,26 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 		//fprintf(stderr, "OnTimer()\n");
 
 	#define CHECK_SPEAKER_STATE_ITER 10 // co ile iteracji ma byc sprawdzony stan speakera
-	
+
 	static int closing_delay_counter; // do odliczania czasu do zamkniecia aplikacji
 	static int Iteration_counter = 0; // licznik uruchomienia fukcji
-	
-	
+
+
 	Iteration_counter++;
-	
+
 	if ((Iteration_counter%CHECK_SPEAKER_STATE_ITER)==0) {
 		if (ui_state.is_wind_speaker_play_open) // otworz okno
 		{
 			speaker_check_state(widget, apinfo, cbinfo);
 		}
 	}
-	
+
 	if (ui_sr_obj->check_new_msg() == 0) { // by Y jesli mamy co wypisywac
-	ui_sr_obj->lock_mutex(); 
+	ui_sr_obj->lock_mutex();
 // 	printf("timer\n");
 	int attributes_mask;
 	PtMultiTextAttributes_t attr;
-	
+
 	// char buffer[ 80 ];
 
 	char current_line[400];
@@ -67,55 +67,55 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 		ui_sr_obj->reader_buf_position++;
 		ui_sr_obj->reader_buf_position %= UI_SR_BUFFER_LENGHT;
-		
-		
+
+
 		snprintf(current_line, 100, "%-10s",
 				ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].host_name);
 		strcat(current_line, "  ");
 		strftime( current_line+12, 100, "%H:%M:%S",
-            localtime( &ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].ts.tv_sec ));
+				localtime( &ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].ts.tv_sec ));
 		sprintf(current_line+20, ".%03d   ",
-            ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].ts.tv_nsec/1000000);
+				ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].ts.tv_nsec/1000000);
 
 		switch (ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].process_type) {
 			case EDP:
 				strcat(current_line, "EDP: ");
 				break;
 			case ECP:
-				strcat(current_line, "ECP: ");      
+				strcat(current_line, "ECP: ");
 				break;
 			case MP:
 				// printf("MP w ontimer\n");
-				strcat(current_line, "MP:  ");  
+				strcat(current_line, "MP:  ");
 				break;
 			case VSP:
-				strcat(current_line, "VSP: ");      
+				strcat(current_line, "VSP: ");
 				break;
 			case UI:
-				strcat(current_line, "UI:  ");      
+				strcat(current_line, "UI:  ");
 				break;
 			default:
 				strcat(current_line, "???: ");
 				continue;
 		} // end: switch (message_buffer[reader_buf_position].process_type)
-      
+
 		ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].process_type = UNKNOWN_PROCESS_TYPE;
 
 		char process_name_buffer[NAME_LENGTH+1];
 		snprintf(process_name_buffer, sizeof(process_name_buffer), "%-21s",
 				ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].process_name);
-    
+
 		strcat(current_line,process_name_buffer);
 
 		switch (ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].message_type) {
 			case FATAL_ERROR:
 				strcat(current_line, "FATAL_ERROR:     ");
 				attr.text_color=Pg_RED;
-				break;         
+				break;
 			case NON_FATAL_ERROR:
 				strcat(current_line, "NON_FATAL_ERROR: ");
 				attr.text_color=Pg_BLUE;
-				break; 
+				break;
 			case SYSTEM_ERROR:
 				// printf("SYSTEM ERROR W ONTIMER\n");
 				// Informacja do UI o koniecznosci zmiany stanu na INITIAL_STATE
@@ -126,29 +126,29 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 				strcat(current_line, "MESSAGE:         ");
 				attr.text_color=Pg_BLACK;
 				break;
-			default: 
+			default:
 				strcat(current_line, "UNKNOWN ERROR:   ");
 				attr.text_color=Pg_YELLOW;
 		}; // end: switch (message.message_type)
-    
+
 		strcat( current_line, ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].description);
 		strcat( current_line, "\n" );
 		// 	printf("c_l W ONT: %s\n",current_line);
 		// delay(1000);
 		// 	attr.text_color=Pg_DBLUE;
-		
+
 		attributes_mask=Pt_MT_TEXT_COLOR;
 		PtMultiTextModifyText(ABW_PtMultiText_sr_window, NULL, NULL, -1, current_line, strlen(current_line), &attr, attributes_mask);
 
 	    (*log_file_outfile) << current_line;
-			
+
 	} 	while (ui_sr_obj->writer_buf_position!=ui_sr_obj->reader_buf_position);
 
 		(*log_file_outfile).flush();
-		
-		ui_sr_obj->unlock_mutex(); 
-	} 
-	   
+
+		ui_sr_obj->unlock_mutex();
+	}
+
 	if (ui_state.ui_state==2) {// jesli ma nastapic zamkniecie z aplikacji
 		set_ui_state_notification(UI_N_EXITING);
 	// 	printf("w ontimer 2\n");
@@ -169,7 +169,7 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 	} else if (ui_state.ui_state==5) {// odlcizanie do zamnkiecia
  	//	printf("w ontimer 5\n");
 		if ((--closing_delay_counter)<=0)
-			ui_state.ui_state=6;	
+			ui_state.ui_state=6;
 	} else if (ui_state.ui_state==6) {// zakonczenie aplikacji
 	      (*log_file_outfile).close();
 	      delete log_file_outfile;
@@ -178,7 +178,7 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 	}  else {
 		set_ui_ready_state_notification(widget, apinfo, cbinfo);
 	}
-	
+
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 

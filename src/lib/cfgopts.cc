@@ -146,12 +146,12 @@ int input_config(const char *filename, struct Config_Tag configs[], const char *
    int count=0,lineno=0,temp;
    FILE *file;
    char *fptr,*tok,*next;
-   void *function();
 
    file=fopen(filename,"r");
    if ( file==NULL ) {
-		return INCFG_ERROR;   // return error designation.
-	}
+	   perror("fopen()");
+	   return INCFG_ERROR;   // return error designation.
+   }
 
    if ( header!=NULL )
       do
@@ -193,7 +193,7 @@ int input_config(const char *filename, struct Config_Tag configs[], const char *
                case Int_Tag: // by Y
                   sscanf(next, "%d", (int *)(ptr->buf));
                   ++count;
-                  break;                  
+                  break;
 
 
                case Word_Tag:
@@ -308,7 +308,7 @@ int update_config(const char *filename, struct Config_Tag configs[], const char 
          case Int_Tag: // by Y
     	      fprintf(outfile, "%d\n", *((int *)(ptr->buf)));
             ++count;
-            break;  
+            break;
 
          case Word_Tag:
             fprintf(outfile, "%hd\n", *((short *)(ptr->buf)));
@@ -338,7 +338,7 @@ int update_config(const char *filename, struct Config_Tag configs[], const char 
          case DHexWord_Tag:
             fprintf(outfile, "%lx\n", *((long *)(ptr->buf)));
             ++count;
-            break;            
+            break;
 
          case Float_Tag:
             fprintf(outfile, "%g\n", *((float *)ptr->buf));
@@ -408,7 +408,7 @@ int update_config(const char *filename, struct Config_Tag configs[], const char 
          case Int_Tag: // by Y
     	      fprintf(outfile, "%d\n", *((int *)(ptr->buf)));
             ++count;
-            break;  
+            break;
 
          case Word_Tag:
             fprintf(outfile, "%hd\n", *((short *)(ptr->buf)));
@@ -504,7 +504,7 @@ int update_config(const char *filename, struct Config_Tag configs[], const char 
 		         case Int_Tag: // by Y
 		    	      fprintf(outfile, "%d\n", *((int *)(ptr->buf)));
 		            ++count;
-		            break;  
+		            break;
 
                   case Word_Tag:
                      fprintf(outfile, "%hd\n", *((short *)(ptr->buf)));

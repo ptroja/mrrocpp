@@ -1051,7 +1051,6 @@ int initiate_configuration()
 	fill_node_list();
 	fill_program_node_list();
 
-
 	return 1;
 }
 

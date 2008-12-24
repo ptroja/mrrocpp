@@ -27,7 +27,7 @@ configsrv::configsrv (const char* _node, const char* _dir, const char* _ini_file
 	node = strdup(_node);
 	dir = strdup(_dir);
 	ini_file = strdup(_ini_file);
-	
+
 	pthread_mutex_init(&mutex, NULL );
 
 	int size;
@@ -36,7 +36,7 @@ configsrv::configsrv (const char* _node, const char* _dir, const char* _ini_file
 	mrrocpp_network_path = new char[size];
 	// Stworzenie sciezki do pliku.
 	sprintf(mrrocpp_network_path, "/net/%s%s", node, dir);
-	
+
 	size = 1 + strlen(mrrocpp_network_path) + strlen("configs/") + strlen(ini_file);
 	file_location = new char[size];
 	// Stworzenie sciezki do pliku.
@@ -84,13 +84,13 @@ bool configsrv::exists(const char* _key, const char* _section_name)
 	if (input_config(file_location, configs, _section_name)<1) {
 		if (input_config(common_file_location, configs, _section_name)<1) {
 			unlock_mutex();
-			
+
 			return false;
 		}
 	}
 	unlock_mutex();
-	
-	return true;	
+
+	return true;
 }
 
 
@@ -134,12 +134,12 @@ double configsrv::return_double_value(const char* _key, const char*_section_name
 		// Pole konczace.
 		{ NULL , Error_Tag, NULL }
 		};
-		
+
 	// Odczytanie zmiennej.
 	lock_mutex();
 	if (input_config(file_location, configs, _section_name)<1) {
 		if (input_config(common_file_location, configs, _section_name)<1) {
-			printf("Blad input_config() w return_double_value file_location:%s, _section_name:%s, _key:%s\n", 
+			printf("Blad input_config() w return_double_value file_location:%s, _section_name:%s, _key:%s\n",
 				file_location, _section_name, _key);
 		}
 	}
@@ -162,14 +162,14 @@ char* configsrv::return_string_value(const char* _key, const char*_section_name)
 		{ (char *) _key, String_Tag, tmp},
 		// Pole konczace.
 		{ NULL , Error_Tag, NULL }
-		};		
-		
+		};
+
 	// Odczytanie zmiennej.
 	lock_mutex();
 	if (input_config(file_location, configs, _section_name)<1) {
 		if (input_config(common_file_location, configs, _section_name)<1) {
-			printf("Blad input_config() w return_string_value file_location:%s, _section_name:%s, _key:%s\n",
-				 file_location, _section_name, _key);
+			printf("Blad input_config() w return_string_value file_location:{%s,%s}, _section_name:%s, _key:%s\n",
+				 file_location, common_file_location, _section_name, _key);
 		}
 	}
 	unlock_mutex();

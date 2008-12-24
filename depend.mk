@@ -1,18 +1,3 @@
-#///////////////////////////////////////////////////////////////////////////////
-# /** @file     common.mk
-#  *
-#  *  Dependencies for Windows host compilation.
-#  *
-#  *  @author   ptroja
-#  *  @date     2008-02-08
-#  *  $URL$
-#  *  $LastChangedRevision$
-#  *  $LastChangedDate$  
-#  *  $LastChangedBy$
-#  *  
-#  */
-#///////////////////////////////////////////////////////////////////////////////
-#
 SYS_HEADER_DIRS = $(QNX_TARGET)/usr/include/cpp \
 	$(QNX_TARGET)/usr/include/cpp/c $(QNX_TARGET)/usr/include
 #

@@ -154,7 +154,7 @@ void *sr_thread(void* arg)
 	}
 
 	return 0;
-};
+}
 #else /* USE_MESSIP_SRR */
 #warning "use messip :)"
 void *sr_thread(void* arg)
@@ -209,7 +209,7 @@ void *sr_thread(void* arg)
 	}
 
 	return 0;
-};
+}
 #endif /* USE_MESSIP_SRR */
 
 

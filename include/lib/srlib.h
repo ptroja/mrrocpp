@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 //                            srlib.h
 // Definicje struktur danych i metod do komunikacji z SR
-// 
+//
 // -------------------------------------------------------------------------
 
 #if !defined(__SRLIB_H)
@@ -16,7 +16,7 @@
 #define SR_MSG_SERVED 0x11	// kod ustawiany po wyswietleniu komunikatu
 				// poniewaz przychodza komunikaty o zdarzeniach
 				// zwiazanych z oknem i powodowalyby powtorzenie
-				// ostatniego komunikatu 
+				// ostatniego komunikatu
 
 #define ERROR_TAB_SIZE   2   // Rozmiar tablicy zawierajacej kody bledow
 #define NAME_LENGTH     30   // Dlugosc nazwy
@@ -46,7 +46,7 @@ typedef struct sr_package {
 // tymczasowe rozwiazanie porponowane przez ekipe QNX
 
 class sr {
-#if !defined(USE_MESSIP_SRR)	
+#if !defined(USE_MESSIP_SRR)
   int fd;	// by W
 #else
   messip_channel_t *ch;
@@ -55,7 +55,7 @@ protected:
   uint64_t error_tab[ERROR_TAB_SIZE]; // tablica slow 64-bitowych zawierajacych kody bledow
   sr_package_t sr_message;          // paczka z wiadomoscia dla SR
   int send_package(void);
-  
+
 public :
   sr(PROCESS_TYPE process_type, const char *process_name, const char *sr_name);
   virtual ~sr(void);
@@ -70,15 +70,15 @@ public :
 class sr_edp: public sr {
 public:
   sr_edp(PROCESS_TYPE process_type, const char *process_name, const char *sr_name);
-  virtual void interpret(void);  
+  virtual void interpret(void);
 };
 
 class sr_ecp: public sr {
 public:
   sr_ecp(PROCESS_TYPE process_type, const char *process_name, const char *sr_name);
-  virtual void interpret(void);  
+  virtual void interpret(void);
 };
-  
+
 // obsluga komunikatow generowanych przez VSP
 class sr_vsp: public sr {
 public:
@@ -92,5 +92,5 @@ public:
   sr_ui(PROCESS_TYPE process_type, const char *process_name, const char *sr_name);
   virtual void interpret(void);
 };
-  
-#endif 
+
+#endif

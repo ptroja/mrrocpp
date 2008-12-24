@@ -2,10 +2,18 @@
 #include <stdint.h>
 #include <assert.h>
 #include <string.h>
+#include <signal.h>
+#include <stdlib.h>
 
 #include "lib/configsrv.h"
 #include "messip/messip.h"
 #include "lib/config_types.h"
+
+void
+sigint_handler(int signum)
+{
+	exit(-1);
+}
 
 int
 main(int argc, char *argv[])
@@ -15,10 +23,14 @@ main(int argc, char *argv[])
 	messip_channel_t *ch = messip_channel_create(NULL, CONFIGSRV_CHANNEL_NAME, MESSIP_NOTIMEOUT, 0);
 	assert(ch);
 
+	if (signal(SIGINT, sigint_handler) == SIG_ERR) {
+		perror("signal()");
+	}
+
 	while(1) {
 		int rcvid;
 		int32_t type, subtype;
-		config_request req;	
+		config_request req;
 		config_msg_t config_msg;
 
 		rcvid = messip_receive(ch,

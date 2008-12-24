@@ -32,16 +32,11 @@
 
 void * edp_irp6s_and_conv_effector::reader_thread_start(void* arg)
 {
-	//	 edp_irp6s_and_conv_effector *master = (edp_irp6s_and_conv_effector *) arg;
-
 	static_cast<edp_irp6s_and_conv_effector*> (arg)->reader_thread(arg);
 }
 
 void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 {
-
-	//edp_irp6s_and_conv_effector *master = (edp_irp6s_and_conv_effector *) arg;
-
 	int i;
 	uint64_t k;
 	uint64_t nr_of_samples; // maksymalna liczba pomiarow
@@ -49,11 +44,15 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 	uint64_t msr_nr; // numer pomiaru
 	int przepelniony; // czy bufor byl przepelniony
 	int msr_counter; // liczba pomiarow, ktore maja byc zapisane do pliku
+#if !defined(USE_MESSIP_SRR)
 	name_attach_t *my_attach; // nazwa kanalu komunikacyjnego
+#else
+	messip_channel_t *my_attach;
+#endif
 	uint64_t e; // kod bledu systemowego
 	_pulse_msg ui_msg;// wiadomosc z ui
-	int wyjscie;
-	int msg_return;
+	bool start;	// shall we start the reader?
+	bool stop;	// shall we stop the reader?
 
 	bool ui_trigger = false; // specjalny puls z UI
 
@@ -86,7 +85,7 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
 	char tmp_string[50];
 	char tmp2_string[3];
-	
+
 
 
 	for (int j=0; j<MAX_SERVOS_NR; j++) {
@@ -153,9 +152,13 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 	// alokacja pamieci pod lokalny bufor z pomiarami
 	r_measptr = new reader_data[nr_of_samples];
 
+	// by Y komuniakicja pomiedzy ui i reader'em rozwiazalem poprzez pulsy
 	// powolanie kanalu komunikacyjnego do odbioru pulsow sterujacych
-	if ((my_attach = name_attach(NULL, config.return_attach_point_name(configurator::CONFIG_SERVER, "reader_attach_point"),
-	NAME_FLAG_ATTACH_GLOBAL)) == NULL) {// by Y komuniakicja pomiedzy ui i reader'em rozwiazalem poprzez pulsy
+#if !defined(USE_MESSIP_SRR)
+	if ((my_attach = name_attach(NULL, config.return_attach_point_name(configurator::CONFIG_SERVER, "reader_attach_point"), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+#else
+	if ((my_attach = messip_channel_create(NULL, config.return_attach_point_name(configurator::CONFIG_SERVER, "reader_attach_point"), MESSIP_NOTIMEOUT, 0)) == NULL) {
+#endif
 		e = errno;
 		perror("Failed to attach pulse chanel for READER\n");
 		msg->message("Failed to attach pulse chanel for READER");
@@ -168,13 +171,12 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 		msr_nr=0; // wyzerowanie liczby pomiarow
 		przepelniony=0; // bufor narazie nie jest przepelniony
 
-		int rcvid;
-
-		wyjscie=0; // okresla czy odebrano juz puls rozpoczecia pomiarow
+		start = false; // okresla czy odebrano juz puls rozpoczecia pomiarow
 
 		// dopoki nie przyjdzie puls startu
-		while (!wyjscie) {
-			rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
+		while (!start) {
+#if !defined(USE_MESSIP_SRR)
+			int rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
 
 			if (rcvid == -1) {/* Error condition, exit */
 				perror("blad receive w reader\n");
@@ -191,7 +193,7 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 						break;
 					default:
 						if (ui_msg.hdr.code==READER_START) { // odebrano puls start
-							wyjscie++;
+							start = true;
 						}
 				}
 				continue;
@@ -202,15 +204,25 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 				MsgReply(rcvid, EOK, 0, 0);
 				continue;
 			}
+
 			/* A message (presumable ours) received, handle */
-			printf("reader server receive strange message of type: %d\n", ui_msg.data);
+			fprintf(stderr, "reader server receive strange message of type: %d\n", ui_msg.data);
 			MsgReply(rcvid, EOK, 0, 0);
 			rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
+#else
+			int32_t type, subtype;
+			int rcvid = messip_receive(my_attach, &type, &subtype, NULL, 0, MESSIP_NOTIMEOUT);
 
+			if (rcvid >= 0) {
+				if (type == READER_START) {
+					start = true;
+				}
+			}
+#endif
 		}
 
 		msg->message("measures started");
-		
+
 		set_thread_priority(pthread_self() , MAX_PRIORITY+1);
 
 		rb_obj->reader_wait_for_new_step();
@@ -228,7 +240,7 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 				rb_obj->step_data.ui_trigger = 0;
 			}
 
-			// printf("EDPX: %f\n", rb_obj->step_data.current_kartez_position[1]); 
+			// printf("EDPX: %f\n", rb_obj->step_data.current_kartez_position[1]);
 			// przepisanie danych dla biezacego kroku do bufora lokalnego reader
 			memcpy( &(r_measptr[msr_nr]), &rb_obj->step_data, sizeof(reader_data));
 
@@ -241,12 +253,13 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 			}
 
 			// warunkowy odbior pulsu (o ile przyszedl)
+			stop = false;
+			ui_trigger = false;
+
+#if !defined(USE_MESSIP_SRR)
 			stop_event.sigev_notify = SIGEV_UNBLOCK;
 			TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, &stop_event, NULL, NULL); // czekamy na odbior pulsu stopu
-			rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
-
-			msg_return=-1;
-			ui_trigger = false;
+			int rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
 
 			if (rcvid == -1) {/* Error condition, exit */
 				// perror("blad receive w reader\n");
@@ -261,11 +274,10 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 					case _PULSE_CODE_UNBLOCK:
 						break;
 					default:
-						if (ui_msg.hdr.code==READER_STOP) { // odebrano stop
-							msg_return = 0; // dostalismy puls stopu
-						}
-						if (ui_msg.hdr.code==READER_TRIGGER) { // odebrano stop
-							ui_trigger = true;
+						if (ui_msg.hdr.code==READER_STOP) {
+							stop = true; // dostalismy puls STOP
+						} else if (ui_msg.hdr.code==READER_TRIGGER) {
+							ui_trigger = true;	// dostaliśmy puls TRIGGER
 						}
 
 				}
@@ -281,7 +293,19 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 					MsgReply(rcvid, EOK, 0, 0);
 				}
 			}
-		} while (msg_return==-1); // dopoki nie przyjdzie puls stopu
+#else
+			int32_t type, subtype;
+			int rcvid = messip_receive(my_attach, &type, &subtype, NULL, 0, 0);
+
+			if (rcvid >= 0) {
+				if (type == READER_STOP) {
+					stop = true;
+				} else  if (type == READER_TRIGGER) {
+					ui_trigger = true;
+				}
+			}
+#endif
+		} while (!stop); // dopoki nie przyjdzie puls stopu
 
 
 		set_thread_priority(pthread_self() , 1);// Najnizszy priorytet podczas proby zapisu do pliku
@@ -322,7 +346,7 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
 				// zapis pomiarow z biezacego kroku do pliku
 				// printf("EDP %f\n", r_measptr[k].current_kartez_position[1]);
-				
+
 
 				outfile << r_measptr[k].step << " ";
 				if (rb_obj->reader_cnf.msec)
@@ -408,4 +432,3 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 	delete[] robot_name;
 	delete[] reader_meassures_dir;
 }
-;

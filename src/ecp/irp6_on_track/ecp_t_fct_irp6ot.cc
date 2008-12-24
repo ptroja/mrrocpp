@@ -219,7 +219,12 @@ void* forcesensor_move_thread(void* arg)
 /********************** SHOW FORCE CONTROL WINDOW ************************/
 
 // Funkcja pokazuje okno oraz odpala watki.
-void show_force_control_window(int UI_fd)
+void show_force_control_window
+#if !defined(USE_MESSIP_SRR)
+(int UI_fd)
+#else
+(messip_channel_t *UI_fd)
+#endif
 {
 	int i;
 	// Przesylka z ECP do UI.
@@ -230,7 +235,12 @@ void show_force_control_window(int UI_fd)
 	ecp_msg.hdr.type=0;
 	ecp_msg.ecp_message = OPEN_FORCE_SENSOR_MOVE_WINDOW;
 	// Wyslanie polecenia do UI -> otwarcie okna.
+#if !defined(USE_MESSIP_SRR)
 	if (MsgSend(UI_fd, &ecp_msg, sizeof(ECP_message), &ui_rep, sizeof(UI_reply)) < 0) {
+#else
+	int status;
+	if (messip_send(UI_fd, 0,0, &ecp_msg, sizeof(ECP_message), &status, &ui_rep, sizeof(UI_reply)) < 0) {
+#endif
 		ecp_t->sr_ecp_msg->message(SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
 		throw ECP_main_error(SYSTEM_ERROR, 0);
 	}

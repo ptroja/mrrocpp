@@ -5,6 +5,7 @@
 
 #include "configurator.h"
 #include "ui_model.h"
+#include "sr_console.h"
 
 GtkNotebook *getNotebook(void) {
 	return GTK_NOTEBOOK (ui_model::instance().getUiGObject("notebook1"));
@@ -76,7 +77,19 @@ int main(int argc, char *argv[])
 	//! Gtk::Main object initialized for use GTKMM in process tabs
 	Gtk::Main kit(argc, argv);
 
+	if (!g_thread_supported ()) g_thread_init (NULL);
+
 	config = new configurator();
+
+	{
+		GError *err;
+
+		GThread *sr = g_thread_create(sr_thread, NULL, true, &err);
+		if (sr == NULL) {
+			fprintf(stderr, "g_thread_create(): %s\n", err->message);
+			return -1;
+		}
+	}
 
 	ui_model::instance().set_status("MRROC++ - the best robotic framework ever");
 
