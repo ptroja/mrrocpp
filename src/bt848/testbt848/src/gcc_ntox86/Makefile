@@ -50,10 +50,12 @@ VPATH = ..
 # Application Program
 #
 
-shr:	$(ABOBJ) $(MYOBJ)
+testbt848:	$(ABOBJ) $(MYOBJ)
 		$(LD) $(ABOBJ) $(MYOBJ) $(SDFLAGS) -M -o testbt848
 		usemsg testbt848 ../Usemsg
 		phabbind testbt848 $(ABMOD)
+
+shr: testbt848
 
 app:	$(ABOBJ) $(MYOBJ)
 		$(LD) $(ABOBJ) $(MYOBJ) $(LDFLAGS) -M -o testbt848
