@@ -23,7 +23,6 @@ BINARIES = \
 	mp_vf \
 	mp_rc \
 	mp_rcsc \
-	mp_sb \
 	mp_vis \
 	mp_trm \
 	mp_vis_nn \
@@ -75,9 +74,6 @@ mp_rcsc: mp_t_rcsc.o ecp_mp_tr_rc_windows.o mp_g_teach_in.o mp_g_vis.o mp_g_forc
 	$(LD) $(LDFLAGS) -o $@ $^
 
 mp_haptic: mp_t_haptic.o mp_g_teach_in.o mp_g_force.o ecp_mp_s_schunk.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
-
-mp_sb: mp_t_sb.o mp_g_teach_in.o mp_g_force.o ecp_mp_s_schunk.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 mp_vis: mp_t_vis.o mp_g_vis.o mp_g_teach_in.o mp_g_force.o ecp_mp_s_vis.o ecp_mp_s_schunk.o $(SHOBJ)
