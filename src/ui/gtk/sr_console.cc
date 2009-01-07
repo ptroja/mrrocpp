@@ -90,6 +90,8 @@ void *sr_thread(void* arg)
 
 	gtk_tree_view_set_model (GTK_TREE_VIEW (view), GTK_TREE_MODEL(store));
 
+	g_object_unref (store);
+
 	while(1)
 	{
 		rcvid = messip_receive(ch, &type, &subtype, &sr_msg, sizeof(sr_msg), MESSIP_NOTIMEOUT);
