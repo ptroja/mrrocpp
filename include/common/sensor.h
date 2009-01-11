@@ -256,7 +256,8 @@ enum SENSOR_ENUM
 	/*!
 	 * Sensor used for communication with the PCBird.
 	 */
-	SENSOR_PCBIRD
+	SENSOR_PCBIRD,
+	SENSOR_WIIMOTE,
 };
 
 // Klasa obslugi bledow procesu VSP.

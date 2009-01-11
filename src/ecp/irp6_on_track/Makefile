@@ -56,7 +56,7 @@ ecp_ttt: ecp_t_ttt.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o \
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_ellipse: ecp_t_ellipse.o ecp_g_ellipse.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o \
+ecp_ellipse: ecp_t_ellipse.o ecp_g_ellipse.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o ecp_mp_s_wiimote.o \
                 ecp_operator_reaction_condition.o ecp_g_sleep.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 

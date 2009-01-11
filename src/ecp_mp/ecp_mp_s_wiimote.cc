@@ -25,14 +25,15 @@ ecp_mp_wiimote_sensor::ecp_mp_wiimote_sensor(SENSOR_ENUM _sensor_name, const cha
 	// Try to open socket.
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0) {
-		printf("ERROR opening socket");
+		sr_ecp_msg.message("ERROR opening socket");
 		throw sensor_error(SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
-
+    
 	// Get server hostname.
 	server = gethostbyname(wiimote_node_name);
 	if (server == NULL) {
-		printf("ERROR, no host %s\n", wiimote_node_name);
+		sprintf(buffer,"ERROR, no host %s", wiimote_node_name);
+		sr_ecp_msg.message(buffer);
 		throw sensor_error(SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
 
@@ -45,14 +46,9 @@ ecp_mp_wiimote_sensor::ecp_mp_wiimote_sensor(SENSOR_ENUM _sensor_name, const cha
 
 	// Try to establish a connection with wiimote.
 	if (connect(sockfd, (const struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-		printf("ERROR connecting");
+		sr_ecp_msg.message("Error connecting");
 		throw sensor_error(SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
-
-  // Retrieve task name.
-	char* task = _ecp_mp_object.config.return_string_value("wiimote_task", _section_name);
-  strcpy(to_vsp.wiimote_task_name, task);
-  free(task);
 
 	sr_ecp_msg.message("Connected to wiimote");
 }
