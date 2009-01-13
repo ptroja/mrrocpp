@@ -57,7 +57,6 @@ ecp_mp_wiimote_sensor::ecp_mp_wiimote_sensor(SENSOR_ENUM _sensor_name, const cha
 void ecp_mp_wiimote_sensor::configure_sensor() {
 	// Send adequate command to wiimote.
 	to_vsp.i_code = VSP_CONFIGURE_SENSOR;
-
 	if(write(sockfd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)
 		throw sensor_error (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 }

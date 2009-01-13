@@ -33,6 +33,7 @@ void ecp_task_ellipse::main_task_algorithm(void)
 	a = read_double((char*)"a",0,MAX_MAJOR);
 	b = read_double((char*)"b",0,MAX_MINOR);
     eg = new ecp_ellipse_generator(*this,a,b,100);
+    sensor_m[SENSOR_WIIMOTE]->initiate_reading();
     eg->Move();
     ecp_termination_notice();
 }
