@@ -10,6 +10,7 @@ Servo_algorithm window
 <xsl:template name="irp6.servo" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="irp6EDPNumber" select="irp6EDPNumber"/>
+<xsl:variable name="signal" select="name"/>
 <xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../{$name}servo_algorithm.glade">
 <glade-interface>
   <widget class="GtkWindow" id="window">
@@ -53,6 +54,15 @@ Servo_algorithm window
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="response_id">0</property>
+                    <xsl:if test="$name = 'irp6m_'">
+						<signal name="clicked" handler="on_arrow_button_clicked_m"/>		
+				    </xsl:if>
+				    <xsl:if test="$name = 'irp6o_'">
+						<signal name="clicked" handler="on_arrow_button_clicked_o"/>		
+				    </xsl:if>
+				    <xsl:if test="$name = 'irp6p_'">
+						<signal name="clicked" handler="on_arrow_button_clicked_p"/>		
+				    </xsl:if>
                     <child>
                       <widget class="GtkArrow" id="arrow1">
                         <property name="visible">True</property>
@@ -116,6 +126,15 @@ Servo_algorithm window
                     <property name="receives_default">True</property>
                     <property name="label" translatable="yes">Set</property>
                     <property name="response_id">0</property>
+                    <xsl:if test="$name = 'irp6m_'">
+						<signal name="clicked" handler="on_set_button_clicked_m"/>		
+				    </xsl:if>
+				    <xsl:if test="$name = 'irp6o_'">
+						<signal name="clicked" handler="on_set_button_clicked_o"/>		
+				    </xsl:if>
+				    <xsl:if test="$name = 'irp6p_'">
+						<signal name="clicked" handler="on_set_button_clicked_p"/>		
+				    </xsl:if>
                   </widget>
                   <packing>
                     <property name="left_attach">5</property>
@@ -131,6 +150,15 @@ Servo_algorithm window
                     <property name="receives_default">True</property>
                     <property name="label" translatable="yes">Read</property>
                     <property name="response_id">0</property>
+                    <xsl:if test="$name = 'irp6m_'">
+						<signal name="clicked" handler="on_read_button_clicked_m"/>		
+				    </xsl:if>
+				    <xsl:if test="$name = 'irp6o_'">
+						<signal name="clicked" handler="on_read_button_clicked_o"/>		
+				    </xsl:if>
+				    <xsl:if test="$name = 'irp6p_'">
+						<signal name="clicked" handler="on_read_button_clicked_p"/>		
+				    </xsl:if>
                   </widget>
                   <packing>
                     <property name="left_attach">2</property>
@@ -253,7 +281,7 @@ Servo_algorithm window
                   <widget class="GtkSpinButton" id="spinbutton1"><xsl:attribute name="id">spinbutton<xsl:value-of select="(2*$i)-1"/></xsl:attribute>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 10</property>
+                    <property name="adjustment">0 0 100 1 10 0</property>
                     <property name="digits">3</property>
                   </widget>
                   <packing>
@@ -267,7 +295,7 @@ Servo_algorithm window
                   <widget class="GtkSpinButton" id="spinbutton2"><xsl:attribute name="id">spinbutton<xsl:value-of select="(2*$i)"/></xsl:attribute>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 10</property>
+                    <property name="adjustment">0 0 100 1 10 0</property>
                     <property name="digits">3</property>
                   </widget>
                   <packing>
