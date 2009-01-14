@@ -20,7 +20,7 @@ void ecp_task_ellipse::task_initialization(void)
     sr_ecp_msg->message("ECP loaded");
     
 	//create Wii-mote virtual sensor object
-	sensor_m[SENSOR_WIIMOTE] = new ecp_mp_wiimote_sensor(SENSOR_WIIMOTE, "[vsp_wiimote]", *this, sizeof(sensor_image_t::sensor_union_t::fradia_t));
+	sensor_m[SENSOR_WIIMOTE] = new ecp_mp_wiimote_sensor(SENSOR_WIIMOTE, "[vsp_wiimote]", *this, sizeof(sensor_image_t::sensor_union_t::wiimote_t));
 	//configure the sensor
 	sensor_m[SENSOR_WIIMOTE]->configure_sensor();
 }
@@ -29,11 +29,19 @@ void ecp_task_ellipse::main_task_algorithm(void)
 {
  	//Polosie elipsy
 	double a,b;
-
+	double* firstPosition;
+	
 	a = read_double((char*)"a",0,MAX_MAJOR);
 	b = read_double((char*)"b",0,MAX_MINOR);
+    sg = new ecp_smooth_generator(*this,true);
     eg = new ecp_ellipse_generator(*this,a,b,100);
-    sensor_m[SENSOR_WIIMOTE]->initiate_reading();
+    firstPosition = eg->getFirstPosition();
+    
+	sg->reset();
+	sg->load_coordinates(XYZ_EULER_ZYZ,firstPosition[0],firstPosition[1],firstPosition[2],firstPosition[3],firstPosition[4],firstPosition[5],firstPosition[6],firstPosition[7]);
+	sg->Move();
+	
+    eg->sensor_m[SENSOR_WIIMOTE] = sensor_m[SENSOR_WIIMOTE];
     eg->Move();
     ecp_termination_notice();
 }

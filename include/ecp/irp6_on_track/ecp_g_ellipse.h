@@ -48,6 +48,8 @@ public:
      * @author jedrzej
      */    
     virtual bool next_step();
+    
+    double* getFirstPosition();
 };
 
 #endif
