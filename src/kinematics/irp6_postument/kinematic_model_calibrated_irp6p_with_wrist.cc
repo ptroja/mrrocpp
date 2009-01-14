@@ -1,11 +1,10 @@
 // ------------------------------------------------------------------------
 // Proces:		EDP
-// Plik:			kinematic_model_calibrated_irp6ot_with_wrist.cc
+// Plik:			kinematic_model_irp6p_with_wrist.cc
 // System:	QNX/MRROC++  v. 6.3
-// Opis:		Model kinematyki robota IRp-6 na torze
+// Opis:		Model kinematyki robota IRp-6 na postumencie
 //				- definicja metod klasy
 //				- wykorzystanie nowego stopnia swobody  jako czynnego stopnia swobody
-//				- tor jest biernym stopniem swobody
 //				- parametry obliczone zostaly podczas kalibracji
 //
 // Autor:		tkornuta
@@ -15,19 +14,21 @@
 #include "common/typedefs.h"
 #include "common/impconst.h"
 #include "common/com_buf.h"
+
 #include "lib/mathtr.h"
+
 
 // Klasy bledow, itp.
 #include "kinematics/common/transformer_error.h"
 
-// Klasa kinematic_model_calibrated_irp6ot_with_wrist.
-#include "kinematics/irp6_on_track/kinematic_model_calibrated_irp6ot_with_wrist.h"
+// Klasa kinematic_model_calibrated_irp6p_with_wrist.
+#include "kinematics/irp6_postument/kinematic_model_calibrated_irp6p_with_wrist.h"
 
 
 /* -----------------------------------------------------------------------
   Konstruktor.
  ------------------------------------------------------------------------- */
-kinematic_model_calibrated_irp6ot_with_wrist::kinematic_model_calibrated_irp6ot_with_wrist (void)
+kinematic_model_calibrated_irp6p_with_wrist::kinematic_model_calibrated_irp6p_with_wrist (void)
 {
   // Ustawienie etykiety modelu kinematycznego.
   set_kinematic_model_label("Switching to calibrated kinematic model with active wrist");
@@ -40,55 +41,54 @@ kinematic_model_calibrated_irp6ot_with_wrist::kinematic_model_calibrated_irp6ot_
 /* -----------------------------------------------------------------------
   Ustawienia wszystkie parametry modelu kinematycznego danego modelu.
  ------------------------------------------------------------------------- */
-void kinematic_model_calibrated_irp6ot_with_wrist::set_kinematic_parameters(void)
+void kinematic_model_calibrated_irp6p_with_wrist::set_kinematic_parameters(void)
 {
 /* -----------------------------------------------------------------------
 Numery osi:
-  0 - tor jezdny
-  1 - kolumna obrotowa: os FI
-  2 - ramie dolne:     os TETA
-  3 - ramie gorne:    os ALFA
-  4 - pochylnie kisci: os T
-  5 - obrot kisci:    os V
-  7 - obrot kisci:    os N
-  8 - chwytak
+  0 - kolumna obrotowa: os FI
+  1 - ramie dolne:     os TETA
+  2 - ramie gorne:    os ALFA
+  3 - pochylnie kisci: os T
+  4 - obrot kisci:    os V
+  5 - obrot kisci:    os N
+  6 - chwytak
  ------------------------------------------------------------------------- */
 
 /* -----------------------------------------------------------------------
-Poprawione dlugosci czlonow robota [m].
+Dlugosci czlonow robota [m].
  ------------------------------------------------------------------------- */
-  a2 = 0.4647;
-  a3 = 0.6748;
-  d5 = 0.1967;
-  
+  a2 = 0.4596;
+  a3 = 0.6729;
+  d5 = 0.1903;
+
 /* -----------------------------------------------------------------------
 Poprawione wspolczynniki.
  ------------------------------------------------------------------------- */
-  theta[1] = 0.004989;
+  theta[0] = 0.0111;
 
-  sl123 = 79744.63;
-  mi2 = 65788.63;
-  ni2 = -22524.88;
-  theta[2] = 223.9765; // l02
+  sl123 = 78379.4388;
+  mi1 = 60059.3311;
+  ni1 = -32453.0983;
+  theta[1] = 211.8108; // l02
 
-  mi3 = -44612.77;
-  ni3 = -52925.22;
-  theta[3] = 189.1123; // l03
+  mi2 = -42863.8177;
+  ni2 = -53294.4762;
+  theta[2] = 187.6529; // l03
 
-  theta[5] = 0.000898; 
-  theta[6] = 0.005605;
-  
+  theta[4] = 0.0903;
+
+  theta[5] = 0.0209;
+
 /* -----------------------------------------------------------------------
-Poprawione polozenia synchronizacji - odczyty z enkoderow silnikow.
+Polozenia synchronizacji - odczyty z enkoderow silnikow.
  ------------------------------------------------------------------------- */
-  synchro_motor_position[0]= -0.0117;			// tor [m]
-  synchro_motor_position[1]= -7.185;			// kolumna [rad]
-  synchro_motor_position[2]= -23.7333;		// ramie d. [rad]
-  synchro_motor_position[3]= -4.0065;			// ramie g. [rad] 
-  synchro_motor_position[4]= 153.6764;		// kisc T [rad]
-  synchro_motor_position[5]= 356.0929;		// kisc V [rad] 
-  synchro_motor_position[6]= 791.4409;		// kisc N [rad]
-  
+  synchro_motor_position[0]= -7.7597;		// kolumna [rad]
+  synchro_motor_position[1]= -8.7537;		// ramie d. [rad]
+  synchro_motor_position[2]= -7.5355;		// ramie g. [rad] 
+  synchro_motor_position[3]= 153.1366;		// kisc T [rad]
+  synchro_motor_position[4]= 309.5910;		// kisc V [rad] 
+  synchro_motor_position[5]= 796.0265;		// kisc N [rad]
+
 /* -----------------------------------------------------------------------
 Polozenia synchronizacji we wspolrzednych wewnetrznych - obliczone na podstawie z enkoderow silnikow.
  ------------------------------------------------------------------------- */
@@ -96,10 +96,9 @@ Polozenia synchronizacji we wspolrzednych wewnetrznych - obliczone na podstawie 
   synchro_joint_position[1] = synchro_motor_position[1] - gear[1] * theta[1];
   synchro_joint_position[2] = synchro_motor_position[2] - gear[2] * theta[2];
   synchro_joint_position[3] = synchro_motor_position[3] - gear[3] * theta[3];
-  synchro_joint_position[4] = synchro_motor_position[4] - gear[4] * theta[4];
-  synchro_joint_position[5] = synchro_motor_position[5] - gear[5] * theta[5] - synchro_motor_position[4];
+  synchro_joint_position[4] = synchro_motor_position[4] - gear[4] * theta[4] - synchro_motor_position[3];
+  synchro_joint_position[5] = synchro_motor_position[5] - gear[5] * theta[5];
   synchro_joint_position[6] = synchro_motor_position[6] - gear[6] * theta[6];
-  synchro_joint_position[7] = synchro_motor_position[7] - gear[7] * theta[7];
 
 }; // end: set_kinematic_parameters
 
