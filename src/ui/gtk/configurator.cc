@@ -167,42 +167,37 @@ void configurator::populate_tree_model_with_effectors()
 
 			if (program_name && xmlStrEqual(effector_name, (xmlChar*)"irp6_mechatronika"))
 			 {
-				for (int j=0; j<6; j++)
-				{
+
 				char *ui_def = NULL;
-				program_name = this->get_string("/config/effectors/effector[@name='%s']/edp[@name='edp_irp6m_%s']/program_name", effector_name, irp6[j]);
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='%s']/edp[@name='edp_irp6m_%s']/@ui_def", effector_name, irp6[j]);
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='%s']/edp[@name='edp_irp6m_%s']/ui_def", effector_name, irp6[j]);
+				program_name = this->get_string("/config/effectors/effector[@name='irp6_mechatronika']/edp[@name='edp_irp6m_rcsc']/program_name");
+				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_mechatronika']/edp[@name='edp_irp6m_rcsc']/@ui_def");
+				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_mechatronika']/edp[@name='edp_irp6m_rcsc']/ui_def");
 				ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EDP, program_name, node_name, ui_def);
-				}
+				
 			}
 
 
 			if (program_name && xmlStrEqual(effector_name, (xmlChar*)"irp6_ontrack"))
 			 {
-				for (int j=0; j<6; j++)
-				{
+
 				char *ui_def = NULL;
-				program_name = this->get_string("/config/effectors/effector[@name='%s']/edp[@name='edp_irp6o_%s']/program_name", effector_name, irp6[j]);
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='%s']/edp[@name='edp_irp6o_%s']/@ui_def", effector_name, irp6[j]);
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='%s']/edp[@name='edp_irp6o_%s']/ui_def", effector_name, irp6[j]);
+				program_name = this->get_string("/config/effectors/effector[@name='irp6_ontrack']/edp[@name='edp_irp6o_rcsc']/program_name");
+				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_ontrack']/edp[@name='edp_irp6o_rcsc']/@ui_def");
+				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_ontrack']/edp[@name='edp_irp6o_rcsc']/ui_def");
 				ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EDP, program_name, node_name, ui_def);
-				}
+				
 			}
 
 			if (program_name && xmlStrEqual(effector_name, (xmlChar*)"irp6_postument"))
 			 {
-				for (int j=0; j<6; j++)
-				{
+
 				char *ui_def = NULL;
-				program_name = this->get_string("/config/effectors/effector[@name='%s']/edp[@name='edp_irp6p_%s']/program_name", effector_name, irp6p[j]);
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='%s']/edp[@name='edp_irp6p_%s']/@ui_def", effector_name, irp6p[j]);
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='%s']/edp[@name='edp_irp6p_%s']/ui_def", effector_name, irp6p[j]);
+				program_name = this->get_string("/config/effectors/effector[@name='irp6_postument']/edp[@name='edp_irp6p_rcsc']/program_name");
+				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_postument']/edp[@name='edp_irp6p_rcsc']/@ui_def");
+				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_postument']/edp[@name='edp_irp6p_rcsc']/ui_def");
 				ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EDP, program_name, node_name, ui_def);
-				}
+				
 			}
-
-
 
 		}
 		xmlXPathFreeObject(active_effectors);
