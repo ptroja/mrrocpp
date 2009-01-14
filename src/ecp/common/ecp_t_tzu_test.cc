@@ -173,40 +173,41 @@ void ecp_task_tzu_test::trajectories_test(int count)
 	tcg->Move();
 
 	cout<<"START TRAJECTORIES TEST"<<endl;
-	for(int j = 0 ; j < count ; j++)
-	{
-		cout<<"parametry z common.ini: "<<j<<endl;
-		//0.004 0.0 0.13
-		ftcg->set_tool_parameters(0.004,0.0,0.13,13.18);
-		ftcg->Move();
-
-		for(int i = 0 ; i < 10 ; i++)
-		{
-			sg->load_file_with_path(get_trajectory(tmp[i]));
-			sg->Move();
-
-			if(i == 0 || i == 5)
-			{
-				sleep(2);
-				befg->Move();
-			}
-
-			fmg->Move();
-			result_common[j][i] = fmg->get_meassurement();
-			cout<<"pomiar "<<i<<": "<<fmg->get_meassurement()<<endl;
-			str<<"pomiar "<<i<<": "<<fmg->get_meassurement()<<endl;
-		}
-	}
+//	for(int j = 0 ; j < count ; j++)
+//	{
+//		cout<<"parametry z common.ini: "<<j<<endl;
+//		//0.004 0.0 0.13
+//		ftcg->set_tool_parameters(0.004,0.0,0.13,13.18);
+//		ftcg->Move();
+//
+//		for(int i = 0 ; i < 10 ; i++)
+//		{
+//			sg->load_file_with_path(get_trajectory(tmp[i]));
+//			sg->Move();
+//
+//			if(i == 0 || i == 5)
+//			{
+//				sleep(2);
+//				befg->Move();
+//			}
+//
+//			fmg->Move();
+//			result_common[j][i] = fmg->get_meassurement();
+//			cout<<"pomiar "<<i<<": "<<fmg->get_meassurement()<<endl;
+//			str<<"pomiar "<<i<<": "<<fmg->get_meassurement()<<endl;
+//		}
+//	}
 
 	for(int j = 0 ; j < count ; j++)
 	{
 		cout<<"parametry wyliczone: "<<j<<endl;
-		// weight: 13.4494
-		// P_x: -0.00123971
-		// P_y: -0.000875034
-		// P_z: 0.136523
+		// weight: 13.124
+		// P_x: -0.0051578
+		// P_y: -0.00101577
+		// P_z: 0.158867
 
-		ftcg->set_tool_parameters(-0.00123971, -0.000875034, 0.136523, 13.4494);
+
+		ftcg->set_tool_parameters(-0.0051578, -0.00101577, 0.158867, 13.124);
 		ftcg->Move();
 
 		for(int i = 0 ; i < 10 ; i++)

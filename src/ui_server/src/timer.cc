@@ -59,10 +59,11 @@ OnTimer()
 
 		ui_sr_obj->reader_buf_position++;
 		ui_sr_obj->reader_buf_position %= UI_SR_BUFFER_LENGHT;
-		
-		strftime( current_line, 8, "%H:%M:%S",
+		int ln = strlen(ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].host_name) + 1;
+		strcpy(current_line,ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].host_name);
+		strftime( current_line+ln, 9, "|%H:%M:%S",
             localtime( &ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].ts.tv_sec ));
-		sprintf(current_line+8, ".%03d   ",
+		sprintf(current_line+9+ln, ".%03d   ",
             ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].ts.tv_nsec/1000000);
 
 		switch (ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].process_type) {
