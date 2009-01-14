@@ -1,12 +1,17 @@
 #--------------- edp/conveyor catalog makefile of the MRROC++ frame system ---------------------#
 #======================================================#
-SOURCES = ${wildcard *.cc}
-OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-BINARIES = edp_conveyor
+
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
+KINEMATDIR = ${HOMEDIR}/src/kinematics
 include $(HOMEDIR)/common.mk
+
+KIN_OBJECTS = ${KINEMATDIR}/conveyor/kinematic_model_conveyor.o
+
+SOURCES = ${wildcard *.cc}
+OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
+BINARIES = edp_conveyor
 
 SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a
 # search path for make, if you want create dependencies from files from other directory than ".", 
@@ -17,7 +22,7 @@ VPATH = ../common $(LIBDIR) ../irp6s
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
-edp_conveyor: $(OBJECTS) $(SHOBJ)
+edp_conveyor: $(OBJECTS) ${KIN_OBJECTS} $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:

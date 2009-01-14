@@ -18,12 +18,12 @@
 // Klasa edp_irp6ot_effector.
 #include "edp/irp6_postument/edp_irp6p_effector.h"
 // Kinematyki.
-#include "edp/irp6_postument/kinematic_model_irp6p_with_wrist.h"
-#include "edp/irp6_postument/kinematic_model_irp6p_5dof.h"
-#include "edp/irp6_postument/kinematic_model_calibrated_irp6p_with_wrist.h"
-#include "edp/irp6_postument/kinematic_model_calibrated_correction_matrix_irp6p_with_wrist.h"
-#include "edp/irp6_postument/kinematic_model_irp6p_jacobian_with_wrist.h"
-#include "edp/irp6_postument/kinematic_model_irp6p_jacobian_transpose_with_wrist.h"
+#include "kinematics/irp6_postument/kinematic_model_irp6p_with_wrist.h"
+#include "kinematics/irp6_postument/kinematic_model_irp6p_5dof.h"
+#include "kinematics/irp6_postument/kinematic_model_calibrated_irp6p_with_wrist.h"
+#include "kinematics/irp6_postument/kinematic_model_calibrated_correction_matrix_irp6p_with_wrist.h"
+#include "kinematics/irp6_postument/kinematic_model_irp6p_jacobian_with_wrist.h"
+#include "kinematics/irp6_postument/kinematic_model_irp6p_jacobian_transpose_with_wrist.h"
 
 // Konstruktor.
 edp_irp6p_effector::edp_irp6p_effector(configurator &_config) :

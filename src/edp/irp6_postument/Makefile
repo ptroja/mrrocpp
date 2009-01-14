@@ -1,20 +1,25 @@
 #------------- edp/irp6_postument catalog makefile of the MRROC++ frame system ---------------#
 #======================================================#
-SOURCES = ${wildcard *.cc}
-#OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-KIN_OBJECTS = kinematic_model_irp6p_with_wrist.o \
-	      kinematic_model_irp6p_5dof.o \
-	      kinematic_model_calibrated_irp6p_with_wrist.o \
-	      kinematic_model_calibrated_correction_matrix_irp6p_with_wrist.o \
-	      kinematic_model_irp6p_jacobian_with_wrist.o \
-	      kinematic_model_irp6p_jacobian_transpose_with_wrist.o 
-OBJECTS = force.o edp_irp6p_effector.o hi_local.o int_hand.o sg_local.o edp_irp6s_postument_track.o
-EDPOBJS  = ${OBJECTS} ${KIN_OBJECTS}
-BINARIES  = edp_irp6_postument
+
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
+KINEMATDIR = ${HOMEDIR}/src/kinematics
 include $(HOMEDIR)/common.mk
+
+SOURCES = ${wildcard *.cc}
+#OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
+KIN_OBJECTS = ${KINEMATDIR}/irp6_postument/kinematic_model_irp6p_with_wrist.o \
+	      ${KINEMATDIR}/irp6_postument/kinematic_model_irp6p_5dof.o \
+	      ${KINEMATDIR}/irp6_postument/kinematic_model_calibrated_irp6p_with_wrist.o \
+	      ${KINEMATDIR}/irp6_postument/kinematic_model_calibrated_correction_matrix_irp6p_with_wrist.o \
+	      ${KINEMATDIR}/irp6_postument/kinematic_model_irp6p_jacobian_with_wrist.o \
+	      ${KINEMATDIR}/irp6_postument/kinematic_model_irp6p_jacobian_transpose_with_wrist.o
+	       
+OBJECTS = force.o edp_irp6p_effector.o hi_local.o int_hand.o sg_local.o edp_irp6s_postument_track.o
+EDPOBJS  = ${OBJECTS} ${KIN_OBJECTS}
+BINARIES  = edp_irp6_postument
+
 
 SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a
 # search path for make, if you want create dependencies from files from other directory than ".", 

@@ -22,8 +22,8 @@
 // Klasa edp_irp6ot_effector.
 #include "edp/irp6_mechatronika/edp_irp6m_effector.h"
 // Kinematyki.
-#include "edp/irp6_mechatronika/kinematic_model_irp6m_with_wrist.h"
-#include "edp/irp6_mechatronika/kinematic_model_irp6m_5dof.h"
+#include "kinematics/irp6_mechatronika/kinematic_model_irp6m_with_wrist.h"
+#include "kinematics/irp6_mechatronika/kinematic_model_irp6m_5dof.h"
 
 
 

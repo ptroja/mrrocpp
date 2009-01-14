@@ -20,7 +20,7 @@
 // Klasa edp_conveyor_effector.
 #include "edp/conveyor/edp_conveyor_effector.h"
 // Model kinematyczny tasmociagu.
-#include "edp/conveyor/kinematic_model_conveyor.h"
+#include "kinematics/conveyor/kinematic_model_conveyor.h"
 
 
 

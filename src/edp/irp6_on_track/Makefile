@@ -1,18 +1,21 @@
 #--------------- edp/irp6_on_track catalog makefile of the MRROC++ frame system ----------------#
 #======================================================#
+
+#-----------------------------------------------------------------------------------------------------------------------#
+# Should be modified only by developers not by users
+HOMEDIR = ../../..
+KINEMATDIR = ${HOMEDIR}/src/kinematics
+include $(HOMEDIR)/common.mk
+
 SOURCES = ${wildcard *.cc}
-KIN_OBJECTS = kinematic_model_irp6ot_with_track.o \
-	      kinematic_model_irp6ot_with_wrist.o \
-	      kinematic_model.o kinematic_model_calibrated_irp6ot_with_wrist.o \
-	      kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist.o
+KIN_OBJECTS = ${KINEMATDIR}/irp6_on_track/kinematic_model_irp6ot_with_track.o \
+	      ${KINEMATDIR}/irp6_on_track/kinematic_model_irp6ot_with_wrist.o \
+	      ${KINEMATDIR}/irp6_on_track/kinematic_model_calibrated_irp6ot_with_wrist.o \
+	      ${KINEMATDIR}/irp6_on_track/kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist.o
 
 OBJECTS = force.o edp_irp6ot_effector.o hi_local.o int_hand.o sg_local.o edp_irp6s_postument_track.o
 EDPOBJS  = ${OBJECTS} ${KIN_OBJECTS}
 BINARIES  = edp_irp6_on_track
-#-----------------------------------------------------------------------------------------------------------------------#
-# Should be modified only by developers not by users
-HOMEDIR = ../../..
-include $(HOMEDIR)/common.mk
 
 SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a
 # search path for make, if you want create dependencies from files from other directory than ".", 

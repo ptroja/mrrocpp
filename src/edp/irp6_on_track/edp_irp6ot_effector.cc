@@ -17,10 +17,10 @@
 // Klasa edp_irp6ot_effector.
 #include "edp/irp6_on_track/edp_irp6ot_effector.h"
 // Kinematyki.
-#include "edp/irp6_on_track/kinematic_model_irp6ot_with_track.h"
-#include "edp/irp6_on_track/kinematic_model_irp6ot_with_wrist.h"
-#include "edp/irp6_on_track/kinematic_model_calibrated_irp6ot_with_wrist.h"
-#include "edp/irp6_on_track/kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist.h"
+#include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_track.h"
+#include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_wrist.h"
+#include "kinematics/irp6_on_track/kinematic_model_calibrated_irp6ot_with_wrist.h"
+#include "kinematics/irp6_on_track/kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist.h"
 
 // Konstruktor.
 edp_irp6ot_effector::edp_irp6ot_effector(configurator &_config) :

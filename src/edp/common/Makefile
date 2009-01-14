@@ -2,6 +2,7 @@
 #======================================================#
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
+KINEMATDIR = ${HOMEDIR}/src/kinematics
 include $(HOMEDIR)/common.mk
 
 SOURCES = ${wildcard *.cc}
@@ -10,7 +11,7 @@ EDPOBJ = edp_common.o edp_m.o \
 	edp_force_sensor.o force.o \
 	servo_gr.o servo_ms.o \
 	trans_t.o vis_server.o reader.o \
-	kinematic_model.o kinematics_manager.o \
+	${KINEMATDIR}/common/transformer_error.o ${KINEMATDIR}/common/kinematic_model.o ${KINEMATDIR}/common/kinematics_manager.o \
 	hi_rydz.o sg_irp6p_and_conv.o
 
 #======================================================#	
