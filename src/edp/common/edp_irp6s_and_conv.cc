@@ -38,7 +38,7 @@
 
 #include "lib/mathtr.h"
 
-#include "edp/common/kinematic_model.h"
+#include "kinematics/common/kinematic_model.h"
 
 
 

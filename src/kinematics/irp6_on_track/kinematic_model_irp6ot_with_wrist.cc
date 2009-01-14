@@ -20,10 +20,10 @@
 #include "lib/mathtr.h"
 
 // Klasy bledow, itp.
-#include "edp/common/edp.h"
+#include "kinematics/common/transformer_error.h"
 
 // Klasa kinematic_model_irp6ot_with_wrist.
-#include "edp/irp6_on_track/kinematic_model_irp6ot_with_wrist.h"
+#include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_wrist.h"
 
 
 /* -----------------------------------------------------------------------
@@ -459,9 +459,9 @@ void kinematic_model_irp6ot_with_wrist::mp2i_transform(const double* local_curre
  ------------------------------------------------------------------------ */
 void kinematic_model_irp6ot_with_wrist::i2mp_transform(double* local_desired_motor_pos_new, double* local_desired_joints)
 {
-  // Niejednoznacznosc polozenia dla 4-tej osi (obrot kisci < 180ø).
+  // Niejednoznacznosc polozenia dla 4-tej osi (obrot kisci < 180ï¿½).
   double joint_4_revolution = M_PI;
-  // Niejednoznacznosc polozenia dla 5-tej osi (obrot kisci > 360ø).
+  // Niejednoznacznosc polozenia dla 5-tej osi (obrot kisci > 360ï¿½).
   double axis_5_revolution = 2*M_PI;
 
   // Sprawdzenie wartosci wspolrzednych wewnetrznych.

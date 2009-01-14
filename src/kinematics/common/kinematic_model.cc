@@ -19,7 +19,7 @@
 #include "lib/mathtr.h"
 
 // Klasa kinematic_model.
-#include "edp/common/kinematic_model.h"
+#include "kinematics/common/kinematic_model.h"
 
 /* ------------------------------------------------------------------------
   Konstruktor. Domyslnie wszystkie obliczenia sa wlaczone.

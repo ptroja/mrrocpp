@@ -16,7 +16,7 @@
 // Definicja typu frame_tab.
 #include "common/impconst.h"
 // Definicja klasy kinematic_model.
-#include "edp/irp6_postument/kinematic_model_irp6p_with_wrist.h"
+#include "kinematics/irp6_postument/kinematic_model_irp6p_with_wrist.h"
 
 // Zakresy ruchu poszczegolnych stopni swobody (w radianach lub milimetrach)
 #define UPPER_THETA1_LIMIT  170.0*M_PI/180.0 // [rad] 

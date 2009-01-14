@@ -16,7 +16,7 @@
 // Definicja typu frame_tab.
 #include "common/impconst.h"
 // Definicja klasy kinematic_model.
-#include "edp/irp6_on_track/kinematic_model_irp6ot_with_wrist.h"
+#include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_wrist.h"
 
 class kinematic_model_irp6ot_with_track : public kinematic_model_irp6ot_with_wrist
 {

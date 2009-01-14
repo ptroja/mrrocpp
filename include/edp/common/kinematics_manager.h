@@ -15,7 +15,7 @@
 
 #include <map>
 
-#include "edp/common/kinematic_model.h"
+#include "kinematics/common/kinematic_model.h"
 
 class kinematics_manager{
   protected:

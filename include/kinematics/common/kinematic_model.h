@@ -1,6 +1,6 @@
 // *INDENT-OFF*
 ///////////////////////////////////////////////////////////////////////////////////////
-/*! \file 		mrrocpp/include/edp/common/kinematic_model.h
+/*! \file 		mrrocpp/include/kinematics/common/kinematic_model.h
  *\polish
  *	\brief 		$Header$
  *						Model kinematyki robota - klasa abstrakcyjna.

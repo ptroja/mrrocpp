@@ -15,7 +15,7 @@
 #include "lib/mathtr.h"
 
 // Klasa kinematic_model_conveyor.
-#include "edp/conveyor/kinematic_model_conveyor.h"
+#include "kinematics/conveyor/kinematic_model_conveyor.h"
 
 
 /* -----------------------------------------------------------------------

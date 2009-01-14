@@ -20,10 +20,10 @@
 #include "lib/mathtr.h"
 
 // Klasy bledow, itp.
-#include "edp/common/edp.h"
+#include "kinematics/common/transformer_error.h"
 
 // Klasa kinematic_model_irp6m_5dof.
-#include "edp/irp6_mechatronika/kinematic_model_irp6m_5dof.h"
+#include "kinematics/irp6_mechatronika/kinematic_model_irp6m_5dof.h"
 
 
 /* -----------------------------------------------------------------------

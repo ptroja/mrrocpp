@@ -20,7 +20,7 @@
 
 #include "messip/messip.h"
 
-#include "edp/common/kinematics_manager.h"
+#include "kinematics/common/kinematics_manager.h"
 
 // Konfigurator
 #include "lib/configurator.h"

@@ -15,8 +15,8 @@
 #include "common/com_buf.h"
 #include "edp/common/edp.h"
 
-#include "edp/common/kinematics_manager.h"
-#include "edp/common/kinematic_model.h"
+#include "kinematics/common/kinematics_manager.h"
+#include "kinematics/common/kinematic_model.h"
 
 // extern edp_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
 

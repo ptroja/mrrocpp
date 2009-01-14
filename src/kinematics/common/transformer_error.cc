@@ -20,6 +20,7 @@
 #include <semaphore.h>
 #include <errno.h>
 
+#include "kinematics/common/transformer_error.h"
 
 
 transformer_error::Fatal_error::Fatal_error(uint64_t err_no_0, uint64_t err_no_1) :
