@@ -4,7 +4,7 @@ SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
-HOMEDIR = ../..
+HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 .PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#

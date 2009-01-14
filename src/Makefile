@@ -15,7 +15,8 @@ INSTALLDIRS = ${CLEANDIRS}
 all: $(SOURCEDIRS) $(UIDIR)
 #-----------------------------------------------------------------------------------------------------------------------#
 
-edp ecp_mp vsp: lib
+kinematics edp ecp_mp vsp: lib
+edp ecp_mp vsp: kinematics
 mp ecp: ecp_mp
 ui: ecp
 ui_server: ui
