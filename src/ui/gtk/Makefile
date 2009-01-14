@@ -29,6 +29,9 @@ ui.gtk: main.o configurator.o ui_model.o ui_config_entry.o sr_console.o
 
 %.so: %_uimodule.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $<
+	
+edp_irp6m_rcsc.so: edp_irp6m_rcsc.o
+	$(CXX) ${LDFLAGS} -shared -o $@ $<
 
 clean:
 	rm -f *.xml ui.gtk *.o *.so
