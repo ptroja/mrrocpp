@@ -173,7 +173,7 @@ void configurator::populate_tree_model_with_effectors()
 				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_mechatronika']/edp[@name='edp_irp6m_rcsc']/@ui_def");
 				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_mechatronika']/edp[@name='edp_irp6m_rcsc']/ui_def");
 				ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EDP, program_name, node_name, ui_def);
-				
+
 			}
 
 
@@ -185,7 +185,7 @@ void configurator::populate_tree_model_with_effectors()
 				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_ontrack']/edp[@name='edp_irp6o_rcsc']/@ui_def");
 				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_ontrack']/edp[@name='edp_irp6o_rcsc']/ui_def");
 				ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EDP, program_name, node_name, ui_def);
-				
+
 			}
 
 			if (program_name && xmlStrEqual(effector_name, (xmlChar*)"irp6_postument"))
@@ -196,7 +196,7 @@ void configurator::populate_tree_model_with_effectors()
 				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_postument']/edp[@name='edp_irp6p_rcsc']/@ui_def");
 				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_postument']/edp[@name='edp_irp6p_rcsc']/ui_def");
 				ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EDP, program_name, node_name, ui_def);
-				
+
 			}
 
 		}
@@ -218,8 +218,9 @@ configurator::configurator() : doc(NULL)
 	// get the [configs/xml] subdirectory
 	getcwd(config_dir, sizeof(config_dir));
 
+	// go up 1 level
 	char *ptr;
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 1; i++) {
 		ptr = rindex(config_dir, '/');
 		*ptr = '\0';
 	}
