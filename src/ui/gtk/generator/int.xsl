@@ -10,8 +10,9 @@ Int window
 <!-- main irp6 int part -->
 <xsl:template name="irp6.int" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
+<xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="irp6EDPNumber" select="irp6EDPNumber"/>
-<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../{$name}int.glade">
+<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../{$name}_int.glade">
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <child>
@@ -60,7 +61,7 @@ Int window
                   <widget class="GtkSpinButton" id="spinbuttonDown1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 10</property>
+                    <property name="adjustment">0 0 100 1 10 0</property>
                     <property name="digits">3</property> 
                   </widget>
                   <packing>
@@ -77,6 +78,7 @@ Int window
                     <property name="receives_default">True</property>
                     <property name="label" translatable="yes">Execute move</property>
                     <property name="response_id">0</property>
+                    <signal name="clicked" handler="on_execute_button_clicked_{$fullName}_int"/>
                   </widget>
                   <packing>
                     <property name="left_attach">4</property>
@@ -92,6 +94,7 @@ Int window
                     <property name="receives_default">True</property>
                     <property name="label" translatable="yes">Import</property>
                     <property name="response_id">0</property>
+                    <signal name="clicked" handler="on_import_button_clicked_{$fullName}_int"/>
                   </widget>
                   <packing>
                     <property name="left_attach">4</property>
@@ -106,6 +109,7 @@ Int window
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="response_id">0</property>
+                    <signal name="clicked" handler="on_arrow_button_clicked_{$fullName}_int"/>	
                     <child>
                       <widget class="GtkArrow" id="arrowLeft1">
                         <property name="visible">True</property>
@@ -128,6 +132,7 @@ Int window
                     <property name="receives_default">True</property>
                     <property name="label" translatable="yes">Read</property>
                     <property name="response_id">0</property>
+					<signal name="clicked" handler="on_read_button_clicked_{$fullName}_int"/>	
                   </widget>
                   <packing>
                     <property name="left_attach">2</property>
@@ -143,6 +148,7 @@ Int window
                     <property name="receives_default">True</property>
                     <property name="label" translatable="yes">Export</property>
                     <property name="response_id">0</property>
+                    <signal name="clicked" handler="on_export_button_clicked_{$fullName}_int"/>
                   </widget>
                   <packing>
                     <property name="left_attach">5</property>
@@ -253,7 +259,8 @@ Int window
                 </child>
 <!-- call loop for each position -->
 		<xsl:call-template name="for.each.edp.irp6.int">
-    			<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+    		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+    		<xsl:with-param name="fullName" select="$fullName"/>
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template>
 <!-- end tags -->
@@ -266,12 +273,14 @@ Int window
   </widget>
 </glade-interface>
 </xsl:document>
+<xsl:call-template name="irp6.int.main.signals.cc" />
 </xsl:template>
 
 
 <!-- irp6 int repeatable part -->
 <xsl:template name="for.each.edp.irp6.int">
 <xsl:param name="irp6EDPNumber"/>
+<xsl:param name="fullName"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $irp6EDPNumber">
                 <child>
@@ -302,7 +311,7 @@ Int window
                   <widget class="GtkSpinButton" id="spinbutton6"><xsl:attribute name="id">spinbutton<xsl:value-of select="$i"/></xsl:attribute> <!--RI--> 
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 10</property>
+                    <property name="adjustment">0 0 100 1 10 0</property>
                     <property name="digits">3</property>
                   </widget>
                   <packing>
@@ -323,6 +332,7 @@ Int window
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button{($i*2)-1}_clicked_{$fullName}_int"/>
                         <child>
                           <widget class="GtkArrow" id="arrow10"><xsl:attribute name="id">arrow<xsl:value-of select="($i*2)-1"/></xsl:attribute> <!-- RI x 2 --> 
                             <property name="visible">True</property>
@@ -337,6 +347,7 @@ Int window
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button{($i*2)}_clicked_{$fullName}_int"/>
                         <child>
                           <widget class="GtkArrow" id="arrow5"><xsl:attribute name="id">arrow<xsl:value-of select="($i*2)"/></xsl:attribute> <!-- RI x 2 -1 --> 
                             <property name="visible">True</property>
@@ -364,6 +375,9 @@ Int window
               </xsl:with-param>
               <xsl:with-param name="irp6EDPNumber">
                   <xsl:value-of select="$irp6EDPNumber"/>
+              </xsl:with-param>
+              <xsl:with-param name="fullName">
+                  <xsl:value-of select="$fullName"/>
               </xsl:with-param>
           </xsl:call-template>
        </xsl:if>

@@ -9,8 +9,9 @@ Axis_ts window
 <!-- main irp6 axis_ts part -->
 <xsl:template name="irp6.axis.ts" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
+<xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="irp6EDPNumber" select="axis_ts"/>
-<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../{$name}axis_ts.glade">
+<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../{$name}_axis_ts.glade">
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <child>
@@ -62,6 +63,7 @@ Axis_ts window
                     <property name="receives_default">True</property>
                     <property name="label" translatable="yes">Set</property>
                     <property name="response_id">0</property>
+					<signal name="clicked" handler="on_set_button_clicked_{$fullName}_axis_ts"/>
                   </widget>
                   <packing>
                     <property name="left_attach">5</property>
@@ -76,6 +78,7 @@ Axis_ts window
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="response_id">0</property>
+					<signal name="clicked" handler="on_arrow_button_clicked_{$fullName}_axis_ts"/>		
                     <child>
                       <widget class="GtkArrow" id="arrowLeft1">
                         <property name="visible">True</property>
@@ -98,6 +101,7 @@ Axis_ts window
                     <property name="receives_default">True</property>
                     <property name="label" translatable="yes">Read</property>
                     <property name="response_id">0</property>
+					<signal name="clicked" handler="on_read_button_clicked_{$fullName}_axis_ts"/>		
                   </widget>
                   <packing>
                     <property name="left_attach">2</property>
@@ -189,6 +193,7 @@ Axis_ts window
   </widget>
 </glade-interface>
 </xsl:document>
+<xsl:call-template name="irp6.axis.ts.main.signals.cc" />
 </xsl:template>
 
 
@@ -210,7 +215,7 @@ Axis_ts window
 			<xsl:if test="$i = 7">α</xsl:if>
 			<xsl:if test="$i = 8">G</xsl:if>
 			<xsl:if test="$i = 9">T</xsl:if>
-			<xsl:if test="$i > 9"> Please name me in xsl file </xsl:if>			
+			<xsl:if test="$i > 9"> Please name me in axis_ts.xsl file </xsl:if>			
              	    </property> <!-- RI --> 
                   </widget>
                   <packing>
@@ -236,7 +241,7 @@ Axis_ts window
                   <widget class="GtkSpinButton" id="spinbutton6"><xsl:attribute name="id">spinbutton<xsl:value-of select="$i"/></xsl:attribute> <!--RI--> 
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 10</property>
+                    <property name="adjustment">0 0 100 1 10 0</property>
                     <property name="digits">3</property>
                   </widget>
                   <packing>

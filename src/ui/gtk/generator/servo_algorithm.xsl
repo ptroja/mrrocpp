@@ -9,9 +9,10 @@ Servo_algorithm window
 <!-- main irp6 servo algorithm part -->
 <xsl:template name="irp6.servo" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
+<xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="irp6EDPNumber" select="irp6EDPNumber"/>
 <xsl:variable name="signal" select="name"/>
-<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../{$name}servo_algorithm.glade">
+<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../{$name}_servo_algorithm.glade">
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <child>
@@ -54,15 +55,7 @@ Servo_algorithm window
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="response_id">0</property>
-                    <xsl:if test="$name = 'irp6m_'">
-						<signal name="clicked" handler="on_arrow_button_clicked_m"/>		
-				    </xsl:if>
-				    <xsl:if test="$name = 'irp6o_'">
-						<signal name="clicked" handler="on_arrow_button_clicked_o"/>		
-				    </xsl:if>
-				    <xsl:if test="$name = 'irp6p_'">
-						<signal name="clicked" handler="on_arrow_button_clicked_p"/>		
-				    </xsl:if>
+					<signal name="clicked" handler="on_arrow_button_clicked_{$fullName}_servo"/>
                     <child>
                       <widget class="GtkArrow" id="arrow1">
                         <property name="visible">True</property>
@@ -126,15 +119,7 @@ Servo_algorithm window
                     <property name="receives_default">True</property>
                     <property name="label" translatable="yes">Set</property>
                     <property name="response_id">0</property>
-                    <xsl:if test="$name = 'irp6m_'">
-						<signal name="clicked" handler="on_set_button_clicked_m"/>		
-				    </xsl:if>
-				    <xsl:if test="$name = 'irp6o_'">
-						<signal name="clicked" handler="on_set_button_clicked_o"/>		
-				    </xsl:if>
-				    <xsl:if test="$name = 'irp6p_'">
-						<signal name="clicked" handler="on_set_button_clicked_p"/>		
-				    </xsl:if>
+					<signal name="clicked" handler="on_set_button_clicked_{$fullName}_servo"/>
                   </widget>
                   <packing>
                     <property name="left_attach">5</property>
@@ -150,15 +135,7 @@ Servo_algorithm window
                     <property name="receives_default">True</property>
                     <property name="label" translatable="yes">Read</property>
                     <property name="response_id">0</property>
-                    <xsl:if test="$name = 'irp6m_'">
-						<signal name="clicked" handler="on_read_button_clicked_m"/>		
-				    </xsl:if>
-				    <xsl:if test="$name = 'irp6o_'">
-						<signal name="clicked" handler="on_read_button_clicked_o"/>		
-				    </xsl:if>
-				    <xsl:if test="$name = 'irp6p_'">
-						<signal name="clicked" handler="on_read_button_clicked_p"/>		
-				    </xsl:if>
+					<signal name="clicked" handler="on_read_button_clicked_{$fullName}_servo"/>		
                   </widget>
                   <packing>
                     <property name="left_attach">2</property>
@@ -259,6 +236,7 @@ Servo_algorithm window
   </widget>
 </glade-interface>
 </xsl:document>
+<xsl:call-template name="irp6.servo.main.signals.cc" />
 </xsl:template>
 
 

@@ -48,7 +48,7 @@
                   <widget class="GtkSpinButton" id="spinbuttonDown1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 10</property>
+                    <property name="adjustment">0 0 100 1 10 0</property>
                     <property name="digits">3</property>
                   </widget>
                   <packing>
@@ -65,6 +65,7 @@
                     <property name="receives_default">True</property>
                     <property name="label" translatable="yes">Execute move</property>
                     <property name="response_id">0</property>
+                    <signal name="clicked" handler="on_execute_button_clicked_ontrack_axis_xyz"/>
                   </widget>
                   <packing>
                     <property name="left_attach">4</property>
@@ -79,6 +80,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="response_id">0</property>
+                    <signal name="clicked" handler="on_arrow_button_clicked_ontrack_axis_xyz"/>
                     <child>
                       <widget class="GtkArrow" id="arrowLeft1">
                         <property name="visible">True</property>
@@ -101,6 +103,7 @@
                     <property name="receives_default">True</property>
                     <property name="label" translatable="yes">Read</property>
                     <property name="response_id">0</property>
+                    <signal name="clicked" handler="on_read_button_clicked_ontrack_axis_xyz"/>
                   </widget>
                   <packing>
                     <property name="left_attach">2</property>
@@ -237,7 +240,7 @@
                   <widget class="GtkSpinButton" id="spinbutton1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 10</property>
+                    <property name="adjustment">0 0 100 1 10 0</property>
                     <property name="digits">3</property>
                   </widget>
                   <packing>
@@ -258,6 +261,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button1_clicked_ontrack_axis_xyz"/>
                         <child>
                           <widget class="GtkArrow" id="arrow1">
                             <property name="visible">True</property>
@@ -272,6 +276,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button2_clicked_ontrack_axis_xyz"/>
                         <child>
                           <widget class="GtkArrow" id="arrow2">
                             <property name="visible">True</property>
@@ -318,7 +323,7 @@
                   <widget class="GtkSpinButton" id="spinbutton2">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 10</property>
+                    <property name="adjustment">0 0 100 1 10 0</property>
                     <property name="digits">3</property>
                   </widget>
                   <packing>
@@ -339,6 +344,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button3_clicked_ontrack_axis_xyz"/>
                         <child>
                           <widget class="GtkArrow" id="arrow3">
                             <property name="visible">True</property>
@@ -353,6 +359,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button4_clicked_ontrack_axis_xyz"/>
                         <child>
                           <widget class="GtkArrow" id="arrow4">
                             <property name="visible">True</property>
@@ -399,7 +406,7 @@
                   <widget class="GtkSpinButton" id="spinbutton3">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 10</property>
+                    <property name="adjustment">0 0 100 1 10 0</property>
                     <property name="digits">3</property>
                   </widget>
                   <packing>
@@ -420,6 +427,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button5_clicked_ontrack_axis_xyz"/>
                         <child>
                           <widget class="GtkArrow" id="arrow5">
                             <property name="visible">True</property>
@@ -434,6 +442,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button6_clicked_ontrack_axis_xyz"/>
                         <child>
                           <widget class="GtkArrow" id="arrow6">
                             <property name="visible">True</property>
@@ -480,7 +489,7 @@
                   <widget class="GtkSpinButton" id="spinbutton4">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 10</property>
+                    <property name="adjustment">0 0 100 1 10 0</property>
                     <property name="digits">3</property>
                   </widget>
                   <packing>
@@ -501,6 +510,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button7_clicked_ontrack_axis_xyz"/>
                         <child>
                           <widget class="GtkArrow" id="arrow7">
                             <property name="visible">True</property>
@@ -515,6 +525,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button8_clicked_ontrack_axis_xyz"/>
                         <child>
                           <widget class="GtkArrow" id="arrow8">
                             <property name="visible">True</property>
@@ -561,7 +572,7 @@
                   <widget class="GtkSpinButton" id="spinbutton5">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 10</property>
+                    <property name="adjustment">0 0 100 1 10 0</property>
                     <property name="digits">3</property>
                   </widget>
                   <packing>
@@ -582,6 +593,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button9_clicked_ontrack_axis_xyz"/>
                         <child>
                           <widget class="GtkArrow" id="arrow9">
                             <property name="visible">True</property>
@@ -596,6 +608,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button10_clicked_ontrack_axis_xyz"/>
                         <child>
                           <widget class="GtkArrow" id="arrow10">
                             <property name="visible">True</property>
@@ -642,7 +655,7 @@
                   <widget class="GtkSpinButton" id="spinbutton6">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 10</property>
+                    <property name="adjustment">0 0 100 1 10 0</property>
                     <property name="digits">3</property>
                   </widget>
                   <packing>
@@ -663,6 +676,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button11_clicked_ontrack_axis_xyz"/>
                         <child>
                           <widget class="GtkArrow" id="arrow11">
                             <property name="visible">True</property>
@@ -677,6 +691,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button12_clicked_ontrack_axis_xyz"/>
                         <child>
                           <widget class="GtkArrow" id="arrow12">
                             <property name="visible">True</property>
@@ -723,7 +738,7 @@
                   <widget class="GtkSpinButton" id="spinbutton7">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 10</property>
+                    <property name="adjustment">0 0 100 1 10 0</property>
                     <property name="digits">3</property>
                   </widget>
                   <packing>
@@ -744,6 +759,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button13_clicked_ontrack_axis_xyz"/>
                         <child>
                           <widget class="GtkArrow" id="arrow13">
                             <property name="visible">True</property>
@@ -758,6 +774,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button14_clicked_ontrack_axis_xyz"/>
                         <child>
                           <widget class="GtkArrow" id="arrow14">
                             <property name="visible">True</property>
@@ -804,7 +821,7 @@
                   <widget class="GtkSpinButton" id="spinbutton8">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 10</property>
+                    <property name="adjustment">0 0 100 1 10 0</property>
                     <property name="digits">3</property>
                   </widget>
                   <packing>
@@ -825,6 +842,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button15_clicked_ontrack_axis_xyz"/>
                         <child>
                           <widget class="GtkArrow" id="arrow15">
                             <property name="visible">True</property>
@@ -839,6 +857,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button16_clicked_ontrack_axis_xyz"/>
                         <child>
                           <widget class="GtkArrow" id="arrow16">
                             <property name="visible">True</property>
@@ -885,7 +904,7 @@
                   <widget class="GtkSpinButton" id="spinbutton9">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 10</property>
+                    <property name="adjustment">0 0 100 1 10 0</property>
                     <property name="digits">3</property>
                   </widget>
                   <packing>
@@ -906,6 +925,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button17_clicked_ontrack_axis_xyz"/>
                         <child>
                           <widget class="GtkArrow" id="arrow17">
                             <property name="visible">True</property>
@@ -920,6 +940,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_button18_clicked_ontrack_axis_xyz"/>
                         <child>
                           <widget class="GtkArrow" id="arrow18">
                             <property name="visible">True</property>

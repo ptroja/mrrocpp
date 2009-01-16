@@ -1,4 +1,4 @@
-MRROC++ GUI generator
+MRROC++ GUI generatori
 =====================
 To generate GUI windows for robots type:
 'xsltproc robots.xml --xinclude'

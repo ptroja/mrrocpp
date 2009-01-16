@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Wed Jan 14 12:51:21 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <child>
@@ -9,13 +8,13 @@
         <child>
           <widget class="GtkComboBox" id="combobox1">
             <property name="visible">True</property>
-            <property name="items" translatable="yes">servo algorithm
-internal
-increment
+            <property name="items" translatable="yes">Servo algorithm
+Internal
+Increment
 XYZ Euler ZYZ
 XYZ Angle Axis
 TS Angle Axis</property>
-            <signal name="changed" handler="on_combobox1_changed"/>
+            <signal name="changed" handler="on_combobox1_changed_mechatronika"/>
           </widget>
           <packing>
             <property name="expand">False</property>

@@ -1,5 +1,6 @@
 <irp6ontrack>
-	<name>irp6o_</name>
+	<name>irp6o</name>
+	<fullName>ontrack</fullName>
 	<irp6EDPNumber>8</irp6EDPNumber>
 	<axis_xyz>9</axis_xyz>
 	<axis_ts>7</axis_ts>

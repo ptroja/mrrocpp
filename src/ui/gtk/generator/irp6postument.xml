@@ -1,5 +1,6 @@
 <irp6postument>
-	<name>irp6p_</name>
+	<name>irp6p</name>
+	<fullName>postument</fullName>
 	<irp6EDPNumber>7</irp6EDPNumber>
 	<axis_xyz>8</axis_xyz>
 	<axis_ts></axis_ts>
