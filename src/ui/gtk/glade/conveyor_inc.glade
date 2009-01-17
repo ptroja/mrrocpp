@@ -1,18 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-MRROC++ GUI generator
-Inc window
- -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-<xsl:output method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0"/>
-
-
-<!-- main irp6 inc part -->
-<xsl:template name="irp6.inc" match="*[substring(name(),1,4)='irp6']">
-<xsl:variable name="name" select="name"/>
-<xsl:variable name="fullName" select="fullName"/>
-<xsl:variable name="irp6EDPNumber" select="irp6EDPNumber"/>
-<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../glade/{$name}_inc.glade">
+<?xml version="1.0"?>
+<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <child>
@@ -28,7 +15,7 @@ Inc window
             <child>
               <widget class="GtkTable" id="table1">
                 <property name="visible">True</property>
-                <property name="n_rows"><xsl:value-of select="$irp6EDPNumber + 5" /></property> <!-- 5 + RN  -->
+                <property name="n_rows">6</property>
                 <property name="n_columns">9</property>
                 <child>
                   <placeholder/>
@@ -62,13 +49,13 @@ Inc window
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 100 1 10 0</property>
-                    <property name="digits">3</property> 
+                    <property name="digits">3</property>
                   </widget>
                   <packing>
                     <property name="left_attach">7</property>
                     <property name="right_attach">9</property>
-                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property>  <!-- 3 + RN  -->
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 4" /></property>  <!-- 4 + RN  -->
+                    <property name="top_attach">4</property>
+                    <property name="bottom_attach">5</property>
                   </packing>
                 </child>
                 <child>
@@ -78,13 +65,13 @@ Inc window
                     <property name="receives_default">True</property>
                     <property name="label" translatable="yes">Execute move</property>
                     <property name="response_id">0</property>
-					<signal name="clicked" handler="on_execute_button_clicked_{$fullName}_inc"/>
+                    <signal name="clicked" handler="on_execute_button_clicked_conveyor_inc"/>
                   </widget>
                   <packing>
                     <property name="left_attach">4</property>
                     <property name="right_attach">6</property>
-                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property>  <!-- 3 + RN  -->
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 4" /></property> <!-- 4 + RN  -->
+                    <property name="top_attach">4</property>
+                    <property name="bottom_attach">5</property>
                   </packing>
                 </child>
                 <child>
@@ -94,13 +81,13 @@ Inc window
                     <property name="receives_default">True</property>
                     <property name="label" translatable="yes">Import</property>
                     <property name="response_id">0</property>
-					<signal name="clicked" handler="on_import_button_clicked_{$fullName}_inc"/>
+                    <signal name="clicked" handler="on_import_button_clicked_conveyor_inc"/>
                   </widget>
                   <packing>
                     <property name="left_attach">4</property>
                     <property name="right_attach">5</property>
-                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 4" /></property>  <!-- 4 + RN  -->
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 5" /></property>  <!-- 5 + RN  -->
+                    <property name="top_attach">5</property>
+                    <property name="bottom_attach">6</property>
                   </packing>
                 </child>
                 <child>
@@ -109,7 +96,7 @@ Inc window
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="response_id">0</property>
-					<signal name="clicked" handler="on_arrow_button_clicked_{$fullName}_inc"/>	
+                    <signal name="clicked" handler="on_arrow_button_clicked_conveyor_inc"/>
                     <child>
                       <widget class="GtkArrow" id="arrowLeft1">
                         <property name="visible">True</property>
@@ -120,8 +107,8 @@ Inc window
                     <property name="left_attach">3</property>
                     <property name="right_attach">4</property>
                     <property name="top_attach">2</property>
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 2" /></property> <!-- 2 + RN  -->
-                    <property name="x_options"></property>
+                    <property name="bottom_attach">3</property>
+                    <property name="x_options"/>
                     <property name="x_padding">5</property>
                   </packing>
                 </child>
@@ -132,13 +119,13 @@ Inc window
                     <property name="receives_default">True</property>
                     <property name="label" translatable="yes">Read</property>
                     <property name="response_id">0</property>
-					<signal name="clicked" handler="on_read_button_clicked_{$fullName}_inc"/>	
+                    <signal name="clicked" handler="on_read_button_clicked_conveyor_inc"/>
                   </widget>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="right_attach">3</property>
-                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property>  <!-- 3 + RN  -->
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 4" /></property>  <!-- 4 + RN  -->
+                    <property name="top_attach">4</property>
+                    <property name="bottom_attach">5</property>
                   </packing>
                 </child>
                 <child>
@@ -148,13 +135,13 @@ Inc window
                     <property name="receives_default">True</property>
                     <property name="label" translatable="yes">Export</property>
                     <property name="response_id">0</property>
-					<signal name="clicked" handler="on_export_button_clicked_{$fullName}_inc"/>
+                    <signal name="clicked" handler="on_export_button_clicked_conveyor_inc"/>
                   </widget>
                   <packing>
                     <property name="left_attach">5</property>
                     <property name="right_attach">6</property>
-                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 4" /></property> <!-- 4 + RN  -->
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 5" /></property> <!-- 5 + RN  -->
+                    <property name="top_attach">5</property>
+                    <property name="bottom_attach">6</property>
                   </packing>
                 </child>
                 <child>
@@ -165,8 +152,8 @@ Inc window
                   <packing>
                     <property name="left_attach">7</property>
                     <property name="right_attach">9</property>
-                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 4" /></property>  <!-- 4 + RN  -->
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 5" /></property>  <!-- 5 + RN  -->
+                    <property name="top_attach">5</property>
+                    <property name="bottom_attach">6</property>
                   </packing>
                 </child>
                 <child>
@@ -224,7 +211,7 @@ Inc window
                   <packing>
                     <property name="left_attach">4</property>
                     <property name="right_attach">5</property>
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property> <!-- 3 + RN -->
+                    <property name="bottom_attach">4</property>
                   </packing>
                 </child>
                 <child>
@@ -233,8 +220,8 @@ Inc window
                   </widget>
                   <packing>
                     <property name="right_attach">9</property>
-                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 2" /></property> <!-- 2 + RN -->
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property> <!-- 3 + RN -->
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
                   </packing>
                 </child>
                 <child>
@@ -244,7 +231,7 @@ Inc window
                   <packing>
                     <property name="left_attach">6</property>
                     <property name="right_attach">7</property>
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property> <!-- 3 + RN -->
+                    <property name="bottom_attach">4</property>
                   </packing>
                 </child>
                 <child>
@@ -254,47 +241,21 @@ Inc window
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property> <!-- 3 + RN -->
+                    <property name="bottom_attach">4</property>
                   </packing>
                 </child>
-<!-- call loop for each position -->
-		<xsl:call-template name="for.each.edp.irp6.inc">
-    		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
-    		<xsl:with-param name="fullName" select="$fullName"/>
-			<xsl:with-param name="i" select="1"/>
- 		</xsl:call-template>
-<!-- end tags -->
-              </widget>
-            </child>
-          </widget>
-        </child>
-      </widget>
-    </child>
-  </widget>
-</glade-interface>
-</xsl:document>
-<xsl:call-template name="irp6.inc.main.signals.cc" />
-</xsl:template>
-
-
-<!-- irp6 inc repeatable part -->
-<xsl:template name="for.each.edp.irp6.inc">
-<xsl:param name="irp6EDPNumber"/>
-<xsl:param name="fullName"/>
-<xsl:param name="i"/>
-	<xsl:if test="$i &lt;= $irp6EDPNumber">
                 <child>
-                  <widget class="GtkLabel" id="label5"><xsl:attribute name="id">label<xsl:value-of select="$i"/></xsl:attribute> <!-- RI --> 
+                  <widget class="GtkLabel" id="label1">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes"><xsl:value-of select="$i - 1"/></property> <!-- RI --> 
+                    <property name="label" translatable="yes">0</property>
                   </widget>
                   <packing>
-                    <property name="top_attach"><xsl:value-of select="$i + 1"/></property> <!-- 1 + RI -->
-                    <property name="bottom_attach"><xsl:value-of select="$i + 2"/></property> <!-- 2 + RI -->
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkEntry" id="entry4"><xsl:attribute name="id">entry<xsl:value-of select="$i"/></xsl:attribute> <!-- RI --> 
+                  <widget class="GtkEntry" id="entry1">
                     <property name="width_request">66</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -303,12 +264,12 @@ Inc window
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="right_attach">3</property>
-                    <property name="top_attach"><xsl:value-of select="$i + 1"/></property>  <!-- 1 + RI -->
-                    <property name="bottom_attach"><xsl:value-of select="$i + 2"/></property> <!-- 2 + RI -->
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkSpinButton" id="spinbutton6"><xsl:attribute name="id">spinbutton<xsl:value-of select="$i"/></xsl:attribute> <!--RI--> 
+                  <widget class="GtkSpinButton" id="spinbutton1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 100 1 10 0</property>
@@ -317,24 +278,24 @@ Inc window
                   <packing>
                     <property name="left_attach">5</property>
                     <property name="right_attach">6</property>
-                    <property name="top_attach"><xsl:value-of select="$i + 1"/></property>  <!-- 1 + RI -->
-                    <property name="bottom_attach"><xsl:value-of select="$i + 2"/></property> <!-- 2 + RI -->
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkHButtonBox" id="hbuttonbox4"><xsl:attribute name="id">hbuttonbox<xsl:value-of select="$i"/></xsl:attribute> <!--RI--> 
+                  <widget class="GtkHButtonBox" id="hbuttonbox1">
                     <property name="width_request">150</property>
                     <property name="visible">True</property>
                     <property name="layout_style">GTK_BUTTONBOX_CENTER</property>
                     <child>
-                      <widget class="GtkButton" id="button11"><xsl:attribute name="id">button<xsl:value-of select="($i*2)-1"/></xsl:attribute> <!--RIx2--> 
+                      <widget class="GtkButton" id="button1">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
-                        <signal name="clicked" handler="on_button{($i*2)-1}_clicked_{$fullName}_inc"/>	
+                        <signal name="clicked" handler="on_button1_clicked_conveyor_inc"/>
                         <child>
-                          <widget class="GtkArrow" id="arrow10"><xsl:attribute name="id">arrow<xsl:value-of select="($i*2)-1"/></xsl:attribute> <!-- RI x 2 --> 
+                          <widget class="GtkArrow" id="arrow1">
                             <property name="visible">True</property>
                             <property name="arrow_type">GTK_ARROW_LEFT</property>
                           </widget>
@@ -342,14 +303,14 @@ Inc window
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkButton" id="button12"><xsl:attribute name="id">button<xsl:value-of select="($i*2)"/></xsl:attribute> <!-- RI x 2 -1 --> 
+                      <widget class="GtkButton" id="button2">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
-                        <signal name="clicked" handler="on_button{($i*2)}_clicked_{$fullName}_inc"/>	
+                        <signal name="clicked" handler="on_button2_clicked_conveyor_inc"/>
                         <child>
-                          <widget class="GtkArrow" id="arrow5"><xsl:attribute name="id">arrow<xsl:value-of select="($i*2)"/></xsl:attribute> <!-- RI x 2 -1 --> 
+                          <widget class="GtkArrow" id="arrow2">
                             <property name="visible">True</property>
                           </widget>
                         </child>
@@ -362,26 +323,15 @@ Inc window
                   <packing>
                     <property name="left_attach">7</property>
                     <property name="right_attach">9</property>
-                    <property name="top_attach"><xsl:value-of select="$i + 1"/></property>  <!-- 1 + RI -->
-                    <property name="bottom_attach"><xsl:value-of select="$i + 2"/></property> <!-- 2 + RI -->
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
                   </packing>
                 </child>
-       </xsl:if>
-	<!-- for loop --> 
-       <xsl:if test="$i &lt;= $irp6EDPNumber">
-          <xsl:call-template name="for.each.edp.irp6.inc">
-              <xsl:with-param name="i">
-                  <xsl:value-of select="$i + 1"/>
-              </xsl:with-param>
-              <xsl:with-param name="irp6EDPNumber">
-                  <xsl:value-of select="$irp6EDPNumber"/>
-              </xsl:with-param>
-              <xsl:with-param name="fullName">
-                  <xsl:value-of select="$fullName"/>
-              </xsl:with-param>
-          </xsl:call-template>
-       </xsl:if>
-</xsl:template>
-
-</xsl:stylesheet>
-
+              </widget>
+            </child>
+          </widget>
+        </child>
+      </widget>
+    </child>
+  </widget>
+</glade-interface>

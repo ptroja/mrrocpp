@@ -198,6 +198,17 @@ void configurator::populate_tree_model_with_effectors()
 				ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EDP, program_name, node_name, ui_def);
 
 			}
+			
+			if (program_name && xmlStrEqual(effector_name, (xmlChar*)"conveyor"))
+			 {
+
+				char *ui_def = NULL;
+				program_name = this->get_string("/config/effectors/effector[@name='conveyor']/edp[@name='edp_conveyor_rcsc']/program_name");
+				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='conveyor']/edp[@name='edp_conveyor_rcsc']/@ui_def");
+				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='conveyor']/edp[@name='edp_conveyor_rcsc']/ui_def");
+				ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EDP, program_name, node_name, ui_def);
+				
+			}
 
 		}
 		xmlXPathFreeObject(active_effectors);

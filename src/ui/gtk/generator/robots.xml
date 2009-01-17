@@ -9,4 +9,5 @@ Main XML generator file - includes xml files for each robot
 	<xi:include href="irp6ontrack.xml" xmlns:xi="http://www.w3.org/2003/XInclude"/>
 	<xi:include href="irp6postument.xml" xmlns:xi="http://www.w3.org/2003/XInclude"/>
 	<xi:include href="conveyor.xml" xmlns:xi="http://www.w3.org/2003/XInclude"/>
+	<xi:include href="festival.xml" xmlns:xi="http://www.w3.org/2003/XInclude"/>
 </MRROCppGUIgenerator>

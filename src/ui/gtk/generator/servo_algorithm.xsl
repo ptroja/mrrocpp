@@ -11,8 +11,7 @@ Servo_algorithm window
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="irp6EDPNumber" select="irp6EDPNumber"/>
-<xsl:variable name="signal" select="name"/>
-<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../{$name}_servo_algorithm.glade">
+<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../glade/{$name}_servo_algorithm.glade">
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <child>
@@ -260,7 +259,6 @@ Servo_algorithm window
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 100 1 10 0</property>
-                    <property name="digits">3</property>
                   </widget>
                   <packing>
                     <property name="left_attach">5</property> <!-- constant value  - second spin button -->
@@ -274,7 +272,6 @@ Servo_algorithm window
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 100 1 10 0</property>
-                    <property name="digits">3</property>
                   </widget>
                   <packing>
                     <property name="left_attach">6</property> <!-- constant value - first spin button -->
@@ -288,18 +285,18 @@ Servo_algorithm window
                     <property name="visible">True</property>
                     <child>
                       <widget class="GtkEntry" id="entry1"><xsl:attribute name="id">entry<xsl:value-of select="(2*$i)-1"/></xsl:attribute>
-                        <property name="width_request">66</property>
+                        <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0.000</property>
+                        <property name="text" translatable="yes">0</property>
                       </widget>
                     </child>
                     <child>
                       <widget class="GtkEntry" id="entry2"><xsl:attribute name="id">entry<xsl:value-of select="(2*$i)"/></xsl:attribute>
-                        <property name="width_request">66</property>
+                        <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0.000</property>
+                        <property name="text" translatable="yes">0</property>
                       </widget>
                       <packing>
                         <property name="position">1</property>

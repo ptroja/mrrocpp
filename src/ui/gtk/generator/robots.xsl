@@ -22,21 +22,42 @@ Main generator file - includes xsl files for each window
 <xsl:include href="euler_xyz_signals.xsl" />
 <xsl:include href="euler_ts.xsl" />
 <xsl:include href="euler_ts_signals.xsl" />
-<xsl:include href="conveyor.xsl" />
+<xsl:include href="festival.xsl" />
 
-<!-- call templates defined in the stylesheets above -->
-<xsl:template name="call.all.templates" match="*[substring(name(),1,4)='irp6']">
-<xsl:call-template name="irp6.servo" />
-<xsl:call-template name="irp6.int" />
-<xsl:call-template name="irp6.inc" />
-<xsl:call-template name="irp6.axis.xyz" />
+<xsl:template name="call.all.irp6.templates" match="*[substring(name(),1,4)='irp6']">
+<xsl:variable name="irp6EDPNumber" select="irp6EDPNumber"/>
+	<xsl:if test="$irp6EDPNumber &gt;= 0">
+		<xsl:call-template name="irp6.servo" />
+		<xsl:call-template name="irp6.int" />
+		<xsl:call-template name="irp6.inc" />
+	</xsl:if>
+<xsl:variable name="axis_xyz" select="axis_xyz"/>
+	<xsl:if test="$axis_xyz &gt;= 0">	
+		<xsl:call-template name="irp6.axis.xyz" />
+	</xsl:if>
 <xsl:variable name="axis_ts" select="axis_ts"/>
-<xsl:if test="$axis_ts &gt;= 0"><xsl:call-template name="irp6.axis.ts" /></xsl:if>
-<xsl:call-template name="irp6.euler.xyz" />
+	<xsl:if test="$axis_ts &gt;= 0">
+		<xsl:call-template name="irp6.axis.ts" />
+	</xsl:if>
+<xsl:variable name="euler_xyz" select="euler_xyz"/>
+	<xsl:if test="$euler_xyz &gt;= 0">
+		<xsl:call-template name="irp6.euler.xyz" />
+	</xsl:if>
 <xsl:variable name="euler_ts" select="euler_ts"/>
-<xsl:if test="$euler_ts &gt;= 0"><xsl:call-template name="irp6.euler.ts" /></xsl:if>
-<xsl:call-template name="conveyor.servo" />
-<xsl:call-template name="conveyor.moves" />
+	<xsl:if test="$euler_ts &gt;= 0">
+		<xsl:call-template name="irp6.euler.ts" />
+	</xsl:if>
 <xsl:call-template name="irp6.edp.main" />
 </xsl:template>
+
+<xsl:template name="call.all.other.templates">
+<xsl:call-template name="festival.main" />
+</xsl:template>
+
+<!-- call templates defined in the stylesheets above -->
+<xsl:template name="call.all.templates">
+<xsl:call-template name="call.all.irp6.templates" />
+<xsl:call-template name="call.all.other.templates" />
+</xsl:template>
+
 </xsl:stylesheet>

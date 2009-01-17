@@ -11,7 +11,7 @@ Axis XYZ window callback signals
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="irp6EDPNumber" select="axis_xyz"/>
-<xsl:document method="text" href="../{$name}_axis_xyz_uimodule.cc">
+<xsl:document method="text" href="../signals/{$name}_axis_xyz_uimodule.cc">
 
 
 <xsl:text>
@@ -122,7 +122,7 @@ extern "C"
 <!-- signals handling file .h-->
 <xsl:template name="irp6.axis.xyz.main.signals.h" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
-<xsl:document method="text" href="../{$name}_axis_xyz_uimodule.h">
+<xsl:document method="text" href="../signals/{$name}_axis_xyz_uimodule.h">
 
 <xsl:text>
 #ifndef __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_AXIS_XYZ

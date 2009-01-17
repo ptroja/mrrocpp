@@ -220,7 +220,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 100 1 10 0</property>
-                    <property name="digits">3</property>
                   </widget>
                   <packing>
                     <property name="left_attach">5</property>
@@ -234,7 +233,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 100 1 10 0</property>
-                    <property name="digits">3</property>
                   </widget>
                   <packing>
                     <property name="left_attach">6</property>
@@ -248,18 +246,18 @@
                     <property name="visible">True</property>
                     <child>
                       <widget class="GtkEntry" id="entry1">
-                        <property name="width_request">66</property>
+                        <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0.000</property>
+                        <property name="text" translatable="yes">0</property>
                       </widget>
                     </child>
                     <child>
                       <widget class="GtkEntry" id="entry2">
-                        <property name="width_request">66</property>
+                        <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0.000</property>
+                        <property name="text" translatable="yes">0</property>
                       </widget>
                       <packing>
                         <property name="position">1</property>
@@ -288,7 +286,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 100 1 10 0</property>
-                    <property name="digits">3</property>
                   </widget>
                   <packing>
                     <property name="left_attach">5</property>
@@ -302,7 +299,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 100 1 10 0</property>
-                    <property name="digits">3</property>
                   </widget>
                   <packing>
                     <property name="left_attach">6</property>
@@ -316,18 +312,18 @@
                     <property name="visible">True</property>
                     <child>
                       <widget class="GtkEntry" id="entry3">
-                        <property name="width_request">66</property>
+                        <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0.000</property>
+                        <property name="text" translatable="yes">0</property>
                       </widget>
                     </child>
                     <child>
                       <widget class="GtkEntry" id="entry4">
-                        <property name="width_request">66</property>
+                        <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0.000</property>
+                        <property name="text" translatable="yes">0</property>
                       </widget>
                       <packing>
                         <property name="position">1</property>
@@ -356,7 +352,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 100 1 10 0</property>
-                    <property name="digits">3</property>
                   </widget>
                   <packing>
                     <property name="left_attach">5</property>
@@ -370,7 +365,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 100 1 10 0</property>
-                    <property name="digits">3</property>
                   </widget>
                   <packing>
                     <property name="left_attach">6</property>
@@ -384,18 +378,18 @@
                     <property name="visible">True</property>
                     <child>
                       <widget class="GtkEntry" id="entry5">
-                        <property name="width_request">66</property>
+                        <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0.000</property>
+                        <property name="text" translatable="yes">0</property>
                       </widget>
                     </child>
                     <child>
                       <widget class="GtkEntry" id="entry6">
-                        <property name="width_request">66</property>
+                        <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0.000</property>
+                        <property name="text" translatable="yes">0</property>
                       </widget>
                       <packing>
                         <property name="position">1</property>
@@ -424,7 +418,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 100 1 10 0</property>
-                    <property name="digits">3</property>
                   </widget>
                   <packing>
                     <property name="left_attach">5</property>
@@ -438,7 +431,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 100 1 10 0</property>
-                    <property name="digits">3</property>
                   </widget>
                   <packing>
                     <property name="left_attach">6</property>
@@ -452,18 +444,18 @@
                     <property name="visible">True</property>
                     <child>
                       <widget class="GtkEntry" id="entry7">
-                        <property name="width_request">66</property>
+                        <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0.000</property>
+                        <property name="text" translatable="yes">0</property>
                       </widget>
                     </child>
                     <child>
                       <widget class="GtkEntry" id="entry8">
-                        <property name="width_request">66</property>
+                        <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0.000</property>
+                        <property name="text" translatable="yes">0</property>
                       </widget>
                       <packing>
                         <property name="position">1</property>
@@ -492,7 +484,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 100 1 10 0</property>
-                    <property name="digits">3</property>
                   </widget>
                   <packing>
                     <property name="left_attach">5</property>
@@ -506,7 +497,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 100 1 10 0</property>
-                    <property name="digits">3</property>
                   </widget>
                   <packing>
                     <property name="left_attach">6</property>
@@ -520,18 +510,18 @@
                     <property name="visible">True</property>
                     <child>
                       <widget class="GtkEntry" id="entry9">
-                        <property name="width_request">66</property>
+                        <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0.000</property>
+                        <property name="text" translatable="yes">0</property>
                       </widget>
                     </child>
                     <child>
                       <widget class="GtkEntry" id="entry10">
-                        <property name="width_request">66</property>
+                        <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0.000</property>
+                        <property name="text" translatable="yes">0</property>
                       </widget>
                       <packing>
                         <property name="position">1</property>
@@ -560,7 +550,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 100 1 10 0</property>
-                    <property name="digits">3</property>
                   </widget>
                   <packing>
                     <property name="left_attach">5</property>
@@ -574,7 +563,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 100 1 10 0</property>
-                    <property name="digits">3</property>
                   </widget>
                   <packing>
                     <property name="left_attach">6</property>
@@ -588,18 +576,18 @@
                     <property name="visible">True</property>
                     <child>
                       <widget class="GtkEntry" id="entry11">
-                        <property name="width_request">66</property>
+                        <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0.000</property>
+                        <property name="text" translatable="yes">0</property>
                       </widget>
                     </child>
                     <child>
                       <widget class="GtkEntry" id="entry12">
-                        <property name="width_request">66</property>
+                        <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0.000</property>
+                        <property name="text" translatable="yes">0</property>
                       </widget>
                       <packing>
                         <property name="position">1</property>
@@ -628,7 +616,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 100 1 10 0</property>
-                    <property name="digits">3</property>
                   </widget>
                   <packing>
                     <property name="left_attach">5</property>
@@ -642,7 +629,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">0 0 100 1 10 0</property>
-                    <property name="digits">3</property>
                   </widget>
                   <packing>
                     <property name="left_attach">6</property>
@@ -656,18 +642,18 @@
                     <property name="visible">True</property>
                     <child>
                       <widget class="GtkEntry" id="entry13">
-                        <property name="width_request">66</property>
+                        <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0.000</property>
+                        <property name="text" translatable="yes">0</property>
                       </widget>
                     </child>
                     <child>
                       <widget class="GtkEntry" id="entry14">
-                        <property name="width_request">66</property>
+                        <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0.000</property>
+                        <property name="text" translatable="yes">0</property>
                       </widget>
                       <packing>
                         <property name="position">1</property>

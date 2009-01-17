@@ -10,7 +10,7 @@ Euler_ts window callback signals
 <xsl:template name="irp6.euler.ts.main.signals.cc" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
-<xsl:document method="text" href="../{$name}_euler_ts_uimodule.cc">
+<xsl:document method="text" href="../signals/{$name}_euler_ts_uimodule.cc">
 
 
 <xsl:text>
@@ -69,7 +69,7 @@ extern "C"
 <!-- signals handling file .h-->
 <xsl:template name="irp6.euler.ts.main.signals.h" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
-<xsl:document method="text" href="../{$name}_euler_ts_uimodule.h">
+<xsl:document method="text" href="../signals/{$name}_euler_ts_uimodule.h">
 
 
 

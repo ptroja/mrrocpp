@@ -179,12 +179,41 @@
 
 		</effector>
 
+		<effector name="conveyor" active="true">
+			<ecp>
+				<program_name>ecp_conveyor_rcsc</program_name>
+				<node_name>qnx632</node_name>
+			</ecp>
+
+			<edp name="edp_conveyor_rcsc" active="true" ui_def="edp_conveyor_rcsc.xml">
+
+				<program_name>edp_conveyor_rcsc</program_name>
+				<node_name>qnx632</node_name>
+
+			</edp>
+			<edp name="edp_conveyor_inc" active="true" ui_def="conveyor_inc.xml">
+
+				<program_name>edp_conveyor_inc</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_conveyor_int" active="true" ui_def="conveyor_int.xml">
+
+				<program_name>edp_conveyor_int</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_conveyor_servo" active="true" ui_def="conveyor_servo_algorithm.xml">
+
+				<program_name>edp_conveyor_servo</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+
+		</effector>
+
 		<effector name="festival" active="true" ui_def="festival.xml">
 			<ecp>
 				<test_mode>1</test_mode>
 				<node_name>qnx632</node_name>
 			</ecp>
 		</effector>
-
 	</effectors>
 </config>

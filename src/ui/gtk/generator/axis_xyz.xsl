@@ -11,7 +11,7 @@ Axis_xyz window
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="irp6EDPNumber" select="axis_xyz"/>
-<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../{$name}_axis_xyz.glade">
+<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../glade/{$name}_axis_xyz.glade">
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <child>

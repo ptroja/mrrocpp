@@ -1,4 +1,9 @@
-<conveyor>
-	<name>conveyor_</name>
-	<EDPNumber>1</EDPNumber>
-</conveyor>
+<irp6conveyor>
+	<name>conveyor</name>
+	<fullName>conveyor</fullName>
+	<irp6EDPNumber>1</irp6EDPNumber>
+	<axis_xyz></axis_xyz>
+	<axis_ts></axis_ts>
+	<euler_xyz></euler_xyz>
+	<euler_ts></euler_ts>
+</irp6conveyor>

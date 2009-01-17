@@ -2,13 +2,15 @@ ui_defs = mp.xml festival.xml \
 	irp6m_axis_xyz.xml irp6m_inc.xml irp6m_int.xml irp6m_euler_xyz.xml irp6m_axis_ts.xml irp6m_servo_algorithm.xml \
 	irp6o_axis_xyz.xml irp6o_inc.xml irp6o_int.xml irp6o_euler_xyz.xml irp6o_axis_ts.xml irp6o_servo_algorithm.xml \
 	irp6p_axis_xyz.xml irp6p_inc.xml irp6p_int.xml irp6p_euler_xyz.xml irp6p_euler_ts.xml irp6p_servo_algorithm.xml \
-	edp_irp6m_rcsc.xml edp_irp6o_rcsc.xml edp_irp6p_rcsc.xml 
+	conveyor_inc.xml conveyor_int.xml conveyor_servo_algorithm.xml \
+	edp_irp6m_rcsc.xml edp_irp6o_rcsc.xml edp_irp6p_rcsc.xml edp_conveyor_rcsc.xml 
 
 ui_modules = mp.so festival.so \
 	irp6m_axis_xyz.so irp6m_inc.so irp6m_int.so irp6m_euler_xyz.so irp6m_axis_ts.so irp6m_servo_algorithm.so \
 	irp6o_axis_xyz.so irp6o_inc.so irp6o_int.so irp6o_euler_xyz.so irp6o_axis_ts.so irp6o_servo_algorithm.so \
 	irp6p_axis_xyz.so irp6p_inc.so irp6p_int.so irp6p_euler_xyz.so irp6p_euler_ts.so irp6p_servo_algorithm.so \
-	edp_irp6m_rcsc.so edp_irp6o_rcsc.so edp_irp6p_rcsc.so
+	conveyor_inc.so conveyor_int.so conveyor_servo_algorithm.so \
+	edp_irp6m_rcsc.so edp_irp6o_rcsc.so edp_irp6p_rcsc.so edp_conveyor_rcsc.so 
 
 all: ui.gtk ui.xml $(ui_defs) $(ui_modules)
 

@@ -9,7 +9,13 @@ EDP IRp6 RCSC window
 <!-- main edp irp6 algorithm part -->
 <xsl:template name="irp6.edp.main" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
-<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../edp_{$name}_rcsc.glade">
+<xsl:variable name="fullName" select="fullName"/>
+<xsl:variable name="irp6EDPNumber" select="irp6EDPNumber"/>
+<xsl:variable name="axis_xyz" select="axis_xyz"/>
+<xsl:variable name="axis_ts" select="axis_ts"/>
+<xsl:variable name="euler_xyz" select="euler_xyz"/>
+<xsl:variable name="euler_ts" select="euler_ts"/>
+<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../glade/edp_{$name}_rcsc.glade">
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <child>
@@ -18,27 +24,15 @@ EDP IRp6 RCSC window
         <child>
           <widget class="GtkComboBox" id="combobox1">
             <property name="visible">True</property>
-            <property name="items" translatable="yes">Servo algorithm
-Internal
-Increment
-XYZ Euler ZYZ
-XYZ Angle Axis
-<xsl:choose><xsl:when test="$name = 'irp6p'">TS Euler ZYZ</xsl:when><xsl:otherwise>TS Angle Axis</xsl:otherwise></xsl:choose>
+            <property name="items" translatable="yes">1. <xsl:choose><xsl:when test="$irp6EDPNumber &gt;= 0">Servo algorithm</xsl:when><xsl:otherwise></xsl:otherwise> - </xsl:choose> 
+2. <xsl:choose><xsl:when test="$irp6EDPNumber &gt;= 0">Internal</xsl:when><xsl:otherwise> - </xsl:otherwise></xsl:choose>
+3. <xsl:choose><xsl:when test="$irp6EDPNumber &gt;= 0">Increment</xsl:when><xsl:otherwise> - </xsl:otherwise></xsl:choose>
+4. <xsl:choose><xsl:when test="$euler_xyz &gt;= 0">XYZ Euler ZYZ</xsl:when><xsl:otherwise> - </xsl:otherwise></xsl:choose> 
+5. <xsl:choose><xsl:when test="$axis_xyz &gt;= 0">XYZ Angle Axis</xsl:when><xsl:otherwise> - </xsl:otherwise></xsl:choose>  
+6. <xsl:choose><xsl:when test="$axis_ts &gt;= 0">TS Angle Axis</xsl:when><xsl:otherwise> - </xsl:otherwise></xsl:choose>
+7. <xsl:choose><xsl:when test="$euler_ts &gt;= 0">TS Euler ZYZ</xsl:when><xsl:otherwise> - </xsl:otherwise></xsl:choose> 
 			</property>
-			<xsl:choose>
-			<xsl:when test="$name = 'irp6m'">
-				<signal name="changed" handler="on_combobox1_changed_mechatronika"/>		
-			</xsl:when>
-			<xsl:when test="$name = 'irp6o'">
-				<signal name="changed" handler="on_combobox1_changed_ontrack"/>		
-			</xsl:when>
-			<xsl:when test="$name = 'irp6p'">
-				<signal name="changed" handler="on_combobox1_changed_postument"/>		
-			</xsl:when>
-		   	<xsl:otherwise>
-				<signal name="changed" handler="on_combobox1_changed_newRobot"/>
-    		</xsl:otherwise>	
-    		</xsl:choose>
+			<signal name="changed" handler="on_combobox1_changed_{$fullName}"/>		
           </widget>
           <packing>
             <property name="expand">False</property>

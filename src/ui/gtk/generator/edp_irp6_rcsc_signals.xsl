@@ -10,7 +10,12 @@ EDP IRp6 RCSC window callback signals
 <xsl:template name="irp6.edp.main.signals.cc" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
-<xsl:document method="text" href="../edp_{$name}_rcsc_uimodule.cc">
+<xsl:variable name="irp6EDPNumber" select="irp6EDPNumber"/>
+<xsl:variable name="axis_xyz" select="axis_xyz"/>
+<xsl:variable name="axis_ts" select="axis_ts"/>
+<xsl:variable name="euler_xyz" select="euler_xyz"/>
+<xsl:variable name="euler_ts" select="euler_ts"/>
+<xsl:document method="text" href="../signals/edp_{$name}_rcsc_uimodule.cc">
 
 
 
@@ -50,41 +55,45 @@ extern "C"
 		}
 		
 		const gchar * ChosenFile;
+		gboolean isFile = 0;
 		gint choice;
 		choice = gtk_combo_box_get_active (comboBox);
 
 		switch (choice)
 		{
-		case 0: std::cout &lt;&lt; "Servo algorithm window chosen" &lt;&lt; std::endl; ChosenFile = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm.xml"; break;
-		case 1: std::cout &lt;&lt; "Internal window chosen" &lt;&lt; std::endl; ChosenFile = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_int.xml"; break;
-		case 2: std::cout &lt;&lt; "Increment window chosen" &lt;&lt; std::endl; ChosenFile = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc.xml"; break;
-		case 3: std::cout &lt;&lt; "XYZ Euler ZYZ window chosen" &lt;&lt; std::endl; ChosenFile = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_xyz.xml"; break;
-		case 4: std::cout &lt;&lt; "XYZ Angle Axis window chosen" &lt;&lt; std::endl; ChosenFile = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz.xml"; break;
-		case 5: std::cout &lt;&lt; "</xsl:text><xsl:choose><xsl:when test="$name = 'irp6p'"><xsl:text>TS Euler ZYZ</xsl:text></xsl:when><xsl:otherwise><xsl:text>TS Angle Axis</xsl:text></xsl:otherwise></xsl:choose><xsl:text> window chosen" &lt;&lt; std::endl; ChosenFile = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_</xsl:text><xsl:choose><xsl:when test="$name = 'irp6p'"><xsl:text>euler</xsl:text></xsl:when><xsl:otherwise><xsl:text>axis</xsl:text></xsl:otherwise></xsl:choose><xsl:text>_ts.xml"; break;
+		case 0: </xsl:text><xsl:if test="$irp6EDPNumber &gt;= 0"><xsl:text>std::cout &lt;&lt; "Servo algorithm window chosen" &lt;&lt; std::endl; ChosenFile = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm.xml"; isFile = 1;</xsl:text></xsl:if><xsl:text> break;
+		case 1: </xsl:text><xsl:if test="$irp6EDPNumber &gt;= 0"><xsl:text>std::cout &lt;&lt; "Internal window chosen" &lt;&lt; std::endl; ChosenFile = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_int.xml"; isFile = 1;</xsl:text></xsl:if><xsl:text> break;
+		case 2: </xsl:text><xsl:if test="$irp6EDPNumber &gt;= 0"><xsl:text>std::cout &lt;&lt; "Increment window chosen" &lt;&lt; std::endl; ChosenFile = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc.xml"; isFile = 1;</xsl:text></xsl:if><xsl:text> break;
+		case 3: </xsl:text><xsl:if test="$euler_xyz &gt;= 0"><xsl:text>std::cout &lt;&lt; "XYZ Euler ZYZ window chosen" &lt;&lt; std::endl; ChosenFile = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_xyz.xml"; isFile = 1;</xsl:text></xsl:if><xsl:text> break;
+		case 4: </xsl:text><xsl:if test="$axis_xyz &gt;= 0"><xsl:text>std::cout &lt;&lt; "XYZ Angle Axis window chosen" &lt;&lt; std::endl; ChosenFile = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz.xml"; isFile = 1;</xsl:text></xsl:if><xsl:text> break;
+		case 5: </xsl:text><xsl:if test="$axis_ts &gt;= 0"><xsl:text>std::cout &lt;&lt; "TS Angle Axis window chosen" &lt;&lt; std::endl; ChosenFile = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_ts.xml"; isFile = 1;</xsl:text></xsl:if><xsl:text> break;
+		case 6: </xsl:text><xsl:if test="$euler_ts &gt;= 0"><xsl:text>std::cout &lt;&lt; "TS Euler ZYZ window chosen" &lt;&lt; std::endl; ChosenFile = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_ts.xml"; isFile = 1;</xsl:text></xsl:if><xsl:text> break;
 		default: std::cout &lt;&lt; "Something is not working properly!" &lt;&lt; std::endl;
 		}
-		
-		GtkBuilder* chosenFileBuilder = gtk_builder_new();
-		GError *err = NULL;
-		if (gtk_builder_add_from_file(chosenFileBuilder, ChosenFile, &amp;err) == 0) 
+		if (isFile)
 		{
-			fprintf (stderr, "Unable to read file %s: %s\n", ChosenFile, err->message);
-			g_error_free (err);
-
-			// TODO: throw(...)
+			GtkBuilder* chosenFileBuilder = gtk_builder_new();
+			GError *err = NULL;
+			if (gtk_builder_add_from_file(chosenFileBuilder, ChosenFile, &amp;err) == 0) 
+			{
+				fprintf (stderr, "Unable to read file %s: %s\n", ChosenFile, err->message);
+				g_error_free (err);
+	
+				// TODO: throw(...)
+			}
+			g_assert(chosenFileBuilder);
+			
+			gpointer symbol;
+			gtk_builder_connect_signals(chosenFileBuilder, symbol);
+	
+			GtkWidget* chosenWindow = GTK_WIDGET (gtk_builder_get_object (chosenFileBuilder, "window"));
+			g_assert(chosenWindow);
+			
+			GtkWidget* windowWithoutParent = gtk_bin_get_child(GTK_BIN(chosenWindow));
+			gtk_widget_unparent(windowWithoutParent);
+			
+			gtk_scrolled_window_add_with_viewport (scrolled, windowWithoutParent);
 		}
-		g_assert(chosenFileBuilder);
-		
-		gpointer symbol;
-		gtk_builder_connect_signals(chosenFileBuilder, symbol);
-
-		GtkWidget* chosenWindow = GTK_WIDGET (gtk_builder_get_object (chosenFileBuilder, "window"));
-		g_assert(chosenWindow);
-		
-		GtkWidget* windowWithoutParent = gtk_bin_get_child(GTK_BIN(chosenWindow));
-		gtk_widget_unparent(windowWithoutParent);
-		
-		gtk_scrolled_window_add_with_viewport (scrolled, windowWithoutParent);
 		
 	}	
 
@@ -92,18 +101,14 @@ extern "C"
 	{
 		edp_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = new edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_rcsc(entry);
 		fprintf(stderr, "module %s loaded\n", __FILE__);
-		const char * def_servo_algorithm = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm.xml";
-		const char * def_euler_xyz = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_xyz.xml";
-		const char * def_axis_xyz = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz.xml";
-		const char * def_inc = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc.xml";
-		const char * def_int = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_int.xml";
-		const char * def_ts = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_</xsl:text><xsl:choose><xsl:when test="$name = 'irp6p'"><xsl:text>euler</xsl:text></xsl:when><xsl:otherwise><xsl:text>axis</xsl:text></xsl:otherwise></xsl:choose><xsl:text>_ts.xml";
-		new ui_config_entry(ui_config_entry::EDP, "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm", NULL, def_servo_algorithm);
-		new ui_config_entry(ui_config_entry::EDP, "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_int", NULL, def_int);
-		new ui_config_entry(ui_config_entry::EDP, "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc", NULL, def_inc);
-		new ui_config_entry(ui_config_entry::EDP, "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz", NULL, def_axis_xyz);
-		new ui_config_entry(ui_config_entry::EDP, "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_zyz", NULL, def_euler_xyz);
-		new ui_config_entry(ui_config_entry::EDP, "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_</xsl:text><xsl:choose><xsl:when test="$name = 'irp6p'"><xsl:text>euler</xsl:text></xsl:when><xsl:otherwise><xsl:text>axis</xsl:text></xsl:otherwise></xsl:choose><xsl:text>_ts", NULL, def_ts);
+		
+		</xsl:text><xsl:if test="$irp6EDPNumber &gt;= 0"><xsl:text>const char * def_servo_algorithm = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm.xml"; new ui_config_entry(ui_config_entry::EDP, "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm", NULL, def_servo_algorithm);</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$irp6EDPNumber &gt;= 0"><xsl:text>const char * def_int = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_int.xml"; new ui_config_entry(ui_config_entry::EDP, "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_int", NULL, def_int);</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$irp6EDPNumber &gt;= 0"><xsl:text>const char * def_inc = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc.xml"; new ui_config_entry(ui_config_entry::EDP, "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc", NULL, def_inc);</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$axis_xyz &gt;= 0"><xsl:text>const char * def_axis_xyz = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz.xml"; new ui_config_entry(ui_config_entry::EDP, "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz", NULL, def_axis_xyz);</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$euler_xyz &gt;= 0"><xsl:text>const char * def_euler_xyz = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_xyz.xml"; new ui_config_entry(ui_config_entry::EDP, "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_xyz", NULL, def_euler_xyz);</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$axis_ts &gt;= 0"><xsl:text>const char * def_axis_ts = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_ts.xml"; new ui_config_entry(ui_config_entry::EDP, "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_ts", NULL, def_axis_ts);</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$euler_ts &gt;= 0"><xsl:text>const char * def_euler_ts = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_ts.xml"; new ui_config_entry(ui_config_entry::EDP, "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_ts", NULL, def_euler_ts);</xsl:text></xsl:if><xsl:text>
 	}
 
 	void ui_module_unload(void) 
@@ -123,7 +128,7 @@ extern "C"
 <!-- signals handling file .cc-->
 <xsl:template name="irp6.edp.main.signals.h" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
-<xsl:document method="text" href="../edp_{$name}_rcsc_uimodule.h">
+<xsl:document method="text" href="../signals/edp_{$name}_rcsc_uimodule.h">
 
 
 

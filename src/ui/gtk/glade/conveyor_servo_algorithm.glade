@@ -41,6 +41,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="response_id">0</property>
+                    <signal name="clicked" handler="on_arrow_button_clicked_conveyor_servo"/>
                     <child>
                       <widget class="GtkArrow" id="arrow1">
                         <property name="visible">True</property>
@@ -103,6 +104,7 @@
                     <property name="receives_default">True</property>
                     <property name="label" translatable="yes">Set</property>
                     <property name="response_id">0</property>
+                    <signal name="clicked" handler="on_set_button_clicked_conveyor_servo"/>
                   </widget>
                   <packing>
                     <property name="left_attach">5</property>
@@ -118,6 +120,7 @@
                     <property name="receives_default">True</property>
                     <property name="label" translatable="yes">Read</property>
                     <property name="response_id">0</property>
+                    <signal name="clicked" handler="on_read_button_clicked_conveyor_servo"/>
                   </widget>
                   <packing>
                     <property name="left_attach">2</property>
@@ -216,8 +219,7 @@
                   <widget class="GtkSpinButton" id="spinbutton1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 10</property>
-                    <property name="digits">3</property>
+                    <property name="adjustment">0 0 100 1 10 0</property>
                   </widget>
                   <packing>
                     <property name="left_attach">5</property>
@@ -230,8 +232,7 @@
                   <widget class="GtkSpinButton" id="spinbutton2">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 10</property>
-                    <property name="digits">3</property>
+                    <property name="adjustment">0 0 100 1 10 0</property>
                   </widget>
                   <packing>
                     <property name="left_attach">6</property>
@@ -245,18 +246,18 @@
                     <property name="visible">True</property>
                     <child>
                       <widget class="GtkEntry" id="entry1">
-                        <property name="width_request">66</property>
+                        <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0.000</property>
+                        <property name="text" translatable="yes">0</property>
                       </widget>
                     </child>
                     <child>
                       <widget class="GtkEntry" id="entry2">
-                        <property name="width_request">66</property>
+                        <property name="width_request">30</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0.000</property>
+                        <property name="text" translatable="yes">0</property>
                       </widget>
                       <packing>
                         <property name="position">1</property>
