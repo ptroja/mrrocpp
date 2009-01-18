@@ -14,16 +14,18 @@ class ui_widget_entry
 		ui_widget_entry();
 		ui_widget_entry(const char *ui_def = NULL);
 		~ui_widget_entry();
-		
+
 		void copy(ui_widget_entry &entry);
 
-		GtkBuilder & getBuilder(void) 
+		void ListBuilderObjects(void);
+
+		GtkBuilder & getBuilder(void)
 		{
-			if (this->builder) 
+			if (this->builder)
 			{
 				return *(GTK_BUILDER(this->builder));
-			} 
-			else 
+			}
+			else
 			{
 				throw ("no GtkBuilder in this widget");
 			}

@@ -1,9 +1,30 @@
 #include "ui_widget_entry.h"
 #include "ui_model.h"
 
+static void print_gobject(gpointer data, gpointer user_data) {
+	GObject *obj = (GObject *) data;
+	printf(" object\n");
+}
+
+void ui_widget_entry::ListBuilderObjects(void) {
+
+	g_assert(this->builder);
+
+	GSList *list = gtk_builder_get_objects(this->builder);
+
+	if (!list) {
+		std::cerr << "gtk_builder_get_objects() failed" << std::endl;
+		return;
+	}
+
+	g_slist_foreach(list, print_gobject, NULL);
+
+	g_slist_free(list);
+}
+
 void ui_widget_entry::copy(ui_widget_entry &entry)
 {
-	std::cout << "copying entries, please wait...." << std::endl;	
+	std::cout << "copying entries, please wait...." << std::endl;
 	GtkBuilder & thisBuilder = (entry.getBuilder());
 }
 
@@ -12,6 +33,7 @@ ui_widget_entry::ui_widget_entry(const char *ui_def)  {
 	if (!ui_def) {
 		builder = NULL;
 		module = NULL;
+		g_warn_if_reached();
 		return;
 	}
 
@@ -41,7 +63,7 @@ ui_widget_entry::ui_widget_entry(const char *ui_def)  {
 	module = g_module_open(ui_lib.c_str(), (GModuleFlags) G_MODULE_BIND_LAZY);
 
 	if(module) {
-		gtk_builder_connect_signals(builder, this);
+//		gtk_builder_connect_signals(builder, this);
 
 		gpointer symbol;
 		if (g_module_symbol(module, "ui_widget_init", &symbol)) {
@@ -51,13 +73,15 @@ ui_widget_entry::ui_widget_entry(const char *ui_def)  {
 			ui_widget_init_t ui_widget_init = (ui_widget_init_t) symbol;
 
 			ui_widget_init(*this);
+		} else {
+			g_warning("failed to call widget %s.%s init function\n", ui_lib.c_str(), G_MODULE_SUFFIX );
 		}
 	} else {
 		g_warning("failed to open module %s.%s\n", ui_lib.c_str(), G_MODULE_SUFFIX );
 	}
 }
 
-ui_widget_entry::~ui_widget_entry() 
+ui_widget_entry::~ui_widget_entry()
 {
 	if (module) {
 		gpointer symbol;

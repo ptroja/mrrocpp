@@ -127,13 +127,13 @@ ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program
 			ui_module_init_t ui_module_init = (ui_module_init_t) symbol;
 
 			ui_module_init(*this);
+		} else {
+			g_warning("failed to call module %s.%s init function\n", ui_lib.c_str(), G_MODULE_SUFFIX );
 		}
+
 	} else {
 		g_warning("failed to open module %s.%s\n", ui_lib.c_str(), G_MODULE_SUFFIX );
 	}
-	
-	//tymczasowe - utworz widget
-	new ui_widget_entry(ui_def);
 
 	content = gtk_bin_get_child(GTK_BIN(this->window));
 	gtk_widget_unparent(content);
