@@ -18,6 +18,9 @@ all: $(ui_modules)
 %.so: %_widget.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $<
 
+%.so: %_uimodule.o
+	$(CXX) ${LDFLAGS} -shared -o $@ $<
+
 clean:
 	rm -f *.o *.so
 
