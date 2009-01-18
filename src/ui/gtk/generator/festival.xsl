@@ -74,5 +74,6 @@ Polish</property>
 </glade-interface>
 
 </xsl:document>	
+<xsl:call-template name="festival.main.signals.cc"/>
 </xsl:template>
 </xsl:stylesheet>

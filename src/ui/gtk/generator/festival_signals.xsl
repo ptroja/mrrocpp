@@ -4,12 +4,12 @@ MRROC++ GUI generator
 Festival window callback signals
  -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-<xsl:output method="text"/>
 
-<!-- signals handling file .cc-->
-<xsl:template name="festival.main.signals.cc">
+<!-- main festival window -->
+<xsl:template name="festival.main.signals.cc" match="festival">
 <xsl:variable name="name" select="name"/>
-<xsl:document method="text" href="../signals/speaker_uimodule.cc">
+<xsl:variable name="fullName" select="fullName"/>
+<xsl:document method="text" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../signals/{$name}_widget.cc">
 
 
 <xsl:text>
@@ -17,52 +17,52 @@ Festival window callback signals
 #include &lt;gtk/gtk.h&gt;
 #include &lt;glib.h&gt;
 #include "ui_model.h"
-#include "festival_uimodule.h"
+#include "</xsl:text><xsl:value-of select="$name" /><xsl:text>_widget.h"
 
 
-festival::festival(ui_config_entry &amp;entry) 
+</xsl:text><xsl:value-of select="$name" /><xsl:text>::</xsl:text><xsl:value-of select="$name" /><xsl:text>(ui_widget_entry &amp;entry) 
 {
 }
 
-static festival *festivalPanel;
+static </xsl:text><xsl:value-of select="$name" /><xsl:text> *</xsl:text><xsl:value-of select="$fullName" /><xsl:text>Panel;
 
 
 extern "C"
 {
-	void on_say_button_clicked (GtkButton* button, gpointer userdata)
+	void on_say_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> (GtkButton* button, gpointer userdata)
 	{
-		std::cout &lt;&lt; "Say button clicked in festival window" &lt;&lt; std::endl;
-	}	
+		std::cout &lt;&lt; "Wcisniety przycisk Say dla </xsl:text><xsl:value-of select="$fullName" /><xsl:text>" &lt;&lt; std::endl;
+	}
 	
-	void ui_module_init(ui_config_entry &amp;entry) 
+	void ui_widget_init(ui_widget_entry &amp;entry) 
 	{
-		festivalPanel = new festival(entry);
-		fprintf(stderr, "module %s loaded\n", __FILE__);
+		</xsl:text><xsl:value-of select="$fullName" /><xsl:text>Panel = new </xsl:text><xsl:value-of select="$name" /><xsl:text>(entry);
+		fprintf(stderr, "widget %s loaded\n", __FILE__);
 	}
 
-	void ui_module_unload(void) 
+	void ui_widget_unload(void) 
 	{
-		if (festivalPanel) 
+		if (</xsl:text><xsl:value-of select="$fullName" /><xsl:text>Panel) 
 		{
-			delete festivalPanel;
+			delete </xsl:text><xsl:value-of select="$fullName" /><xsl:text>Panel;
 		}
-		fprintf(stderr, "module %s unloaded\n", __FILE__);
+		fprintf(stderr, "widget %s unloaded\n", __FILE__);
 	}
 }
 </xsl:text>
-</xsl:document>
+
+</xsl:document>	
 <xsl:call-template name="festival.main.signals.h"/>
 </xsl:template>
 
-
 <!-- signals handling file .h-->
-<xsl:template name="festival.main.signals.h" match="festival">
+<xsl:template name="festival.main.signals.h">
 <xsl:variable name="name" select="name"/>
-<xsl:document method="text" href="../signals/festival_uimodule.h">
+<xsl:document method="text" href="../signals/{$name}_widget.h">
 
 <xsl:text>
-#ifndef __festival
-#define __festival
+#ifndef __</xsl:text><xsl:value-of select="$name" /><xsl:text>
+#define __</xsl:text><xsl:value-of select="$name" /><xsl:text>
 
 #include &lt;iostream&gt;
 #include &lt;vector&gt;
@@ -70,18 +70,18 @@ extern "C"
 #include &lt;gtk/gtkbuilder.h&gt;
 #include &lt;gtk/gtk.h&gt;
 
-class festival
+class </xsl:text><xsl:value-of select="$name" /><xsl:text>
 {
 	public:
 
-		festival(ui_config_entry &amp;entry);
-		festival();
-		~festival();
+		</xsl:text><xsl:value-of select="$name" /><xsl:text>(ui_widget_entry &amp;entry);
+		</xsl:text><xsl:value-of select="$name" /><xsl:text>();
+		~</xsl:text><xsl:value-of select="$name" /><xsl:text>();
 
 
 };
 
-#endif /* __festival */
+#endif /* __</xsl:text><xsl:value-of select="$name" /><xsl:text> */
 </xsl:text>
 </xsl:document>
 </xsl:template>
