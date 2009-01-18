@@ -139,7 +139,6 @@ class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc
 	public:
 
 		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc(ui_widget_entry &amp;entry);
-		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc();
 		~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc();
 
 
