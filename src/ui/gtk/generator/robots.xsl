@@ -6,8 +6,8 @@ Main generator file - includes xsl files for each window
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0"/>
 
-<xsl:include href="edp_irp6_rcsc.xsl" />
-<xsl:include href="edp_irp6_rcsc_signals.xsl" />
+<xsl:include href="edp_irp6.xsl" />
+<xsl:include href="edp_irp6_signals.xsl" />
 <xsl:include href="servo_algorithm.xsl" />
 <xsl:include href="servo_algorithm_signals.xsl" />
 <xsl:include href="int.xsl" />
