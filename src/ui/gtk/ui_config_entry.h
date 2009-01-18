@@ -7,6 +7,8 @@
 #include <gtk/gtkbuilder.h>
 #include <gtk/gtk.h>
 
+#include "ui_widget_entry.h"
+
 class ui_config_entry
 {
 	public:
