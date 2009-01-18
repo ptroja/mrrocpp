@@ -88,7 +88,6 @@ class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm
 	public:
 
 		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm(ui_widget_entry &amp;entry);
-		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm();
 		~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm();
 
 

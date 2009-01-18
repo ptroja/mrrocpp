@@ -139,7 +139,6 @@ class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz
 	public:
 
 		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz(ui_widget_entry &amp;entry);
-		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz();
 		~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz();
 
 

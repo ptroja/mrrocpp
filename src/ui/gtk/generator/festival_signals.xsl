@@ -75,7 +75,6 @@ class </xsl:text><xsl:value-of select="$name" /><xsl:text>
 	public:
 
 		</xsl:text><xsl:value-of select="$name" /><xsl:text>(ui_widget_entry &amp;entry);
-		</xsl:text><xsl:value-of select="$name" /><xsl:text>();
 		~</xsl:text><xsl:value-of select="$name" /><xsl:text>();
 
 
