@@ -15,7 +15,7 @@ EDP IRp6 RCSC window
 <xsl:variable name="axis_ts" select="axis_ts"/>
 <xsl:variable name="euler_xyz" select="euler_xyz"/>
 <xsl:variable name="euler_ts" select="euler_ts"/>
-<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../glade/edp_{$name}_rcsc.glade">
+<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../glade/edp_{$name}.glade">
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <child>

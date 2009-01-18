@@ -131,6 +131,9 @@ ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program
 	} else {
 		g_warning("failed to open module %s.%s\n", ui_lib.c_str(), G_MODULE_SUFFIX );
 	}
+	
+	//tymczasowe - utworz widget
+	new ui_widget_entry(ui_def);
 
 	content = gtk_bin_get_child(GTK_BIN(this->window));
 	gtk_widget_unparent(content);

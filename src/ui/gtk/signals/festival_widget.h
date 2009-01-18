@@ -12,7 +12,7 @@ class festival
 {
 	public:
 
-		festival(ui_config_entry &entry);
+		festival(ui_widget_entry &entry);
 		festival();
 		~festival();
 

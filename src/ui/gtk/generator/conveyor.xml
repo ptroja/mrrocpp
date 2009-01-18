@@ -1,6 +1,6 @@
 <irp6conveyor>
 	<name>conveyor</name>
-	<fullName>conveyor</fullName>
+	<fullName>conveyorRobot</fullName>
 	<irp6EDPNumber>1</irp6EDPNumber>
 	<axis_xyz></axis_xyz>
 	<axis_ts></axis_ts>

@@ -20,13 +20,16 @@ CXXFLAGS=-Wall -g -O0 -fpic
 LDFLAGS+=`pkg-config --libs ${PACKAGES}` -export-dynamic -L${HOMEDIR}/lib -lmessip
 XSLTPROC=xsltproc robots.xml --xinclude
 
-ui.gtk: main.o configurator.o ui_model.o ui_config_entry.o sr_console.o
+ui.gtk: main.o configurator.o ui_model.o ui_config_entry.o ui_widget_entry.o sr_console.o
 	$(CXX) -g -o $@ $^ ${LDFLAGS}
 
 %.xml: %.glade
 	gtk-builder-convert $< $@
 
 %.so: %_uimodule.o
+	$(CXX) ${LDFLAGS} -shared -o $@ $<
+	
+%.so: %_widget.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $<
 
 clean:

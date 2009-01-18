@@ -11,7 +11,7 @@ Inc window callback signals
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="irp6EDPNumber" select="irp6EDPNumber"/>
-<xsl:document method="text" href="../signals/{$name}_inc_uimodule.cc">
+<xsl:document method="text" href="../signals/{$name}_inc_widget.cc">
 
 
 <xsl:text>
@@ -19,10 +19,10 @@ Inc window callback signals
 #include &lt;gtk/gtk.h&gt;
 #include &lt;glib.h&gt;
 #include "ui_model.h"
-#include "</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc_uimodule.h"
+#include "</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc_widget.h"
 
 
-edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc(ui_config_entry &amp;entry) 
+edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc(ui_widget_entry &amp;entry) 
 {
 }
 
@@ -57,19 +57,19 @@ extern "C"
 	}
 	
 	
-	void ui_module_init(ui_config_entry &amp;entry) 
+	void ui_widget_init(ui_widget_entry &amp;entry) 
 	{
 		inc_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = new edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc(entry);
-		fprintf(stderr, "module %s loaded\n", __FILE__);
+		fprintf(stderr, "widget %s loaded\n", __FILE__);
 	}
 
-	void ui_module_unload(void) 
+	void ui_widget_unload(void) 
 	{
 		if (inc_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>) 
 		{
 			delete inc_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
 		}
-		fprintf(stderr, "module %s unloaded\n", __FILE__);
+		fprintf(stderr, "widget %s unloaded\n", __FILE__);
 	}
 	
 </xsl:text>
@@ -122,7 +122,7 @@ extern "C"
 <!-- signals handling file .h-->
 <xsl:template name="irp6.inc.main.signals.h" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
-<xsl:document method="text" href="../signals/{$name}_inc_uimodule.h">
+<xsl:document method="text" href="../signals/{$name}_inc_widget.h">
 
 <xsl:text>
 #ifndef __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_INC
@@ -138,7 +138,7 @@ class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc
 {
 	public:
 
-		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc(ui_config_entry &amp;entry);
+		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc(ui_widget_entry &amp;entry);
 		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc();
 		~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc();
 

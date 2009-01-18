@@ -10,7 +10,7 @@ Servo_algorithm window callback signals
 <xsl:template name="irp6.servo.main.signals.cc" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
-<xsl:document method="text" href="../signals/{$name}_servo_algorithm_uimodule.cc">
+<xsl:document method="text" href="../signals/{$name}_servo_algorithm_widget.cc">
 
 
 <xsl:text>
@@ -18,10 +18,10 @@ Servo_algorithm window callback signals
 #include &lt;gtk/gtk.h&gt;
 #include &lt;glib.h&gt;
 #include "ui_model.h"
-#include "</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm_uimodule.h"
+#include "</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm_widget.h"
 
 
-edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm(ui_config_entry &amp;entry) 
+edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm(ui_widget_entry &amp;entry) 
 {
 }
 
@@ -46,19 +46,19 @@ extern "C"
 	}
 	
 	
-	void ui_module_init(ui_config_entry &amp;entry) 
+	void ui_widget_init(ui_widget_entry &amp;entry) 
 	{
 		servo_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = new edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm(entry);
-		fprintf(stderr, "module %s loaded\n", __FILE__);
+		fprintf(stderr, "widget %s loaded\n", __FILE__);
 	}
 
-	void ui_module_unload(void) 
+	void ui_widget_unload(void) 
 	{
 		if (servo_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>) 
 		{
 			delete servo_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
 		}
-		fprintf(stderr, "module %s unloaded\n", __FILE__);
+		fprintf(stderr, "widget %s unloaded\n", __FILE__);
 	}
 }
 </xsl:text>
@@ -69,7 +69,7 @@ extern "C"
 <!-- signals handling file .h-->
 <xsl:template name="irp6.servo.main.signals.h" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
-<xsl:document method="text" href="../signals/{$name}_servo_algorithm_uimodule.h">
+<xsl:document method="text" href="../signals/{$name}_servo_algorithm_widget.h">
 
 
 
@@ -87,7 +87,7 @@ class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm
 {
 	public:
 
-		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm(ui_config_entry &amp;entry);
+		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm(ui_widget_entry &amp;entry);
 		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm();
 		~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm();
 
