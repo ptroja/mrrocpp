@@ -70,7 +70,11 @@ void ui_config_entry::remove_childs(void)  {
 ui_config_entry::ui_config_entry() : type(ROOT), builder(NULL), window(NULL), module(NULL) {
 }
 
-ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program, const char *node, const char *ui_def) : program_name(program), node_name(node ? node : ""), type(_type) {
+ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program, const char *node, const char *ui_def)
+:
+	program_name(program ? program : "MISSING PROGRAM NAME"),
+	node_name(node ? node : "MISSING NODE NAME"),
+	type(_type) {
 
 	if (!ui_def) {
 		builder = NULL;
@@ -98,6 +102,7 @@ ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program
 	}
 
 	// remove filename extension, add local directory prefix
+	g_assert(ui_def);
 	std::string ui_lib = std::string(ui_def);
 	ui_lib.erase(ui_lib.find_last_of('.'));
 	ui_lib.insert(0, "./");
