@@ -44,9 +44,9 @@
 				<node_name>qnx632</node_name>
 			</ecp>
 
-			<edp name="edp_irp6o_rcsc" active="true" ui_def="edp_irp6o.xml">
+			<edp name="edp_irp6o" active="true" ui_def="edp_irp6o.xml">
 
-				<program_name>edp_irp6o_rcsc</program_name>
+				<program_name>edp_irp6o</program_name>
 				<node_name>qnx632</node_name>
 
 			</edp>
@@ -91,9 +91,9 @@
 				<node_name>qnx632</node_name>
 			</ecp>
 
-			<edp name="edp_irp6p_rcsc" active="true" ui_def="edp_irp6p.xml">
+			<edp name="edp_irp6p" active="true" ui_def="edp_irp6p.xml">
 
-				<program_name>edp_irp6p_rcsc</program_name>
+				<program_name>edp_irp6p</program_name>
 				<node_name>qnx632</node_name>
 
 			</edp>
@@ -138,9 +138,9 @@
 				<node_name>qnx632</node_name>
 			</ecp>
 
-			<edp name="edp_irp6m_rcsc" active="true" ui_def="edp_irp6m.xml">
+			<edp name="edp_irp6m" active="true" ui_def="edp_irp6m.xml">
 
-				<program_name>edp_irp6m_rcsc</program_name>
+				<program_name>edp_irp6m</program_name>
 				<node_name>qnx632</node_name>
 
 			</edp>
@@ -185,9 +185,9 @@
 				<node_name>qnx632</node_name>
 			</ecp>
 
-			<edp name="edp_conveyor_rcsc" active="true" ui_def="edp_conveyor.xml">
+			<edp name="edp_conveyor" active="true" ui_def="edp_conveyor.xml">
 
-				<program_name>edp_conveyor_rcsc</program_name>
+				<program_name>edp_conveyor</program_name>
 				<node_name>qnx632</node_name>
 
 			</edp>
