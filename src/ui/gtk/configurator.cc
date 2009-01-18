@@ -169,9 +169,9 @@ void configurator::populate_tree_model_with_effectors()
 			 {
 
 				char *ui_def = NULL;
-				program_name = this->get_string("/config/effectors/effector[@name='irp6_mechatronika']/edp[@name='edp_irp6m_rcsc']/program_name");
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_mechatronika']/edp[@name='edp_irp6m_rcsc']/@ui_def");
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_mechatronika']/edp[@name='edp_irp6m_rcsc']/ui_def");
+				program_name = this->get_string("/config/effectors/effector[@name='irp6_mechatronika']/edp[@name='edp_irp6m']/program_name");
+				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_mechatronika']/edp[@name='edp_irp6m']/@ui_def");
+				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_mechatronika']/edp[@name='edp_irp6m']/ui_def");
 				ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EDP, program_name, node_name, ui_def);
 
 			}
@@ -181,9 +181,9 @@ void configurator::populate_tree_model_with_effectors()
 			 {
 
 				char *ui_def = NULL;
-				program_name = this->get_string("/config/effectors/effector[@name='irp6_ontrack']/edp[@name='edp_irp6o_rcsc']/program_name");
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_ontrack']/edp[@name='edp_irp6o_rcsc']/@ui_def");
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_ontrack']/edp[@name='edp_irp6o_rcsc']/ui_def");
+				program_name = this->get_string("/config/effectors/effector[@name='irp6_ontrack']/edp[@name='edp_irp6o']/program_name");
+				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_ontrack']/edp[@name='edp_irp6o']/@ui_def");
+				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_ontrack']/edp[@name='edp_irp6o']/ui_def");
 				ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EDP, program_name, node_name, ui_def);
 
 			}
@@ -192,22 +192,22 @@ void configurator::populate_tree_model_with_effectors()
 			 {
 
 				char *ui_def = NULL;
-				program_name = this->get_string("/config/effectors/effector[@name='irp6_postument']/edp[@name='edp_irp6p_rcsc']/program_name");
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_postument']/edp[@name='edp_irp6p_rcsc']/@ui_def");
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_postument']/edp[@name='edp_irp6p_rcsc']/ui_def");
+				program_name = this->get_string("/config/effectors/effector[@name='irp6_postument']/edp[@name='edp_irp6p']/program_name");
+				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_postument']/edp[@name='edp_irp6p']/@ui_def");
+				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_postument']/edp[@name='edp_irp6p']/ui_def");
 				ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EDP, program_name, node_name, ui_def);
 
 			}
-			
+
 			if (program_name && xmlStrEqual(effector_name, (xmlChar*)"conveyor"))
 			 {
 
 				char *ui_def = NULL;
-				program_name = this->get_string("/config/effectors/effector[@name='conveyor']/edp[@name='edp_conveyor_rcsc']/program_name");
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='conveyor']/edp[@name='edp_conveyor_rcsc']/@ui_def");
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='conveyor']/edp[@name='edp_conveyor_rcsc']/ui_def");
+				program_name = this->get_string("/config/effectors/effector[@name='conveyor']/edp[@name='edp_conveyor']/program_name");
+				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='conveyor']/edp[@name='edp_conveyor']/@ui_def");
+				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='conveyor']/edp[@name='edp_conveyor']/ui_def");
 				ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EDP, program_name, node_name, ui_def);
-				
+
 			}
 
 		}
