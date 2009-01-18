@@ -15,7 +15,7 @@ LDFLAGS+=`pkg-config --libs ${PACKAGES}` -export-dynamic -L${HOMEDIR}/lib -lmess
 
 all: $(ui_modules)
 
-%.so: %_uimodule.o
+%.so: %_widget.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $<
 
 clean:
