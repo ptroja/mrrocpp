@@ -15,7 +15,7 @@ EDP IRp6 RCSC window callback signals
 <xsl:variable name="axis_ts" select="axis_ts"/>
 <xsl:variable name="euler_xyz" select="euler_xyz"/>
 <xsl:variable name="euler_ts" select="euler_ts"/>
-<xsl:document method="text" href="../signals/edp_{$name}_widget.cc">
+<xsl:document method="text" href="../signals/edp_{$name}_uimodule.cc">
 
 
 
@@ -24,10 +24,10 @@ EDP IRp6 RCSC window callback signals
 #include &lt;gtk/gtk.h&gt;
 #include &lt;glib.h&gt;
 #include "ui_model.h"
-#include "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_widget.h"
+#include "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_uimodule.h"
 
 
-edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>(ui_widget_entry &amp;entry)
+edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>(ui_config_entry &amp;entry)
 {	
 }
 
@@ -97,27 +97,27 @@ extern "C"
 		
 	}	
 
-	void ui_widget_init(ui_widget_entry &amp;entry) 
+	void ui_module_init(ui_config_entry &amp;entry) 
 	{
 		edp_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = new edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>(entry);
-		fprintf(stderr, "widget %s loaded\n", __FILE__);
+		fprintf(stderr, "module %s loaded\n", __FILE__);
 		
-		</xsl:text><xsl:if test="$irp6EDPNumber &gt;= 0"><xsl:text>const char * def_servo_algorithm = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm.xml"; new ui_widget_entry(def_servo_algorithm);</xsl:text></xsl:if><xsl:text>
-		</xsl:text><xsl:if test="$irp6EDPNumber &gt;= 0"><xsl:text>const char * def_int = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_int.xml"; new ui_widget_entry(def_int);</xsl:text></xsl:if><xsl:text>
-		</xsl:text><xsl:if test="$irp6EDPNumber &gt;= 0"><xsl:text>const char * def_inc = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc.xml"; new ui_widget_entry(def_inc);</xsl:text></xsl:if><xsl:text>
-		</xsl:text><xsl:if test="$axis_xyz &gt;= 0"><xsl:text>const char * def_axis_xyz = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz.xml"; new ui_widget_entry(def_axis_xyz);</xsl:text></xsl:if><xsl:text>
-		</xsl:text><xsl:if test="$euler_xyz &gt;= 0"><xsl:text>const char * def_euler_xyz = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_xyz.xml"; new ui_widget_entry(def_euler_xyz);</xsl:text></xsl:if><xsl:text>
-		</xsl:text><xsl:if test="$axis_ts &gt;= 0"><xsl:text>const char * def_axis_ts = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_ts.xml"; new ui_widget_entry(def_axis_ts);</xsl:text></xsl:if><xsl:text>
-		</xsl:text><xsl:if test="$euler_ts &gt;= 0"><xsl:text>const char * def_euler_ts = "</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_ts.xml"; new ui_widget_entry(def_euler_ts);</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$irp6EDPNumber &gt;= 0"><xsl:text>new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm.xml");</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$irp6EDPNumber &gt;= 0"><xsl:text>new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_int.xml");</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$irp6EDPNumber &gt;= 0"><xsl:text>new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc.xml");</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$axis_xyz &gt;= 0"><xsl:text>new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz.xml");</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$euler_xyz &gt;= 0"><xsl:text>new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_xyz.xml");</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$axis_ts &gt;= 0"><xsl:text>new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_ts.xml");</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$euler_ts &gt;= 0"><xsl:text>new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_ts.xml");</xsl:text></xsl:if><xsl:text>
 	}
 
-	void ui_widget_unload(void) 
+	void ui_module_unload(void) 
 	{
 		if (edp_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>) 
 		{
 			delete edp_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
 		}
-		fprintf(stderr, "widget %s unloaded\n", __FILE__);
+		fprintf(stderr, "config %s unloaded\n", __FILE__);
 	}
 }
 </xsl:text>
@@ -128,7 +128,7 @@ extern "C"
 <!-- signals handling file .cc-->
 <xsl:template name="irp6.edp.main.signals.h" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
-<xsl:document method="text" href="../signals/edp_{$name}_widget.h">
+<xsl:document method="text" href="../signals/edp_{$name}_uimodule.h">
 
 
 
@@ -146,7 +146,7 @@ class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>
 {
 	public:
 
-		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>(ui_widget_entry &amp;entry);
+		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>(ui_config_entry &amp;entry);
 		~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>();
 
 
