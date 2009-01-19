@@ -58,9 +58,10 @@ Axis_xyz window
                 </child>
                 <child>
                   <widget class="GtkSpinButton" id="spinbuttonDown1">
+                  	<property name="width_request">50</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 0</property>
+                    <property name="adjustment">0 -999999999999999 999999999999999 1 10 0</property>
                     <property name="digits">3</property> 
                   </widget>
                   <packing>
@@ -299,9 +300,10 @@ Axis_xyz window
                 </child>
                 <child>
                   <widget class="GtkSpinButton" id="spinbutton6"><xsl:attribute name="id">spinbutton<xsl:value-of select="$i"/></xsl:attribute> <!--RI--> 
+                    <property name="width_request">50</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 0</property>
+                    <property name="adjustment">0 -999999999999999 999999999999999 1 10 0</property>
                     <property name="digits">3</property>
                   </widget>
                   <packing>
