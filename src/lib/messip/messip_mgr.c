@@ -25,7 +25,7 @@
 	messip_mgr		Olivier Singla - olivier@singla.us
 					2001, 2002, 2003
 
-	This is the server that manages the names, the buffered messages 
+	This is the server that manages the names, the buffered messages
 	ans the proxies (non blocking fixed messages).
 */
 
@@ -285,7 +285,7 @@ search_cnx_by_sockfd( int sockfd )
 
 
 static int
-do_writev( 
+do_writev(
 	int sockfd,
 	const struct iovec *iov,
 	int iovcnt )
@@ -365,7 +365,7 @@ debug_show( void )
 	 */
 
 	printf( "\n------------\n" );
-	printf( "%d active connexion%s\n", 
+	printf( "%d active connexion%s\n",
 		nb_connexions, (nb_connexions > 1) ? "s" : "" );
 	if ( nb_connexions > 0 )
 	{
@@ -378,7 +378,7 @@ debug_show( void )
 		{
 			int k;
 			cnx = connexions[index];
-			strftime( when, 32, "%02d-%b-%Y %02H:%02M:%02S", 
+			strftime( when, 32, "%02d-%b-%Y %02H:%02M:%02S",
 				localtime( &cnx->when ) );
 			printf( "%3d:%8d %-12s " TID_DISPLAY " %-12s %5d %6d %-18s",
 			   index,
@@ -443,7 +443,7 @@ debug_show( void )
 	 * Print out the defined proxies
 	 */
 
-	printf( "\n%d (%d) defined proxies\n", 
+	printf( "\n%d (%d) defined proxies\n",
 		nb_proxies, proxies_sz );
 	if ( nb_proxies > 0 )
 	{
@@ -549,13 +549,13 @@ http_table_column_add( char *msg,
 
 
 static void
-http_build_table_connexions( char *msg, 
+http_build_table_connexions( char *msg,
    int key )
 {
 	connexion_t *cnx;
 	int index;
 	char when[33];
-	typedef struct 
+	typedef struct
 	{
 		char *index;
 		char *pid;
@@ -570,7 +570,7 @@ http_build_table_connexions( char *msg,
 	   *p;
 
 	/*--- Headers of the table ---*/
-	strcat( msg, 
+	strcat( msg,
 		"<table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" width=\"100%\">\n"
 		"  <tbody>\n"
 		"    <tr>\n" );
@@ -583,7 +583,7 @@ http_build_table_connexions( char *msg,
 	http_table_column_title( msg, "Socket", 	"/connexion/socket" );
 	http_table_column_title( msg, "Since", 		"/connexion/since" );
 	strcat( msg, "    </tr>\n" );
-	
+
 	tab = (column_t *) malloc( sizeof( column_t ) *nb_connexions );
 	for ( p = tab, index = 0; index < nb_connexions; index++, p++ )
 	{
@@ -595,7 +595,7 @@ http_build_table_connexions( char *msg,
 		http_table_column_add_string( &p->address, 	inet_ntoa( cnx->xclient_addr.sin_addr ) );
 		http_table_column_add_int( &p->port, 		cnx->xclient_addr.sin_port );
 		http_table_column_add_int( &p->socket, 		cnx->sockfd );
-		strftime( when, 32, "%02d-%b-%Y %02H:%02M:%02S", 
+		strftime( when, 32, "%02d-%b-%Y %02H:%02M:%02S",
 			localtime( &cnx->when ) );
 		http_table_column_add_string( &p->since, 	when );
 	}							// http_build_table_connexions
@@ -603,7 +603,7 @@ http_build_table_connexions( char *msg,
 	{
 		strcat( msg,
 			"    <tr>\n" );
-		http_table_column_add( msg, p->index ); 
+		http_table_column_add( msg, p->index );
 		http_table_column_add( msg, p->pid );
 		http_table_column_add( msg, p->process );
 		http_table_column_add( msg, p->tid );
@@ -632,7 +632,7 @@ http_build_table_channels( char *msg )
 	char when[33];
 
 	/*--- Headers of the table ---*/
-	strcat( msg, 
+	strcat( msg,
 		"<table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" width=\"100%\">\n"
 		"  <tbody>\n"
 		"    <tr>\n" );
@@ -708,7 +708,7 @@ http_build_table_proxies( char *msg )
 	int index;
 
 	/*--- Headers of the table ---*/
-	strcat( msg, 
+	strcat( msg,
 		"<table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" width=\"100%\">\n"
 		"  <tbody>\n"
 		"    <tr>\n" );
@@ -768,7 +768,7 @@ http_send_status( int sockfd,
 
 	/*--- Page header ---*/
 	msg2 = (char *) malloc( 32768 );
-	sprintf( msg2, 
+	sprintf( msg2,
 		"<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n"
 		"<html>\n"
 		"<head>\n"
@@ -776,17 +776,17 @@ http_send_status( int sockfd,
 		"  <meta http-equiv=\"content-type\"\n"
 		" content=\"text/html; charset=ISO-8859-1\">\n"
 		"</head>\n" );
-	strcat( msg2, 
-		"<b>MessIP</b> : Message Passing over TCP/IP<br>" 
+	strcat( msg2,
+		"<b>MessIP</b> : Message Passing over TCP/IP<br>"
 		"<a href=\"http://singla.us/messip/\">http://singla.us/messip/</a><br>" );
 	sprintf( &msg2[ strlen( msg2 ) ],
 		"Version <b>%d.%d.%c</b> compiled on <b>%s %s</b><br>",
 			VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH + 'a' - 1,
 			__DATE__, __TIME__ );
-	strcat( msg2, 
+	strcat( msg2,
 		"<hr width=\"100%\" size=\"2\"><br>" );
 
-	/*--- Active connections ---*/	
+	/*--- Active connections ---*/
 	sprintf( &msg2[ strlen( msg2 ) ],
 		"<body text=\"#000000\" bgcolor=\"#dddddd\" link=\"#000099\" vlink=\"#990099\" alink=\"#000099\">\n"
 		"%d active connection%s:<br>\n",
@@ -795,21 +795,21 @@ http_send_status( int sockfd,
 		http_build_table_connexions( msg2, key );
 
 	/*--- Active channels ---*/
-	sprintf( &msg2[ strlen( msg2 ) ], 
+	sprintf( &msg2[ strlen( msg2 ) ],
 		"<p>%d active channel%s:<br>\n",
 			nb_channels, (nb_channels > 1) ? "s" : "" );
 	if ( nb_channels > 0 )
 		http_build_table_channels( msg2 );
 
 	/*--- Print out the defined proxies ---*/
-	sprintf( &msg2[ strlen( msg2 ) ], 
-		"<p>%d (%d) defined proxies\n", 
+	sprintf( &msg2[ strlen( msg2 ) ],
+		"<p>%d (%d) defined proxies\n",
 			nb_proxies, proxies_sz );
 	if ( nb_proxies > 0 )
 		http_build_table_proxies( msg2 );
 
 	/*--- End of page ---*/
-	strcat( msg2, 
+	strcat( msg2,
 		"<br>\n"
 		"<br>\n"
 		"</body>\n"
@@ -818,7 +818,7 @@ http_send_status( int sockfd,
 
 	/*--- Header to send ---*/
 	msg1 = (char *) malloc( 1024 );
-	sprintf( msg1, 
+	sprintf( msg1,
 		"HTTP/%d.%d 200 OK\r\n"
 		"Content-type: text/html\r\n"
 		"Content-Length: %d\r\n"
@@ -864,7 +864,7 @@ thread_http_thread( void *arg )
 	char tag[200];
 	int key;
 
-	TRACE( "thread_http_thread: pid=%d tid=" TID_DISPLAY "\n", 
+	TRACE( "thread_http_thread: pid=%d tid=" TID_DISPLAY "\n",
 		getpid(  ), pthread_self(  ) );
 
 	for (;;)
@@ -897,12 +897,14 @@ thread_http_thread( void *arg )
 			}
 		}
 
-		request[ dcount ] = 0;    		
+		request[ dcount ] = 0;
 		printf( "dcount=%d [%s]\n", dcount, request );
 
 	}							// for (;;)
 
 	/*--- Done ---*/
+	if ( close( descr->sockfd_accept ) == -1 )
+			fprintf( stderr, "Error %d while closing socket %d\n", errno, descr->sockfd_accept );
 	free( descr );
 	pthread_exit( NULL );
 	return NULL;
@@ -957,7 +959,7 @@ http_thread( void *arg )
 	if ( status < 0 )
 	{
 		fprintf( stderr, "%s %d\n\tUnable to bind - port %d - status=%d errno=%s\n",
-		   __FILE__, __LINE__, 
+		   __FILE__, __LINE__,
 		   port_http,
 		   status, strerror( errno ) );
 		if ( close( sockfd ) == -1 )
@@ -1398,7 +1400,7 @@ client_channel_connect( int sockfd,
 			if ( cnx->nb_cnx_channels == 0 )
 				cnx->sockfd_cnx_channels = (int *) malloc( sizeof( int ) );
 			else
-				cnx->sockfd_cnx_channels = (int *) realloc( cnx->sockfd_cnx_channels, 
+				cnx->sockfd_cnx_channels = (int *) realloc( cnx->sockfd_cnx_channels,
 					(cnx->nb_cnx_channels+1) * sizeof( int ) );
 			cnx->sockfd_cnx_channels[ cnx->nb_cnx_channels++ ] = ch->sockfd;
 
@@ -1891,7 +1893,7 @@ thread_client_trigger_proxy( void *arg )
 			if ( !FD_ISSET( sockfd, &ready ) )
 			{
 				printf( "YYOOOPSS!!! fd=%d \n", sockfd );
-			}			
+			}
 
 			LOCK;
 			nb = proxy->nb_proxies_to_trigger;
@@ -1922,7 +1924,7 @@ thread_client_trigger_proxy( void *arg )
 			tlen = sizeof( datasend ) + sizeof( int32_t ) + proxy->nbytes;
 			if ( dcount != tlen )
 				printf( "dcount=%d expected=%d nbytes=%d - errno=%d - %d - data=%p\n",
-				   dcount, tlen, proxy->nbytes, errno, 
+				   dcount, tlen, proxy->nbytes, errno,
 				   sizeof( datasend ), proxy->data );
 			assert( dcount == tlen );
 
@@ -1981,15 +1983,15 @@ client_proxy_attach( int sockfd,
 	dcount = do_readv( sockfd, iovec, 1 );
 	if ( dcount == -1 )
 	{
-		fprintf( stderr, "%s %d\n\terrno=%d\n", 
-			__FILE__, __LINE__, 
+		fprintf( stderr, "%s %d\n\terrno=%d\n",
+			__FILE__, __LINE__,
 			errno );
 		return -1;
 	}
 	if ( dcount != sizeof( messip_send_proxy_attach_t ) )
 	{
 		fprintf( stderr, "%s %d\n\tread %d of %d - errno=%d\n",
-		   __FILE__, __LINE__, 
+		   __FILE__, __LINE__,
 		   dcount, sizeof( messip_send_proxy_attach_t ), errno );
 		return -1;
 	}
@@ -2006,7 +2008,7 @@ client_proxy_attach( int sockfd,
 		if ( dcount != msgsent.nbytes )
 		{
 			fprintf( stderr, "%s %d\n\tShould have read %d bytes - only %d have been read\n",
-			   __FILE__, __LINE__, 
+			   __FILE__, __LINE__,
 			   msgsent.nbytes, dcount );
 			return -1;
 		}
@@ -2015,7 +2017,7 @@ client_proxy_attach( int sockfd,
 #if 0
 	TRACE( "*** client_proxy_attach: from: pid=%d,tid=%ld to: pid=%d nbytes=%d [data=%p] sockfd=%d\n",
 		  msgsent.pid_from, msgsent.tid_from,
-		  msgsent.pid_to, 
+		  msgsent.pid_to,
 		  msgsent.nbytes, data, sockfd );
 #endif
 
@@ -2084,7 +2086,7 @@ client_proxy_attach( int sockfd,
 		if ( proxy->process_to_trigger_sockfd < 0 )
 		{
 			UNLOCK;
-			fprintf( stderr, "%s %d\n\tUnable to open a socket!\n", 
+			fprintf( stderr, "%s %d\n\tUnable to open a socket!\n",
 				__FILE__, __LINE__ );
 			return -1;
 		}
@@ -2102,7 +2104,7 @@ client_proxy_attach( int sockfd,
 			   __FILE__, __LINE__,
 			   inet_ntoa( sockaddr.sin_addr ), sockaddr.sin_port, errno );
 			if ( close( proxy->process_to_trigger_sockfd ) == -1 )
-				fprintf( stderr, "Error %d while closing socket %d\n", 
+				fprintf( stderr, "Error %d while closing socket %d\n",
 					errno, proxy->process_to_trigger_sockfd );
 			return -1;
 		}
@@ -2147,15 +2149,15 @@ client_proxy_detach( int sockfd,
 	dcount = do_readv( sockfd, iovec, 1 );
 	if ( dcount == -1 )
 	{
-		fprintf( stderr, "%s %d\n\terrno=%d\n", 
-			__FILE__, __LINE__, 
+		fprintf( stderr, "%s %d\n\terrno=%d\n",
+			__FILE__, __LINE__,
 			errno );
 		return -1;
 	}
 	if ( dcount != sizeof( messip_send_proxy_detach_t ) )
 	{
 		fprintf( stderr, "%s %d\n\tread %d of %d - errno=%d\n",
-		   __FILE__, __LINE__, 
+		   __FILE__, __LINE__,
 		   dcount, sizeof( messip_send_proxy_detach_t ), errno );
 		return -1;
 	}
@@ -2176,7 +2178,7 @@ client_proxy_detach( int sockfd,
 		{
 			pthread_cancel( proxy->tid_client_proxies_to_trigger );
 			if ( close( proxy->process_to_trigger_sockfd ) == -1 )
-				fprintf( stderr, "Error %d while closing socket %d\n", 
+				fprintf( stderr, "Error %d while closing socket %d\n",
 					errno, proxy->process_to_trigger_sockfd );
 			proxy->tid_client_proxies_to_trigger = 0;
 			proxy->process_to_trigger_sockfd = -1;
@@ -2473,7 +2475,7 @@ handle_client_msg( int sockfd,
 			client_debug_op_inform_state( sockfd, client_addr );
 			break;
 #endif
-			
+
 		default:
 			fprintf( stderr, "%s %d:\n\tUnknown code op %d - 0x%08X\n",
 			   __FILE__, __LINE__, op, op );
@@ -2520,7 +2522,7 @@ notify_server_death_client( channel_t * ch,
 			   __FILE__, __LINE__,
 			   inet_ntoa( sockaddr.sin_addr ), sockaddr.sin_port, errno );
 		if ( close( sockfd ) == -1 )
-			fprintf( stderr, "Error %d while closing socket %d\n", 
+			fprintf( stderr, "Error %d while closing socket %d\n",
 				errno, sockfd );
 		return -1;
 	}
@@ -2554,7 +2556,7 @@ notify_server_death_client( channel_t * ch,
 
 	/*--- ok ---*/
 	if ( close( sockfd ) == -1 )
-		fprintf( stderr, "Error %d while closing socket %d\n", 
+		fprintf( stderr, "Error %d while closing socket %d\n",
 			errno, sockfd );
 	return 0;
 
@@ -2606,7 +2608,7 @@ thread_client_thread( void *arg )
 		op = int_little_endian( op );
 #endif
 
-		search_socket = handle_client_msg( descr->sockfd_accept, 
+		search_socket = handle_client_msg( descr->sockfd_accept,
 			&descr->client_addr, op, &new_cnx );
 
 	}							// for (;;)
@@ -2626,8 +2628,8 @@ thread_client_thread( void *arg )
 
 	/*--- Destroy this connection ---*/
 	LOCK;
-	for ( cnx = connexions, found = 0, index = 0; 
-		  index < nb_connexions; 
+	for ( cnx = connexions, found = 0, index = 0;
+		  index < nb_connexions;
 		  index++, cnx++ )
 	{
 		if ( ( *cnx )->sockfd == descr->sockfd_accept )
@@ -2652,7 +2654,7 @@ thread_client_thread( void *arg )
 	logg( LOG_MESSIP_INFORMATIVE, "Destroy connexion #%d sockfd=%-3d pid=%d [%s]\n",
 		  index, connexion->sockfd, connexion->pid, connexion->process_name );
 	if ( close( connexion->sockfd ) == -1 )
-		fprintf( stderr, "Unable to close socket %d: errno=%d\n", 
+		fprintf( stderr, "Unable to close socket %d: errno=%d\n",
 			connexion->sockfd, errno );
 	pid = connexion->pid;
 	tid = connexion->tid;
@@ -2714,7 +2716,7 @@ thread_client_thread( void *arg )
 			continue;
 
 		notify_server_death_client( channel, pid, tid, MESSIP_FLAG_DEATH_PROCESS );
-			
+
 	}							// for (index)
 
 	/*--- Destroy all channels related to this connection, if any ---*/
@@ -2741,7 +2743,7 @@ thread_client_thread( void *arg )
 		{
 			pthread_cancel( proxy->tid_client_proxies_to_trigger );
 			if ( close( proxy->process_to_trigger_sockfd ) == -1 )
-				fprintf( stderr, "Error %d while closing socket %d\n", 
+				fprintf( stderr, "Error %d while closing socket %d\n",
 					errno, proxy->process_to_trigger_sockfd );
 			proxy->tid_client_proxies_to_trigger = 0;
 			proxy->process_to_trigger_sockfd = -1;
@@ -2776,7 +2778,7 @@ sigint_sighandler( int signum )
 	{
 		cnx = connexions[index];
 		if ( close( cnx->sockfd ) == -1 )
-			fprintf( stderr, "Error %d while closing socket %d\n", 
+			fprintf( stderr, "Error %d while closing socket %d\n",
 				errno, cnx->sockfd );
 	}							// for
 
@@ -2797,7 +2799,7 @@ main( int argc,
 	int reuse;
 	pthread_t tid;
 	pthread_attr_t attr;
-	const char hostname[64] = "localhost";
+	char hostname[64] = "localhost";
 	struct sigaction sa;
 	sigset_t set;
 	int port, port_http;
@@ -2847,9 +2849,9 @@ main( int argc,
 		}						// switch
 	}							// for (;;)
 
-	fprintf( stdout, "Using %s:%d for Messaging\n", 
+	fprintf( stdout, "Using %s:%d for Messaging\n",
 		hostname, port );
-	fprintf( stdout, "Using %s:%d for http\n", 
+	fprintf( stdout, "Using %s:%d for http\n",
 		hostname, port_http );
 
 	/*--- Initialize active connexions and channels ---*/
@@ -2902,10 +2904,10 @@ main( int argc,
 	if ( status == EADDRINUSE )
 	{
 		fprintf( stderr, "%s %d\n\tUnable to bind, port %d is already in use\n",
-		   __FILE__, __LINE__, 
+		   __FILE__, __LINE__,
 		   port );
 		if ( close( sockfd ) == -1 )
-			fprintf( stderr, "Error %d while closing socket %d\n", 
+			fprintf( stderr, "Error %d while closing socket %d\n",
 				errno, sockfd );
 		return -1;
 	}
@@ -2916,7 +2918,7 @@ main( int argc,
 			port,
 			status, strerror( errno ) );
 		if ( close( sockfd ) == -1 )
-			fprintf( stderr, "Error %d while closing socket %d\n", 
+			fprintf( stderr, "Error %d while closing socket %d\n",
 				errno, sockfd );
 		return -1;
 	}
@@ -2938,7 +2940,7 @@ main( int argc,
 		clientdescr_t *descr;
 		pthread_t tid;
 		pthread_attr_t attr;
-		
+
 		descr = (clientdescr_t *) malloc( sizeof( clientdescr_t ) );
 		descr->client_addr_len = sizeof( struct sockaddr_in );
 		descr->sockfd_accept = accept( sockfd,
@@ -2949,7 +2951,7 @@ main( int argc,
 				continue;
 			fprintf( stderr, "Socket non accepted - errno=%d\n", errno );
 			if ( close( sockfd ) == -1 )
-				fprintf( stderr, "Error %d while closing socket %d\n", 
+				fprintf( stderr, "Error %d while closing socket %d\n",
 					errno, sockfd );
 			return -1;
 		}
@@ -2964,7 +2966,7 @@ main( int argc,
 	}							// for (;;)
 
 	if ( close( sockfd ) == -1 )
-		fprintf( stderr, "Error %d while closing socket %d\n", 
+		fprintf( stderr, "Error %d while closing socket %d\n",
 			errno, sockfd );
 	return 0;
 
