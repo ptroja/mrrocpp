@@ -113,6 +113,7 @@ extern "C" {
 	void mp_load_clicked(GtkToolButton *toolbutton,
             gpointer       user_data) {
 
+		g_print("host %s\n", g_get_host_name());
 		ui_model::instance().setMpLoadButton(true, false);
 	}
 

@@ -9,7 +9,7 @@
 
 #include "ui_widget_entry.h"
 
-class ui_config_entry 
+class ui_config_entry
 {
 	public:
 
@@ -18,8 +18,6 @@ class ui_config_entry
 		const std::string id;
 		const std::string program_name;
 		const std::string node_name;
-
-		bool is_running;
 
 		enum ui_config_entry_type {
 			ROOT,
@@ -49,9 +47,6 @@ class ui_config_entry
 
 		//! children nodes
 		std::vector <ui_config_entry *> children;
-		
-		// manual motion windows
-		std::vector <ui_widget_entry *> widgetVector;
 
 		void show_page(bool visible);
 
@@ -66,7 +61,12 @@ class ui_config_entry
 		std::vector <ui_config_entry *> getChildByType(ui_config_entry_type _type);
 		void addWidget(ui_widget_entry *entry);
 		ui_widget_entry * getWidget(gint whichOne);
-		
+
+		//! create process
+		void process_spawn(void);
+
+		//! kill process
+		void process_kill(int signum);
 
 	private:
 
@@ -87,6 +87,15 @@ class ui_config_entry
 		GtkWidget *content;
 
 		GtkNotebook *getNotebook(void);
+
+		//! manual motion windows
+		std::vector <ui_widget_entry *> widgetVector;
+
+		//! process running flag
+		bool is_running;
+
+		//! process ID
+		pid_t pid;
 };
 
 #endif /* __UI_CONFIG_ENTRY_H */

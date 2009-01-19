@@ -225,3 +225,98 @@ ui_widget_entry * ui_config_entry::getWidget(gint whichOne)
 {
 	return widgetVector.at(whichOne);
 }
+
+void ui_config_entry::process_spawn(void) {
+	if (is_running) {
+		throw std::runtime_error(std::string(program_name) + " already running");
+	}
+
+//	pid_t child_pid = vfork();
+//
+//	if (child_pid == 0) {
+//
+//		//g_get_host_name
+//
+//		char * spawned_program_name = return_string_value("program_name", _section_name);
+//		char * spawned_node_name = return_string_value("node_name", _section_name);
+//
+//		char rsh_spawn_node[PATH_MAX];
+//
+//		if (strcmp(sysinfo.nodename,spawned_node_name) == 0)
+//		{
+//			strcpy(rsh_spawn_node, "localhost");
+//		} else
+//		{
+//			strcpy(rsh_spawn_node, spawned_node_name);
+//		}
+//
+//		// Sciezka do binariow.
+//		char bin_path[PATH_MAX];
+//		if (exists("binpath", _section_name)) {
+//			char * _bin_path = return_string_value("binpath", _section_name);
+//			strcpy(bin_path, _bin_path);
+//			if(strlen(bin_path) && bin_path[strlen(bin_path)-1] != '/') {
+//				strcat(bin_path, "/");
+//			}
+//			delete [] _bin_path;
+//		} else {
+//			snprintf(bin_path, sizeof(bin_path), "/net/%s%sbin/",
+//					node, dir);
+//		}
+//
+//		char process_path[PATH_MAX];
+//		char *ui_host = getenv("UI_HOST");
+//		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s",
+//				bin_path, ui_host ? ui_host : "",
+//				bin_path, spawned_program_name,
+//				node, dir, ini_file, _section_name,
+//				session_name
+//		);
+//
+//		delete [] spawned_program_name;
+//
+//		if (exists("username", _section_name)) {
+//			char * username = return_string_value("username", _section_name);
+//
+//			printf("rsh -l %s %s \"%s\"\n", username, rsh_spawn_node, process_path);
+//
+//			execlp("rsh",
+//					"rsh",
+//					"-l", username,
+//					rsh_spawn_node,
+//					process_path,
+//					NULL);
+//
+//			delete [] username;
+//		} else {
+//			printf("rsh %s \"%s\"\n", rsh_spawn_node, process_path);
+//
+//			execlp("rsh",
+//					"rsh",
+//					rsh_spawn_node,
+//					process_path,
+//					NULL);
+//		}
+//
+//		delete [] spawned_node_name;
+//
+//	} else if (child_pid > 0) {
+//		printf("child %d created\n", child_pid);
+//	} else {
+//		perror("vfork()");
+//	}
+//
+//	this->pid = child_pid;
+
+	is_running = true;
+}
+
+void ui_config_entry::process_kill(int signum) {
+	if (!is_running) {
+		throw std::runtime_error(std::string(program_name) + " is not running");
+	}
+
+	// TODO
+
+	is_running = false;
+}
