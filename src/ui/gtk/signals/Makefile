@@ -18,6 +18,9 @@ all: $(ui_modules)
 %.so: %_widget.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $<
 
+#edp_irp6m.so: edp_irp6m_uimodule.o $(ECP_DIR)/irp6_mechatronika/ecp_local.o
+#	$(CXX) ${LDFLAGS} -shared -o $@ $<
+
 %.so: %_uimodule.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $<
 

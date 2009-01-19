@@ -56,6 +56,7 @@ ui_widget_entry::ui_widget_entry(const char *ui_def)  {
 	}
 
 	// remove filename extension, add local directory prefix
+	g_assert(ui_def);
 	std::string ui_lib = std::string(ui_def);
 	ui_lib.erase(ui_lib.find_last_of('.'));
 	ui_lib.insert(0, "./");
@@ -63,7 +64,7 @@ ui_widget_entry::ui_widget_entry(const char *ui_def)  {
 	module = g_module_open(ui_lib.c_str(), (GModuleFlags) G_MODULE_BIND_LAZY);
 
 	if(module) {
-//		gtk_builder_connect_signals(builder, this);
+		gtk_builder_connect_signals(builder, this);
 
 		gpointer symbol;
 		if (g_module_symbol(module, "ui_widget_init", &symbol)) {

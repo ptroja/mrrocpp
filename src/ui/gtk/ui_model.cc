@@ -122,11 +122,11 @@ Glib::RefPtr<Glib::Object> ui_model::getUiObject(const gchar *name) {
 	return Glib::wrap(obj);
 }
 
-void ui_model::setMpLoadButton (bool sensitive, bool button_type_load) {
+void ui_model::setMpLoadButton (bool sensitive, bool button_type_is_load) {
 	Gtk::ToolButton & MpButton = *Glib::wrap(GTK_TOOL_BUTTON(getUiGObject("MpLoadButton")));
 
 	MpButton.set_sensitive(sensitive);
-	if (button_type_load) {
+	if (button_type_is_load) {
 		MpButton.set_stock_id(Gtk::Stock::CONNECT);
 		MpButton.set_label("MP Load");
 	} else {
@@ -135,13 +135,13 @@ void ui_model::setMpLoadButton (bool sensitive, bool button_type_load) {
 	}
 }
 
-void ui_model::setEdpsLoadButton (bool sensitive, bool button_type_load) {
+void ui_model::setEdpsLoadButton (bool sensitive, bool button_type_is_load) {
 	GObject *obj = getUiGObject("EdpsLoadButton");
 	g_assert (obj);
 	Gtk::ToolButton & EcpsButton = *Glib::wrap(GTK_TOOL_BUTTON(obj));
 
 	EcpsButton.set_sensitive(sensitive);
-	if (button_type_load) {
+	if (button_type_is_load) {
 		EcpsButton.set_stock_id(Gtk::Stock::CONNECT);
 		EcpsButton.set_label("All EDP Load");
 	} else {
@@ -187,4 +187,12 @@ int ui_model::set_tree_view(void)
 	gtk_tree_view_append_column(tree, column);
 
 	return 0;
+}
+
+void ui_model::loadEdps(void) {
+	std::vector <ui_config_entry *> edps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::EDP);
+
+	for(std::vector<ui_config_entry *>::iterator Iter = edps.begin(); Iter != edps.end(); Iter++) {
+		std::cout << (*Iter)->program_name << "@" << (*Iter)->node_name << std::endl;
+	}
 }

@@ -119,6 +119,7 @@ ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program
 	}
 
 */
+	printf("g_module_open(\"%s\")\n", ui_lib.c_str());
 	module = g_module_open(ui_lib.c_str(), (GModuleFlags) G_MODULE_BIND_LAZY);
 
 	if(module) {
@@ -137,6 +138,7 @@ ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program
 		}
 
 	} else {
+		perror("g_module_open()");
 		g_warning("failed to open module %s.%s\n", ui_lib.c_str(), G_MODULE_SUFFIX );
 	}
 
@@ -212,12 +214,12 @@ std::vector <ui_config_entry *> ui_config_entry::getChildByType(ui_config_entry_
 	return ret;
 }
 
-void ui_config_entry::addWidget(ui_widget_entry *entry) 
+void ui_config_entry::addWidget(ui_widget_entry *entry)
 {
 	widgetVector.push_back(entry);
 }
 
-ui_widget_entry * ui_config_entry::getWidget(gint whichOne) 
+ui_widget_entry * ui_config_entry::getWidget(gint whichOne)
 {
 	return widgetVector.at(whichOne);
 }

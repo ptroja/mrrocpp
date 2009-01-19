@@ -15,9 +15,6 @@
 #include "configurator.h"
 #include "ui_model.h"
 
-const char *irp6[] = {"axis_xyz","axis_ts", "euler_xyz", "inc", "int", "servo"};
-const char *irp6p[] = {"axis_xyz","euler_ts", "euler_xyz", "inc", "int", "servo"};
-
 class configurator *config;
 
 xmlXPathObjectPtr
@@ -257,6 +254,12 @@ int configurator::open_config_file(const char *filename)
 	}
 
 	this->populate_tree_model();
+
+	std::vector <ui_config_entry *> edps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::EDP);
+	ui_model::instance().setEdpsLoadButton((edps.size() > 0), true);
+
+	std::vector <ui_config_entry *> mps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::MP);
+	ui_model::instance().setMpLoadButton((mps.size() > 0), true);
 
 	return 0;
 }

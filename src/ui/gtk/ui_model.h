@@ -44,8 +44,11 @@ class ui_model
 		void show_page(bool visible);
 
 		//! set properties of buttons
-		void setMpLoadButton (bool sensitive, bool button_type_load);
-		void setEdpsLoadButton (bool sensitive, bool button_type_load);
+		void setMpLoadButton (bool sensitive, bool button_type_is_load);
+		void setEdpsLoadButton (bool sensitive, bool button_type_is_load);
+
+		//! load EDP processes
+		void loadEdps(void);
 
 		//! set status bar message
 		guint set_status(const char *msg);

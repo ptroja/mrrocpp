@@ -5,7 +5,7 @@ MESSIP_PID=$!
 
 export UI_HOST=`hostname` 
 
-sleep 1
+sleep 0.5
 
 PWD=`pwd`
 DEFAULT_CONFIG="../configs/default_file.cfg"
@@ -24,7 +24,7 @@ fi
 ./configsrv `hostname` `dirname ${PWD}`/ ${CONFIG} &
 CONFIGSRV_PID=$!
 
-sleep 1
+sleep 0.5
 
 echo CONFIGSRV_PID=${CONFIGSRV_PID}
 echo MESSIP_PID=${MESSIP_PID}

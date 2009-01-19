@@ -92,6 +92,8 @@ int main(int argc, char *argv[])
 	}
 
 	ui_model::instance().set_status("MRROC++ - the best robotic framework ever");
+	ui_model::instance().setEdpsLoadButton(false, true);
+	ui_model::instance().setMpLoadButton(false, true);
 
 	gtk_widget_show(GTK_WIDGET(ui_model::instance().getUiGObject("window")));
 
@@ -110,18 +112,15 @@ int main(int argc, char *argv[])
 extern "C" {
 	void mp_load_clicked(GtkToolButton *toolbutton,
             gpointer       user_data) {
-		Gtk::ToolButton & LoadButton = *Glib::wrap(toolbutton);
 
-		LoadButton.set_label("MP Unload");
-		LoadButton.set_stock_id(Gtk::Stock::DISCONNECT);
+		ui_model::instance().setMpLoadButton(true, false);
 	}
 
 	void edp_load_clicked(GtkToolButton *toolbutton,
             gpointer       user_data) {
-		Gtk::ToolButton & LoadButton = *Glib::wrap(toolbutton);
 
-		LoadButton.set_label("EDP Unload");
-		LoadButton.set_stock_id(Gtk::Stock::DISCONNECT);
+		ui_model::instance().setEdpsLoadButton(true, false);
+		ui_model::instance().loadEdps();
 	}
 
 }
