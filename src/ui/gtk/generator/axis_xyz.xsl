@@ -224,6 +224,18 @@ Axis_xyz window
                     <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property> <!-- 3 + RN -->
                   </packing>
                 </child>
+                <child>
+                  <widget class="GtkLabel" id="labelSpace">
+                    <property name="width_request">36</property>
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">6</property>
+                    <property name="right_attach">7</property>
+                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property>
+                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 4" /></property>
+                  </packing>
+                </child>
 <!-- call loop for each position -->
 		<xsl:call-template name="for.each.edp.irp6.axis.xyz">
     		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>

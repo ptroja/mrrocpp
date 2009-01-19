@@ -366,6 +366,18 @@ Int window
                     <property name="bottom_attach"><xsl:value-of select="$i + 2"/></property> <!-- 2 + RI -->
                   </packing>
                 </child>
+                <child>
+                  <widget class="GtkLabel" id="labelSpace">
+                    <property name="width_request">36</property>
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">6</property>
+                    <property name="right_attach">7</property>
+                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property>
+                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 4" /></property>
+                  </packing>
+                </child>
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $irp6EDPNumber">
