@@ -9,7 +9,7 @@
 
 #include "ui_widget_entry.h"
 
-class ui_config_entry
+class ui_config_entry 
 {
 	public:
 
@@ -49,6 +49,9 @@ class ui_config_entry
 
 		//! children nodes
 		std::vector <ui_config_entry *> children;
+		
+		// manual motion windows
+		std::vector <ui_widget_entry *> widgetVector;
 
 		void show_page(bool visible);
 
@@ -61,6 +64,9 @@ class ui_config_entry
 		}
 
 		std::vector <ui_config_entry *> getChildByType(ui_config_entry_type _type);
+		void addWidget(ui_widget_entry *entry);
+		ui_widget_entry * getWidget(gint whichOne);
+		
 
 	private:
 

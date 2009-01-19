@@ -211,3 +211,13 @@ std::vector <ui_config_entry *> ui_config_entry::getChildByType(ui_config_entry_
 
 	return ret;
 }
+
+void ui_config_entry::addWidget(ui_widget_entry *entry) 
+{
+	widgetVector.push_back(entry);
+}
+
+ui_widget_entry * ui_config_entry::getWidget(gint whichOne) 
+{
+	return widgetVector.at(whichOne);
+}
