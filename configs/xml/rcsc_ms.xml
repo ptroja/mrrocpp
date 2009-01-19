@@ -38,7 +38,7 @@
 
 	<effectors>
 
-		<effector name="irp6_ontrack" active="true">
+		<effector name="irp6_ontrack" active="false">
 			<ecp>
 				<program_name>ecp_irp6o_rcsc</program_name>
 				<node_name>qnx632</node_name>
@@ -85,7 +85,7 @@
 
 		</effector>
 
-		<effector name="irp6_postument" active="true">
+		<effector name="irp6_postument" active="false">
 			<ecp>
 				<program_name>ecp_irp6p_rcsc</program_name>
 				<node_name>qnx632</node_name>
