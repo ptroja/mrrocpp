@@ -106,6 +106,8 @@ ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program
 	std::string ui_lib = std::string(ui_def);
 	ui_lib.erase(ui_lib.find_last_of('.'));
 	ui_lib.insert(0, "./");
+	ui_lib.append(".");
+	ui_lib.append(G_MODULE_SUFFIX);
 
 /*
 	{
@@ -119,7 +121,7 @@ ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program
 	}
 
 */
-	printf("g_module_open(\"%s\")\n", ui_lib.c_str());
+
 	module = g_module_open(ui_lib.c_str(), (GModuleFlags) G_MODULE_BIND_LAZY);
 
 	if(module) {
@@ -134,7 +136,7 @@ ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program
 
 			ui_module_init(*this);
 		} else {
-			g_warning("failed to call module %s.%s init function\n", ui_lib.c_str(), G_MODULE_SUFFIX );
+			g_warning("failed to call module %s init function\n", ui_lib.c_str());
 		}
 
 	} else {
