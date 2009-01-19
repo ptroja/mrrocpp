@@ -33,7 +33,13 @@ extern "C"
 {
 	void on_arrow_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_euler_xyz (GtkButton* button, gpointer userdata)
 	{
-		std::cout &lt;&lt; "skopiuj wartosci dla </xsl:text><xsl:value-of select="$fullName" /><xsl:text> euler_xyz" &lt;&lt; std::endl;
+		ui_widget_entry * ChoseEntry = (ui_widget_entry *) userdata;
+        GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
+        
+		</xsl:text><xsl:call-template name="irp6.euler.xyz.repeat.signals.cc.1">
+    		<xsl:with-param name="euler_xyz" select="$irp6EDPNumber"/>
+			<xsl:with-param name="i" select="1"/>
+ 		</xsl:call-template><xsl:text>
 	}
 	
 	void on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_euler_xyz (GtkButton* button, gpointer user_data)
@@ -83,6 +89,30 @@ extern "C"
 </xsl:text>
 </xsl:document>
 <xsl:call-template name="irp6.euler.xyz.main.signals.h"/>
+</xsl:template>
+
+<!-- irp6 axis xyz handling signals .cc repeatable part -->
+<xsl:template name="irp6.euler.xyz.repeat.signals.cc.1">
+<xsl:param name="euler_xyz"/>
+<xsl:param name="i"/>
+	<xsl:if test="$i &lt;= $euler_xyz">
+	<xsl:text>
+        GtkEntry * entry</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
+        GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
+        gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>, atof(gtk_entry_get_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>)));
+	</xsl:text>
+       </xsl:if>
+	<!-- for loop --> 
+       <xsl:if test="$i &lt;= $euler_xyz">
+          <xsl:call-template name="irp6.euler.xyz.repeat.signals.cc.1">
+              <xsl:with-param name="i">
+                  <xsl:value-of select="$i + 1"/>
+              </xsl:with-param>
+              <xsl:with-param name="euler_xyz">
+                  <xsl:value-of select="$euler_xyz"/>
+              </xsl:with-param>
+          </xsl:call-template>
+       </xsl:if>
 </xsl:template>
 
 
