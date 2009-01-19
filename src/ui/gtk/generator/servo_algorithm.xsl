@@ -258,7 +258,7 @@ Servo_algorithm window
                   <widget class="GtkSpinButton" id="spinbutton1"><xsl:attribute name="id">spinbutton<xsl:value-of select="(2*$i)-1"/></xsl:attribute>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 0</property>
+                    <property name="adjustment">0 0 999 1 10 0</property>
                   </widget>
                   <packing>
                     <property name="left_attach">5</property> <!-- constant value  - second spin button -->
@@ -271,7 +271,7 @@ Servo_algorithm window
                   <widget class="GtkSpinButton" id="spinbutton2"><xsl:attribute name="id">spinbutton<xsl:value-of select="(2*$i)"/></xsl:attribute>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">0 0 100 1 10 0</property>
+                    <property name="adjustment">0 0 999 1 10 0</property>
                   </widget>
                   <packing>
                     <property name="left_attach">6</property> <!-- constant value - first spin button -->
