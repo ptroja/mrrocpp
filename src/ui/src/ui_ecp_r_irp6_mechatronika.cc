@@ -14,9 +14,6 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <string.h>
-#include <sys/neutrino.h>
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
 #include <iostream>
 
 #include "common/typedefs.h"
@@ -28,11 +25,6 @@
 
 #include <math.h>
 #include "lib/mathtr.h"
-
-/* Local headers */
-#include "ablibs.h"
-#include "abimport.h"
-#include "proto.h"
 
 // ---------------------------------------------------------------
 ui_irp6_mechatronika_robot::ui_irp6_mechatronika_robot (configurator &_config, sr_ecp* sr_ecp_msg)

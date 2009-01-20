@@ -735,7 +735,6 @@ short tmp;
 				ui_state.irp6_on_track.edp.node_nr = config->return_node_number(ui_state.irp6_on_track.edp.node_name);
 		
 					ui_robot.irp6_on_track = new ui_common_robot(
-					&ui_state.irp6_on_track.edp,
 					*config, ui_msg.all_ecp,
 					ROBOT_IRP6_ON_TRACK);
 

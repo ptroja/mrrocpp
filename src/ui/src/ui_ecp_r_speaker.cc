@@ -14,9 +14,6 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <string.h>
-#include <sys/neutrino.h>
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
 #include <iostream>
 
 #include "common/typedefs.h"
@@ -28,11 +25,6 @@
 
 #include <math.h>
 #include "lib/mathtr.h"
-
-/* Local headers */
-#include "ablibs.h"
-#include "abimport.h"
-#include "proto.h"
 
 // ---------------------------------------------------------------
 ui_speaker_robot::ui_speaker_robot (edp_state_def* _edp_state, configurator &_config, sr_ecp* sr_ecp_msg) 

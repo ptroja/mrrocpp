@@ -674,7 +674,7 @@ short tmp;
 			} else {
 				ui_state.irp6_mechatronika.edp.node_nr = config->return_node_number(ui_state.irp6_mechatronika.edp.node_name);
 		
-				ui_robot.irp6_mechatronika = new ui_irp6_mechatronika_robot(&ui_state.irp6_mechatronika.edp, *config, ui_msg.all_ecp);
+				ui_robot.irp6_mechatronika = new ui_irp6_mechatronika_robot(*config, ui_msg.all_ecp);
 				ui_state.irp6_mechatronika.edp.pid = ui_robot.irp6_mechatronika->get_EDP_pid();
 									
 				if (ui_state.irp6_mechatronika.edp.pid<0)
