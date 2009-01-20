@@ -14,12 +14,14 @@ CXXFLAGS=-Wall -g -O0 -fpic
 LDFLAGS+=`pkg-config --libs ${PACKAGES}` -export-dynamic -L${HOMEDIR}/lib -lmessip
 ECP_DIR = $(HOMEDIR)/src/ecp
 
+MRROCOBJ = $(ECP_DIR)/irp6_mechatronika/ecp_local.o $(ECP_DIR)/common/libecp.a $(LIBDIR)/libmrrocpp.a
+
 all: $(ui_modules)
 
-edp_irp6m.so: $(ECP_DIR)/irp6_mechatronika/ecp_local.o $(ECP_DIR)/common/libecp.a $(LIBDIR)/libmrrocpp.a edp_irp6m_uimodule.o
-	$(CXX) ${LDFLAGS} -shared -o $@ $<
+%.so: %_widget.o $(MRROCOBJ)
+	$(CXX) ${LDFLAGS} -shared -o $@ $(MRROCOBJ) $<
 	
-irp6m_servo_algorithm.so: $(ECP_DIR)/irp6_mechatronika/ecp_local.o $(ECP_DIR)/common/libecp.a $(LIBDIR)/libmrrocpp.a irp6m_servo_algorithm_widget.o
+%.so: %_uimodule.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $<
 
 clean:
