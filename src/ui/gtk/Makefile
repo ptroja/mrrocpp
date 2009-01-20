@@ -16,10 +16,11 @@ include $(HOMEDIR)/common.mk
 
 PACKAGES=libxml-2.0 gtk+-2.0 gtkmm-2.4 gthread-2.0
 CPPFLAGS=-I${HOMEDIR}/include `pkg-config --cflags ${PACKAGES}` -DUSE_MESSIP_SRR
-CXXFLAGS=-Wall -g -O0 -fpic
-LDFLAGS+=`pkg-config --libs ${PACKAGES}` -export-dynamic -L${HOMEDIR}/lib -lmessip
+CXXFLAGS=-Wall -g -O0 -fpic -I $(HEADERSDIR) -I.
+LDFLAGS+=`pkg-config --libs ${PACKAGES}` -export-dynamic -L${HOMEDIR}/lib -lmessip -I $(HEADERSDIR) -I.
 XSLTPROC=xsltproc robots.xml --xinclude
 ECP_DIR = $(HOMEDIR)/src/ecp
+HEADERSDIR = $(HOMEDIR)/include
 
 MRROCOBJ = $(ECP_DIR)/irp6_mechatronika/ecp_local.o $(ECP_DIR)/common/libecp.a $(LIBDIR)/libmrrocpp.a irp6m_servo_algorithm_widget.o
 
@@ -30,7 +31,7 @@ ui.gtk: main.o configurator.o ui_model.o ui_config_entry.o ui_widget_entry.o sr_
 	gtk-builder-convert $< $@
 	
 %.so: %_widget.o $(MRROCOBJ)
-	$(CXX) ${LDFLAGS} -shared -o $@ $(MRROCOBJ) $<
+	$(CXX) ${LDFLAGS} -shared -o $@ -I $(HEADERSDIR) -I. $(MRROCOBJ) $<
 	
 %.so: %_uimodule.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $<

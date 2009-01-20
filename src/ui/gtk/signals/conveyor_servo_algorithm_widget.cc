@@ -6,7 +6,7 @@
 #include "conveyor_servo_algorithm_widget.h"
 
 
-edp_conveyor_servo_algorithm::edp_conveyor_servo_algorithm(ui_widget_entry &entry)
+edp_conveyor_servo_algorithm::edp_conveyor_servo_algorithm(ui_widget_entry &entry) 
 {
 }
 
@@ -17,37 +17,40 @@ extern "C"
 {
 	void on_arrow_button_clicked_conveyorRobot_servo (GtkButton* button, gpointer userdata)
 	{
-		std::cout << "skopiuj wartosci dla conveyorRobot servo" << std::endl;
-
-        ui_widget_entry * ChoseEntry = (ui_widget_entry *) userdata;
+		ui_widget_entry * ChoseEntry = (ui_widget_entry *) userdata;
         GtkBuilder & thisBuilder = ((*ChoseEntry).getBuilder());
-
+        
+		
         GtkEntry * entry1 = GTK_ENTRY(gtk_builder_get_object(&thisBuilder, "entry1"));
-        g_return_if_fail(entry1);
-        const gchar * sth = gtk_entry_get_text(entry1);
-        std::cout << sth << std::endl;
+        GtkSpinButton * spin1 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton1"));
+        gtk_spin_button_set_value(spin1, atof(gtk_entry_get_text(entry1)));
+	
+        GtkEntry * entry2 = GTK_ENTRY(gtk_builder_get_object(&thisBuilder, "entry2"));
+        GtkSpinButton * spin2 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton2"));
+        gtk_spin_button_set_value(spin2, atof(gtk_entry_get_text(entry2)));
+	
 	}
-
+	
 	void on_read_button_clicked_conveyorRobot_servo (GtkButton* button, gpointer user_data)
 	{
 		std::cout << "wczytaj wartosci dla conveyorRobot servo" << std::endl;
 	}
-
+	
 	void on_set_button_clicked_conveyorRobot_servo (GtkButton* button, gpointer user_data)
 	{
 		std::cout << "ustaw wartosci dla conveyorRobot servo" << std::endl;
 	}
-
-
-	void ui_widget_init(ui_widget_entry &entry)
+	
+	
+	void ui_widget_init(ui_widget_entry &entry) 
 	{
 		servo_conveyorRobot = new edp_conveyor_servo_algorithm(entry);
 		fprintf(stderr, "widget %s loaded\n", __FILE__);
 	}
 
-	void ui_widget_unload(void)
+	void ui_widget_unload(void) 
 	{
-		if (servo_conveyorRobot)
+		if (servo_conveyorRobot) 
 		{
 			delete servo_conveyorRobot;
 		}

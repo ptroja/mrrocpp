@@ -10,14 +10,9 @@
 #include "ui/ui_const.h"
 #include "ui/ui_ecp.h"
 
-extern ui_msg_def ui_msg;
-extern ui_ecp_buffer* ui_ecp_obj;
-
-extern ui_state_def ui_state;
-extern configurator* config;
-
-extern ui_robot_def ui_robot;
-extern ui_ecp_buffer* ui_ecp_obj;
+ui_msg_def ui_msg;
+ui_state_def ui_state;
+ui_robot_def ui_robot;
 
 
 double irp6m_current_pos[6]; // pozycja biezaca
@@ -87,12 +82,21 @@ extern "C"
         GtkBuilder & thisBuilder = ((*ChoseEntry).getBuilder());
         
         GtkEntry * entry1 = GTK_ENTRY(gtk_builder_get_object(&thisBuilder, "entry1"));
+        GtkEntry * entry2 = GTK_ENTRY(gtk_builder_get_object(&thisBuilder, "entry2"));
+        GtkEntry * entry3 = GTK_ENTRY(gtk_builder_get_object(&thisBuilder, "entry3"));
+        GtkEntry * entry4 = GTK_ENTRY(gtk_builder_get_object(&thisBuilder, "entry4"));
+        GtkEntry * entry5 = GTK_ENTRY(gtk_builder_get_object(&thisBuilder, "entry5"));
+        GtkEntry * entry6 = GTK_ENTRY(gtk_builder_get_object(&thisBuilder, "entry6"));
+        GtkEntry * entry7 = GTK_ENTRY(gtk_builder_get_object(&thisBuilder, "entry7"));
+        GtkEntry * entry8 = GTK_ENTRY(gtk_builder_get_object(&thisBuilder, "entry8"));
+        GtkEntry * entry9 = GTK_ENTRY(gtk_builder_get_object(&thisBuilder, "entry9"));
+        GtkEntry * entry10 = GTK_ENTRY(gtk_builder_get_object(&thisBuilder, "entry10"));
         
 		BYTE servo_alg_no[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
 		BYTE servo_par_no[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
 		
 		gchar * servo_alg_no_gchar = (gchar*)(servo_alg_no);
-		//gchar * servo_par_no_gchar = (gchar*)(servo_par_no);		
+		gchar * servo_par_no_gchar = (gchar*)(servo_par_no);		
 
 		try
 			{
@@ -103,13 +107,29 @@ extern "C"
 					if (!(ui_robot.irp6_mechatronika->get_servo_algorithm(servo_alg_no, servo_par_no))) // Odczyt polozenia walow silnikow
 						printf("Blad w mechatronika get_servo_algorithm\n");
 					
-						//gtk_entry_set_text(entry1, &servo_alg_no_gchar[0]);
+						gtk_entry_set_text(entry1, &servo_alg_no_gchar[0]);
+						gtk_entry_set_text(entry2, &servo_par_no_gchar[0]);
+						gtk_entry_set_text(entry3, &servo_alg_no_gchar[1]);
+						gtk_entry_set_text(entry4, &servo_par_no_gchar[1]);
+						gtk_entry_set_text(entry5, &servo_alg_no_gchar[2]);
+						gtk_entry_set_text(entry6, &servo_par_no_gchar[2]);
+						gtk_entry_set_text(entry7, &servo_alg_no_gchar[3]);
+						gtk_entry_set_text(entry8, &servo_par_no_gchar[3]);
+						gtk_entry_set_text(entry9, &servo_alg_no_gchar[4]);
+						gtk_entry_set_text(entry10, &servo_par_no_gchar[4]);
 						
-				} else
+				} 
+				else
 				{
- 
+					std::cout << "testuje - ale mechatronika nie jest zsynchronizowany" << std::endl;
 				}
 			}
+			else
+			{
+				std::cout << "testuje - ale pid = 1" << std::endl;;
+			}
+		
+
 			} // end try
 			CATCH_SECTION_UI
 	

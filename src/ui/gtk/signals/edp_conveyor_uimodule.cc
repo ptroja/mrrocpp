@@ -32,7 +32,7 @@ extern "C"
 			GtkWidget* child = gtk_bin_get_child(GTK_BIN(scrolled));
 			gtk_widget_destroy(child);
 		}
-
+		
 		ui_widget_entry * ChoseEntry;
 		gboolean isFile = 0;
 		gint choice;
@@ -50,7 +50,6 @@ extern "C"
 		default: std::cout << "Something is not working properly!" << std::endl;
 		}
 		
-		
 		if (isFile)
 		{
 			GtkBuilder & chosenFileBuilder = ((*ChoseEntry).getBuilder());
@@ -64,7 +63,6 @@ extern "C"
 			gtk_scrolled_window_add_with_viewport (scrolled, windowWithoutParent);
 		}
 		
-		
 	}	
 
 	void ui_module_init(ui_config_entry &entry) 
@@ -72,12 +70,11 @@ extern "C"
 		edp_conveyorRobot = new edp_conveyor(entry);
 		fprintf(stderr, "module %s loaded\n", __FILE__);
 		
-		ui_widget_entry * widgetEntry1 = new ui_widget_entry("conveyor_servo_algorithm.xml");
-		entry.addWidget(widgetEntry1);
-		ui_widget_entry * widgetEntry2 = new ui_widget_entry("conveyor_int.xml");
-		entry.addWidget(widgetEntry2);
-		ui_widget_entry * widgetEntry3 = new ui_widget_entry("conveyor_inc.xml");
-		entry.addWidget(widgetEntry3);
+		ui_widget_entry * widgetEntry1 = new ui_widget_entry("conveyor_servo_algorithm.xml"); entry.addWidget(widgetEntry1);
+		ui_widget_entry * widgetEntry2 = new ui_widget_entry("conveyor_int.xml"); entry.addWidget(widgetEntry2);
+		ui_widget_entry * widgetEntry3 = new ui_widget_entry("conveyor_inc.xml"); entry.addWidget(widgetEntry3);
+		
+		
 		
 		
 	}
