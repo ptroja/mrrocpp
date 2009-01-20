@@ -5,20 +5,7 @@
 // Ostatnia modyfikacja: styczen 2009
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <signal.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <sys/neutrino.h>
-#include <sys/sched.h>
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
-#include <pthread.h>
-#include <semaphore.h>
-#include <errno.h>
+#include <stdint.h>
 
 #include "kinematics/common/transformer_error.h"
 

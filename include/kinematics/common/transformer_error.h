@@ -9,10 +9,6 @@
 #define __TRANSFORMER_ERROR_H
 
 #include <stdint.h>
-#include <semaphore.h>
-#include <pthread.h>
-#include <sys/dispatch.h>
-
 
 // by Y - klasa pomocnicza z bledami transformera
 class transformer_error
