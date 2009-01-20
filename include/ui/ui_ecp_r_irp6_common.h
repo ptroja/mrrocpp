@@ -37,7 +37,7 @@ class ui_common_robot {
  ecp_robot *ecp;
 
 // ecp_buffer ui_edp_package; // by Y
-  ui_common_robot (edp_state_def* edp_state, configurator &_config, sr_ecp* sr_ecp_msg, ROBOT_ENUM _robot_name); // Konstruktor
+  ui_common_robot (configurator &_config, sr_ecp* sr_ecp_msg, ROBOT_ENUM _robot_name); // Konstruktor
   
   virtual void execute_motion ( void );
 // virtual void set_edp_master_pid ( pid_t edppid ) {EDP_Pid = edppid;}; 
