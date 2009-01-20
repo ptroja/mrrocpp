@@ -22,8 +22,8 @@ Main generator file - includes xsl files for each window
 <xsl:include href="euler_xyz_signals.xsl" />
 <xsl:include href="euler_ts.xsl" />
 <xsl:include href="euler_ts_signals.xsl" />
-<xsl:include href="festival.xsl" />
 <xsl:include href="festival_signals.xsl" />
+<xsl:include href="festival.xsl" />
 
 <xsl:template name="call.all.irp6.templates" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="irp6EDPNumber" select="irp6EDPNumber"/>
