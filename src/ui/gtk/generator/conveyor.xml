@@ -2,8 +2,8 @@
 	<name>conveyor</name>
 	<fullName>conveyorRobot</fullName>
 	<irp6EDPNumber>1</irp6EDPNumber>
-	<axis_xyz></axis_xyz>
-	<axis_ts></axis_ts>
-	<euler_xyz></euler_xyz>
-	<euler_ts></euler_ts>
+	<axis_xyz>0</axis_xyz>
+	<axis_ts>0</axis_ts>
+	<euler_xyz>0</euler_xyz>
+	<euler_ts>0</euler_ts>
 </irp6conveyor>

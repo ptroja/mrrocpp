@@ -61,13 +61,13 @@ extern "C"
 
 		switch (choice)
 		{
-		case 0: </xsl:text><xsl:if test="$irp6EDPNumber &gt;= 0"><xsl:text>std::cout &lt;&lt; "Servo algorithm window chosen" &lt;&lt; std::endl; ChoseEntry = comboEntry.getWidget(0); isFile = 1;</xsl:text></xsl:if><xsl:text> break;
-		case 1: </xsl:text><xsl:if test="$irp6EDPNumber &gt;= 0"><xsl:text>std::cout &lt;&lt; "Internal window chosen" &lt;&lt; std::endl; ChoseEntry = comboEntry.getWidget(1); isFile = 1;</xsl:text></xsl:if><xsl:text> break;
-		case 2: </xsl:text><xsl:if test="$irp6EDPNumber &gt;= 0"><xsl:text>std::cout &lt;&lt; "Increment window chosen" &lt;&lt; std::endl; ChoseEntry = comboEntry.getWidget(2); isFile = 1;</xsl:text></xsl:if><xsl:text> break;
-		case 3: </xsl:text><xsl:if test="$euler_xyz &gt;= 0"><xsl:text>std::cout &lt;&lt; "XYZ Euler ZYZ window chosen" &lt;&lt; std::endl; ChoseEntry = comboEntry.getWidget(3); isFile = 1;</xsl:text></xsl:if><xsl:text> break;
-		case 4: </xsl:text><xsl:if test="$axis_xyz &gt;= 0"><xsl:text>std::cout &lt;&lt; "XYZ Angle Axis window chosen" &lt;&lt; std::endl; ChoseEntry = comboEntry.getWidget(4); isFile = 1;</xsl:text></xsl:if><xsl:text> break;
-		case 5: </xsl:text><xsl:if test="$axis_ts &gt;= 0"><xsl:text>std::cout &lt;&lt; "TS Angle Axis window chosen" &lt;&lt; std::endl; ChoseEntry = comboEntry.getWidget(5); isFile = 1;</xsl:text></xsl:if><xsl:text> break;
-		case 6: </xsl:text><xsl:if test="$euler_ts &gt;= 0"><xsl:text>std::cout &lt;&lt; "TS Euler ZYZ window chosen" &lt;&lt; std::endl; ChoseEntry = comboEntry.getWidget(5); isFile = 1;</xsl:text></xsl:if><xsl:text> break;
+		case 0: </xsl:text><xsl:if test="$irp6EDPNumber &gt; 0"><xsl:text>std::cout &lt;&lt; "Servo algorithm window chosen" &lt;&lt; std::endl; ChoseEntry = comboEntry.getWidget(0); isFile = 1;</xsl:text></xsl:if><xsl:text> break;
+		case 1: </xsl:text><xsl:if test="$irp6EDPNumber &gt; 0"><xsl:text>std::cout &lt;&lt; "Internal window chosen" &lt;&lt; std::endl; ChoseEntry = comboEntry.getWidget(1); isFile = 1;</xsl:text></xsl:if><xsl:text> break;
+		case 2: </xsl:text><xsl:if test="$irp6EDPNumber &gt; 0"><xsl:text>std::cout &lt;&lt; "Increment window chosen" &lt;&lt; std::endl; ChoseEntry = comboEntry.getWidget(2); isFile = 1;</xsl:text></xsl:if><xsl:text> break;
+		case 3: </xsl:text><xsl:if test="$euler_xyz &gt; 0"><xsl:text>std::cout &lt;&lt; "XYZ Euler ZYZ window chosen" &lt;&lt; std::endl; ChoseEntry = comboEntry.getWidget(3); isFile = 1;</xsl:text></xsl:if><xsl:text> break;
+		case 4: </xsl:text><xsl:if test="$axis_xyz &gt; 0"><xsl:text>std::cout &lt;&lt; "XYZ Angle Axis window chosen" &lt;&lt; std::endl; ChoseEntry = comboEntry.getWidget(4); isFile = 1;</xsl:text></xsl:if><xsl:text> break;
+		case 5: </xsl:text><xsl:if test="$axis_ts &gt; 0"><xsl:text>std::cout &lt;&lt; "TS Angle Axis window chosen" &lt;&lt; std::endl; ChoseEntry = comboEntry.getWidget(5); isFile = 1;</xsl:text></xsl:if><xsl:text> break;
+		case 6: </xsl:text><xsl:if test="$euler_ts &gt; 0"><xsl:text>std::cout &lt;&lt; "TS Euler ZYZ window chosen" &lt;&lt; std::endl; ChoseEntry = comboEntry.getWidget(5); isFile = 1;</xsl:text></xsl:if><xsl:text> break;
 		default: std::cout &lt;&lt; "Something is not working properly!" &lt;&lt; std::endl;
 		}
 		
@@ -91,13 +91,13 @@ extern "C"
 		edp_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = new edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>(entry);
 		fprintf(stderr, "module %s loaded\n", __FILE__);
 		
-		</xsl:text><xsl:if test="$irp6EDPNumber &gt;= 0"><xsl:text>ui_widget_entry * widgetEntry1 = new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm.xml"); entry.addWidget(widgetEntry1);</xsl:text></xsl:if><xsl:text>
-		</xsl:text><xsl:if test="$irp6EDPNumber &gt;= 0"><xsl:text>ui_widget_entry * widgetEntry2 = new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_int.xml"); entry.addWidget(widgetEntry2);</xsl:text></xsl:if><xsl:text>
-		</xsl:text><xsl:if test="$irp6EDPNumber &gt;= 0"><xsl:text>ui_widget_entry * widgetEntry3 = new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc.xml"); entry.addWidget(widgetEntry3);</xsl:text></xsl:if><xsl:text>
-		</xsl:text><xsl:if test="$axis_xyz &gt;= 0"><xsl:text>ui_widget_entry * widgetEntry4 = new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz.xml"); entry.addWidget(widgetEntry4);</xsl:text></xsl:if><xsl:text>
-		</xsl:text><xsl:if test="$euler_xyz &gt;= 0"><xsl:text>ui_widget_entry * widgetEntry5 = new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_xyz.xml"); entry.addWidget(widgetEntry5);</xsl:text></xsl:if><xsl:text>
-		</xsl:text><xsl:if test="$axis_ts &gt;= 0"><xsl:text>ui_widget_entry * widgetEntry6 = new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_ts.xml"); entry.addWidget(widgetEntry6);</xsl:text></xsl:if><xsl:text>
-		</xsl:text><xsl:if test="$euler_ts &gt;= 0"><xsl:text>ui_widget_entry * widgetEntry7 = new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_ts.xml"); entry.addWidget(widgetEntry7);</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$irp6EDPNumber &gt; 0"><xsl:text>ui_widget_entry * widgetEntry1 = new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm.xml"); entry.addWidget(widgetEntry1);</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$irp6EDPNumber &gt; 0"><xsl:text>ui_widget_entry * widgetEntry2 = new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_int.xml"); entry.addWidget(widgetEntry2);</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$irp6EDPNumber &gt; 0"><xsl:text>ui_widget_entry * widgetEntry3 = new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc.xml"); entry.addWidget(widgetEntry3);</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$axis_xyz &gt; 0"><xsl:text>ui_widget_entry * widgetEntry4 = new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz.xml"); entry.addWidget(widgetEntry4);</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$euler_xyz &gt; 0"><xsl:text>ui_widget_entry * widgetEntry5 = new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_xyz.xml"); entry.addWidget(widgetEntry5);</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$axis_ts &gt; 0"><xsl:text>ui_widget_entry * widgetEntry6 = new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_ts.xml"); entry.addWidget(widgetEntry6);</xsl:text></xsl:if><xsl:text>
+		</xsl:text><xsl:if test="$euler_ts &gt; 0"><xsl:text>ui_widget_entry * widgetEntry7 = new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_ts.xml"); entry.addWidget(widgetEntry7);</xsl:text></xsl:if><xsl:text>
 	}
 
 	void ui_module_unload(void) 
