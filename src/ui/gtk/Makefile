@@ -19,6 +19,11 @@ CPPFLAGS=-I${HOMEDIR}/include `pkg-config --cflags ${PACKAGES}` -DUSE_MESSIP_SRR
 CXXFLAGS=-Wall -g -O0 -fpic
 LDFLAGS+=`pkg-config --libs ${PACKAGES}` -export-dynamic -L${HOMEDIR}/lib -lmessip
 XSLTPROC=xsltproc robots.xml --xinclude
+ECP_DIR = $(HOMEDIR)/src/ecp
+
+MRROCOBJ = \
+	$(ECP_DIR)/irp6_mechatronika/ecp_local.o\
+	$(ECP_DIR)/common/libecp.a $(LIBDIR)/libmrrocpp.a
 
 ui.gtk: main.o configurator.o ui_model.o ui_config_entry.o ui_widget_entry.o sr_console.o
 	$(CXX) -g -o $@ $^ ${LDFLAGS}
@@ -26,10 +31,10 @@ ui.gtk: main.o configurator.o ui_model.o ui_config_entry.o ui_widget_entry.o sr_
 %.xml: %.glade
 	gtk-builder-convert $< $@
 
-%.so: %_uimodule.o
+edp_irp6m.so: $(ECP_DIR)/irp6_mechatronika/ecp_local.o $(ECP_DIR)/common/libecp.a $(LIBDIR)/libmrrocpp.a edp_irp6m_uimodule.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $<
 	
-%.so: %_widget.o
+irp6m_servo_algorithm.so: $(ECP_DIR)/irp6_mechatronika/ecp_local.o $(ECP_DIR)/common/libecp.a $(LIBDIR)/libmrrocpp.a irp6m_servo_algorithm_widget.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $<
 
 clean:
