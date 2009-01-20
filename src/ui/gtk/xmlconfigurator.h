@@ -42,6 +42,6 @@ class xmlconfigurator
 		}
 };
 
-extern class xmlconfigurator *config;
+extern class xmlconfigurator *xmlconfig;
 
 #endif /* __CONFIGURATOR_H */

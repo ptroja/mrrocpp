@@ -63,7 +63,9 @@ ui_model::ui_model() : tabs_visible(0)
 	setMpLoadButton(false, true);
 	setEdpsLoadButton(true, true);
 
-	config = new configurator("ui_node_name", "mrrocpp_local_path", "config_file", "[ui]", "session_name");
+	config = new configurator(
+			g_get_host_name(),
+			g_get_current_dir(), "rcsc.ini", "[ui]", "session_name");
 }
 
 ui_model::~ui_model()

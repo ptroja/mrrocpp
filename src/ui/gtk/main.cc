@@ -31,13 +31,13 @@ extern "C" {
 		gtk_file_filter_set_name(filter, "XML files");
 		gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
 
-		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), config->getConfig_dir());
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), xmlconfig->getConfig_dir());
 
 		if (gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
 			char *filename;
 
 			filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (dialog));
-			config->open_config_file(filename);
+			xmlconfig->open_config_file(filename);
 			g_free(filename);
 		}
 
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 
 	if (!g_thread_supported ()) g_thread_init (NULL);
 
-	config = new xmlconfigurator();
+	xmlconfig = new xmlconfigurator();
 
 	{
 		GError *err;
@@ -98,10 +98,10 @@ int main(int argc, char *argv[])
 	gtk_widget_show(GTK_WIDGET(ui_model::instance().getUiGObject("window")));
 
 	if(config_files && *config_files) {
-		std::string config_file = config->getConfig_dir();
+		std::string config_file = xmlconfig->getConfig_dir();
 		config_file += "/";
 		config_file += (*config_files);
-		config->open_config_file(config_file.c_str());
+		xmlconfig->open_config_file(config_file.c_str());
 	}
 
 	gtk_main();
