@@ -42,6 +42,7 @@ CFLAGS=${FLAGS}
 
 LIBDIR=$(HOMEDIR)/lib
 BINDIR=$(HOMEDIR)/bin
+UI_DIR = $(HOMEDIR)/src/ui/src/gcc_ntox86
 ECP_DIR = $(HOMEDIR)/src/ecp
 ECP_MPDIR=$(HOMEDIR)/src/ecp_mp
 

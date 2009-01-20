@@ -11,20 +11,29 @@ include $(HOMEDIR)/common.mk
 PACKAGES=libxml-2.0 gtk+-2.0 gtkmm-2.4 gthread-2.0
 CPPFLAGS=-I${HOMEDIR}/include -I.. `pkg-config --cflags ${PACKAGES}` -DUSE_MESSIP_SRR
 CXXFLAGS=-Wall -g -O0 -fpic -I $(HEADERSDIR) -I.
-LDFLAGS+=`pkg-config --libs ${PACKAGES}` -export-dynamic -L${HOMEDIR}/lib -lmessip
+LDFLAGS+=`pkg-config --libs ${PACKAGES}` -export-dynamic -L${HOMEDIR}/lib
 ECP_DIR = $(HOMEDIR)/src/ecp
 HEADERSDIR = $(HOMEDIR)/include
 
-MRROCOBJ = $(ECP_DIR)/irp6_mechatronika/ecp_local.o $(ECP_DIR)/common/libecp.a $(LIBDIR)/libmrrocpp.a
+LIBS = `pwd`/../../../../lib/libecp.so `pwd`/../../../../lib/libmrrocpp.so `pwd`/../../../../lib/libmessip.so
 
 all: $(ui_modules)
 
-%.so: %_widget.o $(MRROCOBJ)
-	$(CXX) ${LDFLAGS} -shared -o $@ -I $(HEADERSDIR) -I. $(MRROCOBJ) $<
-	
-%.so: %_uimodule.o
-	$(CXX) ${LDFLAGS} -shared -o $@ $<
+edp_irp6m.so: edp_irp6m_uimodule.o $(ECP_DIR)/irp6_mechatronika/ecp_local.o $(UI_DIR)/ui_ecp_r_irp6_mechatronika.o
+	$(CXX) ${LDFLAGS} -Wl,-rpath-link . -shared -o $@ $(LIBS) $^
 
+edp_irp6o.so: edp_irp6o_uimodule.o $(ECP_DIR)/irp6_on_track/ecp_local.o $(UI_DIR)/ui_ecp_r_irp6_common.o
+	$(CXX) ${LDFLAGS} -Wl,-rpath-link . -shared -o $@ $(LIBS) $^
+
+edp_irp6p.so: edp_irp6o_uimodule.o $(ECP_DIR)/irp6_postument/ecp_local.o $(UI_DIR)/ui_ecp_r_irp6_common.o
+	$(CXX) ${LDFLAGS} -Wl,-rpath-link . -shared -o $@ $(LIBS) $^
+
+edp_conveyor.so: edp_conveyor_uimodule.o $(ECP_DIR)/conveyor/ecp_local.o $(UI_DIR)/ui_ecp_r_conveyor.o
+	$(CXX) ${LDFLAGS} -Wl,-rpath-link . -shared -o $@ $(LIBS) $^
+
+%.so: %_widget.o
+	$(CXX) ${LDFLAGS} -shared -o $@ -I $(HEADERSDIR) -I. $^
+	
 clean:
 	rm -f *.o *.so
 

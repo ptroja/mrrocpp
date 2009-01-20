@@ -14,11 +14,15 @@ CPPFLAGS += -I$(HOMEDIR)/include/messip
 #======================================================#	
 .PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#
-all: libmessip.a ${BINARIES}
+all: libmessip.a libmessip.so ${BINARIES}
 	@cp libmessip.a ${LIBDIR}
 
 libmessip.a: ${MESSIP_OBJECTS}
 	$(AR) $(ARFLAGS) $@ $?
+
+libmessip.so: ${MESSIP_OBJECTS}
+	$(CXX) $^ $(LDFLAGS) -shared -o $@
+	${INSTALL} $@ $(LIBDIR)
 
 messip_mgr: messip_mgr.o logg_messip.o libmessip.a
 

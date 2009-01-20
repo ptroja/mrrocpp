@@ -165,8 +165,7 @@ static channel_t **channels;				   // This is an array
 
 static int f_bye;							   // Set to 1 when SIGINT has been applied
 
-char *logg_dir;				// Specified by --l or set to NULL
-
+extern char *logg_dir;
 
 enum
 {

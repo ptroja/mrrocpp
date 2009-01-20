@@ -52,7 +52,7 @@ configurator::configurator (const char* _node, const char* _dir, const char* _in
 	session_name = strdup(_session_name);
 
 	pthread_mutex_init(&mutex, NULL );
-	
+
 	if( uname( &sysinfo ) == -1 ) {
 		perror( "uname" );
 	}
@@ -463,7 +463,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		char * spawned_node_name = return_string_value("node_name", _section_name);
 
 		char rsh_spawn_node[PATH_MAX];
-		
+
 		if (strcmp(sysinfo.nodename,spawned_node_name) == 0)
 		{
 			strcpy(rsh_spawn_node, "localhost");
@@ -471,7 +471,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		{
 			strcpy(rsh_spawn_node, spawned_node_name);
 		}
-		
+
 		// Sciezka do binariow.
 		char bin_path[PATH_MAX];
 		if (exists("binpath", _section_name)) {
@@ -491,8 +491,8 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s",
 				bin_path, ui_host ? ui_host : "",
 				bin_path, spawned_program_name,
-				node, dir, ini_file, _section_name
-				, session_name
+				node, dir, ini_file, _section_name,
+				session_name
 		);
 
 		delete [] spawned_program_name;
@@ -574,7 +574,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	}
 
 #define RSP_ATTACH_LENGTH 20
-	
+
 	time_t time_of_day;
 	char rsp_attach[RSP_ATTACH_LENGTH];
 	int fd_for_open;
@@ -584,7 +584,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	strftime( rsp_attach, RSP_ATTACH_LENGTH, "rsp%H%M%S", localtime( &time_of_day ) );
 
 	//printf("rsp_attach: %s\n",rsp_attach);
-	
+
 	// printf("spawned_node_name:%s\n", spawned_node_name);
 
 
@@ -601,7 +601,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	strcat(input.program_name_and_args, session_name);
 	strcat(input.program_name_and_args, " ");
 	strcat(input.program_name_and_args, rsp_attach);
-	
+
 	bool glob_std_out = exists("std_out","[ui]");
 	bool loc_std_out = exists("std_out", _section_name);
 
@@ -612,13 +612,13 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		{
 			std_out = return_string_value("std_out", _section_name);
 		} else 	if (glob_std_out)
-		{ 
+		{
 			std_out = return_string_value("std_out", "[ui]");
 		}
-			
-			
+
+
 		if (((fd_for_open=open(std_out, O_RDWR)) > 0)&&(isatty(fd_for_open)))
-		{	
+		{
 				strcat(input.program_name_and_args, " >> ");
 			strcat(input.program_name_and_args, std_out);
 		} else
@@ -627,20 +627,20 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		}
 		close(fd_for_open);
 		delete [] std_out;
-		
+
 	}
-	
 
 
-		
+
+
 	strcpy(input.binaries_path, bin_path);
 
 	// Zwolnienie pamieci.
-	
+
 	delete [] spawned_program_name;
 	delete [] spawned_node_name;
 	delete [] bin_path;
-	
+
 	char rsh_cmd[PATH_MAX];
 		snprintf(rsh_cmd, PATH_MAX, "rsh %s %s%s&",
 				input.node_name, input.binaries_path, input.program_name_and_args);
@@ -653,7 +653,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 	system(rsh_cmd);
 	//printf("za rsh_cmd\n");
 	fflush(stdout);
-	
+
 	while (!wyjscie)
 	{
 		//printf("spawn_prc 3\n");
@@ -694,7 +694,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 
 
 	name_detach(my_attach, 0);
-	// Zwrocenie wyniku.  	
+	// Zwrocenie wyniku.
 	return output.pid;
 #endif
 #if defined(PROCESS_SPAWN_SPAWN)

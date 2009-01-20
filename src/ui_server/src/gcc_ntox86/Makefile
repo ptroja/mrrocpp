@@ -8,7 +8,6 @@ PHABOPTS= -l socket -lm
 
 HOMEDIR = ../../../..
 include $(HOMEDIR)/common.mk
-ECP_DIR = $(HOMEDIR)/src/ecp
 UIDIR=$(HOMEDIR)/src/ui
 UISRCDIR=$(HOMEDIR)/src/ui/src
 

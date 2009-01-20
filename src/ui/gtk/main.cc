@@ -113,7 +113,6 @@ extern "C" {
 	void mp_load_clicked(GtkToolButton *toolbutton,
             gpointer       user_data) {
 
-		g_print("host %s\n", g_get_host_name());
 		ui_model::instance().setMpLoadButton(true, false);
 	}
 
@@ -124,4 +123,28 @@ extern "C" {
 		ui_model::instance().loadEdps();
 	}
 
+}
+
+
+enum UI_NOTIFICATION_STATE_ENUM
+{
+	UI_N_STARTING, UI_N_READY, UI_N_BUSY, UI_N_EXITING, 	UI_N_COMMUNICATION, UI_N_PROCESS_CREATION,
+	UI_N_SYNCHRONISATION
+};
+
+// FIXME: moved from proto.h for linux compatibility
+int set_ui_state_notification ( UI_NOTIFICATION_STATE_ENUM new_notifacion ){
+	printf("UI NOTIFICATION STATE: ");
+	switch(new_notifacion) {
+		case UI_N_STARTING: printf("UI_N_STARTING\n"); break;
+		case UI_N_READY: printf("UI_N_READY\n"); break;
+		case UI_N_BUSY: printf("UI_N_BUSY\n"); break;
+		case UI_N_EXITING: printf("UI_N_EXITING\n"); break;
+		case UI_N_COMMUNICATION: printf("UI_N_COMMUNICATION\n"); break;
+		case UI_N_PROCESS_CREATION: printf("UI_N_PROCESS_CREATION\n"); break;
+		case UI_N_SYNCHRONISATION: printf("UI_N_SYNCHRONISATION\n"); break;
+		default: printf("unkonwn\n"); break;
+	}
+
+	return 0;
 }

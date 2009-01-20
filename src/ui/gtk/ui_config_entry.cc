@@ -127,14 +127,14 @@ ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program
 		}
 
 	} else {
-		perror("g_module_open()");
-		g_warning("failed to open module %s.%s\n", ui_lib.c_str(), G_MODULE_SUFFIX );
+		g_warning("failed to open module %s\n", ui_lib.c_str() );
 
 		//! just to debug
 		void *handle = dlopen(ui_lib.c_str(), RTLD_LAZY|RTLD_GLOBAL);
 		if (!handle) {
 			fprintf(stderr, "dlopen(): %s\n", dlerror());
 		} else {
+			printf("dlopen %s OK\n", ui_lib.c_str());
 			dlclose(handle);
 		}
 	}

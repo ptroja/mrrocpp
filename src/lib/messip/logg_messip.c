@@ -54,13 +54,12 @@
 #include "logg_messip.h"
 
 
-extern char *logg_dir;
-
 // Updated by messip_logg_on() and messip_logg_off()
 static	int	is_logg = 1;
 
+char *logg_dir;				// Specified by --l or set to NULL
 
-__inline__ unsigned long long int 
+__inline__ unsigned long long int
 rdtsc(void)
 {
 	unsigned long long int x;
@@ -98,7 +97,7 @@ file_logg(
 		tm = localtime( &now );
 		sprintf( filename, "%s/%04d-%02d-%02d",
 			logg_dir,
-			tm->tm_year + 1900, 
+			tm->tm_year + 1900,
 			tm->tm_mon + 1,
 			tm->tm_mday );
 		fd = open( filename, O_CREAT | O_EXCL, 0664 );
@@ -163,10 +162,10 @@ file_logg(
 				default : stype="?"; break;
 			}						// switch (type)
 			sprintf( tmp, "%6d %7lld %-15s %6d %-15s: ",
-				seqnb, 
+				seqnb,
 				t,
 				stype,
-				getpid(), 
+				getpid(),
 				"messip_mgr" );
 			write( fd, tmp, 6+1+7+1+15+1+6+1+15+1+1 );
 			write( fd, text, strlen(text) );
@@ -186,7 +185,7 @@ file_logg(
 
 	/*
 		Display also on the console ?
-	*/	
+	*/
 	if ( output )
 		fputs( text, output );
 
@@ -196,7 +195,7 @@ file_logg(
 
 
 int
-logg( 
+logg(
 	logg_type_t type,
 	char *fmt,
 	... )
@@ -241,8 +240,8 @@ logg(
 
 	errno = saved_errno;
 	return seqnb;
-	
-}								// logg 
+
+}								// logg
 
 
 void

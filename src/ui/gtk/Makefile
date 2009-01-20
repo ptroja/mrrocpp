@@ -25,7 +25,7 @@ HEADERSDIR = $(HOMEDIR)/include
 MRROCOBJ = $(ECP_DIR)/irp6_mechatronika/ecp_local.o $(ECP_DIR)/common/libecp.a $(LIBDIR)/libmrrocpp.a irp6m_servo_algorithm_widget.o
 
 ui.gtk: main.o configurator.o ui_model.o ui_config_entry.o ui_widget_entry.o sr_console.o
-	$(CXX) -g -o $@ $^ ${LDFLAGS}
+	$(CXX) -Wl,-rpath `pwd`/../../../lib -g -o $@ $^ ${LDFLAGS}
 
 %.xml: %.glade
 	gtk-builder-convert $< $@

@@ -10,7 +10,7 @@ include $(HOMEDIR)/common.mk
 #======================================================#	
 .PHONY: all clean install depend libplayerc libplayerclient messip
 #------------------------------------------------- Build rules -------------------------------------------------------#
-all: messip libplayerc libplayerclient libmrrocpp.a ${OBJECTS} ${BINARIES}
+all: messip libplayerc libplayerclient libmrrocpp.a libmrrocpp.so ${OBJECTS} ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
 libplayerc:
 	@$(MAKE) -C $@
@@ -25,7 +25,7 @@ messip:
 MESSIP_OBJECTS = messip/logg_messip.o messip/messip_lib.o messip/messip_utils.o
 MESSIP_OBJECTS: messip
 
-libmrrocpp.a: \
+LIBMRROCPP_OBJECTS = \
 	ForceTrans.o \
 	cfgopts.o \
 	configurator.o \
@@ -37,9 +37,14 @@ libmrrocpp.a: \
 	srlib.o \
 	playerpos_goal.o \
 	$(MESSIP_OBJECTS)
+
+libmrrocpp.a: $(LIBMRROCPP_OBJECTS)
 	$(AR) $(ARFLAGS) $@ $?
 	${INSTALL} $@ $(LIBDIR)
 
+libmrrocpp.so: $(LIBMRROCPP_OBJECTS)
+	$(CXX) $^ $(LDFLAGS) -shared -o $@
+	${INSTALL} $@ $(LIBDIR)
 #-----------------------------------------------------------------------------------------------------------------------#
 y_spawn_process: y_spawn_process.o
 	$(LD) $(LDFLAGS) -o $@  $^	
