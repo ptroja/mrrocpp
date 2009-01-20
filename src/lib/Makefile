@@ -50,7 +50,7 @@ y_spawn_process: y_spawn_process.o
 	$(LD) $(LDFLAGS) -o $@  $^	
 
 configsrv: configsrv.o cfgopts.o configsrv_m.o
-	$(LD) $(LDFLAGS) -o $@ $^ -L$(LIBDIR) -lmessip
+	$(LD) $(LDFLAGS) -o $@ $^ -L$(LIBDIR) -lmessip -Wl,-rpath `pwd`/../../lib
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
 # plik.o: plik.cc plik1.h plik2.h ... itd
@@ -62,7 +62,7 @@ install: ${BINARIES}
 	@$(MAKE) -C messip install
 #-----------------------------------------------------------------------------------------------------------------------#
 clean:
-	@rm -f *.o *.err *.a ${BINARIES}
+	@rm -f *.o *.err *.a *.so ${BINARIES}
 	@$(MAKE) -C libplayerc clean
 	@$(MAKE) -C libplayerclient clean
 	@$(MAKE) -C messip clean
