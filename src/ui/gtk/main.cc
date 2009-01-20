@@ -3,7 +3,7 @@
 
 #include <gtkmm.h>
 
-#include "configurator.h"
+#include "xmlconfigurator.h"
 #include "ui_model.h"
 #include "sr_console.h"
 
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 
 	if (!g_thread_supported ()) g_thread_init (NULL);
 
-	config = new configurator();
+	config = new xmlconfigurator();
 
 	{
 		GError *err;

@@ -22,7 +22,7 @@ XSLTPROC=xsltproc robots.xml --xinclude
 ECP_DIR = $(HOMEDIR)/src/ecp
 HEADERSDIR = $(HOMEDIR)/include
 
-ui.gtk: main.o configurator.o ui_model.o ui_config_entry.o ui_widget_entry.o sr_console.o
+ui.gtk: main.o xmlconfigurator.o ui_model.o ui_config_entry.o ui_widget_entry.o sr_console.o
 	$(CXX) -Wl,-rpath `pwd`/../../../lib -g -o $@ $^ ${LDFLAGS}
 
 %.xml: %.glade

@@ -6,6 +6,8 @@
 
 #include "ui_config_entry.h"
 
+#include "lib/configurator.h"
+
 class ui_model
 {
 	public:
@@ -76,6 +78,8 @@ class ui_model
 		GtkBuilder *builder;
 
 		int set_tree_view(void);
+
+		configurator *config;
 };
 
 /*

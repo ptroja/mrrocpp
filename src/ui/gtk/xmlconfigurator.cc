@@ -12,13 +12,13 @@
 
 #include <cstdarg>
 
-#include "configurator.h"
+#include "xmlconfigurator.h"
 #include "ui_model.h"
 
-class configurator *config;
+class xmlconfigurator *config;
 
 xmlXPathObjectPtr
-configurator::getnodeset (xmlDocPtr doc, const xmlChar *xpath){
+xmlconfigurator::getnodeset (xmlDocPtr doc, const xmlChar *xpath){
 
 	xmlXPathContextPtr context;
 	xmlXPathObjectPtr result;
@@ -41,7 +41,7 @@ configurator::getnodeset (xmlDocPtr doc, const xmlChar *xpath){
 	return result;
 }
 
-void configurator::populate_tree_model_with_mp()
+void xmlconfigurator::populate_tree_model_with_mp()
 {
 	xmlXPathObjectPtr mp = getnodeset(this->doc, (xmlChar *) "/config/mp[@active='true']");
 
@@ -90,7 +90,7 @@ void configurator::populate_tree_model_with_mp()
 	}
 }
 
-void configurator::populate_tree_model_with_sensors()
+void xmlconfigurator::populate_tree_model_with_sensors()
 {
 	xmlXPathObjectPtr active_sensors = getnodeset(this->doc, (xmlChar *) "/config/sensors/sensor[@active='true']");
 
@@ -124,7 +124,7 @@ void configurator::populate_tree_model_with_sensors()
 	}
 }
 
-void configurator::populate_tree_model_with_effectors()
+void xmlconfigurator::populate_tree_model_with_effectors()
 {
 	xmlXPathObjectPtr active_effectors = getnodeset(this->doc, (xmlChar *) "/config/effectors/effector[@active='true']");
 
@@ -213,7 +213,7 @@ void configurator::populate_tree_model_with_effectors()
 }
 
 
-void configurator::populate_tree_model()
+void xmlconfigurator::populate_tree_model()
 {
 	ui_model::instance().clear();
     populate_tree_model_with_sensors();
@@ -221,7 +221,7 @@ void configurator::populate_tree_model()
 	populate_tree_model_with_mp();
 }
 
-configurator::configurator() : doc(NULL)
+xmlconfigurator::xmlconfigurator() : doc(NULL)
 {
 	// get the [configs/xml] subdirectory
 	getcwd(config_dir, sizeof(config_dir));
@@ -235,7 +235,7 @@ configurator::configurator() : doc(NULL)
 	strcat(config_dir, "/configs/xml");
 }
 
-int configurator::open_config_file(const char *filename)
+int xmlconfigurator::open_config_file(const char *filename)
 {
 	// parse config file
 	if (doc) {
@@ -264,7 +264,7 @@ int configurator::open_config_file(const char *filename)
 	return 0;
 }
 
-configurator::~configurator()
+xmlconfigurator::~xmlconfigurator()
 {
 	// free the document
 	if (doc) {
@@ -275,7 +275,7 @@ configurator::~configurator()
 	xmlCleanupParser();
 }
 
-char * configurator::get_string(const char *xpath, ...)
+char * xmlconfigurator::get_string(const char *xpath, ...)
 {
 	va_list ap;
 

@@ -11,7 +11,7 @@
 #include <iostream>
 #include <map>
 
-class configurator
+class xmlconfigurator
 {
 	private:
 		// XML config document
@@ -29,8 +29,8 @@ class configurator
 
 	public:
 
-		configurator();
-		~configurator();
+		xmlconfigurator();
+		~xmlconfigurator();
 
 		int open_config_file(const char *filename);
 
@@ -42,6 +42,6 @@ class configurator
 		}
 };
 
-extern class configurator *config;
+extern class xmlconfigurator *config;
 
 #endif /* __CONFIGURATOR_H */

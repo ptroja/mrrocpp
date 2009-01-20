@@ -3,6 +3,8 @@
 
 #include "ui_model.h"
 
+#include "lib/configurator.h"
+
 ui_config_entry & ui_model::getNodeByPath(GtkTreePath *path) {
 	gint depth = gtk_tree_path_get_depth(path);
 	gint *indices = gtk_tree_path_get_indices(path);
@@ -60,6 +62,8 @@ ui_model::ui_model() : tabs_visible(0)
 	//! initialization
 	setMpLoadButton(false, true);
 	setEdpsLoadButton(true, true);
+
+	config = new configurator("ui_node_name", "mrrocpp_local_path", "config_file", "[ui]", "session_name");
 }
 
 ui_model::~ui_model()
@@ -70,6 +74,10 @@ ui_model::~ui_model()
 	// remove reference to GtkTreeView model
 	g_object_unref(store);
 	g_object_unref(G_OBJECT(builder));
+
+	if (config) {
+		delete config;
+	}
 }
 
 ui_config_entry & ui_model::add_ui_config_entry(ui_config_entry & parent_entry, ui_config_entry::ui_config_entry_type entry_type, const char *program_name, const char *node_name, const char *ui_def)
