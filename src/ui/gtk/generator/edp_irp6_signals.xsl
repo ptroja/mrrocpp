@@ -106,7 +106,7 @@ extern "C"
 		{
 			delete edp_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
 		}
-		fprintf(stderr, "config %s unloaded\n", __FILE__);
+		fprintf(stderr, "module %s unloaded\n", __FILE__);
 	}
 }
 </xsl:text>
