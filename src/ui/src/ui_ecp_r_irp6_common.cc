@@ -39,7 +39,7 @@
 #include "proto.h"
 
 // ---------------------------------------------------------------
-ui_common_robot::ui_common_robot (edp_state_def* _edp_state, configurator &_config, sr_ecp* sr_ecp_msg, ROBOT_ENUM _robot_name)
+ui_common_robot::ui_common_robot (configurator &_config, sr_ecp* sr_ecp_msg, ROBOT_ENUM _robot_name)
 {
 
     switch (_robot_name)
@@ -90,11 +90,11 @@ ui_common_robot::ui_common_robot (edp_state_def* _edp_state, configurator &_conf
 
 // ---------------------------------------------------------------
 /* // by Y - zdefiniowane w irp6_on_track_robot - przemyslec czy nie trzeba wstawic warunku na poprawnosc synchronizacji
-void ui_common_robot::synchronise ( void ) { 
+void ui_common_robot::synchronise ( void ) {
 // Zlecenie synchronizacji robota
   ecp->EDP_command_and_reply_buffer.instruction.instruction_type = SYNCHRO;
   ecp->EDP_command_and_reply_buffer.send(EDP_fd);  // Wyslanie zlecenia synchronizacji
-  ecp->EDP_command_and_reply_buffer.query(EDP_fd); // Odebranie wyniku zlecenia  
+  ecp->EDP_command_and_reply_buffer.query(EDP_fd); // Odebranie wyniku zlecenia
   if (ecp->EDP_command_and_reply_buffer.reply_package.reply_type == SYNCHRO_OK)
     synchronised = true;
 };// end: ui_common_robot::synchronise ()
@@ -324,10 +324,10 @@ bool ui_common_robot::move_motors ( double final_position[] )
     double max_inc=0.0, max_inc_grip = 0.0,  temp = 0.0; // Zmienne pomocnicze
 
     /*
-    	if (is_synchronised()) 
+    	if (is_synchronised())
     		printf("zsynchronizowany move motors\n");
-    	else 
-    		printf("niezsynchronizowany move motors\n");		
+    	else
+    		printf("niezsynchronizowany move motors\n");
     	*/
     if (ecp->is_synchronised())
     {  // Robot zsynchronizowany

@@ -18,7 +18,6 @@ PHABOPTS= -l socket
 
 HOMEDIR = ../../../..
 include $(HOMEDIR)/common.mk
-ECP_DIR = $(HOMEDIR)/src/ecp
 HEADERSDIR = $(HOMEDIR)/include
 
 CXXFLAGS += -I $(HEADERSDIR) -I.

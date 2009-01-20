@@ -88,7 +88,7 @@ close_wnd_irp6_postument_xyz_angle_axis( PtWidget_t *widget, ApInfo_t *apinfo, P
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	
+
 	if (ui_state.is_wind_irp6p_xyz_angle_axis_open)
 	{
 		PtDestroyWidget( ABW_wnd_irp6_postument_xyz_angle_axis );
@@ -172,8 +172,8 @@ close_wnd_irp6_postument_xyz_angle_axis_ts( PtWidget_t *widget, ApInfo_t *apinfo
 	return( Pt_CONTINUE );
 
 	}
-	
-	
+
+
 
 
 int
@@ -212,8 +212,8 @@ start_wnd_irp6_postument_xyz_eul_zyz_ts( PtWidget_t *widget, ApInfo_t *apinfo, P
 	return( Pt_CONTINUE );
 
 	}
-	
-	
+
+
 
 
 int
@@ -235,8 +235,8 @@ start_wnd_irp6_postument_kinematic( PtWidget_t *widget, ApInfo_t *apinfo, PtCall
 	return( Pt_CONTINUE );
 
 	}
-	
-	
+
+
 
 int
 start_wnd_irp6_postument_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
@@ -257,7 +257,7 @@ start_wnd_irp6_postument_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, 
 	return( Pt_CONTINUE );
 
 	}
-	
+
 
 int
 clear_wnd_irp6p_xyz_euler_zyz_ts_flag( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
@@ -309,8 +309,8 @@ close_wnd_irp6_postument_kinematic( PtWidget_t *widget, ApInfo_t *apinfo, PtCall
 	return( Pt_CONTINUE );
 
 	}
-	
-	
+
+
 int
 close_wnd_irp6_postument_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
@@ -327,8 +327,8 @@ close_wnd_irp6_postument_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, 
 	return( Pt_CONTINUE );
 
 	}
-	
-	
+
+
 
 
 int
@@ -419,7 +419,7 @@ clear_wnd_irp6p_inc_flag( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 	return( Pt_CONTINUE );
 
 	}
-	
+
 
 int
 clear_wnd_irp6p_int_flag( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
@@ -432,7 +432,7 @@ clear_wnd_irp6p_int_flag( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 	ui_state.is_wind_irp6p_int_open=false;
 	return( Pt_CONTINUE );
 
-	}	
+	}
 
 
 int
@@ -448,7 +448,7 @@ clear_wnd_irp6p_xyz_euler_zyz_flag( PtWidget_t *widget, ApInfo_t *apinfo, PtCall
 
 	}
 
-	
+
 int
 clear_wnd_irp6p_xyz_angle_axis_flag( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
@@ -473,13 +473,13 @@ clear_wnd_irp6p_servo_algorithm_flag( PtWidget_t *widget, ApInfo_t *apinfo, PtCa
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui_state.is_wind_irp6p_servo_algorithm_open=false; 
+	ui_state.is_wind_irp6p_servo_algorithm_open=false;
 
 	return( Pt_CONTINUE );
 
 	}
-	
-	
+
+
 
 int
 import_wnd_irp6_postument_inc( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
@@ -503,11 +503,11 @@ import_wnd_irp6_postument_inc( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
     val = strtod( tmp, &tmp );
 	PtSetResource(ABW_PtNumericFloat_wind_irp6p_inc_p2, Pt_ARG_NUMERIC_VALUE, &val , 0);
     val = strtod( tmp, &tmp );
-	PtSetResource(ABW_PtNumericFloat_wind_irp6p_inc_p3, Pt_ARG_NUMERIC_VALUE, &val , 0);	
+	PtSetResource(ABW_PtNumericFloat_wind_irp6p_inc_p3, Pt_ARG_NUMERIC_VALUE, &val , 0);
     val = strtod( tmp, &tmp );
 	PtSetResource(ABW_PtNumericFloat_wind_irp6p_inc_p4, Pt_ARG_NUMERIC_VALUE, &val , 0);
     val = strtod( tmp, &tmp );
-	PtSetResource(ABW_PtNumericFloat_wind_irp6p_inc_p5, Pt_ARG_NUMERIC_VALUE, &val , 0);							
+	PtSetResource(ABW_PtNumericFloat_wind_irp6p_inc_p5, Pt_ARG_NUMERIC_VALUE, &val , 0);
     val = strtod( tmp, &tmp );
 	PtSetResource(ABW_PtNumericFloat_wind_irp6p_inc_p6, Pt_ARG_NUMERIC_VALUE, &val , 0);
 
@@ -529,7 +529,7 @@ export_wnd_irp6_postument_inc( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	char buffer[ 200 ];
 
 	double *wektor[7];
-		
+
 	PtGetResource(ABW_PtNumericFloat_wind_irp6p_inc_p0, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
 	PtGetResource(ABW_PtNumericFloat_wind_irp6p_inc_p1, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
 	PtGetResource(ABW_PtNumericFloat_wind_irp6p_inc_p2, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
@@ -538,10 +538,10 @@ export_wnd_irp6_postument_inc( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	PtGetResource(ABW_PtNumericFloat_wind_irp6p_inc_p5, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
 	PtGetResource(ABW_PtNumericFloat_wind_irp6p_inc_p6, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
 
-      sprintf(buffer, "EDP_IRP6_P INCREMENTAL POSITION\n %f %f %f %f %f %f %f", 
-		*wektor[0], *wektor[1], *wektor[2], *wektor[3],  *wektor[4], *wektor[5], *wektor[6]);        
+      sprintf(buffer, "EDP_IRP6_P INCREMENTAL POSITION\n %f %f %f %f %f %f %f",
+		*wektor[0], *wektor[1], *wektor[2], *wektor[3],  *wektor[4], *wektor[5], *wektor[6]);
 
-	ui_msg.ui->message(buffer);	
+	ui_msg.ui->message(buffer);
 
 	return( Pt_CONTINUE );
 
@@ -570,11 +570,11 @@ import_wnd_irp6_postument_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
     val = strtod( tmp, &tmp );
 	PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p3, Pt_ARG_NUMERIC_VALUE, &val , 0);
     val = strtod( tmp, &tmp );
-	PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p4, Pt_ARG_NUMERIC_VALUE, &val , 0);	
+	PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p4, Pt_ARG_NUMERIC_VALUE, &val , 0);
     val = strtod( tmp, &tmp );
 	PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p5, Pt_ARG_NUMERIC_VALUE, &val , 0);
     val = strtod( tmp, &tmp );
-	PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p6, Pt_ARG_NUMERIC_VALUE, &val , 0);							
+	PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p6, Pt_ARG_NUMERIC_VALUE, &val , 0);
     val = strtod( tmp, &tmp );
 	PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p7, Pt_ARG_NUMERIC_VALUE, &val , 0);
 
@@ -605,10 +605,10 @@ export_wnd_irp6_postument_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	PtGetResource(ABW_PtNumericFloat_wind_irp6p_int_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
 	PtGetResource(ABW_PtNumericFloat_wind_irp6p_int_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
 
-      sprintf(buffer, "EDP_IRP6_P INTERNAL POSITION\n %f %f %f %f %f %f %f", 
+      sprintf(buffer, "EDP_IRP6_P INTERNAL POSITION\n %f %f %f %f %f %f %f",
 		*wektor[0], *wektor[1], *wektor[2], *wektor[3],  *wektor[4], *wektor[5], *wektor[6]);
 
-	ui_msg.ui->message(buffer);	
+	ui_msg.ui->message(buffer);
 
 	return( Pt_CONTINUE );
 
@@ -635,11 +635,11 @@ import_wnd_irp6_postument_xyz_euler_zyz( PtWidget_t *widget, ApInfo_t *apinfo, P
     val = strtod( tmp, &tmp );
 	PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_p2, Pt_ARG_NUMERIC_VALUE, &val , 0);
     val = strtod( tmp, &tmp );
-	PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_p3, Pt_ARG_NUMERIC_VALUE, &val , 0);	
+	PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_p3, Pt_ARG_NUMERIC_VALUE, &val , 0);
     val = strtod( tmp, &tmp );
 	PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_p4, Pt_ARG_NUMERIC_VALUE, &val , 0);
     val = strtod( tmp, &tmp );
-	PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_p5, Pt_ARG_NUMERIC_VALUE, &val , 0);							
+	PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_p5, Pt_ARG_NUMERIC_VALUE, &val , 0);
     val = strtod( tmp, &tmp );
 	PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_p6, Pt_ARG_NUMERIC_VALUE, &val , 0);
     val = strtod( tmp, &tmp );
@@ -661,7 +661,7 @@ export_wnd_irp6_postument_xyz_euler_zyz( PtWidget_t *widget, ApInfo_t *apinfo, P
 	char buffer[ 200 ];
 
 	double *wektor[7];
-		
+
 	PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
 	PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
 	PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
@@ -670,10 +670,10 @@ export_wnd_irp6_postument_xyz_euler_zyz( PtWidget_t *widget, ApInfo_t *apinfo, P
 	PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
 	PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
 
-      sprintf(buffer, "EDP_IRP6_P XYZ_EULER_ZYZ POSITION\n %f %f %f %f %f %f %f", 
+      sprintf(buffer, "EDP_IRP6_P XYZ_EULER_ZYZ POSITION\n %f %f %f %f %f %f %f",
 		*wektor[0], *wektor[1], *wektor[2], *wektor[3],  *wektor[4], *wektor[5], *wektor[6]);
 
-	ui_msg.ui->message(buffer);	
+	ui_msg.ui->message(buffer);
 
 	return( Pt_CONTINUE );
 
@@ -698,7 +698,7 @@ init_wnd_irp6_postument_inc( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 	{
 		if (ui_state.irp6_postument.edp.is_synchronised ) // Czy robot jest zsynchronizowany?
 		{
-		
+
 			unblock_widget(ABW_PtPane_wind_irp6p_inc_post_synchro_moves);
 			if (!( ui_robot.irp6_postument->read_motors(irp6p_current_pos))) // Odczyt polozenia walow silnikow
 				printf("Blad w read motors\n");
@@ -710,7 +710,7 @@ init_wnd_irp6_postument_inc( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 			PtSetResource(ABW_PtNumericFloat_wind_irp6p_motors_cur_p4, Pt_ARG_NUMERIC_VALUE, &irp6p_current_pos[4] , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6p_motors_cur_p5, Pt_ARG_NUMERIC_VALUE, &irp6p_current_pos[5] , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6p_motors_cur_p6, Pt_ARG_NUMERIC_VALUE, &irp6p_current_pos[6] , 0);
-	
+
 			for (int i = 0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++)
 				irp6p_desired_pos[i] = irp6p_current_pos[i];
 		}
@@ -740,7 +740,7 @@ wnd_irp6p_motors_copy_current_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, 
 
 	// wychwytania ew. bledow ECP::robot
 	double *wektor_ptgr[IRP6_POSTUMENT_NUM_OF_SERVOS], wektor[IRP6_POSTUMENT_NUM_OF_SERVOS];
-	
+
 	if (ui_state.irp6_postument.edp.pid!=-1)
 	{
 		if (ui_state.irp6_postument.edp.is_synchronised ) // Czy robot jest zsynchronizowany?
@@ -768,7 +768,7 @@ wnd_irp6p_motors_copy_current_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, 
 		}
 		else
 		{
-	
+
 		}
 	}
 
@@ -798,12 +798,12 @@ irp6p_move_to_preset_position( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	// wychwytania ew. bledow ECP::robot
 	try
 	{
-	
+
 	if (ui_state.irp6_postument.edp.pid!=-1) {
 
 	 if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6_postument_preset_position_synchro)||
 		(ApName(ApWidget(cbinfo)) == ABN_mm_all_robots_preset_position_synchro))||
-		((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x73 ))		
+		((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x73 ))
 		)&&(ui_state.irp6_postument.edp.is_synchronised)) {// powrot do pozycji synchronizacji
 		 for (int i = 0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++)
 		 {
@@ -818,7 +818,7 @@ irp6p_move_to_preset_position( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 			}
 	} else  if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6_postument_preset_position_1)||
 		(ApName(ApWidget(cbinfo)) == ABN_mm_all_robots_preset_position_1))||
-		((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x31 ))		
+		((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x31 ))
 		)&&(ui_state.irp6_postument.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 		for(int i = 0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++) {
 			 irp6p_desired_pos[i] = ui_state.irp6_postument.edp.preset_position[1][i];
@@ -848,7 +848,7 @@ irp6p_inc_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 	{
 
 	double *wektor[7];
-	double *step1;	
+	double *step1;
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -859,7 +859,7 @@ irp6p_inc_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 	if (ui_state.irp6_postument.edp.pid!=-1) {
 
 		 if (ui_state.irp6_postument.edp.is_synchronised) {
-		 
+
 			PtGetResource(ABW_PtNumericFloat_wind_irp6p_inc_p0,Pt_ARG_NUMERIC_VALUE, &(wektor[0]), 0 );
 			PtGetResource(ABW_PtNumericFloat_wind_irp6p_inc_p1,Pt_ARG_NUMERIC_VALUE, &(wektor[1]), 0 );
 			PtGetResource(ABW_PtNumericFloat_wind_irp6p_inc_p2,Pt_ARG_NUMERIC_VALUE, &(wektor[2]), 0 );
@@ -867,7 +867,7 @@ irp6p_inc_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 			PtGetResource(ABW_PtNumericFloat_wind_irp6p_inc_p4,Pt_ARG_NUMERIC_VALUE, &(wektor[4]), 0 );
 			PtGetResource(ABW_PtNumericFloat_wind_irp6p_inc_p5,Pt_ARG_NUMERIC_VALUE, &(wektor[5]), 0 );
 			PtGetResource(ABW_PtNumericFloat_wind_irp6p_inc_p6,Pt_ARG_NUMERIC_VALUE, &(wektor[6]), 0 );
-			
+
 			 for (int i = 0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++)
 			 {
 		          irp6p_desired_pos[i] = *wektor[i];
@@ -878,61 +878,61 @@ irp6p_inc_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 		          irp6p_desired_pos[i] = 0.0;
 	         }
 	    }
-		
+
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_inc_step, Pt_ARG_NUMERIC_VALUE, &step1, 0 );
-	
+
 		 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_inc_0l) {
 			irp6p_desired_pos[0]-=(*step1);
 		} else
-	
+
 		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_inc_1l) {
 			irp6p_desired_pos[1]-=(*step1);
 		} else
-	
+
 		 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_inc_2l) {
 			irp6p_desired_pos[2]-=(*step1);
 		} else
-	
+
 		 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_inc_3l) {
 			irp6p_desired_pos[3]-=(*step1);
 		} else
-	
+
 		 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_inc_4l) {
 			irp6p_desired_pos[4]-=(*step1);
 		} else
-	
+
 		 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_inc_5l) {
 			irp6p_desired_pos[5]-=(*step1);
 		} else
-		
+
 		 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_inc_6l) {
 			irp6p_desired_pos[6]-=(*step1);
 		} else
-	
+
 		 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_inc_0r) {
 			irp6p_desired_pos[0]+=(*step1);
 		} else
-	
+
 		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_inc_1r) {
 			irp6p_desired_pos[1]+=(*step1);
 		} else
-	
+
 		 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_inc_2r) {
 			irp6p_desired_pos[2]+=(*step1);
 		} else
-	
+
 		 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_inc_3r) {
 			irp6p_desired_pos[3]+=(*step1);
 		} else
-	
+
 		 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_inc_4r) {
 			irp6p_desired_pos[4]+=(*step1);
 		} else
-	
+
 		 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_inc_5r) {
 			irp6p_desired_pos[5]+=(*step1);
 		} else
-	
+
 		 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_inc_6r) {
 			irp6p_desired_pos[6]+=(*step1);
 		}
@@ -1000,7 +1000,7 @@ init_wnd_irp6_postument_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 	}
 	} // end try
 	CATCH_SECTION_UI
-	
+
 	return( Pt_CONTINUE );
 }
 
@@ -1016,7 +1016,7 @@ wnd_irp6p_joints_copy_current_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, 
 
 	// wychwytania ew. bledow ECP::robot
 	double *wektor_ptgr[IRP6_POSTUMENT_NUM_OF_SERVOS], wektor[IRP6_POSTUMENT_NUM_OF_SERVOS];
-	
+
 	if (ui_state.irp6_postument.edp.pid!=-1)
 	{
 		if (ui_state.irp6_postument.edp.is_synchronised ) // Czy robot jest zsynchronizowany?
@@ -1028,7 +1028,7 @@ wnd_irp6p_joints_copy_current_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, 
 			PtGetResource(ABW_PtNumericFloat_wind_irp6p_joints_cur_p5, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]) , 0);
 			PtGetResource(ABW_PtNumericFloat_wind_irp6p_joints_cur_p6, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]) , 0);
 			PtGetResource(ABW_PtNumericFloat_wind_irp6p_joints_cur_p7, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]) , 0);
-			
+
 			for (int i=0; i< IRP6_POSTUMENT_NUM_OF_SERVOS; i++)
 			{
 				wektor[i] = *wektor_ptgr[i];
@@ -1044,7 +1044,7 @@ wnd_irp6p_joints_copy_current_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, 
 		}
 		else
 		{
-	
+
 		}
 	}
 
@@ -1052,8 +1052,8 @@ wnd_irp6p_joints_copy_current_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, 
 	return( Pt_CONTINUE );
 
 	}
-	
-	
+
+
 
 
 int
@@ -1061,7 +1061,7 @@ irp6p_int_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 {
 
 	double *wektor[IRP6_POSTUMENT_NUM_OF_SERVOS];
-	double *step1;	
+	double *step1;
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -1071,7 +1071,7 @@ irp6p_int_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 	{
 	if ((ui_state.irp6_postument.edp.pid!=-1)&&(ui_state.irp6_postument.edp.is_synchronised))
 	{
-	
+
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_int_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_int_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_int_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
@@ -1079,13 +1079,13 @@ irp6p_int_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_int_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_int_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_int_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
-		
+
 		 for (int i = 0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++)
 		 {
 	          irp6p_desired_pos[i] = *wektor[i];
           }
 
-		
+
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_int_step, Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 
 		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_int_1l) {
@@ -1144,7 +1144,7 @@ irp6p_int_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 			PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p6, Pt_ARG_NUMERIC_VALUE, &irp6p_desired_pos[5] , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p7, Pt_ARG_NUMERIC_VALUE, &irp6p_desired_pos[6] , 0);
 
-		} 
+		}
 
 	} // end if (ui_state.irp6_postument.edp.pid!=-1)
 	} // end try
@@ -1191,7 +1191,7 @@ init_wnd_irp6_postument_xyz_euler_zyz( PtWidget_t *widget, ApInfo_t *apinfo, PtC
 	}
 	} // end try
 	CATCH_SECTION_UI
-	
+
 	return( Pt_CONTINUE );
 }
 
@@ -1207,7 +1207,7 @@ wnd_irp6p_xyz_zyz_copy_cur_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, PtC
 
 	// wychwytania ew. bledow ECP::robot
 	double *wektor_ptgr[7], wektor[7];
-	
+
 	if (ui_state.irp6_postument.edp.pid!=-1)
 	{
 		if (ui_state.irp6_postument.edp.is_synchronised ) // Czy robot jest zsynchronizowany?
@@ -1235,7 +1235,7 @@ wnd_irp6p_xyz_zyz_copy_cur_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, PtC
 		}
 		else
 		{
-	
+
 		}
 	}
 
@@ -1262,7 +1262,7 @@ irp6p_xyz_euler_zyz_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 	try
 	{
 	 if ( ui_state.irp6_postument.edp.is_synchronised ) {
-	
+
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
@@ -1270,77 +1270,77 @@ irp6p_xyz_euler_zyz_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0 );
-	
+
 	  for (int i = 0; i < 7; i++)
 	       irp6p_desired_pos[i] = *wektor[i];
-	
+
 	PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_step, Pt_ARG_NUMERIC_VALUE, &step1, 0 );
-	
+
 	 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_euler_zyz_1l) {
 	// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 		irp6p_desired_pos[0]-=(*step1);
 	} else
-	
+
 	if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_euler_zyz_2l) {
 	// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 		irp6p_desired_pos[1]-=(*step1);
 	} else
-	
+
 	 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_euler_zyz_3l) {
 	// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 		irp6p_desired_pos[2]-=(*step1);
 	} else
-	
+
 	 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_euler_zyz_4l) {
 	// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 		irp6p_desired_pos[3]-=(*step1);
 	} else
-	
+
 	 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_euler_zyz_5l) {
 	// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 		irp6p_desired_pos[4]-=(*step1);
 	} else
-	
+
 	 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_euler_zyz_6l) {
 	// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 		irp6p_desired_pos[5]-=(*step1);
 	} else
-	
+
 	 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_euler_zyz_7l) {
 	// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 		irp6p_desired_pos[6]-=(*step1);
 	} else
-	
+
 	 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_euler_zyz_1r) {
 	// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 		irp6p_desired_pos[0]+=*step1;
 	} else
-	
+
 	if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_euler_zyz_2r) {
 	// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 		irp6p_desired_pos[1]+=*step1;
 	} else
-	
+
 	 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_euler_zyz_3r) {
 	// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 		irp6p_desired_pos[2]+=*step1;
 	} else
-	
+
 	 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_euler_zyz_4r) {
 	// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 		irp6p_desired_pos[3]+=*step1;
 	} else
-	
+
 	 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_euler_zyz_5r) {
 	// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 		irp6p_desired_pos[4]+=*step1;
 	} else
-	
+
 	 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_euler_zyz_6r) {
 	// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 		irp6p_desired_pos[5]+=*step1;
 	} else
-	
+
 	 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_euler_zyz_7r) {
 	// 	PtGetResource(ABW_PtNumericFloat_internal_step,Pt_ARG_NUMERIC_VALUE, &step1, 0 );
 		irp6p_desired_pos[6]+=*step1;
@@ -1372,43 +1372,43 @@ init_wnd_irp6_postument_xyz_angle_axis( PtWidget_t *widget, ApInfo_t *apinfo, Pt
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	
+
 	double alfa, kx, ky, kz;
 
 	// wychwytania ew. bledow ECP::robot
 	try
-	{	
+	{
 	if (ui_state.irp6_postument.edp.pid!=-1)
 	{
 		if ( ui_state.irp6_postument.edp.is_synchronised )  // Czy robot jest zsynchronizowany?
 		{
 			if (!(ui_robot.irp6_postument->read_xyz_angle_axis(irp6p_current_pos))) // Odczyt polozenia walow silnikow
 				printf("Blad w read read_xyz_angle_axis\n");
-	
+
 			PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_read_p1, Pt_ARG_NUMERIC_VALUE, &irp6p_current_pos[0] , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_read_p2, Pt_ARG_NUMERIC_VALUE, &irp6p_current_pos[1] , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_read_p3, Pt_ARG_NUMERIC_VALUE, &irp6p_current_pos[2] , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_read_p8, Pt_ARG_NUMERIC_VALUE, &irp6p_current_pos[6] , 0);
-				
+
 			alfa = sqrt(irp6p_current_pos[3]*irp6p_current_pos[3]
 				+irp6p_current_pos[4]*irp6p_current_pos[4]
 				+irp6p_current_pos[5]*irp6p_current_pos[5]);
-			
+
 			kx = irp6p_current_pos[3]/alfa;
 			ky = irp6p_current_pos[4]/alfa;
 			kz = irp6p_current_pos[5]/alfa;
-			
+
 			PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_read_p4, Pt_ARG_NUMERIC_VALUE, &kx , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_read_p5, Pt_ARG_NUMERIC_VALUE, &ky , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_read_p6, Pt_ARG_NUMERIC_VALUE, &kz , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_read_p7, Pt_ARG_NUMERIC_VALUE, &alfa , 0);
-	
+
 			for (int i = 0; i < 7; i++)
 				irp6p_desired_pos[i] = irp6p_current_pos[i];
-		} 
+		}
 		else
 		{
-	
+
 		}
 	}
 	} // end try
@@ -1429,7 +1429,7 @@ wnd_irp6p_xyz_aa_copy_current_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, 
 
 	// wychwytania ew. bledow ECP::robot
 	double *wektor_ptgr[8], wektor[8];
-	
+
 	if (ui_state.irp6_postument.edp.pid!=-1)
 	{
 		if (ui_state.irp6_postument.edp.is_synchronised ) // Czy robot jest zsynchronizowany?
@@ -1442,7 +1442,7 @@ wnd_irp6p_xyz_aa_copy_current_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, 
 			PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_read_p6, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]) , 0);
 			PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_read_p7, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]) , 0);
 			PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_read_p8, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[7]) , 0);
-			
+
 			for (int i=0; i< 8; i++)
 			{
 				wektor[i] = *wektor_ptgr[i];
@@ -1460,7 +1460,7 @@ wnd_irp6p_xyz_aa_copy_current_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, 
 		}
 		else
 		{
-	
+
 		}
 	}
 
@@ -1481,16 +1481,16 @@ irp6p_xyz_angle_axis_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 	double wl; double l_eps = 0;
 	double kx, ky, kz;
 	// double alfa;
-	
+
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	
+
 	// wychwytania ew. bledow ECP::robot
 	try
 	{
 	if ( ui_state.irp6_postument.edp.is_synchronised )
 	{
-	
+
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_p1, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[0], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_p2, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[1], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_p3, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[2], 0 );
@@ -1499,74 +1499,74 @@ irp6p_xyz_angle_axis_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_p6, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[5], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_p7, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[6], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_p8, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[7], 0 );
-		
+
 		for (int i=0; i< 8; i++)
 		{
 			wektor[i] = *wektor_ptgr[i];
 		}
-		
+
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_step, Pt_ARG_NUMERIC_VALUE, &krok, 0 );
-		
+
 		// wektor przesuniecia
-		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_1l) 
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_1l)
 			wektor[0]-=(*krok);
-		
-		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_1r) 
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_1r)
 			wektor[0]+=(*krok);
-			
-		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_2l) 
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_2l)
 			wektor[1]-=(*krok);
-		
-		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_2r) 
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_2r)
 			wektor[1]+=(*krok);
-			
-		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_3l) 
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_3l)
 			wektor[2]-=(*krok);
-		
-		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_3r) 
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_3r)
 			wektor[2]+=(*krok);
-		
+
 		// parametry wersora obrotu
-		
+
 
 		// kat obrotu i chwytak
-		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_7l) 
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_7l)
 			wektor[6]-=(*krok);
-			
-		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_8l) 
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_8l)
 			wektor[7]-=(*krok);
-		
-		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_7r) 
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_7r)
 			wektor[6]+=(*krok);
-			
-		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_8r) 
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_angle_axis_8r)
 			wektor[7]+=(*krok);
-		
+
 		// sprawdzenie dlugosci wersora
 		// w przypadku, gdy dlugosc wersora jest inna niz 1
 		// parametry wersora zostaja przeskalowane
-		
+
 		kx = wektor[3];
 		ky = wektor[4];
 		kz = wektor[5];
-		
+
 		wl = sqrt(kx*kx + ky*ky + kz*kz);
-		
+
 		if((wl > 1 + l_eps) || (wl < 1 - l_eps))
 		{
 			wektor[3] = kx/wl;
 			wektor[4] = ky/wl;
 			wektor[5] = kz/wl;
-		
+
 		}
-		
+
 		// przepisanie parametrow ruchu do postaci rozkazu w formie XYZ_ANGLE_AXIS
 		for(int i=0; i<6; i++)
 		{
 			irp6p_desired_pos[i] = wektor[i];
 			if( i >2)
 				irp6p_desired_pos[i] *= wektor[6];
-		}	
+		}
 		irp6p_desired_pos[6] = wektor[7];
 
 		// zlecenie wykonania ruchu
@@ -1605,7 +1605,7 @@ EDP_irp6_postument_synchronise( PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 	// wychwytania ew. bledow ECP::robot
 	try
 	{
-		// dla robota irp6_postument	
+		// dla robota irp6_postument
 
 		if ((ui_state.irp6_postument.edp.state > 0)&&
 			(ui_state.irp6_postument.edp.is_synchronised == false))
@@ -1625,9 +1625,9 @@ EDP_irp6_postument_synchronise( PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 	return( Pt_CONTINUE );
 
 	}
-	
-	
-	
+
+
+
 
 int
 init_wnd_irp6_postument_xyz_aa_ts( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
@@ -1642,22 +1642,22 @@ init_wnd_irp6_postument_xyz_aa_ts( PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 
 	// wychwytania ew. bledow ECP::robot
 	try
-	{	
+	{
 	if (ui_state.irp6_postument.edp.pid!=-1)
 	{
 		if ( ui_state.irp6_postument.edp.is_synchronised )  // Czy robot jest zsynchronizowany?
 		{
 			if (!(ui_robot.irp6_postument->read_tool_xyz_angle_axis(tool_vector))) // Odczyt polozenia walow silnikow
 				printf("Blad w read external\n");
-	
+
 			PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_ts_read_p1, Pt_ARG_NUMERIC_VALUE, &tool_vector[0] , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_ts_read_p2, Pt_ARG_NUMERIC_VALUE, &tool_vector[1] , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_ts_read_p3, Pt_ARG_NUMERIC_VALUE, &tool_vector[2] , 0);
-				
+
 			alfa = sqrt(tool_vector[3]*tool_vector[3]
 				+tool_vector[4]*tool_vector[4]
 				+tool_vector[5]*tool_vector[5]);
-			
+
 			if (alfa==0){
 				kx = -1;
 				ky = 0;
@@ -1668,7 +1668,7 @@ init_wnd_irp6_postument_xyz_aa_ts( PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 				ky = tool_vector[4]/alfa;
 				kz = tool_vector[5]/alfa;
 			}
-			
+
 			PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_ts_read_p4, Pt_ARG_NUMERIC_VALUE, &kx , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_ts_read_p5, Pt_ARG_NUMERIC_VALUE, &ky , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_ts_read_p6, Pt_ARG_NUMERIC_VALUE, &kz , 0);
@@ -1676,7 +1676,7 @@ init_wnd_irp6_postument_xyz_aa_ts( PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 		}
 		else
 		{
-	
+
 		}
 	}
 	} // end try
@@ -1698,7 +1698,7 @@ wnd_irp6p_xyz_aa_ts_copy_cur_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, P
 
 	// wychwytania ew. bledow ECP::robot
 	double *wektor_ptgr[7], wektor[7];
-	
+
 	if (ui_state.irp6_postument.edp.pid!=-1)
 	{
 		if (ui_state.irp6_postument.edp.is_synchronised ) // Czy robot jest zsynchronizowany?
@@ -1726,7 +1726,7 @@ wnd_irp6p_xyz_aa_ts_copy_cur_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, P
 		}
 		else
 		{
-	
+
 		}
 	}
 
@@ -1749,14 +1749,14 @@ irp6p_xyz_angle_axis_set_tool( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	double tool_vector[6];
 	double wl; double l_eps = 0;
 	double kx, ky, kz;
-	
-	
+
+
 	// wychwytania ew. bledow ECP::robot
 	try
 	{
 	if ( ui_state.irp6_postument.edp.is_synchronised )
 	{
-	
+
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_ts_p1, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[0], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_ts_p2, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[1], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_ts_p3, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[2], 0 );
@@ -1764,40 +1764,40 @@ irp6p_xyz_angle_axis_set_tool( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_ts_p5, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[4], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_ts_p6, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[5], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_angle_axis_ts_p7, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[6], 0 );
-		
+
 		for (int i=0; i< 7; i++)
 		{
 			wektor[i] = *wektor_ptgr[i];
 		}
-		
+
 		// sprawdzenie dlugosci wersora
 		// w przypadku, gdy dlugosc wersora jest inna niz 1
 		// parametry wersora zostaja przeskalowane
-		
+
 		kx = wektor[3];
 		ky = wektor[4];
 		kz = wektor[5];
-		
+
 		wl = sqrt(kx*kx + ky*ky + kz*kz);
-		
+
 		if((wl > 1 + l_eps) || (wl < 1 - l_eps))
 		{
 			wektor[3] = kx/wl;
 			wektor[4] = ky/wl;
 			wektor[5] = kz/wl;
 		}
-		
+
 		// przepisanie parametrow ruchu do postaci rozkazu w formie XYZ_ANGLE_AXIS
 		for(int i=0; i<6; i++)
 		{
 			tool_vector[i] = wektor[i];
 			if( i >2)
 				tool_vector[i] *= wektor[6];
-		}	
-	
+		}
+
 		// zlecenie wykonania ruchu
 		ui_robot.irp6_postument->set_tool_xyz_angle_axis(tool_vector);
-		
+
 	}
 	else
 	{
@@ -1821,7 +1821,7 @@ init_wnd_irp6_postument_xyz_euler_zyz_ts( PtWidget_t *widget, ApInfo_t *apinfo, 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	double tool_vector[6];	
+	double tool_vector[6];
 
 	// wychwytania ew. bledow ECP::robot
 	try
@@ -1864,7 +1864,7 @@ wnd_irp6p_xyz_zyz_ts_copy_cur_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, 
 
 	// wychwytania ew. bledow ECP::robot
 	double *wektor_ptgr[6], wektor[6];
-	
+
 	if (ui_state.irp6_postument.edp.pid!=-1)
 	{
 		if (ui_state.irp6_postument.edp.is_synchronised ) // Czy robot jest zsynchronizowany?
@@ -1890,7 +1890,7 @@ wnd_irp6p_xyz_zyz_ts_copy_cur_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, 
 		}
 		else
 		{
-	
+
 		}
 	}
 
@@ -1910,29 +1910,29 @@ irp6p_xyz_euler_zyz_set_tool( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 	double *wektor[6];
 	double tool_vector[6];
-	
-	
+
+
 	// wychwytania ew. bledow ECP::robot
 	try
 	{
 	if ( ui_state.irp6_postument.edp.is_synchronised )
 	{
-	
+
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_ts_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_ts_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_ts_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_ts_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_ts_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0 );
 		PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_ts_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0 );
-			
+
 		for(int i=0; i<6; i++)
 		{
-			tool_vector[i] = *wektor[i];			
+			tool_vector[i] = *wektor[i];
 		}
-	
+
 		// zlecenie wykonania ruchu
 		ui_robot.irp6_postument->set_tool_xyz_euler_zyz(tool_vector);
-		
+
 	}
 	else
 	{
@@ -1943,9 +1943,9 @@ irp6p_xyz_euler_zyz_set_tool( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 	return( Pt_CONTINUE );
 
 	}
-	
-	
-	
+
+
+
 
 
 int
@@ -1980,9 +1980,9 @@ init_wnd_irp6_postument_kinematic( PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 	return( Pt_CONTINUE );
 
 	}
-	
-	
-	
+
+
+
 
 
 int
@@ -1995,20 +1995,20 @@ irp6p_kinematic_set( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 
 	BYTE *model_no_tmp;
 	BYTE model_no_output;
-	
+
 	// wychwytania ew. bledow ECP::robot
 	try
 	{
 	if ( ui_state.irp6_postument.edp.is_synchronised )
 	{
-	
+
 		PtGetResource(ABW_PtNumericInteger_wnd_irp6p_kinematic_model_no, Pt_ARG_NUMERIC_VALUE, &model_no_tmp, 0 );
-			
+
 		model_no_output = *model_no_tmp;
-	
+
 		// zlecenie wykonania ruchu
 		ui_robot.irp6_postument->set_kinematic(model_no_output);
-		
+
 	}
 	else
 	{
@@ -2048,7 +2048,7 @@ init_wnd_irp6_postument_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, P
 			PtSetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_alg_5, Pt_ARG_NUMERIC_VALUE, servo_alg_no[4] , 0);
 			PtSetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_alg_6, Pt_ARG_NUMERIC_VALUE, servo_alg_no[5] , 0);
 			PtSetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_alg_7, Pt_ARG_NUMERIC_VALUE, servo_alg_no[6] , 0);
-			
+
 			PtSetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_par_1, Pt_ARG_NUMERIC_VALUE, servo_par_no[0] , 0);
 			PtSetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_par_2, Pt_ARG_NUMERIC_VALUE, servo_par_no[1] , 0);
 			PtSetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_par_3, Pt_ARG_NUMERIC_VALUE, servo_par_no[2] , 0);
@@ -2056,7 +2056,7 @@ init_wnd_irp6_postument_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, P
 			PtSetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_par_5, Pt_ARG_NUMERIC_VALUE, servo_par_no[4] , 0);
 			PtSetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_par_6, Pt_ARG_NUMERIC_VALUE, servo_par_no[5] , 0);
 			PtSetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_par_7, Pt_ARG_NUMERIC_VALUE, servo_par_no[6] , 0);
-	
+
 		} else
 		{
 
@@ -2082,12 +2082,12 @@ wnd_irp6p_ser_alg_copy_cur_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, PtC
 	// wychwytania ew. bledow ECP::robot
 	BYTE *wektor_ptgr[IRP6_POSTUMENT_NUM_OF_SERVOS], *wektor2_ptgr[IRP6_POSTUMENT_NUM_OF_SERVOS],
 		wektor[IRP6_POSTUMENT_NUM_OF_SERVOS], wektor2[IRP6_POSTUMENT_NUM_OF_SERVOS];
-	
+
 	if (ui_state.irp6_postument.edp.pid!=-1)
 	{
 		if (ui_state.irp6_postument.edp.is_synchronised ) // Czy robot jest zsynchronizowany?
 		{
-	
+
 
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_alg_1, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[0]) , 0);
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_alg_2, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[1]) , 0);
@@ -2096,7 +2096,7 @@ wnd_irp6p_ser_alg_copy_cur_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, PtC
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_alg_5, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]) , 0);
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_alg_6, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]) , 0);
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_alg_7, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]) , 0);
-			
+
 			for (int i=0; i< IRP6_POSTUMENT_NUM_OF_SERVOS; i++)
 			{
 				wektor[i] = *wektor_ptgr[i];
@@ -2109,7 +2109,7 @@ wnd_irp6p_ser_alg_copy_cur_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, PtC
 			PtSetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_alg_5, Pt_ARG_NUMERIC_VALUE, wektor[4], 0 );
 			PtSetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_alg_6, Pt_ARG_NUMERIC_VALUE, wektor[5], 0 );
 			PtSetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_alg_7, Pt_ARG_NUMERIC_VALUE, wektor[6], 0 );
-			
+
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_par_1, Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[0]) , 0);
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_par_2, Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[1]) , 0);
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_par_3, Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[2]) , 0);
@@ -2117,7 +2117,7 @@ wnd_irp6p_ser_alg_copy_cur_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, PtC
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_par_5, Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[4]) , 0);
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_par_6, Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[5]) , 0);
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_read_par_7, Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[6]) , 0);
-			
+
 			for (int i=0; i< IRP6_POSTUMENT_NUM_OF_SERVOS; i++)
 			{
 				wektor2[i] = *wektor2_ptgr[i];
@@ -2136,7 +2136,7 @@ wnd_irp6p_ser_alg_copy_cur_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, PtC
 		{
 			// Wygaszanie elementow przy niezsynchronizowanym robocie
 
-	
+
 		}
 	}
 
@@ -2158,13 +2158,13 @@ irp6p_servo_algorithm_set( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 	BYTE servo_alg_no_output[IRP6_POSTUMENT_NUM_OF_SERVOS];
 	BYTE *servo_par_no_tmp [IRP6_POSTUMENT_NUM_OF_SERVOS];
 	BYTE servo_par_no_output[IRP6_POSTUMENT_NUM_OF_SERVOS];
-	
+
 	// wychwytania ew. bledow ECP::robot
 	try
 	{
 	if ( ui_state.irp6_postument.edp.is_synchronised )
 	{
-	
+
 		PtGetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_alg_1, Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[0], 0 );
 		PtGetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_alg_2, Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[1], 0 );
 		PtGetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_alg_3, Pt_ARG_NUMERIC_VALUE, &servo_alg_no_tmp[2], 0 );
@@ -2180,16 +2180,16 @@ irp6p_servo_algorithm_set( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 		PtGetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_par_5, Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[4], 0 );
 		PtGetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_par_6, Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[5], 0 );
 		PtGetResource(ABW_PtNumericInteger_wnd_irp6p_servo_algorithm_par_7, Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[6], 0 );
-			
+
 		for(int i=0; i<IRP6_POSTUMENT_NUM_OF_SERVOS; i++)
 		{
 			servo_alg_no_output[i] = *servo_alg_no_tmp[i];
 			servo_par_no_output[i] = *servo_par_no_tmp[i];
 		}
-	
+
 		// zlecenie wykonania ruchu
 		ui_robot.irp6_postument->set_servo_algorithm(servo_alg_no_output, servo_par_no_output);
-		
+
 	}
 	else
 	{
@@ -2216,20 +2216,20 @@ EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 	short tmp;
 	char tmp_string[100];
 	char tmp2_string[100];
-	
+
 	FILE* file;					// do sprawdzenia czy istnieje /net/node_name/dev/TWOJ_ROBOT
 	controller_state_t robot_controller_initial_state_tmp;
 
 	try { // dla bledow robot :: ECP_error
-	
+
 	// dla robota irp6_postument
 	if (ui_state.irp6_postument.edp.state == 0)
 	{
 		sprintf(tmp_string, "/dev/name/global/%s", ui_state.irp6_postument.edp.hardware_busy_attach_point);
-		
+
 		sprintf(tmp2_string, "/dev/name/global/%s", ui_state.irp6_postument.edp.network_resourceman_attach_point);
 
-		// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow		
+		// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
 		if((!(ui_state.irp6_postument.edp.test_mode)) && ( access(tmp_string, R_OK)== 0 )
 			|| (access(tmp2_string, R_OK)== 0 )
 		)
@@ -2237,12 +2237,11 @@ EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 			ui_msg.ui->message("edp_irp6_postument already exists");
 		} else {
 			ui_state.irp6_postument.edp.node_nr = config->return_node_number(ui_state.irp6_postument.edp.node_name);
-	
+
 			ui_robot.irp6_postument = new ui_common_robot(
-					&ui_state.irp6_postument.edp,
 					*config, ui_msg.all_ecp,
 					ROBOT_IRP6_POSTUMENT);
-			
+
 			ui_state.irp6_postument.edp.pid = ui_robot.irp6_postument->ecp->get_EDP_pid();
 
 			if (ui_state.irp6_postument.edp.pid<0)
@@ -2253,7 +2252,7 @@ EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 
 				tmp = 0;
 			 	// kilka sekund  (~1) na otworzenie urzadzenia
-				while((ui_state.irp6_postument.edp.reader_fd = name_open(ui_state.irp6_postument.edp.network_reader_attach_point, 
+				while((ui_state.irp6_postument.edp.reader_fd = name_open(ui_state.irp6_postument.edp.network_reader_attach_point,
 					NAME_FLAG_ATTACH_GLOBAL))  < 0)
 					if((tmp++)<CONNECT_RETRY) {
 						delay(CONNECT_DELAY);
@@ -2261,7 +2260,7 @@ EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 					   perror("blad odwolania do READER_P\n");
 					   break;
 					}
-				// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)	
+				// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 				ui_robot.irp6_postument->get_controller_state(&robot_controller_initial_state_tmp);
 
 				ui_state.irp6_postument.edp.state = 1; // edp wlaczone reader czeka na start
@@ -2271,12 +2270,12 @@ EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 				} else { // jesli robot jest zsynchronizowany
 					ui_state.irp6_postument.edp.is_synchronised = true; // edp wlaczone reader czeka na start
 				}
-			
+
 
 			}
 		}
 	}
-	
+
 
 	} // end try
 	CATCH_SECTION_UI
@@ -2286,8 +2285,8 @@ EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 	return( Pt_CONTINUE );
 
 	}
-	
-	
+
+
 
 int
 EDP_irp6_postument_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
@@ -2342,7 +2341,7 @@ close_all_irp6p_windows( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 	close_wnd_irp6_postument_xyz_euler_zyz_ts(NULL, NULL, NULL);
 	close_wnd_irp6_postument_kinematic(NULL, NULL, NULL);
 	close_wnd_irp6_postument_servo_algorithm (NULL, NULL, NULL);
-		
+
 	return( Pt_CONTINUE );
 
 	}
@@ -2377,8 +2376,8 @@ bool pulse_reader_irp6p_start_exec_pulse ()
 		ui_state.irp6_postument.edp.state = 2;
 		return true;
 	}
-	
-	return false;	
+
+	return false;
 }
 
 
@@ -2390,11 +2389,11 @@ pulse_reader_irp6p_stop( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	
+
 	if (pulse_reader_irp6p_stop_exec_pulse()) {
 		process_control_window_init(widget, apinfo, cbinfo);
 	}
-	
+
 	return( Pt_CONTINUE );
 
 	}
@@ -2409,8 +2408,8 @@ bool pulse_reader_irp6p_stop_exec_pulse ()
 		ui_state.irp6_postument.edp.state = 1;
 		return true;
 	}
-	
-	return false;	
+
+	return false;
 }
 
 
@@ -2422,7 +2421,7 @@ pulse_reader_irp6p_trigger( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	
+
 	if (pulse_reader_irp6p_trigger_exec_pulse()) process_control_window_init(widget, apinfo, cbinfo);
 
 	return( Pt_CONTINUE );
@@ -2439,8 +2438,8 @@ bool pulse_reader_irp6p_trigger_exec_pulse ()
 
 		return true;
 	}
-	
-	return false;	
+
+	return false;
 }
 
 int
@@ -2454,11 +2453,11 @@ pulse_ecp_irp6_postument( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui_state.irp6_postument.edp.is_synchronised) 
+	if (ui_state.irp6_postument.edp.is_synchronised)
 	{ // o ile ECP dziala (sprawdzanie poprzez dzialanie odpowiedniego EDP)
 		if (ui_state.irp6_postument.ecp.trigger_fd<0)
 		{
-		
+
 			short tmp = 0;
 	 		// kilka sekund  (~1) na otworzenie urzadzenia
 			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
@@ -2479,10 +2478,10 @@ pulse_ecp_irp6_postument( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 
 		if (ui_state.irp6_postument.ecp.trigger_fd>= 0) {
 			if (MsgSendPulse (ui_state.irp6_postument.ecp.trigger_fd, sched_get_priority_min(SCHED_FIFO),  pulse_code,  pulse_value)==-1) {
-				
+
 				fprintf( stderr, "Blad w wysylaniu pulsu do ecp error: %s \n",  strerror( errno ) );
 				delay(1000);
-			}	
+			}
 		} else {
 			printf("W PULS ECP:  BLAD name_open \n");
 		}
@@ -2518,7 +2517,7 @@ process_control_window_irp6p_section_init (bool &wlacz_PtButton_wnd_processes_co
 			unblock_widget(ABW_PtButton_wnd_processes_control_irp6p_reader_trigger);
 		}
 	}
-	
+
 	ui_state.irp6_postument.edp.last_state=ui_state.irp6_postument.edp.state;
 
 	return 1;
@@ -2526,42 +2525,42 @@ process_control_window_irp6p_section_init (bool &wlacz_PtButton_wnd_processes_co
 }
 
 
-int 
+int
 reload_irp6p_configuration()
 {
 	char* tmp, *tmp1;
-	char tmp_string[50];	
+	char tmp_string[50];
 	char tmp2_string[3];
 
 	// jesli IRP6 postument ma byc aktywne
-	if ((ui_state.irp6_postument.is_active = config->return_int_value("is_irp6_postument_active")) == 1) 
+	if ((ui_state.irp6_postument.is_active = config->return_int_value("is_irp6_postument_active")) == 1)
 	{
 		// ini_con->create_ecp_irp6_postument (ini_con->ui->ecp_irp6_postument_section);
 		//ui_state.is_any_edp_active = true;
 		if (ui_state.is_mp_and_ecps_active)
 		{
 			delete [] ui_state.irp6_postument.ecp.network_trigger_attach_point;
-			ui_state.irp6_postument.ecp.network_trigger_attach_point =config->return_attach_point_name 
+			ui_state.irp6_postument.ecp.network_trigger_attach_point =config->return_attach_point_name
 				(configurator::CONFIG_SERVER, "trigger_attach_point", ui_state.irp6_postument.ecp.section_name);
 
 			ui_state.irp6_postument.ecp.pid = -1;
 	 		ui_state.irp6_postument.ecp.trigger_fd = -1;
 	 	}
 
-		switch (ui_state.irp6_postument.edp.state) 
+		switch (ui_state.irp6_postument.edp.state)
 		{
 			case -1:
 			case 0:
 				// ini_con->create_edp_irp6_postument (ini_con->ui->edp_irp6_postument_section);
-				
+
 				ui_state.irp6_postument.edp.pid = -1;
 				ui_state.irp6_postument.edp.reader_fd = -1;
 				ui_state.irp6_postument.edp.state = 0;
-				
-				for (int i=0; i<3; i++) 
+
+				for (int i=0; i<3; i++)
 				{
 					itoa( i, tmp2_string, 10 );
-	
+
 					strcpy(tmp_string,"preset_position_");
 					strcat(tmp_string, tmp2_string);
 					if (config->exists(tmp_string, ui_state.irp6_postument.edp.section_name))
@@ -2582,20 +2581,20 @@ reload_irp6p_configuration()
 
 				if (config->exists("test_mode", ui_state.irp6_postument.edp.section_name))
 					ui_state.irp6_postument.edp.test_mode = config->return_int_value("test_mode", ui_state.irp6_postument.edp.section_name);
-				else 
+				else
 					ui_state.irp6_postument.edp.test_mode = 0;
-				
+
 				delete [] ui_state.irp6_postument.edp.hardware_busy_attach_point;
-				ui_state.irp6_postument.edp.hardware_busy_attach_point = config->return_string_value 
+				ui_state.irp6_postument.edp.hardware_busy_attach_point = config->return_string_value
 					("hardware_busy_attach_point", ui_state.irp6_postument.edp.section_name);
-				
+
 				delete [] ui_state.irp6_postument.edp.network_resourceman_attach_point;
-				ui_state.irp6_postument.edp.network_resourceman_attach_point = config->return_attach_point_name 
+				ui_state.irp6_postument.edp.network_resourceman_attach_point = config->return_attach_point_name
 					(configurator::CONFIG_SERVER, "resourceman_attach_point", ui_state.irp6_postument.edp.section_name);
-					
+
 				delete [] ui_state.irp6_postument.edp.network_reader_attach_point;
 				ui_state.irp6_postument.edp.network_reader_attach_point = config->return_attach_point_name
-					(configurator::CONFIG_SERVER, "reader_attach_point", ui_state.irp6_postument.edp.section_name);	
+					(configurator::CONFIG_SERVER, "reader_attach_point", ui_state.irp6_postument.edp.section_name);
 
 				delete [] ui_state.irp6_postument.edp.node_name;
 				ui_state.irp6_postument.edp.node_name = config->return_string_value ("node_name", ui_state.irp6_postument.edp.section_name);
@@ -2607,10 +2606,10 @@ reload_irp6p_configuration()
 			default:
 			break;
 		}
-	
+
 	} else // jesli  irp6 postument ma byc nieaktywne
 	{
-		switch (ui_state.irp6_postument.edp.state) 
+		switch (ui_state.irp6_postument.edp.state)
 		{
 			case -1:
 			case 0:
@@ -2629,23 +2628,23 @@ reload_irp6p_configuration()
 }
 
 
-int 
+int
 manage_interface_irp6p ()
 {
 
 	switch (ui_state.irp6_postument.edp.state)
 	{
-	
+
 		case -1:
 			ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument, NULL);
 		break;
 		case 0:
-			ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_edp_unload, 
+			ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_edp_unload,
 				ABN_mm_irp6_postument_pre_synchro_moves, ABN_mm_irp6_postument_post_synchro_moves,
 				   ABN_mm_irp6_postument_tool_specification, ABN_mm_irp6_postument_preset_positions,
 				 ABN_mm_irp6_postument_kinematic, ABN_mm_irp6_postument_servo_algorithm, NULL);
 			ApModifyItemState( &robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_postument, ABN_mm_irp6_postument_edp_load, NULL);
-			
+
 		break;
 		case 1:
 		case 2:
@@ -2656,26 +2655,26 @@ manage_interface_irp6p ()
 			{
 				ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_pre_synchro_moves, NULL);
 				ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
-			
+
 				switch (ui_state.mp.state)
 				{
 					case UI_MP_NOT_PERMITED_TO_RUN:
 					case UI_MP_PERMITED_TO_RUN:
-						ApModifyItemState( &robot_menu, AB_ITEM_NORMAL,  ABN_mm_irp6_postument_edp_unload, 
-							ABN_mm_irp6_postument_post_synchro_moves, ABN_mm_irp6_postument_tool_specification, 
+						ApModifyItemState( &robot_menu, AB_ITEM_NORMAL,  ABN_mm_irp6_postument_edp_unload,
+							ABN_mm_irp6_postument_post_synchro_moves, ABN_mm_irp6_postument_tool_specification,
 							 ABN_mm_irp6_postument_preset_positions, ABN_mm_irp6_postument_kinematic, ABN_mm_irp6_postument_servo_algorithm, NULL);
 						ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_edp_load, NULL);
 					break;
 					case UI_MP_WAITING_FOR_START_PULSE:
-						ApModifyItemState( &robot_menu, AB_ITEM_NORMAL, 
-							ABN_mm_irp6_postument_post_synchro_moves, ABN_mm_irp6_postument_preset_positions, 
+						ApModifyItemState( &robot_menu, AB_ITEM_NORMAL,
+							ABN_mm_irp6_postument_post_synchro_moves, ABN_mm_irp6_postument_preset_positions,
 							ABN_mm_irp6_postument_tool_specification, ABN_mm_irp6_postument_kinematic, ABN_mm_irp6_postument_servo_algorithm, NULL);
 						ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_edp_load, ABN_mm_irp6_postument_edp_unload, NULL);
 					break;
-					case UI_MP_TASK_RUNNING: 
+					case UI_MP_TASK_RUNNING:
 					case UI_MP_TASK_PAUSED:
 						ApModifyItemState( &robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-							ABN_mm_irp6_postument_post_synchro_moves, ABN_mm_irp6_postument_preset_positions, 
+							ABN_mm_irp6_postument_post_synchro_moves, ABN_mm_irp6_postument_preset_positions,
 							ABN_mm_irp6_postument_tool_specification, ABN_mm_irp6_postument_kinematic, ABN_mm_irp6_postument_servo_algorithm, NULL);
 					break;
 					default:
@@ -2683,7 +2682,7 @@ manage_interface_irp6p ()
 				}
 
 			} else		// jesli robot jest niezsynchronizowany
-			{		
+			{
 				ApModifyItemState( &robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_postument_edp_unload,
 					ABN_mm_irp6_postument_pre_synchro_moves, NULL);
 				ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_edp_load, NULL);
