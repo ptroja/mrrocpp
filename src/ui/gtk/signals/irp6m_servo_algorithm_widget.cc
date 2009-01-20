@@ -77,7 +77,6 @@ extern "C"
 	
 	void on_read_button_clicked_mechatronika_servo (GtkButton* button, gpointer userdata)
 	{
-		
 		ui_widget_entry * ChoseEntry = (ui_widget_entry *) userdata;
         GtkBuilder & thisBuilder = ((*ChoseEntry).getBuilder());
         
@@ -136,9 +135,64 @@ extern "C"
 			
 	}
 	
-	void on_set_button_clicked_mechatronika_servo (GtkButton* button, gpointer user_data)
+	void on_set_button_clicked_mechatronika_servo (GtkButton* button, gpointer userdata)
 	{
-		std::cout << "ustaw wartosci dla mechatronika servo" << std::endl;
+		ui_widget_entry * ChoseEntry = (ui_widget_entry *) userdata;
+        GtkBuilder & thisBuilder = ((*ChoseEntry).getBuilder());
+        
+        GtkSpinButton * spin1 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton1"));
+        GtkSpinButton * spin2 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton2"));
+        GtkSpinButton * spin3 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton3"));
+        GtkSpinButton * spin4 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton4"));
+        GtkSpinButton * spin5 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton5"));
+        GtkSpinButton * spin6 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton6"));
+        GtkSpinButton * spin7 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton7"));
+        GtkSpinButton * spin8 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton8"));
+        GtkSpinButton * spin9 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton9"));
+        GtkSpinButton * spin10 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton10"));
+ 
+        double servo_alg_no_tmp [IRP6_MECHATRONIKA_NUM_OF_SERVOS];
+		BYTE servo_alg_no_output[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
+		double servo_par_no_tmp [IRP6_MECHATRONIKA_NUM_OF_SERVOS];
+		BYTE servo_par_no_output[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
+				
+		// wychwytania ew. bledow ECP::robot
+		try
+		{
+		if ( ui_state.irp6_mechatronika.edp.is_synchronised )
+		{
+			servo_alg_no_tmp[0] = gtk_spin_button_get_value(spin1);
+			servo_par_no_tmp[0] = gtk_spin_button_get_value(spin2);
+			servo_alg_no_tmp[1] = gtk_spin_button_get_value(spin3);
+			servo_par_no_tmp[1] = gtk_spin_button_get_value(spin4);
+			servo_alg_no_tmp[2] = gtk_spin_button_get_value(spin5);
+			servo_par_no_tmp[2] = gtk_spin_button_get_value(spin6);
+			servo_alg_no_tmp[3] = gtk_spin_button_get_value(spin7);
+			servo_par_no_tmp[3] = gtk_spin_button_get_value(spin8);
+			servo_alg_no_tmp[4] = gtk_spin_button_get_value(spin9);
+			servo_par_no_tmp[4] = gtk_spin_button_get_value(spin10);
+				
+			for(int i=0; i<IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
+			{
+				servo_alg_no_output[i] = servo_alg_no_tmp[i];
+				servo_par_no_output[i] = servo_par_no_tmp[i];
+			}
+		
+			// zlecenie wykonania ruchu
+			ui_robot.irp6_mechatronika->set_servo_algorithm(servo_alg_no_output, servo_par_no_output);
+			
+		}
+		else
+		{
+			std::cout << "testuje - ale mechatronika nie jest zsynchronizowany" << std::endl;
+		}
+		} // end try
+		CATCH_SECTION_UI
+
+		return;
+
+	
+
 	}
 	
 	
