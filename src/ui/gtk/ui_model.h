@@ -7,6 +7,7 @@
 #include "ui_config_entry.h"
 
 #include "lib/configurator.h"
+#include "lib/srlib.h"
 
 class ui_model
 {
@@ -79,7 +80,14 @@ class ui_model
 
 		int set_tree_view(void);
 
+		//! old-type .INI configurator
 		configurator *config;
+
+		//! SR object for UI
+		sr_ui* ui_report;
+
+		//! SR object for UI
+		sr_ecp* ecp_report;
 };
 
 /*

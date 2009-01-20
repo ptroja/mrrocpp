@@ -63,9 +63,12 @@ ui_model::ui_model() : tabs_visible(0)
 	setMpLoadButton(false, true);
 	setEdpsLoadButton(true, true);
 
-	config = new configurator(
+	this->config = new configurator(
 			g_get_host_name(),
 			g_get_current_dir(), "rcsc.ini", "[ui]", "session_name");
+
+	this->ui_report = new sr_ui(UI, "ui", "sr");
+	this->ecp_report = new sr_ecp(UI, "ui", "sr");
 }
 
 ui_model::~ui_model()
@@ -79,6 +82,14 @@ ui_model::~ui_model()
 
 	if (config) {
 		delete config;
+	}
+
+	if (ui_report) {
+		delete ui_report;
+	}
+
+	if (ecp_report) {
+			delete ecp_report;
 	}
 }
 
