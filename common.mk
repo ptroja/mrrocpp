@@ -42,6 +42,7 @@ CFLAGS=${FLAGS}
 
 LIBDIR=$(HOMEDIR)/lib
 BINDIR=$(HOMEDIR)/bin
+ECP_DIR = $(HOMEDIR)/src/ecp
 ECP_MPDIR=$(HOMEDIR)/src/ecp_mp
 
 #ifeq (,$(findstring "host/qnx/x86",$(QNX_HOST)))
