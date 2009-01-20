@@ -31,7 +31,8 @@ void ui_model::clear(void)
 	this->getRootNode().remove_childs();
 }
 
-ui_model::ui_model() : tabs_visible(0)
+ui_model::ui_model() : tabs_visible(0),
+	ui_report(NULL), ecp_report(NULL)
 {
 	builder = gtk_builder_new();
 
@@ -66,9 +67,14 @@ ui_model::ui_model() : tabs_visible(0)
 	this->config = new configurator(
 			g_get_host_name(),
 			g_get_current_dir(), "rcsc.ini", "[ui]", "session_name");
+}
 
-	this->ui_report = new sr_ui(UI, "ui", "sr");
-	this->ecp_report = new sr_ecp(UI, "ui", "sr");
+void ui_model::init_sr(void) {
+	ui_report = new sr_ui(UI, "ui", "sr");
+	ecp_report = new sr_ecp(UI, "ui", "sr");
+
+	ui_report->message("UI report");
+	ecp_report->message("ECP report");
 }
 
 ui_model::~ui_model()

@@ -62,6 +62,9 @@ class ui_model
 		GObject *getUiGObject(const gchar *name);
 		Glib::RefPtr<Glib::Object> getUiObject(const gchar *name);
 
+		//! initialize SR client objects
+		void init_sr(void);
+
 	private:
 		ui_model();
 

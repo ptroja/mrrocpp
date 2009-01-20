@@ -104,6 +104,8 @@ int main(int argc, char *argv[])
 		xmlconfig->open_config_file(config_file.c_str());
 	}
 
+	ui_model::instance().init_sr();
+
 	gtk_main();
 
 	return 0;
