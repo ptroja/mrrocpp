@@ -1,6 +1,8 @@
 #include "ui_widget_entry.h"
 #include "ui_model.h"
 
+#include <dlfcn.h>
+
 static void print_gobject(gpointer data, gpointer user_data) {
 	GObject *obj = (GObject *) data;
 	printf(" object\n");
@@ -60,6 +62,8 @@ ui_widget_entry::ui_widget_entry(const char *ui_def)  {
 	std::string ui_lib = std::string(ui_def);
 	ui_lib.erase(ui_lib.find_last_of('.'));
 	ui_lib.insert(0, "./");
+	ui_lib.append(".");
+	ui_lib.append(G_MODULE_SUFFIX);
 
 	module = g_module_open(ui_lib.c_str(), (GModuleFlags) G_MODULE_BIND_LAZY);
 
@@ -78,7 +82,16 @@ ui_widget_entry::ui_widget_entry(const char *ui_def)  {
 			g_warning("failed to call widget %s.%s init function\n", ui_lib.c_str(), G_MODULE_SUFFIX );
 		}
 	} else {
-		g_warning("failed to open module %s.%s\n", ui_lib.c_str(), G_MODULE_SUFFIX );
+		g_warning("failed to open widget %s\n", ui_lib.c_str());
+
+		//! just to debug
+		void *handle = dlopen(ui_lib.c_str(), RTLD_LAZY|RTLD_GLOBAL);
+		if (!handle) {
+			fprintf(stderr, "dlopen(): %s\n", dlerror());
+		} else {
+			printf("dlopen %s OK\n", ui_lib.c_str());
+			dlclose(handle);
+		}
 	}
 }
 
