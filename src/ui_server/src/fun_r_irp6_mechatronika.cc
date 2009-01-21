@@ -413,8 +413,8 @@ try
 	{
 		if ((ui_state.irp6_mechatronika.edp.state > 0)&&(ui_state.irp6_mechatronika.edp.is_synchronised == false))
 		{
-			ui_robot.irp6_mechatronika->synchronise();
-			ui_state.irp6_mechatronika.edp.is_synchronised = ui_robot.irp6_mechatronika->is_synchronised();
+			ui_robot.irp6_mechatronika->ecp->synchronise();
+			ui_state.irp6_mechatronika.edp.is_synchronised = ui_robot.irp6_mechatronika->ecp->is_synchronised();
 		}
 		if ((ui_state.irp6_mechatronika.edp.state > 0)&&(ui_state.irp6_mechatronika.edp.is_synchronised == true)) replySend(new Message('F','L','A',0,NULL,NULL));
 	}
@@ -674,8 +674,11 @@ short tmp;
 			} else {
 				ui_state.irp6_mechatronika.edp.node_nr = config->return_node_number(ui_state.irp6_mechatronika.edp.node_name);
 		
-				ui_robot.irp6_mechatronika = new ui_irp6_mechatronika_robot(*config, ui_msg.all_ecp);
-				ui_state.irp6_mechatronika.edp.pid = ui_robot.irp6_mechatronika->get_EDP_pid();
+				//ui_robot.irp6_mechatronika = new ui_irp6_mechatronika_robot(*config, ui_msg.all_ecp);
+				ui_robot.irp6_mechatronika = new ui_common_robot(*config, ui_msg.all_ecp,ROBOT_IRP6_MECHATRONIKA);
+				
+				
+				ui_state.irp6_mechatronika.edp.pid = ui_robot.irp6_mechatronika->ecp->get_EDP_pid();
 									
 				if (ui_state.irp6_mechatronika.edp.pid<0)
 				{
