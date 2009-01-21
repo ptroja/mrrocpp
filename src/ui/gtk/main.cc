@@ -111,6 +111,8 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
+#include "ui/ui.h"
+
 extern "C" {
 	void mp_load_clicked(GtkToolButton *toolbutton,
             gpointer       user_data) {
@@ -126,13 +128,6 @@ extern "C" {
 	}
 
 }
-
-
-enum UI_NOTIFICATION_STATE_ENUM
-{
-	UI_N_STARTING, UI_N_READY, UI_N_BUSY, UI_N_EXITING, 	UI_N_COMMUNICATION, UI_N_PROCESS_CREATION,
-	UI_N_SYNCHRONISATION
-};
 
 // FIXME: moved from proto.h for linux compatibility
 int set_ui_state_notification ( UI_NOTIFICATION_STATE_ENUM new_notifacion ){

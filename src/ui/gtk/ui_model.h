@@ -65,6 +65,10 @@ class ui_model
 		//! initialize SR client objects
 		void init_sr(void);
 
+		sr_ecp & getEcpSr(void) const;
+
+		configurator & getConfigurator(void) const;
+
 	private:
 		ui_model();
 
@@ -89,7 +93,7 @@ class ui_model
 		//! SR object for UI
 		sr_ui* ui_report;
 
-		//! SR object for UI
+		//! SR object for ECP
 		sr_ecp* ecp_report;
 };
 

@@ -492,7 +492,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 				bin_path, ui_host ? ui_host : "",
 				bin_path, spawned_program_name,
 				node, dir, ini_file, _section_name,
-				session_name
+				strlen(session_name) ? session_name : "\"\""
 		);
 
 		delete [] spawned_program_name;

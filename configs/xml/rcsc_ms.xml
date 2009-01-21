@@ -38,7 +38,7 @@
 
 	<effectors>
 
-		<effector name="irp6_ontrack" active="false">
+		<effector name="irp6_ontrack" active="true">
 			<ecp>
 				<program_name>ecp_irp6o_rcsc</program_name>
 				<node_name>qnx632</node_name>
@@ -132,7 +132,7 @@
 
 		</effector>
 
-		<effector name="irp6_mechatronika" active="true">
+		<effector name="irp6_mechatronika" active="false">
 			<ecp>
 				<program_name>ecp_irp6m_rcsc</program_name>
 				<node_name>qnx632</node_name>

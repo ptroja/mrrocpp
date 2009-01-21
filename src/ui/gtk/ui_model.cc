@@ -66,7 +66,7 @@ ui_model::ui_model() : tabs_visible(0),
 
 	this->config = new configurator(
 			g_get_host_name(),
-			g_get_current_dir(), "rcsc.ini", "[ui]", "session_name");
+			g_get_current_dir(), "rcsc.ini", "[ui]", "");
 }
 
 void ui_model::init_sr(void) {
@@ -75,6 +75,14 @@ void ui_model::init_sr(void) {
 
 	ui_report->message("UI report");
 	ecp_report->message("ECP report");
+}
+
+sr_ecp & ui_model::getEcpSr(void) const {
+	return *(this->ecp_report);
+}
+
+configurator & ui_model::getConfigurator(void) const {
+	return *(this->config);
 }
 
 ui_model::~ui_model()
