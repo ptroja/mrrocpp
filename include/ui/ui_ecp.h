@@ -9,8 +9,6 @@
 #define _UI_ECP_H
 
 #include "ui/ui_ecp_r_conveyor.h"
-#include "ui/ui_ecp_r_irp6_on_track.h"
-#include "ui/ui_ecp_r_irp6_postument.h"
 #include "ui/ui_ecp_r_speaker.h"
 #include "ui/ui_ecp_r_irp6_mechatronika.h"
 #include "ui/ui_ecp_r_irp6_common.h"

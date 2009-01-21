@@ -73,5 +73,5 @@ class ui_irp6_mechatronika_robot: public ecp_irp6_mechatronika_robot {
   bool get_servo_algorithm ( BYTE algorithm_no[IRP6_POSTUMENT_NUM_OF_SERVOS],
       BYTE parameters_no[IRP6_POSTUMENT_NUM_OF_SERVOS]);
 
-}; // end: class ui_irp6_postument_robot
+};
 #endif
