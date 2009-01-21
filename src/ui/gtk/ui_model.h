@@ -53,6 +53,9 @@ class ui_model
 		//! load EDP processes
 		void loadEdps(void);
 
+		//! slay all configured processes
+		void slayAll(void);
+
 		//! set status bar message
 		guint set_status(const char *msg);
 

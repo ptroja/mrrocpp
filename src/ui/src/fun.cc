@@ -2829,6 +2829,3 @@ pulse_ecp_all_robots( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 	return( Pt_CONTINUE );
 
 	}
-
-
-

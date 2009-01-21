@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Wed Dec 24 15:08:37 2008 -->
+<!--Generated with glade3 3.4.5 on Wed Jan 21 13:53:24 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="width_request">600</property>
@@ -186,11 +186,12 @@
                 <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
                 <property name="show_arrow">False</property>
                 <child>
-                  <widget class="GtkToolButton" id="toolbutton4">
+                  <widget class="GtkToolButton" id="SlayAllButton">
                     <property name="visible">True</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">Slay all</property>
                     <property name="stock_id">gtk-quit</property>
+                    <signal name="clicked" handler="on_SlayAllButton_clicked"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>

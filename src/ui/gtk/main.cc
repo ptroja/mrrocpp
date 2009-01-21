@@ -50,6 +50,10 @@ extern "C" {
 		entry.show_page(TRUE);
 	}
 
+	void on_SlayAllButton_clicked(GtkButton *button, gpointer user_data) {
+		ui_model::instance().slayAll();
+	}
+
 } /* extern "C" */
 
 gchar **config_files;

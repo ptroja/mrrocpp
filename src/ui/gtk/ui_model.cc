@@ -231,3 +231,7 @@ void ui_model::loadEdps(void) {
 		std::cout << (*Iter)->program_name << "@" << (*Iter)->node_name << std::endl;
 	}
 }
+
+void ui_model::slayAll(void) {
+	std::cout << "slayAll" << std::endl;
+}
