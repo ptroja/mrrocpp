@@ -32,8 +32,7 @@ MRROCOBJ = \
 	$(ECP_DIR)/speaker/ecp_local.o \
 	$(ECP_DIR)/common/libecp.a $(LIBDIR)/libmrrocpp.a
 
-MYOBJ = ui_ecp_r_irp6_mechatronika.o \
-	ui_ecp_r_conveyor.o ui_ecp_r_speaker.o \
+MYOBJ = ui_ecp_r_conveyor.o ui_ecp_r_speaker.o \
 	ui_ecp_r_irp6_common.o ui.o
 
 VPATH = ..

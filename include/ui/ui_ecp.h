@@ -10,7 +10,6 @@
 
 #include "ui/ui_ecp_r_conveyor.h"
 #include "ui/ui_ecp_r_speaker.h"
-#include "ui/ui_ecp_r_irp6_mechatronika.h"
 #include "ui/ui_ecp_r_irp6_common.h"
 
 typedef struct{
@@ -19,7 +18,7 @@ typedef struct{
 	ui_common_robot *irp6_postument;
 	ui_conveyor_robot *conveyor;
 	ui_speaker_robot *speaker;
-	ui_irp6_mechatronika_robot *irp6_mechatronika;
+	ui_common_robot *irp6_mechatronika;
 	} ui_robot_def;
 
 

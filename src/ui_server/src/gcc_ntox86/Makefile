@@ -25,10 +25,9 @@ MRROCOBJ = \
 	$(ECP_DIR)/speaker/ecp_local.o \
 	$(ECP_DIR)/common/libecp.a $(LIBDIR)/libmrrocpp.a
 
-MYOBJ = $(UISRCDIR)/gcc_ntox86/ui_ecp_r_irp6_mechatronika.o \
+MYOBJ = $(UISRCDIR)/gcc_ntox86/ui_ecp_r_irp6_common.o \
 	$(UISRCDIR)/gcc_ntox86/ui_ecp_r_conveyor.o \
 	$(UISRCDIR)/gcc_ntox86/ui_ecp_r_speaker.o \
-	$(UISRCDIR)/gcc_ntox86/ui_ecp_r_irp6_common.o \
 	$(UISRCDIR)/gcc_ntox86/ui.o \
 	../fun.o ../fun_r_conveyor.o ../fun_r_irp6_mechatronika.o ../fun_r_irp6_on_track.o ../fun_r_irp6_postument.o ../fun_r_speaker.o ../timer.o ../ui_init.o
 
