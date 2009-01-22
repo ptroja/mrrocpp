@@ -99,6 +99,7 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 				continue;
 		} // end: switch (message_buffer[reader_buf_position].process_type)
 
+		// FIXME: ?
 		ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].process_type = UNKNOWN_PROCESS_TYPE;
 
 		char process_name_buffer[NAME_LENGTH+1];

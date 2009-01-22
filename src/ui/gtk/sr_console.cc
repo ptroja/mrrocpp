@@ -9,6 +9,9 @@
 #include <string.h>
 #include <stdint.h>
 
+#include <iostream>
+#include <fstream>
+
 #include <gtk/gtk.h>
 
 #include "ui_model.h"
@@ -29,12 +32,7 @@ enum
 
 void *sr_thread(void* arg)
 {
-	sr_package_t sr_msg;
-	int16_t status;
-
 	messip_channel_t *ch;
-	int32_t type, subtype;
-	int rcvid;
 
 	if ((ch = messip_channel_create(NULL, "sr", MESSIP_NOTIMEOUT, 0)) == NULL) {
 		perror("messip_channel_create()");
@@ -92,9 +90,28 @@ void *sr_thread(void* arg)
 
 	g_object_unref (store);
 
+	//! init SR log file
+	time_t time_of_day;
+	char timestamp[50];
+
+	time_of_day = time( NULL );
+	strftime(timestamp, 40, "%g%m%d_%H-%M-%S", localtime( &time_of_day ) );
+
+	std::string log_file_with_dir = std::string("../logs/");
+	log_file_with_dir.append(timestamp);
+	log_file_with_dir.append("_sr.log");
+
+//	std::cout << log_file_with_dir << std::endl;
+
+	std::ofstream log_file (log_file_with_dir.c_str(), std::ios::out);
+
 	while(1)
 	{
-		rcvid = messip_receive(ch, &type, &subtype, &sr_msg, sizeof(sr_msg), MESSIP_NOTIMEOUT);
+		sr_package_t sr_msg;
+		int16_t status;
+		int32_t type, subtype;
+
+		int rcvid = messip_receive(ch, &type, &subtype, &sr_msg, sizeof(sr_msg), MESSIP_NOTIMEOUT);
 
 		if (rcvid == -1) /* Error condition, exit */
 		{
@@ -112,6 +129,7 @@ void *sr_thread(void* arg)
 
 		if (strlen(sr_msg.process_name)>1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
 		{
+			//! write to UI console
 			char timestamp[16];
 
 			strftime(timestamp, 100, "%H:%M:%S", localtime(&sr_msg.ts.tv_sec));
@@ -126,7 +144,62 @@ void *sr_thread(void* arg)
 					COL_DESCRIPTION, sr_msg.description,
 					-1);
 
-			// TODO: logowanie do pliku
+			//! write to logfile
+			char current_line[400];
+
+			snprintf(current_line, 100, "%-10s", sr_msg.host_name);
+			strcat(current_line, "  ");
+			strftime(current_line+12, 100, "%H:%M:%S", localtime(&sr_msg.ts.tv_sec));
+			sprintf(current_line+20, ".%03ld   ", sr_msg.ts.tv_nsec/1000000);
+
+			switch (sr_msg.process_type) {
+				case EDP:
+					strcat(current_line, "EDP: ");
+					break;
+				case ECP:
+					strcat(current_line, "ECP: ");
+					break;
+				case MP:
+					strcat(current_line, "MP:  ");
+					break;
+				case VSP:
+					strcat(current_line, "VSP: ");
+					break;
+				case UI:
+					strcat(current_line, "UI:  ");
+					break;
+				default:
+					strcat(current_line, "???: ");
+					continue;
+			}
+
+			char process_name_buffer[NAME_LENGTH+1];
+			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-21s", sr_msg.process_name);
+
+			strcat(current_line, process_name_buffer);
+
+			switch (sr_msg.message_type) {
+				case FATAL_ERROR:
+					strcat(current_line, "FATAL_ERROR:     ");
+					break;
+				case NON_FATAL_ERROR:
+					strcat(current_line, "NON_FATAL_ERROR: ");
+					break;
+				case SYSTEM_ERROR:
+					strcat(current_line, "SYSTEM_ERROR:    ");
+					break;
+				case NEW_MESSAGE:
+					strcat(current_line, "MESSAGE:         ");
+					break;
+				default:
+					strcat(current_line, "UNKNOWN ERROR:   ");
+			};
+
+			strcat( current_line, sr_msg.description);
+			strcat( current_line, "\n" );
+
+			log_file << current_line;
+			log_file.flush();
 		} else {
 			printf("SR: unexpected message\n");
 		}

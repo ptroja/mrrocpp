@@ -19,20 +19,26 @@ HEADERSDIR = $(HOMEDIR)/include
 
 all: $(ui_modules)
 
-edp_irp6m.so: edp_irp6m_uimodule.o $(ECP_DIR)/irp6_mechatronika/ecp_local.o $(UI_DIR)/ui_ecp_r_irp6_mechatronika.o
+edp_irp6m.so: edp_irp6m_uimodule.o \
+	$(ECP_DIR)/irp6_mechatronika/ecp_local.o \
+	$(UI_DIR)/ui_ecp_r_irp6_common.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $(LIBS) $^
 
 edp_irp6o.so: edp_irp6o_uimodule.o \
-	$(ECP_DIR)/irp6_on_track/ecp_local.o $(ECP_DIR)/irp6_postument/ecp_local.o $(ECP_DIR)/irp6_mechatronika/ecp_local.o \
+	$(ECP_DIR)/irp6_on_track/ecp_local.o \
+	$(ECP_DIR)/irp6_postument/ecp_local.o \
+	$(ECP_DIR)/irp6_mechatronika/ecp_local.o \
 	$(UI_DIR)/ui_ecp_r_irp6_common.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $(LIBS) $^
 
 edp_irp6p.so: edp_irp6p_uimodule.o \
-	$(ECP_DIR)/irp6_on_track/ecp_local.o $(ECP_DIR)/irp6_postument/ecp_local.o $(ECP_DIR)/irp6_mechatronika/ecp_local.o \
+	$(ECP_DIR)/irp6_postument/ecp_local.o \
 	$(UI_DIR)/ui_ecp_r_irp6_common.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $(LIBS) $^
 
-edp_conveyor.so: edp_conveyor_uimodule.o $(ECP_DIR)/conveyor/ecp_local.o $(UI_DIR)/ui_ecp_r_conveyor.o
+edp_conveyor.so: edp_conveyor_uimodule.o \
+	$(ECP_DIR)/conveyor/ecp_local.o \
+	$(UI_DIR)/ui_ecp_r_conveyor.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $(LIBS) $^
 
 %.so: %_widget.o
