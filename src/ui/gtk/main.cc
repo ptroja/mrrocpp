@@ -6,6 +6,7 @@
 #include "xmlconfigurator.h"
 #include "ui_model.h"
 #include "sr_console.h"
+#include "comm_thread.h"
 
 GtkNotebook *getNotebook(void) {
 	return GTK_NOTEBOOK (ui_model::instance().getUiGObject("notebook1"));
@@ -85,14 +86,16 @@ int main(int argc, char *argv[])
 
 	xmlconfig = new xmlconfigurator();
 
-	{
-		GError *err;
+	GThread *sr_t = g_thread_create(sr_thread, NULL, false, &error);
+	if (sr_t == NULL) {
+		fprintf(stderr, "g_thread_create(): %s\n", error->message);
+		return -1;
+	}
 
-		GThread *sr = g_thread_create(sr_thread, NULL, true, &err);
-		if (sr == NULL) {
-			fprintf(stderr, "g_thread_create(): %s\n", err->message);
-			return -1;
-		}
+	GThread *comm_t = g_thread_create(comm_thread, NULL, false, &error);
+	if (comm_t == NULL) {
+		fprintf(stderr, "g_thread_create(): %s\n", error->message);
+		return -1;
 	}
 
 	ui_model::instance().set_status("MRROC++ - the best robotic framework ever");

@@ -34,6 +34,7 @@ void *sr_thread(void* arg)
 {
 	messip_channel_t *ch;
 
+	// TODO: config->return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
 	if ((ch = messip_channel_create(NULL, "sr", MESSIP_NOTIMEOUT, 0)) == NULL) {
 		perror("messip_channel_create()");
 		return NULL;
@@ -86,6 +87,8 @@ void *sr_thread(void* arg)
 			"text", COL_DESCRIPTION,
 			NULL);
 
+	// TODO: error class column
+
 	gtk_tree_view_set_model (GTK_TREE_VIEW (view), GTK_TREE_MODEL(store));
 
 	g_object_unref (store);
@@ -108,7 +111,6 @@ void *sr_thread(void* arg)
 	while(1)
 	{
 		sr_package_t sr_msg;
-		int16_t status;
 		int32_t type, subtype;
 
 		int rcvid = messip_receive(ch, &type, &subtype, &sr_msg, sizeof(sr_msg), MESSIP_NOTIMEOUT);
@@ -124,7 +126,7 @@ void *sr_thread(void* arg)
 			continue;
 		}
 
-		status = 0;
+		int16_t status = 0;
 		messip_reply(ch, rcvid, EOK, &status, sizeof(status), MESSIP_NOTIMEOUT);
 
 		if (strlen(sr_msg.process_name)>1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
@@ -204,6 +206,8 @@ void *sr_thread(void* arg)
 			printf("SR: unexpected message\n");
 		}
 	}
+
+	messip_channel_delete(ch, MESSIP_NOTIMEOUT);
 
 	return NULL;
 }

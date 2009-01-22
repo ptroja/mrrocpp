@@ -24,7 +24,8 @@ HEADERSDIR = $(HOMEDIR)/include
 
 ui.gtk: main.o xmlconfigurator.o \
 	ui_model.o ui_config_entry.o ui_widget_entry.o \
-	sr_console.o
+	sr_console.o comm_thread.o \
+	../src/gcc_ntox86/ui.o
 	$(CXX) -Wl,-rpath `pwd`/../../../lib -g -o $@ $^ ${LDFLAGS}
 
 %.xml: %.glade

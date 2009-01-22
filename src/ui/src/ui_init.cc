@@ -265,6 +265,7 @@ void *comm_thread(void* arg) {
 			continue;
 		}
 
+		//! FIXME:
 		if (ui_state.irp6_on_track.ecp.pid<=0) {
 
 			ui_state.irp6_on_track.ecp.pid = info->pid;
