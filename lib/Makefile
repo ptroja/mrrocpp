@@ -1,3 +1,3 @@
 # ------------------------------ KASUJE OBIEKTY I BLEDY  ------------------------------
 clean:
-	@rm -f *.o *.err *.a
+	@rm -f *.o *.so *.err *.a

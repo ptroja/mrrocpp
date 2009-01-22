@@ -215,7 +215,7 @@ bool mp_extended_empty_generator::next_step ()
     {
         if ( robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED )
         {
-            sr_ecp_msg.message("w mp task terminated");
+          //  sr_ecp_msg.message("w mp task terminated");
             return false;
         }
     }
