@@ -17,7 +17,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-	
+
 ui_sr_buffer::ui_sr_buffer()
 {
 	writer_buf_position=-1;
@@ -31,7 +31,7 @@ ui_sr_buffer::ui_sr_buffer()
 int	ui_sr_buffer::set_new_msg() // podniesienie semafora
 {
 	sem_trywait(&sem);
-	return sem_post(&sem);// odwieszenie watku edp_master	
+	return sem_post(&sem);// odwieszenie watku edp_master
 }
 
 int	ui_sr_buffer::check_new_msg() // oczekiwanie na semafor
@@ -58,14 +58,12 @@ ui_ecp_buffer::ui_ecp_buffer()
 
 int	ui_ecp_buffer::post_sem() // podniesienie semafora
 {
-	sem_post(&sem); // odwieszenie watku edp_master	
-	return 1;
+	return sem_post(&sem); // odwieszenie watku edp_master
 }
-	
+
 int	ui_ecp_buffer::take_sem() // oczekiwanie na semafor
 {
-	sem_wait(&sem);
-	return 1;
+	return sem_wait(&sem);
 }
 
 int	ui_ecp_buffer::trywait_sem() // oczekiwanie na semafor
