@@ -177,6 +177,8 @@ void* UI_communication_thread(void* arg)
 				TERMINATE = true;
 				ecp_t->ecp_termination_notice();
 				break;
+			default:
+				fprintf(stderr, "unknown UI command in %s:%d\n", __FILE__, __LINE__);
 		}
 		if (from_ui_msg.command == TR_LOAD_TRAJECTORY) {
 			// Odsylamy liczbe elementow na liscie.
@@ -305,7 +307,11 @@ void* trajectory_reproduce_thread(void* arg)
 
 
 /********************** TRAJECTORY RENDER WINDOW ************************/
+#if !defined(USE_MESSIP_SRR)
 void show_trajectory_reproduce_window(int UI_fd)
+#else
+void show_trajectory_reproduce_window(messip_channel_t * UI_fd)
+#endif
 {
 	int i;
 	ECP_message ecp_ui_msg; // Przesylka z ECP do UI
@@ -313,7 +319,12 @@ void show_trajectory_reproduce_window(int UI_fd)
 	ecp_ui_msg.hdr.type=0;
 	ecp_ui_msg.ecp_message = OPEN_TRAJECTORY_REPRODUCE_WINDOW;
 	// Wyslanie polecenia do UI -> otwarcie okna.
-	if (MsgSend(UI_fd, &ecp_ui_msg, sizeof(ECP_message), NULL, 0) < 0) {
+#if !defined(USE_MESSIP_SRR)
+		if (MsgSend(UI_fd, &ecp_ui_msg, sizeof(ECP_message), NULL, 0) < 0){
+#else
+		int32_t answer;
+		if (messip_send(UI_fd, 0, 0, &ecp_ui_msg, sizeof(ECP_message), &answer, NULL, 0, MESSIP_NOTIMEOUT) < 0){
+#endif
 		perror("show_trajectory_reproduce_window: Send to UI failed");
 		throw ECP_main_error(SYSTEM_ERROR, 0);
 	}

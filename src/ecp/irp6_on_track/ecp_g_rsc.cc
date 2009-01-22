@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP) 
+// Proces: 	EFFECTOR CONTROL PROCESS (ECP)
 // Plik:			ecp_rsc.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		trajectory_reproduce_generator - definicja metod klasy
@@ -32,7 +32,7 @@ bool robot_stopped_condition::first_step (){
 	communicate_with_edp=false;
 	return true;
 	};
-	
+
 bool robot_stopped_condition::next_step (){
 	double first_position[6], second_position[6];
 	bool stoped;
@@ -77,11 +77,11 @@ void robot_stopped_condition::get_current_position(double current_position[6]){
 	// Odczytanie polozenia robota
 	// Przygotowanie rozkazu dla EDP.
 	the_robot->EDP_data.instruction_type = GET;
-	the_robot->EDP_data.get_type = ARM_DV; // ARM	
+	the_robot->EDP_data.get_type = ARM_DV; // ARM
 	// Sprawdzenie rodzaju ramienia.
 	the_robot->EDP_data.get_arm_type = MOTOR;
 	// Przepisanie rozkazu do bufora wysylkowego.
-	the_robot->create_command();	
+	the_robot->create_command();
 	// Zlecenie ruchu robota.
 	communicate_with_edp=true;
 	the_robot->execute_motion();
@@ -111,7 +111,12 @@ void robot_stopped_condition::refresh_window(void){
 		printf("\n");
 
 		// Wyslanie polecenia do UI -> Polecenie odswiezenia okna.
-		if (MsgSend(UI_fd, &ecp_ui_msg,  sizeof(ECP_message),  NULL, 0) < 0){
+#if !defined(USE_MESSIP_SRR)
+		if (MsgSend(UI_fd, &ecp_ui_msg, sizeof(ECP_message), NULL, 0) < 0){
+#else
+		int32_t answer;
+		if (messip_send(UI_fd, 0, 0, &ecp_ui_msg, sizeof(ECP_message), &answer, NULL, 0, MESSIP_NOTIMEOUT) < 0){
+#endif
 			 perror("ECP trajectory_reproduce_thread(): Send() to UI failed");
 			 sr_ecp_msg.message (SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
 			};

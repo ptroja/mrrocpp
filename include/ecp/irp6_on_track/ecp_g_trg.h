@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP) 
+// Proces: 	EFFECTOR CONTROL PROCESS (ECP)
 // Plik:			ecp_trg.h
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		trajectory_reproduce_generator - deklaracja klasy
@@ -45,9 +45,13 @@ class trajectory_reproduce_generator : public ecp_teach_in_generator {
 		double last_force_sensor_reading[6];
 		// Pobranie obecnego polozenia robota.
 		void get_current_position (double current_position[6]);
-		
+
 	public:
+#if !defined(USE_MESSIP_SRR)
 		int UI_fd;
+#else
+		messip_channel_t *UI_fd;
+#endif
 		trajectory_reproduce_generator(ecp_task& _ecp_task);
 
 		~trajectory_reproduce_generator (void);

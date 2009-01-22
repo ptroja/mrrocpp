@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP) 
+// Proces: 	EFFECTOR CONTROL PROCESS (ECP)
 // Plik:			ecp_rsc.h
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		robot_stopped_condition - deklaracja klasy
@@ -63,7 +63,11 @@ class robot_stopped_condition : public ecp_generator {
 		// Ostatni odczyt czujnika sily.
 		double last_force_sensor_reading[6];
 	public:
+#if !defined(USE_MESSIP_SRR)
 		int UI_fd;
+#else
+		messip_channel_t *UI_fd;
+#endif
 		robot_stopped_condition(ecp_task& _ecp_task);
 		~robot_stopped_condition(void);
 		// Przygotowanie warunku do ruchu.

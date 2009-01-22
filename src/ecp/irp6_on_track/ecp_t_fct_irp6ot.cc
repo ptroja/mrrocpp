@@ -141,6 +141,9 @@ void* UI_communication_thread(void* arg)
 				TERMINATE=true;
 				ecp_t->ecp_termination_notice();
 				break;
+			default:
+				fprintf(stderr, "unknown UI command in %s:%d\n", __FILE__, __LINE__);
+				break;
 		}
 		// Jesli trzeba odswiezyc okno.
 		if (ui_msg.command == FC_GET_DATA) {
@@ -239,7 +242,7 @@ void show_force_control_window
 	if (MsgSend(UI_fd, &ecp_msg, sizeof(ECP_message), &ui_rep, sizeof(UI_reply)) < 0) {
 #else
 	int status;
-	if (messip_send(UI_fd, 0,0, &ecp_msg, sizeof(ECP_message), &status, &ui_rep, sizeof(UI_reply)) < 0) {
+	if (messip_send(UI_fd, 0, 0, &ecp_msg, sizeof(ECP_message), &status, &ui_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0) {
 #endif
 		ecp_t->sr_ecp_msg->message(SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
 		throw ECP_main_error(SYSTEM_ERROR, 0);

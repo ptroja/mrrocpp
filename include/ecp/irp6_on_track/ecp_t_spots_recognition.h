@@ -29,11 +29,6 @@
 #include "ecp/common/ecp_g_smooth.h"
 #include "ecp/common/ecp_g_sleep.h"
 
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-
-
 class ecp_t_spots_recognition: public ecp_task
 {
 		/*!

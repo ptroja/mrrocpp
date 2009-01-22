@@ -261,7 +261,12 @@ void trajectory_reproduce_generator::dangerous_force_handler(ecp_generator::ECP_
     // Przepisanie ostatniego odczytu czujnika sily.
    memcpy(ecp_ui_msg.R2S.force_sensor_reading, last_force_sensor_reading, MAX_SERVOS_NR*sizeof(double));
     // Wyslanie polecenia do UI.
-    if (MsgSend(UI_fd, &ecp_ui_msg,  sizeof(ECP_message),  NULL, 0) < 0){
+#if !defined(USE_MESSIP_SRR)
+		if (MsgSend(UI_fd, &ecp_ui_msg, sizeof(ECP_message), NULL, 0) < 0){
+#else
+		int32_t answer;
+		if (messip_send(UI_fd, 0, 0, &ecp_ui_msg, sizeof(ECP_message), &answer, NULL, 0, MESSIP_NOTIMEOUT) < 0){
+#endif
          sr_ecp_msg.message (SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
     }else
         sr_ecp_msg.message("Press TRY AGAIN to continue move.");
@@ -379,7 +384,7 @@ trajectory_reproduce_generator::trajectory_reproduce_generator (ecp_task& _ecp_t
     interpose_list.clear();
 
     // Ustawienie niebezpiecznej sily.
-    
+
     UI_fd = _ecp_task.UI_fd;
     set_dangerous_force();
     }; // end: trajectory_reproduce_generator

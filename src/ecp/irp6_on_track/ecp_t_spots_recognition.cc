@@ -9,6 +9,13 @@
 
 #include "ecp/irp6_on_track/ecp_t_spots_recognition.h"
 
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+
+#include <sys/types.h>
+#include <sys/stat.h>
+
 //own libraries
 //Constructors
 ecp_t_spots_recognition::ecp_t_spots_recognition(configurator &_config): ecp_task(_config)
