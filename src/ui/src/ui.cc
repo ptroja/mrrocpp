@@ -6,17 +6,7 @@
 #include <semaphore.h>
 #include <pthread.h>
 
-#include "lib/srlib.h"
-#include "ui/ui_const.h"
 #include "ui/ui.h"
-// Konfigurator.
-// #include "lib/configurator.h"
-
-/* Local headers */
-#include "ablibs.h"
-#include "abimport.h"
-#include "proto.h"
-
 
 ui_sr_buffer::ui_sr_buffer()
 {
