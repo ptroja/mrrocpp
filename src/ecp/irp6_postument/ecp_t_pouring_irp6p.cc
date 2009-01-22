@@ -93,9 +93,9 @@ void ecp_task_pouring_irp6p::main_task_algorithm(void)
     			go_st->execute();
     			break;
     		case WEIGHT:
-    			printf("force0: %d\n", sensor_m.begin()->second->image.sensor_union.force.rez[0]);
-    			printf("force1: %d\n", sensor_m.begin()->second->image.sensor_union.force.rez[0]);
-    			printf("force2: %d\n", sensor_m.begin()->second->image.sensor_union.force.rez[0]);
+    			printf("force0: %f\n", sensor_m.begin()->second->image.sensor_union.force.rez[0]);
+    			printf("force1: %f\n", sensor_m.begin()->second->image.sensor_union.force.rez[0]);
+    			printf("force2: %f\n", sensor_m.begin()->second->image.sensor_union.force.rez[0]);
     			break;
     		default:
     			break;

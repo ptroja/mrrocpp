@@ -5,6 +5,9 @@
 #include "ecp/common/ecp_g_smooth.h"
 #include "ecp/common/ecp_g_force.h"
 
+#include <iostream>
+#include <fstream>
+
 #define FORCE_X 0
 #define FORCE_Y 1
 #define FORCE_Z 2
@@ -34,7 +37,7 @@ protected:
 	double P_y;
 	double P_z;
 	int procedure_type;
-	ofstream str;
+	std::ofstream str;
 	int robot;
 	void nose_generator_test(int tool);
 	void trajectories_test(int count);
@@ -63,7 +66,7 @@ public:
     // konstruktor
     force_meassure_generator(ecp_task& _ecp_task, int _sleep_time = 0, int _meassurement_count = 1);
 	Ft_v_vector& get_meassurement();
-	bool set_configuration(int _sleep_time, int _meassurement_count);
+	void set_configuration(int _sleep_time, int _meassurement_count);
 	
     bool first_step ();
     bool next_step ();

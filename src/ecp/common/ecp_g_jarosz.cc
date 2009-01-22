@@ -2314,7 +2314,7 @@ bool ecp_smooth_cubic_spline_generator::first_step()
 			throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end: switch
 
-
+	return true;
 }
 ; // end :	 ecp_smooth_cubic_spline_generator::first_step
 

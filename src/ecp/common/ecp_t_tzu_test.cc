@@ -509,7 +509,7 @@ force_meassure_generator::force_meassure_generator(ecp_task& _ecp_task, int _sle
 }
 
 /** ustawienie konfiguracji generatora **/
-bool force_meassure_generator::set_configuration(int _sleep_time, int _meassurement_count)
+void force_meassure_generator::set_configuration(int _sleep_time, int _meassurement_count)
 {
 	sleep_time = _sleep_time;
 	meassurement_count = _meassurement_count;

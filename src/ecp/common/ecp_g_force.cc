@@ -31,7 +31,7 @@ weight_meassure_generator::weight_meassure_generator(ecp_task& _ecp_task,
 	ecp_generator(_ecp_task), weight_difference(_weight_difference),
 			current_buffer_pointer(0), initial_weight(0.0),
 			initial_weight_counted(false), 
-			terminate_state_recognized(false), catch_time(_catch_time)
+			catch_time(_catch_time), terminate_state_recognized(false)
 {
 	clear_buffer();
 

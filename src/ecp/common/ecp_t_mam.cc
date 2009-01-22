@@ -133,6 +133,9 @@ void* UI_communication_thread(void* arg)
 				// Zakonczenie dzialania procesu.
 				TERMINATE = true;
 				break;
+			default:
+				fprintf(stderr, "unknown MAM command in %s:%d\n", __FILE__, __LINE__);
+				break;
 		}
 		// Odeslanie pustej odpowiedzi.
 		MsgReply(rcvid, EOK, NULL, 0);

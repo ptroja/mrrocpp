@@ -1,6 +1,9 @@
 #if !defined(_ECP_T_TZU_FS_H)
 #define _ECP_T_TZU_FS_H
 
+#include <iostream>
+#include <fstream>
+
 #include "ecp/common/ecp_task.h"
 #include "ecp/common/ecp_g_smooth.h"
 #include "ecp/common/ecp_g_force.h"
@@ -26,7 +29,7 @@
 
 class force_meassure_generator;
 
-class ecp_task_tzu_fs :  public ecp_task  
+class ecp_task_tzu_fs :  public ecp_task
 {
 protected:
 	ecp_smooth_generator *sg;
@@ -42,17 +45,17 @@ protected:
 	double P_y;
 	double P_z;
 	int robot;
-	ofstream str;
+	std::ofstream str;
 	void set_trajectory(int robot_type, int procedure_type);
 	void set_test_trajectory(int robot_type);
 	void method_alternative(int type, int sequence[], int T);
 	void method_standard(int T);
-	
+
 	const char* get_trajectory(double x[]);
 public:
 	ecp_task_tzu_fs(configurator &_config);
 	~ecp_task_tzu_fs();
-	
+
 	// methods for ECP template to redefine in concrete classes
 	/** metoda odpowiedzialna za inicjalizacje zmiennych zadania **/
 	void task_initialization(void);
@@ -73,12 +76,11 @@ public:
     // konstruktor
     force_meassure_generator(ecp_task& _ecp_task, int _sleep_time = 0, int _meassurement_count = 1);
 	Ft_v_vector& get_meassurement();
-	bool set_configuration(int _sleep_time, int _meassurement_count);
-	
+	void set_configuration(int _sleep_time, int _meassurement_count);
+
     bool first_step ();
     bool next_step ();
-}
-; // end:
+};
 
 
 #endif
