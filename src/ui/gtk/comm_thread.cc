@@ -6,6 +6,13 @@
 
 #include "ui/ui.h"
 
+extern "C" {
+	void on_window_input_number_response(GtkDialog *dialog, gint arg1, gpointer user_data)
+	{
+		printf("response ID = %d\n", arg1);
+	}
+}
+
 void *comm_thread(void* arg)
 {
 	messip_channel_t *ch;
@@ -18,22 +25,16 @@ void *comm_thread(void* arg)
 
 	ui_ecp_buffer ui_ecp_obj = ui_ecp_buffer();
 
-//	{
-//		gdk_threads_enter();
-//		GtkDialog *input = GTK_DIALOG(ui_model::instance().getUiGObject("window-input-number"));
-//		gtk_widget_show_all(GTK_WIDGET(input));
-//		gdk_threads_leave();
-//	}
-
 	while (1) {
 		// ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
-//		ui_ecp_obj->communication_state = UI_ECP_AFTER_REPLY;
-//		rcvid = MsgReceive(attach->chid, &ui_ecp_obj->ecp_to_ui_msg, sizeof(ui_ecp_obj->ecp_to_ui_msg), info);
+		//		ui_ecp_obj->communication_state = UI_ECP_AFTER_REPLY;
+		//		rcvid = MsgReceive(attach->chid, &ui_ecp_obj->ecp_to_ui_msg, sizeof(ui_ecp_obj->ecp_to_ui_msg), info);
 
 		int32_t type, subtype;
 
-		int rcvid = messip_receive(ch, &type, &subtype, &ui_ecp_obj.ecp_to_ui_msg, sizeof(ui_ecp_obj.ecp_to_ui_msg), MESSIP_NOTIMEOUT);
-//		ui_ecp_obj->communication_state = UI_ECP_AFTER_RECEIVE;
+		int rcvid = messip_receive(ch, &type, &subtype, &ui_ecp_obj.ecp_to_ui_msg, sizeof(ui_ecp_obj.ecp_to_ui_msg),
+				MESSIP_NOTIMEOUT);
+		//		ui_ecp_obj->communication_state = UI_ECP_AFTER_RECEIVE;
 
 		if (rcvid == -1) {/* Error condition, exit */
 			perror("UI: Receive failed\n");
@@ -41,33 +42,66 @@ void *comm_thread(void* arg)
 			break;
 		}
 
-		switch (ui_ecp_obj.ecp_to_ui_msg.ecp_message) {
-			case DOUBLE_NUMBER:
-//				ui_ecp_obj->trywait_sem();
-//				PtEnter(0);
-//				ApCreateModule(ABM_wnd_input_double, ABW_base, NULL);
-//				PtSetResource(ABW_PtLabel_wind_input_double, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string, 0);
-//				PtLeave(0);
-//				ui_ecp_obj->take_sem();
-//
-//				if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep)) < 0) {
-//					printf("Blad w UI reply\n");
-//				}
-				break;
-			case INTEGER_NUMBER:
-//				ui_ecp_obj->trywait_sem();
-//				PtEnter(0);
-//				ApCreateModule(ABM_wnd_input_integer, ABW_base, NULL);
-//				PtSetResource(ABW_PtLabel_wind_input_integer, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string, 0);
-//				PtLeave(0);
-//				ui_ecp_obj->take_sem();
-//
-//				if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep)) < 0) {
-//					printf("Blad w UI reply\n");
-//				}
-				break;
+		switch (ui_ecp_obj.ecp_to_ui_msg.ecp_message)
+		{
+			case DOUBLE_NUMBER: {
+				gdk_threads_enter();
+				GtkDialog *dialog = GTK_DIALOG(ui_model::instance().getUiGObject("window_input_number"));
+				//		gtk_widget_show_all(GTK_WIDGET(dialog));
+				gtk_widget_hide_on_delete(GTK_WIDGET(dialog));
+
+				GtkSpinButton *input = GTK_SPIN_BUTTON((ui_model::instance().getUiGObject("numeric_input_spinbutton")));
+				gtk_spin_button_set_range(input, -G_MAXDOUBLE, G_MAXDOUBLE);
+				gtk_spin_button_set_value(input, 0.0);
+				gtk_spin_button_set_digits(input, 3);
+
+				GtkLabel *label = GTK_LABEL((ui_model::instance().getUiGObject("numeric_input_label")));
+				gtk_label_set_label(label, ui_ecp_obj.ecp_to_ui_msg.string);
+
+				gint response = gtk_dialog_run(dialog);
+				gtk_widget_hide(GTK_WIDGET(dialog));
+				gdk_flush();
+
+				ui_ecp_obj.ui_rep.double_number = (response == GTK_RESPONSE_OK) ? ANSWER_YES : INVALID_REPLY;
+				ui_ecp_obj.ui_rep.double_number = gtk_spin_button_get_value(input);
+
+				gdk_threads_leave();
+
+				if (messip_reply(ch, rcvid, EOK, &ui_ecp_obj.ui_rep, sizeof(ui_ecp_obj.ui_rep), MESSIP_NOTIMEOUT) < 0) {
+					perror("messip_reply()");
+				}
+			}
+			break;
+			case INTEGER_NUMBER: {
+				gdk_threads_enter();
+				GtkDialog *dialog = GTK_DIALOG(ui_model::instance().getUiGObject("window_input_number"));
+				//		gtk_widget_show_all(GTK_WIDGET(dialog));
+				gtk_widget_hide_on_delete(GTK_WIDGET(dialog));
+
+				GtkSpinButton *input = GTK_SPIN_BUTTON((ui_model::instance().getUiGObject("numeric_input_spinbutton")));
+				gtk_spin_button_set_range(input, -G_MAXINT, G_MAXINT);
+				gtk_spin_button_set_value(input, 0.0);
+				gtk_spin_button_set_digits(input, 0);
+
+				GtkLabel *label = GTK_LABEL((ui_model::instance().getUiGObject("numeric_input_label")));
+				gtk_label_set_label(label, ui_ecp_obj.ecp_to_ui_msg.string);
+
+				gint response = gtk_dialog_run(dialog);
+				gtk_widget_hide(GTK_WIDGET(dialog));
+				gdk_flush();
+
+				ui_ecp_obj.ui_rep.double_number = (response == GTK_RESPONSE_OK) ? ANSWER_YES : INVALID_REPLY;
+				ui_ecp_obj.ui_rep.double_number = gtk_spin_button_get_value(input);
+
+				gdk_threads_leave();
+
+				if (messip_reply(ch, rcvid, EOK, &ui_ecp_obj.ui_rep, sizeof(ui_ecp_obj.ui_rep), MESSIP_NOTIMEOUT) < 0) {
+					perror("messip_reply()");
+				}
+			}
+			break;
 #if 0
-			// rodzaj polecenia z ECP
+				// rodzaj polecenia z ECP
 			case C_XYZ_ANGLE_AXIS:
 			case C_XYZ_EULER_ZYZ:
 			case C_JOINT:
