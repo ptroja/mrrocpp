@@ -216,14 +216,7 @@ EDP_irp6_mechatronika_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 				ui_robot.irp6_mechatronika->get_controller_state(&robot_controller_initial_state_tmp);
 
 				ui_state.irp6_mechatronika.edp.state = 1; // edp wlaczone reader czeka na start
-				if (!robot_controller_initial_state_tmp.is_synchronised) // jesli robot nie jest zsynchronizowany
-				{
-					ui_state.irp6_mechatronika.edp.is_synchronised = false; // edp wlaczone reader czeka na start
-				} else { // jesli robot jest zsynchronizowany
-					ui_state.irp6_mechatronika.edp.is_synchronised = true; // edp wlaczone reader czeka na start
-				}
-
-
+				ui_state.irp6_mechatronika.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
 			}
 		}
 	}
@@ -254,7 +247,7 @@ EDP_irp6_mechatronika_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 		name_close(ui_state.irp6_mechatronika.edp.reader_fd);
 
 		delete ui_robot.irp6_mechatronika;
-		 SignalKill(ui_state.irp6_mechatronika.edp.node_nr, ui_state.irp6_mechatronika.edp.pid, 0, SIGTERM, 0, 0);
+		SignalKill(ui_state.irp6_mechatronika.edp.node_nr, ui_state.irp6_mechatronika.edp.pid, 0, SIGTERM, 0, 0);
 		ui_state.irp6_mechatronika.edp.state = 0; // edp wylaczone
 		ui_state.irp6_mechatronika.edp.is_synchronised = false;
 

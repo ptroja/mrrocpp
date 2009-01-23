@@ -101,7 +101,7 @@ pulse_ecp_conveyor()
 	{ // o ile ECP dziala (sprawdzanie poprzez dzialanie odpowiedniego EDP)
 		if (ui_state.conveyor.ecp.trigger_fd < 0)
 		{
-		
+
 			 short tmp = 0;
 		 	// kilka sekund  (~1) na otworzenie urzadzenia
 		 	// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
@@ -121,10 +121,10 @@ pulse_ecp_conveyor()
 
 		if (ui_state.conveyor.ecp.trigger_fd >= 0) {
 			if (MsgSendPulse (ui_state.conveyor.ecp.trigger_fd, sched_get_priority_min(SCHED_FIFO),  pulse_code,  pulse_value)==-1) {
-				
+
 				fprintf( stderr, "Blad w wysylaniu pulsu do ecp error: %s \n",  strerror( errno ) );
 				delay(1000);
-			}	
+			}
 		} else {
 			printf("W PULS ECP:  BLAD name_open \n");
 		}
@@ -133,7 +133,7 @@ pulse_ecp_conveyor()
 	return 0;
 }
 
-int 
+int
 manage_interface_conveyor ()
 {
 	switch (ui_state.conveyor.edp.state)
@@ -147,9 +147,9 @@ manage_interface_conveyor ()
 		case 1:
 		case 2:
 			replySend(new Message('D','E','C',0,NULL,NULL));
-			
+
 			// jesli robot jest zsynchronizowany
-			if (	ui_state.conveyor.edp.is_synchronised)			
+			if (	ui_state.conveyor.edp.is_synchronised)
 			{
 				replySend(new Message('D','E','D',0,NULL,NULL));
 				switch (ui_state.mp.state)
@@ -241,7 +241,7 @@ int conveyor_moves_move_motors(double* v)
 	{
 		if (ui_state.conveyor.edp.pid!=-1)
 		{
-		
+
 				if (ui_state.conveyor.edp.is_synchronised)
 				{
 					conveyor_desired_pos_motors[0] = v[0];
@@ -265,7 +265,7 @@ int conveyor_moves_move_joints(double* v)
 	{
 		if (ui_state.conveyor.edp.pid!=-1)
 		{
-		
+
 				if (ui_state.conveyor.edp.is_synchronised)
 				{
 					conveyor_desired_pos_int[0] = v[0];
@@ -302,7 +302,7 @@ int conv_servo_algorithm_set(double* v)
 		}
 	}
 	CATCH_SECTION_UI
-	
+
 	return 0;
 }
 
@@ -312,7 +312,7 @@ int conveyor_move_to_synchro_position()
 	{
 		if (ui_state.conveyor.edp.pid!=-1)
 		{
-			
+
 			for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++)
 			{
 				conveyor_desired_pos[i] = 0.0;
@@ -320,7 +320,7 @@ int conveyor_move_to_synchro_position()
 			ui_robot.conveyor->move_motors(conveyor_desired_pos);
 			conveyor_read_joints();
 			conveyor_read_motors();
-		}   
+		}
 	}
 	CATCH_SECTION_UI
 
@@ -333,7 +333,7 @@ int conveyor_move_to_position0()
 	{
 		if (ui_state.conveyor.edp.pid!=-1)
 		{
-			
+
 			for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++)
 			{
 				conveyor_desired_pos[i] = ui_state.conveyor.edp.preset_position[0][i];
@@ -341,7 +341,7 @@ int conveyor_move_to_position0()
 			ui_robot.conveyor->move_motors(conveyor_desired_pos);
 			conveyor_read_joints();
 			conveyor_read_motors();
-		}   
+		}
 	}
 	CATCH_SECTION_UI
 
@@ -354,7 +354,7 @@ int conveyor_move_to_position1()
 	{
 		if (ui_state.conveyor.edp.pid!=-1)
 		{
-			
+
 			for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++)
 			{
 				conveyor_desired_pos[i] = ui_state.conveyor.edp.preset_position[1][i];
@@ -362,7 +362,7 @@ int conveyor_move_to_position1()
 			ui_robot.conveyor->move_motors(conveyor_desired_pos);
 			conveyor_read_joints();
 			conveyor_read_motors();
-		}   
+		}
 	}
 	CATCH_SECTION_UI
 
@@ -375,7 +375,7 @@ int conveyor_move_to_position2()
 	{
 		if (ui_state.conveyor.edp.pid!=-1)
 		{
-			
+
 			for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++)
 			{
 				conveyor_desired_pos[i] = ui_state.conveyor.edp.preset_position[2][i];
@@ -383,7 +383,7 @@ int conveyor_move_to_position2()
 			ui_robot.conveyor->move_motors(conveyor_desired_pos);
 			conveyor_read_joints();
 			conveyor_read_motors();
-		}   
+		}
 	}
 	CATCH_SECTION_UI
 
@@ -403,14 +403,14 @@ int EDP_conveyor_synchronise()
 		if ((ui_state.conveyor.edp.state > 0) && (ui_state.conveyor.edp.is_synchronised == true)) replySend(new Message('D','E','A',0,NULL,NULL));
 	}
 	CATCH_SECTION_UI
-	
+
 	manage_interface();
 	return 0;
 }
 
 int EDP_conveyor_create()
 {
-	set_ui_state_notification(UI_N_PROCESS_CREATION);	
+	set_ui_state_notification(UI_N_PROCESS_CREATION);
 
 	short tmp;
 	char tmp_string[100];
@@ -421,7 +421,7 @@ int EDP_conveyor_create()
 		{
 			strcpy(tmp_string, "/dev/name/global/");
 			strcat(tmp_string, ui_state.conveyor.edp.hardware_busy_attach_point);
-			
+
 			strcpy(tmp2_string, "/dev/name/global/");
 			strcat(tmp2_string, ui_state.conveyor.edp.network_resourceman_attach_point);
 			if((!(ui_state.conveyor.edp.test_mode)) && ( access(tmp_string, R_OK)== 0  )
@@ -431,7 +431,7 @@ int EDP_conveyor_create()
 				ui_msg.ui->message("edp_conveyor already exists");
 			} else {
 				ui_state.conveyor.edp.node_nr = config->return_node_number(ui_state.conveyor.edp.node_name);
-				
+
 				ui_robot.conveyor = new ui_conveyor_robot(&ui_state.irp6_on_track.edp, *config, ui_msg.all_ecp);
 				ui_state.conveyor.edp.pid = ui_robot.conveyor->get_EDP_pid();
 
@@ -440,10 +440,10 @@ int EDP_conveyor_create()
 					fprintf( stderr, "EDP spawn failed: %s\n", strerror( errno ));
 					delete ui_robot.conveyor;
 				} else {  // jesli spawn sie powiodl
-					
+
 					 tmp = 0;
 				 	// kilka sekund  (~1) na otworzenie urzadzenia
-					while((ui_state.conveyor.edp.reader_fd = name_open(ui_state.conveyor.edp.network_reader_attach_point, 
+					while((ui_state.conveyor.edp.reader_fd = name_open(ui_state.conveyor.edp.network_reader_attach_point,
 						NAME_FLAG_ATTACH_GLOBAL))  < 0)
 						if((tmp++)<20)
 							delay(50);
@@ -451,20 +451,14 @@ int EDP_conveyor_create()
 						   perror("blad odwolania do READER_C\n");
 		   				   break;
 						};
-					
-					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)	
+
+					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					controller_state_t robot_controller_initial_state_tmp;
 					ui_robot.conveyor->get_controller_state(&robot_controller_initial_state_tmp);
-		
+
 					ui_state.conveyor.edp.state = 1; // edp wlaczone reader czeka na start
 					replySend(new Message('D','C','A',0,NULL,NULL));
-					if (!robot_controller_initial_state_tmp.is_synchronised) // jesli robot nie jest zsynchronizowany
-					{
-						ui_state.conveyor.edp.is_synchronised = false; // edp wlaczone reader czeka na start
-					} else { // jesli robot jest zsynchronizowany
-						ui_state.conveyor.edp.is_synchronised = true; // edp wlaczone reader czeka na start
-					}
-						
+					ui_state.conveyor.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
 				}
 			}
 		}
@@ -473,7 +467,7 @@ int EDP_conveyor_create()
 manage_interface();
 	return 0;
 }
-	
+
 int EDP_conveyor_slay()
 {
 	if (ui_state.conveyor.edp.state>0)
@@ -504,7 +498,7 @@ int
 pulse_reader_conv_stop()
 {
 	pulse_reader_conv_stop_exec_pulse();
-	
+
 	return 0;
 }
 
@@ -520,8 +514,8 @@ bool pulse_reader_conv_start_exec_pulse ()
 		ui_state.conveyor.edp.state = 2;
 		return true;
 	}
-	
-	return false;	
+
+	return false;
 }
 
 
@@ -536,8 +530,8 @@ bool pulse_reader_conv_stop_exec_pulse ()
 		ui_state.conveyor.edp.state = 1;
 		return true;
 	}
-	
-	return false;	
+
+	return false;
 }
 
 
@@ -551,34 +545,34 @@ bool pulse_reader_conv_trigger_exec_pulse ()
 
 		return true;
 	}
-	
-	return false;	
+
+	return false;
 }
 
 
 
 
-int 
+int
 reload_conveyor_configuration ()
 {
 
 
 	// jesli conveyor ma byc aktywny
-	if ((ui_state.conveyor.is_active = config->return_int_value("is_conveyor_active")) == 1) 
+	if ((ui_state.conveyor.is_active = config->return_int_value("is_conveyor_active")) == 1)
 	{
-	
+
 		//ui_state.is_any_edp_active = true;
-		
+
 		if (ui_state.is_mp_and_ecps_active)
 		{
 			delete [] ui_state.conveyor.ecp.network_trigger_attach_point;
-			ui_state.conveyor.ecp.network_trigger_attach_point =config->return_attach_point_name 
+			ui_state.conveyor.ecp.network_trigger_attach_point =config->return_attach_point_name
 				(configurator::CONFIG_SERVER, "trigger_attach_point", ui_state.conveyor.ecp.section_name);
-			
+
 	 		ui_state.conveyor.ecp.pid = -1;
 	 		ui_state.conveyor.ecp.trigger_fd = -1;
 	 	}
-		
+
 		switch (ui_state.conveyor.edp.state)
 		{
 			case -1:
@@ -590,24 +584,24 @@ reload_conveyor_configuration ()
 
 				if (config->exists("preset_position_0", ui_state.conveyor.edp.section_name))
 					ui_state.conveyor.edp.preset_position[0][0] = config->return_double_value ("preset_position_0", ui_state.conveyor.edp.section_name);
-				if (config->exists("preset_position_1", ui_state.conveyor.edp.section_name))	
+				if (config->exists("preset_position_1", ui_state.conveyor.edp.section_name))
 					ui_state.conveyor.edp.preset_position[1][0] = config->return_double_value ("preset_position_1", ui_state.conveyor.edp.section_name);
 				if (config->exists("preset_position_2", ui_state.conveyor.edp.section_name))
 					ui_state.conveyor.edp.preset_position[2][0] = config->return_double_value ("preset_position_2", ui_state.conveyor.edp.section_name);
 
 				if (config->exists("test_mode", ui_state.conveyor.edp.section_name))
 					ui_state.conveyor.edp.test_mode = config->return_int_value("test_mode", ui_state.conveyor.edp.section_name);
-				else 
+				else
 					ui_state.conveyor.edp.test_mode = 0;
-				
+
 				delete [] ui_state.conveyor.edp.hardware_busy_attach_point;
-				ui_state.conveyor.edp.hardware_busy_attach_point = config->return_string_value 
+				ui_state.conveyor.edp.hardware_busy_attach_point = config->return_string_value
 					("hardware_busy_attach_point", ui_state.conveyor.edp.section_name);
 
 
 
 				delete [] ui_state.conveyor.edp.network_resourceman_attach_point;
-				ui_state.conveyor.edp.network_resourceman_attach_point = config->return_attach_point_name 
+				ui_state.conveyor.edp.network_resourceman_attach_point = config->return_attach_point_name
 					(configurator::CONFIG_SERVER, "resourceman_attach_point", ui_state.conveyor.edp.section_name);
 
 				delete [] ui_state.conveyor.edp.network_reader_attach_point;
@@ -616,7 +610,7 @@ reload_conveyor_configuration ()
 
 				delete [] ui_state.conveyor.edp.node_name;
 				ui_state.conveyor.edp.node_name = config->return_string_value ("node_name", ui_state.conveyor.edp.section_name);
-				
+
 			break;
 			case 1:
 			case 2:
@@ -625,11 +619,11 @@ reload_conveyor_configuration ()
 			default:
 			break;
 		}
-	
+
 	} else // jesli  conveyor ma byc nieaktywny
 	{
 
-		switch (ui_state.conveyor.edp.state) 
+		switch (ui_state.conveyor.edp.state)
 		{
 			case -1:
 			case 0:
