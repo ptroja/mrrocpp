@@ -520,8 +520,6 @@ EDP_conveyor_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 	short tmp;
 	char tmp_string[100];
 	char tmp2_string[100];
-	FILE* file;					// do sprawdzenia czy istnieje /net/node_name/dev/TWOJ_ROBOT
-	controller_state_t robot_controller_initial_state_tmp;
 
 	try { // dla bledow robot :: ECP_error
 	
@@ -563,6 +561,7 @@ EDP_conveyor_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 					};
 				
 				// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)	
+				controller_state_t robot_controller_initial_state_tmp;
 				ui_robot.conveyor->get_controller_state(&robot_controller_initial_state_tmp);
 	
 				ui_state.conveyor.edp.state = 1; // edp wlaczone reader czeka na start

@@ -415,8 +415,6 @@ int EDP_conveyor_create()
 	short tmp;
 	char tmp_string[100];
 	char tmp2_string[100];
-	FILE* file;
-	controller_state_t robot_controller_initial_state_tmp;
 
 	try {
 		if (ui_state.conveyor.edp.state == 0)
@@ -455,6 +453,7 @@ int EDP_conveyor_create()
 						};
 					
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)	
+					controller_state_t robot_controller_initial_state_tmp;
 					ui_robot.conveyor->get_controller_state(&robot_controller_initial_state_tmp);
 		
 					ui_state.conveyor.edp.state = 1; // edp wlaczone reader czeka na start

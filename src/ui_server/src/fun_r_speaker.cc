@@ -161,7 +161,6 @@ int EDP_speaker_create()
 	set_ui_state_notification(UI_N_PROCESS_CREATION);	
 char tmp_string[100];
 	char tmp2_string[100];
-	FILE* file;
 
 	try
 	{
