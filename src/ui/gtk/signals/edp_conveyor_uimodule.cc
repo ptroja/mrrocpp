@@ -5,6 +5,7 @@
 #include "ui_model.h"
 #include "edp_conveyor_uimodule.h"
 
+#include "ui/ui_ecp_r_irp6_common.h"
 
 edp_conveyor::edp_conveyor(ui_config_entry &entry)
 {	
@@ -77,6 +78,12 @@ extern "C"
 		
 		
 		
+		
+				new ui_common_robot(
+				ui_model::instance().getConfigurator(),
+				&ui_model::instance().getEcpSr(),
+				ROBOT_CONVEYOR
+				);
 	}
 
 	void ui_module_unload(void) 
@@ -85,6 +92,6 @@ extern "C"
 		{
 			delete edp_conveyorRobot;
 		}
-		fprintf(stderr, "config %s unloaded\n", __FILE__);
+		fprintf(stderr, "module %s unloaded\n", __FILE__);
 	}
 }

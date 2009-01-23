@@ -2,14 +2,20 @@ ui_defs = mp.xml
 
 ui_modules = mp.so
 
-SOURCEDIRS = generator glade signals
+INSTALLDIRS = glade signals
+SOURCEDIRS = generator $(INSTALLDIRS)
 
 .PHONY: all clean install depend $(SOURCEDIRS)
 
 all: $(SOURCEDIRS) ui.gtk ui.xml $(ui_defs) $(ui_modules)
 
+glade: generator
+signals: generator
+
 $(SOURCEDIRS):
 	@$(MAKE) -C $@
+
+install:
 
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
@@ -42,6 +48,9 @@ clean:
 
 # TODO: ponizsza regule "install" trzeba ladniej przepisac
 install: all
+	@for i in ${INSTALLDIRS} ; do \
+		($(MAKE) -C $$i install) ; \
+	done
 	cp ui.gtk start.sh *.xml *.so $(HOMEDIR)/bin/
 
 # Directory with dependences.
