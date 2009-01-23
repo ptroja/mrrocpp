@@ -67,12 +67,21 @@ static GOptionEntry entries[] =
 
 int main(int argc, char *argv[])
 {
-	GError *error = NULL;
-	GOptionContext *context;
+	// initialize multi-threading in GTK/GDK
+	if (!g_thread_supported ()) g_thread_init (NULL);
+	gdk_threads_init();
+	gdk_threads_enter();
 
+	// common GLib error pointer
+	GError *error = NULL;
+
+	// parse command line options
+	GOptionContext *context;
 	context = g_option_context_new ("- MRROC++ User Interface");
 	g_option_context_add_main_entries (context, entries, NULL);
 	g_option_context_add_group (context, gtk_get_option_group (TRUE));
+
+	// this calls gtk_init()
 	if (!g_option_context_parse (context, &argc, &argv, &error)) {
 		g_print ("option parsing failed: %s\n", error->message);
 		exit (1);
@@ -82,16 +91,16 @@ int main(int argc, char *argv[])
 	//! Gtk::Main object initialized for use GTKMM in process tabs
 	Gtk::Main kit(argc, argv);
 
-	if (!g_thread_supported ()) g_thread_init (NULL);
-
 	xmlconfig = new xmlconfigurator();
 
+	// create SR thread
 	GThread *sr_t = g_thread_create(sr_thread, NULL, false, &error);
 	if (sr_t == NULL) {
 		fprintf(stderr, "g_thread_create(): %s\n", error->message);
 		return -1;
 	}
 
+	// create common ECP->UI communication thread
 	GThread *comm_t = g_thread_create(comm_thread, NULL, false, &error);
 	if (comm_t == NULL) {
 		fprintf(stderr, "g_thread_create(): %s\n", error->message);
@@ -111,9 +120,15 @@ int main(int argc, char *argv[])
 		xmlconfig->open_config_file(config_file.c_str());
 	}
 
+	// initialize client SR objects
 	ui_model::instance().init_sr();
 
+//	GtkDialog *input = GTK_DIALOG(ui_model::instance().getUiGObject("window-input-number"));
+//	gtk_widget_show_all(GTK_WIDGET(input));
+
+
 	gtk_main();
+	gdk_threads_leave();
 
 	return 0;
 }
