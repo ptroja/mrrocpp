@@ -21,19 +21,29 @@ EDP IRp6 RCSC window callback signals
 
 <xsl:text>
 #include &lt;iostream&gt;
+
 #include &lt;gtk/gtk.h&gt;
 #include &lt;glib.h&gt;
+
 #include "ui_model.h"
 #include "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_uimodule.h"
 
-</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>#include "ui/ui_ecp_r_conveyor.h"</xsl:text></xsl:when><xsl:otherwise><xsl:text>#include "ui/ui_ecp_r_irp6_common.h"</xsl:text></xsl:otherwise></xsl:choose><xsl:text>
+#include "ui/ui_ecp_r_irp6_common.h"
 
 edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>(ui_config_entry &amp;entry)
-{	
+{
+	robot = new ui_common_robot(
+		ui_model::instance().getConfigurator(),
+		&amp;ui_model::instance().getEcpSr(),
+		</xsl:text><xsl:choose><xsl:when test="$name = 'irp6m'"><xsl:text>ROBOT_IRP6_MECHATRONIKA</xsl:text></xsl:when><xsl:when test="$name = 'irp6o'"><xsl:text>ROBOT_IRP6_ON_TRACK</xsl:text></xsl:when><xsl:when test="$name = 'irp6p'"><xsl:text>ROBOT_IRP6_POSTUMENT</xsl:text></xsl:when><xsl:when test="$name = 'conveyor'"><xsl:text>ROBOT_CONVEYOR</xsl:text></xsl:when><xsl:otherwise><xsl:text>ROBOT_IRP6_NEWROBOT</xsl:text></xsl:otherwise></xsl:choose><xsl:text>
+	);
 }
 
 edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>::~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>()
 {
+	if (robot) {
+		delete robot;
+	}		
 }
 
 static edp_</xsl:text><xsl:value-of select="$name" /><xsl:text> *edp_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
@@ -99,12 +109,6 @@ extern "C"
 		</xsl:text><xsl:if test="$euler_xyz &gt; 0"><xsl:text>ui_widget_entry * widgetEntry5 = new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_xyz.xml"); entry.addWidget(widgetEntry5);</xsl:text></xsl:if><xsl:text>
 		</xsl:text><xsl:if test="$axis_ts &gt; 0"><xsl:text>ui_widget_entry * widgetEntry6 = new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_ts.xml"); entry.addWidget(widgetEntry6);</xsl:text></xsl:if><xsl:text>
 		</xsl:text><xsl:if test="$euler_ts &gt; 0"><xsl:text>ui_widget_entry * widgetEntry7 = new ui_widget_entry("</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_ts.xml"); entry.addWidget(widgetEntry7);</xsl:text></xsl:if><xsl:text>
-		
-				new </xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>ui_conveyor_robot</xsl:text></xsl:when><xsl:otherwise><xsl:text>ui_common_robot</xsl:text></xsl:otherwise></xsl:choose><xsl:text>(
-				ui_model::instance().getConfigurator(),
-				&amp;ui_model::instance().getEcpSr()
-				</xsl:text><xsl:choose><xsl:when test="$name = 'irp6m'"><xsl:text>,ROBOT_IRP6_MECHATRONIKA</xsl:text></xsl:when><xsl:when test="$name = 'irp6o'"><xsl:text>,ROBOT_IRP6_ON_TRACK</xsl:text></xsl:when><xsl:when test="$name = 'irp6p'"><xsl:text>,ROBOT_IRP6_POSTUMENT</xsl:text></xsl:when><xsl:when test="$name = 'conveyor'"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>ROBOT_IRP6_NEWROBOT</xsl:text></xsl:otherwise></xsl:choose><xsl:text>
-				);
 	}
 
 	void ui_module_unload(void) 
@@ -138,6 +142,8 @@ extern "C"
 #include &lt;gtk/gtkbuilder.h&gt;
 #include &lt;gtk/gtk.h&gt;
 
+#include "ui/ui_ecp_r_irp6_common.h"
+
 class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>
 {
 	public:
@@ -145,7 +151,8 @@ class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>
 		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>(ui_config_entry &amp;entry);
 		~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>();
 
-
+	private:
+		ui_common_robot *robot;
 };
 
 #endif /* __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text> */
