@@ -1,20 +1,20 @@
 ////////////////////////////////////////////////////////////////////////////////
 /** @file     include/common/com_buf.h
  *
- *  Data structures for IPC. 
+ *  Data structures for IPC.
  *
  *  @author   tkornuta
  *  @date     2006-11-29
  *  $URL$
  *  $LastChangedRevision$
- *  $LastChangedDate$  
+ *  $LastChangedDate$
  *  $LastChangedBy$
- *  
+ *
  *  @todo <ul>
  *          <li>Translate to English where necessary.</li>
  *          <li>Write detailed comments.</li>
- *          <li>Suplement comments for those consts, variables and structures 
- *              that are not commented at all.</li> 
+ *          <li>Suplement comments for those consts, variables and structures
+ *              that are not commented at all.</li>
  *          <li>Clean up the commented fragments of code.</li>
  *        </ul>
  */
@@ -34,7 +34,7 @@
  */
 enum MP_COMMAND {
     INVALID_COMMAND,
-    START_TASK,    
+    START_TASK,
     NEXT_POSE,
     END_MOTION,
     NEXT_STATE,
@@ -43,7 +43,7 @@ enum MP_COMMAND {
 
 //------------------------------------------------------------------------------
 /**
- *  Type of reply from ECP to the MP command. 
+ *  Type of reply from ECP to the MP command.
  */
 enum ECP_REPLY {
     INCORRECT_MP_COMMAND,
@@ -54,7 +54,7 @@ enum ECP_REPLY {
 
 //------------------------------------------------------------------------------
 /**
- *  Type of arm position definition.	 
+ *  Type of arm position definition.
  */
 enum POSE_SPECIFICATION {
     INVALID_END_EFFECTOR,
@@ -108,8 +108,8 @@ enum UI_TO_ECP_COMMAND {
     OPTION_FOUR,
 
     /**
-     *  Commands from the window 
-     *  MAM_wnd_manual_moves_automatic_measures. 
+     *  Commands from the window
+     *  MAM_wnd_manual_moves_automatic_measures.
      */
     MAM_START,
     MAM_STOP,
@@ -205,7 +205,7 @@ struct ECP_message
 struct UI_reply
 {
     msg_header_t hdr;
-    BYTE reply;
+    UI_TO_ECP_COMMAND reply;
     int integer_number;
     double double_number;
     double coordinates[MAX_SERVOS_NR];
@@ -236,9 +236,9 @@ struct UI_ECP_message
 
 //------------------------------------------------------------------------------
 /**
- *  Trajectory description for a chosen type of interpolation. 
- *  
- *  @warning  Enum type POSE_SPECIFICATION moved to the front 
+ *  Trajectory description for a chosen type of interpolation.
+ *
+ *  @warning  Enum type POSE_SPECIFICATION moved to the front
  *            of the file, because it is used in this structure.
  *            Connected with C_MOTOR and C_JOINT etc. - watch out for the indexes.
  *  @see      POSE_SPECIFICATION  C_MOTOR  C_JOINT.
@@ -568,8 +568,8 @@ struct edp_master_command
             WORD number_of_steps;
             /**
              *  Number of steps after which the information about the previously
-             *  realized position is to be sent. 
-             *  Information is sent to EDP_MASTER using READING_BUFFER. 
+             *  realized position is to be sent.
+             *  Information is sent to EDP_MASTER using READING_BUFFER.
              *  After k steps SERVO has the position from the k-1 step.
              */
             WORD return_value_in_step_no;
@@ -659,7 +659,7 @@ typedef union c_buffer_rmodel
     {
         /** Numbers for the servo-regulation algorithms. */
         BYTE servo_algorithm_no[MAX_SERVOS_NR];
-        /** Parameter set numbers for the servo-regulation algorithms. */        
+        /** Parameter set numbers for the servo-regulation algorithms. */
         BYTE servo_parameters_no[MAX_SERVOS_NR];
         //** Byte for calculating the command's length. */
         // 	BYTE address_byte;
@@ -689,7 +689,7 @@ typedef union c_buffer_arm
     //----------------------------------------------------------
     struct
     {
-        /**  End's trihedron ralative to the base system. */      
+        /**  End's trihedron ralative to the base system. */
         frame_tab arm_frame;
         /** XYZ + end's orientation relative to the base system. */
         double arm_coordinates[MAX_SERVOS_NR];
@@ -756,22 +756,22 @@ struct c_buffer
     WORD motion_steps;
     /**
      *  Number of steps for the 1st movemement phase.
-     *  Krok, w ktorym ma zostac przekazana informacja 
+     *  Krok, w ktorym ma zostac przekazana informacja
      *  o realizacji pierwszej fazy ruchu:
      *  0 < value_in_step_no <= motion_steps + 1 .
-     *  
-     *  Dla value_in_step_no = motion_steps 
-     *  wiadomosc dotrze po zrealizowaniu makrokroku, 
-     *  ale informacja o polozeniu bedzie dotyczyc 
-     *  realizacji przedostatniego kroku makrokroku. 
-     *  
+     *
+     *  Dla value_in_step_no = motion_steps
+     *  wiadomosc dotrze po zrealizowaniu makrokroku,
+     *  ale informacja o polozeniu bedzie dotyczyc
+     *  realizacji przedostatniego kroku makrokroku.
+     *
      *  Dla value_in_step_no = motion_steps + 1
-     *  wiadomosc dotrze po zrealizowaniu jednego kroku 
-     *  obiegu petli ruchu jalowego po zakonczeniu makrokroku, 
-     *  ale informacja o polozeniu bedzie dotyczyc 
+     *  wiadomosc dotrze po zrealizowaniu jednego kroku
+     *  obiegu petli ruchu jalowego po zakonczeniu makrokroku,
+     *  ale informacja o polozeniu bedzie dotyczyc
      *  realizacji calego makrokroku.
-     *  
-     *  Dla value_in_step_no < motion_steps 
+     *
+     *  Dla value_in_step_no < motion_steps
      *  wiadomosc dotrze przed zrealizowaniem makrokroku
      *  i informacja o polozeniu bedzie dotyczyc
      *  realizacji srodkowej fazy makrokroku.
@@ -834,7 +834,7 @@ typedef union r_buffer_rmodel
     struct
     {
         /**
-         *  Macierz reprezentujaca narzedzie wzgledem konca lancucha kinematycznego. 
+         *  Macierz reprezentujaca narzedzie wzgledem konca lancucha kinematycznego.
          *  @todo Translate to English.
          */
         frame_tab tool_frame;
@@ -846,7 +846,7 @@ typedef union r_buffer_rmodel
     struct
     {
         /**
-         *  XYZ + orientacja narzedzia wzgledem kolnierza. 
+         *  XYZ + orientacja narzedzia wzgledem kolnierza.
          *  @todo Translate to English.
          */
         double tool_coordinates[6];
@@ -858,7 +858,7 @@ typedef union r_buffer_rmodel
     struct
     {
         /**
-         *  Numer modelu kinematyki. 
+         *  Numer modelu kinematyki.
          *  @todo Translate to English.
          */
         BYTE kinematic_model_no;
@@ -871,12 +871,12 @@ typedef union r_buffer_rmodel
     struct
     {
         /**
-         *  Numery algorytmow serworegulacji. 
+         *  Numery algorytmow serworegulacji.
          *  @todo Translate to English.
          */
         BYTE servo_algorithm_no[MAX_SERVOS_NR];
         /**
-         *  Numery zestawu parametrow algorytmow serworegulacji. 
+         *  Numery zestawu parametrow algorytmow serworegulacji.
          *  @todo Translate to English.
          */
         BYTE servo_parameters_no[MAX_SERVOS_NR];
@@ -899,24 +899,24 @@ typedef struct _controller_state_t
     /** Is robot synchronised? */
     bool is_synchronised;
     /**
-     *  Czy wzmacniacze mocy sa zasilane? 
+     *  Czy wzmacniacze mocy sa zasilane?
      *  @todo Translate to English.
      */
     bool is_power_on;
     /**
-     *  Czy szafa jest w³aczona? 
-     *  @todo Translate to English. 
+     *  Czy szafa jest wï¿½aczona?
+     *  @todo Translate to English.
      *        Change the "wardrobe" thing for God's sake !!!
      */
     bool is_wardrobe_on;
     /**
-     *  Czy karta kontrolera robota jest w zamontowana w komputerze? 
-     *  @todo Translate to English. 
+     *  Czy karta kontrolera robota jest w zamontowana w komputerze?
+     *  @todo Translate to English.
      */
     bool is_controller_card_present;
     /**
-     *  Czy wyzerowano sterowanie na silnikach po awarii sprzetowej? 
-     *  @todo Translate to English. 
+     *  Czy wyzerowano sterowanie na silnikach po awarii sprzetowej?
+     *  @todo Translate to English.
      */
     bool is_robot_blocked;
 }
@@ -1013,8 +1013,7 @@ struct r_buffer
     //                      METHODS
     //-----------------------------------------------------
     r_buffer (void); // W odkomentowane
-};
-
+} __attribute__((__packed__));
 
 //------------------------------------------------------------------------------
 /** Target position for the mobile robot. */
