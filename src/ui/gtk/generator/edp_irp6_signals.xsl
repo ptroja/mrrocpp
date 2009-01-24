@@ -145,6 +145,7 @@ extern "C"
 #include &lt;gtk/gtk.h&gt;
 
 #include "ui/ui_ecp_r_irp6_common.h"
+#include "ui/ui_ecp_r_conveyor.h"
 
 class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>
 {
@@ -152,11 +153,10 @@ class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>
 
 		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>(ui_config_entry &amp;entry);
 		~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>();
-
-	private:
-		ui_common_robot *robot;
 };
-
+ui_</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>conveyor</xsl:text></xsl:when><xsl:otherwise><xsl:text>common</xsl:text></xsl:otherwise></xsl:choose><xsl:text>_robot * robot;
+controller_state_t state;
+		
 #endif /* __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text> */
 </xsl:text>
 
