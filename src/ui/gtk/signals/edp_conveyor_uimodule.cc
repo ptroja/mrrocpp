@@ -1,30 +1,49 @@
 
 #include <iostream>
+
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <signal.h>
+
 #include <gtk/gtk.h>
 #include <glib.h>
+
 #include "ui_model.h"
 #include "edp_conveyor_uimodule.h"
 
 #include "ui/ui_ecp_r_irp6_common.h"
 
 edp_conveyor::edp_conveyor(ui_config_entry &entry)
-{	
+{
+	robot = NULL;
 }
 
 edp_conveyor::~edp_conveyor()
 {
+	if (robot) {
+		pid_t edp_pid = robot->ecp->get_EDP_pid();
+		if (kill(edp_pid, SIGTERM) == -1) {
+			perror("kill()");
+		} else {
+			int status;
+			if (waitpid(edp_pid, &status, 0) == -1) {
+				perror("waitpid()");
+			}
+		}
+		delete robot;
+	}
 }
 
 static edp_conveyor *edp_conveyorRobot;
 
 
-extern "C" 
-{ 
-	void  on_combobox1_changed_conveyorRobot(GtkComboBox *comboBox, gpointer userdata)  
+extern "C"
+{
+	void  on_combobox1_changed_conveyorRobot(GtkComboBox *comboBox, gpointer userdata)
 	{
 		ui_config_entry & comboEntry = *(ui_config_entry *) userdata;
 		GtkBuilder & builder = (comboEntry.getBuilder());
-		
+
 		GtkScrolledWindow * scrolled = GTK_SCROLLED_WINDOW (gtk_builder_get_object(&builder, "scrolledwindow1"));
 
 		//if the child exists, destroy it
@@ -33,7 +52,7 @@ extern "C"
 			GtkWidget* child = gtk_bin_get_child(GTK_BIN(scrolled));
 			gtk_widget_destroy(child);
 		}
-		
+
 		ui_widget_entry * ChoseEntry;
 		gboolean isFile = 0;
 		gint choice;
@@ -50,45 +69,39 @@ extern "C"
 		case 6:  break;
 		default: std::cout << "Something is not working properly!" << std::endl;
 		}
-		
+
 		if (isFile)
 		{
 			GtkBuilder & chosenFileBuilder = ((*ChoseEntry).getBuilder());
-	
+
 			GtkWidget* chosenWindow = GTK_WIDGET (gtk_builder_get_object (&chosenFileBuilder, "window"));
 			g_assert(chosenWindow);
-			
+
 			GtkWidget* windowWithoutParent = gtk_bin_get_child(GTK_BIN(chosenWindow));
 			gtk_widget_unparent(windowWithoutParent);
-			
+
 			gtk_scrolled_window_add_with_viewport (scrolled, windowWithoutParent);
 		}
-		
-	}	
 
-	void ui_module_init(ui_config_entry &entry) 
+	}
+
+	void ui_module_init(ui_config_entry &entry)
 	{
 		edp_conveyorRobot = new edp_conveyor(entry);
 		fprintf(stderr, "module %s loaded\n", __FILE__);
-		
+
 		ui_widget_entry * widgetEntry1 = new ui_widget_entry("conveyor_servo_algorithm.xml"); entry.addWidget(widgetEntry1);
 		ui_widget_entry * widgetEntry2 = new ui_widget_entry("conveyor_int.xml"); entry.addWidget(widgetEntry2);
 		ui_widget_entry * widgetEntry3 = new ui_widget_entry("conveyor_inc.xml"); entry.addWidget(widgetEntry3);
-		
-		
-		
-		
-		
-				new ui_common_robot(
-				ui_model::instance().getConfigurator(),
-				&ui_model::instance().getEcpSr(),
-				ROBOT_CONVEYOR
-				);
+
+
+
+
 	}
 
-	void ui_module_unload(void) 
+	void ui_module_unload(void)
 	{
-		if (edp_conveyorRobot) 
+		if (edp_conveyorRobot)
 		{
 			delete edp_conveyorRobot;
 		}

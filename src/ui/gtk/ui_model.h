@@ -8,6 +8,7 @@
 
 #include "lib/configurator.h"
 #include "lib/srlib.h"
+#include "ui/ui.h"
 
 class ui_model
 {
@@ -58,6 +59,9 @@ class ui_model
 
 		//! set status bar message
 		guint set_status(const char *msg);
+
+		//! set UI state notification
+		guint set_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
 
 		//! set current notebook page
 		void set_current_page(gint page_num);

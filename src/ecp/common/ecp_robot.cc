@@ -35,6 +35,7 @@ ecp_robot::~ecp_robot(void)
 #else /* USE_MESSIP_SRR */
     if (EDP_fd)
     {
+    	printf("~ecp_robot()\n");
         messip_channel_disconnect(EDP_fd, MESSIP_NOTIMEOUT);
     }
 #endif /* USE_MESSIP_SRR */

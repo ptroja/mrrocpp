@@ -96,7 +96,7 @@ enum UI_ALL_EDPS_STATE
 
 
 typedef struct{
-	pid_t pid;
+//	pid_t pid;
 	int test_mode;
 	char* node_name;
 	char section_name[50]; // nazwa sekcji, w ktorej zapisana jest konfiguracja

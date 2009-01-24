@@ -133,18 +133,12 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-#include "ui/ui.h"
-
 extern "C" {
-	void mp_load_clicked(GtkToolButton *toolbutton,
-            gpointer       user_data) {
-
+	void mp_load_clicked(GtkToolButton *toolbutton, gpointer user_data)	{
 		ui_model::instance().setMpLoadButton(true, false);
 	}
 
-	void edp_load_clicked(GtkToolButton *toolbutton,
-            gpointer       user_data) {
-
+	void edp_load_clicked(GtkToolButton *toolbutton, gpointer user_data) {
 		ui_model::instance().setEdpsLoadButton(true, false);
 		ui_model::instance().loadEdps();
 	}
@@ -153,17 +147,5 @@ extern "C" {
 
 // FIXME: moved from proto.h for linux compatibility
 int set_ui_state_notification ( UI_NOTIFICATION_STATE_ENUM new_notifacion ){
-	printf("UI NOTIFICATION STATE: ");
-	switch(new_notifacion) {
-		case UI_N_STARTING: printf("UI_N_STARTING\n"); break;
-		case UI_N_READY: printf("UI_N_READY\n"); break;
-		case UI_N_BUSY: printf("UI_N_BUSY\n"); break;
-		case UI_N_EXITING: printf("UI_N_EXITING\n"); break;
-		case UI_N_COMMUNICATION: printf("UI_N_COMMUNICATION\n"); break;
-		case UI_N_PROCESS_CREATION: printf("UI_N_PROCESS_CREATION\n"); break;
-		case UI_N_SYNCHRONISATION: printf("UI_N_SYNCHRONISATION\n"); break;
-		default: printf("unkonwn\n"); break;
-	}
-
-	return 0;
+	return ui_model::instance().set_state_notification(new_notifacion);
 }

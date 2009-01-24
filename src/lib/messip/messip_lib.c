@@ -216,14 +216,14 @@ int
 messip_select( int fd,
    fd_set *readfds,
    fd_set *writefds,
-   fd_set *exceptfds, 
+   fd_set *exceptfds,
    struct timeval *timeout )
 {
 	int	status;
 	fd_set ready;
 
 	do
-	{   
+	{
 		status = select( fd, NULL, &ready, NULL, NULL );
 		if ( (status < 0) && (status != EINTR) )
 			return status;
@@ -321,7 +321,7 @@ messip_connect0(const char *mgr_ref,
 //	logg( NULL, "%s: sockfd=%d\n", __FUNCTION__, cnx->sockfd );
 
 	/*
-	 * Change to non-blocking mode to enable timeout with connect() 
+	 * Change to non-blocking mode to enable timeout with connect()
 	 */
 	if ( msec_timeout != MESSIP_NOTIMEOUT )
 	{
@@ -538,11 +538,11 @@ messip_sin( char *mgr_ref )
 static int
 message_handler(message_context_t *ctp, int code,
                 unsigned flags, void *handle ) {
-                
+
 	messip_channel_t *ch = (messip_channel_t *) handle;
-	
+
 	//printf("mh: %s\n", ((char *) ctp->msg) + sizeof(uint16_t));
-	
+
 	ch->msgcnt++;
 	return 0;
 }
@@ -724,21 +724,21 @@ messip_channel_create( messip_cnx_t * cnx,
 #ifdef USE_QNXMSG
 	ch->dpp = dispatch_create();
 	if (ch->dpp == NULL) {
-		perror("dispatch_create()");	
+		perror("dispatch_create()");
 	}
 
 	memset( &ch->resmgr_attr, 0, sizeof( resmgr_attr_t ) );
 	ch->resmgr_attr.nparts_max = 1;
 	ch->resmgr_attr.msg_max_size = 2048;
-	
+
 	/* Setup the default I/O functions to handle open/read/write/... */
 	iofunc_func_init( _RESMGR_CONNECT_NFUNCS, &ch->ConnectFuncs, _RESMGR_IO_NFUNCS, &ch->IoFuncs );
 
 	/* Setup the attribute for the entry in the filesystem */
 	iofunc_attr_init( &ch->IoFuncAttr, S_IFNAM | 0666, 0, 0 );
-	
+
 	strcat(namepath, name);
-	ch->resmgr_id = resmgr_attach( ch->dpp, &ch->resmgr_attr, namepath, _FTYPE_ANY, 
+	ch->resmgr_id = resmgr_attach( ch->dpp, &ch->resmgr_attr, namepath, _FTYPE_ANY,
                                0, &ch->ConnectFuncs, &ch->IoFuncs, &ch->IoFuncAttr );
 	if( ch->resmgr_id == -1 ) {
 		perror("resmgr_attach()");
@@ -880,7 +880,7 @@ messip_channel_delete( messip_channel_t * ch,
 	if (select_detach(ch->dpp, ch->recv_sockfd[0])) {
 		perror("select_detach()");
 	}
-*/	
+*/
 	if (resmgr_detach(ch->dpp, ch->resmgr_id, 0)) {
 		perror("resmgr_detach()");
 	}
@@ -890,7 +890,7 @@ messip_channel_delete( messip_channel_t * ch,
 			perror("dispatch_destroy()");
 		}
 		ch->dpp = NULL;
-	}		
+	}
 #endif /* USE_QNXMSG */
 
 	free(ch->new_sockfd);
@@ -898,7 +898,7 @@ messip_channel_delete( messip_channel_t * ch,
 	free(ch->receive_allmsg);
 	free(ch->receive_allmsg_sz);
 	free(ch);
-	
+
 	/*--- Channel creation failed ? ---*/
 	return reply.nb_clients;
 
@@ -996,6 +996,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 	/*--- Locate channel has failed ? ---*/
 	if ( msgreply.ok == MESSIP_NOK )
 	{
+//		fprintf(stderr, "Locate channel has failed: %s\n", name);
 		return NULL;
 	}
 
@@ -1030,7 +1031,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 		info->cnx = cnx;
 		info->mgr_sockfd = msgreply.mgr_sockfd;
 		get_taskname( msgreply.pid, info->remote_taskname );
-			
+
 		info->send_sockfd = -1;
 
 #ifdef USE_SRRMOD
@@ -1162,7 +1163,7 @@ messip_channel_disconnect( messip_channel_t * ch,
 			if ( !FD_ISSET( ch->send_sockfd, &ready ) )
 				return MESSIP_MSG_TIMEOUT;
 		}
-	
+
 		/*--- Message to send ---*/
 		datasend.flag = MESSIP_FLAG_DISCONNECTING;
 		datasend.pid = getpid(  );
@@ -1170,7 +1171,7 @@ messip_channel_disconnect( messip_channel_t * ch,
 		datasend.type = -1;
 		datasend.subtype = -1;
 		datasend.datalen = 0;
-	
+
 		/*--- Send a message to the 'server' ---*/
 		iovec[0].iov_base = &datasend;
 		iovec[0].iov_len  = sizeof( datasend );
@@ -1526,7 +1527,7 @@ messip_receive( messip_channel_t * ch,
 
 #ifdef MESSIP_INFORM_STATE
 	/*--- Notify the MessIP manager, for DEBUG purpose only ---*/
-	messip_send_inform_messipmgr(ch, 
+	messip_send_inform_messipmgr(ch,
 		MESSIP_STATE_RECEIVE_BLOCKED, -1, -1 );
 #endif
 
@@ -1557,22 +1558,22 @@ messip_receive( messip_channel_t * ch,
 #if USE_QNXMSG
 
 	for ( n = 0; n < ch->recv_sockfd_sz; n++ ) {
-		//printf("\\select_attach[%d] @ %d\n", ch->recv_sockfd[n], __LINE__);	
+		//printf("\\select_attach[%d] @ %d\n", ch->recv_sockfd[n], __LINE__);
 		if (select_attach(ch->dpp, NULL, ch->recv_sockfd[n],
 							SELECT_FLAG_READ | SELECT_FLAG_REARM, &select_handler, ch) == -1) {
 			perror("select_attach()");
 		}
 	}
 
-	ch->ctp = dispatch_context_alloc(ch->dpp);		
+	ch->ctp = dispatch_context_alloc(ch->dpp);
 	if (!ch->ctp) {
 		perror("dispatch_context_alloc()");
 	}
-	
+
 	ch->msgcnt = 0;
-	ch->selcnt = 0;	
+	ch->selcnt = 0;
 	do {
-		//printf("dispatch_block()\n");   	
+		//printf("dispatch_block()\n");
 		ch->new_ctp = dispatch_block( ch->ctp );
 		if(ch->new_ctp) {
 				//printf("dispatch_handler()\n");
@@ -1591,7 +1592,7 @@ messip_receive( messip_channel_t * ch,
 	}
 
 	if (ch->msgcnt > 0) {
-		
+
 		ch->remote_pid = ch->new_ctp->message_context.info.pid;
 		ch->remote_tid = ch->new_ctp->message_context.info.tid;
 		ch->datalen = ch->new_ctp->message_context.info.srcmsglen;
@@ -1613,7 +1614,7 @@ messip_receive( messip_channel_t * ch,
 #endif /* USE_QNXMSG */
 
 	/*--- Timeout ? ---*/
-	do 
+	do
 	{
 		int maxfd = 0;
 		FD_ZERO( &ready );
@@ -1848,7 +1849,7 @@ messip_receive( messip_channel_t * ch,
 			perror("select_detach()");
 		}
 */
-#endif /* USE_QNXMSG */	
+#endif /* USE_QNXMSG */
 		shutdown( ch->recv_sockfd[n], SHUT_RDWR );
 		close( ch->recv_sockfd[n] );
 		for ( k = n + 1; k < ch->recv_sockfd_sz; k++ )
@@ -1866,7 +1867,7 @@ messip_receive( messip_channel_t * ch,
 	assert( dcount == (ssize_t) (sizeof( uint32_t ) + len_to_read) );
 	ch->datalenr = len_to_read;
 
-	/* 
+	/*
 		Allocate a temp buffer to hold the whole message - used by Msgread()
 		Will be free-ed by Reply()
 	*/
@@ -1915,7 +1916,7 @@ messip_receive( messip_channel_t * ch,
 
 #ifdef MESSIP_INFORM_STATE
 	/*--- Notify the MessIP manager, for DEBUG purpose only ---*/
-	messip_send_inform_messipmgr(ch, 
+	messip_send_inform_messipmgr(ch,
 		MESSIP_STATE_NIL, -1, -1 );
 #endif
 
@@ -1963,7 +1964,7 @@ messip_send( messip_channel_t *ch,
 #ifdef MESSIP_INFORM_STATE
 printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
 	/*--- Notify the MessIP manager, for DEBUG purpose only ---*/
-	messip_send_inform_messipmgr(ch, 
+	messip_send_inform_messipmgr(ch,
 		MESSIP_STATE_SEND_BLOCKED, ch->remote_pid, ch->remote_tid );
 #endif
 
@@ -1985,7 +1986,7 @@ printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
 
 		riov[0].iov_base = reply_buffer;
 		riov[0].iov_len = reply_maxlen;
-		
+
 		return MsgSendv(ch->fd, siov, 2, riov, 1);
 	}
 #endif /* USE_QNXMSG */
@@ -2113,7 +2114,7 @@ printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
 
 #ifdef MESSIP_INFORM_STATE
 	/*--- Notify the MessIP manager, for DEBUG purpose only ---*/
-	messip_send_inform_messipmgr(ch, 
+	messip_send_inform_messipmgr(ch,
 		MESSIP_STATE_REPLY_BLOCKED, ch->remote_pid, ch->remote_tid );
 #endif
 
@@ -2197,7 +2198,7 @@ messip_buffered_send( messip_channel_t * ch,
 	iovec[0].iov_base = &msgreply;
 	iovec[0].iov_len  = sizeof( msgreply );
 	dcount = messip_readv( ch->cnx->sockfd, iovec, 1 );
-//	printf( "@messip_buffered_send: reply dcount= %d,%d \n", 
+//	printf( "@messip_buffered_send: reply dcount= %d,%d \n",
 //		dcount, sizeof( msgreply ) );
 	assert( dcount == sizeof( msgreply ) );
 
@@ -2227,7 +2228,7 @@ messip_reply( messip_channel_t * ch,
 
 #ifdef MESSIP_INFORM_STATE
 	/*--- Notify the MessIP manager, for DEBUG purpose only ---*/
-	messip_send_inform_messipmgr( ch, 
+	messip_send_inform_messipmgr( ch,
 		MESSIP_STATE_NIL, -1, -1 );
 #endif
 
@@ -2249,7 +2250,7 @@ messip_reply( messip_channel_t * ch,
 		datareply.tid = pthread_self(  );
 		datareply.datalen = reply_len;
 		datareply.answer  = answer;
-	
+
 		/*--- Timeout to write ? ---*/
 		if ( msec_timeout != MESSIP_NOTIMEOUT )
 		{
@@ -2262,7 +2263,7 @@ messip_reply( messip_channel_t * ch,
 			if ( !FD_ISSET( ch->new_sockfd[index], &ready ) )
 				return MESSIP_MSG_TIMEOUT;
 		}
-	
+
 		/*--- Now wait for an answer from the server ---*/
 		sz = 0;
 		iovec[sz].iov_base  = &datareply;
@@ -2286,7 +2287,7 @@ messip_reply( messip_channel_t * ch,
 	--ch->nb_replies_pending;
 	ch->new_sockfd[index] = -1;
 	ch->channel_type[index] = -1;
-	
+
 	if (ch->receive_allmsg[index]) {
 	    free( ch->receive_allmsg[index] );
 	}
@@ -2382,7 +2383,7 @@ timer_thread_handler( sigval_t sigval )
 
 #elif defined(TIMER_USE_SIGEV_SIGNAL)
 
-static void 
+static void
 sig_action( int signo,
    siginfo_t *info,
    void *context )
@@ -2524,7 +2525,7 @@ messip_death_notify( messip_cnx_t *cnx,
 	iovec[0].iov_base = &msgreply;
 	iovec[0].iov_len  = sizeof( msgreply );
 	dcount = messip_readv( cnx->sockfd, iovec, 1 );
-	LIBTRACE( ( "@messip_death_notify: reply dcount= %d \n", 
+	LIBTRACE( ( "@messip_death_notify: reply dcount= %d \n",
 		dcount ) );
 	assert( dcount == sizeof( msgreply ) );
 

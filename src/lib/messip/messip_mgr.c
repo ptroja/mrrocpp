@@ -1194,8 +1194,8 @@ destroy_channel( channel_t * ch,
 {
 	int k;
 
-#if 0
-	TRACE( "Destroy channel %d [%s] index=%d\n", index, ch->name, index );
+#if 1
+	printf( "Destroy channel %d [%s] index=%d\n", index, ch->channel_name, index );
 #endif
 
 	if ( ch->tid_client_send_buffered_msg )

@@ -27,7 +27,7 @@
 #include "lib/mathtr.h"
 
 // ---------------------------------------------------------------
-ui_conveyor_robot::ui_conveyor_robot (edp_state_def* _edp_state, configurator &_config, sr_ecp* sr_ecp_msg)
+ui_conveyor_robot::ui_conveyor_robot (configurator &_config, sr_ecp* sr_ecp_msg)
         : ecp_conveyor_robot (_config, sr_ecp_msg)
 {
 
@@ -47,7 +47,6 @@ ui_conveyor_robot::ui_conveyor_robot (edp_state_def* _edp_state, configurator &_
     JOINT_LINEAR_STEP = 0.00004;     // Przyrost liniowy w przegubach posuwistych [m]
 
 }
-;// end: ui_conveyor_robot::ui_conveyor_robot ()
 // ---------------------------------------------------------------
 
 void ui_conveyor_robot::execute_motion (void)
@@ -59,7 +58,6 @@ void ui_conveyor_robot::execute_motion (void)
     ecp_robot::execute_motion();
 
 }
-; // end: conveyor_robot::execute_motion (void)
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
@@ -70,7 +68,6 @@ void ui_conveyor_robot::set_desired_position ( double d_position[CONVEYOR_NUM_OF
         desired_position[j] = d_position[j];
 
 }
-;// end: ui_conveyor_robot::set_desired_position()
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
@@ -81,7 +78,6 @@ void ui_conveyor_robot::get_current_position ( double c_position[CONVEYOR_NUM_OF
         c_position[j] = current_position[j];
 
 }
-;// end: ui_conveyor_robot::get_current_position()
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
@@ -162,7 +158,6 @@ bool ui_conveyor_robot::set_kinematic (BYTE kinematic_model_no)
 
     return true;
 }
-;// end: ui_conveyor_robot::set_kinematic()
 // ---------------------------------------------------------------
 
 
@@ -185,7 +180,6 @@ bool ui_conveyor_robot::set_servo_algorithm (BYTE algorithm_no[CONVEYOR_NUM_OF_S
     execute_motion();
     return true;
 }
-;// end: ui_conveyor_robot::set_servo_algorithm()
 // ---------------------------------------------------------------
 
 
@@ -197,10 +191,10 @@ bool ui_conveyor_robot::move_motors ( double final_position[CONVEYOR_NUM_OF_SERV
     double max_inc=0.0, temp = 0.0; // Zmienne pomocnicze
 
     /*
-    	if (is_synchronised()) 
+    	if (is_synchronised())
     		printf("zsynchronizowany move motors\n");
-    	else 
-    		printf("niezsynchronizowany move motors\n");		
+    	else
+    		printf("niezsynchronizowany move motors\n");
     	*/
     if (is_synchronised())
     {  // Robot zsynchronizowany
@@ -240,7 +234,6 @@ bool ui_conveyor_robot::move_motors ( double final_position[CONVEYOR_NUM_OF_SERV
         EDP_command_and_reply_buffer.instruction.motion_type = RELATIVE;
         EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
     }
-    ; // end: else
     EDP_command_and_reply_buffer.instruction.get_type = ARM_DV; // ARM
     EDP_command_and_reply_buffer.instruction.get_arm_type = MOTOR;
     EDP_command_and_reply_buffer.instruction.set_type = ARM_DV; // ARM
@@ -263,7 +256,6 @@ bool ui_conveyor_robot::move_motors ( double final_position[CONVEYOR_NUM_OF_SERV
 
     return true;
 }
-;// end: ui_conveyor_robot::move_motors()
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
@@ -315,7 +307,6 @@ bool ui_conveyor_robot::move_joints (double final_position[CONVEYOR_NUM_OF_SERVO
 
     return true;
 }
-;// end: ui_conveyor_robot::move_internal()
 // ---------------------------------------------------------------
 
 
@@ -343,7 +334,6 @@ bool ui_conveyor_robot::read_motors ( double current_position[CONVEYOR_NUM_OF_SE
     // printf("koniec read motors\n");
     return true;
 }
-;// end: ui_conveyor_robot::read_motors()
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
@@ -364,7 +354,6 @@ bool ui_conveyor_robot::read_joints ( double current_position[CONVEYOR_NUM_OF_SE
     //   printf("read_joints: %f\n", current_position[0]);
     return true;
 }
-;// end: ui_conveyor_robot::read_joints()
 // ---------------------------------------------------------------
 
 

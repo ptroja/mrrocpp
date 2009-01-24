@@ -198,6 +198,31 @@ guint ui_model::set_status(const char *msg)
 	return gtk_statusbar_push(statusbar, context_id, msg);
 }
 
+guint ui_model::set_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion)
+{
+	GtkStatusbar *statusbar;
+	guint context_id;
+
+	statusbar = GTK_STATUSBAR (ui_model::instance().getUiGObject("notifybar"));
+
+	context_id = gtk_statusbar_get_context_id(statusbar, "base message");
+
+	const char *msg;
+
+	switch(new_notifacion) {
+		case UI_N_STARTING: msg = "STARTING"; break;
+		case UI_N_READY: msg = "READY"; break;
+		case UI_N_BUSY: msg = "BUSY"; break;
+		case UI_N_EXITING: msg = "EXITING"; break;
+		case UI_N_COMMUNICATION: msg = "COMMUNICATION"; break;
+		case UI_N_PROCESS_CREATION: msg = "PROCESS CREATION"; break;
+		case UI_N_SYNCHRONISATION: msg = "SYNCHRONISATION"; break;
+		default: msg = "unkonwn"; break;
+	}
+
+	return gtk_statusbar_push(statusbar, context_id, msg);
+}
+
 int ui_model::set_tree_view(void)
 {
 	GtkTreeView *tree = GTK_TREE_VIEW (getUiGObject("process_treeview"));

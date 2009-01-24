@@ -540,7 +540,7 @@ EDP_conveyor_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 		} else {
 			ui_state.conveyor.edp.node_nr = config->return_node_number(ui_state.conveyor.edp.node_name);
 
-			ui_robot.conveyor = new ui_conveyor_robot(&ui_state.irp6_on_track.edp, *config, ui_msg.all_ecp);
+			ui_robot.conveyor = new ui_conveyor_robot(*config, ui_msg.all_ecp);
 			ui_state.conveyor.edp.pid = ui_robot.conveyor->get_EDP_pid();
 
 			if (ui_state.conveyor.edp.pid<0)

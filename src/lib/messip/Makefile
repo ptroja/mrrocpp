@@ -9,7 +9,8 @@ BINARIES = messip_sin messip_mgr
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
-CPPFLAGS += -I$(HOMEDIR)/include/messip
+CPPFLAGS += -I$(HOMEDIR)/include/messip -g
+LDFLAGS += -g
 
 #======================================================#	
 .PHONY: all clean install depend

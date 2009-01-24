@@ -35,7 +35,7 @@ ui_speaker_robot::ui_speaker_robot (edp_state_def* _edp_state, configurator &_co
 
   synchronised = true;
 
-};// end: ui_conveyor_robot::ui_conveyor_robot ()
+};
 // ---------------------------------------------------------------
 
 

@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 //                            robot.h
 // Definicje struktur danych i metod do komunikacji UI z EDP
-// 
+//
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
@@ -25,30 +25,30 @@ class ui_conveyor_robot: public ecp_conveyor_robot {
 // pid_t EDP_Pid; // identyfikator procesu driver'a edp_m // by Y
 // bool synchronised; // Flaga ustawiana po synchronizacji robota // by Y
 
-// Dopuszczalne przyrosty polozenia w pojedynczym kroku [2ms] przy ruchach 
+// Dopuszczalne przyrosty polozenia w pojedynczym kroku [2ms] przy ruchach
 // recznych dla roznych wspolrzednych
  double MOTOR_STEP;                // Przyrost kata obrotu walu silnika [rad]
- double JOINT_ANGULAR_STEP;        // Przyrost kata obrotu w przegubie obrotowym [rad] 
+ double JOINT_ANGULAR_STEP;        // Przyrost kata obrotu w przegubie obrotowym [rad]
  double JOINT_LINEAR_STEP;         // Przyrost liniowy w przegubach posuwistych [mm]
  double END_EFFECTOR_LINEAR_STEP;  // Przyrost wspolrzednej polozenia koncowki [mm]
  double END_EFFECTOR_ANGULAR_STEP; // Przyrost wspolrzednej orientacji koncowki [rad]
 
  double desired_position[CONVEYOR_NUM_OF_SERVOS]; // polozenie zadane
  double current_position[CONVEYOR_NUM_OF_SERVOS]; // polozenie aktualne
- 
+
  public:
 // ecp_buffer ui_edp_package; // by Y
-  ui_conveyor_robot (edp_state_def* edp_state, configurator &_config, sr_ecp* sr_ecp_msg); // Konstruktor
-  
-  virtual void execute_motion ( void ); 
-// virtual void set_edp_master_pid ( pid_t edppid ) {EDP_Pid = edppid;}; 
-                                     // Przekazanie identyfikatora procesu EDP 
-  // virtual void synchronise ( void ); // Zlecenie synchronizacji robota 
+  ui_conveyor_robot (configurator &_config, sr_ecp* sr_ecp_msg); // Konstruktor
+
+  virtual void execute_motion ( void );
+// virtual void set_edp_master_pid ( pid_t edppid ) {EDP_Pid = edppid;};
+                                     // Przekazanie identyfikatora procesu EDP
+  // virtual void synchronise ( void ); // Zlecenie synchronizacji robota
   // virtual bool is_synchronised( void ) { return synchronised;};
 
   virtual void set_desired_position ( double des_position[CONVEYOR_NUM_OF_SERVOS] );
                                      // Przepisanie polozen zadanych
-                                     // do tablicy desired_position[]      
+                                     // do tablicy desired_position[]
   virtual void get_current_position ( double c_position[CONVEYOR_NUM_OF_SERVOS] );  // Pobranie aktualnych polozen
 
 
@@ -62,7 +62,7 @@ class ui_conveyor_robot: public ecp_conveyor_robot {
   bool set_servo_algorithm (BYTE algorithm_no[CONVEYOR_NUM_OF_SERVOS],
 	 BYTE parameters_no[CONVEYOR_NUM_OF_SERVOS] );
 
-  // Odczyt polozenia 
+  // Odczyt polozenia
   bool read_motors ( double current_position[CONVEYOR_NUM_OF_SERVOS] );
   bool read_joints ( double current_position[CONVEYOR_NUM_OF_SERVOS] );
   bool get_kinematic (BYTE* kinematic_model_no);
