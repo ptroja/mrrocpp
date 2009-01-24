@@ -21,6 +21,7 @@ Inc window callback signals
 #include "ui_model.h"
 #include "</xsl:text><xsl:value-of select="$name" /><xsl:text>_int_widget.h"
 
+gchar buffer[500];
 
 edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_int::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_int(ui_widget_entry &amp;entry) 
 {
@@ -52,15 +53,41 @@ extern "C"
 		std::cout &lt;&lt; "Execute move dla </xsl:text><xsl:value-of select="$fullName" /><xsl:text> int" &lt;&lt; std::endl;
 	}
 	
-	void on_export_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (GtkButton* button, gpointer user_data)
+	void on_export_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (GtkButton* button, gpointer userdata)
 	{
-		std::cout &lt;&lt; "Export dla </xsl:text><xsl:value-of select="$fullName" /><xsl:text> int" &lt;&lt; std::endl;
+		GtkEntry * entryConsole =  GTK_ENTRY(ui_model::instance().getUiGObject("entryConsole"));
+     
+ 		ui_widget_entry * ChoseEntry = (ui_widget_entry *) userdata;
+        GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
+        
+	</xsl:text><xsl:call-template name="irp6.int.repeat.signals.cc.3">
+    	<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+		<xsl:with-param name="i" select="1"/>
+ 	</xsl:call-template><xsl:text>
+ 		sprintf(buffer, "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text> INTERNAL position </xsl:text><xsl:call-template name="irp6.int.repeat.signals.cc.4">
+    		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+			<xsl:with-param name="i" select="1"/>
+ 		</xsl:call-template><xsl:text>" 
+ 		</xsl:text><xsl:call-template name="irp6.int.repeat.signals.cc.5">
+    		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+			<xsl:with-param name="i" select="1"/>
+ 		</xsl:call-template><xsl:text>);
+ 		  
+ 		gtk_entry_set_text (entryConsole, buffer);  
 	}
 	
-	void on_import_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (GtkButton* button, gpointer user_data)
+	void on_import_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (GtkButton* button, gpointer userdata)
 	{
-		std::cout &lt;&lt; "Import dla </xsl:text><xsl:value-of select="$fullName" /><xsl:text> int" &lt;&lt; std::endl;
-	}
+		GtkEntry * entryConsole =  GTK_ENTRY(ui_model::instance().getUiGObject("entryConsole"));
+        
+ 		ui_widget_entry * ChoseEntry = (ui_widget_entry *) userdata;
+        GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
+		
+		</xsl:text><xsl:call-template name="irp6.int.repeat.signals.cc.2">
+    		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+			<xsl:with-param name="i" select="1"/>
+ 		</xsl:call-template><xsl:text>  
+ 	}
 	
 	
 	void ui_widget_init(ui_widget_entry &amp;entry) 
@@ -105,6 +132,90 @@ extern "C"
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $irp6EDPNumber">
           <xsl:call-template name="irp6.int.repeat.signals.cc.1">
+              <xsl:with-param name="i">
+                  <xsl:value-of select="$i + 1"/>
+              </xsl:with-param>
+              <xsl:with-param name="irp6EDPNumber">
+                  <xsl:value-of select="$irp6EDPNumber"/>
+              </xsl:with-param>
+          </xsl:call-template>
+       </xsl:if>
+</xsl:template>
+
+<!-- irp6 servo algorithm repeatable part -->
+<xsl:template name="irp6.int.repeat.signals.cc.2">
+<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="i"/>
+	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:text>
+ 	    GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
+        gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>, atof(gtk_entry_get_text(entryConsole)));
+	</xsl:text>
+       </xsl:if>
+	<!-- for loop --> 
+       <xsl:if test="$i &lt;= $irp6EDPNumber">
+          <xsl:call-template name="irp6.int.repeat.signals.cc.2">
+              <xsl:with-param name="i">
+                  <xsl:value-of select="$i + 1"/>
+              </xsl:with-param>
+              <xsl:with-param name="irp6EDPNumber">
+                  <xsl:value-of select="$irp6EDPNumber"/>
+              </xsl:with-param>
+          </xsl:call-template>
+       </xsl:if>
+</xsl:template>
+
+<!-- irp6 servo algorithm repeatable part -->
+<xsl:template name="irp6.int.repeat.signals.cc.3">
+<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="i"/>
+	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:text>	GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
+ 	</xsl:text>
+       </xsl:if>
+	<!-- for loop --> 
+       <xsl:if test="$i &lt;= $irp6EDPNumber">
+          <xsl:call-template name="irp6.int.repeat.signals.cc.3">
+              <xsl:with-param name="i">
+                  <xsl:value-of select="$i + 1"/>
+              </xsl:with-param>
+              <xsl:with-param name="irp6EDPNumber">
+                  <xsl:value-of select="$irp6EDPNumber"/>
+              </xsl:with-param>
+          </xsl:call-template>
+       </xsl:if>
+</xsl:template>
+
+<!-- irp6 servo algorithm repeatable part -->
+<xsl:template name="irp6.int.repeat.signals.cc.4">
+<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="i"/>
+	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:text> %f</xsl:text>
+       </xsl:if>
+	<!-- for loop --> 
+       <xsl:if test="$i &lt;= $irp6EDPNumber">
+          <xsl:call-template name="irp6.int.repeat.signals.cc.4">
+              <xsl:with-param name="i">
+                  <xsl:value-of select="$i + 1"/>
+              </xsl:with-param>
+              <xsl:with-param name="irp6EDPNumber">
+                  <xsl:value-of select="$irp6EDPNumber"/>
+              </xsl:with-param>
+          </xsl:call-template>
+       </xsl:if>
+</xsl:template>
+
+<!-- irp6 servo algorithm repeatable part -->
+<xsl:template name="irp6.int.repeat.signals.cc.5">
+<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="i"/>
+	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:text>, gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>)</xsl:text>
+       </xsl:if>
+	<!-- for loop --> 
+       <xsl:if test="$i &lt;= $irp6EDPNumber">
+          <xsl:call-template name="irp6.int.repeat.signals.cc.5">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
