@@ -173,7 +173,7 @@ uint64_t edp_effector::is_error_no_1(void) const
 	return reply.error_no.error1;
 }
 
-#if !defined(USE_MESSIP_SRR)
+
 INSTRUCTION_TYPE edp_effector::receive_instruction(void)
 {
 	// oczekuje na polecenie od ECP, wczytuje je oraz zwraca jego typ
@@ -182,6 +182,7 @@ INSTRUCTION_TYPE edp_effector::receive_instruction(void)
 
 	/* Do your MsgReceive's here now with the chid */
 	while (1) {
+#if !defined(USE_MESSIP_SRR)
 		rcvid
 				= MsgReceive(attach->chid, &new_instruction, sizeof(c_buffer), NULL);
 
@@ -231,12 +232,23 @@ INSTRUCTION_TYPE edp_effector::receive_instruction(void)
 			MsgError(rcvid, ENOSYS);
 			continue;
 		}
+#else /* USE_MESSIP_SRR */
+		rcvid = messip_receive(attach, &type, &subtype, &new_instruction, sizeof(c_buffer), MESSIP_NOTIMEOUT);
+
+		if (rcvid == -1)
+		{/* Error condition, exit */
+			perror("messip_receive()");
+			break;
+		}
+		else if (rcvid < -1)
+		{
+			fprintf(stderr, "ie. MESSIP_MSG_DISCONNECT\n");
+			continue;
+		}
+#endif /* USE_MESSIP_SRR */
 
 		/* A message (presumable ours) received, handle */
 		break;
-		//printf("Server receive %d \n", msg.data);
-		//MsgReply(rcvid, EOK, 0, 0);
-
 	}
 
 	//memcpy( &new_instruction, msg_cb, sizeof(*msg_cb) );
@@ -254,8 +266,11 @@ void edp_effector::reply_to_instruction(void)
 	// int reply_size;     // liczba bajtw wysyanej odpowiedzi
 	if ( !( (reply.reply_type == ERROR) || (reply.reply_type == SYNCHRO_OK) ))
 		reply.reply_type = real_reply_type;
-
+#if !defined(USE_MESSIP_SRR)
 	if (MsgReply(caller, 0, &reply, sizeof(reply)) == -1) { // Odpowiedz dla procesu ECP badz UI by Y
+#else /* USE_MESSIP_SRR */
+	if (messip_reply(attach, caller, 0, &reply, sizeof(reply), MESSIP_NOTIMEOUT) == -1) {
+#endif /* USE_MESSIP_SRR */
 		uint64_t e= errno;
 		perror("Reply() to ECP failed");
 		msg->message(SYSTEM_ERROR, e, "Reply() to ECP failed");
@@ -263,59 +278,6 @@ void edp_effector::reply_to_instruction(void)
 	}
 	real_reply_type = ACKNOWLEDGE;
 }
-#else /* USE_MESSIP_SRR */
-INSTRUCTION_TYPE edp_effector::receive_instruction (void)
-{
-	// oczekuje na polecenie od ECP, wczytuje je oraz zwraca jego typ
-	int rcvid;
-	int32_t type, subtype;
-
-	/* Do your MsgReceive's here now with the chid */
-	while (1)
-	{
-		rcvid = messip_receive(attach, &type, &subtype, &new_instruction, sizeof(c_buffer), MESSIP_NOTIMEOUT);
-
-		if (rcvid == -1)
-		{/* Error condition, exit */
-			perror("messip_receive()");
-			break;
-		}
-		else if (rcvid < -1)
-		{
-			fprintf(stderr, "ie. MESSIP_MSG_DISCONNECT\n");
-			continue;
-		}
-
-		/* A message (presumable ours) received, handle */
-		break;
-	}
-
-	//memcpy( &new_instruction, msg_cb, sizeof(*msg_cb) );
-	caller = rcvid;
-
-	return new_instruction.instruction_type;
-}
-
-void edp_effector::reply_to_instruction (void)
-{
-	// Wyslanie potwierdzenia przyjecia polecenia do wykonania,
-	// adekwatnej odpowiedzi na zapytanie lub
-	// informacji o tym, ze przyslane polecenie nie moze byc przyjte
-	// do wykonania w aktualnym stanie EDP
-	// int reply_size;     // liczba bajtw wysyanej odpowiedzi
-	if ( !( (reply.reply_type == ERROR) || (reply.reply_type == SYNCHRO_OK) ) )
-	reply.reply_type = real_reply_type;
-
-	if (messip_reply(attach, caller, 0, &reply, sizeof(reply), MESSIP_NOTIMEOUT) == -1)
-	{ // Odpowiedz dla procesu ECP badz UI by Y
-		uint64_t e = errno;
-		perror("Reply() to ECP failed");
-		msg->message(SYSTEM_ERROR, e, "Reply() to ECP failed");
-		throw System_error();
-	}
-	real_reply_type = ACKNOWLEDGE;
-}
-#endif /* USE_MESSIP_SRR */
 
 reader_buffer::reader_buffer()
 {
