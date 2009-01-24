@@ -13,6 +13,12 @@
 #  */
 #///////////////////////////////////////////////////////////////////////////////
 
+#DEBUG=-g
+#OPTIM = -O2
+#WARN = -w9
+FLAGS=${DEBUG} ${OPTIM} ${WARN}
+CFLAGS=${FLAGS}
+
 # Linker, compilator, and default global flags for both
 ifeq ($(BUILD_TARGET), linux)
   LD=g++
@@ -33,12 +39,6 @@ else
   CPPFLAGS=-I$(HOMEDIR)/include -I$(QNX_TARGET)/mrlib/include
   AR=ntox86-ar
 endif
-
-#DEBUG=-g
-#OPTIM = -O2
-#WARN = -w9
-FLAGS=${DEBUG} ${OPTIM} ${WARN}
-CFLAGS=${FLAGS}
 
 LIBDIR=$(HOMEDIR)/lib
 BINDIR=$(HOMEDIR)/bin
