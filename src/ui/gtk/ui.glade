@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Fri Jan 23 22:47:14 2009 -->
+<!--Generated with glade3 3.4.5 on Sat Jan 24 13:05:37 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="width_request">600</property>
@@ -144,17 +144,13 @@
                     <signal name="clicked" handler="edp_load_clicked"/>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkSeparatorToolItem" id="toolbutton2">
                     <property name="visible">True</property>
                   </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
                 </child>
                 <child>
                   <widget class="GtkToolButton" id="MpLoadButton">
@@ -166,17 +162,13 @@
                     <signal name="clicked" handler="mp_load_clicked"/>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkSeparatorToolItem" id="toolbutton5">
                     <property name="visible">True</property>
                   </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
                 </child>
               </widget>
             </child>
@@ -194,7 +186,7 @@
                     <signal name="clicked" handler="on_SlayAllButton_clicked"/>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
               </widget>
@@ -229,7 +221,6 @@
                       <widget class="GtkTreeView" id="process_treeview">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="headers_clickable">True</property>
                         <signal name="row_activated" handler="on_process_treeview_row_activated"/>
                       </widget>
                     </child>
@@ -284,7 +275,6 @@
                           <widget class="GtkTreeView" id="sr_treeview">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="headers_clickable">True</property>
                           </widget>
                         </child>
                       </widget>
@@ -302,7 +292,7 @@
                   </widget>
                 </child>
                 <child>
-                  <widget class="GtkEntry" id="entry1">
+                  <widget class="GtkEntry" id="entryConsole">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </widget>
