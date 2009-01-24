@@ -28,15 +28,17 @@ EDP IRp6 RCSC window callback signals
 #include "ui_model.h"
 #include "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_uimodule.h"
 
-#include "ui/ui_ecp_r_irp6_common.h"
+</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>#include "ui/ui_ecp_r_conveyor.h"</xsl:text></xsl:when><xsl:otherwise><xsl:text>#include "ui/ui_ecp_r_irp6_common.h"</xsl:text></xsl:otherwise></xsl:choose><xsl:text>
 
 edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>(ui_config_entry &amp;entry)
 {
-	robot = new ui_common_robot(
-		ui_model::instance().getConfigurator(),
-		&amp;ui_model::instance().getEcpSr(),
-		</xsl:text><xsl:choose><xsl:when test="$name = 'irp6m'"><xsl:text>ROBOT_IRP6_MECHATRONIKA</xsl:text></xsl:when><xsl:when test="$name = 'irp6o'"><xsl:text>ROBOT_IRP6_ON_TRACK</xsl:text></xsl:when><xsl:when test="$name = 'irp6p'"><xsl:text>ROBOT_IRP6_POSTUMENT</xsl:text></xsl:when><xsl:when test="$name = 'conveyor'"><xsl:text>ROBOT_CONVEYOR</xsl:text></xsl:when><xsl:otherwise><xsl:text>ROBOT_IRP6_NEWROBOT</xsl:text></xsl:otherwise></xsl:choose><xsl:text>
-	);
+				robot = new </xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>ui_conveyor_robot</xsl:text></xsl:when><xsl:otherwise><xsl:text>ui_common_robot</xsl:text></xsl:otherwise></xsl:choose><xsl:text>(
+				ui_model::instance().getConfigurator(),
+				&amp;ui_model::instance().getEcpSr()
+				</xsl:text><xsl:choose><xsl:when test="$name = 'irp6m'"><xsl:text>,ROBOT_IRP6_MECHATRONIKA</xsl:text></xsl:when><xsl:when test="$name = 'irp6o'"><xsl:text>,ROBOT_IRP6_ON_TRACK</xsl:text></xsl:when><xsl:when test="$name = 'irp6p'"><xsl:text>,ROBOT_IRP6_POSTUMENT</xsl:text></xsl:when><xsl:when test="$name = 'conveyor'"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>ROBOT_IRP6_NEWROBOT</xsl:text></xsl:otherwise></xsl:choose><xsl:text>
+				);
+				
+				robot->get_controller_state(&amp;state);
 }
 
 edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>::~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>()
