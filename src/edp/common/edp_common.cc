@@ -233,6 +233,7 @@ INSTRUCTION_TYPE edp_effector::receive_instruction(void)
 			continue;
 		}
 #else /* USE_MESSIP_SRR */
+		int32_t type, subtype;
 		rcvid = messip_receive(attach, &type, &subtype, &new_instruction, sizeof(c_buffer), MESSIP_NOTIMEOUT);
 
 		if (rcvid == -1)
