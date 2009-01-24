@@ -15,21 +15,16 @@
 
 edp_conveyor::edp_conveyor(ui_config_entry &entry)
 {
-	robot = NULL;
+	robot = new ui_common_robot(
+		ui_model::instance().getConfigurator(),
+		&ui_model::instance().getEcpSr(),
+		ROBOT_CONVEYOR
+	);
 }
 
 edp_conveyor::~edp_conveyor()
 {
 	if (robot) {
-		pid_t edp_pid = robot->ecp->get_EDP_pid();
-		if (kill(edp_pid, SIGTERM) == -1) {
-			perror("kill()");
-		} else {
-			int status;
-			if (waitpid(edp_pid, &status, 0) == -1) {
-				perror("waitpid()");
-			}
-		}
 		delete robot;
 	}
 }

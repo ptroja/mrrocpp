@@ -651,9 +651,6 @@ int EDP_irp6_postument_slay()
 		}
 		delete ui_robot.irp6_postument;
 
-		if (SignalKill(ui_state.irp6_postument.edp.node_nr, ui_state.irp6_postument.edp.pid, 0, SIGTERM, 0, 0) == -1) {
-			perror("UI(EDP_postument) SignalKill()");
-		};
 		ui_state.irp6_postument.edp.state = 0; // edp wylaczone
 		ui_state.irp6_postument.edp.is_synchronised = false;
 		replySend(new Message('C','K','A',0,NULL,NULL));

@@ -3,25 +3,29 @@
 #include <stdio.h>
 #include <errno.h>
 
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <signal.h>
+
 #include "ecp/common/ecp_robot.h"
 #include "ecp/common/ecp_task.h"
 
 // konstruktor wywolywany z UI
 ecp_robot::ecp_robot(ROBOT_ENUM _robot_name, configurator &_config, sr_ecp *_sr_ecp_msg) :
-	ecp_mp_robot(_robot_name)
+	ecp_mp_robot(_robot_name), spawn_and_kill(true)
 {
 	EDP_command_and_reply_buffer.sr_ecp_msg = _sr_ecp_msg;
 
-	connect_to_edp(_config, true);
+	connect_to_edp(_config);
 }
 
 // konstruktor wywolywany z ECP
 ecp_robot::ecp_robot(ROBOT_ENUM _robot_name, ecp_task& _ecp_object) :
-	ecp_mp_robot(_robot_name)
+	ecp_mp_robot(_robot_name), spawn_and_kill(false)
 {
 	EDP_command_and_reply_buffer.sr_ecp_msg = _ecp_object.sr_ecp_msg;
 
-	connect_to_edp(_ecp_object.config, false);
+	connect_to_edp(_ecp_object.config);
 }
 
 // -------------------------------------------------------------------
@@ -35,10 +39,20 @@ ecp_robot::~ecp_robot(void)
 #else /* USE_MESSIP_SRR */
     if (EDP_fd)
     {
-    	printf("~ecp_robot()\n");
         messip_channel_disconnect(EDP_fd, MESSIP_NOTIMEOUT);
     }
 #endif /* USE_MESSIP_SRR */
+
+    if (spawn_and_kill) {
+    	if (kill(EDP_MASTER_Pid, SIGTERM) == -1) {
+    		perror("kill()");
+    	} else {
+    		int status;
+    		if (waitpid(EDP_MASTER_Pid, &status, 0) == -1) {
+    			perror("waitpid()");
+    		}
+    	}
+    }
 }
 
 pid_t ecp_robot::get_EDP_pid(void) const
@@ -80,7 +94,7 @@ void ecp_robot::copy_edp_to_mp_buffer(r_buffer& mp_buffer)
 
 
 // ---------------------------------------------------------------
-void ecp_robot::connect_to_edp(configurator &config, bool spawn_edp)
+void ecp_robot::connect_to_edp(configurator &config)
 {
 	const char *edp_section;
 
@@ -111,7 +125,7 @@ void ecp_robot::connect_to_edp(configurator &config, bool spawn_edp)
 			break;
 	}
 
-	EDP_MASTER_Pid = (spawn_edp) ? config.process_spawn(edp_section) : -1;
+	EDP_MASTER_Pid = (spawn_and_kill) ? config.process_spawn(edp_section) : -1;
 
 	const char* edp_net_attach_point =
 			config.return_attach_point_name(configurator::CONFIG_SERVER, "resourceman_attach_point", edp_section);

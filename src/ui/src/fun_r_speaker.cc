@@ -334,7 +334,6 @@ EDP_speaker_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 		name_close(ui_state.speaker.edp.reader_fd);
 
 		delete ui_robot.speaker;
-		 SignalKill(ui_state.speaker.edp.node_nr, ui_state.speaker.edp.pid, 0, SIGTERM, 0, 0);
 		ui_state.speaker.edp.state = 0; // edp wylaczone
 		ui_state.speaker.edp.is_synchronised = false;
 

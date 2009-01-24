@@ -596,7 +596,6 @@ EDP_conveyor_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 		name_close(ui_state.conveyor.edp.reader_fd);
 
 		delete ui_robot.conveyor;
-		SignalKill(ui_state.conveyor.edp.node_nr, ui_state.conveyor.edp.pid, 0, SIGTERM, 0, 0);
 		ui_state.conveyor.edp.state = 0; // edp wylaczone
 		ui_state.conveyor.edp.is_synchronised = false;
 

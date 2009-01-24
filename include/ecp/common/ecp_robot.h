@@ -46,9 +46,11 @@ private:
     void copy_edp_to_mp_buffer (r_buffer& mp_buffer);
 
     // zainicjowanie komunikacji
-    void connect_to_edp (configurator &config, bool spawn_edp);
+    void connect_to_edp (configurator &config);
 
     pid_t EDP_MASTER_Pid; // Identyfikator procesu driver'a edp_m
+
+    const bool spawn_and_kill;
 
 protected:
 

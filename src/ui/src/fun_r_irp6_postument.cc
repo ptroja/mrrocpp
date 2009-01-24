@@ -2295,10 +2295,6 @@ EDP_irp6_postument_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 					__FILE__, __LINE__, strerror(errno));
 		}
 		delete ui_robot.irp6_postument;
-
-		if (SignalKill(ui_state.irp6_postument.edp.node_nr, ui_state.irp6_postument.edp.pid, 0, SIGTERM, 0, 0) == -1) {;
-			perror("UI(EDP_postument) SignalKill()");
-		}
 		ui_state.irp6_postument.edp.state = 0; // edp wylaczone
 		ui_state.irp6_postument.edp.is_synchronised=false;
 

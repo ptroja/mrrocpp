@@ -45,9 +45,9 @@ ui_common_robot::ui_common_robot (configurator &_config, sr_ecp* sr_ecp_msg, ROB
     case ROBOT_IRP6_MECHATRONIKA:
         ecp = new ecp_irp6_mechatronika_robot(_config, sr_ecp_msg);
         break;
-    case ROBOT_SPEAKER:
-    case ROBOT_CONVEYOR:
-        break;
+//    case ROBOT_SPEAKER:
+//    case ROBOT_CONVEYOR:
+//        break;
     default:
         fprintf(stderr, "ERROR: unknown robot name in ecp_robot ui_common_robot::ui_common_robot\n");
         ecp = NULL;
@@ -79,6 +79,10 @@ ui_common_robot::ui_common_robot (configurator &_config, sr_ecp* sr_ecp_msg, ROB
 
 }
 // ---------------------------------------------------------------
+
+ui_common_robot::~ui_common_robot() {
+	delete ecp;
+}
 
 // ---------------------------------------------------------------
 /* // by Y - zdefiniowane w irp6_on_track_robot - przemyslec czy nie trzeba wstawic warunku na poprawnosc synchronizacji

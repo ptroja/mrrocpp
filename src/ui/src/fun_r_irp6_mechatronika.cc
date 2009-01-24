@@ -247,7 +247,6 @@ EDP_irp6_mechatronika_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 		name_close(ui_state.irp6_mechatronika.edp.reader_fd);
 
 		delete ui_robot.irp6_mechatronika;
-		SignalKill(ui_state.irp6_mechatronika.edp.node_nr, ui_state.irp6_mechatronika.edp.pid, 0, SIGTERM, 0, 0);
 		ui_state.irp6_mechatronika.edp.state = 0; // edp wylaczone
 		ui_state.irp6_mechatronika.edp.is_synchronised = false;
 
