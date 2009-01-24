@@ -1194,8 +1194,8 @@ destroy_channel( channel_t * ch,
 {
 	int k;
 
-#if 1
-	printf( "Destroy channel %d [%s] index=%d\n", index, ch->channel_name, index );
+#if 0
+	printf( "Destroy channel %d [%s]\n", index, ch->channel_name);
 #endif
 
 	if ( ch->tid_client_send_buffered_msg )
@@ -1262,8 +1262,8 @@ client_channel_delete( int sockfd,
 		return -1;
 	}
 
-#if 0
-	TRACE( "channel_delete: pid=%d tid=%ld name=%s\n", msg.pid, msg.tid, msg.name );
+#if 1
+	printf( "channel_delete: pid=%d tid=%ld name=%s\n", msg.pid, msg.tid, msg.name );
 #endif
 
 	/*--- Search this channel name ---*/
@@ -2725,7 +2725,7 @@ thread_client_thread( void *arg )
 		{
 			channel = channels[index];
 			destroy_channel( channel, index );
-			index--;
+			index--; ch--;
 		}						// if
 	}							// for (ch)
 	UNLOCK;
