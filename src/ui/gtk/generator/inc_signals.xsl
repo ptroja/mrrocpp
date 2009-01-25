@@ -50,7 +50,7 @@ extern "C"
 		ui_widget_entry * ChoseEntry = (ui_widget_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
-        </xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.6">
+	</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.6">
     		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>
@@ -62,7 +62,7 @@ extern "C"
 				if (!( robot->read_motors(irp6m_current_pos))) // Odczyt polozenia walow silnikow
 					printf("Blad w read motors\n");
 					
-				</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.7">
+	</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.7">
     				<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
 					<xsl:with-param name="i" select="1"/>
  				</xsl:call-template><xsl:text>				
@@ -282,7 +282,8 @@ extern "C"
 <xsl:param name="irp6EDPNumber"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $irp6EDPNumber">
-	<xsl:text>GtkEntry * entry</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry</xsl:text><xsl:value-of select="$i" /><xsl:text>"));</xsl:text>
+	<xsl:text>	GtkEntry * entry</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
+	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $irp6EDPNumber">
@@ -302,9 +303,8 @@ extern "C"
 <xsl:param name="irp6EDPNumber"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $irp6EDPNumber">
-	<xsl:text>
-				gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>, (char*)(&amp;irp6m_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]));
-				irp6m_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = irp6m_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>];
+	<xsl:text>				gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>, (char*)(&amp;irp6m_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]));
+					irp6m_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = irp6m_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>];
 	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
