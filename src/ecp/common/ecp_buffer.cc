@@ -46,7 +46,7 @@ void ecp_buffer::send (messip_channel_t *ch)
 				sr_ecp_msg->message(SYSTEM_ERROR, e, "Send error to EDP_MASTER");
 				throw ecp_robot::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
 			}
-			printf("sizeof(r_buffer) = %d\n", sizeof(r_buffer));
+			//printf("sizeof(r_buffer) = %d\n", sizeof(r_buffer));
 
 			break;
 		default: // blad: nieprawidlowe polecenie
