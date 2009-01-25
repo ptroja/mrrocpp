@@ -59,7 +59,7 @@ extern "C"
 			if (state.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				if (!( robot->read_tool_xyz_euler_zyz(tool_vector))) // Odczyt polozenia walow silnikow
-					printf("Blad w read motors\n");
+					printf("Blad w read external\n");
 					
 </xsl:text><xsl:call-template name="irp6.euler.ts.repeat.signals.cc.7">
     				<xsl:with-param name="irp6EDPNumber" select="$euler_ts"/>
