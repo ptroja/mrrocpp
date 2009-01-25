@@ -21,6 +21,13 @@ Servo_algorithm window callback signals
 #include "ui_model.h"
 #include "</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm_widget.h"
 
+BYTE servo_alg_no[</xsl:text><xsl:value-of select="$irp6EDPNumber" /><xsl:text>];
+BYTE servo_par_no[</xsl:text><xsl:value-of select="$irp6EDPNumber" /><xsl:text>];
+	
+gint servo_alg_no_tmp [</xsl:text><xsl:value-of select="$irp6EDPNumber" /><xsl:text>];
+BYTE servo_alg_no_output[</xsl:text><xsl:value-of select="$irp6EDPNumber" /><xsl:text>];
+gint servo_par_no_tmp [</xsl:text><xsl:value-of select="$irp6EDPNumber" /><xsl:text>];
+BYTE servo_par_no_output[</xsl:text><xsl:value-of select="$irp6EDPNumber" /><xsl:text>];
 
 edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm(ui_widget_entry &amp;entry) 
 {
@@ -42,14 +49,66 @@ extern "C"
  		</xsl:call-template><xsl:text>
 	}
 	
-	void on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_servo (GtkButton* button, gpointer user_data)
+	void on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_servo (GtkButton* button, gpointer userdata)
 	{
-		std::cout &lt;&lt; "wczytaj wartosci dla </xsl:text><xsl:value-of select="$fullName" /><xsl:text> servo" &lt;&lt; std::endl;
+		ui_widget_entry * ChoseEntry = (ui_widget_entry *) userdata;
+        GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
+        
+</xsl:text><xsl:call-template name="irp6.servo.repeat.signals.cc.1">
+    		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+			<xsl:with-param name="i" select="1"/>
+ 		</xsl:call-template><xsl:text>
+
+	//	if (robot->ecp->get_EDP_pid()!=-1)
+		//	{
+				if (state.is_synchronised)  // Czy robot jest zsynchronizowany?
+				{
+					if (!(robot->get_servo_algorithm(servo_alg_no, servo_par_no))) // Odczyt polozenia walow silnikow
+						printf("Blad w mechatronika get_servo_algorithm\n");
+					
+</xsl:text><xsl:call-template name="irp6.servo.repeat.signals.cc.2">
+    						<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+							<xsl:with-param name="i" select="1"/>
+ 						</xsl:call-template><xsl:text>					
+				} else
+				{
+					std::cout &lt;&lt; "I am not synchronized yet!!!" &lt;&lt; std::endl;
+				}
+			//}
 	}
 	
-	void on_set_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_servo (GtkButton* button, gpointer user_data)
+	void on_set_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_servo (GtkButton* button, gpointer userdata)
 	{
-		std::cout &lt;&lt; "ustaw wartosci dla </xsl:text><xsl:value-of select="$fullName" /><xsl:text> servo" &lt;&lt; std::endl;
+		ui_widget_entry * ChoseEntry = (ui_widget_entry *) userdata;
+        GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
+
+</xsl:text><xsl:call-template name="irp6.servo.repeat.signals.cc.3">
+    		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+			<xsl:with-param name="i" select="1"/>
+ 		</xsl:call-template><xsl:text>
+ 		
+ 		if (state.is_synchronised)
+		{
+</xsl:text><xsl:call-template name="irp6.servo.repeat.signals.cc.4">
+    		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+			<xsl:with-param name="i" select="1"/>
+ 		</xsl:call-template><xsl:text>
+
+		for(int i=0; i&lt;</xsl:text><xsl:value-of select="$irp6EDPNumber" /><xsl:text>; i++)
+		{
+			servo_alg_no_output[i] = BYTE(servo_alg_no_tmp[i]);
+			servo_par_no_output[i] = BYTE(servo_par_no_tmp[i]);
+		}
+
+		// zlecenie wykonania ruchu
+		robot->set_servo_algorithm(servo_alg_no_output, servo_par_no_output);
+
+	}
+	else
+	{
+		std::cout &lt;&lt; "I am not synchronized yet!!!" &lt;&lt; std::endl;
+	}
+ 		
 	}
 	
 	
@@ -73,6 +132,92 @@ extern "C"
 
 
 <xsl:call-template name="irp6.servo.main.signals.h"/>
+</xsl:template>
+
+<!-- irp6 servo algorithm repeatable part -->
+<xsl:template name="irp6.servo.repeat.signals.cc.1">
+<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="i"/>
+	<xsl:if test="$i &lt;= $irp6EDPNumber*2">
+	<xsl:text>		GtkEntry * entry</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
+</xsl:text>
+       </xsl:if>
+	<!-- for loop --> 
+       <xsl:if test="$i &lt;= $irp6EDPNumber*2">
+          <xsl:call-template name="irp6.servo.repeat.signals.cc.1">
+              <xsl:with-param name="i">
+                  <xsl:value-of select="$i + 1"/>
+              </xsl:with-param>
+              <xsl:with-param name="irp6EDPNumber">
+                  <xsl:value-of select="$irp6EDPNumber"/>
+              </xsl:with-param>
+          </xsl:call-template>
+       </xsl:if>
+</xsl:template>
+
+<!-- irp6 servo algorithm repeatable part -->
+<xsl:template name="irp6.servo.repeat.signals.cc.2">
+<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="i"/>
+	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:text>					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="($i*2)-1" /><xsl:text>, (const gchar*)servo_alg_no[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
+					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="($i*2)" /><xsl:text>, (const gchar*)servo_par_no[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);	
+</xsl:text>
+       </xsl:if>
+	<!-- for loop --> 
+       <xsl:if test="$i &lt;= $irp6EDPNumber">
+          <xsl:call-template name="irp6.servo.repeat.signals.cc.2">
+              <xsl:with-param name="i">
+                  <xsl:value-of select="$i + 1"/>
+              </xsl:with-param>
+              <xsl:with-param name="irp6EDPNumber">
+                  <xsl:value-of select="$irp6EDPNumber"/>
+              </xsl:with-param>
+          </xsl:call-template>
+       </xsl:if>
+</xsl:template>
+
+<!-- irp6 servo algorithm repeatable part -->
+<xsl:template name="irp6.servo.repeat.signals.cc.3">
+<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="i"/>
+	<xsl:if test="$i &lt;= $irp6EDPNumber*2">
+	<xsl:text>		GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
+</xsl:text>
+       </xsl:if>
+	<!-- for loop --> 
+       <xsl:if test="$i &lt;= $irp6EDPNumber*2">
+          <xsl:call-template name="irp6.servo.repeat.signals.cc.3">
+              <xsl:with-param name="i">
+                  <xsl:value-of select="$i + 1"/>
+              </xsl:with-param>
+              <xsl:with-param name="irp6EDPNumber">
+                  <xsl:value-of select="$irp6EDPNumber"/>
+              </xsl:with-param>
+          </xsl:call-template>
+       </xsl:if>
+</xsl:template>
+
+<!-- irp6 servo algorithm repeatable part -->
+<xsl:template name="irp6.servo.repeat.signals.cc.4">
+<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="i"/>
+	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:text>			servo_alg_no_tmp[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = gtk_spin_button_get_value_as_int(spin</xsl:text><xsl:value-of select="($i*2)-1" /><xsl:text>);
+			servo_par_no_tmp[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = gtk_spin_button_get_value_as_int(spin</xsl:text><xsl:value-of select="($i*2)" /><xsl:text>);
+</xsl:text>
+       </xsl:if>
+	<!-- for loop --> 
+       <xsl:if test="$i &lt;= $irp6EDPNumber">
+          <xsl:call-template name="irp6.servo.repeat.signals.cc.4">
+              <xsl:with-param name="i">
+                  <xsl:value-of select="$i + 1"/>
+              </xsl:with-param>
+              <xsl:with-param name="irp6EDPNumber">
+                  <xsl:value-of select="$irp6EDPNumber"/>
+              </xsl:with-param>
+          </xsl:call-template>
+       </xsl:if>
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
@@ -115,6 +260,7 @@ extern "C"
 
 #include &lt;gtk/gtkbuilder.h&gt;
 #include &lt;gtk/gtk.h&gt;
+#include "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_uimodule.h"
 
 class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm
 {
