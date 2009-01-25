@@ -102,6 +102,7 @@ extern "C"
  		</xsl:call-template><xsl:text>  
 			 }
 		//}
+		on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_inc (button, userdata);
 
 	}
 	
@@ -304,7 +305,7 @@ extern "C"
 <xsl:param name="irp6EDPNumber"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $irp6EDPNumber">
-	<xsl:text>					snprintf (buf, sizeof(buf), "%f", irp6m_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
+	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", irp6m_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
 					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>, buf);
 					irp6m_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = irp6m_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>];				
 </xsl:text>
@@ -379,6 +380,8 @@ extern "C"
         GtkSpinButton * spinbuttonDown1 = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbuttonDown1"));
         GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
         gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>, gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>) - gtk_spin_button_get_value(spinbuttonDown1));
+ 	
+		on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_inc (button, userdata); 	
  	}
 	
 	void on_button</xsl:text><xsl:value-of select="($i*2)" /><xsl:text>_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_inc (GtkButton* button, gpointer userdata)
@@ -389,6 +392,8 @@ extern "C"
         GtkSpinButton * spinbuttonDown1 = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbuttonDown1"));
         GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
         gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>, gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>) + gtk_spin_button_get_value(spinbuttonDown1));
+ 	
+ 		on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_inc (button, userdata);
  	}    
 </xsl:text>
     </xsl:if>
