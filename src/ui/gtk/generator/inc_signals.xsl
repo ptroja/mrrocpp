@@ -21,6 +21,7 @@ Inc window callback signals
 #include "ui_model.h"
 #include "</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc_widget.h"
 
+char buf[32];
 gchar buffer[500];
 double irp6m_current_pos[6]; // pozycja biezaca
 double irp6m_desired_pos[6]; // pozycja zadana
@@ -62,7 +63,7 @@ extern "C"
 				if (!( robot->read_motors(irp6m_current_pos))) // Odczyt polozenia walow silnikow
 					printf("Blad w read motors\n");
 					
-	</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.7">
+</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.7">
     				<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
 					<xsl:with-param name="i" select="1"/>
  				</xsl:call-template><xsl:text>				
@@ -303,9 +304,10 @@ extern "C"
 <xsl:param name="irp6EDPNumber"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $irp6EDPNumber">
-	<xsl:text>				gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>, (char*)(&amp;irp6m_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]));
-					irp6m_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = irp6m_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>];
-	</xsl:text>
+	<xsl:text>					snprintf (buf, sizeof(buf), "%f", irp6m_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
+					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>, buf);
+					irp6m_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = irp6m_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>];				
+</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $irp6EDPNumber">
