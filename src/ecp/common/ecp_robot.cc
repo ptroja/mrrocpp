@@ -7,11 +7,11 @@
 #include <sys/wait.h>
 #include <signal.h>
 
- #include <execinfo.h>
- #include <signal.h>
-
- #include <exception>
- #include <iostream>
+#ifdef __LINUX__
+#include <execinfo.h>
+#include <exception>
+#include <iostream>
+#endif /* __LINUX__ */
 
 #include "ecp/common/ecp_robot.h"
 #include "ecp/common/ecp_task.h"
@@ -72,7 +72,7 @@ ecp_robot::ECP_error::ECP_error ( uint64_t err_cl, uint64_t err_no,
 {
     error.error0 = err0;
     error.error1 = err1;
-
+#ifdef __LINUX__
     void * array[25];
     int nSize = backtrace(array, 25);
     char ** symbols = backtrace_symbols(array, nSize);
@@ -83,6 +83,7 @@ ecp_robot::ECP_error::ECP_error ( uint64_t err_cl, uint64_t err_no,
     }
 
     free(symbols);
+#endif /* __LINUX__ */
 }
 
 ecp_robot::ECP_main_error::ECP_main_error ( uint64_t err_cl, uint64_t err_no)
