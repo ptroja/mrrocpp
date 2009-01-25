@@ -125,32 +125,50 @@ extern "C"
 	ui_widget_entry * ChoseEntry = (ui_widget_entry *) userdata;
     GtkBuilder & thisBuilder = ((*ChoseEntry).getBuilder());
     
-    GtkSpinButton * spin1 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton1"));
-    GtkSpinButton * spin2 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton2"));
-
+		GtkSpinButton * spin1 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton1"));
+		GtkSpinButton * spin2 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton2"));
+		GtkSpinButton * spin3 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton3"));
+		GtkSpinButton * spin4 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton4"));
+		GtkSpinButton * spin5 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton5"));
+		GtkSpinButton * spin6 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton6"));
+		GtkSpinButton * spin7 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton7"));
+		GtkSpinButton * spin8 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton8"));
+		GtkSpinButton * spin9 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton9"));
+ 		GtkSpinButton * spin10 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton10"));
+ 		GtkSpinButton * spin11 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton11"));
+ 		GtkSpinButton * spin12 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton12"));
+ 		GtkSpinButton * spin13 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton13"));
+ 		GtkSpinButton * spin14 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton14"));
+ 		GtkSpinButton * spin15 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton15"));
+ 		GtkSpinButton * spin16 = GTK_SPIN_BUTTON(gtk_builder_get_object(&thisBuilder, "spinbutton16"));
+ 	    
 	if (state.is_synchronised)
 	{
 		servo_alg_no_tmp[0] = gtk_spin_button_get_value_as_int(spin1);
 		servo_par_no_tmp[0] = gtk_spin_button_get_value_as_int(spin2);
-		
-		std::cout << servo_alg_no_tmp[0] << std::endl;
-		std::cout << servo_par_no_tmp[0] << std::endl;
+		servo_alg_no_tmp[1] = gtk_spin_button_get_value_as_int(spin3);
+		servo_par_no_tmp[1] = gtk_spin_button_get_value_as_int(spin4);
+		servo_alg_no_tmp[2] = gtk_spin_button_get_value_as_int(spin5);
+		servo_par_no_tmp[2] = gtk_spin_button_get_value_as_int(spin6);
+		servo_alg_no_tmp[3] = gtk_spin_button_get_value_as_int(spin7);
+		servo_par_no_tmp[3] = gtk_spin_button_get_value_as_int(spin8);
+		servo_alg_no_tmp[4] = gtk_spin_button_get_value_as_int(spin9);
+		servo_par_no_tmp[4] = gtk_spin_button_get_value_as_int(spin10);
+		servo_alg_no_tmp[5] = gtk_spin_button_get_value_as_int(spin11);
+		servo_par_no_tmp[5] = gtk_spin_button_get_value_as_int(spin12);
+		servo_alg_no_tmp[6] = gtk_spin_button_get_value_as_int(spin13);
+		servo_par_no_tmp[6] = gtk_spin_button_get_value_as_int(spin14);
+		servo_alg_no_tmp[7] = gtk_spin_button_get_value_as_int(spin15);
+		servo_par_no_tmp[7] = gtk_spin_button_get_value_as_int(spin16);
 
-		servo_alg_no_output[0] = (BYTE)(servo_alg_no_tmp[0]);
-		servo_par_no_output[0] = (BYTE)(servo_par_no_tmp[0]);
-		
-		std::cout << servo_alg_no_output[0] << std::endl;
-		std::cout << servo_par_no_output[0] << std::endl;
-		
-		//for(int i=0; i<IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
-		//for(int i=0; i<2; i++)
-		//{
-		//	servo_alg_no_output[i] = BYTE(servo_alg_no_tmp[i]);
-		//	servo_par_no_output[i] = BYTE(servo_par_no_tmp[i]);
-		//}
+		for(int i=0; i<8; i++)
+		{
+			servo_alg_no_output[i] = BYTE(servo_alg_no_tmp[i]);
+			servo_par_no_output[i] = BYTE(servo_par_no_tmp[i]);
+		}
 
 		// zlecenie wykonania ruchu
-		//robot->set_servo_algorithm(servo_alg_no_output, servo_par_no_output);
+		robot->set_servo_algorithm(servo_alg_no_output, servo_par_no_output);
 
 	}
 	else
