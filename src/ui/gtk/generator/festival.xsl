@@ -75,5 +75,6 @@ Polish</property>
 
 </xsl:document>	
 <xsl:call-template name="festival.main.signals.cc"/>
+<xsl:call-template name="timestamp.file"/>
 </xsl:template>
 </xsl:stylesheet>
