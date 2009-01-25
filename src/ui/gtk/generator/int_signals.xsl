@@ -23,8 +23,8 @@ Inc window callback signals
 
 char buf[32];
 gchar buffer[500];
-double irp6m_current_pos[6]; // pozycja biezaca
-double irp6m_desired_pos[6]; // pozycja zadana
+double </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[6]; // pozycja biezaca
+double </xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[6]; // pozycja zadana
 
 edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_int::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_int(ui_widget_entry &amp;entry) 
 {
@@ -60,11 +60,12 @@ extern "C"
 		{
 			if (state.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				if (!( robot->read_joints(irp6m_current_pos))) // Odczyt polozenia walow silnikow
+				if (!( robot->read_joints(</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos))) // Odczyt polozenia walow silnikow
 					printf("Blad w read motors\n");
 					
 </xsl:text><xsl:call-template name="irp6.int.repeat.signals.cc.7">
     				<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+    				<xsl:with-param name="name" select="$name"/>
 					<xsl:with-param name="i" select="1"/>
  				</xsl:call-template><xsl:text>				
 			}
@@ -91,14 +92,16 @@ extern "C"
 		{
 	</xsl:text><xsl:call-template name="irp6.int.repeat.signals.cc.8">
     		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+    		<xsl:with-param name="name" select="$name"/>
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>    
 			
-			robot->move_motors(irp6m_desired_pos);
+			robot->move_joints(</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos);
 			
 			 if (state.is_synchronised) {
 	</xsl:text><xsl:call-template name="irp6.int.repeat.signals.cc.9">
     		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+    		<xsl:with-param name="name" select="$name"/>
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>  
 			 }
@@ -304,11 +307,12 @@ extern "C"
 <!-- irp6 servo algorithm repeatable part -->
 <xsl:template name="irp6.int.repeat.signals.cc.7">
 <xsl:param name="irp6EDPNumber"/>
+<xsl:param name="name"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $irp6EDPNumber">
-	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", irp6m_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
+	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
 					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>, buf);
-					irp6m_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = irp6m_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>];				
+					</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>];				
 </xsl:text>
        </xsl:if>
 	<!-- for loop --> 
@@ -320,6 +324,9 @@ extern "C"
               <xsl:with-param name="irp6EDPNumber">
                   <xsl:value-of select="$irp6EDPNumber"/>
               </xsl:with-param>
+              <xsl:with-param name="name">
+                  <xsl:value-of select="$name"/>
+              </xsl:with-param>
           </xsl:call-template>
        </xsl:if>
 </xsl:template>
@@ -327,9 +334,10 @@ extern "C"
 <!-- irp6 servo algorithm repeatable part -->
 <xsl:template name="irp6.int.repeat.signals.cc.8">
 <xsl:param name="irp6EDPNumber"/>
+<xsl:param name="name"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $irp6EDPNumber">
-	<xsl:text>			irp6m_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>);
+	<xsl:text>			</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>);
 	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
@@ -341,6 +349,9 @@ extern "C"
               <xsl:with-param name="irp6EDPNumber">
                   <xsl:value-of select="$irp6EDPNumber"/>
               </xsl:with-param>
+              <xsl:with-param name="name">
+                  <xsl:value-of select="$name"/>
+              </xsl:with-param>
           </xsl:call-template>
        </xsl:if>
 </xsl:template>
@@ -348,9 +359,10 @@ extern "C"
 <!-- irp6 servo algorithm repeatable part -->
 <xsl:template name="irp6.int.repeat.signals.cc.9">
 <xsl:param name="irp6EDPNumber"/>
+<xsl:param name="name"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $irp6EDPNumber">
-	<xsl:text>			gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>, irp6m_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
+	<xsl:text>			gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>, </xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
 	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
@@ -361,6 +373,9 @@ extern "C"
               </xsl:with-param>
               <xsl:with-param name="irp6EDPNumber">
                   <xsl:value-of select="$irp6EDPNumber"/>
+              </xsl:with-param>
+              <xsl:with-param name="name">
+                  <xsl:value-of select="$name"/>
               </xsl:with-param>
           </xsl:call-template>
        </xsl:if>
