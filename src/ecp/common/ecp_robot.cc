@@ -7,6 +7,12 @@
 #include <sys/wait.h>
 #include <signal.h>
 
+ #include <execinfo.h>
+ #include <signal.h>
+
+ #include <exception>
+ #include <iostream>
+
 #include "ecp/common/ecp_robot.h"
 #include "ecp/common/ecp_task.h"
 
@@ -66,6 +72,17 @@ ecp_robot::ECP_error::ECP_error ( uint64_t err_cl, uint64_t err_no,
 {
     error.error0 = err0;
     error.error1 = err1;
+
+    void * array[25];
+    int nSize = backtrace(array, 25);
+    char ** symbols = backtrace_symbols(array, nSize);
+
+    for (int i = 0; i < nSize; i++)
+    {
+        std::cout << symbols[i] << std::endl;
+    }
+
+    free(symbols);
 }
 
 ecp_robot::ECP_main_error::ECP_main_error ( uint64_t err_cl, uint64_t err_no)
