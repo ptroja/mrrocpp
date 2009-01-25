@@ -80,7 +80,7 @@ extern "C"
 		case 3: </xsl:text><xsl:if test="$axis_xyz &gt; 0"><xsl:text>std::cout &lt;&lt; "XYZ Angle Axis window chosen" &lt;&lt; std::endl; ChoseEntry = comboEntry.getWidget(3); isFile = 1;</xsl:text></xsl:if><xsl:text> break;
 		case 4: </xsl:text><xsl:if test="$euler_xyz &gt; 0"><xsl:text>std::cout &lt;&lt; "XYZ Euler ZYZ window chosen" &lt;&lt; std::endl; ChoseEntry = comboEntry.getWidget(4); isFile = 1;</xsl:text></xsl:if><xsl:text> break;
 		case 5: </xsl:text><xsl:if test="$axis_ts &gt; 0"><xsl:text>std::cout &lt;&lt; "TS Angle Axis window chosen" &lt;&lt; std::endl; ChoseEntry = comboEntry.getWidget(5); isFile = 1;</xsl:text></xsl:if><xsl:text> break;
-		case 6: </xsl:text><xsl:if test="$euler_ts &gt; 0"><xsl:text>std::cout &lt;&lt; "TS Euler ZYZ window chosen" &lt;&lt; std::endl; ChoseEntry = comboEntry.getWidget(5); isFile = 1;</xsl:text></xsl:if><xsl:text> break;
+		case 6: </xsl:text><xsl:if test="$euler_ts &gt; 0"><xsl:text>std::cout &lt;&lt; "TS Euler ZYZ window chosen" &lt;&lt; std::endl; ChoseEntry = comboEntry.getWidget(6); isFile = 1;</xsl:text></xsl:if><xsl:text> break;
 		default: std::cout &lt;&lt; "Something is not working properly!" &lt;&lt; std::endl;
 		}
 		

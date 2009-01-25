@@ -3,7 +3,7 @@
 	<fullName>postument</fullName>
 	<irp6EDPNumber>7</irp6EDPNumber>
 	<axis_xyz>8</axis_xyz>
-	<axis_ts>0</axis_ts>
+	<axis_ts>7</axis_ts>
 	<euler_xyz>7</euler_xyz>
 	<euler_ts>6</euler_ts>
 </irp6postument>
