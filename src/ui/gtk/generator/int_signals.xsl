@@ -60,7 +60,7 @@ extern "C"
 		{
 			if (state.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				if (!( robot->read_motors(irp6m_current_pos))) // Odczyt polozenia walow silnikow
+				if (!( robot->read_joints(irp6m_current_pos))) // Odczyt polozenia walow silnikow
 					printf("Blad w read motors\n");
 					
 </xsl:text><xsl:call-template name="irp6.int.repeat.signals.cc.7">
