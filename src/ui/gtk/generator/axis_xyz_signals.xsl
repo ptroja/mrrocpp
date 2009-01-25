@@ -23,6 +23,9 @@ Axis XYZ window callback signals
 
 double wl;
 double l_eps = 0;
+char buf[32];
+double irp6m_current_pos[</xsl:text><xsl:value-of select="$irp6EDPNumber" /><xsl:text>]; // pozycja biezaca
+double irp6m_desired_pos[</xsl:text><xsl:value-of select="$irp6EDPNumber" /><xsl:text>]; // pozycja zadana
 
 edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz(ui_widget_entry &amp;entry) 
 {
@@ -44,26 +47,66 @@ extern "C"
  		</xsl:call-template><xsl:text>
 	}
 	
-	void on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (GtkButton* button, gpointer user_data)
-	{
-		std::cout &lt;&lt; "wczytaj wartosci dla </xsl:text><xsl:value-of select="$fullName" /><xsl:text> axis_xyz" &lt;&lt; std::endl;
+	void on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (GtkButton* button, gpointer userdata)
+		{
+		ui_widget_entry * ChoseEntry = (ui_widget_entry *) userdata;
+        GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
+        
+	</xsl:text><xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.6">
+    		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+			<xsl:with-param name="i" select="1"/>
+ 		</xsl:call-template><xsl:text>
+ 		
+		if (robot</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
+		{
+			if (state.is_synchronised) // Czy robot jest zsynchronizowany?
+			{
+				if (!( robot->read_motors(irp6m_current_pos))) // Odczyt polozenia walow silnikow
+					printf("Blad w read motors\n");
+					
+</xsl:text><xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.7">
+    				<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+					<xsl:with-param name="i" select="1"/>
+ 				</xsl:call-template><xsl:text>				
+			}
+			else
+			{
+				// Wygaszanie elementow przy niezsynchronizowanym robocie
+				std::cout &lt;&lt; "nie jestem zsynchronizowany" &lt;&lt; std::endl;
+			}
+		}
+	
 	}
 	
-	void on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (GtkButton* button, gpointer user_data)
-	{
-		std::cout &lt;&lt; "Execute move dla </xsl:text><xsl:value-of select="$fullName" /><xsl:text> axis_xyz" &lt;&lt; std::endl;
+	void on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (GtkButton* button, gpointer userdata)
+		{
+		ui_widget_entry * ChoseEntry = (ui_widget_entry *) userdata;
+        GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
+        
+	</xsl:text><xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.3">
+    		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+			<xsl:with-param name="i" select="1"/>
+ 		</xsl:call-template><xsl:text>    
+
+		if (robot</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
+		{
+	</xsl:text><xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.8">
+    		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+			<xsl:with-param name="i" select="1"/>
+ 		</xsl:call-template><xsl:text>    
+			
+			robot->move_motors(irp6m_desired_pos);
+			
+			 if (state.is_synchronised) {
+	</xsl:text><xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.9">
+    		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+			<xsl:with-param name="i" select="1"/>
+ 		</xsl:call-template><xsl:text>  
+			 }
+		}
+		on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (button, userdata);
+
 	}
-	
-	void on_export_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (GtkButton* button, gpointer user_data)
-	{
-		std::cout &lt;&lt; "Export dla </xsl:text><xsl:value-of select="$fullName" /><xsl:text> axis_xyz" &lt;&lt; std::endl;
-	}
-	
-	void on_import_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (GtkButton* button, gpointer user_data)
-	{
-		std::cout &lt;&lt; "Import dla </xsl:text><xsl:value-of select="$fullName" /><xsl:text> axis_xyz" &lt;&lt; std::endl;
-	}
-	
 	
 	void ui_widget_init(ui_widget_entry &amp;entry) 
 	{
@@ -117,6 +160,113 @@ extern "C"
        </xsl:if>
 </xsl:template>
 
+<!-- irp6 servo algorithm repeatable part -->
+<xsl:template name="irp6.axis.xyz.repeat.signals.cc.3">
+<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="i"/>
+	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:text>	GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
+ 	</xsl:text>
+       </xsl:if>
+	<!-- for loop --> 
+       <xsl:if test="$i &lt;= $irp6EDPNumber">
+          <xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.3">
+              <xsl:with-param name="i">
+                  <xsl:value-of select="$i + 1"/>
+              </xsl:with-param>
+              <xsl:with-param name="irp6EDPNumber">
+                  <xsl:value-of select="$irp6EDPNumber"/>
+              </xsl:with-param>
+          </xsl:call-template>
+       </xsl:if>
+</xsl:template>
+
+<!-- irp6 servo algorithm repeatable part -->
+<xsl:template name="irp6.axis.xyz.repeat.signals.cc.6">
+<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="i"/>
+	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:text>	GtkEntry * entry</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
+	</xsl:text>
+       </xsl:if>
+	<!-- for loop --> 
+       <xsl:if test="$i &lt;= $irp6EDPNumber">
+          <xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.6">
+              <xsl:with-param name="i">
+                  <xsl:value-of select="$i + 1"/>
+              </xsl:with-param>
+              <xsl:with-param name="irp6EDPNumber">
+                  <xsl:value-of select="$irp6EDPNumber"/>
+              </xsl:with-param>
+          </xsl:call-template>
+       </xsl:if>
+</xsl:template>
+
+<!-- irp6 servo algorithm repeatable part -->
+<xsl:template name="irp6.axis.xyz.repeat.signals.cc.7">
+<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="i"/>
+	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", irp6m_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
+					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>, buf);
+					irp6m_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = irp6m_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>];				
+</xsl:text>
+       </xsl:if>
+	<!-- for loop --> 
+       <xsl:if test="$i &lt;= $irp6EDPNumber">
+          <xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.7">
+              <xsl:with-param name="i">
+                  <xsl:value-of select="$i + 1"/>
+              </xsl:with-param>
+              <xsl:with-param name="irp6EDPNumber">
+                  <xsl:value-of select="$irp6EDPNumber"/>
+              </xsl:with-param>
+          </xsl:call-template>
+       </xsl:if>
+</xsl:template>
+
+<!-- irp6 servo algorithm repeatable part -->
+<xsl:template name="irp6.axis.xyz.repeat.signals.cc.8">
+<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="i"/>
+	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:text>			irp6m_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>);
+	</xsl:text>
+       </xsl:if>
+	<!-- for loop --> 
+       <xsl:if test="$i &lt;= $irp6EDPNumber">
+          <xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.8">
+              <xsl:with-param name="i">
+                  <xsl:value-of select="$i + 1"/>
+              </xsl:with-param>
+              <xsl:with-param name="irp6EDPNumber">
+                  <xsl:value-of select="$irp6EDPNumber"/>
+              </xsl:with-param>
+          </xsl:call-template>
+       </xsl:if>
+</xsl:template>
+
+<!-- irp6 servo algorithm repeatable part -->
+<xsl:template name="irp6.axis.xyz.repeat.signals.cc.9">
+<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="i"/>
+	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:text>			gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>, irp6m_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
+	</xsl:text>
+       </xsl:if>
+	<!-- for loop --> 
+       <xsl:if test="$i &lt;= $irp6EDPNumber">
+          <xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.9">
+              <xsl:with-param name="i">
+                  <xsl:value-of select="$i + 1"/>
+              </xsl:with-param>
+              <xsl:with-param name="irp6EDPNumber">
+                  <xsl:value-of select="$irp6EDPNumber"/>
+              </xsl:with-param>
+          </xsl:call-template>
+       </xsl:if>
+</xsl:template>
+
 <!-- handling signals .cc repeatable part -->
 <xsl:template name="for.each.edp.irp6.axis.xyz.signals.cc">
 <xsl:param name="irp6EDPNumber"/>
@@ -146,6 +296,8 @@ extern "C"
 			gtk_spin_button_set_value(spin5, gtk_spin_button_get_value(spin5) / wl);
 			gtk_spin_button_set_value(spin6, gtk_spin_button_get_value(spin6) / wl);
 		}
+		
+		on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (button, userdata);
  	}
 	
 	void on_button</xsl:text><xsl:value-of select="($i*2)" /><xsl:text>_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (GtkButton* button, gpointer userdata)
@@ -168,7 +320,9 @@ extern "C"
 			gtk_spin_button_set_value(spin5, gtk_spin_button_get_value(spin5) / wl);
 			gtk_spin_button_set_value(spin6, gtk_spin_button_get_value(spin6) / wl);
 		}
- 	}   
+		
+		on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (button, userdata);
+}   
 </xsl:text>
  		</xsl:when>
  		<xsl:when test="$i &gt;= 7">
@@ -193,7 +347,9 @@ extern "C"
 			gtk_spin_button_set_value(spin5, gtk_spin_button_get_value(spin5) / wl);
 			gtk_spin_button_set_value(spin6, gtk_spin_button_get_value(spin6) / wl);
 		}
- 	}
+		
+		on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (button, userdata);
+	}
 	
 	void on_button</xsl:text><xsl:value-of select="($i*2)" /><xsl:text>_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (GtkButton* button, gpointer userdata)
 	{
@@ -215,7 +371,9 @@ extern "C"
 			gtk_spin_button_set_value(spin5, gtk_spin_button_get_value(spin5) / wl);
 			gtk_spin_button_set_value(spin6, gtk_spin_button_get_value(spin6) / wl);
 		}
- 	}   
+		
+		on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (button, userdata);
+	}   
 </xsl:text>
  		</xsl:when>
  		<xsl:otherwise>
@@ -236,7 +394,9 @@ extern "C"
 			gtk_spin_button_set_value(spin5, gtk_spin_button_get_value(spin5) / wl);
 			gtk_spin_button_set_value(spin6, gtk_spin_button_get_value(spin6) / wl);
 		}
- 	}
+		
+		on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (button, userdata);
+	}
 	
 	void on_button</xsl:text><xsl:value-of select="($i*2)" /><xsl:text>_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (GtkButton* button, gpointer userdata)
 	{
@@ -254,7 +414,9 @@ extern "C"
 			gtk_spin_button_set_value(spin5, gtk_spin_button_get_value(spin5) / wl);
 			gtk_spin_button_set_value(spin6, gtk_spin_button_get_value(spin6) / wl);
 		}
- 	}   
+		
+		on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (button, userdata);
+	}  
 </xsl:text>
  		</xsl:otherwise>		
  	</xsl:choose>
@@ -291,6 +453,7 @@ extern "C"
 
 #include &lt;gtk/gtkbuilder.h&gt;
 #include &lt;gtk/gtk.h&gt;
+#include "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_uimodule.h"
 
 class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz
 {

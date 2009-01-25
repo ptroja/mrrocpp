@@ -23,8 +23,8 @@ Inc window callback signals
 
 char buf[32];
 gchar buffer[500];
-double irp6m_current_pos[6]; // pozycja biezaca
-double irp6m_desired_pos[6]; // pozycja zadana
+double irp6m_current_pos[</xsl:text><xsl:value-of select="$irp6EDPNumber" /><xsl:text>]; // pozycja biezaca
+double irp6m_desired_pos[</xsl:text><xsl:value-of select="$irp6EDPNumber" /><xsl:text>]; // pozycja zadana
 
 edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_inc(ui_widget_entry &amp;entry) 
 {
@@ -56,8 +56,8 @@ extern "C"
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>
  		
-		//if (robot->ecp->get_EDP_pid()!=-1)
-		//{
+		if (robot</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
+		{
 			if (state.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				if (!( robot->read_motors(irp6m_current_pos))) // Odczyt polozenia walow silnikow
@@ -73,7 +73,7 @@ extern "C"
 				// Wygaszanie elementow przy niezsynchronizowanym robocie
 				std::cout &lt;&lt; "nie jestem zsynchronizowany" &lt;&lt; std::endl;
 			}
-		//}
+		}
 	
 	}
 	
@@ -87,7 +87,8 @@ extern "C"
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>    
 
-		//if (robot->ecp->get_EDP_pid()!=-1) {
+		if (robot</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
+		{
 	</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.8">
     		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
 			<xsl:with-param name="i" select="1"/>
@@ -101,7 +102,7 @@ extern "C"
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>  
 			 }
-		//}
+		}
 		on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_inc (button, userdata);
 
 	}
@@ -244,7 +245,7 @@ extern "C"
 <xsl:param name="irp6EDPNumber"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $irp6EDPNumber">
-	<xsl:text> %f</xsl:text>
+	<xsl:text> %.3f</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $irp6EDPNumber">
