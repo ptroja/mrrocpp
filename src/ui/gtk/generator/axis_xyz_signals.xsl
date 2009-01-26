@@ -126,6 +126,10 @@ extern "C"
 	{
 		axis_xyz_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = new edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz(entry);
 		fprintf(stderr, "widget %s loaded\n", __FILE__);
+		
+		GtkButton * anyButton;
+		gpointer userdata = &amp; entry;
+		on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (anyButton, userdata);
 	}
 
 	void ui_widget_unload(void) 
@@ -510,8 +514,6 @@ class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz
 
 		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz(ui_widget_entry &amp;entry);
 		~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz();
-
-
 };
 
 #endif /* __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_AXIS_XYZ */

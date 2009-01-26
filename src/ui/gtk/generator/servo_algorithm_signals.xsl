@@ -116,6 +116,10 @@ extern "C"
 	{
 		servo_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = new edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm(entry);
 		fprintf(stderr, "widget %s loaded\n", __FILE__);
+		
+		GtkButton * anyButton;
+		gpointer userdata = &amp; entry;
+		on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_servo (anyButton, userdata);
 	}
 
 	void ui_widget_unload(void) 
