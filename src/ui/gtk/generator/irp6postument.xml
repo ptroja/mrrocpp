@@ -1,7 +1,7 @@
 <irp6postument>
 	<name>irp6p</name>
 	<fullName>postument</fullName>
-	<irp6EDPNumber>7</irp6EDPNumber>
+	<motorsNo>7</motorsNo>
 	<axis_xyz>8</axis_xyz>
 	<axis_ts>7</axis_ts>
 	<euler_xyz>7</euler_xyz>

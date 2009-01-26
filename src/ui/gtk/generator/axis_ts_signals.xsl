@@ -52,7 +52,7 @@ extern "C"
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
 	</xsl:text><xsl:call-template name="irp6.axis.ts.repeat.signals.cc.6">
-    		<xsl:with-param name="irp6EDPNumber" select="$axis_ts"/>
+    		<xsl:with-param name="axis_ts" select="$axis_ts"/>
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>
  		
@@ -79,7 +79,7 @@ extern "C"
 				}
 					
 </xsl:text><xsl:call-template name="irp6.axis.ts.repeat.signals.cc.7">
-    				<xsl:with-param name="irp6EDPNumber" select="$axis_ts"/>
+    				<xsl:with-param name="axis_ts" select="$axis_ts"/>
 					<xsl:with-param name="name" select="$name"/>
 					<xsl:with-param name="i" select="1"/>
  				</xsl:call-template><xsl:text>				
@@ -99,14 +99,14 @@ extern "C"
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
 	</xsl:text><xsl:call-template name="irp6.axis.ts.repeat.signals.cc.3">
-    		<xsl:with-param name="irp6EDPNumber" select="$axis_ts"/>
+    		<xsl:with-param name="axis_ts" select="$axis_ts"/>
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>    
 
 		if (state.is_synchronised)
 		{
 	</xsl:text><xsl:call-template name="irp6.axis.ts.repeat.signals.cc.8">
-    		<xsl:with-param name="irp6EDPNumber" select="$axis_ts"/>
+    		<xsl:with-param name="axis_ts" select="$axis_ts"/>
 			<xsl:with-param name="name" select="$name"/>
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>    
@@ -158,20 +158,20 @@ extern "C"
 
 <!-- irp6 servo algorithm repeatable part -->
 <xsl:template name="irp6.axis.ts.repeat.signals.cc.3">
-<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="axis_ts"/>
 <xsl:param name="i"/>
-	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:if test="$i &lt;= $axis_ts">
 	<xsl:text>	GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
  	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
-       <xsl:if test="$i &lt;= $irp6EDPNumber">
+       <xsl:if test="$i &lt;= $axis_ts">
           <xsl:call-template name="irp6.axis.ts.repeat.signals.cc.3">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
-              <xsl:with-param name="irp6EDPNumber">
-                  <xsl:value-of select="$irp6EDPNumber"/>
+              <xsl:with-param name="axis_ts">
+                  <xsl:value-of select="$axis_ts"/>
               </xsl:with-param>
           </xsl:call-template>
        </xsl:if>
@@ -179,20 +179,20 @@ extern "C"
 
 <!-- irp6 servo algorithm repeatable part -->
 <xsl:template name="irp6.axis.ts.repeat.signals.cc.6">
-<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="axis_ts"/>
 <xsl:param name="i"/>
-	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:if test="$i &lt;= $axis_ts">
 	<xsl:text>	GtkEntry * entry</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
 	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
-       <xsl:if test="$i &lt;= $irp6EDPNumber">
+       <xsl:if test="$i &lt;= $axis_ts">
           <xsl:call-template name="irp6.axis.ts.repeat.signals.cc.6">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
-              <xsl:with-param name="irp6EDPNumber">
-                  <xsl:value-of select="$irp6EDPNumber"/>
+              <xsl:with-param name="axis_ts">
+                  <xsl:value-of select="$axis_ts"/>
               </xsl:with-param>
           </xsl:call-template>
        </xsl:if>
@@ -200,10 +200,10 @@ extern "C"
 
 <!-- irp6 servo algorithm repeatable part -->
 <xsl:template name="irp6.axis.ts.repeat.signals.cc.7">
-<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="axis_ts"/>
 <xsl:param name="name"/>
 <xsl:param name="i"/>
-	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:if test="$i &lt;= $axis_ts">
 	<xsl:choose>
 		<xsl:when test="$i &lt;= 3">
 	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", tool_vector[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
@@ -229,13 +229,13 @@ extern "C"
 	
        </xsl:if>
 	<!-- for loop --> 
-       <xsl:if test="$i &lt;= $irp6EDPNumber">
+       <xsl:if test="$i &lt;= $axis_ts">
           <xsl:call-template name="irp6.axis.ts.repeat.signals.cc.7">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
-              <xsl:with-param name="irp6EDPNumber">
-                  <xsl:value-of select="$irp6EDPNumber"/>
+              <xsl:with-param name="axis_ts">
+                  <xsl:value-of select="$axis_ts"/>
               </xsl:with-param>
               <xsl:with-param name="name">
                   <xsl:value-of select="$name"/>
@@ -246,21 +246,21 @@ extern "C"
 
 <!-- irp6 servo algorithm repeatable part -->
 <xsl:template name="irp6.axis.ts.repeat.signals.cc.8">
-<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="axis_ts"/>
 <xsl:param name="name"/>
 <xsl:param name="i"/>
-	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:if test="$i &lt;= $axis_ts">
 	<xsl:text>			tool_vector[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>);
 	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
-       <xsl:if test="$i &lt;= $irp6EDPNumber">
+       <xsl:if test="$i &lt;= $axis_ts">
           <xsl:call-template name="irp6.axis.ts.repeat.signals.cc.8">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
-              <xsl:with-param name="irp6EDPNumber">
-                  <xsl:value-of select="$irp6EDPNumber"/>
+              <xsl:with-param name="axis_ts">
+                  <xsl:value-of select="$axis_ts"/>
               </xsl:with-param>
               <xsl:with-param name="name">
                   <xsl:value-of select="$name"/>

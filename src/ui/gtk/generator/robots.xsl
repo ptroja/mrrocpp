@@ -27,8 +27,8 @@ Main generator file - includes xsl files for each window
 <xsl:include href="festival.xsl" />
 
 <xsl:template name="call.all.irp6.templates" match="*[substring(name(),1,4)='irp6']">
-<xsl:variable name="irp6EDPNumber" select="irp6EDPNumber"/>
-	<xsl:if test="$irp6EDPNumber &gt; 0">
+<xsl:variable name="motorsNo" select="motorsNo"/>
+	<xsl:if test="$motorsNo &gt; 0">
 		<xsl:call-template name="irp6.servo" />
 		<xsl:call-template name="irp6.int" />
 		<xsl:call-template name="irp6.inc" />

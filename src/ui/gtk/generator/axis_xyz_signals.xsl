@@ -10,7 +10,7 @@ Axis XYZ window callback signals
 <xsl:template name="irp6.axis.xyz.main.signals.cc" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
-<xsl:variable name="irp6EDPNumber" select="axis_xyz"/>
+<xsl:variable name="axis_xyz" select="axis_xyz"/>
 <xsl:document method="text" href="../signals/{$name}_axis_xyz_widget.cc">
 
 
@@ -25,8 +25,8 @@ double wl;
 double l_eps = 0;
 double alfa;
 char buf[32];
-double </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[</xsl:text><xsl:value-of select="$irp6EDPNumber" /><xsl:text>]; // pozycja biezaca
-double </xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="$irp6EDPNumber" /><xsl:text>]; // pozycja zadana
+double </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[</xsl:text><xsl:value-of select="$axis_xyz" /><xsl:text>]; // pozycja biezaca
+double </xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="$axis_xyz" /><xsl:text>]; // pozycja zadana
 
 edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz(ui_widget_entry &amp;entry) 
 {
@@ -43,7 +43,7 @@ extern "C"
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
 		</xsl:text><xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.1">
-    		<xsl:with-param name="axis_xyz" select="$irp6EDPNumber"/>
+    		<xsl:with-param name="axis_xyz" select="$axis_xyz"/>
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>
 	}
@@ -54,7 +54,7 @@ extern "C"
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
 	</xsl:text><xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.6">
-    		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+    		<xsl:with-param name="axis_xyz" select="$axis_xyz"/>
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>
  		
@@ -70,7 +70,7 @@ extern "C"
 				+</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[5]*</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[5]);
 					
 </xsl:text><xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.7">
-    				<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+    				<xsl:with-param name="axis_xyz" select="$axis_xyz"/>
 					<xsl:with-param name="name" select="$name"/>
 					<xsl:with-param name="i" select="1"/>
  				</xsl:call-template><xsl:text>				
@@ -90,20 +90,20 @@ extern "C"
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
 	</xsl:text><xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.3">
-    		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+    		<xsl:with-param name="axis_xyz" select="$axis_xyz"/>
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>    
 
 		if (robot</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
 		{
 	</xsl:text><xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.8">
-    		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+    		<xsl:with-param name="axis_xyz" select="$axis_xyz"/>
 			<xsl:with-param name="name" select="$name"/>
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>    
  		
  			// przepisanie parametrow ruchu do postaci rozkazu w formie XYZ_ANGLE_AXIS
-			for(int i=3; i&lt;</xsl:text><xsl:value-of select="$irp6EDPNumber" /><xsl:text>; i++)
+			for(int i=3; i&lt;</xsl:text><xsl:value-of select="$axis_xyz" /><xsl:text>; i++)
 			{
 					</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[i] *= </xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[6];
 			}
@@ -112,7 +112,7 @@ extern "C"
 			
 			 if (state.is_synchronised) {
 	</xsl:text><xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.9">
-    		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+    		<xsl:with-param name="axis_xyz" select="$axis_xyz"/>
 			<xsl:with-param name="name" select="$name"/>
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>  
@@ -143,7 +143,7 @@ extern "C"
 	
 </xsl:text>
 		<xsl:call-template name="for.each.edp.irp6.axis.xyz.signals.cc">
-    			<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+    			<xsl:with-param name="axis_xyz" select="$axis_xyz"/>
     			<xsl:with-param name="fullName" select="$fullName"/>
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template>
@@ -180,20 +180,20 @@ extern "C"
 
 <!-- irp6 servo algorithm repeatable part -->
 <xsl:template name="irp6.axis.xyz.repeat.signals.cc.3">
-<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="axis_xyz"/>
 <xsl:param name="i"/>
-	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:if test="$i &lt;= $axis_xyz">
 	<xsl:text>	GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
  	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
-       <xsl:if test="$i &lt;= $irp6EDPNumber">
+       <xsl:if test="$i &lt;= $axis_xyz">
           <xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.3">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
-              <xsl:with-param name="irp6EDPNumber">
-                  <xsl:value-of select="$irp6EDPNumber"/>
+              <xsl:with-param name="axis_xyz">
+                  <xsl:value-of select="$axis_xyz"/>
               </xsl:with-param>
           </xsl:call-template>
        </xsl:if>
@@ -201,20 +201,20 @@ extern "C"
 
 <!-- irp6 servo algorithm repeatable part -->
 <xsl:template name="irp6.axis.xyz.repeat.signals.cc.6">
-<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="axis_xyz"/>
 <xsl:param name="i"/>
-	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:if test="$i &lt;= $axis_xyz">
 	<xsl:text>	GtkEntry * entry</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
 	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
-       <xsl:if test="$i &lt;= $irp6EDPNumber">
+       <xsl:if test="$i &lt;= $axis_xyz">
           <xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.6">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
-              <xsl:with-param name="irp6EDPNumber">
-                  <xsl:value-of select="$irp6EDPNumber"/>
+              <xsl:with-param name="axis_xyz">
+                  <xsl:value-of select="$axis_xyz"/>
               </xsl:with-param>
           </xsl:call-template>
        </xsl:if>
@@ -222,10 +222,10 @@ extern "C"
 
 <!-- irp6 servo algorithm repeatable part -->
 <xsl:template name="irp6.axis.xyz.repeat.signals.cc.7">
-<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="axis_xyz"/>
 <xsl:param name="name"/>
 <xsl:param name="i"/>
-	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:if test="$i &lt;= $axis_xyz">
 	<xsl:choose>
 		<xsl:when test="$i &lt;= 3">
 	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
@@ -255,13 +255,13 @@ extern "C"
 	
        </xsl:if>
 	<!-- for loop --> 
-       <xsl:if test="$i &lt;= $irp6EDPNumber">
+       <xsl:if test="$i &lt;= $axis_xyz">
           <xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.7">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
-              <xsl:with-param name="irp6EDPNumber">
-                  <xsl:value-of select="$irp6EDPNumber"/>
+              <xsl:with-param name="axis_xyz">
+                  <xsl:value-of select="$axis_xyz"/>
               </xsl:with-param>
               <xsl:with-param name="name">
                   <xsl:value-of select="$name"/>
@@ -272,21 +272,21 @@ extern "C"
 
 <!-- irp6 servo algorithm repeatable part -->
 <xsl:template name="irp6.axis.xyz.repeat.signals.cc.8">
-<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="axis_xyz"/>
 <xsl:param name="name"/>
 <xsl:param name="i"/>
-	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:if test="$i &lt;= $axis_xyz">
 	<xsl:text>			</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>);
 	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
-       <xsl:if test="$i &lt;= $irp6EDPNumber">
+       <xsl:if test="$i &lt;= $axis_xyz">
           <xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.8">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
-              <xsl:with-param name="irp6EDPNumber">
-                  <xsl:value-of select="$irp6EDPNumber"/>
+              <xsl:with-param name="axis_xyz">
+                  <xsl:value-of select="$axis_xyz"/>
               </xsl:with-param>
               <xsl:with-param name="name">
                   <xsl:value-of select="$name"/>
@@ -297,21 +297,21 @@ extern "C"
 
 <!-- irp6 servo algorithm repeatable part -->
 <xsl:template name="irp6.axis.xyz.repeat.signals.cc.9">
-<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="axis_xyz"/>
 <xsl:param name="name"/>
 <xsl:param name="i"/>
-	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:if test="$i &lt;= $axis_xyz">
 	<xsl:text>			gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>, </xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
 	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
-       <xsl:if test="$i &lt;= $irp6EDPNumber">
+       <xsl:if test="$i &lt;= $axis_xyz">
           <xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.9">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
-              <xsl:with-param name="irp6EDPNumber">
-                  <xsl:value-of select="$irp6EDPNumber"/>
+              <xsl:with-param name="axis_xyz">
+                  <xsl:value-of select="$axis_xyz"/>
               </xsl:with-param>
               <xsl:with-param name="name">
                   <xsl:value-of select="$name"/>
@@ -322,10 +322,10 @@ extern "C"
 
 <!-- handling signals .cc repeatable part -->
 <xsl:template name="for.each.edp.irp6.axis.xyz.signals.cc">
-<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="axis_xyz"/>
 <xsl:param name="fullName"/>
 <xsl:param name="i"/>
-	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:if test="$i &lt;= $axis_xyz">
 	<xsl:choose>
 		<xsl:when test="$i &lt;= 3">
 <xsl:text>
@@ -475,13 +475,13 @@ extern "C"
  	</xsl:choose>
     </xsl:if>
 	<!-- for loop --> 
-       <xsl:if test="$i &lt;= $irp6EDPNumber">
+       <xsl:if test="$i &lt;= $axis_xyz">
           <xsl:call-template name="for.each.edp.irp6.axis.xyz.signals.cc">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
-              <xsl:with-param name="irp6EDPNumber">
-                  <xsl:value-of select="$irp6EDPNumber"/>
+              <xsl:with-param name="axis_xyz">
+                  <xsl:value-of select="$axis_xyz"/>
               </xsl:with-param>
               <xsl:with-param name="fullName">
                   <xsl:value-of select="$fullName"/>

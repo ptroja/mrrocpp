@@ -11,7 +11,7 @@ Int window
 <xsl:template name="irp6.int" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
-<xsl:variable name="irp6EDPNumber" select="irp6EDPNumber"/>
+<xsl:variable name="motorsNo" select="motorsNo"/>
 <xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../glade/{$name}_int.glade">
 <glade-interface>
   <widget class="GtkWindow" id="window">
@@ -28,7 +28,7 @@ Int window
             <child>
               <widget class="GtkTable" id="table1">
                 <property name="visible">True</property>
-                <property name="n_rows"><xsl:value-of select="$irp6EDPNumber + 5" /></property> <!-- 5 + RN  -->
+                <property name="n_rows"><xsl:value-of select="$motorsNo + 5" /></property> <!-- 5 + RN  -->
                 <property name="n_columns">9</property>
                 <child>
                   <placeholder/>
@@ -68,8 +68,8 @@ Int window
                   <packing>
                     <property name="left_attach">7</property>
                     <property name="right_attach">9</property>
-                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property>  <!-- 3 + RN  -->
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 4" /></property>  <!-- 4 + RN  -->
+                    <property name="top_attach"><xsl:value-of select="$motorsNo + 3" /></property>  <!-- 3 + RN  -->
+                    <property name="bottom_attach"><xsl:value-of select="$motorsNo + 4" /></property>  <!-- 4 + RN  -->
                   </packing>
                 </child>
                 <child>
@@ -84,8 +84,8 @@ Int window
                   <packing>
                     <property name="left_attach">4</property>
                     <property name="right_attach">6</property>
-                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property>  <!-- 3 + RN  -->
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 4" /></property> <!-- 4 + RN  -->
+                    <property name="top_attach"><xsl:value-of select="$motorsNo + 3" /></property>  <!-- 3 + RN  -->
+                    <property name="bottom_attach"><xsl:value-of select="$motorsNo + 4" /></property> <!-- 4 + RN  -->
                   </packing>
                 </child>
                 <child>
@@ -100,8 +100,8 @@ Int window
                   <packing>
                     <property name="left_attach">4</property>
                     <property name="right_attach">5</property>
-                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 4" /></property>  <!-- 4 + RN  -->
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 5" /></property>  <!-- 5 + RN  -->
+                    <property name="top_attach"><xsl:value-of select="$motorsNo + 4" /></property>  <!-- 4 + RN  -->
+                    <property name="bottom_attach"><xsl:value-of select="$motorsNo + 5" /></property>  <!-- 5 + RN  -->
                   </packing>
                 </child>
                 <child>
@@ -121,7 +121,7 @@ Int window
                     <property name="left_attach">3</property>
                     <property name="right_attach">4</property>
                     <property name="top_attach">2</property>
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 2" /></property> <!-- 2 + RN  -->
+                    <property name="bottom_attach"><xsl:value-of select="$motorsNo + 2" /></property> <!-- 2 + RN  -->
                     <property name="x_options"></property>
                     <property name="x_padding">5</property>
                   </packing>
@@ -138,8 +138,8 @@ Int window
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="right_attach">3</property>
-                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property>  <!-- 3 + RN  -->
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 4" /></property>  <!-- 4 + RN  -->
+                    <property name="top_attach"><xsl:value-of select="$motorsNo + 3" /></property>  <!-- 3 + RN  -->
+                    <property name="bottom_attach"><xsl:value-of select="$motorsNo + 4" /></property>  <!-- 4 + RN  -->
                   </packing>
                 </child>
                 <child>
@@ -154,8 +154,8 @@ Int window
                   <packing>
                     <property name="left_attach">5</property>
                     <property name="right_attach">6</property>
-                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 4" /></property> <!-- 4 + RN  -->
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 5" /></property> <!-- 5 + RN  -->
+                    <property name="top_attach"><xsl:value-of select="$motorsNo + 4" /></property> <!-- 4 + RN  -->
+                    <property name="bottom_attach"><xsl:value-of select="$motorsNo + 5" /></property> <!-- 5 + RN  -->
                   </packing>
                 </child>
                 <child>
@@ -166,8 +166,8 @@ Int window
                   <packing>
                     <property name="left_attach">7</property>
                     <property name="right_attach">9</property>
-                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 4" /></property>  <!-- 4 + RN  -->
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 5" /></property>  <!-- 5 + RN  -->
+                    <property name="top_attach"><xsl:value-of select="$motorsNo + 4" /></property>  <!-- 4 + RN  -->
+                    <property name="bottom_attach"><xsl:value-of select="$motorsNo + 5" /></property>  <!-- 5 + RN  -->
                   </packing>
                 </child>
                 <child>
@@ -225,7 +225,7 @@ Int window
                   <packing>
                     <property name="left_attach">4</property>
                     <property name="right_attach">5</property>
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property> <!-- 3 + RN -->
+                    <property name="bottom_attach"><xsl:value-of select="$motorsNo + 3" /></property> <!-- 3 + RN -->
                   </packing>
                 </child>
                 <child>
@@ -234,8 +234,8 @@ Int window
                   </widget>
                   <packing>
                     <property name="right_attach">9</property>
-                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 2" /></property> <!-- 2 + RN -->
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property> <!-- 3 + RN -->
+                    <property name="top_attach"><xsl:value-of select="$motorsNo + 2" /></property> <!-- 2 + RN -->
+                    <property name="bottom_attach"><xsl:value-of select="$motorsNo + 3" /></property> <!-- 3 + RN -->
                   </packing>
                 </child>
                 <child>
@@ -245,7 +245,7 @@ Int window
                   <packing>
                     <property name="left_attach">6</property>
                     <property name="right_attach">7</property>
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property> <!-- 3 + RN -->
+                    <property name="bottom_attach"><xsl:value-of select="$motorsNo + 3" /></property> <!-- 3 + RN -->
                   </packing>
                 </child>
                 <child>
@@ -255,12 +255,12 @@ Int window
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property> <!-- 3 + RN -->
+                    <property name="bottom_attach"><xsl:value-of select="$motorsNo + 3" /></property> <!-- 3 + RN -->
                   </packing>
                 </child>
 <!-- call loop for each position -->
 		<xsl:call-template name="for.each.edp.irp6.int">
-    		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+    		<xsl:with-param name="motorsNo" select="$motorsNo"/>
     		<xsl:with-param name="fullName" select="$fullName"/>
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template>
@@ -280,10 +280,10 @@ Int window
 
 <!-- irp6 int repeatable part -->
 <xsl:template name="for.each.edp.irp6.int">
-<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="motorsNo"/>
 <xsl:param name="fullName"/>
 <xsl:param name="i"/>
-	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:if test="$i &lt;= $motorsNo">
                 <child>
                   <widget class="GtkLabel" id="label5"><xsl:attribute name="id">label<xsl:value-of select="$i"/></xsl:attribute> <!-- RI --> 
                     <property name="visible">True</property>
@@ -376,19 +376,19 @@ Int window
                   <packing>
                     <property name="left_attach">6</property>
                     <property name="right_attach">7</property>
-                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property>
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 4" /></property>
+                    <property name="top_attach"><xsl:value-of select="$motorsNo + 3" /></property>
+                    <property name="bottom_attach"><xsl:value-of select="$motorsNo + 4" /></property>
                   </packing>
                 </child>
        </xsl:if>
 	<!-- for loop --> 
-       <xsl:if test="$i &lt;= $irp6EDPNumber">
+       <xsl:if test="$i &lt;= $motorsNo">
           <xsl:call-template name="for.each.edp.irp6.int">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
-              <xsl:with-param name="irp6EDPNumber">
-                  <xsl:value-of select="$irp6EDPNumber"/>
+              <xsl:with-param name="motorsNo">
+                  <xsl:value-of select="$motorsNo"/>
               </xsl:with-param>
               <xsl:with-param name="fullName">
                   <xsl:value-of select="$fullName"/>

@@ -10,7 +10,7 @@ Axis_ts window
 <xsl:template name="irp6.axis.ts" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
-<xsl:variable name="irp6EDPNumber" select="axis_ts"/>
+<xsl:variable name="axis_ts" select="axis_ts"/>
 <xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../glade/{$name}_axis_ts.glade">
 <glade-interface>
   <widget class="GtkWindow" id="window">
@@ -27,7 +27,7 @@ Axis_ts window
             <child>
               <widget class="GtkTable" id="table1">
                 <property name="visible">True</property>
-                <property name="n_rows"><xsl:value-of select="$irp6EDPNumber + 4" /></property> <!-- 4 + RN  -->
+                <property name="n_rows"><xsl:value-of select="$axis_ts + 4" /></property> <!-- 4 + RN  -->
                 <property name="n_columns">6</property>
                 <child>
                   <placeholder/>
@@ -68,8 +68,8 @@ Axis_ts window
                   <packing>
                     <property name="left_attach">5</property>
                     <property name="right_attach">6</property>
-                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property>  <!-- 3 + RN  -->
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 4" /></property> <!-- 4 + RN  -->
+                    <property name="top_attach"><xsl:value-of select="$axis_ts + 3" /></property>  <!-- 3 + RN  -->
+                    <property name="bottom_attach"><xsl:value-of select="$axis_ts + 4" /></property> <!-- 4 + RN  -->
                   </packing>
                 </child>
                 <child>
@@ -89,7 +89,7 @@ Axis_ts window
                     <property name="left_attach">3</property>
                     <property name="right_attach">4</property>
                     <property name="top_attach">2</property>
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 2" /></property> <!-- 2 + RN  -->
+                    <property name="bottom_attach"><xsl:value-of select="$axis_ts + 2" /></property> <!-- 2 + RN  -->
                     <property name="x_options"></property>
                     <property name="x_padding">5</property>
                   </packing>
@@ -106,8 +106,8 @@ Axis_ts window
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="right_attach">3</property>
-                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property>  <!-- 3 + RN  -->
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 4" /></property>  <!-- 4 + RN  -->
+                    <property name="top_attach"><xsl:value-of select="$axis_ts + 3" /></property>  <!-- 3 + RN  -->
+                    <property name="bottom_attach"><xsl:value-of select="$axis_ts + 4" /></property>  <!-- 4 + RN  -->
                   </packing>
                 </child>
                 <child>
@@ -155,7 +155,7 @@ Axis_ts window
                   <packing>
                     <property name="left_attach">4</property>
                     <property name="right_attach">5</property>
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property> <!-- 3 + RN -->
+                    <property name="bottom_attach"><xsl:value-of select="$axis_ts + 3" /></property> <!-- 3 + RN -->
                   </packing>
                 </child>
                 <child>
@@ -164,8 +164,8 @@ Axis_ts window
                   </widget>
                   <packing>
                     <property name="right_attach">6</property>
-                    <property name="top_attach"><xsl:value-of select="$irp6EDPNumber + 2" /></property> <!-- 2 + RN -->
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property> <!-- 3 + RN -->
+                    <property name="top_attach"><xsl:value-of select="$axis_ts + 2" /></property> <!-- 2 + RN -->
+                    <property name="bottom_attach"><xsl:value-of select="$axis_ts + 3" /></property> <!-- 3 + RN -->
                   </packing>
                 </child>
                 <child>
@@ -175,12 +175,12 @@ Axis_ts window
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="bottom_attach"><xsl:value-of select="$irp6EDPNumber + 3" /></property> <!-- 3 + RN -->
+                    <property name="bottom_attach"><xsl:value-of select="$axis_ts + 3" /></property> <!-- 3 + RN -->
                   </packing>
                 </child>
 <!-- call loop for each position -->
 		<xsl:call-template name="for.each.edp.irp6.axis.ts">
-    			<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
+    			<xsl:with-param name="axis_ts" select="$axis_ts"/>
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template>
 <!-- end tags -->
@@ -199,9 +199,9 @@ Axis_ts window
 
 <!-- irp6 axis_xyz repeatable part -->
 <xsl:template name="for.each.edp.irp6.axis.ts">
-<xsl:param name="irp6EDPNumber"/>
+<xsl:param name="axis_ts"/>
 <xsl:param name="i"/>
-	<xsl:if test="$i &lt;= $irp6EDPNumber">
+	<xsl:if test="$i &lt;= $axis_ts">
                 <child>
                   <widget class="GtkLabel" id="label5"><xsl:attribute name="id">label<xsl:value-of select="$i"/></xsl:attribute> <!-- RI --> 
                     <property name="visible">True</property>
@@ -254,13 +254,13 @@ Axis_ts window
                 </child>
        </xsl:if>
 	<!-- for loop --> 
-       <xsl:if test="$i &lt;= $irp6EDPNumber">
+       <xsl:if test="$i &lt;= $axis_ts">
           <xsl:call-template name="for.each.edp.irp6.axis.ts">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
-              <xsl:with-param name="irp6EDPNumber">
-                  <xsl:value-of select="$irp6EDPNumber"/>
+              <xsl:with-param name="axis_ts">
+                  <xsl:value-of select="$axis_ts"/>
               </xsl:with-param>
           </xsl:call-template>
        </xsl:if>

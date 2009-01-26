@@ -1,7 +1,7 @@
 <irp6ontrack>
 	<name>irp6o</name>
 	<fullName>ontrack</fullName>
-	<irp6EDPNumber>8</irp6EDPNumber>
+	<motorsNo>8</motorsNo>
 	<axis_xyz>9</axis_xyz>
 	<axis_ts>7</axis_ts>
 	<euler_xyz>8</euler_xyz>

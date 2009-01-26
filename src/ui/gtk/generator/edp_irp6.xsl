@@ -10,7 +10,7 @@ EDP IRp6 RCSC window
 <xsl:template name="irp6.edp.main" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
-<xsl:variable name="irp6EDPNumber" select="irp6EDPNumber"/>
+<xsl:variable name="motorsNo" select="motorsNo"/>
 <xsl:variable name="axis_xyz" select="axis_xyz"/>
 <xsl:variable name="axis_ts" select="axis_ts"/>
 <xsl:variable name="euler_xyz" select="euler_xyz"/>
@@ -24,9 +24,9 @@ EDP IRp6 RCSC window
         <child>
           <widget class="GtkComboBox" id="combobox1">
             <property name="visible">True</property>
-            <property name="items" translatable="yes">1. <xsl:choose><xsl:when test="$irp6EDPNumber &gt; 0">Servo algorithm</xsl:when><xsl:otherwise></xsl:otherwise> - </xsl:choose> 
-2. <xsl:choose><xsl:when test="$irp6EDPNumber &gt; 0">Internal</xsl:when><xsl:otherwise> - </xsl:otherwise></xsl:choose>
-3. <xsl:choose><xsl:when test="$irp6EDPNumber &gt; 0">Increment</xsl:when><xsl:otherwise> - </xsl:otherwise></xsl:choose>
+            <property name="items" translatable="yes">1. <xsl:choose><xsl:when test="$motorsNo &gt; 0">Servo algorithm</xsl:when><xsl:otherwise></xsl:otherwise> - </xsl:choose> 
+2. <xsl:choose><xsl:when test="$motorsNo &gt; 0">Internal</xsl:when><xsl:otherwise> - </xsl:otherwise></xsl:choose>
+3. <xsl:choose><xsl:when test="$motorsNo &gt; 0">Increment</xsl:when><xsl:otherwise> - </xsl:otherwise></xsl:choose>
 4. <xsl:choose><xsl:when test="$axis_xyz &gt; 0">XYZ Angle Axis</xsl:when><xsl:otherwise> - </xsl:otherwise></xsl:choose> 
 5. <xsl:choose><xsl:when test="$euler_xyz &gt; 0">XYZ Euler ZYZ</xsl:when><xsl:otherwise> - </xsl:otherwise></xsl:choose>  
 6. <xsl:choose><xsl:when test="$axis_ts &gt; 0">TS Angle Axis</xsl:when><xsl:otherwise> - </xsl:otherwise></xsl:choose>
