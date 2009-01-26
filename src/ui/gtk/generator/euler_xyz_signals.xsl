@@ -67,7 +67,10 @@ extern "C"
     				<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
     				<xsl:with-param name="name" select="$name"/>
 					<xsl:with-param name="i" select="1"/>
- 				</xsl:call-template><xsl:text>				
+ 				</xsl:call-template><xsl:text>		
+ 				
+				for (int i = 0; i &lt; </xsl:text><xsl:value-of select="$irp6EDPNumber" /><xsl:text>; i++)
+				</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[i] = </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[i];		
 			}
 			else
 			{
@@ -90,6 +93,7 @@ extern "C"
 
 		if (robot</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
 		{
+			if (state.is_synchronised) {
 	</xsl:text><xsl:call-template name="irp6.euler.xyz.repeat.signals.cc.8">
     		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
     		<xsl:with-param name="name" select="$name"/>
@@ -97,7 +101,7 @@ extern "C"
  		</xsl:call-template><xsl:text>    
 			
 			robot->move_xyz_euler_zyz(</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos);
-			
+			}
 			 if (state.is_synchronised) {
 	</xsl:text><xsl:call-template name="irp6.euler.xyz.repeat.signals.cc.9">
     		<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>

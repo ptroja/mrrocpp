@@ -86,7 +86,7 @@ extern "C"
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>    
 
-		if (robot</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
+		if (state.is_synchronised)
 		{
 	</xsl:text><xsl:call-template name="irp6.euler.ts.repeat.signals.cc.8">
     		<xsl:with-param name="irp6EDPNumber" select="$euler_ts"/>

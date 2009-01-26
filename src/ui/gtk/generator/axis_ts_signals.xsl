@@ -118,8 +118,13 @@ extern "C"
 			tool_vector[3] = tool_vector[3]/wl;
 			tool_vector[4] = tool_vector[4]/wl;
 			tool_vector[5] = tool_vector[5]/wl;
-
 		}
+		
+		for(int i=3; i&lt;</xsl:text><xsl:value-of select="$axis_ts" /><xsl:text>; i++)
+		{
+				tool_vector[i] *= tool_vector[6];
+		}
+		
 			robot->set_tool_xyz_angle_axis(tool_vector);		
 		}
 		on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_ts (button, userdata);

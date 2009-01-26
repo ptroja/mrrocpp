@@ -101,6 +101,12 @@ extern "C"
 			<xsl:with-param name="name" select="$name"/>
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>    
+ 		
+ 			// przepisanie parametrow ruchu do postaci rozkazu w formie XYZ_ANGLE_AXIS
+			for(int i=3; i&lt;</xsl:text><xsl:value-of select="$irp6EDPNumber" /><xsl:text>; i++)
+			{
+					</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[i] *= </xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[6];
+			}
 			
 			robot->move_xyz_angle_axis(</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos);
 			

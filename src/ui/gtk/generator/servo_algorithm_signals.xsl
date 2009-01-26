@@ -59,8 +59,8 @@ extern "C"
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>
 
-	//	if (robot->ecp->get_EDP_pid()!=-1)
-		//	{
+		if (robot</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
+		{
 				if (state.is_synchronised)  // Czy robot jest zsynchronizowany?
 				{
 					if (!(robot->get_servo_algorithm(servo_alg_no, servo_par_no))) // Odczyt polozenia walow silnikow
@@ -74,7 +74,7 @@ extern "C"
 				{
 					std::cout &lt;&lt; "I am not synchronized yet!!!" &lt;&lt; std::endl;
 				}
-			//}
+			}
 	}
 	
 	void on_set_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_servo (GtkButton* button, gpointer userdata)

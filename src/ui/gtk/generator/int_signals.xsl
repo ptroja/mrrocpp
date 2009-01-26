@@ -67,7 +67,10 @@ extern "C"
     				<xsl:with-param name="irp6EDPNumber" select="$irp6EDPNumber"/>
     				<xsl:with-param name="name" select="$name"/>
 					<xsl:with-param name="i" select="1"/>
- 				</xsl:call-template><xsl:text>				
+ 				</xsl:call-template><xsl:text>		
+ 				
+ 				for (int i = 0; i &lt; </xsl:text><xsl:value-of select="$irp6EDPNumber" /><xsl:text>; i++)
+				</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[i] = </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[i];		
 			}
 			else
 			{
