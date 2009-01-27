@@ -40,7 +40,7 @@ EDP IRp6 RCSC window
           </packing>
         </child>
         <child>
-          <widget class="GtkScrolledWindow" id="scrolledwindow1">
+          <widget class="GtkScrolledWindow" id="scrolledwindow_edp">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -56,6 +56,14 @@ EDP IRp6 RCSC window
       </widget>
     </child>
   </widget>
+
+<xsl:call-template name="irp6.axis.ts" />
+<xsl:call-template name="irp6.axis.xyz" />
+<xsl:call-template name="irp6.euler.ts" />
+<xsl:call-template name="irp6.euler.xyz" />
+<xsl:call-template name="irp6.inc" />
+<xsl:call-template name="irp6.int" />
+<xsl:call-template name="irp6.servo" />
 </glade-interface>
 </xsl:document>
 <xsl:call-template name="irp6.edp.main.signals.cc" />

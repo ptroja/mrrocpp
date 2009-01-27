@@ -11,27 +11,7 @@ Inc window callback signals
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="motorsNo" select="motorsNo"/>
-<xsl:document method="text" href="../signals/{$name}_int_widget.cc">
-
-
 <xsl:text>
-#include &lt;iostream&gt;
-#include &lt;gtk/gtk.h&gt;
-#include &lt;glib.h&gt;
-#include "ui_model.h"
-#include "</xsl:text><xsl:value-of select="$name" /><xsl:text>_int_widget.h"
-
-char buf[32];
-gchar buffer[500];
-double </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[6]; // pozycja biezaca
-double </xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[6]; // pozycja zadana
-
-edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_int::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_int(ui_widget_entry &amp;entry) 
-{
-}
-
-static edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_int *int_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
-
 
 extern "C"
 {
@@ -149,26 +129,6 @@ extern "C"
  		</xsl:call-template><xsl:text>  
  	}
 	
-	
-	void ui_widget_init(ui_widget_entry &amp;entry) 
-	{
-		int_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = new edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_int(entry);
-		fprintf(stderr, "widget %s loaded\n", __FILE__);
-		
-		GtkButton * anyButton;
-		gpointer userdata = &amp; entry;
-		on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (anyButton, userdata);
-	}
-
-	void ui_widget_unload(void) 
-	{
-		if (int_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>) 
-		{
-			delete int_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
-		}
-		fprintf(stderr, "widget %s unloaded\n", __FILE__);
-	}
-	
 </xsl:text>
 		<xsl:call-template name="for.each.edp.irp6.int.signals.cc">
     			<xsl:with-param name="motorsNo" select="$motorsNo"/>
@@ -178,8 +138,6 @@ extern "C"
 <xsl:text>
 }
 </xsl:text>
-</xsl:document>
-<xsl:call-template name="irp6.int.main.signals.h"/>
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
@@ -434,39 +392,6 @@ extern "C"
               </xsl:with-param>
           </xsl:call-template>
        </xsl:if>
-</xsl:template>
-
-
-
-<!-- signals handling file .h-->
-<xsl:template name="irp6.int.main.signals.h" match="*[substring(name(),1,4)='irp6']">
-<xsl:variable name="name" select="name"/>
-<xsl:document method="text" href="../signals/{$name}_int_widget.h">
-
-<xsl:text>
-#ifndef __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_INT
-#define __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_INT
-
-#include &lt;iostream&gt;
-#include &lt;vector&gt;
-
-#include &lt;gtk/gtkbuilder.h&gt;
-#include &lt;gtk/gtk.h&gt;
-#include "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_uimodule.h"
-
-class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_int
-{
-	public:
-
-		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_int(ui_widget_entry &amp;entry);
-		~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_int();
-
-
-};
-
-#endif /* __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_INT */
-</xsl:text>
-</xsl:document>
 </xsl:template>
 
 </xsl:stylesheet>

@@ -11,27 +11,7 @@ Euler XYZ window callback signals
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="euler_xyz" select="euler_xyz"/>
-<xsl:document method="text" href="../signals/{$name}_euler_xyz_widget.cc">
-
-
 <xsl:text>
-#include &lt;iostream&gt;
-#include &lt;gtk/gtk.h&gt;
-#include &lt;glib.h&gt;
-#include "ui_model.h"
-#include "</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_xyz_widget.h"
-
-char buf[32];
-gchar buffer[500];
-double </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[</xsl:text><xsl:value-of select="$euler_xyz" /><xsl:text>]; // pozycja biezaca
-double </xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="$euler_xyz" /><xsl:text>]; // pozycja zadana
-
-edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_xyz::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_xyz(ui_widget_entry &amp;entry) 
-{
-}
-
-static edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_xyz *euler_xyz_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
-
 
 extern "C"
 {
@@ -60,7 +40,7 @@ extern "C"
 		{
 			if (state.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				if (!( robot->read_xyz_euler_zyz(</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos))) // Odczyt polozenia walow silnikow
+				if (!( robot->read_xyz_euler_zyz(</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos_e))) // Odczyt polozenia walow silnikow
 					printf("Blad w read motors\n");
 					
 </xsl:text><xsl:call-template name="irp6.euler.xyz.repeat.signals.cc.7">
@@ -70,7 +50,7 @@ extern "C"
  				</xsl:call-template><xsl:text>		
  				
 				for (int i = 0; i &lt; </xsl:text><xsl:value-of select="$euler_xyz" /><xsl:text>; i++)
-				</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[i] = </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[i];		
+				</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos_e[i] = </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos_e[i];		
 			}
 			else
 			{
@@ -100,7 +80,7 @@ extern "C"
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>    
 			
-			robot->move_xyz_euler_zyz(</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos);
+			robot->move_xyz_euler_zyz(</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos_e);
 			}
 			 if (state.is_synchronised) {
 	</xsl:text><xsl:call-template name="irp6.euler.xyz.repeat.signals.cc.9">
@@ -150,26 +130,6 @@ extern "C"
  		</xsl:call-template><xsl:text>  
  	}
 	
-	
-	void ui_widget_init(ui_widget_entry &amp;entry) 
-	{
-		euler_xyz_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = new edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_xyz(entry);
-		fprintf(stderr, "widget %s loaded\n", __FILE__);
-		
-		GtkButton * anyButton;
-		gpointer userdata = &amp; entry;
-		on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_euler_xyz (anyButton, userdata);
-	}
-
-	void ui_widget_unload(void) 
-	{
-		if (euler_xyz_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>) 
-		{
-			delete euler_xyz_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
-		}
-		fprintf(stderr, "widget %s unloaded\n", __FILE__);
-	}
-	
 </xsl:text>
 		<xsl:call-template name="for.each.edp.irp6.euler.xyz.signals.cc">
     			<xsl:with-param name="euler_xyz" select="$euler_xyz"/>
@@ -179,8 +139,6 @@ extern "C"
 <xsl:text>
 }
 </xsl:text>
-</xsl:document>
-<xsl:call-template name="irp6.euler.xyz.main.signals.h"/>
 </xsl:template>
 
 <!-- irp6 axis xyz handling signals .cc repeatable part -->
@@ -318,9 +276,9 @@ extern "C"
 <xsl:param name="name"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $euler_xyz">
-	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
+	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos_e[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
 					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>, buf);
-					</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>];				
+					</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos_e[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos_e[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>];				
 </xsl:text>
        </xsl:if>
 	<!-- for loop --> 
@@ -345,7 +303,7 @@ extern "C"
 <xsl:param name="name"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $euler_xyz">
-	<xsl:text>			</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>);
+	<xsl:text>			</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos_e[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>);
 	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
@@ -370,7 +328,7 @@ extern "C"
 <xsl:param name="name"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $euler_xyz">
-	<xsl:text>			gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>, </xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
+	<xsl:text>			gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>, </xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos_e[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
 	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
@@ -435,39 +393,6 @@ extern "C"
               </xsl:with-param>
           </xsl:call-template>
        </xsl:if>
-</xsl:template>
-
-
-
-<!-- signals handling file .h-->
-<xsl:template name="irp6.euler.xyz.main.signals.h" match="*[substring(name(),1,4)='irp6']">
-<xsl:variable name="name" select="name"/>
-<xsl:document method="text" href="../signals/{$name}_euler_xyz_widget.h">
-
-<xsl:text>
-#ifndef __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_EULER_XYZ
-#define __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_EULER_XYZ
-
-#include &lt;iostream&gt;
-#include &lt;vector&gt;
-
-#include &lt;gtk/gtkbuilder.h&gt;
-#include &lt;gtk/gtk.h&gt;
-#include "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_uimodule.h"
-
-class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_xyz
-{
-	public:
-
-		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_xyz(ui_widget_entry &amp;entry);
-		~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_xyz();
-
-
-};
-
-#endif /* __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_EULER_XYZ */
-</xsl:text>
-</xsl:document>
 </xsl:template>
 
 </xsl:stylesheet>

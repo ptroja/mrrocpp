@@ -12,9 +12,7 @@ Inc window
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="motorsNo" select="motorsNo"/>
-<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../glade/{$name}_inc.glade">
-<glade-interface>
-  <widget class="GtkWindow" id="window">
+  <widget class="GtkWindow" id="window_inc">
     <child>
       <widget class="GtkScrolledWindow" id="scrolledwindow1">
         <property name="visible">True</property>
@@ -284,9 +282,6 @@ Inc window
       </widget>
     </child>
   </widget>
-</glade-interface>
-</xsl:document>
-<xsl:call-template name="irp6.inc.main.signals.cc" />
 </xsl:template>
 
 

@@ -11,9 +11,7 @@ Axis_ts window
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="axis_ts" select="axis_ts"/>
-<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../glade/{$name}_axis_ts.glade">
-<glade-interface>
-  <widget class="GtkWindow" id="window">
+  <widget class="GtkWindow" id="window_axis_ts">
     <child>
       <widget class="GtkScrolledWindow" id="scrolledwindow1">
         <property name="visible">True</property>
@@ -191,9 +189,6 @@ Axis_ts window
       </widget>
     </child>
   </widget>
-</glade-interface>
-</xsl:document>
-<xsl:call-template name="irp6.axis.ts.main.signals.cc" />
 </xsl:template>
 
 

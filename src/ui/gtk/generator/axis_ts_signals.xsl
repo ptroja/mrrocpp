@@ -1,37 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 MRROC++ GUI generator
-Axis_ts window callback signals
+Axis TS window callback signals
  -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output method="text"/>
+
 
 <!-- signals handling file .cc-->
 <xsl:template name="irp6.axis.ts.main.signals.cc" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="axis_ts" select="axis_ts"/>
-<xsl:document method="text" href="../signals/{$name}_axis_ts_widget.cc">
-
 
 <xsl:text>
-#include &lt;iostream&gt;
-#include &lt;gtk/gtk.h&gt;
-#include &lt;glib.h&gt;
-#include "ui_model.h"
-#include "</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_ts_widget.h"
-
-char buf[32];
-double tool_vector[</xsl:text><xsl:value-of select="$axis_ts" /><xsl:text>];
-double alfa, kx, ky, kz;
-double wl; double l_eps = 0;
-
-edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_ts::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_ts(ui_widget_entry &amp;entry) 
-{
-}
-
-static edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_ts *axis_ts_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
-
 
 extern "C"
 {
@@ -60,22 +42,22 @@ extern "C"
 		{
 			if (state.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				if (!( robot->read_tool_xyz_angle_axis(tool_vector))) // Odczyt polozenia walow silnikow
+				if (!( robot->read_tool_xyz_angle_axis(tool_vector_a))) // Odczyt polozenia walow silnikow
 					printf("Blad w read external\n");
 					
-				alfa = sqrt(tool_vector[3]*tool_vector[3]
-				+tool_vector[4]*tool_vector[4]
-				+tool_vector[5]*tool_vector[5]);
+				alfa = sqrt(tool_vector_a[3]*tool_vector_a[3]
+				+tool_vector_a[4]*tool_vector_a[4]
+				+tool_vector_a[5]*tool_vector_a[5]);
 				
 				if (alfa==0){
-					tool_vector[3] = -1;
-					tool_vector[4] = 0;
-					tool_vector[5] = 0;
+					tool_vector_a[3] = -1;
+					tool_vector_a[4] = 0;
+					tool_vector_a[5] = 0;
 				}
 				else{
-					tool_vector[3] = tool_vector[3]/alfa;
-					tool_vector[4] = tool_vector[4]/alfa;
-					tool_vector[5] = tool_vector[5]/alfa;
+					tool_vector_a[3] = tool_vector_a[3]/alfa;
+					tool_vector_a[4] = tool_vector_a[4]/alfa;
+					tool_vector_a[5] = tool_vector_a[5]/alfa;
 				}
 					
 </xsl:text><xsl:call-template name="irp6.axis.ts.repeat.signals.cc.7">
@@ -111,49 +93,28 @@ extern "C"
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>    
  		
- 		wl = sqrt(tool_vector[3]*tool_vector[3] + tool_vector[4]*tool_vector[4] + tool_vector[5]*tool_vector[5]);
+ 		wl = sqrt(tool_vector_a[3]*tool_vector_a[3] + tool_vector_a[4]*tool_vector_a[4] + tool_vector_a[5]*tool_vector_a[5]);
 
 		if((wl &gt; 1 + l_eps) || (wl &lt; 1 - l_eps))
 		{
-			tool_vector[3] = tool_vector[3]/wl;
-			tool_vector[4] = tool_vector[4]/wl;
-			tool_vector[5] = tool_vector[5]/wl;
+			tool_vector_a[3] = tool_vector_a[3]/wl;
+			tool_vector_a[4] = tool_vector_a[4]/wl;
+			tool_vector_a[5] = tool_vector_a[5]/wl;
 		}
 		
 		for(int i=3; i&lt;</xsl:text><xsl:value-of select="$axis_ts" /><xsl:text>; i++)
 		{
-				tool_vector[i] *= tool_vector[6];
+				tool_vector_a[i] *= tool_vector_a[6];
 		}
 		
-			robot->set_tool_xyz_angle_axis(tool_vector);		
+			robot->set_tool_xyz_angle_axis(tool_vector_a);		
 		}
 		on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_ts (button, userdata);
 
 	}
-	
-	
-	void ui_widget_init(ui_widget_entry &amp;entry) 
-	{
-		axis_ts_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = new edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_ts(entry);
-		fprintf(stderr, "widget %s loaded\n", __FILE__);
-		
-		GtkButton * anyButton;
-		gpointer userdata = &amp; entry;
-		on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_ts (anyButton, userdata);
-	}
 
-	void ui_widget_unload(void) 
-	{
-		if (axis_ts_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>) 
-		{
-			delete axis_ts_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
-		}
-		fprintf(stderr, "widget %s unloaded\n", __FILE__);
-	}
 }
 </xsl:text>
-</xsl:document>
-<xsl:call-template name="irp6.axis.ts.main.signals.h"/>
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
@@ -206,12 +167,12 @@ extern "C"
 	<xsl:if test="$i &lt;= $axis_ts">
 	<xsl:choose>
 		<xsl:when test="$i &lt;= 3">
-	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", tool_vector[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
+	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", tool_vector_a[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
 					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>, buf);
 </xsl:text>
  		</xsl:when>
  		<xsl:when test="$i &gt;= 8">
-	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", tool_vector[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
+	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", tool_vector_a[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
 					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>, buf);
 </xsl:text>
  		</xsl:when>
@@ -221,7 +182,7 @@ extern "C"
 </xsl:text>
  		</xsl:when>
  		<xsl:otherwise>
-<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", tool_vector[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
+<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", tool_vector_a[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
 					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>, buf);
 </xsl:text>
  		</xsl:otherwise>		
@@ -250,7 +211,7 @@ extern "C"
 <xsl:param name="name"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $axis_ts">
-	<xsl:text>			tool_vector[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>);
+	<xsl:text>			tool_vector_a[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>);
 	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
@@ -292,39 +253,6 @@ extern "C"
               </xsl:with-param>
           </xsl:call-template>
        </xsl:if>
-</xsl:template>
-
-<!-- signals handling file .h-->
-<xsl:template name="irp6.axis.ts.main.signals.h" match="*[substring(name(),1,4)='irp6']">
-<xsl:variable name="name" select="name"/>
-<xsl:document method="text" href="../signals/{$name}_axis_ts_widget.h">
-
-
-
-<xsl:text>
-#ifndef __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_AXIS_TS
-#define __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_AXIS_TS
-
-#include &lt;iostream&gt;
-#include &lt;vector&gt;
-
-#include &lt;gtk/gtkbuilder.h&gt;
-#include &lt;gtk/gtk.h&gt;
-#include "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_uimodule.h"
-
-
-class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_ts
-{
-	public:
-
-		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_ts(ui_widget_entry &amp;entry);
-		~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_ts();
-};
-
-#endif /* __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_AXIS_TS */
-</xsl:text>
-
-</xsl:document>
 </xsl:template>
 
 </xsl:stylesheet>

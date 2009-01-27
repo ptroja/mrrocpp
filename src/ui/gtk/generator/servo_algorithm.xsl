@@ -11,9 +11,7 @@ Servo_algorithm window
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="motorsNo" select="motorsNo"/>
-<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../glade/{$name}_servo_algorithm.glade">
-<glade-interface>
-  <widget class="GtkWindow" id="window">
+  <widget class="GtkWindow" id="window_servo">
     <child>
       <widget class="GtkScrolledWindow" id="scrolledwindow1">
         <property name="visible">True</property>
@@ -233,9 +231,6 @@ Servo_algorithm window
       </widget>
     </child>
   </widget>
-</glade-interface>
-</xsl:document>
-<xsl:call-template name="irp6.servo.main.signals.cc" />
 </xsl:template>
 
 
