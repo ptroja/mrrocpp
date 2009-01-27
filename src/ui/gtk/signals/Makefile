@@ -1,8 +1,4 @@
 ui_modules = festival.so \
-	irp6m_axis_xyz.so irp6m_inc.so irp6m_int.so irp6m_euler_xyz.so irp6m_axis_ts.so irp6m_euler_ts.so irp6m_servo_algorithm.so \
-	irp6o_axis_xyz.so irp6o_inc.so irp6o_int.so irp6o_euler_xyz.so irp6o_axis_ts.so irp6o_euler_ts.so irp6o_servo_algorithm.so \
-	irp6p_axis_xyz.so irp6p_inc.so irp6p_int.so irp6p_euler_xyz.so irp6p_axis_ts.so irp6p_euler_ts.so irp6p_servo_algorithm.so \
-	conveyor_inc.so conveyor_int.so conveyor_servo_algorithm.so \
 	edp_irp6m.so edp_irp6o.so edp_irp6p.so edp_conveyor.so 
 
 HOMEDIR = ../../../..
@@ -44,9 +40,6 @@ edp_conveyor.so: edp_conveyor_uimodule.o \
 festival.so: festival_uimodule.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $<
 
-%.so: %_widget.o
-	$(CXX) ${LDFLAGS} -shared -o $@ -I $(HEADERSDIR) -I. $^
-	
 clean:
 	rm -f *.o *.so
 
