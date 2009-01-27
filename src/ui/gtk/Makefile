@@ -37,9 +37,6 @@ ui.gtk: main.o xmlconfigurator.o \
 %.xml: %.glade
 	gtk-builder-convert $< $@
 	
-%.so: %_widget.o $(MRROCOBJ)
-	$(CXX) ${LDFLAGS} -shared -o $@ -I $(HEADERSDIR) -I. $(MRROCOBJ) $<
-	
 %.so: %_uimodule.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $<
 	
