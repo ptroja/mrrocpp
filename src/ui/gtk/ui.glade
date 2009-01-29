@@ -365,7 +365,7 @@
               <widget class="GtkSpinButton" id="numeric_input_spinbutton">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="adjustment">0 0 100 1 10 10</property>
+                <property name="adjustment">0 0 100 1 10 0</property>
               </widget>
               <packing>
                 <property name="position">1</property>
