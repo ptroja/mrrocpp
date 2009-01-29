@@ -140,6 +140,10 @@ ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program
 	}
 
 	content = gtk_bin_get_child(GTK_BIN(this->window));
+	if (!content) {
+		std::cerr << "gtk_bin_get_child() for main window in module "
+					<< ui_def << " failed" << std::endl;
+	}
 	gtk_widget_unparent(content);
 
 	hbox = GTK_HBOX(gtk_hbox_new(FALSE, 5));
@@ -158,8 +162,12 @@ ui_config_entry::ui_config_entry(ui_config_entry_type _type, const char *program
 	gtk_box_pack_start_defaults(GTK_BOX(hbox), GTK_WIDGET(tabbutton));
 	gtk_widget_show_all(GTK_WIDGET(hbox));
 
-	gtk_notebook_append_page(getNotebook(), this->content, GTK_WIDGET(this->hbox));
-	gtk_notebook_set_tab_reorderable(getNotebook(), this->content, TRUE);
+	if (gtk_notebook_append_page(getNotebook(), this->content, GTK_WIDGET(this->hbox)) == -1) {
+		std::cerr << "gtk_notebook_append_page() for module "
+			<< ui_def << " failed" << std::endl;
+	} else {
+		gtk_notebook_set_tab_reorderable(getNotebook(), this->content, TRUE);
+	}
 
 	this->show_page(FALSE);
 }
