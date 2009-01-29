@@ -74,8 +74,8 @@ extern "C"
 			}
 			else
 			{
-				// Wygaszanie elementow przy niezsynchronizowanym robocie
-				std::cout &lt;&lt; "nie jestem zsynchronizowany" &lt;&lt; std::endl;
+				// Robot is not synchronized
+				std::cout &lt;&lt; "Robot is not synchronized" &lt;&lt; std::endl;
 			}
 		}
 	

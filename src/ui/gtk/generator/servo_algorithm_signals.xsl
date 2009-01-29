@@ -72,7 +72,7 @@ extern "C"
  						</xsl:call-template><xsl:text>					
 				} else
 				{
-					std::cout &lt;&lt; "I am not synchronized yet!!!" &lt;&lt; std::endl;
+					std::cout &lt;&lt; "Robot is not synchronized" &lt;&lt; std::endl;
 				}
 			}
 	}

@@ -22,6 +22,7 @@ Axis_ts window callback signals
 #include "</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_ts_widget.h"
 
 char buf[32];
+double tmp;
 double tool_vector[</xsl:text><xsl:value-of select="$axis_ts" /><xsl:text>];
 double alfa, kx, ky, kz;
 double wl; double l_eps = 0;
@@ -86,8 +87,8 @@ extern "C"
 			}
 			else
 			{
-				// Wygaszanie elementow przy niezsynchronizowanym robocie
-				std::cout &lt;&lt; "nie jestem zsynchronizowany" &lt;&lt; std::endl;
+				// Robot is not synchronized
+				std::cout &lt;&lt; "Robot is not synchronized" &lt;&lt; std::endl;
 			}
 		}
 	
@@ -120,9 +121,11 @@ extern "C"
 			tool_vector[5] = tool_vector[5]/wl;
 		}
 		
+		tmp = tool_vector[6];
+		
 		for(int i=3; i&lt;</xsl:text><xsl:value-of select="$axis_ts" /><xsl:text>; i++)
 		{
-				tool_vector[i] *= tool_vector[6];
+				tool_vector[i] *= tmp;
 		}
 		
 			robot->set_tool_xyz_angle_axis(tool_vector);		
