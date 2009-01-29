@@ -35,7 +35,7 @@ ui.gtk: main.o xmlconfigurator.o \
 	$(CXX) -Wl,-rpath `pwd`/../../../lib -g -o $@ $^ ${LDFLAGS}
 
 %.xml: %.glade
-	gtk-builder-convert $< $@
+	gtk-builder-convert $< $@ 
 	
 %.so: %_uimodule.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $<
