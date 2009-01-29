@@ -11,7 +11,30 @@ Servo_algorithm window callback signals
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="motorsNo" select="motorsNo"/>
+<xsl:document method="text" href="../signals/{$name}_servo_algorithm_widget.cc">
+
+
 <xsl:text>
+#include &lt;iostream&gt;
+#include &lt;gtk/gtk.h&gt;
+#include &lt;glib.h&gt;
+#include "ui_model.h"
+#include "</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm_widget.h"
+
+BYTE servo_alg_no[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
+BYTE servo_par_no[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
+	
+gint servo_alg_no_tmp [</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
+BYTE servo_alg_no_output[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
+gint servo_par_no_tmp [</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
+BYTE servo_par_no_output[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
+
+edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm(ui_widget_entry &amp;entry) 
+{
+}
+
+static edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm *servo_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
+
 
 extern "C"
 {
@@ -87,8 +110,28 @@ extern "C"
 	}
  		
 	}
+	
+	
+	void ui_widget_init(ui_widget_entry &amp;entry) 
+	{
+		servo_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = new edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm(entry);
+		fprintf(stderr, "widget %s loaded\n", __FILE__);
+	}
+
+	void ui_widget_unload(void) 
+	{
+		if (servo_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>) 
+		{
+			delete servo_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
+		}
+		fprintf(stderr, "widget %s unloaded\n", __FILE__);
+	}
 }
 </xsl:text>
+</xsl:document>
+
+
+<xsl:call-template name="irp6.servo.main.signals.h"/>
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
@@ -199,6 +242,40 @@ extern "C"
               </xsl:with-param>
           </xsl:call-template>
        </xsl:if>
+</xsl:template>
+
+<!-- signals handling file .h-->
+<xsl:template name="irp6.servo.main.signals.h" match="*[substring(name(),1,4)='irp6']">
+<xsl:variable name="name" select="name"/>
+<xsl:document method="text" href="../signals/{$name}_servo_algorithm_widget.h">
+
+
+
+<xsl:text>
+#ifndef __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_SERVO_ALGORITHM
+#define __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_SERVO_ALGORITHM
+
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+#include &lt;gtk/gtkbuilder.h&gt;
+#include &lt;gtk/gtk.h&gt;
+#include "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_uimodule.h"
+
+class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm
+{
+	public:
+
+		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm(ui_widget_entry &amp;entry);
+		~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_servo_algorithm();
+
+
+};
+
+#endif /* __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_SERVO_ALGORITHM */
+</xsl:text>
+
+</xsl:document>
 </xsl:template>
 
 </xsl:stylesheet>

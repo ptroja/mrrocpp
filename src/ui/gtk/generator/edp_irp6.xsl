@@ -22,6 +22,9 @@ EDP IRp6 RCSC window
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
         <child>
+          <widget class="GtkHBox" id="hbox1">
+            <property name="visible">True</property>
+            <child>
           <widget class="GtkComboBox" id="combobox1">
             <property name="visible">True</property>
             <property name="items" translatable="yes">1. <xsl:choose><xsl:when test="$motorsNo &gt; 0">Servo algorithm</xsl:when><xsl:otherwise></xsl:otherwise> - </xsl:choose> 
@@ -34,13 +37,30 @@ EDP IRp6 RCSC window
 			</property>
 			<signal name="changed" handler="on_combobox1_changed_{$fullName}"/>		
           </widget>
+        </child>
+            <child>
+              <widget class="GtkButton" id="button_synchronize">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">  Synchronize  </property>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_clicked_synchronize_{$fullName}"/>	
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="pack_type">GTK_PACK_END</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </widget>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkScrolledWindow" id="scrolledwindow_edp">
+          <widget class="GtkScrolledWindow" id="scrolledwindow1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -56,14 +76,6 @@ EDP IRp6 RCSC window
       </widget>
     </child>
   </widget>
-
-<xsl:call-template name="irp6.axis.ts" />
-<xsl:call-template name="irp6.axis.xyz" />
-<xsl:call-template name="irp6.euler.ts" />
-<xsl:call-template name="irp6.euler.xyz" />
-<xsl:call-template name="irp6.inc" />
-<xsl:call-template name="irp6.int" />
-<xsl:call-template name="irp6.servo" />
 </glade-interface>
 </xsl:document>
 <xsl:call-template name="irp6.edp.main.signals.cc" />

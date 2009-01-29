@@ -11,7 +11,25 @@ Euler_ts window callback signals
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="euler_ts" select="euler_ts"/>
+<xsl:document method="text" href="../signals/{$name}_euler_ts_widget.cc">
+
+
 <xsl:text>
+#include &lt;iostream&gt;
+#include &lt;gtk/gtk.h&gt;
+#include &lt;glib.h&gt;
+#include "ui_model.h"
+#include "</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_ts_widget.h"
+
+char buf[32];
+double tool_vector[</xsl:text><xsl:value-of select="$euler_ts" /><xsl:text>];
+
+edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_ts::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_ts(ui_widget_entry &amp;entry) 
+{
+}
+
+static edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_ts *euler_ts_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
+
 
 extern "C"
 {
@@ -40,7 +58,7 @@ extern "C"
 		{
 			if (state.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				if (!( robot->read_tool_xyz_euler_zyz(tool_vector_e))) // Odczyt polozenia walow silnikow
+				if (!( robot->read_tool_xyz_euler_zyz(tool_vector))) // Odczyt polozenia walow silnikow
 					printf("Blad w read external\n");
 					
 </xsl:text><xsl:call-template name="irp6.euler.ts.repeat.signals.cc.7">
@@ -76,13 +94,31 @@ extern "C"
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>    
 			
-			robot->set_tool_xyz_euler_zyz(tool_vector_e);
+			robot->set_tool_xyz_euler_zyz(tool_vector);
 		}
 		on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_euler_ts (button, userdata);
 
 	}
+	
+	
+	void ui_widget_init(ui_widget_entry &amp;entry) 
+	{
+		euler_ts_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = new edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_ts(entry);
+		fprintf(stderr, "widget %s loaded\n", __FILE__);
+	}
+
+	void ui_widget_unload(void) 
+	{
+		if (euler_ts_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>) 
+		{
+			delete euler_ts_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
+		}
+		fprintf(stderr, "widget %s unloaded\n", __FILE__);
+	}
 }
 </xsl:text>
+</xsl:document>
+<xsl:call-template name="irp6.euler.ts.main.signals.h"/>
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
@@ -133,7 +169,7 @@ extern "C"
 <xsl:param name="name"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $euler_ts">
-	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", tool_vector_e[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
+	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", tool_vector[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
 					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>, buf);		
 </xsl:text>
        </xsl:if>
@@ -159,7 +195,7 @@ extern "C"
 <xsl:param name="name"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $euler_ts">
-	<xsl:text>			tool_vector_e[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>);
+	<xsl:text>			tool_vector[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>);
 	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
@@ -200,6 +236,40 @@ extern "C"
               </xsl:with-param>
           </xsl:call-template>
        </xsl:if>
+</xsl:template>
+
+<!-- signals handling file .h-->
+<xsl:template name="irp6.euler.ts.main.signals.h" match="*[substring(name(),1,4)='irp6']">
+<xsl:variable name="name" select="name"/>
+<xsl:document method="text" href="../signals/{$name}_euler_ts_widget.h">
+
+
+
+<xsl:text>
+#ifndef __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_EULER_TS
+#define __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_EULER_TS
+
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+#include &lt;gtk/gtkbuilder.h&gt;
+#include &lt;gtk/gtk.h&gt;
+#include "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_uimodule.h"
+
+class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_ts
+{
+	public:
+
+		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_ts(ui_widget_entry &amp;entry);
+		~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_euler_ts();
+
+
+};
+
+#endif /* __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_EULER_TS */
+</xsl:text>
+
+</xsl:document>
 </xsl:template>
 
 </xsl:stylesheet>

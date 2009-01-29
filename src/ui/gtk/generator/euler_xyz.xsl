@@ -11,7 +11,9 @@ Euler_xyz window
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="euler_xyz" select="euler_xyz"/>
-  <widget class="GtkWindow" id="window_euler_xyz">
+<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../glade/{$name}_euler_xyz.glade">
+<glade-interface>
+  <widget class="GtkWindow" id="window">
     <child>
       <widget class="GtkScrolledWindow" id="scrolledwindow1">
         <property name="visible">True</property>
@@ -281,6 +283,9 @@ Euler_xyz window
       </widget>
     </child>
   </widget>
+</glade-interface>
+</xsl:document>
+<xsl:call-template name="irp6.euler.xyz.main.signals.cc" />
 </xsl:template>
 
 
