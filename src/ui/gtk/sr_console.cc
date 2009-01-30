@@ -122,7 +122,7 @@ void *sr_thread(void* arg)
 			break;
 		} else if (rcvid < -1) {
 			// ie. MESSIP_MSG_DISCONNECT
-			fprintf(stderr, "ie. MESSIP_MSG_DISCONNECT\n");
+			fprintf(stderr, "messip_receive() -> %d, ie. MESSIP_MSG_DISCONNECT\n", rcvid);
 			continue;
 		}
 

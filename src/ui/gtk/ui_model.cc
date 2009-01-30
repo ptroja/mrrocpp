@@ -1,9 +1,14 @@
 #include <gtk/gtk.h>
 #include <gtkmm.h>
 
+#include <exception>
+
 #include "ui_model.h"
 
 #include "lib/configurator.h"
+
+ui_model * ui_model::pointerToTheSingletonInstance = NULL;
+pthread_mutex_t ui_model::mtx = PTHREAD_MUTEX_INITIALIZER;
 
 ui_config_entry & ui_model::getNodeByPath(GtkTreePath *path) {
 	gint depth = gtk_tree_path_get_depth(path);
@@ -20,8 +25,50 @@ ui_config_entry & ui_model::getNodeByPath(GtkTreePath *path) {
 
 ui_model& ui_model::instance()
 {
-	static ui_model * pointerToTheSingletonInstance = new ui_model;
+	printf("pthread_mutex_lock()..."); fflush(stdout);
+	// lock the guard mutex
+	if (pthread_mutex_lock(&mtx) != 0) {
+		perror("ui_model::pthread_mutex_lock()");
+		throw std::exception();
+	}
+
+	// create instance if necessary
+	if (!pointerToTheSingletonInstance) {
+		printf("XXX\n");
+		pointerToTheSingletonInstance = new ui_model;
+	}
+
+	// unlock the guard mutex
+	if (pthread_mutex_unlock(&mtx) != 0) {
+		perror("ui_model::pthread_mutex_lock()");
+		throw std::exception();
+	}
+	printf("done\n");
+
 	return *pointerToTheSingletonInstance;
+}
+
+void ui_model::freeInstance()
+{
+	// TODO: guard with mutex or not...?
+//	// lock the guard mutex
+////	printf("pthread_mutex_lock()..."); fflush(stdout);
+//	if (pthread_mutex_lock(&mtx) != 0) {
+//		perror("ui_model::pthread_mutex_lock()");
+//		return;
+//	}
+
+	if (pointerToTheSingletonInstance) {
+		delete pointerToTheSingletonInstance;
+		pointerToTheSingletonInstance = NULL;
+	}
+
+//	// unlock the guard mutex
+//	if (pthread_mutex_unlock(&mtx) != 0) {
+//		perror("ui_model::pthread_mutex_lock()");
+//		return;
+//	}
+//	printf("done\n");
 }
 
 void ui_model::clear(void)
@@ -94,16 +141,18 @@ ui_model::~ui_model()
 	g_object_unref(store);
 	g_object_unref(G_OBJECT(builder));
 
-	if (config) {
-		delete config;
+	if (ecp_report) {
+		// TODO: fix this, bug in messip?
+//		delete ecp_report;
 	}
 
 	if (ui_report) {
-		delete ui_report;
+		// TODO: fix this, bug in messip?
+//		delete ui_report;
 	}
 
-	if (ecp_report) {
-			delete ecp_report;
+	if (config) {
+		delete config;
 	}
 }
 

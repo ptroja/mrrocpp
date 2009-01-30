@@ -4,6 +4,8 @@
 #include <gtk/gtk.h>
 #include <gtkmm.h>
 
+#include <pthread.h>
+
 #include "ui_config_entry.h"
 
 #include "lib/configurator.h"
@@ -14,6 +16,7 @@ class ui_model
 {
 	public:
 		static ui_model& instance();
+		static void freeInstance();
 
 		void clear(void);
 
@@ -77,6 +80,9 @@ class ui_model
 		configurator & getConfigurator(void) const;
 
 	private:
+		static pthread_mutex_t mtx;
+		static ui_model * pointerToTheSingletonInstance;
+
 		ui_model();
 
 		ui_config_entry root_entry;

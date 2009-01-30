@@ -128,6 +128,11 @@ int main(int argc, char *argv[])
 
 
 	gtk_main();
+
+	printf("main() exiting...\n");
+
+	ui_model::freeInstance();
+
 	gdk_threads_leave();
 
 	return 0;
