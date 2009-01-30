@@ -21,12 +21,14 @@ ecp_t_tb_irp6ot::~ecp_t_tb_irp6ot(){
 
 // methods for ECP template to redefine in concrete classes
 void ecp_t_tb_irp6ot::task_initialization(void){
-	//initialization of robot
-	ecp_m_robot=new ecp_irp6_on_track_robot(*this);
+
+	sensor_m[SENSOR_CVFRADIA] = new ecp_mp_cvfradia_sensor(SENSOR_CVFRADIA,"[vsp_cvfradia]", *this,	sizeof(sensor_image_t::sensor_union_t::fradia_t));
+	sensor_m[SENSOR_CVFRADIA]->configure_sensor();
+
+	ecp_m_robot=new ecp_irp6_on_track_robot(*this);				//initialization of robot
 	sgen=new ecp_smooth_generator(*this, true);
 	befgen=new bias_edp_force_generator(*this);
-	//gripper approach constructor (task&, no_of_steps)
-	gagen=new ecp_tff_gripper_approach_generator (*this, 8);
+	gagen=new ecp_tff_gripper_approach_generator (*this, 8);	//gripper approach constructor (task&, no_of_steps)
 	go_st = new ecp_sub_task_gripper_opening(*this);
 	sleepgen=new ecp_sleep_generator(*this);
 	sr_ecp_msg->message("ECP loaded tb");
