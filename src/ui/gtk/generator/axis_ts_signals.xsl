@@ -57,11 +57,11 @@ extern "C"
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>
  		
-		if (robot</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
+		if (robot_</xsl:text><xsl:value-of select="$name" /><xsl:text></xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
 		{
 			if (state.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				if (!( robot->read_tool_xyz_angle_axis(tool_vector))) // Odczyt polozenia walow silnikow
+				if (!( robot_</xsl:text><xsl:value-of select="$name" /><xsl:text>->read_tool_xyz_angle_axis(tool_vector))) // Odczyt polozenia walow silnikow
 					printf("Blad w read external\n");
 					
 				alfa = sqrt(tool_vector[3]*tool_vector[3]
@@ -128,7 +128,7 @@ extern "C"
 				tool_vector[i] *= tmp;
 		}
 		
-			robot->set_tool_xyz_angle_axis(tool_vector);		
+			robot_</xsl:text><xsl:value-of select="$name" /><xsl:text>->set_tool_xyz_angle_axis(tool_vector);		
 		}
 		on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_ts (button, userdata);
 
