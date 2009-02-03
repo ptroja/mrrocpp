@@ -53,10 +53,10 @@ ecp_robot::~ecp_robot(void)
     	if (kill(EDP_MASTER_Pid, SIGTERM) == -1) {
     		perror("kill()");
     	} else {
-    		int status;
-    		if (waitpid(EDP_MASTER_Pid, &status, 0) == -1) {
-    			perror("waitpid()");
-    		}
+//    		int status;
+//    		if (waitpid(EDP_MASTER_Pid, &status, 0) == -1) {
+//    			perror("waitpid()");
+//    		}
     	}
     }
 }
