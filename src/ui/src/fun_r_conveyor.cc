@@ -526,6 +526,10 @@ EDP_conveyor_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 	// dla robota conveyor
 	if (ui_state.conveyor.edp.state == 0)
 	{
+		
+		ui_state.conveyor.edp.state = 0;
+		ui_state.conveyor.edp.is_synchronised = false;
+		
 		strcpy(tmp_string, "/dev/name/global/");
 		strcat(tmp_string, ui_state.conveyor.edp.hardware_busy_attach_point);
 
@@ -540,11 +544,14 @@ EDP_conveyor_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 		} else {
 			ui_state.conveyor.edp.node_nr = config->return_node_number(ui_state.conveyor.edp.node_name);
 
+			ui_state.conveyor.edp.state = 1;
+			
 			ui_robot.conveyor = new ui_conveyor_robot(*config, ui_msg.all_ecp);
 			ui_state.conveyor.edp.pid = ui_robot.conveyor->get_EDP_pid();
 
 			if (ui_state.conveyor.edp.pid<0)
 			{
+				ui_state.conveyor.edp.state = 0;
 				fprintf( stderr, "EDP spawn failed: %s\n", strerror( errno ));
 				delete ui_robot.conveyor;
 			} else {  // jesli spawn sie powiodl
@@ -564,7 +571,7 @@ EDP_conveyor_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 				controller_state_t robot_controller_initial_state_tmp;
 				ui_robot.conveyor->get_controller_state(&robot_controller_initial_state_tmp);
 
-				ui_state.conveyor.edp.state = 1; // edp wlaczone reader czeka na start
+				//ui_state.conveyor.edp.state = 1; // edp wlaczone reader czeka na start
 				ui_state.conveyor.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
 			}
 		}

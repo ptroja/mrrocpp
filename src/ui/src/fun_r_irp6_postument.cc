@@ -2222,6 +2222,10 @@ EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 	// dla robota irp6_postument
 	if (ui_state.irp6_postument.edp.state == 0)
 	{
+		
+		ui_state.irp6_postument.edp.state = 0;
+		ui_state.irp6_postument.edp.is_synchronised = false;
+		
 		sprintf(tmp_string, "/dev/name/global/%s", ui_state.irp6_postument.edp.hardware_busy_attach_point);
 
 		sprintf(tmp2_string, "/dev/name/global/%s", ui_state.irp6_postument.edp.network_resourceman_attach_point);
@@ -2235,6 +2239,8 @@ EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 		} else {
 			ui_state.irp6_postument.edp.node_nr = config->return_node_number(ui_state.irp6_postument.edp.node_name);
 
+			ui_state.irp6_postument.edp.state = 1;
+			
 			ui_robot.irp6_postument = new ui_common_robot(
 					*config, ui_msg.all_ecp,
 					ROBOT_IRP6_POSTUMENT);
@@ -2243,6 +2249,7 @@ EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 
 			if (ui_state.irp6_postument.edp.pid<0)
 			{
+				ui_state.irp6_postument.edp.state = 0;
 				fprintf( stderr, "EDP spawn failed: %s\n", strerror( errno ));
 				delete ui_robot.irp6_postument;
 			} else {  // jesli spawn sie powiodl
@@ -2261,7 +2268,7 @@ EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 				controller_state_t robot_controller_initial_state_tmp;
 				ui_robot.irp6_postument->get_controller_state(&robot_controller_initial_state_tmp);
 
-				ui_state.irp6_postument.edp.state = 1; // edp wlaczone reader czeka na start
+				//ui_state.irp6_postument.edp.state = 1; // edp wlaczone reader czeka na start
 				ui_state.irp6_postument.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
 			}
 		}

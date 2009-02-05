@@ -263,6 +263,9 @@ EDP_speaker_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 	// dla robota speaker
 	if (ui_state.speaker.edp.state == 0)
 	{
+		ui_state.speaker.edp.state = 0;
+		ui_state.speaker.edp.is_synchronised = false;
+		
 		strcpy(tmp_string, "/dev/name/global/");
 		strcat(tmp_string, ui_state.speaker.edp.hardware_busy_attach_point);
 
@@ -280,11 +283,14 @@ EDP_speaker_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 
 			ui_state.speaker.edp.node_nr = config->return_node_number(ui_state.speaker.edp.node_name);
 
+			ui_state.speaker.edp.state = 1;
+			
 			ui_robot.speaker = new ui_speaker_robot(&ui_state.speaker.edp, *config, ui_msg.all_ecp);
 			ui_state.speaker.edp.pid = ui_robot.speaker->get_EDP_pid();
 
 			if (ui_state.speaker.edp.pid<0)
 			{
+				ui_state.speaker.edp.state = 0;
 				fprintf( stderr, "EDP spawn failed: %s\n", strerror( errno ));
 				delete ui_robot.speaker;
 			} else {  // jesli spawn sie powiodl
@@ -302,7 +308,7 @@ EDP_speaker_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 					};
 				*/
 
-				ui_state.speaker.edp.state=1;// edp wlaczone reader czeka na start
+				//ui_state.speaker.edp.state=1;// edp wlaczone reader czeka na start
 				ui_state.speaker.edp.is_synchronised=true;
 			}
 		}

@@ -2290,6 +2290,10 @@ EDP_irp6_on_track_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 	// dla robota irp6_on_track
 	if (ui_state.irp6_on_track.edp.state == 0)
 	{
+		
+		ui_state.irp6_on_track.edp.state = 0;
+		ui_state.irp6_on_track.edp.is_synchronised = false;
+		
 		sprintf(tmp_string,  "/dev/name/global/%s", ui_state.irp6_on_track.edp.hardware_busy_attach_point);
 
 		sprintf(tmp2_string, "/dev/name/global/%s", ui_state.irp6_on_track.edp.network_resourceman_attach_point);
@@ -2303,14 +2307,17 @@ EDP_irp6_on_track_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 		} else {
 			ui_state.irp6_on_track.edp.node_nr = config->return_node_number(ui_state.irp6_on_track.edp.node_name);
 
-			ui_robot.irp6_on_track = new ui_common_robot(
-					*config, ui_msg.all_ecp,
+			ui_state.irp6_on_track.edp.state = 1;
+			
+			ui_robot.irp6_on_track = new ui_common_robot
+				(*config, ui_msg.all_ecp,
 					ROBOT_IRP6_ON_TRACK);
 
 			ui_state.irp6_on_track.edp.pid = ui_robot.irp6_on_track->ecp->get_EDP_pid();
 
 			if (ui_state.irp6_on_track.edp.pid<0)
 			{
+				ui_state.irp6_on_track.edp.state = 0;
 				fprintf( stderr, "EDP spawn failed: %s\n", strerror( errno ));
 				delete ui_robot.irp6_on_track;
 			} else {  // jesli spawn sie powiodl
@@ -2329,7 +2336,7 @@ EDP_irp6_on_track_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 				controller_state_t robot_controller_initial_state_tmp;
 				ui_robot.irp6_on_track->get_controller_state(&robot_controller_initial_state_tmp);
 
-				ui_state.irp6_on_track.edp.state = 1; // edp wlaczone reader czeka na start
+				//ui_state.irp6_on_track.edp.state = 1; // edp wlaczone reader czeka na start
 
 				ui_state.irp6_on_track.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
 			}

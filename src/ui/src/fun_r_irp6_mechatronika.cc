@@ -171,6 +171,10 @@ EDP_irp6_mechatronika_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 	// dla robota irp6_mechatronika
 	if (ui_state.irp6_mechatronika.edp.state == 0)
 	{
+		
+		ui_state.irp6_mechatronika.edp.state = 0;
+		ui_state.irp6_mechatronika.edp.is_synchronised = false;
+		
 		strcpy(tmp_string, "/dev/name/global/");
 		strcat(tmp_string, ui_state.irp6_mechatronika.edp.hardware_busy_attach_point);
 
@@ -187,6 +191,8 @@ EDP_irp6_mechatronika_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 		} else {
 			ui_state.irp6_mechatronika.edp.node_nr = config->return_node_number(ui_state.irp6_mechatronika.edp.node_name);
 
+			ui_state.irp6_mechatronika.edp.state = 1;
+			
 			ui_robot.irp6_mechatronika = new ui_common_robot(
 					*config, ui_msg.all_ecp,
 					ROBOT_IRP6_MECHATRONIKA);
@@ -195,6 +201,7 @@ EDP_irp6_mechatronika_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 			if (ui_state.irp6_mechatronika.edp.pid<0)
 			{
+				ui_state.irp6_mechatronika.edp.state = 0;
 				fprintf( stderr, "EDP spawn failed: %s\n", strerror( errno ));
 				delete ui_robot.irp6_mechatronika;
 			} else {  // jesli spawn sie powiodl
@@ -215,7 +222,7 @@ EDP_irp6_mechatronika_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 				controller_state_t robot_controller_initial_state_tmp;
 				ui_robot.irp6_mechatronika->get_controller_state(&robot_controller_initial_state_tmp);
 
-				ui_state.irp6_mechatronika.edp.state = 1; // edp wlaczone reader czeka na start
+				//ui_state.irp6_mechatronika.edp.state = 1; // edp wlaczone reader czeka na start
 				ui_state.irp6_mechatronika.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
 			}
 		}
