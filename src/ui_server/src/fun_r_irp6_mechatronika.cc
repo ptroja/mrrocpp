@@ -48,11 +48,11 @@ double irp6m_desired_pos[6]; // pozycja zadana
 
 int
 process_control_window_irp6m_section_init (bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
-	bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
-	bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
+		bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
+		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
 {
 
-double* tmp = new double[2];
+	double* tmp = new double[2];
 	if (ui_state.irp6_mechatronika.edp.state<=0) {// edp wylaczone
 		tmp[0] = 4;
 		tmp[1] = 0;
@@ -147,8 +147,8 @@ int irp6m_read_post_angle_axis()
 				v[7] = irp6m_current_pos[6];
 
 				alfa = sqrt(irp6m_current_pos[3]*irp6m_current_pos[3]
-					+irp6m_current_pos[4]*irp6m_current_pos[4]
-					+irp6m_current_pos[5]*irp6m_current_pos[5]);
+				                                                   +irp6m_current_pos[4]*irp6m_current_pos[4]
+				                                                                                           +irp6m_current_pos[5]*irp6m_current_pos[5]);
 
 				kx = irp6m_current_pos[3]/alfa;
 				ky = irp6m_current_pos[4]/alfa;
@@ -239,8 +239,8 @@ int irp6m_read_tool_angle()
 					printf("Blad w read external\n");
 
 				alfa = sqrt(v[3]*v[3]
-					+v[4]*v[4]
-					+v[5]*v[5]);
+				                   +v[4]*v[4]
+				                           +v[5]*v[5]);
 
 				if (alfa==0){
 					kx = -1;
@@ -253,10 +253,10 @@ int irp6m_read_tool_angle()
 					kz = v[5]/alfa;
 				}
 
-			v[3] = kx;
-			v[4] = ky;
-			v[5] = kz;
-			v[6] = alfa;
+				v[3] = kx;
+				v[4] = ky;
+				v[5] = kz;
+				v[6] = alfa;
 			}
 
 			replySend(new Message('F','H','A',7,v,NULL));
@@ -293,8 +293,8 @@ int irp6m_move_to_synchro_position()
 			{// powrot do pozycji synchronizacji
 				for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
 				{
-			          irp6m_desired_pos[i] = 0.0;
-		        }
+					irp6m_desired_pos[i] = 0.0;
+				}
 			}
 			ui_robot.irp6_mechatronika->move_motors(irp6m_desired_pos);
 			irp6m_read_joints();
@@ -314,19 +314,19 @@ int irp6m_move_to_position0()
 		if (ui_state.irp6_mechatronika.edp.pid!=-1)
 		{
 
-		if (ui_state.irp6_mechatronika.edp.is_synchronised)
-		{// powrot do pozycji synchronizacji
-			for(int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
-			{
-				irp6m_desired_pos[i] = ui_state.irp6_mechatronika.edp.preset_position[0][i];
+			if (ui_state.irp6_mechatronika.edp.is_synchronised)
+			{// powrot do pozycji synchronizacji
+				for(int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
+				{
+					irp6m_desired_pos[i] = ui_state.irp6_mechatronika.edp.preset_position[0][i];
+				}
 			}
-		}
 
-		ui_robot.irp6_mechatronika->move_motors(irp6m_desired_pos);
-		irp6m_read_joints();
-		irp6m_read_post_angle_axis();
-		irp6m_read_post_euler();
-		irp6m_read_motors();
+			ui_robot.irp6_mechatronika->move_motors(irp6m_desired_pos);
+			irp6m_read_joints();
+			irp6m_read_post_angle_axis();
+			irp6m_read_post_euler();
+			irp6m_read_motors();
 		}
 	}
 	CATCH_SECTION_UI
@@ -339,18 +339,18 @@ int irp6m_move_to_position1()
 		if (ui_state.irp6_mechatronika.edp.pid!=-1)
 		{
 
-		if (ui_state.irp6_mechatronika.edp.is_synchronised)
-		{// powrot do pozycji synchronizacji
-			for(int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
-			{
-				irp6m_desired_pos[i] = ui_state.irp6_mechatronika.edp.preset_position[1][i];
+			if (ui_state.irp6_mechatronika.edp.is_synchronised)
+			{// powrot do pozycji synchronizacji
+				for(int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
+				{
+					irp6m_desired_pos[i] = ui_state.irp6_mechatronika.edp.preset_position[1][i];
+				}
 			}
-		}
-		ui_robot.irp6_mechatronika->move_motors(irp6m_desired_pos);
-		irp6m_read_joints();
-		irp6m_read_post_angle_axis();
-		irp6m_read_post_euler();
-		irp6m_read_motors();
+			ui_robot.irp6_mechatronika->move_motors(irp6m_desired_pos);
+			irp6m_read_joints();
+			irp6m_read_post_angle_axis();
+			irp6m_read_post_euler();
+			irp6m_read_motors();
 		}
 	}
 	CATCH_SECTION_UI
@@ -364,18 +364,18 @@ int irp6m_move_to_position2()
 		if (ui_state.irp6_mechatronika.edp.pid!=-1)
 		{
 
-		if (ui_state.irp6_mechatronika.edp.is_synchronised)
-		{// powrot do pozycji synchronizacji
-			for(int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
-			{
-				irp6m_desired_pos[i] = ui_state.irp6_mechatronika.edp.preset_position[2][i];
+			if (ui_state.irp6_mechatronika.edp.is_synchronised)
+			{// powrot do pozycji synchronizacji
+				for(int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
+				{
+					irp6m_desired_pos[i] = ui_state.irp6_mechatronika.edp.preset_position[2][i];
+				}
 			}
-		}
-		ui_robot.irp6_mechatronika->move_motors(irp6m_desired_pos);
-		irp6m_read_joints();
-		irp6m_read_post_angle_axis();
-		irp6m_read_post_euler();
-		irp6m_read_motors();
+			ui_robot.irp6_mechatronika->move_motors(irp6m_desired_pos);
+			irp6m_read_joints();
+			irp6m_read_post_angle_axis();
+			irp6m_read_post_euler();
+			irp6m_read_motors();
 		}
 	}
 	CATCH_SECTION_UI
@@ -392,8 +392,8 @@ int irp6m_inc_motion(double* v)
 			{
 				for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
 				{
-			          irp6m_desired_pos[i] = v[i];
-		        }
+					irp6m_desired_pos[i] = v[i];
+				}
 			}
 		}
 		ui_robot.irp6_mechatronika->move_motors(irp6m_desired_pos);
@@ -408,8 +408,8 @@ int irp6m_inc_motion(double* v)
 }
 int EDP_irp6_mechatronika_synchronise()
 {
-set_ui_state_notification(UI_N_SYNCHRONISATION);
-try
+	set_ui_state_notification(UI_N_SYNCHRONISATION);
+	try
 	{
 		if ((ui_state.irp6_mechatronika.edp.state > 0)&&(ui_state.irp6_mechatronika.edp.is_synchronised == false))
 		{
@@ -433,8 +433,8 @@ int irp6m_int_motion(double* v)
 			{
 				for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
 				{
-			          irp6m_desired_pos[i] = v[i];
-		        }
+					irp6m_desired_pos[i] = v[i];
+				}
 			}
 		}
 		ui_robot.irp6_mechatronika->move_joints(irp6m_desired_pos);
@@ -461,7 +461,7 @@ int irp6m_xyz_euler_zyz_motion(double* v)
 			irp6m_read_post_euler();
 			irp6m_read_motors();
 		}
-    }
+	}
 	CATCH_SECTION_UI
 
 	return 0;
@@ -646,7 +646,7 @@ int irp6m_servo_algorithm_set(double* v)
 int EDP_irp6_mechatronika_create()
 {
 	set_ui_state_notification(UI_N_PROCESS_CREATION);
-short tmp;
+	short tmp;
 	char tmp_string[100];
 	char tmp2_string[100];
 
@@ -654,19 +654,22 @@ short tmp;
 	{
 		if (ui_state.irp6_mechatronika.edp.state == 0)
 		{
+			ui_state.irp6_mechatronika.edp.state = 0;
+			ui_state.irp6_mechatronika.edp.is_synchronised = false;
+
 			sprintf(tmp_string,  "/dev/name/global/%s", ui_state.irp6_mechatronika.edp.hardware_busy_attach_point);
 
 			sprintf(tmp2_string, "/dev/name/global/%s", ui_state.irp6_mechatronika.edp.network_resourceman_attach_point);
 
 			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
 			if((!(ui_state.irp6_mechatronika.edp.test_mode)) && ( access(tmp_string, R_OK)== 0  )
-				|| (access(tmp2_string, R_OK)== 0 )
+					|| (access(tmp2_string, R_OK)== 0 )
 			)
 			{
 				ui_msg.ui->message("edp_irp6_mechatronika already exists");
 			} else {
 				ui_state.irp6_mechatronika.edp.node_nr = config->return_node_number(ui_state.irp6_mechatronika.edp.node_name);
-
+				ui_state.irp6_mechatronika.edp.state = 1;
 				//ui_robot.irp6_mechatronika = new ui_irp6_mechatronika_robot(*config, ui_msg.all_ecp);
 				ui_robot.irp6_mechatronika = new ui_common_robot(*config, ui_msg.all_ecp,ROBOT_IRP6_MECHATRONIKA);
 
@@ -675,26 +678,27 @@ short tmp;
 
 				if (ui_state.irp6_mechatronika.edp.pid<0)
 				{
+					ui_state.irp6_mechatronika.edp.state = 0;
 					fprintf( stderr, "EDP spawn failed: %s\n", strerror( errno ));
 					delete ui_robot.irp6_mechatronika;
 				} else {  // jesli spawn sie powiodl
 
-					 tmp = 0;
-				 	// kilka sekund  (~1) na otworzenie urzadzenia
+					tmp = 0;
+					// kilka sekund  (~1) na otworzenie urzadzenia
 					while((ui_state.irp6_mechatronika.edp.reader_fd = name_open(ui_state.irp6_mechatronika.edp.network_reader_attach_point,
-						NAME_FLAG_ATTACH_GLOBAL))  < 0)
+							NAME_FLAG_ATTACH_GLOBAL))  < 0)
 						if((tmp++)<40) {
 							delay(50);
 						} else {
-						   perror("blad odwolania do READER_OT");
-						   break;
+							perror("blad odwolania do READER_OT");
+							break;
 						}
 
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					controller_state_t robot_controller_initial_state_tmp;
 					ui_robot.irp6_mechatronika->get_controller_state(&robot_controller_initial_state_tmp);
 
-					ui_state.irp6_mechatronika.edp.state = 1; // edp wlaczone reader czeka na start
+					//ui_state.irp6_mechatronika.edp.state = 1; // edp wlaczone reader czeka na start
 					replySend(new Message('F','J','A',0,NULL,NULL));
 					ui_state.irp6_mechatronika.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
 				}
@@ -702,7 +706,7 @@ short tmp;
 		}
 	}
 	CATCH_SECTION_UI
-manage_interface();
+	manage_interface();
 	return 0;
 }
 
@@ -733,18 +737,18 @@ int pulse_ecp_irp6_mechatronika()
 		if (ui_state.irp6_mechatronika.ecp.trigger_fd<0)
 		{
 
-			 short tmp = 0;
-		 	// kilka sekund  (~1) na otworzenie urzadzenia
+			short tmp = 0;
+			// kilka sekund  (~1) na otworzenie urzadzenia
 			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
 
-		 	ualarm( (useconds_t)( SIGALRM_TIMEOUT), 0);
+			ualarm( (useconds_t)( SIGALRM_TIMEOUT), 0);
 			while( (ui_state.irp6_mechatronika.ecp.trigger_fd = name_open(ui_state.irp6_mechatronika.ecp.network_trigger_attach_point, NAME_FLAG_ATTACH_GLOBAL)) < 0)
 			{
 				if (errno == EINTR) break;
 				if ((tmp++)<20)
 					delay(50);
 				else{
-				   perror("blad odwolania do ECP_TRIGGER\n");
+					perror("blad odwolania do ECP_TRIGGER\n");
 				};
 			}
 			// odwolanie alarmu
@@ -763,7 +767,7 @@ int pulse_ecp_irp6_mechatronika()
 			printf("W PULS ECP:  BLAD name_open \n");
 		}
 	}
-manage_interface();
+	manage_interface();
 	return 0;
 }
 
@@ -776,49 +780,49 @@ manage_interface_irp6m ()
 	switch (ui_state.irp6_mechatronika.edp.state)
 	{
 
-		case -1:
+	case -1:
 
-			replySend(new Message('F','M','A',0,NULL,NULL));
+	replySend(new Message('F','M','A',0,NULL,NULL));
+	break;
+	case 0:
+		replySend(new Message('F','M','B',0,NULL,NULL));
+
 		break;
-		case 0:
-			replySend(new Message('F','M','B',0,NULL,NULL));
-
-		break;
-		case 1:
-		case 2:
+	case 1:
+	case 2:
 
 
-			replySend(new Message('F','M','C',0,NULL,NULL));
-			//ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
-			// jesli robot jest zsynchronizowany
-			if (	ui_state.irp6_mechatronika.edp.is_synchronised)
+		replySend(new Message('F','M','C',0,NULL,NULL));
+		//ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
+		// jesli robot jest zsynchronizowany
+		if (	ui_state.irp6_mechatronika.edp.is_synchronised)
+		{
+			replySend(new Message('F','M','D',0,NULL,NULL));
+
+			switch (ui_state.mp.state)
 			{
-				replySend(new Message('F','M','D',0,NULL,NULL));
-
-				switch (ui_state.mp.state)
-				{
-					case UI_MP_NOT_PERMITED_TO_RUN:
-					case UI_MP_PERMITED_TO_RUN:
-						replySend(new Message('F','M','E',0,NULL,NULL));
-					break;
-					case UI_MP_WAITING_FOR_START_PULSE:
-						replySend(new Message('F','M','F',0,NULL,NULL));
-					break;
-					case UI_MP_TASK_RUNNING:
-					case UI_MP_TASK_PAUSED:
-							replySend(new Message('F','M','G',0,NULL,NULL));
-					break;
-					default:
-					break;
-				}
-
-			} else		// jesli robot jest niezsynchronizowany
-			{
-				replySend(new Message('F','M','H',0,NULL,NULL));
-				replySend(new Message('A','G','A',0,NULL,NULL));
+			case UI_MP_NOT_PERMITED_TO_RUN:
+			case UI_MP_PERMITED_TO_RUN:
+				replySend(new Message('F','M','E',0,NULL,NULL));
+				break;
+			case UI_MP_WAITING_FOR_START_PULSE:
+				replySend(new Message('F','M','F',0,NULL,NULL));
+				break;
+			case UI_MP_TASK_RUNNING:
+			case UI_MP_TASK_PAUSED:
+				replySend(new Message('F','M','G',0,NULL,NULL));
+				break;
+			default:
+				break;
 			}
+
+		} else		// jesli robot jest niezsynchronizowany
+		{
+			replySend(new Message('F','M','H',0,NULL,NULL));
+			replySend(new Message('A','G','A',0,NULL,NULL));
+		}
 		break;
-		default:
+	default:
 		break;
 
 	}
@@ -893,72 +897,72 @@ reload_irp6m_configuration ()
 		{
 			delete [] ui_state.irp6_mechatronika.ecp.network_trigger_attach_point;
 			ui_state.irp6_mechatronika.ecp.network_trigger_attach_point =config->return_attach_point_name
-				(configurator::CONFIG_SERVER, "trigger_attach_point", ui_state.irp6_mechatronika.ecp.section_name);
+			(configurator::CONFIG_SERVER, "trigger_attach_point", ui_state.irp6_mechatronika.ecp.section_name);
 
-	 		ui_state.irp6_mechatronika.ecp.pid = -1;
-	 		ui_state.irp6_mechatronika.ecp.trigger_fd = -1;
-	 	}
+			ui_state.irp6_mechatronika.ecp.pid = -1;
+			ui_state.irp6_mechatronika.ecp.trigger_fd = -1;
+		}
 
 		switch (ui_state.irp6_mechatronika.edp.state)
 		{
-			case -1:
-			case 0:
-				// ini_con->create_edp_irp6_mechatronika (ini_con->ui->edp_irp6_mechatronika_section);
+		case -1:
+		case 0:
+			// ini_con->create_edp_irp6_mechatronika (ini_con->ui->edp_irp6_mechatronika_section);
 
-				ui_state.irp6_mechatronika.edp.pid = -1;
-				ui_state.irp6_mechatronika.edp.reader_fd = -1;
-				ui_state.irp6_mechatronika.edp.state = 0;
+			ui_state.irp6_mechatronika.edp.pid = -1;
+			ui_state.irp6_mechatronika.edp.reader_fd = -1;
+			ui_state.irp6_mechatronika.edp.state = 0;
 
-				for (int i=0; i<3; i++)
+			for (int i=0; i<3; i++)
+			{
+				itoa( i, tmp2_string, 10 );
+
+				strcpy(tmp_string,"preset_position_");
+				strcat(tmp_string, tmp2_string);
+				if (config->exists(tmp_string, ui_state.irp6_mechatronika.edp.section_name))
 				{
-					itoa( i, tmp2_string, 10 );
-
-					strcpy(tmp_string,"preset_position_");
-					strcat(tmp_string, tmp2_string);
-					if (config->exists(tmp_string, ui_state.irp6_mechatronika.edp.section_name))
+					tmp1 = tmp = config->return_string_value(tmp_string, ui_state.irp6_mechatronika.edp.section_name);
+					for (int j=0; j<8; j++)
 					{
-						tmp1 = tmp = config->return_string_value(tmp_string, ui_state.irp6_mechatronika.edp.section_name);
-						 for (int j=0; j<8; j++)
-						{
-							ui_state.irp6_mechatronika.edp.preset_position[i][j] = strtod( tmp1, &tmp1 );
-						}
-						delete[] tmp;
-					} else {
-						 for (int j=0; j<7; j++)
-						{
-							ui_state.irp6_mechatronika.edp.preset_position[i][j] = 0.0;
-						}
+						ui_state.irp6_mechatronika.edp.preset_position[i][j] = strtod( tmp1, &tmp1 );
+					}
+					delete[] tmp;
+				} else {
+					for (int j=0; j<7; j++)
+					{
+						ui_state.irp6_mechatronika.edp.preset_position[i][j] = 0.0;
 					}
 				}
+			}
 
-				if (config->exists("test_mode", ui_state.irp6_mechatronika.edp.section_name))
-					ui_state.irp6_mechatronika.edp.test_mode = config->return_int_value("test_mode", ui_state.irp6_mechatronika.edp.section_name);
-				else
-					ui_state.irp6_mechatronika.edp.test_mode = 0;
+			if (config->exists("test_mode", ui_state.irp6_mechatronika.edp.section_name))
+				ui_state.irp6_mechatronika.edp.test_mode = config->return_int_value("test_mode", ui_state.irp6_mechatronika.edp.section_name);
+			else
+				ui_state.irp6_mechatronika.edp.test_mode = 0;
 
-				delete [] ui_state.irp6_mechatronika.edp.hardware_busy_attach_point;
-				ui_state.irp6_mechatronika.edp.hardware_busy_attach_point = config->return_string_value
-					("hardware_busy_attach_point", ui_state.irp6_mechatronika.edp.section_name);
+			delete [] ui_state.irp6_mechatronika.edp.hardware_busy_attach_point;
+			ui_state.irp6_mechatronika.edp.hardware_busy_attach_point = config->return_string_value
+			("hardware_busy_attach_point", ui_state.irp6_mechatronika.edp.section_name);
 
 
 
-				delete [] ui_state.irp6_mechatronika.edp.network_resourceman_attach_point;
-				ui_state.irp6_mechatronika.edp.network_resourceman_attach_point = config->return_attach_point_name
-					(configurator::CONFIG_SERVER, "resourceman_attach_point", ui_state.irp6_mechatronika.edp.section_name);
+			delete [] ui_state.irp6_mechatronika.edp.network_resourceman_attach_point;
+			ui_state.irp6_mechatronika.edp.network_resourceman_attach_point = config->return_attach_point_name
+			(configurator::CONFIG_SERVER, "resourceman_attach_point", ui_state.irp6_mechatronika.edp.section_name);
 
-				delete [] ui_state.irp6_mechatronika.edp.network_reader_attach_point;
-				ui_state.irp6_mechatronika.edp.network_reader_attach_point = config->return_attach_point_name
-					(configurator::CONFIG_SERVER, "reader_attach_point", ui_state.irp6_mechatronika.edp.section_name);
+			delete [] ui_state.irp6_mechatronika.edp.network_reader_attach_point;
+			ui_state.irp6_mechatronika.edp.network_reader_attach_point = config->return_attach_point_name
+			(configurator::CONFIG_SERVER, "reader_attach_point", ui_state.irp6_mechatronika.edp.section_name);
 
-				delete [] ui_state.irp6_mechatronika.edp.node_name;
-				ui_state.irp6_mechatronika.edp.node_name = config->return_string_value ("node_name", ui_state.irp6_mechatronika.edp.section_name);
+			delete [] ui_state.irp6_mechatronika.edp.node_name;
+			ui_state.irp6_mechatronika.edp.node_name = config->return_string_value ("node_name", ui_state.irp6_mechatronika.edp.section_name);
 
 			break;
-			case 1:
-			case 2:
-				// nie robi nic bo EDP pracuje
+		case 1:
+		case 2:
+			// nie robi nic bo EDP pracuje
 			break;
-			default:
+		default:
 			break;
 		}
 
@@ -966,15 +970,15 @@ reload_irp6m_configuration ()
 	{
 		switch (ui_state.irp6_mechatronika.edp.state)
 		{
-			case -1:
-			case 0:
-				ui_state.irp6_mechatronika.edp.state=-1;
+		case -1:
+		case 0:
+			ui_state.irp6_mechatronika.edp.state=-1;
 			break;
-			case 1:
-			case 2:
-				// nie robi nic bo EDP pracuje
+		case 1:
+		case 2:
+			// nie robi nic bo EDP pracuje
 			break;
-			default:
+		default:
 			break;
 		}
 	} // end irp6_mechatronika
