@@ -106,46 +106,9 @@ void ui_common_robot::execute_motion (void)
     // Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
     set_ui_state_notification(UI_N_COMMUNICATION);
 
-    //ecp->execute_motion();
+    ecp->execute_motion();
     
-    
-	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
-	/*
-	 // maskowanie sygnalu SIGTERM
-	 // w celu zapobierzenia przerwania komunikacji ECP z EDP pomiedzy SET a QUERY - usuniete
-
-	 sigset_t set;
-
-	 sigemptyset( &set );
-	 sigaddset( &set, SIGTERM );
-
-	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1)
-	 {
-	 printf ("blad w ECP procmask signal\n");
-	 }
-	 */
-	// komunikacja wlasciwa
-    ecp->EDP_command_and_reply_buffer.send(ecp->EDP_fd);
-	if (ecp->EDP_command_and_reply_buffer.reply_package.reply_type == ERROR) {
-		ecp->EDP_command_and_reply_buffer.query(ecp->EDP_fd);
-		throw ecp_robot::ECP_error (NON_FATAL_ERROR, EDP_ERROR);
-	}
-	ecp->EDP_command_and_reply_buffer.query(ecp->EDP_fd);
-
-	/*
-	 // odmaskowanie sygnalu SIGTERM
-
-	 sigemptyset( &set );
-
-	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1)
-	 {
-	 printf ("blad w ECP procmask signal\n");
-	 }
-	 */
-	if (ecp->EDP_command_and_reply_buffer.reply_package.reply_type == ERROR) {
-		throw ecp_robot::ECP_error (NON_FATAL_ERROR, EDP_ERROR);
-	}
-    
+  
     
 
 }

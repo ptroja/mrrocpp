@@ -69,7 +69,7 @@ void ecp_generator::Move()
                 the_robot->create_command();
             }
             // zlecenie ruchu SET oraz odczyt stanu robota GET
-            the_robot->execute_motion();
+            execute_motion();
 
             if (copy_edp_buffers_in_move)
             {
@@ -89,3 +89,14 @@ void ecp_generator::Move()
     while (next_step() &&
             (!communicate_with_mp_in_move || ecp_t.mp_buffer_receive_and_send()));
 }
+
+
+void ecp_generator::execute_motion(void)
+{
+	the_robot->execute_motion();
+}
+
+
+
+
+

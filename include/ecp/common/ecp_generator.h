@@ -21,6 +21,7 @@ class ecp_generator : public ecp_mp_generator {
 	public:
 	    // Zlecenie ruchu dla EDP
   		void Move(void);
+  		virtual void execute_motion (void);
 	
 		bool communicate_with_mp_in_move;
 		bool communicate_with_edp;
@@ -30,6 +31,7 @@ class ecp_generator : public ecp_mp_generator {
 		ecp_generator(ecp_task& _ecp_task);
 
 		virtual ~ecp_generator();
+		
 
 		bool is_EDP_error (ecp_robot& the_robot) const;
 

@@ -61,10 +61,12 @@ protected:
     // przez generator.next_step()
     // Funkcja generator.next_step() przygotowuje rozkazy dla EDP wypelniajac
 
-    ecp_buffer EDP_command_and_reply_buffer;
+  
 
 public:
 
+	  ecp_buffer EDP_command_and_reply_buffer;
+	
     bool synchronised; // Flaga synchronizacji robota (true - zsynchronizowany, false - nie)
 
     int number_of_servos;

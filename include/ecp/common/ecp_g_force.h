@@ -30,7 +30,7 @@ private:
     bool initial_weight_counted; // czy wyznaczono juz poczatkowy ciezar
     int catch_lag; // ilosc potwierdzen zmiany masy do zwrocenia false;
     int initial_catch_lag; // ilosc potwierdzen zmiany masy do zwrocenia false;
-    double catch_time; // czas przez ktory ma byc stwierdzona zmian ciê¿aru
+    double catch_time; // czas przez ktory ma byc stwierdzona zmian ciï¿½aru
     bool terminate_state_recognized; // wykryto warunek koncowy
 
     // wstawienie elementu do bufora cyklicznego
@@ -300,6 +300,7 @@ public:
 
     // konstruktor
     ecp_tff_nose_run_generator(ecp_task& _ecp_task, int step=0);
+    void execute_motion (void);
 
 	void configure_behaviour(BEHAVIOUR_SPECIFICATION x, BEHAVIOUR_SPECIFICATION y, BEHAVIOUR_SPECIFICATION z,
 		 BEHAVIOUR_SPECIFICATION ax, BEHAVIOUR_SPECIFICATION ay, BEHAVIOUR_SPECIFICATION az);
