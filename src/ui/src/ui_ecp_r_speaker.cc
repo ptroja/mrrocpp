@@ -27,11 +27,11 @@
 #include "lib/mathtr.h"
 
 // ---------------------------------------------------------------
-ui_speaker_robot::ui_speaker_robot(edp_state_def* _edp_state, configurator &_config, sr_ecp* sr_ecp_msg) :
+ui_speaker_robot::ui_speaker_robot(edp_state_def* _edp_state, configurator &_config, sr_ecp* _sr_ecp_msg) :
 	ecp_speaker_robot(_config, sr_ecp_msg)
 {
 	// Konstruktor klasy
-	EDP_command_and_reply_buffer.sr_ecp_msg = sr_ecp_msg;
+	sr_ecp_msg = _sr_ecp_msg;
 
 	synchronised = true;
 }

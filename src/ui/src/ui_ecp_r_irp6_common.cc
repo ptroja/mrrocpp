@@ -31,19 +31,19 @@
 #include "lib/mathtr.h"
 
 // ---------------------------------------------------------------
-ui_common_robot::ui_common_robot (configurator &_config, sr_ecp* sr_ecp_msg, ROBOT_ENUM _robot_name)
+ui_common_robot::ui_common_robot (configurator &_config, sr_ecp* _sr_ecp_msg, ROBOT_ENUM _robot_name)
 {
 
     switch (_robot_name)
     {
     case ROBOT_IRP6_ON_TRACK:
-        ecp = new ecp_irp6_on_track_robot(_config, sr_ecp_msg);
+        ecp = new ecp_irp6_on_track_robot(_config, _sr_ecp_msg);
         break;
     case ROBOT_IRP6_POSTUMENT:
-        ecp = new ecp_irp6_postument_robot(_config, sr_ecp_msg);
+        ecp = new ecp_irp6_postument_robot(_config, _sr_ecp_msg);
         break;
     case ROBOT_IRP6_MECHATRONIKA:
-        ecp = new ecp_irp6_mechatronika_robot(_config, sr_ecp_msg);
+        ecp = new ecp_irp6_mechatronika_robot(_config, _sr_ecp_msg);
         break;
 //    case ROBOT_SPEAKER:
 //    case ROBOT_CONVEYOR:
@@ -57,7 +57,7 @@ ui_common_robot::ui_common_robot (configurator &_config, sr_ecp* sr_ecp_msg, ROB
     assert(ecp);
 
     // Konstruktor klasy
-    ecp->EDP_command_and_reply_buffer.sr_ecp_msg = sr_ecp_msg;
+    ecp->sr_ecp_msg = _sr_ecp_msg;
     ecp->EDP_command_and_reply_buffer.instruction.rmodel.kinematic_model.kinematic_model_no = 0;
     ecp->EDP_command_and_reply_buffer.instruction.get_type = ARM_DV; // ARM
     ecp->EDP_command_and_reply_buffer.instruction.get_arm_type = MOTOR;

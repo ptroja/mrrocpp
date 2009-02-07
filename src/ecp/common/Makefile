@@ -10,7 +10,7 @@ include $(HOMEDIR)/common.mk
 
 ECPOBJ_SHARED = ECP_main_error.o ecp_mp_generator.o \
 		ecp_robot.o ecp_taught_in_pose.o \
-		ecp_buffer.o ecp_smooth_taught_in_pose.o \
+		ecp_smooth_taught_in_pose.o \
 		ecp_mp_sensor.o transmitter.o ecp_mp_task.o ecp_mp_robot.o \
 		../../mp/Trajectory.o
 ECPOBJ = $(ECPOBJ_SHARED) \

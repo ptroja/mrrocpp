@@ -1829,12 +1829,12 @@ void ecp_tff_nose_run_generator::execute_motion(void)
 	 }
 	 */
 	// komunikacja wlasciwa
-	the_robot->EDP_command_and_reply_buffer.send(the_robot->EDP_fd);
+	the_robot->send(the_robot->EDP_fd);
 	if (the_robot->EDP_command_and_reply_buffer.reply_package.reply_type == ERROR) {
-		the_robot->EDP_command_and_reply_buffer.query(the_robot->EDP_fd);
+		the_robot->query(the_robot->EDP_fd);
 		throw ecp_robot::ECP_error (NON_FATAL_ERROR, EDP_ERROR);
 	}
-	the_robot->EDP_command_and_reply_buffer.query(the_robot->EDP_fd);
+	the_robot->query(the_robot->EDP_fd);
 
 	/*
 	 // odmaskowanie sygnalu SIGTERM
