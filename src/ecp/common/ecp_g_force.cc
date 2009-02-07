@@ -1830,7 +1830,7 @@ void ecp_tff_nose_run_generator::execute_motion(void)
 	 */
 	// komunikacja wlasciwa
 	the_robot->send(the_robot->EDP_fd);
-	if (the_robot->EDP_command_and_reply_buffer.reply_package.reply_type == ERROR) {
+	if (the_robot->EDP_buffer.reply_package.reply_type == ERROR) {
 		the_robot->query(the_robot->EDP_fd);
 		throw ecp_robot::ECP_error (NON_FATAL_ERROR, EDP_ERROR);
 	}
@@ -1846,7 +1846,7 @@ void ecp_tff_nose_run_generator::execute_motion(void)
 	 printf ("blad w ECP procmask signal\n");
 	 }
 	 */
-	if (the_robot->EDP_command_and_reply_buffer.reply_package.reply_type == ERROR) {
+	if (the_robot->EDP_buffer.reply_package.reply_type == ERROR) {
 		throw ecp_robot::ECP_error (NON_FATAL_ERROR, EDP_ERROR);
 	}
 }

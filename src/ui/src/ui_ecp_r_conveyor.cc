@@ -33,13 +33,13 @@ ui_conveyor_robot::ui_conveyor_robot (configurator &_config, sr_ecp* _sr_ecp_msg
 
     // Konstruktor klasy
     sr_ecp_msg = _sr_ecp_msg;
-    EDP_command_and_reply_buffer.instruction.rmodel.kinematic_model.kinematic_model_no = 0;
-    EDP_command_and_reply_buffer.instruction.get_type = ARM_DV; // ARM
-    EDP_command_and_reply_buffer.instruction.get_arm_type = MOTOR;
-    EDP_command_and_reply_buffer.instruction.set_type = ARM_DV; // ARM
-    EDP_command_and_reply_buffer.instruction.set_arm_type = MOTOR;
-    EDP_command_and_reply_buffer.instruction.motion_steps = 0;
-    EDP_command_and_reply_buffer.instruction.value_in_step_no = 0;
+    EDP_buffer.instruction.rmodel.kinematic_model.kinematic_model_no = 0;
+    EDP_buffer.instruction.get_type = ARM_DV; // ARM
+    EDP_buffer.instruction.get_arm_type = MOTOR;
+    EDP_buffer.instruction.set_type = ARM_DV; // ARM
+    EDP_buffer.instruction.set_arm_type = MOTOR;
+    EDP_buffer.instruction.motion_steps = 0;
+    EDP_buffer.instruction.value_in_step_no = 0;
 
     synchronised = false;
 
@@ -88,12 +88,12 @@ bool ui_conveyor_robot::get_kinematic (BYTE* kinematic_model_no)
 {
 
     // Zlecenie odczytu numeru modelu i korektora kinematyki
-    EDP_command_and_reply_buffer.instruction.instruction_type = GET;
-    EDP_command_and_reply_buffer.instruction.get_type = RMODEL_DV; // RMODEL
-    EDP_command_and_reply_buffer.instruction.get_rmodel_type = ARM_KINEMATIC_MODEL; // RMODEL
+    EDP_buffer.instruction.instruction_type = GET;
+    EDP_buffer.instruction.get_type = RMODEL_DV; // RMODEL
+    EDP_buffer.instruction.get_rmodel_type = ARM_KINEMATIC_MODEL; // RMODEL
     execute_motion();
 
-    *kinematic_model_no  = EDP_command_and_reply_buffer.reply_package.rmodel.kinematic_model.kinematic_model_no;
+    *kinematic_model_no  = EDP_buffer.reply_package.rmodel.kinematic_model.kinematic_model_no;
 
     return true;
 }
@@ -104,15 +104,15 @@ bool ui_conveyor_robot::get_servo_algorithm ( BYTE algorithm_no[CONVEYOR_NUM_OF_
 {
 
     // Zlecenie odczytu numerow algorytmow i zestawow parametrow
-    EDP_command_and_reply_buffer.instruction.instruction_type = GET;
-    EDP_command_and_reply_buffer.instruction.get_type = RMODEL_DV; // RMODEL
-    EDP_command_and_reply_buffer.instruction.get_rmodel_type = SERVO_ALGORITHM; //
+    EDP_buffer.instruction.instruction_type = GET;
+    EDP_buffer.instruction.get_type = RMODEL_DV; // RMODEL
+    EDP_buffer.instruction.get_rmodel_type = SERVO_ALGORITHM; //
     execute_motion();
 
     // Przepisanie aktualnych numerow algorytmow i zestawow parametrow
-    memcpy (algorithm_no, EDP_command_and_reply_buffer.reply_package.rmodel.servo_algorithm.servo_algorithm_no,
+    memcpy (algorithm_no, EDP_buffer.reply_package.rmodel.servo_algorithm.servo_algorithm_no,
             CONVEYOR_NUM_OF_SERVOS*sizeof(BYTE) );
-    memcpy (parameters_no, EDP_command_and_reply_buffer.reply_package.rmodel.servo_algorithm.servo_parameters_no,
+    memcpy (parameters_no, EDP_buffer.reply_package.rmodel.servo_algorithm.servo_parameters_no,
             CONVEYOR_NUM_OF_SERVOS*sizeof(BYTE) );
 
     return true;
@@ -124,16 +124,16 @@ bool ui_conveyor_robot::get_controller_state (controller_state_t* robot_controll
 {
 
     // Zlecenie odczytu numeru modelu i korektora kinematyki
-    EDP_command_and_reply_buffer.instruction.instruction_type = GET;
-    EDP_command_and_reply_buffer.instruction.get_type = CONTROLLER_STATE_DV;
+    EDP_buffer.instruction.instruction_type = GET;
+    EDP_buffer.instruction.get_type = CONTROLLER_STATE_DV;
 
     execute_motion();
 
-    synchronised = (*robot_controller_initial_state_l).is_synchronised  = EDP_command_and_reply_buffer.reply_package.controller_state.is_synchronised;
-    (*robot_controller_initial_state_l).is_power_on  = EDP_command_and_reply_buffer.reply_package.controller_state.is_power_on;
-    (*robot_controller_initial_state_l).is_wardrobe_on  = EDP_command_and_reply_buffer.reply_package.controller_state.is_wardrobe_on;
-    (*robot_controller_initial_state_l).is_controller_card_present  = EDP_command_and_reply_buffer.reply_package.controller_state.is_controller_card_present;
-    (*robot_controller_initial_state_l).is_robot_blocked  = EDP_command_and_reply_buffer.reply_package.controller_state.is_robot_blocked;
+    synchronised = (*robot_controller_initial_state_l).is_synchronised  = EDP_buffer.reply_package.controller_state.is_synchronised;
+    (*robot_controller_initial_state_l).is_power_on  = EDP_buffer.reply_package.controller_state.is_power_on;
+    (*robot_controller_initial_state_l).is_wardrobe_on  = EDP_buffer.reply_package.controller_state.is_wardrobe_on;
+    (*robot_controller_initial_state_l).is_controller_card_present  = EDP_buffer.reply_package.controller_state.is_controller_card_present;
+    (*robot_controller_initial_state_l).is_robot_blocked  = EDP_buffer.reply_package.controller_state.is_robot_blocked;
     return true;
 }
 
@@ -147,12 +147,12 @@ bool ui_conveyor_robot::set_kinematic (BYTE kinematic_model_no)
     // algorytmow serwo i numerow zestawow parametrow algorytmow
 
     // Zlecenie zapisu numeru modelu i korektora kinematyki
-    EDP_command_and_reply_buffer.instruction.instruction_type = SET;
-    EDP_command_and_reply_buffer.instruction.set_type = RMODEL_DV; // RMODEL
-    EDP_command_and_reply_buffer.instruction.set_rmodel_type = ARM_KINEMATIC_MODEL; // RMODEL
-    EDP_command_and_reply_buffer.instruction.get_rmodel_type = ARM_KINEMATIC_MODEL; // RMODEL
+    EDP_buffer.instruction.instruction_type = SET;
+    EDP_buffer.instruction.set_type = RMODEL_DV; // RMODEL
+    EDP_buffer.instruction.set_rmodel_type = ARM_KINEMATIC_MODEL; // RMODEL
+    EDP_buffer.instruction.get_rmodel_type = ARM_KINEMATIC_MODEL; // RMODEL
 
-    EDP_command_and_reply_buffer.instruction.rmodel.kinematic_model.kinematic_model_no = kinematic_model_no;
+    EDP_buffer.instruction.rmodel.kinematic_model.kinematic_model_no = kinematic_model_no;
 
     execute_motion();
 
@@ -169,14 +169,14 @@ bool ui_conveyor_robot::set_servo_algorithm (BYTE algorithm_no[CONVEYOR_NUM_OF_S
 
     // Zlecenie zapisu numerow algorytmow i zestawow parametrow
     // Przepisanie zadanych numerow algorytmow i zestawow parametrow
-    memcpy (EDP_command_and_reply_buffer.instruction.rmodel.servo_algorithm.servo_algorithm_no, algorithm_no,
+    memcpy (EDP_buffer.instruction.rmodel.servo_algorithm.servo_algorithm_no, algorithm_no,
             CONVEYOR_NUM_OF_SERVOS*sizeof(BYTE) );
-    memcpy (EDP_command_and_reply_buffer.instruction.rmodel.servo_algorithm.servo_parameters_no, parameters_no,
+    memcpy (EDP_buffer.instruction.rmodel.servo_algorithm.servo_parameters_no, parameters_no,
             CONVEYOR_NUM_OF_SERVOS*sizeof(BYTE) );
-    EDP_command_and_reply_buffer.instruction.instruction_type = SET;
-    EDP_command_and_reply_buffer.instruction.set_type = RMODEL_DV; // RMODEL
-    EDP_command_and_reply_buffer.instruction.set_rmodel_type = SERVO_ALGORITHM; //
-    EDP_command_and_reply_buffer.instruction.get_rmodel_type = SERVO_ALGORITHM; //
+    EDP_buffer.instruction.instruction_type = SET;
+    EDP_buffer.instruction.set_type = RMODEL_DV; // RMODEL
+    EDP_buffer.instruction.set_rmodel_type = SERVO_ALGORITHM; //
+    EDP_buffer.instruction.get_rmodel_type = SERVO_ALGORITHM; //
     execute_motion();
     return true;
 }
@@ -215,9 +215,9 @@ bool ui_conveyor_robot::move_motors ( double final_position[CONVEYOR_NUM_OF_SERV
 
         //  printf("is synchronised za read motors: nr of steps %d\n", nr_of_steps);
         // Parametry zlecenia ruchu i odczytu polozenia
-        EDP_command_and_reply_buffer.instruction.instruction_type = SET_GET;
-        EDP_command_and_reply_buffer.instruction.motion_type = ABSOLUTE;
-        EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
+        EDP_buffer.instruction.instruction_type = SET_GET;
+        EDP_buffer.instruction.motion_type = ABSOLUTE;
+        EDP_buffer.instruction.interpolation_type = MIM;
     }
     else
     {
@@ -230,29 +230,29 @@ bool ui_conveyor_robot::move_motors ( double final_position[CONVEYOR_NUM_OF_SERV
         }
         nr_of_steps = (int) ceil(max_inc / MOTOR_STEP);
 
-        EDP_command_and_reply_buffer.instruction.instruction_type = SET;
-        EDP_command_and_reply_buffer.instruction.motion_type = RELATIVE;
-        EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
+        EDP_buffer.instruction.instruction_type = SET;
+        EDP_buffer.instruction.motion_type = RELATIVE;
+        EDP_buffer.instruction.interpolation_type = MIM;
     }
-    EDP_command_and_reply_buffer.instruction.get_type = ARM_DV; // ARM
-    EDP_command_and_reply_buffer.instruction.get_arm_type = MOTOR;
-    EDP_command_and_reply_buffer.instruction.set_type = ARM_DV; // ARM
-    EDP_command_and_reply_buffer.instruction.set_arm_type = MOTOR;
-    EDP_command_and_reply_buffer.instruction.motion_steps = nr_of_steps;
-    EDP_command_and_reply_buffer.instruction.value_in_step_no = nr_of_steps;
+    EDP_buffer.instruction.get_type = ARM_DV; // ARM
+    EDP_buffer.instruction.get_arm_type = MOTOR;
+    EDP_buffer.instruction.set_type = ARM_DV; // ARM
+    EDP_buffer.instruction.set_arm_type = MOTOR;
+    EDP_buffer.instruction.motion_steps = nr_of_steps;
+    EDP_buffer.instruction.value_in_step_no = nr_of_steps;
 
     if (nr_of_steps < 1) // Nie wykowywac bo zadano ruch do aktualnej pozycji
         return true;
     for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
-        EDP_command_and_reply_buffer.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
+        EDP_buffer.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
 
-    // printf("\n ilosc krokow: %d, po ilu komun: %d, odleglosc 1: %f\n",EDP_command_and_reply_buffer.instruction.motion_steps, EDP_command_and_reply_buffer.instruction.value_in_step_no, EDP_command_and_reply_buffer.instruction.arm.pf_def.arm_coordinates[1]);
+    // printf("\n ilosc krokow: %d, po ilu komun: %d, odleglosc 1: %f\n",EDP_buffer.instruction.motion_steps, EDP_buffer.instruction.value_in_step_no, EDP_buffer.instruction.arm.pf_def.arm_coordinates[1]);
 
     execute_motion();
 
     if (is_synchronised())
         for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
-            current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[j];
+            current_position[j] = EDP_buffer.reply_package.arm.pf_def.arm_coordinates[j];
 
     return true;
 }
@@ -282,28 +282,28 @@ bool ui_conveyor_robot::move_joints (double final_position[CONVEYOR_NUM_OF_SERVO
 
 
     // Parametry zlecenia ruchu i odczytu polozenia
-    EDP_command_and_reply_buffer.instruction.instruction_type = SET_GET;
-    EDP_command_and_reply_buffer.instruction.get_type = ARM_DV; // ARM
-    EDP_command_and_reply_buffer.instruction.get_arm_type = JOINT;
-    EDP_command_and_reply_buffer.instruction.set_type = ARM_DV; // ARM
-    EDP_command_and_reply_buffer.instruction.set_arm_type = JOINT;
-    EDP_command_and_reply_buffer.instruction.motion_type = ABSOLUTE;
-    EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
-    EDP_command_and_reply_buffer.instruction.motion_steps = nr_of_steps;
-    EDP_command_and_reply_buffer.instruction.value_in_step_no = nr_of_steps;
+    EDP_buffer.instruction.instruction_type = SET_GET;
+    EDP_buffer.instruction.get_type = ARM_DV; // ARM
+    EDP_buffer.instruction.get_arm_type = JOINT;
+    EDP_buffer.instruction.set_type = ARM_DV; // ARM
+    EDP_buffer.instruction.set_arm_type = JOINT;
+    EDP_buffer.instruction.motion_type = ABSOLUTE;
+    EDP_buffer.instruction.interpolation_type = MIM;
+    EDP_buffer.instruction.motion_steps = nr_of_steps;
+    EDP_buffer.instruction.value_in_step_no = nr_of_steps;
 
-    // cprintf("NOS=%u\n",EDP_command_and_reply_buffer.instruction.motion_steps);
+    // cprintf("NOS=%u\n",EDP_buffer.instruction.motion_steps);
 
     if (nr_of_steps < 1) // Nie wykowywac bo zadano ruch do aktualnej pozycji
         return true;
 
     for (j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
-        EDP_command_and_reply_buffer.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
+        EDP_buffer.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
 
     execute_motion();
 
     for (j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
-        current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[j];
+        current_position[j] = EDP_buffer.reply_package.arm.pf_def.arm_coordinates[j];
 
     return true;
 }
@@ -317,19 +317,19 @@ bool ui_conveyor_robot::read_motors ( double current_position[CONVEYOR_NUM_OF_SE
     int j;
     // printf("poczatek read motors\n");
     // Parametry zlecenia ruchu i odczytu polozenia
-    EDP_command_and_reply_buffer.instruction.get_type = ARM_DV;
-    EDP_command_and_reply_buffer.instruction.instruction_type = GET;
-    EDP_command_and_reply_buffer.instruction.get_arm_type = MOTOR;
-    EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
+    EDP_buffer.instruction.get_type = ARM_DV;
+    EDP_buffer.instruction.instruction_type = GET;
+    EDP_buffer.instruction.get_arm_type = MOTOR;
+    EDP_buffer.instruction.interpolation_type = MIM;
 
     execute_motion();
     // printf("za query read motors\n");
-    if ( EDP_command_and_reply_buffer.reply_package.reply_type == ERROR)
+    if ( EDP_buffer.reply_package.reply_type == ERROR)
         return false;
     // printf("dalej za query read motors\n");
     for (j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
-        // { // printf("current position: %f\n",EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[j]);
-        current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[j];
+        // { // printf("current position: %f\n",EDP_buffer.reply_package.arm.pf_def.arm_coordinates[j]);
+        current_position[j] = EDP_buffer.reply_package.arm.pf_def.arm_coordinates[j];
     // 			    }
     // printf("koniec read motors\n");
     return true;
@@ -342,15 +342,15 @@ bool ui_conveyor_robot::read_joints ( double current_position[CONVEYOR_NUM_OF_SE
     // Zlecenie odczytu polozenia
     int j;
     // Parametry zlecenia ruchu i odczytu polozenia
-    EDP_command_and_reply_buffer.instruction.instruction_type = GET;
-    EDP_command_and_reply_buffer.instruction.get_type = ARM_DV;
-    EDP_command_and_reply_buffer.instruction.get_arm_type = JOINT;
-    EDP_command_and_reply_buffer.instruction.interpolation_type = MIM;
+    EDP_buffer.instruction.instruction_type = GET;
+    EDP_buffer.instruction.get_type = ARM_DV;
+    EDP_buffer.instruction.get_arm_type = JOINT;
+    EDP_buffer.instruction.interpolation_type = MIM;
 
     execute_motion();
 
     for (j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
-        current_position[j] = EDP_command_and_reply_buffer.reply_package.arm.pf_def.arm_coordinates[j];
+        current_position[j] = EDP_buffer.reply_package.arm.pf_def.arm_coordinates[j];
     //   printf("read_joints: %f\n", current_position[0]);
     return true;
 }

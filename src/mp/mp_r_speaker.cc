@@ -16,14 +16,14 @@ void mp_speaker_robot::create_next_pose_command (void)
 	// wypelnia bufor wysylkowy do ECP na podstawie danych
 	// zawartych w skladowych generatora lub warunku
 
-	mp_command.mp_package.instruction.instruction_type = ecp_td.instruction_type;
+	mp_command.instruction.instruction_type = ecp_td.instruction_type;
 
 	switch (ecp_td.instruction_type) {
 		case SET:
 		case SET_GET:
 			// Wypelniamy czesc zwiazana z polozeniem ramienia
-			strcpy(mp_command.mp_package.instruction.arm.text_def.text, ecp_td.text);
-			strcpy(mp_command.mp_package.instruction.arm.text_def.prosody, ecp_td.prosody);
+			strcpy(mp_command.instruction.arm.text_def.text, ecp_td.text);
+			strcpy(mp_command.instruction.arm.text_def.prosody, ecp_td.prosody);
 			break;
 		case GET:
 		case QUERY:
@@ -40,18 +40,18 @@ void mp_speaker_robot::get_reply(void)
 	// odpowiednich skladowych generatora lub warunku
 
 	ecp_td.ecp_reply = ecp_reply_package.reply;
-	ecp_td.reply_type = ecp_reply_package.ecp_reply.reply_package.reply_type;
+	ecp_td.reply_type = ecp_reply_package.reply_package.reply_type;
 
 	switch (ecp_td.reply_type) {
 		case ERROR:
 			ecp_td.error_no.error0
-					= ecp_reply_package.ecp_reply.reply_package.error_no.error0;
+					= ecp_reply_package.reply_package.error_no.error0;
 			ecp_td.error_no.error1
-					= ecp_reply_package.ecp_reply.reply_package.error_no.error1;
+					= ecp_reply_package.reply_package.error_no.error1;
 			break;
 		case ACKNOWLEDGE:
 			ecp_td.speaking
-					= ecp_reply_package.ecp_reply.reply_package.arm.text_def.speaking;
+					= ecp_reply_package.reply_package.arm.text_def.speaking;
 			break;
 		default: // bledna przesylka
 			throw MP_error (NON_FATAL_ERROR, INVALID_EDP_REPLY);

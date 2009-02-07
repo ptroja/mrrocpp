@@ -46,9 +46,9 @@ private:
 
 protected:
 
-	// strukture EDP_command_and_reply_buffer.instruction, ktora jest
+	// strukture EDP_buffer.instruction, ktora jest
 	// nastepnie wyslana przez funkcje execute_motion() do EDP.
-	// Struktura EDP_command_and_reply_buffer.reply_package zawierajaca
+	// Struktura EDP_buffer.reply_package zawierajaca
 	// odpowiedz EDP na wyslany rozkaz, ktora moze byc wykorzystana
 	// przez generator.next_step()
 	// Funkcja generator.next_step() przygotowuje rozkazy dla EDP wypelniajac
@@ -57,7 +57,7 @@ protected:
 
 public:
 
-	ecp_buffer EDP_command_and_reply_buffer;
+	ecp_buffer EDP_buffer;
 
 	   sr_ecp* sr_ecp_msg;     // by Y - Wskaznik na obiekt do komunikacji z SR
 	

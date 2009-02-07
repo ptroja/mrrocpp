@@ -78,7 +78,7 @@ ecp_linear_generator::ecp_linear_generator(ecp_task& _ecp_task, trajectory_descr
 	v_max_zyz[6] = 5.0;
 	a_max_aa[6] = 0.0; // przyspieszenie katowe koncowki 1rad/s^2
 	v_max_aa[6] = 0.0;
-	// 	EDP_command_and_reply_buffer.sr_ecp_msg.message("Skonstruowano obiekt klasy irp6p_irp6p_linear_generator");
+	// 	EDP_buffer.sr_ecp_msg.message("Skonstruowano obiekt klasy irp6p_irp6p_linear_generator");
 }
 ;
 
@@ -277,7 +277,7 @@ ecp_linear_parabolic_generator::ecp_linear_parabolic_generator(ecp_task& _ecp_ta
 	a_max_aa[6] = 0.0; // przyspieszenie katowe koncowki 1rad/s^2
 	v_max_aa[6] = 0.0;
 
-	// 	EDP_command_and_reply_buffer.sr_ecp_msg.message("Skonstruowano obiekt klasy ecp_linear_parabolic_generator");
+	// 	EDP_buffer.sr_ecp_msg.message("Skonstruowano obiekt klasy ecp_linear_parabolic_generator");
 }
 ; // end:konstruktor
 

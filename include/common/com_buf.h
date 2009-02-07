@@ -1078,7 +1078,7 @@ struct MP_COMMAND_PACKAGE
     msg_header_t hdr;
     MP_COMMAND command;
     ecp_next_state_t ecp_next_state;
-    ecp_command_buffer mp_package;
+    c_buffer instruction;
 };
 
 //------------------------------------------------------------------------------
@@ -1091,7 +1091,7 @@ struct MP_COMMAND_PACKAGE
 struct ECP_REPLY_PACKAGE
 {
     ECP_REPLY reply;
-    edp_reply_buffer ecp_reply;
+    r_buffer reply_package;
     char commandRecognized[SPEECH_RECOGNITION_TEXT_LEN];
 };
 // ------------------------------------------------------------------------

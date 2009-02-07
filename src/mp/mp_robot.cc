@@ -211,7 +211,7 @@ void mp_robot::get_reply(void) {
 	// odpowiednich skladowych generatora lub warunku
 
 	ecp_td.ecp_reply = ecp_reply_package.reply;
-	ecp_td.reply_type = ecp_reply_package.ecp_reply.reply_package.reply_type;
+	ecp_td.reply_type = ecp_reply_package.reply_package.reply_type;
 
 	// TODO: czy warto wprowadzac klase potomna?
 	if (robot_name == ROBOT_SPEECHRECOGNITION) {
@@ -220,8 +220,8 @@ void mp_robot::get_reply(void) {
 
 	switch (ecp_td.reply_type) {
 		case ERROR:
-			ecp_td.error_no.error0 = ecp_reply_package.ecp_reply.reply_package.error_no.error0;
-			ecp_td.error_no.error1 = ecp_reply_package.ecp_reply.reply_package.error_no.error1;
+			ecp_td.error_no.error0 = ecp_reply_package.reply_package.error_no.error0;
+			ecp_td.error_no.error1 = ecp_reply_package.reply_package.error_no.error1;
 			break;
 		case ACKNOWLEDGE:
 			break;

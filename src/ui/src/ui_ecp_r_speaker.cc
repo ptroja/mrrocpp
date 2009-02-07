@@ -52,11 +52,11 @@ void ui_speaker_robot::execute_motion(void)
 bool ui_speaker_robot::send_command(const char* local_text, const char* local_prosody)
 {
 
-	EDP_command_and_reply_buffer.instruction.instruction_type = SET;
+	EDP_buffer.instruction.instruction_type = SET;
 
 	if ((local_text) && (local_prosody)) {
-		strncpy(EDP_command_and_reply_buffer.instruction.arm.text_def.text, local_text, MAX_TEXT);
-		strncpy(EDP_command_and_reply_buffer.instruction.arm.text_def.prosody, local_prosody, MAX_PROSODY );
+		strncpy(EDP_buffer.instruction.arm.text_def.text, local_text, MAX_TEXT);
+		strncpy(EDP_buffer.instruction.arm.text_def.prosody, local_prosody, MAX_PROSODY );
 	}
 
 	execute_motion();
@@ -67,14 +67,14 @@ bool ui_speaker_robot::send_command(const char* local_text, const char* local_pr
 bool ui_speaker_robot::read_state(int* local_state)
 {
 
-	EDP_command_and_reply_buffer.instruction.instruction_type = GET;
+	EDP_buffer.instruction.instruction_type = GET;
 
 	execute_motion();
 
 	if (local_state) {
-		*local_state = EDP_command_and_reply_buffer.reply_package.arm.text_def.speaking;
+		*local_state = EDP_buffer.reply_package.arm.text_def.speaking;
 	}
-	// printf("UI SPEAKING: %d\n", EDP_command_and_reply_buffer.reply_package.arm.text_def.speaking);
+	// printf("UI SPEAKING: %d\n", EDP_buffer.reply_package.arm.text_def.speaking);
 
 	return true;
 }
