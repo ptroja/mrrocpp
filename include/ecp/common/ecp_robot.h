@@ -58,13 +58,8 @@ public:
 	bool synchronised; // Flaga synchronizacji robota (true - zsynchronizowany, false - nie)
 
 
-#if !defined(USE_MESSIP_SRR)
-	void send  (int);
-	void query (int);
-#else
-	void send  (messip_channel_t *);
-	void query (messip_channel_t *);
-#endif
+	void send  ();
+	void query ();
 
 
 	int number_of_servos;

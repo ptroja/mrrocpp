@@ -1829,12 +1829,12 @@ void ecp_tff_nose_run_generator::execute_motion(void)
 	 }
 	 */
 	// komunikacja wlasciwa
-	the_robot->send(the_robot->EDP_fd);
+	the_robot->send();
 	if (the_robot->reply_package.reply_type == ERROR) {
-		the_robot->query(the_robot->EDP_fd);
+		the_robot->query();
 		throw ecp_robot::ECP_error (NON_FATAL_ERROR, EDP_ERROR);
 	}
-	the_robot->query(the_robot->EDP_fd);
+	the_robot->query();
 
 	/*
 	 // odmaskowanie sygnalu SIGTERM

@@ -202,8 +202,8 @@ void ecp_robot::synchronise(void)
 	// komunikacja wlasciwa
 	ecp_command.instruction.instruction_type = SYNCHRO;
 
-	send(EDP_fd); // Wyslanie zlecenia synchronizacji
-	query(EDP_fd); // Odebranie wyniku zlecenia
+	send(); // Wyslanie zlecenia synchronizacji
+	query(); // Odebranie wyniku zlecenia
 
 	synchronised = (reply_package.reply_type == SYNCHRO_OK);
 
@@ -221,11 +221,9 @@ void ecp_robot::synchronise(void)
 
 
 
-#if !defined(USE_MESSIP_SRR)
-void ecp_robot::send(int fd)
-#else
-void ecp_robot::send (messip_channel_t *ch)
-#endif
+
+void ecp_robot::send()
+
 {
 	// Wyslanie do EDP polecenia
 	// int command_size;  // rozmiar przesylanej przesylki
@@ -245,10 +243,10 @@ void ecp_robot::send (messip_channel_t *ch)
 			// by Y&W doszlo  dodatkowe pole w instruction zwiazane z obsluga resource managera
 
 #if !defined(USE_MESSIP_SRR)
-			if (MsgSend(fd, &ecp_command.instruction, sizeof(ecp_command.instruction), &reply_package.reply_type, sizeof(r_buffer)) == -1)
+			if (MsgSend(EDP_fd, &ecp_command.instruction, sizeof(ecp_command.instruction), &reply_package.reply_type, sizeof(r_buffer)) == -1)
 #else
 			int32_t answer;
-			if ( messip_send(ch, 0, 0,
+			if ( messip_send(EDP_fd, 0, 0,
 							&ecp_command.instruction, sizeof(ecp_command.instruction),
 							&answer, &reply_package.reply_type, sizeof(r_buffer),
 							MESSIP_NOTIMEOUT) == -1 )
@@ -272,14 +270,12 @@ void ecp_robot::send (messip_channel_t *ch)
 
 }
 
-#if !defined(USE_MESSIP_SRR)
-void ecp_robot::query(int fd)
-#else
-void ecp_robot::query (messip_channel_t *fd)
-#endif
+
+void ecp_robot::query()
+
 {
 	ecp_command.instruction.instruction_type = QUERY;
-	send(fd); // czyli wywolanie funkcji ecp_buffer::send, ktora jest powyzej :)
+	send(); // czyli wywolanie funkcji ecp_buffer::send, ktora jest powyzej :)
 }
 
 
@@ -302,12 +298,12 @@ void ecp_robot::execute_motion(void)
 	 }
 	 */
 	// komunikacja wlasciwa
-	send(EDP_fd);
+	send();
 	if (reply_package.reply_type == ERROR) {
-		query(EDP_fd);
+		query();
 		throw ECP_error (NON_FATAL_ERROR, EDP_ERROR);
 	}
-	query(EDP_fd);
+	query();
 
 	/*
 	 // odmaskowanie sygnalu SIGTERM
