@@ -107,14 +107,14 @@ bool ecp_robot::is_synchronised ( void ) const
 // Kopiowanie bufora przesylanego z MP do bufora wysylanego do EDP
 void ecp_robot::copy_mp_to_edp_buffer(c_buffer& mp_buffer)
 {
-	memcpy( &EDP_buffer.instruction, &mp_buffer, sizeof(c_buffer));
+	memcpy( &ecp_command.instruction, &mp_buffer, sizeof(c_buffer));
 }
 
 // by Y - o dziwo tego nie bylo !!!
 // Kopiowanie bufora przesylanego z EDP do bufora wysylanego do MP
 void ecp_robot::copy_edp_to_mp_buffer(r_buffer& mp_buffer)
 {
-	memcpy( &mp_buffer, &EDP_buffer.reply_package, sizeof(r_buffer));
+	memcpy( &mp_buffer, &reply_package, sizeof(r_buffer));
 }
 
 
@@ -200,12 +200,12 @@ void ecp_robot::synchronise(void)
 	 }
 	 */
 	// komunikacja wlasciwa
-	EDP_buffer.instruction.instruction_type = SYNCHRO;
+	ecp_command.instruction.instruction_type = SYNCHRO;
 
 	send(EDP_fd); // Wyslanie zlecenia synchronizacji
 	query(EDP_fd); // Odebranie wyniku zlecenia
 
-	synchronised = (EDP_buffer.reply_package.reply_type == SYNCHRO_OK);
+	synchronised = (reply_package.reply_type == SYNCHRO_OK);
 
 	/*
 	 // odmaskowanie sygnalu SIGTERM
@@ -233,7 +233,7 @@ void ecp_robot::send (messip_channel_t *ch)
 
 	// printf("w send instruction.instruction_type: %d\n", instruction.instruction_type);
 
-	switch (EDP_buffer.instruction.instruction_type) {
+	switch (ecp_command.instruction.instruction_type) {
 		case SET:
 		case SET_GET:
 		case GET:
@@ -245,12 +245,12 @@ void ecp_robot::send (messip_channel_t *ch)
 			// by Y&W doszlo  dodatkowe pole w instruction zwiazane z obsluga resource managera
 
 #if !defined(USE_MESSIP_SRR)
-			if (MsgSend(fd, &EDP_buffer.instruction, sizeof(EDP_buffer.instruction), &EDP_buffer.reply_package.reply_type, sizeof(r_buffer)) == -1)
+			if (MsgSend(fd, &ecp_command.instruction, sizeof(ecp_command.instruction), &reply_package.reply_type, sizeof(r_buffer)) == -1)
 #else
 			int32_t answer;
 			if ( messip_send(ch, 0, 0,
-							&EDP_buffer.instruction, sizeof(EDP_buffer.instruction),
-							&answer, &EDP_buffer.reply_package.reply_type, sizeof(EDP_buffer.r_buffer),
+							&ecp_command.instruction, sizeof(ecp_command.instruction),
+							&answer, &reply_package.reply_type, sizeof(r_buffer),
 							MESSIP_NOTIMEOUT) == -1 )
 #endif
 			{
@@ -278,7 +278,7 @@ void ecp_robot::query(int fd)
 void ecp_robot::query (messip_channel_t *fd)
 #endif
 {
-	EDP_buffer.instruction.instruction_type = QUERY;
+	ecp_command.instruction.instruction_type = QUERY;
 	send(fd); // czyli wywolanie funkcji ecp_buffer::send, ktora jest powyzej :)
 }
 
@@ -303,7 +303,7 @@ void ecp_robot::execute_motion(void)
 	 */
 	// komunikacja wlasciwa
 	send(EDP_fd);
-	if (EDP_buffer.reply_package.reply_type == ERROR) {
+	if (reply_package.reply_type == ERROR) {
 		query(EDP_fd);
 		throw ECP_error (NON_FATAL_ERROR, EDP_ERROR);
 	}
@@ -319,7 +319,7 @@ void ecp_robot::execute_motion(void)
 	 printf ("blad w ECP procmask signal\n");
 	 }
 	 */
-	if (EDP_buffer.reply_package.reply_type == ERROR) {
+	if (reply_package.reply_type == ERROR) {
 		throw ECP_error (NON_FATAL_ERROR, EDP_ERROR);
 	}
 }

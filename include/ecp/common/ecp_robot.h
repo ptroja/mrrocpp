@@ -10,13 +10,6 @@
 
 class ui_common_robot;
 
-// ------------------------------------------------------------------------
-class ecp_buffer: public ecp_command_buffer, public edp_reply_buffer
-{
-public:
-
-}; 
-// ------------------------------------------------------------------------
 
 class ecp_task;
 
@@ -46,9 +39,9 @@ private:
 
 protected:
 
-	// strukture EDP_buffer.instruction, ktora jest
+	// strukture ecp_command.instruction, ktora jest
 	// nastepnie wyslana przez funkcje execute_motion() do EDP.
-	// Struktura EDP_buffer.reply_package zawierajaca
+	// Struktura reply_package zawierajaca
 	// odpowiedz EDP na wyslany rozkaz, ktora moze byc wykorzystana
 	// przez generator.next_step()
 	// Funkcja generator.next_step() przygotowuje rozkazy dla EDP wypelniajac
@@ -57,7 +50,8 @@ protected:
 
 public:
 
-	ecp_buffer EDP_buffer;
+	ecp_command_buffer ecp_command;
+	r_buffer reply_package;
 
 	   sr_ecp* sr_ecp_msg;     // by Y - Wskaznik na obiekt do komunikacji z SR
 	

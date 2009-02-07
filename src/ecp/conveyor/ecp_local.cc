@@ -25,17 +25,17 @@ void ecp_conveyor_robot::create_command (void)
     // wypelnia bufor wysylkowy do EDP na podstawie danych
     // zawartych w skladowych generatora lub warunku
 
-    EDP_buffer.instruction.instruction_type = EDP_data.instruction_type;
-    EDP_buffer.instruction.set_type = EDP_data.set_type;
-    EDP_buffer.instruction.get_type = EDP_data.get_type;
-    // printf("EDP_data.get_type: %d, EDP_buffer.instruction.get_type: %d\n",
-    // EDP_data.get_type,EDP_buffer.instruction.get_type);
+    ecp_command.instruction.instruction_type = EDP_data.instruction_type;
+    ecp_command.instruction.set_type = EDP_data.set_type;
+    ecp_command.instruction.get_type = EDP_data.get_type;
+    // printf("EDP_data.get_type: %d, ecp_command.instruction.get_type: %d\n",
+    // EDP_data.get_type,ecp_command.instruction.get_type);
 
-    EDP_buffer.instruction.set_rmodel_type = EDP_data.set_rmodel_type;
-    EDP_buffer.instruction.get_rmodel_type = EDP_data.get_rmodel_type;
-    EDP_buffer.instruction.set_arm_type = EDP_data.set_arm_type;
-    EDP_buffer.instruction.get_arm_type = EDP_data.get_arm_type;
-    EDP_buffer.instruction.output_values = EDP_data.output_values;
+    ecp_command.instruction.set_rmodel_type = EDP_data.set_rmodel_type;
+    ecp_command.instruction.get_rmodel_type = EDP_data.get_rmodel_type;
+    ecp_command.instruction.set_arm_type = EDP_data.set_arm_type;
+    ecp_command.instruction.get_arm_type = EDP_data.get_arm_type;
+    ecp_command.instruction.output_values = EDP_data.output_values;
 
     switch (EDP_data.instruction_type)
     {
@@ -47,15 +47,15 @@ void ecp_conveyor_robot::create_command (void)
             switch (EDP_data.set_rmodel_type)
             {
             case ARM_KINEMATIC_MODEL:
-                EDP_buffer.instruction.rmodel.kinematic_model.kinematic_model_no
+                ecp_command.instruction.rmodel.kinematic_model.kinematic_model_no
                 = EDP_data.next_kinematic_model_no;
                 break;
             case SERVO_ALGORITHM:
                 for (int j=0; j<CONVEYOR_NUM_OF_SERVOS; j++)
                 {
-                    EDP_buffer.instruction.rmodel.servo_algorithm.servo_algorithm_no[j]
+                    ecp_command.instruction.rmodel.servo_algorithm.servo_algorithm_no[j]
                     = EDP_data.next_servo_algorithm_no[j];
-                    EDP_buffer.instruction.rmodel.servo_algorithm.servo_parameters_no[j]
+                    ecp_command.instruction.rmodel.servo_algorithm.servo_parameters_no[j]
                     = EDP_data.next_servo_parameters_no[j];
                 } // end: for
                 break;
@@ -66,21 +66,21 @@ void ecp_conveyor_robot::create_command (void)
 
         if (EDP_data.set_type & ARM_DV)
         {
-            EDP_buffer.instruction.motion_type = EDP_data.motion_type;
-            EDP_buffer.instruction.interpolation_type = EDP_data.next_interpolation_type;
-            EDP_buffer.instruction.motion_steps = EDP_data.motion_steps;
-            EDP_buffer.instruction.value_in_step_no = EDP_data.value_in_step_no;
+            ecp_command.instruction.motion_type = EDP_data.motion_type;
+            ecp_command.instruction.interpolation_type = EDP_data.next_interpolation_type;
+            ecp_command.instruction.motion_steps = EDP_data.motion_steps;
+            ecp_command.instruction.value_in_step_no = EDP_data.value_in_step_no;
             // Wypelniamy czesc zwiazana z polozeniem ramienia
             switch (EDP_data.set_arm_type)
             {
             case  JOINT:
                 for (int j=0; j<CONVEYOR_NUM_OF_SERVOS ; j++)
-                    EDP_buffer.instruction.arm.pf_def.arm_coordinates[j]
+                    ecp_command.instruction.arm.pf_def.arm_coordinates[j]
                     = EDP_data.next_joint_arm_coordinates[j];
                 break;
             case  MOTOR:
                     for (int j=0; j<CONVEYOR_NUM_OF_SERVOS ; j++)
-                        EDP_buffer.instruction.arm.pf_def.arm_coordinates[j]
+                        ecp_command.instruction.arm.pf_def.arm_coordinates[j]
                         = EDP_data.next_motor_arm_coordinates[j];
                 break;
             default: // Blad: niewlasciwy sposob zadawania polozenia ramienia
@@ -107,13 +107,13 @@ void ecp_conveyor_robot::get_reply (void)
     // pobiera z pakietu przeslanego z EDP informacje i wstawia je do
     // odpowiednich skladowych generatora lub warunku
 
-    EDP_data.reply_type = EDP_buffer.reply_package.reply_type;
+    EDP_data.reply_type = reply_package.reply_type;
 
     switch (EDP_data.reply_type)
     {
     case ERROR:
-        EDP_data.error_no.error0 = EDP_buffer.reply_package.error_no.error0;
-        EDP_data.error_no.error1 = EDP_buffer.reply_package.error_no.error1;
+        EDP_data.error_no.error0 = reply_package.error_no.error0;
+        EDP_data.error_no.error1 = reply_package.error_no.error1;
         break;
     case ACKNOWLEDGE:
         break;
@@ -147,27 +147,27 @@ void ecp_conveyor_robot::get_reply (void)
 
 void ecp_conveyor_robot::get_input_reply (void)
 {
-    EDP_data.input_values = EDP_buffer.reply_package.input_values;
+    EDP_data.input_values = reply_package.input_values;
     for (int i=0; i<8; i++)
     {
-        EDP_data.analog_input[i]=EDP_buffer.reply_package.analog_input[i];
+        EDP_data.analog_input[i]=reply_package.analog_input[i];
     }
 }
 
 
 void ecp_conveyor_robot::get_arm_reply (void)
 {
-    switch (EDP_buffer.reply_package.arm_type)
+    switch (reply_package.arm_type)
     {
     case MOTOR:
         for (int i=0; i<CONVEYOR_NUM_OF_SERVOS; i++)
             EDP_data.current_motor_arm_coordinates[i] =
-                EDP_buffer.reply_package.arm.pf_def.arm_coordinates[i];
+                reply_package.arm.pf_def.arm_coordinates[i];
         break;
     case JOINT:
             for (int i=0; i<CONVEYOR_NUM_OF_SERVOS; i++)
                 EDP_data.current_joint_arm_coordinates[i] =
-                    EDP_buffer.reply_package.arm.pf_def.arm_coordinates[i];
+                    reply_package.arm.pf_def.arm_coordinates[i];
         break;
 
     default: // bledny typ specyfikacji pozycji
@@ -177,19 +177,19 @@ void ecp_conveyor_robot::get_arm_reply (void)
 
 void ecp_conveyor_robot::get_rmodel_reply (void)
 {
-    switch (EDP_buffer.reply_package.rmodel_type)
+    switch (reply_package.rmodel_type)
     {
     case ARM_KINEMATIC_MODEL:
         EDP_data.current_kinematic_model_no =
-            EDP_buffer.reply_package.rmodel.kinematic_model.kinematic_model_no;
+            reply_package.rmodel.kinematic_model.kinematic_model_no;
         break;
     case SERVO_ALGORITHM:
         for(int i=0; i<CONVEYOR_NUM_OF_SERVOS; i++)
         {
             EDP_data.current_servo_algorithm_no[i] =
-                EDP_buffer.reply_package.rmodel.servo_algorithm.servo_algorithm_no[i];
+                reply_package.rmodel.servo_algorithm.servo_algorithm_no[i];
             EDP_data.current_servo_parameters_no[i] =
-                EDP_buffer.reply_package.rmodel.servo_algorithm.servo_parameters_no[i];
+                reply_package.rmodel.servo_algorithm.servo_parameters_no[i];
         }
         break;
     default: // bledny typ specyfikacji modelu robota
