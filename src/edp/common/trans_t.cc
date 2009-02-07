@@ -36,7 +36,7 @@ void * edp_irp6s_and_conv_effector::trans_thread(void *arg)
         mt_tt_obj->trans_t_wait_for_master_order();
 
         // przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)
-        memcpy( &(current_instruction), &(new_instruction), sizeof(new_instruction) );
+        memcpy( &(current_instruction), &(new_instruction), sizeof(c_buffer) );
 
         mt_tt_obj->error = NO_ERROR; // wyjsciowo brak bledu (dla rzutowania)
 

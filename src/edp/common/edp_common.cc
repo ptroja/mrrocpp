@@ -184,7 +184,7 @@ INSTRUCTION_TYPE edp_effector::receive_instruction(void)
 	while (1) {
 #if !defined(USE_MESSIP_SRR)
 		rcvid
-				= MsgReceive(attach->chid, &new_instruction, sizeof(c_buffer), NULL);
+				= MsgReceive(attach->chid, &new_ecp_command, sizeof(c_buffer), NULL);
 
 		if (rcvid == -1) {/* Error condition, exit */
 			perror("MsgReceive()");
@@ -192,14 +192,14 @@ INSTRUCTION_TYPE edp_effector::receive_instruction(void)
 		}
 
 		if (rcvid == 0) {/* Pulse received */
-			switch (new_instruction.hdr.code) {
+			switch (new_ecp_command.hdr.code) {
 				case _PULSE_CODE_DISCONNECT:
 					/*
 					 * A client disconnected all its connections (called
 					 * name_close() for each name_open() of our name) or
 					 * terminated
 					 */
-					ConnectDetach(new_instruction.hdr.scoid);
+					ConnectDetach(new_ecp_command.hdr.scoid);
 					break;
 				case _PULSE_CODE_UNBLOCK:
 					/*
@@ -221,13 +221,13 @@ INSTRUCTION_TYPE edp_effector::receive_instruction(void)
 		}
 
 		/* name_open() sends a connect message, must EOK this */
-		if (new_instruction.hdr.type == _IO_CONNECT) {
+		if (new_ecp_command.hdr.type == _IO_CONNECT) {
 			MsgReply(rcvid, EOK, NULL, 0);
 			continue;
 		}
 
 		/* Some other QNX IO message was received; reject it */
-		if (new_instruction.hdr.type > _IO_BASE && new_instruction.hdr.type
+		if (new_ecp_command.hdr.type > _IO_BASE && new_ecp_command.hdr.type
 				<= _IO_MAX) {
 			MsgError(rcvid, ENOSYS);
 			continue;
@@ -251,10 +251,12 @@ INSTRUCTION_TYPE edp_effector::receive_instruction(void)
 		/* A message (presumable ours) received, handle */
 		break;
 	}
-
+	
 	//memcpy( &new_instruction, msg_cb, sizeof(*msg_cb) );
 	caller = rcvid;
 
+	memcpy( &(new_instruction), &(new_ecp_command.instruction), sizeof(c_buffer) );
+	
 	return new_instruction.instruction_type;
 }
 

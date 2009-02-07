@@ -101,6 +101,7 @@ public:
     // bufory:
     // - polecen przysylanych z ECP
     // - polecen przysylanych z ECP dla watku trans_t
+    ecp_command_buffer new_ecp_command;
     c_buffer new_instruction, current_instruction;
 
     const ROBOT_ENUM robot_name;
