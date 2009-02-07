@@ -236,12 +236,12 @@ void ecp_task_fsautomat_irp6ot::main_task_algorithm(void)
 
 		sr_ecp_msg->message("Order received");
 
-		switch ( (STATE_MACHINE_ECP_STATES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state)
+		switch ( (STATE_MACHINE_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
 		{
 			case ECP_GEN_TEACH_IN:
-				size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+				size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				path1 = new char[size];
-				sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+				sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				tig->flush_pose_list();
 				//tig->load_file_with_path (path1);
 				//tig->initiate_pose_list();
@@ -256,22 +256,22 @@ void ecp_task_fsautomat_irp6ot::main_task_algorithm(void)
 				{
 					if(ecpLevel)
 					{
-						sg->load_trajectory_from_xml((*trjMap)[mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string]);
+						sg->load_trajectory_from_xml((*trjMap)[mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
 					}
 					else
 					{
 						size = 1 + strlen(mrrocpp_network_path) + strlen(fileName);
 						path1 = new char[size];
 						sprintf(path1, "%s%s", mrrocpp_network_path, fileName);
-						sg->load_trajectory_from_xml(path1, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+						sg->load_trajectory_from_xml(path1, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 						delete[] path1;
 					}
 				}
 				else
 				{
-					size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+					size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 					path1 = new char[size];
-					sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+					sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 					sg->load_file_with_path (path1);
 					delete[] path1;
 				}
@@ -291,7 +291,7 @@ void ecp_task_fsautomat_irp6ot::main_task_algorithm(void)
 				break;
 			case ECP_GEN_TFF_RUBIK_GRAB:
 				gen_args = new double[4];
-				size = Trajectory::setValuesInArray(gen_args, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+				size = Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				if(size > 3)
 					rgg->configure(gen_args[0], gen_args[1], (int)gen_args[2], (bool)gen_args[3]);
 				else
@@ -301,28 +301,28 @@ void ecp_task_fsautomat_irp6ot::main_task_algorithm(void)
 				break;
 			case ECP_GEN_TFF_RUBIK_FACE_ROTATE:
 				gen_args = new double[1];
-				Trajectory::setValuesInArray(gen_args, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+				Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				rfrg->configure(gen_args[0]);
 				rfrg->Move();
 				delete[] gen_args;
 				break;
 			case ECP_GEN_TFF_GRIPPER_APPROACH:
 				gen_args = new double[2];
-				Trajectory::setValuesInArray(gen_args, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+				Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				gag->configure(gen_args[0] , (int)gen_args[1]);
 				gag->Move();
 				delete[] gen_args;
 				break;
 			case ECP_TOOL_CHANGE_GENERATOR:
 				gen_args = new double[3];
-				Trajectory::setValuesInArray(gen_args, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+				Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				tcg->set_tool_parameters(gen_args[0], gen_args[1], gen_args[2]);
 				tcg->Move();
 				delete[] gen_args;
 				break;
 			case RCSC_GRIPPER_OPENING:
 				gen_args = new double[2];
-				Trajectory::setValuesInArray(gen_args, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+				Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				go_st->configure(gen_args[0], (int)gen_args[1]);
 				go_st->execute();
 				delete[] gen_args;

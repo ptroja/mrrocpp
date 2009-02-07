@@ -37,13 +37,13 @@ void ecp_task_playerpos::main_task_algorithm(void)
 
 		sr_ecp_msg->message("Order received");
 
-		switch ( (ECP_PLAYER_STATES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state) {
+		switch ( (ECP_PLAYER_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
 			case ECP_GEN_PLAYERPOS:
-				ppg->set_goal(mp_command.mp_package.ecp_next_state.playerpos_goal);
+				ppg->set_goal(mp_command.ecp_next_state.playerpos_goal);
 				ppg->Move();
 				break;
 			default:
-				fprintf(stderr, "invalid ecp_next_state.mp_2_ecp_next_state (%d)\n", mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state);
+				fprintf(stderr, "invalid ecp_next_state.mp_2_ecp_next_state (%d)\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
 				break;
 		}
 

@@ -45,13 +45,13 @@ void ecp_task_rcsc_speaker::main_task_algorithm(void)
 
 		sr_ecp_msg->message("Order received");
 
-		switch ( (RCSC_ECP_STATES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state)
+		switch ( (RCSC_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
 		{
 			case ECP_GEN_TRANSPARENT:
 				gt->Move();
 				break;
 			case ECP_GEN_SPEAK:
-				speak->configure(mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+				speak->configure(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				speak->Move();
 				break;
 			default:

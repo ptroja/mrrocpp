@@ -35,19 +35,19 @@ void ecp_task_festival::main_task_algorithm(void)
 
 		sr_ecp_msg->message("NEXT_STATE received");
 
-		switch ( (ECP_FESTIVAL_STATES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state) {
+		switch ( (ECP_FESTIVAL_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
 			case ECP_GEN_FESTIVAL:
 				if(isTest)
-					sr_ecp_msg->message(mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+					sr_ecp_msg->message(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				else
 				{
-					fg->set_voice((festival_generator::VOICE) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_variant);
-					fg->set_phrase(mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+					fg->set_voice((festival_generator::VOICE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
+					fg->set_phrase(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 					fg->Move();
 				}
 				break;
 			default:
-				fprintf(stderr, "invalid ecp_next_state.mp_2_ecp_next_state (%d)\n", mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state);
+				fprintf(stderr, "invalid ecp_next_state.mp_2_ecp_next_state (%d)\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
 				break;
 		}
 

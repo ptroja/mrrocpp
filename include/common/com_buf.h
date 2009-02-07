@@ -1058,7 +1058,7 @@ public:
      *  Zlecenie zmiany stanu ECP skojarzone z NEXT_STATE.
      *  @todo Translate to English.
      */
-    ecp_next_state_t ecp_next_state;
+ //   ecp_next_state_t ecp_next_state;
     /** ECP to EDP command buffer. */
     c_buffer instruction;
 };
@@ -1077,6 +1077,7 @@ struct MP_COMMAND_PACKAGE
 {
     msg_header_t hdr;
     MP_COMMAND command;
+    ecp_next_state_t ecp_next_state;
     ecp_command_buffer mp_package;
 };
 

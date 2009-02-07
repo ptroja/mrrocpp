@@ -65,7 +65,7 @@ void ecp_task_multiplayer_irp6ot::main_task_algorithm(void)
 
 		sr_ecp_msg->message("Order received");
 
-		switch ( (RCSC_ECP_STATES) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state) {
+		switch ( (RCSC_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
 			case ECP_WEIGHT_MEASURE_GENERATOR:
 				wmg->Move();
 				break;
@@ -76,7 +76,7 @@ void ecp_task_multiplayer_irp6ot::main_task_algorithm(void)
 				befg->Move();
 				break;
 			case MULTIPLAYER_GRIPPER_OPENING:
-				switch ( (MULTIPLAYER_GRIPPER_OP) mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_variant) {
+				switch ( (MULTIPLAYER_GRIPPER_OP) mp_command.ecp_next_state.mp_2_ecp_next_state_variant) {
 					case MULTIPLAYER_GO_VAR_1:
 						go_st->configure(0.002, 1000);
 						go_st->execute();
@@ -91,10 +91,10 @@ void ecp_task_multiplayer_irp6ot::main_task_algorithm(void)
 				break;
 			case ECP_GEN_SMOOTH:
 				size = strlen(mrrocpp_network_path)
-						+ strlen(mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string) + 1;
+						+ strlen(mp_command.ecp_next_state.mp_2_ecp_next_state_string) + 1;
 				path1 = new char[size];
 				// Stworzenie sciezki do pliku.
-				sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state_string);
+				sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				sg->load_file_with_path(path1);
 				//printf("\nTRACK ECP_GEN_SMOOTH :%s\n\n", path1);
 				delete[] path1;
