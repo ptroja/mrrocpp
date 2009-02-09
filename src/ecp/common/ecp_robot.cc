@@ -229,7 +229,7 @@ void ecp_robot::send()
 	// int command_size;  // rozmiar przesylanej przesylki
 	// printf("\n a w send fd=%d",fd);  // debug
 
-	// printf("w send instruction.instruction_type: %d\n", instruction.instruction_type);
+	// printf("w ECP send instruction.instruction_type: %d\n", ecp_command.instruction.instruction_type);
 
 	switch (ecp_command.instruction.instruction_type) {
 		case SET:
@@ -243,12 +243,12 @@ void ecp_robot::send()
 			// by Y&W doszlo  dodatkowe pole w instruction zwiazane z obsluga resource managera
 
 #if !defined(USE_MESSIP_SRR)
-			if (MsgSend(EDP_fd, &ecp_command.instruction, sizeof(ecp_command.instruction), &reply_package.reply_type, sizeof(r_buffer)) == -1)
+			if (MsgSend(EDP_fd, &ecp_command, sizeof(ecp_command), &reply_package, sizeof(r_buffer)) == -1)
 #else
 			int32_t answer;
 			if ( messip_send(EDP_fd, 0, 0,
-							&ecp_command.instruction, sizeof(ecp_command.instruction),
-							&answer, &reply_package.reply_type, sizeof(r_buffer),
+							&ecp_command, sizeof(ecp_command),
+							&answer, &reply_package, sizeof(r_buffer),
 							MESSIP_NOTIMEOUT) == -1 )
 #endif
 			{

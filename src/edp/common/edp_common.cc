@@ -184,7 +184,7 @@ INSTRUCTION_TYPE edp_effector::receive_instruction(void)
 	while (1) {
 #if !defined(USE_MESSIP_SRR)
 		rcvid
-				= MsgReceive(attach->chid, &new_ecp_command, sizeof(c_buffer), NULL);
+				= MsgReceive(attach->chid, &new_ecp_command, sizeof(ecp_command_buffer), NULL);
 
 		if (rcvid == -1) {/* Error condition, exit */
 			perror("MsgReceive()");
@@ -234,7 +234,7 @@ INSTRUCTION_TYPE edp_effector::receive_instruction(void)
 		}
 #else /* USE_MESSIP_SRR */
 		int32_t type, subtype;
-		rcvid = messip_receive(attach, &type, &subtype, &new_instruction, sizeof(c_buffer), MESSIP_NOTIMEOUT);
+		rcvid = messip_receive(attach, &type, &subtype, &new_ecp_command, sizeof(ecp_command_buffer), MESSIP_NOTIMEOUT);
 
 		if (rcvid == -1)
 		{/* Error condition, exit */
@@ -254,7 +254,8 @@ INSTRUCTION_TYPE edp_effector::receive_instruction(void)
 	
 	//memcpy( &new_instruction, msg_cb, sizeof(*msg_cb) );
 	caller = rcvid;
-
+//	printf("edp instruction_type: %d\n", new_ecp_command.instruction.instruction_type);
+// flushall();
 	memcpy( &(new_instruction), &(new_ecp_command.instruction), sizeof(c_buffer) );
 	
 	return new_instruction.instruction_type;
