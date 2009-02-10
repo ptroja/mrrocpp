@@ -1858,6 +1858,7 @@ slay_all( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 	for (std::list<program_node_def>::iterator program_node_list_iterator = ui_state.program_node_list.begin(); program_node_list_iterator != ui_state.program_node_list.end(); program_node_list_iterator++)
 	{
 		char system_command[100];
+		/*
 #if 0 && defined(PROCESS_SPAWN_RSH)
 		sprintf(system_command, "rsh %s killall -e -q -v %s",
 				program_node_list_iterator->node_name,
@@ -1871,7 +1872,7 @@ slay_all( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 #endif
 		printf("aaa: %s\n", system_command);
 		system(system_command);
-
+*/
 		delay(10);
 
 #if 0 && defined(PROCESS_SPAWN_RSH)
