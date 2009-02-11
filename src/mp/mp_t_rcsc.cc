@@ -846,8 +846,8 @@ void mp_task_rubik_cube_solver::approach_op(int mode)
 
 
 	// wlaczenie generatora transparentnego w obu robotach
-	set_next_ecps_state ((int) ECP_GEN_TRANSPARENT, (int) 0, "", 1, ROBOT_IRP6_ON_TRACK);
-	set_next_ecps_state ((int) ECP_GEN_TRANSPARENT, (int) 0, "", 1, ROBOT_IRP6_POSTUMENT);
+	set_next_ecps_state ((int) ECP_GEN_TRANSPARENT, (int) 1, "", 1, ROBOT_IRP6_ON_TRACK);
+	set_next_ecps_state ((int) ECP_GEN_TRANSPARENT, (int) 1, "", 1, ROBOT_IRP6_POSTUMENT);
 
 
 	// opcjonalne serwo wizyjne

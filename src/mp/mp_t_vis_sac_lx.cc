@@ -93,7 +93,7 @@ void mp_task_vis_sac_lx::main_task_algorithm(void)
 			printf("AAAAAAAAA\n");
 
 			// wlaczenie generatora transparentnego w obu robotach
-			set_next_ecps_state((int) ECP_GEN_TRANSPARENT, (int) 0, "", 1, ROBOT_IRP6_ON_TRACK);
+			set_next_ecps_state((int) ECP_GEN_TRANSPARENT, (int) 1, "", 1, ROBOT_IRP6_ON_TRACK);
 
 			// opcjonalne serwo wizyjne
 			//if (mode)

@@ -57,6 +57,7 @@ void ecp_task_rcsc_irp6ot::main_task_algorithm(void)
 				wmg->Move();
 				break;
 			case ECP_GEN_TRANSPARENT:
+				gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
 				gt->Move();
 				break;
 			case ECP_GEN_BIAS_EDP_FORCE:

@@ -4,6 +4,7 @@ ecp_generator_t::ecp_generator_t(ecp_task& _ecp_task) :
 	ecp_generator(_ecp_task)
 {
 	copy_edp_buffers_in_move=false;
+	throw_kinematics_exceptions = true;
 }
 
 
@@ -34,3 +35,79 @@ bool ecp_generator_t::next_step()
 
 	return true;
 }
+
+
+void ecp_generator_t::execute_motion(void)
+{
+	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
+	/*
+	 // maskowanie sygnalu SIGTERM
+	 // w celu zapobierzenia przerwania komunikacji ECP z EDP pomiedzy SET a QUERY - usuniete
+
+	 sigset_t set;
+
+	 sigemptyset( &set );
+	 sigaddset( &set, SIGTERM );
+
+	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1)
+	 {
+	 printf ("blad w ECP procmask signal\n");
+	 }
+	 */
+	// komunikacja wlasciwa
+	the_robot->send();
+	if (the_robot->reply_package.reply_type == ERROR) {
+
+		the_robot->query();
+		throw ecp_robot::ECP_error (NON_FATAL_ERROR, EDP_ERROR);
+
+	}
+	the_robot->query();
+
+	/*
+	 // odmaskowanie sygnalu SIGTERM
+
+	 sigemptyset( &set );
+
+	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1)
+	 {
+	 printf ("blad w ECP procmask signal\n");
+	 }
+	 */
+	if (the_robot->reply_package.reply_type == ERROR) {
+		
+		
+		
+		switch ( the_robot->reply_package.error_no.error0 ) {
+			case BEYOND_UPPER_D0_LIMIT:
+			case BEYOND_UPPER_THETA1_LIMIT:
+			case BEYOND_UPPER_THETA2_LIMIT:
+			case BEYOND_UPPER_THETA3_LIMIT:
+			case BEYOND_UPPER_THETA4_LIMIT:
+			case BEYOND_UPPER_THETA5_LIMIT:
+			case BEYOND_UPPER_THETA6_LIMIT:
+			case BEYOND_UPPER_THETA7_LIMIT:
+			case BEYOND_LOWER_D0_LIMIT:
+			case BEYOND_LOWER_THETA1_LIMIT:
+			case BEYOND_LOWER_THETA2_LIMIT:
+			case BEYOND_LOWER_THETA3_LIMIT:
+			case BEYOND_LOWER_THETA4_LIMIT:
+			case BEYOND_LOWER_THETA5_LIMIT:
+			case BEYOND_LOWER_THETA6_LIMIT:
+			case BEYOND_LOWER_THETA7_LIMIT:
+				if (throw_kinematics_exceptions) 
+				{
+					throw ecp_robot::ECP_error (NON_FATAL_ERROR, EDP_ERROR);
+				}
+				
+			break;
+			default:
+				throw ecp_robot::ECP_error (NON_FATAL_ERROR, EDP_ERROR);
+			break;
+
+		} /* end: switch */
+		
+	
+	}
+}
+
