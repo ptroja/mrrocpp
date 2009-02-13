@@ -143,8 +143,9 @@ typedef struct sensor_image_t
 
 		//uchyb vsp pwilkows
 		struct {
-			float x;
-			float y;
+			int frame_number;
+			int x;
+			int y;
 		}deviation;
 
 		/*!
