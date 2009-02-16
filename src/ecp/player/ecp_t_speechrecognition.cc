@@ -43,7 +43,7 @@ void ecp_task_speechrecognition::main_task_algorithm(void)
         		srg->Move();
         		break;
         	default:
-        		fprintf(stderr, "invalid ecp_next_state.mp_2_ecp_next_state (%d)\n", mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state);
+        		fprintf(stderr, "invalid ecp_next_state.mp_2_ecp_next_state (%d)\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
         		break;
         }
 
