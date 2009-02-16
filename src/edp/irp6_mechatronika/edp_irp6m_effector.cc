@@ -190,9 +190,9 @@ void edp_irp6m_effector::arm_frame_2_xyz_eul_zyz ()
     case ARM_RMODEL:
     case ARM_RMODEL_INPUTS:
         A.get_mech_xyz_euler_zyz(reply.arm.pf_def.arm_coordinates);
-        A.get_mech_xyz_euler_zyz(rb_obj->step_data.current_kartez_position);
+        A.get_mech_xyz_euler_zyz(rb_obj->step_data.current_cartesian_position);
         //A.get_xyz_euler_zyz(reply.arm.pf_def.arm_coordinates);
-        //A.get_xyz_euler_zyz(rb_obj->step_data.current_kartez_position);
+        //A.get_xyz_euler_zyz(rb_obj->step_data.current_cartesian_position);
         break;
     default: // blad:
         throw NonFatal_error_2(STRANGE_GET_ARM_REQUEST);
@@ -235,7 +235,7 @@ void edp_irp6m_effector::move_arm (c_buffer &instruction)
 
         for (int i=0; i<6;i++)
         {
-            rb_obj->step_data.current_kartez_position[i]=instruction.arm.pf_def.arm_coordinates[i];
+            rb_obj->step_data.current_cartesian_position[i]=instruction.arm.pf_def.arm_coordinates[i];
         }
 
         rb_obj->unlock_mutex();
@@ -308,7 +308,7 @@ void edp_irp6m_effector::servo_joints_and_frame_actualization_and_upload (void)
 
         for (int i=0; i<6; i++)
         {
-            rb_obj->step_data.real_kartez_position[i] = servo_real_kartez_pos[i];
+            rb_obj->step_data.real_cartesian_position[i] = servo_real_kartez_pos[i];
 
         }
 

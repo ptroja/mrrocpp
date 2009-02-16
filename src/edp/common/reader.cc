@@ -51,12 +51,12 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 #endif
 	uint64_t e; // kod bledu systemowego
 	_pulse_msg ui_msg;// wiadomosc z ui
-	bool start;	// shall we start the reader?
-	bool stop;	// shall we stop the reader?
+	bool start; // shall we start the reader?
+	bool stop; // shall we stop the reader?
 
 	bool ui_trigger = false; // specjalny puls z UI
 
-	int file_counter=0;
+	int file_counter = 0;
 	time_t time_of_day;
 	char file_name[50];
 	char file_date[40];
@@ -75,20 +75,18 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 	char* robot_name = config.return_string_value("reader_attach_point");
 
 	if (config.exists("reader_samples"))
-		nr_of_samples=config.return_int_value("reader_samples");
+		nr_of_samples = config.return_int_value("reader_samples");
 	else
-		nr_of_samples=1000;
+		nr_of_samples = 1000;
 
-	rb_obj->reader_cnf.step=1;
-	check_config("servo_tryb", &(rb_obj->reader_cnf.servo_tryb));
+	rb_obj->reader_cnf.step = 1;
+	check_config("servo_tryb", &(rb_obj->reader_cnf.servo_mode));
 	check_config("msec", &(rb_obj->reader_cnf.msec));
 
 	char tmp_string[50];
 	char tmp2_string[3];
 
-
-
-	for (int j=0; j<MAX_SERVOS_NR; j++) {
+	for (int j = 0; j < MAX_SERVOS_NR; j++) {
 		sprintf(tmp2_string, "%d", j);
 
 		strcpy(tmp_string, "desired_inc_");
@@ -115,7 +113,7 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 		strcat(tmp_string, tmp2_string);
 		check_config(tmp_string, &(rb_obj->reader_cnf.current_joints[j]));
 
-		if (j<6) {
+		if (j < 6) {
 			strcpy(tmp_string, "force_");
 			strcat(tmp_string, tmp2_string);
 			check_config(tmp_string, &(rb_obj->reader_cnf.force[j]));
@@ -128,36 +126,38 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 			strcat(tmp_string, tmp2_string);
 			check_config(tmp_string, &(rb_obj->reader_cnf.filtered_force[j]));
 
-			strcpy(tmp_string, "current_kartez_position_");
+			strcpy(tmp_string, "current_cartesian_position_");
 			strcat(tmp_string, tmp2_string);
-			check_config(tmp_string, &(rb_obj->reader_cnf.current_kartez_position[j]));
+			check_config(tmp_string, &(rb_obj->reader_cnf.current_cartesian_position[j]));
 
-			strcpy(tmp_string, "real_kartez_position_");
+			strcpy(tmp_string, "real_cartesian_position_");
 			strcat(tmp_string, tmp2_string);
-			check_config(tmp_string, &(rb_obj->reader_cnf.real_kartez_position[j]));
+			check_config(tmp_string, &(rb_obj->reader_cnf.real_cartesian_position[j]));
 
-			strcpy(tmp_string, "real_kartez_vel_");
+			strcpy(tmp_string, "real_cartesian_vel_");
 			strcat(tmp_string, tmp2_string);
-			check_config(tmp_string, &(rb_obj->reader_cnf.real_kartez_vel[j]));
+			check_config(tmp_string, &(rb_obj->reader_cnf.real_cartesian_vel[j]));
 
-			strcpy(tmp_string, "real_kartez_acc_");
+			strcpy(tmp_string, "real_cartesian_acc_");
 			strcat(tmp_string, tmp2_string);
-			check_config(tmp_string, &(rb_obj->reader_cnf.real_kartez_acc[j]));
+			check_config(tmp_string, &(rb_obj->reader_cnf.real_cartesian_acc[j]));
 		}
 	}
 
 	// ustawienie priorytetu watku
-	set_thread_priority(pthread_self() , MAX_PRIORITY-10);
+	set_thread_priority(pthread_self(), MAX_PRIORITY-10);
 
 	// alokacja pamieci pod lokalny bufor z pomiarami
 	r_measptr = new reader_data[nr_of_samples];
+//	fprintf(stderr, "reader buffer size %dKB\n", nr_of_samples*sizeof(reader_data)/1024);
 
 	// by Y komuniakicja pomiedzy ui i reader'em rozwiazalem poprzez pulsy
 	// powolanie kanalu komunikacyjnego do odbioru pulsow sterujacych
 #if !defined(USE_MESSIP_SRR)
 	if ((my_attach = name_attach(NULL, config.return_attach_point_name(configurator::CONFIG_SERVER, "reader_attach_point"), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 #else
-	if ((my_attach = messip_channel_create(NULL, config.return_attach_point_name(configurator::CONFIG_SERVER, "reader_attach_point"), MESSIP_NOTIMEOUT, 0)) == NULL) {
+	if ((my_attach = messip_channel_create(NULL, config.return_attach_point_name(configurator::CONFIG_SERVER,
+			"reader_attach_point"), MESSIP_NOTIMEOUT, 0)) == NULL) {
 #endif
 		e = errno;
 		perror("Failed to attach pulse chanel for READER\n");
@@ -168,8 +168,8 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 	// GLOWNA PETLA Z OCZEKIWANIEM NA ZLECENIE POMIAROW
 	for (;;) {
 
-		msr_nr=0; // wyzerowanie liczby pomiarow
-		przepelniony=0; // bufor narazie nie jest przepelniony
+		msr_nr = 0; // wyzerowanie liczby pomiarow
+		przepelniony = 0; // bufor narazie nie jest przepelniony
 
 		start = false; // okresla czy odebrano juz puls rozpoczecia pomiarow
 
@@ -187,14 +187,14 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 				//  printf("reader puls\n");
 				switch (ui_msg.hdr.code) {
 					case _PULSE_CODE_DISCONNECT:
-						ConnectDetach(ui_msg.hdr.scoid);
-						break;
+					ConnectDetach(ui_msg.hdr.scoid);
+					break;
 					case _PULSE_CODE_UNBLOCK:
-						break;
+					break;
 					default:
-						if (ui_msg.hdr.code==READER_START) { // odebrano puls start
-							start = true;
-						}
+					if (ui_msg.hdr.code==READER_START) { // odebrano puls start
+						start = true;
+					}
 				}
 				continue;
 			}
@@ -223,7 +223,7 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
 		msg->message("measures started");
 
-		set_thread_priority(pthread_self() , MAX_PRIORITY+1);
+		set_thread_priority(pthread_self(), MAX_PRIORITY+1);
 
 		rb_obj->reader_wait_for_new_step();
 		// dopoki nie przyjdzie puls stopu
@@ -234,22 +234,18 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 			// sekcja krytyczna odczytu danych pomiarowych dla biezacego kroku
 			rb_obj->lock_mutex();
 
-			if (ui_trigger) {
-				rb_obj->step_data.ui_trigger = 1;
-			} else {
-				rb_obj->step_data.ui_trigger = 0;
-			}
+			rb_obj->step_data.ui_trigger = ui_trigger;
 
-			// printf("EDPX: %f\n", rb_obj->step_data.current_kartez_position[1]);
+			// printf("EDPX: %f\n", rb_obj->step_data.current_cartesian_position[1]);
 			// przepisanie danych dla biezacego kroku do bufora lokalnego reader
-			memcpy( &(r_measptr[msr_nr]), &rb_obj->step_data, sizeof(reader_data));
+			memcpy(&(r_measptr[msr_nr]), &rb_obj->step_data, sizeof(reader_data));
 
 			rb_obj->unlock_mutex();
 
 			// wykrycie przepelnienia
-			if ((++msr_nr)>=nr_of_samples) {
-				msr_nr=0;
-				przepelniony=1;
+			if ((++msr_nr) >= nr_of_samples) {
+				msr_nr = 0;
+				przepelniony = 1;
 			}
 
 			// warunkowy odbior pulsu (o ile przyszedl)
@@ -269,21 +265,21 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 				// printf("reader puls\n");
 				switch (ui_msg.hdr.code) {
 					case _PULSE_CODE_DISCONNECT:
-						ConnectDetach(ui_msg.hdr.scoid);
-						break;
+					ConnectDetach(ui_msg.hdr.scoid);
+					break;
 					case _PULSE_CODE_UNBLOCK:
-						break;
+					break;
 					default:
-						if (ui_msg.hdr.code==READER_STOP) {
-							stop = true; // dostalismy puls STOP
-						} else if (ui_msg.hdr.code==READER_TRIGGER) {
-							ui_trigger = true;	// dostaliśmy puls TRIGGER
-						}
+					if (ui_msg.hdr.code==READER_STOP) {
+						stop = true; // dostalismy puls STOP
+					} else if (ui_msg.hdr.code==READER_TRIGGER) {
+						ui_trigger = true; // dostaliśmy puls TRIGGER
+					}
 
 				}
 			}
 
-			if (rcvid > 0) {
+			if (rcvid> 0) {
 				/* A QNX IO message received, reject */
 				if (ui_msg.hdr.type >= _IO_BASE && ui_msg.hdr.type <= _IO_MAX) {
 					MsgReply(rcvid, EOK, 0, 0);
@@ -300,7 +296,7 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 			if (rcvid >= 0) {
 				if (type == READER_STOP) {
 					stop = true;
-				} else  if (type == READER_TRIGGER) {
+				} else if (type == READER_TRIGGER) {
 					ui_trigger = true;
 				}
 			}
@@ -308,12 +304,12 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 		} while (!stop); // dopoki nie przyjdzie puls stopu
 
 
-		set_thread_priority(pthread_self() , 1);// Najnizszy priorytet podczas proby zapisu do pliku
+		set_thread_priority(pthread_self(), 1);// Najnizszy priorytet podczas proby zapisu do pliku
 		msg->message("measures stopped");
 
 		// przygotowanie nazwy pliku do ktorego beda zapisane pomiary
-		time_of_day = time( NULL);
-		strftime(file_date, 40, "%g%m%d_%H-%M-%S", localtime( &time_of_day) );
+		time_of_day = time(NULL);
+		strftime(file_date, 40, "%g%m%d_%H-%M-%S", localtime(&time_of_day));
 
 		sprintf(file_name, "/%s_%s_pomiar-%d", file_date, robot_name, ++file_counter);
 		strcpy(config_file_with_dir, reader_meassures_dir);
@@ -330,11 +326,11 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
 			// sprawdzenie czy bufor byl przepelniony i odpowiednie przygotowanie granic bufora przy zapi sie do pliku
 			if (przepelniony) {
-				k=msr_nr;
-				msr_counter=nr_of_samples;
+				k = msr_nr;
+				msr_counter = nr_of_samples;
 			} else {
-				k=0;
-				msr_counter=msr_nr;
+				k = 0;
+				msr_counter = msr_nr;
 			}
 
 			// dla calego horyzontu pomiarow
@@ -345,16 +341,16 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 					k = 0;
 
 				// zapis pomiarow z biezacego kroku do pliku
-				// printf("EDP %f\n", r_measptr[k].current_kartez_position[1]);
+				// printf("EDP %f\n", r_measptr[k].current_cartesian_position[1]);
 
 
 				outfile << r_measptr[k].step << " ";
 				if (rb_obj->reader_cnf.msec)
 					outfile << r_measptr[k].msec << " ";
-				if (rb_obj->reader_cnf.servo_tryb)
-					outfile << r_measptr[k].servo_tryb << " ";
+				if (rb_obj->reader_cnf.servo_mode)
+					outfile << (r_measptr[k].servo_mode ? "1" : "0") << " ";
 
-				for (int j=0; j<MAX_SERVOS_NR; j++) {
+				for (int j = 0; j < MAX_SERVOS_NR; j++) {
 					if (rb_obj->reader_cnf.desired_inc[j])
 						outfile << r_measptr[k].desired_inc[j] << " ";
 					if (rb_obj->reader_cnf.current_inc[j])
@@ -369,14 +365,14 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
 				outfile << "j: ";
 
-				for (int j=0; j<MAX_SERVOS_NR; j++) {
+				for (int j = 0; j < MAX_SERVOS_NR; j++) {
 					if (rb_obj->reader_cnf.current_joints[j])
 						outfile << r_measptr[k].current_joints[j] << " ";
 				}
 
 				outfile << "f: ";
 
-				for (int j=0; j<6; j++) {
+				for (int j = 0; j < 6; j++) {
 					if (rb_obj->reader_cnf.force[j])
 						outfile << r_measptr[k].force[j] << " ";
 					if (rb_obj->reader_cnf.desired_force[j])
@@ -387,30 +383,30 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 
 				outfile << "k: ";
 
-				for (int j=0; j<6; j++) {
-					if (rb_obj->reader_cnf.current_kartez_position[j])
-						outfile << r_measptr[k].current_kartez_position[j] << " ";
+				for (int j = 0; j < 6; j++) {
+					if (rb_obj->reader_cnf.current_cartesian_position[j])
+						outfile << r_measptr[k].current_cartesian_position[j] << " ";
 				}
 
 				outfile << "r: ";
 
-				for (int j=0; j<6; j++) {
-					if (rb_obj->reader_cnf.real_kartez_position[j])
-						outfile << r_measptr[k].real_kartez_position[j] << " ";
+				for (int j = 0; j < 6; j++) {
+					if (rb_obj->reader_cnf.real_cartesian_position[j])
+						outfile << r_measptr[k].real_cartesian_position[j] << " ";
 				}
 
 				outfile << "v: ";
 
-				for (int j=0; j<6; j++) {
-					if (rb_obj->reader_cnf.real_kartez_vel[j])
-						outfile << r_measptr[k].real_kartez_vel[j] << " ";
+				for (int j = 0; j < 6; j++) {
+					if (rb_obj->reader_cnf.real_cartesian_vel[j])
+						outfile << r_measptr[k].real_cartesian_vel[j] << " ";
 				}
 
 				outfile << "a: ";
 
-				for (int j=0; j<6; j++) {
-					if (rb_obj->reader_cnf.real_kartez_acc[j])
-						outfile << r_measptr[k].real_kartez_acc[j] << " ";
+				for (int j = 0; j < 6; j++) {
+					if (rb_obj->reader_cnf.real_cartesian_acc[j])
+						outfile << r_measptr[k].real_cartesian_acc[j] << " ";
 				}
 
 				outfile << "t: " << r_measptr[k].ui_trigger;
@@ -425,10 +421,11 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 			msg->message("file writing is finished");
 		}
 
-		set_thread_priority(pthread_self() , MAX_PRIORITY-10);
+		set_thread_priority(pthread_self(), MAX_PRIORITY-10);
 
 	} // end: for (;;)
 
+	delete[] r_measptr;
 	delete[] robot_name;
 	delete[] reader_meassures_dir;
 }

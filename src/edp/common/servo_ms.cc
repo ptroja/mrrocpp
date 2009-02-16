@@ -45,7 +45,7 @@ void * edp_irp6s_and_conv_effector::servo_thread(void* arg)
         {
 
             rb_obj->lock_mutex();
-            rb_obj->step_data.servo_tryb = 0;  // bierny
+            rb_obj->step_data.servo_mode = false;  // bierny
             rb_obj->unlock_mutex();
 
             /* Nie otrzymano nowego polecenia */
@@ -57,7 +57,7 @@ void * edp_irp6s_and_conv_effector::servo_thread(void* arg)
         { // nowe polecenie
 
             rb_obj->lock_mutex();
-            rb_obj->step_data.servo_tryb = 1;  // czynny
+            rb_obj->step_data.servo_mode = true;  // czynny
             rb_obj->unlock_mutex();
 
             switch (sb->command_type())

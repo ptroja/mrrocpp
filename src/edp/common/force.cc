@@ -1,6 +1,6 @@
 /*	! \file src/edp/irp6s/force.cc
  * \brief WATKI SILOWE
- * Ostatnia modyfikacja: kwiecieñ 2006*/
+ * Ostatnia modyfikacja: kwiecieï¿½ 2006*/
 
 /********************************* INCLUDES *********************************/
 #include <stdio.h>
@@ -116,7 +116,7 @@ void * edp_irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 		rb_obj->lock_mutex();
 		edp_vsp_reply.servo_step=rb_obj->step_data.step;
 		for (int i=0; i<=5; i++) {
-			edp_vsp_reply.current_present_XYZ_ZYZ_arm_coordinates[i]=rb_obj->step_data.current_kartez_position[i];
+			edp_vsp_reply.current_present_XYZ_ZYZ_arm_coordinates[i]=rb_obj->step_data.current_cartesian_position[i];
 		}
 
 		rb_obj->unlock_mutex();

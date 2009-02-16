@@ -60,7 +60,7 @@ void edp_irp6s_effector::compute_xyz_euler_zyz (const c_buffer &instruction)
         p = (double*) instruction.arm.pf_def.arm_coordinates;
     }
     for (int i=0;i<6;i++)
-        rb_obj->step_data.current_kartez_position[i] = instruction.arm.pf_def.arm_coordinates[i];
+        rb_obj->step_data.current_cartesian_position[i] = instruction.arm.pf_def.arm_coordinates[i];
 
     // dla robotow track i postument - oblicz chwytak
     if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
@@ -310,7 +310,7 @@ void edp_irp6s_effector::tool_axially_symmetrical_frame_2_xyz_eul_zy (void)
         }
         else
         {
-            fi   = 0;   /* Dowolna wartož k†ta fi, poniewa§ Vx = Vy = 0 */
+            fi   = 0;   /* Dowolna wartoï¿½ï¿½ kï¿½ta fi, poniewaï¿½ Vx = Vy = 0 */
             if (v6[2] > 0)
                 psi = -M_PI/2;
             else
