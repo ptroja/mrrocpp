@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP) 
+// Proces: 	EFFECTOR CONTROL PROCESS (ECP)
 // Plik:			ecp_fs.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		Testowy obraz testowego czujnika VSP
@@ -20,4 +20,4 @@
 ecp_mp_time_sensor::ecp_mp_time_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object):
 	ecp_mp_sensor (_sensor_name, _section_name, _ecp_mp_object) {
   union_size = sizeof(image.sensor_union.time);
-};//: ecp_mp_time_sensor
+}//: ecp_mp_time_sensor

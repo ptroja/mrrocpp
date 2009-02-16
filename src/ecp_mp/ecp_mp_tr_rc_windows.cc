@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP) 
+// Proces: 	EFFECTOR CONTROL PROCESS (ECP)
 // Plik:			ecp_mp_sensor.h
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		Definicja konstruktora bazowej klasy czujnikow po stronie procesu ECP - jeden dla wszystkich.
@@ -32,15 +32,15 @@ rc_windows_transmitter::rc_windows_transmitter  (
 		const char* _section_name,
 		ecp_mp_task& _ecp_mp_object)  :
 			transmitter (_transmitter_name, _section_name, _ecp_mp_object) {
-	
+
 	if(!rc_win_buf) {
 		rc_win_buf = new rc_win_buf_typedef;
 	} else {
 		printf ("powolano juz obiekt klasy transmitter\n");
 	}
-	
+
 	sem_init(&(rc_win_buf->sem), 0, 1);
-	
+
 	rc_win_buf->solver_hostname = _ecp_mp_object.config.return_string_value("solver_hostname", _section_name);
 	rc_win_buf->solver_port = _ecp_mp_object.config.return_int_value("solver_port", _section_name);
 }
@@ -61,8 +61,8 @@ void * rc_windows_transmitter::do_query(void * arg) {
   fd_set fds;
   struct timeval timeout;
   int retval;
-  
-  
+
+
   /*
   	switch (to_va.rc_windows.rc_state[i]) {
   		case 'Y':
@@ -82,7 +82,7 @@ void * rc_windows_transmitter::do_query(void * arg) {
   			pattern[i] = 'b'; break;
   		case 'G':
   		case 'g':
-  			pattern[i] = 'g'; break;  			
+  			pattern[i] = 'g'; break;
   	}
   */
 
@@ -130,7 +130,6 @@ void * rc_windows_transmitter::do_query(void * arg) {
   close(sock);
   sem_post(&(rc_win_buf->sem));
 
-
   return NULL;
 }
 
@@ -166,46 +165,46 @@ int rc_windows_transmitter::make_socket (const char *hostname, uint16_t port)
 }
 
 bool rc_windows_transmitter::t_write() {
-	
+
 	snprintf(rc_win_buf->request, sizeof(rc_win_buf->request), "GET /?%s HTTP/1.0\r\n", to_va.rc_windows.rc_state);
 
 	pthread_create(&worker, NULL, do_query, NULL);
-	
-	return 1;
+
+	return true;
 }
 
 bool rc_windows_transmitter::t_read(bool wait) {
 
-int l=0;
+	int l=0;
 
 	if (wait) {
 		sem_wait(&(rc_win_buf->sem));
-		
+
 		printf("W SEMAFORZE 1 %d\n", strlen(rc_win_buf->response)-33);
-		
+
 		l=strlen(rc_win_buf->response)-33-16;
 		if(l<0) l=0;
-		
+
 		strncpy(from_va.rc_windows.sequence, rc_win_buf->response+33, l);
 		from_va.rc_windows.sequence[l]='\0';
-		
+
 		sem_post(&(rc_win_buf->sem));
-		
-		return 1;
+
+		return true;
 	} else {
 		if (sem_trywait(&(rc_win_buf->sem)) == 0) {
-		
+
 			printf("W SEMAFORZE2 %d\n", strlen(rc_win_buf->response)-33);
 			l=strlen(rc_win_buf->response)-33-16;
 			if(l<0) l=0;
 			strncpy(from_va.rc_windows.sequence, rc_win_buf->response+33, l);
 			from_va.rc_windows.sequence[l]='\0';
-			
+
 			sem_post(&(rc_win_buf->sem));
-		
-			return 1;
+
+			return true;
 		} else {
-			return 0;
+			return false;
 		}
 	}
 }

@@ -230,7 +230,6 @@ void ecp_mp_task::kill_all_VSP (std::map <SENSOR_ENUM, sensor*>& _sensor_m)
 #endif
 		}
 	}
-
 }
 // ------------------------------------------------------------------------
 

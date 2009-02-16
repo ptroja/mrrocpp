@@ -1,8 +1,8 @@
 // ------------------------------------------------------------------------
 //                        		ecp_s.cc		dla QNX6.2
-// 
+//
 //                     EFFECTOR CONTROL PROCESS (VSP) - metody klasy ecp_mp_sensor()
-// 
+//
 // Ostatnia modyfikacja: 06.12.2006
 // Autor: tkornuta
 // ------------------------------------------------------------------------
@@ -18,18 +18,16 @@
 #include "lib/srlib.h"
 
 #include "ecp_mp/ecp_mp_s_pawel.h"		// zawiera klase ecp_mp_sensor
-	
+
 /***************************** CONSTRUCTOR ********************************/
 ecp_mp_pawel_sensor::ecp_mp_pawel_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object):
 	ecp_mp_sensor (_sensor_name, _section_name, _ecp_mp_object) {
-  
-  union_size = sizeof(image.sensor_union.ball);
-  
-  
-//  printf("[ecp_mp]\tunion_size = %i\n",union_size);
-//  sr_ecp_msg->message (SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
 
-};
+	union_size = sizeof(image.sensor_union.ball);
+
+	//  printf("[ecp_mp]\tunion_size = %i\n",union_size);
+	//  sr_ecp_msg->message (SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
+}
 /************************** CONFIGURE SENSOR ******************************/
 void ecp_mp_pawel_sensor::configure_sensor() {
 
@@ -38,7 +36,7 @@ void ecp_mp_pawel_sensor::configure_sensor() {
 	// Wyslanie polecenia do procesu VSP.
 	if (devctl(sd, DEVCTL_RW, &devmsg, sizeof(DEVCTL_MSG), NULL) == 9)
 		throw sensor_error(SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
-};
+}
 
 /************************** INITIATE  READING *********************************/
 void ecp_mp_pawel_sensor::initiate_reading() {
@@ -49,18 +47,18 @@ void ecp_mp_pawel_sensor::initiate_reading() {
 
 //	printf("[ecp_mp]\tinitiate reading\n");
 
-};
+}
 
 /***************************** GET  READING *********************************/
 void ecp_mp_pawel_sensor::get_reading() {
-	
+
 	if(read(sd, &from_vsp, sizeof(VSP_ECP_MSG)) == -1)
 		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
 
 	if(from_vsp.vsp_report == VSP_REPLY_OK)
 	{
 		memcpy(&image.sensor_union.ball, &from_vsp.comm_image.sensor_union.ball, union_size);
-	
+
 		//int nsec = round((double)image.sensor_union.ball.ts.tv_nsec/10000000.0);
 
 //		printf ("[nr] %i\t[x] %f\t[y] %f\t[z] %f\n", image.sensor_union.ball.nr, image.sensor_union.ball.x, image.sensor_union.ball.y, image.sensor_union.ball.z);
@@ -74,5 +72,4 @@ void ecp_mp_pawel_sensor::get_reading() {
 
 		printf("[ecp_mp]\treply from VSP not OK\n");
 	}
-}; 
-
+}

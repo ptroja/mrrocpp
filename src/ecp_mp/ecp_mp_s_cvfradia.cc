@@ -59,10 +59,10 @@ ecp_mp_cvfradia_sensor::ecp_mp_cvfradia_sensor(SENSOR_ENUM _sensor_name, const c
 		throw sensor_error(SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
 
-  // Retrieve task name.
+	// Retrieve task name.
 	char* task = _ecp_mp_object.config.return_string_value("cvfradia_task", _section_name);
-  strcpy(to_vsp.cvfradia_task_name, task);
-  free(task);
+	strcpy(to_vsp.cvfradia_task_name, task);
+	delete []task;
 
 	sr_ecp_msg.message("Connected to cvFraDIA");
 }// end: ecp_mp_sensor
@@ -74,13 +74,13 @@ ecp_mp_cvfradia_sensor::ecp_mp_cvfradia_sensor(SENSOR_ENUM _sensor_name, const c
 void ecp_mp_cvfradia_sensor::configure_sensor() {
 	// Send adequate command to cvFraDIA.
 	to_vsp.i_code = VSP_CONFIGURE_SENSOR;
-  // Name of required task is set in constructor.
+	// Name of required task is set in constructor.
 
-//cout<<to_vsp.cvfradia_task_name;
+	//cout<<to_vsp.cvfradia_task_name;
 
 	if(write(sockfd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)
 		throw sensor_error (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
-}; // end initiate_sensor
+}
 
 
 /*!
@@ -92,7 +92,7 @@ void ecp_mp_cvfradia_sensor::initiate_reading() {
 
 	if(write(sockfd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)
 		throw sensor_error (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
-};
+}
 
 
 /*!
@@ -103,7 +103,7 @@ void ecp_mp_cvfradia_sensor::send_reading(ECP_VSP_MSG to) {
 
 	if(write(sockfd, &to, sizeof(ECP_VSP_MSG)) == -1)
 		throw sensor_error (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
-};
+}
 
 
 /*!
@@ -125,7 +125,7 @@ void ecp_mp_cvfradia_sensor::get_reading() {
 	else
 		sr_ecp_msg.message ("Reply from VSP not ok");
 	//cout<<"cvFraDIA: ("<<image.cvFraDIA.x<<","<<image.cvFraDIA.y<<") size: "<<image.cvFraDIA.width<<","<<image.cvFraDIA.height<<")\n";
-};
+}
 
 
 /*!

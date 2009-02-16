@@ -28,7 +28,7 @@ ecp_mp_wiimote_sensor::ecp_mp_wiimote_sensor(SENSOR_ENUM _sensor_name, const cha
 		sr_ecp_msg.message("ERROR opening socket");
 		throw sensor_error(SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
-    
+
 	// Get server hostname.
 	server = gethostbyname(wiimote_node_name);
 	if (server == NULL) {
@@ -105,5 +105,4 @@ void ecp_mp_wiimote_sensor::terminate() {
 
 	close(sockfd);
 	sr_ecp_msg.message("Terminate\n");
-} 
-
+}

@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP) 
+// Proces: 	EFFECTOR CONTROL PROCESS (ECP)
 // Plik:	ecp_mp_s_rcs_kociemba.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:	metody klasy ecp_mp_rcs_kociemba dla czujnika znajdujacego rozwiazanie kostki Rubika alg. Kociemby
@@ -28,8 +28,8 @@ ecp_mp_rcs_kociemba::ecp_mp_rcs_kociemba(SENSOR_ENUM _sensor_name, const char* _
 	union_size = sizeof(image.sensor_union.rcs);
 	// Wyzerowanie odczytow.
 	image.sensor_union.rcs.cube_solution[0] = '\0';
-}; // end: 
-	
+} // end:
+
 /************************** CONFIGURE SENSOR ******************************/
 void ecp_mp_rcs_kociemba::configure_sensor() {
 	// Rozkaz konfiguracjii czujnika.
@@ -39,7 +39,7 @@ void ecp_mp_rcs_kociemba::configure_sensor() {
 	// Wyslanie polecenia do procesu VSP.
 	if (devctl(sd, DEVCTL_RW, &devmsg, sizeof(DEVCTL_MSG), NULL) == 9)
 		throw sensor_error(SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
-}; // end: configure_sensor
+} // end: configure_sensor
 
 /************************** INITIATE READING *********************************/
 void ecp_mp_rcs_kociemba::initiate_reading(){
@@ -55,7 +55,7 @@ void ecp_mp_rcs_kociemba::initiate_reading(){
 		image.sensor_union.rcs.init_mode = RCS_INIT_FAILURE;
 		printf("ECP_MP KR initiate_reading: Reply from VSP not OK!\n");
 	}
-};
+}
 
 /***************************** GET  READING *********************************/
 void ecp_mp_rcs_kociemba::get_reading() {
@@ -73,4 +73,4 @@ void ecp_mp_rcs_kociemba::get_reading() {
 		image.sensor_union.rcs.reading_mode = RCS_SOLUTION_NOTFOUND;
 		printf("ECP_MP KC get_reading: Reply from VSP not OK!\n");
 	}
-}; // end: get_reading
+} // end: get_reading

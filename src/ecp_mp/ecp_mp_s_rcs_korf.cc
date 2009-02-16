@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP) 
+// Proces: 	EFFECTOR CONTROL PROCESS (ECP)
 // Plik:	ecp_mp_s_rcs_korf.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:	metody klasy ecp_mp_rcs_korf dla czujnika znajdujacego rozwiazanie kostki Rubika alg. Korfa
@@ -27,7 +27,7 @@ ecp_mp_rcs_korf::ecp_mp_rcs_korf(SENSOR_ENUM _sensor_name, const char* _section_
 	union_size = sizeof(image.sensor_union.rcs);
 	// Wyzerowanie odczytow.
     image.sensor_union.rcs.cube_solution[0] = '\0';
-}; // end: ecp_mp_rcs_korf
+} // end: ecp_mp_rcs_korf
 
 /************************** CONFIGURE SENSOR ******************************/
 void ecp_mp_rcs_korf::configure_sensor() {
@@ -37,7 +37,7 @@ void ecp_mp_rcs_korf::configure_sensor() {
 	// Wyslanie polecenia do procesu VSP.
 	if (devctl(sd, DEVCTL_RW, &devmsg, sizeof(DEVCTL_MSG), NULL) == 9)
 		throw sensor_error(SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
-}; // end: configure_sensor
+} // end: configure_sensor
 
 /************************** INITIATE READING *********************************/
 void ecp_mp_rcs_korf::initiate_reading(){
@@ -53,7 +53,7 @@ void ecp_mp_rcs_korf::initiate_reading(){
 		image.sensor_union.rcs.init_mode = RCS_INIT_FAILURE;
 		printf("ECP_MP KR initiate_reading: Reply from VSP not OK!\n");
 	}
-};
+}
 
 /***************************** GET  READING *********************************/
 void ecp_mp_rcs_korf::get_reading() {
@@ -71,4 +71,4 @@ void ecp_mp_rcs_korf::get_reading() {
 		image.sensor_union.rcs.reading_mode = RCS_SOLUTION_NOTFOUND;
 		printf("ECP_MP KR get_reading: Reply from VSP not OK!\n");
 	}
-}; // end: get_reading
+} // end: get_reading

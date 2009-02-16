@@ -20,7 +20,7 @@ using namespace std;
 /*!
  * Constructor. Creates socket connection to pcbird.
  */
-ecp_mp_pcbird_sensor::ecp_mp_pcbird_sensor(SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object) 
+ecp_mp_pcbird_sensor::ecp_mp_pcbird_sensor(SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object)
 	: sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(_sensor_name)
 {
 	// Set size of passed message/union.
@@ -51,7 +51,7 @@ void ecp_mp_pcbird_sensor::configure_sensor() {
 		throw sensor_error (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);*/
 
 
-}; // end initiate_sensor
+} // end initiate_sensor
 
 
 /*!
@@ -59,14 +59,14 @@ void ecp_mp_pcbird_sensor::configure_sensor() {
  */
 void ecp_mp_pcbird_sensor::initiate_reading() {
 
-};
+}
 
 
 /*!
  * Retrieves aggregated data from pcbird.
  */
 void ecp_mp_pcbird_sensor::get_reading() {
-  
+
 //  pcbird_get_streaming_position(sockfd, (pcbird_pos_t *)&image.sensor_union.pcbird);
   pcbird_get_single_position(sockfd, (pcbird_pos_t *)&image.sensor_union.pcbird);
 
@@ -74,15 +74,13 @@ void ecp_mp_pcbird_sensor::get_reading() {
   printf("[a, b, g] = [%.3f, %.3f, %.3f] ", image.sensor_union.pcbird.a, image.sensor_union.pcbird.b, image.sensor_union.pcbird.g);
   printf("dist = %.3f ts=%d:%d\n", image.sensor_union.pcbird.distance, image.sensor_union.pcbird.ts_sec, image.sensor_union.pcbird.ts_usec);
 
-};
+}
 
 
 /*!
  * Closes pcbird socket connection.
  */
 void ecp_mp_pcbird_sensor::terminate() {
-
-  close(sockfd);
+	close(sockfd);
 	sr_ecp_msg.message("Terminate\n");
 } // end: terminate()
-
