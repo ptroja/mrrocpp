@@ -39,12 +39,12 @@ void ecp_task_speechrecognition::main_task_algorithm(void)
 
         switch ( (ECP_PLAYER_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
         {
-        case ECP_GEN_SPEECHRECOGNITION:
-            srg->Move();
-            break;
-        default:
-            fprintf(stderr, "invalid ecp_next_state.mp_2_ecp_next_state (%d)\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
-            break;
+        	case ECP_GEN_SPEECHRECOGNITION:
+        		srg->Move();
+        		break;
+        	default:
+        		fprintf(stderr, "invalid ecp_next_state.mp_2_ecp_next_state (%d)\n", mp_command.mp_package.ecp_next_state.mp_2_ecp_next_state);
+        		break;
         }
 
         ecp_termination_notice();
