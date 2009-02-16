@@ -9,11 +9,9 @@
 // Data:		31.01.2007
 // ------------------------------------------------------------------------
 
-#if !defined(_CONVEYOR_KIN_MODEL)  
+#if !defined(_CONVEYOR_KIN_MODEL)
 #define _CONVEYOR_KIN_MODEL
 
-// Definicja typu frame_tab.
-#include "common/impconst.h"
 // Definicja klasy kinematic_model.
 #include "kinematics/common/kinematic_model.h"
 
@@ -38,19 +36,18 @@ public:
   kinematic_model_conveyor (void);
 
   // Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne.
-  virtual void mp2i_transform(const double* local_current_motor_pos, double* local_current_joints); 
+  virtual void mp2i_transform(const double* local_current_motor_pos, double* local_current_joints);
 
   // Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow.
   virtual void i2mp_transform(double* local_desired_motor_pos_new, double* local_desired_joints);
 
   // Rozwiazanie prostego zagadnienia kinematyki.
   virtual void direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame);
-  
+
   // Rozwiazanie odwrotnego zagadnienia kinematyki.
   virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame);
 
 
 };//: kinematic_model_conveyor;
 
-#endif					   
-
+#endif

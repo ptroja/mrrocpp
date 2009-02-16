@@ -30,11 +30,10 @@ weight_meassure_generator::weight_meassure_generator(ecp_task& _ecp_task,
 		double _weight_difference, double _catch_time) :
 	ecp_generator(_ecp_task), weight_difference(_weight_difference),
 			current_buffer_pointer(0), initial_weight(0.0),
-			initial_weight_counted(false), 
+			initial_weight_counted(false),
 			catch_time(_catch_time), terminate_state_recognized(false)
 {
 	clear_buffer();
-
 }
 
 void weight_meassure_generator::insert_in_buffer(double fx)
@@ -58,10 +57,10 @@ void weight_meassure_generator::clear_buffer()
 	current_buffer_pointer=0;
 	initial_weight_counted = false;
 	terminate_state_recognized = false;
-	
+
 	catch_lag = initial_catch_lag = (int) (1000000*catch_time/(USLEEP_TIME));
 	// std::cout << "weight_meassure_generator" << initial_catch_lag << std::endl;
-	
+
 }
 
 double weight_meassure_generator::check_average_weight_in_buffer(void) const
@@ -213,11 +212,11 @@ bool y_nose_run_force_generator::first_step()
 	 the_robot->EDP_data.ECPtoEDP_force_coordinates[0]=0.0;
 	 the_robot->EDP_data.ECPtoEDP_force_coordinates[1]=0.0;
 	 the_robot->EDP_data.ECPtoEDP_force_coordinates[2]=0.0;
-	 
+
 	 for (int j=0; j<6 ; j++)	{
 	 the_robot->EDP_data.position_increment[j]=0.0;
 	 }
-	 
+
 	 the_robot->EDP_data.dyslocation_matrix[0][0]=1;
 	 the_robot->EDP_data.dyslocation_matrix[1][1]=1;
 	 the_robot->EDP_data.dyslocation_matrix[2][2]=1;
@@ -298,23 +297,23 @@ bool y_egg_force_generator::first_step()
 	/*
 	 the_robot->EDP_data.force_move_mode=2; // z regulacja silowa po query
 	 the_robot->EDP_data.position_set_mode=1; // przyrostowo
-	 
+
 	 the_robot->EDP_data.force_axis_quantity=3; // DOBRZE
-	 
+
 	 the_robot->EDP_data.set_arm_type = POSE_FORCE_LINEAR;
 	 the_robot->EDP_data.get_arm_type = POSE_FORCE_LINEAR;
 	 the_robot->EDP_data.motion_type = ABSOLUTE;
 	 the_robot->EDP_data.motion_steps = td.internode_step_no;
 	 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-	 
+
 	 the_robot->EDP_data.ECPtoEDP_force_coordinates[0]=0.0;
 	 the_robot->EDP_data.ECPtoEDP_force_coordinates[1]=0.0;
 	 the_robot->EDP_data.ECPtoEDP_force_coordinates[2]=0.0;
-	 
+
 	 for (int j=0; j<6 ; j++)	{
 	 the_robot->EDP_data.position_increment[j]=0.0;
 	 }
-	 
+
 	 the_robot->EDP_data.dyslocation_matrix[0][0]=1;
 	 the_robot->EDP_data.dyslocation_matrix[1][1]=1;
 	 the_robot->EDP_data.dyslocation_matrix[2][2]=1;
@@ -360,11 +359,11 @@ bool y_egg_force_generator::next_step()
 		 the_robot->EDP_data.force_axis_quantity=3; // DOBRZE
 		 the_robot->EDP_data.motion_steps = td.internode_step_no;
 		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-		 
+
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[0]=0.0;
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[1]=0.0;
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[2]=0.0;
-		 
+
 		 for (int j=0; j<6 ; j++)	{
 		 the_robot->EDP_data.position_increment[j]=0.0;
 		 }
@@ -391,13 +390,13 @@ bool y_egg_force_generator::next_step()
 		td.value_in_step_no = td.internode_step_no - 2;
 		/*
 		 the_robot->EDP_data.force_axis_quantity=0; // ruch czysto pozycyjny
-		 
+
 		 the_robot->EDP_data.motion_steps = td.internode_step_no;
 		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-		 
+
 		 // inkrementacja numeru iteracji dla biezacego stanu
 		 in_state_iteration++;
-		 
+
 		 // bezruch
 		 for (int j=0; j<6 ; j++)	{
 		 the_robot->EDP_data.position_increment[j]=0.0;
@@ -434,10 +433,10 @@ bool y_egg_force_generator::next_step()
 		td.value_in_step_no = td.internode_step_no - 2;
 		/*
 		 the_robot->EDP_data.force_axis_quantity = 0;
-		 
+
 		 the_robot->EDP_data.motion_steps = td.internode_step_no;
 		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-		 
+
 		 the_robot->EDP_data.position_increment[0]=0.0;
 		 the_robot->EDP_data.position_increment[1]=0.0;
 		 the_robot->EDP_data.position_increment[2]=-POS_Z_AXIS_MACROSTEP_INC;
@@ -480,10 +479,10 @@ bool y_egg_force_generator::next_step()
 		td.value_in_step_no = td.internode_step_no - 2;
 		/*
 		 the_robot->EDP_data.force_axis_quantity = 0;
-		 
+
 		 the_robot->EDP_data.motion_steps = td.internode_step_no;
 		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-		 
+
 		 the_robot->EDP_data.position_increment[0]=0.0;
 		 the_robot->EDP_data.position_increment[1]=0.0;
 		 the_robot->EDP_data.position_increment[2]=-POS_Z_AXIS_MACROSTEP_INC;
@@ -514,17 +513,17 @@ bool y_egg_force_generator::next_step()
 
 		/*
 		 the_robot->EDP_data.force_axis_quantity=1;
-		 
+
 		 the_robot->EDP_data.relative_force_vector[0]=0.0;
 		 the_robot->EDP_data.relative_force_vector[1]=0.0;
 		 the_robot->EDP_data.relative_force_vector[2]=1.0;
-		 
+
 		 the_robot->EDP_data.motion_steps = td.internode_step_no;
 		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP_OPADANIE_EGG;
-		 
+
 		 in_state_iteration++;
-		 
+
 		 for (int j=0; j<6 ; j++)	{
 		 the_robot->EDP_data.position_increment[j]=0.0;
 		 }
@@ -548,10 +547,10 @@ bool y_egg_force_generator::next_step()
 		td.value_in_step_no = td.internode_step_no - 2;
 		/*
 		 the_robot->EDP_data.force_axis_quantity=0;
-		 
+
 		 the_robot->EDP_data.motion_steps = td.internode_step_no;
 		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-		 
+
 		 the_robot->EDP_data.position_increment[0]=0.0;
 		 the_robot->EDP_data.position_increment[1]=0.0;
 		 the_robot->EDP_data.position_increment[2]=0.05;
@@ -709,7 +708,7 @@ bool y_edge_follow_force_generator::next_step()
 		the_robot->EDP_data.next_motor_arm_coordinates[i]=0.0;
 	}
 
-	
+
 
 
 
@@ -734,7 +733,7 @@ bool y_edge_follow_force_generator::next_step()
 
 		// basic_rot_frame = Homog_matrix(c_alfa, s_alfa, 0.0,	-s_alfa, c_alfa, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
 		basic_rot_frame = Homog_matrix(c_alfa, -s_alfa, 0.0, 0.0,
-			 s_alfa, c_alfa, 0.0, 0.0, 
+			 s_alfa, c_alfa, 0.0, 0.0,
 			 0.0, 0.0, 1, 0.0);
 
 		// dodatkowa macierz obracajaca kierunek wywieranej sily tak aby stabilizowac jej wartosc
@@ -743,7 +742,7 @@ bool y_edge_follow_force_generator::next_step()
 		double c_alfa_r = cos(alfa_r);
 
 		// ex_rot_frame = Homog_matrix(c_alfa_r, s_alfa_r, 0.0,	-s_alfa_r, c_alfa_r, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
-		ex_rot_frame = Homog_matrix(c_alfa_r, -s_alfa_r, 0.0, 0.0, 
+		ex_rot_frame = Homog_matrix(c_alfa_r, -s_alfa_r, 0.0, 0.0,
 			s_alfa_r, c_alfa_r, 0.0, 0.0,
 			 0.0, 0.0, 1, 0.0);
 
@@ -852,7 +851,7 @@ bool legobrick_attach_force_generator::first_step()
 	//the_robot->EDP_data.next_behaviour[4] = GUARDED_MOTION;
 	the_robot->EDP_data.next_behaviour[4] = UNGUARDED_MOTION;
 
-	//os z 
+	//os z
 	the_robot->EDP_data.next_reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING;
 	the_robot->EDP_data.next_velocity[2] = 0;
 	the_robot->EDP_data.next_force_xyz_torque_xyz[2] = 5.0;
@@ -883,11 +882,11 @@ bool legobrick_attach_force_generator::next_step()
 	{
 		the_robot->EDP_data.next_motor_arm_coordinates[i]=0.0;
 	}
-	
+
 	Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
 
 	double wz = force_torque[2];
-	
+
 	//warunek stopu
 	if(wz >= 5.0) return false;
 
@@ -970,7 +969,7 @@ bool legobrick_detach_force_generator::first_step()
 	the_robot->EDP_data.next_force_xyz_torque_xyz[4] = 0.0;
 	the_robot->EDP_data.next_behaviour[4] = GUARDED_MOTION;
 
-	//os z 
+	//os z
 	the_robot->EDP_data.next_reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING/4;
 	the_robot->EDP_data.next_velocity[2] = 0;
 	the_robot->EDP_data.next_force_xyz_torque_xyz[2] = 20.0;
@@ -1056,21 +1055,21 @@ bool y_drawing_teach_in_force_generator::first_step()
 
 		/*
 		 the_robot->EDP_data.force_axis_quantity=1;
-		 
+
 		 the_robot->EDP_data.relative_force_vector[0]=0.0;
 		 the_robot->EDP_data.relative_force_vector[1]=0.0;
 		 the_robot->EDP_data.relative_force_vector[2]=1.0;
-		 
+
 		 normalize_vector(the_robot->EDP_data.relative_force_vector,the_robot->EDP_data.relative_force_vector,3);
-		 
+
 		 the_robot->EDP_data.set_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->EDP_data.get_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->EDP_data.motion_type = ABSOLUTE;
 		 the_robot->EDP_data.motion_steps = td.internode_step_no;
 		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-		 
+
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
-		 
+
 		 the_robot->EDP_data.dyslocation_matrix[0][0]=1;
 		 the_robot->EDP_data.dyslocation_matrix[1][1]=1;
 		 the_robot->EDP_data.dyslocation_matrix[2][2]=1;
@@ -1102,24 +1101,24 @@ bool y_drawing_teach_in_force_generator::first_step()
 		/*
 		 the_robot->EDP_data.force_move_mode=2;
 		 the_robot->EDP_data.position_set_mode=1; // przyrostowo
-		 
+
 		 the_robot->EDP_data.force_axis_quantity=3;
-		 
+
 		 the_robot->EDP_data.set_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->EDP_data.get_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->EDP_data.motion_type = ABSOLUTE;
 		 the_robot->EDP_data.motion_steps = td.internode_step_no;
 		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-		 
+
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[0]=0;
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[1]=0;
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
-		 
+
 		 for (int j=0; j<6 ; j++)	{
 		 the_robot->EDP_data.position_increment[j]=0.0;
 		 }
 		 // zerowy przyrost pozycji
-		 
+
 		 the_robot->EDP_data.dyslocation_matrix[0][0]=1;
 		 the_robot->EDP_data.dyslocation_matrix[1][1]=1;
 		 the_robot->EDP_data.dyslocation_matrix[2][2]=1;
@@ -1257,21 +1256,21 @@ bool y_advanced_drawing_teach_in_force_generator::first_step()
 
 		/*
 		 the_robot->EDP_data.force_axis_quantity=1;
-		 
+
 		 the_robot->EDP_data.relative_force_vector[0]=0.0;
 		 the_robot->EDP_data.relative_force_vector[1]=0.0;
 		 the_robot->EDP_data.relative_force_vector[2]=1.0;
-		 
+
 		 normalize_vector(the_robot->EDP_data.relative_force_vector,the_robot->EDP_data.relative_force_vector,3);
-		 
+
 		 the_robot->EDP_data.set_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->EDP_data.get_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->EDP_data.motion_type = ABSOLUTE;
 		 the_robot->EDP_data.motion_steps = td.internode_step_no;
 		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-		 
+
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
-		 
+
 		 the_robot->EDP_data.dyslocation_matrix[0][0]=1;
 		 the_robot->EDP_data.dyslocation_matrix[1][1]=1;
 		 the_robot->EDP_data.dyslocation_matrix[2][2]=1;
@@ -1312,23 +1311,23 @@ bool y_advanced_drawing_teach_in_force_generator::first_step()
 		/*
 		 the_robot->EDP_data.force_move_mode=2;
 		 the_robot->EDP_data.position_set_mode=1; // przyrostowo
-		 
+
 		 the_robot->EDP_data.force_axis_quantity=3;
-		 
+
 		 the_robot->EDP_data.set_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->EDP_data.get_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->EDP_data.motion_type = ABSOLUTE;
 		 the_robot->EDP_data.motion_steps = td.internode_step_no;
 		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-		 
+
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[0]=0;
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[1]=0;
 		 the_robot->EDP_data.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
-		 
+
 		 for (int j=0; j<6 ; j++)	{
 		 the_robot->EDP_data.position_increment[j]=0.0;}
 		 // zerowy przyrost pozycji
-		 
+
 		 the_robot->EDP_data.dyslocation_matrix[0][0]=1;
 		 the_robot->EDP_data.dyslocation_matrix[1][1]=1;
 		 the_robot->EDP_data.dyslocation_matrix[2][2]=1;
@@ -1391,15 +1390,15 @@ bool y_advanced_drawing_teach_in_force_generator::next_step()
 			td.value_in_step_no = td.internode_step_no - 2;
 			/*
 			 the_robot->EDP_data.force_axis_quantity=1;
-			 
+
 			 the_robot->EDP_data.motion_steps = td.internode_step_no;
 			 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-			 
+
 			 // inkrementacja numeru iteracji dla biezacego stanu
 			 in_state_iteration++;
-			 
+
 			 #define ST2_LOW_SEGMENT 20
-			 
+
 			 if (in_state_iteration < ST2_LOW_SEGMENT)
 			 {
 			 the_robot->EDP_data.ECPtoEDP_force_coordinates[2]= (short) (MIN_SILA_DOCISKUEDP +
@@ -1408,7 +1407,7 @@ bool y_advanced_drawing_teach_in_force_generator::next_step()
 			 {
 			 the_robot->EDP_data.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
 			 }
-			 
+
 			 the_robot->EDP_data.position_increment[0]=tip.coordinates[0];
 			 the_robot->EDP_data.position_increment[1]=tip.coordinates[1];
 			 the_robot->EDP_data.position_increment[2]=0.0;
@@ -1441,10 +1440,10 @@ bool y_advanced_drawing_teach_in_force_generator::next_step()
 			td.value_in_step_no = td.internode_step_no - 2;
 			/*
 			 the_robot->EDP_data.force_axis_quantity=0;
-			 
+
 			 the_robot->EDP_data.motion_steps = td.internode_step_no;
 			 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-			 
+
 			 the_robot->EDP_data.position_increment[0]=0.0;
 			 the_robot->EDP_data.position_increment[1]=0.0;
 			 the_robot->EDP_data.position_increment[2]=0.01;
@@ -1468,10 +1467,10 @@ bool y_advanced_drawing_teach_in_force_generator::next_step()
 			td.value_in_step_no = td.internode_step_no - 2;
 			/*
 			 the_robot->EDP_data.force_axis_quantity = 0;
-			 
+
 			 the_robot->EDP_data.motion_steps = td.internode_step_no;
 			 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-			 
+
 			 the_robot->EDP_data.position_increment[0]=tip.coordinates[0];
 			 the_robot->EDP_data.position_increment[1]=tip.coordinates[1];
 			 the_robot->EDP_data.position_increment[2]=0.0;
@@ -1638,10 +1637,10 @@ ecp_tff_nose_run_generator::ecp_tff_nose_run_generator(ecp_task& _ecp_task,
 	configure_reciprocal_damping (FORCE_RECIPROCAL_DAMPING, FORCE_RECIPROCAL_DAMPING, FORCE_RECIPROCAL_DAMPING,
 		 TORQUE_RECIPROCAL_DAMPING, TORQUE_RECIPROCAL_DAMPING, TORQUE_RECIPROCAL_DAMPING);
 	configure_inertia (FORCE_INERTIA, FORCE_INERTIA, FORCE_INERTIA, TORQUE_INERTIA, TORQUE_INERTIA, TORQUE_INERTIA);
-	
+
 	set_force_meassure (false);
-	
-	
+
+
 }
 
 
@@ -1680,7 +1679,7 @@ void ecp_tff_nose_run_generator::configure_velocity(double x, double y, double z
 	generator_edp_data.next_velocity[5] = az;
 }
 
-	
+
 void ecp_tff_nose_run_generator::configure_force(double x, double y, double z, double ax, double ay, double az)
 {
 	generator_edp_data.next_force_xyz_torque_xyz[0] = x;
@@ -1691,7 +1690,7 @@ void ecp_tff_nose_run_generator::configure_force(double x, double y, double z, d
 	generator_edp_data.next_force_xyz_torque_xyz[5] = az;
 }
 
-	
+
 void ecp_tff_nose_run_generator::configure_reciprocal_damping(double x, double y, double z, double ax, double ay, double az)
 {
 	generator_edp_data.next_reciprocal_damping[0] = x;
@@ -1710,7 +1709,7 @@ void ecp_tff_nose_run_generator::configure_inertia(double x, double y, double z,
 	generator_edp_data.next_inertia[2] = z;
 	generator_edp_data.next_inertia[3] = ax;
 	generator_edp_data.next_inertia[4] = ay;
-	generator_edp_data.next_inertia[5] = az;	
+	generator_edp_data.next_inertia[5] = az;
 }
 
 
@@ -1797,11 +1796,11 @@ bool ecp_tff_nose_run_generator::next_step()
 	{
 		Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
 		current_frame_wo_offset.remove_translation();
-		
+
 		Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
-			
+
 		std::cout<<"force: "<<force_torque<<std::endl;
-	}	
+	}
 	return true;
 
 }

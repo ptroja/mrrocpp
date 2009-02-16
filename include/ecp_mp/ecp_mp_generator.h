@@ -17,9 +17,9 @@ class ecp_mp_generator
 
 	public:
 		bool trigger;			// informacja czy pszyszedl puls trigger
-		
+
 		ecp_mp_generator(sr_ecp& _sr_ecp_msg);
-		
+
 		bool check_and_null_trigger(); 		// zwraca wartosc trigger i zeruje go
 
 		int node_counter;  // biezacy wezel interpolacji

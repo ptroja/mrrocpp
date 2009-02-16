@@ -32,7 +32,6 @@ protected:
 
     void configure_edp_force_sensor(bool configure_track, bool configure_postument);
 
-
 public:
 
     // stl'owa lista manipulacji

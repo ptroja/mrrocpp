@@ -3,7 +3,7 @@
 // System:		QNX/MRROC++   v. 6.3
 // Opis:			miscelangeous functions
 // Modyfikacja:
-// Jej autor:		
+// Jej autor:
 // Data:			2006
 // ------------------------------------------------------------------------
 
@@ -16,7 +16,7 @@
 #include "common/impconst.h"
 
 // setting of thread priority
-void set_thread_priority(pthread_t thread, int32_t sched_priority_l);
+void set_thread_priority(pthread_t thread, int sched_priority_l);
 
 // by Y
 inline void copy_frame(frame_tab destination_frame, const frame_tab source_frame)

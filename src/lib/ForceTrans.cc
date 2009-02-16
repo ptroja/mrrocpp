@@ -1,6 +1,5 @@
 #include "lib/ForceTrans.h"
 
-
 int debugi = 1;
 
 /*
@@ -17,7 +16,7 @@ ForceTrans::ForceTrans(const Homog_matrix & init_frame, const Homog_matrix & s_f
 }
 */
 
-ForceTrans::ForceTrans(const short l_force_sensor_name, const Homog_matrix & init_frame, const Homog_matrix & s_frame, 
+ForceTrans::ForceTrans(const short l_force_sensor_name, const Homog_matrix & init_frame, const Homog_matrix & s_frame,
 	const double weight, const K_vector & point_of_gravity) : force_sensor_name(l_force_sensor_name), initialized (false)
 {
 
@@ -36,7 +35,7 @@ ForceTrans::ForceTrans(const short l_force_sensor_name, const Homog_matrix & ini
 
 	tool_weight = weight;
 	gravity_arm_in_wrist = point_of_gravity;
-	
+
 	synchro(init_frame);
 	defineTool(init_frame, weight, point_of_gravity);
 	initialized = true;
@@ -52,7 +51,7 @@ void ForceTrans::defineTool(const Homog_matrix & init_frame, const double weight
 
 	//	frame_tab sens_rot = {{0,-1,0},{1,0,0},{0,0,1},{0,0,0}};
 	//	Homog_matrix sensor_rotation = Homog_matrix(sens_rot);
-	// orientacja koncowki manipulatora bez narzedzia	
+	// orientacja koncowki manipulatora bez narzedzia
 	Homog_matrix current_orientation (init_frame.return_with_with_removed_translation());
 	// cout << current_orientation << endl;
 	// current_orientation.remove_translation(); // elminacja skladowej polozenia
@@ -68,7 +67,7 @@ void ForceTrans::defineTool(const Homog_matrix & init_frame, const double weight
 //	cout << tool_mass_center_translation << endl;
 
 //	reaction_torque_in_sensor = K_vector((gravity_force_in_sensor*gravity_arm_in_sensor)*(-1));
-//	reaction_force_in_sensor = K_vector(gravity_force_in_sensor*(-1));  
+//	reaction_force_in_sensor = K_vector(gravity_force_in_sensor*(-1));
 
 
 	// reaction_torque_in_sensor = K_vector((gravity_force_torque_in_sensor.get_force_K_vector()*gravity_arm_in_sensor)*(-1));
@@ -77,11 +76,11 @@ void ForceTrans::defineTool(const Homog_matrix & init_frame, const double weight
 //	cout << "aa:" << reaction_force_in_sensor << reaction_torque_in_sensor << endl;
 	// wyznaczenie sil reakcji
 	reaction_force_torque_in_sensor = - (ft_tool_mass_center_translation*gravity_force_torque_in_sensor);
-	
-	
+
+
 //	reaction_force_in_sensor = reaction_force_torque_in_sensor.get_force_K_vector();
 //	reaction_torque_in_sensor = reaction_force_torque_in_sensor.get_torque_K_vector();
-	
+
 //	cout << "bb:" << reaction_force_torque_in_sensor << endl;
 }
 
@@ -116,10 +115,10 @@ double* ForceTrans::getForce(const double inputForceTorque[6], const Homog_matri
 		input_force = sensor_frame_rotation*input_force;
 		input_torque = sensor_frame_rotation*input_torque;
 		*/
-		
+
 //		K_vector input_force = input_force_torque.get_force_K_vector();
 //		K_vector input_torque = input_force_torque.get_torque_K_vector();
-		
+
 //		if ((deblicz%100) == 0)cout << "af" << input_force << endl;
 		//end by Y
 //		frame_tab rot = {{0,-1,0},{1,0,0},{0,0,1},{0,0,0}};
@@ -131,10 +130,10 @@ double* ForceTrans::getForce(const double inputForceTorque[6], const Homog_matri
 //		cout <<"bbbbb"<<	endl << sensor_frame <<endl << sensor_rotation;
 //		K_vector gravity_force_in_sensor = (!(current_orientation*sensor_rotation))*gravity_force_in_base;
 		// wyznaczenie sily grawitacji i z jej pomoca sil i momentow w kisci
-		
+
 //		K_vector gravity_force_in_sensor = (!current_orientation)*gravity_force_in_base;
 		Ft_v_vector gravity_force_torque_in_sensor (Ft_v_tr(!current_orientation, Ft_v_tr::FT)*gravity_force_torque_in_base);
-		
+
 		// cout << gravity_force_in_sensor << endl;
 		// uwzglednienie w odczytach sily grawitacji i sily reakcji
 //		K_vector output_force = input_force - gravity_force_in_sensor - reaction_force_in_sensor;
@@ -142,21 +141,21 @@ double* ForceTrans::getForce(const double inputForceTorque[6], const Homog_matri
 	//	if ((deblicz%100) == 0) cout << "aa:" << output_force << output_torque << endl;
 		Ft_v_vector output_force_torque (input_force_torque - (ft_tool_mass_center_translation*gravity_force_torque_in_sensor)
 			 - reaction_force_torque_in_sensor);
-			 
-			 
+
+
 //		if ((deblicz%100) == 0) cout << "bb:" << output_force_torque << endl;
 		// sprowadzenie sil i momentow sil do ukladu umieszczonego w koncowce kinematyki i z jej orientacja
 				// sprowadzenie sil i momentow sil do ukladu umieszczonego w koncowce kinematyki ale z orientacja ukladu bazowego
 		/*
-		output_force_torque = ft_tr_sensor_translation_matrix * 
+		output_force_torque = ft_tr_sensor_translation_matrix *
 				output_force_torque;
 		*/
-			
 
-		output_force_torque = Ft_v_tr (current_orientation, Ft_v_tr::FT) * (-output_force_torque);	
 
-//		Ft_v_vector tmp_force_torque = Ft_v_tr (current_orientation*sensor_frame_translation, FT_VARIANT) * output_force_torque;	
-		
+		output_force_torque = Ft_v_tr (current_orientation, Ft_v_tr::FT) * (-output_force_torque);
+
+//		Ft_v_vector tmp_force_torque = Ft_v_tr (current_orientation*sensor_frame_translation, FT_VARIANT) * output_force_torque;
+
 /*
 		if ((debugi%10==0)&&(force_sensor_name==FORCE_SENSOR_ATI3084)&&(last_debugi!=debugi))
 		{
@@ -170,8 +169,8 @@ double* ForceTrans::getForce(const double inputForceTorque[6], const Homog_matri
 //		output_force_torque = Ft_v_tr (sensor_frame_translation) * Ft_v_vector(output_force, output_torque);
 		// sprowadzenie sil i momentow sil do ukladu umieszczonego w koncowce kinematyki ale z orientacja ukladu bazowego
 		// output_force_torque = Ft_v_tr (current_orientation) * output_force_torque;
-		// 
-				
+		//
+
 		/*
 		output_force = (current_orientation)*output_force;
 		output_torque = (current_orientation)*output_torque;
@@ -200,8 +199,8 @@ double* ForceTrans::getForce(const double inputForceTorque[6], const Homog_matri
 			for(int i=j*6;i<j*6+3;i++) {
 				outputForceTorque[i]*=20;
 				outputForceTorque[i+3]*=333;
-			}	
-						
+			}
+
 */
 		last_debugi = debugi;
 		return outputForceTorque;
@@ -212,7 +211,7 @@ double* ForceTrans::getForce(const double inputForceTorque[6], const Homog_matri
 
 void ForceTrans::synchro(const Homog_matrix & init_frame)
 {
-
 	//initialisation_frame = init_frame;
-	if (initialized) defineTool (init_frame, tool_weight, gravity_arm_in_wrist);
- }
+	if (initialized)
+		defineTool(init_frame, tool_weight, gravity_arm_in_wrist);
+}

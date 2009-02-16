@@ -131,7 +131,7 @@ void mp_robot::start_ecp ( void ) {
 
 
 // -------------------------------------------------------------------
-void mp_robot::execute_motion ( void ) { // zlecenie wykonania ruchu
+void mp_robot::execute_motion(void) { // zlecenie wykonania ruchu
 
 	mp_command.hdr.type = 0;
 
@@ -161,7 +161,7 @@ void mp_robot::execute_motion ( void ) { // zlecenie wykonania ruchu
 
 
 // -------------------------------------------------------------------
-void mp_robot::terminate_ecp ( void ) { // zlecenie STOP zakonczenia ruchu
+void mp_robot::terminate_ecp(void) { // zlecenie STOP zakonczenia ruchu
 	mp_command.command = STOP;
 	mp_command.hdr.type = 0;
 

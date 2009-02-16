@@ -10,13 +10,11 @@
 // Data:		31.01.2007
 // ------------------------------------------------------------------------
 
-#if !defined(_IRP6P_KIN_MODEL_WITH_WRIST)  
+#if !defined(_IRP6P_KIN_MODEL_WITH_WRIST)
 #define _IRP6P_KIN_MODEL_WITH_WRIST
 
-// Definicja typu frame_tab.
-#include "common/impconst.h"
 // Definicja klasy kinematic_model.
-#include "kinematics/common/kinematic_model.h" 
+#include "kinematics/common/kinematic_model.h"
 
 class kinematic_model_irp6p_with_wrist : public kinematic_model
 {
@@ -59,7 +57,7 @@ protected:
   double synchro_motor_position[7];
   // Polozenia synchronizacji (polozenia we wspolrzednych wewnetrznych).
   double synchro_joint_position[7];
-  
+
   // Ustawienie parametrow kinematycznych.
   virtual void set_kinematic_parameters(void);
 
@@ -74,18 +72,17 @@ public:
   kinematic_model_irp6p_with_wrist ( void );
 
   // Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne.
-  virtual void mp2i_transform(const double* local_current_motor_pos, double* local_current_joints); 
+  virtual void mp2i_transform(const double* local_current_motor_pos, double* local_current_joints);
 
   // Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow.
   virtual void i2mp_transform(double* local_desired_motor_pos_new, double* local_desired_joints);
 
   // Rozwiazanie prostego zagadnienia kinematyki.
   virtual void direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame);
-  
+
   // Rozwiazanie odwrotnego zagadnienia kinematyki.
   virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame);
 
 };//: kinematic_model_irp6p_with_wrist;
 
-#endif					   
-
+#endif

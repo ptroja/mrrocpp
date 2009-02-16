@@ -27,15 +27,17 @@ void mp_task_rubik_cube_solver::initiate(CUBE_COLOR up_is, CUBE_COLOR down_is, C
 
 	cube_initial_state = NULL;
 	manipulation_sequence_computed = false;
-
 }
 
-mp_task_rubik_cube_solver::mp_task_rubik_cube_solver(configurator &_config) : mp_task(_config)
+mp_task_rubik_cube_solver::mp_task_rubik_cube_solver(configurator &_config)
+	: mp_task(_config),
+	cube_state(NULL)
 {}
 
 mp_task_rubik_cube_solver::~mp_task_rubik_cube_solver()
 {
-	delete cube_state;
+	if(cube_state)
+		delete cube_state;
 }
 
 void mp_task_rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogladanie scian)
@@ -469,11 +471,11 @@ void mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 	// wlaczenie generatora zacisku na kostce w robocie irp6p
 	set_next_ecps_state ((int) ECP_GEN_TFF_RUBIK_GRAB, (int) RCSC_RG_FROM_OPEARTOR_PHASE_1, "", 1, ROBOT_IRP6_POSTUMENT);
 	// uruchomienie generatora empty_gen
-	run_ext_empty_gen (false, 1, ROBOT_IRP6_POSTUMENT);
+	run_extended_empty_gen (false, 1, ROBOT_IRP6_POSTUMENT);
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
 	set_next_ecps_state ((int) ECP_GEN_TFF_RUBIK_GRAB, (int) RCSC_RG_FROM_OPEARTOR_PHASE_2, "", 1, ROBOT_IRP6_POSTUMENT);
 	// uruchomienie generatora empty_gen
-	run_ext_empty_gen (false, 1, ROBOT_IRP6_POSTUMENT);
+	run_extended_empty_gen (false, 1, ROBOT_IRP6_POSTUMENT);
 
 	// obrot kostki
 
@@ -515,7 +517,7 @@ void mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 
 
 	// uruchomienie generatora empty_gen
-	run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK);
+	run_extended_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK);
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
 
 
@@ -526,7 +528,7 @@ void mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 	//	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "trj/rcsc/irp6ot_fturn_de.trj", 1, ROBOT_IRP6_ON_TRACK)) {  return true;  }
 	set_next_ecps_state ((int) ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fturn_de.trj", 1, ROBOT_IRP6_ON_TRACK);
 	// uruchomienie generatora empty_gen
-	run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK);
+	run_extended_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK);
 };
 
 
@@ -618,18 +620,18 @@ void mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
 	set_next_ecps_state ((int) ECP_GEN_TFF_RUBIK_GRAB, (int) RCSC_RG_FCHANGE_PHASE_1, "", 1, ROBOT_IRP6_ON_TRACK);
 	// uruchomienie generatora empty_gen
-	run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK);
+	run_extended_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK);
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
 	set_next_ecps_state ((int) ECP_GEN_TFF_RUBIK_GRAB, (int) RCSC_RG_FCHANGE_PHASE_2, "", 1, ROBOT_IRP6_ON_TRACK);
 	// uruchomienie generatora empty_gen
-	run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK);
+	run_extended_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK);
 
 
 	// docisniecie chwytaka tracka do kostki
 
 	set_next_ecps_state ((int) ECP_GEN_TFF_GRIPPER_APPROACH, (int) 0, "", 1, ROBOT_IRP6_ON_TRACK);
 	// uruchomienie generatora empty_gen
-	run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK);
+	run_extended_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK);
 
 
 	// zacisniecie tracka na kostce
@@ -637,14 +639,14 @@ void mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
 	set_next_ecps_state ((int) ECP_GEN_TFF_RUBIK_GRAB, (int) RCSC_RG_FCHANGE_PHASE_3, "", 1, ROBOT_IRP6_ON_TRACK);
 	// uruchomienie generatora empty_gen
-	run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK);
+	run_extended_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK);
 
 
 
 	// wstepne rozwarcie chwytaka postumenta
 	set_next_ecps_state ((int) RCSC_GRIPPER_OPENING, (int) RCSC_GO_VAR_1, "", 1, ROBOT_IRP6_POSTUMENT);
 	// uruchomienie generatora empty_gen
-	run_ext_empty_gen (false, 1, ROBOT_IRP6_POSTUMENT);
+	run_extended_empty_gen (false, 1, ROBOT_IRP6_POSTUMENT);
 
 
 
@@ -653,14 +655,14 @@ void mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
 	set_next_ecps_state ((int) ECP_GEN_TFF_RUBIK_GRAB, (int) RCSC_RG_FCHANGE_PHASE_4, "", 1, ROBOT_IRP6_ON_TRACK);
 	// uruchomienie generatora empty_gen
-	run_ext_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK);
+	run_extended_empty_gen (false, 1, ROBOT_IRP6_ON_TRACK);
 
 
 	// dalsze rozwarcie chwytaka postumenta
 
 	set_next_ecps_state ((int) RCSC_GRIPPER_OPENING, (int) RCSC_GO_VAR_2, "", 1, ROBOT_IRP6_POSTUMENT);
 	// uruchomienie generatora empty_gen
-	run_ext_empty_gen (false, 1, ROBOT_IRP6_POSTUMENT);
+	run_extended_empty_gen (false, 1, ROBOT_IRP6_POSTUMENT);
 
 
 	// odejscie tracka od postumenta
@@ -673,15 +675,15 @@ void mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 		set_next_ecps_state ((int) ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_de_cl_90.trj", 1, ROBOT_IRP6_ON_TRACK);
 		break;
 	case CL_0:
-		
+
 		set_next_ecps_state ((int) ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_de_cl_0.trj", 1, ROBOT_IRP6_ON_TRACK);
 		break;
 	case CCL_90:
-	
+
 		set_next_ecps_state ((int) ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_de_ccl_90.trj", 1, ROBOT_IRP6_ON_TRACK);
 		break;
 	case CL_180:
-		
+
 		set_next_ecps_state ((int) ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_de_cl_180.trj", 1, ROBOT_IRP6_ON_TRACK);
 		break;
 	default:
@@ -778,7 +780,7 @@ void mp_task_rubik_cube_solver::approach_op(int mode)
 		set_next_ecps_state ((int) ECP_GEN_TFF_NOSE_RUN, (int) 0, "", 1, ROBOT_IRP6_POSTUMENT);
 
 		// uruchomienie generatora empty_gen
-		run_ext_empty_gen (true, 1, ROBOT_IRP6_POSTUMENT);
+		run_extended_empty_gen (true, 1, ROBOT_IRP6_POSTUMENT);
 
 
 		// przerwanie pracy generatora w ECP
@@ -792,7 +794,7 @@ void mp_task_rubik_cube_solver::approach_op(int mode)
 		set_next_ecps_state ((int) ECP_GEN_TFF_NOSE_RUN, (int) 0, "", 1, ROBOT_IRP6_ON_TRACK);
 
 		// uruchomienie generatora empty_gen
-		run_ext_empty_gen (true, 1, ROBOT_IRP6_ON_TRACK);
+		run_extended_empty_gen (true, 1, ROBOT_IRP6_ON_TRACK);
 
 
 		// przerwanie pracy generatora w ECP

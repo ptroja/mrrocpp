@@ -13,13 +13,11 @@
 #if !defined(_IRP6M_KIN_MODEL_5DOF)
 #define _IRP6M_KIN_MODEL_5DOF
 
-// Definicja typu frame_tab.
-#include "common/impconst.h"
 // Definicja klasy kinematic_model.
 #include "kinematics/irp6_mechatronika/kinematic_model_irp6m_with_wrist.h"
 
 // Zakresy ruchu poszczegolnych stopni swobody (w radianach lub milimetrach)
-#define UPPER_THETA1_LIMIT  170.0*M_PI/180.0 // [rad] 
+#define UPPER_THETA1_LIMIT  170.0*M_PI/180.0 // [rad]
 #define LOWER_THETA1_LIMIT -170.0*M_PI/180.0
 
 #define UPPER_THETA2_LIMIT -50.0*M_PI/180.0
@@ -37,7 +35,7 @@
 
 
 
-#define S1 theta1_pointer->sin_theta	
+#define S1 theta1_pointer->sin_theta
 #define C1 theta1_pointer->cos_theta
 #define S2 theta2_pointer->sin_theta
 #define C2 theta2_pointer->cos_theta
@@ -50,11 +48,11 @@
 
 #define INTER_PERIOD 10000
 
-/* ***********************************************************************   
-      Wartosci zwracane przez funkcje uczestniczace w rozwiazywaniu   
-     prostego i odwrotnego zagadnienia kinematycznego.                   
+/* ***********************************************************************
+      Wartosci zwracane przez funkcje uczestniczace w rozwiazywaniu
+     prostego i odwrotnego zagadnienia kinematycznego.
  ************************************************************************* */
-/* Rozwiazanie rownania kwadratowego 
+/* Rozwiazanie rownania kwadratowego
             lub rownania --> E cos + F sin - G = 0 */
 
 #define NO_SOLUTION        0
@@ -106,7 +104,7 @@
           /* BleDY NIE FATALNE */
 
   /* wynik dzialania funkcji Add_Theta */
-#define OUT_OF_MEMORY                   -1  
+#define OUT_OF_MEMORY                   -1
 
   /* wartosci zwracane przez funkcje Theta_i, i = 1..5 */
 #define NEGATIVE_DISCRIMINANT_THETA1    -2
@@ -133,10 +131,10 @@
    odwrotnego zagadnienia kinematycznego */
 typedef struct AngleTheta
 {
-  double            value;        /* wartosc kata theta */ 
+  double            value;        /* wartosc kata theta */
   double            cos_theta;    /* cosinus  kata theta */
   double            sin_theta;    /* sinus  kata theta */
-  struct AngleTheta *NextTheta;   /* wskaznik na nastepna 
+  struct AngleTheta *NextTheta;   /* wskaznik na nastepna
                                      wartosc tego samego kata */
   struct AngleTheta *NextAngle;   /* wskaznik na nastepny kat */
 } THETA_NODE;
@@ -164,13 +162,13 @@ THETA_NODE *Theta_1(double q0[3], double v0[3],
 THETA_NODE *Theta_2(THETA_NODE *theta1_pointer, THETA_NODE *theta4_pointer,
 	    double u0[3], double v0[3], double q0[3], double u6[3],
 	    double q6[3], double v6[3], double radius_2,
-	    int16_t *result, double old_theta[5],	    
+	    int16_t *result, double old_theta[5],
 	    double interpolation_period, int16_t no_of_solutions);
 
-THETA_NODE* Theta_3(THETA_NODE *theta1_pointer, 
+THETA_NODE* Theta_3(THETA_NODE *theta1_pointer,
 		    THETA_NODE *theta2_pointer,
 		    THETA_NODE *theta4_pointer,
-		    double e, double f, 
+		    double e, double f,
 		    double q0[3], double q6[3],
 		    double v0[3], double v6[3],
 		    int16_t *result, double old_theta[5],
@@ -184,9 +182,9 @@ THETA_NODE* Theta_4(THETA_NODE *theta1_pointer,
 		    double interpolation_period,
 		    int16_t no_of_solutions);
 
-THETA_NODE* Theta_5(THETA_NODE *theta1_pointer, 
+THETA_NODE* Theta_5(THETA_NODE *theta1_pointer,
 		    THETA_NODE *theta2_pointer,
-		    THETA_NODE *theta3_pointer, 
+		    THETA_NODE *theta3_pointer,
 		    THETA_NODE *theta4_pointer,
 		    double q0[3], double q6[3],
 		    double v0[3], double v6[3],
@@ -198,8 +196,8 @@ int16_t QuadraticEquation(double a, double b, double c,
 				double *x1, double *x2, double delta);
 
 int16_t Ecos_Fsin_G(double e, double f, double g,
-			  double *theta1_ptr, double *theta2_ptr, 
-			  double lower_limit, double upper_limit, 
+			  double *theta1_ptr, double *theta2_ptr,
+			  double lower_limit, double upper_limit,
 			  double max_theta_inc, double OldTheta,
 			  int16_t no_of_solutions);
 
@@ -237,7 +235,7 @@ THETA_NODE* Create1(double x, double p, double r, double t,
 
 void Delete_Theta_Tree(THETA_NODE *root_ptr);
 
-void Extract_vect_from_tree(THETA_NODE *root_ptr, double Theta[5], 
+void Extract_vect_from_tree(THETA_NODE *root_ptr, double Theta[5],
 			    double tsin[5], double tcos[5]);
 
 public:
@@ -246,7 +244,7 @@ public:
 
   // Rozwiazanie prostego zagadnienia kinematyki.
   virtual void direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame);
-  
+
   // Rozwiazanie odwrotnego zagadnienia kinematyki.
   virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame);
 
@@ -255,5 +253,5 @@ public:
 
 };//: kinematic_model_irp6m_5dof;
 
-#endif					   
+#endif
 

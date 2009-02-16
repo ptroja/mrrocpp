@@ -2,7 +2,7 @@
 //                            ecp_t_fsautomat.cc
 //
 // Funkcje do obslugi chwytaka, zacytowane z ecp_t_rcsc.cc
-// 
+//
 // Ostatnia modyfikacja: 2008
 // -------------------------------------------------------------------------
 
@@ -30,11 +30,11 @@ void ecp_gripper_opening (ecp_task& _ecp_task, double gripper_increment, int mot
 	tdes.coordinate_delta[3] = 0.0;   // przyrost wspolrzednej FI
 	tdes.coordinate_delta[4] = 0.0;   // przyrost wspolrzednej TETA
 	tdes.coordinate_delta[5] = 0.0;   // przyrost wspolrzednej PSI
-	//	tdes.coordinate_delta[6] = 0.0;   // przyrost wspolrzednej PSI		
-	tdes.coordinate_delta[6] = gripper_increment;   // przyrost wspolrzednej PSI		
-	
+	//	tdes.coordinate_delta[6] = 0.0;   // przyrost wspolrzednej PSI
+	tdes.coordinate_delta[6] = gripper_increment;   // przyrost wspolrzednej PSI
+
 	// Generator trajektorii prostoliniowej
 	ecp_linear_generator lg(_ecp_task, tdes, 1);
 
 	_ecp_task.Move (lg);
-};
+}

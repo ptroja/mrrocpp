@@ -13,11 +13,9 @@
 // Data:		22.02.2007
 // ------------------------------------------------------------------------
 
-#if !defined(_IRP6OT_KIN_MODEL_WITH_WRIST_CALIBRATED_CORRECTED)  
+#if !defined(_IRP6OT_KIN_MODEL_WITH_WRIST_CALIBRATED_CORRECTED)
 #define _IRP6OT_KIN_MODEL_WITH_WRIST_CALIBRATED_CORRECTED
 
-// Definicja typu frame_tab.
-#include "common/impconst.h"
 // Definicja klasy kinematic_model_irp6ot_with_wrist.
 #include "kinematics/irp6_on_track/kinematic_model_calibrated_irp6ot_with_wrist.h"
 
@@ -33,5 +31,4 @@ public:
 
 };//: kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist;
 
-#endif					   
-
+#endif

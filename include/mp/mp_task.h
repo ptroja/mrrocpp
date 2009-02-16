@@ -11,13 +11,6 @@
 // klasa globalna dla calego procesu MP
 class mp_task: public ecp_mp_task
 {
-	protected:
-		/// lista generatorow dla scheduler'a
-		std::list<mp_generator*> gen_list;
-		std::list<mp_generator*>::iterator gen_list_iterator;
-
-		bool all_gen_sets_waiting_for_ECP_pulse;
-
 	public:
 #if !defined(USE_MESSIP_SRR)
 		static name_attach_t *mp_pulse_attach;
@@ -29,10 +22,6 @@ class mp_task: public ecp_mp_task
 
 		/// mapa wszystkich robotow
 		static std::map <ROBOT_ENUM, mp_robot*> robot_m;
-
-		int32_t ui_scoid; // server connection id
-		char ui_pulse_code; // kod pulsu ktory zostal wyslany przez ECP w celu zgloszenia gotowosci do komunikacji (wartosci w impconst.h)
-		bool ui_new_pulse; // okresla czy jest nowy puls
 
 		/// KONSTRUKTORY
 		mp_task(configurator &_config);
@@ -54,19 +43,19 @@ class mp_task: public ecp_mp_task
 		};
 
 		void set_next_playerpos_goal (ROBOT_ENUM robot_l, const playerpos_goal_t &goal);
+
 		void set_next_ecps_state (int l_state, int l_variant, const char* l_string, int number_of_robots, ... );
+
 		void send_end_motion_to_ecps (int number_of_robots, ... );
 		void send_end_motion_to_ecps (int number_of_robots, ROBOT_ENUM *properRobotsSet);
-		void run_ext_empty_gen (bool activate_trigger, int number_of_robots, ... );
+
+		void run_extended_empty_gen (bool activate_trigger, int number_of_robots, ... );
 		void run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 		(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ... );
 		void run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 		(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ROBOT_ENUM *robotsToMove, ROBOT_ENUM *robotsWaitingForTaskTermination);
-		void wait_ms (int _ms_delay); // zamiast delay
 
-		int mp_receive_pulse (mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PULSE_MODE tryb);
-		int check_and_optional_wait_for_new_pulse (mp_receive_pulse_struct_t* outputs,
-		        WAIT_FOR_NEW_PULSE_ENUM process_mode, MP_RECEIVE_PULSE_MODE desired_wait_mode);
+		void wait_ms (int _ms_delay); // zamiast delay
 
 		// mp_receive_ecp_pulse_return_t mp_receive_ecp_pulse (int tryb);
 		// oczekwianie na name_open do kanalu do przesylania pulsow miedzy ECP i MP
@@ -87,9 +76,6 @@ class mp_task: public ecp_mp_task
 		// Wyslanie rozkazu do wszystkich ECP
 		void execute_all (std::map <ROBOT_ENUM, mp_robot*>& _robot_m);
 
-		// funkcja odbierajaca pulsy z UI wykorzystywana w MOVE
-		bool mp_receive_ui_pulse (std::map <ROBOT_ENUM, mp_robot*>& _robot_m, bool* trigger);
-
 		// funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
 		void mp_receive_ui_or_ecp_pulse (std::map <ROBOT_ENUM, mp_robot*>& _robot_m, mp_generator& the_generator );
 
@@ -100,25 +86,22 @@ class mp_task: public ecp_mp_task
 		static void kill_all_ECP (std::map <ROBOT_ENUM, mp_robot*>& _robot_m);
 
 		/// utworzenie robotow
-		virtual bool create_robots(void);
+		virtual void create_robots(void);
 
 		/// methods for MP template to redefine in concrete classes
 		virtual void task_initialization(void);
 		virtual void main_task_algorithm(void);
+
+	private:
+		int32_t ui_scoid; // server connection id
+		char ui_pulse_code; // kod pulsu ktory zostal wyslany przez ECP w celu zgloszenia gotowosci do komunikacji (wartosci w impconst.h)
+		bool ui_new_pulse; // okresla czy jest nowy puls
+
+		int mp_receive_pulse (mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PULSE_MODE tryb);
+		int check_and_optional_wait_for_new_pulse (mp_receive_pulse_struct_t* outputs,
+		        WAIT_FOR_NEW_PULSE_ENUM process_mode, MP_RECEIVE_PULSE_MODE desired_wait_mode);
 };
 
 mp_task* return_created_mp_task (configurator &_config);
-
-
-// klasa podzadania
-class mp_sub_task
-{
-
-protected:
-    mp_task &mp_t;
-
-public:
-    mp_sub_task(mp_task &_mp_t);
-};
 
 #endif /*MP_TASK_H_*/

@@ -1,5 +1,3 @@
-
-
 #include <mp/State.h>
 #include <iostream>
 #include <string.h>
@@ -159,7 +157,7 @@ ROBOT_ENUM State::returnProperRobot(char * robotName)
 	else if(strcmp(robotName, (const char *)"ROBOT_SPEECHRECOGNITION") == 0)
 		return ROBOT_SPEECHRECOGNITION;
 	else
-		return ROBOT_UNDEFINED;	
+		return ROBOT_UNDEFINED;
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -189,7 +187,7 @@ void State::setRobot(char *robot)
 	else if(strcmp(robot, (const char *)"ROBOT_SPEECHRECOGNITION") == 0)
 		this->robot = ROBOT_SPEECHRECOGNITION;
 	else
-		this->robot = ROBOT_UNDEFINED;	
+		this->robot = ROBOT_UNDEFINED;
 */
 }
 
@@ -206,29 +204,29 @@ void State::setGeneratorType(char *genType)
 	//std::cout<<strcmp(genType, (const char *)"ECP_GEN_TRANSPARENT")<<std::endl;
 	//strcpy(this->generatorType, genType);
 	if(strcmp(genType, (const char *)"ECP_GEN_TRANSPARENT") == 0)
-		this->generatorType = ECP_GEN_TRANSPARENT;	
+		this->generatorType = ECP_GEN_TRANSPARENT;
 	else if(strcmp(genType, (const char *)"ECP_GEN_TFF_NOSE_RUN") == 0)
-		this->generatorType = ECP_GEN_TFF_NOSE_RUN;	
+		this->generatorType = ECP_GEN_TFF_NOSE_RUN;
 	else if(strcmp(genType, (const char *)"ECP_GEN_TEACH_IN") == 0)
-		this->generatorType = ECP_GEN_TEACH_IN;	
+		this->generatorType = ECP_GEN_TEACH_IN;
 	else if(strcmp(genType, (const char *)"ECP_GEN_SMOOTH") == 0)
-		this->generatorType = ECP_GEN_SMOOTH;	
+		this->generatorType = ECP_GEN_SMOOTH;
 	else if(strcmp(genType, (const char *)"ECP_GEN_TFF_RUBIK_GRAB") == 0)
-		this->generatorType = ECP_GEN_TFF_RUBIK_GRAB;	
+		this->generatorType = ECP_GEN_TFF_RUBIK_GRAB;
 	else if(strcmp(genType, (const char *)"ECP_GEN_TFF_RUBIK_FACE_ROTATE") == 0)
-		this->generatorType = ECP_GEN_TFF_RUBIK_FACE_ROTATE;	
+		this->generatorType = ECP_GEN_TFF_RUBIK_FACE_ROTATE;
 	else if(strcmp(genType, (const char *)"ECP_GEN_TFF_GRIPPER_APPROACH") == 0)
-		this->generatorType = ECP_GEN_TFF_GRIPPER_APPROACH;	
+		this->generatorType = ECP_GEN_TFF_GRIPPER_APPROACH;
 	else if(strcmp(genType, (const char *)"RCSC_GRIPPER_OPENING") == 0)
-		this->generatorType = RCSC_GRIPPER_OPENING;	
+		this->generatorType = RCSC_GRIPPER_OPENING;
 	else if(strcmp(genType, (const char *)"ECP_GEN_BIAS_EDP_FORCE") == 0)
-		this->generatorType = ECP_GEN_BIAS_EDP_FORCE;	
+		this->generatorType = ECP_GEN_BIAS_EDP_FORCE;
 	else if(strcmp(genType, (const char *)"ECP_WEIGHT_MEASURE_GENERATOR") == 0)
-		this->generatorType = ECP_WEIGHT_MEASURE_GENERATOR;	
+		this->generatorType = ECP_WEIGHT_MEASURE_GENERATOR;
 	else if(strcmp(genType, (const char *)"ECP_TOOL_CHANGE_GENERATOR") == 0)
-		this->generatorType = ECP_TOOL_CHANGE_GENERATOR;	
-	else 
-		this->generatorType = ECP_GEN_SPEAK;	
+		this->generatorType = ECP_TOOL_CHANGE_GENERATOR;
+	else
+		this->generatorType = ECP_GEN_SPEAK;
 }
 
 //----------------------------------------------------------------------------------------------------------
@@ -303,7 +301,7 @@ void State::showStateContent() const
 			std::cout<<robotSet->firstSet[i]<<"; ";
 		std::cout<<"\nSecond set count: "<<robotSet->secondSetCount<<" = ";
 		for(int i=0;i<robotSet->secondSetCount;i++)
-			std::cout<<robotSet->secondSet[i]<<"; ";		
+			std::cout<<robotSet->secondSet[i]<<"; ";
 		std::cout<<std::endl;
 	}
 	std::cout<<"Transitions count: "<<stateTransitions->size()<<std::endl;

@@ -51,4 +51,3 @@ bool ecp_cvfradia_generator::next_step()
 	}*/
 	return true;
 }
-

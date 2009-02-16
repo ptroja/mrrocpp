@@ -138,8 +138,6 @@ map <ROBOT_ENUM, mp_robot*> mp_task::robot_m;
 // KONSTRUKTORY
 mp_task::mp_task(configurator &_config) : ecp_mp_task(_config)
 {
-	// dla scheduler'a
-	all_gen_sets_waiting_for_ECP_pulse = false;
 	ui_new_pulse = false;
 }
 
@@ -157,7 +155,7 @@ void mp_task::stop_and_terminate()
 }
 
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
-bool mp_task::create_robots()
+void mp_task::create_robots()
 {
 	/*
 	 * this is necessary to first create robot and then assign it to robot_m
@@ -214,8 +212,6 @@ bool mp_task::create_robots()
 		created_robot = new mp_robot (ROBOT_FESTIVAL, "[ecp_festival]", *this);
 		robot_m[ROBOT_FESTIVAL] = created_robot;
 	}
-
-	return true;
 }
 
 
@@ -226,7 +222,8 @@ void mp_task::task_initialization(void)
 }
 
 void mp_task::main_task_algorithm(void)
-{}
+{
+}
 
 // metody do obslugi najczesniej uzywanych generatorow
 void mp_task::set_next_playerpos_goal (ROBOT_ENUM robot_l, const playerpos_goal_t &goal)
@@ -306,7 +303,7 @@ void mp_task::send_end_motion_to_ecps (int number_of_robots, ROBOT_ENUM *properR
 	mp_semte_gen.Move();
 }
 
-void mp_task::run_ext_empty_gen (bool activate_trigger, int number_of_robots, ... )
+void mp_task::run_extended_empty_gen (bool activate_trigger, int number_of_robots, ... )
 {
 	mp_extended_empty_generator mp_ext_empty_gen (*this);
 
@@ -722,8 +719,8 @@ int mp_task::mp_wait_for_name_open(mp_receive_pulse_struct_t* outputs)
 		ret = mp_receive_pulse (outputs, WITHOUT_TIMEOUT);
 		// jakis inny robot wyslal puls
 		if (ret == -1) {
-			// tu ma byc wyjatek
-			printf ("Blad MsgReceive() na kanale ecp_pusle w mp_wait_for_name_open_ecp_pulse\n");
+			// TODO: tu ma byc wyjatek
+			fprintf (stderr, "Blad MsgReceive() na kanale ecp_pusle w mp_wait_for_name_open_ecp_pulse\n");
 		} else if (ret == 0) {
 
 			// wstawiamy informacje o pulsie ktory przyszedl od innego robota
@@ -861,76 +858,6 @@ void mp_task::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m,
 	}
 //	return false;
 
-}
-
-// funkcja odbierajaca pulsy z UI wykorzystywana w Move
-
-bool mp_task::mp_receive_ui_pulse (map <ROBOT_ENUM, mp_robot*>& _robot_m, bool* trigger )
-{
-	enum MP_STATE_ENUM
-	{
-	    MP_STATE_RUNNING,
-	    MP_STATE_PAUSED
-	};
-
-	MP_STATE_ENUM mp_state = MP_STATE_RUNNING;
-
-	bool ui_exit_from_while = false;
-
-	while (!ui_exit_from_while) {
-		mp_receive_pulse_struct_t input;
-		int rcvid = check_and_optional_wait_for_new_pulse (
-				&input, NEW_UI_PULSE,
-				(mp_state == MP_STATE_RUNNING) ? WITH_TIMEOUT : WITHOUT_TIMEOUT);
-
-		if (rcvid == -1) {// Error condition
-			if (mp_state == MP_STATE_RUNNING) {
-				if (input.e != ETIMEDOUT) {// by Y zamiast creceive
-					// Blad komunikacji miedzyprocesowej - wyjatek
-					perror("Creceive STOP or PAUSE proxy from UI failed ?");
-					sr_ecp_msg->message(SYSTEM_ERROR, input.e, "MP:Creceive STOP pulse from UI failed");
-					throw MP_main_error (SYSTEM_ERROR, (uint64_t) 0);
-				} else {
-					ui_exit_from_while = true;
-					continue;
-				}
-			} else if (mp_state == MP_STATE_PAUSED) {
-				perror("Creceive RESUME proxy from UI failed ?\n");
-				sr_ecp_msg->message(SYSTEM_ERROR, input.e, "MP: receive RESUME pulse from UI failed");
-				throw MP_main_error (SYSTEM_ERROR, (uint64_t) 0);
-			}
-		} else if (rcvid == 0) {
-			if (ui_new_pulse) {
-				ui_new_pulse = false;
-				if (ui_pulse_code == MP_STOP) {
-					terminate_all (_robot_m);
-					return true;
-				}
-
-				if (ui_pulse_code == MP_PAUSE) {
-					// printf("ui_new_pulse MP_PAUSED\n");
-					mp_state = MP_STATE_PAUSED;
-				}
-
-				if (mp_state == MP_STATE_PAUSED) {// oczekujemy na resume
-					if (ui_pulse_code == MP_RESUME) { // odebrano resume
-						mp_state = MP_STATE_RUNNING;
-						ui_exit_from_while = true;
-					}
-				} else {
-					if (ui_pulse_code == MP_TRIGGER) { // odebrano trigger
-						ui_exit_from_while = true;
-						*trigger = true;
-					}
-				}
-			}
-			continue;
-
-		} else if (rcvid > 0) {
-			printf("MP_TRIGGER server receive strange message of type: \n");
-		}
-	}
-	return false;
 }
 
 void mp_task::initialize_communication()
@@ -1216,11 +1143,3 @@ void mp_task::kill_all_ECP (map <ROBOT_ENUM, mp_robot*>& _robot_m)
 	}
 }
 // ------------------------------------------------------------------------
-
-
-
-
-mp_sub_task::mp_sub_task(mp_task &_mp_t):
-        mp_t(_mp_t)
-{}
-

@@ -142,7 +142,7 @@ protected:
     //Dla value_in_step_no < motion_steps wiadomosc dotrze przed zrealizowaniem
     //makrokroku i informacja o polozeniu bedzie dotyczyc realizacji srodkowej
     //fazy makrokroku.
-    WORD value_in_step_no;	
+    WORD value_in_step_no;
 
     int serwo_fd;
 
@@ -287,7 +287,7 @@ public:
     virtual void servo_joints_and_frame_actualization_and_upload(void) = 0; // by Y
 
     void main_loop(); // main loop
-    
+
     virtual void create_threads ();
 
     void interpret_instruction (c_buffer &instruction);
@@ -312,7 +312,7 @@ public:
     // przed wykonaniem synchronizacji robota
     bool pre_synchro_motion(c_buffer &instruction);
 
-  
+
     // Czy robot zsynchronizowany? // by Y - wziete z ecp
     bool is_synchronised ( void ) const;
 
@@ -500,11 +500,11 @@ struct reader_config
 
     uint8_t current_joints[MAX_SERVOS_NR];
 
-    uint8_t current_kartez_position[6]; // skaldowe liniowe polozenia zadanego
-    uint8_t real_kartez_position[6]; // polozenie rzeczywiste
-    uint8_t real_kartez_vel[6]; // predkosc rzeczywista
-    uint8_t real_kartez_acc[6]; // przyspieszenie rzeczywiste
-    uint8_t servo_tryb; // by Y 0 - petla bierna 1- wykonywanie zleconego przemieszczenia
+    uint8_t current_cartesian_position[6]; // skaldowe liniowe polozenia zadanego
+    uint8_t real_cartesian_position[6]; // polozenie rzeczywiste
+    uint8_t real_cartesian_vel[6]; // predkosc rzeczywista
+    uint8_t real_cartesian_acc[6]; // przyspieszenie rzeczywiste
+    uint8_t servo_mode; // by Y 0 - petla bierna 1- wykonywanie zleconego przemieszczenia
 
 };
 
@@ -525,14 +525,14 @@ struct reader_data
     double desired_force[3]; // pierwsze 3 z 6
     double filtered_force[6]; // sila po przefiltrowaniu
 
-    double current_kartez_position[6]; // skaldowe liniowe polozenia zadanego
+    double current_cartesian_position[6]; // skaldowe liniowe polozenia zadanego
     double current_joints[MAX_SERVOS_NR]; // spolozenie w joints
 
-    double real_kartez_position[6]; // polozenie rzeczywiste
-    double real_kartez_vel[6]; // predkosc rzeczywista
-    double real_kartez_acc[6]; // przyspieszenie rzeczywiste
-    short servo_tryb; // by Y: 0 - petla bierna, 1- wykonywanie zleconego przemieszczenia
-    short ui_trigger; // by Y: 0 - nie wystapil w biezacym kroku, 1- wystapil
+    double real_cartesian_position[6]; // polozenie rzeczywiste
+    double real_cartesian_vel[6]; // predkosc rzeczywista
+    double real_cartesian_acc[6]; // przyspieszenie rzeczywiste
+    bool servo_mode; // by Y: false - petla bierna, true - wykonywanie zleconego przemieszczenia
+    bool ui_trigger; // by Y: false - nie wystapil w biezacym kroku, true - wystapil
 };
 
 

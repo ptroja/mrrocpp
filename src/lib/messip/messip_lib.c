@@ -172,11 +172,14 @@ messip_writev( int sockfd,
 		if ( (dcount == -1) && (errno == EINTR) )
 			continue;
 		if ( dcount == -1 )
-			fprintf( stderr, "%d: %s %d: dcount=%d errno=%d %d\n",
-			   getpid(), __FILE__, __LINE__, dcount, errno, cnt++ );
+			fprintf( stderr, "%d: %s %d: dcount=%d errno=%d (%s) fileno: %d %d\n",
+			   getpid(), __FILE__, __LINE__, dcount, errno, strerror(errno), sockfd, cnt++ );
 		if ( errno == EPIPE )
 			return dcount;
-		assert( dcount != -1 );
+		//assert( dcount != -1 );
+		if (!(dcount != -1)) {
+			fprintf(stderr, "assert( dcount != -1 ) failed at %s:%d\n", __FILE__, __LINE__);
+		}
 		break;
 	}							// for (;;)
 

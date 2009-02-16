@@ -141,9 +141,6 @@ public:
 	const ROBOT_ENUM robot_name; // by Y - nazwa robota (track, postument etc.)
 
 	ecp_mp_robot(ROBOT_ENUM _robot_name);
-
-	// destruktor by Y - do usuniecia obiektu do komunikacji z SR
-	virtual ~ecp_mp_robot(void);
 };
 
 #endif

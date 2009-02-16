@@ -36,10 +36,10 @@ class mp_generator : public ecp_mp_generator
 
 		//! faza w ktorej znajduje sie generator
 		GEN_SET_PHASE phase;
-		
+
 		//! czy nowy puls zostal sprawdzony (wykorzystywane w scheduler_run() )
 		bool new_pulse_checked;
-		
+
 		/*!
 		 * okresla czy przed next step Move ma sie zawieszac w oczekwianiu na puls z ECP;
 		 * wykorzystywane przy luznej i sporadycznej wspolpracy robotow.
@@ -50,8 +50,6 @@ class mp_generator : public ecp_mp_generator
 		std::map <ROBOT_ENUM, mp_robot*> robot_m;
 
 		mp_generator(mp_task& _mp_task);
-
-		virtual ~mp_generator(void);
 
 		void re_run(void); // powrot do stanu wyjsciowego
 

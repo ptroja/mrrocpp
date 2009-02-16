@@ -66,7 +66,7 @@ void mp_task_pouring::weight(void)
 
 	/*	if(set_next_ecps_state( (int) WEIGHT, 0, "", 1, ROBOT_IRP6_POSTUMENT))
 	 {	return true;}
-	 run_ext_empty_gen (false, 1, ROBOT_IRP6_POSTUMENT)) {  return true;  }*/
+	 run_extended_empty_gen (false, 1, ROBOT_IRP6_POSTUMENT)) {  return true;  }*/
 
 }
 
@@ -79,10 +79,10 @@ void mp_task_pouring::meet(void)
 			ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT);
 
 	set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_track_meet.trj", 1, ROBOT_IRP6_ON_TRACK);
-	run_ext_empty_gen(false, 1, ROBOT_IRP6_ON_TRACK);
+	run_extended_empty_gen(false, 1, ROBOT_IRP6_ON_TRACK);
 
 	set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_pour.trj", 1, ROBOT_IRP6_ON_TRACK);
-	run_ext_empty_gen(false, 1, ROBOT_IRP6_ON_TRACK);
+	run_extended_empty_gen(false, 1, ROBOT_IRP6_ON_TRACK);
 
 }
 
@@ -90,26 +90,26 @@ void mp_task_pouring::pour(void)
 {
 
 	set_next_ecps_state( (int) ECP_GEN_POURING, 0, "", 1, ROBOT_IRP6_ON_TRACK);
-	run_ext_empty_gen(false, 1, ROBOT_IRP6_ON_TRACK);
+	run_extended_empty_gen(false, 1, ROBOT_IRP6_ON_TRACK);
 
 	set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_pour_2.trj", 1, ROBOT_IRP6_ON_TRACK);
-	run_ext_empty_gen(false, 1, ROBOT_IRP6_ON_TRACK);
+	run_extended_empty_gen(false, 1, ROBOT_IRP6_ON_TRACK);
 
 	set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_pour_3.trj", 1, ROBOT_IRP6_ON_TRACK);
-	run_ext_empty_gen(false, 1, ROBOT_IRP6_ON_TRACK);
+	run_extended_empty_gen(false, 1, ROBOT_IRP6_ON_TRACK);
 
 	set_next_ecps_state( (int) ECP_END_POURING, 0, "", 1, ROBOT_IRP6_ON_TRACK);
-	run_ext_empty_gen(false, 1, ROBOT_IRP6_ON_TRACK);
+	run_extended_empty_gen(false, 1, ROBOT_IRP6_ON_TRACK);
 
 	set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_pour_4.trj", 1, ROBOT_IRP6_ON_TRACK);
-	run_ext_empty_gen(false, 1, ROBOT_IRP6_ON_TRACK);
+	run_extended_empty_gen(false, 1, ROBOT_IRP6_ON_TRACK);
 
 }
 
 void mp_task_pouring::go_back(void)
 {
 	set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_track_put_back.trj", 1, ROBOT_IRP6_ON_TRACK);
-	run_ext_empty_gen(false, 1, ROBOT_IRP6_ON_TRACK);
+	run_extended_empty_gen(false, 1, ROBOT_IRP6_ON_TRACK);
 
 	set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_go_back.trj", 1, ROBOT_IRP6_ON_TRACK);
 	set_next_ecps_state( (int) ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_go_back.trj", 1, ROBOT_IRP6_POSTUMENT);

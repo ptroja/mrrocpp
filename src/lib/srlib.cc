@@ -98,8 +98,10 @@ sr::sr(const PROCESS_TYPE process_type, const char *process_name, const char *sr
 
 // Destruktor
 sr::~sr(void) {
-	fprintf(stderr, "messip_channel_disconnect()\n");
-    messip_channel_disconnect(ch, MESSIP_NOTIMEOUT);
+	fprintf(stderr, "~sr::messip_channel_disconnect(%s)\n", sr_message.process_name);
+    if(messip_channel_disconnect(ch, MESSIP_NOTIMEOUT) == -1) {
+    	perror("messip_channel_disconnect()");
+    }
 }
 
 int sr::send_package(void) {
@@ -333,9 +335,10 @@ void sr_edp::interpret(void) {
 } // end: sr_edp::interpret()
 // ---------------------------------------------------------------------
 
-  sr_ecp::sr_ecp(PROCESS_TYPE process_type, const char *process_name, const char *sr_name) :
-              sr(process_type, process_name, sr_name) { }
-
+sr_ecp::sr_ecp(PROCESS_TYPE process_type, const char *process_name, const char *sr_name) :
+	sr(process_type, process_name, sr_name)
+{
+}
 
 // ---------------------------------------------------------------------
 // Interpretacja bledow generowanych w ECP i MP
@@ -502,4 +505,3 @@ switch (sr_message.message_type) {
     sprintf(sr_message.description, "UNIDENTIFIED VSP ERROR");
 } // end: switch (sr_message.message_type)
 } // end: sr_ui::interpret()
-

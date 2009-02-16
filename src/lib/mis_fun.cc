@@ -1,10 +1,17 @@
 #include "lib/mis_fun.h"
 
-void set_thread_priority(pthread_t thread,  int32_t  sched_priority_l)
+#include <pthread.h>
+#include <stdio.h>
+
+void set_thread_priority(pthread_t thread, int sched_priority_l)
 {
 	int policy;
 	struct sched_param param;
-	pthread_getschedparam( thread,  &policy, &param );
+	if (pthread_getschedparam(thread, &policy, &param)) {
+		perror("pthread_getschedparam()");
+	}
 	param.sched_priority = sched_priority_l;
-	pthread_setschedparam(thread,  policy, &param );
+	if (pthread_setschedparam(thread, policy, &param)) {
+		perror("pthread_setschedparam()");
+	}
 }
