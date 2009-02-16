@@ -59,11 +59,11 @@ extern "C"
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>
  		
-		if (robot_</xsl:text><xsl:value-of select="$name" /><xsl:text></xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
+		if (robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text></xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
 		{
 			if (state.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				if (!( robot_</xsl:text><xsl:value-of select="$name" /><xsl:text>->read_xyz_angle_axis(</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos))) // Odczyt polozenia walow silnikow
+				if (!( robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->read_xyz_angle_axis(</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos))) // Odczyt polozenia walow silnikow
 					printf("Blad w read motors\n");
 					
 				alfa = sqrt(</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[3]*</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[3]
@@ -103,7 +103,7 @@ extern "C"
 			gtk_spin_button_set_value(spin6, gtk_spin_button_get_value(spin6) / wl);
 		}
 
-		if (robot_</xsl:text><xsl:value-of select="$name" /><xsl:text></xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
+		if (robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text></xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
 		{
 	</xsl:text><xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.8">
     		<xsl:with-param name="axis_xyz" select="$axis_xyz"/>
@@ -119,7 +119,7 @@ extern "C"
 					</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[i] *= tmp;
 			}
 			
-			robot_</xsl:text><xsl:value-of select="$name" /><xsl:text>->move_xyz_angle_axis(</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos);
+			robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->move_xyz_angle_axis(</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos);
 			
 			 if (state.is_synchronised) {
 	</xsl:text><xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.9">

@@ -32,7 +32,7 @@ EDP IRp6 RCSC window callback signals
 
 edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>(ui_config_entry &amp;entry)
 {
-				robot_</xsl:text><xsl:value-of select="$name" /><xsl:text> = new </xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>ui_conveyor_robot</xsl:text></xsl:when><xsl:otherwise><xsl:text>ui_common_robot</xsl:text></xsl:otherwise></xsl:choose><xsl:text>(
+				robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = new </xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>ui_conveyor_robot</xsl:text></xsl:when><xsl:otherwise><xsl:text>ui_common_robot</xsl:text></xsl:otherwise></xsl:choose><xsl:text>(
 				ui_model::instance().getConfigurator(),
 				&amp;ui_model::instance().getEcpSr()
 				</xsl:text><xsl:choose><xsl:when test="$name = 'irp6m'"><xsl:text>,ROBOT_IRP6_MECHATRONIKA</xsl:text></xsl:when><xsl:when test="$name = 'irp6o'"><xsl:text>,ROBOT_IRP6_ON_TRACK</xsl:text></xsl:when><xsl:when test="$name = 'irp6p'"><xsl:text>,ROBOT_IRP6_POSTUMENT</xsl:text></xsl:when><xsl:when test="$name = 'conveyor'"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>ROBOT_IRP6_NEWROBOT</xsl:text></xsl:otherwise></xsl:choose><xsl:text>
@@ -41,8 +41,8 @@ edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>::edp_</xsl:text><xsl:va
 
 edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>::~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>()
 {
-	if (robot_</xsl:text><xsl:value-of select="$name" /><xsl:text>) {
-		delete robot_</xsl:text><xsl:value-of select="$name" /><xsl:text>;
+	if (robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>) {
+		delete robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
 	}		
 }
 
@@ -119,8 +119,14 @@ extern "C"
 		ui_config_entry &amp; comboEntry = *(ui_config_entry *) userdata;
 		GtkBuilder &amp; builder = (comboEntry.getBuilder());
 		
-		robot_</xsl:text><xsl:value-of select="$name" /><xsl:text>->get_controller_state(&amp;state);
-		gtk_widget_set_sensitive( GTK_WIDGET(button), FALSE);
+		robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state(&amp;state);
+	        if(!state.is_synchronised) {
+	            //robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->ecp->synchronise();
+	        }
+	        robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state(&amp;state);
+	        if (state.is_synchronised) {
+	            gtk_widget_set_sensitive( GTK_WIDGET(button), FALSE);
+	        }
 		
 		GtkComboBox * combo = GTK_COMBO_BOX (gtk_builder_get_object(&amp;builder, "combobox1"));
 	
@@ -185,6 +191,7 @@ extern "C"
 <!-- signals handling file .cc-->
 <xsl:template name="irp6.edp.main.signals.h" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="name" select="name"/>
+<xsl:variable name="fullName" select="fullName"/>
 <xsl:document method="text" href="../signals/edp_{$name}_uimodule.h">
 
 
@@ -209,7 +216,7 @@ class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>
 		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>(ui_config_entry &amp;entry);
 		~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>();
 };
-ui_</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>conveyor</xsl:text></xsl:when><xsl:otherwise><xsl:text>common</xsl:text></xsl:otherwise></xsl:choose><xsl:text>_robot * robot_</xsl:text><xsl:value-of select="$name" /><xsl:text>;
+ui_</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>conveyor</xsl:text></xsl:when><xsl:otherwise><xsl:text>common</xsl:text></xsl:otherwise></xsl:choose><xsl:text>_robot * robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
 controller_state_t state;
 		
 #endif /* __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text> */

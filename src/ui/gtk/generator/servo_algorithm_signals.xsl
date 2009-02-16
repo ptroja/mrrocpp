@@ -59,11 +59,11 @@ extern "C"
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>
 
-		if (robot_</xsl:text><xsl:value-of select="$name" /><xsl:text></xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
+		if (robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text></xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
 		{
 				if (state.is_synchronised)  // Czy robot jest zsynchronizowany?
 				{
-					if (!(robot_</xsl:text><xsl:value-of select="$name" /><xsl:text>->get_servo_algorithm(servo_alg_no, servo_par_no))) // Odczyt polozenia walow silnikow
+					if (!(robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_servo_algorithm(servo_alg_no, servo_par_no))) // Odczyt polozenia walow silnikow
 						printf("Blad w mechatronika get_servo_algorithm\n");
 					
 </xsl:text><xsl:call-template name="irp6.servo.repeat.signals.cc.2">
@@ -101,7 +101,7 @@ extern "C"
 		}
 
 		// zlecenie wykonania ruchu
-		robot_</xsl:text><xsl:value-of select="$name" /><xsl:text>->set_servo_algorithm(servo_alg_no_output, servo_par_no_output);
+		robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->set_servo_algorithm(servo_alg_no_output, servo_par_no_output);
 
 	}
 	else
