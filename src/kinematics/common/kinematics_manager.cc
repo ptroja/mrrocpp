@@ -10,8 +10,6 @@
 // Data:		19.01.2007
 // ------------------------------------------------------------------------
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
 #include "common/com_buf.h"
 #include "kinematics/common/transformer_error.h"
 

@@ -12,17 +12,8 @@
 // Data:		24.02.2007
 // ------------------------------------------------------------------------
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
-#include "lib/mathtr.h"
-
-// Klasy bledow, itp.
-#include "kinematics/common/transformer_error.h"
-
 // Klasa kinematic_model_calibrated_irp6ot_with_wrist.
 #include "kinematics/irp6_on_track/kinematic_model_calibrated_irp6ot_with_wrist.h"
-
 
 /* -----------------------------------------------------------------------
   Konstruktor.
@@ -60,7 +51,7 @@ Poprawione dlugosci czlonow robota [m].
   a2 = 0.4647;
   a3 = 0.6748;
   d5 = 0.1967;
-  
+
 /* -----------------------------------------------------------------------
 Poprawione wspolczynniki.
  ------------------------------------------------------------------------- */
@@ -75,20 +66,20 @@ Poprawione wspolczynniki.
   ni3 = -52925.22;
   theta[3] = 189.1123; // l03
 
-  theta[5] = 0.000898; 
+  theta[5] = 0.000898;
   theta[6] = 0.005605;
-  
+
 /* -----------------------------------------------------------------------
 Poprawione polozenia synchronizacji - odczyty z enkoderow silnikow.
  ------------------------------------------------------------------------- */
   synchro_motor_position[0]= -0.0117;			// tor [m]
   synchro_motor_position[1]= -7.185;			// kolumna [rad]
   synchro_motor_position[2]= -23.7333;		// ramie d. [rad]
-  synchro_motor_position[3]= -4.0065;			// ramie g. [rad] 
+  synchro_motor_position[3]= -4.0065;			// ramie g. [rad]
   synchro_motor_position[4]= 153.6764;		// kisc T [rad]
-  synchro_motor_position[5]= 356.0929;		// kisc V [rad] 
+  synchro_motor_position[5]= 356.0929;		// kisc V [rad]
   synchro_motor_position[6]= 791.4409;		// kisc N [rad]
-  
+
 /* -----------------------------------------------------------------------
 Polozenia synchronizacji we wspolrzednych wewnetrznych - obliczone na podstawie z enkoderow silnikow.
  ------------------------------------------------------------------------- */

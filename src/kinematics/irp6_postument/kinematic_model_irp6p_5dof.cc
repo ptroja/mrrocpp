@@ -10,17 +10,10 @@
 // Data:		24.02.2007
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
 #include "common/com_buf.h"
-#include "lib/mathtr.h"
-
-// Klasy bledow, itp.
-#include "kinematics/common/transformer_error.h"
 
 // Klasa kinematic_model_irp6p_5dof.
 #include "kinematics/irp6_postument/kinematic_model_irp6p_5dof.h"
@@ -46,7 +39,7 @@ void kinematic_model_irp6p_5dof::set_kinematic_parameters(void)
   // Wysokosc kolumny.
   d1 = 0.7;
   // Modyfikacja pozostalych
-  synchro_motor_position[4]= 314.665;		// kisc V [rad] 
+  synchro_motor_position[4]= 314.665;		// kisc V [rad]
   synchro_joint_position[4] = synchro_motor_position[4] - gear[4] * theta[4] - synchro_motor_position[3];
 
   // Zmiana ustawienia czesci standardowego narzedzia na osiowo-symetryczne [m].
@@ -75,7 +68,7 @@ void kinematic_model_irp6p_5dof::attached_tool_inverse_transform(frame_tab* loca
   * current_joints[6] - wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
 
   Wyjscie:
-  * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ) 
+  * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
 void kinematic_model_irp6p_5dof::direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame)
@@ -115,10 +108,10 @@ void kinematic_model_irp6p_5dof::direct_kinematics_transform(const double* local
 /* ------------------------------------------------------------------------
   Zadanie odwrotne kinematyki dla robota IRp-6 na postumencie.
   Kinematyka pieciostopniowa.
-  
-  Wejscie:    
+
+  Wejscie:
   * local_current_joints - obecne (w rzeczywistosci poprzednie) wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
-  * local_desired_end_effector_frame - macierz przeksztacenia jednorodnego (MPJ) 
+  * local_desired_end_effector_frame - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca zadane poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
 
   Wyjscie:
@@ -126,7 +119,7 @@ void kinematic_model_irp6p_5dof::direct_kinematics_transform(const double* local
  ------------------------------------------------------------------------ */
 void kinematic_model_irp6p_5dof::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
 {
-  // Stale 
+  // Stale
  // const double a2_2 = a2*a2;
  // const double a3_2 = a3*a3;
 //  const double EPS=1e-10;
@@ -143,14 +136,14 @@ void kinematic_model_irp6p_5dof::inverse_kinematics_transform(double* local_desi
   double Theta[5];
   double tsin[5];
   double tcos[5];
-	
+
   interpolation_period = INTER_PERIOD;
 
   // Przepisanie starych wartosci katow.
   for(int i = 0; i < 5; i++)
 	old_theta[i] = local_current_joints[i];
 
-	
+
   q0[0] = (*local_desired_end_effector_frame)[0][3];
   q0[1] = (*local_desired_end_effector_frame)[1][3];
   q0[2] = (*local_desired_end_effector_frame)[2][3];
@@ -162,7 +155,7 @@ void kinematic_model_irp6p_5dof::inverse_kinematics_transform(double* local_desi
   q6[0] = tmp_tool_m[0][3];
   q6[1] = tmp_tool_m[1][3];
   q6[2] = tmp_tool_m[2][3];
-		
+
   v0[0] = (*local_desired_end_effector_frame)[0][0];
   v0[1] = (*local_desired_end_effector_frame)[1][0];
   v0[2] = (*local_desired_end_effector_frame)[2][0];// tutaj byl minus, ale dlaczego???
@@ -182,7 +175,7 @@ void kinematic_model_irp6p_5dof::inverse_kinematics_transform(double* local_desi
       Extract_vect_from_tree(tree_ptr, Theta, tsin, tcos);
       /* Skasowanie drzewa rozwiaza`n */
       Delete_Theta_Tree(tree_ptr);
-    
+
 	local_desired_joints[0] = Theta[0];
 	local_desired_joints[1] = Theta[1];
 	local_desired_joints[2] = Theta[2];
@@ -191,7 +184,7 @@ void kinematic_model_irp6p_5dof::inverse_kinematics_transform(double* local_desi
   }
   else
   {
-	
+
 	local_desired_joints[0] = Theta[0];
 	local_desired_joints[1] = Theta[1];
 	local_desired_joints[2] = Theta[2];
@@ -304,11 +297,11 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_1(double q0[3], double v0[3],
 			  drugiego rozwiazania rownania kwadratowego */
    int16_t res;         /* zmienna pomocnicza przeznaczona na przechowywanie
 			  rodzaju rozwiaza`nia rownania kwadratowego */
-   double p;           /* zmienna pomocnicza wykorzystywana przy obliczaniu 
+   double p;           /* zmienna pomocnicza wykorzystywana przy obliczaniu
 			  wspolczynnikow rownania kwadratowego */
-   double r;           /* zmienna pomocnicza wykorzystywana przy obliczaniu 
+   double r;           /* zmienna pomocnicza wykorzystywana przy obliczaniu
 			  wspolczynnikow rownania kwadratowego */
-   double t;           /* zmienna pomocnicza wykorzystywana przy obliczaniu 
+   double t;           /* zmienna pomocnicza wykorzystywana przy obliczaniu
 			  wspolczynnikow rownania kwadratowego */
    double r_2;         /* r*r */
    double delta;       /* wyroznik rownania kwadratowego */
@@ -363,19 +356,19 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_1(double q0[3], double v0[3],
 		     /* wzor (4.12) */
 		     p = u6[Z]*u6[Z]*temp1 - temp2*(u0[X]*u0[X] - u0[Y]*u0[Y]) +
 			 2.0*u6[Z]*v6[Z]*(u0[Y]*v0[Y] - v0[X]*u0[X]) - temp1*radius_2;
-		
+
 		     /* wzor (4.13) */
 		     r = 2.0*(u6[Z]*u6[Z]*v0[X]*v0[Y] - u0[Y]*u0[X]*temp2 -
 			   u6[Z]*v6[Z]*(v0[X]*u0[Y] + u0[X]*v0[Y]) - v0[X]*v0[Y]*radius_2);
-		
+
 		     /* wzor (4.14) */
 		     t = (u6[Z]*u6[Z] - radius_2)*(v0[Z]*v0[Z] + v0[Y]*v0[Y]) +
 			  u0[X]*u0[X]*temp2 + radius_2*v6[Z]*v6[Z] +
 			  2.0*u6[Z]*v6[Z]*u0[X]*v0[X];
-		
+
 		      r_2 = r*r;
 		      delta = r_2*(r_2 - 4.0*t*(p + t));
-		
+
 		     /* stworzenie warstwy THETA1 w drzewie rozwiaza`n */
 		     res = QuadraticEquation(p*p+r_2, 2*p*t-r_2, t*t, &x1, &x2, delta);
     }
@@ -407,7 +400,7 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_1(double q0[3], double v0[3],
      case LINEAR_SOLUTION:
 //      std::cout << " Jedno rozwiazanie LINEAR_SOLUTION ";
 			  root_pointer = Create1(x1,p,r,t,result,max_theta1_inc,no_of_solutions,old_theta[0]);
-		
+
 			  switch (*result)
 			   {
 			    case OUT_OF_MEMORY: return(NULL);
@@ -420,7 +413,7 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_1(double q0[3], double v0[3],
 			   break;
      case TWO_SOLUTIONS:
 	//  	   std::cout << "dwa rozwiazania";
-	
+
 	       /* pierwsze rozwiazanie */
 	       // std::cout << "przed Create1" << std::endl;
 	       // std::cout << "x1 = " << x1 << std::endl;
@@ -428,7 +421,7 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_1(double q0[3], double v0[3],
 	       // std::cout << "r = " << r << std::endl;
 	       // std::cout << "t = " << t << std::endl;
 	//      // std::cout << "result = " << result << std::endl;
-	       
+
 		  root_pointer = Create1(x1,p,r,t,result,max_theta1_inc,no_of_solutions,old_theta[0]);
 		  switch (*result)
 		   {
@@ -439,7 +432,7 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_1(double q0[3], double v0[3],
 			    case TWO_NODES: break;
 			    default : *result = UNKNOWN_ERROR_THETA1; return(NULL);
 		   } /* end switch (*result) */
-	
+
 	      	/* drugie rozwiazanie */
 			// std::cout << "drugie rozwiazanie" <<std::endl;
 		  if(root_pointer == NULL){
@@ -449,7 +442,7 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_1(double q0[3], double v0[3],
 		   }
 		   else{
 			    // std::cout <<"root_pointer nie byl null" << std::endl;
-			      if(no_of_solutions == SINGLE_SOLUTION) 
+			      if(no_of_solutions == SINGLE_SOLUTION)
 					break;
 			      previous = NULL;
 			      node_pointer = root_pointer;
@@ -459,7 +452,7 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_1(double q0[3], double v0[3],
 			       } /* end while( node_pointer != NULL) */
 			      previous->NextTheta = Create1(x2,p,r,t,result,max_theta1_inc,no_of_solutions,old_theta[0]);
 		  } /* end else od: if(root_pointer == NULL) */
-		    
+
 		  switch (*result)
 		   {
 		    case OUT_OF_MEMORY: return(NULL);
@@ -469,7 +462,7 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_1(double q0[3], double v0[3],
 		    case TWO_NODES: break;
 		    default : *result = UNKNOWN_ERROR_THETA1; return(NULL);
 		   } /* end switch (*result) */
-	
+
 		   if(root_pointer == NULL)
 		     { *result = INVALID_ROOTS_THETA1; return(NULL); }
 		   break;
@@ -627,7 +620,7 @@ ZMIENNE ZEWNeTRZNE:
 THETA_NODE* kinematic_model_irp6p_5dof::Theta_2(THETA_NODE *theta1_pointer, THETA_NODE *theta4_pointer,
 	    double u0[3], double v0[3], double q0[3], double u6[3],
 	    double q6[3], double v6[3], double radius_2,
-	    int16_t *result, double old_theta[5],	    
+	    int16_t *result, double old_theta[5],
 	    double interpolation_period, int16_t no_of_solutions)
 {
  double theta_x1;   /* zmiena pomocnicza przeznaczona na przechowywanie
@@ -642,17 +635,17 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_2(THETA_NODE *theta1_pointer, THET
 			 liczby rozwiaza`n dla kolnierza */
  int16_t res;        /* zmienna pomocnicza przeznaczona na przechowywanie
 			 rodzaju rozwiaza`nia rownania kwadratowego */
- double e1;         /* parametr E pierwszego zestawu parametrow rownania: 
+ double e1;         /* parametr E pierwszego zestawu parametrow rownania:
 			  E cos + F sin - G = 0 */
- double f1;         /* parametr F pierwszego zestawu parametrow rownania: 
+ double f1;         /* parametr F pierwszego zestawu parametrow rownania:
 			  E cos + F sin - G = 0 */
- double g1;         /* parametr G pierwszego zestawu parametrow rownania: 
+ double g1;         /* parametr G pierwszego zestawu parametrow rownania:
 			  E cos + F sin - G = 0 */
- double e2;         /* parametr E drugiego zestawu parametrow rownania: 
+ double e2;         /* parametr E drugiego zestawu parametrow rownania:
 			  E cos + F sin - G = 0 */
- double f2;         /* parametr F drugiego zestawu parametrow rownania: 
+ double f2;         /* parametr F drugiego zestawu parametrow rownania:
 			  E cos + F sin - G = 0 */
- double g2;         /* parametr G drugiego zestawu parametrow rownania: 
+ double g2;         /* parametr G drugiego zestawu parametrow rownania:
 			  E cos + F sin - G = 0 */
  double max_theta2_inc;     /* maksymalny dopuszczalny przyrost ka`ta
 				 THETA w 1 kroku makro-interpolacji */
@@ -665,7 +658,7 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_2(THETA_NODE *theta1_pointer, THET
 
 
 /* Poczatek Theta_2() */
-// // std::cout << "Jestem w Theta_2" << std::endl;
+//// std::cout << "Jestem w Theta_2" << std::endl;
 
 /* inicjalizacja wskaznikow */
    root_pointer = NULL;
@@ -681,7 +674,7 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_2(THETA_NODE *theta1_pointer, THET
 /* obliczenie wspolrzednych srodka kolnierza */
   rrr = Flange(u0, v0, u6, radius_2, theta1_pointer, theta4_pointer,
 	       o06_prim, o06_bis);
-  if(rrr == NO_SOLUTION) 
+  if(rrr == NO_SOLUTION)
     { *result = INVALID_FLANGE; return(NULL); }
 
 
@@ -690,8 +683,8 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_2(THETA_NODE *theta1_pointer, THET
     f1 = d1 - d6*S4 - o06_prim[Z];
     g1 = (e1*e1 +f1*f1 +a2*a2 - a3*a3)/(2.0*a2);
 
-   res = Ecos_Fsin_G(e1, f1, g1, &theta_x1, &theta_x2, 
-		     LOWER_THETA2_LIMIT, UPPER_THETA2_LIMIT, max_theta2_inc, 
+   res = Ecos_Fsin_G(e1, f1, g1, &theta_x1, &theta_x2,
+		     LOWER_THETA2_LIMIT, UPPER_THETA2_LIMIT, max_theta2_inc,
 		     old_theta[1], no_of_solutions);
 
   /* stworzenie warstwy THETA2 w drzewie rozwiaza`n */
@@ -712,10 +705,10 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_2(THETA_NODE *theta1_pointer, THET
 	  if( (root_pointer = Add_Theta(theta_x1,cos(theta_x1),sin(theta_x1)))
 	       == NULL)
 	    { *result = OUT_OF_MEMORY; return(NULL); }
-	  else 
-	    { 
+	  else
+	    {
 	      /* utworzenie poddrzewa rozwiaza`n */
-	      if( (root_pointer->NextAngle = 
+	      if( (root_pointer->NextAngle =
 		   Theta_3(theta1_pointer,root_pointer,theta4_pointer,e1,f1,q0,q6,v0,v6,result,
 		     old_theta,interpolation_period,no_of_solutions))
 		    == NULL)
@@ -730,10 +723,10 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_2(THETA_NODE *theta1_pointer, THET
 	  if( (root_pointer = Add_Theta(theta_x1,cos(theta_x1),sin(theta_x1)))
 	       == NULL)
 	    { *result = OUT_OF_MEMORY; return(NULL); }
-	  else 
-	    { 
+	  else
+	    {
 	      /* utworzenie poddrzewa rozwiaza`n */
-	      if( (root_pointer->NextAngle = 
+	      if( (root_pointer->NextAngle =
 		      Theta_3(theta1_pointer,root_pointer,theta4_pointer,e1,f1,q0,q6,v0,v6,result,
 			     old_theta,interpolation_period,no_of_solutions))
 		    == NULL)
@@ -747,10 +740,10 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_2(THETA_NODE *theta1_pointer, THET
 	      if( (last_node = Add_Theta(theta_x2,cos(theta_x2),sin(theta_x2)))
 		   == NULL)
 		{ *result = OUT_OF_MEMORY; return(NULL); }
-	      else  
-		{ 
+	      else
+		{
 		  /* utworzenie poddrzewa rozwiaza`n */
-		  if( (last_node->NextAngle = 
+		  if( (last_node->NextAngle =
 			  Theta_3(theta1_pointer,last_node,theta4_pointer,e1,f1,q0,q6,v0,v6,result,
 				 old_theta,interpolation_period,no_of_solutions))
 			== NULL)
@@ -778,8 +771,8 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_2(THETA_NODE *theta1_pointer, THET
 	f2 = d1 - d6*S4 - o06_bis[Z];
 	g2 = (e2*e2 +f2*f2 +a2*a2 - a3*a3)/(2.0*a2);
 
-	res = Ecos_Fsin_G(e2, f2, g2, &theta_x1, &theta_x2, 
-		     LOWER_THETA2_LIMIT, UPPER_THETA2_LIMIT, max_theta2_inc, 
+	res = Ecos_Fsin_G(e2, f2, g2, &theta_x1, &theta_x2,
+		     LOWER_THETA2_LIMIT, UPPER_THETA2_LIMIT, max_theta2_inc,
 		     old_theta[1], no_of_solutions);
 
       /* kontynuacja tworzenia warstwy THETA2 w drzewie rozwiaza`n */
@@ -801,16 +794,16 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_2(THETA_NODE *theta1_pointer, THET
 	     if( (tmp_ptr = Add_Theta(theta_x1,cos(theta_x1),sin(theta_x1)))
 		  == NULL)
 	       { *result = OUT_OF_MEMORY; return(NULL); }
-	  else 
-	    { 
+	  else
+	    {
 	      /* utworzenie poddrzewa rozwiaza`n */
-	      if( (tmp_ptr->NextAngle = 
+	      if( (tmp_ptr->NextAngle =
 		      Theta_3(theta1_pointer,tmp_ptr,theta4_pointer,e2,f2,q0,q6,v0,v6,result,
 			     old_theta,interpolation_period,no_of_solutions))
 		    == NULL)
 		{ free(tmp_ptr); tmp_ptr = NULL; }
 	      if(last_node == NULL)
-		 root_pointer = tmp_ptr; 
+		 root_pointer = tmp_ptr;
 	      else
 		last_node->NextTheta = tmp_ptr;
 	      break;
@@ -822,16 +815,16 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_2(THETA_NODE *theta1_pointer, THET
 	     if( (tmp_ptr = Add_Theta(theta_x1,cos(theta_x1),sin(theta_x1)))
 		  == NULL)
 	       { *result = OUT_OF_MEMORY; return(NULL); }
-	     else 
-	       { 
+	     else
+	       {
 		 /* utworzenie poddrzewa rozwiaza`n */
-		 if( (tmp_ptr->NextAngle = 
+		 if( (tmp_ptr->NextAngle =
 			 Theta_3(theta1_pointer,tmp_ptr,theta4_pointer,e2,f2,q0,q6,v0,v6,result,
 				old_theta,interpolation_period,no_of_solutions))
 		       == NULL)
 		   { free(tmp_ptr); tmp_ptr = NULL; }
 		 if(last_node == NULL)
-		    root_pointer = tmp_ptr; 
+		    root_pointer = tmp_ptr;
 		 else
 		   last_node->NextTheta = tmp_ptr;
 		 last_node = tmp_ptr;
@@ -840,13 +833,13 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_2(THETA_NODE *theta1_pointer, THET
 	  if( (no_of_solutions == ALL_SOLUTIONS) || (root_pointer == NULL))
 	    {
 	     /* drugie rozwiazanie */
-	     if( (tmp_ptr = 
+	     if( (tmp_ptr =
 		  Add_Theta(theta_x2,cos(theta_x2),sin(theta_x2))) == NULL)
 	       { *result = OUT_OF_MEMORY; return(NULL); }
-	      else  
-		{ 
+	      else
+		{
 		  /* utworzenie poddrzewa rozwiaza`n */
-		  if( (tmp_ptr->NextAngle = 
+		  if( (tmp_ptr->NextAngle =
 			  Theta_3(theta1_pointer,tmp_ptr,theta4_pointer,e2,f2,q0,q6,v0,v6,result,
 				 old_theta,interpolation_period,no_of_solutions))
 			== NULL)
@@ -954,10 +947,10 @@ ZMIENNE ZEWNeTRZNE:
    spowodowane kumulacja bledow numerycznych */
 #define OFFSET 1.0e-4
 
-THETA_NODE* kinematic_model_irp6p_5dof::Theta_3(THETA_NODE *theta1_pointer, 
+THETA_NODE* kinematic_model_irp6p_5dof::Theta_3(THETA_NODE *theta1_pointer,
 		    THETA_NODE *theta2_pointer,
 		    THETA_NODE *theta4_pointer,
-		    double e, double f, 
+		    double e, double f,
 		    double q0[3], double q6[3],
 		    double v0[3], double v6[3],
 		    int16_t *result, double old_theta[5],
@@ -983,8 +976,8 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_3(THETA_NODE *theta1_pointer,
 
   eee = e - a2*C2;
   fff = f - a2*S2;
-  if( (eee < EPS) && (eee > -EPS))  /* eee == 0 */ 
-     /* eee == 0  => cos(theta3) == 0  => theta3 == -90 lub +90, 
+  if( (eee < EPS) && (eee > -EPS))  /* eee == 0 */
+     /* eee == 0  => cos(theta3) == 0  => theta3 == -90 lub +90,
 	natomiast -25 < theta3 < 40  => blad */
      { *result = ATAN_THETA3_ERROR; return(NULL); }
   else
@@ -1125,11 +1118,11 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_4(THETA_NODE *theta1_pointer,
 		       drugiego rozwiazania rownania E cos + F sin - G = 0 */
  int16_t res; /* zmienna pomocnicza przeznaczona na przechowywanie
 			 rodzaju rozwiaza`nia rownania kwadratowego */
- double e;           /* parametr E zestawu parametrow rownania: 
+ double e;           /* parametr E zestawu parametrow rownania:
 			  E cos + F sin - G = 0 */
- double f;           /* parametr F zestawu parametrow rownania: 
+ double f;           /* parametr F zestawu parametrow rownania:
 			  E cos + F sin - G = 0 */
- double g;           /* parametr G zestawu parametrow rownania: 
+ double g;           /* parametr G zestawu parametrow rownania:
 			  E cos + F sin - G = 0 */
  double max_theta4_inc;     /* maksymalny dopuszczalny przyrost ka`ta
 				 THETA w 1 kroku makro-interpolacji */
@@ -1156,8 +1149,8 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_4(THETA_NODE *theta1_pointer,
     f = -v0[Z];
     g =  v6[Z];
 
-    res = Ecos_Fsin_G(e, f, g, &theta_x1, &theta_x2, 
-		     LOWER_THETA4_LIMIT, UPPER_THETA4_LIMIT, max_theta4_inc, 
+    res = Ecos_Fsin_G(e, f, g, &theta_x1, &theta_x2,
+		     LOWER_THETA4_LIMIT, UPPER_THETA4_LIMIT, max_theta4_inc,
 		     old_theta[3], no_of_solutions);
 
   /* stworzenie warstwy THETA4 w drzewie rozwiaza`n */
@@ -1175,7 +1168,7 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_4(THETA_NODE *theta1_pointer,
 	  if( (root_pointer = Add_Theta(theta_x1,cos(theta_x1),sin(theta_x1)))
 	       == NULL)
 	    { *result = OUT_OF_MEMORY; return(NULL); }
-	  else 
+	  else
 	    {
 	      root_pointer->NextAngle = Theta_2(theta1_pointer,root_pointer,
 				u0,v0,q0,u6,q6,v6,radius_2,result,old_theta,
@@ -1193,7 +1186,7 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_4(THETA_NODE *theta1_pointer,
 	  if( (root_pointer = Add_Theta(theta_x1,cos(theta_x1),sin(theta_x1)))
 	       == NULL)
 	    { *result = OUT_OF_MEMORY; return(NULL); }
-	  else 
+	  else
 	    {
 	      root_pointer->NextAngle = Theta_2(theta1_pointer,root_pointer,
 				u0,v0,q0,u6,q6,v6,radius_2,result,old_theta,
@@ -1209,7 +1202,7 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_4(THETA_NODE *theta1_pointer,
 	      /* drugie rozwiazanie */
 	       if( (tmp_ptr = Add_Theta(theta_x2,cos(theta_x2),sin(theta_x2))) == NULL)
 		 { *result = OUT_OF_MEMORY; return(NULL); }
-	       else 
+	       else
 		 {
 		   tmp_ptr->NextAngle = Theta_2(theta1_pointer,tmp_ptr,
 				     u0,v0,q0,u6,q6,v6,radius_2,result,old_theta,
@@ -1316,9 +1309,9 @@ ZMIENNE ZEWNeTRZNE:
 
 #define EPS5 1.0e-6
 
-THETA_NODE* kinematic_model_irp6p_5dof::Theta_5(THETA_NODE *theta1_pointer, 
+THETA_NODE* kinematic_model_irp6p_5dof::Theta_5(THETA_NODE *theta1_pointer,
 		    THETA_NODE *theta2_pointer,
-		    THETA_NODE *theta3_pointer, 
+		    THETA_NODE *theta3_pointer,
 		    THETA_NODE *theta4_pointer,
 		    double q0[3], double q6[3],
 		    double v0[3], double v6[3],
@@ -1333,11 +1326,11 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_5(THETA_NODE *theta1_pointer,
 		       drugiego rozwiazania rownania E cos + F sin - G = 0 */
  int16_t res; /* zmienna pomocnicza przeznaczona na przechowywanie
 		       rodzaju rozwiaza`nia rownania E cos + F sin - G = 0 */
- double e;           /* parametr E zestawu parametrow rownania: 
+ double e;           /* parametr E zestawu parametrow rownania:
 			  E cos + F sin - G = 0 */
- double f;           /* parametr F zestawu parametrow rownania: 
+ double f;           /* parametr F zestawu parametrow rownania:
 			  E cos + F sin - G = 0 */
- double g;           /* parametr G zestawu parametrow rownania: 
+ double g;           /* parametr G zestawu parametrow rownania:
 			  E cos + F sin - G = 0 */
  double s5;          /* sin(THETA5) */
  double c5;          /* cos(THETA5) */
@@ -1375,7 +1368,7 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_5(THETA_NODE *theta1_pointer,
     { /* C4 == 0 */
       g = q0[X] - C1*(d6*C4 + a3*C3 + a2*C2);
       if( S4 > 0 )  /* S4 == 1 */
-	{ 
+	{
 	  special_case = 1;
 	  e = C1*q6[X] + S1*q6[Y];
 			 f = S1*q6[X] - C1*q6[Y];
@@ -1387,7 +1380,7 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_5(THETA_NODE *theta1_pointer,
 		}
 	 }
        else  /* S4 == -1 */
-	 { 
+	 {
 	   special_case = -1;
 			  e = -C1*q6[X] + S1*q6[Y];
 		  f = S1*q6[X] + C1*q6[Y];
@@ -1399,7 +1392,7 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_5(THETA_NODE *theta1_pointer,
 		}
 	 }
     } /* end: C4 == 0 */
-  else 
+  else
     { /* C4 != 0 */
       e =  q6[X]*C4;
       f = -q6[Y]*C4;
@@ -1412,8 +1405,8 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_5(THETA_NODE *theta1_pointer,
 	}
     } /* end: C4 != 0 */
 
-   res = Ecos_Fsin_G(e, f, g, &theta_x1, &theta_x2, 
-		     LOWER_THETA5_LIMIT, UPPER_THETA5_LIMIT, max_theta5_inc, 
+   res = Ecos_Fsin_G(e, f, g, &theta_x1, &theta_x2,
+		     LOWER_THETA5_LIMIT, UPPER_THETA5_LIMIT, max_theta5_inc,
 		     old_theta[4], ALL_SOLUTIONS);
   /* Tutaj zadamy znalezienia wszystkich rozwiaza`n niezaleznie od no_of_solutions,
      poniewaz nie chcemy, aby przedwczesnie byly sprawdzone ograniczenia
@@ -1476,7 +1469,7 @@ THETA_NODE* kinematic_model_irp6p_5dof::Theta_5(THETA_NODE *theta1_pointer,
 	  else
 	    *result = THETA5_EQUATION_VIOLATION;
 	  return(root_pointer);
-  
+
      default :
 	  *result = UNKNOWN_ERROR_THETA5; return(NULL);
     }  /* end switch(res) */
@@ -1552,10 +1545,10 @@ int16_t kinematic_model_irp6p_5dof::QuadraticEquation(double a, double b, double
 				  else
 				      return(NO_SOLUTION);
 		 }  /* end: if (delta < 0) */
-	      else 
+	      else
 			sqrt_delta = sqrt(delta);
-	
-	
+
+
 	     if (sqrt_delta < EPS){
 			 *x1 = -b/(2*a);
 			 /* z powodu kumulacji bledow numerycznych pierwiastek, ktory
@@ -1567,14 +1560,14 @@ int16_t kinematic_model_irp6p_5dof::QuadraticEquation(double a, double b, double
 			 if( ((*x1 > -1.0 - ROUND_OFF) && (*x1 < -1.0)) ) *x1 = -1.0;
 			 return(ONE_SOLUTION);
 	     }
-	      
-	     if (b < 0) 
-			sgnb = -1.0; 
-		else 
+
+	     if (b < 0)
+			sgnb = -1.0;
+		else
 			sgnb = 1.0;
-	     	
+
 		q = -(b + sgnb*sqrt_delta)/2 ;
-	     	
+
 	     if ((q < EPS) && (q > -EPS)){
 			   /* z powodu kumulacji bledow numerycznych pierwiastek, ktory
 			      w rzeczywistosci = 1 lub -1 moze nieznacznie przekraczac te
@@ -1606,9 +1599,9 @@ int16_t kinematic_model_irp6p_5dof::QuadraticEquation(double a, double b, double
    } /* koniec rozwiazania rownania kwadratowego */
   else{ /* rownanie liniowe */
 	      if ((b < EPS) && (b > -EPS)) /* b == 0 */
-			if ((c < EPS) && (c > -EPS)) /* c == 0 */    
+			if ((c < EPS) && (c > -EPS)) /* c == 0 */
 	 				return(TRIVIAL_EQUATION);
-			else /* c != 0 */ 	
+			else /* c != 0 */
 					return(INCONSISTENT_DATA);
 	    /* b != 0 */
 	    *x1 = -c/b;
@@ -1634,7 +1627,7 @@ int16_t kinematic_model_irp6p_5dof::QuadraticEquation(double a, double b, double
 FUNKCJA:
 
 Funkcja Ecos_Fsin_G rozwiazuje rownanie o postaci:
-	 E cos(theta) + F sin(theta) - G = 0 
+	 E cos(theta) + F sin(theta) - G = 0
 
 Rozwiazanie:
   theta = atan2( g, +sqrt(e^2 + f^2 - g^2) ) - atan2(e,f)
@@ -1646,16 +1639,16 @@ Ponadto sprawdza dopuszczalnosc otrzymanych wynikow.
 
 WYWOlANIE:
 
-   r = Ecos_Fsin_G(e, f, g, theta1_ptr, theta2_ptr, 
-		   lower_limit, upper_limit, max_theta_inc, 
+   r = Ecos_Fsin_G(e, f, g, theta1_ptr, theta2_ptr,
+		   lower_limit, upper_limit, max_theta_inc,
 		   OldTheta, no_of_solutions);
 
 
 DANE WEJSCIOWE:
 
- double e             - wspolczynnik E rownania: E cos(theta) + F sin(theta) - G = 0 
- double f             - wspolczynnik F rownania: E cos(theta) + F sin(theta) - G = 0 
- double g             - wspolczynnik G rownania: E cos(theta) + F sin(theta) - G = 0 
+ double e             - wspolczynnik E rownania: E cos(theta) + F sin(theta) - G = 0
+ double f             - wspolczynnik F rownania: E cos(theta) + F sin(theta) - G = 0
+ double g             - wspolczynnik G rownania: E cos(theta) + F sin(theta) - G = 0
  double lower_limit   - dolne ograniczenie narzucone na kat theta
  double upper_limit   - gorne ograniczenie narzucone na kat theta
  double max_theta_inc - maksymalny dopuszczalny przyrost ka`ta
@@ -1677,14 +1670,14 @@ DANE WYJSCIOWE:
 
   Wartosc funkcji:
   r = NO_SOLUTION       - obliczone katy nie spelniaja ogranicze`n
-						--> *theta1_ptr, *theta2_ptr 
+						--> *theta1_ptr, *theta2_ptr
 						    - nieokreslone
-  r = ONE_SOLUTION      - e^2 + f^2 - g^2  = 0  --> *theta2_ptr 
+  r = ONE_SOLUTION      - e^2 + f^2 - g^2  = 0  --> *theta2_ptr
 						    - nieokreslone
   r = TWO_SOLUTIONS     - e^2 + f^2 - g^2  > 0
-  r = INCONSISTENT_DATA - e = 0, f = 0, g != 0  --> *theta1_ptr, *theta2_ptr 
+  r = INCONSISTENT_DATA - e = 0, f = 0, g != 0  --> *theta1_ptr, *theta2_ptr
 						    - nieokreslone
-			- e^2 + f^2 - g^2  < 0  --> *theta1_ptr, *theta2_ptr 
+			- e^2 + f^2 - g^2  < 0  --> *theta1_ptr, *theta2_ptr
 						    - nieokreslone
   r = TRIVIAL_EQUATION  - e = 0, f = 0, g  = 0  --> *theta2_ptr
 						    - nieokreslone,
@@ -1693,7 +1686,7 @@ DANE WYJSCIOWE:
 ---------------------------------------------------------------------------*/
 
 /* o tyle moze byc przekroczone 0 przy sprawdzaniu rownania:
-	 E cos(theta) + F sin(theta) - G = 0 
+	 E cos(theta) + F sin(theta) - G = 0
    Spowodowane jest to kumulacja bledow numerycznych */
 #define EQ_EPS 1.0e-4
 
@@ -1707,8 +1700,8 @@ DANE WYJSCIOWE:
 
 
 int16_t kinematic_model_irp6p_5dof::Ecos_Fsin_G(double e, double f, double g,
-			  double *theta1_ptr, double *theta2_ptr, 
-			  double lower_limit, double upper_limit, 
+			  double *theta1_ptr, double *theta2_ptr,
+			  double lower_limit, double upper_limit,
 			  double max_theta_inc, double OldTheta,
 			  int16_t no_of_solutions)
 {
@@ -1761,7 +1754,7 @@ int16_t kinematic_model_irp6p_5dof::Ecos_Fsin_G(double e, double f, double g,
 	*theta1_ptr += 2.0*M_PI;
       if(*theta1_ptr > M_PI)
 	*theta1_ptr = M_PI;
-     /* sprawdzenie legalnosci kata theta */ 
+     /* sprawdzenie legalnosci kata theta */
       if ( (*theta1_ptr <= upper_limit) && (*theta1_ptr >= lower_limit) )
 	if ( (no_of_solutions == ALL_SOLUTIONS) ||
 	(fabs(*theta1_ptr - OldTheta)< max_theta_inc) )
@@ -1807,9 +1800,9 @@ int16_t kinematic_model_irp6p_5dof::Ecos_Fsin_G(double e, double f, double g,
 	if ( (no_of_solutions == ALL_SOLUTIONS) ||
 	     (fabs(*theta2_ptr - OldTheta) < max_theta_inc) )
 	  wynik = 2;
-	else 
+	else
 	  wynik = 1;  /* przekroczenie dopuszczalnej predkosci lub pozadane pojedyncze rozwiazanie */
-      else   
+      else
 	/* poza przestrzenia robocza */
 	if ( (*theta2_ptr < upper_limit+OFFSET) && (*theta2_ptr > lower_limit-+OFFSET) )
 	  { /* w niewielkim stopniu poza przestrzenia robocza => korekcja */
@@ -1821,7 +1814,7 @@ int16_t kinematic_model_irp6p_5dof::Ecos_Fsin_G(double e, double f, double g,
 		 (fabs(*theta2_ptr - OldTheta) < max_theta_inc) ||
 	     (fabs(fabs(*theta2_ptr - OldTheta) - 2.0*M_PI)< max_theta_inc) )
 	      wynik = 2;
-	    else 
+	    else
 	      wynik = 1;  /* przekroczenie dopuszczalnej predkosci lub pozadane pojedyncze rozwiazanie */
 	  }  /* koniec proby korekcji */
 	else  /* korekcja jest niedopuszczalna */
@@ -1940,7 +1933,7 @@ DANE WYJSCIOWE:
 ---------------------------------------------------------------------------*/
 
 
-// stara 
+// stara
 // #define EQUATION_EPS 1.0E-5
 // by Y - nowa
 #define EQUATION_EPS 1.0E-10
@@ -1957,7 +1950,7 @@ int16_t kinematic_model_irp6p_5dof::Check_cos_Theta1(double cos_theta1, double *
   double value;  /* wartosc lewej strony sprawdzanego rownania */
 
   /* Poczatek Check_cos_Theta1 */
- 
+
 
   *sin_theta1 = sqrt(1.0 - cos_theta1*cos_theta1);
 
@@ -2639,16 +2632,16 @@ THETA_NODE* kinematic_model_irp6p_5dof::Create1(double x, double p, double r, do
      node_pointer = NULL;
 
  	if((x > (1.0 + EPS)) || (x < 0.0)){
-		*result = INVALID_ROOT_X; 
+		*result = INVALID_ROOT_X;
 		return(NULL);
 	} /* bo x = (cos THETA1)^2 */
 
-  	if( x > 1.0) 
+  	if( x > 1.0)
 		x = 1.0;
   c = sqrt(x);
 
   if( Check_cos_Theta1(c, &s, &theta, p, r, t, max_theta_inc, no_of_solutions, OldTheta) == ACCEPT ) {/* ACCEPT Check_cos_Theta1 */
-  	
+
 	      if((root_pointer = Add_Theta(theta,c,s)) == NULL)
 		 	{*result = OUT_OF_MEMORY; return(NULL); }
 
@@ -2660,9 +2653,9 @@ THETA_NODE* kinematic_model_irp6p_5dof::Create1(double x, double p, double r, do
 		{
 
 			if( (theta > UPPER_THETA1_LIMIT+OFFSET) || (theta < LOWER_THETA1_LIMIT-OFFSET) )
-			    { *result = ONE_NODE; 
+			    { *result = ONE_NODE;
 
-			       return(root_pointer); 
+			       return(root_pointer);
 			    }
 			else
 			    if(theta < UPPER_THETA1_LIMIT)
@@ -2672,29 +2665,29 @@ THETA_NODE* kinematic_model_irp6p_5dof::Create1(double x, double p, double r, do
 		}
 	      if( (no_of_solutions == SINGLE_SOLUTION) && (fabs(theta - OldTheta) > max_theta_inc) )	{
 
-			*result = ONE_NODE; 
-			return(root_pointer); 
+			*result = ONE_NODE;
+			return(root_pointer);
 		 }
-	     if((node_pointer = Add_Theta(theta,-c,-s)) == NULL){ 
+	     if((node_pointer = Add_Theta(theta,-c,-s)) == NULL){
 
-			*result = OUT_OF_MEMORY; 
-			return(NULL); 
+			*result = OUT_OF_MEMORY;
+			return(NULL);
 		}
 	      root_pointer->NextTheta = node_pointer;
-	      *result = TWO_NODES; 
+	      *result = TWO_NODES;
 
 	      return(root_pointer);
-	      
+
     } /* end ACCEPT Check_cos_Theta1 */
 
    else{ /* REJECT Check_cos_Theta1 */
 
-      if(theta < 0.0) 
+      if(theta < 0.0)
 		theta += M_PI;
       else
 		 theta -= M_PI;
 
-      if((theta > UPPER_THETA1_LIMIT) ||	 (theta < LOWER_THETA1_LIMIT)){ 
+      if((theta > UPPER_THETA1_LIMIT) ||	 (theta < LOWER_THETA1_LIMIT)){
 		  if( (theta > UPPER_THETA1_LIMIT+OFFSET) || (theta < LOWER_THETA1_LIMIT-OFFSET) ){
 		       *result = OUT_OF_RANGE;
 		       return(NULL);
@@ -2704,15 +2697,15 @@ THETA_NODE* kinematic_model_irp6p_5dof::Create1(double x, double p, double r, do
 		       theta = LOWER_THETA1_LIMIT;
 		    else
 		       theta = UPPER_THETA1_LIMIT;
-	 } 
+	 }
 
       if( (no_of_solutions == SINGLE_SOLUTION) && (fabs(theta - OldTheta) > max_theta_inc) ){
-		 *result = OUT_OF_RANGE; 
-		return(NULL); 
+		 *result = OUT_OF_RANGE;
+		return(NULL);
 	 }
       if((root_pointer = Add_Theta(theta,-c,-s)) == NULL){
-		*result = OUT_OF_MEMORY; 
-		return(NULL); 
+		*result = OUT_OF_MEMORY;
+		return(NULL);
 
  	 }
 
@@ -2788,9 +2781,9 @@ void kinematic_model_irp6p_5dof::Delete_Theta_Tree(THETA_NODE *root_ptr)
 
 FUNKCJA:
 
-  Funkcja Extract_vect_from_tree przepisuje pierwsze rozwiazanie 
-  (wspolrzedne wewnetrzne - katy THETA - oraz ich sinusy i cosinusy) 
-  zawarte w drzewie rozwiaza`n odwrotnego zagadnienia kinematycznego do 
+  Funkcja Extract_vect_from_tree przepisuje pierwsze rozwiazanie
+  (wspolrzedne wewnetrzne - katy THETA - oraz ich sinusy i cosinusy)
+  zawarte w drzewie rozwiaza`n odwrotnego zagadnienia kinematycznego do
   adekwatnych wektorow. Zaklada sie, ze drzewo jest poprawnie zbudowane.
 
 
@@ -2806,8 +2799,8 @@ DANE WEJSCIOWE:
 
 DANE WYJSCIOWE:
 
-  double Theta[5] - wartosci katow theta (katy umieszczone sa w 
-		    tablicy w porzadku: THETA1, THETA2, THETA3, 
+  double Theta[5] - wartosci katow theta (katy umieszczone sa w
+		    tablicy w porzadku: THETA1, THETA2, THETA3,
 		    THETA4, THETA5.
   double tsin[5] - wartosci funkcji sinus wspolrzednych, w kolejnosci
 		   THETA1, THETA2, THETA23, THETA234, THETA5.
@@ -2816,10 +2809,10 @@ DANE WYJSCIOWE:
 
 ---------------------------------------------------------------------------*/
 
-void kinematic_model_irp6p_5dof::Extract_vect_from_tree(THETA_NODE *root_ptr, double Theta[5], 
+void kinematic_model_irp6p_5dof::Extract_vect_from_tree(THETA_NODE *root_ptr, double Theta[5],
 			    double tsin[5], double tcos[5])
 
-{ 
+{
     THETA_NODE *node_ptr;   /* wskaznik biezacego wezla */
 
  /* Poczatek Extract_vect_from_tree() */
@@ -2856,7 +2849,3 @@ void kinematic_model_irp6p_5dof::Extract_vect_from_tree(THETA_NODE *root_ptr, do
   return;
 
 } /* Koniec Extract_vect_from_tree() */
-
-
-
-

@@ -10,20 +10,8 @@
 // Data:		24.02.2007
 // ------------------------------------------------------------------------
 
-#include <iostream>
-#include <math.h>
-
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
-#include "lib/mathtr.h"
-
-// Klasy bledow, itp.
-#include "kinematics/common/transformer_error.h"
-
 // Klasa kinematic_model_irp6ot_with_track.
 #include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_track.h"
-
 
 /* -----------------------------------------------------------------------
   Konstruktor.
@@ -45,7 +33,7 @@ kinematic_model_irp6ot_with_track::kinematic_model_irp6ot_with_track (void)
   * current_joints[6] - wspolrzedne wewnetrzne robota (kolejno d0, q1, q2, ...)
 
   Wyjscie:
-  * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ) 
+  * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
 void kinematic_model_irp6ot_with_track::direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame) {
@@ -86,9 +74,9 @@ void kinematic_model_irp6ot_with_track::direct_kinematics_transform(const double
   Zadanie odwrotne kinematyki dla robota IRp-6 na torze.
   Wykorzystanie toru jako czynnego stopnia swobody.
 
-  Wejscie:    
+  Wejscie:
   * local_current_joints - obecne (w rzeczywistosci poprzednie) wspolrzedne wewnetrzne robota (kolejno d0, q1, q2, ...)
-  * local_desired_end_effector_frame - macierz przeksztacenia jednorodnego (MPJ) 
+  * local_desired_end_effector_frame - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca zadane poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
 
   Wyjscie:
@@ -96,7 +84,7 @@ void kinematic_model_irp6ot_with_track::direct_kinematics_transform(const double
  ------------------------------------------------------------------------ */
 void kinematic_model_irp6ot_with_track::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
 {
-  // Stale 
+  // Stale
   const double a2_2 = a2*a2;
   const double a3_2 = a3*a3;
   const double EPS=1e-10;
@@ -171,9 +159,8 @@ if (!p) {
   for (int i=1; i<6; i++ ) {
     reduce(local_desired_joints[i]);
   }
-  
+
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
   check_joints (local_desired_joints);
 
 }; //: inverse_kinematics_transform()
-

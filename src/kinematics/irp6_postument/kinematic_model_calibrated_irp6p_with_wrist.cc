@@ -11,19 +11,8 @@
 // Data:		24.02.2007
 // ------------------------------------------------------------------------
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
-
-#include "lib/mathtr.h"
-
-
-// Klasy bledow, itp.
-#include "kinematics/common/transformer_error.h"
-
 // Klasa kinematic_model_calibrated_irp6p_with_wrist.
 #include "kinematics/irp6_postument/kinematic_model_calibrated_irp6p_with_wrist.h"
-
 
 /* -----------------------------------------------------------------------
   Konstruktor.
@@ -84,9 +73,9 @@ Polozenia synchronizacji - odczyty z enkoderow silnikow.
  ------------------------------------------------------------------------- */
   synchro_motor_position[0]= -7.7597;		// kolumna [rad]
   synchro_motor_position[1]= -8.7537;		// ramie d. [rad]
-  synchro_motor_position[2]= -7.5355;		// ramie g. [rad] 
+  synchro_motor_position[2]= -7.5355;		// ramie g. [rad]
   synchro_motor_position[3]= 153.1366;		// kisc T [rad]
-  synchro_motor_position[4]= 309.5910;		// kisc V [rad] 
+  synchro_motor_position[4]= 309.5910;		// kisc V [rad]
   synchro_motor_position[5]= 796.0265;		// kisc N [rad]
 
 /* -----------------------------------------------------------------------
@@ -101,5 +90,3 @@ Polozenia synchronizacji we wspolrzednych wewnetrznych - obliczone na podstawie 
   synchro_joint_position[6] = synchro_motor_position[6] - gear[6] * theta[6];
 
 }; // end: set_kinematic_parameters
-
-

@@ -12,17 +12,8 @@
 // Data:		24.02.2007
 // ------------------------------------------------------------------------
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
-#include "lib/mathtr.h"
-
-// Klasy bledow, itp.
-#include "kinematics/common/transformer_error.h"
-
 // Klasa kinematic_model_calibrated_irp6ot_with_wrist.
 #include "kinematics/irp6_on_track/kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist.h"
-
 
 /* -----------------------------------------------------------------------
   Konstruktor.
@@ -55,7 +46,7 @@ void kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist::set_kinemat
 	V[3] =-16.908942178416;
 	V[4] =23.003338261798;
 	V[5] =-104.994144497905;
-	
+
 	// Macierz U.
 	// U - wiersz pierwszy.
 	U[0][0] =0.98772609866074;
@@ -99,7 +90,7 @@ void kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist::set_kinemat
 	U[5][3] =0.00283554308545;
 	U[5][4] =0.02369229639424;
 	U[5][5] =0.96776559310888;
-	
+
 	// Odwrocona macierz korekcji U.
 	// inv_U - wiersz pierwszy.
 	inv_U[0][0] =1.01476867442650;
@@ -145,5 +136,3 @@ void kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist::set_kinemat
 	inv_U[5][5] =1.03590839825862;
 
 }; // end: set_kinematic_parameters
-
-

@@ -9,15 +9,6 @@
 // Data:		17.03.2007
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <string.h>
-#include <iostream>
-
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
-#include "lib/mathtr.h"
-
 // Klasa kinematic_model.
 #include "kinematics/common/kinematic_model.h"
 
@@ -33,7 +24,7 @@ kinematic_model::kinematic_model(void)
     attached_tool_computations = false;
     // Flaga - uzywac lokalnych korektorow.
     local_corrector_computations = false;
-}//: kinematic_model
+}
 
 
 /* ------------------------------------------------------------------------
@@ -43,7 +34,6 @@ void kinematic_model::attached_tool_transform(Homog_matrix& current_end_effector
 {
     current_end_effector_matrix *= tool;
 }
-;//: attached_tool_transform
 
 
 /* ------------------------------------------------------------------------
@@ -53,7 +43,6 @@ void kinematic_model::attached_tool_inverse_transform(Homog_matrix& desired_end_
 {
     desired_end_effector_matrix *= (!tool);
 }
-;//: attached_tool_inverse_transform
 
 
 /* ------------------------------------------------------------------------
@@ -63,7 +52,6 @@ void kinematic_model::global_frame_transform(Homog_matrix& current_end_effector_
 {
     current_end_effector_matrix = (global_base * current_end_effector_matrix);
 }
-;//: global_base_transform
 
 
 /* ------------------------------------------------------------------------
@@ -73,7 +61,6 @@ void kinematic_model::global_frame_inverse_transform(Homog_matrix& desired_end_e
 {
     desired_end_effector_matrix = ((!global_base) * desired_end_effector_matrix);
 }
-;//: global_base_inverse_transform
 
 
 /* ------------------------------------------------------------------------
@@ -105,7 +92,6 @@ void kinematic_model::local_corrector_transform(Homog_matrix& current_end_effect
         ;//: for
         z[i] += V[i];
     }
-    ;//: for
 
     // Przeksztalcenie poprawionego polozenia do postaci XYZ_Euler_ZYZ.
     d[0] = z[0] / 1000;
@@ -118,7 +104,6 @@ void kinematic_model::local_corrector_transform(Homog_matrix& current_end_effect
     current_end_effector_matrix.set_xyz_euler_zyz(d[0], d[1], d[2], d[3], d[4], d[5]);
     //  	std::cout<<" local_corrector_transform: poprawione \n"<<current_end_effector_matrix<<std::endl;
 }
-;//: local_correctors_transform
 
 /* ------------------------------------------------------------------------
  Poprawa polozenia koncowki przy uzyciu macierzy korekcji lokalnej - transformacja odwrotna.
@@ -150,7 +135,6 @@ void kinematic_model::local_corrector_inverse_transform(Homog_matrix& desired_en
             x[i] += inv_U[i][j] * zminV[j];
         }
     }
-    ;//: for
 
     // Przeksztalcenie pierwotnego polozenia do postaci XYZ_Euler_ZYZ.
     d[0] = x[0] / 1000;
@@ -163,15 +147,14 @@ void kinematic_model::local_corrector_inverse_transform(Homog_matrix& desired_en
     desired_end_effector_matrix.set_xyz_euler_zyz(d[0], d[1], d[2], d[3], d[4], d[5]);
     //  	std::cout<<" local_corrector_inverse_transform: oryginalne \n"<<desired_end_effector_matrix<<std::endl;
 }
-;//: local_correctors_inverse_transform
 
 
 
 /* ------------------------------------------------------------------------
   Przeliczenie polozenia ze wspolrzednych wewnetrznych na wspolrzedne zewnetrzne (i2e - internal to external)
- 
+
 -> Dodac opis kolejnosci obliczen.
- 
+
  ------------------------------------------------------------------------ */
 void kinematic_model::i2e_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame)
 {
@@ -197,14 +180,13 @@ void kinematic_model::i2e_transform(const double* local_current_joints, frame_ta
     // Przepisanie wyniku z macierzy.
     local_current_end_effector_matrix.get_frame_tab(*local_current_end_effector_frame);
 }
-;//: i2e_transform
 
 
 /* ------------------------------------------------------------------------
   Przeliczenie polozenia ze wspolrzednych zewnetrznych na wspolrzedne zewnetrzne (e2i - external to internal).
- 
+
 -> Dodac opis kolejnosci obliczen.
- 
+
  ------------------------------------------------------------------------ */
 void kinematic_model::e2i_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
 {
@@ -232,12 +214,11 @@ void kinematic_model::e2i_transform(double* local_desired_joints, double* local_
     /*	printf("Ramka w e2i\n");
     printf("%lf; %lf; %lf; %lf \n",(*local_desired_end_effector_frame)[0][0], (*local_desired_end_effector_frame)[0][1], (*local_desired_end_effector_frame)[0][2], (*local_desired_end_effector_frame)[0][3]);
     printf("%lf; %lf; %lf; %lf \n",(*local_desired_end_effector_frame)[1][0], (*local_desired_end_effector_frame)[1][1], (*local_desired_end_effector_frame)[1][2], (*local_desired_end_effector_frame)[1][3]);
-    printf("%lf; %lf; %lf; %lf \n",(*local_desired_end_effector_frame)[2][0], (*local_desired_end_effector_frame)[2][1], (*local_desired_end_effector_frame)[2][2], (*local_desired_end_effector_frame)[2][3]);  
-    printf("%lf; %lf; %lf; %lf \n",(*local_desired_end_effector_frame)[3][0], (*local_desired_end_effector_frame)[3][1], (*local_desired_end_effector_frame)[3][2], (*local_desired_end_effector_frame)[3][3]);  
+    printf("%lf; %lf; %lf; %lf \n",(*local_desired_end_effector_frame)[2][0], (*local_desired_end_effector_frame)[2][1], (*local_desired_end_effector_frame)[2][2], (*local_desired_end_effector_frame)[2][3]);
+    printf("%lf; %lf; %lf; %lf \n",(*local_desired_end_effector_frame)[3][0], (*local_desired_end_effector_frame)[3][1], (*local_desired_end_effector_frame)[3][2], (*local_desired_end_effector_frame)[3][3]);
       */
 
 }
-;//: e2i_transform
 
 
 /* ------------------------------------------------------------------------
@@ -247,7 +228,6 @@ char* kinematic_model::get_kinematic_model_label(void)
 {
     return kinematic_model_label;
 }
-;//: return_kinematic_model_name
 
 /* ------------------------------------------------------------------------
   Ustawia etykiete modelu kinematycznego.
@@ -259,5 +239,3 @@ void kinematic_model::set_kinematic_model_label(const char * _label)
     kinematic_model_label = new char[strlen(_label)];
     kinematic_model_label = strcpy(kinematic_model_label, _label);
 }
-;//: set_kinematic_model_label
-

@@ -13,12 +13,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
 #include "common/com_buf.h"
-
-#include "lib/mathtr.h"
-
 
 // Klasy bledow, itp.
 #include "kinematics/common/transformer_error.h"
@@ -100,11 +95,11 @@ Ustawienie pozycji ukladu bazowego w globalnym ukladzie odniesienia [m].
 /* -----------------------------------------------------------------------
 Obliczanie wspolczynnika - przelozenie przekladni kata obrotu walu silnika napedowego kolumny.
      *  gear_0    =  H_0 * K_0
-     *  H_0        - przelozenie przekladni harmonicznej kolumny 
+     *  H_0        - przelozenie przekladni harmonicznej kolumny
      *  K_0        - 1 lub -1 w zaleznosci od tego czy dodatni kierunek ruchu
      *              walu silnika jest zgodny z dodatnim kierunkiem ruchu osi
  ------------------------------------------------------------------------- */
-  double H_0 = 158;  
+  double H_0 = 158;
   double K_0 = -1;
   gear[0] = (H_0*K_0);
   theta[0] = 0.000000e+00;
@@ -125,7 +120,7 @@ Obliczanie wspolczynnikow - przelozenie przekladni kata obrotu walu silnika nape
   mi1 = 6.090255e+04;
   ni1 = -2.934668e+04;
 
-  double S_r = 5;  
+  double S_r = 5;
   double K_1 = 1;
   gear[1] = (2*M_PI/S_r)*K_1;
   theta[1] = 2.203374e+02; // l02
@@ -175,7 +170,7 @@ Obliczanie wspolczynnika - przekladni kata obrotu walu silnika napedowego pochyl
   double K_4 = -1;
   gear[4] = H_4*S_4*K_4;
   theta[4] = 0.000000e+00;
- 
+
 /* -----------------------------------------------------------------------
 Obliczanie wspolczynnika - przekladni kata obrotu walu silnika napedowego pochylenie kisci N.
      * gear_5 = H_5*K_5;
@@ -196,7 +191,7 @@ Obliczenia wartosci wspolrzednych wewnetrznych na podstawie odczytow enkoderow s
  uzywane wspolczynniki
      * dir_a_6, dir_b_6, dir_c_6
 
-Obliczenia wartosci polozen silnikow na podstawie wspolrzednych wewnetrznych 
+Obliczenia wartosci polozen silnikow na podstawie wspolrzednych wewnetrznych
      * motor[6] = inv_a_6 * sqrt(inv_b_6 + inv_c_6 * joint[6]) + inv_d_6
  uzywane wspolczynniki
      * inv_a_6, inv_b_6, inv_c_6, inv_d_6
@@ -216,9 +211,9 @@ Polozenia synchronizacji - odczyty z enkoderow silnikow.
  ------------------------------------------------------------------------- */
   synchro_motor_position[0]= -15.9;		// kolumna [rad]
   synchro_motor_position[1]= -5;		// ramie d. [rad]
-  synchro_motor_position[2]= -8.527;		// ramie g. [rad] 
+  synchro_motor_position[2]= -8.527;		// ramie g. [rad]
   synchro_motor_position[3]= 153.31;		// kisc T [rad]
-  synchro_motor_position[4]= 314.665;		// kisc V [rad] 
+  synchro_motor_position[4]= 314.665;		// kisc V [rad]
   synchro_motor_position[5]= 794.0;		// kisc N [rad]
   synchro_motor_position[6]= 4830;			// chwytak [-]
 
@@ -263,7 +258,7 @@ Zakresy ruchu poszczegolnych stopni swobody (w radianach lub milimetrach).
   lower_limit_joint[5] = -2.88;
   lower_limit_joint[6] = 0.053;
 
-  upper_limit_joint[0] = 170.0*M_PI/180.0; // [rad] 
+  upper_limit_joint[0] = 170.0*M_PI/180.0; // [rad]
   upper_limit_joint[1] = -50.0*M_PI/180.0;
   upper_limit_joint[2] = 40.0*M_PI/180.0;
   upper_limit_joint[3] = 90.1*M_PI/180.0;
@@ -295,27 +290,27 @@ if (motor_position[2] < lower_limit_axis[2])   // Kat f3 mniejszy od minimalnego
   throw transformer_error::NonFatal_error_2 (BEYOND_LOWER_LIMIT_AXIS_2);
 else if (motor_position[2] > upper_limit_axis[2])   // Kat f3 wiekszy od maksymalnego
   throw transformer_error::NonFatal_error_2 (BEYOND_UPPER_LIMIT_AXIS_2);
-  
+
   if (motor_position[3] < lower_limit_axis[3])   // Kat f4 mniejszy od minimalnego
   throw transformer_error::NonFatal_error_2 (BEYOND_LOWER_LIMIT_AXIS_3);
 else if (motor_position[3] > upper_limit_axis[3])   // Kat f4 wiekszy od maksymalnego
   throw transformer_error::NonFatal_error_2 (BEYOND_UPPER_LIMIT_AXIS_3);
-  
+
   if (motor_position[4] < lower_limit_axis[4])   // Kat f5 mniejszy od minimalnego
   throw transformer_error::NonFatal_error_2 (BEYOND_LOWER_LIMIT_AXIS_4);
 else if (motor_position[4] > upper_limit_axis[4])   // Kat f5 wiekszy od maksymalnego
   throw transformer_error::NonFatal_error_2 (BEYOND_UPPER_LIMIT_AXIS_4);
-  
+
   if (motor_position[5] < lower_limit_axis[5])   // Kat f6 mniejszy od minimalnego
   throw  transformer_error::NonFatal_error_2 (BEYOND_LOWER_LIMIT_AXIS_5);
 else if (motor_position[5] > upper_limit_axis[5])   // Kat f6 wiekszy od maksymalnego
   throw  transformer_error::NonFatal_error_2 (BEYOND_UPPER_LIMIT_AXIS_5);
-  
+
   if (motor_position[6] < lower_limit_axis[6])   // Kat f7 mniejszy od minimalnego
   throw  transformer_error::NonFatal_error_2 (BEYOND_LOWER_LIMIT_AXIS_6);
 else if (motor_position[6] > upper_limit_axis[6])   // Kat f7 wiekszy od maksymalnego
   throw  transformer_error::NonFatal_error_2 (BEYOND_UPPER_LIMIT_AXIS_6);
-  
+
 }; // end: kinematic_model_irp6p_with_wrist::check_motor_position(const )
 
 
@@ -349,7 +344,7 @@ if (isnan(q[2])) throw  transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_
 if (isnan(q[3])) throw  transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA4);
   if (q[3] < lower_limit_joint[3] ) // kat q3 mniejszy od minimalnego
    throw  transformer_error::NonFatal_error_2 (BEYOND_LOWER_THETA4_LIMIT);
-   
+
   if (q[3] > upper_limit_joint[3])
     throw  transformer_error::NonFatal_error_2 (BEYOND_UPPER_THETA4_LIMIT);
 
@@ -360,21 +355,21 @@ if (isnan(q[4])) throw  transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_
  if(q[4] > upper_limit_joint[4])  // kat q4 wiekszy od maksymalnego
    throw  transformer_error::NonFatal_error_2 (BEYOND_UPPER_THETA5_LIMIT);
 
-if (isnan(q[5])) throw  transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA6);   		
+if (isnan(q[5])) throw  transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA6);
  if(q[5] < lower_limit_joint[5])  // kat q5 mniejszy od minimalnego
    throw  transformer_error::NonFatal_error_2 (BEYOND_LOWER_THETA6_LIMIT);
 
  if(q[5] > upper_limit_joint[5])  // kat q5 wiekszy od maksymalnego
    throw  transformer_error::NonFatal_error_2 (BEYOND_UPPER_THETA6_LIMIT);
-      
+
 	  //***szczeki chwytaka***
   if (isnan(q[6])) throw  transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA7);
- if(q[6] < lower_limit_joint[6])  // 6 st. swobody   
-   throw  transformer_error::NonFatal_error_2 (BEYOND_LOWER_THETA7_LIMIT);   
-   
- if(q[6] > upper_limit_joint[6])  // 6 st. swobody   
-   throw  transformer_error::NonFatal_error_2 (BEYOND_UPPER_THETA7_LIMIT);   
-     
+ if(q[6] < lower_limit_joint[6])  // 6 st. swobody
+   throw  transformer_error::NonFatal_error_2 (BEYOND_LOWER_THETA7_LIMIT);
+
+ if(q[6] > upper_limit_joint[6])  // 6 st. swobody
+   throw  transformer_error::NonFatal_error_2 (BEYOND_UPPER_THETA7_LIMIT);
+
 }; // end: kinematic_model_irp6p_with_wrist::check_joints(const )
 
 
@@ -385,7 +380,7 @@ if (isnan(q[5])) throw  transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_
 void kinematic_model_irp6p_with_wrist::mp2i_transform(const double* local_current_motor_pos, double* local_current_joints) {
 
   // zmienne pomocnicze
-  double c, d, l; 
+  double c, d, l;
   double sinus, cosinus;
   double M1, M2;
 
@@ -439,7 +434,7 @@ void kinematic_model_irp6p_with_wrist::mp2i_transform(const double* local_curren
 
 
 /* ------------------------------------------------------------------------
-  Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow 
+  Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
   (i2mp - internal to motor position)
  ------------------------------------------------------------------------ */
 void kinematic_model_irp6p_with_wrist::i2mp_transform(double* local_desired_motor_pos_new, double* local_desired_joints)
@@ -478,13 +473,13 @@ void kinematic_model_irp6p_with_wrist::i2mp_transform(double* local_desired_moto
     local_desired_motor_pos_new[4] += axis_4_revolution;
   while (local_desired_motor_pos_new[4] > upper_limit_axis[4])
     local_desired_motor_pos_new[4] -= axis_4_revolution;
-      
+
   // Obliczanie kata obrotu walu silnika napedowego obrotu kisci N
   local_desired_motor_pos_new[5] = gear[5] * local_desired_joints[5] + synchro_joint_position[5];
 
   // Obliczenie kata obrotu walu silnika napedowego chwytaka.
   local_desired_motor_pos_new[6] = inv_a_6*sqrt(inv_b_6 + inv_c_6*local_desired_joints[6]) + inv_d_6;
-  
+
   // Sprawdzenie obliczonych wartosci.
   check_motor_position (local_desired_motor_pos_new);
 
@@ -499,7 +494,7 @@ void kinematic_model_irp6p_with_wrist::i2mp_transform(double* local_desired_moto
   * current_joints[6] - wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
 
   Wyjscie:
-  * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ) 
+  * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
 void kinematic_model_irp6p_with_wrist::direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame) {
@@ -541,9 +536,9 @@ void kinematic_model_irp6p_with_wrist::direct_kinematics_transform(const double*
   Zadanie odwrotne kinematyki dla robota IRp-6 na postumencie.
   Wykorzystanie nowego stopnia swobody  jako czynnego stopnia swobody.
 
-  Wejscie:    
+  Wejscie:
   * local_current_joints - obecne (w rzeczywistosci poprzednie) wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
-  * local_desired_end_effector_frame - macierz przeksztacenia jednorodnego (MPJ) 
+  * local_desired_end_effector_frame - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca zadane poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
 
   Wyjscie:
@@ -552,7 +547,7 @@ void kinematic_model_irp6p_with_wrist::direct_kinematics_transform(const double*
 void kinematic_model_irp6p_with_wrist::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
 {
 
-  // Stale 
+  // Stale
   const double EPS=1e-10;
 
   // Zmienne pomocnicze.
@@ -588,8 +583,8 @@ void kinematic_model_irp6p_with_wrist::inverse_kinematics_transform(double* loca
   if (fabs(c4*c4-1)>EPS)
 	s4= sqrt(1-c4*c4);
   else
-	s4=0;	
-	
+	s4=0;
+
   double cj_tmp;
   double dj_translation;
   // Sprawdzenie rozwiazania.
@@ -603,14 +598,14 @@ void kinematic_model_irp6p_with_wrist::inverse_kinematics_transform(double* loca
 	cj_tmp = local_current_joints[4] + 2*M_PI;
 	dj_translation = -2*M_PI;
   }
-  else 
+  else
   {
 	cj_tmp = local_current_joints[4];
 	dj_translation = 0.0;
   }
 
   // Niejednoznacznosc - uzywamy rozwiazanie blizsze poprzedniemu.
-  if (cj_tmp > 0)		
+  if (cj_tmp > 0)
 	local_desired_joints[4]=atan2(s4, c4);
   else
 	local_desired_joints[4]=atan2(-s4, c4);
@@ -642,12 +637,12 @@ void kinematic_model_irp6p_with_wrist::inverse_kinematics_transform(double* loca
 	if (fabs(t_ok-local_current_joints[5]) > fabs(t5-local_desired_joints[3]-(local_current_joints[5])))
 		t_ok=t5-local_desired_joints[3];
 	if (fabs(t_ok-local_current_joints[5]) > fabs(t5-M_PI-local_desired_joints[3]-(local_current_joints[5])))
-		t_ok=t5-M_PI-local_desired_joints[3];	
+		t_ok=t5-M_PI-local_desired_joints[3];
 	if (fabs(t_ok-local_current_joints[5]) > fabs(t5+M_PI-local_desired_joints[3]-(local_current_joints[5])))
 		t_ok=t5+M_PI-local_desired_joints[3];
-		
+
 	if (fabs(t_ok-local_current_joints[5]) > fabs(t5-2*M_PI-local_desired_joints[3]-(local_current_joints[5])))
-		t_ok=t5-2*M_PI-local_desired_joints[3];	
+		t_ok=t5-2*M_PI-local_desired_joints[3];
 	if (fabs(t_ok-local_current_joints[5]) > fabs(t5+2*M_PI-local_desired_joints[3]-(local_current_joints[5])))
 		t_ok=t5+2*M_PI-local_desired_joints[3];
 
@@ -696,14 +691,3 @@ void kinematic_model_irp6p_with_wrist::inverse_kinematics_transform(double* loca
   check_joints (local_desired_joints);
 
 }; //: inverse_kinematics_transform()
-
-
-
-
-
-
-
-
-
-
-

@@ -9,11 +9,6 @@
 // Data:		24.02.2007
 // ------------------------------------------------------------------------
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
-#include "lib/mathtr.h"
-
 // Klasa kinematic_model_conveyor.
 #include "kinematics/conveyor/kinematic_model_conveyor.h"
 
@@ -29,7 +24,7 @@ kinematic_model_conveyor::kinematic_model_conveyor (void)
   // Ustawienie parametrow kinematycznych.
   set_kinematic_parameters();
 
-}; //: set_kinematic_parameters
+} //: set_kinematic_parameters
 
 /* -----------------------------------------------------------------------
   Ustawienia wszystkie parametry modelu kinematycznego danego modelu.
@@ -41,7 +36,7 @@ void kinematic_model_conveyor::set_kinematic_parameters(void)
   // Stosunek polozenia walu silnika do polozenia we wsp. wewn (zewn) w metrach.
   motor_to_intext_ratio = 2250;
 
-}; // end: set_kinematic_parameters
+} // end: set_kinematic_parameters
 
 
 
@@ -51,7 +46,7 @@ void kinematic_model_conveyor::set_kinematic_parameters(void)
 void kinematic_model_conveyor::check_motor_position(const double motor_position[])
 {
 	return;
-}; // end: kinematic_model_conveyor::check_motor_position(const )
+} // end: kinematic_model_conveyor::check_motor_position(const )
 
 
 /* ------------------------------------------------------------------------
@@ -60,7 +55,7 @@ void kinematic_model_conveyor::check_motor_position(const double motor_position[
 void kinematic_model_conveyor::check_joints(const double q[])
 {
 	return;
-}; // end: kinematic_model_conveyor::check_joints(const )
+} // end: kinematic_model_conveyor::check_joints(const )
 
 
 /* ------------------------------------------------------------------------
@@ -75,13 +70,13 @@ void kinematic_model_conveyor::mp2i_transform(const double* local_current_motor_
 
 
 /* ------------------------------------------------------------------------
-  Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow 
+  Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
   (i2mp - internal to motor position)
  ------------------------------------------------------------------------ */
 void kinematic_model_conveyor::i2mp_transform(double* local_desired_motor_pos_new, double* local_desired_joints)
 {
   local_desired_motor_pos_new[0] =  local_desired_joints[0] * motor_to_intext_ratio;
-}; //: i2mp_transform
+} //: i2mp_transform
 
 
 /* ------------------------------------------------------------------------
@@ -90,11 +85,11 @@ void kinematic_model_conveyor::i2mp_transform(double* local_desired_motor_pos_ne
 
   Wejscie:
   * current_joints[6] - wspolrzedne wewnetrzne robota (kolejno d0, q1, q2, ...)
-  * local_tool[4][3] - macierz przeksztacenia jednorodnego (MPJ) 
+  * local_tool[4][3] - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca przeksztalcenie zwiazane z narzedziem.
 
   Wyjscie:
-  * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ) 
+  * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
 void kinematic_model_conveyor::direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame)
@@ -123,11 +118,11 @@ void kinematic_model_conveyor::direct_kinematics_transform(const double* local_c
   Zadanie odwrotne kinematyki dla tasmociagu.
   Przeliczenie wspolrzednych zewnetrznych na wspolrzedne wewnetrzne.
 
-  Wejscie:    
+  Wejscie:
   * local_current_joints - obecne (w rzeczywistosci poprzednie) wspolrzedne wewnetrzne robota (kolejno d0, q1, q2, ...)
-  * local_desired_end_effector_frame - macierz przeksztacenia jednorodnego (MPJ) 
+  * local_desired_end_effector_frame - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca zadane poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
-  * local_tool[4][3] - macierz przeksztacenia jednorodnego (MPJ) 
+  * local_tool[4][3] - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca przeksztalcenie zwiazane z narzedziem.
 
   Wyjscie:
@@ -136,6 +131,6 @@ void kinematic_model_conveyor::direct_kinematics_transform(const double* local_c
 void kinematic_model_conveyor::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
 {
     local_desired_joints[0] = (*local_desired_end_effector_frame)[0][3];
-}; //: inverse_kinematics_transform()
+} //: inverse_kinematics_transform()
 
 
