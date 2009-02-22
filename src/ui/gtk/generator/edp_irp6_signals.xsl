@@ -121,25 +121,29 @@ extern "C"
 		
 		robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state(&amp;state);
 	        if(!state.is_synchronised) {
-	            robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:choose><xsl:when test="$name != 'conveyor'"><xsl:text>->ecp</xsl:text></xsl:when></xsl:choose><xsl:text>->synchronise();
-	        }
+	   	        GThread * synchronization_thread_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = g_thread_create(ui_synchronize_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>, userdata, false, &amp;error);
+	        	if (synchronization_thread_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> == NULL) 
+	     		{
+	        		fprintf(stderr, "g_thread_create(): %s\n", error->message);
+	        	}
+	      }
 	        robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state(&amp;state);
 	        if (state.is_synchronised) {
 	            gtk_widget_set_sensitive( GTK_WIDGET(button), FALSE);
+	            
+	            	GtkComboBox * combo = GTK_COMBO_BOX (gtk_builder_get_object(&amp;builder, "combobox1"));
+
+					gtk_combo_box_remove_text(combo, 0);
+					gtk_combo_box_insert_text(combo, 0, "1. Servo algorithm");
+					gtk_combo_box_remove_text(combo, 3);
+					gtk_combo_box_insert_text(combo, 3, "4. XYZ Angle Axis");
+					gtk_combo_box_remove_text(combo, 4);
+					gtk_combo_box_insert_text(combo, 4, "5. XYZ Euler ZYZ");
+					gtk_combo_box_remove_text(combo, 5);
+					gtk_combo_box_insert_text(combo, 5, "6. TS Angle Axis");
+					gtk_combo_box_remove_text(combo, 6);
+					gtk_combo_box_insert_text(combo, 6, "7. TS Euler ZYZ");
 	        }
-		
-		GtkComboBox * combo = GTK_COMBO_BOX (gtk_builder_get_object(&amp;builder, "combobox1"));
-	
-		gtk_combo_box_remove_text(combo, 0);
-		gtk_combo_box_insert_text(combo, 0, "1. Servo algorithm");
-		gtk_combo_box_remove_text(combo, 3);
-		gtk_combo_box_insert_text(combo, 3, "4. XYZ Angle Axis");
-		gtk_combo_box_remove_text(combo, 4);
-		gtk_combo_box_insert_text(combo, 4, "5. XYZ Euler ZYZ");
-		gtk_combo_box_remove_text(combo, 5);
-		gtk_combo_box_insert_text(combo, 5, "6. TS Angle Axis");
-		gtk_combo_box_remove_text(combo, 6);
-		gtk_combo_box_insert_text(combo, 6, "7. TS Euler ZYZ");
 	}		
 
 	void ui_module_init(ui_config_entry &amp;entry) 
@@ -183,6 +187,28 @@ extern "C"
 		fprintf(stderr, "module %s unloaded\n", __FILE__);
 	}
 }
+
+void *ui_synchronize_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> (gpointer userdata)
+{
+	ui_config_entry &amp; comboEntry = *(ui_config_entry *) userdata;
+	GtkBuilder &amp; builder = (comboEntry.getBuilder());
+
+	robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:choose><xsl:when test="$name != 'conveyor'"><xsl:text>->ecp</xsl:text></xsl:when></xsl:choose><xsl:text>->synchronise();
+    
+	GtkComboBox * combo = GTK_COMBO_BOX (gtk_builder_get_object(&amp;builder, "combobox1"));
+
+	gtk_combo_box_remove_text(combo, 0);
+	gtk_combo_box_insert_text(combo, 0, "1. Servo algorithm");
+	gtk_combo_box_remove_text(combo, 3);
+	gtk_combo_box_insert_text(combo, 3, "4. XYZ Angle Axis");
+	gtk_combo_box_remove_text(combo, 4);
+	gtk_combo_box_insert_text(combo, 4, "5. XYZ Euler ZYZ");
+	gtk_combo_box_remove_text(combo, 5);
+	gtk_combo_box_insert_text(combo, 5, "6. TS Angle Axis");
+	gtk_combo_box_remove_text(combo, 6);
+	gtk_combo_box_insert_text(combo, 6, "7. TS Euler ZYZ");
+	return NULL;
+}
 </xsl:text>
 </xsl:document>
 <xsl:call-template name="irp6.edp.main.signals.h"/>
@@ -209,6 +235,8 @@ extern "C"
 #include "ui/ui_ecp_r_irp6_common.h"
 #include "ui/ui_ecp_r_conveyor.h"
 
+
+
 class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>
 {
 	public:
@@ -218,6 +246,8 @@ class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>
 };
 ui_</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>conveyor</xsl:text></xsl:when><xsl:otherwise><xsl:text>common</xsl:text></xsl:otherwise></xsl:choose><xsl:text>_robot * robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
 controller_state_t state;
+GError *error = NULL;
+void *ui_synchronize_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> (gpointer userdata);
 		
 #endif /* __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text> */
 </xsl:text>
