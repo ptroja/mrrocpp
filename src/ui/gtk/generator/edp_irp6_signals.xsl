@@ -121,7 +121,7 @@ extern "C"
 		
 		robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state(&amp;state);
 	        if(!state.is_synchronised) {
-	            //robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->ecp->synchronise();
+	            robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:choose><xsl:when test="$name != 'conveyor'"><xsl:text>->ecp</xsl:text></xsl:when></xsl:choose><xsl:text>->synchronise();
 	        }
 	        robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state(&amp;state);
 	        if (state.is_synchronised) {
