@@ -37,6 +37,13 @@ void ecp_smooth_generator::set_absolute(void){
 	type=1;
 }
 
+bool ecp_smooth_generator::eq(double a, double b)
+{
+	const double EPS = 0.0001;
+	const double& diff = a - b;
+	return diff < EPS && diff > -EPS; 
+}
+
 void ecp_smooth_generator::generate_next_coords (void)
 {
     //funkcja obliczajaca polozenie w danym makrokroku
@@ -48,11 +55,13 @@ void ecp_smooth_generator::generate_next_coords (void)
     {
         if(node_counter<przysp[i])
         { //pierwszy etap
+			if (debug && i == 0) printf("etap 1: ");
+				
             if(v_p[i]<=v_r[i])
             { //przyspieszanie w pierwszym etapie
                 if(debug)
                 {
-                    printf("%.16f ", ( start_position[i] + k[i]*(node_counter*v_p[i]*tk +
+                    printf("P%.8f ", ( start_position[i] + k[i]*(node_counter*v_p[i]*tk +
                                        node_counter*node_counter*a_r[i]*tk*tk/2)));
                     if(i==7)
                         printf("\n");
@@ -65,7 +74,7 @@ void ecp_smooth_generator::generate_next_coords (void)
             { //hamowanie w pierwszym etapie
                 if(debug)
                 {
-                    printf("%.16f", (start_position[i] +
+                    printf("H%.8f ", (start_position[i] +
                                      k[i]*((node_counter*tk*v_p[i]) -
                                            (node_counter*node_counter*tk*tk*a_r[i]/2))));
                     if(i==7)
@@ -79,9 +88,10 @@ void ecp_smooth_generator::generate_next_coords (void)
         }
         else if(node_counter<=jedn[i])
         { // drugi etap - ruch jednostajny
+			if (debug && i == 0) printf("etap 2: ");
             if(debug)
             {
-                printf("%.16f ", (start_position[i] +
+                printf("J%.8f ", (start_position[i] +
                                   k[i]*(s_przysp[i] +
                                         (node_counter*tk - fabs(v_r[i]-v_p[i])/a_r[i])*v_r[i])));
                 if(i==7)
@@ -92,11 +102,12 @@ void ecp_smooth_generator::generate_next_coords (void)
         }
         else if(node_counter<=td.interpolation_node_no)
         { //trzeci etap
+			if (debug && i == 0) printf("etap 3: ");
             if(v_k[i]<=v_r[i])
             { //hamowanie w trzecim etapie
                 if(debug)
                 {
-                    printf("%.16f ", (start_position[i] +
+                    printf("H%.8f ", (start_position[i] +
                                       k[i]*(s_przysp[i] + s_jedn[i] +
                                             (node_counter*tk + fabs(v_r[i]-v_k[i])/a_r[i] - t_max)*v_r[i] -
                                             (node_counter*tk + fabs(v_r[i]-v_k[i])/a_r[i] - t_max)*(node_counter*tk + fabs(v_r[i]-v_k[i])/a_r[i] - t_max)*a_r[i]/2)));
@@ -112,7 +123,7 @@ void ecp_smooth_generator::generate_next_coords (void)
             { //przyspieszanie w trzecim etapie
                 if(debug)
                 {
-                    printf("%.16f ", (start_position[i] +
+                    printf("P%.8f ", (start_position[i] +
                                       k[i]*(s_przysp[i] + s_jedn[i] +
                                             (node_counter*tk + fabs(v_r[i]-v_k[i])/a_r[i] - t_max)*v_r[i] +
                                             (node_counter*tk + fabs(v_r[i]-v_k[i])/a_r[i] - t_max)*(node_counter*tk + fabs(v_r[i]-v_k[i])/a_r[i] - t_max)*a_r[i]/2)));
@@ -558,7 +569,7 @@ void ecp_smooth_generator::calculate(void)
             k[i]=1;
         }
 
-        if(s[i]==0)
+        if(eq(s[i], 0.0))
         {
             t=0;
         }
@@ -691,7 +702,7 @@ void ecp_smooth_generator::calculate(void)
 
     // Obliczenie predkosci dla wszystkich osi
     for(i=0; i<MAX_SERVOS_NR; i++)
-        if(s[i]==0)
+        if(eq(s[i], 0.0))
             v_r[i]=0;
         else
         {//pierszy model ruchu - przyspieszanie / hamowanie
@@ -748,7 +759,7 @@ void ecp_smooth_generator::calculate(void)
                 }
             }
 
-            if(s[i]==0)
+            if(eq(s[i], 0.0))
                 v_r[i]=0;
 
         }
