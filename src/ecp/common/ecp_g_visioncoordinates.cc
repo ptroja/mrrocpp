@@ -83,7 +83,7 @@ bool ecp_visioncoordinates_generator::next_step()
 
 	// current_XYZ_AA_arm_coordinates zawiera 8 elementow, wykorzystujemy 6 pierwszych xyz_zyz
 	Homog_matrix current_position(Homog_matrix::MTR_XYZ_EULER_ZYZ, arm[0], arm[1], arm[2], arm[3], arm[4], arm[5]); // aktualna pozycja ramienia robota
-	Homog_matrix move(Homog_matrix::MTR_XYZ_EULER_ZYZ, 0.0, 0.0, 0.0, xoz, z, 0.0); 
+	Homog_matrix move(Homog_matrix::MTR_XYZ_EULER_ZYZ, 0.0, 0.0, 0.0, 0.0, xoz, z); 
 
 
 	oss << "VCG current_position: " << std::endl << current_position << std::flush;
@@ -95,7 +95,7 @@ bool ecp_visioncoordinates_generator::next_step()
 	debugmsg(oss2.str().c_str());
 
 
-	Homog_matrix target = move * current_position;
+	Homog_matrix target = current_position * move;
 
 	std::ostringstream oss3;
 	oss3 << "target: " << std::endl << target << std::endl;
