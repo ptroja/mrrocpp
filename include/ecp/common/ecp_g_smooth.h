@@ -89,6 +89,9 @@ public:
 
 	virtual bool first_step();
 	virtual bool next_step();
+
+private:
+	static bool eq(double a, double b); 
 };
 
 class ecp_tool_change_generator : public ecp_smooth_generator
