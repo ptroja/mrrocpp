@@ -30,7 +30,6 @@ BINARIES =		ecp_pr \
 				ecp_tb \
 				ecp_spots_recognition \
 				ecp_t_box_irp6ot \
-				ecp_t_smooth2_test
 				ecp_spots_recognition\
 				ecp_pw\
 				ecp_pw_scena \
