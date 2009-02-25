@@ -28,11 +28,16 @@ BINARIES =		ecp_pr \
 				ecp_vis_ib_eih_irp6ot \
 				ecp_vis_weights_driven_irp6ot \
 				ecp_tb \
+				ecp_spots_recognition \
+				ecp_t_box_irp6ot \
+				ecp_t_smooth2_test
 				ecp_spots_recognition\
 				ecp_pw\
 				ecp_pw_scena \
 				ecp_ttt \
-				ecp_ellipse
+				ecp_ellipse \
+				ecp_t_box_irp6ot \
+				ecp_t_smooth2_test
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -165,6 +170,13 @@ ecp_vis_weights_driven_irp6ot: ecp_t_vis_weights_driven_irp6ot.o ecp_vis_weights
 ecp_vis_ib_eih_irp6ot: ecp_t_vis_ib_eih_irp6ot.o ecp_vis_ib_eih_irp6ot.o \
 						ecp_mp_s_vis_sac_lx.o $(SHOBJ) 
 	$(LD) $(LDFLAGS) -o $@ $^
+#-----------------------------------------------------------------------------------------------------------------------#
+ecp_t_box_irp6ot: ecp_t_box_irp6ot.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^ 
+#-----------------------------------------------------------------------------------------------------------------------#
+ecp_t_smooth2_test: ecp_t_smooth2_test.o ecp_g_smooth2.o ecp_generator_t.o ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^ 
+	
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
 # plik.o: plik.cc plik1.h plik2.h ... itd
