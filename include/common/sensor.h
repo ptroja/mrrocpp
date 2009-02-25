@@ -176,6 +176,14 @@ typedef struct sensor_image_t
 			int up;
 			int down;
 		} wiimote;
+	
+		//Struktura zawiwarajaca katy pod jakimi widac obiekt na obrazie z kamery
+		struct visioncoordinates_t
+		{	
+			double xOz;	// wzgledem plaszczyzny XOZ
+			double z;	// wzgledem osi Z
+		} visioncoordinates;
+
 	} sensor_union; // koniec unii
 } SENSOR_IMAGE;
 
