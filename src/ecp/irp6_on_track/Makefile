@@ -29,8 +29,6 @@ BINARIES =		ecp_pr \
 				ecp_vis_weights_driven_irp6ot \
 				ecp_tb \
 				ecp_spots_recognition \
-				ecp_t_box_irp6ot \
-				ecp_spots_recognition\
 				ecp_pw\
 				ecp_pw_scena \
 				ecp_ttt \
