@@ -68,6 +68,10 @@ int main(int argc, char *argv[])
 		if (e.error_class == SYSTEM_ERROR)
 			exit(EXIT_FAILURE);
 	}
+	catch (ecp_generator::ECP_error e) {
+		ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
+		printf("Mam blad generatora section 1 (@%s:%d)\n", __FILE__, __LINE__);
+	}
 	catch (sensor::sensor_error e) {
 		ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 		printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
@@ -76,6 +80,13 @@ int main(int argc, char *argv[])
 		ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 		printf("ecp_m.cc: Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
 	}
+
+	catch (...) {  /* Dla zewnetrznej petli try*/
+		/* Wylapywanie niezdefiniowanych bledow*/
+		/*Komunikat o bledzie wysylamy do SR*/
+		ecp_t->sr_ecp_msg->message (NON_FATAL_ERROR, (uint64_t) ECP_UNIDENTIFIED_ERROR);
+		exit(EXIT_FAILURE);
+	} /*end: catch */
 
 	for (;;) { // Zewnetrzna petla nieskonczona
 

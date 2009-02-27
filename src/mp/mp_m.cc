@@ -68,7 +68,7 @@ int main (int argc, char *argv[], char **arge)
 			mp_t->create_robots();
 
 			mp_t->task_initialization();
-					        
+
 		}
 		catch (ECP_MP_main_error e) {
 			/* Obsluga bledow ECP_MP_main_error */
@@ -100,6 +100,11 @@ int main (int argc, char *argv[], char **arge)
 			mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 			printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		} /* end: catch sensor_error  */
+		catch (mp_generator::MP_error e) {
+					/* Wyswietlenie komunikatu. */
+			mp_t->sr_ecp_msg->message(NON_FATAL_ERROR, e.mp_error);
+					printf("Mam blad mp_generator section 1 (@%s:%d)\n", __FILE__, __LINE__);
+		} /* end: catch sensor_error  */
 		catch (transmitter::transmitter_error e) {
 			/* Wyswietlenie komunikatu. */
 			mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
@@ -116,15 +121,15 @@ int main (int argc, char *argv[], char **arge)
 
 			try {
 				mp_t->sr_ecp_msg->message("MP - wcisnij start");
-				// Oczekiwanie na zlecenie START od UI  
+				// Oczekiwanie na zlecenie START od UI
 				mp_t->wait_for_start ();
-				// Wyslanie START do wszystkich ECP 
+				// Wyslanie START do wszystkich ECP
 				mp_t->start_all (mp_t->robot_m);
 				mp_t->main_task_algorithm();
-				
+
 				// Oczekiwanie na STOP od UI
 				mp_t->wait_for_stop (MP_THROW); // by Y - wlaczony tryb
-				  
+
 				// Wyslanie STOP do wszystkich ECP po zakonczeniu programu uzytkownika
 				mp_t->terminate_all (mp_t->robot_m);
 			}  // end: try
@@ -155,7 +160,7 @@ int main (int argc, char *argv[], char **arge)
 						perror("Unidentified mp error");
 						mp_t->stop_and_terminate();
 				}/*end:switch*/
-				
+
 
 
 			} /*end: catch */
