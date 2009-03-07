@@ -11,21 +11,19 @@ Euler_xyz window
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="euler_xyz" select="euler_xyz"/>
-<xsl:document method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0" href="../glade/{$name}_euler_xyz.glade">
-<glade-interface>
-  <widget class="GtkWindow" id="window">
+  <widget class="GtkWindow" id="window_euler_xyz">
     <child>
-      <widget class="GtkScrolledWindow" id="scrolledwindow1">
+      <widget class="GtkScrolledWindow" id="scrolledwindow1"><xsl:attribute name="id">scrolledwindow_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
         <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
         <child>
-          <widget class="GtkViewport" id="viewport1">
+          <widget class="GtkViewport" id="viewport1"><xsl:attribute name="id">viewport_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
             <property name="visible">True</property>
             <property name="resize_mode">GTK_RESIZE_QUEUE</property>
             <child>
-              <widget class="GtkTable" id="table1">
+              <widget class="GtkTable" id="table1"><xsl:attribute name="id">table_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
                 <property name="visible">True</property>
                 <property name="n_rows"><xsl:value-of select="$euler_xyz + 5" /></property> <!-- 5 + RN  -->
                 <property name="n_columns">9</property>
@@ -57,7 +55,7 @@ Euler_xyz window
                   <placeholder/>
                 </child>
                 <child>
-                  <widget class="GtkSpinButton" id="spinbuttonDown1">
+                  <widget class="GtkSpinButton" id="spinbuttonDown1"><xsl:attribute name="id">spinbuttonDown1_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="width_request">50</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -72,7 +70,7 @@ Euler_xyz window
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkButton" id="buttonDown1">
+                  <widget class="GtkButton" id="buttonDown1"><xsl:attribute name="id">buttonDown1_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -88,7 +86,7 @@ Euler_xyz window
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkButton" id="buttonDown2">
+                  <widget class="GtkButton" id="buttonDown2"><xsl:attribute name="id">buttonDown2_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -104,7 +102,7 @@ Euler_xyz window
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkButton" id="buttonDown4">
+                  <widget class="GtkButton" id="buttonDown4"><xsl:attribute name="id">buttonDown4_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -120,14 +118,14 @@ Euler_xyz window
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkButton" id="buttonLeft1">
+                  <widget class="GtkButton" id="buttonLeft1"><xsl:attribute name="id">buttonLeft1_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="response_id">0</property>
                     <signal name="clicked" handler="on_arrow_button_clicked_{$fullName}_euler_xyz"/>
                     <child>
-                      <widget class="GtkArrow" id="arrowLeft1">
+                      <widget class="GtkArrow" id="arrowLeft1"><xsl:attribute name="id">arrowLeft1_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
                         <property name="visible">True</property>
                       </widget>
                     </child>
@@ -142,7 +140,7 @@ Euler_xyz window
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkButton" id="buttonDown3">
+                  <widget class="GtkButton" id="buttonDown3"><xsl:attribute name="id">buttonDown3_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -158,7 +156,7 @@ Euler_xyz window
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="labelDown1">
+                  <widget class="GtkLabel" id="labelDown1"><xsl:attribute name="id">labelDown1_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
                     <property name="label" translatable="yes">step</property>
                   </widget>
@@ -170,13 +168,13 @@ Euler_xyz window
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="labelUp1">
+                  <widget class="GtkLabel" id="labelUp1"><xsl:attribute name="id">labelUp1_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
                     <property name="label" translatable="yes">axis</property>
                   </widget>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="labelUp2">
+                  <widget class="GtkLabel" id="labelUp2"><xsl:attribute name="id">labelUp2_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="width_request">77</property>
                     <property name="visible">True</property>
                     <property name="label" translatable="yes">current position</property>
@@ -187,7 +185,7 @@ Euler_xyz window
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="labelUp3">
+                  <widget class="GtkLabel" id="labelUp3"><xsl:attribute name="id">labelUp3_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
                     <property name="label" translatable="yes">incremental move</property>
                   </widget>
@@ -197,7 +195,7 @@ Euler_xyz window
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="labelUp4">
+                  <widget class="GtkLabel" id="labelUp4"><xsl:attribute name="id">labelUp4_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="width_request">77</property>
                     <property name="visible">True</property>
                     <property name="label" translatable="yes">desired position</property>
@@ -208,7 +206,7 @@ Euler_xyz window
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkHSeparator" id="hseparator1">
+                  <widget class="GtkHSeparator" id="hseparator1"><xsl:attribute name="id">hseparator1_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
                   </widget>
                   <packing>
@@ -218,7 +216,7 @@ Euler_xyz window
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkVSeparator" id="vseparator1">
+                  <widget class="GtkVSeparator" id="vseparator1"><xsl:attribute name="id">vseparator1_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
                   </widget>
                   <packing>
@@ -228,7 +226,7 @@ Euler_xyz window
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkHSeparator" id="hseparator2">
+                  <widget class="GtkHSeparator" id="hseparator2"><xsl:attribute name="id">hseparator2_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
                   </widget>
                   <packing>
@@ -238,7 +236,7 @@ Euler_xyz window
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkVSeparator" id="vseparator2">
+                  <widget class="GtkVSeparator" id="vseparator2"><xsl:attribute name="id">vseparator2_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
                   </widget>
                   <packing>
@@ -248,7 +246,7 @@ Euler_xyz window
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkVSeparator" id="vseparator3">
+                  <widget class="GtkVSeparator" id="vseparator3"><xsl:attribute name="id">vseparator3_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="visible">True</property>
                   </widget>
                   <packing>
@@ -258,7 +256,7 @@ Euler_xyz window
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="labelSpace">
+                  <widget class="GtkLabel" id="labelSpace"><xsl:attribute name="id">labelSpace_euler_xyz_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="width_request">36</property>
                     <property name="visible">True</property>
                   </widget>
@@ -274,6 +272,7 @@ Euler_xyz window
     		<xsl:with-param name="euler_xyz" select="$euler_xyz"/>
     		<xsl:with-param name="fullName" select="$fullName"/>
 			<xsl:with-param name="i" select="1"/>
+			<xsl:with-param name="name" select="$name"/>
  		</xsl:call-template>
 <!-- end tags -->
               </widget>
@@ -283,9 +282,6 @@ Euler_xyz window
       </widget>
     </child>
   </widget>
-</glade-interface>
-</xsl:document>
-<xsl:call-template name="irp6.euler.xyz.main.signals.cc" />
 </xsl:template>
 
 
@@ -294,9 +290,10 @@ Euler_xyz window
 <xsl:param name="euler_xyz"/>
 <xsl:param name="fullName"/>
 <xsl:param name="i"/>
+<xsl:param name="name"/>
 	<xsl:if test="$i &lt;= $euler_xyz">
                 <child>
-                  <widget class="GtkLabel" id="label5"><xsl:attribute name="id">label<xsl:value-of select="$i"/></xsl:attribute> <!-- RI --> 
+                  <widget class="GtkLabel" id="label5"><xsl:attribute name="id">label<xsl:value-of select="$i"/>_euler_xyz_<xsl:value-of select="$name"/></xsl:attribute> <!-- RI --> 
                     <property name="visible">True</property>
                     <property name="label" translatable="yes">
 			<xsl:if test="$i = 1">X</xsl:if>
@@ -316,7 +313,7 @@ Euler_xyz window
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkEntry" id="entry4"><xsl:attribute name="id">entry<xsl:value-of select="$i"/></xsl:attribute> <!-- RI --> 
+                  <widget class="GtkEntry" id="entry4"><xsl:attribute name="id">entry<xsl:value-of select="$i"/>_euler_xyz_<xsl:value-of select="$name"/></xsl:attribute> <!-- RI --> 
                     <property name="width_request">66</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -330,7 +327,7 @@ Euler_xyz window
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkSpinButton" id="spinbutton6"><xsl:attribute name="id">spinbutton<xsl:value-of select="$i"/></xsl:attribute> <!--RI--> 
+                  <widget class="GtkSpinButton" id="spinbutton6"><xsl:attribute name="id">spinbutton<xsl:value-of select="$i"/>_euler_xyz_<xsl:value-of select="$name"/></xsl:attribute> <!--RI--> 
                     <property name="width_request">50</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -345,19 +342,19 @@ Euler_xyz window
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkHButtonBox" id="hbuttonbox4"><xsl:attribute name="id">hbuttonbox<xsl:value-of select="$i"/></xsl:attribute> <!--RI--> 
+                  <widget class="GtkHButtonBox" id="hbuttonbox4"><xsl:attribute name="id">hbuttonbox<xsl:value-of select="$i"/>_euler_xyz_<xsl:value-of select="$name"/></xsl:attribute> <!--RI--> 
                     <property name="width_request">150</property>
                     <property name="visible">True</property>
                     <property name="layout_style">GTK_BUTTONBOX_CENTER</property>
                     <child>
-                      <widget class="GtkButton" id="button11"><xsl:attribute name="id">button<xsl:value-of select="($i*2)-1"/></xsl:attribute> <!--RIx2--> 
+                      <widget class="GtkButton" id="button11"><xsl:attribute name="id">button<xsl:value-of select="($i*2)-1"/>_euler_xyz_<xsl:value-of select="$name"/></xsl:attribute> <!--RIx2--> 
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
                         <signal name="clicked" handler="on_button{($i*2)-1}_clicked_{$fullName}_euler_xyz"/>
                         <child>
-                          <widget class="GtkArrow" id="arrow10"><xsl:attribute name="id">arrow<xsl:value-of select="($i*2)-1"/></xsl:attribute> <!-- RI x 2 --> 
+                          <widget class="GtkArrow" id="arrow10"><xsl:attribute name="id">arrow<xsl:value-of select="($i*2)-1"/>_euler_xyz_<xsl:value-of select="$name"/></xsl:attribute> <!-- RI x 2 --> 
                             <property name="visible">True</property>
                             <property name="arrow_type">GTK_ARROW_LEFT</property>
                           </widget>
@@ -365,14 +362,14 @@ Euler_xyz window
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkButton" id="button12"><xsl:attribute name="id">button<xsl:value-of select="($i*2)"/></xsl:attribute> <!-- RI x 2 -1 --> 
+                      <widget class="GtkButton" id="button12"><xsl:attribute name="id">button<xsl:value-of select="($i*2)"/>_euler_xyz_<xsl:value-of select="$name"/></xsl:attribute> <!-- RI x 2 -1 --> 
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
                         <signal name="clicked" handler="on_button{($i*2)}_clicked_{$fullName}_euler_xyz"/>
                         <child>
-                          <widget class="GtkArrow" id="arrow5"><xsl:attribute name="id">arrow<xsl:value-of select="($i*2)"/></xsl:attribute> <!-- RI x 2 -1 --> 
+                          <widget class="GtkArrow" id="arrow5"><xsl:attribute name="id">arrow<xsl:value-of select="($i*2)"/>_euler_xyz_<xsl:value-of select="$name"/></xsl:attribute> <!-- RI x 2 -1 --> 
                             <property name="visible">True</property>
                           </widget>
                         </child>
@@ -401,6 +398,9 @@ Euler_xyz window
               </xsl:with-param>
               <xsl:with-param name="fullName">
                   <xsl:value-of select="$fullName"/>
+              </xsl:with-param>
+              <xsl:with-param name="name">
+                  <xsl:value-of select="$name"/>
               </xsl:with-param>
           </xsl:call-template>
        </xsl:if>

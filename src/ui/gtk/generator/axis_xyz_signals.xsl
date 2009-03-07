@@ -11,64 +11,44 @@ Axis XYZ window callback signals
 <xsl:variable name="name" select="name"/>
 <xsl:variable name="fullName" select="fullName"/>
 <xsl:variable name="axis_xyz" select="axis_xyz"/>
-<xsl:document method="text" href="../signals/{$name}_axis_xyz_widget.cc">
-
 
 <xsl:text>
-#include &lt;iostream&gt;
-#include &lt;gtk/gtk.h&gt;
-#include &lt;glib.h&gt;
-#include "ui_model.h"
-#include "</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz_widget.h"
-
-double wl;
-double l_eps = 0;
-double alfa;
-double tmp;
-char buf[32];
-double </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[</xsl:text><xsl:value-of select="$axis_xyz" /><xsl:text>]; // pozycja biezaca
-double </xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="$axis_xyz" /><xsl:text>]; // pozycja zadana
-
-edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz(ui_widget_entry &amp;entry) 
-{
-}
-
-static edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz *axis_xyz_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
-
 
 extern "C"
 {
 	void on_arrow_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (GtkButton* button, gpointer userdata)
 	{
-		ui_widget_entry * ChoseEntry = (ui_widget_entry *) userdata;
+		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
 		</xsl:text><xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.1">
     		<xsl:with-param name="axis_xyz" select="$axis_xyz"/>
 			<xsl:with-param name="i" select="1"/>
+			<xsl:with-param name="name" select="$name"/>
  		</xsl:call-template><xsl:text>
 	}
 	
 	void on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (GtkButton* button, gpointer userdata)
 		{
-		ui_widget_entry * ChoseEntry = (ui_widget_entry *) userdata;
+		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
 	</xsl:text><xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.6">
     		<xsl:with-param name="axis_xyz" select="$axis_xyz"/>
 			<xsl:with-param name="i" select="1"/>
+			<xsl:with-param name="name" select="$name"/>
  		</xsl:call-template><xsl:text>
  		
 		if (robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text></xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
 		{
 			if (state.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				if (!( robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->read_xyz_angle_axis(</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos))) // Odczyt polozenia walow silnikow
+				if (!( robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->read_xyz_angle_axis(</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos_a))) // Odczyt polozenia walow silnikow
 					printf("Blad w read motors\n");
 					
-				alfa = sqrt(</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[3]*</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[3]
-				+</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[4]*</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[4]
-				+</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[5]*</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[5]);
+				alfa = sqrt(</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos_a[3]*</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos_a[3]
+				+</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos_a[4]*</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos_a[4]
+				+</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos_a[5]*</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos_a[5]);
 					
 </xsl:text><xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.7">
     				<xsl:with-param name="axis_xyz" select="$axis_xyz"/>
@@ -78,7 +58,7 @@ extern "C"
 			}
 			else
 			{
-				// Robot is not synchronized
+				// Wygaszanie elementow przy niezsynchronizowanym robocie
 				std::cout &lt;&lt; "Robot is not synchronized" &lt;&lt; std::endl;
 			}
 		}
@@ -87,21 +67,14 @@ extern "C"
 	
 	void on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (GtkButton* button, gpointer userdata)
 		{
-		ui_widget_entry * ChoseEntry = (ui_widget_entry *) userdata;
+		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
 	</xsl:text><xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.3">
     		<xsl:with-param name="axis_xyz" select="$axis_xyz"/>
 			<xsl:with-param name="i" select="1"/>
+			<xsl:with-param name="name" select="$name"/>
  		</xsl:call-template><xsl:text>    
- 		
- 		wl = sqrt(gtk_spin_button_get_value(spin4)*gtk_spin_button_get_value(spin4) + gtk_spin_button_get_value(spin5)*gtk_spin_button_get_value(spin5) + gtk_spin_button_get_value(spin6)*gtk_spin_button_get_value(spin6));
-		if((wl &gt; 1 + l_eps) || (wl &lt; 1 - l_eps))
-		{
-			gtk_spin_button_set_value(spin4, gtk_spin_button_get_value(spin4) / wl);
-			gtk_spin_button_set_value(spin5, gtk_spin_button_get_value(spin5) / wl);
-			gtk_spin_button_set_value(spin6, gtk_spin_button_get_value(spin6) / wl);
-		}
 
 		if (robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text></xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
 		{
@@ -111,15 +84,13 @@ extern "C"
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>    
  		
- 			tmp = </xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[6];	
-
  			// przepisanie parametrow ruchu do postaci rozkazu w formie XYZ_ANGLE_AXIS
 			for(int i=3; i&lt;</xsl:text><xsl:value-of select="$axis_xyz" /><xsl:text>; i++)
 			{
-					</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[i] *= tmp;
+					</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos_a[i] *= </xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos_a[6];
 			}
 			
-			robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->move_xyz_angle_axis(</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos);
+			robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->move_xyz_angle_axis(</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos_a);
 			
 			 if (state.is_synchronised) {
 	</xsl:text><xsl:call-template name="irp6.axis.xyz.repeat.signals.cc.9">
@@ -133,43 +104,28 @@ extern "C"
 
 	}
 	
-	void ui_widget_init(ui_widget_entry &amp;entry) 
-	{
-		axis_xyz_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = new edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz(entry);
-		fprintf(stderr, "widget %s loaded\n", __FILE__);
-	}
-
-	void ui_widget_unload(void) 
-	{
-		if (axis_xyz_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>) 
-		{
-			delete axis_xyz_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
-		}
-		fprintf(stderr, "widget %s unloaded\n", __FILE__);
-	}
-	
 </xsl:text>
 		<xsl:call-template name="for.each.edp.irp6.axis.xyz.signals.cc">
-    			<xsl:with-param name="axis_xyz" select="$axis_xyz"/>
-    			<xsl:with-param name="fullName" select="$fullName"/>
+    		<xsl:with-param name="axis_xyz" select="$axis_xyz"/>
+    		<xsl:with-param name="fullName" select="$fullName"/>
+			<xsl:with-param name="name" select="$name"/>
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template>
 <xsl:text>
 }
 </xsl:text>
-</xsl:document>
-<xsl:call-template name="irp6.axis.xyz.main.signals.h"/>
 </xsl:template>
 
 <!-- irp6 axis xyz handling signals .cc repeatable part -->
 <xsl:template name="irp6.axis.xyz.repeat.signals.cc.1">
 <xsl:param name="axis_xyz"/>
 <xsl:param name="i"/>
+<xsl:param name="name"/>
 	<xsl:if test="$i &lt;= $axis_xyz">
 	<xsl:text>
-        GtkEntry * entry</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
-        GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
-        gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>, atof(gtk_entry_get_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>)));
+        GtkEntry * entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, atof(gtk_entry_get_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>)));
 	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
@@ -181,6 +137,9 @@ extern "C"
               <xsl:with-param name="axis_xyz">
                   <xsl:value-of select="$axis_xyz"/>
               </xsl:with-param>
+              <xsl:with-param name="name">
+                  <xsl:value-of select="$name"/>
+              </xsl:with-param>
           </xsl:call-template>
        </xsl:if>
 </xsl:template>
@@ -189,8 +148,9 @@ extern "C"
 <xsl:template name="irp6.axis.xyz.repeat.signals.cc.3">
 <xsl:param name="axis_xyz"/>
 <xsl:param name="i"/>
+<xsl:param name="name"/>
 	<xsl:if test="$i &lt;= $axis_xyz">
-	<xsl:text>	GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
+	<xsl:text>	GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
  	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
@@ -202,6 +162,9 @@ extern "C"
               <xsl:with-param name="axis_xyz">
                   <xsl:value-of select="$axis_xyz"/>
               </xsl:with-param>
+              <xsl:with-param name="name">
+                  <xsl:value-of select="$name"/>
+              </xsl:with-param>
           </xsl:call-template>
        </xsl:if>
 </xsl:template>
@@ -210,8 +173,9 @@ extern "C"
 <xsl:template name="irp6.axis.xyz.repeat.signals.cc.6">
 <xsl:param name="axis_xyz"/>
 <xsl:param name="i"/>
+<xsl:param name="name"/>
 	<xsl:if test="$i &lt;= $axis_xyz">
-	<xsl:text>	GtkEntry * entry</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
+	<xsl:text>	GtkEntry * entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_ENTRY(gtk_builder_get_object(&amp;thisBuilder, "entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
 	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
@@ -222,6 +186,9 @@ extern "C"
               </xsl:with-param>
               <xsl:with-param name="axis_xyz">
                   <xsl:value-of select="$axis_xyz"/>
+              </xsl:with-param>
+              <xsl:with-param name="name">
+                  <xsl:value-of select="$name"/>
               </xsl:with-param>
           </xsl:call-template>
        </xsl:if>
@@ -235,27 +202,27 @@ extern "C"
 	<xsl:if test="$i &lt;= $axis_xyz">
 	<xsl:choose>
 		<xsl:when test="$i &lt;= 3">
-	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
-					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>, buf);
-					</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>];				
+	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos_a[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
+					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, buf);
+					</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos_a[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos_a[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>];				
 </xsl:text>
  		</xsl:when>
  		<xsl:when test="$i &gt;= 8">
-	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
-					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>, buf);
-					</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>];				
+	<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos_a[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
+					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, buf);
+					</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos_a[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos_a[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>];				
 </xsl:text>
  		</xsl:when>
 <xsl:when test="$i = 7">
 <xsl:text>					snprintf (buf, sizeof(buf), "%.3f", alfa);
-					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>, buf);
-					</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = alfa;							
+					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, buf);
+					</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos_a[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = alfa;							
 </xsl:text>
  		</xsl:when>
  		<xsl:otherwise>
-<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]/alfa);
-					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>, buf);
-					</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]/alfa;
+<xsl:text>					snprintf (buf, sizeof(buf), "%.3f", </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos_a[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]/alfa);
+					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, buf);
+					</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos_a[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos_a[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]/alfa;
 </xsl:text>
  		</xsl:otherwise>		
  	</xsl:choose>
@@ -283,7 +250,7 @@ extern "C"
 <xsl:param name="name"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $axis_xyz">
-	<xsl:text>			</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>);
+	<xsl:text>			</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos_a[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>] = gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>);
 	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
@@ -308,7 +275,7 @@ extern "C"
 <xsl:param name="name"/>
 <xsl:param name="i"/>
 	<xsl:if test="$i &lt;= $axis_xyz">
-	<xsl:text>			gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>, </xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
+	<xsl:text>			gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, </xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos_a[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
 	</xsl:text>
        </xsl:if>
 	<!-- for loop --> 
@@ -332,32 +299,155 @@ extern "C"
 <xsl:param name="axis_xyz"/>
 <xsl:param name="fullName"/>
 <xsl:param name="i"/>
+<xsl:param name="name"/>
 	<xsl:if test="$i &lt;= $axis_xyz">
+	<xsl:choose>
+		<xsl:when test="$i &lt;= 3">
 <xsl:text>
 	void on_button</xsl:text><xsl:value-of select="($i*2)-1" /><xsl:text>_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (GtkButton* button, gpointer userdata)
 	{
- 		ui_widget_entry * ChoseEntry = (ui_widget_entry *) userdata;
+ 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
        
-        GtkSpinButton * spinbuttonDown1 = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbuttonDown1"));
-        GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
-        gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>, gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>) - gtk_spin_button_get_value(spinbuttonDown1));
-        		
+        GtkSpinButton * spinbuttonDown1_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbuttonDown1_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) - gtk_spin_button_get_value(spinbuttonDown1_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>));
+        
+        GtkSpinButton * spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        GtkSpinButton * spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        GtkSpinButton * spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        
+        wl = sqrt(gtk_spin_button_get_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>)*gtk_spin_button_get_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) + gtk_spin_button_get_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>)*gtk_spin_button_get_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) + gtk_spin_button_get_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>)*gtk_spin_button_get_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>));
+		if((wl &gt; 1 + l_eps) || (wl &lt; 1 - l_eps))
+		{
+			gtk_spin_button_set_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) / wl);
+			gtk_spin_button_set_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) / wl);
+			gtk_spin_button_set_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) / wl);
+		}
+		
+		on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (button, userdata);
+ 	}
+	
+	void on_button</xsl:text><xsl:value-of select="($i*2)" /><xsl:text>_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (GtkButton* button, gpointer userdata)
+	{
+ 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
+        GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
+       
+        GtkSpinButton * spinbuttonDown1_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbuttonDown1_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) + gtk_spin_button_get_value(spinbuttonDown1_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>));
+        
+        GtkSpinButton * spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        GtkSpinButton * spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        GtkSpinButton * spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        
+        wl = sqrt(gtk_spin_button_get_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>)*gtk_spin_button_get_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) + gtk_spin_button_get_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>)*gtk_spin_button_get_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) + gtk_spin_button_get_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>)*gtk_spin_button_get_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>));
+		if((wl &gt; 1 + l_eps) || (wl &lt; 1 - l_eps))
+		{
+			gtk_spin_button_set_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) / wl);
+			gtk_spin_button_set_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) / wl);
+			gtk_spin_button_set_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) / wl);
+		}
+		
+		on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (button, userdata);
+}   
+</xsl:text>
+ 		</xsl:when>
+ 		<xsl:when test="$i &gt;= 7">
+<xsl:text>
+	void on_button</xsl:text><xsl:value-of select="($i*2)-1" /><xsl:text>_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (GtkButton* button, gpointer userdata)
+	{
+ 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
+        GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
+       
+        GtkSpinButton * spinbuttonDown1_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbuttonDown1_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) - gtk_spin_button_get_value(spinbuttonDown1_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>));
+        
+        GtkSpinButton * spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        GtkSpinButton * spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        GtkSpinButton * spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        
+        wl = sqrt(gtk_spin_button_get_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>)*gtk_spin_button_get_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) + gtk_spin_button_get_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>)*gtk_spin_button_get_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) + gtk_spin_button_get_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>)*gtk_spin_button_get_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>));
+		if((wl &gt; 1 + l_eps) || (wl &lt; 1 - l_eps))
+		{
+			gtk_spin_button_set_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) / wl);
+			gtk_spin_button_set_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) / wl);
+			gtk_spin_button_set_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) / wl);
+		}
+		
 		on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (button, userdata);
 	}
 	
 	void on_button</xsl:text><xsl:value-of select="($i*2)" /><xsl:text>_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (GtkButton* button, gpointer userdata)
 	{
- 		ui_widget_entry * ChoseEntry = (ui_widget_entry *) userdata;
+ 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
        
-        GtkSpinButton * spinbuttonDown1 = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbuttonDown1"));
-        GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>"));
-        gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>, gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>) + gtk_spin_button_get_value(spinbuttonDown1));
-       		
+        GtkSpinButton * spinbuttonDown1_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbuttonDown1_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        GtkSpinButton * spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        gtk_spin_button_set_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin</xsl:text><xsl:value-of select="$i" /><xsl:text>_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) + gtk_spin_button_get_value(spinbuttonDown1_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>));
+        
+        GtkSpinButton * spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        GtkSpinButton * spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        GtkSpinButton * spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        
+        wl = sqrt(gtk_spin_button_get_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>)*gtk_spin_button_get_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) + gtk_spin_button_get_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>)*gtk_spin_button_get_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) + gtk_spin_button_get_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>)*gtk_spin_button_get_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>));
+		if((wl &gt; 1 + l_eps) || (wl &lt; 1 - l_eps))
+		{
+			gtk_spin_button_set_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) / wl);
+			gtk_spin_button_set_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) / wl);
+			gtk_spin_button_set_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) / wl);
+		}
+		
+		on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (button, userdata);
+	}   
+</xsl:text>
+ 		</xsl:when>
+ 		<xsl:otherwise>
+<xsl:text>
+	void on_button</xsl:text><xsl:value-of select="($i*2)-1" /><xsl:text>_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (GtkButton* button, gpointer userdata)
+	{
+ 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
+        GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
+               
+        GtkSpinButton * spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        GtkSpinButton * spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        GtkSpinButton * spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        
+        wl = sqrt(gtk_spin_button_get_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>)*gtk_spin_button_get_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) + gtk_spin_button_get_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>)*gtk_spin_button_get_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) + gtk_spin_button_get_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>)*gtk_spin_button_get_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>));
+		if((wl &gt; 1 + l_eps) || (wl &lt; 1 - l_eps))
+		{
+			gtk_spin_button_set_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) / wl);
+			gtk_spin_button_set_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) / wl);
+			gtk_spin_button_set_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) / wl);
+		}
+		
+		on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (button, userdata);
+	}
+	
+	void on_button</xsl:text><xsl:value-of select="($i*2)" /><xsl:text>_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (GtkButton* button, gpointer userdata)
+	{
+ 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
+        GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
+        
+        GtkSpinButton * spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        GtkSpinButton * spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        GtkSpinButton * spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text> = GTK_SPIN_BUTTON(gtk_builder_get_object(&amp;thisBuilder, "spinbutton6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>"));
+        
+        wl = sqrt(gtk_spin_button_get_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>)*gtk_spin_button_get_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) + gtk_spin_button_get_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>)*gtk_spin_button_get_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) + gtk_spin_button_get_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>)*gtk_spin_button_get_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>));
+		if((wl &gt; 1 + l_eps) || (wl &lt; 1 - l_eps))
+		{
+			gtk_spin_button_set_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin4_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) / wl);
+			gtk_spin_button_set_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin5_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) / wl);
+			gtk_spin_button_set_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>, gtk_spin_button_get_value(spin6_axis_xyz_</xsl:text><xsl:value-of select="$name" /><xsl:text>) / wl);
+		}
+		
 		on_execute_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (button, userdata);
 	}  
 </xsl:text>
+ 		</xsl:otherwise>		
+ 	</xsl:choose>
     </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $axis_xyz">
@@ -371,39 +461,11 @@ extern "C"
               <xsl:with-param name="fullName">
                   <xsl:value-of select="$fullName"/>
               </xsl:with-param>
+              <xsl:with-param name="name">
+                  <xsl:value-of select="$name"/>
+              </xsl:with-param>
           </xsl:call-template>
        </xsl:if>
-</xsl:template>
-
-
-
-<!-- signals handling file .h-->
-<xsl:template name="irp6.axis.xyz.main.signals.h" match="*[substring(name(),1,4)='irp6']">
-<xsl:variable name="name" select="name"/>
-<xsl:document method="text" href="../signals/{$name}_axis_xyz_widget.h">
-
-<xsl:text>
-#ifndef __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_AXIS_XYZ
-#define __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_AXIS_XYZ
-
-#include &lt;iostream&gt;
-#include &lt;vector&gt;
-
-#include &lt;gtk/gtkbuilder.h&gt;
-#include &lt;gtk/gtk.h&gt;
-#include "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_uimodule.h"
-
-class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz
-{
-	public:
-
-		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz(ui_widget_entry &amp;entry);
-		~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_axis_xyz();
-};
-
-#endif /* __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text>_AXIS_XYZ */
-</xsl:text>
-</xsl:document>
 </xsl:template>
 
 </xsl:stylesheet>

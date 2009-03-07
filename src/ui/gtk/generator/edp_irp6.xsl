@@ -21,22 +21,15 @@ EDP IRp6 RCSC window
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
-        <child>
+         <child>
           <widget class="GtkHBox" id="hbox1">
             <property name="visible">True</property>
             <child>
           <widget class="GtkComboBox" id="combobox1">
             <property name="visible">True</property>
-            <property name="items" translatable="yes">1. <xsl:choose><xsl:when test="$motorsNo &gt; 0">Servo algorithm</xsl:when><xsl:otherwise></xsl:otherwise> - </xsl:choose> 
-2. <xsl:choose><xsl:when test="$motorsNo &gt; 0">Internal</xsl:when><xsl:otherwise> - </xsl:otherwise></xsl:choose>
-3. <xsl:choose><xsl:when test="$motorsNo &gt; 0">Increment</xsl:when><xsl:otherwise> - </xsl:otherwise></xsl:choose>
-4. <xsl:choose><xsl:when test="$axis_xyz &gt; 0">XYZ Angle Axis</xsl:when><xsl:otherwise> - </xsl:otherwise></xsl:choose> 
-5. <xsl:choose><xsl:when test="$euler_xyz &gt; 0">XYZ Euler ZYZ</xsl:when><xsl:otherwise> - </xsl:otherwise></xsl:choose>  
-6. <xsl:choose><xsl:when test="$axis_ts &gt; 0">TS Angle Axis</xsl:when><xsl:otherwise> - </xsl:otherwise></xsl:choose>
-7. <xsl:choose><xsl:when test="$euler_ts &gt; 0">TS Euler ZYZ</xsl:when><xsl:otherwise> - </xsl:otherwise></xsl:choose> 
-			</property>
+            <property name="items" translatable="yes"> -</property>
 			<signal name="changed" handler="on_combobox1_changed_{$fullName}"/>		
-          </widget>
+    	  </widget>
         </child>
             <child>
               <widget class="GtkButton" id="button_synchronize">
@@ -60,13 +53,19 @@ EDP IRp6 RCSC window
           </packing>
         </child>
         <child>
-          <widget class="GtkScrolledWindow" id="scrolledwindow1">
+          <widget class="GtkScrolledWindow" id="scrolledwindow_edp">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
             <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
             <child>
-              <placeholder/>
+              <widget class="GtkViewport" id="viewport8">
+                <property name="visible">True</property>
+                <property name="resize_mode">GTK_RESIZE_QUEUE</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </widget>
             </child>
           </widget>
           <packing>
@@ -76,6 +75,14 @@ EDP IRp6 RCSC window
       </widget>
     </child>
   </widget>
+
+<xsl:call-template name="irp6.axis.ts" />
+<xsl:call-template name="irp6.axis.xyz" />
+<xsl:call-template name="irp6.euler.ts" />
+<xsl:call-template name="irp6.euler.xyz" />
+<xsl:call-template name="irp6.inc" />
+<xsl:call-template name="irp6.int" />
+<xsl:call-template name="irp6.servo" />
 </glade-interface>
 </xsl:document>
 <xsl:call-template name="irp6.edp.main.signals.cc" />
