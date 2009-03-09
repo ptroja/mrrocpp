@@ -33,8 +33,8 @@ void ecp_t_smooth2_test::main_task_algorithm(void ){
 
 	smoothgen2->set_absolute();
 
-	if (smoothgen2->load_file_with_path("/mnt/mrroc/workspace/MRROC++/trj/box_euler2.trj")) {
-		//smoothgen2->Move();
+	if (smoothgen2->load_file_with_path("/mnt/mrroc/workspace/MRROC++/trj/box_euler3.trj")) {
+		smoothgen2->Move();
 	};
 
 	char size[10];
