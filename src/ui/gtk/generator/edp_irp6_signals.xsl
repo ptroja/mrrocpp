@@ -105,7 +105,7 @@ extern "C"
 		gint choice;
 		choice = gtk_combo_box_get_active (comboBox); 
 
-		if (state.is_synchronised)
+		if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised)
 		{
 			switch (choice)
 			{
@@ -153,16 +153,16 @@ extern "C"
 		GtkBuilder &amp; builder = (comboEntry.getBuilder());
 		gint counter_synch;
 		
-		robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state(&amp;state);
-	        if(!state.is_synchronised) {
+		robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state (&amp;state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>);
+	        if(!state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) {
 	   	        GThread * synchronization_thread_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = g_thread_create(ui_synchronize_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>, userdata, false, &amp;error);
 	        	if (synchronization_thread_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> == NULL) 
 	     		{
 	        		fprintf(stderr, "g_thread_create(): %s\n", error->message);
 	        	}
 	      }
-	        robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state(&amp;state);
-	        if (state.is_synchronised) {
+	        robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state (&amp;state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>);
+	        if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) {
 	            gtk_widget_set_sensitive( GTK_WIDGET(button), FALSE);
 	            
 	            	GtkComboBox * combo = GTK_COMBO_BOX (gtk_builder_get_object(&amp;builder, "combobox1"));
@@ -185,7 +185,7 @@ extern "C"
 		gint counter = 0;
 		GtkBuilder &amp; builder = (entry.getBuilder());
 		GtkButton * button = GTK_BUTTON (gtk_builder_get_object(&amp;builder, "button_synchronize"));
-		if (state.is_synchronised) gtk_widget_set_sensitive( GTK_WIDGET(button), FALSE);
+		if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) gtk_widget_set_sensitive( GTK_WIDGET(button), FALSE);
 		else
 		{
 			GtkComboBox * combo = GTK_COMBO_BOX (gtk_builder_get_object(&amp;builder, "combobox1"));
@@ -279,7 +279,7 @@ class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>
 		~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>();
 };
 ui_</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>conveyor</xsl:text></xsl:when><xsl:otherwise><xsl:text>common</xsl:text></xsl:otherwise></xsl:choose><xsl:text>_robot * robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
-controller_state_t state;
+controller_state_t state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
 GError *error = NULL;
 void *ui_synchronize_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> (gpointer userdata);
 GtkButton* button;

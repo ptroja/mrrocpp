@@ -42,7 +42,7 @@ extern "C"
  		
 		if (robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text></xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
 		{
-			if (state.is_synchronised) // Czy robot jest zsynchronizowany?
+			if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				if (!( robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->read_tool_xyz_angle_axis(tool_vector_a))) // Odczyt polozenia walow silnikow
 					printf("Blad w read external\n");
@@ -88,7 +88,7 @@ extern "C"
 			<xsl:with-param name="name" select="$name"/>
  		</xsl:call-template><xsl:text>    
 
-		if (state.is_synchronised)
+		if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised)
 		{
 	</xsl:text><xsl:call-template name="irp6.axis.ts.repeat.signals.cc.8">
     		<xsl:with-param name="axis_ts" select="$axis_ts"/>
