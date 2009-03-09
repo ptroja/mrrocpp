@@ -7,10 +7,10 @@
 class ecp_smooth2_taught_in_pose {
 public:
   POSE_SPECIFICATION arm_type;
-  double v[MAX_SERVOS_NR];
-  double a[MAX_SERVOS_NR];
-  double coordinates[MAX_SERVOS_NR];
-  
+  double v[MAX_SERVOS_NR];//maksymalna predkosc ruchu dla kazdej osi
+  double a[MAX_SERVOS_NR];//maksymalne przyspieszenie ruchu dla kazdej osi
+  double coordinates[MAX_SERVOS_NR]; //pozycja docelowa dla kazdej osi
+
   ecp_smooth2_taught_in_pose (void);
   ecp_smooth2_taught_in_pose (POSE_SPECIFICATION at, double* vv, double* aa, double* coordinates);
 }; // end:class ecp_smooth2_taught_in_pose

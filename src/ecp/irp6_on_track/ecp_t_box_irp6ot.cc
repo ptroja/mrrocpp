@@ -20,16 +20,16 @@ void ecp_t_box_irp6ot::task_initialization(void) {
 
 void ecp_t_box_irp6ot::main_task_algorithm(void ){
 	sr_ecp_msg->message("ECP box ready");
-	ecp_wait_for_start();
+	//ecp_wait_for_start();
 
 	smoothgen->set_absolute();
 	if (smoothgen->load_file_with_path("/net/home-host/mnt/mrroc/trj/box_euler.trj")) {
 	  smoothgen->Move();
 	}
 	smoothgen->reset();
-	
+
 	ecp_termination_notice();
-	ecp_wait_for_stop();
+	//ecp_wait_for_stop();
 };
 
 ecp_task* return_created_ecp_task(configurator &_config){

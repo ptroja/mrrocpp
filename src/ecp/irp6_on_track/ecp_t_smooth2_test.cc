@@ -30,22 +30,27 @@ void ecp_t_smooth2_test::main_task_algorithm(void ){
 	//sr_ecp_msg->message("ECP loaded smooth2_test");
 
 	sr_ecp_msg->message("ECP smooth2_test ready");
-	ecp_wait_for_start();
 
 	smoothgen2->set_absolute();
 
-	//if (smoothgen2->load_file_with_path("/net/home-host/mnt/mrroc/trj/box_euler2.trj")) {
+	if (smoothgen2->load_file_with_path("/mnt/mrroc/workspace/MRROC++/trj/box_euler2.trj")) {
 		//smoothgen2->Move();
-	//};
+	};
+
+	char size[10];
+	double size2 = smoothgen2->pose_list_length();
+	sprintf(size,"%f",size2);
+
+	sr_ecp_msg->message(size);
 
 	//printf("wielkosc listy: %d\n", smoothgen2->pose_list_length());
+	//fflush();
 
 	  //smoothgen2->Move();
 	  //sr_ecp_msg->message("jest git");
-	//smoothgen2->reset();
+	smoothgen2->reset();
 
 	ecp_termination_notice();
-	ecp_wait_for_stop();
 };
 
 ecp_task* return_created_ecp_task(configurator &_config){
