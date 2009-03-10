@@ -33,7 +33,7 @@ void ecp_t_smooth2_test::main_task_algorithm(void ){
 
 	smoothgen2->set_absolute();
 
-	if (smoothgen2->load_file_with_path("/mnt/mrroc/workspace/MRROC++/trj/box_euler3.trj")) {
+	if (smoothgen2->load_file_with_path("/mnt/mrroc/MRROC++/trj/box_euler3.trj")) {
 		smoothgen2->Move();
 	};
 

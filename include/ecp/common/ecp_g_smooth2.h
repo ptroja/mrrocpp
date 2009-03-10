@@ -28,8 +28,6 @@ protected:
 	double v_max_motor[MAX_SERVOS_NR], v_max_joint[MAX_SERVOS_NR], v_max_zyz[MAX_SERVOS_NR], v_max_aa[MAX_SERVOS_NR];
 	double v_grip, v_grip_min;
 
-	//std::list<>
-
 	int first_interval;
 	trajectory_description td;
 
@@ -54,8 +52,6 @@ protected:
 
 	int type; //1 - polozenie bezwzgledne , 2 - polozenie przyrostowe
 	bool first_coordinate;
-
-	double calculate_vk();
 
 public:
 	ecp_smooth2_generator(ecp_task& _ecp_task, bool _is_synchronised);

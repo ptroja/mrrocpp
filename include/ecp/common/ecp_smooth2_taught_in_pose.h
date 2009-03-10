@@ -11,6 +11,18 @@ public:
   double a[MAX_SERVOS_NR];//maksymalne przyspieszenie ruchu dla kazdej osi
   double coordinates[MAX_SERVOS_NR]; //pozycja docelowa dla kazdej osi
 
+  double przysp[];
+  double jedn[];
+  double s_jedn[];
+  double s_przysp[];
+
+  double start_position[];
+  double k[];
+  double v_p[];
+  double v_k[];
+  double a_r[];
+  double v_r[];
+
   ecp_smooth2_taught_in_pose (void);
   ecp_smooth2_taught_in_pose (POSE_SPECIFICATION at, double* vv, double* aa, double* coordinates);
 }; // end:class ecp_smooth2_taught_in_pose
