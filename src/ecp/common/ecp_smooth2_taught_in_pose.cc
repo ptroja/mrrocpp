@@ -12,5 +12,4 @@ ecp_smooth2_taught_in_pose::ecp_smooth2_taught_in_pose (POSE_SPECIFICATION at, d
 	memcpy(v, vv, MAX_SERVOS_NR*sizeof(double));
 	memcpy(a, aa, MAX_SERVOS_NR*sizeof(double));
 	memcpy(coordinates, c, MAX_SERVOS_NR*sizeof(double));
-
 }
