@@ -22,7 +22,7 @@ public:
   double v_k[MAX_SERVOS_NR];
   double a_r[MAX_SERVOS_NR];
   double v_r[MAX_SERVOS_NR];
-  double interpolation_node_no;
+  int interpolation_node_no;
   double v_grip;
 
   ecp_smooth2_taught_in_pose (void);

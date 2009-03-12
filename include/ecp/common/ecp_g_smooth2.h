@@ -23,6 +23,9 @@ protected:
 	std::list<ecp_smooth2_taught_in_pose> *pose_list;
  	std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator;
 
+ 	std::list<double[MAX_SERVOS_NR]> *coordinate_list;
+ 	std::list<double[MAX_SERVOS_NR]>::iterator coordinate_list_iterator;
+
 	bool eq(double a, double b);
 	void generate_cords();
 	double a_max_motor[MAX_SERVOS_NR], a_max_joint[MAX_SERVOS_NR], a_max_zyz[MAX_SERVOS_NR], a_max_aa[MAX_SERVOS_NR];
