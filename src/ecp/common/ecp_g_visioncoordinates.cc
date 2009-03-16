@@ -53,13 +53,47 @@ bool ecp_visioncoordinates_generator::first_step()
 
 	debugmsg("VCG: setting instruction type GET done");
 	data.get_type = ARM_DV;
-	data.get_arm_type = XYZ_EULER_ZYZ;
+	data.get_arm_type = XYZ_ANGLE_AXIS;	// XYZ_EULER_ZYZ;
 	data.motion_type = ABSOLUTE;
 	data.next_interpolation_type = MIM;
 
 	debugmsg("VCG: Ready to get data");
 
 	return true;
+}
+
+void describe_matrix(Homog_matrix& matrix, const char* name)
+{
+	std::ostringstream oss1;
+	oss1 << "##### Matrix " << name << ":" << std::endl;
+	oss1 << matrix << std::flush;
+	debugmsg(oss1.str().c_str());
+
+	double t[8];
+	std::ostringstream oss;
+	oss << std::endl << "xyz_angle_axis: ";
+	memset(t, 0, sizeof(t));
+	matrix.get_xyz_angle_axis(t);
+	for (int i = 0; i < sizeof(t)/sizeof(t[0]); ++i)
+	{
+		if (i == 3 || i == 6) 
+			oss << "| ";
+		oss << t[i] << " ";
+	}
+	oss << std::endl;
+
+	oss << "xyz_euler_zyz: ";
+	memset(t, 0, sizeof(t));
+	matrix.get_xyz_euler_zyz(t);
+	for (int i = 0; i < sizeof(t)/sizeof(t[0]); ++i)
+	{
+		if (i == 3 || i == 6) 
+			oss << "| ";
+		oss << t[i] << " ";
+	}
+	oss << std::endl;
+
+	debugmsg(oss.str().c_str());
 }
 
 bool ecp_visioncoordinates_generator::next_step()
@@ -79,11 +113,16 @@ bool ecp_visioncoordinates_generator::next_step()
 		oss << data.current_XYZ_ZYZ_arm_coordinates[i] << " ";
 	oss << std::endl;
 
-	double* arm = &data.current_XYZ_ZYZ_arm_coordinates[0];
+	//double* arm = &data.current_XYZ_ZYZ_arm_coordinates[0];
+	double* arm = &data.current_XYZ_AA_arm_coordinates[0];
 
 	// current_XYZ_AA_arm_coordinates zawiera 8 elementow, wykorzystujemy 6 pierwszych xyz_zyz
-	Homog_matrix current_position(Homog_matrix::MTR_XYZ_EULER_ZYZ, arm[0], arm[1], arm[2], arm[3], arm[4], arm[5]); // aktualna pozycja ramienia robota
+	Homog_matrix current_position(Homog_matrix::MTR_XYZ_ANGLE_AXIS, arm[0], arm[1], arm[2], arm[3], arm[4], arm[5]); // aktualna pozycja ramienia robota
 	Homog_matrix move(Homog_matrix::MTR_XYZ_EULER_ZYZ, 0.0, 0.0, 0.0, z, xoz, -z); 
+
+
+	describe_matrix(current_position, "current_position");
+	describe_matrix(move, "move");
 
 
 	oss << "VCG current_position: " << std::endl << current_position << std::flush;
@@ -99,9 +138,12 @@ bool ecp_visioncoordinates_generator::next_step()
 
 	std::ostringstream oss3;
 	oss3 << "target: " << std::endl << target << std::endl;
+	describe_matrix(target, "target = current_position * move");
 	
 	debugmsg(oss3.str().c_str());
 
+	//memcpy(itsOutputCoordinates, arm, sizeof(data.current_XYZ_AA_arm_coordinates));
+	//target.get_xyz_angle_axis(itsOutputCoordinates);
 	memcpy(itsOutputCoordinates, arm, sizeof(data.current_XYZ_ZYZ_arm_coordinates));
 	target.get_xyz_euler_zyz(itsOutputCoordinates);
 	itsOutputCoordinates[6] = data.current_gripper_coordinate;
