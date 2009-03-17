@@ -37,6 +37,9 @@ public:
     //Przyrost polozenia w makrokroku
     double s;
 
+    //Orientacja koncokwi wzgledem ukladu bazowego.
+    double alpha;
+
 	//Maksymalna wartosc  predkosci.
 	double v_max;
 	//Wartosc przyspieszenia z jakim osiagana jest maksymalna predkosc.

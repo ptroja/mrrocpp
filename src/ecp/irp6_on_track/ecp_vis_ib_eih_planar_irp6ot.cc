@@ -59,7 +59,7 @@ bool ecp_vis_ib_eih_planar_irp6ot::first_step() {
 	x = 0;
 	y = 0;
 	v = 0;
-
+	s = 0;
 	breaking = false;
 
 	//    for(int i=0;i<8;i++)
@@ -105,6 +105,8 @@ bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints() {
 			s = v*t_m;
 		}
 	}
+	else
+		s =0;
 
 	double direction = atan2(-ux, -uy);
 	x = cos(direction) * s;
