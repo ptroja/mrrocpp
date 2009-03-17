@@ -10,15 +10,17 @@
 ecp_vis_ib_eih_planar_irp6ot::ecp_vis_ib_eih_planar_irp6ot(ecp_task& _ecp_task) :
 	ecp_visual_servo(_ecp_task) {
 
-	v_max = 0.02;
-	//Wartosc przyspieszenia z jakim osiagana jest maksymalna predkosc.
-	a = 0.04;
-	//Minimalna  wartosc predkosci do jakiej schodzimy przy hamowaniu.
-	v_min = 0.002;
-	//Predkosc chwilowa.
+	retrieve_parameters();
 
-	//Dystans wyrazony w pikselach, przy ktorym nastepuje hamowanie.
-	breaking_dist = 7;
+//	v_max = 0.02;
+//	//Wartosc przyspieszenia z jakim osiagana jest maksymalna predkosc.
+//	a = 0.04;
+//	//Minimalna  wartosc predkosci do jakiej schodzimy przy hamowaniu.
+//	v_min = 0.002;
+//	//Predkosc chwilowa.
+//
+//	//Dystans wyrazony w pikselach, przy ktorym nastepuje hamowanie.
+//	breaking_dist = 7;
 }
 
 ecp_vis_ib_eih_planar_irp6ot::~ecp_vis_ib_eih_planar_irp6ot() {
@@ -38,6 +40,8 @@ void ecp_vis_ib_eih_planar_irp6ot::retrieve_parameters() {
 	//Dystans wyrazony w pikselach, przy ktorym powinnismy hamowac.
 	breaking_dist = ecp_t.config.return_double_value("breaking_dist");
 
+	std::cout << "breaking_dist: " << breaking_dist << std::endl;
+
 }
 
 bool ecp_vis_ib_eih_planar_irp6ot::first_step() {
@@ -48,9 +52,6 @@ bool ecp_vis_ib_eih_planar_irp6ot::first_step() {
 	the_robot->EDP_data.get_type = ARM_DV;
 	the_robot->EDP_data.get_arm_type = XYZ_ANGLE_AXIS;
 	the_robot->EDP_data.motion_type = ABSOLUTE;
-	the_robot->EDP_data.next_interpolation_type = MIM;
-	the_robot->EDP_data.motion_steps = MOTION_STEPS;
-	the_robot->EDP_data.value_in_step_no = MOTION_STEPS - 1;
 
 	t_m = MOTION_STEPS * STEP;
 
@@ -62,7 +63,13 @@ bool ecp_vis_ib_eih_planar_irp6ot::first_step() {
 
 	//    for(int i=0;i<8;i++)
 	//    	std::cout<<next_position[i]<<std::endl;
-	return true;
+
+
+
+	std::cout << "vvv: " << v_min << std::endl;
+
+
+	return false;
 }
 
 bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints() {
