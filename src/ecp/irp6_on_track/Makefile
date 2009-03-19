@@ -33,6 +33,7 @@ BINARIES =		ecp_pr \
 				ecp_pw_scena \
 				ecp_ttt \
 				ecp_ellipse \
+        ecp_wii \				
 				ecp_t_box_irp6ot \
 				ecp_t_smooth2_test
 
@@ -61,6 +62,12 @@ ecp_ttt: ecp_t_ttt.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o \
 ecp_ellipse: ecp_t_ellipse.o ecp_g_ellipse.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o ecp_mp_s_wiimote.o \
                 ecp_operator_reaction_condition.o ecp_g_sleep.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
+
+#-----------------------------------------------------------------------------------------------------------------------#
+ecp_wii: ecp_t_wii.o ecp_g_wii.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o ecp_mp_s_wiimote.o \
+                ecp_operator_reaction_condition.o ecp_g_sleep.o $(SHOBJ)
+  $(LD) $(LDFLAGS) -o $@ $^
+
 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_pw: ecp_g_pw_kolo.o ecp_t_pw_irp6ot.o ecp_g_force.o ecp_st_go.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o\
