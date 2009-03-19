@@ -4,7 +4,7 @@
 #include "common/com_buf.h"
 #include "math.h"
 
-ecp_wii_generator::ecp_wii_generator (ecp_task& _ecp_task,double major_axis,double minor_axis) : ecp_generator (_ecp_task)) {}
+ecp_wii_generator::ecp_wii_generator (ecp_task& _ecp_task) : ecp_generator (_ecp_task)) {}
 
 bool ecp_wii_generator::first_step()
 {

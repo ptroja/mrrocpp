@@ -31,7 +31,7 @@ void ecp_task_wii::main_task_algorithm(void)
 	double* firstPosition;
 
     sg = new ecp_smooth_generator(*this,true);
-    eg = new ecp_wii_generator(*this,a,b,100);
+    eg = new ecp_wii_generator(*this);
     firstPosition = eg->getFirstPosition();
 
 	sg->reset();
