@@ -4,7 +4,7 @@
 #include "common/com_buf.h"
 #include "math.h"
 
-ecp_wii_generator::ecp_wii_generator (ecp_task& _ecp_task) : ecp_generator (_ecp_task)) {}
+ecp_wii_generator::ecp_wii_generator (ecp_task& _ecp_task) : ecp_generator (_ecp_task) {}
 
 bool ecp_wii_generator::first_step()
 {
@@ -46,8 +46,8 @@ bool ecp_wii_generator::next_step()
 
 
     the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] = 1;
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] = major_axis*sin(rad);
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[2] = 0.15+minor_axis*cos(rad);
+    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] = 0;
+    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[2] = 0.15;
 	the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[3] = sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_x;;
 	the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[4] = sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y;
 	the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[5] = sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_z;
@@ -61,7 +61,7 @@ double* ecp_wii_generator::getFirstPosition()
 	double* firstPosition = new double[8];
 	firstPosition[0] = 1;
 	firstPosition[1] = 0;
-	firstPosition[2] = 0.15 + minor_axis;
+	firstPosition[2] = 0.15;
 	firstPosition[3] = sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_x;;
 	firstPosition[4] = sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y;
 	firstPosition[5] = sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_z;
