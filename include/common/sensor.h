@@ -167,7 +167,7 @@ typedef struct sensor_image_t
 			float distance; // odleglosc
 			uint32_t ts_sec, ts_usec; // timestamp
 		} pcbird;
-		
+
 		//Structure for storing data retrieved from the Wii-mote server
 		struct wiimote_t
 		{
@@ -175,11 +175,14 @@ typedef struct sensor_image_t
 			int right;
 			int up;
 			int down;
+			float orientation_x;
+			float orientation_y;
+			float orientation_z;
 		} wiimote;
-	
+
 		//Struktura zawiwarajaca katy pod jakimi widac obiekt na obrazie z kamery
 		struct visioncoordinates_t
-		{	
+		{
 			double xOz;	// wzgledem plaszczyzny XOZ
 			double z;	// wzgledem osi Z
 		} visioncoordinates;
