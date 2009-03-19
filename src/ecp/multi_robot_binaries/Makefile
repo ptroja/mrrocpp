@@ -108,14 +108,14 @@ ecp_ellipse: \
 	$(LD) $(LDFLAGS) -o $@ $^
 
 ecp_wii: \
-    ../irp6_on_track/ecp_local.o \
-    ../common/ecp_t_wii.o \
-    ../common/ecp_g_smooth.o \
-    ../common/ecp_g_wii.o \   
-    ../common/ecp_g_jarosz.o \
-    ../common/ecp_operator_reaction_condition.o \
-    $(SHOBJ)
-  $(LD) $(LDFLAGS) -o $@ $^
+	    ../irp6_on_track/ecp_local.o \
+    	../common/ecp_t_wii.o \
+	    ../common/ecp_g_smooth.o \
+	    ../common/ecp_g_wii.o \
+    	../common/ecp_g_jarosz.o \
+	    ../common/ecp_operator_reaction_condition.o \
+    	$(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
 
 
 ecp_pawel: \

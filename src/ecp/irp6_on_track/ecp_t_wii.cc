@@ -27,19 +27,23 @@ void ecp_task_wii::task_initialization(void)
 
 void ecp_task_wii::main_task_algorithm(void)
 {
- 	//Polosie elipsy
 	double* firstPosition;
 
     sg = new ecp_smooth_generator(*this,true);
     eg = new ecp_wii_generator(*this);
-    firstPosition = eg->getFirstPosition();
-
+    
+    eg->sensor_m[SENSOR_WIIMOTE] = sensor_m[SENSOR_WIIMOTE];
+	firstPosition = eg->getFirstPosition();
+	
 	sg->reset();
 	sg->load_coordinates(XYZ_EULER_ZYZ,firstPosition[0],firstPosition[1],firstPosition[2],firstPosition[3],firstPosition[4],firstPosition[5],firstPosition[6],firstPosition[7]);
 	sg->Move();
 
-    eg->sensor_m[SENSOR_WIIMOTE] = sensor_m[SENSOR_WIIMOTE];
-    eg->Move();
+	while(1)
+	{    
+    	eg->Move();
+    }
+    
     ecp_termination_notice();
 }
 
