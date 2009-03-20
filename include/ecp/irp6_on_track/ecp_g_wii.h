@@ -45,6 +45,8 @@ public:
     virtual bool next_step();
 
     double* getFirstPosition();
+
+    void execute_motion(void);
 };
 
 #endif

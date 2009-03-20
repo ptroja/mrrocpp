@@ -73,3 +73,42 @@ double* ecp_wii_generator::getFirstPosition()
 
 	return firstPosition;
 }
+
+void ecp_wii_generator::execute_motion(void)
+{
+	// komunikacja wlasciwa
+	the_robot->send();
+	if (the_robot->reply_package.reply_type == ERROR) {
+
+		the_robot->query();
+		throw ecp_robot::ECP_error (NON_FATAL_ERROR, EDP_ERROR);
+
+	}
+	the_robot->query();
+
+	if (the_robot->reply_package.reply_type == ERROR) {
+		switch ( the_robot->reply_package.error_no.error0 ) {
+			case BEYOND_UPPER_D0_LIMIT:
+			case BEYOND_UPPER_THETA1_LIMIT:
+			case BEYOND_UPPER_THETA2_LIMIT:
+			case BEYOND_UPPER_THETA3_LIMIT:
+			case BEYOND_UPPER_THETA4_LIMIT:
+			case BEYOND_UPPER_THETA5_LIMIT:
+			case BEYOND_UPPER_THETA6_LIMIT:
+			case BEYOND_UPPER_THETA7_LIMIT:
+			case BEYOND_LOWER_D0_LIMIT:
+			case BEYOND_LOWER_THETA1_LIMIT:
+			case BEYOND_LOWER_THETA2_LIMIT:
+			case BEYOND_LOWER_THETA3_LIMIT:
+			case BEYOND_LOWER_THETA4_LIMIT:
+			case BEYOND_LOWER_THETA5_LIMIT:
+			case BEYOND_LOWER_THETA6_LIMIT:
+			case BEYOND_LOWER_THETA7_LIMIT:
+			break;
+			default:
+				throw ecp_robot::ECP_error (NON_FATAL_ERROR, EDP_ERROR);
+			break;
+
+		} /* end: switch */
+	}
+}
