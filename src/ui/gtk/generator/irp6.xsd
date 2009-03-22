@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
-
+<!--
+MRROC++ GUI generator
+XSD schema for the irp6 XML files.
+ -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 <xs:element name="irp6" type="Irp6Type" />
 
