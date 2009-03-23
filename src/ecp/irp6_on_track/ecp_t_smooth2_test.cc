@@ -33,15 +33,21 @@ void ecp_t_smooth2_test::main_task_algorithm(void ){
 
 	smoothgen2->set_absolute();
 
-	if (smoothgen2->load_file_with_path("/mnt/mrroc/MRROC++/trj/box_euler3.trj")) {
+	//char * path[500];
+	//sprintf(path, "%s%s", mrrocpp_network_path, config.return_string_value("trajektoria_euler"));
+
+	if (smoothgen2->load_file_with_path("/net/mieszko/home/mrrocpp/trj/box_euler3.trj")) {
+		char size[10];
+		double size2 = smoothgen2->pose_list_length();
+		sprintf(size,"%f",size2);
+		sr_ecp_msg->message(size);
+
 		smoothgen2->Move();
 	};
 
-	char size[10];
-	double size2 = smoothgen2->pose_list_length();
-	sprintf(size,"%f",size2);
 
-	sr_ecp_msg->message(size);
+
+
 
 	//printf("wielkosc listy: %d\n", smoothgen2->pose_list_length());
 	//fflush();
