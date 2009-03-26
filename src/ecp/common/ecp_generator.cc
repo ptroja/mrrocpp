@@ -58,6 +58,7 @@ void ecp_generator::Move()
     do
     { // realizacja ruchu
 
+
         // zadanie przygotowania danych od czujnikow
         ecp_t.all_sensors_initiate_reading(sensor_m);
 
@@ -69,6 +70,7 @@ void ecp_generator::Move()
                 the_robot->create_command();
             }
             // zlecenie ruchu SET oraz odczyt stanu robota GET
+
             execute_motion();
 
             if (copy_edp_buffers_in_move)

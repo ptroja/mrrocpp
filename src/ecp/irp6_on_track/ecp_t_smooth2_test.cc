@@ -24,7 +24,7 @@ void ecp_t_smooth2_test::task_initialization(void) {
 	sr_ecp_msg->message("ECP loaded smooth2_test");
 };
 
-void ecp_t_smooth2_test::main_task_algorithm(void ){
+void ecp_t_smooth2_test::main_task_algorithm(void ) {
 	//ecp_m_robot = new ecp_irp6_on_track_robot(*this);
 	//smoothgen2 = new ecp_smooth2_generator(*this, true);
 	//sr_ecp_msg->message("ECP loaded smooth2_test");
@@ -33,10 +33,7 @@ void ecp_t_smooth2_test::main_task_algorithm(void ){
 
 	smoothgen2->set_absolute();
 
-	//char * path[500];
-	//sprintf(path, "%s%s", mrrocpp_network_path, config.return_string_value("trajektoria_euler"));
-
-	if (smoothgen2->load_file_with_path("/net/mieszko/home/mrrocpp/trj/box_euler3.trj")) {
+	if (smoothgen2->load_file_with_path("/mnt/mrroc/MRROC++/trj/box_euler3.trj")) {
 		char size[10];
 		double size2 = smoothgen2->pose_list_length();
 		sprintf(size,"%f",size2);
@@ -44,10 +41,6 @@ void ecp_t_smooth2_test::main_task_algorithm(void ){
 
 		smoothgen2->Move();
 	};
-
-
-
-
 
 	//printf("wielkosc listy: %d\n", smoothgen2->pose_list_length());
 	//fflush();
