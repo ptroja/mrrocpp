@@ -18,7 +18,7 @@
 # Should be modified only by developers not by users
 HOMEDIR = .
 CLEANDIRS = src lib
-CLEANEDFILES = ./bin/* ./pomiary/* ./logs/*
+CLEANEDFILES = ./bin/* ./msr/* ./logs/*
 INSTALLDIRS = src
 
 # Data for makedepend 

@@ -119,7 +119,7 @@ void ecp_spots_generator::save_position()
 	p_t_g.rproduct4x4(plate_to_tool);
 	//double * plate_to_ground = p_t_g.getA();
 
-FILE *fd = fopen("../pomiary/kalibracja.txt", "a+");
+FILE *fd = fopen("../msr/kalibracja.txt", "a+");
 	for(int i=0; i<4; i++)
 	{
 		double vec_plate[4];
@@ -150,7 +150,7 @@ FILE *fd = fopen("../pomiary/kalibracja.txt", "a+");
 		}
 		p_t_g.product4x1(vec_plate); // vec_plate := vec_ground
 
-//FILE *fd1 = fopen("../pomiary/temp.txt", "a+");
+//FILE *fd1 = fopen("../msr/temp.txt", "a+");
 //for(int it = 0; it<4; it++)
 //		fprintf(fd1, "%f ", tool_to_ground[4*i+it]);
 //for(int it=0; it<4; it++)

@@ -213,11 +213,11 @@ char* configurator::return_common_ini_file_path()
 // Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.
 char* configurator::return_default_reader_measures_path()
 {
-	int size = 1 + strlen(mrrocpp_network_path) + strlen("pomiary/");
+	int size = 1 + strlen(mrrocpp_network_path) + strlen("msr/");
 	char * value = new char[size];
 	// Stworzenie sciezki do pliku.
 	strcpy(value, mrrocpp_network_path);
-	sprintf(value, "%spomiary/", mrrocpp_network_path);
+	sprintf(value, "%msr/", mrrocpp_network_path);
 
 	return value;
 }
