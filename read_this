@@ -51,3 +51,6 @@ mrrocppbla.tar.gz
 
 to use aplication:
 run "gns -s" on one of qnx network node's
+
+to generate doxygen
+doxygen Doxyfile
