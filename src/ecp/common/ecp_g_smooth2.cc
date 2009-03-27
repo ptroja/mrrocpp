@@ -689,6 +689,8 @@ bool ecp_smooth2_generator::next_step () {
 void ecp_smooth2_generator::calculate(void) {
 
 	double s[MAX_SERVOS_NR];
+	double s_temp1[MAX_SERVOS_NR], s_temp2[MAX_SERVOS_NR];
+	double t_temp1, t_temp2;
     double t;
     double t_max; //nadluzszy czas ruchu w jednej osi w jednym ruchu
     //double v_r[MAX_SERVOS_NR], a_r[MAX_SERVOS_NR];
@@ -700,7 +702,7 @@ void ecp_smooth2_generator::calculate(void) {
 
     initiate_pose_list();
 
-    td.interpolation_node_no = 5;//TODO zapisywanie tego trzeba przeniesc gdzies dalej
+    td.interpolation_node_no = 5;//TODO zapisywanie tego trzeba przeniesc gdzies dalej (prawdopodobnie do next_step)
     td.internode_step_no = 10;
     td.value_in_step_no = td.internode_step_no - 2;
 
@@ -725,8 +727,10 @@ void ecp_smooth2_generator::calculate(void) {
 				pose_list_iterator->start_position[7] = 0.0;//TODO sprawdzic czy tutaj ma byc 0
 
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
-					pose_list_iterator->v_r[i] = v_max_motor[i] * pose_list_iterator->v[i];
-					pose_list_iterator->a_r[i] = a_max_motor[i] * pose_list_iterator->a[i];
+					printf("predkosci (max i zadane): %f\t %f\n", v_max_zyz[i], pose_list_iterator->v[i]);
+					printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
+					pose_list_iterator->v_r[i] = v_max_zyz[i] * pose_list_iterator->v[i];
+					pose_list_iterator->a_r[i] = a_max_zyz[i] * pose_list_iterator->a[i];
 					pose_list_iterator->v_p[i] = 0; //zalozenie, ze poczatkowa predkosc jest rowna 0
 				}
 
@@ -757,8 +761,10 @@ void ecp_smooth2_generator::calculate(void) {
 				pose_list_iterator->start_position[7] = 0.0;//TODO sprawdzic czy tutaj ma byc 0
 
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
-					pose_list_iterator->v_r[i] = v_max_motor[i] * pose_list_iterator->v[i];
-					pose_list_iterator->a_r[i] = a_max_motor[i] * pose_list_iterator->a[i];
+					printf("predkosci (max i zadane): %f\t %f\t", v_max_zyz[i], pose_list_iterator->v[i]);
+					printf("przyspieszenia (max i zadane): %f\t %f\t", a_max_zyz[i], pose_list_iterator->a[i]);
+					pose_list_iterator->v_r[i] = v_max_zyz[i] * pose_list_iterator->v[i];
+					pose_list_iterator->a_r[i] = a_max_zyz[i] * pose_list_iterator->a[i];
 				}
 
 				break;
@@ -783,6 +789,8 @@ void ecp_smooth2_generator::calculate(void) {
 		}
 		// ==================================== poczatek oliczen ========================================
 
+		t_max = 0;
+
 		pose_list_iterator->start_position[1] = -0.288; //tymczasowa opcja (powrot do pozycji synchro)
 
 		//obliczenie drogi dla kazdej osi
@@ -802,11 +810,37 @@ void ecp_smooth2_generator::calculate(void) {
 
 			if (pose_list_iterator->v_p[i] < pose_list_iterator->v_r[i] && v_r_next[i] < pose_list_iterator->v_r[i]) { //pierwszy model
 				printf("pierwszy model (droga) %d\n", i);
-			} else if (pose_list_iterator->v_p[i] < pose_list_iterator->v_r[i] && v_r_next[i] >= pose_list_iterator->v_r[i]) { // drugi model
+				s_temp1[i] = 0.5 * pose_list_iterator->a_r[i] * ((pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i]) * ((pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i]);
+				s_temp2[i] = 0.5 * pose_list_iterator->a_r[i] * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]) * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]);
 
-			} else if (pose_list_iterator->v_p[i] == pose_list_iterator->v_r[i] && v_r_next[i] >= pose_list_iterator->v_r[i]) { //trzeci model
+				printf("s_temp1: %f\ts_temp2: %f\n", s_temp1[i], s_temp2[i]);
 
-			} else if (pose_list_iterator->v_p[i] == pose_list_iterator->v_r[i] && v_r_next[i] < pose_list_iterator->v_r[i]) { //czwarty model
+				if (s_temp1[i] + s_temp2[i] > s[i]) {
+					printf("redukcja przyspieszen w osi %d\n", i);
+					//nadpisanie v_r (ruch bedzie 2 etapowy)
+					//obliczenie czasu
+				} else {//droga przyspieszenia i opoznienia nie przekracza drogi ruchu
+					t_temp1 = (pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i];
+					t_temp2 = (pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i];
+
+					printf("t_temp1: %f\tt_temp2: %f\n", t_temp1, t_temp2);
+
+					t = t_temp1 + t_temp2 + (s[i] - (s_temp1[i] + s_temp2[i]))/pose_list_iterator->v_r[i];
+
+					printf("czas\t\tv_r\t\tv_r_next\ta_r\t\tv_p\n");
+					printf("%f\t%f\t%f\t%f\t%f\n", t, pose_list_iterator->v_r[i], v_r_next[i], pose_list_iterator->a_r[i], pose_list_iterator->v_p[i]);
+
+				}
+
+				if (t > t_max) {//napisanie najdluzszego czasu
+					t_max = t;
+				}
+
+            } else if (pose_list_iterator->v_p[i] < pose_list_iterator->v_r[i] && (v_r_next[i] > pose_list_iterator->v_r[i] || eq(v_r_next[i], pose_list_iterator->v_r[i]))) { // drugi model
+
+			} else if (eq(pose_list_iterator->v_p[i], pose_list_iterator->v_r[i]) && (v_r_next[i] > pose_list_iterator->v_r[i] || eq(v_r_next[i], pose_list_iterator->v_r[i]))) { //trzeci model
+
+			} else if (eq(pose_list_iterator->v_p[i], pose_list_iterator->v_r[i]) && v_r_next[i] < pose_list_iterator->v_r[i]) { //czwarty model
 
 			} else {
 				printf("\n ten przypadek nigdy nie moze wystapic\n");

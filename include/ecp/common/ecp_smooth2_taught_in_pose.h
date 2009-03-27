@@ -24,6 +24,7 @@ public:
   double v_r[MAX_SERVOS_NR];
   int interpolation_node_no;
   double v_grip;
+  double t;
 
   ecp_smooth2_taught_in_pose (void);
   ecp_smooth2_taught_in_pose (POSE_SPECIFICATION at, double* vv, double* aa, double* coordinates);
