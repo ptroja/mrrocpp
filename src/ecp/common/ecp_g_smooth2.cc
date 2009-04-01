@@ -691,7 +691,7 @@ void ecp_smooth2_generator::calculate(void) {
 	double s[MAX_SERVOS_NR];
 	double s_temp1[MAX_SERVOS_NR], s_temp2[MAX_SERVOS_NR];
 	double t_temp1, t_temp2;
-    double t;
+    double t[MAX_SERVOS_NR];
     double t_max; //nadluzszy czas ruchu w jednej osi w jednym ruchu
     //double v_r[MAX_SERVOS_NR], a_r[MAX_SERVOS_NR];
     int i;
@@ -801,9 +801,9 @@ void ecp_smooth2_generator::calculate(void) {
 		//sprawdzanie czy droga w etapach przyspieszenia i hamowania nie jest wieksza niz droga calego ruchu
 
 		//warunki na modele ruchu dla wszystkich osi
-		for (i = 0; i < MAX_SERVOS_NR; i++) { //
+		for (i = 0; i < MAX_SERVOS_NR; i++) { //petla w ktorej obliczany jest czas dla kazdej osi i sprawdzane jest czy da sie wykonac ruch w zalozonych etapach
 
-			if (eq(s[i],0)) {
+			if (s[i] < 0.001) {//najmniejsza wykrywalna droga
 				printf("droga 0 %d\n", i);
 				continue;
 			}
@@ -816,7 +816,7 @@ void ecp_smooth2_generator::calculate(void) {
 				printf("s_temp1: %f\ts_temp2: %f\n", s_temp1[i], s_temp2[i]);
 
 				if (s_temp1[i] + s_temp2[i] > s[i]) {
-					printf("redukcja przyspieszen w osi %d\n", i);
+					printf("redukcja predkosci w osi %d\n", i);
 					//nadpisanie v_r (ruch bedzie 2 etapowy)
 					//obliczenie czasu
 				} else {//droga przyspieszenia i opoznienia nie przekracza drogi ruchu
@@ -825,15 +825,15 @@ void ecp_smooth2_generator::calculate(void) {
 
 					printf("t_temp1: %f\tt_temp2: %f\n", t_temp1, t_temp2);
 
-					t = t_temp1 + t_temp2 + (s[i] - (s_temp1[i] + s_temp2[i]))/pose_list_iterator->v_r[i];
+					t[i] = t_temp1 + t_temp2 + (s[i] - (s_temp1[i] + s_temp2[i]))/pose_list_iterator->v_r[i];
 
 					printf("czas\t\tv_r\t\tv_r_next\ta_r\t\tv_p\n");
-					printf("%f\t%f\t%f\t%f\t%f\n", t, pose_list_iterator->v_r[i], v_r_next[i], pose_list_iterator->a_r[i], pose_list_iterator->v_p[i]);
+					printf("%f\t%f\t%f\t%f\t%f\n", t[i], pose_list_iterator->v_r[i], v_r_next[i], pose_list_iterator->a_r[i], pose_list_iterator->v_p[i]);
 
 				}
 
-				if (t > t_max) {//napisanie najdluzszego czasu
-					t_max = t;
+				if (t[i] > t_max) {//napisanie najdluzszego czasu
+					t_max = t[i];
 				}
 
             } else if (pose_list_iterator->v_p[i] < pose_list_iterator->v_r[i] && (v_r_next[i] > pose_list_iterator->v_r[i] || eq(v_r_next[i], pose_list_iterator->v_r[i]))) { // drugi model
@@ -846,6 +846,16 @@ void ecp_smooth2_generator::calculate(void) {
 				printf("\n ten przypadek nigdy nie moze wystapic\n");
 			}
 		}
+
+		for (i = 0; i < MAX_SERVOS_NR; i++) {
+
+			if (t[i] < t_max) {//redukcja predkosci w danej osi
+				//redukcja predkosci i przypisanie jedn, przysp
+			} else {
+				//zapisanie jedn przysp
+			}
+		}
+
     }
     /*for(i=0; i<MAX_SERVOS_NR; i++)
     {

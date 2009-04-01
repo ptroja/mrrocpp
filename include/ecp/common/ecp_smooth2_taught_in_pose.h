@@ -25,6 +25,7 @@ public:
   int interpolation_node_no;
   double v_grip;
   double t;
+  int model;
 
   ecp_smooth2_taught_in_pose (void);
   ecp_smooth2_taught_in_pose (POSE_SPECIFICATION at, double* vv, double* aa, double* coordinates);

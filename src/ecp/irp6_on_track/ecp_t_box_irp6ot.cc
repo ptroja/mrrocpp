@@ -23,7 +23,7 @@ void ecp_t_box_irp6ot::main_task_algorithm(void ){
 	//ecp_wait_for_start();
 
 	smoothgen->set_absolute();
-	if (smoothgen->load_file_with_path("/net/home-host/mnt/mrroc/trj/box_euler.trj")) {
+	if (smoothgen->load_file_with_path("/mnt/mrroc/MRROC++/trj/box_euler.trj")) {
 	  smoothgen->Move();
 	}
 	smoothgen->reset();
