@@ -774,8 +774,18 @@ void ecp_smooth2_generator::calculate(void) {
 			}
 		}
 
-		for(i=0;i<MAX_SERVOS_NR;i++)
-		        td.coordinate_delta[i] = pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i];
+		for(i=0;i<MAX_SERVOS_NR;i++) {//zapisanie coordinate_delta i zapisanie kierunku (k)
+			td.coordinate_delta[i] = pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i];
+
+			if(pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i] < 0)
+	        {
+				pose_list_iterator->k[i]=-1;
+	        }
+	        else
+	        {
+	        	pose_list_iterator->k[i]=1;
+	        }
+		}
 
 		for (i = 0; i < MAX_SERVOS_NR; i++) {//zapisanie v_r_next
 			if (is_last_list_element()) {
