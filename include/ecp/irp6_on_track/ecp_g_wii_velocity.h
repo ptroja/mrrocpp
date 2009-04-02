@@ -21,17 +21,11 @@ class ecp_wii_velocity_generator : public ecp_tff_nose_run_generator
     ecp_wii_velocity_generator (ecp_task& _ecp_task);
 
     /**
-     * Generuje pierwszy krok
-     * @author jedrzej
-     */
-    virtual bool first_step();
-
-    /**
      * Generuje kolejne punkty wynikajace z aktualnej orientacji kontrolera
      * @author jedrzej
      */
     virtual bool next_step();
-    
+
 //    void execute_motion(void);
 };
 

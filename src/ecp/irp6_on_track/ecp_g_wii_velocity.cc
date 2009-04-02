@@ -9,21 +9,6 @@ ecp_wii_velocity_generator::ecp_wii_velocity_generator (ecp_task& _ecp_task) : e
 	configure_behaviour(UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION);
 }
 
-bool ecp_wii_velocity_generator::first_step()
-{
-    the_robot->EDP_data.instruction_type = GET;
-    the_robot->EDP_data.get_type = ARM_DV;
-    the_robot->EDP_data.set_type = ARM_DV;
-    the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
-    the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;
-    the_robot->EDP_data.motion_type = ABSOLUTE;
-    the_robot->EDP_data.next_interpolation_type = MIM;
-    the_robot->EDP_data.motion_steps = 8;
-    the_robot->EDP_data.value_in_step_no = 6;
-
-    return true;
-}
-
 bool ecp_wii_velocity_generator::next_step()
 {
 	char buffer[200];
