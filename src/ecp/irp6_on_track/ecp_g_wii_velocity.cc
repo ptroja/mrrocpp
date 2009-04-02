@@ -4,7 +4,7 @@
 #include "common/com_buf.h"
 #include "math.h"
 
-ecp_wii_velocity_generator::ecp_wii_velocity_generator (ecp_task& _ecp_task) : tff_nose_run_generator(_ecp_task)
+ecp_wii_velocity_generator::ecp_wii_velocity_generator (ecp_task& _ecp_task) : ecp_tff_nose_run_generator(_ecp_task)
 {
 
 
@@ -23,8 +23,6 @@ bool ecp_wii_velocity_generator::first_step()
     the_robot->EDP_data.motion_steps = 8;
     the_robot->EDP_data.value_in_step_no = 6;
 
-	step_no = 0;
-    rad = 0;
     return true;
 }
 
@@ -63,21 +61,6 @@ bool ecp_wii_velocity_generator::next_step()
 	return true;
 }
 
-double* ecp_wii_velocity_generator::getFirstPosition()
-{
-
-	double* firstPosition = new double[8];
-	firstPosition[0] = 0.85;
-	firstPosition[1] = -0.3;
-	firstPosition[2] = 0.3;
-
-	firstPosition[3] = -1.136 + sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_x;
-	firstPosition[4] = 1.38 + sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y;
-	firstPosition[5] = 2.3;// + sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_z;
-	firstPosition[6] = 0.074;
-
-	return firstPosition;
-}
 
 void ecp_wii_velocity_generator::execute_motion(void)
 {

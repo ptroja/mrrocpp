@@ -13,9 +13,6 @@
 class ecp_task_wii_velocity: public ecp_task
 {
 protected:
-	//Generator ruchu
-	ecp_wii_generator* eg;
-	ecp_smooth_generator* sg;
 
 public:
 	/**

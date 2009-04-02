@@ -9,7 +9,7 @@
 #include "ecp_mp/ecp_mp_s_wiimote.h"
 
 #include "ecp/irp6_on_track/ecp_local.h"
-#include "ecp/irp6_on_track/ecp_t_wii.h"
+#include "ecp/irp6_on_track/ecp_t_wii_velocity.h"
 #include "lib/mathtr.h"
 
 ecp_task_wii_velocity::ecp_task_wii_velocity(configurator &_config) : ecp_task(_config) {};
@@ -27,24 +27,7 @@ void ecp_task_wii_velocity::task_initialization(void)
 
 void ecp_task_wii_velocity::main_task_algorithm(void)
 {
-	double* firstPosition;
 
-    sg = new ecp_smooth_generator(*this,true);
-    eg = new ecp_wii_generator(*this);
-
-    eg->sensor_m[SENSOR_WIIMOTE] = sensor_m[SENSOR_WIIMOTE];
-	firstPosition = eg->getFirstPosition();
-
-	sg->reset();
-	sg->load_coordinates(XYZ_EULER_ZYZ,firstPosition[0],firstPosition[1],firstPosition[2],firstPosition[3],firstPosition[4],firstPosition[5],firstPosition[6],firstPosition[7]);
-	sg->Move();
-
-	while(1)
-	{
-    	eg->Move();
-    }
-
-    ecp_termination_notice();
 }
 
 ecp_task* return_created_ecp_task (configurator &_config)

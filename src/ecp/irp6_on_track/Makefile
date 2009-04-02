@@ -72,7 +72,7 @@ ecp_wii: ecp_t_wii.o ecp_g_wii.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_wii_velocity: ecp_t_wii_velocity.o ecp_g_wii_velocity.o ecp_g_force.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o ecp_mp_s_wiimote.o \
                 ecp_operator_reaction_condition.o ecp_g_sleep.o $(SHOBJ)
-  $(LD) $(LDFLAGS) -o $@ $^
+	$(LD) $(LDFLAGS) -o $@ $^
 
 
 #-----------------------------------------------------------------------------------------------------------------------#

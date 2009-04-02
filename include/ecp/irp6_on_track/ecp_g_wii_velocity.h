@@ -6,7 +6,7 @@
 
 #include "ecp/common/ecp_g_force.h"
 
-class ecp_wii_velocity_generator : public tff_nose_run_generator
+class ecp_wii_velocity_generator : public ecp_tff_nose_run_generator
 {
 	private:
 
