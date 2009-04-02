@@ -31,8 +31,8 @@ class ecp_wii_velocity_generator : public ecp_tff_nose_run_generator
      * @author jedrzej
      */
     virtual bool next_step();
-
-    void execute_motion(void);
+    
+//    void execute_motion(void);
 };
 
 #endif
