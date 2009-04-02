@@ -27,7 +27,14 @@ void ecp_task_wii_velocity::task_initialization(void)
 
 void ecp_task_wii_velocity::main_task_algorithm(void)
 {
+	eg = new ecp_wii_velocity_generator(*this);
 
+    eg->sensor_m[SENSOR_WIIMOTE] = sensor_m[SENSOR_WIIMOTE];
+
+    while(1)
+    {
+        	eg->Move();
+    }
 }
 
 ecp_task* return_created_ecp_task (configurator &_config)
