@@ -37,15 +37,14 @@ bool ecp_wii_velocity_generator::next_step()
 
 	++step_no;
 
-	configure_velocity (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+	configure_velocity (0.1, 0.0, 0.0, 0.0, 0.0, 0.0);
+	sprintf(buffer,"Pos: %f %f %f %f %f %f",the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0],the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1],the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[2],the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[3],the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[4],the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[5]);
+	sr_ecp_msg.message(buffer);
 
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] = 0.85;
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] = -0.3;
-    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[2] = 0.3;
-	the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[3] = -1.136 + sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_x;
-	the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[4] = 1.39 + sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y;
+	//the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[3] = -1.136 + sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_x;
+	//the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[4] = 1.39 + sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y;
 	//the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[5] = 2.3 + sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_z;
-	the_robot->EDP_data.next_gripper_coordinate = 0.074;
+	//the_robot->EDP_data.next_gripper_coordinate = 0.074;
 
 	return true;
 }
