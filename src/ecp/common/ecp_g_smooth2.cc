@@ -625,6 +625,7 @@ bool ecp_smooth2_generator::next_step () {
     		//printf("wywolany else (nastepna pozycja pose_list)\n");
 			node_counter = 0; //ustawienie makrokroku na 1
 		    next_pose_list_ptr();
+		    td.interpolation_node_no = pose_list_iterator->interpolation_node_no;
 		}
     } else {
     	//printf("kolejny makrokrok\n");
@@ -698,11 +699,13 @@ void ecp_smooth2_generator::calculate(void) {
     double tk = 10 * STEP; //czas jednego makrokroku
 
     double v_r_next[MAX_SERVOS_NR];
+
+    double temp;//generalny temp do wszystkiego
     //double v_r_prev[MAX_SERVOS_NR];
 
     initiate_pose_list();
 
-    td.interpolation_node_no = 5;//TODO zapisywanie tego trzeba przeniesc gdzies dalej (prawdopodobnie do next_step)
+
     td.internode_step_no = 10;
     td.value_in_step_no = td.internode_step_no - 2;
 
@@ -732,6 +735,13 @@ void ecp_smooth2_generator::calculate(void) {
 					pose_list_iterator->v_r[i] = v_max_zyz[i] * pose_list_iterator->v[i];
 					pose_list_iterator->a_r[i] = a_max_zyz[i] * pose_list_iterator->a[i];
 					pose_list_iterator->v_p[i] = 0; //zalozenie, ze poczatkowa predkosc jest rowna 0
+
+					if(pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i] < 0) { //zapisanie kierunku dla pierwszego ruchu
+						pose_list_iterator->k[i]=-1;			//zapisanie kierunku nastepnych ruchow dokonywane jest dalej
+			        }
+			        else {
+			        	pose_list_iterator->k[i]=1;
+			        }
 				}
 
 				break;
@@ -748,12 +758,18 @@ void ecp_smooth2_generator::calculate(void) {
 
 			case XYZ_EULER_ZYZ:
 				for (i = 0; i < 6; i++) {
-					pose_list_iterator->start_position[i] = pose_list_iterator->coordinates[i];//przypisanie pozycji koncowej poprzedniego ruchu jako
-				}																			//pozycje startowa nowego ruchu
+					temp = pose_list_iterator->coordinates[i];
+					next_pose_list_ptr();
+					pose_list_iterator->start_position[i] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
+					prev_pose_list_ptr();							//pozycje startowa nowego ruchu
+				}
 
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
-					pose_list_iterator->v_p[i] = pose_list_iterator->v_k[i]; //koncowa predkosc poprzedniego ruchu jest poczatkowa
-				}														  //predkoscia nowego ruchu
+					temp = pose_list_iterator->v_k[i];
+					next_pose_list_ptr();
+					pose_list_iterator->v_p[i] = temp; //koncowa predkosc poprzedniego ruchu jest poczatkowa
+					prev_pose_list_ptr();					//predkoscia nowego ruchu
+				}
 
 				next_pose_list_ptr(); //inkrementacja iteratora listy pose_list
 
@@ -761,8 +777,8 @@ void ecp_smooth2_generator::calculate(void) {
 				pose_list_iterator->start_position[7] = 0.0;//TODO sprawdzic czy tutaj ma byc 0
 
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
-					printf("predkosci (max i zadane): %f\t %f\t", v_max_zyz[i], pose_list_iterator->v[i]);
-					printf("przyspieszenia (max i zadane): %f\t %f\t", a_max_zyz[i], pose_list_iterator->a[i]);
+					printf("predkosci (max i zadane): %f\t %f\n", v_max_zyz[i], pose_list_iterator->v[i]);
+					printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
 					pose_list_iterator->v_r[i] = v_max_zyz[i] * pose_list_iterator->v[i];
 					pose_list_iterator->a_r[i] = a_max_zyz[i] * pose_list_iterator->a[i];
 				}
@@ -774,26 +790,33 @@ void ecp_smooth2_generator::calculate(void) {
 			}
 		}
 
-		for(i=0;i<MAX_SERVOS_NR;i++) {//zapisanie coordinate_delta i zapisanie kierunku (k)
+		for(i=0;i<MAX_SERVOS_NR;i++) {//zapisanie coordinate_delta
 			td.coordinate_delta[i] = pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i];
 
-			if(pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i] < 0)
-	        {
-				pose_list_iterator->k[i]=-1;
-	        }
-	        else
-	        {
-	        	pose_list_iterator->k[i]=1;
-	        }
 		}
 
 		for (i = 0; i < MAX_SERVOS_NR; i++) {//zapisanie v_r_next
 			if (is_last_list_element()) {
 				printf("ostatni ruch\n");
 				v_r_next[i] = 0.0;
+				pose_list_iterator->v_k[i] = 0; //to nie jest potrzebne tak naprawde...
 			} else {
+				temp = pose_list_iterator->k[i];
 				next_pose_list_ptr();
-				v_r_next[i] = pose_list_iterator->v_r[i];
+
+				if(pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i] < 0) {//nadpisanie k dla nastepnego ruchu
+					pose_list_iterator->k[i]=-1;
+		        }
+		        else {
+		        	pose_list_iterator->k[i]=1;
+		        }
+
+				if (pose_list_iterator->k[i] != temp) {
+					v_r_next[i] = 0;
+				} else {
+					v_r_next[i] = v_max_zyz[i] * pose_list_iterator->v[i];
+				}
+				printf("ruch nieostatni, nastepna predkosc: %f\n", v_max_zyz[i] * pose_list_iterator->v[i]);
 				prev_pose_list_ptr();
 			}
 		}
@@ -801,7 +824,7 @@ void ecp_smooth2_generator::calculate(void) {
 
 		t_max = 0;
 
-		pose_list_iterator->start_position[1] = -0.288; //tymczasowa opcja (powrot do pozycji synchro)
+		//pose_list_iterator->start_position[1] = -0.288; //tymczasowa opcja (powrot do pozycji synchro)
 
 		//obliczenie drogi dla kazdej osi
 		for (i = 0; i < MAX_SERVOS_NR; i++) {
@@ -842,6 +865,8 @@ void ecp_smooth2_generator::calculate(void) {
 
 				}
 
+				pose_list_iterator->v_k[i] = v_r_next[i];
+
 				if (t[i] > t_max) {//napisanie najdluzszego czasu
 					t_max = t[i];
 				}
@@ -851,11 +876,26 @@ void ecp_smooth2_generator::calculate(void) {
 			} else if (eq(pose_list_iterator->v_p[i], pose_list_iterator->v_r[i]) && (v_r_next[i] > pose_list_iterator->v_r[i] || eq(v_r_next[i], pose_list_iterator->v_r[i]))) { //trzeci model
 
 			} else if (eq(pose_list_iterator->v_p[i], pose_list_iterator->v_r[i]) && v_r_next[i] < pose_list_iterator->v_r[i]) { //czwarty model
+				printf("czwarty model\n");
+
+
+
+				printf("czas\t\tv_r\t\tv_r_next\ta_r\t\tv_p\n");
+									printf("%f\t%f\t%f\t%f\t%f\n", t[i], pose_list_iterator->v_r[i], v_r_next[i], pose_list_iterator->a_r[i], pose_list_iterator->v_p[i]);
 
 			} else {
 				printf("\n ten przypadek nigdy nie moze wystapic\n");
 			}
 		}
+
+	    //kwantyzacja czasu
+	    if(ceil(t_max/tk)*tk != t_max)
+	    {
+	        t_max = ceil(t_max/tk);
+	        t_max = t_max*tk;
+	    }
+
+		pose_list_iterator->interpolation_node_no = (int)round(t_max / tk);
 
 		for (i = 0; i < MAX_SERVOS_NR; i++) {
 
@@ -863,9 +903,9 @@ void ecp_smooth2_generator::calculate(void) {
 				//redukcja predkosci i przypisanie jedn, przysp
 			} else {
 				//zapisanie jedn przysp
+
 			}
 		}
-
     }
     /*for(i=0; i<MAX_SERVOS_NR; i++)
     {
