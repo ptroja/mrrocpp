@@ -66,12 +66,12 @@ bool ecp_wii_velocity_generator::next_step()
 
 	//wyznaczenie nowych wartosci predkosci
 	configure_velocity(
-		sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.up ? sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y * C_0 : 0,	
+		sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.up && !sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.left && !sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.right ? sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y * C_0 : 0,	
 		sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.right ? sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y * C_1 :	 0,
 		sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.down ? sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y * C_2 : 0,
 		sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.left ? sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y * C_3 : 0,
-		sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.up && sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.right ? sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y * C_4 : 0,
-		sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.up && sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.left ? sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y * C_5 : 0
+		sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.up && sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.right && !sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.left ? sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y * C_4 : 0,
+		sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.up && sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.left && !sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.right? sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y * C_5 : 0
 	);	
 
 	for (int i=0; i<6; i++)
