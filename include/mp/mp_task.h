@@ -7,8 +7,7 @@
 #include <list>
 #include <map>
 
-using namespace mrrocpp;
-using namespace ecp_mp;
+
 
 // klasa globalna dla calego procesu MP
 class mp_task: public ecp_mp_task

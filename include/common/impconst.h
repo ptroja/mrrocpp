@@ -10,10 +10,19 @@
 
 #include <stdint.h>
 
+namespace mrrocpp
+{
+
+}
+
+
+using namespace mrrocpp;
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+
+	
 #define CONNECT_RETRY	200
 #define CONNECT_DELAY	50
 

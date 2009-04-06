@@ -1,11 +1,10 @@
 #ifndef MP_GENERATOR_H_
 #define MP_GENERATOR_H_
 
+
 #include "mp/mp_robot.h"
-#include "mp/mp_task.h"
 #include "ecp_mp/ecp_mp_generator.h"
 
-using namespace mrrocpp;
 using namespace ecp_mp;
 
 class mp_task;

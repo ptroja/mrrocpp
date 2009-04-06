@@ -8,7 +8,7 @@
 
 #include "messip/messip.h"
 
-using namespace mrrocpp;
+
 using namespace ecp_mp;
 
 class ui_common_robot;
