@@ -7,6 +7,11 @@
 
 #include "lib/srlib.h"
 
+
+namespace mrrocpp {
+namespace ecp_mp {
+
+
 // XXX Forward declaration
 class ecp_mp_task;
 
@@ -100,5 +105,10 @@ class transmitter
 		; // end: class transmitter_error
 }
 ; // end: class transmitter
+
+
+} // namespace ecp_mp
+} // namespace mrrocpp
+
 
 #endif /* _TRANSMITTER_H */

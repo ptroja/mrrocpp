@@ -5,6 +5,9 @@
 #include "mp/mp_task.h"
 #include "ecp_mp/ecp_mp_generator.h"
 
+using namespace mrrocpp;
+using namespace ecp_mp;
+
 class mp_task;
 class mp_robot;
 

@@ -12,6 +12,9 @@
 
 #include "ecp_mp/ecp_mp_sensor.h"				// klasa bazowa sensor
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 // ####################################################################
 // ## KLASA czujnika - rozwiazywanie kostki Rubika algorytmem Korfa  ##
 // ####################################################################
@@ -27,5 +30,8 @@ class ecp_mp_rcs_korf : public ecp_mp_sensor{
 	// Inicjalizacja czujnika
 	void initiate_reading();
 }; 
+
+} // namespace ecp_mp
+} // namespace mrrocpp
 
 #endif

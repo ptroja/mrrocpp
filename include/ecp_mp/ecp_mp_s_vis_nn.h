@@ -12,6 +12,9 @@
 
 #include "ecp_mp/ecp_mp_sensor.h"				// klasa bazowa sensor
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 /***************** Klasa czujnikow ********************/
 class ecp_mp_vis_nn_sensor: public ecp_mp_sensor{
   public:
@@ -19,5 +22,8 @@ class ecp_mp_vis_nn_sensor: public ecp_mp_sensor{
  	ecp_mp_vis_nn_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object);
 											// konstruktor czujnika virtualnego
 };
+
+} // namespace ecp_mp
+} // namespace mrrocpp
 
 #endif

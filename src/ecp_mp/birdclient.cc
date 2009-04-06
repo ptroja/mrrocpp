@@ -17,6 +17,9 @@
 #include <sys/poll.h>
 #include "ecp_mp/birdclient.h"
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 #define MAX_RANGE ( 36.0 * 0.0254 )
 
 #define SVCMD_POS 1
@@ -141,3 +144,6 @@ int pcbird_get_streaming_position(int fd, pcbird_pos_t *p)
 }
 
 //}// extern
+
+} // namespace ecp_mp
+} // namespace mrrocpp

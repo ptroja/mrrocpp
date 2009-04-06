@@ -13,6 +13,9 @@
 #include "common/impconst.h"
 #include "mp/Transition.h"
 
+using namespace mrrocpp;
+using namespace ecp_mp;
+
 //enum StateType { INITIALIZATION, MOTION_EXECUTE };
 
 class State

@@ -13,6 +13,8 @@
 
 #include "ecp_mp/ecp_mp_sensor.h"
 
+namespace mrrocpp {
+namespace ecp_mp {
 
 /*!
  * \class ecp_mp_s_pcbird.h
@@ -66,6 +68,8 @@ public:
 
 }; 
 
+} // namespace ecp_mp
+} // namespace mrrocpp
 
 #endif
 

@@ -15,7 +15,12 @@
 #include "ecp_mp/ecp_mp_s_pcbird.h"
 #include "ecp_mp/ecp_mp_task.h"
 
+
+
 using namespace std;
+
+namespace mrrocpp {
+namespace ecp_mp {
 
 /*!
  * Constructor. Creates socket connection to pcbird.
@@ -84,3 +89,6 @@ void ecp_mp_pcbird_sensor::terminate() {
 	close(sockfd);
 	sr_ecp_msg.message("Terminate\n");
 } // end: terminate()
+
+} // namespace ecp_mp
+} // namespace mrrocpp

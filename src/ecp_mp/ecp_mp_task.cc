@@ -28,6 +28,9 @@
 #include "ecp_mp/ecp_mp_sensor.h"
 #include "ecp/common/ECP_main_error.h"
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 sr_ecp* ecp_mp_task::sr_ecp_msg = NULL;
 
 // mapa wszystkich czujnikow
@@ -261,3 +264,7 @@ void ecp_mp_task::all_sensors_get_reading (std::map <SENSOR_ENUM, sensor*>& _sen
 		}
 	}
 }
+
+} // namespace ecp_mp
+} // namespace mrrocpp
+

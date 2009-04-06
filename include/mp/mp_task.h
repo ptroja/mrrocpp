@@ -2,11 +2,13 @@
 #define MP_TASK_H_
 
 #include "mp/mp_generator.h"
-#include "mp/mp_robot.h"
 #include "mp/mp.h"
 
 #include <list>
 #include <map>
+
+using namespace mrrocpp;
+using namespace ecp_mp;
 
 // klasa globalna dla calego procesu MP
 class mp_task: public ecp_mp_task

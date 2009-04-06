@@ -16,6 +16,9 @@
 #include <fcntl.h>
 #include <string.h>
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 ecp_mp_sensor::ecp_mp_sensor(SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object)
 	: sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(_sensor_name)
 {
@@ -152,3 +155,7 @@ void ecp_mp_sensor::get_reading(SENSOR_IMAGE* sensor_image) {
 		sr_ecp_msg.message ("Reply from VSP not ok");
 	}
 }
+
+} // namespace ecp_mp
+} // namespace mrrocpp
+

@@ -21,6 +21,9 @@
 #include "ecp_mp/transmitter.h"
 #include "common/sensor.h"
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 // klasa macierzysta dla klas globalnych procesow ECP i MP
 class ecp_mp_task {
 
@@ -86,5 +89,8 @@ class ECP_MP_main_error
 };
 
 // ---------------------------------------------------------------
+
+} // namespace ecp_mp
+} // namespace mrrocpp
 
 #endif /* _ECP_MP_H */

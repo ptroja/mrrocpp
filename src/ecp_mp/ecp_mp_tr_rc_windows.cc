@@ -25,6 +25,9 @@
 #include "lib/srlib.h"					// klasy bledow
 #include "ecp_mp/ecp_mp_tr_rc_windows.h"
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 rc_win_buf_typedef *rc_windows_transmitter::rc_win_buf = NULL;
 
 rc_windows_transmitter::rc_windows_transmitter  (
@@ -208,3 +211,7 @@ bool rc_windows_transmitter::t_read(bool wait) {
 		}
 	}
 }
+
+} // namespace ecp_mp
+} // namespace mrrocpp
+

@@ -10,6 +10,9 @@
 #ifndef __ECP_MP_T_MULTIPLAYER_H
 #define __ECP_MP_T_MULTIPLAYER_H
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 enum RCSC_ECP_STATES {
 	ECP_WEIGHT_MEASURE_GENERATOR,
 	ECP_GEN_TRANSPARENT,
@@ -21,5 +24,8 @@ enum RCSC_ECP_STATES {
 };
 
 enum MULTIPLAYER_GRIPPER_OP {MULTIPLAYER_GO_VAR_1, MULTIPLAYER_GO_VAR_2};
+
+} // namespace ecp_mp
+} // namespace mrrocpp
 
 #endif

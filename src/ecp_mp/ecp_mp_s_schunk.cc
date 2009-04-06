@@ -10,6 +10,9 @@
 #include "ecp_mp/ecp_mp_sensor.h"		// zawiera klase ecp_mp_sensor
 #include "ecp_mp/ecp_mp_s_schunk.h"		// zawiera klase ecp_mp_schunk_sensor
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 /***************************** CONSTRUCTOR ********************************/
 ecp_mp_schunk_sensor::ecp_mp_schunk_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object):
 	ecp_mp_sensor (_sensor_name, _section_name, _ecp_mp_object) {
@@ -19,3 +22,6 @@ ecp_mp_schunk_sensor::ecp_mp_schunk_sensor (SENSOR_ENUM _sensor_name, const char
 // inicjacja odczytu dla VSP
 void ecp_mp_schunk_sensor::initiate_reading(){ // by Y - wywalone ze wzgledu na prace nieinteraktywna
 }
+
+} // namespace ecp_mp
+} // namespace mrrocpp

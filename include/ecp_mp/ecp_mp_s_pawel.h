@@ -12,6 +12,9 @@
 
 #include "ecp_mp/ecp_mp_sensor.h"				// klasa bazowa sensor
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 /***************** Klasa czujnikow ********************/
 class ecp_mp_pawel_sensor: public ecp_mp_sensor{
 
@@ -27,5 +30,8 @@ class ecp_mp_pawel_sensor: public ecp_mp_sensor{
 	    void initiate_reading (void);	
 	    void get_reading (void);											
 }; 
+
+} // namespace ecp_mp
+} // namespace mrrocpp
 
 #endif

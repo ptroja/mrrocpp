@@ -14,6 +14,9 @@
 #include "ecp_mp/ecp_mp_s_cvfradia.h"
 #include "ecp_mp/ecp_mp_task.h"
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 using namespace std;
 
 /*!
@@ -140,4 +143,7 @@ void ecp_mp_cvfradia_sensor::terminate() {
 	close(sockfd);
 	sr_ecp_msg.message("Terminate\n");
 } // end: terminate()
+
+} // namespace ecp_mp
+} // namespace mrrocpp
 

@@ -9,6 +9,8 @@
 #include <map>
 #include "mp/Trajectory.h"
 
+
+
 class ecp_generator;
 
 // klasa globalna dla calego procesu MP

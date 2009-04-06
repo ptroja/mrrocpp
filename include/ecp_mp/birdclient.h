@@ -3,6 +3,9 @@
 
 #include <inttypes.h>
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 // struktura z pozycja i katami pcbirda
 typedef struct {
     float x, y, z;	// pozycja
@@ -32,6 +35,8 @@ int pcbird_data_avail(int fd);
 // nieblokujacy odczyt pozycji w trybie streaming
 int pcbird_get_streaming_position(int fd, pcbird_pos_t *p);
 
+} // namespace ecp_mp
+} // namespace mrrocpp
 
 #endif
 

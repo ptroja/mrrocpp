@@ -5,6 +5,9 @@
 
 #include "ecp_mp/ecp_mp_sensor.h"
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 #define BUFFER_SIZE 8*256
 
 /**
@@ -81,4 +84,8 @@ public:
 	 */
 	void terminate();
 };
+
+} // namespace ecp_mp
+} // namespace mrrocpp
+
 #endif

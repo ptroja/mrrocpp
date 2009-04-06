@@ -5,6 +5,9 @@
 
 #include "messip/messip.h"
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 // TODO: Forward declaration
 class ecp_mp_task;
 
@@ -36,5 +39,8 @@ public:
 	virtual void get_reading();
 	virtual void get_reading(SENSOR_IMAGE *sensor_image);
 };
+
+} // namespace ecp_mp
+} // namespace mrrocpp
 
 #endif /* _ECP_MP_SENSOR_H */

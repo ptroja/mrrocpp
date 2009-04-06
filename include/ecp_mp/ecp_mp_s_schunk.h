@@ -12,6 +12,9 @@
 
 #include "ecp_mp/ecp_mp_sensor.h"				// klasa bazowa sensor
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 /***************** Klasa czujnikow ********************/
 class ecp_mp_schunk_sensor: public ecp_mp_sensor{
 	public:
@@ -21,5 +24,8 @@ class ecp_mp_schunk_sensor: public ecp_mp_sensor{
 
 	void initiate_reading (void);		// zadanie odczytu od VSP
 }; 
+
+} // namespace ecp_mp
+} // namespace mrrocpp
 
 #endif

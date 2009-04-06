@@ -9,6 +9,9 @@
 
 using namespace std;
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 ecp_mp_wiimote_sensor::ecp_mp_wiimote_sensor(SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object, int _union_size)
 	: sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(_sensor_name)
 {
@@ -106,3 +109,6 @@ void ecp_mp_wiimote_sensor::terminate() {
 	close(sockfd);
 	sr_ecp_msg.message("Terminate\n");
 }
+
+} // namespace ecp_mp
+} // namespace mrrocpp

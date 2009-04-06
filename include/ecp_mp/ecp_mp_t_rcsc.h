@@ -10,6 +10,9 @@
 #ifndef __ECP_MP_T_RCSC_H
 #define __ECP_MP_T_RCSC_H
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 enum RCSC_ECP_STATES {ECP_GEN_TRANSPARENT, ECP_GEN_TFF_NOSE_RUN, ECP_GEN_TEACH_IN,
                       ECP_GEN_SMOOTH,
                       ECP_GEN_TFF_RUBIK_GRAB, ECP_GEN_TFF_RUBIK_FACE_ROTATE, ECP_GEN_TFF_GRIPPER_APPROACH,
@@ -24,5 +27,8 @@ enum RCSC_TURN_ANGLES {RCSC_CCL_90, RCSC_CL_0, RCSC_CL_90, RCSC_CL_180};
 enum RCSC_RUBIK_GRAB_PHASES { RCSC_RG_FROM_OPEARTOR_PHASE_1, RCSC_RG_FROM_OPEARTOR_PHASE_2,
                               RCSC_RG_FCHANGE_PHASE_1, RCSC_RG_FCHANGE_PHASE_2, RCSC_RG_FCHANGE_PHASE_3, RCSC_RG_FCHANGE_PHASE_4
                             };
+
+} // namespace ecp_mp
+} // namespace mrrocpp
 
 #endif

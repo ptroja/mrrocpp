@@ -1,5 +1,8 @@
 #include "ecp_mp/ecp_mp_generator.h"
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 ecp_mp_generator::ecp_mp_generator(sr_ecp& _sr_ecp_msg) :
         sr_ecp_msg(_sr_ecp_msg),
         trigger(false),
@@ -22,3 +25,6 @@ bool ecp_mp_generator::check_and_null_trigger()
 
 ecp_mp_generator::~ecp_mp_generator()
 {}
+
+} // namespace ecp_mp
+} // namespace mrrocpp

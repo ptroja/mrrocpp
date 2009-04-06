@@ -16,6 +16,9 @@
 
 #include "ecp_mp/transmitter.h"				// klasa bazowa transmitter
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 typedef struct {
 	char response[1024];
 	char request[255];
@@ -45,5 +48,8 @@ class rc_windows_transmitter: public transmitter{
 	// zapis
 	virtual bool t_write (void);
 }; 
+
+} // namespace ecp_mp
+} // namespace mrrocpp
 
 #endif

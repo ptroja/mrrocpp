@@ -10,6 +10,9 @@
 #include "ecp_mp/ecp_mp_tr_player.h"
 #include "player/playerc.h"
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 player_transmitter::player_transmitter  (
     TRANSMITTER_ENUM _transmitter_name, const char* _section_name, ecp_mp_task& _ecp_mp_object,
     const char *host, unsigned int port,
@@ -320,3 +323,6 @@ int player_transmitter::say(const char *str)
 
 	return playerc_client_write(client, device, &cmd, sizeof(cmd));
 }
+
+} // namespace ecp_mp
+} // namespace mrrocpp

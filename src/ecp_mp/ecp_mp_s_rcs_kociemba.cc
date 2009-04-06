@@ -20,6 +20,8 @@
 
 #include "ecp_mp/ecp_mp_s_rcs_kociemba.h"
 
+namespace mrrocpp {
+namespace ecp_mp {
 
 /***************************** CONSTRUCTOR ********************************/
 ecp_mp_rcs_kociemba::ecp_mp_rcs_kociemba(SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object)
@@ -74,3 +76,7 @@ void ecp_mp_rcs_kociemba::get_reading() {
 		printf("ECP_MP KC get_reading: Reply from VSP not OK!\n");
 	}
 } // end: get_reading
+
+} // namespace ecp_mp
+} // namespace mrrocpp
+

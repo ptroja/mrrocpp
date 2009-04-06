@@ -10,6 +10,9 @@
 	ECP_END_POURING, ECP_GEN_SMOOTH, GRIP, LET_GO, WEIGHT
 };*/
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 enum POURING_GRIPPER_OP {RCSC_GO_VAR_1 = 0, RCSC_GO_VAR_2};
 
 enum POURING_PHASES { POURING_PHASE_1 = 0, POURING_PHASE_2,
@@ -29,5 +32,8 @@ enum STATE_MACHINE_ECP_STATES {
 	ECP_WEIGHT_MEASURE_GENERATOR,
 	ECP_TOOL_CHANGE_GENERATOR
 };
+
+} // namespace ecp_mp
+} // namespace mrrocpp
 
 #endif// -------------------------------------------------------------------------

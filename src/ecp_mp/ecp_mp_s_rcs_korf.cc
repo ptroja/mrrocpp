@@ -20,6 +20,9 @@
 
 #include "ecp_mp/ecp_mp_s_rcs_korf.h"
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 /***************************** CONSTRUCTOR ********************************/
 ecp_mp_rcs_korf::ecp_mp_rcs_korf(SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object)
 	: ecp_mp_sensor(_sensor_name, _section_name, _ecp_mp_object) {
@@ -72,3 +75,7 @@ void ecp_mp_rcs_korf::get_reading() {
 		printf("ECP_MP KR get_reading: Reply from VSP not OK!\n");
 	}
 } // end: get_reading
+
+} // namespace ecp_mp
+} // namespace mrrocpp
+

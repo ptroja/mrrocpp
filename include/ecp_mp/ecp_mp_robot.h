@@ -6,6 +6,9 @@
 #include "common/sensor.h"
 #include "ecp_mp/transmitter.h"
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 struct robot_transmission_data
 {
 
@@ -142,5 +145,9 @@ public:
 
 	ecp_mp_robot(ROBOT_ENUM _robot_name);
 };
+
+} // namespace ecp_mp
+} // namespace mrrocpp
+
 
 #endif

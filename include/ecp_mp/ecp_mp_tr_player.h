@@ -7,6 +7,9 @@
 #include "ecp_mp/transmitter.h"				// klasa bazowa transmitter
 #include "player/playerc.h"
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 /***************** Klasa czujnikow ********************/
 class player_transmitter: public transmitter{
   private:						// pola do komunikacji
@@ -36,5 +39,8 @@ class player_transmitter: public transmitter{
 	int position_set_cmd_pose(double gx = 0.0, double gy = 0.0, double ga = 0.0, int state = 1);
 	int say(const char *str);
 }; 
+
+} // namespace ecp_mp
+} // namespace mrrocpp
 
 #endif

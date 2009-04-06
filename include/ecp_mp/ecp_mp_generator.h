@@ -6,6 +6,9 @@
 #include "common/sensor.h"
 #include "ecp_mp/transmitter.h"
 
+namespace mrrocpp {
+namespace ecp_mp {
+
 class ecp_mp_generator
 {
 		// Klasa bazowa dla generatorow trajektorii (klasa abstrakcyjna)
@@ -42,5 +45,8 @@ class ecp_mp_generator
 		// (zadanie realizowane przez klase konkretna)
 		virtual bool next_step (void) = 0;
 };
+
+} // namespace ecp_mp
+} // namespace mrrocpp
 
 #endif /*ECP_MP_GENERATOR_H_*/
