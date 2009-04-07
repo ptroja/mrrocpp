@@ -355,7 +355,7 @@ void mp_task_fsautomat::runEmptyGenForSet(State &state)
 void mp_task_fsautomat::executeMotion(State &state)
 {
 	int trjConf = config.return_int_value("trajectory_from_xml", "[xml_settings]");
-	if (trjConf && state.getGeneratorType() == ECP_GEN_SMOOTH) {
+	if (trjConf && state.getGeneratorType() == ecp_mp::task::ECP_GEN_SMOOTH) {
 		set_next_ecps_state((int) state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 1,
 				state.getRobot());
 	} else {

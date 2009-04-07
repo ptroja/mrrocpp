@@ -72,15 +72,15 @@ void mp_task_vis_nn::main_task_algorithm(void)
 		sensor_m_iterator->second->configure_sensor();
 	}
 
-	set_next_ecps_state((int) ECP_GEN_TEACH_IN, 0, "../trj/rcsc/irp6ot_ap_1.trj", 1, ROBOT_IRP6_ON_TRACK);
+	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_TEACH_IN, 0, "../trj/rcsc/irp6ot_ap_1.trj", 1, ROBOT_IRP6_ON_TRACK);
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_ON_TRACK);
 
-	set_next_ecps_state((int) ECP_GEN_TEACH_IN, 0, "../trj/rcsc/irp6ot_ap_2.trj", 1, ROBOT_IRP6_ON_TRACK);
+	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_TEACH_IN, 0, "../trj/rcsc/irp6ot_ap_2.trj", 1, ROBOT_IRP6_ON_TRACK);
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_ON_TRACK);
 
 	// wlaczenie generatora transparentnego w obu robotach
-	set_next_ecps_state((int) ECP_GEN_TRANSPARENT, (int) 1, "", 1, ROBOT_IRP6_ON_TRACK);
+	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 1, "", 1, ROBOT_IRP6_ON_TRACK);
 
 	// opcjonalne serwo wizyjne
 	//if (mode)
@@ -92,11 +92,11 @@ void mp_task_vis_nn::main_task_algorithm(void)
 	send_end_motion_to_ecps(1, ROBOT_IRP6_ON_TRACK);
 
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
-	set_next_ecps_state((int) ECP_GEN_TFF_RUBIK_GRAB, (int) RCSC_RG_FROM_OPEARTOR_PHASE_1, "", 1, ROBOT_IRP6_ON_TRACK);
+	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FROM_OPEARTOR_PHASE_1, "", 1, ROBOT_IRP6_ON_TRACK);
 	// uruchomienie generatora empty_gen
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_ON_TRACK);
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
-	set_next_ecps_state((int) ECP_GEN_TFF_RUBIK_GRAB, (int) RCSC_RG_FROM_OPEARTOR_PHASE_2, "", 1, ROBOT_IRP6_ON_TRACK);
+	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FROM_OPEARTOR_PHASE_2, "", 1, ROBOT_IRP6_ON_TRACK);
 	// uruchomienie generatora empty_gen
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_ON_TRACK);
 

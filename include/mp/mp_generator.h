@@ -5,8 +5,6 @@
 #include "mp/mp_robot.h"
 #include "ecp_mp/ecp_mp_generator.h"
 
-using namespace ecp_mp;
-using namespace generator;
 
 
 class mp_task;
@@ -14,7 +12,7 @@ class mp_robot;
 
 #include <map>
 
-class mp_generator : public ecp_mp_generator
+class mp_generator : public ecp_mp::generator::ecp_mp_generator
 {
 	protected:
 

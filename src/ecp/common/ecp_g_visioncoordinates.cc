@@ -45,7 +45,7 @@ bool ecp_visioncoordinates_generator::first_step()
 	if (!the_robot)
 		debugmsg("VCG: the robot not exists");
 
-	robot_transmission_data& data = the_robot->EDP_data;
+	ecp_mp::robot_transmission_data& data = the_robot->EDP_data;
 
 	debugmsg("VCG: robot_transmission_data ready");
 
@@ -104,7 +104,7 @@ bool ecp_visioncoordinates_generator::next_step()
 	const double xoz = sensor.sensor_union.visioncoordinates.xOz;
 	const double z = sensor.sensor_union.visioncoordinates.z;
 
-	robot_transmission_data& data = the_robot->EDP_data;
+	ecp_mp::robot_transmission_data& data = the_robot->EDP_data;
 
 	std::ostringstream oss;
 

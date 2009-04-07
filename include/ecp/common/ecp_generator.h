@@ -15,11 +15,7 @@
 
 
 
-using namespace generator;
-using namespace transmitter;
-
-
-class ecp_generator : public ecp_mp_generator {
+class ecp_generator : public ecp_mp::generator::ecp_mp_generator {
 
 	protected:
 		ecp_task& ecp_t;

@@ -65,23 +65,23 @@ void ecp_task_multiplayer_irp6ot::main_task_algorithm(void)
 
 		sr_ecp_msg->message("Order received");
 
-		switch ( (RCSC_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
-			case ECP_WEIGHT_MEASURE_GENERATOR:
+		switch ( (ecp_mp::task::RCSC_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
+			case ecp_mp::task::ECP_WEIGHT_MEASURE_GENERATOR:
 				wmg->Move();
 				break;
-			case ECP_GEN_TRANSPARENT:
+			case ecp_mp::task::ECP_GEN_TRANSPARENT:
 				gt->Move();
 				break;
-			case ECP_GEN_BIAS_EDP_FORCE:
+			case ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE:
 				befg->Move();
 				break;
-			case MULTIPLAYER_GRIPPER_OPENING:
-				switch ( (MULTIPLAYER_GRIPPER_OP) mp_command.ecp_next_state.mp_2_ecp_next_state_variant) {
-					case MULTIPLAYER_GO_VAR_1:
+			case ecp_mp::task::MULTIPLAYER_GRIPPER_OPENING:
+				switch ( (ecp_mp::task::MULTIPLAYER_GRIPPER_OP) mp_command.ecp_next_state.mp_2_ecp_next_state_variant) {
+					case ecp_mp::task::MULTIPLAYER_GO_VAR_1:
 						go_st->configure(0.002, 1000);
 						go_st->execute();
 						break;
-					case MULTIPLAYER_GO_VAR_2:
+					case ecp_mp::task::MULTIPLAYER_GO_VAR_2:
 						go_st->configure(0.02, 1000);
 						go_st->execute();
 						break;
@@ -89,7 +89,7 @@ void ecp_task_multiplayer_irp6ot::main_task_algorithm(void)
 						break;
 				}
 				break;
-			case ECP_GEN_SMOOTH:
+			case ecp_mp::task::ECP_GEN_SMOOTH:
 				size = strlen(mrrocpp_network_path)
 						+ strlen(mp_command.ecp_next_state.mp_2_ecp_next_state_string) + 1;
 				path1 = new char[size];
@@ -103,13 +103,13 @@ void ecp_task_multiplayer_irp6ot::main_task_algorithm(void)
 			default:
 				break;
 
-			case ECP_GEN_TAKE_FROM_ROVER:
+			case ecp_mp::task::ECP_GEN_TAKE_FROM_ROVER:
 				sr_ecp_msg->message("MOVE");
 				takeg->Move();
 				sr_ecp_msg->message("STOP MOVE");
 			break;
 
-			case ECP_GEN_GRAB_FROM_ROVER:
+			case ecp_mp::task::ECP_GEN_GRAB_FROM_ROVER:
 			sr_ecp_msg->message("GRAB");
 				rgg->configure(0.057, 0.00005, 0);
 				rgg->Move();

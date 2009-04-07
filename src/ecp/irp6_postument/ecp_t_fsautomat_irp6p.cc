@@ -231,9 +231,9 @@ void ecp_task_fsautomat_irp6p::main_task_algorithm(void)
 
 		sr_ecp_msg->message("Order received");
 
-		switch ( (STATE_MACHINE_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
+		switch ( (ecp_mp::task::STATE_MACHINE_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
 		{
-			case ECP_GEN_TEACH_IN:
+			case ecp_mp::task::ECP_GEN_TEACH_IN:
 				size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				path1 = new char[size];
 				sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
@@ -243,7 +243,7 @@ void ecp_task_fsautomat_irp6p::main_task_algorithm(void)
 				delete[] path1;
 				tig->Move();
 				break;
-			case ECP_GEN_SMOOTH:
+			case ecp_mp::task::ECP_GEN_SMOOTH:
 				if(trjConf)
 				{
 					if(ecpLevel)
@@ -269,19 +269,19 @@ void ecp_task_fsautomat_irp6p::main_task_algorithm(void)
 				}
 				sg->Move();
 				break;
-			case ECP_WEIGHT_MEASURE_GENERATOR:
+			case ecp_mp::task::ECP_WEIGHT_MEASURE_GENERATOR:
 				wmg->Move();
 				break;
-			case ECP_GEN_TRANSPARENT:
+			case ecp_mp::task::ECP_GEN_TRANSPARENT:
 				gt->Move();
 				break;
-			case ECP_GEN_BIAS_EDP_FORCE:
+			case ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE:
 				befg->Move();
 				break;
-			case ECP_GEN_TFF_NOSE_RUN:
+			case ecp_mp::task::ECP_GEN_TFF_NOSE_RUN:
 				nrg->Move();
 				break;
-			case ECP_GEN_TFF_RUBIK_GRAB:
+			case ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB:
 				gen_args = new double[4];
 				size = Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				if(size > 3)
@@ -291,28 +291,28 @@ void ecp_task_fsautomat_irp6p::main_task_algorithm(void)
 				rgg->Move();
 				delete[] gen_args;
 				break;
-			case ECP_GEN_TFF_RUBIK_FACE_ROTATE:
+			case ecp_mp::task::ECP_GEN_TFF_RUBIK_FACE_ROTATE:
 				gen_args = new double[1];
 				Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				rfrg->configure(gen_args[0]);
 				rfrg->Move();
 				delete[] gen_args;
 				break;
-			case ECP_GEN_TFF_GRIPPER_APPROACH:
+			case ecp_mp::task::ECP_GEN_TFF_GRIPPER_APPROACH:
 				gen_args = new double[2];
 				Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				gag->configure(gen_args[0] , (int)gen_args[1]);
 				gag->Move();
 				delete[] gen_args;
 				break;
-			case ECP_TOOL_CHANGE_GENERATOR:
+			case ecp_mp::task::ECP_TOOL_CHANGE_GENERATOR:
 				gen_args = new double[3];
 				Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				tcg->set_tool_parameters(gen_args[0], gen_args[1], gen_args[2]);
 				tcg->Move();
 				delete[] gen_args;
 				break;
-			case RCSC_GRIPPER_OPENING:
+			case ecp_mp::task::RCSC_GRIPPER_OPENING:
 				gen_args = new double[2];
 				Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				go_st->configure(gen_args[0], (int)gen_args[1]);

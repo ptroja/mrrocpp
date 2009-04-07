@@ -10,15 +10,12 @@
 
 
 
-using namespace ecp_mp;
-using namespace task;
-
 class ui_common_robot;
 
 
 class ecp_task;
 
-class ecp_robot : public ecp_mp_robot
+class ecp_robot : public ecp_mp::ecp_mp_robot
 {
 	friend class ui_common_robot;
 	friend class ecp_generator_t;
@@ -75,7 +72,7 @@ public:
 	messip_channel_t *EDP_fd;
 #endif
 
-	robot_transmission_data EDP_data; // Obraz robota wykorzystywany przez generator
+	ecp_mp::robot_transmission_data EDP_data; // Obraz robota wykorzystywany przez generator
 
 	virtual void execute_motion (void);
 	// Zlecenie wykonania ruchu przez robota (realizowane przez klase konkretna):

@@ -14,7 +14,6 @@
 #include "mp/Transition.h"
 
 
-using namespace ecp_mp;
 
 //enum StateType { INITIALIZATION, MOTION_EXECUTE };
 

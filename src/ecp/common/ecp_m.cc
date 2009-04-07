@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 
 		ecp_t->task_initialization();
 	}
-	catch (ECP_MP_main_error e) {
+	catch (ecp_mp::task::ECP_MP_main_error e) {
 		if (e.error_class == SYSTEM_ERROR)
 			exit(EXIT_FAILURE);
 	}
@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
 			ecp_t->sr_ecp_msg->message("Press STOP");
 		}
 
-		catch (ECP_MP_main_error e) {
+		catch (ecp_mp::task::ECP_MP_main_error e) {
 			if (e.error_class == SYSTEM_ERROR)
 				exit(EXIT_FAILURE);
 		}

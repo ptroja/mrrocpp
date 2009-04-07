@@ -7,7 +7,7 @@
 
 
 // ------------------------------------------------------------------------
-struct robot_ECP_transmission_data : robot_transmission_data
+struct robot_ECP_transmission_data : ecp_mp::robot_transmission_data
 {
 public:
     MP_COMMAND mp_command;                // polecenie przesylane z MP do ECP
@@ -24,7 +24,7 @@ public:
 
 
 
-class mp_robot : public ecp_mp_robot
+class mp_robot : public ecp_mp::ecp_mp_robot
 {
     // Klasa bazowa dla robotow (klasa abstrakcyjna)
     // Kazdy robot konkretny (wyprowadzony z klasy bazowej)

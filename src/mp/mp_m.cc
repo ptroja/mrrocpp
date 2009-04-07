@@ -70,7 +70,7 @@ int main (int argc, char *argv[], char **arge)
 			mp_t->task_initialization();
 
 		}
-		catch (ECP_MP_main_error e) {
+		catch (ecp_mp::task::ECP_MP_main_error e) {
 			/* Obsluga bledow ECP_MP_main_error */
 			if (e.error_class == SYSTEM_ERROR)
 				exit(EXIT_FAILURE);
@@ -134,7 +134,7 @@ int main (int argc, char *argv[], char **arge)
 				mp_t->terminate_all (mp_t->robot_m);
 			}  // end: try
 
-			catch (ECP_MP_main_error e) {
+			catch (ecp_mp::task::ECP_MP_main_error e) {
 				/* Obsluga bledow ECP_MP_main_error */
 				if (e.error_class == SYSTEM_ERROR)
 					exit(EXIT_FAILURE);

@@ -54,7 +54,7 @@ bool playerjoy_generator::next_step ( )
     the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
     
 
-    transmitter_m[TRANSMITTER_PLAYER]->t_read(0);
+    transmitter_m[ecp_mp::transmitter::TRANSMITTER_PLAYER]->t_read(0);
     /*
     printf("%f %f 0x%04x\n",
             transmitter_m[TRANSMITTER_PLAYER]->from_va.player_joystick.px,
@@ -71,10 +71,10 @@ bool playerjoy_generator::next_step ( )
         }
         else
         {
-            if (transmitter_m[TRANSMITTER_PLAYER]->from_va.player_joystick.buttons & (1 << i))
+            if (transmitter_m[ecp_mp::transmitter::TRANSMITTER_PLAYER]->from_va.player_joystick.buttons & (1 << i))
             {
                 start_joint_arm_coordinates[i] +=
-                    transmitter_m[TRANSMITTER_PLAYER]->from_va.player_joystick.px*(16*(10*M_PI/180)/1000/4);
+                    transmitter_m[ecp_mp::transmitter::TRANSMITTER_PLAYER]->from_va.player_joystick.px*(16*(10*M_PI/180)/1000/4);
             }
         }
     }

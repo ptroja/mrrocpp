@@ -10,7 +10,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace generator {
 
-// using namespace transmitter;
+
 
 class ecp_mp_generator
 {

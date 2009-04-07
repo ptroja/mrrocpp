@@ -73,9 +73,9 @@ void ecp_task_pouring_irp6p::main_task_algorithm(void)
 
     	sr_ecp_msg->message("Order received");
 
-    	switch ( (POURING_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
+    	switch ( (ecp_mp::task::POURING_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
     	{
-    		case ECP_GEN_SMOOTH:
+    		case ecp_mp::task::ECP_GEN_SMOOTH:
     			size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
     			path1 = new char[size];
     			strcpy(path1, mrrocpp_network_path);
@@ -84,15 +84,15 @@ void ecp_task_pouring_irp6p::main_task_algorithm(void)
     			delete[] path1;
     			sg->Move();
     			break;
-    		case GRIP:
+    		case ecp_mp::task::GRIP:
     			go_st->configure(-0.018, 1000);
     			go_st->execute();
     			break;
-    		case LET_GO:
+    		case ecp_mp::task::LET_GO:
     			go_st->configure(0.015, 2000);
     			go_st->execute();
     			break;
-    		case WEIGHT:
+    		case ecp_mp::task::WEIGHT:
     			printf("force0: %f\n", sensor_m.begin()->second->image.sensor_union.force.rez[0]);
     			printf("force1: %f\n", sensor_m.begin()->second->image.sensor_union.force.rez[0]);
     			printf("force2: %f\n", sensor_m.begin()->second->image.sensor_union.force.rez[0]);

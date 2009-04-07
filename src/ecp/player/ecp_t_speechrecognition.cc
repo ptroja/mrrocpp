@@ -37,9 +37,9 @@ void ecp_task_speechrecognition::main_task_algorithm(void)
 
         sr_ecp_msg->message("Order received");
 
-        switch ( (ECP_PLAYER_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
+        switch ( (ecp_mp::task::ECP_PLAYER_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
         {
-        	case ECP_GEN_SPEECHRECOGNITION:
+        	case ecp_mp::task::ECP_GEN_SPEECHRECOGNITION:
         		srg->Move();
         		break;
         	default:

@@ -35,8 +35,8 @@ void ecp_task_festival::main_task_algorithm(void)
 
 		sr_ecp_msg->message("NEXT_STATE received");
 
-		switch ( (ECP_FESTIVAL_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
-			case ECP_GEN_FESTIVAL:
+		switch ( (ecp_mp::task::ECP_FESTIVAL_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
+			case ecp_mp::task::ECP_GEN_FESTIVAL:
 				if(isTest)
 					sr_ecp_msg->message(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				else

@@ -59,37 +59,37 @@ void ecp_task_rcsc_irp6p::main_task_algorithm(void)
 
 		sr_ecp_msg->message("Order received");
 
-		switch ( (RCSC_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
+		switch ( (ecp_mp::task::RCSC_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
 		{
-			case ECP_GEN_TRANSPARENT:
+			case ecp_mp::task::ECP_GEN_TRANSPARENT:
 				gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
 				gt->Move();
 				break;
-			case ECP_GEN_BIAS_EDP_FORCE:
+			case ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE:
 				befg->Move();
 				break;
-			case ECP_GEN_TFF_NOSE_RUN:
+			case ecp_mp::task::ECP_GEN_TFF_NOSE_RUN:
 				nrg->Move();
 				break;
-			case ECP_GEN_TFF_RUBIK_GRAB:
-				switch ( (RCSC_RUBIK_GRAB_PHASES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+			case ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB:
+				switch ( (ecp_mp::task::RCSC_RUBIK_GRAB_PHASES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
 				{
-					case RCSC_RG_FROM_OPEARTOR_PHASE_1:
+					case ecp_mp::task::RCSC_RG_FROM_OPEARTOR_PHASE_1:
 						rgg->configure(0.057, 0.00005, 0);
 						break;
-					case RCSC_RG_FROM_OPEARTOR_PHASE_2:
+					case ecp_mp::task::RCSC_RG_FROM_OPEARTOR_PHASE_2:
 						rgg->configure(0.057, 0.00005, 50);
 						break;
-					case RCSC_RG_FCHANGE_PHASE_1:
+					case ecp_mp::task::RCSC_RG_FCHANGE_PHASE_1:
 						rgg->configure(0.072, 0.00005, 0, false);
 						break;
-					case RCSC_RG_FCHANGE_PHASE_2:
+					case ecp_mp::task::RCSC_RG_FCHANGE_PHASE_2:
 						rgg->configure(0.062, 0.00005, 0);
 						break;
-					case RCSC_RG_FCHANGE_PHASE_3:
+					case ecp_mp::task::RCSC_RG_FCHANGE_PHASE_3:
 						rgg->configure(0.057, 0.00005, 0);
 						break;
-					case RCSC_RG_FCHANGE_PHASE_4:
+					case ecp_mp::task::RCSC_RG_FCHANGE_PHASE_4:
 						rgg->configure(0.057, 0.00005, 50);
 						break;
 					default:
@@ -97,23 +97,23 @@ void ecp_task_rcsc_irp6p::main_task_algorithm(void)
 				}
 				rgg->Move();
 				break;
-					case ECP_GEN_TFF_GRIPPER_APPROACH:
+					case ecp_mp::task::ECP_GEN_TFF_GRIPPER_APPROACH:
 						gag->configure(0.005, 150);
 						gag->Move();
 						break;
-					case ECP_GEN_TFF_RUBIK_FACE_ROTATE:
-						switch ( (RCSC_TURN_ANGLES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+					case ecp_mp::task::ECP_GEN_TFF_RUBIK_FACE_ROTATE:
+						switch ( (ecp_mp::task::RCSC_TURN_ANGLES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
 						{
-							case RCSC_CCL_90:
+							case ecp_mp::task::RCSC_CCL_90:
 								rfrg->configure(-90.0);
 								break;
-							case RCSC_CL_0:
+							case ecp_mp::task::RCSC_CL_0:
 								rfrg->configure(0.0);
 								break;
-							case RCSC_CL_90:
+							case ecp_mp::task::RCSC_CL_90:
 								rfrg->configure(90.0);
 								break;
-							case RCSC_CL_180:
+							case ecp_mp::task::RCSC_CL_180:
 								rfrg->configure(180.0);
 								break;
 							default:
@@ -121,14 +121,14 @@ void ecp_task_rcsc_irp6p::main_task_algorithm(void)
 						}
 						rfrg->Move();
 						break;
-							case RCSC_GRIPPER_OPENING:
-								switch ( (RCSC_TURN_ANGLES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+							case ecp_mp::task::RCSC_GRIPPER_OPENING:
+								switch ( (ecp_mp::task::RCSC_TURN_ANGLES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
 								{
-									case RCSC_GO_VAR_1:
+									case ecp_mp::task::RCSC_GO_VAR_1:
 										go_st->configure(0.002, 1000);
 										go_st->execute();
 										break;
-									case RCSC_GO_VAR_2:
+									case ecp_mp::task::RCSC_GO_VAR_2:
 										go_st->configure(0.02, 1000);
 										go_st->execute();
 										break;
@@ -136,7 +136,7 @@ void ecp_task_rcsc_irp6p::main_task_algorithm(void)
 										break;
 								}
 								break;
-									case ECP_GEN_TEACH_IN:
+									case ecp_mp::task::ECP_GEN_TEACH_IN:
 										size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 										path1 = new char[size];
 										// Stworzenie sciezki do pliku.
@@ -149,7 +149,7 @@ void ecp_task_rcsc_irp6p::main_task_algorithm(void)
 										delete[] path1;
 										tig->Move();
 										break;
-									case ECP_GEN_SMOOTH:
+									case ecp_mp::task::ECP_GEN_SMOOTH:
 										size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 										path1 = new char[size];
 										// Stworzenie sciezki do pliku.

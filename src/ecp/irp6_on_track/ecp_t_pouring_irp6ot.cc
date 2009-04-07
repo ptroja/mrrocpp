@@ -58,9 +58,9 @@ void ecp_task_pouring_irp6ot::main_task_algorithm(void)
 
             sr_ecp_msg->message("Order received");
 
-            switch ( (POURING_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
+            switch ( (ecp_mp::task::POURING_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
             {
-            case ECP_GEN_SMOOTH:
+            case ecp_mp::task::ECP_GEN_SMOOTH:
                 size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
                 path1 = new char[size];
                 // Stworzenie sciezki do pliku.
@@ -73,19 +73,19 @@ void ecp_task_pouring_irp6ot::main_task_algorithm(void)
                 sg->Move();
                 //printf("OT po move\n");
                 break;
-            case ECP_GEN_POURING:
+            case ecp_mp::task::ECP_GEN_POURING:
                 tcg->set_tool_parameters(-0.18, 0.0, 0.25);
                 tcg->Move();
                 break;
-            case ECP_END_POURING:
+            case ecp_mp::task::ECP_END_POURING:
                 tcg->set_tool_parameters(0.0, 0.0, 0.25);
                 tcg->Move();
                 break;
-            case GRIP:
+            case ecp_mp::task::GRIP:
                 go_st->configure(-0.03, 1000);
                 go_st->execute();
                 break;
-            case LET_GO:
+            case ecp_mp::task::LET_GO:
                 go_st->configure(0.03, 1000);
                 go_st->execute();
                 break;

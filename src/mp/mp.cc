@@ -78,7 +78,7 @@ void mp_set_next_ecps_state_generator::configure (int l_mp_2_ecp_next_state, int
 
 void mp_set_next_ecps_state_generator::configure (const playerpos_goal_t &_goal)
 {
-    ecp_next_state.mp_2_ecp_next_state = ECP_GEN_PLAYERPOS;
+    ecp_next_state.mp_2_ecp_next_state = ecp_mp::task::ECP_GEN_PLAYERPOS;
     ecp_next_state.playerpos_goal = _goal;
 }
 
