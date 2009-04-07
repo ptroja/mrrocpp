@@ -72,7 +72,7 @@ class manual_moves_automatic_measures_generator : public ecp_generator {
           void get_mam_list_data (double* robot_position, double* sensor_reading);
 		// Pobranie obecnego polozenia robota.
 		void get_current_position (double* current_position);
-		void get_sensor_reading(ecp_mp_digital_scales_sensor& the_sensor, double* sensor_reading);
+		void get_sensor_reading(ecp_mp::sensor::ecp_mp_digital_scales_sensor& the_sensor, double* sensor_reading);
 
 	public:
 		manual_moves_automatic_measures_generator(ecp_task& _ecp_task, 	int _axes_number);
@@ -84,10 +84,10 @@ class manual_moves_automatic_measures_generator : public ecp_generator {
 		virtual bool next_step ();
 
 		// Wyslanie polecenia odswiezenia okna.
-		void refresh_window(ecp_mp_digital_scales_sensor& the_sensor);
+		void refresh_window(ecp_mp::sensor::ecp_mp_digital_scales_sensor& the_sensor);
 
 		// Dodanie nowego elementu do listy.
-		void add_mam_element(ecp_mp_digital_scales_sensor& the_sensor);
+		void add_mam_element(ecp_mp::sensor::ecp_mp_digital_scales_sensor& the_sensor);
 		// Zapisanie wynikow do pliku.
 		void save_mam_list(char* filename);
 		// Usuniecie wszystkich elementow z listy.

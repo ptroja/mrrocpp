@@ -224,7 +224,7 @@ void ecp_task_mam::task_initialization(void)
 	mam_gen = new manual_moves_automatic_measures_generator(*this, 8);
 
 	// Stworznie obiektu - czujnik zlozony z linialow.
-	sensor_m[SENSOR_DIGITAL_SCALE_SENSOR] = new ecp_mp_digital_scales_sensor(SENSOR_DIGITAL_SCALE_SENSOR, "[vsp_dss]", *this);
+	sensor_m[SENSOR_DIGITAL_SCALE_SENSOR] = new ecp_mp::sensor::ecp_mp_digital_scales_sensor(SENSOR_DIGITAL_SCALE_SENSOR, "[vsp_dss]", *this);
 	// Konfiguracja czujnika.
 	sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]->configure_sensor();
 

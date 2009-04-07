@@ -134,16 +134,16 @@ void mp_task_fsautomat::task_initialization(void)
 	 xmlFreeDoc(doc);
 	 xmlCleanupParser();
 	 */
-	sensor_m[SENSOR_CAMERA_ON_TRACK] = new ecp_mp_vis_sensor(SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
+	sensor_m[SENSOR_CAMERA_ON_TRACK] = new ecp_mp::sensor::ecp_mp_vis_sensor(SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
 	if (config.return_int_value("vis_servoing")) {
 
-		sensor_m[SENSOR_CAMERA_SA] = new ecp_mp_vis_sensor(SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+		sensor_m[SENSOR_CAMERA_SA] = new ecp_mp::sensor::ecp_mp_vis_sensor(SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 
 	}
 
 	// Konfiguracja wszystkich czujnikow
-	for (std::map<SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+	for (std::map<SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 			!= sensor_m.end(); sensor_m_iterator++) {
 		sensor_m_iterator->second->to_vsp.parameters = 1; // biasowanie czujnika
 		sensor_m_iterator->second->configure_sensor();
@@ -152,7 +152,7 @@ void mp_task_fsautomat::task_initialization(void)
 	usleep(1000 * 100);
 
 	// dodanie transmitter'a
-	transmitter_m[TRANSMITTER_RC_WINDOWS] = new rc_windows_transmitter(TRANSMITTER_RC_WINDOWS,
+	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] = new ecp_mp::transmitter::rc_windows_transmitter(ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS,
 			"[transmitter_rc_windows]", *this);
 
 	cube_state = new CubeState();
@@ -306,14 +306,14 @@ std::map<char *, State, ecp_task::str_cmp> * mp_task_fsautomat::takeStatesMap()
 void mp_task_fsautomat::configureProperSensor(char *propSensor)
 {
 	// Powolanie czujnikow
-	sensor_m[SENSOR_CAMERA_ON_TRACK] = new ecp_mp_vis_sensor(SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
+	sensor_m[SENSOR_CAMERA_ON_TRACK] = new ecp_mp::sensor::ecp_mp_vis_sensor(SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
 	if (config.return_int_value("vis_servoing")) {
-		sensor_m[SENSOR_CAMERA_SA] = new ecp_mp_vis_sensor(SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+		sensor_m[SENSOR_CAMERA_SA] = new ecp_mp::sensor::ecp_mp_vis_sensor(SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 	}
 
 	// Konfiguracja wszystkich czujnikow
-	for (std::map<SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+	for (std::map<SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 			!= sensor_m.end(); sensor_m_iterator++) {
 		sensor_m_iterator->second->to_vsp.parameters = 1; // biasowanie czujnika
 		sensor_m_iterator->second->configure_sensor();
@@ -324,7 +324,7 @@ void mp_task_fsautomat::configureProperSensor(char *propSensor)
 void mp_task_fsautomat::configureProperTransmitter(char *propTrans)
 {
 	// dodanie transmitter'a
-	transmitter_m[TRANSMITTER_RC_WINDOWS] = new rc_windows_transmitter(TRANSMITTER_RC_WINDOWS,
+	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] = new ecp_mp::transmitter::rc_windows_transmitter(ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS,
 			"[transmitter_rc_windows]", *this);
 }
 
@@ -366,7 +366,7 @@ void mp_task_fsautomat::executeMotion(State &state)
 
 void mp_task_fsautomat::sensorInitialization()
 {
-	/*	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	/*	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 	 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	 {
 	 sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -576,18 +576,18 @@ void mp_task_fsautomat::communicate_with_windows_solver(State &state)
 	manipulation_list.clear();
 
 	for (int i = 0; i < 54; i++) {
-		transmitter_m[TRANSMITTER_RC_WINDOWS]->to_va.rc_windows.rc_state[i] = cube_tab_send[i];
+		transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->to_va.rc_windows.rc_state[i] = cube_tab_send[i];
 	}
 	//mp_object.transmitter_m[TRANSMITTER_RC_WINDOWS]->to_va.rc_windows.rc_state[i]=patternx[i];
-	transmitter_m[TRANSMITTER_RC_WINDOWS]->to_va.rc_windows.rc_state[54] = '\0';
+	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->to_va.rc_windows.rc_state[54] = '\0';
 
-	transmitter_m[TRANSMITTER_RC_WINDOWS]->t_write();
+	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->t_write();
 
-	transmitter_m[TRANSMITTER_RC_WINDOWS]->t_read(true);
+	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->t_read(true);
 
-	printf("OPS: %s", transmitter_m[TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence);
+	printf("OPS: %s", transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence);
 
-	strcpy(manipulation_sequence, transmitter_m[TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence);
+	strcpy(manipulation_sequence, transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence);
 
 	if ((manipulation_sequence[0] == 'C') && (manipulation_sequence[1] == 'u') && (manipulation_sequence[2] == 'b')
 			&& (manipulation_sequence[3] == 'e')) {
@@ -601,10 +601,10 @@ void mp_task_fsautomat::communicate_with_windows_solver(State &state)
 	//cube_initial_state=BGROWY
 	s = 0;
 	str_size = 0;
-	for (unsigned int char_i = 0; char_i < strlen(transmitter_m[TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence)
+	for (unsigned int char_i = 0; char_i < strlen(transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence)
 			- 1; char_i++) {
 		if (s == 0) {
-			switch (transmitter_m[TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence[char_i])
+			switch (transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence[char_i])
 			{
 				case 'U':
 					manipulation_sequence[str_size] = 'B';
@@ -628,7 +628,7 @@ void mp_task_fsautomat::communicate_with_windows_solver(State &state)
 			s = 1;
 			str_size++;
 		} else if (s == 1) {
-			switch (transmitter_m[TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence[char_i])
+			switch (transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence[char_i])
 			{
 				case ' ':
 					manipulation_sequence[str_size] = '1';
@@ -658,7 +658,7 @@ void mp_task_fsautomat::communicate_with_windows_solver(State &state)
 	manipulation_sequence[str_size] = '\0';
 
 	printf("\n%d %d\n", str_size, strlen(manipulation_sequence));
-	printf("SEQ from win %s\n", transmitter_m[TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence);
+	printf("SEQ from win %s\n", transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence);
 	printf("\nSEQ2 %s\n", manipulation_sequence);
 
 	//pocztaek ukladania
@@ -749,7 +749,7 @@ void mp_task_fsautomat::main_task_algorithm(void)
 	//strcmp(nextState, (char *)"INIT");
 	sprintf(nextState, "INIT");
 	// temporary sensor config in this place
-	for (std::map<SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+	for (std::map<SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 			!= sensor_m.end(); sensor_m_iterator++) {
 		sensor_m_iterator->second->to_vsp.parameters = 1; // biasowanie czujnika
 		sensor_m_iterator->second->configure_sensor();

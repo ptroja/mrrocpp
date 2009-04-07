@@ -32,7 +32,7 @@ void ecp_task_pcbird::task_initialization(void)
 	try
 	{
 		// Create pcbird sensor - for testing purposes.
-		sensor_m[SENSOR_PCBIRD] = new ecp_mp_pcbird_sensor(SENSOR_PCBIRD, "[vsp_pcbird]", *this);
+		sensor_m[SENSOR_PCBIRD] = new ecp_mp::sensor::ecp_mp_pcbird_sensor(SENSOR_PCBIRD, "[vsp_pcbird]", *this);
 		// Configure sensor.
 		sensor_m[SENSOR_PCBIRD]->configure_sensor();
     // Create an adequate robot. - depending on the ini section name.

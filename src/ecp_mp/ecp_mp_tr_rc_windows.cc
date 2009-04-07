@@ -27,13 +27,14 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
+namespace transmitter {
 
 rc_win_buf_typedef *rc_windows_transmitter::rc_win_buf = NULL;
 
 rc_windows_transmitter::rc_windows_transmitter  (
 		TRANSMITTER_ENUM _transmitter_name,
 		const char* _section_name,
-		ecp_mp_task& _ecp_mp_object)  :
+		task::ecp_mp_task& _ecp_mp_object)  :
 			transmitter (_transmitter_name, _section_name, _ecp_mp_object) {
 
 	if(!rc_win_buf) {
@@ -212,6 +213,7 @@ bool rc_windows_transmitter::t_read(bool wait) {
 	}
 }
 
+} // namespace transmitter
 } // namespace ecp_mp
 } // namespace mrrocpp
 

@@ -46,12 +46,12 @@ void mp_task_rcs_test::task_initialization(void)
 	printf("MP Init\n");
 
 	// tworzy i konfiguruje czujnik dla algorytmu Kociemby (w powloce nieinteraktywnej)
-	sensor_m[SENSOR_RCS_KOCIEMBA] = new ecp_mp_rcs_kociemba(SENSOR_RCS_KOCIEMBA, "[vsp_rcs_kociemba]", *this);
+	sensor_m[SENSOR_RCS_KOCIEMBA] = new ecp_mp::sensor::ecp_mp_rcs_kociemba(SENSOR_RCS_KOCIEMBA, "[vsp_rcs_kociemba]", *this);
 	sensor_m[SENSOR_RCS_KOCIEMBA]->to_vsp.rcs.configure_mode = RCS_BUILD_TABLES;
 	sensor_m[SENSOR_RCS_KOCIEMBA]->configure_sensor();
 
 	// tworzy i konfiguruje czujnik dla algorytmu Korfa (w powloce interaktywnej bez oczekiwania)
-	sensor_m[SENSOR_RCS_KORF] = new ecp_mp_rcs_korf(SENSOR_RCS_KORF, "[vsp_rcs_korf]", *this);
+	sensor_m[SENSOR_RCS_KORF] = new ecp_mp::sensor::ecp_mp_rcs_korf(SENSOR_RCS_KORF, "[vsp_rcs_korf]", *this);
 	sensor_m[SENSOR_RCS_KORF]->to_vsp.rcs.configure_mode = RCS_BUILD_TABLES;
 	sensor_m[SENSOR_RCS_KORF]->configure_sensor();
 

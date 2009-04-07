@@ -12,6 +12,7 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
+namespace task {
 
 enum RCSC_ECP_STATES {
 	ECP_WEIGHT_MEASURE_GENERATOR,
@@ -25,6 +26,7 @@ enum RCSC_ECP_STATES {
 
 enum MULTIPLAYER_GRIPPER_OP {MULTIPLAYER_GO_VAR_1, MULTIPLAYER_GO_VAR_2};
 
+} // namespace task
 } // namespace ecp_mp
 } // namespace mrrocpp
 

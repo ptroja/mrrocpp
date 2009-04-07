@@ -981,18 +981,18 @@ void mp_task_rubik_cube_solver::task_initialization(void)
 	// Powolanie czujnikow
 
 	sensor_m[SENSOR_CAMERA_ON_TRACK] =
-		new ecp_mp_vis_sensor (SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
+		new ecp_mp::sensor::ecp_mp_vis_sensor (SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
 	if (config.return_int_value("vis_servoing"))
 	{
 
 		sensor_m[SENSOR_CAMERA_SA] =
-			new ecp_mp_vis_sensor (SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+			new ecp_mp::sensor::ecp_mp_vis_sensor (SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 
 	}
 
 	// Konfiguracja wszystkich czujnikow
-	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -1033,7 +1033,7 @@ void mp_task_rubik_cube_solver::main_task_algorithm(void)
 	for(;;)
 	{
 		sr_ecp_msg->message("Nowa seria");
-		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+		for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 		sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 		{
 			sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika

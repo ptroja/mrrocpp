@@ -156,7 +156,7 @@ bool manual_moves_automatic_measures_generator::next_step (){
     double eps = 1e-2;
 
 	// Czujnik - linialy.
-	ecp_mp_digital_scales_sensor* dss = (ecp_mp_digital_scales_sensor*)((sensor_m.begin())->second);
+    ecp_mp::sensor::ecp_mp_digital_scales_sensor* dss = (ecp_mp::sensor::ecp_mp_digital_scales_sensor*)((sensor_m.begin())->second);
 	// Porownanie ostatniego polozenia z obecnym.
 	bool position_changed = false;
 	for(int i =0; i<axes_number; i++)
@@ -198,7 +198,7 @@ void manual_moves_automatic_measures_generator::get_current_position(double* cur
     }; // end: get_current_position
 
 /*********************** RETURN SENSOR READING ***************************/
-void manual_moves_automatic_measures_generator::get_sensor_reading(ecp_mp_digital_scales_sensor& the_sensor, double* sensor_reading){
+void manual_moves_automatic_measures_generator::get_sensor_reading(ecp_mp::sensor::ecp_mp_digital_scales_sensor& the_sensor, double* sensor_reading){
     // Przepisanie pozycji z bufora.
     memcpy(sensor_reading, the_sensor.image.sensor_union.ds.readings, 6*sizeof(double));
     }; // end: return_sensor_reading
@@ -207,7 +207,7 @@ void manual_moves_automatic_measures_generator::get_sensor_reading(ecp_mp_digita
 
 /**************************** REFRESH WINDOW *******************************/
 void manual_moves_automatic_measures_generator::refresh_window
-	(ecp_mp_digital_scales_sensor& the_sensor){
+	(ecp_mp::sensor::ecp_mp_digital_scales_sensor& the_sensor){
 	// Wiadomosc wysylana do UI.
 	ECP_message ecp_ui_msg;
 	// Odswiezenie okna.
@@ -232,7 +232,7 @@ void manual_moves_automatic_measures_generator::refresh_window
 
 
 /***************************** ADD MAM ELEMENT *******************************/
-void manual_moves_automatic_measures_generator::add_mam_element(ecp_mp_digital_scales_sensor& the_sensor){
+void manual_moves_automatic_measures_generator::add_mam_element(ecp_mp::sensor::ecp_mp_digital_scales_sensor& the_sensor){
 	// Dodanie elementu do listy
 	if (mam_list.empty()){
 		// Jesli glowa pusta.

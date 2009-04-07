@@ -73,7 +73,7 @@ class force_controlled_trajectory_generator : public ecp_teach_in_generator
 		// Zmniejszanie wielkosci kroku.
 		bool decrement_delta(double &tmp_delta, double direction, double delta_increment);
 		// Sprawdzenie odczytow z czujnika sily.
-		void check_force_condition(ecp_mp_force_sensor& the_sensor);
+		void check_force_condition(ecp_mp::sensor::ecp_mp_force_sensor& the_sensor);
 
 		// Mutex do odbierania pozycji robota
 		pthread_mutex_t ROBOT_POSITION_MUTEX;
@@ -95,7 +95,7 @@ class force_controlled_trajectory_generator : public ecp_teach_in_generator
 		// Zwraca aktualnie posiadana pozycje na motorach.
 		void return_motor_position (double robot_position[8]);
 		// Zwraca aktualne odczyty z czujnika sily.
-		void return_sensor_reading(ecp_mp_force_sensor& the_sensor, double sensor_reading[6]);
+		void return_sensor_reading(ecp_mp::sensor::ecp_mp_force_sensor& the_sensor, double sensor_reading[6]);
 		// Odczyt pozycji robota z EDP.
 		void get_current_position ();
 		// Zmiana sterowania MOTOR/EXTERNAL.

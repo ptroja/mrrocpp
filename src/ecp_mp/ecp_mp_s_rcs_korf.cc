@@ -22,9 +22,10 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
+namespace sensor {
 
 /***************************** CONSTRUCTOR ********************************/
-ecp_mp_rcs_korf::ecp_mp_rcs_korf(SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object)
+ecp_mp_rcs_korf::ecp_mp_rcs_korf(SENSOR_ENUM _sensor_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object)
 	: ecp_mp_sensor(_sensor_name, _section_name, _ecp_mp_object) {
 	// Ustawienie wielkosci przesylanej unii.
 	union_size = sizeof(image.sensor_union.rcs);
@@ -76,6 +77,7 @@ void ecp_mp_rcs_korf::get_reading() {
 	}
 } // end: get_reading
 
+} // namespace sensor
 } // namespace ecp_mp
 } // namespace mrrocpp
 

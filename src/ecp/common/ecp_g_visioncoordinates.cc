@@ -30,7 +30,7 @@ ecp_visioncoordinates_generator::ecp_visioncoordinates_generator(ecp_task& _ecp_
 : ecp_generator(_ecp_task), SETTINGS_SECTION_NAME("[ecp_visioncoordinates_generator]")
 {
 	debugmsg("VCG: Creating virtual sensor to communicate with FraDIA");
-	sensor_m[SENSOR_CVFRADIA] = new ecp_mp_cvfradia_sensor(SENSOR_CVFRADIA, SETTINGS_SECTION_NAME, ecp_t, sizeof(sensor_image_t::sensor_union_t::visioncoordinates_t));
+	sensor_m[SENSOR_CVFRADIA] = new ecp_mp::sensor::ecp_mp_cvfradia_sensor(SENSOR_CVFRADIA, SETTINGS_SECTION_NAME, ecp_t, sizeof(sensor_image_t::sensor_union_t::visioncoordinates_t));
 	sensor_m[SENSOR_CVFRADIA]->configure_sensor();
 
 	debugmsg("VCG: Sensor configured");

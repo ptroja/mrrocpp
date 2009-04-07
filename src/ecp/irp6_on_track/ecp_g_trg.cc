@@ -128,8 +128,8 @@ bool trajectory_reproduce_generator::first_step (){
 	// Sprawdzenie, czy lista czujnikow nie jest pusta.
     if (sensor_m.size() > 0){
 	    // Czujnik sily.
- 	   ecp_mp_force_sensor* the_sensor;
-        the_sensor = (ecp_mp_force_sensor*)((sensor_m.begin())->second);
+    	ecp_mp::sensor::ecp_mp_force_sensor* the_sensor;
+        the_sensor = (ecp_mp::sensor::ecp_mp_force_sensor*)((sensor_m.begin())->second);
         // Sprawdzenie odczytow czujnika sily.
         check_force_condition(*the_sensor);
         };
@@ -211,8 +211,8 @@ bool trajectory_reproduce_generator::next_step (){
     // Jesli lista czujnikow nie jest pusta.
     if (sensor_m.size() > 0){
 	    // Czujnik sily.
- 	   ecp_mp_force_sensor* the_sensor;
-        the_sensor = (ecp_mp_force_sensor*)((sensor_m.begin())->second);
+    	ecp_mp::sensor::ecp_mp_force_sensor* the_sensor;
+        the_sensor = (ecp_mp::sensor::ecp_mp_force_sensor*)((sensor_m.begin())->second);
         // Sprawdzenie odczytow czujnika sily.
         check_force_condition(*the_sensor);
         };
@@ -236,7 +236,7 @@ bool trajectory_reproduce_generator::next_step (){
     }; // end: next_step
 
 /*********************  CHECK FORCE CONDITION **************************/
-void trajectory_reproduce_generator::check_force_condition(ecp_mp_force_sensor& the_sensor){
+void trajectory_reproduce_generator::check_force_condition(ecp_mp::sensor::ecp_mp_force_sensor& the_sensor){
 	SENSOR_IMAGE si;
 	// Pobranie odczytow z czujnika sily.
 	the_sensor.get_reading(&si);

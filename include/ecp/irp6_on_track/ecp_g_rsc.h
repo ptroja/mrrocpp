@@ -73,7 +73,7 @@ class robot_stopped_condition : public ecp_generator {
 		// Przygotowanie warunku do ruchu.
 		void prepare_condition_for_motion(void);
 		// Dodanie nowego elementu do listy.
-		void add_rse_element(ecp_mp_digital_scales_sensor& the_sensor);
+		void add_rse_element(ecp_mp::sensor::ecp_mp_digital_scales_sensor& the_sensor);
 		// Odczyt ostatniej pozycji na liscie.
 		void get_rse_list_data (double robot_position[6], double sensor_reading[6]);
 		// Zapisanie wynikow.

@@ -6,6 +6,8 @@
 #include "ecp_mp/ecp_mp_generator.h"
 
 using namespace ecp_mp;
+using namespace generator;
+
 
 class mp_task;
 class mp_robot;

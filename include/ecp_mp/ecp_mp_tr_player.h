@@ -9,6 +9,7 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
+namespace transmitter {
 
 /***************** Klasa czujnikow ********************/
 class player_transmitter: public transmitter{
@@ -24,7 +25,7 @@ class player_transmitter: public transmitter{
   public:
 	// Konstruktor
  	player_transmitter (
-            TRANSMITTER_ENUM _transmitter_name, const char* _section_name, ecp_mp_task& _ecp_mp_object,
+            TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object,
             const char *host, unsigned int port,
             const char *devname, int devindex, int access);
 											// konstruktor czujnika virtualnego
@@ -40,6 +41,7 @@ class player_transmitter: public transmitter{
 	int say(const char *str);
 }; 
 
+} // namespace transmitter
 } // namespace ecp_mp
 } // namespace mrrocpp
 

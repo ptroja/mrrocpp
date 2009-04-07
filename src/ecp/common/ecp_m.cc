@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 		ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 		printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
 	}
-	catch (transmitter::transmitter_error e) {
+	catch (ecp_mp::transmitter::transmitter::transmitter_error e) {
 		ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 		printf("ecp_m.cc: Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
 	}
@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
 			ecp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 			printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
 		}
-		catch (transmitter::transmitter_error e) {
+		catch (ecp_mp::transmitter::transmitter::transmitter_error e) {
 			ecp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 			printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);
 		}

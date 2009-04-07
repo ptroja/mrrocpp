@@ -105,7 +105,7 @@ int main (int argc, char *argv[], char **arge)
 			mp_t->sr_ecp_msg->message(NON_FATAL_ERROR, e.mp_error);
 					printf("Mam blad mp_generator section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		} /* end: catch sensor_error  */
-		catch (transmitter::transmitter_error e) {
+		catch (ecp_mp::transmitter::transmitter::transmitter_error e) {
 			/* Wyswietlenie komunikatu. */
 			mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 			printf("Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
@@ -218,7 +218,7 @@ int main (int argc, char *argv[], char **arge)
 				mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 				printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
 			} /* end: catch sensor_error  */
-			catch (transmitter::transmitter_error e) {
+			catch (ecp_mp::transmitter::transmitter::transmitter_error e) {
 				/* Wyswietlenie komunikatu. */
 				mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 				printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);

@@ -12,6 +12,7 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
+namespace task {
 
 enum RCSC_ECP_STATES {ECP_GEN_TRANSPARENT, ECP_GEN_TFF_NOSE_RUN, ECP_GEN_TEACH_IN,
                       ECP_GEN_SMOOTH,
@@ -28,6 +29,7 @@ enum RCSC_RUBIK_GRAB_PHASES { RCSC_RG_FROM_OPEARTOR_PHASE_1, RCSC_RG_FROM_OPEART
                               RCSC_RG_FCHANGE_PHASE_1, RCSC_RG_FCHANGE_PHASE_2, RCSC_RG_FCHANGE_PHASE_3, RCSC_RG_FCHANGE_PHASE_4
                             };
 
+} // namespace task
 } // namespace ecp_mp
 } // namespace mrrocpp
 

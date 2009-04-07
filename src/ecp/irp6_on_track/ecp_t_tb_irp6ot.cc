@@ -22,7 +22,7 @@ ecp_t_tb_irp6ot::~ecp_t_tb_irp6ot(){
 // methods for ECP template to redefine in concrete classes
 void ecp_t_tb_irp6ot::task_initialization(void){
 
-	sensor_m[SENSOR_CVFRADIA] = new ecp_mp_cvfradia_sensor(SENSOR_CVFRADIA,"[vsp_cvfradia]", *this,	sizeof(sensor_image_t::sensor_union_t::fradia_t));
+	sensor_m[SENSOR_CVFRADIA] = new ecp_mp::sensor::ecp_mp_cvfradia_sensor(SENSOR_CVFRADIA,"[vsp_cvfradia]", *this,	sizeof(sensor_image_t::sensor_union_t::fradia_t));
 	sensor_m[SENSOR_CVFRADIA]->configure_sensor();
 
 	ecp_m_robot=new ecp_irp6_on_track_robot(*this);				//initialization of robot

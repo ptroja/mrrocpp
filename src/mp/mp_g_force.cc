@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //
-// MP Master Process - methods for force generators
+// MP Master Process - methodsï¿½for force generators
 //
 // -------------------------------------------------------------------------
 // Funkcje do konstruowania procesow MP
@@ -94,7 +94,7 @@ bool mp_tff_single_robot_nose_run_generator::next_step()
 
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 
-		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
@@ -246,7 +246,7 @@ bool mp_tff_nose_run_generator::next_step()
 	//	cout << "next_step" << endl;
 
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
-		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
@@ -643,7 +643,7 @@ bool mp_tff_rubik_grab_generator::next_step()
 
 
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
-		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
@@ -850,7 +850,7 @@ bool mp_tff_rubik_face_rotate_generator::next_step()
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
-		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
@@ -1059,7 +1059,7 @@ bool mp_tff_gripper_approach_generator::next_step()
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
-		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
@@ -1238,7 +1238,7 @@ bool mp_nose_run_force_generator::next_step()
 
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		// wylaczenie pomiaru sily
-		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
@@ -1509,7 +1509,7 @@ bool mp_drawing_teach_in_force_generator::next_step()
 {
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		// wylaczenie pomiaru sily
-		for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;

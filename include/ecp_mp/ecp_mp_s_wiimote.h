@@ -7,6 +7,7 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
+namespace sensor {
 
 #define BUFFER_SIZE 8*256
 
@@ -15,7 +16,7 @@ namespace ecp_mp {
  * 
  * @author jedrzej
  */
-class ecp_mp_wiimote_sensor : public sensor
+class ecp_mp_wiimote_sensor : public ::sensor
 {
 private:
 	//socket descriptor
@@ -47,7 +48,7 @@ public:
 	 *
 	 * @author jedrzej
 	 */
-	ecp_mp_wiimote_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object, int _union_size);
+	ecp_mp_wiimote_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object, int _union_size);
 	
 	/**
 	 * Sends sensor configuration to the Wii-mote server
@@ -85,6 +86,7 @@ public:
 	void terminate();
 };
 
+} // namespace sensor
 } // namespace ecp_mp
 } // namespace mrrocpp
 

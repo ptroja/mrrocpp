@@ -13,6 +13,12 @@
 #include "ecp/common/ecp_robot.h"
 #include "ecp_mp/ecp_mp_generator.h"
 
+
+
+using namespace generator;
+using namespace transmitter;
+
+
 class ecp_generator : public ecp_mp_generator {
 
 	protected:

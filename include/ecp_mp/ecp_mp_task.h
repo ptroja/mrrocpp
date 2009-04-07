@@ -23,6 +23,7 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
+namespace task {
 
 // klasa macierzysta dla klas globalnych procesow ECP i MP
 class ecp_mp_task {
@@ -33,10 +34,10 @@ public:
 	~ecp_mp_task();
 
 	// mapa wszystkich czujnikow
-	static std::map <SENSOR_ENUM, sensor*> sensor_m;
+	static std::map <SENSOR_ENUM, ::sensor*> sensor_m;
 
 	// mapa wszystkich transmiterow
-	static std::map <TRANSMITTER_ENUM, transmitter*> transmitter_m;
+	static std::map <transmitter::TRANSMITTER_ENUM, transmitter::transmitter*> transmitter_m;
 
 	static sr_ecp* sr_ecp_msg;
 	configurator &config;
@@ -66,11 +67,11 @@ public:
 	bool show_message (const char* message);
 
 	// Zatrzymanie wszystkich VSP
-	static void kill_all_VSP (std::map <SENSOR_ENUM, sensor*>& _sensor_m);
+	static void kill_all_VSP (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m);
 
 	// funkcje do obslugi czujnikow
-	void all_sensors_initiate_reading (std::map <SENSOR_ENUM, sensor*>& _sensor_m);
-	void all_sensors_get_reading (std::map <SENSOR_ENUM, sensor*>& _sensor_m);
+	void all_sensors_initiate_reading (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m);
+	void all_sensors_get_reading (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m);
 
 };
 
@@ -90,6 +91,7 @@ class ECP_MP_main_error
 
 // ---------------------------------------------------------------
 
+} // namespace task
 } // namespace ecp_mp
 } // namespace mrrocpp
 

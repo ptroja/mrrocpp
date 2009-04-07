@@ -33,7 +33,7 @@
 //pthread_mutex_t FORCE_SENSOR_READINGS_MUTEX = PTHREAD_MUTEX_INITIALIZER;
 
 /*********************** RETURN SENSOR READING ***************************/
-void force_controlled_trajectory_generator::return_sensor_reading(ecp_mp_force_sensor& the_sensor, double sensor_reading[6]){
+void force_controlled_trajectory_generator::return_sensor_reading(ecp_mp::sensor::ecp_mp_force_sensor& the_sensor, double sensor_reading[6]){
 	SENSOR_IMAGE si;
 	// Nowe odczyty czujnika.
 	the_sensor.get_reading(&si);
@@ -247,10 +247,10 @@ bool force_controlled_trajectory_generator::first_step(){
     // Przyrost na motorach.
     double tmp_delta;
     // Czujnik sily.
-    ecp_mp_force_sensor* the_sensor;
+    ecp_mp::sensor::ecp_mp_force_sensor* the_sensor;
     // Jesli lista czujnikow nie jest pusta.
     if (sensor_m.size()>0){
-        the_sensor = (ecp_mp_force_sensor*)((sensor_m.begin())->second);
+        the_sensor = (ecp_mp::sensor::ecp_mp_force_sensor*)((sensor_m.begin())->second);
     }else{
         the_sensor = NULL;
     }
@@ -340,10 +340,10 @@ bool force_controlled_trajectory_generator::next_step ( ) {
     // Pozycja - tymczasowa zmienna.
     double tmp_position;
     // Czujnik sily.
-    ecp_mp_force_sensor* the_sensor;
+    ecp_mp::sensor::ecp_mp_force_sensor* the_sensor;
     // Jesli lista czujnikow nie jest pusta.
     if (sensor_m.size()>0){
-        the_sensor = (ecp_mp_force_sensor*)((sensor_m.begin())->second);
+        the_sensor = (ecp_mp::sensor::ecp_mp_force_sensor*)((sensor_m.begin())->second);
         // Sprawdzenie odczytow czujnika sily.
         	check_force_condition(*the_sensor);
 	}
@@ -373,7 +373,7 @@ bool force_controlled_trajectory_generator::next_step ( ) {
 }
 
 /*********************  CHECK FORCE CONDITION **************************/
-void force_controlled_trajectory_generator::check_force_condition(ecp_mp_force_sensor& the_sensor){
+void force_controlled_trajectory_generator::check_force_condition(ecp_mp::sensor::ecp_mp_force_sensor& the_sensor){
     double tmp_reading[6];
     // Pobranie odczytow z czujnika sily.
     return_sensor_reading(the_sensor, tmp_reading);

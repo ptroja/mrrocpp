@@ -35,13 +35,13 @@ mp_task_vis_sac_lx::mp_task_vis_sac_lx(configurator &_config) :
 void mp_task_vis_sac_lx::task_initialization(void)
 {
 	// Powolanie czujnikow
-	sensor_m[SENSOR_FORCE_ON_TRACK] = new ecp_mp_schunk_sensor (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
+	sensor_m[SENSOR_FORCE_ON_TRACK] = new ecp_mp::sensor::ecp_mp_schunk_sensor (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
 
-	sensor_m[SENSOR_CAMERA_SA] = new ecp_mp_vis_sac_lx_sensor (SENSOR_CAMERA_SA, "[vsp_vis]", *this); //change if SENSOR_CAMERA_SA used for nonnn recog (vsp_vis_pbeolsac)
+	sensor_m[SENSOR_CAMERA_SA] = new ecp_mp::sensor::ecp_mp_vis_sac_lx_sensor (SENSOR_CAMERA_SA, "[vsp_vis]", *this); //change if SENSOR_CAMERA_SA used for nonnn recog (vsp_vis_pbeolsac)
 
 	// Konfiguracja wszystkich czujnikow	
 
-	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 			!= sensor_m.end(); sensor_m_iterator++) {
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
 		sensor_m_iterator->second->configure_sensor();
@@ -68,7 +68,7 @@ void mp_task_vis_sac_lx::main_task_algorithm(void)
 			//eyegen.sensor_m = sensor_m;
 			//po cholere biasujemy jeszcze raz te czujniki i co to w ogole oznacza???
 			/*
-			 for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+			 for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 			 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 			 {
 			 printf("SSSSSSS\n");

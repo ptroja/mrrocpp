@@ -33,13 +33,13 @@ void mp_task_vf::task_initialization(void)
 {
 	// Powolanie czujnikow
 	sensor_m[SENSOR_FORCE_ON_TRACK] = 
-		new ecp_mp_schunk_sensor (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
+		new ecp_mp::sensor::ecp_mp_schunk_sensor (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
 
 	sensor_m[SENSOR_CAMERA_SA] = 
-		new ecp_mp_vis_sensor (SENSOR_CAMERA_SA, "[vsp2_section]", *this);
+		new ecp_mp::sensor::ecp_mp_vis_sensor (SENSOR_CAMERA_SA, "[vsp2_section]", *this);
 
 	// Konfiguracja wszystkich czujnikow	
-	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika

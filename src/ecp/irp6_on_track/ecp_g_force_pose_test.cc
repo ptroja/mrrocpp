@@ -38,7 +38,7 @@ bool y_simple_generator::first_step ( )
 
     return true;
 }
-; // end: bool y_simple_generator::first_step (map <SENSOR_ENUM, sensor*>& sensor_m, robot& the_robot )
+; // end: bool y_simple_generator::first_step (map <SENSOR_ENUM, ::sensor*>& sensor_m, robot& the_robot )
 //--------------------------------------------------------------------------
 
 

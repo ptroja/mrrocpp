@@ -2,29 +2,31 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
+namespace generator {
 
 ecp_mp_generator::ecp_mp_generator(sr_ecp& _sr_ecp_msg) :
-        sr_ecp_msg(_sr_ecp_msg),
-        trigger(false),
-        node_counter(0)
-{}
+	sr_ecp_msg(_sr_ecp_msg),
+	trigger(false),
+	node_counter(0)
+	{}
 
 
 bool ecp_mp_generator::check_and_null_trigger()
 {
-    bool returned_value = false;
-    if (trigger)
-    {
-        trigger = false;
-        returned_value = true;
-    }
+	bool returned_value = false;
+	if (trigger)
+	{
+		trigger = false;
+		returned_value = true;
+	}
 
-    return returned_value;
+	return returned_value;
 }
 
 
 ecp_mp_generator::~ecp_mp_generator()
 {}
 
+} // namespace generator
 } // namespace ecp_mp
 } // namespace mrrocpp

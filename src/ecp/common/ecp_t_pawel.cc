@@ -31,7 +31,7 @@ void ecp_task_pawel::task_initialization(void)
 
     // Powolanie czujnikow
 
-    sensor_m[SENSOR_PAWEL] = new ecp_mp_pawel_sensor(SENSOR_PAWEL, "[vsp_pawel]", *this);
+    sensor_m[SENSOR_PAWEL] = new ecp_mp::sensor::ecp_mp_pawel_sensor(SENSOR_PAWEL, "[vsp_pawel]", *this);
     sensor_m[SENSOR_PAWEL]->configure_sensor();
     //	sensor_m[SENSOR_PAWEL]->initiate_reading();
 
@@ -75,7 +75,7 @@ ecp_task* return_created_ecp_task (configurator &_config)
 	//	nrg->sensor_m = sensor_m;
 
 	/*
-		for (map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+		for (map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 			 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 		{
 			sensor_m_iterator->second->to_vsp.parameters = 1; // biasowanie czujnika

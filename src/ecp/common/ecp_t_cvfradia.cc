@@ -30,7 +30,7 @@ void ecp_task_cvfradia::task_initialization(void)
 	try
 	{
 		// Create cvFraDIA sensor - for testing purposes.
-		sensor_m[SENSOR_CVFRADIA] = new ecp_mp_cvfradia_sensor(SENSOR_CVFRADIA, "[vsp_cvfradia]", *this, sizeof(sensor_image_t::sensor_union_t::fradia_t));
+		sensor_m[SENSOR_CVFRADIA] = new ecp_mp::sensor::ecp_mp_cvfradia_sensor(SENSOR_CVFRADIA, "[vsp_cvfradia]", *this, sizeof(sensor_image_t::sensor_union_t::fradia_t));
 		// Configure sensor.
 		sensor_m[SENSOR_CVFRADIA]->configure_sensor();
     // Create an adequate robot. - depending on the ini section name.

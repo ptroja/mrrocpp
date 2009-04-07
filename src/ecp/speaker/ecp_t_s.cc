@@ -32,10 +32,10 @@ void ecp_task_speaker::task_initialization(void)
     ecp_m_robot = new ecp_speaker_robot (*this);
 
     sensor_m[SENSOR_MIC] =
-        new ecp_mp_mic_sensor(SENSOR_MIC, "[vsp_mic]", *this);
+        new ecp_mp::sensor::ecp_mp_mic_sensor(SENSOR_MIC, "[vsp_mic]", *this);
 
     // Konfiguracja wszystkich czujnikow
-    for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+    for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
             sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
     {
         sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika

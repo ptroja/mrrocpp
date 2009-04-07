@@ -45,7 +45,7 @@ class State
 		void setRobot(char *robot);
 		ROBOT_ENUM getRobot() const;
 		void setGeneratorType(char *genType);
-		STATE_MACHINE_ECP_STATES getGeneratorType() const;
+		ecp_mp::task::STATE_MACHINE_ECP_STATES getGeneratorType() const;
 		void setStringArgument(char *trajFilePath);
 		char *  getStringArgument() const;
 		void setTransition(char *cond, char *target, configurator &_config);
@@ -62,7 +62,7 @@ class State
 		char *id;
 		char *type;
 		ROBOT_ENUM robot;
-		STATE_MACHINE_ECP_STATES generatorType;
+		ecp_mp::task::STATE_MACHINE_ECP_STATES generatorType;
 		char *stringArgument;
 		std::list<Transition> *stateTransitions;
 	

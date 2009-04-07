@@ -20,7 +20,7 @@ void ecp_task_wii::task_initialization(void)
     sr_ecp_msg->message("ECP loaded");
 
 	//create Wii-mote virtual sensor object
-	sensor_m[SENSOR_WIIMOTE] = new ecp_mp_wiimote_sensor(SENSOR_WIIMOTE, "[vsp_wiimote]", *this, sizeof(sensor_image_t::sensor_union_t::wiimote_t));
+	sensor_m[SENSOR_WIIMOTE] = new ecp_mp::sensor::ecp_mp_wiimote_sensor(SENSOR_WIIMOTE, "[vsp_wiimote]", *this, sizeof(sensor_image_t::sensor_union_t::wiimote_t));
 	//configure the sensor
 	sensor_m[SENSOR_WIIMOTE]->configure_sensor();
 }

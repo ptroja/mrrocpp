@@ -11,8 +11,9 @@ using namespace std;
 
 namespace mrrocpp {
 namespace ecp_mp {
+namespace sensor {
 
-ecp_mp_wiimote_sensor::ecp_mp_wiimote_sensor(SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object, int _union_size)
+ecp_mp_wiimote_sensor::ecp_mp_wiimote_sensor(SENSOR_ENUM _sensor_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object, int _union_size)
 	: sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(_sensor_name)
 {
 	// Set size of passed message/union.
@@ -110,5 +111,6 @@ void ecp_mp_wiimote_sensor::terminate() {
 	sr_ecp_msg.message("Terminate\n");
 }
 
+} // namespace sensor
 } // namespace ecp_mp
 } // namespace mrrocpp

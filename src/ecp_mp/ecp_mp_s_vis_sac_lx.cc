@@ -19,9 +19,10 @@
 	
 namespace mrrocpp {
 namespace ecp_mp {
+namespace sensor {
 
 /***************************** CONSTRUCTOR ********************************/
-ecp_mp_vis_sac_lx_sensor::ecp_mp_vis_sac_lx_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object):
+ecp_mp_vis_sac_lx_sensor::ecp_mp_vis_sac_lx_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object):
 	ecp_mp_sensor (_sensor_name, _section_name, _ecp_mp_object) {
  
 //    printf("ecp_mp_vis_sac_sensor: [vsp_vis_sac_sac]\n");
@@ -46,6 +47,7 @@ void ecp_mp_vis_sac_lx_sensor::get_reading(){
 };
 */
 	
+} // namespace sensor
 } // namespace ecp_mp
 } // namespace mrrocpp
 

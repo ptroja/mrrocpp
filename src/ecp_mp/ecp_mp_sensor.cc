@@ -18,8 +18,9 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
+namespace sensor {
 
-ecp_mp_sensor::ecp_mp_sensor(SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object)
+ecp_mp_sensor::ecp_mp_sensor(SENSOR_ENUM _sensor_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object)
 	: sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(_sensor_name)
 {
 	// cout<<"ecp_mp_sensor - konstruktor: "<<_section_name<<endl;
@@ -156,6 +157,7 @@ void ecp_mp_sensor::get_reading(SENSOR_IMAGE* sensor_image) {
 	}
 }
 
+} // namespace sensor
 } // namespace ecp_mp
 } // namespace mrrocpp
 

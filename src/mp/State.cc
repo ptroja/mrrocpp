@@ -204,34 +204,34 @@ void State::setGeneratorType(char *genType)
 	//std::cout<<strcmp(genType, (const char *)"ECP_GEN_TRANSPARENT")<<std::endl;
 	//strcpy(this->generatorType, genType);
 	if(strcmp(genType, (const char *)"ECP_GEN_TRANSPARENT") == 0)
-		this->generatorType = ECP_GEN_TRANSPARENT;
+		this->generatorType = ecp_mp::task::ECP_GEN_TRANSPARENT;
 	else if(strcmp(genType, (const char *)"ECP_GEN_TFF_NOSE_RUN") == 0)
-		this->generatorType = ECP_GEN_TFF_NOSE_RUN;
+		this->generatorType = ecp_mp::task::ECP_GEN_TFF_NOSE_RUN;
 	else if(strcmp(genType, (const char *)"ECP_GEN_TEACH_IN") == 0)
-		this->generatorType = ECP_GEN_TEACH_IN;
+		this->generatorType = ecp_mp::task::ECP_GEN_TEACH_IN;
 	else if(strcmp(genType, (const char *)"ECP_GEN_SMOOTH") == 0)
-		this->generatorType = ECP_GEN_SMOOTH;
+		this->generatorType = ecp_mp::task::ECP_GEN_SMOOTH;
 	else if(strcmp(genType, (const char *)"ECP_GEN_TFF_RUBIK_GRAB") == 0)
-		this->generatorType = ECP_GEN_TFF_RUBIK_GRAB;
+		this->generatorType = ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB;
 	else if(strcmp(genType, (const char *)"ECP_GEN_TFF_RUBIK_FACE_ROTATE") == 0)
-		this->generatorType = ECP_GEN_TFF_RUBIK_FACE_ROTATE;
+		this->generatorType = ecp_mp::task::ECP_GEN_TFF_RUBIK_FACE_ROTATE;
 	else if(strcmp(genType, (const char *)"ECP_GEN_TFF_GRIPPER_APPROACH") == 0)
-		this->generatorType = ECP_GEN_TFF_GRIPPER_APPROACH;
+		this->generatorType = ecp_mp::task::ECP_GEN_TFF_GRIPPER_APPROACH;
 	else if(strcmp(genType, (const char *)"RCSC_GRIPPER_OPENING") == 0)
-		this->generatorType = RCSC_GRIPPER_OPENING;
+		this->generatorType = ecp_mp::task::RCSC_GRIPPER_OPENING;
 	else if(strcmp(genType, (const char *)"ECP_GEN_BIAS_EDP_FORCE") == 0)
-		this->generatorType = ECP_GEN_BIAS_EDP_FORCE;
+		this->generatorType = ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE;
 	else if(strcmp(genType, (const char *)"ECP_WEIGHT_MEASURE_GENERATOR") == 0)
-		this->generatorType = ECP_WEIGHT_MEASURE_GENERATOR;
+		this->generatorType = ecp_mp::task::ECP_WEIGHT_MEASURE_GENERATOR;
 	else if(strcmp(genType, (const char *)"ECP_TOOL_CHANGE_GENERATOR") == 0)
-		this->generatorType = ECP_TOOL_CHANGE_GENERATOR;
+		this->generatorType = ecp_mp::task::ECP_TOOL_CHANGE_GENERATOR;
 	else
-		this->generatorType = ECP_GEN_SPEAK;
+		this->generatorType = ecp_mp::task::ECP_GEN_SPEAK;
 }
 
 //----------------------------------------------------------------------------------------------------------
 
-STATE_MACHINE_ECP_STATES State::getGeneratorType() const
+ecp_mp::task::STATE_MACHINE_ECP_STATES State::getGeneratorType() const
 {
 	return generatorType;
 }

@@ -17,7 +17,7 @@
 class ecp_spots_generator : public ecp_generator
 {
 	ECP_VSP_MSG comm_struct;
-	ecp_mp_cvfradia_sensor * sensor;
+	ecp_mp::sensor::ecp_mp_cvfradia_sensor * sensor;
 	double tool_to_ground[16], plate_to_tool[16];
 	SENSOR_IMAGE calib_data;
 

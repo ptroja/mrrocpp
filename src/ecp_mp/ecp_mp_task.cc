@@ -30,12 +30,14 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
+namespace task {
+
 
 sr_ecp* ecp_mp_task::sr_ecp_msg = NULL;
 
 // mapa wszystkich czujnikow
-std::map <SENSOR_ENUM, sensor*> ecp_mp_task::sensor_m;
-std::map <TRANSMITTER_ENUM, transmitter*> ecp_mp_task::transmitter_m;
+std::map <SENSOR_ENUM, ::sensor*> ecp_mp_task::sensor_m;
+std::map <transmitter::TRANSMITTER_ENUM, transmitter::transmitter*> ecp_mp_task::transmitter_m;
 
 ecp_mp_task::ecp_mp_task(configurator &_config)
 	: config(_config)
@@ -219,10 +221,10 @@ bool ecp_mp_task::show_message (const char* message)
 // Funkcje do obslugi czujnikow
 
 // ------------------------------------------------------------------------
-void ecp_mp_task::kill_all_VSP (std::map <SENSOR_ENUM, sensor*>& _sensor_m)
+void ecp_mp_task::kill_all_VSP (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m)
 {
 	// Zabicie wszystkich procesow VSP
-	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = _sensor_m.begin();
+	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = _sensor_m.begin();
 	        sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++) {
 		if (sensor_m_iterator->second->pid !=0) {
 #if defined(PROCESS_SPAWN_RSH)
@@ -237,9 +239,9 @@ void ecp_mp_task::kill_all_VSP (std::map <SENSOR_ENUM, sensor*>& _sensor_m)
 // ------------------------------------------------------------------------
 
 
-void ecp_mp_task::all_sensors_initiate_reading (std::map <SENSOR_ENUM, sensor*>& _sensor_m)
+void ecp_mp_task::all_sensors_initiate_reading (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m)
 {
-	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = _sensor_m.begin();
+	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = _sensor_m.begin();
 	        sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++) {
 		if (sensor_m_iterator->second->base_period > 0) {
 			if (sensor_m_iterator->second->current_period == sensor_m_iterator->second->base_period) {
@@ -250,10 +252,10 @@ void ecp_mp_task::all_sensors_initiate_reading (std::map <SENSOR_ENUM, sensor*>&
 	}
 }
 
-void ecp_mp_task::all_sensors_get_reading (std::map <SENSOR_ENUM, sensor*>& _sensor_m)
+void ecp_mp_task::all_sensors_get_reading (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m)
 {
 
-	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = _sensor_m.begin();
+	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = _sensor_m.begin();
 	        sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++) {
 		// jesli wogole mamy robic pomiar
 		if (sensor_m_iterator->second->base_period > 0) {
@@ -265,6 +267,7 @@ void ecp_mp_task::all_sensors_get_reading (std::map <SENSOR_ENUM, sensor*>& _sen
 	}
 }
 
+} // namespace task
 } // namespace ecp_mp
 } // namespace mrrocpp
 

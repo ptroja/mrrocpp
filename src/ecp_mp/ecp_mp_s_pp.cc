@@ -11,9 +11,10 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
+namespace sensor {
 
 /***************************** CONSTRUCTOR ********************************/
-ecp_mp_pp_sensor::ecp_mp_pp_sensor(SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object) :
+ecp_mp_pp_sensor::ecp_mp_pp_sensor(SENSOR_ENUM _sensor_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object) :
 	ecp_mp_sensor(_sensor_name, _section_name, _ecp_mp_object)
 {
 	// Ustawienie wielkosci przesylanej unii.
@@ -24,5 +25,6 @@ ecp_mp_pp_sensor::ecp_mp_pp_sensor(SENSOR_ENUM _sensor_name, const char* _sectio
 	image.sensor_union.pp.active_motors = 0;
 }
 
+} // namespace sensor
 } // namespace ecp_mp
 } // namespace mrrocpp

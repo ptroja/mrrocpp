@@ -11,7 +11,7 @@ protected:
 
   
     mp_robot *irp6ot, *irp6p;
-    sensor *vsp_force_irp6ot, *vsp_force_irp6p, *vsp_vis_sac;
+    ::sensor *vsp_force_irp6ot, *vsp_force_irp6p, *vsp_vis_sac;
     
     // do konfiguracji pracy generatora
     unsigned short irp6ot_con, irp6p_con;

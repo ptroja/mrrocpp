@@ -12,9 +12,10 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
+namespace transmitter {
 
 player_transmitter::player_transmitter  (
-    TRANSMITTER_ENUM _transmitter_name, const char* _section_name, ecp_mp_task& _ecp_mp_object,
+    TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object,
     const char *host, unsigned int port,
     const char *devname, int devindex, int access
 )  :
@@ -324,5 +325,6 @@ int player_transmitter::say(const char *str)
 	return playerc_client_write(client, device, &cmd, sizeof(cmd));
 }
 
+} // namespace transmitter
 } // namespace ecp_mp
 } // namespace mrrocpp

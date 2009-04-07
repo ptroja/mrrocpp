@@ -209,17 +209,17 @@ bool mp_task_rubik_cube_solver::communicate_with_windows_solver()
 
 			for(int i=0; i<54; i++)
 			{
-				transmitter_m[TRANSMITTER_RC_WINDOWS]->to_va.rc_windows.rc_state[i]=cube_tab_send[i];
+				transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->to_va.rc_windows.rc_state[i]=cube_tab_send[i];
 			}
-			//transmitter_m[TRANSMITTER_RC_WINDOWS]->to_va.rc_windows.rc_state[i]=patternx[i];
-			transmitter_m[TRANSMITTER_RC_WINDOWS]->to_va.rc_windows.rc_state[54]='\0';
+			//transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->to_va.rc_windows.rc_state[i]=patternx[i];
+			transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->to_va.rc_windows.rc_state[54]='\0';
 
-			transmitter_m[TRANSMITTER_RC_WINDOWS]->t_write();
-			transmitter_m[TRANSMITTER_RC_WINDOWS]->t_read(true);
+			transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->t_write();
+			transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->t_read(true);
 
-			printf ("OPS: %s", transmitter_m[TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence);
+			printf ("OPS: %s", transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence);
 
-			strcpy (manipulation_sequence,transmitter_m[TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence);
+			strcpy (manipulation_sequence,transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence);
 
 			if ((manipulation_sequence[0]=='C') && (manipulation_sequence[1]=='u') && (manipulation_sequence[2]=='b') && (manipulation_sequence[3]=='e'))
 			{
@@ -233,11 +233,11 @@ bool mp_task_rubik_cube_solver::communicate_with_windows_solver()
 
 			s=0;
 			str_size=0;
-			for (unsigned int char_i=0; char_i < strlen(transmitter_m[TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence)-1; char_i ++)
+			for (unsigned int char_i=0; char_i < strlen(transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence)-1; char_i ++)
 			{
 				if (s==0)
 				{
-					switch (transmitter_m[TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence[char_i])
+					switch (transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence[char_i])
 					{
 					case 'U':
 						manipulation_sequence[str_size] = 'B';
@@ -263,7 +263,7 @@ bool mp_task_rubik_cube_solver::communicate_with_windows_solver()
 				}
 				else if (s==1)
 				{
-					switch (transmitter_m[TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence[char_i])
+					switch (transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence[char_i])
 					{
 					case ' ':
 						manipulation_sequence[str_size] = '1';
@@ -296,7 +296,7 @@ bool mp_task_rubik_cube_solver::communicate_with_windows_solver()
 			manipulation_sequence[str_size]='\0';
 
 			printf ("\n%d %d\n",str_size,strlen(manipulation_sequence));
-			printf ("SEQ from win %s\n",transmitter_m[TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence);
+			printf ("SEQ from win %s\n",transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]->from_va.rc_windows.sequence);
 			printf ("\nSEQ2 %s\n",manipulation_sequence);
 
 			//pocztaek ukladania
@@ -407,7 +407,7 @@ void mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 	// zacisniecie postumenta na kostce
 
 
-	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -508,7 +508,7 @@ void mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 
 	// zacisniecie tracka na kostce
 
-	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -773,19 +773,19 @@ void mp_task_rubik_cube_solver::task_initialization(void)
 {
 	// Powolanie czujnikow
 	sensor_m[SENSOR_FORCE_ON_TRACK] =
-		new ecp_mp_schunk_sensor (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
+		new ecp_mp::sensor::ecp_mp_schunk_sensor (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
 
 	sensor_m[SENSOR_FORCE_POSTUMENT] =
-		new ecp_mp_schunk_sensor (SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
+		new ecp_mp::sensor::ecp_mp_schunk_sensor (SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
 
 	sensor_m[SENSOR_CAMERA_ON_TRACK] =
-		new ecp_mp_vis_sensor (SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
+		new ecp_mp::sensor::ecp_mp_vis_sensor (SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
 	sensor_m[SENSOR_CAMERA_SA] =
-		new ecp_mp_vis_sensor (SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+		new ecp_mp::sensor::ecp_mp_vis_sensor (SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 
 	// Konfiguracja wszystkich czujnikow
-	for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -795,8 +795,8 @@ void mp_task_rubik_cube_solver::task_initialization(void)
 	usleep(1000*100);
 
 	// dodanie transmitter'a
-	transmitter_m[TRANSMITTER_RC_WINDOWS] =
-		new rc_windows_transmitter (TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
+	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] =
+		new ecp_mp::transmitter::rc_windows_transmitter (ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
 
 	sr_ecp_msg->message("MP rc loaded");
 };
@@ -827,7 +827,7 @@ void mp_task_rubik_cube_solver::main_task_algorithm(void)
 		for(;;)
 		{
 			sr_ecp_msg->message("Nowa seria");
-			for (std::map <SENSOR_ENUM, sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+			for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 			sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 			{
 				sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika

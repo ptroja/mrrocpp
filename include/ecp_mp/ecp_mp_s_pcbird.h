@@ -15,13 +15,14 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
+namespace sensor {
 
 /*!
  * \class ecp_mp_s_pcbird.h
  * \brief Virtual sensor on the ECP/MP side used for communication with pcbird.
  * \author tkornuta
  */
-class ecp_mp_pcbird_sensor : public sensor
+class ecp_mp_pcbird_sensor : public ::sensor
 {
 private:
 	/*!
@@ -44,7 +45,7 @@ public:
 	/*!
       * Constructor. Creates socket connection to pcbird.
       */
- 	ecp_mp_pcbird_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object);
+ 	ecp_mp_pcbird_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object);
 
 	/*!
       * Sends sensor configuration to pcbird.
@@ -68,6 +69,7 @@ public:
 
 }; 
 
+} // namespace sensor
 } // namespace ecp_mp
 } // namespace mrrocpp
 

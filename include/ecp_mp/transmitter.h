@@ -7,13 +7,22 @@
 
 #include "lib/srlib.h"
 
+namespace mrrocpp {
+namespace ecp_mp {
+namespace task {
+// XXX Forward declaration
+class ecp_mp_task;
+}
+}
+}
+
 
 namespace mrrocpp {
 namespace ecp_mp {
+namespace transmitter {
 
 
-// XXX Forward declaration
-class ecp_mp_task;
+
 
 // TRASMITERY
 
@@ -73,7 +82,7 @@ class transmitter
 		sr_ecp &sr_ecp_msg;
 
 	public:
-		transmitter (TRANSMITTER_ENUM _transmitter_name, const char* _section_name, ecp_mp_task& _ecp_mp_object);
+		transmitter (TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::ecp_mp_task& _ecp_mp_object);
 
 		virtual ~transmitter()
 		{}
@@ -107,6 +116,7 @@ class transmitter
 ; // end: class transmitter
 
 
+} // namespace transmitter
 } // namespace ecp_mp
 } // namespace mrrocpp
 

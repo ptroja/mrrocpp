@@ -152,7 +152,7 @@ void* UI_communication_thread(void* arg)
 			// Jesli uzywany jest czujnik sily.
 			if (ecp_t->sensor_m.count(SENSOR_FORCE_ON_TRACK)>0) {
 				// Przepisanie odczytow czujnika.
-				fctg->return_sensor_reading(*((ecp_mp_force_sensor *)(ecp_t->sensor_m[SENSOR_FORCE_ON_TRACK])), to_ui_msg.RS.sensor_reading);
+				fctg->return_sensor_reading(*((ecp_mp::sensor::ecp_mp_force_sensor *)(ecp_t->sensor_m[SENSOR_FORCE_ON_TRACK])), to_ui_msg.RS.sensor_reading);
 			} else {
 				// Zerowe odczyty.
 				for (int i =0; i<6; i++)
@@ -290,7 +290,7 @@ void ecp_task_fct_irp6ot::task_initialization(void)
 		sr_ecp_msg->message("Using force sensor for move control");
 		// Stworzenie obiektu czujnik.
 		// ini_con->create_vsp ("[vsp_fs]");
-		sensor_m[SENSOR_FORCE_ON_TRACK] = new ecp_mp_force_sensor(SENSOR_FORCE_ON_TRACK, "[vsp_fs]", *this);
+		sensor_m[SENSOR_FORCE_ON_TRACK] = new ecp_mp::sensor::ecp_mp_force_sensor(SENSOR_FORCE_ON_TRACK, "[vsp_fs]", *this);
 		// Konfiguracja czujnika.
 		sensor_m[SENSOR_FORCE_ON_TRACK]->configure_sensor();
 		// Stworzenie listy czujnikow -> glowa = (czujnik sily).

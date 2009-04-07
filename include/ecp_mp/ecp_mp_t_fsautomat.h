@@ -12,6 +12,7 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
+namespace task {
 
 enum POURING_GRIPPER_OP {RCSC_GO_VAR_1 = 0, RCSC_GO_VAR_2};
 
@@ -33,6 +34,7 @@ enum STATE_MACHINE_ECP_STATES {
 	ECP_TOOL_CHANGE_GENERATOR
 };
 
+} // namespace task
 } // namespace ecp_mp
 } // namespace mrrocpp
 

@@ -7,12 +7,21 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
-
+namespace task {
 // TODO: Forward declaration
 class ecp_mp_task;
+}
+}
+}
+
+namespace mrrocpp {
+namespace ecp_mp {
+namespace sensor {
+
+
 
 // Klasa bazowa czujnikow po stronie procesu ECP.
-class ecp_mp_sensor: public sensor{
+class ecp_mp_sensor: public ::sensor{
 protected:
 	// Sensor descriptor - uchwyt do /dev/twoj_sensor.
 	
@@ -31,7 +40,7 @@ public:
 	const SENSOR_ENUM sensor_name; // nazwa czujnika z define w impconst.h
 
 	// Wlasciwy konstruktor czujnika wirtualnego.
-	ecp_mp_sensor(SENSOR_ENUM _sensor_name, const char* _section_name, ecp_mp_task& _ecp_mp_object);
+	ecp_mp_sensor(SENSOR_ENUM _sensor_name, const char* _section_name, task::ecp_mp_task& _ecp_mp_object);
 	
 	virtual void configure_sensor();
 	virtual void initiate_reading();
@@ -40,6 +49,7 @@ public:
 	virtual void get_reading(SENSOR_IMAGE *sensor_image);
 };
 
+} // namespace sensor
 } // namespace ecp_mp
 } // namespace mrrocpp
 

@@ -379,7 +379,7 @@ void ecp_task_tr_irp6ot::task_initialization(void)
 	// Stworznie obiektu - czujnik zlozony z linialow.
 	//  ini_con->create_vsp ("[vsp_dss]");
 
-	sensor_m[SENSOR_DIGITAL_SCALE_SENSOR] = new ecp_mp_digital_scales_sensor(SENSOR_DIGITAL_SCALE_SENSOR, "[vsp_dss]", *this);
+	sensor_m[SENSOR_DIGITAL_SCALE_SENSOR] = new ecp_mp::sensor::ecp_mp_digital_scales_sensor(SENSOR_DIGITAL_SCALE_SENSOR, "[vsp_dss]", *this);
 	//   dss = new ecp_mp_digital_scales_sensor(ini_con->vsp->program_name, ini_con->vsp->node_name,
 	// 		ini_con->vsp->resourceman_attach_point, ini_con->config_directories->binaries_network_path,
 	// 		argv[1], argv[2], argv[3], "[vsp_dss]" , msg);
@@ -394,7 +394,7 @@ void ecp_task_tr_irp6ot::task_initialization(void)
 	if (use_force_sensor == 1) {
 		sr_ecp_msg->message("Using force sensor for move control");
 		// Stworzenie obiektu czujnik.
-		sensor_m[SENSOR_FORCE_ON_TRACK] = new ecp_mp_force_sensor(SENSOR_FORCE_ON_TRACK, "[vsp_fs]", *this);
+		sensor_m[SENSOR_FORCE_ON_TRACK] = new ecp_mp::sensor::ecp_mp_force_sensor(SENSOR_FORCE_ON_TRACK, "[vsp_fs]", *this);
 		// Konfiguracja czujnika.
 		sensor_m[SENSOR_FORCE_ON_TRACK]->configure_sensor();
 		// Stworzenie listy czujnikow uzywanych przed instrukcje Move -> glowa = (czujnik sily).
