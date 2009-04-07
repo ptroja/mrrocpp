@@ -12,7 +12,7 @@ class mp_robot;
 
 #include <map>
 
-class mp_generator : public ecp_mp::generator::ecp_mp_generator
+class mp_generator : public ecp_mp::generator::base
 {
 	protected:
 

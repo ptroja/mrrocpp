@@ -25,8 +25,8 @@ namespace ecp_mp {
 namespace sensor {
 
 /***************************** CONSTRUCTOR ********************************/
-ecp_mp_rcs_kociemba::ecp_mp_rcs_kociemba(SENSOR_ENUM _sensor_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object)
-	: ecp_mp_sensor(_sensor_name, _section_name, _ecp_mp_object) {
+rcs_kociemba::rcs_kociemba(SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object)
+	: base(_sensor_name, _section_name, _ecp_mp_object) {
 	// Ustawienie wielkosci przesylanej unii.
 	union_size = sizeof(image.sensor_union.rcs);
 	// Wyzerowanie odczytow.
@@ -34,7 +34,7 @@ ecp_mp_rcs_kociemba::ecp_mp_rcs_kociemba(SENSOR_ENUM _sensor_name, const char* _
 } // end:
 
 /************************** CONFIGURE SENSOR ******************************/
-void ecp_mp_rcs_kociemba::configure_sensor() {
+void rcs_kociemba::configure_sensor() {
 	// Rozkaz konfiguracjii czujnika.
 	devmsg.to_vsp.i_code=VSP_CONFIGURE_SENSOR;
 	memcpy(&devmsg.to_vsp.rcs, &to_vsp.rcs, union_size);
@@ -45,7 +45,7 @@ void ecp_mp_rcs_kociemba::configure_sensor() {
 } // end: configure_sensor
 
 /************************** INITIATE READING *********************************/
-void ecp_mp_rcs_kociemba::initiate_reading(){
+void rcs_kociemba::initiate_reading(){
 	devmsg.to_vsp.i_code=VSP_INITIATE_READING;
 	memcpy(&devmsg.to_vsp.rcs, &to_vsp.rcs, union_size);
 	if (devctl(sd, DEVCTL_RW, &devmsg, sizeof(DEVCTL_MSG), NULL) == 9) {
@@ -61,7 +61,7 @@ void ecp_mp_rcs_kociemba::initiate_reading(){
 }
 
 /***************************** GET  READING *********************************/
-void ecp_mp_rcs_kociemba::get_reading() {
+void rcs_kociemba::get_reading() {
 	if(read(sd, &from_vsp, sizeof(VSP_ECP_MSG)) == -1) {
 		image.sensor_union.rcs.cube_solution[0] = '\0';
 		image.sensor_union.rcs.reading_mode = RCS_SOLUTION_NOTFOUND;

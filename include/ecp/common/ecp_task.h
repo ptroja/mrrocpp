@@ -14,7 +14,7 @@
 class ecp_generator;
 
 // klasa globalna dla calego procesu MP
-class ecp_task : public ecp_mp::task::ecp_mp_task
+class ecp_task : public ecp_mp::task::base
 {
 	private:
 		name_attach_t *ecp_attach, *trigger_attach; // by Y

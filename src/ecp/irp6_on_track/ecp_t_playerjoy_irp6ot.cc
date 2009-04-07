@@ -36,7 +36,7 @@ void ecp_task_playerjoy_irp6ot::task_initialization(void)
     sr_ecp_msg->message("ECP loaded");
 
     transmitter_m[ecp_mp::transmitter::TRANSMITTER_PLAYER] =
-        new ecp_mp::transmitter::player_transmitter (ecp_mp::transmitter::TRANSMITTER_PLAYER, "[transmitter_player]", *this,
+        new ecp_mp::transmitter::player (ecp_mp::transmitter::TRANSMITTER_PLAYER, "[transmitter_player]", *this,
                                 "192.168.1.68", 6665, "joystick", 0, 'r');
 
     pjg = new playerjoy_generator(*this, 8);

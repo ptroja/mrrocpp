@@ -138,12 +138,12 @@ struct robot_transmission_data
 
 };
 
-class ecp_mp_robot
+class robot
 {
 public:
 	const ROBOT_ENUM robot_name; // by Y - nazwa robota (track, postument etc.)
 
-	ecp_mp_robot(ROBOT_ENUM _robot_name);
+	robot(ROBOT_ENUM _robot_name);
 };
 
 } // namespace ecp_mp

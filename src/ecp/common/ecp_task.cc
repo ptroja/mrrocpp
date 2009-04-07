@@ -15,7 +15,7 @@
 #include <libxml/xinclude.h>
 
 ecp_task::ecp_task(configurator &_config) :
-	ecp_mp_task(_config)
+	base(_config)
 {
 	sensor_m.clear();
 	ecp_m_robot = NULL;

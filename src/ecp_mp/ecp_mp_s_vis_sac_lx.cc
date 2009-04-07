@@ -22,8 +22,8 @@ namespace ecp_mp {
 namespace sensor {
 
 /***************************** CONSTRUCTOR ********************************/
-ecp_mp_vis_sac_lx_sensor::ecp_mp_vis_sac_lx_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object):
-	ecp_mp_sensor (_sensor_name, _section_name, _ecp_mp_object) {
+vis_sac_lx::vis_sac_lx (SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object):
+	base (_sensor_name, _section_name, _ecp_mp_object) {
  
 //    printf("ecp_mp_vis_sac_sensor: [vsp_vis_sac_sac]\n");
     // SAC -> uzycie strunktury sizeof(image.sensor_union.camera);

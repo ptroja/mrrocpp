@@ -1,7 +1,7 @@
 #include "ecp/common/ecp_generator.h"
 
 ecp_generator::ecp_generator (ecp_task& _ecp_task)
-        : ecp_mp_generator(*(ecp_t.sr_ecp_msg)),
+        : base(*(ecp_t.sr_ecp_msg)),
         ecp_t(_ecp_task),
         communicate_with_mp_in_move(true),
         communicate_with_edp(true),

@@ -19,11 +19,11 @@ namespace sensor {
 // ####################################################################
 // ## KLASA czujnika - rozwiazywanie kostki Rubika algorytmem Korfa  ##
 // ####################################################################
-class ecp_mp_rcs_korf : public ecp_mp_sensor{
+class rcs_korf : public base{
 
   public:
 	// Konstruktor czujnika wirtualnego - wywolanie konstruktora klasy bazowej.
- 	ecp_mp_rcs_korf (SENSOR_ENUM _sensor_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object);
+ 	rcs_korf (SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object);
 	// Konfiguracja czujnika.
 	void configure_sensor (void);
 	// Odebranie odczytu od VSP.

@@ -29,13 +29,13 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace transmitter {
 
-rc_win_buf_typedef *rc_windows_transmitter::rc_win_buf = NULL;
+rc_win_buf_typedef *rc_windows::rc_win_buf = NULL;
 
-rc_windows_transmitter::rc_windows_transmitter  (
+rc_windows::rc_windows  (
 		TRANSMITTER_ENUM _transmitter_name,
 		const char* _section_name,
-		task::ecp_mp_task& _ecp_mp_object)  :
-			transmitter (_transmitter_name, _section_name, _ecp_mp_object) {
+		task::base& _ecp_mp_object)  :
+			base (_transmitter_name, _section_name, _ecp_mp_object) {
 
 	if(!rc_win_buf) {
 		rc_win_buf = new rc_win_buf_typedef;
@@ -50,14 +50,14 @@ rc_windows_transmitter::rc_windows_transmitter  (
 }
 
 
-rc_windows_transmitter::~rc_windows_transmitter  (){
+rc_windows::~rc_windows  (){
 	sem_destroy(&(rc_win_buf->sem));
 	delete[] rc_win_buf->solver_hostname;
 	delete rc_win_buf;
 }
 
 
-void * rc_windows_transmitter::do_query(void * arg) {
+void * rc_windows::do_query(void * arg) {
 
   sem_wait(&(rc_win_buf->sem));
 
@@ -138,7 +138,7 @@ void * rc_windows_transmitter::do_query(void * arg) {
 }
 
 
-int rc_windows_transmitter::make_socket (const char *hostname, uint16_t port)
+int rc_windows::make_socket (const char *hostname, uint16_t port)
 {
   int sock;
   struct sockaddr_in server;
@@ -168,7 +168,7 @@ int rc_windows_transmitter::make_socket (const char *hostname, uint16_t port)
   return sock;
 }
 
-bool rc_windows_transmitter::t_write() {
+bool rc_windows::t_write() {
 
 	snprintf(rc_win_buf->request, sizeof(rc_win_buf->request), "GET /?%s HTTP/1.0\r\n", to_va.rc_windows.rc_state);
 
@@ -177,7 +177,7 @@ bool rc_windows_transmitter::t_write() {
 	return true;
 }
 
-bool rc_windows_transmitter::t_read(bool wait) {
+bool rc_windows::t_read(bool wait) {
 
 	int l=0;
 

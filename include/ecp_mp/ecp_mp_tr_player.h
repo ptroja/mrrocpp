@@ -12,7 +12,7 @@ namespace ecp_mp {
 namespace transmitter {
 
 /***************** Klasa czujnikow ********************/
-class player_transmitter: public transmitter{
+class player: public base{
   private:						// pola do komunikacji
     pthread_t worker;
     pthread_cond_t cond;
@@ -24,12 +24,12 @@ class player_transmitter: public transmitter{
   	
   public:
 	// Konstruktor
- 	player_transmitter (
-            TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object,
+ 	player (
+            TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task:: base& _ecp_mp_object,
             const char *host, unsigned int port,
             const char *devname, int devindex, int access);
 											// konstruktor czujnika virtualnego
-	~player_transmitter();						// destruktor czujnika virtualnego
+	~player();						// destruktor czujnika virtualnego
 
     // odczyt z zawieszaniem lub bez
 	virtual bool t_read (bool wait);

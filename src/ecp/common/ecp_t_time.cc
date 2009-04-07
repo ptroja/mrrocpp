@@ -37,7 +37,7 @@ void ecp_task_time::task_initialization(void)
 		{ ecp_m_robot = new ecp_irp6_postument_robot (*this); }
 
 	// Powolanie czujnikow
-	sensor_m[SENSOR_TIME] = new ecp_mp::sensor::ecp_mp_time_sensor (SENSOR_TIME, "[vsp_time]", *this);
+	sensor_m[SENSOR_TIME] = new ecp_mp::sensor::time (SENSOR_TIME, "[vsp_time]", *this);
 
 	// Konfiguracja wszystkich czujnikow
 	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();

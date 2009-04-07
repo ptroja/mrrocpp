@@ -20,7 +20,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-ecp_mp_sensor::ecp_mp_sensor(SENSOR_ENUM _sensor_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object)
+base::base(SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object)
 	: sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(_sensor_name)
 {
 	// cout<<"ecp_mp_sensor - konstruktor: "<<_section_name<<endl;
@@ -91,7 +91,7 @@ ecp_mp_sensor::ecp_mp_sensor(SENSOR_ENUM _sensor_name, const char* _section_name
 	}// end: while
 #endif /* !USE_MESSIP_SRR */
 }
-void ecp_mp_sensor::terminate() {
+void base::terminate() {
 	to_vsp.i_code=VSP_TERMINATE;
 #if !defined(USE_MESSIP_SRR)
 	if(write(sd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)
@@ -108,7 +108,7 @@ void ecp_mp_sensor::terminate() {
 #endif /* !USE_MESSIP_SRR */
 }
 
-void ecp_mp_sensor::initiate_reading() {
+void base::initiate_reading() {
 	to_vsp.i_code=VSP_INITIATE_READING;
 #if !defined(USE_MESSIP_SRR)
 	if(write(sd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)
@@ -120,7 +120,7 @@ void ecp_mp_sensor::initiate_reading() {
 		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
 }
 
-void ecp_mp_sensor::configure_sensor() {
+void base::configure_sensor() {
 	to_vsp.i_code=VSP_CONFIGURE_SENSOR;
 #if !defined(USE_MESSIP_SRR)
 	if(write(sd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)
@@ -133,11 +133,11 @@ void ecp_mp_sensor::configure_sensor() {
 }
 
 
-void ecp_mp_sensor::get_reading() {
+void base::get_reading() {
 	get_reading(&image);
 }
 
-void ecp_mp_sensor::get_reading(SENSOR_IMAGE* sensor_image) {
+void base::get_reading(SENSOR_IMAGE* sensor_image) {
 	// Sprawdzenie, czy uzyc domyslnego obrazu.
 	to_vsp.i_code=VSP_GET_READING;
 #if !defined(USE_MESSIP_SRR)

@@ -33,13 +33,13 @@ namespace ecp_mp {
 namespace task {
 
 
-sr_ecp* ecp_mp_task::sr_ecp_msg = NULL;
+sr_ecp* base::sr_ecp_msg = NULL;
 
 // mapa wszystkich czujnikow
-std::map <SENSOR_ENUM, ::sensor*> ecp_mp_task::sensor_m;
-std::map <transmitter::TRANSMITTER_ENUM, transmitter::transmitter*> ecp_mp_task::transmitter_m;
+std::map <SENSOR_ENUM, ::sensor*> base::sensor_m;
+std::map <transmitter::TRANSMITTER_ENUM, transmitter::base*> base::transmitter_m;
 
-ecp_mp_task::ecp_mp_task(configurator &_config)
+base::base(configurator &_config)
 	: config(_config)
 {
 	mrrocpp_network_path = config.return_mrrocpp_network_path();
@@ -67,7 +67,7 @@ ecp_mp_task::ecp_mp_task(configurator &_config)
     delete [] ui_net_attach_point;
 }
 
-ecp_mp_task::~ecp_mp_task()
+base::~base()
 {
 	delete [] mrrocpp_network_path;
 }
@@ -75,7 +75,7 @@ ecp_mp_task::~ecp_mp_task()
 
 // --------------------------------------------------------------------------
 // Odpowiedz operatora typu (Yes/No) na zadane pytanie (question)
-bool ecp_mp_task::operator_reaction (const char* question )
+bool base::operator_reaction (const char* question )
 {
 	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
@@ -104,7 +104,7 @@ bool ecp_mp_task::operator_reaction (const char* question )
 
 // --------------------------------------------------------------------------
 // by Y - Wybor przez operatora jednej z opcji
-BYTE ecp_mp_task::choose_option (const char* question, BYTE nr_of_options_input )
+BYTE base::choose_option (const char* question, BYTE nr_of_options_input )
 {
 	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
@@ -134,7 +134,7 @@ BYTE ecp_mp_task::choose_option (const char* question, BYTE nr_of_options_input 
 
 // --------------------------------------------------------------------------
 // Zadanie od operatora podania liczby calkowitej (int)
-int ecp_mp_task::input_integer (const char* question )
+int base::input_integer (const char* question )
 {
 	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
@@ -163,7 +163,7 @@ int ecp_mp_task::input_integer (const char* question )
 
 // --------------------------------------------------------------------------
 // Zadanie od operatora podania liczby rzeczywistej (double)
-double ecp_mp_task::input_double (const char* question )
+double base::input_double (const char* question )
 {
 	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
@@ -191,7 +191,7 @@ double ecp_mp_task::input_double (const char* question )
 
 // --------------------------------------------------------------------------
 // Informacja wymagajaca potwierdzenia odbioru przez operatora
-bool ecp_mp_task::show_message (const char* message)
+bool base::show_message (const char* message)
 {
 	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
@@ -221,7 +221,7 @@ bool ecp_mp_task::show_message (const char* message)
 // Funkcje do obslugi czujnikow
 
 // ------------------------------------------------------------------------
-void ecp_mp_task::kill_all_VSP (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m)
+void base::kill_all_VSP (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m)
 {
 	// Zabicie wszystkich procesow VSP
 	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = _sensor_m.begin();
@@ -239,7 +239,7 @@ void ecp_mp_task::kill_all_VSP (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m)
 // ------------------------------------------------------------------------
 
 
-void ecp_mp_task::all_sensors_initiate_reading (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m)
+void base::all_sensors_initiate_reading (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m)
 {
 	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = _sensor_m.begin();
 	        sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++) {
@@ -252,7 +252,7 @@ void ecp_mp_task::all_sensors_initiate_reading (std::map <SENSOR_ENUM, ::sensor*
 	}
 }
 
-void ecp_mp_task::all_sensors_get_reading (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m)
+void base::all_sensors_get_reading (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m)
 {
 
 	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = _sensor_m.begin();

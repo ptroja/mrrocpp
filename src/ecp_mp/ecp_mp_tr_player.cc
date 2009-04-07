@@ -14,12 +14,12 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace transmitter {
 
-player_transmitter::player_transmitter  (
-    TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object,
+player::player  (
+    TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task:: base& _ecp_mp_object,
     const char *host, unsigned int port,
     const char *devname, int devindex, int access
 )  :
-		transmitter (_transmitter_name, _section_name, _ecp_mp_object)
+		base (_transmitter_name, _section_name, _ecp_mp_object)
 {
 
 	int err;
@@ -128,7 +128,7 @@ player_transmitter::player_transmitter  (
 }
 
 
-player_transmitter::~player_transmitter ()
+player::~player ()
 {
 	// Shutdown and tidy up
 	printf("Player transmitter shutting down...");
@@ -147,12 +147,12 @@ player_transmitter::~player_transmitter ()
 	printf("done\n");
 }
 
-bool player_transmitter::t_write()
+bool player::t_write()
 {
 	return true;
 }
 
-bool player_transmitter::t_read(bool wait)
+bool player::t_read(bool wait)
 {
 
 	if (wait) {
@@ -237,11 +237,11 @@ bool player_transmitter::t_read(bool wait)
 	return 1;
 }
 
-void * player_transmitter::query_loop(void * arg)
+void * player::query_loop(void * arg)
 {
 
 	// Read data from the server
-	player_transmitter *me = (player_transmitter *) arg;
+	player *me = (player *) arg;
 	playerc_client_t *clnt = me->client;
 
 	while(1) {
@@ -273,7 +273,7 @@ void * player_transmitter::query_loop(void * arg)
 }
 
 // Set the robot speed
-int player_transmitter::position_set_cmd_vel(double vx, double vy, double va, int state)
+int player::position_set_cmd_vel(double vx, double vy, double va, int state)
 {
 	if (if_code != PLAYER_POSITION_CODE)
 		return -1;
@@ -291,7 +291,7 @@ int player_transmitter::position_set_cmd_vel(double vx, double vy, double va, in
 }
 
 // Set the target pose
-int player_transmitter::position_set_cmd_pose(double gx, double gy, double ga, int state)
+int player::position_set_cmd_pose(double gx, double gy, double ga, int state)
 {
 	if (if_code != PLAYER_POSITION_CODE)
 		return -1;
@@ -310,7 +310,7 @@ int player_transmitter::position_set_cmd_pose(double gx, double gy, double ga, i
 }
 
 // say phrase
-int player_transmitter::say(const char *str)
+int player::say(const char *str)
 {
 	if (if_code != PLAYER_SPEECH_CODE)
 		return -1;

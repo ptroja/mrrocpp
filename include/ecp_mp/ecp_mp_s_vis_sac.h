@@ -17,12 +17,12 @@ namespace ecp_mp {
 namespace sensor {
 
 /***************** Klasa czujnikow ********************/
-class ecp_mp_vis_sac_sensor: public ecp_mp_sensor{
+class vis_sac: public base{
   private:									// pola do komunikacji
 
   public:
 	// Konstruktor czujnika wirtualnego - wywolanie konstruktora klasy bazowej.
- 	ecp_mp_vis_sac_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object);
+ 	vis_sac (SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object);
 											// konstruktor czujnika virtualnego
 	void get_reading (void);			// odebranie odczytu od VSP
 }; 

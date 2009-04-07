@@ -35,9 +35,9 @@ mp_task_vis_sac_lx::mp_task_vis_sac_lx(configurator &_config) :
 void mp_task_vis_sac_lx::task_initialization(void)
 {
 	// Powolanie czujnikow
-	sensor_m[SENSOR_FORCE_ON_TRACK] = new ecp_mp::sensor::ecp_mp_schunk_sensor (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
+	sensor_m[SENSOR_FORCE_ON_TRACK] = new ecp_mp::sensor::schunk (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
 
-	sensor_m[SENSOR_CAMERA_SA] = new ecp_mp::sensor::ecp_mp_vis_sac_lx_sensor (SENSOR_CAMERA_SA, "[vsp_vis]", *this); //change if SENSOR_CAMERA_SA used for nonnn recog (vsp_vis_pbeolsac)
+	sensor_m[SENSOR_CAMERA_SA] = new ecp_mp::sensor::vis_sac_lx (SENSOR_CAMERA_SA, "[vsp_vis]", *this); //change if SENSOR_CAMERA_SA used for nonnn recog (vsp_vis_pbeolsac)
 
 	// Konfiguracja wszystkich czujnikow	
 

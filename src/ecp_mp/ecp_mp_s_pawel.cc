@@ -24,8 +24,8 @@ namespace ecp_mp {
 namespace sensor {
 
 /***************************** CONSTRUCTOR ********************************/
-ecp_mp_pawel_sensor::ecp_mp_pawel_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object):
-	ecp_mp_sensor (_sensor_name, _section_name, _ecp_mp_object) {
+pawel::pawel (SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object):
+	base (_sensor_name, _section_name, _ecp_mp_object) {
 
 	union_size = sizeof(image.sensor_union.ball);
 
@@ -33,7 +33,7 @@ ecp_mp_pawel_sensor::ecp_mp_pawel_sensor (SENSOR_ENUM _sensor_name, const char* 
 	//  sr_ecp_msg->message (SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
 }
 /************************** CONFIGURE SENSOR ******************************/
-void ecp_mp_pawel_sensor::configure_sensor() {
+void pawel::configure_sensor() {
 
 	devmsg.to_vsp.i_code=VSP_CONFIGURE_SENSOR;
 //	printf ("[ecp_mp]\tkonfiguracja czujnika\n");
@@ -43,7 +43,7 @@ void ecp_mp_pawel_sensor::configure_sensor() {
 }
 
 /************************** INITIATE  READING *********************************/
-void ecp_mp_pawel_sensor::initiate_reading() {
+void pawel::initiate_reading() {
 
 	devmsg.to_vsp.i_code=VSP_INITIATE_READING;
 	if (devctl(sd, DEVCTL_RW, &devmsg, sizeof(DEVCTL_MSG), NULL) == 9)
@@ -54,7 +54,7 @@ void ecp_mp_pawel_sensor::initiate_reading() {
 }
 
 /***************************** GET  READING *********************************/
-void ecp_mp_pawel_sensor::get_reading() {
+void pawel::get_reading() {
 
 	if(read(sd, &from_vsp, sizeof(VSP_ECP_MSG)) == -1)
 		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);

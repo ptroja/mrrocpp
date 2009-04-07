@@ -134,11 +134,11 @@ void mp_task_fsautomat::task_initialization(void)
 	 xmlFreeDoc(doc);
 	 xmlCleanupParser();
 	 */
-	sensor_m[SENSOR_CAMERA_ON_TRACK] = new ecp_mp::sensor::ecp_mp_vis_sensor(SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
+	sensor_m[SENSOR_CAMERA_ON_TRACK] = new ecp_mp::sensor::vis(SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
 	if (config.return_int_value("vis_servoing")) {
 
-		sensor_m[SENSOR_CAMERA_SA] = new ecp_mp::sensor::ecp_mp_vis_sensor(SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+		sensor_m[SENSOR_CAMERA_SA] = new ecp_mp::sensor::vis(SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 
 	}
 
@@ -152,7 +152,7 @@ void mp_task_fsautomat::task_initialization(void)
 	usleep(1000 * 100);
 
 	// dodanie transmitter'a
-	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] = new ecp_mp::transmitter::rc_windows_transmitter(ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS,
+	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] = new ecp_mp::transmitter::rc_windows(ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS,
 			"[transmitter_rc_windows]", *this);
 
 	cube_state = new CubeState();
@@ -306,10 +306,10 @@ std::map<char *, State, ecp_task::str_cmp> * mp_task_fsautomat::takeStatesMap()
 void mp_task_fsautomat::configureProperSensor(char *propSensor)
 {
 	// Powolanie czujnikow
-	sensor_m[SENSOR_CAMERA_ON_TRACK] = new ecp_mp::sensor::ecp_mp_vis_sensor(SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
+	sensor_m[SENSOR_CAMERA_ON_TRACK] = new ecp_mp::sensor::vis(SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
 	if (config.return_int_value("vis_servoing")) {
-		sensor_m[SENSOR_CAMERA_SA] = new ecp_mp::sensor::ecp_mp_vis_sensor(SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+		sensor_m[SENSOR_CAMERA_SA] = new ecp_mp::sensor::vis(SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 	}
 
 	// Konfiguracja wszystkich czujnikow
@@ -324,7 +324,7 @@ void mp_task_fsautomat::configureProperSensor(char *propSensor)
 void mp_task_fsautomat::configureProperTransmitter(char *propTrans)
 {
 	// dodanie transmitter'a
-	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] = new ecp_mp::transmitter::rc_windows_transmitter(ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS,
+	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] = new ecp_mp::transmitter::rc_windows(ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS,
 			"[transmitter_rc_windows]", *this);
 }
 

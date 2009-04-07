@@ -773,16 +773,16 @@ void mp_task_rubik_cube_solver::task_initialization(void)
 {
 	// Powolanie czujnikow
 	sensor_m[SENSOR_FORCE_ON_TRACK] =
-		new ecp_mp::sensor::ecp_mp_schunk_sensor (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
+		new ecp_mp::sensor::schunk (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
 
 	sensor_m[SENSOR_FORCE_POSTUMENT] =
-		new ecp_mp::sensor::ecp_mp_schunk_sensor (SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
+		new ecp_mp::sensor::schunk (SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
 
 	sensor_m[SENSOR_CAMERA_ON_TRACK] =
-		new ecp_mp::sensor::ecp_mp_vis_sensor (SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
+		new ecp_mp::sensor::vis (SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
 	sensor_m[SENSOR_CAMERA_SA] =
-		new ecp_mp::sensor::ecp_mp_vis_sensor (SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+		new ecp_mp::sensor::vis (SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 
 	// Konfiguracja wszystkich czujnikow
 	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
@@ -796,7 +796,7 @@ void mp_task_rubik_cube_solver::task_initialization(void)
 
 	// dodanie transmitter'a
 	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] =
-		new ecp_mp::transmitter::rc_windows_transmitter (ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
+		new ecp_mp::transmitter::rc_windows (ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
 
 	sr_ecp_msg->message("MP rc loaded");
 };

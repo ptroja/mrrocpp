@@ -31,7 +31,7 @@ void ecp_task_pawel::task_initialization(void)
 
     // Powolanie czujnikow
 
-    sensor_m[SENSOR_PAWEL] = new ecp_mp::sensor::ecp_mp_pawel_sensor(SENSOR_PAWEL, "[vsp_pawel]", *this);
+    sensor_m[SENSOR_PAWEL] = new ecp_mp::sensor::pawel(SENSOR_PAWEL, "[vsp_pawel]", *this);
     sensor_m[SENSOR_PAWEL]->configure_sensor();
     //	sensor_m[SENSOR_PAWEL]->initiate_reading();
 

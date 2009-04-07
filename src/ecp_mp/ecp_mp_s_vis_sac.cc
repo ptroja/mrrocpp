@@ -22,8 +22,8 @@ namespace ecp_mp {
 namespace sensor {
 
 /***************************** CONSTRUCTOR ********************************/
-ecp_mp_vis_sac_sensor::ecp_mp_vis_sac_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object):
-	ecp_mp_sensor (_sensor_name, _section_name, _ecp_mp_object) {
+vis_sac::vis_sac (SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object):
+	base (_sensor_name, _section_name, _ecp_mp_object) {
 
 //    printf("ecp_mp_vis_sac_sensor: [vsp_vis_sac_sac]\n");
     // SAC -> uzycie strunktury sizeof(image.sensor_union.camera);
@@ -32,7 +32,7 @@ ecp_mp_vis_sac_sensor::ecp_mp_vis_sac_sensor (SENSOR_ENUM _sensor_name, const ch
 }//: ecp_mp_vis_sac_sensor
 
 // odebranie odczytu od VSP
-void ecp_mp_vis_sac_sensor::get_reading(){
+void vis_sac::get_reading(){
  	if(read(sd, &from_vsp, sizeof(VSP_ECP_MSG))==-1)
 		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
 	// jesli odczyt sie powodl, przepisanie pol obrazu z bufora komunikacyjnego do image;

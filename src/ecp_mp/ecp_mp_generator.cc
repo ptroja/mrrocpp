@@ -4,14 +4,14 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace generator {
 
-ecp_mp_generator::ecp_mp_generator(sr_ecp& _sr_ecp_msg) :
+base::base(sr_ecp& _sr_ecp_msg) :
 	sr_ecp_msg(_sr_ecp_msg),
 	trigger(false),
 	node_counter(0)
 	{}
 
 
-bool ecp_mp_generator::check_and_null_trigger()
+bool base::check_and_null_trigger()
 {
 	bool returned_value = false;
 	if (trigger)
@@ -24,7 +24,7 @@ bool ecp_mp_generator::check_and_null_trigger()
 }
 
 
-ecp_mp_generator::~ecp_mp_generator()
+base::~base()
 {}
 
 } // namespace generator

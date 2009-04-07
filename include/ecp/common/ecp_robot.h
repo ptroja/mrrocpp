@@ -15,7 +15,7 @@ class ui_common_robot;
 
 class ecp_task;
 
-class ecp_robot : public ecp_mp::ecp_mp_robot
+class ecp_robot : public ecp_mp::robot
 {
 	friend class ui_common_robot;
 	friend class ecp_generator_t;

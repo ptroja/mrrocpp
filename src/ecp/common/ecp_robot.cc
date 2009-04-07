@@ -25,7 +25,7 @@
 
 // konstruktor wywolywany z UI
 ecp_robot::ecp_robot(ROBOT_ENUM _robot_name, configurator &_config, sr_ecp *_sr_ecp_msg) :
-	ecp_mp_robot(_robot_name), spawn_and_kill(true)
+	robot(_robot_name), spawn_and_kill(true)
 {
 	sr_ecp_msg = _sr_ecp_msg;
 
@@ -34,7 +34,7 @@ ecp_robot::ecp_robot(ROBOT_ENUM _robot_name, configurator &_config, sr_ecp *_sr_
 
 // konstruktor wywolywany z ECP
 ecp_robot::ecp_robot(ROBOT_ENUM _robot_name, ecp_task& _ecp_object) :
-	ecp_mp_robot(_robot_name), spawn_and_kill(false)
+	robot(_robot_name), spawn_and_kill(false)
 {
 	sr_ecp_msg = _ecp_object.sr_ecp_msg;
 

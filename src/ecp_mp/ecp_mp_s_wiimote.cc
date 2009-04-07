@@ -13,7 +13,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-ecp_mp_wiimote_sensor::ecp_mp_wiimote_sensor(SENSOR_ENUM _sensor_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object, int _union_size)
+wiimote::wiimote(SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object, int _union_size)
 	: sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(_sensor_name)
 {
 	// Set size of passed message/union.
@@ -58,7 +58,7 @@ ecp_mp_wiimote_sensor::ecp_mp_wiimote_sensor(SENSOR_ENUM _sensor_name, const cha
 }
 
 
-void ecp_mp_wiimote_sensor::configure_sensor() {
+void wiimote::configure_sensor() {
 	// Send adequate command to wiimote.
 	to_vsp.i_code = VSP_CONFIGURE_SENSOR;
 	if(write(sockfd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)
@@ -66,7 +66,7 @@ void ecp_mp_wiimote_sensor::configure_sensor() {
 }
 
 
-void ecp_mp_wiimote_sensor::initiate_reading() {
+void wiimote::initiate_reading() {
 	// Send adequate command to wiimote.
 	to_vsp.i_code = VSP_INITIATE_READING;
 
@@ -75,7 +75,7 @@ void ecp_mp_wiimote_sensor::initiate_reading() {
 }
 
 
-void ecp_mp_wiimote_sensor::send_reading(ECP_VSP_MSG to) {
+void wiimote::send_reading(ECP_VSP_MSG to) {
 	// Send any command to wiimote.
 
 	if(write(sockfd, &to, sizeof(ECP_VSP_MSG)) == -1)
@@ -83,7 +83,7 @@ void ecp_mp_wiimote_sensor::send_reading(ECP_VSP_MSG to) {
 }
 
 
-void ecp_mp_wiimote_sensor::get_reading() {
+void wiimote::get_reading() {
 	// Send adequate command to wiimote.
 	to_vsp.i_code = VSP_GET_READING;
 	if(write(sockfd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)
@@ -101,7 +101,7 @@ void ecp_mp_wiimote_sensor::get_reading() {
 }
 
 
-void ecp_mp_wiimote_sensor::terminate() {
+void wiimote::terminate() {
 	// Send adequate command to wiimote.
 	to_vsp.i_code = VSP_TERMINATE;
 	if(write(sockfd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)

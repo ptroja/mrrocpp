@@ -15,13 +15,13 @@ namespace ecp_mp {
 namespace sensor {
 
 /***************************** CONSTRUCTOR ********************************/
-ecp_mp_schunk_sensor::ecp_mp_schunk_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object):
-	ecp_mp_sensor (_sensor_name, _section_name, _ecp_mp_object) {
+schunk::schunk (SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object):
+	base (_sensor_name, _section_name, _ecp_mp_object) {
   union_size = sizeof(image.sensor_union.force);
 }
 
 // inicjacja odczytu dla VSP
-void ecp_mp_schunk_sensor::initiate_reading(){ // by Y - wywalone ze wzgledu na prace nieinteraktywna
+void schunk::initiate_reading(){ // by Y - wywalone ze wzgledu na prace nieinteraktywna
 }
 
 } // namespace sensor

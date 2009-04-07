@@ -136,7 +136,7 @@ messip_channel_t* mp_task::mp_attach = NULL;
 map <ROBOT_ENUM, mp_robot*> mp_task::robot_m;
 
 // KONSTRUKTORY
-mp_task::mp_task(configurator &_config) : ecp_mp_task(_config)
+mp_task::mp_task(configurator &_config) : base(_config)
 {
 	ui_new_pulse = false;
 }

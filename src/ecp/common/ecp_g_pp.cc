@@ -69,7 +69,7 @@ bool progpanel_generator::next_step ( )
     the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
 
 
-    ecp_mp::sensor::ecp_mp_pp_sensor* pps = (ecp_mp::sensor::ecp_mp_pp_sensor*)(sensor_m[SENSOR_PP]);
+    ecp_mp::sensor::pp* pps = (ecp_mp::sensor::pp*)(sensor_m[SENSOR_PP]);
     // Pobranie ostatniego odczytu z czujnika sily.
     //	pps->initiate_reading();
     //	pps->get_reading();

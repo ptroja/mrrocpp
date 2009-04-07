@@ -29,7 +29,7 @@ typedef struct {
 } rc_win_buf_typedef;
 
 /***************** Klasa czujnikow ********************/
-class rc_windows_transmitter: public transmitter{
+class rc_windows: public base{
   private:									// pola do komunikacji
   	pthread_t worker;
 
@@ -40,9 +40,9 @@ class rc_windows_transmitter: public transmitter{
   	
   public:
 	// Konstruktor
- 	rc_windows_transmitter (TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object);
+ 	rc_windows (TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task:: base& _ecp_mp_object);
 											// konstruktor czujnika virtualnego
-	~rc_windows_transmitter();						// destruktor czujnika virtualnego
+	~rc_windows();						// destruktor czujnika virtualnego
 
     // odczyt z zawieszaniem lub bez
 	virtual bool t_read (bool wait);

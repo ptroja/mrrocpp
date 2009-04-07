@@ -20,10 +20,10 @@ namespace sensor {
 // ####################################################################
 // ###################   KLASA czujnikow - obsluga  linialow    ########################
 // ####################################################################
-class ecp_mp_digital_scales_sensor : public ecp_mp_sensor{
+class digital_scales : public base{
   public:
 	// Konstruktor czujnika wirtualnego - wywolanie konstruktora klasy bazowej.
- 	ecp_mp_digital_scales_sensor (SENSOR_ENUM _sensor_name, const char* _section_name, task:: ecp_mp_task& _ecp_mp_object);
+ 	digital_scales (SENSOR_ENUM _sensor_name, const char* _section_name, task::base& _ecp_mp_object);
 }; 
 
 } // namespace sensor

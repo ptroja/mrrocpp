@@ -12,7 +12,7 @@ namespace generator {
 
 
 
-class ecp_mp_generator
+class base
 {
 	// Klasa bazowa dla generatorow trajektorii (klasa abstrakcyjna)
 	// Sluzy zarowno do wyznaczania nastepnej wartosci zadanej jak i
@@ -24,19 +24,19 @@ protected:
 public:
 	bool trigger;			// informacja czy pszyszedl puls trigger
 
-	ecp_mp_generator(sr_ecp& _sr_ecp_msg);
+	base(sr_ecp& _sr_ecp_msg);
 
 	bool check_and_null_trigger(); 		// zwraca wartosc trigger i zeruje go
 
 	int node_counter;  // biezacy wezel interpolacji
 
-	virtual ~ecp_mp_generator();
+	virtual ~base();
 
 	// mapa wszystkich czujnikow
 	std::map <SENSOR_ENUM, ::sensor*> sensor_m;
 
 	// mapa wszystkich transmiterow
-	std::map <transmitter::TRANSMITTER_ENUM, transmitter::transmitter*> transmitter_m;
+	std::map <transmitter::TRANSMITTER_ENUM, transmitter::base*> transmitter_m;
 
 	// generuje pierwszy krok ruchu -
 	// pierwszy krok czesto rozni sie od pozostalych,

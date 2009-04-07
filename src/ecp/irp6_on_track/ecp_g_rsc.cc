@@ -50,12 +50,12 @@ bool robot_stopped_condition::next_step (){
 				stoped = false;
 		}while(!stoped);
 	// Czujnik - linialy.
-	ecp_mp::sensor::ecp_mp_digital_scales_sensor* dss = (ecp_mp::sensor::ecp_mp_digital_scales_sensor*)(sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]);
+	ecp_mp::sensor::digital_scales* dss = (ecp_mp::sensor::digital_scales*)(sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]);
 	// Odebranie odczytow ostatniego polozenia i dodanie ich do listy.
 	add_rse_element(*dss);
 	// Czujnik sily.
 	if (sensor_m.count(SENSOR_FORCE_ON_TRACK) > 0){
-		ecp_mp::sensor::ecp_mp_force_sensor* fs = (ecp_mp::sensor::ecp_mp_force_sensor*)(sensor_m[SENSOR_FORCE_ON_TRACK]);
+		ecp_mp::sensor::force* fs = (ecp_mp::sensor::force*)(sensor_m[SENSOR_FORCE_ON_TRACK]);
 		// Pobranie ostatniego odczytu z czujnika sily.
 		fs->get_reading();
 		// Przepisanie obecnego polozenia robota do bufora w zaleznosci od rodzaju wspolrzednych.
@@ -125,7 +125,7 @@ void robot_stopped_condition::refresh_window(void){
 
 
 /***************************** ADD RSE ELEMENT *******************************/
-void robot_stopped_condition::add_rse_element(ecp_mp::sensor::ecp_mp_digital_scales_sensor& the_sensor){
+void robot_stopped_condition::add_rse_element(ecp_mp::sensor::digital_scales& the_sensor){
 	// double current_position[6];
 	// Pobranie pozycji robota.
 	// Rozkaz dla EDP.

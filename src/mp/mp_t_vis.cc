@@ -35,10 +35,10 @@ void mp_task_vis::task_initialization(void)
 {
 	// Powolanie czujnikow
 	sensor_m[SENSOR_FORCE_ON_TRACK] = 
-		new ecp_mp::sensor::ecp_mp_schunk_sensor (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
+		new ecp_mp::sensor::schunk (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
 
 	sensor_m[SENSOR_CAMERA_SA] = 
-		new ecp_mp::sensor::ecp_mp_vis_sensor (SENSOR_CAMERA_SA, "[vsp_vis]", *this);
+		new ecp_mp::sensor::vis (SENSOR_CAMERA_SA, "[vsp_vis]", *this);
 
 	// Konfiguracja wszystkich czujnikow	
 	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();

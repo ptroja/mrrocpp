@@ -65,8 +65,8 @@ class trajectory_reproduce_generator : public ecp_teach_in_generator {
 		void load_trajectory(char* filename);
 		// Stworznie polecenia dla robota -> ruch do pozycji.
 		void create_command_for_pose(ecp_taught_in_pose& tip);
-		void return_sensor_reading(ecp_mp::sensor::ecp_mp_force_sensor& the_sensor, double sensor_reading[6]);
-		void check_force_condition(ecp_mp::sensor::ecp_mp_force_sensor& the_sensor);
+		void return_sensor_reading(ecp_mp::sensor::force& the_sensor, double sensor_reading[6]);
+		void check_force_condition(ecp_mp::sensor::force& the_sensor);
 		void set_dangerous_force(void);
 		// Zwrocenie danych z tablic.
 		void return_current_data(double robot_position[6], double sensor_reading[6]);

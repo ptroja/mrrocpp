@@ -981,13 +981,13 @@ void mp_task_rubik_cube_solver::task_initialization(void)
 	// Powolanie czujnikow
 
 	sensor_m[SENSOR_CAMERA_ON_TRACK] =
-		new ecp_mp::sensor::ecp_mp_vis_sensor (SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
+		new ecp_mp::sensor::vis (SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
 	if (config.return_int_value("vis_servoing"))
 	{
 
 		sensor_m[SENSOR_CAMERA_SA] =
-			new ecp_mp::sensor::ecp_mp_vis_sensor (SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+			new ecp_mp::sensor::vis (SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 
 	}
 
@@ -1003,7 +1003,7 @@ void mp_task_rubik_cube_solver::task_initialization(void)
 
 	// dodanie transmitter'a
 	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] =
-		new ecp_mp::transmitter::rc_windows_transmitter (ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]", *this);
+		new ecp_mp::transmitter::rc_windows (ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]", *this);
 
 	sr_ecp_msg->message("MP rcsc loaded");
 }

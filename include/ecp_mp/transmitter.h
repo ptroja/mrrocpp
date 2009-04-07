@@ -11,7 +11,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
 // XXX Forward declaration
-class ecp_mp_task;
+class base;
 }
 }
 }
@@ -64,7 +64,7 @@ typedef struct _FROM_VA
 	};
 } FROM_VA;
 
-class transmitter
+class base
 {
 		// Klasa bazowa dla transmitterow (klasa abstrakcyjna)
 		// Transmittery konkretne wyprowadzane sa z klasy bazowej
@@ -82,9 +82,9 @@ class transmitter
 		sr_ecp &sr_ecp_msg;
 
 	public:
-		transmitter (TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::ecp_mp_task& _ecp_mp_object);
+		base (TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::base& _ecp_mp_object);
 
-		virtual ~transmitter()
+		virtual ~base()
 		{}
 		;
 

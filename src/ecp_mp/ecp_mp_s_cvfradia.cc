@@ -23,7 +23,7 @@ using namespace std;
 /*!
  * Constructor. Creates socket connection to cvFraDIA.
  */
-ecp_mp_cvfradia_sensor::ecp_mp_cvfradia_sensor(SENSOR_ENUM _sensor_name, const char* _section_name, task::ecp_mp_task& _ecp_mp_object, int _union_size)
+cvfradia::cvfradia(SENSOR_ENUM _sensor_name, const char* _section_name, task::base& _ecp_mp_object, int _union_size)
 	: sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(_sensor_name)
 {
 	// Set size of passed message/union.
@@ -75,7 +75,7 @@ ecp_mp_cvfradia_sensor::ecp_mp_cvfradia_sensor(SENSOR_ENUM _sensor_name, const c
 /*!
  * Sends sensor configuration to cvFraDIA.
  */
-void ecp_mp_cvfradia_sensor::configure_sensor() {
+void cvfradia::configure_sensor() {
 	// Send adequate command to cvFraDIA.
 	to_vsp.i_code = VSP_CONFIGURE_SENSOR;
 	// Name of required task is set in constructor.
@@ -90,7 +90,7 @@ void ecp_mp_cvfradia_sensor::configure_sensor() {
 /*!
  * Sends initiation reading command to cvFraDIA.
  */
-void ecp_mp_cvfradia_sensor::initiate_reading() {
+void cvfradia::initiate_reading() {
 	// Send adequate command to cvFraDIA.
 	to_vsp.i_code = VSP_INITIATE_READING;
 
@@ -102,7 +102,7 @@ void ecp_mp_cvfradia_sensor::initiate_reading() {
 /*!
  * Sends given reading command to cvFraDIA.
  */
-void ecp_mp_cvfradia_sensor::send_reading(ECP_VSP_MSG to) {
+void cvfradia::send_reading(ECP_VSP_MSG to) {
 	// Send any command to cvFraDIA.
 
 	if(write(sockfd, &to, sizeof(ECP_VSP_MSG)) == -1)
@@ -113,7 +113,7 @@ void ecp_mp_cvfradia_sensor::send_reading(ECP_VSP_MSG to) {
 /*!
  * Retrieves aggregated data from cvFraDIA.
  */
-void ecp_mp_cvfradia_sensor::get_reading() {
+void cvfradia::get_reading() {
 	// Send adequate command to cvFraDIA.
 	to_vsp.i_code = VSP_GET_READING;
 	if(write(sockfd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)
@@ -135,7 +135,7 @@ void ecp_mp_cvfradia_sensor::get_reading() {
 /*!
  * Closes cvFraDIA socket connection.
  */
-void ecp_mp_cvfradia_sensor::terminate() {
+void cvfradia::terminate() {
 	// Send adequate command to cvFraDIA.
 	to_vsp.i_code = VSP_TERMINATE;
 	if(write(sockfd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)

@@ -37,7 +37,7 @@ void ecp_task_test_irp6p::task_initialization(void)
 
 		// Powolanie czujnikow
 	sensor_m[SENSOR_FORCE_POSTUMENT] =
-		new ecp_mp::sensor::ecp_mp_schunk_sensor (SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
+		new ecp_mp::sensor::schunk (SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
 
 	// Konfiguracja wszystkich czujnikow
 	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();

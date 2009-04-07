@@ -10,7 +10,7 @@
 
 
 // klasa globalna dla calego procesu MP
-class mp_task: public ecp_mp::task::ecp_mp_task
+class mp_task: public ecp_mp::task::base
 {
 	public:
 #if !defined(USE_MESSIP_SRR)

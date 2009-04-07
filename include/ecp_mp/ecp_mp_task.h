@@ -26,18 +26,18 @@ namespace ecp_mp {
 namespace task {
 
 // klasa macierzysta dla klas globalnych procesow ECP i MP
-class ecp_mp_task {
+class base {
 
 public:
 
-	ecp_mp_task(configurator &_config);
-	~ecp_mp_task();
+	base(configurator &_config);
+	~base();
 
 	// mapa wszystkich czujnikow
 	static std::map <SENSOR_ENUM, ::sensor*> sensor_m;
 
 	// mapa wszystkich transmiterow
-	static std::map <transmitter::TRANSMITTER_ENUM, transmitter::transmitter*> transmitter_m;
+	static std::map <transmitter::TRANSMITTER_ENUM, transmitter::base*> transmitter_m;
 
 	static sr_ecp* sr_ecp_msg;
 	configurator &config;

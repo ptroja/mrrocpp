@@ -28,7 +28,7 @@ ecp_spots_generator::ecp_spots_generator (ecp_task& _ecp_task)
 
 bool ecp_spots_generator::first_step()
 {
-	sensor = (ecp_mp::sensor::ecp_mp_cvfradia_sensor *)sensor_m[SENSOR_CVFRADIA];
+	sensor = (ecp_mp::sensor::cvfradia *)sensor_m[SENSOR_CVFRADIA];
 
 	//proste zadanie kinematyki
 	the_robot->EDP_data.instruction_type = GET;

@@ -59,10 +59,10 @@ void mp_task_pr::task_initialization(void)
 {
 	// Powolanie czujnikow
 	sensor_m[SENSOR_FORCE_ON_TRACK] = 
-		new ecp_mp::sensor::ecp_mp_schunk_sensor (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
+		new ecp_mp::sensor::schunk (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
 
 	sensor_m[SENSOR_FORCE_POSTUMENT] = 
-		new ecp_mp::sensor::ecp_mp_schunk_sensor (SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
+		new ecp_mp::sensor::schunk (SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
 
 	// Konfiguracja wszystkich czujnikow	
 	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();

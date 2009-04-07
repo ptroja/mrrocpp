@@ -26,7 +26,7 @@ namespace sensor {
 /*!
  * Constructor. Creates socket connection to pcbird.
  */
-ecp_mp_pcbird_sensor::ecp_mp_pcbird_sensor(SENSOR_ENUM _sensor_name, const char* _section_name, task::ecp_mp_task& _ecp_mp_object)
+pcbird::pcbird(SENSOR_ENUM _sensor_name, const char* _section_name, task::base& _ecp_mp_object)
 	: sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(_sensor_name)
 {
 	// Set size of passed message/union.
@@ -50,7 +50,7 @@ ecp_mp_pcbird_sensor::ecp_mp_pcbird_sensor(SENSOR_ENUM _sensor_name, const char*
 /*!
  * Sends sensor configuration to pcbird.
  */
-void ecp_mp_pcbird_sensor::configure_sensor() {
+void pcbird::configure_sensor() {
 
   // Start streaming.
 /*  if (pcbird_start_streaming(sockfd) == -1)
@@ -63,7 +63,7 @@ void ecp_mp_pcbird_sensor::configure_sensor() {
 /*!
  * Sends initiation reading command to pcbird.
  */
-void ecp_mp_pcbird_sensor::initiate_reading() {
+void pcbird::initiate_reading() {
 
 }
 
@@ -71,7 +71,7 @@ void ecp_mp_pcbird_sensor::initiate_reading() {
 /*!
  * Retrieves aggregated data from pcbird.
  */
-void ecp_mp_pcbird_sensor::get_reading() {
+void pcbird::get_reading() {
 
 //  pcbird_get_streaming_position(sockfd, (pcbird_pos_t *)&image.sensor_union.pcbird);
   pcbird_get_single_position(sockfd, (pcbird_pos_t *)&image.sensor_union.pcbird);
@@ -86,7 +86,7 @@ void ecp_mp_pcbird_sensor::get_reading() {
 /*!
  * Closes pcbird socket connection.
  */
-void ecp_mp_pcbird_sensor::terminate() {
+void pcbird::terminate() {
 	close(sockfd);
 	sr_ecp_msg.message("Terminate\n");
 } // end: terminate()

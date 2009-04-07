@@ -67,7 +67,7 @@ void ecp_task_progpanel_irp6ot::task_initialization(void)
 
     // powolanie czujnikow
     sensor_m[SENSOR_PP] =
-        new ecp_mp::sensor::ecp_mp_pp_sensor (SENSOR_PP, "[vsp_pp_irp6ot]", *this);
+        new ecp_mp::sensor::pp (SENSOR_PP, "[vsp_pp_irp6ot]", *this);
     // Konfiguracja czujnika.
     sensor_m.begin()->second->configure_sensor();
     // Stworzenie generatora.

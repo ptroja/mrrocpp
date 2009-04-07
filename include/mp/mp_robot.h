@@ -24,7 +24,7 @@ public:
 
 
 
-class mp_robot : public ecp_mp::ecp_mp_robot
+class mp_robot : public ecp_mp::robot
 {
     // Klasa bazowa dla robotow (klasa abstrakcyjna)
     // Kazdy robot konkretny (wyprowadzony z klasy bazowej)
