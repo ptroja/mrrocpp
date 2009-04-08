@@ -28,7 +28,7 @@ namespace irp6p {
 /* -----------------------------------------------------------------------
   Konstruktor.
  ------------------------------------------------------------------------- */
-kinematic_model_irp6p_with_wrist::kinematic_model_irp6p_with_wrist (void)
+model_with_wrist::model_with_wrist (void)
 {
   // Ustawienie etykiety modelu kinematycznego.
   set_kinematic_model_label("Switching to kinematic model with active wrist");
@@ -46,7 +46,7 @@ kinematic_model_irp6p_with_wrist::kinematic_model_irp6p_with_wrist (void)
 /* -----------------------------------------------------------------------
   Ustawienia wszystkie parametry modelu kinematycznego danego modelu.
  ------------------------------------------------------------------------- */
-void kinematic_model_irp6p_with_wrist::set_kinematic_parameters(void)
+void model_with_wrist::set_kinematic_parameters(void)
 {
 /* -----------------------------------------------------------------------
 Numery osi:
@@ -276,7 +276,7 @@ Zakresy ruchu poszczegolnych stopni swobody (w radianach lub milimetrach).
 /* ------------------------------------------------------------------------
   Sprawdzenie ograniczen na polozenia katowe walow silnikow.
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6p_with_wrist::check_motor_position(const double motor_position[])
+void model_with_wrist::check_motor_position(const double motor_position[])
 {
 
 if (motor_position[0] < lower_limit_axis[0])   // Kat f1 mniejszy od minimalnego
@@ -320,7 +320,7 @@ else if (motor_position[6] > upper_limit_axis[6])   // Kat f7 wiekszy od maksyma
 /* ------------------------------------------------------------------------
   Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6p_with_wrist::check_joints(const double q[])
+void model_with_wrist::check_joints(const double q[])
 {
 
 	if (isnan(q[0])) throw  common::transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA1);
@@ -380,7 +380,7 @@ if (isnan(q[5])) throw  common::transformer_error::NonFatal_error_2 (NOT_A_NUMBE
   Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne
   (mp2i - motor position to internal)
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6p_with_wrist::mp2i_transform(const double* local_current_motor_pos, double* local_current_joints) {
+void model_with_wrist::mp2i_transform(const double* local_current_motor_pos, double* local_current_joints) {
 
   // zmienne pomocnicze
   double c, d, l;
@@ -440,7 +440,7 @@ void kinematic_model_irp6p_with_wrist::mp2i_transform(const double* local_curren
   Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
   (i2mp - internal to motor position)
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6p_with_wrist::i2mp_transform(double* local_desired_motor_pos_new, double* local_desired_joints)
+void model_with_wrist::i2mp_transform(double* local_desired_motor_pos_new, double* local_desired_joints)
 {
   // Niejednoznacznosc polozenia dla 3-tej osi (obrot kisci < 180�).
   double joint_3_revolution = M_PI;
@@ -500,7 +500,7 @@ void kinematic_model_irp6p_with_wrist::i2mp_transform(double* local_desired_moto
   * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6p_with_wrist::direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame) {
+void model_with_wrist::direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame) {
 
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
   check_joints (local_current_joints);
@@ -547,7 +547,7 @@ void kinematic_model_irp6p_with_wrist::direct_kinematics_transform(const double*
   Wyjscie:
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6p_with_wrist::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
+void model_with_wrist::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
 {
 
   // Stale

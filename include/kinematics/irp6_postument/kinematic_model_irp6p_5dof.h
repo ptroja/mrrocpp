@@ -144,7 +144,7 @@ typedef struct AngleTheta
 } THETA_NODE;
 
 
-class kinematic_model_irp6p_5dof : public kinematic_model_irp6p_with_wrist
+class model_5dof : public model_with_wrist
 {
 protected:
   // Wysokosc kolumny.
@@ -244,7 +244,7 @@ void Extract_vect_from_tree(THETA_NODE *root_ptr, double Theta[5],
 
 public:
   // Konstruktor.
-  kinematic_model_irp6p_5dof (void);
+  model_5dof (void);
 
   // Rozwiazanie prostego zagadnienia kinematyki.
   virtual void direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame);

@@ -21,13 +21,13 @@ namespace mrrocpp {
 namespace kinematic {
 namespace irp6p {
 
-class kinematic_model_calibrated_irp6p_with_wrist: public kinematic_model_irp6p_with_wrist
+class model_calibrated_with_wrist: public model_with_wrist
 {
   // Ustawienie parametrow kinematycznych.
   virtual void set_kinematic_parameters(void);
 public:
   // Konstruktor.
-  kinematic_model_calibrated_irp6p_with_wrist (void);
+  model_calibrated_with_wrist (void);
 
 };//: kinematic_model_calibrated_irp6p_with_wrist
 

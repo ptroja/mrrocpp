@@ -21,7 +21,7 @@ namespace irp6p {
 /* -----------------------------------------------------------------------
   Konstruktor.
  ------------------------------------------------------------------------- */
-kinematic_model_irp6p_jacobian_with_wrist::kinematic_model_irp6p_jacobian_with_wrist (void)
+model_jacobian_with_wrist::model_jacobian_with_wrist (void)
 {
   // Ustawienie etykiety modelu kinematycznego.
   set_kinematic_model_label("Switching to kinematic based on jacobian matrix");
@@ -45,7 +45,7 @@ kinematic_model_irp6p_jacobian_with_wrist::kinematic_model_irp6p_jacobian_with_w
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
  ------------------------------------------------------------------------ */
 
-void kinematic_model_irp6p_jacobian_with_wrist::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
+void model_jacobian_with_wrist::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
 {
 
   double K=1; 			//Zadane wzmocnienie

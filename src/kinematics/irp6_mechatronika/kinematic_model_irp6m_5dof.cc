@@ -24,7 +24,7 @@ namespace irp6m {
 /* -----------------------------------------------------------------------
   Konstruktor.
  ------------------------------------------------------------------------- */
-kinematic_model_irp6m_5dof::kinematic_model_irp6m_5dof (void)
+model_5dof::model_5dof (void)
 {
   // Ustawienie etykiety modelu kinematycznego.
   set_kinematic_model_label("Switching to 5 DOF kinematic model");
@@ -36,7 +36,7 @@ kinematic_model_irp6m_5dof::kinematic_model_irp6m_5dof (void)
 }; // end: kinematic_model::kinematic_model
 
 
-void kinematic_model_irp6m_5dof::set_kinematic_parameters(void)
+void model_5dof::set_kinematic_parameters(void)
 {
   // Wysokosc kolumny.
   d1 = 0.7;
@@ -56,7 +56,7 @@ void kinematic_model_irp6m_5dof::set_kinematic_parameters(void)
   metoda musi byc pusta - przedefiniowanie standardowej metody.
   W prostym zadaniu narzedzue jest "dolaczone" normalnie.
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6m_5dof::attached_tool_inverse_transform(frame_tab* local_current_end_effector_frame)
+void model_5dof::attached_tool_inverse_transform(frame_tab* local_current_end_effector_frame)
 {
 	return;
 };//: attached_tool_inverse_transform
@@ -73,7 +73,7 @@ void kinematic_model_irp6m_5dof::attached_tool_inverse_transform(frame_tab* loca
   * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6m_5dof::direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame)
+void model_5dof::direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame)
 {
 
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
@@ -119,7 +119,7 @@ void kinematic_model_irp6m_5dof::direct_kinematics_transform(const double* local
   Wyjscie:
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
  ------------------------------------------------------------------------ */
-void kinematic_model_irp6m_5dof::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
+void model_5dof::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
 {
   // Stale
  // const double a2_2 = a2*a2;
@@ -279,7 +279,7 @@ ZMIENNE ZEWNeTRZNE:
 
 #define EPSSS  1.0E-10
 
-THETA_NODE* kinematic_model_irp6m_5dof::Theta_1(double q0[3], double v0[3],
+THETA_NODE* model_5dof::Theta_1(double q0[3], double v0[3],
 		    double q6[3], double v6[3],
 		    int16_t *result,
 		    double old_theta[5],
@@ -619,7 +619,7 @@ ZMIENNE ZEWNeTRZNE:
 
 ---------------------------------------------------------------------------*/
 
-THETA_NODE* kinematic_model_irp6m_5dof::Theta_2(THETA_NODE *theta1_pointer, THETA_NODE *theta4_pointer,
+THETA_NODE* model_5dof::Theta_2(THETA_NODE *theta1_pointer, THETA_NODE *theta4_pointer,
 	    double u0[3], double v0[3], double q0[3], double u6[3],
 	    double q6[3], double v6[3], double radius_2,
 	    int16_t *result, double old_theta[5],
@@ -949,7 +949,7 @@ ZMIENNE ZEWNeTRZNE:
    spowodowane kumulacja bledow numerycznych */
 #define OFFSET 1.0e-4
 
-THETA_NODE* kinematic_model_irp6m_5dof::Theta_3(THETA_NODE *theta1_pointer,
+THETA_NODE* model_5dof::Theta_3(THETA_NODE *theta1_pointer,
 		    THETA_NODE *theta2_pointer,
 		    THETA_NODE *theta4_pointer,
 		    double e, double f,
@@ -1107,7 +1107,7 @@ ZMIENNE ZEWNeTRZNE:
 
 ---------------------------------------------------------------------------*/
 
-THETA_NODE* kinematic_model_irp6m_5dof::Theta_4(THETA_NODE *theta1_pointer,
+THETA_NODE* model_5dof::Theta_4(THETA_NODE *theta1_pointer,
 		    double u0[3], double v0[3], double u6[3], double v6[3],
 		    double q0[3], double q6[3], double radius_2,
 		    int16_t *result, double old_theta[5],
@@ -1311,7 +1311,7 @@ ZMIENNE ZEWNeTRZNE:
 
 #define EPS5 1.0e-6
 
-THETA_NODE* kinematic_model_irp6m_5dof::Theta_5(THETA_NODE *theta1_pointer,
+THETA_NODE* model_5dof::Theta_5(THETA_NODE *theta1_pointer,
 		    THETA_NODE *theta2_pointer,
 		    THETA_NODE *theta3_pointer,
 		    THETA_NODE *theta4_pointer,
@@ -1530,7 +1530,7 @@ UWAGA! Jezeli ktorys z otrzymanych pierwiastkow nieznacznie
 #define EPS 1.0e-15
 #define ROUND_OFF 1.0e-8
 
-int16_t kinematic_model_irp6m_5dof::QuadraticEquation(double a, double b, double c,
+int16_t model_5dof::QuadraticEquation(double a, double b, double c,
 				double *x1, double *x2, double delta)
 {
   double sqrt_delta;    /* pierwiastek wyroznika rownania kwadratowego */
@@ -1701,7 +1701,7 @@ DANE WYJSCIOWE:
 #define OFFSET 1.0e-4
 
 
-int16_t kinematic_model_irp6m_5dof::Ecos_Fsin_G(double e, double f, double g,
+int16_t model_5dof::Ecos_Fsin_G(double e, double f, double g,
 			  double *theta1_ptr, double *theta2_ptr,
 			  double lower_limit, double upper_limit,
 			  double max_theta_inc, double OldTheta,
@@ -1941,7 +1941,7 @@ DANE WYJSCIOWE:
 #define EQUATION_EPS 1.0E-10
 
 
-int16_t kinematic_model_irp6m_5dof::Check_cos_Theta1(double cos_theta1, double *sin_theta1,
+int16_t model_5dof::Check_cos_Theta1(double cos_theta1, double *sin_theta1,
 			       double *theta1,
 			       double p, double r, double t,
 			       double max_theta1_inc,
@@ -2055,7 +2055,7 @@ DANE WYJSCIOWE:
 #define EQUATION_EPS 1.0E-2
 #define ANGLE_EPS    1.0E-9
 
-int16_t kinematic_model_irp6m_5dof::Check_Theta5(double *theta5, double c5, double s5,
+int16_t model_5dof::Check_Theta5(double *theta5, double c5, double s5,
 		    double q0[3], double q6[3], double v0[3], double v6[3],
 		    THETA_NODE *theta1_pointer, THETA_NODE *theta2_pointer,
 		    THETA_NODE *theta3_pointer, THETA_NODE *theta4_pointer,
@@ -2228,7 +2228,7 @@ DANE WYJSCIOWE:
 #define EPS 1.0E-8
 #define EEPS 1.0E-10
 
-int16_t kinematic_model_irp6m_5dof::Flange(double u0[3], double v0[3], double u6[3],
+int16_t model_5dof::Flange(double u0[3], double v0[3], double u6[3],
 		     double radius_2,
 		     THETA_NODE *theta1_pointer, THETA_NODE *theta4_pointer,
 		     double o06_prim[3], double o06_bis[3])
@@ -2403,7 +2403,7 @@ DANE WYJSCIOWE:
 #define EEPS 1.0E-7
 
 
-int16_t kinematic_model_irp6m_5dof::Flange_exception(double u0[3], double v0[3], double u6[3],
+int16_t model_5dof::Flange_exception(double u0[3], double v0[3], double u6[3],
 	     double radius_2,
 	 THETA_NODE *theta1_pointer, THETA_NODE *theta4_pointer,
 	   double abd_1[3], double abd_2[3])
@@ -2532,7 +2532,7 @@ DANE WYJSCIOWE:
 
 ---------------------------------------------------------------------------*/
 
-THETA_NODE* kinematic_model_irp6m_5dof::Add_Theta(double Theta, double cosTheta, double sinTheta)
+THETA_NODE* model_5dof::Add_Theta(double Theta, double cosTheta, double sinTheta)
 
 {
    THETA_NODE *Theta_node;
@@ -2613,7 +2613,7 @@ DANE WYJSCIOWE:
    spowodowane kumulacja bledow numerycznych */
 #define OFFSET 1.0e-4
 
-THETA_NODE* kinematic_model_irp6m_5dof::Create1(double x, double p, double r, double t,
+THETA_NODE* model_5dof::Create1(double x, double p, double r, double t,
 		    int16_t *result,
 		    double max_theta_inc, int16_t no_of_solutions,
 		    double OldTheta)
@@ -2745,7 +2745,7 @@ DANE WYJSCIOWE:   brak
 
 ---------------------------------------------------------------------------*/
 
-void kinematic_model_irp6m_5dof::Delete_Theta_Tree(THETA_NODE *root_ptr)
+void model_5dof::Delete_Theta_Tree(THETA_NODE *root_ptr)
 
 {
     THETA_NODE *node_ptr;   /* wskaznik biezacego wezla warstwy */
@@ -2811,7 +2811,7 @@ DANE WYJSCIOWE:
 
 ---------------------------------------------------------------------------*/
 
-void kinematic_model_irp6m_5dof::Extract_vect_from_tree(THETA_NODE *root_ptr, double Theta[5],
+void model_5dof::Extract_vect_from_tree(THETA_NODE *root_ptr, double Theta[5],
 			    double tsin[5], double tcos[5])
 
 {

@@ -20,12 +20,12 @@ namespace mrrocpp {
 namespace kinematic {
 namespace irp6ot {
 
-class kinematic_model_irp6ot_with_track : public kinematic_model_irp6ot_with_wrist
+class model_with_track : public model_with_wrist
 {
 
 public:
   // Konstruktor.
-  kinematic_model_irp6ot_with_track (void);
+  model_with_track (void);
 
   // Rozwiazanie prostego zagadnienia kinematyki.
   virtual void direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame);

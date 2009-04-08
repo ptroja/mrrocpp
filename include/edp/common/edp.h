@@ -115,7 +115,7 @@ public:
 // base class for EDP robots with manipulators and conveyor
 
 /************************ edp_irp6s_and_conv_effector ****************************/
-class edp_irp6s_and_conv_effector : public edp_effector, public kinematic::common::kinematics_manager
+class edp_irp6s_and_conv_effector : public edp_effector, public kinematic::common::manager
 {
 
 protected:

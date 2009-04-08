@@ -22,7 +22,7 @@ namespace irp6p {
 /* -----------------------------------------------------------------------
   Konstruktor.
  ------------------------------------------------------------------------- */
-kinematic_model_calibrated_correction_matrix_irp6p_with_wrist::kinematic_model_calibrated_correction_matrix_irp6p_with_wrist (void)
+model_calibrated_correction_matrix_with_wrist::model_calibrated_correction_matrix_with_wrist (void)
 {
   // Ustawienie etykiety modelu kinematycznego.
   set_kinematic_model_label("Switching to calibrated and locally corrected kinematic model with active wrist");
@@ -35,7 +35,7 @@ kinematic_model_calibrated_correction_matrix_irp6p_with_wrist::kinematic_model_c
 /* -----------------------------------------------------------------------
   Ustawienia wszystkie parametry modelu kinematycznego danego modelu.
  ------------------------------------------------------------------------- */
-void kinematic_model_calibrated_correction_matrix_irp6p_with_wrist::set_kinematic_parameters(void)
+void model_calibrated_correction_matrix_with_wrist::set_kinematic_parameters(void)
 {
 	// Uzycie przeliczen zwiazanych z lokalnym korektorem.
 	local_corrector_computations = true;

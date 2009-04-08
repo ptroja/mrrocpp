@@ -50,12 +50,12 @@ void edp_irp6p_effector::initialize(void)
 void edp_irp6p_effector::create_kinematic_models_for_given_robot(void)
 {
 	// Stworzenie wszystkich modeli kinematyki.
-	add_kinematic_model(new kinematic::irp6p::kinematic_model_irp6p_with_wrist());
-	add_kinematic_model(new kinematic::irp6p::kinematic_model_irp6p_5dof());
-	add_kinematic_model(new kinematic::irp6p::kinematic_model_calibrated_irp6p_with_wrist());
-	add_kinematic_model(new kinematic::irp6p::kinematic_model_calibrated_correction_matrix_irp6p_with_wrist());
-	add_kinematic_model(new kinematic::irp6p::kinematic_model_irp6p_jacobian_with_wrist());
-	add_kinematic_model(new kinematic::irp6p::kinematic_model_irp6p_jacobian_transpose_with_wrist());
+	add_kinematic_model(new kinematic::irp6p::model_with_wrist());
+	add_kinematic_model(new kinematic::irp6p::model_5dof());
+	add_kinematic_model(new kinematic::irp6p::model_calibrated_with_wrist());
+	add_kinematic_model(new kinematic::irp6p::model_calibrated_correction_matrix_with_wrist());
+	add_kinematic_model(new kinematic::irp6p::model_jacobian_with_wrist());
+	add_kinematic_model(new kinematic::irp6p::model_jacobian_transpose_with_wrist());
 	//add_kinematic_model(new kinematic_model_irp6p_jacobian_with_wrist());
 
 	// Ustawienie aktywnego modelu.

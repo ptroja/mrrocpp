@@ -20,7 +20,7 @@ namespace mrrocpp {
 namespace kinematic {
 namespace irp6p {
 
-class kinematic_model_irp6p_with_wrist : public common::kinematic_model
+class model_with_wrist : public common::model
 {
 protected:
   // Dlugosci czlonow
@@ -73,7 +73,7 @@ protected:
 
 public:
   // Konstruktor.
-  kinematic_model_irp6p_with_wrist ( void );
+  model_with_wrist ( void );
 
   // Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne.
   virtual void mp2i_transform(const double* local_current_motor_pos, double* local_current_joints);

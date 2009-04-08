@@ -19,7 +19,7 @@ namespace mrrocpp {
 namespace kinematic {
 namespace conveyor {
 
-class kinematic_model_conveyor : public common::kinematic_model
+class model : public common::model
 {
 protected:
   // Polozenie synchronizacji.
@@ -37,7 +37,7 @@ protected:
 
 public:
   // Konstruktor.
-  kinematic_model_conveyor (void);
+  model (void);
 
   // Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne.
   virtual void mp2i_transform(const double* local_current_motor_pos, double* local_current_joints);

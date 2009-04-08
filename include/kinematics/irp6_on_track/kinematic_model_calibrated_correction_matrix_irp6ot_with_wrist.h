@@ -23,7 +23,7 @@ namespace mrrocpp {
 namespace kinematic {
 namespace irp6ot {
 
-class kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist: public kinematic_model_calibrated_irp6ot_with_wrist
+class model_calibrated_correction_matrix_with_wrist: public model_calibrated_with_wrist
 {
 protected:
   // Ustawienie parametrow kinematycznych.
@@ -31,7 +31,7 @@ protected:
 
 public:
   // Konstruktor.
-  kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist ( void );
+  model_calibrated_correction_matrix_with_wrist ( void );
 
 };//: kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist;
 

@@ -37,7 +37,7 @@ namespace mrrocpp {
 namespace kinematic {
 namespace common {
 
-class kinematic_model
+class model
 {
 protected:
   // Etykieta kinematyki.
@@ -76,7 +76,7 @@ public:
   Homog_matrix global_base;
 
   // Konstruktor.
-  kinematic_model(void);
+  model(void);
   
   // Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne.
   virtual void mp2i_transform(const double* local_current_motor_pos, double* local_current_joints) = 0; 

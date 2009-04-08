@@ -19,7 +19,7 @@ namespace common {
 /* ------------------------------------------------------------------------
   Konstruktor. Domyslnie wszystkie obliczenia sa wlaczone.
  ------------------------------------------------------------------------ */
-kinematic_model::kinematic_model(void)
+model::model(void)
 {
     kinematic_model_label = NULL;
     // Flaga - czy przeliczac do globalnego ukladu odniesienia.
@@ -34,7 +34,7 @@ kinematic_model::kinematic_model(void)
 /* ------------------------------------------------------------------------
   Przeliczenie polozenia koncowki zwiazane z dolaczonym narzedziem.
  ------------------------------------------------------------------------ */
-void kinematic_model::attached_tool_transform(Homog_matrix& current_end_effector_matrix)
+void model::attached_tool_transform(Homog_matrix& current_end_effector_matrix)
 {
     current_end_effector_matrix *= tool;
 }
@@ -43,7 +43,7 @@ void kinematic_model::attached_tool_transform(Homog_matrix& current_end_effector
 /* ------------------------------------------------------------------------
   Przeliczenie polozenia koncowki zwiazane z dolaczonym narzedziem - transformacja odwrotna.
  ------------------------------------------------------------------------ */
-void kinematic_model::attached_tool_inverse_transform(Homog_matrix& desired_end_effector_matrix)
+void model::attached_tool_inverse_transform(Homog_matrix& desired_end_effector_matrix)
 {
     desired_end_effector_matrix *= (!tool);
 }
@@ -52,7 +52,7 @@ void kinematic_model::attached_tool_inverse_transform(Homog_matrix& desired_end_
 /* ------------------------------------------------------------------------
  Przeliczenie bazy manipulatora w globalnym ukladzie odniesienia.
  ------------------------------------------------------------------------ */
-void kinematic_model::global_frame_transform(Homog_matrix& current_end_effector_matrix)
+void model::global_frame_transform(Homog_matrix& current_end_effector_matrix)
 {
     current_end_effector_matrix = (global_base * current_end_effector_matrix);
 }
@@ -61,7 +61,7 @@ void kinematic_model::global_frame_transform(Homog_matrix& current_end_effector_
 /* ------------------------------------------------------------------------
  Przeliczenie bazy manipulatora w globalnym ukladzie odniesienia - transformacja odwrotna.
  ------------------------------------------------------------------------ */
-void kinematic_model::global_frame_inverse_transform(Homog_matrix& desired_end_effector_matrix)
+void model::global_frame_inverse_transform(Homog_matrix& desired_end_effector_matrix)
 {
     desired_end_effector_matrix = ((!global_base) * desired_end_effector_matrix);
 }
@@ -70,7 +70,7 @@ void kinematic_model::global_frame_inverse_transform(Homog_matrix& desired_end_e
 /* ------------------------------------------------------------------------
  Poprawa polozenia koncowki przy uzyciu macierzy korekcji lokalnej.
  ------------------------------------------------------------------------ */
-void kinematic_model::local_corrector_transform(Homog_matrix& current_end_effector_matrix)
+void model::local_corrector_transform(Homog_matrix& current_end_effector_matrix)
 {
     //  	std::cout<<" local_corrector_transform: przed \n"<<current_end_effector_matrix<<std::endl;
     double d[6];
@@ -112,7 +112,7 @@ void kinematic_model::local_corrector_transform(Homog_matrix& current_end_effect
 /* ------------------------------------------------------------------------
  Poprawa polozenia koncowki przy uzyciu macierzy korekcji lokalnej - transformacja odwrotna.
  ------------------------------------------------------------------------ */
-void kinematic_model::local_corrector_inverse_transform(Homog_matrix& desired_end_effector_matrix)
+void model::local_corrector_inverse_transform(Homog_matrix& desired_end_effector_matrix)
 {
     //  	std::cout<<" local_corrector_inverse_transform: przed \n"<<desired_end_effector_matrix<<std::endl;
     double d[6];
@@ -160,7 +160,7 @@ void kinematic_model::local_corrector_inverse_transform(Homog_matrix& desired_en
 -> Dodac opis kolejnosci obliczen.
 
  ------------------------------------------------------------------------ */
-void kinematic_model::i2e_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame)
+void model::i2e_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame)
 {
 
     // Rozwiazanie prostego zagadnienia kinematyki.
@@ -192,7 +192,7 @@ void kinematic_model::i2e_transform(const double* local_current_joints, frame_ta
 -> Dodac opis kolejnosci obliczen.
 
  ------------------------------------------------------------------------ */
-void kinematic_model::e2i_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
+void model::e2i_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
 {
     // Stworzenie macierzy, ktora bedzie uzywana w dalszych obliczeniach.
     Homog_matrix local_desired_end_effector_matrix (*local_desired_end_effector_frame);
@@ -228,7 +228,7 @@ void kinematic_model::e2i_transform(double* local_desired_joints, double* local_
 /* ------------------------------------------------------------------------
   Zwraca etykiete modelu kinematycznego.
  ------------------------------------------------------------------------ */
-char* kinematic_model::get_kinematic_model_label(void)
+char* model::get_kinematic_model_label(void)
 {
     return kinematic_model_label;
 }
@@ -236,7 +236,7 @@ char* kinematic_model::get_kinematic_model_label(void)
 /* ------------------------------------------------------------------------
   Ustawia etykiete modelu kinematycznego.
  ------------------------------------------------------------------------ */
-void kinematic_model::set_kinematic_model_label(const char * _label)
+void model::set_kinematic_model_label(const char * _label)
 {
     if (kinematic_model_label != NULL)
         delete(kinematic_model_label);

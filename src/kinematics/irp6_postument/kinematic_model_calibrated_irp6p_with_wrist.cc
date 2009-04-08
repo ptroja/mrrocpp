@@ -21,7 +21,7 @@ namespace irp6p {
 /* -----------------------------------------------------------------------
   Konstruktor.
  ------------------------------------------------------------------------- */
-kinematic_model_calibrated_irp6p_with_wrist::kinematic_model_calibrated_irp6p_with_wrist (void)
+model_calibrated_with_wrist::model_calibrated_with_wrist (void)
 {
   // Ustawienie etykiety modelu kinematycznego.
   set_kinematic_model_label("Switching to calibrated kinematic model with active wrist");
@@ -34,7 +34,7 @@ kinematic_model_calibrated_irp6p_with_wrist::kinematic_model_calibrated_irp6p_wi
 /* -----------------------------------------------------------------------
   Ustawienia wszystkie parametry modelu kinematycznego danego modelu.
  ------------------------------------------------------------------------- */
-void kinematic_model_calibrated_irp6p_with_wrist::set_kinematic_parameters(void)
+void model_calibrated_with_wrist::set_kinematic_parameters(void)
 {
 /* -----------------------------------------------------------------------
 Numery osi:

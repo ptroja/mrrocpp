@@ -44,7 +44,7 @@
 
 /*--------------------------------------------------------------------------*/
 edp_irp6s_and_conv_effector::edp_irp6s_and_conv_effector (configurator &_config, ROBOT_ENUM l_robot_name) :
-        edp_effector (_config, l_robot_name), kinematics_manager(), step_counter(0)
+        edp_effector (_config, l_robot_name), manager(), step_counter(0)
 {
 
     controller_state_edp_buf.is_synchronised = false;
