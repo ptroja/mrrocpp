@@ -6,7 +6,7 @@
 
 sem_t sem;
 
-ecp_wii_velocity_generator::ecp_wii_velocity_generator (ecp_task& _ecp_task) : ecp_tff_nose_run_generator(_ecp_task,50)
+ecp_wii_velocity_generator::ecp_wii_velocity_generator (ecp_task& _ecp_task) : ecp_tff_nose_run_generator(_ecp_task,10)
 {
 	configure_behaviour(UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION);
 }
@@ -17,7 +17,7 @@ bool ecp_wii_velocity_generator::first_step()
 
 	td.interpolation_node_no = 1;
 	td.internode_step_no = step_no;
-	td.value_in_step_no = td.internode_step_no - 2;
+	td.value_in_step_no = td.internode_step_no - 3;
 
 	Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
