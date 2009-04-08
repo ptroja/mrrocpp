@@ -16,6 +16,10 @@
 #include "kinematics/common/kinematics_manager.h"
 #include "kinematics/common/kinematic_model.h"
 
+namespace mrrocpp {
+namespace kinematic {
+namespace common {
+
 // extern edp_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
 
 // Konstruktor - tworzy liste kinematyk.
@@ -38,7 +42,7 @@ void kinematics_manager::set_kinematic_model (int _desired_kinematic_model_nr)
 {
     if (_desired_kinematic_model_nr >= kinematic_models_list.size() || _desired_kinematic_model_nr <0 )
     {
-        throw transformer_error::NonFatal_error_2 (INVALID_KINEMATIC_MODEL_NO);
+        throw common::transformer_error::NonFatal_error_2 (INVALID_KINEMATIC_MODEL_NO);
     }
     current_kinematic_model = (kinematic_model*) (kinematic_models_list[_desired_kinematic_model_nr]);
     current_kinematic_model_no = _desired_kinematic_model_nr;
@@ -65,3 +69,7 @@ int kinematics_manager::get_current_kinematic_model_no (void)
 {
     return current_kinematic_model_no;
 }
+
+} // namespace common
+} // namespace kinematic
+} // namespace mrrocpp

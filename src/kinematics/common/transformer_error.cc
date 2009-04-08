@@ -9,6 +9,9 @@
 
 #include "kinematics/common/transformer_error.h"
 
+namespace mrrocpp {
+namespace kinematic {
+namespace common {
 
 transformer_error::Fatal_error::Fatal_error(uint64_t err_no_0, uint64_t err_no_1) :
 	error0(err_no_0), error1(err_no_1)
@@ -34,3 +37,8 @@ transformer_error::NonFatal_error_4::NonFatal_error_4(uint64_t err_no) :
 	error(err_no)
 {
 }
+
+} // namespace common
+} // namespace kinematic
+} // namespace mrrocpp
+

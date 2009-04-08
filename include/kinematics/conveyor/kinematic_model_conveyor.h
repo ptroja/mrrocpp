@@ -15,7 +15,11 @@
 // Definicja klasy kinematic_model.
 #include "kinematics/common/kinematic_model.h"
 
-class kinematic_model_conveyor : public kinematic_model
+namespace mrrocpp {
+namespace kinematic {
+namespace conveyor {
+
+class kinematic_model_conveyor : public common::kinematic_model
 {
 protected:
   // Polozenie synchronizacji.
@@ -49,5 +53,9 @@ public:
 
 
 };//: kinematic_model_conveyor;
+
+} // namespace conveyor
+} // namespace kinematic
+} // namespace mrrocpp
 
 #endif

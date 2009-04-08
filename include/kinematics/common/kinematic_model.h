@@ -33,6 +33,9 @@
 // Klasa frame_tab.
 #include "common/impconst.h"
 
+namespace mrrocpp {
+namespace kinematic {
+namespace common {
 
 class kinematic_model
 {
@@ -117,5 +120,9 @@ public:
   virtual void set_kinematic_model_label(const char*);
   
 };//: kinematic_model
+
+} // namespace common
+} // namespace kinematic
+} // namespace mrrocpp
 
 #endif					   

@@ -16,7 +16,11 @@
 // Definicja klasy kinematic_model.
 #include "kinematics/common/kinematic_model.h"
 
-class kinematic_model_irp6m_with_wrist : public kinematic_model
+namespace mrrocpp {
+namespace kinematic {
+namespace irp6m {
+
+class kinematic_model_irp6m_with_wrist : public common::kinematic_model
 {
 protected:
   // Dlugosci czlonow
@@ -85,6 +89,12 @@ public:
   virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame);
 
 };//: kinematic_model_irp6m_with_wrist;
+
+
+} // namespace irp6m
+} // namespace kinematic
+} // namespace mrrocpp
+
 
 #endif
 

@@ -14,6 +14,10 @@
 // Klasa kinematic_model_calibrated_irp6p_with_wrist.
 #include "kinematics/irp6_postument/kinematic_model_calibrated_irp6p_with_wrist.h"
 
+namespace mrrocpp {
+namespace kinematic {
+namespace irp6p {
+
 /* -----------------------------------------------------------------------
   Konstruktor.
  ------------------------------------------------------------------------- */
@@ -90,3 +94,7 @@ Polozenia synchronizacji we wspolrzednych wewnetrznych - obliczone na podstawie 
   synchro_joint_position[6] = synchro_motor_position[6] - gear[6] * theta[6];
 
 }; // end: set_kinematic_parameters
+
+} // namespace irp6p
+} // namespace kinematic
+} // namespace mrrocpp

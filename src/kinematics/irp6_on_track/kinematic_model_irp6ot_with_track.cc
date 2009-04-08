@@ -13,6 +13,10 @@
 // Klasa kinematic_model_irp6ot_with_track.
 #include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_track.h"
 
+namespace mrrocpp {
+namespace kinematic {
+namespace irp6ot {
+
 /* -----------------------------------------------------------------------
   Konstruktor.
  ------------------------------------------------------------------------- */
@@ -164,3 +168,9 @@ if (!p) {
   check_joints (local_desired_joints);
 
 }; //: inverse_kinematics_transform()
+
+
+} // namespace irp6ot
+} // namespace kinematic
+} // namespace mrrocpp
+

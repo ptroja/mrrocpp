@@ -17,6 +17,10 @@
 
 #include "kinematics/common/kinematic_model.h"
 
+namespace mrrocpp {
+namespace kinematic {
+namespace common {
+
 class kinematics_manager{
   protected:
     // Lista kinematyk.
@@ -49,6 +53,9 @@ class kinematics_manager{
 
 };// kinematics_manager
 
+} // namespace common
+} // namespace kinematic
+} // namespace mrrocpp
 
 #endif
 

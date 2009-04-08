@@ -10,6 +10,10 @@
 
 #include <stdint.h>
 
+namespace mrrocpp {
+namespace kinematic {
+namespace common {
+
 // by Y - klasa pomocnicza z bledami transformera
 class transformer_error
 {
@@ -58,5 +62,8 @@ public:
 
 };
 
+} // namespace common
+} // namespace kinematic
+} // namespace mrrocpp
 
 #endif

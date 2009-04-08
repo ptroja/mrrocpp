@@ -25,6 +25,9 @@
 // Konfigurator
 #include "lib/configurator.h"
 
+using namespace kinematic;
+using namespace common;
+
 class reader_buffer;
 class master_trans_t_buffer;
 class in_out_buffer;

@@ -17,6 +17,9 @@
 // Klasa kinematic_model_irp6m_5dof.
 #include "kinematics/irp6_mechatronika/kinematic_model_irp6m_5dof.h"
 
+namespace mrrocpp {
+namespace kinematic {
+namespace irp6m {
 
 /* -----------------------------------------------------------------------
   Konstruktor.
@@ -2849,6 +2852,9 @@ void kinematic_model_irp6m_5dof::Extract_vect_from_tree(THETA_NODE *root_ptr, do
 
 } /* Koniec Extract_vect_from_tree() */
 
+} // namespace irp6m
+} // namespace kinematic
+} // namespace mrrocpp
 
 
 

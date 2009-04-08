@@ -14,6 +14,9 @@
 // Klasa kinematic_model_calibrated_irp6p_with_wrist.
 #include "kinematics/irp6_postument/kinematic_model_irp6p_jacobian_with_wrist.h"
 
+namespace mrrocpp {
+namespace kinematic {
+namespace irp6p {
 
 /* -----------------------------------------------------------------------
   Konstruktor.
@@ -100,3 +103,8 @@ while(fabs(Max)>E){
  check_joints (local_desired_joints);
 
 }; //: inverse_kinematics_transform()
+
+} // namespace irp6p
+} // namespace kinematic
+} // namespace mrrocpp
+

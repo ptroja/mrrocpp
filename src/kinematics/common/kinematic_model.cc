@@ -12,6 +12,10 @@
 // Klasa kinematic_model.
 #include "kinematics/common/kinematic_model.h"
 
+namespace mrrocpp {
+namespace kinematic {
+namespace common {
+
 /* ------------------------------------------------------------------------
   Konstruktor. Domyslnie wszystkie obliczenia sa wlaczone.
  ------------------------------------------------------------------------ */
@@ -239,3 +243,8 @@ void kinematic_model::set_kinematic_model_label(const char * _label)
     kinematic_model_label = new char[strlen(_label)];
     kinematic_model_label = strcpy(kinematic_model_label, _label);
 }
+
+} // namespace common
+} // namespace kinematic
+} // namespace mrrocpp
+

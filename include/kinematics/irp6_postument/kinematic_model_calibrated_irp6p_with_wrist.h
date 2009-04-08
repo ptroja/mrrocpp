@@ -17,6 +17,10 @@
 // Definicja klasy kinematic_model.
 #include "kinematics/irp6_postument/kinematic_model_irp6p_with_wrist.h"
 
+namespace mrrocpp {
+namespace kinematic {
+namespace irp6p {
+
 class kinematic_model_calibrated_irp6p_with_wrist: public kinematic_model_irp6p_with_wrist
 {
   // Ustawienie parametrow kinematycznych.
@@ -26,5 +30,9 @@ public:
   kinematic_model_calibrated_irp6p_with_wrist (void);
 
 };//: kinematic_model_calibrated_irp6p_with_wrist
+
+} // namespace irp6p
+} // namespace kinematic
+} // namespace mrrocpp
 
 #endif

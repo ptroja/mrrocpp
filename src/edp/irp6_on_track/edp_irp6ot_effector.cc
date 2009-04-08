@@ -47,10 +47,10 @@ void edp_irp6ot_effector::initialize(void)
 void edp_irp6ot_effector::create_kinematic_models_for_given_robot(void)
 {
 	// Stworzenie wszystkich modeli kinematyki.
-	add_kinematic_model(new kinematic_model_irp6ot_with_wrist());
-	add_kinematic_model(new kinematic_model_irp6ot_with_track());
-	add_kinematic_model(new kinematic_model_calibrated_irp6ot_with_wrist());
-	add_kinematic_model(new kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist());
+	add_kinematic_model(new kinematic::irp6ot::kinematic_model_irp6ot_with_wrist());
+	add_kinematic_model(new kinematic::irp6ot::kinematic_model_irp6ot_with_track());
+	add_kinematic_model(new kinematic::irp6ot::kinematic_model_calibrated_irp6ot_with_wrist());
+	add_kinematic_model(new kinematic::irp6ot::kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist());
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
 }

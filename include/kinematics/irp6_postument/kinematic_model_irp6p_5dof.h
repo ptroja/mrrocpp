@@ -16,6 +16,10 @@
 // Definicja klasy kinematic_model.
 #include "kinematics/irp6_postument/kinematic_model_irp6p_with_wrist.h"
 
+namespace mrrocpp {
+namespace kinematic {
+namespace irp6p {
+
 // Zakresy ruchu poszczegolnych stopni swobody (w radianach lub milimetrach)
 #define UPPER_THETA1_LIMIT  170.0*M_PI/180.0 // [rad]
 #define LOWER_THETA1_LIMIT -170.0*M_PI/180.0
@@ -252,5 +256,9 @@ public:
   virtual void attached_tool_inverse_transform(frame_tab*);
 
 };//: kinematic_model_irp6p_5dof;
+
+} // namespace irp6p
+} // namespace kinematic
+} // namespace mrrocpp
 
 #endif

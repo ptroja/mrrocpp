@@ -16,6 +16,10 @@
 // Definicja klasy kinematic_model.
 #include "kinematics/irp6_on_track/kinematic_model_irp6ot_with_wrist.h"
 
+namespace mrrocpp {
+namespace kinematic {
+namespace irp6ot {
+
 class kinematic_model_irp6ot_with_track : public kinematic_model_irp6ot_with_wrist
 {
 
@@ -30,5 +34,9 @@ public:
   virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame);
 
 };//: kinematic_model_irp6ot_with_track;
+
+} // namespace irp6ot
+} // namespace kinematic
+} // namespace mrrocpp
 
 #endif

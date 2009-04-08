@@ -12,6 +12,9 @@
 // Klasa kinematic_model_conveyor.
 #include "kinematics/conveyor/kinematic_model_conveyor.h"
 
+namespace mrrocpp {
+namespace kinematic {
+namespace conveyor {
 
 /* -----------------------------------------------------------------------
   Konstruktor.
@@ -133,4 +136,7 @@ void kinematic_model_conveyor::inverse_kinematics_transform(double* local_desire
     local_desired_joints[0] = (*local_desired_end_effector_frame)[0][3];
 } //: inverse_kinematics_transform()
 
+} // namespace conveyor
+} // namespace kinematic
+} // namespace mrrocpp
 

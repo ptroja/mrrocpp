@@ -20,6 +20,9 @@
 // Klasa kinematic_model_irp6m_with_wrist.
 #include "kinematics/irp6_mechatronika/kinematic_model_irp6m_with_wrist.h"
 
+namespace mrrocpp {
+namespace kinematic {
+namespace irp6m {
 
 /* -----------------------------------------------------------------------
   Konstruktor.
@@ -285,29 +288,29 @@ void kinematic_model_irp6m_with_wrist::check_motor_position(const double motor_p
 {
 
 if (motor_position[0] < lower_limit_axis[0])   // Kat f1 mniejszy od minimalnego
-  throw transformer_error::NonFatal_error_2 (BEYOND_LOWER_LIMIT_AXIS_0);
+  throw common::transformer_error::NonFatal_error_2 (BEYOND_LOWER_LIMIT_AXIS_0);
 else if (motor_position[0] > upper_limit_axis[0])   // Kat f1 wiekszy od maksymalnego
-  throw transformer_error::NonFatal_error_2 (BEYOND_UPPER_LIMIT_AXIS_0);
+  throw common::transformer_error::NonFatal_error_2 (BEYOND_UPPER_LIMIT_AXIS_0);
 
 if (motor_position[1] < lower_limit_axis[1])   // Kat f2 mniejszy od minimalnego
-  throw transformer_error::NonFatal_error_2 (BEYOND_LOWER_LIMIT_AXIS_1);
+  throw common::transformer_error::NonFatal_error_2 (BEYOND_LOWER_LIMIT_AXIS_1);
 else if (motor_position[1] > upper_limit_axis[1])   // Kat f2 wiekszy od maksymalnego
-  throw transformer_error::NonFatal_error_2 (BEYOND_UPPER_LIMIT_AXIS_1);
+  throw common::transformer_error::NonFatal_error_2 (BEYOND_UPPER_LIMIT_AXIS_1);
 
 if (motor_position[2] < lower_limit_axis[2])   // Kat f3 mniejszy od minimalnego
-  throw transformer_error::NonFatal_error_2 (BEYOND_LOWER_LIMIT_AXIS_2);
+  throw common::transformer_error::NonFatal_error_2 (BEYOND_LOWER_LIMIT_AXIS_2);
 else if (motor_position[2] > upper_limit_axis[2])   // Kat f3 wiekszy od maksymalnego
-  throw transformer_error::NonFatal_error_2 (BEYOND_UPPER_LIMIT_AXIS_2);
+  throw common::transformer_error::NonFatal_error_2 (BEYOND_UPPER_LIMIT_AXIS_2);
 
   if (motor_position[3] < lower_limit_axis[3])   // Kat f4 mniejszy od minimalnego
-  throw transformer_error::NonFatal_error_2 (BEYOND_LOWER_LIMIT_AXIS_3);
+  throw common::transformer_error::NonFatal_error_2 (BEYOND_LOWER_LIMIT_AXIS_3);
 else if (motor_position[3] > upper_limit_axis[3])   // Kat f4 wiekszy od maksymalnego
-  throw transformer_error::NonFatal_error_2 (BEYOND_UPPER_LIMIT_AXIS_3);
+  throw common::transformer_error::NonFatal_error_2 (BEYOND_UPPER_LIMIT_AXIS_3);
 
   if (motor_position[4] < lower_limit_axis[4])   // Kat f5 mniejszy od minimalnego
-  throw transformer_error::NonFatal_error_2 (BEYOND_LOWER_LIMIT_AXIS_4);
+  throw common::transformer_error::NonFatal_error_2 (BEYOND_LOWER_LIMIT_AXIS_4);
 else if (motor_position[4] > upper_limit_axis[4])   // Kat f5 wiekszy od maksymalnego
-  throw transformer_error::NonFatal_error_2 (BEYOND_UPPER_LIMIT_AXIS_4);
+  throw common::transformer_error::NonFatal_error_2 (BEYOND_UPPER_LIMIT_AXIS_4);
 
 
 }; // end: kinematic_model_irp6m_with_wrist::check_motor_position(const )
@@ -319,40 +322,40 @@ else if (motor_position[4] > upper_limit_axis[4])   // Kat f5 wiekszy od maksyma
 void kinematic_model_irp6m_with_wrist::check_joints(const double q[])
 {
 
-	if (isnan(q[0])) throw  transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA1);
+	if (isnan(q[0])) throw  common::transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA1);
 
   if (q[0] < lower_limit_joint[0])  // kat q1 mniejszy od minimalnego
-    throw  transformer_error::NonFatal_error_2 (BEYOND_LOWER_THETA1_LIMIT);
+    throw  common::transformer_error::NonFatal_error_2 (BEYOND_LOWER_THETA1_LIMIT);
   else if (q[0] > upper_limit_joint[0])   // kat q1 wiekszy od maksymalnego
-    throw  transformer_error::NonFatal_error_2 (BEYOND_UPPER_THETA1_LIMIT);
+    throw  common::transformer_error::NonFatal_error_2 (BEYOND_UPPER_THETA1_LIMIT);
 
-if (isnan(q[1])) throw  transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA2);
+if (isnan(q[1])) throw  common::transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA2);
   if (q[1] < lower_limit_joint[1])  // dlugosc silownika mniejsza od minimalnej
-   throw  transformer_error::NonFatal_error_2 (BEYOND_LOWER_THETA2_LIMIT);
+   throw  common::transformer_error::NonFatal_error_2 (BEYOND_LOWER_THETA2_LIMIT);
 
   if (q[1] > upper_limit_joint[1])  // dlugosc silownika wieksza od maksymalnej
-   throw  transformer_error::NonFatal_error_2 (BEYOND_UPPER_THETA2_LIMIT);
+   throw  common::transformer_error::NonFatal_error_2 (BEYOND_UPPER_THETA2_LIMIT);
 
-if (isnan(q[2])) throw  transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA3);
+if (isnan(q[2])) throw  common::transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA3);
   if (q[2] < lower_limit_joint[2]) // dlugosc silownika mniejsza od minimalnej
-   throw  transformer_error::NonFatal_error_2 (BEYOND_LOWER_THETA3_LIMIT);
+   throw  common::transformer_error::NonFatal_error_2 (BEYOND_LOWER_THETA3_LIMIT);
 
   if(q[2] > upper_limit_joint[2])  // dlugosc silownika wieksza od maksymalnej
-   throw  transformer_error::NonFatal_error_2 (BEYOND_UPPER_THETA3_LIMIT);
+   throw  common::transformer_error::NonFatal_error_2 (BEYOND_UPPER_THETA3_LIMIT);
 
-  if (isnan(q[3])) throw  transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA4);
+  if (isnan(q[3])) throw  common::transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA4);
   if (q[3] < lower_limit_joint[3] ) // kat q3 mniejszy od minimalnego
-   throw  transformer_error::NonFatal_error_2 (BEYOND_LOWER_THETA4_LIMIT);
+   throw common::transformer_error::NonFatal_error_2 (BEYOND_LOWER_THETA4_LIMIT);
 
   if (q[3] > upper_limit_joint[3])
-    throw  transformer_error::NonFatal_error_2 (BEYOND_UPPER_THETA4_LIMIT);
+    throw common::transformer_error::NonFatal_error_2 (BEYOND_UPPER_THETA4_LIMIT);
 
-/*if (isnan(q[4])) throw  transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA5);
+/*if (isnan(q[4])) throw common::transformer_error::NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA5);
  if(q[4] < lower_limit_joint[4])  // kat q4 mniejszy od minimalnego
-   throw  transformer_error::NonFatal_error_2 (BEYOND_LOWER_THETA5_LIMIT);
+   throw common::transformer_error::NonFatal_error_2 (BEYOND_LOWER_THETA5_LIMIT);
 
  if(q[4] > upper_limit_joint[4])  // kat q4 wiekszy od maksymalnego
-   throw  transformer_error::NonFatal_error_2 (BEYOND_UPPER_THETA5_LIMIT); */
+   throw common::transformer_error::NonFatal_error_2 (BEYOND_UPPER_THETA5_LIMIT); */
 
 
 
@@ -627,4 +630,7 @@ void kinematic_model_irp6m_with_wrist::inverse_kinematics_transform(double* loca
 
 }; //: inverse_kinematics_transform()
 
+} // namespace irp6m
+} // namespace kinematic
+} // namespace mrrocpp
 

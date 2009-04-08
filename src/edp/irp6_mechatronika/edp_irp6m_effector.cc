@@ -437,8 +437,8 @@ void edp_irp6m_effector::get_arm_position (bool read_hardware, c_buffer &instruc
 void edp_irp6m_effector::create_kinematic_models_for_given_robot(void)
 {
     // Stworzenie wszystkich modeli kinematyki.
-    add_kinematic_model(new kinematic_model_irp6m_with_wrist());
-    add_kinematic_model(new kinematic_model_irp6m_5dof());
+    add_kinematic_model(new kinematic::irp6m::kinematic_model_irp6m_with_wrist());
+    add_kinematic_model(new kinematic::irp6m::kinematic_model_irp6m_5dof());
     // Ustawienie aktywnego modelu.
     set_kinematic_model(0);
 }

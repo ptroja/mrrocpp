@@ -15,6 +15,10 @@
 // Klasa kinematic_model_calibrated_irp6ot_with_wrist.
 #include "kinematics/irp6_on_track/kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist.h"
 
+namespace mrrocpp {
+namespace kinematic {
+namespace irp6ot {
+
 /* -----------------------------------------------------------------------
   Konstruktor.
  ------------------------------------------------------------------------- */
@@ -136,3 +140,9 @@ void kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist::set_kinemat
 	inv_U[5][5] =1.03590839825862;
 
 }; // end: set_kinematic_parameters
+
+
+} // namespace irp6ot
+} // namespace kinematic
+} // namespace mrrocpp
+
