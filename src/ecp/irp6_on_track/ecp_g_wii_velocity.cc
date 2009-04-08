@@ -4,13 +4,17 @@
 #include "common/com_buf.h"
 #include "math.h"
 
-ecp_wii_velocity_generator::ecp_wii_velocity_generator (ecp_task& _ecp_task) : ecp_tff_nose_run_generator(_ecp_task,8)
+sem_t sem;
+
+ecp_wii_velocity_generator::ecp_wii_velocity_generator (ecp_task& _ecp_task) : ecp_tff_nose_run_generator(_ecp_task,50)
 {
 	configure_behaviour(UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION);
 }
 
 bool ecp_wii_velocity_generator::first_step()
 {
+	sem_init(&sem,0,0);
+
 	td.interpolation_node_no = 1;
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
@@ -87,7 +91,7 @@ bool ecp_wii_velocity_generator::next_step()
 	{
 		 the_robot->EDP_data.next_velocity[i] = generator_edp_data.next_velocity[i];
 	}
-
+	
 	//sprintf(buffer,"P%d %f %f %f %f %f %f",step_no,the_robot->EDP_data.current_joint_arm_coordinates[0],the_robot->EDP_data.current_joint_arm_coordinates[1],the_robot->EDP_data.current_joint_arm_coordinates[2],the_robot->EDP_data.current_joint_arm_coordinates[3],the_robot->EDP_data.current_joint_arm_coordinates[4],the_robot->EDP_data.current_joint_arm_coordinates[5]);
 	//sprintf(buffer,"V%d %f %f %f %f	 %f %f",step_no,the_robot->EDP_data.next_velocity[0],the_robot->EDP_data.next_velocity[1],the_robot->EDP_data.next_velocity[2],the_robot->EDP_data.next_velocity[3],the_robot->EDP_data.next_velocity[4],the_robot->EDP_data.next_velocity[5]);
 	//sr_ecp_msg.message(buffer);

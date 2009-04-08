@@ -3,6 +3,10 @@
 
 #include <string.h>
 #include <math.h>
+#include <unistd.h>
+
+#include <semaphore.h>
+#include <time.h>
 
 #include "ecp/common/ecp_g_force.h"
 
