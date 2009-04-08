@@ -25,9 +25,6 @@
 // Konfigurator
 #include "lib/configurator.h"
 
-using namespace kinematic;
-using namespace common;
-
 class reader_buffer;
 class master_trans_t_buffer;
 class in_out_buffer;
@@ -44,7 +41,7 @@ enum TRANSLATION_ENUM { WITH_TRANSLATION, WITHOUT_TRANSLATION };
 
 
 // Glowna klasa efektora EDP
-class edp_effector : public transformer_error
+class edp_effector : public kinematic::common::transformer_error
 {
 protected:
 
@@ -118,7 +115,7 @@ public:
 // base class for EDP robots with manipulators and conveyor
 
 /************************ edp_irp6s_and_conv_effector ****************************/
-class edp_irp6s_and_conv_effector : public edp_effector, public kinematics_manager
+class edp_irp6s_and_conv_effector : public edp_effector, public kinematic::common::kinematics_manager
 {
 
 protected:
@@ -572,7 +569,7 @@ enum MT_ORDER { MT_GET_CONTROLLER_STATE, MT_SET_RMODEL, MT_GET_ARM_POSITION, MT_
 enum ERROR_TYPE { NO_ERROR, Fatal_erroR, NonFatal_erroR_1, NonFatal_erroR_2, NonFatal_erroR_3, NonFatal_erroR_4, System_erroR};
 
 
-class master_trans_t_buffer : public transformer_error
+class master_trans_t_buffer : public kinematic::common::transformer_error
 {
 private:
     sem_t master_to_trans_t_sem; // semafor pomiedzy edp_master a edp_trans

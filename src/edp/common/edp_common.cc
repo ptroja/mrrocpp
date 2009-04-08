@@ -336,19 +336,19 @@ int master_trans_t_buffer::master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb
 
 	switch (error) {
 		case NonFatal_erroR_1:
-			throw *(NonFatal_error_1*)(error_pointer);
+			throw *(kinematic::common::transformer_error::NonFatal_error_1*)(error_pointer);
 			break;
 		case NonFatal_erroR_2:
-			throw *(NonFatal_error_2*)(error_pointer);
+			throw *(kinematic::common::transformer_error::NonFatal_error_2*)(error_pointer);
 			break;
 		case NonFatal_erroR_3:
-			throw *(NonFatal_error_3*)(error_pointer);
+			throw *(kinematic::common::transformer_error::NonFatal_error_3*)(error_pointer);
 			break;
 		case NonFatal_erroR_4:
-			throw *(NonFatal_error_4*)(error_pointer);
+			throw *(kinematic::common::transformer_error::NonFatal_error_4*)(error_pointer);
 			break;
 		case Fatal_erroR:
-			throw *(Fatal_error*)(error_pointer);
+			throw *(kinematic::common::transformer_error::Fatal_error*)(error_pointer);
 			break;
 		case System_erroR:
 			throw *(System_error*)(error_pointer);
