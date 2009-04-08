@@ -55,9 +55,7 @@ bool ecp_wii_velocity_generator::next_step()
 	++step_no;
 
 	if (pulse_check_activated && check_and_null_trigger())
-	{ // Koniec odcinka
-		//	ecp_t.set_ecp_reply (TASK_TERMINATED);
-
+	{
 		return false;
 	}
 
@@ -94,20 +92,6 @@ bool ecp_wii_velocity_generator::next_step()
 				= the_robot->EDP_data.current_gripper_coordinate;
 	}
 
-	// wyrzucanie odczytu sil
-
-
-
-
-	if(force_meassure)
-	{
-		Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
-		current_frame_wo_offset.remove_translation();
-
-		Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
-
-		std::cout<<"force: "<<force_torque<<std::endl;
-	}
 	return true;
 
 }
