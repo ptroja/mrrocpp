@@ -24,7 +24,7 @@ bool ecp_wii_velocity_generator::first_step()
 	the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
 	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
 	the_robot->EDP_data.set_arm_type = PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = MOTOR;
+	the_robot->EDP_data.get_arm_type = JOINT;
 	the_robot->EDP_data.motion_type = RELATIVE;
 	the_robot->EDP_data.next_interpolation_type = TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
@@ -66,13 +66,13 @@ bool ecp_wii_velocity_generator::next_step()
 
 	//wyznaczenie nowych wartosci predkosci
 	configure_velocity(
-		sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.up && !sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.left && !sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.right ? sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y * C_0 : 0,	
+		sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.up && !sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.left && !sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.right ? sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y * C_0 : 0,
 		sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.right ? sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y * C_1 :	 0,
 		sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.down ? sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y * C_2 : 0,
 		sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.left ? sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y * C_3 : 0,
 		sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.up && sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.right && !sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.left ? sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y * C_4 : 0,
 		sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.up && sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.left && !sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.right? sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.orientation_y * C_5 : 0
-	);	
+	);
 
 	for (int i=0; i<6; i++)
 	{
@@ -84,10 +84,10 @@ bool ecp_wii_velocity_generator::next_step()
 	}
 
 
-	sprintf(buffer,"P%d %f %f %f %f %f %f",step_no,the_robot->EDP_data.current_motor_arm_coordinates[0],the_robot->EDP_data.current_motor_arm_coordinates[1],the_robot->EDP_data.current_motor_arm_coordinates[2],the_robot->EDP_data.current_motor_arm_coordinates[3],the_robot->EDP_data.current_motor_arm_coordinates[4],the_robot->EDP_data.current_motor_arm_coordinates[5]);
-	sr_ecp_msg.message(buffer);	
-	sprintf(buffer,"V%d %f %f %f %f	 %f %f",step_no,the_robot->EDP_data.next_velocity[0],the_robot->EDP_data.next_velocity[1],the_robot->EDP_data.next_velocity[2],the_robot->EDP_data.next_velocity[3],the_robot->EDP_data.next_velocity[4],the_robot->EDP_data.next_velocity[5]);
-	sr_ecp_msg.message(buffer);	
+	sprintf(buffer,"P%d %f %f %f %f %f %f",step_no,the_robot->EDP_data.current_joint_arm_coordinates[0],the_robot->EDP_data.current_joint_arm_coordinates[1],the_robot->EDP_data.current_joint_arm_coordinates[2],the_robot->EDP_data.current_joint_arm_coordinates[3],the_robot->EDP_data.current_joint_arm_coordinates[4],the_robot->EDP_data.current_joint_arm_coordinates[5]);
+	sr_ecp_msg.message(buffer);
+	//sprintf(buffer,"V%d %f %f %f %f	 %f %f",step_no,the_robot->EDP_data.next_velocity[0],the_robot->EDP_data.next_velocity[1],the_robot->EDP_data.next_velocity[2],the_robot->EDP_data.next_velocity[3],the_robot->EDP_data.next_velocity[4],the_robot->EDP_data.next_velocity[5]);
+	sr_ecp_msg.message(buffer);
 
 	// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 	if (node_counter==1)
