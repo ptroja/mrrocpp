@@ -20,9 +20,7 @@
 //Constructors
 ecp_t_spots_recognition::ecp_t_spots_recognition(configurator &_config): ecp_task(_config)
 {
-    katalog_traj = "../trj/spots/standard/traj";
-    katalog_dump = "~/mrroc_calib";
-    mkdir(katalog_dump, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    trajektoria_poczatkowa = "../trj/spots/traj00.trj";
     remove("../msr/kalibracja.txt");
 }
 
@@ -59,44 +57,36 @@ if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	// Create smooth generator.
 	smooth = new ecp_smooth_generator(*this, true, false);
 
-	//sleep_g = new ecp_sleep_generator(*this);
+	nose = new y_nose_run_force_generator(*this);
 
 }
 
 void ecp_t_spots_recognition::main_task_algorithm(void)
 {
-	char traj[36];
+	/*!
+	    	 * smooth generator odczytuje trajektorie z pliku
+	    	 * po czym przesuwa sie do poczatkowej pozycji
+	 */
+
+	smooth->load_file_with_path(trajektoria_poczatkowa);
+	smooth->Move();
 
     for(int i=0; i<=15; i++)
     {
-    	/*!
-    	 * smooth generator odczytuje trajektorie z pliku
-    	 * po czym przesuwa sie do odpowiedniej pozycji
-    	 * jest 15 trajektorii + poczatkowa + kocowa (poza petla)
-    	 */
-    	sprintf(traj, "%s%.2d.trj", katalog_traj, i);
-    	//printf("teraz iteracja %d", i);
-    	smooth->load_file_with_path(traj);
-	    smooth->Move();
+
+
 
 	    /*!
 	     * nastepnie nalezy odczekac ok 1s, zanim mozna rozpoczac sesje zdjeciowa
 	     */
 	    sleep(2);
-	    //sleep_g->init_time(2);
-	    //sleep_g->Move();
 
 	    /*!
 	     * zrob zdjecia, dokonaj obliczen
 	     */
 	    generator->Move();
 
-	    //printf(" ... koniec\n");
     }
-
-    sprintf(traj, "%s%.2d.trj", katalog_traj, 99);
-	smooth->load_file_with_path(traj);
-    smooth->Move();
 }
 
 ecp_task* return_created_ecp_task(configurator &_config)

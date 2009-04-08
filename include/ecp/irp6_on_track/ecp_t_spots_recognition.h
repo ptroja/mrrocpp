@@ -27,29 +27,18 @@
 #include "ecp/irp6_on_track/ecp_g_spots_recognition.h"
 
 #include "ecp/common/ecp_g_smooth.h"
-#include "ecp/common/ecp_g_sleep.h"
+#include "ecp/common/ecp_g_force.h"
 
 class ecp_t_spots_recognition: public ecp_task
 {
-		/*!
-		 * katalog, w ktorym sa trajektorie
-		 */
-		const char * katalog_traj;
-		/*!
-		 * katalog, w ktorym beda zapisywane dane kalibracyjne
-		 */
-		const char * katalog_dump;
+	char * trajektoria_poczatkowa;
 
 	protected:
 
 		ecp_spots_generator* generator;
 		ecp_smooth_generator* smooth;
-		//ecp_sleep_generator* sleep_g;
+		y_nose_run_force_generator* nose;
 
-		/*!
-        * Generator used for communication with cvFraDIA.
-        */
-	    //ecp_cvfradia_generator* cvg;
 
 	public:
 		ecp_t_spots_recognition(configurator &_config);
