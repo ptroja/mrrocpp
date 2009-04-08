@@ -217,7 +217,7 @@ char* configurator::return_default_reader_measures_path()
 	char * value = new char[size];
 	// Stworzenie sciezki do pliku.
 	strcpy(value, mrrocpp_network_path);
-	sprintf(value, "%msr/", mrrocpp_network_path);
+	sprintf(value, "%smsr/", mrrocpp_network_path);
 
 	return value;
 }
