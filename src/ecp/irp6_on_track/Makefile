@@ -87,7 +87,7 @@ ecp_tb: ecp_t_tb_irp6ot.o ecp_g_force.o ecp_st_go.o ecp_g_smooth.o ecp_generator
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_spots_recognition: ecp_t_spots_recognition.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o\
 		ecp_g_cvfradia.o ecp_mp_s_cvfradia.o ecp_operator_reaction_condition.o ecp_mp_s_schunk.o \
-		ecp_matrix4x4.o ecp_g_spots_recognition.o $(SHOBJ)
+		ecp_matrix4x4.o ecp_camera_to_tool.o ecp_g_spots_recognition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_kin_test_irp6ot: ecp_t_kin_test_irp6ot.o $(SHOBJ)

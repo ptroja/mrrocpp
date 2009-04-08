@@ -5,46 +5,26 @@
  *      Author: ghard
  */
 
-#ifndef ECP_MATRIX4X4_H_
-#define ECP_MATRIX4X4_H_
+#ifndef ECP_MATRIX_4x4_H_
+#define ECP_MATRIX_4x4_H_
 
-#define TYPE_T 1
-#define TYPE_D 2
-#define TYPE_S 0
+#include <iostream>
+#include <cmath>
 
-#define A_LOADED 1
-#define B_LOADED 2
-
-class Matrix4x4
+class T_MatrixManip
 {
-    double A[16], b[4], x[4], inv[16];
-    bool solved;
-    char full;
-    short type;
+	double A[16];
+
+	double det3x3(short, short);
+	double det4x4();
+	void adj4x4(double[12]);
 
   public:
-    Matrix4x4();
-    Matrix4x4(double *, short=TYPE_S);
-    Matrix4x4(double *, double *, short=TYPE_S);
+	T_MatrixManip(double[12]);
 
-    double * getA();
-    double * getb();
-    double * getx();
-    double * getinv();
-
-    void setA(double *, short=TYPE_S);
-    void setb(double *);
-
-    double det3x3(short x, short y);
-    double det4x4();
-    void adj4x4(double * out);
-    void inv_matrix4x4();
-    void solveAxb4x4();
-
-    void rproduct4x4(double *);
-    void lproduct4x4(double *);
-    void product4x1(double *);
-    void product1x4(double *);
+	void inv_matrix4x4(double[12]);
+	void multiply_r_matrix4x4(double[12], double[12]);
+	void multiply_l_matrix4x4(double[12], double[12]);
 };
 
 

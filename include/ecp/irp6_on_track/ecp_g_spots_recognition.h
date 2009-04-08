@@ -12,16 +12,20 @@
 #include "ecp_mp/ecp_mp_s_cvfradia.h"
 #include "ecp/common/ecp_t_cvfradia.h"
 
+#include "ecp/irp6_on_track/ecp_camera_to_tool.h"
+
 #include "ecp/common/ecp_generator.h"
 
 class ecp_spots_generator : public ecp_generator
 {
 	ECP_VSP_MSG comm_struct;
 	ecp_mp::sensor::cvfradia * sensor;
-	double tool_to_ground[16], plate_to_tool[16];
+	double tce[12], teg[12], tcg[12];
+	long no_of_tcg_in_one;
+	CameraToTool * c;
 	SENSOR_IMAGE calib_data;
 
-	double vec_1[4], vec_2[4], vec_3[4], vec_4[4];
+	//double vec_1[4], vec_2[4], vec_3[4], vec_4[4];
 	short iter; //0 - zero, 1 - one, 2 - many ;)
 
   public:
@@ -31,6 +35,8 @@ class ecp_spots_generator : public ecp_generator
 
 	void get_pic();
 	void get_frame();
+	void compute_TCE();
+	void compute_TCG();
 	void save_position();
 };
 

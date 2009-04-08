@@ -6,24 +6,18 @@
  */
 
 #include "ecp/irp6_on_track/ecp_g_spots_recognition.h"
-#include "ecp/common/ecp_matrix4x4.h"
 #include <unistd.h>
+
+using namespace std;
 
 
 ecp_spots_generator::ecp_spots_generator (ecp_task& _ecp_task)
         : ecp_generator (_ecp_task)
 {
 	//tool to plate frame initialization, all in rad and meters
-	plate_to_tool[0]=0; plate_to_tool[1]=0; plate_to_tool[2]=1; plate_to_tool[3]=0.001;
-	plate_to_tool[4]=-1; plate_to_tool[5]=0; plate_to_tool[6]=0; plate_to_tool[7]=0.000;
-	plate_to_tool[8]=0; plate_to_tool[9]=-1; plate_to_tool[10]=0; plate_to_tool[11]=0.04;
-	plate_to_tool[12]=0; plate_to_tool[13]=0; plate_to_tool[14]=0; plate_to_tool[15]=1;
-
 	//spots in plate coordinates
-	vec_1[0]=-0.035; vec_1[1]=0.035; vec_1[2]=0.001; vec_1[3]=1.;
-	vec_2[0]=0.035; vec_2[1]=0.035; vec_2[2]=0.001; vec_2[3]=1.;
-	vec_3[0]=0.035; vec_3[1]=-0.035; vec_3[2]=0.001; vec_3[3]=1.;
-	vec_4[0]=-0.035; vec_4[1]=-0.035; vec_4[2]=0.001; vec_4[3]=1.;
+	c = new CameraToTool();
+	no_of_tcg_in_one = 0;
 }
 
 bool ecp_spots_generator::first_step()
@@ -80,12 +74,8 @@ void ecp_spots_generator::get_frame()
 	for(int i=0; i<3; i++)
 	{
 		for(int j=0; j<4; j++)
-			tool_to_ground[4*i+j] = the_robot->EDP_data.current_arm_frame[i][j];
+			teg[4*i+j] = the_robot->EDP_data.current_arm_frame[i][j];
 	}
-
-	for(int i=12; i<15; i++)
-		tool_to_ground[i] = 0;
-	tool_to_ground[15] = 1;
 }
 
 void ecp_spots_generator::get_pic()
@@ -100,7 +90,58 @@ void ecp_spots_generator::get_pic()
 	}
 }
 
+void ecp_spots_generator::compute_TCE()
+{
+	double vec_cam1[3], vec_cam2[3], vec_cam3[3], vec_cam4[3];
+
+	for (int i=0; i<4; i++)
+	{
+		switch(i)
+		{
+		  case 0:
+			vec_cam1[0] = calib_data.sensor_union.sp_r.x[i];
+			vec_cam1[1] = calib_data.sensor_union.sp_r.y[i];
+			vec_cam1[2] = calib_data.sensor_union.sp_r.z[i];
+			break;
+		  case 1:
+			vec_cam2[0] = calib_data.sensor_union.sp_r.x[i];
+			vec_cam2[1] = calib_data.sensor_union.sp_r.y[i];
+			vec_cam2[2] = calib_data.sensor_union.sp_r.z[i];
+			break;
+		  case 2:
+			vec_cam3[0] = calib_data.sensor_union.sp_r.x[i];
+			vec_cam3[1] = calib_data.sensor_union.sp_r.y[i];
+			vec_cam3[2] = calib_data.sensor_union.sp_r.z[i];
+			break;
+		  case 3:
+			vec_cam4[0] = calib_data.sensor_union.sp_r.x[i];
+			vec_cam4[1] = calib_data.sensor_union.sp_r.y[i];
+			vec_cam4[2] = calib_data.sensor_union.sp_r.z[i];
+			break;
+		}
+	}
+
+	double norm = c->computeTCE(vec_cam1, vec_cam2, vec_cam3, vec_cam4, tce);
+}
+
+void ecp_spots_generator::compute_TCG()
+{
+	//T_C^G = T_E^G * T_C^E
+	T_MatrixManip Teg_mm(teg);
+	Teg_mm.multiply_r_matrix4x4(tce, tcg);
+
+	cout << tcg[0] << "  " << tcg[1] << "  " << tcg[2] << "  " << tcg[3] << endl;
+	cout << tcg[4] << "  " << tcg[5] << "  " << tcg[6] << "  " << tcg[7] << endl;
+	cout << tcg[8] << "  " << tcg[9] << "  " << tcg[10] << "  " << tcg[11] << endl;
+}
+
 void ecp_spots_generator::save_position()
+{
+	compute_TCE();
+	compute_TCG();
+}
+
+/*void ecp_spots_generator::save_position()
 {
 	Matrix4x4 T; // tego szukamy
 	Matrix4x4 D;
@@ -222,5 +263,5 @@ fprintf(fd, "%f %f %f 1.0 %f\n", 0.01*calib_data.sensor_union.sp_r.x[i], 0.01*ca
 //		printf("\n");
 //	}printf("\n\n");
 fclose(fd);
-}
+}*/
 
