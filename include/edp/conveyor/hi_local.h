@@ -10,6 +10,10 @@
 
 #include "edp/common/hi_rydz.h"
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
+
 // Struktury danych wykorzystywane w hardware_interface
 const int IRQ_REAL = 10; // Numer przerwania sprzetowego
 const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwan (odpowiada 2ms)
@@ -67,7 +71,7 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-class hi_conv : public hardware_interface
+class hi_conv : public common::hardware_interface
 {
 
 
@@ -85,6 +89,11 @@ public:
 
 }
 ; // koniec: class hardware_interface
+
+} // namespace conveyor
+} // namespace edp
+} // namespace mrrocpp
+
 
 #endif // __HI_RYDZ_H
 

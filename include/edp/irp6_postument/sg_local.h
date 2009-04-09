@@ -16,9 +16,12 @@
 // os od ktorej startuje synchronizacja - numeracja od 0
 #define IRP6P_SYN_INIT_AXE 1
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
 
 /************************ EDP_SPEAKER ****************************/
-class irp6p_servo_buffer  : public servo_buffer
+class irp6p_servo_buffer  : public common::servo_buffer
 {
     // Bufor polecen przysylanych z EDP_MASTER dla SERVO
     // Obiekt z algorytmem regulacji
@@ -43,5 +46,9 @@ public:
 }
 ; // end: class servo_buffer
 /************************ EDP_SPEAKER ****************************/
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
 
 #endif

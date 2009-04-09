@@ -36,7 +36,9 @@
 #include "edp/common/edp.h"
 #include "lib/mathtr.h"
 
-
+namespace mrrocpp {
+namespace edp {
+namespace common {
 
 /*--------------------------------------------------------------------------*/
 edp_irp6s_effector::edp_irp6s_effector (configurator &_config, ROBOT_ENUM l_robot_name) :
@@ -731,3 +733,8 @@ void edp_irp6s_effector::master_joints_and_frame_download (void)
 }
 
 /*--------------------------------------------------------------------------*/
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
+

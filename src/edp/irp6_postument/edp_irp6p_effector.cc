@@ -25,6 +25,10 @@
 #include "kinematics/irp6_postument/kinematic_model_irp6p_jacobian_with_wrist.h"
 #include "kinematics/irp6_postument/kinematic_model_irp6p_jacobian_transpose_with_wrist.h"
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
+
 // Konstruktor.
 edp_irp6p_effector::edp_irp6p_effector(configurator &_config) :
 	edp_irp6s_postument_track_effector(_config, ROBOT_IRP6_POSTUMENT)
@@ -67,3 +71,8 @@ edp_effector* return_created_efector(configurator &_config)
 {
 	return new edp_irp6p_effector (_config);
 }
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
+

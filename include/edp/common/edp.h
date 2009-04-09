@@ -25,6 +25,11 @@
 // Konfigurator
 #include "lib/configurator.h"
 
+
+namespace mrrocpp {
+namespace edp {
+namespace common {
+
 class reader_buffer;
 class master_trans_t_buffer;
 class in_out_buffer;
@@ -325,7 +330,7 @@ public:
 
 
 /************************ edp_irp6s_effector ****************************/
-class edp_irp6s_effector: public edp_irp6s_and_conv_effector
+class edp_irp6s_effector: public common::edp_irp6s_and_conv_effector
 {
 
 protected:
@@ -622,5 +627,9 @@ public:
 
 // Zwrocenie stworzonego obiektu - efektora. Funkcja implementowana w plikach efektorow konkretnych (jadro).
 edp_effector* return_created_efector (configurator &_config);
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
 
 #endif

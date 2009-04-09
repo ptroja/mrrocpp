@@ -27,6 +27,10 @@
 // Klasa hi_irp6p.
 #include "edp/irp6_postument/hi_local.h"
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
+
 // Zmienne globalne do komunikacji z procedura obslugi przerwan
 
 extern struct sigevent event; // by y&w
@@ -231,3 +235,7 @@ int_handler (void *arg, int int_id)
 
 
 // ------------------------------------------------------------------------
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp

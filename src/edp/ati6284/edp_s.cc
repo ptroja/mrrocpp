@@ -23,6 +23,13 @@
 #include "edp/irp6_postument/hi_local.h"
 #include <time.h>
 
+short int invalid_value;
+Calibration *cal; //!< struct containing calibration information
+
+namespace mrrocpp {
+namespace edp {
+namespace sensor {
+
 #define START_TO_READ_TIME_INTERVAL 0.0007
 #define INTERRUPT_INTERVAL 0.00007
 #define START_TO_READ_FAILURE 0.002
@@ -31,10 +38,10 @@ static struct sigevent hi_event;
 struct sigevent ati6284event;
 intrspin_t* spinlock; //!< ochrona sekcji kytycznych pomiedzy przerwaniem a watkiem
 
-short int invalid_value;
+
 short int przerwanie;
 
-Calibration *cal; //!< struct containing calibration information
+
 
 iBus* bus;
 tSTC *theSTC;
@@ -89,7 +96,7 @@ const struct sigevent *isr_handler(void *area, int id)
 
 // // // // // // // // // // // // // // /   konfiguracja czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
-edp_ATI6284_force_sensor::edp_ATI6284_force_sensor(edp_irp6s_postument_track_effector &_master) :
+edp_ATI6284_force_sensor::edp_ATI6284_force_sensor(common::edp_irp6s_postument_track_effector &_master) :
 	edp_force_sensor(_master)
 {
 
@@ -359,7 +366,7 @@ void edp_ATI6284_force_sensor::configure_sensor(void)
 	if (master.force_tryb == 2) {
 		//!< synchronize gravity transformation
 		// polozenie kisci bez narzedzia wzgledem bazy
-		Homog_matrix frame = master.return_current_frame(WITH_TRANSLATION); //!< FORCE Transformation by Slawomir Bazant
+		Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION); //!< FORCE Transformation by Slawomir Bazant
 		// Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej pozycji
 		if (!gravity_transformation) // nie powolano jeszcze obiektu
 		{
@@ -592,7 +599,7 @@ void edp_ATI6284_force_sensor::initiate_reading(void)
 			for (int i=0; i<6; i++)
 				root_force[i] = force_torque[i];
 
-			Homog_matrix frame = master.return_current_frame(WITH_TRANSLATION);
+			Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
 			// Homog_matrix frame(master.force_current_end_effector_frame);
 			double* output = gravity_transformation->getForce(root_force, frame);
 
@@ -1087,8 +1094,11 @@ void edp_ATI6284_force_sensor::AI_Start_The_Acquisition(void)
 	return;
 }
 
-edp_force_sensor* return_created_edp_force_sensor(edp_irp6s_postument_track_effector &_master)
+edp_force_sensor* return_created_edp_force_sensor(common::edp_irp6s_postument_track_effector &_master)
 {
 	return new edp_ATI6284_force_sensor(_master);
 }//!< : return_created_sensor
 
+} // namespace sensor
+} // namespace edp
+} // namespace mrrocpp

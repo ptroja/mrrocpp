@@ -15,6 +15,10 @@
 #include "common/com_buf.h"
 #include "edp/common/hi_rydz.h"
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
+
 hardware_interface::hardware_interface( edp_irp6s_and_conv_effector &_master )
         : master(_master)
 {}
@@ -92,4 +96,7 @@ void hardware_interface::reset_position (int i)
 }
 ; // end: reset_position
 
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
 

@@ -25,8 +25,9 @@
 #include "kinematics/irp6_mechatronika/kinematic_model_irp6m_with_wrist.h"
 #include "kinematics/irp6_mechatronika/kinematic_model_irp6m_5dof.h"
 
-
-
+namespace mrrocpp {
+namespace edp {
+namespace common {
 
 
 // Konstruktor.
@@ -35,7 +36,6 @@ edp_irp6m_effector::edp_irp6m_effector (configurator &_config) :
 {
 
 }
-
 
 
 
@@ -449,3 +449,8 @@ edp_effector* return_created_efector(configurator &_config)
 {
 	return new edp_irp6m_effector (_config);
 }
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
+

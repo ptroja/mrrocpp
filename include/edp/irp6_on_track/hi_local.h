@@ -10,9 +10,15 @@
 
 #include "edp/common/hi_rydz.h"
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
+
 // Struktury danych wykorzystywane w hardware_interface
 const int IRQ_REAL = 9; // Numer przerwania sprzetowego
 const unsigned short int INT_FREC_DIVIDER = 4; // Dzielnik czestotliwosci przerwan
+
+
 
 #define HI_RYDZ_INTR_TIMEOUT_HIGH 10000000 // by Y - timeout przerwania z szafy badz zegara
 
@@ -78,7 +84,7 @@ const unsigned short int INT_FREC_DIVIDER = 4; // Dzielnik czestotliwosci przerw
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-class hi_irp6ot : public hardware_interface
+class hi_irp6ot : public common::hardware_interface
 {
 
 
@@ -100,6 +106,12 @@ public:
 
 }
 ; // koniec: class hardware_interface
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
+
+
 
 #endif // __HI_RYDZ_H
 

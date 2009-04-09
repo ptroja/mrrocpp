@@ -15,6 +15,10 @@
 const int IRQ_REAL = 10; // Numer przerwania sprzetowego
 const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwan (odpowiada 2ms)
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
+
 #define HI_RYDZ_INTR_TIMEOUT_HIGH 10000000 // by Y - timeout przerwania z szafy badz zegara
 
 
@@ -77,7 +81,7 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-class hi_irp6p : public hardware_interface
+class hi_irp6p : public common::hardware_interface
 {
 
 
@@ -103,6 +107,10 @@ public:
 
 }
 ; // koniec: class hardware_interface
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
 
 #endif // __HI_RYDZ_H
 

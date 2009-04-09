@@ -35,6 +35,11 @@
 #include "edp/irp6_mechatronika/hi_local.h"
 
 
+
+namespace mrrocpp {
+namespace edp {
+namespace common {
+
 struct sigevent event;
 
 // extern ini_configs* ini_con;
@@ -448,3 +453,7 @@ void hi_irp6m::finish_synchro ( int drive_number )
 
 }
 ;  // end: finis_synchro()
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp

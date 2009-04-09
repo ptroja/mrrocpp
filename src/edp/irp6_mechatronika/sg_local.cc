@@ -22,7 +22,9 @@
 
 // uint64_t kk;	// numer pomiaru od momentu startu pomiarow
 
-
+namespace mrrocpp {
+namespace edp {
+namespace common {
 
 /*-----------------------------------------------------------------------*/
 BYTE irp6m_servo_buffer::Move_a_step (void)
@@ -437,7 +439,7 @@ servo_buffer* return_created_servo_buffer (edp_irp6s_and_conv_effector &_master)
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_2_irp6m::NL_regulator_2_irp6m (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master)
+NL_regulator_2_irp6m::NL_regulator_2_irp6m (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::edp_irp6s_and_conv_effector &_master)
         : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
@@ -449,7 +451,7 @@ NL_regulator_2_irp6m::NL_regulator_2_irp6m (BYTE reg_no, BYTE reg_par_no, double
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_3_irp6m::NL_regulator_3_irp6m (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master)
+NL_regulator_3_irp6m::NL_regulator_3_irp6m (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::edp_irp6s_and_conv_effector &_master)
         : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
@@ -461,7 +463,7 @@ NL_regulator_3_irp6m::NL_regulator_3_irp6m (BYTE reg_no, BYTE reg_par_no, double
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_4_irp6m::NL_regulator_4_irp6m (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master)
+NL_regulator_4_irp6m::NL_regulator_4_irp6m (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::edp_irp6s_and_conv_effector &_master)
         : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
@@ -473,7 +475,7 @@ NL_regulator_4_irp6m::NL_regulator_4_irp6m (BYTE reg_no, BYTE reg_par_no, double
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_5_irp6m::NL_regulator_5_irp6m (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master)
+NL_regulator_5_irp6m::NL_regulator_5_irp6m (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::edp_irp6s_and_conv_effector &_master)
         : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
@@ -486,7 +488,7 @@ NL_regulator_5_irp6m::NL_regulator_5_irp6m (BYTE reg_no, BYTE reg_par_no, double
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_6_irp6m::NL_regulator_6_irp6m (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master)
+NL_regulator_6_irp6m::NL_regulator_6_irp6m (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::edp_irp6s_and_conv_effector &_master)
         : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
@@ -534,7 +536,7 @@ BYTE NL_regulator_2_irp6m::compute_set_value (void)
     // double root_position_increment_new=position_increment_new;
 
     // BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-    constraint_detector(SG_REG_2_MAX_ACC, SG_REG_2_MAX_SPEED);
+    constraint_detector(common::SG_REG_2_MAX_ACC, common::SG_REG_2_MAX_SPEED);
 
     // przeliczenie radianow na impulsy
     // step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
@@ -750,7 +752,7 @@ BYTE NL_regulator_3_irp6m::compute_set_value (void)
     // double root_position_increment_new=position_increment_new;
 
     // BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-    constraint_detector(SG_REG_3_MAX_ACC, SG_REG_3_MAX_SPEED);
+    constraint_detector(common::SG_REG_3_MAX_ACC, common::SG_REG_3_MAX_SPEED);
 
     // przeliczenie radianow na impulsy
     // step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
@@ -961,7 +963,7 @@ BYTE NL_regulator_4_irp6m::compute_set_value (void)
     // double root_position_increment_new=position_increment_new;
 
     // BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-    constraint_detector(SG_REG_4_MAX_ACC, SG_REG_4_MAX_SPEED);
+    constraint_detector(common::SG_REG_4_MAX_ACC, common::SG_REG_4_MAX_SPEED);
 
     // przeliczenie radianow na impulsy
     // step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
@@ -1173,7 +1175,7 @@ BYTE NL_regulator_5_irp6m::compute_set_value (void)
     // double root_position_increment_new=position_increment_new;
 
     // BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-    constraint_detector(SG_REG_5_MAX_ACC, SG_REG_5_MAX_SPEED);
+    constraint_detector(common::SG_REG_5_MAX_ACC, common::SG_REG_5_MAX_SPEED);
 
     // przeliczenie radianow na impulsy
     // step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
@@ -1389,7 +1391,7 @@ BYTE NL_regulator_6_irp6m::compute_set_value (void)
     double root_position_increment_new=position_increment_new;
 
     // BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-    constraint_detector(SG_REG_6_MAX_ACC, SG_REG_6_MAX_SPEED);
+    constraint_detector(common::SG_REG_6_MAX_ACC, common::SG_REG_6_MAX_SPEED);
 
     // przeliczenie radianow na impulsy
     // step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
@@ -1567,6 +1569,9 @@ BYTE NL_regulator_6_irp6m::compute_set_value (void)
 ; // end: NL_regulator_6::compute_set_value
 /*-----------------------------------------------------------------------*/
 
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
 
 
 

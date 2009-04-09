@@ -14,13 +14,17 @@
 #include "common/sensor.h"				// klasa bazowa sensor
 #include "edp/common/edp.h"				// klasa bazowa sensor
 
+namespace mrrocpp {
+namespace edp {
+namespace sensor {
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
     /********** klasa czujnikow po stronie EDP **************/
-    class edp_force_sensor : public sensor
+    class edp_force_sensor : public ::sensor
     {
 
     protected:
@@ -50,8 +54,8 @@ extern "C"
         bool force_sensor_do_first_configure; // pierwsza konfiguracja po synchronizacji lub uruchomieniu
         bool force_sensor_set_tool; // FLAGA ZLECENIA ZMIANY NARZEDZIA
 
-        edp_irp6s_postument_track_effector &master;
-        edp_force_sensor(edp_irp6s_postument_track_effector &_master);
+        common::edp_irp6s_postument_track_effector &master;
+        edp_force_sensor(common::edp_irp6s_postument_track_effector &_master);
 
         virtual void wait_for_event(void);			// oczekiwanie na zdarzenie
         void set_force_tool (void);
@@ -61,10 +65,15 @@ extern "C"
 
 
     // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-    edp_force_sensor* return_created_edp_force_sensor (edp_irp6s_postument_track_effector &_master);
+    edp_force_sensor* return_created_edp_force_sensor (common::edp_irp6s_postument_track_effector &_master);
 
 
 #ifdef __cplusplus
 };
 #endif
+
+} // namespace sensor
+} // namespace edp
+} // namespace mrrocpp
+
 #endif

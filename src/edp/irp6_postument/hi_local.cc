@@ -34,8 +34,11 @@
 // Klasa hi_irp6p.
 #include "edp/irp6_postument/hi_local.h"
 
-struct sigevent event;
+namespace mrrocpp {
+namespace edp {
+namespace common {
 
+struct sigevent event;
 
 volatile motor_data md; // Dane przesylane z/do funkcji obslugi przerwania
 
@@ -427,3 +430,7 @@ printf("1: %x, %x, %x, %x, %x, %x, %x\n", robot_control[0].adr_offset_plus_0, ro
 	hi_int_wait(INT_SINGLE_COMMAND, 2);
 	
   };  // end: finis_synchro()
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp

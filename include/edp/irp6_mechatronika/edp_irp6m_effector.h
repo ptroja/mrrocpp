@@ -16,6 +16,10 @@
 // Klasa edp_irp6s_robot.
 #include "edp/common/edp.h"
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
+
 // Klasa reprezentujaca robota IRp-6 na postumencie.
 class edp_irp6m_effector : public edp_irp6s_effector
 {
@@ -45,5 +49,11 @@ public:
 
     void get_arm_position (bool read_hardware, c_buffer &instruction); // odczytanie pozycji ramienia
 };
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
+
+
 
 #endif

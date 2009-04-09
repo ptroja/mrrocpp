@@ -15,6 +15,10 @@
 
 
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
+
 // base class for EDP robots with manipulators postument and on_track
 
 
@@ -60,7 +64,7 @@ protected:
 
 public:
 
-    edp_force_sensor *vs;
+    sensor::edp_force_sensor *vs;
 
     static void *edp_vsp_thread_start(void* arg);
     void *edp_vsp_thread(void* arg);
@@ -102,7 +106,9 @@ public:
 };
 /************************ edp_irp6s_effector ****************************/
 
-
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
 
 
 #endif

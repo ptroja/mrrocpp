@@ -14,8 +14,12 @@
 
 #include "edp/common/edp.h"
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
+
 // Klasa reprezentujaca tasmociag.
-class edp_conveyor_effector  : public edp_irp6s_and_conv_effector
+class edp_conveyor_effector  : public common::edp_irp6s_and_conv_effector
 {
 protected:
     // Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
@@ -36,5 +40,10 @@ public:
     void servo_joints_and_frame_actualization_and_upload(void);
 
 };
+
+} // namespace conveyor
+} // namespace edp
+} // namespace mrrocpp
+
 
 #endif

@@ -30,6 +30,10 @@
 #include "lib/mis_fun.h"
 #include "edp/common/edp.h"
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
+
 void * edp_irp6s_and_conv_effector::reader_thread_start(void* arg)
 {
 	static_cast<edp_irp6s_and_conv_effector*> (arg)->reader_thread(arg);
@@ -429,3 +433,7 @@ void * edp_irp6s_and_conv_effector::reader_thread(void* arg)
 	delete[] robot_name;
 	delete[] reader_meassures_dir;
 }
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp

@@ -34,6 +34,9 @@
 
 //!< watek do komunikacji miedzy edp a vsp
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
 
 void * edp_irp6s_postument_track_effector::edp_vsp_thread_start(void* arg)
 {
@@ -143,7 +146,7 @@ void * edp_irp6s_postument_track_effector::force_thread(void *arg)
 
 	set_thread_priority(pthread_self() , MAX_PRIORITY-1);
 
-	vs = return_created_edp_force_sensor(*this); //!< czujnik wirtualny
+	vs = sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
 
 	sem_post(&force_master_sem);
 
@@ -152,7 +155,7 @@ void * edp_irp6s_postument_track_effector::force_thread(void *arg)
 		vs->configure_sensor();
 	}
 
-	catch (sensor::sensor_error e)
+	catch (::sensor::sensor_error e)
 	{
 		printf("sensor_error w force thread EDP\n");
 
@@ -240,7 +243,7 @@ void * edp_irp6s_postument_track_effector::force_thread(void *arg)
 
 		} //!< koniec TRY
 
-		catch (sensor::sensor_error e)
+		catch (::sensor::sensor_error e)
 		{
 			printf("sensor_error w force thread  EDP\n");
 
@@ -267,3 +270,8 @@ void * edp_irp6s_postument_track_effector::force_thread(void *arg)
 
 	return NULL;
 } //!< end MAIN
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
+

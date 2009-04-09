@@ -11,6 +11,9 @@
 #include <stdint.h>
 #include "edp/common/edp.h"
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
 
 struct control_a_dof
 {
@@ -117,5 +120,9 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
 
 #endif // __HI_RYDZ_H

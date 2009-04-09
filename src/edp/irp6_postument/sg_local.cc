@@ -17,6 +17,9 @@
 // Klasa irp6p_servo_buffer.
 #include "edp/irp6_postument/sg_local.h"
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
 
 // extern uint64_t kk;				  // numer pomiaru od momentu startu pomiarow
 
@@ -395,7 +398,7 @@ void irp6p_servo_buffer::synchronise (void)
             switch ((reply_status_tmp.error0 >> (5*j)) & 0x000000000000001FULL)
             {
             case SYNCHRO_SWITCH_ON:
-                //    	printf("bcbb: SYNCHRO_SWITCH_ON\n");
+                //    	printf("bcbb:ï¿½SYNCHRO_SWITCH_ON\n");
             case SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO:
                 //     	printf("bfbb: SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO\n");
                 continue;
@@ -596,3 +599,8 @@ servo_buffer* return_created_servo_buffer (edp_irp6s_and_conv_effector &_master)
                     {
                         return new irp6p_servo_buffer ((edp_irp6p_effector &)(_master));
                     };
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
+

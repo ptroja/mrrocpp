@@ -29,7 +29,11 @@
 #include <edp/common/edp.h>
 #include "edp/common/edp_irp6s_postument_track.h"
 
-edp_force_sensor::edp_force_sensor(edp_irp6s_postument_track_effector &_master)
+namespace mrrocpp {
+namespace edp {
+namespace sensor {
+
+edp_force_sensor::edp_force_sensor(common::edp_irp6s_postument_track_effector &_master)
         : master(_master), new_edp_command(false)
 {
     gravity_transformation = NULL;
@@ -62,7 +66,7 @@ void edp_force_sensor::set_force_tool(void)
 {
 
     K_vector gravity_arm_in_sensor(next_force_tool_position);
-    Homog_matrix frame = master.return_current_frame(WITH_TRANSLATION);
+    Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
     gravity_transformation->defineTool(frame, next_force_tool_weight, gravity_arm_in_sensor);
 
     for (int i = 0; i<3; i++)
@@ -90,3 +94,8 @@ int	edp_force_sensor::check_for_command_execution_finish() // oczekiwanie na sem
     new_edp_command = true;
     return sem_wait(&new_ms_for_edp);
 };
+
+} // namespace sensor
+} // namespace edp
+} // namespace mrrocpp
+

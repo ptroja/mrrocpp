@@ -18,6 +18,10 @@
 // Klasa edp_speaker_effector.
 #include "edp/speaker/edp_speaker_effector.h"
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
+
 
 /********************************* GLOBALS **********************************/
 
@@ -150,4 +154,8 @@ void * edp_speaker_effector::speak_thread(void *arg)
     } // end while
     return NULL;
 }
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
 

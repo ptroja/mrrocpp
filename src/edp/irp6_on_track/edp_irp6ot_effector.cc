@@ -22,6 +22,10 @@
 #include "kinematics/irp6_on_track/kinematic_model_calibrated_irp6ot_with_wrist.h"
 #include "kinematics/irp6_on_track/kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist.h"
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
+
 // Konstruktor.
 edp_irp6ot_effector::edp_irp6ot_effector(configurator &_config) :
 	edp_irp6s_postument_track_effector(_config, ROBOT_IRP6_ON_TRACK)
@@ -55,8 +59,15 @@ void edp_irp6ot_effector::create_kinematic_models_for_given_robot(void)
 	set_kinematic_model(0);
 }
 
+
+
 // Stworzenie obiektu edp_irp6p_effector.
 edp_effector* return_created_efector(configurator &_config)
 {
 	return new edp_irp6ot_effector (_config);
 }
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
+

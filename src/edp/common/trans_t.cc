@@ -16,7 +16,9 @@
 
 /********************************* GLOBALS **********************************/
 
-
+namespace mrrocpp {
+namespace edp {
+namespace common {
 
 void * edp_irp6s_and_conv_effector::trans_thread_start(void* arg)
 {
@@ -127,3 +129,8 @@ void * edp_irp6s_and_conv_effector::trans_thread(void *arg)
         }
     }
 }
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
+

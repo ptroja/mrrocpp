@@ -40,6 +40,9 @@
 
 #include "kinematics/common/kinematic_model.h"
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
 
 
 /*--------------------------------------------------------------------------*/
@@ -1389,21 +1392,25 @@ in_out_buffer::in_out_buffer()
 void in_out_buffer::set_output(const WORD *out_value)
 {
 
-    InterruptLock(&output_spinlock);
+ //   InterruptLock(&output_spinlock);
+	InterruptEnable();
     set_output_flag=true;   // aby f. obslugi przerwania wiedziala ze ma ustawic wyjscie
     binary_output=*out_value;
 
-    InterruptUnlock(&output_spinlock);
+//    InterruptUnlock(&output_spinlock);
+    InterruptDisable();
 }
 
 // odczytanie wyjsc
 void in_out_buffer::get_output(WORD *out_value)
 {
 
-    InterruptLock(&output_spinlock );
+  //  InterruptLock(&output_spinlock );
+	InterruptEnable();
     *out_value=binary_output;
 
-    InterruptUnlock(&output_spinlock );
+ //   InterruptUnlock(&output_spinlock );
+    InterruptDisable();
 }
 
 
@@ -1411,14 +1418,16 @@ void in_out_buffer::get_output(WORD *out_value)
 void in_out_buffer::set_input (const WORD *binary_in_value, const BYTE *analog_in_table)
 {
 
-    InterruptLock(&input_spinlock );
+  //  InterruptLock(&input_spinlock );
+	InterruptEnable();
     binary_input=*binary_in_value;		// wejscie binarne
     for (int i=0; i<8; i++)
     {
         analog_input[i]=analog_in_table[i];
     }
 
-    InterruptUnlock(&input_spinlock );
+//    InterruptUnlock(&input_spinlock );
+    InterruptDisable();
 
     /*	analog_in_value = & read_analog;
     	binary_in_value =   & read_binary;*/
@@ -1431,7 +1440,8 @@ void in_out_buffer::set_input (const WORD *binary_in_value, const BYTE *analog_i
 void in_out_buffer::get_input (WORD *binary_in_value, BYTE *analog_in_table)
 {
 
-    InterruptLock(&input_spinlock );
+  //  InterruptLock(&input_spinlock );
+	InterruptEnable();
     *binary_in_value=binary_input;		// wejscie binarne
     for (int i=0; i<8; i++)
     {
@@ -1447,7 +1457,8 @@ void in_out_buffer::get_input (WORD *binary_in_value, BYTE *analog_in_table)
     	// SERVO_REPLY_REG_1_ADR       0x218
     	WORD read_binary = 0x00FF & in16(SERVO_REPLY_REG_1_ADR);*/
 
-    InterruptUnlock(&input_spinlock );
+  //  InterruptUnlock(&input_spinlock );
+    InterruptDisable();
 
     /*	analog_in_value = & read_analog;
     	binary_in_value =   & read_binary;*/
@@ -1456,3 +1467,7 @@ void in_out_buffer::get_input (WORD *binary_in_value, BYTE *analog_in_table)
 }
 
 /**************************** IN_OUT_BUFFER *****************************/
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp

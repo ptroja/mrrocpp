@@ -15,7 +15,9 @@
 #include "lib/mis_fun.h"
 
 
-
+namespace mrrocpp {
+namespace edp {
+namespace common {
 
 
 void * edp_irp6s_and_conv_effector::servo_thread_start(void* arg)
@@ -87,3 +89,8 @@ void * edp_irp6s_and_conv_effector::servo_thread(void* arg)
 
 
 /*---------------------------------------------------------------------------*/
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
+

@@ -27,6 +27,10 @@
 // Klasa hi_irp6ot.
 #include "edp/irp6_on_track/hi_local.h"
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
+
 // Zmienne globalne do komunikacji z procedura obslugi przerwan
 
 extern struct sigevent event; // by y&w
@@ -44,7 +48,7 @@ extern edp_irp6ot_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
 const struct sigevent *
             int_handler (void *arg, int int_id)
 {
-    status_of_a_dof robot_status[IRP6_ON_TRACK_NUM_OF_SERVOS];
+    common::status_of_a_dof robot_status[IRP6_ON_TRACK_NUM_OF_SERVOS];
     short int low_word, high_word;
     int i;
 
@@ -308,3 +312,8 @@ const struct sigevent *
 
 // #pragma on(check_stack);
 // ------------------------------------------------------------------------
+            
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
+

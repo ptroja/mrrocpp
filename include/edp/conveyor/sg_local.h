@@ -13,8 +13,12 @@
 #include "edp/common/edp.h"
 #include "edp/common/sg_irp6p_and_conv.h"
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
+
 /************************ EDP_SPEAKER ****************************/
-class conveyor_servo_buffer  : public servo_buffer
+class conveyor_servo_buffer  : public common::servo_buffer
 {
     // Bufor polecen przysylanych z EDP_MASTER dla SERVO
     // Obiekt z algorytmem regulacji
@@ -39,5 +43,10 @@ public:
 }
 ; // end: class servo_buffer
 /*-----------------------------------------------------------------------*/
+
+} // namespace conveyor
+} // namespace edp
+} // namespace mrrocpp
+
 
 #endif

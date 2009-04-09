@@ -27,7 +27,9 @@
 
 #include "messip/messip.h"
 
-
+namespace mrrocpp {
+namespace edp {
+namespace common {
 
 /*--------------------------------------------------------------------------*/
 edp_effector::edp_effector(configurator &_config, ROBOT_ENUM l_robot_name) :
@@ -384,3 +386,8 @@ int master_trans_t_buffer::trans_t_wait_for_master_order()
 	// oczekiwanie na rozkaz z watku master
 	return sem_wait(&(master_to_trans_t_sem));
 }
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
+

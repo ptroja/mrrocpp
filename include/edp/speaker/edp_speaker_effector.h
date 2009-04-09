@@ -19,6 +19,9 @@
 #include "edp/common/edp.h"
 //#include "edp/speaker/sound.h" // MAC7
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
 
 // Klasa reprezentujaca speaker'a.
 class edp_speaker_effector  : public edp_effector
@@ -85,5 +88,10 @@ public:
     int speak (c_buffer *instruction);
 
 };
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
+
 
 #endif

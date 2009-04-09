@@ -52,7 +52,9 @@
 // bool speaking; // MAC7
 
 
-
+namespace mrrocpp {
+namespace edp {
+namespace common {
 
 edp_speaker_effector::edp_speaker_effector (configurator &_config)
         : edp_effector(_config, ROBOT_SPEAKER)
@@ -468,3 +470,6 @@ edp_effector* return_created_efector (configurator &_config)
                         return new edp_speaker_effector (_config);
                     };
 
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp

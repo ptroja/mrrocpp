@@ -19,8 +19,12 @@
 #define IRP6P_GRIPPER_CATCH_AXE 6
 #define IRP6P_GRIPPER_TURN_AXE 5
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
+
 // Klasa reprezentujaca robota IRp-6 na postumencie.
-class edp_irp6p_effector  : public edp_irp6s_postument_track_effector
+class edp_irp6p_effector  : public common::edp_irp6s_postument_track_effector
 {
 protected:
     // Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
@@ -30,5 +34,9 @@ public:
     void initialize (void);
     edp_irp6p_effector (configurator &_config);
 };
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
 
 #endif

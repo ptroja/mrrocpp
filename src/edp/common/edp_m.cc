@@ -29,6 +29,10 @@
 #include "lib/mis_fun.h"
 #include "edp/common/edp.h"
 
+namespace mrrocpp {
+namespace edp {
+namespace common {
+
 // sr_edp *msg;                // Wskaznik na obiekt do komunikacji z SR
 
 edp_effector* master; // Bufor polecen i odpowiedzi EDP_MASTER
@@ -50,6 +54,10 @@ void catch_signal(int sig) {
 	} // end: switch
 }
 
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
+
 int main(int argc, char *argv[], char **arge) {
 
 	// delay(10000);
@@ -66,11 +74,11 @@ int main(int argc, char *argv[], char **arge) {
 		_clockperiod new_cp;
 		new_cp.nsec = TIME_SLICE; // impconst.h
 		new_cp.fract = 0;
-		ClockPeriod(CLOCK_REALTIME, &new_cp, &old_cp, 0);
+		ClockPeriod(CLOCK_REALTIME, &new_cp, &edp::common::old_cp, 0);
 
 		// przechwycenie SIGTERM
-		signal(SIGTERM, &catch_signal);
-		signal(SIGSEGV, &catch_signal);
+		signal(SIGTERM, &edp::common::catch_signal);
+		signal(SIGSEGV, &edp::common::catch_signal);
 #if defined(PROCESS_SPAWN_RSH)
 		signal(SIGINT, SIG_IGN);
 #endif
@@ -96,23 +104,23 @@ int main(int argc, char *argv[], char **arge) {
 		//	printf("przed\n");
 		//		delay(10000);
 		//			printf("za\n");
-		master = return_created_efector(*_config);
+		edp::common::master = edp::common::return_created_efector(*_config);
 
-		master->initialize();
+		edp::common::master->initialize();
 
-		master->create_threads();
+		edp::common::master->create_threads();
 
-		if (!master->initialize_communication()) {
+		if (!edp::common::master->initialize_communication()) {
 			return EXIT_FAILURE;
 		}
 
 		//	printf("1\n");
 		//	delay (20000);
-		master->main_loop();
+		edp::common::master->main_loop();
 		//	printf("end\n");
 	}
 
-	catch (System_error fe) {
+	catch (edp::common::System_error fe) {
 		// Obsluga bledow systemowych
 		/*
 		 // Wystapil blad w komunikacji miedzyprocesowej, oczekiwanie na jawne
@@ -127,7 +135,7 @@ int main(int argc, char *argv[], char **arge) {
 	catch (...) { // Dla zewnetrznej petli try
 		perror("Unidentified error in EDP");
 		// Komunikat o bledzie wysylamy do SR
-		master->msg->message(FATAL_ERROR, EDP_UNIDENTIFIED_ERROR);
+		edp::common::master->msg->message(FATAL_ERROR, EDP_UNIDENTIFIED_ERROR);
 		/*
 		 // Wystapil niezidentyfikowany blad, oczekiwanie na jawne zabicie procesu
 		 // przez operatora
@@ -139,3 +147,6 @@ int main(int argc, char *argv[], char **arge) {
 		 */
 	}
 }
+
+
+

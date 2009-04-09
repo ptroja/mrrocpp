@@ -19,7 +19,9 @@
 #include "edp/common/hi_rydz.h"
 #include "edp/common/servo_gr.h"
 
-
+namespace mrrocpp {
+namespace edp {
+namespace common {
 
 
 BYTE servo_buffer::Move_a_step (void)
@@ -420,7 +422,7 @@ void servo_buffer::Change_algorithm (void)
 
 
 /*-----------------------------------------------------------------------*/
-regulator::regulator(BYTE reg_no, BYTE reg_par_no, edp_irp6s_and_conv_effector &_master)
+regulator::regulator(BYTE reg_no, BYTE reg_par_no, common::edp_irp6s_and_conv_effector &_master)
         : master(_master)
 {
     // Konstruktor abstrakcyjnego regulatora
@@ -735,7 +737,7 @@ void regulator::clear_regulator ()
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator::NL_regulator (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, edp_irp6s_and_conv_effector &_master)
+NL_regulator::NL_regulator (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::edp_irp6s_and_conv_effector &_master)
         : regulator(reg_no, reg_par_no, _master)
 {
     // Konstruktor regulatora konkretnego
@@ -757,4 +759,8 @@ NL_regulator::NL_regulator (BYTE reg_no, BYTE reg_par_no, double aa, double bb0,
 }
 ; // end: NL_regulator::NL_regulator
 /*-----------------------------------------------------------------------*/
+
+} // namespace common
+} // namespace edp
+} // namespace mrrocpp
 
