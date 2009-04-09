@@ -44,6 +44,13 @@
 // Konfigurator
 #include "lib/configurator.h"
 
+
+void y_InterruptUnlock( intrspin_t* spinlock_local )
+{
+	InterruptUnlock(spinlock_local );
+}
+
+
 namespace mrrocpp {
 namespace edp {
 namespace sensor {
@@ -214,8 +221,8 @@ edp_ATI3084_force_sensor::edp_ATI3084_force_sensor(common::edp_irp6s_postument_t
 
 		spinlock=new(intrspin_t);
 		memset(spinlock, 0, sizeof( *spinlock ));
-		//InterruptLock(spinlock );
-		InterruptEnable();
+		InterruptLock(spinlock );
+		//InterruptEnable();
 
 		out8(LCREG, 0x80); /* DLAB=1 */
 		delay( 1);
@@ -241,7 +248,8 @@ edp_ATI3084_force_sensor::edp_ATI3084_force_sensor(common::edp_irp6s_postument_t
 		out8(FCREG, 0x81); /*program fifo*/
 		delay( 1);
 		//InterruptUnlock(spinlock );
-		InterruptDisable();
+		y_InterruptUnlock(spinlock);
+		//InterruptDisable();
 		/* interrupts are enabled */
 
 		do_init(); // komunikacja wstepna

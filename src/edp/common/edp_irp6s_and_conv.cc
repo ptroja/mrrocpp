@@ -40,6 +40,11 @@
 
 #include "kinematics/common/kinematic_model.h"
 
+void yy_InterruptUnlock( intrspin_t* spinlock_local )
+{
+	InterruptUnlock(spinlock_local );
+}
+
 namespace mrrocpp {
 namespace edp {
 namespace common {
@@ -1392,25 +1397,27 @@ in_out_buffer::in_out_buffer()
 void in_out_buffer::set_output(const WORD *out_value)
 {
 
- //   InterruptLock(&output_spinlock);
-	InterruptEnable();
+    InterruptLock(&output_spinlock);
+//	InterruptEnable();
     set_output_flag=true;   // aby f. obslugi przerwania wiedziala ze ma ustawic wyjscie
     binary_output=*out_value;
 
 //    InterruptUnlock(&output_spinlock);
-    InterruptDisable();
+    yy_InterruptUnlock(&output_spinlock);
+  //  InterruptDisable();
 }
 
 // odczytanie wyjsc
 void in_out_buffer::get_output(WORD *out_value)
 {
 
-  //  InterruptLock(&output_spinlock );
-	InterruptEnable();
+    InterruptLock(&output_spinlock );
+	//InterruptEnable();
     *out_value=binary_output;
 
- //   InterruptUnlock(&output_spinlock );
-    InterruptDisable();
+  //  InterruptUnlock(&output_spinlock );
+    yy_InterruptUnlock(&output_spinlock);
+  //  InterruptDisable();
 }
 
 
@@ -1418,8 +1425,8 @@ void in_out_buffer::get_output(WORD *out_value)
 void in_out_buffer::set_input (const WORD *binary_in_value, const BYTE *analog_in_table)
 {
 
-  //  InterruptLock(&input_spinlock );
-	InterruptEnable();
+    InterruptLock(&input_spinlock );
+//	InterruptEnable();
     binary_input=*binary_in_value;		// wejscie binarne
     for (int i=0; i<8; i++)
     {
@@ -1427,7 +1434,8 @@ void in_out_buffer::set_input (const WORD *binary_in_value, const BYTE *analog_i
     }
 
 //    InterruptUnlock(&input_spinlock );
-    InterruptDisable();
+    yy_InterruptUnlock(&input_spinlock);
+  //  InterruptDisable();
 
     /*	analog_in_value = & read_analog;
     	binary_in_value =   & read_binary;*/
@@ -1440,8 +1448,8 @@ void in_out_buffer::set_input (const WORD *binary_in_value, const BYTE *analog_i
 void in_out_buffer::get_input (WORD *binary_in_value, BYTE *analog_in_table)
 {
 
-  //  InterruptLock(&input_spinlock );
-	InterruptEnable();
+    InterruptLock(&input_spinlock );
+//	InterruptEnable();
     *binary_in_value=binary_input;		// wejscie binarne
     for (int i=0; i<8; i++)
     {
@@ -1458,7 +1466,8 @@ void in_out_buffer::get_input (WORD *binary_in_value, BYTE *analog_in_table)
     	WORD read_binary = 0x00FF & in16(SERVO_REPLY_REG_1_ADR);*/
 
   //  InterruptUnlock(&input_spinlock );
-    InterruptDisable();
+    yy_InterruptUnlock(&input_spinlock);
+  //  InterruptDisable();
 
     /*	analog_in_value = & read_analog;
     	binary_in_value =   & read_binary;*/
