@@ -42,8 +42,8 @@ using namespace std;
 
 
 
-mp_teach_in_generator::mp_teach_in_generator(task::mp_task& _mp_task)
-	: mp_generator (_mp_task), UI_fd(_mp_task.UI_fd)
+teach_in::teach_in(task::mp_task& _mp_task)
+	: base (_mp_task), UI_fd(_mp_task.UI_fd)
 {
 	pose_list.clear();
 	pose_list_iterator = pose_list.end();
@@ -51,14 +51,14 @@ mp_teach_in_generator::mp_teach_in_generator(task::mp_task& _mp_task)
 
 // -------------------------------------------------------
 // destruktor
-mp_teach_in_generator::~mp_teach_in_generator (void) { flush_pose_list(); }
+teach_in::~teach_in (void) { flush_pose_list(); }
 
 
 
 
 // --------------------------------------------------------------------------
 // Zapis trajektorii do pliku
-void mp_teach_in_generator::save_file (POSE_SPECIFICATION ps) {
+void teach_in::save_file (POSE_SPECIFICATION ps) {
 	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
 	common::mp_taught_in_pose tip;        // Zapisywana pozycja
@@ -83,7 +83,7 @@ void mp_teach_in_generator::save_file (POSE_SPECIFICATION ps) {
 		e = errno;
 		perror("ECP: Send() to UI failed\n");
 		sr_ecp_msg.message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw mp_generator::MP_error(SYSTEM_ERROR, (uint64_t) 0);
+		throw base::MP_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
 	if ( ui_to_ecp_rep.reply == QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
 		return;
@@ -110,13 +110,13 @@ void mp_teach_in_generator::save_file (POSE_SPECIFICATION ps) {
 	cwd = getcwd (NULL, 0);
 	if ( chdir(ui_to_ecp_rep.path) != 0 ) {
 		perror(ui_to_ecp_rep.path);
-		throw mp_generator::MP_error(NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		throw base::MP_error(NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
 	}
 	ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
 	e = errno;
 	if (!to_file) {
 		perror(ui_to_ecp_rep.filename);
-		throw mp_generator::MP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw base::MP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	} else {
 		initiate_pose_list();
 		number_of_poses = pose_list_length();
@@ -142,7 +142,7 @@ void mp_teach_in_generator::save_file (POSE_SPECIFICATION ps) {
 
 // --------------------------------------------------------------------------
 // Wczytanie trajektorii z pliku
-bool mp_teach_in_generator::load_file_with_path (const char* file_name, short robot_number) {
+bool teach_in::load_file_with_path (const char* file_name, short robot_number) {
 // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 // false w przeciwnym razie
 // common::mp_taught_in_pose tip;        // Wczytana pozycja
@@ -161,12 +161,12 @@ bool mp_teach_in_generator::load_file_with_path (const char* file_name, short ro
 	ifstream from_file(file_name); // otworz plik do odczytu
 	if (!from_file) {
 		perror(file_name);
-		throw mp_generator::MP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw base::MP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 
 	if ( !(from_file >> coordinate_type) ) {
 		from_file.close();
-		throw mp_generator::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
 // Usuwanie spacji i tabulacji
@@ -194,12 +194,12 @@ bool mp_teach_in_generator::load_file_with_path (const char* file_name, short ro
 		ps = PF_VELOCITY;
 	else {
 		from_file.close();
-		throw mp_generator::MP_error(NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+		throw base::MP_error(NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
 	}
 
 	if ( !(from_file >> number_of_poses) ) {
 		from_file.close();
-		throw mp_generator::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
@@ -207,19 +207,19 @@ bool mp_teach_in_generator::load_file_with_path (const char* file_name, short ro
 
 		if (!(from_file >> motion_time)) {
 			from_file.close();
-			throw mp_generator::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+			throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
 		}
 		for ( j = 0; j < MAX_SERVOS_NR; j++) {
 			if ( !(from_file >> irp6ot_coordinates[j]) ) { // Zabezpieczenie przed danymi nienumerycznymi
 				from_file.close();
-				throw mp_generator::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+				throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
 			}
 		}
 		if (robot_number > 1) {
 			for ( j = 0; j < MAX_SERVOS_NR; j++) {
 				if ( !(from_file >> irp6p_coordinates[j]) ) { // Zabezpieczenie przed danymi nienumerycznymi
 					from_file.close();
-					throw mp_generator::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+					throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
 				}
 			}
 		}
@@ -252,7 +252,7 @@ bool mp_teach_in_generator::load_file_with_path (const char* file_name, short ro
 
 // --------------------------------------------------------------------------
 // Wczytanie trajektorii z pliku
-bool mp_teach_in_generator::load_file () {
+bool teach_in::load_file () {
 // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 // false w przeciwnym razie
 	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
@@ -284,23 +284,23 @@ bool mp_teach_in_generator::load_file () {
 		e = errno;
 		perror("ECP: Send() to UI failed\n");
 		sr_ecp_msg.message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw mp_generator::MP_error(SYSTEM_ERROR, (uint64_t) 0);
+		throw base::MP_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
 	if ( ui_to_ecp_rep.reply == QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
 		return false;
 	if ( chdir(ui_to_ecp_rep.path) != 0 ) {
 		perror(ui_to_ecp_rep.path);
-		throw mp_generator::MP_error(NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		throw base::MP_error(NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
 	}
 
 	ifstream from_file(ui_to_ecp_rep.filename); // otworz plik do odczytu
 	if (!from_file) {
 		perror(ui_to_ecp_rep.filename);
-		throw mp_generator::MP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw base::MP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 	if ( !(from_file >> coordinate_type) ) {
 		from_file.close();
-		throw mp_generator::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
 // Usuwanie spacji i tabulacji
@@ -328,29 +328,29 @@ bool mp_teach_in_generator::load_file () {
 		ps = PF_VELOCITY;
 	else {
 		from_file.close();
-		throw mp_generator::MP_error(NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+		throw base::MP_error(NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
 	}
 	if ( !(from_file >> number_of_poses) ) {
 		from_file.close();
-		throw mp_generator::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
 	for ( i = 0; i < number_of_poses; i++) {
 		if (!(from_file >> motion_time)) {
 			from_file.close();
-			throw mp_generator::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+			throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
 		}
 		for ( j = 0; j < MAX_SERVOS_NR; j++) {
 			if ( !(from_file >> coordinates[j]) ) { // Zabezpieczenie przed danymi nienumerycznymi
 				from_file.close();
-				throw mp_generator::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+				throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
 			}
 		}
 
 		if (ps == PF_VELOCITY) { // by Y
 			if ( !(from_file >> extra_info) ) { // Zabezpieczenie przed danymi nienumerycznymi
 				from_file.close();
-				throw mp_generator::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+				throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
 			}
 			if (first_time) {
 				// Tworzymy glowe listy
@@ -379,19 +379,19 @@ bool mp_teach_in_generator::load_file () {
 
 
 // -------------------------------------------------------
-void mp_teach_in_generator::flush_pose_list ( void ) {
+void teach_in::flush_pose_list ( void ) {
 	pose_list.clear();
 }
 ; // end: flush_pose_list
 // -------------------------------------------------------
-void mp_teach_in_generator::initiate_pose_list(void) { pose_list_iterator = pose_list.begin();};
+void teach_in::initiate_pose_list(void) { pose_list_iterator = pose_list.begin();};
 // -------------------------------------------------------
-void mp_teach_in_generator::next_pose_list_ptr (void) {
+void teach_in::next_pose_list_ptr (void) {
 	if (pose_list_iterator != pose_list.end())
 		pose_list_iterator++;
 }
 // -------------------------------------------------------
-void mp_teach_in_generator::get_pose (common::mp_taught_in_pose& tip) { // by Y
+void teach_in::get_pose (common::mp_taught_in_pose& tip) { // by Y
 	tip.arm_type = pose_list_iterator->arm_type;
 	tip.motion_time = pose_list_iterator->motion_time;
 	tip.extra_info = pose_list_iterator->extra_info;
@@ -400,24 +400,24 @@ void mp_teach_in_generator::get_pose (common::mp_taught_in_pose& tip) { // by Y
 }
 // -------------------------------------------------------
 // Pobierz nastepna pozycje z listy
-void mp_teach_in_generator::get_next_pose (double next_pose[MAX_SERVOS_NR])  {
+void teach_in::get_next_pose (double next_pose[MAX_SERVOS_NR])  {
 	memcpy(next_pose, pose_list_iterator->coordinates, MAX_SERVOS_NR*sizeof(double));
 };
 
-void mp_teach_in_generator::get_next_pose (double next_pose[MAX_SERVOS_NR], double irp6_next_pose[MAX_SERVOS_NR])  {
+void teach_in::get_next_pose (double next_pose[MAX_SERVOS_NR], double irp6_next_pose[MAX_SERVOS_NR])  {
 	memcpy(next_pose, pose_list_iterator->coordinates, MAX_SERVOS_NR*sizeof(double));
 	memcpy(irp6_next_pose, pose_list_iterator->irp6p_coordinates, MAX_SERVOS_NR*sizeof(double));
 };
 
 
 // -------------------------------------------------------
-void mp_teach_in_generator::set_pose (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]) {
+void teach_in::set_pose (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]) {
 	pose_list_iterator->arm_type = ps;
 	pose_list_iterator->motion_time = motion_time;
 	memcpy(pose_list_iterator->coordinates, coordinates, MAX_SERVOS_NR*sizeof(double));
 }
 
-void mp_teach_in_generator::set_pose (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
+void teach_in::set_pose (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
                                       double irp6p_coordinates[MAX_SERVOS_NR]) {
 	pose_list_iterator->arm_type = ps;
 	pose_list_iterator->motion_time = motion_time;
@@ -426,7 +426,7 @@ void mp_teach_in_generator::set_pose (POSE_SPECIFICATION ps, double motion_time,
 }
 
 // -------------------------------------------------------
-bool mp_teach_in_generator::is_pose_list_element ( void ) {
+bool teach_in::is_pose_list_element ( void ) {
 	// sprawdza czy aktualnie wskazywany jest element listy, czy lista sie skonczyla
 	if ( pose_list_iterator != pose_list.end())
 		return true;
@@ -434,7 +434,7 @@ bool mp_teach_in_generator::is_pose_list_element ( void ) {
 		return false;
 }
 // -------------------------------------------------------
-bool mp_teach_in_generator::is_last_list_element ( void ) {
+bool teach_in::is_last_list_element ( void ) {
 	// sprawdza czy aktualnie wskazywany element listy ma nastepnik
 	// jesli <> nulla
 	if ( pose_list_iterator != pose_list.end() ) {
@@ -451,46 +451,46 @@ bool mp_teach_in_generator::is_last_list_element ( void ) {
 };
 // -------------------------------------------------------
 
-void mp_teach_in_generator::create_pose_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]) {
+void teach_in::create_pose_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]) {
 	pose_list.push_back(common::mp_taught_in_pose(ps, motion_time, coordinates));
 	pose_list_iterator = pose_list.begin();
 }
 
 // by Y
 
-void mp_teach_in_generator::create_pose_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
+void teach_in::create_pose_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
         double irp6p_coordinates[MAX_SERVOS_NR]) {
 	pose_list.push_back(common::mp_taught_in_pose(ps, motion_time, coordinates, irp6p_coordinates));
 	pose_list_iterator = pose_list.begin();
 }
 
 
-void mp_teach_in_generator::create_pose_list_head (POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]) {
+void teach_in::create_pose_list_head (POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]) {
 	pose_list.push_back(common::mp_taught_in_pose(ps, motion_time, extra_info, coordinates));
 	pose_list_iterator = pose_list.begin();
 }
 
-void mp_teach_in_generator::insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]) {
+void teach_in::insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]) {
 	pose_list.push_back(common::mp_taught_in_pose(ps, motion_time, coordinates));
 	pose_list_iterator++;
 }
 
 // by Y
 
-void mp_teach_in_generator::insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
+void teach_in::insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
         double irp6p_coordinates[MAX_SERVOS_NR]) {
 	pose_list.push_back(common::mp_taught_in_pose(ps, motion_time, coordinates, irp6p_coordinates));
 	pose_list_iterator++;
 }
 
 
-void mp_teach_in_generator::insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]) {
+void teach_in::insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]) {
 	pose_list.push_back(common::mp_taught_in_pose(ps, motion_time, extra_info, coordinates));
 	pose_list_iterator++;
 }
 
 // -------------------------------------------------------
-int mp_teach_in_generator::pose_list_length(void) { return pose_list.size(); };
+int teach_in::pose_list_length(void) { return pose_list.size(); };
 // -------------------------------------------------------
 
 
@@ -499,11 +499,11 @@ int mp_teach_in_generator::pose_list_length(void) { return pose_list.size(); };
 // ----------------------  metoda	first_step -------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_teach_in_generator::first_step () {
-//  printf("w mp_teach_in_generator::first_step\n");
+bool teach_in::first_step () {
+//  printf("w teach_in::first_step\n");
 	idle_step_counter = 1;
 
-//   printf("w mp_teach_in_generator::first_step 2\n");
+//   printf("w teach_in::first_step 2\n");
 	initiate_pose_list();
 
 	for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
@@ -516,39 +516,39 @@ bool mp_teach_in_generator::first_step () {
 	}
 
 
-//  printf("w mp_teach_in_generator::first_step za initiate_pose_list\n");
+//  printf("w teach_in::first_step za initiate_pose_list\n");
 	return next_step ();
 }
-; // end: bool mp_teach_in_generator::first_step ( )
+; // end: bool teach_in::first_step ( )
 
 // ----------------------------------------------------------------------------------------------
 // ----------------------  metoda	next_step --------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_teach_in_generator::next_step () {
+bool teach_in::next_step () {
 	common::mp_taught_in_pose tip;      // Nauczona pozycja
 
-// printf("W mp_teach_in_generator::next_step\n");
+// printf("W teach_in::next_step\n");
 	if ( idle_step_counter ) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		idle_step_counter--;
 		return true;
 	}
 
-// printf("W mp_teach_in_generator::next_step\n");
+// printf("W teach_in::next_step\n");
 	/*
 	  if (is_pose_list_element ())
 	    the_robot.set_ecp_reply (ECP_ACKNOWLEDGE);
 	  else
 	    the_robot.set_ecp_reply (TASK_TERMINATED);
 	*/
-// printf("W mp_teach_in_generator::next_step przed mp_buffer_receive_and_send\n");
+// printf("W teach_in::next_step przed mp_buffer_receive_and_send\n");
 // the_robot.mp_buffer_receive_and_send ();
-// printf("W mp_teach_in_generator::next_step za mp_buffer_receive_and_send\n");
+// printf("W teach_in::next_step za mp_buffer_receive_and_send\n");
 
 	if (!is_pose_list_element ())
 		return false; // Jezeli lista jest pusta to konczymy generacje trajektorii
 
-// printf("W mp_teach_in_generator::next_step\n");
+// printf("W teach_in::next_step\n");
 
 	get_pose (tip);
 
@@ -656,7 +656,7 @@ bool mp_teach_in_generator::next_step () {
 	return true;
 
 }
-; // end: bool mp_teach_in_generator::next_step ( )
+; // end: bool teach_in::next_step ( )
 
 } // namespace generator
 } // namespace mp

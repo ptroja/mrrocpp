@@ -78,11 +78,11 @@ namespace generator {
 
 // generator for setting the next ecps state
 
-mp_set_next_ecps_state_generator::mp_set_next_ecps_state_generator(task::mp_task& _mp_task):
-        mp_generator (_mp_task)
+set_next_ecps_state::set_next_ecps_state(task::mp_task& _mp_task):
+        base (_mp_task)
 {}
 
-void mp_set_next_ecps_state_generator::configure (int l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant,
+void set_next_ecps_state::configure (int l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant,
         const char* l_mp_2_ecp_next_state_string)
 {
     ecp_next_state.mp_2_ecp_next_state = l_mp_2_ecp_next_state;
@@ -93,7 +93,7 @@ void mp_set_next_ecps_state_generator::configure (int l_mp_2_ecp_next_state, int
     }
 }
 
-void mp_set_next_ecps_state_generator::configure (const playerpos_goal_t &_goal)
+void set_next_ecps_state::configure (const playerpos_goal_t &_goal)
 {
     ecp_next_state.mp_2_ecp_next_state = ecp_mp::task::ECP_GEN_PLAYERPOS;
     ecp_next_state.playerpos_goal = _goal;
@@ -103,7 +103,7 @@ void mp_set_next_ecps_state_generator::configure (const playerpos_goal_t &_goal)
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_set_next_ecps_state_generator::first_step ()
+bool set_next_ecps_state::first_step ()
 {
     for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
@@ -123,20 +123,20 @@ bool mp_set_next_ecps_state_generator::first_step ()
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_set_next_ecps_state_generator::next_step ()
+bool set_next_ecps_state::next_step ()
 {
     return false;
 }
 
-mp_send_end_motion_to_ecps_generator::mp_send_end_motion_to_ecps_generator(task::mp_task& _mp_task)
-        : mp_generator (_mp_task)
+send_end_motion_to_ecps::send_end_motion_to_ecps(task::mp_task& _mp_task)
+        : base (_mp_task)
 {}
 
 // ----------------------------------------------------------------------------------------------
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_send_end_motion_to_ecps_generator::first_step ()
+bool send_end_motion_to_ecps::first_step ()
 {
     for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
@@ -152,7 +152,7 @@ bool mp_send_end_motion_to_ecps_generator::first_step ()
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_send_end_motion_to_ecps_generator::next_step ()
+bool send_end_motion_to_ecps::next_step ()
 {
     return false;
 }
@@ -161,13 +161,13 @@ bool mp_send_end_motion_to_ecps_generator::next_step ()
 // Rozszerzony generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
 // ###############################################################
 
-mp_extended_empty_generator::mp_extended_empty_generator(task::mp_task& _mp_task):
-        mp_generator (_mp_task)
+extended_empty::extended_empty(task::mp_task& _mp_task):
+        base (_mp_task)
 {
     activate_trigger = true;
 }
 
-void mp_extended_empty_generator::configure (bool l_activate_trigger)
+void extended_empty::configure (bool l_activate_trigger)
 {
     activate_trigger = l_activate_trigger;
 }
@@ -176,7 +176,7 @@ void mp_extended_empty_generator::configure (bool l_activate_trigger)
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_extended_empty_generator::first_step ()
+bool extended_empty::first_step ()
 {
 
     wait_for_ECP_pulse = true;
@@ -195,7 +195,7 @@ bool mp_extended_empty_generator::first_step ()
 // -----------------------------------  metoda	next_step --------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_extended_empty_generator::next_step ()
+bool extended_empty::next_step ()
 {
     // Funkcja zwraca false gdy koniec generacji trajektorii
     // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
@@ -244,14 +244,14 @@ bool mp_extended_empty_generator::next_step ()
 // Generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
 // ###############################################################
 
-mp_empty_generator::mp_empty_generator(task::mp_task& _mp_task): mp_generator (_mp_task)
+empty::empty(task::mp_task& _mp_task): base (_mp_task)
 {}
 
 // ----------------------------------------------------------------------------------------------
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_empty_generator::first_step ()
+bool empty::first_step ()
 {
 
     // Funkcja zwraca false gdy koniec generacji trajektorii
@@ -274,7 +274,7 @@ bool mp_empty_generator::first_step ()
 // -----------------------------------  metoda	next_step --------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_empty_generator::next_step ()
+bool empty::next_step ()
 {
     // Funkcja zwraca false gdy koniec generacji trajektorii
     // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
@@ -300,28 +300,28 @@ bool mp_empty_generator::next_step ()
     return true;
 }
 
-mp_delta_generator::mp_delta_generator(task::mp_task& _mp_task): mp_generator (_mp_task)
+delta::delta(task::mp_task& _mp_task): base (_mp_task)
 {}
 
 // ####################################################################################################
 // Generator prostoliniowy o zadany przyrost polozenia/orientacji
 // ####################################################################################################
 
-mp_tight_coop_generator::mp_tight_coop_generator(task::mp_task& _mp_task, trajectory_description irp6ot_tr_des,
-        trajectory_description irp6p_tr_des): mp_delta_generator (_mp_task)
+tight_coop::tight_coop(task::mp_task& _mp_task, trajectory_description irp6ot_tr_des,
+        trajectory_description irp6p_tr_des): delta (_mp_task)
 {
     irp6ot_td = irp6ot_tr_des;
     irp6p_td = irp6p_tr_des;
 }
 
-mp_tight_coop_generator::~mp_tight_coop_generator()
+tight_coop::~tight_coop()
 { }
 
 // ----------------------------------------------------------------------------------------------
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_tight_coop_generator::first_step ()
+bool tight_coop::first_step ()
 {
     // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
     // Funkcja zwraca false gdy koniec generacji trajektorii
@@ -352,7 +352,7 @@ bool mp_tight_coop_generator::first_step ()
 // -----------------------------------  metoda	next_step --------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_tight_coop_generator::next_step ()
+bool tight_coop::next_step ()
 {
     // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
     // Funkcja zwraca false gdy koniec generacji trajektorii

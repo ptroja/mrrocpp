@@ -59,7 +59,7 @@ void mp_task_vf::task_initialization(void)
 void mp_task_vf::main_task_algorithm(void)
 {
 	// Utworzenie generatora 
-	generator::MP_vf_generator vf_gen(*this,8);
+	generator::vis_force vf_gen(*this,8);
 	vf_gen.robot_m = robot_m;
 	vf_gen.sensor_m = sensor_m;
 

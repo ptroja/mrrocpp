@@ -76,7 +76,7 @@ int steps2switch=0;
 
 
 
-    mp_seven_eye_generator::mp_seven_eye_generator(task::mp_task& _mp_task, int step): mp_generator (_mp_task), irp6ot_con(1), irp6p_con(1){ 
+    seven_eye::seven_eye(task::mp_task& _mp_task, int step): base (_mp_task), irp6ot_con(1), irp6p_con(1){ 
         step_no = step;          
     };  
 	
@@ -86,7 +86,7 @@ int steps2switch=0;
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_seven_eye_generator::first_step () {
+bool seven_eye::first_step () {
   // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
   // Funkcja zwraca false gdy koniec generacji trajektorii
   // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
@@ -141,7 +141,7 @@ bool mp_seven_eye_generator::first_step () {
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_seven_eye_generator::next_step () {
+bool seven_eye::next_step () {
  // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
  // Funkcja zwraca false gdy koniec generacji trajektorii
  // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana

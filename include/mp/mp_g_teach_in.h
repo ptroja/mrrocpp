@@ -24,7 +24,7 @@ namespace mrrocpp {
 namespace mp {
 namespace generator {
 
-class mp_teach_in_generator : public mp_generator {
+class teach_in : public base {
 
 	protected:
 		std::list<common::mp_taught_in_pose> pose_list;
@@ -38,11 +38,11 @@ class mp_teach_in_generator : public mp_generator {
 	public:
 		// -------------------------------------------------------
 		// konstruktor
-		mp_teach_in_generator(task::mp_task& _mp_task);
+		teach_in(task::mp_task& _mp_task);
 
 		// -------------------------------------------------------
 		// destruktor
-		~mp_teach_in_generator (void);
+		~teach_in (void);
 		// -------------------------------------------------------
 
 
@@ -116,7 +116,7 @@ class mp_teach_in_generator : public mp_generator {
 		// generuje kazdy nastepny krok ruchu
 		// (zadanie realizowane przez klase konkretna)
 
-}; // end: class mp_teach_in_generator
+}; // end: class teach_in
 
 
 // ########################################################################################################

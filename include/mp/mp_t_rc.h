@@ -79,7 +79,7 @@ public:
 	void task_initialization(void);
 	void main_task_algorithm(void);
 
-}; // end : class MP_nose_run_force_generator
+}; // end : class nose_run_force
 
 
 } // namespace task

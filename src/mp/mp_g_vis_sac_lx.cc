@@ -95,7 +95,7 @@ double aux2=0;
 #define PRINTA 0
 
 
-mp_vis_sac_lx_generator::mp_vis_sac_lx_generator(task::mp_task& _mp_task, int step): mp_generator (_mp_task), irp6ot_con(1), irp6p_con(1)
+vis_sac_lx::vis_sac_lx(task::mp_task& _mp_task, int step): base (_mp_task), irp6ot_con(1), irp6p_con(1)
 {
     step_no = step;
 };
@@ -106,7 +106,7 @@ mp_vis_sac_lx_generator::mp_vis_sac_lx_generator(task::mp_task& _mp_task, int st
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_vis_sac_lx_generator::first_step ()
+bool vis_sac_lx::first_step ()
 {
     // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
     // Funkcja zwraca false gdy koniec generacji trajektorii
@@ -190,13 +190,13 @@ bool mp_vis_sac_lx_generator::first_step ()
 
     return true;
 }
-; // end: mp_vis_sac_lx_generator::first_step()
+; // end: vis_sac_lx::first_step()
 
 // ----------------------------------------------------------------------------------------------
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_vis_sac_lx_generator::next_step ()
+bool vis_sac_lx::next_step ()
 {
     // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
     // Funkcja zwraca false gdy koniec generacji trajektorii

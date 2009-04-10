@@ -60,14 +60,14 @@ void mp_task_vis_sac_lx::main_task_algorithm(void)
 {
 
 
-	generator::mp_vis_sac_lx_generator eyegen(*this, 4);
+	generator::vis_sac_lx eyegen(*this, 4);
 	eyegen.robot_m[ROBOT_IRP6_ON_TRACK] = robot_m[ROBOT_IRP6_ON_TRACK];
 	eyegen.sensor_m[SENSOR_CAMERA_SA] = sensor_m[SENSOR_CAMERA_SA];
 
 
 			sr_ecp_msg->message("New loop");
 
-			//mp_seven_eye_generator eyegen(*this, 4);
+			//seven_eye eyegen(*this, 4);
 			//eyegen.robot_m = robot_m;
 			//eyegen.sensor_m = sensor_m;
 			//po cholere biasujemy jeszcze raz te czujniki i co to w ogole oznacza???

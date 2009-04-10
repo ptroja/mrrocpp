@@ -15,7 +15,7 @@ namespace generator {
 // KLASA BAZOWA dla generatorow o zadany przyrost polozenia/orientacji  
 // ####################################################################################################
 
-class MP_vf_generator : public mp_generator 
+class vis_force : public base 
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
@@ -55,7 +55,7 @@ public:
 
 
 	// konstruktor
-	MP_vf_generator(task::mp_task& _mp_task, int step=0);  
+	vis_force(task::mp_task& _mp_task, int step=0);  
 
    virtual bool first_step ();	
    virtual bool next_step ();	

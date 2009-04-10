@@ -24,13 +24,13 @@ namespace mp {
 namespace generator {
 
 // Konstruktor.
-mp_two_robots_measures_generator::mp_two_robots_measures_generator(task::mp_task& _mp_task)
-	: mp_generator (_mp_task), UI_fd(_mp_task.UI_fd)
+two_robots_measures::two_robots_measures(task::mp_task& _mp_task)
+	: base (_mp_task), UI_fd(_mp_task.UI_fd)
 {
 }
 
 // Pierwszy krok generatora.
-bool mp_two_robots_measures_generator::first_step()
+bool two_robots_measures::first_step()
 {
 	idle_step_counter = 2;
 	// Ustawienie polecen dla robota na torze.
@@ -63,7 +63,7 @@ bool mp_two_robots_measures_generator::first_step()
 
 
 // Nastepny krok generatora.
-bool mp_two_robots_measures_generator::next_step()
+bool two_robots_measures::next_step()
 {
 	// Sprawdzenie, czy nadeszlo polecenie zakonczenia zbierania pomiarow.
 	if (check_and_null_trigger())
@@ -122,7 +122,7 @@ bool mp_two_robots_measures_generator::next_step()
 
 
 // Zapis pomiarow do pliku.
-void mp_two_robots_measures_generator::save_measures_to_file (void)
+void two_robots_measures::save_measures_to_file (void)
 {
 	// Przesylka z ECP do UI
 	ECP_message ecp_to_ui_msg;
@@ -143,7 +143,7 @@ void mp_two_robots_measures_generator::save_measures_to_file (void)
 #endif
 	{
 		sr_ecp_msg.message (SYSTEM_ERROR, errno, "Send to UI failed");
-		throw mp_generator::MP_error(SYSTEM_ERROR, (uint64_t) 0);
+		throw base::MP_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
 	// Sprawdzenie katalogu.
 	if ( chdir(ui_to_ecp_rep.path) != 0 )

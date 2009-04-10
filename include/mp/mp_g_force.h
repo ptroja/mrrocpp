@@ -18,7 +18,7 @@ namespace generator {
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji
 
-class mp_tff_single_robot_nose_run_generator : public mp_generator
+class tff_single_robot_nose_run : public base
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
@@ -34,12 +34,12 @@ public:
        double delta[6];
 
     // konstruktor
-    mp_tff_single_robot_nose_run_generator(task::mp_task& _mp_task, int step=0);
+    tff_single_robot_nose_run(task::mp_task& _mp_task, int step=0);
 	
 	virtual bool first_step ();    
 	virtual bool next_step ();    
 
-}; // end : class MP_nose_run_force_generator
+}; // end : class nose_run_force
 
 
 
@@ -47,7 +47,7 @@ public:
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji
 
-class mp_tff_nose_run_generator : public mp_generator 
+class tff_nose_run : public base 
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
@@ -67,7 +67,7 @@ public:
        double delta[6];
 
     // konstruktor
-    mp_tff_nose_run_generator(task::mp_task& _mp_task, int step=0);
+    tff_nose_run(task::mp_task& _mp_task, int step=0);
 	
 	void configure (unsigned short l_irp6ot_con , unsigned short l_irp6p_con );
 
@@ -75,14 +75,14 @@ public:
 	virtual bool first_step ();    
 	virtual bool next_step ();    
 
-}; // end : class MP_nose_run_force_generator
+}; // end : class nose_run_force
 
 
 
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji
 
-class mp_haptic_generator : public mp_generator 
+class haptic : public base 
 {
 protected:
    
@@ -101,7 +101,7 @@ public:
   //     double delta[6];
 
     // konstruktor
-    mp_haptic_generator(task::mp_task& _mp_task, int step=0);
+    haptic(task::mp_task& _mp_task, int step=0);
 	
 	void configure (unsigned short l_irp6ot_con , unsigned short l_irp6p_con );
 
@@ -109,13 +109,13 @@ public:
 	virtual bool first_step ();    
 	virtual bool next_step ();    
 
-}; // end : class mp_haptic_generator
+}; // end : class haptic
 
 
 // --------------------------------------------------------------------------
 // Generator do lapania kostki
 
-class mp_tff_rubik_grab_generator : public mp_generator 
+class tff_rubik_grab : public base 
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
@@ -138,7 +138,7 @@ public:
        double delta[6];
 
     // konstruktor
-    mp_tff_rubik_grab_generator(task::mp_task& _mp_task, int step=0);
+    tff_rubik_grab(task::mp_task& _mp_task, int step=0);
 	
 	void configure(unsigned short l_irp6ot_con, unsigned short l_irp6p_con, double l_goal_position, 
 		double l_position_increment, int l_min_node_counter, bool l_irp6p_both_axes_running = true, bool l_irp6ot_both_axes_running = true);
@@ -146,13 +146,13 @@ public:
 	virtual bool first_step ();    
 	virtual bool next_step ();    
 
-}; // end : class MP_nose_run_force_generator
+}; // end : class nose_run_force
 
 
 // --------------------------------------------------------------------------
 // Generator do obracania sciany kostki
 
-class mp_tff_rubik_face_rotate_generator : public mp_generator 
+class tff_rubik_face_rotate : public base 
 {
 protected:
 	int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
@@ -169,21 +169,21 @@ public:
        double delta[6];
 
     // konstruktor
-    mp_tff_rubik_face_rotate_generator(task::mp_task& _mp_task, int step=0);  
+    tff_rubik_face_rotate(task::mp_task& _mp_task, int step=0);  
 	
 	void configure(double l_irp6ot_con, double l_irp6p_con);
 	
 	virtual bool first_step ();    
 	virtual bool next_step ();    
 
-}; // end : class MP_nose_run_force_generator
+}; // end : class nose_run_force
 
 
 
 // --------------------------------------------------------------------------
 // Generator do nasuniecia chwytaka na kostke
 
-class mp_tff_gripper_approach_generator : public mp_generator 
+class tff_gripper_approach : public base 
 {
 protected:
 	int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
@@ -200,14 +200,14 @@ public:
        double delta[6];
 
     // konstruktor
-    mp_tff_gripper_approach_generator(task::mp_task& _mp_task, int step=0);  
+    tff_gripper_approach(task::mp_task& _mp_task, int step=0);  
 	
 	void configure(double l_irp6ot_speed, double l_irp6p_speed, int l_motion_time);
 	
 	virtual bool first_step ();    
 	virtual bool next_step ();    
 
-}; // end : class MP_nose_run_force_generator
+}; // end : class nose_run_force
 
 
 
@@ -216,7 +216,7 @@ public:
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos
 
-class mp_nose_run_force_generator : public mp_generator 
+class nose_run_force : public base 
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
@@ -231,12 +231,12 @@ public:
        double delta[6];
 
     // konstruktor
-    mp_nose_run_force_generator(task::mp_task& _mp_task, int step=0);  
+    nose_run_force(task::mp_task& _mp_task, int step=0);  
 
    virtual bool first_step ();    
    virtual bool next_step ();    
 
-}; // end : class MP_nose_run_force_generator
+}; // end : class nose_run_force
 
 #define SILA_DOCISKUEDP_OPADANIE_EGG 15 
 #define PROG_ODLEGLOSCI_PODCZERWIEN_EGG 115 
@@ -265,7 +265,7 @@ public:
     
     // po osiagnieciu powierzhcni zaczyna od MAX_SILA_DOCISKUEDP i osiaga SILA_DOCISKUEDP
 
-class mp_drawing_teach_in_force_generator : public mp_teach_in_generator {
+class drawing_teach_in_force : public teach_in {
 
     private:
         int in_state_iteration; // numer interacji dla biezacego stanu generatora (powierzchni, uniesienia etc.)
@@ -288,14 +288,14 @@ class mp_drawing_teach_in_force_generator : public mp_teach_in_generator {
         short teach_or_move;
         
     // konstruktor
-    mp_drawing_teach_in_force_generator(task::mp_task& _mp_task, int step=0);
+    drawing_teach_in_force(task::mp_task& _mp_task, int step=0);
         
         
         virtual bool first_step ();
             
         virtual bool next_step ();
             
-}; // end: class mp_drawing_teach_in_force_generator
+}; // end: class drawing_teach_in_force
 // --------------------------------------------------------------------------
 
 } // namespace common

@@ -24,7 +24,7 @@ namespace mp {
 namespace common {
 
 
-class mp_generator;
+class base;
 class mp_robot;
 
 enum WAIT_FOR_STOP_ENUM {

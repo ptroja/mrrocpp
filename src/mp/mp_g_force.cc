@@ -23,8 +23,8 @@ namespace mp {
 namespace generator {
 
 // konstruktor
-mp_tff_single_robot_nose_run_generator::mp_tff_single_robot_nose_run_generator(task::mp_task& _mp_task, int step) :
-	mp_generator(_mp_task)
+tff_single_robot_nose_run::tff_single_robot_nose_run(task::mp_task& _mp_task, int step) :
+	base(_mp_task)
 {
 	step_no = step;
 }
@@ -34,7 +34,7 @@ mp_tff_single_robot_nose_run_generator::mp_tff_single_robot_nose_run_generator(t
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_tff_single_robot_nose_run_generator::first_step()
+bool tff_single_robot_nose_run::first_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -89,7 +89,7 @@ bool mp_tff_single_robot_nose_run_generator::first_step()
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_tff_single_robot_nose_run_generator::next_step()
+bool tff_single_robot_nose_run::next_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -127,13 +127,13 @@ bool mp_tff_single_robot_nose_run_generator::next_step()
 		return true;
 }
 
-mp_tff_nose_run_generator::mp_tff_nose_run_generator(task::mp_task& _mp_task, int step) :
-	mp_generator(_mp_task), irp6ot_con(1), irp6p_con(1)
+tff_nose_run::tff_nose_run(task::mp_task& _mp_task, int step) :
+	base(_mp_task), irp6ot_con(1), irp6p_con(1)
 {
 	step_no = step;
 }
 
-void mp_tff_nose_run_generator::configure(unsigned short l_irp6ot_con, unsigned short l_irp6p_con)
+void tff_nose_run::configure(unsigned short l_irp6ot_con, unsigned short l_irp6p_con)
 {
 	irp6ot_con = l_irp6ot_con;
 	irp6p_con = l_irp6p_con;
@@ -143,7 +143,7 @@ void mp_tff_nose_run_generator::configure(unsigned short l_irp6ot_con, unsigned 
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_tff_nose_run_generator::first_step()
+bool tff_nose_run::first_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -241,7 +241,7 @@ bool mp_tff_nose_run_generator::first_step()
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_tff_nose_run_generator::next_step()
+bool tff_nose_run::next_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -284,13 +284,13 @@ bool mp_tff_nose_run_generator::next_step()
 		return true;
 }
 
-mp_haptic_generator::mp_haptic_generator(task::mp_task& _mp_task, int step) :
-	mp_generator(_mp_task), irp6ot_con(1), irp6p_con(1), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
+haptic::haptic(task::mp_task& _mp_task, int step) :
+	base(_mp_task), irp6ot_con(1), irp6p_con(1), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
 {
 	step_no = step;
 }
 
-void mp_haptic_generator::configure(unsigned short l_irp6ot_con, unsigned short l_irp6p_con)
+void haptic::configure(unsigned short l_irp6ot_con, unsigned short l_irp6p_con)
 {
 	irp6ot_con = l_irp6ot_con;
 	irp6p_con = l_irp6p_con;
@@ -300,7 +300,7 @@ void mp_haptic_generator::configure(unsigned short l_irp6ot_con, unsigned short 
 // ---------------------------------    metoda	first_step ---------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_haptic_generator::first_step()
+bool haptic::first_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -408,7 +408,7 @@ bool mp_haptic_generator::first_step()
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_haptic_generator::next_step()
+bool haptic::next_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -478,13 +478,13 @@ bool mp_haptic_generator::next_step()
 		return true;
 }
 
-mp_tff_rubik_grab_generator::mp_tff_rubik_grab_generator(task::mp_task& _mp_task, int step) :
-	mp_generator(_mp_task), irp6ot_con(0), irp6p_con(0)
+tff_rubik_grab::tff_rubik_grab(task::mp_task& _mp_task, int step) :
+	base(_mp_task), irp6ot_con(0), irp6p_con(0)
 {
 	step_no = step;
 }
 
-void mp_tff_rubik_grab_generator::configure(unsigned short l_irp6ot_con, unsigned short l_irp6p_con, double l_goal_position, double l_position_increment, int l_min_node_counter, bool l_irp6p_both_axes_running, bool l_irp6ot_both_axes_running)
+void tff_rubik_grab::configure(unsigned short l_irp6ot_con, unsigned short l_irp6p_con, double l_goal_position, double l_position_increment, int l_min_node_counter, bool l_irp6p_both_axes_running, bool l_irp6ot_both_axes_running)
 {
 	irp6ot_con = l_irp6ot_con;
 	irp6p_con = l_irp6p_con;
@@ -496,7 +496,7 @@ void mp_tff_rubik_grab_generator::configure(unsigned short l_irp6ot_con, unsigne
 
 }
 
-bool mp_tff_rubik_grab_generator::first_step()
+bool tff_rubik_grab::first_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -638,7 +638,7 @@ bool mp_tff_rubik_grab_generator::first_step()
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_tff_rubik_grab_generator::next_step()
+bool tff_rubik_grab::next_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -703,19 +703,19 @@ bool mp_tff_rubik_grab_generator::next_step()
 		return true;
 }
 
-mp_tff_rubik_face_rotate_generator::mp_tff_rubik_face_rotate_generator(task::mp_task& _mp_task, int step) :
-	mp_generator(_mp_task), irp6ot_con(1), irp6p_con(1)
+tff_rubik_face_rotate::tff_rubik_face_rotate(task::mp_task& _mp_task, int step) :
+	base(_mp_task), irp6ot_con(1), irp6p_con(1)
 {
 	step_no = step;
 }
 
-void mp_tff_rubik_face_rotate_generator::configure(double l_irp6ot_con, double l_irp6p_con)
+void tff_rubik_face_rotate::configure(double l_irp6ot_con, double l_irp6p_con)
 {
 	irp6ot_con = l_irp6ot_con;
 	irp6p_con = l_irp6p_con;
 }
 
-bool mp_tff_rubik_face_rotate_generator::first_step()
+bool tff_rubik_face_rotate::first_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -846,7 +846,7 @@ bool mp_tff_rubik_face_rotate_generator::first_step()
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_tff_rubik_face_rotate_generator::next_step()
+bool tff_rubik_face_rotate::next_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -955,20 +955,20 @@ bool mp_tff_rubik_face_rotate_generator::next_step()
 		return true;
 }
 
-mp_tff_gripper_approach_generator::mp_tff_gripper_approach_generator(task::mp_task& _mp_task, int step) :
-	mp_generator(_mp_task), irp6ot_speed(1.0), irp6p_speed(1.0)
+tff_gripper_approach::tff_gripper_approach(task::mp_task& _mp_task, int step) :
+	base(_mp_task), irp6ot_speed(1.0), irp6p_speed(1.0)
 {
 	step_no = step;
 }
 
-void mp_tff_gripper_approach_generator::configure(double l_irp6ot_speed, double l_irp6p_speed, int l_motion_time)
+void tff_gripper_approach::configure(double l_irp6ot_speed, double l_irp6p_speed, int l_motion_time)
 {
 	irp6ot_speed = l_irp6ot_speed;
 	irp6p_speed = l_irp6p_speed;
 	motion_time = l_motion_time;
 }
 
-bool mp_tff_gripper_approach_generator::first_step()
+bool tff_gripper_approach::first_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -1055,7 +1055,7 @@ bool mp_tff_gripper_approach_generator::first_step()
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_tff_gripper_approach_generator::next_step()
+bool tff_gripper_approach::next_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -1103,13 +1103,13 @@ bool mp_tff_gripper_approach_generator::next_step()
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-mp_nose_run_force_generator::mp_nose_run_force_generator(task::mp_task& _mp_task, int step) :
-	mp_generator(_mp_task)
+nose_run_force::nose_run_force(task::mp_task& _mp_task, int step) :
+	base(_mp_task)
 {
 	step_no = step;
 }
 
-bool mp_nose_run_force_generator::first_step()
+bool nose_run_force::first_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -1230,7 +1230,7 @@ bool mp_nose_run_force_generator::first_step()
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_nose_run_force_generator::next_step()
+bool nose_run_force::next_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -1285,18 +1285,18 @@ bool mp_nose_run_force_generator::next_step()
 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 //
-// 			mp_drawing_teach_in_force_generator
+// 			drawing_teach_in_force
 //
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
-mp_drawing_teach_in_force_generator::mp_drawing_teach_in_force_generator(task::mp_task& _mp_task, int step) :
-	mp_teach_in_generator(_mp_task)
+drawing_teach_in_force::drawing_teach_in_force(task::mp_task& _mp_task, int step) :
+	teach_in(_mp_task)
 {
 	step_no = step;
 }
 
-bool mp_drawing_teach_in_force_generator::first_step()
+bool drawing_teach_in_force::first_step()
 {
 
 	idle_step_counter = 1;
@@ -1509,7 +1509,7 @@ bool mp_drawing_teach_in_force_generator::first_step()
 
 
 // --------------------------------------------------------------------------
-bool mp_drawing_teach_in_force_generator::next_step()
+bool drawing_teach_in_force::next_step()
 {
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		// wylaczenie pomiaru sily

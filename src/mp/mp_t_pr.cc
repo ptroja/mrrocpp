@@ -48,7 +48,7 @@ void mp_task_pr::mp_short_move_up(void)
 	tdes.coordinate_delta[6] = 0.0;   // przyrost wspolrzednej PSI
 
 	// Generator trajektorii prostoliniowej
-	generator::mp_tight_coop_generator tcg(*this, tdes, tdes);
+	generator::tight_coop tcg(*this, tdes, tdes);
 	tcg.robot_m = robot_m;
 	tcg.Move();
 }
@@ -85,10 +85,10 @@ void mp_task_pr::task_initialization(void)
 void mp_task_pr::main_task_algorithm(void)
 {
 
-	generator::mp_nose_run_force_generator mp_nrf_gen(*this, 8); 
+	generator::nose_run_force mp_nrf_gen(*this, 8); 
 	mp_nrf_gen.robot_m = robot_m;
 	mp_nrf_gen.sensor_m = sensor_m;
-	generator::mp_drawing_teach_in_force_generator mp_dtif_gen(*this, 8);
+	generator::drawing_teach_in_force mp_dtif_gen(*this, 8);
 	mp_dtif_gen.robot_m = robot_m;
 	mp_dtif_gen.sensor_m = sensor_m;
 	// printf("przed wait for start \n");

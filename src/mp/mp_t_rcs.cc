@@ -992,7 +992,7 @@ void mp_task_rubik_cube_solver::approach_op(int mode)
 	// opcjonalne serwo wizyjne
 	if (mode)
 	{
-		generator::mp_seven_eye_generator eyegen(*this, 4);
+		generator::seven_eye eyegen(*this, 4);
 		eyegen.robot_m[ROBOT_IRP6_ON_TRACK] = robot_m[ROBOT_IRP6_ON_TRACK];
 		eyegen.sensor_m[SENSOR_CAMERA_SA] = sensor_m[SENSOR_CAMERA_SA];
 
@@ -1102,7 +1102,7 @@ void mp_task_rubik_cube_solver::gripper_opening(double track_increment, double p
 	tdes2.coordinate_delta[6] = postument_increment;   // przyrost wspolrzednej PSI
 
 	// Generator trajektorii prostoliniowej
-	generator::mp_tight_coop_generator tcg(*this, tdes, tdes2);
+	generator::tight_coop tcg(*this, tdes, tdes2);
 	tcg.robot_m = robot_m;
 
 	tcg.Move();

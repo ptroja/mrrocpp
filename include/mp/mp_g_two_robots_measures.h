@@ -27,7 +27,7 @@ struct two_robots_measure
 };
 
 // Generator odpowiedzialny za zapamietywanie na liscie polozen koncowki dwoch robotow IRp-6.
-class mp_two_robots_measures_generator : public mp_generator
+class two_robots_measures : public base
 {
 	protected:
 		// Pomocnicze wskazniki na roboty.
@@ -45,7 +45,7 @@ class mp_two_robots_measures_generator : public mp_generator
 
 	public:
 		// Konstruktor.
-		mp_two_robots_measures_generator(task::mp_task&);
+		two_robots_measures(task::mp_task&);
 		// Pierwszy krok generatora.
 		virtual bool first_step (void);
 		// Nastepny krok generatora.

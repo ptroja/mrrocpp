@@ -9,7 +9,7 @@ namespace generator {
 
 // condition to wait for desired time in ms
 
-class mp_delay_ms_condition: public mp_generator
+class delay_ms_condition: public base
 {
 protected:
 	timer* local_timer;
@@ -19,8 +19,8 @@ protected:
 public:
 
     // konstruktor
-    mp_delay_ms_condition(task::mp_task& _mp_task, int _ms_delay);
-    ~mp_delay_ms_condition();
+    delay_ms_condition(task::mp_task& _mp_task, int _ms_delay);
+    ~delay_ms_condition();
 
 	void configure (int _ms_delay);
 

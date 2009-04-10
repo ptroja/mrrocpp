@@ -30,7 +30,7 @@ void mp_task_c::task_initialization(void)
  
 void mp_task_c::main_task_algorithm(void)
 {
-	generator::mp_empty_generator empty_gen (*this); // "Pusty" generator
+	generator::empty empty_gen (*this); // "Pusty" generator
 	empty_gen.robot_m = robot_m;
    
 	// Zlecenie wykonania kolejnego makrokroku

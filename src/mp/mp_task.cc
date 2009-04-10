@@ -233,7 +233,7 @@ void mp_task::main_task_algorithm(void)
 void mp_task::set_next_playerpos_goal (ROBOT_ENUM robot_l, const playerpos_goal_t &goal)
 {
 	// setting the next ecps state
-	generator::mp_set_next_ecps_state_generator mp_snes_gen(*this);
+	generator::set_next_ecps_state mp_snes_gen(*this);
 
 	mp_snes_gen.robot_m[robot_l] = robot_m[robot_l];
 
@@ -246,7 +246,7 @@ void mp_task::set_next_playerpos_goal (ROBOT_ENUM robot_l, const playerpos_goal_
 void mp_task::set_next_ecps_state (int l_state, int l_variant, const char* l_string, int number_of_robots, ... )
 {
 	// setting the next ecps state
-	generator::mp_set_next_ecps_state_generator mp_snes_gen (*this);
+	generator::set_next_ecps_state mp_snes_gen (*this);
 
 	va_list arguments;                     // A place to store the list of arguments
 	ROBOT_ENUM robot_l;
@@ -267,7 +267,7 @@ void mp_task::set_next_ecps_state (int l_state, int l_variant, const char* l_str
 // delay MP replacement
 void mp_task::wait_ms (int _ms_delay) // zamiast delay
 {
-	generator::mp_delay_ms_condition mp_ds_ms (*this, _ms_delay);
+	generator::delay_ms_condition mp_ds_ms (*this, _ms_delay);
 
 	mp_ds_ms.Move();
 }
@@ -275,7 +275,7 @@ void mp_task::wait_ms (int _ms_delay) // zamiast delay
 // send_end_motion
 void mp_task::send_end_motion_to_ecps (int number_of_robots, ... )
 {
-	generator::mp_send_end_motion_to_ecps_generator mp_semte_gen (*this);
+	generator::send_end_motion_to_ecps mp_semte_gen (*this);
 
 	va_list arguments;                     // A place to store the list of arguments
 	ROBOT_ENUM robot_l;
@@ -294,7 +294,7 @@ void mp_task::send_end_motion_to_ecps (int number_of_robots, ... )
 // send_end_motion
 void mp_task::send_end_motion_to_ecps (int number_of_robots, ROBOT_ENUM *properRobotsSet)
 {
-	generator::mp_send_end_motion_to_ecps_generator mp_semte_gen (*this);
+	generator::send_end_motion_to_ecps mp_semte_gen (*this);
 
 	ROBOT_ENUM robot_l;
 
@@ -309,7 +309,7 @@ void mp_task::send_end_motion_to_ecps (int number_of_robots, ROBOT_ENUM *properR
 
 void mp_task::run_extended_empty_gen (bool activate_trigger, int number_of_robots, ... )
 {
-	generator::mp_extended_empty_generator mp_ext_empty_gen (*this);
+	generator::extended_empty mp_ext_empty_gen (*this);
 
 	va_list arguments;                     // A place to store the list of arguments
 	ROBOT_ENUM robot_l;
@@ -337,7 +337,7 @@ void mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_t
 	map <ROBOT_ENUM, common::mp_robot*>::iterator robots_map_iter;
 
 	// powolanie generatora i jego konfiguracja
-	generator::mp_extended_empty_generator mp_ext_empty_gen (*this);
+	generator::extended_empty mp_ext_empty_gen (*this);
 	mp_ext_empty_gen.configure (false);
 
 	// na podstawie argumentow wywolania biezacej metody
@@ -444,7 +444,7 @@ void mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_t
 	map <ROBOT_ENUM, common::mp_robot*>::iterator robots_map_iter;
 
 	// powolanie generatora i jego konfiguracja
-	generator::mp_extended_empty_generator mp_ext_empty_gen (*this);
+	generator::extended_empty mp_ext_empty_gen (*this);
 	mp_ext_empty_gen.configure (false);
 
 	// na podstawie argumentow wywolania biezacej metody
@@ -764,7 +764,7 @@ int mp_task::mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs)
 
 // funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
 
-void mp_task::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, common::mp_robot*>& _robot_m, generator::mp_generator& the_generator )
+void mp_task::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, common::mp_robot*>& _robot_m, generator::base& the_generator )
 {
 
 	enum MP_STATE_ENUM

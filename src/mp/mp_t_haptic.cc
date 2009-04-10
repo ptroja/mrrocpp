@@ -78,7 +78,7 @@ bool mp_task_haptic::configure_edp_force_sensor(bool configure_track, bool confi
 void mp_task_haptic::main_task_algorithm(void)
 {
 
-	generator::mp_haptic_generator mp_h_gen(*this, 10); 
+	generator::haptic mp_h_gen(*this, 10); 
    	mp_h_gen.robot_m = robot_m;
 
 

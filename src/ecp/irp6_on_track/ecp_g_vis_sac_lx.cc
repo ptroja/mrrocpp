@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 //                              mp.cc
 //
-// MP Master Process - methods for visual generators
+// MP Master Process - methodsï¿½for visual generators
 //
 // Last issue: 06.05.22
 // -------------------------------------------------------------------------
@@ -272,7 +272,7 @@ bool ecp_vis_sac_lx_generator::first_step()
 
 	return true;
 }
-; // end: mp_vis_sac_lx_generator::first_step()
+; // end: vis_sac_lx::first_step()
 
 // ----------------------------------------------------------------------------------------------
 // -----------------------------------  metoda	next_step -----------------------------------

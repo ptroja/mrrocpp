@@ -381,7 +381,7 @@ void mp_task_rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 
 	// zblizenie chwytakow
 
-	generator::mp_teach_in_generator mp_ti1_gen(*this);
+	generator::teach_in mp_ti1_gen(*this);
 	mp_ti1_gen.robot_m = robot_m;
 
 
@@ -418,7 +418,7 @@ void mp_task_rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 		sensor_m_iterator->second->configure_sensor();
 	}
 
-	generator::mp_tff_rubik_grab_generator mp_tff_rg_gen(*this, 10);
+	generator::tff_rubik_grab mp_tff_rg_gen(*this, 10);
 	mp_tff_rg_gen.robot_m = robot_m;
 	mp_tff_rg_gen.sensor_m[SENSOR_FORCE_ON_TRACK] = sensor_m[SENSOR_FORCE_ON_TRACK];
 	mp_tff_rg_gen.sensor_m[SENSOR_FORCE_POSTUMENT] = sensor_m[SENSOR_FORCE_POSTUMENT];
@@ -433,7 +433,7 @@ void mp_task_rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 
 	// obrot kostki
 
-	generator::mp_tff_rubik_face_rotate_generator mp_tff_rf_gen(*this, 10);
+	generator::tff_rubik_face_rotate mp_tff_rf_gen(*this, 10);
 	mp_tff_rf_gen.robot_m = robot_m;
 	mp_tff_rf_gen.sensor_m[SENSOR_FORCE_ON_TRACK] = sensor_m[SENSOR_FORCE_ON_TRACK];
 	mp_tff_rf_gen.sensor_m[SENSOR_FORCE_POSTUMENT] = sensor_m[SENSOR_FORCE_POSTUMENT];
@@ -464,7 +464,7 @@ void mp_task_rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 
 	// odejscie tracka od postumenta
 
-	generator::mp_teach_in_generator mp_ti2_gen (*this);
+	generator::teach_in mp_ti2_gen (*this);
 	mp_ti2_gen.robot_m = robot_m;
 
 	mp_ti2_gen.load_file_with_path ("../trj/rc/fturn_de.trj", 2);
@@ -483,7 +483,7 @@ void mp_task_rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angl
 
 	// zblizenie chwytakow
 
-	generator::mp_teach_in_generator mp_ti1_gen(*this);
+	generator::teach_in mp_ti1_gen(*this);
 	mp_ti1_gen.robot_m = robot_m;
 
 
@@ -519,7 +519,7 @@ void mp_task_rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angl
 		sensor_m_iterator->second->configure_sensor();
 	}
 
-	generator::mp_tff_rubik_grab_generator mp_tff_rg_gen(*this, 10);
+	generator::tff_rubik_grab mp_tff_rg_gen(*this, 10);
 	// mp_tff_rg_gen.wait_for_ECP_pulse = true;
 	mp_tff_rg_gen.robot_m = robot_m;
 	mp_tff_rg_gen.sensor_m[SENSOR_FORCE_ON_TRACK] = sensor_m[SENSOR_FORCE_ON_TRACK];
@@ -534,7 +534,7 @@ void mp_task_rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angl
 
 
 	// docisniecie chwytaka tracka do kostki
-	generator::mp_tff_gripper_approach_generator mp_tff_ga_gen(*this, 10);
+	generator::tff_gripper_approach mp_tff_ga_gen(*this, 10);
 	mp_tff_ga_gen.robot_m = robot_m;
 	mp_tff_ga_gen.sensor_m[SENSOR_FORCE_ON_TRACK] = sensor_m[SENSOR_FORCE_ON_TRACK];
 	mp_tff_ga_gen.sensor_m[SENSOR_FORCE_POSTUMENT] = sensor_m[SENSOR_FORCE_POSTUMENT];
@@ -563,7 +563,7 @@ void mp_task_rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angl
 
 	// odejscie tracka od postumenta
 
-	generator::mp_teach_in_generator mp_ti2_gen(*this);
+	generator::teach_in mp_ti2_gen(*this);
 	mp_ti2_gen.robot_m = robot_m;
 
 	switch (turn_angle)
@@ -630,7 +630,7 @@ void mp_task_rubik_cube_solver::approach_op(int mode)
 {
 
 
-	generator::mp_tff_nose_run_generator mp_tff_fr_gen(*this, 10);
+	generator::tff_nose_run mp_tff_fr_gen(*this, 10);
 	mp_tff_fr_gen.robot_m = robot_m;
 	mp_tff_fr_gen.sensor_m[SENSOR_FORCE_ON_TRACK] = sensor_m[SENSOR_FORCE_ON_TRACK];
 	mp_tff_fr_gen.sensor_m[SENSOR_FORCE_POSTUMENT] = sensor_m[SENSOR_FORCE_POSTUMENT];
@@ -640,7 +640,7 @@ void mp_task_rubik_cube_solver::approach_op(int mode)
 	mp_tff_fr_gen.Move();
 
 	sr_ecp_msg->message("Odtwarzanie trajektorii");
-	generator::mp_teach_in_generator mp_ti1_gen(*this);
+	generator::teach_in mp_ti1_gen(*this);
 	mp_ti1_gen.robot_m = robot_m;
 
 	mp_ti1_gen.load_file_with_path ("../trj/rc/ap_1.trj", 2);
@@ -648,7 +648,7 @@ void mp_task_rubik_cube_solver::approach_op(int mode)
 
 	mp_ti1_gen.Move();
 
-	generator::mp_teach_in_generator mp_ti2_gen(*this);
+	generator::teach_in mp_ti2_gen(*this);
 	mp_ti2_gen.robot_m = robot_m;
 
 	mp_ti2_gen.load_file_with_path ("../trj/rc/ap_2.trj", 2);
@@ -659,7 +659,7 @@ void mp_task_rubik_cube_solver::approach_op(int mode)
 	/*
     	// docisniecie chwytaka do kostki
 
-    	generator::mp_tff_gripper_approach_generator mp_tff_ga_gen(*this, 10); 
+    	generator::tff_gripper_approach mp_tff_ga_gen(*this, 10); 
     	mp_tff_ga_gen.configure(10.0 , 0.0, 100);
     	if (Move ( mp_tff_ga_gen)) {
     		return true;
@@ -669,7 +669,7 @@ void mp_task_rubik_cube_solver::approach_op(int mode)
 	// opcjonalne serwo wizyjne
 	if (mode)
 	{
-		generator::mp_seven_eye_generator eyegen(*this, 4);
+		generator::seven_eye eyegen(*this, 4);
 		eyegen.robot_m = robot_m; // mozna przydzielic tylko postumenta
 		eyegen.sensor_m[SENSOR_CAMERA_SA] = sensor_m[SENSOR_CAMERA_SA];
 
@@ -679,7 +679,7 @@ void mp_task_rubik_cube_solver::approach_op(int mode)
 	// zacisniecie chwytaka na kostce
 
 
-	generator::mp_tff_rubik_grab_generator mp_tff_rg_gen(*this, 10);
+	generator::tff_rubik_grab mp_tff_rg_gen(*this, 10);
 	mp_tff_rg_gen.robot_m = robot_m;
 	mp_tff_rg_gen.sensor_m[SENSOR_FORCE_ON_TRACK] = sensor_m[SENSOR_FORCE_ON_TRACK];
 	mp_tff_rg_gen.sensor_m[SENSOR_FORCE_POSTUMENT] = sensor_m[SENSOR_FORCE_POSTUMENT];
@@ -692,7 +692,7 @@ void mp_task_rubik_cube_solver::approach_op(int mode)
 	mp_tff_rg_gen.Move();
 
 	/*
-        	generator::mp_teach_in_generator mp_ti3_gen(*this);
+        	generator::teach_in mp_ti3_gen(*this);
     	mp_load_file_with_path (mp_ti3_gen, "../trj/rc/ap_3.trj", 2); 
     	mp_ti3_gen.initiate_pose_list();
 
@@ -709,7 +709,7 @@ void mp_task_rubik_cube_solver::approach_op(int mode)
 void mp_task_rubik_cube_solver::departure_op()
 {
 
-	generator::mp_teach_in_generator mp_ti1_gen(*this);
+	generator::teach_in mp_ti1_gen(*this);
 	mp_ti1_gen.robot_m = robot_m;
 
 	mp_ti1_gen.load_file_with_path ("../trj/rc/de_1.trj", 2);
@@ -756,7 +756,7 @@ void mp_task_rubik_cube_solver::gripper_opening(double track_increment, double p
 	tdes2.coordinate_delta[6] = postument_increment;   // przyrost wspolrzednej PSI
 
 	// Generator trajektorii prostoliniowej
-	generator::mp_tight_coop_generator tcg(*this, tdes, tdes2);
+	generator::tight_coop tcg(*this, tdes, tdes2);
 	tcg.robot_m = robot_m;
 
 	tcg.Move();

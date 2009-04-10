@@ -10,7 +10,7 @@ namespace generator {
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji
 
-class mp_vis_pbeclsac_generator : public mp_generator 
+class vis_pbeclsac : public base 
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
@@ -40,12 +40,12 @@ public:
 	Homog_matrix E_Tx_G__O;
 
     // konstruktor
-    mp_vis_pbeclsac_generator(task::mp_task& _mp_task, int step=0);  
+    vis_pbeclsac(task::mp_task& _mp_task, int step=0);  
 	
 	virtual bool first_step ();    
 	virtual bool next_step ();    
 
-}; // end : class MP_nose_run_force_generator
+}; // end : class nose_run_force
 } // namespace common
 } // namespace mp
 } // namespace mrrocpp

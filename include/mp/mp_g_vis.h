@@ -8,7 +8,7 @@ namespace generator {
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji
 
-class mp_seven_eye_generator : public mp_generator 
+class seven_eye : public base 
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
@@ -28,12 +28,12 @@ public:
        double delta[6];
 
     // konstruktor
-    mp_seven_eye_generator(task::mp_task& _mp_task, int step=0);  
+    seven_eye(task::mp_task& _mp_task, int step=0);  
 	
 	virtual bool first_step ();    
 	virtual bool next_step ();    
 
-}; // end : class MP_nose_run_force_generator
+}; // end : class nose_run_force
 } // namespace common
 } // namespace mp
 } // namespace mrrocpp

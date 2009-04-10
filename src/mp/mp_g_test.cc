@@ -29,7 +29,7 @@ namespace generator {
 
 
 
-	MP_vf_generator::MP_vf_generator(task::mp_task& _mp_task, int step): mp_generator (_mp_task){ 
+	vis_force::vis_force(task::mp_task& _mp_task, int step): base (_mp_task){ 
 		step_no = step;          
 	};  
 
@@ -37,7 +37,7 @@ namespace generator {
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool MP_vf_generator::first_step () {
+bool vis_force::first_step () {
   // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
   // Funkcja zwraca false gdy koniec generacji trajektorii
   // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
@@ -115,7 +115,7 @@ bool MP_vf_generator::first_step () {
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool MP_vf_generator::next_step () {
+bool vis_force::next_step () {
  // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
  // Funkcja zwraca false gdy koniec generacji trajektorii
  // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana

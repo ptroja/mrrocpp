@@ -23,7 +23,7 @@ namespace task {
 class mp_two_robots_measures_task : public mp_task  
 {
 protected:
-	generator::mp_two_robots_measures_generator *rmg;
+	generator::two_robots_measures *rmg;
 public:
 	
 	mp_two_robots_measures_task(configurator &_config);

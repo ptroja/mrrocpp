@@ -8,14 +8,14 @@ namespace mrrocpp {
 namespace mp {
 namespace generator {
 
-void mp_generator::re_run(void) // powrot do stanu wyjsciowego
+void base::re_run(void) // powrot do stanu wyjsciowego
 {
 	phase = BEFORE_FIRST_STEP;
 	new_pulse_checked = true;
 }
 
 // kopiuje dane z robotow do generatora
-void mp_generator::copy_data(std::map<ROBOT_ENUM, common::mp_robot*>& _robot_m)
+void base::copy_data(std::map<ROBOT_ENUM, common::mp_robot*>& _robot_m)
 {
 	for (std::map<ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = _robot_m.begin(); robot_m_iterator
 			!= _robot_m.end(); robot_m_iterator++) {
@@ -24,7 +24,7 @@ void mp_generator::copy_data(std::map<ROBOT_ENUM, common::mp_robot*>& _robot_m)
 }
 
 // kopiuje polecenie stworzone w generatorze do robotow
-void mp_generator::copy_generator_command(std::map<ROBOT_ENUM, common::mp_robot*>& _robot_m)
+void base::copy_generator_command(std::map<ROBOT_ENUM, common::mp_robot*>& _robot_m)
 {
 	for (std::map<ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = _robot_m.begin(); robot_m_iterator
 			!= _robot_m.end(); robot_m_iterator++) {
@@ -32,14 +32,14 @@ void mp_generator::copy_generator_command(std::map<ROBOT_ENUM, common::mp_robot*
 	}
 }
 
-mp_generator::mp_generator(task::mp_task& _mp_task) :
-	base(*_mp_task.sr_ecp_msg), mp_t(_mp_task), wait_for_ECP_pulse(false), phase(BEFORE_FIRST_STEP),
+base::base(task::mp_task& _mp_task) :
+	ecp_mp::generator::base(*_mp_task.sr_ecp_msg), mp_t(_mp_task), wait_for_ECP_pulse(false), phase(BEFORE_FIRST_STEP),
 			new_pulse_checked(true)
 {
 }
 
 // ---------------------------------------------------------------
-void mp_generator::Move()
+void base::Move()
 {
 	// Funkcja zwraca false gdy samoistny koniec ruchu
 	// Funkcja zwraca true gdy koniec ruchu wywolany jest przez STOP

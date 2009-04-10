@@ -10,14 +10,14 @@ namespace mrrocpp {
 namespace mp {
 namespace generator {
 
-class mp_set_next_ecps_state_generator : public mp_generator
+class set_next_ecps_state : public base
 {
 protected:
 	ecp_next_state_t ecp_next_state;
 
 public:
 
-    mp_set_next_ecps_state_generator(task::mp_task& _mp_task);
+    set_next_ecps_state(task::mp_task& _mp_task);
 
 	void configure (int l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const char* l_mp_2_ecp_next_state_string);
 	void configure (const playerpos_goal_t &_goal);
@@ -29,12 +29,12 @@ public:
 
 // generator for sending end_motion mesage to ecps
 
-class mp_send_end_motion_to_ecps_generator : public mp_generator
+class send_end_motion_to_ecps : public base
 {
 public:
 
     // konstruktor
-    mp_send_end_motion_to_ecps_generator(task::mp_task& _mp_task);
+    send_end_motion_to_ecps(task::mp_task& _mp_task);
 
 	bool first_step ();
 	bool next_step ();
@@ -45,7 +45,7 @@ public:
 // Rozszerzony Generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
 // ####################################################################################################
 
-class mp_extended_empty_generator : public mp_generator {
+class extended_empty : public base {
 	// Klasa dla generatorow trajektorii
 	// Sluzy zarowno do wyznaczania nastepnej wartosci zadanej jak i
 	// sprawdzania spelnienia warunku koncowego
@@ -53,9 +53,9 @@ class mp_extended_empty_generator : public mp_generator {
 	bool activate_trigger;
 
  public:
-	mp_extended_empty_generator(task::mp_task& _mp_task);
+	extended_empty(task::mp_task& _mp_task);
 
-	~mp_extended_empty_generator(){ };
+	~extended_empty(){ };
 
 	void configure (bool l_activate_trigger);
 
@@ -68,14 +68,14 @@ class mp_extended_empty_generator : public mp_generator {
 // Generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
 // ####################################################################################################
 
-class mp_empty_generator : public mp_generator {
+class empty : public base {
     // Klasa dla generatorow trajektorii
     // Sluzy zarowno do wyznaczania nastepnej wartosci zadanej jak i
     // sprawdzania spelnienia warunku koncowego
  public:
-	mp_empty_generator(task::mp_task& _mp_task);
+	empty(task::mp_task& _mp_task);
 
-  ~mp_empty_generator(){ };
+  ~empty(){ };
 
   virtual bool first_step ();
       // generuje pierwszy krok ruchu -
@@ -92,13 +92,13 @@ class mp_empty_generator : public mp_generator {
 // KLASA BAZOWA dla generatorow o zadany przyrost polozenia/orientacji
 // ####################################################################################################
 
-class mp_delta_generator : public mp_generator
+class delta : public base
 {
 protected:
 
 
 public:
-	mp_delta_generator(task::mp_task& _mp_task);
+	delta(task::mp_task& _mp_task);
 	trajectory_description irp6ot_td;
 	trajectory_description irp6p_td;
 };
@@ -107,13 +107,13 @@ public:
 // Generator prostoliniowy o zadany przyrost polozenia/orientacji
 // ####################################################################################################
 
-class mp_tight_coop_generator : public mp_delta_generator
+class tight_coop : public delta
 {
 
 public:
-	mp_tight_coop_generator(task::mp_task& _mp_task, trajectory_description irp6ot_tr_des, trajectory_description irp6p_tr_des);
+	tight_coop(task::mp_task& _mp_task, trajectory_description irp6ot_tr_des, trajectory_description irp6p_tr_des);
 
-  ~mp_tight_coop_generator();
+  ~tight_coop();
 
   virtual bool first_step ();
 
@@ -121,7 +121,7 @@ public:
 
 };
 
-} // namespace common
+} // namespace generator
 } // namespace mp
 } // namespace mrrocpp
 

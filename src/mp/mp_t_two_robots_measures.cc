@@ -32,7 +32,7 @@ mp_two_robots_measures_task::mp_two_robots_measures_task(configurator &_config) 
 void mp_two_robots_measures_task::task_initialization(void)
 {
 	// Stworzenie generatora.
-	rmg = new generator::mp_two_robots_measures_generator(*this);
+	rmg = new generator::two_robots_measures(*this);
 	rmg->robot_m = robot_m;
 
 	sr_ecp_msg->message("Two robots measurements task is ready for work.");

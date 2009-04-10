@@ -83,7 +83,7 @@ double aux2=0;
 
 
 
-    mp_vis_pbeclsac_generator::mp_vis_pbeclsac_generator(task::mp_task& _mp_task, int step): mp_generator (_mp_task), irp6ot_con(1), irp6p_con(1){ 
+    vis_pbeclsac::vis_pbeclsac(task::mp_task& _mp_task, int step): base (_mp_task), irp6ot_con(1), irp6p_con(1){ 
         step_no = step;          
     };  
 	
@@ -93,7 +93,7 @@ double aux2=0;
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_vis_pbeclsac_generator::first_step () {
+bool vis_pbeclsac::first_step () {
   // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
   // Funkcja zwraca false gdy koniec generacji trajektorii
   // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
@@ -143,13 +143,13 @@ bool mp_vis_pbeclsac_generator::first_step () {
 	
 	
 	return true;
-}; // end: mp_vis_pbeclsac_generator::first_step()
+}; // end: vis_pbeclsac::first_step()
 
 // ----------------------------------------------------------------------------------------------
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool mp_vis_pbeclsac_generator::next_step () {
+bool vis_pbeclsac::next_step () {
  // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
  // Funkcja zwraca false gdy koniec generacji trajektorii
  // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
