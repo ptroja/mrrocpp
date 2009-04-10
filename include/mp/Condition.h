@@ -6,6 +6,11 @@
 
 #include "lib/configurator.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace common {
+
+
 class Condition
 {
 	public:
@@ -32,5 +37,10 @@ class Condition
 
 		configurator &config;
 };
+
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
+
 
 #endif

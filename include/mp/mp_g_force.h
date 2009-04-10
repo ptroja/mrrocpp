@@ -11,7 +11,9 @@
 
 #include "mp/mp_g_teach_in.h"
 
-
+namespace mrrocpp {
+namespace mp {
+namespace generator {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji
@@ -22,7 +24,7 @@ protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
 
   
-    mp_robot *irp6;
+  common::mp_robot *irp6;
     ::sensor *vsp_force;
     
      trajectory_description td;
@@ -32,7 +34,7 @@ public:
        double delta[6];
 
     // konstruktor
-    mp_tff_single_robot_nose_run_generator(mp_task& _mp_task, int step=0);
+    mp_tff_single_robot_nose_run_generator(task::mp_task& _mp_task, int step=0);
 	
 	virtual bool first_step ();    
 	virtual bool next_step ();    
@@ -51,7 +53,7 @@ protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
    
   
-    mp_robot *irp6ot, *irp6p;
+    common::mp_robot *irp6ot, *irp6p;
     ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
     
     // do konfiguracji pracy generatora
@@ -65,7 +67,7 @@ public:
        double delta[6];
 
     // konstruktor
-    mp_tff_nose_run_generator(mp_task& _mp_task, int step=0);
+    mp_tff_nose_run_generator(task::mp_task& _mp_task, int step=0);
 	
 	void configure (unsigned short l_irp6ot_con , unsigned short l_irp6p_con );
 
@@ -85,7 +87,7 @@ class mp_haptic_generator : public mp_generator
 protected:
    
   
-    mp_robot *irp6ot, *irp6p;
+    common::mp_robot *irp6ot, *irp6p;
     ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
     
     // do konfiguracji pracy generatora
@@ -99,7 +101,7 @@ public:
   //     double delta[6];
 
     // konstruktor
-    mp_haptic_generator(mp_task& _mp_task, int step=0);
+    mp_haptic_generator(task::mp_task& _mp_task, int step=0);
 	
 	void configure (unsigned short l_irp6ot_con , unsigned short l_irp6p_con );
 
@@ -119,7 +121,7 @@ protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
    
   
-    mp_robot *irp6ot, *irp6p;
+    common::mp_robot *irp6ot, *irp6p;
     ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
 
      trajectory_description td;
@@ -136,7 +138,7 @@ public:
        double delta[6];
 
     // konstruktor
-    mp_tff_rubik_grab_generator(mp_task& _mp_task, int step=0);
+    mp_tff_rubik_grab_generator(task::mp_task& _mp_task, int step=0);
 	
 	void configure(unsigned short l_irp6ot_con, unsigned short l_irp6p_con, double l_goal_position, 
 		double l_position_increment, int l_min_node_counter, bool l_irp6p_both_axes_running = true, bool l_irp6ot_both_axes_running = true);
@@ -156,7 +158,7 @@ protected:
 	int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
 	
      trajectory_description td;
-    mp_robot *irp6ot, *irp6p;
+    common::mp_robot *irp6ot, *irp6p;
     ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
     // do konfiguracji pracy generatora
     double irp6ot_con, irp6p_con;
@@ -167,7 +169,7 @@ public:
        double delta[6];
 
     // konstruktor
-    mp_tff_rubik_face_rotate_generator(mp_task& _mp_task, int step=0);  
+    mp_tff_rubik_face_rotate_generator(task::mp_task& _mp_task, int step=0);  
 	
 	void configure(double l_irp6ot_con, double l_irp6p_con);
 	
@@ -187,7 +189,7 @@ protected:
 	int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
 	
      trajectory_description td;
-    mp_robot *irp6ot, *irp6p;
+    common::mp_robot *irp6ot, *irp6p;
     ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
     // do konfiguracji pracy generatora
     double irp6ot_speed, irp6p_speed;
@@ -198,7 +200,7 @@ public:
        double delta[6];
 
     // konstruktor
-    mp_tff_gripper_approach_generator(mp_task& _mp_task, int step=0);  
+    mp_tff_gripper_approach_generator(task::mp_task& _mp_task, int step=0);  
 	
 	void configure(double l_irp6ot_speed, double l_irp6p_speed, int l_motion_time);
 	
@@ -220,7 +222,7 @@ protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
    
   
-      mp_robot *irp6ot, *irp6p, *conv;
+      common::mp_robot *irp6ot, *irp6p, *conv;
     ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
  
 public:
@@ -229,7 +231,7 @@ public:
        double delta[6];
 
     // konstruktor
-    mp_nose_run_force_generator(mp_task& _mp_task, int step=0);  
+    mp_nose_run_force_generator(task::mp_task& _mp_task, int step=0);  
 
    virtual bool first_step ();    
    virtual bool next_step ();    
@@ -270,7 +272,7 @@ class mp_drawing_teach_in_force_generator : public mp_teach_in_generator {
         short gen_state, next_gen_state, prev_gen_state; // stan w ktorym znajduje sie generator 
         double conv_summar_inc;
         
-        mp_robot *irp6ot, *irp6p, *conv;
+        common::mp_robot *irp6ot, *irp6p, *conv;
         ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
         
     protected:
@@ -286,7 +288,7 @@ class mp_drawing_teach_in_force_generator : public mp_teach_in_generator {
         short teach_or_move;
         
     // konstruktor
-    mp_drawing_teach_in_force_generator(mp_task& _mp_task, int step=0);
+    mp_drawing_teach_in_force_generator(task::mp_task& _mp_task, int step=0);
         
         
         virtual bool first_step ();
@@ -295,5 +297,9 @@ class mp_drawing_teach_in_force_generator : public mp_teach_in_generator {
             
 }; // end: class mp_drawing_teach_in_force_generator
 // --------------------------------------------------------------------------
+
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
 
 #endif

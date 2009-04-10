@@ -20,13 +20,15 @@
 #include "lib/configurator.h"
 #include "lib/timer.h"
 
-
+namespace mrrocpp {
+namespace mp {
+namespace generator {
 
 class mp_teach_in_generator : public mp_generator {
 
 	protected:
-		std::list<mp_taught_in_pose> pose_list;
-		std::list<mp_taught_in_pose>::iterator pose_list_iterator;
+		std::list<common::mp_taught_in_pose> pose_list;
+		std::list<common::mp_taught_in_pose>::iterator pose_list_iterator;
 #if !defined(USE_MESSIP_SRR)
 		const int UI_fd;
 #else
@@ -36,7 +38,7 @@ class mp_teach_in_generator : public mp_generator {
 	public:
 		// -------------------------------------------------------
 		// konstruktor
-		mp_teach_in_generator(mp_task& _mp_task);
+		mp_teach_in_generator(task::mp_task& _mp_task);
 
 		// -------------------------------------------------------
 		// destruktor
@@ -63,7 +65,7 @@ class mp_teach_in_generator : public mp_generator {
 		// -------------------------------------------------------
 		void next_pose_list_ptr (void);
 		// -------------------------------------------------------
-		void get_pose (mp_taught_in_pose& tip);
+		void get_pose (common::mp_taught_in_pose& tip);
 		// -------------------------------------------------------
 		// Pobierz nastepna pozycje z listy
 		void get_next_pose (double next_pose[MAX_SERVOS_NR]);
@@ -121,6 +123,8 @@ class mp_teach_in_generator : public mp_generator {
 // ####################################    KONIEC GENERATOROW   ###########################################
 // ########################################################################################################
 
-
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
 
 #endif

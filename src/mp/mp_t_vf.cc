@@ -19,6 +19,10 @@
 #include "ecp_mp/ecp_mp_s_schunk.h"
 #include "ecp_mp/ecp_mp_s_vis.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace task {
+
 mp_task* return_created_mp_task (configurator &_config)
 {
 	return new mp_task_vf(_config);
@@ -55,7 +59,7 @@ void mp_task_vf::task_initialization(void)
 void mp_task_vf::main_task_algorithm(void)
 {
 	// Utworzenie generatora 
-	MP_vf_generator vf_gen(*this,8);
+	generator::MP_vf_generator vf_gen(*this,8);
 	vf_gen.robot_m = robot_m;
 	vf_gen.sensor_m = sensor_m;
 
@@ -63,3 +67,8 @@ void mp_task_vf::main_task_algorithm(void)
 	vf_gen.Move();
 
 };
+
+} // namespace task
+} // namespace mp
+} // namespace mrrocpp
+

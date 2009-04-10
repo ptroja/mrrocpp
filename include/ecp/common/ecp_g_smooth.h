@@ -81,7 +81,7 @@ public:
 	
 	void set_pose_from_xml(xmlNode *stateNode, bool &first_time);
 	bool load_trajectory_from_xml(char* fileName, char* nodeName);
-	bool load_trajectory_from_xml(Trajectory &trajectory);
+	bool load_trajectory_from_xml(mp::common::Trajectory &trajectory);
 
 	void load_coordinates(POSE_SPECIFICATION,double,double,double,double,double,double,double,double);
 	void load_coordinates(POSE_SPECIFICATION,double[],double[],double[],double[],double[]);

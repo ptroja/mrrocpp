@@ -20,6 +20,10 @@
 #include "ecp_mp/ecp_mp_s_rcs_korf.h"
 #include "ecp_mp/ecp_mp_s_rcs_kociemba.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace task {
+
 mp_task* return_created_mp_task(configurator &_config)
 {
 	return new mp_task_rcs_test(_config);
@@ -180,3 +184,8 @@ void mp_task_rcs_test::main_task_algorithm(void)
 		}
 	}
 }
+
+} // namespace task
+} // namespace mp
+} // namespace mrrocpp
+

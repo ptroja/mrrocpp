@@ -76,8 +76,8 @@ class ecp_task : public ecp_mp::task::base
 		struct str_cmp{
 			bool operator()(char const *a, char const *b) const;
 		};
-		Trajectory * createTrajectory(xmlNode *actNode, xmlChar *stateID);
-		std::map<char*, Trajectory, str_cmp>* loadTrajectories(char * fileName, ROBOT_ENUM propRobot);
+		mp::common::Trajectory * createTrajectory(xmlNode *actNode, xmlChar *stateID);
+		std::map<char*, mp::common::Trajectory, str_cmp>* loadTrajectories(char * fileName, ROBOT_ENUM propRobot);
 
 	public: // TODO: what follows should be private method
 

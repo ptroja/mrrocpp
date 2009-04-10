@@ -16,10 +16,14 @@
 #include "mp/mp.h"
 #include "mp/mp_g_two_robots_measures.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace task {
+
 class mp_two_robots_measures_task : public mp_task  
 {
 protected:
-	mp_two_robots_measures_generator *rmg;
+	generator::mp_two_robots_measures_generator *rmg;
 public:
 	
 	mp_two_robots_measures_task(configurator &_config);
@@ -29,5 +33,10 @@ public:
 	// Exact task algorithm.
 	void main_task_algorithm(void);
 };//: mp_task_two_robots_measures
+
+
+} // namespace task
+} // namespace mp
+} // namespace mrrocpp
 
 #endif

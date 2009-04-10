@@ -1,8 +1,11 @@
 #ifndef MP_R_IRP6S_AND_CONV_H_
 #define MP_R_IRP6S_AND_CONV_H_
 
+#include "mp/mp.h"
 #include "mp/mp_robot.h"
-
+namespace mrrocpp {
+namespace mp {
+namespace common {
 class mp_irp6s_and_conv_robot : public mp_robot
 {
 	private:
@@ -10,7 +13,7 @@ class mp_irp6s_and_conv_robot : public mp_robot
 		bool has_gripper;
 
 	public:
-		mp_irp6s_and_conv_robot (ROBOT_ENUM l_robot_name, const char* _section_name, mp_task &mp_object_l);
+		mp_irp6s_and_conv_robot (ROBOT_ENUM l_robot_name, const char* _section_name, task::mp_task &mp_object_l);
 
 		virtual void create_next_pose_command (void);
 
@@ -19,5 +22,7 @@ class mp_irp6s_and_conv_robot : public mp_robot
 		virtual void get_arm_reply (void);
 		virtual void get_rmodel_reply (void);
 };
-
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
 #endif /*MP_R_IRP6S_AND_CONV_H_*/

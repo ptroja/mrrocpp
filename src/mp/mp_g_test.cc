@@ -11,6 +11,10 @@
 #include "mp/mp_g_test.h"
 
 
+namespace mrrocpp {
+namespace mp {
+namespace generator {
+
 
 // extern ProxyPids MPProxyPids; // by Y&W zamienione na pulsy
 
@@ -25,7 +29,7 @@
 
 
 
-	MP_vf_generator::MP_vf_generator(mp_task& _mp_task, int step): mp_generator (_mp_task){ 
+	MP_vf_generator::MP_vf_generator(task::mp_task& _mp_task, int step): mp_generator (_mp_task){ 
 		step_no = step;          
 	};  
 
@@ -379,3 +383,8 @@ else
    }
 
 }; // end: bool tight_coop_generator::next_step ()
+
+
+} // namespace generator
+} // namespace mp
+} // namespace mrrocpp

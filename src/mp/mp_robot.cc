@@ -16,8 +16,12 @@
 #include "mp/mp.h"
 #include "mp/mp_task.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace common {
+
 // -------------------------------------------------------------------
-mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, mp_task &mp_object_l) :
+mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, task::mp_task &mp_object_l) :
 	robot(l_robot_name),
 	mp_object(mp_object_l),
 	sr_ecp_msg(*(mp_object_l.sr_ecp_msg))
@@ -229,3 +233,8 @@ void mp_robot::get_reply(void) {
 			throw MP_error (NON_FATAL_ERROR, INVALID_EDP_REPLY);
 	}
 }
+
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
+

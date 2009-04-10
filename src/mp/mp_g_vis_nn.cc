@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 //                              mp.cc
 // 
-// MP Master Process - methods for visual generators
+// MP Master Process - methodsï¿½for visual generators
 // 
 // Last issue: 06.05.22
 // -------------------------------------------------------------------------
@@ -18,6 +18,10 @@
 #include "lib/srlib.h"
 #include "mp/mp.h"
 #include "mp/mp_g_vis_nn.h"
+
+namespace mrrocpp {
+namespace mp {
+namespace generator {
 
 //globalne do wywalenia
 
@@ -75,7 +79,7 @@ int steps2switch=0;
 
 
 
-    mp_nn_eye_generator::mp_nn_eye_generator(mp_task& _mp_task, int step): mp_generator (_mp_task), irp6ot_con(1), irp6p_con(1){ 
+    mp_nn_eye_generator::mp_nn_eye_generator(task::mp_task& _mp_task, int step): mp_generator (_mp_task), irp6ot_con(1), irp6p_con(1){ 
         step_no = step;          
     };  
 	
@@ -544,3 +548,8 @@ else
 		return false;
 	} else return true;
 }; // end: bool tight_coop_generator::next_step ()
+
+
+} // namespace generator
+} // namespace mp
+} // namespace mrrocpp

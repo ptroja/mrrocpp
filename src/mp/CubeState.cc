@@ -2,6 +2,10 @@
 
 #include <stdio.h>
 
+namespace mrrocpp {
+namespace mp {
+namespace common {
+
 CubeState::CubeState ()
 {
 	up = UNKNOWN_CUBE_COLOR;
@@ -175,3 +179,8 @@ CUBE_COLOR CubeState::getRight() const
 	return right;
 }
 
+
+
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp

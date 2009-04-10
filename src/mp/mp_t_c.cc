@@ -9,6 +9,10 @@
 #include "mp/mp_t_c.h"
 #include "mp/mp_common_generators.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace task {
+
 mp_task* return_created_mp_task (configurator &_config)
 {
 	return new mp_task_c(_config);
@@ -26,10 +30,17 @@ void mp_task_c::task_initialization(void)
  
 void mp_task_c::main_task_algorithm(void)
 {
-	mp_empty_generator empty_gen (*this); // "Pusty" generator
+	generator::mp_empty_generator empty_gen (*this); // "Pusty" generator
 	empty_gen.robot_m = robot_m;
    
 	// Zlecenie wykonania kolejnego makrokroku
 	empty_gen.Move(); 
 
 }
+
+
+} // namespace task
+} // namespace mp
+} // namespace mrrocpp
+
+

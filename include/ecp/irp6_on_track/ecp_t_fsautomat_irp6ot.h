@@ -35,7 +35,7 @@ class ecp_task_fsautomat_irp6ot: public ecp_task
 		ecp_sub_task_gripper_opening* go_st;
 
 
-		std::map<char*, Trajectory, str_cmp>* trjMap;
+		std::map<char*, mp::common::Trajectory, str_cmp>* trjMap;
 
 	public:
 		// KONSTRUKTORY

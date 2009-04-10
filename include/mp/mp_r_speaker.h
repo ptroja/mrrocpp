@@ -7,12 +7,14 @@
 #define __MP_R_SPEAKER_H
 
 #include "mp/mp.h"
-
+namespace mrrocpp {
+namespace mp {
+namespace common {
 // ---------------------------------------------------------------
 class mp_speaker_robot: public mp_robot {
 
  public:
-  mp_speaker_robot (mp_task &mp_object_l); // Konstruktor
+  mp_speaker_robot (task::mp_task &mp_object_l); // Konstruktor
 
 // virtual void execute_motion (void); // Zlecenie wykonania ruchu przez robota
                                       // na poziomie MP jest to polecenie dla ECP
@@ -31,5 +33,7 @@ class mp_speaker_robot: public mp_robot {
 
 }; // end: class mp_conveyor_robot
 // --------------------------------------------------------------------------
-
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
 #endif

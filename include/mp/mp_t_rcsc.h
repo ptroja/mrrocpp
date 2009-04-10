@@ -17,6 +17,10 @@
 #include "mp/CubeState.h"
 #include "mp/SingleManipulation.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace task {
+
 class mp_task_rubik_cube_solver : public mp_task
 {
 protected:
@@ -24,7 +28,7 @@ protected:
 
     // stan kostki
     // kolory scian patrzac przez os ramienia tracka (od kolumny), w plaszczynie ziemi
-    CubeState* cube_state;
+    common::CubeState* cube_state;
 
     bool manipulation_sequence_computed;
     // odczyt konfiguracji manipulacji
@@ -35,10 +39,10 @@ protected:
 public:
 
     // stl'owa lista manipulacji
-    std::list<SingleManipulation> manipulation_list;
+    std::list<common::SingleManipulation> manipulation_list;
 
-    void initiate (CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is,
-                   CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is);
+    void initiate (common::CUBE_COLOR up_is, common::CUBE_COLOR down_is, common::CUBE_COLOR front_is,
+                   common::CUBE_COLOR rear_is, common::CUBE_COLOR left_is, common::CUBE_COLOR right_is);
 
     // konstruktor
     mp_task_rubik_cube_solver(configurator &_config);
@@ -48,7 +52,7 @@ public:
 
     // MANIPULACJA
     // manipulacja pojedyncza sciana
-    void manipulate (CUBE_COLOR face_to_turn, CUBE_TURN_ANGLE turn_angle );
+    void manipulate (common::CUBE_COLOR face_to_turn, common::CUBE_TURN_ANGLE turn_angle );
 
     // wykonanie sekwecji manipulacji poszczegolnymi scianami
     void execute_manipulation_sequence();
@@ -61,9 +65,9 @@ public:
     // OPERACJE
 
     // obrot sciany
-    void face_turn_op (CUBE_TURN_ANGLE turn_angle);
+    void face_turn_op (common::CUBE_TURN_ANGLE turn_angle);
     // zmiana sciany (przelozenie kostki)
-    void face_change_op (CUBE_TURN_ANGLE turn_angle);
+    void face_change_op (common::CUBE_TURN_ANGLE turn_angle);
     // dojscie
     void approach_op (int mode);
     // odejscie
@@ -81,5 +85,10 @@ public:
 
 }
 ; // end : class MP_nose_run_force_generator
+
+
+} // namespace task
+} // namespace mp
+} // namespace mrrocpp
 
 #endif

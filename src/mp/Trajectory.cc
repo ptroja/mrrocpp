@@ -8,6 +8,11 @@
 
 #include "mp/Trajectory.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace common {
+
+
 Trajectory::Trajectory()
 {
 	trjID = new char[80];
@@ -273,4 +278,9 @@ std::list<ecp_smooth_taught_in_pose> * Trajectory::getPoses()
 {
 	return new std::list<ecp_smooth_taught_in_pose>(*trjPoses);
 }
+
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
+
 

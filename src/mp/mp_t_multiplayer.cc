@@ -18,6 +18,10 @@
 #include "ecp_mp/ecp_mp_t_multiplayer.h"
 #include "ecp/festival/ecp_g_festival.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace task {
+
 void mp_task_multiplayer::move_electron_robot(const playerpos_goal_t &goal)
 {
 	set_next_playerpos_goal (ROBOT_ELECTRON, goal);
@@ -222,3 +226,8 @@ void mp_task_multiplayer::main_task_algorithm(void)
 #endif
 
 }
+
+
+} // namespace task
+} // namespace mp
+} // namespace mrrocpp

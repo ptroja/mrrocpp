@@ -26,6 +26,10 @@
 #include "ecp_mp/ecp_mp_s_vis.h"
 #include "ecp_mp/ecp_mp_tr_rc_windows.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace task {
+
 void mp_task_pouring::approach(void)
 {
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_ap.trj", 1, ROBOT_IRP6_ON_TRACK);
@@ -210,6 +214,9 @@ void mp_task_pouring::main_task_algorithm(void)
 	depart();
 	printf("Depart skonczony\n");
 
-
-
 }
+
+} // namespace task
+} // namespace mp
+} // namespace mrrocpp
+

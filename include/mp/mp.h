@@ -19,6 +19,11 @@
 #include "lib/configurator.h"
 #include "lib/timer.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace common {
+
+
 class mp_generator;
 class mp_robot;
 
@@ -80,6 +85,11 @@ class mp_taught_in_pose {
 		mp_taught_in_pose (POSE_SPECIFICATION at, double mt, int e_info, double* c);
 };
 // ------------------------------------------------------------------------
+
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
+
 
 
 // to fix forward declaration issues

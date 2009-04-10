@@ -20,10 +20,14 @@
 #include "ecp/festival/ecp_g_festival.h"
 #include "ecp_mp/ecp_mp_t_festival.h"
 
-void mp_task_rubik_cube_solver::initiate(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is,
-		CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is)
+namespace mrrocpp {
+namespace mp {
+namespace task {
+
+void mp_task_rubik_cube_solver::initiate(common::CUBE_COLOR up_is, common::CUBE_COLOR down_is, common::CUBE_COLOR front_is,
+		common::CUBE_COLOR rear_is, common::CUBE_COLOR left_is, common::CUBE_COLOR right_is)
 {
-	cube_state = new CubeState(up_is, down_is, front_is, rear_is, left_is, right_is);
+	cube_state = new common::CubeState(up_is, down_is, front_is, rear_is, left_is, right_is);
 
 	cube_initial_state = NULL;
 	manipulation_sequence_computed = false;
@@ -47,17 +51,17 @@ void mp_task_rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogl
 	//cube_initial_state=BGROWY
 
 	// manianka
-	cube_state->set_state(BLUE, GREEN, RED, ORANGE, WHITE, YELLOW);
+	cube_state->set_state(common::BLUE, common::GREEN, common::RED, common::ORANGE, common::WHITE, common::YELLOW);
 
-	const CUBE_TURN_ANGLE changing_order[]=
+	const common::CUBE_TURN_ANGLE changing_order[]=
 	{
-			CL_0, CL_0, CL_180, CL_0, CL_180, CL_0
+			common::CL_0, common::CL_0, common::CL_180, common::CL_0, common::CL_180, common::CL_0
 	};
 
 	for(int k=0; k<6; k++)
 	{
 
-		face_turn_op(CL_0);
+		face_turn_op(common::CL_0);
 
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_FESTIVAL, 0, "oglo~dam kolory na s~ciance", 1, ROBOT_FESTIVAL);
 
@@ -209,7 +213,7 @@ bool mp_task_rubik_cube_solver::communicate_with_windows_solver()
 
 			//reszta
 			// struktura pomiocnicza
-			SingleManipulation single_manipulation;
+			common::SingleManipulation single_manipulation;
 
 			// czyszczenie listy
 			manipulation_list.clear();
@@ -320,8 +324,8 @@ bool mp_task_rubik_cube_solver::communicate_with_windows_solver()
 			// dodawanie manipulacji do listy
 			for (unsigned int char_i=0; char_i < strlen(manipulation_sequence)-1; char_i += 2)
 			{
-				single_manipulation.set_state(read_cube_color(manipulation_sequence[char_i]),
-						read_cube_turn_angle(manipulation_sequence[char_i+1]));
+				single_manipulation.set_state(common::read_cube_color(manipulation_sequence[char_i]),
+						common::read_cube_turn_angle(manipulation_sequence[char_i+1]));
 				manipulation_list.push_back(single_manipulation);
 			}
 
@@ -339,7 +343,7 @@ bool mp_task_rubik_cube_solver::communicate_with_windows_solver()
 
 void mp_task_rubik_cube_solver::execute_manipulation_sequence()
 {
-	for(std::list<SingleManipulation>::iterator manipulation_list_iterator = manipulation_list.begin();
+	for(std::list<common::SingleManipulation>::iterator manipulation_list_iterator = manipulation_list.begin();
 	manipulation_list_iterator != manipulation_list.end(); manipulation_list_iterator++)
 	{
 		manipulate(manipulation_list_iterator->face_to_turn, manipulation_list_iterator->turn_angle);
@@ -348,48 +352,48 @@ void mp_task_rubik_cube_solver::execute_manipulation_sequence()
 
 
 
-void mp_task_rubik_cube_solver::manipulate(CUBE_COLOR face_to_turn, CUBE_TURN_ANGLE turn_angle )
+void mp_task_rubik_cube_solver::manipulate(common::CUBE_COLOR face_to_turn, common::CUBE_TURN_ANGLE turn_angle )
 {
 
 	if (face_to_turn == cube_state->up)
 	{
 		// printf("cube_state->up\n");
-		face_change_op(CL_90);
+		face_change_op(common::CL_90);
 		face_turn_op(turn_angle);
 	}
 	else if (face_to_turn == cube_state->down)
 	{
 		// printf("cube_state->down\n");
-		face_change_op(CCL_90);
+		face_change_op(common::CCL_90);
 		face_turn_op(turn_angle);
 
 	}
 	else if (face_to_turn == cube_state->front)
 	{
 		// printf("cube_state->front\n");
-		face_change_op(CL_0);
-		face_turn_op(CL_0);
-		face_change_op(CL_90);
+		face_change_op(common::CL_0);
+		face_turn_op(common::CL_0);
+		face_change_op(common::CL_90);
 		face_turn_op(turn_angle);
 	}
 	else if (face_to_turn == cube_state->rear)
 	{
 		// printf("cube_state->rear\n");
-		face_change_op(CL_0);
-		face_turn_op(CL_0);
-		face_change_op(CCL_90);
+		face_change_op(common::CL_0);
+		face_turn_op(common::CL_0);
+		face_change_op(common::CCL_90);
 		face_turn_op(turn_angle);
 	}
 	else if (face_to_turn == cube_state->left)
 	{
 		// printf("cube_state->left\n");
-		face_change_op(CL_0);
+		face_change_op(common::CL_0);
 		face_turn_op(turn_angle);
 	}
 	else if (face_to_turn == cube_state->right)
 	{
 		// printf("cube_state->right\n");
-		face_change_op(CL_180);
+		face_change_op(common::CL_180);
 		face_turn_op(turn_angle);
 	}
 }
@@ -397,7 +401,7 @@ void mp_task_rubik_cube_solver::manipulate(CUBE_COLOR face_to_turn, CUBE_TURN_AN
 
 
 // obrot sciany
-void mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
+void mp_task_rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 {
 
 	// ustawienie chwytakow we wlasciwej wzajemnej orientacji
@@ -407,19 +411,19 @@ void mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 	// wlaczenie generatora uczacego w obu robotach
 	switch (turn_angle)
 	{
-	case CL_90:
+	case common::CL_90:
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fturn_ap_cl_90_phase_1.trj", 1, ROBOT_IRP6_ON_TRACK);
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6p_sm_fturn_ap_cl_90_phase_1.trj", 1, ROBOT_IRP6_POSTUMENT);
 		break;
-	case CL_0:
+	case common::CL_0:
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fturn_ap_cl_0_phase_1.trj", 1, ROBOT_IRP6_ON_TRACK);
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6p_sm_fturn_ap_cl_0_phase_1.trj", 1, ROBOT_IRP6_POSTUMENT);
 		break;
-	case CCL_90:
+	case common::CCL_90:
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fturn_ap_ccl_90_phase_1.trj", 1, ROBOT_IRP6_ON_TRACK);
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6p_sm_fturn_ap_ccl_90_phase_1.trj", 1, ROBOT_IRP6_POSTUMENT);
 		break;
-	case CL_180:
+	case common::CL_180:
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fturn_ap_cl_180_phase_1.trj", 1, ROBOT_IRP6_ON_TRACK);
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6p_sm_fturn_ap_cl_180_phase_1.trj", 1, ROBOT_IRP6_POSTUMENT);
 		break;
@@ -436,16 +440,16 @@ void mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 
 	switch (turn_angle)
 	{
-	case CL_90:
+	case common::CL_90:
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fturn_ap_cl_90_phase_2.trj", 1, ROBOT_IRP6_ON_TRACK);
 		break;
-	case CL_0:
+	case common::CL_0:
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fturn_ap_cl_0_phase_2.trj", 1, ROBOT_IRP6_ON_TRACK);
 		break;
-	case CCL_90:
+	case common::CCL_90:
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fturn_ap_ccl_90_phase_2.trj", 1, ROBOT_IRP6_ON_TRACK);
 		break;
-	case CL_180:
+	case common::CL_180:
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fturn_ap_cl_180_phase_2.trj", 1, ROBOT_IRP6_ON_TRACK);
 		break;
 	default:
@@ -482,23 +486,23 @@ void mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 
 	switch (turn_angle)
 	{
-	case CL_90:
+	case common::CL_90:
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_FESTIVAL, 0, "obracam kostke~", 1, ROBOT_FESTIVAL);
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) ecp_mp::task::RCSC_CL_90, "", 1, ROBOT_IRP6_ON_TRACK);
 		// uruchomienie generatora empty_gen
 		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 				(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL);
 		break;
-	case CL_0:
+	case common::CL_0:
 		break;
-	case CCL_90:
+	case common::CCL_90:
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_FESTIVAL, 0, "obracam kostke~", 1, ROBOT_FESTIVAL);
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) ecp_mp::task::RCSC_CCL_90, "", 1, ROBOT_IRP6_ON_TRACK);
 		// uruchomienie generatora empty_gen
 		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 				(2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL, ROBOT_IRP6_ON_TRACK, ROBOT_FESTIVAL);
 		break;
-	case CL_180:
+	case common::CL_180:
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_FESTIVAL, 0, "obracam kostke~", 1, ROBOT_FESTIVAL);
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) ecp_mp::task::RCSC_CL_180, "", 1, ROBOT_IRP6_ON_TRACK);
 		// uruchomienie generatora empty_gen
@@ -534,7 +538,7 @@ void mp_task_rubik_cube_solver::face_turn_op(CUBE_TURN_ANGLE turn_angle)
 
 
 // zmiana sciany (przelozenie kostki)
-void mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
+void mp_task_rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 {
 
 	// zblizenie chwytakow
@@ -550,22 +554,22 @@ void mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 	// wlaczenie generatora uczacego w obu robotach
 	switch (turn_angle)
 	{
-	case CL_90:
+	case common::CL_90:
 
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_ap_cl_90_phase_1.trj", 1, ROBOT_IRP6_ON_TRACK);
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6p_sm_fchange_ap_cl_90_phase_1.trj", 1, ROBOT_IRP6_POSTUMENT);
 		break;
-	case CL_0:
+	case common::CL_0:
 
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_ap_cl_0_phase_1.trj", 1, ROBOT_IRP6_ON_TRACK);
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6p_sm_fchange_ap_cl_0_phase_1.trj", 1, ROBOT_IRP6_POSTUMENT);
 		break;
-	case CCL_90:
+	case common::CCL_90:
 
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_ap_ccl_90_phase_1.trj", 1, ROBOT_IRP6_ON_TRACK);
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6p_sm_fchange_ap_ccl_90_phase_1.trj", 1, ROBOT_IRP6_POSTUMENT);
 		break;
-	case CL_180:
+	case common::CL_180:
 
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_ap_cl_180_phase_1.trj", 1, ROBOT_IRP6_ON_TRACK);
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6p_sm_fchange_ap_cl_180_phase_1.trj", 1, ROBOT_IRP6_POSTUMENT);
@@ -585,16 +589,16 @@ void mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 
 	switch (turn_angle)
 	{
-	case CL_90:
+	case common::CL_90:
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_ap_cl_90_phase_2.trj", 1, ROBOT_IRP6_ON_TRACK);
 		break;
-	case CL_0:
+	case common::CL_0:
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_ap_cl_0_phase_2.trj", 1, ROBOT_IRP6_ON_TRACK);
 		break;
-	case CCL_90:
+	case common::CCL_90:
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_ap_ccl_90_phase_2.trj", 1, ROBOT_IRP6_ON_TRACK);
 		break;
-	case CL_180:
+	case common::CL_180:
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_ap_cl_180_phase_2.trj", 1, ROBOT_IRP6_ON_TRACK);
 		break;
 	default:
@@ -670,19 +674,19 @@ void mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 	// wlaczenie generatora uczacego w obu robotach
 	switch (turn_angle)
 	{
-	case CL_90:
+	case common::CL_90:
 
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_de_cl_90.trj", 1, ROBOT_IRP6_ON_TRACK);
 		break;
-	case CL_0:
+	case common::CL_0:
 
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_de_cl_0.trj", 1, ROBOT_IRP6_ON_TRACK);
 		break;
-	case CCL_90:
+	case common::CCL_90:
 
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_de_ccl_90.trj", 1, ROBOT_IRP6_ON_TRACK);
 		break;
-	case CL_180:
+	case common::CL_180:
 
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_de_cl_180.trj", 1, ROBOT_IRP6_ON_TRACK);
 		break;
@@ -697,23 +701,23 @@ void mp_task_rubik_cube_solver::face_change_op(CUBE_TURN_ANGLE turn_angle)
 
 	// zmiana stanu kostki
 
-	CubeState tmp_cube_state;
+	common::CubeState tmp_cube_state;
 
 	switch (turn_angle)
 	{
-	case CL_90:
+	case common::CL_90:
 		tmp_cube_state.set_state(cube_state->left, cube_state->right, cube_state->up, cube_state->down,
 				cube_state->front, cube_state->rear);
 		break;
-	case CL_0:
+	case common::CL_0:
 		tmp_cube_state.set_state(cube_state->front, cube_state->rear, cube_state->left, cube_state->right,
 				cube_state->up, cube_state->down);
 		break;
-	case CCL_90:
+	case common::CCL_90:
 		tmp_cube_state.set_state(cube_state->right, cube_state->left, cube_state->down, cube_state->up,
 				cube_state->front, cube_state->rear);
 		break;
-	case CL_180:
+	case common::CL_180:
 		tmp_cube_state.set_state(cube_state->front, cube_state->rear, cube_state->right, cube_state->left,
 				cube_state->down, cube_state->up);
 		break;
@@ -855,7 +859,7 @@ void mp_task_rubik_cube_solver::approach_op(int mode)
 	// opcjonalne serwo wizyjne
 	if (mode)
 	{
-		mp_seven_eye_generator eyegen(*this, 4);
+		generator::mp_seven_eye_generator eyegen(*this, 4);
 		eyegen.robot_m[ROBOT_IRP6_ON_TRACK] = robot_m[ROBOT_IRP6_ON_TRACK];
 		eyegen.sensor_m[SENSOR_CAMERA_SA] = sensor_m[SENSOR_CAMERA_SA];
 
@@ -964,7 +968,7 @@ void mp_task_rubik_cube_solver::gripper_opening(double track_increment, double p
 	tdes2.coordinate_delta[6] = postument_increment;   // przyrost wspolrzednej PSI
 
 	// Generator trajektorii prostoliniowej
-	mp_tight_coop_generator tcg(*this, tdes, tdes2);
+	generator::mp_tight_coop_generator tcg(*this, tdes, tdes2);
 	tcg.robot_m = robot_m;
 
 	tcg.Move();
@@ -1018,13 +1022,13 @@ void mp_task_rubik_cube_solver::main_task_algorithm(void)
 	if (cube_initial_state)
 		delete[] cube_initial_state;
 	cube_initial_state = config.return_string_value("cube_initial_state");
-	//	enum CUBE_COLOR {UKNOWN, RED, YELLOW, GREEN, BLUE, ORANGE, WHITE};
-	//	 cube_state::set_state(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is,
-	//		CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is)
+	//	enum common::CUBE_COLOR {UKNOWN, common::RED, common::YELLOW, common::GREEN, common::BLUE, common::ORANGE, common::WHITE};
+	//	 cube_state::set_state(common::CUBE_COLOR up_is, common::CUBE_COLOR down_is, common::CUBE_COLOR front_is,
+	//		common::CUBE_COLOR rear_is, common::CUBE_COLOR left_is, common::CUBE_COLOR right_is)
 
-	initiate (read_cube_color(cube_initial_state[0]),
-			read_cube_color(cube_initial_state[1]), read_cube_color(cube_initial_state[2]),  read_cube_color(cube_initial_state[3]),
-			read_cube_color(cube_initial_state[4]), read_cube_color(cube_initial_state[5]));
+	initiate (common::read_cube_color(cube_initial_state[0]),
+			common::read_cube_color(cube_initial_state[1]), common::read_cube_color(cube_initial_state[2]),  common::read_cube_color(cube_initial_state[3]),
+			common::read_cube_color(cube_initial_state[4]), common::read_cube_color(cube_initial_state[5]));
 
 
 
@@ -1055,14 +1059,14 @@ void mp_task_rubik_cube_solver::main_task_algorithm(void)
 		{
 
 			// wykonanie sekwencji manipulacji
-			face_turn_op(CL_0);
+			face_turn_op(common::CL_0);
 
 
 			execute_manipulation_sequence();
 
 			// zakonczenie zadania
 
-			face_change_op(CL_0);
+			face_change_op(common::CL_0);
 		}
 
 		departure_op();
@@ -1076,3 +1080,8 @@ mp_task* return_created_mp_task (configurator &_config)
 {
 	return new mp_task_rubik_cube_solver(_config);
 }
+
+} // namespace task
+} // namespace mp
+} // namespace mrrocpp
+

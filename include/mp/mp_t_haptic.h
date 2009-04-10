@@ -11,6 +11,10 @@
 #include "mp/mp.h"
 #include "ecp_mp/ecp_mp_t_rcsc.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace task {
+
 class mp_task_haptic : public mp_task  
 {
 protected:
@@ -26,5 +30,10 @@ public:
 	void main_task_algorithm(void);
 
 };
+
+
+} // namespace task
+} // namespace mp
+} // namespace mrrocpp
 
 #endif

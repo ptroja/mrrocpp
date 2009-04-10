@@ -21,6 +21,10 @@
 #include "ecp_mp/ecp_mp_s_schunk.h"
 #include "ecp_mp/ecp_mp_t_rcsc.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace task {
+
 mp_task* return_created_mp_task(configurator &_config)
 {
 	return new mp_task_vis_sac(_config);
@@ -55,7 +59,7 @@ void mp_task_vis_sac::main_task_algorithm(void)
 {
 
 
-	mp_vis_sac_generator eyegen(*this, 4);
+	generator::mp_vis_sac_generator eyegen(*this, 4);
 	eyegen.robot_m[ROBOT_IRP6_ON_TRACK] = robot_m[ROBOT_IRP6_ON_TRACK];
 	eyegen.sensor_m[SENSOR_CAMERA_SA] = sensor_m[SENSOR_CAMERA_SA];
 
@@ -106,3 +110,8 @@ void mp_task_vis_sac::main_task_algorithm(void)
 
 
 }
+
+} // namespace task
+} // namespace mp
+} // namespace mrrocpp
+

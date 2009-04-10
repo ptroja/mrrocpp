@@ -6,6 +6,10 @@
 
 // generator for setting the next ecps state
 
+namespace mrrocpp {
+namespace mp {
+namespace generator {
+
 class mp_set_next_ecps_state_generator : public mp_generator
 {
 protected:
@@ -13,7 +17,7 @@ protected:
 
 public:
 
-    mp_set_next_ecps_state_generator(mp_task& _mp_task);
+    mp_set_next_ecps_state_generator(task::mp_task& _mp_task);
 
 	void configure (int l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const char* l_mp_2_ecp_next_state_string);
 	void configure (const playerpos_goal_t &_goal);
@@ -30,7 +34,7 @@ class mp_send_end_motion_to_ecps_generator : public mp_generator
 public:
 
     // konstruktor
-    mp_send_end_motion_to_ecps_generator(mp_task& _mp_task);
+    mp_send_end_motion_to_ecps_generator(task::mp_task& _mp_task);
 
 	bool first_step ();
 	bool next_step ();
@@ -49,7 +53,7 @@ class mp_extended_empty_generator : public mp_generator {
 	bool activate_trigger;
 
  public:
-	mp_extended_empty_generator(mp_task& _mp_task);
+	mp_extended_empty_generator(task::mp_task& _mp_task);
 
 	~mp_extended_empty_generator(){ };
 
@@ -69,7 +73,7 @@ class mp_empty_generator : public mp_generator {
     // Sluzy zarowno do wyznaczania nastepnej wartosci zadanej jak i
     // sprawdzania spelnienia warunku koncowego
  public:
-	mp_empty_generator(mp_task& _mp_task);
+	mp_empty_generator(task::mp_task& _mp_task);
 
   ~mp_empty_generator(){ };
 
@@ -94,7 +98,7 @@ protected:
 
 
 public:
-	mp_delta_generator(mp_task& _mp_task);
+	mp_delta_generator(task::mp_task& _mp_task);
 	trajectory_description irp6ot_td;
 	trajectory_description irp6p_td;
 };
@@ -107,7 +111,7 @@ class mp_tight_coop_generator : public mp_delta_generator
 {
 
 public:
-	mp_tight_coop_generator(mp_task& _mp_task, trajectory_description irp6ot_tr_des, trajectory_description irp6p_tr_des);
+	mp_tight_coop_generator(task::mp_task& _mp_task, trajectory_description irp6ot_tr_des, trajectory_description irp6p_tr_des);
 
   ~mp_tight_coop_generator();
 
@@ -116,5 +120,9 @@ public:
   virtual bool next_step ();
 
 };
+
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
 
 #endif /*MP_GENERATORS_H_*/

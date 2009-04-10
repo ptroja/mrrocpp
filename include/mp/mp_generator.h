@@ -7,10 +7,18 @@
 
 
 
-class mp_task;
-class mp_robot;
+
 
 #include <map>
+
+// class common::mp_task;
+// class mp_robot;
+
+namespace mrrocpp {
+namespace mp {
+namespace generator {
+
+
 
 class mp_generator : public ecp_mp::generator::base
 {
@@ -20,7 +28,7 @@ class mp_generator : public ecp_mp::generator::base
 
 	public:
 
-		mp_task& mp_t;
+		task::mp_task& mp_t;
 
 		// Funkcja ruchu
 		void Move (void);
@@ -49,17 +57,17 @@ class mp_generator : public ecp_mp::generator::base
 		bool wait_for_ECP_pulse;
 
 		//! mapa wszystkich robotow
-		std::map <ROBOT_ENUM, mp_robot*> robot_m;
+		std::map <ROBOT_ENUM, common::mp_robot*> robot_m;
 
-		mp_generator(mp_task& _mp_task);
+		mp_generator(task::mp_task& _mp_task);
 
 		void re_run(void); // powrot do stanu wyjsciowego
 
 		//! Kopiuje dane z robotow do generatora
-		void copy_data(std::map <ROBOT_ENUM, mp_robot*>& _robot_m);
+		void copy_data(std::map <ROBOT_ENUM, common::mp_robot*>& _robot_m);
 
 		//! Kopiuje polecenie stworzone w generatorze do robotow
-		void copy_generator_command (std::map <ROBOT_ENUM, mp_robot*>& _robot_m);
+		void copy_generator_command (std::map <ROBOT_ENUM, common::mp_robot*>& _robot_m);
 
 		//! Klasa obslugi bledow generatora na poziomie MP
 		class MP_error
@@ -74,5 +82,7 @@ class mp_generator : public ecp_mp::generator::base
 				}
 		};
 };
-
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
 #endif /*MP_GENERATOR_H_*/

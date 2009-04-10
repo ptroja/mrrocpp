@@ -5,6 +5,11 @@
 #include "mp/Condition.h"
 #include "mp/StateHeap.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace common {
+
+
 class Transition
 {
 	public:
@@ -23,6 +28,11 @@ class Transition
 		char *targetID;
 		Condition *condition;
 };
+
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
+
 
 #endif
 

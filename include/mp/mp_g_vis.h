@@ -1,6 +1,10 @@
 #if !defined(__MP_GEN_VIS_H)
 #define __MP_GEN_VIS_H
 
+namespace mrrocpp {
+namespace mp {
+namespace generator {
+
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji
 
@@ -10,7 +14,7 @@ protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
 
   
-    mp_robot *irp6ot, *irp6p;
+  common::mp_robot *irp6ot, *irp6p;
     ::sensor *vsp_force_irp6ot, *vsp_force_irp6p, *vsp_vis_sac;
     
     // do konfiguracji pracy generatora
@@ -24,11 +28,13 @@ public:
        double delta[6];
 
     // konstruktor
-    mp_seven_eye_generator(mp_task& _mp_task, int step=0);  
+    mp_seven_eye_generator(task::mp_task& _mp_task, int step=0);  
 	
 	virtual bool first_step ();    
 	virtual bool next_step ();    
 
 }; // end : class MP_nose_run_force_generator
-
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
 #endif

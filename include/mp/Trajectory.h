@@ -8,6 +8,11 @@
 #include "common/com_buf.h"
 #include "ecp/common/ecp_smooth_taught_in_pose.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace common {
+
+
 class Trajectory
 {
 	public:
@@ -54,6 +59,11 @@ class Trajectory
 		ecp_smooth_taught_in_pose *actPose;
 		std::list<ecp_smooth_taught_in_pose> *trjPoses;
 };
+
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
+
 
 
 #endif

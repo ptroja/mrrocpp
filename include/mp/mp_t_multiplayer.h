@@ -3,6 +3,10 @@
 
 #include "mp/mp.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace task {
+
 class mp_task_multiplayer : public mp_task
 {
 	private:
@@ -16,5 +20,10 @@ class mp_task_multiplayer : public mp_task
 		void main_task_algorithm(void);
 
 };
+
+
+} // namespace task
+} // namespace mp
+} // namespace mrrocpp
 
 #endif

@@ -14,6 +14,11 @@
 #include "mp/Transition.h"
 
 
+namespace mrrocpp {
+namespace mp {
+namespace common {
+
+
 
 //enum StateType { INITIALIZATION, MOTION_EXECUTE };
 
@@ -66,6 +71,11 @@ class State
 		std::list<Transition> *stateTransitions;
 	
 };
+
+
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
 
 
 #endif /* _STATE_H_ */

@@ -16,17 +16,21 @@
 #include "mp/CubeState.h"
 #include "mp/SingleManipulation.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace task {
+
 class mp_task_fsautomat : public mp_task  
 {
 	protected:
 		bool break_state;
-    	CubeState *cube_state;
+    	common::CubeState *cube_state;
 		// should depend on init node in xml task definition or be computed in Condition
     	bool manipulation_sequence_computed;
 
 	public:
 		// stl'owa lista manipulacji
-		std::list<SingleManipulation> manipulation_list;
+		std::list<common::SingleManipulation> manipulation_list;
 		
 	    // konstruktor
 	    mp_task_fsautomat(configurator &_config);
@@ -37,26 +41,31 @@ class mp_task_fsautomat : public mp_task
 		void task_initialization(void);
 		void main_task_algorithm(void);
 		
-		std::list<State> *takeStatesList(void);
-		State * createState(xmlNode *stateNode);
-		std::map<char *, State, ecp_task::str_cmp> * takeStatesMap();
-		void executeMotion(State &state);
-		void runEmptyGenForSet(State &state);
-		void runEmptyGen(State &state);
-		void runWaitFunction(State &state);
-		void stopProperGen(State &state);
+		std::list<common::State> *takeStatesList(void);
+		common::State * createState(xmlNode *stateNode);
+		std::map<char *, common::State, ecp_task::str_cmp> * takeStatesMap();
+		void executeMotion(common::State &state);
+		void runEmptyGenForSet(common::State &state);
+		void runEmptyGen(common::State &state);
+		void runWaitFunction(common::State &state);
+		void stopProperGen(common::State &state);
 		void sensorInitialization();
-		void initializeCubeState(State &state);
-		void initiateSensorReading(State &state);
-		void getSensorReading(State &state);
-		void writeCubeState(State &state);
-		void changeCubeState(State &state);
+		void initializeCubeState(common::State &state);
+		void initiateSensorReading(common::State &state);
+		void getSensorReading(common::State &state);
+		void writeCubeState(common::State &state);
+		void changeCubeState(common::State &state);
 		void changeCubeState(int turn_angle);
-		void communicate_with_windows_solver(State &state);
-		void translateManipulationSequence(StateHeap &sh);
+		void communicate_with_windows_solver(common::State &state);
+		void translateManipulationSequence(common::StateHeap &sh);
 
 		void configureProperSensor(char *propSensor);
 		void configureProperTransmitter(char *propTrans);
 
 }; // end : class mp_task_fsautomat
+
+} // namespace task
+} // namespace mp
+} // namespace mrrocpp
+
 #endif

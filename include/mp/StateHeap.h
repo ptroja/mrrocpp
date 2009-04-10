@@ -4,6 +4,11 @@
 
 #include <list>
 
+namespace mrrocpp {
+namespace mp {
+namespace common {
+
+
 class StateHeap
 {
 	public:
@@ -18,6 +23,11 @@ class StateHeap
 	private:
 		std::list<const char *> *targetsHeap;
 };
+
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
+
 
 #endif
 

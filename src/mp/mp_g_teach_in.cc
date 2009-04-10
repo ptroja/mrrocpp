@@ -32,13 +32,17 @@
 #include "mp/mp.h"
 #include "mp/mp_g_teach_in.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace generator {
+
 
 using namespace std;
 
 
 
 
-mp_teach_in_generator::mp_teach_in_generator(mp_task& _mp_task)
+mp_teach_in_generator::mp_teach_in_generator(task::mp_task& _mp_task)
 	: mp_generator (_mp_task), UI_fd(_mp_task.UI_fd)
 {
 	pose_list.clear();
@@ -57,7 +61,7 @@ mp_teach_in_generator::~mp_teach_in_generator (void) { flush_pose_list(); }
 void mp_teach_in_generator::save_file (POSE_SPECIFICATION ps) {
 	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
-	mp_taught_in_pose tip;        // Zapisywana pozycja
+	common::mp_taught_in_pose tip;        // Zapisywana pozycja
 	char *cwd;                 // Wsk. na nazwe biezacego katalogu
 	char coordinate_type[80];  // Opis wspolrzednych: "MOTOR", "JOINT", ...
 	uint64_t e;       // Kod bledu systemowego
@@ -141,7 +145,7 @@ void mp_teach_in_generator::save_file (POSE_SPECIFICATION ps) {
 bool mp_teach_in_generator::load_file_with_path (const char* file_name, short robot_number) {
 // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 // false w przeciwnym razie
-// mp_taught_in_pose tip;        // Wczytana pozycja
+// common::mp_taught_in_pose tip;        // Wczytana pozycja
 // char *cwd;                 // Wsk. na nazwe biezacego katalogu
 	char coordinate_type[80];  // Opis wspolrzednych: "MOTOR", "JOINT", ...
 	POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
@@ -253,7 +257,7 @@ bool mp_teach_in_generator::load_file () {
 // false w przeciwnym razie
 	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
-// mp_taught_in_pose tip;        // Wczytana pozycja
+// common::mp_taught_in_pose tip;        // Wczytana pozycja
 // char *cwd;                 // Wsk. na nazwe biezacego katalogu
 	char coordinate_type[80];  // Opis wspolrzednych: "MOTOR", "JOINT", ...
 	POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
@@ -387,7 +391,7 @@ void mp_teach_in_generator::next_pose_list_ptr (void) {
 		pose_list_iterator++;
 }
 // -------------------------------------------------------
-void mp_teach_in_generator::get_pose (mp_taught_in_pose& tip) { // by Y
+void mp_teach_in_generator::get_pose (common::mp_taught_in_pose& tip) { // by Y
 	tip.arm_type = pose_list_iterator->arm_type;
 	tip.motion_time = pose_list_iterator->motion_time;
 	tip.extra_info = pose_list_iterator->extra_info;
@@ -448,7 +452,7 @@ bool mp_teach_in_generator::is_last_list_element ( void ) {
 // -------------------------------------------------------
 
 void mp_teach_in_generator::create_pose_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]) {
-	pose_list.push_back(mp_taught_in_pose(ps, motion_time, coordinates));
+	pose_list.push_back(common::mp_taught_in_pose(ps, motion_time, coordinates));
 	pose_list_iterator = pose_list.begin();
 }
 
@@ -456,18 +460,18 @@ void mp_teach_in_generator::create_pose_list_head (POSE_SPECIFICATION ps, double
 
 void mp_teach_in_generator::create_pose_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
         double irp6p_coordinates[MAX_SERVOS_NR]) {
-	pose_list.push_back(mp_taught_in_pose(ps, motion_time, coordinates, irp6p_coordinates));
+	pose_list.push_back(common::mp_taught_in_pose(ps, motion_time, coordinates, irp6p_coordinates));
 	pose_list_iterator = pose_list.begin();
 }
 
 
 void mp_teach_in_generator::create_pose_list_head (POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]) {
-	pose_list.push_back(mp_taught_in_pose(ps, motion_time, extra_info, coordinates));
+	pose_list.push_back(common::mp_taught_in_pose(ps, motion_time, extra_info, coordinates));
 	pose_list_iterator = pose_list.begin();
 }
 
 void mp_teach_in_generator::insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]) {
-	pose_list.push_back(mp_taught_in_pose(ps, motion_time, coordinates));
+	pose_list.push_back(common::mp_taught_in_pose(ps, motion_time, coordinates));
 	pose_list_iterator++;
 }
 
@@ -475,13 +479,13 @@ void mp_teach_in_generator::insert_pose_list_element (POSE_SPECIFICATION ps, dou
 
 void mp_teach_in_generator::insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
         double irp6p_coordinates[MAX_SERVOS_NR]) {
-	pose_list.push_back(mp_taught_in_pose(ps, motion_time, coordinates, irp6p_coordinates));
+	pose_list.push_back(common::mp_taught_in_pose(ps, motion_time, coordinates, irp6p_coordinates));
 	pose_list_iterator++;
 }
 
 
 void mp_teach_in_generator::insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]) {
-	pose_list.push_back(mp_taught_in_pose(ps, motion_time, extra_info, coordinates));
+	pose_list.push_back(common::mp_taught_in_pose(ps, motion_time, extra_info, coordinates));
 	pose_list_iterator++;
 }
 
@@ -502,7 +506,7 @@ bool mp_teach_in_generator::first_step () {
 //   printf("w mp_teach_in_generator::first_step 2\n");
 	initiate_pose_list();
 
-	for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+	for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
 	        robot_m_iterator != robot_m.end(); robot_m_iterator++) {
 		robot_m_iterator->second->ecp_td.mp_command = NEXT_POSE;
 		robot_m_iterator->second->ecp_td.instruction_type = GET;
@@ -522,7 +526,7 @@ bool mp_teach_in_generator::first_step () {
 // ----------------------------------------------------------------------------------------------
 
 bool mp_teach_in_generator::next_step () {
-	mp_taught_in_pose tip;      // Nauczona pozycja
+	common::mp_taught_in_pose tip;      // Nauczona pozycja
 
 // printf("W mp_teach_in_generator::next_step\n");
 	if ( idle_step_counter ) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
@@ -548,7 +552,7 @@ bool mp_teach_in_generator::next_step () {
 
 	get_pose (tip);
 
-	map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+	map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
 
 	// Przepisanie pozycji z listy
 	switch ( tip.arm_type ) {
@@ -653,3 +657,8 @@ bool mp_teach_in_generator::next_step () {
 
 }
 ; // end: bool mp_teach_in_generator::next_step ( )
+
+} // namespace generator
+} // namespace mp
+} // namespace mrrocpp
+

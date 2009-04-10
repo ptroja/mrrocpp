@@ -10,6 +10,10 @@
 
 #include "mp/mp.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace task {
+
 class mp_task_vf: public mp_task  {
 	
 public:
@@ -21,5 +25,10 @@ public:
 	void main_task_algorithm(void);
   
 };
+
+
+} // namespace task
+} // namespace mp
+} // namespace mrrocpp
 
 #endif

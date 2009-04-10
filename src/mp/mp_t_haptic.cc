@@ -21,6 +21,10 @@
 #include "mp/mp_t_haptic.h"
 #include "ecp_mp/ecp_mp_s_schunk.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace task {
+
 mp_task* return_created_mp_task (configurator &_config)
 {
 	return new mp_task_haptic(_config);
@@ -74,7 +78,7 @@ bool mp_task_haptic::configure_edp_force_sensor(bool configure_track, bool confi
 void mp_task_haptic::main_task_algorithm(void)
 {
 
-  	mp_haptic_generator mp_h_gen(*this, 10); 
+	generator::mp_haptic_generator mp_h_gen(*this, 10); 
    	mp_h_gen.robot_m = robot_m;
 
 
@@ -98,3 +102,8 @@ void mp_task_haptic::main_task_algorithm(void)
 
 
 }
+
+
+} // namespace task
+} // namespace mp
+} // namespace mrrocpp

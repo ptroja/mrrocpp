@@ -7,6 +7,10 @@
 #if !defined(__MP_GEN_TEST_H)
 #define __MP_GEN_TEST_H
 
+namespace mrrocpp {
+namespace mp {
+namespace generator {
+
 // ####################################################################################################
 // KLASA BAZOWA dla generatorow o zadany przyrost polozenia/orientacji  
 // ####################################################################################################
@@ -51,7 +55,7 @@ public:
 
 
 	// konstruktor
-	MP_vf_generator(mp_task& _mp_task, int step=0);  
+	MP_vf_generator(task::mp_task& _mp_task, int step=0);  
 
    virtual bool first_step ();	
    virtual bool next_step ();	
@@ -63,6 +67,8 @@ public:
 // ########################################################################################################
 // ####################################    KONIEC GENERATOROW   ###########################################
 // ########################################################################################################
-
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
 
 #endif

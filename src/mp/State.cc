@@ -4,6 +4,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+namespace mrrocpp {
+namespace mp {
+namespace common {
+
+
 State::State()
 {
 	numArgument = 0;
@@ -311,3 +316,8 @@ void State::showStateContent() const
 		(*it).showContent();
 	}
 }
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
+
+

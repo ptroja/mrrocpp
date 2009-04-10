@@ -5,6 +5,12 @@
 
 #include "mp/Condition.h"
 
+
+namespace mrrocpp {
+namespace mp {
+namespace common {
+
+
 /*Condition::Condition()
 {
 	this->condition = NULL;
@@ -152,4 +158,9 @@ void Condition::setResult(bool result)
 {
 	this->result = result;
 }
+
+
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
 

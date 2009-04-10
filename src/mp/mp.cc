@@ -20,6 +20,13 @@
 
 using namespace std;
 
+namespace mrrocpp {
+namespace mp {
+namespace common {
+
+
+
+
 mp_taught_in_pose::mp_taught_in_pose(void)
 {}
 
@@ -57,11 +64,21 @@ mp_robot::MP_error::MP_error(ERROR_CLASS err0, uint64_t err1) :
 // ##############################################################
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
+
 #include "mp/mp_common_generators.h"
+
+
+namespace mrrocpp {
+namespace mp {
+namespace generator {
+
 
 // generator for setting the next ecps state
 
-mp_set_next_ecps_state_generator::mp_set_next_ecps_state_generator(mp_task& _mp_task):
+mp_set_next_ecps_state_generator::mp_set_next_ecps_state_generator(task::mp_task& _mp_task):
         mp_generator (_mp_task)
 {}
 
@@ -88,7 +105,7 @@ void mp_set_next_ecps_state_generator::configure (const playerpos_goal_t &_goal)
 
 bool mp_set_next_ecps_state_generator::first_step ()
 {
-    for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
 
@@ -111,7 +128,7 @@ bool mp_set_next_ecps_state_generator::next_step ()
     return false;
 }
 
-mp_send_end_motion_to_ecps_generator::mp_send_end_motion_to_ecps_generator(mp_task& _mp_task)
+mp_send_end_motion_to_ecps_generator::mp_send_end_motion_to_ecps_generator(task::mp_task& _mp_task)
         : mp_generator (_mp_task)
 {}
 
@@ -121,7 +138,7 @@ mp_send_end_motion_to_ecps_generator::mp_send_end_motion_to_ecps_generator(mp_ta
 
 bool mp_send_end_motion_to_ecps_generator::first_step ()
 {
-    for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         robot_m_iterator->second->ecp_td.mp_command = END_MOTION;
@@ -144,7 +161,7 @@ bool mp_send_end_motion_to_ecps_generator::next_step ()
 // Rozszerzony generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
 // ###############################################################
 
-mp_extended_empty_generator::mp_extended_empty_generator(mp_task& _mp_task):
+mp_extended_empty_generator::mp_extended_empty_generator(task::mp_task& _mp_task):
         mp_generator (_mp_task)
 {
     activate_trigger = true;
@@ -163,7 +180,7 @@ bool mp_extended_empty_generator::first_step ()
 {
 
     wait_for_ECP_pulse = true;
-    for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         robot_m_iterator->second->ecp_td.mp_command = NEXT_POSE;
@@ -196,7 +213,7 @@ bool mp_extended_empty_generator::next_step ()
         return false;
     }
 
-    for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         if (robot_m_iterator->second->new_pulse)
@@ -210,7 +227,7 @@ bool mp_extended_empty_generator::next_step ()
         }
     }
 
-    for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         if ( robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED )
@@ -227,7 +244,7 @@ bool mp_extended_empty_generator::next_step ()
 // Generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
 // ###############################################################
 
-mp_empty_generator::mp_empty_generator(mp_task& _mp_task): mp_generator (_mp_task)
+mp_empty_generator::mp_empty_generator(task::mp_task& _mp_task): mp_generator (_mp_task)
 {}
 
 // ----------------------------------------------------------------------------------------------
@@ -242,7 +259,7 @@ bool mp_empty_generator::first_step ()
     // Inicjacja generatora trajektorii
     // printf("mp first step\n");
     // wait_for_ECP_pulse = true;
-    for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         robot_m_iterator->second->ecp_td.mp_command = NEXT_POSE;
@@ -270,7 +287,7 @@ bool mp_empty_generator::next_step ()
     // printf("mp next step\n");
     // UWAGA: dzialamy na jednoelementowej liscie robotow
 
-    for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         if ( robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED )
@@ -283,14 +300,14 @@ bool mp_empty_generator::next_step ()
     return true;
 }
 
-mp_delta_generator::mp_delta_generator(mp_task& _mp_task): mp_generator (_mp_task)
+mp_delta_generator::mp_delta_generator(task::mp_task& _mp_task): mp_generator (_mp_task)
 {}
 
 // ####################################################################################################
 // Generator prostoliniowy o zadany przyrost polozenia/orientacji
 // ####################################################################################################
 
-mp_tight_coop_generator::mp_tight_coop_generator(mp_task& _mp_task, trajectory_description irp6ot_tr_des,
+mp_tight_coop_generator::mp_tight_coop_generator(task::mp_task& _mp_task, trajectory_description irp6ot_tr_des,
         trajectory_description irp6p_tr_des): mp_delta_generator (_mp_task)
 {
     irp6ot_td = irp6ot_tr_des;
@@ -312,7 +329,7 @@ bool mp_tight_coop_generator::first_step ()
 
     idle_step_counter = 2;
 
-    for (map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         robot_m_iterator->second->ecp_td.mp_command = NEXT_POSE;
@@ -354,7 +371,7 @@ bool mp_tight_coop_generator::next_step ()
 
 
 
-    map <ROBOT_ENUM, mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+    map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
 
     // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
     robot_m_iterator->second->ecp_td.instruction_type = SET;
@@ -407,3 +424,8 @@ bool mp_tight_coop_generator::next_step ()
 
     return true;
 }
+
+} // namespace generator
+} // namespace mp
+} // namespace mrrocpp
+

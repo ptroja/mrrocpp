@@ -4,7 +4,9 @@
 #include "mp/mp_task.h"
 #include "ecp_mp/ecp_mp_robot.h"
 
-
+namespace mrrocpp {
+namespace mp {
+namespace common {
 
 // ------------------------------------------------------------------------
 struct robot_ECP_transmission_data : ecp_mp::robot_transmission_data
@@ -36,7 +38,7 @@ protected:
     ECP_REPLY_PACKAGE ecp_reply_package;        // Bufor z odpowiedzia z ECP
     // - uzytkownik nie powinien z tego korzystac
 
-    mp_task &mp_object;
+    task::mp_task &mp_object;
 
 public:
     bool communicate; // okresla czy robot ma byc obslugiwany w Move
@@ -61,7 +63,7 @@ public:
     robot_ECP_transmission_data ecp_td; // Obraz danych robota wykorzystywanych przez generator
     // - do uzytku uzytkownika (generatora)
 
-    mp_robot (ROBOT_ENUM l_robot_name, const char* _section_name, mp_task &mp_object_l);
+    mp_robot (ROBOT_ENUM l_robot_name, const char* _section_name, task::mp_task &mp_object_l);
     ~mp_robot();
 
     class MP_error
@@ -94,5 +96,7 @@ public:
     // pobiera z pakietu przeslanego z EDP informacje i wstawia je do odpowiednich swoich skladowych
     virtual void get_reply ( void );
 };
-
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
 #endif /*MP_ROBOT_H_*/

@@ -20,6 +20,10 @@
 #include "mp/mp_common_generators.h"
 
 
+namespace mrrocpp {
+namespace mp {
+namespace task {
+
 mp_task* return_created_mp_task (configurator &_config)
 {
 	return new mp_task_pr(_config);
@@ -44,7 +48,7 @@ void mp_task_pr::mp_short_move_up(void)
 	tdes.coordinate_delta[6] = 0.0;   // przyrost wspolrzednej PSI
 
 	// Generator trajektorii prostoliniowej
-	mp_tight_coop_generator tcg(*this, tdes, tdes);
+	generator::mp_tight_coop_generator tcg(*this, tdes, tdes);
 	tcg.robot_m = robot_m;
 	tcg.Move();
 }
@@ -81,10 +85,10 @@ void mp_task_pr::task_initialization(void)
 void mp_task_pr::main_task_algorithm(void)
 {
 
-	mp_nose_run_force_generator mp_nrf_gen(*this, 8); 
+	generator::mp_nose_run_force_generator mp_nrf_gen(*this, 8); 
 	mp_nrf_gen.robot_m = robot_m;
 	mp_nrf_gen.sensor_m = sensor_m;
-	mp_drawing_teach_in_force_generator mp_dtif_gen(*this, 8);
+	generator::mp_drawing_teach_in_force_generator mp_dtif_gen(*this, 8);
 	mp_dtif_gen.robot_m = robot_m;
 	mp_dtif_gen.sensor_m = sensor_m;
 	// printf("przed wait for start \n");
@@ -157,3 +161,8 @@ void mp_task_pr::main_task_algorithm(void)
 	}
 
 };
+
+} // namespace task
+} // namespace mp
+} // namespace mrrocpp
+

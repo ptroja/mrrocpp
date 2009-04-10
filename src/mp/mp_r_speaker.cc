@@ -7,7 +7,11 @@
 #include "lib/srlib.h"
 #include "mp/mp_r_speaker.h"
 
-mp_speaker_robot::mp_speaker_robot (mp_task &mp_object_l) :
+namespace mrrocpp {
+namespace mp {
+namespace common {
+
+mp_speaker_robot::mp_speaker_robot (task::mp_task &mp_object_l) :
 		mp_robot (ROBOT_SPEAKER, "[ecp_speaker]", mp_object_l)
 {}
 
@@ -57,3 +61,8 @@ void mp_speaker_robot::get_reply(void)
 			throw MP_error (NON_FATAL_ERROR, INVALID_EDP_REPLY);
 	}
 }
+
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
+

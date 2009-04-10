@@ -12,6 +12,10 @@
 #include "mp/mp.h"
 #include "ecp_mp/ecp_mp_t_pouring.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace task {
+
 class mp_task_pouring : public mp_task  
 {
 protected:
@@ -37,4 +41,9 @@ public:
 	void depart(void);
 
 }; // end : class mp_task_pouring
+
+} // namespace task
+} // namespace mp
+} // namespace mrrocpp
+
 #endif

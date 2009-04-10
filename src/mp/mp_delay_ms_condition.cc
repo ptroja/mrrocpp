@@ -2,9 +2,13 @@
 
 #include "unistd.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace generator {
+
 // condition to wait for desired time in ms
 
-mp_delay_ms_condition::mp_delay_ms_condition(mp_task& _mp_task, int _ms_delay): mp_generator (_mp_task)
+mp_delay_ms_condition::mp_delay_ms_condition(task::mp_task& _mp_task, int _ms_delay): mp_generator (_mp_task)
 {
 	local_timer = new timer();
 	configure(_ms_delay);
@@ -39,3 +43,8 @@ bool mp_delay_ms_condition::next_step ()
 		return false;
 	return true;
 }
+
+} // namespace generator
+} // namespace mp
+} // namespace mrrocpp
+

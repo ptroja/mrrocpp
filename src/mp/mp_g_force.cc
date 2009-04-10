@@ -18,8 +18,12 @@
 #include "lib/mathtr.h"
 #include "mp/mp_common_generators.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace generator {
+
 // konstruktor
-mp_tff_single_robot_nose_run_generator::mp_tff_single_robot_nose_run_generator(mp_task& _mp_task, int step) :
+mp_tff_single_robot_nose_run_generator::mp_tff_single_robot_nose_run_generator(task::mp_task& _mp_task, int step) :
 	mp_generator(_mp_task)
 {
 	step_no = step;
@@ -123,7 +127,7 @@ bool mp_tff_single_robot_nose_run_generator::next_step()
 		return true;
 }
 
-mp_tff_nose_run_generator::mp_tff_nose_run_generator(mp_task& _mp_task, int step) :
+mp_tff_nose_run_generator::mp_tff_nose_run_generator(task::mp_task& _mp_task, int step) :
 	mp_generator(_mp_task), irp6ot_con(1), irp6p_con(1)
 {
 	step_no = step;
@@ -280,7 +284,7 @@ bool mp_tff_nose_run_generator::next_step()
 		return true;
 }
 
-mp_haptic_generator::mp_haptic_generator(mp_task& _mp_task, int step) :
+mp_haptic_generator::mp_haptic_generator(task::mp_task& _mp_task, int step) :
 	mp_generator(_mp_task), irp6ot_con(1), irp6p_con(1), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
 {
 	step_no = step;
@@ -474,7 +478,7 @@ bool mp_haptic_generator::next_step()
 		return true;
 }
 
-mp_tff_rubik_grab_generator::mp_tff_rubik_grab_generator(mp_task& _mp_task, int step) :
+mp_tff_rubik_grab_generator::mp_tff_rubik_grab_generator(task::mp_task& _mp_task, int step) :
 	mp_generator(_mp_task), irp6ot_con(0), irp6p_con(0)
 {
 	step_no = step;
@@ -699,7 +703,7 @@ bool mp_tff_rubik_grab_generator::next_step()
 		return true;
 }
 
-mp_tff_rubik_face_rotate_generator::mp_tff_rubik_face_rotate_generator(mp_task& _mp_task, int step) :
+mp_tff_rubik_face_rotate_generator::mp_tff_rubik_face_rotate_generator(task::mp_task& _mp_task, int step) :
 	mp_generator(_mp_task), irp6ot_con(1), irp6p_con(1)
 {
 	step_no = step;
@@ -951,7 +955,7 @@ bool mp_tff_rubik_face_rotate_generator::next_step()
 		return true;
 }
 
-mp_tff_gripper_approach_generator::mp_tff_gripper_approach_generator(mp_task& _mp_task, int step) :
+mp_tff_gripper_approach_generator::mp_tff_gripper_approach_generator(task::mp_task& _mp_task, int step) :
 	mp_generator(_mp_task), irp6ot_speed(1.0), irp6p_speed(1.0)
 {
 	step_no = step;
@@ -1099,7 +1103,7 @@ bool mp_tff_gripper_approach_generator::next_step()
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-mp_nose_run_force_generator::mp_nose_run_force_generator(mp_task& _mp_task, int step) :
+mp_nose_run_force_generator::mp_nose_run_force_generator(task::mp_task& _mp_task, int step) :
 	mp_generator(_mp_task)
 {
 	step_no = step;
@@ -1286,7 +1290,7 @@ bool mp_nose_run_force_generator::next_step()
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
-mp_drawing_teach_in_force_generator::mp_drawing_teach_in_force_generator(mp_task& _mp_task, int step) :
+mp_drawing_teach_in_force_generator::mp_drawing_teach_in_force_generator(task::mp_task& _mp_task, int step) :
 	mp_teach_in_generator(_mp_task)
 {
 	step_no = step;
@@ -1524,7 +1528,7 @@ bool mp_drawing_teach_in_force_generator::next_step()
 
 	if (teach_or_move == YG_MOVE) {
 
-		mp_taught_in_pose tip; // Nauczona pozycja
+		common::mp_taught_in_pose tip; // Nauczona pozycja
 
 		if (!(is_pose_list_element())) { // Koniec odcinka
 			vsp_force_irp6ot->to_vsp.parameters = 6;
@@ -1888,3 +1892,8 @@ bool mp_drawing_teach_in_force_generator::next_step()
 
 }
 // --------------------------------------------------------------------------
+
+} // namespace generator
+} // namespace mp
+} // namespace mrrocpp
+

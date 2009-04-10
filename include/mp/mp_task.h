@@ -7,6 +7,16 @@
 #include <list>
 #include <map>
 
+namespace mrrocpp {
+namespace mp {
+
+namespace generator {
+
+class mp_generator;
+}
+
+namespace task {
+
 
 
 // klasa globalna dla calego procesu MP
@@ -22,7 +32,7 @@ class mp_task: public ecp_mp::task::base
 #endif
 
 		/// mapa wszystkich robotow
-		static std::map <ROBOT_ENUM, mp_robot*> robot_m;
+		static std::map <ROBOT_ENUM, common::mp_robot*> robot_m;
 
 		/// KONSTRUKTORY
 		mp_task(configurator &_config);
@@ -60,31 +70,31 @@ class mp_task: public ecp_mp::task::base
 
 		// mp_receive_ecp_pulse_return_t mp_receive_ecp_pulse (int tryb);
 		// oczekwianie na name_open do kanalu do przesylania pulsow miedzy ECP i MP
-		int mp_wait_for_name_open(mp_receive_pulse_struct_t* outputs);
+		int mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs);
 
 		// Oczekiwanie na zlecenie START od UI
 		void wait_for_start (void);// by Y&W
 
 		// Oczekiwanie na zlecenie STOP od UI
-		void wait_for_stop ( WAIT_FOR_STOP_ENUM tryb);// by Y&W dodany tryb
+		void wait_for_stop ( common::WAIT_FOR_STOP_ENUM tryb);// by Y&W dodany tryb
 
 		// Wystartowanie wszystkich ECP
-		void start_all (std::map <ROBOT_ENUM, mp_robot*>& _robot_m);
+		void start_all (std::map <ROBOT_ENUM, common::mp_robot*>& _robot_m);
 
 		// Zatrzymanie wszystkich ECP
-		void terminate_all (std::map <ROBOT_ENUM, mp_robot*>& _robot_m );
+		void terminate_all (std::map <ROBOT_ENUM, common::mp_robot*>& _robot_m );
 
 		// Wyslanie rozkazu do wszystkich ECP
-		void execute_all (std::map <ROBOT_ENUM, mp_robot*>& _robot_m);
+		void execute_all (std::map <ROBOT_ENUM, common::mp_robot*>& _robot_m);
 
 		// funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
-		void mp_receive_ui_or_ecp_pulse (std::map <ROBOT_ENUM, mp_robot*>& _robot_m, mp_generator& the_generator );
+		void mp_receive_ui_or_ecp_pulse (std::map <ROBOT_ENUM, common::mp_robot*>& _robot_m, generator::mp_generator& the_generator );
 
 		// obsluga sygnalu
 		virtual void catch_signal_in_mp_task(int sig);
 
 		/// Zatrzymanie wszystkich ECP
-		static void kill_all_ECP (std::map <ROBOT_ENUM, mp_robot*>& _robot_m);
+		static void kill_all_ECP (std::map <ROBOT_ENUM, common::mp_robot*>& _robot_m);
 
 		/// utworzenie robotow
 		virtual void create_robots(void);
@@ -98,11 +108,16 @@ class mp_task: public ecp_mp::task::base
 		char ui_pulse_code; // kod pulsu ktory zostal wyslany przez ECP w celu zgloszenia gotowosci do komunikacji (wartosci w impconst.h)
 		bool ui_new_pulse; // okresla czy jest nowy puls
 
-		int mp_receive_pulse (mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PULSE_MODE tryb);
-		int check_and_optional_wait_for_new_pulse (mp_receive_pulse_struct_t* outputs,
+		int mp_receive_pulse (common::mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PULSE_MODE tryb);
+		int check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct_t* outputs,
 		        WAIT_FOR_NEW_PULSE_ENUM process_mode, MP_RECEIVE_PULSE_MODE desired_wait_mode);
 };
 
 mp_task* return_created_mp_task (configurator &_config);
+
+
+} // namespace task
+} // namespace mp
+} // namespace mrrocpp
 
 #endif /*MP_TASK_H_*/

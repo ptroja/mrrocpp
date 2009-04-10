@@ -1,5 +1,10 @@
 #include "mp/SingleManipulation.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace common {
+
+
 void SingleManipulation::set_state(CUBE_COLOR face_to_turn_l, CUBE_TURN_ANGLE turn_angle_l)
 {
 	face_to_turn = face_to_turn_l;
@@ -41,3 +46,8 @@ CUBE_TURN_ANGLE read_cube_turn_angle(char input_char)
 			break;
 	}
 }
+
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
+

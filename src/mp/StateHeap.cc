@@ -4,6 +4,11 @@
 
 #include "mp/StateHeap.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace common {
+
+
 
 StateHeap::StateHeap()
 {
@@ -51,4 +56,9 @@ void StateHeap::showHeapContent()
 		printf("### on heap: #%s#\n", (*it));
 	}
 }
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
+
+
 

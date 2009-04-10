@@ -19,8 +19,12 @@
 
 #include "mp/mp_g_two_robots_measures.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace generator {
+
 // Konstruktor.
-mp_two_robots_measures_generator::mp_two_robots_measures_generator(mp_task& _mp_task)
+mp_two_robots_measures_generator::mp_two_robots_measures_generator(task::mp_task& _mp_task)
 	: mp_generator (_mp_task), UI_fd(_mp_task.UI_fd)
 {
 }
@@ -167,3 +171,8 @@ void mp_two_robots_measures_generator::save_measures_to_file (void)
 	to_file.close();
 	sr_ecp_msg.message("Measures were saved to file");
 }
+
+
+} // namespace generator
+} // namespace mp
+} // namespace mrrocpp

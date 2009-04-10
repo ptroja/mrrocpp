@@ -15,8 +15,14 @@
 #include "lib/mis_fun.h"
 #include "mp/mp.h"
 
+
+namespace mrrocpp {
+namespace mp {
+namespace common {
+
+
 // obiekt z metodami i polami dla procesu MP (polimorficzny)
-mp_task* mp_t;
+task::mp_task* mp_t;
 
 void catch_signal_in_mp(int sig)
 {
@@ -28,6 +34,15 @@ void catch_signal_in_mp(int sig)
 	flushall();
 #endif
 }
+
+
+
+
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
+
+
 
 int main (int argc, char *argv[], char **arge)
 {
@@ -51,23 +66,23 @@ int main (int argc, char *argv[], char **arge)
 		 		signal(SIGINT, SIG_IGN);
 		 	}
 #endif
-			mp_t = return_created_mp_task(*_config);
+			mp::common::mp_t = mp::task::return_created_mp_task(*_config);
 
 			set_thread_priority(pthread_self(), MAX_PRIORITY-4);
-			signal(SIGTERM, &(catch_signal_in_mp));
+			signal(SIGTERM, &(mp::common::catch_signal_in_mp));
 			//signal(SIGINT,  &(catch_signal_in_mp));
-			signal(SIGSEGV, &(catch_signal_in_mp));
-			signal(SIGCHLD, &(catch_signal_in_mp));
+			signal(SIGSEGV, &(mp::common::catch_signal_in_mp));
+			signal(SIGCHLD, &(mp::common::catch_signal_in_mp));
 #if defined(PROCESS_SPAWN_RSH)
 			signal(SIGINT, SIG_IGN);
 #endif
 
-			mp_t->initialize_communication();
+			mp::common::mp_t->initialize_communication();
 
 			// Utworzenie listy robotow, powolanie procesow ECP i nawiazanie komunikacji z nimi
-			mp_t->create_robots();
+			mp::common::mp_t->create_robots();
 
-			mp_t->task_initialization();
+			mp::common::mp_t->task_initialization();
 
 		}
 		catch (ecp_mp::task::ECP_MP_main_error e) {
@@ -75,7 +90,7 @@ int main (int argc, char *argv[], char **arge)
 			if (e.error_class == SYSTEM_ERROR)
 				exit(EXIT_FAILURE);
 		} /*end: catch */
-		catch (MP_main_error e) {
+		catch (mp::common::MP_main_error e) {
 
 			perror("initialize incorrect");
 			if (e.error_class == SYSTEM_ERROR)
@@ -87,51 +102,51 @@ int main (int argc, char *argv[], char **arge)
 				case INVALID_ECP_PULSE_IN_MP_START_ALL:
 				case INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL:
 				case INVALID_ECP_PULSE_IN_MP_TERMINATE_ALL:
-					mp_t->sr_ecp_msg->message(NON_FATAL_ERROR, e.mp_error);
+					mp::common::mp_t->sr_ecp_msg->message(NON_FATAL_ERROR, e.mp_error);
 					break;
 				default:
 					perror("Message to SR has been already sent");
 			}/* end:switch */
-			mp_t->sr_ecp_msg->message("To terminate MP click STOP icon");
+			mp::common::mp_t->sr_ecp_msg->message("To terminate MP click STOP icon");
 		} /*end: catch*/
 
 		catch (sensor::sensor_error e) {
 			/* Wyswietlenie komunikatu. */
-			mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
+			mp::common::mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 			printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		} /* end: catch sensor_error  */
-		catch (mp_generator::MP_error e) {
+		catch (mp::generator::mp_generator::MP_error e) {
 					/* Wyswietlenie komunikatu. */
-			mp_t->sr_ecp_msg->message(NON_FATAL_ERROR, e.mp_error);
+			mp::common::mp_t->sr_ecp_msg->message(NON_FATAL_ERROR, e.mp_error);
 					printf("Mam blad mp_generator section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		} /* end: catch sensor_error  */
 		catch (ecp_mp::transmitter::base::transmitter_error e) {
 			/* Wyswietlenie komunikatu. */
-			mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
+			mp::common::mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 			printf("Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		} /* end: catch sensor_error  */
 		catch (...) {  /* Dla zewnetrznej petli try*/
 			/*   Wylapywanie niezdfiniowanych bledow  */
 			/*  Komunikat o bledzie wysylamy do SR */
-			mp_t->sr_ecp_msg->message (NON_FATAL_ERROR, (uint64_t) MP_UNIDENTIFIED_ERROR);
+			mp::common::mp_t->sr_ecp_msg->message (NON_FATAL_ERROR, (uint64_t) MP_UNIDENTIFIED_ERROR);
 			exit(EXIT_FAILURE);
 		} /*end: catch  */
 
 		for (;;) {  // Zewnetrzna petla nieskonczona
 
 			try {
-				mp_t->sr_ecp_msg->message("MP - wcisnij start");
+				mp::common::mp_t->sr_ecp_msg->message("MP - wcisnij start");
 				// Oczekiwanie na zlecenie START od UI
-				mp_t->wait_for_start ();
+				mp::common::mp_t->wait_for_start ();
 				// Wyslanie START do wszystkich ECP
-				mp_t->start_all (mp_t->robot_m);
-				mp_t->main_task_algorithm();
+				mp::common::mp_t->start_all (mp::common::mp_t->robot_m);
+				mp::common::mp_t->main_task_algorithm();
 
 				// Oczekiwanie na STOP od UI
-				mp_t->wait_for_stop (MP_THROW); // by Y - wlaczony tryb
+				mp::common::mp_t->wait_for_stop (mp::common::MP_THROW); // by Y - wlaczony tryb
 
 				// Wyslanie STOP do wszystkich ECP po zakonczeniu programu uzytkownika
-				mp_t->terminate_all (mp_t->robot_m);
+				mp::common::mp_t->terminate_all (mp::common::mp_t->robot_m);
 			}  // end: try
 
 			catch (ecp_mp::task::ECP_MP_main_error e) {
@@ -139,7 +154,7 @@ int main (int argc, char *argv[], char **arge)
 				if (e.error_class == SYSTEM_ERROR)
 					exit(EXIT_FAILURE);
 			} /*end: catch */
-			catch (MP_main_error e) {
+			catch (mp::common::MP_main_error e) {
 
 				if (e.error_class == SYSTEM_ERROR)
 					exit(EXIT_FAILURE);
@@ -150,21 +165,21 @@ int main (int argc, char *argv[], char **arge)
 					case INVALID_ECP_PULSE_IN_MP_START_ALL:
 					case INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL:
 					case INVALID_ECP_PULSE_IN_MP_TERMINATE_ALL:
-						mp_t->sr_ecp_msg->message(NON_FATAL_ERROR, e.mp_error);
-						mp_t->stop_and_terminate();
+						mp::common::mp_t->sr_ecp_msg->message(NON_FATAL_ERROR, e.mp_error);
+						mp::common::mp_t->stop_and_terminate();
 						break;
 					case ECP_STOP_ACCEPTED:
-						mp_t->sr_ecp_msg->message("ECP STOP ACCEPTED");
+						mp::common::mp_t->sr_ecp_msg->message("ECP STOP ACCEPTED");
 					break;
 					default:
 						perror("Unidentified mp error");
-						mp_t->stop_and_terminate();
+						mp::common::mp_t->stop_and_terminate();
 				}/*end:switch*/
 
 
 
 			} /*end: catch */
-			catch (mp_robot::MP_error e) {
+			catch (mp::common::mp_robot::MP_error e) {
 				if (e.error_class == SYSTEM_ERROR) {
 					exit(EXIT_FAILURE);
 				}
@@ -178,16 +193,16 @@ int main (int argc, char *argv[], char **arge)
 					case EDP_ERROR:
 					case INVALID_EDP_REPLY:
 					case INVALID_RMODEL_TYPE:
-						mp_t->sr_ecp_msg->message(NON_FATAL_ERROR, e.mp_error);
+						mp::common::mp_t->sr_ecp_msg->message(NON_FATAL_ERROR, e.mp_error);
 						break;
 					default:
 						perror("Unidentified mp error");
 				}/*end:switch */
-				mp_t->stop_and_terminate();
+				mp::common::mp_t->stop_and_terminate();
 
 			} /*end: catch*/
 
-			catch (mp_generator::MP_error e) {
+			catch (mp::generator::mp_generator::MP_error e) {
 
 				if (e.error_class == SYSTEM_ERROR)
 					exit(EXIT_FAILURE);
@@ -204,30 +219,30 @@ int main (int argc, char *argv[], char **arge)
 					case MAX_ACCELERATION_EXCEEDED:
 					case MAX_VELOCITY_EXCEEDED:
 					case NOT_ENOUGH_MEMORY:
-						mp_t->sr_ecp_msg->message(NON_FATAL_ERROR, e.mp_error);
+						mp::common::mp_t->sr_ecp_msg->message(NON_FATAL_ERROR, e.mp_error);
 						break;
 					default:
 						perror("Unidentified mp error");
 				}/* end:switch*/
-				mp_t->stop_and_terminate();
+				mp::common::mp_t->stop_and_terminate();
 
 			} /*end: catch*/
 
 			catch (sensor::sensor_error e) {
 				/* Wyswietlenie komunikatu. */
-				mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
+				mp::common::mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 				printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
 			} /* end: catch sensor_error  */
 			catch (ecp_mp::transmitter::base::transmitter_error e) {
 				/* Wyswietlenie komunikatu. */
-				mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
+				mp::common::mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 				printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);
 			} /* end: catch sensor_error  */
 
 			catch (...) {  /* Dla zewnetrznej petli try*/
 				/*   Wylapywanie niezdfiniowanych bledow  */
 				/*  Komunikat o bledzie wysylamy do SR */
-				mp_t->sr_ecp_msg->message (NON_FATAL_ERROR, (uint64_t) MP_UNIDENTIFIED_ERROR);
+				mp::common::mp_t->sr_ecp_msg->message (NON_FATAL_ERROR, (uint64_t) MP_UNIDENTIFIED_ERROR);
 				exit(EXIT_FAILURE);
 			} /*end: catch  */
 
@@ -238,7 +253,7 @@ int main (int argc, char *argv[], char **arge)
 		/* Wylapywanie niezdfiniowanych bledow  */
 		/* Komunikat o bledzie wysylamy do SR */
 		printf("unexpected exception throw from catch section (@%s:%d)\n", __FILE__, __LINE__);
-		mp_t->sr_ecp_msg->message (NON_FATAL_ERROR, (uint64_t) MP_UNIDENTIFIED_ERROR);
+		mp::common::mp_t->sr_ecp_msg->message (NON_FATAL_ERROR, (uint64_t) MP_UNIDENTIFIED_ERROR);
 		exit(EXIT_FAILURE);
 	} /* end: catch  */
 

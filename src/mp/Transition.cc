@@ -4,6 +4,11 @@
 
 #include "mp/Transition.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace common {
+
+
 Transition::Transition(char *cond, char *targetID, configurator &_config)
 {
 	int size = strlen(targetID) + 1;
@@ -62,4 +67,9 @@ void Transition::showContent()
 //	std::cout<<">> Condition: "<<condition<<std::endl<<
 //		">> Target State: "<<targetID<<std::endl;
 }
+
+} // namespace common
+} // namespace mp
+} // namespace mrrocpp
+
 

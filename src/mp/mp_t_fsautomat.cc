@@ -35,6 +35,10 @@
 #include "mp/State.h"
 #include "mp/StateHeap.h"
 
+namespace mrrocpp {
+namespace mp {
+namespace task {
+
 mp_task_fsautomat::mp_task_fsautomat(configurator &_config) :
 	mp_task(_config)
 {
@@ -155,22 +159,22 @@ void mp_task_fsautomat::task_initialization(void)
 	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] = new ecp_mp::transmitter::rc_windows(ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS,
 			"[transmitter_rc_windows]", *this);
 
-	cube_state = new CubeState();
+	cube_state = new common::CubeState();
 
 	sr_ecp_msg->message("MP fsautomat loaded");
 }
 ;
 
-State * mp_task_fsautomat::createState(xmlNode *stateNode)
+common::State * mp_task_fsautomat::createState(xmlNode *stateNode)
 {
 	int index;
-	State *actState;
+	common::State *actState;
 	xmlNode *child_node, *cchild_node, *set_node;
 	xmlChar *ecpGeneratorType, *robot, *robotSet;
 	xmlChar *stateID, *stateType, *stringArgument, *numArgument;
 	xmlChar *cond, *trans;
 
-	actState = new State();
+	actState = new common::State();
 	stateID = xmlGetProp(stateNode, (const xmlChar *) "id");
 
 	if (stateID) {
@@ -195,7 +199,7 @@ State * mp_task_fsautomat::createState(xmlNode *stateNode)
 			xmlFree(robot);
 		}
 		if (child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->name, (const xmlChar *) "SetOfRobots")) {
-			actState->robotSet = new State::RobotSets();
+			actState->robotSet = new common::State::RobotSets();
 			for (cchild_node = child_node->children; cchild_node != NULL; cchild_node = cchild_node->next) {
 				if (cchild_node->type == XML_ELEMENT_NODE
 						&& !xmlStrcmp(cchild_node->name, (const xmlChar *) "FirstSet")) {
@@ -204,7 +208,7 @@ State * mp_task_fsautomat::createState(xmlNode *stateNode)
 					index = 0;
 					for (set_node = cchild_node->children; set_node != NULL; set_node = set_node->next)
 						if (set_node->type == XML_ELEMENT_NODE && !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))
-							actState->robotSet->firstSet[index++] = State::returnProperRobot(
+							actState->robotSet->firstSet[index++] = common::State::returnProperRobot(
 									(char *) xmlNodeGetContent(set_node));
 				}
 				if (cchild_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cchild_node->name, (const xmlChar *) "SecSet")) {
@@ -213,7 +217,7 @@ State * mp_task_fsautomat::createState(xmlNode *stateNode)
 					index = 0;
 					for (set_node = cchild_node->children; set_node != NULL; set_node = set_node->next)
 						if (set_node->type == XML_ELEMENT_NODE && !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))
-							actState->robotSet->secondSet[index++] = State::returnProperRobot(
+							actState->robotSet->secondSet[index++] = common::State::returnProperRobot(
 									(char *) xmlNodeGetContent(set_node));
 				}
 			}
@@ -249,13 +253,13 @@ State * mp_task_fsautomat::createState(xmlNode *stateNode)
 	return actState;
 }
 
-std::map<char *, State, ecp_task::str_cmp> * mp_task_fsautomat::takeStatesMap()
+std::map<char *, common::State, ecp_task::str_cmp> * mp_task_fsautomat::takeStatesMap()
 {
 	int size;
 	char *filePath;
 	char *fileName = config.return_string_value("xml_file", "[xml_settings]");
 	xmlNode *cur_node, *child_node;
-	std::map<char *, State, ecp_task::str_cmp> * statesMap = new std::map<char *, State, ecp_task::str_cmp>();
+	std::map<char *, common::State, ecp_task::str_cmp> * statesMap = new std::map<char *, common::State, ecp_task::str_cmp>();
 
 	size = 1 + strlen(mrrocpp_network_path) + strlen(fileName);
 	filePath = new char[size];
@@ -278,7 +282,7 @@ std::map<char *, State, ecp_task::str_cmp> * mp_task_fsautomat::takeStatesMap()
 		xmlFreeDoc(doc);
 		return statesMap;
 	}
-	State *actState = NULL;
+	common::State *actState = NULL;
 
 	// for each root children
 	for (cur_node = root->children; cur_node != NULL; cur_node = cur_node->next) {
@@ -286,13 +290,13 @@ std::map<char *, State, ecp_task::str_cmp> * mp_task_fsautomat::takeStatesMap()
 			for (child_node = cur_node->children; child_node != NULL; child_node = child_node->next) {
 				if (child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->name, (const xmlChar *) "State")) {
 					actState = createState(child_node);
-					statesMap->insert(std::map<char *, State>::value_type(actState->getStateID(), *actState));
+					statesMap->insert(std::map<char *, common::State>::value_type(actState->getStateID(), *actState));
 				}
 			}
 		}
 		if (cur_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cur_node->name, (const xmlChar *) "State")) {
 			actState = createState(cur_node);
-			statesMap->insert(std::map<char *, State>::value_type(actState->getStateID(), *actState));
+			statesMap->insert(std::map<char *, common::State>::value_type(actState->getStateID(), *actState));
 		}
 	}
 	// free the document
@@ -328,31 +332,31 @@ void mp_task_fsautomat::configureProperTransmitter(char *propTrans)
 			"[transmitter_rc_windows]", *this);
 }
 
-void mp_task_fsautomat::stopProperGen(State &state)
+void mp_task_fsautomat::stopProperGen(common::State &state)
 {
 	if (state.robotSet == NULL)
 		send_end_motion_to_ecps(1, state.getRobot());
 	send_end_motion_to_ecps(state.robotSet->firstSetCount, state.robotSet->firstSet);
 }
 
-void mp_task_fsautomat::runWaitFunction(State &state)
+void mp_task_fsautomat::runWaitFunction(common::State &state)
 {
 	wait_ms(state.getNumArgument());
 }
 
-void mp_task_fsautomat::runEmptyGen(State &state)
+void mp_task_fsautomat::runEmptyGen(common::State &state)
 {
 	run_extended_empty_gen(state.getNumArgument(), 1, state.getRobot());
 }
 
-void mp_task_fsautomat::runEmptyGenForSet(State &state)
+void mp_task_fsautomat::runEmptyGenForSet(common::State &state)
 {
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
 			state.robotSet->firstSetCount, state.robotSet->secondSetCount, state.robotSet->firstSet,
 			state.robotSet->secondSet);
 }
 
-void mp_task_fsautomat::executeMotion(State &state)
+void mp_task_fsautomat::executeMotion(common::State &state)
 {
 	int trjConf = config.return_int_value("trajectory_from_xml", "[xml_settings]");
 	if (trjConf && state.getGeneratorType() == ecp_mp::task::ECP_GEN_SMOOTH) {
@@ -375,33 +379,33 @@ void mp_task_fsautomat::sensorInitialization()
 	 */
 }
 
-void mp_task_fsautomat::initializeCubeState(State &state)
+void mp_task_fsautomat::initializeCubeState(common::State &state)
 {
-	CUBE_COLOR colors[6];
+	common::CUBE_COLOR colors[6];
 	char *colorStr = strdup(state.getStringArgument());
 	//	printf("color config: %s\n", colorStr);
 	char *temp;
 	int index = 0;
 	for (temp = strtok(colorStr, " \t"); temp != NULL; temp = strtok(NULL, " \t")) {
 		if (!strcmp(temp, (const char *) "BLUE"))
-			colors[index++] = BLUE;
+			colors[index++] = common::BLUE;
 		if (!strcmp(temp, (const char *) "GREEN"))
-			colors[index++] = GREEN;
+			colors[index++] = common::GREEN;
 		if (!strcmp(temp, (const char *) "RED"))
-			colors[index++] = RED;
+			colors[index++] = common::RED;
 		if (!strcmp(temp, (const char *) "ORANGE"))
-			colors[index++] = ORANGE;
+			colors[index++] = common::ORANGE;
 		if (!strcmp(temp, (const char *) "WHITE"))
-			colors[index++] = WHITE;
+			colors[index++] = common::WHITE;
 		if (!strcmp(temp, (const char *) "YELLOW"))
-			colors[index++] = YELLOW;
+			colors[index++] = common::YELLOW;
 	}
 	//	for(int i=0; i<6; i++)
 	//		printf("c[%d]: %d\n", i, colors[i]);
 	cube_state->set_state(colors[0], colors[1], colors[2], colors[3], colors[4], colors[5]);
 }
 
-void mp_task_fsautomat::initiateSensorReading(State &state)
+void mp_task_fsautomat::initiateSensorReading(common::State &state)
 {
 	/*        sensor_m[SENSOR_CAMERA_ON_TRACK]->initiate_reading();
 	 if (wait_ms(1000))
@@ -421,7 +425,7 @@ void mp_task_fsautomat::initiateSensorReading(State &state)
 	 */
 }
 
-void mp_task_fsautomat::getSensorReading(State &state)
+void mp_task_fsautomat::getSensorReading(common::State &state)
 {
 	/*	char *sensorName = strdup(state.getStringArgument());
 	 SENSOR_ENUM whichSensor;
@@ -434,7 +438,7 @@ void mp_task_fsautomat::getSensorReading(State &state)
 	 */
 }
 
-void mp_task_fsautomat::writeCubeState(State &state)
+void mp_task_fsautomat::writeCubeState(common::State &state)
 {
 	int index = state.getNumArgument();
 
@@ -485,10 +489,10 @@ void mp_task_fsautomat::writeCubeState(State &state)
 
 }
 
-void mp_task_fsautomat::changeCubeState(State &state)
+void mp_task_fsautomat::changeCubeState(common::State &state)
 {
 	int turn_angle = state.getNumArgument();
-	CubeState tmp_cube_state;
+	common::CubeState tmp_cube_state;
 
 	tmp_cube_state.set_state(*cube_state, turn_angle);
 
@@ -497,14 +501,14 @@ void mp_task_fsautomat::changeCubeState(State &state)
 
 void mp_task_fsautomat::changeCubeState(int turn_angle)
 {
-	CubeState tmp_cube_state;
+	common::CubeState tmp_cube_state;
 
 	tmp_cube_state.set_state(*cube_state, turn_angle);
 
 	*cube_state = tmp_cube_state;
 }
 
-void mp_task_fsautomat::communicate_with_windows_solver(State &state)
+void mp_task_fsautomat::communicate_with_windows_solver(common::State &state)
 {
 	//		  state.setProperTransitionResult(true);
 	//		  return false;
@@ -570,7 +574,7 @@ void mp_task_fsautomat::communicate_with_windows_solver(State &state)
 
 	//reszta
 	// struktura pomiocnicza
-	SingleManipulation single_manipulation;
+	common::SingleManipulation single_manipulation;
 
 	// czyszczenie listy
 	manipulation_list.clear();
@@ -664,7 +668,7 @@ void mp_task_fsautomat::communicate_with_windows_solver(State &state)
 	//pocztaek ukladania
 	// dodawanie manipulacji do listy
 	for (unsigned int char_i = 0; char_i < strlen(manipulation_sequence) - 1; char_i += 2) {
-		single_manipulation.set_state(read_cube_color(manipulation_sequence[char_i]), read_cube_turn_angle(
+		single_manipulation.set_state(common::read_cube_color(manipulation_sequence[char_i]), common::read_cube_turn_angle(
 				manipulation_sequence[char_i + 1]));
 		manipulation_list.push_back(single_manipulation);
 	}
@@ -673,11 +677,11 @@ void mp_task_fsautomat::communicate_with_windows_solver(State &state)
 
 }
 
-void mp_task_fsautomat::translateManipulationSequence(StateHeap &sh)
+void mp_task_fsautomat::translateManipulationSequence(common::StateHeap &sh)
 {
 	std::list<const char *> *scenario = new std::list<const char *>();
 
-	for (std::list<SingleManipulation>::iterator manipulation_list_iterator = manipulation_list.begin(); manipulation_list_iterator
+	for (std::list<common::SingleManipulation>::iterator manipulation_list_iterator = manipulation_list.begin(); manipulation_list_iterator
 			!= manipulation_list.end(); manipulation_list_iterator++) {
 		if (manipulation_list_iterator->face_to_turn == cube_state->getUp()) {
 			scenario->push_back("fco_CL_90_1");
@@ -706,16 +710,16 @@ void mp_task_fsautomat::translateManipulationSequence(StateHeap &sh)
 		}
 		switch (manipulation_list_iterator->turn_angle)
 		{
-			case CL_90:
+			case common::CL_90:
 				scenario->push_back("fto_CL_90_1");
 				break;
-			case CL_0:
+			case common::CL_0:
 				scenario->push_back("fto_CL_0_1");
 				break;
-			case CCL_90:
+			case common::CCL_90:
 				scenario->push_back("fto_CCL_90_1");
 				break;
-			case CL_180:
+			case common::CL_180:
 				scenario->push_back("fto_CL_180_1");
 				break;
 			default:
@@ -735,11 +739,11 @@ void mp_task_fsautomat::translateManipulationSequence(StateHeap &sh)
 
 void mp_task_fsautomat::main_task_algorithm(void)
 {
-	StateHeap sh;
+	common::StateHeap sh;
 	break_state = false;
 	char *nextState = new char[64];
 	//	std::list<State> *statesList = takeStatesList();
-	std::map<char *, State, ecp_task::str_cmp> * stateMap = takeStatesMap();
+	std::map<char *, common::State, ecp_task::str_cmp> * stateMap = takeStatesMap();
 	std::cout << "Mapa zawiera: " << stateMap->size() << std::endl;
 	//	std::cout<<"ELEMENTOW INIT jest: "<<stateMap->count((const char *)"INIT")<<std::endl;
 
@@ -829,3 +833,9 @@ void mp_task_fsautomat::main_task_algorithm(void)
 	}
 
 }
+
+
+
+} // namespace task
+} // namespace mp
+} // namespace mrrocpp
