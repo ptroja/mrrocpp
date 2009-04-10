@@ -24,7 +24,7 @@ namespace edp {
 namespace irp6ot {
 
 // Klasa reprezentujaca robota IRp-6 na torze jezdnym.
-class edp_irp6ot_effector : public common::irp6s_postument_track_effector
+class effector : public common::irp6s_postument_track_effector
 {
 protected:
     // Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
@@ -32,7 +32,7 @@ protected:
 
 public:
     void initialize (void);
-    edp_irp6ot_effector (configurator &_config);
+    effector (configurator &_config);
 };
 
 } // namespace irp6ot

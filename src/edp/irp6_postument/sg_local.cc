@@ -12,9 +12,9 @@
 
 // Klasa edp_irp6p_effector.
 #include "edp/irp6_postument/edp_irp6p_effector.h"
-// Klasa hi_irp6p.
+// Klasa hardware_interface.
 #include "edp/irp6_postument/hi_local.h"
-// Klasa irp6p_servo_buffer.
+// Klasa servo_buffer.
 #include "edp/irp6_postument/sg_local.h"
 
 namespace mrrocpp {
@@ -26,7 +26,7 @@ namespace irp6p {
 
 
 /*-----------------------------------------------------------------------*/
-BYTE irp6p_servo_buffer::Move_a_step (void)
+BYTE servo_buffer::Move_a_step (void)
 {
 	// wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH ora SYNCHRO_ZERO
 
@@ -75,10 +75,10 @@ BYTE irp6p_servo_buffer::Move_a_step (void)
 
 
 /*-----------------------------------------------------------------------*/
-irp6p_servo_buffer::irp6p_servo_buffer ( edp_irp6p_effector &_master) : servo_buffer(_master), master(_master)
+servo_buffer::servo_buffer ( effector &_master) : common::servo_buffer(_master), master(_master)
 {
 
-	hi = new hi_irp6p(_master);
+	hi = new hardware_interface(_master);
 
 	// utworzenie tablicy regulatorow
 	// Serwomechanizm 1
@@ -122,7 +122,7 @@ irp6p_servo_buffer::irp6p_servo_buffer ( edp_irp6p_effector &_master) : servo_bu
 
 /*-----------------------------------------------------------------------*/
 /*
-void irp6p_servo_buffer::synchronise (void) {
+void servo_buffer::synchronise (void) {
 
  regulator* crp = NULL; // wskaznik aktualnie synchronizowanego napedu
 
@@ -176,7 +176,7 @@ void irp6p_servo_buffer::synchronise (void) {
 
 /*-----------------------------------------------------------------------*/
 
-void irp6p_servo_buffer::synchronise (void)
+void servo_buffer::synchronise (void)
 {
 
 	const int NS = 10;     // liczba krokow rozpedzania/hamowania
@@ -507,14 +507,14 @@ void irp6p_servo_buffer::synchronise (void)
 
 
 /*-----------------------------------------------------------------------*/
-irp6p_servo_buffer::~irp6p_servo_buffer(void)
+servo_buffer::~servo_buffer(void)
 {}
 ; // end: regulator_group::~regulator_group
 /*-----------------------------------------------------------------------*/
 
 
 /*-----------------------------------------------------------------------*/
-void irp6p_servo_buffer::get_all_positions (void)
+void servo_buffer::get_all_positions (void)
 {
 	// Przepisanie aktualnych polozen servo do pakietu wysylkowego
 	for (int i = 0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++)
@@ -551,7 +551,7 @@ void irp6p_servo_buffer::get_all_positions (void)
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
-uint64_t irp6p_servo_buffer::compute_all_set_values (void)
+uint64_t servo_buffer::compute_all_set_values (void)
 {
 	// obliczenie nastepnej wartosci zadanej dla wszystkich napedow
 	uint64_t status = OK; // kumuluje numer bledu
@@ -598,7 +598,7 @@ namespace common {
 
 servo_buffer* return_created_servo_buffer (irp6s_and_conv_effector &_master)
 {
-	return new irp6p::irp6p_servo_buffer ((irp6p::edp_irp6p_effector &)(_master));
+	return new irp6p::servo_buffer ((irp6p::effector &)(_master));
 };
 
 } // namespace common

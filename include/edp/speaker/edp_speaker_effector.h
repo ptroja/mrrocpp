@@ -24,7 +24,7 @@ namespace edp {
 namespace speaker {
 
 // Klasa reprezentujaca speaker'a.
-class edp_speaker_effector  : public common::effector
+class effector  : public common::effector
 {
 protected:
 
@@ -68,10 +68,10 @@ public:
     unsigned uicSamplesNo;
 
     // Konstruktor.
-    edp_speaker_effector (configurator &_config);
+    effector (configurator &_config);
     int init ();
     // Destruktor
-    virtual ~edp_speaker_effector ();
+    virtual ~effector ();
 
     // Interpretuje otrzymana z ECP instrukcje, przygotowuje odpowiedz dla ECP.
     void interpret_instruction (c_buffer *instruction);

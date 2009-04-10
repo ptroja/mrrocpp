@@ -21,7 +21,7 @@ namespace edp {
 namespace irp6p {
 
 /************************ EDP_SPEAKER ****************************/
-class irp6p_servo_buffer  : public common::servo_buffer
+class servo_buffer  : public common::servo_buffer
 {
     // Bufor polecen przysylanych z EDP_MASTER dla SERVO
     // Obiekt z algorytmem regulacji
@@ -33,10 +33,10 @@ public:
 
     // output_buffer
     void get_all_positions (void);
-    edp_irp6p_effector &master;
+    effector &master;
 
-    irp6p_servo_buffer (edp_irp6p_effector &_master);             // konstruktor
-    ~irp6p_servo_buffer (void);      // destruktor
+    servo_buffer (effector &_master);             // konstruktor
+    ~servo_buffer (void);      // destruktor
 
     void synchronise (void);         // synchronizacja
     uint64_t compute_all_set_values (void);

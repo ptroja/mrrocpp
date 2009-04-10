@@ -24,14 +24,14 @@
 
 // Klasa edp_irp6p_effector.
 #include "edp/irp6_postument/edp_irp6p_effector.h"
-// Klasa hi_irp6p.
+// Klasa hardware_interface.
 #include "edp/irp6_postument/hi_local.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace common {
 
-extern irp6p::edp_irp6p_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
+extern irp6p::effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
 
 }
 

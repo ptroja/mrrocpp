@@ -27,12 +27,12 @@ namespace edp {
 namespace irp6ot {
 
 // Konstruktor.
-edp_irp6ot_effector::edp_irp6ot_effector(configurator &_config) :
+effector::effector(configurator &_config) :
 	irp6s_postument_track_effector(_config, ROBOT_IRP6_ON_TRACK)
 {
 }
 
-void edp_irp6ot_effector::initialize(void)
+void effector::initialize(void)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -48,7 +48,7 @@ void edp_irp6ot_effector::initialize(void)
 }
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na torze.
-void edp_irp6ot_effector::create_kinematic_models_for_given_robot(void)
+void effector::create_kinematic_models_for_given_robot(void)
 {
 	// Stworzenie wszystkich modeli kinematyki.
 	add_kinematic_model(new kinematic::irp6ot::model_with_wrist());
@@ -67,7 +67,7 @@ namespace common {
 // Stworzenie obiektu edp_irp6p_effector.
 effector* return_created_efector(configurator &_config)
 {
-	return new irp6ot::edp_irp6ot_effector (_config);
+	return new irp6ot::effector (_config);
 }
 
 } // namespace common

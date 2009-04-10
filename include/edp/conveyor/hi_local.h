@@ -71,13 +71,13 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-class hw_in : public common::hardware_interface
+class hardware_interface : public common::hardware_interface
 {
 
 
 public:
-    hw_in( effector &_master );    // Konstruktor
-    ~hw_in( void );   // Destruktor
+    hardware_interface( effector &_master );    // Konstruktor
+    ~hardware_interface( void );   // Destruktor
     bool is_hardware_error ( void); // Sprawdzenie czy wystapil blad sprzetowy
     effector &master;
     uint64_t read_write_hardware ( void );    // Obsluga sprzetu

@@ -26,7 +26,7 @@
 
 // Klasa edp_conveyor_effector.
 #include "edp/conveyor/edp_conveyor_effector.h"
-// Klasa hw_in.
+// Klasa hardware_interface.
 #include "edp/conveyor/hi_local.h"
 
 namespace mrrocpp {

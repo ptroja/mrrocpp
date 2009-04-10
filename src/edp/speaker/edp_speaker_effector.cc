@@ -56,8 +56,8 @@ namespace mrrocpp {
 namespace edp {
 namespace speaker {
 
-edp_speaker_effector::edp_speaker_effector (configurator &_config)
-: effector(_config, ROBOT_SPEAKER)
+effector::effector (configurator &_config)
+: common::effector(_config, ROBOT_SPEAKER)
 {
 
 	mt_tt_obj = new common::master_trans_t_buffer();
@@ -65,7 +65,7 @@ edp_speaker_effector::edp_speaker_effector (configurator &_config)
 ;
 
 
-void edp_speaker_effector::initialize (void)
+void effector::initialize (void)
 {
 	real_reply_type = ACKNOWLEDGE;
 	// inicjacja deskryptora pliku by 7&Y
@@ -84,7 +84,7 @@ void edp_speaker_effector::initialize (void)
 ;
 
 
-int edp_speaker_effector::init ()
+int effector::init ()
 {
 	// inicjacja buforow
 	msg->message ("Initialization in progress ...");
@@ -208,7 +208,7 @@ int edp_speaker_effector::init ()
 	return 0;
 };
 
-edp_speaker_effector::~edp_speaker_effector ()
+effector::~effector ()
 {
 	;
 	free(piBuffSpeechOut);
@@ -216,7 +216,7 @@ edp_speaker_effector::~edp_speaker_effector ()
 	rtn = snd_pcm_close (pcm_handle);
 }
 
-void edp_speaker_effector::create_threads ()
+void effector::create_threads ()
 {
 
 	if (pthread_create (&speak_t_tid, NULL, &speak_thread_start, (void *) this)!=EOK)
@@ -232,7 +232,7 @@ void edp_speaker_effector::create_threads ()
 };
 
 /*--------------------------------------------------------------------------*/
-void edp_speaker_effector::interpret_instruction (c_buffer *instruction)
+void effector::interpret_instruction (c_buffer *instruction)
 {
 	// interpretuje otrzyman z ECP instrukcj;
 	// wypenaia struktury danych TRANSFORMATORa;
@@ -276,7 +276,7 @@ void edp_speaker_effector::interpret_instruction (c_buffer *instruction)
 
 
 /*--------------------------------------------------------------------------*/
-REPLY_TYPE edp_speaker_effector::rep_type (c_buffer *instruction)
+REPLY_TYPE effector::rep_type (c_buffer *instruction)
 {
 	// ustalenie formatu odpowiedzi
 	reply.reply_type = ACKNOWLEDGE;
@@ -286,12 +286,12 @@ REPLY_TYPE edp_speaker_effector::rep_type (c_buffer *instruction)
 ; // end: edp_speaker_effector::rep_type
 /*--------------------------------------------------------------------------*/
 
-void edp_speaker_effector::get_spoken (bool read_hardware, c_buffer *instruction)
+void effector::get_spoken (bool read_hardware, c_buffer *instruction)
 { // MAC7
 	return;
 };
 
-int edp_speaker_effector::speak (c_buffer *instruction)
+int effector::speak (c_buffer *instruction)
 { // add by MAC7
 
 	strcpy(text2speak,(*instruction).arm.text_def.text);
@@ -328,7 +328,7 @@ int edp_speaker_effector::speak (c_buffer *instruction)
 
 
 
-void edp_speaker_effector::main_loop (void)
+void effector::main_loop (void)
 {
 	next_state = common::GET_INSTRUCTION; // MAC7 glosnikow nie trzeba synchronizowac ; )
 
@@ -475,7 +475,7 @@ namespace common {
 
 effector* return_created_efector (configurator &_config)
 {
-	return new speaker::edp_speaker_effector (_config);
+	return new speaker::effector (_config);
 };
 
 } // namespace common

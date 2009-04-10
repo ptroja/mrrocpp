@@ -128,7 +128,7 @@ public:
 
 
 /************************ EDP_SPEAKER ****************************/
-class irp6m_servo_buffer  : public common::servo_buffer
+class servo_buffer  : public common::servo_buffer
 {
     // Bufor polecen przysylanych z EDP_MASTER dla SERVO
     // Obiekt z algorytmem regulacji
@@ -137,13 +137,13 @@ class irp6m_servo_buffer  : public common::servo_buffer
     BYTE Move_a_step (void);         // wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH i SYNCHRO_T
 
 public:
-    edp_irp6m_effector &master;
+    effector &master;
     // output_buffer
     void get_all_positions (void);
 
 
-    irp6m_servo_buffer (edp_irp6m_effector &_master);             // konstruktor
-    ~irp6m_servo_buffer (void);      // destruktor
+    servo_buffer (effector &_master);             // konstruktor
+    ~servo_buffer (void);      // destruktor
 
     void synchronise (void);         // synchronizacja
     uint64_t compute_all_set_values (void);

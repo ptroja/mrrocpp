@@ -32,7 +32,7 @@
 // Klasa edp_irp6ot_effector.
 #include "edp/irp6_on_track/edp_irp6ot_effector.h"
 
-// Klasa hi_irp6ot.
+// Klasa hardware_interface.
 #include "edp/irp6_on_track/hi_local.h"
 
 namespace mrrocpp {
@@ -48,7 +48,7 @@ volatile common::motor_data md; // Dane przesylane z/do funkcji obslugi przerwan
 
 
 // ------------------------------------------------------------------------
-hi_irp6ot::hi_irp6ot ( edp_irp6ot_effector &_master  )  : hardware_interface(_master), master(_master)  // konstruktor
+hardware_interface::hardware_interface ( effector &_master  )  : common::hardware_interface(_master), master(_master)  // konstruktor
 {
 	int irq_no;    // Numer przerwania sprzetowego 
 	int i;         // Zmienna pomocnicze
@@ -160,7 +160,7 @@ hi_irp6ot::hi_irp6ot ( edp_irp6ot_effector &_master  )  : hardware_interface(_ma
 
 
 // ------------------------------------------------------------------------
-hi_irp6ot::~hi_irp6ot ( void )   // destruktor
+hardware_interface::~hardware_interface ( void )   // destruktor
 {
 
 	if(master.test_mode==0)
@@ -180,7 +180,7 @@ hi_irp6ot::~hi_irp6ot ( void )   // destruktor
 // ------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------
-uint64_t hi_irp6ot::read_write_hardware ( void )
+uint64_t hardware_interface::read_write_hardware ( void )
 {  
 
 	// ------------------------------------------------------------------------
@@ -233,7 +233,7 @@ uint64_t hi_irp6ot::read_write_hardware ( void )
 
 // ------------------------------------------------------------------------
 // Zerowanie licznikow polozenia wszystkich osi
-void hi_irp6ot::reset_counters ( void ) 
+void hardware_interface::reset_counters ( void ) 
 {  
 
 	for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++ )
@@ -286,7 +286,7 @@ void hi_irp6ot::reset_counters ( void )
 // ------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------
-bool hi_irp6ot::is_hardware_error ( void) 
+bool hardware_interface::is_hardware_error ( void) 
 { 
 	bool h_error;
 	WORD MASK = 0x7E00;
@@ -310,7 +310,7 @@ bool hi_irp6ot::is_hardware_error ( void)
 
 
 
-int hi_irp6ot::hi_int_wait (int inter_mode, int lag)
+int hardware_interface::hi_int_wait (int inter_mode, int lag)
 {
 	uint64_t *int_timeout;
 	struct sigevent tim_event;
@@ -363,7 +363,7 @@ printf("1: %x, %x, %x, %x, %x, %x, %x\n", robot_control[0].adr_offset_plus_0, ro
 };
 
 
-void hi_irp6ot::start_synchro ( int drive_number )  {     
+void hardware_interface::start_synchro ( int drive_number )  {     
 	trace_resolver_zero = true;
 	// Wlacz sledzenie zera rezolwera (synchronizacja robota)
 	md.card_adress=FIRST_SERVO_PTR + (BYTE)drive_number;
@@ -373,7 +373,7 @@ void hi_irp6ot::start_synchro ( int drive_number )  {
 };  // end: start_synchro()
 
 
-void hi_irp6ot::finish_synchro ( int drive_number )  {     
+void hardware_interface::finish_synchro ( int drive_number )  {     
 	trace_resolver_zero = false;
 
 	// Zakonczyc sledzenie zera rezolwera i przejdz do trybu normalnej pracy

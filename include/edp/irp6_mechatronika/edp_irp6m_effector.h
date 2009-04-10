@@ -21,7 +21,7 @@ namespace edp {
 namespace irp6m {
 
 // Klasa reprezentujaca robota IRp-6 na postumencie.
-class edp_irp6m_effector : public common::irp6s_effector
+class effector : public common::irp6s_effector
 {
 protected:
     // Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
@@ -41,7 +41,7 @@ public:
     void get_rmodel (c_buffer &instruction);                    // odczytanie narzedzia
     // Konstruktor.
     void initialize (void);
-    edp_irp6m_effector (configurator &_config);
+    effector (configurator &_config);
 
     void servo_joints_and_frame_actualization_and_upload(void);// by Y
 

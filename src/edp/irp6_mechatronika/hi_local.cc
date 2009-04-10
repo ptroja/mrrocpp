@@ -31,7 +31,7 @@
 
 // Klasa edp_irp6m_effector.
 #include "edp/irp6_mechatronika/edp_irp6m_effector.h"
-// Klasa hi_irp6m.
+// Klasa hardware_interface.
 #include "edp/irp6_mechatronika/hi_local.h"
 
 
@@ -49,7 +49,7 @@ volatile common::motor_data md; // Dane przesylane z/do funkcji obslugi przerwan
 
 
 // ------------------------------------------------------------------------
-hi_irp6m::hi_irp6m ( edp_irp6m_effector &_master )   : hardware_interface(_master), master(_master) // konstruktor
+hardware_interface::hardware_interface ( effector &_master )   : common::hardware_interface(_master), master(_master) // konstruktor
 {
     int irq_no;    // Numer przerwania sprzetowego
     int i;         // Zmienna pomocnicze
@@ -162,7 +162,7 @@ hi_irp6m::hi_irp6m ( edp_irp6m_effector &_master )   : hardware_interface(_maste
 
 
 // ------------------------------------------------------------------------
-hi_irp6m::~hi_irp6m ( void )   // destruktor
+hardware_interface::~hardware_interface ( void )   // destruktor
 {
 
     if(master.test_mode==0)
@@ -183,7 +183,7 @@ hi_irp6m::~hi_irp6m ( void )   // destruktor
 
 
 // ------------------------------------------------------------------------
-uint64_t hi_irp6m::read_write_hardware ( void )
+uint64_t hardware_interface::read_write_hardware ( void )
 {
 
     // ------------------------------------------------------------------------
@@ -235,7 +235,7 @@ uint64_t hi_irp6m::read_write_hardware ( void )
 
 // ------------------------------------------------------------------------
 // Zerowanie licznikow polozenia wszystkich osi
-void hi_irp6m::reset_counters ( void )
+void hardware_interface::reset_counters ( void )
 {
 
     for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
@@ -291,7 +291,7 @@ void hi_irp6m::reset_counters ( void )
 
 
 // ------------------------------------------------------------------------
-bool hi_irp6m::is_hardware_error ( void)
+bool hardware_interface::is_hardware_error ( void)
 {
     bool h_error;
     WORD MASK = 0x7E00;
@@ -316,7 +316,7 @@ bool hi_irp6m::is_hardware_error ( void)
 
 
 // synchronizacja automatyczna z wykrorzystaniem lm629
-int hi_irp6m::synchronise_via_lm629(void)
+int hardware_interface::synchronise_via_lm629(void)
 {
     int i;
     int wyjscie;
@@ -359,7 +359,7 @@ int hi_irp6m::synchronise_via_lm629(void)
 
 
 
-int hi_irp6m::hi_int_wait (int inter_mode, int lag)
+int hardware_interface::hi_int_wait (int inter_mode, int lag)
 {
     uint64_t *int_timeout;
     struct sigevent tim_event;
@@ -425,7 +425,7 @@ int hi_irp6m::hi_int_wait (int inter_mode, int lag)
 };
 
 
-void hi_irp6m::start_synchro ( int drive_number )
+void hardware_interface::start_synchro ( int drive_number )
 {
     trace_resolver_zero = true;
     // Wlacz sledzenie zera rezolwera (synchronizacja robota)
@@ -437,7 +437,7 @@ void hi_irp6m::start_synchro ( int drive_number )
 ;  // end: start_synchro()
 
 
-void hi_irp6m::finish_synchro ( int drive_number )
+void hardware_interface::finish_synchro ( int drive_number )
 {
     trace_resolver_zero = false;
 

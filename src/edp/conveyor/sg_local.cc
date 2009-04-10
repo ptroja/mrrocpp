@@ -9,7 +9,7 @@
 
 // Klasa edp_conveyor_effector.
 #include "edp/conveyor/edp_conveyor_effector.h"
-// Klasa hw_in.
+// Klasa hardware_interface.
 #include "edp/conveyor/hi_local.h"
 // Klasa servo_buffer.
 #include "edp/conveyor/sg_local.h"
@@ -53,7 +53,7 @@ BYTE servo_buffer::Move_a_step (void)
 servo_buffer::servo_buffer (effector &_master) : common::servo_buffer(_master), master(_master)
 {
 
-	hi = new hw_in(_master);
+	hi = new hardware_interface(_master);
 
 
 	// utworzenie tablicy regulatorow

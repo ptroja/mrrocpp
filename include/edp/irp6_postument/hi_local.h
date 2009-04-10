@@ -81,16 +81,16 @@ namespace irp6p {
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-class hi_irp6p : public common::hardware_interface
+class hardware_interface : public common::hardware_interface
 {
 
 
 public:
-    hi_irp6p( edp_irp6p_effector &_master );    // Konstruktor
-    ~hi_irp6p( void );   // Destruktor
+    hardware_interface( effector &_master );    // Konstruktor
+    ~hardware_interface( void );   // Destruktor
     bool is_hardware_error ( void); // Sprawdzenie czy wystapil blad sprzetowy
 
-    edp_irp6p_effector &master;
+    effector &master;
 
     uint64_t read_write_hardware ( void );    // Obsluga sprzetu
     void reset_counters ( void );  // Zerowanie licznikow polozenia

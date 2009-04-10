@@ -31,7 +31,7 @@ namespace irp6m {
 
 
 // Konstruktor.
-edp_irp6m_effector::edp_irp6m_effector (configurator &_config) :
+effector::effector (configurator &_config) :
         irp6s_effector (_config, ROBOT_IRP6_MECHATRONIKA)
 {
 
@@ -40,7 +40,7 @@ edp_irp6m_effector::edp_irp6m_effector (configurator &_config) :
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6m_effector::set_rmodel (c_buffer &instruction)
+void effector::set_rmodel (c_buffer &instruction)
 {
     // BYTE previous_model;
     // BYTE previous_corrector;
@@ -92,7 +92,7 @@ void edp_irp6m_effector::set_rmodel (c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6m_effector::get_rmodel (c_buffer &instruction)
+void effector::get_rmodel (c_buffer &instruction)
 {
     //printf(" GET RMODEL: ");
     switch (instruction.get_rmodel_type)
@@ -141,7 +141,7 @@ void edp_irp6m_effector::get_rmodel (c_buffer &instruction)
 
 
 
-void edp_irp6m_effector::initialize (void)
+void effector::initialize (void)
 {
     //  Stworzenie listy dostepnych kinematyk.
     create_kinematic_models_for_given_robot();
@@ -152,7 +152,7 @@ void edp_irp6m_effector::initialize (void)
 }
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6m_effector::arm_abs_xyz_eul_zyz_2_frame (const double *p)
+void effector::arm_abs_xyz_eul_zyz_2_frame (const double *p)
 {
 
     double x, y, z;					// wspolrzedne wektora przesuniecia
@@ -175,7 +175,7 @@ void edp_irp6m_effector::arm_abs_xyz_eul_zyz_2_frame (const double *p)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6m_effector::arm_frame_2_xyz_eul_zyz ()
+void effector::arm_frame_2_xyz_eul_zyz ()
 {
 
     // Przeksztacenie definicji koncowki z postaci
@@ -210,7 +210,7 @@ void edp_irp6m_effector::arm_frame_2_xyz_eul_zyz ()
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6m_effector::move_arm (c_buffer &instruction)
+void effector::move_arm (c_buffer &instruction)
 { // przemieszczenie ramienia
     // Wypenienie struktury danych transformera na podstawie parametrow polecenia
     // otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
@@ -272,7 +272,7 @@ void edp_irp6m_effector::move_arm (c_buffer &instruction)
 // sprawdza stan EDP zaraz po jego uruchomieniu
 
 
-void edp_irp6m_effector::servo_joints_and_frame_actualization_and_upload (void)
+void effector::servo_joints_and_frame_actualization_and_upload (void)
 {
     static int catch_nr=0;
 
@@ -349,7 +349,7 @@ void edp_irp6m_effector::servo_joints_and_frame_actualization_and_upload (void)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6m_effector::get_arm_position (bool read_hardware, c_buffer &instruction)
+void effector::get_arm_position (bool read_hardware, c_buffer &instruction)
 { // odczytanie pozycji ramienia
 
     //   printf(" GET ARM\n");
@@ -434,7 +434,7 @@ void edp_irp6m_effector::get_arm_position (bool read_hardware, c_buffer &instruc
 
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
-void edp_irp6m_effector::create_kinematic_models_for_given_robot(void)
+void effector::create_kinematic_models_for_given_robot(void)
 {
     // Stworzenie wszystkich modeli kinematyki.
     add_kinematic_model(new kinematic::irp6m::model_with_wrist());
@@ -449,7 +449,7 @@ namespace common {
 // Stworzenie obiektu edp_irp6m_effector.
 effector* return_created_efector(configurator &_config)
 {
-	return new irp6m::edp_irp6m_effector (_config);
+	return new irp6m::effector (_config);
 }
 
 } // namespace common

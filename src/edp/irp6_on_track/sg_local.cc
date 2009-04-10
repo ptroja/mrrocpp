@@ -13,9 +13,9 @@
 
 // Klasa edp_irp6ot_effector.
 #include "edp/irp6_on_track/edp_irp6ot_effector.h"
-// Klasa hi_irp6ot.
+// Klasa hardware_interface.
 #include "edp/irp6_on_track/hi_local.h"
-// Klasa irp6ot_servo_buffer.
+// Klasa servo_buffer.
 #include "edp/irp6_on_track/sg_local.h"
 
 namespace mrrocpp {
@@ -27,7 +27,7 @@ namespace irp6ot {
 // uint64_t kk;				  // numer pomiaru od momentu startu pomiarow
 
 /*-----------------------------------------------------------------------*/
-BYTE irp6ot_servo_buffer::Move_a_step (void)
+BYTE servo_buffer::Move_a_step (void)
 {
 	// wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH ora SYNCHRO_ZERO
 	Move_1_step ();
@@ -84,10 +84,10 @@ BYTE irp6ot_servo_buffer::Move_a_step (void)
 
 
 /*-----------------------------------------------------------------------*/
-irp6ot_servo_buffer::irp6ot_servo_buffer (edp_irp6ot_effector &_master ) : servo_buffer(_master), master(_master)
+servo_buffer::servo_buffer (effector &_master ) : common::servo_buffer(_master), master(_master)
 {
 
-	hi = new hi_irp6ot(_master);
+	hi = new hardware_interface(_master);
 
 	// utworzenie tablicy regulatorow
 	// Serwomechanizm 1
@@ -120,7 +120,7 @@ irp6ot_servo_buffer::irp6ot_servo_buffer (edp_irp6ot_effector &_master ) : servo
 
 
 /*-----------------------------------------------------------------------*/
-void irp6ot_servo_buffer::synchronise (void)
+void servo_buffer::synchronise (void)
 {
 
 	const int NS = 10;     // liczba krokow rozpedzania/hamowania
@@ -450,14 +450,14 @@ void irp6ot_servo_buffer::synchronise (void)
 
 
 /*-----------------------------------------------------------------------*/
-irp6ot_servo_buffer::~irp6ot_servo_buffer(void)
+servo_buffer::~servo_buffer(void)
 {}
 ; // end: regulator_group::~regulator_group
 /*-----------------------------------------------------------------------*/
 
 
 /*-----------------------------------------------------------------------*/
-void irp6ot_servo_buffer::get_all_positions (void)
+void servo_buffer::get_all_positions (void)
 {
 	// Przepisanie aktualnych polozen servo do pakietu wysylkowego
 	for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
@@ -494,7 +494,7 @@ void irp6ot_servo_buffer::get_all_positions (void)
 
 
 /*-----------------------------------------------------------------------*/
-uint64_t irp6ot_servo_buffer::compute_all_set_values (void)
+uint64_t servo_buffer::compute_all_set_values (void)
 {
 	// obliczenie nastepnej wartosci zadanej dla wszystkich napedow
 	uint64_t status = OK; // kumuluje numer bledu
@@ -2401,7 +2401,7 @@ namespace common {
 
 servo_buffer* return_created_servo_buffer (irp6s_and_conv_effector &_master)
 {
-	return new irp6ot::irp6ot_servo_buffer ((irp6ot::edp_irp6ot_effector &)(_master));
+	return new irp6ot::servo_buffer ((irp6ot::effector &)(_master));
 };
 
 } // namespace common

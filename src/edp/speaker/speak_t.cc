@@ -39,15 +39,15 @@ void catch_signal_speak_t(int sig)
 }
 
 
-void * edp_speaker_effector::speak_thread_start(void* arg)
+void * effector::speak_thread_start(void* arg)
 {
 //	 edp_irp6s_and_conv_effector *master = (edp_irp6s_and_conv_effector *) arg;
 	
-	 static_cast<edp_speaker_effector*> (arg)->speak_thread(arg);
+	 static_cast<effector*> (arg)->speak_thread(arg);
 }
 
 
-void * edp_speaker_effector::speak_thread(void *arg)
+void * effector::speak_thread(void *arg)
 {
     set_thread_priority(pthread_self() , MAX_PRIORITY-10);
 
