@@ -26,7 +26,7 @@
 
 // Klasa edp_conveyor_effector.
 #include "edp/conveyor/edp_conveyor_effector.h"
-// Klasa hi_conv.
+// Klasa hw_in.
 #include "edp/conveyor/hi_local.h"
 
 namespace mrrocpp {
@@ -34,7 +34,7 @@ namespace edp {
 namespace common {
 
 
-extern conveyor::edp_conveyor_effector* master;
+extern conveyor::effector* master;
 
 }
 

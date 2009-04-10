@@ -27,13 +27,13 @@ namespace edp {
 namespace conveyor {
 
 // Konstruktor.
-edp_conveyor_effector::edp_conveyor_effector (configurator &_config) :
+effector::effector (configurator &_config) :
 	irp6s_and_conv_effector (_config, ROBOT_CONVEYOR)
 	{
 	}
 
 
-void edp_conveyor_effector::initialize (void)
+void effector::initialize (void)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -45,7 +45,7 @@ void edp_conveyor_effector::initialize (void)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_conveyor_effector::set_rmodel (c_buffer &instruction)
+void effector::set_rmodel (c_buffer &instruction)
 {
 	// BYTE previous_model;
 	// BYTE previous_corrector;
@@ -82,7 +82,7 @@ void edp_conveyor_effector::set_rmodel (c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_conveyor_effector::get_rmodel (c_buffer &instruction)
+void effector::get_rmodel (c_buffer &instruction)
 {
 	int i; // licznik obiegow petli
 	//printf(" GET RMODEL: ");
@@ -118,7 +118,7 @@ void edp_conveyor_effector::get_rmodel (c_buffer &instruction)
 
 
 // servo_joints_and_frame_actualization_and_upload.
-void edp_conveyor_effector::servo_joints_and_frame_actualization_and_upload (void)
+void effector::servo_joints_and_frame_actualization_and_upload (void)
 {
 	int i;
 	static int catch_nr=0;
@@ -149,7 +149,7 @@ void edp_conveyor_effector::servo_joints_and_frame_actualization_and_upload (voi
 
 
 // Przemieszczenie tasmociagu.
-void edp_conveyor_effector::move_arm (c_buffer &instruction)
+void effector::move_arm (c_buffer &instruction)
 {
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
@@ -188,7 +188,7 @@ void edp_conveyor_effector::move_arm (c_buffer &instruction)
 }
 
 // Odczytanie pozycji tasmociagu.
-void edp_conveyor_effector::get_arm_position (bool read_hardware, c_buffer &instruction)
+void effector::get_arm_position (bool read_hardware, c_buffer &instruction)
 {
 
 	if (read_hardware)
@@ -251,7 +251,7 @@ void edp_conveyor_effector::get_arm_position (bool read_hardware, c_buffer &inst
 
 
 // Stworzenie modeli kinematyki dla tasmociagu.
-void edp_conveyor_effector::create_kinematic_models_for_given_robot(void)
+void effector::create_kinematic_models_for_given_robot(void)
 {
 	// Stworzenie wszystkich modeli kinematyki.
 	add_kinematic_model(new kinematic::conveyor::model());
@@ -267,7 +267,7 @@ namespace common {
 // Stworzenie obiektu edp_conveyor_effector.
 effector* return_created_efector (configurator &_config)
 {
-	return new conveyor::edp_conveyor_effector (_config);
+	return new conveyor::effector (_config);
 }//: return_created_efector
 
 } // namespace common

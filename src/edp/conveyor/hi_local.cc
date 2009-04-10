@@ -33,7 +33,7 @@
 
 // Klasa edp_conveyor_effector.
 #include "edp/conveyor/edp_conveyor_effector.h"
-// Klasa hi_conv.
+// Klasa hw_in.
 #include "edp/conveyor/hi_local.h"
 
 namespace mrrocpp {
@@ -42,7 +42,7 @@ namespace conveyor {
 
 struct sigevent event;
 
-extern edp_conveyor_effector* master;
+extern effector* master;
 
 
 
@@ -50,7 +50,7 @@ volatile common::motor_data md; // Dane przesylane z/do funkcji obslugi przerwan
 
 
 // ------------------------------------------------------------------------
-hi_conv::hi_conv ( edp_conveyor_effector &_master ) : hardware_interface (_master), master(_master)
+hw_in::hw_in ( effector &_master ) : hardware_interface (_master), master(_master)
 {
 	int irq_no;     // Numer przerwania sprzetowego 
 	int i;            // Zmienna pomocnicze
@@ -150,7 +150,7 @@ hi_conv::hi_conv ( edp_conveyor_effector &_master ) : hardware_interface (_maste
 
 
 // ------------------------------------------------------------------------
-hi_conv::~hi_conv ( void )    // destruktor
+hw_in::~hw_in ( void )    // destruktor
 {
 	if(master.test_mode==0)
 	{
@@ -168,7 +168,7 @@ hi_conv::~hi_conv ( void )    // destruktor
 // ------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------
-uint64_t hi_conv::read_write_hardware ( void )
+uint64_t hw_in::read_write_hardware ( void )
 {   
 
 	// ------------------------------------------------------------------------
@@ -211,7 +211,7 @@ uint64_t hi_conv::read_write_hardware ( void )
 
 // ------------------------------------------------------------------------
 // Zerowanie licznikow polozenia wszystkich osi
-void hi_conv::reset_counters ( void ) 
+void hw_in::reset_counters ( void ) 
 {   
 
 	for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++ )
@@ -261,7 +261,7 @@ void hi_conv::reset_counters ( void )
 // ------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------
-bool hi_conv::is_hardware_error ( void) 
+bool hw_in::is_hardware_error ( void) 
 { 
 	bool h_error;
 	WORD MASK = 0x7E00;
@@ -286,7 +286,7 @@ bool hi_conv::is_hardware_error ( void)
 
 
 
-int hi_conv::hi_int_wait (int inter_mode, int lag)
+int hw_in::hi_int_wait (int inter_mode, int lag)
 {
 	uint64_t *int_timeout;
 	struct sigevent tim_event;

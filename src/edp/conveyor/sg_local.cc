@@ -9,9 +9,9 @@
 
 // Klasa edp_conveyor_effector.
 #include "edp/conveyor/edp_conveyor_effector.h"
-// Klasa hi_conv.
+// Klasa hw_in.
 #include "edp/conveyor/hi_local.h"
-// Klasa conveyor_servo_buffer.
+// Klasa servo_buffer.
 #include "edp/conveyor/sg_local.h"
 
 
@@ -20,11 +20,11 @@ namespace mrrocpp {
 namespace edp {
 namespace conveyor {
 
-extern edp_conveyor_effector* master;
+extern effector* master;
 //extern uint64_t kk;	// numer pomiaru od momentu startu pomiarow
 
 /*-----------------------------------------------------------------------*/
-BYTE conveyor_servo_buffer::Move_a_step (void)
+BYTE servo_buffer::Move_a_step (void)
 {
 	// wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH ora SYNCHRO_ZERO
 
@@ -50,10 +50,10 @@ BYTE conveyor_servo_buffer::Move_a_step (void)
 
 
 /*-----------------------------------------------------------------------*/
-conveyor_servo_buffer::conveyor_servo_buffer (edp_conveyor_effector &_master) : servo_buffer(_master), master(_master)
+servo_buffer::servo_buffer (effector &_master) : common::servo_buffer(_master), master(_master)
 {
 
-	hi = new hi_conv(_master);
+	hi = new hw_in(_master);
 
 
 	// utworzenie tablicy regulatorow
@@ -80,7 +80,7 @@ conveyor_servo_buffer::conveyor_servo_buffer (edp_conveyor_effector &_master) : 
 
 /*-----------------------------------------------------------------------*/
 
-void conveyor_servo_buffer::synchronise (void)
+void servo_buffer::synchronise (void)
 {
 
 	common::regulator* crp = NULL; // wskaznik aktualnie synchronizowanego napedu
@@ -132,7 +132,7 @@ void conveyor_servo_buffer::synchronise (void)
 
 
 /*-----------------------------------------------------------------------*/
-conveyor_servo_buffer::~conveyor_servo_buffer(void)
+servo_buffer::~servo_buffer(void)
 {
 }
 ; // end: regulator_group::~regulator_group
@@ -140,7 +140,7 @@ conveyor_servo_buffer::~conveyor_servo_buffer(void)
 
 
 /*-----------------------------------------------------------------------*/
-void conveyor_servo_buffer::get_all_positions (void)
+void servo_buffer::get_all_positions (void)
 {
 	// Przepisanie aktualnych polozen servo do pakietu wysylkowego
 	for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++)
@@ -160,7 +160,7 @@ void conveyor_servo_buffer::get_all_positions (void)
 
 
 /*-----------------------------------------------------------------------*/
-uint64_t conveyor_servo_buffer::compute_all_set_values (void)
+uint64_t servo_buffer::compute_all_set_values (void)
 {
 	// obliczenie nastepnej wartosci zadanej dla wszystkich napedow
 	uint64_t status = OK; // kumuluje numer bledu
@@ -197,7 +197,7 @@ namespace common {
 
 servo_buffer* return_created_servo_buffer (irp6s_and_conv_effector &_master)
 {
-	return new conveyor::conveyor_servo_buffer ((conveyor::edp_conveyor_effector &)(_master));
+	return new conveyor::servo_buffer ((conveyor::effector &)(_master));
 }
 
 } // namespace common
