@@ -134,8 +134,8 @@ const struct sigevent * schunk_int_handler(void *arg, int sint_id)
 // #pragma on(check_stack);
 
 // Rejstracja procesu VSP
-edp_ATI3084_force_sensor::edp_ATI3084_force_sensor(common::edp_irp6s_postument_track_effector &_master) :
-	edp_force_sensor(_master)
+ATI3084_force::ATI3084_force(common::edp_irp6s_postument_track_effector &_master) :
+	force(_master)
 {
 	if (!(master.test_mode)) {
 		// 	printf("Konstruktor VSP!\n");
@@ -257,7 +257,7 @@ edp_ATI3084_force_sensor::edp_ATI3084_force_sensor(common::edp_irp6s_postument_t
 }
 ;
 
-edp_ATI3084_force_sensor::~edp_ATI3084_force_sensor(void)
+ATI3084_force::~ATI3084_force(void)
 {
 	if (!(master.test_mode)) {
 		pci_detach_device(hdl); // odlacza driver od danego urzadzenia na PCI
@@ -270,7 +270,7 @@ edp_ATI3084_force_sensor::~edp_ATI3084_force_sensor(void)
 ;
 
 /**************************** inicjacja czujnika ****************************/
-void edp_ATI3084_force_sensor::configure_sensor(void)
+void ATI3084_force::configure_sensor(void)
 {// by Y
 	is_sensor_configured=true;
 	//  printf("EDP Sensor configured\n");
@@ -343,7 +343,7 @@ void edp_ATI3084_force_sensor::configure_sensor(void)
 }
 ;
 
-void edp_ATI3084_force_sensor::wait_for_event()
+void ATI3084_force::wait_for_event()
 {
 
 	int iw_ret;
@@ -408,7 +408,7 @@ void edp_ATI3084_force_sensor::wait_for_event()
 ;
 
 /*************************** inicjacja odczytu ******************************/
-void edp_ATI3084_force_sensor::initiate_reading(void)
+void ATI3084_force::initiate_reading(void)
 {
 	double kartez_force[6];
 	short measure_report;
@@ -472,19 +472,19 @@ InterruptDisable		();
 };
 
 /***************************** odczyt z czujnika *****************************/
-void edp_ATI3084_force_sensor::get_reading(void)
+void ATI3084_force::get_reading(void)
 {
 }
 ;
 
 /********************** zakonczenie dzialania czujnika *************************/
-void edp_ATI3084_force_sensor::terminate(void)
+void ATI3084_force::terminate(void)
 {
 	//	printf("VSP terminate\n");
 }
 ;
 
-int edp_ATI3084_force_sensor::parallel_do_send_command(const char* command)
+int ATI3084_force::parallel_do_send_command(const char* command)
 {
 	char a;
 	short value=0;
@@ -511,14 +511,14 @@ int edp_ATI3084_force_sensor::parallel_do_send_command(const char* command)
 	return 1;
 }
 
-void edp_ATI3084_force_sensor::set_char_output(char* znak)
+void ATI3084_force::set_char_output(char* znak)
 {
 	short value=0;
 	value=*znak;
 	set_output(value);
 }
 
-int edp_ATI3084_force_sensor::set_output(short value)
+int ATI3084_force::set_output(short value)
 {
 	short output=0;
 	unsigned short comp=0x0001;
@@ -569,7 +569,7 @@ short get_input(void)
 	return input;
 }
 
-void edp_ATI3084_force_sensor::set_obf(unsigned char state)
+void ATI3084_force::set_obf(unsigned char state)
 {
 	unsigned char temp_register;
 	temp_register=in8(base_io_adress+CONTROL_OUTPUT);
@@ -595,7 +595,7 @@ void set_ibf(unsigned char state)
 	out8(base_io_adress+CONTROL_OUTPUT, temp_register);
 }
 
-unsigned char edp_ATI3084_force_sensor::check_ack()
+unsigned char ATI3084_force::check_ack()
 {
 	unsigned char temp_register;
 	temp_register=in8(base_io_adress+ACK_PORT_INPUT);
@@ -615,7 +615,7 @@ unsigned char check_stb()
 		return 0;
 }
 
-void edp_ATI3084_force_sensor::initiate_registers(void)
+void ATI3084_force::initiate_registers(void)
 {
 	out8(base_io_adress+PORT_0_CONFIG, 0x03);
 	out8(base_io_adress+PORT_1_CONFIG, 0x03);
@@ -635,7 +635,7 @@ unsigned char check_intr(void)
 		return 0;
 }
 
-void edp_ATI3084_force_sensor::check_cs(void)
+void ATI3084_force::check_cs(void)
 {
 	printf("Input int: %d, char: %c,   ", get_input(), get_input());
 	if (check_ack())
@@ -648,7 +648,7 @@ void edp_ATI3084_force_sensor::check_cs(void)
 		printf("STB LOW\n");
 }
 
-short edp_ATI3084_force_sensor::do_Wait(const char* command)
+short ATI3084_force::do_Wait(const char* command)
 {
 	int iw_ret;
 
@@ -666,7 +666,7 @@ short edp_ATI3084_force_sensor::do_Wait(const char* command)
 	return OK;
 }
 
-short edp_ATI3084_force_sensor::do_send_command(const char* command)
+short ATI3084_force::do_send_command(const char* command)
 {
 	char a;
 	unsigned int timeout;
@@ -689,7 +689,7 @@ short edp_ATI3084_force_sensor::do_send_command(const char* command)
 // metoda na wypadek skasowanie pamiecia nvram
 // uwaga sterownik czujnika wysyla komunikat po zlaczu szeregowym zaraz po jego wlaczeniu
 
-void edp_ATI3084_force_sensor::solve_transducer_controller_failure(void)
+void ATI3084_force::solve_transducer_controller_failure(void)
 {
 
 	unsigned char char_buf[1000];
@@ -721,7 +721,7 @@ void edp_ATI3084_force_sensor::solve_transducer_controller_failure(void)
 	// 	printf("Input int: %s,   \n",aaac);
 }
 
-short edp_ATI3084_force_sensor::do_init(void)
+short ATI3084_force::do_init(void)
 {
 	short i;
 
@@ -882,9 +882,9 @@ void clear_intr(void)
 	out8(base_io_adress+INTER_CONFIG, temp_register);
 }
 
-edp_force_sensor* return_created_edp_force_sensor(common::edp_irp6s_postument_track_effector &_master)
+force* return_created_edp_force_sensor(common::edp_irp6s_postument_track_effector &_master)
 {
-	return new edp_ATI3084_force_sensor(_master);
+	return new ATI3084_force(_master);
 }// : return_created_sensor
 
 } // namespace sensor

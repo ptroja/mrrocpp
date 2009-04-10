@@ -96,8 +96,8 @@ const struct sigevent *isr_handler(void *area, int id)
 
 // // // // // // // // // // // // // // /   konfiguracja czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
-edp_ATI6284_force_sensor::edp_ATI6284_force_sensor(common::edp_irp6s_postument_track_effector &_master) :
-	edp_force_sensor(_master)
+ATI6284_force::ATI6284_force(common::edp_irp6s_postument_track_effector &_master) :
+	force(_master)
 {
 
 	// unsigned  uCount;  //!< Count index
@@ -199,7 +199,7 @@ edp_ATI6284_force_sensor::edp_ATI6284_force_sensor(common::edp_irp6s_postument_t
 
 // // // // // // // // // // // // // // /   odlaczenie czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
-edp_ATI6284_force_sensor::~edp_ATI6284_force_sensor(void)
+ATI6284_force::~ATI6284_force(void)
 {
 	if (!(master.test_mode)) {
 		delete theSTC;
@@ -220,7 +220,7 @@ edp_ATI6284_force_sensor::~edp_ATI6284_force_sensor(void)
 ;
 
 // // // // // // // // // // // // // // /   inicjacja odczytu // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
-void edp_ATI6284_force_sensor::configure_sensor(void)
+void ATI6284_force::configure_sensor(void)
 {
 	if (!(master.test_mode)) {
 		// double kartez_force[6];
@@ -409,7 +409,7 @@ void edp_ATI6284_force_sensor::configure_sensor(void)
 
 // // // // // // // // // // // // // // /   inicjalizacja zbierania danych z czujnika, wait_for_event // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
-void edp_ATI6284_force_sensor::wait_for_event()
+void ATI6284_force::wait_for_event()
 {
 	if (!is_sensor_configured)
 		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
@@ -453,7 +453,7 @@ void edp_ATI6284_force_sensor::wait_for_event()
 ;
 // // // // // // // // // // // // // // /   odczyt danych  // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
-void edp_ATI6284_force_sensor::initiate_reading(void)
+void ATI6284_force::initiate_reading(void)
 {
 	timer local_timer;
 	float sec;
@@ -642,13 +642,13 @@ void edp_ATI6284_force_sensor::initiate_reading(void)
 ;
 
 // // // // // // // // // // // // // // /   odczyt z czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
-void edp_ATI6284_force_sensor::get_reading(void)
+void ATI6284_force::get_reading(void)
 {
 }
 ;
 
 // // // // // // // // // // // // // // /   zakonczenie dzialania czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
-void edp_ATI6284_force_sensor::terminate(void)
+void ATI6284_force::terminate(void)
 {
 	//	printf("VSP terminate\n");
 }
@@ -656,14 +656,14 @@ void edp_ATI6284_force_sensor::terminate(void)
 
 // // // // // // // // // // // // // // /  inne potrzebne funkcje // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
-void edp_ATI6284_force_sensor::Interrupt_Service_Routine(void)
+void ATI6284_force::Interrupt_Service_Routine(void)
 {
 	uValues[Samples_Acquired] = board->AIFifoData.readRegister();
 	Samples_Acquired++;
 	return;
 }
 
-void edp_ATI6284_force_sensor::InitMite(void)
+void ATI6284_force::InitMite(void)
 {
 	tAddressSpace Bar0;
 	u32 physicalBar1;
@@ -683,7 +683,7 @@ void edp_ATI6284_force_sensor::InitMite(void)
 	bus->destroyAddressSpace(Bar0);
 }
 
-void edp_ATI6284_force_sensor::Input_to_Volts(void)
+void ATI6284_force::Input_to_Volts(void)
 {
 
 	unsigned uCount;
@@ -739,7 +739,7 @@ void edp_ATI6284_force_sensor::Input_to_Volts(void)
 
 
 //!< Call this function to configure board options.
-void edp_ATI6284_force_sensor::Configure_Board(void)
+void ATI6284_force::Configure_Board(void)
 {
 	//!< Clear configuration memory
 	theSTC->Write_Strobe_0.writeRegister(0x0001);
@@ -834,7 +834,7 @@ void edp_ATI6284_force_sensor::Configure_Board(void)
 }
 
 //!< Call this function to configure the timebase options for DAQ-STC.
-void edp_ATI6284_force_sensor::MSC_Clock_Configure(void)
+void ATI6284_force::MSC_Clock_Configure(void)
 {
 	//!< Select timebase for DAQ-STC
 	theSTC->Clock_and_FOUT.setSlow_Internal_Timebase(1);
@@ -846,14 +846,14 @@ void edp_ATI6284_force_sensor::MSC_Clock_Configure(void)
 }
 
 //!< Call this function to clear the AI FIFO.
-void edp_ATI6284_force_sensor::Clear_FIFO(void)
+void ATI6284_force::Clear_FIFO(void)
 {
 	theSTC->Write_Strobe_1.writeRegister(0x0001);
 	return;
 }
 
 //!< Call this function to stop any activities in progress.
-void edp_ATI6284_force_sensor::AI_Reset_All(void)
+void ATI6284_force::AI_Reset_All(void)
 {
 	theSTC->Joint_Reset.setAI_Reset(1);//!< Reset important registers
 	theSTC->Joint_Reset.setAI_Configuration_Start(1);//!< Starting AI configuration
@@ -882,7 +882,7 @@ void edp_ATI6284_force_sensor::AI_Reset_All(void)
 }
 
 //!< Call this function to setup the board.
-void edp_ATI6284_force_sensor::AI_Board_Personalize(void)
+void ATI6284_force::AI_Board_Personalize(void)
 {
 	theSTC->Joint_Reset.writeAI_Configuration_Start(1);
 
@@ -915,14 +915,14 @@ void edp_ATI6284_force_sensor::AI_Board_Personalize(void)
 }
 
 //!< Call this function to access the first value in the configuration FIFO.
-void edp_ATI6284_force_sensor::AI_Initialize_Configuration_Memory_Output(void)
+void ATI6284_force::AI_Initialize_Configuration_Memory_Output(void)
 {
 	theSTC->AI_Command_1.writeAI_CONVERT_Pulse(1);
 	return;
 }
 
 //!< Call this function to setup for external multiplexers.
-void edp_ATI6284_force_sensor::AI_Board_Environmentalize(void)
+void ATI6284_force::AI_Board_Environmentalize(void)
 {
 	theSTC->Joint_Reset.writeAI_Configuration_Start(1);
 
@@ -935,7 +935,7 @@ void edp_ATI6284_force_sensor::AI_Board_Environmentalize(void)
 }
 
 //!< Call this function to enable or disable retriggering.
-void edp_ATI6284_force_sensor::AI_Trigger_Signals(void)
+void ATI6284_force::AI_Trigger_Signals(void)
 {
 	theSTC->Joint_Reset.writeAI_Configuration_Start(1);
 
@@ -956,7 +956,7 @@ void edp_ATI6284_force_sensor::AI_Trigger_Signals(void)
 }
 
 //!< Call this function to select the number of scans.
-void edp_ATI6284_force_sensor::Number_of_Scans(void)
+void ATI6284_force::Number_of_Scans(void)
 {
 	theSTC->Joint_Reset.writeAI_Configuration_Start(1);
 	theSTC->AI_SC_Load_A.writeRegister(0x00000001);//!< Number of Scans(jeden skan to 6 sygnalow)  are 1
@@ -970,7 +970,7 @@ void edp_ATI6284_force_sensor::Number_of_Scans(void)
 }
 
 //!< Call this function to select the scan start event.
-void edp_ATI6284_force_sensor::AI_Scan_Start(void)
+void ATI6284_force::AI_Scan_Start(void)
 {
 	theSTC->Joint_Reset.writeAI_Configuration_Start(1);
 
@@ -994,7 +994,7 @@ void edp_ATI6284_force_sensor::AI_Scan_Start(void)
 }
 
 //!< Call this function to select the end of scan event.
-void edp_ATI6284_force_sensor::AI_End_of_Scan(void)
+void ATI6284_force::AI_End_of_Scan(void)
 {
 	theSTC->Joint_Reset.writeAI_Configuration_Start(1);
 
@@ -1012,7 +1012,7 @@ void edp_ATI6284_force_sensor::AI_End_of_Scan(void)
 }
 
 //!< Call this function to select the convert signal for the Acquisition
-void edp_ATI6284_force_sensor::Convert_Signal(void)
+void ATI6284_force::Convert_Signal(void)
 {
 	theSTC->Joint_Reset.writeAI_Configuration_Start(1);
 
@@ -1033,7 +1033,7 @@ void edp_ATI6284_force_sensor::Convert_Signal(void)
 }
 
 //!< Call this function to enable interrupts for the Acquisition
-void edp_ATI6284_force_sensor::AI_Interrupt_Enable(void)
+void ATI6284_force::AI_Interrupt_Enable(void)
 {
 	theSTC->Interrupt_A_Enable.setRegister(0); //!< reset register
 	theSTC->Interrupt_A_Enable.setAI_FIFO_Interrupt_Enable(1); //!< enable interrupts based on the AI FIFO
@@ -1076,7 +1076,7 @@ void edp_ATI6284_force_sensor::AI_Interrupt_Enable(void)
 }
 
 //!< Call this function to arm the analog input counters.
-void edp_ATI6284_force_sensor::AI_Arming(void)
+void ATI6284_force::AI_Arming(void)
 {
 	theSTC->AI_Command_1.setAI_SC_Arm(1);
 	theSTC->AI_Command_1.setAI_SI_Arm(1);
@@ -1087,16 +1087,16 @@ void edp_ATI6284_force_sensor::AI_Arming(void)
 }
 
 //!< Call this function to start the acquistion.
-void edp_ATI6284_force_sensor::AI_Start_The_Acquisition(void)
+void ATI6284_force::AI_Start_The_Acquisition(void)
 {
 	theSTC->AI_Command_2.writeAI_START1_Pulse(1);
 	theSTC->AI_Command_2.flush();
 	return;
 }
 
-edp_force_sensor* return_created_edp_force_sensor(common::edp_irp6s_postument_track_effector &_master)
+force* return_created_edp_force_sensor(common::edp_irp6s_postument_track_effector &_master)
 {
-	return new edp_ATI6284_force_sensor(_master);
+	return new ATI6284_force(_master);
 }//!< : return_created_sensor
 
 } // namespace sensor

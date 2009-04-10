@@ -13,7 +13,7 @@ namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-class edp_ATI6284_force_sensor : public edp_force_sensor{
+class ATI6284_force : public force{
 
 private:
 	unsigned  uCount;      //!<  zmienna indeksuj�ca
@@ -36,8 +36,8 @@ public:
 
 	short ERROR_CODE;
 
-	edp_ATI6284_force_sensor(common::edp_irp6s_postument_track_effector &_master);       //!< konstruktor uruchamiaj�cy czujnik i ustawiaj�cuy bias
-	virtual ~edp_ATI6284_force_sensor();    //!< destruktor od��czaj�cy kart� z magistrali PCI
+	ATI6284_force(common::edp_irp6s_postument_track_effector &_master);       //!< konstruktor uruchamiaj�cy czujnik i ustawiaj�cuy bias
+	virtual ~ATI6284_force();    //!< destruktor od��czaj�cy kart� z magistrali PCI
 
 	void configure_sensor (void);           //!<  konfiguracja czujnika
 	void wait_for_event(void);              //!<  oczekiwanie na zdarzenie

@@ -118,7 +118,7 @@ namespace sensor {
 
 
 /********** klasa czujnikow po stronie VSP **************/
-class edp_ATI3084_force_sensor : public edp_force_sensor{
+class ATI3084_force : public force{
 
 private:
 
@@ -160,8 +160,8 @@ private:
 
 public:
 
-	edp_ATI3084_force_sensor(common::edp_irp6s_postument_track_effector &_master);
-	virtual ~edp_ATI3084_force_sensor();
+	ATI3084_force(common::edp_irp6s_postument_track_effector &_master);
+	virtual ~ATI3084_force();
 
 	void configure_sensor (void);	// konfiguracja czujnika
 	void wait_for_event(void);		// oczekiwanie na zdarzenie

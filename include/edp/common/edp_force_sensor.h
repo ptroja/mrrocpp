@@ -24,7 +24,7 @@ extern "C"
 #endif
 
     /********** klasa czujnikow po stronie EDP **************/
-    class edp_force_sensor : public ::sensor
+    class force : public ::sensor
     {
 
     protected:
@@ -55,7 +55,7 @@ extern "C"
         bool force_sensor_set_tool; // FLAGA ZLECENIA ZMIANY NARZEDZIA
 
         common::edp_irp6s_postument_track_effector &master;
-        edp_force_sensor(common::edp_irp6s_postument_track_effector &_master);
+        force(common::edp_irp6s_postument_track_effector &_master);
 
         virtual void wait_for_event(void);			// oczekiwanie na zdarzenie
         void set_force_tool (void);
@@ -65,7 +65,7 @@ extern "C"
 
 
     // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-    edp_force_sensor* return_created_edp_force_sensor (common::edp_irp6s_postument_track_effector &_master);
+    force* return_created_edp_force_sensor (common::edp_irp6s_postument_track_effector &_master);
 
 
 #ifdef __cplusplus

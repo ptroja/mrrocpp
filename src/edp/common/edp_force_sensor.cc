@@ -33,7 +33,7 @@ namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-edp_force_sensor::edp_force_sensor(common::edp_irp6s_postument_track_effector &_master)
+force::force(common::edp_irp6s_postument_track_effector &_master)
         : master(_master), new_edp_command(false)
 {
     gravity_transformation = NULL;
@@ -58,11 +58,11 @@ edp_force_sensor::edp_force_sensor(common::edp_irp6s_postument_track_effector &_
     
 };
 
-void edp_force_sensor::wait_for_event(void)
+void force::wait_for_event(void)
 {}
 ;			// oczekiwanie na zdarzenie
 
-void edp_force_sensor::set_force_tool(void)
+void force::set_force_tool(void)
 {
 
     K_vector gravity_arm_in_sensor(next_force_tool_position);
@@ -78,7 +78,7 @@ void edp_force_sensor::set_force_tool(void)
 }
 ;
 
-int	edp_force_sensor::set_command_execution_finish() // podniesienie semafora
+int	force::set_command_execution_finish() // podniesienie semafora
 {
     if (new_edp_command)
     {
@@ -89,7 +89,7 @@ int	edp_force_sensor::set_command_execution_finish() // podniesienie semafora
 
 };
 
-int	edp_force_sensor::check_for_command_execution_finish() // oczekiwanie na semafor
+int	force::check_for_command_execution_finish() // oczekiwanie na semafor
 {
     new_edp_command = true;
     return sem_wait(&new_ms_for_edp);
