@@ -19,7 +19,7 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-hardware_interface::hardware_interface( edp_irp6s_and_conv_effector &_master )
+hardware_interface::hardware_interface( irp6s_and_conv_effector &_master )
         : master(_master)
 {}
 ;    // Konstruktor

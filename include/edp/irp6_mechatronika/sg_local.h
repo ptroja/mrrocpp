@@ -44,7 +44,7 @@ class NL_regulator_2_irp6m: public common::NL_regulator
 
 public:
     NL_regulator_2_irp6m (BYTE reg_no, BYTE reg_par_no,
-                          double aa, double bb0, double bb1, double k_ff, common::edp_irp6s_and_conv_effector &_master); // konstruktor
+                          double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master); // konstruktor
 
     virtual BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
@@ -61,7 +61,7 @@ class NL_regulator_3_irp6m: public common::NL_regulator
 
 public:
     NL_regulator_3_irp6m (BYTE reg_no, BYTE reg_par_no,
-                          double aa, double bb0, double bb1, double k_ff, common::edp_irp6s_and_conv_effector &_master); // konstruktor
+                          double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master); // konstruktor
 
     virtual BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
@@ -78,7 +78,7 @@ class NL_regulator_4_irp6m: public common::NL_regulator
 
 public:
     NL_regulator_4_irp6m (BYTE reg_no, BYTE reg_par_no,
-                          double aa, double bb0, double bb1, double k_ff, common::edp_irp6s_and_conv_effector &_master); // konstruktor
+                          double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master); // konstruktor
 
     virtual BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
@@ -97,7 +97,7 @@ class NL_regulator_5_irp6m: public common::NL_regulator
 public:
     bool first;
     NL_regulator_5_irp6m (BYTE reg_no, BYTE reg_par_no,
-                          double aa, double bb0, double bb1, double k_ff, common::edp_irp6s_and_conv_effector &_master); // konstruktor
+                          double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master); // konstruktor
 
     virtual BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
@@ -115,7 +115,7 @@ class NL_regulator_6_irp6m: public common::NL_regulator
 
 public:
     NL_regulator_6_irp6m (BYTE reg_no, BYTE reg_par_no,
-                          double aa, double bb0, double bb1, double k_ff, common::edp_irp6s_and_conv_effector &_master); // konstruktor
+                          double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master); // konstruktor
 
     virtual BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna

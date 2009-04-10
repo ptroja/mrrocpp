@@ -41,12 +41,12 @@ namespace edp {
 namespace common {
 
 /*--------------------------------------------------------------------------*/
-edp_irp6s_effector::edp_irp6s_effector (configurator &_config, ROBOT_ENUM l_robot_name) :
-        edp_irp6s_and_conv_effector (_config, l_robot_name)
+irp6s_effector::irp6s_effector (configurator &_config, ROBOT_ENUM l_robot_name) :
+        irp6s_and_conv_effector (_config, l_robot_name)
 {}
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::compute_xyz_euler_zyz (const c_buffer &instruction)
+void irp6s_effector::compute_xyz_euler_zyz (const c_buffer &instruction)
 {
     // obliczenia dla ruchu ramienia (kocwk: XYZ_EULER_ZYZ)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
@@ -104,7 +104,7 @@ void edp_irp6s_effector::compute_xyz_euler_zyz (const c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::compute_xyz_angle_axis (const c_buffer &instruction)
+void irp6s_effector::compute_xyz_angle_axis (const c_buffer &instruction)
 {
     // obliczenia dla ruchu ramienia (kocwk: XYZ_ANGLE_AXIS)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
@@ -155,7 +155,7 @@ void edp_irp6s_effector::compute_xyz_angle_axis (const c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::compute_frame (const c_buffer &instruction)
+void irp6s_effector::compute_frame (const c_buffer &instruction)
 {
     // obliczenia dla ruchu ramienia (kocwk: FRAME)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
@@ -210,7 +210,7 @@ void edp_irp6s_effector::compute_frame (const c_buffer &instruction)
 // Przeksztacenie definicji narzedzia z postaci
 // TOOL_FRAME do postaci TOOL_XYZ_ANGLE_AXIS oraz przepisanie wyniku
 // przeksztacenia do wewntrznych struktur danych REPLY_BUFFER.
-void edp_irp6s_effector::tool_frame_2_xyz_aa (void)
+void irp6s_effector::tool_frame_2_xyz_aa (void)
 {
     reply.rmodel_type = TOOL_XYZ_ANGLE_AXIS;
     switch (reply.reply_type)
@@ -231,7 +231,7 @@ void edp_irp6s_effector::tool_frame_2_xyz_aa (void)
 // Przeksztacenie definicji narzedzia z postaci
 // TOOL_FRAME do postaci TOOL_XYZ_EULER_ZYZ oraz przepisanie wyniku
 // przeksztacenia do wewntrznych struktur danych REPLY_BUFFER.
-void edp_irp6s_effector::tool_frame_2_xyz_eul_zyz (void)
+void irp6s_effector::tool_frame_2_xyz_eul_zyz (void)
 {
     reply.rmodel_type = TOOL_XYZ_EULER_ZYZ;
     switch (reply.reply_type)
@@ -252,7 +252,7 @@ void edp_irp6s_effector::tool_frame_2_xyz_eul_zyz (void)
 // Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
 // z wewntrznych struktur danych TRANSFORMATORa
 // do wewntrznych struktur danych REPLY_BUFFER
-void edp_irp6s_effector::tool_frame_2_frame_rep (void)
+void irp6s_effector::tool_frame_2_frame_rep (void)
 {
     reply.rmodel_type = TOOL_FRAME;
     switch (reply.reply_type)
@@ -271,7 +271,7 @@ void edp_irp6s_effector::tool_frame_2_frame_rep (void)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::tool_axially_symmetrical_frame_2_xyz_eul_zy (void)
+void irp6s_effector::tool_axially_symmetrical_frame_2_xyz_eul_zy (void)
 {
     // Przeksztacenie definicji narzdzia z postaci
     // TOOL_FRAME do postaci TOOL_AS_XYZ_EULER_ZY oraz przepisanie wyniku
@@ -332,7 +332,7 @@ void edp_irp6s_effector::tool_axially_symmetrical_frame_2_xyz_eul_zy (void)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::tool_xyz_eul_zyz_2_frame (c_buffer &instruction)
+void irp6s_effector::tool_xyz_eul_zyz_2_frame (c_buffer &instruction)
 {
     // Przeksztacenie definicji narzedzia z postaci
     // TOOL_XYZ_EULER_ZYZ do postaci TOOL_FRAME oraz przepisanie wyniku
@@ -364,7 +364,7 @@ void edp_irp6s_effector::tool_xyz_eul_zyz_2_frame (c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::tool_frame_2_frame (c_buffer &instruction)
+void irp6s_effector::tool_frame_2_frame (c_buffer &instruction)
 {
     // Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
     // do wewntrznych struktur danych TRANSFORMATORa
@@ -386,7 +386,7 @@ void edp_irp6s_effector::tool_frame_2_frame (c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::arm_abs_xyz_aa_2_frame (const double *p)
+void irp6s_effector::arm_abs_xyz_aa_2_frame (const double *p)
 {
     double alfa;				// kat obrotu
     double x, y, z;			// wspolrzedne wektora przesuniecia
@@ -424,7 +424,7 @@ void edp_irp6s_effector::arm_abs_xyz_aa_2_frame (const double *p)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::arm_abs_frame_2_frame (frame_tab p_m)
+void irp6s_effector::arm_abs_frame_2_frame (frame_tab p_m)
 {
     // Przepisanie definicji koncowki danej
     // w postaci TRANS wyraonej bezwzgldnie
@@ -437,7 +437,7 @@ void edp_irp6s_effector::arm_abs_frame_2_frame (frame_tab p_m)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::arm_rel_xyz_aa_2_frame (const double* p)
+void irp6s_effector::arm_rel_xyz_aa_2_frame (const double* p)
 {
 
     double alfa;			// kat obrotu
@@ -483,7 +483,7 @@ void edp_irp6s_effector::arm_rel_xyz_aa_2_frame (const double* p)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::arm_rel_xyz_eul_zyz_2_frame (const double* p)
+void irp6s_effector::arm_rel_xyz_eul_zyz_2_frame (const double* p)
 {
 
     double x, y, z;			// wspolrzedne wektora przesuniecia
@@ -506,7 +506,7 @@ void edp_irp6s_effector::arm_rel_xyz_eul_zyz_2_frame (const double* p)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::arm_rel_frame_2_frame (frame_tab p_m)
+void irp6s_effector::arm_rel_frame_2_frame (frame_tab p_m)
 {
     // Przepisanie definicji koncowki danej
     // w postaci TRANS wyraonej wzgldnie
@@ -524,7 +524,7 @@ void edp_irp6s_effector::arm_rel_frame_2_frame (frame_tab p_m)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::arm_frame_2_xyz_aa (void)
+void irp6s_effector::arm_frame_2_xyz_aa (void)
 {
 
     Homog_matrix A(current_end_effector_frame);
@@ -558,7 +558,7 @@ void edp_irp6s_effector::arm_frame_2_xyz_aa (void)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::tool_xyz_aa_2_frame (c_buffer &instruction)
+void irp6s_effector::tool_xyz_aa_2_frame (c_buffer &instruction)
 {
     // Przeksztacenie definicji narzedzia z postaci
     // TOOL_XYZ_ANGLE_AXIS do postaci TOOL_FRAME oraz przepisanie wyniku
@@ -612,7 +612,7 @@ void edp_irp6s_effector::tool_xyz_aa_2_frame (c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::tool_axially_symmetrical_xyz_eul_zy_2_frame (c_buffer *instruction)
+void irp6s_effector::tool_axially_symmetrical_xyz_eul_zy_2_frame (c_buffer *instruction)
 {
     // Przeksztacenie definicji narzdzia z postaci
     // TOOL_AS_XYZ_EULER_ZY do postaci TOOL_FRAME oraz przepisanie wyniku
@@ -686,7 +686,7 @@ void edp_irp6s_effector::tool_axially_symmetrical_xyz_eul_zy_2_frame (c_buffer *
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_effector::arm_frame_2_frame (void)
+void irp6s_effector::arm_frame_2_frame (void)
 {
     // Przepisanie definicji koncowki danej w postaci
     // TRANS z wewntrznych struktur danych TRANSFORMATORa
@@ -719,7 +719,7 @@ void edp_irp6s_effector::arm_frame_2_frame (void)
 }
 /*--------------------------------------------------------------------------*/
 
-void edp_irp6s_effector::master_joints_and_frame_download (void)
+void irp6s_effector::master_joints_and_frame_download (void)
 { // by Y
     pthread_mutex_lock( &edp_irp6s_effector_mutex );
     // przepisanie danych na zestaw lokalny dla edp_master

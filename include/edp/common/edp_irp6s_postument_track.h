@@ -23,7 +23,7 @@ namespace common {
 
 
 /************************ edp_irp6s_effector ****************************/
-class edp_irp6s_postument_track_effector: public edp_irp6s_effector
+class irp6s_postument_track_effector: public irp6s_effector
 {
 
 
@@ -71,7 +71,7 @@ public:
     static void *force_thread_start(void* arg);
     void *force_thread(void* arg);
 
-    edp_irp6s_postument_track_effector (configurator &_config, ROBOT_ENUM l_robot_name );       // konstruktor
+    irp6s_postument_track_effector (configurator &_config, ROBOT_ENUM l_robot_name );       // konstruktor
 
     int force_tryb;
 

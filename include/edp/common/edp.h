@@ -34,7 +34,7 @@ class reader_buffer;
 class master_trans_t_buffer;
 class in_out_buffer;
 
-class edp_irp6s_postument_track_effector;
+class irp6s_postument_track_effector;
 
 enum STATE { GET_STATE, GET_SYNCHRO, SYNCHRO_TERMINATED, GET_INSTRUCTION, EXECUTE_INSTRUCTION, WAIT, WAIT_Q };
 // extern int errno;
@@ -46,7 +46,7 @@ enum TRANSLATION_ENUM { WITH_TRANSLATION, WITHOUT_TRANSLATION };
 
 
 // Glowna klasa efektora EDP
-class edp_effector : public kinematic::common::transformer_error
+class effector : public kinematic::common::transformer_error
 {
 protected:
 
@@ -77,7 +77,7 @@ public:
     messip_channel_t *attach;
 #endif /* USE_MESSIP_SRR */
 
-    edp_effector (configurator &_config, ROBOT_ENUM l_robot_name);       // konstruktor
+    effector (configurator &_config, ROBOT_ENUM l_robot_name);       // konstruktor
     controller_state_t controller_state_edp_buf; // do okreslenia stanu robota
 
     int test_mode;
@@ -120,7 +120,7 @@ public:
 // base class for EDP robots with manipulators and conveyor
 
 /************************ edp_irp6s_and_conv_effector ****************************/
-class edp_irp6s_and_conv_effector : public edp_effector, public kinematic::common::manager
+class irp6s_and_conv_effector : public effector, public kinematic::common::manager
 {
 
 protected:
@@ -274,7 +274,7 @@ public:
     in_out_buffer* in_out_obj; // bufor wejsc wyjsc
     reader_buffer *rb_obj;
     master_trans_t_buffer *mt_tt_obj;
-    edp_irp6s_and_conv_effector (configurator &_config, ROBOT_ENUM l_robot_name);       // konstruktor
+    irp6s_and_conv_effector (configurator &_config, ROBOT_ENUM l_robot_name);       // konstruktor
 
     virtual void set_rmodel (c_buffer &instruction) = 0;                    // zmiana narzedzia
     virtual void get_rmodel (c_buffer &instruction) = 0;                    // odczytanie narzedzia
@@ -330,7 +330,7 @@ public:
 
 
 /************************ edp_irp6s_effector ****************************/
-class edp_irp6s_effector: public common::edp_irp6s_and_conv_effector
+class irp6s_effector: public common::irp6s_and_conv_effector
 {
 
 protected:
@@ -464,7 +464,7 @@ protected:
     // manipulatora wzgledem ukladu bazowego (polozenie w mm)
 
 public:
-    edp_irp6s_effector (configurator &_config, ROBOT_ENUM l_robot_name );       // konstruktor
+    irp6s_effector (configurator &_config, ROBOT_ENUM l_robot_name );       // konstruktor
 
     // wyznaczenie polozenia lokalnego i globalnego transformera
     // przepisanie lokalnego zestawu lokalnego edp_servo na globalny (chronione mutexem)
@@ -626,7 +626,7 @@ public:
 
 
 // Zwrocenie stworzonego obiektu - efektora. Funkcja implementowana w plikach efektorow konkretnych (jadro).
-edp_effector* return_created_efector (configurator &_config);
+effector* return_created_efector (configurator &_config);
 
 } // namespace common
 } // namespace edp

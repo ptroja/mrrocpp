@@ -72,12 +72,12 @@ protected:
     bool first; // true jesli pierwszy krok
 
 public:
-	edp_irp6s_and_conv_effector &master;
+	irp6s_and_conv_effector &master;
 
     int irq_no;    // Numer przerwania sprzetowego
     int int_id;                 // Identyfikator obslugi przerwania
 	//hardware_interface();    // Konstruktor
-    hardware_interface( edp_irp6s_and_conv_effector &_master );    // Konstruktor
+    hardware_interface( irp6s_and_conv_effector &_master );    // Konstruktor
     virtual ~hardware_interface( void );   // Destruktor
     virtual bool is_hardware_error ( void); // Sprawdzenie czy wystapil blad sprzetowy
 

@@ -54,8 +54,8 @@ extern "C"
         bool force_sensor_do_first_configure; // pierwsza konfiguracja po synchronizacji lub uruchomieniu
         bool force_sensor_set_tool; // FLAGA ZLECENIA ZMIANY NARZEDZIA
 
-        common::edp_irp6s_postument_track_effector &master;
-        force(common::edp_irp6s_postument_track_effector &_master);
+        common::irp6s_postument_track_effector &master;
+        force(common::irp6s_postument_track_effector &_master);
 
         virtual void wait_for_event(void);			// oczekiwanie na zdarzenie
         void set_force_tool (void);
@@ -65,7 +65,7 @@ extern "C"
 
 
     // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-    force* return_created_edp_force_sensor (common::edp_irp6s_postument_track_effector &_master);
+    force* return_created_edp_force_sensor (common::irp6s_postument_track_effector &_master);
 
 
 #ifdef __cplusplus

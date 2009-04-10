@@ -32,7 +32,7 @@ namespace edp {
 namespace common {
 
 /*--------------------------------------------------------------------------*/
-edp_effector::edp_effector(configurator &_config, ROBOT_ENUM l_robot_name) :
+effector::effector(configurator &_config, ROBOT_ENUM l_robot_name) :
 	config(_config), robot_name(l_robot_name)
 {
 
@@ -53,7 +53,7 @@ edp_effector::edp_effector(configurator &_config, ROBOT_ENUM l_robot_name) :
 
 }
 
-void edp_effector::check_config(const char* string, uint8_t* input)
+void effector::check_config(const char* string, uint8_t* input)
 {
 	if ((config.exists(string))&&(config.return_int_value(string)))
 		*input=1;
@@ -62,7 +62,7 @@ void edp_effector::check_config(const char* string, uint8_t* input)
 }
 
 /*--------------------------------------------------------------------------*/
-bool edp_effector::initialize_communication()
+bool effector::initialize_communication()
 {
 	char* server_attach_point;
 	server_attach_point
@@ -138,21 +138,21 @@ bool edp_effector::initialize_communication()
 }
 
 
-void edp_effector::insert_reply_type(REPLY_TYPE rt)
+void effector::insert_reply_type(REPLY_TYPE rt)
 {
 	reply.reply_type = rt;
 }
 
-bool edp_effector::is_reply_type_ERROR() const
+bool effector::is_reply_type_ERROR() const
 {
 	return (reply.reply_type==ERROR);
 }
 
-void edp_effector::main_loop()
+void effector::main_loop()
 {
 }
 
-void edp_effector::establish_error(uint64_t err0, uint64_t err1)
+void effector::establish_error(uint64_t err0, uint64_t err1)
 {
 	reply.reply_type = ERROR;
 	reply.error_no.error0 = err0;
@@ -160,23 +160,23 @@ void edp_effector::establish_error(uint64_t err0, uint64_t err1)
 }
 
 // r_buffer
-REPLY_TYPE edp_effector::is_reply_type(void) const
+REPLY_TYPE effector::is_reply_type(void) const
 {
 	return reply.reply_type;
 }
 
-uint64_t edp_effector::is_error_no_0(void) const
+uint64_t effector::is_error_no_0(void) const
 {
 	return reply.error_no.error0;
 }
 
-uint64_t edp_effector::is_error_no_1(void) const
+uint64_t effector::is_error_no_1(void) const
 {
 	return reply.error_no.error1;
 }
 
 
-INSTRUCTION_TYPE edp_effector::receive_instruction(void)
+INSTRUCTION_TYPE effector::receive_instruction(void)
 {
 	// oczekuje na polecenie od ECP, wczytuje je oraz zwraca jego typ
 	int rcvid;
@@ -263,7 +263,7 @@ INSTRUCTION_TYPE edp_effector::receive_instruction(void)
 	return new_instruction.instruction_type;
 }
 
-void edp_effector::reply_to_instruction(void)
+void effector::reply_to_instruction(void)
 {
 	// Wyslanie potwierdzenia przyjecia polecenia do wykonania,
 	// adekwatnej odpowiedzi na zapytanie lub

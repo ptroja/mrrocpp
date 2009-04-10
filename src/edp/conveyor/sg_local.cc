@@ -195,7 +195,7 @@ uint64_t conveyor_servo_buffer::compute_all_set_values (void)
 namespace common {
 
 
-servo_buffer* return_created_servo_buffer (edp_irp6s_and_conv_effector &_master)
+servo_buffer* return_created_servo_buffer (irp6s_and_conv_effector &_master)
 {
 	return new conveyor::conveyor_servo_buffer ((conveyor::edp_conveyor_effector &)(_master));
 }

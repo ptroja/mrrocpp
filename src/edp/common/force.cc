@@ -38,12 +38,12 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-void * edp_irp6s_postument_track_effector::edp_vsp_thread_start(void* arg)
+void * irp6s_postument_track_effector::edp_vsp_thread_start(void* arg)
 {
-	return static_cast<edp_irp6s_postument_track_effector*> (arg)->edp_vsp_thread(arg);
+	return static_cast<irp6s_postument_track_effector*> (arg)->edp_vsp_thread(arg);
 }
 
-void * edp_irp6s_postument_track_effector::edp_vsp_thread(void *arg)
+void * irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 {
 	name_attach_t *edp_vsp_attach;
 	uint64_t e; //!< kod bledu systemowego
@@ -135,13 +135,13 @@ void * edp_irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 	return 0;
 }
 
-void * edp_irp6s_postument_track_effector::force_thread_start(void* arg)
+void * irp6s_postument_track_effector::force_thread_start(void* arg)
 {
-	return static_cast<edp_irp6s_postument_track_effector*> (arg)->force_thread(arg);
+	return static_cast<irp6s_postument_track_effector*> (arg)->force_thread(arg);
 }
 
 //!< watek do komunikacji ze sprzetem
-void * edp_irp6s_postument_track_effector::force_thread(void *arg)
+void * irp6s_postument_track_effector::force_thread(void *arg)
 {
 
 	set_thread_priority(pthread_self() , MAX_PRIORITY-1);

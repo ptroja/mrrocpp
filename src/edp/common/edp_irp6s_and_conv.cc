@@ -51,8 +51,8 @@ namespace common {
 
 
 /*--------------------------------------------------------------------------*/
-edp_irp6s_and_conv_effector::edp_irp6s_and_conv_effector (configurator &_config, ROBOT_ENUM l_robot_name) :
-        edp_effector (_config, l_robot_name), manager(), step_counter(0)
+irp6s_and_conv_effector::irp6s_and_conv_effector (configurator &_config, ROBOT_ENUM l_robot_name) :
+        effector (_config, l_robot_name), manager(), step_counter(0)
 {
 
     controller_state_edp_buf.is_synchronised = false;
@@ -101,7 +101,7 @@ edp_irp6s_and_conv_effector::edp_irp6s_and_conv_effector (configurator &_config,
 
 }
 
-void edp_irp6s_and_conv_effector::master_joints_read (double* output)
+void irp6s_and_conv_effector::master_joints_read (double* output)
 { // by Y
     pthread_mutex_lock( &edp_irp6s_effector_mutex );
     // przepisanie danych na zestaw lokalny dla edp_master
@@ -113,7 +113,7 @@ void edp_irp6s_and_conv_effector::master_joints_read (double* output)
 }
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_and_conv_effector::create_threads ()
+void irp6s_and_conv_effector::create_threads ()
 {
     // Y&W - utworzenie watku serwa
     if (pthread_create (&serwo_tid, NULL, &servo_thread_start, (void *) this)!=EOK)
@@ -154,7 +154,7 @@ void edp_irp6s_and_conv_effector::create_threads ()
 
 
 // kasuje zmienne - uwaga najpierw nalezy ustawic number_of_servos
-void edp_irp6s_and_conv_effector::reset_variables ()
+void irp6s_and_conv_effector::reset_variables ()
 {
     int i; // Liczniki petli
     // Servomechanizmy
@@ -191,15 +191,15 @@ void edp_irp6s_and_conv_effector::reset_variables ()
 
 }
 
-void edp_irp6s_and_conv_effector::servo_joints_and_frame_actualization_and_upload(void)
+void irp6s_and_conv_effector::servo_joints_and_frame_actualization_and_upload(void)
 {}
 
-bool edp_irp6s_and_conv_effector::is_power_on() const
+bool irp6s_and_conv_effector::is_power_on() const
 {
     return controller_state_edp_buf.is_power_on;
 }
 
-bool edp_irp6s_and_conv_effector::pre_synchro_motion(c_buffer &instruction)
+bool irp6s_and_conv_effector::pre_synchro_motion(c_buffer &instruction)
 // sprawdzenie czy jest to dopuszczalny rozkaz ruchu
 // przed wykonaniem synchronizacji robota
 {
@@ -216,13 +216,13 @@ bool edp_irp6s_and_conv_effector::pre_synchro_motion(c_buffer &instruction)
 
 
 
-bool edp_irp6s_and_conv_effector::is_synchronised ( void ) const
+bool irp6s_and_conv_effector::is_synchronised ( void ) const
 {
     return synchronised;
 }
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer &instruction)
+void irp6s_and_conv_effector::interpret_instruction (c_buffer &instruction)
 {
     // interpretuje otrzyman z ECP instrukcj;
     // wypenaia struktury danych TRANSFORMATORa;
@@ -440,7 +440,7 @@ void edp_irp6s_and_conv_effector::interpret_instruction (c_buffer &instruction)
 
 
 // Synchronizacja robota.
-void edp_irp6s_and_conv_effector::synchronise ()
+void irp6s_and_conv_effector::synchronise ()
 {
 
     /* Uformowanie rozkazu synchronizacji dla procesu SERVO_GROUP */
@@ -476,7 +476,7 @@ void edp_irp6s_and_conv_effector::synchronise ()
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_and_conv_effector::arm_motors_2_motors (void)
+void irp6s_and_conv_effector::arm_motors_2_motors (void)
 {
     // Przepisanie definicji koncowki danej w postaci
     // MOTORS z wewntrznych struktur danych TRANSFORMATORa
@@ -512,7 +512,7 @@ void edp_irp6s_and_conv_effector::arm_motors_2_motors (void)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_and_conv_effector::arm_joints_2_joints (void)
+void irp6s_and_conv_effector::arm_joints_2_joints (void)
 {
     // Przepisanie definicji koncowki danej w postaci
     // JOINTS z wewntrznych struktur danych TRANSFORMATORa
@@ -543,7 +543,7 @@ void edp_irp6s_and_conv_effector::arm_joints_2_joints (void)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_and_conv_effector::send_to_SERVO_GROUP ()
+void irp6s_and_conv_effector::send_to_SERVO_GROUP ()
 {
     // int command_size; // dulgosci rozkazu
     // sigset_t set, old_set; // zmienne opisujace sygnaly przysylane do procesu
@@ -639,7 +639,7 @@ void edp_irp6s_and_conv_effector::send_to_SERVO_GROUP ()
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_and_conv_effector::set_outputs (const c_buffer &instruction)
+void irp6s_and_conv_effector::set_outputs (const c_buffer &instruction)
 {
     // ustawienie wyjsc binarnych
     in_out_obj->set_output(&instruction.output_values);
@@ -650,7 +650,7 @@ void edp_irp6s_and_conv_effector::set_outputs (const c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_and_conv_effector::get_inputs (r_buffer *local_reply)
+void irp6s_and_conv_effector::get_inputs (r_buffer *local_reply)
 {
     // odczytanie wejsc binarnych
     in_out_obj->get_input(&((*local_reply).input_values), ((*local_reply).analog_input));
@@ -662,7 +662,7 @@ void edp_irp6s_and_conv_effector::get_inputs (r_buffer *local_reply)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_and_conv_effector::get_algorithms ()
+void irp6s_and_conv_effector::get_algorithms ()
 {
     // odczytanie numerow algorytmow i ich numerow zestawow parametrow
 
@@ -677,7 +677,7 @@ void edp_irp6s_and_conv_effector::get_algorithms ()
 
 
 /*--------------------------------------------------------------------------*/
-REPLY_TYPE edp_irp6s_and_conv_effector::rep_type (c_buffer &instruction)
+REPLY_TYPE irp6s_and_conv_effector::rep_type (c_buffer &instruction)
 {
     // ustalenie formatu odpowiedzi
     reply.reply_type = ACKNOWLEDGE;
@@ -745,7 +745,7 @@ REPLY_TYPE edp_irp6s_and_conv_effector::rep_type (c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_and_conv_effector::compute_motors(const c_buffer &instruction)
+void irp6s_and_conv_effector::compute_motors(const c_buffer &instruction)
 {
     // obliczenia dla ruchu ramienia (silnikami)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
@@ -803,7 +803,7 @@ void edp_irp6s_and_conv_effector::compute_motors(const c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_and_conv_effector::compute_joints (const c_buffer &instruction)
+void irp6s_and_conv_effector::compute_joints (const c_buffer &instruction)
 {
     // obliczenia dla ruchu ramienia (stawami)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
@@ -847,7 +847,7 @@ void edp_irp6s_and_conv_effector::compute_joints (const c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_and_conv_effector::move_servos ()
+void irp6s_and_conv_effector::move_servos ()
 {
     /* Wyslanie polecenia ruchu do procesu SERVO_GROUP oraz odebranie wyniku
         realizacji pierwszej fazy ruchu */
@@ -883,12 +883,12 @@ void edp_irp6s_and_conv_effector::move_servos ()
 }
 /*--------------------------------------------------------------------------*/
 
-void edp_irp6s_and_conv_effector::update_servo_current_motor_pos(double motor_position_increment, int i)
+void irp6s_and_conv_effector::update_servo_current_motor_pos(double motor_position_increment, int i)
 {
     servo_current_motor_pos[i]+=motor_position_increment;
 }
 
-void edp_irp6s_and_conv_effector::update_servo_current_motor_pos_abs(double abs_motor_position, int i)
+void irp6s_and_conv_effector::update_servo_current_motor_pos_abs(double abs_motor_position, int i)
 {
     servo_current_motor_pos[i]=abs_motor_position;
 }
@@ -902,7 +902,7 @@ void edp_irp6s_and_conv_effector::update_servo_current_motor_pos_abs(double abs_
 
 
 //   sprawdza stan robota
-void edp_irp6s_and_conv_effector::get_controller_state(c_buffer &instruction)
+void irp6s_and_conv_effector::get_controller_state(c_buffer &instruction)
 {
     synchronised = reply.controller_state.is_synchronised = controller_state_edp_buf.is_synchronised;
     reply.controller_state.is_power_on = controller_state_edp_buf.is_power_on;
@@ -934,7 +934,7 @@ void edp_irp6s_and_conv_effector::get_controller_state(c_buffer &instruction)
 
 
 
-void edp_irp6s_and_conv_effector::main_loop ()
+void irp6s_and_conv_effector::main_loop ()
 {
 
     // by Y pierwsza petla while do odpytania o stan EDP przez UI zaraz po starcie EDP
@@ -964,16 +964,16 @@ void edp_irp6s_and_conv_effector::main_loop ()
                     }
                     else
                     {
-                        throw edp_irp6s_and_conv_effector::NonFatal_error_1 (INVALID_INSTRUCTION_TYPE);
+                        throw irp6s_and_conv_effector::NonFatal_error_1 (INVALID_INSTRUCTION_TYPE);
                     }
 
                     break;
                 case QUERY: // blad: nie ma o co pytac - zadne polecenie uprzednio nie zostalo wydane
                     // okreslenie numeru bledu
-                    throw edp_irp6s_and_conv_effector::NonFatal_error_1 (QUERY_NOT_EXPECTED);
+                    throw irp6s_and_conv_effector::NonFatal_error_1 (QUERY_NOT_EXPECTED);
                 default: // blad: nieznana instrukcja
                     // okreslenie numeru bledu
-                    throw edp_irp6s_and_conv_effector::NonFatal_error_1 (INVALID_INSTRUCTION_TYPE);
+                    throw irp6s_and_conv_effector::NonFatal_error_1 (INVALID_INSTRUCTION_TYPE);
                 }
                 next_state = WAIT;
                 break;
@@ -985,7 +985,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
                 }
                 else
                 { // blad: powinna byla nadejsc instrukcja QUERY
-                    throw edp_irp6s_and_conv_effector::NonFatal_error_3 ( QUERY_EXPECTED );
+                    throw irp6s_and_conv_effector::NonFatal_error_3 ( QUERY_EXPECTED );
                 }
 
                 /*
@@ -1013,7 +1013,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
             }
         }
 
-        catch(edp_irp6s_and_conv_effector::NonFatal_error_1 nfe)
+        catch(irp6s_and_conv_effector::NonFatal_error_1 nfe)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -1027,7 +1027,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
             next_state = GET_STATE;
         } // end: catch(transformer::NonFatal_error_1 nfe)
 
-        catch(edp_irp6s_and_conv_effector::NonFatal_error_2 nfe)
+        catch(irp6s_and_conv_effector::NonFatal_error_2 nfe)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -1039,7 +1039,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
             next_state = WAIT;
         } // end: catch(transformer::NonFatal_error_2 nfe)
 
-        catch(edp_irp6s_and_conv_effector::NonFatal_error_3 nfe)
+        catch(irp6s_and_conv_effector::NonFatal_error_3 nfe)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -1064,7 +1064,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
             next_state = GET_STATE;
         } // end: catch(transformer::NonFatal_error_3 nfe)
 
-        catch(edp_irp6s_and_conv_effector::Fatal_error fe)
+        catch(irp6s_and_conv_effector::Fatal_error fe)
         {
             //     printf("ERROR w EDP transformer fe\n");
             // Obsluga bledow fatalnych
@@ -1122,13 +1122,13 @@ void edp_irp6s_and_conv_effector::main_loop ()
                         // synchronizacji lub ruchow presynchronizacyjnych
                         // Bez synchronizacji adna inna instrukcja nie moze by wykonana przez EDP
                         /* Informacja o bedzie polegajcym na braku polecenia synchronizacji */
-                        throw edp_irp6s_and_conv_effector::NonFatal_error_1(NOT_YET_SYNCHRONISED);
+                        throw irp6s_and_conv_effector::NonFatal_error_1(NOT_YET_SYNCHRONISED);
                     break;
                 default: // blad: jedyna instrukcja w tym stanie moze by polecenie
                     // synchronizacji lub ruchow presynchronizacyjnych
                     // Bez synchronizacji adna inna instrukcja nie moze by wykonana przez EDP
                     /* Informacja o bedzie polegajcym na braku polecenia synchronizacji */
-                    throw edp_irp6s_and_conv_effector::NonFatal_error_1(INVALID_INSTRUCTION_TYPE);
+                    throw irp6s_and_conv_effector::NonFatal_error_1(INVALID_INSTRUCTION_TYPE);
                 }
                 break;
             case SYNCHRO_TERMINATED:
@@ -1144,7 +1144,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
                 }
                 else
                 { // blad: powinna byla nadejsc instrukcja QUERY
-                    throw edp_irp6s_and_conv_effector::NonFatal_error_4(QUERY_EXPECTED);
+                    throw irp6s_and_conv_effector::NonFatal_error_4(QUERY_EXPECTED);
                 }
                 break;
             case WAIT_Q:
@@ -1157,7 +1157,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
                 }
                 else
                 { // blad: powinna byla nadejsc instrukcja QUERY
-                    throw edp_irp6s_and_conv_effector::NonFatal_error_3(QUERY_EXPECTED);
+                    throw irp6s_and_conv_effector::NonFatal_error_3(QUERY_EXPECTED);
                 }
                 break;
             default:
@@ -1167,7 +1167,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
 
         // printf("debug edp po while\n");		// by Y&W
 
-        catch(edp_irp6s_and_conv_effector::NonFatal_error_1 nfe1)
+        catch(irp6s_and_conv_effector::NonFatal_error_1 nfe1)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -1179,7 +1179,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
             next_state = GET_SYNCHRO;
         } // end: catch(transformer::NonFatal_error_1 nfe1)
 
-        catch(edp_irp6s_and_conv_effector::NonFatal_error_2 nfe2)
+        catch(irp6s_and_conv_effector::NonFatal_error_2 nfe2)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -1194,7 +1194,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
             next_state = WAIT_Q;
         } // end: catch(transformer::NonFatal_error nfe2)
 
-        catch(edp_irp6s_and_conv_effector::NonFatal_error_3 nfe3)
+        catch(irp6s_and_conv_effector::NonFatal_error_3 nfe3)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -1214,7 +1214,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
             next_state = GET_SYNCHRO;
         } // end: catch(transformer::NonFatal_error nfe3)
 
-        catch(edp_irp6s_and_conv_effector::NonFatal_error_4 nfe4)
+        catch(irp6s_and_conv_effector::NonFatal_error_4 nfe4)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -1230,7 +1230,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
             next_state = SYNCHRO_TERMINATED;
         } // end: catch(transformer::NonFatal_error nfe4)
 
-        catch(edp_irp6s_and_conv_effector::Fatal_error fe)
+        catch(irp6s_and_conv_effector::Fatal_error fe)
         {
             // Obsluga bledow fatalnych
             // Konkretny numer bledu znajduje sie w skadowych error0 lub error1 obiektu fe
@@ -1275,13 +1275,13 @@ void edp_irp6s_and_conv_effector::main_loop ()
                     break;
                 case SYNCHRO: // blad: robot jest juz zsynchronizowany
                     // okreslenie numeru bledu
-                    throw edp_irp6s_and_conv_effector::NonFatal_error_1(ALREADY_SYNCHRONISED);
+                    throw irp6s_and_conv_effector::NonFatal_error_1(ALREADY_SYNCHRONISED);
                 case QUERY: // blad: nie ma o co pytac - zadne polecenie uprzednio nie zostalo wydane
                     // okreslenie numeru bledu
-                    throw edp_irp6s_and_conv_effector::NonFatal_error_1(QUERY_NOT_EXPECTED);
+                    throw irp6s_and_conv_effector::NonFatal_error_1(QUERY_NOT_EXPECTED);
                 default: // blad: nieznana instrukcja
                     // okreslenie numeru bledu
-                    throw edp_irp6s_and_conv_effector::NonFatal_error_1(UNKNOWN_INSTRUCTION);
+                    throw irp6s_and_conv_effector::NonFatal_error_1(UNKNOWN_INSTRUCTION);
                 }
                 next_state = EXECUTE_INSTRUCTION;
                 break;
@@ -1298,7 +1298,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
                 }
                 else
                 { // blad: powinna byla nadejsc instrukcja QUERY
-                    throw edp_irp6s_and_conv_effector::NonFatal_error_3(QUERY_EXPECTED);
+                    throw irp6s_and_conv_effector::NonFatal_error_3(QUERY_EXPECTED);
                 }
                 next_state = GET_INSTRUCTION;
                 break;
@@ -1307,7 +1307,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
             }
         }
 
-        catch(edp_irp6s_and_conv_effector::NonFatal_error_1 nfe)
+        catch(irp6s_and_conv_effector::NonFatal_error_1 nfe)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -1321,7 +1321,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
             next_state = GET_INSTRUCTION;
         } // end: catch(transformer::NonFatal_error_1 nfe)
 
-        catch(edp_irp6s_and_conv_effector::NonFatal_error_2 nfe)
+        catch(irp6s_and_conv_effector::NonFatal_error_2 nfe)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -1333,7 +1333,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
             next_state = WAIT;
         } // end: catch(transformer::NonFatal_error_2 nfe)
 
-        catch(edp_irp6s_and_conv_effector::NonFatal_error_3 nfe)
+        catch(irp6s_and_conv_effector::NonFatal_error_3 nfe)
         {
             // Obsluga bledow nie fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -1358,7 +1358,7 @@ void edp_irp6s_and_conv_effector::main_loop ()
             next_state = GET_INSTRUCTION;
         } // end: catch(transformer::NonFatal_error_3 nfe)
 
-        catch(edp_irp6s_and_conv_effector::Fatal_error fe)
+        catch(irp6s_and_conv_effector::Fatal_error fe)
         {
             // Obsluga bledow fatalnych
             // Konkretny numer bledu znajduje sie w skladowej error obiektu fe

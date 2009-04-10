@@ -42,7 +42,7 @@ namespace edp {
 namespace common {
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_postument_track_effector::set_rmodel(c_buffer &instruction)
+void irp6s_postument_track_effector::set_rmodel(c_buffer &instruction)
 {
 	// BYTE previous_model;
 	// BYTE previous_corrector;
@@ -114,7 +114,7 @@ void edp_irp6s_postument_track_effector::set_rmodel(c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_postument_track_effector::get_rmodel(c_buffer &instruction)
+void irp6s_postument_track_effector::get_rmodel(c_buffer &instruction)
 {
 	//printf(" GET RMODEL: ");
 	switch (instruction.get_rmodel_type)
@@ -169,7 +169,7 @@ void edp_irp6s_postument_track_effector::get_rmodel(c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_postument_track_effector::arm_frame_2_xyz_eul_zyz()
+void irp6s_postument_track_effector::arm_frame_2_xyz_eul_zyz()
 {
 
 	// Przeksztacenie definicji koncowki z postaci
@@ -202,7 +202,7 @@ void edp_irp6s_postument_track_effector::arm_frame_2_xyz_eul_zyz()
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_postument_track_effector::arm_abs_xyz_eul_zyz_2_frame(const double *p)
+void irp6s_postument_track_effector::arm_abs_xyz_eul_zyz_2_frame(const double *p)
 {
 
 	double x, y, z; // wspolrzedne wektora przesuniecia
@@ -224,8 +224,8 @@ void edp_irp6s_postument_track_effector::arm_abs_xyz_eul_zyz_2_frame(const doubl
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-edp_irp6s_postument_track_effector::edp_irp6s_postument_track_effector(configurator &_config, ROBOT_ENUM l_robot_name) :
-	edp_irp6s_effector(_config, l_robot_name)
+irp6s_postument_track_effector::irp6s_postument_track_effector(configurator &_config, ROBOT_ENUM l_robot_name) :
+	irp6s_effector(_config, l_robot_name)
 	{
 
 	pthread_mutex_init(&force_mutex, NULL);
@@ -248,11 +248,11 @@ edp_irp6s_postument_track_effector::edp_irp6s_postument_track_effector(configura
 
 	}
 
-void edp_irp6s_postument_track_effector::pose_force_linear_move(c_buffer &instruction)
+void irp6s_postument_track_effector::pose_force_linear_move(c_buffer &instruction)
 {}
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_postument_track_effector::create_threads()
+void irp6s_postument_track_effector::create_threads()
 {
 	// jesli wlaczono obsluge sily
 	if (force_tryb > 0)
@@ -281,13 +281,13 @@ void edp_irp6s_postument_track_effector::create_threads()
 		}
 	}
 
-	edp_irp6s_effector::create_threads();
+	irp6s_effector::create_threads();
 }
 
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffer &instruction)
+void irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffer &instruction)
 {
 	//	static int debugi=0;
 	//   debugi++;
@@ -611,7 +611,7 @@ void edp_irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffe
 
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_postument_track_effector::move_arm(c_buffer &instruction)
+void irp6s_postument_track_effector::move_arm(c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
@@ -675,7 +675,7 @@ void edp_irp6s_postument_track_effector::move_arm(c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void edp_irp6s_postument_track_effector::get_arm_position(bool read_hardware, c_buffer &instruction)
+void irp6s_postument_track_effector::get_arm_position(bool read_hardware, c_buffer &instruction)
 { // odczytanie pozycji ramienia
 
 	//   printf(" GET ARM\n");
@@ -779,7 +779,7 @@ void edp_irp6s_postument_track_effector::get_arm_position(bool read_hardware, c_
 
 // sprawdza stan EDP zaraz po jego uruchomieniu
 
-void edp_irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_upload(void)
+void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_upload(void)
 {
 	int i;
 	static int catch_nr=0;
@@ -910,7 +910,7 @@ void edp_irp6s_postument_track_effector::servo_joints_and_frame_actualization_an
 	pthread_mutex_unlock( &edp_irp6s_effector_mutex);
 }
 
-Homog_matrix edp_irp6s_postument_track_effector::return_current_frame(TRANSLATION_ENUM translation_mode)
+Homog_matrix irp6s_postument_track_effector::return_current_frame(TRANSLATION_ENUM translation_mode)
 {// by Y
 	pthread_mutex_lock( &edp_irp6s_effector_mutex);
 	// przepisanie danych na zestaw lokalny dla edp_force
@@ -923,7 +923,7 @@ Homog_matrix edp_irp6s_postument_track_effector::return_current_frame(TRANSLATIO
 	return return_frame;
 }
 
-void edp_irp6s_postument_track_effector::force_msr_upload(const double *new_value)
+void irp6s_postument_track_effector::force_msr_upload(const double *new_value)
 {// by Y wgranie globalnego zestawu danych
 	pthread_mutex_lock( &force_mutex);
 	for (int i=0; i<=5; i++)
@@ -936,7 +936,7 @@ void edp_irp6s_postument_track_effector::force_msr_upload(const double *new_valu
 }
 
 // by Y odczytanie globalnego zestawu danych
-void edp_irp6s_postument_track_effector::force_msr_download(double *new_value, double *old_value)
+void irp6s_postument_track_effector::force_msr_download(double *new_value, double *old_value)
 {
 	pthread_mutex_lock( &force_mutex);
 	for (int i=0; i<=5; i++)

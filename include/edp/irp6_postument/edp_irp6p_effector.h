@@ -24,7 +24,7 @@ namespace edp {
 namespace irp6p {
 
 // Klasa reprezentujaca robota IRp-6 na postumencie.
-class edp_irp6p_effector  : public common::edp_irp6s_postument_track_effector
+class edp_irp6p_effector  : public common::irp6s_postument_track_effector
 {
 protected:
     // Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.

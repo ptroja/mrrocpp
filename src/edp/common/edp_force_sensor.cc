@@ -33,7 +33,7 @@ namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-force::force(common::edp_irp6s_postument_track_effector &_master)
+force::force(common::irp6s_postument_track_effector &_master)
         : master(_master), new_edp_command(false)
 {
     gravity_transformation = NULL;

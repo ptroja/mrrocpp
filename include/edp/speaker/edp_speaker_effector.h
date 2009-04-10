@@ -24,7 +24,7 @@ namespace edp {
 namespace speaker {
 
 // Klasa reprezentujaca speaker'a.
-class edp_speaker_effector  : public common::edp_effector
+class edp_speaker_effector  : public common::effector
 {
 protected:
 

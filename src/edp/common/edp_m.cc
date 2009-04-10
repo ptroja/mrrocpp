@@ -35,7 +35,7 @@ namespace common {
 
 // sr_edp *msg;                // Wskaznik na obiekt do komunikacji z SR
 
-edp_effector* master; // Bufor polecen i odpowiedzi EDP_MASTER
+effector* master; // Bufor polecen i odpowiedzi EDP_MASTER
 
 static _clockperiod old_cp;
 

@@ -136,8 +136,8 @@ protected:
     void constraint_detector(double max_acc_local, double max_vel_local, bool debug = false);
 
 public:
-    edp_irp6s_and_conv_effector &master;
-    regulator ( BYTE reg_no, BYTE reg_par_no,    edp_irp6s_and_conv_effector &_master ); // konstruktor
+    irp6s_and_conv_effector &master;
+    regulator ( BYTE reg_no, BYTE reg_par_no,    irp6s_and_conv_effector &_master ); // konstruktor
 
     virtual BYTE compute_set_value ( void ) = 0;
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda abstrakcyjna
@@ -201,7 +201,7 @@ public:
 
     NL_regulator (BYTE reg_no, BYTE reg_par_no,
                   double aa, double bb0, double bb1, double k_ff,
-                  edp_irp6s_and_conv_effector &_master); // konstruktor
+                  irp6s_and_conv_effector &_master); // konstruktor
 
     virtual BYTE compute_set_value ( void ) = 0;
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda abstrakcyjna
@@ -261,7 +261,7 @@ protected:
 
 public:
 
-    edp_irp6s_and_conv_effector &master;
+    irp6s_and_conv_effector &master;
 
     // input_buffer
     SERVO_COMMAND command_type(void);
@@ -270,7 +270,7 @@ public:
     // output_buffer
     virtual void get_all_positions (void);
     //servo_buffer ();             // konstruktor
-    servo_buffer (edp_irp6s_and_conv_effector &_master);             // konstruktor
+    servo_buffer (irp6s_and_conv_effector &_master);             // konstruktor
     virtual ~servo_buffer (void);      // destruktor
     bool get_command (void);      // odczytanie polecenia z EDP_MASTER
     // o ile zostalo przyslane
@@ -287,7 +287,7 @@ public:
 /*-----------------------------------------------------------------------*/
 
 // Zwrocenie stworzonego obiektu - servo_buffer. Funkcja implementowana w plikach efektorow konkretnych (jadro).
-servo_buffer* return_created_servo_buffer (edp_irp6s_and_conv_effector &_master);
+servo_buffer* return_created_servo_buffer (irp6s_and_conv_effector &_master);
 
 } // namespace common
 } // namespace edp

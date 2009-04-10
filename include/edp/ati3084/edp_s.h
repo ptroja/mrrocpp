@@ -160,7 +160,7 @@ private:
 
 public:
 
-	ATI3084_force(common::edp_irp6s_postument_track_effector &_master);
+	ATI3084_force(common::irp6s_postument_track_effector &_master);
 	virtual ~ATI3084_force();
 
 	void configure_sensor (void);	// konfiguracja czujnika

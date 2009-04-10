@@ -596,7 +596,7 @@ uint64_t irp6p_servo_buffer::compute_all_set_values (void)
 } // namespace irp6p
 namespace common {
 
-servo_buffer* return_created_servo_buffer (edp_irp6s_and_conv_effector &_master)
+servo_buffer* return_created_servo_buffer (irp6s_and_conv_effector &_master)
 {
 	return new irp6p::irp6p_servo_buffer ((irp6p::edp_irp6p_effector &)(_master));
 };
