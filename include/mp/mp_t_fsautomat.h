@@ -20,7 +20,7 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class mp_task_fsautomat : public mp_task  
+class fsautomat : public base  
 {
 	protected:
 		bool break_state;
@@ -33,9 +33,9 @@ class mp_task_fsautomat : public mp_task
 		std::list<common::SingleManipulation> manipulation_list;
 		
 	    // konstruktor
-	    mp_task_fsautomat(configurator &_config);
+	    fsautomat(configurator &_config);
 	
-	    ~mp_task_fsautomat();
+	    ~fsautomat();
 
 		// methods for mp template
 		void task_initialization(void);

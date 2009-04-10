@@ -22,7 +22,7 @@ namespace common {
 
 
 // obiekt z metodami i polami dla procesu MP (polimorficzny)
-task::mp_task* mp_t;
+task::base* mp_t;
 
 void catch_signal_in_mp(int sig)
 {
@@ -179,7 +179,7 @@ int main (int argc, char *argv[], char **arge)
 
 
 			} /*end: catch */
-			catch (mp::common::mp_robot::MP_error e) {
+			catch (mp::common::robot::MP_error e) {
 				if (e.error_class == SYSTEM_ERROR) {
 					exit(EXIT_FAILURE);
 				}

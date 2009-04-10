@@ -14,13 +14,13 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class mp_task_vis_sac: public mp_task  {
+class vis_sac: public base  {
 protected:
 
 
 public:
 	
-	mp_task_vis_sac(configurator &_config);
+	vis_sac(configurator &_config);
 
 	// methods for mp template
 	void task_initialization(void);

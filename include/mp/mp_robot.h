@@ -26,7 +26,7 @@ public:
 
 
 
-class mp_robot : public ecp_mp::robot
+class robot : public ecp_mp::robot
 {
     // Klasa bazowa dla robotow (klasa abstrakcyjna)
     // Kazdy robot konkretny (wyprowadzony z klasy bazowej)
@@ -38,7 +38,7 @@ protected:
     ECP_REPLY_PACKAGE ecp_reply_package;        // Bufor z odpowiedzia z ECP
     // - uzytkownik nie powinien z tego korzystac
 
-    task::mp_task &mp_object;
+    task::base &mp_object;
 
 public:
     bool communicate; // okresla czy robot ma byc obslugiwany w Move
@@ -63,8 +63,8 @@ public:
     robot_ECP_transmission_data ecp_td; // Obraz danych robota wykorzystywanych przez generator
     // - do uzytku uzytkownika (generatora)
 
-    mp_robot (ROBOT_ENUM l_robot_name, const char* _section_name, task::mp_task &mp_object_l);
-    ~mp_robot();
+    robot (ROBOT_ENUM l_robot_name, const char* _section_name, task::base &mp_object_l);
+    ~robot();
 
     class MP_error
     {  // Klasa obslugi bledow robotow

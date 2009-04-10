@@ -38,7 +38,7 @@ class teach_in : public base {
 	public:
 		// -------------------------------------------------------
 		// konstruktor
-		teach_in(task::mp_task& _mp_task);
+		teach_in(task::base& _mp_task);
 
 		// -------------------------------------------------------
 		// destruktor

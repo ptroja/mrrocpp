@@ -24,7 +24,7 @@ protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
 
   
-  common::mp_robot *irp6;
+  common::robot *irp6;
     ::sensor *vsp_force;
     
      trajectory_description td;
@@ -34,7 +34,7 @@ public:
        double delta[6];
 
     // konstruktor
-    tff_single_robot_nose_run(task::mp_task& _mp_task, int step=0);
+    tff_single_robot_nose_run(task::base& _mp_task, int step=0);
 	
 	virtual bool first_step ();    
 	virtual bool next_step ();    
@@ -53,7 +53,7 @@ protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
    
   
-    common::mp_robot *irp6ot, *irp6p;
+    common::robot *irp6ot, *irp6p;
     ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
     
     // do konfiguracji pracy generatora
@@ -67,7 +67,7 @@ public:
        double delta[6];
 
     // konstruktor
-    tff_nose_run(task::mp_task& _mp_task, int step=0);
+    tff_nose_run(task::base& _mp_task, int step=0);
 	
 	void configure (unsigned short l_irp6ot_con , unsigned short l_irp6p_con );
 
@@ -87,7 +87,7 @@ class haptic : public base
 protected:
    
   
-    common::mp_robot *irp6ot, *irp6p;
+    common::robot *irp6ot, *irp6p;
     ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
     
     // do konfiguracji pracy generatora
@@ -101,7 +101,7 @@ public:
   //     double delta[6];
 
     // konstruktor
-    haptic(task::mp_task& _mp_task, int step=0);
+    haptic(task::base& _mp_task, int step=0);
 	
 	void configure (unsigned short l_irp6ot_con , unsigned short l_irp6p_con );
 
@@ -121,7 +121,7 @@ protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
    
   
-    common::mp_robot *irp6ot, *irp6p;
+    common::robot *irp6ot, *irp6p;
     ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
 
      trajectory_description td;
@@ -138,7 +138,7 @@ public:
        double delta[6];
 
     // konstruktor
-    tff_rubik_grab(task::mp_task& _mp_task, int step=0);
+    tff_rubik_grab(task::base& _mp_task, int step=0);
 	
 	void configure(unsigned short l_irp6ot_con, unsigned short l_irp6p_con, double l_goal_position, 
 		double l_position_increment, int l_min_node_counter, bool l_irp6p_both_axes_running = true, bool l_irp6ot_both_axes_running = true);
@@ -158,7 +158,7 @@ protected:
 	int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
 	
      trajectory_description td;
-    common::mp_robot *irp6ot, *irp6p;
+    common::robot *irp6ot, *irp6p;
     ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
     // do konfiguracji pracy generatora
     double irp6ot_con, irp6p_con;
@@ -169,7 +169,7 @@ public:
        double delta[6];
 
     // konstruktor
-    tff_rubik_face_rotate(task::mp_task& _mp_task, int step=0);  
+    tff_rubik_face_rotate(task::base& _mp_task, int step=0);  
 	
 	void configure(double l_irp6ot_con, double l_irp6p_con);
 	
@@ -189,7 +189,7 @@ protected:
 	int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
 	
      trajectory_description td;
-    common::mp_robot *irp6ot, *irp6p;
+    common::robot *irp6ot, *irp6p;
     ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
     // do konfiguracji pracy generatora
     double irp6ot_speed, irp6p_speed;
@@ -200,7 +200,7 @@ public:
        double delta[6];
 
     // konstruktor
-    tff_gripper_approach(task::mp_task& _mp_task, int step=0);  
+    tff_gripper_approach(task::base& _mp_task, int step=0);  
 	
 	void configure(double l_irp6ot_speed, double l_irp6p_speed, int l_motion_time);
 	
@@ -222,7 +222,7 @@ protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
    
   
-      common::mp_robot *irp6ot, *irp6p, *conv;
+      common::robot *irp6ot, *irp6p, *conv;
     ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
  
 public:
@@ -231,7 +231,7 @@ public:
        double delta[6];
 
     // konstruktor
-    nose_run_force(task::mp_task& _mp_task, int step=0);  
+    nose_run_force(task::base& _mp_task, int step=0);  
 
    virtual bool first_step ();    
    virtual bool next_step ();    
@@ -272,7 +272,7 @@ class drawing_teach_in_force : public teach_in {
         short gen_state, next_gen_state, prev_gen_state; // stan w ktorym znajduje sie generator 
         double conv_summar_inc;
         
-        common::mp_robot *irp6ot, *irp6p, *conv;
+        common::robot *irp6ot, *irp6p, *conv;
         ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
         
     protected:
@@ -288,7 +288,7 @@ class drawing_teach_in_force : public teach_in {
         short teach_or_move;
         
     // konstruktor
-    drawing_teach_in_force(task::mp_task& _mp_task, int step=0);
+    drawing_teach_in_force(task::base& _mp_task, int step=0);
         
         
         virtual bool first_step ();

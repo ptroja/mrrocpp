@@ -25,17 +25,17 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-mp_task* return_created_mp_task (configurator &_config)
+base* return_created_mp_task (configurator &_config)
 {
-	return new mp_task_vis(_config);
+	return new vis(_config);
 }
 
-mp_task_vis::mp_task_vis(configurator &_config) : mp_task(_config)
+vis::vis(configurator &_config) : base(_config)
 {
 }
 
 // methods fo mp template to redefine in concete class
-void mp_task_vis::task_initialization(void) 
+void vis::task_initialization(void) 
 {
 	// Powolanie czujnikow
 	sensor_m[SENSOR_FORCE_ON_TRACK] = 
@@ -58,7 +58,7 @@ void mp_task_vis::task_initialization(void)
 };
 
 
-void mp_task_vis::main_task_algorithm(void)
+void vis::main_task_algorithm(void)
 {
 
 

@@ -20,7 +20,7 @@ public:
 	
 	char cube_tab[6][9]; // NAZWA DO ZMIANY
 
-	friend class mp_task_rubik_cube_solver;
+	friend class rubik_cube_solver;
     // konstruktory
     CubeState();
     CubeState(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is, 

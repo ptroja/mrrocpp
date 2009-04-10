@@ -21,8 +21,8 @@ namespace mp {
 namespace common {
 
 // -------------------------------------------------------------------
-mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, task::mp_task &mp_object_l) :
-	robot(l_robot_name),
+robot::robot( ROBOT_ENUM l_robot_name, const char* _section_name, task::base &mp_object_l) :
+	ecp_mp::robot(l_robot_name),
 	mp_object(mp_object_l),
 	sr_ecp_msg(*(mp_object_l.sr_ecp_msg))
 {
@@ -92,7 +92,7 @@ mp_robot::mp_robot( ROBOT_ENUM l_robot_name, const char* _section_name, task::mp
 // -------------------------------------------------------------------
 
 
-mp_robot::~mp_robot() {
+robot::~robot() {
 #if !defined(USE_MESSIP_SRR)
 	if (ECP_fd > 0) {
 		name_close(ECP_fd);
@@ -105,7 +105,7 @@ mp_robot::~mp_robot() {
 }
 
 // ------------------------------------------------------------------------
-void mp_robot::start_ecp ( void ) {
+void robot::start_ecp ( void ) {
 
 	mp_command.command = START_TASK;
 	mp_command.hdr.type = 0;
@@ -135,7 +135,7 @@ void mp_robot::start_ecp ( void ) {
 
 
 // -------------------------------------------------------------------
-void mp_robot::execute_motion(void) { // zlecenie wykonania ruchu
+void robot::execute_motion(void) { // zlecenie wykonania ruchu
 
 	mp_command.hdr.type = 0;
 
@@ -165,7 +165,7 @@ void mp_robot::execute_motion(void) { // zlecenie wykonania ruchu
 
 
 // -------------------------------------------------------------------
-void mp_robot::terminate_ecp(void) { // zlecenie STOP zakonczenia ruchu
+void robot::terminate_ecp(void) { // zlecenie STOP zakonczenia ruchu
 	mp_command.command = STOP;
 	mp_command.hdr.type = 0;
 
@@ -192,7 +192,7 @@ void mp_robot::terminate_ecp(void) { // zlecenie STOP zakonczenia ruchu
 
 
 // --------------------------------------------------------------------------
-void mp_robot::create_command (void) {
+void robot::create_command (void) {
 // wypelnia bufor wysylkowy do ECP na podstawie danych
 // zawartych w skladowych generatora lub warunku
 
@@ -210,7 +210,7 @@ void mp_robot::create_command (void) {
 	}
 }
 // ---------------------------------------------------------------
-void mp_robot::get_reply(void) {
+void robot::get_reply(void) {
 	// pobiera z pakietu przeslanego z ECP informacje i wstawia je do
 	// odpowiednich skladowych generatora lub warunku
 

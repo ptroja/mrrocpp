@@ -5,10 +5,10 @@
 namespace mrrocpp {
 namespace mp {
 namespace common {
-class mp_irp6_on_track_robot: public mp_irp6s_and_conv_robot {
+class irp6_on_track_robot: public irp6s_and_conv_robot {
 
  public:
-  mp_irp6_on_track_robot (task::mp_task &mp_object_l);
+  irp6_on_track_robot (task::base &mp_object_l);
 };
 } // namespace common
 } // namespace mp

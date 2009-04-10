@@ -15,7 +15,7 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class mp_task_haptic : public mp_task  
+class haptic : public base  
 {
 protected:
  
@@ -23,7 +23,7 @@ protected:
   
 public:
 	
-	mp_task_haptic(configurator &_config);
+	haptic(configurator &_config);
 
 	// methods for mp template
 	void task_initialization(void);

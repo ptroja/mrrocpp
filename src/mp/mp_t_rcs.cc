@@ -32,7 +32,7 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-void mp_task_rubik_cube_solver::initiate(common::CUBE_COLOR up_is, common::CUBE_COLOR down_is, common::CUBE_COLOR front_is,
+void rubik_cube_solver::initiate(common::CUBE_COLOR up_is, common::CUBE_COLOR down_is, common::CUBE_COLOR front_is,
 		common::CUBE_COLOR rear_is, common::CUBE_COLOR left_is, common::CUBE_COLOR right_is)
 {
 	cube_state = new common::CubeState(up_is, down_is, front_is, rear_is, left_is, right_is);
@@ -41,19 +41,19 @@ void mp_task_rubik_cube_solver::initiate(common::CUBE_COLOR up_is, common::CUBE_
 }
 
 
-mp_task_rubik_cube_solver::mp_task_rubik_cube_solver(configurator &_config)
-	: mp_task(_config),
+rubik_cube_solver::rubik_cube_solver(configurator &_config)
+	: base(_config),
 	cube_state(NULL)
 {
 }
 
-mp_task_rubik_cube_solver::~mp_task_rubik_cube_solver()
+rubik_cube_solver::~rubik_cube_solver()
 {
 	if(cube_state)
 		delete cube_state;
 }
 
-void mp_task_rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogladanie scian)
+void rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogladanie scian)
 {
 
 	//sekwencja poczatkowa w kolejnosci: UP, DOWN, FRONT, BACK, LEFT, RIGHT
@@ -288,7 +288,7 @@ bool mp_task_rubik_cube_solver::communicate_with_windows_solver()
 }
  */
 
-bool mp_task_rubik_cube_solver::find_rcs()
+bool rubik_cube_solver::find_rcs()
 {
 	char c_up, c_right, c_front, c_down, c_left, c_back;
 	char cube_tab_send[55];
@@ -428,7 +428,7 @@ bool mp_task_rubik_cube_solver::find_rcs()
 }
 
 
-int mp_task_rubik_cube_solver::find_rcs_with_VSP(char* cube_state, char* cube_solution)
+int rubik_cube_solver::find_rcs_with_VSP(char* cube_state, char* cube_solution)
 {
 	// Zmienne na rozwiazania
 	char *sol_korf = NULL, *sol_kociemba = NULL;
@@ -539,7 +539,7 @@ int mp_task_rubik_cube_solver::find_rcs_with_VSP(char* cube_state, char* cube_so
 }
 
 
-int mp_task_rubik_cube_solver::find_rcs_with_windows_solver(char* cube_state, char* cube_solution)
+int rubik_cube_solver::find_rcs_with_windows_solver(char* cube_state, char* cube_solution)
 {
 	// przepisanie stanu kostki do bufora transmisyjnego
 	for(int i=0; i<54; i++)
@@ -587,7 +587,7 @@ int mp_task_rubik_cube_solver::find_rcs_with_windows_solver(char* cube_state, ch
 }
 
 
-void mp_task_rubik_cube_solver::execute_manipulation_sequence()
+void rubik_cube_solver::execute_manipulation_sequence()
 {
 	for(std::list<common::SingleManipulation>::iterator manipulation_list_iterator = manipulation_list.begin();
 	manipulation_list_iterator != manipulation_list.end(); manipulation_list_iterator++)
@@ -598,7 +598,7 @@ void mp_task_rubik_cube_solver::execute_manipulation_sequence()
 
 
 
-void mp_task_rubik_cube_solver::manipulate(common::CUBE_COLOR face_to_turn, common::CUBE_TURN_ANGLE turn_angle )
+void rubik_cube_solver::manipulate(common::CUBE_COLOR face_to_turn, common::CUBE_TURN_ANGLE turn_angle )
 {
 
 	if (face_to_turn == cube_state->up)
@@ -642,7 +642,7 @@ void mp_task_rubik_cube_solver::manipulate(common::CUBE_COLOR face_to_turn, comm
 
 
 // obrot sciany
-void mp_task_rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
+void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 {
 
 	// zblizenie chwytakow
@@ -760,7 +760,7 @@ void mp_task_rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 
 
 // zmiana sciany (przelozenie kostki)
-void mp_task_rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
+void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 {
 
 	// zblizenie chwytakow
@@ -929,7 +929,7 @@ void mp_task_rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angl
 
 
 // dojscie
-void mp_task_rubik_cube_solver::approach_op(int mode)
+void rubik_cube_solver::approach_op(int mode)
 {
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SPEAK, 0, "jestem podatny", 1, ROBOT_SPEAKER);
 
@@ -1041,7 +1041,7 @@ void mp_task_rubik_cube_solver::approach_op(int mode)
 
 
 // odejscie
-void mp_task_rubik_cube_solver::departure_op()
+void rubik_cube_solver::departure_op()
 {
 
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SPEAK, 0, "skoNczyLem", 1, ROBOT_SPEAKER);
@@ -1066,7 +1066,7 @@ void mp_task_rubik_cube_solver::departure_op()
 }
 
 
-void mp_task_rubik_cube_solver::gripper_opening(double track_increment, double postument_increment, int motion_time)
+void rubik_cube_solver::gripper_opening(double track_increment, double postument_increment, int motion_time)
 {
 
 	trajectory_description tdes;
@@ -1110,15 +1110,15 @@ void mp_task_rubik_cube_solver::gripper_opening(double track_increment, double p
 
 
 
-mp_task* return_created_mp_task (configurator &_config)
+base* return_created_mp_task (configurator &_config)
 {
-	return new mp_task_rubik_cube_solver(_config);
+	return new rubik_cube_solver(_config);
 }
 
 
 
 // methods fo mp template to redefine in concete class
-void mp_task_rubik_cube_solver::task_initialization(void)
+void rubik_cube_solver::task_initialization(void)
 {
 	// Powolanie czujnikow
 	sensor_m[SENSOR_FORCE_ON_TRACK] =
@@ -1166,7 +1166,7 @@ void mp_task_rubik_cube_solver::task_initialization(void)
 }
 
 
-void mp_task_rubik_cube_solver::main_task_algorithm(void)
+void rubik_cube_solver::main_task_algorithm(void)
 {
 
 

@@ -29,7 +29,7 @@ namespace generator {
 
 
 
-	vis_force::vis_force(task::mp_task& _mp_task, int step): base (_mp_task){ 
+	vis_force::vis_force(task::base& _mp_task, int step): base (_mp_task){ 
 		step_no = step;          
 	};  
 

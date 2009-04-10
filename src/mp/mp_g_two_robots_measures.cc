@@ -24,7 +24,7 @@ namespace mp {
 namespace generator {
 
 // Konstruktor.
-two_robots_measures::two_robots_measures(task::mp_task& _mp_task)
+two_robots_measures::two_robots_measures(task::base& _mp_task)
 	: base (_mp_task), UI_fd(_mp_task.UI_fd)
 {
 }

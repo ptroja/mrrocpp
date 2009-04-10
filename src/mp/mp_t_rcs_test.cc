@@ -24,18 +24,18 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-mp_task* return_created_mp_task(configurator &_config)
+base* return_created_mp_task(configurator &_config)
 {
-	return new mp_task_rcs_test(_config);
+	return new rcs_test(_config);
 }
 
-mp_task_rcs_test::mp_task_rcs_test(configurator &_config) :
-	mp_task(_config)
+rcs_test::rcs_test(configurator &_config) :
+	base(_config)
 {
 	printf("MP Construct\n");
 }
 
-mp_task_rcs_test::~mp_task_rcs_test()
+rcs_test::~rcs_test()
 {
 	printf("MP Destruct\n");
 
@@ -45,7 +45,7 @@ mp_task_rcs_test::~mp_task_rcs_test()
 }
 
 // methods fo mp template to redefine in concete class
-void mp_task_rcs_test::task_initialization(void)
+void rcs_test::task_initialization(void)
 {
 	printf("MP Init\n");
 
@@ -62,7 +62,7 @@ void mp_task_rcs_test::task_initialization(void)
 }
 
 // rcs - znajdz rozwiazanie
-void mp_task_rcs_test::main_task_algorithm(void)
+void rcs_test::main_task_algorithm(void)
 {
 	printf("MP Algorithm\n");
 

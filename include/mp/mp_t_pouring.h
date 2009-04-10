@@ -16,16 +16,16 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class mp_task_pouring : public mp_task  
+class pouring : public base  
 {
 protected:
 
 
 public:
     // konstruktor
-    mp_task_pouring(configurator &_config);
+    pouring(configurator &_config);
 	
-    ~mp_task_pouring();
+    ~pouring();
 
 	// methods for mp template
 	void task_initialization(void);

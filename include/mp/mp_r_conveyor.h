@@ -5,10 +5,10 @@
 namespace mrrocpp {
 namespace mp {
 namespace common {
-class mp_conveyor_robot: public mp_irp6s_and_conv_robot {
+class conveyor_robot: public irp6s_and_conv_robot {
 
  public:
-  mp_conveyor_robot (task::mp_task &mp_object_l);
+  conveyor_robot (task::base &mp_object_l);
 };
 } // namespace common
 } // namespace mp

@@ -31,7 +31,7 @@ class two_robots_measures : public base
 {
 	protected:
 		// Pomocnicze wskazniki na roboty.
-		common::mp_robot *irp6ot, *irp6p;
+		common::robot *irp6ot, *irp6p;
 		// Lista kinematyk.
 		std::vector <two_robots_measure> measures;
 		// Ostatni odczyt - do porownywania, czy pozycja jest nowa.
@@ -45,7 +45,7 @@ class two_robots_measures : public base
 
 	public:
 		// Konstruktor.
-		two_robots_measures(task::mp_task&);
+		two_robots_measures(task::base&);
 		// Pierwszy krok generatora.
 		virtual bool first_step (void);
 		// Nastepny krok generatora.

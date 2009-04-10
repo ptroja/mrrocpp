@@ -39,7 +39,7 @@ namespace task {
 using namespace std;
 
 // obsluga sygnalu
-void mp_task::catch_signal_in_mp_task(int sig)
+void base::catch_signal_in_mp_task(int sig)
 {
 	printf("catch_signal_in_mp\n");
 	pid_t child_pid;
@@ -129,29 +129,29 @@ void mp_task::catch_signal_in_mp_task(int sig)
 }
 
 #if !defined(USE_MESSIP_SRR)
-name_attach_t* mp_task::mp_pulse_attach = NULL;
-name_attach_t* mp_task::mp_attach = NULL;
+name_attach_t* base::mp_pulse_attach = NULL;
+name_attach_t* base::mp_attach = NULL;
 #else
-messip_channel_t* mp_task::mp_pulse_attach = NULL;
-messip_channel_t* mp_task::mp_attach = NULL;
+messip_channel_t* base::mp_pulse_attach = NULL;
+messip_channel_t* base::mp_attach = NULL;
 #endif
 
 // mapa wszystkich robotow z iteratorem
-map <ROBOT_ENUM, common::mp_robot*> mp_task::robot_m;
+map <ROBOT_ENUM, common::robot*> base::robot_m;
 
 // KONSTRUKTORY
-mp_task::mp_task(configurator &_config) : base(_config)
+base::base(configurator &_config) : ecp_mp::task::base(_config)
 {
 	ui_new_pulse = false;
 }
 
-mp_task::~mp_task()
+base::~base()
 {
 	delete[] mrrocpp_network_path;
 }
 
 
-void mp_task::stop_and_terminate()
+void base::stop_and_terminate()
 {
 	sr_ecp_msg->message("To terminate MP click STOP icon");
 	wait_for_stop (common::MP_EXIT);
@@ -159,7 +159,7 @@ void mp_task::stop_and_terminate()
 }
 
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
-void mp_task::create_robots()
+void base::create_robots()
 {
 	/*
 	 * this is necessary to first create robot and then assign it to robot_m
@@ -167,70 +167,70 @@ void mp_task::create_robots()
 	 * mp_task::mp_wait_for_name_open() so needs the map to be in
 	 * a consistent state
 	 */
-	common::mp_robot* created_robot;
+	common::robot* created_robot;
 
 	// ROBOT IRP6_ON_TRACK
 	if (config.return_int_value("is_irp6_on_track_active", "[ui]")) {
-		created_robot = new common::mp_irp6_on_track_robot (*this);
+		created_robot = new common::irp6_on_track_robot (*this);
 		robot_m[ROBOT_IRP6_ON_TRACK] = created_robot;
 	}
 
 	// ROBOT IRP6_POSTUMENT
 	if (config.return_int_value("is_irp6_postument_active", "[ui]")) {
-		created_robot = new common::mp_irp6_postument_robot (*this);
+		created_robot = new common::irp6_postument_robot (*this);
 		robot_m[ROBOT_IRP6_POSTUMENT] = created_robot;
 	}
 
 	// ROBOT CONVEYOR
 	if (config.return_int_value("is_conveyor_active", "[ui]")) {
-		created_robot = new common::mp_conveyor_robot (*this);
+		created_robot = new common::conveyor_robot (*this);
 		robot_m[ROBOT_CONVEYOR] = created_robot;
 	}
 
 	// ROBOT SPEAKER
 	if (config.return_int_value("is_speaker_active", "[ui]")) {
-		created_robot = new common::mp_speaker_robot (*this);
+		created_robot = new common::speaker_robot (*this);
 		robot_m[ROBOT_SPEAKER] = created_robot;
 	}
 
 	// ROBOT IRP6_MECHATRONIKA
 	if (config.return_int_value("is_irp6_mechatronika_active", "[ui]")) {
-		created_robot = new common::mp_irp6_mechatronika_robot (*this);
+		created_robot = new common::irp6_mechatronika_robot (*this);
 		robot_m[ROBOT_IRP6_MECHATRONIKA] = created_robot;
 	}
 
 	// ROBOT_ELECTRON
 	if (config.return_int_value("is_electron_robot_active", "[ui]")) {
-		created_robot = new common::mp_robot (ROBOT_ELECTRON, "[ecp_electron]", *this);
+		created_robot = new common::robot (ROBOT_ELECTRON, "[ecp_electron]", *this);
 		robot_m[ROBOT_ELECTRON] = created_robot;
 	}
 
 	// ROBOT_SPEECHRECOGNITION
 	if (config.return_int_value("is_speechrecognition_active", "[ui]")) {
-		created_robot = new common::mp_robot (ROBOT_SPEECHRECOGNITION, "[ecp_speechrecognition]", *this);
+		created_robot = new common::robot (ROBOT_SPEECHRECOGNITION, "[ecp_speechrecognition]", *this);
 		robot_m[ROBOT_SPEECHRECOGNITION] = created_robot;
 	}
 
 	// ROBOT_FESTIVAL
 	if (config.return_int_value("is_festival_active", "[ui]")) {
-		created_robot = new common::mp_robot (ROBOT_FESTIVAL, "[ecp_festival]", *this);
+		created_robot = new common::robot (ROBOT_FESTIVAL, "[ecp_festival]", *this);
 		robot_m[ROBOT_FESTIVAL] = created_robot;
 	}
 }
 
 
 // methods for mp template to redefine in concrete classes
-void mp_task::task_initialization(void)
+void base::task_initialization(void)
 {
 	sr_ecp_msg->message("MP loaded");
 }
 
-void mp_task::main_task_algorithm(void)
+void base::main_task_algorithm(void)
 {
 }
 
 // metody do obslugi najczesniej uzywanych generatorow
-void mp_task::set_next_playerpos_goal (ROBOT_ENUM robot_l, const playerpos_goal_t &goal)
+void base::set_next_playerpos_goal (ROBOT_ENUM robot_l, const playerpos_goal_t &goal)
 {
 	// setting the next ecps state
 	generator::set_next_ecps_state mp_snes_gen(*this);
@@ -243,7 +243,7 @@ void mp_task::set_next_playerpos_goal (ROBOT_ENUM robot_l, const playerpos_goal_
 }
 
 // metody do obslugi najczesniej uzywanych generatorow
-void mp_task::set_next_ecps_state (int l_state, int l_variant, const char* l_string, int number_of_robots, ... )
+void base::set_next_ecps_state (int l_state, int l_variant, const char* l_string, int number_of_robots, ... )
 {
 	// setting the next ecps state
 	generator::set_next_ecps_state mp_snes_gen (*this);
@@ -265,7 +265,7 @@ void mp_task::set_next_ecps_state (int l_state, int l_variant, const char* l_str
 }
 
 // delay MP replacement
-void mp_task::wait_ms (int _ms_delay) // zamiast delay
+void base::wait_ms (int _ms_delay) // zamiast delay
 {
 	generator::delay_ms_condition mp_ds_ms (*this, _ms_delay);
 
@@ -273,7 +273,7 @@ void mp_task::wait_ms (int _ms_delay) // zamiast delay
 }
 
 // send_end_motion
-void mp_task::send_end_motion_to_ecps (int number_of_robots, ... )
+void base::send_end_motion_to_ecps (int number_of_robots, ... )
 {
 	generator::send_end_motion_to_ecps mp_semte_gen (*this);
 
@@ -292,7 +292,7 @@ void mp_task::send_end_motion_to_ecps (int number_of_robots, ... )
 }
 
 // send_end_motion
-void mp_task::send_end_motion_to_ecps (int number_of_robots, ROBOT_ENUM *properRobotsSet)
+void base::send_end_motion_to_ecps (int number_of_robots, ROBOT_ENUM *properRobotsSet)
 {
 	generator::send_end_motion_to_ecps mp_semte_gen (*this);
 
@@ -307,7 +307,7 @@ void mp_task::send_end_motion_to_ecps (int number_of_robots, ROBOT_ENUM *properR
 	mp_semte_gen.Move();
 }
 
-void mp_task::run_extended_empty_gen (bool activate_trigger, int number_of_robots, ... )
+void base::run_extended_empty_gen (bool activate_trigger, int number_of_robots, ... )
 {
 	generator::extended_empty mp_ext_empty_gen (*this);
 
@@ -327,14 +327,14 @@ void mp_task::run_extended_empty_gen (bool activate_trigger, int number_of_robot
 	mp_ext_empty_gen.Move();
 }
 
-void mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+void base::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 (int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ... )
 {
 	// CZYNNOSCI WSTEPNE
 	// utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
-	map <ROBOT_ENUM, common::mp_robot*> robots_to_move, robots_to_wait_for_task_termination;
-	map <ROBOT_ENUM, common::mp_robot*> robots_to_move_tmp, robots_to_wait_for_task_termination_tmp;
-	map <ROBOT_ENUM, common::mp_robot*>::iterator robots_map_iter;
+	map <ROBOT_ENUM, common::robot*> robots_to_move, robots_to_wait_for_task_termination;
+	map <ROBOT_ENUM, common::robot*> robots_to_move_tmp, robots_to_wait_for_task_termination_tmp;
+	map <ROBOT_ENUM, common::robot*>::iterator robots_map_iter;
 
 	// powolanie generatora i jego konfiguracja
 	generator::extended_empty mp_ext_empty_gen (*this);
@@ -373,7 +373,7 @@ void mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_t
 
 	// sprawdzenie czy zbior robots_to_wait_for_task_termination nie zawiera robotow, ktorych nie ma w zbiorze robots_to_move
 
-	for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robots_to_wait_for_task_termination.begin();
+	for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robots_to_wait_for_task_termination.begin();
 	robot_m_iterator != robots_to_wait_for_task_termination.end(); robot_m_iterator++) {
 
 		robots_map_iter = robots_to_move.find(robot_m_iterator->first);
@@ -398,7 +398,7 @@ void mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_t
 		robots_to_wait_for_task_termination_tmp = robots_to_wait_for_task_termination;
 
 		// sprawdzenie zbioru robots_to_move
-		for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robots_to_move_tmp.begin();
+		for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robots_to_move_tmp.begin();
 		robot_m_iterator != robots_to_move_tmp.end(); robot_m_iterator++) {
 			if (robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED  ) {
 				//	if (debug_tmp) robot_m_iterator->second->printf_state("1 ");
@@ -407,7 +407,7 @@ void mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_t
 		}
 
 		// sprawdzenie zbioru robots_to_wait_for_task_termination
-		for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robots_to_wait_for_task_termination_tmp.begin();
+		for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robots_to_wait_for_task_termination_tmp.begin();
 		robot_m_iterator != robots_to_wait_for_task_termination_tmp.end(); robot_m_iterator++) {
 			if (robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED  ) {
 				//	if (debug_tmp) robot_m_iterator->second->printf_state("2 ");
@@ -434,14 +434,14 @@ void mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_t
 
 }
 
-void mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+void base::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 (int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ROBOT_ENUM *robotsToMove, ROBOT_ENUM *robotsWaitingForTaskTermination)
 {
 	// CZYNNOSCI WSTEPNE
 	// utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
-	map <ROBOT_ENUM, common::mp_robot*> robots_to_move, robots_to_wait_for_task_termination;
-	map <ROBOT_ENUM, common::mp_robot*> robots_to_move_tmp, robots_to_wait_for_task_termination_tmp;
-	map <ROBOT_ENUM, common::mp_robot*>::iterator robots_map_iter;
+	map <ROBOT_ENUM, common::robot*> robots_to_move, robots_to_wait_for_task_termination;
+	map <ROBOT_ENUM, common::robot*> robots_to_move_tmp, robots_to_wait_for_task_termination_tmp;
+	map <ROBOT_ENUM, common::robot*>::iterator robots_map_iter;
 
 	// powolanie generatora i jego konfiguracja
 	generator::extended_empty mp_ext_empty_gen (*this);
@@ -480,7 +480,7 @@ void mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_t
 
 	// sprawdzenie czy zbior robots_to_wait_for_task_termination nie zawiera robotow, ktorych nie ma w zbiorze robots_to_move
 
-	for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robots_to_wait_for_task_termination.begin();
+	for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robots_to_wait_for_task_termination.begin();
 	robot_m_iterator != robots_to_wait_for_task_termination.end(); robot_m_iterator++) {
 
 		robots_map_iter = robots_to_move.find(robot_m_iterator->first);
@@ -505,7 +505,7 @@ void mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_t
 		robots_to_wait_for_task_termination_tmp = robots_to_wait_for_task_termination;
 
 		// sprawdzenie zbioru robots_to_move
-		for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robots_to_move_tmp.begin();
+		for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robots_to_move_tmp.begin();
 		robot_m_iterator != robots_to_move_tmp.end(); robot_m_iterator++) {
 			if (robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED  ) {
 				//	if (debug_tmp) robot_m_iterator->second->printf_state("1 ");
@@ -514,7 +514,7 @@ void mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_t
 		}
 
 		// sprawdzenie zbioru robots_to_wait_for_task_termination
-		for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robots_to_wait_for_task_termination_tmp.begin();
+		for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robots_to_wait_for_task_termination_tmp.begin();
 		robot_m_iterator != robots_to_wait_for_task_termination_tmp.end(); robot_m_iterator++) {
 			if (robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED  ) {
 				//	if (debug_tmp) robot_m_iterator->second->printf_state("2 ");
@@ -545,7 +545,7 @@ void mp_task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_t
 // inicjacja polaczen, rejestracja nazwy MP, odszukanie UI, SR by Y&W
 // -------------------------------------------------------------------
 
-int mp_task::mp_receive_pulse (common::mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PULSE_MODE tryb)
+int base::mp_receive_pulse (common::mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PULSE_MODE tryb)
 {
 
 	struct sigevent event;
@@ -623,7 +623,7 @@ int mp_task::mp_receive_pulse (common::mp_receive_pulse_struct_t* outputs, MP_RE
 	return outputs->rcvid;
 }
 
-int mp_task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct_t* outputs,
+int base::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct_t* outputs,
 		WAIT_FOR_NEW_PULSE_ENUM process_mode, MP_RECEIVE_PULSE_MODE desired_wait_mode)
 {
 
@@ -636,7 +636,7 @@ int mp_task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_str
 	// checking of already registered pulses
 
 	if ((process_mode == NEW_ECP_PULSE) || (process_mode == NEW_UI_OR_ECP_PULSE)) {
-		for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+		for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
 		robot_m_iterator != robot_m.end(); robot_m_iterator++) {
 			if ((robot_m_iterator->second->new_pulse) && (!(robot_m_iterator->second->robot_new_pulse_checked))) {
 				desired_pulse_found = true;
@@ -671,7 +671,7 @@ int mp_task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_str
 		} else if (ret == 0) {
 			//			printf("check_and_optional_wait_for_new_pulse ret == 0\n");
 			// wstawiamy informacje o pulsie ktory przyszedl do innego robota
-			for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+			for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
 			robot_m_iterator != robot_m.end(); robot_m_iterator++) {
 				if (outputs->pulse_msg.hdr.scoid == robot_m_iterator->second->scoid) {
 					//					printf("check_and_optional_wait_for_new_pulse w ECP\n");
@@ -714,7 +714,7 @@ int mp_task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_str
 }
 
 
-int mp_task::mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs)
+int base::mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs)
 {
 	int ret;
 	bool wyjscie = false;
@@ -728,7 +728,7 @@ int mp_task::mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs)
 		} else if (ret == 0) {
 
 			// wstawiamy informacje o pulsie ktory przyszedl od innego robota
-			for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+			for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
 			robot_m_iterator != robot_m.end(); robot_m_iterator++) {
 				if (outputs->pulse_msg.hdr.scoid == robot_m_iterator->second->scoid) {
 					robot_m_iterator->second->pulse_code = outputs->pulse_msg.hdr.code;
@@ -764,7 +764,7 @@ int mp_task::mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs)
 
 // funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
 
-void mp_task::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, common::mp_robot*>& _robot_m, generator::base& the_generator )
+void base::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, common::robot*>& _robot_m, generator::base& the_generator )
 {
 
 	enum MP_STATE_ENUM
@@ -843,7 +843,7 @@ void mp_task::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, common::mp_robot*>& _
 			}
 
 			if (the_generator.wait_for_ECP_pulse) {
-				for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+				for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
 				robot_m_iterator != robot_m.end(); robot_m_iterator++) {
 					if ((robot_m_iterator->second->new_pulse) && (!(robot_m_iterator->second->robot_new_pulse_checked))) {
 						robot_m_iterator->second->robot_new_pulse_checked = true;
@@ -864,7 +864,7 @@ void mp_task::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, common::mp_robot*>& _
 
 }
 
-void mp_task::initialize_communication()
+void base::initialize_communication()
 {
 	char* sr_net_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
 	char* mp_attach_point =	config.return_attach_point_name(configurator::CONFIG_SERVER, "mp_attach_point");
@@ -927,7 +927,7 @@ void mp_task::initialize_communication()
 		}
 		// -------------------------------------------------------------------
 
-		void mp_task::wait_for_start ()
+		void base::wait_for_start ()
 		{
 			// Oczekiwanie na zlecenie START od UI
 
@@ -947,7 +947,7 @@ void mp_task::initialize_communication()
 		// ------------------------------------------------------------------------
 
 
-		void mp_task::wait_for_stop (common::WAIT_FOR_STOP_ENUM tryb)
+		void base::wait_for_stop (common::WAIT_FOR_STOP_ENUM tryb)
 		{
 			// Oczekiwanie na zlecenie STOP od UI
 
@@ -994,12 +994,12 @@ void mp_task::initialize_communication()
 
 		// ------------------------------------------------------------------------
 
-		void mp_task::start_all (map <ROBOT_ENUM, common::mp_robot*>& _robot_m)
+		void base::start_all (map <ROBOT_ENUM, common::robot*>& _robot_m)
 		{
 			// Wystartowanie wszystkich ECP
 
-			map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator;
-			map <ROBOT_ENUM, common::mp_robot*> robots_m_tmp, robots_m_tmp2;
+			map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator;
+			map <ROBOT_ENUM, common::robot*> robots_m_tmp, robots_m_tmp2;
 
 			// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
 			robots_m_tmp = _robot_m;
@@ -1038,13 +1038,13 @@ void mp_task::initialize_communication()
 
 
 		// ------------------------------------------------------------------------
-		void mp_task::execute_all (map <ROBOT_ENUM, common::mp_robot*>& _robot_m)
+		void base::execute_all (map <ROBOT_ENUM, common::robot*>& _robot_m)
 		{
 			// Wystartowanie wszystkich ECP
 			// do przepisania wg http://www.thescripts.com/forum/thread62378.html
 
-			map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator;
-			map <ROBOT_ENUM, common::mp_robot*> robots_m_tmp, robots_m_tmp2;
+			map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator;
+			map <ROBOT_ENUM, common::robot*> robots_m_tmp, robots_m_tmp2;
 
 			// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
 			for (robot_m_iterator = _robot_m.begin(); robot_m_iterator != _robot_m.end(); robot_m_iterator++) {
@@ -1088,12 +1088,12 @@ void mp_task::initialize_communication()
 
 
 		// ------------------------------------------------------------------------
-		void mp_task::terminate_all (map <ROBOT_ENUM, common::mp_robot*>& _robot_m)
+		void base::terminate_all (map <ROBOT_ENUM, common::robot*>& _robot_m)
 		{
 			// Zatrzymanie wszystkich ECP
-			map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator;
+			map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator;
 
-			map <ROBOT_ENUM, common::mp_robot*> robots_m_tmp, robots_m_tmp2;
+			map <ROBOT_ENUM, common::robot*> robots_m_tmp, robots_m_tmp2;
 
 			// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
 			robots_m_tmp = _robot_m;
@@ -1134,10 +1134,10 @@ void mp_task::initialize_communication()
 
 
 		// ------------------------------------------------------------------------
-		void mp_task::kill_all_ECP (map <ROBOT_ENUM, common::mp_robot*>& _robot_m)
+		void base::kill_all_ECP (map <ROBOT_ENUM, common::robot*>& _robot_m)
 		{
 			// Zabicie wszystkich ECP z mapy
-			for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = _robot_m.begin();
+			for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = _robot_m.begin();
 			robot_m_iterator != _robot_m.end(); robot_m_iterator++) {
 #if defined(PROCESS_SPAWN_RSH)
 				kill(robot_m_iterator->second->ECP_pid, SIGTERM);

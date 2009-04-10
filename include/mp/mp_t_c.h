@@ -7,12 +7,12 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class mp_task_c: public mp_task
+class cxx: public base
 {
 	
 public:
 	
-	mp_task_c(configurator &_config);
+	cxx(configurator &_config);
 
 	// methods fo mp template to redefine in concete class
 	void task_initialization(void);

@@ -20,7 +20,7 @@ namespace task {
 
 
 // klasa globalna dla calego procesu MP
-class mp_task: public ecp_mp::task::base
+class base: public ecp_mp::task::base
 {
 	public:
 #if !defined(USE_MESSIP_SRR)
@@ -32,11 +32,11 @@ class mp_task: public ecp_mp::task::base
 #endif
 
 		/// mapa wszystkich robotow
-		static std::map <ROBOT_ENUM, common::mp_robot*> robot_m;
+		static std::map <ROBOT_ENUM, common::robot*> robot_m;
 
 		/// KONSTRUKTORY
-		mp_task(configurator &_config);
-		virtual ~mp_task(void);
+		base(configurator &_config);
+		virtual ~base(void);
 
 		void initialize_communication (void);
 		void stop_and_terminate (void);
@@ -79,22 +79,22 @@ class mp_task: public ecp_mp::task::base
 		void wait_for_stop ( common::WAIT_FOR_STOP_ENUM tryb);// by Y&W dodany tryb
 
 		// Wystartowanie wszystkich ECP
-		void start_all (std::map <ROBOT_ENUM, common::mp_robot*>& _robot_m);
+		void start_all (std::map <ROBOT_ENUM, common::robot*>& _robot_m);
 
 		// Zatrzymanie wszystkich ECP
-		void terminate_all (std::map <ROBOT_ENUM, common::mp_robot*>& _robot_m );
+		void terminate_all (std::map <ROBOT_ENUM, common::robot*>& _robot_m );
 
 		// Wyslanie rozkazu do wszystkich ECP
-		void execute_all (std::map <ROBOT_ENUM, common::mp_robot*>& _robot_m);
+		void execute_all (std::map <ROBOT_ENUM, common::robot*>& _robot_m);
 
 		// funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
-		void mp_receive_ui_or_ecp_pulse (std::map <ROBOT_ENUM, common::mp_robot*>& _robot_m, generator::base& the_generator );
+		void mp_receive_ui_or_ecp_pulse (std::map <ROBOT_ENUM, common::robot*>& _robot_m, generator::base& the_generator );
 
 		// obsluga sygnalu
 		virtual void catch_signal_in_mp_task(int sig);
 
 		/// Zatrzymanie wszystkich ECP
-		static void kill_all_ECP (std::map <ROBOT_ENUM, common::mp_robot*>& _robot_m);
+		static void kill_all_ECP (std::map <ROBOT_ENUM, common::robot*>& _robot_m);
 
 		/// utworzenie robotow
 		virtual void create_robots(void);
@@ -113,7 +113,7 @@ class mp_task: public ecp_mp::task::base
 		        WAIT_FOR_NEW_PULSE_ENUM process_mode, MP_RECEIVE_PULSE_MODE desired_wait_mode);
 };
 
-mp_task* return_created_mp_task (configurator &_config);
+base* return_created_mp_task (configurator &_config);
 
 
 } // namespace task

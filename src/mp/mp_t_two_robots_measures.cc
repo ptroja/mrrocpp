@@ -18,18 +18,18 @@ namespace mp {
 namespace task {
 
 // Zwrocenie obiektu - zadania.
-mp_task* return_created_mp_task(configurator &_config)
+base* return_created_mp_task(configurator &_config)
 {
-	return new mp_two_robots_measures_task(_config);
+	return new two_robots_measures(_config);
 }
 
-mp_two_robots_measures_task::mp_two_robots_measures_task(configurator &_config) :
-	mp_task(_config)
+two_robots_measures::two_robots_measures(configurator &_config) :
+	base(_config)
 {
 }
 
 // Inicjalizacja obiektow uzywanych prez zadanie.
-void mp_two_robots_measures_task::task_initialization(void)
+void two_robots_measures::task_initialization(void)
 {
 	// Stworzenie generatora.
 	rmg = new generator::two_robots_measures(*this);
@@ -39,7 +39,7 @@ void mp_two_robots_measures_task::task_initialization(void)
 }
 
 // Wlasciwe zadanie.
-void mp_two_robots_measures_task::main_task_algorithm(void)
+void two_robots_measures::main_task_algorithm(void)
 {
 
 	rmg->Move();

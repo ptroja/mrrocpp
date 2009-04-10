@@ -14,11 +14,11 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class mp_task_vf: public mp_task  {
+class vis_force: public base  {
 	
 public:
 	
-	mp_task_vf(configurator &_config);
+	vis_force(configurator &_config);
 
 	// methods fo mp template to redefine in concete class
 	void task_initialization(void);

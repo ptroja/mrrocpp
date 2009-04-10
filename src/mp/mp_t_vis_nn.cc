@@ -26,18 +26,18 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-mp_task* return_created_mp_task(configurator &_config)
+base* return_created_mp_task(configurator &_config)
 {
-	return new mp_task_vis_nn(_config);
+	return new vis_nn(_config);
 }
 
-mp_task_vis_nn::mp_task_vis_nn(configurator &_config) :
-	mp_task(_config)
+vis_nn::vis_nn(configurator &_config) :
+	base(_config)
 	{
 	}
 
 // methods fo mp template to redefine in concete class
-void mp_task_vis_nn::task_initialization(void)
+void vis_nn::task_initialization(void)
 {
 	// Powolanie czujnikow
 	sensor_m[SENSOR_FORCE_ON_TRACK] = new ecp_mp::sensor::schunk (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
@@ -56,7 +56,7 @@ void mp_task_vis_nn::task_initialization(void)
 }
 ;
 
-void mp_task_vis_nn::main_task_algorithm(void)
+void vis_nn::main_task_algorithm(void)
 {
 
 	generator::nn_eye eyegen(*this, 4);

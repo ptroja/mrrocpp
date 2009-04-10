@@ -55,7 +55,7 @@ public:
 
 
 	// konstruktor
-	vis_force(task::mp_task& _mp_task, int step=0);  
+	vis_force(task::base& _mp_task, int step=0);  
 
    virtual bool first_step ();	
    virtual bool next_step ();	

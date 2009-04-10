@@ -18,7 +18,7 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class mp_task_rubik_cube_solver : public mp_task  
+class rubik_cube_solver : public base  
 {
 protected:
 // sekwencja (lista) manipulacji
@@ -41,9 +41,9 @@ public:
 			common::CUBE_COLOR rear_is, common::CUBE_COLOR left_is, common::CUBE_COLOR right_is);
 
     // konstruktor
-    mp_task_rubik_cube_solver(configurator &_config);
+    rubik_cube_solver(configurator &_config);
 	
-    ~mp_task_rubik_cube_solver();
+    ~rubik_cube_solver();
 
 	
 	// MANIPULACJA

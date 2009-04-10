@@ -28,7 +28,7 @@ class base : public ecp_mp::generator::base
 
 	public:
 
-		task::mp_task& mp_t;
+		task::base& mp_t;
 
 		// Funkcja ruchu
 		void Move (void);
@@ -57,17 +57,17 @@ class base : public ecp_mp::generator::base
 		bool wait_for_ECP_pulse;
 
 		//! mapa wszystkich robotow
-		std::map <ROBOT_ENUM, common::mp_robot*> robot_m;
+		std::map <ROBOT_ENUM, common::robot*> robot_m;
 
-		base(task::mp_task& _mp_task);
+		base(task::base& _mp_task);
 
 		void re_run(void); // powrot do stanu wyjsciowego
 
 		//! Kopiuje dane z robotow do generatora
-		void copy_data(std::map <ROBOT_ENUM, common::mp_robot*>& _robot_m);
+		void copy_data(std::map <ROBOT_ENUM, common::robot*>& _robot_m);
 
 		//! Kopiuje polecenie stworzone w generatorze do robotow
-		void copy_generator_command (std::map <ROBOT_ENUM, common::mp_robot*>& _robot_m);
+		void copy_generator_command (std::map <ROBOT_ENUM, common::robot*>& _robot_m);
 
 		//! Klasa obslugi bledow generatora na poziomie MP
 		class MP_error

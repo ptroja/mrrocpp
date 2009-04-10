@@ -15,24 +15,24 @@ void base::re_run(void) // powrot do stanu wyjsciowego
 }
 
 // kopiuje dane z robotow do generatora
-void base::copy_data(std::map<ROBOT_ENUM, common::mp_robot*>& _robot_m)
+void base::copy_data(std::map<ROBOT_ENUM, common::robot*>& _robot_m)
 {
-	for (std::map<ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = _robot_m.begin(); robot_m_iterator
+	for (std::map<ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = _robot_m.begin(); robot_m_iterator
 			!= _robot_m.end(); robot_m_iterator++) {
 		robot_m_iterator->second->get_reply(); // odpowiedz z ECP
 	}
 }
 
 // kopiuje polecenie stworzone w generatorze do robotow
-void base::copy_generator_command(std::map<ROBOT_ENUM, common::mp_robot*>& _robot_m)
+void base::copy_generator_command(std::map<ROBOT_ENUM, common::robot*>& _robot_m)
 {
-	for (std::map<ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = _robot_m.begin(); robot_m_iterator
+	for (std::map<ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = _robot_m.begin(); robot_m_iterator
 			!= _robot_m.end(); robot_m_iterator++) {
 		robot_m_iterator->second->create_command(); // rozkaz dla ECP
 	}
 }
 
-base::base(task::mp_task& _mp_task) :
+base::base(task::base& _mp_task) :
 	ecp_mp::generator::base(*_mp_task.sr_ecp_msg), mp_t(_mp_task), wait_for_ECP_pulse(false), phase(BEFORE_FIRST_STEP),
 			new_pulse_checked(true)
 {
@@ -45,7 +45,7 @@ void base::Move()
 	// Funkcja zwraca true gdy koniec ruchu wywolany jest przez STOP
 
 	// czyszczenie aby nie czekac na pulsy z ECP
-	for (std::map<ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = mp_t.robot_m.begin(); robot_m_iterator
+	for (std::map<ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = mp_t.robot_m.begin(); robot_m_iterator
 			!= mp_t.robot_m.end(); robot_m_iterator++) {
 		if (robot_m_iterator->second->new_pulse) {
 			robot_m_iterator->second->robot_new_pulse_checked = false;
@@ -57,7 +57,7 @@ void base::Move()
 	mp_t.mp_receive_ui_or_ecp_pulse(mp_t.robot_m, *this);
 
 	// czyszczenie aby nie czekac na pulsy z ECP
-	for (std::map<ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = mp_t.robot_m.begin(); robot_m_iterator
+	for (std::map<ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = mp_t.robot_m.begin(); robot_m_iterator
 			!= mp_t.robot_m.end(); robot_m_iterator++) {
 		if (robot_m_iterator->second->new_pulse) {
 			robot_m_iterator->second->robot_new_pulse_checked = false;

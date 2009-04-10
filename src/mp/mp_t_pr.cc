@@ -24,12 +24,12 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-mp_task* return_created_mp_task (configurator &_config)
+base* return_created_mp_task (configurator &_config)
 {
-	return new mp_task_pr(_config);
+	return new pr(_config);
 }
 
-void mp_task_pr::mp_short_move_up(void)
+void pr::mp_short_move_up(void)
 {
 
 	trajectory_description tdes;
@@ -54,12 +54,12 @@ void mp_task_pr::mp_short_move_up(void)
 }
 
 
-mp_task_pr::mp_task_pr(configurator &_config) : mp_task(_config)
+pr::pr(configurator &_config) : base(_config)
 {
 }
 
 // methods for mp template to redefine in concrete class
-void mp_task_pr::task_initialization(void) 
+void pr::task_initialization(void) 
 {
 	// Powolanie czujnikow
 	sensor_m[SENSOR_FORCE_ON_TRACK] = 
@@ -82,7 +82,7 @@ void mp_task_pr::task_initialization(void)
 };
 
 
-void mp_task_pr::main_task_algorithm(void)
+void pr::main_task_algorithm(void)
 {
 
 	generator::nose_run_force mp_nrf_gen(*this, 8); 

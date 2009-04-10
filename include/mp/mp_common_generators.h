@@ -17,7 +17,7 @@ protected:
 
 public:
 
-    set_next_ecps_state(task::mp_task& _mp_task);
+    set_next_ecps_state(task::base& _mp_task);
 
 	void configure (int l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const char* l_mp_2_ecp_next_state_string);
 	void configure (const playerpos_goal_t &_goal);
@@ -34,7 +34,7 @@ class send_end_motion_to_ecps : public base
 public:
 
     // konstruktor
-    send_end_motion_to_ecps(task::mp_task& _mp_task);
+    send_end_motion_to_ecps(task::base& _mp_task);
 
 	bool first_step ();
 	bool next_step ();
@@ -53,7 +53,7 @@ class extended_empty : public base {
 	bool activate_trigger;
 
  public:
-	extended_empty(task::mp_task& _mp_task);
+	extended_empty(task::base& _mp_task);
 
 	~extended_empty(){ };
 
@@ -73,7 +73,7 @@ class empty : public base {
     // Sluzy zarowno do wyznaczania nastepnej wartosci zadanej jak i
     // sprawdzania spelnienia warunku koncowego
  public:
-	empty(task::mp_task& _mp_task);
+	empty(task::base& _mp_task);
 
   ~empty(){ };
 
@@ -98,7 +98,7 @@ protected:
 
 
 public:
-	delta(task::mp_task& _mp_task);
+	delta(task::base& _mp_task);
 	trajectory_description irp6ot_td;
 	trajectory_description irp6p_td;
 };
@@ -111,7 +111,7 @@ class tight_coop : public delta
 {
 
 public:
-	tight_coop(task::mp_task& _mp_task, trajectory_description irp6ot_tr_des, trajectory_description irp6p_tr_des);
+	tight_coop(task::base& _mp_task, trajectory_description irp6ot_tr_des, trajectory_description irp6p_tr_des);
 
   ~tight_coop();
 

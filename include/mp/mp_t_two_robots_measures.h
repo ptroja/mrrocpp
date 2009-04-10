@@ -20,13 +20,13 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class mp_two_robots_measures_task : public mp_task  
+class two_robots_measures : public base  
 {
 protected:
 	generator::two_robots_measures *rmg;
 public:
 	
-	mp_two_robots_measures_task(configurator &_config);
+	two_robots_measures(configurator &_config);
 	
 	// Object initialization.
 	void task_initialization(void);

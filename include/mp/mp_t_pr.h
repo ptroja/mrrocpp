@@ -14,14 +14,14 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class mp_task_pr: public mp_task  {
+class pr: public base  {
 protected:
 	
 	void mp_short_move_up(void);
 	
 public:
 	
-	mp_task_pr(configurator &_config);
+	pr(configurator &_config);
 
 	// methods for mp template
 	void task_initialization(void);

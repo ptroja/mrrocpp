@@ -52,7 +52,7 @@ mp_taught_in_pose::mp_taught_in_pose(POSE_SPECIFICATION at, double mt,
     extra_info = e_info;
 }
 
-mp_robot::MP_error::MP_error(ERROR_CLASS err0, uint64_t err1) :
+robot::MP_error::MP_error(ERROR_CLASS err0, uint64_t err1) :
         error_class(err0), mp_error(err1)
 {}
 
@@ -78,7 +78,7 @@ namespace generator {
 
 // generator for setting the next ecps state
 
-set_next_ecps_state::set_next_ecps_state(task::mp_task& _mp_task):
+set_next_ecps_state::set_next_ecps_state(task::base& _mp_task):
         base (_mp_task)
 {}
 
@@ -105,7 +105,7 @@ void set_next_ecps_state::configure (const playerpos_goal_t &_goal)
 
 bool set_next_ecps_state::first_step ()
 {
-    for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
 
@@ -128,7 +128,7 @@ bool set_next_ecps_state::next_step ()
     return false;
 }
 
-send_end_motion_to_ecps::send_end_motion_to_ecps(task::mp_task& _mp_task)
+send_end_motion_to_ecps::send_end_motion_to_ecps(task::base& _mp_task)
         : base (_mp_task)
 {}
 
@@ -138,7 +138,7 @@ send_end_motion_to_ecps::send_end_motion_to_ecps(task::mp_task& _mp_task)
 
 bool send_end_motion_to_ecps::first_step ()
 {
-    for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         robot_m_iterator->second->ecp_td.mp_command = END_MOTION;
@@ -161,7 +161,7 @@ bool send_end_motion_to_ecps::next_step ()
 // Rozszerzony generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
 // ###############################################################
 
-extended_empty::extended_empty(task::mp_task& _mp_task):
+extended_empty::extended_empty(task::base& _mp_task):
         base (_mp_task)
 {
     activate_trigger = true;
@@ -180,7 +180,7 @@ bool extended_empty::first_step ()
 {
 
     wait_for_ECP_pulse = true;
-    for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         robot_m_iterator->second->ecp_td.mp_command = NEXT_POSE;
@@ -213,7 +213,7 @@ bool extended_empty::next_step ()
         return false;
     }
 
-    for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         if (robot_m_iterator->second->new_pulse)
@@ -227,7 +227,7 @@ bool extended_empty::next_step ()
         }
     }
 
-    for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         if ( robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED )
@@ -244,7 +244,7 @@ bool extended_empty::next_step ()
 // Generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
 // ###############################################################
 
-empty::empty(task::mp_task& _mp_task): base (_mp_task)
+empty::empty(task::base& _mp_task): base (_mp_task)
 {}
 
 // ----------------------------------------------------------------------------------------------
@@ -259,7 +259,7 @@ bool empty::first_step ()
     // Inicjacja generatora trajektorii
     // printf("mp first step\n");
     // wait_for_ECP_pulse = true;
-    for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         robot_m_iterator->second->ecp_td.mp_command = NEXT_POSE;
@@ -287,7 +287,7 @@ bool empty::next_step ()
     // printf("mp next step\n");
     // UWAGA: dzialamy na jednoelementowej liscie robotow
 
-    for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         if ( robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED )
@@ -300,14 +300,14 @@ bool empty::next_step ()
     return true;
 }
 
-delta::delta(task::mp_task& _mp_task): base (_mp_task)
+delta::delta(task::base& _mp_task): base (_mp_task)
 {}
 
 // ####################################################################################################
 // Generator prostoliniowy o zadany przyrost polozenia/orientacji
 // ####################################################################################################
 
-tight_coop::tight_coop(task::mp_task& _mp_task, trajectory_description irp6ot_tr_des,
+tight_coop::tight_coop(task::base& _mp_task, trajectory_description irp6ot_tr_des,
         trajectory_description irp6p_tr_des): delta (_mp_task)
 {
     irp6ot_td = irp6ot_tr_des;
@@ -329,7 +329,7 @@ bool tight_coop::first_step ()
 
     idle_step_counter = 2;
 
-    for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         robot_m_iterator->second->ecp_td.mp_command = NEXT_POSE;
@@ -371,7 +371,7 @@ bool tight_coop::next_step ()
 
 
 
-    map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+    map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
 
     // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
     robot_m_iterator->second->ecp_td.instruction_type = SET;

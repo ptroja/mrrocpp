@@ -30,7 +30,7 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-void mp_task_pouring::approach(void)
+void pouring::approach(void)
 {
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_ap.trj", 1, ROBOT_IRP6_ON_TRACK);
 
@@ -41,7 +41,7 @@ void mp_task_pouring::approach(void)
 
 }
 
-void mp_task_pouring::grab(void)
+void pouring::grab(void)
 {
 	//Ustawienie w pozycji chwytania
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_grab.trj", 1, ROBOT_IRP6_ON_TRACK);
@@ -60,7 +60,7 @@ void mp_task_pouring::grab(void)
 
 }
 
-void mp_task_pouring::weight(void)
+void pouring::weight(void)
 {
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_weight.trj", 1, ROBOT_IRP6_ON_TRACK);
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_weight.trj", 1, ROBOT_IRP6_POSTUMENT);
@@ -74,7 +74,7 @@ void mp_task_pouring::weight(void)
 
 }
 
-void mp_task_pouring::meet(void)
+void pouring::meet(void)
 {
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_meet.trj", 1, ROBOT_IRP6_ON_TRACK);
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_meet.trj", 1, ROBOT_IRP6_POSTUMENT);
@@ -90,7 +90,7 @@ void mp_task_pouring::meet(void)
 
 }
 
-void mp_task_pouring::pour(void)
+void pouring::pour(void)
 {
 
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_POURING, 0, "", 1, ROBOT_IRP6_ON_TRACK);
@@ -110,7 +110,7 @@ void mp_task_pouring::pour(void)
 
 }
 
-void mp_task_pouring::go_back(void)
+void pouring::go_back(void)
 {
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_track_put_back.trj", 1, ROBOT_IRP6_ON_TRACK);
 	run_extended_empty_gen(false, 1, ROBOT_IRP6_ON_TRACK);
@@ -123,7 +123,7 @@ void mp_task_pouring::go_back(void)
 
 }
 
-void mp_task_pouring::put_back(void)
+void pouring::put_back(void)
 {
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_put_back.trj", 1, ROBOT_IRP6_ON_TRACK);
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_put_back.trj", 1, ROBOT_IRP6_POSTUMENT);
@@ -149,7 +149,7 @@ void mp_task_pouring::put_back(void)
 
 }
 
-void mp_task_pouring::depart(void)
+void pouring::depart(void)
 {
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_dep_2.trj", 1, ROBOT_IRP6_ON_TRACK);
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_dep_2.trj", 1, ROBOT_IRP6_POSTUMENT);
@@ -158,22 +158,22 @@ void mp_task_pouring::depart(void)
 			ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT);
 }
 
-mp_task_pouring::mp_task_pouring(configurator &_config) :
-	mp_task(_config)
+pouring::pouring(configurator &_config) :
+	base(_config)
 	{
 	}
 
-mp_task_pouring::~mp_task_pouring()
+pouring::~pouring()
 {
 }
 
-mp_task* return_created_mp_task(configurator &_config)
+base* return_created_mp_task(configurator &_config)
 {
-	return new mp_task_pouring(_config);
+	return new pouring(_config);
 }
 
 // methods fo mp template to redefine in concete class
-void mp_task_pouring::task_initialization(void)
+void pouring::task_initialization(void)
 {
 	/*	// Powolanie czujnikow
 	 sensor_m[SENSOR_FORCE_ON_TRACK]=new ecp_mp_schunk_sensor(SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
@@ -193,7 +193,7 @@ void mp_task_pouring::task_initialization(void)
 	sr_ecp_msg->message("MP pouring loaded");
 }
 
-void mp_task_pouring::main_task_algorithm(void)
+void pouring::main_task_algorithm(void)
 {
 
 

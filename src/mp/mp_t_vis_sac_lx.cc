@@ -25,18 +25,18 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-mp_task* return_created_mp_task(configurator &_config)
+base* return_created_mp_task(configurator &_config)
 {
-	return new mp_task_vis_sac_lx(_config);
+	return new vis_sac_lx(_config);
 }
 
-mp_task_vis_sac_lx::mp_task_vis_sac_lx(configurator &_config) :
-	mp_task(_config)
+vis_sac_lx::vis_sac_lx(configurator &_config) :
+	base(_config)
 {
 }
 
 // methods fo mp template to redefine in concete class
-void mp_task_vis_sac_lx::task_initialization(void)
+void vis_sac_lx::task_initialization(void)
 {
 	// Powolanie czujnikow
 	sensor_m[SENSOR_FORCE_ON_TRACK] = new ecp_mp::sensor::schunk (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
@@ -56,7 +56,7 @@ void mp_task_vis_sac_lx::task_initialization(void)
 }
 ;
 
-void mp_task_vis_sac_lx::main_task_algorithm(void)
+void vis_sac_lx::main_task_algorithm(void)
 {
 
 

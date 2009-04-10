@@ -13,22 +13,22 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-mp_task* return_created_mp_task (configurator &_config)
+base* return_created_mp_task (configurator &_config)
 {
-	return new mp_task_c(_config);
+	return new cxx(_config);
 }
 
-mp_task_c::mp_task_c(configurator &_config) : mp_task(_config)
+cxx::cxx(configurator &_config) : base(_config)
 {
 }
 
 // methods for mp template to redefine in concrete class
-void mp_task_c::task_initialization(void) 
+void cxx::task_initialization(void) 
 {
 	sr_ecp_msg->message("MP c loaded");
 }
  
-void mp_task_c::main_task_algorithm(void)
+void cxx::main_task_algorithm(void)
 {
 	generator::empty empty_gen (*this); // "Pusty" generator
 	empty_gen.robot_m = robot_m;

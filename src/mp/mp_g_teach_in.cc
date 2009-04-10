@@ -42,7 +42,7 @@ using namespace std;
 
 
 
-teach_in::teach_in(task::mp_task& _mp_task)
+teach_in::teach_in(task::base& _mp_task)
 	: base (_mp_task), UI_fd(_mp_task.UI_fd)
 {
 	pose_list.clear();
@@ -506,7 +506,7 @@ bool teach_in::first_step () {
 //   printf("w teach_in::first_step 2\n");
 	initiate_pose_list();
 
-	for (map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+	for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
 	        robot_m_iterator != robot_m.end(); robot_m_iterator++) {
 		robot_m_iterator->second->ecp_td.mp_command = NEXT_POSE;
 		robot_m_iterator->second->ecp_td.instruction_type = GET;
@@ -552,7 +552,7 @@ bool teach_in::next_step () {
 
 	get_pose (tip);
 
-	map <ROBOT_ENUM, common::mp_robot*>::iterator robot_m_iterator = robot_m.begin();
+	map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
 
 	// Przepisanie pozycji z listy
 	switch ( tip.arm_type ) {

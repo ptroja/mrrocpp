@@ -9,8 +9,8 @@ namespace mrrocpp {
 namespace mp {
 namespace common {
 
-mp_irp6s_and_conv_robot::mp_irp6s_and_conv_robot(ROBOT_ENUM l_robot_name, const char* _section_name, task::mp_task &mp_object_l) :
-	mp_robot(l_robot_name, _section_name, mp_object_l), servos_number(0), has_gripper(false)
+irp6s_and_conv_robot::irp6s_and_conv_robot(ROBOT_ENUM l_robot_name, const char* _section_name, task::base &mp_object_l) :
+	robot(l_robot_name, _section_name, mp_object_l), servos_number(0), has_gripper(false)
 {
 	switch (l_robot_name) {
 		case ROBOT_IRP6_ON_TRACK:
@@ -32,7 +32,7 @@ mp_irp6s_and_conv_robot::mp_irp6s_and_conv_robot(ROBOT_ENUM l_robot_name, const 
 	}
 }
 
-void mp_irp6s_and_conv_robot::create_next_pose_command(void)
+void irp6s_and_conv_robot::create_next_pose_command(void)
 {
 	// wypelnia bufor wysylkowy do ECP na podstawie danych
 	// zawartych w skladowych generatora lub warunku
@@ -179,7 +179,7 @@ void mp_irp6s_and_conv_robot::create_next_pose_command(void)
 	}
 }
 
-void mp_irp6s_and_conv_robot::get_reply(void)
+void irp6s_and_conv_robot::get_reply(void)
 {
 	// pobiera z pakietu przeslanego z ECP informacje i wstawia je do
 	// odpowiednich skladowych generatora lub warunku
@@ -218,7 +218,7 @@ void mp_irp6s_and_conv_robot::get_reply(void)
 	}
 }
 
-void mp_irp6s_and_conv_robot::get_input_reply(void)
+void irp6s_and_conv_robot::get_input_reply(void)
 {
 	ecp_td.input_values = ecp_reply_package.reply_package.input_values;
 	for (int i=0; i<8; i++) {
@@ -226,7 +226,7 @@ void mp_irp6s_and_conv_robot::get_input_reply(void)
 	}
 }
 
-void mp_irp6s_and_conv_robot::get_arm_reply(void)
+void irp6s_and_conv_robot::get_arm_reply(void)
 {
 	switch (ecp_reply_package.reply_package.arm_type) {
 		case MOTOR:
@@ -283,7 +283,7 @@ void mp_irp6s_and_conv_robot::get_arm_reply(void)
 
 }
 
-void mp_irp6s_and_conv_robot::get_rmodel_reply(void)
+void irp6s_and_conv_robot::get_rmodel_reply(void)
 {
 	switch (ecp_reply_package.reply_package.rmodel_type) {
 		case TOOL_FRAME:

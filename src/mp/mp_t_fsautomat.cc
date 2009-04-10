@@ -39,24 +39,24 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-mp_task_fsautomat::mp_task_fsautomat(configurator &_config) :
-	mp_task(_config)
+fsautomat::fsautomat(configurator &_config) :
+	base(_config)
 {
 
 }
 
-mp_task_fsautomat::~mp_task_fsautomat()
+fsautomat::~fsautomat()
 {
 
 }
 
-mp_task* return_created_mp_task(configurator &_config)
+base* return_created_mp_task(configurator &_config)
 {
-	return new mp_task_fsautomat(_config);
+	return new fsautomat(_config);
 }
 
 // methods fo mp template to redefine in concete class
-void mp_task_fsautomat::task_initialization(void)
+void fsautomat::task_initialization(void)
 {
 	/*	int size, conArg;
 	 char *filePath;
@@ -165,7 +165,7 @@ void mp_task_fsautomat::task_initialization(void)
 }
 ;
 
-common::State * mp_task_fsautomat::createState(xmlNode *stateNode)
+common::State * fsautomat::createState(xmlNode *stateNode)
 {
 	int index;
 	common::State *actState;
@@ -253,7 +253,7 @@ common::State * mp_task_fsautomat::createState(xmlNode *stateNode)
 	return actState;
 }
 
-std::map<char *, common::State, ecp_task::str_cmp> * mp_task_fsautomat::takeStatesMap()
+std::map<char *, common::State, ecp_task::str_cmp> * fsautomat::takeStatesMap()
 {
 	int size;
 	char *filePath;
@@ -307,7 +307,7 @@ std::map<char *, common::State, ecp_task::str_cmp> * mp_task_fsautomat::takeStat
 	return statesMap;
 }
 
-void mp_task_fsautomat::configureProperSensor(char *propSensor)
+void fsautomat::configureProperSensor(char *propSensor)
 {
 	// Powolanie czujnikow
 	sensor_m[SENSOR_CAMERA_ON_TRACK] = new ecp_mp::sensor::vis(SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
@@ -325,38 +325,38 @@ void mp_task_fsautomat::configureProperSensor(char *propSensor)
 	usleep(1000 * 100);
 }
 
-void mp_task_fsautomat::configureProperTransmitter(char *propTrans)
+void fsautomat::configureProperTransmitter(char *propTrans)
 {
 	// dodanie transmitter'a
 	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] = new ecp_mp::transmitter::rc_windows(ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS,
 			"[transmitter_rc_windows]", *this);
 }
 
-void mp_task_fsautomat::stopProperGen(common::State &state)
+void fsautomat::stopProperGen(common::State &state)
 {
 	if (state.robotSet == NULL)
 		send_end_motion_to_ecps(1, state.getRobot());
 	send_end_motion_to_ecps(state.robotSet->firstSetCount, state.robotSet->firstSet);
 }
 
-void mp_task_fsautomat::runWaitFunction(common::State &state)
+void fsautomat::runWaitFunction(common::State &state)
 {
 	wait_ms(state.getNumArgument());
 }
 
-void mp_task_fsautomat::runEmptyGen(common::State &state)
+void fsautomat::runEmptyGen(common::State &state)
 {
 	run_extended_empty_gen(state.getNumArgument(), 1, state.getRobot());
 }
 
-void mp_task_fsautomat::runEmptyGenForSet(common::State &state)
+void fsautomat::runEmptyGenForSet(common::State &state)
 {
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
 			state.robotSet->firstSetCount, state.robotSet->secondSetCount, state.robotSet->firstSet,
 			state.robotSet->secondSet);
 }
 
-void mp_task_fsautomat::executeMotion(common::State &state)
+void fsautomat::executeMotion(common::State &state)
 {
 	int trjConf = config.return_int_value("trajectory_from_xml", "[xml_settings]");
 	if (trjConf && state.getGeneratorType() == ecp_mp::task::ECP_GEN_SMOOTH) {
@@ -368,7 +368,7 @@ void mp_task_fsautomat::executeMotion(common::State &state)
 	}
 }
 
-void mp_task_fsautomat::sensorInitialization()
+void fsautomat::sensorInitialization()
 {
 	/*	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 	 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
@@ -379,7 +379,7 @@ void mp_task_fsautomat::sensorInitialization()
 	 */
 }
 
-void mp_task_fsautomat::initializeCubeState(common::State &state)
+void fsautomat::initializeCubeState(common::State &state)
 {
 	common::CUBE_COLOR colors[6];
 	char *colorStr = strdup(state.getStringArgument());
@@ -405,7 +405,7 @@ void mp_task_fsautomat::initializeCubeState(common::State &state)
 	cube_state->set_state(colors[0], colors[1], colors[2], colors[3], colors[4], colors[5]);
 }
 
-void mp_task_fsautomat::initiateSensorReading(common::State &state)
+void fsautomat::initiateSensorReading(common::State &state)
 {
 	/*        sensor_m[SENSOR_CAMERA_ON_TRACK]->initiate_reading();
 	 if (wait_ms(1000))
@@ -425,7 +425,7 @@ void mp_task_fsautomat::initiateSensorReading(common::State &state)
 	 */
 }
 
-void mp_task_fsautomat::getSensorReading(common::State &state)
+void fsautomat::getSensorReading(common::State &state)
 {
 	/*	char *sensorName = strdup(state.getStringArgument());
 	 SENSOR_ENUM whichSensor;
@@ -438,7 +438,7 @@ void mp_task_fsautomat::getSensorReading(common::State &state)
 	 */
 }
 
-void mp_task_fsautomat::writeCubeState(common::State &state)
+void fsautomat::writeCubeState(common::State &state)
 {
 	int index = state.getNumArgument();
 
@@ -489,7 +489,7 @@ void mp_task_fsautomat::writeCubeState(common::State &state)
 
 }
 
-void mp_task_fsautomat::changeCubeState(common::State &state)
+void fsautomat::changeCubeState(common::State &state)
 {
 	int turn_angle = state.getNumArgument();
 	common::CubeState tmp_cube_state;
@@ -499,7 +499,7 @@ void mp_task_fsautomat::changeCubeState(common::State &state)
 	*cube_state = tmp_cube_state;
 }
 
-void mp_task_fsautomat::changeCubeState(int turn_angle)
+void fsautomat::changeCubeState(int turn_angle)
 {
 	common::CubeState tmp_cube_state;
 
@@ -508,7 +508,7 @@ void mp_task_fsautomat::changeCubeState(int turn_angle)
 	*cube_state = tmp_cube_state;
 }
 
-void mp_task_fsautomat::communicate_with_windows_solver(common::State &state)
+void fsautomat::communicate_with_windows_solver(common::State &state)
 {
 	//		  state.setProperTransitionResult(true);
 	//		  return false;
@@ -677,7 +677,7 @@ void mp_task_fsautomat::communicate_with_windows_solver(common::State &state)
 
 }
 
-void mp_task_fsautomat::translateManipulationSequence(common::StateHeap &sh)
+void fsautomat::translateManipulationSequence(common::StateHeap &sh)
 {
 	std::list<const char *> *scenario = new std::list<const char *>();
 
@@ -737,7 +737,7 @@ void mp_task_fsautomat::translateManipulationSequence(common::StateHeap &sh)
 
 }
 
-void mp_task_fsautomat::main_task_algorithm(void)
+void fsautomat::main_task_algorithm(void)
 {
 	common::StateHeap sh;
 	break_state = false;

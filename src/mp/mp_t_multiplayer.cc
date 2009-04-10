@@ -22,29 +22,29 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-void mp_task_multiplayer::move_electron_robot(const playerpos_goal_t &goal)
+void multiplayer::move_electron_robot(const playerpos_goal_t &goal)
 {
 	set_next_playerpos_goal (ROBOT_ELECTRON, goal);
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, ROBOT_ELECTRON, ROBOT_ELECTRON);
 }
 
-mp_task_multiplayer::mp_task_multiplayer(configurator &_config) : mp_task(_config)
+multiplayer::multiplayer(configurator &_config) : base(_config)
 {
 }
 
-mp_task* return_created_mp_task (configurator &_config)
+base* return_created_mp_task (configurator &_config)
 {
-	return new mp_task_multiplayer(_config);
+	return new multiplayer(_config);
 }
 
-void mp_task_multiplayer::task_initialization(void) 
+void multiplayer::task_initialization(void) 
 {
 	sr_ecp_msg->message("MP multiplayer task loaded");
 }
 
 #define FRICTION_CORRECTOR	1.5
  
-void mp_task_multiplayer::main_task_algorithm(void)
+void multiplayer::main_task_algorithm(void)
 {
   	//mp_playerpos_generator playerpos_gen(*this); 
    	//playerpos_gen.transmitter_m = this->transmitter_m;

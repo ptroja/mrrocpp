@@ -25,24 +25,24 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-mp_task* return_created_mp_task (configurator &_config)
+base* return_created_mp_task (configurator &_config)
 {
-	return new mp_task_haptic(_config);
+	return new haptic(_config);
 }
 
-mp_task_haptic::mp_task_haptic(configurator &_config) : mp_task(_config)
+haptic::haptic(configurator &_config) : base(_config)
 {
 }
 
 // methods fo mp template to redefine in concete class
-void mp_task_haptic::task_initialization(void) 
+void haptic::task_initialization(void) 
 {
 	sr_ecp_msg->message("MP haptic device loaded");
 };
 
 
 
-bool mp_task_haptic::configure_edp_force_sensor(bool configure_track, bool configure_postument)
+bool haptic::configure_edp_force_sensor(bool configure_track, bool configure_postument)
 {
     if (configure_track)
     {
@@ -75,7 +75,7 @@ bool mp_task_haptic::configure_edp_force_sensor(bool configure_track, bool confi
 }
 
  
-void mp_task_haptic::main_task_algorithm(void)
+void haptic::main_task_algorithm(void)
 {
 
 	generator::haptic mp_h_gen(*this, 10); 
