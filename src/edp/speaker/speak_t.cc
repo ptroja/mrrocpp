@@ -20,7 +20,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace speaker {
 
 
 /********************************* GLOBALS **********************************/
@@ -71,12 +71,12 @@ void * edp_speaker_effector::speak_thread(void *arg)
 
             switch (mt_tt_obj->trans_t_task)
             {
-            case MT_GET_ARM_POSITION:
+            case common::MT_GET_ARM_POSITION:
                 // master.get_arm_position(mt_tt_obj->trans_t_tryb, &(master.current_instruction));
                 get_spoken(mt_tt_obj->trans_t_tryb, &(current_instruction)); // MAC7
                 mt_tt_obj->trans_t_to_master_order_status_ready();
                 break;
-            case MT_MOVE_ARM:
+            case common::MT_MOVE_ARM:
                 // master.move_arm(&(master.current_instruction)); 	 // wariant dla watku edp_trans_t
                 mt_tt_obj->trans_t_to_master_order_status_ready();
                 speak(&(current_instruction)); // MAC7
@@ -96,7 +96,7 @@ void * edp_speaker_effector::speak_thread(void *arg)
             mt_tt_obj->error_pointer= malloc(sizeof(nfe));
             memcpy(mt_tt_obj->error_pointer, &nfe, sizeof(nfe));
             mt_tt_obj->error_pointer = &nfe;
-            mt_tt_obj->error = NonFatal_erroR_1;
+            mt_tt_obj->error = common::NonFatal_erroR_1;
             mt_tt_obj->trans_t_to_master_order_status_ready();
         } // end: catch(transformer_error::NonFatal_error_1 nfe)
 
@@ -105,7 +105,7 @@ void * edp_speaker_effector::speak_thread(void *arg)
             mt_tt_obj->error_pointer= malloc(sizeof(nfe));
             memcpy(mt_tt_obj->error_pointer, &nfe, sizeof(nfe));
             mt_tt_obj->error_pointer=&nfe;
-            mt_tt_obj->error = NonFatal_erroR_2;
+            mt_tt_obj->error = common::NonFatal_erroR_2;
             mt_tt_obj->trans_t_to_master_order_status_ready();
         } // end: catch(transformer_error::NonFatal_error_2 nfe)
 
@@ -114,7 +114,7 @@ void * edp_speaker_effector::speak_thread(void *arg)
             mt_tt_obj->error_pointer= malloc(sizeof(nfe));
             memcpy(mt_tt_obj->error_pointer, &nfe, sizeof(nfe));
             mt_tt_obj->error_pointer=&nfe;
-            mt_tt_obj->error = NonFatal_erroR_3;
+            mt_tt_obj->error = common::NonFatal_erroR_3;
             mt_tt_obj->trans_t_to_master_order_status_ready();
         } // end: catch(transformer_error::NonFatal_error_3 nfe)
 
@@ -122,7 +122,7 @@ void * edp_speaker_effector::speak_thread(void *arg)
         {
             mt_tt_obj->error_pointer= malloc(sizeof(nfe));
             memcpy(mt_tt_obj->error_pointer, &nfe, sizeof(nfe));
-            mt_tt_obj->error = NonFatal_erroR_4;
+            mt_tt_obj->error = common::NonFatal_erroR_4;
             mt_tt_obj->trans_t_to_master_order_status_ready();
         } // end: catch(transformer_error::NonFatal_error nfe4)
 
@@ -130,15 +130,15 @@ void * edp_speaker_effector::speak_thread(void *arg)
         {
             mt_tt_obj->error_pointer= malloc(sizeof(fe));
             memcpy(mt_tt_obj->error_pointer, &fe, sizeof(fe));
-            mt_tt_obj->error = Fatal_erroR;
+            mt_tt_obj->error = common::Fatal_erroR;
             mt_tt_obj->trans_t_to_master_order_status_ready();
         } // end: catch(transformer_error::Fatal_error fe)
 
-        catch (System_error fe)
+        catch (common::System_error fe)
         {
             mt_tt_obj->error_pointer= malloc(sizeof(fe));
             memcpy(mt_tt_obj->error_pointer, &fe, sizeof(fe));
-            mt_tt_obj->error = System_erroR;
+            mt_tt_obj->error = common::System_erroR;
             mt_tt_obj->trans_t_to_master_order_status_ready();
         } // end: catch(System_error fe)
 

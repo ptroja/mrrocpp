@@ -21,23 +21,23 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace speaker {
 
 // Klasa reprezentujaca speaker'a.
-class edp_speaker_effector  : public edp_effector
+class edp_speaker_effector  : public common::edp_effector
 {
 protected:
 
     pthread_t edp_tid;
     pthread_t speak_t_tid;
-    STATE next_state;   // stan nastepny, do ktorego przejdzie EDP_MASTER
+    common::STATE next_state;   // stan nastepny, do ktorego przejdzie EDP_MASTER
 
     static void *speak_thread_start(void* arg);
     void *speak_thread(void* arg);
 
 public:
 
-    master_trans_t_buffer *mt_tt_obj;
+	common::master_trans_t_buffer *mt_tt_obj;
     void initialize (void);
     char text2speak[MAX_TEXT]; // MAC 7
     char prosody[MAX_PROSODY]; // MAC 7
