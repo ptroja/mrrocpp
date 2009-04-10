@@ -31,12 +31,18 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
+extern irp6ot::edp_irp6ot_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
+
+}
+
+namespace irp6ot {
+
 // Zmienne globalne do komunikacji z procedura obslugi przerwan
 
 extern struct sigevent event; // by y&w
-extern volatile motor_data md; // Aktualne dane we/wy (obsluga przerwania)
+extern volatile common::motor_data md; // Aktualne dane we/wy (obsluga przerwania)
 
-extern edp_irp6ot_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
+
 
 // ------------------------------------------------------------------------
 // #pragma off(check_stack);
@@ -59,7 +65,7 @@ const struct sigevent *
 
     md.hardware_error = (uint64_t) ALL_RIGHT; // Nie ma bledow sprzetowych
 
-    if(master->test_mode)
+    if(common::master->test_mode)
     {
         return (&event); // by Y&W
     }
@@ -74,7 +80,7 @@ const struct sigevent *
         in16(SERVO_REPLY_INT_ADR);
 
         md.is_synchronised = true;
-        for ( i = 0; i < master->number_of_servos; i++ )
+        for ( i = 0; i < common::master->number_of_servos; i++ )
         {
             out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
             md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
@@ -102,7 +108,7 @@ const struct sigevent *
         in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
         in16(SERVO_REPLY_INT_ADR);
 
-        for ( i = 0; i < master->number_of_servos; i++ )
+        for ( i = 0; i < common::master->number_of_servos; i++ )
         {
             // Odczyty stanu osi, polozenia oraz pradu wirnikow
             out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
@@ -207,7 +213,7 @@ const struct sigevent *
 
         if ( md.hardware_error & HARDWARE_ERROR_MASK ) // wyciecie SYNCHRO_ZERO i SYNCHRO_SWITCH_ON
         {
-            for ( i = 0; i < master->number_of_servos; i++ )
+            for ( i = 0; i < common::master->number_of_servos; i++ )
             {
                 // Zapis wartosci zadanej wypelnienia PWM
                 out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
@@ -217,7 +223,7 @@ const struct sigevent *
             return (&event); // Yoyek & 7
         }
 
-        for ( i = 0; i < master->number_of_servos; i++ )
+        for ( i = 0; i < common::master->number_of_servos; i++ )
         {
             // Zapis wartosci zadanej wypelnienia PWM
             out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
@@ -243,13 +249,13 @@ const struct sigevent *
         analog_input[6]=0x00ff & tmp_buf;
         analog_input[7]=((0xff00 & tmp_buf)>>8);
 
-        master->in_out_obj->set_input(&binary_input, analog_input);
+        common::master->in_out_obj->set_input(&binary_input, analog_input);
 
         // ustawienie wyjscia o ile bylo takie zlecenie
-        if (master->in_out_obj->set_output_flag)
+        if (common::master->in_out_obj->set_output_flag)
         {
-            master->in_out_obj->set_output_flag=false;
-            master->in_out_obj->get_output(&binary_output);
+            common::master->in_out_obj->set_output_flag=false;
+            common::master->in_out_obj->get_output(&binary_output);
 
             out8(ADR_OF_SERVO_PTR, IN_OUT_PACKET);
             // SERVO_COMMAND_2_ADR       0x212
@@ -271,7 +277,7 @@ const struct sigevent *
         out8(ADR_OF_SERVO_PTR, md.card_adress);
         out16(md	.register_adress, md.value);
 
-        for ( i = 0; i < master->number_of_servos; i++ )
+        for ( i = 0; i < common::master->number_of_servos; i++ )
         {
             out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
             md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
@@ -291,7 +297,7 @@ const struct sigevent *
         in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
         in16(SERVO_REPLY_INT_ADR);
 
-        for ( i = 0; i < master->number_of_servos; i++ )
+        for ( i = 0; i < common::master->number_of_servos; i++ )
         {
             out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
             md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow

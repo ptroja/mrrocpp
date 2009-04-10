@@ -28,16 +28,26 @@
 // Klasa hi_irp6m.
 #include "edp/irp6_mechatronika/hi_local.h"
 
+
 namespace mrrocpp {
 namespace edp {
 namespace common {
 
+extern irp6m::edp_irp6m_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
+
+}
+}
+}
+
+namespace mrrocpp {
+namespace edp {
+namespace irp6m {
+
 // Zmienne globalne do komunikacji z procedura obslugi przerwan
 
 extern struct sigevent event; // by y&w
-extern volatile motor_data md; // Aktualne dane we/wy (obsluga przerwania)
+extern volatile common::motor_data md; // Aktualne dane we/wy (obsluga przerwania)
 
-extern edp_irp6m_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
 
 
 // ------------------------------------------------------------------------
@@ -47,13 +57,13 @@ extern edp_irp6m_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
 const struct sigevent *
 int_handler (void *arg, int int_id) 
 {
-	status_of_a_dof robot_status[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
+	common::status_of_a_dof robot_status[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
 	short int low_word, high_word;
 	int i;
 
 	md.hardware_error = (uint64_t) ALL_RIGHT; // Nie ma bledow sprzetowych
 	
-	if(master->test_mode)
+	if(common::master->test_mode)
 	{
 		return (&event); // by Y&W
 	}

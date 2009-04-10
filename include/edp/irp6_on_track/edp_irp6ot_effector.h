@@ -21,7 +21,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace irp6ot {
 
 // Klasa reprezentujaca robota IRp-6 na torze jezdnym.
 class edp_irp6ot_effector : public common::edp_irp6s_postument_track_effector
@@ -35,7 +35,7 @@ public:
     edp_irp6ot_effector (configurator &_config);
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace edp
 } // namespace mrrocpp
 

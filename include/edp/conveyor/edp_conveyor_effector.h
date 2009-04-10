@@ -16,7 +16,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace conveyor {
 
 // Klasa reprezentujaca tasmociag.
 class edp_conveyor_effector  : public common::edp_irp6s_and_conv_effector

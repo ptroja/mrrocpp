@@ -20,7 +20,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace irp6ot {
 
 
 
@@ -2394,11 +2394,14 @@ BYTE NL_regulator_8_irp6ot::compute_set_value (void)
 ; // end: NL_regulator_8::compute_set_value
 /*-----------------------------------------------------------------------*/
 
+} // namespace irp6ot
 
+
+namespace common {
 
 servo_buffer* return_created_servo_buffer (edp_irp6s_and_conv_effector &_master)
 {
-	return new irp6ot_servo_buffer ((edp_irp6ot_effector &)(_master));
+	return new irp6ot::irp6ot_servo_buffer ((irp6ot::edp_irp6ot_effector &)(_master));
 };
 
 } // namespace common

@@ -24,7 +24,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace irp6ot {
 
 // Konstruktor.
 edp_irp6ot_effector::edp_irp6ot_effector(configurator &_config) :
@@ -60,11 +60,14 @@ void edp_irp6ot_effector::create_kinematic_models_for_given_robot(void)
 }
 
 
+} // namespace irp6ot
+
+namespace common {
 
 // Stworzenie obiektu edp_irp6p_effector.
 edp_effector* return_created_efector(configurator &_config)
 {
-	return new edp_irp6ot_effector (_config);
+	return new irp6ot::edp_irp6ot_effector (_config);
 }
 
 } // namespace common

@@ -18,7 +18,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace irp6p {
 
 /************************ EDP_SPEAKER ****************************/
 class irp6p_servo_buffer  : public common::servo_buffer

@@ -37,7 +37,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace irp6ot {
 
 struct sigevent event;
 
@@ -94,7 +94,7 @@ hi_irp6ot::hi_irp6ot ( edp_irp6ot_effector &_master  )  : hardware_interface(_ma
 
 
 	md.interrupt_mode=INT_EMPTY; 
-	if ( (int_id =InterruptAttach (irq_no, common::int_handler, (void *) &md , sizeof(md), 0)) == -1) 
+	if ( (int_id =InterruptAttach (irq_no, int_handler, (void *) &md , sizeof(md), 0)) == -1) 
 	{
 		// Obsluga bledu
 		perror( "Unable to attach interrupt handler: ");

@@ -16,7 +16,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace irp6m {
 
 // numeracja od 2 ze wzgledu na analogie irp6_postument
 

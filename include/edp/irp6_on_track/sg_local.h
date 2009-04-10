@@ -16,7 +16,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace irp6ot {
 
 #define IRP6_ON_TRACK_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS 10
 #define IRP6_ON_TRACK_GRIPPER_SUM_OF_CURRENTS_MAX_VALUE 100
@@ -230,7 +230,7 @@ public:
 ; // end: class servo_buffer
 /************************ EDP_SPEAKER ****************************/
 
-} // namespace common
+} // namespace irp6ot
 } // namespace edp
 } // namespace mrrocpp
 

@@ -38,14 +38,14 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace irp6m {
 
 struct sigevent event;
 
 // extern ini_configs* ini_con;
 
 
-volatile motor_data md; // Dane przesylane z/do funkcji obslugi przerwania
+volatile common::motor_data md; // Dane przesylane z/do funkcji obslugi przerwania
 
 
 // ------------------------------------------------------------------------

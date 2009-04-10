@@ -33,12 +33,19 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
+
+extern conveyor::edp_conveyor_effector* master;
+
+}
+
+namespace conveyor {
+
 // Zmienne globalne do komunikacji z procedura obslugi przerwan
 
 extern struct sigevent event; // by y&w
-extern volatile motor_data md; // Aktualne dane we/wy (obsluga przerwania)
+extern volatile common::motor_data md; // Aktualne dane we/wy (obsluga przerwania)
 
-extern edp_conveyor_effector* master;
+
 
 // ------------------------------------------------------------------------
 // #pragma off(check_stack);
@@ -47,12 +54,12 @@ extern edp_conveyor_effector* master;
 const struct sigevent *
 int_handler (void *arg, int int_id)
 {
-	status_of_a_dof robot_status[CONVEYOR_NUM_OF_SERVOS];
+	common::status_of_a_dof robot_status[CONVEYOR_NUM_OF_SERVOS];
 	short int low_word, high_word;
 
 	md.hardware_error = (uint64_t) ALL_RIGHT; // Nie ma bledow sprzetowych
 
-	if(master->test_mode)
+	if(common::master->test_mode)
 	{
 		return (&event);// by Y&W
 	}

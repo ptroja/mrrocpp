@@ -17,7 +17,7 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace irp6p {
 
 #define HI_RYDZ_INTR_TIMEOUT_HIGH 10000000 // by Y - timeout przerwania z szafy badz zegara
 
@@ -107,6 +107,21 @@ public:
 
 }
 ; // koniec: class hardware_interface
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+    // pid_t far int_handler (void);  // Obsluga przerwania
+    // by YOYEK & 7 - zastapic inna procedura obslugi prrzerwania
+
+    const struct sigevent *
+                int_handler (void *arg, int id); // by YOYEK & 7 - nowa forma z helpu
+
+#ifdef __cplusplus
+}
+#endif
+
 
 } // namespace common
 } // namespace edp

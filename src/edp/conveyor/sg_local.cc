@@ -18,7 +18,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace conveyor {
 
 extern edp_conveyor_effector* master;
 //extern uint64_t kk;	// numer pomiaru od momentu startu pomiarow
@@ -190,10 +190,14 @@ uint64_t conveyor_servo_buffer::compute_all_set_values (void)
 ; // end: servo_buffer::compute_all_set_values
 /*-----------------------------------------------------------------------*/
 
+} // namespace conveyor
+
+namespace common {
+
 
 servo_buffer* return_created_servo_buffer (edp_irp6s_and_conv_effector &_master)
 {
-	return new conveyor_servo_buffer ((edp_conveyor_effector &)(_master));
+	return new conveyor::conveyor_servo_buffer ((conveyor::edp_conveyor_effector &)(_master));
 }
 
 } // namespace common

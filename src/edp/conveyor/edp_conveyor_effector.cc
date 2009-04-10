@@ -24,7 +24,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace conveyor {
 
 // Konstruktor.
 edp_conveyor_effector::edp_conveyor_effector (configurator &_config) :
@@ -259,13 +259,15 @@ void edp_conveyor_effector::create_kinematic_models_for_given_robot(void)
 	set_kinematic_model(0);
 }//: create_kinematic_models_for_given_robot
 
+} // namespace conveyor
 
+namespace common {
 
 
 // Stworzenie obiektu edp_conveyor_effector.
 edp_effector* return_created_efector (configurator &_config)
 {
-	return new edp_conveyor_effector (_config);
+	return new conveyor::edp_conveyor_effector (_config);
 }//: return_created_efector
 
 } // namespace common

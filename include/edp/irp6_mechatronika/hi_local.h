@@ -12,7 +12,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace irp6m {
 
 // Struktury danych wykorzystywane w hardware_interface
 const int IRQ_REAL = 10; // Numer przerwania sprzetowego
@@ -104,6 +104,21 @@ public:
 
 }
 ; // koniec: class hardware_interface
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+    // pid_t far int_handler (void);  // Obsluga przerwania
+    // by YOYEK & 7 - zastapic inna procedura obslugi prrzerwania
+
+    const struct sigevent *
+                int_handler (void *arg, int id); // by YOYEK & 7 - nowa forma z helpu
+
+#ifdef __cplusplus
+}
+#endif
+
 
 } // namespace common
 } // namespace edp

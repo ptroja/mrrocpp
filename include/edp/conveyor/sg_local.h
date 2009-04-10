@@ -15,7 +15,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace conveyor {
 
 /************************ EDP_SPEAKER ****************************/
 class conveyor_servo_buffer  : public common::servo_buffer
