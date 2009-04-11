@@ -22,6 +22,10 @@
 #include "ecp/common/ECP_main_error.h"
 #include "ecp_mp/ecp_mp_s_digital_scales.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // ####################################################################
 // ################ KLASA Robot Position Digital Scales Reading  Element ##################
 // #############  do przechowywania par (pozycja robota) - (odczyty linialow)  ###############
@@ -87,5 +91,9 @@ class robot_stopped_condition : public ecp_generator {
 		// Pobranie pozycji robota.
 		void get_current_position(double current_position[6]);
 	}; // end: class robot_stopped_condition
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

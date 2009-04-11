@@ -11,6 +11,10 @@
 #include <iostream>
 #include <cmath>
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class T_MatrixManip
 {
 	double A[16];
@@ -27,5 +31,9 @@ class T_MatrixManip
 	void multiply_l_matrix4x4(double[12], double[12]);
 };
 
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif /* ECP_MATRIX4X4_H_ */

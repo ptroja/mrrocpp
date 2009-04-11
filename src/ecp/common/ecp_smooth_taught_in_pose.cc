@@ -3,6 +3,10 @@
 #include "ecp/common/ecp_smooth_taught_in_pose.h"
 #include "common/impconst.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 ecp_smooth_taught_in_pose::ecp_smooth_taught_in_pose (void)
 {}
 
@@ -16,4 +20,8 @@ ecp_smooth_taught_in_pose::ecp_smooth_taught_in_pose (POSE_SPECIFICATION at, dou
 	memcpy(coordinates, c, MAX_SERVOS_NR*sizeof(double));
 }
 
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 

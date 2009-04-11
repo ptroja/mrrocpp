@@ -16,6 +16,10 @@
 #include "ecp/common/ecp_g_jarosz.h"
 #include "mp/Trajectory.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_smooth2_generator : public ecp_delta_generator {
 
 	protected:
@@ -104,5 +108,9 @@ class ecp_smooth2_generator : public ecp_delta_generator {
 
 		int pose_list_length(void);
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

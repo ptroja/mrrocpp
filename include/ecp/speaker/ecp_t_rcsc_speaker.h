@@ -5,6 +5,10 @@
 #include "ecp/common/ecp_generator_t.h"
 #include "ecp/speaker/ecp_g_speak.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_rcsc_speaker: public ecp_task  {
 protected:
 	ecp_generator_t* gt;
@@ -19,5 +23,9 @@ public:
 	void main_task_algorithm(void);
 
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

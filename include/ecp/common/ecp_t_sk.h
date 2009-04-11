@@ -3,6 +3,10 @@
 
 #include "ecp/common/ecp_task.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_sk: public ecp_task  {
 protected:
 	ecp_tff_nose_run_generator* nrg;
@@ -19,5 +23,9 @@ public:
 	void main_task_algorithm(void);
 
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

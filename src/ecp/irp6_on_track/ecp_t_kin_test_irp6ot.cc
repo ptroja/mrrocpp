@@ -14,6 +14,10 @@
 #include "ecp/common/ecp_g_force.h"
 #include "ecp/irp6_on_track/ecp_t_kin_test_irp6ot.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 #define BILLION  1000000000L;
 
 // KONSTRUKTORY
@@ -93,3 +97,8 @@ ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_kin_test_irp6ot(_config);
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

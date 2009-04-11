@@ -16,6 +16,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 //own libraries
 //Constructors
 ecp_t_spots_recognition::ecp_t_spots_recognition(configurator &_config): ecp_task(_config)
@@ -93,3 +97,8 @@ ecp_task* return_created_ecp_task(configurator &_config)
 {
 	return new ecp_t_spots_recognition(_config);
 }
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
+

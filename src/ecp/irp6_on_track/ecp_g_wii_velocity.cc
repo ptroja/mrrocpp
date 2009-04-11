@@ -4,6 +4,10 @@
 #include "common/com_buf.h"
 #include "math.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 sem_t sem;
 
 ecp_wii_velocity_generator::ecp_wii_velocity_generator (ecp_task& _ecp_task) : ecp_tff_nose_run_generator(_ecp_task,10)
@@ -106,4 +110,9 @@ bool ecp_wii_velocity_generator::next_step()
 	return true;
 }
 ; // end: bool ecp_wii_velocity_generator::next_step ()
+
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 

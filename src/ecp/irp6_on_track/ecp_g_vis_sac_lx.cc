@@ -20,6 +20,10 @@
 #include "ecp/irp6_on_track/ecp_local.h"
 #include "ecp/irp6_on_track/ecp_g_vis_sac_lx.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 /*
  double measure_border_u[]={1.090, 0.150, 0.305, 0.606, 1.57, 3.12}; //Zmienic ogranicz Z
  double measure_border_d[]={0.82, -0.150, 0.155, -0.606, 1.267, 2.5}; // gamma 1.8
@@ -1040,3 +1044,8 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	return true;
 }
 ; // end: bool tight_coop_generator::next_step ()
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

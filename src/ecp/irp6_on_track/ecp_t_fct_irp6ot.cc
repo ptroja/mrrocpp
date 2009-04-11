@@ -24,6 +24,10 @@
 
 #include "ecp/common/ECP_main_error.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 extern ecp_task_fct_irp6ot *ecp_t;
 
 // Kanal komunikacyjny z procesem MP.
@@ -318,3 +322,8 @@ ecp_task* return_created_ecp_task(configurator &_config)
 {
 	return new ecp_task_fct_irp6ot(_config);
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

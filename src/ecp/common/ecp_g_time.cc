@@ -16,6 +16,10 @@
 
 #include "lib/mathtr.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 time_generator::time_generator(ecp_task& _ecp_task, int step):
         ecp_generator (_ecp_task)
 {
@@ -99,7 +103,9 @@ bool time_generator::next_step ( )
 
     //printf("\n");
 
-
-
     return true;
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

@@ -7,6 +7,10 @@
 
 #include "ecp/common/ecp_matrix4x4.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 using namespace std;
 
 T_MatrixManip::T_MatrixManip(double m[12])
@@ -87,3 +91,7 @@ void T_MatrixManip::multiply_l_matrix4x4(double B[12], double ret[12])
 			ret[4*j+i] += B[4*j+3];
 	}
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

@@ -6,6 +6,10 @@
 #include "ecp/common/ecp_generator_t.h"
 #include "ecp/irp6_on_track/ecp_g_vis_sac_lx.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_multiplayer_irp6ot : public ecp_task
 {
 private:
@@ -29,5 +33,9 @@ public:
     void task_initialization(void);
     void main_task_algorithm(void);
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

@@ -3,6 +3,10 @@
 #include "ecp/common/ecp_taught_in_pose.h"
 #include "common/impconst.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 ecp_taught_in_pose::ecp_taught_in_pose (void)
 {}
 
@@ -23,3 +27,7 @@ ecp_taught_in_pose::ecp_taught_in_pose (POSE_SPECIFICATION at, double mt, int e_
 	memcpy(coordinates, c, MAX_SERVOS_NR*sizeof(double));
 } // end: ecp_taught_in_pose::ecp_taught_in_pose
 
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

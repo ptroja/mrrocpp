@@ -1,6 +1,10 @@
 #include "ecp/irp6_on_track/ecp_t_pw_scena_irp6ot.h"
 
 #include <iostream>
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 #define robot1
 
 //Konstruktory
@@ -127,3 +131,8 @@ void ecp_task_pw_scena_irp6ot::init_td(POSE_SPECIFICATION pspec, int internode_n
 	td.internode_step_no=internode_no;	//motion time
 	td.value_in_step_no=internode_no-2;			//motion time-2 ??
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

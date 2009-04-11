@@ -19,6 +19,10 @@
 #include "ecp_mp/ecp_mp_s_vis_sac_lx.h"
 #include "ecp_mp/ecp_mp_s_schunk.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // KONSTRUKTORY
 ecp_task_vislx_irp6ot::ecp_task_vislx_irp6ot(configurator &_config) : ecp_task(_config)
 {
@@ -74,3 +78,8 @@ ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_vislx_irp6ot(_config);
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

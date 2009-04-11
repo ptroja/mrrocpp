@@ -17,6 +17,10 @@
 #include "ecp/common/ecp_g_jarosz.h"
 
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 void ecp_task_pr_irp6ot::short_move_up ()
 {
     trajectory_description tdes;
@@ -171,3 +175,8 @@ ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_pr_irp6ot(_config);
 }
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
+

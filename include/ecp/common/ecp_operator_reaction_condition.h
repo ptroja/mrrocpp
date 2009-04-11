@@ -6,6 +6,11 @@
 #include "ecp/common/ecp_generator.h"
 #include "ecp/common/ecp_taught_in_pose.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
+
 class ecp_operator_reaction_condition: public ecp_generator {
    // Klasa konkretnych warunkow poczatkowych dla robota irp6_on_track
    // Spelnienie warunku poczatkowego konczy wykonanie instrukcji MOVE.
@@ -53,5 +58,9 @@ public:
      // true - konczy czekanie (funkcja wait)
      // false - kontynuuje oczekiwanie
 }; // end: class irp6ot_operator_reaction_condition
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif /* _ECP_OPERATOR_REACTION_CONDITION_H */

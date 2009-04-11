@@ -20,6 +20,10 @@
 #include "ecp/common/ecp_t_time.h"
 #include "ecp_mp/ecp_mp_s_time.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 
 // KONSTRUKTORY
 ecp_task_time::ecp_task_time(configurator &_config) : ecp_task(_config)
@@ -63,3 +67,7 @@ ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_time(_config);
 }
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

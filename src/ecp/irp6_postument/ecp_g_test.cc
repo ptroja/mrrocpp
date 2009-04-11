@@ -18,6 +18,10 @@
 
 #include "lib/mathtr.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 y_simple_generator::y_simple_generator(ecp_task& _ecp_task, int step)
         :
         ecp_generator (_ecp_task, true)
@@ -151,3 +155,7 @@ bool y_simple_generator::next_step ( )
     return true;
 }
 ; // end:  y_nose_run_force_generator::next_step ( )
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

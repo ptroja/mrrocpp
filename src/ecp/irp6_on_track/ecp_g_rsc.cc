@@ -27,6 +27,10 @@
 #include "ecp_mp/ecp_mp_s_force.h"
 #include "ecp_mp/ecp_mp_s_digital_scales.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 /*************************** CONDITION VALUE ********************************/
 bool robot_stopped_condition::first_step (){
 	communicate_with_edp=false;
@@ -325,3 +329,8 @@ int robot_stopped_condition::rse_list_length(void) const
 }
 
 /****************** KONIEC: METODY ZWIAZANE Z LISTA RSE ********************/
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
+

@@ -10,6 +10,10 @@
 
 #include "ecp/common/ecp_teach_in_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 #define NPOINTS 100         // Maximum number of controll poses
 
 // ########################################################################################################
@@ -80,5 +84,9 @@ public:
    virtual bool next_step ();
 };// end: irp6ot_natural_spline_generator
 // #################################################################################################
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

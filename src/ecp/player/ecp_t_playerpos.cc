@@ -10,6 +10,10 @@
 #include "ecp/player/ecp_t_playerpos.h"
 #include "ecp_mp/ecp_mp_t_player.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // KONSTRUKTORY
 ecp_task_playerpos::ecp_task_playerpos(configurator &_config) :
 	ecp_task(_config)
@@ -55,3 +59,8 @@ ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_playerpos(_config);
 }
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
+

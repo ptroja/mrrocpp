@@ -16,6 +16,10 @@
 #include "ecp/common/ecp_g_pawel.h"
 #include "ecp_mp/ecp_mp_s_pawel.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 #define XMAX 768.0
 #define YMAX 574.0
 #define ZMAX 350.0
@@ -204,3 +208,7 @@ bool pawel_generator::next_step ( )
 
     return true;
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

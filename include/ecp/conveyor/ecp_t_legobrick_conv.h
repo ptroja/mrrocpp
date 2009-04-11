@@ -17,6 +17,10 @@
 
 #include "ecp/common/ecp_g_smooth.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_conveyor_lego_brick: public ecp_task 
 {
 	double absolute_position;
@@ -31,5 +35,9 @@ public:
 	void main_task_algorithm(void);
 	
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

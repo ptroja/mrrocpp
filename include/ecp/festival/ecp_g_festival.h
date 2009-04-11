@@ -3,6 +3,10 @@
 
 #include "ecp/common/ecp_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 #define MAX_FESTIVAL_PHRASE	255
 
 #define FESTIVAL_POLISH_VOICE "(voice_cstr_pl_em_diphone)"
@@ -58,5 +62,9 @@ class festival_generator : public ecp_generator
 		char * set_phrase(const char *text);
 		bool set_voice(VOICE _voice);
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif /* _ECP_GEN_FESTIVAL_H */

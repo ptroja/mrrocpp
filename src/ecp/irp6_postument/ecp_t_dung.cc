@@ -23,6 +23,10 @@
 #include "ecp/irp6_postument/ecp_t_dung.h"
 #include "ecp/irp6_postument/ecp_g_dung.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // KONSTRUKTORY
 ecp_task_dung::ecp_task_dung(configurator &_config) : ecp_task(_config)
 {
@@ -56,3 +60,7 @@ ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_dung(_config);
 }
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

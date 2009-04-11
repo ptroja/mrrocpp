@@ -10,6 +10,10 @@
 #include "ecp_mp/ecp_mp_t_rcsc.h"
 #include "ecp/common/ecp_g_jarosz.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // KONSTRUKTORY
 ecp_task_conveyor_kon::ecp_task_conveyor_kon(configurator &_config) : ecp_task(_config)
 {}
@@ -142,3 +146,8 @@ ecp_task* return_created_ecp_task (configurator &_config)
                 {
                     return new ecp_task_conveyor_kon(_config);
                 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

@@ -4,6 +4,10 @@
 #include "ecp/common/ecp_task.h"
 #include "ecp/festival/ecp_g_festival.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_festival: public ecp_task  {
 protected:
 	festival_generator* fg;
@@ -17,5 +21,9 @@ public:
 	void main_task_algorithm(void);
 	
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

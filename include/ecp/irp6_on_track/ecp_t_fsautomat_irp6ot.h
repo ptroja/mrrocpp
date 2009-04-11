@@ -17,6 +17,10 @@
 
 #include "mp/Trajectory.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_fsautomat_irp6ot: public ecp_task
 {
 	protected:
@@ -47,5 +51,9 @@ class ecp_task_fsautomat_irp6ot: public ecp_task
 //		void grip(double gripper_increment, int motion_time);
 
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif// -------------------------------------------------------------------------

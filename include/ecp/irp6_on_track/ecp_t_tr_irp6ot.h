@@ -3,6 +3,10 @@
 
 #include "ecp/common/ecp_task.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_tr_irp6ot: public ecp_task  {
 
 public:
@@ -16,5 +20,9 @@ public:
 	void catch_signal(int sig);
 
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

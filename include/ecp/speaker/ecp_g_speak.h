@@ -9,6 +9,10 @@
 
 #include "ecp/common/ecp_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 enum speak_gen_state {SG_AFTER_SET, SG_FIRST_GET, SG_LAST_GET, SG_FINISH};
 
 // --------------------------------------------------------------------------
@@ -32,5 +36,9 @@ public:
 
 }; // end:
 // --------------------------------------------------------------------------
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

@@ -20,6 +20,10 @@
 #include "ecp/speaker/ecp_t_s.h"
 #include "ecp_mp/ecp_mp_s_mic.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // KONSTRUKTORY
 ecp_task_speaker::ecp_task_speaker(configurator &_config) : ecp_task(_config)
 {
@@ -65,3 +69,8 @@ ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_speaker(_config);
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

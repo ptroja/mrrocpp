@@ -16,6 +16,10 @@
 #include "ecp/irp6_on_track/ecp_vis_ib_eih_irp6ot.h"
 
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 ecp_vis_ib_eih_irp6ot::ecp_vis_ib_eih_irp6ot(ecp_task& _ecp_task, int step) : ecp_visual_servo(_ecp_task){
 
 	measure_border_u[0]=ecp_t.config.return_double_value("measure_border_u0");
@@ -275,3 +279,8 @@ bool ecp_vis_ib_eih_irp6ot::first_step(void){
 	O_eps_EG_norm=10;
 	return true;
 }
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
+

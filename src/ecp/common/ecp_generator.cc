@@ -1,5 +1,9 @@
 #include "ecp/common/ecp_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 ecp_generator::ecp_generator (ecp_task& _ecp_task)
         : base(*(ecp_t.sr_ecp_msg)),
         ecp_t(_ecp_task),
@@ -100,5 +104,9 @@ void ecp_generator::execute_motion(void)
 
 
 
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 

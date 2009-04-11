@@ -12,6 +12,10 @@
 #include "ecp/common/ecp_g_visioncoordinates.h"
 #include "ecp/common/ecp_g_smooth.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // class ecp_task_visioncoordinates : public ecp_task
 // - zadanie kierowania ramieniem robota w strone zidentyfikowanego obiektu na ekranie
 class ecp_task_visioncoordinates : public ecp_task  
@@ -40,5 +44,9 @@ private:
 	// nazwa sekcji zawierajacej ustawienia dla zadania
 	const char* SETTINGS_SECTION_NAME;
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif	// ECP_T_VISIONCOORDINATES_H_INCLUDED

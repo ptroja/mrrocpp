@@ -12,6 +12,10 @@
 
 #include "ecp/common/ecp_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 #define PI 3.14159265
 #define DEG 0.0174444 //Jeden stopien wyrazony w radianach
 
@@ -21,11 +25,11 @@ class ecp_g_pw_kolo : public ecp_generator
     trajectory_description td;
     double next_position[8];  
     int step_no;
-    double d_rad; //Przyrost k±ta w radianach.
-    double prev_rad; //Wcz¶niejszy k±t(koncowka, srodek kola)
+    double d_rad; //Przyrost kï¿½ta w radianach.
+    double prev_rad; //Wczï¿½niejszy kï¿½t(koncowka, srodek kola)
     double r; //Promien rysowanego okregu.
-    double y0; //¦rodek ko³a - wsp y.
-    double z0; //¦rodek ko³a - wsp z.
+    double y0; //ï¿½rodek koï¿½a - wsp y.
+    double z0; //ï¿½rodek koï¿½a - wsp z.
     double y;	
     double z;
 public:
@@ -33,6 +37,10 @@ public:
     virtual bool first_step();
     virtual bool next_step();
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif
 

@@ -4,6 +4,10 @@
 #include "common/com_buf.h"
 #include "math.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 ecp_g_pw_kolo::ecp_g_pw_kolo (ecp_task& _ecp_task)
         : ecp_generator (_ecp_task)
 {
@@ -100,3 +104,8 @@ bool ecp_g_pw_kolo::next_step()
     printf("po robocie \n");
     return true;
 }
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
+

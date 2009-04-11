@@ -6,6 +6,10 @@
 
 #include "ecp/common/ecp_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 #define PI 3.141592
 
 class ecp_wii_generator : public ecp_generator
@@ -48,5 +52,9 @@ public:
 
     void execute_motion(void);
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

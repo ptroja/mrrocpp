@@ -23,6 +23,10 @@
 #include "ecp/irp6_on_track/ecp_g_nurbs.h"
 
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 const size_t Dim=6;
 
 using namespace NurbsLib;
@@ -153,3 +157,8 @@ bool irp6ot_nurbs_generator::next_step (  )
 	return true;
 
 }; // end:  irp6ot_nurbs_generator::next_step ( )
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

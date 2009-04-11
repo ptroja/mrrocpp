@@ -14,6 +14,10 @@
 
 #include "ecp/common/ecp_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej 
 class time_generator : public ecp_generator 
@@ -37,5 +41,9 @@ public:
 	virtual bool next_step ();
 
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

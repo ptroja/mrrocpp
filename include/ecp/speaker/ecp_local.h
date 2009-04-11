@@ -10,6 +10,10 @@
 
 #include "ecp/common/ecp_robot.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // ---------------------------------------------------------------
 class ecp_speaker_robot: public ecp_robot
 {
@@ -28,5 +32,9 @@ class ecp_speaker_robot: public ecp_robot
 
 }; // end: class ecp_speaker_robot
 // ---------------------------------------------------------------
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

@@ -5,6 +5,10 @@
 #include "ecp/irp6_on_track/ecp_g_wii.h"
 #include "ecp/common/ecp_g_smooth.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 
 /**
  * Odtwarza orientacje kontrolera
@@ -37,6 +41,10 @@ public:
 	 */
 	void main_task_algorithm(void);
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 
 #endif

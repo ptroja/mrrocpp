@@ -21,6 +21,10 @@
 #include "ecp/common/ecp_generator.h"
 #include "ecp_mp/ecp_mp_s_digital_scales.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // ####################################################################
 // #########################  KLASA MAM Element  #############################
 // #############  do przechowywania par (pozycja robota) - (odczyty linialow)  ###############
@@ -94,5 +98,9 @@ class manual_moves_automatic_measures_generator : public ecp_generator {
 		void flush_mam_list (void);
 
 	}; // end: class manual_moves_automatic_measures_generator
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

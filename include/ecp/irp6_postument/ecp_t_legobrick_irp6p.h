@@ -5,6 +5,10 @@
 #include "ecp/common/ecp_g_smooth.h"
 #include "ecp/common/ecp_g_force.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_lego_brick_irp6p: public ecp_task
 {
 protected:
@@ -21,5 +25,9 @@ public:
     void task_initialization(void);
     void main_task_algorithm(void);
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

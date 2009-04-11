@@ -12,6 +12,10 @@
 
 #include "ecp/irp6_mechatronika/ecp_local.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 ecp_irp6_mechatronika_robot::ecp_irp6_mechatronika_robot (configurator &_config, sr_ecp *_sr_ecp):
 	ecp_robot (ROBOT_IRP6_MECHATRONIKA, _config, _sr_ecp){};
 ecp_irp6_mechatronika_robot::ecp_irp6_mechatronika_robot (ecp_task& _ecp_object):
@@ -249,3 +253,8 @@ void ecp_irp6_mechatronika_robot::get_rmodel_reply (void)
 			throw ECP_error(NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end: switch (...rmodel_type)
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

@@ -60,9 +60,11 @@ base::base(configurator &_config)
             int e = errno;
             perror("Connect to UI failed");
             sr_ecp_msg->message (SYSTEM_ERROR, e, "Connect to UI failed");
-            throw ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+            throw ecp::common::ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
         }
     }
+	
+
 
     delete [] ui_net_attach_point;
 }

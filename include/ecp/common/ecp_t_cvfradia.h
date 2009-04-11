@@ -13,6 +13,10 @@
 #include "ecp/common/ecp_task.h"
 #include "ecp/common/ecp_g_cvfradia.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 
 /*!
  * \class ecp_task_cvfradia
@@ -45,5 +49,9 @@ public:
 	void main_task_algorithm(void);
 	
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

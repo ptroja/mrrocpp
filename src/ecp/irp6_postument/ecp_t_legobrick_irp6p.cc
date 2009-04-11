@@ -12,6 +12,10 @@
 #include "ecp/common/ecp_g_force.h"
 #include "ecp/irp6_postument/ecp_t_legobrick_irp6p.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 ecp_task_lego_brick_irp6p::ecp_task_lego_brick_irp6p(configurator &_config) :
         ecp_task(_config)
 {}
@@ -198,3 +202,7 @@ ecp_task* return_created_ecp_task(configurator &_config)
 {
 	return new ecp_task_lego_brick_irp6p(_config);
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

@@ -18,6 +18,10 @@
 #include "lib/mathtr.h"
 #include "ecp/common/ecp_g_smooth.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 using namespace std;
 /** konstruktor **/
 ecp_task_tzu_test::ecp_task_tzu_test(configurator &_config) : ecp_task(_config)
@@ -558,3 +562,7 @@ Ft_v_vector& force_meassure_generator::get_meassurement()
 //		weight[i] = weight[i]/meassurement_count;
 	return weight;
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

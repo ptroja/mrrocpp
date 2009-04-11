@@ -29,6 +29,10 @@
 // Konfigurator.
 #include "lib/configurator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // Kanal komunikacyjny z procesem UI.
 name_attach_t * UI_ECP_attach;
 
@@ -420,3 +424,8 @@ ecp_task* return_created_ecp_task(configurator &_config)
 {
 	return new ecp_task_tr_irp6ot(_config);
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

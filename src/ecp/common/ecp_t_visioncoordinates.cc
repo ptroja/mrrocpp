@@ -21,6 +21,10 @@
 #include "ecp_mp/ecp_mp_s_cvfradia.h"
 #include "ecp/common/ecp_t_visioncoordinates.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 #define debugmsg(msg)		sr_ecp_msg->message(msg);
 /////////////////////////////////////////////////////////////////////////////////////////////
 // ecp_task_visioncoordinates
@@ -91,7 +95,7 @@ void ecp_task_visioncoordinates::setStartPosition()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-// fabryk abstrakcyjna dla zadañ
+// fabryk abstrakcyjna dla zadaï¿½
 /////////////////////////////////////////////////////////////////////////////////////////////
 ecp_task* return_created_ecp_task (configurator &_config)
 {
@@ -101,4 +105,8 @@ ecp_task* return_created_ecp_task (configurator &_config)
 #undef debugmsg
 
 
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 

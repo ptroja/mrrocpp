@@ -23,6 +23,10 @@
 #include "ecp/common/ecp_t_pcbird.h"
 
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 
 /*!
  * Initialize task - robot, sensors and generators.
@@ -71,3 +75,7 @@ ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_pcbird(_config);
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

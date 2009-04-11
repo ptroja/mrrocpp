@@ -20,6 +20,10 @@
 //#include "ecp/common/ecp_t_rcsc.h"
 #include "ecp/irp6_on_track/ecp_t_progpanel_irp6ot.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 /*int get_object_position(double *coordinates)
 {
 	int i;
@@ -90,3 +94,8 @@ ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_progpanel_irp6ot(_config);
 }
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
+

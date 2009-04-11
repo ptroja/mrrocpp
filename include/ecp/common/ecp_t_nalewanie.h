@@ -16,6 +16,10 @@
 #include "ecp_mp/ecp_mp_task.h"
 #include "ecp/common/ecp_g_smooth.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_nalewanie: public ecp_task  {
 protected:
 	ecp_smooth_generator* sg;
@@ -28,5 +32,9 @@ public:
 	void task_initialization(void);
 	void main_task_algorithm(void);
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

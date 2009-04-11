@@ -1,6 +1,12 @@
 #include <string.h>
 
+
+
 #include "ecp/common/ecp_operator_reaction_condition.h"
+
+namespace mrrocpp {
+namespace ecp {
+namespace common {
 
 ecp_operator_reaction_condition::ecp_operator_reaction_condition (ecp_task& _ecp_task)
 	:
@@ -141,3 +147,7 @@ bool ecp_operator_reaction_condition::next_step ()
 	}
 } // end: irp6ot_operator_reaction_condition::condition_value ()
 // --------------------------------------------------------------------------
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

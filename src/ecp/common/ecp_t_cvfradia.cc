@@ -22,6 +22,10 @@
 #include "ecp_mp/ecp_mp_s_cvfradia.h"
 #include "ecp/common/ecp_t_cvfradia.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 /*!
  * Initialize task - robot, sensors and generators.
  */
@@ -70,3 +74,7 @@ ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_cvfradia(_config);
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

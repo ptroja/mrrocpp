@@ -37,13 +37,13 @@ ui_common_robot::ui_common_robot (configurator &_config, sr_ecp* _sr_ecp_msg, RO
     switch (_robot_name)
     {
     case ROBOT_IRP6_ON_TRACK:
-        ecp = new ecp_irp6_on_track_robot(_config, _sr_ecp_msg);
+        ecp = new ecp::common::ecp_irp6_on_track_robot(_config, _sr_ecp_msg);
         break;
     case ROBOT_IRP6_POSTUMENT:
-        ecp = new ecp_irp6_postument_robot(_config, _sr_ecp_msg);
+        ecp = new ecp::common::ecp_irp6_postument_robot(_config, _sr_ecp_msg);
         break;
     case ROBOT_IRP6_MECHATRONIKA:
-        ecp = new ecp_irp6_mechatronika_robot(_config, _sr_ecp_msg);
+        ecp = new ecp::common::ecp_irp6_mechatronika_robot(_config, _sr_ecp_msg);
         break;
 //    case ROBOT_SPEAKER:
 //    case ROBOT_CONVEYOR:

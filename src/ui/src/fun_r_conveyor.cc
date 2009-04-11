@@ -547,7 +547,7 @@ EDP_conveyor_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 			ui_state.conveyor.edp.state = 1;
 			
 			ui_robot.conveyor = new ui_conveyor_robot(*config, ui_msg.all_ecp);
-			ui_state.conveyor.edp.pid = ui_robot.conveyor->get_EDP_pid();
+			ui_state.conveyor.edp.pid = ui_robot.conveyor->ecp_robot::get_EDP_pid();
 
 			if (ui_state.conveyor.edp.pid<0)
 			{

@@ -10,6 +10,10 @@
 
 #include "ecp/irp6_on_track/ecp_g_pw_kolo.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_pw_irp6ot: public ecp_task  {
 
 	ecp_g_pw_kolo * kolo_gen;
@@ -22,5 +26,9 @@ public:
 	void task_initialization(void);
 	void main_task_algorithm(void);
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

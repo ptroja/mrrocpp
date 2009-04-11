@@ -5,6 +5,10 @@
 #include "ecp/common/ecp_st_go.h"
 #include "ecp/common/ecp_generator_t.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_pouring_irp6p: public ecp_task
 {
 protected:
@@ -21,5 +25,9 @@ public:
     void main_task_algorithm(void);
 
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

@@ -20,6 +20,10 @@
 #include "lib/nurbs_tdes.h"
 #include "ecp/common/ecp_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 //#############################################################################
 
 class irp6ot_nurbs_generator : public ecp_generator 
@@ -39,5 +43,9 @@ public:
   virtual bool next_step ();
 
 }; //end: class all_irp6ot_linear_generator
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

@@ -11,6 +11,10 @@
 // Konfigurator.
 #include "lib/configurator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_pawel: public ecp_task  {
 	protected:
 		//	ecp_tff_nose_run_generator* nrg;
@@ -27,5 +31,9 @@ class ecp_task_pawel: public ecp_task  {
 		void task_initialization(void);
 		void main_task_algorithm(void);
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

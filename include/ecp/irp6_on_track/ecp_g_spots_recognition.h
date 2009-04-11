@@ -16,6 +16,10 @@
 
 #include "ecp/common/ecp_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_spots_generator : public ecp_generator
 {
 	ECP_VSP_MSG comm_struct;
@@ -39,5 +43,9 @@ class ecp_spots_generator : public ecp_generator
 	void compute_TCG();
 	void save_position();
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif /* ECP_G_SPOTS_RECOGNITION_H_ */

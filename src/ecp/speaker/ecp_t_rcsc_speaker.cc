@@ -15,6 +15,10 @@
 #include "ecp/speaker/ecp_t_rcsc_speaker.h"
 #include "ecp_mp/ecp_mp_t_rcsc.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // KONSTRUKTORY
 ecp_task_rcsc_speaker::ecp_task_rcsc_speaker(configurator &_config) : ecp_task(_config)
 {
@@ -64,3 +68,8 @@ ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_rcsc_speaker(_config);
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

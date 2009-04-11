@@ -18,6 +18,10 @@
 
 #include "ecp/common/ecp_visual_servo.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 /*!
  * \class ecp_visual_servo_manager
  * \brief Abstract class as a pattern for implementing swiching/agregating basic visual servos.
@@ -44,4 +48,8 @@ private:
 	ecp_visual_servo* ecp_visual_servo_list;
 
 };
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
 #endif // !defined(EA_372F46B1_372D_4660_A605_52297559E64B__INCLUDED_)

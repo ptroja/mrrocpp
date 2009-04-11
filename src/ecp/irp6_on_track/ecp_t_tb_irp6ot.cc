@@ -8,6 +8,10 @@
 #include <stdio.h>
 //#define sim
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 //Constructors
 ecp_t_tb_irp6ot::ecp_t_tb_irp6ot(configurator &_config): ecp_task(_config){
 	sgen=NULL;
@@ -250,3 +254,8 @@ void ecp_t_tb_irp6ot::init_tdes(POSE_SPECIFICATION pspec, int internode_no){
 	tdes.internode_step_no=internode_no;	//motion time
 	tdes.value_in_step_no=internode_no-2;			//motion time-2 ??
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

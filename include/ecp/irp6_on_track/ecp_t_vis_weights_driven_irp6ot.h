@@ -6,6 +6,10 @@
 #include "ecp/irp6_on_track/ecp_vis_pb_eih_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_vis_ib_eih_irp6ot.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_vislx_irp6ot: public ecp_task  {
 
 	public:
@@ -20,5 +24,9 @@ class ecp_task_vislx_irp6ot: public ecp_task  {
 		void task_initialization(void);
 		void main_task_algorithm(void);
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

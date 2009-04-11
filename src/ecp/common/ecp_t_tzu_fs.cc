@@ -17,6 +17,10 @@
 #include "lib/mathtr.h"
 #include "ecp/common/ecp_g_smooth.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 /*
  * przy najblizszej okazji zrobic tu porzadek przy wykorzystaniu jakiegos porzadnego edytora!!!
  */
@@ -388,3 +392,7 @@ Ft_v_vector& force_meassure_generator::get_meassurement()
 //cout<<"in gen mes aft: "<<weight<<endl;
 	return weight;
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

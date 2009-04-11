@@ -21,6 +21,10 @@
 #include "ecp/common/ecp_g_visioncoordinates.h"
 #include "ecp_mp/ecp_mp_s_cvfradia.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 #define debugmsg(msg)						ecp_task::sr_ecp_msg->message(msg);
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,4 +165,8 @@ bool ecp_visioncoordinates_generator::next_step()
 }
 
 #undef debugmsg
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 

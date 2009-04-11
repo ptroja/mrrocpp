@@ -21,6 +21,10 @@
 
 #include <iostream>
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 #define MOTION_STEPS 25
 
 
@@ -63,6 +67,10 @@ public:
 	virtual void entertain_constraints();
 	virtual void retrieve_parameters();
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif /* ECP_VIS_IB_EIH_PLANAR_IRP6OT_H_ */
 

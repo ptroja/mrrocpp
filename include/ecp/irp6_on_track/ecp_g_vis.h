@@ -12,6 +12,10 @@
 
 #include "ecp/common/ecp_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class seven_eye_run_linear_generator : public ecp_generator {
 protected:
 
@@ -41,5 +45,9 @@ public:
      // (zadanie realizowane przez klas konkretn)
 }; // end: class irp6ot_calibration_generator
 // --------------------------------------------------------------------------
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

@@ -22,6 +22,10 @@
 #include "ecp_mp/ecp_mp_s_schunk.h"
 #include "ecp/common/ecp_t_sk.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 
 // KONSTRUKTORY
 ecp_task_sk::ecp_task_sk(configurator &_config) : ecp_task(_config)
@@ -113,3 +117,8 @@ ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_sk(_config);
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

@@ -11,6 +11,14 @@
 
 #include "ecp/common/ecp_task.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 void ecp_gripper_opening (ecp_task& ecp_object, double gripper_increment, int motion_time);
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

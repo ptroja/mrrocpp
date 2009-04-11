@@ -10,6 +10,10 @@
 #include "ecp/common/ecp_generator.h"
 #include "ecp/common/ecp_taught_in_pose.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_teach_in_generator : public ecp_generator {
 
 protected:
@@ -88,5 +92,9 @@ public:
   ECP_TO_UI_COMMAND convert(POSE_SPECIFICATION ps) const;
 
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif /* _ECP_TEACH_IN_GENERATOR_H */

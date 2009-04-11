@@ -7,6 +7,10 @@
 
 #include "ecp/common/ecp_task.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_sub_task_gripper_opening : public ecp_sub_task
 {
 
@@ -20,6 +24,10 @@ public:
     void configure(double gripper_increment, int motion_time);
     void execute();
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 
 #endif

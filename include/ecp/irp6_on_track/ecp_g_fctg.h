@@ -20,6 +20,10 @@
 #include "ecp_mp/ecp_mp_s_force.h"
 #include "ecp/common/ecp_teach_in_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // ####################################################################
 // ###########  KLASA do ruszania robotem, ruch kontrolowany za  pomoca czujnika sily    #########
 // ####################################################################
@@ -108,5 +112,9 @@ class force_controlled_trajectory_generator : public ecp_teach_in_generator
 		void set_dangerous_force();
 }
 ; // end: class force_controlled_trajectory_generator
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

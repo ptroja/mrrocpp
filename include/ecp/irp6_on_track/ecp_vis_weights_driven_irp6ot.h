@@ -21,6 +21,10 @@
 #include "ecp/irp6_on_track/ecp_vis_pb_eih_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_vis_ib_eih_irp6ot.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 /*!
  * \class ecp_vis_weight_driven_irp6ot
  * \brief Class implementing switching algorithm.
@@ -92,4 +96,8 @@ public:
 	//virtual bool next_step(void);
 
 };
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
 #endif // !defined(EA_0ECAB625_4FB6_4695_B581_8BCA0028CF30__INCLUDED_)

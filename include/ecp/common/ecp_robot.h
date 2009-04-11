@@ -7,10 +7,14 @@
 #include "ecp_mp/ecp_mp_robot.h"
 
 #include "messip/messip.h"
-
-
-
 class ui_common_robot;
+
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
+
+
 
 
 class ecp_task;
@@ -122,5 +126,9 @@ public:
 	};
 
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif /* _ECP_ROBOT_H */

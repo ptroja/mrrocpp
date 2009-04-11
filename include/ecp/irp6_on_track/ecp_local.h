@@ -10,6 +10,10 @@
 
 #include "ecp/common/ecp_robot.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // ---------------------------------------------------------------
 class ecp_irp6_on_track_robot: public ecp_robot
 {
@@ -31,5 +35,9 @@ class ecp_irp6_on_track_robot: public ecp_robot
 
 }; // end: class ecp_irp6_on_track_robot
 // ---------------------------------------------------------------
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

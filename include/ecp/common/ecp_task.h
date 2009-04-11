@@ -10,6 +10,10 @@
 #include "mp/Trajectory.h"
 
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 
 class ecp_generator;
 
@@ -100,5 +104,9 @@ class ecp_sub_task
 	public:
 		ecp_sub_task(ecp_task &_ecp_t);
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif /* _ECP_TASK_H */

@@ -19,6 +19,10 @@
 #include "lib/srlib.h"
 #include "ecp/common/ecp_g_cvfradia.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 
 /*!
  * First step method.. .
@@ -51,3 +55,8 @@ bool ecp_cvfradia_generator::next_step()
 	}*/
 	return true;
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

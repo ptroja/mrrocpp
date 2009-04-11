@@ -8,6 +8,10 @@
 #include "ecp/irp6_on_track/ecp_g_spots_recognition.h"
 #include <unistd.h>
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 using namespace std;
 
 
@@ -264,4 +268,9 @@ fprintf(fd, "%f %f %f 1.0 %f\n", 0.01*calib_data.sensor_union.sp_r.x[i], 0.01*ca
 //	}printf("\n\n");
 fclose(fd);
 }*/
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
 

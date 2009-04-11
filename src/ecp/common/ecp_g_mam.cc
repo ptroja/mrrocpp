@@ -27,6 +27,10 @@
 #include "ecp_mp/ecp_mp_s_digital_scales.h"
 #include "ecp/common/ECP_main_error.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 /*********************** METODY ZWIAZANE Z LISTA MAM ************************/
 
 void manual_moves_automatic_measures_generator::flush_mam_list ( void ) {
@@ -308,3 +312,7 @@ void manual_moves_automatic_measures_generator::save_mam_list(char* filename)
 		sr_ecp_msg.message (e.error_class, e.error_no);
 	}
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

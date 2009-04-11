@@ -6,6 +6,10 @@
 
 #include "ecp/common/ecp_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 #define PI 3.141592
 
 class ecp_ellipse_generator : public ecp_generator
@@ -51,5 +55,9 @@ public:
     
     double* getFirstPosition();
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

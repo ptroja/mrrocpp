@@ -29,6 +29,10 @@
 #include "ecp/common/ecp_smooth_taught_in_pose.h"
 //#include "lib/y_math.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 void ecp_smooth_generator::set_relative(void){
 	type=2;
 }
@@ -1527,3 +1531,7 @@ ecp_tool_change_generator::ecp_tool_change_generator (ecp_task& _ecp_task, bool 
     set_tool_parameters(-0.18, 0.0, 0.25);
 
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

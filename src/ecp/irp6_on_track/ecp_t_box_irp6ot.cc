@@ -1,6 +1,10 @@
 #include "ecp/irp6_on_track/ecp_local.h"
 #include "ecp/irp6_on_track/ecp_t_box_irp6ot.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 //Constructors
 ecp_t_box_irp6ot::ecp_t_box_irp6ot(configurator &_config): ecp_task(_config){
   smoothgen = NULL;
@@ -35,3 +39,8 @@ void ecp_t_box_irp6ot::main_task_algorithm(void ){
 ecp_task* return_created_ecp_task(configurator &_config){
 	return new ecp_t_box_irp6ot(_config);
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

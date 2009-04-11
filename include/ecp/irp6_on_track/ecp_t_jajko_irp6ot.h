@@ -3,6 +3,10 @@
 
 #include "ecp/common/ecp_task.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_jajko_irp6ot: public ecp_task  {
 protected:
 	y_egg_force_generator* yefg;
@@ -16,5 +20,9 @@ public:
 	void main_task_algorithm(void);
 
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

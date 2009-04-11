@@ -8,6 +8,10 @@
 #include "lib/srlib.h"
 #include "ecp/common/ecp_g_space.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 
 // ########################################################################################################
 // ########################################################################################################
@@ -679,3 +683,7 @@ bool irp6ot_natural_spline_generator::next_step ()
     return true;
 }
 ; // end: irp6ot_natural_spline_generator::next_step()
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

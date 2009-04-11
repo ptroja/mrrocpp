@@ -5,6 +5,10 @@
 #include "ecp/irp6_on_track/ecp_g_ellipse.h"
 #include "ecp/common/ecp_g_smooth.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 //limity na wartosc polosi w metrach
 #define MAX_MAJOR 0.2
 #define MAX_MINOR 0.1
@@ -50,6 +54,10 @@ public:
 	 */
 	void main_task_algorithm(void);
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 
 #endif

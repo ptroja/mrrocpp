@@ -9,6 +9,10 @@
 #include "ecp/common/ecp_g_sleep.h"
 #include "ecp_mp/ecp_mp_s_cvfradia.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_t_tb_irp6ot: public ecp_task{
 	protected:
 		ecp_smooth_generator* sgen;					//smooth movement generator
@@ -27,6 +31,10 @@ class ecp_t_tb_irp6ot: public ecp_task{
 		void task_initialization(void);
 		void main_task_algorithm(void);
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif
 

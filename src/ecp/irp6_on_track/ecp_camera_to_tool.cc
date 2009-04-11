@@ -7,6 +7,10 @@
 
 #include "ecp/irp6_on_track/ecp_camera_to_tool.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 using namespace std;
 
 CameraToTool::CameraToTool(double dn, double hn, double an)
@@ -121,3 +125,8 @@ void CameraToTool::vec_prod(double r1[3], double r2[3], double r3[3])
 	r3[1] = r1[2]*r2[0] - r2[2]*r1[0];
 	r3[2] = r1[0]*r2[1] - r2[0]*r1[1];
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

@@ -8,6 +8,10 @@
 
 #include "ecp/common/ecp_teach_in_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // ####################################################################################################
 // ############################     Odtwarzanie listy pozycji    ######################################
 // ####################################################################################################
@@ -570,3 +574,7 @@ ECP_TO_UI_COMMAND ecp_teach_in_generator::convert(POSE_SPECIFICATION ps) const
       return C_MOTOR;
       }
   }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

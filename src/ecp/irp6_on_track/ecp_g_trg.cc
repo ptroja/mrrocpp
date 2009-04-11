@@ -29,6 +29,10 @@
 #include "ecp_mp/ecp_mp_s_digital_scales.h"
 #include "ecp_mp/ecp_mp_s_force.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 /********************************* GLOBALS **********************************/
 
 /************************* GET CURRENT POSITION *****************************/
@@ -440,3 +444,8 @@ void trajectory_reproduce_generator::insert_interpose_list_element (POSE_SPECIFI
     }; // end: insert_interpose_list_element
 
 /**********  KONIEC: METODY ZWIAZANE Z LISTA POZYCJI POSREDNICH ************/
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
+

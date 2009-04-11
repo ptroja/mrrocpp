@@ -3,6 +3,10 @@
 
 #include "ecp/player/ecp_g_playerpos.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 playerpos_generator::playerpos_generator(ecp_task& _ecp_task)
 	: ecp_generator (_ecp_task)
 {
@@ -74,3 +78,8 @@ bool playerpos_generator::next_step()
 
 	return true;
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

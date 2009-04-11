@@ -4,6 +4,10 @@
 #include "common/com_buf.h"
 #include "math.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 ecp_wii_generator::ecp_wii_generator (ecp_task& _ecp_task) : ecp_generator (_ecp_task) {}
 
 bool ecp_wii_generator::first_step()
@@ -112,3 +116,8 @@ void ecp_wii_generator::execute_motion(void)
 		} /* end: switch */
 	}
 }
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
+

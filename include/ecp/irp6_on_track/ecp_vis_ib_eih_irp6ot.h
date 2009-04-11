@@ -18,6 +18,10 @@
 
 #include "ecp/common/ecp_visual_servo.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 /*!
  * \class ecp_vis_ib_eih_irp6ot
  * \brief Class implementing IB-EIH algorithm.
@@ -78,4 +82,8 @@ public:
 	virtual bool first_step(void);
 
 };
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
 #endif // !defined(EA_9A938E04_44AF_4d5f_B8CC_BE3DF0E08682__INCLUDED_)

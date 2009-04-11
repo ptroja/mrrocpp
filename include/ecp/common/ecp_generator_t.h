@@ -3,6 +3,10 @@
 
 #include "ecp/common/ecp_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // Generator przezroczysty
 class ecp_generator_t : public ecp_generator {
 
@@ -18,5 +22,9 @@ public:
 	void execute_motion (void);
 	
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif /* _ECP_GENERATOR_T_H */

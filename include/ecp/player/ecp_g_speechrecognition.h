@@ -4,6 +4,10 @@
 #include "ecp/common/ecp_generator.h"
 #include "player/playerclient.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class speechrecognition_generator : public ecp_generator
 {
 	private:
@@ -19,5 +23,9 @@ class speechrecognition_generator : public ecp_generator
 
 		virtual bool next_step ();
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif /* _ECP_GEN_SPEECHRECOGNITION_H */

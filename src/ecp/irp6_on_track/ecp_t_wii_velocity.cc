@@ -12,6 +12,10 @@
 #include "ecp/irp6_on_track/ecp_t_wii_velocity.h"
 #include "lib/mathtr.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 ecp_task_wii_velocity::ecp_task_wii_velocity(configurator &_config) : ecp_task(_config) {};
 
 void ecp_task_wii_velocity::task_initialization(void)
@@ -42,4 +46,9 @@ ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_wii_velocity(_config);
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
 

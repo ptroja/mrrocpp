@@ -14,6 +14,10 @@
 #include "ecp/common/ecp_g_pp.h"
 
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 
 
 progpanel_generator::progpanel_generator(ecp_task& _ecp_task, int step):
@@ -126,3 +130,7 @@ bool progpanel_generator::next_step ( )
 
     return true;
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

@@ -9,6 +9,10 @@
 #include "ecp/conveyor/ecp_local.h"
 #include "ecp/conveyor/ecp_g_legobrick.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 conveyor_incremental_move::conveyor_incremental_move(ecp_task& _ecp_task, double inc_move):
 		ecp_generator (_ecp_task), move_length(inc_move) {}
 
@@ -76,3 +80,8 @@ bool conveyor_incremental_move::next_step ( )
 	
 	return true;
 }
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
+

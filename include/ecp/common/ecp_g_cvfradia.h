@@ -14,6 +14,10 @@
 #include "ecp/common/ecp_generator.h"
 
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 /*!
  * \class ecp_cvfradia_generator
  * \brief Generator responsible for communication with cvFraDIA (testing purposes).
@@ -39,6 +43,10 @@ public:
       */
     bool next_step ();
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 
 #endif

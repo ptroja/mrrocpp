@@ -10,6 +10,10 @@
 #include "ecp/common/ecp_g_pawel.h"
 #include "ecp/common/ecp_t_pawel.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // KONSTRUKTORY
 ecp_task_pawel::ecp_task_pawel(configurator &_config) : ecp_task(_config)
 {
@@ -89,3 +93,7 @@ ecp_task* return_created_ecp_task (configurator &_config)
 
 	//			Move ( *nrg);
 	//	Move ( *tig);
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

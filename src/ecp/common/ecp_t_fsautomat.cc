@@ -14,6 +14,10 @@
 #include "ecp/common/ecp_t_fsautomat.h"
 #include "ecp/common/ecp_g_jarosz.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 void ecp_gripper_opening (ecp_task& _ecp_task, double gripper_increment, int motion_time)
 {
 
@@ -38,3 +42,7 @@ void ecp_gripper_opening (ecp_task& _ecp_task, double gripper_increment, int mot
 
 	_ecp_task.Move (lg);
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

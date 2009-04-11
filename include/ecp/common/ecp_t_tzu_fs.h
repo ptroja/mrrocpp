@@ -8,6 +8,10 @@
 #include "ecp/common/ecp_g_smooth.h"
 #include "ecp/common/ecp_g_force.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 #define FORCE_X 0
 #define FORCE_Y 1
 #define FORCE_Z 2
@@ -81,6 +85,10 @@ public:
     bool first_step ();
     bool next_step ();
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 
 #endif

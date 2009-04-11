@@ -9,6 +9,10 @@
 #include "ecp/common/ecp_g_pjg.h"
 #include "ecp_mp/ecp_mp_tr_player.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 playerjoy_generator::playerjoy_generator(ecp_task& _ecp_task, int step):
         ecp_generator (_ecp_task)
 {
@@ -91,3 +95,7 @@ bool playerjoy_generator::next_step ( )
 
     return true;
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

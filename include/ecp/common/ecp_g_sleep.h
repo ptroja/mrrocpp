@@ -10,6 +10,10 @@
 #include <time.h>
 #include "ecp/common/ecp_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_sleep_generator : public ecp_generator
 {
 	private:
@@ -25,5 +29,9 @@ class ecp_sleep_generator : public ecp_generator
 		bool next_step();			//next step generation
 		int init_time(double=1);	//initialize time
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif /* ECP_G_SLEEP_H_ */

@@ -1,10 +1,14 @@
-//Zadanie które realizuje dan¹ trajektoriê u¿ywaj¹c smooth generatora
+//Zadanie ktï¿½re realizuje danï¿½ trajektoriï¿½ uï¿½ywajï¿½c smooth generatora
 
 #if !defined(_ECP_T_BOX_IRP6OT_H)
 #define _ECP_T_BOX_IRP6OT_H
 
 #include "ecp/common/ecp_task.h"
 #include "ecp/common/ecp_g_smooth.h"
+
+namespace mrrocpp {
+namespace ecp {
+namespace common {
 
 class ecp_t_box_irp6ot: public ecp_task {
   
@@ -18,6 +22,10 @@ class ecp_t_box_irp6ot: public ecp_task {
 		void task_initialization(void);
 		void main_task_algorithm(void);
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif
 

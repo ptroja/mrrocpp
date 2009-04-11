@@ -10,6 +10,10 @@
 #include "ecp/common/ecp_task.h"
 #include "ecp/common/ecp_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // class ecp_visioncoordinates_generator : public ecp_generator
 // - klasa odpowiadajaca za generowanie nowych wspolrzednych dla koncowki robota
 //   na podstawie informacji z systemu wizyjnego, z wykorzystaniem VSP FraDIA
@@ -18,7 +22,7 @@ class ecp_visioncoordinates_generator : public ecp_generator
 {
 public:
 	// ecp_visioncoordinates_generator(ecp_task& _ecp_task)
-	// · ecp_task& _ecp_task - zadanie, z ktorym zwiazany jest dany generator
+	// ï¿½ ecp_task& _ecp_task - zadanie, z ktorym zwiazany jest dany generator
 	ecp_visioncoordinates_generator(ecp_task& _ecp_task);
 
     // bool first_step()
@@ -41,6 +45,10 @@ private:
 	double itsOutputCoordinates[8];
 
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 
 #endif // ECP_G_VISIONCOORDINATES_H_INCLUDED

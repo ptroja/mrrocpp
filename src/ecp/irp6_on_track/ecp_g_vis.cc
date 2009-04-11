@@ -20,6 +20,10 @@
 
 #include "lib/mathtr.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 #define PRINT 1
 
 
@@ -763,3 +767,8 @@ clock_gettime( CLOCK_REALTIME , &e_time);
 // the_robot->create_command ();
    return true;
 }; // end: bool irp6ot_linear_generator::next_step ( )
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

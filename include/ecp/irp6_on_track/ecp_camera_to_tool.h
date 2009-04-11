@@ -13,6 +13,10 @@
 
 #include "ecp/common/ecp_matrix4x4.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class CameraToTool
 {
 	double d, a, h;
@@ -31,6 +35,10 @@ class CameraToTool
 	double computeTCE(double[3], double[3], double[3], double[3], double[12]);
 	double computeTCE(double[12], double[12]);
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 
 #endif /* ECP_CAMERA_TO_TOOL_H_ */

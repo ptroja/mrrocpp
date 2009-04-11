@@ -25,6 +25,10 @@
 #include "ecp_mp/ecp_mp_s_schunk.h"
 #include "ecp/irp6_postument/ecp_g_test.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // KONSTRUKTORY
 ecp_task_test_irp6p::ecp_task_test_irp6p(configurator &_config) : ecp_task(_config)
 {
@@ -71,3 +75,7 @@ ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_test_irp6p(_config);
 }
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

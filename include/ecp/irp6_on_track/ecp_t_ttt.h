@@ -4,6 +4,10 @@
 #include "ecp_mp/ecp_mp_task.h"
 #include "ecp/common/ecp_g_smooth.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 /**
  * Kresli w powietrzu siatke jak do gry w kolko-i-krzyzyk
  * @author jkurylo
@@ -35,5 +39,9 @@ public:
 	void main_task_algorithm(void);
 };
 
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

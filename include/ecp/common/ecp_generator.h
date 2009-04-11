@@ -14,6 +14,10 @@
 #include "ecp_mp/ecp_mp_generator.h"
 
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 
 class ecp_generator : public ecp_mp::generator::base {
 
@@ -47,5 +51,9 @@ class ecp_generator : public ecp_mp::generator::base {
 		}; // end: class ECP_error
 
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif /* _ECP_GENERATOR_H */

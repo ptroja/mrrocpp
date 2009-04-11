@@ -20,6 +20,10 @@
 #include "lib/mathtr.h"
 #include "math.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 dung_generator::dung_generator(ecp_task& _ecp_task, int step) :
         ecp_generator(_ecp_task)
 {
@@ -312,3 +316,8 @@ bool dung_generator::next_step ( )
 
     return true;
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

@@ -12,6 +12,10 @@
 
 #include "ecp/irp6_on_track/ecp_local.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 ecp_irp6_on_track_robot::ecp_irp6_on_track_robot(configurator &_config, sr_ecp *_sr_ecp) :
 	ecp_robot(ROBOT_IRP6_ON_TRACK, _config, _sr_ecp)
 {
@@ -300,3 +304,8 @@ void ecp_irp6_on_track_robot::get_rmodel_reply(void)
 			throw ECP_error(NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end: switch (...rmodel_type)
 }
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
+

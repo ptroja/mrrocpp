@@ -15,6 +15,10 @@
 
 #include "ecp/common/ecp_task.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_conveyor_kon: public ecp_task  {
 
 public:
@@ -27,5 +31,9 @@ public:
 	void main_task_algorithm(void);
 	
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

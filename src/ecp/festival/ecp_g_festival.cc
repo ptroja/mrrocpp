@@ -14,6 +14,10 @@
 
 #include "ecp/festival/ecp_g_festival.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 festival_generator::festival_generator(ecp_task& _ecp_task) :
 		ecp_generator (_ecp_task)
 {
@@ -212,3 +216,8 @@ bool festival_generator::next_step ( )
 
 	return true;
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

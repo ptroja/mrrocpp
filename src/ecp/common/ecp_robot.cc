@@ -23,6 +23,10 @@
 
 #include "lib/mis_fun.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // konstruktor wywolywany z UI
 ecp_robot::ecp_robot(ROBOT_ENUM _robot_name, configurator &_config, sr_ecp *_sr_ecp_msg) :
 	robot(_robot_name), spawn_and_kill(true)
@@ -319,3 +323,7 @@ void ecp_robot::execute_motion(void)
 		throw ECP_error (NON_FATAL_ERROR, EDP_ERROR);
 	}
 }
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

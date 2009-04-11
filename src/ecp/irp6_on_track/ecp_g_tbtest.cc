@@ -8,6 +8,10 @@
 #include "ecp/irp6_on_track/ecp_g_tbtest.h"
 #include <iostream>
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 ecp_g_tbtest::ecp_g_tbtest (ecp_task& _ecp_task) : ecp_generator (_ecp_task){
 
 }
@@ -71,4 +75,9 @@ bool ecp_g_tbtest::next_step(){
 */
     return true;
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
 

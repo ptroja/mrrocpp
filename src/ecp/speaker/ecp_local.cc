@@ -13,6 +13,10 @@
 
 #include "ecp/speaker/ecp_local.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 
 // ####################################################################################################
 // ####################################################################################################
@@ -73,3 +77,8 @@ void ecp_speaker_robot::get_reply(void)
 			throw ECP_error(NON_FATAL_ERROR, INVALID_EDP_REPLY);
 	} // end: switch (EDP_data.reply_type)
 } // end: ecp_speaker_robot::get_reply ()
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
+

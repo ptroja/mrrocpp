@@ -12,6 +12,10 @@
 #include "common/typedefs.h"
 #include "ecp/common/ecp_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 
 // --------------------------------------------------------------------------
 
@@ -36,5 +40,9 @@ public:
 
 }; // end:
 // --------------------------------------------------------------------------
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

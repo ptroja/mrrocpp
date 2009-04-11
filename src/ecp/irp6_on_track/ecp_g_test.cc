@@ -17,6 +17,10 @@
 #include "ecp/irp6_on_track/ecp_g_test.h"
 #include "lib/mathtr.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 
 y_simple_generator::y_simple_generator(ecp_task& _ecp_task, int step):
 	 ecp_generator (_ecp_task, true) { 		step_no = step;          	};  
@@ -128,3 +132,8 @@ bool y_simple_generator::next_step (std::map <SENSOR_ENUM, ::sensor*>& sensor_m 
 // // 	if(++run_counter==1000) return false;	
 	return true;
 };  // end:  y_simple_generator::next_step (, robot& the_robot )
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

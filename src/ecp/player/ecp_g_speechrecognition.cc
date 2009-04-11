@@ -3,6 +3,10 @@
 
 #include "ecp/player/ecp_g_speechrecognition.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 speechrecognition_generator::speechrecognition_generator(ecp_task& _ecp_task)
 	: ecp_generator (_ecp_task)
 {
@@ -52,3 +56,8 @@ bool speechrecognition_generator::next_step ( )
 
 	return true;
 }
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
+

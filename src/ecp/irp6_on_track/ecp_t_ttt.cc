@@ -13,6 +13,10 @@
 #include "ecp/irp6_on_track/ecp_t_ttt.h"
 #include "lib/mathtr.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 ecp_task_ttt::ecp_task_ttt(configurator &_config) : ecp_task(_config) {}
 
 void ecp_task_ttt::task_initialization(void)
@@ -58,3 +62,8 @@ ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_ttt(_config);
 }
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
+

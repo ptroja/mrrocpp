@@ -17,6 +17,10 @@
 #include "ecp/common/ecp_g_jarosz.h"
 #include "mp/Trajectory.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_smooth_generator : public ecp_delta_generator
 {
 
@@ -107,5 +111,9 @@ public:
 	virtual bool first_step();
 	virtual bool next_step();
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

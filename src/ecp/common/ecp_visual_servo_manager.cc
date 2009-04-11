@@ -15,6 +15,10 @@
 
 #include "ecp/common/ecp_visual_servo_manager.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 ecp_visual_servo_manager::ecp_visual_servo_manager(ecp_task& _ecp_task, int step) : ecp_visual_servo(_ecp_task){
 
 }
@@ -24,3 +28,7 @@ ecp_visual_servo_manager::ecp_visual_servo_manager(ecp_task& _ecp_task, int step
 ecp_visual_servo_manager::~ecp_visual_servo_manager(){
 
 }
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

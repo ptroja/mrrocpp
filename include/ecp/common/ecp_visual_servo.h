@@ -14,6 +14,10 @@
 #include "lib/mathtr.h"
 #include "ecp/common/ecp_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 #if 0
 
 // tutaj struktury
@@ -284,4 +288,8 @@ public:
 
 
 };
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
 #endif // !defined(EA_8CD1135B_079F_4b66_82F9_362F9BC528CE__INCLUDED_)

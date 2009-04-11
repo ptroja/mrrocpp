@@ -18,6 +18,10 @@
 #include "ecp/common/ecp_teach_in_generator.h"
 #include "ecp/common/ecp_operator_reaction_condition.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // ########################################################################################################
 // ########################################################################################################
 // ########################### GENERATORY RUCHU DLA ECP (opracowane by Jarosz) ############################
@@ -149,7 +153,7 @@ public:
 class ecp_polynomial_generator : public ecp_delta_generator 
 {
 protected:
-   int first_interval;             // flaga, mówiaca czy jest to pierwszy przedzial interpolacji
+   int first_interval;             // flaga, mï¿½wiaca czy jest to pierwszy przedzial interpolacji
   
 public:	
    ecp_polynomial_generator (ecp_task& _ecp_task);
@@ -436,5 +440,9 @@ void ecp_save_trajectory (ecp_elipsoid_generator& the_generator, ecp_task& _ecp_
 // Zapis danych z kalibracji do pliku
 void ecp_save_extended_file (ecp_calibration_generator& the_generator,
 	 ecp_operator_reaction_condition& the_condition, ecp_task& _ecp_task);
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

@@ -6,6 +6,10 @@
 #include "ecp/irp6_on_track/ecp_local.h"
 #include "ecp/irp6_on_track/ecp_t_smooth2_test.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 //Constructors
 ecp_t_smooth2_test::ecp_t_smooth2_test(configurator &_config): ecp_task(_config){
   smoothgen2 = NULL;
@@ -55,3 +59,8 @@ void ecp_t_smooth2_test::main_task_algorithm(void ) {
 ecp_task* return_created_ecp_task(configurator &_config){
 	return new ecp_t_smooth2_test(_config);
 }
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
+

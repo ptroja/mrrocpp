@@ -28,7 +28,7 @@ class Trajectory
 		static const char * toString(POSE_SPECIFICATION ps);
 		static const char * returnRobotName(ROBOT_ENUM robot);
 
-		static bool writeTrajectoryToXmlFile(char *fileName, POSE_SPECIFICATION ps, std::list<ecp_smooth_taught_in_pose> &poses);
+		static bool writeTrajectoryToXmlFile(char *fileName, POSE_SPECIFICATION ps, std::list<ecp::common::ecp_smooth_taught_in_pose> &poses);
 		
 		void createNewPose();
 		void addPoseToTrajectory();
@@ -50,14 +50,14 @@ class Trajectory
 		double *getCoordinates() const;
 		void showTime();
 
-		std::list<ecp_smooth_taught_in_pose> * getPoses();
+		std::list<ecp::common::ecp_smooth_taught_in_pose> * getPoses();
 
 	private:
 		char * trjID;
 		uint64_t numOfPoses;		
 		POSE_SPECIFICATION poseSpec;
-		ecp_smooth_taught_in_pose *actPose;
-		std::list<ecp_smooth_taught_in_pose> *trjPoses;
+		ecp::common::ecp_smooth_taught_in_pose *actPose;
+		std::list<ecp::common::ecp_smooth_taught_in_pose> *trjPoses;
 };
 
 } // namespace common

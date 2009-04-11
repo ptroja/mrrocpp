@@ -13,6 +13,10 @@
 
 #include "ecp/common/ecp_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_vis_sac_lx_generator : public ecp_generator {
 protected:
 sensor *vsp_force_irp6ot, *vsp_force_irp6p, *vsp_vis_sac;
@@ -181,5 +185,9 @@ int steps2switch;//=0;
      // (zadanie realizowane przez klas konkretn)
 }; // end: class irp6ot_calibration_generator
 // --------------------------------------------------------------------------
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

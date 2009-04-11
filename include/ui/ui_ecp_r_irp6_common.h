@@ -34,7 +34,7 @@ class ui_common_robot {
  double current_position[IRP6_ON_TRACK_NUM_OF_SERVOS]; // polozenie aktualne
 
  public:
- ecp_robot *ecp;
+	 ecp::common::ecp_robot *ecp;
 
 // ecp_buffer ui_edp_package; // by Y
   ui_common_robot (configurator &_config, sr_ecp* _sr_ecp_msg, ROBOT_ENUM _robot_name); // Konstruktor

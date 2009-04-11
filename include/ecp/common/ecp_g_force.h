@@ -15,6 +15,10 @@
 #include "lib/mathtr.h"
 
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // Generator do wykrywania zmiany wagi chwytaka wraz z obiektem chwytanym
 // ciezary wyskalowane w newtonach
 #define WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE 10
@@ -453,5 +457,9 @@ public:
 	virtual bool first_step();
 	virtual bool next_step();
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

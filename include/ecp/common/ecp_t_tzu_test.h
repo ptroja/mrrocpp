@@ -8,6 +8,10 @@
 #include <iostream>
 #include <fstream>
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 #define FORCE_X 0
 #define FORCE_Y 1
 #define FORCE_Z 2
@@ -73,5 +77,9 @@ public:
 }
 ; // end:
 
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

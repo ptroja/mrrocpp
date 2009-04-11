@@ -22,6 +22,10 @@
 #include "ecp/common/ecp_teach_in_generator.h"
 #include "ecp/common/ECP_main_error.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // ####################################################################
 // #############    KLASA do odtwarzania listy pozycji i odczytywania linialow    ###############
 // ####################################################################
@@ -73,5 +77,9 @@ class trajectory_reproduce_generator : public ecp_teach_in_generator {
 		// Obsluga niebezpiecznej sily.
 		void dangerous_force_handler(ecp_generator::ECP_error e);
 	}; // end: class trajectory_reproduce_generator
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

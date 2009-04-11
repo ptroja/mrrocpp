@@ -14,6 +14,10 @@
 #include "ecp/common/ecp_g_jarosz.h"
 #include "ecp/common/ecp_st_go.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 ecp_sub_task_gripper_opening::ecp_sub_task_gripper_opening(ecp_task &_ecp_t) :
 	ecp_sub_task(_ecp_t)
 {
@@ -48,3 +52,7 @@ void ecp_sub_task_gripper_opening::execute()
 	lg.Move();
 }
 
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

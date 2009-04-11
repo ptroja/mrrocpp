@@ -9,6 +9,10 @@
 #include "ecp/conveyor/ecp_local.h"
 #include "ecp/conveyor/ecp_g_test.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 y_simple_generator::y_simple_generator(ecp_task& _ecp_task, int step):
 		ecp_generator (_ecp_task)
 {
@@ -88,3 +92,8 @@ bool y_simple_generator::next_step ( )
 	
 	return true;
 }
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
+

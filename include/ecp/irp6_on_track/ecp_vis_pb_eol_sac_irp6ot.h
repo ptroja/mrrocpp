@@ -18,6 +18,10 @@
 
 #include "ecp/common/ecp_visual_servo.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 /*!
  * \class ecp_vis_pb_eol_sac_irp6ot
  * \brief Class implementing PB-EOL-SAC algorithm.
@@ -140,4 +144,8 @@ public:
 	virtual bool first_step(void);
 
 };
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
 #endif // !defined(EA_B10EA6BB_2E03_4f87_8E50_B6482560D9BB__INCLUDED_)

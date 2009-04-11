@@ -19,6 +19,10 @@
 #include "lib/srlib.h"
 #include "ecp/common/ecp_g_force.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 //
 // 			weight_meassure_generator
@@ -2331,3 +2335,7 @@ void ecp_force_tool_change_generator::set_tool_parameters(double x, double y, do
     tool_parameters[2] = z;
     weight = v;
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

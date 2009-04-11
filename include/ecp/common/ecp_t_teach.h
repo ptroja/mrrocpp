@@ -16,6 +16,10 @@
 #include "ecp/common/ecp_task.h"
 #include "ecp/common/ecp_teach_in_generator.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_teach_irp6ot: public ecp_task  {
 protected:
 	ecp_teach_in_generator* tig;
@@ -29,5 +33,9 @@ public:
 	void main_task_algorithm(void);
 
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

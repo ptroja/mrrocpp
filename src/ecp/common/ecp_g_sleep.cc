@@ -6,6 +6,10 @@
 
 #include "ecp/common/ecp_g_sleep.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 //constructor with parameters: task and time to sleep [s]
 ecp_sleep_generator::ecp_sleep_generator (ecp_task& _ecp_task, double s): ecp_generator (_ecp_task){
 	communicate_with_edp=false;	//do not communicate with edp
@@ -50,4 +54,8 @@ bool ecp_sleep_generator::next_step(){
 		return true;
 	}
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 

@@ -3,6 +3,10 @@
 
 #include "ecp/common/ecp_task.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_pr_irp6ot: public ecp_task  {
 protected:
 	y_drawing_teach_in_force_generator *tig;
@@ -22,5 +26,9 @@ public:
 	void main_task_algorithm(void);
 	
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

@@ -29,6 +29,10 @@
 #include "ecp/irp6_on_track/ecp_local.h"
 #include "ecp/irp6_on_track/ecp_g_fctg.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // Mutex do wykonywania odczytow z czujnika.
 //pthread_mutex_t FORCE_SENSOR_READINGS_MUTEX = PTHREAD_MUTEX_INITIALIZER;
 
@@ -555,3 +559,8 @@ void force_controlled_trajectory_generator::insert_position_list_element (double
     };
 
 /**************** KONIEC: METODY ZWIAZANE Z LISTA POZYCJI ******************/
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+
+

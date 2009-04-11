@@ -19,6 +19,10 @@
 
 #include "ecp_mp/ecp_mp_s_cvfradia.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_pw_scena_irp6ot: public ecp_task  {
 
 	ecp_g_pw_scena* scena_gen;
@@ -46,5 +50,9 @@ public:
 	void set_td_coordinates(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6);
 	void init_td(POSE_SPECIFICATION ps, int internode_no);
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

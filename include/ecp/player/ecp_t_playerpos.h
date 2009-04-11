@@ -4,6 +4,10 @@
 #include "ecp/common/ecp_task.h"
 #include "ecp/player/ecp_g_playerpos.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_playerpos: public ecp_task  {
 protected:
 	playerpos_generator* ppg;
@@ -18,5 +22,9 @@ public:
 	void main_task_algorithm(void);
 	
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif /* _ECP_T_PLAYERPOS_H */

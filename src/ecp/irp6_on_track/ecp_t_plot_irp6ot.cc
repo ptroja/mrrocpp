@@ -12,6 +12,10 @@
 #include "ecp/common/ecp_g_plot.h"
 #include "ecp/irp6_on_track/ecp_t_plot_irp6ot.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 
 // KONSTRUKTORY
 ecp_task_plot_irp6ot::ecp_task_plot_irp6ot(configurator &_config) : ecp_task(_config)
@@ -39,3 +43,8 @@ ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new ecp_task_plot_irp6ot(_config);
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

@@ -16,6 +16,10 @@
 
 #include "mp/Trajectory.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 class ecp_task_fsautomat_irp6p: public ecp_task
 {
 	protected:
@@ -45,5 +49,9 @@ class ecp_task_fsautomat_irp6p: public ecp_task
 //		bool loadTrajectories(char * fileName);
 
 };
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
 
 #endif

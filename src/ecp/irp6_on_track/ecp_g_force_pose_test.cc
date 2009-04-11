@@ -17,6 +17,10 @@
 #include "ecp/irp6_on_track/ecp_g_test.h"
 #include "lib/mathtr.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 bool y_simple_generator::first_step ( )
 {
 
@@ -117,3 +121,8 @@ bool y_simple_generator::next_step ( )
     return true;
 }
 ; // end:  y_simple_generator::next_step (, robot& the_robot )
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
+

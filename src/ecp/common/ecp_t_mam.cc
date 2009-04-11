@@ -30,6 +30,10 @@
 
 #include "ecp/common/ECP_main_error.h"
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 // Zmienne do komunikacji.
 extern name_attach_t *ecp_attach;
 // Kanal komunikacyjny z procesem UI.
@@ -255,3 +259,7 @@ ecp_task* return_created_ecp_task(configurator &_config)
 {
 	return new ecp_task_mam(_config);
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp

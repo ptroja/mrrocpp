@@ -14,6 +14,10 @@
 #include <libxml/tree.h>
 #include <libxml/xinclude.h>
 
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+
 ecp_task::ecp_task(configurator &_config) :
 	base(_config)
 {
@@ -572,3 +576,7 @@ std::map<char*, mp::common::Trajectory, ecp_task::str_cmp>* ecp_task::loadTrajec
 
 	return trajectoriesMap;
 }
+
+} // namespace common
+} // namespace ecp
+} // namespace mrrocpp
