@@ -24,14 +24,14 @@ namespace vsp {
 namespace sensor {
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor (configurator &_config)
+base* return_created_sensor (configurator &_config)
 {
-	return new vsp_time_sensor(_config);
+	return new time(_config);
 }// : return_created_sensor
 
 
 // Konstruktor klasy czujnika wirtualnego, odpowiedzialnego za odczyty z czujnika sily.
-vsp_time_sensor::vsp_time_sensor(configurator &_config) : vsp_sensor(_config){
+time::time(configurator &_config) : base(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.time);
 
@@ -42,16 +42,16 @@ vsp_time_sensor::vsp_time_sensor(configurator &_config) : vsp_sensor(_config){
 }; // end: vsp_time_sensor
 
 // Metoda sluzaca do konfiguracji czujnika.
-void vsp_time_sensor::configure_sensor (void){// w obecnej implementacji zeruje poziom odczytow z czujnika w EDP
+void time::configure_sensor (void){// w obecnej implementacji zeruje poziom odczytow z czujnika w EDP
    	is_sensor_configured=true;
 }; // end: configure_sensor
 
 // Metoda oczekujaca na dane, otrzymane z czujnika sily (poprzez proces EDP).
-void vsp_time_sensor::wait_for_event(void){
+void time::wait_for_event(void){
 }; // end: wait_for_event
 
 // Metoda dokonujaca przepisania odczytu do obrazu czujnika.
-void vsp_time_sensor::initiate_reading (void){
+void time::initiate_reading (void){
 	// Jesli czujnik nie jest skonfigurowany.
 	if(!is_sensor_configured)
 	     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
@@ -60,7 +60,7 @@ void vsp_time_sensor::initiate_reading (void){
 }; // end: initiate_reading
 
 // Metoda wysyla przepisuje dane z obrazu czujnika do bufora oraz wysyla bufor do procesu oczekujacego na odczyty.
-void vsp_time_sensor::get_reading (void){
+void time::get_reading (void){
 	// Jesli czujnik nie jest skonfigurowany.
 	if(!is_sensor_configured)
 	     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);

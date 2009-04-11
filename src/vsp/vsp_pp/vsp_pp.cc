@@ -66,13 +66,13 @@ namespace sensor {
 // extern vsp_pp_sensor *vs;
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor (configurator &_config)
+base* return_created_sensor (configurator &_config)
 {
-	return new vsp_pp_sensor(_config);
+	return new pp(_config);
 }// : return_created_sensor
 
 /*****************************  KONSTRUKTOR *********************************/
-vsp_pp_sensor::vsp_pp_sensor(configurator &_config) : vsp_sensor(_config){
+pp::pp(configurator &_config) : base(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.pp);
 
@@ -100,11 +100,11 @@ vsp_pp_sensor::vsp_pp_sensor(configurator &_config) : vsp_sensor(_config){
     };// end: vsp_pp_sensor
 
 
-vsp_pp_sensor::~vsp_pp_sensor(void){};
+pp::~pp(void){};
 
 
 /************************** CONFIGURE SENSOR ******************************/
-void vsp_pp_sensor::configure_sensor (void){
+void pp::configure_sensor (void){
     // Przechowuje tryby odczytu/zapisu z portu RS-232.
     struct termios RS232_mode;
     // Dostep do sprzetu.
@@ -200,7 +200,7 @@ void vsp_pp_sensor::configure_sensor (void){
     };// end: configure_sensor
 
 /**************************** INITIATE READING *******************************/
-void vsp_pp_sensor::initiate_reading (void){
+void pp::initiate_reading (void){
 	// Czy czujnik skonfigurowany
 	if(!is_sensor_configured)
 		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
@@ -304,7 +304,7 @@ printf("Axis_Z: %d\n", axis_reading[2]);
     };// end: initiate_reading
 
 /***************************** GET  READING *********************************/
-void vsp_pp_sensor::get_reading (void){
+void pp::get_reading (void){
 
 	// Czy czujnik skonfigurowany
 	if(!is_sensor_configured)
@@ -326,7 +326,7 @@ void vsp_pp_sensor::get_reading (void){
     };// end: get_reading
 
 /****************************** TERMINATE **********************************/
-void vsp_pp_sensor::terminate(void){
+void pp::terminate(void){
     // Zamkniecie deskryptora urzadzenia.
     close(RS_descriptor);
     }; // end: terminate

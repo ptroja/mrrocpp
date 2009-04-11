@@ -20,7 +20,7 @@ namespace sensor {
 #define VSP_MSG_SEND_TIMEOUT_HIGH 10000000
 
 /********** klasa czujnikow po stronie VSP **************/
-class vsp_schunk_sensor : public vsp_sensor{
+class schunk : public base{
 
 private:
 	short ap_state, prev_ap_state, next_ap_state; // stan aplikacji z punktu widzenia wykrywanych zdarzen
@@ -39,8 +39,8 @@ private:
 		struct timespec start[9];
 		
 public:
-	vsp_schunk_sensor(configurator &_config);
-	~vsp_schunk_sensor(void);
+	schunk(configurator &_config);
+	~schunk(void);
 
 	void configure_sensor (void);	// konfiguracja czujnika
 	void wait_for_event(void);		// oczekiwanie na zdarzenie

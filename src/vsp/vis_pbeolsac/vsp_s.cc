@@ -97,16 +97,16 @@ RubiksCube k1,k2;
 // extern configurator* config;
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor (configurator &_config)
+base* return_created_sensor (configurator &_config)
 {
-	return new vsp_vis_sensor(_config);
+	return new vis(_config);
 }// : return_created_sensor
 
 
 
 
 // Rejstracja procesu VSP
-vsp_vis_sensor::vsp_vis_sensor(configurator &_config) : vsp_sensor(_config){
+vis::vis(configurator &_config) : base(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.camera);
 
@@ -195,7 +195,7 @@ else printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	
 	};
 
-vsp_vis_sensor::~vsp_vis_sensor(void){
+vis::~vis(void){
 	close (fd);
 	/*
 	free_matrix(Rckk);
@@ -213,14 +213,14 @@ vsp_vis_sensor::~vsp_vis_sensor(void){
 	};
 
 /**************************** inicjacja czujnika ****************************/
-void vsp_vis_sensor::configure_sensor (void){
+void vis::configure_sensor (void){
 // printf("7 - config\n");
 	is_sensor_configured=true;
  //   printf("Sensor initiated\n");
      sr_msg->message ("Sensor initiated"); // 7 
 	};
 	
-void vsp_vis_sensor::wait_for_event(){
+void vis::wait_for_event(){
 // printf("7 - wait_for_event\n");
 /*
 if(interatt==0){
@@ -235,7 +235,7 @@ InterruptWait (NULL, NULL);
 };	
 
 /*************************** inicjacja odczytu ******************************/
-void vsp_vis_sensor::initiate_reading (void){
+void vis::initiate_reading (void){
 // printf("7 - initiate reading\n");
 
 	if(!is_sensor_configured)
@@ -345,7 +345,7 @@ clock_gettime( CLOCK_REALTIME , &e_time);
 	}; // wait_for_event
 		
 /***************************** odczyt z czujnika *****************************/
-void vsp_vis_sensor::get_reading (void){
+void vis::get_reading (void){
 // printf("7 - get reading\n");
 	if(!is_sensor_configured)
 	     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);

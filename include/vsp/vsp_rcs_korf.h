@@ -22,7 +22,7 @@ namespace sensor {
 
 
 // klasa czujnikow po stronie VSP
-class vsp_rcs_korf : public vsp_sensor {
+class rcs_korf : public base {
   private:
 	// Stan kostki Rubika do rozwiazania.
 	CubieCube *pCube;
@@ -33,9 +33,9 @@ class vsp_rcs_korf : public vsp_sensor {
 
   public:
 	// Konstruktor czujnika wirtualnego.
-	vsp_rcs_korf(configurator &_config);
+	rcs_korf(configurator &_config);
 	// Destruktor czujnika wirtualnego.
-	~vsp_rcs_korf(void);
+	~rcs_korf(void);
 	// Konfiguracja czujnika.
 	void configure_sensor (void);
 	// Inicjacja odczytu.

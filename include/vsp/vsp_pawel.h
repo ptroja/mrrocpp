@@ -46,7 +46,7 @@ typedef struct{
 } Thsv;
 
 /********** klasa czujnikow po stronie VSP **************/
-class vsp_pawel_sensor: public vsp_sensor {
+class pawel: public base {
 
 private:
 	short zero;							// polozenie zerowe
@@ -67,8 +67,8 @@ private:
 public:
 	short ERROR_CODE;
 	
-	vsp_pawel_sensor(configurator &_config);
-	~vsp_pawel_sensor(void);
+	pawel(configurator &_config);
+	~pawel(void);
 
 	void configure_sensor (void);	// konfiguracja czujnika
 	void wait_for_event(void);		// oczekiwanie na zdarzenie

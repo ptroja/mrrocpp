@@ -35,13 +35,13 @@ namespace vsp {
 namespace sensor {
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor (configurator &_config)
+base* return_created_sensor (configurator &_config)
 {
-	return new vsp_schunk_sensor(_config);
+	return new schunk(_config);
 }// : return_created_sensor
 
 // Kontruktor procesu VSP
-vsp_schunk_sensor::vsp_schunk_sensor(configurator &_config) : vsp_sensor(_config)
+schunk::schunk(configurator &_config) : base(_config)
 {
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.force);
@@ -71,13 +71,13 @@ vsp_schunk_sensor::vsp_schunk_sensor(configurator &_config) : vsp_sensor(_config
 	
 };
 
-vsp_schunk_sensor::~vsp_schunk_sensor(void)
+schunk::~schunk(void)
 {
    printf("Destruktor VSP\n");
 };
 
 /**************************** inicjacja czujnika ****************************/
-void vsp_schunk_sensor::configure_sensor (void)// w obecnej implementacji zeruje poziom odczytow z czujnika w EDP
+void schunk::configure_sensor (void)// w obecnej implementacji zeruje poziom odczytow z czujnika w EDP
 {
 
 	uint64_t *msg_send_timeout;
@@ -112,7 +112,7 @@ void vsp_schunk_sensor::configure_sensor (void)// w obecnej implementacji zeruje
 	}
 };
 
-void vsp_schunk_sensor::wait_for_event()
+void schunk::wait_for_event()
 {
 
 	uint64_t *msg_send_timeout;
@@ -148,7 +148,7 @@ void vsp_schunk_sensor::wait_for_event()
 #define STATE_2_TO_4 120
 
 /*************************** inicjacja odczytu ******************************/
-void vsp_schunk_sensor::initiate_reading (void)
+void schunk::initiate_reading (void)
 {
 
 	if(!is_sensor_configured)
@@ -221,7 +221,7 @@ void vsp_schunk_sensor::initiate_reading (void)
 };
 
 /***************************** odczyt z czujnika *****************************/
-void vsp_schunk_sensor::get_reading (void)
+void schunk::get_reading (void)
 {
 
 

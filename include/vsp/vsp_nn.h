@@ -17,7 +17,7 @@ namespace vsp {
 namespace sensor {
 
 /********** klasa czujnikow po stronie VSP **************/
-class vsp_nn_sensor: public vsp_sensor{
+class nn: public base{
 
 private:
 	short zero;							// polozenie zerowe
@@ -25,8 +25,8 @@ private:
 public:
 	short ERROR_CODE;
 	
-	vsp_nn_sensor(configurator &_config);
-	~vsp_nn_sensor(void);
+	nn(configurator &_config);
+	~nn(void);
 
 	void configure_sensor (void);	// konfiguracja czujnika
 	void wait_for_event(void);		// oczekiwanie na zdarzenie

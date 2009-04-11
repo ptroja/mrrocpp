@@ -17,7 +17,7 @@ namespace vsp {
 namespace sensor {
 
 /********** klasa czujnikow po stronie VSP **************/
-class vsp_pp_sensor : public vsp_sensor{
+class pp : public base{
 private:
     // Deskryptor portu RS-232
     int RS_descriptor;
@@ -40,9 +40,9 @@ private:
     
 public:
     // Konstruktor czujnika wirtualnego.
-    vsp_pp_sensor(configurator &_config);
+    pp(configurator &_config);
     // Destruktor czujnika wirtualnego.
-    ~vsp_pp_sensor(void);
+    ~pp(void);
     // Konfiguracja czujnika.
     void configure_sensor (void);
     // Inicjacja odczytu.

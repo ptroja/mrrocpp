@@ -60,14 +60,14 @@ namespace sensor {
 // extern pid_t UI_pid;           // identyfikator procesu UI
 // extern configurator* config;
 
-vsp_sensor* return_created_sensor (configurator &_config)
+base* return_created_sensor (configurator &_config)
 {
-	return new vsp_mic(_config);
+	return new mic(_config);
 }// : return_created_sensor
 
 
 // Rejstracja procesu VSP
-vsp_mic::vsp_mic(configurator &_config) : vsp_sensor(_config){
+mic::mic(configurator &_config) : base(_config){
 
 //	unsigned long int e;			// kod bledu systemowego	 
 	printf("Konstruktor VSP! - SOUND\n");
@@ -209,7 +209,7 @@ mSamples = mSampleRate * mSampleChannels  * mSampleTime;
 	r.WczytajKlasy();
 };
 
-vsp_mic::~vsp_mic(void){
+mic::~mic(void){
 	
 	rtn = snd_mixer_close (mixer_handle);
     rtn = snd_pcm_close (pcm_handle);
@@ -219,7 +219,7 @@ vsp_mic::~vsp_mic(void){
 };
 
 /**************************** inicjacja czujnika ****************************/
-void vsp_mic::configure_sensor (void){
+void mic::configure_sensor (void){
 
 	is_sensor_configured=TRUE;
   	 sr_msg->message ("Sensor MIC initiated"); // 7 
@@ -241,7 +241,7 @@ void vsp_mic::wait_for_event(){
 */ // useless in no-wait interactive mode 
 
 /*************************** inicjacja odczytu ******************************/
-void vsp_mic::initiate_reading (void){
+void mic::initiate_reading (void){
   
 //	if(!is_sensor_configured)
 //	     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED); //MAC7 odrem w MRROC++
@@ -355,7 +355,7 @@ void vsp_mic::initiate_reading (void){
 }; //wait_for_event
 		
 /***************************** odczyt z czujnika *****************************/
-void vsp_mic::get_reading (void){
+void mic::get_reading (void){
 
 	//if(!is_sensor_configured)
 	//     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED); //MAC7 odrem w MRROC++

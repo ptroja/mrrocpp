@@ -19,7 +19,7 @@ namespace sensor {
 
 
 /********** klasa czujnikow po stronie VSP **************/
-class vsp_force_sensor : public vsp_sensor {
+class force : public base {
 private:
 	int edp_vsp_fd; // do polaczenia z EDP
 
@@ -33,7 +33,7 @@ private:
 
 public:
     // Konstruktor czujnika wirtualnego.
-	vsp_force_sensor (configurator &_config);
+	force (configurator &_config);
 
     // Konfiguracja czujnika.
     void configure_sensor (void);

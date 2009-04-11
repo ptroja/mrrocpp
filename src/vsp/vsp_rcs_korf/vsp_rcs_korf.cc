@@ -39,13 +39,13 @@ namespace sensor {
 
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor (configurator &_config) {
-	return new vsp_rcs_korf(_config);
+base* return_created_sensor (configurator &_config) {
+	return new rcs_korf(_config);
 } // : return_created_sensor
 
 
 // Konstruktor czujnika wirtualnego.
-vsp_rcs_korf::vsp_rcs_korf(configurator &_config) : vsp_sensor(_config){
+rcs_korf::rcs_korf(configurator &_config) : base(_config){
     printf("VSP KR construct\n");
 
 	// Inicjalizuje puste pola.
@@ -71,7 +71,7 @@ vsp_rcs_korf::vsp_rcs_korf(configurator &_config) : vsp_sensor(_config){
 
 
 // Destruktor czujnika wirtualnego.
-vsp_rcs_korf::~vsp_rcs_korf(void) {
+rcs_korf::~rcs_korf(void) {
     printf("VSP KR destruct\n");
 
 	// Zwalnia pamiec zajmowana przez struktury pomocnicze
@@ -83,7 +83,7 @@ vsp_rcs_korf::~vsp_rcs_korf(void) {
 
 
 // Konfiguracja czujnika.
-void vsp_rcs_korf::configure_sensor (void){
+void rcs_korf::configure_sensor (void){
     printf("VSP KR configure\n");
 
 	if (to_vsp.rcs.configure_mode == RCS_BUILD_TABLES) {
@@ -110,7 +110,7 @@ void vsp_rcs_korf::configure_sensor (void){
 
 
 // Inicjacja odczytu.
-void vsp_rcs_korf::initiate_reading (void) {
+void rcs_korf::initiate_reading (void) {
     printf("VSP KR initiate_reading\n");
 
 	// Zglasza blad, gdy czujnik nie jest skonfigurowany.
@@ -157,7 +157,7 @@ void vsp_rcs_korf::initiate_reading (void) {
 
 
 // Odeslanie odczytu.
-void vsp_rcs_korf::get_reading (void) {
+void rcs_korf::get_reading (void) {
     printf("VSP KR get_reading\n");
 
 	// Zglasza blad, gdy czujnik nie jest skonfigurowany.

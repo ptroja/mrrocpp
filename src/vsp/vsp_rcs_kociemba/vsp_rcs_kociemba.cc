@@ -41,13 +41,13 @@ namespace sensor {
 
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor (configurator &_config) {
-	return new vsp_rcs_kociemba(_config);
+base* return_created_sensor (configurator &_config) {
+	return new rcs_kociemba(_config);
 } // : return_created_sensor
 
 
 // Konstruktor czujnika wirtualnego.
-vsp_rcs_kociemba::vsp_rcs_kociemba(configurator &_config) : vsp_sensor(_config){
+rcs_kociemba::rcs_kociemba(configurator &_config) : base(_config){
     printf("VSP KC construct\n");
 
 	// Inicjalizuje puste pola.
@@ -76,7 +76,7 @@ vsp_rcs_kociemba::vsp_rcs_kociemba(configurator &_config) : vsp_sensor(_config){
 
 
 // Destruktor czujnika wirtualnego.
-vsp_rcs_kociemba::~vsp_rcs_kociemba(void) {
+rcs_kociemba::~rcs_kociemba(void) {
     printf("VSP KC destruct\n");
 
 	// Zwalnia pamiec zajmowana przez struktury pomocnicze
@@ -96,7 +96,7 @@ vsp_rcs_kociemba::~vsp_rcs_kociemba(void) {
 
 
 // Konfiguracja czujnika.
-void vsp_rcs_kociemba::configure_sensor (void){
+void rcs_kociemba::configure_sensor (void){
     printf("VSP KC configure\n");
 	
 	if (to_vsp.rcs.configure_mode == RCS_BUILD_TABLES) {
@@ -162,7 +162,7 @@ void vsp_rcs_kociemba::configure_sensor (void){
 
 
 // Inicjacja odczytu.
-void vsp_rcs_kociemba::initiate_reading (void) {
+void rcs_kociemba::initiate_reading (void) {
 //    printf("VSP KC initiate_reading\n");
 
 	// nie szuka kolejnych rozwiazan po optymalnym
@@ -213,7 +213,7 @@ void vsp_rcs_kociemba::initiate_reading (void) {
 
 
 // Oczekiwanie na wydarzenie.
-void vsp_rcs_kociemba::wait_for_event(void) {
+void rcs_kociemba::wait_for_event(void) {
 //    printf("VSP KC wait_for_event\n");
 
     // Odczekuje 1s jezeli znalezione juz zostalo rozwiazanie optymalne
@@ -226,7 +226,7 @@ void vsp_rcs_kociemba::wait_for_event(void) {
 
 
 // Odeslanie odczytu.
-void vsp_rcs_kociemba::get_reading (void) {
+void rcs_kociemba::get_reading (void) {
     printf("VSP KC get_reading\n");
 
 	// Zglasza blad, gdy czujnik nie jest skonfigurowany.

@@ -80,16 +80,16 @@ char buffer[256];
 // extern configurator* config;
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor (configurator &_config)
+base* return_created_sensor (configurator &_config)
 {
-	return new vsp_nn_sensor(_config);
+	return new nn(_config);
 }// : return_created_sensor
 
 
 
 
 // Rejstracja procesu VSP
-vsp_nn_sensor::vsp_nn_sensor(configurator &_config) : vsp_sensor(_config){
+nn::nn(configurator &_config) : base(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.camera);
 
@@ -125,7 +125,7 @@ vsp_nn_sensor::vsp_nn_sensor(configurator &_config) : vsp_sensor(_config){
 		}
 	};
 
-vsp_nn_sensor::~vsp_nn_sensor(void){
+nn::~nn(void){
 
 	
 	
@@ -133,19 +133,19 @@ vsp_nn_sensor::~vsp_nn_sensor(void){
 	};
 
 /**************************** inicjacja czujnika ****************************/
-void vsp_nn_sensor::configure_sensor (void){
+void nn::configure_sensor (void){
 
 	is_sensor_configured=true;
  
      sr_msg->message ("Sensor initiated"); // 7 
 	};
 	
-void vsp_nn_sensor::wait_for_event(){
+void nn::wait_for_event(){
 
 };	
 
 /*************************** inicjacja odczytu ******************************/
-void vsp_nn_sensor::initiate_reading (void){
+void nn::initiate_reading (void){
 
 
 	if(!is_sensor_configured)
@@ -178,7 +178,7 @@ void vsp_nn_sensor::initiate_reading (void){
 	}; // wait_for_event
 		
 /***************************** odczyt z czujnika *****************************/
-void vsp_nn_sensor::get_reading (void){
+void nn::get_reading (void){
 
 	if(!is_sensor_configured)
 	     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);

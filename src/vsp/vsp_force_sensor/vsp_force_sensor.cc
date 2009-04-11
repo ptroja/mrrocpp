@@ -36,14 +36,14 @@ namespace sensor {
 
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor (configurator &_config)
+base* return_created_sensor (configurator &_config)
 {
-	return new vsp_force_sensor(_config);
+	return new force(_config);
 }// : return_created_sensor
 
 
 // Konstruktor klasy czujnika wirtualnego, odpowiedzialnego za odczyty z czujnika sily.
-vsp_force_sensor::vsp_force_sensor(configurator &_config) : vsp_sensor(_config){
+force::force(configurator &_config) : base(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.force);
 
@@ -75,7 +75,7 @@ vsp_force_sensor::vsp_force_sensor(configurator &_config) : vsp_sensor(_config){
 	}; // end: vsp_force_sensor
 
 // Metoda sluzaca do konfiguracji czujnika.
-void vsp_force_sensor::configure_sensor (void){// w obecnej implementacji zeruje poziom odczytow z czujnika w EDP
+void force::configure_sensor (void){// w obecnej implementacji zeruje poziom odczytow z czujnika w EDP
    	is_sensor_configured=true;
 	vsp_edp_command.konfigurowac=1;// zadanie konfiguracji czujnika sily skierowane do EDP
 	vsp_edp_command.hdr.type=0;
@@ -86,7 +86,7 @@ void vsp_force_sensor::configure_sensor (void){// w obecnej implementacji zeruje
 	}; // end: configure_sensor
 
 // Metoda oczekujaca na dane, otrzymane z czujnika sily (poprzez proces EDP).
-void vsp_force_sensor::wait_for_event(void){
+void force::wait_for_event(void){
 	// Zadanie odczytu sily od EDP.
 	vsp_edp_command.konfigurowac=0;
 	vsp_edp_command.hdr.type=0;
@@ -97,7 +97,7 @@ void vsp_force_sensor::wait_for_event(void){
 	}; // end: wait_for_event
 
 // Metoda dokonujaca przepisania odczytu do obrazu czujnika.
-void vsp_force_sensor::initiate_reading (void){
+void force::initiate_reading (void){
 	// Jesli czujnik nie jest skonfigurowany.
 	if(!is_sensor_configured)
 	     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
@@ -114,7 +114,7 @@ void vsp_force_sensor::initiate_reading (void){
 	}; // end: initiate_reading
 
 // Metoda wysyla przepisuje dane z obrazu czujnika do bufora oraz wysyla bufor do procesu oczekujacego na odczyty.
-void vsp_force_sensor::get_reading (void){
+void force::get_reading (void){
 	// Jesli czujnik nie jest skonfigurowany.
 	if(!is_sensor_configured)
 	     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);

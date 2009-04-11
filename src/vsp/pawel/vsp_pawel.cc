@@ -114,12 +114,12 @@ bool countLUT(){
 
 /**************************** metody vsp_pawel ****************************/
 
-vsp_sensor* return_created_sensor (configurator &_config){
+base* return_created_sensor (configurator &_config){
 
-	return new vsp_pawel_sensor(_config);
+	return new pawel(_config);
 }
 
-vsp_pawel_sensor::vsp_pawel_sensor(configurator &_config) : vsp_sensor(_config)
+pawel::pawel(configurator &_config) : base(_config)
 {
 	struct timespec time_start, time_end;
 	printf("[vsp_pawel]\tconstructor\n");
@@ -139,14 +139,14 @@ vsp_pawel_sensor::vsp_pawel_sensor(configurator &_config) : vsp_sensor(_config)
 };
 
 
-vsp_pawel_sensor::~vsp_pawel_sensor(void)
+pawel::~pawel(void)
 {
 	close(fd);
    printf("Destruktor VSP\n");
 };
 
 /**************************** inicjacja czujnika ****************************/
-void vsp_pawel_sensor::configure_sensor (void)
+void pawel::configure_sensor (void)
 {
 	is_sensor_configured=true;
 
@@ -156,13 +156,13 @@ void vsp_pawel_sensor::configure_sensor (void)
 //   	printf("[vsp_pawel]\tconfigure sensor\n");
 };
 
-void vsp_pawel_sensor::wait_for_event()
+void pawel::wait_for_event()
 {
 
 };
 
 /*************************** inicjacja odczytu ******************************/
-void vsp_pawel_sensor::initiate_reading (void)
+void pawel::initiate_reading (void)
 {
 	struct timespec tmp_time, time_start, time_end;
 	clock_gettime( CLOCK_REALTIME , &time_start);
@@ -253,7 +253,7 @@ void vsp_pawel_sensor::initiate_reading (void)
 };
 
 /***************************** odczyt z czujnika *****************************/
-void vsp_pawel_sensor::get_reading (void)
+void pawel::get_reading (void)
 {
 	if(!is_sensor_configured)
 		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
@@ -285,7 +285,7 @@ void vsp_pawel_sensor::get_reading (void)
 };
 
 /********************** zakonczenie dzialania czujnika *************************/
-void vsp_pawel_sensor::terminate(void)
+void pawel::terminate(void)
 {
 //	printf("[vsp_pawel]\tterminated\n");
 };

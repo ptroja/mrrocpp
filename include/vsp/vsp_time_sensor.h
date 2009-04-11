@@ -17,14 +17,14 @@ namespace vsp {
 namespace sensor {
 
 /********** klasa czujnikow po stronie VSP **************/
-class vsp_time_sensor : public vsp_sensor {
+class time : public base {
 private:
 	
     struct timespec ts;
 
 public:
     // Konstruktor czujnika wirtualnego.
-    vsp_time_sensor (configurator &_config);
+    time (configurator &_config);
 
     // Konfiguracja czujnika.
     void configure_sensor (void);

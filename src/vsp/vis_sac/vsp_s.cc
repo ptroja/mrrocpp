@@ -88,16 +88,16 @@ int ret=0;
 // extern configurator* config;
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor (configurator &_config)
+base* return_created_sensor (configurator &_config)
 {
-	return new vsp_vis_sac_sensor(_config);
+	return new vis_sac(_config);
 }// : return_created_sensor
 
 
 
 
 // Rejstracja procesu VSP
-vsp_vis_sac_sensor::vsp_vis_sac_sensor(configurator &_config) : vsp_sensor(_config){
+vis_sac::vis_sac(configurator &_config) : base(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.vis_sac);
 
@@ -174,7 +174,7 @@ else printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	
 	};
 
-vsp_vis_sac_sensor::~vsp_vis_sac_sensor(void){
+vis_sac::~vis_sac(void){
 	close (fd);
 
 	
@@ -183,19 +183,19 @@ vsp_vis_sac_sensor::~vsp_vis_sac_sensor(void){
 	};
 
 /**************************** inicjacja czujnika ****************************/
-void vsp_vis_sac_sensor::configure_sensor (void){
+void vis_sac::configure_sensor (void){
 
 	is_sensor_configured=true;
 
      sr_msg->message ("Sensor initiated"); // 7 
 	};
 	
-void vsp_vis_sac_sensor::wait_for_event(){
+void vis_sac::wait_for_event(){
 
 };	
 
 /*************************** inicjacja odczytu ******************************/
-void vsp_vis_sac_sensor::initiate_reading (void){
+void vis_sac::initiate_reading (void){
 // printf("7 - initiate reading\n");
 
 	if(!is_sensor_configured)
@@ -258,7 +258,7 @@ vision.setRoi(k1.roi,1000);
 	}; // wait_for_event
 		
 /***************************** odczyt z czujnika *****************************/
-void vsp_vis_sac_sensor::get_reading (void){
+void vis_sac::get_reading (void){
 // printf("7 - get reading\n");
 	if(!is_sensor_configured)
 	     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);

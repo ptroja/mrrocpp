@@ -17,7 +17,7 @@ namespace vsp {
 namespace sensor {
 
 /********** klasa czujnikow po stronie VSP **************/
-class vsp_mic: public vsp_sensor{
+class mic: public base{
 
 private:
 	short zero;							// polozenie zerowe
@@ -25,8 +25,8 @@ private:
 public:
 	short ERROR_CODE;
 	
-	vsp_mic(configurator &_config);
-	~vsp_mic(void);
+	mic(configurator &_config);
+	~mic(void);
 
 	void configure_sensor (void);	// konfiguracja czujnika
 //	void wait_for_event(void);		// oczekiwanie na zdarzenie

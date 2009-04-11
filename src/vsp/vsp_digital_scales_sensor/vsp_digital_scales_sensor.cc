@@ -40,7 +40,7 @@ extern short TERMINATE;
 
 
 // Czujnik wirtualny
-extern sensor::vsp_digital_scales_sensor *vs;
+extern sensor::digital_scales *vs;
 
 }
 
@@ -54,9 +54,9 @@ pthread_barrier_t initiate_reading_barrier;
 pthread_barrier_t reading_ready_barrier;
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor (configurator &_config)
+base* return_created_sensor (configurator &_config)
 {
-	return new vsp_digital_scales_sensor(_config);
+	return new digital_scales(_config);
 }// : return_created_sensor
 
 /*************************** DIGITAL SCALE THREAD ****************************/
@@ -91,7 +91,7 @@ void* digital_scale_thread(void*  arg ){
     } // end: digital_scale_thread
 
 /*****************************  KONSTRUKTOR *********************************/
-vsp_digital_scales_sensor::vsp_digital_scales_sensor(configurator &_config)  : vsp_sensor(_config) {
+digital_scales::digital_scales(configurator &_config)  : base(_config) {
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.ds);
 
@@ -124,11 +124,11 @@ vsp_digital_scales_sensor::vsp_digital_scales_sensor(configurator &_config)  : v
     };// end: vsp_digital_scales_sensor
 
 
-vsp_digital_scales_sensor::~vsp_digital_scales_sensor(void){};
+digital_scales::~digital_scales(void){};
 
 
 /************************** CONFIGURE SENSOR ******************************/
-void vsp_digital_scales_sensor::configure_sensor (void){
+void digital_scales::configure_sensor (void){
     // Odblokowanie watkow, jezeli odczyty byly juz zainicjowane.
     if (readings_initiated)
         pthread_barrier_wait(&reading_ready_barrier);
@@ -145,7 +145,7 @@ void vsp_digital_scales_sensor::configure_sensor (void){
     };// end: configure_sensor
 
 /**************************** INITIATE READING *******************************/
-void vsp_digital_scales_sensor::initiate_reading (void){
+void digital_scales::initiate_reading (void){
     // Odblokowanie watkow, jezeli odczyty byly juz zainicjowane.
     if (readings_initiated)
         pthread_barrier_wait(&reading_ready_barrier);
@@ -156,7 +156,7 @@ void vsp_digital_scales_sensor::initiate_reading (void){
     };// end: initiate_reading
 
 /***************************** GET  READING *********************************/
-void vsp_digital_scales_sensor::get_reading (void){
+void digital_scales::get_reading (void){
     // Sprawdzenie, czy odczyty sa zainicjowane.
     if (!readings_initiated)
         throw sensor_error (NON_FATAL_ERROR, READING_NOT_READY);

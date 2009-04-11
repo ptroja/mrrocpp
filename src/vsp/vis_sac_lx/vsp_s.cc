@@ -136,7 +136,7 @@ int ret=0;
 //RubiksCube k1,k2;
 // Rejstracja procesu VSP
 
-vsp_vis_sac_lx_sensor::vsp_vis_sac_lx_sensor(configurator &_config) : vsp_sensor(_config){
+vis_sac_lx::vis_sac_lx(configurator &_config) : base(_config){
 
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.vis_sac);
@@ -203,7 +203,7 @@ vsp_vis_sac_lx_sensor::vsp_vis_sac_lx_sensor(configurator &_config) : vsp_sensor
 	sr_msg->message("VSP VIS PB-ECL-SAC LX started");
 }
 
-vsp_vis_sac_lx_sensor::~vsp_vis_sac_lx_sensor(void)
+vis_sac_lx::~vis_sac_lx(void)
 {
 	close(sockfd_sac);
 	close(sockfd_eih);
@@ -211,19 +211,19 @@ vsp_vis_sac_lx_sensor::~vsp_vis_sac_lx_sensor(void)
 }
 
 /**************************** inicjacja czujnika ****************************/
-void vsp_vis_sac_lx_sensor::configure_sensor(void)
+void vis_sac_lx::configure_sensor(void)
 {
 	is_sensor_configured=true;
 
 	sr_msg->message("Sensor initiated"); // 7 
 }
 	
-void vsp_vis_sac_lx_sensor::wait_for_event(){
+void vis_sac_lx::wait_for_event(){
 	//delay(10);
 }
 
 /*************************** inicjacja odczytu ******************************/
-void vsp_vis_sac_lx_sensor::initiate_reading(void)
+void vis_sac_lx::initiate_reading(void)
 {
 	if (!is_sensor_configured)
 		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
@@ -307,7 +307,7 @@ void vsp_vis_sac_lx_sensor::initiate_reading(void)
 }
 		
 /***************************** odczyt z czujnika *****************************/
-void vsp_vis_sac_lx_sensor::get_reading(void)
+void vis_sac_lx::get_reading(void)
 {
 	// printf("7 - get reading\n");
 	if (!is_sensor_configured)
@@ -420,9 +420,9 @@ void vsp_vis_sac_lx_sensor::get_reading(void)
 }
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor(configurator &_config)
+base* return_created_sensor(configurator &_config)
 {
-	return new vsp_vis_sac_lx_sensor(_config);
+	return new vis_sac_lx(_config);
 }
 
 } // namespace sensor

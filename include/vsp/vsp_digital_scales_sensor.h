@@ -17,7 +17,7 @@ namespace vsp {
 namespace sensor {
 
 /********** klasa czujnikow po stronie VSP **************/
-class vsp_digital_scales_sensor : public vsp_sensor {
+class digital_scales : public base {
 private:
     // Odczyty w pozycji konfiguracji czujnika.
     double position_zero[6];
@@ -28,9 +28,9 @@ private:
     
 public:
     // Konstruktor czujnika wirtualnego.
-    vsp_digital_scales_sensor(configurator &_config);
+    digital_scales(configurator &_config);
     // Destruktor czujnika wirtualnego.
-    ~vsp_digital_scales_sensor(void);
+    ~digital_scales(void);
     // Konfiguracja czujnika.
     void configure_sensor (void);
     // Inicjacja odczytu.
