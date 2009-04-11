@@ -21,7 +21,7 @@ private:
 public:
 	short ERROR_CODE;
 	
-	vsp_vis_sac_sensor(void);
+	vsp_vis_sac_sensor(configurator &_config);
 	~vsp_vis_sac_sensor(void);
 
 	void configure_sensor (void);	// konfiguracja czujnika

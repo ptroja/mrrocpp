@@ -45,30 +45,30 @@
 
 /********************************* GLOBALS **********************************/
 // Wskaznik na obiekt do komunikacji z SR.
-extern sr_vsp* sr_msg;
+// extern sr_vsp* sr_msg;
 
 // Flaga uzywana do konczenia pracy watkow.
-extern short TERMINATE;
+// extern short TERMINATE;
 
 // Objekt uzywane do konfiguracji.
 // extern common_config* common_c;
 // extern vsp_config* vsp_c;
 // extern config_directories_class* config_directories;
 // extern ini_configs* ini_con;
-extern configurator* config;
+// extern configurator* config;
 
 
 // Czujnik wirtualny
-extern vsp_pp_sensor *vs;
+// extern vsp_pp_sensor *vs;
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor (void)
+vsp_sensor* return_created_sensor (configurator &_config)
 {
-	return new vsp_pp_sensor();
+	return new vsp_pp_sensor(_config);
 }// : return_created_sensor
 
 /*****************************  KONSTRUKTOR *********************************/
-vsp_pp_sensor::vsp_pp_sensor(void){
+vsp_pp_sensor::vsp_pp_sensor(configurator &_config) : vsp_sensor(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.pp);
 

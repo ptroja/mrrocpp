@@ -76,22 +76,22 @@ RubiksCube k1,k2;
 
 // #pragma on(check_stack);
 
-extern pid_t UI_pid;           // identyfikator procesu UI
+// extern pid_t UI_pid;           // identyfikator procesu UI
 
 
-extern configurator* config;
+// extern configurator* config;
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor (void)
+vsp_sensor* return_created_sensor (configurator &_config)
 {
-	return new vsp_vis_pbeclsac_sensor();
+	return new vsp_vis_pbeclsac_sensor(_config);
 }// : return_created_sensor
 
 
 
 
 // Rejstracja procesu VSP
-vsp_vis_pbeclsac_sensor::vsp_vis_pbeclsac_sensor(void){
+vsp_vis_pbeclsac_sensor::vsp_vis_pbeclsac_sensor(configurator &_config) : vsp_sensor(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.camera);
 
@@ -103,7 +103,7 @@ vsp_vis_pbeclsac_sensor::vsp_vis_pbeclsac_sensor(void){
 	ThreadCtl (_NTO_TCTL_IO, NULL);  // by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi 
 	
 	
-	mrrocpp_network_path = config->return_mrrocpp_network_path();
+	//mrrocpp_network_path = config->return_mrrocpp_network_path();
 	
 	   int size = 1 + strlen(mrrocpp_network_path) + strlen("data/color.txt");
 	    char * path1 = new char[size];

@@ -81,19 +81,19 @@ int ret=0;
 
 // #pragma on(check_stack);
 
-extern configurator* config;
+// extern configurator* config;
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor (void)
+vsp_sensor* return_created_sensor (configurator &_config)
 {
-	return new vsp_vis_sac_sensor();
+	return new vsp_vis_sac_sensor(_config);
 }// : return_created_sensor
 
 
 
 
 // Rejstracja procesu VSP
-vsp_vis_sac_sensor::vsp_vis_sac_sensor(void){
+vsp_vis_sac_sensor::vsp_vis_sac_sensor(configurator &_config) : vsp_sensor(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.vis_sac);
 

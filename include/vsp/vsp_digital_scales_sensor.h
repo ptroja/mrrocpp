@@ -24,7 +24,7 @@ private:
     
 public:
     // Konstruktor czujnika wirtualnego.
-    vsp_digital_scales_sensor(void);
+    vsp_digital_scales_sensor(configurator &_config);
     // Destruktor czujnika wirtualnego.
     ~vsp_digital_scales_sensor(void);
     // Konfiguracja czujnika.

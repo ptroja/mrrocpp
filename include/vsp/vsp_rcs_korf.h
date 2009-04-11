@@ -27,7 +27,7 @@ class vsp_rcs_korf : public vsp_sensor {
 
   public:
 	// Konstruktor czujnika wirtualnego.
-	vsp_rcs_korf(void);
+	vsp_rcs_korf(configurator &_config);
 	// Destruktor czujnika wirtualnego.
 	~vsp_rcs_korf(void);
 	// Konfiguracja czujnika.

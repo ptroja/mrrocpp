@@ -11,9 +11,9 @@
 #define _VSP_SENSOR_H
 
 #include "common/sensor.h"
+// Konfigurator
+#include "lib/configurator.h"
 
-// Wskaznik na lacze z SR
-extern sr_vsp *sr_msg;
 
 /********** klasa czujnikow po stronie VSP **************/
 class vsp_sensor : public sensor {
@@ -23,8 +23,15 @@ protected:
 	// Flaga - czy jakikolwiek odczyt jest gotowy.
 	short is_reading_ready;
 	
+	
 public:
+	configurator &config;
+	sr_vsp *sr_msg;
+	
 	char* mrrocpp_network_path;
+	
+	vsp_sensor (configurator &_config); 
+	
 	// Metoda uzywana przy wspolpracy nieinteraktywnej.
 	virtual void wait_for_event(void);
 	
@@ -33,6 +40,6 @@ public:
 }; // end: class vsp_sensor
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor (void);
+vsp_sensor* return_created_sensor (configurator &_config);
 
 #endif

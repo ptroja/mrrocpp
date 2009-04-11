@@ -30,9 +30,9 @@
 /********************************* GLOBALS **********************************/
 vsp_sensor *vs;		// czujnik wirtualny
 
-sr_vsp *sr_msg;		// komunikacja z SR
+// sr_vsp *vs->sr_msg;		// komunikacja z SR
 
-configurator* config;
+// configurator* config;
 
 bool TERMINATE = false;									// zakonczenie obu watkow
 
@@ -57,31 +57,31 @@ void error_handler(ERROR e){
 	switch(e.error_class){
 		case SYSTEM_ERROR:
 			printf("VSP aborted due to SYSTEM_ERROR\n");
-			sr_msg->message (SYSTEM_ERROR, e.error_no);
+			vs->sr_msg->message (SYSTEM_ERROR, e.error_no);
 			TERMINATE=true;
 			break;
 		case FATAL_ERROR:
-			sr_msg->message (FATAL_ERROR, e.error_no);
+			vs->sr_msg->message (FATAL_ERROR, e.error_no);
 			break;
 		case NON_FATAL_ERROR:
 			switch(e.error_no){
 			case INVALID_COMMAND_TO_VSP:
 				vs->from_vsp.vsp_report=INVALID_VSP_COMMAND;
-				sr_msg->message (NON_FATAL_ERROR, e.error_no);
+				vs->sr_msg->message (NON_FATAL_ERROR, e.error_no);
 			break;
 			case SENSOR_NOT_CONFIGURED:
 				vs->from_vsp.vsp_report=VSP_SENSOR_NOT_CONFIGURED;
-				sr_msg->message (NON_FATAL_ERROR, e.error_no);
+				vs->sr_msg->message (NON_FATAL_ERROR, e.error_no);
 				break;
 			case READING_NOT_READY:
 				vs->from_vsp.vsp_report=VSP_READING_NOT_READY;
 				break;
 			default:
-				sr_msg->message (NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
+				vs->sr_msg->message (NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
 			}; // end switch
 			break;
 		default:
-			sr_msg->message (NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
+			vs->sr_msg->message (NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
 		} // end switch  
 	} // end error_handler
 
@@ -107,34 +107,26 @@ int main(int argc, char *argv[]) {
 		};
 
 	 // zczytanie konfiguracji calego systemu
- 	config = new configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
+	configurator *_config = new configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
 #if defined(PROCESS_SPAWN_YRSH)
 	if (argc>6) {
  		config->answer_to_y_rsh_spawn(argv[6]); 
  		signal(SIGINT, SIG_IGN);
  	}
 #endif
-	attach_point = config->return_attach_point_name(configurator::CONFIG_SERVER, "resourceman_attach_point");
+	attach_point = _config->return_attach_point_name(configurator::CONFIG_SERVER, "resourceman_attach_point");
 
 	try {
-		/* Lokalizacja procesu wywietlania komunikatow SR */ 
-		if ((sr_msg = new sr_vsp(VSP, attach_point,
-			 config->return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL) 
-		{
-			printf("communication with SR not ready\n");
-		}
-		else
-			sr_msg->message ("Communication with SR ready");
-
+	
 		// Stworzenie nowego czujnika za pomoca funkcji (cos na ksztalt szablonu abstract factory).
-		vs = return_created_sensor();
+		vs = return_created_sensor(*_config);
 
 		if ((ch = messip_channel_create(NULL, attach_point, MESSIP_NOTIMEOUT, 0)) == NULL) {
 			perror("messip_channel_create()");
 		}
 
 		/* start the resource manager message loop */
-		sr_msg->message ("Device is waiting for clients...");
+		vs->sr_msg->message ("Device is waiting for clients...");
 		while(!TERMINATE) { // for(;;)
 
 			int32_t type, subtype;
@@ -183,7 +175,7 @@ int main(int argc, char *argv[]) {
 		
 			messip_reply(ch, rcvid, 0, &vs->from_vsp, sizeof(VSP_REPORT) + vs->union_size, MESSIP_NOTIMEOUT);
  		} // end while()
-        sr_msg->message ("VSP terminated");
+        vs->sr_msg->message ("VSP terminated");
 	} // koniec TRY
 	catch (VSP_main_error e) {
 		error_handler(e);

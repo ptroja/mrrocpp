@@ -30,18 +30,18 @@
 
 
 // Zmienne konfiguracyjne.
-extern configurator* config;
+// extern configurator* config;
 
 
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor (void) {
-	return new vsp_rcs_korf();
+vsp_sensor* return_created_sensor (configurator &_config) {
+	return new vsp_rcs_korf(_config);
 } // : return_created_sensor
 
 
 // Konstruktor czujnika wirtualnego.
-vsp_rcs_korf::vsp_rcs_korf(void) {
+vsp_rcs_korf::vsp_rcs_korf(configurator &_config) : vsp_sensor(_config){
     printf("VSP KR construct\n");
 
 	// Inicjalizuje puste pola.
@@ -85,7 +85,7 @@ void vsp_rcs_korf::configure_sensor (void){
 	if (to_vsp.rcs.configure_mode == RCS_BUILD_TABLES) {
 
 		// Pobiera dane z pliku konfiguracyjnego.
-		char* path = config->return_string_value("tables_path");
+		char* path = config.return_string_value("tables_path");
 		printf("VSP KR PATH = %s\n", path);
 
 		// Konfiguruje

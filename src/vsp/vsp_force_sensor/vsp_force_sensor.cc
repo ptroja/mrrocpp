@@ -28,24 +28,24 @@
 // Zmienne konfiguracyjne.
 // edp_schunk_config* edp_schunk_c;
 // extern ini_configs* ini_con;
-extern configurator* config;
+// extern configurator* config;
 
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor (void)
+vsp_sensor* return_created_sensor (configurator &_config)
 {
-	return new vsp_force_sensor();
+	return new vsp_force_sensor(_config);
 }// : return_created_sensor
 
 
 // Konstruktor klasy czujnika wirtualnego, odpowiedzialnego za odczyty z czujnika sily.
-vsp_force_sensor::vsp_force_sensor(void){
+vsp_force_sensor::vsp_force_sensor(configurator &_config) : vsp_sensor(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.force);
 
 	char* network_edp_vsp_attach_point = 
-		config->return_attach_point_name (configurator::CONFIG_SERVER, "edp_vsp_attach_point", 
-		config->return_string_value("edp_section"));
+		config.return_attach_point_name (configurator::CONFIG_SERVER, "edp_vsp_attach_point", 
+		config.return_string_value("edp_section"));
 
  	ms_nr=0; // numer odczytu z czujnika
 

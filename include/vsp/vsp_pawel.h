@@ -63,7 +63,7 @@ private:
 public:
 	short ERROR_CODE;
 	
-	vsp_pawel_sensor(void);
+	vsp_pawel_sensor(configurator &_config);
 	~vsp_pawel_sensor(void);
 
 	void configure_sensor (void);	// konfiguracja czujnika

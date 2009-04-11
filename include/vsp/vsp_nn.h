@@ -21,7 +21,7 @@ private:
 public:
 	short ERROR_CODE;
 	
-	vsp_nn_sensor(void);
+	vsp_nn_sensor(configurator &_config);
 	~vsp_nn_sensor(void);
 
 	void configure_sensor (void);	// konfiguracja czujnika

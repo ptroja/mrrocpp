@@ -21,7 +21,7 @@ private:
 public:
 	short ERROR_CODE;
 	
-	vsp_mic(void);
+	vsp_mic(configurator &_config);
 	~vsp_mic(void);
 
 	void configure_sensor (void);	// konfiguracja czujnika

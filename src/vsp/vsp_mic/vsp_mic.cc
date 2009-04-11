@@ -53,17 +53,17 @@ CROSMDoc r;
 #define FALSE 0
 
 
-extern pid_t UI_pid;           // identyfikator procesu UI
-extern configurator* config;
+// extern pid_t UI_pid;           // identyfikator procesu UI
+// extern configurator* config;
 
-vsp_sensor* return_created_sensor (void)
+vsp_sensor* return_created_sensor (configurator &_config)
 {
-	return new vsp_mic();
+	return new vsp_mic(_config);
 }// : return_created_sensor
 
 
 // Rejstracja procesu VSP
-vsp_mic::vsp_mic(){
+vsp_mic::vsp_mic(configurator &_config) : vsp_sensor(_config){
 
 //	unsigned long int e;			// kod bledu systemowego	 
 	printf("Konstruktor VSP! - SOUND\n");
@@ -308,10 +308,10 @@ void vsp_mic::initiate_reading (void){
 				if (tmp > r.maxWartosc) r.maxWartosc = tmp; 
 			}
 			
-			r.InicjujAnalize(1); // -- bez przerw na wizualizacjê. 	
+			r.InicjujAnalize(1); // -- bez przerw na wizualizacjï¿½. 	
 			r.bezSzumu = true;
 			r.poczatek_ramki = r.ZnajdzRamke(1); // Zakladamy najpierw szeroki spektrogram 			
-			r.ObliczCechyOkien(1, 0); // Nie przerywaj pracy wizualizacj¹
+			r.ObliczCechyOkien(1, 0); // Nie przerywaj pracy wizualizacjï¿½
 			r.RozpoznajKomende();
 
 		//primitive speach recog. - checking: is sth speakin'?        

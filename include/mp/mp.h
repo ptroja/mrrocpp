@@ -24,7 +24,7 @@ namespace mp {
 namespace common {
 
 
-class base;
+//class base;
 class robot;
 
 enum WAIT_FOR_STOP_ENUM {

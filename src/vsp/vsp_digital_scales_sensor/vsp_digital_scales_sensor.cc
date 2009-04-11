@@ -24,7 +24,7 @@
 
 /********************************* GLOBALS **********************************/
 // Wskaznik na obiekt do komunikacji z SR.
-extern sr_vsp* sr_msg;
+// extern sr_vsp* vs->sr_msg;
 
 // Flaga uzywana do konczenia pracy watkow.
 extern short TERMINATE;
@@ -34,7 +34,7 @@ extern short TERMINATE;
 // extern vsp_config* vsp_c;
 // extern config_directories_class* config_directories;
 // extern ini_configs* ini_con;
-extern configurator* config;
+// extern configurator* config;
 
 
 // Czujnik wirtualny
@@ -46,9 +46,9 @@ pthread_barrier_t initiate_reading_barrier;
 pthread_barrier_t reading_ready_barrier;
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor (void)
+vsp_sensor* return_created_sensor (configurator &_config)
 {
-	return new vsp_digital_scales_sensor();
+	return new vsp_digital_scales_sensor(_config);
 }// : return_created_sensor
 
 /*************************** DIGITAL SCALE THREAD ****************************/
@@ -73,7 +73,7 @@ void* digital_scale_thread(void*  arg ){
         vs->image.sensor_union.ds.readings[number-1] = ds->transform_reading_to_double();
             } // end: try
         catch(sensor::sensor_error e){
-            sr_msg->message(e.error_class, e.error_no);
+            vs->sr_msg->message(e.error_class, e.error_no);
             vs->image.sensor_union.ds.readings[number-1] = 0;
             } // end: catch
         // Odczyt gotowy (zawieszenie na barierze).
@@ -83,12 +83,12 @@ void* digital_scale_thread(void*  arg ){
     } // end: digital_scale_thread
 
 /*****************************  KONSTRUKTOR *********************************/
-vsp_digital_scales_sensor::vsp_digital_scales_sensor(void){
+vsp_digital_scales_sensor::vsp_digital_scales_sensor(configurator &_config)  : vsp_sensor(_config) {
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.ds);
 
     // Struktura do pobierania danych z pliku konfiguracyjnego.
-      number_of_scales = config->return_int_value("number_of_scales");
+      number_of_scales = config.return_int_value("number_of_scales");
       
     // Jesii za duzo linialow.
     if(number_of_scales > 6)
@@ -133,7 +133,7 @@ void vsp_digital_scales_sensor::configure_sensor (void){
         position_zero[i] = image.sensor_union.ds.readings[i];
     // Ustawienie flagi stanu procesu.
     readings_initiated = false;
-    sr_msg->message ("Digital Scale sensor calibrated");
+    vs->sr_msg->message ("Digital Scale sensor calibrated");
     };// end: configure_sensor
 
 /**************************** INITIATE READING *******************************/

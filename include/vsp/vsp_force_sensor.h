@@ -29,7 +29,7 @@ private:
 
 public:
     // Konstruktor czujnika wirtualnego.
-	vsp_force_sensor (void);
+	vsp_force_sensor (configurator &_config);
 
     // Konfiguracja czujnika.
     void configure_sensor (void);

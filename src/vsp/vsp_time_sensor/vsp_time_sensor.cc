@@ -20,14 +20,14 @@
 
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor (void)
+vsp_sensor* return_created_sensor (configurator &_config)
 {
-	return new vsp_time_sensor();
+	return new vsp_time_sensor(_config);
 }// : return_created_sensor
 
 
 // Konstruktor klasy czujnika wirtualnego, odpowiedzialnego za odczyty z czujnika sily.
-vsp_time_sensor::vsp_time_sensor(void){
+vsp_time_sensor::vsp_time_sensor(configurator &_config) : vsp_sensor(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.time);
 

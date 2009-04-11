@@ -29,7 +29,7 @@ class vsp_rcs_kociemba : public vsp_sensor {
 
   public:
 	// Konstruktor czujnika wirtualnego.
-	vsp_rcs_kociemba(void);
+	vsp_rcs_kociemba(configurator &_config);
 	// Destruktor czujnika wirtualnego.
 	~vsp_rcs_kociemba(void);
 	// Konfiguracja czujnika.

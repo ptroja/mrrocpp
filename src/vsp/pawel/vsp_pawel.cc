@@ -54,7 +54,7 @@
 
 
 
-extern sr_vsp *sr_msg;       // Wskaznik na lacze z SR
+// extern sr_vsp *sr_msg;       // Wskaznik na lacze z SR
 int RGB2H[0xffff];
 float RGB2S[0xffff];
 float RGB2V[0xffff];
@@ -110,12 +110,12 @@ bool countLUT(){
 
 /**************************** metody vsp_pawel ****************************/
 
-vsp_sensor* return_created_sensor (void){
+vsp_sensor* return_created_sensor (configurator &_config){
 
-	return new vsp_pawel_sensor();
+	return new vsp_pawel_sensor(_config);
 }
 
-vsp_pawel_sensor::vsp_pawel_sensor(void)
+vsp_pawel_sensor::vsp_pawel_sensor(configurator &_config) : vsp_sensor(_config)
 {
 	struct timespec time_start, time_end;
 	printf("[vsp_pawel]\tconstructor\n");

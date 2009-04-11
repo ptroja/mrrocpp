@@ -45,7 +45,7 @@
 
 #define BUFFER_EIH_SIZE 22*256 //14
 
-extern configurator* config;
+// extern configurator* config;
 
 int sockfd_sac, portno;
 struct sockaddr_in serv_addr;
@@ -132,8 +132,8 @@ int ret=0;
 //RubiksCube k1,k2;
 // Rejstracja procesu VSP
 
-vsp_vis_sac_lx_sensor::vsp_vis_sac_lx_sensor(void)
-{
+vsp_vis_sac_lx_sensor::vsp_vis_sac_lx_sensor(configurator &_config) : vsp_sensor(_config){
+
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.vis_sac);
 
@@ -145,8 +145,8 @@ vsp_vis_sac_lx_sensor::vsp_vis_sac_lx_sensor(void)
 	z=0;
 	x=0;
 	
-	strcpy(SAC_node_name, config->return_string_value("SAC_node_name"));
-	strcpy(EIH_node_name, config->return_string_value("EIH_node_name"));
+	strcpy(SAC_node_name, config.return_string_value("SAC_node_name"));
+	strcpy(EIH_node_name, config.return_string_value("EIH_node_name"));
 
 	//SAC
 	if(strcmp( SAC_node_name, "NULL" )!=0)
@@ -416,7 +416,7 @@ void vsp_vis_sac_lx_sensor::get_reading(void)
 }
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-vsp_sensor* return_created_sensor(void)
+vsp_sensor* return_created_sensor(configurator &_config)
 {
-	return new vsp_vis_sac_lx_sensor();
+	return new vsp_vis_sac_lx_sensor(_config);
 }

@@ -36,7 +36,7 @@ private:
     
 public:
     // Konstruktor czujnika wirtualnego.
-    vsp_pp_sensor(void);
+    vsp_pp_sensor(configurator &_config);
     // Destruktor czujnika wirtualnego.
     ~vsp_pp_sensor(void);
     // Konfiguracja czujnika.

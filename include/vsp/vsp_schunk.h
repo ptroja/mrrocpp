@@ -35,7 +35,7 @@ private:
 		struct timespec start[9];
 		
 public:
-	vsp_schunk_sensor(void);
+	vsp_schunk_sensor(configurator &_config);
 	~vsp_schunk_sensor(void);
 
 	void configure_sensor (void);	// konfiguracja czujnika

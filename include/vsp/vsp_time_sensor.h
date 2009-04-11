@@ -20,7 +20,7 @@ private:
 
 public:
     // Konstruktor czujnika wirtualnego.
-    vsp_time_sensor (void);
+    vsp_time_sensor (configurator &_config);
 
     // Konfiguracja czujnika.
     void configure_sensor (void);
