@@ -24,6 +24,10 @@
 #include "vsp/vsp_force_sensor.h"
 
 
+namespace mrrocpp {
+namespace vsp {
+namespace sensor {
+
 
 // Zmienne konfiguracyjne.
 // edp_schunk_config* edp_schunk_c;
@@ -124,4 +128,8 @@ void vsp_force_sensor::get_reading (void){
 	// Obacny odczyt nie jest "nowy".
      is_reading_ready=false;
 	}; // end: get_reading
+
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp
 

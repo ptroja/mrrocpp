@@ -31,6 +31,10 @@
 #include "vsp/rcs/Kociemba/KociembaException.h"
 
 
+namespace mrrocpp {
+namespace vsp {
+namespace sensor {
+
 
 // Zmienne konfiguracyjne.
 // extern configurator* config;
@@ -263,3 +267,7 @@ void vsp_rcs_kociemba::get_reading (void) {
 	is_reading_ready=false;
 
 }; // end: get_reading
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp
+

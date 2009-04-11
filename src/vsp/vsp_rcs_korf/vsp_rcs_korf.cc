@@ -28,6 +28,10 @@
 
 
 
+namespace mrrocpp {
+namespace vsp {
+namespace sensor {
+
 
 // Zmienne konfiguracyjne.
 // extern configurator* config;
@@ -200,3 +204,7 @@ void vsp_rcs_korf::get_reading (void) {
 	pSol = NULL;
 
 }; // end: get_reading
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp
+

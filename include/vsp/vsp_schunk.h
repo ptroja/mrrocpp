@@ -13,6 +13,10 @@
 #include "vsp/vsp_sensor.h"
 #include "vsp/vsp_force_sensor.h"
 
+namespace mrrocpp {
+namespace vsp {
+namespace sensor {
+
 #define VSP_MSG_SEND_TIMEOUT_HIGH 10000000
 
 /********** klasa czujnikow po stronie VSP **************/
@@ -43,5 +47,9 @@ public:
 	void initiate_reading (void);		// zadanie odczytu od VSP
 	void get_reading (void);			// odebranie odczytu od VSP		// zwraca blad
 }; // end: class vsp_sensor
+
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp
 
 #endif

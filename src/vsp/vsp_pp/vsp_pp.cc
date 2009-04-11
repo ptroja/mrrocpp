@@ -43,6 +43,10 @@
 #include "vsp/vsp_pp.h"
 //#include "vsp/moxaclass.h"
 
+namespace mrrocpp {
+namespace vsp {
+namespace sensor {
+
 /********************************* GLOBALS **********************************/
 // Wskaznik na obiekt do komunikacji z SR.
 // extern sr_vsp* sr_msg;
@@ -326,3 +330,7 @@ void vsp_pp_sensor::terminate(void){
     // Zamkniecie deskryptora urzadzenia.
     close(RS_descriptor);
     }; // end: terminate
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp
+

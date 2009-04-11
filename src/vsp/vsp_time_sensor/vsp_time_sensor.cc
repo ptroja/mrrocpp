@@ -19,6 +19,10 @@
 #include "vsp/vsp_time_sensor.h"
 
 
+namespace mrrocpp {
+namespace vsp {
+namespace sensor {
+
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
 vsp_sensor* return_created_sensor (configurator &_config)
 {
@@ -71,3 +75,7 @@ void vsp_time_sensor::get_reading (void){
 	// Obacny odczyt nie jest "nowy".
 	is_reading_ready=false;
 }; // end: get_reading
+
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp

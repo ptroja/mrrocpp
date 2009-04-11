@@ -32,6 +32,10 @@
 
 #include "vsp/vsp_sensor.h"				// zawiera deklaracje klasy vsp_sensor + struktury komunikacyjne
 
+namespace mrrocpp {
+namespace vsp {
+namespace sensor {
+
 vsp_sensor::vsp_sensor (configurator &_config) :
 	config(_config)
 	{
@@ -61,4 +65,8 @@ void vsp_sensor::wait_for_event(void){};
 void vsp_sensor::terminate(void) {
 	sr_msg->message("VSP terminated");
 }
+
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp
 

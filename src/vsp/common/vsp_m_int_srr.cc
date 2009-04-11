@@ -27,8 +27,12 @@
 // Konfigurator
 #include "lib/configurator.h"
 
+namespace mrrocpp {
+namespace vsp {
+namespace common {
+
 /********************************* GLOBALS **********************************/
-vsp_sensor *vs;		// czujnik wirtualny
+sensor::vsp_sensor *vs;		// czujnik wirtualny
 
 // sr_vsp *vs->sr_msg;		// komunikacja z SR
 
@@ -85,6 +89,10 @@ void error_handler(ERROR e){
 		} // end switch  
 	} // end error_handler
 
+} // namespace common
+} // namespace vsp
+} // namespace mrrocpp
+
 /*********************************** MAIN ***********************************/
 int main(int argc, char *argv[]) {
     char* attach_point;
@@ -93,8 +101,8 @@ int main(int argc, char *argv[]) {
 	// ustawienie priorytetow
 	//setprio(getpid(), MAX_PRIORITY-3); 
 	// wylapywanie sygnalow
-	signal(SIGTERM, &catch_signal);
-	signal(SIGSEGV, &catch_signal);
+	signal(SIGTERM, &vsp::common::catch_signal);
+	signal(SIGSEGV, &vsp::common::catch_signal);
 #if defined(PROCESS_SPAWN_RSH)
 	signal(SIGINT, SIG_IGN);
 #endif
@@ -119,20 +127,20 @@ int main(int argc, char *argv[]) {
 	try {
 	
 		// Stworzenie nowego czujnika za pomoca funkcji (cos na ksztalt szablonu abstract factory).
-		vs = return_created_sensor(*_config);
+		vsp::common::vs = vsp::sensor::return_created_sensor(*_config);
 
 		if ((ch = messip_channel_create(NULL, attach_point, MESSIP_NOTIMEOUT, 0)) == NULL) {
 			perror("messip_channel_create()");
 		}
 
 		/* start the resource manager message loop */
-		vs->sr_msg->message ("Device is waiting for clients...");
-		while(!TERMINATE) { // for(;;)
+		vsp::common::vs->sr_msg->message ("Device is waiting for clients...");
+		while(!vsp::common::TERMINATE) { // for(;;)
 
 			int32_t type, subtype;
 			int rcvid;
 	
-			rcvid = messip_receive(ch, &type, &subtype, &(vs->to_vsp), sizeof(vs->to_vsp), MESSIP_NOTIMEOUT);
+			rcvid = messip_receive(ch, &type, &subtype, &(vsp::common::vs->to_vsp), sizeof(vsp::common::vs->to_vsp), MESSIP_NOTIMEOUT);
 	
 			if (rcvid == -1) /* Error condition, exit */
 			{
@@ -144,22 +152,22 @@ int main(int argc, char *argv[]) {
 				continue;
 			}
 	
-			vs->from_vsp.vsp_report=VSP_REPLY_OK;
+			vsp::common::vs->from_vsp.vsp_report=VSP_REPLY_OK;
 	
 			try {
-				switch(vs->to_vsp.i_code) {
+				switch(vsp::common::vs->to_vsp.i_code) {
 					case VSP_CONFIGURE_SENSOR :
-						vs->configure_sensor();
+						vsp::common::vs->configure_sensor();
 						break;
 					case VSP_INITIATE_READING :
-						vs->initiate_reading();
+						vsp::common::vs->initiate_reading();
 						break;
 					case VSP_GET_READING :
-						vs->get_reading();
+						vsp::common::vs->get_reading();
 						break;
 					case VSP_TERMINATE :
-						vs->terminate();
-						TERMINATE=true;
+						vsp::common::vs->terminate();
+						vsp::common::TERMINATE=true;
 						break;
 					default :
 						throw VSP_main_error(NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
@@ -167,18 +175,18 @@ int main(int argc, char *argv[]) {
 			}
 
 			catch (VSP_main_error e){
-				error_handler(e);
+				vsp::common::error_handler(e);
 			} // end CATCH
 			catch (sensor::sensor_error e){
-				error_handler(e);
+				vsp::common::error_handler(e);
 			} // end CATCH
 		
-			messip_reply(ch, rcvid, 0, &vs->from_vsp, sizeof(VSP_REPORT) + vs->union_size, MESSIP_NOTIMEOUT);
+			messip_reply(ch, rcvid, 0, &vsp::common::vs->from_vsp, sizeof(VSP_REPORT) + vsp::common::vs->union_size, MESSIP_NOTIMEOUT);
  		} // end while()
-        vs->sr_msg->message ("VSP terminated");
+		vsp::common::vs->sr_msg->message ("VSP terminated");
 	} // koniec TRY
 	catch (VSP_main_error e) {
-		error_handler(e);
+		vsp::common::error_handler(e);
 		exit(EXIT_FAILURE);
 	} // end CATCH
 } // end MAIN

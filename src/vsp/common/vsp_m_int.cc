@@ -43,8 +43,12 @@
 #include "lib/configurator.h"
 
 
+namespace mrrocpp {
+namespace vsp {
+namespace common {
+
 /********************************* GLOBALS **********************************/
-vsp_sensor *vs;		// czujnik wirtualny
+sensor::vsp_sensor *vs;		// czujnik wirtualny
 
 //sr_vsp *vs->sr_msg;		// komunikacja z SR
 
@@ -151,7 +155,7 @@ int io_read (resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb){
 	catch (VSP_main_error e){
 		error_handler(e);
 		} // end CATCH
-	catch (sensor::sensor_error e){
+	catch (::sensor::sensor_error e){
 		error_handler(e);
 		} // end CATCH
      resmgr_msgwrite(ctp, &vs->from_vsp, sizeof(VSP_REPORT) + vs->union_size, 0);
@@ -173,7 +177,7 @@ int io_write (resmgr_context_t *ctp, io_write_t *msg, RESMGR_OCB_T *ocb){
 	catch (VSP_main_error e){
 	  error_handler(e);
 	  } // end CATCH
-	catch (sensor::sensor_error e){
+	catch (::sensor::sensor_error e){
 		error_handler(e);
 		} // end CATCH
 	return(EOK);
@@ -199,7 +203,7 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb) {
 		catch (VSP_main_error e){
 			error_handler(e);
 			} // end CATCH
-		catch (sensor::sensor_error e){
+		catch (::sensor::sensor_error e){
 			error_handler(e);
 			} // end CATCH
 		return (EOK);
@@ -212,7 +216,7 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb) {
 		catch (VSP_main_error e){
 			error_handler(e);
 			} // end CATCH
-		catch (sensor::sensor_error e){
+		catch (::sensor::sensor_error e){
 			error_handler(e);
 			} // end CATCH
 		// Count the start address of reply message content.
@@ -239,7 +243,7 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb) {
 		catch (VSP_main_error e){
 			error_handler(e);
 			} // end CATCH
-		catch (sensor::sensor_error e){
+		catch (::sensor::sensor_error e){
 			error_handler(e);
 			} // end CATCH
 		// Count the start address of reply message content.
@@ -254,6 +258,10 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb) {
 	return(EOK);
 }
 
+
+} // namespace common
+} // namespace vsp
+} // namespace mrrocpp
 
 
 /*********************************** MAIN ***********************************/
@@ -273,8 +281,8 @@ int main(int argc, char *argv[]) {
 	// ustawienie priorytetow
 	setprio(getpid(), MAX_PRIORITY-3);
 	// wylapywanie sygnalow
-	signal(SIGTERM, &catch_signal);
-	signal(SIGSEGV, &catch_signal);
+	signal(SIGTERM, &vsp::common::catch_signal);
+	signal(SIGSEGV, &vsp::common::catch_signal);
 #if defined(PROCESS_SPAWN_RSH)
 	signal(SIGINT, SIG_IGN);
 #endif
@@ -299,7 +307,7 @@ int main(int argc, char *argv[]) {
 	
 
 		// Stworzenie nowego czujnika za pomoca funkcji (cos na ksztalt szablonu abstract factory).
-		vs = return_created_sensor(*_config);
+		vsp::common::vs = vsp::sensor::return_created_sensor(*_config);
 
 		// Sprawdzenie czy istnieje /dev/TWOJSENSOR.
 		if( access(resourceman_attach_point, R_OK)== 0  ){
@@ -318,9 +326,9 @@ int main(int argc, char *argv[]) {
 
 		/* initialize functions for handling messages */
 		iofunc_func_init(_RESMGR_CONNECT_NFUNCS, &connect_funcs, _RESMGR_IO_NFUNCS, &io_funcs);
-		io_funcs.read = io_read;
-		io_funcs.write = io_write;
-		io_funcs.devctl = io_devctl;
+		io_funcs.read = vsp::common::io_read;
+		io_funcs.write = vsp::common::io_write;
+		io_funcs.devctl =vsp::common:: io_devctl;
 
 		/* initialize attribute structure used by the device */
 		iofunc_attr_init(&attr, S_IFNAM | 0666, 0, 0);
@@ -343,16 +351,16 @@ int main(int argc, char *argv[]) {
 	 	ctp = dispatch_context_alloc(dpp);
 
 		/* start the resource manager message loop */
-		vs->sr_msg->message ("Device is waiting for clients...");
-		while(!TERMINATE) { // for(;;)
+	 	vsp::common::vs->sr_msg->message ("Device is waiting for clients...");
+		while(!vsp::common::TERMINATE) { // for(;;)
 			if((ctp = dispatch_block(ctp)) == NULL)
 				throw VSP_main_error(SYSTEM_ERROR, DISPATCH_LOOP_ERROR);	// wyrzucany blad
 			dispatch_handler(ctp);
 	 		} // end for(;;)
-          vs->sr_msg->message ("VSP terminated");
+		vsp::common::vs->sr_msg->message ("VSP terminated");
 		} // koniec TRY
 	catch (VSP_main_error e){
-		error_handler(e);
+		vsp::common::error_handler(e);
 		exit(EXIT_FAILURE);
 		}; // end CATCH
 	}	// end MAIN

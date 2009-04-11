@@ -12,6 +12,10 @@
 
 #include "vsp/vsp_sensor.h"
 
+namespace mrrocpp {
+namespace vsp {
+namespace sensor {
+
 /********** klasa czujnikow po stronie VSP **************/
 class vsp_vis_sac_sensor: public vsp_sensor {
 
@@ -30,5 +34,9 @@ public:
 	void get_reading (void);			// odebranie odczytu od VSP		// zwraca blad
 
 }; // end: class vsp_vis_sensor
+
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp
 
 #endif

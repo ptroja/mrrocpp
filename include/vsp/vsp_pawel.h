@@ -13,6 +13,10 @@
 #include "vsp/vsp_sensor.h"
 #include "common/sensor.h"
 
+namespace mrrocpp {
+namespace vsp {
+namespace sensor {
+
 #define VSP_MSG_SEND_TIMEOUT_HIGH 1000000
 #define XMAX 768
 #define YMAX 574
@@ -73,5 +77,9 @@ public:
 	void terminate (void);				// rozkaz zakonczenia procesu VSP
 	
 }; 
+
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp
 
 #endif

@@ -33,6 +33,10 @@
 #include "vsp/global.h"
 #include "vsp/calib.h"
 #include "vsp/macierze_nr.h"
+int alloc_m=0, alloc_v=0; // globalnie widoczne liczby zaalokowanych macierzy i wektorow
+namespace mrrocpp {
+namespace vsp {
+namespace sensor {
 
 
 #define XMAX 768
@@ -43,7 +47,7 @@ int state = 0;
 int fd;
 unsigned short buffer[600000];
 
-int alloc_m=0, alloc_v=0; // globalnie widoczne liczby zaalokowanych macierzy i wektorow
+
 
 int size_read;
 clock_t start_time, end_time;
@@ -243,3 +247,7 @@ double aux=0;
      // sr_msg->message ("VSP Get reading ok");   
      is_reading_ready=false; // 7
 	};
+
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp

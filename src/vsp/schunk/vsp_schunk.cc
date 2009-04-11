@@ -30,6 +30,10 @@
 
 // extern configurator* config;
 
+namespace mrrocpp {
+namespace vsp {
+namespace sensor {
+
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
 vsp_sensor* return_created_sensor (configurator &_config)
 {
@@ -253,3 +257,7 @@ void vsp_schunk_sensor::get_reading (void)
 	//    sr_msg->message ("VSP Get reading ok");
 	is_reading_ready=false;
 };
+
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp

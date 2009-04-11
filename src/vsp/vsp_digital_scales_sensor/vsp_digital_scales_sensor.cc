@@ -22,7 +22,9 @@
 #include "vsp/vsp_digital_scales_sensor.h"
 #include "vsp/moxaclass.h"
 
-/********************************* GLOBALS **********************************/
+namespace mrrocpp {
+namespace vsp {
+namespace common {
 // Wskaznik na obiekt do komunikacji z SR.
 // extern sr_vsp* vs->sr_msg;
 
@@ -38,7 +40,13 @@ extern short TERMINATE;
 
 
 // Czujnik wirtualny
-extern vsp_digital_scales_sensor *vs;
+extern sensor::vsp_digital_scales_sensor *vs;
+
+}
+
+namespace sensor {
+/********************************* GLOBALS **********************************/
+
 
 // Bariera uzywana do zawieszania watkow w oczekiwaniu na polecenie INITIATE_READING.
 pthread_barrier_t initiate_reading_barrier;
@@ -64,17 +72,17 @@ void* digital_scale_thread(void*  arg ){
         // Oczekiwanie na polecenie (zawieszenie na barierze).
         pthread_barrier_wait( &initiate_reading_barrier);
         // Koniec pracy.
-        if(TERMINATE)
+        if(common::TERMINATE)
             break;
         try{
             // Pobranie odczytu.
             ds->get_reading();
             // Przeksztalcenie odczytu do postaci zmiennoprzecinkowej.
-        vs->image.sensor_union.ds.readings[number-1] = ds->transform_reading_to_double();
+            common::vs->image.sensor_union.ds.readings[number-1] = ds->transform_reading_to_double();
             } // end: try
-        catch(sensor::sensor_error e){
-            vs->sr_msg->message(e.error_class, e.error_no);
-            vs->image.sensor_union.ds.readings[number-1] = 0;
+        catch(::sensor::sensor_error e){
+        	common::vs->sr_msg->message(e.error_class, e.error_no);
+        	common::vs->image.sensor_union.ds.readings[number-1] = 0;
             } // end: catch
         // Odczyt gotowy (zawieszenie na barierze).
         pthread_barrier_wait( &reading_ready_barrier);
@@ -133,7 +141,7 @@ void vsp_digital_scales_sensor::configure_sensor (void){
         position_zero[i] = image.sensor_union.ds.readings[i];
     // Ustawienie flagi stanu procesu.
     readings_initiated = false;
-    vs->sr_msg->message ("Digital Scale sensor calibrated");
+    common::vs->sr_msg->message ("Digital Scale sensor calibrated");
     };// end: configure_sensor
 
 /**************************** INITIATE READING *******************************/
@@ -166,3 +174,7 @@ void vsp_digital_scales_sensor::get_reading (void){
     // Ustawienie flagi stanu procesu.
     readings_initiated = false;
     };// end: get_reading
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp
+

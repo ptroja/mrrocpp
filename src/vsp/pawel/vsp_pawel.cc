@@ -53,6 +53,10 @@
 #include "lib/configurator.h"
 
 
+namespace mrrocpp {
+namespace vsp {
+namespace sensor {
+
 
 // extern sr_vsp *sr_msg;       // Wskaznik na lacze z SR
 int RGB2H[0xffff];
@@ -285,5 +289,9 @@ void vsp_pawel_sensor::terminate(void)
 {
 //	printf("[vsp_pawel]\tterminated\n");
 };
+
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp
 
 

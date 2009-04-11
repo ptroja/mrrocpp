@@ -36,6 +36,10 @@
 
 #include "include.c"
 
+namespace mrrocpp {
+namespace vsp {
+namespace sensor {
+
 #define XMAX 768
 #define YMAX 576
 
@@ -363,3 +367,7 @@ void vsp_vis_sensor::get_reading (void){
      // sr_msg->message ("VSP Get reading ok");   
      is_reading_ready=false; // 7
 	};
+
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp

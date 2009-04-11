@@ -48,6 +48,10 @@ CROSMDoc r;
 #include "vsp_s.h"
 */
 
+namespace mrrocpp {
+namespace vsp {
+namespace sensor {
+
 
 #define TRUE 1
 #define FALSE 0
@@ -401,3 +405,7 @@ void vsp_mic::get_reading (void){
 	
     // is_reading_ready=FALSE;
 	};
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp
+

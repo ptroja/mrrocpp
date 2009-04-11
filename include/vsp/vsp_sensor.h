@@ -14,9 +14,12 @@
 // Konfigurator
 #include "lib/configurator.h"
 
+namespace mrrocpp {
+namespace vsp {
+namespace sensor {
 
 /********** klasa czujnikow po stronie VSP **************/
-class vsp_sensor : public sensor {
+class vsp_sensor : public ::sensor {
 protected:
 	// Flaga - czy czujnik jest skonfigurowany.
 	short is_sensor_configured;
@@ -41,5 +44,9 @@ public:
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
 vsp_sensor* return_created_sensor (configurator &_config);
+
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp
 
 #endif

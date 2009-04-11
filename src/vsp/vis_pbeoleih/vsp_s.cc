@@ -34,6 +34,12 @@
 #include "vsp/calib.h"
 #include "vsp/macierze_nr.h"
 
+int alloc_m=0, alloc_v=0; // globalnie widoczne liczby zaalokowanych macierzy i wektorow
+
+namespace mrrocpp {
+namespace vsp {
+namespace sensor {
+
 //#include "include.c"
 
 #define XMAX 768/2
@@ -48,7 +54,7 @@ int fd;
 unsigned short buffer[600000];
 unsigned short buffer1[150000];
 //double *cc, *fc, *kc; // globalnie widoczne parametry kamery
-int alloc_m=0, alloc_v=0; // globalnie widoczne liczby zaalokowanych macierzy i wektorow
+
 /*
 double **x_kk, **X_kk;
 double *omckk;
@@ -571,3 +577,7 @@ void vsp_vis_sensor::get_reading (void){
      // sr_msg->message ("VSP Get reading ok");   
      is_reading_ready=false; // 7
 	};
+
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp

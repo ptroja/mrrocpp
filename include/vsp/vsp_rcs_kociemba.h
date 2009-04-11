@@ -15,6 +15,12 @@
 class CubieCube;
 class CubeSolution;
 
+namespace mrrocpp {
+namespace vsp {
+namespace sensor {
+
+
+
 // klasa czujnikow po stronie VSP
 class vsp_rcs_kociemba : public vsp_sensor {
   private:
@@ -41,5 +47,9 @@ class vsp_rcs_kociemba : public vsp_sensor {
 	// Odeslanie odczytu.
 	void get_reading (void);
 }; // end: class vsp_rcs_korf
+
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp
 
 #endif

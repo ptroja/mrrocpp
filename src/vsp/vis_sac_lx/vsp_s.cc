@@ -24,6 +24,10 @@
 
 #include "lib/configurator.h"
 
+namespace mrrocpp {
+namespace vsp {
+namespace sensor {
+
 //#include "vsp/cmvision.h"
 //#include "vsp/cube.h"
 
@@ -420,3 +424,7 @@ vsp_sensor* return_created_sensor(configurator &_config)
 {
 	return new vsp_vis_sac_lx_sensor(_config);
 }
+
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp

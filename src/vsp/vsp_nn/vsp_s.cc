@@ -39,12 +39,16 @@
 
 // Konfigurator
 #include "lib/configurator.h"
+int alloc_m=0, alloc_v=0; // globalnie widoczne liczby zaalokowanych macierzy i wektorow
+namespace mrrocpp {
+namespace vsp {
+namespace sensor {
 
 //#define HOST "chrobry"
 #define HOST "mieszko"
 #define PORT 30000
 
-int alloc_m=0, alloc_v=0; // globalnie widoczne liczby zaalokowanych macierzy i wektorow
+
 
 int size_read;
 
@@ -211,3 +215,7 @@ void vsp_nn_sensor::get_reading (void){
 */   
      is_reading_ready=false; // 7
 	};
+} // namespace sensor
+} // namespace vsp
+} // namespace mrrocpp
+
