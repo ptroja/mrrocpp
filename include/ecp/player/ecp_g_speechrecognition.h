@@ -6,9 +6,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace player {
 
-class speechrecognition_generator : public ecp_generator
+class speechrecognition_generator : public common::ecp_generator
 {
 	private:
 		PlayerClient *client;
@@ -16,7 +16,7 @@ class speechrecognition_generator : public ecp_generator
 
 	public:
 		// konstruktor
-		speechrecognition_generator(ecp_task& _ecp_task);
+		speechrecognition_generator(common::ecp_task& _ecp_task);
 		~speechrecognition_generator();
 
 		virtual bool first_step ();
@@ -24,7 +24,7 @@ class speechrecognition_generator : public ecp_generator
 		virtual bool next_step ();
 };
 
-} // namespace common
+} // namespace player
 } // namespace ecp
 } // namespace mrrocpp
 

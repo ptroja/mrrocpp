@@ -5,9 +5,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace player {
 
-playerpos_generator::playerpos_generator(ecp_task& _ecp_task)
+playerpos_generator::playerpos_generator(common::ecp_task& _ecp_task)
 	: ecp_generator (_ecp_task)
 {
 	char *hostname = ecp_t.config.return_string_value("player_hostname");
@@ -79,7 +79,7 @@ bool playerpos_generator::next_step()
 	return true;
 }
 
-} // namespace common
+} // namespace player
 } // namespace ecp
 } // namespace mrrocpp
 

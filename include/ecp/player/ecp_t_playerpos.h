@@ -6,9 +6,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace player {
 
-class ecp_task_playerpos: public ecp_task  {
+class ecp_task_playerpos: public common::ecp_task  {
 protected:
 	playerpos_generator* ppg;
 
@@ -23,7 +23,7 @@ public:
 	
 };
 
-} // namespace common
+} // namespace player
 } // namespace ecp
 } // namespace mrrocpp
 

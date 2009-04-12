@@ -12,7 +12,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace player {
 
 // KONSTRUKTORY
 ecp_task_playerpos::ecp_task_playerpos(configurator &_config) :
@@ -55,9 +55,13 @@ void ecp_task_playerpos::main_task_algorithm(void)
 	}
 }
 
+} // namespace player
+
+namespace common {
+
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_playerpos(_config);
+	return new player::ecp_task_playerpos(_config);
 }
 } // namespace common
 } // namespace ecp

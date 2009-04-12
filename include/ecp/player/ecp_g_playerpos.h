@@ -6,9 +6,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace player {
 
-class playerpos_generator : public ecp_generator
+class playerpos_generator : public common::ecp_generator
 {
 	private:
 		PlayerClient *client;
@@ -20,7 +20,7 @@ class playerpos_generator : public ecp_generator
 
 	public:
 		// konstruktor
-		playerpos_generator(ecp_task& _ecp_task);
+		playerpos_generator(common::ecp_task& _ecp_task);
 		~playerpos_generator();
 
 		virtual bool first_step ();
@@ -30,7 +30,7 @@ class playerpos_generator : public ecp_generator
 		void set_goal(const playerpos_goal_t &_goal);
 };
 
-} // namespace common
+} // namespace player
 } // namespace ecp
 } // namespace mrrocpp
 
