@@ -46,7 +46,7 @@ void ecp_task_visioncoordinates::task_initialization()
     }
     else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
     {
-        ecp_m_robot = new ecp_irp6_postument_robot(*this);
+        ecp_m_robot = new irp6p::ecp_irp6_postument_robot(*this);
         debugmsg("IRp6p loaded");
     }
 

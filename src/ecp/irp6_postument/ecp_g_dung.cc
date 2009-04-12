@@ -22,9 +22,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6p {
 
-dung_generator::dung_generator(ecp_task& _ecp_task, int step) :
+dung_generator::dung_generator(common::ecp_task& _ecp_task, int step) :
         ecp_generator(_ecp_task)
 {
     step_no = step;
@@ -317,7 +317,7 @@ bool dung_generator::next_step ( )
     return true;
 }
 
-} // namespace common
+} // namespace irp6p
 } // namespace ecp
 } // namespace mrrocpp
 

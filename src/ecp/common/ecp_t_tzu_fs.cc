@@ -52,7 +52,7 @@ void ecp_task_tzu_fs::task_initialization(void)
 	}
 	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
 	{
-		ecp_m_robot = new ecp_irp6_postument_robot (*this);
+		ecp_m_robot = new irp6p::ecp_irp6_postument_robot (*this);
 		robot = POSTUMENT;
 		str.open("../postument_results.txt");
 	}

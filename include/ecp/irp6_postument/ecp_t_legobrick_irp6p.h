@@ -7,16 +7,16 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6p {
 
-class ecp_task_lego_brick_irp6p: public ecp_task
+class ecp_task_lego_brick_irp6p: public common::ecp_task
 {
 protected:
     //generatory
-    ecp_smooth_generator* sg;
-    bias_edp_force_generator* befg;
-    legobrick_attach_force_generator* afg;
-    legobrick_detach_force_generator* dfg;
+	common::ecp_smooth_generator* sg;
+	common::bias_edp_force_generator* befg;
+	common::legobrick_attach_force_generator* afg;
+	common::legobrick_detach_force_generator* dfg;
 
 public:
     ecp_task_lego_brick_irp6p(configurator &_config);
@@ -26,7 +26,7 @@ public:
     void main_task_algorithm(void);
 };
 
-} // namespace common
+} // namespace irp6p
 } // namespace ecp
 } // namespace mrrocpp
 

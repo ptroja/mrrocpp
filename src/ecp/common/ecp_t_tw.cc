@@ -45,7 +45,7 @@ void ecp_task_tw::task_initialization(void)
 	}
 	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
 	{
-		ecp_m_robot = new ecp_irp6_postument_robot (*this);
+		ecp_m_robot = new irp6p::ecp_irp6_postument_robot (*this);
 	}
 
 	usleep(1000*100);

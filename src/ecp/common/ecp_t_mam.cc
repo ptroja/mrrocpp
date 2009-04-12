@@ -215,7 +215,7 @@ void ecp_task_mam::task_initialization(void)
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0) {
 		ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 	} else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0) {
-		ecp_m_robot = new ecp_irp6_postument_robot (*this);
+		ecp_m_robot = new irp6p::ecp_irp6_postument_robot (*this);
 	}
 
 	// Dolaczenie globalnej nazwy procesu ECP - kanal do odbioru polecen z UI.

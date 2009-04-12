@@ -18,24 +18,24 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6p {
 
-class ecp_task_fsautomat_irp6p: public ecp_task
+class ecp_task_fsautomat_irp6p: public common::ecp_task
 {
 	protected:
 		// generatory
-		ecp_smooth_generator* sg;
-		ecp_tool_change_generator* tcg;
-		ecp_generator_t* gt;
-		ecp_tff_nose_run_generator* nrg;
-		ecp_tff_rubik_grab_generator* rgg;
-		ecp_tff_gripper_approach_generator* gag;
-		ecp_tff_rubik_face_rotate_generator* rfrg;
-		ecp_teach_in_generator* tig;
-		bias_edp_force_generator* befg;
-		weight_meassure_generator* wmg;
+		common::ecp_smooth_generator* sg;
+		common::ecp_tool_change_generator* tcg;
+		common::ecp_generator_t* gt;
+		common::ecp_tff_nose_run_generator* nrg;
+		common::ecp_tff_rubik_grab_generator* rgg;
+		common::ecp_tff_gripper_approach_generator* gag;
+		common::ecp_tff_rubik_face_rotate_generator* rfrg;
+		common::ecp_teach_in_generator* tig;
+		common::bias_edp_force_generator* befg;
+		common::weight_meassure_generator* wmg;
 		//podzadania
-		ecp_sub_task_gripper_opening* go_st;
+		common::ecp_sub_task_gripper_opening* go_st;
 
 		std::map<char*, mp::common::Trajectory, str_cmp>* trjMap;
 
@@ -50,7 +50,7 @@ class ecp_task_fsautomat_irp6p: public ecp_task
 
 };
 
-} // namespace common
+} // namespace irp6p
 } // namespace ecp
 } // namespace mrrocpp
 

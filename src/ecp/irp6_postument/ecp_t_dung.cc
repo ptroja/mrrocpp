@@ -25,7 +25,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6p {
 
 // KONSTRUKTORY
 ecp_task_dung::ecp_task_dung(configurator &_config) : ecp_task(_config)
@@ -56,9 +56,13 @@ void ecp_task_dung::main_task_algorithm(void)
 	}
 }
 
+} // namespace irp6p
+
+namespace common {
+
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_dung(_config);
+	return new irp6p::ecp_task_dung(_config);
 }
 } // namespace common
 } // namespace ecp

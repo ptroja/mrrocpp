@@ -14,14 +14,14 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6p {
 
 ecp_irp6_postument_robot::ecp_irp6_postument_robot(configurator &_config, sr_ecp *_sr_ecp) :
 	ecp_robot(ROBOT_IRP6_POSTUMENT, _config, _sr_ecp)
 {
 }
 ;
-ecp_irp6_postument_robot::ecp_irp6_postument_robot(ecp_task& _ecp_object) :
+ecp_irp6_postument_robot::ecp_irp6_postument_robot(common::ecp_task& _ecp_object) :
 	ecp_robot(ROBOT_IRP6_POSTUMENT, _ecp_object)
 {
 }
@@ -323,6 +323,6 @@ void ecp_irp6_postument_robot::get_rmodel_reply(void)
 	} // end: switch (...rmodel_type)
 }
 
-} // namespace common
+} // namespace irp6p
 } // namespace ecp
 } // namespace mrrocpp
