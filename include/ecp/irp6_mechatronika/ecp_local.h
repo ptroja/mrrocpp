@@ -12,16 +12,16 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6m {
 
 // ---------------------------------------------------------------
-class ecp_irp6_mechatronika_robot: public ecp_robot
+class ecp_irp6_mechatronika_robot: public common::ecp_robot
 {
 	// Klasa dla robota irp6_postument (sztywnego)
 
 	public:
 	ecp_irp6_mechatronika_robot (configurator &_config, sr_ecp *_sr_ecp);
-	ecp_irp6_mechatronika_robot (ecp_task& _ecp_object);
+	ecp_irp6_mechatronika_robot (common::ecp_task& _ecp_object);
 
 	virtual void create_command (void);
 	// wypelnia bufor wysylkowy do EDP na podstawie danych zawartych w obrazie
@@ -36,7 +36,7 @@ class ecp_irp6_mechatronika_robot: public ecp_robot
 }; // end: class ecp_irp6_mechatronika_robot
 // ---------------------------------------------------------------
 
-} // namespace common
+} // namespace irp6m
 } // namespace ecp
 } // namespace mrrocpp
 

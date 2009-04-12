@@ -14,11 +14,11 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6m {
 
 ecp_irp6_mechatronika_robot::ecp_irp6_mechatronika_robot (configurator &_config, sr_ecp *_sr_ecp):
 	ecp_robot (ROBOT_IRP6_MECHATRONIKA, _config, _sr_ecp){};
-ecp_irp6_mechatronika_robot::ecp_irp6_mechatronika_robot (ecp_task& _ecp_object):
+ecp_irp6_mechatronika_robot::ecp_irp6_mechatronika_robot (common::ecp_task& _ecp_object):
 	ecp_robot (ROBOT_IRP6_MECHATRONIKA, _ecp_object){};
 
 // --------------------------------------------------------------------------
@@ -254,7 +254,7 @@ void ecp_irp6_mechatronika_robot::get_rmodel_reply (void)
 	} // end: switch (...rmodel_type)
 }
 
-} // namespace common
+} // namespace irp6m
 } // namespace ecp
 } // namespace mrrocpp
 

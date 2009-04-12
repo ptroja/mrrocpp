@@ -42,7 +42,7 @@ void ecp_task_teach_irp6ot::task_initialization(void)
     }
     else if (strcmp(config.section_name, "[ecp_irp6_mechatronika]") == 0)
     {
-        ecp_m_robot = new ecp_irp6_mechatronika_robot (*this);
+        ecp_m_robot = new irp6m::ecp_irp6_mechatronika_robot (*this);
     }
 
     tig = new ecp_teach_in_generator (*this);

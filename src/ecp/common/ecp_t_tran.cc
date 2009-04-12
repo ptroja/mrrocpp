@@ -53,7 +53,7 @@ void ecp_task_tran::task_initialization(void)
 	}
 	else if (!strcmp(config.section_name, "[ecp_irp6_mechatronika]"))
 	{
-		ecp_m_robot = new ecp_irp6_mechatronika_robot (*this);
+		ecp_m_robot = new irp6m::ecp_irp6_mechatronika_robot (*this);
 	}
 
 	sr_ecp_msg->message("ECP loaded");
