@@ -8,11 +8,11 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace festival {
 
 // KONSTRUKTORY
 ecp_task_festival::ecp_task_festival(configurator &_config) :
-	ecp_task(_config)
+	common::ecp_task(_config)
 {
 	fg = new festival_generator (*this);
 }
@@ -59,9 +59,13 @@ void ecp_task_festival::main_task_algorithm(void)
 	}
 }
 
+} // namespace festival
+
+namespace common {
+
 ecp_task* return_created_ecp_task(configurator &_config)
 {
-	return new ecp_task_festival(_config);
+	return new festival::ecp_task_festival(_config);
 }
 
 } // namespace common

@@ -5,7 +5,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace festival {
 
 #define MAX_FESTIVAL_PHRASE	255
 
@@ -31,7 +31,7 @@ namespace common {
  * z* - rzet
  */
 
-class festival_generator : public ecp_generator
+class festival_generator : public common::ecp_generator
 {
 	private:
 		int sock;
@@ -50,7 +50,7 @@ class festival_generator : public ecp_generator
 
 	public:
 		// konstruktor
-		festival_generator(ecp_task& _ecp_task);
+		festival_generator(common::ecp_task& _ecp_task);
 		~festival_generator();
 
 		virtual bool first_step ();
@@ -63,7 +63,7 @@ class festival_generator : public ecp_generator
 		bool set_voice(VOICE _voice);
 };
 
-} // namespace common
+} // namespace festival
 } // namespace ecp
 } // namespace mrrocpp
 

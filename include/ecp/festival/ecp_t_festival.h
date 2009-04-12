@@ -6,9 +6,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace festival {
 
-class ecp_task_festival: public ecp_task  {
+class ecp_task_festival: public common::ecp_task  {
 protected:
 	festival_generator* fg;
 
@@ -22,7 +22,7 @@ public:
 	
 };
 
-} // namespace common
+} // namespace festival
 } // namespace ecp
 } // namespace mrrocpp
 
