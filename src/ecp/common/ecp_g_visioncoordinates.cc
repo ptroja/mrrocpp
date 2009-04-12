@@ -25,12 +25,12 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-#define debugmsg(msg)						ecp_task::sr_ecp_msg->message(msg);
+#define debugmsg(msg)						task::ecp_task::sr_ecp_msg->message(msg);
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // ecp_visioncoordinates_generator
 ////////////////////////////////////////////////////////////////////////////////////////////
-ecp_visioncoordinates_generator::ecp_visioncoordinates_generator(ecp_task& _ecp_task)
+ecp_visioncoordinates_generator::ecp_visioncoordinates_generator(common::task::ecp_task& _ecp_task)
 : ecp_generator(_ecp_task), SETTINGS_SECTION_NAME("[ecp_visioncoordinates_generator]")
 {
 	debugmsg("VCG: Creating virtual sensor to communicate with FraDIA");

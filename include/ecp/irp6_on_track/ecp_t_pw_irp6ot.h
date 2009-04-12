@@ -14,7 +14,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-class ecp_task_pw_irp6ot: public common::ecp_task  {
+class ecp_task_pw_irp6ot: public common::task::ecp_task  {
 
 	ecp_g_pw_kolo * kolo_gen;
 

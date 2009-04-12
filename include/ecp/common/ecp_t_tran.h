@@ -18,8 +18,9 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace task {
 
-class ecp_task_tran: public common::ecp_task  {
+class ecp_task_tran: public common::task::ecp_task  {
 
 public:
 	// KONSTRUKTORY
@@ -30,6 +31,7 @@ public:
 	void main_task_algorithm(void);
 };
 
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

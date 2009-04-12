@@ -60,7 +60,7 @@ public:
 
 	bool breaking;
 
-	ecp_vis_ib_eih_planar_irp6ot(common::ecp_task& _ecp_task);
+	ecp_vis_ib_eih_planar_irp6ot(common::task::ecp_task& _ecp_task);
 	virtual ~ecp_vis_ib_eih_planar_irp6ot();
 	virtual bool first_step(void);
 	virtual bool next_step_without_constraints();

@@ -36,7 +36,7 @@ public:
 	/*!
 	 * Constructor.
 	 */
-	ecp_visual_servo_manager(ecp_task& _ecp_task, int step=0);
+	ecp_visual_servo_manager(common::task::ecp_task& _ecp_task, int step=0);
 	/*!
 	 * Destructor.
 	 */

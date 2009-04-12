@@ -21,9 +21,9 @@ namespace common {
 class ecp_visioncoordinates_generator : public common::ecp_generator
 {
 public:
-	// ecp_visioncoordinates_generator(ecp_task& _ecp_task)
-	// � ecp_task& _ecp_task - zadanie, z ktorym zwiazany jest dany generator
-	ecp_visioncoordinates_generator(ecp_task& _ecp_task);
+	// ecp_visioncoordinates_generator(common::task::ecp_task& _ecp_task)
+	// � common::task::ecp_task& _ecp_task - zadanie, z ktorym zwiazany jest dany generator
+	ecp_visioncoordinates_generator(common::task::ecp_task& _ecp_task);
 
     // bool first_step()
     // - first step method

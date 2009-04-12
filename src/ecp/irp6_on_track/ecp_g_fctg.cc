@@ -137,7 +137,7 @@ void force_controlled_trajectory_generator::change_control(POSE_SPECIFICATION ps
 
 
 /*****************************  KONSTRUKTOR *********************************/
-force_controlled_trajectory_generator::force_controlled_trajectory_generator (common::ecp_task& _ecp_task)
+force_controlled_trajectory_generator::force_controlled_trajectory_generator (common::task::ecp_task& _ecp_task)
 	:ecp_teach_in_generator(_ecp_task)
 {
 	pthread_mutex_init(&ROBOT_POSITION_MUTEX, NULL);

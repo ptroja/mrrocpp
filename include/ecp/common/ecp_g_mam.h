@@ -79,7 +79,7 @@ class manual_moves_automatic_measures_generator : public common::ecp_generator {
 		void get_sensor_reading(ecp_mp::sensor::digital_scales& the_sensor, double* sensor_reading);
 
 	public:
-		manual_moves_automatic_measures_generator(ecp_task& _ecp_task, 	int _axes_number);
+		manual_moves_automatic_measures_generator(common::task::ecp_task& _ecp_task, 	int _axes_number);
 
 		~manual_moves_automatic_measures_generator (void);
 		// Przygotowanie trajektorii do wykonania.

@@ -125,7 +125,7 @@ public:
 	/*!
 	* Constructor. Setting gains for controller from *.ini file.
 	*/
-	ecp_vis_pb_eol_sac_irp6ot(common::ecp_task& _ecp_task, int step=0);
+	ecp_vis_pb_eol_sac_irp6ot(common::task::ecp_task& _ecp_task, int step=0);
 	/*!
 	* Destructor.
 	*/

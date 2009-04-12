@@ -8,7 +8,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace player {
 
-class ecp_task_speechrecognition: public common::ecp_task  {
+class ecp_task_speechrecognition: public common::task::ecp_task  {
 protected:
 	speechrecognition_generator* srg;
 

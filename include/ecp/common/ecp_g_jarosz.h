@@ -47,7 +47,7 @@ protected:
   double v_max_aa[MAX_SERVOS_NR];			// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 
 public:	
-	ecp_delta_generator(ecp_task& _ecp_task);
+	ecp_delta_generator(common::task::ecp_task& _ecp_task);
 
    trajectory_description td;   
 
@@ -68,8 +68,8 @@ protected:
 	
 public:
 	// konstruktor
-	ecp_linear_generator (ecp_task& _ecp_task);
-	ecp_linear_generator (ecp_task& _ecp_task, trajectory_description tr_des, int mp_communication_mode_arg = 1);
+	ecp_linear_generator (common::task::ecp_task& _ecp_task);
+	ecp_linear_generator (common::task::ecp_task& _ecp_task, trajectory_description tr_des, int mp_communication_mode_arg = 1);
 	
   virtual bool first_step ();
   virtual bool next_step ();
@@ -122,7 +122,7 @@ protected:
 public:	
 
   /** Konstruktor domyslny. */
-  ecp_linear_parabolic_generator (ecp_task& _ecp_task, 
+  ecp_linear_parabolic_generator (common::task::ecp_task& _ecp_task, 
                                   trajectory_description tr_des, 
                                   const double *time_a , 
                                   const double *time_b
@@ -156,7 +156,7 @@ protected:
    int first_interval;             // flaga, m�wiaca czy jest to pierwszy przedzial interpolacji
   
 public:	
-   ecp_polynomial_generator (ecp_task& _ecp_task);
+   ecp_polynomial_generator (common::task::ecp_task& _ecp_task);
    virtual bool first_step ();	
    virtual bool next_step () = 0;	 
 
@@ -182,7 +182,7 @@ protected:
 public:
    
    // ---------konstruktor dla dla zadanych predkosci vp i vk ---------------
-   ecp_cubic_generator (ecp_task& _ecp_task, trajectory_description tr_des, double *vp, double *vk); 		 
+   ecp_cubic_generator (common::task::ecp_task& _ecp_task, trajectory_description tr_des, double *vp, double *vk); 		 
    
    virtual bool next_step ();	 
 
@@ -211,7 +211,7 @@ protected:
 public:	
 
 	// --------- konstruktor dla dla zadanych predkosci vp i vk i przysp. ap i ak -------------
-   ecp_quintic_generator (ecp_task& _ecp_task, trajectory_description tr_des, double *vp, double *vk, double *ap, double *ak);
+   ecp_quintic_generator (common::task::ecp_task& _ecp_task, trajectory_description tr_des, double *vp, double *vk, double *ap, double *ak);
 
    virtual bool next_step ();	 
 
@@ -248,7 +248,7 @@ protected:
   virtual bool next_step ()=0;
   
   public:
-   ecp_spline_generator (ecp_task& _ecp_task);
+   ecp_spline_generator (common::task::ecp_task& _ecp_task);
 
 }; // end : irp6p_spline_generator
 
@@ -265,7 +265,7 @@ protected:
   double a[MAX_SERVOS_NR];													// tablica faktycznie realizowanych przyspieszen 
 																	// dla kolejnych osi/wspolrzednych
 public:
-	  ecp_parabolic_teach_in_generator (ecp_task& _ecp_task, double interval);
+	  ecp_parabolic_teach_in_generator (common::task::ecp_task& _ecp_task, double interval);
 
   	virtual bool first_step ();
   	virtual bool next_step ();
@@ -284,7 +284,7 @@ protected:
   double a[MAX_SERVOS_NR];													// tablica faktycznie realizowanych przyspieszen 
 
 public:	
-	  ecp_calibration_generator (ecp_task& _ecp_task, double interval);
+	  ecp_calibration_generator (common::task::ecp_task& _ecp_task, double interval);
   
    virtual bool first_step ();
    virtual bool next_step ();
@@ -306,7 +306,7 @@ protected:
 
 public:	
 	  ecp_cubic_spline_generator();
-	  ecp_cubic_spline_generator (ecp_task& _ecp_task, double interval);
+	  ecp_cubic_spline_generator (common::task::ecp_task& _ecp_task, double interval);
 
    virtual bool first_step ();	 
    virtual bool next_step ();		 
@@ -332,7 +332,7 @@ protected:
   void Build_Coeff (double *tt, double *yy, int nn, double vvp, double vvk, double *aa);	     
 
 public:
-	  ecp_smooth_cubic_spline_generator (ecp_task& _ecp_task, double *vp, double *vk, double interval);
+	  ecp_smooth_cubic_spline_generator (common::task::ecp_task& _ecp_task, double *vp, double *vk, double interval);
 
    virtual bool first_step ();		     
    virtual bool next_step ();			     
@@ -354,7 +354,7 @@ protected:
    double A5[MAX_SERVOS_NR]; 
 
 public:	
-	  ecp_quintic_spline_generator (ecp_task& _ecp_task, double interval);
+	  ecp_quintic_spline_generator (common::task::ecp_task& _ecp_task, double interval);
 
    virtual bool first_step ();		 
    virtual bool next_step ();			 
@@ -409,7 +409,7 @@ protected:
   double v_max_aa[MAX_SERVOS_NR];			// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 
 public:
-	  ecp_elipsoid_generator (ecp_task& _ecp_task);
+	  ecp_elipsoid_generator (common::task::ecp_task& _ecp_task);
 
 
   virtual bool first_step ();
@@ -434,12 +434,12 @@ public:
 
 
 // Zapis rzeczywistej trajektorii do pliku
-void ecp_save_trajectory (ecp_elipsoid_generator& the_generator, ecp_task& _ecp_task);
+void ecp_save_trajectory (ecp_elipsoid_generator& the_generator, common::task::ecp_task& _ecp_task);
 
 // --------------------------------------------------------------------------
 // Zapis danych z kalibracji do pliku
 void ecp_save_extended_file (ecp_calibration_generator& the_generator,
-	 ecp_operator_reaction_condition& the_condition, ecp_task& _ecp_task);
+	 ecp_operator_reaction_condition& the_condition, common::task::ecp_task& _ecp_task);
 
 } // namespace common
 } // namespace ecp

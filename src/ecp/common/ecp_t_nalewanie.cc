@@ -25,6 +25,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace task {
 
 // KONSTRUKTORY
 ecp_task_nalewanie::ecp_task_nalewanie(configurator &_config) : ecp_task(_config)
@@ -74,6 +75,7 @@ ecp_task* return_created_ecp_task (configurator &_config)
 	return new ecp_task_nalewanie(_config);
 }
 
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

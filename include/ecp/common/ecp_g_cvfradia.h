@@ -29,7 +29,7 @@ public:
 	/*!
       * Constructor.
       */
-	ecp_cvfradia_generator(ecp_task& _ecp_task)
+	ecp_cvfradia_generator(common::task::ecp_task& _ecp_task)
 	  : ecp_generator(_ecp_task)
 	{  }
 

@@ -7,7 +7,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-class ecp_task_pteach_irp6ot: public common::ecp_task  {
+class ecp_task_pteach_irp6ot: public common::task::ecp_task  {
 protected:
 	// Generator  odtwarzajacy nauczona trajektorie dla celow kalibracji
 	common::ecp_calibration_generator* cg;

@@ -19,8 +19,9 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace task {
 
-class ecp_task_nalewanie: public common::ecp_task  {
+class ecp_task_nalewanie: public common::task::ecp_task  {
 protected:
 	ecp_smooth_generator* sg;
 
@@ -33,6 +34,7 @@ public:
 	void main_task_algorithm(void);
 };
 
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

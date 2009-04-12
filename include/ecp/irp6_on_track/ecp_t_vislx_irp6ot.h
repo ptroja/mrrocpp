@@ -7,7 +7,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-class ecp_task_vislx_irp6ot: public common::ecp_task  {
+class ecp_task_vislx_irp6ot: public common::task::ecp_task  {
 
 public:
 	// KONSTRUKTORY

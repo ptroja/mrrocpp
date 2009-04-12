@@ -30,7 +30,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-ecp_delta_generator::ecp_delta_generator(ecp_task& _ecp_task) :
+ecp_delta_generator::ecp_delta_generator(common::task::ecp_task& _ecp_task) :
 	ecp_generator(_ecp_task)
 {
 }
@@ -41,12 +41,12 @@ ecp_delta_generator::ecp_delta_generator(ecp_task& _ecp_task) :
 
 // ---------------------------------  KONSTRUKTOR  ----------------------------------------------
 
-ecp_linear_generator::ecp_linear_generator(ecp_task& _ecp_task) :
+ecp_linear_generator::ecp_linear_generator(common::task::ecp_task& _ecp_task) :
 	ecp_delta_generator(_ecp_task)
 {
 }
 
-ecp_linear_generator::ecp_linear_generator(ecp_task& _ecp_task, trajectory_description tr_des, int mp_communication_mode_arg) :
+ecp_linear_generator::ecp_linear_generator(common::task::ecp_task& _ecp_task, trajectory_description tr_des, int mp_communication_mode_arg) :
 	ecp_delta_generator(_ecp_task)
 {
 
@@ -234,7 +234,7 @@ bool ecp_linear_generator::next_step()
 
 // ---------------------------------  KONSTRUKTOR  ----------------------------------------------
 
-ecp_linear_parabolic_generator::ecp_linear_parabolic_generator(ecp_task& _ecp_task, trajectory_description tr_des, const double *time_a, const double *time_b) :
+ecp_linear_parabolic_generator::ecp_linear_parabolic_generator(common::task::ecp_task& _ecp_task, trajectory_description tr_des, const double *time_a, const double *time_b) :
 	ecp_delta_generator(_ecp_task)
 {
 	td = tr_des;
@@ -609,7 +609,7 @@ bool ecp_linear_parabolic_generator::next_step()
 // ####################################################################################################
 
 
-ecp_polynomial_generator::ecp_polynomial_generator(ecp_task& _ecp_task) :
+ecp_polynomial_generator::ecp_polynomial_generator(common::task::ecp_task& _ecp_task) :
 	ecp_delta_generator(_ecp_task)
 {
 }
@@ -690,7 +690,7 @@ bool ecp_polynomial_generator::first_step()
 // -----------------  konstruktor dla dla zadanych predkosci vp i vk ----------------------------
 // ----------------------------------------------------------------------------------------------
 
-ecp_cubic_generator::ecp_cubic_generator(ecp_task& _ecp_task, trajectory_description tr_des, double *vp, double *vk) :
+ecp_cubic_generator::ecp_cubic_generator(common::task::ecp_task& _ecp_task, trajectory_description tr_des, double *vp, double *vk) :
 	ecp_polynomial_generator(_ecp_task)
 {
 	td = tr_des;
@@ -941,7 +941,7 @@ bool ecp_cubic_generator::next_step()
 // ---------------------------konstruktor ------------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-ecp_quintic_generator::ecp_quintic_generator(ecp_task& _ecp_task, trajectory_description tr_des, double *vp, double *vk, double *ap, double *ak) :
+ecp_quintic_generator::ecp_quintic_generator(common::task::ecp_task& _ecp_task, trajectory_description tr_des, double *vp, double *vk, double *ap, double *ak) :
 	ecp_polynomial_generator(_ecp_task)
 {
 	td = tr_des;
@@ -1206,7 +1206,7 @@ bool ecp_quintic_generator::next_step()
 // ####################################################################################################
 
 
-ecp_spline_generator::ecp_spline_generator(ecp_task& _ecp_task) :
+ecp_spline_generator::ecp_spline_generator(common::task::ecp_task& _ecp_task) :
 	ecp_teach_in_generator(_ecp_task)
 {
 }
@@ -1222,7 +1222,7 @@ ecp_spline_generator::ecp_spline_generator(ecp_task& _ecp_task) :
 // ---------------------------konstruktor ------------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-ecp_parabolic_teach_in_generator::ecp_parabolic_teach_in_generator(ecp_task& _ecp_task, double interval = 0.02) :
+ecp_parabolic_teach_in_generator::ecp_parabolic_teach_in_generator(common::task::ecp_task& _ecp_task, double interval = 0.02) :
 	ecp_spline_generator(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
@@ -1536,7 +1536,7 @@ bool ecp_parabolic_teach_in_generator::next_step()
 // ---------------------------konstruktor ------------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-ecp_calibration_generator::ecp_calibration_generator(ecp_task& _ecp_task, double interval) :
+ecp_calibration_generator::ecp_calibration_generator(common::task::ecp_task& _ecp_task, double interval) :
 	ecp_spline_generator(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
@@ -1872,7 +1872,7 @@ bool ecp_calibration_generator::next_step()
 // ####################################################################################################
 
 
-ecp_cubic_spline_generator::ecp_cubic_spline_generator(ecp_task& _ecp_task, double interval = 0.02) :
+ecp_cubic_spline_generator::ecp_cubic_spline_generator(common::task::ecp_task& _ecp_task, double interval = 0.02) :
 	ecp_spline_generator(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
@@ -2189,7 +2189,7 @@ bool ecp_cubic_spline_generator::next_step()
 // ---------------------------konstruktor ----------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-ecp_smooth_cubic_spline_generator::ecp_smooth_cubic_spline_generator(ecp_task& _ecp_task, double *vp, double *vk, double interval = 0.02) :
+ecp_smooth_cubic_spline_generator::ecp_smooth_cubic_spline_generator(common::task::ecp_task& _ecp_task, double *vp, double *vk, double interval = 0.02) :
 	ecp_spline_generator(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
@@ -2692,7 +2692,7 @@ B					= 1-A;
 // ---------------------------konstruktor ----------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-ecp_quintic_spline_generator::ecp_quintic_spline_generator(ecp_task& _ecp_task, double interval = 0.02) :
+ecp_quintic_spline_generator::ecp_quintic_spline_generator(common::task::ecp_task& _ecp_task, double interval = 0.02) :
 	ecp_spline_generator(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
@@ -3047,7 +3047,7 @@ bool ecp_quintic_spline_generator::next_step()
 // --------------------------------------------------------------------------
 // Konstruktor generatora elipsy
 
-ecp_elipsoid_generator::ecp_elipsoid_generator(ecp_task& _ecp_task) :
+ecp_elipsoid_generator::ecp_elipsoid_generator(common::task::ecp_task& _ecp_task) :
 	ecp_teach_in_generator(_ecp_task)
 {
 	INTERVAL = 0.006; // Dlugosc okresu interpolacji w [sek]
@@ -3275,7 +3275,7 @@ bool ecp_elipsoid_generator::next_step()
 
 // --------------------------------------------------------------------------
 // Zapis rzeczywistej trajektorii do pliku
-void ecp_save_trajectory(ecp_elipsoid_generator& the_generator, ecp_task& _ecp_task)
+void ecp_save_trajectory(ecp_elipsoid_generator& the_generator, common::task::ecp_task& _ecp_task)
 {
 	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
@@ -3332,7 +3332,7 @@ void ecp_save_trajectory(ecp_elipsoid_generator& the_generator, ecp_task& _ecp_t
 
 // --------------------------------------------------------------------------
 // Zapis danych z kalibracji do pliku
-void ecp_save_extended_file(ecp_calibration_generator& the_generator, ecp_operator_reaction_condition& the_condition, ecp_task& _ecp_task)
+void ecp_save_extended_file(ecp_calibration_generator& the_generator, ecp_operator_reaction_condition& the_condition, common::task::ecp_task& _ecp_task)
 {
 	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP

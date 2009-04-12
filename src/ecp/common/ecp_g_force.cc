@@ -30,7 +30,7 @@ namespace common {
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
-weight_meassure_generator::weight_meassure_generator(ecp_task& _ecp_task,
+weight_meassure_generator::weight_meassure_generator(common::task::ecp_task& _ecp_task,
 		double _weight_difference, double _catch_time) :
 	ecp_generator(_ecp_task), weight_difference(_weight_difference),
 			current_buffer_pointer(0), initial_weight(0.0),
@@ -176,7 +176,7 @@ bool weight_meassure_generator::next_step()
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
-y_nose_run_force_generator::y_nose_run_force_generator(ecp_task& _ecp_task,
+y_nose_run_force_generator::y_nose_run_force_generator(common::task::ecp_task& _ecp_task,
 		int step) :
 	ecp_generator(_ecp_task)
 {
@@ -272,7 +272,7 @@ bool y_nose_run_force_generator::next_step()
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
-y_egg_force_generator::y_egg_force_generator(ecp_task& _ecp_task, int step,
+y_egg_force_generator::y_egg_force_generator(common::task::ecp_task& _ecp_task, int step,
 		int mode) :
 	ecp_generator(_ecp_task)
 {
@@ -584,7 +584,7 @@ bool y_egg_force_generator::next_step()
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
-bias_edp_force_generator::bias_edp_force_generator(ecp_task& _ecp_task) :
+bias_edp_force_generator::bias_edp_force_generator(common::task::ecp_task& _ecp_task) :
 	ecp_generator(_ecp_task)
 {
 }
@@ -615,7 +615,7 @@ bool bias_edp_force_generator::next_step()
 
 
 y_edge_follow_force_generator::y_edge_follow_force_generator(
-		ecp_task& _ecp_task, int step) :
+		common::task::ecp_task& _ecp_task, int step) :
 	ecp_teach_in_generator(_ecp_task), tool_frame(0.0, 0.0, 0.25)
 {
 	step_no=step;
@@ -785,7 +785,7 @@ bool y_edge_follow_force_generator::next_step()
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////
 legobrick_attach_force_generator::legobrick_attach_force_generator(
-		ecp_task& _ecp_task, int step) :
+		common::task::ecp_task& _ecp_task, int step) :
 	ecp_teach_in_generator(_ecp_task)//, tool_frame(0.026551, -0.011313, 0.25 + 0.028)
 {
 	//macierz jednorodna przejscia na uklad narzedzia do przemieszczania klockow
@@ -903,7 +903,7 @@ bool legobrick_attach_force_generator::next_step()
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////
 legobrick_detach_force_generator::legobrick_detach_force_generator(
-		ecp_task& _ecp_task, int step) :
+		common::task::ecp_task& _ecp_task, int step) :
 	ecp_teach_in_generator(_ecp_task)//, tool_frame(0.026551, -0.011313, 0.25 + 0.028)
 {
 	//macierz jednorodna przejscia na uklad narzedzia do przemieszczania klockow
@@ -1031,7 +1031,7 @@ bool legobrick_detach_force_generator::next_step()
 
 
 y_drawing_teach_in_force_generator::y_drawing_teach_in_force_generator(
-		ecp_task& _ecp_task, int step) :
+		common::task::ecp_task& _ecp_task, int step) :
 	ecp_teach_in_generator(_ecp_task)
 {
 	step_no=step;
@@ -1230,7 +1230,7 @@ bool y_drawing_teach_in_force_generator::next_step()
 
 
 y_advanced_drawing_teach_in_force_generator::y_advanced_drawing_teach_in_force_generator(
-		ecp_task& _ecp_task, int step) :
+		common::task::ecp_task& _ecp_task, int step) :
 	y_drawing_teach_in_force_generator(_ecp_task, step)
 {
 }
@@ -1628,7 +1628,7 @@ bool y_advanced_drawing_teach_in_force_generator::next_step()
 // --------------------------------------------------------------------------
 
 
-ecp_tff_nose_run_generator::ecp_tff_nose_run_generator(ecp_task& _ecp_task,
+ecp_tff_nose_run_generator::ecp_tff_nose_run_generator(common::task::ecp_task& _ecp_task,
 		int step) :
 	ecp_generator(_ecp_task)
 {
@@ -1886,7 +1886,7 @@ void ecp_tff_nose_run_generator::execute_motion(void)
 
 
 
-ecp_tff_rubik_grab_generator::ecp_tff_rubik_grab_generator(ecp_task& _ecp_task,
+ecp_tff_rubik_grab_generator::ecp_tff_rubik_grab_generator(common::task::ecp_task& _ecp_task,
 		int step) :
 	ecp_generator(_ecp_task)
 {
@@ -2012,7 +2012,7 @@ bool ecp_tff_rubik_grab_generator::next_step()
 
 
 ecp_tff_rubik_face_rotate_generator::ecp_tff_rubik_face_rotate_generator(
-		ecp_task& _ecp_task, int step) :
+		common::task::ecp_task& _ecp_task, int step) :
 	ecp_generator(_ecp_task)
 {
 	step_no = step;
@@ -2183,7 +2183,7 @@ bool ecp_tff_rubik_face_rotate_generator::next_step()
 
 
 ecp_tff_gripper_approach_generator::ecp_tff_gripper_approach_generator(
-		ecp_task& _ecp_task, int step) :
+		common::task::ecp_task& _ecp_task, int step) :
 	ecp_generator(_ecp_task)
 {
 	step_no = step;
@@ -2302,7 +2302,7 @@ bool ecp_tff_gripper_approach_generator::next_step()
 //
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
-ecp_force_tool_change_generator::ecp_force_tool_change_generator (ecp_task& _ecp_task)
+ecp_force_tool_change_generator::ecp_force_tool_change_generator (common::task::ecp_task& _ecp_task)
         :ecp_generator (_ecp_task)
 {
 

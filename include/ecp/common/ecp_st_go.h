@@ -10,6 +10,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace task {
 
 class ecp_sub_task_gripper_opening : public ecp_sub_task
 {
@@ -25,6 +26,7 @@ public:
     void execute();
 };
 
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

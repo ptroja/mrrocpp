@@ -13,6 +13,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace task {
 
 
 class ecp_generator;
@@ -105,6 +106,7 @@ class ecp_sub_task
 		ecp_sub_task(ecp_task &_ecp_t);
 };
 
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

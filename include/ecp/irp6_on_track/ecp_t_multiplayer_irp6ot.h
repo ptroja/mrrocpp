@@ -10,7 +10,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-class ecp_task_multiplayer_irp6ot : public common::ecp_task
+class ecp_task_multiplayer_irp6ot : public common::task::ecp_task
 {
 private:
 	//generatory
@@ -20,7 +20,7 @@ private:
 	common::weight_meassure_generator* wmg;
 
     //podzadania
-	common::ecp_sub_task_gripper_opening* go_st;
+	common::task::ecp_sub_task_gripper_opening* go_st;
 
    	ecp_vis_sac_lx_generator *takeg;
    	common::ecp_tff_rubik_grab_generator *rgg;

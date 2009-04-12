@@ -25,6 +25,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace task {
 
 /*!
  * Initialize task - robot, sensors and generators.
@@ -75,6 +76,7 @@ ecp_task* return_created_ecp_task (configurator &_config)
 	return new ecp_task_cvfradia(_config);
 }
 
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

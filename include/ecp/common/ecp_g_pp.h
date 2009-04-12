@@ -34,7 +34,7 @@ public:
 	int step_no;
 	
 	// konstruktor
-	progpanel_generator(ecp_task& _ecp_task, int step=0);  
+	progpanel_generator(common::task::ecp_task& _ecp_task, int step=0);  
 	
 	virtual bool first_step ();
 	virtual bool next_step ();

@@ -4,7 +4,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-ecp_g_pw_scena::ecp_g_pw_scena(common::ecp_task& _ecp_task) :
+ecp_g_pw_scena::ecp_g_pw_scena(common::task::ecp_task& _ecp_task) :
 	ecp_generator(_ecp_task) {
 
 	recognized = false;

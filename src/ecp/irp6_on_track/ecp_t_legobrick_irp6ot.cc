@@ -18,33 +18,33 @@ namespace ecp {
 namespace irp6ot {
 
 ecp_task_lego_brick_irp6ot::ecp_task_lego_brick_irp6ot(configurator &_config) :
-        ecp_task(_config)
-{}
+	ecp_task(_config)
+	{}
 
 // methods for ECP template to redefine in concrete classes
 void ecp_task_lego_brick_irp6ot::task_initialization(void)
 {
-    // the robot is choose dependendat on the section of configuration file sent as argv[4]
-    ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+	// the robot is choose dependendat on the section of configuration file sent as argv[4]
+	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
-    //gt = new ecp_generator_t (*this);
-    //nrg = new ecp_tff_nose_run_generator (*this, 8);
-    //rgg = new ecp_tff_rubik_grab_generator (*this, 8);
-    //gag = new ecp_tff_gripper_approach_generator (*this, 8);
-    //rfrg = new ecp_tff_rubik_face_rotate_generator (*this, 8);
-    //tig = new ecp_teach_in_generator (*this);
-    //befg = new bias_edp_force_generator (*this);
-    sg = new common::ecp_smooth_generator (*this, true);
-    //wmg = new weight_meassure_generator(*this, 1);
+	//gt = new ecp_generator_t (*this);
+	//nrg = new ecp_tff_nose_run_generator (*this, 8);
+	//rgg = new ecp_tff_rubik_grab_generator (*this, 8);
+	//gag = new ecp_tff_gripper_approach_generator (*this, 8);
+	//rfrg = new ecp_tff_rubik_face_rotate_generator (*this, 8);
+	//tig = new ecp_teach_in_generator (*this);
+	//befg = new bias_edp_force_generator (*this);
+	sg = new common::ecp_smooth_generator (*this, true);
+	//wmg = new weight_meassure_generator(*this, 1);
 
-    //go_st = new ecp_sub_task_gripper_opening(*this);
+	//go_st = new ecp_sub_task_gripper_opening(*this);
 
-    sr_ecp_msg->message("ECP loaded");
+	sr_ecp_msg->message("ECP loaded");
 }
 
 void ecp_task_lego_brick_irp6ot::main_task_algorithm(void)
 {
-    /*
+	/*
 	for(;;)
 	{
 		sr_ecp_msg->message("Waiting for MP order");
@@ -163,19 +163,21 @@ void ecp_task_lego_brick_irp6ot::main_task_algorithm(void)
 		ecp_termination_notice();
 
 	} //end for
-*/
+	 */
 
 }
 
 } // namespace irp6ot
 
 namespace common {
+namespace task {
 
 ecp_task* return_created_ecp_task(configurator &_config)
-                {
-                    return new irp6ot::ecp_task_lego_brick_irp6ot(_config);
-                }
+{
+	return new irp6ot::ecp_task_lego_brick_irp6ot(_config);
+}
 
+}
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

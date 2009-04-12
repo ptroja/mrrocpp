@@ -449,7 +449,7 @@ bool ecp_smooth2_generator::load_a_v_max (char* file_name)
     return true;
 } // end: bool load_a_v_max()
 
-ecp_smooth2_generator::ecp_smooth2_generator (ecp_task& _ecp_task, bool _is_synchronised)
+ecp_smooth2_generator::ecp_smooth2_generator (common::task::ecp_task& _ecp_task, bool _is_synchronised)
         :
         ecp_delta_generator (_ecp_task), debug(false),first_coordinate(true)
 {

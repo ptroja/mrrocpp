@@ -42,9 +42,13 @@ void ecp_task_conveyor_test::main_task_algorithm(void)
 } // namespace conveyor
 
 namespace common {
+namespace task {
+
 ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new conveyor::ecp_task_conveyor_test(_config);
+}
+
 }
 } // namespace common
 } // namespace ecp

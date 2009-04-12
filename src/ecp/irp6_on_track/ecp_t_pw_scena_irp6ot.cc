@@ -133,10 +133,13 @@ void ecp_task_pw_scena_irp6ot::init_td(POSE_SPECIFICATION pspec, int internode_n
 } // namespace irp6ot
 
 namespace common {
+namespace task {
 
 ecp_task* return_created_ecp_task(configurator &_config) {
 	return new irp6ot::ecp_task_pw_scena_irp6ot(_config);
 	
+}
+
 }
 } // namespace common
 } // namespace ecp

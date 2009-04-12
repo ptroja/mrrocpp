@@ -89,12 +89,14 @@ double ecp_task_ellipse::read_double(char* name,double min,double max)
 } // namespace irp6ot
 
 namespace common {
+namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new irp6ot::ecp_task_ellipse(_config);
 }
 
+}
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

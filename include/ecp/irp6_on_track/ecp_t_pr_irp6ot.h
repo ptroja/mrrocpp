@@ -7,7 +7,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-class ecp_task_pr_irp6ot: public common::ecp_task  {
+class ecp_task_pr_irp6ot: public common::task::ecp_task  {
 protected:
 	common::y_drawing_teach_in_force_generator *tig;
 	int ecp_tryb;

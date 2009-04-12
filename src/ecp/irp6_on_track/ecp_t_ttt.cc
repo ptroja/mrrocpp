@@ -17,7 +17,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-ecp_task_ttt::ecp_task_ttt(configurator &_config) : common::ecp_task(_config) {}
+ecp_task_ttt::ecp_task_ttt(configurator &_config) : common::task::ecp_task(_config) {}
 
 void ecp_task_ttt::task_initialization(void)
 {
@@ -61,10 +61,13 @@ void ecp_task_ttt::main_task_algorithm(void)
 } // namespace irp6ot
 
 namespace common {
+namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new irp6ot::ecp_task_ttt(_config);
+}
+
 }
 } // namespace common
 } // namespace ecp

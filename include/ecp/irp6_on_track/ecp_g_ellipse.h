@@ -39,7 +39,7 @@ public:
 	 * @param max_steps ilosc krokow, w ktorych wykonany ma byc ruch po elipsie
 	 * @author jedrzej
 	 */
-    ecp_ellipse_generator (common::ecp_task& _ecp_task,double major_axis,double minor_axis,int max_steps);
+    ecp_ellipse_generator (common::task::ecp_task& _ecp_task,double major_axis,double minor_axis,int max_steps);
     
     /**
      * Generuje pierwszy krok - ustawienie w pozycji (0,b)

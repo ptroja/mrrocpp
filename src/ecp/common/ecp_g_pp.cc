@@ -20,7 +20,7 @@ namespace common {
 
 
 
-progpanel_generator::progpanel_generator(ecp_task& _ecp_task, int step):
+progpanel_generator::progpanel_generator(common::task::ecp_task& _ecp_task, int step):
         ecp_generator (_ecp_task)
 {
     step_no = step;

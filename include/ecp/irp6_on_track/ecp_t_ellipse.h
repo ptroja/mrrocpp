@@ -17,7 +17,7 @@ namespace irp6ot {
  * Kresli w powietrzu elipse o zadanych polosiach
  * @author jkurylo
  */
-class ecp_task_ellipse: public common::ecp_task
+class ecp_task_ellipse: public common::task::ecp_task
 {
 protected:
 	//Generator ruchu

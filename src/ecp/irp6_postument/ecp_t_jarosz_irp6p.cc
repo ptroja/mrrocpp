@@ -27,15 +27,15 @@ ecp_task_jarosz_irp6p::~ecp_task_jarosz_irp6p()
 // methods for ECP template to redefine in concrete classes
 void ecp_task_jarosz_irp6p::task_initialization(void)
 {
-    ecp_m_robot = new ecp_irp6_postument_robot (*this);
+	ecp_m_robot = new ecp_irp6_postument_robot (*this);
 
-    sr_ecp_msg->message("ECP loaded");
+	sr_ecp_msg->message("ECP loaded");
 }
 
 
 void ecp_task_jarosz_irp6p::main_task_algorithm(void)
 {
-    int pll,i;
+	int pll,i;
 
 	//      irp6_postument->ecp_wait_for_start();
 
@@ -66,7 +66,7 @@ void ecp_task_jarosz_irp6p::main_task_algorithm(void)
 		tdes.coordinate_delta[3] = 0.0;								// ramie gorne
 		tdes.coordinate_delta[4] = 0.0;								// pochylenie kisci
 		tdes.coordinate_delta[5] = 0.0;								// obrot kisci
-	*/
+	 */
 	// --------------------------------------------------------------------------------------------
 	/*
 		tdes.coordinate_delta[0] = 0.7853981633974483;								// kolumna obrotowa (45 stopni)
@@ -76,7 +76,7 @@ void ecp_task_jarosz_irp6p::main_task_algorithm(void)
 		tdes.coordinate_delta[4] = 0.0;								// pochylenie kisci
 		tdes.coordinate_delta[5] = 0.0;								// obrot kisci
 		tdes.coordinate_delta[6] = 0.0;								// obrot kisci
-	*/
+	 */
 	// --------------------------------------------------------------------------------------------
 	// Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
 
@@ -98,7 +98,7 @@ void ecp_task_jarosz_irp6p::main_task_algorithm(void)
 		ecp_msg->message("Wykonywany jest ruch o zadany przyrost polozenia/orientacji");
 		Move (*irp6_postument, NULL, lg);
 		ecp_msg->message("Ruch robota zakonczyl sie");
-	*/
+	 */
 	// ####################################################################################################
 	// Interpolacja funckja liniowa z parabolicznymi odcinkami krzywoliniowymi,
 	// czyli trapezoidalny profil predkosci
@@ -110,7 +110,7 @@ void ecp_task_jarosz_irp6p::main_task_algorithm(void)
 		ecp_msg->message("Wykonywany jest ruch o zadany przyrost polozenia/orientacji");
 		Move (*irp6_postument, NULL, trapez);
 		ecp_msg->message("Ruch robota zakonczyl sie");
-	*/
+	 */
 	// ####################################################################################################
 	// Generator o zadany przyrost polozenia/orientacji wykorzystujacy do interpolacji wielomian 3 stopnia
 	// ciaglosc predkosci
@@ -173,7 +173,7 @@ void ecp_task_jarosz_irp6p::main_task_algorithm(void)
 			ecp_msg->message("Wykonywany jest ruch o zadany przyrost polozenia/orientacji");
 			Move (*irp6_postument, NULL, quintic);
 			ecp_msg->message("Ruch robota zakonczyl sie");
-			*/
+		 */
 		// ####################################################################################################
 		// ###############     KLASA glowna dla odtwarzania listy pozycji     #################################
 		// ####################################################################################################
@@ -191,7 +191,7 @@ void ecp_task_jarosz_irp6p::main_task_algorithm(void)
 			   ecp_msg->message("Ruch do nastepnej pozycji na licie zakonczyl sie");
 			   }
 		  ecp_msg->message("Ruch robota zakonczyl sie");
-		*/
+		 */
 		// ####################################################################################################
 		// Generator odtwarzajacy liste nauczonych pozycji, z rozpedzaniem i hamowaniem miedzy pozycjami,
 		// z dokladna zadana pozycja koncowa
@@ -209,7 +209,7 @@ void ecp_task_jarosz_irp6p::main_task_algorithm(void)
 
 			//	ecp_msg->message("Zaladowano plik");
 
-			*/
+		 */
 
 		pteach.initiate_pose_list();
 		sr_ecp_msg->message("Zainicjowano liste pozycji");
@@ -243,7 +243,7 @@ void ecp_task_jarosz_irp6p::main_task_algorithm(void)
 					sr_ecp_msg->message("Ruch do nastepnej pozycji na licie zakonczyl sie");
 				}
 		sr_ecp_msg->message("Ruch robota zakonczyl sie");
-	*/
+	 */
 	// ####################################################################################################
 	// Generator interpolujacy sklejanymi wielomianami 3 stopnia,
 	// z rozpedzaniem i hamowaniem miedzy pozycjami
@@ -263,7 +263,7 @@ void ecp_task_jarosz_irp6p::main_task_algorithm(void)
 					sr_ecp_msg->message("Ruch do nastepnej pozycji na licie zakonczyl sie");
 				}
 		sr_ecp_msg->message("Ruch robota zakonczyl sie");
-	*/
+	 */
 	// ####################################################################################################
 	// Generator interpolujacy sklejanymi wielomianami 3 stopnia   (SMOOTH)
 	// ####################################################################################################
@@ -285,7 +285,7 @@ void ecp_task_jarosz_irp6p::main_task_algorithm(void)
 			sr_ecp_msg->message("Ruch do nastepnej pozycji na licie zakonczyl sie");
 				}
 			sr_ecp_msg->message("Ruch robota zakonczyl sie");
-	  */
+	 */
 	// ####################################################################################################
 	// Generator interpolujacy sklejanymi wielomianami 5 stopnia,
 	// z rozpedzaniem i hamowaniem miedzy pozycjami
@@ -305,7 +305,7 @@ void ecp_task_jarosz_irp6p::main_task_algorithm(void)
 					sr_ecp_msg->message("Ruch do nastepnej pozycji na licie zakonczyl sie");
 				}
 		sr_ecp_msg->message("Ruch robota zakonczyl sie");
-	*/
+	 */
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	// Informacja dla MP o zakonczeniu zadania uzytkownika
 	ecp_termination_notice ();  // ?????????????
@@ -314,11 +314,14 @@ void ecp_task_jarosz_irp6p::main_task_algorithm(void)
 } // namespace irp6p
 
 namespace common {
+namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
-                {
-                    return new irp6p::ecp_task_jarosz_irp6p(_config);
-                }
+{
+	return new irp6p::ecp_task_jarosz_irp6p(_config);
+}
+
+}
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

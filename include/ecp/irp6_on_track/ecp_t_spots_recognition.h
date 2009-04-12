@@ -33,7 +33,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-class ecp_t_spots_recognition: public common::ecp_task
+class ecp_t_spots_recognition: public common::task::ecp_task
 {
 	char * trajektoria_poczatkowa;
 

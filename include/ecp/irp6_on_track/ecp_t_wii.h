@@ -14,7 +14,7 @@ namespace irp6ot {
  * Odtwarza orientacje kontrolera
  * @author jkurylo
  */
-class ecp_task_wii: public common::ecp_task
+class ecp_task_wii: public common::task::ecp_task
 {
 protected:
 	//Generator ruchu

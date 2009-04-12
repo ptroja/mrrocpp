@@ -23,7 +23,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-ecp_task *ecp_t;
+common::task::ecp_task *ecp_t;
 
 void catch_signal_in_ecp(int sig)
 {
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 			signal(SIGINT, SIG_IGN);
 		}
 #endif
-		ecp::common::ecp_t = ecp::common::return_created_ecp_task(*_config);
+		ecp::common::ecp_t = ecp::common::task::return_created_ecp_task(*_config);
 
 		set_thread_priority(pthread_self(), MAX_PRIORITY-3);
 

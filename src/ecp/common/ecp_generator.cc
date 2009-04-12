@@ -4,7 +4,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-ecp_generator::ecp_generator (ecp_task& _ecp_task)
+ecp_generator::ecp_generator (common::task::ecp_task& _ecp_task)
         : base(*(ecp_t.sr_ecp_msg)),
         ecp_t(_ecp_task),
         communicate_with_mp_in_move(true),

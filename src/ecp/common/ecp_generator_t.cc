@@ -4,7 +4,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-ecp_generator_t::ecp_generator_t(ecp_task& _ecp_task) :
+ecp_generator_t::ecp_generator_t(common::task::ecp_task& _ecp_task) :
 	ecp_generator(_ecp_task)
 {
 	copy_edp_buffers_in_move=false;

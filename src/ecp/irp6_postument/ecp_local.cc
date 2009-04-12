@@ -21,7 +21,7 @@ ecp_irp6_postument_robot::ecp_irp6_postument_robot(configurator &_config, sr_ecp
 {
 }
 ;
-ecp_irp6_postument_robot::ecp_irp6_postument_robot(common::ecp_task& _ecp_object) :
+ecp_irp6_postument_robot::ecp_irp6_postument_robot(common::task::ecp_task& _ecp_object) :
 	ecp_robot(ROBOT_IRP6_POSTUMENT, _ecp_object)
 {
 }

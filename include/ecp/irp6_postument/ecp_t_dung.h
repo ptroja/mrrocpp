@@ -7,7 +7,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6p {
 
-class ecp_task_dung: public common::ecp_task  {
+class ecp_task_dung: public common::task::ecp_task  {
 
 public:
 	// KONSTRUKTORY

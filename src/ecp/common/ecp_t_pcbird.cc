@@ -26,6 +26,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace task {
 
 
 /*!
@@ -76,6 +77,7 @@ ecp_task* return_created_ecp_task (configurator &_config)
 	return new ecp_task_pcbird(_config);
 }
 
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

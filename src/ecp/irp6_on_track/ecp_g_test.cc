@@ -22,7 +22,7 @@ namespace ecp {
 namespace irp6ot {
 
 
-y_simple_generator::y_simple_generator(ecp_task& _ecp_task, int step):
+y_simple_generator::y_simple_generator(common::task::ecp_task& _ecp_task, int step):
 	 ecp_generator (_ecp_task, true) { 		step_no = step;          	};  
 
 

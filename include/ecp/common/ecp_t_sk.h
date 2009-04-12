@@ -6,8 +6,9 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace task {
 
-class ecp_task_sk: public common::ecp_task  {
+class ecp_task_sk: public common::task::ecp_task  {
 protected:
 	ecp_tff_nose_run_generator* nrg;
 	y_edge_follow_force_generator* yefg;
@@ -24,6 +25,7 @@ public:
 
 };
 
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

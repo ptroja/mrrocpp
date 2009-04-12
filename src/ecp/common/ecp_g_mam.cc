@@ -114,7 +114,7 @@ int manual_moves_automatic_measures_generator::mam_list_length(void) {
 
 
 /*****************************  KONSTRUKTOR *********************************/
-manual_moves_automatic_measures_generator::manual_moves_automatic_measures_generator(ecp_task& _ecp_task, int _axes_number) :
+manual_moves_automatic_measures_generator::manual_moves_automatic_measures_generator(common::task::ecp_task& _ecp_task, int _axes_number) :
 	ecp_generator(_ecp_task)
 {
 	UI_fd = _ecp_task.UI_fd;

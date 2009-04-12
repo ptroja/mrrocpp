@@ -7,7 +7,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-class ecp_task_playerjoy_irp6ot: public common::ecp_task  {
+class ecp_task_playerjoy_irp6ot: public common::task::ecp_task  {
 protected:
 	common::playerjoy_generator* pjg;
 

@@ -34,13 +34,17 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
+// Obiekt zawierajacy sciezki sieciowe.
+extern task::ecp_task* ecp_t;
+
+namespace task {
+
 // Zmienne do komunikacji.
 extern name_attach_t *ecp_attach;
 // Kanal komunikacyjny z procesem UI.
 name_attach_t * UI_ECP_attach;
 
-// Obiekt zawierajacy sciezki sieciowe.
-extern ecp_task* ecp_t;
+
 
 // Obiekt generator trajektorii.
 manual_moves_automatic_measures_generator *mam_gen;
@@ -260,6 +264,7 @@ ecp_task* return_created_ecp_task(configurator &_config)
 	return new ecp_task_mam(_config);
 }
 
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

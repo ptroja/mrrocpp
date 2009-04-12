@@ -11,7 +11,7 @@ namespace common {
 class ecp_generator_t : public common::ecp_generator {
 
 public:
-	ecp_generator_t(ecp_task& _ecp_task);
+	ecp_generator_t(common::task::ecp_task& _ecp_task);
 	
 	bool throw_kinematics_exceptions;
 	

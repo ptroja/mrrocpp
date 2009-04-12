@@ -66,11 +66,14 @@ void ecp_task_rcsc_speaker::main_task_algorithm(void)
 } // namespace speaker
 
 namespace common {
+namespace task {
+
 ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new speaker::ecp_task_rcsc_speaker(_config);
 }
 
+}
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

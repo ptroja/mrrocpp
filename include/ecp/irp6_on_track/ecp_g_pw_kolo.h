@@ -33,7 +33,7 @@ class ecp_g_pw_kolo : public common::ecp_generator
     double y;	
     double z;
 public:
-    ecp_g_pw_kolo (common::ecp_task& _ecp_task);
+    ecp_g_pw_kolo (common::task::ecp_task& _ecp_task);
     virtual bool first_step();
     virtual bool next_step();
 };

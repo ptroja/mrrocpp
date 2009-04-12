@@ -16,6 +16,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace task {
 
 
 /*!
@@ -23,7 +24,7 @@ namespace common {
  * \brief Class responsible for communication with pcbird (testing purposes).
  * \author tkornuta
  */
-class ecp_task_pcbird: public common::ecp_task  {
+class ecp_task_pcbird: public common::task::ecp_task  {
 protected:
 	/*!
       * Generator used for communication with pcbird.
@@ -50,6 +51,7 @@ public:
 
 };
 
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

@@ -37,7 +37,7 @@ void ecp_task_rcsc_irp6ot::task_initialization(void)
     sg = new common::ecp_smooth_generator (*this, true);
     wmg = new common::weight_meassure_generator(*this, 1);
 
-    go_st = new common::ecp_sub_task_gripper_opening(*this);
+    go_st = new common::task::ecp_sub_task_gripper_opening(*this);
 
     sr_ecp_msg->message("ECP loaded");
 }
@@ -170,12 +170,13 @@ void ecp_task_rcsc_irp6ot::main_task_algorithm(void)
 } // namespace irp6ot
 
 namespace common {
+namespace task {
 
 ecp_task* return_created_ecp_task(configurator &_config)
 {
 	return new irp6ot::ecp_task_rcsc_irp6ot(_config);
 }
-
+}
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

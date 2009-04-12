@@ -10,7 +10,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-class ecp_task_lego_brick_irp6ot: public common::ecp_task
+class ecp_task_lego_brick_irp6ot: public common::task::ecp_task
 {
 protected:
     //generatory

@@ -19,7 +19,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-ecp_visual_servo_manager::ecp_visual_servo_manager(ecp_task& _ecp_task, int step) : ecp_visual_servo(_ecp_task){
+ecp_visual_servo_manager::ecp_visual_servo_manager(common::task::ecp_task& _ecp_task, int step) : ecp_visual_servo(_ecp_task){
 
 }
 

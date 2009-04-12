@@ -44,7 +44,7 @@ void ecp_task_rcsc_irp6p::task_initialization(void)
     befg = new common::bias_edp_force_generator (*this);
     sg = new common::ecp_smooth_generator (*this, true);
 
-    go_st = new common::ecp_sub_task_gripper_opening(*this);
+    go_st = new common::task::ecp_sub_task_gripper_opening(*this);
 
     sr_ecp_msg->message("ECP loaded");
 }
@@ -175,12 +175,14 @@ void ecp_task_rcsc_irp6p::main_task_algorithm(void)
 } // namespace irp6p
 
 namespace common {
+namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new irp6p::ecp_task_rcsc_irp6p(_config);
 }
 
+}
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

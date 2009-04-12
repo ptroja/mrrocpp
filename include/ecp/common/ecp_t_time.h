@@ -7,8 +7,9 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace task {
 
-class ecp_task_time: public common::ecp_task  {
+class ecp_task_time: public common::task::ecp_task  {
 protected:
 	time_generator *tfg;
 
@@ -22,6 +23,7 @@ public:
 
 };
 
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

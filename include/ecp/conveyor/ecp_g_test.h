@@ -28,7 +28,7 @@ public:
 	double delta[6];
 	
 	// konstruktor
-	y_simple_generator(common::ecp_task& _ecp_task, int step=0);  
+	y_simple_generator(common::task::ecp_task& _ecp_task, int step=0);  
 	
 	virtual bool first_step ();
 

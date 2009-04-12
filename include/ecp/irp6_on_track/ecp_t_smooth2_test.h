@@ -10,7 +10,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-class ecp_t_smooth2_test: public common::ecp_task {
+class ecp_t_smooth2_test: public common::task::ecp_task {
   
   protected:
 	  common::ecp_smooth2_generator* smoothgen2;

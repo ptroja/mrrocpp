@@ -14,7 +14,7 @@ namespace irp6ot {
  * Odtwarza orientacje kontrolera
  * @author jkurylo
  */
-class ecp_task_wii_velocity: public common::ecp_task
+class ecp_task_wii_velocity: public common::task::ecp_task
 {
 protected:
 //	ecp_wii_velocity_generator* eg;

@@ -13,6 +13,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace task {
 
 // KONSTRUKTORY
 ecp_task_pawel::ecp_task_pawel(configurator &_config) : ecp_task(_config)
@@ -94,6 +95,7 @@ ecp_task* return_created_ecp_task (configurator &_config)
 	//			Move ( *nrg);
 	//	Move ( *tig);
 
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

@@ -9,7 +9,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6p {
 
-class ecp_task_rcsc_irp6p: public common::ecp_task
+class ecp_task_rcsc_irp6p: public common::task::ecp_task
 {
 protected:
     //generatory
@@ -23,7 +23,7 @@ protected:
 	common::bias_edp_force_generator* befg;
 	common::weight_meassure_generator* wmg;
     //podzadania
-	common::ecp_sub_task_gripper_opening* go_st;
+	common::task::ecp_sub_task_gripper_opening* go_st;
 
 public:
     // KONSTRUKTORY

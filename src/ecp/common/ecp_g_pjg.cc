@@ -13,7 +13,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-playerjoy_generator::playerjoy_generator(ecp_task& _ecp_task, int step):
+playerjoy_generator::playerjoy_generator(common::task::ecp_task& _ecp_task, int step):
         ecp_generator (_ecp_task)
 {
     step_no = step;

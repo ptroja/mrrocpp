@@ -46,7 +46,7 @@ void ecp_task_multiplayer_irp6ot::task_initialization(void)
 	wmg = new common::weight_meassure_generator(*this, -0.3, 2);
 	gt = new common::ecp_generator_t (*this);
 
-	go_st = new common::ecp_sub_task_gripper_opening(*this);
+	go_st = new common::task::ecp_sub_task_gripper_opening(*this);
 
 	takeg = new ecp_vis_sac_lx_generator (*this, 4);
 	rgg = new common::ecp_tff_rubik_grab_generator (*this, 8);
@@ -128,10 +128,12 @@ void ecp_task_multiplayer_irp6ot::main_task_algorithm(void)
 } // namespace irp6ot
 
 namespace common {
+namespace task {
 
 ecp_task* return_created_ecp_task(configurator &_config)
 {
 	return new irp6ot::ecp_task_multiplayer_irp6ot(_config);
+}
 }
 } // namespace common
 } // namespace ecp

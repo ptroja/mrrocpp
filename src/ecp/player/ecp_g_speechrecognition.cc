@@ -7,7 +7,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace player {
 
-speechrecognition_generator::speechrecognition_generator(common::ecp_task& _ecp_task)
+speechrecognition_generator::speechrecognition_generator(common::task::ecp_task& _ecp_task)
 	: ecp_generator (_ecp_task)
 {
 	char * hostname = ecp_t.config.return_string_value("player_hostname");

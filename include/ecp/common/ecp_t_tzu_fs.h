@@ -11,6 +11,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace task {
 
 #define FORCE_X 0
 #define FORCE_Y 1
@@ -33,7 +34,7 @@ namespace common {
 
 class force_meassure_generator;
 
-class ecp_task_tzu_fs :  public common::ecp_task
+class ecp_task_tzu_fs :  public common::task::ecp_task
 {
 protected:
 	ecp_smooth_generator *sg;
@@ -78,7 +79,7 @@ private:
 	Ft_v_vector weight;
 public:
     // konstruktor
-    force_meassure_generator(ecp_task& _ecp_task, int _sleep_time = 0, int _meassurement_count = 1);
+    force_meassure_generator(common::task::ecp_task& _ecp_task, int _sleep_time = 0, int _meassurement_count = 1);
 	Ft_v_vector& get_meassurement();
 	void set_configuration(int _sleep_time, int _meassurement_count);
 
@@ -86,6 +87,7 @@ public:
     bool next_step ();
 };
 
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

@@ -7,7 +7,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-class ecp_task_fr_irp6ot: public common::ecp_task  {
+class ecp_task_fr_irp6ot: public common::task::ecp_task  {
 protected:
 	trajectory_description tdes_joint;
 	common::ecp_linear_parabolic_generator *adg1;

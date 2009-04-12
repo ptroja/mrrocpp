@@ -12,7 +12,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-ecp_g_tbtest::ecp_g_tbtest (common::ecp_task& _ecp_task) : common::ecp_generator (_ecp_task){
+ecp_g_tbtest::ecp_g_tbtest (common::task::ecp_task& _ecp_task) : common::ecp_generator (_ecp_task){
 
 }
 

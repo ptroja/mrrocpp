@@ -33,7 +33,7 @@ void ecp_t_tb_irp6ot::task_initialization(void){
 	sgen=new common::ecp_smooth_generator(*this, true);
 	befgen=new common::bias_edp_force_generator(*this);
 	gagen=new common::ecp_tff_gripper_approach_generator (*this, 8);	//gripper approach constructor (task&, no_of_steps)
-	go_st = new common::ecp_sub_task_gripper_opening(*this);
+	go_st = new common::task::ecp_sub_task_gripper_opening(*this);
 	sleepgen=new common::ecp_sleep_generator(*this);
 	sr_ecp_msg->message("ECP loaded tb");
 };
@@ -255,10 +255,13 @@ void ecp_t_tb_irp6ot::init_tdes(POSE_SPECIFICATION pspec, int internode_no){
 } // namespace irp6ot
 
 namespace common {
+namespace task {
 
 ecp_task* return_created_ecp_task(configurator &_config){
 	return new irp6ot::ecp_t_tb_irp6ot(_config);
 	
+}
+
 }
 } // namespace common
 } // namespace ecp

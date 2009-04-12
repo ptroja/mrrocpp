@@ -17,8 +17,9 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace task {
 
-void ecp_gripper_opening (ecp_task& _ecp_task, double gripper_increment, int motion_time)
+void ecp_gripper_opening (common::task::ecp_task& _ecp_task, double gripper_increment, int motion_time)
 {
 
 	trajectory_description tdes;
@@ -43,6 +44,7 @@ void ecp_gripper_opening (ecp_task& _ecp_task, double gripper_increment, int mot
 	_ecp_task.Move (lg);
 }
 
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

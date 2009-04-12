@@ -21,7 +21,7 @@ class ecp_irp6_mechatronika_robot: public common::ecp_robot
 
 	public:
 	ecp_irp6_mechatronika_robot (configurator &_config, sr_ecp *_sr_ecp);
-	ecp_irp6_mechatronika_robot (common::ecp_task& _ecp_object);
+	ecp_irp6_mechatronika_robot (common::task::ecp_task& _ecp_object);
 
 	virtual void create_command (void);
 	// wypelnia bufor wysylkowy do EDP na podstawie danych zawartych w obrazie

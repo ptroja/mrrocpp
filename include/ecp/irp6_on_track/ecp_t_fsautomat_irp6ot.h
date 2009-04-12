@@ -21,7 +21,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-class ecp_task_fsautomat_irp6ot: public common::ecp_task
+class ecp_task_fsautomat_irp6ot: public common::task::ecp_task
 {
 	protected:
 		// generatory
@@ -36,7 +36,7 @@ class ecp_task_fsautomat_irp6ot: public common::ecp_task
 		common::bias_edp_force_generator* befg;
 		common::weight_meassure_generator* wmg;
 		//podzadania
-		common::ecp_sub_task_gripper_opening* go_st;
+		common::task::ecp_sub_task_gripper_opening* go_st;
 
 
 		std::map<char*, mp::common::Trajectory, str_cmp>* trjMap;

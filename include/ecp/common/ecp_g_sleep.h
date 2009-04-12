@@ -24,7 +24,7 @@ class ecp_sleep_generator : public common::ecp_generator
 		timespec starttime;
 
 	public:
-		ecp_sleep_generator(ecp_task& _ecp_task, double=1);		//constructor
+		ecp_sleep_generator(common::task::ecp_task& _ecp_task, double=1);		//constructor
 		bool first_step();		//first step generation
 		bool next_step();			//next step generation
 		int init_time(double=1);	//initialize time

@@ -58,10 +58,13 @@ void ecp_task_speechrecognition::main_task_algorithm(void)
 } // namespace player
 
 namespace common {
+namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new player::ecp_task_speechrecognition(_config);
+}
+
 }
 } // namespace common
 } // namespace ecp

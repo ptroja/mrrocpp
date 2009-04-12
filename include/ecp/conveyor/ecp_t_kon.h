@@ -19,7 +19,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace conveyor {
 
-class ecp_task_conveyor_kon: public common::ecp_task  {
+class ecp_task_conveyor_kon: public common::task::ecp_task  {
 
 public:
 	// KONSTRUKTORY

@@ -40,7 +40,7 @@ public:
 	double gammax;
 	
 	// konstruktor
-	y_simple_generator(ecp_task& _ecp_task, int step=0);  
+	y_simple_generator(common::task::ecp_task& _ecp_task, int step=0);  
 	virtual ~y_simple_generator() {};
 
 	virtual bool first_step ();

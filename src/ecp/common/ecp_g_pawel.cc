@@ -46,7 +46,7 @@ struct timespec time_start, time_tmp;
 FILE* research;
 
 
-pawel_generator::pawel_generator(ecp_task& _ecp_task, int step):
+pawel_generator::pawel_generator(common::task::ecp_task& _ecp_task, int step):
         ecp_generator (_ecp_task)
 {
 

@@ -77,6 +77,7 @@ void ecp_task_vislx_irp6ot::main_task_algorithm(void)
 } // namespace irp6ot
 
 namespace common {
+namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
@@ -173,6 +174,7 @@ ecp_task* return_created_ecp_task (configurator &_config)
 	return new ecp_task_vislx_irp6ot(_config);
 };
 */
+}
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

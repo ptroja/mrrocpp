@@ -18,7 +18,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace festival {
 
-festival_generator::festival_generator(common::ecp_task& _ecp_task) :
+festival_generator::festival_generator(common::task::ecp_task& _ecp_task) :
 		ecp_generator (_ecp_task)
 {
 	host = ecp_t.config.return_string_value("server_host");

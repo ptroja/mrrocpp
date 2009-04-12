@@ -27,7 +27,7 @@ public:
 	messip_channel_t *UI_fd;
 #endif
   // konstruktor
-	ecp_operator_reaction_condition(ecp_task& _ecp_task);
+	ecp_operator_reaction_condition(task::ecp_task& _ecp_task);
 
   // destruktor
   virtual ~ecp_operator_reaction_condition (void);

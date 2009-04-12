@@ -74,10 +74,13 @@ void ecp_task_test_irp6p::main_task_algorithm(void)
 } // namespace irp6p
 
 namespace common {
+namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new irp6p::ecp_task_test_irp6p(_config);
+}
+
 }
 } // namespace common
 } // namespace ecp

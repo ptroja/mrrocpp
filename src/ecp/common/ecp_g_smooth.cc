@@ -1018,7 +1018,7 @@ bool ecp_smooth_generator::load_a_v_max (char* file_name)
     return true;
 } // end: load_a_v_max()
 
-ecp_smooth_generator::ecp_smooth_generator (ecp_task& _ecp_task, bool _is_synchronised)
+ecp_smooth_generator::ecp_smooth_generator (common::task::ecp_task& _ecp_task, bool _is_synchronised)
         :
         ecp_delta_generator (_ecp_task), debug(false),first_coordinate(true)
 {
@@ -1054,7 +1054,7 @@ ecp_smooth_generator::ecp_smooth_generator (ecp_task& _ecp_task, bool _is_synchr
 }
 ; // end : konstruktor
 
-ecp_smooth_generator::ecp_smooth_generator (ecp_task& _ecp_task, bool _is_synchronised, bool _debug)
+ecp_smooth_generator::ecp_smooth_generator (common::task::ecp_task& _ecp_task, bool _is_synchronised, bool _debug)
         :
         ecp_delta_generator (_ecp_task), first_coordinate(true)
 {
@@ -1517,14 +1517,14 @@ void ecp_tool_change_generator::set_tool_parameters(double x, double y, double z
     tool_parameters[2]=z;
 }
 
-ecp_tool_change_generator::ecp_tool_change_generator (ecp_task& _ecp_task, bool _is_synchronised)
+ecp_tool_change_generator::ecp_tool_change_generator (common::task::ecp_task& _ecp_task, bool _is_synchronised)
         :ecp_smooth_generator (_ecp_task, _is_synchronised)
 {
 
     set_tool_parameters(-0.18, 0.0, 0.25);
 
 }
-ecp_tool_change_generator::ecp_tool_change_generator (ecp_task& _ecp_task, bool _is_synchronised, bool _debug)
+ecp_tool_change_generator::ecp_tool_change_generator (common::task::ecp_task& _ecp_task, bool _is_synchronised, bool _debug)
         :ecp_smooth_generator (_ecp_task, _is_synchronised, _debug)
 {
 

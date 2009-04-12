@@ -20,7 +20,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace speaker {
 
-speaking_generator::speaking_generator(common::ecp_task& _ecp_task, int step):
+speaking_generator::speaking_generator(common::task::ecp_task& _ecp_task, int step):
 	 ecp_generator(_ecp_task){	step_no = step;  };
 
 bool speaking_generator::configure(const char* text)

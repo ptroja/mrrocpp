@@ -15,7 +15,7 @@ namespace irp6ot {
 using namespace std;
 
 
-ecp_spots_generator::ecp_spots_generator (common::ecp_task& _ecp_task)
+ecp_spots_generator::ecp_spots_generator (common::task::ecp_task& _ecp_task)
         : ecp_generator (_ecp_task)
 {
 	//tool to plate frame initialization, all in rad and meters

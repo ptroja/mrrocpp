@@ -31,7 +31,7 @@ public:
 	trajectory_description td;
 	
 	// konstruktor
-	conveyor_incremental_move(common::ecp_task& _ecp_task, double inc_move);  
+	conveyor_incremental_move(common::task::ecp_task& _ecp_task, double inc_move);  
 	
 	virtual bool first_step ();
 

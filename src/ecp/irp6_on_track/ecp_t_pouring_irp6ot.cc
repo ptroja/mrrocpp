@@ -42,7 +42,7 @@ void ecp_task_pouring_irp6ot::task_initialization(void)
     sg = new common::ecp_smooth_generator (*this, true);
     tcg = new common::ecp_tool_change_generator(*this, true);
 
-    go_st = new common::ecp_sub_task_gripper_opening(*this);
+    go_st = new common::task::ecp_sub_task_gripper_opening(*this);
 
     sr_ecp_msg->message("ECP loaded");
 };
@@ -104,12 +104,12 @@ void ecp_task_pouring_irp6ot::main_task_algorithm(void)
 } // namespace irp6ot
 
 namespace common {
-
+namespace task {
 ecp_task* return_created_ecp_task (configurator &_config)
 {
 	return new irp6ot::ecp_task_pouring_irp6ot(_config);
 }
-
+}
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

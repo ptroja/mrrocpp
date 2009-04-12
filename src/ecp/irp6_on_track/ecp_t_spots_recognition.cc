@@ -96,10 +96,13 @@ void ecp_t_spots_recognition::main_task_algorithm(void)
 } // namespace irp6ot
 
 namespace common {
+namespace task {
 
 ecp_task* return_created_ecp_task(configurator &_config)
 {
 	return new irp6ot::ecp_t_spots_recognition(_config);
+}
+
 }
 } // namespace common
 } // namespace ecp

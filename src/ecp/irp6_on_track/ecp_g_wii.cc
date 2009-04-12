@@ -8,7 +8,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-ecp_wii_generator::ecp_wii_generator (common::ecp_task& _ecp_task) : ecp_generator (_ecp_task) {}
+ecp_wii_generator::ecp_wii_generator (common::task::ecp_task& _ecp_task) : ecp_generator (_ecp_task) {}
 
 bool ecp_wii_generator::first_step()
 {

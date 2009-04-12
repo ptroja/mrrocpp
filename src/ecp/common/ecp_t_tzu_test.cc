@@ -21,6 +21,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace task {
 
 using namespace std;
 /** konstruktor **/
@@ -504,7 +505,7 @@ ecp_task* return_created_ecp_task (configurator &_config)
 /**** force meassure generator ****/
 
 /** konstruktor **/
-force_meassure_generator::force_meassure_generator(ecp_task& _ecp_task, int _sleep_time, int _meassurement_count) :
+force_meassure_generator::force_meassure_generator(common::task::ecp_task& _ecp_task, int _sleep_time, int _meassurement_count) :
 	ecp_generator(_ecp_task)
 {
 	sleep_time = _sleep_time;
@@ -563,6 +564,7 @@ Ft_v_vector& force_meassure_generator::get_meassurement()
 	return weight;
 }
 
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

@@ -24,6 +24,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace task {
 
 #define debugmsg(msg)		sr_ecp_msg->message(msg);
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,6 +107,7 @@ ecp_task* return_created_ecp_task (configurator &_config)
 
 
 
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

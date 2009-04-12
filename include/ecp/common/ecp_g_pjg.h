@@ -31,7 +31,7 @@ public:
 	int step_no;
 	
 	// konstruktor
-	playerjoy_generator(ecp_task& _ecp_task, int step=0);  
+	playerjoy_generator(common::task::ecp_task& _ecp_task, int step=0);  
 	
 	virtual bool first_step ();
 

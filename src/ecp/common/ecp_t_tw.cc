@@ -26,6 +26,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace task {
 
 // KONSTRUKTORY
 ecp_task_tw::ecp_task_tw(configurator &_config) : ecp_task(_config)
@@ -112,6 +113,7 @@ ecp_task* return_created_ecp_task (configurator &_config)
 	return new ecp_task_tw(_config);
 }
 
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

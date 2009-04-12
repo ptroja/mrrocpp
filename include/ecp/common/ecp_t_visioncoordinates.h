@@ -15,10 +15,11 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace task {
 
-// class ecp_task_visioncoordinates : public common::ecp_task
+// class ecp_task_visioncoordinates : public common::task::ecp_task
 // - zadanie kierowania ramieniem robota w strone zidentyfikowanego obiektu na ekranie
-class ecp_task_visioncoordinates : public common::ecp_task  
+class ecp_task_visioncoordinates : public common::task::ecp_task  
 {
 public:
 	ecp_task_visioncoordinates(configurator& _config);
@@ -45,6 +46,7 @@ private:
 	const char* SETTINGS_SECTION_NAME;
 };
 
+} // namespace task
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

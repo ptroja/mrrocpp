@@ -15,6 +15,7 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
+
 class haptic : public base  
 {
 protected:

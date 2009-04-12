@@ -58,8 +58,8 @@ protected:
 	bool first_coordinate;
 
 public:
-	ecp_smooth_generator(ecp_task& _ecp_task, bool _is_synchronised);
-	ecp_smooth_generator(ecp_task& _ecp_task, bool _is_synchronised, bool _debug);
+	ecp_smooth_generator(common::task::ecp_task& _ecp_task, bool _is_synchronised);
+	ecp_smooth_generator(common::task::ecp_task& _ecp_task, bool _is_synchronised, bool _debug);
 	
 	void calculate(void);
 	void generate_next_coords(void);
@@ -104,8 +104,8 @@ protected:
 	double tool_parameters[3];
 	
 public:
-	ecp_tool_change_generator(ecp_task& _ecp_task, bool _is_synchronised);
-	ecp_tool_change_generator(ecp_task& _ecp_task, bool _is_synchronised, bool _debug);
+	ecp_tool_change_generator(common::task::ecp_task& _ecp_task, bool _is_synchronised);
+	ecp_tool_change_generator(common::task::ecp_task& _ecp_task, bool _is_synchronised, bool _debug);
 	void set_tool_parameters(double x, double y, double z);
 	
 	virtual bool first_step();

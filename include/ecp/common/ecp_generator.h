@@ -22,7 +22,7 @@ namespace common {
 class ecp_generator : public ecp_mp::generator::base {
 
 	protected:
-		ecp_task& ecp_t;
+		common::task::ecp_task& ecp_t;
 
 	public:
 	    // Zlecenie ruchu dla EDP
@@ -34,7 +34,7 @@ class ecp_generator : public ecp_mp::generator::base {
 		bool copy_edp_buffers_in_move;
 		ecp_robot* the_robot;
 
-		ecp_generator(ecp_task& _ecp_task);
+		ecp_generator(common::task::ecp_task& _ecp_task);
 
 		virtual ~ecp_generator();
 		
