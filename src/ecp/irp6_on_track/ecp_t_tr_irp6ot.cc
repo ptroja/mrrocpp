@@ -31,14 +31,20 @@
 
 namespace mrrocpp {
 namespace ecp {
+
 namespace common {
+
+extern irp6ot::ecp_task_tr_irp6ot* ecp_t;
+} // namespace common 
+namespace irp6ot {
+
 
 // Kanal komunikacyjny z procesem UI.
 name_attach_t * UI_ECP_attach;
 
 // Obiekt zawierajacy sciezki sieciowe.
 
-extern ecp_task_tr_irp6ot* ecp_t;
+
 
 // Obiekt generator trajektorii.
 trajectory_reproduce_generator *trg;
@@ -69,22 +75,22 @@ void ecp_task_tr_irp6ot::catch_signal(int sig)
 			// Zakonczenie pracy watkow.
 			TERMINATE = true;
 			// Koniec pracy czujnikow.
-			ecp_t->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]->terminate();
+			common::ecp_t->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]->terminate();
 			// Koniec pracy czujnika.
-			if (ecp_t->sensor_m.count(SENSOR_FORCE_ON_TRACK)>0)
-				ecp_t->sensor_m[SENSOR_FORCE_ON_TRACK]->terminate();
+			if (common::ecp_t->sensor_m.count(SENSOR_FORCE_ON_TRACK)>0)
+				common::ecp_t->sensor_m[SENSOR_FORCE_ON_TRACK]->terminate();
 			// Zwolnienie pamieci - czujniki.
-			delete(ecp_t->sensor_m[SENSOR_FORCE_ON_TRACK]);
-			delete(ecp_t->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]);
+			delete(common::ecp_t->sensor_m[SENSOR_FORCE_ON_TRACK]);
+			delete(common::ecp_t->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]);
 			// Zwolnienie pamieci - generator.
 			delete(trg);
 			// Zwolnienie pamieci - warunek.
 			delete(rsc);
 			// Zwolnienie pamieci - robot.
-			delete(ecp_t->ecp_m_robot);
+			delete(common::ecp_t->ecp_m_robot);
 			// Odlaczenie nazwy.
 			name_detach(UI_ECP_attach, 0);
-			ecp_t->sr_ecp_msg->message("ECP terminated");
+			common::ecp_t->sr_ecp_msg->message("ECP terminated");
 			exit(EXIT_SUCCESS);
 			break;
 	}
@@ -168,18 +174,18 @@ void* UI_communication_thread(void* arg)
 				break;
 			case TR_CALIBRATE_DIGITAL_SCALES_SENSOR:
 				// Konfiguracja czujnika.
-				ecp_t->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]->configure_sensor();
+				common::ecp_t->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]->configure_sensor();
 				break;
 			case TR_CALIBRATE_FORCE_SENSOR:
-				if (ecp_t->sensor_m.count(SENSOR_FORCE_ON_TRACK)>0) {
+				if (common::ecp_t->sensor_m.count(SENSOR_FORCE_ON_TRACK)>0) {
 					// Konfiguracja czujnika sil.
-					ecp_t->sensor_m[SENSOR_FORCE_ON_TRACK]->configure_sensor();
+					common::ecp_t->sensor_m[SENSOR_FORCE_ON_TRACK]->configure_sensor();
 				}
 				break;
 			case TR_EXIT:
 				// Zakonczenie dzialania procesu.
 				TERMINATE = true;
-				ecp_t->ecp_termination_notice();
+				common::ecp_t->ecp_termination_notice();
 				break;
 			default:
 				fprintf(stderr, "unknown UI command in %s:%d\n", __FILE__, __LINE__);
@@ -231,7 +237,7 @@ void* trajectory_reproduce_thread(void* arg)
 				// Ruch wykonano poprawnie.
 				break;
 			} // end: try zewnetrzne.
-			catch (ecp_generator::ECP_error e)
+			catch (common::ecp_generator::ECP_error e)
 			{
 				// Obsluga bledu.
 				trg->dangerous_force_handler(e);
@@ -249,7 +255,7 @@ void* trajectory_reproduce_thread(void* arg)
 		EMPTY_MOVE = true;
 		// Oczekiwanie na start;
 		PAUSE_MOVE = true;
-		ecp_t->sr_ecp_msg->message("Move to position zero completed. Press START to start measures.");
+		common::ecp_t->sr_ecp_msg->message("Move to position zero completed. Press START to start measures.");
 		do {
 			// Oczekiwanie na pozwolenie ruchu.
 			while (PAUSE_MOVE) {
@@ -283,7 +289,7 @@ void* trajectory_reproduce_thread(void* arg)
 				// Oczekiwanie na calkowite zatrzymanie robota.
 				rsc->Move();
 			} // end: try wewnetrzne.
-			catch (ecp_generator::ECP_error e)
+			catch (common::ecp_generator::ECP_error e)
 			{
 				// Obsluga bledu.
 				trg->dangerous_force_handler(e);
@@ -302,7 +308,7 @@ void* trajectory_reproduce_thread(void* arg)
 		// Skonczyly sie pozycje na liscie.
 		// Dalszy ruch od pierszego kroku.
 		ZERO_POSITION_MOVE = false;
-		ecp_t->sr_ecp_msg->message("Trajectory finished. Press STOP.");
+		common::ecp_t->sr_ecp_msg->message("Trajectory finished. Press STOP.");
 	}
 	// koniec dzialania
 	pthread_exit(value_ptr);
@@ -330,7 +336,7 @@ void show_trajectory_reproduce_window(messip_channel_t * UI_fd)
 		if (messip_send(UI_fd, 0, 0, &ecp_ui_msg, sizeof(ECP_message), &answer, NULL, 0, MESSIP_NOTIMEOUT) < 0){
 #endif
 		perror("show_trajectory_reproduce_window: Send to UI failed");
-		throw ECP_main_error(SYSTEM_ERROR, 0);
+		throw common::ECP_main_error(SYSTEM_ERROR, 0);
 	}
 	// Ustawienie flagi konczenia pracy.
 	TERMINATE = false;
@@ -371,7 +377,7 @@ void ecp_task_tr_irp6ot::task_initialization(void)
 	// Dolaczenie globalnej nazwy procesu ECP - kanal do odbioru polecen z UI.
 	if ((UI_ECP_attach = name_attach(NULL, "ECP_M_TR", NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		// W razie niepowodzenia.
-		throw ECP_main_error(SYSTEM_ERROR, NAME_ATTACH_ERROR);
+		throw common::ECP_main_error(SYSTEM_ERROR, NAME_ATTACH_ERROR);
 	}
 
 	// Stworznie obiektu - generator uczacy.
@@ -420,9 +426,13 @@ void ecp_task_tr_irp6ot::main_task_algorithm(void)
 	show_trajectory_reproduce_window(UI_fd);
 }
 
+} // namespace irp6ot
+
+namespace common {
+
 ecp_task* return_created_ecp_task(configurator &_config)
 {
-	return new ecp_task_tr_irp6ot(_config);
+	return new irp6ot::ecp_task_tr_irp6ot(_config);
 }
 
 } // namespace common

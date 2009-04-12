@@ -20,7 +20,7 @@ namespace common {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej 
-class progpanel_generator : public ecp_generator 
+class progpanel_generator : public common::ecp_generator 
 {
 
 protected:

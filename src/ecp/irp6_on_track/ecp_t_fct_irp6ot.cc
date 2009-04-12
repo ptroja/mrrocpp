@@ -28,7 +28,11 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-extern ecp_task_fct_irp6ot *ecp_t;
+extern irp6ot::ecp_task_fct_irp6ot *ecp_t;
+} // namespace common 
+namespace irp6ot {
+
+
 
 // Kanal komunikacyjny z procesem MP.
 extern name_attach_t *ecp_attach;
@@ -143,7 +147,7 @@ void* UI_communication_thread(void* arg)
 			case FC_EXIT:
 				// Zakonczenie ruchu.
 				TERMINATE=true;
-				ecp_t->ecp_termination_notice();
+				common::ecp_t->ecp_termination_notice();
 				break;
 			default:
 				fprintf(stderr, "unknown UI command in %s:%d\n", __FILE__, __LINE__);
@@ -154,9 +158,9 @@ void* UI_communication_thread(void* arg)
 			// Pobranie polozenia.
 			fctg->return_position(to_ui_msg.RS.robot_position);
 			// Jesli uzywany jest czujnik sily.
-			if (ecp_t->sensor_m.count(SENSOR_FORCE_ON_TRACK)>0) {
+			if (common::ecp_t->sensor_m.count(SENSOR_FORCE_ON_TRACK)>0) {
 				// Przepisanie odczytow czujnika.
-				fctg->return_sensor_reading(*((ecp_mp::sensor::force *)(ecp_t->sensor_m[SENSOR_FORCE_ON_TRACK])), to_ui_msg.RS.sensor_reading);
+				fctg->return_sensor_reading(*((ecp_mp::sensor::force *)(common::ecp_t->sensor_m[SENSOR_FORCE_ON_TRACK])), to_ui_msg.RS.sensor_reading);
 			} else {
 				// Zerowe odczyty.
 				for (int i =0; i<6; i++)
@@ -190,8 +194,8 @@ void* forcesensor_move_thread(void* arg)
 			// Jezeli przyszedl rozkaz kalibracji czujnika.
 			if (CALIBRATE_SENSOR) {
 				// Kalibracja czujnika.
-				if (ecp_t->sensor_m.count(SENSOR_FORCE_ON_TRACK)>0)
-					ecp_t->sensor_m[SENSOR_FORCE_ON_TRACK]->configure_sensor();
+				if (common::ecp_t->sensor_m.count(SENSOR_FORCE_ON_TRACK)>0)
+					common::ecp_t->sensor_m[SENSOR_FORCE_ON_TRACK]->configure_sensor();
 				CALIBRATE_SENSOR = false;
 			}
 			// Jezeli przyszedl rozkaz zmiany sterowania.
@@ -209,9 +213,9 @@ void* forcesensor_move_thread(void* arg)
 			// Proba wykonania ruchu w danym kierunku.
 			fctg->Move();
 		}
-		catch (ecp_generator::ECP_error e) {
+		catch (common::ecp_generator::ECP_error e) {
 			// Komunikat o bledzie wysylamy do SR.
-			ecp_t->sr_ecp_msg->message (e.error_class, e.error_no);
+			common::ecp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 		}
 		// Pobranie polozenia robota.
 		fctg->get_current_position();
@@ -248,8 +252,8 @@ void show_force_control_window
 	int status;
 	if (messip_send(UI_fd, 0, 0, &ecp_msg, sizeof(ECP_message), &status, &ui_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0) {
 #endif
-		ecp_t->sr_ecp_msg->message(SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
-		throw ECP_main_error(SYSTEM_ERROR, 0);
+		common::ecp_t->sr_ecp_msg->message(SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
+		throw common::ECP_main_error(SYSTEM_ERROR, 0);
 	}
 	// Ustawienie flagi konczenia pracy.
 	TERMINATE = false;
@@ -284,7 +288,7 @@ void ecp_task_fct_irp6ot::task_initialization(void)
 	if ((UI_ECP_attach = name_attach(NULL, tmp_name, NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 //		printf("%s\n", tmp_name);
 		// W razie niepowodzenia.
-		throw ECP_main_error(SYSTEM_ERROR, NAME_ATTACH_ERROR);
+		throw common::ECP_main_error(SYSTEM_ERROR, NAME_ATTACH_ERROR);
 	}
 	// Stworzenie generatora trajektorii.
 	fctg = new force_controlled_trajectory_generator(*this);
@@ -318,9 +322,13 @@ void ecp_task_fct_irp6ot::main_task_algorithm(void)
 	show_force_control_window(UI_fd);
 }
 
+} // namespace irp6ot
+
+namespace common {
+
 ecp_task* return_created_ecp_task(configurator &_config)
 {
-	return new ecp_task_fct_irp6ot(_config);
+	return new irp6ot::ecp_task_fct_irp6ot(_config);
 }
 
 } // namespace common

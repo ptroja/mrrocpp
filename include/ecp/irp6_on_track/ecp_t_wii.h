@@ -7,19 +7,19 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 
 /**
  * Odtwarza orientacje kontrolera
  * @author jkurylo
  */
-class ecp_task_wii: public ecp_task
+class ecp_task_wii: public common::ecp_task
 {
 protected:
 	//Generator ruchu
 	ecp_wii_generator* eg;
-	ecp_smooth_generator* sg;
+	common::ecp_smooth_generator* sg;
 
 public:
 	/**
@@ -42,7 +42,7 @@ public:
 	void main_task_algorithm(void);
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

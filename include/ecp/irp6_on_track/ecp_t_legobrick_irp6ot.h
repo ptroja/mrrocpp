@@ -8,9 +8,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-class ecp_task_lego_brick_irp6ot: public ecp_task
+class ecp_task_lego_brick_irp6ot: public common::ecp_task
 {
 protected:
     //generatory
@@ -20,7 +20,7 @@ protected:
     ecp_tff_gripper_approach_generator* gag;
     ecp_tff_rubik_face_rotate_generator* rfrg;
     ecp_teach_in_generator* tig;*/
-    ecp_smooth_generator* sg;
+	common::ecp_smooth_generator* sg;
     //bias_edp_force_generator* befg;
     //weight_meassure_generator* wmg;
     //podzadania
@@ -33,7 +33,7 @@ public:
     void main_task_algorithm(void);
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

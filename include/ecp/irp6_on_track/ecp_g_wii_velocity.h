@@ -12,7 +12,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 #define C_0 0.1
 #define C_1 0.1
@@ -21,15 +21,15 @@ namespace common {
 #define C_4 0.1
 #define C_5 0.1
 
-class ecp_wii_velocity_generator : public ecp_tff_nose_run_generator
+class ecp_wii_velocity_generator : public common::ecp_tff_nose_run_generator
 {
 	public:
-    ecp_wii_velocity_generator (ecp_task& _ecp_task);
+    ecp_wii_velocity_generator (common::ecp_task& _ecp_task);
     virtual bool first_step();
     virtual bool next_step();
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

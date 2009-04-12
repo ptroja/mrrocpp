@@ -25,7 +25,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 const size_t Dim=6;
 
@@ -158,7 +158,7 @@ bool irp6ot_nurbs_generator::next_step (  )
 
 }; // end:  irp6ot_nurbs_generator::next_step ( )
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

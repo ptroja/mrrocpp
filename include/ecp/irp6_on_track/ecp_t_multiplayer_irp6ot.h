@@ -8,22 +8,22 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-class ecp_task_multiplayer_irp6ot : public ecp_task
+class ecp_task_multiplayer_irp6ot : public common::ecp_task
 {
 private:
 	//generatory
-    ecp_generator_t* gt;
-    ecp_smooth_generator* sg;
-    bias_edp_force_generator* befg;
-    weight_meassure_generator* wmg;
+	common::ecp_generator_t* gt;
+	common::ecp_smooth_generator* sg;
+	common::bias_edp_force_generator* befg;
+	common::weight_meassure_generator* wmg;
 
     //podzadania
-    ecp_sub_task_gripper_opening* go_st;
+	common::ecp_sub_task_gripper_opening* go_st;
 
    	ecp_vis_sac_lx_generator *takeg;
-	ecp_tff_rubik_grab_generator *rgg;
+   	common::ecp_tff_rubik_grab_generator *rgg;
 
 
 public:
@@ -34,7 +34,7 @@ public:
     void main_task_algorithm(void);
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

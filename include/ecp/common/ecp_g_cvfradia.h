@@ -23,7 +23,7 @@ namespace common {
  * \brief Generator responsible for communication with cvFraDIA (testing purposes).
  * \author tkornuta
  */
-class ecp_cvfradia_generator : public ecp_generator
+class ecp_cvfradia_generator : public common::ecp_generator
 {
 public:
 	/*!

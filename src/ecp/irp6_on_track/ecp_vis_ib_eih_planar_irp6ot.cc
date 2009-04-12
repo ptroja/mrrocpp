@@ -9,10 +9,10 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-ecp_vis_ib_eih_planar_irp6ot::ecp_vis_ib_eih_planar_irp6ot(ecp_task& _ecp_task) :
-	ecp_visual_servo(_ecp_task) {
+ecp_vis_ib_eih_planar_irp6ot::ecp_vis_ib_eih_planar_irp6ot(common::ecp_task& _ecp_task) :
+	common::ecp_visual_servo(_ecp_task) {
 
 	retrieve_parameters();
 
@@ -179,7 +179,7 @@ bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints() {
 void ecp_vis_ib_eih_planar_irp6ot::entertain_constraints() {
 
 }
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

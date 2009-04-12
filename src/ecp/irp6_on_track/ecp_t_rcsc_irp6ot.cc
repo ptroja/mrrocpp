@@ -15,7 +15,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 ecp_task_rcsc_irp6ot::ecp_task_rcsc_irp6ot(configurator &_config) :
         ecp_task(_config)
@@ -27,17 +27,17 @@ void ecp_task_rcsc_irp6ot::task_initialization(void)
     // the robot is choose dependendat on the section of configuration file sent as argv[4]
     ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
-    gt = new ecp_generator_t (*this);
-    nrg = new ecp_tff_nose_run_generator (*this, 8);
-    rgg = new ecp_tff_rubik_grab_generator (*this, 8);
-    gag = new ecp_tff_gripper_approach_generator (*this, 8);
-    rfrg = new ecp_tff_rubik_face_rotate_generator (*this, 8);
-    tig = new ecp_teach_in_generator (*this);
-    befg = new bias_edp_force_generator (*this);
-    sg = new ecp_smooth_generator (*this, true);
-    wmg = new weight_meassure_generator(*this, 1);
+    gt = new common::ecp_generator_t (*this);
+    nrg = new common::ecp_tff_nose_run_generator (*this, 8);
+    rgg = new common::ecp_tff_rubik_grab_generator (*this, 8);
+    gag = new common::ecp_tff_gripper_approach_generator (*this, 8);
+    rfrg = new common::ecp_tff_rubik_face_rotate_generator (*this, 8);
+    tig = new common::ecp_teach_in_generator (*this);
+    befg = new common::bias_edp_force_generator (*this);
+    sg = new common::ecp_smooth_generator (*this, true);
+    wmg = new common::weight_meassure_generator(*this, 1);
 
-    go_st = new ecp_sub_task_gripper_opening(*this);
+    go_st = new common::ecp_sub_task_gripper_opening(*this);
 
     sr_ecp_msg->message("ECP loaded");
 }
@@ -167,9 +167,13 @@ void ecp_task_rcsc_irp6ot::main_task_algorithm(void)
 	} //end for
 }
 
+} // namespace irp6ot
+
+namespace common {
+
 ecp_task* return_created_ecp_task(configurator &_config)
 {
-	return new ecp_task_rcsc_irp6ot(_config);
+	return new irp6ot::ecp_task_rcsc_irp6ot(_config);
 }
 
 } // namespace common

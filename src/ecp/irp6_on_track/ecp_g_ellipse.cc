@@ -6,9 +6,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-ecp_ellipse_generator::ecp_ellipse_generator (ecp_task& _ecp_task,double major_axis,double minor_axis,int max_steps) : ecp_generator (_ecp_task),major_axis(major_axis),minor_axis(minor_axis),max_steps(max_steps),d_rad(2*PI/max_steps) {}
+ecp_ellipse_generator::ecp_ellipse_generator (common::ecp_task& _ecp_task,double major_axis,double minor_axis,int max_steps) : common::ecp_generator (_ecp_task),major_axis(major_axis),minor_axis(minor_axis),max_steps(max_steps),d_rad(2*PI/max_steps) {}
 
 bool ecp_ellipse_generator::first_step()
 {
@@ -104,7 +104,7 @@ double* ecp_ellipse_generator::getFirstPosition()
 	
 	return firstPosition;
 }
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

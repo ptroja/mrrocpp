@@ -14,9 +14,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-class seven_eye_run_linear_generator : public ecp_generator {
+class seven_eye_run_linear_generator : public common::ecp_generator {
 protected:
 
 	
@@ -33,7 +33,7 @@ public:
   bool the_first;
   
   // konstruktor
-	seven_eye_run_linear_generator(ecp_task& _ecp_task, int step=0);  
+	seven_eye_run_linear_generator(common::ecp_task& _ecp_task, int step=0);  
 
   virtual bool first_step ();
       // generuje pierwszy krok ruchu -
@@ -46,7 +46,7 @@ public:
 }; // end: class irp6ot_calibration_generator
 // --------------------------------------------------------------------------
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

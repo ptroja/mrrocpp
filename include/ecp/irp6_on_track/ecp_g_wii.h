@@ -8,11 +8,11 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 #define PI 3.141592
 
-class ecp_wii_generator : public ecp_generator
+class ecp_wii_generator : public common::ecp_generator
 {
 	private:
 		//ilosc krokow
@@ -34,7 +34,7 @@ public:
 	 * @param minor_axis wartosc mniejszej polosi
 	 * @author jedrzej
 	 */
-    ecp_wii_generator (ecp_task& _ecp_task);
+    ecp_wii_generator (common::ecp_task& _ecp_task);
 
     /**
      * Generuje pierwszy krok
@@ -53,7 +53,7 @@ public:
     void execute_motion(void);
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

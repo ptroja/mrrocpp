@@ -8,9 +8,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-class ecp_task_vislx_irp6ot: public ecp_task  {
+class ecp_task_vislx_irp6ot: public common::ecp_task  {
 
 	public:
 		//static std::map <SENSOR_ENUM, generator*> generator_m;
@@ -25,7 +25,7 @@ class ecp_task_vislx_irp6ot: public ecp_task  {
 		void main_task_algorithm(void);
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

@@ -23,7 +23,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 /*!
  * \class ecp_vis_weight_driven_irp6ot
@@ -31,7 +31,7 @@ namespace common {
  * \author Maciej Staniak
  */
 
-class ecp_vis_weights_driven_irp6ot : public ecp_visual_servo_manager
+class ecp_vis_weights_driven_irp6ot : public common::ecp_visual_servo_manager
 {
 protected:
 //sensor *vsp_force_irp6ot, *vsp_force_irp6p, *vsp_vis_sac;
@@ -86,7 +86,7 @@ public:
 	double C_weight__EIH;
 	double f_weight__EIH;
 
-	ecp_vis_weights_driven_irp6ot(ecp_task& _ecp_task, int step=0);
+	ecp_vis_weights_driven_irp6ot(common::ecp_task& _ecp_task, int step=0);
 	virtual ~ecp_vis_weights_driven_irp6ot();
 
 	virtual void initalize_switching_parameters();
@@ -96,7 +96,7 @@ public:
 	//virtual bool next_step(void);
 
 };
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

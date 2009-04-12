@@ -22,7 +22,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 /*int get_object_position(double *coordinates)
 {
@@ -75,7 +75,7 @@ void ecp_task_progpanel_irp6ot::task_initialization(void)
     // Konfiguracja czujnika.
     sensor_m.begin()->second->configure_sensor();
     // Stworzenie generatora.
-    ppg = new progpanel_generator (*this, 16);
+    ppg = new common::progpanel_generator (*this, 16);
     // Przepisanie listy czujnikow.
     ppg->sensor_m = sensor_m;
     sr_ecp_msg->message("ECP loaded");
@@ -90,9 +90,13 @@ void ecp_task_progpanel_irp6ot::main_task_algorithm(void)
 	ppg->Move();
 }
 
+} // namespace irp6ot
+
+namespace common {
+
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_progpanel_irp6ot(_config);
+	return new irp6ot::ecp_task_progpanel_irp6ot(_config);
 }
 } // namespace common
 } // namespace ecp

@@ -15,9 +15,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-class ecp_vis_sac_lx_generator : public ecp_generator {
+class ecp_vis_sac_lx_generator : public common::ecp_generator {
 protected:
 sensor *vsp_force_irp6ot, *vsp_force_irp6p, *vsp_vis_sac;
 
@@ -173,7 +173,7 @@ int steps2switch;//=0;
 	int phaseD;
   	
   // konstruktor
-	ecp_vis_sac_lx_generator(ecp_task& _ecp_task, int step=0);  
+	ecp_vis_sac_lx_generator(common::ecp_task& _ecp_task, int step=0);  
 
   virtual bool first_step ();
       // generuje pierwszy krok ruchu -
@@ -186,7 +186,7 @@ int steps2switch;//=0;
 }; // end: class irp6ot_calibration_generator
 // --------------------------------------------------------------------------
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

@@ -5,11 +5,11 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-class ecp_task_playerjoy_irp6ot: public ecp_task  {
+class ecp_task_playerjoy_irp6ot: public common::ecp_task  {
 protected:
-	playerjoy_generator* pjg;
+	common::playerjoy_generator* pjg;
 
 public:
 	// KONSTRUKTORY
@@ -20,7 +20,7 @@ public:
 	void main_task_algorithm(void);
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

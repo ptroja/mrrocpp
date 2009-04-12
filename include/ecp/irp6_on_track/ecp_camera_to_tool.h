@@ -15,7 +15,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 class CameraToTool
 {
@@ -36,7 +36,7 @@ class CameraToTool
 	double computeTCE(double[12], double[12]);
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

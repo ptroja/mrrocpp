@@ -24,22 +24,22 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 // ####################################################################
 // #############    KLASA do odtwarzania listy pozycji i odczytywania linialow    ###############
 // ####################################################################
 
-class trajectory_reproduce_generator : public ecp_teach_in_generator {
+class trajectory_reproduce_generator : public common::ecp_teach_in_generator {
 	private:
 		// Lista pozycji dla danego makrokroku - pozycje posrednie.
-	    std::list<ecp_taught_in_pose> interpose_list;
-	    std::list<ecp_taught_in_pose>::iterator interpose_list_iterator;
+	    std::list<common::ecp_taught_in_pose> interpose_list;
+	    std::list<common::ecp_taught_in_pose>::iterator interpose_list_iterator;
 		// Metody zwiazane z lista pozycjami posrednim.
 		void flush_interpose_list (void);
 		void initiate_interpose_list (void);
 		void next_interpose_list_element (void);
-		void get_interpose_list_element (ecp_taught_in_pose& tip);
+		void get_interpose_list_element (common::ecp_taught_in_pose& tip);
 		bool is_interpose_list_element ( void );
 		void create_interpose_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[6]);
 		void insert_interpose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[6]);
@@ -56,7 +56,7 @@ class trajectory_reproduce_generator : public ecp_teach_in_generator {
 #else
 		messip_channel_t *UI_fd;
 #endif
-		trajectory_reproduce_generator(ecp_task& _ecp_task);
+		trajectory_reproduce_generator(common::ecp_task& _ecp_task);
 
 		~trajectory_reproduce_generator (void);
 		// Przygotowanie trajektorii do wykonania.
@@ -68,7 +68,7 @@ class trajectory_reproduce_generator : public ecp_teach_in_generator {
 		// Wczytanie trajektorii.
 		void load_trajectory(char* filename);
 		// Stworznie polecenia dla robota -> ruch do pozycji.
-		void create_command_for_pose(ecp_taught_in_pose& tip);
+		void create_command_for_pose(common::ecp_taught_in_pose& tip);
 		void return_sensor_reading(ecp_mp::sensor::force& the_sensor, double sensor_reading[6]);
 		void check_force_condition(ecp_mp::sensor::force& the_sensor);
 		void set_dangerous_force(void);
@@ -78,7 +78,7 @@ class trajectory_reproduce_generator : public ecp_teach_in_generator {
 		void dangerous_force_handler(ecp_generator::ECP_error e);
 	}; // end: class trajectory_reproduce_generator
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

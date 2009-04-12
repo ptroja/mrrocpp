@@ -5,14 +5,14 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-class ecp_task_pteach_irp6ot: public ecp_task  {
+class ecp_task_pteach_irp6ot: public common::ecp_task  {
 protected:
 	// Generator  odtwarzajacy nauczona trajektorie dla celow kalibracji
-	ecp_calibration_generator* cg;
+	common::ecp_calibration_generator* cg;
 	// Warunek, ktorego spelnienie umozliwia realizacje ruchu do nastepnej nauczonej pozycji
-	ecp_operator_reaction_condition* orc;
+	common::ecp_operator_reaction_condition* orc;
 	int pll;                 // liczba nauczonych pozycji
 	int i;                // licznik
 
@@ -25,7 +25,7 @@ public:
 	void main_task_algorithm(void);
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

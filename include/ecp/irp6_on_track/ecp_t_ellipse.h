@@ -7,7 +7,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 //limity na wartosc polosi w metrach
 #define MAX_MAJOR 0.2
@@ -17,12 +17,12 @@ namespace common {
  * Kresli w powietrzu elipse o zadanych polosiach
  * @author jkurylo
  */
-class ecp_task_ellipse: public ecp_task
+class ecp_task_ellipse: public common::ecp_task
 {
 protected:
 	//Generator ruchu
 	ecp_ellipse_generator* eg;
-	ecp_smooth_generator* sg;
+	common::ecp_smooth_generator* sg;
 	
 	/**
 	 * Pobiera od uzytkownika wartosc typu double
@@ -55,7 +55,7 @@ public:
 	void main_task_algorithm(void);
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

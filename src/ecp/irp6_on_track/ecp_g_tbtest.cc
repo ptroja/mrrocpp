@@ -10,9 +10,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-ecp_g_tbtest::ecp_g_tbtest (ecp_task& _ecp_task) : ecp_generator (_ecp_task){
+ecp_g_tbtest::ecp_g_tbtest (common::ecp_task& _ecp_task) : common::ecp_generator (_ecp_task){
 
 }
 
@@ -76,7 +76,7 @@ bool ecp_g_tbtest::next_step(){
     return true;
 }
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

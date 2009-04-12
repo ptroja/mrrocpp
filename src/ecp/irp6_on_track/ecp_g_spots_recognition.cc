@@ -10,12 +10,12 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 using namespace std;
 
 
-ecp_spots_generator::ecp_spots_generator (ecp_task& _ecp_task)
+ecp_spots_generator::ecp_spots_generator (common::ecp_task& _ecp_task)
         : ecp_generator (_ecp_task)
 {
 	//tool to plate frame initialization, all in rad and meters
@@ -131,7 +131,7 @@ void ecp_spots_generator::compute_TCE()
 void ecp_spots_generator::compute_TCG()
 {
 	//T_C^G = T_E^G * T_C^E
-	T_MatrixManip Teg_mm(teg);
+	common::T_MatrixManip Teg_mm(teg);
 	Teg_mm.multiply_r_matrix4x4(tce, tcg);
 
 	cout << tcg[0] << "  " << tcg[1] << "  " << tcg[2] << "  " << tcg[3] << endl;
@@ -269,7 +269,7 @@ fprintf(fd, "%f %f %f 1.0 %f\n", 0.01*calib_data.sensor_union.sp_r.x[i], 0.01*ca
 fclose(fd);
 }*/
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

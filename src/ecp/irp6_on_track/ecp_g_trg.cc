@@ -31,7 +31,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 /********************************* GLOBALS **********************************/
 
@@ -62,7 +62,7 @@ void trajectory_reproduce_generator::prepare_generator_for_motion(void){
     }; // end: prepare_generator_for_motion
 
 /*********************** CREATE COMMAND FOR POSE **************************/
-void trajectory_reproduce_generator::create_command_for_pose(ecp_taught_in_pose& tip) {
+void trajectory_reproduce_generator::create_command_for_pose(common::ecp_taught_in_pose& tip) {
 // printf("create_command_for_pose: czas %f | %f, %f, %f, %f, %f, %f\n", tip.motion_time,
 // tip.coordinates[0], tip.coordinates[1], tip.coordinates[2], tip.coordinates[3], tip.coordinates[4], tip.coordinates[5]);
     // sprawdzenie rodzaju wspolrzednych
@@ -120,7 +120,7 @@ bool trajectory_reproduce_generator::first_step (){
     // Pozycja poczatkowa.
     double current_position[6];
     // Pozycja koncowa ruchu.
-    ecp_taught_in_pose tip;
+    common::ecp_taught_in_pose tip;
     // Przesuniecie miedzy kolejnymi krokami posrednimi.
     double delta[6];
     // Czas trwania kroku posredniego.
@@ -211,7 +211,7 @@ bool trajectory_reproduce_generator::first_step (){
 bool trajectory_reproduce_generator::next_step (){
     // Wlasciewe wykonywanie trajektorii.
     // Pozycja - tymczasowa zmienna.
-    ecp_taught_in_pose interpose;
+	common::ecp_taught_in_pose interpose;
     // Jesli lista czujnikow nie jest pusta.
     if (sensor_m.size() > 0){
 	    // Czujnik sily.
@@ -293,12 +293,12 @@ try{
     // Otworzenie pliku do odczytu.
 	std::ifstream from_file(filename);
     if (!from_file){
-        throw ECP_main_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw common::ECP_main_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
         };
     // Wczytanie rodzaju wspolrzednych.
     if ( !(from_file >> coordinate_type) ) {
         from_file.close();
-        throw ECP_main_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw common::ECP_main_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
         };
     // Usuniecie spacji i tabulacji.
     unsigned int i = 0;
@@ -317,17 +317,17 @@ try{
         ps = MOTOR;
    else{
         from_file.close();
-        throw ECP_main_error(NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+        throw common::ECP_main_error(NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
         };
     // Wczytanie liczby elementow.
     if ( !(from_file >> number_of_poses) ){
         from_file.close();
-        throw ECP_main_error(NON_FATAL_ERROR, READ_FILE_ERROR);
+        throw common::ECP_main_error(NON_FATAL_ERROR, READ_FILE_ERROR);
         };
     // Musi byc wiecej niz 0 elementow.
     if ( number_of_poses <1){
         from_file.close();
-        throw ECP_main_error(NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
+        throw common::ECP_main_error(NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
         };
     // Usuniecie listy pozycji, o ile istnieje.
     flush_pose_list();
@@ -337,14 +337,14 @@ try{
         if (!(from_file >> motion_time)){
             // Zabezpieczenie przed danymi nienumerycznymi.
             from_file.close();
-            throw ECP_main_error(NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw common::ECP_main_error(NON_FATAL_ERROR, READ_FILE_ERROR);
             };
         // Kolejne wspolrzedne.
         for ( j = 0; j < 6; j++) {
             if ( !(from_file >> coordinates[j]) ){
                 // Zabezpieczenie przed danymi nienumerycznymi.
                 from_file.close();
-                throw ECP_main_error(NON_FATAL_ERROR, READ_FILE_ERROR);
+                throw common::ECP_main_error(NON_FATAL_ERROR, READ_FILE_ERROR);
                 };
             };
 //     printf("Wczytano pozycje %i: czas %f | %f, %f, %f, %f, %f, %f\n",i, motion_time,
@@ -362,7 +362,7 @@ try{
     // Zamkniecie pliku.
     from_file.close();
     sr_ecp_msg.message("Trajectory readed properly.");
-}catch (ECP_main_error e){
+}catch (common::ECP_main_error e){
     // Wylapanie i oblsuga bledow.
     sr_ecp_msg.message (e.error_class, e.error_no);
 }catch (...){
@@ -379,7 +379,7 @@ void trajectory_reproduce_generator::set_dangerous_force(void){
 
 
 /*****************************  KONSTRUKTOR *********************************/
-trajectory_reproduce_generator::trajectory_reproduce_generator (ecp_task& _ecp_task):
+trajectory_reproduce_generator::trajectory_reproduce_generator (common::ecp_task& _ecp_task):
 	 ecp_teach_in_generator (_ecp_task)
 {
     // Ustawienie elementow list na NULL.
@@ -415,7 +415,7 @@ void trajectory_reproduce_generator::next_interpose_list_element (void) {
     interpose_list_iterator++;
     }; // end: next_interpose_list_element
 
-void trajectory_reproduce_generator::get_interpose_list_element (ecp_taught_in_pose& tip){
+void trajectory_reproduce_generator::get_interpose_list_element (common::ecp_taught_in_pose& tip){
     // Przepisanie danych ruchu.
     tip.arm_type = interpose_list_iterator->arm_type;
     tip.motion_time = interpose_list_iterator->motion_time;
@@ -433,18 +433,18 @@ bool trajectory_reproduce_generator::is_interpose_list_element ( void ) {
 
 void trajectory_reproduce_generator::create_interpose_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[6]) {
     // Wstawienie glowy.
-    	interpose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates));
+    	interpose_list.push_back(common::ecp_taught_in_pose(ps, motion_time, coordinates));
 	interpose_list_iterator = interpose_list.begin();
     }; // end: create_interpose_list_head
 
 void trajectory_reproduce_generator::insert_interpose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[6]) {
     // Wlasciwe wstawienie elementu.
-    	interpose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates));
+    	interpose_list.push_back(common::ecp_taught_in_pose(ps, motion_time, coordinates));
 	interpose_list_iterator++;
     }; // end: insert_interpose_list_element
 
 /**********  KONIEC: METODY ZWIAZANE Z LISTA POZYCJI POSREDNICH ************/
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

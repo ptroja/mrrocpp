@@ -24,7 +24,7 @@ namespace common {
 #define WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE 10
 #define USLEEP_TIME 10000
 
-class weight_meassure_generator : public ecp_generator
+class weight_meassure_generator : public common::ecp_generator
 {
 private:
     double weight_difference;  // roznica wagi do wykrycia
@@ -65,7 +65,7 @@ public:
 
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos
-class y_nose_run_force_generator : public ecp_generator
+class y_nose_run_force_generator : public common::ecp_generator
 {
 
 
@@ -105,7 +105,7 @@ public:
 
 
 
-class y_egg_force_generator : public ecp_generator
+class y_egg_force_generator : public common::ecp_generator
 {
 
 protected:
@@ -279,7 +279,7 @@ public:
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji
 
-class ecp_tff_nose_run_generator : public ecp_generator
+class ecp_tff_nose_run_generator : public common::ecp_generator
 {
 protected:
 
@@ -330,7 +330,7 @@ public:
 // --------------------------------------------------------------------------
 // Generator do lapania kostki
 
-class bias_edp_force_generator : public ecp_generator
+class bias_edp_force_generator : public common::ecp_generator
 {
 
 public:
@@ -346,7 +346,7 @@ public:
 // --------------------------------------------------------------------------
 // Generator do lapania kostki
 
-class ecp_tff_rubik_grab_generator : public ecp_generator
+class ecp_tff_rubik_grab_generator : public common::ecp_generator
 {
 protected:
 
@@ -382,7 +382,7 @@ public:
 // --------------------------------------------------------------------------
 // Generator do obracania sciany kostki
 
-class ecp_tff_rubik_face_rotate_generator : public ecp_generator
+class ecp_tff_rubik_face_rotate_generator : public common::ecp_generator
 {
 protected:
 
@@ -416,7 +416,7 @@ public:
 // --------------------------------------------------------------------------
 // Generator do nasuniecia chwytaka na kostke
 
-class ecp_tff_gripper_approach_generator : public ecp_generator
+class ecp_tff_gripper_approach_generator : public common::ecp_generator
 {
 protected:
 
@@ -444,7 +444,7 @@ public:
 }
 ; // end : class ecp_tff_gripper_approach_generator
 
-class ecp_force_tool_change_generator : public ecp_generator
+class ecp_force_tool_change_generator : public common::ecp_generator
 {
 protected:
 	double tool_parameters[3]; // zobaczyc jeszcze co z tymi parametrami jak to bedzie w przypadku tego generatora

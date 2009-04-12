@@ -5,11 +5,11 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-class ecp_task_jajko_irp6ot: public ecp_task  {
+class ecp_task_jajko_irp6ot: public common::ecp_task  {
 protected:
-	y_egg_force_generator* yefg;
+	common::y_egg_force_generator* yefg;
 
 public:
 	// KONSTRUKTORY
@@ -21,7 +21,7 @@ public:
 
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

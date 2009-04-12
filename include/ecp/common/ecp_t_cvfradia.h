@@ -23,7 +23,7 @@ namespace common {
  * \brief Class responsible for communication with cvFraDIA (testing purposes).
  * \author tkornuta
  */
-class ecp_task_cvfradia: public ecp_task  {
+class ecp_task_cvfradia: public common::ecp_task  {
 protected:
 	/*!
       * Generator used for communication with cvFraDIA.

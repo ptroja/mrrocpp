@@ -19,12 +19,12 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 
 //enum SCENE_STATE {NOT_RECOGNIZED,RECOGNIZED}
 
-class ecp_g_pw_scena : public ecp_generator
+class ecp_g_pw_scena : public common::ecp_generator
 {
 	int step_no;
     double next_position[8];
@@ -36,13 +36,13 @@ class ecp_g_pw_scena : public ecp_generator
     double ydir;
 
 public:
-    ecp_g_pw_scena (ecp_task& _ecp_task);
+    ecp_g_pw_scena (common::ecp_task& _ecp_task);
     double* get_current_pose();
     virtual bool first_step();
     virtual bool next_step();
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

@@ -3,7 +3,7 @@
 #include <iostream>
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 #define robot1
 
@@ -34,11 +34,11 @@ void ecp_task_pw_scena_irp6ot::task_initialization(void) {
 		planar_vis->sensor_m = sensor_m;
 
 		//Smooth generator
-		smooth_gen = new ecp_smooth_generator(*this, true);
+		smooth_gen = new common::ecp_smooth_generator(*this, true);
 
-		bef_gen=new bias_edp_force_generator(*this);
+		bef_gen=new common::bias_edp_force_generator(*this);
 		//gripper approach constructor (task&, no_of_steps)
-		ga_gen=new ecp_tff_gripper_approach_generator (*this, 8);
+		ga_gen=new common::ecp_tff_gripper_approach_generator (*this, 8);
 		//Linear generator.
 		linear_gen=NULL;
 
@@ -86,19 +86,19 @@ void ecp_task_pw_scena_irp6ot::main_task_algorithm(void) {
 	sr_ecp_msg->message("linear_gen\n");
 	//Podniesienie chwytaka o 0.4 cm.
 	set_td_coordinates(0.0, 0.0, 0.002, 0.0, 0.0, 0.0, 0.0);
-	linear_gen=new ecp_linear_generator(*this,td,1);
+	linear_gen=new common::ecp_linear_generator(*this,td,1);
 	linear_gen->Move();
 	delete linear_gen;
 
 	//Zacisniecie szczek.
 	set_td_coordinates(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.024);
-	linear_gen=new ecp_linear_generator(*this,td,1);
+	linear_gen=new common::ecp_linear_generator(*this,td,1);
 	linear_gen->Move();
 	delete linear_gen;
 
 	//Podniesienie o 2cm.
 	set_td_coordinates(0,0,0.02,0,0,0,0);
-	linear_gen=new ecp_linear_generator(*this,td,1);
+	linear_gen=new common::ecp_linear_generator(*this,td,1);
 	linear_gen->Move();
 	delete linear_gen;
 
@@ -109,9 +109,7 @@ void ecp_task_pw_scena_irp6ot::main_task_algorithm(void) {
 
 }
 
-ecp_task* return_created_ecp_task(configurator &_config) {
-	return new ecp_task_pw_scena_irp6ot(_config);
-}
+
 
 void ecp_task_pw_scena_irp6ot::set_td_coordinates(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6){
 	// Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
@@ -132,6 +130,14 @@ void ecp_task_pw_scena_irp6ot::init_td(POSE_SPECIFICATION pspec, int internode_n
 	td.value_in_step_no=internode_no-2;			//motion time-2 ??
 }
 
+} // namespace irp6ot
+
+namespace common {
+
+ecp_task* return_created_ecp_task(configurator &_config) {
+	return new irp6ot::ecp_task_pw_scena_irp6ot(_config);
+	
+}
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

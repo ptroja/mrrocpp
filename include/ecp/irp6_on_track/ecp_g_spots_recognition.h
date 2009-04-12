@@ -18,9 +18,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-class ecp_spots_generator : public ecp_generator
+class ecp_spots_generator : public common::ecp_generator
 {
 	ECP_VSP_MSG comm_struct;
 	ecp_mp::sensor::cvfradia * sensor;
@@ -33,7 +33,7 @@ class ecp_spots_generator : public ecp_generator
 	short iter; //0 - zero, 1 - one, 2 - many ;)
 
   public:
-	ecp_spots_generator(ecp_task& _ecp_task);
+	ecp_spots_generator(common::ecp_task& _ecp_task);
 	bool first_step();
 	bool next_step();
 
@@ -44,7 +44,7 @@ class ecp_spots_generator : public ecp_generator
 	void save_position();
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

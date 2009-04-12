@@ -8,12 +8,12 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-class ecp_t_smooth2_test: public ecp_task {
+class ecp_t_smooth2_test: public common::ecp_task {
   
   protected:
-		ecp_smooth2_generator* smoothgen2;
+	  common::ecp_smooth2_generator* smoothgen2;
 		
 	public:
 		ecp_t_smooth2_test(configurator &_config);
@@ -23,7 +23,7 @@ class ecp_t_smooth2_test: public ecp_task {
 		void main_task_algorithm(void);
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

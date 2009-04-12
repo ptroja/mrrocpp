@@ -14,7 +14,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 // KONSTRUKTORY
 ecp_task_kbochnia_irp6ot::ecp_task_kbochnia_irp6ot(configurator &_config) : ecp_task(_config)
@@ -32,7 +32,7 @@ void ecp_task_kbochnia_irp6ot::task_initialization(void)
 
 void ecp_task_kbochnia_irp6ot::main_task_algorithm(void)
 {
-	irp6ot_natural_spline_generator	spline_gen(*this, 0.02,1);
+	common::irp6ot_natural_spline_generator	spline_gen(*this, 0.02,1);
 
 	spline_gen.load_file_from_ui();
 	sr_ecp_msg->message("Zaladowano plik");
@@ -44,9 +44,13 @@ void ecp_task_kbochnia_irp6ot::main_task_algorithm(void)
 	ecp_termination_notice ();
 }
 
+} // namespace irp6ot
+
+namespace common {
+
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_kbochnia_irp6ot(_config);
+	return new irp6ot::ecp_task_kbochnia_irp6ot(_config);
 }
 } // namespace common
 } // namespace ecp

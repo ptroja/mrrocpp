@@ -18,7 +18,7 @@ namespace common {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej 
-class y_simple_generator : public ecp_generator 
+class y_simple_generator : public common::ecp_generator 
 {
 
 protected:

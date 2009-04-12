@@ -5,9 +5,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-class ecp_task_ts_irp6ot: public ecp_task  {
+class ecp_task_ts_irp6ot: public common::ecp_task  {
 
 public:
 	// KONSTRUKTORY
@@ -20,7 +20,7 @@ public:
 	
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

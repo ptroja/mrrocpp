@@ -20,7 +20,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-class ecp_task_teach_irp6ot: public ecp_task  {
+class ecp_task_teach_irp6ot: public common::ecp_task  {
 protected:
 	ecp_teach_in_generator* tig;
 

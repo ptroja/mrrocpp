@@ -16,11 +16,11 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej dla zadan yoyka z wodzeniem za nos
-class y_simple_generator : public ecp_generator {
+class y_simple_generator : public common::ecp_generator {
 
 protected:
 	long run_counter;
@@ -50,7 +50,7 @@ public:
 }; // end:
 // --------------------------------------------------------------------------
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

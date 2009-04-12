@@ -17,7 +17,7 @@ namespace common {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej 
-class playerjoy_generator : public ecp_generator 
+class playerjoy_generator : public common::ecp_generator 
 {
 
 protected:

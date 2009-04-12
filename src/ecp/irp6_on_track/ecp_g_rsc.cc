@@ -29,7 +29,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 /*************************** CONDITION VALUE ********************************/
 bool robot_stopped_condition::first_step (){
@@ -189,7 +189,7 @@ void robot_stopped_condition::save_rse_list(char* filename)
 		// Otworzenie pliku.
 		std::ofstream to_file(filename);
 		if (!to_file)
-		throw ECP_main_error(FATAL_ERROR, SAVE_FILE_ERROR);
+		throw common::ECP_main_error(FATAL_ERROR, SAVE_FILE_ERROR);
 		// Przejscie na poczatek listy.
 		initiate_rse_list();
 		// Zapisywanie kolejnych elementow.
@@ -222,14 +222,14 @@ void robot_stopped_condition::save_rse_list(char* filename)
 		// Komentarz - zapisanie pliku.
 		sr_ecp_msg.message ("Measures saved properly to file");
 	} // end: TRY
-	catch(ECP_main_error e) {
+	catch(common::ECP_main_error e) {
 		// Wylapanie i oblsuga bledow.
 		sr_ecp_msg.message (e.error_class, e.error_no);
 	}
 }
 
 /*****************************  KONSTRUKTOR *********************************/
-robot_stopped_condition::robot_stopped_condition(ecp_task& _ecp_task) :
+robot_stopped_condition::robot_stopped_condition(common::ecp_task& _ecp_task) :
 	ecp_generator(_ecp_task)
 {
 	// Ustawienie elementow list na NULL.
@@ -329,7 +329,7 @@ int robot_stopped_condition::rse_list_length(void) const
 }
 
 /****************** KONIEC: METODY ZWIAZANE Z LISTA RSE ********************/
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

@@ -24,7 +24,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 
 // KONSTRUKTORY
@@ -75,7 +75,7 @@ void ecp_task_jajko_irp6ot::main_task_algorithm(void)
 		}
 
 		if (yefg!=NULL) delete yefg;
-		yefg = new y_egg_force_generator (*this, 8, tryb);
+		yefg = new common::y_egg_force_generator (*this, 8, tryb);
 		yefg->sensor_m = sensor_m;
 
 		sr_ecp_msg->message("NOWA SERIA");
@@ -83,9 +83,13 @@ void ecp_task_jajko_irp6ot::main_task_algorithm(void)
 	}
 }
 
+} // namespace irp6ot
+
+namespace common {
+
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_jajko_irp6ot(_config);
+	return new irp6ot::ecp_task_jajko_irp6ot(_config);
 }
 
 } // namespace common

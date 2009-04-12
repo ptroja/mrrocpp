@@ -21,19 +21,19 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-class ecp_task_pw_scena_irp6ot: public ecp_task  {
+class ecp_task_pw_scena_irp6ot: public common::ecp_task  {
 
 	ecp_g_pw_scena* scena_gen;
 	//Smoth movement generator
-	ecp_smooth_generator* smooth_gen;
+	common::ecp_smooth_generator* smooth_gen;
 	//Calibration of force
-	bias_edp_force_generator* bef_gen;
+	common::bias_edp_force_generator* bef_gen;
 	//Gripper approach with force control
-	ecp_tff_gripper_approach_generator* ga_gen;
+	common::ecp_tff_gripper_approach_generator* ga_gen;
 	//Linear generator
-	ecp_linear_generator* linear_gen;
+	common::ecp_linear_generator* linear_gen;
 	//Planar servoing.
 	ecp_vis_ib_eih_planar_irp6ot* planar_vis;
 	//Trajectory description.
@@ -51,7 +51,7 @@ public:
 	void init_td(POSE_SPECIFICATION ps, int internode_no);
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

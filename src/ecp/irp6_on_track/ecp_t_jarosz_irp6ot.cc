@@ -16,7 +16,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 
 // KONSTRUKTORY
@@ -112,7 +112,7 @@ void ecp_task_jarosz_irp6ot::main_task_algorithm(void)
 
 	double vp[]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 	double vk[]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-	ecp_cubic_generator cubic(*this, tdes, vp, vk);
+	common::ecp_cubic_generator cubic(*this, tdes, vp, vk);
 	sr_ecp_msg->message("Wykonywany jest ruch o zadany przyrost polozenia/orientacji");
 	cubic.Move();
 	sr_ecp_msg->message("Ruch robota zakonczyl sie");
@@ -255,9 +255,13 @@ void ecp_task_jarosz_irp6ot::main_task_algorithm(void)
 	ecp_termination_notice ();  // ?????????????
 }
 
+} // namespace irp6ot
+
+namespace common {
+
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_jarosz_irp6ot(_config);
+	return new irp6ot::ecp_task_jarosz_irp6ot(_config);
 }
 
 } // namespace common

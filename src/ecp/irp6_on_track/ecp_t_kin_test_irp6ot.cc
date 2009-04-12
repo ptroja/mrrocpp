@@ -16,7 +16,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 #define BILLION  1000000000L;
 
@@ -93,9 +93,13 @@ void ecp_task_kin_test_irp6ot::main_task_algorithm(void)
     ecp_termination_notice();
 }
 
+} // namespace irp6ot
+
+namespace common {
+
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_kin_test_irp6ot(_config);
+	return new irp6ot::ecp_task_kin_test_irp6ot(_config);
 }
 
 } // namespace common

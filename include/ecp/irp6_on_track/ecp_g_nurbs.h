@@ -22,11 +22,11 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 //#############################################################################
 
-class irp6ot_nurbs_generator : public ecp_generator 
+class irp6ot_nurbs_generator : public common::ecp_generator 
 {
 protected:
 	int mp_communication_mode_; //by Y - 0 bez TASK TERMINATED, 1 - z TASK TERMINATED
@@ -44,7 +44,7 @@ public:
 
 }; //end: class all_irp6ot_linear_generator
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

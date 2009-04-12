@@ -32,7 +32,7 @@ namespace common {
 // KLASA BAZOWA dla generatorow o zadany przyrost polozenia/orientacji  
 // ####################################################################################################
 
-class ecp_delta_generator : public ecp_generator 
+class ecp_delta_generator : public common::ecp_generator 
 {
 protected:
 

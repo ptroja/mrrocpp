@@ -6,11 +6,11 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 sem_t sem;
 
-ecp_wii_velocity_generator::ecp_wii_velocity_generator (ecp_task& _ecp_task) : ecp_tff_nose_run_generator(_ecp_task,10)
+ecp_wii_velocity_generator::ecp_wii_velocity_generator (common::ecp_task& _ecp_task) : common::ecp_tff_nose_run_generator(_ecp_task,10)
 {
 	configure_behaviour(UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION);
 }
@@ -112,7 +112,7 @@ bool ecp_wii_velocity_generator::next_step()
 ; // end: bool ecp_wii_velocity_generator::next_step ()
 
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

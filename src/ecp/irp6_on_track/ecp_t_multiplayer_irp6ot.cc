@@ -14,7 +14,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 ecp_task_multiplayer_irp6ot::ecp_task_multiplayer_irp6ot(configurator &_config) :
 	ecp_task(_config)
@@ -40,16 +40,16 @@ void ecp_task_multiplayer_irp6ot::task_initialization(void)
 	}
 
 	//powolanie generatorow
-	befg = new bias_edp_force_generator (*this);
+	befg = new common::bias_edp_force_generator (*this);
 
-	sg = new ecp_smooth_generator (*this, true);
-	wmg = new weight_meassure_generator(*this, -0.3, 2);
-	gt = new ecp_generator_t (*this);
+	sg = new common::ecp_smooth_generator (*this, true);
+	wmg = new common::weight_meassure_generator(*this, -0.3, 2);
+	gt = new common::ecp_generator_t (*this);
 
-	go_st = new ecp_sub_task_gripper_opening(*this);
+	go_st = new common::ecp_sub_task_gripper_opening(*this);
 
 	takeg = new ecp_vis_sac_lx_generator (*this, 4);
-	rgg = new ecp_tff_rubik_grab_generator (*this, 8);
+	rgg = new common::ecp_tff_rubik_grab_generator (*this, 8);
 
 	//przydzielenie czujnikow generatorom
 	takeg->sensor_m = sensor_m;
@@ -125,9 +125,13 @@ void ecp_task_multiplayer_irp6ot::main_task_algorithm(void)
 	}
 }
 
+} // namespace irp6ot
+
+namespace common {
+
 ecp_task* return_created_ecp_task(configurator &_config)
 {
-	return new ecp_task_multiplayer_irp6ot(_config);
+	return new irp6ot::ecp_task_multiplayer_irp6ot(_config);
 }
 } // namespace common
 } // namespace ecp

@@ -13,7 +13,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 
 // KONSTRUKTORY
@@ -28,9 +28,9 @@ void ecp_task_pteach_irp6ot::task_initialization(void)
 {
     ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
-    cg = new ecp_calibration_generator (*this, 10);
+    cg = new common::ecp_calibration_generator (*this, 10);
     // Warunek, ktorego spelnienie umozliwia realizacje ruchu do nastepnej nauczonej pozycji
-    orc = new ecp_operator_reaction_condition (*this);
+    orc = new common::ecp_operator_reaction_condition (*this);
 
     sr_ecp_msg->message("ECP loaded");
 }
@@ -83,9 +83,13 @@ void ecp_task_pteach_irp6ot::main_task_algorithm(void)
     ecp_termination_notice ();
 }
 
+} // namespace irp6ot
+
+namespace common {
+
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_pteach_irp6ot(_config);
+	return new irp6ot::ecp_task_pteach_irp6ot(_config);
 }
 
 } // namespace common

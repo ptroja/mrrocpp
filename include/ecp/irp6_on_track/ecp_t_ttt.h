@@ -6,17 +6,17 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 /**
  * Kresli w powietrzu siatke jak do gry w kolko-i-krzyzyk
  * @author jkurylo
  */
-class ecp_task_ttt: public ecp_task
+class ecp_task_ttt: public common::ecp_task
 {
 protected:
 	//Generator ruchu
-	ecp_smooth_generator* sg;
+	common::ecp_smooth_generator* sg;
 
 public:
 	/**
@@ -40,7 +40,7 @@ public:
 };
 
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

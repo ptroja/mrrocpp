@@ -7,7 +7,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-class ecp_task_tw: public ecp_task  {
+class ecp_task_tw: public common::ecp_task  {
 protected:
 	ecp_tff_nose_run_generator* nrg;
 	y_edge_follow_force_generator* yefg;

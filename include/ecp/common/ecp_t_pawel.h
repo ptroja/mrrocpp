@@ -15,7 +15,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-class ecp_task_pawel: public ecp_task  {
+class ecp_task_pawel: public common::ecp_task  {
 	protected:
 		//	ecp_tff_nose_run_generator* nrg;
 		//	ecp_teach_in_generator* tig;

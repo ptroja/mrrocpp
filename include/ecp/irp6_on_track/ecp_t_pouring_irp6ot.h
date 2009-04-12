@@ -7,15 +7,15 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-class ecp_task_pouring_irp6ot: public ecp_task
+class ecp_task_pouring_irp6ot: public common::ecp_task
 {
 protected:
-    ecp_smooth_generator* sg;
-    ecp_tool_change_generator* tcg;
+	common:: ecp_smooth_generator* sg;
+	common::ecp_tool_change_generator* tcg;
     //podzadania
-    ecp_sub_task_gripper_opening* go_st;
+	common::ecp_sub_task_gripper_opening* go_st;
 
 public:
     // KONSTRUKTORY
@@ -28,7 +28,7 @@ public:
 
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

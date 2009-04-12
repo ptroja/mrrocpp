@@ -24,7 +24,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 // ####################################################################
 // ################ KLASA Robot Position Digital Scales Reading  Element ##################
@@ -48,7 +48,7 @@ class robot_position_digital_scales_reading_element{
 // #################   KLASA do sprawdzania, czy robot stoi w miejscu    ##################
 // ####################################################################
 
-class robot_stopped_condition : public ecp_generator {
+class robot_stopped_condition : public common::ecp_generator {
 	private:
 		// Lista elementow RSE.
 	    std::list<robot_position_digital_scales_reading_element> rse_list;
@@ -72,7 +72,7 @@ class robot_stopped_condition : public ecp_generator {
 #else
 		messip_channel_t *UI_fd;
 #endif
-		robot_stopped_condition(ecp_task& _ecp_task);
+		robot_stopped_condition(common::ecp_task& _ecp_task);
 		~robot_stopped_condition(void);
 		// Przygotowanie warunku do ruchu.
 		void prepare_condition_for_motion(void);
@@ -92,7 +92,7 @@ class robot_stopped_condition : public ecp_generator {
 		void get_current_position(double current_position[6]);
 	}; // end: class robot_stopped_condition
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

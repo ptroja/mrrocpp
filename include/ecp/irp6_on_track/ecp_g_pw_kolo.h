@@ -14,13 +14,13 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 #define PI 3.14159265
 #define DEG 0.0174444 //Jeden stopien wyrazony w radianach
 
 
-class ecp_g_pw_kolo : public ecp_generator
+class ecp_g_pw_kolo : public common::ecp_generator
 {
     trajectory_description td;
     double next_position[8];  
@@ -33,12 +33,12 @@ class ecp_g_pw_kolo : public ecp_generator
     double y;	
     double z;
 public:
-    ecp_g_pw_kolo (ecp_task& _ecp_task);
+    ecp_g_pw_kolo (common::ecp_task& _ecp_task);
     virtual bool first_step();
     virtual bool next_step();
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

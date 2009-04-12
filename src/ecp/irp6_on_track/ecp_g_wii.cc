@@ -6,9 +6,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-ecp_wii_generator::ecp_wii_generator (ecp_task& _ecp_task) : ecp_generator (_ecp_task) {}
+ecp_wii_generator::ecp_wii_generator (common::ecp_task& _ecp_task) : ecp_generator (_ecp_task) {}
 
 bool ecp_wii_generator::first_step()
 {
@@ -85,7 +85,7 @@ void ecp_wii_generator::execute_motion(void)
 	if (the_robot->reply_package.reply_type == ERROR) {
 
 		the_robot->query();
-		throw ecp_robot::ECP_error (NON_FATAL_ERROR, EDP_ERROR);
+		throw common::ecp_robot::ECP_error (NON_FATAL_ERROR, EDP_ERROR);
 
 	}
 	the_robot->query();
@@ -110,13 +110,13 @@ void ecp_wii_generator::execute_motion(void)
 			case BEYOND_LOWER_THETA7_LIMIT:
 			break;
 			default:
-				throw ecp_robot::ECP_error (NON_FATAL_ERROR, EDP_ERROR);
+				throw common::ecp_robot::ECP_error (NON_FATAL_ERROR, EDP_ERROR);
 			break;
 
 		} /* end: switch */
 	}
 }
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

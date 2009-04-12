@@ -40,7 +40,7 @@ void ecp_task_cvfradia::task_initialization(void)
     // Create an adequate robot. - depending on the ini section name.
     if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     {
-        ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+        ecp_m_robot = new irp6ot::ecp_irp6_on_track_robot (*this);
         sr_ecp_msg->message("IRp6ot loaded");
     }
     else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)

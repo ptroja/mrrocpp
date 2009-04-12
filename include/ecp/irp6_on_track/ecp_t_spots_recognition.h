@@ -31,17 +31,17 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-class ecp_t_spots_recognition: public ecp_task
+class ecp_t_spots_recognition: public common::ecp_task
 {
 	char * trajektoria_poczatkowa;
 
 	protected:
 
 		ecp_spots_generator* generator;
-		ecp_smooth_generator* smooth;
-		y_nose_run_force_generator* nose;
+		common::ecp_smooth_generator* smooth;
+		common::y_nose_run_force_generator* nose;
 
 
 	public:
@@ -52,7 +52,7 @@ class ecp_t_spots_recognition: public ecp_task
 		void main_task_algorithm(void);
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

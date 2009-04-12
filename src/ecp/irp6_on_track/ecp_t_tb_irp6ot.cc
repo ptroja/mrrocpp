@@ -10,7 +10,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 //Constructors
 ecp_t_tb_irp6ot::ecp_t_tb_irp6ot(configurator &_config): ecp_task(_config){
@@ -30,11 +30,11 @@ void ecp_t_tb_irp6ot::task_initialization(void){
 	sensor_m[SENSOR_CVFRADIA]->configure_sensor();
 
 	ecp_m_robot=new ecp_irp6_on_track_robot(*this);				//initialization of robot
-	sgen=new ecp_smooth_generator(*this, true);
-	befgen=new bias_edp_force_generator(*this);
-	gagen=new ecp_tff_gripper_approach_generator (*this, 8);	//gripper approach constructor (task&, no_of_steps)
-	go_st = new ecp_sub_task_gripper_opening(*this);
-	sleepgen=new ecp_sleep_generator(*this);
+	sgen=new common::ecp_smooth_generator(*this, true);
+	befgen=new common::bias_edp_force_generator(*this);
+	gagen=new common::ecp_tff_gripper_approach_generator (*this, 8);	//gripper approach constructor (task&, no_of_steps)
+	go_st = new common::ecp_sub_task_gripper_opening(*this);
+	sleepgen=new common::ecp_sleep_generator(*this);
 	sr_ecp_msg->message("ECP loaded tb");
 };
 
@@ -232,9 +232,6 @@ void ecp_t_tb_irp6ot::main_task_algorithm(void){
 	ecp_termination_notice();
 };
 
-ecp_task* return_created_ecp_task(configurator &_config){
-	return new ecp_t_tb_irp6ot(_config);
-}
 
 void ecp_t_tb_irp6ot::set_tdes(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6){
 	// Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
@@ -255,6 +252,14 @@ void ecp_t_tb_irp6ot::init_tdes(POSE_SPECIFICATION pspec, int internode_no){
 	tdes.value_in_step_no=internode_no-2;			//motion time-2 ??
 }
 
+} // namespace irp6ot
+
+namespace common {
+
+ecp_task* return_created_ecp_task(configurator &_config){
+	return new irp6ot::ecp_t_tb_irp6ot(_config);
+	
+}
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

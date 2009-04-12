@@ -31,7 +31,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 // Mutex do wykonywania odczytow z czujnika.
 //pthread_mutex_t FORCE_SENSOR_READINGS_MUTEX = PTHREAD_MUTEX_INITIALIZER;
@@ -137,7 +137,7 @@ void force_controlled_trajectory_generator::change_control(POSE_SPECIFICATION ps
 
 
 /*****************************  KONSTRUKTOR *********************************/
-force_controlled_trajectory_generator::force_controlled_trajectory_generator (ecp_task& _ecp_task)
+force_controlled_trajectory_generator::force_controlled_trajectory_generator (common::ecp_task& _ecp_task)
 	:ecp_teach_in_generator(_ecp_task)
 {
 	pthread_mutex_init(&ROBOT_POSITION_MUTEX, NULL);
@@ -449,7 +449,7 @@ bool force_controlled_trajectory_generator::decrement_delta(double &tmp_delta, d
 /**************************** SAVE TRAJECTORY ********************************/
 void force_controlled_trajectory_generator::save_trajectory(char* filename) {
     // Pozycja robota.
-    ecp_taught_in_pose tip;
+	common::ecp_taught_in_pose tip;
     int j;
     if (pose_list_length() == 0){
         sr_ecp_msg.message("Empty trajectory");
@@ -559,7 +559,7 @@ void force_controlled_trajectory_generator::insert_position_list_element (double
     };
 
 /**************** KONIEC: METODY ZWIAZANE Z LISTA POZYCJI ******************/
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

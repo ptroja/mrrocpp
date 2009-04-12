@@ -5,12 +5,12 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 
-class ecp_task_progpanel_irp6ot: public ecp_task  {
+class ecp_task_progpanel_irp6ot: public common::ecp_task  {
 protected:
-	progpanel_generator* ppg;
+	common::progpanel_generator* ppg;
 //	ecp_teach_in_generator* tig;
 
 public:
@@ -23,7 +23,7 @@ public:
 
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

@@ -14,7 +14,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-class ecp_sleep_generator : public ecp_generator
+class ecp_sleep_generator : public common::ecp_generator
 {
 	private:
 		double waittime;		//seconds to wait

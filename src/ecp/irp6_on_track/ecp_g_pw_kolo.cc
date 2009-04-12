@@ -6,9 +6,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-ecp_g_pw_kolo::ecp_g_pw_kolo (ecp_task& _ecp_task)
+ecp_g_pw_kolo::ecp_g_pw_kolo (common::ecp_task& _ecp_task)
         : ecp_generator (_ecp_task)
 {
 }
@@ -104,7 +104,7 @@ bool ecp_g_pw_kolo::next_step()
     printf("po robocie \n");
     return true;
 }
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

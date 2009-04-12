@@ -5,16 +5,16 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-class ecp_task_fr_irp6ot: public ecp_task  {
+class ecp_task_fr_irp6ot: public common::ecp_task  {
 protected:
 	trajectory_description tdes_joint;
-	ecp_linear_parabolic_generator *adg1;
+	common::ecp_linear_parabolic_generator *adg1;
 	// parabolic_generator adg1(JOINT, 20., joint_pp);   // generator dla trajektorii dojscia we wsp. wew
 	// generator dla trajektorii dojscia we wsp. zew.
-	ecp_linear_parabolic_generator *adg2;
-	ecp_elipsoid_generator *el;
+	common::ecp_linear_parabolic_generator *adg2;
+	common::ecp_elipsoid_generator *el;
 	double ta[MAX_SERVOS_NR];
 	double tb[MAX_SERVOS_NR];
 
@@ -27,7 +27,7 @@ public:
 	void main_task_algorithm(void);
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

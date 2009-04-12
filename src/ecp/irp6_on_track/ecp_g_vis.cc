@@ -22,7 +22,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 #define PRINT 1
 
@@ -97,7 +97,7 @@ int steps2switch=0;
 
 // double frame1[4][4];
 
-	seven_eye_run_linear_generator::seven_eye_run_linear_generator(ecp_task& _ecp_task, int step): 
+	seven_eye_run_linear_generator::seven_eye_run_linear_generator(common::ecp_task& _ecp_task, int step): 
 		ecp_generator (_ecp_task) { 		step_no = step;          	};  
 
 
@@ -768,7 +768,7 @@ clock_gettime( CLOCK_REALTIME , &e_time);
    return true;
 }; // end: bool irp6ot_linear_generator::next_step ( )
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

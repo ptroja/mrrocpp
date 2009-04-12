@@ -18,7 +18,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 //own libraries
 //Constructors
@@ -59,9 +59,9 @@ if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
  	generator->sensor_m = sensor_m;
 
 	// Create smooth generator.
-	smooth = new ecp_smooth_generator(*this, true, false);
+	smooth = new common::ecp_smooth_generator(*this, true, false);
 
-	nose = new y_nose_run_force_generator(*this);
+	nose = new common::y_nose_run_force_generator(*this);
 
 }
 
@@ -93,9 +93,13 @@ void ecp_t_spots_recognition::main_task_algorithm(void)
     }
 }
 
+} // namespace irp6ot
+
+namespace common {
+
 ecp_task* return_created_ecp_task(configurator &_config)
 {
-	return new ecp_t_spots_recognition(_config);
+	return new irp6ot::ecp_t_spots_recognition(_config);
 }
 } // namespace common
 } // namespace ecp

@@ -9,7 +9,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 using namespace std;
 
@@ -55,10 +55,10 @@ double CameraToTool::computeTCE(double vec1[3], double vec2[3], double vec3[3], 
 	double norm2_TPC = computeTPC(vec1, vec2, vec3, vec4, ret);
 	double tcp[12];
 
-	T_MatrixManip Tpc_mm(ret);
+	common::T_MatrixManip Tpc_mm(ret);
 	Tpc_mm.inv_matrix4x4(tcp);
 
-	T_MatrixManip Tcp_mm(tcp);
+	common::T_MatrixManip Tcp_mm(tcp);
 	//TCE = TPE*TCP
 	Tcp_mm.multiply_l_matrix4x4(tpe, ret);
 
@@ -126,7 +126,7 @@ void CameraToTool::vec_prod(double r1[3], double r2[3], double r3[3])
 	r3[2] = r1[0]*r2[1] - r2[0]*r1[1];
 }
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

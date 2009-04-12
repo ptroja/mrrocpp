@@ -8,7 +8,7 @@ namespace ecp {
 namespace common {
 
 // Generator przezroczysty
-class ecp_generator_t : public ecp_generator {
+class ecp_generator_t : public common::ecp_generator {
 
 public:
 	ecp_generator_t(ecp_task& _ecp_task);

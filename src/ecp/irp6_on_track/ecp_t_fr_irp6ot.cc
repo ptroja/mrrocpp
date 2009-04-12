@@ -20,7 +20,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 
 // KONSTRUKTORY
@@ -70,11 +70,11 @@ void ecp_task_fr_irp6ot::task_initialization(void)
     }
 
     // parabolic_generator adg2(XYZ_EULER_ZYZ, 10., ext_pp);  // generator dla trajektorii dojscia we wsp. zew.
-    adg1 = new ecp_linear_parabolic_generator (*this, tdes_joint, ta, tb);
+    adg1 = new common::ecp_linear_parabolic_generator (*this, tdes_joint, ta, tb);
     // parabolic_generator adg1(JOINT, 20., joint_pp);   // generator dla trajektorii dojscia we wsp. wew
     // generator dla trajektorii dojscia we wsp. zew.
-    adg2 = new ecp_linear_parabolic_generator (*this, tdes_ext, ta, tb);
-    el = new ecp_elipsoid_generator (*this);
+    adg2 = new common::ecp_linear_parabolic_generator (*this, tdes_ext, ta, tb);
+    el = new common::ecp_elipsoid_generator (*this);
 
 
     sr_ecp_msg->message("ECP loaded");
@@ -101,9 +101,13 @@ void ecp_task_fr_irp6ot::main_task_algorithm(void)
 	ecp_termination_notice();
 }
 
+} // namespace irp6ot
+
+namespace common {
+
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_fr_irp6ot(_config);
+	return new irp6ot::ecp_task_fr_irp6ot(_config);
 }
 
 } // namespace common

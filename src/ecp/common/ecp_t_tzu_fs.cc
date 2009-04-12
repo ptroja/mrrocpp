@@ -46,7 +46,7 @@ void ecp_task_tzu_fs::task_initialization(void)
 {
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	{
-		ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+		ecp_m_robot = new irp6ot::ecp_irp6_on_track_robot (*this);
 		robot = ON_TRACK;
 		str.open("../on_track_results.txt");
 	}

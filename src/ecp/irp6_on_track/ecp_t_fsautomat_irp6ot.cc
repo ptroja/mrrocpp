@@ -29,7 +29,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 // KONSTRUKTORY
 ecp_task_fsautomat_irp6ot::ecp_task_fsautomat_irp6ot(configurator &_config) : ecp_task(_config)
@@ -109,7 +109,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""));
-									gt = new ecp_generator_t(*this);
+									gt = new common::ecp_generator_t(*this);
 									xmlFree(argument);
 								}
 								if(child_node->children->type == XML_ELEMENT_NODE &&
@@ -117,7 +117,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										nrg = new ecp_tff_nose_run_generator(*this, atoi((char *)argument));
+										nrg = new common::ecp_tff_nose_run_generator(*this, atoi((char *)argument));
 									xmlFree(argument);
 								}
 								if(child_node->children->type == XML_ELEMENT_NODE &&
@@ -125,7 +125,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										rgg = new ecp_tff_rubik_grab_generator(*this, atoi((char *)argument));
+										rgg = new common::ecp_tff_rubik_grab_generator(*this, atoi((char *)argument));
 									xmlFree(argument);
 								}
 								if(child_node->children->type == XML_ELEMENT_NODE &&
@@ -133,7 +133,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										gag = new ecp_tff_gripper_approach_generator(*this, atoi((char *)argument));
+										gag = new common::ecp_tff_gripper_approach_generator(*this, atoi((char *)argument));
 									xmlFree(argument);
 								}
 								if(child_node->children->type == XML_ELEMENT_NODE &&
@@ -141,7 +141,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										rfrg = new ecp_tff_rubik_face_rotate_generator(*this, atoi((char *)argument));
+										rfrg = new common::ecp_tff_rubik_face_rotate_generator(*this, atoi((char *)argument));
 									xmlFree(argument);
 								}
 								if(child_node->children->type == XML_ELEMENT_NODE &&
@@ -149,7 +149,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""));
-									tig = new ecp_teach_in_generator(*this);
+									tig = new common::ecp_teach_in_generator(*this);
 									xmlFree(argument);
 								}
 								if(child_node->children->type == XML_ELEMENT_NODE &&
@@ -157,7 +157,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""));
-									befg = new bias_edp_force_generator(*this);
+									befg = new common::bias_edp_force_generator(*this);
 									xmlFree(argument);
 								}
 								if(child_node->children->type == XML_ELEMENT_NODE &&
@@ -165,7 +165,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										tcg = new ecp_tool_change_generator(*this, atoi((char *)argument));
+										tcg = new common::ecp_tool_change_generator(*this, atoi((char *)argument));
 									xmlFree(argument);
 								}
 								if(child_node->children->type == XML_ELEMENT_NODE &&
@@ -173,7 +173,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										sg = new ecp_smooth_generator(*this, (bool)atoi((char *)argument));
+										sg = new common::ecp_smooth_generator(*this, (bool)atoi((char *)argument));
 									xmlFree(argument);
 								}
 								if(child_node->children->type == XML_ELEMENT_NODE &&
@@ -181,7 +181,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										wmg = new weight_meassure_generator(*this, atoi((char *)argument));
+										wmg = new common::weight_meassure_generator(*this, atoi((char *)argument));
 									xmlFree(argument);
 								}
 								if(child_node->children->type == XML_ELEMENT_NODE &&
@@ -189,7 +189,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""));
-									go_st = new ecp_sub_task_gripper_opening(*this);
+									go_st = new common::ecp_sub_task_gripper_opening(*this);
 									xmlFree(argument);
 								}
 							}
@@ -338,9 +338,13 @@ void ecp_task_fsautomat_irp6ot::main_task_algorithm(void)
 	} //end for
 }
 
+} // namespace irp6ot
+
+namespace common {
+
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_fsautomat_irp6ot(_config);
+	return new irp6ot::ecp_task_fsautomat_irp6ot(_config);
 }
 
 } // namespace common

@@ -24,7 +24,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 // KONSTRUKTORY
 ecp_task_playerjoy_irp6ot::ecp_task_playerjoy_irp6ot(configurator &_config) : ecp_task(_config)
@@ -43,7 +43,7 @@ void ecp_task_playerjoy_irp6ot::task_initialization(void)
         new ecp_mp::transmitter::player (ecp_mp::transmitter::TRANSMITTER_PLAYER, "[transmitter_player]", *this,
                                 "192.168.1.68", 6665, "joystick", 0, 'r');
 
-    pjg = new playerjoy_generator(*this, 8);
+    pjg = new common::playerjoy_generator(*this, 8);
     pjg->transmitter_m = transmitter_m;
 }
 
@@ -55,9 +55,13 @@ void ecp_task_playerjoy_irp6ot::main_task_algorithm(void)
 	}
 }
 
+} // namespace irp6ot
+
+namespace common {
+
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_playerjoy_irp6ot(_config);
+	return new irp6ot::ecp_task_playerjoy_irp6ot(_config);
 }
 } // namespace common
 } // namespace ecp

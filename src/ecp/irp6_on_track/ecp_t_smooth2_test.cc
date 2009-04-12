@@ -8,7 +8,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 //Constructors
 ecp_t_smooth2_test::ecp_t_smooth2_test(configurator &_config): ecp_task(_config){
@@ -24,7 +24,7 @@ void ecp_t_smooth2_test::task_initialization(void) {
 
 	ecp_m_robot = new ecp_irp6_on_track_robot(*this);
 	//delay(20000);
-	smoothgen2 = new ecp_smooth2_generator(*this, true);
+	smoothgen2 = new common::ecp_smooth2_generator(*this, true);
 	sr_ecp_msg->message("ECP loaded smooth2_test");
 };
 
@@ -56,8 +56,12 @@ void ecp_t_smooth2_test::main_task_algorithm(void ) {
 	ecp_termination_notice();
 };
 
+} // namespace irp6ot
+
+namespace common {
+
 ecp_task* return_created_ecp_task(configurator &_config){
-	return new ecp_t_smooth2_test(_config);
+	return new irp6ot::ecp_t_smooth2_test(_config);
 }
 } // namespace common
 } // namespace ecp

@@ -14,7 +14,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 
 // KONSTRUKTORY
@@ -33,15 +33,19 @@ void ecp_task_plot_irp6ot::task_initialization(void)
 
 void ecp_task_plot_irp6ot::main_task_algorithm(void)
 {
-    y_simple_generator ysg(*this, 8);
+	common::y_simple_generator ysg(*this, 8);
     ysg.sensor_m = sensor_m;
 
     ysg.Move();
 }
 
+} // namespace irp6ot
+
+namespace common {
+
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_plot_irp6ot(_config);
+	return new irp6ot::ecp_task_plot_irp6ot(_config);
 }
 
 } // namespace common

@@ -213,7 +213,7 @@ void ecp_task_mam::task_initialization(void)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0) {
-		ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+		ecp_m_robot = new irp6ot::ecp_irp6_on_track_robot (*this);
 	} else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0) {
 		ecp_m_robot = new irp6p::ecp_irp6_postument_robot (*this);
 	}

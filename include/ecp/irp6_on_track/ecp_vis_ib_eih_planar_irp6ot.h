@@ -23,12 +23,12 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 #define MOTION_STEPS 25
 
 
-class ecp_vis_ib_eih_planar_irp6ot: public ecp_visual_servo {
+class ecp_vis_ib_eih_planar_irp6ot: public common::ecp_visual_servo {
 public:
 	//Wirtualny sensor
 	::sensor *vsp_fradia;
@@ -60,7 +60,7 @@ public:
 
 	bool breaking;
 
-	ecp_vis_ib_eih_planar_irp6ot(ecp_task& _ecp_task);
+	ecp_vis_ib_eih_planar_irp6ot(common::ecp_task& _ecp_task);
 	virtual ~ecp_vis_ib_eih_planar_irp6ot();
 	virtual bool first_step(void);
 	virtual bool next_step_without_constraints();
@@ -68,7 +68,7 @@ public:
 	virtual void retrieve_parameters();
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

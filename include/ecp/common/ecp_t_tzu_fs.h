@@ -33,7 +33,7 @@ namespace common {
 
 class force_meassure_generator;
 
-class ecp_task_tzu_fs :  public ecp_task
+class ecp_task_tzu_fs :  public common::ecp_task
 {
 protected:
 	ecp_smooth_generator *sg;
@@ -68,7 +68,7 @@ public:
 };
 
 // taki maly prywatny generator
-class force_meassure_generator : public ecp_generator
+class force_meassure_generator : public common::ecp_generator
 {
 private:
     //double weight;

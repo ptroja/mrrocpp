@@ -20,9 +20,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-class ecp_g_tbtest : public ecp_generator
+class ecp_g_tbtest : public common::ecp_generator
 {
 	//Buffer used to communicate between ECP and VSP
 //	ECP_VSP_MSG communication_buffer;
@@ -34,12 +34,12 @@ class ecp_g_tbtest : public ecp_generator
     double next_position[8];
 
 public:
-    ecp_g_tbtest (ecp_task& _ecp_task);
+    ecp_g_tbtest (common::ecp_task& _ecp_task);
     virtual bool first_step();
     virtual bool next_step();
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

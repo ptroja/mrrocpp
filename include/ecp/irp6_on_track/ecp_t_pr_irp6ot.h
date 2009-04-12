@@ -5,14 +5,14 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-class ecp_task_pr_irp6ot: public ecp_task  {
+class ecp_task_pr_irp6ot: public common::ecp_task  {
 protected:
-	y_drawing_teach_in_force_generator *tig;
+	common::y_drawing_teach_in_force_generator *tig;
 	int ecp_tryb;
 //	void *dtig;
-	y_nose_run_force_generator* ynrlg;
+	common::y_nose_run_force_generator* ynrlg;
 
 	void short_move_up ();
 
@@ -27,7 +27,7 @@ public:
 	
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

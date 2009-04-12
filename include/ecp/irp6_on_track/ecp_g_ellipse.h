@@ -8,11 +8,11 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 #define PI 3.141592
 
-class ecp_ellipse_generator : public ecp_generator
+class ecp_ellipse_generator : public common::ecp_generator
 {
 	private:
 		//wieksza polos
@@ -39,7 +39,7 @@ public:
 	 * @param max_steps ilosc krokow, w ktorych wykonany ma byc ruch po elipsie
 	 * @author jedrzej
 	 */
-    ecp_ellipse_generator (ecp_task& _ecp_task,double major_axis,double minor_axis,int max_steps);
+    ecp_ellipse_generator (common::ecp_task& _ecp_task,double major_axis,double minor_axis,int max_steps);
     
     /**
      * Generuje pierwszy krok - ustawienie w pozycji (0,b)
@@ -56,7 +56,7 @@ public:
     double* getFirstPosition();
 };
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

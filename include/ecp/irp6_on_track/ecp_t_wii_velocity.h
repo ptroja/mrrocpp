@@ -8,17 +8,17 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 /**
  * Odtwarza orientacje kontrolera
  * @author jkurylo
  */
-class ecp_task_wii_velocity: public ecp_task
+class ecp_task_wii_velocity: public common::ecp_task
 {
 protected:
 //	ecp_wii_velocity_generator* eg;
-	ecp_tff_nose_run_generator* eg;
+	common::ecp_tff_nose_run_generator* eg;
 public:
 	/**
 	 * Tworzy obiekt zadania
@@ -41,7 +41,7 @@ public:
 };
 
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

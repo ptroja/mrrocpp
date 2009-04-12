@@ -19,7 +19,7 @@ namespace common {
 
 // --------------------------------------------------------------------------
 
-class pawel_generator : public ecp_generator {
+class pawel_generator : public common::ecp_generator {
 
 protected:
 

@@ -2,9 +2,9 @@
 #include <iostream>
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-ecp_g_pw_scena::ecp_g_pw_scena(ecp_task& _ecp_task) :
+ecp_g_pw_scena::ecp_g_pw_scena(common::ecp_task& _ecp_task) :
 	ecp_generator(_ecp_task) {
 
 	recognized = false;
@@ -160,7 +160,7 @@ bool ecp_g_pw_scena::next_step() {
 	return true;
 }
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

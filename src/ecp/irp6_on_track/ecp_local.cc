@@ -14,14 +14,14 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 ecp_irp6_on_track_robot::ecp_irp6_on_track_robot(configurator &_config, sr_ecp *_sr_ecp) :
 	ecp_robot(ROBOT_IRP6_ON_TRACK, _config, _sr_ecp)
 {
 }
 
-ecp_irp6_on_track_robot::ecp_irp6_on_track_robot(ecp_task& _ecp_object) :
+ecp_irp6_on_track_robot::ecp_irp6_on_track_robot(common::ecp_task& _ecp_object) :
 	ecp_robot(ROBOT_IRP6_ON_TRACK, _ecp_object)
 {
 }
@@ -304,7 +304,7 @@ void ecp_irp6_on_track_robot::get_rmodel_reply(void)
 			throw ECP_error(NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end: switch (...rmodel_type)
 }
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

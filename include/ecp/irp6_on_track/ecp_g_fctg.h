@@ -22,13 +22,13 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
 // ####################################################################
 // ###########  KLASA do ruszania robotem, ruch kontrolowany za  pomoca czujnika sily    #########
 // ####################################################################
 
-class force_controlled_trajectory_generator : public ecp_teach_in_generator
+class force_controlled_trajectory_generator : public common::ecp_teach_in_generator
 {
 	private:
 		// Lista pozycji dla danego makrokroku - ruch jedna osia/wspolrzedna.
@@ -82,7 +82,7 @@ class force_controlled_trajectory_generator : public ecp_teach_in_generator
 		// Mutex do odbierania pozycji robota
 		pthread_mutex_t ROBOT_POSITION_MUTEX;
 	public:
-		force_controlled_trajectory_generator (ecp_task& _ecp_task);
+		force_controlled_trajectory_generator (common::ecp_task& _ecp_task);
 		~force_controlled_trajectory_generator (void);
 		// Dodanie nowego kroku do listy.
 		void add_step(int motion_time);
@@ -113,7 +113,7 @@ class force_controlled_trajectory_generator : public ecp_teach_in_generator
 }
 ; // end: class force_controlled_trajectory_generator
 
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

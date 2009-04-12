@@ -15,15 +15,15 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6ot {
 
-ecp_task_ttt::ecp_task_ttt(configurator &_config) : ecp_task(_config) {}
+ecp_task_ttt::ecp_task_ttt(configurator &_config) : common::ecp_task(_config) {}
 
 void ecp_task_ttt::task_initialization(void)
 {
 	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
-    sg = new ecp_smooth_generator (*this, true, true);
+    sg = new common::ecp_smooth_generator (*this, true, true);
 
     sr_ecp_msg->message("ECP loaded");
 }
@@ -58,9 +58,13 @@ void ecp_task_ttt::main_task_algorithm(void)
     ecp_termination_notice();
 }
 
+} // namespace irp6ot
+
+namespace common {
+
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_ttt(_config);
+	return new irp6ot::ecp_task_ttt(_config);
 }
 } // namespace common
 } // namespace ecp
