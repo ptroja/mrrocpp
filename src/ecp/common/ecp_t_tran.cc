@@ -49,7 +49,7 @@ void ecp_task_tran::task_initialization(void)
 	}
 	else if (!strcmp(config.section_name, "[ecp_speaker]"))
 	{
-		ecp_m_robot = new ecp_speaker_robot (*this);
+		ecp_m_robot = new speaker::ecp_speaker_robot (*this);
 	}
 	else if (!strcmp(config.section_name, "[ecp_irp6_mechatronika]"))
 	{

@@ -22,7 +22,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace speaker {
 
 // KONSTRUKTORY
 ecp_task_speaker::ecp_task_speaker(configurator &_config) : ecp_task(_config)
@@ -65,9 +65,13 @@ void ecp_task_speaker::main_task_algorithm(void)
 	}
 }
 
+} // namespace speaker
+
+namespace common {
+ 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_speaker(_config);
+	return new speaker::ecp_task_speaker(_config);
 }
 
 } // namespace common

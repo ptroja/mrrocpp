@@ -6,9 +6,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace speaker {
 
-class ecp_task_speaker: public ecp_task  {
+class ecp_task_speaker: public common::ecp_task  {
 protected:
 	speaking_generator* speak;
 
@@ -22,7 +22,7 @@ public:
 
 };
 
-} // namespace common
+} // namespace speaker
 } // namespace ecp
 } // namespace mrrocpp
 

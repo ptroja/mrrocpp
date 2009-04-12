@@ -12,16 +12,16 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace speaker {
 
 // ---------------------------------------------------------------
-class ecp_speaker_robot: public ecp_robot
+class ecp_speaker_robot: public common::ecp_robot
 {
 	// Klasa dla robota speaker
 
 	public:
 	ecp_speaker_robot (configurator &_config, sr_ecp *_sr_ecp);
-	ecp_speaker_robot (ecp_task& _ecp_object);
+	ecp_speaker_robot (common::ecp_task& _ecp_object);
 
 	virtual void create_command (void);
 	// wypelnia bufor wysylkowy do EDP na podstawie danych zawartych w obrazie
@@ -33,7 +33,7 @@ class ecp_speaker_robot: public ecp_robot
 }; // end: class ecp_speaker_robot
 // ---------------------------------------------------------------
 
-} // namespace common
+} // namespace speaker
 } // namespace ecp
 } // namespace mrrocpp
 

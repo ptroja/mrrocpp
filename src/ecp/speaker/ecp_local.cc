@@ -15,7 +15,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace speaker {
 
 
 // ####################################################################################################
@@ -27,7 +27,7 @@ ecp_speaker_robot::ecp_speaker_robot(configurator &_config, sr_ecp *_sr_ecp) :
 {
 }
 
-ecp_speaker_robot::ecp_speaker_robot(ecp_task& _ecp_object) :
+ecp_speaker_robot::ecp_speaker_robot(common::ecp_task& _ecp_object) :
 	ecp_robot(ROBOT_SPEAKER, _ecp_object)
 {
 }
@@ -77,7 +77,7 @@ void ecp_speaker_robot::get_reply(void)
 			throw ECP_error(NON_FATAL_ERROR, INVALID_EDP_REPLY);
 	} // end: switch (EDP_data.reply_type)
 } // end: ecp_speaker_robot::get_reply ()
-} // namespace common
+} // namespace speaker
 } // namespace ecp
 } // namespace mrrocpp
 
