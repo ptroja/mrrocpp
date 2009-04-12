@@ -19,9 +19,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace conveyor {
 
-class ecp_task_conveyor_lego_brick: public ecp_task 
+class ecp_task_conveyor_lego_brick: public common::ecp_task 
 {
 	double absolute_position;
 
@@ -36,7 +36,7 @@ public:
 	
 };
 
-} // namespace common
+} // namespace conveyor
 } // namespace ecp
 } // namespace mrrocpp
 

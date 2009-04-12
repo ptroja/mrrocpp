@@ -11,9 +11,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace conveyor {
 
-y_simple_generator::y_simple_generator(ecp_task& _ecp_task, int step):
+y_simple_generator::y_simple_generator(common::ecp_task& _ecp_task, int step):
 		ecp_generator (_ecp_task)
 {
 	step_no = step;
@@ -92,7 +92,7 @@ bool y_simple_generator::next_step ( )
 	
 	return true;
 }
-} // namespace common
+} // namespace conveyor
 } // namespace ecp
 } // namespace mrrocpp
 

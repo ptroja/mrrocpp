@@ -21,9 +21,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace conveyor {
 
-class ecp_task_conveyor_test: public ecp_task 
+class ecp_task_conveyor_test: public common::ecp_task 
 {
 
 public:
@@ -37,7 +37,7 @@ public:
 	
 };
 
-} // namespace common
+} // namespace conveyor
 } // namespace ecp
 } // namespace mrrocpp
 

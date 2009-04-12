@@ -13,7 +13,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace conveyor {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej dla zadan yoyka z wodzeniem za nos
@@ -33,7 +33,7 @@ public:
 }; // end:
 // --------------------------------------------------------------------------
 
-} // namespace common
+} // namespace conveyor
 } // namespace ecp
 } // namespace mrrocpp
 

@@ -9,7 +9,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace conveyor {
 
 // KONSTRUKTORY
 ecp_task_conveyor_test::ecp_task_conveyor_test(configurator &_config) : ecp_task(_config)
@@ -39,10 +39,12 @@ void ecp_task_conveyor_test::main_task_algorithm(void)
 		ysg.Move();
 	}
 }
+} // namespace conveyor
 
+namespace common {
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_conveyor_test(_config);
+	return new conveyor::ecp_task_conveyor_test(_config);
 }
 } // namespace common
 } // namespace ecp

@@ -8,7 +8,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace conveyor {
 
 
 // KONSTRUKTORY
@@ -87,10 +87,12 @@ void ecp_task_conveyor_lego_brick::main_task_algorithm(void)
 		break;
 	} // koniec: for(;;) wewnetrznej
 }
+} // namespace conveyor
 
+namespace common {
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_conveyor_lego_brick(_config);
+	return new conveyor::ecp_task_conveyor_lego_brick(_config);
 }
 
 } // namespace common

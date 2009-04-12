@@ -19,7 +19,7 @@
 
 
 // ---------------------------------------------------------------
-class ui_conveyor_robot: public ecp::common::ecp_conveyor_robot {
+class ui_conveyor_robot: public ecp::conveyor::ecp_conveyor_robot {
 // Klasa do obslugi robota conveyor (sztywnego) z poziomu UI
 
 // pid_t EDP_Pid; // identyfikator procesu driver'a edp_m // by Y

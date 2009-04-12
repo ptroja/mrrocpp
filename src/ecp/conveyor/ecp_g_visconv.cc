@@ -14,9 +14,9 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace conveyor {
 
-conveyor_incremental_move::conveyor_incremental_move(ecp_task& _ecp_task, double inc_move):
+conveyor_incremental_move::conveyor_incremental_move(common::ecp_task& _ecp_task, double inc_move):
 		ecp_generator (_ecp_task), move_length(inc_move) {}
 
 bool conveyor_incremental_move::first_step ( )
@@ -101,7 +101,7 @@ bool conveyor_incremental_move::next_step ( )
 	
 	return true;
 }
-} // namespace common
+} // namespace conveyor
 } // namespace ecp
 } // namespace mrrocpp
 

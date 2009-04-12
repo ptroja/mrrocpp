@@ -12,7 +12,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace conveyor {
 
 // KONSTRUKTORY
 ecp_task_conveyor_kon::ecp_task_conveyor_kon(configurator &_config) : ecp_task(_config)
@@ -24,9 +24,9 @@ ecp_task_conveyor_kon::~ecp_task_conveyor_kon()
 // methods for ECP template to redefine in concrete classes
 void ecp_task_conveyor_kon::task_initialization(void)
 {
-    ecp_m_robot = new ecp_conveyor_robot (*this);
+	ecp_m_robot = new ecp_conveyor_robot (*this);
 
-    sr_ecp_msg->message("ECP loaded");
+	sr_ecp_msg->message("ECP loaded");
 }
 
 void ecp_task_conveyor_kon::main_task_algorithm(void)
@@ -123,7 +123,7 @@ void ecp_task_conveyor_kon::main_task_algorithm(void)
 	// double tb[]={0.75, 0.75, 0.75, 0.75, 0.75, 0.75};
 	double ta[]={0.25,0.2,0.28,0.17949,0.071795,0.25};
 	double tb[]={1-0.25,0.8,0.72,1-0.17949,1-0.071795,0.75};
-	ecp_linear_parabolic_generator trapez(*this, tdes, ta, tb);
+	common::ecp_linear_parabolic_generator trapez(*this, tdes, ta, tb);
 	sr_ecp_msg->message("Wykonywany jest ruch o zadany przyrost polozenia/orientacji");
 	trapez.Move();
 
@@ -142,10 +142,14 @@ void ecp_task_conveyor_kon::main_task_algorithm(void)
 	ecp_termination_notice ();
 }
 
+} // namespace conveyor
+
+namespace common {
+
 ecp_task* return_created_ecp_task (configurator &_config)
-                {
-                    return new ecp_task_conveyor_kon(_config);
-                }
+{
+	return new conveyor::ecp_task_conveyor_kon(_config);
+}
 
 } // namespace common
 } // namespace ecp

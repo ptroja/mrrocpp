@@ -14,11 +14,11 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace conveyor {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej dla zadan yoyka z wodzeniem za nos
-class conveyor_incremental_move: public ecp_generator {
+class conveyor_incremental_move: public common::ecp_generator {
 	double move_length;
 	double current_pose;
 	double next_pose;
@@ -31,7 +31,7 @@ public:
 	trajectory_description td;
 	
 	// konstruktor
-	conveyor_incremental_move(ecp_task& _ecp_task, double inc_move);  
+	conveyor_incremental_move(common::ecp_task& _ecp_task, double inc_move);  
 	
 	virtual bool first_step ();
 
@@ -40,7 +40,7 @@ public:
 }; // end:
 // --------------------------------------------------------------------------
 
-} // namespace common
+} // namespace conveyor
 } // namespace ecp
 } // namespace mrrocpp
 

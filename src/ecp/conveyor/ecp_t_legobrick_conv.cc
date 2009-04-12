@@ -7,7 +7,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace conveyor {
 
 // KONSTRUKTORY
 ecp_task_conveyor_lego_brick::ecp_task_conveyor_lego_brick(configurator &_config) : ecp_task(_config)
@@ -31,7 +31,7 @@ void ecp_task_conveyor_lego_brick::task_initialization(void)
 void ecp_task_conveyor_lego_brick::main_task_algorithm(void)
 {
 	//conveyor_incremental_move ysg(*this, 100);
-	ecp_smooth_generator gen(*this, true, true);
+	common::ecp_smooth_generator gen(*this, true, true);
 	gen.flush_pose_list();
 
 	POSE_SPECIFICATION ps;
@@ -67,9 +67,13 @@ void ecp_task_conveyor_lego_brick::main_task_algorithm(void)
 	}
 }
 
+} // namespace conveyor
+
+namespace common {
+
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_conveyor_lego_brick(_config);
+	return new conveyor::ecp_task_conveyor_lego_brick(_config);
 }
 
 } // namespace common

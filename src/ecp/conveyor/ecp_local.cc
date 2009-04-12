@@ -13,12 +13,12 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace conveyor {
 
 ecp_conveyor_robot::ecp_conveyor_robot (configurator &_config, sr_ecp *_sr_ecp):
         ecp_robot (ROBOT_CONVEYOR, _config, _sr_ecp)
 {}
-ecp_conveyor_robot::ecp_conveyor_robot (ecp_task& _ecp_object):
+ecp_conveyor_robot::ecp_conveyor_robot (common::ecp_task& _ecp_object):
         ecp_robot (ROBOT_CONVEYOR, _ecp_object)
 {}
 
@@ -200,7 +200,7 @@ void ecp_conveyor_robot::get_rmodel_reply (void)
         throw ECP_error(NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
     } // end: switch (...rmodel_type)
 }
-} // namespace common
+} // namespace conveyor
 } // namespace ecp
 } // namespace mrrocpp
 
