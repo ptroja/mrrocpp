@@ -12,6 +12,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace conveyor {
+namespace generator {
 
 conveyor_incremental_move::conveyor_incremental_move(common::task::ecp_task& _ecp_task, double inc_move):
 		ecp_generator (_ecp_task), move_length(inc_move) {}
@@ -79,6 +80,8 @@ bool conveyor_incremental_move::next_step ( )
 	//}
 	
 	return true;
+}
+
 }
 } // namespace conveyor
 } // namespace ecp

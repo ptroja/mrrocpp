@@ -10,6 +10,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace conveyor {
+namespace task {
 
 // KONSTRUKTORY
 ecp_task_conveyor_test::ecp_task_conveyor_test(configurator &_config) : ecp_task(_config)
@@ -29,7 +30,7 @@ void ecp_task_conveyor_test::task_initialization(void)
 
 void ecp_task_conveyor_test::main_task_algorithm(void)
 {
-	y_simple_generator ysg(*this, 8);
+	generator::y_simple_generator ysg(*this, 8);
 	ysg.sensor_m = sensor_m;
 
 	for(;;) {
@@ -39,6 +40,8 @@ void ecp_task_conveyor_test::main_task_algorithm(void)
 		ysg.Move();
 	}
 }
+
+}
 } // namespace conveyor
 
 namespace common {
@@ -46,7 +49,7 @@ namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new conveyor::ecp_task_conveyor_test(_config);
+	return new conveyor::task::ecp_task_conveyor_test(_config);
 }
 
 }

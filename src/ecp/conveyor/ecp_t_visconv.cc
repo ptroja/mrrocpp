@@ -8,6 +8,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace conveyor {
+namespace task {
 
 // KONSTRUKTORY
 ecp_task_conveyor_lego_brick::ecp_task_conveyor_lego_brick(configurator &_config) : ecp_task(_config)
@@ -74,6 +75,8 @@ void ecp_task_conveyor_lego_brick::main_task_algorithm(void)
 		gen2.Move();
 	}
 }
+
+}
 } // namespace conveyor
 
 namespace common {
@@ -81,7 +84,7 @@ namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new conveyor::ecp_task_conveyor_lego_brick(_config);
+	return new conveyor::task::ecp_task_conveyor_lego_brick(_config);
 }
 
 }

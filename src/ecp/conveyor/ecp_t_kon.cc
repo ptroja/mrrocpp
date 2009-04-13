@@ -13,6 +13,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace conveyor {
+namespace task {
 
 // KONSTRUKTORY
 ecp_task_conveyor_kon::ecp_task_conveyor_kon(configurator &_config) : ecp_task(_config)
@@ -142,6 +143,7 @@ void ecp_task_conveyor_kon::main_task_algorithm(void)
 	ecp_termination_notice ();
 }
 
+}
 } // namespace conveyor
 
 namespace common {
@@ -149,7 +151,7 @@ namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new conveyor::ecp_task_conveyor_kon(_config);
+	return new conveyor::task::ecp_task_conveyor_kon(_config);
 }
 
 }
