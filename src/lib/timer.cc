@@ -3,6 +3,9 @@
 
 #include "lib/timer.h"
 
+namespace mrrocpp {
+namespace lib {
+
 timer::timer(void)
 {
 	timer_initialized = true;
@@ -104,3 +107,7 @@ void timer::print_last_status(void)
 			break;
 	}
 } // print_last_status
+
+} // namespace lib
+} // namespace mrrocpp
+

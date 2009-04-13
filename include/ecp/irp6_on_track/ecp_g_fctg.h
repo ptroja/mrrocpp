@@ -13,8 +13,8 @@
 
 #include <list>
 
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 
 // Naglowek zawierajacy klase ecp_mp_force_sensor.
 #include "ecp_mp/ecp_mp_s_force.h"

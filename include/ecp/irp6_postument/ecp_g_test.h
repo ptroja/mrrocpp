@@ -7,8 +7,8 @@
 #if !defined(_ECP_GEN_TEST_IRP6P_H)
 #define _ECP_GEN_TEST_IRP6P_H
 
-#include "common/impconst.h"		// frame_tab
-#include "common/com_buf.h"			// trajectory_description
+#include "lib/impconst.h"		// frame_tab
+#include "lib/com_buf.h"			// trajectory_description
 
 #include "ecp/common/ecp_generator.h"
 

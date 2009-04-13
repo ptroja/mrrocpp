@@ -6,8 +6,8 @@
 // 
 // -------------------------------------------------------------------------
 
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 #include "lib/mis_fun.h"
 
 #include "ecp/irp6_mechatronika/ecp_local.h"

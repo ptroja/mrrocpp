@@ -16,9 +16,9 @@
 #include <libxml/parser.h>
 #include <libxml/xinclude.h>
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/typedefs.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 #include "ecp_mp/ecp_mp_s_schunk.h"
 
 #include "lib/srlib.h"

@@ -8,7 +8,7 @@
 #define _ECP_GEN_LEGOBRICK_CONV_H
 #include "sys/time.h"
 
-#include "common/com_buf.h"		// trajectory_description
+#include "lib/com_buf.h"		// trajectory_description
 
 #include "ecp/common/ecp_generator.h"
 

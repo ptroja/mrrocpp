@@ -8,8 +8,8 @@
 #if !defined(_ECP_GEN_PP_H)
 #define _ECP_GEN_PP_H
 
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 #include "lib/mathtr.h"
 #include "ecp/common/ecp_generator.h"
 

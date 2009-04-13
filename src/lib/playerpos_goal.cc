@@ -1,6 +1,6 @@
 #include <math.h>
 
-#include "common/com_buf.h"
+#include "lib/com_buf.h"
 
 void playerpos_goal_t::setGoal(double _x, double _y, double _t)
 {

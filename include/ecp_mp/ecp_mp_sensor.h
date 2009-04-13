@@ -1,7 +1,7 @@
 #if !defined(_ECP_MP_SENSOR_H)
 #define _ECP_MP_SENSOR_H
 
-#include "common/sensor.h"
+#include "lib/sensor.h"
 
 #include "messip/messip.h"
 

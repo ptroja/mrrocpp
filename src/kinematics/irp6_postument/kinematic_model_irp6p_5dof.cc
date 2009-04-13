@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "common/com_buf.h"
+#include "lib/com_buf.h"
 
 // Klasa kinematic_model_irp6p_5dof.
 #include "kinematics/irp6_postument/kinematic_model_irp6p_5dof.h"

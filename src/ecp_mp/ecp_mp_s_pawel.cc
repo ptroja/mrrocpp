@@ -13,7 +13,7 @@
 #include <devctl.h>
 #include <math.h>
 
-#include "common/com_buf.h"
+#include "lib/com_buf.h"
 
 #include "lib/srlib.h"
 

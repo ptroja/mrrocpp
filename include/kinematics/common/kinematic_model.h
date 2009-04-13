@@ -31,7 +31,7 @@
 // Klasa lib::Homog_matrix.
 #include "lib/mathtr.h"
 // Klasa frame_tab.
-#include "common/impconst.h"
+#include "lib/impconst.h"
 
 namespace mrrocpp {
 namespace kinematic {

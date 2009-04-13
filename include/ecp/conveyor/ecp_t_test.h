@@ -13,8 +13,8 @@
 #if !defined(_ECP_T_CONV_TEST_H)
 #define _ECP_T_CONV_TEST_H
 
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 
 #include "ecp/common/ecp_task.h"
 #include "ecp/conveyor/ecp_local.h"

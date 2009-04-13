@@ -10,7 +10,7 @@
 #include <list>
 
 #include "ecp_mp/ecp_mp_t_fsautomat.h"
-#include "common/impconst.h"
+#include "lib/impconst.h"
 #include "mp/Transition.h"
 
 

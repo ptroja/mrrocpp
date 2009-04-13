@@ -11,7 +11,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "common/com_buf.h"				// numery bledow
+#include "lib/com_buf.h"				// numery bledow
 
 #include "lib/srlib.h"					// klasy bledow
 #include "ecp_mp/ecp_mp_sensor.h"				// zawiera klase ecp_mp_sensor

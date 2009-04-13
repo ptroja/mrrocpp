@@ -4,8 +4,8 @@
 
 #include <list>
 
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 #include "ecp/common/ecp_smooth_taught_in_pose.h"
 
 namespace mrrocpp {

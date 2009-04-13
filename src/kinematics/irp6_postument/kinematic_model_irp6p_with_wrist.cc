@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "common/com_buf.h"
+#include "lib/com_buf.h"
 
 // Klasy bledow, itp.
 #include "kinematics/common/transformer_error.h"

@@ -18,9 +18,9 @@
 #include <unistd.h> // do delay
 #include <hw/inout.h>// do in*/out*
 
-#include "common/com_buf.h"
+#include "lib/com_buf.h"
 
-#include "common/sensor.h"
+#include "lib/sensor.h"
 #include "vsp/moxaclass.h"
 
 /***************************** INCREMENT MARKER ******************************/

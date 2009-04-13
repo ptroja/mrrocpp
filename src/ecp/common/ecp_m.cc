@@ -10,8 +10,8 @@
 #include <signal.h>
 #include <stdlib.h>
 
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 
 #include "lib/srlib.h"
 #include "lib/mis_fun.h"

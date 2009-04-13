@@ -34,9 +34,9 @@
 #include <fstream>
 #include <iostream>
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/typedefs.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 #include "lib/mis_fun.h"
 
 #include "edp/speaker/sound.h" // MAC7

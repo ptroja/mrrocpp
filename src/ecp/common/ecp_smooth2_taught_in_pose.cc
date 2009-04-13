@@ -1,7 +1,7 @@
 #include <string.h>
 
 #include "ecp/common/ecp_smooth2_taught_in_pose.h"
-#include "common/impconst.h"
+#include "lib/impconst.h"
 
 namespace mrrocpp {
 namespace ecp {

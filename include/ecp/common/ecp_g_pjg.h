@@ -7,7 +7,7 @@
 #if !defined(_ECP_GEN_PLAYERJOY_H)
 #define _ECP_GEN_PLAYERJOY_H
 
-#include "common/impconst.h"
+#include "lib/impconst.h"
 
 #include "ecp/common/ecp_generator.h"
 

@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <time.h>
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/typedefs.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 
 #include "lib/srlib.h"
 #include "ecp/conveyor/ecp_local.h"

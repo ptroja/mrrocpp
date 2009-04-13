@@ -9,7 +9,7 @@
 #include <arpa/inet.h>
 #include <assert.h>
 
-#include "common/impconst.h"
+#include "lib/impconst.h"
 #include "edp/common/edp.h"
 
 #define MAXBUFLEN 100

@@ -3,6 +3,9 @@
 
 #include <time.h>
 
+namespace mrrocpp {
+namespace lib {
+
 enum timer_status_enum {
 	TIMER_INITIALIZED,
 	TIMER_STARTED,
@@ -38,5 +41,8 @@ public:
 
 }; // end: class edp_buffer
 /**************************** timer *****************************/
+
+} // namespace lib
+} // namespace mrrocpp
 
 #endif

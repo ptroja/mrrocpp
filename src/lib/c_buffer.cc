@@ -1,4 +1,4 @@
-#include "common/com_buf.h"
+#include "lib/com_buf.h"
 
 c_buffer::c_buffer (void) :
   instruction_type(SYNCHRO),

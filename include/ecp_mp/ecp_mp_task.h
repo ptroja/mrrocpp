@@ -13,13 +13,13 @@
 #include <stdint.h>
 #include <map>
 
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 #include "lib/srlib.h"
 #include "lib/configurator.h"
 
 #include "ecp_mp/transmitter.h"
-#include "common/sensor.h"
+#include "lib/sensor.h"
 
 namespace mrrocpp {
 namespace ecp_mp {

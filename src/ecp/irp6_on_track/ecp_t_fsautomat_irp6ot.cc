@@ -13,9 +13,9 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/typedefs.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 #include "mp/Trajectory.h"
 
 #include "lib/srlib.h"

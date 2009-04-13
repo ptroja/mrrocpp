@@ -11,7 +11,7 @@
 #define _VSP_PAWEL_H
 
 #include "vsp/vsp_sensor.h"
-#include "common/sensor.h"
+#include "lib/sensor.h"
 
 namespace mrrocpp {
 namespace vsp {

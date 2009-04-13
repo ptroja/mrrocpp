@@ -7,8 +7,8 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 #include "lib/mis_fun.h"
 
 #include "ecp/speaker/ecp_local.h"

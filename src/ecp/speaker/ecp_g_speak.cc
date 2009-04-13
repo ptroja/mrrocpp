@@ -9,9 +9,9 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/typedefs.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 
 #include "ecp/speaker/ecp_local.h"
 #include "ecp/speaker/ecp_g_speak.h"

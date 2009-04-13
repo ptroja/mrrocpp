@@ -11,7 +11,7 @@
 #define _EDP_FORCE_SENSOR_H
 
 #include "lib/ForceTrans.h"
-#include "common/sensor.h"				// klasa bazowa sensor
+#include "lib/sensor.h"				// klasa bazowa sensor
 #include "edp/common/edp.h"				// klasa bazowa sensor
 
 namespace mrrocpp {

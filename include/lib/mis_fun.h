@@ -13,7 +13,7 @@
 #include <pthread.h>
 #include <string.h>
 
-#include "common/impconst.h"
+#include "lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {

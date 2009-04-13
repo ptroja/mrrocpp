@@ -1,7 +1,7 @@
 #if !defined(_ECP_ROBOT_H)
 #define _ECP_ROBOT_H
 
-#include "common/com_buf.h"
+#include "lib/com_buf.h"
 #include "lib/srlib.h"
 #include "lib/configurator.h"
 #include "ecp_mp/ecp_mp_robot.h"

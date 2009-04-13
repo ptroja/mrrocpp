@@ -10,7 +10,7 @@
 #if !defined(_VSP_SENSOR_H)
 #define _VSP_SENSOR_H
 
-#include "common/sensor.h"
+#include "lib/sensor.h"
 // Konfigurator
 #include "lib/configurator.h"
 

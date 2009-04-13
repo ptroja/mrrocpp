@@ -96,6 +96,6 @@ class mp_taught_in_pose {
 #include "mp/mp_generator.h"
 #include "mp/mp_task.h"
 #include "mp/mp_robot.h"
-#include "../common/com_buf.h"
+#include "../lib/com_buf.h"
 
 #endif

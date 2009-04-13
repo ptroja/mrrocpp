@@ -14,7 +14,7 @@
 
 #include "lib/srlib.h"
 // #include "ecp/common/ecp.h"
-#include "common/com_buf.h"
+#include "lib/com_buf.h"
 #include "ui/ui.h"
 
 

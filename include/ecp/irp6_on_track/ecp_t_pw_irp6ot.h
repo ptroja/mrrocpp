@@ -4,7 +4,7 @@
 #include "ecp/common/ecp_task.h"
 #include "ecp/common/ecp_g_smooth.h"
 #include "ecp/common/ecp_g_force.h"
-#include "common/com_buf.h"
+#include "lib/com_buf.h"
 #include "ecp/common/ecp_st_go.h"
 #include "ecp/common/ecp_g_sleep.h"
 

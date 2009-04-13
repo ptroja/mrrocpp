@@ -1,7 +1,7 @@
 #include "ecp/irp6_on_track/ecp_g_pw_kolo.h"
 
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 #include "math.h"
 
 namespace mrrocpp {

@@ -3,9 +3,9 @@
 #include <string.h>
 #include <math.h>
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"				// numery bledow
+#include "lib/typedefs.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"				// numery bledow
 #include "lib/srlib.h"					// klasy bledow
 #include "ecp_mp/ecp_mp_tr_player.h"
 #include "player/playerc.h"

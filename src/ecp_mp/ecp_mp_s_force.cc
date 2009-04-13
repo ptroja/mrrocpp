@@ -7,7 +7,7 @@
 // Data:		04.11.2005
 // ------------------------------------------------------------------------
 
-#include "common/com_buf.h"
+#include "lib/com_buf.h"
 
 // Zawiera klase bazowa ecp_mp_sensor.
 #include "ecp_mp/ecp_mp_sensor.h"

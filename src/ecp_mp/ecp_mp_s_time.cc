@@ -7,9 +7,9 @@
 // Data:		04.11.2005
 // ------------------------------------------------------------------------
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/typedefs.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 
 // Zawiera klase bazowa ecp_mp_sensor.
 #include "ecp_mp/ecp_mp_sensor.h"

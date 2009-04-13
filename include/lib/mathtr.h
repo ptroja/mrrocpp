@@ -17,7 +17,7 @@
 #include <math.h>
 #include <string.h>
 
-#include "common/impconst.h"	// frame_tab
+#include "lib/impconst.h"	// frame_tab
 
 namespace mrrocpp {
 namespace lib {

@@ -11,7 +11,7 @@
 #define __Y_SPAWN_H
 
 #include <limits.h>
-#include "common/typedefs.h"
+#include "lib/typedefs.h"
 
 typedef struct _my_data { // wiadomosc wysylana do procesu spawnujacego
     msg_header_t hdr;

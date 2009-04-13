@@ -28,7 +28,7 @@
 #include <sys/netmgr.h>
 #endif /* __QNXNTO__ */
 
-#include "common/impconst.h"
+#include "lib/impconst.h"
 #include "lib/configurator.h"
 #include "lib/y_spawn.h"
 #include "messip/messip.h"

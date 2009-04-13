@@ -12,7 +12,7 @@ namespace generator {
 class delay_ms_condition: public base
 {
 protected:
-	timer* local_timer;
+	lib::timer* local_timer;
 	float sec;
 	int ms_delay;
 

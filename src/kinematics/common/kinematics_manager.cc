@@ -10,7 +10,7 @@
 // Data:		19.01.2007
 // ------------------------------------------------------------------------
 
-#include "common/com_buf.h"
+#include "lib/com_buf.h"
 #include "kinematics/common/transformer_error.h"
 
 #include "kinematics/common/kinematics_manager.h"

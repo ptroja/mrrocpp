@@ -8,8 +8,8 @@
 #if !defined(_ECP_GEN_FORCE_H)
 #define _ECP_GEN_FORCE_H
 
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 
 #include "ecp/common/ecp_teach_in_generator.h"
 #include "lib/mathtr.h"

@@ -41,10 +41,10 @@
 #include <fcntl.h>
 
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
-#include "common/sensor.h"
+#include "lib/typedefs.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
+#include "lib/sensor.h"
 
 #include "lib/srlib.h"
 #include "vsp/vsp_pawel.h"

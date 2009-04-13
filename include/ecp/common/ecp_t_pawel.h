@@ -4,8 +4,8 @@
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 #include "lib/srlib.h"
 #include "ecp_mp/ecp_mp_s_pawel.h"
 // Konfigurator.

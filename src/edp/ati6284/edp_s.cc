@@ -2,9 +2,9 @@
  * \brief metody sterownika czujnika sily Gamma FT6284 firmy ATI
  * Ostatnia modyfikacja: marzec 2006
  * Autor: Krzysztof Dziubek	*/
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/typedefs.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 
 #include "lib/srlib.h"
 #include "edp/ati6284/edp_s.h"
@@ -228,7 +228,7 @@ void ATI6284_force::configure_sensor(void)
 		short int sensor_overload=0;
 		float force_torque[6];
 
-		timer local_timer;
+		lib::timer local_timer;
 		float sec;
 
 		overload=0;
@@ -415,7 +415,7 @@ void ATI6284_force::wait_for_event()
 		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
 	if (!(master.test_mode)) {
-		timer local_timer;
+		lib::timer local_timer;
 		float sec;
 
 		//!< Clear ADC FIFO
@@ -455,7 +455,7 @@ void ATI6284_force::wait_for_event()
 
 void ATI6284_force::initiate_reading(void)
 {
-	timer local_timer;
+	lib::timer local_timer;
 	float sec;
 
 	short int no_result =0; //brak wyniku

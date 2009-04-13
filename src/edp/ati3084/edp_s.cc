@@ -34,9 +34,9 @@
 #include <stddef.h>
 #include <sys/mman.h>
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/typedefs.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 
 #include "lib/srlib.h"
 #include "edp/ati3084/edp_s.h"

@@ -10,9 +10,9 @@
 #include <unistd.h>
 #include <map>
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/typedefs.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 #include "lib/srlib.h"
 #include "mp/mp.h"
 #include "mp/mp_t_vis_nn.h"

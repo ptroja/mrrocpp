@@ -14,8 +14,8 @@
 #if !defined(_ECP_irp6_on_track_NURBS_H)
 #define _ECP_irp6_on_track_NURBS_H
 
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 
 #include "lib/nurbs_tdes.h"
 #include "ecp/common/ecp_generator.h"

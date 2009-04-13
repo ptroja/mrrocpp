@@ -2,9 +2,9 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/typedefs.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 
 #include "ecp/player/ecp_g_playerpos.h"
 #include "ecp/player/ecp_t_playerpos.h"

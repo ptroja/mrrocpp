@@ -14,7 +14,7 @@
 #include <unistd.h>
 #include <devctl.h>
 
-#include "common/com_buf.h"
+#include "lib/com_buf.h"
 
 #include "lib/srlib.h"
 

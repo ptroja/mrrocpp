@@ -10,8 +10,8 @@
 #include <time.h>
 
 #include "messip/messip.h"
-#include "common/typedefs.h"
-#include "common/com_buf.h"
+#include "lib/typedefs.h"
+#include "lib/com_buf.h"
 
 namespace mrrocpp {
 namespace lib {

@@ -2,9 +2,9 @@
 #include <unistd.h>
 #include <map>
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/typedefs.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 
 #include "lib/srlib.h"
 #include "ecp_mp/ecp_mp_t_rcsc.h"
@@ -91,9 +91,9 @@ base* return_created_ecp_task (lib::configurator &_config)
 #include <unistd.h>
 #include <map>
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/typedefs.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 
 #include "lib/srlib.h"
 #include "ecp_mp/ecp_mp_t_rcsc.h"

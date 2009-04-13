@@ -1,4 +1,4 @@
-#include "common/com_buf.h"
+#include "lib/com_buf.h"
 
 r_buffer::r_buffer (void) :
   reply_type(ERROR),

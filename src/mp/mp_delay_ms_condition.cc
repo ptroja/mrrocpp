@@ -10,7 +10,7 @@ namespace generator {
 
 delay_ms_condition::delay_ms_condition(task::base& _mp_task, int _ms_delay): base (_mp_task)
 {
-	local_timer = new timer();
+	local_timer = new lib::timer();
 	configure(_ms_delay);
 }
 

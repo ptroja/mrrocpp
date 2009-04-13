@@ -1,11 +1,11 @@
 ////////////////////////////////////////////////////////////////////////////////
-/*! \file     include/common/com_buf.h
+/*! \file     include/lib/com_buf.h
  *
  *  Data structures for IPC.
  *
  *  \author   tkornuta
  *  \date     2006-11-29
- *  \URL: https://segomo.elka.pw.edu.pl/svn/mrrocpp/base/trunk/include/common/com_buf.h $
+ *  \URL: https://segomo.elka.pw.edu.pl/svn/mrrocpp/base/trunk/include/lib/com_buf.h $
  *  $LastChangedRevision$
  *  $LastChangedDate$
  *  $LastChangedBy$
@@ -23,8 +23,8 @@
 #ifndef __COM_BUF_H
 #define __COM_BUF_H
 
-#include "common/typedefs.h"
-#include "common/impconst.h"
+#include "lib/typedefs.h"
+#include "lib/impconst.h"
 #include "messip/messip.h"
 
 

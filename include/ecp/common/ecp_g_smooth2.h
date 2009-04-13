@@ -7,8 +7,8 @@
 #if !defined(_ECP_GEN_SMOOTH2_H)
 # define _ECP_GEN_SMOOTH2_H
 
-#include "common/impconst.h"
-#include "common/com_buf.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 
 #include <list>
 #include "ecp/common/ecp_smooth2_taught_in_pose.h"

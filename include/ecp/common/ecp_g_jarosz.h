@@ -12,7 +12,7 @@
 #if !defined(_ECP_GEN_JAROSZ_H)
 #define _ECP_GEN_JAROSZ_H
 
-#include "common/impconst.h"
+#include "lib/impconst.h"
 
 #include "lib/matrix.h"
 #include "ecp/common/ecp_teach_in_generator.h"
