@@ -3,6 +3,9 @@
 #include <pthread.h>
 #include <stdio.h>
 
+namespace mrrocpp {
+namespace lib {
+
 void set_thread_priority(pthread_t thread, int sched_priority_l)
 {
 	int policy;
@@ -15,3 +18,6 @@ void set_thread_priority(pthread_t thread, int sched_priority_l)
 		perror("pthread_setschedparam()");
 	}
 }
+
+} // namespace lib
+} // namespace mrrocpp

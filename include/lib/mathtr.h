@@ -234,7 +234,7 @@ public:
 	inline static void copy_frame_tab(frame_tab destination_frame,   frame_tab source_frame)
 	{
 		memcpy(destination_frame, source_frame, sizeof(frame_tab));
-	};//: copy_frame
+	};//: lib::copy_frame
 
 	// Kopiowanie macierzy jednorodnej w postaci XYZ_ANGLE_AXIS do DEST z SOURCE.
 	inline static void copy_xyz_angle_axis(double  destination_xyz_angle_axis[6], double source_xyz_angle_axis[6])

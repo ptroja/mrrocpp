@@ -455,7 +455,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffer &i
 	}
 
 
-	//   copy_frame (reply.arm.pf_def.beggining_arm_frame, begining_frame);
+	//   lib::copy_frame (reply.arm.pf_def.beggining_arm_frame, begining_frame);
 
 	beginning_gripper_coordinate = begining_joints[gripper_servo_nr];
 
@@ -905,7 +905,7 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 		global_current_joints[i]=servo_current_joints[i];
 	}
 	//	printf("lala: %f\n", servo_current_joints[1]);
-	copy_frame(global_current_frame_wo_tool, servo_current_frame_wo_tool);
+	lib::copy_frame(global_current_frame_wo_tool, servo_current_frame_wo_tool);
 
 	pthread_mutex_unlock( &edp_irp6s_effector_mutex);
 }
@@ -914,7 +914,7 @@ lib::Homog_matrix irp6s_postument_track_effector::return_current_frame(TRANSLATI
 {// by Y
 	pthread_mutex_lock( &edp_irp6s_effector_mutex);
 	// przepisanie danych na zestaw lokalny dla edp_force
-	// copy_frame(force_current_end_effector_frame, global_current_end_effector_frame);
+	// lib::copy_frame(force_current_end_effector_frame, global_current_end_effector_frame);
 	lib::Homog_matrix return_frame(global_current_frame_wo_tool);
 	pthread_mutex_unlock( &edp_irp6s_effector_mutex);
 

@@ -68,7 +68,7 @@ int main (int argc, char *argv[], char **arge)
 #endif
 			mp::common::mp_t = mp::task::return_created_mp_task(*_config);
 
-			set_thread_priority(pthread_self(), MAX_PRIORITY-4);
+			lib::set_thread_priority(pthread_self(), MAX_PRIORITY-4);
 			signal(SIGTERM, &(mp::common::catch_signal_in_mp));
 			//signal(SIGINT,  &(catch_signal_in_mp));
 			signal(SIGSEGV, &(mp::common::catch_signal_in_mp));

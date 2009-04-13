@@ -51,7 +51,7 @@ void * irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 	VSP_EDP_message vsp_edp_command;
 	EDP_VSP_reply edp_vsp_reply;
 
-	set_thread_priority(pthread_self() , MAX_PRIORITY-4);
+	lib::set_thread_priority(pthread_self() , MAX_PRIORITY-4);
 
 	//!< zarejestrowanie nazwy identyfikujacej serwer
 
@@ -144,7 +144,7 @@ void * irp6s_postument_track_effector::force_thread_start(void* arg)
 void * irp6s_postument_track_effector::force_thread(void *arg)
 {
 
-	set_thread_priority(pthread_self() , MAX_PRIORITY-1);
+	lib::set_thread_priority(pthread_self() , MAX_PRIORITY-1);
 
 	vs = sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
 

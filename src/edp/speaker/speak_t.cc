@@ -49,7 +49,7 @@ void * effector::speak_thread_start(void* arg)
 
 void * effector::speak_thread(void *arg)
 {
-    set_thread_priority(pthread_self() , MAX_PRIORITY-10);
+    lib::set_thread_priority(pthread_self() , MAX_PRIORITY-10);
 
     if( init() == -1)
     {

@@ -15,6 +15,9 @@
 
 #include "common/impconst.h"
 
+namespace mrrocpp {
+namespace lib {
+
 // setting of thread priority
 void set_thread_priority(pthread_t thread, int sched_priority_l);
 
@@ -28,5 +31,8 @@ inline void copy_frame(frame_tab destination_frame, const frame_tab source_frame
 			destination_frame[column][row] = source_frame[column][row];
 	*/
 }
+
+} // namespace lib
+} // namespace mrrocpp
 
 #endif

@@ -30,7 +30,7 @@ void * irp6s_and_conv_effector::trans_thread_start(void* arg)
 void * irp6s_and_conv_effector::trans_thread(void *arg)
 {
 
-    set_thread_priority(pthread_self(), MAX_PRIORITY);
+    lib::set_thread_priority(pthread_self(), MAX_PRIORITY);
 
     while(1)
     {

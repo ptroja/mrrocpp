@@ -115,7 +115,7 @@ bool effector::initialize_communication()
 
 	/* Ustawienie priorytetu procesu */
 
-	set_thread_priority(pthread_self() , MAX_PRIORITY-2);
+	lib::set_thread_priority(pthread_self() , MAX_PRIORITY-2);
 
 	attach =
 #if !defined(USE_MESSIP_SRR)

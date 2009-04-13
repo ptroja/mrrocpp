@@ -102,15 +102,15 @@ bool y_simple::next_step ( )
 
     /*
     	frame_tab beggining_frame;
-    	copy_frame(beggining_frame,the_robot->EDP_data.current_arm_frame);
+    	lib::copy_frame(beggining_frame,the_robot->EDP_data.current_arm_frame);
     	lib::Homog_matrix beg_frame = lib::Homog_matrix(beggining_frame);
     	cout << endl << "ecp: beginning_frame" << endl << endl << beg_frame;
     	frame_tab present_frame;
-    	copy_frame(present_frame,the_robot->EDP_data.current_arm_frame);
+    	lib::copy_frame(present_frame,the_robot->EDP_data.current_arm_frame);
     	lib::Homog_matrix pres_frame = lib::Homog_matrix(present_frame);
     	cout << endl << "ecp: present_frame" << endl << endl << pres_frame;
     	frame_tab predicted_frame;
-    	copy_frame(predicted_frame,the_robot->EDP_data.current_arm_frame);
+    	lib::copy_frame(predicted_frame,the_robot->EDP_data.current_arm_frame);
     	lib::Homog_matrix pred_frame = lib::Homog_matrix(predicted_frame);
     	cout << endl << "ecp: predicted_frame" << endl << endl<< pred_frame;
     	double force[6];

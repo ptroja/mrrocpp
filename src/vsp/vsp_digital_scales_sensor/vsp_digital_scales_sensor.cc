@@ -64,7 +64,7 @@ void* digital_scale_thread(void*  arg ){
     // Odczytanie numeru linialu.
     int number = (int)arg;
     // Ustawienie priorytetu watku.
-    set_thread_priority(pthread_self() , MAX_PRIORITY-4);
+    lib::set_thread_priority(pthread_self() , MAX_PRIORITY-4);
     // Stworzenie obiektu pomiarowego zwiazanego z danym linialem.
     MOXADigitalScale* ds = new MOXADigitalScale(number);
     // Glowna petla oczekiwania na polecenie odczytu.

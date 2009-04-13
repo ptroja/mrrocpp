@@ -35,7 +35,7 @@ void * irp6s_and_conv_effector::servo_thread(void* arg)
 
     //	 printf("servo 2\n");
 
-    set_thread_priority(pthread_self() , MAX_PRIORITY+2);
+    lib::set_thread_priority(pthread_self() , MAX_PRIORITY+2);
 
     /* BEGIN SERVO_GROUP */
 

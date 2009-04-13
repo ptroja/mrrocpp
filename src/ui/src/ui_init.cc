@@ -608,7 +608,7 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	signal( SIGCHLD, &catch_signal );
 #endif /* PROCESS_SPAWN_RSH */
 
-	set_thread_priority(pthread_self() , MAX_PRIORITY-6);
+	lib::set_thread_priority(pthread_self() , MAX_PRIORITY-6);
 
 	config = NULL;
 

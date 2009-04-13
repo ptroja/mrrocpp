@@ -270,7 +270,7 @@ void ecp_robot::send()
 			throw ecp_robot::ECP_error(NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 	}
 
-	set_thread_priority(pthread_self(), MAX_PRIORITY-2);
+	lib::set_thread_priority(pthread_self(), MAX_PRIORITY-2);
 
 }
 

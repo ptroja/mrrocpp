@@ -168,7 +168,7 @@ void irp6s_effector::compute_frame (const c_buffer &instruction)
         motion_steps = instruction.motion_steps;
         value_in_step_no = instruction.value_in_step_no;
 
-        copy_frame(p_m, instruction.arm.pf_def.arm_frame);
+        lib::copy_frame(p_m, instruction.arm.pf_def.arm_frame);
 
     } // end: then
 
@@ -429,7 +429,7 @@ void irp6s_effector::arm_abs_frame_2_frame (frame_tab p_m)
     // Przepisanie definicji koncowki danej
     // w postaci TRANS wyraonej bezwzgldnie
     // do wewntrznych struktur danych TRANSFORMATORa
-    copy_frame(desired_end_effector_frame, p_m);
+    lib::copy_frame(desired_end_effector_frame, p_m);
 
 
 }
@@ -728,7 +728,7 @@ void irp6s_effector::master_joints_and_frame_download (void)
         current_motor_pos[i]=global_current_motor_pos[i];
         current_joints[i]=global_current_joints[i];
     }
-    copy_frame(servo_current_frame_wo_tool, global_current_frame_wo_tool);
+    lib::copy_frame(servo_current_frame_wo_tool, global_current_frame_wo_tool);
     pthread_mutex_unlock( &edp_irp6s_effector_mutex );
 }
 

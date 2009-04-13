@@ -55,7 +55,7 @@ void ecp_irp6_postument_robot::create_command(void)
 			if (EDP_data.set_type & RMODEL_DV) {
 				switch (EDP_data.set_rmodel_type) {
 					case TOOL_FRAME:
-						copy_frame(ecp_command.instruction.rmodel.tool_frame_def.tool_frame, EDP_data.next_tool_frame);
+						lib::copy_frame(ecp_command.instruction.rmodel.tool_frame_def.tool_frame, EDP_data.next_tool_frame);
 						break;
 					case TOOL_XYZ_ANGLE_AXIS:
 						for (j=0; j<6; j++)
@@ -109,7 +109,7 @@ void ecp_irp6_postument_robot::create_command(void)
 				// Wypelniamy czesc zwiazana z polozeniem ramienia
 				switch (EDP_data.set_arm_type) {
 					case FRAME:
-						copy_frame(ecp_command.instruction.arm.pf_def.arm_frame, EDP_data.next_arm_frame);
+						lib::copy_frame(ecp_command.instruction.arm.pf_def.arm_frame, EDP_data.next_arm_frame);
 
 						break;
 					case XYZ_ANGLE_AXIS:
@@ -249,7 +249,7 @@ void ecp_irp6_postument_robot::get_arm_reply(void)
 						= reply_package.arm.pf_def.arm_coordinates[i];
 			break;
 		case FRAME:
-			copy_frame(EDP_data.current_arm_frame, reply_package.arm.pf_def.arm_frame);
+			lib::copy_frame(EDP_data.current_arm_frame, reply_package.arm.pf_def.arm_frame);
 			break;
 		case XYZ_EULER_ZYZ:
 			for (int i=0; i<6; i++)
@@ -282,7 +282,7 @@ void ecp_irp6_postument_robot::get_rmodel_reply(void)
 {
 	switch (reply_package.rmodel_type) {
 		case TOOL_FRAME:
-			copy_frame(EDP_data.current_tool_frame, reply_package.rmodel.tool_frame_def.tool_frame);
+			lib::copy_frame(EDP_data.current_tool_frame, reply_package.rmodel.tool_frame_def.tool_frame);
 			break;
 		case TOOL_XYZ_ANGLE_AXIS:
 			for (int i=0; i<6; i++)

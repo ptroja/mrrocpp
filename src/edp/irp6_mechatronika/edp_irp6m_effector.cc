@@ -342,7 +342,7 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
 
     // T.K.: Nad tym trzeba pomyslec - co w tym momencie dzieje sie z global_current_end_effector_frame?
     // Jezeli zmienna ta przechowyje polozenie bez narzedzia, to nazwa jest nie tylko nieadekwatna, a wrecz mylaca.
-    copy_frame(global_current_frame_wo_tool, servo_current_frame_wo_tool);
+    lib::copy_frame(global_current_frame_wo_tool, servo_current_frame_wo_tool);
 
     pthread_mutex_unlock( &edp_irp6s_effector_mutex );
 }

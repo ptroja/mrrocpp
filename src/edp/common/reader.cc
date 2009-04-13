@@ -149,7 +149,7 @@ void * irp6s_and_conv_effector::reader_thread(void* arg)
 	}
 
 	// ustawienie priorytetu watku
-	set_thread_priority(pthread_self(), MAX_PRIORITY-10);
+	lib::set_thread_priority(pthread_self(), MAX_PRIORITY-10);
 
 	// alokacja pamieci pod lokalny bufor z pomiarami
 	r_measptr = new reader_data[nr_of_samples];
@@ -227,7 +227,7 @@ void * irp6s_and_conv_effector::reader_thread(void* arg)
 
 		msg->message("measures started");
 
-		set_thread_priority(pthread_self(), MAX_PRIORITY+1);
+		lib::set_thread_priority(pthread_self(), MAX_PRIORITY+1);
 
 		rb_obj->reader_wait_for_new_step();
 		// dopoki nie przyjdzie puls stopu
@@ -308,7 +308,7 @@ void * irp6s_and_conv_effector::reader_thread(void* arg)
 		} while (!stop); // dopoki nie przyjdzie puls stopu
 
 
-		set_thread_priority(pthread_self(), 1);// Najnizszy priorytet podczas proby zapisu do pliku
+		lib::set_thread_priority(pthread_self(), 1);// Najnizszy priorytet podczas proby zapisu do pliku
 		msg->message("measures stopped");
 
 		// przygotowanie nazwy pliku do ktorego beda zapisane pomiary
@@ -425,7 +425,7 @@ void * irp6s_and_conv_effector::reader_thread(void* arg)
 			msg->message("file writing is finished");
 		}
 
-		set_thread_priority(pthread_self(), MAX_PRIORITY-10);
+		lib::set_thread_priority(pthread_self(), MAX_PRIORITY-10);
 
 	} // end: for (;;)
 

@@ -126,7 +126,7 @@ bool y_simple::next_step (std::map <SENSOR_ENUM, ::sensor*>& sensor_m ) {
 	}
 	else next_frame = move_frame * prev_frame * rot_frame;
 	next_frame.to_table(previous_frame);
-	copy_frame(the_robot->EDP_data.next_arm_frame, previous_frame);
+	lib::copy_frame(the_robot->EDP_data.next_arm_frame, previous_frame);
 						// przepisanie nowej ramki do EDP
 	the_robot->EDP_data.next_gripper_coordinate=the_robot->EDP_data.current_gripper_coordinate;
 	

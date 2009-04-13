@@ -52,7 +52,7 @@ void irp6s_and_conv_robot::create_next_pose_command(void)
 			if (ecp_td.set_type & RMODEL_DV) {
 				switch (ecp_td.set_rmodel_type) {
 					case TOOL_FRAME:
-						copy_frame(mp_command.instruction.rmodel.tool_frame_def.tool_frame, ecp_td.next_tool_frame);
+						lib::copy_frame(mp_command.instruction.rmodel.tool_frame_def.tool_frame, ecp_td.next_tool_frame);
 						break;
 					case TOOL_XYZ_ANGLE_AXIS:
 						for (int j=0; j<6; j++) {
@@ -109,7 +109,7 @@ void irp6s_and_conv_robot::create_next_pose_command(void)
 				// Wypelniamy czesc zwiazana z polozeniem ramienia
 				switch (ecp_td.set_arm_type) {
 					case FRAME:
-						copy_frame(mp_command.instruction.arm.pf_def.arm_frame, ecp_td.next_arm_frame);
+						lib::copy_frame(mp_command.instruction.arm.pf_def.arm_frame, ecp_td.next_arm_frame);
 
 						break;
 					case XYZ_ANGLE_AXIS:
@@ -246,7 +246,7 @@ void irp6s_and_conv_robot::get_arm_reply(void)
 		case FRAME:
 			if (robot_name == ROBOT_CONVEYOR)
 				throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
-			copy_frame(ecp_td.current_arm_frame, ecp_reply_package.reply_package.arm.pf_def.arm_frame);
+			lib::copy_frame(ecp_td.current_arm_frame, ecp_reply_package.reply_package.arm.pf_def.arm_frame);
 
 			break;
 		case XYZ_EULER_ZYZ:
@@ -291,7 +291,7 @@ void irp6s_and_conv_robot::get_rmodel_reply(void)
 					!= ROBOT_IRP6_MECHATRONIKA) {
 				throw MP_error(NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			}
-			copy_frame(ecp_td.current_tool_frame, ecp_reply_package.reply_package.rmodel.tool_frame_def.tool_frame);
+			lib::copy_frame(ecp_td.current_tool_frame, ecp_reply_package.reply_package.rmodel.tool_frame_def.tool_frame);
 			break;
 		case TOOL_XYZ_ANGLE_AXIS:
 			if (robot_name != ROBOT_IRP6_POSTUMENT && robot_name != ROBOT_IRP6_ON_TRACK && robot_name
