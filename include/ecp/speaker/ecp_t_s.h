@@ -7,10 +7,11 @@
 namespace mrrocpp {
 namespace ecp {
 namespace speaker {
+namespace task {
 
 class ecp_task_speaker: public common::task::ecp_task  {
 protected:
-	speaking_generator* speak;
+	generator::speaking_generator* speak;
 
 public:
 	// KONSTRUKTORY
@@ -22,6 +23,7 @@ public:
 
 };
 
+}
 } // namespace speaker
 } // namespace ecp
 } // namespace mrrocpp

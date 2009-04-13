@@ -12,6 +12,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace speaker {
+namespace generator {
 
 enum speak_gen_state {SG_AFTER_SET, SG_FIRST_GET, SG_LAST_GET, SG_FINISH};
 
@@ -37,6 +38,7 @@ public:
 }; // end:
 // --------------------------------------------------------------------------
 
+}
 } // namespace speaker
 } // namespace ecp
 } // namespace mrrocpp

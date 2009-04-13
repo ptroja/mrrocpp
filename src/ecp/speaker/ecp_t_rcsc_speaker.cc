@@ -18,6 +18,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace speaker {
+namespace task {
 
 // KONSTRUKTORY
 ecp_task_rcsc_speaker::ecp_task_rcsc_speaker(configurator &_config) : ecp_task(_config)
@@ -32,7 +33,7 @@ void ecp_task_rcsc_speaker::task_initialization(void)
     ecp_m_robot = new ecp_speaker_robot (*this);
 
     gt = new common::generator::ecp_generator_t(*this);
-    speak = new speaking_generator (*this, 8);
+    speak = new generator::speaking_generator (*this, 8);
 
     sr_ecp_msg->message("ECP loaded");
 }
@@ -63,6 +64,8 @@ void ecp_task_rcsc_speaker::main_task_algorithm(void)
 		}
 	}
 }
+
+}
 } // namespace speaker
 
 namespace common {
@@ -70,7 +73,7 @@ namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new speaker::ecp_task_rcsc_speaker(_config);
+	return new speaker::task::ecp_task_rcsc_speaker(_config);
 }
 
 }
