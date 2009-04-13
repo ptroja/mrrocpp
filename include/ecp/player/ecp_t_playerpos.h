@@ -9,14 +9,14 @@ namespace ecp {
 namespace player {
 namespace task {
 
-class ecp_task_playerpos: public common::task::base  {
+class playerpos: public common::task::base  {
 protected:
-	generator::playerpos_generator* ppg;
+	generator::playerpos* ppg;
 
 public:
 	// KONSTRUKTORY
-	ecp_task_playerpos(configurator &_config);
-	~ecp_task_playerpos();
+	playerpos(configurator &_config);
+	~playerpos();
 	
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

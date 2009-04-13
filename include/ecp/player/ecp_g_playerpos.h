@@ -9,7 +9,7 @@ namespace ecp {
 namespace player {
 namespace generator {
 
-class playerpos_generator : public common::generator::base
+class playerpos : public common::generator::base
 {
 	private:
 		PlayerClient *client;
@@ -21,8 +21,8 @@ class playerpos_generator : public common::generator::base
 
 	public:
 		// konstruktor
-		playerpos_generator(common::task::base& _ecp_task);
-		~playerpos_generator();
+		playerpos(common::task::base& _ecp_task);
+		~playerpos();
 
 		virtual bool first_step ();
 

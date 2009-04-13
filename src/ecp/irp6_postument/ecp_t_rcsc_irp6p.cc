@@ -19,7 +19,7 @@ namespace irp6p {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_rcsc_irp6p::ecp_task_rcsc_irp6p(configurator &_config) : base(_config)
+rcsc::rcsc(configurator &_config) : base(_config)
 {
     gt = NULL;
     nrg = NULL;
@@ -31,7 +31,7 @@ ecp_task_rcsc_irp6p::ecp_task_rcsc_irp6p(configurator &_config) : base(_config)
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_rcsc_irp6p::task_initialization(void)
+void rcsc::task_initialization(void)
 {
     // the robot is choose dependendat on the section of configuration file sent as argv[4]
     ecp_m_robot = new ecp_irp6_postument_robot (*this);
@@ -51,7 +51,7 @@ void ecp_task_rcsc_irp6p::task_initialization(void)
 }
 
 
-void ecp_task_rcsc_irp6p::main_task_algorithm(void)
+void rcsc::main_task_algorithm(void)
 {
 	int size;
 	char * path1;
@@ -181,7 +181,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new irp6p::task::ecp_task_rcsc_irp6p(_config);
+	return new irp6p::task::rcsc(_config);
 }
 
 }

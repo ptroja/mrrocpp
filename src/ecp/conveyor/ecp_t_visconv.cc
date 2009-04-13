@@ -11,16 +11,16 @@ namespace conveyor {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_conveyor_lego_brick::ecp_task_conveyor_lego_brick(configurator &_config) : base(_config)
+lego_brick::lego_brick(configurator &_config) : base(_config)
 {
 	absolute_position = 0.0;
 }
 
-ecp_task_conveyor_lego_brick::~ecp_task_conveyor_lego_brick()
+lego_brick::~lego_brick()
 {}
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_conveyor_lego_brick::task_initialization(void)
+void lego_brick::task_initialization(void)
 {
 	ecp_m_robot = new ecp_conveyor_robot (*this);
 
@@ -29,7 +29,7 @@ void ecp_task_conveyor_lego_brick::task_initialization(void)
 }
 
 
-void ecp_task_conveyor_lego_brick::main_task_algorithm(void)
+void lego_brick::main_task_algorithm(void)
 {
 	//conveyor_incremental_move ysg(*this, 100);
 	common::generator::smooth gen(*this, true, true);
@@ -84,7 +84,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new conveyor::task::ecp_task_conveyor_lego_brick(_config);
+	return new conveyor::task::lego_brick(_config);
 }
 
 }

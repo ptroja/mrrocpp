@@ -8,11 +8,11 @@ namespace ecp {
 namespace irp6p {
 namespace task {
 
-class ecp_task_dung: public common::task::base  {
+class dung: public common::task::base  {
 
 public:
 	// KONSTRUKTORY
-	ecp_task_dung(configurator &_config);
+	dung(configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

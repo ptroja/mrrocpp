@@ -17,12 +17,12 @@ namespace ecp {
 namespace irp6p {
 namespace task {
 
-ecp_task_lego_brick_irp6p::ecp_task_lego_brick_irp6p(configurator &_config) :
+lego_brick::lego_brick(configurator &_config) :
         base(_config)
 {}
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_lego_brick_irp6p::task_initialization(void)
+void lego_brick::task_initialization(void)
 {
     // the robot is choose dependendat on the section of configuration file sent as argv[4]
     ecp_m_robot = new ecp_irp6_postument_robot (*this);
@@ -35,7 +35,7 @@ void ecp_task_lego_brick_irp6p::task_initialization(void)
     sr_ecp_msg->message("ECP loaded");
 }
 
-void ecp_task_lego_brick_irp6p::main_task_algorithm(void)
+void lego_brick::main_task_algorithm(void)
 {
 	sg->flush_pose_list();
 
@@ -207,7 +207,7 @@ namespace task {
 
 base* return_created_ecp_task(configurator &_config)
 {
-	return new irp6p::task::ecp_task_lego_brick_irp6p(_config);
+	return new irp6p::task::lego_brick(_config);
 }
 
 }

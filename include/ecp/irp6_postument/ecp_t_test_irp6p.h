@@ -8,11 +8,11 @@ namespace ecp {
 namespace irp6p {
 namespace task {
 
-class ecp_task_test_irp6p: public common::task::base  {
+class test: public common::task::base  {
 
 public:
 	// KONSTRUKTORY
-	ecp_task_test_irp6p(configurator &_config);
+	test(configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

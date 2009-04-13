@@ -29,12 +29,12 @@ namespace irp6p {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_dung::ecp_task_dung(configurator &_config) : base(_config)
+dung::dung(configurator &_config) : base(_config)
 {
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_dung::task_initialization(void)
+void dung::task_initialization(void)
 {
 	ecp_m_robot = new ecp_irp6_postument_robot (*this);
 
@@ -46,9 +46,9 @@ void ecp_task_dung::task_initialization(void)
 }
 
 
-void ecp_task_dung::main_task_algorithm(void)
+void dung::main_task_algorithm(void)
 {
-	generator::dung_generator dg(*this, 4);
+	generator::dung dg(*this, 4);
 
 	for(;;) {
 		sr_ecp_msg->message("NEW SERIES");
@@ -65,7 +65,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new irp6p::task::ecp_task_dung(_config);
+	return new irp6p::task::dung(_config);
 }
 
 }

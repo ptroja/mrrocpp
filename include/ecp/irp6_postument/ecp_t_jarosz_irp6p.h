@@ -8,12 +8,12 @@ namespace ecp {
 namespace irp6p {
 namespace task {
 
-class ecp_task_jarosz_irp6p: public common::task::base  {
+class jarosz: public common::task::base  {
 
 public:
 	// KONSTRUKTORY
-	ecp_task_jarosz_irp6p(configurator &_config);
-	~ecp_task_jarosz_irp6p();
+	jarosz(configurator &_config);
+	~jarosz();
 	
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

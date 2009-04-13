@@ -25,14 +25,14 @@ namespace ecp {
 namespace irp6p {
 namespace generator {
 
-dung_generator::dung_generator(common::task::base& _ecp_task, int step) :
+dung::dung(common::task::base& _ecp_task, int step) :
         base(_ecp_task)
 {
     step_no = step;
     oq1 = oq2 = oq3 = oq4 = oq5 = oq6 = 200.0;
 }
 
-bool dung_generator::first_step()
+bool dung::first_step()
 {
     td.interpolation_node_no = 1;
     td.internode_step_no = step_no;
@@ -54,7 +54,7 @@ bool dung_generator::first_step()
     return true;
 }
 
-bool dung_generator::next_step ( )
+bool dung::next_step ( )
 {
     // define variable
     double	g[6];

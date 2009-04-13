@@ -24,13 +24,13 @@ namespace ecp {
 namespace conveyor {
 namespace task {
 
-class ecp_task_conveyor_test: public common::task::base 
+class test: public common::task::base 
 {
 
 public:
 	// KONSTRUKTORY
-	ecp_task_conveyor_test(configurator &_config);
-	~ecp_task_conveyor_test();
+	test(configurator &_config);
+	~test();
 	
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

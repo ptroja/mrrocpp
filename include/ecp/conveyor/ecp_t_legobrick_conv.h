@@ -22,14 +22,14 @@ namespace ecp {
 namespace conveyor {
 namespace task {
 
-class ecp_task_conveyor_lego_brick: public common::task::base 
+class lego_brick: public common::task::base 
 {
 	double absolute_position;
 
 public:
 	// KONSTRUKTORY
-	ecp_task_conveyor_lego_brick(configurator &_config);
-	~ecp_task_conveyor_lego_brick();
+	lego_brick(configurator &_config);
+	~lego_brick();
 	
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

@@ -12,24 +12,24 @@ namespace festival {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_festival::ecp_task_festival(configurator &_config) :
+base::base(configurator &_config) :
 	common::task::base(_config)
 {
-	fg = new generator::festival_generator (*this);
+	fg = new generator::base (*this);
 }
 
-ecp_task_festival::~ecp_task_festival()
+base::~base()
 {
 	delete fg;
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_festival::task_initialization(void)
+void base::task_initialization(void)
 {
 	sr_ecp_msg->message("ECP loaded");
 }
 
-void ecp_task_festival::main_task_algorithm(void)
+void base::main_task_algorithm(void)
 {
 	int isTest = config.return_int_value("test_mode");
 
@@ -46,7 +46,7 @@ void ecp_task_festival::main_task_algorithm(void)
 					sr_ecp_msg->message(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				else
 				{
-					fg->set_voice((generator::festival_generator::VOICE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
+					fg->set_voice((generator::base::VOICE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
 					fg->set_phrase(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 					fg->Move();
 				}
@@ -68,7 +68,7 @@ namespace task {
 
 base* return_created_ecp_task(configurator &_config)
 {
-	return new festival::task::ecp_task_festival(_config);
+	return new festival::task::base(_config);
 }
 
 }

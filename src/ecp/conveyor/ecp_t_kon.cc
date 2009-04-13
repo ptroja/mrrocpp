@@ -16,21 +16,21 @@ namespace conveyor {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_conveyor_kon::ecp_task_conveyor_kon(configurator &_config) : base(_config)
+kon::kon(configurator &_config) : base(_config)
 {}
 
-ecp_task_conveyor_kon::~ecp_task_conveyor_kon()
+kon::~kon()
 {}
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_conveyor_kon::task_initialization(void)
+void kon::task_initialization(void)
 {
 	ecp_m_robot = new ecp_conveyor_robot (*this);
 
 	sr_ecp_msg->message("ECP loaded");
 }
 
-void ecp_task_conveyor_kon::main_task_algorithm(void)
+void kon::main_task_algorithm(void)
 {
 	// --------------------------------- old
 	// for(;;) {
@@ -151,7 +151,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new conveyor::task::ecp_task_conveyor_kon(_config);
+	return new conveyor::task::kon(_config);
 }
 
 }

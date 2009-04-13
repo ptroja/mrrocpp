@@ -15,24 +15,24 @@ namespace player {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_speechrecognition::ecp_task_speechrecognition(configurator &_config)
+speechrecognition::speechrecognition(configurator &_config)
         : base(_config)
 {
-    srg = new generator::speechrecognition_generator (*this);
+    srg = new generator::speechrecognition (*this);
 }
 
-ecp_task_speechrecognition::~ecp_task_speechrecognition()
+speechrecognition::~speechrecognition()
 {
     delete srg;
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_speechrecognition::task_initialization(void)
+void speechrecognition::task_initialization(void)
 {
     sr_ecp_msg->message("ECP loaded");
 }
 
-void ecp_task_speechrecognition::main_task_algorithm(void)
+void speechrecognition::main_task_algorithm(void)
 {
     for(;;)
     {
@@ -64,7 +64,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new player::task::ecp_task_speechrecognition(_config);
+	return new player::task::speechrecognition(_config);
 }
 
 }

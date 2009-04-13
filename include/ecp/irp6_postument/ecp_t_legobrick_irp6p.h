@@ -10,7 +10,7 @@ namespace ecp {
 namespace irp6p {
 namespace task {
 
-class ecp_task_lego_brick_irp6p: public common::task::base
+class lego_brick: public common::task::base
 {
 protected:
     //generatory
@@ -20,7 +20,7 @@ protected:
 	common::generator::legobrick_detach_force* dfg;
 
 public:
-    ecp_task_lego_brick_irp6p(configurator &_config);
+    lego_brick(configurator &_config);
 
     // methods for ECP template to redefine in concrete classes
     void task_initialization(void);

@@ -32,7 +32,7 @@ namespace generator {
  * z* - rzet
  */
 
-class festival_generator : public common::generator::base
+class base : public common::generator::base
 {
 	private:
 		int sock;
@@ -51,8 +51,8 @@ class festival_generator : public common::generator::base
 
 	public:
 		// konstruktor
-		festival_generator(common::task::base& _ecp_task);
-		~festival_generator();
+		base(common::task::base& _ecp_task);
+		~base();
 
 		virtual bool first_step ();
 

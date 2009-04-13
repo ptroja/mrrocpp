@@ -13,14 +13,14 @@ namespace conveyor {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_conveyor_test::ecp_task_conveyor_test(configurator &_config) : base(_config)
+test::test(configurator &_config) : base(_config)
 {}
 
-ecp_task_conveyor_test::~ecp_task_conveyor_test()
+test::~test()
 {}
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_conveyor_test::task_initialization(void)
+void test::task_initialization(void)
 {
 	ecp_m_robot = new ecp_conveyor_robot (*this);
 
@@ -28,9 +28,9 @@ void ecp_task_conveyor_test::task_initialization(void)
 }
 
 
-void ecp_task_conveyor_test::main_task_algorithm(void)
+void test::main_task_algorithm(void)
 {
-	generator::y_simple_generator ysg(*this, 8);
+	generator::y_simple ysg(*this, 8);
 	ysg.sensor_m = sensor_m;
 
 	for(;;) {
@@ -49,7 +49,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new conveyor::task::ecp_task_conveyor_test(_config);
+	return new conveyor::task::test(_config);
 }
 
 }

@@ -8,7 +8,7 @@ namespace ecp {
 namespace player {
 namespace generator {
 
-speechrecognition_generator::speechrecognition_generator(common::task::base& _ecp_task)
+speechrecognition::speechrecognition(common::task::base& _ecp_task)
 	: base (_ecp_task)
 {
 	char * hostname = ecp_t.config.return_string_value("player_hostname");
@@ -20,13 +20,13 @@ speechrecognition_generator::speechrecognition_generator(common::task::base& _ec
 	device = new SpeechRecognitionProxy(client, device_index, 'r');		
 }
 
-speechrecognition_generator::~speechrecognition_generator()
+speechrecognition::~speechrecognition()
 {
 	delete device;
 	delete client;
 }
 
-bool speechrecognition_generator::first_step ( )
+bool speechrecognition::first_step ( )
 {
 	if (device->fresh) {
 			device->Clear();
@@ -35,7 +35,7 @@ bool speechrecognition_generator::first_step ( )
 	return true;
 }
 
-bool speechrecognition_generator::next_step ( )
+bool speechrecognition::next_step ( )
 {
 #if 1
 	// do not block

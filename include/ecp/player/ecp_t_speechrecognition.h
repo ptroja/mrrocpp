@@ -9,14 +9,14 @@ namespace ecp {
 namespace player {
 namespace task {
 
-class ecp_task_speechrecognition: public common::task::base  {
+class speechrecognition: public common::task::base  {
 protected:
-	generator::speechrecognition_generator* srg;
+	generator::speechrecognition* srg;
 
 public:
 	// KONSTRUKTORY
-	ecp_task_speechrecognition(configurator &_config);
-	~ecp_task_speechrecognition();
+	speechrecognition(configurator &_config);
+	~speechrecognition();
 	
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

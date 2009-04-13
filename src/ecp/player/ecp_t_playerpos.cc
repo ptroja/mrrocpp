@@ -16,24 +16,24 @@ namespace player {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_playerpos::ecp_task_playerpos(configurator &_config) :
+playerpos::playerpos(configurator &_config) :
 	base(_config)
 {
-	ppg = new generator::playerpos_generator (*this);
+	ppg = new generator::playerpos (*this);
 }
 
-ecp_task_playerpos::~ecp_task_playerpos()
+playerpos::~playerpos()
 {
 	delete ppg;
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_playerpos::task_initialization(void)
+void playerpos::task_initialization(void)
 {
 	sr_ecp_msg->message("ECP loaded");
 }
 
-void ecp_task_playerpos::main_task_algorithm(void)
+void playerpos::main_task_algorithm(void)
 {
 	for (;;) {
 		sr_ecp_msg->message("Waiting for MP order");
@@ -64,7 +64,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new player::task::ecp_task_playerpos(_config);
+	return new player::task::playerpos(_config);
 }
 
 }

@@ -19,14 +19,14 @@ namespace generator {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej dla zadan yoyka z wodzeniem za nos
-class conveyor_incremental_move: public common::generator::base {
+class incremental_move: public common::generator::base {
 	double move_length;
 	
 public:	
 	trajectory_description td;
 	
 	// konstruktor
-	conveyor_incremental_move(common::task::base& _ecp_task, double inc_move);  
+	incremental_move(common::task::base& _ecp_task, double inc_move);  
 	
 	virtual bool first_step ();
 

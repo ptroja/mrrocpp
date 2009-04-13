@@ -21,25 +21,25 @@ namespace speaker {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_rcsc_speaker::ecp_task_rcsc_speaker(configurator &_config) : base(_config)
+rcsc::rcsc(configurator &_config) : base(_config)
 {
     gt = NULL;
     speak = NULL;
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_rcsc_speaker::task_initialization(void)
+void rcsc::task_initialization(void)
 {
     ecp_m_robot = new ecp_speaker_robot (*this);
 
     gt = new common::generator::transparent(*this);
-    speak = new generator::speaking_generator (*this, 8);
+    speak = new generator::speaking (*this, 8);
 
     sr_ecp_msg->message("ECP loaded");
 }
 
 
-void ecp_task_rcsc_speaker::main_task_algorithm(void)
+void rcsc::main_task_algorithm(void)
 {
 	for(;;)
 	{
@@ -73,7 +73,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new speaker::task::ecp_task_rcsc_speaker(_config);
+	return new speaker::task::rcsc(_config);
 }
 
 }

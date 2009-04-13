@@ -18,7 +18,7 @@ enum speak_gen_state {SG_AFTER_SET, SG_FIRST_GET, SG_LAST_GET, SG_FINISH};
 
 // --------------------------------------------------------------------------
 // Generator mowienia
-class speaking_generator : public common::generator::base {
+class speaking : public common::generator::base {
 
 protected:
 
@@ -29,7 +29,7 @@ public:
 	speak_gen_state new_sg_state, last_sg_state;
 	
 	// konstruktor
-	speaking_generator(common::task::base& _ecp_task, int step=0);  
+	speaking(common::task::base& _ecp_task, int step=0);  
 	
 	virtual bool first_step ();
 	bool configure(const char* text);

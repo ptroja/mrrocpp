@@ -17,10 +17,10 @@ namespace ecp {
 namespace conveyor {
 namespace generator {
 
-conveyor_incremental_move::conveyor_incremental_move(common::task::base& _ecp_task, double inc_move):
+incremental_move::incremental_move(common::task::base& _ecp_task, double inc_move):
 		base (_ecp_task), move_length(inc_move) {}
 
-bool conveyor_incremental_move::first_step ( )
+bool incremental_move::first_step ( )
 {
 	td.interpolation_node_no = 1;
 	td.internode_step_no = 50;//((int)move_length)*20;
@@ -44,7 +44,7 @@ bool conveyor_incremental_move::first_step ( )
 	return true;
 }
 
-bool conveyor_incremental_move::next_step ( )
+bool incremental_move::next_step ( )
 {
 	//struct timespec start[9];
 	if (check_and_null_trigger()) { // Koniec odcinka

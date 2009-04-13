@@ -10,14 +10,14 @@ namespace ecp {
 namespace speaker {
 namespace task {
 
-class ecp_task_rcsc_speaker: public common::task::base  {
+class rcsc: public common::task::base  {
 protected:
 	common::generator::transparent* gt;
-	generator::speaking_generator* speak;
+	generator::speaking* speak;
 
 public:
 	// KONSTRUKTORY
-	ecp_task_rcsc_speaker(configurator &_config);
+	rcsc(configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

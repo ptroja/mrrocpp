@@ -21,10 +21,10 @@ namespace ecp {
 namespace speaker {
 namespace generator {
 
-speaking_generator::speaking_generator(common::task::base& _ecp_task, int step):
+speaking::speaking(common::task::base& _ecp_task, int step):
 	 base(_ecp_task){	step_no = step;  };
 
-bool speaking_generator::configure(const char* text)
+bool speaking::configure(const char* text)
 {
 	if (text != NULL) {
 		strcpy(the_robot->EDP_data.text, text);
@@ -35,7 +35,7 @@ bool speaking_generator::configure(const char* text)
 	}
 }
 
-bool speaking_generator::first_step ( ) {
+bool speaking::first_step ( ) {
 
 	for (int i=0; i<6; i++)
 		delta[i]=0.0;
@@ -54,7 +54,7 @@ bool speaking_generator::first_step ( ) {
 
 
 // --------------------------------------------------------------------------
-bool speaking_generator::next_step ( ) {
+bool speaking::next_step ( ) {
 	// struct timespec start[9];
 
 /*

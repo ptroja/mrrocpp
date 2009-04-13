@@ -9,7 +9,7 @@ namespace ecp {
 namespace player {
 namespace generator {
 
-class speechrecognition_generator : public common::generator::base
+class speechrecognition : public common::generator::base
 {
 	private:
 		PlayerClient *client;
@@ -17,8 +17,8 @@ class speechrecognition_generator : public common::generator::base
 
 	public:
 		// konstruktor
-		speechrecognition_generator(common::task::base& _ecp_task);
-		~speechrecognition_generator();
+		speechrecognition(common::task::base& _ecp_task);
+		~speechrecognition();
 
 		virtual bool first_step ();
 

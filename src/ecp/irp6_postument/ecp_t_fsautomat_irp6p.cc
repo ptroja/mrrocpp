@@ -38,7 +38,7 @@ namespace irp6p {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_fsautomat_irp6p::ecp_task_fsautomat_irp6p(configurator &_config) : base(_config)
+fsautomat::fsautomat(configurator &_config) : base(_config)
 {
 	sg = NULL;
 	tcg = NULL;
@@ -54,7 +54,7 @@ ecp_task_fsautomat_irp6p::ecp_task_fsautomat_irp6p(configurator &_config) : base
 	go_st = NULL;
 }
 
-void ecp_task_fsautomat_irp6p::task_initialization(void)
+void fsautomat::task_initialization(void)
 {
 	ecp_m_robot = new ecp_irp6_postument_robot (*this);
 
@@ -213,7 +213,7 @@ void ecp_task_fsautomat_irp6p::task_initialization(void)
 	sr_ecp_msg->message("ECP loaded");
 };
 
-void ecp_task_fsautomat_irp6p::main_task_algorithm(void)
+void fsautomat::main_task_algorithm(void)
 {
 
 	int size;
@@ -340,7 +340,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new irp6p::task::ecp_task_fsautomat_irp6p(_config);
+	return new irp6p::task::fsautomat(_config);
 }
 
 }

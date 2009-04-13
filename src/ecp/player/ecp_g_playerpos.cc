@@ -8,7 +8,7 @@ namespace ecp {
 namespace player {
 namespace generator {
 
-playerpos_generator::playerpos_generator(common::task::base& _ecp_task)
+playerpos::playerpos(common::task::base& _ecp_task)
 	: base (_ecp_task)
 {
 	char *hostname = ecp_t.config.return_string_value("player_hostname");
@@ -25,18 +25,18 @@ playerpos_generator::playerpos_generator(common::task::base& _ecp_task)
 	test_mode = ecp_t.config.return_int_value("test_mode");
 }
 
-playerpos_generator::~playerpos_generator()
+playerpos::~playerpos()
 {
 	delete device;
 	delete client;
 }
 
-void playerpos_generator::set_goal(const playerpos_goal_t &_goal)
+void playerpos::set_goal(const playerpos_goal_t &_goal)
 {
 	this->goal = _goal;
 }
 
-bool playerpos_generator::first_step()
+bool playerpos::first_step()
 {
 	//device->ResetOdometry();
 	printf("playerpos_generator::first_step() -> {%.2f, %.2f, %.2f}\n",
@@ -51,7 +51,7 @@ bool playerpos_generator::first_step()
 	return true;
 }
 
-bool playerpos_generator::next_step()
+bool playerpos::next_step()
 {
 	static bool goto_accepted = false;
 	

@@ -32,12 +32,12 @@ namespace task {
 
 
 // KONSTRUKTORY
-ecp_task_test_irp6p::ecp_task_test_irp6p(configurator &_config) : base(_config)
+test::test(configurator &_config) : base(_config)
 {
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_test_irp6p::task_initialization(void)
+void test::task_initialization(void)
 {
 	ecp_m_robot = new ecp_irp6_postument_robot (*this);
 
@@ -60,9 +60,9 @@ void ecp_task_test_irp6p::task_initialization(void)
 }
 
 
-void ecp_task_test_irp6p::main_task_algorithm(void)
+void test::main_task_algorithm(void)
 {
-	generator::y_simple_generator ysg(*this, 8);
+	generator::y_simple ysg(*this, 8);
 	ysg.sensor_m = sensor_m;
 
 	for(;;) {
@@ -81,7 +81,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new irp6p::task::ecp_task_test_irp6p(_config);
+	return new irp6p::task::test(_config);
 }
 
 }
