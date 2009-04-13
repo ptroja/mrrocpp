@@ -6,9 +6,10 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 // Generator przezroczysty
-class ecp_generator_t : public common::ecp_generator {
+class ecp_generator_t : public common::generator::ecp_generator {
 
 public:
 	ecp_generator_t(common::task::ecp_task& _ecp_task);
@@ -23,6 +24,7 @@ public:
 	
 };
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

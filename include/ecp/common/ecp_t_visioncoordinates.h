@@ -39,8 +39,8 @@ private:
 	// na podstawie pozycji zadanej w pliku konfiguracyjnym
 	void setStartPosition();
 
-	ecp_visioncoordinates_generator* itsVisionGen;
-	ecp_smooth_generator* itsSmoothGen;
+	generator::ecp_visioncoordinates_generator* itsVisionGen;
+	generator::ecp_smooth_generator* itsSmoothGen;
 
 	// nazwa sekcji zawierajacej ustawienia dla zadania
 	const char* SETTINGS_SECTION_NAME;

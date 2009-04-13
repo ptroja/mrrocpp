@@ -31,7 +31,7 @@ void ecp_task_conveyor_lego_brick::task_initialization(void)
 void ecp_task_conveyor_lego_brick::main_task_algorithm(void)
 {
 	//conveyor_incremental_move ysg(*this, 100);
-	common::ecp_smooth_generator gen(*this, true, true);
+	common::generator::ecp_smooth_generator gen(*this, true, true);
 	gen.flush_pose_list();
 
 	POSE_SPECIFICATION ps;

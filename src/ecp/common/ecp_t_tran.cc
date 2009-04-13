@@ -63,7 +63,7 @@ void ecp_task_tran::task_initialization(void)
 
 void ecp_task_tran::main_task_algorithm(void)
 {
-	ecp_generator_t gt (*this);
+	generator::ecp_generator_t gt (*this);
 	sr_ecp_msg->message("Ruch");
 
 	gt.Move();

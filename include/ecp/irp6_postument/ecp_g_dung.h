@@ -18,7 +18,7 @@ namespace irp6p {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej dla zadan yoyka z wodzeniem za nos
-class dung_generator : public common::ecp_generator {
+class dung_generator : public common::generator::ecp_generator {
 
 private:
 	double oq1;

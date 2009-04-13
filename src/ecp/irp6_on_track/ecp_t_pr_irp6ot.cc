@@ -38,7 +38,7 @@ void ecp_task_pr_irp6ot::short_move_up ()
     tdes.coordinate_delta[5] = 0.0;   // przyrost wspolrzednej PSI
     tdes.coordinate_delta[6] = 0.0;   // przyrost dla rozwarcia chwytaka
     // Generator trajektorii prostoliniowej
-    common::ecp_linear_generator lg(*this, tdes, 0);
+    common::generator::ecp_linear_generator lg(*this, tdes, 0);
     lg.Move();
 }
 
@@ -75,17 +75,17 @@ void ecp_task_pr_irp6ot::task_initialization(void)
 
     ecp_tryb = config.return_int_value("tryb");
 
-    ynrlg = new common::y_nose_run_force_generator (*this, 8);
+    ynrlg = new common::generator::y_nose_run_force_generator (*this, 8);
     ynrlg->sensor_m = sensor_m;
 
     if (ecp_tryb==1)
     {
-        tig = new common::y_drawing_teach_in_force_generator (*this, 8);
+        tig = new common::generator::y_drawing_teach_in_force_generator (*this, 8);
         tig->sensor_m = sensor_m;
     }
     else if (ecp_tryb==2)
     {
-        tig = new common::y_advanced_drawing_teach_in_force_generator(*this, 8);
+        tig = new common::generator::y_advanced_drawing_teach_in_force_generator(*this, 8);
         tig->sensor_m = sensor_m;
 
     }
@@ -133,7 +133,7 @@ void ecp_task_pr_irp6ot::main_task_algorithm(void)
 			sr_ecp_msg->message("Uczenie trajektorii");
 			sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
 			tig->flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
-			tig->teach_or_move=common::YG_TEACH;
+			tig->teach_or_move=common::generator::YG_TEACH;
 			tig->Move();
 
 			sr_ecp_msg->message("Krotki ruch w gore");
@@ -151,7 +151,7 @@ void ecp_task_pr_irp6ot::main_task_algorithm(void)
 			ynrlg->Move();
 
 			sr_ecp_msg->message("Odtwarzanie nauczonej trajektorii");
-			tig->teach_or_move=common::YG_MOVE;
+			tig->teach_or_move=common::generator::YG_MOVE;
 			tig->Move();
 
 			sr_ecp_msg->message("Krotki ruch w gore");

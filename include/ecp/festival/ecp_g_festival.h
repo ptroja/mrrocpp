@@ -31,7 +31,7 @@ namespace festival {
  * z* - rzet
  */
 
-class festival_generator : public common::ecp_generator
+class festival_generator : public common::generator::ecp_generator
 {
 	private:
 		int sock;

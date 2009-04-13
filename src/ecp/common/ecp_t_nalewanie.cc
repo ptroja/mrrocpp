@@ -47,7 +47,7 @@ void ecp_task_nalewanie::task_initialization(void)
         ecp_m_robot = new irp6p::ecp_irp6_postument_robot (*this);
     }
 
-    sg = new ecp_smooth_generator (*this, true, true);
+    sg = new generator::ecp_smooth_generator (*this, true, true);
 
     sg->load_file_with_path ("../trj/rcsc/irp6ot_sm_ap_2.trj");
 

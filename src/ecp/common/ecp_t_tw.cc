@@ -51,7 +51,7 @@ void ecp_task_tw::task_initialization(void)
 
 	usleep(1000*100);
 
-	nrg = new ecp_tff_nose_run_generator(*this, 8);
+	nrg = new generator::ecp_tff_nose_run_generator(*this, 8);
 
 
 
@@ -66,7 +66,7 @@ void ecp_task_tw::task_initialization(void)
 
 
 
-	befg = new bias_edp_force_generator(*this);
+	befg = new generator::bias_edp_force_generator(*this);
 
 
 	switch (ecp_m_robot->robot_name)

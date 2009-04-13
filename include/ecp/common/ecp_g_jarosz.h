@@ -21,6 +21,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 // ########################################################################################################
 // ########################################################################################################
@@ -32,7 +33,7 @@ namespace common {
 // KLASA BAZOWA dla generatorow o zadany przyrost polozenia/orientacji  
 // ####################################################################################################
 
-class ecp_delta_generator : public common::ecp_generator 
+class ecp_delta_generator : public common::generator::ecp_generator 
 {
 protected:
 
@@ -441,6 +442,7 @@ void ecp_save_trajectory (ecp_elipsoid_generator& the_generator, common::task::e
 void ecp_save_extended_file (ecp_calibration_generator& the_generator,
 	 ecp_operator_reaction_condition& the_condition, common::task::ecp_task& _ecp_task);
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

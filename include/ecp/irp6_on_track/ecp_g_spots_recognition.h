@@ -20,7 +20,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-class ecp_spots_generator : public common::ecp_generator
+class ecp_spots_generator : public common::generator::ecp_generator
 {
 	ECP_VSP_MSG comm_struct;
 	ecp_mp::sensor::cvfradia * sensor;

@@ -30,6 +30,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 /*********************** METODY ZWIAZANE Z LISTA MAM ************************/
 
@@ -313,6 +314,7 @@ void manual_moves_automatic_measures_generator::save_mam_list(char* filename)
 	}
 }
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

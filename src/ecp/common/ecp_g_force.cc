@@ -22,6 +22,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 //
@@ -2336,6 +2337,7 @@ void ecp_force_tool_change_generator::set_tool_parameters(double x, double y, do
     weight = v;
 }
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

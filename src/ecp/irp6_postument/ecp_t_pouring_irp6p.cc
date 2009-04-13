@@ -55,7 +55,7 @@ void ecp_task_pouring_irp6p::task_initialization(void)
 
     	usleep(1000*100);
     */
-    sg = new common::ecp_smooth_generator (*this, true);
+    sg = new common::generator::ecp_smooth_generator (*this, true);
 
     go_st = new common::task::ecp_sub_task_gripper_opening(*this);
 

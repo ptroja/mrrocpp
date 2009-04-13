@@ -20,6 +20,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 class ecp_smooth_generator : public ecp_delta_generator
 {
@@ -112,6 +113,7 @@ public:
 	virtual bool next_step();
 };
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

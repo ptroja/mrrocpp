@@ -32,6 +32,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 void ecp_smooth_generator::set_relative(void){
 	type=2;
@@ -1532,6 +1533,7 @@ ecp_tool_change_generator::ecp_tool_change_generator (common::task::ecp_task& _e
 
 }
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

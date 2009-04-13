@@ -19,6 +19,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 time_generator::time_generator(common::task::ecp_task& _ecp_task, int step):
         ecp_generator (_ecp_task)
@@ -106,6 +107,7 @@ bool time_generator::next_step ( )
     return true;
 }
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

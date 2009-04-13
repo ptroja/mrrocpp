@@ -51,7 +51,7 @@ void ecp_task_time::task_initialization(void)
 		sensor_m_iterator->second->configure_sensor();
 	}
 
-	tfg = new time_generator(*this, 8);
+	tfg = new generator::time_generator(*this, 8);
 	tfg->sensor_m = sensor_m;
 
 	sr_ecp_msg->message("ECP time loaded");

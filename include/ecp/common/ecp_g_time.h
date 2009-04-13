@@ -17,10 +17,11 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej 
-class time_generator : public common::ecp_generator 
+class time_generator : public common::generator::ecp_generator 
 {
 
 protected:
@@ -42,6 +43,7 @@ public:
 
 };
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

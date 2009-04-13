@@ -13,7 +13,7 @@ namespace irp6ot {
 class ecp_t_smooth2_test: public common::task::ecp_task {
   
   protected:
-	  common::ecp_smooth2_generator* smoothgen2;
+	  common::generator::ecp_smooth2_generator* smoothgen2;
 		
 	public:
 		ecp_t_smooth2_test(configurator &_config);

@@ -24,7 +24,7 @@ namespace irp6ot {
 
 //enum SCENE_STATE {NOT_RECOGNIZED,RECOGNIZED}
 
-class ecp_g_pw_scena : public common::ecp_generator
+class ecp_g_pw_scena : public common::generator::ecp_generator
 {
 	int step_no;
     double next_position[8];

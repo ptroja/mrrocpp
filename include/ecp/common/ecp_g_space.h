@@ -13,6 +13,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 #define NPOINTS 100         // Maximum number of controll poses
 
@@ -85,6 +86,7 @@ public:
 };// end: irp6ot_natural_spline_generator
 // #################################################################################################
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

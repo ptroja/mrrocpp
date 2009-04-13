@@ -14,16 +14,16 @@ class ecp_task_multiplayer_irp6ot : public common::task::ecp_task
 {
 private:
 	//generatory
-	common::ecp_generator_t* gt;
-	common::ecp_smooth_generator* sg;
-	common::bias_edp_force_generator* befg;
-	common::weight_meassure_generator* wmg;
+	common::generator::ecp_generator_t* gt;
+	common::generator::ecp_smooth_generator* sg;
+	common::generator::bias_edp_force_generator* befg;
+	common::generator::weight_meassure_generator* wmg;
 
     //podzadania
 	common::task::ecp_sub_task_gripper_opening* go_st;
 
    	ecp_vis_sac_lx_generator *takeg;
-   	common::ecp_tff_rubik_grab_generator *rgg;
+   	common::generator::ecp_tff_rubik_grab_generator *rgg;
 
 
 public:

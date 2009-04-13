@@ -12,8 +12,8 @@ namespace irp6ot {
 class ecp_task_pouring_irp6ot: public common::task::ecp_task
 {
 protected:
-	common:: ecp_smooth_generator* sg;
-	common::ecp_tool_change_generator* tcg;
+	common::generator::ecp_smooth_generator* sg;
+	common::generator::ecp_tool_change_generator* tcg;
     //podzadania
 	common::task::ecp_sub_task_gripper_opening* go_st;
 

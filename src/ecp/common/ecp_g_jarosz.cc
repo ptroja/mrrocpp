@@ -29,6 +29,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 ecp_delta_generator::ecp_delta_generator(common::task::ecp_task& _ecp_task) :
 	ecp_generator(_ecp_task)
@@ -3403,6 +3404,7 @@ void ecp_save_extended_file(ecp_calibration_generator& the_generator, ecp_operat
 ; // // end: irp6_postument_save_extended_file()
 // --------------------------------------------------------------------------
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

@@ -24,6 +24,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 // ####################################################################
 // #########################  KLASA MAM Element  #############################
@@ -47,7 +48,7 @@ class mam_element{
 // #############    KLASA do odtwarzania listy pozycji i odczytywania linialow    ###############
 // ####################################################################
 
-class manual_moves_automatic_measures_generator : public common::ecp_generator {
+class manual_moves_automatic_measures_generator : public common::generator::ecp_generator {
 	private:
 		// Ostatnia pozycja.
 		double* last_motor_position;
@@ -99,6 +100,7 @@ class manual_moves_automatic_measures_generator : public common::ecp_generator {
 
 	}; // end: class manual_moves_automatic_measures_generator
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

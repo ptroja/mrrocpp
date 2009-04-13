@@ -70,11 +70,11 @@ void ecp_task_fr_irp6ot::task_initialization(void)
     }
 
     // parabolic_generator adg2(XYZ_EULER_ZYZ, 10., ext_pp);  // generator dla trajektorii dojscia we wsp. zew.
-    adg1 = new common::ecp_linear_parabolic_generator (*this, tdes_joint, ta, tb);
+    adg1 = new common::generator::ecp_linear_parabolic_generator (*this, tdes_joint, ta, tb);
     // parabolic_generator adg1(JOINT, 20., joint_pp);   // generator dla trajektorii dojscia we wsp. wew
     // generator dla trajektorii dojscia we wsp. zew.
-    adg2 = new common::ecp_linear_parabolic_generator (*this, tdes_ext, ta, tb);
-    el = new common::ecp_elipsoid_generator (*this);
+    adg2 = new common::generator::ecp_linear_parabolic_generator (*this, tdes_ext, ta, tb);
+    el = new common::generator::ecp_elipsoid_generator (*this);
 
 
     sr_ecp_msg->message("ECP loaded");

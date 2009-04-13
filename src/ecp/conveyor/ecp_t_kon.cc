@@ -123,7 +123,7 @@ void ecp_task_conveyor_kon::main_task_algorithm(void)
 	// double tb[]={0.75, 0.75, 0.75, 0.75, 0.75, 0.75};
 	double ta[]={0.25,0.2,0.28,0.17949,0.071795,0.25};
 	double tb[]={1-0.25,0.8,0.72,1-0.17949,1-0.071795,0.75};
-	common::ecp_linear_parabolic_generator trapez(*this, tdes, ta, tb);
+	common::generator::ecp_linear_parabolic_generator trapez(*this, tdes, ta, tb);
 	sr_ecp_msg->message("Wykonywany jest ruch o zadany przyrost polozenia/orientacji");
 	trapez.Move();
 

@@ -20,7 +20,7 @@ class ecp_task_pawel: public common::task::ecp_task  {
 	protected:
 		//	ecp_tff_nose_run_generator* nrg;
 		//	ecp_teach_in_generator* tig;
-		pawel_generator* pg;
+		generator::pawel_generator* pg;
 		double x,y,z;
 
 

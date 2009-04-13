@@ -31,7 +31,7 @@ void ecp_task_rcsc_speaker::task_initialization(void)
 {
     ecp_m_robot = new ecp_speaker_robot (*this);
 
-    gt = new common::ecp_generator_t(*this);
+    gt = new common::generator::ecp_generator_t(*this);
     speak = new speaking_generator (*this, 8);
 
     sr_ecp_msg->message("ECP loaded");

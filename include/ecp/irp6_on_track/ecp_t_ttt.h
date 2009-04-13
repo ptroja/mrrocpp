@@ -16,7 +16,7 @@ class ecp_task_ttt: public common::task::ecp_task
 {
 protected:
 	//Generator ruchu
-	common::ecp_smooth_generator* sg;
+	common::generator::ecp_smooth_generator* sg;
 
 public:
 	/**

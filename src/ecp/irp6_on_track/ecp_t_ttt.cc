@@ -23,7 +23,7 @@ void ecp_task_ttt::task_initialization(void)
 {
 	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
-    sg = new common::ecp_smooth_generator (*this, true, true);
+    sg = new common::generator::ecp_smooth_generator (*this, true, true);
 
     sr_ecp_msg->message("ECP loaded");
 }

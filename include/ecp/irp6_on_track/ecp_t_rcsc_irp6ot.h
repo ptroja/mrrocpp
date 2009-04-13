@@ -13,15 +13,15 @@ class ecp_task_rcsc_irp6ot: public common::task::ecp_task
 {
 protected:
     //generatory
-	common::ecp_generator_t* gt;
-	common::ecp_tff_nose_run_generator* nrg;
-	common::ecp_tff_rubik_grab_generator* rgg;
-	common::ecp_tff_gripper_approach_generator* gag;
-	common::ecp_tff_rubik_face_rotate_generator* rfrg;
+	common::generator::ecp_generator_t* gt;
+	common::generator::ecp_tff_nose_run_generator* nrg;
+	common::generator::ecp_tff_rubik_grab_generator* rgg;
+	common::generator::ecp_tff_gripper_approach_generator* gag;
+	common::generator::ecp_tff_rubik_face_rotate_generator* rfrg;
 	common::ecp_teach_in_generator* tig;
-	common::ecp_smooth_generator* sg;
-	common::bias_edp_force_generator* befg;
-	common::weight_meassure_generator* wmg;
+	common::generator::ecp_smooth_generator* sg;
+	common::generator::bias_edp_force_generator* befg;
+	common::generator::weight_meassure_generator* wmg;
     //podzadania
 	common::task::ecp_sub_task_gripper_opening* go_st;
 

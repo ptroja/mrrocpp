@@ -29,7 +29,7 @@ protected:
 	/*!
       * Generator used for communication with cvFraDIA.
       */
-	ecp_cvfradia_generator* cvg;
+	generator::ecp_cvfradia_generator* cvg;
 	
 public:
 	/*!

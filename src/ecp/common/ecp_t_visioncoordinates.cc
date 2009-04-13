@@ -52,8 +52,8 @@ void ecp_task_visioncoordinates::task_initialization()
     }
 
 	// i powiazane z nim generatory - czucia wizji i ruchu :)
-	itsVisionGen = new ecp_visioncoordinates_generator(*this);
-	itsSmoothGen = new ecp_smooth_generator(*this, true, false); // synchronized, debug
+	itsVisionGen = new generator::ecp_visioncoordinates_generator(*this);
+	itsSmoothGen = new generator::ecp_smooth_generator(*this, true, false); // synchronized, debug
 }
 
 void ecp_task_visioncoordinates::main_task_algorithm()

@@ -213,7 +213,7 @@ void* forcesensor_move_thread(void* arg)
 			// Proba wykonania ruchu w danym kierunku.
 			fctg->Move();
 		}
-		catch (common::ecp_generator::ECP_error e) {
+		catch (common::generator::ecp_generator::ECP_error e) {
 			// Komunikat o bledzie wysylamy do SR.
 			common::ecp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 		}

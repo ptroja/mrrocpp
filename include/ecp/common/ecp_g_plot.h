@@ -15,10 +15,11 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej 
-class y_simple_generator : public common::ecp_generator 
+class y_simple_generator : public common::generator::ecp_generator 
 {
 
 protected:
@@ -49,6 +50,7 @@ public:
 }; // end:
 // --------------------------------------------------------------------------
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

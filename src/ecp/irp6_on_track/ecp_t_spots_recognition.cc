@@ -59,9 +59,9 @@ if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
  	generator->sensor_m = sensor_m;
 
 	// Create smooth generator.
-	smooth = new common::ecp_smooth_generator(*this, true, false);
+	smooth = new common::generator::ecp_smooth_generator(*this, true, false);
 
-	nose = new common::y_nose_run_force_generator(*this);
+	nose = new common::generator::y_nose_run_force_generator(*this);
 
 }
 

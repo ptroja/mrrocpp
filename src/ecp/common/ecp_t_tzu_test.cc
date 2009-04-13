@@ -59,12 +59,12 @@ void ecp_task_tzu_test::task_initialization(void)
 	}
 
 	// inicjalizacja generatorow
-	sg = new ecp_smooth_generator (*this, true, false);
-	befg = new bias_edp_force_generator(*this);
-	fmg = new force_meassure_generator(*this,100000,20);
-	ftcg = new ecp_force_tool_change_generator(*this);
-	tcg = new ecp_tool_change_generator(*this,true);
-	ynrfg = new ecp_tff_nose_run_generator(*this,8);
+	sg = new generator::ecp_smooth_generator (*this, true, false);
+	befg = new generator::bias_edp_force_generator(*this);
+	fmg = new generator::force_meassure_generator(*this,100000,20);
+	ftcg = new generator::ecp_force_tool_change_generator(*this);
+	tcg = new generator::ecp_tool_change_generator(*this,true);
+	ynrfg = new generator::ecp_tff_nose_run_generator(*this,8);
 
 	sr_ecp_msg->message("ECP loaded");
 }
@@ -501,7 +501,9 @@ ecp_task* return_created_ecp_task (configurator &_config)
 	return new ecp_task_tzu_test(_config);
 };
 
+} // namespace task
 
+namespace generator {
 /**** force meassure generator ****/
 
 /** konstruktor **/
@@ -564,7 +566,7 @@ Ft_v_vector& force_meassure_generator::get_meassurement()
 	return weight;
 }
 
-} // namespace task
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

@@ -28,7 +28,7 @@ void ecp_task_pteach_irp6ot::task_initialization(void)
 {
     ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
-    cg = new common::ecp_calibration_generator (*this, 10);
+    cg = new common::generator::ecp_calibration_generator (*this, 10);
     // Warunek, ktorego spelnienie umozliwia realizacje ruchu do nastepnej nauczonej pozycji
     orc = new common::ecp_operator_reaction_condition (*this);
 

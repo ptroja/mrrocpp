@@ -17,13 +17,14 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 /*!
  * \class ecp_cvfradia_generator
  * \brief Generator responsible for communication with cvFraDIA (testing purposes).
  * \author tkornuta
  */
-class ecp_cvfradia_generator : public common::ecp_generator
+class ecp_cvfradia_generator : public common::generator::ecp_generator
 {
 public:
 	/*!
@@ -44,6 +45,7 @@ public:
     bool next_step ();
 };
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

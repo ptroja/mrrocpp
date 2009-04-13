@@ -17,7 +17,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-class ecp_vis_sac_lx_generator : public common::ecp_generator {
+class ecp_vis_sac_lx_generator : public common::generator::ecp_generator {
 protected:
 sensor *vsp_force_irp6ot, *vsp_force_irp6p, *vsp_vis_sac;
 

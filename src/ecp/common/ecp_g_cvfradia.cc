@@ -22,7 +22,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-
+namespace generator {
 
 /*!
  * First step method.. .
@@ -56,6 +56,7 @@ bool ecp_cvfradia_generator::next_step()
 	return true;
 }
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

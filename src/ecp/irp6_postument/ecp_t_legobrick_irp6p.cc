@@ -26,10 +26,10 @@ void ecp_task_lego_brick_irp6p::task_initialization(void)
     // the robot is choose dependendat on the section of configuration file sent as argv[4]
     ecp_m_robot = new ecp_irp6_postument_robot (*this);
 
-    befg = new common::bias_edp_force_generator (*this);
-    sg = new common::ecp_smooth_generator (*this, true);
-    afg = new common::legobrick_attach_force_generator(*this, 10);
-    dfg = new common::legobrick_detach_force_generator(*this, 10);
+    befg = new common::generator::bias_edp_force_generator (*this);
+    sg = new common::generator::ecp_smooth_generator (*this, true);
+    afg = new common::generator::legobrick_attach_force_generator(*this, 10);
+    dfg = new common::generator::legobrick_detach_force_generator(*this, 10);
 
     sr_ecp_msg->message("ECP loaded");
 }

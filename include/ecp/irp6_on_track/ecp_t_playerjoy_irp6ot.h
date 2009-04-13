@@ -9,7 +9,7 @@ namespace irp6ot {
 
 class ecp_task_playerjoy_irp6ot: public common::task::ecp_task  {
 protected:
-	common::playerjoy_generator* pjg;
+	common::generator::playerjoy_generator* pjg;
 
 public:
 	// KONSTRUKTORY

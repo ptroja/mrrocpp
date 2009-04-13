@@ -19,6 +19,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 class ecp_smooth2_generator : public ecp_delta_generator {
 
@@ -109,6 +110,7 @@ class ecp_smooth2_generator : public ecp_delta_generator {
 		int pose_list_length(void);
 };
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

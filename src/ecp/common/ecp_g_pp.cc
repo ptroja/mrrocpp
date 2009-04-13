@@ -17,6 +17,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 
 
@@ -131,6 +132,7 @@ bool progpanel_generator::next_step ( )
     return true;
 }
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

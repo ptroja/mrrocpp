@@ -9,6 +9,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 //constructor with parameters: task and time to sleep [s]
 ecp_sleep_generator::ecp_sleep_generator (common::task::ecp_task& _ecp_task, double s): ecp_generator (_ecp_task){
@@ -55,6 +56,7 @@ bool ecp_sleep_generator::next_step(){
 	}
 }
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

@@ -11,7 +11,7 @@ namespace task {
 
 class ecp_task_time: public common::task::ecp_task  {
 protected:
-	time_generator *tfg;
+	generator::time_generator *tfg;
 
 public:
 	// KONSTRUKTORY

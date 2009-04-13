@@ -11,6 +11,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 
 // ########################################################################################################
@@ -684,6 +685,7 @@ bool irp6ot_natural_spline_generator::next_step ()
 }
 ; // end: irp6ot_natural_spline_generator::next_step()
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

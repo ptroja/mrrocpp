@@ -32,7 +32,7 @@ void ecp_task_kbochnia_irp6ot::task_initialization(void)
 
 void ecp_task_kbochnia_irp6ot::main_task_algorithm(void)
 {
-	common::irp6ot_natural_spline_generator	spline_gen(*this, 0.02,1);
+	common::generator::irp6ot_natural_spline_generator	spline_gen(*this, 0.02,1);
 
 	spline_gen.load_file_from_ui();
 	sr_ecp_msg->message("Zaladowano plik");

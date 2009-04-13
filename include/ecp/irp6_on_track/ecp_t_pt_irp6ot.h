@@ -10,7 +10,7 @@ namespace irp6ot {
 class ecp_task_pteach_irp6ot: public common::task::ecp_task  {
 protected:
 	// Generator  odtwarzajacy nauczona trajektorie dla celow kalibracji
-	common::ecp_calibration_generator* cg;
+	common::generator::ecp_calibration_generator* cg;
 	// Warunek, ktorego spelnienie umozliwia realizacje ruchu do nastepnej nauczonej pozycji
 	common::ecp_operator_reaction_condition* orc;
 	int pll;                 // liczba nauczonych pozycji

@@ -24,6 +24,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 #define debugmsg(msg)						task::ecp_task::sr_ecp_msg->message(msg);
 
@@ -166,6 +167,7 @@ bool ecp_visioncoordinates_generator::next_step()
 
 #undef debugmsg
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

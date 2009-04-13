@@ -21,6 +21,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 y_simple_generator::y_simple_generator(common::task::ecp_task& _ecp_task, int step):
         ecp_generator (_ecp_task)
@@ -366,6 +367,7 @@ bool y_simple_generator::next_step ( )
     return true;
 }
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

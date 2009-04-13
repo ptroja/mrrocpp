@@ -12,7 +12,7 @@ namespace irp6ot {
 
 #define PI 3.141592
 
-class ecp_ellipse_generator : public common::ecp_generator
+class ecp_ellipse_generator : public common::generator::ecp_generator
 {
 	private:
 		//wieksza polos

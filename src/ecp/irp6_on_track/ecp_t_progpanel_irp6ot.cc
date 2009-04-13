@@ -75,7 +75,7 @@ void ecp_task_progpanel_irp6ot::task_initialization(void)
     // Konfiguracja czujnika.
     sensor_m.begin()->second->configure_sensor();
     // Stworzenie generatora.
-    ppg = new common::progpanel_generator (*this, 16);
+    ppg = new common::generator::progpanel_generator (*this, 16);
     // Przepisanie listy czujnikow.
     ppg->sensor_m = sensor_m;
     sr_ecp_msg->message("ECP loaded");

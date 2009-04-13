@@ -17,7 +17,7 @@ namespace conveyor {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej dla zadan yoyka z wodzeniem za nos
-class y_simple_generator : public common::ecp_generator {
+class y_simple_generator : public common::generator::ecp_generator {
 
 protected:
 

@@ -14,10 +14,11 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej 
-class playerjoy_generator : public common::ecp_generator 
+class playerjoy_generator : public common::generator::ecp_generator 
 {
 
 protected:
@@ -40,6 +41,7 @@ public:
 }; // end:
 // --------------------------------------------------------------------------
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

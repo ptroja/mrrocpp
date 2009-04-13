@@ -34,7 +34,7 @@ void ecp_task_lego_brick_irp6ot::task_initialization(void)
 	//rfrg = new ecp_tff_rubik_face_rotate_generator (*this, 8);
 	//tig = new ecp_teach_in_generator (*this);
 	//befg = new bias_edp_force_generator (*this);
-	sg = new common::ecp_smooth_generator (*this, true);
+	sg = new common::generator::ecp_smooth_generator (*this, true);
 	//wmg = new weight_meassure_generator(*this, 1);
 
 	//go_st = new ecp_sub_task_gripper_opening(*this);

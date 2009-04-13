@@ -33,7 +33,7 @@ void ecp_task_wii::main_task_algorithm(void)
 {
 	double* firstPosition;
 
-    sg = new common::ecp_smooth_generator(*this,true);
+    sg = new common::generator::ecp_smooth_generator(*this,true);
     eg = new ecp_wii_generator(*this);
     
     eg->sensor_m[SENSOR_WIIMOTE] = sensor_m[SENSOR_WIIMOTE];

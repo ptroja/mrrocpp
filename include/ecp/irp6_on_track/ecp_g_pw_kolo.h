@@ -20,7 +20,7 @@ namespace irp6ot {
 #define DEG 0.0174444 //Jeden stopien wyrazony w radianach
 
 
-class ecp_g_pw_kolo : public common::ecp_generator
+class ecp_g_pw_kolo : public common::generator::ecp_generator
 {
     trajectory_description td;
     double next_position[8];  

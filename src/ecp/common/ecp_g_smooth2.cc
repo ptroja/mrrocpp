@@ -29,6 +29,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 void ecp_smooth2_generator::set_relative(void) {
 	type=2;
@@ -1775,6 +1776,7 @@ void ecp_smooth2_generator::calculate(void) {
 
 } *///end - calculate
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

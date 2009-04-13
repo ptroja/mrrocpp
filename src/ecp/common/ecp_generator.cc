@@ -3,6 +3,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 ecp_generator::ecp_generator (common::task::ecp_task& _ecp_task)
         : base(*(ecp_t.sr_ecp_msg)),
@@ -103,8 +104,7 @@ void ecp_generator::execute_motion(void)
 }
 
 
-
-
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

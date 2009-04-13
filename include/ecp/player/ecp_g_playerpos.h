@@ -8,7 +8,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace player {
 
-class playerpos_generator : public common::ecp_generator
+class playerpos_generator : public common::generator::ecp_generator
 {
 	private:
 		PlayerClient *client;

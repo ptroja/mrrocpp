@@ -11,7 +11,7 @@ namespace speaker {
 
 class ecp_task_rcsc_speaker: public common::task::ecp_task  {
 protected:
-	common::ecp_generator_t* gt;
+	common::generator::ecp_generator_t* gt;
 	speaking_generator* speak;
 
 public:

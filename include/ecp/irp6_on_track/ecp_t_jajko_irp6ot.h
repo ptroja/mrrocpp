@@ -9,7 +9,7 @@ namespace irp6ot {
 
 class ecp_task_jajko_irp6ot: public common::task::ecp_task  {
 protected:
-	common::y_egg_force_generator* yefg;
+	common::generator::y_egg_force_generator* yefg;
 
 public:
 	// KONSTRUKTORY

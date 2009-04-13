@@ -17,6 +17,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 
 class ecp_generator : public ecp_mp::generator::base {
@@ -52,6 +53,7 @@ class ecp_generator : public ecp_mp::generator::base {
 
 };
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

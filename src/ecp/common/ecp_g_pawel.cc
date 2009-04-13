@@ -19,6 +19,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace generator {
 
 #define XMAX 768.0
 #define YMAX 574.0
@@ -209,6 +210,7 @@ bool pawel_generator::next_step ( )
     return true;
 };
 
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

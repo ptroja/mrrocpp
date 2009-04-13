@@ -13,7 +13,7 @@ namespace irp6ot {
 class ecp_t_box_irp6ot: public common::task::ecp_task {
   
   protected:
-	  common::ecp_smooth_generator* smoothgen;
+	  common::generator::ecp_smooth_generator* smoothgen;
 		
 	public:
 		ecp_t_box_irp6ot(configurator &_config);

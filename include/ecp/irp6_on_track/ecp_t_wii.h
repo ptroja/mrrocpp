@@ -19,7 +19,7 @@ class ecp_task_wii: public common::task::ecp_task
 protected:
 	//Generator ruchu
 	ecp_wii_generator* eg;
-	common::ecp_smooth_generator* sg;
+	common::generator::ecp_smooth_generator* sg;
 
 public:
 	/**

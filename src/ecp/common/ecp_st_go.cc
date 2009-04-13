@@ -49,7 +49,7 @@ void ecp_sub_task_gripper_opening::configure(double gripper_increment, int motio
 void ecp_sub_task_gripper_opening::execute()
 {
 	// Generator trajektorii prostoliniowej
-	ecp_linear_generator lg(ecp_t, tdes, 1);
+	generator::ecp_linear_generator lg(ecp_t, tdes, 1);
 	lg.Move();
 }
 

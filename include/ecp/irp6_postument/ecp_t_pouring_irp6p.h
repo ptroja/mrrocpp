@@ -12,7 +12,7 @@ namespace irp6p {
 class ecp_task_pouring_irp6p: public common::task::ecp_task
 {
 protected:
-	common::ecp_smooth_generator* sg;
+	common::generator::ecp_smooth_generator* sg;
     //podzadania
 	common::task::ecp_sub_task_gripper_opening* go_st;
 
