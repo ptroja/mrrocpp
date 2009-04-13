@@ -17,6 +17,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace festival {
+namespace generator {
 
 festival_generator::festival_generator(common::task::ecp_task& _ecp_task) :
 		ecp_generator (_ecp_task)
@@ -217,6 +218,7 @@ bool festival_generator::next_step ( )
 	return true;
 }
 
+}
 } // namespace festival
 } // namespace ecp
 } // namespace mrrocpp

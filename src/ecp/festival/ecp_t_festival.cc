@@ -9,12 +9,13 @@
 namespace mrrocpp {
 namespace ecp {
 namespace festival {
+namespace task {
 
 // KONSTRUKTORY
 ecp_task_festival::ecp_task_festival(configurator &_config) :
 	common::task::ecp_task(_config)
 {
-	fg = new festival_generator (*this);
+	fg = new generator::festival_generator (*this);
 }
 
 ecp_task_festival::~ecp_task_festival()
@@ -45,7 +46,7 @@ void ecp_task_festival::main_task_algorithm(void)
 					sr_ecp_msg->message(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				else
 				{
-					fg->set_voice((festival_generator::VOICE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
+					fg->set_voice((generator::festival_generator::VOICE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
 					fg->set_phrase(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 					fg->Move();
 				}
@@ -59,6 +60,7 @@ void ecp_task_festival::main_task_algorithm(void)
 	}
 }
 
+}
 } // namespace festival
 
 namespace common {
@@ -66,7 +68,7 @@ namespace task {
 
 ecp_task* return_created_ecp_task(configurator &_config)
 {
-	return new festival::ecp_task_festival(_config);
+	return new festival::task::ecp_task_festival(_config);
 }
 
 }

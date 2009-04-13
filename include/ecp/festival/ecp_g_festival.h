@@ -6,6 +6,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace festival {
+namespace generator {
 
 #define MAX_FESTIVAL_PHRASE	255
 
@@ -63,6 +64,7 @@ class festival_generator : public common::generator::ecp_generator
 		bool set_voice(VOICE _voice);
 };
 
+}
 } // namespace festival
 } // namespace ecp
 } // namespace mrrocpp

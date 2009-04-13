@@ -74,7 +74,7 @@ void multiplayer::main_task_algorithm(void)
 #if 1
 			// USTAWIENIE POCZATKOWE
 			set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/multiplayer/irp6ot_sm_init.trj", 1, ROBOT_IRP6_ON_TRACK); 
-			set_next_ecps_state (ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::festival_generator::POLISH_VOICE, "inicjalizuje~ zadanie", 1, ROBOT_FESTIVAL);
+			set_next_ecps_state (ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::festival_generator::POLISH_VOICE, "inicjalizuje~ zadanie", 1, ROBOT_FESTIVAL);
 			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 			run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
 					2, 1,
@@ -92,7 +92,7 @@ void multiplayer::main_task_algorithm(void)
 #endif		
 #if 1
 			// OCZEKIWANIE NA POLECENIE (komuikat z festivala)
-			set_next_ecps_state (ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::festival_generator::POLISH_VOICE, "oczekuje~ na polecenie", 1, ROBOT_FESTIVAL);
+			set_next_ecps_state (ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::festival_generator::POLISH_VOICE, "oczekuje~ na polecenie", 1, ROBOT_FESTIVAL);
 			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 			run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 		        (1, 1, ROBOT_FESTIVAL, ROBOT_FESTIVAL);
@@ -119,7 +119,7 @@ void multiplayer::main_task_algorithm(void)
 				}
 				
 				// komuikat z festivala
-				set_next_ecps_state (ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::festival_generator::POLISH_VOICE, komunikat, 1, ROBOT_FESTIVAL);
+				set_next_ecps_state (ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::festival_generator::POLISH_VOICE, komunikat, 1, ROBOT_FESTIVAL);
 				// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 				run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			        (1, 1, ROBOT_FESTIVAL, ROBOT_FESTIVAL);
@@ -129,7 +129,7 @@ void multiplayer::main_task_algorithm(void)
 			goal.forward(1.2);
 			
 			set_next_playerpos_goal (ROBOT_ELECTRON, goal);
-			set_next_ecps_state (ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::festival_generator::POLISH_VOICE, "jade~ przekazac~ kostke~", 1, ROBOT_FESTIVAL);
+			set_next_ecps_state (ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::festival_generator::POLISH_VOICE, "jade~ przekazac~ kostke~", 1, ROBOT_FESTIVAL);
 			set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/multiplayer/irp6ot_sm_grab.trj", 1, ROBOT_IRP6_ON_TRACK);
 			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 			run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
@@ -153,7 +153,7 @@ void multiplayer::main_task_algorithm(void)
 		        (1, 1, ROBOT_ELECTRON, ROBOT_ELECTRON);
 
 			// FAZA PRZECHWYTYWANIA KOSTKI
-			set_next_ecps_state (ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::festival_generator::POLISH_VOICE, "drugi robot podniesie kostke~", 1, ROBOT_FESTIVAL);
+			set_next_ecps_state (ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::festival_generator::POLISH_VOICE, "drugi robot podniesie kostke~", 1, ROBOT_FESTIVAL);
 			
 			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 			run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
@@ -197,7 +197,7 @@ void multiplayer::main_task_algorithm(void)
 			
 			// FAZA ODBIERANIA KOSTKI
 			set_next_ecps_state( (int) ecp_mp::task::ECP_WEIGHT_MEASURE_GENERATOR, 0, NULL, 1, ROBOT_IRP6_ON_TRACK);
-			set_next_ecps_state (ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::festival_generator::POLISH_VOICE, "prosze~ odbierz kostke~", 1, ROBOT_FESTIVAL);
+			set_next_ecps_state (ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::festival_generator::POLISH_VOICE, "prosze~ odbierz kostke~", 1, ROBOT_FESTIVAL);
 			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 			run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
 					2, 2,
@@ -208,7 +208,7 @@ void multiplayer::main_task_algorithm(void)
 			// FAZA POWROTU DO USTAWIENIA POCZATKOWEGO
 
 			set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/multiplayer/irp6ot_sm_init.trj", 1, ROBOT_IRP6_ON_TRACK);
-			set_next_ecps_state (ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::festival_generator::POLISH_VOICE, "zadanie wykonane", 1, ROBOT_FESTIVAL);
+			set_next_ecps_state (ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::festival_generator::POLISH_VOICE, "zadanie wykonane", 1, ROBOT_FESTIVAL);
 			// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 			run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
 					2, 2,
