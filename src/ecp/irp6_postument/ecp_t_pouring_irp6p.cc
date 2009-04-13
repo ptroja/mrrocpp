@@ -28,6 +28,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6p {
+namespace task {
 
 
 // KONSTRUKTORY
@@ -109,6 +110,7 @@ void ecp_task_pouring_irp6p::main_task_algorithm(void)
     } //end for
 }
 
+}
 } // namespace irp6p
 
 namespace common {
@@ -116,7 +118,7 @@ namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new irp6p::ecp_task_pouring_irp6p(_config);
+	return new irp6p::task::ecp_task_pouring_irp6p(_config);
 }
 
 }

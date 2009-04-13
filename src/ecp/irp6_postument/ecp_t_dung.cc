@@ -26,6 +26,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6p {
+namespace task {
 
 // KONSTRUKTORY
 ecp_task_dung::ecp_task_dung(configurator &_config) : ecp_task(_config)
@@ -47,7 +48,7 @@ void ecp_task_dung::task_initialization(void)
 
 void ecp_task_dung::main_task_algorithm(void)
 {
-	dung_generator dg(*this, 4);
+	generator::dung_generator dg(*this, 4);
 
 	for(;;) {
 		sr_ecp_msg->message("NEW SERIES");
@@ -56,6 +57,7 @@ void ecp_task_dung::main_task_algorithm(void)
 	}
 }
 
+}
 } // namespace irp6p
 
 namespace common {
@@ -63,7 +65,7 @@ namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new irp6p::ecp_task_dung(_config);
+	return new irp6p::task::ecp_task_dung(_config);
 }
 
 }

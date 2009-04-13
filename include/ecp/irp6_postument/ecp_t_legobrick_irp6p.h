@@ -8,6 +8,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6p {
+namespace task {
 
 class ecp_task_lego_brick_irp6p: public common::task::ecp_task
 {
@@ -26,6 +27,7 @@ public:
     void main_task_algorithm(void);
 };
 
+}
 } // namespace irp6p
 } // namespace ecp
 } // namespace mrrocpp

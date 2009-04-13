@@ -21,6 +21,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6p {
+namespace generator {
 
 y_simple_generator::y_simple_generator(common::task::ecp_task& _ecp_task, int step)
         :
@@ -156,6 +157,7 @@ bool y_simple_generator::next_step ( )
 }
 ; // end:  y_nose_run_force_generator::next_step ( )
 
+}
 } // namespace irp6p
 } // namespace ecp
 } // namespace mrrocpp

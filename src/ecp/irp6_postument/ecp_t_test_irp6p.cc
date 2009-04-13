@@ -28,6 +28,8 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6p {
+namespace task {
+
 
 // KONSTRUKTORY
 ecp_task_test_irp6p::ecp_task_test_irp6p(configurator &_config) : ecp_task(_config)
@@ -60,7 +62,7 @@ void ecp_task_test_irp6p::task_initialization(void)
 
 void ecp_task_test_irp6p::main_task_algorithm(void)
 {
-	y_simple_generator ysg(*this, 8);
+	generator::y_simple_generator ysg(*this, 8);
 	ysg.sensor_m = sensor_m;
 
 	for(;;) {
@@ -71,6 +73,7 @@ void ecp_task_test_irp6p::main_task_algorithm(void)
 	}
 }
 
+}
 } // namespace irp6p
 
 namespace common {
@@ -78,7 +81,7 @@ namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new irp6p::ecp_task_test_irp6p(_config);
+	return new irp6p::task::ecp_task_test_irp6p(_config);
 }
 
 }
