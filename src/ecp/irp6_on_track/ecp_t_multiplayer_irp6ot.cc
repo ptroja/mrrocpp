@@ -17,13 +17,13 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-ecp_task_multiplayer_irp6ot::ecp_task_multiplayer_irp6ot(configurator &_config) :
+multiplayer::multiplayer(configurator &_config) :
 	base(_config)
 {
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_multiplayer_irp6ot::task_initialization(void)
+void multiplayer::task_initialization(void)
 {
 	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
@@ -49,7 +49,7 @@ void ecp_task_multiplayer_irp6ot::task_initialization(void)
 
 	go_st = new common::task::ecp_sub_task_gripper_opening(*this);
 
-	takeg = new generator::ecp_vis_sac_lx_generator (*this, 4);
+	takeg = new generator::vis_sac_lx (*this, 4);
 	rgg = new common::generator::tff_rubik_grab (*this, 8);
 
 	//przydzielenie czujnikow generatorom
@@ -58,7 +58,7 @@ void ecp_task_multiplayer_irp6ot::task_initialization(void)
 	sr_ecp_msg->message("ECP loaded");
 }
 
-void ecp_task_multiplayer_irp6ot::main_task_algorithm(void)
+void multiplayer::main_task_algorithm(void)
 {
 	for (;;) {
 		int size;
@@ -134,7 +134,7 @@ namespace task {
 
 base* return_created_ecp_task(configurator &_config)
 {
-	return new irp6ot::task::ecp_task_multiplayer_irp6ot(_config);
+	return new irp6ot::task::multiplayer(_config);
 }
 }
 } // namespace common

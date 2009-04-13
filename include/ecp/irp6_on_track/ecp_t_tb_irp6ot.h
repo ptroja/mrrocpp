@@ -14,7 +14,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class ecp_t_tb_irp6ot: public common::task::base{
+class tb: public common::task::base{
 	protected:
 		common::generator::smooth* sgen;					//smooth movement generator
 		common::generator::bias_edp_force* befgen;			//calibration of force
@@ -25,8 +25,8 @@ class ecp_t_tb_irp6ot: public common::task::base{
 		common::generator::sleep* sleepgen;				//sleep generator
 
 	public:
-		ecp_t_tb_irp6ot(configurator &_config);
-		~ecp_t_tb_irp6ot();
+		tb(configurator &_config);
+		~tb();
 		void set_tdes(double, double, double, double, double, double, double);
 		void init_tdes(POSE_SPECIFICATION, int);
 		void task_initialization(void);

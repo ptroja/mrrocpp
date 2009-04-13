@@ -34,7 +34,7 @@ namespace ecp {
 
 namespace common {
 
-extern irp6ot::task::ecp_task_tr_irp6ot* ecp_t;
+extern irp6ot::task::tr* ecp_t;
 } // namespace common 
 namespace irp6ot {
 namespace task {
@@ -48,7 +48,7 @@ name_attach_t * UI_ECP_attach;
 
 
 // Obiekt generator trajektorii.
-generator::trajectory_reproduce_generator *trg;
+generator::trajectory_reproduce *trg;
 // Obiekt warunek sprawdzania, czy robot sie zatrzymal.
 generator::robot_stopped_condition *rsc;
 
@@ -69,7 +69,7 @@ bool STOP_MOVE=true;
 void* value_ptr;
 
 /********************************** SIGCATCH ********************************/
-void ecp_task_tr_irp6ot::catch_signal(int sig)
+void tr::catch_signal(int sig)
 {
 	switch (sig) {
 		case SIGTERM:
@@ -363,13 +363,13 @@ void show_trajectory_reproduce_window(messip_channel_t * UI_fd)
 }
 
 // KONSTRUKTORY
-ecp_task_tr_irp6ot::ecp_task_tr_irp6ot(configurator &_config) :
+tr::tr(configurator &_config) :
 	base(_config)
 {
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_tr_irp6ot::task_initialization(void)
+void tr::task_initialization(void)
 {
 	// Stworzenie obiektu robot.
 	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
@@ -382,7 +382,7 @@ void ecp_task_tr_irp6ot::task_initialization(void)
 	}
 
 	// Stworznie obiektu - generator uczacy.
-	trg = new generator::trajectory_reproduce_generator(*this);
+	trg = new generator::trajectory_reproduce(*this);
 
 	// Stworzenie obiektu - warunek.
 	rsc = new generator::robot_stopped_condition(*this);
@@ -421,7 +421,7 @@ void ecp_task_tr_irp6ot::task_initialization(void)
 	sr_ecp_msg->message("ECP loaded");
 }
 
-void ecp_task_tr_irp6ot::main_task_algorithm(void)
+void tr::main_task_algorithm(void)
 {
 	// Pokazanie okna .
 	show_trajectory_reproduce_window(UI_fd);
@@ -435,7 +435,7 @@ namespace task {
 
 base* return_created_ecp_task(configurator &_config)
 {
-	return new irp6ot::task::ecp_task_tr_irp6ot(_config);
+	return new irp6ot::task::tr(_config);
 }
 }
 } // namespace common

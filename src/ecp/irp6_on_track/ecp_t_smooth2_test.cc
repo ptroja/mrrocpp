@@ -12,16 +12,16 @@ namespace irp6ot {
 namespace task {
 
 //Constructors
-ecp_t_smooth2_test::ecp_t_smooth2_test(configurator &_config): base(_config){
+smooth2_test::smooth2_test(configurator &_config): base(_config){
   smoothgen2 = NULL;
 };
 //Desctructor
-ecp_t_smooth2_test::~ecp_t_smooth2_test(){
+smooth2_test::~smooth2_test(){
 
 };
 
 //methods for ECP template to redefine in concrete classes
-void ecp_t_smooth2_test::task_initialization(void) {
+void smooth2_test::task_initialization(void) {
 
 	ecp_m_robot = new ecp_irp6_on_track_robot(*this);
 	//delay(20000);
@@ -29,7 +29,7 @@ void ecp_t_smooth2_test::task_initialization(void) {
 	sr_ecp_msg->message("ECP loaded smooth2_test");
 };
 
-void ecp_t_smooth2_test::main_task_algorithm(void ) {
+void smooth2_test::main_task_algorithm(void ) {
 	//ecp_m_robot = new ecp_irp6_on_track_robot(*this);
 	//smoothgen2 = new ecp_smooth2_generator(*this, true);
 	//sr_ecp_msg->message("ECP loaded smooth2_test");
@@ -64,7 +64,7 @@ namespace common {
 namespace task {
 
 base* return_created_ecp_task(configurator &_config){
-	return new irp6ot::task::ecp_t_smooth2_test(_config);
+	return new irp6ot::task::smooth2_test(_config);
 }
 
 }

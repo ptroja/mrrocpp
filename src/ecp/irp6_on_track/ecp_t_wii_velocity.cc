@@ -17,9 +17,9 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-ecp_task_wii_velocity::ecp_task_wii_velocity(configurator &_config) : base(_config) {};
+wii_velocity::wii_velocity(configurator &_config) : base(_config) {};
 
-void ecp_task_wii_velocity::task_initialization(void)
+void wii_velocity::task_initialization(void)
 {
 	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
     sr_ecp_msg->message("ECP loaded");
@@ -30,9 +30,9 @@ void ecp_task_wii_velocity::task_initialization(void)
 	sensor_m[SENSOR_WIIMOTE]->configure_sensor();
 }
 
-void ecp_task_wii_velocity::main_task_algorithm(void)
+void wii_velocity::main_task_algorithm(void)
 {
-	eg = new generator::ecp_wii_velocity_generator(*this);
+	eg = new generator::wii_velocity(*this);
 //	eg = new ecp_tff_nose_run_generator(*this,8);
 
     eg->sensor_m[SENSOR_WIIMOTE] = sensor_m[SENSOR_WIIMOTE];
@@ -51,7 +51,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new irp6ot::task::ecp_task_wii_velocity(_config);
+	return new irp6ot::task::wii_velocity(_config);
 }
 
 }

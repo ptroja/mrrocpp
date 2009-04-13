@@ -98,11 +98,11 @@ int steps2switch=0;
 
 // double frame1[4][4];
 
-	seven_eye_run_linear_generator::seven_eye_run_linear_generator(common::task::base& _ecp_task, int step): 
+	seven_eye_run_linear::seven_eye_run_linear(common::task::base& _ecp_task, int step): 
 		base (_ecp_task) { 		step_no = step;          	};  
 
 
-bool seven_eye_run_linear_generator::first_step (  ) {
+bool seven_eye_run_linear::first_step (  ) {
   // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
   // Funkcja zwraca false gdy koniec generacji trajektorii
   // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
@@ -258,7 +258,7 @@ the_robot->EDP_data.next_tool_frame[2][2]=1; the_robot->EDP_data.next_tool_frame
 
 // --------------------------------------------------------------------------
 // Generator prostoliniowy
-bool seven_eye_run_linear_generator::next_step (  ) {
+bool seven_eye_run_linear::next_step (  ) {
  // Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
  // Funkcja zwraca false gdy koniec generacji trajektorii
  // Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana

@@ -23,7 +23,7 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-class ecp_g_tbtest : public common::generator::base
+class tbtest : public common::generator::base
 {
 	//Buffer used to communicate between ECP and VSP
 //	ECP_VSP_MSG communication_buffer;
@@ -35,7 +35,7 @@ class ecp_g_tbtest : public common::generator::base
     double next_position[8];
 
 public:
-    ecp_g_tbtest (common::task::base& _ecp_task);
+    tbtest (common::task::base& _ecp_task);
     virtual bool first_step();
     virtual bool next_step();
 };

@@ -10,7 +10,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class ecp_task_pouring_irp6ot: public common::task::base
+class pouring: public common::task::base
 {
 protected:
 	common::generator::smooth* sg;
@@ -20,7 +20,7 @@ protected:
 
 public:
     // KONSTRUKTORY
-    ecp_task_pouring_irp6ot(configurator &_config);
+    pouring(configurator &_config);
 
     // methods for ECP template to redefine in concrete classes
     void task_initialization(void);

@@ -15,13 +15,13 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class ecp_task_pw_irp6ot: public common::task::base  {
+class pw: public common::task::base  {
 
-	generator::ecp_g_pw_kolo * kolo_gen;
+	generator::pw_kolo * kolo_gen;
 
 public:
 	//Konstruktory.
-	ecp_task_pw_irp6ot(configurator &_config);
+	pw(configurator &_config);
 
 	//Methods for ECP template to redefine in concrete classes.
 	void task_initialization(void);

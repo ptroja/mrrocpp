@@ -22,11 +22,11 @@ namespace task {
 #define BILLION  1000000000L;
 
 // KONSTRUKTORY
-ecp_task_kin_test_irp6ot::ecp_task_kin_test_irp6ot(configurator &_config) : base(_config)
+kin_test::kin_test(configurator &_config) : base(_config)
 {}
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_kin_test_irp6ot::task_initialization(void)
+void kin_test::task_initialization(void)
 {
     ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
@@ -34,7 +34,7 @@ void ecp_task_kin_test_irp6ot::task_initialization(void)
 }
 
 
-void ecp_task_kin_test_irp6ot::main_task_algorithm(void)
+void kin_test::main_task_algorithm(void)
 {
     struct timespec start, stop;
     double accum;
@@ -102,7 +102,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new irp6ot::task::ecp_task_kin_test_irp6ot(_config);
+	return new irp6ot::task::kin_test(_config);
 }
 }
 } // namespace common

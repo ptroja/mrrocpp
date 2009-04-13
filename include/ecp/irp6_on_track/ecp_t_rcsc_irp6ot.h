@@ -10,7 +10,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class ecp_task_rcsc_irp6ot: public common::task::base
+class rcsc: public common::task::base
 {
 protected:
     //generatory
@@ -27,7 +27,7 @@ protected:
 	common::task::ecp_sub_task_gripper_opening* go_st;
 
 public:
-    ecp_task_rcsc_irp6ot(configurator &_config);
+    rcsc(configurator &_config);
 
     // methods for ECP template to redefine in concrete classes
     void task_initialization(void);

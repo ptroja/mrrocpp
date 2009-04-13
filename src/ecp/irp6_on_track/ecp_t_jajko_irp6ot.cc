@@ -29,13 +29,13 @@ namespace task {
 
 
 // KONSTRUKTORY
-ecp_task_jajko_irp6ot::ecp_task_jajko_irp6ot(configurator &_config) : base(_config)
+jajko::jajko(configurator &_config) : base(_config)
 {
 	yefg = NULL;
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_jajko_irp6ot::task_initialization(void)
+void jajko::task_initialization(void)
 {
 	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
@@ -56,7 +56,7 @@ void ecp_task_jajko_irp6ot::task_initialization(void)
 };
 
 
-void ecp_task_jajko_irp6ot::main_task_algorithm(void)
+void jajko::main_task_algorithm(void)
 {
 	for(;;)
 	{
@@ -92,7 +92,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new irp6ot::task::ecp_task_jajko_irp6ot(_config);
+	return new irp6ot::task::jajko(_config);
 }
 }
 } // namespace common

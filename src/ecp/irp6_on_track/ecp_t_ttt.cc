@@ -18,9 +18,9 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-ecp_task_ttt::ecp_task_ttt(configurator &_config) : common::task::base(_config) {}
+ttt::ttt(configurator &_config) : common::task::base(_config) {}
 
-void ecp_task_ttt::task_initialization(void)
+void ttt::task_initialization(void)
 {
 	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
@@ -29,7 +29,7 @@ void ecp_task_ttt::task_initialization(void)
     sr_ecp_msg->message("ECP loaded");
 }
 
-void ecp_task_ttt::main_task_algorithm(void)
+void ttt::main_task_algorithm(void)
 {
 	char path[666];
 	int option = choose_option("1 - Euler, 2 - Joint",2);
@@ -67,7 +67,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new irp6ot::task::ecp_task_ttt(_config);
+	return new irp6ot::task::ttt(_config);
 }
 
 }

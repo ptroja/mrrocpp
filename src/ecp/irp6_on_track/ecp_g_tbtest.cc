@@ -13,11 +13,11 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-ecp_g_tbtest::ecp_g_tbtest (common::task::base& _ecp_task) : common::generator::base (_ecp_task){
+tbtest::tbtest (common::task::base& _ecp_task) : common::generator::base (_ecp_task){
 
 }
 
-bool ecp_g_tbtest::first_step()
+bool tbtest::first_step()
 {
     the_robot->EDP_data.get_type = ARM_DV; // ARM
     the_robot->EDP_data.instruction_type = GET;
@@ -36,7 +36,7 @@ bool ecp_g_tbtest::first_step()
     //step_no=1;
 }
 
-bool ecp_g_tbtest::next_step(){
+bool tbtest::next_step(){
     double time; //Czas ruchu.
 
     sensor_m[SENSOR_CVFRADIA]->get_reading();

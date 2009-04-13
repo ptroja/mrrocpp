@@ -59,14 +59,14 @@ int create_grab_path(double *object_coordinates, ecp_teach_in_generator generato
 
 
 // KONSTRUKTORY
-ecp_task_progpanel_irp6ot::ecp_task_progpanel_irp6ot(configurator &_config) : base(_config)
+progpanel::progpanel(configurator &_config) : base(_config)
 {
     //	tig = NULL;
     ppg = NULL;
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_progpanel_irp6ot::task_initialization(void)
+void progpanel::task_initialization(void)
 {
     ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
@@ -82,7 +82,7 @@ void ecp_task_progpanel_irp6ot::task_initialization(void)
     sr_ecp_msg->message("ECP loaded");
 }
 
-void ecp_task_progpanel_irp6ot::main_task_algorithm(void)
+void progpanel::main_task_algorithm(void)
 {
 	//	ecp_load_file_from_ui(*tig);
 	//	ecp_load_file_with_path(*tig, config->return_string_value("trajektoria"));
@@ -99,7 +99,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new irp6ot::task::ecp_task_progpanel_irp6ot(_config);
+	return new irp6ot::task::progpanel(_config);
 }
 
 }

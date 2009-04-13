@@ -15,11 +15,11 @@ namespace task {
  * Odtwarza orientacje kontrolera
  * @author jkurylo
  */
-class ecp_task_wii: public common::task::base
+class wii: public common::task::base
 {
 protected:
 	//Generator ruchu
-	generator::ecp_wii_generator* eg;
+	generator::wii* eg;
 	common::generator::smooth* sg;
 
 public:
@@ -28,7 +28,7 @@ public:
 	 * @param _config konfigurator
 	 * @author jedrzej
 	 */
-	ecp_task_wii(configurator &_config);
+	wii(configurator &_config);
 
 	/**
 	 * Inicjalizuje zadanie

@@ -18,20 +18,20 @@ namespace irp6ot {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_kbochnia_irp6ot::ecp_task_kbochnia_irp6ot(configurator &_config) : base(_config)
+kbochnia::kbochnia(configurator &_config) : base(_config)
 {
 }
 
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_kbochnia_irp6ot::task_initialization(void)
+void kbochnia::task_initialization(void)
 {
     ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
     sr_ecp_msg->message("ECP loaded");
 }
 
-void ecp_task_kbochnia_irp6ot::main_task_algorithm(void)
+void kbochnia::main_task_algorithm(void)
 {
 	common::generator::natural_spline	spline_gen(*this, 0.02,1);
 
@@ -53,7 +53,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new irp6ot::task::ecp_task_kbochnia_irp6ot(_config);
+	return new irp6ot::task::kbochnia(_config);
 }
 }
 } // namespace common

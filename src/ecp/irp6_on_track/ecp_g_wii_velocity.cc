@@ -11,12 +11,12 @@ namespace generator {
 
 sem_t sem;
 
-ecp_wii_velocity_generator::ecp_wii_velocity_generator (common::task::base& _ecp_task) : common::generator::tff_nose_run(_ecp_task,10)
+wii_velocity::wii_velocity (common::task::base& _ecp_task) : common::generator::tff_nose_run(_ecp_task,10)
 {
 	configure_behaviour(UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION);
 }
 
-bool ecp_wii_velocity_generator::first_step()
+bool wii_velocity::first_step()
 {
 	sem_init(&sem,0,0);
 
@@ -50,7 +50,7 @@ bool ecp_wii_velocity_generator::first_step()
 	return true;
 }
 
-bool ecp_wii_velocity_generator::next_step()
+bool wii_velocity::next_step()
 {
 	char buffer[200];
 	int operate = 0;

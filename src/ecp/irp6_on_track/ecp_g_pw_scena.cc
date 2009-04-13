@@ -5,7 +5,7 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-ecp_g_pw_scena::ecp_g_pw_scena(common::task::base& _ecp_task) :
+pw_scena::pw_scena(common::task::base& _ecp_task) :
 	base(_ecp_task) {
 
 	recognized = false;
@@ -16,7 +16,7 @@ ecp_g_pw_scena::ecp_g_pw_scena(common::task::base& _ecp_task) :
 	ydir = 0;
 }
 
-bool ecp_g_pw_scena::first_step() {
+bool pw_scena::first_step() {
 	the_robot->EDP_data.instruction_type = GET;
 	the_robot->EDP_data.get_type = ARM_DV;
 	the_robot->EDP_data.set_type = ARM_DV;
@@ -41,7 +41,7 @@ bool ecp_g_pw_scena::first_step() {
 }
 
 
-double* ecp_g_pw_scena::get_current_pose(){
+double* pw_scena::get_current_pose(){
 
 	double pos[6];
 	memcpy(pos,
@@ -53,7 +53,7 @@ double* ecp_g_pw_scena::get_current_pose(){
 
 
 
-bool ecp_g_pw_scena::next_step() {
+bool pw_scena::next_step() {
 
 	step_no++;
 

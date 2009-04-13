@@ -21,7 +21,7 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-class ecp_spots_generator : public common::generator::base
+class spots : public common::generator::base
 {
 	ECP_VSP_MSG comm_struct;
 	ecp_mp::sensor::cvfradia * sensor;
@@ -34,7 +34,7 @@ class ecp_spots_generator : public common::generator::base
 	short iter; //0 - zero, 1 - one, 2 - many ;)
 
   public:
-	ecp_spots_generator(common::task::base& _ecp_task);
+	spots(common::task::base& _ecp_task);
 	bool first_step();
 	bool next_step();
 

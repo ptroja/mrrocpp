@@ -18,11 +18,11 @@ namespace task {
  * Kresli w powietrzu elipse o zadanych polosiach
  * @author jkurylo
  */
-class ecp_task_ellipse: public common::task::base
+class ellipse: public common::task::base
 {
 protected:
 	//Generator ruchu
-	generator::ecp_ellipse_generator* eg;
+	generator::ellipse* eg;
 	common::generator::smooth* sg;
 	
 	/**
@@ -41,7 +41,7 @@ public:
 	 * @param _config konfigurator
 	 * @author jedrzej
 	 */
-	ecp_task_ellipse(configurator &_config);
+	ellipse(configurator &_config);
 	
 	/**
 	 * Inicjalizuje zadanie - pobiera od uzytkownika dlugosci polosi

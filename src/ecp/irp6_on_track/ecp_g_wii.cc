@@ -9,9 +9,9 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-ecp_wii_generator::ecp_wii_generator (common::task::base& _ecp_task) : base (_ecp_task) {}
+wii::wii (common::task::base& _ecp_task) : base (_ecp_task) {}
 
-bool ecp_wii_generator::first_step()
+bool wii::first_step()
 {
     the_robot->EDP_data.instruction_type = GET;
     the_robot->EDP_data.get_type = ARM_DV;
@@ -28,7 +28,7 @@ bool ecp_wii_generator::first_step()
     return true;
 }
 
-bool ecp_wii_generator::next_step()
+bool wii::next_step()
 {
 	char buffer[200];
 	try
@@ -63,7 +63,7 @@ bool ecp_wii_generator::next_step()
 	return true;
 }
 
-double* ecp_wii_generator::getFirstPosition()
+double* wii::getFirstPosition()
 {
 
 	double* firstPosition = new double[8];
@@ -79,7 +79,7 @@ double* ecp_wii_generator::getFirstPosition()
 	return firstPosition;
 }
 
-void ecp_wii_generator::execute_motion(void)
+void wii::execute_motion(void)
 {
 	// komunikacja wlasciwa
 	the_robot->send();

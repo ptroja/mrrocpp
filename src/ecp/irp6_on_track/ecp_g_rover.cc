@@ -43,7 +43,7 @@ namespace generator {
 #define PRINTB 0
 #define PRINTA 0
 
-ecp_vis_sac_lx_generator::ecp_vis_sac_lx_generator(common::task::base& _ecp_task, int step) :
+vis_sac_lx::vis_sac_lx(common::task::base& _ecp_task, int step) :
 	base(_ecp_task)
 {
 	step_no = step;
@@ -154,7 +154,7 @@ ecp_vis_sac_lx_generator::ecp_vis_sac_lx_generator(common::task::base& _ecp_task
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_vis_sac_lx_generator::first_step()
+bool vis_sac_lx::first_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -245,7 +245,7 @@ bool ecp_vis_sac_lx_generator::first_step()
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_vis_sac_lx_generator::next_step()
+bool vis_sac_lx::next_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii

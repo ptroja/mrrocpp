@@ -8,7 +8,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class ecp_task_pr_irp6ot: public common::task::base  {
+class pr: public common::task::base  {
 protected:
 	common::generator::y_drawing_teach_in_force *tig;
 	int ecp_tryb;
@@ -19,8 +19,8 @@ protected:
 
 public:
 	// KONSTRUKTORY
-	ecp_task_pr_irp6ot(configurator &_config);
-	~ecp_task_pr_irp6ot();
+	pr(configurator &_config);
+	~pr();
 	
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

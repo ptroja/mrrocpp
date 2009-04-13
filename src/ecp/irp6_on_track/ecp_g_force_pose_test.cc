@@ -23,7 +23,7 @@ namespace irp6ot {
 namespace generator {
 
 
-bool y_simple_generator::first_step ( )
+bool y_simple::first_step ( )
 {
 
     td.interpolation_node_no = 1;
@@ -49,7 +49,7 @@ bool y_simple_generator::first_step ( )
 
 
 // --------------------------------------------------------------------------
-bool y_simple_generator::next_step ( )
+bool y_simple::next_step ( )
 {
     //	struct timespec start[9];
     if (ecp_t->pulse_check())

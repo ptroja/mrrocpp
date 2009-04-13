@@ -13,7 +13,7 @@ namespace task {
  * Kresli w powietrzu siatke jak do gry w kolko-i-krzyzyk
  * @author jkurylo
  */
-class ecp_task_ttt: public common::task::base
+class ttt: public common::task::base
 {
 protected:
 	//Generator ruchu
@@ -25,7 +25,7 @@ public:
 	 * @param _config konfigurator
 	 * @author jedrzej
 	 */
-	ecp_task_ttt(configurator &_config);
+	ttt(configurator &_config);
 	
 	/**
 	 * Inicjalizuje zadanie - wczytuje trajektorie z pliku

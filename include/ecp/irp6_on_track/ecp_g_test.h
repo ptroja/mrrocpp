@@ -21,7 +21,7 @@ namespace generator {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej dla zadan yoyka z wodzeniem za nos
-class y_simple_generator : public common::generator::base {
+class y_simple : public common::generator::base {
 
 protected:
 	long run_counter;
@@ -41,8 +41,8 @@ public:
 	double gammax;
 	
 	// konstruktor
-	y_simple_generator(common::task::base& _ecp_task, int step=0);  
-	virtual ~y_simple_generator() {};
+	y_simple(common::task::base& _ecp_task, int step=0);  
+	virtual ~y_simple() {};
 
 	virtual bool first_step ();
 

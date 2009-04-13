@@ -27,7 +27,7 @@ namespace generator {
 
 //#############################################################################
 
-class irp6ot_nurbs_generator : public common::generator::base 
+class nurbs : public common::generator::base 
 {
 protected:
 	int mp_communication_mode_; //by Y - 0 bez TASK TERMINATED, 1 - z TASK TERMINATED
@@ -38,7 +38,7 @@ protected:
    	POSE_SPECIFICATION atype_;
 public:
 	// konstruktor
-	irp6ot_nurbs_generator (common::task::base& _ecp_task, const nurbs_tdes& ntdes, int mp_communication_mode_arg = 1);
+	nurbs (common::task::base& _ecp_task, const nurbs_tdes& ntdes, int mp_communication_mode_arg = 1);
 	
   virtual bool first_step ();
   virtual bool next_step ();

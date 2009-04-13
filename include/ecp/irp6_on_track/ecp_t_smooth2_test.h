@@ -11,14 +11,14 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class ecp_t_smooth2_test: public common::task::base {
+class smooth2_test: public common::task::base {
   
   protected:
 	  common::generator::smooth2* smoothgen2;
 		
 	public:
-		ecp_t_smooth2_test(configurator &_config);
-		~ecp_t_smooth2_test();
+		smooth2_test(configurator &_config);
+		~smooth2_test();
 
 		void task_initialization(void);
 		void main_task_algorithm(void);

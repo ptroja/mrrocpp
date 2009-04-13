@@ -16,7 +16,7 @@ namespace generator {
 using namespace std;
 
 
-ecp_spots_generator::ecp_spots_generator (common::task::base& _ecp_task)
+spots::spots (common::task::base& _ecp_task)
         : base (_ecp_task)
 {
 	//tool to plate frame initialization, all in rad and meters
@@ -25,7 +25,7 @@ ecp_spots_generator::ecp_spots_generator (common::task::base& _ecp_task)
 	no_of_tcg_in_one = 0;
 }
 
-bool ecp_spots_generator::first_step()
+bool spots::first_step()
 {
 	sensor = (ecp_mp::sensor::cvfradia *)sensor_m[SENSOR_CVFRADIA];
 
@@ -43,7 +43,7 @@ bool ecp_spots_generator::first_step()
 	return true;
 }
 
-bool ecp_spots_generator::next_step()
+bool spots::next_step()
 {
 	if(iter == 0) //first time next_step
 	{
@@ -74,7 +74,7 @@ bool ecp_spots_generator::next_step()
 		return false;
 }
 
-void ecp_spots_generator::get_frame()
+void spots::get_frame()
 {
 	for(int i=0; i<3; i++)
 	{
@@ -83,7 +83,7 @@ void ecp_spots_generator::get_frame()
 	}
 }
 
-void ecp_spots_generator::get_pic()
+void spots::get_pic()
 {
 	calib_data.sensor_union.sp_r.dz = sensor->from_vsp.comm_image.sensor_union.sp_r.dz;
 	calib_data.sensor_union.sp_r.pic_count = sensor->from_vsp.comm_image.sensor_union.sp_r.pic_count;
@@ -95,7 +95,7 @@ void ecp_spots_generator::get_pic()
 	}
 }
 
-void ecp_spots_generator::compute_TCE()
+void spots::compute_TCE()
 {
 	double vec_cam1[3], vec_cam2[3], vec_cam3[3], vec_cam4[3];
 
@@ -129,7 +129,7 @@ void ecp_spots_generator::compute_TCE()
 	double norm = c->computeTCE(vec_cam1, vec_cam2, vec_cam3, vec_cam4, tce);
 }
 
-void ecp_spots_generator::compute_TCG()
+void spots::compute_TCG()
 {
 	//T_C^G = T_E^G * T_C^E
 	common::T_MatrixManip Teg_mm(teg);
@@ -140,7 +140,7 @@ void ecp_spots_generator::compute_TCG()
 	cout << tcg[8] << "  " << tcg[9] << "  " << tcg[10] << "  " << tcg[11] << endl;
 }
 
-void ecp_spots_generator::save_position()
+void spots::save_position()
 {
 	compute_TCE();
 	compute_TCG();

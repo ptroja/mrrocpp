@@ -18,14 +18,14 @@ namespace task {
 
 
 // KONSTRUKTORY
-ecp_task_pteach_irp6ot::ecp_task_pteach_irp6ot(configurator &_config) : base(_config)
+pteach::pteach(configurator &_config) : base(_config)
 {
     cg = NULL;
     orc = NULL;
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_pteach_irp6ot::task_initialization(void)
+void pteach::task_initialization(void)
 {
     ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
@@ -37,7 +37,7 @@ void ecp_task_pteach_irp6ot::task_initialization(void)
 }
 
 
-void ecp_task_pteach_irp6ot::main_task_algorithm(void)
+void pteach::main_task_algorithm(void)
 {
 	if (operator_reaction("Teach in?"))
     {
@@ -92,7 +92,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new irp6ot::task::ecp_task_pteach_irp6ot(_config);
+	return new irp6ot::task::pteach(_config);
 }
 
 }

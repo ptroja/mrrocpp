@@ -11,7 +11,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class ecp_task_lego_brick_irp6ot: public common::task::base
+class lego_brick: public common::task::base
 {
 protected:
     //generatory
@@ -27,7 +27,7 @@ protected:
     //podzadania
     //ecp_sub_task_gripper_opening* go_st;
 public:
-    ecp_task_lego_brick_irp6ot(configurator &_config);
+    lego_brick(configurator &_config);
 
     // methods for ECP template to redefine in concrete classes
     void task_initialization(void);

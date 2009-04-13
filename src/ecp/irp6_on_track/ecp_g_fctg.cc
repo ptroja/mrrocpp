@@ -38,7 +38,7 @@ namespace generator {
 //pthread_mutex_t FORCE_SENSOR_READINGS_MUTEX = PTHREAD_MUTEX_INITIALIZER;
 
 /*********************** RETURN SENSOR READING ***************************/
-void force_controlled_trajectory_generator::return_sensor_reading(ecp_mp::sensor::force& the_sensor, double sensor_reading[6]){
+void force_controlled_trajectory::return_sensor_reading(ecp_mp::sensor::force& the_sensor, double sensor_reading[6]){
 	SENSOR_IMAGE si;
 	// Nowe odczyty czujnika.
 	the_sensor.get_reading(&si);
@@ -47,7 +47,7 @@ void force_controlled_trajectory_generator::return_sensor_reading(ecp_mp::sensor
     }; // end: return_sensor_reading
 
 /*************************** RETURN  POSITION *******************************/
-void force_controlled_trajectory_generator::return_position (double robot_position[8]){
+void force_controlled_trajectory::return_position (double robot_position[8]){
     // Sekcja krytyczna.
     pthread_mutex_lock(&ROBOT_POSITION_MUTEX);
         // Przepisanie pozycji z bufora.
@@ -63,7 +63,7 @@ void force_controlled_trajectory_generator::return_position (double robot_positi
     }; // end: return_position
 
 /************************ RETURN  MOTOR POSITION ***************************/
-void force_controlled_trajectory_generator::return_motor_position (double robot_position[8]){
+void force_controlled_trajectory::return_motor_position (double robot_position[8]){
     // Sekcja krytyczna.
     pthread_mutex_lock(&ROBOT_POSITION_MUTEX);
         // Przepisanie pozycji z bufora.
@@ -73,7 +73,7 @@ void force_controlled_trajectory_generator::return_motor_position (double robot_
     }; // end: return_position
 
 /************************* GET CURRENT POSITION *****************************/
-void force_controlled_trajectory_generator::get_current_position (){
+void force_controlled_trajectory::get_current_position (){
     // Sekcja krytyczna.
     pthread_mutex_lock(&ROBOT_POSITION_MUTEX);
         // Odczytanie polozenia robota
@@ -113,7 +113,7 @@ void force_controlled_trajectory_generator::get_current_position (){
 
 
 /**************************** CHANGE CONTROL *******************************/
-void force_controlled_trajectory_generator::change_control(POSE_SPECIFICATION ps){
+void force_controlled_trajectory::change_control(POSE_SPECIFICATION ps){
     // Jesli nic nie trzeba zmienic
     if (current_control == ps)
         return;
@@ -138,7 +138,7 @@ void force_controlled_trajectory_generator::change_control(POSE_SPECIFICATION ps
 
 
 /*****************************  KONSTRUKTOR *********************************/
-force_controlled_trajectory_generator::force_controlled_trajectory_generator (common::task::base& _ecp_task)
+force_controlled_trajectory::force_controlled_trajectory (common::task::base& _ecp_task)
 	:ecp_teach_in_generator(_ecp_task)
 {
 	pthread_mutex_init(&ROBOT_POSITION_MUTEX, NULL);
@@ -204,7 +204,7 @@ force_controlled_trajectory_generator::force_controlled_trajectory_generator (co
 
 
 /********************************* ADD STEP ***********************************/
-void force_controlled_trajectory_generator::add_step (int motion_time){
+void force_controlled_trajectory::add_step (int motion_time){
     // Sekcja krytyczna.
     pthread_mutex_lock(&ROBOT_POSITION_MUTEX);
     // Dodanie elementu do listy
@@ -225,7 +225,7 @@ void force_controlled_trajectory_generator::add_step (int motion_time){
     }; // end: add_step
 
 /****************************** SET MOVE TYPE *********************************/
-void force_controlled_trajectory_generator::set_move_type(short move_type){
+void force_controlled_trajectory::set_move_type(short move_type){
     if (move_type>0){
         // Ruch w "prawo".
         dir = 1;
@@ -238,7 +238,7 @@ void force_controlled_trajectory_generator::set_move_type(short move_type){
     }; // end: set_move_type
 
 /******************************** FIRST STEP ***********************************/
-bool force_controlled_trajectory_generator::first_step(){
+bool force_controlled_trajectory::first_step(){
     // Pozycja robota.
     double robot_position[8];
     // Pozycja - tymczasowa zmienna.
@@ -341,7 +341,7 @@ bool force_controlled_trajectory_generator::first_step(){
 }
 
 /******************************** NEXT STEP ***********************************/
-bool force_controlled_trajectory_generator::next_step ( ) {
+bool force_controlled_trajectory::next_step ( ) {
     // Pozycja - tymczasowa zmienna.
     double tmp_position;
     // Czujnik sily.
@@ -378,7 +378,7 @@ bool force_controlled_trajectory_generator::next_step ( ) {
 }
 
 /*********************  CHECK FORCE CONDITION **************************/
-void force_controlled_trajectory_generator::check_force_condition(ecp_mp::sensor::force& the_sensor){
+void force_controlled_trajectory::check_force_condition(ecp_mp::sensor::force& the_sensor){
     double tmp_reading[6];
     // Pobranie odczytow z czujnika sily.
     return_sensor_reading(the_sensor, tmp_reading);
@@ -390,7 +390,7 @@ void force_controlled_trajectory_generator::check_force_condition(ecp_mp::sensor
 }
 
 /***************************  INCREMENT DELTA ********************************/
-bool force_controlled_trajectory_generator::increment_delta(double &tmp_delta, double direction, double max_delta_increment, double delta_increment){
+bool force_controlled_trajectory::increment_delta(double &tmp_delta, double direction, double max_delta_increment, double delta_increment){
     // Sprawdzenie znaku maksymalnego przerostu.
     if (direction < 0){
         // Zmniejszenie przyrostu.
@@ -410,7 +410,7 @@ bool force_controlled_trajectory_generator::increment_delta(double &tmp_delta, d
 }
 
 /*************************  SLOW DOWN CONDITION ****************************/
-bool force_controlled_trajectory_generator::slow_down_condition(double start_position, double after_acceleration_position, double current_position, double stop_position){
+bool force_controlled_trajectory::slow_down_condition(double start_position, double after_acceleration_position, double current_position, double stop_position){
     // Jesli kierunek ruchu ma znak dodatni.
     if (start_position < stop_position){
         // Jezeli pozostala tylko droga na zwolnienie.
@@ -428,7 +428,7 @@ bool force_controlled_trajectory_generator::slow_down_condition(double start_pos
     }; // end: check_slow_down_condition
 
 /***************************  DECREMENT DELTA *******************************/
-bool force_controlled_trajectory_generator::decrement_delta(double &tmp_delta, double direction, double delta_increment){
+bool force_controlled_trajectory::decrement_delta(double &tmp_delta, double direction, double delta_increment){
     // Sprawdzenie kierunku.
     if (direction > 0){
         // Zmniejszenie przyrostu.
@@ -448,7 +448,7 @@ bool force_controlled_trajectory_generator::decrement_delta(double &tmp_delta, d
     }; // end: decrement_delta
 
 /**************************** SAVE TRAJECTORY ********************************/
-void force_controlled_trajectory_generator::save_trajectory(char* filename) {
+void force_controlled_trajectory::save_trajectory(char* filename) {
     // Pozycja robota.
 	common::ecp_taught_in_pose tip;
     int j;
@@ -503,7 +503,7 @@ catch(ECP_error e){
 
 
 /*************************  SET DANGEROUS FORCE *****************************/
-void force_controlled_trajectory_generator::set_dangerous_force(){
+void force_controlled_trajectory::set_dangerous_force(){
 	dangerous_force = ecp_t.config.return_int_value("dangerous_force");
 	sr_ecp_msg.message("Dangerous force size readed properly from INI file");
     }; // end: set_dangerous_force
@@ -511,7 +511,7 @@ void force_controlled_trajectory_generator::set_dangerous_force(){
 
 
 /******************************  DESTRUKTOR **********************************/
-force_controlled_trajectory_generator::~force_controlled_trajectory_generator (void) {
+force_controlled_trajectory::~force_controlled_trajectory (void) {
     // Usuniecie elementow z obu list.
     flush_pose_list();
     flush_position_list();
@@ -519,27 +519,27 @@ force_controlled_trajectory_generator::~force_controlled_trajectory_generator (v
     };
 
 /********************* METODY ZWIAZANE Z LISTA POZYCJI **********************/
-void force_controlled_trajectory_generator::flush_position_list ( void ) {
+void force_controlled_trajectory::flush_position_list ( void ) {
     // Jezeli sa jakies elementy
     position_list.clear();
     }; // end: flush_position_list
 
-void force_controlled_trajectory_generator::initiate_position_list(void) {
+void force_controlled_trajectory::initiate_position_list(void) {
     position_list_iterator = position_list.begin();
     };
 
-void force_controlled_trajectory_generator::next_position_list_element (void) {
+void force_controlled_trajectory::next_position_list_element (void) {
     // Przejscie na nastepny element.
   	position_list_iterator++;
     };
 
-void force_controlled_trajectory_generator::get_position_list_element (double &position){
+void force_controlled_trajectory::get_position_list_element (double &position){
     // Przepisanie polozenia z listy.
     position = *position_list_iterator;
     };
 
 
-bool force_controlled_trajectory_generator::is_position_list_element ( void ) {
+bool force_controlled_trajectory::is_position_list_element ( void ) {
     // sprawdza czy element nie jest NULL.
     if (position_list_iterator != position_list.end())
         return true;
@@ -547,13 +547,13 @@ bool force_controlled_trajectory_generator::is_position_list_element ( void ) {
         return false;
     };
 
-void force_controlled_trajectory_generator::create_position_list_head (double position) {
+void force_controlled_trajectory::create_position_list_head (double position) {
     // Wstawienie glowy.
     	position_list.push_back(double(position));
 	position_list_iterator = position_list.begin();
     };
 
-void force_controlled_trajectory_generator::insert_position_list_element (double position) {
+void force_controlled_trajectory::insert_position_list_element (double position) {
     // Wlasciwe wstawienie elementu.
     position_list.push_back(double(position));
 	position_list_iterator++;

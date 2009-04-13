@@ -54,7 +54,7 @@ ostream& operator<<(ostream& s, const valarray<double>& v) {
 
 //---------------------------------  KONSTRUKTOR  ----------------------------------------------
 
-irp6ot_nurbs_generator::irp6ot_nurbs_generator (common::task::base& _ecp_task,
+nurbs::nurbs (common::task::base& _ecp_task,
 	 const nurbs_tdes &ntdes, int mp_communication_mode_arg)
 : base (_ecp_task) 
 {
@@ -66,7 +66,7 @@ irp6ot_nurbs_generator::irp6ot_nurbs_generator (common::task::base& _ecp_task,
 //---------------------------------    metoda	first_step -------------------------------------
 //----------------------------------------------------------------------------------------------
 
-bool irp6ot_nurbs_generator::first_step (  )
+bool nurbs::first_step (  )
 {
 
 		EDP_data_next_ptr_=0;
@@ -116,7 +116,7 @@ bool irp6ot_nurbs_generator::first_step (  )
 //-----------------------------------  metoda	next_step --------------------------------------
 //----------------------------------------------------------------------------------------------
 
-bool irp6ot_nurbs_generator::next_step (  )
+bool nurbs::next_step (  )
 {
 
 //	cout<<"nextstep: start \n"<<flush;

@@ -37,7 +37,7 @@ namespace generator {
 /********************************* GLOBALS **********************************/
 
 /************************* GET CURRENT POSITION *****************************/
-void trajectory_reproduce_generator::get_current_position(double current_position[6]){
+void trajectory_reproduce::get_current_position(double current_position[6]){
     // Odczytanie polozenia robota
     // Przygotowanie rozkazu dla EDP.
     the_robot->EDP_data.instruction_type = GET;
@@ -55,7 +55,7 @@ void trajectory_reproduce_generator::get_current_position(double current_positio
     }; // end: get_current_position
 
 /******************** PREPARE GENERATOR FOR MOTION  ************************/
-void trajectory_reproduce_generator::prepare_generator_for_motion(void){
+void trajectory_reproduce::prepare_generator_for_motion(void){
     // Poczatek listy.
     initiate_pose_list();
     // Wyczyszczenie listy z pozycjami posrednimi.
@@ -63,7 +63,7 @@ void trajectory_reproduce_generator::prepare_generator_for_motion(void){
     }; // end: prepare_generator_for_motion
 
 /*********************** CREATE COMMAND FOR POSE **************************/
-void trajectory_reproduce_generator::create_command_for_pose(common::ecp_taught_in_pose& tip) {
+void trajectory_reproduce::create_command_for_pose(common::ecp_taught_in_pose& tip) {
 // printf("create_command_for_pose: czas %f | %f, %f, %f, %f, %f, %f\n", tip.motion_time,
 // tip.coordinates[0], tip.coordinates[1], tip.coordinates[2], tip.coordinates[3], tip.coordinates[4], tip.coordinates[5]);
     // sprawdzenie rodzaju wspolrzednych
@@ -116,7 +116,7 @@ void trajectory_reproduce_generator::create_command_for_pose(common::ecp_taught_
 
 
 /******************************** FIRST STEP ***********************************/
-bool trajectory_reproduce_generator::first_step (){
+bool trajectory_reproduce::first_step (){
     // Przygotowanie trajektorii do wykonania.
     // Pozycja poczatkowa.
     double current_position[6];
@@ -209,7 +209,7 @@ bool trajectory_reproduce_generator::first_step (){
     }; // end: first_step
 
 /******************************** NEXT STEP ***********************************/
-bool trajectory_reproduce_generator::next_step (){
+bool trajectory_reproduce::next_step (){
     // Wlasciewe wykonywanie trajektorii.
     // Pozycja - tymczasowa zmienna.
 	common::ecp_taught_in_pose interpose;
@@ -241,7 +241,7 @@ bool trajectory_reproduce_generator::next_step (){
     }; // end: next_step
 
 /*********************  CHECK FORCE CONDITION **************************/
-void trajectory_reproduce_generator::check_force_condition(ecp_mp::sensor::force& the_sensor){
+void trajectory_reproduce::check_force_condition(ecp_mp::sensor::force& the_sensor){
 	SENSOR_IMAGE si;
 	// Pobranie odczytow z czujnika sily.
 	the_sensor.get_reading(&si);
@@ -254,7 +254,7 @@ void trajectory_reproduce_generator::check_force_condition(ecp_mp::sensor::force
     }; // end: check_force_condition
 
 /*********************** DANGEROUS FORCE HANDLER **************************/
-void trajectory_reproduce_generator::dangerous_force_handler(base::ECP_error e){
+void trajectory_reproduce::dangerous_force_handler(base::ECP_error e){
     // Komunikat o bledzie wysylamy do SR.
     sr_ecp_msg.message (NON_FATAL_ERROR, e.error_no);
     // Wiadomosc wysylana do UI.
@@ -279,7 +279,7 @@ void trajectory_reproduce_generator::dangerous_force_handler(base::ECP_error e){
 
 
 /****************************** LOAD TRAJECTORY ******************************/
-void trajectory_reproduce_generator::load_trajectory(char* filename) {
+void trajectory_reproduce::load_trajectory(char* filename) {
 	// Opis wspolrzednych: "MOTOR", "JOINT", ...
 	char coordinate_type[80];
 	// Rodzaj wspolrzednych
@@ -374,13 +374,13 @@ try{
 
 
 /*************************  SET DANGEROUS FORCE *****************************/
-void trajectory_reproduce_generator::set_dangerous_force(void){
+void trajectory_reproduce::set_dangerous_force(void){
 	dangerous_force = ecp_t.config.return_int_value("dangerous_force");
 }
 
 
 /*****************************  KONSTRUKTOR *********************************/
-trajectory_reproduce_generator::trajectory_reproduce_generator (common::task::base& _ecp_task):
+trajectory_reproduce::trajectory_reproduce (common::task::base& _ecp_task):
 	 ecp_teach_in_generator (_ecp_task)
 {
     // Ustawienie elementow list na NULL.
@@ -395,7 +395,7 @@ trajectory_reproduce_generator::trajectory_reproduce_generator (common::task::ba
     }; // end: trajectory_reproduce_generator
 
 /******************************  DESTRUKTOR **********************************/
-trajectory_reproduce_generator::~trajectory_reproduce_generator (void) {
+trajectory_reproduce::~trajectory_reproduce (void) {
     // Usuniecie elementow z wszystkich list.
     flush_pose_list();
     flush_interpose_list();
@@ -403,20 +403,20 @@ trajectory_reproduce_generator::~trajectory_reproduce_generator (void) {
 
 
 /************* METODY ZWIAZANE Z LISTA POZYCJI  POSREDNICH *****************/
-void trajectory_reproduce_generator::flush_interpose_list ( void ) {
+void trajectory_reproduce::flush_interpose_list ( void ) {
    interpose_list.clear();
     }; // end: flush_interpose_list
 
-void trajectory_reproduce_generator::initiate_interpose_list(void) {
+void trajectory_reproduce::initiate_interpose_list(void) {
     interpose_list_iterator = interpose_list.begin();
     }; // end: initiate_interpose_list
 
-void trajectory_reproduce_generator::next_interpose_list_element (void) {
+void trajectory_reproduce::next_interpose_list_element (void) {
     // Przejscie na nastepny element.
     interpose_list_iterator++;
     }; // end: next_interpose_list_element
 
-void trajectory_reproduce_generator::get_interpose_list_element (common::ecp_taught_in_pose& tip){
+void trajectory_reproduce::get_interpose_list_element (common::ecp_taught_in_pose& tip){
     // Przepisanie danych ruchu.
     tip.arm_type = interpose_list_iterator->arm_type;
     tip.motion_time = interpose_list_iterator->motion_time;
@@ -424,7 +424,7 @@ void trajectory_reproduce_generator::get_interpose_list_element (common::ecp_tau
     memcpy(tip.coordinates, interpose_list_iterator->coordinates, MAX_SERVOS_NR*sizeof(double));
     }; // end: get_interpose_list_element
 
-bool trajectory_reproduce_generator::is_interpose_list_element ( void ) {
+bool trajectory_reproduce::is_interpose_list_element ( void ) {
     // Sprawdza czy element nie jest NULL.
     if (interpose_list_iterator != interpose_list.end())
         return true;
@@ -432,13 +432,13 @@ bool trajectory_reproduce_generator::is_interpose_list_element ( void ) {
         return false;
     }; // end: is_interpose_list_element
 
-void trajectory_reproduce_generator::create_interpose_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[6]) {
+void trajectory_reproduce::create_interpose_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[6]) {
     // Wstawienie glowy.
     	interpose_list.push_back(common::ecp_taught_in_pose(ps, motion_time, coordinates));
 	interpose_list_iterator = interpose_list.begin();
     }; // end: create_interpose_list_head
 
-void trajectory_reproduce_generator::insert_interpose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[6]) {
+void trajectory_reproduce::insert_interpose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[6]) {
     // Wlasciwe wstawienie elementu.
     	interpose_list.push_back(common::ecp_taught_in_pose(ps, motion_time, coordinates));
 	interpose_list_iterator++;

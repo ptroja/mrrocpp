@@ -23,19 +23,19 @@ namespace task {
 
 //own libraries
 //Constructors
-ecp_t_spots_recognition::ecp_t_spots_recognition(configurator &_config): base(_config)
+spots_recognition::spots_recognition(configurator &_config): base(_config)
 {
     trajektoria_poczatkowa = "../trj/spots/traj00.trj";
     remove("../msr/kalibracja.txt");
 }
 
-ecp_t_spots_recognition::~ecp_t_spots_recognition()
+spots_recognition::~spots_recognition()
 {
 
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_t_spots_recognition::task_initialization(void)
+void spots_recognition::task_initialization(void)
 {
 
 	// Create cvFraDIA sensor - for testing purposes.
@@ -56,7 +56,7 @@ if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     sr_ecp_msg->message("IRp6 Postument loaded");
 }*/
 	// Create spots generator and pass sensor to it.
-	generator = new generator::ecp_spots_generator(*this);
+	generator = new generator::spots(*this);
  	generator->sensor_m = sensor_m;
 
 	// Create smooth generator.
@@ -66,7 +66,7 @@ if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 
 }
 
-void ecp_t_spots_recognition::main_task_algorithm(void)
+void spots_recognition::main_task_algorithm(void)
 {
 	/*!
 	    	 * smooth generator odczytuje trajektorie z pliku
@@ -102,7 +102,7 @@ namespace task {
 
 base* return_created_ecp_task(configurator &_config)
 {
-	return new irp6ot::task::ecp_t_spots_recognition(_config);
+	return new irp6ot::task::spots_recognition(_config);
 }
 
 }

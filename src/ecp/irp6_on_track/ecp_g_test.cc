@@ -23,11 +23,11 @@ namespace irp6ot {
 namespace generator {
 
 
-y_simple_generator::y_simple_generator(common::task::base& _ecp_task, int step):
+y_simple::y_simple(common::task::base& _ecp_task, int step):
 	 base (_ecp_task, true) { 		step_no = step;          	};  
 
 
-bool y_simple_generator::first_step ( ) {
+bool y_simple::first_step ( ) {
 
 	run_counter = 0;
 	second_step = false;
@@ -69,7 +69,7 @@ bool y_simple_generator::first_step ( ) {
 
 
 // --------------------------------------------------------------------------
-bool y_simple_generator::next_step (std::map <SENSOR_ENUM, ::sensor*>& sensor_m ) {
+bool y_simple::next_step (std::map <SENSOR_ENUM, ::sensor*>& sensor_m ) {
 	struct timespec start[9];
 	
 	

@@ -9,19 +9,19 @@ namespace irp6ot {
 namespace task {
 
 //Konstruktory
-ecp_task_pw_irp6ot::ecp_task_pw_irp6ot(configurator &_config) : base(_config)
+pw::pw(configurator &_config) : base(_config)
 {}
 
-void ecp_task_pw_irp6ot::task_initialization(void)
+void pw::task_initialization(void)
 {
 	ecp_m_robot= new ecp_irp6_on_track_robot(*this);
-	kolo_gen= new generator::ecp_g_pw_kolo(*this);
+	kolo_gen= new generator::pw_kolo(*this);
 
 	sr_ecp_msg->message("ECP PW loaded");
 }
 
 
-void ecp_task_pw_irp6ot::main_task_algorithm(void)
+void pw::main_task_algorithm(void)
 {
 	sr_ecp_msg->message("Przed MOVE");
 	kolo_gen->Move();
@@ -39,7 +39,7 @@ namespace task {
 
 base* return_created_ecp_task(configurator &_config)
 {
-	return new irp6ot::task::ecp_task_pw_irp6ot(_config);
+	return new irp6ot::task::pw(_config);
 }
 
 }

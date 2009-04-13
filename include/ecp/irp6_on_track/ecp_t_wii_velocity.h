@@ -15,7 +15,7 @@ namespace task {
  * Odtwarza orientacje kontrolera
  * @author jkurylo
  */
-class ecp_task_wii_velocity: public common::task::base
+class wii_velocity: public common::task::base
 {
 protected:
 //	ecp_wii_velocity_generator* eg;
@@ -26,7 +26,7 @@ public:
 	 * @param _config konfigurator
 	 * @author jedrzej
 	 */
-	ecp_task_wii_velocity(configurator &_config);
+	wii_velocity(configurator &_config);
 
 	/**
 	 * Inicjalizuje zadanie

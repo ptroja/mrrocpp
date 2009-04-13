@@ -33,7 +33,7 @@ namespace irp6ot {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_fsautomat_irp6ot::ecp_task_fsautomat_irp6ot(configurator &_config) : base(_config)
+fsautomat::fsautomat(configurator &_config) : base(_config)
 {
 	sg = NULL;
 	tcg = NULL;
@@ -50,7 +50,7 @@ ecp_task_fsautomat_irp6ot::ecp_task_fsautomat_irp6ot(configurator &_config) : ba
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_fsautomat_irp6ot::task_initialization(void)
+void fsautomat::task_initialization(void)
 {
 	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 	const char * whichECP = "ROBOT_IRP6_ON_TRACK";
@@ -208,7 +208,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
    sr_ecp_msg->message("ECP loaded");
 }
 
-void ecp_task_fsautomat_irp6ot::main_task_algorithm(void)
+void fsautomat::main_task_algorithm(void)
 {
 	int size;
 	char * path1;
@@ -347,7 +347,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new irp6ot::task::ecp_task_fsautomat_irp6ot(_config);
+	return new irp6ot::task::fsautomat(_config);
 }
 }
 } // namespace common

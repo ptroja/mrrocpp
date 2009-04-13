@@ -34,20 +34,20 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class ecp_t_spots_recognition: public common::task::base
+class spots_recognition: public common::task::base
 {
 	char * trajektoria_poczatkowa;
 
 	protected:
 
-		generator::ecp_spots_generator* generator;
+		generator::spots* generator;
 		common::generator::smooth* smooth;
 		common::generator::y_nose_run_force* nose;
 
 
 	public:
-		ecp_t_spots_recognition(configurator &_config);
-		~ecp_t_spots_recognition();
+		spots_recognition(configurator &_config);
+		~spots_recognition();
 
 		void task_initialization(void);
 		void main_task_algorithm(void);

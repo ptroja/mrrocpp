@@ -9,9 +9,9 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-ecp_ellipse_generator::ecp_ellipse_generator (common::task::base& _ecp_task,double major_axis,double minor_axis,int max_steps) : common::generator::base (_ecp_task),major_axis(major_axis),minor_axis(minor_axis),max_steps(max_steps),d_rad(2*PI/max_steps) {}
+ellipse::ellipse (common::task::base& _ecp_task,double major_axis,double minor_axis,int max_steps) : common::generator::base (_ecp_task),major_axis(major_axis),minor_axis(minor_axis),max_steps(max_steps),d_rad(2*PI/max_steps) {}
 
-bool ecp_ellipse_generator::first_step()
+bool ellipse::first_step()
 {
     the_robot->EDP_data.instruction_type = GET;
     the_robot->EDP_data.get_type = ARM_DV;
@@ -28,7 +28,7 @@ bool ecp_ellipse_generator::first_step()
     return true;
 }
 
-bool ecp_ellipse_generator::next_step()
+bool ellipse::next_step()
 {
 	try
 	{
@@ -92,7 +92,7 @@ bool ecp_ellipse_generator::next_step()
 	return true;
 }
 
-double* ecp_ellipse_generator::getFirstPosition()
+double* ellipse::getFirstPosition()
 {
 	double* firstPosition = new double[8];
 	firstPosition[0] = 1;

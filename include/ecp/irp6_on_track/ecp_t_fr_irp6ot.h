@@ -8,7 +8,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class ecp_task_fr_irp6ot: public common::task::base  {
+class fr: public common::task::base  {
 protected:
 	trajectory_description tdes_joint;
 	common::generator::linear_parabolic *adg1;
@@ -21,7 +21,7 @@ protected:
 
 public:
 	// KONSTRUKTORY
-	ecp_task_fr_irp6ot(configurator &_config);
+	fr(configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

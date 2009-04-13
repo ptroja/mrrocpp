@@ -24,9 +24,9 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class ecp_task_pw_scena_irp6ot: public common::task::base  {
+class pw_scena: public common::task::base  {
 
-	generator::ecp_g_pw_scena* scena_gen;
+	generator::pw_scena* scena_gen;
 	//Smoth movement generator
 	common::generator::smooth* smooth_gen;
 	//Calibration of force
@@ -42,7 +42,7 @@ class ecp_task_pw_scena_irp6ot: public common::task::base  {
 
 public:
 	//Konstruktory.
-	ecp_task_pw_scena_irp6ot(configurator &_config);
+	pw_scena(configurator &_config);
 
 	//Methods for ECP template to redefine in concrete classes.
 	void task_initialization(void);

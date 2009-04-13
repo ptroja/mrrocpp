@@ -25,7 +25,7 @@ namespace generator {
 
 //enum SCENE_STATE {NOT_RECOGNIZED,RECOGNIZED}
 
-class ecp_g_pw_scena : public common::generator::base
+class pw_scena : public common::generator::base
 {
 	int step_no;
     double next_position[8];
@@ -37,7 +37,7 @@ class ecp_g_pw_scena : public common::generator::base
     double ydir;
 
 public:
-    ecp_g_pw_scena (common::task::base& _ecp_task);
+    pw_scena (common::task::base& _ecp_task);
     double* get_current_pose();
     virtual bool first_step();
     virtual bool next_step();

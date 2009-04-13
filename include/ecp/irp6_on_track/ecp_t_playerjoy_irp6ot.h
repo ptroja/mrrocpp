@@ -8,13 +8,13 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class ecp_task_playerjoy_irp6ot: public common::task::base  {
+class playerjoy: public common::task::base  {
 protected:
 	common::generator::playerjoy* pjg;
 
 public:
 	// KONSTRUKTORY
-	ecp_task_playerjoy_irp6ot(configurator &_config);
+	playerjoy(configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

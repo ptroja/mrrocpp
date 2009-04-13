@@ -29,7 +29,7 @@ namespace ecp {
 namespace common {
 
 
-extern irp6ot::task::ecp_task_fct_irp6ot *ecp_t;
+extern irp6ot::task::fct *ecp_t;
 } // namespace common 
 namespace irp6ot {
 namespace task {
@@ -41,7 +41,7 @@ extern name_attach_t *ecp_attach;
 name_attach_t * UI_ECP_attach;
 
 // Obiekt generator trajektorii.
-generator::force_controlled_trajectory_generator *fctg;
+generator::force_controlled_trajectory *fctg;
 
 // Flaga uzywana do informmowania o koncu pracy.
 short TERMINATE=false;
@@ -58,7 +58,7 @@ POSE_SPECIFICATION ps;
 void* value_ptr;
 
 // Funkcja - obsluga przychodzacych sygnalow.
-void ecp_task_fct_irp6ot::catch_signal(int sig)
+void fct::catch_signal(int sig)
 {
 	switch (sig) {
 		case SIGTERM:
@@ -270,13 +270,13 @@ void show_force_control_window
 }
 
 // KONSTRUKTORY
-ecp_task_fct_irp6ot::ecp_task_fct_irp6ot(configurator &_config) :
+fct::fct(configurator &_config) :
 	base(_config)
 {
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_fct_irp6ot::task_initialization(void)
+void fct::task_initialization(void)
 {
 	// Nawiazanie komunikacji z EDP.
 	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
@@ -292,7 +292,7 @@ void ecp_task_fct_irp6ot::task_initialization(void)
 		throw common::ECP_main_error(SYSTEM_ERROR, NAME_ATTACH_ERROR);
 	}
 	// Stworzenie generatora trajektorii.
-	fctg = new generator::force_controlled_trajectory_generator(*this);
+	fctg = new generator::force_controlled_trajectory(*this);
 	// Sprawdzanie, czy nalezy uzywac czujnik sily.
 	short use_force_sensor = config.return_int_value("use_force_sensor");
 	if (use_force_sensor == 1) {
@@ -317,7 +317,7 @@ void ecp_task_fct_irp6ot::task_initialization(void)
 	sr_ecp_msg->message("ECP loaded");
 }
 
-void ecp_task_fct_irp6ot::main_task_algorithm(void)
+void fct::main_task_algorithm(void)
 {
 	// Pokazanie okna i uruchomienie watkow.
 	show_force_control_window(UI_fd);
@@ -331,7 +331,7 @@ namespace task {
 
 base* return_created_ecp_task(configurator &_config)
 {
-	return new irp6ot::task::ecp_task_fct_irp6ot(_config);
+	return new irp6ot::task::fct(_config);
 }
 }
 } // namespace common

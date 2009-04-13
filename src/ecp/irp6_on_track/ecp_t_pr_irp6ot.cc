@@ -22,7 +22,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-void ecp_task_pr_irp6ot::short_move_up ()
+void pr::short_move_up ()
 {
     trajectory_description tdes;
 
@@ -44,19 +44,19 @@ void ecp_task_pr_irp6ot::short_move_up ()
 }
 
 // KONSTRUKTORY
-ecp_task_pr_irp6ot::ecp_task_pr_irp6ot(configurator &_config) : base(_config)
+pr::pr(configurator &_config) : base(_config)
 {
     tig = NULL;
 }
 
-ecp_task_pr_irp6ot::~ecp_task_pr_irp6ot()
+pr::~pr()
 {
     if (tig)
     	delete tig;
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_pr_irp6ot::task_initialization(void)
+void pr::task_initialization(void)
 {
     ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
@@ -100,7 +100,7 @@ void ecp_task_pr_irp6ot::task_initialization(void)
 }
 
 
-void ecp_task_pr_irp6ot::main_task_algorithm(void)
+void pr::main_task_algorithm(void)
 {
 	if (ecp_tryb==1)
 	{
@@ -180,7 +180,7 @@ namespace task {
 
 common::task::base* return_created_ecp_task (configurator &_config)
 {
-	return new irp6ot::task::ecp_task_pr_irp6ot(_config);
+	return new irp6ot::task::pr(_config);
 }
 
 } // namespace task

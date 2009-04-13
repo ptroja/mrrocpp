@@ -9,12 +9,12 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-ecp_g_pw_kolo::ecp_g_pw_kolo (common::task::base& _ecp_task)
+pw_kolo::pw_kolo (common::task::base& _ecp_task)
         : base (_ecp_task)
 {
 }
 
-bool ecp_g_pw_kolo::first_step()
+bool pw_kolo::first_step()
 {
 
     //Tak bylo w teach_in_generatorze.
@@ -39,7 +39,7 @@ bool ecp_g_pw_kolo::first_step()
     return true;
 }
 
-bool ecp_g_pw_kolo::next_step()
+bool pw_kolo::next_step()
 {
     double time; //Czas ruchu.
 //    double current_rad; //Aktualne polozenie w radianach.

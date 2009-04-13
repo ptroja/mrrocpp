@@ -18,7 +18,7 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-class ecp_vis_sac_lx_generator : public common::generator::base {
+class vis_sac_lx : public common::generator::base {
 protected:
 sensor *vsp_force_irp6ot, *vsp_force_irp6p, *vsp_vis_sac;
 
@@ -174,7 +174,7 @@ int steps2switch;//=0;
 	int phaseD;
   	
   // konstruktor
-	ecp_vis_sac_lx_generator(common::task::base& _ecp_task, int step=0);  
+	vis_sac_lx(common::task::base& _ecp_task, int step=0);  
 
   virtual bool first_step ();
       // generuje pierwszy krok ruchu -

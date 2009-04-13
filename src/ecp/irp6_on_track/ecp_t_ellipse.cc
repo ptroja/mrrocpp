@@ -17,9 +17,9 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-ecp_task_ellipse::ecp_task_ellipse(configurator &_config) : base(_config) {};
+ellipse::ellipse(configurator &_config) : base(_config) {};
 
-void ecp_task_ellipse::task_initialization(void)
+void ellipse::task_initialization(void)
 {
 	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
     sr_ecp_msg->message("ECP loaded");
@@ -30,7 +30,7 @@ void ecp_task_ellipse::task_initialization(void)
 	sensor_m[SENSOR_WIIMOTE]->configure_sensor();
 }
 
-void ecp_task_ellipse::main_task_algorithm(void)
+void ellipse::main_task_algorithm(void)
 {
  	//Polosie elipsy
 	double a,b;
@@ -39,7 +39,7 @@ void ecp_task_ellipse::main_task_algorithm(void)
 	a = read_double((char*)"a",0,MAX_MAJOR);
 	b = read_double((char*)"b",0,MAX_MINOR);
     sg = new common::generator::smooth(*this,true);
-    eg = new generator::ecp_ellipse_generator(*this,a,b,100);
+    eg = new generator::ellipse(*this,a,b,100);
     firstPosition = eg->getFirstPosition();
     
 	sg->reset();
@@ -51,7 +51,7 @@ void ecp_task_ellipse::main_task_algorithm(void)
     ecp_termination_notice();
 }
 
-double ecp_task_ellipse::read_double(char* name,double min,double max)
+double ellipse::read_double(char* name,double min,double max)
 {
 	double value;
 	int cnt = 0;
@@ -95,7 +95,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new irp6ot::task::ecp_task_ellipse(_config);
+	return new irp6ot::task::ellipse(_config);
 }
 
 }

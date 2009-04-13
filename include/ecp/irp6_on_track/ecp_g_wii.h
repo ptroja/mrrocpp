@@ -13,7 +13,7 @@ namespace generator {
 
 #define PI 3.141592
 
-class ecp_wii_generator : public common::generator::base
+class wii : public common::generator::base
 {
 	private:
 		//ilosc krokow
@@ -35,7 +35,7 @@ public:
 	 * @param minor_axis wartosc mniejszej polosi
 	 * @author jedrzej
 	 */
-    ecp_wii_generator (common::task::base& _ecp_task);
+    wii (common::task::base& _ecp_task);
 
     /**
      * Generuje pierwszy krok

@@ -8,7 +8,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class ecp_task_pteach_irp6ot: public common::task::base  {
+class pteach: public common::task::base  {
 protected:
 	// Generator  odtwarzajacy nauczona trajektorie dla celow kalibracji
 	common::generator::calibration* cg;
@@ -19,7 +19,7 @@ protected:
 
 public:
 	// KONSTRUKTORY
-	ecp_task_pteach_irp6ot(configurator &_config);
+	pteach(configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

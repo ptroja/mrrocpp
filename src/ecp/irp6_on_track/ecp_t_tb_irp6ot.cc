@@ -14,18 +14,18 @@ namespace irp6ot {
 namespace task {
 
 //Constructors
-ecp_t_tb_irp6ot::ecp_t_tb_irp6ot(configurator &_config): base(_config){
+tb::tb(configurator &_config): base(_config){
 	sgen=NULL;
 	befgen=NULL;
 	gagen=NULL;
 	lgen=NULL;
 };
 
-ecp_t_tb_irp6ot::~ecp_t_tb_irp6ot(){
+tb::~tb(){
 };
 
 // methods for ECP template to redefine in concrete classes
-void ecp_t_tb_irp6ot::task_initialization(void){
+void tb::task_initialization(void){
 
 	sensor_m[SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(SENSOR_CVFRADIA,"[vsp_cvfradia]", *this,	sizeof(sensor_image_t::sensor_union_t::fradia_t));
 	sensor_m[SENSOR_CVFRADIA]->configure_sensor();
@@ -39,7 +39,7 @@ void ecp_t_tb_irp6ot::task_initialization(void){
 	sr_ecp_msg->message("ECP loaded tb");
 };
 
-void ecp_t_tb_irp6ot::main_task_algorithm(void){
+void tb::main_task_algorithm(void){
 	//char *path="/net/home-host/home/mrrocpp/trj/draughts/1_pawn_moving.trj";
 	//file with trajectory to smooth generator
 
@@ -234,7 +234,7 @@ void ecp_t_tb_irp6ot::main_task_algorithm(void){
 };
 
 
-void ecp_t_tb_irp6ot::set_tdes(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6){
+void tb::set_tdes(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6){
 	// Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
 	tdes.coordinate_delta[0] = cor0; // przyrost wspolrzednej X
 	tdes.coordinate_delta[1] = cor1;// przyrost wspolrzednej Y
@@ -246,7 +246,7 @@ void ecp_t_tb_irp6ot::set_tdes(double cor0, double cor1, double cor2, double cor
 }
 
 //inicjacja struktury tdes - trajectory description
-void ecp_t_tb_irp6ot::init_tdes(POSE_SPECIFICATION pspec, int internode_no){
+void tb::init_tdes(POSE_SPECIFICATION pspec, int internode_no){
 	tdes.arm_type=pspec;
 	tdes.interpolation_node_no=1;
 	tdes.internode_step_no=internode_no;	//motion time
@@ -260,7 +260,7 @@ namespace common {
 namespace task {
 
 base* return_created_ecp_task(configurator &_config){
-	return new irp6ot::task::ecp_t_tb_irp6ot(_config);
+	return new irp6ot::task::tb(_config);
 	
 }
 

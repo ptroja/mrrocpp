@@ -22,10 +22,10 @@ namespace generator {
 #define C_4 0.1
 #define C_5 0.1
 
-class ecp_wii_velocity_generator : public common::generator::tff_nose_run
+class wii_velocity : public common::generator::tff_nose_run
 {
 	public:
-    ecp_wii_velocity_generator (common::task::base& _ecp_task);
+    wii_velocity (common::task::base& _ecp_task);
     virtual bool first_step();
     virtual bool next_step();
 };

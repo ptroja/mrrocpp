@@ -25,7 +25,7 @@ namespace task {
 
 
 // KONSTRUKTORY
-ecp_task_fr_irp6ot::ecp_task_fr_irp6ot(configurator &_config) : base(_config)
+fr::fr(configurator &_config) : base(_config)
 {
     adg1 = NULL;
     adg2 = NULL;
@@ -33,7 +33,7 @@ ecp_task_fr_irp6ot::ecp_task_fr_irp6ot(configurator &_config) : base(_config)
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_fr_irp6ot::task_initialization(void)
+void fr::task_initialization(void)
 {
     ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
@@ -82,7 +82,7 @@ void ecp_task_fr_irp6ot::task_initialization(void)
 }
 
 
-void ecp_task_fr_irp6ot::main_task_algorithm(void)
+void fr::main_task_algorithm(void)
 {
 	if (operator_reaction("Start motion? ")) {
 		// Odtwarzanie nauczonej lub wczytanej trajektorii zaczynamy od jej poczatku
@@ -110,7 +110,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new irp6ot::task::ecp_task_fr_irp6ot(_config);
+	return new irp6ot::task::fr(_config);
 }
 }
 } // namespace common

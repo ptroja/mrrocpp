@@ -9,11 +9,11 @@ namespace task {
 #define robot1
 
 //Konstruktory
-ecp_task_pw_scena_irp6ot::ecp_task_pw_scena_irp6ot(configurator &_config) :
+pw_scena::pw_scena(configurator &_config) :
 	base(_config) {
 }
 
-void ecp_task_pw_scena_irp6ot::task_initialization(void) {
+void pw_scena::task_initialization(void) {
 
 	try {
 		//Create cvFraDIA sensor - for testing purposes.
@@ -28,7 +28,7 @@ void ecp_task_pw_scena_irp6ot::task_initialization(void) {
 //
 
 		//Generator ruchu dla rozpoznawania sceny.
-		scena_gen = new generator::ecp_g_pw_scena(*this);
+		scena_gen = new generator::pw_scena(*this);
 		scena_gen->sensor_m = sensor_m;
 
 		planar_vis = new ecp_vis_ib_eih_planar_irp6ot(*this);
@@ -49,7 +49,7 @@ void ecp_task_pw_scena_irp6ot::task_initialization(void) {
 	}
 }
 
-void ecp_task_pw_scena_irp6ot::main_task_algorithm(void) {
+void pw_scena::main_task_algorithm(void) {
 
 	//Dojazd do pozycji nad stolem.
 	#ifdef robot1
@@ -112,7 +112,7 @@ void ecp_task_pw_scena_irp6ot::main_task_algorithm(void) {
 
 
 
-void ecp_task_pw_scena_irp6ot::set_td_coordinates(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6){
+void pw_scena::set_td_coordinates(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6){
 	// Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
 	td.coordinate_delta[0] = cor0; // przyrost wspolrzednej X
 	td.coordinate_delta[1] = cor1;// przyrost wspolrzednej Y
@@ -124,7 +124,7 @@ void ecp_task_pw_scena_irp6ot::set_td_coordinates(double cor0, double cor1, doub
 }
 
 //inicjacja struktury td - trajectory description
-void ecp_task_pw_scena_irp6ot::init_td(POSE_SPECIFICATION pspec, int internode_no){
+void pw_scena::init_td(POSE_SPECIFICATION pspec, int internode_no){
 	td.arm_type=pspec;
 	td.interpolation_node_no=1;
 	td.internode_step_no=internode_no;	//motion time
@@ -138,7 +138,7 @@ namespace common {
 namespace task {
 
 base* return_created_ecp_task(configurator &_config) {
-	return new irp6ot::task::ecp_task_pw_scena_irp6ot(_config);
+	return new irp6ot::task::pw_scena(_config);
 	
 }
 

@@ -27,7 +27,7 @@ namespace irp6ot {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_pouring_irp6ot::ecp_task_pouring_irp6ot(configurator &_config) : base(_config)
+pouring::pouring(configurator &_config) : base(_config)
 {
     sg = NULL;
     tcg = NULL;
@@ -35,7 +35,7 @@ ecp_task_pouring_irp6ot::ecp_task_pouring_irp6ot(configurator &_config) : base(_
 
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_pouring_irp6ot::task_initialization(void)
+void pouring::task_initialization(void)
 {
     // the robot is choose dependendat on the section of configuration file sent as argv[4]
     ecp_m_robot = new ecp_irp6_on_track_robot (*this);
@@ -49,7 +49,7 @@ void ecp_task_pouring_irp6ot::task_initialization(void)
 };
 
 
-void ecp_task_pouring_irp6ot::main_task_algorithm(void)
+void pouring::main_task_algorithm(void)
 {
 
     int size;
@@ -109,7 +109,7 @@ namespace common {
 namespace task {
 base* return_created_ecp_task (configurator &_config)
 {
-	return new irp6ot::task::ecp_task_pouring_irp6ot(_config);
+	return new irp6ot::task::pouring(_config);
 }
 }
 } // namespace common

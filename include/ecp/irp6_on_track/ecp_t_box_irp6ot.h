@@ -11,14 +11,14 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class ecp_t_box_irp6ot: public common::task::base {
+class box: public common::task::base {
   
   protected:
 	  common::generator::smooth* smoothgen;
 		
 	public:
-		ecp_t_box_irp6ot(configurator &_config);
-		~ecp_t_box_irp6ot();
+		box(configurator &_config);
+		~box();
 
 		void task_initialization(void);
 		void main_task_algorithm(void);

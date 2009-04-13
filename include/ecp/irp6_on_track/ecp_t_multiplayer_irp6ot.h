@@ -11,7 +11,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class ecp_task_multiplayer_irp6ot : public common::task::base
+class multiplayer : public common::task::base
 {
 private:
 	//generatory
@@ -23,12 +23,12 @@ private:
     //podzadania
 	common::task::ecp_sub_task_gripper_opening* go_st;
 
-	generator::ecp_vis_sac_lx_generator *takeg;
+	generator::vis_sac_lx *takeg;
    	common::generator::tff_rubik_grab *rgg;
 
 
 public:
-    ecp_task_multiplayer_irp6ot(configurator &_config);
+    multiplayer(configurator &_config);
 
     // methods for ECP template to redefine in concrete classes
     void task_initialization(void);

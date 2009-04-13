@@ -7,23 +7,23 @@ namespace irp6ot {
 namespace task {
 
 //Constructors
-ecp_t_box_irp6ot::ecp_t_box_irp6ot(configurator &_config): common::task::base(_config){
+box::box(configurator &_config): common::task::base(_config){
   smoothgen = NULL;
 };
 //Desctructor
-ecp_t_box_irp6ot::~ecp_t_box_irp6ot(){
+box::~box(){
 
 };
 
 //methods for ECP template to redefine in concrete classes
-void ecp_t_box_irp6ot::task_initialization(void) {
+void box::task_initialization(void) {
 
 	ecp_m_robot = new ecp_irp6_on_track_robot(*this);
 	smoothgen = new common::generator::smooth(*this, true);
 	sr_ecp_msg->message("ECP loaded box");
 };
 
-void ecp_t_box_irp6ot::main_task_algorithm(void ){
+void box::main_task_algorithm(void ){
 	sr_ecp_msg->message("ECP box ready");
 	//ecp_wait_for_start();
 
@@ -44,7 +44,7 @@ namespace common {
 namespace task {
 
 base* return_created_ecp_task(configurator &_config){
-	return new irp6ot::task::ecp_t_box_irp6ot(_config);
+	return new irp6ot::task::box(_config);
 }
 
 }

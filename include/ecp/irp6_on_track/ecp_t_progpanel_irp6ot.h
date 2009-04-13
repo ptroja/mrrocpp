@@ -9,14 +9,14 @@ namespace irp6ot {
 namespace task {
 
 
-class ecp_task_progpanel_irp6ot: public common::task::base  {
+class progpanel: public common::task::base  {
 protected:
 	common::generator::progpanel* ppg;
 //	ecp_teach_in_generator* tig;
 
 public:
 	// KONSTRUKTORY
-	ecp_task_progpanel_irp6ot(configurator &_config);
+	progpanel(configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

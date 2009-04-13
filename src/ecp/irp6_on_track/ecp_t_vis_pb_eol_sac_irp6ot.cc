@@ -25,12 +25,12 @@ namespace irp6ot {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_vislx_irp6ot::ecp_task_vislx_irp6ot(configurator &_config) : base(_config)
+vislx::vislx(configurator &_config) : base(_config)
 {
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_vislx_irp6ot::task_initialization(void)
+void vislx::task_initialization(void)
 {
 	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
@@ -53,7 +53,7 @@ void ecp_task_vislx_irp6ot::task_initialization(void)
 }
 
 
-void ecp_task_vislx_irp6ot::main_task_algorithm(void)
+void vislx::main_task_algorithm(void)
 {
 	ecp_vis_pb_eol_sac_irp6ot ynrlg(*this, 4);
 	ynrlg.sensor_m = sensor_m;
@@ -74,7 +74,7 @@ namespace task {
 
 base* return_created_ecp_task (configurator &_config)
 {
-	return new irp6ot::task::ecp_task_vislx_irp6ot(_config);
+	return new irp6ot::task::vislx(_config);
 }
 
 }

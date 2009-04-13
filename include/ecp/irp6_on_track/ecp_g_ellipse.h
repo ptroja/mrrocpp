@@ -13,7 +13,7 @@ namespace generator {
 
 #define PI 3.141592
 
-class ecp_ellipse_generator : public common::generator::base
+class ellipse : public common::generator::base
 {
 	private:
 		//wieksza polos
@@ -40,7 +40,7 @@ public:
 	 * @param max_steps ilosc krokow, w ktorych wykonany ma byc ruch po elipsie
 	 * @author jedrzej
 	 */
-    ecp_ellipse_generator (common::task::base& _ecp_task,double major_axis,double minor_axis,int max_steps);
+    ellipse (common::task::base& _ecp_task,double major_axis,double minor_axis,int max_steps);
     
     /**
      * Generuje pierwszy krok - ustawienie w pozycji (0,b)

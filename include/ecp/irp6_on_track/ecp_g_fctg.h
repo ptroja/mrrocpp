@@ -29,7 +29,7 @@ namespace generator {
 // ###########  KLASA do ruszania robotem, ruch kontrolowany za  pomoca czujnika sily    #########
 // ####################################################################
 
-class force_controlled_trajectory_generator : public common::ecp_teach_in_generator
+class force_controlled_trajectory : public common::ecp_teach_in_generator
 {
 	private:
 		// Lista pozycji dla danego makrokroku - ruch jedna osia/wspolrzedna.
@@ -83,8 +83,8 @@ class force_controlled_trajectory_generator : public common::ecp_teach_in_genera
 		// Mutex do odbierania pozycji robota
 		pthread_mutex_t ROBOT_POSITION_MUTEX;
 	public:
-		force_controlled_trajectory_generator (common::task::base& _ecp_task);
-		~force_controlled_trajectory_generator (void);
+		force_controlled_trajectory (common::task::base& _ecp_task);
+		~force_controlled_trajectory (void);
 		// Dodanie nowego kroku do listy.
 		void add_step(int motion_time);
 		// Zapisanie trajektorii.
