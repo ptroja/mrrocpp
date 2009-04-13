@@ -12,7 +12,7 @@ class kin_test: public common::task::base  {
 
 public:
 	// KONSTRUKTORY
-	kin_test(configurator &_config);
+	kin_test(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

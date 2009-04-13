@@ -2,7 +2,7 @@
 // Proces: 	EFFECTOR CONTROL PROCESS (ECP)
 // Plik:			configurator.h
 // System:	QNX/MRROCPP  v. 6.3
-// Opis:		Plik zawiera klase configurator - obsluga konfiguracji z pliku INI.
+// Opis:		Plik zawiera klase lib::configurator - obsluga konfiguracji z pliku INI.
 // Autor:		tkornuta
 // Data:		10.11.2005
 // -------------------------------------------------------------------------
@@ -17,6 +17,9 @@
 #include "lib/cfgopts.h"
 
 #include "messip/messip.h"
+
+namespace mrrocpp {
+namespace lib {
 
 #define PROCESS_SPAWN_RSH
 // Z wykorzystaniem rsh w odpowiedzi na buga w qnx 6.4.0
@@ -103,6 +106,9 @@ public:
 	~configurator();
 
 };// : configurator
+
+} // namespace lib
+} // namespace mrrocpp
 
 
 #endif

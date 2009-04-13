@@ -28,12 +28,12 @@ protected:
 	
 	
 public:
-	configurator &config;
+	lib::configurator &config;
 	sr_vsp *sr_msg;
 	
 	char* mrrocpp_network_path;
 	
-	base (configurator &_config); 
+	base (lib::configurator &_config); 
 	
 	// Metoda uzywana przy wspolpracy nieinteraktywnej.
 	virtual void wait_for_event(void);
@@ -43,7 +43,7 @@ public:
 }; // end: class vsp_sensor
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-base* return_created_sensor (configurator &_config);
+base* return_created_sensor (lib::configurator &_config);
 
 } // namespace sensor
 } // namespace vsp

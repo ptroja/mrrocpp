@@ -12,7 +12,7 @@ class vis: public common::task::base  {
 
 public:
 	// KONSTRUKTORY
-	vis(configurator &_config);
+	vis(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

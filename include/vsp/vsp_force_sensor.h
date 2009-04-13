@@ -33,7 +33,7 @@ private:
 
 public:
     // Konstruktor czujnika wirtualnego.
-	force (configurator &_config);
+	force (lib::configurator &_config);
 
     // Konfiguracja czujnika.
     void configure_sensor (void);

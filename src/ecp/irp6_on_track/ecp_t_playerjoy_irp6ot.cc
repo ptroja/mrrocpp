@@ -28,7 +28,7 @@ namespace irp6ot {
 namespace task {
 
 // KONSTRUKTORY
-playerjoy::playerjoy(configurator &_config) : base(_config)
+playerjoy::playerjoy(lib::configurator &_config) : base(_config)
 {
     pjg = NULL;
 }
@@ -62,7 +62,7 @@ void playerjoy::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (lib::configurator &_config)
 {
 	return new irp6ot::task::playerjoy(_config);
 }

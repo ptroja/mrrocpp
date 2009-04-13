@@ -19,7 +19,7 @@ class rcs_test : public base
 public:
 
     // konstruktor
-    rcs_test(configurator &_config);
+    rcs_test(lib::configurator &_config);
 	
     // destruktor
     ~rcs_test();

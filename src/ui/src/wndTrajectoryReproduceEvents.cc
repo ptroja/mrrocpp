@@ -42,7 +42,7 @@ extern UI_ECP_message ui_ecp_msg;
 // Rozkaz przeslany z ECP.
 extern ui_ecp_buffer* ui_ecp_obj;
 // Zmienna konfiguracyjna.
-extern configurator* config;
+extern lib::configurator* config;
 
 // Numer makrokroku.
 int current_macrostep_number;
@@ -251,7 +251,7 @@ int TRConnect( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo ){
     // Nazwa polacznia.
     char *tmp_name;
     // Stworznie nazwy.
-    tmp_name = config->return_attach_point_name	(configurator::CONFIG_SERVER, "ecp_third_chan_attach_point", "[ecp_irp6_on_track]");
+    tmp_name = config->return_attach_point_name	(lib::configurator::CONFIG_SERVER, "ecp_third_chan_attach_point", "[ecp_irp6_on_track]");
 
     #ifdef TRDEBUG
         printf("TRConnect: %s\n", tmp_name);

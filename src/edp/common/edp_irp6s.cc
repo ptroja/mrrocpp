@@ -41,7 +41,7 @@ namespace edp {
 namespace common {
 
 /*--------------------------------------------------------------------------*/
-irp6s_effector::irp6s_effector (configurator &_config, ROBOT_ENUM l_robot_name) :
+irp6s_effector::irp6s_effector (lib::configurator &_config, ROBOT_ENUM l_robot_name) :
         irp6s_and_conv_effector (_config, l_robot_name)
 {}
 

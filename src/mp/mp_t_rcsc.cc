@@ -33,7 +33,7 @@ void rubik_cube_solver::initiate(common::CUBE_COLOR up_is, common::CUBE_COLOR do
 	manipulation_sequence_computed = false;
 }
 
-rubik_cube_solver::rubik_cube_solver(configurator &_config)
+rubik_cube_solver::rubik_cube_solver(lib::configurator &_config)
 	: base(_config),
 	cube_state(NULL)
 {}
@@ -1076,7 +1076,7 @@ void rubik_cube_solver::main_task_algorithm(void)
 	} // koniec: for(;;) - zewnetrzna petla
 }
 
-base* return_created_mp_task (configurator &_config)
+base* return_created_mp_task (lib::configurator &_config)
 {
 	return new rubik_cube_solver(_config);
 }

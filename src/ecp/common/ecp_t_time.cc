@@ -27,7 +27,7 @@ namespace task {
 
 
 // KONSTRUKTORY
-time::time(configurator &_config) : base(_config)
+time::time(lib::configurator &_config) : base(_config)
 {
 	tfg = NULL;
 }
@@ -64,7 +64,7 @@ void time::main_task_algorithm(void)
 	}
 }
 
-base* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (lib::configurator &_config)
 {
 	return new time(_config);
 }

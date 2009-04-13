@@ -12,7 +12,7 @@ class jarosz: public common::task::base  {
 
 public:
 	// KONSTRUKTORY
-	jarosz(configurator &_config);
+	jarosz(lib::configurator &_config);
 	~jarosz();
 	
 	// methods for ECP template to redefine in concrete classes

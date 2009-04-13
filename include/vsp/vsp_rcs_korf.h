@@ -33,7 +33,7 @@ class rcs_korf : public base {
 
   public:
 	// Konstruktor czujnika wirtualnego.
-	rcs_korf(configurator &_config);
+	rcs_korf(lib::configurator &_config);
 	// Destruktor czujnika wirtualnego.
 	~rcs_korf(void);
 	// Konfiguracja czujnika.

@@ -55,7 +55,7 @@ protected:
 	const char* get_trajectory(double x[]);
 	void naciskanie_test();
 public:
-	tzu_test(configurator &_config);
+	tzu_test(lib::configurator &_config);
 	~tzu_test();
 	/** metoda odpowiedzialna za inicjalizacje zmiennych zadania **/
 	void task_initialization(void);

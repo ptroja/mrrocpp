@@ -68,7 +68,7 @@ public:
     unsigned uicSamplesNo;
 
     // Konstruktor.
-    effector (configurator &_config);
+    effector (lib::configurator &_config);
     int init ();
     // Destruktor
     virtual ~effector ();

@@ -71,7 +71,7 @@ public:
     static void *force_thread_start(void* arg);
     void *force_thread(void* arg);
 
-    irp6s_postument_track_effector (configurator &_config, ROBOT_ENUM l_robot_name );       // konstruktor
+    irp6s_postument_track_effector (lib::configurator &_config, ROBOT_ENUM l_robot_name );       // konstruktor
 
     int force_tryb;
 

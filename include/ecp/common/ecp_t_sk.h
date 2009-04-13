@@ -17,7 +17,7 @@ protected:
 
 public:
 	// KONSTRUKTORY
-	sk(configurator &_config);
+	sk(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

@@ -24,7 +24,7 @@ class kon: public common::task::base  {
 
 public:
 	// KONSTRUKTORY
-	kon(configurator &_config);
+	kon(lib::configurator &_config);
 	~kon();
 	
 	// methods for ECP template to redefine in concrete classes

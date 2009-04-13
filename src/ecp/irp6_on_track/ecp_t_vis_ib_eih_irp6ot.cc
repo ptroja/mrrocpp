@@ -25,7 +25,7 @@ namespace irp6ot {
 namespace task {
 
 // KONSTRUKTORY
-vislx::vislx(configurator &_config) : base(_config)
+vislx::vislx(lib::configurator &_config) : base(_config)
 {
 }
 
@@ -80,7 +80,7 @@ void vislx::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (lib::configurator &_config)
 {
 	return new irp6ot::task::vislx(_config);
 }

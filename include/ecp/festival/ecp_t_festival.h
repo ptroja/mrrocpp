@@ -14,7 +14,7 @@ protected:
 	generator::base* fg;
 
 public:
-	base(configurator &_config);
+	base(lib::configurator &_config);
 	~base();
 	
 	// methods for ECP template to redefine in concrete classes

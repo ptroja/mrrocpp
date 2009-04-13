@@ -158,9 +158,9 @@ void * irp6s_and_conv_effector::reader_thread(void* arg)
 	// by Y komuniakicja pomiedzy ui i reader'em rozwiazalem poprzez pulsy
 	// powolanie kanalu komunikacyjnego do odbioru pulsow sterujacych
 #if !defined(USE_MESSIP_SRR)
-	if ((my_attach = name_attach(NULL, config.return_attach_point_name(configurator::CONFIG_SERVER, "reader_attach_point"), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+	if ((my_attach = name_attach(NULL, config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point"), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 #else
-	if ((my_attach = messip_channel_create(NULL, config.return_attach_point_name(configurator::CONFIG_SERVER,
+	if ((my_attach = messip_channel_create(NULL, config.return_attach_point_name(lib::configurator::CONFIG_SERVER,
 			"reader_attach_point"), MESSIP_NOTIMEOUT, 0)) == NULL) {
 #endif
 		e = errno;

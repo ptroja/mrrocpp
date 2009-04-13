@@ -42,7 +42,7 @@ class pw_scena: public common::task::base  {
 
 public:
 	//Konstruktory.
-	pw_scena(configurator &_config);
+	pw_scena(lib::configurator &_config);
 
 	//Methods for ECP template to redefine in concrete classes.
 	void task_initialization(void);

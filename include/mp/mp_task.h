@@ -35,7 +35,7 @@ class base: public ecp_mp::task::base
 		static std::map <ROBOT_ENUM, common::robot*> robot_m;
 
 		/// KONSTRUKTORY
-		base(configurator &_config);
+		base(lib::configurator &_config);
 		virtual ~base(void);
 
 		void initialize_communication (void);
@@ -113,7 +113,7 @@ class base: public ecp_mp::task::base
 		        WAIT_FOR_NEW_PULSE_ENUM process_mode, MP_RECEIVE_PULSE_MODE desired_wait_mode);
 };
 
-base* return_created_mp_task (configurator &_config);
+base* return_created_mp_task (lib::configurator &_config);
 
 
 } // namespace task

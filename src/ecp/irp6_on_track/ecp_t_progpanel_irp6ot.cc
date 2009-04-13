@@ -59,7 +59,7 @@ int create_grab_path(double *object_coordinates, ecp_teach_in_generator generato
 
 
 // KONSTRUKTORY
-progpanel::progpanel(configurator &_config) : base(_config)
+progpanel::progpanel(lib::configurator &_config) : base(_config)
 {
     //	tig = NULL;
     ppg = NULL;
@@ -97,7 +97,7 @@ void progpanel::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (lib::configurator &_config)
 {
 	return new irp6ot::task::progpanel(_config);
 }

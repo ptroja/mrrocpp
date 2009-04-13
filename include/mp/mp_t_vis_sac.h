@@ -20,7 +20,7 @@ protected:
 
 public:
 	
-	vis_sac(configurator &_config);
+	vis_sac(lib::configurator &_config);
 
 	// methods for mp template
 	void task_initialization(void);

@@ -84,7 +84,7 @@ int main(int argc, char *argv[], char **arge) {
 #endif
 
 		// odczytanie konfiguracji
-		configurator * _config = new configurator(argv[1], argv[2], argv[3],
+		lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3],
 				argv[4], argv[5]);
 
 #if defined(PROCESS_SPAWN_YRSH)
@@ -96,7 +96,7 @@ int main(int argc, char *argv[], char **arge) {
 		/* Lokalizacja procesu wywietlania komunikatow SR */
 		/*
 		 if ((msg = new sr_edp(EDP, config->return_string_value("resourceman_attach_point"),
-		 config->return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL) {
+		 config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL) {
 		 perror ( "Unable to locate SR ");
 		 throw System_error();
 		 }

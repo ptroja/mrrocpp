@@ -32,7 +32,7 @@ protected:
 
 public:
     void initialize (void);
-    effector (configurator &_config);
+    effector (lib::configurator &_config);
 };
 
 } // namespace irp6ot

@@ -24,7 +24,7 @@ class tran: public common::task::base  {
 
 public:
 	// KONSTRUKTORY
-	tran(configurator &_config);
+	tran(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

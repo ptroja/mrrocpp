@@ -19,7 +19,7 @@ class vislx: public common::task::base  {
 		ecp_vis_pb_eih_irp6ot* pbeih;
 		ecp_vis_ib_eih_irp6ot* ibeih;
 		// KONSTRUKTORY
-		vislx(configurator &_config);
+		vislx(lib::configurator &_config);
 
 		// methods for ECP template to redefine in concrete classes
 		void task_initialization(void);

@@ -38,7 +38,7 @@ class ui_conveyor_robot: public ecp::conveyor::ecp_conveyor_robot {
 
  public:
 // ecp_buffer ui_edp_package; // by Y
-  ui_conveyor_robot (configurator &_config, sr_ecp* _sr_ecp_msg); // Konstruktor
+  ui_conveyor_robot (lib::configurator &_config, sr_ecp* _sr_ecp_msg); // Konstruktor
 
   virtual void execute_motion ( void );
 // virtual void set_edp_master_pid ( pid_t edppid ) {EDP_Pid = edppid;};

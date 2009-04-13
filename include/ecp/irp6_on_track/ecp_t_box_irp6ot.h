@@ -17,7 +17,7 @@ class box: public common::task::base {
 	  common::generator::smooth* smoothgen;
 		
 	public:
-		box(configurator &_config);
+		box(lib::configurator &_config);
 		~box();
 
 		void task_initialization(void);

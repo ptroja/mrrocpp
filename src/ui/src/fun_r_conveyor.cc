@@ -40,7 +40,7 @@ extern ui_msg_def ui_msg;
 extern ui_ecp_buffer* ui_ecp_obj;
 
 extern ui_state_def ui_state;
-extern configurator* config;
+extern lib::configurator* config;
 
 extern ui_robot_def ui_robot;
 extern ui_ecp_buffer* ui_ecp_obj;
@@ -810,7 +810,7 @@ reload_conveyor_configuration ()
 		{
 			delete [] ui_state.conveyor.ecp.network_trigger_attach_point;
 			ui_state.conveyor.ecp.network_trigger_attach_point =config->return_attach_point_name
-				(configurator::CONFIG_SERVER, "trigger_attach_point", ui_state.conveyor.ecp.section_name);
+				(lib::configurator::CONFIG_SERVER, "trigger_attach_point", ui_state.conveyor.ecp.section_name);
 
 	 		ui_state.conveyor.ecp.pid = -1;
 	 		ui_state.conveyor.ecp.trigger_fd = -1;
@@ -845,11 +845,11 @@ reload_conveyor_configuration ()
 
 				delete [] ui_state.conveyor.edp.network_resourceman_attach_point;
 				ui_state.conveyor.edp.network_resourceman_attach_point = config->return_attach_point_name
-					(configurator::CONFIG_SERVER, "resourceman_attach_point", ui_state.conveyor.edp.section_name);
+					(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", ui_state.conveyor.edp.section_name);
 
 				delete [] ui_state.conveyor.edp.network_reader_attach_point;
 				ui_state.conveyor.edp.network_reader_attach_point = config->return_attach_point_name
-					(configurator::CONFIG_SERVER, "reader_attach_point", ui_state.conveyor.edp.section_name);
+					(lib::configurator::CONFIG_SERVER, "reader_attach_point", ui_state.conveyor.edp.section_name);
 
 				delete [] ui_state.conveyor.edp.node_name;
 				ui_state.conveyor.edp.node_name = config->return_string_value ("node_name", ui_state.conveyor.edp.section_name);

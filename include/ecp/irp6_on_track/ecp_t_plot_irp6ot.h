@@ -12,7 +12,7 @@ class plot: public common::task::base  {
 
 public:
 	// KONSTRUKTORY
-	plot(configurator &_config);
+	plot(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

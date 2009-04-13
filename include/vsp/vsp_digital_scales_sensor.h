@@ -28,7 +28,7 @@ private:
     
 public:
     // Konstruktor czujnika wirtualnego.
-    digital_scales(configurator &_config);
+    digital_scales(lib::configurator &_config);
     // Destruktor czujnika wirtualnego.
     ~digital_scales(void);
     // Konfiguracja czujnika.

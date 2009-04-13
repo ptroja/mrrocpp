@@ -28,7 +28,7 @@ namespace common {
 namespace task {
 
 // KONSTRUKTORY
-nalewanie::nalewanie(configurator &_config) : base(_config)
+nalewanie::nalewanie(lib::configurator &_config) : base(_config)
 {
     sg = NULL;
 }
@@ -70,7 +70,7 @@ void nalewanie::main_task_algorithm(void)
     sg->Move();
 }
 
-base* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (lib::configurator &_config)
 {
 	return new nalewanie(_config);
 }

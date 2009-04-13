@@ -158,7 +158,7 @@ void pouring::depart(void)
 			ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT);
 }
 
-pouring::pouring(configurator &_config) :
+pouring::pouring(lib::configurator &_config) :
 	base(_config)
 	{
 	}
@@ -167,7 +167,7 @@ pouring::~pouring()
 {
 }
 
-base* return_created_mp_task(configurator &_config)
+base* return_created_mp_task(lib::configurator &_config)
 {
 	return new pouring(_config);
 }

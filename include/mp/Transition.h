@@ -14,7 +14,7 @@ class Transition
 {
 	public:
 		//Transition();
-		Transition(char *cond, char *targetID, configurator &_config);
+		Transition(char *cond, char *targetID, lib::configurator &_config);
 		Transition(const Transition &transition);
 		~Transition();
 

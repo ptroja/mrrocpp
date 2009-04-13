@@ -20,7 +20,7 @@ protected:
 
 public:
 	
-	vis_pbeclsac(configurator &_config);
+	vis_pbeclsac(lib::configurator &_config);
 
 	// methods for mp template
 	void task_initialization(void);

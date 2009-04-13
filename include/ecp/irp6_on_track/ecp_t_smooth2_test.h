@@ -17,7 +17,7 @@ class smooth2_test: public common::task::base {
 	  common::generator::smooth2* smoothgen2;
 		
 	public:
-		smooth2_test(configurator &_config);
+		smooth2_test(lib::configurator &_config);
 		~smooth2_test();
 
 		void task_initialization(void);

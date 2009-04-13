@@ -22,7 +22,7 @@ namespace task {
 #define BILLION  1000000000L;
 
 // KONSTRUKTORY
-kin_test::kin_test(configurator &_config) : base(_config)
+kin_test::kin_test(lib::configurator &_config) : base(_config)
 {}
 
 // methods for ECP template to redefine in concrete classes
@@ -100,7 +100,7 @@ void kin_test::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (lib::configurator &_config)
 {
 	return new irp6ot::task::kin_test(_config);
 }

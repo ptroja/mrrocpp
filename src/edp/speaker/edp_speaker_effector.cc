@@ -56,7 +56,7 @@ namespace mrrocpp {
 namespace edp {
 namespace speaker {
 
-effector::effector (configurator &_config)
+effector::effector (lib::configurator &_config)
 : common::effector(_config, ROBOT_SPEAKER)
 {
 
@@ -473,7 +473,7 @@ namespace edp {
 namespace common {
 
 
-effector* return_created_efector (configurator &_config)
+effector* return_created_efector (lib::configurator &_config)
 {
 	return new speaker::effector (_config);
 };

@@ -31,7 +31,7 @@ base::base(SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ec
 	node_name = _ecp_mp_object.config.return_string_value("node_name", _section_name);
 
 #if !defined(USE_MESSIP_SRR)
-	VSP_NAME = _ecp_mp_object.config.return_attach_point_name(configurator::CONFIG_RESOURCEMAN_GLOBAL, "resourceman_attach_point", _section_name);
+	VSP_NAME = _ecp_mp_object.config.return_attach_point_name(lib::configurator::CONFIG_RESOURCEMAN_GLOBAL, "resourceman_attach_point", _section_name);
 
  	// cout<<"VSP_NAME = "<<VSP_NAME<<endl;
 
@@ -60,7 +60,7 @@ base::base(SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ec
 	}
 #else /* USE_MESSIP_SRR */
 
-	VSP_NAME = _ecp_mp_object.config.return_attach_point_name(configurator::CONFIG_SERVER, "resourceman_attach_point", _section_name);
+	VSP_NAME = _ecp_mp_object.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", _section_name);
 
  	// cout<<"VSP_NAME = "<<VSP_NAME<<endl;
 

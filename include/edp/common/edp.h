@@ -60,7 +60,7 @@ protected:
     int caller;				// by 7&Y
 
 public:
-    configurator &config;
+    lib::configurator &config;
     sr_edp *msg;
 
     void check_config(const char* string, uint8_t* input);
@@ -77,7 +77,7 @@ public:
     messip_channel_t *attach;
 #endif /* USE_MESSIP_SRR */
 
-    effector (configurator &_config, ROBOT_ENUM l_robot_name);       // konstruktor
+    effector (lib::configurator &_config, ROBOT_ENUM l_robot_name);       // konstruktor
     controller_state_t controller_state_edp_buf; // do okreslenia stanu robota
 
     int test_mode;
@@ -274,7 +274,7 @@ public:
     in_out_buffer* in_out_obj; // bufor wejsc wyjsc
     reader_buffer *rb_obj;
     master_trans_t_buffer *mt_tt_obj;
-    irp6s_and_conv_effector (configurator &_config, ROBOT_ENUM l_robot_name);       // konstruktor
+    irp6s_and_conv_effector (lib::configurator &_config, ROBOT_ENUM l_robot_name);       // konstruktor
 
     virtual void set_rmodel (c_buffer &instruction) = 0;                    // zmiana narzedzia
     virtual void get_rmodel (c_buffer &instruction) = 0;                    // odczytanie narzedzia
@@ -464,7 +464,7 @@ protected:
     // manipulatora wzgledem ukladu bazowego (polozenie w mm)
 
 public:
-    irp6s_effector (configurator &_config, ROBOT_ENUM l_robot_name );       // konstruktor
+    irp6s_effector (lib::configurator &_config, ROBOT_ENUM l_robot_name );       // konstruktor
 
     // wyznaczenie polozenia lokalnego i globalnego transformera
     // przepisanie lokalnego zestawu lokalnego edp_servo na globalny (chronione mutexem)
@@ -626,7 +626,7 @@ public:
 
 
 // Zwrocenie stworzonego obiektu - efektora. Funkcja implementowana w plikach efektorow konkretnych (jadro).
-effector* return_created_efector (configurator &_config);
+effector* return_created_efector (lib::configurator &_config);
 
 } // namespace common
 } // namespace edp

@@ -17,7 +17,7 @@ protected:
 
 public:
 	// KONSTRUKTORY
-	tw(configurator &_config);
+	tw(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

@@ -49,7 +49,7 @@ namespace sensor {
 
 #define BUFFER_EIH_SIZE 22*256 //14
 
-// extern configurator* config;
+// extern lib::configurator* config;
 
 int sockfd_sac, portno;
 struct sockaddr_in serv_addr;
@@ -136,7 +136,7 @@ int ret=0;
 //RubiksCube k1,k2;
 // Rejstracja procesu VSP
 
-vis_sac_lx::vis_sac_lx(configurator &_config) : base(_config){
+vis_sac_lx::vis_sac_lx(lib::configurator &_config) : base(_config){
 
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.vis_sac);
@@ -420,7 +420,7 @@ void vis_sac_lx::get_reading(void)
 }
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-base* return_created_sensor(configurator &_config)
+base* return_created_sensor(lib::configurator &_config)
 {
 	return new vis_sac_lx(_config);
 }

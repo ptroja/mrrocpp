@@ -41,7 +41,7 @@ public:
 		common::CUBE_COLOR rear_is, common::CUBE_COLOR left_is, common::CUBE_COLOR right_is);
 
     // konstruktor
-    rubik_cube_solver(configurator &_config);
+    rubik_cube_solver(lib::configurator &_config);
 
     ~rubik_cube_solver();
 

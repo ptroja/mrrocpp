@@ -9,7 +9,7 @@ namespace irp6ot {
 namespace task {
 
 //Konstruktory
-pw::pw(configurator &_config) : base(_config)
+pw::pw(lib::configurator &_config) : base(_config)
 {}
 
 void pw::task_initialization(void)
@@ -37,7 +37,7 @@ void pw::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task(configurator &_config)
+base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new irp6ot::task::pw(_config);
 }

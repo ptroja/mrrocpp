@@ -15,7 +15,7 @@ protected:
 
 public:
 	// KONSTRUKTORY
-	speechrecognition(configurator &_config);
+	speechrecognition(lib::configurator &_config);
 	~speechrecognition();
 	
 	// methods for ECP template to redefine in concrete classes

@@ -55,7 +55,7 @@ void * irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 
 	//!< zarejestrowanie nazwy identyfikujacej serwer
 
-	if ((edp_vsp_attach = name_attach(NULL, config.return_attach_point_name(configurator::CONFIG_SERVER, "edp_vsp_attach_point"),
+	if ((edp_vsp_attach = name_attach(NULL, config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point"),
 	NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		e = errno;
 		perror("Failed to attach EDP_VSP\n");

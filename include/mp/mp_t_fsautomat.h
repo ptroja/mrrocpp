@@ -33,7 +33,7 @@ class fsautomat : public base
 		std::list<common::SingleManipulation> manipulation_list;
 		
 	    // konstruktor
-	    fsautomat(configurator &_config);
+	    fsautomat(lib::configurator &_config);
 	
 	    ~fsautomat();
 

@@ -39,7 +39,7 @@ void rubik_cube_solver::initiate(common::CUBE_COLOR up_is, common::CUBE_COLOR do
 };
 
 
-rubik_cube_solver::rubik_cube_solver(configurator &_config) : base(_config)
+rubik_cube_solver::rubik_cube_solver(lib::configurator &_config) : base(_config)
 {
 }
 ;
@@ -765,7 +765,7 @@ void rubik_cube_solver::gripper_opening(double track_increment, double postument
 
 
 
-base* return_created_mp_task (configurator &_config)
+base* return_created_mp_task (lib::configurator &_config)
 {
 	return new rubik_cube_solver(_config);
 }

@@ -18,12 +18,12 @@ namespace mp {
 namespace task {
 
 // Zwrocenie obiektu - zadania.
-base* return_created_mp_task(configurator &_config)
+base* return_created_mp_task(lib::configurator &_config)
 {
 	return new two_robots_measures(_config);
 }
 
-two_robots_measures::two_robots_measures(configurator &_config) :
+two_robots_measures::two_robots_measures(lib::configurator &_config) :
 	base(_config)
 {
 }

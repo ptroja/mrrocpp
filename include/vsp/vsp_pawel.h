@@ -67,7 +67,7 @@ private:
 public:
 	short ERROR_CODE;
 	
-	pawel(configurator &_config);
+	pawel(lib::configurator &_config);
 	~pawel(void);
 
 	void configure_sensor (void);	// konfiguracja czujnika

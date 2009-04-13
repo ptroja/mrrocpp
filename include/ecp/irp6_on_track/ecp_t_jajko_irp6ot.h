@@ -14,7 +14,7 @@ protected:
 
 public:
 	// KONSTRUKTORY
-	jajko(configurator &_config);
+	jajko(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

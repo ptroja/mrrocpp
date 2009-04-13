@@ -140,7 +140,7 @@ messip_channel_t* base::mp_attach = NULL;
 map <ROBOT_ENUM, common::robot*> base::robot_m;
 
 // KONSTRUKTORY
-base::base(configurator &_config) : ecp_mp::task::base(_config)
+base::base(lib::configurator &_config) : ecp_mp::task::base(_config)
 {
 	ui_new_pulse = false;
 }
@@ -866,8 +866,8 @@ void base::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, common::robot*>& _robot_
 
 void base::initialize_communication()
 {
-	char* sr_net_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
-	char* mp_attach_point =	config.return_attach_point_name(configurator::CONFIG_SERVER, "mp_attach_point");
+	char* sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
+	char* mp_attach_point =	config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_attach_point");
 
 	if (( sr_ecp_msg = new sr_ecp(MP, mp_attach_point, sr_net_attach_point)) == NULL) { // Obiekt do komuniacji z SR
 		perror ( "Unable to locate SR\n");
@@ -900,7 +900,7 @@ void base::initialize_communication()
 
 
 
-		char* mp_pulse_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "mp_pulse_attach_point");
+		char* mp_pulse_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point");
 
 		// Rejestracja kanalu dla pulsow z procesu UI i ECP
 #if !defined(USE_MESSIP_SRR)

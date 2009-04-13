@@ -28,26 +28,26 @@
 // Konfigurator
 #include "lib/configurator.h"
 
-// extern configurator* config;
+// extern lib::configurator* config;
 
 namespace mrrocpp {
 namespace vsp {
 namespace sensor {
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-base* return_created_sensor (configurator &_config)
+base* return_created_sensor (lib::configurator &_config)
 {
 	return new schunk(_config);
 }// : return_created_sensor
 
 // Kontruktor procesu VSP
-schunk::schunk(configurator &_config) : base(_config)
+schunk::schunk(lib::configurator &_config) : base(_config)
 {
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.force);
 
 	char* network_edp_vsp_attach_point = 
-		config.return_attach_point_name (configurator::CONFIG_SERVER, "edp_vsp_attach_point", 
+		config.return_attach_point_name (lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point", 
 		config.return_string_value("edp_section"));
 
 	ms_nr=0; // numer odczytu z czujnika

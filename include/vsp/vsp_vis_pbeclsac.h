@@ -25,7 +25,7 @@ private:
 public:
 	short ERROR_CODE;
 	
-	vis_pbeclsac(configurator &_config);
+	vis_pbeclsac(lib::configurator &_config);
 	~vis_pbeclsac(void);
 
 	void configure_sensor (void);	// konfiguracja czujnika

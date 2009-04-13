@@ -25,7 +25,7 @@ class tb: public common::task::base{
 		common::generator::sleep* sleepgen;				//sleep generator
 
 	public:
-		tb(configurator &_config);
+		tb(lib::configurator &_config);
 		~tb();
 		void set_tdes(double, double, double, double, double, double, double);
 		void init_tdes(POSE_SPECIFICATION, int);

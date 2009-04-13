@@ -27,7 +27,7 @@ protected:
 
 public:
 	// KONSTRUKTORY
-	nalewanie(configurator &_config);
+	nalewanie(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

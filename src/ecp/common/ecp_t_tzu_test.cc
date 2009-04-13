@@ -25,7 +25,7 @@ namespace task {
 
 using namespace std;
 /** konstruktor **/
-tzu_test::tzu_test(configurator &_config) : base(_config)
+tzu_test::tzu_test(lib::configurator &_config) : base(_config)
 {
 	befg = NULL;
 	ftcg = NULL;
@@ -496,7 +496,7 @@ const char* tzu_test::get_trajectory(double x[])
 	return "../trj/tzu/temp.trj";
 }
 
-base* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (lib::configurator &_config)
 {
 	return new tzu_test(_config);
 };

@@ -26,7 +26,7 @@ class pawel: public common::task::base  {
 
 	public:
 		// KONSTRUKTORY
-		pawel(configurator &_config);
+		pawel(lib::configurator &_config);
 
 		// methods for ECP template to redefine in concrete classes
 		void task_initialization(void);

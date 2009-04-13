@@ -13,7 +13,7 @@ class multiplayer : public base
 		void move_electron_robot(const playerpos_goal_t &goal);
 	public:
 
-		multiplayer(configurator &_config);
+		multiplayer(lib::configurator &_config);
 
 		// methods for mp template
 		void task_initialization(void);

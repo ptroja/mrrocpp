@@ -32,7 +32,7 @@ namespace task {
 
 
 // KONSTRUKTORY
-pouring::pouring(configurator &_config) : base(_config)
+pouring::pouring(lib::configurator &_config) : base(_config)
 {
     sg = NULL;
 }
@@ -116,7 +116,7 @@ void pouring::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (lib::configurator &_config)
 {
 	return new irp6p::task::pouring(_config);
 }

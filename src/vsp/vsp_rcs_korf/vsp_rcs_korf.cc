@@ -34,18 +34,18 @@ namespace sensor {
 
 
 // Zmienne konfiguracyjne.
-// extern configurator* config;
+// extern lib::configurator* config;
 
 
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-base* return_created_sensor (configurator &_config) {
+base* return_created_sensor (lib::configurator &_config) {
 	return new rcs_korf(_config);
 } // : return_created_sensor
 
 
 // Konstruktor czujnika wirtualnego.
-rcs_korf::rcs_korf(configurator &_config) : base(_config){
+rcs_korf::rcs_korf(lib::configurator &_config) : base(_config){
     printf("VSP KR construct\n");
 
 	// Inicjalizuje puste pola.

@@ -20,7 +20,7 @@ protected:
 
 public:
 	
-	sb(configurator &_config);
+	sb(lib::configurator &_config);
 
 	// methods for mp template
 	void task_initialization(void);

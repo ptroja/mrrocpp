@@ -12,7 +12,7 @@ class ts: public common::task::base  {
 
 public:
 	// KONSTRUKTORY
-	ts(configurator &_config);
+	ts(lib::configurator &_config);
 	~ts();
 	
 	// methods for ECP template to redefine in concrete classes

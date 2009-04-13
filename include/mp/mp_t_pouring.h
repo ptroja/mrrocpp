@@ -23,7 +23,7 @@ protected:
 
 public:
     // konstruktor
-    pouring(configurator &_config);
+    pouring(lib::configurator &_config);
 	
     ~pouring();
 

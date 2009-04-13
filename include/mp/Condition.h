@@ -17,7 +17,7 @@ class Condition
 		enum RELATIONAL_OPERATOR {EQUAL_TO = 0, NOT_EQUAL, LESS_EQUAL, GREATER_EQUAL, LESS_THAN, GREATER_THAN, WITHOUT_OP};
 	public:
 		Condition();
-		Condition(char * condDesc, configurator &_config);
+		Condition(char * condDesc, lib::configurator &_config);
 		Condition(const Condition &cond);
 		~Condition();
 
@@ -35,7 +35,7 @@ class Condition
 		bool result;
 		RELATIONAL_OPERATOR operationType;
 
-		configurator &config;
+		lib::configurator &config;
 };
 
 } // namespace common

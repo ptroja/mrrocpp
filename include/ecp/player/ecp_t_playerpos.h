@@ -15,7 +15,7 @@ protected:
 
 public:
 	// KONSTRUKTORY
-	playerpos(configurator &_config);
+	playerpos(lib::configurator &_config);
 	~playerpos();
 	
 	// methods for ECP template to redefine in concrete classes

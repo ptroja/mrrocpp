@@ -26,7 +26,7 @@ protected:
 	generator::two_robots_measures *rmg;
 public:
 	
-	two_robots_measures(configurator &_config);
+	two_robots_measures(lib::configurator &_config);
 	
 	// Object initialization.
 	void task_initialization(void);

@@ -52,7 +52,7 @@ class base : public ecp_mp::task::base
 		bool pulse_check();
 
 		// KONSTRUKTOR
-		base(configurator &_config);
+		base(lib::configurator &_config);
 
 		// dla gcc: `'class Foo' has virtual functions but non-virtualdestructor` warning.
 		virtual ~base();
@@ -93,7 +93,7 @@ class base : public ecp_mp::task::base
 		void set_ecp_reply(ECP_REPLY ecp_r);
 };
 
-base* return_created_ecp_task (configurator &_config);
+base* return_created_ecp_task (lib::configurator &_config);
 
 
 // klasa podzadania

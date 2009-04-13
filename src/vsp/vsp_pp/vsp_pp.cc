@@ -59,20 +59,20 @@ namespace sensor {
 // extern vsp_config* vsp_c;
 // extern config_directories_class* config_directories;
 // extern ini_configs* ini_con;
-// extern configurator* config;
+// extern lib::configurator* config;
 
 
 // Czujnik wirtualny
 // extern vsp_pp_sensor *vs;
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-base* return_created_sensor (configurator &_config)
+base* return_created_sensor (lib::configurator &_config)
 {
 	return new pp(_config);
 }// : return_created_sensor
 
 /*****************************  KONSTRUKTOR *********************************/
-pp::pp(configurator &_config) : base(_config){
+pp::pp(lib::configurator &_config) : base(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.pp);
 

@@ -45,7 +45,7 @@ UI_ECP_message ui_ecp_msg;
 
 extern ui_state_def ui_state;
 // extern ini_configs* ini_con;
-extern configurator* config;
+extern lib::configurator* config;
 uint64_t e;     // kod bledu systemowego
 
 
@@ -96,7 +96,7 @@ int FCCreateConnection(void){
 
 	char *tmp_name;
 	// Stworzenie nazwy.
-	tmp_name = config->return_attach_point_name	(configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point", "[ecp_irp6_on_track]");
+	tmp_name = config->return_attach_point_name	(lib::configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point", "[ecp_irp6_on_track]");
 
 	#ifdef FCDEBUG
 		printf("FCCreateConnection: %s\n",tmp_name);

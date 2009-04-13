@@ -62,7 +62,7 @@ protected:
 
 	const char* get_trajectory(double x[]);
 public:
-	tzu_fs(configurator &_config);
+	tzu_fs(lib::configurator &_config);
 	~tzu_fs();
 
 	// methods for ECP template to redefine in concrete classes

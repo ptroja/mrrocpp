@@ -24,7 +24,7 @@ class mam: public common::task::base  {
 
 public:
 	// KONSTRUKTORY
-	mam(configurator &_config);
+	mam(lib::configurator &_config);
 	~mam();
 	
 	// methods for ECP template to redefine in concrete classes

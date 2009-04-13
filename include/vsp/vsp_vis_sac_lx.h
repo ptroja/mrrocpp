@@ -25,7 +25,7 @@ private:
 public:
 	short ERROR_CODE;
 	
-	vis_sac_lx(configurator &_config);
+	vis_sac_lx(lib::configurator &_config);
 	~vis_sac_lx(void);
 
 	void configure_sensor (void);	// konfiguracja czujnika

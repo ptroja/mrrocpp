@@ -111,7 +111,7 @@ ui_model::ui_model() : tabs_visible(0),
 	setMpLoadButton(false, true);
 	setEdpsLoadButton(true, true);
 
-	this->config = new configurator(
+	this->config = new lib::configurator(
 			g_get_host_name(),
 			g_get_current_dir(), "rcsc.ini", "[ui]", "");
 }
@@ -128,7 +128,7 @@ sr_ecp & ui_model::getEcpSr(void) const {
 	return *(this->ecp_report);
 }
 
-configurator & ui_model::getConfigurator(void) const {
+lib::configurator & ui_model::getConfigurator(void) const {
 	return *(this->config);
 }
 

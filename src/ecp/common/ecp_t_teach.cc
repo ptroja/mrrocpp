@@ -25,7 +25,7 @@ namespace common {
 namespace task {
 
 // KONSTRUKTORY
-teach::teach(configurator &_config) : base(_config)
+teach::teach(lib::configurator &_config) : base(_config)
 {
     tig = NULL;
 }
@@ -92,7 +92,7 @@ void teach::main_task_algorithm(void)
     ecp_termination_notice();
 }
 
-base* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (lib::configurator &_config)
 {
 	return new teach(_config);
 }

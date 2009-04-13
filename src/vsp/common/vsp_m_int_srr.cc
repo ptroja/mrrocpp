@@ -115,14 +115,14 @@ int main(int argc, char *argv[]) {
 		};
 
 	 // zczytanie konfiguracji calego systemu
-	configurator *_config = new configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
+	lib::configurator *_config = new lib::configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
 #if defined(PROCESS_SPAWN_YRSH)
 	if (argc>6) {
  		config->answer_to_y_rsh_spawn(argv[6]); 
  		signal(SIGINT, SIG_IGN);
  	}
 #endif
-	attach_point = _config->return_attach_point_name(configurator::CONFIG_SERVER, "resourceman_attach_point");
+	attach_point = _config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point");
 
 	try {
 	

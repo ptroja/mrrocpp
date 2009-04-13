@@ -46,7 +46,7 @@ class spots_recognition: public common::task::base
 
 
 	public:
-		spots_recognition(configurator &_config);
+		spots_recognition(lib::configurator &_config);
 		~spots_recognition();
 
 		void task_initialization(void);

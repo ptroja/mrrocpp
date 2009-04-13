@@ -19,7 +19,7 @@ namespace common {
 }
 */
 
-Condition::Condition(char *condDesc, configurator &_config)
+Condition::Condition(char *condDesc, lib::configurator &_config)
 	: config(_config)
 {
 	this->condition = NULL;

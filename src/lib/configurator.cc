@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 // Plik:			configurator.cc
 // System:	QNX/MRROCPP  v. 6.3
-// Opis:		Plik zawiera definicje matod klasy configurator - obsluga konfiguracji z pliku INI.
+// Opis:		Plik zawiera definicje matod klasy lib::configurator - obsluga konfiguracji z pliku INI.
 // Autor:		tkornuta
 // Data:		10.11.2005
 // -------------------------------------------------------------------------
@@ -33,6 +33,9 @@
 #include "lib/y_spawn.h"
 #include "messip/messip.h"
 #include "lib/config_types.h"
+
+namespace mrrocpp {
+namespace lib {
 
 // Konstruktor obiektu - konfiguratora.
 configurator::configurator (const char* _node, const char* _dir, const char* _ini_file, const char* _section_name,
@@ -835,3 +838,6 @@ configurator::~configurator() {
 	delete [] common_file_location;
 #endif /* USE_MESSIP_SRR */
 }
+
+} // namespace lib
+} // namespace mrrocpp

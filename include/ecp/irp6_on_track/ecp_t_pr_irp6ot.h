@@ -19,7 +19,7 @@ protected:
 
 public:
 	// KONSTRUKTORY
-	pr(configurator &_config);
+	pr(lib::configurator &_config);
 	~pr();
 	
 	// methods for ECP template to redefine in concrete classes

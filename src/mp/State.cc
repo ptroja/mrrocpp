@@ -259,7 +259,7 @@ char* State::getStringArgument() const
 
 //----------------------------------------------------------------------------------------------------------
 
-void State::setTransition(char *cond, char *target, configurator &_config)
+void State::setTransition(char *cond, char *target, lib::configurator &_config)
 {
 	Transition *tempTr = new Transition(cond, target, _config);
 	stateTransitions->push_back(*tempTr);

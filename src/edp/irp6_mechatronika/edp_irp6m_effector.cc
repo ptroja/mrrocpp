@@ -31,7 +31,7 @@ namespace irp6m {
 
 
 // Konstruktor.
-effector::effector (configurator &_config) :
+effector::effector (lib::configurator &_config) :
         irp6s_effector (_config, ROBOT_IRP6_MECHATRONIKA)
 {
 
@@ -447,7 +447,7 @@ void effector::create_kinematic_models_for_given_robot(void)
 namespace common {
 
 // Stworzenie obiektu edp_irp6m_effector.
-effector* return_created_efector(configurator &_config)
+effector* return_created_efector(lib::configurator &_config)
 {
 	return new irp6m::effector (_config);
 }

@@ -44,7 +44,7 @@ extern ui_ecp_buffer* ui_ecp_obj;
 extern ui_state_def ui_state;
 // Zmienna konfiguracyjna.
 // extern ini_configs* ini_con;
-extern configurator* config;
+extern lib::configurator* config;
 
 // PID ECP.
 static int ECPfd;
@@ -199,7 +199,7 @@ int MAM_tmr_connect( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
     // Nazwa polacznia.
     char *tmp_name;
     // Stworznie nazwy.
-    tmp_name = config->return_attach_point_name	(configurator::CONFIG_SERVER, "attach_point", "[ecp_ui_channel]");
+    tmp_name = config->return_attach_point_name	(lib::configurator::CONFIG_SERVER, "attach_point", "[ecp_ui_channel]");
 //    tmp_name = config->return_attach_point_name	(CONFIG_SERVER, "ecp_chan_attach_point", "[ui]");
     
     #ifdef MAMDEBUG

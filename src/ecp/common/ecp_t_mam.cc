@@ -203,7 +203,7 @@ void show_mam_window(int UI_fd)
 }
 
 // KONSTRUKTORY
-mam::mam(configurator &_config) :
+mam::mam(lib::configurator &_config) :
 	base(_config)
 {
 }
@@ -259,7 +259,7 @@ void mam::main_task_algorithm(void)
 	ecp_termination_notice();
 }
 
-base* return_created_ecp_task(configurator &_config)
+base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new mam(_config);
 }

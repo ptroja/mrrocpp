@@ -30,7 +30,7 @@ class base {
 
 public:
 
-	base(configurator &_config);
+	base(lib::configurator &_config);
 	~base();
 
 	// mapa wszystkich czujnikow
@@ -40,7 +40,7 @@ public:
 	static std::map <transmitter::TRANSMITTER_ENUM, transmitter::base*> transmitter_m;
 
 	static sr_ecp* sr_ecp_msg;
-	configurator &config;
+	lib::configurator &config;
 #if !defined(USE_MESSIP_SRR)
 	int UI_fd;
 #else

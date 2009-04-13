@@ -18,7 +18,7 @@ namespace irp6ot {
 namespace task {
 
 // KONSTRUKTORY
-kbochnia::kbochnia(configurator &_config) : base(_config)
+kbochnia::kbochnia(lib::configurator &_config) : base(_config)
 {
 }
 
@@ -51,7 +51,7 @@ void kbochnia::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (lib::configurator &_config)
 {
 	return new irp6ot::task::kbochnia(_config);
 }

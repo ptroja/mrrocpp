@@ -27,7 +27,7 @@ protected:
 
 public:
     // Konstruktor.
-    effector (configurator &_config);
+    effector (lib::configurator &_config);
     void initialize (void);
     void set_rmodel (c_buffer &instruction);                    // zmiana narzedzia
     void get_rmodel (c_buffer &instruction);                    // odczytanie narzedzia

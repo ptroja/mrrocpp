@@ -17,7 +17,7 @@ namespace ecp {
 namespace irp6p {
 namespace task {
 
-lego_brick::lego_brick(configurator &_config) :
+lego_brick::lego_brick(lib::configurator &_config) :
         base(_config)
 {}
 
@@ -205,7 +205,7 @@ void lego_brick::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task(configurator &_config)
+base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new irp6p::task::lego_brick(_config);
 }

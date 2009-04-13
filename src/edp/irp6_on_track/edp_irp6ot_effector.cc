@@ -27,7 +27,7 @@ namespace edp {
 namespace irp6ot {
 
 // Konstruktor.
-effector::effector(configurator &_config) :
+effector::effector(lib::configurator &_config) :
 	irp6s_postument_track_effector(_config, ROBOT_IRP6_ON_TRACK)
 {
 }
@@ -65,7 +65,7 @@ void effector::create_kinematic_models_for_given_robot(void)
 namespace common {
 
 // Stworzenie obiektu edp_irp6p_effector.
-effector* return_created_efector(configurator &_config)
+effector* return_created_efector(lib::configurator &_config)
 {
 	return new irp6ot::effector (_config);
 }

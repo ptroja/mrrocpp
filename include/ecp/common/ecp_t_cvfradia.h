@@ -35,7 +35,7 @@ public:
 	/*!
       * Constructor.
       */
-	cvfradia(configurator &_config)
+	cvfradia(lib::configurator &_config)
 	  : base(_config)
 	{ }
 	

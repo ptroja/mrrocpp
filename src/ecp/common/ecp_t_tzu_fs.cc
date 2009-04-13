@@ -27,7 +27,7 @@ namespace task {
  */
 using namespace std;
 /** konstruktor konstruktor**/
-tzu_fs::tzu_fs(configurator &_config) : base(_config)
+tzu_fs::tzu_fs(lib::configurator &_config) : base(_config)
 {
 	sg = NULL;
 	befg = NULL;
@@ -165,7 +165,7 @@ void tzu_fs::main_task_algorithm(void)
 	ecp_termination_notice();
 };
 
-base* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (lib::configurator &_config)
 {
 	return new tzu_fs(_config);
 };

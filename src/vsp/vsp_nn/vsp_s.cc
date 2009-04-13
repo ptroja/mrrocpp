@@ -77,10 +77,10 @@ char buffer[256];
 // extern pid_t UI_pid;           // identyfikator procesu UI
 
 
-// extern configurator* config;
+// extern lib::configurator* config;
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-base* return_created_sensor (configurator &_config)
+base* return_created_sensor (lib::configurator &_config)
 {
 	return new nn(_config);
 }// : return_created_sensor
@@ -89,7 +89,7 @@ base* return_created_sensor (configurator &_config)
 
 
 // Rejstracja procesu VSP
-nn::nn(configurator &_config) : base(_config){
+nn::nn(lib::configurator &_config) : base(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.camera);
 

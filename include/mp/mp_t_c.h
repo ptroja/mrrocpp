@@ -12,7 +12,7 @@ class cxx: public base
 	
 public:
 	
-	cxx(configurator &_config);
+	cxx(lib::configurator &_config);
 
 	// methods fo mp template to redefine in concete class
 	void task_initialization(void);

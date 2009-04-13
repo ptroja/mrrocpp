@@ -40,7 +40,7 @@ private:
 	void copy_edp_to_mp_buffer (r_buffer& mp_buffer);
 
 	// zainicjowanie komunikacji
-	void connect_to_edp (configurator &config);
+	void connect_to_edp (lib::configurator &config);
 
 	pid_t EDP_MASTER_Pid; // Identyfikator procesu driver'a edp_m
 
@@ -85,7 +85,7 @@ public:
 	// Zlecenie wykonania ruchu przez robota (realizowane przez klase konkretna):
 	// na poziomie ECP jest to polecenie dla EDP
 
-	ecp_robot(ROBOT_ENUM _robot_name, configurator &_config, sr_ecp *_sr_ecp);
+	ecp_robot(ROBOT_ENUM _robot_name, lib::configurator &_config, sr_ecp *_sr_ecp);
 	ecp_robot(ROBOT_ENUM _robot_name, common::task::base& _ecp_object);
 
 	pid_t get_EDP_pid(void) const;

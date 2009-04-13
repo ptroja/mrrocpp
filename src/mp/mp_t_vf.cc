@@ -23,12 +23,12 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-base* return_created_mp_task (configurator &_config)
+base* return_created_mp_task (lib::configurator &_config)
 {
 	return new vis_force(_config);
 }
 
-vis_force::vis_force(configurator &_config) : base(_config)
+vis_force::vis_force(lib::configurator &_config) : base(_config)
 {
 }
 

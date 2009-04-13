@@ -41,7 +41,7 @@ public:
 	 * @param _config konfigurator
 	 * @author jedrzej
 	 */
-	ellipse(configurator &_config);
+	ellipse(lib::configurator &_config);
 	
 	/**
 	 * Inicjalizuje zadanie - pobiera od uzytkownika dlugosci polosi

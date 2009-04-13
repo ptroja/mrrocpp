@@ -27,7 +27,7 @@ protected:
 	common::task::ecp_sub_task_gripper_opening* go_st;
 
 public:
-    rcsc(configurator &_config);
+    rcsc(lib::configurator &_config);
 
     // methods for ECP template to redefine in concrete classes
     void task_initialization(void);

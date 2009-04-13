@@ -32,7 +32,7 @@ robot::robot( ROBOT_ENUM l_robot_name, const char* _section_name, task::base &mp
 
 	char * network_ecp_attach_point;
 	network_ecp_attach_point = mp_object.config.return_attach_point_name
-	                           (configurator::CONFIG_SERVER, "ecp_attach_point", _section_name);
+	                           (lib::configurator::CONFIG_SERVER, "ecp_attach_point", _section_name);
 
 #if !defined(USE_MESSIP_SRR)
 	char tmp_string[100];

@@ -9,7 +9,7 @@ namespace mp {
 namespace common {
 
 
-Transition::Transition(char *cond, char *targetID, configurator &_config)
+Transition::Transition(char *cond, char *targetID, lib::configurator &_config)
 {
 	int size = strlen(targetID) + 1;
 	this->targetID = new char[size];

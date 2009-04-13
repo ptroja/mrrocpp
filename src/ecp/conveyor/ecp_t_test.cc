@@ -13,7 +13,7 @@ namespace conveyor {
 namespace task {
 
 // KONSTRUKTORY
-test::test(configurator &_config) : base(_config)
+test::test(lib::configurator &_config) : base(_config)
 {}
 
 test::~test()
@@ -47,7 +47,7 @@ void test::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (lib::configurator &_config)
 {
 	return new conveyor::task::test(_config);
 }

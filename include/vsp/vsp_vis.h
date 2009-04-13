@@ -25,7 +25,7 @@ private:
 public:
 	short ERROR_CODE;
 	
-	vis(configurator &_config);
+	vis(lib::configurator &_config);
 	~vis(void);
 
 	void configure_sensor (void);	// konfiguracja czujnika

@@ -28,7 +28,7 @@ namespace ecp {
 namespace common {
 
 // konstruktor wywolywany z UI
-ecp_robot::ecp_robot(ROBOT_ENUM _robot_name, configurator &_config, sr_ecp *_sr_ecp_msg) :
+ecp_robot::ecp_robot(ROBOT_ENUM _robot_name, lib::configurator &_config, sr_ecp *_sr_ecp_msg) :
 	robot(_robot_name), spawn_and_kill(true)
 {
 	sr_ecp_msg = _sr_ecp_msg;
@@ -123,7 +123,7 @@ void ecp_robot::copy_edp_to_mp_buffer(r_buffer& mp_buffer)
 
 
 // ---------------------------------------------------------------
-void ecp_robot::connect_to_edp(configurator &config)
+void ecp_robot::connect_to_edp(lib::configurator &config)
 {
 	const char *edp_section;
 
@@ -157,7 +157,7 @@ void ecp_robot::connect_to_edp(configurator &config)
 	EDP_MASTER_Pid = (spawn_and_kill) ? config.process_spawn(edp_section) : -1;
 
 	const char* edp_net_attach_point =
-			config.return_attach_point_name(configurator::CONFIG_SERVER, "resourceman_attach_point", edp_section);
+			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", edp_section);
 
 	printf("connect_to_edp");
 	fflush(stdout);

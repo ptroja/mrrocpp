@@ -27,7 +27,7 @@ namespace edp {
 namespace conveyor {
 
 // Konstruktor.
-effector::effector (configurator &_config) :
+effector::effector (lib::configurator &_config) :
 	irp6s_and_conv_effector (_config, ROBOT_CONVEYOR)
 	{
 	}
@@ -265,7 +265,7 @@ namespace common {
 
 
 // Stworzenie obiektu edp_conveyor_effector.
-effector* return_created_efector (configurator &_config)
+effector* return_created_efector (lib::configurator &_config)
 {
 	return new conveyor::effector (_config);
 }//: return_created_efector

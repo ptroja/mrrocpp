@@ -24,7 +24,7 @@ private:
 
 public:
     // Konstruktor czujnika wirtualnego.
-    time (configurator &_config);
+    time (lib::configurator &_config);
 
     // Konfiguracja czujnika.
     void configure_sensor (void);

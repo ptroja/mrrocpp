@@ -14,7 +14,7 @@ namespace irp6ot {
 namespace task {
 
 //Constructors
-tb::tb(configurator &_config): base(_config){
+tb::tb(lib::configurator &_config): base(_config){
 	sgen=NULL;
 	befgen=NULL;
 	gagen=NULL;
@@ -259,7 +259,7 @@ void tb::init_tdes(POSE_SPECIFICATION pspec, int internode_no){
 namespace common {
 namespace task {
 
-base* return_created_ecp_task(configurator &_config){
+base* return_created_ecp_task(lib::configurator &_config){
 	return new irp6ot::task::tb(_config);
 	
 }

@@ -36,13 +36,13 @@ namespace mrrocpp {
 namespace vsp {
 namespace sensor {
 
-base::base (configurator &_config) :
+base::base (lib::configurator &_config) :
 	config(_config)
 	{
 
 	/* Lokalizacja procesu wyswietlania komunikatow SR */
 	if ((sr_msg = new sr_vsp(VSP, config.return_string_value("resourceman_attach_point"),
-			config.return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL)
+			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL)
 	{
 		printf("communication with SR not ready\n");
 		perror("Unable to locate SR ");

@@ -36,7 +36,7 @@ extern short TERMINATE;
 // extern vsp_config* vsp_c;
 // extern config_directories_class* config_directories;
 // extern ini_configs* ini_con;
-// extern configurator* config;
+// extern lib::configurator* config;
 
 
 // Czujnik wirtualny
@@ -54,7 +54,7 @@ pthread_barrier_t initiate_reading_barrier;
 pthread_barrier_t reading_ready_barrier;
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-base* return_created_sensor (configurator &_config)
+base* return_created_sensor (lib::configurator &_config)
 {
 	return new digital_scales(_config);
 }// : return_created_sensor
@@ -91,7 +91,7 @@ void* digital_scale_thread(void*  arg ){
     } // end: digital_scale_thread
 
 /*****************************  KONSTRUKTOR *********************************/
-digital_scales::digital_scales(configurator &_config)  : base(_config) {
+digital_scales::digital_scales(lib::configurator &_config)  : base(_config) {
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.ds);
 

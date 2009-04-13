@@ -24,7 +24,7 @@ protected:
   
 public:
 	
-	haptic(configurator &_config);
+	haptic(lib::configurator &_config);
 
 	// methods for mp template
 	void task_initialization(void);

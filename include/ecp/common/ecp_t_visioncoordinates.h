@@ -22,7 +22,7 @@ namespace task {
 class visioncoordinates : public common::task::base  
 {
 public:
-	visioncoordinates(configurator& _config);
+	visioncoordinates(lib::configurator& _config);
 
 	// void task_initialization()
 	// - Initialize task - robot, sensors and generators.

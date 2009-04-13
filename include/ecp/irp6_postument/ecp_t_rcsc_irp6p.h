@@ -28,7 +28,7 @@ protected:
 
 public:
     // KONSTRUKTORY
-    rcsc(configurator &_config);
+    rcsc(lib::configurator &_config);
 
     // methods for ECP template to redefine in concrete classes
     void task_initialization(void);

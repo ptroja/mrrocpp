@@ -77,7 +77,7 @@ class ui_model
 
 		sr_ecp & getEcpSr(void) const;
 
-		configurator & getConfigurator(void) const;
+		lib::configurator & getConfigurator(void) const;
 
 	private:
 		static pthread_mutex_t mtx;
@@ -101,7 +101,7 @@ class ui_model
 		int set_tree_view(void);
 
 		//! old-type .INI configurator
-		configurator *config;
+		lib::configurator *config;
 
 		//! SR object for UI
 		sr_ui* ui_report;

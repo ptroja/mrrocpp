@@ -18,7 +18,7 @@ class vis_force: public base  {
 	
 public:
 	
-	vis_force(configurator &_config);
+	vis_force(lib::configurator &_config);
 
 	// methods fo mp template to redefine in concete class
 	void task_initialization(void);

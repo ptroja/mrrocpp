@@ -15,7 +15,7 @@
 #include "xmlconfigurator.h"
 #include "ui_model.h"
 
-class xmlconfigurator *xmlconfig;
+class xmllib::configurator *xmlconfig;
 
 xmlXPathObjectPtr
 xmlconfigurator::getnodeset (xmlDocPtr doc, const xmlChar *xpath){

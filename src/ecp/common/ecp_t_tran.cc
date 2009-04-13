@@ -28,7 +28,7 @@ namespace task {
 
 
 // KONSTRUKTORY
-tran::tran(configurator &_config) :
+tran::tran(lib::configurator &_config) :
 	base(_config)
 	{}
 
@@ -70,7 +70,7 @@ void tran::main_task_algorithm(void)
 
 }
 
-base* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (lib::configurator &_config)
 {
 	return new tran(_config);
 }

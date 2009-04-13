@@ -39,12 +39,12 @@ sr_ecp* base::sr_ecp_msg = NULL;
 std::map <SENSOR_ENUM, ::sensor*> base::sensor_m;
 std::map <transmitter::TRANSMITTER_ENUM, transmitter::base*> base::transmitter_m;
 
-base::base(configurator &_config)
+base::base(lib::configurator &_config)
 	: config(_config)
 {
 	mrrocpp_network_path = config.return_mrrocpp_network_path();
 
-	char* ui_net_attach_point = config.return_attach_point_name(configurator::CONFIG_SERVER, "ui_attach_point", "[ui]");
+	char* ui_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", "[ui]");
 
     // kilka sekund  (~1) na otworzenie urzadzenia
     short tmp = 0;
@@ -232,7 +232,7 @@ void base::kill_all_VSP (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m)
 #if defined(PROCESS_SPAWN_RSH)
 			kill(sensor_m_iterator->second->pid, SIGTERM);
 #else
-			SignalKill(configurator::return_node_number(sensor_m_iterator->second->node_name),
+			SignalKill(lib::configurator::return_node_number(sensor_m_iterator->second->node_name),
 			           sensor_m_iterator->second->pid, 0, SIGTERM, 0, 0);
 #endif
 		}

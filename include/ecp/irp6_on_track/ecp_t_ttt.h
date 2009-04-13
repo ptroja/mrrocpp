@@ -25,7 +25,7 @@ public:
 	 * @param _config konfigurator
 	 * @author jedrzej
 	 */
-	ttt(configurator &_config);
+	ttt(lib::configurator &_config);
 	
 	/**
 	 * Inicjalizuje zadanie - wczytuje trajektorie z pliku

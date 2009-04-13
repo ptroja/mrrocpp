@@ -29,7 +29,7 @@ class test: public common::task::base
 
 public:
 	// KONSTRUKTORY
-	test(configurator &_config);
+	test(lib::configurator &_config);
 	~test();
 	
 	// methods for ECP template to redefine in concrete classes

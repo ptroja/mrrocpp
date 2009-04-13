@@ -39,7 +39,7 @@ private:
 		struct timespec start[9];
 		
 public:
-	schunk(configurator &_config);
+	schunk(lib::configurator &_config);
 	~schunk(void);
 
 	void configure_sensor (void);	// konfiguracja czujnika

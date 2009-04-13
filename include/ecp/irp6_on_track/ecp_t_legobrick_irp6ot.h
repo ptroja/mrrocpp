@@ -27,7 +27,7 @@ protected:
     //podzadania
     //ecp_sub_task_gripper_opening* go_st;
 public:
-    lego_brick(configurator &_config);
+    lego_brick(lib::configurator &_config);
 
     // methods for ECP template to redefine in concrete classes
     void task_initialization(void);

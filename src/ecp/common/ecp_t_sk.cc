@@ -29,7 +29,7 @@ namespace task {
 
 
 // KONSTRUKTORY
-sk::sk(configurator &_config) : base(_config)
+sk::sk(lib::configurator &_config) : base(_config)
 {
 	nrg = NULL;
 	yefg = NULL;
@@ -114,7 +114,7 @@ void sk::main_task_algorithm(void)
 	}
 }
 
-base* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (lib::configurator &_config)
 {
 	return new sk(_config);
 }

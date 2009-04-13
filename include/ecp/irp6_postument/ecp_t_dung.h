@@ -12,7 +12,7 @@ class dung: public common::task::base  {
 
 public:
 	// KONSTRUKTORY
-	dung(configurator &_config);
+	dung(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

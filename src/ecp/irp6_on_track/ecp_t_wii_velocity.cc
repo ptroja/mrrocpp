@@ -17,7 +17,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-wii_velocity::wii_velocity(configurator &_config) : base(_config) {};
+wii_velocity::wii_velocity(lib::configurator &_config) : base(_config) {};
 
 void wii_velocity::task_initialization(void)
 {
@@ -49,7 +49,7 @@ void wii_velocity::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (lib::configurator &_config)
 {
 	return new irp6ot::task::wii_velocity(_config);
 }

@@ -24,12 +24,12 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-base* return_created_mp_task(configurator &_config)
+base* return_created_mp_task(lib::configurator &_config)
 {
 	return new rcs_test(_config);
 }
 
-rcs_test::rcs_test(configurator &_config) :
+rcs_test::rcs_test(lib::configurator &_config) :
 	base(_config)
 {
 	printf("MP Construct\n");

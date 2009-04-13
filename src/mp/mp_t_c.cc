@@ -13,12 +13,12 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-base* return_created_mp_task (configurator &_config)
+base* return_created_mp_task (lib::configurator &_config)
 {
 	return new cxx(_config);
 }
 
-cxx::cxx(configurator &_config) : base(_config)
+cxx::cxx(lib::configurator &_config) : base(_config)
 {
 }
 

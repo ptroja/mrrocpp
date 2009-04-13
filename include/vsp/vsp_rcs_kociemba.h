@@ -35,7 +35,7 @@ class rcs_kociemba : public base {
 
   public:
 	// Konstruktor czujnika wirtualnego.
-	rcs_kociemba(configurator &_config);
+	rcs_kociemba(lib::configurator &_config);
 	// Destruktor czujnika wirtualnego.
 	~rcs_kociemba(void);
 	// Konfiguracja czujnika.

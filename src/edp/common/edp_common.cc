@@ -32,14 +32,14 @@ namespace edp {
 namespace common {
 
 /*--------------------------------------------------------------------------*/
-effector::effector(configurator &_config, ROBOT_ENUM l_robot_name) :
+effector::effector(lib::configurator &_config, ROBOT_ENUM l_robot_name) :
 	config(_config), robot_name(l_robot_name)
 {
 
 	/* Lokalizacja procesu wywietlania komunikatow SR */
 
 	if ((msg = new sr_edp(EDP, config.return_string_value("resourceman_attach_point"),
-			config.return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]")))
+			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]")))
 			== NULL) {
 		perror("Unable to locate SR ");
 		throw System_error();
@@ -66,7 +66,7 @@ bool effector::initialize_communication()
 {
 	char* server_attach_point;
 	server_attach_point
-			= config.return_attach_point_name(configurator::CONFIG_SERVER, "resourceman_attach_point");
+			= config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point");
 
 #if !defined(USE_MESSIP_SRR)
 	// obsluga mechanizmu sygnalizacji zajetosci sprzetu

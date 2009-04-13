@@ -20,7 +20,7 @@ protected:
 
 public:
 	
-	vis_nn(configurator &_config);
+	vis_nn(lib::configurator &_config);
 
 	// methods for mp template
 	void task_initialization(void);

@@ -21,7 +21,7 @@ class pw: public common::task::base  {
 
 public:
 	//Konstruktory.
-	pw(configurator &_config);
+	pw(lib::configurator &_config);
 
 	//Methods for ECP template to redefine in concrete classes.
 	void task_initialization(void);

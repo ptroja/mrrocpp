@@ -21,7 +21,7 @@ namespace speaker {
 namespace task {
 
 // KONSTRUKTORY
-rcsc::rcsc(configurator &_config) : base(_config)
+rcsc::rcsc(lib::configurator &_config) : base(_config)
 {
     gt = NULL;
     speak = NULL;
@@ -71,7 +71,7 @@ void rcsc::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (lib::configurator &_config)
 {
 	return new speaker::task::rcsc(_config);
 }

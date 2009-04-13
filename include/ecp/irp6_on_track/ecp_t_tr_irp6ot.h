@@ -12,7 +12,7 @@ class tr: public common::task::base  {
 
 public:
 	// KONSTRUKTORY
-	tr(configurator &_config);
+	tr(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

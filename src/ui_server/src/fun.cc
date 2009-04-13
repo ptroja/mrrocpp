@@ -38,7 +38,7 @@ extern ui_msg_def ui_msg;
 extern ui_ecp_buffer* ui_ecp_obj;
 
 extern ui_state_def ui_state;
-extern configurator* config;
+extern lib::configurator* config;
 
 ui_robot_def ui_robot;
 extern ui_ecp_buffer* ui_ecp_obj;
@@ -1009,10 +1009,10 @@ int initiate_configuration()
         strftime( ui_state.session_name, 8, "_%H%M%S", localtime( &time_of_day ) );
 
         if (config) delete config;
-		config = new configurator(ui_state.ui_node_name, ui_state.mrrocpp_local_path, ui_state.config_file, "[ui]",
+		config = new lib::configurator(ui_state.ui_node_name, ui_state.mrrocpp_local_path, ui_state.config_file, "[ui]",
 		ui_state.session_name);
 
-		tmp = config->return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
+		tmp = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
 
 		// wykrycie identyczneych nazw sesji
 		wyjscie = true;
@@ -1040,9 +1040,9 @@ int initiate_configuration()
 
 	}
 
-	ui_state.ui_attach_point = config->return_attach_point_name(configurator::CONFIG_SERVER, "ui_attach_point", "[ui]");
-	ui_state.sr_attach_point = config->return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
-	ui_state.network_sr_attach_point = config->return_attach_point_name(configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
+	ui_state.ui_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", "[ui]");
+	ui_state.sr_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
+	ui_state.network_sr_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
 
 	clear_all_configuration_lists();
 
@@ -1142,7 +1142,7 @@ reload_whole_configuration() {
 		{
 
 			delete [] ui_state.mp.network_pulse_attach_point;
-			ui_state.mp.network_pulse_attach_point = config->return_attach_point_name	(configurator::CONFIG_SERVER, "mp_pulse_attach_point", "[mp]");
+			ui_state.mp.network_pulse_attach_point = config->return_attach_point_name	(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", "[mp]");
 
 			delete [] ui_state.mp.node_name;
 			ui_state.mp.node_name = config->return_string_value ("node_name", "[mp]");

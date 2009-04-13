@@ -25,7 +25,7 @@ private:
 public:
 	short ERROR_CODE;
 	
-	mic(configurator &_config);
+	mic(lib::configurator &_config);
 	~mic(void);
 
 	void configure_sensor (void);	// konfiguracja czujnika

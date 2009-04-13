@@ -16,7 +16,7 @@ protected:
 
 public:
 	// KONSTRUKTORY
-	progpanel(configurator &_config);
+	progpanel(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

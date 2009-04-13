@@ -8,8 +8,6 @@ namespace mrrocpp {
 namespace lib {
 
 
-
-
 #define X_AXIS_ARM 0
 #define Y_AXIS_ARM 0
 #define Z_AXIS_ARM -0.032

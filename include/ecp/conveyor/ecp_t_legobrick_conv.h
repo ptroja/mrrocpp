@@ -28,7 +28,7 @@ class lego_brick: public common::task::base
 
 public:
 	// KONSTRUKTORY
-	lego_brick(configurator &_config);
+	lego_brick(lib::configurator &_config);
 	~lego_brick();
 	
 	// methods for ECP template to redefine in concrete classes

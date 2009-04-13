@@ -12,7 +12,7 @@ class fct: public common::task::base  {
 
 public:
 	// KONSTRUKTORY
-	fct(configurator &_config);
+	fct(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

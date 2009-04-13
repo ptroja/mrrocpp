@@ -28,11 +28,11 @@ void multiplayer::move_electron_robot(const playerpos_goal_t &goal)
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, ROBOT_ELECTRON, ROBOT_ELECTRON);
 }
 
-multiplayer::multiplayer(configurator &_config) : base(_config)
+multiplayer::multiplayer(lib::configurator &_config) : base(_config)
 {
 }
 
-base* return_created_mp_task (configurator &_config)
+base* return_created_mp_task (lib::configurator &_config)
 {
 	return new multiplayer(_config);
 }

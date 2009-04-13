@@ -270,7 +270,7 @@ void show_force_control_window
 }
 
 // KONSTRUKTORY
-fct::fct(configurator &_config) :
+fct::fct(lib::configurator &_config) :
 	base(_config)
 {
 }
@@ -283,7 +283,7 @@ void fct::task_initialization(void)
 
 	// Stworzenie nazwy.
 	char *tmp_name;
-	tmp_name = config.return_attach_point_name	(configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point", "[ecp_irp6_on_track]");
+	tmp_name = config.return_attach_point_name	(lib::configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point", "[ecp_irp6_on_track]");
 
 	// Dolaczenie globalnej nazwy procesu ECP - kanal do odbioru polecen z UI.
 	if ((UI_ECP_attach = name_attach(NULL, tmp_name, NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
@@ -329,7 +329,7 @@ void fct::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task(configurator &_config)
+base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new irp6ot::task::fct(_config);
 }

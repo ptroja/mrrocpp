@@ -28,7 +28,7 @@ public:
 	 * @param _config konfigurator
 	 * @author jedrzej
 	 */
-	wii(configurator &_config);
+	wii(lib::configurator &_config);
 
 	/**
 	 * Inicjalizuje zadanie

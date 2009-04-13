@@ -224,7 +224,7 @@ void irp6s_postument_track_effector::arm_abs_xyz_eul_zyz_2_frame(const double *p
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-irp6s_postument_track_effector::irp6s_postument_track_effector(configurator &_config, ROBOT_ENUM l_robot_name) :
+irp6s_postument_track_effector::irp6s_postument_track_effector(lib::configurator &_config, ROBOT_ENUM l_robot_name) :
 	irp6s_effector(_config, l_robot_name)
 	{
 

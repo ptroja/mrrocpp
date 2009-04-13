@@ -40,7 +40,7 @@ private:
     
 public:
     // Konstruktor czujnika wirtualnego.
-    pp(configurator &_config);
+    pp(lib::configurator &_config);
     // Destruktor czujnika wirtualnego.
     ~pp(void);
     // Konfiguracja czujnika.

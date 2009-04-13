@@ -114,12 +114,12 @@ bool countLUT(){
 
 /**************************** metody vsp_pawel ****************************/
 
-base* return_created_sensor (configurator &_config){
+base* return_created_sensor (lib::configurator &_config){
 
 	return new pawel(_config);
 }
 
-pawel::pawel(configurator &_config) : base(_config)
+pawel::pawel(lib::configurator &_config) : base(_config)
 {
 	struct timespec time_start, time_end;
 	printf("[vsp_pawel]\tconstructor\n");

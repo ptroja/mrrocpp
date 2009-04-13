@@ -28,7 +28,7 @@ private:
 
 
 public:
-    multiplayer(configurator &_config);
+    multiplayer(lib::configurator &_config);
 
     // methods for ECP template to redefine in concrete classes
     void task_initialization(void);

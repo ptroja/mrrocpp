@@ -25,7 +25,7 @@ private:
 public:
 	short ERROR_CODE;
 	
-	nn(configurator &_config);
+	nn(lib::configurator &_config);
 	~nn(void);
 
 	void configure_sensor (void);	// konfiguracja czujnika

@@ -21,7 +21,7 @@ protected:
 	
 public:
 	
-	pr(configurator &_config);
+	pr(lib::configurator &_config);
 
 	// methods for mp template
 	void task_initialization(void);

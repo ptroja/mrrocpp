@@ -35,7 +35,7 @@ public:
 	/*!
       * Constructor.
       */
-	pcbird(configurator &_config)
+	pcbird(lib::configurator &_config)
 	  : base(_config)
 	{ }
 

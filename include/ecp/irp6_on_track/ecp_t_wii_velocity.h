@@ -26,7 +26,7 @@ public:
 	 * @param _config konfigurator
 	 * @author jedrzej
 	 */
-	wii_velocity(configurator &_config);
+	wii_velocity(lib::configurator &_config);
 
 	/**
 	 * Inicjalizuje zadanie
