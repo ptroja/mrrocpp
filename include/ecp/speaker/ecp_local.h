@@ -21,7 +21,7 @@ class ecp_speaker_robot: public common::ecp_robot
 
 	public:
 	ecp_speaker_robot (configurator &_config, sr_ecp *_sr_ecp);
-	ecp_speaker_robot (common::task::ecp_task& _ecp_object);
+	ecp_speaker_robot (common::task::base& _ecp_object);
 
 	virtual void create_command (void);
 	// wypelnia bufor wysylkowy do EDP na podstawie danych zawartych w obrazie

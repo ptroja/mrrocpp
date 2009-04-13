@@ -9,13 +9,13 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class ecp_task_time: public common::task::ecp_task  {
+class time: public common::task::base  {
 protected:
 	generator::time *tfg;
 
 public:
 	// KONSTRUKTORY
-	ecp_task_time(configurator &_config);
+	time(configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

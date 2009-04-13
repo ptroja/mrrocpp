@@ -9,7 +9,7 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-ecp_wii_generator::ecp_wii_generator (common::task::ecp_task& _ecp_task) : base (_ecp_task) {}
+ecp_wii_generator::ecp_wii_generator (common::task::base& _ecp_task) : base (_ecp_task) {}
 
 bool ecp_wii_generator::first_step()
 {

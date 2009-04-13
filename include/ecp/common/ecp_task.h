@@ -19,7 +19,7 @@ namespace task {
 class base;
 
 // klasa globalna dla calego procesu MP
-class ecp_task : public ecp_mp::task::base
+class base : public ecp_mp::task::base
 {
 	private:
 		name_attach_t *ecp_attach, *trigger_attach; // by Y
@@ -52,10 +52,10 @@ class ecp_task : public ecp_mp::task::base
 		bool pulse_check();
 
 		// KONSTRUKTOR
-		ecp_task(configurator &_config);
+		base(configurator &_config);
 
 		// dla gcc: `'class Foo' has virtual functions but non-virtualdestructor` warning.
-		virtual ~ecp_task();
+		virtual ~base();
 
 		void initialize_communication(void);
 
@@ -93,17 +93,17 @@ class ecp_task : public ecp_mp::task::base
 		void set_ecp_reply(ECP_REPLY ecp_r);
 };
 
-ecp_task* return_created_ecp_task (configurator &_config);
+base* return_created_ecp_task (configurator &_config);
 
 
 // klasa podzadania
 class ecp_sub_task
 {
 	protected:
-		ecp_task &ecp_t;
+		base &ecp_t;
 
 	public:
-		ecp_sub_task(ecp_task &_ecp_t);
+		ecp_sub_task(base &_ecp_t);
 };
 
 } // namespace task

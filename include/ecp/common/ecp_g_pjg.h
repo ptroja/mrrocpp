@@ -32,7 +32,7 @@ public:
 	int step_no;
 	
 	// konstruktor
-	playerjoy(common::task::ecp_task& _ecp_task, int step=0);  
+	playerjoy(common::task::base& _ecp_task, int step=0);  
 	
 	virtual bool first_step ();
 

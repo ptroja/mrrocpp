@@ -59,8 +59,8 @@ protected:
 	bool first_coordinate;
 
 public:
-	smooth(common::task::ecp_task& _ecp_task, bool _is_synchronised);
-	smooth(common::task::ecp_task& _ecp_task, bool _is_synchronised, bool _debug);
+	smooth(common::task::base& _ecp_task, bool _is_synchronised);
+	smooth(common::task::base& _ecp_task, bool _is_synchronised, bool _debug);
 	
 	void calculate(void);
 	void generate_next_coords(void);
@@ -105,8 +105,8 @@ protected:
 	double tool_parameters[3];
 	
 public:
-	tool_change(common::task::ecp_task& _ecp_task, bool _is_synchronised);
-	tool_change(common::task::ecp_task& _ecp_task, bool _is_synchronised, bool _debug);
+	tool_change(common::task::base& _ecp_task, bool _is_synchronised);
+	tool_change(common::task::base& _ecp_task, bool _is_synchronised, bool _debug);
 	void set_tool_parameters(double x, double y, double z);
 	
 	virtual bool first_step();

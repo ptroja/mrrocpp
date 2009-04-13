@@ -25,7 +25,7 @@ namespace task {
 
 using namespace std;
 /** konstruktor **/
-ecp_task_tzu_test::ecp_task_tzu_test(configurator &_config) : ecp_task(_config)
+tzu_test::tzu_test(configurator &_config) : base(_config)
 {
 	befg = NULL;
 	ftcg = NULL;
@@ -37,14 +37,14 @@ ecp_task_tzu_test::ecp_task_tzu_test(configurator &_config) : ecp_task(_config)
 }
 
 /** destruktor **/
-ecp_task_tzu_test::~ecp_task_tzu_test()
+tzu_test::~tzu_test()
 {
 	str<<"--- KONIEC ---"<<endl;
 	str.close();
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_tzu_test::task_initialization(void)
+void tzu_test::task_initialization(void)
 {
 	// ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
@@ -69,7 +69,7 @@ void ecp_task_tzu_test::task_initialization(void)
 	sr_ecp_msg->message("ECP loaded");
 }
 
-void ecp_task_tzu_test::main_task_algorithm(void)
+void tzu_test::main_task_algorithm(void)
 {
 	set_trajectories();
 	int option = choose_option ("1 - NoseGenerator, 2 - Test, 3 - Nacisk", 3);
@@ -109,7 +109,7 @@ void ecp_task_tzu_test::main_task_algorithm(void)
 	ecp_termination_notice();
 }
 
-void ecp_task_tzu_test::naciskanie_test()
+void tzu_test::naciskanie_test()
 {
 	tcg->set_tool_parameters(0,0,0);
 	tcg->Move();
@@ -124,7 +124,7 @@ void ecp_task_tzu_test::naciskanie_test()
 	}
 }
 
-void ecp_task_tzu_test::nose_generator_test(int tool)
+void tzu_test::nose_generator_test(int tool)
 {
 	while(true)
 	{
@@ -158,7 +158,7 @@ void ecp_task_tzu_test::nose_generator_test(int tool)
 }
 
 // argumenty: ilosc powtorzen eksperymentu, taka sama dla parametrow wyliczonych i tych z common.ini
-void ecp_task_tzu_test::trajectories_test(int count)
+void tzu_test::trajectories_test(int count)
 {
 	Ft_v_vector result_common[count][10];
 	Ft_v_vector result_wyliczone[count][10];
@@ -444,7 +444,7 @@ void ecp_task_tzu_test::trajectories_test(int count)
 	// pomyslec jeszcze jakie porownania mozna zrobic
 }
 
-void ecp_task_tzu_test::set_trajectories() // mozna wywalic zmienna robot z klasy i wtedy jawnie przekazywac ja tu do funkcji
+void tzu_test::set_trajectories() // mozna wywalic zmienna robot z klasy i wtedy jawnie przekazywac ja tu do funkcji
 {
 	// sprawdzic czy wszystkie tak wrzucone ruchy maja wiekszy sens
 	if(robot == ON_TRACK)
@@ -478,7 +478,7 @@ void ecp_task_tzu_test::set_trajectories() // mozna wywalic zmienna robot z klas
 }
 
 
-const char* ecp_task_tzu_test::get_trajectory(double x[])
+const char* tzu_test::get_trajectory(double x[])
 {
 	ofstream temp;
 	temp.open("../trj/tzu/temp.trj");
@@ -496,9 +496,9 @@ const char* ecp_task_tzu_test::get_trajectory(double x[])
 	return "../trj/tzu/temp.trj";
 }
 
-ecp_task* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_tzu_test(_config);
+	return new tzu_test(_config);
 };
 
 } // namespace task
@@ -507,7 +507,7 @@ namespace generator {
 /**** force meassure generator ****/
 
 /** konstruktor **/
-force_meassure_generator::force_meassure_generator(common::task::ecp_task& _ecp_task, int _sleep_time, int _meassurement_count) :
+force_meassure_generator::force_meassure_generator(common::task::base& _ecp_task, int _sleep_time, int _meassurement_count) :
 	base(_ecp_task)
 {
 	sleep_time = _sleep_time;

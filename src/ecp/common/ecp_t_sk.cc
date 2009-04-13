@@ -29,14 +29,14 @@ namespace task {
 
 
 // KONSTRUKTORY
-ecp_task_sk::ecp_task_sk(configurator &_config) : ecp_task(_config)
+sk::sk(configurator &_config) : base(_config)
 {
 	nrg = NULL;
 	yefg = NULL;
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_sk::task_initialization(void)
+void sk::task_initialization(void)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
@@ -84,7 +84,7 @@ void ecp_task_sk::task_initialization(void)
 };
 
 
-void ecp_task_sk::main_task_algorithm(void)
+void sk::main_task_algorithm(void)
 {
 	//   weight_meassure_generator wmg(*this, 0.3, 2);
 
@@ -114,9 +114,9 @@ void ecp_task_sk::main_task_algorithm(void)
 	}
 }
 
-ecp_task* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_sk(_config);
+	return new sk(_config);
 }
 
 } // namespace task

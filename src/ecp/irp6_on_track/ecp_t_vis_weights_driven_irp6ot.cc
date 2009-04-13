@@ -25,7 +25,7 @@ namespace irp6ot {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_vislx_irp6ot::ecp_task_vislx_irp6ot(configurator &_config) : ecp_task(_config)
+ecp_task_vislx_irp6ot::ecp_task_vislx_irp6ot(configurator &_config) : base(_config)
 {
 }
 
@@ -79,7 +79,7 @@ namespace common {
 namespace task {
 
 
-ecp_task* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (configurator &_config)
 {
 	return new irp6ot::task::ecp_task_vislx_irp6ot(_config);
 }

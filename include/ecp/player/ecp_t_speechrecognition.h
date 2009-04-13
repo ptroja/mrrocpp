@@ -9,7 +9,7 @@ namespace ecp {
 namespace player {
 namespace task {
 
-class ecp_task_speechrecognition: public common::task::ecp_task  {
+class ecp_task_speechrecognition: public common::task::base  {
 protected:
 	generator::speechrecognition_generator* srg;
 

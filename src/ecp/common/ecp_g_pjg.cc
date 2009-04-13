@@ -14,7 +14,7 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-playerjoy::playerjoy(common::task::ecp_task& _ecp_task, int step):
+playerjoy::playerjoy(common::task::base& _ecp_task, int step):
         base (_ecp_task)
 {
     step_no = step;

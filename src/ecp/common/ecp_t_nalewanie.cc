@@ -28,13 +28,13 @@ namespace common {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_nalewanie::ecp_task_nalewanie(configurator &_config) : ecp_task(_config)
+nalewanie::nalewanie(configurator &_config) : base(_config)
 {
     sg = NULL;
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_nalewanie::task_initialization(void)
+void nalewanie::task_initialization(void)
 {
     int i;
 
@@ -55,7 +55,7 @@ void ecp_task_nalewanie::task_initialization(void)
 }
 
 
-void ecp_task_nalewanie::main_task_algorithm(void)
+void nalewanie::main_task_algorithm(void)
 {
 	/*
 	Homog_matrix *mat=new Homog_matrix();
@@ -70,9 +70,9 @@ void ecp_task_nalewanie::main_task_algorithm(void)
     sg->Move();
 }
 
-ecp_task* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_nalewanie(_config);
+	return new nalewanie(_config);
 }
 
 } // namespace task

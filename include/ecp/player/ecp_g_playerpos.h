@@ -21,7 +21,7 @@ class playerpos_generator : public common::generator::base
 
 	public:
 		// konstruktor
-		playerpos_generator(common::task::ecp_task& _ecp_task);
+		playerpos_generator(common::task::base& _ecp_task);
 		~playerpos_generator();
 
 		virtual bool first_step ();

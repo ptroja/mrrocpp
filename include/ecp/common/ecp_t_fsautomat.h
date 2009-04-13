@@ -16,7 +16,7 @@ namespace ecp {
 namespace common {
 namespace task {
 
-void ecp_gripper_opening (common::task::ecp_task& ecp_object, double gripper_increment, int motion_time);
+void ecp_gripper_opening (common::task::base& ecp_object, double gripper_increment, int motion_time);
 
 } // namespace task
 } // namespace common

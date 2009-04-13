@@ -28,12 +28,12 @@ namespace task {
 
 
 // KONSTRUKTORY
-ecp_task_tran::ecp_task_tran(configurator &_config) :
-	ecp_task(_config)
+tran::tran(configurator &_config) :
+	base(_config)
 	{}
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_tran::task_initialization(void)
+void tran::task_initialization(void)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
 	if (!strcmp(config.section_name, "[ecp_irp6_on_track]"))
@@ -61,7 +61,7 @@ void ecp_task_tran::task_initialization(void)
 }
 
 
-void ecp_task_tran::main_task_algorithm(void)
+void tran::main_task_algorithm(void)
 {
 	generator::transparent gt (*this);
 	sr_ecp_msg->message("Ruch");
@@ -70,9 +70,9 @@ void ecp_task_tran::main_task_algorithm(void)
 
 }
 
-ecp_task* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_tran(_config);
+	return new tran(_config);
 }
 
 } // namespace task

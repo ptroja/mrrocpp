@@ -23,7 +23,7 @@ protected:
 public:
   // -------------------------------------------------------
   // konstruktor
-  ecp_teach_in_generator (common::task::ecp_task& _ecp_task);
+  ecp_teach_in_generator (common::task::base& _ecp_task);
   
   // -------------------------------------------------------
   // destruktor

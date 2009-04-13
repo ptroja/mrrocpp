@@ -51,7 +51,7 @@ class festival_generator : public common::generator::base
 
 	public:
 		// konstruktor
-		festival_generator(common::task::ecp_task& _ecp_task);
+		festival_generator(common::task::base& _ecp_task);
 		~festival_generator();
 
 		virtual bool first_step ();

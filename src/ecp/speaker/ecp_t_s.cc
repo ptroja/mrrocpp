@@ -26,7 +26,7 @@ namespace speaker {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_speaker::ecp_task_speaker(configurator &_config) : ecp_task(_config)
+ecp_task_speaker::ecp_task_speaker(configurator &_config) : base(_config)
 {
     speak = NULL;
 }
@@ -72,7 +72,7 @@ void ecp_task_speaker::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-ecp_task* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (configurator &_config)
 {
 	return new speaker::task::ecp_task_speaker(_config);
 }

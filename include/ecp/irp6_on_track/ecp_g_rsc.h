@@ -73,7 +73,7 @@ class robot_stopped_condition : public common::generator::base {
 #else
 		messip_channel_t *UI_fd;
 #endif
-		robot_stopped_condition(common::task::ecp_task& _ecp_task);
+		robot_stopped_condition(common::task::base& _ecp_task);
 		~robot_stopped_condition(void);
 		// Przygotowanie warunku do ruchu.
 		void prepare_condition_for_motion(void);

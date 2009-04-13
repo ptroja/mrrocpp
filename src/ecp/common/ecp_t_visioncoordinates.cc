@@ -31,12 +31,12 @@ namespace task {
 // ecp_task_visioncoordinates
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-ecp_task_visioncoordinates::ecp_task_visioncoordinates(configurator& _config)
-	: ecp_task(_config), SETTINGS_SECTION_NAME("[ecp_visioncoordinates_task]")
+visioncoordinates::visioncoordinates(configurator& _config)
+	: base(_config), SETTINGS_SECTION_NAME("[ecp_visioncoordinates_task]")
 {
 }
 
-void ecp_task_visioncoordinates::task_initialization()
+void visioncoordinates::task_initialization()
 {
 
 	// tworzymy robota
@@ -56,7 +56,7 @@ void ecp_task_visioncoordinates::task_initialization()
 	itsSmoothGen = new generator::smooth(*this, true, false); // synchronized, debug
 }
 
-void ecp_task_visioncoordinates::main_task_algorithm()
+void visioncoordinates::main_task_algorithm()
 {
 	debugmsg("main_task_alogrithm");
 
@@ -79,7 +79,7 @@ void ecp_task_visioncoordinates::main_task_algorithm()
 	}
 }
 
-void ecp_task_visioncoordinates::setStartPosition()
+void visioncoordinates::setStartPosition()
 {
 	debugmsg("setStartPosition()");
 	double bf[MAX_SERVOS_NR]; 
@@ -98,9 +98,9 @@ void ecp_task_visioncoordinates::setStartPosition()
 /////////////////////////////////////////////////////////////////////////////////////////////
 // fabryk abstrakcyjna dla zada�
 /////////////////////////////////////////////////////////////////////////////////////////////
-ecp_task* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_visioncoordinates(_config);
+	return new visioncoordinates(_config);
 }
 
 #undef debugmsg

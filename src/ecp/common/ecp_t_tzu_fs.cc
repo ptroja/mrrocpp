@@ -27,7 +27,7 @@ namespace task {
  */
 using namespace std;
 /** konstruktor konstruktor**/
-ecp_task_tzu_fs::ecp_task_tzu_fs(configurator &_config) : ecp_task(_config)
+tzu_fs::tzu_fs(configurator &_config) : base(_config)
 {
 	sg = NULL;
 	befg = NULL;
@@ -37,13 +37,13 @@ ecp_task_tzu_fs::ecp_task_tzu_fs(configurator &_config) : ecp_task(_config)
 };
 
 /** destruktor **/
-ecp_task_tzu_fs::~ecp_task_tzu_fs()
+tzu_fs::~tzu_fs()
 {
 	str<<"--- KONIEC ---"<<endl;
 	str.close();
 };
 
-void ecp_task_tzu_fs::task_initialization(void)
+void tzu_fs::task_initialization(void)
 {
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	{
@@ -67,7 +67,7 @@ void ecp_task_tzu_fs::task_initialization(void)
 	sr_ecp_msg->message("ECP loaded");
 };
 
-void ecp_task_tzu_fs::main_task_algorithm(void)
+void tzu_fs::main_task_algorithm(void)
 {
 	bool automatic = false;
 	int procedure_type;
@@ -165,12 +165,12 @@ void ecp_task_tzu_fs::main_task_algorithm(void)
 	ecp_termination_notice();
 };
 
-ecp_task* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_tzu_fs(_config);
+	return new tzu_fs(_config);
 };
 
-void ecp_task_tzu_fs::method_alternative(int type, int sequence[], int T)
+void tzu_fs::method_alternative(int type, int sequence[], int T)
 {
 	for(int i = 0 ; i < T ; i++)
 	{
@@ -199,7 +199,7 @@ void ecp_task_tzu_fs::method_alternative(int type, int sequence[], int T)
 	}
 }
 
-void ecp_task_tzu_fs::method_standard(int T)
+void tzu_fs::method_standard(int T)
 {
 	double weight_s = 0;
 	double P_x_s = 0;
@@ -254,7 +254,7 @@ void ecp_task_tzu_fs::method_standard(int T)
 		<<"weight: "<<weight_s/T<<endl<<"P_x: "<<P_x_s/T<<endl<<"P_y: "<<P_y_s/T<<endl<<"P_z: "<<P_z_s/T<<endl;
 }
 
-void ecp_task_tzu_fs::set_trajectory(int robot_type, int procedure_type)
+void tzu_fs::set_trajectory(int robot_type, int procedure_type)
 {
 	if((robot_type == POSTUMENT) && (procedure_type == STANDARD))
 	{
@@ -311,7 +311,7 @@ void ecp_task_tzu_fs::set_trajectory(int robot_type, int procedure_type)
 	}
 }
 
-const char*ecp_task_tzu_fs::get_trajectory(double x[])
+const char*tzu_fs::get_trajectory(double x[])
 {
 	ofstream temp;
 	temp.open("../trj/tzu/temp.trj");
@@ -336,7 +336,7 @@ namespace generator {
 /**** force meassure generator ****/
 
 /** konstruktor **/
-force_meassure_generator::force_meassure_generator(common::task::ecp_task& _ecp_task, int _sleep_time, int _meassurement_count) :
+force_meassure_generator::force_meassure_generator(common::task::base& _ecp_task, int _sleep_time, int _meassurement_count) :
 	base(_ecp_task)
 {
 	sleep_time = _sleep_time;

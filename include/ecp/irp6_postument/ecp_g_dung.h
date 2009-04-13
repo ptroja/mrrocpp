@@ -40,7 +40,7 @@ public:
 	double delta[6];
 	
 	// konstruktor
-	dung_generator(common::task::ecp_task& _ecp_task, int step=0);
+	dung_generator(common::task::base& _ecp_task, int step=0);
 	
 	virtual bool first_step ();
 

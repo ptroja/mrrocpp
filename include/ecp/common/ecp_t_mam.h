@@ -20,12 +20,12 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class ecp_task_mam: public common::task::ecp_task  {
+class mam: public common::task::base  {
 
 public:
 	// KONSTRUKTORY
-	ecp_task_mam(configurator &_config);
-	~ecp_task_mam();
+	mam(configurator &_config);
+	~mam();
 	
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

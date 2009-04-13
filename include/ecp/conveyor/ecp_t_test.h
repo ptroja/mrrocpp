@@ -24,7 +24,7 @@ namespace ecp {
 namespace conveyor {
 namespace task {
 
-class ecp_task_conveyor_test: public common::task::ecp_task 
+class ecp_task_conveyor_test: public common::task::base 
 {
 
 public:

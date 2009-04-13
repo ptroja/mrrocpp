@@ -12,7 +12,7 @@ namespace common {
 namespace generator {
 
 //constructor with parameters: task and time to sleep [s]
-sleep::sleep (common::task::ecp_task& _ecp_task, double s): base (_ecp_task){
+sleep::sleep (common::task::base& _ecp_task, double s): base (_ecp_task){
 	communicate_with_edp=false;	//do not communicate with edp
 	waittime=s*1000;			//wait time[ns] conversting from given seconds to nanoseconds
 	sleeptime.tv_nsec=20000000;	//sleep time[ns]

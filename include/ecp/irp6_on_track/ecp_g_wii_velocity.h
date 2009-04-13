@@ -25,7 +25,7 @@ namespace generator {
 class ecp_wii_velocity_generator : public common::generator::tff_nose_run
 {
 	public:
-    ecp_wii_velocity_generator (common::task::ecp_task& _ecp_task);
+    ecp_wii_velocity_generator (common::task::base& _ecp_task);
     virtual bool first_step();
     virtual bool next_step();
 };

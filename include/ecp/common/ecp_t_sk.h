@@ -8,7 +8,7 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class ecp_task_sk: public common::task::ecp_task  {
+class sk: public common::task::base  {
 protected:
 	generator::tff_nose_run* nrg;
 	generator::y_edge_follow_force* yefg;
@@ -17,7 +17,7 @@ protected:
 
 public:
 	// KONSTRUKTORY
-	ecp_task_sk(configurator &_config);
+	sk(configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

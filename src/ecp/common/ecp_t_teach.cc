@@ -25,13 +25,13 @@ namespace common {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_teach_irp6ot::ecp_task_teach_irp6ot(configurator &_config) : ecp_task(_config)
+teach::teach(configurator &_config) : base(_config)
 {
     tig = NULL;
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_teach_irp6ot::task_initialization(void)
+void teach::task_initialization(void)
 {
     if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     {
@@ -52,7 +52,7 @@ void ecp_task_teach_irp6ot::task_initialization(void)
 };
 
 
-void ecp_task_teach_irp6ot::main_task_algorithm(void)
+void teach::main_task_algorithm(void)
 {
     switch (ecp_m_robot->robot_name)
     {
@@ -92,9 +92,9 @@ void ecp_task_teach_irp6ot::main_task_algorithm(void)
     ecp_termination_notice();
 }
 
-ecp_task* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_teach_irp6ot(_config);
+	return new teach(_config);
 }
 } // namespace task
 } // namespace common

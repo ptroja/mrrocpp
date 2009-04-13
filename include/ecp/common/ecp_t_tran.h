@@ -20,11 +20,11 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class ecp_task_tran: public common::task::ecp_task  {
+class tran: public common::task::base  {
 
 public:
 	// KONSTRUKTORY
-	ecp_task_tran(configurator &_config);
+	tran(configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

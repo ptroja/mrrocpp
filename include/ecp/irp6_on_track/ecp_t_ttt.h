@@ -13,7 +13,7 @@ namespace task {
  * Kresli w powietrzu siatke jak do gry w kolko-i-krzyzyk
  * @author jkurylo
  */
-class ecp_task_ttt: public common::task::ecp_task
+class ecp_task_ttt: public common::task::base
 {
 protected:
 	//Generator ruchu

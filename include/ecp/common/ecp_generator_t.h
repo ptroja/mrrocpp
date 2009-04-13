@@ -12,7 +12,7 @@ namespace generator {
 class transparent : public common::generator::base {
 
 public:
-	transparent(common::task::ecp_task& _ecp_task);
+	transparent(common::task::base& _ecp_task);
 	
 	bool throw_kinematics_exceptions;
 	

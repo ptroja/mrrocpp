@@ -47,7 +47,7 @@ struct timespec time_start, time_tmp;
 FILE* research;
 
 
-pawel::pawel(common::task::ecp_task& _ecp_task, int step):
+pawel::pawel(common::task::base& _ecp_task, int step):
         base (_ecp_task)
 {
 

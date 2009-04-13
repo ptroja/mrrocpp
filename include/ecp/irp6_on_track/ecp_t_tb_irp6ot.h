@@ -14,7 +14,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class ecp_t_tb_irp6ot: public common::task::ecp_task{
+class ecp_t_tb_irp6ot: public common::task::base{
 	protected:
 		common::generator::smooth* sgen;					//smooth movement generator
 		common::generator::bias_edp_force* befgen;			//calibration of force

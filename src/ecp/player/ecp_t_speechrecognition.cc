@@ -16,7 +16,7 @@ namespace task {
 
 // KONSTRUKTORY
 ecp_task_speechrecognition::ecp_task_speechrecognition(configurator &_config)
-        : ecp_task(_config)
+        : base(_config)
 {
     srg = new generator::speechrecognition_generator (*this);
 }
@@ -62,7 +62,7 @@ void ecp_task_speechrecognition::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-ecp_task* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (configurator &_config)
 {
 	return new player::task::ecp_task_speechrecognition(_config);
 }

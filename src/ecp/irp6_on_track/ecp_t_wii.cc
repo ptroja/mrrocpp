@@ -17,7 +17,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-ecp_task_wii::ecp_task_wii(configurator &_config) : ecp_task(_config) {};
+ecp_task_wii::ecp_task_wii(configurator &_config) : base(_config) {};
 
 void ecp_task_wii::task_initialization(void)
 {
@@ -58,7 +58,7 @@ void ecp_task_wii::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-ecp_task* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (configurator &_config)
 {
 	return new irp6ot::task::ecp_task_wii(_config);
 }

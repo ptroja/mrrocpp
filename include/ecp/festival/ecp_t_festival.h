@@ -9,7 +9,7 @@ namespace ecp {
 namespace festival {
 namespace task {
 
-class ecp_task_festival: public common::task::ecp_task  {
+class ecp_task_festival: public common::task::base  {
 protected:
 	generator::festival_generator* fg;
 

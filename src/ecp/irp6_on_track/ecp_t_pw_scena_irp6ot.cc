@@ -10,7 +10,7 @@ namespace task {
 
 //Konstruktory
 ecp_task_pw_scena_irp6ot::ecp_task_pw_scena_irp6ot(configurator &_config) :
-	ecp_task(_config) {
+	base(_config) {
 }
 
 void ecp_task_pw_scena_irp6ot::task_initialization(void) {
@@ -137,7 +137,7 @@ void ecp_task_pw_scena_irp6ot::init_td(POSE_SPECIFICATION pspec, int internode_n
 namespace common {
 namespace task {
 
-ecp_task* return_created_ecp_task(configurator &_config) {
+base* return_created_ecp_task(configurator &_config) {
 	return new irp6ot::task::ecp_task_pw_scena_irp6ot(_config);
 	
 }

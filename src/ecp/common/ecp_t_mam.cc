@@ -35,7 +35,7 @@ namespace ecp {
 namespace common {
 
 // Obiekt zawierajacy sciezki sieciowe.
-extern task::ecp_task* ecp_t;
+extern task::base* ecp_t;
 
 namespace task {
 
@@ -58,24 +58,24 @@ bool START_MEASURES=false;
 void* value_ptr;
 
 /********************************** SIGCATCH ********************************/
-void ecp_task_mam::catch_signal(int sig)
+void mam::catch_signal(int sig)
 {
 	switch (sig) {
 		case SIGTERM:
 			// Zakonczenie pracy watkow.
 			TERMINATE = true;
 			// Koniec pracy czujnikow.
-			(((ecp_task_mam*)ecp_t))->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]->terminate();
+			(((mam*)ecp_t))->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]->terminate();
 			// Zwolnienie pamieci - czujnik.
-			delete(((ecp_task_mam*)ecp_t)->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]);
+			delete(((mam*)ecp_t)->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]);
 
 			// Zwolnienie pamieci - generator.
 			delete(mam_gen);
 			// Zwolnienie pamieci - robot.
-			delete(((ecp_task_mam*)ecp_t)->ecp_m_robot);
+			delete(((mam*)ecp_t)->ecp_m_robot);
 			// Odlaczenie nazwy.
 			name_detach(UI_ECP_attach, 0);
-			((ecp_task_mam*)ecp_t)->sr_ecp_msg->message("ECP terminated");
+			((mam*)ecp_t)->sr_ecp_msg->message("ECP terminated");
 			exit(EXIT_SUCCESS);
 			break;
 	}
@@ -135,7 +135,7 @@ void* UI_communication_thread(void* arg)
 				break;
 			case MAM_CALIBRATE:
 				// Konfiguracja czujnika.
-				((ecp_task_mam*)ecp_t)->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]->configure_sensor();
+				((mam*)ecp_t)->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]->configure_sensor();
 				break;
 			case MAM_EXIT:
 				// Zakonczenie dzialania procesu.
@@ -203,17 +203,17 @@ void show_mam_window(int UI_fd)
 }
 
 // KONSTRUKTORY
-ecp_task_mam::ecp_task_mam(configurator &_config) :
-	ecp_task(_config)
+mam::mam(configurator &_config) :
+	base(_config)
 {
 }
 
-ecp_task_mam::~ecp_task_mam()
+mam::~mam()
 {
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_mam::task_initialization(void)
+void mam::task_initialization(void)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0) {
@@ -251,7 +251,7 @@ void ecp_task_mam::task_initialization(void)
 	}
 }
 
-void ecp_task_mam::main_task_algorithm(void)
+void mam::main_task_algorithm(void)
 {
 	// Pokazanie okna .
 	show_mam_window(UI_fd);
@@ -259,9 +259,9 @@ void ecp_task_mam::main_task_algorithm(void)
 	ecp_termination_notice();
 }
 
-ecp_task* return_created_ecp_task(configurator &_config)
+base* return_created_ecp_task(configurator &_config)
 {
-	return new ecp_task_mam(_config);
+	return new mam(_config);
 }
 
 } // namespace task

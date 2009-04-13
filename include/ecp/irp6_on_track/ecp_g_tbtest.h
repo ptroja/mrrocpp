@@ -35,7 +35,7 @@ class ecp_g_tbtest : public common::generator::base
     double next_position[8];
 
 public:
-    ecp_g_tbtest (common::task::ecp_task& _ecp_task);
+    ecp_g_tbtest (common::task::base& _ecp_task);
     virtual bool first_step();
     virtual bool next_step();
 };

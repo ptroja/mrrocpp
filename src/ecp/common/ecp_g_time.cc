@@ -21,7 +21,7 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-time::time(common::task::ecp_task& _ecp_task, int step):
+time::time(common::task::base& _ecp_task, int step):
         base (_ecp_task)
 {
     step_no = step;

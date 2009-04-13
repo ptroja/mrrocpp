@@ -450,7 +450,7 @@ bool smooth2::load_a_v_max (char* file_name)
     return true;
 } // end: bool load_a_v_max()
 
-smooth2::smooth2 (common::task::ecp_task& _ecp_task, bool _is_synchronised)
+smooth2::smooth2 (common::task::base& _ecp_task, bool _is_synchronised)
         :
         delta (_ecp_task), debug(false),first_coordinate(true)
 {

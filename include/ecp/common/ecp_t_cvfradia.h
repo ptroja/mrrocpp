@@ -24,7 +24,7 @@ namespace task {
  * \brief Class responsible for communication with cvFraDIA (testing purposes).
  * \author tkornuta
  */
-class ecp_task_cvfradia: public common::task::ecp_task  {
+class cvfradia: public common::task::base  {
 protected:
 	/*!
       * Generator used for communication with cvFraDIA.
@@ -35,8 +35,8 @@ public:
 	/*!
       * Constructor.
       */
-	ecp_task_cvfradia(configurator &_config)
-	  : ecp_task(_config)
+	cvfradia(configurator &_config)
+	  : base(_config)
 	{ }
 	
 	/*!

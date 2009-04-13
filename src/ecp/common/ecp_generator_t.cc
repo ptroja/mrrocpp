@@ -5,7 +5,7 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-transparent::transparent(common::task::ecp_task& _ecp_task) :
+transparent::transparent(common::task::base& _ecp_task) :
 	base(_ecp_task)
 {
 	copy_edp_buffers_in_move=false;

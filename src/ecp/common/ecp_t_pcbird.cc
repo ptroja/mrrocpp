@@ -32,7 +32,7 @@ namespace task {
 /*!
  * Initialize task - robot, sensors and generators.
  */
-void ecp_task_pcbird::task_initialization(void)
+void pcbird::task_initialization(void)
 {
 	try
 	{
@@ -64,7 +64,7 @@ void ecp_task_pcbird::task_initialization(void)
 /*!
  * Main algorithm loop. Retrieves information from pcbird.
  */
-void ecp_task_pcbird::main_task_algorithm(void)
+void pcbird::main_task_algorithm(void)
 {
 	cvg->Move();
 }
@@ -72,9 +72,9 @@ void ecp_task_pcbird::main_task_algorithm(void)
 /*!
  * Returns created task object (Factory Method design pattern).
  */
-ecp_task* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_pcbird(_config);
+	return new pcbird(_config);
 }
 
 } // namespace task

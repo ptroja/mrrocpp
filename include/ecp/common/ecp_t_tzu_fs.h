@@ -38,7 +38,7 @@ namespace task {
 
 
 
-class ecp_task_tzu_fs :  public common::task::ecp_task
+class tzu_fs :  public common::task::base
 {
 protected:
 	generator::smooth *sg;
@@ -62,8 +62,8 @@ protected:
 
 	const char* get_trajectory(double x[]);
 public:
-	ecp_task_tzu_fs(configurator &_config);
-	~ecp_task_tzu_fs();
+	tzu_fs(configurator &_config);
+	~tzu_fs();
 
 	// methods for ECP template to redefine in concrete classes
 	/** metoda odpowiedzialna za inicjalizacje zmiennych zadania **/
@@ -85,7 +85,7 @@ private:
 	Ft_v_vector weight;
 public:
     // konstruktor
-    force_meassure_generator(common::task::ecp_task& _ecp_task, int _sleep_time = 0, int _meassurement_count = 1);
+    force_meassure_generator(common::task::base& _ecp_task, int _sleep_time = 0, int _meassurement_count = 1);
 	Ft_v_vector& get_meassurement();
 	void set_configuration(int _sleep_time, int _meassurement_count);
 

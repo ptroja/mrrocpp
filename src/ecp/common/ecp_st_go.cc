@@ -19,7 +19,7 @@ namespace ecp {
 namespace common {
 namespace task {
 
-ecp_sub_task_gripper_opening::ecp_sub_task_gripper_opening(ecp_task &_ecp_t) :
+ecp_sub_task_gripper_opening::ecp_sub_task_gripper_opening(base &_ecp_t) :
 	ecp_sub_task(_ecp_t)
 {
 	init();

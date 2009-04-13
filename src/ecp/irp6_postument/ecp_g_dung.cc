@@ -25,7 +25,7 @@ namespace ecp {
 namespace irp6p {
 namespace generator {
 
-dung_generator::dung_generator(common::task::ecp_task& _ecp_task, int step) :
+dung_generator::dung_generator(common::task::base& _ecp_task, int step) :
         base(_ecp_task)
 {
     step_no = step;

@@ -34,7 +34,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class ecp_t_spots_recognition: public common::task::ecp_task
+class ecp_t_spots_recognition: public common::task::base
 {
 	char * trajektoria_poczatkowa;
 

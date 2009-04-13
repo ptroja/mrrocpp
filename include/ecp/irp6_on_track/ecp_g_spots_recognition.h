@@ -34,7 +34,7 @@ class ecp_spots_generator : public common::generator::base
 	short iter; //0 - zero, 1 - one, 2 - many ;)
 
   public:
-	ecp_spots_generator(common::task::ecp_task& _ecp_task);
+	ecp_spots_generator(common::task::base& _ecp_task);
 	bool first_step();
 	bool next_step();
 

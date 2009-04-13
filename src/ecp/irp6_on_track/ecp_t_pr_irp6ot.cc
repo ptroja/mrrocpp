@@ -44,7 +44,7 @@ void ecp_task_pr_irp6ot::short_move_up ()
 }
 
 // KONSTRUKTORY
-ecp_task_pr_irp6ot::ecp_task_pr_irp6ot(configurator &_config) : ecp_task(_config)
+ecp_task_pr_irp6ot::ecp_task_pr_irp6ot(configurator &_config) : base(_config)
 {
     tig = NULL;
 }
@@ -178,7 +178,7 @@ void ecp_task_pr_irp6ot::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-common::task::ecp_task* return_created_ecp_task (configurator &_config)
+common::task::base* return_created_ecp_task (configurator &_config)
 {
 	return new irp6ot::task::ecp_task_pr_irp6ot(_config);
 }

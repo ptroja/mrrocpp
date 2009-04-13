@@ -18,7 +18,7 @@ namespace task {
  * Kresli w powietrzu elipse o zadanych polosiach
  * @author jkurylo
  */
-class ecp_task_ellipse: public common::task::ecp_task
+class ecp_task_ellipse: public common::task::base
 {
 protected:
 	//Generator ruchu

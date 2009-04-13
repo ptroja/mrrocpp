@@ -13,7 +13,7 @@ namespace task {
 
 // KONSTRUKTORY
 ecp_task_festival::ecp_task_festival(configurator &_config) :
-	common::task::ecp_task(_config)
+	common::task::base(_config)
 {
 	fg = new generator::festival_generator (*this);
 }
@@ -66,7 +66,7 @@ void ecp_task_festival::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-ecp_task* return_created_ecp_task(configurator &_config)
+base* return_created_ecp_task(configurator &_config)
 {
 	return new festival::task::ecp_task_festival(_config);
 }

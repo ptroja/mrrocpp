@@ -29,14 +29,14 @@ namespace common {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_tw::ecp_task_tw(configurator &_config) : ecp_task(_config)
+tw::tw(configurator &_config) : base(_config)
 {
 	nrg = NULL;
 	yefg = NULL;
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_tw::task_initialization(void)
+void tw::task_initialization(void)
 {
 
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
@@ -94,7 +94,7 @@ void ecp_task_tw::task_initialization(void)
 }
 
 
-void ecp_task_tw::main_task_algorithm(void)
+void tw::main_task_algorithm(void)
 {
 	//   weight_meassure_generator wmg(*this, 0.3, 2);
 
@@ -108,9 +108,9 @@ void ecp_task_tw::main_task_algorithm(void)
 
 }
 
-ecp_task* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_tw(_config);
+	return new tw(_config);
 }
 
 } // namespace task

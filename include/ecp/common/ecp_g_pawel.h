@@ -34,7 +34,7 @@ public:
 	
 	// konstruktor
 	~pawel();
-	pawel(common::task::ecp_task& _ecp_task, int step);  
+	pawel(common::task::base& _ecp_task, int step);  
 	
 	virtual bool first_step();
 	virtual bool next_step();

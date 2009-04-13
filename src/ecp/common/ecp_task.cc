@@ -19,19 +19,19 @@ namespace ecp {
 namespace common {
 namespace task {
 
-ecp_task::ecp_task(configurator &_config) :
-	base(_config)
+base::base(configurator &_config) :
+	ecp_mp::task::base(_config)
 {
 	sensor_m.clear();
 	ecp_m_robot = NULL;
 }
 
-ecp_task::~ecp_task()
+base::~base()
 {
 	delete[] mrrocpp_network_path;
 }
 
-bool ecp_task::pulse_check()
+bool base::pulse_check()
 {
 	struct sigevent stop_event;
 
@@ -88,7 +88,7 @@ bool ecp_task::pulse_check()
 // ---------------------------------------------------------------
 
 
-void ecp_task::catch_signal_in_ecp_task(int sig)
+void base::catch_signal_in_ecp_task(int sig)
 {
 	switch (sig) {
 		case SIGTERM:
@@ -103,12 +103,12 @@ void ecp_task::catch_signal_in_ecp_task(int sig)
 	}
 }
 
-void ecp_task::terminate()
+void base::terminate()
 {
 }
 
 // ---------------------------------------------------------------
-void ecp_task::initialize_communication()
+void base::initialize_communication()
 {
 	uint64_t e; // kod bledu systemowego
 
@@ -155,28 +155,28 @@ void ecp_task::initialize_communication()
 
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task::task_initialization(void)
+void base::task_initialization(void)
 {
 }
 
-void ecp_task::main_task_algorithm(void)
+void base::main_task_algorithm(void)
 {
 }
 
 // Badanie typu polecenia z MP
-MP_COMMAND ecp_task::mp_command_type(void) const
+MP_COMMAND base::mp_command_type(void) const
 {
 	return mp_command.command;
 }
 
 // Ustawienie typu odpowiedzi z ECP do MP
-void ecp_task::set_ecp_reply(ECP_REPLY ecp_r)
+void base::set_ecp_reply(ECP_REPLY ecp_r)
 {
 	ecp_reply.reply = ecp_r;
 }
 
 // Informacja dla MP o zakonczeniu zadania uzytkownika
-void ecp_task::ecp_termination_notice(void)
+void base::ecp_termination_notice(void)
 {
 
 	if (mp_command_type()!= END_MOTION) {
@@ -188,7 +188,7 @@ void ecp_task::ecp_termination_notice(void)
 }
 
 // Wysyla puls do Mp przed oczekiwaniem na spotkanie
-void ecp_task::send_pulse_to_mp(int pulse_code, int pulse_value)
+void base::send_pulse_to_mp(int pulse_code, int pulse_value)
 {
 	if (MsgSendPulse(MP_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value) == -1) {
 		perror("Blad w wysylaniu pulsu do mp\n");
@@ -196,7 +196,7 @@ void ecp_task::send_pulse_to_mp(int pulse_code, int pulse_value)
 }
 
 // Petla odbierania wiadomosci.
-void ecp_task::ecp_wait_for_stop(void)
+void base::ecp_wait_for_stop(void)
 {
 	// Wyslanie pulsu do MP
 	send_pulse_to_mp(ECP_WAIT_FOR_STOP, 1);
@@ -226,7 +226,7 @@ void ecp_task::ecp_wait_for_stop(void)
 }
 
 // Oczekiwanie na polecenie START od MP
-bool ecp_task::ecp_wait_for_start(void)
+bool base::ecp_wait_for_start(void)
 {
 	bool ecp_stop = false;
 
@@ -270,7 +270,7 @@ bool ecp_task::ecp_wait_for_start(void)
 }
 
 // Oczekiwanie na kolejne zlecenie od MP
-void ecp_task::get_next_state(void)
+void base::get_next_state(void)
 {
 	bool ecp_stop = false;
 
@@ -312,7 +312,7 @@ void ecp_task::get_next_state(void)
 }
 
 // Oczekiwanie na polecenie od MP
-bool ecp_task::mp_buffer_receive_and_send(void)
+bool base::mp_buffer_receive_and_send(void)
 {
 	bool returned_value = true;
 	bool ecp_stop = false;
@@ -362,7 +362,7 @@ bool ecp_task::mp_buffer_receive_and_send(void)
 }
 
 // Receive of mp message
-int ecp_task::receive_mp_message(void)
+int base::receive_mp_message(void)
 {
 	while (1) {
 
@@ -413,17 +413,17 @@ int ecp_task::receive_mp_message(void)
 	}
 }
 
-ecp_sub_task::ecp_sub_task(ecp_task &_ecp_t) :
+ecp_sub_task::ecp_sub_task(base &_ecp_t) :
 	ecp_t(_ecp_t)
 {
 }
 
-bool ecp_task::str_cmp::operator()(char const *a, char const *b) const
+bool base::str_cmp::operator()(char const *a, char const *b) const
 {
 	return strcmp(a, b)<0;
 }
 
-mp::common::Trajectory * ecp_task::createTrajectory(xmlNode *actNode, xmlChar *stateID)
+mp::common::Trajectory * base::createTrajectory(xmlNode *actNode, xmlChar *stateID)
 {
 	mp::common::Trajectory* actTrajectory;
 	xmlNode *cchild_node, *ccchild_node;
@@ -482,7 +482,7 @@ mp::common::Trajectory * ecp_task::createTrajectory(xmlNode *actNode, xmlChar *s
 	return actTrajectory;
 }
 
-std::map<char*, mp::common::Trajectory, ecp_task::str_cmp>* ecp_task::loadTrajectories(char * fileName, ROBOT_ENUM propRobot)
+std::map<char*, mp::common::Trajectory, base::str_cmp>* base::loadTrajectories(char * fileName, ROBOT_ENUM propRobot)
 {
 	int size;
 	char * filePath;
@@ -515,7 +515,7 @@ std::map<char*, mp::common::Trajectory, ecp_task::str_cmp>* ecp_task::loadTrajec
 		throw common::generator::base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
-	trajectoriesMap = new std::map<char*, mp::common::Trajectory, ecp_task::str_cmp>();
+	trajectoriesMap = new std::map<char*, mp::common::Trajectory, base::str_cmp>();
 
    for(cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
    {

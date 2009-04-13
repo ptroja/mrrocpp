@@ -259,7 +259,7 @@ public:
 	/*!
 	 * Constructor.
 	 */
-	ecp_visual_servo(common::task::ecp_task& _ecp_task, int step=0);
+	ecp_visual_servo(common::task::base& _ecp_task, int step=0);
 	/*!
 	 * Destructor.
 	 */

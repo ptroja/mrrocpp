@@ -24,7 +24,7 @@ namespace ecp {
 namespace irp6p {
 namespace generator {
 
-y_simple_generator::y_simple_generator(common::task::ecp_task& _ecp_task, int step) :
+y_simple_generator::y_simple_generator(common::task::base& _ecp_task, int step) :
 	base(_ecp_task)
 {
 	step_no = step;

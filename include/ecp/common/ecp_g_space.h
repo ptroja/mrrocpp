@@ -47,7 +47,7 @@ protected:
   double v_def_xyz_angles[MAX_SERVOS_NR];					// 
 
 public:	
-   hermite_spline (common::task::ecp_task& _ecp_task, double interval, double ts );		// constructor		 
+   hermite_spline (common::task::base& _ecp_task, double interval, double ts );		// constructor		 
    void fill_hermite_arrays (void);				// fills the arrays 'time', 'yi', 'yiprim'
    void calc_hermit();							// calculates values of the function for the current T
    virtual bool first_step ();
@@ -78,7 +78,7 @@ protected:
   double v_def_xyz_angles[MAX_SERVOS_NR];							// 
 
 public:	
-   natural_spline(common::task::ecp_task& _ecp_task, double interval, double ts );		// constructor		 
+   natural_spline(common::task::base& _ecp_task, double interval, double ts );		// constructor		 
    void fill_natural_arrays (void); 
    void calc_natural();
    virtual bool first_step ();

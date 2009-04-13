@@ -13,7 +13,7 @@ namespace conveyor {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_conveyor_test::ecp_task_conveyor_test(configurator &_config) : ecp_task(_config)
+ecp_task_conveyor_test::ecp_task_conveyor_test(configurator &_config) : base(_config)
 {}
 
 ecp_task_conveyor_test::~ecp_task_conveyor_test()
@@ -47,7 +47,7 @@ void ecp_task_conveyor_test::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-ecp_task* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (configurator &_config)
 {
 	return new conveyor::task::ecp_task_conveyor_test(_config);
 }

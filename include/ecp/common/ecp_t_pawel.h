@@ -16,7 +16,7 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class ecp_task_pawel: public common::task::ecp_task  {
+class pawel: public common::task::base  {
 	protected:
 		//	ecp_tff_nose_run_generator* nrg;
 		//	ecp_teach_in_generator* tig;
@@ -26,7 +26,7 @@ class ecp_task_pawel: public common::task::ecp_task  {
 
 	public:
 		// KONSTRUKTORY
-		ecp_task_pawel(configurator &_config);
+		pawel(configurator &_config);
 
 		// methods for ECP template to redefine in concrete classes
 		void task_initialization(void);

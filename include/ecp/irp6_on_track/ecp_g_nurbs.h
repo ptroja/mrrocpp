@@ -38,7 +38,7 @@ protected:
    	POSE_SPECIFICATION atype_;
 public:
 	// konstruktor
-	irp6ot_nurbs_generator (common::task::ecp_task& _ecp_task, const nurbs_tdes& ntdes, int mp_communication_mode_arg = 1);
+	irp6ot_nurbs_generator (common::task::base& _ecp_task, const nurbs_tdes& ntdes, int mp_communication_mode_arg = 1);
 	
   virtual bool first_step ();
   virtual bool next_step ();

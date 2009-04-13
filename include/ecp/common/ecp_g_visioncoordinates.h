@@ -22,9 +22,9 @@ namespace generator {
 class visioncoordinates : public common::generator::base
 {
 public:
-	// ecp_visioncoordinates_generator(common::task::ecp_task& _ecp_task)
-	// � common::task::ecp_task& _ecp_task - zadanie, z ktorym zwiazany jest dany generator
-	visioncoordinates(common::task::ecp_task& _ecp_task);
+	// ecp_visioncoordinates_generator(common::task::base& _ecp_task)
+	// � common::task::base& _ecp_task - zadanie, z ktorym zwiazany jest dany generator
+	visioncoordinates(common::task::base& _ecp_task);
 
     // bool first_step()
     // - first step method

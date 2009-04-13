@@ -21,13 +21,13 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class ecp_task_teach_irp6ot: public common::task::ecp_task  {
+class teach: public common::task::base  {
 protected:
 	ecp_teach_in_generator* tig;
 
 public:
 	// KONSTRUKTORY
-	ecp_task_teach_irp6ot(configurator &_config);
+	teach(configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

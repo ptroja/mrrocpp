@@ -9,7 +9,7 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-ecp_g_pw_kolo::ecp_g_pw_kolo (common::task::ecp_task& _ecp_task)
+ecp_g_pw_kolo::ecp_g_pw_kolo (common::task::base& _ecp_task)
         : base (_ecp_task)
 {
 }

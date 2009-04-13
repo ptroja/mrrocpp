@@ -19,7 +19,7 @@ namespace irp6ot {
 namespace task {
 
 ecp_task_lego_brick_irp6ot::ecp_task_lego_brick_irp6ot(configurator &_config) :
-	ecp_task(_config)
+	base(_config)
 	{}
 
 // methods for ECP template to redefine in concrete classes
@@ -174,7 +174,7 @@ void ecp_task_lego_brick_irp6ot::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-ecp_task* return_created_ecp_task(configurator &_config)
+base* return_created_ecp_task(configurator &_config)
 {
 	return new irp6ot::task::ecp_task_lego_brick_irp6ot(_config);
 }

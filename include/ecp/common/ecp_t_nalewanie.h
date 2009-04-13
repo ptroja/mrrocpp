@@ -21,13 +21,13 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class ecp_task_nalewanie: public common::task::ecp_task  {
+class nalewanie: public common::task::base  {
 protected:
 	generator::smooth* sg;
 
 public:
 	// KONSTRUKTORY
-	ecp_task_nalewanie(configurator &_config);
+	nalewanie(configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

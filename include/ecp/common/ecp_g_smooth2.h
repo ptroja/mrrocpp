@@ -93,8 +93,8 @@ class smooth2 : public delta {
 		int coordinate_list_lenght(void);
 
 	public:
-		smooth2(common::task::ecp_task& _ecp_task, bool _is_synchronised);
-		smooth2(common::task::ecp_task& _ecp_task, bool _is_synchronised, bool _debug);
+		smooth2(common::task::base& _ecp_task, bool _is_synchronised);
+		smooth2(common::task::base& _ecp_task, bool _is_synchronised, bool _debug);
 
 		void set_relative(void); //zmiana na tryb przyrostowy
 		void set_absolute(void); //zmiana na tryb bezwzgledny

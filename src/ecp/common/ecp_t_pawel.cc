@@ -16,13 +16,13 @@ namespace common {
 namespace task {
 
 // KONSTRUKTORY
-ecp_task_pawel::ecp_task_pawel(configurator &_config) : ecp_task(_config)
+pawel::pawel(configurator &_config) : base(_config)
 {
     pg = NULL;
 }
 
 // methods for ECP template to redefine in concrete classes
-void ecp_task_pawel::task_initialization(void)
+void pawel::task_initialization(void)
 {
     // the robot is choose dependendant on the section of configuration file sent as argv[4]
     if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
@@ -59,7 +59,7 @@ void ecp_task_pawel::task_initialization(void)
 }
 
 
-void ecp_task_pawel::main_task_algorithm(void)
+void pawel::main_task_algorithm(void)
 {
     //	sensor_m[SENSOR_PAWEL]->get_reading();
     for(;;)
@@ -68,9 +68,9 @@ void ecp_task_pawel::main_task_algorithm(void)
     }
 }
 
-ecp_task* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (configurator &_config)
 {
-	return new ecp_task_pawel(_config);
+	return new pawel(_config);
 }
 	//	nrg = new ecp_tff_nose_run_generator(*this, 8);
 	//	nrg->sensor_m = sensor_m;

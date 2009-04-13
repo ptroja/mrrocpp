@@ -19,7 +19,7 @@ class transparent;
 }
 
 namespace task {
-class ecp_task;
+class base;
 } // namespace task
 
 class ecp_robot : public ecp_mp::robot
@@ -86,7 +86,7 @@ public:
 	// na poziomie ECP jest to polecenie dla EDP
 
 	ecp_robot(ROBOT_ENUM _robot_name, configurator &_config, sr_ecp *_sr_ecp);
-	ecp_robot(ROBOT_ENUM _robot_name, common::task::ecp_task& _ecp_object);
+	ecp_robot(ROBOT_ENUM _robot_name, common::task::base& _ecp_object);
 
 	pid_t get_EDP_pid(void) const;
 

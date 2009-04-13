@@ -20,7 +20,7 @@ namespace common {
 // ecp_teach_in_generator - klasa bazowa
 // ####################################################################################################
 
-ecp_teach_in_generator::ecp_teach_in_generator(common::task::ecp_task& _ecp_task) :
+ecp_teach_in_generator::ecp_teach_in_generator(common::task::base& _ecp_task) :
   base(_ecp_task)
   {
     pose_list.clear();

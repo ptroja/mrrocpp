@@ -25,7 +25,7 @@ namespace task {
 
 
 // KONSTRUKTORY
-ecp_task_fr_irp6ot::ecp_task_fr_irp6ot(configurator &_config) : ecp_task(_config)
+ecp_task_fr_irp6ot::ecp_task_fr_irp6ot(configurator &_config) : base(_config)
 {
     adg1 = NULL;
     adg2 = NULL;
@@ -108,7 +108,7 @@ void ecp_task_fr_irp6ot::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-ecp_task* return_created_ecp_task (configurator &_config)
+base* return_created_ecp_task (configurator &_config)
 {
 	return new irp6ot::task::ecp_task_fr_irp6ot(_config);
 }

@@ -9,7 +9,7 @@ namespace ecp {
 namespace speaker {
 namespace task {
 
-class ecp_task_speaker: public common::task::ecp_task  {
+class ecp_task_speaker: public common::task::base  {
 protected:
 	generator::speaking_generator* speak;
 

@@ -26,12 +26,12 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-#define debugmsg(msg)						task::ecp_task::sr_ecp_msg->message(msg);
+#define debugmsg(msg)						task::base::sr_ecp_msg->message(msg);
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // ecp_visioncoordinates_generator
 ////////////////////////////////////////////////////////////////////////////////////////////
-visioncoordinates::visioncoordinates(common::task::ecp_task& _ecp_task)
+visioncoordinates::visioncoordinates(common::task::base& _ecp_task)
 : base(_ecp_task), SETTINGS_SECTION_NAME("[ecp_visioncoordinates_generator]")
 {
 	debugmsg("VCG: Creating virtual sensor to communicate with FraDIA");

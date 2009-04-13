@@ -27,7 +27,7 @@ ecp_speaker_robot::ecp_speaker_robot(configurator &_config, sr_ecp *_sr_ecp) :
 {
 }
 
-ecp_speaker_robot::ecp_speaker_robot(common::task::ecp_task& _ecp_object) :
+ecp_speaker_robot::ecp_speaker_robot(common::task::base& _ecp_object) :
 	ecp_robot(ROBOT_SPEAKER, _ecp_object)
 {
 }
