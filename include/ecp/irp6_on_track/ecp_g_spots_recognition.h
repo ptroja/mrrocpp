@@ -19,6 +19,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 class ecp_spots_generator : public common::generator::ecp_generator
 {
@@ -44,6 +45,7 @@ class ecp_spots_generator : public common::generator::ecp_generator
 	void save_position();
 };
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

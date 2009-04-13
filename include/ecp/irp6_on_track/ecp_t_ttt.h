@@ -7,6 +7,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 /**
  * Kresli w powietrzu siatke jak do gry w kolko-i-krzyzyk
@@ -39,7 +40,7 @@ public:
 	void main_task_algorithm(void);
 };
 
-
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

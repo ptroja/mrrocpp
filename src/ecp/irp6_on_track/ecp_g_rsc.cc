@@ -30,6 +30,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 /*************************** CONDITION VALUE ********************************/
 bool robot_stopped_condition::first_step (){
@@ -329,6 +330,7 @@ int robot_stopped_condition::rse_list_length(void) const
 }
 
 /****************** KONIEC: METODY ZWIAZANE Z LISTA RSE ********************/
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

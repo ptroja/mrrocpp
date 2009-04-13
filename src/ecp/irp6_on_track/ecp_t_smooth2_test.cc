@@ -9,6 +9,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 //Constructors
 ecp_t_smooth2_test::ecp_t_smooth2_test(configurator &_config): ecp_task(_config){
@@ -56,13 +57,14 @@ void ecp_t_smooth2_test::main_task_algorithm(void ) {
 	ecp_termination_notice();
 };
 
+}
 } // namespace irp6ot
 
 namespace common {
 namespace task {
 
 ecp_task* return_created_ecp_task(configurator &_config){
-	return new irp6ot::ecp_t_smooth2_test(_config);
+	return new irp6ot::task::ecp_t_smooth2_test(_config);
 }
 
 }

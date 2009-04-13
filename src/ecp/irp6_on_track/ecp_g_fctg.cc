@@ -32,6 +32,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 // Mutex do wykonywania odczytow z czujnika.
 //pthread_mutex_t FORCE_SENSOR_READINGS_MUTEX = PTHREAD_MUTEX_INITIALIZER;
@@ -559,6 +560,8 @@ void force_controlled_trajectory_generator::insert_position_list_element (double
     };
 
 /**************** KONIEC: METODY ZWIAZANE Z LISTA POZYCJI ******************/
+
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

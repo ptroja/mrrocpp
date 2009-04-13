@@ -20,6 +20,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 
 y_simple_generator::y_simple_generator(common::task::ecp_task& _ecp_task, int step):
@@ -133,6 +134,7 @@ bool y_simple_generator::next_step (std::map <SENSOR_ENUM, ::sensor*>& sensor_m 
 	return true;
 };  // end:  y_simple_generator::next_step (, robot& the_robot )
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

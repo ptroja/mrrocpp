@@ -25,6 +25,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 // ####################################################################
 // ################ KLASA Robot Position Digital Scales Reading  Element ##################
@@ -92,6 +93,7 @@ class robot_stopped_condition : public common::generator::ecp_generator {
 		void get_current_position(double current_position[6]);
 	}; // end: class robot_stopped_condition
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

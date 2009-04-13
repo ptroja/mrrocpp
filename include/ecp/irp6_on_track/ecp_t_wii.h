@@ -8,6 +8,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 
 /**
@@ -18,7 +19,7 @@ class ecp_task_wii: public common::task::ecp_task
 {
 protected:
 	//Generator ruchu
-	ecp_wii_generator* eg;
+	generator::ecp_wii_generator* eg;
 	common::generator::ecp_smooth_generator* sg;
 
 public:
@@ -42,6 +43,7 @@ public:
 	void main_task_algorithm(void);
 };
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

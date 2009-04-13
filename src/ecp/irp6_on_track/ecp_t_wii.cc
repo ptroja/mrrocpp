@@ -15,6 +15,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 ecp_task_wii::ecp_task_wii(configurator &_config) : ecp_task(_config) {};
 
@@ -34,7 +35,7 @@ void ecp_task_wii::main_task_algorithm(void)
 	double* firstPosition;
 
     sg = new common::generator::ecp_smooth_generator(*this,true);
-    eg = new ecp_wii_generator(*this);
+    eg = new generator::ecp_wii_generator(*this);
     
     eg->sensor_m[SENSOR_WIIMOTE] = sensor_m[SENSOR_WIIMOTE];
 	firstPosition = eg->getFirstPosition();
@@ -51,6 +52,7 @@ void ecp_task_wii::main_task_algorithm(void)
     ecp_termination_notice();
 }
 
+}
 } // namespace irp6ot
 
 namespace common {
@@ -58,7 +60,7 @@ namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new irp6ot::ecp_task_wii(_config);
+	return new irp6ot::task::ecp_task_wii(_config);
 }
 
 }

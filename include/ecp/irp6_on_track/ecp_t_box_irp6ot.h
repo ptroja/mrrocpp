@@ -9,6 +9,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 class ecp_t_box_irp6ot: public common::task::ecp_task {
   
@@ -23,6 +24,7 @@ class ecp_t_box_irp6ot: public common::task::ecp_task {
 		void main_task_algorithm(void);
 };
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

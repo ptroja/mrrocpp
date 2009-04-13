@@ -32,6 +32,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 /********************************* GLOBALS **********************************/
 
@@ -444,6 +445,8 @@ void trajectory_reproduce_generator::insert_interpose_list_element (POSE_SPECIFI
     }; // end: insert_interpose_list_element
 
 /**********  KONIEC: METODY ZWIAZANE Z LISTA POZYCJI POSREDNICH ************/
+
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

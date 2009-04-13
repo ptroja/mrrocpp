@@ -9,6 +9,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 #define PI 3.141592
 
@@ -53,6 +54,7 @@ public:
     void execute_motion(void);
 };
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

@@ -13,6 +13,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 #define C_0 0.1
 #define C_1 0.1
@@ -29,6 +30,7 @@ class ecp_wii_velocity_generator : public common::generator::ecp_tff_nose_run_ge
     virtual bool next_step();
 };
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

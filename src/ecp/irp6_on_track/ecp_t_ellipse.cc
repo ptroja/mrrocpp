@@ -15,6 +15,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 ecp_task_ellipse::ecp_task_ellipse(configurator &_config) : ecp_task(_config) {};
 
@@ -38,7 +39,7 @@ void ecp_task_ellipse::main_task_algorithm(void)
 	a = read_double((char*)"a",0,MAX_MAJOR);
 	b = read_double((char*)"b",0,MAX_MINOR);
     sg = new common::generator::ecp_smooth_generator(*this,true);
-    eg = new ecp_ellipse_generator(*this,a,b,100);
+    eg = new generator::ecp_ellipse_generator(*this,a,b,100);
     firstPosition = eg->getFirstPosition();
     
 	sg->reset();
@@ -86,6 +87,7 @@ double ecp_task_ellipse::read_double(char* name,double min,double max)
 	}
 }
 
+}
 } // namespace irp6ot
 
 namespace common {
@@ -93,7 +95,7 @@ namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new irp6ot::ecp_task_ellipse(_config);
+	return new irp6ot::task::ecp_task_ellipse(_config);
 }
 
 }

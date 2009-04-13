@@ -22,10 +22,11 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 class ecp_task_pw_scena_irp6ot: public common::task::ecp_task  {
 
-	ecp_g_pw_scena* scena_gen;
+	generator::ecp_g_pw_scena* scena_gen;
 	//Smoth movement generator
 	common::generator::ecp_smooth_generator* smooth_gen;
 	//Calibration of force
@@ -51,6 +52,7 @@ public:
 	void init_td(POSE_SPECIFICATION ps, int internode_no);
 };
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

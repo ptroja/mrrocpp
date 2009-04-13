@@ -23,6 +23,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 /*
  double measure_border_u[]={1.090, 0.150, 0.305, 0.606, 1.57, 3.12}; //Zmienic ogranicz Z
@@ -893,6 +894,8 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 }
 ; // end: bool tight_coop_generator::next_step ()
 
+
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

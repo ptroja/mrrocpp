@@ -23,6 +23,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 // ####################################################################
 // ###########  KLASA do ruszania robotem, ruch kontrolowany za  pomoca czujnika sily    #########
@@ -113,6 +114,7 @@ class force_controlled_trajectory_generator : public common::ecp_teach_in_genera
 }
 ; // end: class force_controlled_trajectory_generator
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

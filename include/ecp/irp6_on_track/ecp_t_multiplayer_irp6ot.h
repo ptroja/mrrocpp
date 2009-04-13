@@ -9,6 +9,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 class ecp_task_multiplayer_irp6ot : public common::task::ecp_task
 {
@@ -22,7 +23,7 @@ private:
     //podzadania
 	common::task::ecp_sub_task_gripper_opening* go_st;
 
-   	ecp_vis_sac_lx_generator *takeg;
+	generator::ecp_vis_sac_lx_generator *takeg;
    	common::generator::ecp_tff_rubik_grab_generator *rgg;
 
 
@@ -34,6 +35,7 @@ public:
     void main_task_algorithm(void);
 };
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

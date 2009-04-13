@@ -21,6 +21,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 class ecp_g_tbtest : public common::generator::ecp_generator
 {
@@ -39,6 +40,7 @@ public:
     virtual bool next_step();
 };
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

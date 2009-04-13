@@ -28,10 +28,11 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-extern irp6ot::ecp_task_fct_irp6ot *ecp_t;
+
+extern irp6ot::task::ecp_task_fct_irp6ot *ecp_t;
 } // namespace common 
 namespace irp6ot {
-
+namespace task {
 
 
 // Kanal komunikacyjny z procesem MP.
@@ -40,7 +41,7 @@ extern name_attach_t *ecp_attach;
 name_attach_t * UI_ECP_attach;
 
 // Obiekt generator trajektorii.
-force_controlled_trajectory_generator *fctg;
+generator::force_controlled_trajectory_generator *fctg;
 
 // Flaga uzywana do informmowania o koncu pracy.
 short TERMINATE=false;
@@ -291,7 +292,7 @@ void ecp_task_fct_irp6ot::task_initialization(void)
 		throw common::ECP_main_error(SYSTEM_ERROR, NAME_ATTACH_ERROR);
 	}
 	// Stworzenie generatora trajektorii.
-	fctg = new force_controlled_trajectory_generator(*this);
+	fctg = new generator::force_controlled_trajectory_generator(*this);
 	// Sprawdzanie, czy nalezy uzywac czujnik sily.
 	short use_force_sensor = config.return_int_value("use_force_sensor");
 	if (use_force_sensor == 1) {
@@ -322,6 +323,7 @@ void ecp_task_fct_irp6ot::main_task_algorithm(void)
 	show_force_control_window(UI_fd);
 }
 
+}
 } // namespace irp6ot
 
 namespace common {
@@ -329,7 +331,7 @@ namespace task {
 
 ecp_task* return_created_ecp_task(configurator &_config)
 {
-	return new irp6ot::ecp_task_fct_irp6ot(_config);
+	return new irp6ot::task::ecp_task_fct_irp6ot(_config);
 }
 }
 } // namespace common

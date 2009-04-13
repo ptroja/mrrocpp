@@ -16,6 +16,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 class ecp_vis_sac_lx_generator : public common::generator::ecp_generator {
 protected:
@@ -186,6 +187,7 @@ int steps2switch;//=0;
 }; // end: class irp6ot_calibration_generator
 // --------------------------------------------------------------------------
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

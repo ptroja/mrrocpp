@@ -34,9 +34,10 @@ namespace ecp {
 
 namespace common {
 
-extern irp6ot::ecp_task_tr_irp6ot* ecp_t;
+extern irp6ot::task::ecp_task_tr_irp6ot* ecp_t;
 } // namespace common 
 namespace irp6ot {
+namespace task {
 
 
 // Kanal komunikacyjny z procesem UI.
@@ -47,9 +48,9 @@ name_attach_t * UI_ECP_attach;
 
 
 // Obiekt generator trajektorii.
-trajectory_reproduce_generator *trg;
+generator::trajectory_reproduce_generator *trg;
 // Obiekt warunek sprawdzania, czy robot sie zatrzymal.
-robot_stopped_condition *rsc;
+generator::robot_stopped_condition *rsc;
 
 // Flaga uzywana do informowania o koncu pracy.
 bool TERMINATE=false;
@@ -381,10 +382,10 @@ void ecp_task_tr_irp6ot::task_initialization(void)
 	}
 
 	// Stworznie obiektu - generator uczacy.
-	trg = new trajectory_reproduce_generator(*this);
+	trg = new generator::trajectory_reproduce_generator(*this);
 
 	// Stworzenie obiektu - warunek.
-	rsc = new robot_stopped_condition(*this);
+	rsc = new generator::robot_stopped_condition(*this);
 
 	// Stworznie obiektu - czujnik zlozony z linialow.
 	//  ini_con->create_vsp ("[vsp_dss]");
@@ -426,6 +427,7 @@ void ecp_task_tr_irp6ot::main_task_algorithm(void)
 	show_trajectory_reproduce_window(UI_fd);
 }
 
+}
 } // namespace irp6ot
 
 namespace common {
@@ -433,7 +435,7 @@ namespace task {
 
 ecp_task* return_created_ecp_task(configurator &_config)
 {
-	return new irp6ot::ecp_task_tr_irp6ot(_config);
+	return new irp6ot::task::ecp_task_tr_irp6ot(_config);
 }
 }
 } // namespace common

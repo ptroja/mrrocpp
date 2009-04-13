@@ -7,6 +7,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 ecp_g_pw_kolo::ecp_g_pw_kolo (common::task::ecp_task& _ecp_task)
         : ecp_generator (_ecp_task)
@@ -103,6 +104,8 @@ bool ecp_g_pw_kolo::next_step()
     the_robot->EDP_data.next_gripper_coordinate = next_position[6];
     printf("po robocie \n");
     return true;
+}
+
 }
 } // namespace irp6ot
 } // namespace ecp

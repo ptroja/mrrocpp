@@ -20,6 +20,8 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
+
 
 bool y_simple_generator::first_step ( )
 {
@@ -122,6 +124,7 @@ bool y_simple_generator::next_step ( )
 }
 ; // end:  y_simple_generator::next_step (, robot& the_robot )
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

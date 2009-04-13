@@ -23,6 +23,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 //#############################################################################
 
@@ -44,6 +45,7 @@ public:
 
 }; //end: class all_irp6ot_linear_generator
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

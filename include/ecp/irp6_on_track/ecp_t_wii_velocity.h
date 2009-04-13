@@ -9,6 +9,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 /**
  * Odtwarza orientacje kontrolera
@@ -40,7 +41,7 @@ public:
 	void main_task_algorithm(void);
 };
 
-
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

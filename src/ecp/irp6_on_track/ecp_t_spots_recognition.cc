@@ -19,6 +19,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 //own libraries
 //Constructors
@@ -55,7 +56,7 @@ if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     sr_ecp_msg->message("IRp6 Postument loaded");
 }*/
 	// Create spots generator and pass sensor to it.
-	generator = new ecp_spots_generator(*this);
+	generator = new generator::ecp_spots_generator(*this);
  	generator->sensor_m = sensor_m;
 
 	// Create smooth generator.
@@ -93,6 +94,7 @@ void ecp_t_spots_recognition::main_task_algorithm(void)
     }
 }
 
+}
 } // namespace irp6ot
 
 namespace common {
@@ -100,7 +102,7 @@ namespace task {
 
 ecp_task* return_created_ecp_task(configurator &_config)
 {
-	return new irp6ot::ecp_t_spots_recognition(_config);
+	return new irp6ot::task::ecp_t_spots_recognition(_config);
 }
 
 }

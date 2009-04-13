@@ -32,6 +32,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 class ecp_t_spots_recognition: public common::task::ecp_task
 {
@@ -39,7 +40,7 @@ class ecp_t_spots_recognition: public common::task::ecp_task
 
 	protected:
 
-		ecp_spots_generator* generator;
+		generator::ecp_spots_generator* generator;
 		common::generator::ecp_smooth_generator* smooth;
 		common::generator::y_nose_run_force_generator* nose;
 
@@ -52,6 +53,7 @@ class ecp_t_spots_recognition: public common::task::ecp_task
 		void main_task_algorithm(void);
 };
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

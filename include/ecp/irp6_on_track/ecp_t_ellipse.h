@@ -8,6 +8,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 //limity na wartosc polosi w metrach
 #define MAX_MAJOR 0.2
@@ -21,7 +22,7 @@ class ecp_task_ellipse: public common::task::ecp_task
 {
 protected:
 	//Generator ruchu
-	ecp_ellipse_generator* eg;
+	generator::ecp_ellipse_generator* eg;
 	common::generator::ecp_smooth_generator* sg;
 	
 	/**
@@ -55,6 +56,7 @@ public:
 	void main_task_algorithm(void);
 };
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

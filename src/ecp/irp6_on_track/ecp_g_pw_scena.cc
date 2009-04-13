@@ -3,6 +3,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 ecp_g_pw_scena::ecp_g_pw_scena(common::task::ecp_task& _ecp_task) :
 	ecp_generator(_ecp_task) {
@@ -160,6 +161,8 @@ bool ecp_g_pw_scena::next_step() {
 	return true;
 }
 
+
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

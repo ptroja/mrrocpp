@@ -20,6 +20,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 void ecp_task_pr_irp6ot::short_move_up ()
 {
@@ -171,14 +172,17 @@ void ecp_task_pr_irp6ot::main_task_algorithm(void)
 	}
 }
 
+}
 } // namespace irp6ot
 
 namespace common {
 namespace task {
+
 common::task::ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new irp6ot::ecp_task_pr_irp6ot(_config);
+	return new irp6ot::task::ecp_task_pr_irp6ot(_config);
 }
+
 } // namespace task
 } // namespace common
 } // namespace ecp

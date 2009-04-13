@@ -19,6 +19,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 
 // KONSTRUKTORY
@@ -50,7 +51,7 @@ void ecp_task_vis_irp6ot::task_initialization(void)
 
 void ecp_task_vis_irp6ot::main_task_algorithm(void)
 {
-	seven_eye_run_linear_generator ynrlg(*this, 4);
+	generator::seven_eye_run_linear_generator ynrlg(*this, 4);
 	ynrlg.sensor_m = sensor_m;
 
 	for(;;)
@@ -61,6 +62,7 @@ void ecp_task_vis_irp6ot::main_task_algorithm(void)
 	}
 }
 
+}
 } // namespace irp6ot
 
 namespace common {
@@ -68,7 +70,7 @@ namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new irp6ot::ecp_task_vis_irp6ot(_config);
+	return new irp6ot::task::ecp_task_vis_irp6ot(_config);
 }
 }
 } // namespace common

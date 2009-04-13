@@ -23,6 +23,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 #define PRINT 1
 
@@ -768,6 +769,7 @@ clock_gettime( CLOCK_REALTIME , &e_time);
    return true;
 }; // end: bool irp6ot_linear_generator::next_step ( )
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

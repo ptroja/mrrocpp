@@ -25,6 +25,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 // ####################################################################
 // #############    KLASA do odtwarzania listy pozycji i odczytywania linialow    ###############
@@ -78,6 +79,7 @@ class trajectory_reproduce_generator : public common::ecp_teach_in_generator {
 		void dangerous_force_handler(ecp_generator::ECP_error e);
 	}; // end: class trajectory_reproduce_generator
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

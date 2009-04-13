@@ -11,6 +11,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 using namespace std;
 
@@ -269,6 +270,7 @@ fprintf(fd, "%f %f %f 1.0 %f\n", 0.01*calib_data.sensor_union.sp_r.x[i], 0.01*ca
 fclose(fd);
 }*/
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

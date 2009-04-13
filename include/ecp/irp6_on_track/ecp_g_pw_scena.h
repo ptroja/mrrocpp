@@ -20,6 +20,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 
 //enum SCENE_STATE {NOT_RECOGNIZED,RECOGNIZED}
@@ -42,6 +43,7 @@ public:
     virtual bool next_step();
 };
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

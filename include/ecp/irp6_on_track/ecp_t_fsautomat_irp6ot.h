@@ -20,6 +20,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 class ecp_task_fsautomat_irp6ot: public common::task::ecp_task
 {
@@ -52,6 +53,7 @@ class ecp_task_fsautomat_irp6ot: public common::task::ecp_task
 
 };
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

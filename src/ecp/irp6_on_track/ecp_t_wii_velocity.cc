@@ -15,6 +15,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 ecp_task_wii_velocity::ecp_task_wii_velocity(configurator &_config) : ecp_task(_config) {};
 
@@ -31,7 +32,7 @@ void ecp_task_wii_velocity::task_initialization(void)
 
 void ecp_task_wii_velocity::main_task_algorithm(void)
 {
-	eg = new ecp_wii_velocity_generator(*this);
+	eg = new generator::ecp_wii_velocity_generator(*this);
 //	eg = new ecp_tff_nose_run_generator(*this,8);
 
     eg->sensor_m[SENSOR_WIIMOTE] = sensor_m[SENSOR_WIIMOTE];
@@ -42,6 +43,7 @@ void ecp_task_wii_velocity::main_task_algorithm(void)
     }
 }
 
+}
 } // namespace irp6ot
 
 namespace common {
@@ -49,7 +51,7 @@ namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new irp6ot::ecp_task_wii_velocity(_config);
+	return new irp6ot::task::ecp_task_wii_velocity(_config);
 }
 
 }

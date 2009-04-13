@@ -6,6 +6,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 class ecp_task_pr_irp6ot: public common::task::ecp_task  {
 protected:
@@ -27,6 +28,7 @@ public:
 	
 };
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

@@ -15,6 +15,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 class seven_eye_run_linear_generator : public common::generator::ecp_generator {
 protected:
@@ -46,6 +47,7 @@ public:
 }; // end: class irp6ot_calibration_generator
 // --------------------------------------------------------------------------
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

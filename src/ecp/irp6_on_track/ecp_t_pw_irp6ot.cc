@@ -6,6 +6,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 //Konstruktory
 ecp_task_pw_irp6ot::ecp_task_pw_irp6ot(configurator &_config) : ecp_task(_config)
@@ -13,8 +14,8 @@ ecp_task_pw_irp6ot::ecp_task_pw_irp6ot(configurator &_config) : ecp_task(_config
 
 void ecp_task_pw_irp6ot::task_initialization(void)
 {
-	ecp_m_robot=new ecp_irp6_on_track_robot(*this);
-	kolo_gen=new ecp_g_pw_kolo(*this);
+	ecp_m_robot= new ecp_irp6_on_track_robot(*this);
+	kolo_gen= new generator::ecp_g_pw_kolo(*this);
 
 	sr_ecp_msg->message("ECP PW loaded");
 }
@@ -30,6 +31,7 @@ void ecp_task_pw_irp6ot::main_task_algorithm(void)
 	ecp_termination_notice();
 }
 
+}
 } // namespace irp6ot
 
 namespace common {
@@ -37,7 +39,7 @@ namespace task {
 
 ecp_task* return_created_ecp_task(configurator &_config)
 {
-	return new irp6ot::ecp_task_pw_irp6ot(_config);
+	return new irp6ot::task::ecp_task_pw_irp6ot(_config);
 }
 
 }

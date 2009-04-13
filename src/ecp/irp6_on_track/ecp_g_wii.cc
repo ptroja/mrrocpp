@@ -7,6 +7,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 ecp_wii_generator::ecp_wii_generator (common::task::ecp_task& _ecp_task) : ecp_generator (_ecp_task) {}
 
@@ -115,6 +116,8 @@ void ecp_wii_generator::execute_motion(void)
 
 		} /* end: switch */
 	}
+}
+
 }
 } // namespace irp6ot
 } // namespace ecp

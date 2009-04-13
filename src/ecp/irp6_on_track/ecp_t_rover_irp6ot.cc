@@ -21,6 +21,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 // KONSTRUKTORY
 ecp_task_vislx_irp6ot::ecp_task_vislx_irp6ot(configurator &_config) : ecp_task(_config)
@@ -55,7 +56,7 @@ void ecp_task_vislx_irp6ot::task_initialization(void)
 
 void ecp_task_vislx_irp6ot::main_task_algorithm(void)
 {
-	ecp_vis_sac_lx_generator ynrlg(*this, 4);
+	generator::ecp_vis_sac_lx_generator ynrlg(*this, 4);
 	ynrlg.sensor_m = sensor_m;
 
 	common::generator::bias_edp_force_generator befg(*this);
@@ -74,6 +75,7 @@ void ecp_task_vislx_irp6ot::main_task_algorithm(void)
 			sr_ecp_msg->message("GRAB-STOP");
 }
 
+}
 } // namespace irp6ot
 
 namespace common {
@@ -81,7 +83,7 @@ namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new irp6ot::ecp_task_vislx_irp6ot(_config);
+	return new irp6ot::task::ecp_task_vislx_irp6ot(_config);
 }
 
 /*
@@ -174,6 +176,7 @@ ecp_task* return_created_ecp_task (configurator &_config)
 	return new ecp_task_vislx_irp6ot(_config);
 };
 */
+
 }
 } // namespace common
 } // namespace ecp

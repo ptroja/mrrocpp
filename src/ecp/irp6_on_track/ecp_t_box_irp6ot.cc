@@ -4,6 +4,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 //Constructors
 ecp_t_box_irp6ot::ecp_t_box_irp6ot(configurator &_config): common::task::ecp_task(_config){
@@ -36,13 +37,14 @@ void ecp_t_box_irp6ot::main_task_algorithm(void ){
 	//ecp_wait_for_stop();
 };
 
+}
 } // namespace irp6ot
 
 namespace common {
 namespace task {
 
 ecp_task* return_created_ecp_task(configurator &_config){
-	return new irp6ot::ecp_t_box_irp6ot(_config);
+	return new irp6ot::task::ecp_t_box_irp6ot(_config);
 }
 
 }

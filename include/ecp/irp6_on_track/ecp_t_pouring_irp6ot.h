@@ -8,6 +8,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 class ecp_task_pouring_irp6ot: public common::task::ecp_task
 {
@@ -28,6 +29,7 @@ public:
 
 };
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

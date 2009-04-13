@@ -15,6 +15,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 #define PI 3.14159265
 #define DEG 0.0174444 //Jeden stopien wyrazony w radianach
@@ -38,6 +39,7 @@ public:
     virtual bool next_step();
 };
 
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

@@ -4,6 +4,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace task {
 
 #define robot1
 
@@ -27,7 +28,7 @@ void ecp_task_pw_scena_irp6ot::task_initialization(void) {
 //
 
 		//Generator ruchu dla rozpoznawania sceny.
-		scena_gen = new ecp_g_pw_scena(*this);
+		scena_gen = new generator::ecp_g_pw_scena(*this);
 		scena_gen->sensor_m = sensor_m;
 
 		planar_vis = new ecp_vis_ib_eih_planar_irp6ot(*this);
@@ -130,13 +131,14 @@ void ecp_task_pw_scena_irp6ot::init_td(POSE_SPECIFICATION pspec, int internode_n
 	td.value_in_step_no=internode_no-2;			//motion time-2 ??
 }
 
+}
 } // namespace irp6ot
 
 namespace common {
 namespace task {
 
 ecp_task* return_created_ecp_task(configurator &_config) {
-	return new irp6ot::ecp_task_pw_scena_irp6ot(_config);
+	return new irp6ot::task::ecp_task_pw_scena_irp6ot(_config);
 	
 }
 

@@ -7,6 +7,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
+namespace generator {
 
 sem_t sem;
 
@@ -111,7 +112,7 @@ bool ecp_wii_velocity_generator::next_step()
 }
 ; // end: bool ecp_wii_velocity_generator::next_step ()
 
-
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
