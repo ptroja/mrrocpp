@@ -58,12 +58,12 @@ void ecp_task_tzu_fs::task_initialization(void)
 		str.open("../postument_results.txt");
 	}
 
-	sg = new generator::ecp_smooth_generator (*this, true, false);
-	befg = new generator::bias_edp_force_generator(*this);
+	sg = new generator::smooth (*this, true, false);
+	befg = new generator::bias_edp_force(*this);
 	fmg = new generator::force_meassure_generator(*this,100000,20);
-	ftcg = new generator::ecp_force_tool_change_generator(*this);
-	tcg = new generator::ecp_tool_change_generator(*this,true);
-	etnrg = new generator::ecp_tff_nose_run_generator(*this,8);
+	ftcg = new generator::force_tool_change(*this);
+	tcg = new generator::tool_change(*this,true);
+	etnrg = new generator::tff_nose_run(*this,8);
 	sr_ecp_msg->message("ECP loaded");
 };
 
@@ -337,7 +337,7 @@ namespace generator {
 
 /** konstruktor **/
 force_meassure_generator::force_meassure_generator(common::task::ecp_task& _ecp_task, int _sleep_time, int _meassurement_count) :
-	ecp_generator(_ecp_task)
+	base(_ecp_task)
 {
 	sleep_time = _sleep_time;
 	meassurement_count = _meassurement_count;

@@ -113,7 +113,7 @@ void ecp_task_jarosz_irp6ot::main_task_algorithm(void)
 
 	double vp[]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 	double vk[]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-	common::generator::ecp_cubic_generator cubic(*this, tdes, vp, vk);
+	common::generator::cubic cubic(*this, tdes, vp, vk);
 	sr_ecp_msg->message("Wykonywany jest ruch o zadany przyrost polozenia/orientacji");
 	cubic.Move();
 	sr_ecp_msg->message("Ruch robota zakonczyl sie");

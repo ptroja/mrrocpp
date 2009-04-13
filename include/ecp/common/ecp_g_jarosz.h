@@ -33,7 +33,7 @@ namespace generator {
 // KLASA BAZOWA dla generatorow o zadany przyrost polozenia/orientacji  
 // ####################################################################################################
 
-class ecp_delta_generator : public common::generator::ecp_generator 
+class delta : public common::generator::base 
 {
 protected:
 
@@ -48,7 +48,7 @@ protected:
   double v_max_aa[MAX_SERVOS_NR];			// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 
 public:	
-	ecp_delta_generator(common::task::ecp_task& _ecp_task);
+	delta(common::task::ecp_task& _ecp_task);
 
    trajectory_description td;   
 
@@ -61,7 +61,7 @@ public:
 // Generator prostoliniowy o zadany przyrost polozenia/orientacji  
 // ####################################################################################################
 
-class ecp_linear_generator : public ecp_delta_generator 
+class linear : public delta 
 {
 protected:
 	int mp_communication_mode; // by Y - 0 bez TASK TERMINATED, 1 - z TASK TERMINATED
@@ -69,8 +69,8 @@ protected:
 	
 public:
 	// konstruktor
-	ecp_linear_generator (common::task::ecp_task& _ecp_task);
-	ecp_linear_generator (common::task::ecp_task& _ecp_task, trajectory_description tr_des, int mp_communication_mode_arg = 1);
+	linear (common::task::ecp_task& _ecp_task);
+	linear (common::task::ecp_task& _ecp_task, trajectory_description tr_des, int mp_communication_mode_arg = 1);
 	
   virtual bool first_step ();
   virtual bool next_step ();
@@ -98,7 +98,7 @@ public:
  * 	funkcje paraboliczne zostana sklejone razem tak, aby uzyskac ciagle krzywe 
  * 	przemieszczen i predkosci.
  */
-class ecp_linear_parabolic_generator : public ecp_delta_generator
+class linear_parabolic : public delta
 {
 protected:
   /** Flaga, mowiaca czy jest to pierwszy przedzial interpolacji. */
@@ -123,7 +123,7 @@ protected:
 public:	
 
   /** Konstruktor domyslny. */
-  ecp_linear_parabolic_generator (common::task::ecp_task& _ecp_task, 
+  linear_parabolic (common::task::ecp_task& _ecp_task, 
                                   trajectory_description tr_des, 
                                   const double *time_a , 
                                   const double *time_b
@@ -151,13 +151,13 @@ public:
 // wykorzystujacych do interpolacji wielomiany
 // ####################################################################################################
 
-class ecp_polynomial_generator : public ecp_delta_generator 
+class polynomial : public delta 
 {
 protected:
    int first_interval;             // flaga, m�wiaca czy jest to pierwszy przedzial interpolacji
   
 public:	
-   ecp_polynomial_generator (common::task::ecp_task& _ecp_task);
+   polynomial (common::task::ecp_task& _ecp_task);
    virtual bool first_step ();	
    virtual bool next_step () = 0;	 
 
@@ -169,7 +169,7 @@ public:
 // predkosc poczatkowa i koncowa moze byc zadawana 
 // ####################################################################################################
 
-class ecp_cubic_generator : public ecp_polynomial_generator 
+class cubic : public polynomial 
 {
 protected:
 
@@ -183,7 +183,7 @@ protected:
 public:
    
    // ---------konstruktor dla dla zadanych predkosci vp i vk ---------------
-   ecp_cubic_generator (common::task::ecp_task& _ecp_task, trajectory_description tr_des, double *vp, double *vk); 		 
+   cubic (common::task::ecp_task& _ecp_task, trajectory_description tr_des, double *vp, double *vk); 		 
    
    virtual bool next_step ();	 
 
@@ -195,7 +195,7 @@ public:
 // Generator o zadany przyrost polozenia/orientacji wykorzystujacy do interpolacji wielomian 5 stopnia
 // ciaglosc predkosci, ciaglosc przyspieszenia
 // ####################################################################################################
-class ecp_quintic_generator : public ecp_polynomial_generator 
+class quintic : public polynomial 
 {
 protected:
    double A0[MAX_SERVOS_NR];		// parametry wielomianu
@@ -212,7 +212,7 @@ protected:
 public:	
 
 	// --------- konstruktor dla dla zadanych predkosci vp i vk i przysp. ap i ak -------------
-   ecp_quintic_generator (common::task::ecp_task& _ecp_task, trajectory_description tr_des, double *vp, double *vk, double *ap, double *ak);
+   quintic (common::task::ecp_task& _ecp_task, trajectory_description tr_des, double *vp, double *vk, double *ap, double *ak);
 
    virtual bool next_step ();	 
 
@@ -224,7 +224,7 @@ public:
 // ################################     KLASA BAZOWA dla SPLAJNOW     #################################
 // ####################################################################################################
 
-class ecp_spline_generator : public ecp_teach_in_generator 
+class spline : public ecp_teach_in_generator 
 {
 protected:
   ecp_taught_in_pose tip;			// Kolejna pozycja.
@@ -249,7 +249,7 @@ protected:
   virtual bool next_step ()=0;
   
   public:
-   ecp_spline_generator (common::task::ecp_task& _ecp_task);
+   spline (common::task::ecp_task& _ecp_task);
 
 }; // end : irp6p_spline_generator
 
@@ -258,7 +258,7 @@ protected:
 // z dokladna zadana pozycja koncowa
 // ####################################################################################################
 
-class ecp_parabolic_teach_in_generator : public ecp_spline_generator
+class parabolic_teach_in : public spline
 {
 protected:
 
@@ -266,7 +266,7 @@ protected:
   double a[MAX_SERVOS_NR];													// tablica faktycznie realizowanych przyspieszen 
 																	// dla kolejnych osi/wspolrzednych
 public:
-	  ecp_parabolic_teach_in_generator (common::task::ecp_task& _ecp_task, double interval);
+	  parabolic_teach_in (common::task::ecp_task& _ecp_task, double interval);
 
   	virtual bool first_step ();
   	virtual bool next_step ();
@@ -277,7 +277,7 @@ public:
 // Generator odtwarzajacy liste nauczonych pozycji, wykorzystywany do kalibracji
 // ####################################################################################################
 
-class ecp_calibration_generator : public ecp_spline_generator 
+class calibration : public spline 
 {
 protected:
 
@@ -285,7 +285,7 @@ protected:
   double a[MAX_SERVOS_NR];													// tablica faktycznie realizowanych przyspieszen 
 
 public:	
-	  ecp_calibration_generator (common::task::ecp_task& _ecp_task, double interval);
+	  calibration (common::task::ecp_task& _ecp_task, double interval);
   
    virtual bool first_step ();
    virtual bool next_step ();
@@ -297,7 +297,7 @@ public:
 // z rozpedzaniem i hamowaniem miedzy pozycjami
 // ####################################################################################################
 
-class ecp_cubic_spline_generator : public ecp_spline_generator
+class cubic_spline : public spline
 {
 protected:
 
@@ -306,8 +306,8 @@ protected:
    double A3[MAX_SERVOS_NR]; 
 
 public:	
-	  ecp_cubic_spline_generator();
-	  ecp_cubic_spline_generator (common::task::ecp_task& _ecp_task, double interval);
+	  cubic_spline();
+	  cubic_spline (common::task::ecp_task& _ecp_task, double interval);
 
    virtual bool first_step ();	 
    virtual bool next_step ();		 
@@ -319,7 +319,7 @@ public:
 // Generator interpolujacy sklejanymi wielomianami 3 stopnia
 // ####################################################################################################
 
-class ecp_smooth_cubic_spline_generator : public ecp_spline_generator
+class smooth_cubic_spline : public spline
 {
 protected:
 
@@ -333,7 +333,7 @@ protected:
   void Build_Coeff (double *tt, double *yy, int nn, double vvp, double vvk, double *aa);	     
 
 public:
-	  ecp_smooth_cubic_spline_generator (common::task::ecp_task& _ecp_task, double *vp, double *vk, double interval);
+	  smooth_cubic_spline (common::task::ecp_task& _ecp_task, double *vp, double *vk, double interval);
 
    virtual bool first_step ();		     
    virtual bool next_step ();			     
@@ -345,7 +345,7 @@ public:
 // z rozpedzaniem i hamowaniem miedzy pozycjami
 // ####################################################################################################
 
-class ecp_quintic_spline_generator : public ecp_spline_generator
+class quintic_spline : public spline
 {
 protected:
 
@@ -355,7 +355,7 @@ protected:
    double A5[MAX_SERVOS_NR]; 
 
 public:	
-	  ecp_quintic_spline_generator (common::task::ecp_task& _ecp_task, double interval);
+	  quintic_spline (common::task::ecp_task& _ecp_task, double interval);
 
    virtual bool first_step ();		 
    virtual bool next_step ();			 
@@ -380,7 +380,7 @@ public:
 // Generator odtwarzajacy trajektorie zadana analitycznie - elipsa
 // ####################################################################################################
 
-class ecp_elipsoid_generator : public ecp_teach_in_generator {
+class elipsoid : public ecp_teach_in_generator {
 
 protected:
   ecp_taught_in_pose tip;			// Kolejna z listy nauczonych pozycji.
@@ -410,7 +410,7 @@ protected:
   double v_max_aa[MAX_SERVOS_NR];			// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 
 public:
-	  ecp_elipsoid_generator (common::task::ecp_task& _ecp_task);
+	  elipsoid (common::task::ecp_task& _ecp_task);
 
 
   virtual bool first_step ();
@@ -435,12 +435,12 @@ public:
 
 
 // Zapis rzeczywistej trajektorii do pliku
-void ecp_save_trajectory (ecp_elipsoid_generator& the_generator, common::task::ecp_task& _ecp_task);
+void ecp_save_trajectory (elipsoid& the_generator, common::task::ecp_task& _ecp_task);
 
 // --------------------------------------------------------------------------
 // Zapis danych z kalibracji do pliku
-void ecp_save_extended_file (ecp_calibration_generator& the_generator,
-	 ecp_operator_reaction_condition& the_condition, common::task::ecp_task& _ecp_task);
+void ecp_save_extended_file (calibration& the_generator,
+	 operator_reaction_condition& the_condition, common::task::ecp_task& _ecp_task);
 
 } // namespace generator
 } // namespace common

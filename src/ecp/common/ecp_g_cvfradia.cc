@@ -27,7 +27,7 @@ namespace generator {
 /*!
  * First step method.. .
  */
-bool ecp_cvfradia_generator::first_step()
+bool cvfradia::first_step()
 {
 	// Set robot parameters.
 /*	the_robot->EDP_data.instruction_type = GET;
@@ -44,7 +44,7 @@ bool ecp_cvfradia_generator::first_step()
 /*!
  * Next step method.
  */
-bool ecp_cvfradia_generator::next_step()
+bool cvfradia::next_step()
 {
 	// Wait for 0.2s.
 	usleep(200000);

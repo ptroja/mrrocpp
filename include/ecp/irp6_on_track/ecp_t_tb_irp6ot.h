@@ -16,13 +16,13 @@ namespace task {
 
 class ecp_t_tb_irp6ot: public common::task::ecp_task{
 	protected:
-		common::generator::ecp_smooth_generator* sgen;					//smooth movement generator
-		common::generator::bias_edp_force_generator* befgen;			//calibration of force
-		common::generator::ecp_tff_gripper_approach_generator* gagen;	//gripper approach with force control
-		common::generator::ecp_linear_generator *lgen;					//linear generator
+		common::generator::smooth* sgen;					//smooth movement generator
+		common::generator::bias_edp_force* befgen;			//calibration of force
+		common::generator::tff_gripper_approach* gagen;	//gripper approach with force control
+		common::generator::linear *lgen;					//linear generator
 		trajectory_description tdes;				//trajectory description from com_buf.h
 		common::task::ecp_sub_task_gripper_opening* go_st;		//sub_task_gripper_opening
-		common::generator::ecp_sleep_generator* sleepgen;				//sleep generator
+		common::generator::sleep* sleepgen;				//sleep generator
 
 	public:
 		ecp_t_tb_irp6ot(configurator &_config);

@@ -15,7 +15,7 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-class ecp_sleep_generator : public common::generator::ecp_generator
+class sleep : public common::generator::base
 {
 	private:
 		double waittime;		//seconds to wait
@@ -25,7 +25,7 @@ class ecp_sleep_generator : public common::generator::ecp_generator
 		timespec starttime;
 
 	public:
-		ecp_sleep_generator(common::task::ecp_task& _ecp_task, double=1);		//constructor
+		sleep(common::task::ecp_task& _ecp_task, double=1);		//constructor
 		bool first_step();		//first step generation
 		bool next_step();			//next step generation
 		int init_time(double=1);	//initialize time

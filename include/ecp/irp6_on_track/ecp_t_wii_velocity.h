@@ -19,7 +19,7 @@ class ecp_task_wii_velocity: public common::task::ecp_task
 {
 protected:
 //	ecp_wii_velocity_generator* eg;
-	common::generator::ecp_tff_nose_run_generator* eg;
+	common::generator::tff_nose_run* eg;
 public:
 	/**
 	 * Tworzy obiekt zadania

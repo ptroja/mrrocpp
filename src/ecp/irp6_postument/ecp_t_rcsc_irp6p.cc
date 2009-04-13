@@ -36,14 +36,14 @@ void ecp_task_rcsc_irp6p::task_initialization(void)
     // the robot is choose dependendat on the section of configuration file sent as argv[4]
     ecp_m_robot = new ecp_irp6_postument_robot (*this);
 
-    gt = new common::generator::ecp_generator_t (*this);
-    nrg = new common::generator::ecp_tff_nose_run_generator (*this, 8);
-    rgg = new common::generator::ecp_tff_rubik_grab_generator (*this, 8);
-    gag = new common::generator::ecp_tff_gripper_approach_generator (*this, 8);
-    rfrg = new common::generator::ecp_tff_rubik_face_rotate_generator (*this, 8);
+    gt = new common::generator::transparent (*this);
+    nrg = new common::generator::tff_nose_run (*this, 8);
+    rgg = new common::generator::tff_rubik_grab (*this, 8);
+    gag = new common::generator::tff_gripper_approach (*this, 8);
+    rfrg = new common::generator::tff_rubik_face_rotate (*this, 8);
     tig = new common::ecp_teach_in_generator (*this);
-    befg = new common::generator::bias_edp_force_generator (*this);
-    sg = new common::generator::ecp_smooth_generator (*this, true);
+    befg = new common::generator::bias_edp_force (*this);
+    sg = new common::generator::smooth (*this, true);
 
     go_st = new common::task::ecp_sub_task_gripper_opening(*this);
 

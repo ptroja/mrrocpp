@@ -14,13 +14,13 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-playerjoy_generator::playerjoy_generator(common::task::ecp_task& _ecp_task, int step):
-        ecp_generator (_ecp_task)
+playerjoy::playerjoy(common::task::ecp_task& _ecp_task, int step):
+        base (_ecp_task)
 {
     step_no = step;
 }
 
-bool playerjoy_generator::first_step ( )
+bool playerjoy::first_step ( )
 {
     run_counter = 0;
     second_step = false;
@@ -42,7 +42,7 @@ bool playerjoy_generator::first_step ( )
     return true;
 }
 
-bool playerjoy_generator::next_step ( )
+bool playerjoy::next_step ( )
 {
     if (check_and_null_trigger())
     {

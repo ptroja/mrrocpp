@@ -38,7 +38,7 @@ void ecp_task_ellipse::main_task_algorithm(void)
 	
 	a = read_double((char*)"a",0,MAX_MAJOR);
 	b = read_double((char*)"b",0,MAX_MINOR);
-    sg = new common::generator::ecp_smooth_generator(*this,true);
+    sg = new common::generator::smooth(*this,true);
     eg = new generator::ecp_ellipse_generator(*this,a,b,100);
     firstPosition = eg->getFirstPosition();
     

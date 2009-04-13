@@ -17,7 +17,7 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-class seven_eye_run_linear_generator : public common::generator::ecp_generator {
+class seven_eye_run_linear_generator : public common::generator::base {
 protected:
 
 	

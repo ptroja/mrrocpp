@@ -21,7 +21,7 @@ namespace generator {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej 
-class time_generator : public common::generator::ecp_generator 
+class time : public common::generator::base 
 {
 
 protected:
@@ -35,7 +35,7 @@ public:
 	int step_no;
 	
 	// konstruktor
-	time_generator(common::task::ecp_task& _ecp_task, int step=0);  
+	time(common::task::ecp_task& _ecp_task, int step=0);  
 	
 	virtual bool first_step ();
 

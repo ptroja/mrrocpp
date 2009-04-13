@@ -47,7 +47,7 @@ name_attach_t * UI_ECP_attach;
 
 
 // Obiekt generator trajektorii.
-generator::manual_moves_automatic_measures_generator *mam_gen;
+generator::manual_moves_automatic_measures *mam_gen;
 
 // Flaga uzywana do informowania o koncu pracy.
 bool TERMINATE=false;
@@ -229,7 +229,7 @@ void ecp_task_mam::task_initialization(void)
 	}
 
 	// Stworznie obiektu - generator uczacy.
-	mam_gen = new generator::manual_moves_automatic_measures_generator(*this, 8);
+	mam_gen = new generator::manual_moves_automatic_measures(*this, 8);
 
 	// Stworznie obiektu - czujnik zlozony z linialow.
 	sensor_m[SENSOR_DIGITAL_SCALE_SENSOR] = new ecp_mp::sensor::digital_scales(SENSOR_DIGITAL_SCALE_SENSOR, "[vsp_dss]", *this);

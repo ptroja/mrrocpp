@@ -34,22 +34,22 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-void ecp_smooth_generator::set_relative(void){
+void smooth::set_relative(void){
 	type=2;
 }
 
-void ecp_smooth_generator::set_absolute(void){
+void smooth::set_absolute(void){
 	type=1;
 }
 
-bool ecp_smooth_generator::eq(double a, double b)
+bool smooth::eq(double a, double b)
 {
 	const double EPS = 0.0001;
 	const double& diff = a - b;
 	return diff < EPS && diff > -EPS; 
 }
 
-void ecp_smooth_generator::generate_next_coords (void)
+void smooth::generate_next_coords (void)
 {
     //funkcja obliczajaca polozenie w danym makrokroku
 
@@ -145,7 +145,7 @@ void ecp_smooth_generator::generate_next_coords (void)
 
 }
 
-bool ecp_smooth_generator::load_trajectory_from_xml(mp::common::Trajectory &trajectory)
+bool smooth::load_trajectory_from_xml(mp::common::Trajectory &trajectory)
 {
 	bool first_time = true;
 	int numOfPoses = trajectory.getNumberOfPoses();
@@ -173,7 +173,7 @@ bool ecp_smooth_generator::load_trajectory_from_xml(mp::common::Trajectory &traj
 	return true;
 }
 
-void ecp_smooth_generator::set_pose_from_xml(xmlNode *stateNode, bool &first_time)
+void smooth::set_pose_from_xml(xmlNode *stateNode, bool &first_time)
 {
 	char *dataLine, *value;
 	uint64_t number_of_poses; // Liczba zapamietanych pozycji
@@ -247,7 +247,7 @@ void ecp_smooth_generator::set_pose_from_xml(xmlNode *stateNode, bool &first_tim
 	xmlFree(numOfPoses);
 }
 
-bool ecp_smooth_generator::load_trajectory_from_xml(char* fileName, char* nodeName)
+bool smooth::load_trajectory_from_xml(char* fileName, char* nodeName)
 {
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
@@ -260,7 +260,7 @@ bool ecp_smooth_generator::load_trajectory_from_xml(char* fileName, char* nodeNa
 	 xmlXIncludeProcess(doc);
 	 if(doc == NULL)
 	 {
-        throw ecp_generator::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	 }
 				
 	 xmlNode *root = NULL;
@@ -268,7 +268,7 @@ bool ecp_smooth_generator::load_trajectory_from_xml(char* fileName, char* nodeNa
 	 if(!root || !root->name)
 	 {
 		 xmlFreeDoc(doc);
-		 throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+		 throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
 	 }
  
 	 flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
@@ -319,7 +319,7 @@ bool ecp_smooth_generator::load_trajectory_from_xml(char* fileName, char* nodeNa
 }
 ; // end: load_file()
 
-bool ecp_smooth_generator::load_file_with_path (const char* file_name)
+bool smooth::load_file_with_path (const char* file_name)
 {
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
@@ -340,13 +340,13 @@ bool ecp_smooth_generator::load_file_with_path (const char* file_name)
     if (!from_file)
     {
         perror(file_name);
-        throw ecp_generator::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
     }
 
     if ( !(from_file >> coordinate_type) )
     {
         from_file.close();
-        throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+        throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
     }
 
     // Usuwanie spacji i tabulacji
@@ -385,13 +385,13 @@ bool ecp_smooth_generator::load_file_with_path (const char* file_name)
     else
     {
         from_file.close();
-        throw ecp_generator::ECP_error(NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+        throw base::ECP_error(NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
     }
     // printf("po coord type %d\n", ps);
     if ( !(from_file >> number_of_poses) )
     {
         from_file.close();
-        throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+        throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
     }
     // printf("po number of poses %d\n", number_of_poses);
     flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
@@ -404,7 +404,7 @@ bool ecp_smooth_generator::load_file_with_path (const char* file_name)
             if ( !(from_file >> vp[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
                 from_file.close();
-                throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+                throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         }
         // printf("po vp\n");
@@ -413,7 +413,7 @@ bool ecp_smooth_generator::load_file_with_path (const char* file_name)
             if ( !(from_file >> vk[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
                 from_file.close();
-                throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+                throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         }
         // printf("po vk\n");
@@ -422,7 +422,7 @@ bool ecp_smooth_generator::load_file_with_path (const char* file_name)
             if ( !(from_file >> v[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
                 from_file.close();
-                throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+                throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         }
         // printf("po v\n");
@@ -431,7 +431,7 @@ bool ecp_smooth_generator::load_file_with_path (const char* file_name)
             if ( !(from_file >> a[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
                 from_file.close();
-                throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+                throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         }
         // printf("po a\n");
@@ -440,7 +440,7 @@ bool ecp_smooth_generator::load_file_with_path (const char* file_name)
             if ( !(from_file >> coordinates[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
                 from_file.close();
-                throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+                throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         }
         // printf("po coord\n");
@@ -503,7 +503,7 @@ bool ecp_smooth_generator::load_file_with_path (const char* file_name)
 }
 ; // end: load_file()
 
-void ecp_smooth_generator::reset(){
+void smooth::reset(){
 	flush_pose_list();
 	first_coordinate=true;
 }
@@ -511,7 +511,7 @@ void ecp_smooth_generator::reset(){
 
 //wczytuje wspolrzedne punkt�w poprzez funkcje
 //poki co przy zmiane trybu nalezy usunac instniejaca instancje smooth_generatora i stworzyc nowa.
-void ecp_smooth_generator::load_coordinates(POSE_SPECIFICATION ps, double vp[MAX_SERVOS_NR], double vk[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]){
+void smooth::load_coordinates(POSE_SPECIFICATION ps, double vp[MAX_SERVOS_NR], double vk[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]){
 
 	if(first_coordinate)	//in case if there are some already read coordinates from file.
 		flush_pose_list();
@@ -524,7 +524,7 @@ void ecp_smooth_generator::load_coordinates(POSE_SPECIFICATION ps, double vp[MAX
 
 }
 
-void ecp_smooth_generator::load_coordinates(POSE_SPECIFICATION ps, double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7){
+void smooth::load_coordinates(POSE_SPECIFICATION ps, double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7){
 
 	double vp[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 	double vk[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
@@ -552,7 +552,7 @@ void ecp_smooth_generator::load_coordinates(POSE_SPECIFICATION ps, double cor0, 
 
 }
 
-void ecp_smooth_generator::calculate(void)
+void smooth::calculate(void)
 {
     double s[MAX_SERVOS_NR];
     double t;
@@ -808,7 +808,7 @@ void ecp_smooth_generator::calculate(void)
 
 } //end - calculate
 
-void ecp_smooth_generator::flush_pose_list ( void )
+void smooth::flush_pose_list ( void )
 {
     pose_list->clear();
 	 first_coordinate=true;
@@ -816,19 +816,19 @@ void ecp_smooth_generator::flush_pose_list ( void )
 ; // end: flush_pose_list
 
 // -------------------------------------------------------return iterator to beginning of the list
-void ecp_smooth_generator::initiate_pose_list(void)
+void smooth::initiate_pose_list(void)
 {
     pose_list_iterator = pose_list->begin();
 };
 // -------------------------------------------------------
-void ecp_smooth_generator::next_pose_list_ptr (void)
+void smooth::next_pose_list_ptr (void)
 {
     if (pose_list_iterator != pose_list->end())
         pose_list_iterator++;
 }
 
 // -------------------------------------------------------get all previously saved elements from actual iterator
-void ecp_smooth_generator::get_pose (void)
+void smooth::get_pose (void)
 {
     int i;
 
@@ -847,7 +847,7 @@ void ecp_smooth_generator::get_pose (void)
 
 }
 // -------------------------------------------------------
-void ecp_smooth_generator::set_pose (POSE_SPECIFICATION ps, double vp[MAX_SERVOS_NR], double vk[MAX_SERVOS_NR], double vv[MAX_SERVOS_NR], double aa[MAX_SERVOS_NR], double c[MAX_SERVOS_NR])
+void smooth::set_pose (POSE_SPECIFICATION ps, double vp[MAX_SERVOS_NR], double vk[MAX_SERVOS_NR], double vv[MAX_SERVOS_NR], double aa[MAX_SERVOS_NR], double c[MAX_SERVOS_NR])
 {
     pose_list_iterator->arm_type = ps;
     memcpy(pose_list_iterator->coordinates, c, MAX_SERVOS_NR*sizeof(double));
@@ -857,7 +857,7 @@ void ecp_smooth_generator::set_pose (POSE_SPECIFICATION ps, double vp[MAX_SERVOS
     memcpy(pose_list_iterator->a, aa, MAX_SERVOS_NR*sizeof(double));
 }
 // -------------------------------------------------------
-bool ecp_smooth_generator::is_pose_list_element ( void )
+bool smooth::is_pose_list_element ( void )
 {
     // sprawdza czy aktualnie wskazywany jest element listy, czy lista sie skonczyla
     if ( pose_list_iterator != pose_list->end())
@@ -870,7 +870,7 @@ bool ecp_smooth_generator::is_pose_list_element ( void )
     }
 }
 // -------------------------------------------------------
-bool ecp_smooth_generator::is_last_list_element ( void )
+bool smooth::is_last_list_element ( void )
 {
     // sprawdza czy aktualnie wskazywany element listy ma nastepnik
     // jesli <> nulla
@@ -892,26 +892,26 @@ bool ecp_smooth_generator::is_last_list_element ( void )
 };
 // -------------------------------------------------------
 
-void ecp_smooth_generator::create_pose_list_head (POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR])
+void smooth::create_pose_list_head (POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR])
 {
     pose_list->push_back(ecp_smooth_taught_in_pose(ps, v_p, v_k, v, a, coordinates));
     pose_list_iterator = pose_list->begin();
 }
 
 
-void ecp_smooth_generator::insert_pose_list_element (POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR])
+void smooth::insert_pose_list_element (POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR])
 {
     pose_list->push_back(ecp_smooth_taught_in_pose(ps, v_p, v_k, v, a, coordinates));
     pose_list_iterator++;
 }
 
 // -------------------------------------------------------
-int ecp_smooth_generator::pose_list_length(void)
+int smooth::pose_list_length(void)
 {
     return pose_list->size();
 };
 
-bool ecp_smooth_generator::load_a_v_min (char* file_name)
+bool smooth::load_a_v_min (char* file_name)
 {
     uint64_t e;       // Kod bledu systemowego
     uint64_t j;    // Liczniki petli
@@ -921,20 +921,20 @@ bool ecp_smooth_generator::load_a_v_min (char* file_name)
     {
         // printf("error\n");
         perror(file_name);
-        throw ecp_generator::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
     }
 
     if ( !(from_file >> v_grip_min) )
     { // Zabezpieczenie przed danymi nienumerycznymi
         from_file.close();
-        throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+        throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
     }
 
     from_file.close();
     return true;
 } // end: load_a_v_min()
 
-bool ecp_smooth_generator::load_a_v_max (char* file_name)
+bool smooth::load_a_v_max (char* file_name)
 {
     uint64_t e;       // Kod bledu systemowego
     uint64_t j;    // Liczniki petli
@@ -944,7 +944,7 @@ bool ecp_smooth_generator::load_a_v_max (char* file_name)
     {
         // printf("error\n");
         perror(file_name);
-        throw ecp_generator::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
     }
 
     for ( j = 0; j < MAX_SERVOS_NR; j++)
@@ -952,7 +952,7 @@ bool ecp_smooth_generator::load_a_v_max (char* file_name)
         if ( !(from_file >> v_max_motor[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
     for ( j = 0; j < MAX_SERVOS_NR; j++)
@@ -960,7 +960,7 @@ bool ecp_smooth_generator::load_a_v_max (char* file_name)
         if ( !(from_file >> a_max_motor[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
 
@@ -969,7 +969,7 @@ bool ecp_smooth_generator::load_a_v_max (char* file_name)
         if ( !(from_file >> v_max_joint[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
     for ( j = 0; j < MAX_SERVOS_NR; j++)
@@ -977,7 +977,7 @@ bool ecp_smooth_generator::load_a_v_max (char* file_name)
         if ( !(from_file >> a_max_joint[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
 
@@ -986,7 +986,7 @@ bool ecp_smooth_generator::load_a_v_max (char* file_name)
         if ( !(from_file >> v_max_zyz[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
     for ( j = 0; j < MAX_SERVOS_NR; j++)
@@ -994,7 +994,7 @@ bool ecp_smooth_generator::load_a_v_max (char* file_name)
         if ( !(from_file >> a_max_zyz[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
 
@@ -1003,7 +1003,7 @@ bool ecp_smooth_generator::load_a_v_max (char* file_name)
         if ( !(from_file >> v_max_aa[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
     for ( j = 0; j < MAX_SERVOS_NR; j++)
@@ -1011,7 +1011,7 @@ bool ecp_smooth_generator::load_a_v_max (char* file_name)
         if ( !(from_file >> a_max_aa[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
 
@@ -1019,9 +1019,9 @@ bool ecp_smooth_generator::load_a_v_max (char* file_name)
     return true;
 } // end: load_a_v_max()
 
-ecp_smooth_generator::ecp_smooth_generator (common::task::ecp_task& _ecp_task, bool _is_synchronised)
+smooth::smooth (common::task::ecp_task& _ecp_task, bool _is_synchronised)
         :
-        ecp_delta_generator (_ecp_task), debug(false),first_coordinate(true)
+        delta (_ecp_task), debug(false),first_coordinate(true)
 {
     int i;
     double vp[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
@@ -1055,9 +1055,9 @@ ecp_smooth_generator::ecp_smooth_generator (common::task::ecp_task& _ecp_task, b
 }
 ; // end : konstruktor
 
-ecp_smooth_generator::ecp_smooth_generator (common::task::ecp_task& _ecp_task, bool _is_synchronised, bool _debug)
+smooth::smooth (common::task::ecp_task& _ecp_task, bool _is_synchronised, bool _debug)
         :
-        ecp_delta_generator (_ecp_task), first_coordinate(true)
+        delta (_ecp_task), first_coordinate(true)
 {
     int i;
     double vp[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
@@ -1094,7 +1094,7 @@ ecp_smooth_generator::ecp_smooth_generator (common::task::ecp_task& _ecp_task, b
 ; // end : konstruktor
 
 //set necessary instructions, and other data for preparing the robot
-bool ecp_smooth_generator::first_step ()
+bool smooth::first_step ()
 {
 
     initiate_pose_list();
@@ -1148,7 +1148,7 @@ bool ecp_smooth_generator::first_step ()
 }
 ; // end: bool ecp_smooth_generator::first_step ( )
 
-bool ecp_smooth_generator::next_step ()
+bool smooth::next_step ()
 {
     int i;
     double tk=10*STEP; //czas jednego makrokroku
@@ -1480,7 +1480,7 @@ bool ecp_smooth_generator::next_step ()
 /**************/
 /**************************************************************************/
 
-bool ecp_tool_change_generator::first_step ()
+bool tool_change::first_step ()
 {
 
 
@@ -1503,7 +1503,7 @@ bool ecp_tool_change_generator::first_step ()
 }
 ; // end: bool ecp_smooth_pouring_generator::first_step ( )
 
-bool ecp_tool_change_generator::next_step ()
+bool tool_change::next_step ()
 {
 
 
@@ -1511,22 +1511,22 @@ bool ecp_tool_change_generator::next_step ()
 
 } // end: BOOLEAN ecp_smooth_pouring_generator::next_step ( )
 
-void ecp_tool_change_generator::set_tool_parameters(double x, double y, double z)
+void tool_change::set_tool_parameters(double x, double y, double z)
 {
     tool_parameters[0]=x;
     tool_parameters[1]=y;
     tool_parameters[2]=z;
 }
 
-ecp_tool_change_generator::ecp_tool_change_generator (common::task::ecp_task& _ecp_task, bool _is_synchronised)
-        :ecp_smooth_generator (_ecp_task, _is_synchronised)
+tool_change::tool_change (common::task::ecp_task& _ecp_task, bool _is_synchronised)
+        :smooth (_ecp_task, _is_synchronised)
 {
 
     set_tool_parameters(-0.18, 0.0, 0.25);
 
 }
-ecp_tool_change_generator::ecp_tool_change_generator (common::task::ecp_task& _ecp_task, bool _is_synchronised, bool _debug)
-        :ecp_smooth_generator (_ecp_task, _is_synchronised, _debug)
+tool_change::tool_change (common::task::ecp_task& _ecp_task, bool _is_synchronised, bool _debug)
+        :smooth (_ecp_task, _is_synchronised, _debug)
 {
 
     set_tool_parameters(-0.18, 0.0, 0.25);

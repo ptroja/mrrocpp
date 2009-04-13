@@ -19,7 +19,7 @@ ecp_t_box_irp6ot::~ecp_t_box_irp6ot(){
 void ecp_t_box_irp6ot::task_initialization(void) {
 
 	ecp_m_robot = new ecp_irp6_on_track_robot(*this);
-	smoothgen = new common::generator::ecp_smooth_generator(*this, true);
+	smoothgen = new common::generator::smooth(*this, true);
 	sr_ecp_msg->message("ECP loaded box");
 };
 

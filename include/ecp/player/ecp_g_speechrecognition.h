@@ -9,7 +9,7 @@ namespace ecp {
 namespace player {
 namespace generator {
 
-class speechrecognition_generator : public common::generator::ecp_generator
+class speechrecognition_generator : public common::generator::base
 {
 	private:
 		PlayerClient *client;

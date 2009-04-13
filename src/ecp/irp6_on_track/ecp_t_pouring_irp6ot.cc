@@ -40,8 +40,8 @@ void ecp_task_pouring_irp6ot::task_initialization(void)
     // the robot is choose dependendat on the section of configuration file sent as argv[4]
     ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
-    sg = new common::generator::ecp_smooth_generator (*this, true);
-    tcg = new common::generator::ecp_tool_change_generator(*this, true);
+    sg = new common::generator::smooth (*this, true);
+    tcg = new common::generator::tool_change(*this, true);
 
     go_st = new common::task::ecp_sub_task_gripper_opening(*this);
 

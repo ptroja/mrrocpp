@@ -20,7 +20,7 @@ namespace generator {
 
 // --------------------------------------------------------------------------
 
-class pawel_generator : public common::generator::ecp_generator {
+class pawel : public common::generator::base {
 
 protected:
 
@@ -33,8 +33,8 @@ public:
 	trajectory_description td;
 	
 	// konstruktor
-	~pawel_generator();
-	pawel_generator(common::task::ecp_task& _ecp_task, int step);  
+	~pawel();
+	pawel(common::task::ecp_task& _ecp_task, int step);  
 	
 	virtual bool first_step();
 	virtual bool next_step();

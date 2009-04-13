@@ -21,14 +21,14 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-time_generator::time_generator(common::task::ecp_task& _ecp_task, int step):
-        ecp_generator (_ecp_task)
+time::time(common::task::ecp_task& _ecp_task, int step):
+        base (_ecp_task)
 {
     step_no = step;
 }
 
 
-bool time_generator::first_step ( )
+bool time::first_step ( )
 {
     run_counter = 0;
     second_step = false;
@@ -59,7 +59,7 @@ bool time_generator::first_step ( )
 
 
 // --------------------------------------------------------------------------
-bool time_generator::next_step ( )
+bool time::next_step ( )
 {
     // zmienne wykorzystywane przy rysowaniu
     if (check_and_null_trigger())

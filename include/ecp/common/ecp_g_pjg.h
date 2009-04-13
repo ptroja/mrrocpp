@@ -18,7 +18,7 @@ namespace generator {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej 
-class playerjoy_generator : public common::generator::ecp_generator 
+class playerjoy : public common::generator::base 
 {
 
 protected:
@@ -32,7 +32,7 @@ public:
 	int step_no;
 	
 	// konstruktor
-	playerjoy_generator(common::task::ecp_task& _ecp_task, int step=0);  
+	playerjoy(common::task::ecp_task& _ecp_task, int step=0);  
 	
 	virtual bool first_step ();
 

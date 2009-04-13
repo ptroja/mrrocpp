@@ -124,7 +124,7 @@ void ecp_task_jarosz_irp6p::main_task_algorithm(void)
 
 	int motion_time;
 	double coordinates[8] = {0.078647, 2.994184, 0.255198, 0.980457, 1.243716, 2.163626, 0.074000, 0.0};
-	common::generator::ecp_parabolic_teach_in_generator	pteach(*this, 0.02);
+	common::generator::parabolic_teach_in	pteach(*this, 0.02);
 
 	motion_time = 2;
 
@@ -143,7 +143,7 @@ void ecp_task_jarosz_irp6p::main_task_algorithm(void)
 
 		tdes.coordinate_delta[1] =  0.12;		// przyrost wspolrzednej Y
 		tdes.coordinate_delta[2] =   0.16;		// przyrost wspolrzednej Z
-		common::generator::ecp_cubic_generator cubic(*this, tdes, vp, vk);
+		common::generator::cubic cubic(*this, tdes, vp, vk);
 		sr_ecp_msg->message("Wykonywany jest ruch w gore");
 		cubic.Move();
 		sr_ecp_msg->message("Wykonywany jest ruch w dol");
@@ -155,7 +155,7 @@ void ecp_task_jarosz_irp6p::main_task_algorithm(void)
 
 		tdes.coordinate_delta[1] = - 0.12;		// przyrost wspolrzednej Y
 		tdes.coordinate_delta[2] =  - 0.16;		// przyrost wspolrzednej Z
-		common::generator::ecp_cubic_generator cubic2(*this, tdes, vp, vk);
+		common::generator::cubic cubic2(*this, tdes, vp, vk);
 		cubic2.Move();
 		sr_ecp_msg->message("Koniec");
 		usleep(1000*500);

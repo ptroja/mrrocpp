@@ -31,8 +31,8 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-ecp_delta_generator::ecp_delta_generator(common::task::ecp_task& _ecp_task) :
-	ecp_generator(_ecp_task)
+delta::delta(common::task::ecp_task& _ecp_task) :
+	base(_ecp_task)
 {
 }
 
@@ -42,13 +42,13 @@ ecp_delta_generator::ecp_delta_generator(common::task::ecp_task& _ecp_task) :
 
 // ---------------------------------  KONSTRUKTOR  ----------------------------------------------
 
-ecp_linear_generator::ecp_linear_generator(common::task::ecp_task& _ecp_task) :
-	ecp_delta_generator(_ecp_task)
+linear::linear(common::task::ecp_task& _ecp_task) :
+	delta(_ecp_task)
 {
 }
 
-ecp_linear_generator::ecp_linear_generator(common::task::ecp_task& _ecp_task, trajectory_description tr_des, int mp_communication_mode_arg) :
-	ecp_delta_generator(_ecp_task)
+linear::linear(common::task::ecp_task& _ecp_task, trajectory_description tr_des, int mp_communication_mode_arg) :
+	delta(_ecp_task)
 {
 
 	mp_communication_mode=mp_communication_mode_arg;
@@ -91,7 +91,7 @@ ecp_linear_generator::ecp_linear_generator(common::task::ecp_task& _ecp_task, tr
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_linear_generator::first_step()
+bool linear::first_step()
 {
 
 	switch (td.arm_type) {
@@ -151,7 +151,7 @@ bool ecp_linear_generator::first_step()
 // -----------------------------------  metoda	next_step --------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_linear_generator::next_step()
+bool linear::next_step()
 {
 	int i; // licznik kolejnych wspolrzednych wektora [0..5]
 
@@ -235,8 +235,8 @@ bool ecp_linear_generator::next_step()
 
 // ---------------------------------  KONSTRUKTOR  ----------------------------------------------
 
-ecp_linear_parabolic_generator::ecp_linear_parabolic_generator(common::task::ecp_task& _ecp_task, trajectory_description tr_des, const double *time_a, const double *time_b) :
-	ecp_delta_generator(_ecp_task)
+linear_parabolic::linear_parabolic(common::task::ecp_task& _ecp_task, trajectory_description tr_des, const double *time_a, const double *time_b) :
+	delta(_ecp_task)
 {
 	td = tr_des;
 
@@ -290,7 +290,7 @@ ecp_linear_parabolic_generator::ecp_linear_parabolic_generator(common::task::ecp
 // --------------------------------  funckja liczaca droge  -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-double ecp_linear_parabolic_generator::calculate_s(const double t, const double ta, const double tb)
+double linear_parabolic::calculate_s(const double t, const double ta, const double tb)
 {
 	double s=0;
 
@@ -324,7 +324,7 @@ return s;
 // --------------------------------- metoda	first_step -----------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_linear_parabolic_generator::first_step()
+bool linear_parabolic::first_step()
 {
 
 	switch (td.arm_type) {
@@ -386,7 +386,7 @@ bool ecp_linear_parabolic_generator::first_step()
 // -----------------------------------  metoda	next_step --------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_linear_parabolic_generator::next_step()
+bool linear_parabolic::next_step()
 {
 	int i; // licznik kolejnych wspolrzednych wektora [0..5]
 
@@ -610,8 +610,8 @@ bool ecp_linear_parabolic_generator::next_step()
 // ####################################################################################################
 
 
-ecp_polynomial_generator::ecp_polynomial_generator(common::task::ecp_task& _ecp_task) :
-	ecp_delta_generator(_ecp_task)
+polynomial::polynomial(common::task::ecp_task& _ecp_task) :
+	delta(_ecp_task)
 {
 }
 ;
@@ -620,7 +620,7 @@ ecp_polynomial_generator::ecp_polynomial_generator(common::task::ecp_task& _ecp_
 // --------------------------------- metoda	first_step -----------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_polynomial_generator::first_step()
+bool polynomial::first_step()
 {
 
 	// Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
@@ -691,8 +691,8 @@ bool ecp_polynomial_generator::first_step()
 // -----------------  konstruktor dla dla zadanych predkosci vp i vk ----------------------------
 // ----------------------------------------------------------------------------------------------
 
-ecp_cubic_generator::ecp_cubic_generator(common::task::ecp_task& _ecp_task, trajectory_description tr_des, double *vp, double *vk) :
-	ecp_polynomial_generator(_ecp_task)
+cubic::cubic(common::task::ecp_task& _ecp_task, trajectory_description tr_des, double *vp, double *vk) :
+	polynomial(_ecp_task)
 {
 	td = tr_des;
 	int tf=td.interpolation_node_no;
@@ -739,7 +739,7 @@ ecp_cubic_generator::ecp_cubic_generator(common::task::ecp_task& _ecp_task, traj
 // ----------------------  metoda	next_step --------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_cubic_generator::next_step()
+bool cubic::next_step()
 {
 	int i; // licznik kolejnych wsp�lrzednych wektora [0..MAX_SERVOS_NR]
 
@@ -942,8 +942,8 @@ bool ecp_cubic_generator::next_step()
 // ---------------------------konstruktor ------------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-ecp_quintic_generator::ecp_quintic_generator(common::task::ecp_task& _ecp_task, trajectory_description tr_des, double *vp, double *vk, double *ap, double *ak) :
-	ecp_polynomial_generator(_ecp_task)
+quintic::quintic(common::task::ecp_task& _ecp_task, trajectory_description tr_des, double *vp, double *vk, double *ap, double *ak) :
+	polynomial(_ecp_task)
 {
 	td = tr_des;
 	int tf=td.interpolation_node_no;
@@ -995,7 +995,7 @@ ecp_quintic_generator::ecp_quintic_generator(common::task::ecp_task& _ecp_task, 
 // ----------------------------------  metoda	next_step --------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_quintic_generator::next_step()
+bool quintic::next_step()
 {
 
 	char messg[128]; // komunikat do SR
@@ -1207,7 +1207,7 @@ bool ecp_quintic_generator::next_step()
 // ####################################################################################################
 
 
-ecp_spline_generator::ecp_spline_generator(common::task::ecp_task& _ecp_task) :
+spline::spline(common::task::ecp_task& _ecp_task) :
 	ecp_teach_in_generator(_ecp_task)
 {
 }
@@ -1223,8 +1223,8 @@ ecp_spline_generator::ecp_spline_generator(common::task::ecp_task& _ecp_task) :
 // ---------------------------konstruktor ------------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-ecp_parabolic_teach_in_generator::ecp_parabolic_teach_in_generator(common::task::ecp_task& _ecp_task, double interval = 0.02) :
-	ecp_spline_generator(_ecp_task)
+parabolic_teach_in::parabolic_teach_in(common::task::ecp_task& _ecp_task, double interval = 0.02) :
+	spline(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
 	int i;
@@ -1265,7 +1265,7 @@ ecp_parabolic_teach_in_generator::ecp_parabolic_teach_in_generator(common::task:
 // ----------------------  metoda	first_step -------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_parabolic_teach_in_generator::first_step()
+bool parabolic_teach_in::first_step()
 {
 
 	// Poniewaz ten generator wykonuje ruch tylko do kolejnej pozycji na liscie,
@@ -1315,7 +1315,7 @@ bool ecp_parabolic_teach_in_generator::first_step()
 // ----------------------  metoda	next_step --------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_parabolic_teach_in_generator::next_step()
+bool parabolic_teach_in::next_step()
 {
 	double Delta; // roznica polozen aktulanego  i zadanego
 
@@ -1537,8 +1537,8 @@ bool ecp_parabolic_teach_in_generator::next_step()
 // ---------------------------konstruktor ------------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-ecp_calibration_generator::ecp_calibration_generator(common::task::ecp_task& _ecp_task, double interval) :
-	ecp_spline_generator(_ecp_task)
+calibration::calibration(common::task::ecp_task& _ecp_task, double interval) :
+	spline(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
 	int i; // Licznik
@@ -1579,7 +1579,7 @@ ecp_calibration_generator::ecp_calibration_generator(common::task::ecp_task& _ec
 // ----------------------  metoda	first_step -------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_calibration_generator::first_step()
+bool calibration::first_step()
 {
 
 	// Poniewaz ten generator wykonuje ruch tylko do kolejnej pozycji na liscie,
@@ -1633,7 +1633,7 @@ bool ecp_calibration_generator::first_step()
 // ----------------------  metoda	next_step --------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_calibration_generator::next_step()
+bool calibration::next_step()
 {
 
 	char messg[128]; // komunikat do SR
@@ -1873,8 +1873,8 @@ bool ecp_calibration_generator::next_step()
 // ####################################################################################################
 
 
-ecp_cubic_spline_generator::ecp_cubic_spline_generator(common::task::ecp_task& _ecp_task, double interval = 0.02) :
-	ecp_spline_generator(_ecp_task)
+cubic_spline::cubic_spline(common::task::ecp_task& _ecp_task, double interval = 0.02) :
+	spline(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
 	int i;
@@ -1917,7 +1917,7 @@ ecp_cubic_spline_generator::ecp_cubic_spline_generator(common::task::ecp_task& _
 // ----------------------  metoda	first_step --------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_cubic_spline_generator::first_step()
+bool cubic_spline::first_step()
 {
 
 	if (is_pose_list_element()) {
@@ -1967,7 +1967,7 @@ bool ecp_cubic_spline_generator::first_step()
 // ----------------------  metoda	next_step --------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_cubic_spline_generator::next_step()
+bool cubic_spline::next_step()
 {
 
 	char messg[128]; // komunikat do SR
@@ -2190,8 +2190,8 @@ bool ecp_cubic_spline_generator::next_step()
 // ---------------------------konstruktor ----------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-ecp_smooth_cubic_spline_generator::ecp_smooth_cubic_spline_generator(common::task::ecp_task& _ecp_task, double *vp, double *vk, double interval = 0.02) :
-	ecp_spline_generator(_ecp_task)
+smooth_cubic_spline::smooth_cubic_spline(common::task::ecp_task& _ecp_task, double *vp, double *vk, double interval = 0.02) :
+	spline(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
 	int i;
@@ -2238,7 +2238,7 @@ ecp_smooth_cubic_spline_generator::ecp_smooth_cubic_spline_generator(common::tas
 // ---------------------------metoda BuildCoeff -------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-void ecp_smooth_cubic_spline_generator::Build_Coeff(double *tt, double *yy, int nn, double vvp, double vvk, double *aa)
+void smooth_cubic_spline::Build_Coeff(double *tt, double *yy, int nn, double vvp, double vvk, double *aa)
 {
 	sr_ecp_msg.message("Metoda Build_Coeff wyznacza przyspieszenia w punktach wezlowych");
 	int i, k;
@@ -2276,7 +2276,7 @@ void ecp_smooth_cubic_spline_generator::Build_Coeff(double *tt, double *yy, int 
 // ----------------------  metoda	first_step -------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_smooth_cubic_spline_generator::first_step()
+bool smooth_cubic_spline::first_step()
 {
 
 	if (is_pose_list_element()) {
@@ -2327,7 +2327,7 @@ bool ecp_smooth_cubic_spline_generator::first_step()
 // ----------------------  metoda	next_step -------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_smooth_cubic_spline_generator::next_step()
+bool smooth_cubic_spline::next_step()
 {
 
 	char messg[128]; // komunikat do SR
@@ -2693,8 +2693,8 @@ B					= 1-A;
 // ---------------------------konstruktor ----------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-ecp_quintic_spline_generator::ecp_quintic_spline_generator(common::task::ecp_task& _ecp_task, double interval = 0.02) :
-	ecp_spline_generator(_ecp_task)
+quintic_spline::quintic_spline(common::task::ecp_task& _ecp_task, double interval = 0.02) :
+	spline(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
 	int i;
@@ -2738,7 +2738,7 @@ ecp_quintic_spline_generator::ecp_quintic_spline_generator(common::task::ecp_tas
 // ----------------------  metoda	first_step -------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_quintic_spline_generator::first_step()
+bool quintic_spline::first_step()
 {
 
 	// Poniewaz ten generator wykonuje ruch tylko do kolejnej pozycji na liscie,
@@ -2789,7 +2789,7 @@ bool ecp_quintic_spline_generator::first_step()
 // ----------------------  metoda	next_step -------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_quintic_spline_generator::next_step()
+bool quintic_spline::next_step()
 {
 
 	char messg[128]; // komunikat do SR
@@ -3048,7 +3048,7 @@ bool ecp_quintic_spline_generator::next_step()
 // --------------------------------------------------------------------------
 // Konstruktor generatora elipsy
 
-ecp_elipsoid_generator::ecp_elipsoid_generator(common::task::ecp_task& _ecp_task) :
+elipsoid::elipsoid(common::task::ecp_task& _ecp_task) :
 	ecp_teach_in_generator(_ecp_task)
 {
 	INTERVAL = 0.006; // Dlugosc okresu interpolacji w [sek]
@@ -3089,13 +3089,13 @@ ecp_elipsoid_generator::ecp_elipsoid_generator(common::task::ecp_task& _ecp_task
 ; // end: ecp_elipsoid_generator::ecp_elipsoid_generator()
 
 
-void ecp_elipsoid_generator::get_sample(one_sample& cp, int sn)
+void elipsoid::get_sample(one_sample& cp, int sn)
 {
 	cp.ctime = trj_ptr[sn].ctime;
 	memcpy(cp.coordinates, trj_ptr[sn].coordinates, MAX_SERVOS_NR*sizeof(double));
 }
 
-void ecp_elipsoid_generator::clear_buffer(void)
+void elipsoid::clear_buffer(void)
 {
 	delete trj_ptr;
 }
@@ -3105,7 +3105,7 @@ void ecp_elipsoid_generator::clear_buffer(void)
 // Ruch miedzy kolejnymi pozycjami listy ma trojkatny profil predkosci
 // Kontakt z MP nastepuje tylko w momencie osiagniecia kolejnej pozycji na liscie
 
-bool ecp_elipsoid_generator::first_step()
+bool elipsoid::first_step()
 {
 
 	// Wstawienie danych do generatora
@@ -3151,7 +3151,7 @@ bool ecp_elipsoid_generator::first_step()
 
 // --------------------------------------------------------------------------
 // Generator odtwarzajacy nauczone pozycje z dokladna pozycja zadana
-bool ecp_elipsoid_generator::next_step()
+bool elipsoid::next_step()
 {
 
 	if (first_interval) {
@@ -3276,7 +3276,7 @@ bool ecp_elipsoid_generator::next_step()
 
 // --------------------------------------------------------------------------
 // Zapis rzeczywistej trajektorii do pliku
-void ecp_save_trajectory(ecp_elipsoid_generator& the_generator, common::task::ecp_task& _ecp_task)
+void ecp_save_trajectory(elipsoid& the_generator, common::task::ecp_task& _ecp_task)
 {
 	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
@@ -3300,7 +3300,7 @@ void ecp_save_trajectory(ecp_elipsoid_generator& the_generator, common::task::ec
 		e = errno;
 		perror("ECP: Send() to UI failed\n");
 		_ecp_task.sr_ecp_msg->message(SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw ecp_generator::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+		throw base::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
 
 	if (ui_to_ecp_rep.reply == QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
@@ -3308,13 +3308,13 @@ void ecp_save_trajectory(ecp_elipsoid_generator& the_generator, common::task::ec
 
 	if (chdir(ui_to_ecp_rep.path) != 0) {
 		perror(ui_to_ecp_rep.path);
-		throw ecp_generator::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		throw base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
 	}
 	std::ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
 	e = errno;
 	if (!to_file) {
 		perror(ui_to_ecp_rep.filename);
-		throw ecp_generator::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	} else {
 		number_of_poses = the_generator.get_number_of_intervals();
 		printf("OK=%lld   fn=%s\n", number_of_poses, ui_to_ecp_rep.filename);
@@ -3333,7 +3333,7 @@ void ecp_save_trajectory(ecp_elipsoid_generator& the_generator, common::task::ec
 
 // --------------------------------------------------------------------------
 // Zapis danych z kalibracji do pliku
-void ecp_save_extended_file(ecp_calibration_generator& the_generator, ecp_operator_reaction_condition& the_condition, common::task::ecp_task& _ecp_task)
+void ecp_save_extended_file(calibration& the_generator, operator_reaction_condition& the_condition, common::task::ecp_task& _ecp_task)
 {
 	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
@@ -3359,7 +3359,7 @@ void ecp_save_extended_file(ecp_calibration_generator& the_generator, ecp_operat
 		e = errno;
 		perror("ECP: Send() to UI failed\n");
 		_ecp_task.sr_ecp_msg->message(SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw ecp_generator::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+		throw base::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
 	}
 	if (ui_to_ecp_rep.reply == QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
 		return;
@@ -3368,20 +3368,20 @@ void ecp_save_extended_file(ecp_calibration_generator& the_generator, ecp_operat
 	cwd = getcwd(NULL, 0);
 	if (chdir(ui_to_ecp_rep.path) != 0) {
 		perror(ui_to_ecp_rep.path);
-		throw ecp_generator::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		throw base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
 	}
 	std::ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
 	e = errno;
 	if (!to_file) {
 		perror(ui_to_ecp_rep.filename);
-		throw ecp_generator::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	} else {
 		the_generator.initiate_pose_list(); // inicjacja listy nauczonych pozycji
 		the_condition.initiate_supplementary_list(); // inicjacja listy odczytanych pozycji
 		number_of_sup = the_condition.supplementary_list_length();
 		number_of_poses = the_generator.pose_list_length(); // liczba pozycji
 		if (number_of_poses != number_of_sup)
-			throw ecp_generator::ECP_error(NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
+			throw base::ECP_error(NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
 
 		to_file << number_of_poses << '\n'; // ???
 		for (i = 0; i < number_of_poses; i++) {

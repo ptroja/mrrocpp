@@ -41,8 +41,8 @@ class ecp_t_spots_recognition: public common::task::ecp_task
 	protected:
 
 		generator::ecp_spots_generator* generator;
-		common::generator::ecp_smooth_generator* smooth;
-		common::generator::y_nose_run_force_generator* nose;
+		common::generator::smooth* smooth;
+		common::generator::y_nose_run_force* nose;
 
 
 	public:

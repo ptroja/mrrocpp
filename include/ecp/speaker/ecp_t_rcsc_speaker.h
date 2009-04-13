@@ -12,7 +12,7 @@ namespace task {
 
 class ecp_task_rcsc_speaker: public common::task::ecp_task  {
 protected:
-	common::generator::ecp_generator_t* gt;
+	common::generator::transparent* gt;
 	generator::speaking_generator* speak;
 
 public:

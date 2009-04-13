@@ -61,7 +61,7 @@ void ecp_task_vislx_irp6ot::main_task_algorithm(void)
 	generator::ecp_vis_sac_lx_generator ynrlg(*this, 4);
 	ynrlg.sensor_m = sensor_m;
 
-	common::generator::bias_edp_force_generator befg(*this);
+	common::generator::bias_edp_force befg(*this);
 
 	for(;;) {
 

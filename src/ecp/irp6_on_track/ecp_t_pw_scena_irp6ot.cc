@@ -35,11 +35,11 @@ void ecp_task_pw_scena_irp6ot::task_initialization(void) {
 		planar_vis->sensor_m = sensor_m;
 
 		//Smooth generator
-		smooth_gen = new common::generator::ecp_smooth_generator(*this, true);
+		smooth_gen = new common::generator::smooth(*this, true);
 
-		bef_gen=new common::generator::bias_edp_force_generator(*this);
+		bef_gen=new common::generator::bias_edp_force(*this);
 		//gripper approach constructor (task&, no_of_steps)
-		ga_gen=new common::generator::ecp_tff_gripper_approach_generator (*this, 8);
+		ga_gen=new common::generator::tff_gripper_approach (*this, 8);
 		//Linear generator.
 		linear_gen=NULL;
 
@@ -87,19 +87,19 @@ void ecp_task_pw_scena_irp6ot::main_task_algorithm(void) {
 	sr_ecp_msg->message("linear_gen\n");
 	//Podniesienie chwytaka o 0.4 cm.
 	set_td_coordinates(0.0, 0.0, 0.002, 0.0, 0.0, 0.0, 0.0);
-	linear_gen=new common::generator::ecp_linear_generator(*this,td,1);
+	linear_gen=new common::generator::linear(*this,td,1);
 	linear_gen->Move();
 	delete linear_gen;
 
 	//Zacisniecie szczek.
 	set_td_coordinates(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.024);
-	linear_gen=new common::generator::ecp_linear_generator(*this,td,1);
+	linear_gen=new common::generator::linear(*this,td,1);
 	linear_gen->Move();
 	delete linear_gen;
 
 	//Podniesienie o 2cm.
 	set_td_coordinates(0,0,0.02,0,0,0,0);
-	linear_gen=new common::generator::ecp_linear_generator(*this,td,1);
+	linear_gen=new common::generator::linear(*this,td,1);
 	linear_gen->Move();
 	delete linear_gen;
 

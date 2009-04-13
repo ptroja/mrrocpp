@@ -10,7 +10,7 @@ namespace task {
 
 class ecp_task_jajko_irp6ot: public common::task::ecp_task  {
 protected:
-	common::generator::y_egg_force_generator* yefg;
+	common::generator::y_egg_force* yefg;
 
 public:
 	// KONSTRUKTORY

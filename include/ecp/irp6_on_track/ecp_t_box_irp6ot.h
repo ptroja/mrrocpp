@@ -14,7 +14,7 @@ namespace task {
 class ecp_t_box_irp6ot: public common::task::ecp_task {
   
   protected:
-	  common::generator::ecp_smooth_generator* smoothgen;
+	  common::generator::smooth* smoothgen;
 		
 	public:
 		ecp_t_box_irp6ot(configurator &_config);

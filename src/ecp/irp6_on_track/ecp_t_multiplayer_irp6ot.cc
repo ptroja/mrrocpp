@@ -41,16 +41,16 @@ void ecp_task_multiplayer_irp6ot::task_initialization(void)
 	}
 
 	//powolanie generatorow
-	befg = new common::generator::bias_edp_force_generator (*this);
+	befg = new common::generator::bias_edp_force (*this);
 
-	sg = new common::generator::ecp_smooth_generator (*this, true);
-	wmg = new common::generator::weight_meassure_generator(*this, -0.3, 2);
-	gt = new common::generator::ecp_generator_t (*this);
+	sg = new common::generator::smooth (*this, true);
+	wmg = new common::generator::weight_meassure(*this, -0.3, 2);
+	gt = new common::generator::transparent (*this);
 
 	go_st = new common::task::ecp_sub_task_gripper_opening(*this);
 
 	takeg = new generator::ecp_vis_sac_lx_generator (*this, 4);
-	rgg = new common::generator::ecp_tff_rubik_grab_generator (*this, 8);
+	rgg = new common::generator::tff_rubik_grab (*this, 8);
 
 	//przydzielenie czujnikow generatorom
 	takeg->sensor_m = sensor_m;

@@ -21,14 +21,14 @@ namespace generator {
 
 
 
-progpanel_generator::progpanel_generator(common::task::ecp_task& _ecp_task, int step):
-        ecp_generator (_ecp_task)
+progpanel::progpanel(common::task::ecp_task& _ecp_task, int step):
+        base (_ecp_task)
 {
     step_no = step;
 }
 
 
-bool progpanel_generator::first_step ( )
+bool progpanel::first_step ( )
 {
     run_counter = 0;
     second_step = false;
@@ -58,7 +58,7 @@ bool progpanel_generator::first_step ( )
 
 
 // --------------------------------------------------------------------------
-bool progpanel_generator::next_step ( )
+bool progpanel::next_step ( )
 {
     // zmienne wykorzystywane przy rysowaniu
     if (check_and_null_trigger())

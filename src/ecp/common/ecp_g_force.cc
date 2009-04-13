@@ -31,9 +31,9 @@ namespace generator {
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
-weight_meassure_generator::weight_meassure_generator(common::task::ecp_task& _ecp_task,
+weight_meassure::weight_meassure(common::task::ecp_task& _ecp_task,
 		double _weight_difference, double _catch_time) :
-	ecp_generator(_ecp_task), weight_difference(_weight_difference),
+	base(_ecp_task), weight_difference(_weight_difference),
 			current_buffer_pointer(0), initial_weight(0.0),
 			initial_weight_counted(false),
 			catch_time(_catch_time), terminate_state_recognized(false)
@@ -41,7 +41,7 @@ weight_meassure_generator::weight_meassure_generator(common::task::ecp_task& _ec
 	clear_buffer();
 }
 
-void weight_meassure_generator::insert_in_buffer(double fx)
+void weight_meassure::insert_in_buffer(double fx)
 {
 
 	weight_in_cyclic_buffer[current_buffer_pointer] = fx;
@@ -53,7 +53,7 @@ void weight_meassure_generator::insert_in_buffer(double fx)
 
 }
 
-void weight_meassure_generator::clear_buffer()
+void weight_meassure::clear_buffer()
 {
 	for (int i=0; i<WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE; i++)
 	{
@@ -68,7 +68,7 @@ void weight_meassure_generator::clear_buffer()
 
 }
 
-double weight_meassure_generator::check_average_weight_in_buffer(void) const
+double weight_meassure::check_average_weight_in_buffer(void) const
 {
 	double returned_value=0.0;
 
@@ -80,12 +80,12 @@ double weight_meassure_generator::check_average_weight_in_buffer(void) const
 	return returned_value;
 }
 
-void weight_meassure_generator::set_weight_difference(double _weight_difference)
+void weight_meassure::set_weight_difference(double _weight_difference)
 {
 	weight_difference = _weight_difference;
 }
 
-bool weight_meassure_generator::first_step()
+bool weight_meassure::first_step()
 {
 
 	clear_buffer();
@@ -99,7 +99,7 @@ bool weight_meassure_generator::first_step()
 	return true;
 }
 
-bool weight_meassure_generator::next_step()
+bool weight_meassure::next_step()
 {
 
 	usleep(USLEEP_TIME);
@@ -177,15 +177,15 @@ bool weight_meassure_generator::next_step()
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
-y_nose_run_force_generator::y_nose_run_force_generator(common::task::ecp_task& _ecp_task,
+y_nose_run_force::y_nose_run_force(common::task::ecp_task& _ecp_task,
 		int step) :
-	ecp_generator(_ecp_task)
+	base(_ecp_task)
 {
 	step_no = step;
 }
 ;
 
-bool y_nose_run_force_generator::first_step()
+bool y_nose_run_force::first_step()
 {
 
 	for (int i=0; i<6; i++)
@@ -237,7 +237,7 @@ bool y_nose_run_force_generator::first_step()
 
 
 // --------------------------------------------------------------------------
-bool y_nose_run_force_generator::next_step()
+bool y_nose_run_force::next_step()
 {
 	struct timespec start[9];
 
@@ -273,16 +273,16 @@ bool y_nose_run_force_generator::next_step()
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
-y_egg_force_generator::y_egg_force_generator(common::task::ecp_task& _ecp_task, int step,
+y_egg_force::y_egg_force(common::task::ecp_task& _ecp_task, int step,
 		int mode) :
-	ecp_generator(_ecp_task)
+	base(_ecp_task)
 {
 	step_no = step;
 	int_mode = mode;
 }
 ;
 
-bool y_egg_force_generator::first_step()
+bool y_egg_force::first_step()
 {
 
 	for (int i=0; i<6; i++)
@@ -334,7 +334,7 @@ bool y_egg_force_generator::first_step()
 
 
 // --------------------------------------------------------------------------
-bool y_egg_force_generator::next_step()
+bool y_egg_force::next_step()
 {
 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
@@ -585,12 +585,12 @@ bool y_egg_force_generator::next_step()
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
-bias_edp_force_generator::bias_edp_force_generator(common::task::ecp_task& _ecp_task) :
-	ecp_generator(_ecp_task)
+bias_edp_force::bias_edp_force(common::task::ecp_task& _ecp_task) :
+	base(_ecp_task)
 {
 }
 
-bool bias_edp_force_generator::first_step()
+bool bias_edp_force::first_step()
 {
 	the_robot->EDP_data.instruction_type = SET;
 	the_robot->EDP_data.set_type = RMODEL_DV;
@@ -603,7 +603,7 @@ bool bias_edp_force_generator::first_step()
 
 
 // --------------------------------------------------------------------------
-bool bias_edp_force_generator::next_step()
+bool bias_edp_force::next_step()
 {
 	return false;
 }
@@ -615,7 +615,7 @@ bool bias_edp_force_generator::next_step()
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
-y_edge_follow_force_generator::y_edge_follow_force_generator(
+y_edge_follow_force::y_edge_follow_force(
 		common::task::ecp_task& _ecp_task, int step) :
 	ecp_teach_in_generator(_ecp_task), tool_frame(0.0, 0.0, 0.25)
 {
@@ -623,7 +623,7 @@ y_edge_follow_force_generator::y_edge_follow_force_generator(
 }
 
 
-bool y_edge_follow_force_generator::first_step()
+bool y_edge_follow_force::first_step()
 {
 
 	for (int i=0; i<6; i++)
@@ -675,7 +675,7 @@ bool y_edge_follow_force_generator::first_step()
 
 
 // --------------------------------------------------------------------------
-bool y_edge_follow_force_generator::next_step()
+bool y_edge_follow_force::next_step()
 {
 	// tablice pomocnicze do utworzenia przyrostowej trajektorii ruchu do zapisu do pliku
 	double inc_delta[6], tmp_delta[6];
@@ -785,7 +785,7 @@ bool y_edge_follow_force_generator::next_step()
 // legobrick_attach_force_generator
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////
-legobrick_attach_force_generator::legobrick_attach_force_generator(
+legobrick_attach_force::legobrick_attach_force(
 		common::task::ecp_task& _ecp_task, int step) :
 	ecp_teach_in_generator(_ecp_task)//, tool_frame(0.026551, -0.011313, 0.25 + 0.028)
 {
@@ -798,7 +798,7 @@ legobrick_attach_force_generator::legobrick_attach_force_generator(
 	step_no=step;
 }
 //--------------------------------------------------------------------------------------
-bool legobrick_attach_force_generator::first_step()
+bool legobrick_attach_force::first_step()
 {
 
 	for (int i=0; i<6; i++)
@@ -871,7 +871,7 @@ bool legobrick_attach_force_generator::first_step()
 	return true;
 }
 //--------------------------------------------------------------------------------------
-bool legobrick_attach_force_generator::next_step()
+bool legobrick_attach_force::next_step()
 {
 	if (check_and_null_trigger())
 	{
@@ -903,7 +903,7 @@ bool legobrick_attach_force_generator::next_step()
 // legobrick_detach_force_generator
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////
-legobrick_detach_force_generator::legobrick_detach_force_generator(
+legobrick_detach_force::legobrick_detach_force(
 		common::task::ecp_task& _ecp_task, int step) :
 	ecp_teach_in_generator(_ecp_task)//, tool_frame(0.026551, -0.011313, 0.25 + 0.028)
 {
@@ -917,7 +917,7 @@ legobrick_detach_force_generator::legobrick_detach_force_generator(
 	isStart = true;
 }
 //--------------------------------------------------------------------------------------
-bool legobrick_detach_force_generator::first_step()
+bool legobrick_detach_force::first_step()
 {
 
 	for (int i=0; i<6; i++)
@@ -989,7 +989,7 @@ bool legobrick_detach_force_generator::first_step()
 	return true;
 }
 //--------------------------------------------------------------------------------------
-bool legobrick_detach_force_generator::next_step()
+bool legobrick_detach_force::next_step()
 {
 	if (check_and_null_trigger())
 	{
@@ -1031,7 +1031,7 @@ bool legobrick_detach_force_generator::next_step()
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
-y_drawing_teach_in_force_generator::y_drawing_teach_in_force_generator(
+y_drawing_teach_in_force::y_drawing_teach_in_force(
 		common::task::ecp_task& _ecp_task, int step) :
 	ecp_teach_in_generator(_ecp_task)
 {
@@ -1039,7 +1039,7 @@ y_drawing_teach_in_force_generator::y_drawing_teach_in_force_generator(
 }
 ;
 
-bool y_drawing_teach_in_force_generator::first_step()
+bool y_drawing_teach_in_force::first_step()
 {
 
 	if (teach_or_move == YG_MOVE)
@@ -1142,7 +1142,7 @@ bool y_drawing_teach_in_force_generator::first_step()
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-bool y_drawing_teach_in_force_generator::next_step()
+bool y_drawing_teach_in_force::next_step()
 {
 
 	if (teach_or_move == YG_MOVE)
@@ -1230,14 +1230,14 @@ bool y_drawing_teach_in_force_generator::next_step()
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
-y_advanced_drawing_teach_in_force_generator::y_advanced_drawing_teach_in_force_generator(
+y_advanced_drawing_teach_in_force::y_advanced_drawing_teach_in_force(
 		common::task::ecp_task& _ecp_task, int step) :
-	y_drawing_teach_in_force_generator(_ecp_task, step)
+	y_drawing_teach_in_force(_ecp_task, step)
 {
 }
 ;
 
-bool y_advanced_drawing_teach_in_force_generator::first_step()
+bool y_advanced_drawing_teach_in_force::first_step()
 {
 
 	if (teach_or_move == YG_MOVE)
@@ -1352,7 +1352,7 @@ bool y_advanced_drawing_teach_in_force_generator::first_step()
 
 
 // --------------------------------------------------------------------------
-bool y_advanced_drawing_teach_in_force_generator::next_step()
+bool y_advanced_drawing_teach_in_force::next_step()
 {
 
 	if (teach_or_move == YG_MOVE)
@@ -1629,9 +1629,9 @@ bool y_advanced_drawing_teach_in_force_generator::next_step()
 // --------------------------------------------------------------------------
 
 
-ecp_tff_nose_run_generator::ecp_tff_nose_run_generator(common::task::ecp_task& _ecp_task,
+tff_nose_run::tff_nose_run(common::task::ecp_task& _ecp_task,
 		int step) :
-	ecp_generator(_ecp_task)
+	base(_ecp_task)
 {
 	step_no = step;
 	// domyslnie wszytkie osie podatne a pulse_check nieaktywne
@@ -1650,19 +1650,19 @@ ecp_tff_nose_run_generator::ecp_tff_nose_run_generator(common::task::ecp_task& _
 
 
 
-void ecp_tff_nose_run_generator::set_force_meassure(bool fm)
+void tff_nose_run::set_force_meassure(bool fm)
 {
 	force_meassure = fm;
 }
 
 
-void ecp_tff_nose_run_generator::configure_pulse_check(bool pulse_check_activated_l)
+void tff_nose_run::configure_pulse_check(bool pulse_check_activated_l)
 {
 	pulse_check_activated = pulse_check_activated_l;
 }
 
 
-void ecp_tff_nose_run_generator::configure_behaviour(BEHAVIOUR_SPECIFICATION x, BEHAVIOUR_SPECIFICATION y, BEHAVIOUR_SPECIFICATION z,
+void tff_nose_run::configure_behaviour(BEHAVIOUR_SPECIFICATION x, BEHAVIOUR_SPECIFICATION y, BEHAVIOUR_SPECIFICATION z,
 	 BEHAVIOUR_SPECIFICATION ax, BEHAVIOUR_SPECIFICATION ay, BEHAVIOUR_SPECIFICATION az)
  {
 	generator_edp_data.next_behaviour[0] = x;
@@ -1674,7 +1674,7 @@ void ecp_tff_nose_run_generator::configure_behaviour(BEHAVIOUR_SPECIFICATION x, 
  }
 
 
-void ecp_tff_nose_run_generator::configure_velocity(double x, double y, double z, double ax, double ay, double az)
+void tff_nose_run::configure_velocity(double x, double y, double z, double ax, double ay, double az)
 {
 	generator_edp_data.next_velocity[0] = x;
 	generator_edp_data.next_velocity[1] = y;
@@ -1685,7 +1685,7 @@ void ecp_tff_nose_run_generator::configure_velocity(double x, double y, double z
 }
 
 
-void ecp_tff_nose_run_generator::configure_force(double x, double y, double z, double ax, double ay, double az)
+void tff_nose_run::configure_force(double x, double y, double z, double ax, double ay, double az)
 {
 	generator_edp_data.next_force_xyz_torque_xyz[0] = x;
 	generator_edp_data.next_force_xyz_torque_xyz[1] = y;
@@ -1696,7 +1696,7 @@ void ecp_tff_nose_run_generator::configure_force(double x, double y, double z, d
 }
 
 
-void ecp_tff_nose_run_generator::configure_reciprocal_damping(double x, double y, double z, double ax, double ay, double az)
+void tff_nose_run::configure_reciprocal_damping(double x, double y, double z, double ax, double ay, double az)
 {
 	generator_edp_data.next_reciprocal_damping[0] = x;
 	generator_edp_data.next_reciprocal_damping[1] = y;
@@ -1707,7 +1707,7 @@ void ecp_tff_nose_run_generator::configure_reciprocal_damping(double x, double y
 }
 
 
-void ecp_tff_nose_run_generator::configure_inertia(double x, double y, double z, double ax, double ay, double az)
+void tff_nose_run::configure_inertia(double x, double y, double z, double ax, double ay, double az)
 {
 	generator_edp_data.next_inertia[0] = x;
 	generator_edp_data.next_inertia[1] = y;
@@ -1724,7 +1724,7 @@ void ecp_tff_nose_run_generator::configure_inertia(double x, double y, double z,
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_tff_nose_run_generator::first_step()
+bool tff_nose_run::first_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -1769,7 +1769,7 @@ bool ecp_tff_nose_run_generator::first_step()
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_tff_nose_run_generator::next_step()
+bool tff_nose_run::next_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -1815,7 +1815,7 @@ bool ecp_tff_nose_run_generator::next_step()
 // metoda przeciazona bo nie chcemy rzucac wyjatku wyjscia poza zakres ruchu - UWAGA napisany szkielet skorygowac cialo funkcji
 
 
-void ecp_tff_nose_run_generator::execute_motion(void)
+void tff_nose_run::execute_motion(void)
 {
 	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
 	/*
@@ -1887,14 +1887,14 @@ void ecp_tff_nose_run_generator::execute_motion(void)
 
 
 
-ecp_tff_rubik_grab_generator::ecp_tff_rubik_grab_generator(common::task::ecp_task& _ecp_task,
+tff_rubik_grab::tff_rubik_grab(common::task::ecp_task& _ecp_task,
 		int step) :
-	ecp_generator(_ecp_task)
+	base(_ecp_task)
 {
 	step_no = step;
 }
 
-void ecp_tff_rubik_grab_generator::configure(double l_goal_position,
+void tff_rubik_grab::configure(double l_goal_position,
 		double l_position_increment, int l_min_node_counter,
 		bool l_both_axes_running)
 {
@@ -1909,7 +1909,7 @@ void ecp_tff_rubik_grab_generator::configure(double l_goal_position,
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_tff_rubik_grab_generator::first_step()
+bool tff_rubik_grab::first_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -1978,7 +1978,7 @@ bool ecp_tff_rubik_grab_generator::first_step()
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_tff_rubik_grab_generator::next_step()
+bool tff_rubik_grab::next_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -2012,14 +2012,14 @@ bool ecp_tff_rubik_grab_generator::next_step()
 ; // end: bool ecp_tff_rubik_grab_generator::next_step ()
 
 
-ecp_tff_rubik_face_rotate_generator::ecp_tff_rubik_face_rotate_generator(
+tff_rubik_face_rotate::tff_rubik_face_rotate(
 		common::task::ecp_task& _ecp_task, int step) :
-	ecp_generator(_ecp_task)
+	base(_ecp_task)
 {
 	step_no = step;
 }
 
-void ecp_tff_rubik_face_rotate_generator::configure(double l_turn_angle)
+void tff_rubik_face_rotate::configure(double l_turn_angle)
 {
 	turn_angle = l_turn_angle;
 }
@@ -2028,7 +2028,7 @@ void ecp_tff_rubik_face_rotate_generator::configure(double l_turn_angle)
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_tff_rubik_face_rotate_generator::first_step()
+bool tff_rubik_face_rotate::first_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -2106,7 +2106,7 @@ bool ecp_tff_rubik_face_rotate_generator::first_step()
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_tff_rubik_face_rotate_generator::next_step()
+bool tff_rubik_face_rotate::next_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -2183,15 +2183,15 @@ bool ecp_tff_rubik_face_rotate_generator::next_step()
 ; // end: bool ecp_tff_rubik_face_rotate_generator::next_step ()
 
 
-ecp_tff_gripper_approach_generator::ecp_tff_gripper_approach_generator(
+tff_gripper_approach::tff_gripper_approach(
 		common::task::ecp_task& _ecp_task, int step) :
-	ecp_generator(_ecp_task)
+	base(_ecp_task)
 {
 	step_no = step;
 }
 ;
 
-void ecp_tff_gripper_approach_generator::configure(double l_speed,
+void tff_gripper_approach::configure(double l_speed,
 		int l_motion_time)
 {
 	speed = l_speed;
@@ -2203,7 +2203,7 @@ void ecp_tff_gripper_approach_generator::configure(double l_speed,
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_tff_gripper_approach_generator::first_step()
+bool tff_gripper_approach::first_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -2265,7 +2265,7 @@ bool ecp_tff_gripper_approach_generator::first_step()
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_tff_gripper_approach_generator::next_step()
+bool tff_gripper_approach::next_step()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -2303,15 +2303,15 @@ bool ecp_tff_gripper_approach_generator::next_step()
 //
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
-ecp_force_tool_change_generator::ecp_force_tool_change_generator (common::task::ecp_task& _ecp_task)
-        :ecp_generator (_ecp_task)
+force_tool_change::force_tool_change (common::task::ecp_task& _ecp_task)
+        :base (_ecp_task)
 {
 
     set_tool_parameters(-0.18, 0.0, 0.25, 0);
 
 }
 
-bool ecp_force_tool_change_generator::first_step ()
+bool force_tool_change::first_step ()
 {
 	the_robot->EDP_data.instruction_type = SET;
 	the_robot->EDP_data.set_type = RMODEL_DV;
@@ -2324,12 +2324,12 @@ bool ecp_force_tool_change_generator::first_step ()
 }
 ; // end: bool ecp_smooth_pouring_generator::first_step ( )
 
-bool ecp_force_tool_change_generator::next_step ()
+bool force_tool_change::next_step ()
 {
     return false;
 } // end: BOOLEAN ecp_smooth_pouring_generator::next_step ( )
 
-void ecp_force_tool_change_generator::set_tool_parameters(double x, double y, double z, double v)
+void force_tool_change::set_tool_parameters(double x, double y, double z, double v)
 {
     tool_parameters[0] = x;
     tool_parameters[1] = y;

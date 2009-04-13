@@ -14,10 +14,10 @@ class ecp_task_lego_brick_irp6p: public common::task::ecp_task
 {
 protected:
     //generatory
-	common::generator::ecp_smooth_generator* sg;
-	common::generator::bias_edp_force_generator* befg;
-	common::generator::legobrick_attach_force_generator* afg;
-	common::generator::legobrick_detach_force_generator* dfg;
+	common::generator::smooth* sg;
+	common::generator::bias_edp_force* befg;
+	common::generator::legobrick_attach_force* afg;
+	common::generator::legobrick_detach_force* dfg;
 
 public:
     ecp_task_lego_brick_irp6p(configurator &_config);

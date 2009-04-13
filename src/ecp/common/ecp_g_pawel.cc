@@ -47,8 +47,8 @@ struct timespec time_start, time_tmp;
 FILE* research;
 
 
-pawel_generator::pawel_generator(common::task::ecp_task& _ecp_task, int step):
-        ecp_generator (_ecp_task)
+pawel::pawel(common::task::ecp_task& _ecp_task, int step):
+        base (_ecp_task)
 {
 
     step_no = step;
@@ -60,14 +60,14 @@ pawel_generator::pawel_generator(common::task::ecp_task& _ecp_task, int step):
 
 };
 
-pawel_generator::~pawel_generator()
+pawel::~pawel()
 {
 
     fclose( research );
 
 };
 
-bool pawel_generator::first_step ( )
+bool pawel::first_step ( )
 {
 
     td.internode_step_no = step_no;
@@ -96,7 +96,7 @@ bool pawel_generator::first_step ( )
 
 
 // --------------------------------------------------------------------------
-bool pawel_generator::next_step ( )
+bool pawel::next_step ( )
 {
 
     int i;

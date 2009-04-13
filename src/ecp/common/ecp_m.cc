@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 		if (e.error_class == SYSTEM_ERROR)
 			exit(EXIT_FAILURE);
 	}
-	catch (ecp::common::generator::ecp_generator::ECP_error e) {
+	catch (ecp::common::generator::base::ECP_error e) {
 		ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 		printf("Mam blad generatora section 1 (@%s:%d)\n", __FILE__, __LINE__);
 	}
@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
 			} /* end: switch */
 		} /*end: catch*/
 
-		catch (ecp::common::generator::ecp_generator::ECP_error er) {
+		catch (ecp::common::generator::base::ECP_error er) {
 			/* Wylapywanie bledow generowanych przez generatory*/
 			if ( er.error_class == SYSTEM_ERROR) { /* blad systemowy juz wyslano komunukat do SR */
 				perror("ECP aborted due to SYSTEM_ERROR");

@@ -22,7 +22,7 @@ namespace generator {
 // ----------------------------------------------------------------------------------------------
 // ---------------------irp6ot_hermite_spline_generator - constuctor ---------------------------
 // ----------------------------------------------------------------------------------------------
-irp6ot_hermite_spline_generator::irp6ot_hermite_spline_generator (common::task::ecp_task& _ecp_task,
+hermite_spline::hermite_spline (common::task::ecp_task& _ecp_task,
         double interval,double ts ) : ecp_teach_in_generator (_ecp_task)
 {
     TSTEP=interval;
@@ -54,7 +54,7 @@ irp6ot_hermite_spline_generator::irp6ot_hermite_spline_generator (common::task::
 // ----------------------------------------------------------------------------------------------
 // ----------------------  metoda fill_hermite_arrays ----------------------------
 // ----------------------------------------------------------------------------------------------
-void irp6ot_hermite_spline_generator::fill_hermite_arrays(void)
+void hermite_spline::fill_hermite_arrays(void)
 {
     if (pose_list.empty())
         throw ECP_error (NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
@@ -157,7 +157,7 @@ void irp6ot_hermite_spline_generator::fill_hermite_arrays(void)
 // ----------------------  metoda   calc_hermit -------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-void irp6ot_hermite_spline_generator::calc_hermit()
+void hermite_spline::calc_hermit()
 {
     int i,j;
 
@@ -187,7 +187,7 @@ void irp6ot_hermite_spline_generator::calc_hermit()
 // ----------------------------------------------------------------------------------------------
 // ----------------------  metoda	first_step -------------------------------------------------
 // ----------------------------------------------------------------------------------------------
-bool irp6ot_hermite_spline_generator::first_step (  )
+bool hermite_spline::first_step (  )
 {
 
 
@@ -236,7 +236,7 @@ bool irp6ot_hermite_spline_generator::first_step (  )
 // ----------------------  metoda	next_step --------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool irp6ot_hermite_spline_generator::next_step (  )
+bool hermite_spline::next_step (  )
 {
 
 
@@ -341,7 +341,7 @@ bool irp6ot_hermite_spline_generator::next_step (  )
 // ----------------------------------------------------------------------------------------------
 // ---------------------irp6ot_natural_spline_generator - constuctor ---------------------------
 // ----------------------------------------------------------------------------------------------
-irp6ot_natural_spline_generator::irp6ot_natural_spline_generator(common::task::ecp_task& _ecp_task,
+natural_spline::natural_spline(common::task::ecp_task& _ecp_task,
         double interval, double ts):
 ecp_teach_in_generator (_ecp_task)
 {
@@ -375,7 +375,7 @@ ecp_teach_in_generator (_ecp_task)
 // ----------------------------------------------------------------------------------------------
 // ----------------------  metoda fill_natural_arrays ----------------------------
 // ----------------------------------------------------------------------------------------------
-void irp6ot_natural_spline_generator::fill_natural_arrays(void)
+void natural_spline::fill_natural_arrays(void)
 {
     if (pose_list.empty())
         throw ECP_error (NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
@@ -517,7 +517,7 @@ void irp6ot_natural_spline_generator::fill_natural_arrays(void)
 // ----------------------  metoda	calc_natural -------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-void irp6ot_natural_spline_generator::calc_natural()
+void natural_spline::calc_natural()
 {
     int i,j;
     double A[MAX_SERVOS_NR],B[MAX_SERVOS_NR],h,h1,h2;
@@ -543,7 +543,7 @@ void irp6ot_natural_spline_generator::calc_natural()
 // ----------------------  metoda	first_step -------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool irp6ot_natural_spline_generator::first_step ()
+bool natural_spline::first_step ()
 {
 
 
@@ -590,7 +590,7 @@ bool irp6ot_natural_spline_generator::first_step ()
 // ----------------------------------------------------------------------------------------------
 // ----------------------  metoda	next_step --------------------------------------------------
 // ----------------------------------------------------------------------------------------------
-bool irp6ot_natural_spline_generator::next_step ()
+bool natural_spline::next_step ()
 {
 
 

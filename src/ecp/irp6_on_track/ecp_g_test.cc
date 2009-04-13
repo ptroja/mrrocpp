@@ -24,7 +24,7 @@ namespace generator {
 
 
 y_simple_generator::y_simple_generator(common::task::ecp_task& _ecp_task, int step):
-	 ecp_generator (_ecp_task, true) { 		step_no = step;          	};  
+	 base (_ecp_task, true) { 		step_no = step;          	};  
 
 
 bool y_simple_generator::first_step ( ) {

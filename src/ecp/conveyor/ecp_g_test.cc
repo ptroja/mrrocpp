@@ -15,7 +15,7 @@ namespace conveyor {
 namespace generator {
 
 y_simple_generator::y_simple_generator(common::task::ecp_task& _ecp_task, int step):
-		ecp_generator (_ecp_task)
+		base (_ecp_task)
 {
 	step_no = step;
 }

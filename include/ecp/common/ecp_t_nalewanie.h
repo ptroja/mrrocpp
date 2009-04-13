@@ -23,7 +23,7 @@ namespace task {
 
 class ecp_task_nalewanie: public common::task::ecp_task  {
 protected:
-	generator::ecp_smooth_generator* sg;
+	generator::smooth* sg;
 
 public:
 	// KONSTRUKTORY

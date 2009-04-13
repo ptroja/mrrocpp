@@ -23,14 +23,14 @@ namespace ecp {
 namespace irp6p {
 namespace generator {
 
-y_simple_generator::y_simple_generator(common::task::ecp_task& _ecp_task, int step)
+y_simple::y_simple_generator(common::task::ecp_task& _ecp_task, int step)
         :
-        ecp_generator (_ecp_task, true)
+        base (_ecp_task, true)
 {
     step_no = step;
 };
 
-bool y_simple_generator::first_step ( )
+bool y_simple::first_step ( )
 {
 
     run_counter = 0;
@@ -75,7 +75,7 @@ bool y_simple_generator::first_step ( )
 
 
 // --------------------------------------------------------------------------
-bool y_simple_generator::next_step ( )
+bool y_simple::next_step ( )
 {
     struct timespec start[9];
 

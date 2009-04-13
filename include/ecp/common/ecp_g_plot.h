@@ -19,7 +19,7 @@ namespace generator {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej 
-class y_simple_generator : public common::generator::ecp_generator 
+class y_simple : public common::generator::base 
 {
 
 protected:
@@ -42,7 +42,7 @@ public:
 	double gammax;
 	
 	// konstruktor
-	y_simple_generator(common::task::ecp_task& _ecp_task, int step=0);
+	y_simple(common::task::ecp_task& _ecp_task, int step=0);
 	
 	virtual bool first_step ();
 	virtual bool next_step ();

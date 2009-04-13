@@ -20,7 +20,7 @@ namespace festival {
 namespace generator {
 
 festival_generator::festival_generator(common::task::ecp_task& _ecp_task) :
-		ecp_generator (_ecp_task)
+		base (_ecp_task)
 {
 	host = ecp_t.config.return_string_value("server_host");
 	portnum = ecp_t.config.return_int_value("server_port");

@@ -27,7 +27,7 @@ namespace generator {
 
 //#############################################################################
 
-class irp6ot_nurbs_generator : public common::generator::ecp_generator 
+class irp6ot_nurbs_generator : public common::generator::base 
 {
 protected:
 	int mp_communication_mode_; //by Y - 0 bez TASK TERMINATED, 1 - z TASK TERMINATED

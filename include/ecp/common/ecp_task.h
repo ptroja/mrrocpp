@@ -16,7 +16,7 @@ namespace common {
 namespace task {
 
 
-class ecp_generator;
+class base;
 
 // klasa globalna dla calego procesu MP
 class ecp_task : public ecp_mp::task::base

@@ -23,15 +23,15 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-y_simple_generator::y_simple_generator(common::task::ecp_task& _ecp_task, int step):
-        ecp_generator (_ecp_task)
+y_simple::y_simple(common::task::ecp_task& _ecp_task, int step):
+        base (_ecp_task)
 {
     step_no = step;
 }
 
 static FILE *file;
 
-bool y_simple_generator::first_step ( )
+bool y_simple::first_step ( )
 {
 
 
@@ -71,7 +71,7 @@ bool y_simple_generator::first_step ( )
 
 
 // --------------------------------------------------------------------------
-bool y_simple_generator::next_step ( )
+bool y_simple::next_step ( )
 {
     // zmienne wykorzystywane przy rysowaniu
     static double pozycja[3];

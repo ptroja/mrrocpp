@@ -39,7 +39,7 @@ void ecp_task_pr_irp6ot::short_move_up ()
     tdes.coordinate_delta[5] = 0.0;   // przyrost wspolrzednej PSI
     tdes.coordinate_delta[6] = 0.0;   // przyrost dla rozwarcia chwytaka
     // Generator trajektorii prostoliniowej
-    common::generator::ecp_linear_generator lg(*this, tdes, 0);
+    common::generator::linear lg(*this, tdes, 0);
     lg.Move();
 }
 
@@ -76,17 +76,17 @@ void ecp_task_pr_irp6ot::task_initialization(void)
 
     ecp_tryb = config.return_int_value("tryb");
 
-    ynrlg = new common::generator::y_nose_run_force_generator (*this, 8);
+    ynrlg = new common::generator::y_nose_run_force (*this, 8);
     ynrlg->sensor_m = sensor_m;
 
     if (ecp_tryb==1)
     {
-        tig = new common::generator::y_drawing_teach_in_force_generator (*this, 8);
+        tig = new common::generator::y_drawing_teach_in_force (*this, 8);
         tig->sensor_m = sensor_m;
     }
     else if (ecp_tryb==2)
     {
-        tig = new common::generator::y_advanced_drawing_teach_in_force_generator(*this, 8);
+        tig = new common::generator::y_advanced_drawing_teach_in_force(*this, 8);
         tig->sensor_m = sensor_m;
 
     }

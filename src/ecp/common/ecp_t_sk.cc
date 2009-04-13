@@ -50,13 +50,13 @@ void ecp_task_sk::task_initialization(void)
 
 	usleep(1000*100);
 
-	nrg = new generator::ecp_tff_nose_run_generator(*this, 8);
+	nrg = new generator::tff_nose_run(*this, 8);
 
 
 	nrg->configure_pulse_check (true);
 
-	yefg = new generator::y_edge_follow_force_generator (*this, 8);
-	befg = new generator::bias_edp_force_generator(*this);
+	yefg = new generator::y_edge_follow_force (*this, 8);
+	befg = new generator::bias_edp_force(*this);
 
 
 	switch (ecp_m_robot->robot_name)

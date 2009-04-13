@@ -49,7 +49,7 @@ class robot_position_digital_scales_reading_element{
 // #################   KLASA do sprawdzania, czy robot stoi w miejscu    ##################
 // ####################################################################
 
-class robot_stopped_condition : public common::generator::ecp_generator {
+class robot_stopped_condition : public common::generator::base {
 	private:
 		// Lista elementow RSE.
 	    std::list<robot_position_digital_scales_reading_element> rse_list;

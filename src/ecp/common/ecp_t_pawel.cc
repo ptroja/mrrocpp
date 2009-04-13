@@ -42,7 +42,7 @@ void ecp_task_pawel::task_initialization(void)
 
     delay(100);
 
-    pg = new generator::pawel_generator ( *this, 20 );
+    pg = new generator::pawel ( *this, 20 );
     pg->sensor_m = sensor_m;
 
     switch (ecp_m_robot->robot_name)

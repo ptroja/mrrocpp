@@ -10,7 +10,7 @@ namespace task {
 
 class ecp_task_playerjoy_irp6ot: public common::task::ecp_task  {
 protected:
-	common::generator::playerjoy_generator* pjg;
+	common::generator::playerjoy* pjg;
 
 public:
 	// KONSTRUKTORY

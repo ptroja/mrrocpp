@@ -31,8 +31,8 @@ namespace generator {
 ////////////////////////////////////////////////////////////////////////////////////////////
 // ecp_visioncoordinates_generator
 ////////////////////////////////////////////////////////////////////////////////////////////
-ecp_visioncoordinates_generator::ecp_visioncoordinates_generator(common::task::ecp_task& _ecp_task)
-: ecp_generator(_ecp_task), SETTINGS_SECTION_NAME("[ecp_visioncoordinates_generator]")
+visioncoordinates::visioncoordinates(common::task::ecp_task& _ecp_task)
+: base(_ecp_task), SETTINGS_SECTION_NAME("[ecp_visioncoordinates_generator]")
 {
 	debugmsg("VCG: Creating virtual sensor to communicate with FraDIA");
 	sensor_m[SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(SENSOR_CVFRADIA, SETTINGS_SECTION_NAME, ecp_t, sizeof(sensor_image_t::sensor_union_t::visioncoordinates_t));
@@ -42,7 +42,7 @@ ecp_visioncoordinates_generator::ecp_visioncoordinates_generator(common::task::e
 
 }
 
-bool ecp_visioncoordinates_generator::first_step()
+bool visioncoordinates::first_step()
 {
 	// przygotowywujemy sie do pobrania danych z robota
 	debugmsg("VCG: first_step()");
@@ -101,7 +101,7 @@ void describe_matrix(Homog_matrix& matrix, const char* name)
 	debugmsg(oss.str().c_str());
 }
 
-bool ecp_visioncoordinates_generator::next_step()
+bool visioncoordinates::next_step()
 {
 	debugmsg("VCG: Processing data");
 

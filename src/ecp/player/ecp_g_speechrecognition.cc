@@ -9,7 +9,7 @@ namespace player {
 namespace generator {
 
 speechrecognition_generator::speechrecognition_generator(common::task::ecp_task& _ecp_task)
-	: ecp_generator (_ecp_task)
+	: base (_ecp_task)
 {
 	char * hostname = ecp_t.config.return_string_value("player_hostname");
 	assert(hostname);

@@ -11,11 +11,11 @@ namespace task {
 class ecp_task_fr_irp6ot: public common::task::ecp_task  {
 protected:
 	trajectory_description tdes_joint;
-	common::generator::ecp_linear_parabolic_generator *adg1;
+	common::generator::linear_parabolic *adg1;
 	// parabolic_generator adg1(JOINT, 20., joint_pp);   // generator dla trajektorii dojscia we wsp. wew
 	// generator dla trajektorii dojscia we wsp. zew.
-	common::generator::ecp_linear_parabolic_generator *adg2;
-	common::generator::ecp_elipsoid_generator *el;
+	common::generator::linear_parabolic *adg2;
+	common::generator::elipsoid *el;
 	double ta[MAX_SERVOS_NR];
 	double tb[MAX_SERVOS_NR];
 

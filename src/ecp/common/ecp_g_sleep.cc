@@ -12,18 +12,18 @@ namespace common {
 namespace generator {
 
 //constructor with parameters: task and time to sleep [s]
-ecp_sleep_generator::ecp_sleep_generator (common::task::ecp_task& _ecp_task, double s): ecp_generator (_ecp_task){
+sleep::sleep (common::task::ecp_task& _ecp_task, double s): base (_ecp_task){
 	communicate_with_edp=false;	//do not communicate with edp
 	waittime=s*1000;			//wait time[ns] conversting from given seconds to nanoseconds
 	sleeptime.tv_nsec=20000000;	//sleep time[ns]
 }
 
 //allow for later change of a sleep time
-int ecp_sleep_generator::init_time(double s){
+int sleep::init_time(double s){
 	waittime=s*1000;			//conversion from seconds to nanoseconds
 }
 
-bool ecp_sleep_generator::first_step(){
+bool sleep::first_step(){
 	if( clock_gettime( CLOCK_REALTIME , &acttime) == -1 ){	//acquiring actual time 
 		printf("sleep generator: first step time measurement error");
 		return false;
@@ -33,7 +33,7 @@ bool ecp_sleep_generator::first_step(){
 	return true;
 }
 
-bool ecp_sleep_generator::next_step(){
+bool sleep::next_step(){
 	double diff;
 
 	prevtime=acttime;

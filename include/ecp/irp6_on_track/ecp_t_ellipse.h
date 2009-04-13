@@ -23,7 +23,7 @@ class ecp_task_ellipse: public common::task::ecp_task
 protected:
 	//Generator ruchu
 	generator::ecp_ellipse_generator* eg;
-	common::generator::ecp_smooth_generator* sg;
+	common::generator::smooth* sg;
 	
 	/**
 	 * Pobiera od uzytkownika wartosc typu double

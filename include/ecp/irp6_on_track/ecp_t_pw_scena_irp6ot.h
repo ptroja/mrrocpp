@@ -28,13 +28,13 @@ class ecp_task_pw_scena_irp6ot: public common::task::ecp_task  {
 
 	generator::ecp_g_pw_scena* scena_gen;
 	//Smoth movement generator
-	common::generator::ecp_smooth_generator* smooth_gen;
+	common::generator::smooth* smooth_gen;
 	//Calibration of force
-	common::generator::bias_edp_force_generator* bef_gen;
+	common::generator::bias_edp_force* bef_gen;
 	//Gripper approach with force control
-	common::generator::ecp_tff_gripper_approach_generator* ga_gen;
+	common::generator::tff_gripper_approach* ga_gen;
 	//Linear generator
-	common::generator::ecp_linear_generator* linear_gen;
+	common::generator::linear* linear_gen;
 	//Planar servoing.
 	ecp_vis_ib_eih_planar_irp6ot* planar_vis;
 	//Trajectory description.

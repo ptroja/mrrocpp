@@ -34,7 +34,7 @@ namespace generator {
 
 /*********************** METODY ZWIAZANE Z LISTA MAM ************************/
 
-void manual_moves_automatic_measures_generator::flush_mam_list ( void ) {
+void manual_moves_automatic_measures::flush_mam_list ( void ) {
 	// Jezeli sa jakies elementy - usuniecie.
 	mam_list.clear();
 
@@ -45,30 +45,30 @@ void manual_moves_automatic_measures_generator::flush_mam_list ( void ) {
 	measure_added = false;
 	}; // end: flush_mam_list
 
-void manual_moves_automatic_measures_generator::initiate_mam_list(void) {
+void manual_moves_automatic_measures::initiate_mam_list(void) {
 	mam_list_iterator = mam_list.begin();
 	};
 
-void manual_moves_automatic_measures_generator::next_mam_list_element (void) {
+void manual_moves_automatic_measures::next_mam_list_element (void) {
 	// Przejscie na nastepny element.
 	mam_list_iterator++;
 	};
 
-void manual_moves_automatic_measures_generator::get_mam_list_element (mam_element& mam){
+void manual_moves_automatic_measures::get_mam_list_element (mam_element& mam){
 	// Przepisanie pozycji robota.
 	memcpy(mam.robot_position, mam_list_iterator->robot_position, axes_number*sizeof(double));
 	// Przepisanie odczytow z czujnikow.
 	memcpy(mam.sensor_reading, mam_list_iterator->sensor_reading, 6*sizeof(double));
 	};
 
-void manual_moves_automatic_measures_generator::get_mam_list_data (double* robot_position, double* sensor_reading){
+void manual_moves_automatic_measures::get_mam_list_data (double* robot_position, double* sensor_reading){
 	// Przepisanie pozycji robota.
 	memcpy(robot_position, mam_list_iterator->robot_position, axes_number*sizeof(double));
 	// Przepisanie odczytow z czujnikow.
 	memcpy(sensor_reading, mam_list_iterator->sensor_reading, 6*sizeof(double));
 };
 			
-bool manual_moves_automatic_measures_generator::is_mam_list_element ( void ) {
+bool manual_moves_automatic_measures::is_mam_list_element ( void ) {
 	// sprawdza czy aktualnie wskazywany jest element listy, czy lista sie skonczyla
 	if (mam_list_iterator != mam_list.end())
 		return true;
@@ -76,7 +76,7 @@ bool manual_moves_automatic_measures_generator::is_mam_list_element ( void ) {
 		return false;
 };
 	
-bool manual_moves_automatic_measures_generator::is_mam_list_last_element ( void ) {
+bool manual_moves_automatic_measures::is_mam_list_last_element ( void ) {
 	// sprawdza czy aktualnie wskazywany element listy ma nastepnik
 	// jesli <> nulla
 	if (mam_list_iterator != mam_list.end()){
@@ -95,19 +95,19 @@ bool manual_moves_automatic_measures_generator::is_mam_list_last_element ( void 
 	return false;
 };
 
-void manual_moves_automatic_measures_generator::create_mam_list_head (double* robot_position, double* sensor_reading) {
+void manual_moves_automatic_measures::create_mam_list_head (double* robot_position, double* sensor_reading) {
 	// Wstawienie glowy.
 	mam_list.push_back(mam_element (robot_position, sensor_reading));
 	mam_list_iterator = mam_list.begin();
 	};
 			
-void manual_moves_automatic_measures_generator::insert_mam_list_element (double* robot_position, double* sensor_reading) {
+void manual_moves_automatic_measures::insert_mam_list_element (double* robot_position, double* sensor_reading) {
 	// Wlasciwe wstawienie elementu.
 	mam_list.push_back(mam_element (robot_position, sensor_reading));
 	mam_list_iterator++;
 	};
 
-int manual_moves_automatic_measures_generator::mam_list_length(void) {
+int manual_moves_automatic_measures::mam_list_length(void) {
 	return mam_list.size();
 };
 
@@ -115,8 +115,8 @@ int manual_moves_automatic_measures_generator::mam_list_length(void) {
 
 
 /*****************************  KONSTRUKTOR *********************************/
-manual_moves_automatic_measures_generator::manual_moves_automatic_measures_generator(common::task::ecp_task& _ecp_task, int _axes_number) :
-	ecp_generator(_ecp_task)
+manual_moves_automatic_measures::manual_moves_automatic_measures(common::task::ecp_task& _ecp_task, int _axes_number) :
+	base(_ecp_task)
 {
 	UI_fd = _ecp_task.UI_fd;
 	// Ustawienie elementow list na NULL.
@@ -133,7 +133,7 @@ manual_moves_automatic_measures_generator::manual_moves_automatic_measures_gener
 }
 
 /******************************  DESTRUKTOR **********************************/
-manual_moves_automatic_measures_generator::~manual_moves_automatic_measures_generator(void)
+manual_moves_automatic_measures::~manual_moves_automatic_measures(void)
 {
 	// Usuniecie elementow z listy MAM.
 	flush_mam_list();
@@ -143,7 +143,7 @@ manual_moves_automatic_measures_generator::~manual_moves_automatic_measures_gene
 
 
 /******************************** FIRST STEP ***********************************/
-bool manual_moves_automatic_measures_generator::first_step (){
+bool manual_moves_automatic_measures::first_step (){
     // Przygotowanie rozkazu dla EDP.
     the_robot->EDP_data.instruction_type = GET;
     the_robot->EDP_data.get_type = ARM_DV; // ARM
@@ -156,7 +156,7 @@ bool manual_moves_automatic_measures_generator::first_step (){
 
 
 /******************************** NEXT STEP ***********************************/
-bool manual_moves_automatic_measures_generator::next_step (){
+bool manual_moves_automatic_measures::next_step (){
     // Roznica miedzy polozeniami.
     double eps = 1e-2;
 
@@ -197,13 +197,13 @@ bool manual_moves_automatic_measures_generator::next_step (){
 
 
 /************************* GET CURRENT POSITION *****************************/
-void manual_moves_automatic_measures_generator::get_current_position(double* current_position){
+void manual_moves_automatic_measures::get_current_position(double* current_position){
     // Przepisanie obecnego polozenia robota do bufora w zaleznosci od rodzaju wspolrzednych.
     memcpy(current_position, the_robot->EDP_data.current_motor_arm_coordinates, axes_number*sizeof(double));
     }; // end: get_current_position
 
 /*********************** RETURN SENSOR READING ***************************/
-void manual_moves_automatic_measures_generator::get_sensor_reading(ecp_mp::sensor::digital_scales& the_sensor, double* sensor_reading){
+void manual_moves_automatic_measures::get_sensor_reading(ecp_mp::sensor::digital_scales& the_sensor, double* sensor_reading){
     // Przepisanie pozycji z bufora.
     memcpy(sensor_reading, the_sensor.image.sensor_union.ds.readings, 6*sizeof(double));
     }; // end: return_sensor_reading
@@ -211,7 +211,7 @@ void manual_moves_automatic_measures_generator::get_sensor_reading(ecp_mp::senso
 
 
 /**************************** REFRESH WINDOW *******************************/
-void manual_moves_automatic_measures_generator::refresh_window
+void manual_moves_automatic_measures::refresh_window
 	(ecp_mp::sensor::digital_scales& the_sensor){
 	// Wiadomosc wysylana do UI.
 	ECP_message ecp_ui_msg;
@@ -237,7 +237,7 @@ void manual_moves_automatic_measures_generator::refresh_window
 
 
 /***************************** ADD MAM ELEMENT *******************************/
-void manual_moves_automatic_measures_generator::add_mam_element(ecp_mp::sensor::digital_scales& the_sensor){
+void manual_moves_automatic_measures::add_mam_element(ecp_mp::sensor::digital_scales& the_sensor){
 	// Dodanie elementu do listy
 	if (mam_list.empty()){
 		// Jesli glowa pusta.
@@ -264,7 +264,7 @@ void manual_moves_automatic_measures_generator::add_mam_element(ecp_mp::sensor::
 	};//: add_mam_element
 
 /**************************** SAVE MAM ELEMENTS ******************************/
-void manual_moves_automatic_measures_generator::save_mam_element(ofstream& to_file)
+void manual_moves_automatic_measures::save_mam_element(ofstream& to_file)
 {
 	int i;
 	// Element listy.
@@ -281,7 +281,7 @@ void manual_moves_automatic_measures_generator::save_mam_element(ofstream& to_fi
 	to_file << '\n';
 }//: save_mam_element
 
-void manual_moves_automatic_measures_generator::save_mam_list(char* filename)
+void manual_moves_automatic_measures::save_mam_list(char* filename)
 {
 	// Sprawdzenie, czy lista nie jest pusta.
 	if (mam_list_length() == 0) {

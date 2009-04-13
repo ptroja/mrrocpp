@@ -13,7 +13,7 @@ namespace generator {
 
 #define PI 3.141592
 
-class ecp_wii_generator : public common::generator::ecp_generator
+class ecp_wii_generator : public common::generator::base
 {
 	private:
 		//ilosc krokow

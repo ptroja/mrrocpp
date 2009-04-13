@@ -76,7 +76,7 @@ void ecp_task_jajko_irp6ot::main_task_algorithm(void)
 		}
 
 		if (yefg!=NULL) delete yefg;
-		yefg = new common::generator::y_egg_force_generator (*this, 8, tryb);
+		yefg = new common::generator::y_egg_force (*this, 8, tryb);
 		yefg->sensor_m = sensor_m;
 
 		sr_ecp_msg->message("NOWA SERIA");

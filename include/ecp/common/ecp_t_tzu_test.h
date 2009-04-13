@@ -35,12 +35,12 @@ namespace task {
 class ecp_task_tzu_test :  public common::task::ecp_task  
 {
 protected:
-	generator::ecp_smooth_generator *sg;
-	generator::bias_edp_force_generator *befg;
+	generator::smooth *sg;
+	generator::bias_edp_force *befg;
 	generator::force_meassure_generator* fmg;
-	generator::ecp_force_tool_change_generator* ftcg;
-	generator::ecp_tool_change_generator* tcg;
-	generator::ecp_tff_nose_run_generator *ynrfg;
+	generator::force_tool_change* ftcg;
+	generator::tool_change* tcg;
+	generator::tff_nose_run *ynrfg;
 	const char* test_trajectories[NUMBER_OF_TEST_TRAJECTORIES];
 	double weight;
 	double P_x;
@@ -68,7 +68,7 @@ public:
 namespace generator {
 
 // taki maly prywatny generator
-class force_meassure_generator : public common::generator::ecp_generator
+class force_meassure_generator : public common::generator::base
 {
 private:
     //double weight;

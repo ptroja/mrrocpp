@@ -25,7 +25,7 @@ void ecp_t_smooth2_test::task_initialization(void) {
 
 	ecp_m_robot = new ecp_irp6_on_track_robot(*this);
 	//delay(20000);
-	smoothgen2 = new common::generator::ecp_smooth2_generator(*this, true);
+	smoothgen2 = new common::generator::smooth2(*this, true);
 	sr_ecp_msg->message("ECP loaded smooth2_test");
 };
 

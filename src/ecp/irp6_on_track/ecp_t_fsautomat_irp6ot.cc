@@ -110,7 +110,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""));
-									gt = new common::generator::ecp_generator_t(*this);
+									gt = new common::generator::transparent(*this);
 									xmlFree(argument);
 								}
 								if(child_node->children->type == XML_ELEMENT_NODE &&
@@ -118,7 +118,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										nrg = new common::generator::ecp_tff_nose_run_generator(*this, atoi((char *)argument));
+										nrg = new common::generator::tff_nose_run(*this, atoi((char *)argument));
 									xmlFree(argument);
 								}
 								if(child_node->children->type == XML_ELEMENT_NODE &&
@@ -126,7 +126,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										rgg = new common::generator::ecp_tff_rubik_grab_generator(*this, atoi((char *)argument));
+										rgg = new common::generator::tff_rubik_grab(*this, atoi((char *)argument));
 									xmlFree(argument);
 								}
 								if(child_node->children->type == XML_ELEMENT_NODE &&
@@ -134,7 +134,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										gag = new common::generator::ecp_tff_gripper_approach_generator(*this, atoi((char *)argument));
+										gag = new common::generator::tff_gripper_approach(*this, atoi((char *)argument));
 									xmlFree(argument);
 								}
 								if(child_node->children->type == XML_ELEMENT_NODE &&
@@ -142,7 +142,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										rfrg = new common::generator::ecp_tff_rubik_face_rotate_generator(*this, atoi((char *)argument));
+										rfrg = new common::generator::tff_rubik_face_rotate(*this, atoi((char *)argument));
 									xmlFree(argument);
 								}
 								if(child_node->children->type == XML_ELEMENT_NODE &&
@@ -158,7 +158,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""));
-									befg = new common::generator::bias_edp_force_generator(*this);
+									befg = new common::generator::bias_edp_force(*this);
 									xmlFree(argument);
 								}
 								if(child_node->children->type == XML_ELEMENT_NODE &&
@@ -166,7 +166,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										tcg = new common::generator::ecp_tool_change_generator(*this, atoi((char *)argument));
+										tcg = new common::generator::tool_change(*this, atoi((char *)argument));
 									xmlFree(argument);
 								}
 								if(child_node->children->type == XML_ELEMENT_NODE &&
@@ -174,7 +174,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										sg = new common::generator::ecp_smooth_generator(*this, (bool)atoi((char *)argument));
+										sg = new common::generator::smooth(*this, (bool)atoi((char *)argument));
 									xmlFree(argument);
 								}
 								if(child_node->children->type == XML_ELEMENT_NODE &&
@@ -182,7 +182,7 @@ void ecp_task_fsautomat_irp6ot::task_initialization(void)
 								{
 									argument = xmlNodeGetContent(child_node->children);
 									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										wmg = new common::generator::weight_meassure_generator(*this, atoi((char *)argument));
+										wmg = new common::generator::weight_meassure(*this, atoi((char *)argument));
 									xmlFree(argument);
 								}
 								if(child_node->children->type == XML_ELEMENT_NODE &&

@@ -50,7 +50,7 @@ void ecp_task_cvfradia::task_initialization(void)
         sr_ecp_msg->message("IRp6p loaded");
     }
 		// Create generator and pass sensor to it.
-		cvg = new generator::ecp_cvfradia_generator(*this);
+		cvg = new generator::cvfradia(*this);
 	 	cvg->sensor_m = sensor_m;
 	}
 	catch(...)

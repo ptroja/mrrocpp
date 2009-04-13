@@ -14,7 +14,7 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-class ecp_generator_t;
+class transparent;
 
 }
 
@@ -25,7 +25,7 @@ class ecp_task;
 class ecp_robot : public ecp_mp::robot
 {
 	friend class ui_common_robot;
-	friend class ecp::common::generator::ecp_generator_t;
+	friend class ecp::common::generator::transparent;
 
 	// Klasa bazowa dla robotow (klasa abstrakcyjna)
 	// Kazdy robot konkretny (wyprowadzony z klasy bazowej)

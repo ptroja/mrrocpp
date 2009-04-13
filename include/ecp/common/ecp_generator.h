@@ -20,7 +20,7 @@ namespace common {
 namespace generator {
 
 
-class ecp_generator : public ecp_mp::generator::base {
+class base : public ecp_mp::generator::base {
 
 	protected:
 		common::task::ecp_task& ecp_t;
@@ -35,9 +35,9 @@ class ecp_generator : public ecp_mp::generator::base {
 		bool copy_edp_buffers_in_move;
 		ecp_robot* the_robot;
 
-		ecp_generator(common::task::ecp_task& _ecp_task);
+		base(common::task::ecp_task& _ecp_task);
 
-		virtual ~ecp_generator();
+		virtual ~base();
 		
 
 		bool is_EDP_error (ecp_robot& the_robot) const;

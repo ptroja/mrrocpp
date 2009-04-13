@@ -21,7 +21,7 @@ namespace generator {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej 
-class progpanel_generator : public common::generator::ecp_generator 
+class progpanel : public common::generator::base 
 {
 
 protected:
@@ -35,7 +35,7 @@ public:
 	int step_no;
 	
 	// konstruktor
-	progpanel_generator(common::task::ecp_task& _ecp_task, int step=0);  
+	progpanel(common::task::ecp_task& _ecp_task, int step=0);  
 	
 	virtual bool first_step ();
 	virtual bool next_step ();

@@ -22,7 +22,7 @@ namespace speaker {
 namespace generator {
 
 speaking_generator::speaking_generator(common::task::ecp_task& _ecp_task, int step):
-	 ecp_generator(_ecp_task){	step_no = step;  };
+	 base(_ecp_task){	step_no = step;  };
 
 bool speaking_generator::configure(const char* text)
 {

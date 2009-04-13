@@ -8,9 +8,9 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-ecp_operator_reaction_condition::ecp_operator_reaction_condition (common::task::ecp_task& _ecp_task)
+operator_reaction_condition::operator_reaction_condition (common::task::ecp_task& _ecp_task)
 	:
-		ecp_generator (_ecp_task)
+		base (_ecp_task)
 {
 	pose_list.clear();
 	pose_list_iterator = pose_list.end();
@@ -18,54 +18,54 @@ ecp_operator_reaction_condition::ecp_operator_reaction_condition (common::task::
 }
 
 // destruktor
-ecp_operator_reaction_condition::~ecp_operator_reaction_condition (void)
+operator_reaction_condition::~operator_reaction_condition (void)
 {
 	flush_supplementary_list();
 }
 
-void ecp_operator_reaction_condition::flush_supplementary_list ( void )
+void operator_reaction_condition::flush_supplementary_list ( void )
 {
 	pose_list.clear();
 }
 
-void ecp_operator_reaction_condition::initiate_supplementary_list(void)
+void operator_reaction_condition::initiate_supplementary_list(void)
 {
 	pose_list_iterator = pose_list.begin();
 }
 
-void ecp_operator_reaction_condition::next_supplementary_list_ptr (void)
+void operator_reaction_condition::next_supplementary_list_ptr (void)
 {
 	if (pose_list_iterator != pose_list.end())
 		pose_list_iterator++;
 }
 
-void ecp_operator_reaction_condition::get_supplementary (ecp_taught_in_pose& tip)
+void operator_reaction_condition::get_supplementary (ecp_taught_in_pose& tip)
 {
 	tip.arm_type = pose_list_iterator->arm_type;
 	tip.motion_time = pose_list_iterator->motion_time;
 	memcpy(tip.coordinates, pose_list_iterator->coordinates, MAX_SERVOS_NR*sizeof(double));
 }
 
-void ecp_operator_reaction_condition::set_supplementary (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR])
+void operator_reaction_condition::set_supplementary (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR])
 {
 	pose_list_iterator->arm_type = ps;
 	pose_list_iterator->motion_time = motion_time;
 	memcpy(pose_list_iterator->coordinates, coordinates, MAX_SERVOS_NR*sizeof(double));
 }
 
-void ecp_operator_reaction_condition::create_supplementary_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR])
+void operator_reaction_condition::create_supplementary_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR])
 {
 	pose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates));
 	pose_list_iterator = pose_list.begin();
 }
 
-void ecp_operator_reaction_condition::insert_supplementary_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR])
+void operator_reaction_condition::insert_supplementary_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR])
 {
 	pose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates));
 	pose_list_iterator++;
 }
 
-bool ecp_operator_reaction_condition::is_supplementary_list_element ( void )
+bool operator_reaction_condition::is_supplementary_list_element ( void )
 {
 	// sprawdza czy aktualnie wskazywany jest element listy, czy lista sie skonczyla
 	if ( pose_list_iterator != pose_list.end()) {
@@ -75,7 +75,7 @@ bool ecp_operator_reaction_condition::is_supplementary_list_element ( void )
 	}
 }
 
-bool ecp_operator_reaction_condition::is_supplementary_list_head ( void )
+bool operator_reaction_condition::is_supplementary_list_head ( void )
 {
 	// sprawdza czy aktualnie wskazywany jest element listy, czy lista sie skonczyla
 	if ( pose_list_iterator == pose_list.begin() ) {
@@ -85,13 +85,13 @@ bool ecp_operator_reaction_condition::is_supplementary_list_head ( void )
 	}
 }
 
-int ecp_operator_reaction_condition::supplementary_list_length(void)
+int operator_reaction_condition::supplementary_list_length(void)
 {
 	return pose_list.size();
 }
 
 // --------------------------------------------------------------------------
-bool ecp_operator_reaction_condition::first_step ()
+bool operator_reaction_condition::first_step ()
 {
 	// bada wartosc warunku poczatkowego
 	// true - konczy czekanie (funkcja wait)
@@ -108,7 +108,7 @@ bool ecp_operator_reaction_condition::first_step ()
 
 
 // --------------------------------------------------------------------------
-bool ecp_operator_reaction_condition::next_step ()
+bool operator_reaction_condition::next_step ()
 {
 	// bada wartosc warunku poczatkowego
 	// true - konczy czekanie (funkcja wait)

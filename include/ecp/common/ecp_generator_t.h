@@ -9,10 +9,10 @@ namespace common {
 namespace generator {
 
 // Generator przezroczysty
-class ecp_generator_t : public common::generator::ecp_generator {
+class transparent : public common::generator::base {
 
 public:
-	ecp_generator_t(common::task::ecp_task& _ecp_task);
+	transparent(common::task::ecp_task& _ecp_task);
 	
 	bool throw_kinematics_exceptions;
 	

@@ -34,7 +34,7 @@ void ecp_task_plot_irp6ot::task_initialization(void)
 
 void ecp_task_plot_irp6ot::main_task_algorithm(void)
 {
-	common::generator::y_simple_generator ysg(*this, 8);
+	common::generator::y_simple ysg(*this, 8);
     ysg.sensor_m = sensor_m;
 
     ysg.Move();

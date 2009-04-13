@@ -10,10 +10,10 @@ namespace task {
 
 class ecp_task_pr_irp6ot: public common::task::ecp_task  {
 protected:
-	common::generator::y_drawing_teach_in_force_generator *tig;
+	common::generator::y_drawing_teach_in_force *tig;
 	int ecp_tryb;
 //	void *dtig;
-	common::generator::y_nose_run_force_generator* ynrlg;
+	common::generator::y_nose_run_force* ynrlg;
 
 	void short_move_up ();
 

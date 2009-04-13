@@ -24,7 +24,7 @@ namespace generator {
 // ########################################################################################################
 
 
-class irp6ot_hermite_spline_generator: public ecp_teach_in_generator {
+class hermite_spline: public ecp_teach_in_generator {
 protected:
   ecp_taught_in_pose starting_pose;   // stores coordinates of the starting pose of the robot
   double INTERVAL;								// time of interpolation of one macro step (in seconds)
@@ -47,7 +47,7 @@ protected:
   double v_def_xyz_angles[MAX_SERVOS_NR];					// 
 
 public:	
-   irp6ot_hermite_spline_generator (common::task::ecp_task& _ecp_task, double interval, double ts );		// constructor		 
+   hermite_spline (common::task::ecp_task& _ecp_task, double interval, double ts );		// constructor		 
    void fill_hermite_arrays (void);				// fills the arrays 'time', 'yi', 'yiprim'
    void calc_hermit();							// calculates values of the function for the current T
    virtual bool first_step ();
@@ -55,7 +55,7 @@ public:
 };// end: irp6ot_hermite_spline_generator
 
 
-class irp6ot_natural_spline_generator: public ecp_teach_in_generator {
+class natural_spline: public ecp_teach_in_generator {
 protected:
   ecp_taught_in_pose starting_pose;			// stores coordinates of the starting pose of the robot
   double INTERVAL;										// time of interpolation of one macro step (in seconds)
@@ -78,7 +78,7 @@ protected:
   double v_def_xyz_angles[MAX_SERVOS_NR];							// 
 
 public:	
-   irp6ot_natural_spline_generator(common::task::ecp_task& _ecp_task, double interval, double ts );		// constructor		 
+   natural_spline(common::task::ecp_task& _ecp_task, double interval, double ts );		// constructor		 
    void fill_natural_arrays (void); 
    void calc_natural();
    virtual bool first_step ();

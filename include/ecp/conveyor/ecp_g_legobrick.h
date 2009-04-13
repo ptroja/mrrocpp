@@ -19,7 +19,7 @@ namespace generator {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej dla zadan yoyka z wodzeniem za nos
-class conveyor_incremental_move: public common::generator::ecp_generator {
+class conveyor_incremental_move: public common::generator::base {
 	double move_length;
 	
 public:	

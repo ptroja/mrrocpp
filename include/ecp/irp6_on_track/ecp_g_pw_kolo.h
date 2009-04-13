@@ -21,7 +21,7 @@ namespace generator {
 #define DEG 0.0174444 //Jeden stopien wyrazony w radianach
 
 
-class ecp_g_pw_kolo : public common::generator::ecp_generator
+class ecp_g_pw_kolo : public common::generator::base
 {
     trajectory_description td;
     double next_position[8];  

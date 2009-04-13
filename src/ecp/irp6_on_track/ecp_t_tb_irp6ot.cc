@@ -31,11 +31,11 @@ void ecp_t_tb_irp6ot::task_initialization(void){
 	sensor_m[SENSOR_CVFRADIA]->configure_sensor();
 
 	ecp_m_robot=new ecp_irp6_on_track_robot(*this);				//initialization of robot
-	sgen=new common::generator::ecp_smooth_generator(*this, true);
-	befgen=new common::generator::bias_edp_force_generator(*this);
-	gagen=new common::generator::ecp_tff_gripper_approach_generator (*this, 8);	//gripper approach constructor (task&, no_of_steps)
+	sgen=new common::generator::smooth(*this, true);
+	befgen=new common::generator::bias_edp_force(*this);
+	gagen=new common::generator::tff_gripper_approach (*this, 8);	//gripper approach constructor (task&, no_of_steps)
 	go_st = new common::task::ecp_sub_task_gripper_opening(*this);
-	sleepgen=new common::generator::ecp_sleep_generator(*this);
+	sleepgen=new common::generator::sleep(*this);
 	sr_ecp_msg->message("ECP loaded tb");
 };
 

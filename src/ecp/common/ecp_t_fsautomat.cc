@@ -39,7 +39,7 @@ void ecp_gripper_opening (common::task::ecp_task& _ecp_task, double gripper_incr
 	tdes.coordinate_delta[6] = gripper_increment;   // przyrost wspolrzednej PSI
 
 	// Generator trajektorii prostoliniowej
-	ecp_linear_generator lg(_ecp_task, tdes, 1);
+	linear lg(_ecp_task, tdes, 1);
 
 	_ecp_task.Move (lg);
 }

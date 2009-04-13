@@ -5,8 +5,8 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-ecp_generator_t::ecp_generator_t(common::task::ecp_task& _ecp_task) :
-	ecp_generator(_ecp_task)
+transparent::transparent(common::task::ecp_task& _ecp_task) :
+	base(_ecp_task)
 {
 	copy_edp_buffers_in_move=false;
 	throw_kinematics_exceptions = true;
@@ -17,7 +17,7 @@ ecp_generator_t::ecp_generator_t(common::task::ecp_task& _ecp_task) :
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_generator_t::first_step()
+bool transparent::first_step()
 {
 	communicate_with_edp=false;
 	return true;
@@ -27,7 +27,7 @@ bool ecp_generator_t::first_step()
 // -----------------------------------  metoda	next_step --------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool ecp_generator_t::next_step()
+bool transparent::next_step()
 {
 	// Kopiowanie danych z bufora przyslanego z EDP do
 	// obrazu danych wykorzystywanych przez generator
@@ -42,7 +42,7 @@ bool ecp_generator_t::next_step()
 }
 
 
-void ecp_generator_t::execute_motion(void)
+void transparent::execute_motion(void)
 {
 	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
 	/*

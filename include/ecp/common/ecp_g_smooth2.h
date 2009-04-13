@@ -21,7 +21,7 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-class ecp_smooth2_generator : public ecp_delta_generator {
+class smooth2 : public delta {
 
 	protected:
 		class coordinates {
@@ -93,8 +93,8 @@ class ecp_smooth2_generator : public ecp_delta_generator {
 		int coordinate_list_lenght(void);
 
 	public:
-		ecp_smooth2_generator(common::task::ecp_task& _ecp_task, bool _is_synchronised);
-		ecp_smooth2_generator(common::task::ecp_task& _ecp_task, bool _is_synchronised, bool _debug);
+		smooth2(common::task::ecp_task& _ecp_task, bool _is_synchronised);
+		smooth2(common::task::ecp_task& _ecp_task, bool _is_synchronised, bool _debug);
 
 		void set_relative(void); //zmiana na tryb przyrostowy
 		void set_absolute(void); //zmiana na tryb bezwzgledny

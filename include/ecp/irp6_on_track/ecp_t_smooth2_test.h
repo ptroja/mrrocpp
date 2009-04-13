@@ -14,7 +14,7 @@ namespace task {
 class ecp_t_smooth2_test: public common::task::ecp_task {
   
   protected:
-	  common::generator::ecp_smooth2_generator* smoothgen2;
+	  common::generator::smooth2* smoothgen2;
 		
 	public:
 		ecp_t_smooth2_test(configurator &_config);

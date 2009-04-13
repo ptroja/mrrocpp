@@ -11,7 +11,7 @@ namespace task {
 
 class ecp_task_progpanel_irp6ot: public common::task::ecp_task  {
 protected:
-	common::generator::progpanel_generator* ppg;
+	common::generator::progpanel* ppg;
 //	ecp_teach_in_generator* tig;
 
 public:

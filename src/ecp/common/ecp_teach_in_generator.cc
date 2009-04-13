@@ -21,7 +21,7 @@ namespace common {
 // ####################################################################################################
 
 ecp_teach_in_generator::ecp_teach_in_generator(common::task::ecp_task& _ecp_task) :
-  ecp_generator(_ecp_task)
+  base(_ecp_task)
   {
     pose_list.clear();
     pose_list_iterator = pose_list.end();
@@ -64,7 +64,7 @@ void ecp_teach_in_generator::teach(POSE_SPECIFICATION ps, const char *msg)
             e = errno;
             perror("ECP teach(): Send() to UI failed");
             sr_ecp_msg.message(SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-            throw ecp_generator::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+            throw base::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
           }
         if (ui_to_ecp_rep.reply == QUIT) // Koniec uczenia
           break;
@@ -115,7 +115,7 @@ void ecp_teach_in_generator::save_file(POSE_SPECIFICATION ps)
         e = errno;
         perror("ECP: Send() to UI failed\n");
         sr_ecp_msg.message(SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-        throw ecp_generator::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+        throw base::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
       }
     if (ui_to_ecp_rep.reply == QUIT)
       { // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
@@ -147,14 +147,14 @@ void ecp_teach_in_generator::save_file(POSE_SPECIFICATION ps)
     if (chdir(ui_to_ecp_rep.path) != 0)
       {
         perror(ui_to_ecp_rep.path);
-        throw ecp_generator::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+        throw base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
       }
     std::ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
     e = errno;
     if (!to_file)
       {
         perror(ui_to_ecp_rep.filename);
-        throw ecp_generator::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
       }
     else
       {
@@ -207,14 +207,14 @@ bool ecp_teach_in_generator::load_file_from_ui()
         e = errno;
         perror("ECP: Send() to UI failed\n");
         sr_ecp_msg.message(SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-        throw ecp_generator::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+        throw base::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
       }
     if (ui_to_ecp_rep.reply == QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
       return false;
     if (chdir(ui_to_ecp_rep.path) != 0)
       {
         perror(ui_to_ecp_rep.path);
-        throw ecp_generator::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+        throw base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
       }
 
     return load_file_with_path(ui_to_ecp_rep.filename);
@@ -242,13 +242,13 @@ bool ecp_teach_in_generator::load_file_with_path(char* file_name)
     if (!from_file)
       {
         perror(file_name);
-        throw ecp_generator::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
       }
 
     if ( !(from_file >> coordinate_type))
       {
         from_file.close();
-        throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+        throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
       }
 
     // Usuwanie spacji i tabulacji
@@ -281,12 +281,12 @@ bool ecp_teach_in_generator::load_file_with_path(char* file_name)
     else
       {
         from_file.close();
-        throw ecp_generator::ECP_error(NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+        throw base::ECP_error(NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
       }
     if ( !(from_file >> number_of_poses))
       {
         from_file.close();
-        throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+        throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
       }
     flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
     for (i = 0; i < number_of_poses; i++)
@@ -294,14 +294,14 @@ bool ecp_teach_in_generator::load_file_with_path(char* file_name)
         if (!(from_file >> motion_time))
           {
             from_file.close();
-            throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
           }
         for (j = 0; j < MAX_SERVOS_NR; j++)
           {
             if ( !(from_file >> coordinates[j]))
               { // Zabezpieczenie przed danymi nienumerycznymi
                 from_file.close();
-                throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+                throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
               }
           }
 
@@ -310,7 +310,7 @@ bool ecp_teach_in_generator::load_file_with_path(char* file_name)
             if ( !(from_file >> extra_info))
               { // Zabezpieczenie przed danymi nienumerycznymi
                 from_file.close();
-                throw ecp_generator::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+                throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
               }
             if (first_time)
               {
