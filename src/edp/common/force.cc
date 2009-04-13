@@ -101,17 +101,17 @@ void * irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 		//!< przygotowanie struktury do wyslania
 		double current_force[6];
 
-		Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
-		Ft_v_tr ft_tr_inv_current_frame_matrix(!current_frame_wo_offset, Ft_v_tr::FT);
+		lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
+		lib::Ft_v_tr ft_tr_inv_current_frame_matrix(!current_frame_wo_offset, lib::Ft_v_tr::FT);
 
-		Homog_matrix current_tool(get_current_kinematic_model()->tool);
-		Ft_v_tr ft_tr_inv_tool_matrix(!current_tool, Ft_v_tr::FT);
+		lib::Homog_matrix current_tool(get_current_kinematic_model()->tool);
+		lib::Ft_v_tr ft_tr_inv_tool_matrix(!current_tool, lib::Ft_v_tr::FT);
 
 		// uwaga sila nie przemnozona przez tool'a i current frame orientation
 		force_msr_download(current_force, 0);
 
-		Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
-				* Ft_v_vector(current_force));
+		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
+				* lib::Ft_v_vector(current_force));
 		current_force_torque.to_table(edp_vsp_reply.force);
 
 		counter++;
@@ -219,16 +219,16 @@ void * irp6s_postument_track_effector::force_thread(void *arg)
 
 				double current_force[6];
 
-				Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
-				Ft_v_tr ft_tr_inv_current_frame_matrix (!current_frame_wo_offset, Ft_v_tr::FT);
+				lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
+				lib::Ft_v_tr ft_tr_inv_current_frame_matrix (!current_frame_wo_offset, lib::Ft_v_tr::FT);
 
-				Homog_matrix current_tool(get_current_kinematic_model()->tool);
-				Ft_v_tr ft_tr_inv_tool_matrix (!current_tool, Ft_v_tr::FT);
+				lib::Homog_matrix current_tool(get_current_kinematic_model()->tool);
+				lib::Ft_v_tr ft_tr_inv_tool_matrix (!current_tool, lib::Ft_v_tr::FT);
 
 				// uwaga sila nie przemnozona przez tool'a i current frame orientation
 				force_msr_download(current_force, 0);
 
-				Ft_v_vector current_force_torque (ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix * Ft_v_vector (current_force));
+				lib::Ft_v_vector current_force_torque (ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix * lib::Ft_v_vector (current_force));
 
 				rb_obj->lock_mutex();
 				for (int i=0;i<=5;i++)

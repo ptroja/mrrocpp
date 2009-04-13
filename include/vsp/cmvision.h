@@ -258,15 +258,15 @@ public:
   double C_r_G[6];  // ^{C}r_{G}
   double C_eps_EG[6];  // ^{C}\vareps_{E,G}
   
-  Homog_matrix C_Tx_G;
-Homog_matrix C_Tx_E;
-Homog_matrix O_Tx_E;
-Homog_matrix O_Tx_C;
-Homog_matrix O_Tx_E__C;
-Homog_matrix O_Tx_G__C;
+  lib::Homog_matrix C_Tx_G;
+lib::Homog_matrix C_Tx_E;
+lib::Homog_matrix O_Tx_E;
+lib::Homog_matrix O_Tx_C;
+lib::Homog_matrix O_Tx_E__C;
+lib::Homog_matrix O_Tx_G__C;
 
-Homog_matrix E_Tx_G;
-Homog_matrix E_Tx_G__O;
+lib::Homog_matrix E_Tx_G;
+lib::Homog_matrix E_Tx_G__O;
   
   //double *cube_vector;
   //double *cube_center;

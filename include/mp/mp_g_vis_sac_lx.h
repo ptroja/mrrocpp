@@ -31,23 +31,23 @@ public:
      
      frame_tab my_goal_frame;
      
-	Homog_matrix C_Tx_G;
-	Homog_matrix C_Tx_E;
-	Homog_matrix O_Tx_E;
-	Homog_matrix O_Tx_Ep;
-	Homog_matrix O_Tx_G;
-	Homog_matrix G_Tx_G2;
+	lib::Homog_matrix C_Tx_G;
+	lib::Homog_matrix C_Tx_E;
+	lib::Homog_matrix O_Tx_E;
+	lib::Homog_matrix O_Tx_Ep;
+	lib::Homog_matrix O_Tx_G;
+	lib::Homog_matrix G_Tx_G2;
 	
-	Homog_matrix G_Tx_S;
+	lib::Homog_matrix G_Tx_S;
 	
-	Homog_matrix O_Tx_C;
-	Homog_matrix O_Tx_E__C;
-	Homog_matrix O_Tx_G__C;
+	lib::Homog_matrix O_Tx_C;
+	lib::Homog_matrix O_Tx_E__C;
+	lib::Homog_matrix O_Tx_G__C;
 
-	Homog_matrix E_Tx_G;
-	Homog_matrix E_Tx_Ep;
+	lib::Homog_matrix E_Tx_G;
+	lib::Homog_matrix E_Tx_Ep;
 	
-	Homog_matrix E_Tx_G__O;
+	lib::Homog_matrix E_Tx_G__O;
 	
 	
 	double O_r_E[3][6];

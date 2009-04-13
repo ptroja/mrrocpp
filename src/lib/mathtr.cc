@@ -16,6 +16,9 @@
 #include "lib/mis_fun.h"
 #include "lib/mathtr.h"
 
+namespace mrrocpp {
+namespace lib {
+
 // Sprowadzenie wartosci kata do przedzialu (-M_PI, M_PI >.
 double reduce (double angle)
 {
@@ -236,7 +239,7 @@ double& K_vector::operator[](const int i )
 
 
 // ******************************************************************************************
-//                                     definicje skladowych klasy HOMOG_MATRIX
+//                                     definicje skladowych klasy Homog_matrix
 // ******************************************************************************************
 
 Homog_matrix::Homog_matrix()
@@ -2346,3 +2349,8 @@ matrix[5][4] = -c4*c1/(a2*c2+d5*c4+a3*c3)/s5;
 matrix[5][5] = 0.0;
 
 }//end Jacobian_matrix::irp6_6dof_inverse_equations(const Ft_v_vector & w)
+
+
+} // namespace lib
+} // namespace mrrocpp
+

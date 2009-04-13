@@ -53,10 +53,10 @@ void model_jacobian_transpose_with_wrist::inverse_kinematics_transform(double* l
   double Max;	//pomocnbicza zmienna - max element wektora
 
   frame_tab local_current_end_effector_frame;	//Ramka odpowiadajaca aktualnej pozycji
-  Ft_v_vector desired_distance_new;				//odleglosc do pokonania
-  Ft_v_vector delta_q;									//przyrost zmieenych przegubowych na jedna iteracje
-  Ft_v_vector current_joints;							//wartosci aktualnych zmiennych przegubowych reprezentowane jako wektor
-  Jacobian_matrix  jacobian_new;					//jakobian
+  lib::Ft_v_vector desired_distance_new;				//odleglosc do pokonania
+  lib::Ft_v_vector delta_q;									//przyrost zmieenych przegubowych na jedna iteracje
+  lib::Ft_v_vector current_joints;							//wartosci aktualnych zmiennych przegubowych reprezentowane jako wektor
+  lib::Jacobian_matrix  jacobian_new;					//jakobian
 
   current_joints.set_values(local_current_joints);
 

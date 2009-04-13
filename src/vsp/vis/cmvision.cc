@@ -727,7 +727,7 @@ bool CMVision::loadColors(char *filename)
             c->s_low = s1;  c->s_high = s2;
             c->v_low = v1;  c->v_high = v2;
 
-            k = (1 << i); //kolejne zapalone bity oznaczaj¹ kolejne kolory
+            k = (1 << i); //kolejne zapalone bity oznaczajï¿½ kolejne kolory
 			
 			set_bits(h_class,CMV_COLOR_LEVELS,h1,h2,k);
             set_bits(s_class,CMV_COLOR_LEVELS,s1,s2,k);
@@ -1661,15 +1661,15 @@ C_T_E[2][0]=Rckk[3][1]; C_T_E[2][1]=Rckk[3][2]; C_T_E[2][2]=Rckk[3][3]; C_T_E[2]
 //	C_r_E[3]=atan2(C_T_E[1][2],C_T_E[0][2]);
 
 /*
-Homog_matrix C_Tx_G;
-Homog_matrix C_Tx_E;
-Homog_matrix O_Tx_E;
-Homog_matrix O_Tx_C;
-Homog_matrix O_Tx_E__C;
-Homog_matrix O_Tx_G__C;
+lib::Homog_matrix C_Tx_G;
+lib::Homog_matrix C_Tx_E;
+lib::Homog_matrix O_Tx_E;
+lib::Homog_matrix O_Tx_C;
+lib::Homog_matrix O_Tx_E__C;
+lib::Homog_matrix O_Tx_G__C;
 
-Homog_matrix E_Tx_G;
-Homog_matrix E_Tx_G__O;
+lib::Homog_matrix E_Tx_G;
+lib::Homog_matrix E_Tx_G__O;
 */
 
 for(int i=0; i<4; i++)

@@ -75,11 +75,11 @@ struct vis_entities_t
 			 * ^{C}T_{G} -- goal pose with respect to the camera frame.
 			 */
 
-				Homog_matrix *C_Tx_G;
-/*				Homog_matrix C_Tx_E;
-				Homog_matrix O_Tx_G;
-				Homog_matrix O_Tx_Ep;
-				Homog_matrix O_Tx_E;
+				lib::Homog_matrix *C_Tx_G;
+/*				lib::Homog_matrix C_Tx_E;
+				lib::Homog_matrix O_Tx_G;
+				lib::Homog_matrix O_Tx_Ep;
+				lib::Homog_matrix O_Tx_E;
 */
 				double C_r_G[3][6];
 				double C_r_E[3][6];
@@ -96,10 +96,10 @@ struct vis_entities_t
 		} pb_eol_sac;
 
 		vis_entities_union_t(){
-		 pb_eol_sac.C_Tx_G = new Homog_matrix();
+		 pb_eol_sac.C_Tx_G = new lib::Homog_matrix();
 		};
 	};
-		Homog_matrix C_Tx_E;
+		lib::Homog_matrix C_Tx_E;
 };
 
 /*!
@@ -123,7 +123,7 @@ struct vis_operations_t
 		struct pb_eol_sac_struct_t
 		{
 
-			//	Homog_matrix O_Tx_C;
+			//	lib::Homog_matrix O_Tx_C;
 			/*!
 			 * ^{0}M^{*} -- gain.
 			 */
@@ -131,8 +131,8 @@ struct vis_operations_t
 
 		} pb_eol_sac;
 	};
-	//Homog_matrix G_Tx_G2;
-	//Homog_matrix G_Tx_S;
+	//lib::Homog_matrix G_Tx_G2;
+	//lib::Homog_matrix G_Tx_S;
 };
 #endif
 
@@ -158,23 +158,23 @@ public:
 	/*!
 	 * ^{C}T_{G} -- goal pose with respect to the camera frame.
 	 */
-	Homog_matrix C_Tx_G;
+	lib::Homog_matrix C_Tx_G;
 	/*!
 	 * ^{C}T_{E} -- end-effector pose with respect to the camera frame.
 	 */
-	Homog_matrix C_Tx_E;
+	lib::Homog_matrix C_Tx_E;
 	/*!
 	 * ^{0}T_{G} -- goal pose with respect to the global frame.
 	 */
-	Homog_matrix O_Tx_G;
+	lib::Homog_matrix O_Tx_G;
 	/*!
 	 * ^{C}T_{E'} -- end-effector next pose with respect to the global frame.
 	 */
-	Homog_matrix O_Tx_Ep;
+	lib::Homog_matrix O_Tx_Ep;
 	/*!
 	 * ^{0}T_{E} -- goal pose with respect to the camera frame.
 	 */
-	Homog_matrix O_Tx_E;
+	lib::Homog_matrix O_Tx_E;
 	/*!
 	 * ^{C}r_{G} -- goal pose with respect to the camera frame (AA).
 	 */
@@ -226,15 +226,15 @@ public:
 	 /*!
 	 * ^{0}r_{C} -- camera pose with respect to the camera frame.
 	 */
-	Homog_matrix O_Tx_C;
+	lib::Homog_matrix O_Tx_C;
 	/*!
 	 * M -- gains.
 	 */
 	double gain[6];
 
 	double x2g;
-	Homog_matrix G_Tx_G2;
-	Homog_matrix G_Tx_S;
+	lib::Homog_matrix G_Tx_G2;
+	lib::Homog_matrix G_Tx_S;
 #endif
 
 	/*!

@@ -58,7 +58,7 @@ void nalewanie::task_initialization(void)
 void nalewanie::main_task_algorithm(void)
 {
 	/*
-	Homog_matrix *mat=new Homog_matrix();
+	lib::Homog_matrix *mat=new lib::Homog_matrix();
     double qq[7];
 
 	mat->set_xyz_quaternion(1, 2, 3, 0.5, 0.5, 0.5, 0.5);

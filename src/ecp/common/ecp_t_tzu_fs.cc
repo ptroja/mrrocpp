@@ -370,10 +370,10 @@ bool force_meassure_generator::first_step()
 bool force_meassure_generator::next_step()
 {
 	usleep(sleep_time);
-	Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
+	lib::Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
 	current_frame_wo_offset.remove_translation();
 
-	Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
+	lib::Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
 	weight += force_torque;
 
 //	cout<<"force_torque: "<<force_torque<<endl;
@@ -389,7 +389,7 @@ bool force_meassure_generator::next_step()
 	return true;
 }
 
-Ft_v_vector& force_meassure_generator::get_meassurement()
+lib::Ft_v_vector& force_meassure_generator::get_meassurement()
 {
 //cout<<"in gen mes bef: "<<weight<<endl;
 //	for(int i = 0 ; i < 6 ; i++)

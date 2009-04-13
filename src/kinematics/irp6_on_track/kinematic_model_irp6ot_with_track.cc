@@ -161,7 +161,7 @@ if (!p) {
 
   // Sprowadzenie katow do I lub II cwiartki ukladu
   for (int i=1; i<6; i++ ) {
-    reduce(local_desired_joints[i]);
+    lib::reduce(local_desired_joints[i]);
   }
 
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.

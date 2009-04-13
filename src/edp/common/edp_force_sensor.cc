@@ -65,8 +65,8 @@ void force::wait_for_event(void)
 void force::set_force_tool(void)
 {
 
-    K_vector gravity_arm_in_sensor(next_force_tool_position);
-    Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
+    lib::K_vector gravity_arm_in_sensor(next_force_tool_position);
+    lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
     gravity_transformation->defineTool(frame, next_force_tool_weight, gravity_arm_in_sensor);
 
     for (int i = 0; i<3; i++)

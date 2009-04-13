@@ -53,11 +53,11 @@ public:
 	 * ^{C}T_{G} -- goal pose with respect to the camera frame.
 	 */
 #if 0
-	Homog_matrix C_Tx_G;
-	Homog_matrix C_Tx_E;
-	Homog_matrix O_Tx_G;
-	Homog_matrix O_Tx_Ep;
-	Homog_matrix O_Tx_E;
+	lib::Homog_matrix C_Tx_G;
+	lib::Homog_matrix C_Tx_E;
+	lib::Homog_matrix O_Tx_G;
+	lib::Homog_matrix O_Tx_Ep;
+	lib::Homog_matrix O_Tx_E;
 
 	double C_r_G[3][6];
 	double C_r_E[3][6];
@@ -74,12 +74,12 @@ public:
 	/*!
 	 * Operations:
 	 */
-	Homog_matrix O_Tx_C;
+	lib::Homog_matrix O_Tx_C;
 	double gain[6];
 
 	double x2g;
-	Homog_matrix G_Tx_G2;
-	Homog_matrix G_Tx_S;
+	lib::Homog_matrix G_Tx_G2;
+	lib::Homog_matrix G_Tx_S;
 #endif
 
 	double O_weight__SAC;

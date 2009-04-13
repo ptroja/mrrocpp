@@ -176,7 +176,7 @@ void irp6s_postument_track_effector::arm_frame_2_xyz_eul_zyz()
 	// FRAME do postaci XYZ_EULER_ZYZ
 	// oraz przepisanie wyniku przeksztacenia do
 	// wewntrznych struktur danych REPLY_BUFFER
-	Homog_matrix A(current_end_effector_frame);
+	lib::Homog_matrix A(current_end_effector_frame);
 	switch (reply.reply_type)
 	{
 	case ARM:
@@ -216,8 +216,8 @@ void irp6s_postument_track_effector::arm_abs_xyz_eul_zyz_2_frame(const double *p
 	alfa = p[3];
 	beta = p[4];
 	gamma = p[5];
-	//Homog_matrix A_B_T (Homog_matrix::MTR_MECH_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
-	Homog_matrix A_B_T(Homog_matrix::MTR_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
+	//lib::Homog_matrix A_B_T (lib::Homog_matrix::MTR_MECH_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
+	lib::Homog_matrix A_B_T(lib::Homog_matrix::MTR_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
 	A_B_T.get_frame_tab(desired_end_effector_frame);
 
 }
@@ -334,14 +334,14 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffer &i
 	static double ending_gripper_coordinate;
 	static frame_tab local_force_end_effector_frame;
 	const unsigned long PREVIOUS_MOVE_VECTOR_NULL_STEP_VALUE = 10;
-	Ft_v_vector base_pos_xyz_rot_xyz_vector; // wartosci ruchu pozycyjnego
+	lib::Ft_v_vector base_pos_xyz_rot_xyz_vector; // wartosci ruchu pozycyjnego
 
 
 	static unsigned long last_force_step_counter = step_counter;
 
-	Ft_v_vector move_rot_vector;
-	Ft_v_vector pos_xyz_rot_xyz_vector;
-	static Ft_v_vector previous_move_rot_vector;
+	lib::Ft_v_vector move_rot_vector;
+	lib::Ft_v_vector pos_xyz_rot_xyz_vector;
+	static lib::Ft_v_vector previous_move_rot_vector;
 
 	// WYLICZENIE POZYCJI POCZATKOWEJ
 	double begining_joints[MAX_SERVOS_NR], tmp_joints[MAX_SERVOS_NR], tmp_motor_pos[MAX_SERVOS_NR];
@@ -349,16 +349,16 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffer &i
 
 	get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, begining_joints);
 	get_current_kinematic_model()->i2e_transform(begining_joints, &begining_frame);
-	Homog_matrix begining_end_effector_frame(begining_frame);
-	Homog_matrix next_frame = begining_end_effector_frame;
+	lib::Homog_matrix begining_end_effector_frame(begining_frame);
+	lib::Homog_matrix next_frame = begining_end_effector_frame;
 
 
 	// WYZNACZENIE goal_frame
 	frame_tab goal_frame_tab;
-	Homog_matrix goal_frame;
+	lib::Homog_matrix goal_frame;
 
-	Homog_matrix goal_frame_increment_in_end_effector;
-	Ft_v_vector goal_xyz_angle_axis_increment_in_end_effector;
+	lib::Homog_matrix goal_frame_increment_in_end_effector;
+	lib::Ft_v_vector goal_xyz_angle_axis_increment_in_end_effector;
 
 
 	switch (motion_type)
@@ -459,48 +459,48 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffer &i
 
 	beginning_gripper_coordinate = begining_joints[gripper_servo_nr];
 
-	Homog_matrix current_tool(get_current_kinematic_model()->tool);
+	lib::Homog_matrix current_tool(get_current_kinematic_model()->tool);
 
 	//	std::cout << current_tool << std::endl;
 
-	Ft_v_tr ft_tr_tool_matrix(current_tool, Ft_v_tr::FT);
-	Ft_v_tr ft_tr_inv_tool_matrix = !ft_tr_tool_matrix;
-	Ft_v_tr v_tr_tool_matrix(current_tool, Ft_v_tr::V);
-	Ft_v_tr v_tr_inv_tool_matrix = !v_tr_tool_matrix;
+	lib::Ft_v_tr ft_tr_tool_matrix(current_tool, lib::Ft_v_tr::FT);
+	lib::Ft_v_tr ft_tr_inv_tool_matrix = !ft_tr_tool_matrix;
+	lib::Ft_v_tr v_tr_tool_matrix(current_tool, lib::Ft_v_tr::V);
+	lib::Ft_v_tr v_tr_inv_tool_matrix = !v_tr_tool_matrix;
 
 	// poczatek generacji makrokroku
 	for (int step = 1; step <= ECP_motion_steps; step++)
 	{
 
-		Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
+		lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
 
-		Ft_v_tr ft_tr_current_frame_matrix(current_frame_wo_offset, Ft_v_tr::FT);
-		Ft_v_tr ft_tr_inv_current_frame_matrix = !ft_tr_current_frame_matrix;
-		Ft_v_tr v_tr_current_frame_matrix(current_frame_wo_offset, Ft_v_tr::V);
-		Ft_v_tr v_tr_inv_current_frame_matrix = !v_tr_current_frame_matrix;
+		lib::Ft_v_tr ft_tr_current_frame_matrix(current_frame_wo_offset, lib::Ft_v_tr::FT);
+		lib::Ft_v_tr ft_tr_inv_current_frame_matrix = !ft_tr_current_frame_matrix;
+		lib::Ft_v_tr v_tr_current_frame_matrix(current_frame_wo_offset, lib::Ft_v_tr::V);
+		lib::Ft_v_tr v_tr_inv_current_frame_matrix = !v_tr_current_frame_matrix;
 
 		force_msr_download(current_force, previous_force);
 		// sprowadzenie sil z ukladu bazowego do ukladu kisci
 		// modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
 
 
-		Homog_matrix begining_end_effector_frame_with_current_translation = begining_end_effector_frame;
+		lib::Homog_matrix begining_end_effector_frame_with_current_translation = begining_end_effector_frame;
 		begining_end_effector_frame_with_current_translation.set_translation_vector(next_frame);
 
-		Homog_matrix modified_beginning_to_desired_end_effector_frame =
+		lib::Homog_matrix modified_beginning_to_desired_end_effector_frame =
 			!begining_end_effector_frame_with_current_translation * next_frame;
 
-		Ft_v_tr
-		v_tr_modified_beginning_to_desired_end_effector_frame(modified_beginning_to_desired_end_effector_frame, Ft_v_tr::V);
-		Ft_v_tr v_tr_inv_modified_beginning_to_desired_end_effector_frame =
+		lib::Ft_v_tr
+		v_tr_modified_beginning_to_desired_end_effector_frame(modified_beginning_to_desired_end_effector_frame, lib::Ft_v_tr::V);
+		lib::Ft_v_tr v_tr_inv_modified_beginning_to_desired_end_effector_frame =
 			!v_tr_modified_beginning_to_desired_end_effector_frame;
 
 
-		Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
-				* Ft_v_vector(current_force));
-		//		Ft_v_vector tmp_force_torque (Ft_v_tr((!current_tool) * (!current_frame_wo_offset), Ft_v_tr::FT) * Ft_v_vector (current_force));
-		Ft_v_vector previous_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
-				* Ft_v_vector(previous_force));
+		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
+				* lib::Ft_v_vector(current_force));
+		//		lib::Ft_v_vector tmp_force_torque (lib::Ft_v_tr((!current_tool) * (!current_frame_wo_offset), lib::Ft_v_tr::FT) * lib::Ft_v_vector (current_force));
+		lib::Ft_v_vector previous_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
+				* lib::Ft_v_vector(previous_force));
 
 
 		//wyzerowanie historii dla dlugiej przerwy w sterowaniu silowym
@@ -555,7 +555,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffer &i
 
 		//		if (debugi%10==0) printf("aaa: %f\n", force_xyz_torque_xyz[0] + force_torque[0]);
 
-		Homog_matrix rot_frame(Homog_matrix::MTR_XYZ_ANGLE_AXIS, move_rot_vector);
+		lib::Homog_matrix rot_frame(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, move_rot_vector);
 
 		// wyliczenie nowej pozycji zadanej
 		next_frame = next_frame * rot_frame;
@@ -584,7 +584,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffer &i
 		if (step == ECP_value_in_step_no)
 		{ // przygotowanie predicted frame dla ECP
 			//  next_frame.get_frame_tab(reply.arm.pf_def.arm_frame);
-			Homog_matrix predicted_frame = next_frame;
+			lib::Homog_matrix predicted_frame = next_frame;
 			for (int i=0; i< ECP_motion_steps - ECP_value_in_step_no; i++)
 			{
 				predicted_frame = predicted_frame * rot_frame;
@@ -749,18 +749,18 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, c_buff
 
 	if (instruction.interpolation_type == TCIM)
 	{
-		Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
-		Ft_v_tr ft_tr_inv_current_frame_matrix(!current_frame_wo_offset, Ft_v_tr::FT);
+		lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
+		lib::Ft_v_tr ft_tr_inv_current_frame_matrix(!current_frame_wo_offset, lib::Ft_v_tr::FT);
 
-		Homog_matrix current_tool(get_current_kinematic_model()->tool);
-		Ft_v_tr ft_tr_inv_tool_matrix(!current_tool, Ft_v_tr::FT);
+		lib::Homog_matrix current_tool(get_current_kinematic_model()->tool);
+		lib::Ft_v_tr ft_tr_inv_tool_matrix(!current_tool, lib::Ft_v_tr::FT);
 
 		force_msr_download(current_force, NULL);
 		// sprowadzenie sil z ukladu bazowego do ukladu kisci
 		// modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
 
-		Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
-				* Ft_v_vector(current_force));
+		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix
+				* lib::Ft_v_vector(current_force));
 		current_force_torque.to_table(reply.arm.pf_def.force_xyz_torque_xyz);
 
 		if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
@@ -790,8 +790,8 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 	//	frame_tab tmp;
 
 
-	//	Homog_matrix step_increment_frame;
-	//	Homog_matrix servo_current_end_effector_frame_with_tool_and_base_wo_offset;
+	//	lib::Homog_matrix step_increment_frame;
+	//	lib::Homog_matrix servo_current_end_effector_frame_with_tool_and_base_wo_offset;
 
 	// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
 	try
@@ -817,7 +817,7 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 		//    
 
 		// Stworzenie macierzy, ktora bedzie uzywana w dalszych obliczeniach.
-		Homog_matrix servo_current_frame (servo_current_frame_wo_tool);
+		lib::Homog_matrix servo_current_frame (servo_current_frame_wo_tool);
 
 		get_current_kinematic_model()->global_frame_transform(servo_current_frame);
 		//        get_current_kinematic_model()->local_corrector_transform(servo_current_frame);
@@ -878,7 +878,7 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 		// Jesli obliczenia zwiazane z baza maja byc wykonane.
 		if (get_current_kinematic_model()->global_frame_computations)
 		{
-			Homog_matrix tmp_eem(servo_current_frame_wo_tool);
+			lib::Homog_matrix tmp_eem(servo_current_frame_wo_tool);
 			get_current_kinematic_model()->global_frame_transform(tmp_eem);
 			tmp_eem.get_frame_tab(servo_current_frame_wo_tool);
 		}
@@ -910,12 +910,12 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 	pthread_mutex_unlock( &edp_irp6s_effector_mutex);
 }
 
-Homog_matrix irp6s_postument_track_effector::return_current_frame(TRANSLATION_ENUM translation_mode)
+lib::Homog_matrix irp6s_postument_track_effector::return_current_frame(TRANSLATION_ENUM translation_mode)
 {// by Y
 	pthread_mutex_lock( &edp_irp6s_effector_mutex);
 	// przepisanie danych na zestaw lokalny dla edp_force
 	// copy_frame(force_current_end_effector_frame, global_current_end_effector_frame);
-	Homog_matrix return_frame(global_current_frame_wo_tool);
+	lib::Homog_matrix return_frame(global_current_frame_wo_tool);
 	pthread_mutex_unlock( &edp_irp6s_effector_mutex);
 
 	if (translation_mode == WITHOUT_TRANSLATION)

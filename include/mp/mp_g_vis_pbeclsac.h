@@ -29,15 +29,15 @@ public:
 	int step_no;
 	double delta[6];
        
-	Homog_matrix C_Tx_G;
-	Homog_matrix C_Tx_E;
-	Homog_matrix O_Tx_E;
-	Homog_matrix O_Tx_C;
-	Homog_matrix O_Tx_E__C;
-	Homog_matrix O_Tx_G__C;
+	lib::Homog_matrix C_Tx_G;
+	lib::Homog_matrix C_Tx_E;
+	lib::Homog_matrix O_Tx_E;
+	lib::Homog_matrix O_Tx_C;
+	lib::Homog_matrix O_Tx_E__C;
+	lib::Homog_matrix O_Tx_G__C;
 
-	Homog_matrix E_Tx_G;
-	Homog_matrix E_Tx_G__O;
+	lib::Homog_matrix E_Tx_G;
+	lib::Homog_matrix E_Tx_G__O;
 
     // konstruktor
     vis_pbeclsac(task::base& _mp_task, int step=0);  

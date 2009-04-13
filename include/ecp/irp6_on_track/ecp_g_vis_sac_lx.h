@@ -43,46 +43,46 @@ int step_no;
      
      frame_tab my_goal_frame;
      
-	Homog_matrix C_Tx_G;
-	Homog_matrix CSAC_Tx_G;
-	Homog_matrix C_Tx_E;
-	Homog_matrix O_Tx_E;
-	Homog_matrix O_Tx_Ep;
-	Homog_matrix O_Tx_G;
-	Homog_matrix O_Tx_G__CSAC;
-	Homog_matrix G_Tx_G2;
+	lib::Homog_matrix C_Tx_G;
+	lib::Homog_matrix CSAC_Tx_G;
+	lib::Homog_matrix C_Tx_E;
+	lib::Homog_matrix O_Tx_E;
+	lib::Homog_matrix O_Tx_Ep;
+	lib::Homog_matrix O_Tx_G;
+	lib::Homog_matrix O_Tx_G__CSAC;
+	lib::Homog_matrix G_Tx_G2;
 	
-	Homog_matrix G_Tx_S;
+	lib::Homog_matrix G_Tx_S;
 	
-	Homog_matrix O_Tx_C;
-	Homog_matrix O_Tx_CSAC;
-	Homog_matrix O_Tx_E__C;
-	Homog_matrix O_Tx_G__C;
+	lib::Homog_matrix O_Tx_C;
+	lib::Homog_matrix O_Tx_CSAC;
+	lib::Homog_matrix O_Tx_E__C;
+	lib::Homog_matrix O_Tx_G__C;
 
-	Homog_matrix E_Tx_G;
-	Homog_matrix E_Tx_Ep;
+	lib::Homog_matrix E_Tx_G;
+	lib::Homog_matrix E_Tx_Ep;
 	
-	Homog_matrix E_Tx_G__O;
+	lib::Homog_matrix E_Tx_G__O;
 	
 	//EIH
-	Homog_matrix O_Tx_G__C2;
-	Homog_matrix O_Tx_G__CEIH;
-	Homog_matrix E_Tx_C2;
-	Homog_matrix C2_Tx_G;
-	Homog_matrix O_Tx_G__fEIH;
-	Homog_matrix CEIH_Tx_G;
-	Homog_matrix CEIH_Tx_G__f;
+	lib::Homog_matrix O_Tx_G__C2;
+	lib::Homog_matrix O_Tx_G__CEIH;
+	lib::Homog_matrix E_Tx_C2;
+	lib::Homog_matrix C2_Tx_G;
+	lib::Homog_matrix O_Tx_G__fEIH;
+	lib::Homog_matrix CEIH_Tx_G;
+	lib::Homog_matrix CEIH_Tx_G__f;
 
-	Homog_matrix O_Tx_EE;	
+	lib::Homog_matrix O_Tx_EE;	
 	
-	Homog_matrix O_Tx_G__D;
-	Homog_matrix G_Tx_D;
+	lib::Homog_matrix O_Tx_G__D;
+	lib::Homog_matrix G_Tx_D;
 	
-		Homog_matrix O_Tx_G__BLOCK;
+		lib::Homog_matrix O_Tx_G__BLOCK;
 	
-	 Ft_v_vector O_rf_G__CEIH;
-	Ft_v_tr Jack;//O_Tx_G__CEIH,Ft_v_tr::FT);
-	//	Ft_v_tr ft_tr_inv_tool_matrix (!current_tool, Ft_v_tr::FT);
+	 lib::Ft_v_vector O_rf_G__CEIH;
+	lib::Ft_v_tr Jack;//O_Tx_G__CEIH,lib::Ft_v_tr::FT);
+	//	lib::Ft_v_tr ft_tr_inv_tool_matrix (!current_tool, lib::Ft_v_tr::FT);
 	
 	int CSAC_Tx_G_firstvalid;
 	int CEIH_Tx_G_firstvalid;

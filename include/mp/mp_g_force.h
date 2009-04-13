@@ -92,7 +92,7 @@ protected:
     
     // do konfiguracji pracy generatora
     unsigned short irp6ot_con, irp6p_con;
-	Homog_matrix global_base;
+	lib::Homog_matrix global_base;
 
      trajectory_description td;   
  

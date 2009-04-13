@@ -38,7 +38,7 @@ bool y_simple::first_step()
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 
-	Homog_matrix tool_frame(0.0, 0.0, 0.25);
+	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
 	the_robot->EDP_data.instruction_type = GET;
@@ -133,15 +133,15 @@ bool y_simple::next_step()
 	/*	
 	 frame_tab beggining_frame;
 	 copy_frame(beggining_frame,the_robot->EDP_data.current_arm_frame);
-	 Homog_matrix beg_frame = Homog_matrix(beggining_frame);
+	 lib::Homog_matrix beg_frame = lib::Homog_matrix(beggining_frame);
 	 cout << endl << "ecp: beginning_frame" << endl << endl << beg_frame;
 	 frame_tab present_frame;
 	 copy_frame(present_frame,the_robot->EDP_data.current_arm_frame);
-	 Homog_matrix pres_frame = Homog_matrix(present_frame);
+	 lib::Homog_matrix pres_frame = lib::Homog_matrix(present_frame);
 	 cout << endl << "ecp: present_frame" << endl << endl << pres_frame;
 	 frame_tab predicted_frame;
 	 copy_frame(predicted_frame,the_robot->EDP_data.current_arm_frame);
-	 Homog_matrix pred_frame = Homog_matrix(predicted_frame);
+	 lib::Homog_matrix pred_frame = lib::Homog_matrix(predicted_frame);
 	 cout << endl << "ecp: predicted_frame" << endl << endl<< pred_frame;
 	 double force[6];
 	 for (int i=0;i<6;i++) force[i] = the_robot->EDP_data.current_force_xyz_torque_xyz[i];

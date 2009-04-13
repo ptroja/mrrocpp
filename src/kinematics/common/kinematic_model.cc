@@ -34,7 +34,7 @@ model::model(void)
 /* ------------------------------------------------------------------------
   Przeliczenie polozenia koncowki zwiazane z dolaczonym narzedziem.
  ------------------------------------------------------------------------ */
-void model::attached_tool_transform(Homog_matrix& current_end_effector_matrix)
+void model::attached_tool_transform(lib::Homog_matrix& current_end_effector_matrix)
 {
     current_end_effector_matrix *= tool;
 }
@@ -43,7 +43,7 @@ void model::attached_tool_transform(Homog_matrix& current_end_effector_matrix)
 /* ------------------------------------------------------------------------
   Przeliczenie polozenia koncowki zwiazane z dolaczonym narzedziem - transformacja odwrotna.
  ------------------------------------------------------------------------ */
-void model::attached_tool_inverse_transform(Homog_matrix& desired_end_effector_matrix)
+void model::attached_tool_inverse_transform(lib::Homog_matrix& desired_end_effector_matrix)
 {
     desired_end_effector_matrix *= (!tool);
 }
@@ -52,7 +52,7 @@ void model::attached_tool_inverse_transform(Homog_matrix& desired_end_effector_m
 /* ------------------------------------------------------------------------
  Przeliczenie bazy manipulatora w globalnym ukladzie odniesienia.
  ------------------------------------------------------------------------ */
-void model::global_frame_transform(Homog_matrix& current_end_effector_matrix)
+void model::global_frame_transform(lib::Homog_matrix& current_end_effector_matrix)
 {
     current_end_effector_matrix = (global_base * current_end_effector_matrix);
 }
@@ -61,7 +61,7 @@ void model::global_frame_transform(Homog_matrix& current_end_effector_matrix)
 /* ------------------------------------------------------------------------
  Przeliczenie bazy manipulatora w globalnym ukladzie odniesienia - transformacja odwrotna.
  ------------------------------------------------------------------------ */
-void model::global_frame_inverse_transform(Homog_matrix& desired_end_effector_matrix)
+void model::global_frame_inverse_transform(lib::Homog_matrix& desired_end_effector_matrix)
 {
     desired_end_effector_matrix = ((!global_base) * desired_end_effector_matrix);
 }
@@ -70,7 +70,7 @@ void model::global_frame_inverse_transform(Homog_matrix& desired_end_effector_ma
 /* ------------------------------------------------------------------------
  Poprawa polozenia koncowki przy uzyciu macierzy korekcji lokalnej.
  ------------------------------------------------------------------------ */
-void model::local_corrector_transform(Homog_matrix& current_end_effector_matrix)
+void model::local_corrector_transform(lib::Homog_matrix& current_end_effector_matrix)
 {
     //  	std::cout<<" local_corrector_transform: przed \n"<<current_end_effector_matrix<<std::endl;
     double d[6];
@@ -112,7 +112,7 @@ void model::local_corrector_transform(Homog_matrix& current_end_effector_matrix)
 /* ------------------------------------------------------------------------
  Poprawa polozenia koncowki przy uzyciu macierzy korekcji lokalnej - transformacja odwrotna.
  ------------------------------------------------------------------------ */
-void model::local_corrector_inverse_transform(Homog_matrix& desired_end_effector_matrix)
+void model::local_corrector_inverse_transform(lib::Homog_matrix& desired_end_effector_matrix)
 {
     //  	std::cout<<" local_corrector_inverse_transform: przed \n"<<desired_end_effector_matrix<<std::endl;
     double d[6];
@@ -167,7 +167,7 @@ void model::i2e_transform(const double* local_current_joints, frame_tab* local_c
     direct_kinematics_transform(local_current_joints, local_current_end_effector_frame);
 
     // Stworzenie macierzy, ktora bedzie uzywana w dalszych obliczeniach.
-    Homog_matrix local_current_end_effector_matrix (*local_current_end_effector_frame);
+    lib::Homog_matrix local_current_end_effector_matrix (*local_current_end_effector_frame);
 
     // Obliczenia zwiazane z przeksztalceniami do globalnego ukladu odniesienia.
     if(global_frame_computations)
@@ -195,7 +195,7 @@ void model::i2e_transform(const double* local_current_joints, frame_tab* local_c
 void model::e2i_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
 {
     // Stworzenie macierzy, ktora bedzie uzywana w dalszych obliczeniach.
-    Homog_matrix local_desired_end_effector_matrix (*local_desired_end_effector_frame);
+    lib::Homog_matrix local_desired_end_effector_matrix (*local_desired_end_effector_frame);
 
     // Przeksztalcenie odwrotne polozenia koncowki zwiazane z uzytym narzedziem (chwytakiem).
     if (attached_tool_computations)

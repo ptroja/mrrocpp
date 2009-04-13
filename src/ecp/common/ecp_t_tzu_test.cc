@@ -160,8 +160,8 @@ void tzu_test::nose_generator_test(int tool)
 // argumenty: ilosc powtorzen eksperymentu, taka sama dla parametrow wyliczonych i tych z common.ini
 void tzu_test::trajectories_test(int count)
 {
-	Ft_v_vector result_common[count][10];
-	Ft_v_vector result_wyliczone[count][10];
+	lib::Ft_v_vector result_common[count][10];
+	lib::Ft_v_vector result_wyliczone[count][10];
 	// trajektorie dla ruchu
 	double tmp[10][7] = {{0, -1.570795, 0, 0, 1.5707, 0, 0.07},
 							   {0, -1.570795, 0, 1.5, 1.5707, 0, 0.07},
@@ -234,8 +234,8 @@ void tzu_test::trajectories_test(int count)
 	}
 	// result_common mamy wyniki przy ustawieniach z common.ini natomiast w result_wyliczone mamy wyniki otrzymane przy wyliczonch ustawieniach
 	// roznica pomiedzy kolejnymi probami dla common.ini a tymi wyliczonymi
-	//Ft_v_vector result_difference_common[count][10];
-	//Ft_v_vector result_difference_wyliczone[count][10];
+	//lib::Ft_v_vector result_difference_common[count][10];
+	//lib::Ft_v_vector result_difference_wyliczone[count][10];
 
 	for(int j = 0 ; j < count ; j++)
 	{
@@ -336,8 +336,8 @@ void tzu_test::trajectories_test(int count)
 	}
 	matlab.close();
 	// do kwadratu
-	Ft_v_vector result_common_square[count][10];
-	Ft_v_vector result_wyliczone_square[count][10];
+	lib::Ft_v_vector result_common_square[count][10];
+	lib::Ft_v_vector result_wyliczone_square[count][10];
 
 	for(int j = 0 ; j < count ; j++)
 	{
@@ -541,10 +541,10 @@ bool force_meassure_generator::first_step()
 bool force_meassure_generator::next_step()
 {
 	usleep(sleep_time);
-	Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
+	lib::Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
 	current_frame_wo_offset.remove_translation();
 
-	Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
+	lib::Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
 	weight += force_torque;
 
 //	cout<<"force_torque: "<<force_torque<<endl;
@@ -559,7 +559,7 @@ bool force_meassure_generator::next_step()
 	return true;
 }
 
-Ft_v_vector& force_meassure_generator::get_meassurement()
+lib::Ft_v_vector& force_meassure_generator::get_meassurement()
 {
 //	for(int i = 0 ; i < 6 ; i++)
 //		weight[i] = weight[i]/meassurement_count;

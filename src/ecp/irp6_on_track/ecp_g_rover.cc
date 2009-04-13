@@ -526,7 +526,7 @@ std::cout << " O_Tx_G_CEIH ";
 	}
 	
 //	O_rf_G__CEIH.set_values(O_r_G__CEIH[0]);
-//	Ft_v_tr Jack(O_Tx_E,Ft_v_tr::V);
+//	lib::Ft_v_tr Jack(O_Tx_E,lib::Ft_v_tr::V);
 	
 	
 	//jak cos przyjdzie glupiego z CEIH

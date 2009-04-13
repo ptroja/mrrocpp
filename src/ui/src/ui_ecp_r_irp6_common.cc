@@ -558,7 +558,7 @@ bool ui_common_robot::move_xyz_angle_axis ( double final_position[7] )
     ky = final_position[4]/alfa;
     kz = final_position[5]/alfa;
 
-    Homog_matrix A(kx, ky, kz, alfa, x, y, z);
+    lib::Homog_matrix A(kx, ky, kz, alfa, x, y, z);
     A.get_xyz_euler_zyz(aa_eul);	// zadane polecenie w formie XYZ_EULER_ZYZ
 
     // Odczyt aktualnego polozenia we wsp. zewn. xyz i katy Euler'a Z-Y-Z

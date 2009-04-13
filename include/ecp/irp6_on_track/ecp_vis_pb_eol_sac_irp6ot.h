@@ -47,23 +47,23 @@ public:
 	/*!
 	 * ^{C}T_{G} -- goal pose with respect to the camera frame.
 	 */
-	Homog_matrix C_Tx_G;
+	lib::Homog_matrix C_Tx_G;
 	/*!
 	 * ^{C}T_{E} -- end-effector pose with respect to the camera frame.
 	 */
-	Homog_matrix C_Tx_E;
+	lib::Homog_matrix C_Tx_E;
 	/*!
 	 * ^{0}T_{G} -- goal pose with respect to the global frame.
 	 */
-	Homog_matrix O_Tx_G;
+	lib::Homog_matrix O_Tx_G;
 	/*!
 	 * ^{C}T_{E'} -- end-effector next pose with respect to the global frame.
 	 */
-	Homog_matrix O_Tx_Ep;
+	lib::Homog_matrix O_Tx_Ep;
 	/*!
 	 * ^{0}T_{E} -- goal pose with respect to the camera frame.
 	 */
-	Homog_matrix O_Tx_E;
+	lib::Homog_matrix O_Tx_E;
 	/*!
 	 * ^{C}r_{G} -- goal pose with respect to the camera frame (AA).
 	 */
@@ -111,15 +111,15 @@ public:
 	 /*!
 	 * ^{0}r_{C} -- camera pose with respect to the camera frame.
 	 */
-	Homog_matrix O_Tx_C;
+	lib::Homog_matrix O_Tx_C;
 	/*!
 	 * M -- gains.
 	 */
 	double gain[6];
 
 	double x2g;
-	Homog_matrix G_Tx_G2;
-	Homog_matrix G_Tx_S;
+	lib::Homog_matrix G_Tx_G2;
+	lib::Homog_matrix G_Tx_S;
 #endif
 
 	/*!

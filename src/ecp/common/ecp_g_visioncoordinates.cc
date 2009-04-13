@@ -67,7 +67,7 @@ bool visioncoordinates::first_step()
 	return true;
 }
 
-void describe_matrix(Homog_matrix& matrix, const char* name)
+void describe_matrix(lib::Homog_matrix& matrix, const char* name)
 {
 	std::ostringstream oss1;
 	oss1 << "##### Matrix " << name << ":" << std::endl;
@@ -122,8 +122,8 @@ bool visioncoordinates::next_step()
 	double* arm = &data.current_XYZ_AA_arm_coordinates[0];
 
 	// current_XYZ_AA_arm_coordinates zawiera 8 elementow, wykorzystujemy 6 pierwszych xyz_zyz
-	Homog_matrix current_position(Homog_matrix::MTR_XYZ_ANGLE_AXIS, arm[0], arm[1], arm[2], arm[3], arm[4], arm[5]); // aktualna pozycja ramienia robota
-	Homog_matrix move(Homog_matrix::MTR_XYZ_EULER_ZYZ, 0.0, 0.0, 0.0, z, xoz, -z); 
+	lib::Homog_matrix current_position(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, arm[0], arm[1], arm[2], arm[3], arm[4], arm[5]); // aktualna pozycja ramienia robota
+	lib::Homog_matrix move(lib::Homog_matrix::MTR_XYZ_EULER_ZYZ, 0.0, 0.0, 0.0, z, xoz, -z); 
 
 
 	describe_matrix(current_position, "current_position");
@@ -139,7 +139,7 @@ bool visioncoordinates::next_step()
 	debugmsg(oss2.str().c_str());
 
 
-	Homog_matrix target = current_position * move;
+	lib::Homog_matrix target = current_position * move;
 
 	std::ostringstream oss3;
 	oss3 << "target: " << std::endl << target << std::endl;

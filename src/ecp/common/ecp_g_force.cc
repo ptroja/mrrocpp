@@ -109,14 +109,14 @@ bool weight_meassure::next_step()
 		return false;
 	}
 	// transformacja ciezaru do osi z ukladu bazowego
-	Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
+	lib::Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
 	current_frame_wo_offset.remove_translation();
 
 	//	std::cout << 	current_frame_wo_offset << std::endl;
 
 
-	Ft_v_vector force_torque(Ft_v_tr(current_frame_wo_offset, Ft_v_tr::FT)
-			* Ft_v_vector(the_robot->EDP_data.current_force_xyz_torque_xyz));
+	lib::Ft_v_vector force_torque(lib::Ft_v_tr(current_frame_wo_offset, lib::Ft_v_tr::FT)
+			* lib::Ft_v_vector(the_robot->EDP_data.current_force_xyz_torque_xyz));
 
 	insert_in_buffer(-force_torque[2]);
 
@@ -687,7 +687,7 @@ bool y_edge_follow_force::next_step()
 	}
 
 	// 	wstawienie nowego przyrostu pozyji do przyrostowej trajektorii ruchu do zapisu do pliku
-	Homog_matrix tmp_matrix(the_robot->EDP_data.current_arm_frame);
+	lib::Homog_matrix tmp_matrix(the_robot->EDP_data.current_arm_frame);
 	tmp_matrix.get_xyz_euler_zyz(inc_delta);
 
 	for (int i=0; i<6; i++)
@@ -719,7 +719,7 @@ bool y_edge_follow_force::next_step()
 
 
 	// sprowadzenie sil do ukladu kisci
-	Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
+	lib::Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
 
 	double wx = force_torque[0];
 	double wy = force_torque[1];
@@ -736,8 +736,8 @@ bool y_edge_follow_force::next_step()
 		//     the_robot->EDP_data.next_velocity[1] = -0.00;
 		//	the_robot->EDP_data.ECPtoEDP_position_velocity[1] = 0.0;
 
-		// basic_rot_frame = Homog_matrix(c_alfa, s_alfa, 0.0,	-s_alfa, c_alfa, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
-		basic_rot_frame = Homog_matrix(c_alfa, -s_alfa, 0.0, 0.0,
+		// basic_rot_frame = lib::Homog_matrix(c_alfa, s_alfa, 0.0,	-s_alfa, c_alfa, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
+		basic_rot_frame = lib::Homog_matrix(c_alfa, -s_alfa, 0.0, 0.0,
 			 s_alfa, c_alfa, 0.0, 0.0,
 			 0.0, 0.0, 1, 0.0);
 
@@ -746,8 +746,8 @@ bool y_edge_follow_force::next_step()
 		double s_alfa_r = sin(alfa_r);
 		double c_alfa_r = cos(alfa_r);
 
-		// ex_rot_frame = Homog_matrix(c_alfa_r, s_alfa_r, 0.0,	-s_alfa_r, c_alfa_r, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
-		ex_rot_frame = Homog_matrix(c_alfa_r, -s_alfa_r, 0.0, 0.0,
+		// ex_rot_frame = lib::Homog_matrix(c_alfa_r, s_alfa_r, 0.0,	-s_alfa_r, c_alfa_r, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
+		ex_rot_frame = lib::Homog_matrix(c_alfa_r, -s_alfa_r, 0.0, 0.0,
 			s_alfa_r, c_alfa_r, 0.0, 0.0,
 			 0.0, 0.0, 1, 0.0);
 
@@ -794,7 +794,7 @@ legobrick_attach_force::legobrick_attach_force(
 				, {sin(-M_PI/4), cos(-M_PI/4), 0, -0.011313}
 				, {0, 0, 1, 0.25 + 0.028}};
 
-	tool_frame = Homog_matrix(tmp_tool_frame);
+	tool_frame = lib::Homog_matrix(tmp_tool_frame);
 	step_no=step;
 }
 //--------------------------------------------------------------------------------------
@@ -888,7 +888,7 @@ bool legobrick_attach_force::next_step()
 		the_robot->EDP_data.next_motor_arm_coordinates[i]=0.0;
 	}
 
-	Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
+	lib::Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
 
 	double wz = force_torque[2];
 
@@ -912,7 +912,7 @@ legobrick_detach_force::legobrick_detach_force(
 				, {sin(-M_PI/4), cos(-M_PI/4), 0, -0.011313}
 				, {0, 0, 1, 0.25 + 0.028}};
 
-	tool_frame = Homog_matrix(tmp_tool_frame);
+	tool_frame = lib::Homog_matrix(tmp_tool_frame);
 	step_no=step;
 	isStart = true;
 }
@@ -1735,7 +1735,7 @@ bool tff_nose_run::first_step()
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 
-	Homog_matrix tool_frame(0.0, 0.0, 0.25);
+	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
 	the_robot->EDP_data.instruction_type = GET;
@@ -1799,10 +1799,10 @@ bool tff_nose_run::next_step()
 
 	if(force_meassure)
 	{
-		Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
+		lib::Homog_matrix current_frame_wo_offset(the_robot->EDP_data.current_arm_frame);
 		current_frame_wo_offset.remove_translation();
 
-		Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
+		lib::Ft_v_vector force_torque(the_robot->EDP_data.current_force_xyz_torque_xyz);
 
 		std::cout<<"force: "<<force_torque<<std::endl;
 	}
@@ -1920,7 +1920,7 @@ bool tff_rubik_grab::first_step()
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 
-	Homog_matrix tool_frame(0.0, 0.0, 0.25);
+	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
 	the_robot->EDP_data.instruction_type = GET;
@@ -2040,7 +2040,7 @@ bool tff_rubik_face_rotate::first_step()
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 
-	Homog_matrix tool_frame(0.0, 0.0, 0.25);
+	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
 	the_robot->EDP_data.instruction_type = GET;
@@ -2126,7 +2126,7 @@ bool tff_rubik_face_rotate::next_step()
 				= the_robot->EDP_data.current_gripper_coordinate;
 		if (turn_angle < -0.1 || 0.1 < turn_angle)
 		{
-			Homog_matrix frame(the_robot->EDP_data.current_arm_frame);
+			lib::Homog_matrix frame(the_robot->EDP_data.current_arm_frame);
 			double xyz_eul_zyz[6];
 			frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double angle_to_move = (turn_angle / 180.0) * M_PI;
@@ -2152,7 +2152,7 @@ bool tff_rubik_face_rotate::next_step()
 
 		if (turn_angle < -0.1 || 0.1 < turn_angle)
 		{
-			Homog_matrix current_frame(the_robot->EDP_data.current_arm_frame);
+			lib::Homog_matrix current_frame(the_robot->EDP_data.current_arm_frame);
 			double xyz_eul_zyz[6];
 			current_frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double current_gamma = xyz_eul_zyz[5];
@@ -2215,7 +2215,7 @@ bool tff_gripper_approach::first_step()
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 
-	Homog_matrix tool_frame(0.0, 0.0, 0.25);
+	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
 	the_robot->EDP_data.instruction_type = GET;

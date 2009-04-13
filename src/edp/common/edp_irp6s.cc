@@ -283,7 +283,7 @@ void irp6s_effector::tool_axially_symmetrical_frame_2_xyz_eul_zy (void)
 
     double xyz_aa[6];
 
-    Homog_matrix A(get_current_kinematic_model()->tool);
+    lib::Homog_matrix A(get_current_kinematic_model()->tool);
     A.get_xyz_angle_axis(xyz_aa);
 
     q6[0] =xyz_aa[0];
@@ -352,7 +352,7 @@ void irp6s_effector::tool_xyz_eul_zyz_2_frame (c_buffer &instruction)
     beta = instruction.rmodel.tool_coordinate_def.tool_coordinates[4];
     gamma = instruction.rmodel.tool_coordinate_def.tool_coordinates[5];
 
-    Homog_matrix A_B_T (Homog_matrix::MTR_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
+    lib::Homog_matrix A_B_T (lib::Homog_matrix::MTR_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
     // Sprawdzenie, czy macierz jest jednorodna.
     if (!(A_B_T.is_valid()))
         throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
@@ -374,7 +374,7 @@ void irp6s_effector::tool_frame_2_frame (c_buffer &instruction)
     if ( instruction.is_set_rmodel() || instruction.is_set_arm())
     {
         // Przyslano dane dotyczace narzedzia i koncowki.
-        Homog_matrix A_B_T (instruction.rmodel.tool_frame_def.tool_frame);
+        lib::Homog_matrix A_B_T (instruction.rmodel.tool_frame_def.tool_frame);
         // Sprawdzenie poprawnosci macierzy
         if (!(A_B_T.is_valid()))
             throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
@@ -408,7 +408,7 @@ void irp6s_effector::arm_abs_xyz_aa_2_frame (const double *p)
     // korekta wartosci x, y, z
     if((alfa   < ALFA_SENSITIVITY) && (alfa > -ALFA_SENSITIVITY))
     {
-        Homog_matrix A_B_T(x, y, z);
+        lib::Homog_matrix A_B_T(x, y, z);
         A_B_T.get_frame_tab(desired_end_effector_frame); 		// przepisanie uzyskanego wyniku do transformera
     }
     else
@@ -416,7 +416,7 @@ void irp6s_effector::arm_abs_xyz_aa_2_frame (const double *p)
         kx = kx/alfa;
         ky = ky/alfa;
         kz = kz/alfa;
-        Homog_matrix A_B_T(kx, ky, kz, alfa, x, y, z);
+        lib::Homog_matrix A_B_T(kx, ky, kz, alfa, x, y, z);
         A_B_T.get_frame_tab(desired_end_effector_frame); 		// przepisanie uzyskanego wyniku do transformera
     }
 }
@@ -445,10 +445,10 @@ void irp6s_effector::arm_rel_xyz_aa_2_frame (const double* p)
     double x, y, z;			// wspolrzedne wektora przesuniecia
     double kx, ky, kz;		// specyfikacja wektora, wokol ktorego obracany jest uklad
 
-    Homog_matrix G_R_T;
+    lib::Homog_matrix G_R_T;
 
     // pobranie aktualnej macierzy przeksztalcenia
-    Homog_matrix G_K_T(current_end_effector_frame);
+    lib::Homog_matrix G_K_T(current_end_effector_frame);
 
     // przepisanie z tablicy pakietu komunikacyjnego
     x = p[0];
@@ -465,7 +465,7 @@ void irp6s_effector::arm_rel_xyz_aa_2_frame (const double* p)
     // korekta wartosci x, y, z
     if((alfa   < ALFA_SENSITIVITY) && (alfa > -ALFA_SENSITIVITY))
     {
-        Homog_matrix K_R_T(x, y, z);
+        lib::Homog_matrix K_R_T(x, y, z);
         G_R_T = G_K_T * K_R_T;			// obliczenie macierzy przeksztalcenia
     }
     else
@@ -473,7 +473,7 @@ void irp6s_effector::arm_rel_xyz_aa_2_frame (const double* p)
         kx /=alfa;
         ky /=alfa;
         kz /=alfa;
-        Homog_matrix K_R_T(kx, ky, kz, alfa, x, y, z);
+        lib::Homog_matrix K_R_T(kx, ky, kz, alfa, x, y, z);
         G_R_T = G_K_T * K_R_T;			// obliczenie macierzy przeksztalcenia
     }
     G_R_T.get_frame_tab(desired_end_effector_frame);
@@ -496,9 +496,9 @@ void irp6s_effector::arm_rel_xyz_eul_zyz_2_frame (const double* p)
     alfa = p[3];
     beta = p[4];
     gamma = p[5];
-    Homog_matrix K_R_T (Homog_matrix::MTR_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
-    Homog_matrix G_K_T(current_end_effector_frame);	// pobranie aktualnej macierzy przeksztalcenia
-    Homog_matrix G_R_T = G_K_T * K_R_T;
+    lib::Homog_matrix K_R_T (lib::Homog_matrix::MTR_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
+    lib::Homog_matrix G_K_T(current_end_effector_frame);	// pobranie aktualnej macierzy przeksztalcenia
+    lib::Homog_matrix G_R_T = G_K_T * K_R_T;
     G_R_T.get_frame_tab(desired_end_effector_frame);			// przepisanie uzyskanego wyniku do transformera
 
 }
@@ -512,8 +512,8 @@ void irp6s_effector::arm_rel_frame_2_frame (frame_tab p_m)
     // w postaci TRANS wyraonej wzgldnie
     // do wewntrznych struktur danych TRANSFORMATORa
     // Przepisanie z przemnozeniem
-    Homog_matrix A_B_T_arg(p_m);
-    Homog_matrix A_B_T_des (desired_end_effector_frame);
+    lib::Homog_matrix A_B_T_arg(p_m);
+    lib::Homog_matrix A_B_T_des (desired_end_effector_frame);
     A_B_T_des *= A_B_T_arg;
     A_B_T_des.get_frame_tab(desired_end_effector_frame);
 
@@ -527,7 +527,7 @@ void irp6s_effector::arm_rel_frame_2_frame (frame_tab p_m)
 void irp6s_effector::arm_frame_2_xyz_aa (void)
 {
 
-    Homog_matrix A(current_end_effector_frame);
+    lib::Homog_matrix A(current_end_effector_frame);
     reply.arm_type = XYZ_ANGLE_AXIS;
     switch (reply.reply_type)
     {
@@ -587,7 +587,7 @@ void irp6s_effector::tool_xyz_aa_2_frame (c_buffer &instruction)
     // korekta wartosci x, y, z
     if((alfa   < ALFA_SENSITIVITY) && (alfa > -ALFA_SENSITIVITY))
     {
-        Homog_matrix A_B_T(x, y, z);
+        lib::Homog_matrix A_B_T(x, y, z);
         // Sprawdzenie, czy macierz jest jednorodna.
         if (!(A_B_T.is_valid()))
             throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
@@ -599,7 +599,7 @@ void irp6s_effector::tool_xyz_aa_2_frame (c_buffer &instruction)
         kx = kx/alfa;
         ky = ky/alfa;
         kz = kz/alfa;
-        Homog_matrix A_B_T(kx, ky, kz, alfa, x, y, z);
+        lib::Homog_matrix A_B_T(kx, ky, kz, alfa, x, y, z);
         // Sprawdzenie, czy macierz jest jednorodna.
         if (!(A_B_T.is_valid()))
             throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
@@ -636,10 +636,10 @@ void irp6s_effector::tool_axially_symmetrical_xyz_eul_zy_2_frame (c_buffer *inst
     double x, y, z;			//wspolrzedne wektora przesuniecia
     double kx, ky, kz;		//specyfikacja wektora, wokol ktorego obracany jest uklad
 
-    Homog_matrix G_R_T;
+    lib::Homog_matrix G_R_T;
 
     //pobranie aktualnej macierzy przeksztalcenia
-    Homog_matrix G_K_T(get_current_kinematic_model()->tool);
+    lib::Homog_matrix G_K_T(get_current_kinematic_model()->tool);
 
     //przepisanie z tablicy pakietu komunikacyjnego
     x = *t;
@@ -659,7 +659,7 @@ void irp6s_effector::tool_axially_symmetrical_xyz_eul_zy_2_frame (c_buffer *inst
     if((alfa   < ALFA_SENSITIVITY) && (alfa > -ALFA_SENSITIVITY))
     {
 
-        Homog_matrix K_R_T(x, y, z);
+        lib::Homog_matrix K_R_T(x, y, z);
 
         //obliczenie macierzy przeksztalcenia
         G_R_T = G_K_T * K_R_T;
@@ -671,7 +671,7 @@ void irp6s_effector::tool_axially_symmetrical_xyz_eul_zy_2_frame (c_buffer *inst
         ky = ky/alfa;
         kz = kz/alfa;
 
-        Homog_matrix K_R_T(kx, ky, kz, alfa, x, y, z);
+        lib::Homog_matrix K_R_T(kx, ky, kz, alfa, x, y, z);
 
         //obliczenie macierzy przeksztalcenia
         G_R_T = G_K_T * K_R_T;
@@ -698,7 +698,7 @@ void irp6s_effector::arm_frame_2_frame (void)
     case ARM_INPUTS:
     case ARM_RMODEL:
     case ARM_RMODEL_INPUTS:
-        Homog_matrix::copy_frame_tab(reply.arm.pf_def.arm_frame, current_end_effector_frame);
+        lib::Homog_matrix::copy_frame_tab(reply.arm.pf_def.arm_frame, current_end_effector_frame);
         for(int i=0; i < 6; i++)
         {
             reply.PWM_value[i] = PWM_value[i];

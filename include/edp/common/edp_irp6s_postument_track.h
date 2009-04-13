@@ -87,7 +87,7 @@ public:
     // value to 7 elemetnowa tablica short
     // tryb - 0 zestaw kartezjanski, 1 zestaw nieprzetworzony
 
-    Homog_matrix return_current_frame(TRANSLATION_ENUM translation_mode);// by Y przepisanie z zestawu globalnego na lokalny edp_force
+    lib::Homog_matrix return_current_frame(TRANSLATION_ENUM translation_mode);// by Y przepisanie z zestawu globalnego na lokalny edp_force
 
     // wyznaczenie polozenia lokalnego i globalnego transformera
     // przepisanie lokalnego zestawu lokalnego edp_servo na globalny (chronione mutexem)

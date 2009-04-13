@@ -28,7 +28,7 @@
 #if !defined(__EDP_KIN_MODEL)  
 #define __EDP_KIN_MODEL
 
-// Klasa Homog_matrix.
+// Klasa lib::Homog_matrix.
 #include "lib/mathtr.h"
 // Klasa frame_tab.
 #include "common/impconst.h"
@@ -70,10 +70,10 @@ public:
   bool attached_tool_computations;
 
   // Macierz reprezentujaca narzedzie wzgledem koncowki manipulatora.
-  Homog_matrix tool;
+  lib::Homog_matrix tool;
 
   // Macierz reprezentujaca pozycje bazy robota w globalnym ukladzie odniesienia.
-  Homog_matrix global_base;
+  lib::Homog_matrix global_base;
 
   // Konstruktor.
   model(void);
@@ -91,22 +91,22 @@ public:
    virtual void e2i_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame);
 
   // Przeliczenie bazy manipulatora w globalnym ukladzie odniesienia.
-  virtual void global_frame_transform(Homog_matrix&);
+  virtual void global_frame_transform(lib::Homog_matrix&);
 
   // Przeliczenie bazy manipulatora w globalnym ukladzie odniesienia - transformacja odwrotna.
-  virtual void global_frame_inverse_transform(Homog_matrix&);
+  virtual void global_frame_inverse_transform(lib::Homog_matrix&);
 
   // Poprawa polozenia koncowki przy uzyciu macierzy korekcji lokalnej.
-  virtual void local_corrector_transform(Homog_matrix&);
+  virtual void local_corrector_transform(lib::Homog_matrix&);
 
   // Poprawa polozenia koncowki przy uzyciu macierzy korekcji lokalnej - transformacja odwrotna.
-  virtual void local_corrector_inverse_transform(Homog_matrix&);
+  virtual void local_corrector_inverse_transform(lib::Homog_matrix&);
 
   // Przeliczenie polozenia koncowki zwiazane z dolaczonym narzedziem.
-  virtual void attached_tool_transform(Homog_matrix&);
+  virtual void attached_tool_transform(lib::Homog_matrix&);
 
   // Przeliczenie polozenia koncowki zwiazane z dolaczonym narzedziem - transformacja odwrotna.
-  virtual void attached_tool_inverse_transform(Homog_matrix&);
+  virtual void attached_tool_inverse_transform(lib::Homog_matrix&);
 
   // Rozwiazanie prostego zagadnienia kinematyki.
   virtual void direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame) = 0;

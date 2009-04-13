@@ -166,8 +166,8 @@ void effector::arm_abs_xyz_eul_zyz_2_frame (const double *p)
     alfa = p[3];
     beta = p[4];
     gamma = p[5];
-    Homog_matrix A_B_T (Homog_matrix::MTR_MECH_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
-    //Homog_matrix A_B_T (XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
+    lib::Homog_matrix A_B_T (lib::Homog_matrix::MTR_MECH_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
+    //lib::Homog_matrix A_B_T (XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
     A_B_T.get_frame_tab(desired_end_effector_frame);
 
 }
@@ -182,7 +182,7 @@ void effector::arm_frame_2_xyz_eul_zyz ()
     // FRAME do postaci XYZ_EULER_ZYZ
     // oraz przepisanie wyniku przeksztacenia do
     // wewntrznych struktur danych REPLY_BUFFER
-    Homog_matrix A(current_end_effector_frame);
+    lib::Homog_matrix A(current_end_effector_frame);
     switch (reply.reply_type)
     {
     case ARM:
@@ -298,7 +298,7 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
         // bez uwzglednienia narzedzia, czyli robi to, co poprzednio i2e z TOOL = null.
         //Uwaga: w edp_conveyor_effector jest podobnie.
         get_current_kinematic_model()->direct_kinematics_transform(servo_current_joints, &servo_current_frame_wo_tool);
-        Homog_matrix A(servo_current_frame_wo_tool);
+        lib::Homog_matrix A(servo_current_frame_wo_tool);
         A.get_mech_xyz_euler_zyz(servo_real_kartez_pos);
         //A.get_xyz_euler_zyz(servo_real_kartez_pos);
 
@@ -317,7 +317,7 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
         // Jesli obliczenia zwiazane z baza maja byc wykonane.
         if (get_current_kinematic_model()->global_frame_computations)
         {
-            Homog_matrix tmp_eem(servo_current_frame_wo_tool);
+            lib::Homog_matrix tmp_eem(servo_current_frame_wo_tool);
             get_current_kinematic_model()->global_frame_transform(tmp_eem);
             tmp_eem.get_frame_tab(servo_current_frame_wo_tool);
         }//: if

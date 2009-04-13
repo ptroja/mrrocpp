@@ -201,9 +201,9 @@ protected:
     trajectory_description td;
     int step_no;
     double delta[6];
-    Homog_matrix basic_rot_frame;
-    Homog_matrix tool_frame;
-    Homog_matrix ex_rot_frame;
+    lib::Homog_matrix basic_rot_frame;
+    lib::Homog_matrix tool_frame;
+    lib::Homog_matrix ex_rot_frame;
 
 public:
 
@@ -227,9 +227,9 @@ protected:
     trajectory_description td;
     int step_no;
     double delta[6];
-    Homog_matrix basic_rot_frame;
-    Homog_matrix tool_frame;
-    Homog_matrix ex_rot_frame;
+    lib::Homog_matrix basic_rot_frame;
+    lib::Homog_matrix tool_frame;
+    lib::Homog_matrix ex_rot_frame;
 
 public:
 
@@ -254,9 +254,9 @@ protected:
     trajectory_description td;
     int step_no;
     double delta[6];
-    Homog_matrix basic_rot_frame;
-    Homog_matrix tool_frame;
-    Homog_matrix ex_rot_frame;
+    lib::Homog_matrix basic_rot_frame;
+    lib::Homog_matrix tool_frame;
+    lib::Homog_matrix ex_rot_frame;
 
     double start_position_w3;
     bool isStart;

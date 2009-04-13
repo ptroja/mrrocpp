@@ -82,11 +82,11 @@ private:
     int sleep_time;
     int meassurement_count;
     int init_meassurement_count;
-	Ft_v_vector weight;
+	lib::Ft_v_vector weight;
 public:
     // konstruktor
     force_meassure_generator(common::task::base& _ecp_task, int _sleep_time = 0, int _meassurement_count = 1);
-	Ft_v_vector& get_meassurement();
+	lib::Ft_v_vector& get_meassurement();
 	void set_configuration(int _sleep_time, int _meassurement_count);
 
     bool first_step ();

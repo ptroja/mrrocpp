@@ -97,24 +97,24 @@ bool y_simple::next_step ( )
     vector x_axis(axis_table[0]);
     vector y_axis(axis_table[1]);
     vector z_axis(axis_table[2]);
-    Homog_matrix curr_frame(the_robot->EDP_data.current_arm_frame);								// pobranie aktualnej ramki (tylko na poczatku ruchu)
-    Homog_matrix prev_frame(previous_frame);
-    Homog_matrix next_frame;
-    Homog_matrix temp = !curr_frame;
-    Homog_matrix temp2 = !prev_frame;																	// odwrocenie aktualnej ramki do mnozenia przez ramke obrotu
+    lib::Homog_matrix curr_frame(the_robot->EDP_data.current_arm_frame);								// pobranie aktualnej ramki (tylko na poczatku ruchu)
+    lib::Homog_matrix prev_frame(previous_frame);
+    lib::Homog_matrix next_frame;
+    lib::Homog_matrix temp = !curr_frame;
+    lib::Homog_matrix temp2 = !prev_frame;																	// odwrocenie aktualnej ramki do mnozenia przez ramke obrotu
     temp2.move(0,0,0);																							// oczysczenie z wszelkiego ruchu
     temp.move(0,0,0);
     const double FORCE_TO_MOVE_RATIO = 0.00005;
     const double TORQUE_TO_ROTATE_RATIO = 0.001;
     //	frame_tab rotation = {{0,-1,0},{1,0,0},{0,0,1},{0,0,0}};
-    //	Homog_matrix sensor_rotation(rotation);
+    //	lib::Homog_matrix sensor_rotation(rotation);
     double move_tab[3] = {0,0,0};
     bool force_mov[3] = {true,true,true};
     double mov[3] = { move_tab[0] + force_mov[0]*FORCE_TO_MOVE_RATIO*(sensor_m.begin())->second->image.sensor_union.force.rez[0] , 		// tablica zmiany pozycji wzgledem sil
                       move_tab[1] + force_mov[1]*FORCE_TO_MOVE_RATIO*(sensor_m.begin())->second->image.sensor_union.force.rez[1] ,
                       move_tab[2] + force_mov[2]*FORCE_TO_MOVE_RATIO*(sensor_m.begin())->second->image.sensor_union.force.rez[2]};
     vector move_vector(mov);
-    Homog_matrix temporary_frame;
+    lib::Homog_matrix temporary_frame;
     if(!second_step)
         temporary_frame = curr_frame;
     else
@@ -137,8 +137,8 @@ bool y_simple::next_step ( )
             rot_tab[2] + force_rot[2]*TORQUE_TO_ROTATE_RATIO*(sensor_m.begin())->second->image.sensor_union.force.rez[5]
         }
         ;
-    Homog_matrix move_frame(mov[0], mov[1], mov[2]);
-    Homog_matrix rot_frame(x_axis, y_axis, z_axis, rot);
+    lib::Homog_matrix move_frame(mov[0], mov[1], mov[2]);
+    lib::Homog_matrix rot_frame(x_axis, y_axis, z_axis, rot);
     if(!second_step)
     {
         next_frame = move_frame * curr_frame * rot_frame;											// wyliczenie nowej ramki

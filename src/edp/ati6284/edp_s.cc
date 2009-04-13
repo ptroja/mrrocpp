@@ -366,28 +366,28 @@ void ATI6284_force::configure_sensor(void)
 	if (master.force_tryb == 2) {
 		//!< synchronize gravity transformation
 		// polozenie kisci bez narzedzia wzgledem bazy
-		Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION); //!< FORCE Transformation by Slawomir Bazant
-		// Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej pozycji
+		lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION); //!< FORCE Transformation by Slawomir Bazant
+		// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej pozycji
 		if (!gravity_transformation) // nie powolano jeszcze obiektu
 		{
 			// polozenie czujnika wzgledem kisci (bez narzedzia)
 			// frame_tab sensor_rot = {{-1, 0, 0}, {0, -1, 0}, {0, 0, 1}, {0, 0, 0}};
 			// polozenie czujnika wzgledem  koncowki lancucha kinematycznego
-			// Homog_matrix sensor_frame = Homog_matrix(-1, 0, 0,	0, -1, 0,	0, 0, 1,	0, 0, 0.09);
+			// lib::Homog_matrix sensor_frame = lib::Homog_matrix(-1, 0, 0,	0, -1, 0,	0, 0, 1,	0, 0, 0.09);
 
 			double tab[6];
-			Homog_matrix sensor_frame;
+			lib::Homog_matrix sensor_frame;
 			if (master.config.exists("sensor_in_wrist"))
 			{
 				char *tmp = master.config.return_string_value("sensor_in_wrist");
 				for (int i=0; i<6; i++)
 					tab[i] = strtod( tmp, &tmp );
-				sensor_frame = Homog_matrix(Homog_matrix::MTR_XYZ_ANGLE_AXIS, tab[0], tab[1], tab[2], tab[3], tab[4], tab[5]);
+				sensor_frame = lib::Homog_matrix(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, tab[0], tab[1], tab[2], tab[3], tab[4], tab[5]);
 
 			}
 			else
-				sensor_frame = Homog_matrix(-1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0.09);
-			// Homog_matrix sensor_frame = Homog_matrix(-1, 0, 0, 0,  0, -1, 0, 0,  0, 0, 1, 0.09);
+				sensor_frame = lib::Homog_matrix(-1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0.09);
+			// lib::Homog_matrix sensor_frame = lib::Homog_matrix(-1, 0, 0, 0,  0, -1, 0, 0,  0, 0, 1, 0.09);
 
 			double weight = master.config.return_double_value("weight");
 
@@ -397,8 +397,8 @@ void ATI6284_force::configure_sensor(void)
 				point[i] = strtod( tmp, &tmp );
 			// double point[3] = { master.config.return_double_value("x_axis_arm"),
 			// 		master.config.return_double_value("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
-			K_vector pointofgravity(point);
-			gravity_transformation = new ForceTrans(FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
+			lib::K_vector pointofgravity(point);
+			gravity_transformation = new lib::ForceTrans(FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
 		} else {
 			gravity_transformation->synchro(frame);
 		}
@@ -599,8 +599,8 @@ void ATI6284_force::initiate_reading(void)
 			for (int i=0; i<6; i++)
 				root_force[i] = force_torque[i];
 
-			Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
-			// Homog_matrix frame(master.force_current_end_effector_frame);
+			lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
+			// lib::Homog_matrix frame(master.force_current_end_effector_frame);
 			double* output = gravity_transformation->getForce(root_force, frame);
 
 			//		printf("output: %f, %f, %f, %f, %f, %f\n", output[0], output[1], output[2], output[3], output[4], output[5]);
