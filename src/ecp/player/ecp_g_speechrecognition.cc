@@ -6,6 +6,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace player {
+namespace generator {
 
 speechrecognition_generator::speechrecognition_generator(common::task::ecp_task& _ecp_task)
 	: ecp_generator (_ecp_task)
@@ -55,6 +56,8 @@ bool speechrecognition_generator::next_step ( )
 	}
 
 	return true;
+}
+
 }
 } // namespace player
 } // namespace ecp

@@ -12,12 +12,13 @@
 namespace mrrocpp {
 namespace ecp {
 namespace player {
+namespace task {
 
 // KONSTRUKTORY
 ecp_task_speechrecognition::ecp_task_speechrecognition(configurator &_config)
         : ecp_task(_config)
 {
-    srg = new speechrecognition_generator (*this);
+    srg = new generator::speechrecognition_generator (*this);
 }
 
 ecp_task_speechrecognition::~ecp_task_speechrecognition()
@@ -55,6 +56,7 @@ void ecp_task_speechrecognition::main_task_algorithm(void)
     }
 }
 
+}
 } // namespace player
 
 namespace common {
@@ -62,7 +64,7 @@ namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new player::ecp_task_speechrecognition(_config);
+	return new player::task::ecp_task_speechrecognition(_config);
 }
 
 }

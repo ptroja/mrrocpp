@@ -6,6 +6,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace player {
+namespace generator {
 
 playerpos_generator::playerpos_generator(common::task::ecp_task& _ecp_task)
 	: ecp_generator (_ecp_task)
@@ -79,6 +80,7 @@ bool playerpos_generator::next_step()
 	return true;
 }
 
+}
 } // namespace player
 } // namespace ecp
 } // namespace mrrocpp

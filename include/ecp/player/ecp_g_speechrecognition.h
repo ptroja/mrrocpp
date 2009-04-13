@@ -7,6 +7,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace player {
+namespace generator {
 
 class speechrecognition_generator : public common::generator::ecp_generator
 {
@@ -24,6 +25,7 @@ class speechrecognition_generator : public common::generator::ecp_generator
 		virtual bool next_step ();
 };
 
+}
 } // namespace player
 } // namespace ecp
 } // namespace mrrocpp

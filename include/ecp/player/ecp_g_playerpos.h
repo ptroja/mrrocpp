@@ -7,6 +7,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace player {
+namespace generator {
 
 class playerpos_generator : public common::generator::ecp_generator
 {
@@ -30,6 +31,7 @@ class playerpos_generator : public common::generator::ecp_generator
 		void set_goal(const playerpos_goal_t &_goal);
 };
 
+}
 } // namespace player
 } // namespace ecp
 } // namespace mrrocpp

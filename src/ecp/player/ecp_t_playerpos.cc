@@ -13,12 +13,13 @@
 namespace mrrocpp {
 namespace ecp {
 namespace player {
+namespace task {
 
 // KONSTRUKTORY
 ecp_task_playerpos::ecp_task_playerpos(configurator &_config) :
 	ecp_task(_config)
 {
-	ppg = new playerpos_generator (*this);
+	ppg = new generator::playerpos_generator (*this);
 }
 
 ecp_task_playerpos::~ecp_task_playerpos()
@@ -55,6 +56,7 @@ void ecp_task_playerpos::main_task_algorithm(void)
 	}
 }
 
+}
 } // namespace player
 
 namespace common {
@@ -62,7 +64,7 @@ namespace task {
 
 ecp_task* return_created_ecp_task (configurator &_config)
 {
-	return new player::ecp_task_playerpos(_config);
+	return new player::task::ecp_task_playerpos(_config);
 }
 
 }

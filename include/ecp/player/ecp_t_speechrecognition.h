@@ -7,10 +7,11 @@
 namespace mrrocpp {
 namespace ecp {
 namespace player {
+namespace task {
 
 class ecp_task_speechrecognition: public common::task::ecp_task  {
 protected:
-	speechrecognition_generator* srg;
+	generator::speechrecognition_generator* srg;
 
 public:
 	// KONSTRUKTORY
@@ -23,6 +24,7 @@ public:
 	
 };
 
+}
 } // namespace player
 } // namespace ecp
 } // namespace mrrocpp

@@ -7,10 +7,11 @@
 namespace mrrocpp {
 namespace ecp {
 namespace player {
+namespace task {
 
 class ecp_task_playerpos: public common::task::ecp_task  {
 protected:
-	playerpos_generator* ppg;
+	generator::playerpos_generator* ppg;
 
 public:
 	// KONSTRUKTORY
@@ -23,6 +24,7 @@ public:
 	
 };
 
+}
 } // namespace player
 } // namespace ecp
 } // namespace mrrocpp
