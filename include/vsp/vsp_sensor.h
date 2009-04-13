@@ -29,7 +29,7 @@ protected:
 	
 public:
 	lib::configurator &config;
-	sr_vsp *sr_msg;
+	lib::sr_vsp *sr_msg;
 	
 	char* mrrocpp_network_path;
 	

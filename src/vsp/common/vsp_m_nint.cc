@@ -52,7 +52,7 @@ namespace common {
 /********************************* GLOBALS **********************************/
 sensor::base *vs;		// czujnik wirtualny
 
-// sr_vsp *vsp::common::vs->sr_msg;		// komunikacja z SR
+// lib::sr_vsp *vsp::common::vs->sr_msg;		// komunikacja z SR
 
 sem_t start_sem;
 

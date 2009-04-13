@@ -16,7 +16,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6m {
 
-ecp_irp6_mechatronika_robot::ecp_irp6_mechatronika_robot (lib::configurator &_config, sr_ecp *_sr_ecp):
+ecp_irp6_mechatronika_robot::ecp_irp6_mechatronika_robot (lib::configurator &_config, lib::sr_ecp *_sr_ecp):
 	ecp_robot (ROBOT_IRP6_MECHATRONIKA, _config, _sr_ecp){};
 ecp_irp6_mechatronika_robot::ecp_irp6_mechatronika_robot (common::task::base& _ecp_object):
 	ecp_robot (ROBOT_IRP6_MECHATRONIKA, _ecp_object){};

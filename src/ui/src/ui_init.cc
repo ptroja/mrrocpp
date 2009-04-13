@@ -72,7 +72,7 @@ ofstream *log_file_outfile;
 void *sr_thread(void* arg)
 {
 	// printf("watek testowy dziala\n");		// by Y&W
-	sr_package_t sr_msg;
+	lib::sr_package_t sr_msg;
 	// 	char current_line[40];
 	// 	char current_line[80];
 	int16_t status;

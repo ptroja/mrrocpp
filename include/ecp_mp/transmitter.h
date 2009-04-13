@@ -79,7 +79,7 @@ class base
 
 	protected:
 		// Wskaznik na obiekt do komunikacji z SR
-		sr_ecp &sr_ecp_msg;
+		lib::sr_ecp &sr_ecp_msg;
 
 	public:
 		base (TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::base& _ecp_mp_object);

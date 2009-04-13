@@ -95,7 +95,7 @@ int main(int argc, char *argv[], char **arge) {
 #endif
 		/* Lokalizacja procesu wywietlania komunikatow SR */
 		/*
-		 if ((msg = new sr_edp(EDP, config->return_string_value("resourceman_attach_point"),
+		 if ((msg = new lib::sr_edp(EDP, config->return_string_value("resourceman_attach_point"),
 		 config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL) {
 		 perror ( "Unable to locate SR ");
 		 throw System_error();

@@ -33,7 +33,7 @@ protected:
 	char *VSP_NAME;
 	
 	// Wskaznik na obiekt do komunikacji z SR
-	sr_ecp &sr_ecp_msg;
+	lib::sr_ecp &sr_ecp_msg;
 
 public:
 

@@ -22,7 +22,7 @@ class ui_speaker_robot: public ecp::speaker::ecp_speaker_robot {
  public:
 	int speaking_state; // stan EDP
 	
-	ui_speaker_robot (edp_state_def* edp_state, lib::configurator &_config, sr_ecp* _sr_ecp_msg); // Konstruktor
+	ui_speaker_robot (edp_state_def* edp_state, lib::configurator &_config, lib::sr_ecp* _sr_ecp_msg); // Konstruktor
 	
 	virtual void execute_motion ( void );
 	

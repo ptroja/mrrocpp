@@ -248,7 +248,7 @@ private:
 	pthread_mutex_t mutex; // = PTHREAD_MUTEX_INITIALIZER ;
 
 public:
-	sr_package_t message_buffer[UI_SR_BUFFER_LENGHT];
+	lib::sr_package_t message_buffer[UI_SR_BUFFER_LENGHT];
 	int writer_buf_position;
 	int reader_buf_position;
 
@@ -285,8 +285,8 @@ public:
 
 typedef struct
 {
-	sr_ecp* all_ecp;        // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
-	sr_ui* ui;              // Wskaznik na obiekt do komunikacji z SR
+	lib::sr_ecp* all_ecp;        // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
+	lib::sr_ui* ui;              // Wskaznik na obiekt do komunikacji z SR
 } ui_msg_def;
 
 void UI_close(void);

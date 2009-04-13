@@ -33,7 +33,7 @@ namespace ecp_mp {
 namespace task {
 
 
-sr_ecp* base::sr_ecp_msg = NULL;
+lib::sr_ecp* base::sr_ecp_msg = NULL;
 
 // mapa wszystkich czujnikow
 std::map <SENSOR_ENUM, ::sensor*> base::sensor_m;

@@ -58,7 +58,7 @@ namespace vsp {
 namespace sensor {
 
 
-// extern sr_vsp *sr_msg;       // Wskaznik na lacze z SR
+// extern lib::sr_vsp *sr_msg;       // Wskaznik na lacze z SR
 int RGB2H[0xffff];
 float RGB2S[0xffff];
 float RGB2V[0xffff];

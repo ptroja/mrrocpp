@@ -32,7 +32,7 @@ private:
 	char buffer[BUFFER_SIZE];
 	
 	//link to SRP communication object
-	sr_ecp& sr_ecp_msg;
+	lib::sr_ecp& sr_ecp_msg;
 	
 	//sensor name
 	SENSOR_ENUM sensor_name;

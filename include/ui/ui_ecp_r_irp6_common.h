@@ -37,7 +37,7 @@ class ui_common_robot {
 	 ecp::common::ecp_robot *ecp;
 
 // ecp_buffer ui_edp_package; // by Y
-  ui_common_robot (lib::configurator &_config, sr_ecp* _sr_ecp_msg, ROBOT_ENUM _robot_name); // Konstruktor
+  ui_common_robot (lib::configurator &_config, lib::sr_ecp* _sr_ecp_msg, ROBOT_ENUM _robot_name); // Konstruktor
 
   virtual ~ui_common_robot();
 

@@ -1153,7 +1153,7 @@ reload_whole_configuration() {
 		// inicjacja komunikacji z watkiem sr
 		if (ui_msg.ui == NULL)
 		{
-			if ((ui_msg.ui = new sr_ui(UI, ui_state.ui_attach_point, ui_state.network_sr_attach_point)) == NULL) {
+			if ((ui_msg.ui = new lib::sr_ui(UI, ui_state.ui_attach_point, ui_state.network_sr_attach_point)) == NULL) {
 				perror ( "Unable to locate SR\n");
 			} else {
 				ui_msg.ui->message("started");
@@ -1163,7 +1163,7 @@ reload_whole_configuration() {
 		// inicjacja komunikacji z watkiem sr
 		if (ui_msg.all_ecp == NULL)
 		{
-			if ((ui_msg.all_ecp = new sr_ecp(ECP, "ui_all_ecp" , ui_state.network_sr_attach_point)) == NULL) {
+			if ((ui_msg.all_ecp = new lib::sr_ecp(ECP, "ui_all_ecp" , ui_state.network_sr_attach_point)) == NULL) {
 				perror ( "Unable to locate SR\n");
 			} else {
 

@@ -41,7 +41,7 @@ base::base (lib::configurator &_config) :
 	{
 
 	/* Lokalizacja procesu wyswietlania komunikatow SR */
-	if ((sr_msg = new sr_vsp(VSP, config.return_string_value("resourceman_attach_point"),
+	if ((sr_msg = new lib::sr_vsp(VSP, config.return_string_value("resourceman_attach_point"),
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL)
 	{
 		printf("communication with SR not ready\n");

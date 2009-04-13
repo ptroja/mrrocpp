@@ -13,6 +13,9 @@
 #include "common/typedefs.h"
 #include "common/com_buf.h"
 
+namespace mrrocpp {
+namespace lib {
+
 #define SR_MSG_SERVED 0x11	// kod ustawiany po wyswietleniu komunikatu
 				// poniewaz przychodza komunikaty o zdarzeniach
 				// zwiazanych z oknem i powodowalyby powtorzenie
@@ -92,5 +95,9 @@ public:
   sr_ui(PROCESS_TYPE process_type, const char *process_name, const char *sr_name);
   virtual void interpret(void);
 };
+
+} // namespace lib
+} // namespace mrrocpp
+
 
 #endif

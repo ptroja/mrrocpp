@@ -61,7 +61,7 @@ protected:
 
 public:
     lib::configurator &config;
-    sr_edp *msg;
+    lib::sr_edp *msg;
 
     void check_config(const char* string, uint8_t* input);
     bool initialize_communication (void);

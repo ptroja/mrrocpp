@@ -23,6 +23,9 @@
 
 #include "messip/messip.h"
 
+namespace mrrocpp {
+namespace lib {
+
 #if !defined(USE_MESSIP_SRR)
 // Konstruktor
 sr::sr(PROCESS_TYPE process_type, const char *process_name, const char *sr_name) {
@@ -505,3 +508,7 @@ switch (sr_message.message_type) {
     sprintf(sr_message.description, "UNIDENTIFIED VSP ERROR");
 } // end: switch (sr_message.message_type)
 } // end: sr_ui::interpret()
+
+} // namespace lib
+} // namespace mrrocpp
+

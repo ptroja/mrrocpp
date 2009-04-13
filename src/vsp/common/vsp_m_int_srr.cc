@@ -34,7 +34,7 @@ namespace common {
 /********************************* GLOBALS **********************************/
 sensor::base *vs;		// czujnik wirtualny
 
-// sr_vsp *vs->sr_msg;		// komunikacja z SR
+// lib::sr_vsp *vs->sr_msg;		// komunikacja z SR
 
 // configurator* config;
 

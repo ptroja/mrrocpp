@@ -20,7 +20,7 @@ class ecp_conveyor_robot: public common::ecp_robot
 	// Klasa dla robota conveyor (sztywnego)
 
 	public:
-	ecp_conveyor_robot (lib::configurator &_config, sr_ecp *_sr_ecp);
+	ecp_conveyor_robot (lib::configurator &_config, lib::sr_ecp *_sr_ecp);
 	ecp_conveyor_robot (common::task::base& _ecp_object);
 
 	virtual void create_command (void);

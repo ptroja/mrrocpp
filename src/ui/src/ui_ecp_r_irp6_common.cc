@@ -31,7 +31,7 @@
 #include "lib/mathtr.h"
 
 // ---------------------------------------------------------------
-ui_common_robot::ui_common_robot (lib::configurator &_config, sr_ecp* _sr_ecp_msg, ROBOT_ENUM _robot_name)
+ui_common_robot::ui_common_robot (lib::configurator &_config, lib::sr_ecp* _sr_ecp_msg, ROBOT_ENUM _robot_name)
 {
 
     switch (_robot_name)

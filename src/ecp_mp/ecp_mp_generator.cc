@@ -4,7 +4,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace generator {
 
-base::base(sr_ecp& _sr_ecp_msg) :
+base::base(lib::sr_ecp& _sr_ecp_msg) :
 	sr_ecp_msg(_sr_ecp_msg),
 	trigger(false),
 	node_counter(0)

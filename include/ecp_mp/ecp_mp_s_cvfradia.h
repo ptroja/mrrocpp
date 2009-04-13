@@ -51,7 +51,7 @@ private:
 	/*!
       * Link to the SRP communication object.
       */
-	sr_ecp& sr_ecp_msg;
+	lib::sr_ecp& sr_ecp_msg;
 
 	/*!
       * Sensor name.

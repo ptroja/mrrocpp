@@ -35,7 +35,7 @@ extern "C"
         lib::ForceTrans *gravity_transformation; // klasa likwidujaca wplyw grawitacji na czujnik
 
     public:
-        sr_vsp *sr_msg;		//!< komunikacja z SR
+        lib::sr_vsp *sr_msg;		//!< komunikacja z SR
         sem_t new_ms; //!< semafor dostepu do nowej wiadomosci dla vsp
         sem_t new_ms_for_edp; //!< semafor dostepu do nowej wiadomosci dla edp
         bool TERMINATE;			//!< zakonczenie obydwu watkow

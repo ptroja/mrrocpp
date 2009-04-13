@@ -19,12 +19,12 @@ class base
 	// sprawdzania spelnienia warunku koncowego
 
 protected:
-	sr_ecp& sr_ecp_msg;		// obiekt do komunikacji z SR
+	lib::sr_ecp& sr_ecp_msg;		// obiekt do komunikacji z SR
 
 public:
 	bool trigger;			// informacja czy pszyszedl puls trigger
 
-	base(sr_ecp& _sr_ecp_msg);
+	base(lib::sr_ecp& _sr_ecp_msg);
 
 	bool check_and_null_trigger(); 		// zwraca wartosc trigger i zeruje go
 
