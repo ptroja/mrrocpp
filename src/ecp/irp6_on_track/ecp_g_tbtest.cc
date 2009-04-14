@@ -39,15 +39,15 @@ bool tbtest::first_step()
 bool tbtest::next_step(){
     double time; //Czas ruchu.
 
-    sensor_m[SENSOR_CVFRADIA]->get_reading();
-	if (sensor_m[SENSOR_CVFRADIA]->from_vsp.vsp_report == VSP_REPLY_OK) {
+    sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+	if (sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.vsp_report == lib::VSP_REPLY_OK) {
 		std::cout << "Odczyt z fradii: \n"
-				<< sensor_m[SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.deviation.x
+				<< sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.deviation.x
 				<< std::endl
-				<< sensor_m[SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.deviation.y
+				<< sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.deviation.y
 				<< std::endl;
 	}else{
-		std::cout<<"code: "<<sensor_m[SENSOR_CVFRADIA]->from_vsp.vsp_report<<std::endl;
+		std::cout<<"code: "<<sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.vsp_report<<std::endl;
 	}
 
 /*

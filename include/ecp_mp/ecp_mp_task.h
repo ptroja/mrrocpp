@@ -34,7 +34,7 @@ public:
 	~base();
 
 	// mapa wszystkich czujnikow
-	static std::map <SENSOR_ENUM, ::sensor*> sensor_m;
+	static std::map <lib::SENSOR_ENUM, lib::sensor*> sensor_m;
 
 	// mapa wszystkich transmiterow
 	static std::map <transmitter::TRANSMITTER_ENUM, transmitter::base*> transmitter_m;
@@ -67,11 +67,11 @@ public:
 	bool show_message (const char* message);
 
 	// Zatrzymanie wszystkich VSP
-	static void kill_all_VSP (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m);
+	static void kill_all_VSP (std::map <lib::SENSOR_ENUM, lib::sensor*>& _sensor_m);
 
 	// funkcje do obslugi czujnikow
-	void all_sensors_initiate_reading (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m);
-	void all_sensors_get_reading (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m);
+	void all_sensors_initiate_reading (std::map <lib::SENSOR_ENUM, lib::sensor*>& _sensor_m);
+	void all_sensors_get_reading (std::map <lib::SENSOR_ENUM, lib::sensor*>& _sensor_m);
 
 };
 

@@ -23,12 +23,12 @@ namespace generator {
 
 class spots : public common::generator::base
 {
-	ECP_VSP_MSG comm_struct;
+	lib::ECP_VSP_MSG comm_struct;
 	ecp_mp::sensor::cvfradia * sensor;
 	double tce[12], teg[12], tcg[12];
 	long no_of_tcg_in_one;
 	CameraToTool * c;
-	SENSOR_IMAGE calib_data;
+	lib::SENSOR_IMAGE calib_data;
 
 	//double vec_1[4], vec_2[4], vec_3[4], vec_4[4];
 	short iter; //0 - zero, 1 - one, 2 - many ;)

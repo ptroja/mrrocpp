@@ -66,13 +66,13 @@ void rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogladanie s
 		face_turn_op(common::CL_0);
 
 		usleep(1000*5000); //30 000 - OK //unrem		   //3000 - na lato na zime 5000
-		sensor_m[SENSOR_CAMERA_ON_TRACK]->initiate_reading();
+		sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->initiate_reading();
 		usleep(1000*1000);
-		sensor_m[SENSOR_CAMERA_ON_TRACK]->get_reading();
+		sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->get_reading();
 
 		for(int i=0; i<3; i++)
 			for(int j=0; j<3; j++)
-				cube_state->cube_tab[k][3*i+j]=(char)sensor_m[SENSOR_CAMERA_ON_TRACK]->image.sensor_union.cube_face.colors[3*i+j];
+				cube_state->cube_tab[k][3*i+j]=(char)sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->image.sensor_union.cube_face.colors[3*i+j];
 
 
 		printf("\nFACE FACE %d:\n",k);
@@ -411,7 +411,7 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	// zacisniecie postumenta na kostce
 
 
-	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -420,8 +420,8 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 
 	generator::tff_rubik_grab mp_tff_rg_gen(*this, 10);
 	mp_tff_rg_gen.robot_m = robot_m;
-	mp_tff_rg_gen.sensor_m[SENSOR_FORCE_ON_TRACK] = sensor_m[SENSOR_FORCE_ON_TRACK];
-	mp_tff_rg_gen.sensor_m[SENSOR_FORCE_POSTUMENT] = sensor_m[SENSOR_FORCE_POSTUMENT];
+	mp_tff_rg_gen.sensor_m[lib::SENSOR_FORCE_ON_TRACK] = sensor_m[lib::SENSOR_FORCE_ON_TRACK];
+	mp_tff_rg_gen.sensor_m[lib::SENSOR_FORCE_POSTUMENT] = sensor_m[lib::SENSOR_FORCE_POSTUMENT];
 
 	mp_tff_rg_gen.configure(0, 1, 0.057, 0.00005, 0);
 	mp_tff_rg_gen.Move();
@@ -435,8 +435,8 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 
 	generator::tff_rubik_face_rotate mp_tff_rf_gen(*this, 10);
 	mp_tff_rf_gen.robot_m = robot_m;
-	mp_tff_rf_gen.sensor_m[SENSOR_FORCE_ON_TRACK] = sensor_m[SENSOR_FORCE_ON_TRACK];
-	mp_tff_rf_gen.sensor_m[SENSOR_FORCE_POSTUMENT] = sensor_m[SENSOR_FORCE_POSTUMENT];
+	mp_tff_rf_gen.sensor_m[lib::SENSOR_FORCE_ON_TRACK] = sensor_m[lib::SENSOR_FORCE_ON_TRACK];
+	mp_tff_rf_gen.sensor_m[lib::SENSOR_FORCE_POSTUMENT] = sensor_m[lib::SENSOR_FORCE_POSTUMENT];
 
 	switch (turn_angle)
 	{
@@ -512,7 +512,7 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 
 	// zacisniecie tracka na kostce
 
-	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -522,8 +522,8 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 	generator::tff_rubik_grab mp_tff_rg_gen(*this, 10);
 	// mp_tff_rg_gen.wait_for_ECP_pulse = true;
 	mp_tff_rg_gen.robot_m = robot_m;
-	mp_tff_rg_gen.sensor_m[SENSOR_FORCE_ON_TRACK] = sensor_m[SENSOR_FORCE_ON_TRACK];
-	mp_tff_rg_gen.sensor_m[SENSOR_FORCE_POSTUMENT] = sensor_m[SENSOR_FORCE_POSTUMENT];
+	mp_tff_rg_gen.sensor_m[lib::SENSOR_FORCE_ON_TRACK] = sensor_m[lib::SENSOR_FORCE_ON_TRACK];
+	mp_tff_rg_gen.sensor_m[lib::SENSOR_FORCE_POSTUMENT] = sensor_m[lib::SENSOR_FORCE_POSTUMENT];
 
 
 	mp_tff_rg_gen.configure(1, 0, 0.072, 0.00005, 0, false, false);
@@ -536,8 +536,8 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 	// docisniecie chwytaka tracka do kostki
 	generator::tff_gripper_approach mp_tff_ga_gen(*this, 10);
 	mp_tff_ga_gen.robot_m = robot_m;
-	mp_tff_ga_gen.sensor_m[SENSOR_FORCE_ON_TRACK] = sensor_m[SENSOR_FORCE_ON_TRACK];
-	mp_tff_ga_gen.sensor_m[SENSOR_FORCE_POSTUMENT] = sensor_m[SENSOR_FORCE_POSTUMENT];
+	mp_tff_ga_gen.sensor_m[lib::SENSOR_FORCE_ON_TRACK] = sensor_m[lib::SENSOR_FORCE_ON_TRACK];
+	mp_tff_ga_gen.sensor_m[lib::SENSOR_FORCE_POSTUMENT] = sensor_m[lib::SENSOR_FORCE_POSTUMENT];
 	//	mp_tff_ga_gen.transmitter_m[TRANSMITTER_RC_WINDOWS] = transmitter_m[TRANSMITTER_RC_WINDOWS];
 	mp_tff_ga_gen.configure(5.0, 0.0, 50);
 	mp_tff_ga_gen.Move();
@@ -632,8 +632,8 @@ void rubik_cube_solver::approach_op(int mode)
 
 	generator::tff_nose_run mp_tff_fr_gen(*this, 10);
 	mp_tff_fr_gen.robot_m = robot_m;
-	mp_tff_fr_gen.sensor_m[SENSOR_FORCE_ON_TRACK] = sensor_m[SENSOR_FORCE_ON_TRACK];
-	mp_tff_fr_gen.sensor_m[SENSOR_FORCE_POSTUMENT] = sensor_m[SENSOR_FORCE_POSTUMENT];
+	mp_tff_fr_gen.sensor_m[lib::SENSOR_FORCE_ON_TRACK] = sensor_m[lib::SENSOR_FORCE_ON_TRACK];
+	mp_tff_fr_gen.sensor_m[lib::SENSOR_FORCE_POSTUMENT] = sensor_m[lib::SENSOR_FORCE_POSTUMENT];
 	// mp_tff_fr_gen.sensor_m = sensor_m;
 	mp_tff_fr_gen.configure(1, 0);
 	sr_ecp_msg->message("Track podatny do czasu wcisniecia mp_trigger");
@@ -671,7 +671,7 @@ void rubik_cube_solver::approach_op(int mode)
 	{
 		generator::seven_eye eyegen(*this, 4);
 		eyegen.robot_m = robot_m; // mozna przydzielic tylko postumenta
-		eyegen.sensor_m[SENSOR_CAMERA_SA] = sensor_m[SENSOR_CAMERA_SA];
+		eyegen.sensor_m[lib::SENSOR_CAMERA_SA] = sensor_m[lib::SENSOR_CAMERA_SA];
 
 		eyegen.Move();
 	}
@@ -681,8 +681,8 @@ void rubik_cube_solver::approach_op(int mode)
 
 	generator::tff_rubik_grab mp_tff_rg_gen(*this, 10);
 	mp_tff_rg_gen.robot_m = robot_m;
-	mp_tff_rg_gen.sensor_m[SENSOR_FORCE_ON_TRACK] = sensor_m[SENSOR_FORCE_ON_TRACK];
-	mp_tff_rg_gen.sensor_m[SENSOR_FORCE_POSTUMENT] = sensor_m[SENSOR_FORCE_POSTUMENT];
+	mp_tff_rg_gen.sensor_m[lib::SENSOR_FORCE_ON_TRACK] = sensor_m[lib::SENSOR_FORCE_ON_TRACK];
+	mp_tff_rg_gen.sensor_m[lib::SENSOR_FORCE_POSTUMENT] = sensor_m[lib::SENSOR_FORCE_POSTUMENT];
 
 	mp_tff_rg_gen.configure(1,0, 0.057, 0.00005, 0);
 	mp_tff_rg_gen.Move();
@@ -776,20 +776,20 @@ base* return_created_mp_task (lib::configurator &_config)
 void rubik_cube_solver::task_initialization(void)
 {
 	// Powolanie czujnikow
-	sensor_m[SENSOR_FORCE_ON_TRACK] =
-		new ecp_mp::sensor::schunk (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
+	sensor_m[lib::SENSOR_FORCE_ON_TRACK] =
+		new ecp_mp::sensor::schunk (lib::SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
 
-	sensor_m[SENSOR_FORCE_POSTUMENT] =
-		new ecp_mp::sensor::schunk (SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
+	sensor_m[lib::SENSOR_FORCE_POSTUMENT] =
+		new ecp_mp::sensor::schunk (lib::SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
 
-	sensor_m[SENSOR_CAMERA_ON_TRACK] =
-		new ecp_mp::sensor::vis (SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
+	sensor_m[lib::SENSOR_CAMERA_ON_TRACK] =
+		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
-	sensor_m[SENSOR_CAMERA_SA] =
-		new ecp_mp::sensor::vis (SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+	sensor_m[lib::SENSOR_CAMERA_SA] =
+		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 
 	// Konfiguracja wszystkich czujnikow
-	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -831,7 +831,7 @@ void rubik_cube_solver::main_task_algorithm(void)
 		for(;;)
 		{
 			sr_ecp_msg->message("Nowa seria");
-			for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+			for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 			sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 			{
 				sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika

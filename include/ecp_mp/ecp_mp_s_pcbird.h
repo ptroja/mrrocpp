@@ -22,7 +22,7 @@ namespace sensor {
  * \brief Virtual sensor on the ECP/MP side used for communication with pcbird.
  * \author tkornuta
  */
-class pcbird : public ::sensor
+class pcbird : public lib::sensor
 {
 private:
 	/*!
@@ -38,14 +38,14 @@ private:
 	/*!
       * Sensor name.
       */
-	SENSOR_ENUM sensor_name; 
+	lib::SENSOR_ENUM sensor_name; 
 
 public:
 
 	/*!
       * Constructor. Creates socket connection to pcbird.
       */
- 	pcbird (SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object);
+ 	pcbird (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object);
 
 	/*!
       * Sends sensor configuration to pcbird.

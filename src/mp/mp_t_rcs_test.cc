@@ -40,8 +40,8 @@ rcs_test::~rcs_test()
 	printf("MP Destruct\n");
 
 	// konczy prace czujnikow
-	sensor_m[SENSOR_RCS_KOCIEMBA]->terminate();
-	sensor_m[SENSOR_RCS_KORF]->terminate();
+	sensor_m[lib::SENSOR_RCS_KOCIEMBA]->terminate();
+	sensor_m[lib::SENSOR_RCS_KORF]->terminate();
 }
 
 // methods fo mp template to redefine in concete class
@@ -50,14 +50,14 @@ void rcs_test::task_initialization(void)
 	printf("MP Init\n");
 
 	// tworzy i konfiguruje czujnik dla algorytmu Kociemby (w powloce nieinteraktywnej)
-	sensor_m[SENSOR_RCS_KOCIEMBA] = new ecp_mp::sensor::rcs_kociemba(SENSOR_RCS_KOCIEMBA, "[vsp_rcs_kociemba]", *this);
-	sensor_m[SENSOR_RCS_KOCIEMBA]->to_vsp.rcs.configure_mode = RCS_BUILD_TABLES;
-	sensor_m[SENSOR_RCS_KOCIEMBA]->configure_sensor();
+	sensor_m[lib::SENSOR_RCS_KOCIEMBA] = new ecp_mp::sensor::rcs_kociemba(lib::SENSOR_RCS_KOCIEMBA, "[vsp_rcs_kociemba]", *this);
+	sensor_m[lib::SENSOR_RCS_KOCIEMBA]->to_vsp.rcs.configure_mode = lib::RCS_BUILD_TABLES;
+	sensor_m[lib::SENSOR_RCS_KOCIEMBA]->configure_sensor();
 
 	// tworzy i konfiguruje czujnik dla algorytmu Korfa (w powloce interaktywnej bez oczekiwania)
-	sensor_m[SENSOR_RCS_KORF] = new ecp_mp::sensor::rcs_korf(SENSOR_RCS_KORF, "[vsp_rcs_korf]", *this);
-	sensor_m[SENSOR_RCS_KORF]->to_vsp.rcs.configure_mode = RCS_BUILD_TABLES;
-	sensor_m[SENSOR_RCS_KORF]->configure_sensor();
+	sensor_m[lib::SENSOR_RCS_KORF] = new ecp_mp::sensor::rcs_korf(lib::SENSOR_RCS_KORF, "[vsp_rcs_korf]", *this);
+	sensor_m[lib::SENSOR_RCS_KORF]->to_vsp.rcs.configure_mode = lib::RCS_BUILD_TABLES;
+	sensor_m[lib::SENSOR_RCS_KORF]->configure_sensor();
 
 }
 
@@ -83,15 +83,15 @@ void rcs_test::main_task_algorithm(void)
 	bool kociemba_configured = false;
 
 	// konfiguruje czujnik dla algorytmu Kociemby, ten od razu rozpoczyna prace
-	sensor_m[SENSOR_RCS_KOCIEMBA]->to_vsp.rcs.configure_mode = RCS_CUBE_STATE;
-	strncpy(sensor_m[SENSOR_RCS_KOCIEMBA]->to_vsp.rcs.cube_state, cube_test_state, 54);
-	sensor_m[SENSOR_RCS_KOCIEMBA]->configure_sensor();
+	sensor_m[lib::SENSOR_RCS_KOCIEMBA]->to_vsp.rcs.configure_mode = lib::RCS_CUBE_STATE;
+	strncpy(sensor_m[lib::SENSOR_RCS_KOCIEMBA]->to_vsp.rcs.cube_state, cube_test_state, 54);
+	sensor_m[lib::SENSOR_RCS_KOCIEMBA]->configure_sensor();
 
 	// inicjuje odczyt z czujnika dla algorytmu Korfa, az do skutku
 	while (!korf_configured) {
-		strncpy(sensor_m[SENSOR_RCS_KORF]->to_vsp.rcs.cube_state, cube_test_state, 54);
-		sensor_m[SENSOR_RCS_KORF]->initiate_reading();
-		if (sensor_m[SENSOR_RCS_KORF]->image.sensor_union.rcs.init_mode == RCS_INIT_SUCCESS)
+		strncpy(sensor_m[lib::SENSOR_RCS_KORF]->to_vsp.rcs.cube_state, cube_test_state, 54);
+		sensor_m[lib::SENSOR_RCS_KORF]->initiate_reading();
+		if (sensor_m[lib::SENSOR_RCS_KORF]->image.sensor_union.rcs.init_mode == lib::RCS_INIT_SUCCESS)
 			korf_configured = true;
 		else
 			sleep(1);
@@ -114,15 +114,15 @@ void rcs_test::main_task_algorithm(void)
 		while (!korf_found && !time_elapsed && sol_possible && sol_needed) {
 
 			// odczytuje wynik z czujnika dla algorytmu Korfa
-			sensor_m[SENSOR_RCS_KORF]->get_reading();
+			sensor_m[lib::SENSOR_RCS_KORF]->get_reading();
 			sleep(1);
-			if (sensor_m[SENSOR_RCS_KORF]->image.sensor_union.rcs.reading_mode == RCS_SOLUTION_NOTPOSSIBLE) {
+			if (sensor_m[lib::SENSOR_RCS_KORF]->image.sensor_union.rcs.reading_mode == lib::RCS_SOLUTION_NOTPOSSIBLE) {
 				sol_possible = false;
-			} else if (sensor_m[SENSOR_RCS_KORF]->image.sensor_union.rcs.reading_mode == RCS_SOLUTION_NOTNEEDED) {
+			} else if (sensor_m[lib::SENSOR_RCS_KORF]->image.sensor_union.rcs.reading_mode == lib::RCS_SOLUTION_NOTNEEDED) {
 				sol_needed = false;
-			} else if (sensor_m[SENSOR_RCS_KORF]->image.sensor_union.rcs.reading_mode == RCS_SOLUTION_FOUND) {
+			} else if (sensor_m[lib::SENSOR_RCS_KORF]->image.sensor_union.rcs.reading_mode == lib::RCS_SOLUTION_FOUND) {
 				sol_korf = new char[200];
-				strcpy(sol_korf, (char*) sensor_m[SENSOR_RCS_KORF]->image.sensor_union.rcs.cube_solution);
+				strcpy(sol_korf, (char*) sensor_m[lib::SENSOR_RCS_KORF]->image.sensor_union.rcs.cube_solution);
 				printf("MP KR: %s\n", sol_korf);
 				korf_found = true;
 			}
@@ -138,15 +138,15 @@ void rcs_test::main_task_algorithm(void)
 		}
 
 		// odczytuje ostanio znalezione rozwiazanie z czujnika dla algorytmu Kociemby
-		sensor_m[SENSOR_RCS_KOCIEMBA]->get_reading();
+		sensor_m[lib::SENSOR_RCS_KOCIEMBA]->get_reading();
 		sleep(1);
-		if (sensor_m[SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.reading_mode == RCS_SOLUTION_NOTPOSSIBLE) {
+		if (sensor_m[lib::SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.reading_mode == lib::RCS_SOLUTION_NOTPOSSIBLE) {
 			sol_possible = false;
-		} else if (sensor_m[SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.reading_mode == RCS_SOLUTION_NOTNEEDED) {
+		} else if (sensor_m[lib::SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.reading_mode == lib::RCS_SOLUTION_NOTNEEDED) {
 			sol_needed = false;
-		} else if (sensor_m[SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.reading_mode == RCS_SOLUTION_FOUND) {
+		} else if (sensor_m[lib::SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.reading_mode == lib::RCS_SOLUTION_FOUND) {
 			sol_kociemba = new char[200];
-			strcpy(sol_kociemba, (char*) sensor_m[SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.cube_solution);
+			strcpy(sol_kociemba, (char*) sensor_m[lib::SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.cube_solution);
 			printf("MP KC: %s\n", sol_kociemba);
 			kociemba_found = true;
 		}

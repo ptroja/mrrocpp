@@ -31,7 +31,7 @@ namespace irp6ot {
 class ecp_vis_ib_eih_planar_irp6ot: public common::ecp_visual_servo {
 public:
 	//Wirtualny sensor
-	::sensor *vsp_fradia;
+	lib::sensor *vsp_fradia;
 	//Pozycja w nastepnym kroku.
     double next_position[8];
     //Obliczone sterowanie dla osi x;

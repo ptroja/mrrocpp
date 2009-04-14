@@ -64,12 +64,12 @@ bool y_simple::first_step ( ) {
 	
 
 	return true;
-}; // end: bool y_simple_generator::first_step (std::map <SENSOR_ENUM, ::sensor*>& sensor_m, robot& the_robot )
+}; // end: bool y_simple_generator::first_step (std::map <lib::SENSOR_ENUM, lib::sensor*>& sensor_m, robot& the_robot )
 // --------------------------------------------------------------------------
 
 
 // --------------------------------------------------------------------------
-bool y_simple::next_step (std::map <SENSOR_ENUM, ::sensor*>& sensor_m ) {
+bool y_simple::next_step (std::map <lib::SENSOR_ENUM, lib::sensor*>& sensor_m ) {
 	struct timespec start[9];
 	
 	

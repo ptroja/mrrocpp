@@ -328,7 +328,7 @@ void vis::get_reading (void){
 	     throw sensor_error (FATAL_ERROR, READING_NOT_READY);   
 
 	// ok
-	from_vsp.vsp_report=VSP_REPLY_OK;
+	from_vsp.vsp_report= lib::VSP_REPLY_OK;
 	// tutaj: czujnik skalibrowany, odczyt dokonany, zapisany w "image", przepisanie wszystkich pol
 	// przepisanie do bufora komunikacyjnego
 	/*

@@ -138,16 +138,16 @@ void fsautomat::task_initialization(void)
 	 xmlFreeDoc(doc);
 	 xmlCleanupParser();
 	 */
-	sensor_m[SENSOR_CAMERA_ON_TRACK] = new ecp_mp::sensor::vis(SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
+	sensor_m[lib::SENSOR_CAMERA_ON_TRACK] = new ecp_mp::sensor::vis(lib::SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
 	if (config.return_int_value("vis_servoing")) {
 
-		sensor_m[SENSOR_CAMERA_SA] = new ecp_mp::sensor::vis(SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+		sensor_m[lib::SENSOR_CAMERA_SA] = new ecp_mp::sensor::vis(lib::SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 
 	}
 
 	// Konfiguracja wszystkich czujnikow
-	for (std::map<SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+	for (std::map<lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 			!= sensor_m.end(); sensor_m_iterator++) {
 		sensor_m_iterator->second->to_vsp.parameters = 1; // biasowanie czujnika
 		sensor_m_iterator->second->configure_sensor();
@@ -310,14 +310,14 @@ std::map<char *, common::State, ecp::common::task::base::str_cmp> * fsautomat::t
 void fsautomat::configureProperSensor(char *propSensor)
 {
 	// Powolanie czujnikow
-	sensor_m[SENSOR_CAMERA_ON_TRACK] = new ecp_mp::sensor::vis(SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
+	sensor_m[lib::SENSOR_CAMERA_ON_TRACK] = new ecp_mp::sensor::vis(lib::SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
 	if (config.return_int_value("vis_servoing")) {
-		sensor_m[SENSOR_CAMERA_SA] = new ecp_mp::sensor::vis(SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+		sensor_m[lib::SENSOR_CAMERA_SA] = new ecp_mp::sensor::vis(lib::SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 	}
 
 	// Konfiguracja wszystkich czujnikow
-	for (std::map<SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+	for (std::map<lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 			!= sensor_m.end(); sensor_m_iterator++) {
 		sensor_m_iterator->second->to_vsp.parameters = 1; // biasowanie czujnika
 		sensor_m_iterator->second->configure_sensor();
@@ -370,7 +370,7 @@ void fsautomat::executeMotion(common::State &state)
 
 void fsautomat::sensorInitialization()
 {
-	/*	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	/*	for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 	 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	 {
 	 sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -407,12 +407,12 @@ void fsautomat::initializeCubeState(common::State &state)
 
 void fsautomat::initiateSensorReading(common::State &state)
 {
-	/*        sensor_m[SENSOR_CAMERA_ON_TRACK]->initiate_reading();
+	/*        sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->initiate_reading();
 	 if (wait_ms(1000))
 	 {
 	 return true;
 	 }
-	 sensor_m[SENSOR_CAMERA_ON_TRACK]->get_reading();
+	 sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->get_reading();
 	 */
 	/*	char *sensorName = strdup(state.getStringArgument());
 	 SENSOR_ENUM whichSensor;
@@ -442,14 +442,14 @@ void fsautomat::writeCubeState(common::State &state)
 {
 	int index = state.getNumArgument();
 
-	sensor_m[SENSOR_CAMERA_ON_TRACK]->initiate_reading();
+	sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->initiate_reading();
 	wait_ms(1000);
-	sensor_m[SENSOR_CAMERA_ON_TRACK]->get_reading();
+	sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->get_reading();
 
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
 			cube_state->cube_tab[index][3 * i + j]
-					= (char) sensor_m[SENSOR_CAMERA_ON_TRACK]->image.sensor_union.cube_face.colors[3 * i + j];
+					= (char) sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->image.sensor_union.cube_face.colors[3 * i + j];
 
 	printf("\nFACE FACE %d:\n", index);
 	for (int i = 0; i < 9; i++) {
@@ -753,7 +753,7 @@ void fsautomat::main_task_algorithm(void)
 	//strcmp(nextState, (char *)"INIT");
 	sprintf(nextState, "INIT");
 	// temporary sensor config in this place
-	for (std::map<SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+	for (std::map<lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 			!= sensor_m.end(); sensor_m_iterator++) {
 		sensor_m_iterator->second->to_vsp.parameters = 1; // biasowanie czujnika
 		sensor_m_iterator->second->configure_sensor();

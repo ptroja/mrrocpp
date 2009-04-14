@@ -31,8 +31,8 @@ private:
 		
 		
 		struct sigevent event;
-		VSP_EDP_message vsp_edp_command;// by Y do komuniacji z EDP
-		EDP_VSP_reply edp_vsp_reply;
+		lib::VSP_EDP_message vsp_edp_command;// by Y do komuniacji z EDP
+		lib::EDP_VSP_reply edp_vsp_reply;
 		
 		unsigned int ms_nr; // numer odczytu z czujnika
 		

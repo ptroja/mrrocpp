@@ -65,9 +65,9 @@ void mam::catch_signal(int sig)
 			// Zakonczenie pracy watkow.
 			TERMINATE = true;
 			// Koniec pracy czujnikow.
-			(((mam*)ecp_t))->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]->terminate();
+			(((mam*)ecp_t))->sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR]->terminate();
 			// Zwolnienie pamieci - czujnik.
-			delete(((mam*)ecp_t)->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]);
+			delete(((mam*)ecp_t)->sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR]);
 
 			// Zwolnienie pamieci - generator.
 			delete(mam_gen);
@@ -135,7 +135,7 @@ void* UI_communication_thread(void* arg)
 				break;
 			case MAM_CALIBRATE:
 				// Konfiguracja czujnika.
-				((mam*)ecp_t)->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]->configure_sensor();
+				((mam*)ecp_t)->sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR]->configure_sensor();
 				break;
 			case MAM_EXIT:
 				// Zakonczenie dzialania procesu.
@@ -232,12 +232,12 @@ void mam::task_initialization(void)
 	mam_gen = new generator::manual_moves_automatic_measures(*this, 8);
 
 	// Stworznie obiektu - czujnik zlozony z linialow.
-	sensor_m[SENSOR_DIGITAL_SCALE_SENSOR] = new ecp_mp::sensor::digital_scales(SENSOR_DIGITAL_SCALE_SENSOR, "[vsp_dss]", *this);
+	sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR] = new ecp_mp::sensor::digital_scales(lib::SENSOR_DIGITAL_SCALE_SENSOR, "[vsp_dss]", *this);
 	// Konfiguracja czujnika.
-	sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]->configure_sensor();
+	sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR]->configure_sensor();
 
 	// Stworzenie listy czujnikow.
-	mam_gen->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR] = sensor_m[SENSOR_DIGITAL_SCALE_SENSOR];
+	mam_gen->sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR] = sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR];
 
 	switch (ecp_m_robot->robot_name) {
 		case ROBOT_IRP6_ON_TRACK:

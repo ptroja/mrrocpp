@@ -33,7 +33,7 @@ public:
 	virtual ~base();
 
 	// mapa wszystkich czujnikow
-	std::map <SENSOR_ENUM, ::sensor*> sensor_m;
+	std::map <lib::SENSOR_ENUM, lib::sensor*> sensor_m;
 
 	// mapa wszystkich transmiterow
 	std::map <transmitter::TRANSMITTER_ENUM, transmitter::base*> transmitter_m;

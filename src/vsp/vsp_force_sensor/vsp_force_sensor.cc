@@ -122,7 +122,7 @@ void force::get_reading (void){
 	if(!is_reading_ready)
 		return;
 	// Odczyt w porzadku.
-	from_vsp.vsp_report=VSP_REPLY_OK;
+	from_vsp.vsp_report= lib::VSP_REPLY_OK;
 	// Przepisanie pomiarow z obrazu czujnika do bufora komunikacyjnego.
 	memcpy(from_vsp.comm_image.sensor_union.force.rez, image.sensor_union.force.rez, 6*sizeof(double));
 	// Obacny odczyt nie jest "nowy".

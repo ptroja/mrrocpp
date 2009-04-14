@@ -13,7 +13,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-wiimote::wiimote(SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object, int _union_size)
+wiimote::wiimote(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object, int _union_size)
 	: sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(_sensor_name)
 {
 	// Set size of passed message/union.
@@ -60,41 +60,41 @@ wiimote::wiimote(SENSOR_ENUM _sensor_name, const char* _section_name, task:: bas
 
 void wiimote::configure_sensor() {
 	// Send adequate command to wiimote.
-	to_vsp.i_code = VSP_CONFIGURE_SENSOR;
-	if(write(sockfd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)
+	to_vsp.i_code = lib::VSP_CONFIGURE_SENSOR;
+	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
 		throw sensor_error (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 }
 
 
 void wiimote::initiate_reading() {
 	// Send adequate command to wiimote.
-	to_vsp.i_code = VSP_INITIATE_READING;
+	to_vsp.i_code = lib::VSP_INITIATE_READING;
 
-	if(write(sockfd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)
+	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
 		throw sensor_error (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 }
 
 
-void wiimote::send_reading(ECP_VSP_MSG to) {
+void wiimote::send_reading(lib::ECP_VSP_MSG to) {
 	// Send any command to wiimote.
 
-	if(write(sockfd, &to, sizeof(ECP_VSP_MSG)) == -1)
+	if(write(sockfd, &to, sizeof(lib::ECP_VSP_MSG)) == -1)
 		throw sensor_error (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 }
 
 
 void wiimote::get_reading() {
 	// Send adequate command to wiimote.
-	to_vsp.i_code = VSP_GET_READING;
-	if(write(sockfd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)
+	to_vsp.i_code = lib::VSP_GET_READING;
+	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
 		throw sensor_error (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 
 	// Read aggregated data from wiimote.
- 	if(read(sockfd, &from_vsp, sizeof(VSP_ECP_MSG))==-1)
+ 	if(read(sockfd, &from_vsp, sizeof(lib::VSP_ECP_MSG))==-1)
 		throw sensor_error (SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE);
 
 	// Check and copy data from buffer to image.
-	if(from_vsp.vsp_report == VSP_REPLY_OK)
+	if(from_vsp.vsp_report == lib::VSP_REPLY_OK)
 		memcpy( &(image.sensor_union.begin), &(from_vsp.comm_image.sensor_union.begin), union_size);
 	else
 		sr_ecp_msg.message ("Reply from VSP not ok");
@@ -103,8 +103,8 @@ void wiimote::get_reading() {
 
 void wiimote::terminate() {
 	// Send adequate command to wiimote.
-	to_vsp.i_code = VSP_TERMINATE;
-	if(write(sockfd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)
+	to_vsp.i_code = lib::VSP_TERMINATE;
+	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
 		throw sensor_error (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 
 	close(sockfd);

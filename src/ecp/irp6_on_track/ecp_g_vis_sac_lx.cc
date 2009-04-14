@@ -206,7 +206,7 @@ bool vis_sac_lx::first_step()
 
 	//	the_robot = robot_m[ROBOT_IRP6_ON_TRACK];
 
-	vsp_vis_sac = sensor_m[SENSOR_CAMERA_SA];
+	vsp_vis_sac = sensor_m[lib::SENSOR_CAMERA_SA];
 
 	idle_step_counter = 1;
 	vsp_vis_sac->base_period=0; //1

@@ -25,9 +25,9 @@ void ellipse::task_initialization(void)
     sr_ecp_msg->message("ECP loaded");
     
 	//create Wii-mote virtual sensor object
-	sensor_m[SENSOR_WIIMOTE] = new ecp_mp::sensor::wiimote(SENSOR_WIIMOTE, "[vsp_wiimote]", *this, sizeof(sensor_image_t::sensor_union_t::wiimote_t));
+	sensor_m[lib::SENSOR_WIIMOTE] = new ecp_mp::sensor::wiimote(lib::SENSOR_WIIMOTE, "[vsp_wiimote]", *this, sizeof(lib::sensor_image_t::sensor_union_t::wiimote_t));
 	//configure the sensor
-	sensor_m[SENSOR_WIIMOTE]->configure_sensor();
+	sensor_m[lib::SENSOR_WIIMOTE]->configure_sensor();
 }
 
 void ellipse::main_task_algorithm(void)
@@ -46,7 +46,7 @@ void ellipse::main_task_algorithm(void)
 	sg->load_coordinates(XYZ_EULER_ZYZ,firstPosition[0],firstPosition[1],firstPosition[2],firstPosition[3],firstPosition[4],firstPosition[5],firstPosition[6],firstPosition[7]);
 	sg->Move();
 	
-    eg->sensor_m[SENSOR_WIIMOTE] = sensor_m[SENSOR_WIIMOTE];
+    eg->sensor_m[lib::SENSOR_WIIMOTE] = sensor_m[lib::SENSOR_WIIMOTE];
     eg->Move();
     ecp_termination_notice();
 }

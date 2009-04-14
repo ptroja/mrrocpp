@@ -20,7 +20,7 @@ namespace generator {
 
 class vis_sac_lx : public common::generator::base {
 protected:
-sensor *vsp_force_irp6ot, *vsp_force_irp6p, *vsp_vis_sac;
+lib::sensor *vsp_force_irp6ot, *vsp_force_irp6p, *vsp_vis_sac;
 
 
 public:	

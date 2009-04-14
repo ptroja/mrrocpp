@@ -319,7 +319,7 @@ void pp::get_reading (void){
 	from_vsp.comm_image.sensor_union.pp.joy[2] = joy_axis_img[2];
 
     // Odczyty sa gotowe.
-    from_vsp.vsp_report=VSP_REPLY_OK;
+    from_vsp.vsp_report= lib::VSP_REPLY_OK;
 
     // Ustawienie flagi stanu procesu.
 	is_reading_ready=false;

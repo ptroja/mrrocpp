@@ -35,9 +35,9 @@ void cvfradia::task_initialization(void)
 	try
 	{
 		// Create cvFraDIA sensor - for testing purposes.
-		sensor_m[SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(SENSOR_CVFRADIA, "[vsp_cvfradia]", *this, sizeof(sensor_image_t::sensor_union_t::fradia_t));
+		sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, "[vsp_cvfradia]", *this, sizeof(lib::sensor_image_t::sensor_union_t::fradia_t));
 		// Configure sensor.
-		sensor_m[SENSOR_CVFRADIA]->configure_sensor();
+		sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
     // Create an adequate robot. - depending on the ini section name.
     if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     {

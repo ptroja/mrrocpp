@@ -17,11 +17,11 @@ void pw_scena::task_initialization(void) {
 
 	try {
 		//Create cvFraDIA sensor - for testing purposes.
-		sensor_m[SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(SENSOR_CVFRADIA,
+		sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA,
 				"[vsp_cvfradia]", *this,
-				sizeof(sensor_image_t::sensor_union_t::fradia_t));
+				sizeof(lib::sensor_image_t::sensor_union_t::fradia_t));
 		//Configure sensor.
-		sensor_m[SENSOR_CVFRADIA]->configure_sensor();
+		sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
 
 
 		ecp_m_robot = new ecp_irp6_on_track_robot(*this);
@@ -61,9 +61,9 @@ void pw_scena::main_task_algorithm(void) {
 	smooth_gen->Move();
 
 	//Czekam, az czujnik bedzie skonfigurowany.
-	sensor_m[SENSOR_CVFRADIA]->get_reading();
-	while(sensor_m[SENSOR_CVFRADIA]->from_vsp.vsp_report == VSP_SENSOR_NOT_CONFIGURED){
-		sensor_m[SENSOR_CVFRADIA]->get_reading();
+	sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+	while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.vsp_report == lib::VSP_SENSOR_NOT_CONFIGURED){
+		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 	}
 
 	//Generator nadjezdzajacy nad obiekt.

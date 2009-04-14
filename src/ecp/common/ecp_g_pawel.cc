@@ -109,10 +109,10 @@ bool pawel::next_step ( )
     the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;
 
 
-    x = sensor_m[SENSOR_PAWEL]->image.sensor_union.ball.x;
-    y = sensor_m[SENSOR_PAWEL]->image.sensor_union.ball.y;
-    z = sensor_m[SENSOR_PAWEL]->image.sensor_union.ball.z;
-    i = sensor_m[SENSOR_PAWEL]->image.sensor_union.ball.nr;
+    x = sensor_m[lib::SENSOR_PAWEL]->image.sensor_union.ball.x;
+    y = sensor_m[lib::SENSOR_PAWEL]->image.sensor_union.ball.y;
+    z = sensor_m[lib::SENSOR_PAWEL]->image.sensor_union.ball.z;
+    i = sensor_m[lib::SENSOR_PAWEL]->image.sensor_union.ball.nr;
     /*	t = (double) sensor_m[SENSOR_PAWEL]->image.sensor_union.ball.ts.tv_sec +
     		((double)sensor_m[SENSOR_PAWEL]->image.sensor_union.ball.ts.tv_nsec)/1000000000 - start;*/
     clock_gettime( CLOCK_REALTIME , &time_tmp);

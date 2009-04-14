@@ -27,7 +27,7 @@ spots::spots (common::task::base& _ecp_task)
 
 bool spots::first_step()
 {
-	sensor = (ecp_mp::sensor::cvfradia *)sensor_m[SENSOR_CVFRADIA];
+	sensor = (ecp_mp::sensor::cvfradia *)sensor_m[lib::SENSOR_CVFRADIA];
 
 	//proste zadanie kinematyki
 	the_robot->EDP_data.instruction_type = GET;
@@ -36,7 +36,7 @@ bool spots::first_step()
 
 	//zadanie zrobienia zdjec od fraidii
 	sensor->to_vsp.command = 38;
-	sensor->to_vsp.i_code = VSP_INITIATE_READING;
+	sensor->to_vsp.i_code = lib::VSP_INITIATE_READING;
 
 	iter = 0;
 
@@ -58,10 +58,10 @@ bool spots::next_step()
 
 	//printf("%d\n", sensor->from_vsp.comm_image.sensor_union.sp_r.pic_count);
 
-    if(sensor->from_vsp.vsp_report == VSP_REPLY_OK && sensor->from_vsp.comm_image.sensor_union.sp_r.pic_count <= -2)
+    if(sensor->from_vsp.vsp_report == lib::VSP_REPLY_OK && sensor->from_vsp.comm_image.sensor_union.sp_r.pic_count <= -2)
 		//this position failed
 		return false;
-    else if(sensor->from_vsp.vsp_report != VSP_REPLY_OK || sensor->from_vsp.comm_image.sensor_union.sp_r.pic_count <= 0)
+    else if(sensor->from_vsp.vsp_report != lib::VSP_REPLY_OK || sensor->from_vsp.comm_image.sensor_union.sp_r.pic_count <= 0)
 		return true;
 
 		//teraz zabawa z wynikami

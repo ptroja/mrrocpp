@@ -32,27 +32,27 @@ bool ellipse::next_step()
 {
 	try
 	{
-		sensor_m[SENSOR_WIIMOTE]->get_reading();
+		sensor_m[lib::SENSOR_WIIMOTE]->get_reading();
 		char buffer[100];
-		if(sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.left && !sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.right)
+		if(sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.left && !sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.right)
 		{
 			major_axis *= 0.99;
 			sprintf(buffer,"Nowa wartosc wiekszej polosi: %.3f",major_axis);
 		    sr_ecp_msg.message(buffer);
 		}
-		if(!sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.left && sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.right)
+		if(!sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.left && sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.right)
 		{
 			major_axis *= 1.01;
 			sprintf(buffer,"Nowa wartosc wiekszej polosi: %.3f",major_axis);
 		    sr_ecp_msg.message(buffer);
 		}
-		if(sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.down && !sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.up)
+		if(sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.down && !sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.up)
 		{
 			minor_axis *= 0.99;
 			sprintf(buffer,"Nowa wartosc mniejszej polosi: %.3f",minor_axis);
 		    sr_ecp_msg.message(buffer);
 		}
-		if(!sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.down && sensor_m[SENSOR_WIIMOTE]->image.sensor_union.wiimote.up)
+		if(!sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.down && sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.up)
 		{
 			minor_axis *= 1.01;
 			sprintf(buffer,"Nowa wartosc mniejszej polosi: %.3f",minor_axis);

@@ -270,7 +270,7 @@ void pawel::get_reading (void)
 	from_vsp.comm_image.sensor_union.ball.z  = ball.z;
 	from_vsp.comm_image.sensor_union.ball.nr = ++ms_nr;
 		
-	from_vsp.vsp_report=VSP_REPLY_OK;
+	from_vsp.vsp_report= lib::VSP_REPLY_OK;
 
 	clock_gettime( CLOCK_REALTIME , &time_end);
 

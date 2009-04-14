@@ -80,7 +80,7 @@ void* digital_scale_thread(void*  arg ){
             // Przeksztalcenie odczytu do postaci zmiennoprzecinkowej.
             common::vs->image.sensor_union.ds.readings[number-1] = ds->transform_reading_to_double();
             } // end: try
-        catch(::sensor::sensor_error e){
+        catch(lib::sensor::sensor_error e){
         	common::vs->sr_msg->message(e.error_class, e.error_no);
         	common::vs->image.sensor_union.ds.readings[number-1] = 0;
             } // end: catch
@@ -163,7 +163,7 @@ void digital_scales::get_reading (void){
     // Oczekiwanie na zakonczenie pomiarow.
     pthread_barrier_wait(&reading_ready_barrier);
     // Odczyty sa gotowe.
-    from_vsp.vsp_report=VSP_REPLY_OK;
+    from_vsp.vsp_report= lib::VSP_REPLY_OK;
     // Przepisanie odczytow do bufora komunikacyjnego.
     for(int i=0; i<6; i++)
         if(i<number_of_scales){

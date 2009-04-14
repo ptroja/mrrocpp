@@ -19,7 +19,7 @@ namespace vsp {
 namespace sensor {
 
 /********** klasa czujnikow po stronie VSP **************/
-class base : public ::sensor {
+class base : public lib::sensor {
 protected:
 	// Flaga - czy czujnik jest skonfigurowany.
 	short is_sensor_configured;

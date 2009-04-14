@@ -246,7 +246,7 @@ void schunk::get_reading (void)
 		}
 // 	old_diff=diff;
 	// ok
-	from_vsp.vsp_report=VSP_REPLY_OK;
+	from_vsp.vsp_report= lib::VSP_REPLY_OK;
 	// tutaj: czujnik skalibrowany, odczyt dokonany, zapisany w "image", przepisanie wszystkich pol
 	// przepisanie do bufora komunikacyjnego
 	for(int i=0; i<6; i++)

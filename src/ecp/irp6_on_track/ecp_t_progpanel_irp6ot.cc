@@ -71,8 +71,8 @@ void progpanel::task_initialization(void)
     ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
     // powolanie czujnikow
-    sensor_m[SENSOR_PP] =
-        new ecp_mp::sensor::pp (SENSOR_PP, "[vsp_pp_irp6ot]", *this);
+    sensor_m[lib::SENSOR_PP] =
+        new ecp_mp::sensor::pp (lib::SENSOR_PP, "[vsp_pp_irp6ot]", *this);
     // Konfiguracja czujnika.
     sensor_m.begin()->second->configure_sensor();
     // Stworzenie generatora.

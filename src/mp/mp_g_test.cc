@@ -146,14 +146,14 @@ bool vis_force::next_step () {
 	
 
 
-	if(sensor_m[SENSOR_CAMERA_SA]->current_period==20)
+	if(sensor_m[lib::SENSOR_CAMERA_SA]->current_period==20)
 	{
 	
 	the_first_big=0;
 	
 	 	 for(int i=0; i<4; i++)
 			for(int j=0; j<4; j++)
-				frame1[i][j]=sensor_m[SENSOR_CAMERA_SA]->image.sensor_union.camera.frame[4*i+j];
+				frame1[i][j]=sensor_m[lib::SENSOR_CAMERA_SA]->image.sensor_union.camera.frame[4*i+j];
 
 		valid_measure=(int)frame1[3][3];
 			
@@ -242,7 +242,7 @@ bool vis_force::next_step () {
  
 // prawo regulacji (na lewo jest LSD) 
 // stearing[1][0]=stearing[1][1] + (0.1/30)*(measure[1][0]-stearing[1][1]); // jak robot jest -0.044 na joint1 to alfa jest 0.72
- stearing[1][0]=sensor_m[SENSOR_FORCE_ON_TRACK]->image.sensor_union.force.rez[1]*0.000002+stearing[1][1] + (0.1/30)*(measure[1][0]-stearing[1][1]); // jak robot jest -0.044 na joint1 to alfa jest 0.72
+ stearing[1][0]=sensor_m[lib::SENSOR_FORCE_ON_TRACK]->image.sensor_union.force.rez[1]*0.000002+stearing[1][1] + (0.1/30)*(measure[1][0]-stearing[1][1]); // jak robot jest -0.044 na joint1 to alfa jest 0.72
 
 
 

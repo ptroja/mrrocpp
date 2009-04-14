@@ -15,6 +15,9 @@
 
 #include "lib/srlib.h"
 
+namespace mrrocpp {
+namespace lib {
+
 /*********** stale dla wszystkich czujnikow *************/
 // Polecenie dla VSP
 enum VSP_COMMAND
@@ -240,11 +243,11 @@ typedef union
 
 // ROZKAZY uzywane w devctl()
 // odczyt z czujnika
-#define DEVCTL_RD __DIOF(_DCMD_MISC, 1, VSP_ECP_MSG)
+#define DEVCTL_RD __DIOF(_DCMD_MISC, 1, lib::VSP_ECP_MSG)
 // zapis do czujnika
-#define DEVCTL_WT __DIOT(_DCMD_MISC, 2, ECP_VSP_MSG)
+#define DEVCTL_WT __DIOT(_DCMD_MISC, 2, lib::ECP_VSP_MSG)
 // zapis i odczyt
-#define DEVCTL_RW __DIOTF(_DCMD_MISC, 3, DEVCTL_MSG)
+#define DEVCTL_RW __DIOTF(_DCMD_MISC, 3, lib::DEVCTL_MSG)
 
 // by Y - CZUJNIKI
 
@@ -373,6 +376,9 @@ struct EDP_VSP_reply
 	// EDP_FORCE_SENSOR_READING_CORRECT
 
 };
+
+} // namespace lib
+} // namespace mrrocpp
 
 #endif /* _SENSOR_H */
 

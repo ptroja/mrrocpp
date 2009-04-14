@@ -15,7 +15,7 @@ namespace ecp_mp {
 namespace sensor {
 
 /***************************** CONSTRUCTOR ********************************/
-schunk::schunk (SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object):
+schunk::schunk (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object):
 	base (_sensor_name, _section_name, _ecp_mp_object) {
   union_size = sizeof(image.sensor_union.force);
 }

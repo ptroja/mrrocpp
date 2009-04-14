@@ -86,7 +86,7 @@ rcs_korf::~rcs_korf(void) {
 void rcs_korf::configure_sensor (void){
     printf("VSP KR configure\n");
 
-	if (to_vsp.rcs.configure_mode == RCS_BUILD_TABLES) {
+	if (to_vsp.rcs.configure_mode == lib::RCS_BUILD_TABLES) {
 
 		// Pobiera dane z pliku konfiguracyjnego.
 		char* path = config.return_string_value("tables_path");
@@ -166,7 +166,7 @@ void rcs_korf::get_reading (void) {
 	
 	// Niemozliwe znalezienie rozwiazania - wystapil blad podczas jego znajdywania
 	if (	bRCSErr) {
-		from_vsp.comm_image.sensor_union.rcs.reading_mode = RCS_SOLUTION_NOTPOSSIBLE;
+		from_vsp.comm_image.sensor_union.rcs.reading_mode = lib::RCS_SOLUTION_NOTPOSSIBLE;
 
 	// Ustawia brak rozwiazania, gdy odczyt nie jest gotowy.
 	} else if (!is_reading_ready || pSol == NULL) {
@@ -174,11 +174,11 @@ void rcs_korf::get_reading (void) {
 
 	// Ustawia brak potrzeby rozwiazania, gdy rozwiazanie o dlugosci 0
 	} else if (pSol->GetLength() == 0) {
-		from_vsp.comm_image.sensor_union.rcs.reading_mode = RCS_SOLUTION_NOTNEEDED;
+		from_vsp.comm_image.sensor_union.rcs.reading_mode = lib::RCS_SOLUTION_NOTNEEDED;
 
 	// Ustawia znalezione rozwiazanie do bufora
 	} else {
-		from_vsp.comm_image.sensor_union.rcs.reading_mode = RCS_SOLUTION_FOUND;
+		from_vsp.comm_image.sensor_union.rcs.reading_mode = lib::RCS_SOLUTION_FOUND;
 		char *cSol = pSol->ToString();
 		char solution[200];
 		int j=0;

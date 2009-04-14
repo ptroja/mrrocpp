@@ -38,7 +38,7 @@ void MOXADigitalScale::extract_message(void){
     while(*(cyclic_buffer+read_marker) != '\r'){
         // Spawdzenie, czy nie zaszlo oproznienie bufora.
         if(read_marker == write_marker)
-            throw sensor::sensor_error(FATAL_ERROR, CYCLIC_BUFFER_UNDERRUN);
+            throw lib::sensor::sensor_error(FATAL_ERROR, CYCLIC_BUFFER_UNDERRUN);
         // Przepisanie znaku.
         *(message_buffer+(message_length++)) = *(cyclic_buffer+read_marker);
         // Przesuniecie znacznika odczytu na nastepna pozycje.
@@ -111,7 +111,7 @@ void MOXADigitalScale::get_reading(void){
             increment_marker(&write_marker);
             // Sprawdzenie, czy nie przepelniono bufora.
             if(write_marker == read_marker)
-                throw sensor::sensor_error(FATAL_ERROR, CYCLIC_BUFFER_OVERFLOW);
+                throw lib::sensor::sensor_error(FATAL_ERROR, CYCLIC_BUFFER_OVERFLOW);
             // Przesuniecie sie na nastepny znak w bforze RS_read_buffer.
             i++;
             }; // end: while
@@ -137,7 +137,7 @@ double MOXADigitalScale::transform_reading_to_double(void){
         i++;
         // Sprawdzenie, czy nie przekroczono wielkosci wiadomosci.
         if (i == message_length)
-            throw sensor::sensor_error(FATAL_ERROR, CYCLIC_BUFFER_PARSE_ERROR);
+            throw lib::sensor::sensor_error(FATAL_ERROR, CYCLIC_BUFFER_PARSE_ERROR);
         }; // end: while
     // Zapamietanie znaku.
     char sign = *(message_buffer+(i++));
@@ -152,7 +152,7 @@ double MOXADigitalScale::transform_reading_to_double(void){
         i++;
         // Sprawdzenie, czy nie przekroczono wielkosci wiadomosci.
         if (i == message_length)
-            throw sensor::sensor_error(FATAL_ERROR, CYCLIC_BUFFER_PARSE_ERROR);
+            throw lib::sensor::sensor_error(FATAL_ERROR, CYCLIC_BUFFER_PARSE_ERROR);
         }; // end: while
     // Przesuniecie sie za przecinek.
     i++;

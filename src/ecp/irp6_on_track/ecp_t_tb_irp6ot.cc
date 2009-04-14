@@ -27,8 +27,8 @@ tb::~tb(){
 // methods for ECP template to redefine in concrete classes
 void tb::task_initialization(void){
 
-	sensor_m[SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(SENSOR_CVFRADIA,"[vsp_cvfradia]", *this,	sizeof(sensor_image_t::sensor_union_t::fradia_t));
-	sensor_m[SENSOR_CVFRADIA]->configure_sensor();
+	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA,"[vsp_cvfradia]", *this,	sizeof(lib::sensor_image_t::sensor_union_t::fradia_t));
+	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
 
 	ecp_m_robot=new ecp_irp6_on_track_robot(*this);				//initialization of robot
 	sgen=new common::generator::smooth(*this, true);

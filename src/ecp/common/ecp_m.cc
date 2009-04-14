@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 		ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 		printf("Mam blad generatora section 1 (@%s:%d)\n", __FILE__, __LINE__);
 	}
-	catch (::sensor::sensor_error e) {
+	catch (lib::sensor::sensor_error e) {
 		ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 		printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
 	}
@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
 					exit(EXIT_FAILURE);
 			} /* end: switch*/
 		} /*end: catch */
-		catch (sensor::sensor_error e) {
+		catch (lib::sensor::sensor_error e) {
 			ecp::common::ecp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 			printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
 		}

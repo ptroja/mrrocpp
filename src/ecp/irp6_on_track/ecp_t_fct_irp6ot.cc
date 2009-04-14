@@ -65,10 +65,10 @@ void fct::catch_signal(int sig)
 			// Zakonczenie pracy watkow.
 			TERMINATE = true;
 			// Koniec pracy czujnika.
-			if (sensor_m.count(SENSOR_FORCE_ON_TRACK)>0)
-				sensor_m[SENSOR_FORCE_ON_TRACK]->terminate();
+			if (sensor_m.count(lib::SENSOR_FORCE_ON_TRACK)>0)
+				sensor_m[lib::SENSOR_FORCE_ON_TRACK]->terminate();
 			// Zwolnienie pamieci - czujnik.
-			delete(sensor_m[SENSOR_FORCE_ON_TRACK]);
+			delete(sensor_m[lib::SENSOR_FORCE_ON_TRACK]);
 			// Zwolnienie pamieci - generator.
 			delete(fctg);
 			// Zwolnienie pamieci - robot.
@@ -159,9 +159,9 @@ void* UI_communication_thread(void* arg)
 			// Pobranie polozenia.
 			fctg->return_position(to_ui_msg.RS.robot_position);
 			// Jesli uzywany jest czujnik sily.
-			if (common::ecp_t->sensor_m.count(SENSOR_FORCE_ON_TRACK)>0) {
+			if (common::ecp_t->sensor_m.count(lib::SENSOR_FORCE_ON_TRACK)>0) {
 				// Przepisanie odczytow czujnika.
-				fctg->return_sensor_reading(*((ecp_mp::sensor::force *)(common::ecp_t->sensor_m[SENSOR_FORCE_ON_TRACK])), to_ui_msg.RS.sensor_reading);
+				fctg->return_sensor_reading(*((ecp_mp::sensor::force *)(common::ecp_t->sensor_m[lib::SENSOR_FORCE_ON_TRACK])), to_ui_msg.RS.sensor_reading);
 			} else {
 				// Zerowe odczyty.
 				for (int i =0; i<6; i++)
@@ -195,8 +195,8 @@ void* forcesensor_move_thread(void* arg)
 			// Jezeli przyszedl rozkaz kalibracji czujnika.
 			if (CALIBRATE_SENSOR) {
 				// Kalibracja czujnika.
-				if (common::ecp_t->sensor_m.count(SENSOR_FORCE_ON_TRACK)>0)
-					common::ecp_t->sensor_m[SENSOR_FORCE_ON_TRACK]->configure_sensor();
+				if (common::ecp_t->sensor_m.count(lib::SENSOR_FORCE_ON_TRACK)>0)
+					common::ecp_t->sensor_m[lib::SENSOR_FORCE_ON_TRACK]->configure_sensor();
 				CALIBRATE_SENSOR = false;
 			}
 			// Jezeli przyszedl rozkaz zmiany sterowania.
@@ -299,11 +299,11 @@ void fct::task_initialization(void)
 		sr_ecp_msg->message("Using force sensor for move control");
 		// Stworzenie obiektu czujnik.
 		// ini_con->create_vsp ("[vsp_fs]");
-		sensor_m[SENSOR_FORCE_ON_TRACK] = new ecp_mp::sensor::force(SENSOR_FORCE_ON_TRACK, "[vsp_fs]", *this);
+		sensor_m[lib::SENSOR_FORCE_ON_TRACK] = new ecp_mp::sensor::force(lib::SENSOR_FORCE_ON_TRACK, "[vsp_fs]", *this);
 		// Konfiguracja czujnika.
-		sensor_m[SENSOR_FORCE_ON_TRACK]->configure_sensor();
+		sensor_m[lib::SENSOR_FORCE_ON_TRACK]->configure_sensor();
 		// Stworzenie listy czujnikow -> glowa = (czujnik sily).
-		fctg->sensor_m[SENSOR_FORCE_ON_TRACK] = sensor_m[SENSOR_FORCE_ON_TRACK];
+		fctg->sensor_m[lib::SENSOR_FORCE_ON_TRACK] = sensor_m[lib::SENSOR_FORCE_ON_TRACK];
 		// Odczyt wielkosci niebezpiecznej sily z pliku INI.
 		fctg->set_dangerous_force();
 	} else {

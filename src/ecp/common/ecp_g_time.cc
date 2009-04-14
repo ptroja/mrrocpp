@@ -79,8 +79,8 @@ bool time::next_step ( )
 #if 1
 
     printf("%lu.%09lu\n",
-           sensor_m[SENSOR_TIME]->image.sensor_union.time.ts.tv_sec,
-           sensor_m[SENSOR_TIME]->image.sensor_union.time.ts.tv_nsec
+           sensor_m[lib::SENSOR_TIME]->image.sensor_union.time.ts.tv_sec,
+           sensor_m[lib::SENSOR_TIME]->image.sensor_union.time.ts.tv_nsec
           );
 #endif
 

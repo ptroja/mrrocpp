@@ -39,7 +39,7 @@ namespace generator {
 
 /*********************** RETURN SENSOR READING ***************************/
 void force_controlled_trajectory::return_sensor_reading(ecp_mp::sensor::force& the_sensor, double sensor_reading[6]){
-	SENSOR_IMAGE si;
+	lib::SENSOR_IMAGE si;
 	// Nowe odczyty czujnika.
 	the_sensor.get_reading(&si);
 	// Przepisanie pozycji z bufora.

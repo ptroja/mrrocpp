@@ -242,7 +242,7 @@ bool trajectory_reproduce::next_step (){
 
 /*********************  CHECK FORCE CONDITION **************************/
 void trajectory_reproduce::check_force_condition(ecp_mp::sensor::force& the_sensor){
-	SENSOR_IMAGE si;
+	lib::SENSOR_IMAGE si;
 	// Pobranie odczytow z czujnika sily.
 	the_sensor.get_reading(&si);
     memcpy(last_force_sensor_reading, si.sensor_union.force.rez, MAX_SERVOS_NR*sizeof(double));

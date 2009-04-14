@@ -24,7 +24,7 @@ extern "C"
 #endif
 
     /********** klasa czujnikow po stronie EDP **************/
-    class force : public ::sensor
+    class force : public lib::sensor
     {
 
     protected:

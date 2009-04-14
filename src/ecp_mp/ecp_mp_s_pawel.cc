@@ -24,7 +24,7 @@ namespace ecp_mp {
 namespace sensor {
 
 /***************************** CONSTRUCTOR ********************************/
-pawel::pawel (SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object):
+pawel::pawel (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object):
 	base (_sensor_name, _section_name, _ecp_mp_object) {
 
 	union_size = sizeof(image.sensor_union.ball);
@@ -35,18 +35,18 @@ pawel::pawel (SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& 
 /************************** CONFIGURE SENSOR ******************************/
 void pawel::configure_sensor() {
 
-	devmsg.to_vsp.i_code=VSP_CONFIGURE_SENSOR;
+	devmsg.to_vsp.i_code= lib::VSP_CONFIGURE_SENSOR;
 //	printf ("[ecp_mp]\tkonfiguracja czujnika\n");
 	// Wyslanie polecenia do procesu VSP.
-	if (devctl(sd, DEVCTL_RW, &devmsg, sizeof(DEVCTL_MSG), NULL) == 9)
+	if (devctl(sd, DEVCTL_RW, &devmsg, sizeof(lib::DEVCTL_MSG), NULL) == 9)
 		throw sensor_error(SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 }
 
 /************************** INITIATE  READING *********************************/
 void pawel::initiate_reading() {
 
-	devmsg.to_vsp.i_code=VSP_INITIATE_READING;
-	if (devctl(sd, DEVCTL_RW, &devmsg, sizeof(DEVCTL_MSG), NULL) == 9)
+	devmsg.to_vsp.i_code= lib::VSP_INITIATE_READING;
+	if (devctl(sd, DEVCTL_RW, &devmsg, sizeof(lib::DEVCTL_MSG), NULL) == 9)
 		throw sensor_error(SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 
 //	printf("[ecp_mp]\tinitiate reading\n");
@@ -56,10 +56,10 @@ void pawel::initiate_reading() {
 /***************************** GET  READING *********************************/
 void pawel::get_reading() {
 
-	if(read(sd, &from_vsp, sizeof(VSP_ECP_MSG)) == -1)
+	if(read(sd, &from_vsp, sizeof(lib::VSP_ECP_MSG)) == -1)
 		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
 
-	if(from_vsp.vsp_report == VSP_REPLY_OK)
+	if(from_vsp.vsp_report == lib::VSP_REPLY_OK)
 	{
 		memcpy(&image.sensor_union.ball, &from_vsp.comm_image.sensor_union.ball, union_size);
 

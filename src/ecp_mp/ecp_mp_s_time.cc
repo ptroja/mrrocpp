@@ -21,7 +21,7 @@ namespace ecp_mp {
 namespace sensor {
 
 /***************************** CONSTRUCTOR ********************************/
-time::time (SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object):
+time::time (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object):
 	base (_sensor_name, _section_name, _ecp_mp_object) {
   union_size = sizeof(image.sensor_union.time);
 }//: ecp_mp_time_sensor

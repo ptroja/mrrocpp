@@ -193,15 +193,15 @@ void ecp_vis_weights_driven_irp6ot::entertain_constraints(){
 
 bool ecp_vis_weights_driven_irp6ot::first_step(void){
 
-	pbeolsac->vsp_vis_sac = sensor_m[SENSOR_CAMERA_SA];
+	pbeolsac->vsp_vis_sac = sensor_m[lib::SENSOR_CAMERA_SA];
 	pbeolsac->node_counter = 1;
 	pbeolsac->idle_step_counter = 1;
 
-	pbeih->vsp_vis_sac = sensor_m[SENSOR_CAMERA_SA];
+	pbeih->vsp_vis_sac = sensor_m[lib::SENSOR_CAMERA_SA];
 	pbeih->node_counter = 1;
 	pbeih->idle_step_counter = 1;
 
-	ibeih->vsp_vis_sac = sensor_m[SENSOR_CAMERA_SA];
+	ibeih->vsp_vis_sac = sensor_m[lib::SENSOR_CAMERA_SA];
 	ibeih->node_counter = 1;
 	ibeih->idle_step_counter = 1;
 

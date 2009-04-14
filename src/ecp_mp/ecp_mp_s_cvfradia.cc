@@ -23,7 +23,7 @@ using namespace std;
 /*!
  * Constructor. Creates socket connection to cvFraDIA.
  */
-cvfradia::cvfradia(SENSOR_ENUM _sensor_name, const char* _section_name, task::base& _ecp_mp_object, int _union_size)
+cvfradia::cvfradia(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::base& _ecp_mp_object, int _union_size)
 	: sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(_sensor_name)
 {
 	// Set size of passed message/union.
@@ -77,12 +77,12 @@ cvfradia::cvfradia(SENSOR_ENUM _sensor_name, const char* _section_name, task::ba
  */
 void cvfradia::configure_sensor() {
 	// Send adequate command to cvFraDIA.
-	to_vsp.i_code = VSP_CONFIGURE_SENSOR;
+	to_vsp.i_code = lib::VSP_CONFIGURE_SENSOR;
 	// Name of required task is set in constructor.
 
 	//cout<<to_vsp.cvfradia_task_name;
 
-	if(write(sockfd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)
+	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
 		throw sensor_error (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 }
 
@@ -92,9 +92,9 @@ void cvfradia::configure_sensor() {
  */
 void cvfradia::initiate_reading() {
 	// Send adequate command to cvFraDIA.
-	to_vsp.i_code = VSP_INITIATE_READING;
+	to_vsp.i_code = lib::VSP_INITIATE_READING;
 
-	if(write(sockfd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)
+	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
 		throw sensor_error (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 }
 
@@ -102,10 +102,10 @@ void cvfradia::initiate_reading() {
 /*!
  * Sends given reading command to cvFraDIA.
  */
-void cvfradia::send_reading(ECP_VSP_MSG to) {
+void cvfradia::send_reading(lib::ECP_VSP_MSG to) {
 	// Send any command to cvFraDIA.
 
-	if(write(sockfd, &to, sizeof(ECP_VSP_MSG)) == -1)
+	if(write(sockfd, &to, sizeof(lib::ECP_VSP_MSG)) == -1)
 		throw sensor_error (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 }
 
@@ -115,16 +115,16 @@ void cvfradia::send_reading(ECP_VSP_MSG to) {
  */
 void cvfradia::get_reading() {
 	// Send adequate command to cvFraDIA.
-	to_vsp.i_code = VSP_GET_READING;
-	if(write(sockfd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)
+	to_vsp.i_code = lib::VSP_GET_READING;
+	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
 		throw sensor_error (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 
 	// Read aggregated data from cvFraDIA.
- 	if(read(sockfd, &from_vsp, sizeof(VSP_ECP_MSG))==-1)
+ 	if(read(sockfd, &from_vsp, sizeof(lib::VSP_ECP_MSG))==-1)
 		throw sensor_error (SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE);
 
 	// Check and copy data from buffer to image.
-	if(from_vsp.vsp_report == VSP_REPLY_OK)
+	if(from_vsp.vsp_report == lib::VSP_REPLY_OK)
 		memcpy( &(image.sensor_union.begin), &(from_vsp.comm_image.sensor_union.begin), union_size);
 	else
 		sr_ecp_msg.message ("Reply from VSP not ok");
@@ -137,8 +137,8 @@ void cvfradia::get_reading() {
  */
 void cvfradia::terminate() {
 	// Send adequate command to cvFraDIA.
-	to_vsp.i_code = VSP_TERMINATE;
-	if(write(sockfd, &to_vsp, sizeof(ECP_VSP_MSG)) == -1)
+	to_vsp.i_code = lib::VSP_TERMINATE;
+	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
 		throw sensor_error (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 
 	close(sockfd);

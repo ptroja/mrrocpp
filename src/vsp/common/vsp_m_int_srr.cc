@@ -70,15 +70,15 @@ void error_handler(ERROR e){
 		case NON_FATAL_ERROR:
 			switch(e.error_no){
 			case INVALID_COMMAND_TO_VSP:
-				vs->from_vsp.vsp_report=INVALID_VSP_COMMAND;
+				vs->from_vsp.vsp_report= lib::INVALID_VSP_COMMAND;
 				vs->sr_msg->message (NON_FATAL_ERROR, e.error_no);
 			break;
 			case SENSOR_NOT_CONFIGURED:
-				vs->from_vsp.vsp_report=VSP_SENSOR_NOT_CONFIGURED;
+				vs->from_vsp.vsp_report= lib::VSP_SENSOR_NOT_CONFIGURED;
 				vs->sr_msg->message (NON_FATAL_ERROR, e.error_no);
 				break;
 			case READING_NOT_READY:
-				vs->from_vsp.vsp_report=VSP_READING_NOT_READY;
+				vs->from_vsp.vsp_report= lib::VSP_READING_NOT_READY;
 				break;
 			default:
 				vs->sr_msg->message (NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
@@ -152,40 +152,40 @@ int main(int argc, char *argv[]) {
 				continue;
 			}
 	
-			vsp::common::vs->from_vsp.vsp_report=VSP_REPLY_OK;
+			vsp::common::vs->from_vsp.vsp_report= lib::VSP_REPLY_OK;
 	
 			try {
 				switch(vsp::common::vs->to_vsp.i_code) {
-					case VSP_CONFIGURE_SENSOR :
+					case lib::VSP_CONFIGURE_SENSOR :
 						vsp::common::vs->configure_sensor();
 						break;
-					case VSP_INITIATE_READING :
+					case lib::VSP_INITIATE_READING :
 						vsp::common::vs->initiate_reading();
 						break;
-					case VSP_GET_READING :
+					case lib::VSP_GET_READING :
 						vsp::common::vs->get_reading();
 						break;
-					case VSP_TERMINATE :
+					case lib::VSP_TERMINATE :
 						vsp::common::vs->terminate();
 						vsp::common::TERMINATE=true;
 						break;
 					default :
-						throw VSP_main_error(NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
+						throw lib::VSP_main_error(NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
 				}
 			}
 
-			catch (VSP_main_error e){
+			catch (lib::VSP_main_error e){
 				vsp::common::error_handler(e);
 			} // end CATCH
-			catch (sensor::sensor_error e){
+			catch (lib::sensor::sensor_error e){
 				vsp::common::error_handler(e);
 			} // end CATCH
 		
-			messip_reply(ch, rcvid, 0, &vsp::common::vs->from_vsp, sizeof(VSP_REPORT) + vsp::common::vs->union_size, MESSIP_NOTIMEOUT);
+			messip_reply(ch, rcvid, 0, &vsp::common::vs->from_vsp, sizeof(lib::VSP_REPORT) + vsp::common::vs->union_size, MESSIP_NOTIMEOUT);
  		} // end while()
 		vsp::common::vs->sr_msg->message ("VSP terminated");
 	} // koniec TRY
-	catch (VSP_main_error e) {
+	catch (lib::VSP_main_error e) {
 		vsp::common::error_handler(e);
 		exit(EXIT_FAILURE);
 	} // end CATCH

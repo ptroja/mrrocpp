@@ -21,7 +21,7 @@ namespace sensor {
 
 
 // Klasa bazowa czujnikow po stronie procesu ECP.
-class base: public ::sensor{
+class base: public lib::sensor{
 protected:
 	// Sensor descriptor - uchwyt do /dev/twoj_sensor.
 	
@@ -37,16 +37,16 @@ protected:
 
 public:
 
-	const SENSOR_ENUM sensor_name; // nazwa czujnika z define w impconst.h
+	const lib::SENSOR_ENUM sensor_name; // nazwa czujnika z define w impconst.h
 
 	// Wlasciwy konstruktor czujnika wirtualnego.
-	base(SENSOR_ENUM _sensor_name, const char* _section_name, task::base& _ecp_mp_object);
+	base(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::base& _ecp_mp_object);
 	
 	virtual void configure_sensor();
 	virtual void initiate_reading();
 	virtual void terminate();
 	virtual void get_reading();
-	virtual void get_reading(SENSOR_IMAGE *sensor_image);
+	virtual void get_reading(lib::SENSOR_IMAGE *sensor_image);
 };
 
 } // namespace sensor

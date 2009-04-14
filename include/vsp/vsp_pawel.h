@@ -51,7 +51,7 @@ class pawel: public base {
 private:
 	short zero;							// polozenie zerowe
 	unsigned int ms_nr; // numer odczytu z czujnika
-	SENSOR_IMAGE last;
+	lib::SENSOR_IMAGE last;
 	VECTOR a,v;	// przyspieszenie i predkosc
 	VECTOR ball;
 	struct timespec start[9];

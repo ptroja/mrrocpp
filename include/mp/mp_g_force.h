@@ -25,7 +25,7 @@ protected:
 
   
   common::robot *irp6;
-    ::sensor *vsp_force;
+    lib::sensor *vsp_force;
     
      trajectory_description td;
  
@@ -54,7 +54,7 @@ protected:
    
   
     common::robot *irp6ot, *irp6p;
-    ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
+    lib::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
     
     // do konfiguracji pracy generatora
     unsigned short irp6ot_con, irp6p_con;
@@ -88,7 +88,7 @@ protected:
    
   
     common::robot *irp6ot, *irp6p;
-    ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
+    lib::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
     
     // do konfiguracji pracy generatora
     unsigned short irp6ot_con, irp6p_con;
@@ -122,7 +122,7 @@ protected:
    
   
     common::robot *irp6ot, *irp6p;
-    ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
+    lib::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
 
      trajectory_description td;
     
@@ -159,7 +159,7 @@ protected:
 	
      trajectory_description td;
     common::robot *irp6ot, *irp6p;
-    ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
+    lib::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
     // do konfiguracji pracy generatora
     double irp6ot_con, irp6p_con;
     double irp6ot_stored_gamma, irp6p_stored_gamma;
@@ -190,7 +190,7 @@ protected:
 	
      trajectory_description td;
     common::robot *irp6ot, *irp6p;
-    ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
+    lib::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
     // do konfiguracji pracy generatora
     double irp6ot_speed, irp6p_speed;
 	int motion_time;
@@ -223,7 +223,7 @@ protected:
    
   
       common::robot *irp6ot, *irp6p, *conv;
-    ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
+    lib::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
  
 public:
      trajectory_description td;
@@ -273,7 +273,7 @@ class drawing_teach_in_force : public teach_in {
         double conv_summar_inc;
         
         common::robot *irp6ot, *irp6p, *conv;
-        ::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
+        lib::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
         
     protected:
         

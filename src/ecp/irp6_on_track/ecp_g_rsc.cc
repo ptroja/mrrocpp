@@ -55,12 +55,12 @@ bool robot_stopped_condition::next_step (){
 				stoped = false;
 		}while(!stoped);
 	// Czujnik - linialy.
-	ecp_mp::sensor::digital_scales* dss = (ecp_mp::sensor::digital_scales*)(sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]);
+	ecp_mp::sensor::digital_scales* dss = (ecp_mp::sensor::digital_scales*)(sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR]);
 	// Odebranie odczytow ostatniego polozenia i dodanie ich do listy.
 	add_rse_element(*dss);
 	// Czujnik sily.
-	if (sensor_m.count(SENSOR_FORCE_ON_TRACK) > 0){
-		ecp_mp::sensor::force* fs = (ecp_mp::sensor::force*)(sensor_m[SENSOR_FORCE_ON_TRACK]);
+	if (sensor_m.count(lib::SENSOR_FORCE_ON_TRACK) > 0){
+		ecp_mp::sensor::force* fs = (ecp_mp::sensor::force*)(sensor_m[lib::SENSOR_FORCE_ON_TRACK]);
 		// Pobranie ostatniego odczytu z czujnika sily.
 		fs->get_reading();
 		// Przepisanie obecnego polozenia robota do bufora w zaleznosci od rodzaju wspolrzednych.

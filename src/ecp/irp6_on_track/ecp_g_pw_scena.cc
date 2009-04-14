@@ -72,17 +72,17 @@ bool pw_scena::next_step() {
 	double ydelta = 0;
 
 	//Pobieram odczyty z fradii.
-	//sensor_m[SENSOR_CVFRADIA]->get_reading();
+	//sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 
-	if (!(sensor_m[SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.deviation.frame_number
+	if (!(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.deviation.frame_number
 			== 0) && !recognized) {
 
 		double
 				xdev =
-						sensor_m[SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.deviation.x;
+						sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.deviation.x;
 		double
 				ydev =
-						sensor_m[SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.deviation.y;
+						sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.deviation.y;
 
 		std::cout << "Obraz st1. xdev: " << xdev << ", ydev: " << ydev << std::endl;
 
@@ -106,15 +106,15 @@ bool pw_scena::next_step() {
 
 		recognized = true;
 
-	} else if (!(sensor_m[SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.deviation.frame_number
+	} else if (!(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.deviation.frame_number
 			== 0) && recognized ) {
 
 		double
 				xdev =
-						sensor_m[SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.deviation.x;
+						sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.deviation.x;
 		double
 				ydev =
-						sensor_m[SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.deviation.y;
+						sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.deviation.y;
 
 		//Warunek stopu.
 		if (fabs(xdev) < 10 && fabs(ydev) < 10)

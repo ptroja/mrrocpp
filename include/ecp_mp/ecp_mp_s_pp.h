@@ -26,7 +26,7 @@ namespace sensor {
 class pp:public base{
   public:
 	// Konstruktor czujnika wirtualnego - wywolanie konstruktora klasy bazowej.
- 	pp (SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object);
+ 	pp (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object);
 }; 
 
 } // namespace sensor

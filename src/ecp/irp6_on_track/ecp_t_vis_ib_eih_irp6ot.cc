@@ -35,15 +35,15 @@ void vislx::task_initialization(void)
 	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
 	// Powolanie czujnikow
-/*	sensor_m[SENSOR_FORCE_ON_TRACK] =
-		new ecp_mp_schunk_sensor (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);*/
+/*	sensor_m[lib::SENSOR_FORCE_ON_TRACK] =
+		new ecp_mp_schunk_sensor (lib::SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);*/
 
-	sensor_m[SENSOR_CAMERA_SA] =
-		new ecp_mp::sensor::vis_sac_lx (SENSOR_CAMERA_SA, "[vsp_vis]", *this); //change if SENSOR_CAMERA_SA used for nonnn recog (vsp_vis_pbeolsac)
+	sensor_m[lib::SENSOR_CAMERA_SA] =
+		new ecp_mp::sensor::vis_sac_lx (lib::SENSOR_CAMERA_SA, "[vsp_vis]", *this); //change if SENSOR_CAMERA_SA used for nonnn recog (vsp_vis_pbeolsac)
 
 	// Konfiguracja wszystkich czujnikow
 
-	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 		 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika

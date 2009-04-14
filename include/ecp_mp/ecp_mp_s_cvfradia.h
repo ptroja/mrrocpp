@@ -25,7 +25,7 @@ namespace sensor {
  * \brief Virtual sensor on the ECP/MP side used for communication with cvFraDIA framework.
  * \author tkornuta
  */
-class cvfradia : public ::sensor
+class cvfradia : public lib::sensor
 {
 private:
 	/*!
@@ -56,14 +56,14 @@ private:
 	/*!
       * Sensor name.
       */
-	SENSOR_ENUM sensor_name;
+	lib::SENSOR_ENUM sensor_name;
 
 public:
 
 	/*!
       * Constructor. Creates socket connection to cvFraDIA.
       */
- 	cvfradia (SENSOR_ENUM _sensor_name, const char* _section_name, task::base& _ecp_mp_object, int _union_size);
+ 	cvfradia (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::base& _ecp_mp_object, int _union_size);
 
 	/*!
       * Sends sensor configuration to cvFraDIA.
@@ -78,7 +78,7 @@ public:
 	/*!
       * Sends given reading command to cvFraDIA.
       */
-	void send_reading (ECP_VSP_MSG);
+	void send_reading (lib::ECP_VSP_MSG);
 
 	/*!
       * Retrieves aggregated data from cvFraDIA.

@@ -99,15 +99,15 @@ void error_handler(ERROR e){
 		case NON_FATAL_ERROR:
 			switch(e.error_no){
 			case INVALID_COMMAND_TO_VSP:
-				vs->from_vsp.vsp_report=INVALID_VSP_COMMAND;
+				vs->from_vsp.vsp_report=lib::INVALID_VSP_COMMAND;
 				vs->sr_msg->message (NON_FATAL_ERROR, e.error_no);
 			break;
 			case SENSOR_NOT_CONFIGURED:
-				vs->from_vsp.vsp_report=VSP_SENSOR_NOT_CONFIGURED;
+				vs->from_vsp.vsp_report=lib::VSP_SENSOR_NOT_CONFIGURED;
 				vs->sr_msg->message (NON_FATAL_ERROR, e.error_no);
 				break;
 			case READING_NOT_READY:
-				vs->from_vsp.vsp_report=VSP_READING_NOT_READY;
+				vs->from_vsp.vsp_report=lib::VSP_READING_NOT_READY;
 				break;
 			default:
 				vs->sr_msg->message (NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
@@ -119,24 +119,24 @@ void error_handler(ERROR e){
 	} // end error_handler
 
 /**************************** WRITE_TO_SENSOR ******************************/
-void write_to_sensor(VSP_COMMAND i_code){
-	vs->from_vsp.vsp_report=VSP_REPLY_OK;
+void write_to_sensor(lib::VSP_COMMAND i_code){
+	vs->from_vsp.vsp_report=lib::VSP_REPLY_OK;
 	switch(i_code){
-		case VSP_CONFIGURE_SENSOR :
+		case lib::VSP_CONFIGURE_SENSOR :
 			vs->configure_sensor();
 			break;
-		case VSP_INITIATE_READING :
+		case lib::VSP_INITIATE_READING :
 			vs->initiate_reading();
 			break;
-		case VSP_GET_READING :
+		case lib::VSP_GET_READING :
 			vs->get_reading();
 			break;
-		case VSP_TERMINATE :
+		case lib::VSP_TERMINATE :
 			vs->terminate();
 			 TERMINATE=true;
 			break;
 		default :
-			throw VSP_main_error(NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
+			throw lib::VSP_main_error(NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
 		};
 }
 
@@ -149,16 +149,16 @@ int io_read (resmgr_context_t *ctp, io_read_t *msg, RESMGR_OCB_T *ocb){
 	if (msg->i.xtype & _IO_XTYPE_MASK != _IO_XTYPE_NONE)
 		return (ENOSYS);
 	try{
-		vs->from_vsp.vsp_report=VSP_REPLY_OK;
+		vs->from_vsp.vsp_report=lib::VSP_REPLY_OK;
 		vs->get_reading();
 		} // end TRY
-	catch (VSP_main_error e){
+	catch (lib::VSP_main_error e){
 		error_handler(e);
 		} // end CATCH
-	catch (::sensor::sensor_error e){
+	catch (lib::sensor::sensor_error e){
 		error_handler(e);
 		} // end CATCH
-     resmgr_msgwrite(ctp, &vs->from_vsp, sizeof(VSP_REPORT) + vs->union_size, 0);
+     resmgr_msgwrite(ctp, &vs->from_vsp, sizeof(lib::VSP_REPORT) + vs->union_size, 0);
 	return(EOK);
 } // end io_read
 
@@ -174,10 +174,10 @@ int io_write (resmgr_context_t *ctp, io_write_t *msg, RESMGR_OCB_T *ocb){
 	try{
 	  write_to_sensor(vs->to_vsp.i_code);
 	  } // end TRY
-	catch (VSP_main_error e){
+	catch (lib::VSP_main_error e){
 	  error_handler(e);
 	  } // end CATCH
-	catch (::sensor::sensor_error e){
+	catch (lib::sensor::sensor_error e){
 		error_handler(e);
 		} // end CATCH
 	return(EOK);
@@ -200,23 +200,23 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb) {
 		try{
 			write_to_sensor(vs->to_vsp.i_code);
 			} // end TRY
-		catch (VSP_main_error e){
+		catch (lib::VSP_main_error e){
 			error_handler(e);
 			} // end CATCH
-		catch (::sensor::sensor_error e){
+		catch (lib::sensor::sensor_error e){
 			error_handler(e);
 			} // end CATCH
 		return (EOK);
         break;
     case DEVCTL_RD:
 		try{
-			vs->from_vsp.vsp_report=VSP_REPLY_OK;
+			vs->from_vsp.vsp_report= lib::VSP_REPLY_OK;
 			vs->get_reading();
 			} // end TRY
-		catch (VSP_main_error e){
+		catch (lib::VSP_main_error e){
 			error_handler(e);
 			} // end CATCH
-		catch (::sensor::sensor_error e){
+		catch (lib::sensor::sensor_error e){
 			error_handler(e);
 			} // end CATCH
 		// Count the start address of reply message content.
@@ -232,24 +232,24 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb) {
 		*/
 
 		addr = (int*)&msg->o +4; // + sizeof(msg->o.zero) + sizeof(msg->o.ret_val) + sizeof(msg->o.nbytes) + sizeof(msg->o.zero2);
-		memcpy( addr, &vs->from_vsp, vs->union_size + sizeof(VSP_REPORT));
-		resmgr_msgwrite(ctp, &msg->o,  sizeof(msg->o) + sizeof(VSP_REPORT) + vs->union_size, 0);
+		memcpy( addr, &vs->from_vsp, vs->union_size + sizeof(lib::VSP_REPORT));
+		resmgr_msgwrite(ctp, &msg->o,  sizeof(msg->o) + sizeof(lib::VSP_REPORT) + vs->union_size, 0);
 		return(EOK);
         break;
     case DEVCTL_RW:
 		try{
 			write_to_sensor(vs->to_vsp.i_code);
 		} // end TRY
-		catch (VSP_main_error e){
+		catch (lib::VSP_main_error e){
 			error_handler(e);
 			} // end CATCH
-		catch (::sensor::sensor_error e){
+		catch (lib::sensor::sensor_error e){
 			error_handler(e);
 			} // end CATCH
 		// Count the start address of reply message content.
 		addr = (int*)&msg->o +4;
-		memcpy( addr, &vs->from_vsp, vs->union_size + sizeof(VSP_REPORT));
-		resmgr_msgwrite(ctp, &msg->o,  sizeof(msg->o) + sizeof(VSP_REPORT) + vs->union_size, 0);
+		memcpy( addr, &vs->from_vsp, vs->union_size + sizeof(lib::VSP_REPORT));
+		resmgr_msgwrite(ctp, &msg->o,  sizeof(msg->o) + sizeof(lib::VSP_REPORT) + vs->union_size, 0);
 		return(EOK);
         break;
     default:
@@ -312,17 +312,17 @@ int main(int argc, char *argv[]) {
 		// Sprawdzenie czy istnieje /dev/TWOJSENSOR.
 		if( access(resourceman_attach_point, R_OK)== 0  ){
 
-			throw VSP_main_error(SYSTEM_ERROR, DEVICE_EXISTS);	// wyrzucany blad
+			throw lib::VSP_main_error(SYSTEM_ERROR, DEVICE_EXISTS);	// wyrzucany blad
 			};
 
 		/* initialize dispatch interface */
 		if((dpp = dispatch_create()) == NULL)
-			throw VSP_main_error(SYSTEM_ERROR, DISPATCH_ALLOCATION_ERROR);	// wyrzucany blad
+			throw lib::VSP_main_error(SYSTEM_ERROR, DISPATCH_ALLOCATION_ERROR);	// wyrzucany blad
 
 		/* initialize resource manager attributes */
 		memset(&resmgr_attr, 0, sizeof resmgr_attr);
 		resmgr_attr.nparts_max = 1;
-		resmgr_attr.msg_max_size = sizeof(DEVCTL_MSG);
+		resmgr_attr.msg_max_size = sizeof(lib::DEVCTL_MSG);
 
 		/* initialize functions for handling messages */
 		iofunc_func_init(_RESMGR_CONNECT_NFUNCS, &connect_funcs, _RESMGR_IO_NFUNCS, &io_funcs);
@@ -332,7 +332,7 @@ int main(int argc, char *argv[]) {
 
 		/* initialize attribute structure used by the device */
 		iofunc_attr_init(&attr, S_IFNAM | 0666, 0, 0);
-		attr.nbytes = sizeof(DEVCTL_MSG);
+		attr.nbytes = sizeof(lib::DEVCTL_MSG);
 
 		/* attach our device name */
 		if ( (id = resmgr_attach
@@ -344,7 +344,7 @@ int main(int argc, char *argv[]) {
                        &connect_funcs,		/* connect routines       */
                        &io_funcs,				/* I/O routines           */
                        &attr)) 	== -1){		/* handle                 */
-			throw VSP_main_error(SYSTEM_ERROR, DEVICE_CREATION_ERROR);	// wyrzucany blad
+			throw lib::VSP_main_error(SYSTEM_ERROR, DEVICE_CREATION_ERROR);	// wyrzucany blad
 			};
 
 		/* allocate a context structure */
@@ -354,12 +354,12 @@ int main(int argc, char *argv[]) {
 	 	vsp::common::vs->sr_msg->message ("Device is waiting for clients...");
 		while(!vsp::common::TERMINATE) { // for(;;)
 			if((ctp = dispatch_block(ctp)) == NULL)
-				throw VSP_main_error(SYSTEM_ERROR, DISPATCH_LOOP_ERROR);	// wyrzucany blad
+				throw lib::VSP_main_error(SYSTEM_ERROR, DISPATCH_LOOP_ERROR);	// wyrzucany blad
 			dispatch_handler(ctp);
 	 		} // end for(;;)
 		vsp::common::vs->sr_msg->message ("VSP terminated");
 		} // koniec TRY
-	catch (VSP_main_error e){
+	catch (lib::VSP_main_error e){
 		vsp::common::error_handler(e);
 		exit(EXIT_FAILURE);
 		}; // end CATCH

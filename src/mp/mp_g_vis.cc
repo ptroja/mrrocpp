@@ -98,7 +98,7 @@ bool seven_eye::first_step () {
 	
   	irp6ot = robot_m[ROBOT_IRP6_ON_TRACK];
 
-	vsp_vis_sac = sensor_m[SENSOR_CAMERA_SA];
+	vsp_vis_sac = sensor_m[lib::SENSOR_CAMERA_SA];
 
 	
 	idle_step_counter = 1;

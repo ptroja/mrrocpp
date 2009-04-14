@@ -36,7 +36,7 @@ namespace task {
 lib::sr_ecp* base::sr_ecp_msg = NULL;
 
 // mapa wszystkich czujnikow
-std::map <SENSOR_ENUM, ::sensor*> base::sensor_m;
+std::map <lib::SENSOR_ENUM, lib::sensor*> base::sensor_m;
 std::map <transmitter::TRANSMITTER_ENUM, transmitter::base*> base::transmitter_m;
 
 base::base(lib::configurator &_config)
@@ -223,10 +223,10 @@ bool base::show_message (const char* message)
 // Funkcje do obslugi czujnikow
 
 // ------------------------------------------------------------------------
-void base::kill_all_VSP (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m)
+void base::kill_all_VSP (std::map <lib::SENSOR_ENUM, lib::sensor*>& _sensor_m)
 {
 	// Zabicie wszystkich procesow VSP
-	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = _sensor_m.begin();
+	for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = _sensor_m.begin();
 	        sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++) {
 		if (sensor_m_iterator->second->pid !=0) {
 #if defined(PROCESS_SPAWN_RSH)
@@ -241,9 +241,9 @@ void base::kill_all_VSP (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m)
 // ------------------------------------------------------------------------
 
 
-void base::all_sensors_initiate_reading (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m)
+void base::all_sensors_initiate_reading (std::map <lib::SENSOR_ENUM, lib::sensor*>& _sensor_m)
 {
-	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = _sensor_m.begin();
+	for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = _sensor_m.begin();
 	        sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++) {
 		if (sensor_m_iterator->second->base_period > 0) {
 			if (sensor_m_iterator->second->current_period == sensor_m_iterator->second->base_period) {
@@ -254,10 +254,10 @@ void base::all_sensors_initiate_reading (std::map <SENSOR_ENUM, ::sensor*>& _sen
 	}
 }
 
-void base::all_sensors_get_reading (std::map <SENSOR_ENUM, ::sensor*>& _sensor_m)
+void base::all_sensors_get_reading (std::map <lib::SENSOR_ENUM, lib::sensor*>& _sensor_m)
 {
 
-	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = _sensor_m.begin();
+	for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = _sensor_m.begin();
 	        sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++) {
 		// jesli wogole mamy robic pomiar
 		if (sensor_m_iterator->second->base_period > 0) {

@@ -37,9 +37,9 @@ void pcbird::task_initialization(void)
 	try
 	{
 		// Create pcbird sensor - for testing purposes.
-		sensor_m[SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird(SENSOR_PCBIRD, "[vsp_pcbird]", *this);
+		sensor_m[lib::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird(lib::SENSOR_PCBIRD, "[vsp_pcbird]", *this);
 		// Configure sensor.
-		sensor_m[SENSOR_PCBIRD]->configure_sensor();
+		sensor_m[lib::SENSOR_PCBIRD]->configure_sensor();
     // Create an adequate robot. - depending on the ini section name.
     if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     {

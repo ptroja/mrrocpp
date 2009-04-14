@@ -48,8 +48,8 @@ void * irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 	name_attach_t *edp_vsp_attach;
 	uint64_t e; //!< kod bledu systemowego
 	int vsp_caller; //!< by Y&W
-	VSP_EDP_message vsp_edp_command;
-	EDP_VSP_reply edp_vsp_reply;
+	lib::VSP_EDP_message vsp_edp_command;
+	lib::EDP_VSP_reply edp_vsp_reply;
 
 	lib::set_thread_priority(pthread_self() , MAX_PRIORITY-4);
 
@@ -155,17 +155,17 @@ void * irp6s_postument_track_effector::force_thread(void *arg)
 		vs->configure_sensor();
 	}
 
-	catch (::sensor::sensor_error e)
+	catch (lib::sensor::sensor_error e)
 	{
 		printf("sensor_error w force thread EDP\n");
 
 		switch(e.error_no)
 		{
 			case SENSOR_NOT_CONFIGURED:
-			vs->from_vsp.vsp_report=VSP_SENSOR_NOT_CONFIGURED;
+			vs->from_vsp.vsp_report= lib::VSP_SENSOR_NOT_CONFIGURED;
 			break;
 			case READING_NOT_READY:
-			vs->from_vsp.vsp_report=VSP_READING_NOT_READY;
+			vs->from_vsp.vsp_report= lib::VSP_READING_NOT_READY;
 			break;
 		}
 		; //!< end switch
@@ -243,17 +243,17 @@ void * irp6s_postument_track_effector::force_thread(void *arg)
 
 		} //!< koniec TRY
 
-		catch (::sensor::sensor_error e)
+		catch (lib::sensor::sensor_error e)
 		{
 			printf("sensor_error w force thread  EDP\n");
 
 			switch(e.error_no)
 			{
 				case SENSOR_NOT_CONFIGURED:
-				vs->from_vsp.vsp_report=VSP_SENSOR_NOT_CONFIGURED;
+				vs->from_vsp.vsp_report= lib::VSP_SENSOR_NOT_CONFIGURED;
 				break;
 				case READING_NOT_READY:
-				vs->from_vsp.vsp_report=VSP_READING_NOT_READY;
+				vs->from_vsp.vsp_report= lib::VSP_READING_NOT_READY;
 				break;
 			}
 			; //!< end switch

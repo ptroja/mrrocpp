@@ -42,11 +42,11 @@ void test::task_initialization(void)
 	ecp_m_robot = new ecp_irp6_postument_robot (*this);
 
 		// Powolanie czujnikow
-	sensor_m[SENSOR_FORCE_POSTUMENT] =
-		new ecp_mp::sensor::schunk (SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
+	sensor_m[lib::SENSOR_FORCE_POSTUMENT] =
+		new ecp_mp::sensor::schunk (lib::SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
 
 	// Konfiguracja wszystkich czujnikow
-	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 		 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika

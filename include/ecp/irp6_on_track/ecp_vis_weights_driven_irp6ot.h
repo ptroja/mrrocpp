@@ -37,7 +37,7 @@ protected:
 //sensor *vsp_force_irp6ot, *vsp_force_irp6p, *vsp_vis_sac;
 
 public:
-	sensor *vsp_vis_sac;
+	lib::sensor *vsp_vis_sac;
 	trajectory_description td;
   	int step_no;
   	int idle_step_counter;

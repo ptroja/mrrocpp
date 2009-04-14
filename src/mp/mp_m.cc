@@ -110,7 +110,7 @@ int main (int argc, char *argv[], char **arge)
 			mp::common::mp_t->sr_ecp_msg->message("To terminate MP click STOP icon");
 		} /*end: catch*/
 
-		catch (sensor::sensor_error e) {
+		catch (lib::sensor::sensor_error e) {
 			/* Wyswietlenie komunikatu. */
 			mp::common::mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 			printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
@@ -228,7 +228,7 @@ int main (int argc, char *argv[], char **arge)
 
 			} /*end: catch*/
 
-			catch (sensor::sensor_error e) {
+			catch (lib::sensor::sensor_error e) {
 				/* Wyswietlenie komunikatu. */
 				mp::common::mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 				printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);

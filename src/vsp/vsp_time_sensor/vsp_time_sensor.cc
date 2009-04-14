@@ -68,7 +68,7 @@ void time::get_reading (void){
 	if(!is_reading_ready)
 		return;
 	// Odczyt w porzadku.
-	from_vsp.vsp_report=VSP_REPLY_OK;
+	from_vsp.vsp_report= lib::VSP_REPLY_OK;
 
 	clock_gettime(CLOCK_REALTIME, &from_vsp.comm_image.sensor_union.time.ts);
 

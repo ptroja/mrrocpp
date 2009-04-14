@@ -78,13 +78,13 @@ void rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogladanie s
 
 
 		wait_ms(5000);
-		sensor_m[SENSOR_CAMERA_ON_TRACK]->initiate_reading();
+		sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->initiate_reading();
 		wait_ms(1000);
-		sensor_m[SENSOR_CAMERA_ON_TRACK]->get_reading();
+		sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->get_reading();
 
 		for(int i=0; i<3; i++)
 			for(int j=0; j<3; j++)
-				cube_state->cube_tab[k][3*i+j]=(char)sensor_m[SENSOR_CAMERA_ON_TRACK]->image.sensor_union.cube_face.colors[3*i+j];
+				cube_state->cube_tab[k][3*i+j]=(char)sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->image.sensor_union.cube_face.colors[3*i+j];
 
 
 		printf("\nFACE FACE %d:\n",k);
@@ -375,9 +375,9 @@ bool rubik_cube_solver::find_rcs()
 	else if (!strcmp(solver, "windows_solver"))
 		sol_status = find_rcs_with_windows_solver(cube_tab_send, cube_sol_rec);
 	else
-		sol_status = RCS_SOLUTION_NOTPOSSIBLE;
+		sol_status = lib::RCS_SOLUTION_NOTPOSSIBLE;
 
-	if (sol_status != RCS_SOLUTION_FOUND || cube_sol_rec == NULL)
+	if (sol_status != lib::RCS_SOLUTION_FOUND || cube_sol_rec == NULL)
 	{
 		printf("Jam jest daltonista. ktory Ci nie ulozy kostki\n");
 		return true;
@@ -432,22 +432,22 @@ int rubik_cube_solver::find_rcs_with_VSP(char* cube_state, char* cube_solution)
 {
 	// Zmienne na rozwiazania
 	char *sol_korf = NULL, *sol_kociemba = NULL;
-	bool sol_state = RCS_SOLUTION_NOTFOUND;
+	bool sol_state = lib::RCS_SOLUTION_NOTFOUND;
 
 	// petle ustawiajace stan kostki w czujnikach, az do skutku
 	bool korf_configured = false;
 	//bool kociemba_configured = false;
 
 	// konfiguruje czujnik dla algorytmu Kociemby, ten od razu rozpoczyna prace
-	sensor_m[SENSOR_RCS_KOCIEMBA]->to_vsp.rcs.configure_mode = RCS_CUBE_STATE;
-	strncpy(sensor_m[SENSOR_RCS_KOCIEMBA]->to_vsp.rcs.cube_state, cube_state, 54);
-	sensor_m[SENSOR_RCS_KOCIEMBA]->configure_sensor();
+	sensor_m[lib::SENSOR_RCS_KOCIEMBA]->to_vsp.rcs.configure_mode = lib::RCS_CUBE_STATE;
+	strncpy(sensor_m[lib::SENSOR_RCS_KOCIEMBA]->to_vsp.rcs.cube_state, cube_state, 54);
+	sensor_m[lib::SENSOR_RCS_KOCIEMBA]->configure_sensor();
 
 	// inicjuje odczyt z czujnika dla algorytmu Korfa, az do skutku
 	while (!korf_configured) {
-		strncpy(sensor_m[SENSOR_RCS_KORF]->to_vsp.rcs.cube_state, cube_state, 54);
-		sensor_m[SENSOR_RCS_KORF]->initiate_reading();
-		if (sensor_m[SENSOR_RCS_KORF]->image.sensor_union.rcs.init_mode == RCS_INIT_SUCCESS)
+		strncpy(sensor_m[lib::SENSOR_RCS_KORF]->to_vsp.rcs.cube_state, cube_state, 54);
+		sensor_m[lib::SENSOR_RCS_KORF]->initiate_reading();
+		if (sensor_m[lib::SENSOR_RCS_KORF]->image.sensor_union.rcs.init_mode == lib::RCS_INIT_SUCCESS)
 			korf_configured = true;
 		else
 			sleep(1);
@@ -471,15 +471,15 @@ int rubik_cube_solver::find_rcs_with_VSP(char* cube_state, char* cube_solution)
 		while (!korf_found && !time_elapsed && sol_possible && sol_needed) {
 
 			// odczytuje wynik z czujnika dla algorytmu Korfa
-			sensor_m[SENSOR_RCS_KORF]->get_reading();
+			sensor_m[lib::SENSOR_RCS_KORF]->get_reading();
 			sleep(1);
-			if (sensor_m[SENSOR_RCS_KORF]->image.sensor_union.rcs.reading_mode == RCS_SOLUTION_NOTPOSSIBLE) {
+			if (sensor_m[lib::SENSOR_RCS_KORF]->image.sensor_union.rcs.reading_mode == lib::RCS_SOLUTION_NOTPOSSIBLE) {
 				sol_possible = false;
-			} else if (sensor_m[SENSOR_RCS_KORF]->image.sensor_union.rcs.reading_mode == RCS_SOLUTION_NOTNEEDED) {
+			} else if (sensor_m[lib::SENSOR_RCS_KORF]->image.sensor_union.rcs.reading_mode == lib::RCS_SOLUTION_NOTNEEDED) {
 				sol_needed = false;
-			} else if (sensor_m[SENSOR_RCS_KORF]->image.sensor_union.rcs.reading_mode == RCS_SOLUTION_FOUND) {
+			} else if (sensor_m[lib::SENSOR_RCS_KORF]->image.sensor_union.rcs.reading_mode == lib::RCS_SOLUTION_FOUND) {
 				sol_korf = new char[200];
-				strcpy(sol_korf, (char*) sensor_m[SENSOR_RCS_KORF]->image.sensor_union.rcs.cube_solution);
+				strcpy(sol_korf, (char*) sensor_m[lib::SENSOR_RCS_KORF]->image.sensor_union.rcs.cube_solution);
 				printf("MP KR: %s\n", sol_korf);
 				korf_found = true;
 			}
@@ -495,15 +495,15 @@ int rubik_cube_solver::find_rcs_with_VSP(char* cube_state, char* cube_solution)
 		}
 
 		// odczytuje ostanio znalezione rozwiazanie z czujnika dla algorytmu Kociemby
-		sensor_m[SENSOR_RCS_KOCIEMBA]->get_reading();
+		sensor_m[lib::SENSOR_RCS_KOCIEMBA]->get_reading();
 		sleep(1);
-		if (sensor_m[SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.reading_mode == RCS_SOLUTION_NOTPOSSIBLE) {
+		if (sensor_m[lib::SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.reading_mode == lib::RCS_SOLUTION_NOTPOSSIBLE) {
 			sol_possible = false;
-		} else if (sensor_m[SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.reading_mode == RCS_SOLUTION_NOTNEEDED) {
+		} else if (sensor_m[lib::SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.reading_mode == lib::RCS_SOLUTION_NOTNEEDED) {
 			sol_needed = false;
-		} else if (sensor_m[SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.reading_mode == RCS_SOLUTION_FOUND)  {
+		} else if (sensor_m[lib::SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.reading_mode == lib::RCS_SOLUTION_FOUND)  {
 			sol_kociemba = new char[200];
-			strcpy(sol_kociemba, (char*) sensor_m[SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.cube_solution);
+			strcpy(sol_kociemba, (char*) sensor_m[lib::SENSOR_RCS_KOCIEMBA]->image.sensor_union.rcs.cube_solution);
 			printf("MP KC: %s\n", sol_kociemba);
 			kociemba_found = true;
 		}
@@ -512,9 +512,9 @@ int rubik_cube_solver::find_rcs_with_VSP(char* cube_state, char* cube_solution)
 
 	// sprawdza czy mozliwe i konieczne ukladanie
 	if (!sol_possible)
-		sol_state = RCS_SOLUTION_NOTPOSSIBLE;
+		sol_state = lib::RCS_SOLUTION_NOTPOSSIBLE;
 	else if (!sol_needed)
-		sol_state = RCS_SOLUTION_NOTNEEDED;
+		sol_state = lib::RCS_SOLUTION_NOTNEEDED;
 
 	// wybiera najkrotsze rozwiazanie i informuje o nim
 	else {
@@ -532,7 +532,7 @@ int rubik_cube_solver::find_rcs_with_VSP(char* cube_state, char* cube_solution)
 		if (sol_korf) { delete[] sol_korf; sol_korf = NULL; }
 		if (sol_kociemba) { delete[] sol_kociemba; sol_kociemba = NULL; }
 
-		sol_state = RCS_SOLUTION_FOUND;
+		sol_state = lib::RCS_SOLUTION_FOUND;
 	}
 
 	return sol_state;
@@ -582,8 +582,8 @@ int rubik_cube_solver::find_rcs_with_windows_solver(char* cube_state, char* cube
 
 	// zwrocenie wlasciwego statusu rozwiazania
 	if ((cube_solution[0]=='C') && (cube_solution[1]=='u') && (cube_solution[2]=='b') && (cube_solution[3]=='e'))
-		return RCS_SOLUTION_NOTPOSSIBLE;
-	return RCS_SOLUTION_FOUND;
+		return lib::RCS_SOLUTION_NOTPOSSIBLE;
+	return lib::RCS_SOLUTION_FOUND;
 }
 
 
@@ -680,12 +680,12 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	// zacisniecie postumenta na kostce
 
 	// Konfiguracja czujnikow sily
-	sensor_m[SENSOR_FORCE_ON_TRACK]->to_vsp.parameters=1; // biasowanie czujnika
-	sensor_m[SENSOR_FORCE_ON_TRACK]->configure_sensor();
-	sensor_m[SENSOR_FORCE_POSTUMENT]->to_vsp.parameters=1; // biasowanie czujnika
-	sensor_m[SENSOR_FORCE_POSTUMENT]->configure_sensor();
+	sensor_m[lib::SENSOR_FORCE_ON_TRACK]->to_vsp.parameters=1; // biasowanie czujnika
+	sensor_m[lib::SENSOR_FORCE_ON_TRACK]->configure_sensor();
+	sensor_m[lib::SENSOR_FORCE_POSTUMENT]->to_vsp.parameters=1; // biasowanie czujnika
+	sensor_m[lib::SENSOR_FORCE_POSTUMENT]->configure_sensor();
 	/*
-	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 			 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -802,12 +802,12 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 	// zacisniecie tracka na kostce
 
 	// Konfiguracja czujnikow sily
-	sensor_m[SENSOR_FORCE_ON_TRACK]->to_vsp.parameters=1; // biasowanie czujnika
-	sensor_m[SENSOR_FORCE_ON_TRACK]->configure_sensor();
-	sensor_m[SENSOR_FORCE_POSTUMENT]->to_vsp.parameters=1; // biasowanie czujnika
-	sensor_m[SENSOR_FORCE_POSTUMENT]->configure_sensor();
+	sensor_m[lib::SENSOR_FORCE_ON_TRACK]->to_vsp.parameters=1; // biasowanie czujnika
+	sensor_m[lib::SENSOR_FORCE_ON_TRACK]->configure_sensor();
+	sensor_m[lib::SENSOR_FORCE_POSTUMENT]->to_vsp.parameters=1; // biasowanie czujnika
+	sensor_m[lib::SENSOR_FORCE_POSTUMENT]->configure_sensor();
 	/*
-	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 			 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 		{
 			sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -994,7 +994,7 @@ void rubik_cube_solver::approach_op(int mode)
 	{
 		generator::seven_eye eyegen(*this, 4);
 		eyegen.robot_m[ROBOT_IRP6_ON_TRACK] = robot_m[ROBOT_IRP6_ON_TRACK];
-		eyegen.sensor_m[SENSOR_CAMERA_SA] = sensor_m[SENSOR_CAMERA_SA];
+		eyegen.sensor_m[lib::SENSOR_CAMERA_SA] = sensor_m[lib::SENSOR_CAMERA_SA];
 
 		eyegen.Move();
 	}
@@ -1121,20 +1121,20 @@ base* return_created_mp_task (lib::configurator &_config)
 void rubik_cube_solver::task_initialization(void)
 {
 	// Powolanie czujnikow
-	sensor_m[SENSOR_FORCE_ON_TRACK] =
-		new ecp_mp::sensor::schunk (SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
+	sensor_m[lib::SENSOR_FORCE_ON_TRACK] =
+		new ecp_mp::sensor::schunk (lib::SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
 
-	sensor_m[SENSOR_FORCE_POSTUMENT] =
-		new ecp_mp::sensor::schunk (SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
+	sensor_m[lib::SENSOR_FORCE_POSTUMENT] =
+		new ecp_mp::sensor::schunk (lib::SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
 
-	sensor_m[SENSOR_CAMERA_ON_TRACK] =
-		new ecp_mp::sensor::vis (SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
+	sensor_m[lib::SENSOR_CAMERA_ON_TRACK] =
+		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
-	sensor_m[SENSOR_CAMERA_SA] =
-		new ecp_mp::sensor::vis (SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+	sensor_m[lib::SENSOR_CAMERA_SA] =
+		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 
 	// Konfiguracja wszystkich czujnikow
-	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -1152,14 +1152,14 @@ void rubik_cube_solver::task_initialization(void)
 	// Wywolanie osobno ze wzgledu na inny sposob ich konfiguracji.
 
 	// tworzy i konfiguruje czujnik dla algorytmu Kociemby (w powloce nieinteraktywnej)
-	sensor_m[SENSOR_RCS_KOCIEMBA] = new ecp_mp::sensor::rcs_kociemba(SENSOR_RCS_KOCIEMBA, "[vsp_rcs_kociemba]", *this);
-	sensor_m[SENSOR_RCS_KOCIEMBA]->to_vsp.rcs.configure_mode = RCS_BUILD_TABLES;
-	sensor_m[SENSOR_RCS_KOCIEMBA]->configure_sensor();
+	sensor_m[lib::SENSOR_RCS_KOCIEMBA] = new ecp_mp::sensor::rcs_kociemba(lib::SENSOR_RCS_KOCIEMBA, "[vsp_rcs_kociemba]", *this);
+	sensor_m[lib::SENSOR_RCS_KOCIEMBA]->to_vsp.rcs.configure_mode = lib::RCS_BUILD_TABLES;
+	sensor_m[lib::SENSOR_RCS_KOCIEMBA]->configure_sensor();
 
 	// tworzy i konfiguruje czujnik dla algorytmu Korfa (w powloce interaktywnej bez oczekiwania)
-	sensor_m[SENSOR_RCS_KORF] = new ecp_mp::sensor::rcs_korf(SENSOR_RCS_KORF, "[vsp_rcs_korf]", *this);
-	sensor_m[SENSOR_RCS_KORF]->to_vsp.rcs.configure_mode = RCS_BUILD_TABLES;
-	sensor_m[SENSOR_RCS_KORF]->configure_sensor();
+	sensor_m[lib::SENSOR_RCS_KORF] = new ecp_mp::sensor::rcs_korf(lib::SENSOR_RCS_KORF, "[vsp_rcs_korf]", *this);
+	sensor_m[lib::SENSOR_RCS_KORF]->to_vsp.rcs.configure_mode = lib::RCS_BUILD_TABLES;
+	sensor_m[lib::SENSOR_RCS_KORF]->configure_sensor();
 
 
 	sr_ecp_msg->message("MP rcsc loaded");
@@ -1187,13 +1187,13 @@ void rubik_cube_solver::main_task_algorithm(void)
 		for(;;) {
 			sr_ecp_msg->message("Nowa seria");
 			// Konfiguracja czujnikow sily
-			sensor_m[SENSOR_FORCE_ON_TRACK]->to_vsp.parameters=1; // biasowanie czujnika
-			sensor_m[SENSOR_FORCE_ON_TRACK]->configure_sensor();
-			sensor_m[SENSOR_FORCE_POSTUMENT]->to_vsp.parameters=1; // biasowanie czujnika
-			sensor_m[SENSOR_FORCE_POSTUMENT]->configure_sensor();
+			sensor_m[lib::SENSOR_FORCE_ON_TRACK]->to_vsp.parameters=1; // biasowanie czujnika
+			sensor_m[lib::SENSOR_FORCE_ON_TRACK]->configure_sensor();
+			sensor_m[lib::SENSOR_FORCE_POSTUMENT]->to_vsp.parameters=1; // biasowanie czujnika
+			sensor_m[lib::SENSOR_FORCE_POSTUMENT]->configure_sensor();
 
 			/*
-			for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+			for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 				 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 			{
 				sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika

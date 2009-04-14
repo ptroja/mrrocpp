@@ -50,7 +50,7 @@ void ecp_vis_ib_eih_planar_irp6ot::retrieve_parameters() {
 
 bool ecp_vis_ib_eih_planar_irp6ot::first_step() {
 
-	vsp_fradia = sensor_m[SENSOR_CVFRADIA];
+	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
 
 	the_robot->EDP_data.instruction_type = GET;
 	the_robot->EDP_data.get_type = ARM_DV;

@@ -76,13 +76,13 @@ void tr::catch_signal(int sig)
 			// Zakonczenie pracy watkow.
 			TERMINATE = true;
 			// Koniec pracy czujnikow.
-			common::ecp_t->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]->terminate();
+			common::ecp_t->sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR]->terminate();
 			// Koniec pracy czujnika.
-			if (common::ecp_t->sensor_m.count(SENSOR_FORCE_ON_TRACK)>0)
-				common::ecp_t->sensor_m[SENSOR_FORCE_ON_TRACK]->terminate();
+			if (common::ecp_t->sensor_m.count(lib::SENSOR_FORCE_ON_TRACK)>0)
+				common::ecp_t->sensor_m[lib::SENSOR_FORCE_ON_TRACK]->terminate();
 			// Zwolnienie pamieci - czujniki.
-			delete(common::ecp_t->sensor_m[SENSOR_FORCE_ON_TRACK]);
-			delete(common::ecp_t->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]);
+			delete(common::ecp_t->sensor_m[lib::SENSOR_FORCE_ON_TRACK]);
+			delete(common::ecp_t->sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR]);
 			// Zwolnienie pamieci - generator.
 			delete(trg);
 			// Zwolnienie pamieci - warunek.
@@ -175,12 +175,12 @@ void* UI_communication_thread(void* arg)
 				break;
 			case TR_CALIBRATE_DIGITAL_SCALES_SENSOR:
 				// Konfiguracja czujnika.
-				common::ecp_t->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]->configure_sensor();
+				common::ecp_t->sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR]->configure_sensor();
 				break;
 			case TR_CALIBRATE_FORCE_SENSOR:
-				if (common::ecp_t->sensor_m.count(SENSOR_FORCE_ON_TRACK)>0) {
+				if (common::ecp_t->sensor_m.count(lib::SENSOR_FORCE_ON_TRACK)>0) {
 					// Konfiguracja czujnika sil.
-					common::ecp_t->sensor_m[SENSOR_FORCE_ON_TRACK]->configure_sensor();
+					common::ecp_t->sensor_m[lib::SENSOR_FORCE_ON_TRACK]->configure_sensor();
 				}
 				break;
 			case TR_EXIT:
@@ -390,33 +390,33 @@ void tr::task_initialization(void)
 	// Stworznie obiektu - czujnik zlozony z linialow.
 	//  ini_con->create_vsp ("[vsp_dss]");
 
-	sensor_m[SENSOR_DIGITAL_SCALE_SENSOR] = new ecp_mp::sensor::digital_scales(SENSOR_DIGITAL_SCALE_SENSOR, "[vsp_dss]", *this);
+	sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR] = new ecp_mp::sensor::digital_scales(lib::SENSOR_DIGITAL_SCALE_SENSOR, "[vsp_dss]", *this);
 	//   dss = new ecp_mp_digital_scales_sensor(ini_con->vsp->program_name, ini_con->vsp->node_name,
 	// 		ini_con->vsp->resourceman_attach_point, ini_con->config_directories->binaries_network_path,
 	// 		argv[1], argv[2], argv[3], "[vsp_dss]" , msg);
 	// Konfiguracja czujnika.
-	sensor_m[SENSOR_DIGITAL_SCALE_SENSOR]->configure_sensor();
+	sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR]->configure_sensor();
 
 	// Stworzenie listy czujnikow uzywanych przed instrukcje Wait.
-	rsc->sensor_m[SENSOR_DIGITAL_SCALE_SENSOR] = sensor_m[SENSOR_DIGITAL_SCALE_SENSOR];
+	rsc->sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR] = sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR];
 
 	// Sprawdzanie, czy nalezy uzywac czujnik sily.
 	short use_force_sensor = config.return_int_value("use_force_sensor");
 	if (use_force_sensor == 1) {
 		sr_ecp_msg->message("Using force sensor for move control");
 		// Stworzenie obiektu czujnik.
-		sensor_m[SENSOR_FORCE_ON_TRACK] = new ecp_mp::sensor::force(SENSOR_FORCE_ON_TRACK, "[vsp_fs]", *this);
+		sensor_m[lib::SENSOR_FORCE_ON_TRACK] = new ecp_mp::sensor::force(lib::SENSOR_FORCE_ON_TRACK, "[vsp_fs]", *this);
 		// Konfiguracja czujnika.
-		sensor_m[SENSOR_FORCE_ON_TRACK]->configure_sensor();
+		sensor_m[lib::SENSOR_FORCE_ON_TRACK]->configure_sensor();
 		// Stworzenie listy czujnikow uzywanych przed instrukcje Move -> glowa = (czujnik sily).
-		trg->sensor_m[SENSOR_FORCE_ON_TRACK] = sensor_m[SENSOR_FORCE_ON_TRACK];
+		trg->sensor_m[lib::SENSOR_FORCE_ON_TRACK] = sensor_m[lib::SENSOR_FORCE_ON_TRACK];
 		// Dodanie czujnika sily do listy czujnikow uzywanych przez instrukcje WAIT.
-		rsc->sensor_m[SENSOR_FORCE_ON_TRACK] = sensor_m[SENSOR_FORCE_ON_TRACK];
+		rsc->sensor_m[lib::SENSOR_FORCE_ON_TRACK] = sensor_m[lib::SENSOR_FORCE_ON_TRACK];
 
 	} else {
 		sr_ecp_msg->message("Not using force sensor for move control");
 		// Pusty czujnik.
-		sensor_m.erase(SENSOR_FORCE_ON_TRACK);
+		sensor_m.erase(lib::SENSOR_FORCE_ON_TRACK);
 	}
 	sr_ecp_msg->message("ECP loaded");
 }

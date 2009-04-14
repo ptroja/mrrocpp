@@ -16,7 +16,7 @@ namespace sensor {
  * 
  * @author jedrzej
  */
-class wiimote : public ::sensor
+class wiimote : public lib::sensor
 {
 private:
 	//socket descriptor
@@ -35,7 +35,7 @@ private:
 	lib::sr_ecp& sr_ecp_msg;
 	
 	//sensor name
-	SENSOR_ENUM sensor_name;
+	lib::SENSOR_ENUM sensor_name;
 
 public:
 	/**
@@ -48,7 +48,7 @@ public:
 	 *
 	 * @author jedrzej
 	 */
-	wiimote (SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object, int _union_size);
+	wiimote (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object, int _union_size);
 	
 	/**
 	 * Sends sensor configuration to the Wii-mote server
@@ -69,7 +69,7 @@ public:
 	 *
 	 * @author jedrzej
 	 */
-	void send_reading (ECP_VSP_MSG);
+	void send_reading (lib::ECP_VSP_MSG);
 	
 	/**
 	 * Retrieves aggregated data from the Wii-mote server

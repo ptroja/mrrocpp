@@ -39,9 +39,9 @@ void spots_recognition::task_initialization(void)
 {
 
 	// Create cvFraDIA sensor - for testing purposes.
-	sensor_m[SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(SENSOR_CVFRADIA, "[vsp_cvfradia]", *this, sizeof(sensor_image_t::sensor_union_t::sp_r_t));
+	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, "[vsp_cvfradia]", *this, sizeof(lib::sensor_image_t::sensor_union_t::sp_r_t));
 	// Configure sensor.
-	sensor_m[SENSOR_CVFRADIA]->configure_sensor();
+	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
 
 // Create an adequate robot. - depending on the ini section name.
 // Note - only on track working

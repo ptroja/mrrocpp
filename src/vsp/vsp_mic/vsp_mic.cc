@@ -364,7 +364,7 @@ void mic::get_reading (void){
 	//if(!is_reading_ready)
 	//     throw sensor_error (FATAL_ERROR, READING_NOT_READY);    //MAC7 odrem w MRROC++
 
-	//from_vsp.vsp_report=VSP_REPLY_OK; //MAC7 odrem w MRROC++
+	//from_vsp.vsp_report= lib::VSP_REPLY_OK; //MAC7 odrem w MRROC++
 	
 	// tutaj: czujnik skalibrowany, odczyt dokonany, zapisany w "image", przepisanie wszystkich pol
 	// przepisanie do bufora komunikacyjnego
@@ -381,7 +381,7 @@ void mic::get_reading (void){
 	     throw sensor_error (FATAL_ERROR, READING_NOT_READY);   
 
 	// ok
-	from_vsp.vsp_report=VSP_REPLY_OK;
+	from_vsp.vsp_report= lib::VSP_REPLY_OK;
 
 	
 	// fill up frame

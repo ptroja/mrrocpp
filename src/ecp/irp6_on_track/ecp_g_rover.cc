@@ -167,7 +167,7 @@ bool vis_sac_lx::first_step()
 
 	//	the_robot = robot_m[ROBOT_IRP6_ON_TRACK];
 
-	vsp_vis_sac = sensor_m[SENSOR_CAMERA_SA];
+	vsp_vis_sac = sensor_m[lib::SENSOR_CAMERA_SA];
 	
 	printf("KAMERA, KAMERA %d \n\n",vsp_vis_sac);
 
@@ -339,7 +339,7 @@ bool vis_sac_lx::next_step()
 	//rover VSP_REPORT::
 	//jesli byl odczyt z czujnika to przepisz odczytane wartosci - jesli nie przepisz stare 
 	
-	if(vsp_vis_sac->vsp_report_aux==VSP_REPLY_OK)
+	if(vsp_vis_sac->vsp_report_aux== lib::VSP_REPLY_OK)
 	{
 		CEIH_rpy_G[0][0]=vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0]-0.015; //-0.15
 		CEIH_rpy_G[0][1]=vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[1]+0.03; //0.04

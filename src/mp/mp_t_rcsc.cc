@@ -71,13 +71,13 @@ void rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogladanie s
 
 
 		wait_ms(5000);
-		sensor_m[SENSOR_CAMERA_ON_TRACK]->initiate_reading();
+		sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->initiate_reading();
 		wait_ms(1000);
-		sensor_m[SENSOR_CAMERA_ON_TRACK]->get_reading();
+		sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->get_reading();
 
 		for(int i=0; i<3; i++)
 			for(int j=0; j<3; j++)
-				cube_state->cube_tab[k][3*i+j]=(char)sensor_m[SENSOR_CAMERA_ON_TRACK]->image.sensor_union.cube_face.colors[3*i+j];
+				cube_state->cube_tab[k][3*i+j]=(char)sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->image.sensor_union.cube_face.colors[3*i+j];
 
 
 		printf("\nFACE FACE %d:\n",k);
@@ -861,7 +861,7 @@ void rubik_cube_solver::approach_op(int mode)
 	{
 		generator::seven_eye eyegen(*this, 4);
 		eyegen.robot_m[ROBOT_IRP6_ON_TRACK] = robot_m[ROBOT_IRP6_ON_TRACK];
-		eyegen.sensor_m[SENSOR_CAMERA_SA] = sensor_m[SENSOR_CAMERA_SA];
+		eyegen.sensor_m[lib::SENSOR_CAMERA_SA] = sensor_m[lib::SENSOR_CAMERA_SA];
 
 		eyegen.Move();
 	}
@@ -984,19 +984,19 @@ void rubik_cube_solver::task_initialization(void)
 {
 	// Powolanie czujnikow
 
-	sensor_m[SENSOR_CAMERA_ON_TRACK] =
-		new ecp_mp::sensor::vis (SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
+	sensor_m[lib::SENSOR_CAMERA_ON_TRACK] =
+		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
 	if (config.return_int_value("vis_servoing"))
 	{
 
-		sensor_m[SENSOR_CAMERA_SA] =
-			new ecp_mp::sensor::vis (SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+		sensor_m[lib::SENSOR_CAMERA_SA] =
+			new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 
 	}
 
 	// Konfiguracja wszystkich czujnikow
-	for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -1037,7 +1037,7 @@ void rubik_cube_solver::main_task_algorithm(void)
 	for(;;)
 	{
 		sr_ecp_msg->message("Nowa seria");
-		for (std::map <SENSOR_ENUM, ::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+		for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 		sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 		{
 			sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
