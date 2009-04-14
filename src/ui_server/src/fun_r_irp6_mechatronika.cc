@@ -77,7 +77,7 @@ process_control_window_irp6m_section_init (bool &wlacz_PtButton_wnd_processes_co
 
 int irp6m_read_kinematic()
 {
-	BYTE model_no;
+	lib::BYTE model_no;
 	try
 	{
 		if (ui_state.irp6_mechatronika.edp.pid!=-1)
@@ -100,8 +100,8 @@ int irp6m_read_kinematic()
 
 int irp6m_read_servo_algorithm()
 {
-	BYTE servo_alg_no[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
-	BYTE servo_par_no[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
+	lib::BYTE servo_alg_no[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
+	lib::BYTE servo_par_no[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
 
 	try
 	{
@@ -622,8 +622,8 @@ int pulse_reader_irp6m_trigger()
 
 int irp6m_servo_algorithm_set(double* v)
 {
-	BYTE servo_alg_no_output[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
-	BYTE servo_par_no_output[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
+	lib::BYTE servo_alg_no_output[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
+	lib::BYTE servo_par_no_output[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
 
 	try
 	{
@@ -671,7 +671,7 @@ int EDP_irp6_mechatronika_create()
 				ui_state.irp6_mechatronika.edp.node_nr = config->return_node_number(ui_state.irp6_mechatronika.edp.node_name);
 				ui_state.irp6_mechatronika.edp.state = 1;
 				//ui_robot.irp6_mechatronika = new ui_irp6_mechatronika_robot(*config, ui_msg.all_ecp);
-				ui_robot.irp6_mechatronika = new ui_common_robot(*config, ui_msg.all_ecp,ROBOT_IRP6_MECHATRONIKA);
+				ui_robot.irp6_mechatronika = new ui_common_robot(*config, ui_msg.all_ecp, lib::ROBOT_IRP6_MECHATRONIKA);
 
 
 				ui_state.irp6_mechatronika.edp.pid = ui_robot.irp6_mechatronika->ecp->get_EDP_pid();
@@ -712,12 +712,12 @@ int EDP_irp6_mechatronika_create()
 
 int irp6m_kinematic_set(double* v)
 {
-	BYTE model_no_output;
+	lib::BYTE model_no_output;
 	try
 	{
 		if ( ui_state.irp6_mechatronika.edp.is_synchronised )
 		{
-			model_no_output = (BYTE)(v[0]);
+			model_no_output = (lib::BYTE)(v[0]);
 			ui_robot.irp6_mechatronika->set_kinematic(model_no_output);
 			irp6m_read_kinematic();
 		}

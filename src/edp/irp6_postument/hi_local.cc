@@ -48,7 +48,7 @@ hardware_interface::hardware_interface (  effector &_master )  : common::hardwar
 {
 	int irq_no;    // Numer przerwania sprzetowego 
 	int i;         // Zmienna pomocnicze
-	WORD int_freq; // Ustawienie czestotliwosci przerwan
+	lib::WORD int_freq; // Ustawienie czestotliwosci przerwan
 
 	// tablica pradow maksymalnych d;a poszczegolnych osi
 	int max_current [IRP6_POSTUMENT_NUM_OF_SERVOS] = { IRP6_POSTUMENT_AXE_1_MAX_CURRENT, 
@@ -126,10 +126,10 @@ hardware_interface::hardware_interface (  effector &_master )  : common::hardwar
 		meassured_current[i] = 0;
 	
 		if(master.test_mode==0) {
-			/*out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i); 
+			/*out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i); 
 			out16(SERVO_COMMAND1_ADR,RESET_MANUAL_MODE); // Zerowanie ruchow recznych 
 			out16(SERVO_COMMAND1_ADR, PROHIBIT_MANUAL_MODE); // Zabrania ruchow za pomoca przyciskow w szafie*/
-			md	.card_adress=FIRST_SERVO_PTR + (BYTE)i;
+			md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
 			md	.register_adress=SERVO_COMMAND1_ADR;
 			md	.value=RESET_MANUAL_MODE;
 			hi_int_wait(INT_SINGLE_COMMAND, 2);
@@ -163,7 +163,7 @@ hardware_interface::~hardware_interface ( void )   // destruktor
 		
 		for (int i = 0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++ )
 		{
-			md	.card_adress=FIRST_SERVO_PTR + (BYTE)i;
+			md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
 			md	.register_adress=SERVO_COMMAND1_ADR;
 			md	.value=ALLOW_MANUAL_MODE;
 			hi_int_wait(INT_SINGLE_COMMAND, 2);
@@ -214,7 +214,7 @@ uint64_t hardware_interface::read_write_hardware ( void )
 	if (!trace_resolver_zero) 
 	{
 	//	printf("read_write_hardware: w mask resolver_zero\n");
-		md.hardware_error &= MASK_RESOLVER_ZERO;
+		md.hardware_error &= lib::MASK_RESOLVER_ZERO;
 		}
 	
 	return md.hardware_error;
@@ -230,7 +230,7 @@ void hardware_interface::reset_counters ( void )
 
 	for (int i = 0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++ )
 	{
-		md	.card_adress=FIRST_SERVO_PTR + (BYTE)i;
+		md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
 		md	.register_adress=SERVO_COMMAND1_ADR;
 		md	.value=MICROCONTROLLER_MODE;
 		hi_int_wait(INT_SINGLE_COMMAND, 2);
@@ -281,7 +281,7 @@ void hardware_interface::reset_counters ( void )
 bool hardware_interface::is_hardware_error ( void) 
 { 
 	bool h_error;
-	WORD MASK = 0x7E00;
+	lib::WORD MASK = 0x7E00;
 	
 	h_error = false;
 	
@@ -310,7 +310,7 @@ int hardware_interface::synchronise_via_lm629(void)
 	 for ( i = 0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++ ) // UWAGA NA -1
 	{
 		// tryb pojedynczych polecen w obsludze przerwania
-		md	.card_adress=FIRST_SERVO_PTR + (BYTE)i;
+		md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
 		md	.register_adress=SERVO_COMMAND1_ADR;
 		md	.value=LM629_VIA_MICROCONTROLLER_MODE;
 		hi_int_wait(INT_SINGLE_COMMAND, 10);
@@ -332,7 +332,7 @@ int hardware_interface::synchronise_via_lm629(void)
 		}
 		
 		// tryb pojedynczych polecen w obsludze przerwania
-		md	.card_adress=FIRST_SERVO_PTR + (BYTE)i;
+		md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
 		md	.register_adress=SERVO_COMMAND1_ADR;
 		md	.value=MICROCONTROLLER_MODE;
 		hi_int_wait(INT_SINGLE_COMMAND, 10);
@@ -409,7 +409,7 @@ printf("1: %x, %x, %x, %x, %x, %x, %x\n", robot_control[0].adr_offset_plus_0, ro
  void hardware_interface::start_synchro ( int drive_number )  {     
       trace_resolver_zero = true;
   // Wlacz sledzenie zera rezolwera (synchronizacja robota)
-    	md	.card_adress=FIRST_SERVO_PTR + (BYTE)drive_number;
+    	md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)drive_number;
 	md	.register_adress=SERVO_COMMAND1_ADR;
 	md	.value=START_SYNCHRO;
 	hi_int_wait(INT_SINGLE_COMMAND, 2);
@@ -420,7 +420,7 @@ printf("1: %x, %x, %x, %x, %x, %x, %x\n", robot_control[0].adr_offset_plus_0, ro
      trace_resolver_zero = false;
      
      // Zakonczyc sledzenie zera rezolwera i przejdz do trybu normalnej pracy
-   	md	.card_adress=FIRST_SERVO_PTR + (BYTE)drive_number;
+   	md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)drive_number;
 	md	.register_adress=SERVO_COMMAND1_ADR;
 	md	.value=FINISH_SYNCHRO;
 	hi_int_wait(INT_SINGLE_COMMAND, 2);

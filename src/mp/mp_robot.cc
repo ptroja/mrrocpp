@@ -21,7 +21,7 @@ namespace mp {
 namespace common {
 
 // -------------------------------------------------------------------
-robot::robot( ROBOT_ENUM l_robot_name, const char* _section_name, task::base &mp_object_l) :
+robot::robot( lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::base &mp_object_l) :
 	ecp_mp::robot(l_robot_name),
 	mp_object(mp_object_l),
 	sr_ecp_msg(*(mp_object_l.sr_ecp_msg))
@@ -218,7 +218,7 @@ void robot::get_reply(void) {
 	ecp_td.reply_type = ecp_reply_package.reply_package.reply_type;
 
 	// TODO: czy warto wprowadzac klase potomna?
-	if (robot_name == ROBOT_SPEECHRECOGNITION) {
+	if (robot_name == lib::ROBOT_SPEECHRECOGNITION) {
 		strncpy(ecp_td.commandRecognized, ecp_reply_package.commandRecognized, SPEECH_RECOGNITION_TEXT_LEN);
 	}
 

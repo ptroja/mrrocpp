@@ -26,7 +26,7 @@ class Trajectory
 		static const char * toString(double valArr[], int length);
 		static const char * toString(int numberOfPoses);
 		static const char * toString(lib::POSE_SPECIFICATION ps);
-		static const char * returnRobotName(ROBOT_ENUM robot);
+		static const char * returnRobotName(lib::ROBOT_ENUM robot);
 
 		static bool writeTrajectoryToXmlFile(char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp::common::ecp_smooth_taught_in_pose> &poses);
 		

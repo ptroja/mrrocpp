@@ -106,7 +106,7 @@ bool base::operator_reaction (const char* question )
 
 // --------------------------------------------------------------------------
 // by Y - Wybor przez operatora jednej z opcji
-BYTE base::choose_option (const char* question, BYTE nr_of_options_input )
+lib::BYTE base::choose_option (const char* question, lib::BYTE nr_of_options_input )
 {
 	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	lib::UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP

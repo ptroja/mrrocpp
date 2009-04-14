@@ -57,7 +57,7 @@ int_handler (void *arg, int int_id)
 	common::status_of_a_dof robot_status[CONVEYOR_NUM_OF_SERVOS];
 	short int low_word, high_word;
 
-	md.hardware_error = (uint64_t) ALL_RIGHT; // Nie ma bledow sprzetowych
+	md.hardware_error = (uint64_t) lib::ALL_RIGHT; // Nie ma bledow sprzetowych
 
 	if(common::master->test_mode)
 	{
@@ -79,7 +79,7 @@ int_handler (void *arg, int int_id)
 	else if (md.interrupt_mode==INT_SERVOING)
 	{
 		// Odczyty stanu osi, polozenia oraz pradu wirnikow
-		out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)CONVEYOR_SERVO_NR);
+		out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)CONVEYOR_SERVO_NR);
 		md.robot_status[0].adr_offset_plus_0 = robot_status[0].adr_offset_plus_0 = in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
 
 		md.robot_status[0].adr_offset_plus_2 = robot_status[0].adr_offset_plus_2 = in16(SERVO_REPLY_INT_ADR);
@@ -106,16 +106,16 @@ int_handler (void *arg, int int_id)
 		// Obsluga bledow
 
 		if ( robot_status[0].adr_offset_plus_0 & 0x0100 )
-			md.hardware_error |= (uint64_t) (SYNCHRO_ZERO); // Impuls zera rezolwera
+			md.hardware_error |= (uint64_t) (lib::SYNCHRO_ZERO); // Impuls zera rezolwera
 
 		if ( robot_status[0].adr_offset_plus_0 & 0x4000 )
-			md.hardware_error |= (uint64_t) (SYNCHRO_SWITCH_ON); // Zadzialal wylacznik synchronizacji
+			md.hardware_error |= (uint64_t) (lib::SYNCHRO_SWITCH_ON); // Zadzialal wylacznik synchronizacji
 
 
 		if ( robot_status[0].adr_offset_plus_0 & 0x0400 )
 		{
-			md.hardware_error |= (uint64_t) (OVER_CURRENT);
-			//     out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
+			md.hardware_error |= (uint64_t) (lib::OVER_CURRENT);
+			//     out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
 			//     out16(SERVO_COMMAND1_ADR, RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
 		}
 
@@ -129,11 +129,11 @@ int_handler (void *arg, int int_id)
 		}
 
 
-		if ( md.hardware_error & HARDWARE_ERROR_MASK ) // wyciecie SYNCHRO_ZERO i SYNCHRO_SWITCH_ON
+		if ( md.hardware_error & lib::HARDWARE_ERROR_MASK ) // wyciecie SYNCHRO_ZERO i SYNCHRO_SWITCH_ON
 		{
 
 			// Zapis wartosci zadanej wypelnienia PWM
-			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)CONVEYOR_SERVO_NR);
+			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)CONVEYOR_SERVO_NR);
 			out16(SERVO_COMMAND1_ADR, STOP_MOTORS);
 
 			return (&event); // Yoyek & 7
@@ -141,7 +141,7 @@ int_handler (void *arg, int int_id)
 
 
 		// Zapis wartosci zadanej wypelnienia PWM
-		out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)CONVEYOR_SERVO_NR);
+		out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)CONVEYOR_SERVO_NR);
 		if (md.is_robot_blocked)
 			md.robot_control[0].adr_offset_plus_0 &= 0xff00;
 		out16(SERVO_COMMAND1_ADR, md.robot_control[0].adr_offset_plus_0);
@@ -156,7 +156,7 @@ int_handler (void *arg, int int_id)
 		out16(md	.register_adress, md.value);
 		// konieczne dla skasowania przyczyny przerwania
 
-		out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)CONVEYOR_SERVO_NR);
+		out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)CONVEYOR_SERVO_NR);
 		md.robot_status[0].adr_offset_plus_0 = robot_status[0].adr_offset_plus_0 = in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
 		md.robot_status[0].adr_offset_plus_2 = robot_status[0].adr_offset_plus_2 = in16(SERVO_REPLY_INT_ADR);
 
@@ -168,7 +168,7 @@ int_handler (void *arg, int int_id)
 	else if (md.interrupt_mode==INT_CHECK_STATE)
 	{
 		// konieczne dla skasowania przyczyny przerwania
-		out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)CONVEYOR_SERVO_NR);
+		out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)CONVEYOR_SERVO_NR);
 		md.robot_status[0].adr_offset_plus_0 = robot_status[0].adr_offset_plus_0 = in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
 		md.robot_status[0].adr_offset_plus_2 = robot_status[0].adr_offset_plus_2 = in16(SERVO_REPLY_INT_ADR);
 

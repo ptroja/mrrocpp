@@ -16,10 +16,10 @@ namespace ecp {
 namespace conveyor {
 
 ecp_conveyor_robot::ecp_conveyor_robot (lib::configurator &_config, lib::sr_ecp *_sr_ecp):
-        ecp_robot (ROBOT_CONVEYOR, _config, _sr_ecp)
+        ecp_robot (lib::ROBOT_CONVEYOR, _config, _sr_ecp)
 {}
 ecp_conveyor_robot::ecp_conveyor_robot (common::task::base& _ecp_object):
-        ecp_robot (ROBOT_CONVEYOR, _ecp_object)
+        ecp_robot (lib::ROBOT_CONVEYOR, _ecp_object)
 {}
 
 

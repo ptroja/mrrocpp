@@ -45,14 +45,14 @@ model_jacobian_transpose_with_wrist::model_jacobian_transpose_with_wrist (void)
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
  ------------------------------------------------------------------------ */
 
-void model_jacobian_transpose_with_wrist::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
+void model_jacobian_transpose_with_wrist::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame)
 {
   double K=0.1; 		//Zadane wzmocnienie - od (0) do (1), w modelu transponowanym zalecane ponizej jedynki
   double E=0.00001;		//Max, wartosc uchybu dla kt�rego rozwiazanie zaakceptowane
 
   double Max;	//pomocnbicza zmienna - max element wektora
 
-  frame_tab local_current_end_effector_frame;	//Ramka odpowiadajaca aktualnej pozycji
+  lib::frame_tab local_current_end_effector_frame;	//Ramka odpowiadajaca aktualnej pozycji
   lib::Ft_v_vector desired_distance_new;				//odleglosc do pokonania
   lib::Ft_v_vector delta_q;									//przyrost zmieenych przegubowych na jedna iteracje
   lib::Ft_v_vector current_joints;							//wartosci aktualnych zmiennych przegubowych reprezentowane jako wektor

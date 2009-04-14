@@ -28,7 +28,7 @@ namespace ecp {
 namespace common {
 
 // konstruktor wywolywany z UI
-ecp_robot::ecp_robot(ROBOT_ENUM _robot_name, lib::configurator &_config, lib::sr_ecp *_sr_ecp_msg) :
+ecp_robot::ecp_robot(lib::ROBOT_ENUM _robot_name, lib::configurator &_config, lib::sr_ecp *_sr_ecp_msg) :
 	robot(_robot_name), spawn_and_kill(true)
 {
 	sr_ecp_msg = _sr_ecp_msg;
@@ -37,7 +37,7 @@ ecp_robot::ecp_robot(ROBOT_ENUM _robot_name, lib::configurator &_config, lib::sr
 }
 
 // konstruktor wywolywany z ECP
-ecp_robot::ecp_robot(ROBOT_ENUM _robot_name, common::task::base& _ecp_object) :
+ecp_robot::ecp_robot(lib::ROBOT_ENUM _robot_name, common::task::base& _ecp_object) :
 	robot(_robot_name), spawn_and_kill(false)
 {
 	sr_ecp_msg = _ecp_object.sr_ecp_msg;
@@ -129,22 +129,22 @@ void ecp_robot::connect_to_edp(lib::configurator &config)
 
     // name of the edp_section depends on _robot_name
 	switch (robot_name) {
-		case ROBOT_IRP6_ON_TRACK:
+		case lib::ROBOT_IRP6_ON_TRACK:
 			edp_section = "[edp_irp6_on_track]";
 			number_of_servos = IRP6_ON_TRACK_NUM_OF_SERVOS;
 			break;
-		case ROBOT_IRP6_POSTUMENT:
+		case lib::ROBOT_IRP6_POSTUMENT:
 			edp_section = "[edp_irp6_postument]";
 			number_of_servos = IRP6_POSTUMENT_NUM_OF_SERVOS;
 			break;
-		case ROBOT_CONVEYOR:
+		case lib::ROBOT_CONVEYOR:
 			edp_section = "[edp_conveyor]";
 			number_of_servos = CONVEYOR_NUM_OF_SERVOS;
 			break;
-		case ROBOT_SPEAKER:
+		case lib::ROBOT_SPEAKER:
 			edp_section = "[edp_speaker]";
 			break;
-		case ROBOT_IRP6_MECHATRONIKA:
+		case lib::ROBOT_IRP6_MECHATRONIKA:
 			edp_section = "[edp_irp6_mechatronika]";
 			number_of_servos = IRP6_MECHATRONIKA_NUM_OF_SERVOS;
 			break;
@@ -242,7 +242,7 @@ void ecp_robot::send()
 		case lib::SYNCHRO:
 		case lib::QUERY:
 		case lib::INVALID:
-			// command_size = ((BYTE*) (&instruction.address_byte)) - ((BYTE*) (&instruction.instruction_type));
+			// command_size = ((lib::BYTE*) (&instruction.address_byte)) - ((lib::BYTE*) (&instruction.instruction_type));
 			// by Y bylo command_size zamiast sizeof(in..)
 			// by Y&W doszlo  dodatkowe pole w instruction zwiazane z obsluga resource managera
 

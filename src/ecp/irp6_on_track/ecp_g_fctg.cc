@@ -35,7 +35,7 @@ namespace irp6ot {
 namespace generator {
 
 // Mutex do wykonywania odczytow z czujnika.
-//pthread_mutex_t FORCE_SENSOR_READINGS_MUTEX = PTHREAD_MUTEX_INITIALIZER;
+//pthread_mutex_t lib::FORCE_SENSOR_READINGS_MUTEX = PTHREAD_MUTEX_INITIALIZER;
 
 /*********************** RETURN SENSOR READING ***************************/
 void force_controlled_trajectory::return_sensor_reading(ecp_mp::sensor::force& the_sensor, double sensor_reading[6]){

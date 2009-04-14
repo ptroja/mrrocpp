@@ -8,13 +8,13 @@
 #include "edp_irp6o_uimodule.h"
 
 
-BYTE servo_alg_no[8];
-BYTE servo_par_no[8];
+lib::BYTE servo_alg_no[8];
+lib::BYTE servo_par_no[8];
 	
 gint servo_alg_no_tmp [8];
-BYTE servo_alg_no_output[8];
+lib::BYTE servo_alg_no_output[8];
 gint servo_par_no_tmp [8];
-BYTE servo_par_no_output[8];
+lib::BYTE servo_par_no_output[8];
 
 char buf[32];
 gchar buffer[500];
@@ -292,8 +292,8 @@ extern "C"
 
 		for(int i=0; i<8; i++)
 		{
-			servo_alg_no_output[i] = BYTE(servo_alg_no_tmp[i]);
-			servo_par_no_output[i] = BYTE(servo_par_no_tmp[i]);
+			servo_alg_no_output[i] = lib::BYTE(servo_alg_no_tmp[i]);
+			servo_par_no_output[i] = lib::BYTE(servo_par_no_tmp[i]);
 		}
 
 		// zlecenie wykonania ruchu

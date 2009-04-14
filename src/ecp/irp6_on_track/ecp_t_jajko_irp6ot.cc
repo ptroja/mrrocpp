@@ -60,7 +60,7 @@ void jajko::main_task_algorithm(void)
 {
 	for(;;)
 	{
-		BYTE tryb;
+		lib::BYTE tryb;
 
 		// Wybor trybu zadania - rozbijanie jajka badz nie
 		tryb = choose_option ("1 - Egg destroying, 2 - Egg is safe", 2);

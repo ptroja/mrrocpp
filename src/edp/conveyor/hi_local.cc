@@ -54,7 +54,7 @@ hardware_interface::hardware_interface ( effector &_master ) : common::hardware_
 {
 	int irq_no;     // Numer przerwania sprzetowego 
 	int i;            // Zmienna pomocnicze
-	WORD int_freq; // Ustawienie czestotliwosci przerwan
+	lib::WORD int_freq; // Ustawienie czestotliwosci przerwan
 
 	// Sledzenie zera rezolwera - wylaczane 
 	trace_resolver_zero = false;
@@ -124,10 +124,10 @@ hardware_interface::hardware_interface ( effector &_master ) : common::hardware_
 	};
 
 	if(master.test_mode==0) {
-		/*out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i); 
+		/*out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i); 
 		out16(SERVO_COMMAND1_ADR,RESET_MANUAL_MODE); // Zerowanie ruchow recznych
 		out16(SERVO_COMMAND1_ADR, PROHIBIT_MANUAL_MODE); // Zabrania ruchow za pomoca przyciskow w szafie*/
-		md	.card_adress=FIRST_SERVO_PTR + (BYTE)CONVEYOR_SERVO_NR;
+		md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)CONVEYOR_SERVO_NR;
 		md	.register_adress=SERVO_COMMAND1_ADR;
 		md	.value=RESET_MANUAL_MODE;
 		hi_int_wait(INT_SINGLE_COMMAND, 2);
@@ -158,7 +158,7 @@ hardware_interface::~hardware_interface ( void )    // destruktor
 		// Zezwolenie na prace reczna 
 
 
-		md	.card_adress=FIRST_SERVO_PTR + (BYTE)CONVEYOR_SERVO_NR;
+		md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)CONVEYOR_SERVO_NR;
 		md	.register_adress=SERVO_COMMAND1_ADR;
 		md	.value=ALLOW_MANUAL_MODE;
 		hi_int_wait(INT_SINGLE_COMMAND, 2);
@@ -202,7 +202,7 @@ uint64_t hardware_interface::read_write_hardware ( void )
 	}
 
 	if (!trace_resolver_zero) 
-		md.hardware_error &= MASK_RESOLVER_ZERO;
+		md.hardware_error &= lib::MASK_RESOLVER_ZERO;
 
 	return md.hardware_error;
 
@@ -225,7 +225,7 @@ void hardware_interface::reset_counters ( void )
 
 	}; // end: for   
 
-	md	.card_adress=FIRST_SERVO_PTR + (BYTE)CONVEYOR_SERVO_NR;
+	md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)CONVEYOR_SERVO_NR;
 	md	.register_adress=SERVO_COMMAND1_ADR;
 	md	.value=MICROCONTROLLER_MODE;
 	hi_int_wait(INT_SINGLE_COMMAND, 2);
@@ -264,7 +264,7 @@ void hardware_interface::reset_counters ( void )
 bool hardware_interface::is_hardware_error ( void) 
 { 
 	bool h_error;
-	WORD MASK = 0x7E00;
+	lib::WORD MASK = 0x7E00;
 
 	h_error = false;
 

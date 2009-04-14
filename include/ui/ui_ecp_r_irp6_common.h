@@ -37,7 +37,7 @@ class ui_common_robot {
 	 ecp::common::ecp_robot *ecp;
 
 // ecp_buffer ui_edp_package; // by Y
-  ui_common_robot (lib::configurator &_config, lib::sr_ecp* _sr_ecp_msg, ROBOT_ENUM _robot_name); // Konstruktor
+  ui_common_robot (lib::configurator &_config, lib::sr_ecp* _sr_ecp_msg, lib::ROBOT_ENUM _robot_name); // Konstruktor
 
   virtual ~ui_common_robot();
 
@@ -62,9 +62,9 @@ class ui_common_robot {
   bool move_xyz_angle_axis ( double final_position[7] );
   bool set_tool_xyz_angle_axis ( double tool_vector[6] );
   bool set_tool_xyz_euler_zyz ( double tool_vector[6] );
-  bool set_kinematic (BYTE kinematic_model_no);
-  bool set_servo_algorithm (BYTE algorithm_no[IRP6_ON_TRACK_NUM_OF_SERVOS],
-  BYTE parameters_no[IRP6_ON_TRACK_NUM_OF_SERVOS] );
+  bool set_kinematic (lib::BYTE kinematic_model_no);
+  bool set_servo_algorithm (lib::BYTE algorithm_no[IRP6_ON_TRACK_NUM_OF_SERVOS],
+  lib::BYTE parameters_no[IRP6_ON_TRACK_NUM_OF_SERVOS] );
 
   // Odczyt polozenia
   bool read_motors ( double current_position[IRP6_ON_TRACK_NUM_OF_SERVOS] );
@@ -73,9 +73,9 @@ class ui_common_robot {
   bool read_xyz_angle_axis ( double current_position[7] );
   bool read_tool_xyz_angle_axis ( double tool_vector[6] );
   bool read_tool_xyz_euler_zyz ( double tool_vector[6] );
-  bool get_kinematic (BYTE* kinematic_model_no);
-  bool get_servo_algorithm ( BYTE algorithm_no[IRP6_ON_TRACK_NUM_OF_SERVOS],
-  BYTE parameters_no[IRP6_ON_TRACK_NUM_OF_SERVOS]);
+  bool get_kinematic (lib::BYTE* kinematic_model_no);
+  bool get_servo_algorithm ( lib::BYTE algorithm_no[IRP6_ON_TRACK_NUM_OF_SERVOS],
+  lib::BYTE parameters_no[IRP6_ON_TRACK_NUM_OF_SERVOS]);
 
 };
 #endif

@@ -23,12 +23,12 @@ namespace speaker {
 // ####################################################################################################
 
 ecp_speaker_robot::ecp_speaker_robot(lib::configurator &_config, lib::sr_ecp *_sr_ecp) :
-	ecp_robot(ROBOT_SPEAKER, _config, _sr_ecp)
+	ecp_robot(lib::ROBOT_SPEAKER, _config, _sr_ecp)
 {
 }
 
 ecp_speaker_robot::ecp_speaker_robot(common::task::base& _ecp_object) :
-	ecp_robot(ROBOT_SPEAKER, _ecp_object)
+	ecp_robot(lib::ROBOT_SPEAKER, _ecp_object)
 {
 }
 

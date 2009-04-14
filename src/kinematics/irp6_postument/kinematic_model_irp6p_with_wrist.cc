@@ -77,7 +77,7 @@ Ustawienie standardowego narzedzia [m].
 /* -----------------------------------------------------------------------
 Ustawienie pozycji ukladu bazowego w globalnym ukladzie odniesienia [m].
  ------------------------------------------------------------------------- */
- frame_tab tmp_global_base_m;
+ lib::frame_tab tmp_global_base_m;
  // Macierz rotacji.
  tmp_global_base_m[0][0] =  0.999382684525334;
  tmp_global_base_m[1][0] = -0.032112349151151;
@@ -500,7 +500,7 @@ void model_with_wrist::i2mp_transform(double* local_desired_motor_pos_new, doubl
   * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
-void model_with_wrist::direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame) {
+void model_with_wrist::direct_kinematics_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame) {
 
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
   check_joints (local_current_joints);
@@ -547,7 +547,7 @@ void model_with_wrist::direct_kinematics_transform(const double* local_current_j
   Wyjscie:
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
  ------------------------------------------------------------------------ */
-void model_with_wrist::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
+void model_with_wrist::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame)
 {
 
   // Stale

@@ -60,15 +60,15 @@ teaching_window_send_move(double *v)
 
 	switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
 	{
-		case ROBOT_IRP6_ON_TRACK:
+		case lib::ROBOT_IRP6_ON_TRACK:
 			for (int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
 				ui_ecp_obj->ui_rep.coordinates[i] = irp6ot_current_pos[i];
 		break;
-		case ROBOT_IRP6_POSTUMENT:
+		case lib::ROBOT_IRP6_POSTUMENT:
 	 		for (int i = 0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++)
 				ui_ecp_obj->ui_rep.coordinates[i] = irp6p_current_pos[i];
 		break;
-		case ROBOT_IRP6_MECHATRONIKA:
+		case lib::ROBOT_IRP6_MECHATRONIKA:
  			for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
 				ui_ecp_obj->ui_rep.coordinates[i] = irp6m_current_pos[i];
 		break;

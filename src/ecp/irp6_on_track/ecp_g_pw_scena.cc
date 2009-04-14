@@ -151,7 +151,7 @@ bool pw_scena::next_step() {
 	the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
 	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 	the_robot->EDP_data.next_interpolation_type = lib::MIM;
-	the_robot->EDP_data.motion_steps = (WORD) ceil(time / STEP);
+	the_robot->EDP_data.motion_steps = (lib::WORD) ceil(time / STEP);
 	the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
 
 	memcpy(the_robot->EDP_data.next_XYZ_AA_arm_coordinates, next_position, 6

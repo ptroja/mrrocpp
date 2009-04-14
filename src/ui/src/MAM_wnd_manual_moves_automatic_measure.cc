@@ -49,7 +49,7 @@ extern lib::configurator* config;
 // PID ECP.
 static int ECPfd;
 // Komenda wysylana z okna FileDialog po wcisnieciu accept.
-extern BYTE FDCommand;
+extern lib::BYTE FDCommand;
 
 int MAM_btn_start_measures( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 	{

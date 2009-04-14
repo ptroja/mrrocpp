@@ -57,7 +57,7 @@ namespace edp {
 namespace speaker {
 
 effector::effector (lib::configurator &_config)
-: common::effector(_config, ROBOT_SPEAKER)
+: common::effector(_config, lib::ROBOT_SPEAKER)
 {
 
 	mt_tt_obj = new common::master_trans_t_buffer();

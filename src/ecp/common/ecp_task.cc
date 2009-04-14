@@ -482,7 +482,7 @@ mp::common::Trajectory * base::createTrajectory(xmlNode *actNode, xmlChar *state
 	return actTrajectory;
 }
 
-std::map<char*, mp::common::Trajectory, base::str_cmp>* base::loadTrajectories(char * fileName, ROBOT_ENUM propRobot)
+std::map<char*, mp::common::Trajectory, base::str_cmp>* base::loadTrajectories(char * fileName, lib::ROBOT_ENUM propRobot)
 {
 	int size;
 	char * filePath;

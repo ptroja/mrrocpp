@@ -3151,13 +3151,13 @@ while(1) {
 		case lib::C_XYZ_ANGLE_AXIS:
 			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
 			{
-				case ROBOT_IRP6_ON_TRACK:
+				case lib::ROBOT_IRP6_ON_TRACK:
 					replySend(new Message('7','I','A',0,NULL,msg)); 
 				break;
-				case ROBOT_IRP6_POSTUMENT:
+				case lib::ROBOT_IRP6_POSTUMENT:
 					replySend(new Message('7','I','B',0,NULL,msg)); 
 				break;
-				case ROBOT_IRP6_MECHATRONIKA:
+				case lib::ROBOT_IRP6_MECHATRONIKA:
 					replySend(new Message('7','I','E',0,NULL,msg)); 
 				break;
 				default:
@@ -3167,13 +3167,13 @@ while(1) {
 		case lib::C_XYZ_EULER_ZYZ:
 			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
 			{
-				case ROBOT_IRP6_ON_TRACK:
+				case lib::ROBOT_IRP6_ON_TRACK:
 					replySend(new Message('7','J','A',0,NULL,msg)); 
 				break;
-				case ROBOT_IRP6_POSTUMENT:
+				case lib::ROBOT_IRP6_POSTUMENT:
 					replySend(new Message('7','J','B',0,NULL,msg)); 
 				break;
-				case ROBOT_IRP6_MECHATRONIKA:
+				case lib::ROBOT_IRP6_MECHATRONIKA:
 					replySend(new Message('7','J','E',0,NULL,msg)); 
 				break;
 				default:
@@ -3183,13 +3183,13 @@ while(1) {
 		case lib::C_JOINT:
 			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
 			{
-				case ROBOT_IRP6_ON_TRACK:
+				case lib::ROBOT_IRP6_ON_TRACK:
 					replySend(new Message('7','K','A',0,NULL,msg)); 
 				break;
-				case ROBOT_IRP6_POSTUMENT:
+				case lib::ROBOT_IRP6_POSTUMENT:
 					replySend(new Message('7','K','B',0,NULL,msg)); 
 				break;
-				case ROBOT_IRP6_MECHATRONIKA:
+				case lib::ROBOT_IRP6_MECHATRONIKA:
 					replySend(new Message('7','K','E',0,NULL,msg)); 
 				break;
 				default:
@@ -3199,13 +3199,13 @@ while(1) {
 		case lib::C_MOTOR:
 			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
 			{
-				case ROBOT_IRP6_ON_TRACK:
+				case lib::ROBOT_IRP6_ON_TRACK:
 					replySend(new Message('7','L','A',0,NULL,msg)); 
 				break;
-				case ROBOT_IRP6_POSTUMENT:
+				case lib::ROBOT_IRP6_POSTUMENT:
 					replySend(new Message('7','L','B',0,NULL,msg)); 
 				break;
-				case ROBOT_IRP6_MECHATRONIKA:
+				case lib::ROBOT_IRP6_MECHATRONIKA:
 					replySend(new Message('7','L','E',0,NULL,msg)); 
 				break;
 				default:

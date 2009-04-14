@@ -28,7 +28,7 @@ namespace irp6ot {
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	irp6s_postument_track_effector(_config, ROBOT_IRP6_ON_TRACK)
+	irp6s_postument_track_effector(_config, lib::ROBOT_IRP6_ON_TRACK)
 {
 }
 

@@ -131,15 +131,15 @@ bool y_simple::next_step()
 	//	else the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate-0.0001;
 
 	/*	
-	 frame_tab beggining_frame;
+	 lib::frame_tab beggining_frame;
 	 lib::copy_frame(beggining_frame,the_robot->EDP_data.current_arm_frame);
 	 lib::Homog_matrix beg_frame = lib::Homog_matrix(beggining_frame);
 	 cout << endl << "ecp: beginning_frame" << endl << endl << beg_frame;
-	 frame_tab present_frame;
+	 lib::frame_tab present_frame;
 	 lib::copy_frame(present_frame,the_robot->EDP_data.current_arm_frame);
 	 lib::Homog_matrix pres_frame = lib::Homog_matrix(present_frame);
 	 cout << endl << "ecp: present_frame" << endl << endl << pres_frame;
-	 frame_tab predicted_frame;
+	 lib::frame_tab predicted_frame;
 	 lib::copy_frame(predicted_frame,the_robot->EDP_data.current_arm_frame);
 	 lib::Homog_matrix pred_frame = lib::Homog_matrix(predicted_frame);
 	 cout << endl << "ecp: predicted_frame" << endl << endl<< pred_frame;

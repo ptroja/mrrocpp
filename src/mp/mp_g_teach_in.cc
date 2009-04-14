@@ -506,7 +506,7 @@ bool teach_in::first_step () {
 //   printf("w teach_in::first_step 2\n");
 	initiate_pose_list();
 
-	for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
+	for (map <lib::ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
 	        robot_m_iterator != robot_m.end(); robot_m_iterator++) {
 		robot_m_iterator->second->ecp_td.mp_command = lib::NEXT_POSE;
 		robot_m_iterator->second->ecp_td.instruction_type = lib::GET;
@@ -552,7 +552,7 @@ bool teach_in::next_step () {
 
 	get_pose (tip);
 
-	map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
+	map <lib::ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
 
 	// Przepisanie pozycji z listy
 	switch ( tip.arm_type ) {
@@ -562,7 +562,7 @@ bool teach_in::next_step () {
 			robot_m_iterator->second->ecp_td.set_arm_type = lib::MOTOR;
 			robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
 			robot_m_iterator->second->ecp_td.next_interpolation_type = lib::MIM;
-			robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
+			robot_m_iterator->second->ecp_td.motion_steps = (lib::WORD) ceil(tip.motion_time / STEP);
 			robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 			memcpy (robot_m_iterator->second->ecp_td.next_motor_arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
 			break;
@@ -572,7 +572,7 @@ bool teach_in::next_step () {
 			robot_m_iterator->second->ecp_td.set_arm_type = lib::JOINT;
 			robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
 			robot_m_iterator->second->ecp_td.next_interpolation_type = lib::MIM;
-			robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
+			robot_m_iterator->second->ecp_td.motion_steps = (lib::WORD) ceil(tip.motion_time / STEP);
 			robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 			memcpy (robot_m_iterator->second->ecp_td.next_joint_arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
 			break;
@@ -582,7 +582,7 @@ bool teach_in::next_step () {
 			robot_m_iterator->second->ecp_td.set_arm_type = lib::XYZ_EULER_ZYZ;
 			robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
 			robot_m_iterator->second->ecp_td.next_interpolation_type = lib::MIM;
-			robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
+			robot_m_iterator->second->ecp_td.motion_steps = (lib::WORD) ceil(tip.motion_time / STEP);
 			robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 			memcpy (robot_m_iterator->second->ecp_td.next_XYZ_ZYZ_arm_coordinates, tip.coordinates, 6*sizeof (double));
 			robot_m_iterator->second->ecp_td.next_gripper_coordinate = tip.coordinates[6];
@@ -593,7 +593,7 @@ bool teach_in::next_step () {
 			robot_m_iterator->second->ecp_td.set_arm_type = lib::XYZ_ANGLE_AXIS;
 			robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
 			robot_m_iterator->second->ecp_td.next_interpolation_type = lib::MIM;
-			robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
+			robot_m_iterator->second->ecp_td.motion_steps = (lib::WORD) ceil(tip.motion_time / STEP);
 			robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 			memcpy (robot_m_iterator->second->ecp_td.next_XYZ_AA_arm_coordinates, tip.coordinates, 6*sizeof (double));
 			robot_m_iterator->second->ecp_td.next_gripper_coordinate = tip.coordinates[6];
@@ -610,7 +610,7 @@ bool teach_in::next_step () {
 				robot_m_iterator->second->ecp_td.set_arm_type = lib::MOTOR;
 				robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
 				robot_m_iterator->second->ecp_td.next_interpolation_type = lib::MIM;
-				robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
+				robot_m_iterator->second->ecp_td.motion_steps = (lib::WORD) ceil(tip.motion_time / STEP);
 				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 				memcpy (robot_m_iterator->second->ecp_td.next_motor_arm_coordinates, tip.irp6p_coordinates, MAX_SERVOS_NR*sizeof (double));
 				break;
@@ -620,7 +620,7 @@ bool teach_in::next_step () {
 				robot_m_iterator->second->ecp_td.set_arm_type = lib::JOINT;
 				robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
 				robot_m_iterator->second->ecp_td.next_interpolation_type = lib::MIM;
-				robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
+				robot_m_iterator->second->ecp_td.motion_steps = (lib::WORD) ceil(tip.motion_time / STEP);
 				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 				memcpy (robot_m_iterator->second->ecp_td.next_joint_arm_coordinates, tip.irp6p_coordinates, MAX_SERVOS_NR*sizeof (double));
 				break;
@@ -630,7 +630,7 @@ bool teach_in::next_step () {
 				robot_m_iterator->second->ecp_td.set_arm_type = lib::XYZ_EULER_ZYZ;
 				robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
 				robot_m_iterator->second->ecp_td.next_interpolation_type = lib::MIM;
-				robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
+				robot_m_iterator->second->ecp_td.motion_steps = (lib::WORD) ceil(tip.motion_time / STEP);
 				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 				memcpy (robot_m_iterator->second->ecp_td.next_XYZ_ZYZ_arm_coordinates, tip.irp6p_coordinates, 6*sizeof (double));
 				robot_m_iterator->second->ecp_td.next_gripper_coordinate = tip.irp6p_coordinates[6];
@@ -641,7 +641,7 @@ bool teach_in::next_step () {
 				robot_m_iterator->second->ecp_td.set_arm_type = lib::XYZ_ANGLE_AXIS;
 				robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
 				robot_m_iterator->second->ecp_td.next_interpolation_type = lib::MIM;
-				robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
+				robot_m_iterator->second->ecp_td.motion_steps = (lib::WORD) ceil(tip.motion_time / STEP);
 				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 				memcpy (robot_m_iterator->second->ecp_td.next_XYZ_AA_arm_coordinates, tip.irp6p_coordinates, 6*sizeof (double));
 				robot_m_iterator->second->ecp_td.next_gripper_coordinate = tip.irp6p_coordinates[6];

@@ -57,7 +57,7 @@ void ForceTrans::defineTool(const lib::Homog_matrix & init_frame, const double w
 //	gravity_force_in_base = lib::K_vector (0.0, 0.0, tool_weight);
 	gravity_force_torque_in_base = lib::Ft_v_vector (0.0, 0.0, -tool_weight, 0.0, 0.0, 0.0);
 
-	//	frame_tab sens_rot = {{0,-1,0},{1,0,0},{0,0,1},{0,0,0}};
+	//	lib::frame_tab sens_rot = {{0,-1,0},{1,0,0},{0,0,1},{0,0,0}};
 	//	lib::Homog_matrix sensor_rotation = lib::Homog_matrix(sens_rot);
 	// orientacja koncowki manipulatora bez narzedzia
 	lib::Homog_matrix current_orientation (init_frame.return_with_with_removed_translation());
@@ -111,7 +111,7 @@ double* ForceTrans::getForce(const double inputForceTorque[6], const lib::Homog_
 		// sprowadzenie sil i momentow sil do ukladu umieszczonego w srodku czujnika ale z orientacja koncowki
 		lib::Ft_v_vector input_force_torque (ft_tr_sensor_in_wrist * lib::Ft_v_vector ((double*) inputForceTorque));
 		/*
-		if ((debugi%10==0)&&(force_sensor_name==FORCE_SENSOR_ATI3084)&&(last_debugi!=debugi))
+		if ((debugi%10==0)&&(force_sensor_name==lib::FORCE_SENSOR_ATI3084)&&(last_debugi!=debugi))
 		{
 			printf("ft: ");
 			input_force_torque.wypisz_wartosc_na_konsole();
@@ -129,7 +129,7 @@ double* ForceTrans::getForce(const double inputForceTorque[6], const lib::Homog_
 
 //		if ((deblicz%100) == 0)cout << "af" << input_force << endl;
 		//end by Y
-//		frame_tab rot = {{0,-1,0},{1,0,0},{0,0,1},{0,0,0}};
+//		lib::frame_tab rot = {{0,-1,0},{1,0,0},{0,0,1},{0,0,0}};
 //		lib::Homog_matrix sensor_rotation(rot);
 		// orientacja koncowki manipulatora bez narzedzia
 		lib::Homog_matrix current_orientation (orientation.return_with_with_removed_translation());
@@ -165,7 +165,7 @@ double* ForceTrans::getForce(const double inputForceTorque[6], const lib::Homog_
 //		lib::Ft_v_vector tmp_force_torque = lib::Ft_v_tr (current_orientation*sensor_frame_translation, FT_VARIANT) * output_force_torque;
 
 /*
-		if ((debugi%10==0)&&(force_sensor_name==FORCE_SENSOR_ATI3084)&&(last_debugi!=debugi))
+		if ((debugi%10==0)&&(force_sensor_name==lib::FORCE_SENSOR_ATI3084)&&(last_debugi!=debugi))
 		{
 			printf("ft2: ");
 			output_force_torque.wypisz_wartosc_na_konsole();

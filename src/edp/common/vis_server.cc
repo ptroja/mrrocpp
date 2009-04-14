@@ -86,11 +86,11 @@ void * irp6s_and_conv_effector::visualisation_thread(void * arg)
 			// korekta aby polozenia byly wzgledem poprzedniego czlonu
 			switch (robot_name)
 			{
-			case ROBOT_IRP6_ON_TRACK:
+			case lib::ROBOT_IRP6_ON_TRACK:
 				tmp[3] -= tmp[2] +M_PI_2;
 				tmp[4] -= tmp[3] + tmp[2] +M_PI_2;
 				break;
-			case ROBOT_IRP6_POSTUMENT:
+			case lib::ROBOT_IRP6_POSTUMENT:
 				tmp[2] -= tmp[1] +M_PI_2;
 				tmp[3] -= tmp[2] + tmp[1] +M_PI_2;
 				break;

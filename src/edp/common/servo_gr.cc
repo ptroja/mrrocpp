@@ -24,7 +24,7 @@ namespace edp {
 namespace common {
 
 
-BYTE servo_buffer::Move_a_step (void)
+lib::BYTE servo_buffer::Move_a_step (void)
 {
     return 0;
 }
@@ -129,7 +129,7 @@ bool servo_buffer::get_command (void)
 
 
 /*-----------------------------------------------------------------------*/
-BYTE servo_buffer::Move_1_step (void)
+lib::BYTE servo_buffer::Move_1_step (void)
 {
     // wykonac ruch o krok
     // Odebranie informacji o uprzednio zrealizowanym polozeniu oraz ewentualnej awarii
@@ -172,7 +172,7 @@ BYTE servo_buffer::Move_1_step (void)
 
 
 /*-----------------------------------------------------------------------*/
-BYTE servo_buffer::convert_error (void)
+lib::BYTE servo_buffer::convert_error (void)
 {
     // zwraca NO_ERROR_DETECTED, gdy OK lub wykryto SYNCHRO_SWITCH oraz SYNCHRO_ZERO,
     // w ktorejs osi, a w pozostalych przypadkach dokonuje konwersji numeru bledu
@@ -257,7 +257,7 @@ void servo_buffer::Move (void)
 
 
     // realizacja makrokroku przez wszystkie napedy;  i - licznik krokow ruchu
-    for (WORD j = 0; j < command.parameters.move.number_of_steps; j++)
+    for (lib::WORD j = 0; j < command.parameters.move.number_of_steps; j++)
     {
         // by Y
         // XXX by ptroja
@@ -422,7 +422,7 @@ void servo_buffer::Change_algorithm (void)
 
 
 /*-----------------------------------------------------------------------*/
-regulator::regulator(BYTE reg_no, BYTE reg_par_no, common::irp6s_and_conv_effector &_master)
+regulator::regulator(lib::BYTE reg_no, lib::BYTE reg_par_no, common::irp6s_and_conv_effector &_master)
         : master(_master)
 {
     // Konstruktor abstrakcyjnego regulatora
@@ -459,7 +459,7 @@ regulator::regulator(BYTE reg_no, BYTE reg_par_no, common::irp6s_and_conv_effect
     meassured_current = 0;                 // prad zmierzony
     PWM_value = 0;               // zadane wypelnienie PWM
 }
-;  // end: regulator::regulator(BYTE reg_no, BYTE reg_par_no)
+;  // end: regulator::regulator(lib::BYTE reg_no, lib::BYTE reg_par_no)
 /*-----------------------------------------------------------------------*/
 
 
@@ -687,28 +687,28 @@ int regulator::get_actual_inc ( void )
 // double get_desired_inc ( int axe_nr );
 
 
-void regulator::insert_algorithm_no ( BYTE new_number )
+void regulator::insert_algorithm_no ( lib::BYTE new_number )
 {
     // wpisanie nowego numeru algorytmu regulacji
     algorithm_no = new_number;
 }
 ; // end: insert_algorithm_no ( )
 
-BYTE regulator::get_algorithm_no ( void )
+lib::BYTE regulator::get_algorithm_no ( void )
 {
     // odczytanie aktualnie uzywanego numeru algorytmu regulacji
     return current_algorithm_no;
 }
 ; // end: get_algorithm_no ( )
 
-void regulator::insert_algorithm_parameters_no ( BYTE new_number )
+void regulator::insert_algorithm_parameters_no ( lib::BYTE new_number )
 {
     // wpisanie nowego numeru zestawu parametrow algorytmu regulacji
     algorithm_parameters_no = new_number;
 }
 ; // end: insert_algorithm_parameters_no ( )
 
-BYTE regulator::get_algorithm_parameters_no ( void )
+lib::BYTE regulator::get_algorithm_parameters_no ( void )
 {
     // wpisanie nowego numeru zestawu parametrow algorytmu regulacji
     return current_algorithm_parameters_no;
@@ -737,7 +737,7 @@ void regulator::clear_regulator ()
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator::NL_regulator (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master)
+NL_regulator::NL_regulator (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master)
         : regulator(reg_no, reg_par_no, _master)
 {
     // Konstruktor regulatora konkretnego

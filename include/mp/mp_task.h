@@ -32,7 +32,7 @@ class base: public ecp_mp::task::base
 #endif
 
 		/// mapa wszystkich robotow
-		static std::map <ROBOT_ENUM, common::robot*> robot_m;
+		static std::map <lib::ROBOT_ENUM, common::robot*> robot_m;
 
 		/// KONSTRUKTORY
 		base(lib::configurator &_config);
@@ -53,18 +53,18 @@ class base: public ecp_mp::task::base
 		    NEW_UI_OR_ECP_PULSE
 		};
 
-		void set_next_playerpos_goal (ROBOT_ENUM robot_l, const lib::playerpos_goal_t &goal);
+		void set_next_playerpos_goal (lib::ROBOT_ENUM robot_l, const lib::playerpos_goal_t &goal);
 
 		void set_next_ecps_state (int l_state, int l_variant, const char* l_string, int number_of_robots, ... );
 
 		void send_end_motion_to_ecps (int number_of_robots, ... );
-		void send_end_motion_to_ecps (int number_of_robots, ROBOT_ENUM *properRobotsSet);
+		void send_end_motion_to_ecps (int number_of_robots, lib::ROBOT_ENUM *properRobotsSet);
 
 		void run_extended_empty_gen (bool activate_trigger, int number_of_robots, ... );
 		void run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 		(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ... );
 		void run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-		(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ROBOT_ENUM *robotsToMove, ROBOT_ENUM *robotsWaitingForTaskTermination);
+		(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::ROBOT_ENUM *robotsToMove, lib::ROBOT_ENUM *robotsWaitingForTaskTermination);
 
 		void wait_ms (int _ms_delay); // zamiast delay
 
@@ -79,22 +79,22 @@ class base: public ecp_mp::task::base
 		void wait_for_stop ( common::WAIT_FOR_STOP_ENUM tryb);// by Y&W dodany tryb
 
 		// Wystartowanie wszystkich ECP
-		void start_all (std::map <ROBOT_ENUM, common::robot*>& _robot_m);
+		void start_all (std::map <lib::ROBOT_ENUM, common::robot*>& _robot_m);
 
 		// Zatrzymanie wszystkich ECP
-		void terminate_all (std::map <ROBOT_ENUM, common::robot*>& _robot_m );
+		void terminate_all (std::map <lib::ROBOT_ENUM, common::robot*>& _robot_m );
 
 		// Wyslanie rozkazu do wszystkich ECP
-		void execute_all (std::map <ROBOT_ENUM, common::robot*>& _robot_m);
+		void execute_all (std::map <lib::ROBOT_ENUM, common::robot*>& _robot_m);
 
 		// funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
-		void mp_receive_ui_or_ecp_pulse (std::map <ROBOT_ENUM, common::robot*>& _robot_m, generator::base& the_generator );
+		void mp_receive_ui_or_ecp_pulse (std::map <lib::ROBOT_ENUM, common::robot*>& _robot_m, generator::base& the_generator );
 
 		// obsluga sygnalu
 		virtual void catch_signal_in_mp_task(int sig);
 
 		/// Zatrzymanie wszystkich ECP
-		static void kill_all_ECP (std::map <ROBOT_ENUM, common::robot*>& _robot_m);
+		static void kill_all_ECP (std::map <lib::ROBOT_ENUM, common::robot*>& _robot_m);
 
 		/// utworzenie robotow
 		virtual void create_robots(void);

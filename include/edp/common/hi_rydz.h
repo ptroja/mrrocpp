@@ -17,18 +17,18 @@ namespace common {
 
 struct control_a_dof
 {
-    WORD adr_offset_plus_0;
-    WORD adr_offset_plus_2;
+    lib::WORD adr_offset_plus_0;
+    lib::WORD adr_offset_plus_2;
 };
 
 struct status_of_a_dof
 {
-    WORD adr_offset_plus_0;
-    WORD adr_offset_plus_2;
-    WORD adr_offset_plus_4;
-    WORD adr_offset_plus_6;
-    WORD adr_offset_plus_8;
-    WORD adr_offset_plus_a;
+    lib::WORD adr_offset_plus_0;
+    lib::WORD adr_offset_plus_2;
+    lib::WORD adr_offset_plus_4;
+    lib::WORD adr_offset_plus_6;
+    lib::WORD adr_offset_plus_8;
+    lib::WORD adr_offset_plus_a;
 };
 
 
@@ -39,9 +39,9 @@ struct motor_data
     bool is_robot_blocked; // czy robot jest zablokowany
 
     int interrupt_mode;
-    BYTE card_adress; // adres karty dla trybu INT_SINGLE_COMMAND
-    WORD register_adress;  // adres rejestru dla trybu INT_SINGLE_COMMAND
-    WORD value; // wartosc do wstawienia dla trybu INT_SINGLE_COMMAND
+    lib::BYTE card_adress; // adres karty dla trybu INT_SINGLE_COMMAND
+    lib::WORD register_adress;  // adres rejestru dla trybu INT_SINGLE_COMMAND
+    lib::WORD value; // wartosc do wstawienia dla trybu INT_SINGLE_COMMAND
 
     long int current_absolute_position[MAX_SERVOS_NR];
     control_a_dof robot_control[MAX_SERVOS_NR];

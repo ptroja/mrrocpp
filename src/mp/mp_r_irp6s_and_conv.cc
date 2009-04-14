@@ -9,22 +9,22 @@ namespace mrrocpp {
 namespace mp {
 namespace common {
 
-irp6s_and_conv_robot::irp6s_and_conv_robot(ROBOT_ENUM l_robot_name, const char* _section_name, task::base &mp_object_l) :
+irp6s_and_conv_robot::irp6s_and_conv_robot(lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::base &mp_object_l) :
 	robot(l_robot_name, _section_name, mp_object_l), servos_number(0), has_gripper(false)
 {
 	switch (l_robot_name) {
-		case ROBOT_IRP6_ON_TRACK:
+		case lib::ROBOT_IRP6_ON_TRACK:
 			servos_number = IRP6_ON_TRACK_NUM_OF_SERVOS;
 			has_gripper = true;
 			break;
-		case ROBOT_IRP6_POSTUMENT:
+		case lib::ROBOT_IRP6_POSTUMENT:
 			servos_number = IRP6_POSTUMENT_NUM_OF_SERVOS;
 			has_gripper = true;
 			break;
-		case ROBOT_CONVEYOR:
+		case lib::ROBOT_CONVEYOR:
 			servos_number = CONVEYOR_NUM_OF_SERVOS;
 			break;
-		case ROBOT_IRP6_MECHATRONIKA:
+		case lib::ROBOT_IRP6_MECHATRONIKA:
 			servos_number = IRP6_MECHATRONIKA_NUM_OF_SERVOS;
 			break;
 		default: // error
@@ -67,7 +67,7 @@ void irp6s_and_conv_robot::create_next_pose_command(void)
 						}
 						break;
 					case lib::TOOL_AS_XYZ_EULER_ZY:
-						if (robot_name != ROBOT_IRP6_POSTUMENT && robot_name != ROBOT_IRP6_MECHATRONIKA) {
+						if (robot_name != lib::ROBOT_IRP6_POSTUMENT && robot_name != lib::ROBOT_IRP6_MECHATRONIKA) {
 							throw MP_error(lib::NON_FATAL_ERROR, INVALID_RMODEL_TYPE);
 						}
 						for (int j=0; j<6; j++) {
@@ -244,13 +244,13 @@ void irp6s_and_conv_robot::get_arm_reply(void)
 
 			break;
 		case lib::FRAME:
-			if (robot_name == ROBOT_CONVEYOR)
+			if (robot_name == lib::ROBOT_CONVEYOR)
 				throw MP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			lib::copy_frame(ecp_td.current_arm_frame, ecp_reply_package.reply_package.arm.pf_def.arm_frame);
 
 			break;
 		case lib::XYZ_EULER_ZYZ:
-			if (robot_name == ROBOT_CONVEYOR)
+			if (robot_name == lib::ROBOT_CONVEYOR)
 				throw MP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			for (int i=0; i<6; i++) {
 				ecp_td.current_XYZ_ZYZ_arm_coordinates[i]
@@ -259,7 +259,7 @@ void irp6s_and_conv_robot::get_arm_reply(void)
 
 			break;
 		case lib::XYZ_ANGLE_AXIS:
-			if (robot_name == ROBOT_CONVEYOR)
+			if (robot_name == lib::ROBOT_CONVEYOR)
 				throw MP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			for (int i=0; i<6; i++) {
 				ecp_td.current_XYZ_AA_arm_coordinates[i]
@@ -287,15 +287,15 @@ void irp6s_and_conv_robot::get_rmodel_reply(void)
 {
 	switch (ecp_reply_package.reply_package.rmodel_type) {
 		case lib::TOOL_FRAME:
-			if (robot_name != ROBOT_IRP6_POSTUMENT && robot_name != ROBOT_IRP6_ON_TRACK && robot_name
-					!= ROBOT_IRP6_MECHATRONIKA) {
+			if (robot_name != lib::ROBOT_IRP6_POSTUMENT && robot_name != lib::ROBOT_IRP6_ON_TRACK && robot_name
+					!= lib::ROBOT_IRP6_MECHATRONIKA) {
 				throw MP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			}
 			lib::copy_frame(ecp_td.current_tool_frame, ecp_reply_package.reply_package.rmodel.tool_frame_def.tool_frame);
 			break;
 		case lib::TOOL_XYZ_ANGLE_AXIS:
-			if (robot_name != ROBOT_IRP6_POSTUMENT && robot_name != ROBOT_IRP6_ON_TRACK && robot_name
-					!= ROBOT_IRP6_MECHATRONIKA) {
+			if (robot_name != lib::ROBOT_IRP6_POSTUMENT && robot_name != lib::ROBOT_IRP6_ON_TRACK && robot_name
+					!= lib::ROBOT_IRP6_MECHATRONIKA) {
 				throw MP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			}
 			for (int i=0; i<6; i++) {
@@ -304,8 +304,8 @@ void irp6s_and_conv_robot::get_rmodel_reply(void)
 			}
 			break;
 		case lib::TOOL_XYZ_EULER_ZYZ:
-			if (robot_name != ROBOT_IRP6_POSTUMENT && robot_name != ROBOT_IRP6_ON_TRACK && robot_name
-					!= ROBOT_IRP6_MECHATRONIKA) {
+			if (robot_name != lib::ROBOT_IRP6_POSTUMENT && robot_name != lib::ROBOT_IRP6_ON_TRACK && robot_name
+					!= lib::ROBOT_IRP6_MECHATRONIKA) {
 				throw MP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			}
 			for (int i=0; i<6; i++) {
@@ -314,7 +314,7 @@ void irp6s_and_conv_robot::get_rmodel_reply(void)
 			}
 			break;
 		case lib::TOOL_AS_XYZ_EULER_ZY:
-			if (robot_name != ROBOT_IRP6_POSTUMENT && robot_name != ROBOT_IRP6_MECHATRONIKA) {
+			if (robot_name != lib::ROBOT_IRP6_POSTUMENT && robot_name != lib::ROBOT_IRP6_MECHATRONIKA) {
 				throw MP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			}
 			for (int i=0; i<6; i++) {

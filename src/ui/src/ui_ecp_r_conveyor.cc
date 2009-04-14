@@ -84,7 +84,7 @@ void ui_conveyor_robot::get_current_position ( double c_position[CONVEYOR_NUM_OF
 // zlecenie odczytu numeru modelu kinematyki i korektora oraz numerow
 // algorytmow serwo i numerow zestawow parametrow algorytmow
 
-bool ui_conveyor_robot::get_kinematic (BYTE* kinematic_model_no)
+bool ui_conveyor_robot::get_kinematic (lib::BYTE* kinematic_model_no)
 {
 
     // Zlecenie odczytu numeru modelu i korektora kinematyki
@@ -99,8 +99,8 @@ bool ui_conveyor_robot::get_kinematic (BYTE* kinematic_model_no)
 }
 
 
-bool ui_conveyor_robot::get_servo_algorithm ( BYTE algorithm_no[CONVEYOR_NUM_OF_SERVOS],
-        BYTE parameters_no[CONVEYOR_NUM_OF_SERVOS])
+bool ui_conveyor_robot::get_servo_algorithm ( lib::BYTE algorithm_no[CONVEYOR_NUM_OF_SERVOS],
+        lib::BYTE parameters_no[CONVEYOR_NUM_OF_SERVOS])
 {
 
     // Zlecenie odczytu numerow algorytmow i zestawow parametrow
@@ -111,9 +111,9 @@ bool ui_conveyor_robot::get_servo_algorithm ( BYTE algorithm_no[CONVEYOR_NUM_OF_
 
     // Przepisanie aktualnych numerow algorytmow i zestawow parametrow
     memcpy (algorithm_no, reply_package.rmodel.servo_algorithm.servo_algorithm_no,
-            CONVEYOR_NUM_OF_SERVOS*sizeof(BYTE) );
+            CONVEYOR_NUM_OF_SERVOS*sizeof(lib::BYTE) );
     memcpy (parameters_no, reply_package.rmodel.servo_algorithm.servo_parameters_no,
-            CONVEYOR_NUM_OF_SERVOS*sizeof(BYTE) );
+            CONVEYOR_NUM_OF_SERVOS*sizeof(lib::BYTE) );
 
     return true;
 }
@@ -140,7 +140,7 @@ bool ui_conveyor_robot::get_controller_state (lib::controller_state_t* robot_con
 
 
 // ---------------------------------------------------------------
-bool ui_conveyor_robot::set_kinematic (BYTE kinematic_model_no)
+bool ui_conveyor_robot::set_kinematic (lib::BYTE kinematic_model_no)
 {
 
     // zlecenie zapisu numeru modelu kinematyki i korektora oraz numerow
@@ -163,16 +163,16 @@ bool ui_conveyor_robot::set_kinematic (BYTE kinematic_model_no)
 
 
 // ---------------------------------------------------------------
-bool ui_conveyor_robot::set_servo_algorithm (BYTE algorithm_no[CONVEYOR_NUM_OF_SERVOS],
-        BYTE parameters_no[CONVEYOR_NUM_OF_SERVOS] )
+bool ui_conveyor_robot::set_servo_algorithm (lib::BYTE algorithm_no[CONVEYOR_NUM_OF_SERVOS],
+        lib::BYTE parameters_no[CONVEYOR_NUM_OF_SERVOS] )
 {
 
     // Zlecenie zapisu numerow algorytmow i zestawow parametrow
     // Przepisanie zadanych numerow algorytmow i zestawow parametrow
     memcpy (ecp_command.instruction.rmodel.servo_algorithm.servo_algorithm_no, algorithm_no,
-            CONVEYOR_NUM_OF_SERVOS*sizeof(BYTE) );
+            CONVEYOR_NUM_OF_SERVOS*sizeof(lib::BYTE) );
     memcpy (ecp_command.instruction.rmodel.servo_algorithm.servo_parameters_no, parameters_no,
-            CONVEYOR_NUM_OF_SERVOS*sizeof(BYTE) );
+            CONVEYOR_NUM_OF_SERVOS*sizeof(lib::BYTE) );
     ecp_command.instruction.instruction_type = lib::SET;
     ecp_command.instruction.set_type = RMODEL_DV; // RMODEL
     ecp_command.instruction.set_rmodel_type = lib::SERVO_ALGORITHM; //

@@ -28,7 +28,7 @@ namespace conveyor {
 
 // Konstruktor.
 effector::effector (lib::configurator &_config) :
-	irp6s_and_conv_effector (_config, ROBOT_CONVEYOR)
+	irp6s_and_conv_effector (_config, lib::ROBOT_CONVEYOR)
 	{
 	}
 
@@ -47,8 +47,8 @@ void effector::initialize (void)
 /*--------------------------------------------------------------------------*/
 void effector::set_rmodel (lib::c_buffer &instruction)
 {
-	// BYTE previous_model;
-	// BYTE previous_corrector;
+	// lib::BYTE previous_model;
+	// lib::BYTE previous_corrector;
 	//printf(" SET RMODEL: ");
 	switch (instruction.set_rmodel_type)
 	{

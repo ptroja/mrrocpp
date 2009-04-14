@@ -30,7 +30,7 @@
 
 // Klasa lib::Homog_matrix.
 #include "lib/mathtr.h"
-// Klasa frame_tab.
+// Klasa lib::frame_tab.
 #include "lib/impconst.h"
 
 namespace mrrocpp {
@@ -85,10 +85,10 @@ public:
   virtual void i2mp_transform(double* local_desired_motor_pos_new, double* local_desired_joints) = 0;
 
   // Przeliczenie polozenia ze wspolrzednych wewnetrznych na wspolrzedne zewnetrzne.
-  virtual void i2e_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame);
+  virtual void i2e_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame);
 
   // Przeliczenie polozenia ze wspolrzednych zewnetrznych na wspolrzedne zewnetrzne.
-   virtual void e2i_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame);
+   virtual void e2i_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame);
 
   // Przeliczenie bazy manipulatora w globalnym ukladzie odniesienia.
   virtual void global_frame_transform(lib::Homog_matrix&);
@@ -109,10 +109,10 @@ public:
   virtual void attached_tool_inverse_transform(lib::Homog_matrix&);
 
   // Rozwiazanie prostego zagadnienia kinematyki.
-  virtual void direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame) = 0;
+  virtual void direct_kinematics_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame) = 0;
   
   // Rozwiazanie odwrotnego zagadnienia kinematyki.
-  virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame) = 0;
+  virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame) = 0;
 
   // Zwraca etykiete modelu kinematycznego.
   virtual char* get_kinematic_model_label(void);

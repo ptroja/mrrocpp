@@ -284,7 +284,7 @@ bool hermite_spline::next_step (  )
         the_robot->EDP_data.set_type = ARM_DV; // ARM
         the_robot->EDP_data.motion_type = lib::ABSOLUTE;
          the_robot->EDP_data.next_interpolation_type = lib::MIM;
-        the_robot->EDP_data.motion_steps = (WORD) (10);
+        the_robot->EDP_data.motion_steps = (lib::WORD) (10);
         the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
         first_time = false;
         T = time[0];
@@ -637,7 +637,7 @@ bool natural_spline::next_step ()
         the_robot->EDP_data.set_type = ARM_DV; // ARM
         the_robot->EDP_data.motion_type = lib::ABSOLUTE;
          the_robot->EDP_data.next_interpolation_type = lib::MIM;
-        the_robot->EDP_data.motion_steps = (WORD) (10);
+        the_robot->EDP_data.motion_steps = (lib::WORD) (10);
         the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
         first_time = false;
         T = time[0];

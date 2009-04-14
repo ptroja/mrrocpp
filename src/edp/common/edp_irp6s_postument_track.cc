@@ -44,8 +44,8 @@ namespace common {
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::set_rmodel(lib::c_buffer &instruction)
 {
-	// BYTE previous_model;
-	// BYTE previous_corrector;
+	// lib::BYTE previous_model;
+	// lib::BYTE previous_corrector;
 
 	//printf(" SET RMODEL: ");
 	switch (instruction.set_rmodel_type)
@@ -192,7 +192,7 @@ void irp6s_postument_track_effector::arm_frame_2_xyz_eul_zyz()
 		throw NonFatal_error_2(STRANGE_GET_ARM_REQUEST);
 	}
 	// dla robotow track i postument - oblicz chwytak
-	if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
+	if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
 	{
 		reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
 		reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
@@ -224,7 +224,7 @@ void irp6s_postument_track_effector::arm_abs_xyz_eul_zyz_2_frame(const double *p
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-irp6s_postument_track_effector::irp6s_postument_track_effector(lib::configurator &_config, ROBOT_ENUM l_robot_name) :
+irp6s_postument_track_effector::irp6s_postument_track_effector(lib::configurator &_config, lib::ROBOT_ENUM l_robot_name) :
 	irp6s_effector(_config, l_robot_name)
 	{
 
@@ -295,8 +295,8 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	motion_type = instruction.motion_type;
 
 	// zmienne z bufora wejsciowego
-	const WORD &ECP_motion_steps = instruction.motion_steps; // liczba krokow w makrokroku
-	const WORD &ECP_value_in_step_no = instruction.value_in_step_no; // liczba krokow po ktorych bedzie wyslana odpowiedz do ECP o przewidywanym zakonczeniu ruchu
+	const lib::WORD &ECP_motion_steps = instruction.motion_steps; // liczba krokow w makrokroku
+	const lib::WORD &ECP_value_in_step_no = instruction.value_in_step_no; // liczba krokow po ktorych bedzie wyslana odpowiedz do ECP o przewidywanym zakonczeniu ruchu
 	const lib::POSE_SPECIFICATION &set_arm_type = instruction.set_arm_type;
 
 	double (&force_xyz_torque_xyz)[6] = instruction.arm.pf_def.force_xyz_torque_xyz; // wartosci zadana sily
@@ -305,7 +305,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	const lib::BEHAVIOUR_SPECIFICATION (&behaviour)[6] = instruction.arm.pf_def.behaviour;
 	const double &desired_gripper_coordinate = instruction.arm.pf_def.gripper_coordinate;
 	const double (&arm_coordinates)[MAX_SERVOS_NR] = instruction.arm.pf_def.arm_coordinates;
-	const frame_tab &arm_frame = instruction.arm.pf_def.arm_frame;
+	const lib::frame_tab &arm_frame = instruction.arm.pf_def.arm_frame;
 
 	// w trybie TCIM interpolujemy w edp_trans stad zadajemy pojedynczy krok do serwo
 	motion_steps = 1;
@@ -332,7 +332,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 
 	double beginning_gripper_coordinate;
 	static double ending_gripper_coordinate;
-	static frame_tab local_force_end_effector_frame;
+	static lib::frame_tab local_force_end_effector_frame;
 	const unsigned long PREVIOUS_MOVE_VECTOR_NULL_STEP_VALUE = 10;
 	lib::Ft_v_vector base_pos_xyz_rot_xyz_vector; // wartosci ruchu pozycyjnego
 
@@ -345,7 +345,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 
 	// WYLICZENIE POZYCJI POCZATKOWEJ
 	double begining_joints[MAX_SERVOS_NR], tmp_joints[MAX_SERVOS_NR], tmp_motor_pos[MAX_SERVOS_NR];
-	frame_tab begining_frame;
+	lib::frame_tab begining_frame;
 
 	get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, begining_joints);
 	get_current_kinematic_model()->i2e_transform(begining_joints, &begining_frame);
@@ -354,7 +354,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 
 
 	// WYZNACZENIE goal_frame
-	frame_tab goal_frame_tab;
+	lib::frame_tab goal_frame_tab;
 	lib::Homog_matrix goal_frame;
 
 	lib::Homog_matrix goal_frame_increment_in_end_effector;
@@ -763,7 +763,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 				* lib::Ft_v_vector(current_force));
 		current_force_torque.to_table(reply.arm.pf_def.force_xyz_torque_xyz);
 
-		if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
+		if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
 		{
 			reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
 			reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
@@ -787,7 +787,7 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 	//	static double rkpminusone[6] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 	//	static double rkpminustwo[6] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
-	//	frame_tab tmp;
+	//	lib::frame_tab tmp;
 
 
 	//	lib::Homog_matrix step_increment_frame;

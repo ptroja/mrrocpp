@@ -27,7 +27,7 @@ class servo_buffer  : public common::servo_buffer
     // Obiekt z algorytmem regulacji
 
 
-    BYTE Move_a_step (void);         // wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH i SYNCHRO_T
+    lib::BYTE Move_a_step (void);         // wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH i SYNCHRO_T
 
 public:
 

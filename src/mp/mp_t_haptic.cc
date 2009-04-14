@@ -46,30 +46,30 @@ bool haptic::configure_edp_force_sensor(bool configure_track, bool configure_pos
 {
     if (configure_track)
     {
-        set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE, 0, "", 1, ROBOT_IRP6_ON_TRACK);
+        set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE, 0, "", 1, lib::ROBOT_IRP6_ON_TRACK);
       
     }
 
     if (configure_postument)
     {
-        set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE, 0, "", 1, ROBOT_IRP6_POSTUMENT);
+        set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE, 0, "", 1, lib::ROBOT_IRP6_POSTUMENT);
     }
 
     if ((configure_track)&&(!configure_postument))
     {
         run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-                (1, 1, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_ON_TRACK);
+                (1, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_ON_TRACK);
     }
     else if ((!configure_track)&&(configure_postument))
     {
         run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-                (1, 1, ROBOT_IRP6_POSTUMENT, ROBOT_IRP6_POSTUMENT);
+                (1, 1, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_IRP6_POSTUMENT);
     }
     else if ((configure_track)&&(configure_postument))
     {
         run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-                (2, 2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT,
-                 ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT );
+                (2, 2, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT,
+                		lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT );
     }
    
 }
@@ -89,8 +89,8 @@ void haptic::main_task_algorithm(void)
 
 
    	// wlaczenie generatora transparentnego w obu robotach
-   	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "", 1, ROBOT_IRP6_ON_TRACK);
-   	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "", 1, ROBOT_IRP6_POSTUMENT);
+   	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "", 1, lib::ROBOT_IRP6_ON_TRACK);
+   	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TRANSPARENT, (int) 0, "", 1, lib::ROBOT_IRP6_POSTUMENT);
 
    	// mp_h_gen.sensor_m = sensor_m;
    	mp_h_gen.configure(1, 0);
@@ -98,7 +98,7 @@ void haptic::main_task_algorithm(void)
    	mp_h_gen.Move();
 
 
-   	send_end_motion_to_ecps (2, ROBOT_IRP6_ON_TRACK, ROBOT_IRP6_POSTUMENT);
+   	send_end_motion_to_ecps (2, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT);
 
 
 }

@@ -77,7 +77,7 @@ public:
     messip_channel_t *attach;
 #endif /* USE_MESSIP_SRR */
 
-    effector (lib::configurator &_config, ROBOT_ENUM l_robot_name);       // konstruktor
+    effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name);       // konstruktor
     lib::controller_state_t controller_state_edp_buf; // do okreslenia stanu robota
 
     int test_mode;
@@ -109,7 +109,7 @@ public:
     lib::ecp_command_buffer new_ecp_command;
     lib::c_buffer new_instruction, current_instruction;
 
-    const ROBOT_ENUM robot_name;
+    const lib::ROBOT_ENUM robot_name;
 
     lib::POSE_SPECIFICATION previous_set_arm_type; // by Y poprzedni sposob zadawania pozycji
 };
@@ -133,7 +133,7 @@ protected:
     static void *visualisation_thread_start(void* arg);
     void *visualisation_thread(void* arg);
 
-    WORD motion_steps;            // liczba krokow ruchu zadanego (makrokroku)
+    lib::WORD motion_steps;            // liczba krokow ruchu zadanego (makrokroku)
 
     //Liczba krokow pierwszej fazy ruchu, czyli krok, w ktorym ma zostac
     //przekazana informacja o realizacji pierwszej fazy ruchu:
@@ -147,7 +147,7 @@ protected:
     //Dla value_in_step_no < motion_steps wiadomosc dotrze przed zrealizowaniem
     //makrokroku i informacja o polozeniu bedzie dotyczyc realizacji srodkowej
     //fazy makrokroku.
-    WORD value_in_step_no;
+    lib::WORD value_in_step_no;
 
     int serwo_fd;
 
@@ -249,14 +249,14 @@ protected:
 
 
 
-    BYTE servo_algorithm_ecp[MAX_SERVOS_NR];
+    lib::BYTE servo_algorithm_ecp[MAX_SERVOS_NR];
     // Tablica numerow algorytmow serworegulacji przyslanych z ECP
-    BYTE servo_parameters_ecp[MAX_SERVOS_NR];
+    lib::BYTE servo_parameters_ecp[MAX_SERVOS_NR];
     // Tablica numerow zestawow parametrow
     // algorytmow serworegulacji przyslanych z ECP
-    BYTE servo_algorithm_sg[MAX_SERVOS_NR];
+    lib::BYTE servo_algorithm_sg[MAX_SERVOS_NR];
     // Tablica numerow algorytmow serworegulacji przyslanych z SERVO_GROUP
-    BYTE servo_parameters_sg[MAX_SERVOS_NR];
+    lib::BYTE servo_parameters_sg[MAX_SERVOS_NR];
     // Tablica numerow zestawow parametrow
     // algorytmow serworegulacji przyslanych z SERVO_GROUP
     bool synchronised;         // Flaga zsynchronizowania robota
@@ -274,7 +274,7 @@ public:
     in_out_buffer* in_out_obj; // bufor wejsc wyjsc
     reader_buffer *rb_obj;
     master_trans_t_buffer *mt_tt_obj;
-    irp6s_and_conv_effector (lib::configurator &_config, ROBOT_ENUM l_robot_name);       // konstruktor
+    irp6s_and_conv_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name);       // konstruktor
 
     virtual void set_rmodel (lib::c_buffer &instruction) = 0;                    // zmiana narzedzia
     virtual void get_rmodel (lib::c_buffer &instruction) = 0;                    // odczytanie narzedzia
@@ -411,7 +411,7 @@ protected:
     // XYZ_EULER_ZYZ wyrazonej bezwzglednie do postaci
     // FRAME oraz przepisanie wyniku przeksztalcenia do
     // wewnetrznych struktur danych TRANSFORMATORa
-    void arm_abs_frame_2_frame (frame_tab p_m);
+    void arm_abs_frame_2_frame (lib::frame_tab p_m);
     // Przepisanie definicji koncowki danej
     // w postaci FRAME wyrazonej bezwzglednie
     // do wewnetrznych struktur danych TRANSFORMATORa
@@ -425,18 +425,18 @@ protected:
     // XYZ_EULER_ZYZ wyrazonej wzglednie do postaci
     // FRAME oraz przepisanie wyniku przeksztalcenia do
     // wewnetrznych struktur danych TRANSFORMATORa
-    void arm_rel_frame_2_frame (frame_tab p_m);
+    void arm_rel_frame_2_frame (lib::frame_tab p_m);
     // Przepisanie definicji koncowki danej
     // w postaci FRAME wyrazonej wzglednie
     // do wewnetrznych struktur danych TRANSFORMATORa
 
 
 
-    frame_tab servo_current_frame_wo_tool; // by Y dla watku EDP_SERVO    XXXXX
+    lib::frame_tab servo_current_frame_wo_tool; // by Y dla watku EDP_SERVO    XXXXX
     lib::Homog_matrix servo_current_end_effector_frame_with_tool_and_base; // by Y dla watku EDP_SERVO    XXXXX
     lib::Homog_matrix servo_previous_end_effector_frame_with_tool_and_base; // by Y dla watku EDP_SERVO    XXXXX
 
-    frame_tab global_current_frame_wo_tool;// globalne dla procesu EDP    XXXXXX
+    lib::frame_tab global_current_frame_wo_tool;// globalne dla procesu EDP    XXXXXX
 
     // dla potrzeb wyznaczenia sztywnosci ukladu mnaipulator - drugi manipulator badz ramie czlowieka badz srodowisko
     lib::K_vector servo_xyz_angle_axis_translation;
@@ -447,24 +447,24 @@ protected:
     double servo_real_kartez_acc[6]; // by Y predkosc we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
 
 
-    frame_tab desired_end_effector_frame;      //  XXXXX
+    lib::frame_tab desired_end_effector_frame;      //  XXXXX
     // Podstawowa postac reprezentujaca zadane
     // wspolrzedne zewnetrzne koncowki manipulatora
     // wzgledem ukladu bazowego (polozenie w mm)
 
 
-    frame_tab desired_end_effector_frame_tmp_m;      //  XXXXX
+    lib::frame_tab desired_end_effector_frame_tmp_m;      //  XXXXX
     // Podstawowa postac reprezentujaca zadane
     // wspolrzedne zewnetrzne koncowki manipulatora
     // wzgledem ukladu bazowego (polozenie w mm)       przed sprawdzeniem na ograniczenia kinematyczne
 
-    frame_tab current_end_effector_frame;
+    lib::frame_tab current_end_effector_frame;
     // Podstawowa postac reprezentujaca ostatnio
     // odczytane wspolrzedne zewnetrzne koncowki
     // manipulatora wzgledem ukladu bazowego (polozenie w mm)
 
 public:
-    irp6s_effector (lib::configurator &_config, ROBOT_ENUM l_robot_name );       // konstruktor
+    irp6s_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name );       // konstruktor
 
     // wyznaczenie polozenia lokalnego i globalnego transformera
     // przepisanie lokalnego zestawu lokalnego edp_servo na globalny (chronione mutexem)
@@ -604,10 +604,10 @@ public:
 class in_out_buffer
 {
 private:
-    WORD binary_input;		// wejscie binarne
-    BYTE analog_input[8];		// wejscie analogowe - dla 8 kanalow
+    lib::WORD binary_input;		// wejscie binarne
+    lib::BYTE analog_input[8];		// wejscie analogowe - dla 8 kanalow
 
-    WORD binary_output;		// wyjscie binarne
+    lib::WORD binary_output;		// wyjscie binarne
     intrspin_t output_spinlock; // spinlock (semafor) do wyjscia
     intrspin_t input_spinlock; // spinlock (semafor) do wejscia
 
@@ -616,11 +616,11 @@ public:
     // konstruktor
     in_out_buffer();
 
-    BYTE set_output_flag; // flaga czy ustawic wyjcie na robota
-    void set_output (const WORD *out_value);
-    void get_output (WORD *out_value);
-    void set_input (const WORD *binary_in_value, const BYTE *analog_in_table);
-    void get_input (WORD *binary_in_value, BYTE *analog_in_table);
+    lib::BYTE set_output_flag; // flaga czy ustawic wyjcie na robota
+    void set_output (const lib::WORD *out_value);
+    void get_output (lib::WORD *out_value);
+    void set_input (const lib::WORD *binary_in_value, const lib::BYTE *analog_in_table);
+    void get_input (lib::WORD *binary_in_value, lib::BYTE *analog_in_table);
 };
 /**************************** IN_OUT_BUFFER *****************************/
 

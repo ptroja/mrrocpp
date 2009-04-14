@@ -103,26 +103,26 @@ const char * Trajectory::toString(int numberOfPoses)
 	return numStr;
 }
 
-const char * Trajectory::returnRobotName(ROBOT_ENUM robot)
+const char * Trajectory::returnRobotName(lib::ROBOT_ENUM robot)
 {
 
-	if(robot == ROBOT_IRP6_ON_TRACK)
+	if(robot == lib::ROBOT_IRP6_ON_TRACK)
 		return "ROBOT_IRP6_ON_TRACK";
-	else if(robot == ROBOT_IRP6_POSTUMENT)
+	else if(robot == lib::ROBOT_IRP6_POSTUMENT)
 		return "ROBOT_IRP6_POSTUMENT";
-	else if(robot == ROBOT_CONVEYOR)
+	else if(robot == lib::ROBOT_CONVEYOR)
 		return "ROBOT_CONVEYOR";
-	else if(robot == ROBOT_SPEAKER)
+	else if(robot == lib::ROBOT_SPEAKER)
 		return "ROBOT_SPEAKER";
-	else if(robot == ROBOT_IRP6_MECHATRONIKA)
+	else if(robot == lib::ROBOT_IRP6_MECHATRONIKA)
 		return "ROBOT_IRP6_MECHATRONIKA";
-	else if(robot == ROBOT_ELECTRON)
+	else if(robot == lib::ROBOT_ELECTRON)
 		return "ROBOT_ELECTRON";
-	else if(robot == ROBOT_FESTIVAL)
+	else if(robot == lib::ROBOT_FESTIVAL)
 		return "ROBOT_FESTIVAL";
-	else if(robot == ROBOT_HAND)
+	else if(robot == lib::ROBOT_HAND)
 		return "ROBOT_HAND";
-	else if(robot == ROBOT_SPEECHRECOGNITION)
+	else if(robot == lib::ROBOT_SPEECHRECOGNITION)
 		return "ROBOT_SPEECHRECOGNITION";
 	else
 		return "ROBOT_UNDEFINED";

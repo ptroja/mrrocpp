@@ -80,10 +80,10 @@ State::RobotSets::RobotSets(const RobotSets &robotSets)
 {
 	this->firstSetCount = robotSets.firstSetCount;
 	this->secondSetCount = robotSets.secondSetCount;
-	this->firstSet = new ROBOT_ENUM[firstSetCount];
+	this->firstSet = new lib::ROBOT_ENUM[firstSetCount];
 	for(int i = 0; i<firstSetCount; i++)
 		this->firstSet[i] = robotSets.firstSet[i];
-	this->secondSet = new ROBOT_ENUM[secondSetCount];
+	this->secondSet = new lib::ROBOT_ENUM[secondSetCount];
 	for(int i = 0; i<secondSetCount; i++)
 		this->secondSet[i] = robotSets.secondSet[i];
 }
@@ -141,28 +141,28 @@ char* State::getType() const
 
 //-----------------------------------------------------------------------------------------------------------
 
-ROBOT_ENUM State::returnProperRobot(char * robotName)
+lib::ROBOT_ENUM State::returnProperRobot(char * robotName)
 {
 	if(strcmp(robotName, (const char *)"ROBOT_IRP6_ON_TRACK") == 0)
-		return ROBOT_IRP6_ON_TRACK;
+		return lib::ROBOT_IRP6_ON_TRACK;
 	else if(strcmp(robotName, (const char *)"ROBOT_IRP6_POSTUMENT") == 0)
-		return ROBOT_IRP6_POSTUMENT;
+		return lib::ROBOT_IRP6_POSTUMENT;
 	else if(strcmp(robotName, (const char *)"ROBOT_CONVEYOR") == 0)
-		return ROBOT_CONVEYOR;
+		return lib::ROBOT_CONVEYOR;
 	else if(strcmp(robotName, (const char *)"ROBOT_SPEAKER") == 0)
-		return ROBOT_SPEAKER;
+		return lib::ROBOT_SPEAKER;
 	else if(strcmp(robotName, (const char *)"ROBOT_IRP6_MECHATRONIKA") == 0)
-		return ROBOT_IRP6_MECHATRONIKA;
+		return lib::ROBOT_IRP6_MECHATRONIKA;
 	else if(strcmp(robotName, (const char *)"ROBOT_ELECTRON") == 0)
-		return ROBOT_ELECTRON;
+		return lib::ROBOT_ELECTRON;
 	else if(strcmp(robotName, (const char *)"ROBOT_FESTIVAL") == 0)
-		return ROBOT_FESTIVAL;
+		return lib::ROBOT_FESTIVAL;
 	else if(strcmp(robotName, (const char *)"ROBOT_HAND") == 0)
-		return ROBOT_HAND;
+		return lib::ROBOT_HAND;
 	else if(strcmp(robotName, (const char *)"ROBOT_SPEECHRECOGNITION") == 0)
-		return ROBOT_SPEECHRECOGNITION;
+		return lib::ROBOT_SPEECHRECOGNITION;
 	else
-		return ROBOT_UNDEFINED;
+		return lib::ROBOT_UNDEFINED;
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -174,31 +174,31 @@ void State::setRobot(char *robot)
 	//std::cout<<strcmp(robot, (const char *)"ROBOT_IRP6_ON_TRACK")<<std::endl;
 	//strcpy(this->robot, robot);
 /*	if(strcmp(robot, (const char *)"ROBOT_IRP6_ON_TRACK") == 0)
-		this->robot = ROBOT_IRP6_ON_TRACK;
+		this->robot = lib::ROBOT_IRP6_ON_TRACK;
 	else if(strcmp(robot, (const char *)"ROBOT_IRP6_POSTUMENT") == 0)
-		this->robot = ROBOT_IRP6_POSTUMENT;
+		this->robot = lib::ROBOT_IRP6_POSTUMENT;
 	else if(strcmp(robot, (const char *)"ROBOT_CONVEYOR") == 0)
-		this->robot = ROBOT_CONVEYOR;
+		this->robot = lib::ROBOT_CONVEYOR;
 	else if(strcmp(robot, (const char *)"ROBOT_SPEAKER") == 0)
-		this->robot = ROBOT_SPEAKER;
+		this->robot = lib::ROBOT_SPEAKER;
 	else if(strcmp(robot, (const char *)"ROBOT_IRP6_MECHATRONIKA") == 0)
-		this->robot = ROBOT_IRP6_MECHATRONIKA;
+		this->robot = lib::ROBOT_IRP6_MECHATRONIKA;
 	else if(strcmp(robot, (const char *)"ROBOT_ELECTRON") == 0)
-		this->robot = ROBOT_ELECTRON;
+		this->robot = lib::ROBOT_ELECTRON;
 	else if(strcmp(robot, (const char *)"ROBOT_FESTIVAL") == 0)
-		this->robot = ROBOT_FESTIVAL;
+		this->robot = lib::ROBOT_FESTIVAL;
 	else if(strcmp(robot, (const char *)"ROBOT_HAND") == 0)
-		this->robot = ROBOT_HAND;
+		this->robot = lib::ROBOT_HAND;
 	else if(strcmp(robot, (const char *)"ROBOT_SPEECHRECOGNITION") == 0)
-		this->robot = ROBOT_SPEECHRECOGNITION;
+		this->robot = lib::ROBOT_SPEECHRECOGNITION;
 	else
-		this->robot = ROBOT_UNDEFINED;
+		this->robot = lib::ROBOT_UNDEFINED;
 */
 }
 
 //-----------------------------------------------------------------------------------------------------------
 
-ROBOT_ENUM State::getRobot() const
+lib::ROBOT_ENUM State::getRobot() const
 {
 	return robot;
 }

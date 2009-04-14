@@ -306,7 +306,7 @@ void ATI3084_force::configure_sensor(void)
 		if (!gravity_transformation) // nie powolano jeszcze obiektu
 		{
 			// polozenie czujnika wzgledem kisci (bez narzedzia)
-			//frame_tab sensor_rot = {{0, -1, 0}, {1, 0, 0}, {0, 0, 1}, {0, 0, 0}};
+			//lib::frame_tab sensor_rot = {{0, -1, 0}, {1, 0, 0}, {0, 0, 1}, {0, 0, 0}};
 			// polozenie czujnika wzgledem  koncowki lancucha kinematycznego
 			// lib::Homog_matrix sensor_frame = lib::Homog_matrix(0, -1, 0,		1, 0, 0,	0, 0, 1,	0, 0, 0.09);
 			
@@ -333,7 +333,7 @@ void ATI3084_force::configure_sensor(void)
 			// double point[3] = { master.config.return_double_value("x_axis_arm"),
 			//		master.config.return_double_value("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
 			lib::K_vector pointofgravity(point);
-			gravity_transformation = new lib::ForceTrans(FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
+			gravity_transformation = new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
 
 		} else {
 			gravity_transformation->synchro(frame);

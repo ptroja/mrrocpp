@@ -41,7 +41,7 @@ namespace edp {
 namespace common {
 
 /*--------------------------------------------------------------------------*/
-irp6s_effector::irp6s_effector (lib::configurator &_config, ROBOT_ENUM l_robot_name) :
+irp6s_effector::irp6s_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name) :
         irp6s_and_conv_effector (_config, l_robot_name)
 {}
 
@@ -65,7 +65,7 @@ void irp6s_effector::compute_xyz_euler_zyz (const lib::c_buffer &instruction)
         rb_obj->step_data.current_cartesian_position[i] = instruction.arm.pf_def.arm_coordinates[i];
 
     // dla robotow track i postument - oblicz chwytak
-    if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
+    if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
     {
         desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate;
     }
@@ -120,7 +120,7 @@ void irp6s_effector::compute_xyz_angle_axis (const lib::c_buffer &instruction)
     }
 
     // dla robotow track i postument - oblicz chwytak
-    if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
+    if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
     {
         desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate;
     }
@@ -160,7 +160,7 @@ void irp6s_effector::compute_frame (const lib::c_buffer &instruction)
     // obliczenia dla ruchu ramienia (kocwk: FRAME)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
     /* Zlecenie transformerowi przeliczenie wspolrzednych */
-    frame_tab p_m;   // wskanik miejsca w strukturze przesanej z ECP, w ktorym znajduj sie wspolrzedne
+    lib::frame_tab p_m;   // wskanik miejsca w strukturze przesanej z ECP, w ktorym znajduj sie wspolrzedne
     if ( instruction.is_set_rmodel() || instruction.is_set_arm() )
     {
         // przyslano dane dotyczace narzedzia lub koncowki
@@ -173,7 +173,7 @@ void irp6s_effector::compute_frame (const lib::c_buffer &instruction)
     } // end: then
 
     // dla robotow track i postument - oblicz chwytak
-    if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
+    if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
     {
         desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate;
     }
@@ -424,7 +424,7 @@ void irp6s_effector::arm_abs_xyz_aa_2_frame (const double *p)
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::arm_abs_frame_2_frame (frame_tab p_m)
+void irp6s_effector::arm_abs_frame_2_frame (lib::frame_tab p_m)
 {
     // Przepisanie definicji koncowki danej
     // w postaci TRANS wyraonej bezwzgldnie
@@ -506,7 +506,7 @@ void irp6s_effector::arm_rel_xyz_eul_zyz_2_frame (const double* p)
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::arm_rel_frame_2_frame (frame_tab p_m)
+void irp6s_effector::arm_rel_frame_2_frame (lib::frame_tab p_m)
 {
     // Przepisanie definicji koncowki danej
     // w postaci TRANS wyraonej wzgldnie
@@ -547,7 +547,7 @@ void irp6s_effector::arm_frame_2_xyz_aa (void)
     }
 
     // dla robotow track i postument - oblicz chwytak
-    if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
+    if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
     {
         reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
         reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
@@ -710,7 +710,7 @@ void irp6s_effector::arm_frame_2_frame (void)
     }
 
     // dla robotow track i postument - oblicz chwytak
-    if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
+    if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
     {
         reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
         reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];

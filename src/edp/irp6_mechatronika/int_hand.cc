@@ -61,7 +61,7 @@ int_handler (void *arg, int int_id)
 	short int low_word, high_word;
 	int i;
 
-	md.hardware_error = (uint64_t) ALL_RIGHT; // Nie ma bledow sprzetowych
+	md.hardware_error = (uint64_t) lib::ALL_RIGHT; // Nie ma bledow sprzetowych
 	
 	if(common::master->test_mode)
 	{
@@ -80,7 +80,7 @@ int_handler (void *arg, int int_id)
 		md.is_synchronised = true;
 		for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
 		{
-			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
+			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
 			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
 			md.robot_status[i].adr_offset_plus_2 = robot_status[i].adr_offset_plus_2 = in16(SERVO_REPLY_INT_ADR);
 			
@@ -106,7 +106,7 @@ int_handler (void *arg, int int_id)
 		for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
 		{
 			// Odczyty stanu osi, polozenia oraz pradu wirnikow
-			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
+			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
 			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
 			
 			md.robot_status[i].adr_offset_plus_2 = robot_status[i].adr_offset_plus_2 = in16(SERVO_REPLY_INT_ADR);
@@ -133,26 +133,26 @@ int_handler (void *arg, int int_id)
 			
 			// Obsluga bledow
 			if ( robot_status[i].adr_offset_plus_0 & 0x0100 )
-				md.hardware_error |= (uint64_t) (SYNCHRO_ZERO << (5*i)); // Impuls zera rezolwera
+				md.hardware_error |= (uint64_t) (lib::SYNCHRO_ZERO << (5*i)); // Impuls zera rezolwera
 				
 			if ( robot_status[i].adr_offset_plus_0 & 0x4000 )
-					md.hardware_error |= (uint64_t) (SYNCHRO_SWITCH_ON << (5*i)); // Zadzialal wylacznik synchronizacji
+					md.hardware_error |= (uint64_t) (lib::SYNCHRO_SWITCH_ON << (5*i)); // Zadzialal wylacznik synchronizacji
 			
 			// wylaczniki krancowe
 			if ( ~(robot_status[i].adr_offset_plus_0) & 0x1000 ) {
-			//	out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
+			//	out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
 			//	out16(SERVO_COMMAND1_ADR, RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
-				md.hardware_error |= (uint64_t) (UPPER_LIMIT_SWITCH << (5*i)); // Zadzialal wylacznik "gorny" krancowy
+				md.hardware_error |= (uint64_t) (lib::UPPER_LIMIT_SWITCH << (5*i)); // Zadzialal wylacznik "gorny" krancowy
 			}
 			else if ( ~(robot_status[i].adr_offset_plus_0) & 0x2000 ) {
-				md.hardware_error |= (uint64_t) (LOWER_LIMIT_SWITCH << (5*i)); // Zadzialal wylacznik "dolny" krancowy
+				md.hardware_error |= (uint64_t) (lib::LOWER_LIMIT_SWITCH << (5*i)); // Zadzialal wylacznik "dolny" krancowy
 			}
 	
 		
 			if ( robot_status[i].adr_offset_plus_0 & 0x0400 )
 			{
-				md.hardware_error |= (uint64_t) (OVER_CURRENT << (5*i));
-				//     out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
+				md.hardware_error |= (uint64_t) (lib::OVER_CURRENT << (5*i));
+				//     out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
 				//     out16(SERVO_COMMAND1_ADR, RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
 			}
 		};  // end: for
@@ -166,11 +166,11 @@ int_handler (void *arg, int int_id)
 		}
 		
 		
-		if ( md.hardware_error & HARDWARE_ERROR_MASK ) // wyciecie SYNCHRO_ZERO i SYNCHRO_SWITCH_ON
+		if ( md.hardware_error & lib::HARDWARE_ERROR_MASK ) // wyciecie SYNCHRO_ZERO i SYNCHRO_SWITCH_ON
 		{
 			for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ ) {
 				// Zapis wartosci zadanej wypelnienia PWM
-				out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
+				out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
 				out16(SERVO_COMMAND1_ADR, STOP_MOTORS);
 			}; // end: for
 			return (&event); // Yoyek & 7
@@ -178,7 +178,7 @@ int_handler (void *arg, int int_id)
 		
 		for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ ) {
 			// Zapis wartosci zadanej wypelnienia PWM
-			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
+			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
 			if (md.is_robot_blocked) md.robot_control[i].adr_offset_plus_0 &= 0xff00;
 			out16(SERVO_COMMAND1_ADR, md.robot_control[i].adr_offset_plus_0);
 		}; // end: for
@@ -200,7 +200,7 @@ int_handler (void *arg, int int_id)
 
 		for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
 		{
-			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
+			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
 			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
 			md.robot_status[i].adr_offset_plus_2 = robot_status[i].adr_offset_plus_2 = in16(SERVO_REPLY_INT_ADR);
 		}
@@ -220,7 +220,7 @@ int_handler (void *arg, int int_id)
 		
 		for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
 		{
-			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
+			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
 			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
 			md.robot_status[i].adr_offset_plus_2 = robot_status[i].adr_offset_plus_2 = in16(SERVO_REPLY_INT_ADR);
 		}

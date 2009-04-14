@@ -8,13 +8,13 @@
 #include "edp_conveyor_uimodule.h"
 
 
-BYTE servo_alg_no[1];
-BYTE servo_par_no[1];
+lib::BYTE servo_alg_no[1];
+lib::BYTE servo_par_no[1];
 	
 gint servo_alg_no_tmp [1];
-BYTE servo_alg_no_output[1];
+lib::BYTE servo_alg_no_output[1];
 gint servo_par_no_tmp [1];
-BYTE servo_par_no_output[1];
+lib::BYTE servo_par_no_output[1];
 
 char buf[32];
 gchar buffer[500];
@@ -180,8 +180,8 @@ extern "C"
 
 		for(int i=0; i<1; i++)
 		{
-			servo_alg_no_output[i] = BYTE(servo_alg_no_tmp[i]);
-			servo_par_no_output[i] = BYTE(servo_par_no_tmp[i]);
+			servo_alg_no_output[i] = lib::BYTE(servo_alg_no_tmp[i]);
+			servo_par_no_output[i] = lib::BYTE(servo_par_no_tmp[i]);
 		}
 
 		// zlecenie wykonania ruchu

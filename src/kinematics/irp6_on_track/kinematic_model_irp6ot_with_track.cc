@@ -40,7 +40,7 @@ model_with_track::model_with_track (void)
   * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
-void model_with_track::direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame) {
+void model_with_track::direct_kinematics_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame) {
 
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
   check_joints (local_current_joints);
@@ -86,7 +86,7 @@ void model_with_track::direct_kinematics_transform(const double* local_current_j
   Wyjscie:
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno d0, q1, q2, ...)
  ------------------------------------------------------------------------ */
-void model_with_track::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
+void model_with_track::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame)
 {
   // Stale
   const double a2_2 = a2*a2;

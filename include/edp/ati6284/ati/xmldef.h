@@ -1,5 +1,5 @@
 /* ! \file include/edp/ati6284/ati/xmldef.h
-    * \brief plik nag³ówkowy ATI
+    * \brief plik nagï¿½ï¿½wkowy ATI
     * Ostatnia modyfikacja: 04.2006 
     * Copyright (c) 1998, 1999 Thai Open Source Software Center Ltd
      *
@@ -58,7 +58,7 @@ particular environments. */
 #define realloc(x, y) PR_Realloc((x), (size_t)(y))
 #define calloc(x, y) PR_Calloc((x),(y))
 #define free(x) PR_Free(x)
-#if PR_BYTES_PER_INT != 4
+#if PR_lib::BYTES_PER_INT != 4
 #define int int32
 #endif
 

@@ -57,7 +57,7 @@ void model_5dof::set_kinematic_parameters(void)
   metoda musi byc pusta - przedefiniowanie standardowej metody.
   W prostym zadaniu narzedzue jest "dolaczone" normalnie.
  ------------------------------------------------------------------------ */
-void model_5dof::attached_tool_inverse_transform(frame_tab* local_current_end_effector_frame)
+void model_5dof::attached_tool_inverse_transform(lib::frame_tab* local_current_end_effector_frame)
 {
 	return;
 };//: attached_tool_inverse_transform
@@ -74,7 +74,7 @@ void model_5dof::attached_tool_inverse_transform(frame_tab* local_current_end_ef
   * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
-void model_5dof::direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame)
+void model_5dof::direct_kinematics_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame)
 {
 
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
@@ -120,7 +120,7 @@ void model_5dof::direct_kinematics_transform(const double* local_current_joints,
   Wyjscie:
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno q0, q1, q2, ...)
  ------------------------------------------------------------------------ */
-void model_5dof::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
+void model_5dof::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame)
 {
   // Stale
  // const double a2_2 = a2*a2;
@@ -152,7 +152,7 @@ void model_5dof::inverse_kinematics_transform(double* local_desired_joints, doub
   q0[2] = (*local_desired_end_effector_frame)[2][3];
 
   // Pobranie danych narzedzia.
-  frame_tab tmp_tool_m;
+  lib::frame_tab tmp_tool_m;
   tool.get_frame_tab(tmp_tool_m);
 
   q6[0] = tmp_tool_m[0][3];

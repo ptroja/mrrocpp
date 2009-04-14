@@ -47,10 +47,10 @@ void pawel::task_initialization(void)
 
     switch (ecp_m_robot->robot_name)
     {
-    case ROBOT_IRP6_ON_TRACK:
+    case lib::ROBOT_IRP6_ON_TRACK:
         sr_ecp_msg->message("ECP irp6ot loaded");
         break;
-    case ROBOT_IRP6_POSTUMENT:
+    case lib::ROBOT_IRP6_POSTUMENT:
         sr_ecp_msg->message("ECP irp6p loaded");
         break;
     default:

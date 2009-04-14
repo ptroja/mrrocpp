@@ -7,7 +7,7 @@
 #if !defined(_ECP_GEN_DUNG_H)
 #define _ECP_GEN_DUNG_H
 
-#include "lib/impconst.h"		// frame_tab
+#include "lib/impconst.h"		// lib::frame_tab
 #include "lib/com_buf.h"			// lib::trajectory_description
 
 #include "ecp/common/ecp_generator.h"
@@ -32,7 +32,7 @@ private:
 protected:
 	long run_counter;
 	bool second_step;
-	frame_tab previous_frame;
+	lib::frame_tab previous_frame;
 	
 public:	
 	lib::trajectory_description td;

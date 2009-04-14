@@ -106,7 +106,7 @@ bool y_simple::next_step ( )
     temp.move(0,0,0);
     const double FORCE_TO_MOVE_RATIO = 0.00005;
     const double TORQUE_TO_ROTATE_RATIO = 0.001;
-    //	frame_tab rotation = {{0,-1,0},{1,0,0},{0,0,1},{0,0,0}};
+    //	lib::frame_tab rotation = {{0,-1,0},{1,0,0},{0,0,1},{0,0,0}};
     //	lib::Homog_matrix sensor_rotation(rotation);
     double move_tab[3] = {0,0,0};
     bool force_mov[3] = {true,true,true};

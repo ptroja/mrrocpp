@@ -138,7 +138,7 @@ manage_interface_irp6p ()
 
 int irp6p_read_kinematic()
 {
-	BYTE model_no;
+	lib::BYTE model_no;
 	try
 	{
 		if (ui_state.irp6_postument.edp.pid!=-1)
@@ -161,8 +161,8 @@ int irp6p_read_kinematic()
 
 int irp6p_read_servo_algorithm()
 {
-	BYTE servo_alg_no[IRP6_POSTUMENT_NUM_OF_SERVOS];
-	BYTE servo_par_no[IRP6_POSTUMENT_NUM_OF_SERVOS];
+	lib::BYTE servo_alg_no[IRP6_POSTUMENT_NUM_OF_SERVOS];
+	lib::BYTE servo_par_no[IRP6_POSTUMENT_NUM_OF_SERVOS];
 
 	try
 	{
@@ -684,8 +684,8 @@ int pulse_reader_irp6p_trigger()
 
 int irp6p_servo_algorithm_set(double* v)
 {
-	BYTE servo_alg_no_output[IRP6_POSTUMENT_NUM_OF_SERVOS];
-	BYTE servo_par_no_output[IRP6_POSTUMENT_NUM_OF_SERVOS];
+	lib::BYTE servo_alg_no_output[IRP6_POSTUMENT_NUM_OF_SERVOS];
+	lib::BYTE servo_par_no_output[IRP6_POSTUMENT_NUM_OF_SERVOS];
 
 	try
 	{
@@ -734,7 +734,7 @@ short tmp;
 				ui_state.irp6_postument.edp.state = 1;
 		ui_robot.irp6_postument = new ui_common_robot(
 					*config, ui_msg.all_ecp,
-					ROBOT_IRP6_POSTUMENT);
+					lib::ROBOT_IRP6_POSTUMENT);
 
 			ui_state.irp6_postument.edp.pid = ui_robot.irp6_postument->ecp->get_EDP_pid();
 
@@ -774,12 +774,12 @@ manage_interface();
 
 int irp6p_kinematic_set(double* v)
 {
-	BYTE model_no_output;
+	lib::BYTE model_no_output;
 	try
 	{
 		if ( ui_state.irp6_postument.edp.is_synchronised )
 		{
-			model_no_output = (BYTE)(v[0]);
+			model_no_output = (lib::BYTE)(v[0]);
 			ui_robot.irp6_postument->set_kinematic(model_no_output);
 			irp6p_read_kinematic();
 		}

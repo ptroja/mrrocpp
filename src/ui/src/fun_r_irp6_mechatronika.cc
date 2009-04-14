@@ -195,7 +195,7 @@ EDP_irp6_mechatronika_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 			
 			ui_robot.irp6_mechatronika = new ui_common_robot(
 					*config, ui_msg.all_ecp,
-					ROBOT_IRP6_MECHATRONIKA);
+					lib::ROBOT_IRP6_MECHATRONIKA);
 
 			ui_state.irp6_mechatronika.edp.pid = ui_robot.irp6_mechatronika->ecp->get_EDP_pid();
 
@@ -1180,7 +1180,7 @@ init_wnd_irp6m_kinematic( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	BYTE model_no;
+	lib::BYTE model_no;
 
 
 	// wychwytania ew. bledow ECP::robot
@@ -1216,8 +1216,8 @@ irp6m_kinematic_set( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	BYTE *model_no_tmp;
-	BYTE model_no_output;
+	lib::BYTE *model_no_tmp;
+	lib::BYTE model_no_output;
 
 	// wychwytania ew. bledow ECP::robot
 	try
@@ -1255,7 +1255,7 @@ wnd_irp6m_ser_alg_copy_cur_to_des( PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// wychwytania ew. bledow ECP::robot
-	BYTE *wektor_ptgr[IRP6_MECHATRONIKA_NUM_OF_SERVOS], *wektor2_ptgr[IRP6_MECHATRONIKA_NUM_OF_SERVOS],
+	lib::BYTE *wektor_ptgr[IRP6_MECHATRONIKA_NUM_OF_SERVOS], *wektor2_ptgr[IRP6_MECHATRONIKA_NUM_OF_SERVOS],
 		wektor[IRP6_MECHATRONIKA_NUM_OF_SERVOS], wektor2[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
 
 	if (ui_state.irp6_mechatronika.edp.pid!=-1)
@@ -1320,8 +1320,8 @@ init_wnd_irp6m_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	BYTE servo_alg_no[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
-	BYTE servo_par_no[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
+	lib::BYTE servo_alg_no[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
+	lib::BYTE servo_par_no[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
 
 	// wychwytania ew. bledow ECP::robot
 	try
@@ -1367,10 +1367,10 @@ irp6m_servo_algorithm_set( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	BYTE *servo_alg_no_tmp [IRP6_MECHATRONIKA_NUM_OF_SERVOS];
-	BYTE servo_alg_no_output[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
-	BYTE *servo_par_no_tmp [IRP6_MECHATRONIKA_NUM_OF_SERVOS];
-	BYTE servo_par_no_output[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
+	lib::BYTE *servo_alg_no_tmp [IRP6_MECHATRONIKA_NUM_OF_SERVOS];
+	lib::BYTE servo_alg_no_output[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
+	lib::BYTE *servo_par_no_tmp [IRP6_MECHATRONIKA_NUM_OF_SERVOS];
+	lib::BYTE servo_par_no_output[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
 
 	// wychwytania ew. bledow ECP::robot
 	try

@@ -51,7 +51,7 @@ namespace common {
 
 
 /*--------------------------------------------------------------------------*/
-irp6s_and_conv_effector::irp6s_and_conv_effector (lib::configurator &_config, ROBOT_ENUM l_robot_name) :
+irp6s_and_conv_effector::irp6s_and_conv_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name) :
         effector (_config, l_robot_name), manager(), step_counter(0)
 {
 
@@ -499,7 +499,7 @@ void irp6s_and_conv_effector::arm_motors_2_motors (void)
         throw NonFatal_error_2(STRANGE_GET_ARM_REQUEST);
     }
 
-    if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
+    if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
     {
         reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
         reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
@@ -531,7 +531,7 @@ void irp6s_and_conv_effector::arm_joints_2_joints (void)
             throw NonFatal_error_2(STRANGE_GET_ARM_REQUEST);
     }
 
-    if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
+    if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
     {
         reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
         reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
@@ -555,13 +555,13 @@ void irp6s_and_conv_effector::send_to_SERVO_GROUP ()
     switch(servo_command.instruction_code) {
       case lib::READ:
       case lib::SYNCHRONISE:
-         command_size = (int) (((BYTE*) (&servo_command.address_byte)) - ((BYTE*) (&servo_command.instruction_code)));
+         command_size = (int) (((lib::BYTE*) (&servo_command.address_byte)) - ((lib::BYTE*) (&servo_command.instruction_code)));
          break;
       case lib::MOVE:
-         command_size = (int) (((BYTE*) (&servo_command.parameters.move.address_byte)) - ((BYTE*) (&servo_command.instruction_code)));
+         command_size = (int) (((lib::BYTE*) (&servo_command.parameters.move.address_byte)) - ((lib::BYTE*) (&servo_command.instruction_code)));
          break;
       case lib::SERVO_ALGORITHM_AND_PARAMETERS:
-         command_size = (int) (((BYTE*) (&servo_command.parameters.servo_alg_par.address_byte)) - ((BYTE*) (&servo_command.instruction_code)));
+         command_size = (int) (((lib::BYTE*) (&servo_command.parameters.servo_alg_par.address_byte)) - ((lib::BYTE*) (&servo_command.instruction_code)));
          break;
 }; // end: switch
     // if (Send(&servo_command, &sg_reply, command_size, sizeof(lib::servo_group_reply)) < 0) {
@@ -1394,7 +1394,7 @@ in_out_buffer::in_out_buffer()
 
 
 // ustawienie wyjsc
-void in_out_buffer::set_output(const WORD *out_value)
+void in_out_buffer::set_output(const lib::WORD *out_value)
 {
 
     InterruptLock(&output_spinlock);
@@ -1408,7 +1408,7 @@ void in_out_buffer::set_output(const WORD *out_value)
 }
 
 // odczytanie wyjsc
-void in_out_buffer::get_output(WORD *out_value)
+void in_out_buffer::get_output(lib::WORD *out_value)
 {
 
     InterruptLock(&output_spinlock );
@@ -1422,7 +1422,7 @@ void in_out_buffer::get_output(WORD *out_value)
 
 
 // ustawienie wejsc
-void in_out_buffer::set_input (const WORD *binary_in_value, const BYTE *analog_in_table)
+void in_out_buffer::set_input (const lib::WORD *binary_in_value, const lib::BYTE *analog_in_table)
 {
 
     InterruptLock(&input_spinlock );
@@ -1445,7 +1445,7 @@ void in_out_buffer::set_input (const WORD *binary_in_value, const BYTE *analog_i
 
 
 // odczytanie wejsc
-void in_out_buffer::get_input (WORD *binary_in_value, BYTE *analog_in_table)
+void in_out_buffer::get_input (lib::WORD *binary_in_value, lib::BYTE *analog_in_table)
 {
 
     InterruptLock(&input_spinlock );
@@ -1461,9 +1461,9 @@ void in_out_buffer::get_input (WORD *binary_in_value, BYTE *analog_in_table)
      
     	// odczytanie wejsc
     	// SERVO_REPLY_STATUS_ADR     0x210	
-    	WORD read_analog = 0x00FF & in16(SERVO_REPLY_STATUS_ADR);
+    	lib::WORD read_analog = 0x00FF & in16(SERVO_REPLY_STATUS_ADR);
     	// SERVO_REPLY_REG_1_ADR       0x218
-    	WORD read_binary = 0x00FF & in16(SERVO_REPLY_REG_1_ADR);*/
+    	lib::WORD read_binary = 0x00FF & in16(SERVO_REPLY_REG_1_ADR);*/
 
   //  InterruptUnlock(&input_spinlock );
     yy_InterruptUnlock(&input_spinlock);

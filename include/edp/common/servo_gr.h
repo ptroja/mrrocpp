@@ -122,10 +122,10 @@ protected:
     //
 
     int PWM_value;                  // zadane wypelnienie PWM
-    BYTE algorithm_no;              // przeslany numer algorytmu
-    BYTE current_algorithm_no;      // numer aktualnie uzywanego algorytmu
-    BYTE algorithm_parameters_no;   // przeslany numer zestawu parametrow algorytmu
-    BYTE current_algorithm_parameters_no;  // numer aktualnie uzywanego zestawu parametrow algorytmu
+    lib::BYTE algorithm_no;              // przeslany numer algorytmu
+    lib::BYTE current_algorithm_no;      // numer aktualnie uzywanego algorytmu
+    lib::BYTE algorithm_parameters_no;   // przeslany numer zestawu parametrow algorytmu
+    lib::BYTE current_algorithm_parameters_no;  // numer aktualnie uzywanego zestawu parametrow algorytmu
 
     lib::GRIPPER_STATE_ENUM reg_state, next_reg_state, prev_reg_state; // stany w ktorych moze byc regulator
 
@@ -137,9 +137,9 @@ protected:
 
 public:
     irp6s_and_conv_effector &master;
-    regulator ( BYTE reg_no, BYTE reg_par_no,    irp6s_and_conv_effector &_master ); // konstruktor
+    regulator ( lib::BYTE reg_no, lib::BYTE reg_par_no,    irp6s_and_conv_effector &_master ); // konstruktor
 
-    virtual BYTE compute_set_value ( void ) = 0;
+    virtual lib::BYTE compute_set_value ( void ) = 0;
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda abstrakcyjna
 
     double get_set_value ( void );
@@ -166,13 +166,13 @@ public:
 
     // double get_desired_inc ( int axe_nr );
 
-    void insert_algorithm_no ( BYTE new_number );
+    void insert_algorithm_no ( lib::BYTE new_number );
 
-    BYTE get_algorithm_no ( void ) ;
+    lib::BYTE get_algorithm_no ( void ) ;
 
-    void insert_algorithm_parameters_no ( BYTE new_number );
+    void insert_algorithm_parameters_no ( lib::BYTE new_number );
 
-    BYTE get_algorithm_parameters_no ( void );
+    lib::BYTE get_algorithm_parameters_no ( void );
 
     void clear_regulator (void);
 };
@@ -199,11 +199,11 @@ protected:
 
 public:
 
-    NL_regulator (BYTE reg_no, BYTE reg_par_no,
+    NL_regulator (lib::BYTE reg_no, lib::BYTE reg_par_no,
                   double aa, double bb0, double bb1, double k_ff,
                   irp6s_and_conv_effector &_master); // konstruktor
 
-    virtual BYTE compute_set_value ( void ) = 0;
+    virtual lib::BYTE compute_set_value ( void ) = 0;
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda abstrakcyjna
 
 };
@@ -248,9 +248,9 @@ protected:
     lib::edp_error reply_status_tmp;      // okresla blad jaki wystapil ostatnim kroku
     // pid_t caller;                    // Identyfikator EDP_MASTER
 
-    BYTE Move_1_step (void);         // wykonac ruch o krok
-    virtual BYTE Move_a_step (void);         // wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH i SYNCHRO_T
-    BYTE convert_error (void);       // kompresja numeru bledu w reply_status.error0
+    lib::BYTE Move_1_step (void);         // wykonac ruch o krok
+    virtual lib::BYTE Move_a_step (void);         // wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH i SYNCHRO_T
+    lib::BYTE convert_error (void);       // kompresja numeru bledu w reply_status.error0
     void reply_to_EDP_MASTER (void); // przeslanie stanu SERVO do EDP_MASTER
 
     void clear_reply_status ( void );

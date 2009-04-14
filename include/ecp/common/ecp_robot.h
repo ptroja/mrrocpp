@@ -85,8 +85,8 @@ public:
 	// Zlecenie wykonania ruchu przez robota (realizowane przez klase konkretna):
 	// na poziomie ECP jest to polecenie dla EDP
 
-	ecp_robot(ROBOT_ENUM _robot_name, lib::configurator &_config, lib::sr_ecp *_sr_ecp);
-	ecp_robot(ROBOT_ENUM _robot_name, common::task::base& _ecp_object);
+	ecp_robot(lib::ROBOT_ENUM _robot_name, lib::configurator &_config, lib::sr_ecp *_sr_ecp);
+	ecp_robot(lib::ROBOT_ENUM _robot_name, common::task::base& _ecp_object);
 
 	pid_t get_EDP_pid(void) const;
 

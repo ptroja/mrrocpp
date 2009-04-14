@@ -240,10 +240,10 @@ void mam::task_initialization(void)
 	mam_gen->sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR] = sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR];
 
 	switch (ecp_m_robot->robot_name) {
-		case ROBOT_IRP6_ON_TRACK:
+		case lib::ROBOT_IRP6_ON_TRACK:
 			sr_ecp_msg->message("ECP mam irp6ot loaded");
 			break;
-		case ROBOT_IRP6_POSTUMENT:
+		case lib::ROBOT_IRP6_POSTUMENT:
 			sr_ecp_msg->message("ECP mam irp6p loaded");
 			break;
 		default:

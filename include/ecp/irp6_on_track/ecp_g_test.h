@@ -26,7 +26,7 @@ class y_simple : public common::generator::base {
 protected:
 	long run_counter;
 	bool second_step;
-	frame_tab previous_frame;
+	lib::frame_tab previous_frame;
 	
 public:	
 	lib::trajectory_description td;

@@ -160,7 +160,7 @@ void model::local_corrector_inverse_transform(lib::Homog_matrix& desired_end_eff
 -> Dodac opis kolejnosci obliczen.
 
  ------------------------------------------------------------------------ */
-void model::i2e_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame)
+void model::i2e_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame)
 {
 
     // Rozwiazanie prostego zagadnienia kinematyki.
@@ -192,7 +192,7 @@ void model::i2e_transform(const double* local_current_joints, frame_tab* local_c
 -> Dodac opis kolejnosci obliczen.
 
  ------------------------------------------------------------------------ */
-void model::e2i_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
+void model::e2i_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame)
 {
     // Stworzenie macierzy, ktora bedzie uzywana w dalszych obliczeniach.
     lib::Homog_matrix local_desired_end_effector_matrix (*local_desired_end_effector_frame);

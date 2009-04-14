@@ -31,7 +31,7 @@ namespace irp6p {
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	irp6s_postument_track_effector(_config, ROBOT_IRP6_POSTUMENT)
+	irp6s_postument_track_effector(_config, lib::ROBOT_IRP6_POSTUMENT)
 {
 }
 

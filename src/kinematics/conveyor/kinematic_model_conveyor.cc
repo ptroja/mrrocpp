@@ -95,7 +95,7 @@ void model::i2mp_transform(double* local_desired_motor_pos_new, double* local_de
   * current_end_effector_frame[4][3] - macierz przeksztacenia jednorodnego (MPJ)
 		opisujca aktualne poloenie i orientacje koncowki (narzedzia) w ukladzie bazowym.
  ------------------------------------------------------------------------ */
-void model::direct_kinematics_transform(const double* local_current_joints, frame_tab* local_current_end_effector_frame)
+void model::direct_kinematics_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame)
 {
 
   // Proste zadanie kinematyki.
@@ -131,7 +131,7 @@ void model::direct_kinematics_transform(const double* local_current_joints, fram
   Wyjscie:
   * local_desired_joints - wyliczone wspolrzedne wewnetrzne robota (kolejno d0, q1, q2, ...)
  ------------------------------------------------------------------------ */
-void model::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, frame_tab* local_desired_end_effector_frame)
+void model::inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame)
 {
     local_desired_joints[0] = (*local_desired_end_effector_frame)[0][3];
 } //: inverse_kinematics_transform()

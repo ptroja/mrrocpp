@@ -31,22 +31,22 @@
 #include "lib/mathtr.h"
 
 // ---------------------------------------------------------------
-ui_common_robot::ui_common_robot (lib::configurator &_config, lib::sr_ecp* _sr_ecp_msg, ROBOT_ENUM _robot_name)
+ui_common_robot::ui_common_robot (lib::configurator &_config, lib::sr_ecp* _sr_ecp_msg, lib::ROBOT_ENUM _robot_name)
 {
 
     switch (_robot_name)
     {
-    case ROBOT_IRP6_ON_TRACK:
+    case lib::ROBOT_IRP6_ON_TRACK:
         ecp = new ecp::irp6ot::ecp_irp6_on_track_robot(_config, _sr_ecp_msg);
         break;
-    case ROBOT_IRP6_POSTUMENT:
+    case lib::ROBOT_IRP6_POSTUMENT:
         ecp = new ecp::irp6p::ecp_irp6_postument_robot(_config, _sr_ecp_msg);
         break;
-    case ROBOT_IRP6_MECHATRONIKA:
+    case lib::ROBOT_IRP6_MECHATRONIKA:
         ecp = new ecp::irp6m::ecp_irp6_mechatronika_robot(_config, _sr_ecp_msg);
         break;
-//    case ROBOT_SPEAKER:
-//    case ROBOT_CONVEYOR:
+//    case lib::ROBOT_SPEAKER:
+//    case lib::ROBOT_CONVEYOR:
 //        break;
     default:
         fprintf(stderr, "ERROR: unknown robot name in ecp_robot ui_common_robot::ui_common_robot\n");
@@ -142,7 +142,7 @@ void ui_common_robot::get_current_position ( double c_position[])
 // zlecenie odczytu numeru modelu kinematyki i korektora oraz numerow
 // algorytmow serwo i numerow zestawow parametrow algorytmow
 
-bool ui_common_robot::get_kinematic (BYTE* kinematic_model_no)
+bool ui_common_robot::get_kinematic (lib::BYTE* kinematic_model_no)
 {
 
     // Zlecenie odczytu numeru modelu i korektora kinematyki
@@ -157,8 +157,8 @@ bool ui_common_robot::get_kinematic (BYTE* kinematic_model_no)
 }
 
 
-bool ui_common_robot::get_servo_algorithm ( BYTE algorithm_no[],
-        BYTE parameters_no[])
+bool ui_common_robot::get_servo_algorithm ( lib::BYTE algorithm_no[],
+        lib::BYTE parameters_no[])
 {
 
     // Zlecenie odczytu numerow algorytmow i zestawow parametrow
@@ -169,9 +169,9 @@ bool ui_common_robot::get_servo_algorithm ( BYTE algorithm_no[],
 
     // Przepisanie aktualnych numerow algorytmow i zestawow parametrow
     memcpy (algorithm_no, ecp->reply_package.rmodel.servo_algorithm.servo_algorithm_no,
-            ecp->number_of_servos*sizeof(BYTE) );
+            ecp->number_of_servos*sizeof(lib::BYTE) );
     memcpy (parameters_no, ecp->reply_package.rmodel.servo_algorithm.servo_parameters_no,
-            ecp->number_of_servos*sizeof(BYTE) );
+            ecp->number_of_servos*sizeof(lib::BYTE) );
 
     return true;
 }
@@ -198,7 +198,7 @@ bool ui_common_robot::get_controller_state (lib::controller_state_t* robot_contr
 
 
 // ---------------------------------------------------------------
-bool ui_common_robot::set_kinematic (BYTE kinematic_model_no)
+bool ui_common_robot::set_kinematic (lib::BYTE kinematic_model_no)
 {
 
     // zlecenie zapisu numeru modelu kinematyki i korektora oraz numerow
@@ -221,16 +221,16 @@ bool ui_common_robot::set_kinematic (BYTE kinematic_model_no)
 
 
 // ---------------------------------------------------------------
-bool ui_common_robot::set_servo_algorithm (BYTE algorithm_no[],
-        BYTE parameters_no[] )
+bool ui_common_robot::set_servo_algorithm (lib::BYTE algorithm_no[],
+        lib::BYTE parameters_no[] )
 {
 
     // Zlecenie zapisu numerow algorytmow i zestawow parametrow
     // Przepisanie zadanych numerow algorytmow i zestawow parametrow
     memcpy (ecp->ecp_command.instruction.rmodel.servo_algorithm.servo_algorithm_no, algorithm_no,
-            ecp->number_of_servos*sizeof(BYTE) );
+            ecp->number_of_servos*sizeof(lib::BYTE) );
     memcpy (ecp->ecp_command.instruction.rmodel.servo_algorithm.servo_parameters_no, parameters_no,
-            ecp->number_of_servos*sizeof(BYTE) );
+            ecp->number_of_servos*sizeof(lib::BYTE) );
     ecp->ecp_command.instruction.instruction_type = lib::SET;
     ecp->ecp_command.instruction.set_type = RMODEL_DV; // RMODEL
     ecp->ecp_command.instruction.set_rmodel_type = lib::SERVO_ALGORITHM; //
@@ -424,7 +424,7 @@ bool ui_common_robot::move_joints (double final_position[] )
     for (j = 0; j < ecp->number_of_servos; j++)
     {
         temp = fabs(final_position[j] - current_position[j]);
-        if ( ecp->robot_name == ROBOT_IRP6_ON_TRACK && j == 0 )  // tor
+        if ( ecp->robot_name == lib::ROBOT_IRP6_ON_TRACK && j == 0 )  // tor
             max_inc_lin = (max_inc_lin > temp) ? max_inc_lin : temp;
         else  if ( j == ecp->number_of_servos )  // gripper
             max_inc_grip = (max_inc_grip > temp) ? max_inc_grip : temp;
@@ -436,7 +436,7 @@ bool ui_common_robot::move_joints (double final_position[] )
     nr_lin = (int) ceil(max_inc_lin / JOINT_LINEAR_STEP);
     nr_grip = (int) ceil(max_inc_grip / JOINT_GRIPPER_STEP);
     nr_of_steps = (nr_ang > nr_lin) ? nr_ang : nr_lin;
-    if (ecp->robot_name == ROBOT_IRP6_ON_TRACK)
+    if (ecp->robot_name == lib::ROBOT_IRP6_ON_TRACK)
     {
         nr_of_steps = (nr_ang > nr_lin) ? nr_ang : nr_lin;
     }

@@ -104,7 +104,7 @@ bool vis_sac::first_step () {
   		for (int j=0; j<5; j++)
 			measure[i][j]=0;
 	
-  	irp6ot = robot_m[ROBOT_IRP6_ON_TRACK];
+  	irp6ot = robot_m[lib::ROBOT_IRP6_ON_TRACK];
 
 	vsp_vis_sac = sensor_m[lib::SENSOR_CAMERA_SA];
 

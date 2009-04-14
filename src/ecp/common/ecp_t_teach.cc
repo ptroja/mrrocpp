@@ -56,10 +56,10 @@ void teach::main_task_algorithm(void)
 {
     switch (ecp_m_robot->robot_name)
     {
-    case ROBOT_IRP6_ON_TRACK:
+    case lib::ROBOT_IRP6_ON_TRACK:
         sr_ecp_msg->message("ECP teach irp6ot");
         break;
-    case ROBOT_IRP6_POSTUMENT:
+    case lib::ROBOT_IRP6_POSTUMENT:
         sr_ecp_msg->message("ECP teach irp6p");
         break;
     default:

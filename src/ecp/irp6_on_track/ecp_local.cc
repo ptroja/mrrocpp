@@ -17,12 +17,12 @@ namespace ecp {
 namespace irp6ot {
 
 ecp_irp6_on_track_robot::ecp_irp6_on_track_robot(lib::configurator &_config, lib::sr_ecp *_sr_ecp) :
-	ecp_robot(ROBOT_IRP6_ON_TRACK, _config, _sr_ecp)
+	ecp_robot(lib::ROBOT_IRP6_ON_TRACK, _config, _sr_ecp)
 {
 }
 
 ecp_irp6_on_track_robot::ecp_irp6_on_track_robot(common::task::base& _ecp_object) :
-	ecp_robot(ROBOT_IRP6_ON_TRACK, _ecp_object)
+	ecp_robot(lib::ROBOT_IRP6_ON_TRACK, _ecp_object)
 {
 }
 

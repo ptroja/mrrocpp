@@ -204,7 +204,7 @@ common::State * fsautomat::createState(xmlNode *stateNode)
 				if (cchild_node->type == XML_ELEMENT_NODE
 						&& !xmlStrcmp(cchild_node->name, (const xmlChar *) "FirstSet")) {
 					actState->robotSet->firstSetCount = ((xmlLsCountNode(cchild_node)) - 1) / 2;
-					actState->robotSet->firstSet = new ROBOT_ENUM[actState->robotSet->firstSetCount];
+					actState->robotSet->firstSet = new lib::ROBOT_ENUM[actState->robotSet->firstSetCount];
 					index = 0;
 					for (set_node = cchild_node->children; set_node != NULL; set_node = set_node->next)
 						if (set_node->type == XML_ELEMENT_NODE && !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))
@@ -213,7 +213,7 @@ common::State * fsautomat::createState(xmlNode *stateNode)
 				}
 				if (cchild_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cchild_node->name, (const xmlChar *) "SecSet")) {
 					actState->robotSet->secondSetCount = ((xmlLsCountNode(cchild_node)) - 1) / 2;
-					actState->robotSet->secondSet = new ROBOT_ENUM[actState->robotSet->secondSetCount];
+					actState->robotSet->secondSet = new lib::ROBOT_ENUM[actState->robotSet->secondSetCount];
 					index = 0;
 					for (set_node = cchild_node->children; set_node != NULL; set_node = set_node->next)
 						if (set_node->type == XML_ELEMENT_NODE && !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))

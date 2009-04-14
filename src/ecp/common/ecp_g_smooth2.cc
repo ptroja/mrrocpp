@@ -1371,9 +1371,9 @@ void smooth2::calculate(void) {
 
             //PROBA Z CHWYTAKIEM
 
-            if(the_robot->robot_name == ROBOT_IRP6_ON_TRACK)
+            if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK)
                 i=8;
-            else if(the_robot->robot_name == ROBOT_IRP6_POSTUMENT)
+            else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT)
                 i=7;
 
             if(v_grip*node_counter < final_position[i])
@@ -1410,9 +1410,9 @@ void smooth2::calculate(void) {
 
             //PROBA Z CHWYTAKIEM
 
-            if(the_robot->robot_name == ROBOT_IRP6_ON_TRACK)
+            if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK)
                 i=8;
-            else if(the_robot->robot_name == ROBOT_IRP6_POSTUMENT)
+            else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT)
                 i=7;
 
             if(v_grip*node_counter < final_position[i])

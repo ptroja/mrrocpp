@@ -225,7 +225,7 @@ void fsautomat::main_task_algorithm(void)
 
 	if(trjConf && ecpLevel)
 	{
-		trjMap = loadTrajectories(fileName, ROBOT_IRP6_POSTUMENT);
+		trjMap = loadTrajectories(fileName, lib::ROBOT_IRP6_POSTUMENT);
 		printf("Lista ROBOT_IRP6_POSTUMENT zawiera: %d elementow\n", trjMap->size());
 	}
 

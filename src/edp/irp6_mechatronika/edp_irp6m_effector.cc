@@ -32,7 +32,7 @@ namespace irp6m {
 
 // Konstruktor.
 effector::effector (lib::configurator &_config) :
-        irp6s_effector (_config, ROBOT_IRP6_MECHATRONIKA)
+        irp6s_effector (_config, lib::ROBOT_IRP6_MECHATRONIKA)
 {
 
 }
@@ -42,8 +42,8 @@ effector::effector (lib::configurator &_config) :
 /*--------------------------------------------------------------------------*/
 void effector::set_rmodel (lib::c_buffer &instruction)
 {
-    // BYTE previous_model;
-    // BYTE previous_corrector;
+    // lib::BYTE previous_model;
+    // lib::BYTE previous_corrector;
     //printf(" SET RMODEL: ");
     switch (instruction.set_rmodel_type)
     {
@@ -199,7 +199,7 @@ void effector::arm_frame_2_xyz_eul_zyz ()
     }
  
     // dla robotow track i postument - oblicz chwytak
-    if ((robot_name == ROBOT_IRP6_ON_TRACK) || (robot_name == ROBOT_IRP6_POSTUMENT))
+    if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
     {
         reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
         reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];

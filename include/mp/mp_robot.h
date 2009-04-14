@@ -63,7 +63,7 @@ public:
     robot_ECP_transmission_data ecp_td; // Obraz danych robota wykorzystywanych przez generator
     // - do uzytku uzytkownika (generatora)
 
-    robot (ROBOT_ENUM l_robot_name, const char* _section_name, task::base &mp_object_l);
+    robot (lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::base &mp_object_l);
     ~robot();
 
     class MP_error

@@ -105,7 +105,7 @@ void set_next_ecps_state::configure (const lib::playerpos_goal_t &_goal)
 
 bool set_next_ecps_state::first_step ()
 {
-    for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <lib::ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
 
@@ -138,7 +138,7 @@ send_end_motion_to_ecps::send_end_motion_to_ecps(task::base& _mp_task)
 
 bool send_end_motion_to_ecps::first_step ()
 {
-    for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <lib::ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         robot_m_iterator->second->ecp_td.mp_command = lib::END_MOTION;
@@ -180,7 +180,7 @@ bool extended_empty::first_step ()
 {
 
     wait_for_ECP_pulse = true;
-    for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <lib::ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         robot_m_iterator->second->ecp_td.mp_command = lib::NEXT_POSE;
@@ -213,7 +213,7 @@ bool extended_empty::next_step ()
         return false;
     }
 
-    for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <lib::ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         if (robot_m_iterator->second->new_pulse)
@@ -227,7 +227,7 @@ bool extended_empty::next_step ()
         }
     }
 
-    for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <lib::ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         if ( robot_m_iterator->second->ecp_td.ecp_reply == lib::TASK_TERMINATED )
@@ -259,7 +259,7 @@ bool empty::first_step ()
     // Inicjacja generatora trajektorii
     // printf("mp first step\n");
     // wait_for_ECP_pulse = true;
-    for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <lib::ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         robot_m_iterator->second->ecp_td.mp_command = lib::NEXT_POSE;
@@ -287,7 +287,7 @@ bool empty::next_step ()
     // printf("mp next step\n");
     // UWAGA: dzialamy na jednoelementowej liscie robotow
 
-    for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <lib::ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         if ( robot_m_iterator->second->ecp_td.ecp_reply == lib::TASK_TERMINATED )
@@ -329,7 +329,7 @@ bool tight_coop::first_step ()
 
     idle_step_counter = 2;
 
-    for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
+    for (map <lib::ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
         robot_m_iterator->second->ecp_td.mp_command = lib::NEXT_POSE;
@@ -371,7 +371,7 @@ bool tight_coop::next_step ()
 
 
 
-    map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
+    map <lib::ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
 
     // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
     robot_m_iterator->second->ecp_td.instruction_type = lib::SET;

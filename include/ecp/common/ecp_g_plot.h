@@ -7,7 +7,7 @@
 #if !defined(_ECP_GEN_PLOT_H)
 #define _ECP_GEN_PLOT_H
 
-#include "lib/impconst.h"	// frame_tab
+#include "lib/impconst.h"	// lib::frame_tab
 #include "lib/com_buf.h"		// lib::trajectory_description
 
 #include "ecp/common/ecp_generator.h"
@@ -26,7 +26,7 @@ protected:
 
 	long run_counter;
 	bool second_step;
-	frame_tab previous_frame;
+	lib::frame_tab previous_frame;
 	bool finished;
 	
 public:

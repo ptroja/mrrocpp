@@ -185,8 +185,8 @@ manage_interface_conveyor ()
 
 int conveyor_read_servo_algorithm()
 {
-	BYTE servo_alg_no[1];
-	BYTE servo_par_no[1];
+	lib::BYTE servo_alg_no[1];
+	lib::BYTE servo_par_no[1];
 	ui_robot.conveyor->get_servo_algorithm(servo_alg_no, servo_par_no);
 	double* v = new double[2];
 	v[0] = servo_alg_no[0];
@@ -285,8 +285,8 @@ int conveyor_moves_move_joints(double* v)
 
 int conv_servo_algorithm_set(double* v)
 {
-	BYTE servo_alg_no_output[CONVEYOR_NUM_OF_SERVOS];
-	BYTE servo_par_no_output[CONVEYOR_NUM_OF_SERVOS];
+	lib::BYTE servo_alg_no_output[CONVEYOR_NUM_OF_SERVOS];
+	lib::BYTE servo_par_no_output[CONVEYOR_NUM_OF_SERVOS];
 
 	try
 	{

@@ -369,7 +369,7 @@
 
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */
-/* #undef WORDS_BIGENDIAN */
+/* #undef lib::WORDS_BIGENDIAN */
 
 /* must define this on BSD-based platforms */
 /* #undef socklen_t */

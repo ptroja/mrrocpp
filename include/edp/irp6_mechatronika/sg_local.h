@@ -43,10 +43,10 @@ class NL_regulator_2_irp6m: public common::NL_regulator
     // Obiekt z algorytmem regulacji
 
 public:
-    NL_regulator_2_irp6m (BYTE reg_no, BYTE reg_par_no,
+    NL_regulator_2_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no,
                           double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master); // konstruktor
 
-    virtual BYTE compute_set_value ( void );
+    virtual lib::BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
 }
@@ -60,10 +60,10 @@ class NL_regulator_3_irp6m: public common::NL_regulator
     // Obiekt z algorytmem regulacji
 
 public:
-    NL_regulator_3_irp6m (BYTE reg_no, BYTE reg_par_no,
+    NL_regulator_3_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no,
                           double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master); // konstruktor
 
-    virtual BYTE compute_set_value ( void );
+    virtual lib::BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
 }
@@ -77,10 +77,10 @@ class NL_regulator_4_irp6m: public common::NL_regulator
     // Obiekt z algorytmem regulacji
 
 public:
-    NL_regulator_4_irp6m (BYTE reg_no, BYTE reg_par_no,
+    NL_regulator_4_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no,
                           double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master); // konstruktor
 
-    virtual BYTE compute_set_value ( void );
+    virtual lib::BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
 }
@@ -96,10 +96,10 @@ class NL_regulator_5_irp6m: public common::NL_regulator
 
 public:
     bool first;
-    NL_regulator_5_irp6m (BYTE reg_no, BYTE reg_par_no,
+    NL_regulator_5_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no,
                           double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master); // konstruktor
 
-    virtual BYTE compute_set_value ( void );
+    virtual lib::BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
 }
@@ -114,10 +114,10 @@ class NL_regulator_6_irp6m: public common::NL_regulator
     // Obiekt z algorytmem regulacji
 
 public:
-    NL_regulator_6_irp6m (BYTE reg_no, BYTE reg_par_no,
+    NL_regulator_6_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no,
                           double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master); // konstruktor
 
-    virtual BYTE compute_set_value ( void );
+    virtual lib::BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
 }
@@ -134,7 +134,7 @@ class servo_buffer  : public common::servo_buffer
     // Obiekt z algorytmem regulacji
 
 
-    BYTE Move_a_step (void);         // wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH i SYNCHRO_T
+    lib::BYTE Move_a_step (void);         // wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH i SYNCHRO_T
 
 public:
     effector &master;

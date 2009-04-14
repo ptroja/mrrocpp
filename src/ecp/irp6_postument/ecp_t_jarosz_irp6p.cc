@@ -200,7 +200,7 @@ void jarosz::main_task_algorithm(void)
 		/*
 			int motion_time;
 			double coordinates[8] = {0.127, 0.893, 0.279, 1.008, 1.251, 2.163, 0.074, 0.0};
-			ecp_parabolic_teach_in_generator	pteach(ecp_msg, ROBOT_IRP6_POSTUMENT, 0.02);
+			ecp_parabolic_teach_in_generator	pteach(ecp_msg, lib::ROBOT_IRP6_POSTUMENT, 0.02);
 
 			motion_time = 1;
 

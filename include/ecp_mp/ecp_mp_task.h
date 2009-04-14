@@ -53,7 +53,7 @@ public:
 	bool operator_reaction (const char* question );
 
 	// by Y - Wybor przez operatora jednej z opcji
-	BYTE choose_option (const char* question, BYTE nr_of_options_input );
+	lib::BYTE choose_option (const char* question, lib::BYTE nr_of_options_input );
 
 	// Zadanie od operatora wprowadzenia liczby calkowitej (int)
 	int input_integer (const char* question);

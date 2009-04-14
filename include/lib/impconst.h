@@ -17,6 +17,12 @@ namespace mrrocpp
 
 
 using namespace mrrocpp;
+
+
+namespace mrrocpp {
+namespace lib {
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -144,5 +150,8 @@ const uint64_t MASK_RESOLVER_ZERO = 0x3F7BDEF7BDEF7BDEULL;
 #ifdef __cplusplus
 }
 #endif
+
+} // namespace lib
+} // namespace mrrocpp
 
 #endif /* _IMPCONST_H */

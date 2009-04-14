@@ -29,7 +29,7 @@ public:
 	int step_no;
 	double delta[6];
      
-     frame_tab my_goal_frame;
+     lib::frame_tab my_goal_frame;
      
 	lib::Homog_matrix C_Tx_G;
 	lib::Homog_matrix C_Tx_E;

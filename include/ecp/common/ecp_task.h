@@ -82,7 +82,7 @@ class base : public ecp_mp::task::base
 			bool operator()(char const *a, char const *b) const;
 		};
 		mp::common::Trajectory * createTrajectory(xmlNode *actNode, xmlChar *stateID);
-		std::map<char*, mp::common::Trajectory, str_cmp>* loadTrajectories(char * fileName, ROBOT_ENUM propRobot);
+		std::map<char*, mp::common::Trajectory, str_cmp>* loadTrajectories(char * fileName, lib::ROBOT_ENUM propRobot);
 
 	public: // TODO: what follows should be private method
 

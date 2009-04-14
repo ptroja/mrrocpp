@@ -149,8 +149,8 @@ bool tff_nose_run::first_step()
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 	// cout << "first_step" << endl;
-	irp6ot = robot_m[ROBOT_IRP6_ON_TRACK];
-	irp6p = robot_m[ROBOT_IRP6_POSTUMENT];
+	irp6ot = robot_m[lib::ROBOT_IRP6_ON_TRACK];
+	irp6p = robot_m[lib::ROBOT_IRP6_POSTUMENT];
 
 	irp6ot->communicate = true;
 	irp6p->communicate = true;
@@ -306,8 +306,8 @@ bool haptic::first_step()
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 	// cout << "first_step" << endl;
-	irp6ot = robot_m[ROBOT_IRP6_ON_TRACK];
-	irp6p = robot_m[ROBOT_IRP6_POSTUMENT];
+	irp6ot = robot_m[lib::ROBOT_IRP6_ON_TRACK];
+	irp6p = robot_m[lib::ROBOT_IRP6_POSTUMENT];
 
 	irp6ot->communicate = true;
 	irp6p->communicate = true;
@@ -501,8 +501,8 @@ bool tff_rubik_grab::first_step()
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-	irp6ot = robot_m[ROBOT_IRP6_ON_TRACK];
-	irp6p = robot_m[ROBOT_IRP6_POSTUMENT];
+	irp6ot = robot_m[lib::ROBOT_IRP6_ON_TRACK];
+	irp6p = robot_m[lib::ROBOT_IRP6_POSTUMENT];
 
 	if (irp6ot_con)
 		irp6ot->communicate=true;
@@ -720,8 +720,8 @@ bool tff_rubik_face_rotate::first_step()
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-	irp6ot = robot_m[ROBOT_IRP6_ON_TRACK];
-	irp6p = robot_m[ROBOT_IRP6_POSTUMENT];
+	irp6ot = robot_m[lib::ROBOT_IRP6_ON_TRACK];
+	irp6p = robot_m[lib::ROBOT_IRP6_POSTUMENT];
 	irp6ot->communicate = true;
 	irp6p->communicate = true;
 
@@ -973,8 +973,8 @@ bool tff_gripper_approach::first_step()
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-	irp6ot = robot_m[ROBOT_IRP6_ON_TRACK];
-	irp6p = robot_m[ROBOT_IRP6_POSTUMENT];
+	irp6ot = robot_m[lib::ROBOT_IRP6_ON_TRACK];
+	irp6p = robot_m[lib::ROBOT_IRP6_POSTUMENT];
 
 	irp6ot->communicate = true;
 	irp6p->communicate = true;
@@ -1116,9 +1116,9 @@ bool nose_run_force::first_step()
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 
 
-	irp6ot = robot_m[ROBOT_IRP6_ON_TRACK];
-	irp6p = robot_m[ROBOT_IRP6_POSTUMENT];
-	conv = robot_m[ROBOT_CONVEYOR];
+	irp6ot = robot_m[lib::ROBOT_IRP6_ON_TRACK];
+	irp6p = robot_m[lib::ROBOT_IRP6_POSTUMENT];
+	conv = robot_m[lib::ROBOT_CONVEYOR];
 
 	irp6ot->communicate = true;
 	irp6p->communicate = true;
@@ -1303,9 +1303,9 @@ bool drawing_teach_in_force::first_step()
 
 	conv_summar_inc=0.0;
 
-	irp6ot = robot_m[ROBOT_IRP6_ON_TRACK];
-	irp6p = robot_m[ROBOT_IRP6_POSTUMENT];
-	conv = robot_m[ROBOT_CONVEYOR];
+	irp6ot = robot_m[lib::ROBOT_IRP6_ON_TRACK];
+	irp6p = robot_m[lib::ROBOT_IRP6_POSTUMENT];
+	conv = robot_m[lib::ROBOT_CONVEYOR];
 
 	irp6ot->communicate = true;
 	irp6p->communicate = true;
