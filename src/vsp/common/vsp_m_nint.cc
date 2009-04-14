@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------------
-// Proces:		VIRTUAL SENSOR PROCESS (VSP)
+// Proces:		VIRTUAL SENSOR PROCESS (lib::VSP)
 // Plik:            vsp_m_nint.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		Nieinteraktywna powloka procesow VSP
@@ -87,7 +87,7 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, RESMGR_OCB_T *ocb);
 template<class ERROR>
 void error_handler(ERROR e){
 	switch(e.error_class){
-		case SYSTEM_ERROR:
+		case lib::SYSTEM_ERROR:
 			if(e.error_no == DISPATCH_ALLOCATION_ERROR)
 				printf("ERROR: Unable to allocate dispatch handle.\n");
 			if(e.error_no == DEVICE_EXISTS)
@@ -96,32 +96,32 @@ void error_handler(ERROR e){
 				printf("ERROR: Unable to attach sensor device.\n");
 			if(e.error_no == DISPATCH_LOOP_ERROR)
 				printf("ERROR: Block error in main dispatch loop.\n");
-			printf("VSP aborted due to SYSTEM_ERROR\n");
-			vsp::common::vs->sr_msg->message (SYSTEM_ERROR, e.error_no);
+			printf("VSP aborted due to lib::SYSTEM_ERROR\n");
+			vsp::common::vs->sr_msg->message (lib::SYSTEM_ERROR, e.error_no);
 			TERMINATE=true;
 			break;
-		case FATAL_ERROR:
-			vsp::common::vs->sr_msg->message (FATAL_ERROR, e.error_no);
+		case lib::FATAL_ERROR:
+			vsp::common::vs->sr_msg->message (lib::FATAL_ERROR, e.error_no);
 			break;
-		case NON_FATAL_ERROR:
+		case lib::NON_FATAL_ERROR:
 			switch(e.error_no){
 			case INVALID_COMMAND_TO_VSP:
 				vsp::common::vs->from_vsp.vsp_report= lib::INVALID_VSP_COMMAND;
-				vsp::common::vs->sr_msg->message (NON_FATAL_ERROR, e.error_no);
+				vsp::common::vs->sr_msg->message (lib::NON_FATAL_ERROR, e.error_no);
 			break;
 			case SENSOR_NOT_CONFIGURED:
 				vsp::common::vs->from_vsp.vsp_report= lib::VSP_SENSOR_NOT_CONFIGURED;
-				vsp::common::vs->sr_msg->message (NON_FATAL_ERROR, e.error_no);
+				vsp::common::vs->sr_msg->message (lib::NON_FATAL_ERROR, e.error_no);
 				break;
 			case READING_NOT_READY:
 				vsp::common::vs->from_vsp.vsp_report= lib::VSP_READING_NOT_READY;
 				break;
 			default:
-				vsp::common::vs->sr_msg->message (NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
+				vsp::common::vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
 			}; // end switch
 			break;
 		default:
-			vsp::common::vs->sr_msg->message (NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
+			vsp::common::vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
 		} // end switch
 	} // end error_handler
 
@@ -172,7 +172,7 @@ void write_to_sensor( lib::VSP_COMMAND i_code){
 			 TERMINATE=true;
 			break;
 		default :
-			throw lib::VSP_main_error(NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
+			throw lib::VSP_main_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
 		};
 }
 
@@ -356,12 +356,12 @@ int main(int argc, char *argv[]) {
 		// Sprawdzenie czy istnieje /dev/TWOJSENSOR.
 
 		if( access(resourceman_attach_point, R_OK)== 0 ){
-			throw lib::VSP_main_error(SYSTEM_ERROR, DEVICE_EXISTS);	// wyrzucany blad
+			throw lib::VSP_main_error(lib::SYSTEM_ERROR, DEVICE_EXISTS);	// wyrzucany blad
 		};
 
 		/* initialize dispatch interface */
 		if((dpp = dispatch_create()) == NULL)
-			throw lib::VSP_main_error(SYSTEM_ERROR, DISPATCH_ALLOCATION_ERROR);	// wyrzucany blad
+			throw lib::VSP_main_error(lib::SYSTEM_ERROR, DISPATCH_ALLOCATION_ERROR);	// wyrzucany blad
 
 		/* initialize resource manager attributes */
 		memset(&resmgr_attr, 0, sizeof resmgr_attr);
@@ -389,7 +389,7 @@ int main(int argc, char *argv[]) {
                        &connect_funcs,		/* connect routines       */
                        &io_funcs,				/* I/O routines           */
                        &attr)) 	== -1){		/* handle                 */
-			throw lib::VSP_main_error(SYSTEM_ERROR, DEVICE_CREATION_ERROR);	// wyrzucany blad
+			throw lib::VSP_main_error(lib::SYSTEM_ERROR, DEVICE_CREATION_ERROR);	// wyrzucany blad
 			};
 
 		/* allocate a context structure */
@@ -404,7 +404,7 @@ int main(int argc, char *argv[]) {
 		/* start the resource manager message loop */
 		while(!vsp::common::TERMINATE) { // for (;;)
 			if((ctp = dispatch_block(ctp)) == NULL)
-				throw lib::VSP_main_error(SYSTEM_ERROR, DISPATCH_LOOP_ERROR);	// wyrzucany blad
+				throw lib::VSP_main_error(lib::SYSTEM_ERROR, DISPATCH_LOOP_ERROR);	// wyrzucany blad
 			dispatch_handler(ctp);
 	 		} // end for(;;)
 	     vsp::common::vs->sr_msg->message ("VSP terminated");

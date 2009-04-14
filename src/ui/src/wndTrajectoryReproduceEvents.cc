@@ -38,7 +38,7 @@
 // #define TRDEBUG
 
 // Wiadomosc wysylana do ECP.
-extern UI_ECP_message ui_ecp_msg;
+extern lib::UI_ECP_message ui_ecp_msg;
 // Rozkaz przeslany z ECP.
 extern ui_ecp_buffer* ui_ecp_obj;
 // Zmienna konfiguracyjna.
@@ -78,8 +78,8 @@ int TRbtnStart( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
     ui_ecp_msg.hdr.type = 0x00;
     ui_ecp_msg.hdr.subtype = 0x00;
     // Polecenie dla ECP -> kalibracja czujnika.
-    ui_ecp_msg.command = TR_START_MOVE;
-    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), NULL, 0) == -1) {
+    ui_ecp_msg.command = lib::TR_START_MOVE;
+    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
         perror("TRbtnPause: Send to ECP failed");
     }else{
         // Ustawienie przyciskow.
@@ -104,8 +104,8 @@ int TRbtnPause( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
     ui_ecp_msg.hdr.type = 0x00;
     ui_ecp_msg.hdr.subtype = 0x00;
     // Polecenie dla ECP -> kalibracja czujnika.
-    ui_ecp_msg.command = TR_PAUSE_MOVE;
-    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), NULL, 0) == -1) {
+    ui_ecp_msg.command = lib::TR_PAUSE_MOVE;
+    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
         perror("TRbtnPause: Send to ECP failed");
     }else{
         // Ustawienie przyciskow.
@@ -128,8 +128,8 @@ int TRbtnStop( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo ) 
     ui_ecp_msg.hdr.type = 0x00;
     ui_ecp_msg.hdr.subtype = 0x00;
     // Polecenie dla ECP -> kalibracja czujnika.
-    ui_ecp_msg.command = TR_STOP_MOVE;
-    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), NULL, 0) == -1) {
+    ui_ecp_msg.command = lib::TR_STOP_MOVE;
+    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
         perror("TRbtnPause: Send to ECP failed");
     }else{
         // Ustawienie przyciskow.
@@ -155,8 +155,8 @@ int TRbtnExit( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo ){
     ui_ecp_msg.hdr.type = 0x00;
     ui_ecp_msg.hdr.subtype = 0x00;
     // Polecenie dla ECP.
-    ui_ecp_msg.command = TR_EXIT;
-    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), NULL, 0) == -1) {
+    ui_ecp_msg.command = lib::TR_EXIT;
+    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
          perror("btnExit: Send to ECP failed");
         };
     // Zamkniecie polaczenia.
@@ -175,9 +175,9 @@ int TRbtnPositionZero( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
     ui_ecp_msg.hdr.type = 0x00;
     ui_ecp_msg.hdr.subtype = 0x00;
     // Polecenie dla ECP -> Osiagniecie zerowej pozycji.
-    ui_ecp_msg.command = TR_ZERO_POSITION;
+    ui_ecp_msg.command = lib::TR_ZERO_POSITION;
 	// printf("TRbtnPositionZero: sending %d \n", ui_ecp_msg.command);
-    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), NULL, 0) == -1) {
+    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
         perror("TRbtnPositionZero: Send to ECP failed");
     }else{
         // Zerowy numer makrokroku.
@@ -225,7 +225,7 @@ int TRbtnLoadTrajectory( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
         printf("TRbtnLoadTrajectory\n");
     #endif
     // Komenda wysylana z okna FileDialog po wcisnieciu accept.
-    FDCommand = TR_LOAD_TRAJECTORY;
+    FDCommand = lib::TR_LOAD_TRAJECTORY;
     // Stworzenie okna wyboru pliku.
     ApCreateModule (ABM_wndFileLocation, widget, cbinfo);
     return( Pt_CONTINUE );
@@ -236,7 +236,7 @@ int TRbtnSaveAll( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
         printf("TRbtnSaveAll\n");
     #endif
     // Komenda wysylana z okna FileDialog po wcisnieciu accept.
-    FDCommand = TR_SAVE_READINGS;
+    FDCommand = lib::TR_SAVE_READINGS;
     // Stworzenie okna wndFileLocation.
     ApCreateModule (ABM_wndFileLocation, widget, cbinfo);
     return( Pt_CONTINUE );
@@ -331,8 +331,8 @@ int TRbtnDSSCalibrate( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
     ui_ecp_msg.hdr.type = 0x00;
     ui_ecp_msg.hdr.subtype = 0x00;
     // Polecenie dla ECP -> Kalibracja czujnika zlozonego z linialow.
-    ui_ecp_msg.command = TR_CALIBRATE_DIGITAL_SCALES_SENSOR;
-    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), NULL, 0) == -1) {
+    ui_ecp_msg.command = lib::TR_CALIBRATE_DIGITAL_SCALES_SENSOR;
+    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
         perror("TRbtnDSSCalibrate: Send to ECP failed");
         };
     return( Pt_CONTINUE );
@@ -347,8 +347,8 @@ int TRbtnFSCalibrate( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
     ui_ecp_msg.hdr.type = 0x00;
     ui_ecp_msg.hdr.subtype = 0x00;
     // Polecenie dla ECP -> Kalibracja czujnika sily.
-    ui_ecp_msg.command = TR_CALIBRATE_FORCE_SENSOR;
-    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), NULL, 0) == -1) {
+    ui_ecp_msg.command = lib::TR_CALIBRATE_FORCE_SENSOR;
+    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
         perror("TRbtnFSCalibrate: Send to ECP failed");
         };
     return( Pt_CONTINUE );
@@ -363,8 +363,8 @@ int TRbtnTryAgain( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
     ui_ecp_msg.hdr.type = 0x00;
     ui_ecp_msg.hdr.subtype = 0x00;
     // Polecenie dla ECP -> Kalibracja czujnika sily.
-    ui_ecp_msg.command = TR_TRY_MOVE_AGAIN;
-    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), NULL, 0) == -1) {
+    ui_ecp_msg.command = lib::TR_TRY_MOVE_AGAIN;
+    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
         perror("TRbtnTryAgain: Send to ECP failed");
     }else{
         // Ustawienie stanu przyciskow.

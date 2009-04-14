@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //                            ecp.cc
-//            Effector Control Process (ECP) - methods
+//            Effector Control Process (lib::ECP) - methods
 // Funkcje do tworzenia procesow ECP
 // robot - speaker
 //
@@ -42,17 +42,17 @@ void ecp_speaker_robot::create_command(void)
 
 	switch (EDP_data.instruction_type)
 	{
-		case SET:
-		case SET_GET:
+		case lib::SET:
+		case lib::SET_GET:
 			strcpy(ecp_command.instruction.arm.text_def.text, EDP_data.text);
 			strcpy(ecp_command.instruction.arm.text_def.prosody, EDP_data.prosody);
 			break;
-		case GET:
-		case QUERY:
+		case lib::GET:
+		case lib::QUERY:
 			break;
-		case SYNCHRO:
+		case lib::SYNCHRO:
 		default: // blad: nieprawidlowe polecenie
-			throw ECP_error(NON_FATAL_ERROR, INVALID_ECP_COMMAND);
+			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_ECP_COMMAND);
 	} // end: switch (instruction_type)
 }
 // ---------------------------------------------------------------
@@ -66,15 +66,15 @@ void ecp_speaker_robot::get_reply(void)
 
 	switch (EDP_data.reply_type)
 	{
-		case ERROR:
+		case lib::ERROR:
 			EDP_data.error_no.error0 = reply_package.error_no.error0;
 			EDP_data.error_no.error1 = reply_package.error_no.error1;
 			break;
-		case ACKNOWLEDGE:
+		case lib::ACKNOWLEDGE:
 			EDP_data.speaking = reply_package.arm.text_def.speaking;
 			break;
 		default: // bledna przesylka
-			throw ECP_error(NON_FATAL_ERROR, INVALID_EDP_REPLY);
+			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_EDP_REPLY);
 	} // end: switch (EDP_data.reply_type)
 } // end: ecp_speaker_robot::get_reply ()
 } // namespace speaker

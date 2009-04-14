@@ -1,7 +1,7 @@
  // -------------------------------------------------------------------------
 //                            vsp_s.cc 		dla QNX6.2
 // 
-//            Virtual Sensor Process (VSP) - methods
+//            Virtual Sensor Process (lib::VSP) - methods
 // Metody klasy VSP
 // 
 // Ostatnia modyfikacja: 25.06.03
@@ -105,12 +105,12 @@ nn::nn(lib::configurator &_config) : base(_config){
 	if (sockfd < 0)
 	{
 	    printf("ERROR opening socket");
-	    throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	    throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	}
 	server = gethostbyname(HOST);
 	if (server == NULL) {
 	    printf("ERROR, no such host\n");	    
-	    throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	    throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	}
 	   bzero((char *) &serv_addr, sizeof(serv_addr));
 	serv_addr.sin_family = AF_INET;
@@ -121,7 +121,7 @@ nn::nn(lib::configurator &_config) : base(_config){
 	  if (connect(sockfd, (const struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0) 
 	  {
 	    printf("ERROR connecting");
-	    throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	    throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 		}
 	};
 
@@ -149,7 +149,7 @@ void nn::initiate_reading (void){
 
 
 	if(!is_sensor_configured)
-	     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	     
 
 //read from linux
@@ -181,10 +181,10 @@ void nn::initiate_reading (void){
 void nn::get_reading (void){
 
 	if(!is_sensor_configured)
-	     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	// jezeli chcemy jakikolwiek odczyt	-> is_reading_ready
 	if(!is_reading_ready)
-	     throw sensor_error (FATAL_ERROR, READING_NOT_READY);   
+	     throw sensor_error (lib::FATAL_ERROR, READING_NOT_READY);   
 
 	// ok
 	from_vsp.vsp_report= lib::VSP_REPLY_OK;

@@ -79,9 +79,9 @@ public:
 class ECP_MP_main_error
 { // Klasa obslugi bledow poziomie MP
 	public:
-		const ERROR_CLASS error_class;
+		const lib::ERROR_CLASS error_class;
 		const uint64_t mp_error;
-		ECP_MP_main_error(ERROR_CLASS err0, uint64_t err1, const char *file, int line) :
+		ECP_MP_main_error(lib::ERROR_CLASS err0, uint64_t err1, const char *file, int line) :
 			error_class(err0), mp_error(err1)
 		{
 			fprintf(stderr, "ECP_MP_main_error @ %s:%d\n", file, line);

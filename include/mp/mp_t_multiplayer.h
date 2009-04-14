@@ -10,7 +10,7 @@ namespace task {
 class multiplayer : public base
 {
 	private:
-		void move_electron_robot(const playerpos_goal_t &goal);
+		void move_electron_robot(const lib::playerpos_goal_t &goal);
 	public:
 
 		multiplayer(lib::configurator &_config);

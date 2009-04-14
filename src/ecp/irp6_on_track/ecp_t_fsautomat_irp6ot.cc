@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------
 //   ecp_t_fsautomat_irp6ot.cc - automat skonczony , ECP dla IRP6_ON_TRACK
 //
-//                     EFFECTOR CONTROL PROCESS (ECP) - main()
+//                     EFFECTOR CONTROL PROCESS (lib::ECP) - main()
 //
 // Ostatnia modyfikacja: 2008
 // ------------------------------------------------------------------------
@@ -250,9 +250,9 @@ void fsautomat::main_task_algorithm(void)
 				tig->flush_pose_list();
 				//tig->load_file_with_path (path1);
 				//tig->initiate_pose_list();
-				tig->teach(MOTOR, "asdasdkjasdj");
+				tig->teach(lib::MOTOR, "asdasdkjasdj");
 				if(operator_reaction("Save?"))
-					tig->save_file(MOTOR);
+					tig->save_file(lib::MOTOR);
 				delete[] path1;
 				//tig->Move();
 				break;

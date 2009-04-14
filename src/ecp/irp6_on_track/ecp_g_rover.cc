@@ -199,21 +199,21 @@ bool vis_sac_lx::first_step()
 	the_robot->EDP_data.next_tool_frame[2][3]=0.25; //0.25;
 
 
-	//	the_robot->EDP_data.mp_command = NEXT_POSE;
-	the_robot->EDP_data.instruction_type = SET_GET; //GET;
+	//	the_robot->EDP_data.mp_command = lib::NEXT_POSE;
+	the_robot->EDP_data.instruction_type = lib::SET_GET; //GET;
 	the_robot->EDP_data.get_type = ARM_DV;
 	the_robot->EDP_data.set_type = RMODEL_DV; //ARM_DV;
-	//the_robot->EDP_data.set_arm_type = FRAME; //XYZ_EULER_ZYZ; //POSE_FORCE_TORQUE_AT_FRAME;
-	//the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
-	the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
+	//the_robot->EDP_data.set_arm_type = lib::FRAME; //XYZ_EULER_ZYZ; //POSE_FORCE_TORQUE_AT_FRAME;
+	//the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
+	the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
 
-	the_robot->EDP_data.get_arm_type = FRAME;
+	the_robot->EDP_data.get_arm_type = lib::FRAME;
 	//FRAME; //XYZ_EULER_ZYZ; //POSE_FORCE_TORQUE_AT_FRAME;
-	the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
-	//the_robot->EDP_data.motion_type = ABSOLUTE; //RELATIVE;
-	the_robot->EDP_data.next_interpolation_type= MIM; //TCIM
-	the_robot->EDP_data.motion_type = ABSOLUTE; //PF_FIXED_FRAME_WITH_DESIRED_FORCE_OR_SPEED;
+	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
+	//the_robot->EDP_data.motion_type = lib::ABSOLUTE; //RELATIVE;
+	the_robot->EDP_data.next_interpolation_type= lib::MIM; //TCIM
+	the_robot->EDP_data.motion_type = lib::ABSOLUTE; //PF_FIXED_FRAME_WITH_DESIRED_FORCE_OR_SPEED;
 
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
@@ -254,10 +254,10 @@ bool vis_sac_lx::next_step()
 
 
 	 	the_robot->EDP_data.set_type = ARM_DV;
-		the_robot->EDP_data.instruction_type = SET_GET;
+		the_robot->EDP_data.instruction_type = lib::SET_GET;
 	  	//the_robot->EDP_data.get_type = NOTHING_DV;
-	 	//the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
-	 	//the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
+	 	//the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
+	 	//the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
 
 		//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 2.341);	//jesli chwytamy po przekatnej
 	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 3.141); // jesli chwytak na plasko oryginal

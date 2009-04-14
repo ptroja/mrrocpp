@@ -57,7 +57,7 @@ hermite_spline::hermite_spline (common::task::base& _ecp_task,
 void hermite_spline::fill_hermite_arrays(void)
 {
     if (pose_list.empty())
-        throw ECP_error (NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
+        throw ECP_error (lib::NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
     int i,j;
     double dy1[MAX_SERVOS_NR],dy2[MAX_SERVOS_NR],dtime[MAX_SERVOS_NR],h1,h2,mi,la;        // aux variables
     npoints = pose_list_length() + 1;				// number of poses - the one additional is for the starting pose
@@ -83,7 +83,7 @@ void hermite_spline::fill_hermite_arrays(void)
         time[j]=time[j-1];
         switch ( starting_pose.arm_type )
         {
-        case MOTOR:
+        case lib::MOTOR:
             for(i=0;i<MAX_SERVOS_NR;i++)
             {
                 dtime[i]=TS*(ceil((fabs(yi[j][i]-yi[j-1][i])/v_def_motor[i])/INTERVAL)*INTERVAL);
@@ -94,7 +94,7 @@ void hermite_spline::fill_hermite_arrays(void)
                 // printf("\n   %f",dtime[i]);
             }
             break;
-        case JOINT:
+        case lib::JOINT:
             for(i=0;i<MAX_SERVOS_NR;i++)
             {
                 dtime[i]=TS*(ceil((fabs(yi[j][i]-yi[j-1][i])/v_def_joint[i])/INTERVAL)*INTERVAL);
@@ -105,7 +105,7 @@ void hermite_spline::fill_hermite_arrays(void)
                 // printf("\n   %f",dtime[i]);
             }
             break;
-        case XYZ_EULER_ZYZ:
+        case lib::XYZ_EULER_ZYZ:
             for(i=0;i<7;i++)
             {
                 dtime[i]=TS*(ceil((fabs(yi[j][i]-yi[j-1][i])/v_def_xyz_euler[i])/INTERVAL)*INTERVAL);
@@ -116,7 +116,7 @@ void hermite_spline::fill_hermite_arrays(void)
                 // printf("\n   %f",dtime[i]);
             }
             break;
-        case XYZ_ANGLE_AXIS:
+        case lib::XYZ_ANGLE_AXIS:
             for(i=0;i<7;i++)
             {
                 dtime[i]=TS*(ceil((fabs(yi[j][i]-yi[j-1][i])/v_def_xyz_angles[i])/INTERVAL)*INTERVAL);
@@ -127,7 +127,7 @@ void hermite_spline::fill_hermite_arrays(void)
                 // printf("\n   %f",dtime[i]);
             }
         default:
-            throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+            throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
         } // end: switch   */
         // printf("\ntime[%d] %f", j,time[j]);
     }
@@ -200,30 +200,30 @@ bool hermite_spline::first_step (  )
     // Request the coordinates of the current pose of the robot
     switch ( starting_pose.arm_type )
     {
-    case MOTOR:
+    case lib::MOTOR:
         // printf("\n first step MOTOR");
-        the_robot->EDP_data.instruction_type = GET;
+        the_robot->EDP_data.instruction_type = lib::GET;
         the_robot->EDP_data.get_type = ARM_DV; // ARM
-        the_robot->EDP_data.get_arm_type = MOTOR;
+        the_robot->EDP_data.get_arm_type = lib::MOTOR;
         break;
-    case JOINT:
-        the_robot->EDP_data.instruction_type = GET;
+    case lib::JOINT:
+        the_robot->EDP_data.instruction_type = lib::GET;
         the_robot->EDP_data.get_type = ARM_DV; // ARM
-        the_robot->EDP_data.get_arm_type = JOINT;
+        the_robot->EDP_data.get_arm_type = lib::JOINT;
         break;
-    case XYZ_EULER_ZYZ:
+    case lib::XYZ_EULER_ZYZ:
         // printf("\n  first step, XYZ_EULER_ZYZ");
-        the_robot->EDP_data.instruction_type = GET;
+        the_robot->EDP_data.instruction_type = lib::GET;
         the_robot->EDP_data.get_type = ARM_DV; // ARM
-        the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;
+        the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
         break;
-    case XYZ_ANGLE_AXIS:
-        the_robot->EDP_data.instruction_type = GET;
+    case lib::XYZ_ANGLE_AXIS:
+        the_robot->EDP_data.instruction_type = lib::GET;
         the_robot->EDP_data.get_type = ARM_DV; // ARM
-        the_robot->EDP_data.get_arm_type = XYZ_ANGLE_AXIS;
+        the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
         break;
     default:
-        throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+        throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
     } // end: switch
 
     return true;
@@ -254,36 +254,36 @@ bool hermite_spline::next_step (  )
         // Copy the coordinates of the current robot pose from the virtual image of the robot to the structure 'starting_pose'
         switch ( starting_pose.arm_type )
         {
-        case MOTOR:
+        case lib::MOTOR:
             for(i=0; i<MAX_SERVOS_NR; i++)
                 starting_pose.coordinates[i]=the_robot->EDP_data.current_motor_arm_coordinates[i];
             // for(i=0; i<6; i++) printf("\n next step MOTOR %f",starting_pose.coordinates[i]);
             break;
-        case JOINT:
+        case lib::JOINT:
                 for(i=0; i<MAX_SERVOS_NR; i++)
                     starting_pose.coordinates[i]=the_robot->EDP_data.current_joint_arm_coordinates[i];
             break;
-        case XYZ_EULER_ZYZ:
+        case lib::XYZ_EULER_ZYZ:
                 for(i=0; i<6; i++)
                     starting_pose.coordinates[i]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
             starting_pose.coordinates[6]=the_robot->EDP_data.current_gripper_coordinate;
             // for(i=0; i<6; i++) printf("\n dddddd  %f     %f",starting_pose.coordinates[i],the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i] );
             break;
-        case XYZ_ANGLE_AXIS:
+        case lib::XYZ_ANGLE_AXIS:
                 for(i=0; i<6; i++)
                     starting_pose.coordinates[i]=the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
             starting_pose.coordinates[6]=the_robot->EDP_data.current_gripper_coordinate;
             break;
         default:
-                throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+                throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
         } // end: switch
 
         fill_hermite_arrays(); // fill arrays 'time', 'yi', 'yiprim'
-        the_robot->EDP_data.instruction_type = SET;
+        the_robot->EDP_data.instruction_type = lib::SET;
         the_robot->EDP_data.set_arm_type = starting_pose.arm_type;
         the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.motion_type = ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = MIM;
+        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+         the_robot->EDP_data.next_interpolation_type = lib::MIM;
         the_robot->EDP_data.motion_steps = (WORD) (10);
         the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
         first_time = false;
@@ -307,26 +307,26 @@ bool hermite_spline::next_step (  )
     // Copy the newly calculated coordinates of the next robot pose from the array y to the virtual image of the robot
     switch ( starting_pose.arm_type )
     {
-    case MOTOR:
+    case lib::MOTOR:
         for (i = 0; i < MAX_SERVOS_NR; i++)
             the_robot->EDP_data.next_motor_arm_coordinates[i] = y[i];
         break;
-    case JOINT:
+    case lib::JOINT:
             for (i = 0; i < MAX_SERVOS_NR; i++)
                 the_robot->EDP_data.next_joint_arm_coordinates[i] = y[i];
         break;
-    case XYZ_EULER_ZYZ:
+    case lib::XYZ_EULER_ZYZ:
             for (i = 0; i < 6; i++)
                 the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i] =y[i];
         the_robot->EDP_data.next_gripper_coordinate = y[6];
         break;
-    case XYZ_ANGLE_AXIS:
+    case lib::XYZ_ANGLE_AXIS:
             for (i = 0; i < 6; i++)
                 the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = y[i];
         the_robot->EDP_data.next_gripper_coordinate = y[6];
         break;
     default:
-            throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+            throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
     } // end: switch
 
     return true;
@@ -378,7 +378,7 @@ ecp_teach_in_generator (_ecp_task)
 void natural_spline::fill_natural_arrays(void)
 {
     if (pose_list.empty())
-        throw ECP_error (NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
+        throw ECP_error (lib::NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
     int i,j;
 
     double dx1[MAX_SERVOS_NR],dx2[MAX_SERVOS_NR],dy1[MAX_SERVOS_NR],dy2[MAX_SERVOS_NR],h,p[MAX_SERVOS_NR],dtime[MAX_SERVOS_NR];
@@ -386,7 +386,7 @@ void natural_spline::fill_natural_arrays(void)
     q[NPOINTS][MAX_SERVOS_NR],u[NPOINTS][MAX_SERVOS_NR];  // aux variables
     npoints = pose_list_length() + 1;   // number of control poses - the one additional for the first pose
     if(npoints<3)
-        throw ECP_error (NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
+        throw ECP_error (lib::NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
 
     // Copy the values of the coordinates of the current robot pose from the virtual image of the robot to the first entry in the array yi
     for (i=0;i<MAX_SERVOS_NR;i++)
@@ -409,7 +409,7 @@ void natural_spline::fill_natural_arrays(void)
         time[j]=time[j-1];
         switch ( starting_pose.arm_type )
         {
-        case MOTOR:
+        case lib::MOTOR:
             for(i=0;i<MAX_SERVOS_NR;i++)
             {
                 dtime[i]=TS*(ceil((fabs(yi[j][i]-yi[j-1][i])/v_def_motor[i])/INTERVAL)*INTERVAL);
@@ -420,7 +420,7 @@ void natural_spline::fill_natural_arrays(void)
                 // printf("\n   %f",dtime[i]);
             }
             break;
-        case JOINT:
+        case lib::JOINT:
             for(i=0;i<MAX_SERVOS_NR;i++)
             {
                 dtime[i]=TS*(ceil((fabs(yi[j][i]-yi[j-1][i])/v_def_joint[i])/INTERVAL)*INTERVAL);
@@ -431,7 +431,7 @@ void natural_spline::fill_natural_arrays(void)
                 // printf("\n   %f",dtime[i]);
             }
             break;
-        case XYZ_EULER_ZYZ:
+        case lib::XYZ_EULER_ZYZ:
             for(i=0;i<7;i++)
             {
                 dtime[i]=TS*(ceil((fabs(yi[j][i]-yi[j-1][i])/v_def_xyz_euler[i])/INTERVAL)*INTERVAL);
@@ -442,7 +442,7 @@ void natural_spline::fill_natural_arrays(void)
                 // printf("\n   %f",dtime[i]);
             }
             break;
-        case XYZ_ANGLE_AXIS:
+        case lib::XYZ_ANGLE_AXIS:
             for(i=0;i<7;i++)
             {
                 dtime[i]=TS*(ceil((fabs(yi[j][i]-yi[j-1][i])/v_def_xyz_angles[i])/INTERVAL)*INTERVAL);
@@ -454,7 +454,7 @@ void natural_spline::fill_natural_arrays(void)
             }
             break;
         default:
-            throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+            throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
         } // end: switch   */
         // printf("\ntime[%d] %f", j,time[j]);
     }
@@ -556,28 +556,28 @@ bool natural_spline::first_step ()
     // Request the coordinates of the current pose of the robot
     switch ( starting_pose.arm_type )
     {
-    case MOTOR:
-        the_robot->EDP_data.instruction_type = GET;
+    case lib::MOTOR:
+        the_robot->EDP_data.instruction_type = lib::GET;
         the_robot->EDP_data.get_type = ARM_DV; // ARM
-        the_robot->EDP_data.get_arm_type = MOTOR;
+        the_robot->EDP_data.get_arm_type = lib::MOTOR;
         break;
-    case JOINT:
-        the_robot->EDP_data.instruction_type = GET;
+    case lib::JOINT:
+        the_robot->EDP_data.instruction_type = lib::GET;
         the_robot->EDP_data.get_type = ARM_DV; // ARM
-        the_robot->EDP_data.get_arm_type = JOINT;
+        the_robot->EDP_data.get_arm_type = lib::JOINT;
         break;
-    case XYZ_EULER_ZYZ:
-        the_robot->EDP_data.instruction_type = GET;
+    case lib::XYZ_EULER_ZYZ:
+        the_robot->EDP_data.instruction_type = lib::GET;
         the_robot->EDP_data.get_type = ARM_DV; // ARM
-        the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;
+        the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
         break;
-    case XYZ_ANGLE_AXIS:
-        the_robot->EDP_data.instruction_type = GET;
+    case lib::XYZ_ANGLE_AXIS:
+        the_robot->EDP_data.instruction_type = lib::GET;
         the_robot->EDP_data.get_type = ARM_DV; // ARM
-        the_robot->EDP_data.get_arm_type = XYZ_ANGLE_AXIS;
+        the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
         break;
     default:
-        throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+        throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
     } // end: switch
 
     // sr_ecp_msg->message("natural - first step");
@@ -607,36 +607,36 @@ bool natural_spline::next_step ()
         // Copy the coordinates of the current robot pose from the virtual image of the robot to the structure 'starting_pose'
         switch ( starting_pose.arm_type )
         {
-        case MOTOR:
+        case lib::MOTOR:
             for(i=0; i<MAX_SERVOS_NR; i++)
                 starting_pose.coordinates[i]=the_robot->EDP_data.current_motor_arm_coordinates[i];
             // for(i=0; i<6; i++)printf("\n next step MOTOR %f",starting_pose.coordinates[i]);
             break;
-        case JOINT:
+        case lib::JOINT:
                 for(i=0; i<MAX_SERVOS_NR; i++)
                     starting_pose.coordinates[i]=the_robot->EDP_data.current_joint_arm_coordinates[i];
             break;
-        case XYZ_EULER_ZYZ:
+        case lib::XYZ_EULER_ZYZ:
                 for(i=0; i<6; i++)
                     starting_pose.coordinates[i]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
             starting_pose.coordinates[6]=the_robot->EDP_data.current_gripper_coordinate;
             // for(i=0; i<6; i++) printf("\n dddddd  %f     %f",starting_pose.coordinates[i],the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i] );
             break;
-        case XYZ_ANGLE_AXIS:
+        case lib::XYZ_ANGLE_AXIS:
                 for(i=0; i<6; i++)
                     starting_pose.coordinates[i]=the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
             starting_pose.coordinates[6]=the_robot->EDP_data.current_gripper_coordinate;
             break;
         default:
-                throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+                throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
         } // end: switch
 
         fill_natural_arrays();
-        the_robot->EDP_data.instruction_type = SET;
+        the_robot->EDP_data.instruction_type = lib::SET;
         the_robot->EDP_data.set_arm_type = starting_pose.arm_type;
         the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.motion_type = ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = MIM;
+        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+         the_robot->EDP_data.next_interpolation_type = lib::MIM;
         the_robot->EDP_data.motion_steps = (WORD) (10);
         the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
         first_time = false;
@@ -660,26 +660,26 @@ bool natural_spline::next_step ()
     // Copy the newly calculated coordinates of the next robot pose from the array y to the virtual image of the robot
     switch ( starting_pose.arm_type )
     {
-    case MOTOR:
+    case lib::MOTOR:
         for (i = 0; i < MAX_SERVOS_NR; i++)
             the_robot->EDP_data.next_motor_arm_coordinates[i] = y[i];
         break;
-    case JOINT:
+    case lib::JOINT:
             for (i = 0; i < MAX_SERVOS_NR; i++)
                 the_robot->EDP_data.next_joint_arm_coordinates[i] = y[i];
         break;
-    case XYZ_EULER_ZYZ:
+    case lib::XYZ_EULER_ZYZ:
             for (i = 0; i < 6; i++)
                 the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i] =y[i];
         the_robot->EDP_data.next_gripper_coordinate = y[6];
         break;
-    case XYZ_ANGLE_AXIS:
+    case lib::XYZ_ANGLE_AXIS:
             for (i = 0; i < 6; i++)
                 the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = y[i];
         the_robot->EDP_data.next_gripper_coordinate = y[6];
         break;
     default:
-            throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+            throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
     } // end: switch
     return true;
 }

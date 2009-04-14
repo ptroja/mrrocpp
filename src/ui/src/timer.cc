@@ -78,20 +78,20 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 				ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].ts.tv_nsec/1000000);
 
 		switch (ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].process_type) {
-			case EDP:
+			case lib::EDP:
 				strcat(current_line, "EDP: ");
 				break;
-			case ECP:
+			case lib::ECP:
 				strcat(current_line, "ECP: ");
 				break;
-			case MP:
+			case lib::MP:
 				// printf("MP w ontimer\n");
 				strcat(current_line, "MP:  ");
 				break;
-			case VSP:
+			case lib::VSP:
 				strcat(current_line, "VSP: ");
 				break;
-			case UI:
+			case lib::UI:
 				strcat(current_line, "UI:  ");
 				break;
 			default:
@@ -100,7 +100,7 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 		} // end: switch (message_buffer[reader_buf_position].process_type)
 
 		// FIXME: ?
-		ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].process_type = UNKNOWN_PROCESS_TYPE;
+		ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].process_type = lib::UNKNOWN_PROCESS_TYPE;
 
 		char process_name_buffer[NAME_LENGTH+1];
 		snprintf(process_name_buffer, sizeof(process_name_buffer), "%-21s",
@@ -109,21 +109,21 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 		strcat(current_line,process_name_buffer);
 
 		switch (ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].message_type) {
-			case FATAL_ERROR:
-				strcat(current_line, "FATAL_ERROR:     ");
+			case lib::FATAL_ERROR:
+				strcat(current_line, "lib::FATAL_ERROR:     ");
 				attr.text_color=Pg_RED;
 				break;
-			case NON_FATAL_ERROR:
-				strcat(current_line, "NON_FATAL_ERROR: ");
+			case lib::NON_FATAL_ERROR:
+				strcat(current_line, "lib::NON_FATAL_ERROR: ");
 				attr.text_color=Pg_BLUE;
 				break;
-			case SYSTEM_ERROR:
+			case lib::SYSTEM_ERROR:
 				// printf("SYSTEM ERROR W ONTIMER\n");
 				// Informacja do UI o koniecznosci zmiany stanu na INITIAL_STATE
-				strcat(current_line, "SYSTEM_ERROR:    ");
+				strcat(current_line, "lib::SYSTEM_ERROR:    ");
 				attr.text_color=Pg_PURPLE;
 				break;
-			case NEW_MESSAGE:
+			case lib::NEW_MESSAGE:
 				strcat(current_line, "MESSAGE:         ");
 				attr.text_color=Pg_BLACK;
 				break;

@@ -64,42 +64,42 @@ bool vis_force::first_step () {
      td.value_in_step_no = td.internode_step_no - 2;
     
         // track
-	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.mp_command = NEXT_POSE; 
-	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.instruction_type = GET;
+	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.mp_command = lib::NEXT_POSE; 
+	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.instruction_type = lib::GET;
 	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.get_type = ARM_DV;
 	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.set_type = ARM_DV;
 	
-	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.set_arm_type = JOINT;
-	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.get_arm_type = JOINT;
-	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.motion_type = ABSOLUTE;
-	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.next_interpolation_type = MIM;
+	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.set_arm_type = lib::JOINT;
+	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.get_arm_type = lib::JOINT;
+	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.motion_type = lib::ABSOLUTE;
+	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.next_interpolation_type = lib::MIM;
 	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.motion_steps = td.internode_step_no;
 	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.value_in_step_no = td.value_in_step_no;
     
     
         // postument
- 	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.mp_command = NEXT_POSE; 
-	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.instruction_type = GET;
+ 	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.mp_command = lib::NEXT_POSE; 
+	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.instruction_type = lib::GET;
 	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.get_type = ARM_DV;
 	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.set_type = ARM_DV;
 	
-	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.set_arm_type = JOINT;
-	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.get_arm_type = JOINT;
-	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.motion_type = ABSOLUTE;
-	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.next_interpolation_type = MIM;
+	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.set_arm_type = lib::JOINT;
+	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.get_arm_type = lib::JOINT;
+	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.motion_type = lib::ABSOLUTE;
+	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.next_interpolation_type = lib::MIM;
 	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.motion_steps = td.internode_step_no;
 	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.value_in_step_no = td.value_in_step_no;
  
 /*   
     // speaker
-    	robot_list->next->next->E_ptr->ecp_td.mp_command = NEXT_POSE; 
-	robot_list->next->next->E_ptr->ecp_td.instruction_type = GET;
+    	robot_list->next->next->E_ptr->ecp_td.mp_command = lib::NEXT_POSE; 
+	robot_list->next->next->E_ptr->ecp_td.instruction_type = lib::GET;
 	robot_list->next->next->E_ptr->ecp_td.get_type = ARM_DV;
 	robot_list->next->next->E_ptr->ecp_td.set_type = ARM_DV;
 	
-	robot_list->next->next->E_ptr->ecp_td.set_arm_type = XYZ_EULER_ZYZ;
-	robot_list->next->next->E_ptr->ecp_td.get_arm_type = XYZ_EULER_ZYZ;
-	robot_list->next->next->E_ptr->ecp_td.motion_type = ABSOLUTE;
+	robot_list->next->next->E_ptr->ecp_td.set_arm_type = lib::XYZ_EULER_ZYZ;
+	robot_list->next->next->E_ptr->ecp_td.get_arm_type = lib::XYZ_EULER_ZYZ;
+	robot_list->next->next->E_ptr->ecp_td.motion_type = lib::ABSOLUTE;
 	robot_list->next->next->E_ptr->ecp_td.motion_steps = td.internode_step_no;
 	robot_list->next->next->E_ptr->ecp_td.value_in_step_no = td.value_in_step_no;
 	
@@ -133,15 +133,15 @@ bool vis_force::next_step () {
 
  
   
-	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.instruction_type = SET;
+	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.instruction_type = lib::SET;
 	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.get_type = NOTHING_DV;
-	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
+	robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.get_arm_type = lib::INVALID_END_EFFECTOR;
 	
-	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.instruction_type = SET;
+	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.instruction_type = lib::SET;
 	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.get_type = NOTHING_DV;
-	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
+	robot_m[ROBOT_IRP6_POSTUMENT]->ecp_td.get_arm_type = lib::INVALID_END_EFFECTOR;
 	
-// 	robot_list->next->next->E_ptr->ecp_td.instruction_type = SET;
+// 	robot_list->next->next->E_ptr->ecp_td.instruction_type = lib::SET;
 	
 	
 
@@ -374,7 +374,7 @@ else
 
 
  // UWAGA: dzialamy na jednoelementowej liscie robotow
-   if ( robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.ecp_reply == TASK_TERMINATED ) {
+   if ( robot_m[ROBOT_IRP6_ON_TRACK]->ecp_td.ecp_reply == lib::TASK_TERMINATED ) {
    sr_ecp_msg.message("w mp task terminated");
      return false;
    }

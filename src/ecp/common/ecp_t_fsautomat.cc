@@ -22,9 +22,9 @@ namespace task {
 void ecp_gripper_opening (common::task::base& _ecp_task, double gripper_increment, int motion_time)
 {
 
-	trajectory_description tdes;
+	lib::trajectory_description tdes;
 
-	tdes.arm_type = XYZ_EULER_ZYZ;
+	tdes.arm_type = lib::XYZ_EULER_ZYZ;
 	tdes.interpolation_node_no = 1;
 	tdes.internode_step_no = motion_time;
 	tdes.value_in_step_no = tdes.internode_step_no - 2;

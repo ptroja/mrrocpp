@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP) 
+// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP) 
 // Plik:			configsrv.h
 // System:	QNX/MRROCPP  v. 6.3
 // Opis:		Plik zawiera klase configsrv - obsluga konfiguracji z pliku INI.

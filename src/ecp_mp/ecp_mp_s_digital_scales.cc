@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP)
+// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP)
 // Plik:			ecp_m_em.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		metody klasy ecp_mp_sensor dla czujnika z linialami

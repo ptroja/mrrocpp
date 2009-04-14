@@ -103,7 +103,7 @@ void *sr_thread(void* arg)
 			}
 
 			fprintf(stderr, "SR: Receive failed (%s)\n", strerror(-rcvid));
-			// 	  throw generator::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			break;
 		}
 
@@ -179,7 +179,7 @@ void *sr_thread(void* arg)
 		if (rcvid == -1) /* Error condition, exit */
 		{
 			perror("SR: Receive failed\n");
-			// 	  throw generator::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			break;
 		} else if (rcvid < -1) {
 			// ie. MESSIP_MSG_DISCONNECT
@@ -240,7 +240,7 @@ void *comm_thread(void* arg) {
 		ui_ecp_obj->communication_state = UI_ECP_AFTER_RECEIVE;
 		if (rcvid == -1) {/* Error condition, exit */
 			perror("UI: Receive failed\n");
-			// 	  throw generator::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			break;
 		}
 
@@ -273,10 +273,10 @@ void *comm_thread(void* arg) {
 		}
 
 		switch ( ui_ecp_obj->ecp_to_ui_msg.ecp_message ) { // rodzaj polecenia z ECP
-		case C_XYZ_ANGLE_AXIS:
-		case C_XYZ_EULER_ZYZ:
-		case C_JOINT:
-		case C_MOTOR:
+		case lib::C_XYZ_ANGLE_AXIS:
+		case lib::C_XYZ_EULER_ZYZ:
+		case lib::C_JOINT:
+		case lib::C_MOTOR:
 			//  printf("C_MOTOR\n");
 			ui_ecp_obj->trywait_sem();
 			if (ui_state.teachingstate == MP_RUNNING) {
@@ -296,7 +296,7 @@ void *comm_thread(void* arg) {
 				printf("Blad w UI reply\n");
 			}
 			break;
-		case YES_NO:
+		case lib::YES_NO:
 			ui_ecp_obj->trywait_sem();
 			PtEnter(0);
 			ApCreateModule (ABM_yes_no_window, ABW_base, NULL);
@@ -309,19 +309,19 @@ void *comm_thread(void* arg) {
 			}
 
 			break;
-		case MESSAGE:
+		case lib::MESSAGE:
 			PtEnter(0);
 			ApCreateModule (ABM_wnd_message, ABW_base, NULL);
 			PtSetResource(ABW_PtLabel_wind_message, Pt_ARG_TEXT_STRING, ui_ecp_obj->ecp_to_ui_msg.string , 0);
 			PtLeave(0);
 
-			ui_ecp_obj->ui_rep.reply = ANSWER_YES;
+			ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
 
 			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
 				printf("Blad w UI reply\n");
 			}
 			break;
-		case DOUBLE_NUMBER:
+		case lib::DOUBLE_NUMBER:
 			ui_ecp_obj->trywait_sem();
 			PtEnter(0);
 			ApCreateModule (ABM_wnd_input_double, ABW_base, NULL);
@@ -333,7 +333,7 @@ void *comm_thread(void* arg) {
 				printf("Blad w UI reply\n");
 			}
 			break;
-		case INTEGER_NUMBER:
+		case lib::INTEGER_NUMBER:
 			ui_ecp_obj->trywait_sem();
 			PtEnter(0);
 			ApCreateModule (ABM_wnd_input_integer, ABW_base, NULL);
@@ -345,7 +345,7 @@ void *comm_thread(void* arg) {
 				printf("Blad w UI reply\n");
 			}
 			break;
-		case CHOOSE_OPTION:
+		case lib::CHOOSE_OPTION:
 			ui_ecp_obj->trywait_sem();
 			PtEnter(0);
 			ApCreateModule (ABM_wnd_choose_option, ABW_base, NULL);
@@ -377,8 +377,8 @@ void *comm_thread(void* arg) {
 			}
 
 			break;
-		case LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
-			//    printf("LOAD_FILE\n");
+		case lib::LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+			//    printf("lib::LOAD_FILE\n");
 			if (ui_state.teachingstate == MP_RUNNING) {
 				ui_ecp_obj->trywait_sem();
 				wyjscie=false;
@@ -398,7 +398,7 @@ void *comm_thread(void* arg) {
 					}
 				}
 
-				ui_ecp_obj->ui_rep.reply = FILE_LOADED;
+				ui_ecp_obj->ui_rep.reply = lib::FILE_LOADED;
 				ui_ecp_obj->take_sem();
 
 				if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
@@ -407,8 +407,8 @@ void *comm_thread(void* arg) {
 
 			}
 			break;
-		case SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
-			//    printf("SAVE_FILE\n");
+		case lib::SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+			//    printf("lib::SAVE_FILE\n");
 			if (ui_state.teachingstate == MP_RUNNING) {
 				ui_ecp_obj->trywait_sem();
 				wyjscie = false;
@@ -427,7 +427,7 @@ void *comm_thread(void* arg) {
 					}
 				}
 
-				ui_ecp_obj->ui_rep.reply = FILE_SAVED;
+				ui_ecp_obj->ui_rep.reply = lib::FILE_SAVED;
 				ui_ecp_obj->take_sem();
 
 				if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
@@ -435,7 +435,7 @@ void *comm_thread(void* arg) {
 				}
 			}
 			break;
-		case OPEN_FORCE_SENSOR_MOVE_WINDOW:
+		case lib::OPEN_FORCE_SENSOR_MOVE_WINDOW:
 			// obsluga sterowania silowego -> ForceSensorMove
 			// przejecie kontroli nad Fotonen
 
@@ -449,7 +449,7 @@ void *comm_thread(void* arg) {
 				printf("Blad w UI reply\n");
 			}
 			break;
-		case OPEN_TRAJECTORY_REPRODUCE_WINDOW:
+		case lib::OPEN_TRAJECTORY_REPRODUCE_WINDOW:
 			// obsluga odtwarzania trajektorii
 			// przejecie kontroli nad Fotonen
 			PtEnter(0);
@@ -462,7 +462,7 @@ void *comm_thread(void* arg) {
 				printf("Blad w UI reply\n");
 			}
 			break;
-		case TR_REFRESH_WINDOW:
+		case lib::TR_REFRESH_WINDOW:
 			// przejecie kontroli nad Fotonen
 			PtEnter(0);
 			// Odswiezenie okna
@@ -474,7 +474,7 @@ void *comm_thread(void* arg) {
 				printf("Blad w UI reply\n");
 			}
 			break;
-		case TR_DANGEROUS_FORCE_DETECTED:
+		case lib::TR_DANGEROUS_FORCE_DETECTED:
 			// przejecie kontroli nad Fotonen
 			PtEnter(0);
 			// Ustawienie stanu przyciskow.
@@ -488,7 +488,7 @@ void *comm_thread(void* arg) {
 			break;
 
 
-		case MAM_OPEN_WINDOW:
+		case lib::MAM_OPEN_WINDOW:
 			// Obsluga odtwarzania trajektorii.
 			// Przejecie kontroli nad Fotonen.
 			PtEnter(0);
@@ -502,7 +502,7 @@ void *comm_thread(void* arg) {
 				printf("Blad w UI reply\n");
 			}
 			break;
-		case MAM_REFRESH_WINDOW:
+		case lib::MAM_REFRESH_WINDOW:
 			// Przejecie kontroli nad Photonen.
 			PtEnter(0);
 			// Odswiezenie okna.

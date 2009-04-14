@@ -44,11 +44,11 @@ void jarosz::main_task_algorithm(void)
 	// TESTOWANIE GENRATOROW o przyrost polozenia/orientacji
 	// #####################################################################################
 
-	trajectory_description tdes;
+	lib::trajectory_description tdes;
 
 	// -----------------------------------
-	tdes.arm_type = XYZ_EULER_ZYZ;
-	//	tdes.arm_type = JOINT;
+	tdes.arm_type = lib::XYZ_EULER_ZYZ;
+	//	tdes.arm_type = lib::JOINT;
 	// -----------------------------------
 
 	// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
@@ -128,7 +128,7 @@ void jarosz::main_task_algorithm(void)
 
 	motion_time = 2;
 
-	pteach.create_pose_list_head(XYZ_EULER_ZYZ, motion_time, coordinates);
+	pteach.create_pose_list_head(lib::XYZ_EULER_ZYZ, motion_time, coordinates);
 
 	//     the_generator.insert_pose_list_element(ps, motion_time, extra_info, coordinates);
 
@@ -204,7 +204,7 @@ void jarosz::main_task_algorithm(void)
 
 			motion_time = 1;
 
-			   pteach.create_pose_list_head(XYZ_EULER_ZYZ, motion_time, coordinates);
+			   pteach.create_pose_list_head(lib::XYZ_EULER_ZYZ, motion_time, coordinates);
 
 				//     the_generator.insert_pose_list_element(ps, motion_time, extra_info, coordinates);
 

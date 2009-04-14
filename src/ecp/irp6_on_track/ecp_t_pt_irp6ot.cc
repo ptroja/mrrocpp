@@ -42,10 +42,10 @@ void pteach::main_task_algorithm(void)
 	if (operator_reaction("Teach in?"))
     {
         cg->flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
-        cg->teach ( MOTOR, "Teach-in the trajectory\n");
+        cg->teach (lib::MOTOR, "Teach-in the trajectory\n");
         if ( operator_reaction ("Save trajectory?") )
         {
-            cg->save_file (MOTOR);
+            cg->save_file (lib::MOTOR);
         }
     }
     else

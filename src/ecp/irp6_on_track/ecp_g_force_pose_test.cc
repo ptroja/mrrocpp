@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //                             ecp_gen_test.cc
-//             Effector Control Process (ECP) - force & torque methods
+//             Effector Control Process (lib::ECP) - force & torque methods
 // 			Test nowego EDP z wykorzystaniem sily
 // 			By Slawek Bazant
 //			Ostatnia modyfikacja: 05.01.2006r.
@@ -31,13 +31,13 @@ bool y_simple::first_step ( )
     td.value_in_step_no = td.internode_step_no - 2;
 
 
-    the_robot->EDP_data.instruction_type = GET;
+    the_robot->EDP_data.instruction_type = lib::GET;
     the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
     the_robot->EDP_data.set_type = ARM_DV;
     the_robot->EDP_data.set_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
     the_robot->EDP_data.get_arm_type = POSE_FORCE_TORQUE_AT_FRAME;
-    the_robot->EDP_data.motion_type = RELATIVE;
-     the_robot->EDP_data.next_interpolation_type = TCIM;
+    the_robot->EDP_data.motion_type = lib::RELATIVE;
+     the_robot->EDP_data.next_interpolation_type = lib::TCIM;
     the_robot->EDP_data.motion_steps = td.internode_step_no;
     the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -58,7 +58,7 @@ bool y_simple::next_step ( )
         return false;
     }
 
-    the_robot->EDP_data.instruction_type = SET_GET;
+    the_robot->EDP_data.instruction_type = lib::SET_GET;
     the_robot->EDP_data.set_type = ARM_DV;
     the_robot->EDP_data.get_type = ARM_DV;
     the_robot->EDP_data.get_arm_type = POSE_FORCE_TORQUE_AT_FRAME;

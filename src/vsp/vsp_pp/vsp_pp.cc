@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------------
-// Proces:		VIRTUAL SENSOR PROCESS (VSP)
+// Proces:		VIRTUAL SENSOR PROCESS (lib::VSP)
 // Plik:            vsp_dss.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		definicje metod klasy vsp_dsensor
@@ -203,7 +203,7 @@ void pp::configure_sensor (void){
 void pp::initiate_reading (void){
 	// Czy czujnik skonfigurowany
 	if(!is_sensor_configured)
-		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
 	// Sprawdz, czy panel programowania przeslal jakies polecenie
 //	Word_received = 0;
@@ -308,11 +308,11 @@ void pp::get_reading (void){
 
 	// Czy czujnik skonfigurowany
 	if(!is_sensor_configured)
-		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
     // Sprawdzenie, czy odczyty sa dostepne
     if (!is_reading_ready)
-        throw sensor_error (NON_FATAL_ERROR, READING_NOT_READY);
+        throw sensor_error (lib::NON_FATAL_ERROR, READING_NOT_READY);
 
 	from_vsp.comm_image.sensor_union.pp.joy[0] = joy_axis_img[0];
 	from_vsp.comm_image.sensor_union.pp.joy[1] = joy_axis_img[1];

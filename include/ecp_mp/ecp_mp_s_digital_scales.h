@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP) 
+// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP) 
 // Plik:			ecp_dss.h
 // System:	QNX/MRROCPP  v. 6.3
 // Opis:		Struktura - czujnik zlozony z linialow.

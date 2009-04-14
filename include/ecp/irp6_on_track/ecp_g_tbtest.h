@@ -31,7 +31,7 @@ class tbtest : public common::generator::base
 	//Object coordinates
 //	SENSOR_IMAGE object_descriptor;
 
-    trajectory_description td;
+    lib::trajectory_description td;
     double next_position[8];
 
 public:

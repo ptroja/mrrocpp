@@ -41,7 +41,7 @@ pcbird::pcbird(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::b
 
   // Try to connect to pcbird.
   if ((sockfd = pcbird_connect(pcbird_node_name, pcbird_port)) == -1)
-		throw sensor_error(SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 
 	sr_ecp_msg.message("Connected to pcbird");
 }// end: ecp_mp_sensor
@@ -54,7 +54,7 @@ void pcbird::configure_sensor() {
 
   // Start streaming.
 /*  if (pcbird_start_streaming(sockfd) == -1)
-		throw sensor_error (SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);*/
+		throw sensor_error (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);*/
 
 
 } // end initiate_sensor

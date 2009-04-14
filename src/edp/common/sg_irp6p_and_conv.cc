@@ -128,7 +128,7 @@ NL_regulator_7_irp6p::NL_regulator_7_irp6p (BYTE reg_no, BYTE reg_par_no, double
 NL_regulator_8_irp6p::NL_regulator_8_irp6p (BYTE reg_no, BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master)
         : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
-    reg_state = next_reg_state = prev_reg_state = GRIPPER_START_STATE;
+    reg_state = next_reg_state = prev_reg_state = lib::GRIPPER_START_STATE;
     sum_of_currents = current_index = 0;
     for (int i=0; i < IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS; i++)
     {
@@ -2080,23 +2080,23 @@ BYTE NL_regulator_8_irp6p::compute_set_value (void)
 
     switch (reg_state)
     {
-    case GRIPPER_START_STATE:
+    case lib::GRIPPER_START_STATE:
 
         if (sum_of_currents > IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_MAX_VALUE)
         {
-            next_reg_state = GRIPPER_BLOCKED_STATE;
+            next_reg_state = lib::GRIPPER_BLOCKED_STATE;
             gripper_blocked_start_time = master.step_counter;
             //				printf("gripper GRIPPER_BLOCKED_STATE state\n");
         }
         break;
 
-    case GRIPPER_BLOCKED_STATE:
+    case lib::GRIPPER_BLOCKED_STATE:
 
         if (((master.step_counter - gripper_blocked_start_time) > GRIPPER_BLOCKED_TIME_PERIOD)
                 && (!(sum_of_currents > IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_MAX_VALUE)))
         {
             //			printf("gripper GRIPPER_START_STATE state\n");
-            next_reg_state = GRIPPER_START_STATE;
+            next_reg_state = lib::GRIPPER_START_STATE;
         }
         else
         {

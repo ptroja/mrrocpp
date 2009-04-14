@@ -30,7 +30,7 @@ public:
   virtual ~ecp_teach_in_generator (void);
   
   	// Uczenie robota
-	void teach (POSE_SPECIFICATION ps, const char* msg);
+	void teach (lib::POSE_SPECIFICATION ps, const char* msg);
 	
 	// --------------------------------------------------------------------------
 	// Wczytanie trajektorii z pliku
@@ -42,7 +42,7 @@ public:
 	
 	// --------------------------------------------------------------------------
 	// Zapis trajektorii do pliku
-	void save_file (POSE_SPECIFICATION ps);
+	void save_file (lib::POSE_SPECIFICATION ps);
 	// --------------------------------------------------------------------------
   
   
@@ -58,24 +58,24 @@ public:
   // Pobierz nastepna pozycje z listy
   void get_next_pose (double next_pose[MAX_SERVOS_NR]);
   // -------------------------------------------------------
-  void set_pose (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]);
+  void set_pose (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]);
   // -------------------------------------------------------
   bool is_pose_list_element ( void ) ;
   // -------------------------------------------------------
   bool is_last_list_element ( void );
   // -------------------------------------------------------
   
-   void create_pose_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]);
+   void create_pose_list_head (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]);
   
   // by Y
   
-   void create_pose_list_head (POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]);
+   void create_pose_list_head (lib::POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]);
 
-  void insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]);
+  void insert_pose_list_element (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]);
   
   // by Y
   
-  void insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]);
+  void insert_pose_list_element (lib::POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]);
   
   // -------------------------------------------------------
   int pose_list_length(void);
@@ -89,7 +89,7 @@ public:
      // generuje kazdy nastepny krok ruchu
      // (zadanie realizowane przez klase konkretna)
   
-  ECP_TO_UI_COMMAND convert(POSE_SPECIFICATION ps) const;
+  lib::ECP_TO_UI_COMMAND convert(lib::POSE_SPECIFICATION ps) const;
 
 };
 

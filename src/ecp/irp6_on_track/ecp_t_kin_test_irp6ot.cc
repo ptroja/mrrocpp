@@ -44,11 +44,11 @@ void kin_test::main_task_algorithm(void)
     // petla 1000 getow
     for(int i =0; i<n; i++)
     {
-        ecp_m_robot->EDP_data.instruction_type = GET;
+        ecp_m_robot->EDP_data.instruction_type = lib::GET;
         ecp_m_robot->EDP_data.get_type = ARM_DV;
-        ecp_m_robot->EDP_data.get_arm_type = MOTOR;
-        ecp_m_robot->EDP_data.motion_type = ABSOLUTE;
-        ecp_m_robot->EDP_data.next_interpolation_type = MIM;
+        ecp_m_robot->EDP_data.get_arm_type = lib::MOTOR;
+        ecp_m_robot->EDP_data.motion_type = lib::ABSOLUTE;
+        ecp_m_robot->EDP_data.next_interpolation_type = lib::MIM;
         ecp_m_robot->create_command();
         ecp_m_robot->execute_motion();
     }
@@ -73,11 +73,11 @@ void kin_test::main_task_algorithm(void)
     // petla 100 getow
     for(int i =0; i<n; i++)
     {
-        ecp_m_robot->EDP_data.instruction_type = SET;
+        ecp_m_robot->EDP_data.instruction_type = lib::SET;
         ecp_m_robot->EDP_data.set_type = ARM_DV;
-        ecp_m_robot->EDP_data.set_arm_type = MOTOR;
-        ecp_m_robot->EDP_data.motion_type = ABSOLUTE;
-        ecp_m_robot->EDP_data.next_interpolation_type = MIM;
+        ecp_m_robot->EDP_data.set_arm_type = lib::MOTOR;
+        ecp_m_robot->EDP_data.motion_type = lib::ABSOLUTE;
+        ecp_m_robot->EDP_data.next_interpolation_type = lib::MIM;
         ecp_m_robot->EDP_data.motion_steps = (WORD) 1;
         ecp_m_robot->EDP_data.value_in_step_no = 1;
         memcpy (ecp_m_robot->EDP_data.next_motor_arm_coordinates, ecp_m_robot->EDP_data.current_motor_arm_coordinates, IRP6_ON_TRACK_NUM_OF_SERVOS*sizeof (double));

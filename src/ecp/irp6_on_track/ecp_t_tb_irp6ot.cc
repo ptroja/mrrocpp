@@ -65,7 +65,7 @@ void tb::main_task_algorithm(void){
 	/*
 	//sgen=new ecp_smooth_generator(*this, true);
 	sgen->set_absolute();
-	sgen->load_coordinates(MOTOR,vp,vk,v,a,coordinates);
+	sgen->load_coordinates(lib::MOTOR,vp,vk,v,a,coordinates);
 	sgen->Move();
 	sgen->reset();
 	//delete sgen;
@@ -80,7 +80,7 @@ void tb::main_task_algorithm(void){
 	coordinates[5]=0;
 	coordinates[6]=0;
 	coordinates[7]=0;
-	sgen->load_coordinates(MOTOR,vp,vk,v,a,coordinates);
+	sgen->load_coordinates(lib::MOTOR,vp,vk,v,a,coordinates);
 		coordinates[0]=0;
 	coordinates[1]=0;
 	coordinates[2]=0;
@@ -89,7 +89,7 @@ void tb::main_task_algorithm(void){
 	coordinates[5]=0;
 	coordinates[6]=0;
 	coordinates[7]=0;
-	sgen->load_coordinates(MOTOR,vp,vk,v,a,coordinates);
+	sgen->load_coordinates(lib::MOTOR,vp,vk,v,a,coordinates);
 		coordinates[0]=0;
 	coordinates[1]=0;
 	coordinates[2]=0;
@@ -98,7 +98,7 @@ void tb::main_task_algorithm(void){
 	coordinates[5]=0;
 	coordinates[6]=0;
 	coordinates[7]=0;
-	sgen->load_coordinates(MOTOR,vp,vk,v,a,coordinates);
+	sgen->load_coordinates(lib::MOTOR,vp,vk,v,a,coordinates);
 		coordinates[0]=0;
 	coordinates[1]=0;
 	coordinates[2]=0;
@@ -107,31 +107,31 @@ void tb::main_task_algorithm(void){
 	coordinates[5]=0;
 	coordinates[6]=0;
 	coordinates[7]=0;
-	sgen->load_coordinates(MOTOR,vp,vk,v,a,coordinates);
+	sgen->load_coordinates(lib::MOTOR,vp,vk,v,a,coordinates);
 	sgen->Move();
 	delete sgen;
 	*/
 	/*
 	//sgen=new ecp_smooth_generator(*this, true);
 	sgen->set_absolute();
-	sgen->load_coordinates(MOTOR,0,-30,0,0,0,0,0,0);
+	sgen->load_coordinates(lib::MOTOR,0,-30,0,0,0,0,0,0);
 	sgen->Move();
 	sgen->reset();
 	//delete sgen;
 
 	//sgen=new ecp_smooth_generator(*this, true);
 	sgen->set_relative();
-	sgen->load_coordinates(MOTOR,0,-20,0,0,0,0,0,0);
-	sgen->load_coordinates(MOTOR,0,0,0,10,0,0,0,0);
-	sgen->load_coordinates(MOTOR,0,0,0,10,0,0,0,0);
-	sgen->load_coordinates(MOTOR,0,0,0,10,0,0,0,0);
+	sgen->load_coordinates(lib::MOTOR,0,-20,0,0,0,0,0,0);
+	sgen->load_coordinates(lib::MOTOR,0,0,0,10,0,0,0,0);
+	sgen->load_coordinates(lib::MOTOR,0,0,0,10,0,0,0,0);
+	sgen->load_coordinates(lib::MOTOR,0,0,0,10,0,0,0,0);
 	sgen->Move();
 	delete sgen;
 
 
 	sgen=new ecp_smooth_generator(*this, true);
 	sgen->set_absolute();
-	sgen->load_coordinates(MOTOR,0,0,0,0,0,0,0,0);
+	sgen->load_coordinates(lib::MOTOR,0,0,0,0,0,0,0,0);
 	sgen->Move();
 	delete sgen;
 */
@@ -158,13 +158,13 @@ void tb::main_task_algorithm(void){
 	/*
 	sgen->set_absolute();
 	sgen->reset();
-	sgen->load_coordinates(MOTOR,0,0,0,0,0,0,0,0);
-	sgen->load_coordinates(MOTOR,0,-45,0,9,0,0,0,0);
+	sgen->load_coordinates(lib::MOTOR,0,0,0,0,0,0,0,0);
+	sgen->load_coordinates(lib::MOTOR,0,-45,0,9,0,0,0,0);
 	sgen->Move();
 	sgen->reset();
 	sgen->set_relative();
-	sgen->load_coordinates(MOTOR,0,0,0,10,0,0,0,0);
-	sgen->load_coordinates(MOTOR,0,0,0,-10,0,0,0,0);
+	sgen->load_coordinates(lib::MOTOR,0,0,0,10,0,0,0,0);
+	sgen->load_coordinates(lib::MOTOR,0,0,0,-10,0,0,0,0);
 	sgen->Move();
 
 	sgen->set_absolute();
@@ -176,7 +176,7 @@ void tb::main_task_algorithm(void){
 	sgen->Move();
 	sgen->reset();
 
-	sgen->load_coordinates(MOTOR,0,0,0,0,0,0,0,0);
+	sgen->load_coordinates(lib::MOTOR,0,0,0,0,0,0,0,0);
 	sgen->Move();
 	*/
 	//sgen=new ecp_smooth_generator(*this, true);
@@ -196,16 +196,16 @@ void tb::main_task_algorithm(void){
 
 	sgen->set_relative();
 	sgen->reset();
-	sgen->load_coordinates(MOTOR,0,0,0,-1,0,0,0,0);
-	sgen->load_coordinates(MOTOR,0,0,0,0,0,0,0,1050);
+	sgen->load_coordinates(lib::MOTOR,0,0,0,-1,0,0,0,0);
+	sgen->load_coordinates(lib::MOTOR,0,0,0,0,0,0,0,1050);
 	sgen->Move();
 	sgen->reset();
 	printf("ala");
-	sgen->load_coordinates(MOTOR,0,0,0,-5,0,0,0,0);
+	sgen->load_coordinates(lib::MOTOR,0,0,0,-5,0,0,0,0);
 	sgen->Move();*/
 	/*
 	//configuration and initalization of linear generator
-	init_tdes(XYZ_ANGLE_AXIS,500);
+	init_tdes(lib::XYZ_ANGLE_AXIS,500);
 	set_tdes(0.0, 0.0, 0.002, 0.0, 0.0, 0.0, 0.0);	//podniesienie o 2mm
 
 	// Generator trajektorii prostoliniowej
@@ -246,7 +246,7 @@ void tb::set_tdes(double cor0, double cor1, double cor2, double cor3, double cor
 }
 
 //inicjacja struktury tdes - trajectory description
-void tb::init_tdes(POSE_SPECIFICATION pspec, int internode_no){
+void tb::init_tdes(lib::POSE_SPECIFICATION pspec, int internode_no){
 	tdes.arm_type=pspec;
 	tdes.interpolation_node_no=1;
 	tdes.internode_step_no=internode_no;	//motion time

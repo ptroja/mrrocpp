@@ -18,16 +18,16 @@
 
 #define CATCH_SECTION_UI catch (ecp::common::ecp_robot::ECP_main_error e) { \
 	/* Obsluga bledow ECP */ \
-	if (e.error_class == SYSTEM_ERROR) \
-		printf("ECP SYSTEM_ERROR error in UI\n"); \
+	if (e.error_class == lib::SYSTEM_ERROR) \
+		printf("ECP lib::SYSTEM_ERROR error in UI\n"); \
 		ui_state.ui_state=2; \
 	/*  exit(EXIT_FAILURE);*/ \
   } /*end: catch */ \
 \
 catch (ecp::common::ecp_robot::ECP_error er) { \
 	/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */ \
-	if ( er.error_class == SYSTEM_ERROR) { /* blad systemowy juz wyslano komunikat do SR */ \
-		perror("ECP SYSTEM_ERROR in UI\n"); \
+	if ( er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunikat do SR */ \
+		perror("ECP lib::SYSTEM_ERROR in UI\n"); \
 		/* PtExit( EXIT_SUCCESS ); */ \
 	} else { \
 	switch ( er.error_no ) { \
@@ -38,10 +38,10 @@ catch (ecp::common::ecp_robot::ECP_error er) { \
 		case INVALID_EDP_REPLY: \
 		case INVALID_RMODEL_TYPE: \
 			/* Komunikat o bledzie wysylamy do SR */ \
-			ui_msg.all_ecp->message (NON_FATAL_ERROR, er.error_no); \
+			ui_msg.all_ecp->message (lib::NON_FATAL_ERROR, er.error_no); \
 		break; \
 		default: \
-			ui_msg.all_ecp->message (NON_FATAL_ERROR, 0, "ECP: Unidentified exception"); \
+			ui_msg.all_ecp->message (lib::NON_FATAL_ERROR, 0, "ECP: Unidentified exception"); \
 			perror("Unidentified exception"); \
 		} /* end: switch */ \
 	} \
@@ -273,8 +273,8 @@ private:
 
 public:
 	UI_ECP_COMMUNICATION_STATE communication_state;
-	ECP_message ecp_to_ui_msg;
-	UI_reply ui_rep;
+	lib::ECP_message ecp_to_ui_msg;
+	lib::UI_reply ui_rep;
 
 	ui_ecp_buffer();
 	int	post_sem(); // podniesienie semafora

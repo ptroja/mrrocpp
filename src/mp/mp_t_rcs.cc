@@ -1069,9 +1069,9 @@ void rubik_cube_solver::departure_op()
 void rubik_cube_solver::gripper_opening(double track_increment, double postument_increment, int motion_time)
 {
 
-	trajectory_description tdes;
+	lib::trajectory_description tdes;
 
-	tdes.arm_type = XYZ_EULER_ZYZ;
+	tdes.arm_type = lib::XYZ_EULER_ZYZ;
 	tdes.interpolation_node_no = 1;
 	tdes.internode_step_no = motion_time;
 	tdes.value_in_step_no = tdes.internode_step_no - 2;
@@ -1085,9 +1085,9 @@ void rubik_cube_solver::gripper_opening(double track_increment, double postument
 	//	tdes.coordinate_delta[6] = 0.0;   // przyrost wspolrzednej PSI
 	tdes.coordinate_delta[6] = track_increment;   // przyrost wspolrzednej PSI
 
-	trajectory_description tdes2;
+	lib::trajectory_description tdes2;
 
-	tdes2.arm_type = XYZ_EULER_ZYZ;
+	tdes2.arm_type = lib::XYZ_EULER_ZYZ;
 	tdes2.interpolation_node_no = 1;
 	tdes2.internode_step_no = motion_time;
 	tdes2.value_in_step_no = tdes.internode_step_no - 2;

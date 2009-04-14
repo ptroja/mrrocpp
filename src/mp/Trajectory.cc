@@ -54,18 +54,18 @@ char * Trajectory::getTrjID() const
 	return trjID;
 }
 
-POSE_SPECIFICATION Trajectory::returnProperPS(char *poseSpecification)
+lib::POSE_SPECIFICATION Trajectory::returnProperPS(char *poseSpecification)
 {
 	if ( !strcmp(poseSpecification, (const char *)"MOTOR") )
-	{	return MOTOR;	}
+	{	return lib::MOTOR;	}
 	if ( !strcmp(poseSpecification, (const char *)"JOINT") )
-	{	return JOINT;	}
+	{	return lib::JOINT;	}
 	if ( !strcmp(poseSpecification, (const char *)"XYZ_ANGLE_AXIS") )
-	{	return XYZ_ANGLE_AXIS;	}
+	{	return lib::XYZ_ANGLE_AXIS;	}
 	if ( !strcmp(poseSpecification, (const char *)"XYZ_EULER_ZYZ") )
-	{	return XYZ_EULER_ZYZ;	}
+	{	return lib::XYZ_EULER_ZYZ;	}
 	else
-		return INVALID_END_EFFECTOR;
+		return lib::INVALID_END_EFFECTOR;
 }
 
 int Trajectory::setValuesInArray(double arrayToFill[], char *dataString)
@@ -128,21 +128,21 @@ const char * Trajectory::returnRobotName(ROBOT_ENUM robot)
 		return "ROBOT_UNDEFINED";
 }
 
-const char * Trajectory::toString(POSE_SPECIFICATION ps)
+const char * Trajectory::toString(lib::POSE_SPECIFICATION ps)
 {
-	if ( ps == MOTOR )
+	if ( ps == lib::MOTOR )
 	{	return "MOTOR";	}
-	if ( ps == JOINT )
+	if ( ps == lib::JOINT )
 	{	return "JOINT";	}
-	if ( ps == XYZ_ANGLE_AXIS )
+	if ( ps == lib::XYZ_ANGLE_AXIS )
 	{	return "XYZ_ANGLE_AXIS";	}
-	if ( ps == XYZ_EULER_ZYZ )
+	if ( ps == lib::XYZ_EULER_ZYZ )
 	{	return "XYZ_EULER_ZYZ";	}
 	else
 		return "INVALID_END_EFFECTOR";
 }
 
-bool Trajectory::writeTrajectoryToXmlFile(char *fileName, POSE_SPECIFICATION ps, std::list<ecp::common::ecp_smooth_taught_in_pose> &poses)
+bool Trajectory::writeTrajectoryToXmlFile(char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp::common::ecp_smooth_taught_in_pose> &poses)
 {
 	char * file = new char[80];
 	int posCount = poses.size();
@@ -199,7 +199,7 @@ void Trajectory::setPoseSpecification(char *poseSpecification)
 	poseSpec = returnProperPS(poseSpecification);
 }
 
-POSE_SPECIFICATION Trajectory::getPoseSpecification() const
+lib::POSE_SPECIFICATION Trajectory::getPoseSpecification() const
 {
 	return poseSpec;
 }

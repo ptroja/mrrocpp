@@ -444,7 +444,7 @@ void servo_buffer::synchronise (void)
 				}
 			}
 			; // end: for (;;)
-			//     if ( ((reply_status_tmp.error0 >> (5*j)) & 0x000000000000001FULL) != SYNCHRO_ZERO) {
+			//     if ( ((reply_status_tmp.error0 >> (5*j)) & 0x000000000000001FULL) != lib::SYNCHRO_ZERO) {
 			// by Y - wyciecie SYNCHRO_SWITCH_ON
 			if ( ((reply_status_tmp.error0 >> (5*j)) & 0x000000000000001DULL) != SYNCHRO_ZERO)
 			{

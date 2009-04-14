@@ -287,9 +287,9 @@ enum SENSOR_ENUM
 class VSP_main_error
 {
 public:
-	const ERROR_CLASS error_class;
+	const lib::ERROR_CLASS error_class;
 	const uint64_t error_no;
-	VSP_main_error(ERROR_CLASS err_cl, uint64_t err_no) :
+	VSP_main_error(lib::ERROR_CLASS err_cl, uint64_t err_no) :
 		error_class(err_cl), error_no(err_no)
 	{
 	}
@@ -347,10 +347,10 @@ public:
 	class sensor_error
 	{
 	public:
-		const ERROR_CLASS error_class;
+		const lib::ERROR_CLASS error_class;
 		uint64_t error_no;
 
-		sensor_error(ERROR_CLASS err_cl, uint64_t err_no) :
+		sensor_error(lib::ERROR_CLASS err_cl, uint64_t err_no) :
 			error_class(err_cl), error_no(err_no)
 		{
 		}

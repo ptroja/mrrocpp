@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //                            ecp.cc
-//            Effector Control Process (ECP) - speaker generators
+//            Effector Control Process (lib::ECP) - speaker generators
 //
 // Ostatnia modyfikacja: 2006
 // -------------------------------------------------------------------------
@@ -46,7 +46,7 @@ bool speaking::first_step ( ) {
 
 	last_sg_state = new_sg_state = SG_FIRST_GET;
 
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
 
 	return true;
 }
@@ -62,7 +62,7 @@ bool speaking::next_step ( ) {
 		ecp_t.mp_buffer_receive_and_send ();
 		return false;
 	} else { // w trakcie interpolacji
-		ecp_t.set_ecp_reply (ECP_ACKNOWLEDGE);
+		ecp_t.set_ecp_reply (lib::ECP_ACKNOWLEDGE);
 		ecp_t.mp_buffer_receive_and_send ();
 	}
 	*/ //odrem jako niezalezny od rcsc generator
@@ -77,7 +77,7 @@ bool speaking::next_step ( ) {
 	{
 		case SG_FIRST_GET:
 			if (the_robot->EDP_data.speaking == 0) {
-				the_robot->EDP_data.instruction_type = SET;
+				the_robot->EDP_data.instruction_type = lib::SET;
 				new_sg_state = SG_AFTER_SET;
 			} else {
 				new_sg_state = SG_FIRST_GET;
@@ -85,7 +85,7 @@ bool speaking::next_step ( ) {
 			}
 			break;
 		case SG_AFTER_SET:
-			the_robot->EDP_data.instruction_type = GET;
+			the_robot->EDP_data.instruction_type = lib::GET;
 			new_sg_state=SG_LAST_GET;
 			break;
 		case SG_LAST_GET:

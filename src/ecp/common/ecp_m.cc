@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------
 //   ecp_m.cc - szablon dla procesow ECP
 //
-//                     EFFECTOR CONTROL PROCESS (ECP) - main()
+//                     EFFECTOR CONTROL PROCESS (lib::ECP) - main()
 //
 // Ostatnia modyfikacja: 2007
 // ------------------------------------------------------------------------
@@ -69,11 +69,11 @@ int main(int argc, char *argv[])
 		ecp::common::ecp_t->task_initialization();
 	}
 	catch (ecp_mp::task::ECP_MP_main_error e) {
-		if (e.error_class == SYSTEM_ERROR)
+		if (e.error_class == lib::SYSTEM_ERROR)
 			exit(EXIT_FAILURE);
 	}
 	catch (ecp::common::ecp_robot::ECP_main_error e) {
-		if (e.error_class == SYSTEM_ERROR)
+		if (e.error_class == lib::SYSTEM_ERROR)
 			exit(EXIT_FAILURE);
 	}
 	catch (ecp::common::generator::base::ECP_error e) {
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 	catch (...) {  /* Dla zewnetrznej petli try*/
 		/* Wylapywanie niezdefiniowanych bledow*/
 		/*Komunikat o bledzie wysylamy do SR*/
-		ecp::common::ecp_t->sr_ecp_msg->message (NON_FATAL_ERROR, (uint64_t) ECP_UNIDENTIFIED_ERROR);
+		ecp::common::ecp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, (uint64_t) ECP_UNIDENTIFIED_ERROR);
 		exit(EXIT_FAILURE);
 	} /*end: catch */
 
@@ -109,18 +109,18 @@ int main(int argc, char *argv[])
 		}
 
 		catch (ecp_mp::task::ECP_MP_main_error e) {
-			if (e.error_class == SYSTEM_ERROR)
+			if (e.error_class == lib::SYSTEM_ERROR)
 				exit(EXIT_FAILURE);
 		}
 		catch (ecp::common::ECP_main_error e) {
-			if (e.error_class == SYSTEM_ERROR)
+			if (e.error_class == lib::SYSTEM_ERROR)
 				exit(EXIT_FAILURE);
 		}
 
 		catch (ecp::common::ecp_robot::ECP_error er) {
 			/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP*/
-			if ( er.error_class == SYSTEM_ERROR) { /*blad systemowy juz wyslano komunukat do SR*/
-				perror("ECP aborted due to SYSTEM_ERRORn");
+			if ( er.error_class == lib::SYSTEM_ERROR) { /*blad systemowy juz wyslano komunukat do SR*/
+				perror("ECP aborted due to lib::SYSTEM_ERRORn");
 				exit(EXIT_FAILURE);
 			}
 
@@ -132,12 +132,12 @@ int main(int argc, char *argv[])
 				case INVALID_EDP_REPLY:
 				case INVALID_RMODEL_TYPE:
 					/*Komunikat o bledzie wysylamy do SR */
-					ecp::common::ecp_t->sr_ecp_msg->message (NON_FATAL_ERROR, er.error_no);
-					ecp::common::ecp_t->set_ecp_reply (ERROR_IN_ECP);
+					ecp::common::ecp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, er.error_no);
+					ecp::common::ecp_t->set_ecp_reply (lib::ERROR_IN_ECP);
 					ecp::common::ecp_t->mp_buffer_receive_and_send();
 					break;
 				default:
-					ecp::common::ecp_t->sr_ecp_msg->message (NON_FATAL_ERROR, 0, "ECP: Unidentified exception");
+					ecp::common::ecp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, 0, "ECP: Unidentified exception");
 					perror("Unidentified exception");
 					exit(EXIT_FAILURE);
 			} /* end: switch */
@@ -145,8 +145,8 @@ int main(int argc, char *argv[])
 
 		catch (ecp::common::generator::base::ECP_error er) {
 			/* Wylapywanie bledow generowanych przez generatory*/
-			if ( er.error_class == SYSTEM_ERROR) { /* blad systemowy juz wyslano komunukat do SR */
-				perror("ECP aborted due to SYSTEM_ERROR");
+			if ( er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunukat do SR */
+				perror("ECP aborted due to lib::SYSTEM_ERROR");
 				exit(EXIT_FAILURE);
 			}
 			switch ( er.error_no ) {
@@ -161,15 +161,15 @@ int main(int argc, char *argv[])
 				case MAX_VELOCITY_EXCEEDED:
 				case NOT_ENOUGH_MEMORY:
 					/*Komunikat o bledzie wysylamy do SR */
-					ecp::common::ecp_t->sr_ecp_msg->message (NON_FATAL_ERROR, er.error_no);
-					ecp::common::ecp_t->set_ecp_reply (ERROR_IN_ECP);
+					ecp::common::ecp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, er.error_no);
+					ecp::common::ecp_t->set_ecp_reply (lib::ERROR_IN_ECP);
 					ecp::common::ecp_t->mp_buffer_receive_and_send();
 					break;
 				case ECP_STOP_ACCEPTED:
 					ecp::common::ecp_t->sr_ecp_msg->message("pierwszy catch stop");
 					break;
 				default:
-					ecp::common::ecp_t->sr_ecp_msg->message (NON_FATAL_ERROR, 0, "ECP: Unidentified exception");
+					ecp::common::ecp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, 0, "ECP: Unidentified exception");
 					perror("Unidentified exception");
 					exit(EXIT_FAILURE);
 			} /* end: switch*/
@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
 		catch (...) {  /* Dla zewnetrznej petli try*/
 			/* Wylapywanie niezdefiniowanych bledow*/
 			/*Komunikat o bledzie wysylamy do SR*/
-			ecp::common::ecp_t->sr_ecp_msg->message (NON_FATAL_ERROR, (uint64_t) ECP_UNIDENTIFIED_ERROR);
+			ecp::common::ecp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, (uint64_t) ECP_UNIDENTIFIED_ERROR);
 			exit(EXIT_FAILURE);
 		} /*end: catch */
 

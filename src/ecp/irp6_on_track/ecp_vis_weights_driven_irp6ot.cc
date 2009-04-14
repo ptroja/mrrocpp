@@ -231,15 +231,15 @@ bool ecp_vis_weights_driven_irp6ot::first_step(void){
 	the_robot->EDP_data.next_tool_frame[2][2]=1;
 	the_robot->EDP_data.next_tool_frame[2][3]=0.25;
 
-	the_robot->EDP_data.instruction_type = SET_GET;
+	the_robot->EDP_data.instruction_type = lib::SET_GET;
 	the_robot->EDP_data.get_type = ARM_DV;
 	the_robot->EDP_data.set_type = RMODEL_DV;
-	the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
-	the_robot->EDP_data.get_arm_type = FRAME;
-	the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.next_interpolation_type= MIM;
-	the_robot->EDP_data.motion_type = ABSOLUTE;
+	the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
+	the_robot->EDP_data.get_arm_type = lib::FRAME;
+	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.next_interpolation_type= lib::MIM;
+	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;

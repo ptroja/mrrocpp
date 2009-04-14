@@ -46,11 +46,11 @@ void kon::main_task_algorithm(void)
 	// TESTOWANIE GENRATOROW o przyrost polozenia/orientacji
 	// #####################################################################################
 
-	trajectory_description tdes;
+	lib::trajectory_description tdes;
 
 	// -----------------------------------
-	// 	tdes.arm_type = XYZ_EULER_ZYZ;
-	tdes.arm_type =MOTOR;
+	// 	tdes.arm_type = lib::XYZ_EULER_ZYZ;
+	tdes.arm_type = lib::MOTOR;
 	// -----------------------------------
 
 	// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //

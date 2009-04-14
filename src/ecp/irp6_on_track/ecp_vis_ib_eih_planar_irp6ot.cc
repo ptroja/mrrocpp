@@ -52,10 +52,10 @@ bool ecp_vis_ib_eih_planar_irp6ot::first_step() {
 
 	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
 
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV;
-	the_robot->EDP_data.get_arm_type = XYZ_ANGLE_AXIS;
-	the_robot->EDP_data.motion_type = ABSOLUTE;
+	the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
+	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 
 	t_m = MOTION_STEPS * STEP;
 
@@ -85,13 +85,13 @@ bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints() {
 						* sizeof(double));
 		next_position[6] = the_robot->EDP_data.current_gripper_coordinate;
 
-		the_robot->EDP_data.instruction_type = SET_GET;
+		the_robot->EDP_data.instruction_type = lib::SET_GET;
 		the_robot->EDP_data.get_type = ARM_DV;
 		the_robot->EDP_data.set_type = ARM_DV;
-		the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
-		the_robot->EDP_data.get_arm_type = JOINT;
-		the_robot->EDP_data.motion_type = ABSOLUTE;
-		the_robot->EDP_data.next_interpolation_type = MIM;
+		the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
+		the_robot->EDP_data.get_arm_type = lib::JOINT;
+		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+		the_robot->EDP_data.next_interpolation_type = lib::MIM;
 		the_robot->EDP_data.motion_steps = MOTION_STEPS;
 		the_robot->EDP_data.value_in_step_no = MOTION_STEPS - 1;
 
@@ -159,13 +159,13 @@ bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints() {
 		next_position[0] += x;
 		next_position[1] += y;
 
-		the_robot->EDP_data.instruction_type = SET_GET;
+		the_robot->EDP_data.instruction_type = lib::SET_GET;
 		the_robot->EDP_data.get_type = ARM_DV;
 		the_robot->EDP_data.set_type = ARM_DV;
-		the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
-		the_robot->EDP_data.get_arm_type = JOINT;
-		the_robot->EDP_data.motion_type = ABSOLUTE;
-		the_robot->EDP_data.next_interpolation_type = MIM;
+		the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
+		the_robot->EDP_data.get_arm_type = lib::JOINT;
+		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+		the_robot->EDP_data.next_interpolation_type = lib::MIM;
 		the_robot->EDP_data.motion_steps = MOTION_STEPS;
 		the_robot->EDP_data.value_in_step_no = MOTION_STEPS - 1;
 		memcpy(the_robot->EDP_data.next_XYZ_AA_arm_coordinates, next_position,

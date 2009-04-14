@@ -7,7 +7,7 @@
 #if !defined(_ECP_GEN_TEST_CONV_H)
 #define _ECP_GEN_TEST_CONV_H
 
-#include "lib/com_buf.h"		// trajectory_description
+#include "lib/com_buf.h"		// lib::trajectory_description
 
 #include "ecp/common/ecp_generator.h"
 
@@ -24,7 +24,7 @@ protected:
 
 	
 public:	
-	trajectory_description td;
+	lib::trajectory_description td;
 	int step_no;
 	double delta[6];
 	

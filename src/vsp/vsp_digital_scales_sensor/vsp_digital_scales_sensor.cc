@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------------
-// Proces:		VIRTUAL SENSOR PROCESS (VSP)
+// Proces:		VIRTUAL SENSOR PROCESS (lib::VSP)
 // Plik:            vsp_dss.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		definicje metod klasy vsp_dsensor
@@ -159,7 +159,7 @@ void digital_scales::initiate_reading (void){
 void digital_scales::get_reading (void){
     // Sprawdzenie, czy odczyty sa zainicjowane.
     if (!readings_initiated)
-        throw sensor_error (NON_FATAL_ERROR, READING_NOT_READY);
+        throw sensor_error (lib::NON_FATAL_ERROR, READING_NOT_READY);
     // Oczekiwanie na zakonczenie pomiarow.
     pthread_barrier_wait(&reading_ready_barrier);
     // Odczyty sa gotowe.

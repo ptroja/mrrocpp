@@ -55,7 +55,7 @@ protected:
     // oraz przepisanie wyniku przeksztalcenia do
     // wewnetrznych struktur danych REPLY_BUFFER
 
-    // r_buffer
+    // lib::r_buffer
 
     double global_kartez_force_msr[7], prevoius_global_kartez_force_msr[7]; // sila we wspolrzednych kartezjankich    XXXXX
     // 	i	 odczytana bezposrednio z czujnika - zestaw globalny dla procesu EDP
@@ -76,9 +76,9 @@ public:
     int force_tryb;
 
     // TODO: rename ruch pozycyjno silowo dla staqlej orientacji i kierukow liniowych
-    virtual void pose_force_linear_move (c_buffer &instruction);
+    virtual void pose_force_linear_move (lib::c_buffer &instruction);
 
-    void pose_force_torque_at_frame_move (c_buffer &instruction);
+    void pose_force_torque_at_frame_move (lib::c_buffer &instruction);
 
     void servo_joints_and_frame_actualization_and_upload(void);// by Y
 
@@ -99,10 +99,10 @@ public:
 
     void create_threads ();
     
-    void set_rmodel (c_buffer &);
-    void get_rmodel (c_buffer &);
-    void move_arm (c_buffer &);
-    void get_arm_position(bool, c_buffer &);
+    void set_rmodel (lib::c_buffer &);
+    void get_rmodel (lib::c_buffer &);
+    void move_arm (lib::c_buffer &);
+    void get_arm_position(bool, lib::c_buffer &);
 };
 /************************ edp_irp6s_effector ****************************/
 

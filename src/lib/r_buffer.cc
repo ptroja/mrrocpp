@@ -1,7 +1,10 @@
 #include "lib/com_buf.h"
 
+namespace mrrocpp {
+namespace lib {
+
 r_buffer::r_buffer (void) :
-  reply_type(ERROR),
+  reply_type(lib::ERROR),
   rmodel_type(TOOL_FRAME),
   arm_type(FRAME),
   input_values(0)
@@ -28,3 +31,6 @@ r_buffer::r_buffer (void) :
         */
 //  rmodel.tool_frame_def.address_byte = 0;
 }
+
+} // namespace lib
+} // namespace mrrocpp

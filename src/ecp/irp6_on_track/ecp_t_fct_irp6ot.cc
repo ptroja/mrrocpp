@@ -52,7 +52,7 @@ bool CALIBRATE_SENSOR = false;
 // Polecenie ruchu robota.
 short MOVE_TYPE = 0;
 // Rodzaj sterowania.
-POSE_SPECIFICATION ps;
+lib::POSE_SPECIFICATION ps;
 
 // Zmienna uzywana do konczenia pracy watkow.
 void* value_ptr;
@@ -88,9 +88,9 @@ void* UI_communication_thread(void* arg)
 {
 	//printf("UI_communication_thread!\n");
 	// Wiadomosc otrzymana z UI.
-	UI_ECP_message ui_msg;
+	lib::UI_ECP_message ui_msg;
 	// Wiadomosc wysylana do UI.
-	ECP_message to_ui_msg;
+	lib::ECP_message to_ui_msg;
 
 	// Id nadawcy wiadomosci.
 	int rcvid;
@@ -121,31 +121,31 @@ void* UI_communication_thread(void* arg)
 		//printf("Zwykla wiadomosc!\n");
 		// Zwykla wiadomosc.
 		switch (ui_msg.command) {
-			case FC_ADD_MACROSTEP:
+			case lib::FC_ADD_MACROSTEP:
 				// Dodanie pozycji do trajektorii.
 				fctg->add_step(ui_msg.motion_time);
 				break;
-			case FC_CALIBRATE_SENSOR:
+			case lib::FC_CALIBRATE_SENSOR:
 				CALIBRATE_SENSOR = true;
 				break;
-			case FC_CHANGE_CONTROL:
+			case lib::FC_CHANGE_CONTROL:
 				// Zmiana rodzju sterowania.
 				ps = ui_msg.ps;
 				CHANGE_CONTROL = true;
 				break;
-			case FC_MOVE_ROBOT:
+			case lib::FC_MOVE_ROBOT:
 				// Przepisanie rodzaju ruchu do zmiennej globalnej.
 				//printf("nadeszlo %d\n", ui_msg.move_type);
 				MOVE_TYPE = ui_msg.move_type;
 				break;
-			case FC_SAVE_TRAJECTORY:
+			case lib::FC_SAVE_TRAJECTORY:
 				fctg->save_trajectory(ui_msg.filename);
 				break;
-			case FC_NEW_TRAJECTORY:
+			case lib::FC_NEW_TRAJECTORY:
 				// Usuniecie listy pozycji, o ile istnieje
 				fctg->flush_pose_list();
 				break;
-			case FC_EXIT:
+			case lib::FC_EXIT:
 				// Zakonczenie ruchu.
 				TERMINATE=true;
 				common::ecp_t->ecp_termination_notice();
@@ -155,7 +155,7 @@ void* UI_communication_thread(void* arg)
 				break;
 		}
 		// Jesli trzeba odswiezyc okno.
-		if (ui_msg.command == FC_GET_DATA) {
+		if (ui_msg.command == lib::FC_GET_DATA) {
 			// Pobranie polozenia.
 			fctg->return_position(to_ui_msg.RS.robot_position);
 			// Jesli uzywany jest czujnik sily.
@@ -168,7 +168,7 @@ void* UI_communication_thread(void* arg)
 					to_ui_msg.RS.sensor_reading[i]=0;
 			}
 			// Odeslanie wiadomosci do UI.
-			MsgReply(rcvid, EOK, &to_ui_msg, sizeof(ECP_message));
+			MsgReply(rcvid, EOK, &to_ui_msg, sizeof(lib::ECP_message));
 		} else {
 			// Wyslanie standardowej odpowiedzi.
 			MsgReply(rcvid, EOK, NULL, 0);
@@ -240,21 +240,21 @@ void show_force_control_window
 {
 	int i;
 	// Przesylka z ECP do UI.
-	ECP_message ecp_msg;
+	lib::ECP_message ecp_msg;
 	// Odpowiedz UI do ECP.
-	UI_reply ui_rep;
+	lib::UI_reply ui_rep;
 	// Nazwa okna (polecenie otwarcia).
 	ecp_msg.hdr.type=0;
-	ecp_msg.ecp_message = OPEN_FORCE_SENSOR_MOVE_WINDOW;
+	ecp_msg.ecp_message = lib::OPEN_FORCE_SENSOR_MOVE_WINDOW;
 	// Wyslanie polecenia do UI -> otwarcie okna.
 #if !defined(USE_MESSIP_SRR)
-	if (MsgSend(UI_fd, &ecp_msg, sizeof(ECP_message), &ui_rep, sizeof(UI_reply)) < 0) {
+	if (MsgSend(UI_fd, &ecp_msg, sizeof(lib::ECP_message), &ui_rep, sizeof(lib::UI_reply)) < 0) {
 #else
 	int status;
-	if (messip_send(UI_fd, 0, 0, &ecp_msg, sizeof(ECP_message), &status, &ui_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0) {
+	if (messip_send(UI_fd, 0, 0, &ecp_msg, sizeof(lib::ECP_message), &status, &ui_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
 #endif
-		common::ecp_t->sr_ecp_msg->message(SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
-		throw common::ECP_main_error(SYSTEM_ERROR, 0);
+		common::ecp_t->sr_ecp_msg->message(lib::SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
+		throw common::ECP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 	// Ustawienie flagi konczenia pracy.
 	TERMINATE = false;
@@ -289,7 +289,7 @@ void fct::task_initialization(void)
 	if ((UI_ECP_attach = name_attach(NULL, tmp_name, NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 //		printf("%s\n", tmp_name);
 		// W razie niepowodzenia.
-		throw common::ECP_main_error(SYSTEM_ERROR, NAME_ATTACH_ERROR);
+		throw common::ECP_main_error(lib::SYSTEM_ERROR, NAME_ATTACH_ERROR);
 	}
 	// Stworzenie generatora trajektorii.
 	fctg = new generator::force_controlled_trajectory(*this);

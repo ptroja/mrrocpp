@@ -35,7 +35,7 @@ protected:
 //	nurbs_tdes ntdes_;
 	double* EDP_data_next_ptr_;
 	double* EDP_data_current_ptr_; 
-   	POSE_SPECIFICATION atype_;
+   	lib::POSE_SPECIFICATION atype_;
 public:
 	// konstruktor
 	nurbs (common::task::base& _ecp_task, const nurbs_tdes& ntdes, int mp_communication_mode_arg = 1);

@@ -38,7 +38,7 @@ class pw_scena: public common::task::base  {
 	//Planar servoing.
 	ecp_vis_ib_eih_planar_irp6ot* planar_vis;
 	//Trajectory description.
-	trajectory_description td;
+	lib::trajectory_description td;
 
 public:
 	//Konstruktory.
@@ -49,7 +49,7 @@ public:
 	void main_task_algorithm(void);
 	//Metods modifing td.
 	void set_td_coordinates(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6);
-	void init_td(POSE_SPECIFICATION ps, int internode_no);
+	void init_td(lib::POSE_SPECIFICATION ps, int internode_no);
 };
 
 }

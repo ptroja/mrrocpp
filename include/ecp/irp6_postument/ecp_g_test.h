@@ -8,7 +8,7 @@
 #define _ECP_GEN_TEST_IRP6P_H
 
 #include "lib/impconst.h"		// frame_tab
-#include "lib/com_buf.h"			// trajectory_description
+#include "lib/com_buf.h"			// lib::trajectory_description
 
 #include "ecp/common/ecp_generator.h"
 
@@ -27,7 +27,7 @@ protected:
 	frame_tab previous_frame;
 	
 public:	
-	trajectory_description td;
+	lib::trajectory_description td;
 	int step_no;
 	double delta[6];
 	

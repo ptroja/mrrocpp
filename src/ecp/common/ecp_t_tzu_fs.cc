@@ -73,38 +73,38 @@ void tzu_fs::main_task_algorithm(void)
 	int procedure_type;
 
 	int option = choose_option ("1 - Standard, 2 - Alternative, 3 - Auto", 3);
-	if (option == OPTION_ONE)
+	if (option == lib::OPTION_ONE)
     {
     	sr_ecp_msg->message("Wyznaczanie modelu metoda standardowa");
    		procedure_type = STANDARD;
    	}
-    else if (option == OPTION_TWO)
+    else if (option == lib::OPTION_TWO)
     {
     	// aktualnie wyznaczany jest tu tylko ci��ar narz�dzia, ale pomy�le� r�wnie� nad tym by w r��ny spos�b wyznaczy� ca�y model
 		sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna x");
 		option = choose_option ("1 - x1, 2 - x2, 3 - y1, 4 - y2", 4);
-		if (option == OPTION_ONE)
+		if (option == lib::OPTION_ONE)
 		{
 			sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna x1");
 			procedure_type = ALTERNATIVE_X_METHOD_1;
 		}
-		else if (option == OPTION_TWO)
+		else if (option == lib::OPTION_TWO)
 		{
 			sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna x2");
 			procedure_type = ALTERNATIVE_X_METHOD_2;
 		}
-		else if (option == OPTION_THREE)
+		else if (option == lib::OPTION_THREE)
 		{
 			sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna y1");
 			procedure_type = ALTERNATIVE_Y_METHOD_1;
 		}
-		else if (option == OPTION_FOUR)
+		else if (option == lib::OPTION_FOUR)
 		{
 			sr_ecp_msg->message("Wyznaczanie modelu metoda alternatywna y2");
 			procedure_type = ALTERNATIVE_Y_METHOD_2;
 		}
 	}
-	else if(option == OPTION_THREE)
+	else if(option == lib::OPTION_THREE)
 	{
 		automatic = true;
 	}
@@ -355,11 +355,11 @@ void force_meassure_generator::set_configuration(int _sleep_time, int _meassurem
 /** first step **/
 bool force_meassure_generator::first_step()
 {
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
  	the_robot->EDP_data.get_type = ARM_DV;
-	the_robot->EDP_data.get_arm_type = FRAME;
+	the_robot->EDP_data.get_arm_type = lib::FRAME;
 	the_robot->EDP_data.next_interpolation_type
-			= TCIM;
+			= lib::TCIM;
 	for(int i = 0; i < 6 ; i++)
 		weight[i] = 0;
 

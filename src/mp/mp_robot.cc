@@ -42,7 +42,7 @@ robot::robot( ROBOT_ENUM l_robot_name, const char* _section_name, task::base &mp
 	if (access(tmp_string, R_OK) == 0 ) {
 		sr_ecp_msg.message("ECP already exists");
 		delete[] network_ecp_attach_point;
-		throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+		throw MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 #endif
 
@@ -51,9 +51,9 @@ robot::robot( ROBOT_ENUM l_robot_name, const char* _section_name, task::base &mp
 	if ( ECP_pid < 0) {
 		uint64_t e = errno; // kod bledu
 		perror ("Failed to spawn ECP process on node\n");
-		sr_ecp_msg.message(SYSTEM_ERROR, e, "MP: Failed to spawn ECP");
+		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "MP: Failed to spawn ECP");
 		delete[] network_ecp_attach_point;
-		throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+		throw MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
 	new_pulse = false;
@@ -82,9 +82,9 @@ robot::robot( ROBOT_ENUM l_robot_name, const char* _section_name, task::base &mp
 		else {
 			uint64_t e = errno; // kod bledu
 			perror("Connect to ECP failed");
-			sr_ecp_msg.message (SYSTEM_ERROR, e, "Connect to ECP failed");
+			sr_ecp_msg.message (lib::SYSTEM_ERROR, e, "Connect to ECP failed");
 			delete[] network_ecp_attach_point;
-			throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+			throw MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 		}
 
 	delete[] network_ecp_attach_point;
@@ -107,7 +107,7 @@ robot::~robot() {
 // ------------------------------------------------------------------------
 void robot::start_ecp ( void ) {
 
-	mp_command.command = START_TASK;
+	mp_command.command = lib::START_TASK;
 	mp_command.hdr.type = 0;
 
 #if !defined(USE_MESSIP_SRR)
@@ -119,16 +119,16 @@ void robot::start_ecp ( void ) {
 #endif
 		uint64_t e = errno;
 		perror("Send to ECP failed\n");
-		sr_ecp_msg.message(SYSTEM_ERROR, e, "MP: Send to ECP failed");
-		throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "MP: Send to ECP failed");
+		throw MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
-	// by Y - ECP_ACKNOWLEDGE zamienione na TASK_TERMINATED
+	// by Y - ECP_ACKNOWLEDGE zamienione na lib::TASK_TERMINATED
 	// w celu uproszczenia programowania zadan wielorobotowych
-	if (ecp_reply_package.reply != TASK_TERMINATED ) {
+	if (ecp_reply_package.reply != lib::TASK_TERMINATED ) {
 		// Odebrano od ECP informacje o bledzie
 		printf("Error w start_ecp w ECP\n");
-		throw MP_main_error(NON_FATAL_ERROR, ECP_ERRORS);
+		throw MP_main_error(lib::NON_FATAL_ERROR, ECP_ERRORS);
 	}
 }
 // ------------------------------------------------------------------------
@@ -149,13 +149,13 @@ void robot::execute_motion(void) { // zlecenie wykonania ruchu
 		// Blad komunikacji miedzyprocesowej - wyjatek
 		uint64_t e = errno;
 		perror("Send to ECP failed\n");
-		sr_ecp_msg.message(SYSTEM_ERROR, e, "MP: Send() to ECP failed");
-		throw MP_error (SYSTEM_ERROR, (uint64_t) 0);
+		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "MP: Send() to ECP failed");
+		throw MP_error (lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
-	if (ecp_reply_package.reply == ERROR_IN_ECP ) {
+	if (ecp_reply_package.reply == lib::ERROR_IN_ECP ) {
 		// Odebrano od ECP informacje o bledzie
-		throw MP_error (NON_FATAL_ERROR, ECP_ERRORS);
+		throw MP_error (lib::NON_FATAL_ERROR, ECP_ERRORS);
 	}
 	// W.S. ...
 	// Ewentualna aktualizacja skladowych robota na podstawie ecp_reply
@@ -166,7 +166,7 @@ void robot::execute_motion(void) { // zlecenie wykonania ruchu
 
 // -------------------------------------------------------------------
 void robot::terminate_ecp(void) { // zlecenie STOP zakonczenia ruchu
-	mp_command.command = STOP;
+	mp_command.command = lib::STOP;
 	mp_command.hdr.type = 0;
 
 #if !defined(USE_MESSIP_SRR)
@@ -179,13 +179,13 @@ void robot::terminate_ecp(void) { // zlecenie STOP zakonczenia ruchu
 		// Blad komunikacji miedzyprocesowej - wyjatek
 		uint64_t e = errno;
 		perror("Send to ECP failed ?\n");
-		sr_ecp_msg.message(SYSTEM_ERROR, e, "MP: Send() to ECP failed");
-		throw MP_error (SYSTEM_ERROR, (uint64_t) 0);
+		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "MP: Send() to ECP failed");
+		throw MP_error (lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
-	if (ecp_reply_package.reply == ERROR_IN_ECP) {
+	if (ecp_reply_package.reply == lib::ERROR_IN_ECP) {
 		// Odebrano od ECP informacje o bledzie
-		throw MP_error (NON_FATAL_ERROR, ECP_ERRORS);
+		throw MP_error (lib::NON_FATAL_ERROR, ECP_ERRORS);
 	}
 }
 // ---------------------------------------------------------------
@@ -199,10 +199,10 @@ void robot::create_command (void) {
 	mp_command.command = ecp_td.mp_command;
 
 	switch (mp_command.command) {
-		case NEXT_STATE:
+		case lib::NEXT_STATE:
 			mp_command.ecp_next_state = ecp_td.ecp_next_state;
 			break;
-		case NEXT_POSE:
+		case lib::NEXT_POSE:
 			create_next_pose_command();
 			break;
 		default:
@@ -223,14 +223,14 @@ void robot::get_reply(void) {
 	}
 
 	switch (ecp_td.reply_type) {
-		case ERROR:
+		case lib::ERROR:
 			ecp_td.error_no.error0 = ecp_reply_package.reply_package.error_no.error0;
 			ecp_td.error_no.error1 = ecp_reply_package.reply_package.error_no.error1;
 			break;
-		case ACKNOWLEDGE:
+		case lib::ACKNOWLEDGE:
 			break;
 		default:  // bledna przesylka
-			throw MP_error (NON_FATAL_ERROR, INVALID_EDP_REPLY);
+			throw MP_error (lib::NON_FATAL_ERROR, INVALID_EDP_REPLY);
 	}
 }
 

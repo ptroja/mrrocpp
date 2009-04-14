@@ -27,7 +27,7 @@ protected:
   common::robot *irp6;
     lib::sensor *vsp_force;
     
-     trajectory_description td;
+     lib::trajectory_description td;
  
 public:
        int step_no;
@@ -60,7 +60,7 @@ protected:
     unsigned short irp6ot_con, irp6p_con;
  
 
-     trajectory_description td;   
+     lib::trajectory_description td;   
  
 public:
        int step_no;
@@ -94,7 +94,7 @@ protected:
     unsigned short irp6ot_con, irp6p_con;
 	lib::Homog_matrix global_base;
 
-     trajectory_description td;   
+     lib::trajectory_description td;   
  
 public:
        int step_no;
@@ -124,7 +124,7 @@ protected:
     common::robot *irp6ot, *irp6p;
     lib::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
 
-     trajectory_description td;
+     lib::trajectory_description td;
     
     // do konfiguracji pracy generatora
     unsigned short irp6ot_con, irp6p_con;
@@ -157,7 +157,7 @@ class tff_rubik_face_rotate : public base
 protected:
 	int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
 	
-     trajectory_description td;
+     lib::trajectory_description td;
     common::robot *irp6ot, *irp6p;
     lib::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
     // do konfiguracji pracy generatora
@@ -188,7 +188,7 @@ class tff_gripper_approach : public base
 protected:
 	int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
 	
-     trajectory_description td;
+     lib::trajectory_description td;
     common::robot *irp6ot, *irp6p;
     lib::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
     // do konfiguracji pracy generatora
@@ -226,7 +226,7 @@ protected:
     lib::sensor *vsp_force_irp6ot, *vsp_force_irp6p;
  
 public:
-     trajectory_description td;
+     lib::trajectory_description td;
        int step_no;
        double delta[6];
 
@@ -277,11 +277,11 @@ class drawing_teach_in_force : public teach_in {
         
     protected:
         
-        POSE_SPECIFICATION emptyps;
+        lib::POSE_SPECIFICATION emptyps;
     
     public:
         double delta[6];
-        trajectory_description td;
+        lib::trajectory_description td;
         int step_no;
         
          // uczenie czy ruch - wybor trybu pracy generatora (definicje YG_TEACH, YG_MOVE)

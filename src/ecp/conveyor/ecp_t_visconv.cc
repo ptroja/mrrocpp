@@ -37,8 +37,8 @@ void lego_brick::main_task_algorithm(void)
 	gen.flush_pose_list();
 	gen2.flush_pose_list();
 
-	POSE_SPECIFICATION ps;
-	ps = JOINT;
+	lib::POSE_SPECIFICATION ps;
+	ps = lib::JOINT;
 
 	double coordinates[MAX_SERVOS_NR];
 	double coordinates2[MAX_SERVOS_NR];

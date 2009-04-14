@@ -1,5 +1,8 @@
 #include "lib/com_buf.h"
 
+namespace mrrocpp {
+namespace lib {
+
 c_buffer::c_buffer (void) :
   instruction_type(SYNCHRO),
   set_type(0),
@@ -74,3 +77,6 @@ bool c_buffer::is_set_arm() const
 {
 	return set_type & ARM_DV;
 }
+
+} // namespace lib
+} // namespace mrrocpp

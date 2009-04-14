@@ -82,7 +82,7 @@ void pw_scena::main_task_algorithm(void) {
 	ga_gen->Move();
 
 	//Inicjalizacja td.
-	init_td(XYZ_ANGLE_AXIS,500);
+	init_td(lib::XYZ_ANGLE_AXIS, 500);
 
 	sr_ecp_msg->message("linear_gen\n");
 	//Podniesienie chwytaka o 0.4 cm.
@@ -124,7 +124,7 @@ void pw_scena::set_td_coordinates(double cor0, double cor1, double cor2, double 
 }
 
 //inicjacja struktury td - trajectory description
-void pw_scena::init_td(POSE_SPECIFICATION pspec, int internode_no){
+void pw_scena::init_td(lib::POSE_SPECIFICATION pspec, int internode_no){
 	td.arm_type=pspec;
 	td.interpolation_node_no=1;
 	td.internode_step_no=internode_no;	//motion time

@@ -73,10 +73,10 @@ class base : public ecp_mp::generator::base
 		class MP_error
 		{
 			public:
-				const ERROR_CLASS error_class;
+				const lib::ERROR_CLASS error_class;
 				const uint64_t mp_error;
 
-				MP_error(ERROR_CLASS err0, uint64_t err1) :
+				MP_error(lib::ERROR_CLASS err0, uint64_t err1) :
 					error_class(err0), mp_error(err1)
 				{
 				}

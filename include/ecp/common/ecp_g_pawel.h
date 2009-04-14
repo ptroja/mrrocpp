@@ -30,7 +30,7 @@ protected:
 	
 public:
 
-	trajectory_description td;
+	lib::trajectory_description td;
 	
 	// konstruktor
 	~pawel();

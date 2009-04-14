@@ -650,7 +650,7 @@ switch(RobotId)
 				sem_post(&sem_all);
 				break;
 			}
-			/*ActionId = D (ECP Trigger)*/
+			/*ActionId = D (lib::ECP Trigger)*/
 			case 'D':
 			{
 				sem_wait(&sem_all);
@@ -1055,7 +1055,7 @@ switch(RobotId)
 			sem_post(&sem_mp);
 			break;
 		}
-		/*DialogId = G (EDP Load)*/
+		/*DialogId = G (lib::EDP Load)*/
 		case 'G':
 		{
 			sem_wait(&sem_all);
@@ -1079,7 +1079,7 @@ switch(RobotId)
 			sem_post(&sem_all);
 			break;
 		}
-		/*DialogId = H (EDP Unload)*/
+		/*DialogId = H (lib::EDP Unload)*/
 		case 'H':
 		{
 			sem_wait(&sem_all);
@@ -1601,7 +1601,7 @@ switch(RobotId)
 			}
 			break;
 		}
-		/*DialogId = J (EDP Load)*/
+		/*DialogId = J (lib::EDP Load)*/
 		case 'J':
 		{
 			switch(ActionId)
@@ -1614,7 +1614,7 @@ switch(RobotId)
 			}
 			break;
 		}
-		/*DialogId = K (EDP Unload)*/
+		/*DialogId = K (lib::EDP Unload)*/
 		case 'K':
 		{
 			switch(ActionId)
@@ -1975,7 +1975,7 @@ switch(RobotId)
 			}
 			break;
 		}
-		/*DialogId = J (EDP Load)*/
+		/*DialogId = J (lib::EDP Load)*/
 		case 'J':
 		{		
 			switch(ActionId)
@@ -1988,7 +1988,7 @@ switch(RobotId)
 			}
 			break;
 		}
-		/*DialogId = K (EDP Unload)*/
+		/*DialogId = K (lib::EDP Unload)*/
 		case 'K':
 		{
 			switch(ActionId)
@@ -2161,7 +2161,7 @@ switch(RobotId)
 			}
 			break;
 		}
-		/*DialogId = C (EDP Load)*/
+		/*DialogId = C (lib::EDP Load)*/
 		case 'C':
 		{
 			switch(ActionId)
@@ -2174,7 +2174,7 @@ switch(RobotId)
 			}
 			break;
 		}
-		/*DialogId = D (EDP Unload)*/
+		/*DialogId = D (lib::EDP Unload)*/
 		case 'D':
 		{
 			switch(ActionId)
@@ -2292,7 +2292,7 @@ switch(RobotId)
 			}
 			break;
 		}
-		/*DialogId = B (EDP Load)*/
+		/*DialogId = B (lib::EDP Load)*/
 		case 'B':
 		{
 			switch(ActionId)
@@ -2305,7 +2305,7 @@ switch(RobotId)
 			}
 			break;
 		}
-		/*DialogId = C (EDP Unload)*/
+		/*DialogId = C (lib::EDP Unload)*/
 		case 'C':
 		{
 			switch(ActionId)
@@ -2639,7 +2639,7 @@ switch(RobotId)
 			}
 			break;
 		}
-		/*DialogId = J (EDP Load)*/
+		/*DialogId = J (lib::EDP Load)*/
 		case 'J':
 		{
 			switch(ActionId)
@@ -2652,7 +2652,7 @@ switch(RobotId)
 			}
 			break;
 		}
-		/*DialogId = K (EDP Unload)*/
+		/*DialogId = K (lib::EDP Unload)*/
 		case 'K':
 		{
 			switch(ActionId)
@@ -2968,7 +2968,7 @@ void *sr_thread(void* arg)
 			}
 
 			fprintf(stderr, "SR: Receive failed (%s)\n", strerror(-rcvid));
-			// 	  throw generator::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			break;
 		}
 		
@@ -3044,7 +3044,7 @@ void *sr_thread(void* arg)
 		if (rcvid == -1) /* Error condition, exit */
 		{
 			perror("SR: Receive failed\n");
-			// 	  throw generator::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			break;
 		} else if (rcvid < -1) {
 			// ie. MESSIP_MSG_DISCONNECT
@@ -3105,7 +3105,7 @@ while(1) {
 	ui_ecp_obj->communication_state = UI_ECP_AFTER_RECEIVE;
      if (rcvid == -1) {/* Error condition, exit */
    		  perror("UI: Receive failed\n");
-		// 	  throw generator::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+		// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
          break;
      }
 
@@ -3141,14 +3141,14 @@ while(1) {
 
       switch ( ui_ecp_obj->ecp_to_ui_msg.ecp_message ) { // rodzaj polecenia z ECP
 		//jk
-		case C_XYZ_ANGLE_AXIS:
-        case C_XYZ_EULER_ZYZ:
-        case C_JOINT:
-		case C_MOTOR:
+		case lib::C_XYZ_ANGLE_AXIS:
+        case lib::C_XYZ_EULER_ZYZ:
+        case lib::C_JOINT:
+		case lib::C_MOTOR:
 		
 			switch ( ui_ecp_obj->ecp_to_ui_msg.ecp_message )
 	{
-		case C_XYZ_ANGLE_AXIS:
+		case lib::C_XYZ_ANGLE_AXIS:
 			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
 			{
 				case ROBOT_IRP6_ON_TRACK:
@@ -3164,7 +3164,7 @@ while(1) {
 				break;
 			}
 		break;
-		case C_XYZ_EULER_ZYZ:
+		case lib::C_XYZ_EULER_ZYZ:
 			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
 			{
 				case ROBOT_IRP6_ON_TRACK:
@@ -3180,7 +3180,7 @@ while(1) {
 				break;
 			}
 		break;
-		case C_JOINT:
+		case lib::C_JOINT:
 			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
 			{
 				case ROBOT_IRP6_ON_TRACK:
@@ -3196,7 +3196,7 @@ while(1) {
 				break;
 			}
 		break;
-		case C_MOTOR:
+		case lib::C_MOTOR:
 			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
 			{
 				case ROBOT_IRP6_ON_TRACK:
@@ -3221,7 +3221,7 @@ while(1) {
 				printf("Blad w UI reply\n");
 			}		
 		break;
-		case YES_NO:
+		case lib::YES_NO:
 
 			len = strlen(ui_ecp_obj->ecp_to_ui_msg.string);
 			msg = new char(len+1);
@@ -3236,7 +3236,7 @@ while(1) {
 			}
 		//~jk
           break;
-        case MESSAGE:
+        case lib::MESSAGE:
 	
 			len = strlen(ui_ecp_obj->ecp_to_ui_msg.string);
 			msg = new char(len+1);
@@ -3244,13 +3244,13 @@ while(1) {
 			msg[len] = '\0';
 			replySend(new Message('7','B','A',0,NULL,msg));
 		
-			ui_ecp_obj->ui_rep.reply = ANSWER_YES;
+			ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
  
 			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
 				printf("Blad w UI reply\n");
 			}
           break;
-        case DOUBLE_NUMBER:
+        case lib::DOUBLE_NUMBER:
 		
 		len = strlen(ui_ecp_obj->ecp_to_ui_msg.string);
 			msg = new char(len+1);
@@ -3264,7 +3264,7 @@ while(1) {
 		  	 	printf("Blad w UI reply\n");
 	  	  	}
 		break;
-        case INTEGER_NUMBER:
+        case lib::INTEGER_NUMBER:
 		
 			len = strlen(ui_ecp_obj->ecp_to_ui_msg.string);
 			msg = new char(len+1);
@@ -3278,7 +3278,7 @@ while(1) {
 			   	printf("Blad w UI reply\n");
 		   	}
  		break;
-          case CHOOSE_OPTION:
+          case lib::CHOOSE_OPTION:
 			// wybor ilosci dostepnych opcji w zaleznosci od wartosci ui_ecp_obj->ecp_to_ui_msg.nr_of_options
 	
 			replySend(new Message('7','E',(char)(ui_ecp_obj->ecp_to_ui_msg.nr_of_options),0,NULL,msg)); 
@@ -3290,10 +3290,10 @@ while(1) {
 		    	}
 			    	
           break;  
-        case LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
-     //    printf("LOAD_FILE\n");
+        case lib::LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+     //    printf("lib::LOAD_FILE\n");
 		          replySend(new Message('7','G','A',0,NULL,msg)); 
-		          ui_ecp_obj->ui_rep.reply = FILE_LOADED;
+		          ui_ecp_obj->ui_rep.reply = lib::FILE_LOADED;
 		       	 ui_ecp_obj->take_sem();
 		
 		     	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
@@ -3302,10 +3302,10 @@ while(1) {
       
 
           break;
-        case SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
-		   //    printf("SAVE_FILE\n");
+        case lib::SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+		   //    printf("lib::SAVE_FILE\n");
           replySend(new Message('7','H','A',0,NULL,msg)); 
-		 ui_ecp_obj->ui_rep.reply = FILE_SAVED;
+		 ui_ecp_obj->ui_rep.reply = lib::FILE_SAVED;
   		ui_ecp_obj->take_sem();
 
      	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {

@@ -41,7 +41,7 @@ void wii::main_task_algorithm(void)
 	firstPosition = eg->getFirstPosition();
 	
 	sg->reset();
-	sg->load_coordinates(XYZ_EULER_ZYZ,firstPosition[0],firstPosition[1],firstPosition[2],firstPosition[3],firstPosition[4],firstPosition[5],firstPosition[6],firstPosition[7]);
+	sg->load_coordinates(lib::XYZ_EULER_ZYZ,firstPosition[0],firstPosition[1],firstPosition[2],firstPosition[3],firstPosition[4],firstPosition[5],firstPosition[6],firstPosition[7]);
 	sg->Move();
 
 	while(1)

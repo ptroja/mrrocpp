@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 //                            vsp_s.cc 		dla QNX6.2.1
 // 
-//            Virtual Sensor Process (VSP) - methods for Schunk force/torgue sensor
+//            Virtual Sensor Process (lib::VSP) - methods for Schunk force/torgue sensor
 // Metody klasy VSP
 // 
 // Ostatnia modyfikacja: styczen 2005
@@ -64,7 +64,7 @@ schunk::schunk(lib::configurator &_config) : base(_config)
 		if((tmp++)<CONNECT_RETRY)
 			delay(CONNECT_DELAY);
 		else{
-			throw sensor_error (SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+			throw sensor_error (lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 		};
 	
 	delete [] network_edp_vsp_attach_point;
@@ -152,7 +152,7 @@ void schunk::initiate_reading (void)
 {
 
 	if(!is_sensor_configured)
-		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 		
 // 		printf("force: VSP %f\n", edp_vsp_reply.force[2]);
 		
@@ -234,14 +234,14 @@ void schunk::get_reading (void)
 // start[3].tv_nsec=start[2].tv_nsec;
 
 	if(!is_sensor_configured)
-		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	// jezeli chcemy jakikolwiek odczyt	-> is_reading_ready
 
 	if(!is_reading_ready)
 	{
 // 		printf("DELAY: %d, %d\n", old_diff, diff);
 	
-		throw sensor_error (FATAL_ERROR, READING_NOT_READY);
+		throw sensor_error (lib::FATAL_ERROR, READING_NOT_READY);
 		
 		}
 // 	old_diff=diff;

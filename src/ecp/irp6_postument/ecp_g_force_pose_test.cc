@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //                             ecp_gen_test.cc
-//             Effector Control Process (ECP) - force & torque methods
+//             Effector Control Process (lib::ECP) - force & torque methods
 // 			Test nowego EDP z wykorzystaniem sily
 // 			By Slawek Bazant
 //			Ostatnia modyfikacja: 05.01.2006r.
@@ -41,16 +41,16 @@ bool y_simple::first_step()
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
 	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
 	//	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.set_arm_type = PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = FRAME;
-	the_robot->EDP_data.motion_type = RELATIVE;
-	the_robot->EDP_data.next_interpolation_type = TCIM;
+	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
+	the_robot->EDP_data.get_arm_type = lib::FRAME;
+	the_robot->EDP_data.motion_type = lib::RELATIVE;
+	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -96,7 +96,7 @@ bool y_simple::next_step()
 		ecp_t.mp_buffer_receive_and_send();
 		return false;
 	}
-	the_robot->EDP_data.instruction_type = SET_GET;
+	the_robot->EDP_data.instruction_type = lib::SET_GET;
 
 	/*if(the_robot->EDP_data.current_gripper_coordinate < 0.058) */
 	the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;

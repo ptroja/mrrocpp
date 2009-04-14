@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------------
-// Proces:		VIRTUAL SENSOR PROCESS (VSP)
+// Proces:		VIRTUAL SENSOR PROCESS (lib::VSP)
 // Plik:            vsp_m_nint.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		Interaktywna powloka procesow VSP 
@@ -41,7 +41,7 @@ base::base (lib::configurator &_config) :
 	{
 
 	/* Lokalizacja procesu wyswietlania komunikatow SR */
-	if ((sr_msg = new lib::sr_vsp(VSP, config.return_string_value("resourceman_attach_point"),
+	if ((sr_msg = new lib::sr_vsp(lib::VSP, config.return_string_value("resourceman_attach_point"),
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL)
 	{
 		printf("communication with SR not ready\n");

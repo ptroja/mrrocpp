@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 //                            edp_s.cc 		dla QNX6.3.0
 //
-//            Virtual Sensor Process (VSP) - methods for Schunk force/torgue sensor
+//            Virtual Sensor Process (lib::VSP) - methods for Schunk force/torgue sensor
 // Metody klasy VSP
 //
 // Ostatnia modyfikacja: grudzie 2004
@@ -381,7 +381,7 @@ void ATI3084_force::wait_for_event()
 			// kiedy po uplynieciu okreslonego czasu nie zostanie zgloszone przerwanie
 			if (iw_ret==-1) {
 				if (iter_counter==1) {
-					sr_msg->message(NON_FATAL_ERROR, "Force / Torque read error - check sensor controller");
+					sr_msg->message(lib::NON_FATAL_ERROR, "Force / Torque read error - check sensor controller");
 				}
 				if (iter_counter%10==0) // raz na 10
 				{
@@ -414,7 +414,7 @@ void ATI3084_force::initiate_reading(void)
 	short measure_report;
 
 	if (!is_sensor_configured)
-		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
 	if (master.test_mode) {
 		for (int i = 0; i < 6; ++i) {

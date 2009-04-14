@@ -22,7 +22,7 @@ protected:
 
   
 public:	
-   trajectory_description td;
+   lib::trajectory_description td;
    	int step_no;
    	
    	

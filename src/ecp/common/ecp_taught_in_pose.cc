@@ -10,7 +10,7 @@ namespace common {
 ecp_taught_in_pose::ecp_taught_in_pose (void)
 {}
 
-ecp_taught_in_pose::ecp_taught_in_pose (POSE_SPECIFICATION at, double mt, double* c)
+ecp_taught_in_pose::ecp_taught_in_pose (lib::POSE_SPECIFICATION at, double mt, double* c)
 		:
 		arm_type(at),
 		motion_time(mt)
@@ -18,7 +18,7 @@ ecp_taught_in_pose::ecp_taught_in_pose (POSE_SPECIFICATION at, double mt, double
 	memcpy(coordinates, c, MAX_SERVOS_NR*sizeof(double));
 } // end: ecp_taught_in_pose::ecp_taught_in_pose
 
-ecp_taught_in_pose::ecp_taught_in_pose (POSE_SPECIFICATION at, double mt, int e_info, double* c) // by Y
+ecp_taught_in_pose::ecp_taught_in_pose (lib::POSE_SPECIFICATION at, double mt, int e_info, double* c) // by Y
 		:
 		arm_type(at),
 		motion_time(mt),

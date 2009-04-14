@@ -59,7 +59,7 @@ void * irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 	NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		e = errno;
 		perror("Failed to attach EDP_VSP\n");
-		vs->sr_msg->message(SYSTEM_ERROR, e, "Failed to attach Effector Control Process");
+		vs->sr_msg->message(lib::SYSTEM_ERROR, e, "Failed to attach Effector Control Process");
 	}
 	long counter = 0;
 	while (1) {
@@ -69,7 +69,7 @@ void * irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 		{
 			e = errno;
 			perror("EDP_VSP: Receive from VSP failed\n");
-			vs->sr_msg->message(SYSTEM_ERROR, e, "EDP: Receive from VSP failed");
+			vs->sr_msg->message(lib::SYSTEM_ERROR, e, "EDP: Receive from VSP failed");
 			break;
 		}
 
@@ -129,7 +129,7 @@ void * irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 		{
 			e = errno;
 			perror("EDP_VSP: Reply to VSP failed\n");
-			vs->sr_msg->message(SYSTEM_ERROR, e, "EDP: Reply to VSP failed");
+			vs->sr_msg->message(lib::SYSTEM_ERROR, e, "EDP: Reply to VSP failed");
 		}
 	} //!< end while
 	return 0;
@@ -169,7 +169,7 @@ void * irp6s_postument_track_effector::force_thread(void *arg)
 			break;
 		}
 		; //!< end switch
-		vs->sr_msg->message (FATAL_ERROR, e.error_no);
+		vs->sr_msg->message (lib::FATAL_ERROR, e.error_no);
 
 	} //!< end CATCH
 
@@ -257,7 +257,7 @@ void * irp6s_postument_track_effector::force_thread(void *arg)
 				break;
 			}
 			; //!< end switch
-			vs->sr_msg->message (FATAL_ERROR, e.error_no);
+			vs->sr_msg->message (lib::FATAL_ERROR, e.error_no);
 
 		} //!< end CATCH
 

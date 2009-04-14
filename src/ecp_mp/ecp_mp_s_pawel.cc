@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------
 //                        		ecp_s.cc		dla QNX6.2
 //
-//                     EFFECTOR CONTROL PROCESS (VSP) - metody klasy ecp_mp_sensor()
+//                     EFFECTOR CONTROL PROCESS (lib::VSP) - metody klasy ecp_mp_sensor()
 //
 // Ostatnia modyfikacja: 06.12.2006
 // Autor: tkornuta
@@ -30,7 +30,7 @@ pawel::pawel (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task:: b
 	union_size = sizeof(image.sensor_union.ball);
 
 	//  printf("[ecp_mp]\tunion_size = %i\n",union_size);
-	//  sr_ecp_msg->message (SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
+	//  sr_ecp_msg->message (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
 }
 /************************** CONFIGURE SENSOR ******************************/
 void pawel::configure_sensor() {
@@ -39,7 +39,7 @@ void pawel::configure_sensor() {
 //	printf ("[ecp_mp]\tkonfiguracja czujnika\n");
 	// Wyslanie polecenia do procesu VSP.
 	if (devctl(sd, DEVCTL_RW, &devmsg, sizeof(lib::DEVCTL_MSG), NULL) == 9)
-		throw sensor_error(SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 }
 
 /************************** INITIATE  READING *********************************/
@@ -47,7 +47,7 @@ void pawel::initiate_reading() {
 
 	devmsg.to_vsp.i_code= lib::VSP_INITIATE_READING;
 	if (devctl(sd, DEVCTL_RW, &devmsg, sizeof(lib::DEVCTL_MSG), NULL) == 9)
-		throw sensor_error(SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 
 //	printf("[ecp_mp]\tinitiate reading\n");
 
@@ -57,7 +57,7 @@ void pawel::initiate_reading() {
 void pawel::get_reading() {
 
 	if(read(sd, &from_vsp, sizeof(lib::VSP_ECP_MSG)) == -1)
-		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
+		sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
 
 	if(from_vsp.vsp_report == lib::VSP_REPLY_OK)
 	{

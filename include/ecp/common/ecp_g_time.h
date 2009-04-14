@@ -4,7 +4,7 @@
 // 
 // -------------------------------------------------------------------------
 
-//   tdes.arm_type = XYZ_EULER_ZYZ;
+//   tdes.arm_type = lib::XYZ_EULER_ZYZ;
 
 #if !defined(_ECP_GEN_PLOT_H)
 #define _ECP_GEN_PLOT_H
@@ -31,7 +31,7 @@ protected:
     double start_joint_arm_coordinates[MAX_SERVOS_NR];
 	
 public:
-	trajectory_description td;
+	lib::trajectory_description td;
 	int step_no;
 	
 	// konstruktor

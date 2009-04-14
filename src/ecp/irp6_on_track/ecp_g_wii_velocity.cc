@@ -13,7 +13,7 @@ sem_t sem;
 
 wii_velocity::wii_velocity (common::task::base& _ecp_task) : common::generator::tff_nose_run(_ecp_task,10)
 {
-	configure_behaviour(UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION);
+	configure_behaviour(lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION);
 }
 
 bool wii_velocity::first_step()
@@ -27,15 +27,15 @@ bool wii_velocity::first_step()
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
 	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
-	the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.set_arm_type = PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = JOINT;
-	the_robot->EDP_data.motion_type = RELATIVE;
-	the_robot->EDP_data.next_interpolation_type = TCIM;
+	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
+	the_robot->EDP_data.get_arm_type = lib::JOINT;
+	the_robot->EDP_data.motion_type = lib::RELATIVE;
+	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -71,7 +71,7 @@ bool wii_velocity::next_step()
 	}
 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-	the_robot->EDP_data.instruction_type = SET_GET;
+	the_robot->EDP_data.instruction_type = lib::SET_GET;
 
 	operate = (int)sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.up || (int)sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.right || (int)sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.down || (int)sensor_m[lib::SENSOR_WIIMOTE]->image.sensor_union.wiimote.left;
 

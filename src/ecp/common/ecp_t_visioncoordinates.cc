@@ -71,7 +71,7 @@ void visioncoordinates::main_task_algorithm()
 		debugmsg("getNewCoordinates()");
 		itsVisionGen->getNewCoordinates(bf);
 		debugmsg("load_coordinates()");
-		itsSmoothGen->load_coordinates(XYZ_EULER_ZYZ, bf[0], bf[1], bf[2], bf[3], bf[4], bf[5], bf[6], bf[7]);
+		itsSmoothGen->load_coordinates(lib::XYZ_EULER_ZYZ, bf[0], bf[1], bf[2], bf[3], bf[4], bf[5], bf[6], bf[7]);
 		debugmsg("itsSmoothGen->Move()");
 		itsSmoothGen->Move();
 		debugmsg("itsShoothGen->reset()");
@@ -90,7 +90,7 @@ void visioncoordinates::setStartPosition()
 	iss >> bf[0] >> bf[1] >> bf[2] >> bf[3] >> bf[4] >> bf[5] >> bf[6]; 
 	delete[] position;
 
-	itsSmoothGen->load_coordinates(JOINT, bf[0], bf[1], bf[2], bf[3], bf[4], bf[5], bf[6], bf[7]);
+	itsSmoothGen->load_coordinates(lib::JOINT, bf[0], bf[1], bf[2], bf[3], bf[4], bf[5], bf[6], bf[7]);
 	itsSmoothGen->Move();
 	itsSmoothGen->reset();
 }

@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces:		EFFECTOR CONTROL PROCESS (ECP)
+// Proces:		EFFECTOR CONTROL PROCESS (lib::ECP)
 // Plik:			ecp_fctg.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		force_controlled_trajectory_generator - definicja metod klasy
@@ -78,7 +78,7 @@ void force_controlled_trajectory::get_current_position (){
     pthread_mutex_lock(&ROBOT_POSITION_MUTEX);
         // Odczytanie polozenia robota
         // Przygotowanie rozkazu dla EDP.
-        the_robot->EDP_data.instruction_type = GET;
+        the_robot->EDP_data.instruction_type = lib::GET;
         the_robot->EDP_data.get_type = ARM_DV; // ARM
         the_robot->EDP_data.get_arm_type = current_control;
         // Przepisanie rozkazu do bufora wysylkowego.
@@ -88,17 +88,17 @@ void force_controlled_trajectory::get_current_position (){
         // Odebranie danych.
         the_robot->get_reply();
         // Przepisanie obecnego polozenia robota do bufora.
-        if (current_control == MOTOR){
+        if (current_control == lib::MOTOR){
             memcpy(current_position, the_robot->EDP_data.current_motor_arm_coordinates, 8*sizeof(double));
             memcpy(current_motor_position, the_robot->EDP_data.current_motor_arm_coordinates, 8*sizeof(double));
             }
-        else if (current_control == XYZ_EULER_ZYZ){
+        else if (current_control == lib::XYZ_EULER_ZYZ){
             memcpy(current_position, the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates, 6*sizeof(double));
             // Odczytanie polowenia na motorach.
             // Przygotowanie rozkazu dla EDP.
-            the_robot->EDP_data.instruction_type = GET;
+            the_robot->EDP_data.instruction_type = lib::GET;
             the_robot->EDP_data.get_type = ARM_DV; // ARM
-            the_robot->EDP_data.get_arm_type = MOTOR;
+            the_robot->EDP_data.get_arm_type = lib::MOTOR;
             // Przepisanie rozkazu do bufora wysylkowego.
             the_robot->create_command();
             // Zlecenie ruchu robota.
@@ -113,22 +113,22 @@ void force_controlled_trajectory::get_current_position (){
 
 
 /**************************** CHANGE CONTROL *******************************/
-void force_controlled_trajectory::change_control(POSE_SPECIFICATION ps){
+void force_controlled_trajectory::change_control(lib::POSE_SPECIFICATION ps){
     // Jesli nic nie trzeba zmienic
     if (current_control == ps)
         return;
     // Zmiana sterowania.
-    if (ps == MOTOR){
+    if (ps == lib::MOTOR){
         // Zmiana na sterowanie na silnikach.
-        current_control = MOTOR;
+        current_control = lib::MOTOR;
         // Przepisanie zmiennych.
         memcpy(current_delta, motor_delta, 8*sizeof(double));
         memcpy(current_delta_increment, motor_delta_increment, 8*sizeof(double));
         memcpy(current_max_delta_increment, motor_max_delta_increment, 8*sizeof(double));
         }
-    else if (ps == XYZ_EULER_ZYZ){
+    else if (ps == lib::XYZ_EULER_ZYZ){
         // Zmiana na sterowanie we wspolrzednych zewnetrznych.
-        current_control = XYZ_EULER_ZYZ;
+        current_control = lib::XYZ_EULER_ZYZ;
         // Przepisanie zmiennych.
         memcpy(current_delta, external_delta, 6*sizeof(double));
         memcpy(current_delta_increment, external_delta_increment, 6*sizeof(double));
@@ -197,9 +197,9 @@ force_controlled_trajectory::force_controlled_trajectory (common::task::base& _e
     external_max_delta_increment[4] = 0.02;
     external_max_delta_increment[5] = 0.02;
     // Chwilowe ustawienie rodzaju sterowania.
-    current_control = XYZ_EULER_ZYZ;
+    current_control = lib::XYZ_EULER_ZYZ;
     // Ustawienie sterowania na MOTOR.
-    change_control(MOTOR);
+    change_control(lib::MOTOR);
     }; // end: force_controlled_trajectory_generator
 
 
@@ -210,10 +210,10 @@ void force_controlled_trajectory::add_step (int motion_time){
     // Dodanie elementu do listy
     if (!pose_list.empty()){
         // Jesli glowa pusta.
-        create_pose_list_head(MOTOR, motion_time, current_motor_position);
+        create_pose_list_head(lib::MOTOR, motion_time, current_motor_position);
     }else{
         // Jesli nastepny element.
-        insert_pose_list_element(MOTOR, motion_time, current_motor_position);
+        insert_pose_list_element(lib::MOTOR, motion_time, current_motor_position);
         }; // end else
     // Wyswietlenie dodanego elementu.
 /*    printf("Robot :: ");
@@ -304,19 +304,19 @@ bool force_controlled_trajectory::first_step(){
         insert_position_list_element(tmp_position);
 	}
     // Przygotowanie rozkazu dla EDP.
-    the_robot->EDP_data.instruction_type = SET;
+    the_robot->EDP_data.instruction_type = lib::SET;
     the_robot->EDP_data.set_type = ARM_DV; // ARM
     the_robot->EDP_data.set_arm_type = current_control;
-    the_robot->EDP_data.motion_type = ABSOLUTE;
-     the_robot->EDP_data.next_interpolation_type = MIM;
+    the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+     the_robot->EDP_data.next_interpolation_type = lib::MIM;
     the_robot->EDP_data.motion_steps = 70;
     the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-5;
 
     // Zerowe przesuniecie na innych osiach.
-    if (current_control == MOTOR)
+    if (current_control == lib::MOTOR)
         memcpy(the_robot->EDP_data.next_motor_arm_coordinates, robot_position, 8*sizeof(double));
     // Zerowe przesuniecie robota do danej pozycji - wspolrzedne zewnetrzne.
-    else if (current_control == XYZ_EULER_ZYZ)
+    else if (current_control == lib::XYZ_EULER_ZYZ)
         memcpy(the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates, robot_position, 6*sizeof(double));
     // Przesuniecie sie na pierwszy element listy.
     initiate_position_list();
@@ -327,10 +327,10 @@ bool force_controlled_trajectory::first_step(){
     // Pobranie pierwszej pozycji.
     get_position_list_element(tmp_position);
     // Przesuniecie robota do pierwszej pozycji - na motorach.
-    if (current_control == MOTOR)
+    if (current_control == lib::MOTOR)
         the_robot->EDP_data.next_motor_arm_coordinates[number] = tmp_position;
     // Przesuniecie robota do pierwszej pozycji - wspolrzedne zewnetrzne.
-    if (current_control == XYZ_EULER_ZYZ)
+    if (current_control == lib::XYZ_EULER_ZYZ)
         the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[number] = tmp_position;
     // Przepisanie rozkazu do bufora wysylkowego.
 
@@ -364,10 +364,10 @@ bool force_controlled_trajectory::next_step ( ) {
     // Pobranie elementu z listy.
     get_position_list_element(tmp_position);
     // Przesuniecie robota do danej pozycji - na motorach.
-    if (current_control == MOTOR)
+    if (current_control == lib::MOTOR)
         the_robot->EDP_data.next_motor_arm_coordinates[number] = tmp_position;
     // Przesuniecie robota do danej pozycji - wspolrzedne zewnetrzne.
-    if (current_control == XYZ_EULER_ZYZ)
+    if (current_control == lib::XYZ_EULER_ZYZ)
         the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[number] = tmp_position;
     // Przepisanie rozkazu do bufora wysylkowego.
 
@@ -385,7 +385,7 @@ void force_controlled_trajectory::check_force_condition(ecp_mp::sensor::force& t
     // Sprawdzenie, czy nie wystapila za duza sila.
     for (int i=0; i<6; i++)
         if (fabs(tmp_reading[i]) > dangerous_force)
-                throw ECP_error(NON_FATAL_ERROR, DANGEROUS_FORCE_DETECTED);
+                throw ECP_error(lib::NON_FATAL_ERROR, DANGEROUS_FORCE_DETECTED);
     // Sila w porzadku.
 }
 
@@ -460,7 +460,7 @@ try{
     // Otwarcie pliku.
 	std::ofstream to_file(filename);
     if (!to_file)
-        throw ECP_error(FATAL_ERROR, SAVE_FILE_ERROR);
+        throw ECP_error(lib::FATAL_ERROR, SAVE_FILE_ERROR);
     // Przejscie na poczatek listy.
     initiate_pose_list();
     // Rodzaj wspolrzednych.

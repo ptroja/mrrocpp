@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 //                            vsp_s.cc 		dla QNX6.2.1
 // 
-//            Virtual Sensor Process (VSP) - methods for Schunk force/torgue sensor
+//            Virtual Sensor Process (lib::VSP) - methods for Schunk force/torgue sensor
 // Metody klasy VSP
 // 
 // Ostatnia modyfikacja: styczen 2005
@@ -170,7 +170,7 @@ void pawel::initiate_reading (void)
 	
 	
 	if(!is_sensor_configured)
-		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
 	size_read = read( fd, buffer, sizeof( buffer ) );
 	lseek(fd,0,SEEK_SET);
@@ -256,10 +256,10 @@ void pawel::initiate_reading (void)
 void pawel::get_reading (void)
 {
 	if(!is_sensor_configured)
-		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
 	if(!is_reading_ready)
-		throw sensor_error (FATAL_ERROR, READING_NOT_READY);
+		throw sensor_error (lib::FATAL_ERROR, READING_NOT_READY);
 
 	struct timespec tmp_time, time_start, time_end;
 	

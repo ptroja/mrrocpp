@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //                            ecp.cc
-//            Effector Control Process (ECP) - force methods
+//            Effector Control Process (lib::ECP) - force methods
 // Funkcje do tworzenia procesow ECP z wykorzsytaniem sily
 // 
 // Ostatnia modyfikacja: 2004r.
@@ -221,29 +221,29 @@ the_robot->EDP_data.next_tool_frame[2][2]=1; the_robot->EDP_data.next_tool_frame
 
 
 
-      the_robot->EDP_data.instruction_type = SET_GET;
+      the_robot->EDP_data.instruction_type = lib::SET_GET;
       // the_robot->EDP_data.get_type =  ARM_DV + RMODEL_DV;
       // the_robot->EDP_data.set_type =  ARM_DV + RMODEL_DV;
       the_robot->EDP_data.get_type =  RMODEL_DV;
       the_robot->EDP_data.set_type =  RMODEL_DV;
-      the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
-      the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;
-       the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
-      the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
-      the_robot->EDP_data.motion_type = ABSOLUTE;
-       the_robot->EDP_data.next_interpolation_type = MIM;
+      the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
+      the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
+       the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
+      the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
+      the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+       the_robot->EDP_data.next_interpolation_type = lib::MIM;
       the_robot->EDP_data.motion_steps = td.internode_step_no;
       the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
    
 /* } else {
    
 
-      the_robot->EDP_data.instruction_type = GET;
+      the_robot->EDP_data.instruction_type = lib::GET;
       the_robot->EDP_data.get_type = 0x04;
       the_robot->EDP_data.set_type = 0x04;
-      the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
-      the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;
-      the_robot->EDP_data.motion_type = ABSOLUTE;
+      the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
+      the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
+      the_robot->EDP_data.motion_type = lib::ABSOLUTE;
       the_robot->EDP_data.motion_steps = td.internode_step_no;
       the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
       the_robot->create_command ();
@@ -271,7 +271,7 @@ bool seven_eye_run_linear::next_step (  ) {
 // mp_comm_counter=0; // 2004.02.25
 clock_gettime( CLOCK_REALTIME , &s_time);
    if (check_and_null_trigger()) { // Koniec odcinka
-//    ecp_t.set_ecp_reply (TASK_TERMINATED);
+//    ecp_t.set_ecp_reply (lib::TASK_TERMINATED);
 
      return false;
    }
@@ -281,7 +281,7 @@ clock_gettime( CLOCK_REALTIME , &s_time);
    if(the_first)
    {
    printf("###################################\n");
-   the_robot->EDP_data.instruction_type = GET; //po sugestii Tomka
+   the_robot->EDP_data.instruction_type = lib::GET; //po sugestii Tomka
    the_robot->EDP_data.get_type = ARM_DV;
   
    the_first=0;
@@ -296,9 +296,9 @@ the_second=1;
    {
    	the_robot->EDP_data.set_type = ARM_DV;
 
- the_robot->EDP_data.instruction_type = SET;
+ the_robot->EDP_data.instruction_type = lib::SET;
     the_robot->EDP_data.get_type = NOTHING_DV;
-   the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
+   the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
 } 
 if(the_second)
 {
@@ -330,7 +330,7 @@ printf("%f ",the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i]);
 }
 printf("\n");
 #endif
-// the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
+// the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
    
    
    // for (int j=0; j<3 ; j++)

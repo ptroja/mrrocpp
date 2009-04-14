@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------
 //   ecp_t_tran.cc - przezroczyste wersja dla dowolnego z robotow
 //
-//                     EFFECTOR CONTROL PROCESS (ECP) - main()
+//                     EFFECTOR CONTROL PROCESS (lib::ECP) - main()
 //
 // Ostatnia modyfikacja: 2006
 // ------------------------------------------------------------------------

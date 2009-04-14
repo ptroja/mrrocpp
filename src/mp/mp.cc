@@ -30,13 +30,13 @@ namespace common {
 mp_taught_in_pose::mp_taught_in_pose(void)
 {}
 
-mp_taught_in_pose::mp_taught_in_pose(POSE_SPECIFICATION at, double mt, double* c) :
+mp_taught_in_pose::mp_taught_in_pose(lib::POSE_SPECIFICATION at, double mt, double* c) :
         arm_type(at), motion_time(mt)
 {
     memcpy(coordinates, c, MAX_SERVOS_NR*sizeof(double));
 }
 
-mp_taught_in_pose::mp_taught_in_pose(POSE_SPECIFICATION at, double mt,
+mp_taught_in_pose::mp_taught_in_pose(lib::POSE_SPECIFICATION at, double mt,
                                      double* c, double* irp6p_c) :
         arm_type(at), motion_time(mt)
 {
@@ -44,7 +44,7 @@ mp_taught_in_pose::mp_taught_in_pose(POSE_SPECIFICATION at, double mt,
     memcpy(irp6p_coordinates, irp6p_c, MAX_SERVOS_NR*sizeof(double));
 }
 
-mp_taught_in_pose::mp_taught_in_pose(POSE_SPECIFICATION at, double mt,
+mp_taught_in_pose::mp_taught_in_pose(lib::POSE_SPECIFICATION at, double mt,
                                      int e_info, double* c) :
         arm_type(at), motion_time(mt)
 { // by Y
@@ -52,7 +52,7 @@ mp_taught_in_pose::mp_taught_in_pose(POSE_SPECIFICATION at, double mt,
     extra_info = e_info;
 }
 
-robot::MP_error::MP_error(ERROR_CLASS err0, uint64_t err1) :
+robot::MP_error::MP_error(lib::ERROR_CLASS err0, uint64_t err1) :
         error_class(err0), mp_error(err1)
 {}
 
@@ -93,7 +93,7 @@ void set_next_ecps_state::configure (int l_mp_2_ecp_next_state, int l_mp_2_ecp_n
     }
 }
 
-void set_next_ecps_state::configure (const playerpos_goal_t &_goal)
+void set_next_ecps_state::configure (const lib::playerpos_goal_t &_goal)
 {
     ecp_next_state.mp_2_ecp_next_state = ecp_mp::task::ECP_GEN_PLAYERPOS;
     ecp_next_state.playerpos_goal = _goal;
@@ -109,7 +109,7 @@ bool set_next_ecps_state::first_step ()
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
 
-        robot_m_iterator->second->ecp_td.mp_command = NEXT_STATE;
+        robot_m_iterator->second->ecp_td.mp_command = lib::NEXT_STATE;
 
         robot_m_iterator->second->ecp_td.ecp_next_state = ecp_next_state;
 
@@ -141,7 +141,7 @@ bool send_end_motion_to_ecps::first_step ()
     for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
-        robot_m_iterator->second->ecp_td.mp_command = END_MOTION;
+        robot_m_iterator->second->ecp_td.mp_command = lib::END_MOTION;
         robot_m_iterator->second->communicate = true;
     }
 
@@ -183,8 +183,8 @@ bool extended_empty::first_step ()
     for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
-        robot_m_iterator->second->ecp_td.mp_command = NEXT_POSE;
-        robot_m_iterator->second->ecp_td.instruction_type = QUERY;
+        robot_m_iterator->second->ecp_td.mp_command = lib::NEXT_POSE;
+        robot_m_iterator->second->ecp_td.instruction_type = lib::QUERY;
         robot_m_iterator->second->communicate = false;
     }
 
@@ -230,7 +230,7 @@ bool extended_empty::next_step ()
     for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
-        if ( robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED )
+        if ( robot_m_iterator->second->ecp_td.ecp_reply == lib::TASK_TERMINATED )
         {
           //  sr_ecp_msg.message("w mp task terminated");
             return false;
@@ -262,8 +262,8 @@ bool empty::first_step ()
     for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
-        robot_m_iterator->second->ecp_td.mp_command = NEXT_POSE;
-        robot_m_iterator->second->ecp_td.instruction_type = QUERY;
+        robot_m_iterator->second->ecp_td.mp_command = lib::NEXT_POSE;
+        robot_m_iterator->second->ecp_td.instruction_type = lib::QUERY;
         robot_m_iterator->second->communicate = true;
     }
 
@@ -290,7 +290,7 @@ bool empty::next_step ()
     for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
-        if ( robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED )
+        if ( robot_m_iterator->second->ecp_td.ecp_reply == lib::TASK_TERMINATED )
         {
             sr_ecp_msg.message("w mp task terminated");
             return false;
@@ -307,8 +307,8 @@ delta::delta(task::base& _mp_task): base (_mp_task)
 // Generator prostoliniowy o zadany przyrost polozenia/orientacji
 // ####################################################################################################
 
-tight_coop::tight_coop(task::base& _mp_task, trajectory_description irp6ot_tr_des,
-        trajectory_description irp6p_tr_des): delta (_mp_task)
+tight_coop::tight_coop(task::base& _mp_task, lib::trajectory_description irp6ot_tr_des,
+        lib::trajectory_description irp6p_tr_des): delta (_mp_task)
 {
     irp6ot_td = irp6ot_tr_des;
     irp6p_td = irp6p_tr_des;
@@ -332,14 +332,14 @@ bool tight_coop::first_step ()
     for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
             robot_m_iterator != robot_m.end(); robot_m_iterator++)
     {
-        robot_m_iterator->second->ecp_td.mp_command = NEXT_POSE;
-        robot_m_iterator->second->ecp_td.instruction_type = GET;
+        robot_m_iterator->second->ecp_td.mp_command = lib::NEXT_POSE;
+        robot_m_iterator->second->ecp_td.instruction_type = lib::GET;
         robot_m_iterator->second->ecp_td.get_type = ARM_DV;
         robot_m_iterator->second->ecp_td.set_type = ARM_DV;
-        robot_m_iterator->second->ecp_td.set_arm_type = XYZ_EULER_ZYZ;
-        robot_m_iterator->second->ecp_td.get_arm_type = XYZ_EULER_ZYZ;
-        robot_m_iterator->second->ecp_td.motion_type = ABSOLUTE;
-        robot_m_iterator->second->ecp_td.next_interpolation_type = MIM;
+        robot_m_iterator->second->ecp_td.set_arm_type = lib::XYZ_EULER_ZYZ;
+        robot_m_iterator->second->ecp_td.get_arm_type = lib::XYZ_EULER_ZYZ;
+        robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
+        robot_m_iterator->second->ecp_td.next_interpolation_type = lib::MIM;
         robot_m_iterator->second->ecp_td.motion_steps = irp6ot_td.internode_step_no;
         robot_m_iterator->second->ecp_td.value_in_step_no = irp6ot_td.value_in_step_no;
         robot_m_iterator->second->communicate = true;
@@ -374,9 +374,9 @@ bool tight_coop::next_step ()
     map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
 
     // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-    robot_m_iterator->second->ecp_td.instruction_type = SET;
+    robot_m_iterator->second->ecp_td.instruction_type = lib::SET;
     robot_m_iterator->second->ecp_td.get_type = NOTHING_DV;
-    robot_m_iterator->second->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
+    robot_m_iterator->second->ecp_td.get_arm_type = lib::INVALID_END_EFFECTOR;
 
     // Obliczenie zadanej pozycji posredniej w tym kroku ruchu
     // (okreslenie kolejnego wezla interpolacji)
@@ -397,16 +397,16 @@ bool tight_coop::next_step ()
     /*
       if (node_counter == td.interpolation_node_no) {
         // Zakonczenie generacji trajektorii
-        robot_list->E_ptr->ecp_td.mp_command = END_MOTION; 
+        robot_list->E_ptr->ecp_td.mp_command = lib::END_MOTION; 
       }
     */
 
     if ((++robot_m_iterator) != robot_m.end())
     {
         // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-        robot_m_iterator->second->ecp_td.instruction_type = SET;
+        robot_m_iterator->second->ecp_td.instruction_type = lib::SET;
         robot_m_iterator->second->ecp_td.get_type = NOTHING_DV;
-        robot_m_iterator->second->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
+        robot_m_iterator->second->ecp_td.get_arm_type = lib::INVALID_END_EFFECTOR;
         // Obliczenie zadanej pozycji posredniej w tym kroku ruchu
         // (okreslenie kolejnego wezla interpolacji)
         for (i = 0; i < 6; i++) // zakladamy, ze na liscie jest jeden robot

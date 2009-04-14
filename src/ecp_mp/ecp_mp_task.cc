@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //                            ecp_mp_task.cc
-//            Effector Control Process (ECP) i MP - methods
+//            Effector Control Process (lib::ECP) i MP - methods
 //
 // -------------------------------------------------------------------------
 
@@ -59,8 +59,8 @@ base::base(lib::configurator &_config)
         {
             int e = errno;
             perror("Connect to UI failed");
-            sr_ecp_msg->message (SYSTEM_ERROR, e, "Connect to UI failed");
-            throw ecp::common::ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+            sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "Connect to UI failed");
+            throw ecp::common::ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
         }
     }
 	
@@ -79,27 +79,27 @@ base::~base()
 // Odpowiedz operatora typu (Yes/No) na zadane pytanie (question)
 bool base::operator_reaction (const char* question )
 {
-	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
-	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
+	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
+	lib::UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
 
-	ecp_to_ui_msg.ecp_message = YES_NO;     // Polecenie odpowiedzi na zadane
+	ecp_to_ui_msg.ecp_message = lib::YES_NO;     // Polecenie odpowiedzi na zadane
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI podczas uczenia
 
 	ecp_to_ui_msg.hdr.type=0;
 #if !defined(USE_MESSIP_SRR)
-	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(ECP_message), &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;
-	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
-					&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0) {
+	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message),
+					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
 #endif
 		uint64_t e = errno;
 		perror("ECP operator_reaction(): Send() to UI failed");
-		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw ECP_MP_main_error(SYSTEM_ERROR, 0);
+		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 
-	return (ui_to_ecp_rep.reply == ANSWER_YES);
+	return (ui_to_ecp_rep.reply == lib::ANSWER_YES);
 }
 // --------------------------------------------------------------------------
 
@@ -108,25 +108,25 @@ bool base::operator_reaction (const char* question )
 // by Y - Wybor przez operatora jednej z opcji
 BYTE base::choose_option (const char* question, BYTE nr_of_options_input )
 {
-	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
-	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
+	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
+	lib::UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
 
-	ecp_to_ui_msg.ecp_message = CHOOSE_OPTION; // Polecenie odpowiedzi na zadane
+	ecp_to_ui_msg.ecp_message = lib::CHOOSE_OPTION; // Polecenie odpowiedzi na zadane
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
 	ecp_to_ui_msg.nr_of_options = nr_of_options_input;
 
 	ecp_to_ui_msg.hdr.type=0;
 #if !defined(USE_MESSIP_SRR)
-	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;
-	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
-					&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0) {
+	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message),
+					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
 #endif
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed\n");
-		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw ECP_MP_main_error(SYSTEM_ERROR, 0);
+		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 
 	return ui_to_ecp_rep.reply; // by Y
@@ -138,24 +138,24 @@ BYTE base::choose_option (const char* question, BYTE nr_of_options_input )
 // Zadanie od operatora podania liczby calkowitej (int)
 int base::input_integer (const char* question )
 {
-	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
-	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
+	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
+	lib::UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
 
-	ecp_to_ui_msg.ecp_message = INTEGER_NUMBER; // Polecenie odpowiedzi na zadane
+	ecp_to_ui_msg.ecp_message = lib::INTEGER_NUMBER; // Polecenie odpowiedzi na zadane
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
 
 	ecp_to_ui_msg.hdr.type=0;
 #if !defined(USE_MESSIP_SRR)
-	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;
-	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
-					&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0) {
+	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message),
+					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
 #endif
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed\n");
-		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw ECP_MP_main_error(SYSTEM_ERROR, 0);
+		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 
 	return ui_to_ecp_rep.integer_number;
@@ -167,24 +167,24 @@ int base::input_integer (const char* question )
 // Zadanie od operatora podania liczby rzeczywistej (double)
 double base::input_double (const char* question )
 {
-	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
-	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
+	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
+	lib::UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
 
-	ecp_to_ui_msg.ecp_message = DOUBLE_NUMBER; // Polecenie odpowiedzi na zadane
+	ecp_to_ui_msg.ecp_message = lib::DOUBLE_NUMBER; // Polecenie odpowiedzi na zadane
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
 
 	ecp_to_ui_msg.hdr.type=0;
 #if !defined(USE_MESSIP_SRR)
-	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;
-	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
-					&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0) {
+	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message),
+					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
 #endif
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed\n");
-		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw ECP_MP_main_error(SYSTEM_ERROR, 0);
+		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 	return ui_to_ecp_rep.double_number; // by Y
 }
@@ -195,27 +195,27 @@ double base::input_double (const char* question )
 // Informacja wymagajaca potwierdzenia odbioru przez operatora
 bool base::show_message (const char* message)
 {
-	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
-	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
+	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
+	lib::UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
 
-	ecp_to_ui_msg.ecp_message = MESSAGE; // Polecenie wyswietlenia komunikatu
+	ecp_to_ui_msg.ecp_message = lib::MESSAGE; // Polecenie wyswietlenia komunikatu
 	strcpy(ecp_to_ui_msg.string, message);
 
 	ecp_to_ui_msg.hdr.type=0;
 #if !defined(USE_MESSIP_SRR)
-	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message),  &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message),  &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;
-	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
-					&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0) {
+	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message),
+					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
 #endif
 		uint64_t e = errno;
 		perror("ECP: Send() to UI failed\n");
-		sr_ecp_msg->message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw ECP_MP_main_error(SYSTEM_ERROR, 0);
+		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 
-	return (ui_to_ecp_rep.reply == ANSWER_YES);
+	return (ui_to_ecp_rep.reply == lib::ANSWER_YES);
 }
 // --------------------------------------------------------------------------
 

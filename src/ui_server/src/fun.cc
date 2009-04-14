@@ -77,7 +77,7 @@ teaching_window_send_move(double *v)
 	}
 
 	ui_ecp_obj->ui_rep.double_number = v[0];
-	ui_ecp_obj->ui_rep.reply = NEXT;
+	ui_ecp_obj->ui_rep.reply = lib::NEXT;
 	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 	ui_ecp_obj->trywait_sem();
 	ui_ecp_obj->post_sem();
@@ -90,7 +90,7 @@ int teaching_window_end_motion()
 {
 
 	ui_state.teachingstate = MP_RUNNING;
-	ui_ecp_obj->ui_rep.reply = QUIT;
+	ui_ecp_obj->ui_rep.reply = lib::QUIT;
 
 	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 	ui_ecp_obj->trywait_sem();
@@ -231,12 +231,12 @@ input_double_callback(double* v)
 {
 	if(v[1] > 0)
 	 {
-		ui_ecp_obj->ui_rep.reply = ANSWER_YES;
+		ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
 		ui_ecp_obj->ui_rep.double_number = v[0];
 	}
 	else
 	{
-		ui_ecp_obj->ui_rep.reply = QUIT;
+		ui_ecp_obj->ui_rep.reply = lib::QUIT;
 		ui_ecp_obj->ui_rep.double_number = 0.0;
 	}
 	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
@@ -249,9 +249,9 @@ input_double_callback(double* v)
 int
 yes_no_callback(double* v)
 {
-	if(v[0] > 0) ui_ecp_obj->ui_rep.reply = ANSWER_NO;
-	else if(v[0] < 0) ui_ecp_obj->ui_rep.reply = QUIT;
-	else ui_ecp_obj->ui_rep.reply = ANSWER_YES;
+	if(v[0] > 0) ui_ecp_obj->ui_rep.reply = lib::ANSWER_NO;
+	else if(v[0] < 0) ui_ecp_obj->ui_rep.reply = lib::QUIT;
+	else ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
 
 	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 
@@ -267,12 +267,12 @@ input_integer_callback(double* v)
 
 	if(v[1] > 0)
 	{
-		ui_ecp_obj->ui_rep.reply = ANSWER_YES;
+		ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
 		ui_ecp_obj->ui_rep.integer_number = (int)(v[0]);
 	}
 	else
 	{
-		ui_ecp_obj->ui_rep.reply = QUIT;
+		ui_ecp_obj->ui_rep.reply = lib::QUIT;
 		ui_ecp_obj->ui_rep.integer_number = 0;
 	}
 	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
@@ -290,19 +290,19 @@ choose_option_callback(double* v)
 	switch(choice)
 	{
 		case 1:
-			ui_ecp_obj->ui_rep.reply = OPTION_ONE;
+			ui_ecp_obj->ui_rep.reply = lib::OPTION_ONE;
 			break;
 		case 2:
-			ui_ecp_obj->ui_rep.reply = OPTION_TWO;
+			ui_ecp_obj->ui_rep.reply = lib::OPTION_TWO;
 			break;
 		case 3:
-			ui_ecp_obj->ui_rep.reply = OPTION_THREE;
+			ui_ecp_obj->ui_rep.reply = lib::OPTION_THREE;
 			break;
 		case 4:
-			ui_ecp_obj->ui_rep.reply = OPTION_FOUR;
+			ui_ecp_obj->ui_rep.reply = lib::OPTION_FOUR;
 			break;
 		default:
-			ui_ecp_obj->ui_rep.reply = QUIT;
+			ui_ecp_obj->ui_rep.reply = lib::QUIT;
 			break;
 
 	}
@@ -1153,7 +1153,7 @@ reload_whole_configuration() {
 		// inicjacja komunikacji z watkiem sr
 		if (ui_msg.ui == NULL)
 		{
-			if ((ui_msg.ui = new lib::sr_ui(UI, ui_state.ui_attach_point, ui_state.network_sr_attach_point)) == NULL) {
+			if ((ui_msg.ui = new lib::sr_ui(lib::UI, ui_state.ui_attach_point, ui_state.network_sr_attach_point)) == NULL) {
 				perror ( "Unable to locate SR\n");
 			} else {
 				ui_msg.ui->message("started");
@@ -1163,7 +1163,7 @@ reload_whole_configuration() {
 		// inicjacja komunikacji z watkiem sr
 		if (ui_msg.all_ecp == NULL)
 		{
-			if ((ui_msg.all_ecp = new lib::sr_ecp(ECP, "ui_all_ecp" , ui_state.network_sr_attach_point)) == NULL) {
+			if ((ui_msg.all_ecp = new lib::sr_ecp(lib::ECP, "ui_all_ecp" , ui_state.network_sr_attach_point)) == NULL) {
 				perror ( "Unable to locate SR\n");
 			} else {
 

@@ -74,9 +74,9 @@ public:
     virtual ~effector ();
 
     // Interpretuje otrzymana z ECP instrukcje, przygotowuje odpowiedz dla ECP.
-    void interpret_instruction (c_buffer *instruction);
+    void interpret_instruction (lib::c_buffer *instruction);
     // Ustalenie formatu odpowiedzi.
-    REPLY_TYPE rep_type (c_buffer *instruction);
+    lib::REPLY_TYPE rep_type (lib::c_buffer *instruction);
 
     // Glowna petla.
     void main_loop();
@@ -84,8 +84,8 @@ public:
     void create_threads ();
 
     // Wypowiedzenie tresci.
-    void get_spoken (bool read_hardware, c_buffer *instruction);
-    int speak (c_buffer *instruction);
+    void get_spoken (bool read_hardware, lib::c_buffer *instruction);
+    int speak (lib::c_buffer *instruction);
 
 };
 

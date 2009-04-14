@@ -19,7 +19,7 @@ class edp_irp6o
 		~edp_irp6o();
 };
 ui_common_robot * robot;
-controller_state_t state;
+lib::controller_state_t state;
 
 
 #endif /* __EDP_irp6o */

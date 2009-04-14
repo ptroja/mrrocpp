@@ -159,13 +159,13 @@ vis_sac_lx::vis_sac_lx(lib::configurator &_config) : base(_config){
 		sockfd_sac = socket(AF_INET, SOCK_STREAM, 0);
 		if (sockfd_sac < 0) {
 			printf("ERROR opening socket");
-			throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+			throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 		}
 		//server = gethostbyname(HOST);
 		server = gethostbyname(SAC_node_name);
 		if (server == NULL) {
 			printf("ERROR, no such host\n");
-			throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+			throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 		}
 		bzero((char *) &serv_addr, sizeof(serv_addr));
 		serv_addr.sin_family = AF_INET;
@@ -173,7 +173,7 @@ vis_sac_lx::vis_sac_lx(lib::configurator &_config) : base(_config){
 		serv_addr.sin_port = htons(portno);
 		if (connect(sockfd_sac, (const struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
 			printf("ERROR connecting");
-			throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+			throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 		}
 	}
 	//EIH
@@ -183,13 +183,13 @@ vis_sac_lx::vis_sac_lx(lib::configurator &_config) : base(_config){
 		sockfd_eih = socket(AF_INET, SOCK_STREAM, 0);
 		if (sockfd_eih < 0) {
 			printf("ERROR opening socket");
-			throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+			throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 		}
 		//server_eih = gethostbyname(HOST_EIH);
 		server_eih = gethostbyname(EIH_node_name);	
 		if (server_eih == NULL) {
 			printf("ERROR, no such host\n");
-			throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+			throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 		}
 		bzero((char *) &serv_addr_eih, sizeof(serv_addr_eih));
 		serv_addr_eih.sin_family = AF_INET;
@@ -197,7 +197,7 @@ vis_sac_lx::vis_sac_lx(lib::configurator &_config) : base(_config){
 		serv_addr_eih.sin_port = htons(portno_eih);
 		if (connect(sockfd_eih, (const struct sockaddr *) &serv_addr_eih, sizeof(serv_addr_eih)) < 0) {
 			printf("ERROR connecting");
-			throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+			throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 		}
 	}
 	sr_msg->message("VSP VIS PB-ECL-SAC LX started");
@@ -226,7 +226,7 @@ void vis_sac_lx::wait_for_event(){
 void vis_sac_lx::initiate_reading(void)
 {
 	if (!is_sensor_configured)
-		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
 //	try
 //	{
@@ -311,10 +311,10 @@ void vis_sac_lx::get_reading(void)
 {
 	// printf("7 - get reading\n");
 	if (!is_sensor_configured)
-		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	// jezeli chcemy jakikolwiek odczyt	-> is_reading_ready
 	if (!is_reading_ready)
-		throw sensor_error (FATAL_ERROR, READING_NOT_READY);
+		throw sensor_error (lib::FATAL_ERROR, READING_NOT_READY);
 
 	from_vsp.vsp_report= lib::VSP_REPLY_OK;
 	// tutaj: czujnik skalibrowany, odczyt dokonany, zapisany w "image", przepisanie wszystkich pol

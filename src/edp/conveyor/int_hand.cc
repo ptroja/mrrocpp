@@ -116,7 +116,7 @@ int_handler (void *arg, int int_id)
 		{
 			md.hardware_error |= (uint64_t) (OVER_CURRENT);
 			//     out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
-			//     out16(SERVO_COMMAND_1_ADR, RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
+			//     out16(SERVO_COMMAND1_ADR, RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
 		}
 
 		if (robot_status[0].adr_offset_plus_0 & 0x0080) // czy wlaczono moc
@@ -134,7 +134,7 @@ int_handler (void *arg, int int_id)
 
 			// Zapis wartosci zadanej wypelnienia PWM
 			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)CONVEYOR_SERVO_NR);
-			out16(SERVO_COMMAND_1_ADR, STOP_MOTORS);
+			out16(SERVO_COMMAND1_ADR, STOP_MOTORS);
 
 			return (&event); // Yoyek & 7
 		}
@@ -144,7 +144,7 @@ int_handler (void *arg, int int_id)
 		out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)CONVEYOR_SERVO_NR);
 		if (md.is_robot_blocked)
 			md.robot_control[0].adr_offset_plus_0 &= 0xff00;
-		out16(SERVO_COMMAND_1_ADR, md.robot_control[0].adr_offset_plus_0);
+		out16(SERVO_COMMAND1_ADR, md.robot_control[0].adr_offset_plus_0);
 
 		return (&event);
 	} // end INT_SERVOING

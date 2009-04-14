@@ -171,7 +171,7 @@ const struct sigevent *
                 if ( ~(robot_status[i].adr_offset_plus_0) & 0x1000 )
                 {
                     //	out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
-                    //	out16(SERVO_COMMAND_1_ADR, RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
+                    //	out16(SERVO_COMMAND1_ADR, RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
                     md.hardware_error |= (uint64_t) (UPPER_LIMIT_SWITCH << (5*i)); // Zadzialal wylacznik "gorny" krancowy
                 }
                 else if ( ~(robot_status[i].adr_offset_plus_0) & 0x2000 )
@@ -183,7 +183,7 @@ const struct sigevent *
                 if ( ~(robot_status[i].adr_offset_plus_0) & 0x2000 )
                 {
                     //	out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
-                    //	out16(SERVO_COMMAND_1_ADR, RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
+                    //	out16(SERVO_COMMAND1_ADR, RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
                     md.hardware_error |= (uint64_t) (UPPER_LIMIT_SWITCH << (5*i)); // Zadzialal wylacznik "gorny" krancowy
                 }
                 else if ( ~(robot_status[i].adr_offset_plus_0) & 0x4000 )
@@ -196,7 +196,7 @@ const struct sigevent *
             {
                 md.hardware_error |= (uint64_t) (OVER_CURRENT << (5*i));
                 //     out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
-                //     out16(SERVO_COMMAND_1_ADR, RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
+                //     out16(SERVO_COMMAND1_ADR, RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
             }
         }
         ;  // end: for
@@ -217,7 +217,7 @@ const struct sigevent *
             {
                 // Zapis wartosci zadanej wypelnienia PWM
                 out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
-                out16(SERVO_COMMAND_1_ADR, STOP_MOTORS);
+                out16(SERVO_COMMAND1_ADR, STOP_MOTORS);
             }
             ; // end: for
             return (&event); // Yoyek & 7
@@ -229,7 +229,7 @@ const struct sigevent *
             out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
             if (md.is_robot_blocked)
                 md.robot_control[i].adr_offset_plus_0 &= 0xff00;
-            out16(SERVO_COMMAND_1_ADR, md.robot_control[i].adr_offset_plus_0);
+            out16(SERVO_COMMAND1_ADR, md.robot_control[i].adr_offset_plus_0);
         }
         ; // end: for
 
@@ -258,8 +258,8 @@ const struct sigevent *
             common::master->in_out_obj->get_output(&binary_output);
 
             out8(ADR_OF_SERVO_PTR, IN_OUT_PACKET);
-            // SERVO_COMMAND_2_ADR       0x212
-            out16(SERVO_COMMAND_2_ADR, binary_output);
+            // SERVO_COMMAND2_ADR       0x212
+            out16(SERVO_COMMAND2_ADR, binary_output);
         }
 
         return (&event);

@@ -58,9 +58,9 @@ teach_in::~teach_in (void) { flush_pose_list(); }
 
 // --------------------------------------------------------------------------
 // Zapis trajektorii do pliku
-void teach_in::save_file (POSE_SPECIFICATION ps) {
-	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
-	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
+void teach_in::save_file (lib::POSE_SPECIFICATION ps) {
+	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
+	lib::UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
 	common::mp_taught_in_pose tip;        // Zapisywana pozycja
 	char *cwd;                 // Wsk. na nazwe biezacego katalogu
 	char coordinate_type[80];  // Opis wspolrzednych: "MOTOR", "JOINT", ...
@@ -70,38 +70,38 @@ void teach_in::save_file (POSE_SPECIFICATION ps) {
 
 	ecp_to_ui_msg.hdr.type = 0;
 
-	ecp_to_ui_msg.ecp_message = SAVE_FILE;   // Polecenie wprowadzenia nazwy pliku
+	ecp_to_ui_msg.ecp_message = lib::SAVE_FILE;   // Polecenie wprowadzenia nazwy pliku
 	strcpy(ecp_to_ui_msg.string, "*.trj");   // Wzorzec nazwy pliku
-// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(ECP_message), sizeof(UI_reply)) == -1) {
+// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
 #if !defined(USE_MESSIP_SRR)
-	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(ECP_message), &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+	if (MsgSend(UI_fd, &ecp_to_ui_msg,  sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;
-	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
-					&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0) {
+	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message),
+					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
 #endif
 		e = errno;
 		perror("ECP: Send() to UI failed\n");
-		sr_ecp_msg.message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw base::MP_error(SYSTEM_ERROR, (uint64_t) 0);
+		sr_ecp_msg.message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+		throw base::MP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
-	if ( ui_to_ecp_rep.reply == QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
+	if ( ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
 		return;
 	switch (ps) {
-		case MOTOR:
+		case lib::MOTOR:
 			strcpy (coordinate_type, "MOTOR");
 			break;
-		case JOINT:
+		case lib::JOINT:
 			strcpy (coordinate_type, "JOINT");
 			break;
-		case XYZ_ANGLE_AXIS:
+		case lib::XYZ_ANGLE_AXIS:
 			strcpy (coordinate_type, "XYZ_ANGLE_AXIS");
 			break;
-		case XYZ_EULER_ZYZ:
+		case lib::XYZ_EULER_ZYZ:
 			strcpy (coordinate_type, "XYZ_EULER_ZYZ");
 			break;
-		case PF_VELOCITY:
-			strcpy (coordinate_type, "PF_VELOCITY");
+		case lib::PF_VELOCITY:
+			strcpy (coordinate_type, "lib::PF_VELOCITY");
 			break;
 
 		default:
@@ -110,13 +110,13 @@ void teach_in::save_file (POSE_SPECIFICATION ps) {
 	cwd = getcwd (NULL, 0);
 	if ( chdir(ui_to_ecp_rep.path) != 0 ) {
 		perror(ui_to_ecp_rep.path);
-		throw base::MP_error(NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		throw base::MP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
 	}
 	ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
 	e = errno;
 	if (!to_file) {
 		perror(ui_to_ecp_rep.filename);
-		throw base::MP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw base::MP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	} else {
 		initiate_pose_list();
 		number_of_poses = pose_list_length();
@@ -127,7 +127,7 @@ void teach_in::save_file (POSE_SPECIFICATION ps) {
 			to_file << tip.motion_time << ' ';
 			for (j = 0; j < MAX_SERVOS_NR; j++)
 				to_file << tip.coordinates[j] << ' ';
-			if (ps == PF_VELOCITY) { // by Y
+			if (ps == lib::PF_VELOCITY) { // by Y
 				to_file << tip.extra_info << ' ';
 			}
 			to_file << '\n';
@@ -148,7 +148,7 @@ bool teach_in::load_file_with_path (const char* file_name, short robot_number) {
 // common::mp_taught_in_pose tip;        // Wczytana pozycja
 // char *cwd;                 // Wsk. na nazwe biezacego katalogu
 	char coordinate_type[80];  // Opis wspolrzednych: "MOTOR", "JOINT", ...
-	POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
+	lib::POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
 	// uint64_t e;       // Kod bledu systemowego
 	uint64_t number_of_poses; // Liczba zapamietanych pozycji
 	uint64_t i, j;    // Liczniki petli
@@ -161,12 +161,12 @@ bool teach_in::load_file_with_path (const char* file_name, short robot_number) {
 	ifstream from_file(file_name); // otworz plik do odczytu
 	if (!from_file) {
 		perror(file_name);
-		throw base::MP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw base::MP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 
 	if ( !(from_file >> coordinate_type) ) {
 		from_file.close();
-		throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
 // Usuwanie spacji i tabulacji
@@ -183,23 +183,23 @@ bool teach_in::load_file_with_path (const char* file_name, short robot_number) {
 	coordinate_type[j] = '\0';
 
 	if ( !strcmp(coordinate_type, "MOTOR") ) {
-		ps = MOTOR;
+		ps = lib::MOTOR;
 	} else if ( !strcmp(coordinate_type, "JOINT") )
-		ps = JOINT;
+		ps = lib::JOINT;
 	else if ( !strcmp(coordinate_type, "XYZ_ANGLE_AXIS") )
-		ps = XYZ_ANGLE_AXIS;
+		ps = lib::XYZ_ANGLE_AXIS;
 	else if ( !strcmp(coordinate_type, "XYZ_EULER_ZYZ") )
-		ps = XYZ_EULER_ZYZ;
-	else if ( !strcmp(coordinate_type, "PF_VELOCITY") )
-		ps = PF_VELOCITY;
+		ps = lib::XYZ_EULER_ZYZ;
+	else if ( !strcmp(coordinate_type, "lib::PF_VELOCITY") )
+		ps = lib::PF_VELOCITY;
 	else {
 		from_file.close();
-		throw base::MP_error(NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+		throw base::MP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
 	}
 
 	if ( !(from_file >> number_of_poses) ) {
 		from_file.close();
-		throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
@@ -207,19 +207,19 @@ bool teach_in::load_file_with_path (const char* file_name, short robot_number) {
 
 		if (!(from_file >> motion_time)) {
 			from_file.close();
-			throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+			throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 		}
 		for ( j = 0; j < MAX_SERVOS_NR; j++) {
 			if ( !(from_file >> irp6ot_coordinates[j]) ) { // Zabezpieczenie przed danymi nienumerycznymi
 				from_file.close();
-				throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+				throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 			}
 		}
 		if (robot_number > 1) {
 			for ( j = 0; j < MAX_SERVOS_NR; j++) {
 				if ( !(from_file >> irp6p_coordinates[j]) ) { // Zabezpieczenie przed danymi nienumerycznymi
 					from_file.close();
-					throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+					throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 				}
 			}
 		}
@@ -255,12 +255,12 @@ bool teach_in::load_file_with_path (const char* file_name, short robot_number) {
 bool teach_in::load_file () {
 // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 // false w przeciwnym razie
-	ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
-	UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
+	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
+	lib::UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP
 // common::mp_taught_in_pose tip;        // Wczytana pozycja
 // char *cwd;                 // Wsk. na nazwe biezacego katalogu
 	char coordinate_type[80];  // Opis wspolrzednych: "MOTOR", "JOINT", ...
-	POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
+	lib::POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
 	uint64_t e;       // Kod bledu systemowego
 	uint64_t number_of_poses; // Liczba zapamietanych pozycji
 	uint64_t i, j;    // Liczniki petli
@@ -271,36 +271,36 @@ bool teach_in::load_file () {
 
 	ecp_to_ui_msg.hdr.type = 0;
 
-	ecp_to_ui_msg.ecp_message = LOAD_FILE;   // Polecenie wprowadzenia nazwy odczytywanego pliku
+	ecp_to_ui_msg.ecp_message = lib::LOAD_FILE;   // Polecenie wprowadzenia nazwy odczytywanego pliku
 
-// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(ECP_message), sizeof(UI_reply)) == -1) {
+// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
 #if !defined(USE_MESSIP_SRR)
-	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(ECP_message), &ui_to_ecp_rep, sizeof(UI_reply)) < 0) {// by Y&W
+	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
 	int status;
-	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
-					&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0) {
+	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message),
+					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
 #endif
 		e = errno;
 		perror("ECP: Send() to UI failed\n");
-		sr_ecp_msg.message (SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw base::MP_error(SYSTEM_ERROR, (uint64_t) 0);
+		sr_ecp_msg.message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+		throw base::MP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
-	if ( ui_to_ecp_rep.reply == QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
+	if ( ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
 		return false;
 	if ( chdir(ui_to_ecp_rep.path) != 0 ) {
 		perror(ui_to_ecp_rep.path);
-		throw base::MP_error(NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		throw base::MP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
 	}
 
 	ifstream from_file(ui_to_ecp_rep.filename); // otworz plik do odczytu
 	if (!from_file) {
 		perror(ui_to_ecp_rep.filename);
-		throw base::MP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw base::MP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 	if ( !(from_file >> coordinate_type) ) {
 		from_file.close();
-		throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
 // Usuwanie spacji i tabulacji
@@ -317,40 +317,40 @@ bool teach_in::load_file () {
 	coordinate_type[j] = '\0';
 
 	if ( !strcmp(coordinate_type, "MOTOR") ) {
-		ps = MOTOR;
+		ps = lib::MOTOR;
 	} else if ( !strcmp(coordinate_type, "JOINT") )
-		ps = JOINT;
+		ps = lib::JOINT;
 	else if ( !strcmp(coordinate_type, "XYZ_ANGLE_AXIS") )
-		ps = XYZ_ANGLE_AXIS;
+		ps = lib::XYZ_ANGLE_AXIS;
 	else if ( !strcmp(coordinate_type, "XYZ_EULER_ZYZ") )
-		ps = XYZ_EULER_ZYZ;
-	else if ( !strcmp(coordinate_type, "PF_VELOCITY") )
-		ps = PF_VELOCITY;
+		ps = lib::XYZ_EULER_ZYZ;
+	else if ( !strcmp(coordinate_type, "lib::PF_VELOCITY") )
+		ps = lib::PF_VELOCITY;
 	else {
 		from_file.close();
-		throw base::MP_error(NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+		throw base::MP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
 	}
 	if ( !(from_file >> number_of_poses) ) {
 		from_file.close();
-		throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
 	for ( i = 0; i < number_of_poses; i++) {
 		if (!(from_file >> motion_time)) {
 			from_file.close();
-			throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+			throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 		}
 		for ( j = 0; j < MAX_SERVOS_NR; j++) {
 			if ( !(from_file >> coordinates[j]) ) { // Zabezpieczenie przed danymi nienumerycznymi
 				from_file.close();
-				throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+				throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 			}
 		}
 
-		if (ps == PF_VELOCITY) { // by Y
+		if (ps == lib::PF_VELOCITY) { // by Y
 			if ( !(from_file >> extra_info) ) { // Zabezpieczenie przed danymi nienumerycznymi
 				from_file.close();
-				throw base::MP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+				throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 			}
 			if (first_time) {
 				// Tworzymy glowe listy
@@ -411,13 +411,13 @@ void teach_in::get_next_pose (double next_pose[MAX_SERVOS_NR], double irp6_next_
 
 
 // -------------------------------------------------------
-void teach_in::set_pose (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]) {
+void teach_in::set_pose (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]) {
 	pose_list_iterator->arm_type = ps;
 	pose_list_iterator->motion_time = motion_time;
 	memcpy(pose_list_iterator->coordinates, coordinates, MAX_SERVOS_NR*sizeof(double));
 }
 
-void teach_in::set_pose (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
+void teach_in::set_pose (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
                                       double irp6p_coordinates[MAX_SERVOS_NR]) {
 	pose_list_iterator->arm_type = ps;
 	pose_list_iterator->motion_time = motion_time;
@@ -451,40 +451,40 @@ bool teach_in::is_last_list_element ( void ) {
 };
 // -------------------------------------------------------
 
-void teach_in::create_pose_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]) {
+void teach_in::create_pose_list_head (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]) {
 	pose_list.push_back(common::mp_taught_in_pose(ps, motion_time, coordinates));
 	pose_list_iterator = pose_list.begin();
 }
 
 // by Y
 
-void teach_in::create_pose_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
+void teach_in::create_pose_list_head (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
         double irp6p_coordinates[MAX_SERVOS_NR]) {
 	pose_list.push_back(common::mp_taught_in_pose(ps, motion_time, coordinates, irp6p_coordinates));
 	pose_list_iterator = pose_list.begin();
 }
 
 
-void teach_in::create_pose_list_head (POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]) {
+void teach_in::create_pose_list_head (lib::POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]) {
 	pose_list.push_back(common::mp_taught_in_pose(ps, motion_time, extra_info, coordinates));
 	pose_list_iterator = pose_list.begin();
 }
 
-void teach_in::insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]) {
+void teach_in::insert_pose_list_element (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]) {
 	pose_list.push_back(common::mp_taught_in_pose(ps, motion_time, coordinates));
 	pose_list_iterator++;
 }
 
 // by Y
 
-void teach_in::insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
+void teach_in::insert_pose_list_element (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
         double irp6p_coordinates[MAX_SERVOS_NR]) {
 	pose_list.push_back(common::mp_taught_in_pose(ps, motion_time, coordinates, irp6p_coordinates));
 	pose_list_iterator++;
 }
 
 
-void teach_in::insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]) {
+void teach_in::insert_pose_list_element (lib::POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]) {
 	pose_list.push_back(common::mp_taught_in_pose(ps, motion_time, extra_info, coordinates));
 	pose_list_iterator++;
 }
@@ -508,10 +508,10 @@ bool teach_in::first_step () {
 
 	for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robot_m.begin();
 	        robot_m_iterator != robot_m.end(); robot_m_iterator++) {
-		robot_m_iterator->second->ecp_td.mp_command = NEXT_POSE;
-		robot_m_iterator->second->ecp_td.instruction_type = GET;
+		robot_m_iterator->second->ecp_td.mp_command = lib::NEXT_POSE;
+		robot_m_iterator->second->ecp_td.instruction_type = lib::GET;
 		robot_m_iterator->second->ecp_td.get_type = ARM_DV;
-		robot_m_iterator->second->ecp_td.get_arm_type = MOTOR;
+		robot_m_iterator->second->ecp_td.get_arm_type = lib::MOTOR;
 		robot_m_iterator->second->communicate = true;
 	}
 
@@ -537,9 +537,9 @@ bool teach_in::next_step () {
 // printf("W teach_in::next_step\n");
 	/*
 	  if (is_pose_list_element ())
-	    the_robot.set_ecp_reply (ECP_ACKNOWLEDGE);
+	    the_robot.set_ecp_reply (lib::ECP_ACKNOWLEDGE);
 	  else
-	    the_robot.set_ecp_reply (TASK_TERMINATED);
+	    the_robot.set_ecp_reply (lib::TASK_TERMINATED);
 	*/
 // printf("W teach_in::next_step przed mp_buffer_receive_and_send\n");
 // the_robot.mp_buffer_receive_and_send ();
@@ -556,98 +556,98 @@ bool teach_in::next_step () {
 
 	// Przepisanie pozycji z listy
 	switch ( tip.arm_type ) {
-		case C_MOTOR:
-			robot_m_iterator->second->ecp_td.instruction_type = SET;
+		case lib::C_MOTOR:
+			robot_m_iterator->second->ecp_td.instruction_type = lib::SET;
 			robot_m_iterator->second->ecp_td.set_type = ARM_DV; // ARM
-			robot_m_iterator->second->ecp_td.set_arm_type = MOTOR;
-			robot_m_iterator->second->ecp_td.motion_type = ABSOLUTE;
-			robot_m_iterator->second->ecp_td.next_interpolation_type = MIM;
+			robot_m_iterator->second->ecp_td.set_arm_type = lib::MOTOR;
+			robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
+			robot_m_iterator->second->ecp_td.next_interpolation_type = lib::MIM;
 			robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
 			robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 			memcpy (robot_m_iterator->second->ecp_td.next_motor_arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
 			break;
-		case C_JOINT:
-			robot_m_iterator->second->ecp_td.instruction_type = SET;
+		case lib::C_JOINT:
+			robot_m_iterator->second->ecp_td.instruction_type = lib::SET;
 			robot_m_iterator->second->ecp_td.set_type = ARM_DV; // ARM
-			robot_m_iterator->second->ecp_td.set_arm_type = JOINT;
-			robot_m_iterator->second->ecp_td.motion_type = ABSOLUTE;
-			robot_m_iterator->second->ecp_td.next_interpolation_type = MIM;
+			robot_m_iterator->second->ecp_td.set_arm_type = lib::JOINT;
+			robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
+			robot_m_iterator->second->ecp_td.next_interpolation_type = lib::MIM;
 			robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
 			robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 			memcpy (robot_m_iterator->second->ecp_td.next_joint_arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
 			break;
-		case C_XYZ_EULER_ZYZ:
-			robot_m_iterator->second->ecp_td.instruction_type = SET;
+		case lib::C_XYZ_EULER_ZYZ:
+			robot_m_iterator->second->ecp_td.instruction_type = lib::SET;
 			robot_m_iterator->second->ecp_td.set_type = ARM_DV; // ARM
-			robot_m_iterator->second->ecp_td.set_arm_type = XYZ_EULER_ZYZ;
-			robot_m_iterator->second->ecp_td.motion_type = ABSOLUTE;
-			robot_m_iterator->second->ecp_td.next_interpolation_type = MIM;
+			robot_m_iterator->second->ecp_td.set_arm_type = lib::XYZ_EULER_ZYZ;
+			robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
+			robot_m_iterator->second->ecp_td.next_interpolation_type = lib::MIM;
 			robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
 			robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 			memcpy (robot_m_iterator->second->ecp_td.next_XYZ_ZYZ_arm_coordinates, tip.coordinates, 6*sizeof (double));
 			robot_m_iterator->second->ecp_td.next_gripper_coordinate = tip.coordinates[6];
 			break;
-		case C_XYZ_ANGLE_AXIS:
-			robot_m_iterator->second->ecp_td.instruction_type = SET;
+		case lib::C_XYZ_ANGLE_AXIS:
+			robot_m_iterator->second->ecp_td.instruction_type = lib::SET;
 			robot_m_iterator->second->ecp_td.set_type = ARM_DV; // ARM
-			robot_m_iterator->second->ecp_td.set_arm_type = XYZ_ANGLE_AXIS;
-			robot_m_iterator->second->ecp_td.motion_type = ABSOLUTE;
-			robot_m_iterator->second->ecp_td.next_interpolation_type = MIM;
+			robot_m_iterator->second->ecp_td.set_arm_type = lib::XYZ_ANGLE_AXIS;
+			robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
+			robot_m_iterator->second->ecp_td.next_interpolation_type = lib::MIM;
 			robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
 			robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 			memcpy (robot_m_iterator->second->ecp_td.next_XYZ_AA_arm_coordinates, tip.coordinates, 6*sizeof (double));
 			robot_m_iterator->second->ecp_td.next_gripper_coordinate = tip.coordinates[6];
 			break;
 		default:
-			throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			throw MP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end: switch
 	if ((++robot_m_iterator) != robot_m.end()) {
 		//       	printf("postument\n");
 		switch ( tip.arm_type ) {
-			case C_MOTOR:
-				robot_m_iterator->second->ecp_td.instruction_type = SET;
+			case lib::C_MOTOR:
+				robot_m_iterator->second->ecp_td.instruction_type = lib::SET;
 				robot_m_iterator->second->ecp_td.set_type = ARM_DV; // ARM
-				robot_m_iterator->second->ecp_td.set_arm_type = MOTOR;
-				robot_m_iterator->second->ecp_td.motion_type = ABSOLUTE;
-				robot_m_iterator->second->ecp_td.next_interpolation_type = MIM;
+				robot_m_iterator->second->ecp_td.set_arm_type = lib::MOTOR;
+				robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
+				robot_m_iterator->second->ecp_td.next_interpolation_type = lib::MIM;
 				robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
 				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 				memcpy (robot_m_iterator->second->ecp_td.next_motor_arm_coordinates, tip.irp6p_coordinates, MAX_SERVOS_NR*sizeof (double));
 				break;
-			case C_JOINT:
-				robot_m_iterator->second->ecp_td.instruction_type = SET;
+			case lib::C_JOINT:
+				robot_m_iterator->second->ecp_td.instruction_type = lib::SET;
 				robot_m_iterator->second->ecp_td.set_type = ARM_DV; // ARM
-				robot_m_iterator->second->ecp_td.set_arm_type = JOINT;
-				robot_m_iterator->second->ecp_td.motion_type = ABSOLUTE;
-				robot_m_iterator->second->ecp_td.next_interpolation_type = MIM;
+				robot_m_iterator->second->ecp_td.set_arm_type = lib::JOINT;
+				robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
+				robot_m_iterator->second->ecp_td.next_interpolation_type = lib::MIM;
 				robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
 				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 				memcpy (robot_m_iterator->second->ecp_td.next_joint_arm_coordinates, tip.irp6p_coordinates, MAX_SERVOS_NR*sizeof (double));
 				break;
-			case C_XYZ_EULER_ZYZ:
-				robot_m_iterator->second->ecp_td.instruction_type = SET;
+			case lib::C_XYZ_EULER_ZYZ:
+				robot_m_iterator->second->ecp_td.instruction_type = lib::SET;
 				robot_m_iterator->second->ecp_td.set_type = ARM_DV; // ARM
-				robot_m_iterator->second->ecp_td.set_arm_type = XYZ_EULER_ZYZ;
-				robot_m_iterator->second->ecp_td.motion_type = ABSOLUTE;
-				robot_m_iterator->second->ecp_td.next_interpolation_type = MIM;
+				robot_m_iterator->second->ecp_td.set_arm_type = lib::XYZ_EULER_ZYZ;
+				robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
+				robot_m_iterator->second->ecp_td.next_interpolation_type = lib::MIM;
 				robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
 				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 				memcpy (robot_m_iterator->second->ecp_td.next_XYZ_ZYZ_arm_coordinates, tip.irp6p_coordinates, 6*sizeof (double));
 				robot_m_iterator->second->ecp_td.next_gripper_coordinate = tip.irp6p_coordinates[6];
 				break;
-			case C_XYZ_ANGLE_AXIS:
-				robot_m_iterator->second->ecp_td.instruction_type = SET;
+			case lib::C_XYZ_ANGLE_AXIS:
+				robot_m_iterator->second->ecp_td.instruction_type = lib::SET;
 				robot_m_iterator->second->ecp_td.set_type = ARM_DV; // ARM
-				robot_m_iterator->second->ecp_td.set_arm_type = XYZ_ANGLE_AXIS;
-				robot_m_iterator->second->ecp_td.motion_type = ABSOLUTE;
-				robot_m_iterator->second->ecp_td.next_interpolation_type = MIM;
+				robot_m_iterator->second->ecp_td.set_arm_type = lib::XYZ_ANGLE_AXIS;
+				robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
+				robot_m_iterator->second->ecp_td.next_interpolation_type = lib::MIM;
 				robot_m_iterator->second->ecp_td.motion_steps = (WORD) ceil(tip.motion_time / STEP);
 				robot_m_iterator->second->ecp_td.value_in_step_no = robot_m_iterator->second->ecp_td.motion_steps;
 				memcpy (robot_m_iterator->second->ecp_td.next_XYZ_AA_arm_coordinates, tip.irp6p_coordinates, 6*sizeof (double));
 				robot_m_iterator->second->ecp_td.next_gripper_coordinate = tip.irp6p_coordinates[6];
 				break;
 			default:
-				throw MP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw MP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 		} // end: switch
 	}
 

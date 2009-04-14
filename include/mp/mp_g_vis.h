@@ -21,7 +21,7 @@ protected:
     unsigned short irp6ot_con, irp6p_con;
  
 
-     trajectory_description td;   
+     lib::trajectory_description td;   
  
 public:
        int step_no;

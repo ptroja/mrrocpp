@@ -30,9 +30,9 @@ namespace generator {
 bool cvfradia::first_step()
 {
 	// Set robot parameters.
-/*	the_robot->EDP_data.instruction_type = GET;
+/*	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV;
-	the_robot->EDP_data.get_arm_type = FRAME;
+	the_robot->EDP_data.get_arm_type = lib::FRAME;
 	the_robot->EDP_data.next_interpolation_type
 			= EXTERNAL_INTERPOLATION_WITH_FORCE;*/
 

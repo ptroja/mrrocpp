@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP) 
+// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP) 
 // Plik:			ecp_mp_s_force.h
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		Definicje klasy ecp_mp_force_sensor - czujnik sily.

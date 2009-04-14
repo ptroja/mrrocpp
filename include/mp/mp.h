@@ -55,9 +55,9 @@ typedef struct mp_receive_pulse_struct {
 class MP_main_error
 { // Klasa obslugi bledow poziomie MP
 	public:
-		const ERROR_CLASS error_class;
+		const lib::ERROR_CLASS error_class;
 		const uint64_t mp_error;
-		MP_main_error(ERROR_CLASS err0, uint64_t err1, const char *file, int line) :
+		MP_main_error(lib::ERROR_CLASS err0, uint64_t err1, const char *file, int line) :
 			error_class(err0), mp_error(err1)
 		{
 			fprintf(stderr, "ECP_MP_main_error @ %s:%d\n", file, line);
@@ -70,7 +70,7 @@ class MP_main_error
 // ------------------------------------------------------------------------
 class mp_taught_in_pose {
 	public:
-		POSE_SPECIFICATION arm_type;
+		lib::POSE_SPECIFICATION arm_type;
 		double motion_time;
 		double coordinates[MAX_SERVOS_NR];
 		double irp6p_coordinates[MAX_SERVOS_NR];
@@ -78,11 +78,11 @@ class mp_taught_in_pose {
 		int extra_info; // by Y uzupelnienie struktury o dodatkowe pole, do dowolnego wykorzystania
 
 		mp_taught_in_pose (void);
-		mp_taught_in_pose (POSE_SPECIFICATION at, double mt, double* c);
+		mp_taught_in_pose (lib::POSE_SPECIFICATION at, double mt, double* c);
 
-		mp_taught_in_pose (POSE_SPECIFICATION at, double mt, double* c, double* irp6p_c);
+		mp_taught_in_pose (lib::POSE_SPECIFICATION at, double mt, double* c, double* irp6p_c);
 
-		mp_taught_in_pose (POSE_SPECIFICATION at, double mt, int e_info, double* c);
+		mp_taught_in_pose (lib::POSE_SPECIFICATION at, double mt, int e_info, double* c);
 };
 // ------------------------------------------------------------------------
 

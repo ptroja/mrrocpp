@@ -35,8 +35,8 @@ void lego_brick::main_task_algorithm(void)
 	common::generator::smooth gen(*this, true, true);
 	gen.flush_pose_list();
 
-	POSE_SPECIFICATION ps;
-	ps = JOINT;
+	lib::POSE_SPECIFICATION ps;
+	ps = lib::JOINT;
 
 	double coordinates[MAX_SERVOS_NR];
 	double vp[MAX_SERVOS_NR];

@@ -38,7 +38,7 @@ void base::main_task_algorithm(void)
 
 		get_next_state();
 
-		sr_ecp_msg->message("NEXT_STATE received");
+		sr_ecp_msg->message("lib::NEXT_STATE received");
 
 		switch ( (ecp_mp::task::ECP_FESTIVAL_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
 			case ecp_mp::task::ECP_GEN_FESTIVAL:

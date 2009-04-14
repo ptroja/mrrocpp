@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //                            ecp_g_pawel.cc
-//            Effector Control Process (ECP) - rysowanie
+//            Effector Control Process (lib::ECP) - rysowanie
 // 			Funkcje do tworzenia procesow ECP z rysowaniem
 // 			Ostatnia modyfikacja: 01.06.2006r.
 // -------------------------------------------------------------------------
@@ -76,15 +76,15 @@ bool pawel::first_step ( )
     //	start = (double)time_start.tv_sec + ((double)(time_start.tv_nsec))/1000000000.0;
 
 
-    the_robot->EDP_data.instruction_type = GET;
+    the_robot->EDP_data.instruction_type = lib::GET;
     the_robot->EDP_data.get_type = ARM_DV;
     the_robot->EDP_data.set_type = ARM_DV;
 
-    the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
-    the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;
+    the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
+    the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
 
-    the_robot->EDP_data.motion_type = RELATIVE;
-     the_robot->EDP_data.next_interpolation_type = MIM;
+    the_robot->EDP_data.motion_type = lib::RELATIVE;
+     the_robot->EDP_data.next_interpolation_type = lib::MIM;
     the_robot->EDP_data.motion_steps = td.internode_step_no;
     the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -103,10 +103,10 @@ bool pawel::next_step ( )
     double x,y,z,t,vx,vy,v,tmp;
 
     // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-    the_robot->EDP_data.instruction_type = SET;
+    the_robot->EDP_data.instruction_type = lib::SET;
     the_robot->EDP_data.set_type = ARM_DV;
     the_robot->EDP_data.get_type = NOTHING_DV;
-    the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;
+    the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
 
 
     x = sensor_m[lib::SENSOR_PAWEL]->image.sensor_union.ball.x;

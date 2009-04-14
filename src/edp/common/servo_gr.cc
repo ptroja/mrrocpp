@@ -49,11 +49,11 @@ void servo_buffer::clear_reply_status_tmp ( void )
 
 
 // input_buffer
-SERVO_COMMAND servo_buffer::command_type()
+lib::SERVO_COMMAND servo_buffer::command_type()
 {
     return command.instruction_code;
 };
-// by Yoyek & 7 -  typ returna na SERVO_COMMAND
+// by Yoyek & 7 -  typ returna na lib::SERVO_COMMAND
 
 // output_buffer
 void servo_buffer::get_all_positions (void)
@@ -102,13 +102,13 @@ bool servo_buffer::get_command (void)
         // Uprzednio nie bylo bledu => wstepna analiza polecenia
         switch (command_type())
         {
-        case SYNCHRONISE:
+        case lib::SYNCHRONISE:
             return true; // wyjscie bez kontaktu z EDP_MASTER
-        case MOVE:
+        case lib::MOVE:
             return true; // wyjscie bez kontaktu z EDP_MASTER
-        case READ:
+        case lib::READ:
             return true; // wyjscie bez kontaktu z EDP_MASTER
-        case SERVO_ALGORITHM_AND_PARAMETERS:
+        case lib::SERVO_ALGORITHM_AND_PARAMETERS:
             return true; // wyjscie bez kontaktu z EDP_MASTER
         default: // otrzymano niezidentyfikowane polecenie => blad
             reply_status.error0 = UNIDENTIFIED_SERVO_COMMAND;
@@ -352,7 +352,7 @@ void servo_buffer::reply_to_EDP_MASTER (void)
 
     // Wyslac informacje do EDP_MASTER
 
-    if (MsgReply(edp_caller,EOK, &servo_data, sizeof(servo_group_reply)) < 0)
+    if (MsgReply(edp_caller,EOK, &servo_data, sizeof(lib::servo_group_reply)) < 0)
         perror (" Reply to EDP_MASTER error");
 
     // Wyzerowac zmienne sygnalizujace stan procesu

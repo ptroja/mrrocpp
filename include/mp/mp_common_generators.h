@@ -13,14 +13,14 @@ namespace generator {
 class set_next_ecps_state : public base
 {
 protected:
-	ecp_next_state_t ecp_next_state;
+	lib::ecp_next_state_t ecp_next_state;
 
 public:
 
     set_next_ecps_state(task::base& _mp_task);
 
 	void configure (int l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const char* l_mp_2_ecp_next_state_string);
-	void configure (const playerpos_goal_t &_goal);
+	void configure (const lib::playerpos_goal_t &_goal);
 
 	bool first_step ();
 	bool next_step ();
@@ -99,8 +99,8 @@ protected:
 
 public:
 	delta(task::base& _mp_task);
-	trajectory_description irp6ot_td;
-	trajectory_description irp6p_td;
+	lib::trajectory_description irp6ot_td;
+	lib::trajectory_description irp6p_td;
 };
 
 // ####################################################################################################
@@ -111,7 +111,7 @@ class tight_coop : public delta
 {
 
 public:
-	tight_coop(task::base& _mp_task, trajectory_description irp6ot_tr_des, trajectory_description irp6p_tr_des);
+	tight_coop(task::base& _mp_task, lib::trajectory_description irp6ot_tr_des, lib::trajectory_description irp6p_tr_des);
 
   ~tight_coop();
 

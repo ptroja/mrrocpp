@@ -695,7 +695,7 @@ int EDP_irp6_mechatronika_create()
 						}
 
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
-					controller_state_t robot_controller_initial_state_tmp;
+					lib::controller_state_t robot_controller_initial_state_tmp;
 					ui_robot.irp6_mechatronika->get_controller_state(&robot_controller_initial_state_tmp);
 
 					//ui_state.irp6_mechatronika.edp.state = 1; // edp wlaczone reader czeka na start

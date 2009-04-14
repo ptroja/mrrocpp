@@ -46,7 +46,7 @@ class base : public ecp_mp::generator::base {
 			public:
 				const uint64_t error_class;
 				const uint64_t error_no;
-				edp_error error;
+				lib::edp_error error;
 
 				ECP_error ( uint64_t err_cl, uint64_t err_no, uint64_t err0 = 0, uint64_t err1 = 0);
 		}; // end: class ECP_error

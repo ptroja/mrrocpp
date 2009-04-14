@@ -101,7 +101,7 @@ void tr::catch_signal(int sig)
 void* UI_communication_thread(void* arg)
 {
 	// Wiadomosc otrzymana z UI.
-	UI_ECP_message from_ui_msg;
+	lib::UI_ECP_message from_ui_msg;
 
 	// Odsylana liczba makrokrokow.
 	int macrosteps;
@@ -137,53 +137,53 @@ void* UI_communication_thread(void* arg)
 		}
 		// Zwykla wiadomosc.
 		switch (from_ui_msg.command) {
-			case TR_LOAD_TRAJECTORY:
+			case lib::TR_LOAD_TRAJECTORY:
 				// Wczytanie trajektorii z pliku.
 				trg->load_trajectory(from_ui_msg.filename);
 				// Przerwanie oczekiwania na trajektorie.
 				NEW_TRAJECTORY = true;
 				break;
-			case TR_ZERO_POSITION:
+			case lib::TR_ZERO_POSITION:
 				// Wykonanie pierwszego ruchu.
 				ZERO_POSITION_MOVE = true;
 				// Dalsze dopiero po wcisnieciu START.
 				PAUSE_MOVE = false;
 				STOP_MOVE = false;
 				break;
-			case TR_START_MOVE:
+			case lib::TR_START_MOVE:
 				// Rozpoczecie / kontynuacja ruchu.
 				PAUSE_MOVE = false;
 				STOP_MOVE = false;
 				break;
-			case TR_PAUSE_MOVE:
+			case lib::TR_PAUSE_MOVE:
 				// Chwilowe przerwanie ruchu.
 				PAUSE_MOVE = true;
 				break;
-			case TR_TRY_MOVE_AGAIN:
+			case lib::TR_TRY_MOVE_AGAIN:
 				// Ponowna proba ruchu.
 				PAUSE_MOVE = false;
 				break;
-			case TR_STOP_MOVE:
+			case lib::TR_STOP_MOVE:
 				// Przerwanie ruchu - > przerwanie petli do{}while(next).
 				STOP_MOVE = true;
 				// Przerwanie pauzy.
 				PAUSE_MOVE = false;
 				break;
-			case TR_SAVE_READINGS:
+			case lib::TR_SAVE_READINGS:
 				// Zapis do pliku.
 				rsc->save_rse_list(from_ui_msg.filename);
 				break;
-			case TR_CALIBRATE_DIGITAL_SCALES_SENSOR:
+			case lib::TR_CALIBRATE_DIGITAL_SCALES_SENSOR:
 				// Konfiguracja czujnika.
 				common::ecp_t->sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR]->configure_sensor();
 				break;
-			case TR_CALIBRATE_FORCE_SENSOR:
+			case lib::TR_CALIBRATE_FORCE_SENSOR:
 				if (common::ecp_t->sensor_m.count(lib::SENSOR_FORCE_ON_TRACK)>0) {
 					// Konfiguracja czujnika sil.
 					common::ecp_t->sensor_m[lib::SENSOR_FORCE_ON_TRACK]->configure_sensor();
 				}
 				break;
-			case TR_EXIT:
+			case lib::TR_EXIT:
 				// Zakonczenie dzialania procesu.
 				TERMINATE = true;
 				common::ecp_t->ecp_termination_notice();
@@ -191,7 +191,7 @@ void* UI_communication_thread(void* arg)
 			default:
 				fprintf(stderr, "unknown UI command in %s:%d\n", __FILE__, __LINE__);
 		}
-		if (from_ui_msg.command == TR_LOAD_TRAJECTORY) {
+		if (from_ui_msg.command == lib::TR_LOAD_TRAJECTORY) {
 			// Odsylamy liczbe elementow na liscie.
 			macrosteps = trg->pose_list_length();
 			MsgReply(rcvid, EOK, &macrosteps, sizeof(int));
@@ -325,19 +325,19 @@ void show_trajectory_reproduce_window(messip_channel_t * UI_fd)
 #endif
 {
 	int i;
-	ECP_message ecp_ui_msg; // Przesylka z ECP do UI
+	lib::ECP_message ecp_ui_msg; // Przesylka z ECP do UI
 	// Nazwa okna (polecenie otwarcia).
 	ecp_ui_msg.hdr.type=0;
-	ecp_ui_msg.ecp_message = OPEN_TRAJECTORY_REPRODUCE_WINDOW;
+	ecp_ui_msg.ecp_message = lib::OPEN_TRAJECTORY_REPRODUCE_WINDOW;
 	// Wyslanie polecenia do UI -> otwarcie okna.
 #if !defined(USE_MESSIP_SRR)
-		if (MsgSend(UI_fd, &ecp_ui_msg, sizeof(ECP_message), NULL, 0) < 0){
+		if (MsgSend(UI_fd, &ecp_ui_msg, sizeof(lib::ECP_message), NULL, 0) < 0){
 #else
 		int32_t answer;
-		if (messip_send(UI_fd, 0, 0, &ecp_ui_msg, sizeof(ECP_message), &answer, NULL, 0, MESSIP_NOTIMEOUT) < 0){
+		if (messip_send(UI_fd, 0, 0, &ecp_ui_msg, sizeof(lib::ECP_message), &answer, NULL, 0, MESSIP_NOTIMEOUT) < 0){
 #endif
 		perror("show_trajectory_reproduce_window: Send to UI failed");
-		throw common::ECP_main_error(SYSTEM_ERROR, 0);
+		throw common::ECP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 	// Ustawienie flagi konczenia pracy.
 	TERMINATE = false;
@@ -378,7 +378,7 @@ void tr::task_initialization(void)
 	// Dolaczenie globalnej nazwy procesu ECP - kanal do odbioru polecen z UI.
 	if ((UI_ECP_attach = name_attach(NULL, "ECP_M_TR", NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		// W razie niepowodzenia.
-		throw common::ECP_main_error(SYSTEM_ERROR, NAME_ATTACH_ERROR);
+		throw common::ECP_main_error(lib::SYSTEM_ERROR, NAME_ATTACH_ERROR);
 	}
 
 	// Stworznie obiektu - generator uczacy.

@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP)
+// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP)
 // Plik:	ecp_mp_s_rcs_kociemba.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:	metody klasy ecp_mp_rcs_kociemba dla czujnika znajdujacego rozwiazanie kostki Rubika alg. Kociemby
@@ -41,7 +41,7 @@ void rcs_kociemba::configure_sensor() {
 	//strncpy(devmsg.to_vsp.sensor_union.rcs.cube_state, to_vsp.sensor_union.rcs.cube_state,54);
 	// Wyslanie polecenia do procesu VSP.
 	if (devctl(sd, DEVCTL_RW, &devmsg, sizeof(lib::DEVCTL_MSG), NULL) == 9)
-		throw sensor_error(SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 } // end: configure_sensor
 
 /************************** INITIATE READING *********************************/
@@ -50,7 +50,7 @@ void rcs_kociemba::initiate_reading(){
 	memcpy(&devmsg.to_vsp.rcs, &to_vsp.rcs, union_size);
 	if (devctl(sd, DEVCTL_RW, &devmsg, sizeof(lib::DEVCTL_MSG), NULL) == 9) {
 		image.sensor_union.rcs.init_mode = lib::RCS_INIT_FAILURE;
-		throw sensor_error(SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 	}
 	if (devmsg.from_vsp.vsp_report == lib::VSP_REPLY_OK) {
 		image.sensor_union.rcs.init_mode = lib::RCS_INIT_SUCCESS;
@@ -65,7 +65,7 @@ void rcs_kociemba::get_reading() {
 	if(read(sd, &from_vsp, sizeof(lib::VSP_ECP_MSG)) == -1) {
 		image.sensor_union.rcs.cube_solution[0] = '\0';
 		image.sensor_union.rcs.reading_mode = lib::RCS_SOLUTION_NOTFOUND;
-		sr_ecp_msg.message (SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
+		sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
 	}
 	// jesli odczyt sie powiodl, przepisanie pol obrazu z bufora komunikacyjnego do image;
 	if(from_vsp.vsp_report == lib::VSP_REPLY_OK) {

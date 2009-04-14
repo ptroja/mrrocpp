@@ -50,7 +50,7 @@ protected:
 public:	
 	delta(common::task::base& _ecp_task);
 
-   trajectory_description td;   
+   lib::trajectory_description td;   
 
    virtual bool first_step () = 0;	
    virtual bool next_step () = 0;	
@@ -70,7 +70,7 @@ protected:
 public:
 	// konstruktor
 	linear (common::task::base& _ecp_task);
-	linear (common::task::base& _ecp_task, trajectory_description tr_des, int mp_communication_mode_arg = 1);
+	linear (common::task::base& _ecp_task, lib::trajectory_description tr_des, int mp_communication_mode_arg = 1);
 	
   virtual bool first_step ();
   virtual bool next_step ();
@@ -89,7 +89,7 @@ public:
  * 	czyli trapezoidalny profil predkosci.
  *  W wyniku wykorzystania do realizacji ruchu tego generatora mozliwe jest
  * 	przesuniecie o pewien przyrost polozenia i orientacji, wyrazony we wspolrzednych
- * 	zdefiniowanych w ::POSE_SPECIFICATION, zadany w strukturze ::trajectory_description
+ * 	zdefiniowanych w ::lib::POSE_SPECIFICATION, zadany w strukturze ::lib::trajectory_description
  *	Poniewaz czysta interpolacja liniowa moze powodowac nieciaglosci predkosci w 
  * 	poczatku i koncu ruchu, aby utworzyc gladka krzywa przemieszczenia i ciagla krzywa 
  * 	predkosci nalezy dodac do funkcji liniowej fragmenty paraboli na poczatku i koncu ruchu. 
@@ -124,7 +124,7 @@ public:
 
   /** Konstruktor domyslny. */
   linear_parabolic (common::task::base& _ecp_task, 
-                                  trajectory_description tr_des, 
+                                  lib::trajectory_description tr_des, 
                                   const double *time_a , 
                                   const double *time_b
                                  );	   
@@ -183,7 +183,7 @@ protected:
 public:
    
    // ---------konstruktor dla dla zadanych predkosci vp i vk ---------------
-   cubic (common::task::base& _ecp_task, trajectory_description tr_des, double *vp, double *vk); 		 
+   cubic (common::task::base& _ecp_task, lib::trajectory_description tr_des, double *vp, double *vk); 		 
    
    virtual bool next_step ();	 
 
@@ -212,7 +212,7 @@ protected:
 public:	
 
 	// --------- konstruktor dla dla zadanych predkosci vp i vk i przysp. ap i ak -------------
-   quintic (common::task::base& _ecp_task, trajectory_description tr_des, double *vp, double *vk, double *ap, double *ak);
+   quintic (common::task::base& _ecp_task, lib::trajectory_description tr_des, double *vp, double *vk, double *ap, double *ak);
 
    virtual bool next_step ();	 
 

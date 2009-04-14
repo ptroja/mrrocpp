@@ -20,7 +20,7 @@ class tb: public common::task::base{
 		common::generator::bias_edp_force* befgen;			//calibration of force
 		common::generator::tff_gripper_approach* gagen;	//gripper approach with force control
 		common::generator::linear *lgen;					//linear generator
-		trajectory_description tdes;				//trajectory description from com_buf.h
+		lib::trajectory_description tdes;				//trajectory description from com_buf.h
 		common::task::ecp_sub_task_gripper_opening* go_st;		//sub_task_gripper_opening
 		common::generator::sleep* sleepgen;				//sleep generator
 
@@ -28,7 +28,7 @@ class tb: public common::task::base{
 		tb(lib::configurator &_config);
 		~tb();
 		void set_tdes(double, double, double, double, double, double, double);
-		void init_tdes(POSE_SPECIFICATION, int);
+		void init_tdes(lib::POSE_SPECIFICATION, int);
 		void task_initialization(void);
 		void main_task_algorithm(void);
 };

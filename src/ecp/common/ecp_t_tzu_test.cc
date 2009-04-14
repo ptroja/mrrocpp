@@ -73,7 +73,7 @@ void tzu_test::main_task_algorithm(void)
 {
 	set_trajectories();
 	int option = choose_option ("1 - NoseGenerator, 2 - Test, 3 - Nacisk", 3);
-	if (option == OPTION_ONE)
+	if (option == lib::OPTION_ONE)
     {
     	/*
      	 * reczne obroty manipulatora przy ustawionym standardowym modelu (dane z common.ini) oraz przy modelu wyznaczonym przy
@@ -81,12 +81,12 @@ void tzu_test::main_task_algorithm(void)
      	 */
 		sr_ecp_msg->message("NoseGenerator");
  		option = choose_option ("1 - std, 2 - wyliczony", 2);
-	  	if (option == OPTION_ONE)
+	  	if (option == lib::OPTION_ONE)
     			nose_generator_test(0);
-		else if (option == OPTION_TWO)
+		else if (option == lib::OPTION_TWO)
     			nose_generator_test(1);
 	}
-    else if (option == OPTION_TWO)
+    else if (option == lib::OPTION_TWO)
     {
     		/*
 		 * test polegajacy na obrotach manipulatora do kilku roznych pozycji z dwiema roznymi orientacjami chwytaka dla modelu narzedzia
@@ -96,7 +96,7 @@ void tzu_test::main_task_algorithm(void)
  		sr_ecp_msg->message("Test");
 		trajectories_test(10);
 	}
-  	else if (option == OPTION_THREE)
+  	else if (option == lib::OPTION_THREE)
     {
  		/*
 		 * test polegajacy na sprawdzeniu zmiany odczytow sil dla nacisku wywieranego tylko na jedna z osi np. na os x i sprawdzaniu czy
@@ -526,11 +526,11 @@ void force_meassure_generator::set_configuration(int _sleep_time, int _meassurem
 /** first step **/
 bool force_meassure_generator::first_step()
 {
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
  	the_robot->EDP_data.get_type = ARM_DV;
-	the_robot->EDP_data.get_arm_type = FRAME;
+	the_robot->EDP_data.get_arm_type = lib::FRAME;
 	the_robot->EDP_data.next_interpolation_type
-			= TCIM;
+			= lib::TCIM;
 	for(int i = 0; i < 6 ; i++)
 		weight[i] = 0;
 

@@ -1,7 +1,7 @@
 #if !defined(_ECP_SMOOTH2_TAUGHT_IN_POSE_H)
 #define  _ECP_SMOOTH2_TAUGHT_IN_POSE_H
 
-#include "lib/com_buf.h"		// POSE_SPECIFICATION
+#include "lib/com_buf.h"		// lib::POSE_SPECIFICATION
 #include "lib/impconst.h"	// MAX_SERVOS_NR
 
 namespace mrrocpp {
@@ -10,7 +10,7 @@ namespace common {
 
 class ecp_smooth2_taught_in_pose {
 public:
-  POSE_SPECIFICATION arm_type;
+  lib::POSE_SPECIFICATION arm_type;
   double v[MAX_SERVOS_NR];//maksymalna predkosc ruchu dla kazdej osi
   double a[MAX_SERVOS_NR];//maksymalne przyspieszenie ruchu dla kazdej osi
   double coordinates[MAX_SERVOS_NR]; //pozycja docelowa dla kazdej osi
@@ -32,7 +32,7 @@ public:
   int model;
 
   ecp_smooth2_taught_in_pose (void);
-  ecp_smooth2_taught_in_pose (POSE_SPECIFICATION at, double* vv, double* aa, double* coordinates);
+  ecp_smooth2_taught_in_pose (lib::POSE_SPECIFICATION at, double* vv, double* aa, double* coordinates);
 }; // end:class ecp_smooth2_taught_in_pose
 
 } // namespace common

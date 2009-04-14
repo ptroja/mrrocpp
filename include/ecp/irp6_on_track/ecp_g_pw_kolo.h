@@ -23,7 +23,7 @@ namespace generator {
 
 class pw_kolo : public common::generator::base
 {
-    trajectory_description td;
+    lib::trajectory_description td;
     double next_position[8];  
     int step_no;
     double d_rad; //Przyrost k�ta w radianach.

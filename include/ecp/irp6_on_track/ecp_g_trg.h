@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP)
+// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP)
 // Plik:			ecp_trg.h
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		trajectory_reproduce_generator - deklaracja klasy
@@ -42,8 +42,8 @@ class trajectory_reproduce : public common::ecp_teach_in_generator {
 		void next_interpose_list_element (void);
 		void get_interpose_list_element (common::ecp_taught_in_pose& tip);
 		bool is_interpose_list_element ( void );
-		void create_interpose_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[6]);
-		void insert_interpose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[6]);
+		void create_interpose_list_head (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[6]);
+		void insert_interpose_list_element (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[6]);
 		// Sila przy ktorej nalezy przerwac ruch.
 		short dangerous_force;
 		// ~Aktualny odczyt - czujnik sily.

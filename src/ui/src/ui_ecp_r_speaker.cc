@@ -52,7 +52,7 @@ void ui_speaker_robot::execute_motion(void)
 bool ui_speaker_robot::send_command(const char* local_text, const char* local_prosody)
 {
 
-	ecp_command.instruction.instruction_type = SET;
+	ecp_command.instruction.instruction_type = lib::SET;
 
 	if ((local_text) && (local_prosody)) {
 		strncpy(ecp_command.instruction.arm.text_def.text, local_text, MAX_TEXT);
@@ -67,7 +67,7 @@ bool ui_speaker_robot::send_command(const char* local_text, const char* local_pr
 bool ui_speaker_robot::read_state(int* local_state)
 {
 
-	ecp_command.instruction.instruction_type = GET;
+	ecp_command.instruction.instruction_type = lib::GET;
 
 	execute_motion();
 

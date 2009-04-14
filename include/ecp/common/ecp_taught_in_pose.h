@@ -1,7 +1,7 @@
 #if !defined(_ECP_TAUGHT_IN_POSE_H)
 #define  _ECP_TAUGHT_IN_POSE_H
 
-#include "lib/com_buf.h"		// POSE_SPECIFICATION
+#include "lib/com_buf.h"		// lib::POSE_SPECIFICATION
 #include "lib/impconst.h"	// MAX_SERVOS_NR
 
 namespace mrrocpp {
@@ -10,7 +10,7 @@ namespace common {
 
 class ecp_taught_in_pose {
 public:
-  POSE_SPECIFICATION arm_type;
+  lib::POSE_SPECIFICATION arm_type;
   double motion_time;
   double coordinates[MAX_SERVOS_NR];
   
@@ -18,9 +18,9 @@ public:
   
   ecp_taught_in_pose (void);
 
-  ecp_taught_in_pose (POSE_SPECIFICATION at, double mt, double* c);
+  ecp_taught_in_pose (lib::POSE_SPECIFICATION at, double mt, double* c);
 
-  ecp_taught_in_pose (POSE_SPECIFICATION at, double mt, int e_info, double* c); 
+  ecp_taught_in_pose (lib::POSE_SPECIFICATION at, double mt, int e_info, double* c); 
 }; // end:class ecp_taught_in_pose
 
 } // namespace common

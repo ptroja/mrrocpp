@@ -33,11 +33,11 @@ class ecp_robot : public ecp_mp::robot
 	// ostatnio zrealizowanej pozycji oraz pozycji zadanej
 private:
 	// Kopiowanie bufora przesylanego z MP do bufora wysylanego do EDP
-	void copy_mp_to_edp_buffer (c_buffer& mp_buffer);
+	void copy_mp_to_edp_buffer (lib::c_buffer& mp_buffer);
 
 	// by Y - o dziwo tego nie bylo !!!
 	// Kopiowanie bufora przesylanego z EDP do bufora wysylanego do MP
-	void copy_edp_to_mp_buffer (r_buffer& mp_buffer);
+	void copy_edp_to_mp_buffer (lib::r_buffer& mp_buffer);
 
 	// zainicjowanie komunikacji
 	void connect_to_edp (lib::configurator &config);
@@ -59,8 +59,8 @@ protected:
 
 public:
 
-	ecp_command_buffer ecp_command;
-	r_buffer reply_package;
+	lib::ecp_command_buffer ecp_command;
+	lib::r_buffer reply_package;
 
 	lib::sr_ecp* sr_ecp_msg;     // by Y - Wskaznik na obiekt do komunikacji z SR
 	
@@ -114,7 +114,7 @@ public:
 	public:
 		uint64_t error_class;
 		uint64_t error_no;
-		edp_error error;
+		lib::edp_error error;
 
 		ECP_error ( uint64_t err_cl, uint64_t err_no, uint64_t err0 = 0, uint64_t err1 = 0);
 	};

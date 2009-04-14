@@ -8,7 +8,7 @@
 #define _ECP_GEN_PLOT_H
 
 #include "lib/impconst.h"	// frame_tab
-#include "lib/com_buf.h"		// trajectory_description
+#include "lib/com_buf.h"		// lib::trajectory_description
 
 #include "ecp/common/ecp_generator.h"
 
@@ -30,7 +30,7 @@ protected:
 	bool finished;
 	
 public:
-	trajectory_description td;
+	lib::trajectory_description td;
 	int step_no;
 	double delta[6];
 	double frame1[4][4];

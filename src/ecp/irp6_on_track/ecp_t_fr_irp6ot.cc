@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------
 //   ecp_t_tran.cc - przezroczyste wersja dla dowolnego z robotow
 //
-//                     EFFECTOR CONTROL PROCESS (ECP) - main()
+//                     EFFECTOR CONTROL PROCESS (lib::ECP) - main()
 //
 // Ostatnia modyfikacja: 2006
 // ------------------------------------------------------------------------
@@ -37,7 +37,7 @@ void fr::task_initialization(void)
 {
     ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
-    tdes_joint.arm_type = JOINT;
+    tdes_joint.arm_type = lib::JOINT;
     tdes_joint.interpolation_node_no =200;
     tdes_joint.internode_step_no = 10;
     tdes_joint.value_in_step_no = tdes_joint.internode_step_no -2;
@@ -51,8 +51,8 @@ void fr::task_initialization(void)
     tdes_joint.coordinate_delta[7] = 0.0;
 
 
-    trajectory_description tdes_ext;
-    tdes_ext.arm_type = XYZ_EULER_ZYZ;
+    lib::trajectory_description tdes_ext;
+    tdes_ext.arm_type = lib::XYZ_EULER_ZYZ;
     tdes_ext.interpolation_node_no =200;
     tdes_ext.internode_step_no = 10;
     tdes_ext.value_in_step_no = tdes_ext.internode_step_no -2;
@@ -70,9 +70,9 @@ void fr::task_initialization(void)
         tb[i] = 0.9;
     }
 
-    // parabolic_generator adg2(XYZ_EULER_ZYZ, 10., ext_pp);  // generator dla trajektorii dojscia we wsp. zew.
+    // parabolic_generator adg2(lib::XYZ_EULER_ZYZ, 10., ext_pp);  // generator dla trajektorii dojscia we wsp. zew.
     adg1 = new common::generator::linear_parabolic (*this, tdes_joint, ta, tb);
-    // parabolic_generator adg1(JOINT, 20., joint_pp);   // generator dla trajektorii dojscia we wsp. wew
+    // parabolic_generator adg1(lib::JOINT, 20., joint_pp);   // generator dla trajektorii dojscia we wsp. wew
     // generator dla trajektorii dojscia we wsp. zew.
     adg2 = new common::generator::linear_parabolic (*this, tdes_ext, ta, tb);
     el = new common::generator::elipsoid (*this);

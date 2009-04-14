@@ -26,8 +26,8 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 
 #define ISA_CARD_OFFSET 0x10 // w zaleznosci od ustawienia na karcie isa
 #define ADR_OF_SERVO_PTR          0x305 + ISA_CARD_OFFSET
-#define SERVO_COMMAND_1_ADR       0x200 + ISA_CARD_OFFSET
-#define SERVO_COMMAND_2_ADR       0x202 + ISA_CARD_OFFSET
+#define SERVO_COMMAND1_ADR       0x200 + ISA_CARD_OFFSET
+#define SERVO_COMMAND2_ADR       0x202 + ISA_CARD_OFFSET
 #define SERVO_REPLY_STATUS_ADR    0x200 + ISA_CARD_OFFSET
 #define SERVO_REPLY_INT_ADR       0x202 + ISA_CARD_OFFSET
 #define SERVO_REPLY_POS_LOW_ADR   0x204 + ISA_CARD_OFFSET

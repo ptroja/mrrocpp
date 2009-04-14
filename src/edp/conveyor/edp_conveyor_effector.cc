@@ -45,24 +45,24 @@ void effector::initialize (void)
 
 
 /*--------------------------------------------------------------------------*/
-void effector::set_rmodel (c_buffer &instruction)
+void effector::set_rmodel (lib::c_buffer &instruction)
 {
 	// BYTE previous_model;
 	// BYTE previous_corrector;
 	//printf(" SET RMODEL: ");
 	switch (instruction.set_rmodel_type)
 	{
-	case ARM_KINEMATIC_MODEL:
+	case lib::ARM_KINEMATIC_MODEL:
 		//printf("ARM_KINEMATIC_MODEL\n");
 		// Ustawienie modelu kinematyki.
 		set_kinematic_model(instruction.rmodel.kinematic_model.kinematic_model_no);
 		break;
 
-	case SERVO_ALGORITHM:
+	case lib::SERVO_ALGORITHM:
 		// ustawienie algorytmw serworegulacji oraz ich parametrow
 		// zmiana algorytmu regulacji
 		/* Uformowanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow dla procesu SERVO_GROUP */
-		servo_command.instruction_code = SERVO_ALGORITHM_AND_PARAMETERS;
+		servo_command.instruction_code = lib::SERVO_ALGORITHM_AND_PARAMETERS;
 		for (int i = 0; i<number_of_servos; i++)
 		{
 			servo_command.parameters.servo_alg_par.servo_algorithm_no[i] = servo_algorithm_ecp[i] = instruction.rmodel.servo_algorithm.servo_algorithm_no[i];
@@ -82,19 +82,19 @@ void effector::set_rmodel (c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void effector::get_rmodel (c_buffer &instruction)
+void effector::get_rmodel (lib::c_buffer &instruction)
 {
 	int i; // licznik obiegow petli
 	//printf(" GET RMODEL: ");
 	switch (instruction.get_rmodel_type)
 	{
-	case ARM_KINEMATIC_MODEL:
-		reply.rmodel_type = ARM_KINEMATIC_MODEL;
+	case lib::ARM_KINEMATIC_MODEL:
+		reply.rmodel_type = lib::ARM_KINEMATIC_MODEL;
 		// okreslenie numeru zestawu parametrow przelicznika kinematycznego oraz jego korektora
 		reply.rmodel.kinematic_model.kinematic_model_no = get_current_kinematic_model_no();
 		break;
-	case SERVO_ALGORITHM:
-		reply.rmodel_type = SERVO_ALGORITHM;
+	case lib::SERVO_ALGORITHM:
+		reply.rmodel_type = lib::SERVO_ALGORITHM;
 		// ustawienie numeru algorytmu serworegulatora oraz numeru jego zestawu parametrow
 		for (i = 0; i<number_of_servos; i++)
 			if ( instruction.is_get_arm() )
@@ -149,17 +149,17 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
 
 
 // Przemieszczenie tasmociagu.
-void effector::move_arm (c_buffer &instruction)
+void effector::move_arm (lib::c_buffer &instruction)
 {
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
 	switch (instruction.set_arm_type)
 	{
-	case MOTOR:
+	case lib::MOTOR:
 		compute_motors(instruction);
 		break;
-	case JOINT:
+	case lib::JOINT:
 		compute_joints(instruction);
 		break;
 	default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
@@ -169,8 +169,8 @@ void effector::move_arm (c_buffer &instruction)
 	// wykonanie ruchu
 	switch (instruction.set_arm_type)
 	{
-	case MOTOR:
-	case JOINT:
+	case lib::MOTOR:
+	case lib::JOINT:
 		// Wyslanie makrokroku do realizacji SERVO_GROUP oraz
 		// odebranie informacji o realizacji pierwszej fazy ruchu
 		// aktualizacja transformera
@@ -188,13 +188,13 @@ void effector::move_arm (c_buffer &instruction)
 }
 
 // Odczytanie pozycji tasmociagu.
-void effector::get_arm_position (bool read_hardware, c_buffer &instruction)
+void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
 {
 
 	if (read_hardware)
 	{
 		// Uformowanie rozkazu odczytu dla SERVO_GROUP
-		servo_command.instruction_code = READ;
+		servo_command.instruction_code = lib::READ;
 		// Wyslanie rozkazu do SERVO_GROUP
 		// Pobranie z SERVO_GROUP aktualnej pozycji silnikow
 		//		printf("get_arm_position read_hardware\n");
@@ -228,12 +228,12 @@ void effector::get_arm_position (bool read_hardware, c_buffer &instruction)
 	// oraz adekwatne wypelnienie bufora odpowiedzi
 	switch (instruction.get_arm_type)
 	{
-	case   JOINT:
+	case lib::JOINT:
 		// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
 		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 		arm_joints_2_joints();
 		break;
-	case   MOTOR:
+	case lib::MOTOR:
 		arm_motors_2_motors();
 		break;
 	default:   // blad: nieznany sposob zapisu wspolrzednych koncowki

@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //                            ecp.cc
-//            Effector Control Process (ECP) - force methods
+//            Effector Control Process (lib::ECP) - force methods
 // Funkcje do tworzenia procesow ECP z wykorzystaniem sily
 //
 // Ostatnia modyfikacja: 2004r.
@@ -90,11 +90,11 @@ bool weight_meassure::first_step()
 
 	clear_buffer();
 
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV;
-	the_robot->EDP_data.get_arm_type = FRAME;
+	the_robot->EDP_data.get_arm_type = lib::FRAME;
 	the_robot->EDP_data.next_interpolation_type
-			= TCIM;
+			= lib::TCIM;
 
 	return true;
 }
@@ -197,7 +197,7 @@ bool y_nose_run_force::first_step()
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
 	the_robot->EDP_data.set_type = ARM_DV;
 
@@ -206,11 +206,11 @@ bool y_nose_run_force::first_step()
 
 	//		the_robot->EDP_data.force_axis_quantity=3; // DOBRZE
 
-	the_robot->EDP_data.set_arm_type = PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = FRAME;
-	the_robot->EDP_data.motion_type = RELATIVE;
+	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
+	the_robot->EDP_data.get_arm_type = lib::FRAME;
+	the_robot->EDP_data.motion_type = lib::RELATIVE;
 	the_robot->EDP_data.next_interpolation_type
-			= TCIM;
+			= lib::TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 	/*
@@ -247,7 +247,7 @@ bool y_nose_run_force::next_step()
 	}
 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-	the_robot->EDP_data.instruction_type = SET_GET;
+	the_robot->EDP_data.instruction_type = lib::SET_GET;
 
 	// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 	// (okreslenie kolejnego wezla interpolacji)
@@ -295,7 +295,7 @@ bool y_egg_force::first_step()
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
 	// 		the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
 	the_robot->EDP_data.get_type = ARM_DV+OUTPUTS_DV; // arm_inputs DEBUG
 	the_robot->EDP_data.set_type = ARM_DV;
@@ -307,7 +307,7 @@ bool y_egg_force::first_step()
 
 	 the_robot->EDP_data.set_arm_type = POSE_FORCE_LINEAR;
 	 the_robot->EDP_data.get_arm_type = POSE_FORCE_LINEAR;
-	 the_robot->EDP_data.motion_type = ABSOLUTE;
+	 the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 	 the_robot->EDP_data.motion_steps = td.internode_step_no;
 	 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -338,7 +338,7 @@ bool y_egg_force::next_step()
 {
 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-	the_robot->EDP_data.instruction_type = SET_GET;
+	the_robot->EDP_data.instruction_type = lib::SET_GET;
 
 	// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 	// (okreslenie kolejnego wezla interpolacji)
@@ -592,9 +592,9 @@ bias_edp_force::bias_edp_force(common::task::base& _ecp_task) :
 
 bool bias_edp_force::first_step()
 {
-	the_robot->EDP_data.instruction_type = SET;
+	the_robot->EDP_data.instruction_type = lib::SET;
 	the_robot->EDP_data.set_type = RMODEL_DV;
-	the_robot->EDP_data.set_rmodel_type = FORCE_BIAS;
+	the_robot->EDP_data.set_rmodel_type = lib::FORCE_BIAS;
 
 	return true;
 }
@@ -635,16 +635,16 @@ bool y_edge_follow_force::first_step()
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
 	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
 	//	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.set_arm_type = PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = FRAME;
-	the_robot->EDP_data.motion_type = ABSOLUTE;
-	the_robot->EDP_data.next_interpolation_type = TCIM;
+	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
+	the_robot->EDP_data.get_arm_type = lib::FRAME;
+	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -661,11 +661,11 @@ bool y_edge_follow_force::first_step()
 		the_robot->EDP_data.next_velocity[i] = 0;
 		the_robot->EDP_data.next_force_xyz_torque_xyz[i] = 0;
 		//	the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i] = 0.0;
-		the_robot->EDP_data.next_behaviour[i] = UNGUARDED_MOTION;
+		the_robot->EDP_data.next_behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
 	the_robot->EDP_data.next_reciprocal_damping[0] = FORCE_RECIPROCAL_DAMPING;
-	the_robot->EDP_data.next_behaviour[0] = CONTACT;
+	the_robot->EDP_data.next_behaviour[0] = lib::CONTACT;
 	// Sila dosciku do rawedzi
 	the_robot->EDP_data.next_force_xyz_torque_xyz[0] = 4;
 
@@ -703,7 +703,7 @@ bool y_edge_follow_force::next_step()
 
 	// wyznaczenie nowej macierzy referencyjnej i predkosci ruchu
 
-	the_robot->EDP_data.instruction_type = SET_GET;
+	the_robot->EDP_data.instruction_type = lib::SET_GET;
 
 	the_robot->EDP_data.next_gripper_coordinate
 			= the_robot->EDP_data.current_gripper_coordinate;
@@ -810,16 +810,16 @@ bool legobrick_attach_force::first_step()
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
 	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
 	//	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.set_arm_type = PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = FRAME;
-	the_robot->EDP_data.motion_type = ABSOLUTE;
-	the_robot->EDP_data.next_interpolation_type = TCIM;
+	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
+	the_robot->EDP_data.get_arm_type = lib::FRAME;
+	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -835,38 +835,38 @@ bool legobrick_attach_force::first_step()
 	//the_robot->EDP_data.next_reciprocal_damping[0] = FORCE_RECIPROCAL_DAMPING;
 	the_robot->EDP_data.next_velocity[0] = 0;
 	the_robot->EDP_data.next_force_xyz_torque_xyz[0] = 0.0;
-	//the_robot->EDP_data.next_behaviour[0] = CONTACT;
-	the_robot->EDP_data.next_behaviour[0] = UNGUARDED_MOTION;
+	//the_robot->EDP_data.next_behaviour[0] = lib::CONTACT;
+	the_robot->EDP_data.next_behaviour[0] = lib::UNGUARDED_MOTION;
 
 	//the_robot->EDP_data.next_reciprocal_damping[3] = 0.0;
 	the_robot->EDP_data.next_velocity[3] = 0;
 	the_robot->EDP_data.next_force_xyz_torque_xyz[3] = 0;
-	the_robot->EDP_data.next_behaviour[3] = UNGUARDED_MOTION;
+	the_robot->EDP_data.next_behaviour[3] = lib::UNGUARDED_MOTION;
 
 	//os y (obrotu)
 	//the_robot->EDP_data.next_reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
 	the_robot->EDP_data.next_velocity[1] = 0;
 	the_robot->EDP_data.next_force_xyz_torque_xyz[1] = 0.0;
-	the_robot->EDP_data.next_behaviour[1] = UNGUARDED_MOTION;
-	//the_robot->EDP_data.next_behaviour[1] = CONTACT;
+	the_robot->EDP_data.next_behaviour[1] = lib::UNGUARDED_MOTION;
+	//the_robot->EDP_data.next_behaviour[1] = lib::CONTACT;
 
 	//the_robot->EDP_data.next_reciprocal_damping[4] = TORQUE_RECIPROCAL_DAMPING;
 	the_robot->EDP_data.next_velocity[4] = 0.0;
 	the_robot->EDP_data.next_force_xyz_torque_xyz[4] = 0.0;
-	//the_robot->EDP_data.next_behaviour[4] = GUARDED_MOTION;
-	the_robot->EDP_data.next_behaviour[4] = UNGUARDED_MOTION;
+	//the_robot->EDP_data.next_behaviour[4] = lib::GUARDED_MOTION;
+	the_robot->EDP_data.next_behaviour[4] = lib::UNGUARDED_MOTION;
 
 	//os z
 	the_robot->EDP_data.next_reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING;
 	the_robot->EDP_data.next_velocity[2] = 0;
 	the_robot->EDP_data.next_force_xyz_torque_xyz[2] = 5.0;
-	//the_robot->EDP_data.next_behaviour[2] = UNGUARDED_MOTION;
-	the_robot->EDP_data.next_behaviour[2] = CONTACT;
+	//the_robot->EDP_data.next_behaviour[2] = lib::UNGUARDED_MOTION;
+	the_robot->EDP_data.next_behaviour[2] = lib::CONTACT;
 
 	//the_robot->EDP_data.next_reciprocal_damping[5] = 0.0;
 	the_robot->EDP_data.next_velocity[5] = 0;
 	the_robot->EDP_data.next_force_xyz_torque_xyz[5] = 0;
-	the_robot->EDP_data.next_behaviour[5] = UNGUARDED_MOTION;
+	the_robot->EDP_data.next_behaviour[5] = lib::UNGUARDED_MOTION;
 
 	return true;
 }
@@ -878,7 +878,7 @@ bool legobrick_attach_force::next_step()
 		return false;
 	}
 
-	the_robot->EDP_data.instruction_type = SET_GET;
+	the_robot->EDP_data.instruction_type = lib::SET_GET;
 
 	the_robot->EDP_data.next_gripper_coordinate
 			= the_robot->EDP_data.current_gripper_coordinate;
@@ -929,16 +929,16 @@ bool legobrick_detach_force::first_step()
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
 	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
 	//	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.set_arm_type = PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = XYZ_ANGLE_AXIS;
-	the_robot->EDP_data.motion_type = ABSOLUTE;
-	the_robot->EDP_data.next_interpolation_type = TCIM;
+	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
+	the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
+	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -954,37 +954,37 @@ bool legobrick_detach_force::first_step()
 	the_robot->EDP_data.next_reciprocal_damping[0] = FORCE_RECIPROCAL_DAMPING;
 	the_robot->EDP_data.next_velocity[0] = 0;
 	the_robot->EDP_data.next_force_xyz_torque_xyz[0] = 0.0;
-	the_robot->EDP_data.next_behaviour[0] = CONTACT;
-	//the_robot->EDP_data.next_behaviour[0] = UNGUARDED_MOTION;
+	the_robot->EDP_data.next_behaviour[0] = lib::CONTACT;
+	//the_robot->EDP_data.next_behaviour[0] = lib::UNGUARDED_MOTION;
 
 	//the_robot->EDP_data.next_reciprocal_damping[3] = 0.0;
 	the_robot->EDP_data.next_velocity[3] = 0;
 	the_robot->EDP_data.next_force_xyz_torque_xyz[3] = 0;
-	the_robot->EDP_data.next_behaviour[3] = UNGUARDED_MOTION;
+	the_robot->EDP_data.next_behaviour[3] = lib::UNGUARDED_MOTION;
 
 	//os y (obrotu)
 	the_robot->EDP_data.next_reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
 	the_robot->EDP_data.next_velocity[1] = 0;
 	the_robot->EDP_data.next_force_xyz_torque_xyz[1] = 0.0;
-	//the_robot->EDP_data.next_behaviour[1] = UNGUARDED_MOTION;//CONTACT;
-	the_robot->EDP_data.next_behaviour[1] = CONTACT;
+	//the_robot->EDP_data.next_behaviour[1] = lib::UNGUARDED_MOTION;//CONTACT;
+	the_robot->EDP_data.next_behaviour[1] = lib::CONTACT;
 
 	the_robot->EDP_data.next_reciprocal_damping[4] = TORQUE_RECIPROCAL_DAMPING;
 	the_robot->EDP_data.next_velocity[4] = -0.05;
 	the_robot->EDP_data.next_force_xyz_torque_xyz[4] = 0.0;
-	the_robot->EDP_data.next_behaviour[4] = GUARDED_MOTION;
+	the_robot->EDP_data.next_behaviour[4] = lib::GUARDED_MOTION;
 
 	//os z
 	the_robot->EDP_data.next_reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING/4;
 	the_robot->EDP_data.next_velocity[2] = 0;
 	the_robot->EDP_data.next_force_xyz_torque_xyz[2] = 20.0;
-	//the_robot->EDP_data.next_behaviour[2] = UNGUARDED_MOTION;//CONTACT;
-	the_robot->EDP_data.next_behaviour[2] = CONTACT;
+	//the_robot->EDP_data.next_behaviour[2] = lib::UNGUARDED_MOTION;//CONTACT;
+	the_robot->EDP_data.next_behaviour[2] = lib::CONTACT;
 
 	//the_robot->EDP_data.next_reciprocal_damping[5] = 0.0;
 	the_robot->EDP_data.next_velocity[5] = 0;
 	the_robot->EDP_data.next_force_xyz_torque_xyz[5] = 0;
-	the_robot->EDP_data.next_behaviour[5] = UNGUARDED_MOTION;
+	the_robot->EDP_data.next_behaviour[5] = lib::UNGUARDED_MOTION;
 
 	return true;
 }
@@ -996,7 +996,7 @@ bool legobrick_detach_force::next_step()
 		return false;
 	}
 
-	the_robot->EDP_data.instruction_type = SET_GET;
+	the_robot->EDP_data.instruction_type = lib::SET_GET;
 
 	the_robot->EDP_data.next_gripper_coordinate
 			= the_robot->EDP_data.current_gripper_coordinate;
@@ -1054,7 +1054,7 @@ bool y_drawing_teach_in_force::first_step()
 		td.internode_step_no = step_no;
 		td.value_in_step_no = td.internode_step_no - 2;
 
-		the_robot->EDP_data.instruction_type = GET;
+		the_robot->EDP_data.instruction_type = lib::GET;
 		the_robot->EDP_data.get_type = ARM_DV;
 		the_robot->EDP_data.set_type = ARM_DV;
 
@@ -1069,7 +1069,7 @@ bool y_drawing_teach_in_force::first_step()
 
 		 the_robot->EDP_data.set_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->EDP_data.get_arm_type = POSE_FORCE_LINEAR;
-		 the_robot->EDP_data.motion_type = ABSOLUTE;
+		 the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		 the_robot->EDP_data.motion_steps = td.internode_step_no;
 		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -1100,7 +1100,7 @@ bool y_drawing_teach_in_force::first_step()
 		td.internode_step_no = step_no;
 		td.value_in_step_no = td.internode_step_no - 2;
 
-		the_robot->EDP_data.instruction_type = GET;
+		the_robot->EDP_data.instruction_type = lib::GET;
 		the_robot->EDP_data.get_type = ARM_DV;
 		the_robot->EDP_data.set_type = ARM_DV;
 		/*
@@ -1111,7 +1111,7 @@ bool y_drawing_teach_in_force::first_step()
 
 		 the_robot->EDP_data.set_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->EDP_data.get_arm_type = POSE_FORCE_LINEAR;
-		 the_robot->EDP_data.motion_type = ABSOLUTE;
+		 the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		 the_robot->EDP_data.motion_steps = td.internode_step_no;
 		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -1158,7 +1158,7 @@ bool y_drawing_teach_in_force::next_step()
 		}
 
 		// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-		the_robot->EDP_data.instruction_type = SET;
+		the_robot->EDP_data.instruction_type = lib::SET;
 
 		// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 		// (okreslenie kolejnego wezla interpolacji)
@@ -1209,7 +1209,7 @@ bool y_drawing_teach_in_force::next_step()
 		}
 
 		// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-		the_robot->EDP_data.instruction_type = SET;
+		the_robot->EDP_data.instruction_type = lib::SET;
 
 		insert_pose_list_element(emptyps, 0.0, inc_delta);
 
@@ -1255,7 +1255,7 @@ bool y_advanced_drawing_teach_in_force::first_step()
 		td.internode_step_no = step_no;
 		td.value_in_step_no = td.internode_step_no - 2;
 
-		the_robot->EDP_data.instruction_type = GET;
+		the_robot->EDP_data.instruction_type = lib::GET;
 		the_robot->EDP_data.get_type = ARM_DV;
 		the_robot->EDP_data.set_type = ARM_DV;
 
@@ -1270,7 +1270,7 @@ bool y_advanced_drawing_teach_in_force::first_step()
 
 		 the_robot->EDP_data.set_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->EDP_data.get_arm_type = POSE_FORCE_LINEAR;
-		 the_robot->EDP_data.motion_type = ABSOLUTE;
+		 the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		 the_robot->EDP_data.motion_steps = td.internode_step_no;
 		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -1310,7 +1310,7 @@ bool y_advanced_drawing_teach_in_force::first_step()
 		td.internode_step_no = step_no;
 		td.value_in_step_no = td.internode_step_no - 2;
 
-		the_robot->EDP_data.instruction_type = GET;
+		the_robot->EDP_data.instruction_type = lib::GET;
 		the_robot->EDP_data.get_type = ARM_DV;
 		the_robot->EDP_data.set_type = ARM_DV;
 		/*
@@ -1321,7 +1321,7 @@ bool y_advanced_drawing_teach_in_force::first_step()
 
 		 the_robot->EDP_data.set_arm_type = POSE_FORCE_LINEAR;
 		 the_robot->EDP_data.get_arm_type = POSE_FORCE_LINEAR;
-		 the_robot->EDP_data.motion_type = ABSOLUTE;
+		 the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		 the_robot->EDP_data.motion_steps = td.internode_step_no;
 		 the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -1371,7 +1371,7 @@ bool y_advanced_drawing_teach_in_force::next_step()
 		}
 
 		// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-		the_robot->EDP_data.instruction_type = SET;
+		the_robot->EDP_data.instruction_type = lib::SET;
 
 		get_pose(tip);
 
@@ -1606,7 +1606,7 @@ bool y_advanced_drawing_teach_in_force::next_step()
 		}
 
 		// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-		the_robot->EDP_data.instruction_type = SET;
+		the_robot->EDP_data.instruction_type = lib::SET;
 
 		if ((sensor_m.begin())->second->image.sensor_union.force.event_type==2)
 		{
@@ -1635,7 +1635,7 @@ tff_nose_run::tff_nose_run(common::task::base& _ecp_task,
 {
 	step_no = step;
 	// domyslnie wszytkie osie podatne a pulse_check nieaktywne
-	configure_behaviour(CONTACT, CONTACT, CONTACT, CONTACT, CONTACT, CONTACT);
+	configure_behaviour(lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT);
 	configure_pulse_check (false);
 	configure_velocity (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 	configure_force (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -1662,8 +1662,8 @@ void tff_nose_run::configure_pulse_check(bool pulse_check_activated_l)
 }
 
 
-void tff_nose_run::configure_behaviour(BEHAVIOUR_SPECIFICATION x, BEHAVIOUR_SPECIFICATION y, BEHAVIOUR_SPECIFICATION z,
-	 BEHAVIOUR_SPECIFICATION ax, BEHAVIOUR_SPECIFICATION ay, BEHAVIOUR_SPECIFICATION az)
+void tff_nose_run::configure_behaviour(lib::BEHAVIOUR_SPECIFICATION x, lib::BEHAVIOUR_SPECIFICATION y, lib::BEHAVIOUR_SPECIFICATION z,
+	 lib::BEHAVIOUR_SPECIFICATION ax, lib::BEHAVIOUR_SPECIFICATION ay, lib::BEHAVIOUR_SPECIFICATION az)
  {
 	generator_edp_data.next_behaviour[0] = x;
 	generator_edp_data.next_behaviour[1] = y;
@@ -1738,16 +1738,16 @@ bool tff_nose_run::first_step()
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
 	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
 	//	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.set_arm_type = PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = FRAME;
-	the_robot->EDP_data.motion_type = RELATIVE;
-	the_robot->EDP_data.next_interpolation_type = TCIM;
+	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
+	the_robot->EDP_data.get_arm_type = lib::FRAME;
+	the_robot->EDP_data.motion_type = lib::RELATIVE;
+	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -1779,13 +1779,13 @@ bool tff_nose_run::next_step()
 
 	if (pulse_check_activated && check_and_null_trigger())
 	{ // Koniec odcinka
-		//	ecp_t.set_ecp_reply (TASK_TERMINATED);
+		//	ecp_t.set_ecp_reply (lib::TASK_TERMINATED);
 
 		return false;
 	}
 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-	the_robot->EDP_data.instruction_type = SET_GET;
+	the_robot->EDP_data.instruction_type = lib::SET_GET;
 
 	// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 
@@ -1834,10 +1834,10 @@ void tff_nose_run::execute_motion(void)
 	 */
 	// komunikacja wlasciwa
 	the_robot->send();
-	if (the_robot->reply_package.reply_type == ERROR) {
+	if (the_robot->reply_package.reply_type == lib::ERROR) {
 
 		the_robot->query();
-		throw ecp_robot::ECP_error (NON_FATAL_ERROR, EDP_ERROR);
+		throw ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
 
 	}
 	the_robot->query();
@@ -1852,7 +1852,7 @@ void tff_nose_run::execute_motion(void)
 	 printf ("blad w ECP procmask signal\n");
 	 }
 	 */
-	if (the_robot->reply_package.reply_type == ERROR) {
+	if (the_robot->reply_package.reply_type == lib::ERROR) {
 		
 		
 		switch ( the_robot->reply_package.error_no.error0 ) {
@@ -1874,7 +1874,7 @@ void tff_nose_run::execute_motion(void)
 			case BEYOND_LOWER_THETA7_LIMIT:
 			break;
 			default:
-				throw ecp_robot::ECP_error (NON_FATAL_ERROR, EDP_ERROR);
+				throw ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
 			break;
 
 		} /* end: switch */
@@ -1923,17 +1923,17 @@ bool tff_rubik_grab::first_step()
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
 	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
 	//	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.set_arm_type = PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = FRAME;
-	the_robot->EDP_data.motion_type = RELATIVE;
+	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
+	the_robot->EDP_data.get_arm_type = lib::FRAME;
+	the_robot->EDP_data.motion_type = lib::RELATIVE;
 	the_robot->EDP_data.next_interpolation_type
-			= TCIM;
+			= lib::TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -1954,19 +1954,19 @@ bool tff_rubik_grab::first_step()
 		{
 			the_robot->EDP_data.next_reciprocal_damping[i]
 					= FORCE_RECIPROCAL_DAMPING;
-			the_robot->EDP_data.next_behaviour[i] = CONTACT;
+			the_robot->EDP_data.next_behaviour[i] = lib::CONTACT;
 		}
 	else
 	{
 		the_robot->EDP_data.next_reciprocal_damping[1]
 				= FORCE_RECIPROCAL_DAMPING;
-		the_robot->EDP_data.next_behaviour[1] = CONTACT;
-		the_robot->EDP_data.next_behaviour[0] = UNGUARDED_MOTION;
+		the_robot->EDP_data.next_behaviour[1] = lib::CONTACT;
+		the_robot->EDP_data.next_behaviour[0] = lib::UNGUARDED_MOTION;
 	}
 
 	for (int i=2; i<6; i++)
 	{
-		the_robot->EDP_data.next_behaviour[i] = UNGUARDED_MOTION;
+		the_robot->EDP_data.next_behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
 	return true;
@@ -1988,7 +1988,7 @@ bool tff_rubik_grab::next_step()
 
 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-	the_robot->EDP_data.instruction_type = SET_GET;
+	the_robot->EDP_data.instruction_type = lib::SET_GET;
 
 	// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 
@@ -2043,17 +2043,17 @@ bool tff_rubik_face_rotate::first_step()
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
 	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
 	//	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.set_arm_type = PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = FRAME;
-	the_robot->EDP_data.motion_type = RELATIVE;
+	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
+	the_robot->EDP_data.get_arm_type = lib::FRAME;
+	the_robot->EDP_data.motion_type = lib::RELATIVE;
 	the_robot->EDP_data.next_interpolation_type
-			= TCIM;
+			= lib::TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -2071,12 +2071,12 @@ bool tff_rubik_face_rotate::first_step()
 
 	the_robot->EDP_data.next_reciprocal_damping[5]
 			= TORQUE_RECIPROCAL_DAMPING/4;
-	the_robot->EDP_data.next_behaviour[5] = CONTACT;
+	the_robot->EDP_data.next_behaviour[5] = lib::CONTACT;
 
 	if (-0.1 < turn_angle && turn_angle < 0.1)
 	{
 		for (int i=0; i<6; i++)
-			the_robot->EDP_data.next_behaviour[i] = UNGUARDED_MOTION;
+			the_robot->EDP_data.next_behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 	else
 	{
@@ -2084,13 +2084,13 @@ bool tff_rubik_face_rotate::first_step()
 		{
 			the_robot->EDP_data.next_reciprocal_damping[i]
 					= FORCE_RECIPROCAL_DAMPING;
-			the_robot->EDP_data.next_behaviour[i] = CONTACT;
+			the_robot->EDP_data.next_behaviour[i] = lib::CONTACT;
 		}
 		for (int i=3; i<5; i++)
-			the_robot->EDP_data.next_behaviour[i] = UNGUARDED_MOTION;
+			the_robot->EDP_data.next_behaviour[i] = lib::UNGUARDED_MOTION;
 		the_robot->EDP_data.next_reciprocal_damping[5]
 				= TORQUE_RECIPROCAL_DAMPING;
-		the_robot->EDP_data.next_behaviour[5] = CONTACT;
+		the_robot->EDP_data.next_behaviour[5] = lib::CONTACT;
 		if (turn_angle > 0.0)
 			the_robot->EDP_data.next_force_xyz_torque_xyz[5] = 5;
 		if (turn_angle < 0.0)
@@ -2116,7 +2116,7 @@ bool tff_rubik_face_rotate::next_step()
 
 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-	the_robot->EDP_data.instruction_type = SET_GET;
+	the_robot->EDP_data.instruction_type = lib::SET_GET;
 
 	// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 
@@ -2218,17 +2218,17 @@ bool tff_gripper_approach::first_step()
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
 	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
 	//	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.set_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = TOOL_FRAME;
-	the_robot->EDP_data.set_arm_type = PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = FRAME;
-	the_robot->EDP_data.motion_type = RELATIVE;
+	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
+	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
+	the_robot->EDP_data.get_arm_type = lib::FRAME;
+	the_robot->EDP_data.motion_type = lib::RELATIVE;
 	the_robot->EDP_data.next_interpolation_type
-			= TCIM;
+			= lib::TCIM;
 	the_robot->EDP_data.motion_steps = td.internode_step_no;
 	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -2248,11 +2248,11 @@ bool tff_gripper_approach::first_step()
 
 	for (int i=0; i<6; i++)
 	{
-		the_robot->EDP_data.next_behaviour[i] = UNGUARDED_MOTION;
+		the_robot->EDP_data.next_behaviour[i] = lib::UNGUARDED_MOTION;
 		//		the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i] = 0;
 	}
 
-	the_robot->EDP_data.next_behaviour[2] = GUARDED_MOTION;
+	the_robot->EDP_data.next_behaviour[2] = lib::GUARDED_MOTION;
 	the_robot->EDP_data.next_reciprocal_damping[2]
 			= FORCE_RECIPROCAL_DAMPING / 2;
 
@@ -2275,7 +2275,7 @@ bool tff_gripper_approach::next_step()
 
 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-	the_robot->EDP_data.instruction_type = SET_GET;
+	the_robot->EDP_data.instruction_type = lib::SET_GET;
 
 	// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 
@@ -2313,9 +2313,9 @@ force_tool_change::force_tool_change (common::task::base& _ecp_task)
 
 bool force_tool_change::first_step ()
 {
-	the_robot->EDP_data.instruction_type = SET;
+	the_robot->EDP_data.instruction_type = lib::SET;
 	the_robot->EDP_data.set_type = RMODEL_DV;
-	the_robot->EDP_data.set_rmodel_type = FORCE_TOOL;
+	the_robot->EDP_data.set_rmodel_type = lib::FORCE_TOOL;
 
 	for(int i = 0 ; i < 3 ; i++)
 		the_robot->EDP_data.next_force_tool_position[i] = tool_parameters[i];

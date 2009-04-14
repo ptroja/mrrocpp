@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces:		EFFECTOR CONTROL PROCESS (ECP)
+// Proces:		EFFECTOR CONTROL PROCESS (lib::ECP)
 // Plik:			ecp_trg.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		trajectory_reproduce_generator - definicja metod klasy
@@ -40,10 +40,10 @@ namespace generator {
 void trajectory_reproduce::get_current_position(double current_position[6]){
     // Odczytanie polozenia robota
     // Przygotowanie rozkazu dla EDP.
-    the_robot->EDP_data.instruction_type = GET;
+    the_robot->EDP_data.instruction_type = lib::GET;
     the_robot->EDP_data.get_type = ARM_DV; // ARM
     // Sprawdzenie rodzaju ramienia.
-    the_robot->EDP_data.get_arm_type = MOTOR;
+    the_robot->EDP_data.get_arm_type = lib::MOTOR;
     // Przepisanie rozkazu do bufora wysylkowego.
     the_robot->create_command();
     // Zlecenie ruchu robota.
@@ -68,42 +68,42 @@ void trajectory_reproduce::create_command_for_pose(common::ecp_taught_in_pose& t
 // tip.coordinates[0], tip.coordinates[1], tip.coordinates[2], tip.coordinates[3], tip.coordinates[4], tip.coordinates[5]);
     // sprawdzenie rodzaju wspolrzednych
     switch ( tip.arm_type ) {
-    case C_MOTOR:
-        the_robot->EDP_data.instruction_type = SET;
+    case lib::C_MOTOR:
+        the_robot->EDP_data.instruction_type = lib::SET;
         the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.set_arm_type = MOTOR;
-        the_robot->EDP_data.motion_type = ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = MIM;
+        the_robot->EDP_data.set_arm_type = lib::MOTOR;
+        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+         the_robot->EDP_data.next_interpolation_type = lib::MIM;
         the_robot->EDP_data.motion_steps = (WORD) ceil(tip.motion_time/STEP);
         the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
         memcpy (the_robot->EDP_data.next_motor_arm_coordinates, tip.coordinates, IRP6_ON_TRACK_NUM_OF_SERVOS*sizeof (double));
         break;
-    case C_JOINT:
-        the_robot->EDP_data.instruction_type = SET;
+    case lib::C_JOINT:
+        the_robot->EDP_data.instruction_type = lib::SET;
         the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.set_arm_type = JOINT;
-        the_robot->EDP_data.motion_type = ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = MIM;
+        the_robot->EDP_data.set_arm_type = lib::JOINT;
+        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+         the_robot->EDP_data.next_interpolation_type = lib::MIM;
         the_robot->EDP_data.motion_steps = (WORD) ceil(tip.motion_time/STEP);
         the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
         memcpy (the_robot->EDP_data.next_joint_arm_coordinates, tip.coordinates, IRP6_ON_TRACK_NUM_OF_SERVOS*sizeof (double));
         break;
-    case C_XYZ_EULER_ZYZ:
-        the_robot->EDP_data.instruction_type = SET;
+    case lib::C_XYZ_EULER_ZYZ:
+        the_robot->EDP_data.instruction_type = lib::SET;
         the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
-        the_robot->EDP_data.motion_type = ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = MIM;
+        the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
+        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+         the_robot->EDP_data.next_interpolation_type = lib::MIM;
         the_robot->EDP_data.motion_steps = (WORD) ceil(tip.motion_time/STEP);
         the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
         memcpy (the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
         break;
-    case C_XYZ_ANGLE_AXIS:
-        the_robot->EDP_data.instruction_type = SET;
+    case lib::C_XYZ_ANGLE_AXIS:
+        the_robot->EDP_data.instruction_type = lib::SET;
         the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
-        the_robot->EDP_data.motion_type = ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = MIM;
+        the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
+        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+         the_robot->EDP_data.next_interpolation_type = lib::MIM;
         the_robot->EDP_data.motion_steps = (WORD) ceil(tip.motion_time/STEP);
         the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
         memcpy (the_robot->EDP_data.next_XYZ_AA_arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
@@ -249,30 +249,30 @@ void trajectory_reproduce::check_force_condition(ecp_mp::sensor::force& the_sens
     // Sprawdzenie, czy nie wystapila za duza sila.
     for (int i=0; i<6; i++)
         if (fabs(last_force_sensor_reading[i]) > dangerous_force)
-                throw ECP_error(NON_FATAL_ERROR, DANGEROUS_FORCE_DETECTED);
+                throw ECP_error(lib::NON_FATAL_ERROR, DANGEROUS_FORCE_DETECTED);
     // Sila w porzadku.
     }; // end: check_force_condition
 
 /*********************** DANGEROUS FORCE HANDLER **************************/
 void trajectory_reproduce::dangerous_force_handler(base::ECP_error e){
     // Komunikat o bledzie wysylamy do SR.
-    sr_ecp_msg.message (NON_FATAL_ERROR, e.error_no);
+    sr_ecp_msg.message (lib::NON_FATAL_ERROR, e.error_no);
     // Wiadomosc wysylana do UI.
-    ECP_message ecp_ui_msg;
+    lib::ECP_message ecp_ui_msg;
     // Odswiezenie okna.
     ecp_ui_msg.hdr.type=0;
     // Polecenie ustawienia przyciskow.
-    ecp_ui_msg.ecp_message = TR_DANGEROUS_FORCE_DETECTED;
+    ecp_ui_msg.ecp_message = lib::TR_DANGEROUS_FORCE_DETECTED;
     // Przepisanie ostatniego odczytu czujnika sily.
    memcpy(ecp_ui_msg.R2S.force_sensor_reading, last_force_sensor_reading, MAX_SERVOS_NR*sizeof(double));
     // Wyslanie polecenia do UI.
 #if !defined(USE_MESSIP_SRR)
-		if (MsgSend(UI_fd, &ecp_ui_msg, sizeof(ECP_message), NULL, 0) < 0){
+		if (MsgSend(UI_fd, &ecp_ui_msg, sizeof(lib::ECP_message), NULL, 0) < 0){
 #else
 		int32_t answer;
-		if (messip_send(UI_fd, 0, 0, &ecp_ui_msg, sizeof(ECP_message), &answer, NULL, 0, MESSIP_NOTIMEOUT) < 0){
+		if (messip_send(UI_fd, 0, 0, &ecp_ui_msg, sizeof(lib::ECP_message), &answer, NULL, 0, MESSIP_NOTIMEOUT) < 0){
 #endif
-         sr_ecp_msg.message (SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
+         sr_ecp_msg.message (lib::SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
     }else
         sr_ecp_msg.message("Press TRY AGAIN to continue move.");
     }; // end: dangerous_force_handler
@@ -283,7 +283,7 @@ void trajectory_reproduce::load_trajectory(char* filename) {
 	// Opis wspolrzednych: "MOTOR", "JOINT", ...
 	char coordinate_type[80];
 	// Rodzaj wspolrzednych
-	POSE_SPECIFICATION ps;
+	lib::POSE_SPECIFICATION ps;
 	double coordinates[6];                      // Wczytane wspolrzedne
 	double motion_time;                         // Czas dojscia do wspolrzednych
 	uint64_t number_of_poses;  // Liczba zapamietanych pozycji
@@ -294,12 +294,12 @@ try{
     // Otworzenie pliku do odczytu.
 	std::ifstream from_file(filename);
     if (!from_file){
-        throw common::ECP_main_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw common::ECP_main_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
         };
     // Wczytanie rodzaju wspolrzednych.
     if ( !(from_file >> coordinate_type) ) {
         from_file.close();
-        throw common::ECP_main_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw common::ECP_main_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
         };
     // Usuniecie spacji i tabulacji.
     unsigned int i = 0;
@@ -315,20 +315,20 @@ try{
     coordinate_type[j] = '\0';
     // Sprawdzenie rodzaju wspolrzednych.
     if ( !strcmp(coordinate_type, "MOTOR") )
-        ps = MOTOR;
+        ps = lib::MOTOR;
    else{
         from_file.close();
-        throw common::ECP_main_error(NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+        throw common::ECP_main_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
         };
     // Wczytanie liczby elementow.
     if ( !(from_file >> number_of_poses) ){
         from_file.close();
-        throw common::ECP_main_error(NON_FATAL_ERROR, READ_FILE_ERROR);
+        throw common::ECP_main_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         };
     // Musi byc wiecej niz 0 elementow.
     if ( number_of_poses <1){
         from_file.close();
-        throw common::ECP_main_error(NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
+        throw common::ECP_main_error(lib::NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
         };
     // Usuniecie listy pozycji, o ile istnieje.
     flush_pose_list();
@@ -338,14 +338,14 @@ try{
         if (!(from_file >> motion_time)){
             // Zabezpieczenie przed danymi nienumerycznymi.
             from_file.close();
-            throw common::ECP_main_error(NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw common::ECP_main_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
             };
         // Kolejne wspolrzedne.
         for ( j = 0; j < 6; j++) {
             if ( !(from_file >> coordinates[j]) ){
                 // Zabezpieczenie przed danymi nienumerycznymi.
                 from_file.close();
-                throw common::ECP_main_error(NON_FATAL_ERROR, READ_FILE_ERROR);
+                throw common::ECP_main_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
                 };
             };
 //     printf("Wczytano pozycje %i: czas %f | %f, %f, %f, %f, %f, %f\n",i, motion_time,
@@ -368,7 +368,7 @@ try{
     sr_ecp_msg.message (e.error_class, e.error_no);
 }catch (...){
     // Wylapywanie niezdefiniowanych bledow.
-    sr_ecp_msg.message (NON_FATAL_ERROR, (uint64_t) ECP_UNIDENTIFIED_ERROR);
+    sr_ecp_msg.message (lib::NON_FATAL_ERROR, (uint64_t) ECP_UNIDENTIFIED_ERROR);
     }; // end: catch
 }; // end load_trajectory
 
@@ -432,13 +432,13 @@ bool trajectory_reproduce::is_interpose_list_element ( void ) {
         return false;
     }; // end: is_interpose_list_element
 
-void trajectory_reproduce::create_interpose_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[6]) {
+void trajectory_reproduce::create_interpose_list_head (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[6]) {
     // Wstawienie glowy.
     	interpose_list.push_back(common::ecp_taught_in_pose(ps, motion_time, coordinates));
 	interpose_list_iterator = interpose_list.begin();
     }; // end: create_interpose_list_head
 
-void trajectory_reproduce::insert_interpose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[6]) {
+void trajectory_reproduce::insert_interpose_list_element (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[6]) {
     // Wlasciwe wstawienie elementu.
     	interpose_list.push_back(common::ecp_taught_in_pose(ps, motion_time, coordinates));
 	interpose_list_iterator++;

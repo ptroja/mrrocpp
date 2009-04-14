@@ -24,9 +24,9 @@ namespace task {
 
 void pr::short_move_up ()
 {
-    trajectory_description tdes;
+    lib::trajectory_description tdes;
 
-    tdes.arm_type = XYZ_EULER_ZYZ;
+    tdes.arm_type = lib::XYZ_EULER_ZYZ;
     tdes.interpolation_node_no = 1;
     tdes.internode_step_no = 200;
     tdes.value_in_step_no = tdes.internode_step_no - 2;
@@ -119,7 +119,7 @@ void pr::main_task_algorithm(void)
 		sr_ecp_msg->message("Nastepny etap - nacisnij PULSE ECP trigger");
 		ynrlg->Move();
 
-		if (choose_option ("1 - Load drawing, 2 - Learn drawing", 2) == OPTION_ONE)
+		if (choose_option ("1 - Load drawing, 2 - Learn drawing", 2) == lib::OPTION_ONE)
 		{
 			sr_ecp_msg->message("Wczytywanie trajektorii");
 			tig->load_file_from_ui ();
@@ -167,7 +167,7 @@ void pr::main_task_algorithm(void)
 		if ( operator_reaction ("Save drawing ") )
 		{
 			sr_ecp_msg->message("Zapisywanie trajektorii");
-			tig->save_file (PF_VELOCITY);
+			tig->save_file (lib::PF_VELOCITY);
 		}
 	}
 }

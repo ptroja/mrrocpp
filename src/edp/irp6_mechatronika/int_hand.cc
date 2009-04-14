@@ -141,7 +141,7 @@ int_handler (void *arg, int int_id)
 			// wylaczniki krancowe
 			if ( ~(robot_status[i].adr_offset_plus_0) & 0x1000 ) {
 			//	out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
-			//	out16(SERVO_COMMAND_1_ADR, RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
+			//	out16(SERVO_COMMAND1_ADR, RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
 				md.hardware_error |= (uint64_t) (UPPER_LIMIT_SWITCH << (5*i)); // Zadzialal wylacznik "gorny" krancowy
 			}
 			else if ( ~(robot_status[i].adr_offset_plus_0) & 0x2000 ) {
@@ -153,7 +153,7 @@ int_handler (void *arg, int int_id)
 			{
 				md.hardware_error |= (uint64_t) (OVER_CURRENT << (5*i));
 				//     out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
-				//     out16(SERVO_COMMAND_1_ADR, RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
+				//     out16(SERVO_COMMAND1_ADR, RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
 			}
 		};  // end: for
 		
@@ -171,7 +171,7 @@ int_handler (void *arg, int int_id)
 			for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ ) {
 				// Zapis wartosci zadanej wypelnienia PWM
 				out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
-				out16(SERVO_COMMAND_1_ADR, STOP_MOTORS);
+				out16(SERVO_COMMAND1_ADR, STOP_MOTORS);
 			}; // end: for
 			return (&event); // Yoyek & 7
 		}
@@ -180,7 +180,7 @@ int_handler (void *arg, int int_id)
 			// Zapis wartosci zadanej wypelnienia PWM
 			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
 			if (md.is_robot_blocked) md.robot_control[i].adr_offset_plus_0 &= 0xff00;
-			out16(SERVO_COMMAND_1_ADR, md.robot_control[i].adr_offset_plus_0);
+			out16(SERVO_COMMAND1_ADR, md.robot_control[i].adr_offset_plus_0);
 		}; // end: for
 		
 		return (&event);

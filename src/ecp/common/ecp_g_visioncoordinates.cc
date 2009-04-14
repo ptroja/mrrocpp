@@ -54,13 +54,13 @@ bool visioncoordinates::first_step()
 
 	debugmsg("VCG: robot_transmission_data ready");
 
-	data.instruction_type = GET;
+	data.instruction_type = lib::GET;
 
 	debugmsg("VCG: setting instruction type GET done");
 	data.get_type = ARM_DV;
-	data.get_arm_type = XYZ_ANGLE_AXIS;	// XYZ_EULER_ZYZ;
-	data.motion_type = ABSOLUTE;
-	data.next_interpolation_type = MIM;
+	data.get_arm_type = lib::XYZ_ANGLE_AXIS;	// XYZ_EULER_ZYZ;
+	data.motion_type = lib::ABSOLUTE;
+	data.next_interpolation_type = lib::MIM;
 
 	debugmsg("VCG: Ready to get data");
 

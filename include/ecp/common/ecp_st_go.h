@@ -16,7 +16,7 @@ class ecp_sub_task_gripper_opening : public ecp_sub_task
 {
 
 private:
-    trajectory_description tdes;
+    lib::trajectory_description tdes;
 
     void init();
 

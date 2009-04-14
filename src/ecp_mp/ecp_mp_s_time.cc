@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP)
+// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP)
 // Plik:			ecp_fs.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		Testowy obraz testowego czujnika VSP

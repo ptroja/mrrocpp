@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces:		EFFECTOR CONTROL PROCESS (ECP)
+// Proces:		EFFECTOR CONTROL PROCESS (lib::ECP)
 // Plik:			ecp_ftg.h
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		force_controlled_trajectory_generator - deklaracja klasy
@@ -66,7 +66,7 @@ class force_controlled_trajectory : public common::ecp_teach_in_generator
 		// Maksymalny przyrost - aktualnie uzywane.
 		double current_max_delta_increment[8];
 		// Obecne sterowanie.
-		POSE_SPECIFICATION current_control;
+		lib::POSE_SPECIFICATION current_control;
 		// Numer osi/wspolrzednej, kierunek - dane z przetworzonego polecenia ruchu.
 		short number, dir;
 		// Sila przy ktorej nalezy przerwac ruch.
@@ -104,7 +104,7 @@ class force_controlled_trajectory : public common::ecp_teach_in_generator
 		// Odczyt pozycji robota z EDP.
 		void get_current_position ();
 		// Zmiana sterowania MOTOR/EXTERNAL.
-		void change_control(POSE_SPECIFICATION ps);
+		void change_control(lib::POSE_SPECIFICATION ps);
 		// Ustawienie narzedzia - czujnika przymocowanego do kolnierza.
 		void set_tool_frame();
 		// Ustawienie pustej macierzy narzedzia.

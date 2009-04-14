@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP) 
+// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP) 
 // Plik:	ecp_mp_s_rcs_korf.h
 // System:	QNX/MRROCPP  v. 6.3
 // Opis:	czujnik znajdujacy rozwiazanie kostki Rubika algorytmem Korfa

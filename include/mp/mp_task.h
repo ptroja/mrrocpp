@@ -53,7 +53,7 @@ class base: public ecp_mp::task::base
 		    NEW_UI_OR_ECP_PULSE
 		};
 
-		void set_next_playerpos_goal (ROBOT_ENUM robot_l, const playerpos_goal_t &goal);
+		void set_next_playerpos_goal (ROBOT_ENUM robot_l, const lib::playerpos_goal_t &goal);
 
 		void set_next_ecps_state (int l_state, int l_variant, const char* l_string, int number_of_robots, ... );
 

@@ -1,7 +1,7 @@
  // -------------------------------------------------------------------------
 //                            vsp_s.cc 		dla QNX6.2
 // 
-//            Virtual Sensor Process (VSP) - methods
+//            Virtual Sensor Process (lib::VSP) - methods
 // Metody klasy VSP
 // 
 // Ostatnia modyfikacja: 25.06.03
@@ -152,12 +152,12 @@ else printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	if (sockfd < 0)
 	{
 	    printf("ERROR opening socket");
-	    throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	    throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	}
 	server = gethostbyname(HOST);
 	if (server == NULL) {
 	    printf("ERROR, no such host\n");	    
-	    throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	    throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	}
 	   bzero((char *) &serv_addr, sizeof(serv_addr));
 	serv_addr.sin_family = AF_INET;
@@ -168,7 +168,7 @@ else printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	  if (connect(sockfd, (const struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0) 
 	  {
 	    printf("ERROR connecting");
-	    throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	    throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 		}
 	sr_msg->message ("VSP VIS PB-ECL-SAC started");
 	
@@ -199,7 +199,7 @@ void vis_sac::initiate_reading (void){
 // printf("7 - initiate reading\n");
 
 	if(!is_sensor_configured)
-	     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	     
 //clock_gettime( CLOCK_REALTIME , &s_time);
  
@@ -261,10 +261,10 @@ vision.setRoi(k1.roi,1000);
 void vis_sac::get_reading (void){
 // printf("7 - get reading\n");
 	if(!is_sensor_configured)
-	     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	// jezeli chcemy jakikolwiek odczyt	-> is_reading_ready
 	if(!is_reading_ready)
-	     throw sensor_error (FATAL_ERROR, READING_NOT_READY);   
+	     throw sensor_error (lib::FATAL_ERROR, READING_NOT_READY);   
 
 	from_vsp.vsp_report= lib::VSP_REPLY_OK;
 	// tutaj: czujnik skalibrowany, odczyt dokonany, zapisany w "image", przepisanie wszystkich pol

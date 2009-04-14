@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------
 //   ecp_t_pouring_irp6p.cc - zadanie przelewania, ECP dla IRP6_POSTUMENT
 //
-//                     EFFECTOR CONTROL PROCESS (ECP) - main()
+//                     EFFECTOR CONTROL PROCESS (lib::ECP) - main()
 //
 // Ostatnia modyfikacja: 2008
 // ------------------------------------------------------------------------

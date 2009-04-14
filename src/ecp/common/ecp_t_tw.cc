@@ -55,7 +55,7 @@ void tw::task_initialization(void)
 
 
 
-	nrg->configure_behaviour(UNGUARDED_MOTION, UNGUARDED_MOTION, CONTACT, UNGUARDED_MOTION, UNGUARDED_MOTION, UNGUARDED_MOTION);
+	nrg->configure_behaviour(lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION, lib::CONTACT, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION);
 	//	nrg->configure_pulse_check (false);
 	//	nrg->configure_velocity (0.0, 0.0, 0.4, 0.0, 0.0, 0.0);
 	//	nrg->configure_force (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);

@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------
 //   ((ecp_task_mam*)ecp_t)_tran.cc - przezroczyste wersja dla dowolnego z robotow
 //
-//                     EFFECTOR CONTROL PROCESS (ECP) - main()
+//                     EFFECTOR CONTROL PROCESS (lib::ECP) - main()
 //
 // Ostatnia modyfikacja: 2006
 // ------------------------------------------------------------------------
@@ -85,7 +85,7 @@ void mam::catch_signal(int sig)
 void* UI_communication_thread(void* arg)
 {
 	// Wiadomosc otrzymana z UI.
-	UI_ECP_message from_ui_msg;
+	lib::UI_ECP_message from_ui_msg;
 
 	// Id nadawcy wiadomosci.
 	int rcvid;
@@ -117,27 +117,27 @@ void* UI_communication_thread(void* arg)
 		}
 		// Zwykla wiadomosc.
 		switch (from_ui_msg.command) {
-			case MAM_START:
+			case lib::MAM_START:
 				// Rozpoczecie wykonywania pomiarow.
 				START_MEASURES = true;
 				break;
-			case MAM_STOP:
+			case lib::MAM_STOP:
 				// Zakonczenie wykonywania pomiarow.
 				START_MEASURES = false;
 				break;
-			case MAM_SAVE:
+			case lib::MAM_SAVE:
 				// Zapis do pliku.
 				mam_gen->save_mam_list(from_ui_msg.filename);
 				break;
-			case MAM_CLEAR:
+			case lib::MAM_CLEAR:
 				// Oproznienie listy z pomiarami.
 				mam_gen->flush_mam_list();
 				break;
-			case MAM_CALIBRATE:
+			case lib::MAM_CALIBRATE:
 				// Konfiguracja czujnika.
 				((mam*)ecp_t)->sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR]->configure_sensor();
 				break;
-			case MAM_EXIT:
+			case lib::MAM_EXIT:
 				// Zakonczenie dzialania procesu.
 				TERMINATE = true;
 				break;
@@ -179,14 +179,14 @@ void* measures_thread(void* arg)
 void show_mam_window(int UI_fd)
 {
 	int i;
-	ECP_message ecp_ui_msg; // Przesylka z ECP do UI
+	lib::ECP_message ecp_ui_msg; // Przesylka z ECP do UI
 	// Nazwa okna (polecenie otwarcia).
 	ecp_ui_msg.hdr.type=0;
-	ecp_ui_msg.ecp_message = MAM_OPEN_WINDOW;
+	ecp_ui_msg.ecp_message = lib::MAM_OPEN_WINDOW;
 	// Wyslanie polecenia do UI -> otwarcie okna.
-	if (MsgSend(UI_fd, &ecp_ui_msg, sizeof(ECP_message), NULL, 0) < 0) {
+	if (MsgSend(UI_fd, &ecp_ui_msg, sizeof(lib::ECP_message), NULL, 0) < 0) {
 		perror("show_mam_window: Send to UI failed");
-		throw ECP_main_error(SYSTEM_ERROR, 0);
+		throw ECP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 	// Ustawienie flagi konczenia pracy.
 	TERMINATE = false;
@@ -225,7 +225,7 @@ void mam::task_initialization(void)
 	// Dolaczenie globalnej nazwy procesu ECP - kanal do odbioru polecen z UI.
 	if ((UI_ECP_attach = name_attach(NULL, "ECP_M_MAM", NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		// W razie niepowodzenia.
-		throw ECP_main_error(SYSTEM_ERROR, NAME_ATTACH_ERROR);
+		throw ECP_main_error(lib::SYSTEM_ERROR, NAME_ATTACH_ERROR);
 	}
 
 	// Stworznie obiektu - generator uczacy.

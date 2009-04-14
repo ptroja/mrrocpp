@@ -13,13 +13,13 @@ wii::wii (common::task::base& _ecp_task) : base (_ecp_task) {}
 
 bool wii::first_step()
 {
-    the_robot->EDP_data.instruction_type = GET;
+    the_robot->EDP_data.instruction_type = lib::GET;
     the_robot->EDP_data.get_type = ARM_DV;
     the_robot->EDP_data.set_type = ARM_DV;
-    the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
-    the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;
-    the_robot->EDP_data.motion_type = ABSOLUTE;
-    the_robot->EDP_data.next_interpolation_type = MIM;
+    the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
+    the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
+    the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+    the_robot->EDP_data.next_interpolation_type = lib::MIM;
     the_robot->EDP_data.motion_steps = 8;
     the_robot->EDP_data.value_in_step_no = 6;
 
@@ -40,13 +40,13 @@ bool wii::next_step()
 	}
 
 	++step_no;
-    the_robot->EDP_data.instruction_type = SET;
+    the_robot->EDP_data.instruction_type = lib::SET;
     the_robot->EDP_data.get_type = ARM_DV;
     the_robot->EDP_data.set_type = ARM_DV;
-    the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
-    the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;
-    the_robot->EDP_data.motion_type = ABSOLUTE;
-    the_robot->EDP_data.next_interpolation_type = MIM;
+    the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
+    the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
+    the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+    the_robot->EDP_data.next_interpolation_type = lib::MIM;
     the_robot->EDP_data.motion_steps = 8;
     the_robot->EDP_data.value_in_step_no = 8;
 
@@ -83,15 +83,15 @@ void wii::execute_motion(void)
 {
 	// komunikacja wlasciwa
 	the_robot->send();
-	if (the_robot->reply_package.reply_type == ERROR) {
+	if (the_robot->reply_package.reply_type == lib::ERROR) {
 
 		the_robot->query();
-		throw common::ecp_robot::ECP_error (NON_FATAL_ERROR, EDP_ERROR);
+		throw common::ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
 
 	}
 	the_robot->query();
 
-	if (the_robot->reply_package.reply_type == ERROR) {
+	if (the_robot->reply_package.reply_type == lib::ERROR) {
 		switch ( the_robot->reply_package.error_no.error0 ) {
 			case BEYOND_UPPER_D0_LIMIT:
 			case BEYOND_UPPER_THETA1_LIMIT:
@@ -111,7 +111,7 @@ void wii::execute_motion(void)
 			case BEYOND_LOWER_THETA7_LIMIT:
 			break;
 			default:
-				throw common::ecp_robot::ECP_error (NON_FATAL_ERROR, EDP_ERROR);
+				throw common::ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
 			break;
 
 		} /* end: switch */

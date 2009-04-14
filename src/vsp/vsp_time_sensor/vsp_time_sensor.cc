@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	VIRTUAL SENSOR PROCESS (ECP) 
+// Proces: 	VIRTUAL SENSOR PROCESS (lib::ECP) 
 // Plik:			vsp_fs.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		Metody czujnika sily - po stronie procesu VSP.
@@ -54,7 +54,7 @@ void time::wait_for_event(void){
 void time::initiate_reading (void){
 	// Jesli czujnik nie jest skonfigurowany.
 	if(!is_sensor_configured)
-	     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	// Odczyt w porzadku.
 	is_reading_ready=true;
 }; // end: initiate_reading
@@ -63,7 +63,7 @@ void time::initiate_reading (void){
 void time::get_reading (void){
 	// Jesli czujnik nie jest skonfigurowany.
 	if(!is_sensor_configured)
-	     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	// Jezeli nie ma nowego odczytu -> wyslanie starego.
 	if(!is_reading_ready)
 		return;

@@ -166,7 +166,7 @@ void * irp6s_and_conv_effector::reader_thread(void* arg)
 		e = errno;
 		perror("Failed to attach pulse chanel for READER\n");
 		msg->message("Failed to attach pulse chanel for READER");
-		//  throw MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+		//  throw MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
 	// GLOWNA PETLA Z OCZEKIWANIEM NA ZLECENIE POMIAROW
@@ -218,7 +218,7 @@ void * irp6s_and_conv_effector::reader_thread(void* arg)
 			int rcvid = messip_receive(my_attach, &type, &subtype, NULL, 0, MESSIP_NOTIMEOUT);
 
 			if (rcvid >= 0) {
-				if (type == READER_START) {
+				if (type == lib::READER_START) {
 					start = true;
 				}
 			}
@@ -298,9 +298,9 @@ void * irp6s_and_conv_effector::reader_thread(void* arg)
 			int rcvid = messip_receive(my_attach, &type, &subtype, NULL, 0, 0);
 
 			if (rcvid >= 0) {
-				if (type == READER_STOP) {
+				if (type == lib::READER_STOP) {
 					stop = true;
-				} else if (type == READER_TRIGGER) {
+				} else if (type == lib::READER_TRIGGER) {
 					ui_trigger = true;
 				}
 			}

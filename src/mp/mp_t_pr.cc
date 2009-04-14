@@ -32,9 +32,9 @@ base* return_created_mp_task (lib::configurator &_config)
 void pr::mp_short_move_up(void)
 {
 
-	trajectory_description tdes;
+	lib::trajectory_description tdes;
 
-	tdes.arm_type = XYZ_EULER_ZYZ;
+	tdes.arm_type = lib::XYZ_EULER_ZYZ;
 	tdes.interpolation_node_no = 1;
 	tdes.internode_step_no = 200;
 	tdes.value_in_step_no = tdes.internode_step_no - 2;
@@ -109,7 +109,7 @@ void pr::main_task_algorithm(void)
 
 	mp_nrf_gen.Move();
 
-	if (choose_option ("1 - Load drawing, 2 - Learn drawing", 2) == OPTION_ONE)
+	if (choose_option ("1 - Load drawing, 2 - Learn drawing", 2) == lib::OPTION_ONE)
 	{
 		sr_ecp_msg->message("Wczytywanie trajektorii");
 		mp_dtif_gen.load_file ();
@@ -157,7 +157,7 @@ void pr::main_task_algorithm(void)
 
 	if ( operator_reaction ("Save drawing ") ) {
 		sr_ecp_msg->message("Zapisywanie trajektorii");
-		mp_dtif_gen.save_file (PF_VELOCITY);
+		mp_dtif_gen.save_file (lib::PF_VELOCITY);
 	}
 
 };

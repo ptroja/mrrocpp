@@ -148,21 +148,21 @@ bool vis_sac_lx::first_step ()
     irp6ot->ecp_td.next_tool_frame[2][3]=0.25; //0.25;
 
 
-    irp6ot->ecp_td.mp_command = NEXT_POSE;
-    irp6ot->ecp_td.instruction_type = SET_GET; //GET;
+    irp6ot->ecp_td.mp_command = lib::NEXT_POSE;
+    irp6ot->ecp_td.instruction_type = lib::SET_GET; //GET;
     irp6ot->ecp_td.get_type = RMODEL_DV; //ARM_DV;
     irp6ot->ecp_td.set_type = RMODEL_DV; //ARM_DV;
-    //irp6ot->ecp_td.set_arm_type = FRAME; //XYZ_EULER_ZYZ; //POSE_FORCE_TORQUE_AT_FRAME;
-    //irp6ot->ecp_td.set_arm_type = XYZ_ANGLE_AXIS;
-    irp6ot->ecp_td.set_arm_type = XYZ_ANGLE_AXIS;
+    //irp6ot->ecp_td.set_arm_type = lib::FRAME; //XYZ_EULER_ZYZ; //POSE_FORCE_TORQUE_AT_FRAME;
+    //irp6ot->ecp_td.set_arm_type = lib::XYZ_ANGLE_AXIS;
+    irp6ot->ecp_td.set_arm_type = lib::XYZ_ANGLE_AXIS;
 
-    irp6ot->ecp_td.get_arm_type = FRAME;
+    irp6ot->ecp_td.get_arm_type = lib::FRAME;
     //FRAME; //XYZ_EULER_ZYZ; //POSE_FORCE_TORQUE_AT_FRAME;
-    irp6ot->ecp_td.set_rmodel_type = TOOL_FRAME;
-    irp6ot->ecp_td.get_rmodel_type = TOOL_FRAME;
-    //irp6ot->ecp_td.motion_type = ABSOLUTE; //RELATIVE;
-    irp6ot->ecp_td.motion_type = ABSOLUTE; //PF_FIXED_FRAME_WITH_DESIRED_FORCE_OR_SPEED;
-    irp6ot->ecp_td.next_interpolation_type = TCIM;
+    irp6ot->ecp_td.set_rmodel_type = lib::TOOL_FRAME;
+    irp6ot->ecp_td.get_rmodel_type = lib::TOOL_FRAME;
+    //irp6ot->ecp_td.motion_type = lib::ABSOLUTE; //RELATIVE;
+    irp6ot->ecp_td.motion_type = lib::ABSOLUTE; //PF_FIXED_FRAME_WITH_DESIRED_FORCE_OR_SPEED;
+    irp6ot->ecp_td.next_interpolation_type = lib::TCIM;
 
     irp6ot->ecp_td.motion_steps = td.internode_step_no;
     irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
@@ -183,8 +183,8 @@ bool vis_sac_lx::first_step ()
         irp6ot->ecp_td.next_inertia[i+3] = TORQUE_INERTIA;
         irp6ot->ecp_td.next_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
         irp6ot->ecp_td.next_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
-        irp6ot->ecp_td.next_behaviour[i] = GUARDED_MOTION;
-        irp6ot->ecp_td.next_behaviour[i+3] = GUARDED_MOTION;
+        irp6ot->ecp_td.next_behaviour[i] = lib::GUARDED_MOTION;
+        irp6ot->ecp_td.next_behaviour[i+3] = lib::GUARDED_MOTION;
     }
 
 
@@ -210,7 +210,7 @@ bool vis_sac_lx::next_step ()
 
     if(node_counter==1 || node_counter==2)
     {
-        irp6ot->ecp_td.instruction_type = GET;
+        irp6ot->ecp_td.instruction_type = lib::GET;
         irp6ot->ecp_td.get_type = ARM_DV | RMODEL_DV;
 
         O_Tx_E.set_frame_tab(irp6ot->ecp_td.current_arm_frame); // zarem
@@ -221,7 +221,7 @@ bool vis_sac_lx::next_step ()
         std::cout << "YYY " << 	O_Tx_E  << std::endl;
 
         // UWAGA: dzialamy na jednoelementowej liscie robotow
-        if ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED )
+        if ( irp6ot->ecp_td.ecp_reply == lib::TASK_TERMINATED )
         {
             sr_ecp_msg.message("w mp task terminated");
             return false;
@@ -235,10 +235,10 @@ bool vis_sac_lx::next_step ()
     if(node_counter!=1 && node_counter!=2)
     {
         irp6ot->ecp_td.set_type = ARM_DV;
-        irp6ot->ecp_td.instruction_type = SET_GET;
+        irp6ot->ecp_td.instruction_type = lib::SET_GET;
         //irp6ot->ecp_td.get_type = NOTHING_DV;
-        //irp6ot->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
-        //irp6ot->ecp_td.get_arm_type = INVALID_END_EFFECTOR;
+        //irp6ot->ecp_td.get_arm_type = lib::INVALID_END_EFFECTOR;
+        //irp6ot->ecp_td.get_arm_type = lib::INVALID_END_EFFECTOR;
     }
 
     if(node_counter==1 || node_counter==2 || node_counter==3 || node_counter==4)
@@ -689,7 +689,7 @@ bool vis_sac_lx::next_step ()
 
 
     // UWAGA: dzialamy na jednoelementowej liscie robotow
-    if ( irp6ot->ecp_td.ecp_reply == TASK_TERMINATED )
+    if ( irp6ot->ecp_td.ecp_reply == lib::TASK_TERMINATED )
     {
         sr_ecp_msg.message("w mp task terminated");
         return false;

@@ -118,31 +118,31 @@ void base::initialize_communication()
 	char* mp_pulse_attach_point =
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", "[mp]");
 
-	if ((sr_ecp_msg = new lib::sr_ecp(ECP, ecp_attach_point, sr_net_attach_point)) == NULL) { // Obiekt do komuniacji z SR
+	if ((sr_ecp_msg = new lib::sr_ecp(lib::ECP, ecp_attach_point, sr_net_attach_point)) == NULL) { // Obiekt do komuniacji z SR
 		perror("Unable to locate SR\n");
-		throw ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
 	// Lokalizacja procesu MP - okreslenie identyfikatora (pid)
 	if ( (MP_fd = name_open(mp_pulse_attach_point, NAME_FLAG_ATTACH_GLOBAL)) < 0) {
 		e = errno;
 		perror("ECP: Unable to locate MP_MASTER process\n");
-		throw ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
 	// Rejstracja procesu ECP
 	if ((ecp_attach = name_attach(NULL, ecp_attach_point, NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		e = errno;
 		perror("Failed to attach Effector Control Process\n");
-		sr_ecp_msg->message(SYSTEM_ERROR, e, "Failed to attach Effector Control Process");
-		throw ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Failed to attach Effector Control Process");
+		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
 	if ((trigger_attach = name_attach(NULL, trigger_attach_point, NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		e = errno;
 		perror("Failed to attach TRIGGER pulse chanel for ecp\n");
-		sr_ecp_msg->message(SYSTEM_ERROR, e, "Failed  Failed to name attach (trigger pulse)");
-		throw ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Failed  Failed to name attach (trigger pulse)");
+		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
 	delete [] ecp_attach_point;
@@ -164,13 +164,13 @@ void base::main_task_algorithm(void)
 }
 
 // Badanie typu polecenia z MP
-MP_COMMAND base::mp_command_type(void) const
+lib::MP_COMMAND base::mp_command_type(void) const
 {
 	return mp_command.command;
 }
 
 // Ustawienie typu odpowiedzi z ECP do MP
-void base::set_ecp_reply(ECP_REPLY ecp_r)
+void base::set_ecp_reply(lib::ECP_REPLY ecp_r)
 {
 	ecp_reply.reply = ecp_r;
 }
@@ -179,9 +179,9 @@ void base::set_ecp_reply(ECP_REPLY ecp_r)
 void base::ecp_termination_notice(void)
 {
 
-	if (mp_command_type()!= END_MOTION) {
+	if (mp_command_type()!= lib::END_MOTION) {
 
-		set_ecp_reply(TASK_TERMINATED);
+		set_ecp_reply(lib::TASK_TERMINATED);
 		mp_buffer_receive_and_send();
 
 	}
@@ -204,24 +204,24 @@ void base::ecp_wait_for_stop(void)
 	// Oczekiwanie na wiadomosc.
 	int caller = receive_mp_message();
 
-	if (mp_command_type() == STOP) {
-		set_ecp_reply(ECP_ACKNOWLEDGE);
+	if (mp_command_type() == lib::STOP) {
+		set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 	} else {
-		set_ecp_reply(ERROR_IN_ECP);
+		set_ecp_reply(lib::ERROR_IN_ECP);
 	}
 
 	// Wyslanie odpowiedzi.
 	if (MsgReply(caller, EOK, &ecp_reply, sizeof(ecp_reply)) ==-1) {// by Y&W
 		uint64_t e= errno; // kod bledu systemowego
 		perror("ECP: Reply to MP failed\n");
-		sr_ecp_msg->message(SYSTEM_ERROR, e, "ECP: Reply to MP failed");
-		throw common::generator::base::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
+		throw common::generator::base::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
-	if (mp_command_type() != STOP) {
-		fprintf(stderr, "ecp_generator::ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
+	if (mp_command_type() != lib::STOP) {
+		fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
 		__FILE__, __LINE__);
-		throw common::generator::base::ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
+		throw common::generator::base::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 	}
 }
 
@@ -236,33 +236,33 @@ bool base::ecp_wait_for_start(void)
 	int caller = receive_mp_message();
 
 	switch (mp_command_type() ) {
-		case START_TASK:
-			// by Y - ECP_ACKNOWLEDGE zamienione na TASK_TERMINATED w celu uproszczenia oprogramowania zadan wielorobotowych
-			set_ecp_reply(TASK_TERMINATED);
+		case lib::START_TASK:
+			// by Y - ECP_ACKNOWLEDGE zamienione na lib::TASK_TERMINATED w celu uproszczenia oprogramowania zadan wielorobotowych
+			set_ecp_reply(lib::TASK_TERMINATED);
 			break;
-		case STOP:
-			set_ecp_reply(TASK_TERMINATED);
+		case lib::STOP:
+			set_ecp_reply(lib::TASK_TERMINATED);
 			ecp_stop = true;
 			break;
 		default:
-			set_ecp_reply(INCORRECT_MP_COMMAND);
+			set_ecp_reply(lib::INCORRECT_MP_COMMAND);
 			break;
 	}
 
-	// if (Reply (caller, &ecp_reply, sizeof(ECP_REPLY_PACKAGE)) == -1 ) {
-	if (MsgReply(caller, EOK, &ecp_reply, sizeof(ECP_REPLY_PACKAGE)) ==-1) {// by Y&W
+	// if (Reply (caller, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) == -1 ) {
+	if (MsgReply(caller, EOK, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) ==-1) {// by Y&W
 		uint64_t e= errno; // kod bledu systemowego
 		perror("ECP: Reply to MP failed\n");
-		sr_ecp_msg->message(SYSTEM_ERROR, e, "ECP: Reply to MP failed");
-		throw ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
+		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 	if (ecp_stop)
-		throw common::generator::base::ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+		throw common::generator::base::ECP_error (lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 
-	if (ecp_reply.reply == INCORRECT_MP_COMMAND) {
-		fprintf(stderr, "ecp_generator::ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
+	if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
+		fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
 		__FILE__, __LINE__);
-		throw common::generator::base::ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
+		throw common::generator::base::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 	}
 
 	sr_ecp_msg->message("ECP user program is running");
@@ -280,32 +280,32 @@ void base::get_next_state(void)
 	int caller = receive_mp_message();
 
 	switch (mp_command_type() ) {
-		case NEXT_STATE:
-			set_ecp_reply(ECP_ACKNOWLEDGE);
+		case lib::NEXT_STATE:
+			set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 			break;
-		case STOP:
-			set_ecp_reply(ECP_ACKNOWLEDGE);
+		case lib::STOP:
+			set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 			ecp_stop = true;
 			break;
 		default:
-			set_ecp_reply(INCORRECT_MP_COMMAND);
+			set_ecp_reply(lib::INCORRECT_MP_COMMAND);
 			break;
 	}
 
-	if (MsgReply(caller, EOK, &ecp_reply, sizeof(ECP_REPLY_PACKAGE)) ==-1) {// by Y&W
+	if (MsgReply(caller, EOK, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) ==-1) {// by Y&W
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ECP: Reply to MP failed\n");
-		sr_ecp_msg->message(SYSTEM_ERROR, e, "ECP: Reply to MP failed");
-		throw ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
+		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
 	if (ecp_stop)
-		throw common::generator::base::ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+		throw common::generator::base::ECP_error (lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 
-	if (ecp_reply.reply == INCORRECT_MP_COMMAND) {
-		fprintf(stderr, "ecp_generator::ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
+	if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
+		fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
 				__FILE__, __LINE__);
-		throw common::generator::base::ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
+		throw common::generator::base::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 	}
 
 	return;
@@ -323,39 +323,39 @@ bool base::mp_buffer_receive_and_send(void)
 	int caller = receive_mp_message();
 
 	switch (mp_command_type()) {
-		case NEXT_POSE:
-			if ((ecp_reply.reply != TASK_TERMINATED)&&(ecp_reply.reply != ERROR_IN_ECP))
-				set_ecp_reply(ECP_ACKNOWLEDGE);
+		case lib::NEXT_POSE:
+			if ((ecp_reply.reply != lib::TASK_TERMINATED)&&(ecp_reply.reply != lib::ERROR_IN_ECP))
+				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 			break;
-		case STOP:
-			set_ecp_reply(ECP_ACKNOWLEDGE);
+		case lib::STOP:
+			set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 			ecp_stop = true;
 			break;
-		case END_MOTION:
+		case lib::END_MOTION:
 			// dla ulatwienia programowania apliakcji wielorobotowych
-			if (ecp_reply.reply != ERROR_IN_ECP)
-				set_ecp_reply(TASK_TERMINATED);
+			if (ecp_reply.reply != lib::ERROR_IN_ECP)
+				set_ecp_reply(lib::TASK_TERMINATED);
 			returned_value = false;
 			break;
 		default:
-			set_ecp_reply(INCORRECT_MP_COMMAND);
+			set_ecp_reply(lib::INCORRECT_MP_COMMAND);
 			break;
 	}
 
 	if (MsgReply(caller, EOK, &ecp_reply, sizeof(ecp_reply)) ==-1) {// by Y&W
 		uint64_t e= errno; // kod bledu systemowego
 		perror("ECP: Reply to MP failed\n");
-		sr_ecp_msg->message(SYSTEM_ERROR, e, "ECP: Reply to MP failed");
-		throw ecp_robot::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
+		throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
 	if (ecp_stop)
-		throw common::generator::base::ECP_error (NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+		throw common::generator::base::ECP_error (lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 
-	if (ecp_reply.reply == INCORRECT_MP_COMMAND) {
-		fprintf(stderr, "ecp_generator::ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
+	if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
+		fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
 		__FILE__, __LINE__);
-		throw common::generator::base::ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
+		throw common::generator::base::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 	}
 
 	return returned_value;
@@ -371,8 +371,8 @@ int base::receive_mp_message(void)
 		if (caller == -1) {/* Error condition, exit */
 			uint64_t e= errno; // kod bledu systemowego
 			perror("ECP: Receive from MP failed\n");
-			sr_ecp_msg->message(SYSTEM_ERROR, e, "ECP: Receive from MP failed");
-			throw ecp_robot::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Receive from MP failed");
+			throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 		}
 
 		if (caller == 0) {/* Pulse received */
@@ -504,7 +504,7 @@ std::map<char*, mp::common::Trajectory, base::str_cmp>* base::loadTrajectories(c
 	xmlXIncludeProcess(doc);
 	if(doc == NULL)
 	{
-		throw common::generator::base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw common::generator::base::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 
 	xmlNode *root = NULL;
@@ -512,7 +512,7 @@ std::map<char*, mp::common::Trajectory, base::str_cmp>* base::loadTrajectories(c
 	if(!root || !root->name)
 	{
 		xmlFreeDoc(doc);
-		throw common::generator::base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw common::generator::base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
 	trajectoriesMap = new std::map<char*, mp::common::Trajectory, base::str_cmp>();

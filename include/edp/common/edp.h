@@ -52,10 +52,10 @@ protected:
 
     // faktyczny typ odpowiedzi dla ECP
     // (przechowuje typ odpowiedzi, gdy reply_type jest chwilowo zmienione)
-    REPLY_TYPE real_reply_type;
+    lib::REPLY_TYPE real_reply_type;
 
     // bufor odpowiedzi wysylanych do ECP/MP
-    r_buffer reply;
+    lib::r_buffer reply;
 
     int caller;				// by 7&Y
 
@@ -78,18 +78,18 @@ public:
 #endif /* USE_MESSIP_SRR */
 
     effector (lib::configurator &_config, ROBOT_ENUM l_robot_name);       // konstruktor
-    controller_state_t controller_state_edp_buf; // do okreslenia stanu robota
+    lib::controller_state_t controller_state_edp_buf; // do okreslenia stanu robota
 
     int test_mode;
 
     // oczekuje na polecenie od ECP, wczytuje je,
     // okresla typ nadeslanej instrukcji
-    INSTRUCTION_TYPE receive_instruction (void); // by YW
+    lib::INSTRUCTION_TYPE receive_instruction (void); // by YW
 
     // wyslanie adekwatnej odpowiedzi do ECP
     void reply_to_instruction (void);
 
-    void insert_reply_type (REPLY_TYPE rt);
+    void insert_reply_type (lib::REPLY_TYPE rt);
 
     virtual void main_loop(); // main loop
     virtual void create_threads () = 0;
@@ -98,7 +98,7 @@ public:
 
     void establish_error (uint64_t err0, uint64_t err1);
 
-    REPLY_TYPE is_reply_type (void) const;
+    lib::REPLY_TYPE is_reply_type (void) const;
 
     uint64_t is_error_no_0 (void) const;
     uint64_t is_error_no_1 (void) const;
@@ -106,12 +106,12 @@ public:
     // bufory:
     // - polecen przysylanych z ECP
     // - polecen przysylanych z ECP dla watku trans_t
-    ecp_command_buffer new_ecp_command;
-    c_buffer new_instruction, current_instruction;
+    lib::ecp_command_buffer new_ecp_command;
+    lib::c_buffer new_instruction, current_instruction;
 
     const ROBOT_ENUM robot_name;
 
-    POSE_SPECIFICATION previous_set_arm_type; // by Y poprzedni sposob zadawania pozycji
+    lib::POSE_SPECIFICATION previous_set_arm_type; // by Y poprzedni sposob zadawania pozycji
 };
 /************************ EDP_EFFECTOR ****************************/
 
@@ -161,20 +161,20 @@ protected:
     pthread_t vis_t_tid;
     STATE next_state;    // stan nastepny, do ktorego przejdzie EDP_MASTER
 
-    edp_master_command servo_command;    // Polecenie z EDP_MASTER dla SERVO_GROUP
+    lib::edp_master_command servo_command;    // Polecenie z EDP_MASTER dla SERVO_GROUP
 
-    servo_group_reply sg_reply;            // bufor na informacje przesylane z SERVO_GROUP
+    lib::servo_group_reply sg_reply;            // bufor na informacje przesylane z SERVO_GROUP
 
-    void set_outputs (const c_buffer &instruction);                // ustawienie wyjsc binarnych
+    void set_outputs (const lib::c_buffer &instruction);                // ustawienie wyjsc binarnych
 
-    void get_inputs (r_buffer *local_reply);                 // odczytanie wejsc binarnych
+    void get_inputs (lib::r_buffer *local_reply);                 // odczytanie wejsc binarnych
 
     // kasuje zmienne - uwaga najpierw nalezy ustawic number_of_servos
     void reset_variables ();
 
-    void compute_motors (const c_buffer &instruction);             // obliczenia dla ruchu ramienia (silnikami)
+    void compute_motors (const lib::c_buffer &instruction);             // obliczenia dla ruchu ramienia (silnikami)
 
-    void compute_joints (const c_buffer &instruction);             // obliczenia dla ruchu ramienia (stawami)
+    void compute_joints (const lib::c_buffer &instruction);             // obliczenia dla ruchu ramienia (stawami)
 
     void move_servos ();
 
@@ -244,7 +244,7 @@ protected:
 
     int16_t PWM_value[MAX_SERVOS_NR];             // wartosci zadane wypelnienia PWM
     int16_t current[MAX_SERVOS_NR];                // prad sterujacy
-    MOTION_TYPE motion_type;        // sposob zadania ruchu: ABSOLUTE/RELATIVE
+    lib::MOTION_TYPE motion_type;        // sposob zadania ruchu: ABSOLUTE/RELATIVE
 
 
 
@@ -276,17 +276,17 @@ public:
     master_trans_t_buffer *mt_tt_obj;
     irp6s_and_conv_effector (lib::configurator &_config, ROBOT_ENUM l_robot_name);       // konstruktor
 
-    virtual void set_rmodel (c_buffer &instruction) = 0;                    // zmiana narzedzia
-    virtual void get_rmodel (c_buffer &instruction) = 0;                    // odczytanie narzedzia
+    virtual void set_rmodel (lib::c_buffer &instruction) = 0;                    // zmiana narzedzia
+    virtual void get_rmodel (lib::c_buffer &instruction) = 0;                    // odczytanie narzedzia
 
     unsigned long step_counter;
 
     short number_of_servos; // by Y ilosc serwomechanizmow  XXX
     // w zaleznosci od tego czy chwytak ma byc aktywny czy nie
 
-    virtual void move_arm (c_buffer &instruction) = 0;            // przemieszczenie ramienia
+    virtual void move_arm (lib::c_buffer &instruction) = 0;            // przemieszczenie ramienia
 
-    virtual void get_arm_position (bool read_hardware, c_buffer &instruction) = 0; // odczytanie pozycji ramienia
+    virtual void get_arm_position (bool read_hardware, lib::c_buffer &instruction) = 0; // odczytanie pozycji ramienia
 
     void synchronise (); // synchronizacja robota
     virtual void servo_joints_and_frame_actualization_and_upload(void) = 0; // by Y
@@ -295,7 +295,7 @@ public:
 
     virtual void create_threads ();
 
-    void interpret_instruction (c_buffer &instruction);
+    void interpret_instruction (lib::c_buffer &instruction);
     // interpretuje otrzymana z ECP instrukcje;
     // wypelnaia struktury danych TRANSFORMATORa;
     // przygotowuje odpowied� dla ECP
@@ -303,7 +303,7 @@ public:
     // odczytanie numerow algorytmow i numerow zestawow ich parametrow
     void get_algorithms ();
 
-    void get_controller_state(c_buffer &instruction); // by Y
+    void get_controller_state(lib::c_buffer &instruction); // by Y
 
     bool is_power_on() const;
 
@@ -311,11 +311,11 @@ public:
     void update_servo_current_motor_pos_abs(double abs_motor_position, int i);
 
     // ustalenie formatu odpowiedzi
-    REPLY_TYPE rep_type (c_buffer &instruction);
+    lib::REPLY_TYPE rep_type (lib::c_buffer &instruction);
 
     // sprawdzenie czy jest to dopuszczalny rozkaz ruchu
     // przed wykonaniem synchronizacji robota
-    bool pre_synchro_motion(c_buffer &instruction);
+    bool pre_synchro_motion(lib::c_buffer &instruction);
 
 
     // Czy robot zsynchronizowany? // by Y - wziete z ecp
@@ -334,14 +334,14 @@ class irp6s_effector: public common::irp6s_and_conv_effector
 {
 
 protected:
-    void compute_xyz_euler_zyz (const c_buffer &instruction);     // obliczenia dla ruchu ramienia (koncowka: XYZ_EULER_ZYZ)
+    void compute_xyz_euler_zyz (const lib::c_buffer &instruction);     // obliczenia dla ruchu ramienia (koncowka: XYZ_EULER_ZYZ)
 
-    void compute_xyz_angle_axis (const c_buffer &instruction); // obliczenia dla ruchu ramienia (koncowka: XYZ_ANGLE_AXIS)
+    void compute_xyz_angle_axis (const lib::c_buffer &instruction); // obliczenia dla ruchu ramienia (koncowka: XYZ_ANGLE_AXIS)
 
-    void compute_frame (const c_buffer &instruction);             // obliczenia dla ruchu ramienia (koncowka: FRAME)
+    void compute_frame (const lib::c_buffer &instruction);             // obliczenia dla ruchu ramienia (koncowka: FRAME)
 
 
-    // r_buffer
+    // lib::r_buffer
 
     void tool_frame_2_xyz_aa (void);
     // Przeksztalcenie definicji narzedzia z postaci
@@ -377,10 +377,10 @@ protected:
     // FRAME z wewnetrznych struktur danych TRANSFORMATORa
     // do wewnetrznych struktur danych REPLY_BUFFER
 
-    // c_buffer
+    // lib::c_buffer
 
 
-    void tool_xyz_aa_2_frame (c_buffer &instruction);
+    void tool_xyz_aa_2_frame (lib::c_buffer &instruction);
     // Przeksztalcenie definicji narzedzia z postaci
     // TOOL_XYZ_ANGLE_AXIS do postaci TOOL_FRAME oraz przepisanie wyniku
     // przeksztalcenia do wewnetrznych struktur danych
@@ -389,16 +389,16 @@ protected:
 
     ////////////////////////////K
 
-    void tool_axially_symmetrical_xyz_eul_zy_2_frame(c_buffer *instruction);
+    void tool_axially_symmetrical_xyz_eul_zy_2_frame(lib::c_buffer *instruction);
 
 
     ///////////////////////////K
-    void tool_xyz_eul_zyz_2_frame (c_buffer &instruction);
+    void tool_xyz_eul_zyz_2_frame (lib::c_buffer &instruction);
     // Przeksztalcenie definicji narzedzia z postaci
     // TOOL_XYZ_EULER_ZYZ do postaci TOOL_FRAME oraz przepisanie wyniku
     // przeksztalcenia do wewnetrznych struktur danych
     // TRANSFORMATORa
-    void tool_frame_2_frame (c_buffer &instruction);
+    void tool_frame_2_frame (lib::c_buffer &instruction);
     // Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
     // do wewnetrznych struktur danych TRANSFORMATORa
     void arm_abs_xyz_aa_2_frame (const double *p);

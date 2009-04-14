@@ -64,16 +64,16 @@ void * irp6s_and_conv_effector::servo_thread(void* arg)
 
             switch (sb->command_type())
             {
-            case SYNCHRONISE:
+            case lib::SYNCHRONISE:
                 sb->synchronise(); // synchronizacja
                 break;
-            case MOVE:
+            case lib::MOVE:
                 sb->Move(); // realizacja makrokroku ruchu
                 break;
-            case READ:
+            case lib::READ:
                 sb->Read(); // Odczyt polozen
                 break;
-            case SERVO_ALGORITHM_AND_PARAMETERS:
+            case lib::SERVO_ALGORITHM_AND_PARAMETERS:
                 sb->Change_algorithm(); // Zmiana algorytmu serworegulacji lub jego parametrow
                 break;
             default:

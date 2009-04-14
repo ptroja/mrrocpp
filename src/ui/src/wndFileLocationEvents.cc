@@ -35,12 +35,12 @@
 // #define FLDEBUG
 
 // Wiadomosc wysylana do ECP.
-extern UI_ECP_message ui_ecp_msg;
+extern lib::UI_ECP_message ui_ecp_msg;
 extern ui_state_def ui_state;
 // PID ECP.
 extern int ECPfd;
 // Komenda wysylana z okna FileDialog po wcisnieciu accept.
-UI_TO_ECP_COMMAND FDCommand;
+lib::UI_TO_ECP_COMMAND FDCommand;
 
 int FLbtnAcceptFile( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo ){
 	PtFileSelItem_t *item;
@@ -67,7 +67,7 @@ int FLbtnAcceptFile( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 	} else  if (((item->type) == Pt_FS_DIR_OP)||((item->type) == Pt_FS_DIR_CL)) {
 		// Jesli wybrano katalog.
 		// Jesli load -> nalezy wybrac istniejacy plik.
-		if (FDCommand == TR_LOAD_TRAJECTORY)
+		if (FDCommand == lib::TR_LOAD_TRAJECTORY)
 			return( Pt_CONTINUE );
 		// Save -> sprawdzenie czy wpisano nazwe.
 	    PtGetResource(ABW_FLedtFilename, Pt_ARG_TEXT_STRING, &filename, 0);
@@ -87,10 +87,10 @@ int FLbtnAcceptFile( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 		printf("FLbtnAcceptFile: filename: %s\n", ui_ecp_msg.filename);
 	#endif
 	// Wyslanie nazwy do ECP.
-	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), &macrosteps, sizeof(int)) == -1) {
+	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), &macrosteps, sizeof(int)) == -1) {
 		 perror("FLbtnAcceptFile: Send to ECP failed");
 	}else{
-		if (FDCommand == TR_LOAD_TRAJECTORY){
+		if (FDCommand == lib::TR_LOAD_TRAJECTORY){
 			// Wypisanie liczby makrokrokow.
 			char tmp[5];
 			sprintf(tmp, "%i", macrosteps);

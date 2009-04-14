@@ -27,6 +27,9 @@
 #include "lib/impconst.h"
 #include "messip/messip.h"
 
+namespace mrrocpp {
+namespace lib {
+
 
 //------------------------------------------------------------------------------
 /*!
@@ -1085,12 +1088,15 @@ struct ECP_REPLY_PACKAGE
 
 /*
 // by Y
-inline void lib::copy_frame(frame_tab destination_frame, frame_tab source_frame)
+inline void copy_frame(frame_tab destination_frame, frame_tab source_frame)
 {
   for (int   column = 0; column < 4; column++)
     for (int row = 0; row < 3; row++)
       destination_frame[column][row] = source_frame[column][row];
 }
  */
+
+} // namespace lib
+} // namespace mrrocpp
 
 #endif

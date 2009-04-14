@@ -40,39 +40,39 @@ effector::effector (lib::configurator &_config) :
 
 
 /*--------------------------------------------------------------------------*/
-void effector::set_rmodel (c_buffer &instruction)
+void effector::set_rmodel (lib::c_buffer &instruction)
 {
     // BYTE previous_model;
     // BYTE previous_corrector;
     //printf(" SET RMODEL: ");
     switch (instruction.set_rmodel_type)
     {
-    case TOOL_FRAME:
+    case lib::TOOL_FRAME:
         //printf("TOOL_FRAME\n");
         // przepisa specyfikacj do TRANSFORMATORa
         tool_frame_2_frame(instruction);
         break;
-    case TOOL_XYZ_ANGLE_AXIS:
+    case lib::TOOL_XYZ_ANGLE_AXIS:
         //printf("TOOL_XYZ_ANGLE_AXIS\n");
         // przeksztaci i przepisa specyfikacj do TRANSFORMATORa
         tool_xyz_aa_2_frame(instruction);
         break;
-    case TOOL_XYZ_EULER_ZYZ:
+    case lib::TOOL_XYZ_EULER_ZYZ:
         //printf("TOOL_XYZ_EULER_ZYZ\n");
         // przeksztaci i przepisa specyfikacj do TRANSFORMATORa
         tool_xyz_eul_zyz_2_frame(instruction);
         break;
-    case ARM_KINEMATIC_MODEL:
+    case lib::ARM_KINEMATIC_MODEL:
         //printf("ARM_KINEMATIC_MODEL\n");
         // Ustawienie modelu kinematyki.
         set_kinematic_model(instruction.rmodel.kinematic_model.kinematic_model_no);
         break;
 
-    case SERVO_ALGORITHM:
+    case lib::SERVO_ALGORITHM:
         // ustawienie algorytmw serworegulacji oraz ich parametrow
         // zmiana algorytmu regulacji
         /* Uformowanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow dla procesu SERVO_GROUP */
-        servo_command.instruction_code = SERVO_ALGORITHM_AND_PARAMETERS;
+        servo_command.instruction_code = lib::SERVO_ALGORITHM_AND_PARAMETERS;
         for (int i = 0; i<number_of_servos; i++)
         {
             servo_command.parameters.servo_alg_par.servo_algorithm_no[i] = servo_algorithm_ecp[i] = instruction.rmodel.servo_algorithm.servo_algorithm_no[i];
@@ -92,33 +92,33 @@ void effector::set_rmodel (c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void effector::get_rmodel (c_buffer &instruction)
+void effector::get_rmodel (lib::c_buffer &instruction)
 {
     //printf(" GET RMODEL: ");
     switch (instruction.get_rmodel_type)
     {
-    case TOOL_FRAME:
+    case lib::TOOL_FRAME:
         //printf("TOOL_FRAME\n");
         // przepisa specyfikacj z TRANSFORMATORa do bufora wysykowego
         tool_frame_2_frame_rep();
         break;
-    case TOOL_XYZ_ANGLE_AXIS:
+    case lib::TOOL_XYZ_ANGLE_AXIS:
         //printf("TOOL_XYZ_ANGLE_AXIS\n");
         // przeksztaci i przepisa specyfikacj z TRANSFORMATORa do bufora wysykowego
         tool_frame_2_xyz_aa();
         break;
-    case TOOL_XYZ_EULER_ZYZ:
+    case lib::TOOL_XYZ_EULER_ZYZ:
         //printf("TOOL_XYZ_EULER_ZYZ\n");
         // przeksztaci i przepisa specyfikacj z TRANSFORMATORa do bufora wysykowego
         tool_frame_2_xyz_eul_zyz();
         break;
-    case ARM_KINEMATIC_MODEL:
-        reply.rmodel_type = ARM_KINEMATIC_MODEL;
+    case lib::ARM_KINEMATIC_MODEL:
+        reply.rmodel_type = lib::ARM_KINEMATIC_MODEL;
         // okreslenie numeru zestawu parametrow przelicznika kinematycznego oraz jego korektora
         reply.rmodel.kinematic_model.kinematic_model_no = get_current_kinematic_model_no();
         break;
-    case SERVO_ALGORITHM:
-        reply.rmodel_type = SERVO_ALGORITHM;
+    case lib::SERVO_ALGORITHM:
+        reply.rmodel_type = lib::SERVO_ALGORITHM;
         // ustawienie numeru algorytmu serworegulatora oraz numeru jego zestawu parametrow
         for (int i = 0; i<number_of_servos; i++)
             if ( instruction.is_get_arm() )
@@ -167,7 +167,7 @@ void effector::arm_abs_xyz_eul_zyz_2_frame (const double *p)
     beta = p[4];
     gamma = p[5];
     lib::Homog_matrix A_B_T (lib::Homog_matrix::MTR_MECH_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
-    //lib::Homog_matrix A_B_T (XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
+    //lib::Homog_matrix A_B_T (lib::XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
     A_B_T.get_frame_tab(desired_end_effector_frame);
 
 }
@@ -185,10 +185,10 @@ void effector::arm_frame_2_xyz_eul_zyz ()
     lib::Homog_matrix A(current_end_effector_frame);
     switch (reply.reply_type)
     {
-    case ARM:
-    case ARM_INPUTS:
-    case ARM_RMODEL:
-    case ARM_RMODEL_INPUTS:
+    case lib::ARM:
+    case lib::ARM_INPUTS:
+    case lib::ARM_RMODEL:
+    case lib::ARM_RMODEL_INPUTS:
         A.get_mech_xyz_euler_zyz(reply.arm.pf_def.arm_coordinates);
         A.get_mech_xyz_euler_zyz(rb_obj->step_data.current_cartesian_position);
         //A.get_xyz_euler_zyz(reply.arm.pf_def.arm_coordinates);
@@ -210,7 +210,7 @@ void effector::arm_frame_2_xyz_eul_zyz ()
 
 
 /*--------------------------------------------------------------------------*/
-void effector::move_arm (c_buffer &instruction)
+void effector::move_arm (lib::c_buffer &instruction)
 { // przemieszczenie ramienia
     // Wypenienie struktury danych transformera na podstawie parametrow polecenia
     // otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
@@ -218,17 +218,17 @@ void effector::move_arm (c_buffer &instruction)
 
     switch (instruction.set_arm_type)
     {
-    case MOTOR:
+    case lib::MOTOR:
         compute_motors(instruction);
         move_servos ();
         mt_tt_obj->trans_t_to_master_order_status_ready();
         break;
-    case JOINT:
+    case lib::JOINT:
         compute_joints(instruction);
         move_servos ();
         mt_tt_obj->trans_t_to_master_order_status_ready();
         break;
-    case XYZ_EULER_ZYZ:
+    case lib::XYZ_EULER_ZYZ:
 
         // zapisanie wartosci zadanej dla readera
         rb_obj->lock_mutex();
@@ -245,12 +245,12 @@ void effector::move_arm (c_buffer &instruction)
         mt_tt_obj->trans_t_to_master_order_status_ready();
 
         break;
-    case XYZ_ANGLE_AXIS:
+    case lib::XYZ_ANGLE_AXIS:
         compute_xyz_angle_axis(instruction);
         move_servos ();
         mt_tt_obj->trans_t_to_master_order_status_ready();
         break;
-    case FRAME:
+    case lib::FRAME:
         compute_frame(instruction);
         move_servos ();
         mt_tt_obj->trans_t_to_master_order_status_ready();
@@ -349,7 +349,7 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
 
 
 /*--------------------------------------------------------------------------*/
-void effector::get_arm_position (bool read_hardware, c_buffer &instruction)
+void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
 
     //   printf(" GET ARM\n");
@@ -357,7 +357,7 @@ void effector::get_arm_position (bool read_hardware, c_buffer &instruction)
     if (read_hardware)
     {
         // Uformowanie rozkazu odczytu dla SERVO_GROUP
-        servo_command.instruction_code = READ;
+        servo_command.instruction_code = lib::READ;
         // Wyslanie rozkazu do SERVO_GROUP
         // Pobranie z SERVO_GROUP aktualnej pozycji silnikow
         //		printf("get_arm_position read_hardware\n");
@@ -390,31 +390,31 @@ void effector::get_arm_position (bool read_hardware, c_buffer &instruction)
     // oraz adekwatne wypelnienie bufora odpowiedzi
     switch (instruction.get_arm_type)
     {
-    case FRAME:
+    case lib::FRAME:
         // przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
         get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
         get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
         arm_frame_2_frame();
         break;
-    case   XYZ_ANGLE_AXIS:
+    case lib::XYZ_ANGLE_AXIS:
         // przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
         get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
         get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
         arm_frame_2_xyz_aa();
         break;
-    case   XYZ_EULER_ZYZ:
+    case lib::XYZ_EULER_ZYZ:
         // przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
         get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
         get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
         arm_frame_2_xyz_eul_zyz();   // dla sterowania pozycyjnego
-        reply.arm_type = XYZ_EULER_ZYZ;
+        reply.arm_type = lib::XYZ_EULER_ZYZ;
         break;
-    case   JOINT:
+    case lib::JOINT:
         // przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
         get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
         arm_joints_2_joints();
         break;
-    case   MOTOR:
+    case lib::MOTOR:
         arm_motors_2_motors();
         break;
     default:   // blad: nieznany sposob zapisu wspolrzednych koncowki

@@ -44,7 +44,7 @@ class smooth2 : public delta {
 		double v_grip, v_grip_min;
 
 		int first_interval;
-		trajectory_description td;
+		lib::trajectory_description td;
 
 		//int k[MAX_SERVOS_NR]; //kierunek ruchu (+/-)
 
@@ -81,11 +81,11 @@ class smooth2 : public delta {
 		void next_pose_list_ptr(void);
 		void prev_pose_list_ptr(void);
 		void get_pose(void);
-		void set_pose(POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
+		void set_pose(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
 		bool is_pose_list_element(void);
 		bool is_last_list_element(void);
-		void create_pose_list_head(POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
-		void insert_pose_list_element(POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
+		void create_pose_list_head(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
+		void insert_pose_list_element(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
 
 		//metody zwiazane z coordinate_list
 		void flush_coordinate_list(void);

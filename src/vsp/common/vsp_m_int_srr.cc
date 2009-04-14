@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------------
-// Proces:		VIRTUAL SENSOR PROCESS (VSP)
+// Proces:		VIRTUAL SENSOR PROCESS (lib::VSP)
 // Plik:            vsp_m_nint.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		Interaktywna powloka procesow VSP 
@@ -59,33 +59,33 @@ void catch_signal(int sig) {
 template<class ERROR>
 void error_handler(ERROR e){
 	switch(e.error_class){
-		case SYSTEM_ERROR:
-			printf("VSP aborted due to SYSTEM_ERROR\n");
-			vs->sr_msg->message (SYSTEM_ERROR, e.error_no);
+		case lib::SYSTEM_ERROR:
+			printf("VSP aborted due to lib::SYSTEM_ERROR\n");
+			vs->sr_msg->message (lib::SYSTEM_ERROR, e.error_no);
 			TERMINATE=true;
 			break;
-		case FATAL_ERROR:
-			vs->sr_msg->message (FATAL_ERROR, e.error_no);
+		case lib::FATAL_ERROR:
+			vs->sr_msg->message (lib::FATAL_ERROR, e.error_no);
 			break;
-		case NON_FATAL_ERROR:
+		case lib::NON_FATAL_ERROR:
 			switch(e.error_no){
 			case INVALID_COMMAND_TO_VSP:
 				vs->from_vsp.vsp_report= lib::INVALID_VSP_COMMAND;
-				vs->sr_msg->message (NON_FATAL_ERROR, e.error_no);
+				vs->sr_msg->message (lib::NON_FATAL_ERROR, e.error_no);
 			break;
 			case SENSOR_NOT_CONFIGURED:
 				vs->from_vsp.vsp_report= lib::VSP_SENSOR_NOT_CONFIGURED;
-				vs->sr_msg->message (NON_FATAL_ERROR, e.error_no);
+				vs->sr_msg->message (lib::NON_FATAL_ERROR, e.error_no);
 				break;
 			case READING_NOT_READY:
 				vs->from_vsp.vsp_report= lib::VSP_READING_NOT_READY;
 				break;
 			default:
-				vs->sr_msg->message (NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
+				vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
 			}; // end switch
 			break;
 		default:
-			vs->sr_msg->message (NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
+			vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
 		} // end switch  
 	} // end error_handler
 
@@ -170,7 +170,7 @@ int main(int argc, char *argv[]) {
 						vsp::common::TERMINATE=true;
 						break;
 					default :
-						throw lib::VSP_main_error(NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
+						throw lib::VSP_main_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
 				}
 			}
 

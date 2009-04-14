@@ -56,7 +56,7 @@ class teach_in : public base {
 
 		// --------------------------------------------------------------------------
 		// Zapis trajektorii do pliku
-		void save_file (POSE_SPECIFICATION ps);
+		void save_file (lib::POSE_SPECIFICATION ps);
 		// --------------------------------------------------------------------------
 
 		void flush_pose_list ( void );
@@ -73,9 +73,9 @@ class teach_in : public base {
 		void get_next_pose (double next_pose[MAX_SERVOS_NR], double irp6_next_pose[MAX_SERVOS_NR]);
 
 		// -------------------------------------------------------
-		void set_pose (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]);
+		void set_pose (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]);
 
-		void set_pose (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
+		void set_pose (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
 				double irp6p_coordinates[MAX_SERVOS_NR]);
 
 		// -------------------------------------------------------
@@ -84,25 +84,25 @@ class teach_in : public base {
 		bool is_last_list_element ( void ) ;
 		// -------------------------------------------------------
 
-		void create_pose_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]);
+		void create_pose_list_head (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]);
 
 		// by Y
 
-		void create_pose_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
+		void create_pose_list_head (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
 				double irp6p_coordinates[MAX_SERVOS_NR]) ;
 
 
-		void create_pose_list_head (POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]);
+		void create_pose_list_head (lib::POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]);
 
-		void insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]);
+		void insert_pose_list_element (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR]);
 
 		// by Y
 
-		void insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
+		void insert_pose_list_element (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR],
 				double irp6p_coordinates[MAX_SERVOS_NR]);
 
 
-		void insert_pose_list_element (POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]);
+		void insert_pose_list_element (lib::POSE_SPECIFICATION ps, double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR]);
 
 		// -------------------------------------------------------
 		int pose_list_length(void);

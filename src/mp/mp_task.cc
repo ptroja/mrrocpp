@@ -230,7 +230,7 @@ void base::main_task_algorithm(void)
 }
 
 // metody do obslugi najczesniej uzywanych generatorow
-void base::set_next_playerpos_goal (ROBOT_ENUM robot_l, const playerpos_goal_t &goal)
+void base::set_next_playerpos_goal (ROBOT_ENUM robot_l, const lib::playerpos_goal_t &goal)
 {
 	// setting the next ecps state
 	generator::set_next_ecps_state mp_snes_gen(*this);
@@ -378,8 +378,8 @@ void base::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 
 		robots_map_iter = robots_to_move.find(robot_m_iterator->first);
 		if (robots_map_iter == robots_to_move.end()) {
-			sr_ecp_msg->message (SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
-			throw common::MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+			sr_ecp_msg->message (lib::SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
+			throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 		}
 	}
 
@@ -400,7 +400,7 @@ void base::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 		// sprawdzenie zbioru robots_to_move
 		for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robots_to_move_tmp.begin();
 		robot_m_iterator != robots_to_move_tmp.end(); robot_m_iterator++) {
-			if (robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED  ) {
+			if (robot_m_iterator->second->ecp_td.ecp_reply == lib::TASK_TERMINATED  ) {
 				//	if (debug_tmp) robot_m_iterator->second->printf_state("1 ");
 				robots_to_move.erase (robot_m_iterator->first);
 			}
@@ -409,7 +409,7 @@ void base::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 		// sprawdzenie zbioru robots_to_wait_for_task_termination
 		for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robots_to_wait_for_task_termination_tmp.begin();
 		robot_m_iterator != robots_to_wait_for_task_termination_tmp.end(); robot_m_iterator++) {
-			if (robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED  ) {
+			if (robot_m_iterator->second->ecp_td.ecp_reply == lib::TASK_TERMINATED  ) {
 				//	if (debug_tmp) robot_m_iterator->second->printf_state("2 ");
 				robots_to_wait_for_task_termination.erase (robot_m_iterator->first);
 			}
@@ -485,8 +485,8 @@ void base::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 
 		robots_map_iter = robots_to_move.find(robot_m_iterator->first);
 		if (robots_map_iter == robots_to_move.end()) {
-			sr_ecp_msg->message (SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
-			throw common::MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+			sr_ecp_msg->message (lib::SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
+			throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 		}
 	}
 
@@ -507,7 +507,7 @@ void base::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 		// sprawdzenie zbioru robots_to_move
 		for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robots_to_move_tmp.begin();
 		robot_m_iterator != robots_to_move_tmp.end(); robot_m_iterator++) {
-			if (robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED  ) {
+			if (robot_m_iterator->second->ecp_td.ecp_reply == lib::TASK_TERMINATED  ) {
 				//	if (debug_tmp) robot_m_iterator->second->printf_state("1 ");
 				robots_to_move.erase (robot_m_iterator->first);
 			}
@@ -516,7 +516,7 @@ void base::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 		// sprawdzenie zbioru robots_to_wait_for_task_termination
 		for (map <ROBOT_ENUM, common::robot*>::iterator robot_m_iterator = robots_to_wait_for_task_termination_tmp.begin();
 		robot_m_iterator != robots_to_wait_for_task_termination_tmp.end(); robot_m_iterator++) {
-			if (robot_m_iterator->second->ecp_td.ecp_reply == TASK_TERMINATED  ) {
+			if (robot_m_iterator->second->ecp_td.ecp_reply == lib::TASK_TERMINATED  ) {
 				//	if (debug_tmp) robot_m_iterator->second->printf_state("2 ");
 				robots_to_wait_for_task_termination.erase (robot_m_iterator->first);
 			}
@@ -795,16 +795,16 @@ void base::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, common::robot*>& _robot_
 				if (input.e != ETIMEDOUT) {// by Y zamiast creceive
 					// Blad komunikacji miedzyprocesowej - wyjatek
 					perror("Creceive STOP or PAUSE proxy from UI failed ?");
-					sr_ecp_msg->message(SYSTEM_ERROR, input.e, "MP:Creceive STOP pulse from UI failed");
-					throw common::MP_main_error (SYSTEM_ERROR, (uint64_t) 0);
+					sr_ecp_msg->message(lib::SYSTEM_ERROR, input.e, "MP:Creceive STOP pulse from UI failed");
+					throw common::MP_main_error (lib::SYSTEM_ERROR, (uint64_t) 0);
 				} else {
 					ui_exit_from_while = true;
 					continue;
 				}
 			} else if (mp_state == MP_STATE_PAUSED) {
 				perror("Creceive RESUME proxy from UI failed ?\n");
-				sr_ecp_msg->message(SYSTEM_ERROR, input.e, "MP: receive RESUME pulse from UI failed");
-				throw common::MP_main_error (SYSTEM_ERROR, (uint64_t) 0);
+				sr_ecp_msg->message(lib::SYSTEM_ERROR, input.e, "MP: receive RESUME pulse from UI failed");
+				throw common::MP_main_error (lib::SYSTEM_ERROR, (uint64_t) 0);
 			}
 		} else if (rcvid == 0) {
 			if (ui_new_pulse) {
@@ -813,7 +813,7 @@ void base::mp_receive_ui_or_ecp_pulse (map <ROBOT_ENUM, common::robot*>& _robot_
 
 				if (ui_pulse_code == MP_STOP) {
 					terminate_all (_robot_m);
-					throw common::MP_main_error(NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+					throw common::MP_main_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 					//return true;
 				}
 
@@ -869,13 +869,13 @@ void base::initialize_communication()
 	char* sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
 	char* mp_attach_point =	config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_attach_point");
 
-	if (( sr_ecp_msg = new lib::sr_ecp(MP, mp_attach_point, sr_net_attach_point)) == NULL) { // Obiekt do komuniacji z SR
+	if (( sr_ecp_msg = new lib::sr_ecp(lib::MP, mp_attach_point, sr_net_attach_point)) == NULL) { // Obiekt do komuniacji z SR
 		perror ( "Unable to locate SR\n");
 
 		delete [] sr_net_attach_point;
 		delete [] mp_attach_point;
 
-		throw common::MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+		throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
 	delete [] sr_net_attach_point;
@@ -889,11 +889,11 @@ void base::initialize_communication()
 #endif
 			uint64_t e = errno; // kod bledu systemowego
 			perror("Failed to attach Master Process\n");
-			sr_ecp_msg->message (SYSTEM_ERROR, e, "MP: Failed to name attach");
+			sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "MP: Failed to name attach");
 
 			delete [] mp_attach_point;
 
-			throw common::MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+			throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 		}
 
 		delete [] mp_attach_point;
@@ -910,11 +910,11 @@ void base::initialize_communication()
 #endif
 				uint64_t e = errno; // kod bledu systemowego
 				perror("Failed to attach UI Pulse chanel for Master Process\n");
-				sr_ecp_msg->message (SYSTEM_ERROR, e, "MP: Failed to name attach  UI Pulse");
+				sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "MP: Failed to name attach  UI Pulse");
 
 				delete [] mp_pulse_attach_point;
 
-				throw common::MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+				throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			}
 
 			delete [] mp_pulse_attach_point;
@@ -963,10 +963,10 @@ void base::initialize_communication()
 					if (input.e != ETIMEDOUT)
 					{
 						perror("Receive StopProxy failed (MP)");
-						sr_ecp_msg->message(SYSTEM_ERROR, input.e, "MP: Receive StopProxy failed");
+						sr_ecp_msg->message(lib::SYSTEM_ERROR, input.e, "MP: Receive StopProxy failed");
 						switch (tryb) {
 						case common::MP_THROW:
-							throw common::MP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+							throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 							break;
 						case common::MP_EXIT:
 							exit(EXIT_FAILURE);
@@ -1017,7 +1017,7 @@ void base::initialize_communication()
 							robot_m_iterator->second->start_ecp();
 						} else {
 							printf("phase 2 bledny kod pulsu w start_all\n");
-							throw common::MP_main_error(NON_FATAL_ERROR, INVALID_ECP_PULSE_IN_MP_START_ALL);
+							throw common::MP_main_error(lib::NON_FATAL_ERROR, INVALID_ECP_PULSE_IN_MP_START_ALL);
 						}
 					} else {
 						// dodaj robota do listy jeszcze nie obsluzonych
@@ -1067,7 +1067,7 @@ void base::initialize_communication()
 							robot_m_iterator->second->robot_new_pulse_checked = false;
 							robot_m_iterator->second->execute_motion();
 						} else {
-							throw common::MP_main_error(NON_FATAL_ERROR, INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL);
+							throw common::MP_main_error(lib::NON_FATAL_ERROR, INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL);
 						}
 					} else {
 						// dodaj robota do listy jeszcze nie obsluzonych
@@ -1113,7 +1113,7 @@ void base::initialize_communication()
 							robot_m_iterator->second->terminate_ecp();
 						} else {
 							printf("phase 2 bledny kod pulsu w terminate_all\n");
-							throw common::MP_main_error(NON_FATAL_ERROR, INVALID_ECP_PULSE_IN_MP_TERMINATE_ALL);
+							throw common::MP_main_error(lib::NON_FATAL_ERROR, INVALID_ECP_PULSE_IN_MP_TERMINATE_ALL);
 						}
 					} else {
 						// dodaj robota do listy jeszcze nie obsluzonych

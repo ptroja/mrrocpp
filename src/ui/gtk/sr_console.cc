@@ -118,7 +118,7 @@ void *sr_thread(void* arg)
 		if (rcvid == -1) /* Error condition, exit */
 		{
 			perror("SR: Receive failed\n");
-			// 	  throw generator::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			break;
 		} else if (rcvid < -1) {
 			// ie. MESSIP_MSG_DISCONNECT
@@ -181,16 +181,16 @@ void *sr_thread(void* arg)
 			strcat(current_line, process_name_buffer);
 
 			switch (sr_msg.message_type) {
-				case FATAL_ERROR:
-					strcat(current_line, "FATAL_ERROR:     ");
+				case lib::FATAL_ERROR:
+					strcat(current_line, "lib::FATAL_ERROR:     ");
 					break;
-				case NON_FATAL_ERROR:
-					strcat(current_line, "NON_FATAL_ERROR: ");
+				case lib::NON_FATAL_ERROR:
+					strcat(current_line, "lib::NON_FATAL_ERROR: ");
 					break;
-				case SYSTEM_ERROR:
-					strcat(current_line, "SYSTEM_ERROR:    ");
+				case lib::SYSTEM_ERROR:
+					strcat(current_line, "lib::SYSTEM_ERROR:    ");
 					break;
-				case NEW_MESSAGE:
+				case lib::NEW_MESSAGE:
 					strcat(current_line, "MESSAGE:         ");
 					break;
 				default:

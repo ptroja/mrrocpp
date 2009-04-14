@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP)
+// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP)
 // Plik:			ecp_rsc.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		trajectory_reproduce_generator - definicja metod klasy
@@ -81,10 +81,10 @@ void robot_stopped_condition::prepare_condition_for_motion(void){
 void robot_stopped_condition::get_current_position(double current_position[6]){
 	// Odczytanie polozenia robota
 	// Przygotowanie rozkazu dla EDP.
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV; // ARM
 	// Sprawdzenie rodzaju ramienia.
-	the_robot->EDP_data.get_arm_type = MOTOR;
+	the_robot->EDP_data.get_arm_type = lib::MOTOR;
 	// Przepisanie rozkazu do bufora wysylkowego.
 	the_robot->create_command();
 	// Zlecenie ruchu robota.
@@ -100,13 +100,13 @@ void robot_stopped_condition::get_current_position(double current_position[6]){
 /**************************** REFRESH WINDOW *******************************/
 void robot_stopped_condition::refresh_window(void){
 	// Wiadomosc wysylana do UI.
-	ECP_message ecp_ui_msg;
+	lib::ECP_message ecp_ui_msg;
 	// Odswiezenie okna.
 	ecp_ui_msg.hdr.type=0;
 	// Sprawdzenie, czy element nie jest pusty -> Wykonano ruch do pozycji zerowej.
 	if (is_rse_list_element()){
 		// Polecenie odswiezenia okna.
-		ecp_ui_msg.ecp_message = TR_REFRESH_WINDOW;
+		ecp_ui_msg.ecp_message = lib::TR_REFRESH_WINDOW;
 		// Odczytanie ostatniego elementu.
 		get_rse_list_data(ecp_ui_msg.R2S.robot_position, ecp_ui_msg.R2S.digital_scales_sensor_reading);
 		// Przepisanie ostatniego odczytu czujnika sily.
@@ -117,13 +117,13 @@ void robot_stopped_condition::refresh_window(void){
 
 		// Wyslanie polecenia do UI -> Polecenie odswiezenia okna.
 #if !defined(USE_MESSIP_SRR)
-		if (MsgSend(UI_fd, &ecp_ui_msg, sizeof(ECP_message), NULL, 0) < 0){
+		if (MsgSend(UI_fd, &ecp_ui_msg, sizeof(lib::ECP_message), NULL, 0) < 0){
 #else
 		int32_t answer;
-		if (messip_send(UI_fd, 0, 0, &ecp_ui_msg, sizeof(ECP_message), &answer, NULL, 0, MESSIP_NOTIMEOUT) < 0){
+		if (messip_send(UI_fd, 0, 0, &ecp_ui_msg, sizeof(lib::ECP_message), &answer, NULL, 0, MESSIP_NOTIMEOUT) < 0){
 #endif
 			 perror("ECP trajectory_reproduce_thread(): Send() to UI failed");
-			 sr_ecp_msg.message (SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
+			 sr_ecp_msg.message (lib::SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
 			};
 		}; // end: is_pose_list_element
 	}; // end: refresh_window
@@ -134,9 +134,9 @@ void robot_stopped_condition::add_rse_element(ecp_mp::sensor::digital_scales& th
 	// double current_position[6];
 	// Pobranie pozycji robota.
 	// Rozkaz dla EDP.
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV; // ARM
-	the_robot->EDP_data.get_arm_type = MOTOR;
+	the_robot->EDP_data.get_arm_type = lib::MOTOR;
 	the_robot->EDP_data.motion_steps = 1;
 	the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
 	// Stworzenie rozkazu.
@@ -190,7 +190,7 @@ void robot_stopped_condition::save_rse_list(char* filename)
 		// Otworzenie pliku.
 		std::ofstream to_file(filename);
 		if (!to_file)
-		throw common::ECP_main_error(FATAL_ERROR, SAVE_FILE_ERROR);
+		throw common::ECP_main_error(lib::FATAL_ERROR, SAVE_FILE_ERROR);
 		// Przejscie na poczatek listy.
 		initiate_rse_list();
 		// Zapisywanie kolejnych elementow.

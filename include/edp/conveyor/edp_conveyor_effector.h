@@ -29,13 +29,13 @@ public:
     // Konstruktor.
     effector (lib::configurator &_config);
     void initialize (void);
-    void set_rmodel (c_buffer &instruction);                    // zmiana narzedzia
-    void get_rmodel (c_buffer &instruction);                    // odczytanie narzedzia
+    void set_rmodel (lib::c_buffer &instruction);                    // zmiana narzedzia
+    void get_rmodel (lib::c_buffer &instruction);                    // odczytanie narzedzia
 
     // Przemieszczenie ramienia.
-    void move_arm (c_buffer &instruction);
+    void move_arm (lib::c_buffer &instruction);
     // Odczytanie pozycji ramienia.
-    void get_arm_position (bool read_hardware, c_buffer &instruction);
+    void get_arm_position (bool read_hardware, lib::c_buffer &instruction);
     // Aktualizacja polozenia.
     void servo_joints_and_frame_actualization_and_upload(void);
 

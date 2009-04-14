@@ -35,10 +35,10 @@ ecp_teach_in_generator::~ecp_teach_in_generator(void)
   }
 
 // --------------------------------------------------------------------------
-void ecp_teach_in_generator::teach(POSE_SPECIFICATION ps, const char *msg)
+void ecp_teach_in_generator::teach(lib::POSE_SPECIFICATION ps, const char *msg)
   { // Uczenie robota
-    ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
-    UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
+    lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
+    lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
     uint64_t e; // kod bledu systemowego
     bool first_time = true; // Znacznik
     ecp_to_ui_msg.hdr.type=0;
@@ -53,20 +53,20 @@ void ecp_teach_in_generator::teach(POSE_SPECIFICATION ps, const char *msg)
       {
         // Polecenie uczenia do UI
 #if !defined(USE_MESSIP_SRR)
-    	if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(ECP_message), &ui_to_ecp_rep, sizeof(UI_reply)) < 0)
+    	if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
 #else
     	int status;
-    	if(messip_send(ecp_t.UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
-    			&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0)
+    	if(messip_send(ecp_t.UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message),
+    			&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0)
 #endif
           { // Y&W
 
             e = errno;
             perror("ECP teach(): Send() to UI failed");
-            sr_ecp_msg.message(SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-            throw base::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+            sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+            throw base::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
           }
-        if (ui_to_ecp_rep.reply == QUIT) // Koniec uczenia
+        if (ui_to_ecp_rep.reply == lib::QUIT) // Koniec uczenia
           break;
         if (first_time)
           {
@@ -88,10 +88,10 @@ void ecp_teach_in_generator::teach(POSE_SPECIFICATION ps, const char *msg)
 
 // --------------------------------------------------------------------------
 // Zapis trajektorii do pliku
-void ecp_teach_in_generator::save_file(POSE_SPECIFICATION ps)
+void ecp_teach_in_generator::save_file(lib::POSE_SPECIFICATION ps)
   {
-    ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
-    UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
+    lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
+    lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
     ecp_taught_in_pose tip; // Zapisywana pozycja
     char *cwd; // Wsk. na nazwe biezacego katalogu
     char coordinate_type[80]; // Opis wspolrzednych: "MOTOR", "JOINT", ...
@@ -101,42 +101,42 @@ void ecp_teach_in_generator::save_file(POSE_SPECIFICATION ps)
 
     ecp_to_ui_msg.hdr.type=0;
 
-    ecp_to_ui_msg.ecp_message = SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
+    ecp_to_ui_msg.ecp_message = lib::SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
     strcpy(ecp_to_ui_msg.string, "*.trj"); // Wzorzec nazwy pliku
-    // if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(ECP_message), sizeof(UI_reply)) == -1) {
+    // if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
 #if !defined(USE_MESSIP_SRR)
-    if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(ECP_message), &ui_to_ecp_rep, sizeof(UI_reply)) < 0)
+    if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
 #else
     int status;
-    if(messip_send(ecp_t.UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
-    		&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0)
+    if(messip_send(ecp_t.UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message),
+    		&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0)
 #endif
     {// by Y&W
         e = errno;
         perror("ECP: Send() to UI failed\n");
-        sr_ecp_msg.message(SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-        throw base::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+        sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+        throw base::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
       }
-    if (ui_to_ecp_rep.reply == QUIT)
+    if (ui_to_ecp_rep.reply == lib::QUIT)
       { // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
         return;
       }
 
     switch (ps)
       {
-    case MOTOR:
+    case lib::MOTOR:
       strcpy(coordinate_type, "MOTOR");
       break;
-    case JOINT:
+    case lib::JOINT:
       strcpy(coordinate_type, "JOINT");
       break;
-    case XYZ_ANGLE_AXIS:
+    case lib::XYZ_ANGLE_AXIS:
       strcpy(coordinate_type, "XYZ_ANGLE_AXIS");
       break;
-    case XYZ_EULER_ZYZ:
+    case lib::XYZ_EULER_ZYZ:
       strcpy(coordinate_type, "XYZ_EULER_ZYZ");
       break;
-    case PF_VELOCITY:
+    case lib::PF_VELOCITY:
       strcpy(coordinate_type, "POSE_FORCE_TORQUE_AT_FRAME");
       break;
 
@@ -147,14 +147,14 @@ void ecp_teach_in_generator::save_file(POSE_SPECIFICATION ps)
     if (chdir(ui_to_ecp_rep.path) != 0)
       {
         perror(ui_to_ecp_rep.path);
-        throw base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+        throw base::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
       }
     std::ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
     e = errno;
     if (!to_file)
       {
         perror(ui_to_ecp_rep.filename);
-        throw base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw base::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
       }
     else
       {
@@ -168,7 +168,7 @@ void ecp_teach_in_generator::save_file(POSE_SPECIFICATION ps)
             to_file << tip.motion_time << ' ';
             for (j = 0; j < MAX_SERVOS_NR; j++)
               to_file << tip.coordinates[j] << ' ';
-            if (ps == PF_VELOCITY)
+            if (ps == lib::PF_VELOCITY)
               { // by Y
                 to_file << tip.extra_info << ' ';
               }
@@ -187,34 +187,34 @@ bool ecp_teach_in_generator::load_file_from_ui()
   {
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
     // false w przeciwnym razie
-    ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
-    UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
+    lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
+    lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
 
     uint64_t e; // Kod bledu systemowego
 
     ecp_to_ui_msg.hdr.type=0;
 
-    ecp_to_ui_msg.ecp_message = LOAD_FILE; // Polecenie wprowadzenia nazwy odczytywanego pliku
+    ecp_to_ui_msg.ecp_message = lib::LOAD_FILE; // Polecenie wprowadzenia nazwy odczytywanego pliku
 
 #if !defined(USE_MESSIP_SRR)
-    if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(ECP_message), &ui_to_ecp_rep, sizeof(UI_reply)) < 0)
+    if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
 #else
     int status;
-    if(messip_send(ecp_t.UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
-    		&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0)
+    if(messip_send(ecp_t.UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message),
+    		&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0)
 #endif
     {// by Y&W
         e = errno;
         perror("ECP: Send() to UI failed\n");
-        sr_ecp_msg.message(SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-        throw base::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+        sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
+        throw base::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
       }
-    if (ui_to_ecp_rep.reply == QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
+    if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
       return false;
     if (chdir(ui_to_ecp_rep.path) != 0)
       {
         perror(ui_to_ecp_rep.path);
-        throw base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+        throw base::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
       }
 
     return load_file_with_path(ui_to_ecp_rep.filename);
@@ -228,7 +228,7 @@ bool ecp_teach_in_generator::load_file_with_path(char* file_name)
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
     char coordinate_type[80]; // Opis wspolrzednych: "MOTOR", "JOINT", ...
-    POSE_SPECIFICATION ps; // Rodzaj wspolrzednych
+    lib::POSE_SPECIFICATION ps; // Rodzaj wspolrzednych
 
     uint64_t number_of_poses; // Liczba zapamietanych pozycji
     uint64_t i, j; // Liczniki petli
@@ -242,13 +242,13 @@ bool ecp_teach_in_generator::load_file_with_path(char* file_name)
     if (!from_file)
       {
         perror(file_name);
-        throw base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw base::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
       }
 
     if ( !(from_file >> coordinate_type))
       {
         from_file.close();
-        throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+        throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
       }
 
     // Usuwanie spacji i tabulacji
@@ -268,25 +268,25 @@ bool ecp_teach_in_generator::load_file_with_path(char* file_name)
 
     if ( !strcmp(coordinate_type, "MOTOR") )
       {
-        ps = MOTOR;
+        ps = lib::MOTOR;
       }
     else if ( !strcmp(coordinate_type, "JOINT") )
-      ps = JOINT;
+      ps = lib::JOINT;
     else if ( !strcmp(coordinate_type, "XYZ_ANGLE_AXIS") )
-      ps = XYZ_ANGLE_AXIS;
+      ps = lib::XYZ_ANGLE_AXIS;
     else if ( !strcmp(coordinate_type, "XYZ_EULER_ZYZ") )
-      ps = XYZ_EULER_ZYZ;
-    else if ( !strcmp(coordinate_type, "PF_VELOCITY") )
-      ps = PF_VELOCITY;
+      ps = lib::XYZ_EULER_ZYZ;
+    else if ( !strcmp(coordinate_type, "lib::PF_VELOCITY") )
+      ps = lib::PF_VELOCITY;
     else
       {
         from_file.close();
-        throw base::ECP_error(NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+        throw base::ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
       }
     if ( !(from_file >> number_of_poses))
       {
         from_file.close();
-        throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+        throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
       }
     flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
     for (i = 0; i < number_of_poses; i++)
@@ -294,23 +294,23 @@ bool ecp_teach_in_generator::load_file_with_path(char* file_name)
         if (!(from_file >> motion_time))
           {
             from_file.close();
-            throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
           }
         for (j = 0; j < MAX_SERVOS_NR; j++)
           {
             if ( !(from_file >> coordinates[j]))
               { // Zabezpieczenie przed danymi nienumerycznymi
                 from_file.close();
-                throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+                throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
               }
           }
 
-        if (ps == PF_VELOCITY)
+        if (ps == lib::PF_VELOCITY)
           { // by Y
             if ( !(from_file >> extra_info))
               { // Zabezpieczenie przed danymi nienumerycznymi
                 from_file.close();
-                throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+                throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
               }
             if (first_time)
               {
@@ -377,7 +377,7 @@ void ecp_teach_in_generator::get_next_pose(double next_pose[MAX_SERVOS_NR])
     memcpy(next_pose, pose_list_iterator->coordinates, MAX_SERVOS_NR*sizeof(double));
   }
 // -------------------------------------------------------
-void ecp_teach_in_generator::set_pose(POSE_SPECIFICATION ps,
+void ecp_teach_in_generator::set_pose(lib::POSE_SPECIFICATION ps,
     double motion_time, double coordinates[MAX_SERVOS_NR])
   {
     pose_list_iterator->arm_type = ps;
@@ -415,7 +415,7 @@ bool ecp_teach_in_generator::is_last_list_element(void)
   }
 // -------------------------------------------------------
 
-void ecp_teach_in_generator::create_pose_list_head(POSE_SPECIFICATION ps,
+void ecp_teach_in_generator::create_pose_list_head(lib::POSE_SPECIFICATION ps,
     double motion_time, double coordinates[MAX_SERVOS_NR])
   {
     pose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates));
@@ -424,7 +424,7 @@ void ecp_teach_in_generator::create_pose_list_head(POSE_SPECIFICATION ps,
 
 // by Y
 
-void ecp_teach_in_generator::create_pose_list_head(POSE_SPECIFICATION ps,
+void ecp_teach_in_generator::create_pose_list_head(lib::POSE_SPECIFICATION ps,
     double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR])
   {
     pose_list.push_back(ecp_taught_in_pose(ps, motion_time, extra_info,
@@ -432,7 +432,7 @@ void ecp_teach_in_generator::create_pose_list_head(POSE_SPECIFICATION ps,
     pose_list_iterator = pose_list.begin();
   }
 
-void ecp_teach_in_generator::insert_pose_list_element(POSE_SPECIFICATION ps,
+void ecp_teach_in_generator::insert_pose_list_element(lib::POSE_SPECIFICATION ps,
     double motion_time, double coordinates[MAX_SERVOS_NR])
   {
     pose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates));
@@ -441,7 +441,7 @@ void ecp_teach_in_generator::insert_pose_list_element(POSE_SPECIFICATION ps,
 
 // by Y
 
-void ecp_teach_in_generator::insert_pose_list_element(POSE_SPECIFICATION ps,
+void ecp_teach_in_generator::insert_pose_list_element(lib::POSE_SPECIFICATION ps,
     double motion_time, int extra_info, double coordinates[MAX_SERVOS_NR])
   {
     pose_list.push_back(ecp_taught_in_pose(ps, motion_time, extra_info,
@@ -465,13 +465,13 @@ bool ecp_teach_in_generator::first_step()
     initiate_pose_list();
     the_robot->EDP_data.get_type = ARM_DV; // ARM
 
-    the_robot->EDP_data.instruction_type = GET;
+    the_robot->EDP_data.instruction_type = lib::GET;
     the_robot->EDP_data.get_type = ARM_DV;
     the_robot->EDP_data.set_type = ARM_DV;
-    the_robot->EDP_data.set_arm_type = MOTOR;
-    the_robot->EDP_data.get_arm_type = MOTOR;
-    the_robot->EDP_data.motion_type = ABSOLUTE;
-    the_robot->EDP_data.next_interpolation_type = MIM;
+    the_robot->EDP_data.set_arm_type = lib::MOTOR;
+    the_robot->EDP_data.get_arm_type = lib::MOTOR;
+    the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+    the_robot->EDP_data.next_interpolation_type = lib::MIM;
     the_robot->EDP_data.motion_steps = 8;
     the_robot->EDP_data.value_in_step_no = 6;
 
@@ -502,47 +502,47 @@ bool ecp_teach_in_generator::next_step()
     // Przepisanie pozycji z listy
     switch (tip.arm_type)
       {
-    case C_MOTOR:
-      the_robot->EDP_data.instruction_type = SET;
+    case lib::C_MOTOR:
+      the_robot->EDP_data.instruction_type = lib::SET;
       the_robot->EDP_data.set_type = ARM_DV; // ARM
-      the_robot->EDP_data.set_arm_type = MOTOR;
-      the_robot->EDP_data.motion_type = ABSOLUTE;
-      the_robot->EDP_data.next_interpolation_type = MIM;
+      the_robot->EDP_data.set_arm_type = lib::MOTOR;
+      the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+      the_robot->EDP_data.next_interpolation_type = lib::MIM;
       the_robot->EDP_data.motion_steps = (WORD) ceil(tip.motion_time/STEP);
       the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
       memcpy(the_robot->EDP_data.next_motor_arm_coordinates, tip.coordinates,
       MAX_SERVOS_NR*sizeof (double));
       break;
-    case C_JOINT:
-      the_robot->EDP_data.instruction_type = SET;
+    case lib::C_JOINT:
+      the_robot->EDP_data.instruction_type = lib::SET;
       the_robot->EDP_data.set_type = ARM_DV; // ARM
-      the_robot->EDP_data.set_arm_type = JOINT;
-      the_robot->EDP_data.motion_type = ABSOLUTE;
-      the_robot->EDP_data.next_interpolation_type = MIM;
+      the_robot->EDP_data.set_arm_type = lib::JOINT;
+      the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+      the_robot->EDP_data.next_interpolation_type = lib::MIM;
       the_robot->EDP_data.motion_steps = (WORD) ceil(tip.motion_time/STEP);
       the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
       memcpy(the_robot->EDP_data.next_joint_arm_coordinates, tip.coordinates,
       MAX_SERVOS_NR*sizeof (double));
       // printf("lumpu: %f\n", the_robot->EDP_data.next_joint_arm_coordinates[6]);
       break;
-    case C_XYZ_EULER_ZYZ:
-      the_robot->EDP_data.instruction_type = SET;
+    case lib::C_XYZ_EULER_ZYZ:
+      the_robot->EDP_data.instruction_type = lib::SET;
       the_robot->EDP_data.set_type = ARM_DV; // ARM
-      the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
-      the_robot->EDP_data.motion_type = ABSOLUTE;
-      the_robot->EDP_data.next_interpolation_type = MIM;
+      the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
+      the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+      the_robot->EDP_data.next_interpolation_type = lib::MIM;
       the_robot->EDP_data.motion_steps = (WORD) ceil(tip.motion_time/STEP);
       the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
       memcpy(the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates, tip.coordinates,
           6*sizeof(double));
       the_robot->EDP_data.next_gripper_coordinate = tip.coordinates[6];
       break;
-    case C_XYZ_ANGLE_AXIS:
-      the_robot->EDP_data.instruction_type = SET;
+    case lib::C_XYZ_ANGLE_AXIS:
+      the_robot->EDP_data.instruction_type = lib::SET;
       the_robot->EDP_data.set_type = ARM_DV; // ARM
-      the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
-      the_robot->EDP_data.motion_type = ABSOLUTE;
-      the_robot->EDP_data.next_interpolation_type = MIM;
+      the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
+      the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+      the_robot->EDP_data.next_interpolation_type = lib::MIM;
       the_robot->EDP_data.motion_steps = (WORD) ceil(tip.motion_time/STEP);
       the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
       memcpy(the_robot->EDP_data.next_XYZ_AA_arm_coordinates, tip.coordinates,
@@ -550,7 +550,7 @@ bool ecp_teach_in_generator::next_step()
       the_robot->EDP_data.next_gripper_coordinate = tip.coordinates[6];
       break;
     default:
-      throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+      throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
       } // end: switch
 
     next_pose_list_ptr(); // nastepna pozycja
@@ -558,20 +558,20 @@ bool ecp_teach_in_generator::next_step()
 
   }
 
-ECP_TO_UI_COMMAND ecp_teach_in_generator::convert(POSE_SPECIFICATION ps) const
+lib::ECP_TO_UI_COMMAND ecp_teach_in_generator::convert(lib::POSE_SPECIFICATION ps) const
   {
     switch (ps)
       {
-    case MOTOR:
-      return C_MOTOR;
-    case JOINT:
-      return C_JOINT;
-    case XYZ_ANGLE_AXIS:
-      return C_XYZ_ANGLE_AXIS;
-    case XYZ_EULER_ZYZ:
-      return C_XYZ_EULER_ZYZ;
+    case lib::MOTOR:
+      return lib::C_MOTOR;
+    case lib::JOINT:
+      return lib::C_JOINT;
+    case lib::XYZ_ANGLE_AXIS:
+      return lib::C_XYZ_ANGLE_AXIS;
+    case lib::XYZ_EULER_ZYZ:
+      return lib::C_XYZ_EULER_ZYZ;
     default:
-      return C_MOTOR;
+      return lib::C_MOTOR;
       }
   }
 

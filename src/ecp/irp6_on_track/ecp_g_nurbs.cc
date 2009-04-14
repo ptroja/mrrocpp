@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //                             ecp.cc
-//             Effector Control Process (ECP) - methods
+//             Effector Control Process (lib::ECP) - methods
 // Funkcje do tworzenia procesow ECP
 //
 //
@@ -33,7 +33,7 @@ const size_t Dim=6;
 using namespace NurbsLib;
 
 
-template< POSE_SPECIFICATION arm_type, size_t D >
+template< lib::POSE_SPECIFICATION arm_type, size_t D >
 class Irp6ot_Point_nD : public Point_nD< D > {;};
 
 
@@ -92,19 +92,19 @@ bool nurbs::first_step (  )
 			EDP_data_current_ptr_=&the_robot->EDP_data.current_XYZ_AA_arm_coordinates[0];
 //			cout<<"XYZ_ANGLE_AXIS\n";
 			atype_=XYZ_ANGLE_AXIS; }
-     	if (EDP_data_next_ptr_!=0) {//ntdes_ptr_->arm_type==MOTOR || ntdes_ptr_->arm_type== JOINT || ntdes_ptr_->arm_type==XYZ_EULER_ZYZ || ntdes_ptr_->arm_type== XYZ_ANGLE_AXIS) {
-			the_robot->EDP_data.instruction_type = GET;
+     	if (EDP_data_next_ptr_!=0) {//ntdes_ptr_->arm_type==MOTOR || ntdes_ptr_->arm_type== lib::JOINT || ntdes_ptr_->arm_type==XYZ_EULER_ZYZ || ntdes_ptr_->arm_type== lib::XYZ_ANGLE_AXIS) {
+			the_robot->EDP_data.instruction_type = lib::GET;
 			the_robot->EDP_data.get_type = ARM_DV;
 			the_robot->EDP_data.set_type = ARM_DV;
 			the_robot->EDP_data.set_arm_type = atype_;
 			the_robot->EDP_data.get_arm_type = atype_;
-			the_robot->EDP_data.motion_type = ABSOLUTE;
-			 the_robot->EDP_data.next_interpolation_type = MIM;
+			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+			 the_robot->EDP_data.next_interpolation_type = lib::MIM;
 			the_robot->EDP_data.motion_steps = ntdes_ptr_->internode_step_no;
 			the_robot->EDP_data.value_in_step_no = ntdes_ptr_->value_in_step_no; }
 		else {
 //			cout<<"firststep: dynamic_cast faild \n"<<flush;
-			throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION); }
+			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION); }
 //		cout<<"firststep: after dynamic_cast\n"<<flush;
 		
   	  
@@ -131,13 +131,13 @@ bool nurbs::next_step (  )
 
    // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 
-   the_robot->EDP_data.instruction_type = SET;
+   the_robot->EDP_data.instruction_type = lib::SET;
    the_robot->EDP_data.get_type = NOTHING_DV;
-   the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
+   the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
    the_robot->EDP_data.set_type = ARM_DV; // ARM
    the_robot->EDP_data.set_arm_type = atype_;
-   the_robot->EDP_data.motion_type = ABSOLUTE;
-    the_robot->EDP_data.next_interpolation_type = MIM;
+   the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+    the_robot->EDP_data.next_interpolation_type = lib::MIM;
 
    
 //	cout<<"nextstep: Start2 \n"<<flush;  

@@ -17,13 +17,13 @@ pw_scena::pw_scena(common::task::base& _ecp_task) :
 }
 
 bool pw_scena::first_step() {
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV;
 	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
-	the_robot->EDP_data.get_arm_type = XYZ_ANGLE_AXIS;
-	the_robot->EDP_data.motion_type = ABSOLUTE;
-	the_robot->EDP_data.next_interpolation_type = MIM;
+	the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
+	the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
+	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+	the_robot->EDP_data.next_interpolation_type = lib::MIM;
 	the_robot->EDP_data.motion_steps = 8;
 	the_robot->EDP_data.value_in_step_no = 6;
 
@@ -146,11 +146,11 @@ bool pw_scena::next_step() {
 
 
 	double time = 0.3; //Czas ruchu.
-	the_robot->EDP_data.instruction_type = SET;
+	the_robot->EDP_data.instruction_type = lib::SET;
 	the_robot->EDP_data.set_type = ARM_DV; // ARM
-	the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
-	the_robot->EDP_data.motion_type = ABSOLUTE;
-	the_robot->EDP_data.next_interpolation_type = MIM;
+	the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
+	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+	the_robot->EDP_data.next_interpolation_type = lib::MIM;
 	the_robot->EDP_data.motion_steps = (WORD) ceil(time / STEP);
 	the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
 

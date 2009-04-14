@@ -1,6 +1,6 @@
 // ------------------------------------------------------------------------
 //
-//                     EFFECTOR CONTROL PROCESS (ECP) - main()
+//                     EFFECTOR CONTROL PROCESS (lib::ECP) - main()
 //
 // Ostatnia modyfikacja: 2006
 // ------------------------------------------------------------------------
@@ -69,12 +69,12 @@ void teach::main_task_algorithm(void)
     if ( operator_reaction ("Teach in? ") )
     {
         tig->flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
-        tig->teach (MOTOR, "Teach-in the trajectory\n");
+        tig->teach (lib::MOTOR, "Teach-in the trajectory\n");
     }
 
     if ( operator_reaction ("Save trajectory? ") )
     {
-        tig->save_file (MOTOR);
+        tig->save_file (lib::MOTOR);
     }
 
     if ( operator_reaction ("Load trajectory? ") )
@@ -83,7 +83,7 @@ void teach::main_task_algorithm(void)
     }
 
     // Aktualnie petla wykonuje sie jednokrotnie, gdyby MP przejal sterowanie
-    // to petle mozna przerwac przez STOP lub przez polecenie END_MOTION wydane
+    // to petle mozna przerwac przez STOP lub przez polecenie lib::END_MOTION wydane
     // przez MP
     //  printf("w ecp for\n");
     tig->Move();

@@ -13,32 +13,32 @@ struct robot_transmission_data
 {
 
 	robot_transmission_data(void) :
-		instruction_type(INVALID), reply_type(ACKNOWLEDGE)
+		instruction_type(lib::INVALID), reply_type(lib::ACKNOWLEDGE)
 	{
 	}
 
-	INSTRUCTION_TYPE instruction_type; // typ instrukcji
-	REPLY_TYPE reply_type; // typ odpowiedzi EDP
-	edp_error error_no; // blad wykryty w EDP
+	lib::INSTRUCTION_TYPE instruction_type; // typ instrukcji
+	lib::REPLY_TYPE reply_type; // typ odpowiedzi EDP
+	lib::edp_error error_no; // blad wykryty w EDP
 
 	BYTE set_type; // typ instrukcji set: ARM/RMODEL/OUTPUTS
 	BYTE get_type; // typ instrukcji get: ARM/RMODEL/INPUTS
 
 	// okreslenie modelu robota (narzedzia, serworegulatora, korektora kinematycznego)
-	RMODEL_SPECIFICATION set_rmodel_type; // przy jego zadawaniu
-	RMODEL_SPECIFICATION get_rmodel_type; // przy jego odczycie
+	lib::RMODEL_SPECIFICATION set_rmodel_type; // przy jego zadawaniu
+	lib::RMODEL_SPECIFICATION get_rmodel_type; // przy jego odczycie
 
 	// sposob zdefiniowania polozenia koncowki
-	POSE_SPECIFICATION set_arm_type; // przy jej zadawaniu
-	POSE_SPECIFICATION get_arm_type; // przy jeg odczycie
+	lib::POSE_SPECIFICATION set_arm_type; // przy jej zadawaniu
+	lib::POSE_SPECIFICATION get_arm_type; // przy jeg odczycie
 
 	WORD output_values; // zadane wartosci wyjsc binarnych
 	WORD input_values; // odczytane wartosci wejsc binarnych
 	BYTE analog_input[8]; // odczytane wartosci wejsc analogowych - 8 kanalow
 
-	MOTION_TYPE motion_type; // sposob zadania ruchu
-	INTERPOLATION_TYPE next_interpolation_type; // sposob interpolacji
-	INTERPOLATION_TYPE current_interpolation_type; // sposob interpolacji - narazie nieuzywane
+	lib::MOTION_TYPE motion_type; // sposob zadania ruchu
+	lib::INTERPOLATION_TYPE next_interpolation_type; // sposob interpolacji
+	lib::INTERPOLATION_TYPE current_interpolation_type; // sposob interpolacji - narazie nieuzywane
 
 	WORD motion_steps; // liczba krokow ruchu zadanego (makrokroku)
 	/*
@@ -124,10 +124,10 @@ struct robot_transmission_data
 
 	double next_inertia[6], next_reciprocal_damping[6];
 	double next_velocity[MAX_SERVOS_NR], next_force_xyz_torque_xyz[6];
-	BEHAVIOUR_SPECIFICATION next_behaviour[6];
+	lib::BEHAVIOUR_SPECIFICATION next_behaviour[6];
 	//	bool selection_vector[6];
 
-	// r_buffer
+	// lib::r_buffer
 	// double pos_xyz_rot_xyz[6];
 	double current_force_xyz_torque_xyz[6];
 

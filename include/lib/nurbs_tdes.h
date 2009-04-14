@@ -9,7 +9,7 @@ private:
 	nurbs_tdes& operator=(const nurbs_tdes&);
 	nurbs_tdes(const nurbs_tdes&);
 public:
-  POSE_SPECIFICATION arm_type;  // chyba lepiej uzyc polimorfizmu niz pola typu
+  lib::POSE_SPECIFICATION arm_type;  // chyba lepiej uzyc polimorfizmu niz pola typu
   
   int interpolation_node_no;    // Liczba wezlow przy interpolacji
   int internode_step_no;        // Liczba krokow dla jednego przedzialu

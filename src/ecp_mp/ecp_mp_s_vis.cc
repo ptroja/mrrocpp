@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------
 //                        		ecp_s.cc		dla QNX6.2
 //
-//                     EFFECTOR CONTROL PROCESS (VSP) - metody klasy ecp_mp_sensor()
+//                     EFFECTOR CONTROL PROCESS (lib::VSP) - metody klasy ecp_mp_sensor()
 //
 // Ostatnia modyfikacja: 06.12.2006
 // Autor: tkornuta

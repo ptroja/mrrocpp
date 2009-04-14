@@ -41,7 +41,7 @@
 //#define FCDEBUG 1
 
 // Wiadomosc wysylana do ECP.
-UI_ECP_message ui_ecp_msg;
+lib::UI_ECP_message ui_ecp_msg;
 
 extern ui_state_def ui_state;
 // extern ini_configs* ini_con;
@@ -60,7 +60,7 @@ bool GET_ROBOT_POSITION;
 // Kontrola readera.
 bool READER_ON;
 // Rodzaj sterowania.
-POSE_SPECIFICATION ps;
+lib::POSE_SPECIFICATION ps;
 
 // komenda wysylana z okna FileDialog po wcisnieciu accept
 extern BYTE FDCommand;
@@ -83,7 +83,7 @@ int FCwndForceControlRealised( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	// Reader wylaczony.
 	READER_ON = false;
 	// Sterowanie przyrostami na walach silnikow.
-	ps = MOTOR;
+	ps = lib::MOTOR;
 	return( Pt_CONTINUE );
 	}; // end: FCwndForceControlRealised
 
@@ -92,7 +92,7 @@ int FCCreateConnection(void){
 		printf("FCCreateConnection\n");
 	#endif
 	// Wiadomosc z polozeniem robota otrzymana z ECP.
-// 	ECP_message from_ecp;
+// 	lib::ECP_message from_ecp;
 
 	char *tmp_name;
 	// Stworzenie nazwy.
@@ -113,14 +113,14 @@ int FCCreateConnection(void){
 int FCRefreshPosition(void){
 	char tmp[20];
 	// Wiadomosc odbierana z ECP.
-	ECP_message from_ecp;
+	lib::ECP_message from_ecp;
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
 	// Polecenie dla ECP.
-	ui_ecp_msg.command = FC_GET_DATA;
+	ui_ecp_msg.command = lib::FC_GET_DATA;
 	// Wyslanie polecenia i odebranie polozenia robota.
-	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), &from_ecp, sizeof(ECP_message)) == -1) {
+	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), &from_ecp, sizeof(lib::ECP_message)) == -1) {
 		perror("FCRefreshWindow: Send to ECP failed");
 		return EXIT_FAILURE;
 	}else{
@@ -188,8 +188,8 @@ int FCbtnCalibrateSensor( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
 	// polecenie dla ECP -> kalibracja czujnika
-	ui_ecp_msg.command = FC_CALIBRATE_SENSOR;
-	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), NULL, 0) == -1) {
+	ui_ecp_msg.command = lib::FC_CALIBRATE_SENSOR;
+	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
 		perror("btnCalibrateSensor: Send to ECP failed");
 		};
 	return( Pt_CONTINUE );
@@ -206,12 +206,12 @@ int FCbtnAddMacrostep( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
 	// Polecenie dla ECP.
-	ui_ecp_msg.command = FC_ADD_MACROSTEP;
+	ui_ecp_msg.command = lib::FC_ADD_MACROSTEP;
 	// Zczytanie czasu wykonywana kroku.
 	PtGetResource(ABW_FCPtMotionTime, Pt_ARG_NUMERIC_VALUE, &i, 0);
 	ui_ecp_msg.motion_time = *i;
 	// Wyslanie danych o pozycji oraz odblokowanie ruchu.
-	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), NULL, 0) == -1) {
+	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
 		perror("FCbtnAddMacrostep: Send to ECP failed");
 		return( Pt_CONTINUE );
 	}else{
@@ -239,8 +239,8 @@ int FCbtnNewTrajectory( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
 	// Polecenie dla ECP.
-	ui_ecp_msg.command = FC_NEW_TRAJECTORY;
-	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), NULL, 0) == -1) {
+	ui_ecp_msg.command = lib::FC_NEW_TRAJECTORY;
+	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
 		 perror("FCbtnNewTrajectory: Send to ECP failed");
 	}else{
 		// Wyzerowanie liczby makrokrokow.
@@ -263,7 +263,7 @@ int FCbtnSaveTrajectory( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 		printf("FCbtnSaveTrajectory\n");
 	#endif
 	// Komenda wysylana z okna FileDialog po wcisnieciu accept.
-	FDCommand = FC_SAVE_TRAJECTORY;
+	FDCommand = lib::FC_SAVE_TRAJECTORY;
 	// Stworzenie okna wyboru pliku.
 	ApCreateModule (ABM_wndFileLocation, widget, cbinfo);
 	return( Pt_CONTINUE );
@@ -277,8 +277,8 @@ int FCbtnExit( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo ){
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
 	// Polecenie dla ECP.
-	ui_ecp_msg.command = FC_EXIT;
-	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), NULL, 0) == -1) {
+	ui_ecp_msg.command = lib::FC_EXIT;
+	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
 		 perror("FCbtnExit: Send to ECP failed");
 		};
 	// Zamkniecie polaczenia.
@@ -331,18 +331,18 @@ int FCbtnChangeExternalMotorControl( PtWidget_t *widget, ApInfo_t *apinfo, PtCal
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
 	// Polecenie dla ECP.
-	ui_ecp_msg.command = FC_CHANGE_CONTROL;
+	ui_ecp_msg.command = lib::FC_CHANGE_CONTROL;
 	// Zmiana sterowania.
-	if (ps == MOTOR)
-		ui_ecp_msg.ps = XYZ_EULER_ZYZ;
-	if (ps == XYZ_EULER_ZYZ)
-		ui_ecp_msg.ps = MOTOR;
-	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), NULL, 0) == -1) {
+	if (ps == lib::MOTOR)
+		ui_ecp_msg.ps = lib::XYZ_EULER_ZYZ;
+	if (ps == lib::XYZ_EULER_ZYZ)
+		ui_ecp_msg.ps = lib::MOTOR;
+	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
 		 perror("FCbtnChangeExternalMotorControl: Send to ECP failed");
 	}else{
 		// Sterowanie przyrostami na walach silnikow.
-		if (ps == MOTOR){
-			ps = XYZ_EULER_ZYZ;
+		if (ps == lib::MOTOR){
+			ps = lib::XYZ_EULER_ZYZ;
 			// Wypisanie na etykiecie  - czym sterujemy.
 		    PtSetResource( ABW_FClblControl, Pt_ARG_TEXT_STRING, "Control [EXTERNAL]", 0);
 			// Zmiana przycisku.
@@ -362,7 +362,7 @@ int FCbtnChangeExternalMotorControl( PtWidget_t *widget, ApInfo_t *apinfo, PtCal
 			PtSetResource(ABW_lblRobotControl4, Pt_ARG_TEXT_STRING ,  "Beta", 0);
 			PtSetResource(ABW_lblRobotControl5, Pt_ARG_TEXT_STRING ,  "Gamma", 0);
 		}else{
-			ps = MOTOR;
+			ps = lib::MOTOR;
 			// Wypisanie na etykiecie  - czym sterujemy.
 		    PtSetResource( ABW_FClblControl, Pt_ARG_TEXT_STRING, "Control [MOTOR]", 0);
 			// Zmiana przycisku.
@@ -397,11 +397,11 @@ void SendMoveCommand(int move_type){
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
 	// Polecenie dla ECP.
-	ui_ecp_msg.command = FC_MOVE_ROBOT;
+	ui_ecp_msg.command = lib::FC_MOVE_ROBOT;
 	// Rodzaj ruchu -> (okreslenie osi 1..6) && (+/- lewo/prawo).
 	ui_ecp_msg.move_type = move_type;
 	// Wyslanie polecenia.
-	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), NULL, 0) == -1) {
+	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
 		 perror("SendMoveCommand: Send to ECP failed");
 	}else{
 		// Odczyt polozenia w nastepnym cyklu timera.

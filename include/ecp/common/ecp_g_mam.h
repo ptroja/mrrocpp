@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP) 
+// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP) 
 // Plik:			ecp_gen_mam.h
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		manual_moves_automatic_measures_generator - deklaracja klasy

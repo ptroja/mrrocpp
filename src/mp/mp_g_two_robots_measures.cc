@@ -35,20 +35,20 @@ bool two_robots_measures::first_step()
 	idle_step_counter = 2;
 	// Ustawienie polecen dla robota na torze.
 	irp6ot = robot_m[ROBOT_IRP6_ON_TRACK];
-	irp6ot->ecp_td.mp_command = NEXT_POSE;
-	irp6ot->ecp_td.instruction_type = GET;
+	irp6ot->ecp_td.mp_command = lib::NEXT_POSE;
+	irp6ot->ecp_td.instruction_type = lib::GET;
 	irp6ot->ecp_td.get_type = ARM_DV;
-	irp6ot->ecp_td.get_arm_type = XYZ_EULER_ZYZ;
-	irp6ot->ecp_td.motion_type = ABSOLUTE;
-	irp6ot->ecp_td.next_interpolation_type = MIM;
+	irp6ot->ecp_td.get_arm_type = lib::XYZ_EULER_ZYZ;
+	irp6ot->ecp_td.motion_type = lib::ABSOLUTE;
+	irp6ot->ecp_td.next_interpolation_type = lib::MIM;
 	// Ustawienie polecen dla robota na postumencie.
 	irp6p = robot_m[ROBOT_IRP6_POSTUMENT];
-	irp6p->ecp_td.mp_command = NEXT_POSE;
-	irp6p->ecp_td.instruction_type = GET;
+	irp6p->ecp_td.mp_command = lib::NEXT_POSE;
+	irp6p->ecp_td.instruction_type = lib::GET;
 	irp6p->ecp_td.get_type = ARM_DV;
-	irp6p->ecp_td.get_arm_type = XYZ_EULER_ZYZ;
-	irp6p->ecp_td.motion_type = ABSOLUTE;
-		irp6p->ecp_td.next_interpolation_type = MIM;
+	irp6p->ecp_td.get_arm_type = lib::XYZ_EULER_ZYZ;
+	irp6p->ecp_td.motion_type = lib::ABSOLUTE;
+		irp6p->ecp_td.next_interpolation_type = lib::MIM;
 	// Przepisanie polecen.
 
 	// Wyczyszczenie listy.
@@ -125,37 +125,37 @@ bool two_robots_measures::next_step()
 void two_robots_measures::save_measures_to_file (void)
 {
 	// Przesylka z ECP do UI
-	ECP_message ecp_to_ui_msg;
+	lib::ECP_message ecp_to_ui_msg;
 	// Odpowiedz UI do ECP
-	UI_reply ui_to_ecp_rep;
+	lib::UI_reply ui_to_ecp_rep;
 	ecp_to_ui_msg.hdr.type=0;
 	// Polecenie wprowadzenia nazwy pliku
-	ecp_to_ui_msg.ecp_message = SAVE_FILE;
+	ecp_to_ui_msg.ecp_message = lib::SAVE_FILE;
 	// Wzorzec nazwy pliku
 	strcpy(ecp_to_ui_msg.string,"*.*");
 	// Wyslanie polecenia pokazania okna wyboru pliku.
 #if !defined(USE_MESSIP_SRR)
-	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(ECP_message), &ui_to_ecp_rep, sizeof(UI_reply)) < 0)
+	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
 #else
 	int status;
-	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(ECP_message),
-					&status, &ui_to_ecp_rep, sizeof(UI_reply), MESSIP_NOTIMEOUT) < 0)
+	if(messip_send(UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message),
+					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0)
 #endif
 	{
-		sr_ecp_msg.message (SYSTEM_ERROR, errno, "Send to UI failed");
-		throw base::MP_error(SYSTEM_ERROR, (uint64_t) 0);
+		sr_ecp_msg.message (lib::SYSTEM_ERROR, errno, "Send to UI failed");
+		throw base::MP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 	// Sprawdzenie katalogu.
 	if ( chdir(ui_to_ecp_rep.path) != 0 )
 	{
-		sr_ecp_msg.message (NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		sr_ecp_msg.message (lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
 		return;
 	}
 	// Otworzenie plik do zapisu.
 	std::ofstream to_file(ui_to_ecp_rep.filename);
 	if (to_file == NULL)
 	{
-		sr_ecp_msg.message (NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		sr_ecp_msg.message (lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 		return;
 	}
 	for(unsigned int m=0; m<measures.size(); m++)

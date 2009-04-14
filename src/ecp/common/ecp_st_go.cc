@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //                            ecp_st_go.cc
-//            Effector Control Process (ECP) - methods
+//            Effector Control Process (lib::ECP) - methods
 // Funkcje do tworzenia procesow ECP
 //
 // Ostatnia modyfikacja: 2007
@@ -27,7 +27,7 @@ ecp_sub_task_gripper_opening::ecp_sub_task_gripper_opening(base &_ecp_t) :
 
 void ecp_sub_task_gripper_opening::init()
 {
-	tdes.arm_type = XYZ_EULER_ZYZ;
+	tdes.arm_type = lib::XYZ_EULER_ZYZ;
 	tdes.interpolation_node_no = 1;
 	// Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
 	tdes.coordinate_delta[0] = 0.0; // przyrost wspolrzednej X

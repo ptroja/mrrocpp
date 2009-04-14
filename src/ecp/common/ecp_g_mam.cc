@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP) 
+// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP) 
 // Plik:			ecp_gen_mam.h
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		manual_moves_automatic_measures_generator - definicja metod klasy
@@ -145,10 +145,10 @@ manual_moves_automatic_measures::~manual_moves_automatic_measures(void)
 /******************************** FIRST STEP ***********************************/
 bool manual_moves_automatic_measures::first_step (){
     // Przygotowanie rozkazu dla EDP.
-    the_robot->EDP_data.instruction_type = GET;
+    the_robot->EDP_data.instruction_type = lib::GET;
     the_robot->EDP_data.get_type = ARM_DV; // ARM
     // Sprawdzenie rodzaju ramienia.
-    the_robot->EDP_data.get_arm_type = MOTOR;
+    the_robot->EDP_data.get_arm_type = lib::MOTOR;
  
      // Mozna wykonac ruch - odebrac polozenie
     return true;
@@ -214,11 +214,11 @@ void manual_moves_automatic_measures::get_sensor_reading(ecp_mp::sensor::digital
 void manual_moves_automatic_measures::refresh_window
 	(ecp_mp::sensor::digital_scales& the_sensor){
 	// Wiadomosc wysylana do UI.
-	ECP_message ecp_ui_msg;
+	lib::ECP_message ecp_ui_msg;
 	// Odswiezenie okna.
 	ecp_ui_msg.hdr.type=0;
 	// Polecenie odswiezenia okna.
-	ecp_ui_msg.ecp_message = MAM_REFRESH_WINDOW;
+	ecp_ui_msg.ecp_message = lib::MAM_REFRESH_WINDOW;
 	// Przepisanie polozenia oraz odczytow z linialow do wiadomosci.
 	get_current_position(ecp_ui_msg.MAM.robot_position);
 	get_sensor_reading(the_sensor, ecp_ui_msg.MAM.sensor_reading);
@@ -229,9 +229,9 @@ void manual_moves_automatic_measures::refresh_window
 		printf("\n");
 */
 	// Wyslanie polecenia do UI -> Polecenie odswiezenia okna.
-	if (MsgSend(UI_fd, &ecp_ui_msg,  sizeof(ECP_message),  NULL, 0) < 0){
+	if (MsgSend(UI_fd, &ecp_ui_msg,  sizeof(lib::ECP_message),  NULL, 0) < 0){
 		 perror("ECP trajectory_reproduce_thread(): Send() to UI failed");
-		 sr_ecp_msg.message (SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
+		 sr_ecp_msg.message (lib::SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
 		};
 	}; //: refresh_window
 
@@ -292,7 +292,7 @@ void manual_moves_automatic_measures::save_mam_list(char* filename)
 		// Otworzenie pliku.
 		ofstream to_file(filename);
 		if (!to_file)
-		throw ECP_main_error(FATAL_ERROR, SAVE_FILE_ERROR);
+		throw ECP_main_error(lib::FATAL_ERROR, SAVE_FILE_ERROR);
 		// Przejscie na poczatek listy.
 		initiate_mam_list();
 		// Zapisywanie kolejnych elementow.

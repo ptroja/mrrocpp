@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------
 //   ecp_t_tran.cc - przezroczyste wersja dla dowolnego z robotow
 //
-//                     EFFECTOR CONTROL PROCESS (ECP) - main()
+//                     EFFECTOR CONTROL PROCESS (lib::ECP) - main()
 //
 // Ostatnia modyfikacja: 2006
 // ------------------------------------------------------------------------
@@ -64,13 +64,13 @@ void jajko::main_task_algorithm(void)
 
 		// Wybor trybu zadania - rozbijanie jajka badz nie
 		tryb = choose_option ("1 - Egg destroying, 2 - Egg is safe", 2);
-		if ( tryb == OPTION_ONE )
+		if ( tryb == lib::OPTION_ONE )
 		{
 			tryb=0;
-		} else if ( tryb == OPTION_TWO )
+		} else if ( tryb == lib::OPTION_TWO )
 		{
 			tryb=1;
-		} else if ( tryb == QUIT)
+		} else if ( tryb == lib::QUIT)
 		{
 			break;
 		}

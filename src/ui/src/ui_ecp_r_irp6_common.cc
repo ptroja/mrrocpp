@@ -60,9 +60,9 @@ ui_common_robot::ui_common_robot (lib::configurator &_config, lib::sr_ecp* _sr_e
     ecp->sr_ecp_msg = _sr_ecp_msg;
     ecp->ecp_command.instruction.rmodel.kinematic_model.kinematic_model_no = 0;
     ecp->ecp_command.instruction.get_type = ARM_DV; // ARM
-    ecp->ecp_command.instruction.get_arm_type = MOTOR;
+    ecp->ecp_command.instruction.get_arm_type = lib::MOTOR;
     ecp->ecp_command.instruction.set_type = ARM_DV; // ARM
-    ecp->ecp_command.instruction.set_arm_type = MOTOR;
+    ecp->ecp_command.instruction.set_arm_type = lib::MOTOR;
     ecp->ecp_command.instruction.motion_steps = 0;
     ecp->ecp_command.instruction.value_in_step_no = 0;
 
@@ -88,10 +88,10 @@ ui_common_robot::~ui_common_robot() {
 /* // by Y - zdefiniowane w irp6_on_track_robot - przemyslec czy nie trzeba wstawic warunku na poprawnosc synchronizacji
 void ui_common_robot::synchronise ( void ) {
 // Zlecenie synchronizacji robota
-  ecp->ecp_command.instruction.instruction_type = SYNCHRO;
+  ecp->ecp_command.instruction.instruction_type = lib::SYNCHRO;
   ecp->EDP_buffer.send(EDP_fd);  // Wyslanie zlecenia synchronizacji
   ecp->EDP_buffer.query(EDP_fd); // Odebranie wyniku zlecenia
-  if (ecp->reply_package.reply_type == SYNCHRO_OK)
+  if (ecp->reply_package.reply_type == lib::SYNCHRO_OK)
     synchronised = true;
 };// end: ui_common_robot::synchronise ()
 */
@@ -146,9 +146,9 @@ bool ui_common_robot::get_kinematic (BYTE* kinematic_model_no)
 {
 
     // Zlecenie odczytu numeru modelu i korektora kinematyki
-    ecp->ecp_command.instruction.instruction_type = GET;
+    ecp->ecp_command.instruction.instruction_type = lib::GET;
     ecp->ecp_command.instruction.get_type = RMODEL_DV; // RMODEL
-    ecp->ecp_command.instruction.get_rmodel_type = ARM_KINEMATIC_MODEL; // RMODEL
+    ecp->ecp_command.instruction.get_rmodel_type = lib::ARM_KINEMATIC_MODEL; // RMODEL
     execute_motion();
 
     *kinematic_model_no  = ecp->reply_package.rmodel.kinematic_model.kinematic_model_no;
@@ -162,9 +162,9 @@ bool ui_common_robot::get_servo_algorithm ( BYTE algorithm_no[],
 {
 
     // Zlecenie odczytu numerow algorytmow i zestawow parametrow
-    ecp->ecp_command.instruction.instruction_type = GET;
+    ecp->ecp_command.instruction.instruction_type = lib::GET;
     ecp->ecp_command.instruction.get_type = RMODEL_DV; // RMODEL
-    ecp->ecp_command.instruction.get_rmodel_type = SERVO_ALGORITHM; //
+    ecp->ecp_command.instruction.get_rmodel_type = lib::SERVO_ALGORITHM; //
     execute_motion();
 
     // Przepisanie aktualnych numerow algorytmow i zestawow parametrow
@@ -178,11 +178,11 @@ bool ui_common_robot::get_servo_algorithm ( BYTE algorithm_no[],
 
 
 // do odczytu stanu poczatkowego robota
-bool ui_common_robot::get_controller_state (controller_state_t* robot_controller_initial_state_l)
+bool ui_common_robot::get_controller_state (lib::controller_state_t* robot_controller_initial_state_l)
 {
 
     // Zlecenie odczytu numeru modelu i korektora kinematyki
-    ecp->ecp_command.instruction.instruction_type = GET;
+    ecp->ecp_command.instruction.instruction_type = lib::GET;
     ecp->ecp_command.instruction.get_type = CONTROLLER_STATE_DV;
 
     execute_motion();
@@ -205,10 +205,10 @@ bool ui_common_robot::set_kinematic (BYTE kinematic_model_no)
     // algorytmow serwo i numerow zestawow parametrow algorytmow
 
     // Zlecenie zapisu numeru modelu i korektora kinematyki
-    ecp->ecp_command.instruction.instruction_type = SET;
+    ecp->ecp_command.instruction.instruction_type = lib::SET;
     ecp->ecp_command.instruction.set_type = RMODEL_DV; // RMODEL
-    ecp->ecp_command.instruction.set_rmodel_type = ARM_KINEMATIC_MODEL; // RMODEL
-    ecp->ecp_command.instruction.get_rmodel_type = ARM_KINEMATIC_MODEL; // RMODEL
+    ecp->ecp_command.instruction.set_rmodel_type = lib::ARM_KINEMATIC_MODEL; // RMODEL
+    ecp->ecp_command.instruction.get_rmodel_type = lib::ARM_KINEMATIC_MODEL; // RMODEL
 
     ecp->ecp_command.instruction.rmodel.kinematic_model.kinematic_model_no = kinematic_model_no;
 
@@ -231,10 +231,10 @@ bool ui_common_robot::set_servo_algorithm (BYTE algorithm_no[],
             ecp->number_of_servos*sizeof(BYTE) );
     memcpy (ecp->ecp_command.instruction.rmodel.servo_algorithm.servo_parameters_no, parameters_no,
             ecp->number_of_servos*sizeof(BYTE) );
-    ecp->ecp_command.instruction.instruction_type = SET;
+    ecp->ecp_command.instruction.instruction_type = lib::SET;
     ecp->ecp_command.instruction.set_type = RMODEL_DV; // RMODEL
-    ecp->ecp_command.instruction.set_rmodel_type = SERVO_ALGORITHM; //
-    ecp->ecp_command.instruction.get_rmodel_type = SERVO_ALGORITHM; //
+    ecp->ecp_command.instruction.set_rmodel_type = lib::SERVO_ALGORITHM; //
+    ecp->ecp_command.instruction.get_rmodel_type = lib::SERVO_ALGORITHM; //
     execute_motion();
     return true;
 }
@@ -246,10 +246,10 @@ bool ui_common_robot::set_servo_algorithm (BYTE algorithm_no[],
 bool ui_common_robot::set_tool_xyz_angle_axis ( double tool_vector[6] )
 {
 
-    ecp->ecp_command.instruction.instruction_type = SET;
+    ecp->ecp_command.instruction.instruction_type = lib::SET;
     ecp->ecp_command.instruction.set_type = RMODEL_DV; // RMODEL
-    ecp->ecp_command.instruction.set_rmodel_type = TOOL_XYZ_ANGLE_AXIS;
-    ecp->ecp_command.instruction.get_rmodel_type = TOOL_XYZ_ANGLE_AXIS;
+    ecp->ecp_command.instruction.set_rmodel_type = lib::TOOL_XYZ_ANGLE_AXIS;
+    ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_XYZ_ANGLE_AXIS;
 
     memcpy (ecp->ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates, tool_vector, 6*sizeof(double) );
     execute_motion();
@@ -264,10 +264,10 @@ bool ui_common_robot::set_tool_xyz_angle_axis ( double tool_vector[6] )
 bool ui_common_robot::set_tool_xyz_euler_zyz ( double tool_vector[6] )
 {
 
-    ecp->ecp_command.instruction.instruction_type = SET;
+    ecp->ecp_command.instruction.instruction_type = lib::SET;
     ecp->ecp_command.instruction.set_type = RMODEL_DV; // RMODEL
-    ecp->ecp_command.instruction.set_rmodel_type = TOOL_XYZ_EULER_ZYZ;
-    ecp->ecp_command.instruction.get_rmodel_type = TOOL_XYZ_EULER_ZYZ;
+    ecp->ecp_command.instruction.set_rmodel_type = lib::TOOL_XYZ_EULER_ZYZ;
+    ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_XYZ_EULER_ZYZ;
 
     memcpy (ecp->ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates, tool_vector, 6*sizeof(double) );
     execute_motion();
@@ -284,10 +284,10 @@ bool ui_common_robot::read_tool_xyz_angle_axis ( double tool_vector[6] )
 {
 
     // Zlecenie odczytu numeru modelu i korektora kinematyki
-    ecp->ecp_command.instruction.instruction_type = GET;
+    ecp->ecp_command.instruction.instruction_type = lib::GET;
     ecp->ecp_command.instruction.get_type = RMODEL_DV; // RMODEL
-    ecp->ecp_command.instruction.set_rmodel_type = TOOL_XYZ_ANGLE_AXIS;
-    ecp->ecp_command.instruction.get_rmodel_type = TOOL_XYZ_ANGLE_AXIS;
+    ecp->ecp_command.instruction.set_rmodel_type = lib::TOOL_XYZ_ANGLE_AXIS;
+    ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_XYZ_ANGLE_AXIS;
 
     execute_motion();
 
@@ -304,10 +304,10 @@ bool ui_common_robot::read_tool_xyz_euler_zyz ( double tool_vector[6] )
 {
 
     // Zlecenie odczytu numeru modelu i korektora kinematyki
-    ecp->ecp_command.instruction.instruction_type = GET;
+    ecp->ecp_command.instruction.instruction_type = lib::GET;
     ecp->ecp_command.instruction.get_type = RMODEL_DV; // RMODEL
-    ecp->ecp_command.instruction.set_rmodel_type = TOOL_XYZ_EULER_ZYZ;
-    ecp->ecp_command.instruction.get_rmodel_type = TOOL_XYZ_EULER_ZYZ;
+    ecp->ecp_command.instruction.set_rmodel_type = lib::TOOL_XYZ_EULER_ZYZ;
+    ecp->ecp_command.instruction.get_rmodel_type = lib::TOOL_XYZ_EULER_ZYZ;
 
     execute_motion();
 
@@ -353,9 +353,9 @@ bool ui_common_robot::move_motors ( double final_position[] )
         nr_of_steps = (nr_ang > nr_grip) ? nr_ang : nr_grip;
         //  printf("is synchronised za read motors: nr of steps %d\n", nr_of_steps);
         // Parametry zlecenia ruchu i odczytu polozenia
-        ecp->ecp_command.instruction.instruction_type = SET_GET;
-        ecp->ecp_command.instruction.motion_type = ABSOLUTE;
-        ecp->ecp_command.instruction.interpolation_type = MIM;
+        ecp->ecp_command.instruction.instruction_type = lib::SET_GET;
+        ecp->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+        ecp->ecp_command.instruction.interpolation_type = lib::MIM;
     }
     else
     {
@@ -373,14 +373,14 @@ bool ui_common_robot::move_motors ( double final_position[] )
         nr_grip = (int) ceil(max_inc_grip / MOTOR_GRIPPER_STEP);
         nr_of_steps = (nr_ang > nr_grip) ? nr_ang : nr_grip;
 
-        ecp->ecp_command.instruction.instruction_type = SET;
-        ecp->ecp_command.instruction.motion_type = RELATIVE;
-        ecp->ecp_command.instruction.interpolation_type = MIM;
+        ecp->ecp_command.instruction.instruction_type = lib::SET;
+        ecp->ecp_command.instruction.motion_type = lib::RELATIVE;
+        ecp->ecp_command.instruction.interpolation_type = lib::MIM;
     }
     ecp->ecp_command.instruction.get_type = ARM_DV; // ARM
-    ecp->ecp_command.instruction.get_arm_type = MOTOR;
+    ecp->ecp_command.instruction.get_arm_type = lib::MOTOR;
     ecp->ecp_command.instruction.set_type = ARM_DV; // ARM
-    ecp->ecp_command.instruction.set_arm_type = MOTOR;
+    ecp->ecp_command.instruction.set_arm_type = lib::MOTOR;
     ecp->ecp_command.instruction.motion_steps = nr_of_steps;
     ecp->ecp_command.instruction.value_in_step_no = nr_of_steps;
 
@@ -443,13 +443,13 @@ bool ui_common_robot::move_joints (double final_position[] )
     nr_of_steps = (nr_of_steps > nr_grip) ? nr_of_steps : nr_grip;
 
     // Parametry zlecenia ruchu i odczytu polozenia
-    ecp->ecp_command.instruction.instruction_type = SET_GET;
+    ecp->ecp_command.instruction.instruction_type = lib::SET_GET;
     ecp->ecp_command.instruction.get_type = ARM_DV; // ARM
-    ecp->ecp_command.instruction.get_arm_type = JOINT;
+    ecp->ecp_command.instruction.get_arm_type = lib::JOINT;
     ecp->ecp_command.instruction.set_type = ARM_DV; // ARM
-    ecp->ecp_command.instruction.set_arm_type = JOINT;
-    ecp->ecp_command.instruction.motion_type = ABSOLUTE;
-    ecp->ecp_command.instruction.interpolation_type = MIM;
+    ecp->ecp_command.instruction.set_arm_type = lib::JOINT;
+    ecp->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+    ecp->ecp_command.instruction.interpolation_type = lib::MIM;
     ecp->ecp_command.instruction.motion_steps = nr_of_steps;
     ecp->ecp_command.instruction.value_in_step_no = nr_of_steps;
 
@@ -505,12 +505,12 @@ bool ui_common_robot::move_xyz_euler_zyz ( double final_position[7] )
     nr_of_steps = (nr_of_steps > nr_grip) ? nr_of_steps : nr_grip;
 
     // Parametry zlecenia ruchu i odczytu polozenia
-    ecp->ecp_command.instruction.instruction_type = SET_GET;
-    ecp->ecp_command.instruction.get_arm_type = XYZ_EULER_ZYZ;
+    ecp->ecp_command.instruction.instruction_type = lib::SET_GET;
+    ecp->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
     ecp->ecp_command.instruction.set_type = ARM_DV; // ARM
-    ecp->ecp_command.instruction.set_arm_type = XYZ_EULER_ZYZ;
-    ecp->ecp_command.instruction.motion_type = ABSOLUTE;
-    ecp->ecp_command.instruction.interpolation_type = MIM;
+    ecp->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+    ecp->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+    ecp->ecp_command.instruction.interpolation_type = lib::MIM;
     ecp->ecp_command.instruction.motion_steps = nr_of_steps;
     ecp->ecp_command.instruction.value_in_step_no = nr_of_steps;
 
@@ -597,12 +597,12 @@ bool ui_common_robot::move_xyz_angle_axis ( double final_position[7] )
     if (nr_of_steps < 1)
         return true;
 
-    ecp->ecp_command.instruction.instruction_type = SET_GET;
-    ecp->ecp_command.instruction.get_arm_type = XYZ_ANGLE_AXIS;
+    ecp->ecp_command.instruction.instruction_type = lib::SET_GET;
+    ecp->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
     ecp->ecp_command.instruction.set_type = ARM_DV; // ARM
-    ecp->ecp_command.instruction.set_arm_type = XYZ_ANGLE_AXIS;
-    ecp->ecp_command.instruction.motion_type = ABSOLUTE;
-    ecp->ecp_command.instruction.interpolation_type = MIM;
+    ecp->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+    ecp->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+    ecp->ecp_command.instruction.interpolation_type = lib::MIM;
     ecp->ecp_command.instruction.motion_steps = nr_of_steps;
     ecp->ecp_command.instruction.value_in_step_no = nr_of_steps;
 
@@ -631,9 +631,9 @@ bool ui_common_robot::read_motors ( double current_position[] )
     // printf("poczatek read motors\n");
     // Parametry zlecenia ruchu i odczytu polozenia
     ecp->ecp_command.instruction.get_type = ARM_DV;
-    ecp->ecp_command.instruction.instruction_type = GET;
-    ecp->ecp_command.instruction.get_arm_type = MOTOR;
-    ecp->ecp_command.instruction.interpolation_type = MIM;
+    ecp->ecp_command.instruction.instruction_type = lib::GET;
+    ecp->ecp_command.instruction.get_arm_type = lib::MOTOR;
+    ecp->ecp_command.instruction.interpolation_type = lib::MIM;
 
     execute_motion();
     // printf("dalej za query read motors\n");
@@ -652,10 +652,10 @@ bool ui_common_robot::read_joints ( double current_position[] )
     // Zlecenie odczytu polozenia
     int j;
     // Parametry zlecenia ruchu i odczytu polozenia
-    ecp->ecp_command.instruction.instruction_type = GET;
+    ecp->ecp_command.instruction.instruction_type = lib::GET;
     ecp->ecp_command.instruction.get_type = ARM_DV;
-    ecp->ecp_command.instruction.get_arm_type = JOINT;
-    ecp->ecp_command.instruction.interpolation_type = MIM;
+    ecp->ecp_command.instruction.get_arm_type = lib::JOINT;
+    ecp->ecp_command.instruction.interpolation_type = lib::MIM;
 
     execute_motion();
 
@@ -672,9 +672,9 @@ bool ui_common_robot::read_xyz_euler_zyz (double current_position[])
     int j;
     // Parametry zlecenia ruchu i odczytu polozenia
     ecp->ecp_command.instruction.get_type = ARM_DV;
-    ecp->ecp_command.instruction.instruction_type = GET;
-    ecp->ecp_command.instruction.get_arm_type = XYZ_EULER_ZYZ;
-    ecp->ecp_command.instruction.interpolation_type = MIM;
+    ecp->ecp_command.instruction.instruction_type = lib::GET;
+    ecp->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
+    ecp->ecp_command.instruction.interpolation_type = lib::MIM;
 
     execute_motion();
 
@@ -692,9 +692,9 @@ bool ui_common_robot::read_xyz_angle_axis (double current_position[])
     // Pobranie aktualnego polozenia ramienia robota
 
     ecp->ecp_command.instruction.get_type = ARM_DV;
-    ecp->ecp_command.instruction.instruction_type = GET;
-    ecp->ecp_command.instruction.get_arm_type = XYZ_ANGLE_AXIS;
-    ecp->ecp_command.instruction.interpolation_type = MIM;
+    ecp->ecp_command.instruction.instruction_type = lib::GET;
+    ecp->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
+    ecp->ecp_command.instruction.interpolation_type = lib::MIM;
 
     execute_motion();
 

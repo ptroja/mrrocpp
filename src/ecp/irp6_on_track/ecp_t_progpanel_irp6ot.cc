@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------
 //   ecp_t_progpanel_irp6ot.cc
 //
-//                     EFFECTOR CONTROL PROCESS (ECP) - main()
+//                     EFFECTOR CONTROL PROCESS (lib::ECP) - main()
 //
 // Ostatnia modyfikacja: 2007
 // ------------------------------------------------------------------------
@@ -50,9 +50,9 @@ int create_grab_path(double *object_coordinates, ecp_teach_in_generator generato
 	chwyt[6]=5.0;
 
 	generator.flush_pose_list();
-   	generator.create_pose_list_head(XYZ_EULER_ZYZ, 3.0, okolica);
-   	generator.insert_pose_list_element(XYZ_EULER_ZYZ, 3.0, object_coordinates);
- 	generator.insert_pose_list_element(XYZ_EULER_ZYZ, 3.0, chwyt);
+   	generator.create_pose_list_head(lib::XYZ_EULER_ZYZ, 3.0, okolica);
+   	generator.insert_pose_list_element(lib::XYZ_EULER_ZYZ, 3.0, object_coordinates);
+ 	generator.insert_pose_list_element(lib::XYZ_EULER_ZYZ, 3.0, chwyt);
 
 	return 0;
 }*/

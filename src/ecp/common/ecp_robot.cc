@@ -109,16 +109,16 @@ bool ecp_robot::is_synchronised ( void ) const
 
 
 // Kopiowanie bufora przesylanego z MP do bufora wysylanego do EDP
-void ecp_robot::copy_mp_to_edp_buffer(c_buffer& mp_buffer)
+void ecp_robot::copy_mp_to_edp_buffer(lib::c_buffer& mp_buffer)
 {
-	memcpy( &ecp_command.instruction, &mp_buffer, sizeof(c_buffer));
+	memcpy( &ecp_command.instruction, &mp_buffer, sizeof(lib::c_buffer));
 }
 
 // by Y - o dziwo tego nie bylo !!!
 // Kopiowanie bufora przesylanego z EDP do bufora wysylanego do MP
-void ecp_robot::copy_edp_to_mp_buffer(r_buffer& mp_buffer)
+void ecp_robot::copy_edp_to_mp_buffer(lib::r_buffer& mp_buffer)
 {
-	memcpy( &mp_buffer, &reply_package, sizeof(r_buffer));
+	memcpy( &mp_buffer, &reply_package, sizeof(lib::r_buffer));
 }
 
 
@@ -176,8 +176,8 @@ void ecp_robot::connect_to_edp(lib::configurator &config)
 		} else {
 			int e = errno; // kod bledu systemowego
 			fprintf(stderr, "Unable to locate EDP_MASTER process at channel \"%s\": %s\n", edp_net_attach_point, sys_errlist[errno]);
-			sr_ecp_msg->message(SYSTEM_ERROR, e, "Unable to locate EDP_MASTER process");
-			throw ecp_robot::ECP_main_error(SYSTEM_ERROR, (uint64_t) 0);
+			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Unable to locate EDP_MASTER process");
+			throw ecp_robot::ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 		}
 	}
 	printf(".done\n");
@@ -204,12 +204,12 @@ void ecp_robot::synchronise(void)
 	 }
 	 */
 	// komunikacja wlasciwa
-	ecp_command.instruction.instruction_type = SYNCHRO;
+	ecp_command.instruction.instruction_type = lib::SYNCHRO;
 
 	send(); // Wyslanie zlecenia synchronizacji
 	query(); // Odebranie wyniku zlecenia
 
-	synchronised = (reply_package.reply_type == SYNCHRO_OK);
+	synchronised = (reply_package.reply_type == lib::SYNCHRO_OK);
 
 	/*
 	 // odmaskowanie sygnalu SIGTERM
@@ -236,38 +236,38 @@ void ecp_robot::send()
 	// printf("w ECP send instruction.instruction_type: %d\n", ecp_command.instruction.instruction_type);
 
 	switch (ecp_command.instruction.instruction_type) {
-		case SET:
-		case SET_GET:
-		case GET:
-		case SYNCHRO:
-		case QUERY:
-		case INVALID:
+		case lib::SET:
+		case lib::SET_GET:
+		case lib::GET:
+		case lib::SYNCHRO:
+		case lib::QUERY:
+		case lib::INVALID:
 			// command_size = ((BYTE*) (&instruction.address_byte)) - ((BYTE*) (&instruction.instruction_type));
 			// by Y bylo command_size zamiast sizeof(in..)
 			// by Y&W doszlo  dodatkowe pole w instruction zwiazane z obsluga resource managera
 
 #if !defined(USE_MESSIP_SRR)
-			if (MsgSend(EDP_fd, &ecp_command, sizeof(ecp_command), &reply_package, sizeof(r_buffer)) == -1)
+			if (MsgSend(EDP_fd, &ecp_command, sizeof(ecp_command), &reply_package, sizeof(lib::r_buffer)) == -1)
 #else
 			int32_t answer;
 			if ( messip_send(EDP_fd, 0, 0,
 							&ecp_command, sizeof(ecp_command),
-							&answer, &reply_package, sizeof(r_buffer),
+							&answer, &reply_package, sizeof(lib::r_buffer),
 							MESSIP_NOTIMEOUT) == -1 )
 #endif
 			{
 				uint64_t e= errno; // kod bledu systemowego
 				perror("Send error to EDP_MASTER");
-				sr_ecp_msg->message(SYSTEM_ERROR, e, "Send error to EDP_MASTER");
-				throw ecp_robot::ECP_error(SYSTEM_ERROR, (uint64_t) 0);
+				sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Send error to EDP_MASTER");
+				throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			}
-			//printf("sizeof(r_buffer) = %d\n", sizeof(r_buffer));
+			//printf("sizeof(lib::r_buffer) = %d\n", sizeof(lib::r_buffer));
 
 			break;
 		default: // blad: nieprawidlowe polecenie
 			perror("ECP: INVALID COMMAND TO EDP\n");
-			sr_ecp_msg->message(NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
-			throw ecp_robot::ECP_error(NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			sr_ecp_msg->message(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 	}
 
 	lib::set_thread_priority(pthread_self(), MAX_PRIORITY-2);
@@ -278,7 +278,7 @@ void ecp_robot::send()
 void ecp_robot::query()
 
 {
-	ecp_command.instruction.instruction_type = QUERY;
+	ecp_command.instruction.instruction_type = lib::QUERY;
 	send(); // czyli wywolanie funkcji ecp_buffer::send, ktora jest powyzej :)
 }
 
@@ -303,9 +303,9 @@ void ecp_robot::execute_motion(void)
 	 */
 	// komunikacja wlasciwa
 	send();
-	if (reply_package.reply_type == ERROR) {
+	if (reply_package.reply_type == lib::ERROR) {
 		query();
-		throw ECP_error (NON_FATAL_ERROR, EDP_ERROR);
+		throw ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
 	}
 	query();
 
@@ -319,8 +319,8 @@ void ecp_robot::execute_motion(void)
 	 printf ("blad w ECP procmask signal\n");
 	 }
 	 */
-	if (reply_package.reply_type == ERROR) {
-		throw ECP_error (NON_FATAL_ERROR, EDP_ERROR);
+	if (reply_package.reply_type == lib::ERROR) {
+		throw ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
 	}
 }
 } // namespace common

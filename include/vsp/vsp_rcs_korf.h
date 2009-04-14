@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------------
-// Proces:	VIRTUAL SENSOR PROCESS (VSP)
+// Proces:	VIRTUAL SENSOR PROCESS (lib::VSP)
 // Plik:	vsp_rcs_korf.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:	Deklaracja klasy vsp_rcs_korf - znajdywanie rozwiazania algorytmem Korfa.

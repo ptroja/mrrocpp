@@ -38,7 +38,7 @@ protected:
 
 public:
 	lib::sensor *vsp_vis_sac;
-	trajectory_description td;
+	lib::trajectory_description td;
   	int step_no;
   	int idle_step_counter;
 	double delta[6];

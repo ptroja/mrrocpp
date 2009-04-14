@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //                            ecp_g_smooth2.cc
-//            Effector Control Process (ECP) - smooth2 generator
+//            Effector Control Process (lib::ECP) - smooth2 generator
 // generator powstal na podstawie generatora smooth, glowna zmiana jest
 // rezygnacja z podawanie predkosci poczatkowej i koncowej w kazdym ruchu
 // autor: Rafal Tulwin
@@ -103,7 +103,7 @@ bool smooth2::load_file_with_path(char* file_name) {
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
     char coordinate_type[80];  // Opis wspolrzednych: "MOTOR", "JOINT", ...
-    POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
+    lib::POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
     uint64_t e;       // Kod bledu systemowego
     uint64_t number_of_poses; // Liczba zapamietanych pozycji
     uint64_t i, j;    // Liczniki petli
@@ -117,13 +117,13 @@ bool smooth2::load_file_with_path(char* file_name) {
     if (!from_file)
     {
         perror(file_name);
-        throw base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw base::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
     }
 
     if ( !(from_file >> coordinate_type) )
     {
         from_file.close();
-        throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+        throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
     }
 
     // Usuwanie spacji i tabulacji
@@ -143,32 +143,32 @@ bool smooth2::load_file_with_path(char* file_name) {
 
     if ( !strcmp(coordinate_type, "MOTOR") )
     {
-        ps = MOTOR;
+        ps = lib::MOTOR;
     }
     else if ( !strcmp(coordinate_type, "JOINT") )
     {
-        ps = JOINT;
+        ps = lib::JOINT;
     }
     else if ( !strcmp(coordinate_type, "XYZ_ANGLE_AXIS") )
     {
-        ps = XYZ_ANGLE_AXIS;
+        ps = lib::XYZ_ANGLE_AXIS;
     }
     else if ( !strcmp(coordinate_type, "XYZ_EULER_ZYZ") )
     {
-        ps = XYZ_EULER_ZYZ;
+        ps = lib::XYZ_EULER_ZYZ;
     }
 
     else
     {
         from_file.close();
-        throw base::ECP_error(NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+        throw base::ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
     }
 
     // printf("po coord type %d\n", ps);
     if ( !(from_file >> number_of_poses) )
     {
         from_file.close();
-        throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+        throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
     }
 
     // printf("po number of poses %d\n", number_of_poses);
@@ -186,7 +186,7 @@ bool smooth2::load_file_with_path(char* file_name) {
             if ( !(from_file >> v[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
                 from_file.close();
-                throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+                throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         }
 
@@ -196,7 +196,7 @@ bool smooth2::load_file_with_path(char* file_name) {
             if ( !(from_file >> a[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
                 from_file.close();
-                throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+                throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         }
 
@@ -206,7 +206,7 @@ bool smooth2::load_file_with_path(char* file_name) {
             if ( !(from_file >> coordinates[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
                 from_file.close();
-                throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+                throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         }
 
@@ -275,7 +275,7 @@ void smooth2::get_pose(void) {
 
 }
 // -------------------------------------------------------
-void smooth2::set_pose (POSE_SPECIFICATION ps, double vv[MAX_SERVOS_NR], double aa[MAX_SERVOS_NR], double c[MAX_SERVOS_NR]) {
+void smooth2::set_pose (lib::POSE_SPECIFICATION ps, double vv[MAX_SERVOS_NR], double aa[MAX_SERVOS_NR], double c[MAX_SERVOS_NR]) {
     pose_list_iterator->arm_type = ps;
     memcpy(pose_list_iterator->coordinates, c, MAX_SERVOS_NR*sizeof(double));
     memcpy(pose_list_iterator->v, vv, MAX_SERVOS_NR*sizeof(double));
@@ -314,12 +314,12 @@ bool smooth2::is_last_list_element(void) {
     return false;
 }
 
-void smooth2::create_pose_list_head (POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
+void smooth2::create_pose_list_head (lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
     pose_list->push_back(ecp_smooth2_taught_in_pose(ps, v, a, coordinates));
     pose_list_iterator = pose_list->begin();
 }
 
-void smooth2::insert_pose_list_element (POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
+void smooth2::insert_pose_list_element (lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
     pose_list->push_back(ecp_smooth2_taught_in_pose(ps, v, a, coordinates));
     pose_list_iterator++;
 }
@@ -352,13 +352,13 @@ bool smooth2::load_a_v_min (char* file_name)
     {
         // printf("error\n");
         perror(file_name);
-        throw base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw base::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
     }
 
     if ( !(from_file >> v_grip_min) )
     { // Zabezpieczenie przed danymi nienumerycznymi
         from_file.close();
-        throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+        throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
     }
 
     from_file.close();
@@ -375,7 +375,7 @@ bool smooth2::load_a_v_max (char* file_name)
     {
         // printf("error\n");
         perror(file_name);
-        throw base::ECP_error(NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw base::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
     }
 
     for ( j = 0; j < MAX_SERVOS_NR; j++)
@@ -383,7 +383,7 @@ bool smooth2::load_a_v_max (char* file_name)
         if ( !(from_file >> v_max_motor[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
     for ( j = 0; j < MAX_SERVOS_NR; j++)
@@ -391,7 +391,7 @@ bool smooth2::load_a_v_max (char* file_name)
         if ( !(from_file >> a_max_motor[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
 
@@ -400,7 +400,7 @@ bool smooth2::load_a_v_max (char* file_name)
         if ( !(from_file >> v_max_joint[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
     for ( j = 0; j < MAX_SERVOS_NR; j++)
@@ -408,7 +408,7 @@ bool smooth2::load_a_v_max (char* file_name)
         if ( !(from_file >> a_max_joint[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
 
@@ -417,7 +417,7 @@ bool smooth2::load_a_v_max (char* file_name)
         if ( !(from_file >> v_max_zyz[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
     for ( j = 0; j < MAX_SERVOS_NR; j++)
@@ -425,7 +425,7 @@ bool smooth2::load_a_v_max (char* file_name)
         if ( !(from_file >> a_max_zyz[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
 
@@ -434,7 +434,7 @@ bool smooth2::load_a_v_max (char* file_name)
         if ( !(from_file >> v_max_aa[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
     for ( j = 0; j < MAX_SERVOS_NR; j++)
@@ -442,7 +442,7 @@ bool smooth2::load_a_v_max (char* file_name)
         if ( !(from_file >> a_max_aa[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw base::ECP_error (NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
 
@@ -541,44 +541,44 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
     switch ( td.arm_type )
     {
 
-    case MOTOR:
-        the_robot->EDP_data.instruction_type = GET;
+    case lib::MOTOR:
+        the_robot->EDP_data.instruction_type = lib::GET;
         the_robot->EDP_data.get_type = ARM_DV;
         the_robot->EDP_data.set_type = ARM_DV;
-        the_robot->EDP_data.set_arm_type = MOTOR;
-        the_robot->EDP_data.get_arm_type = MOTOR;
-        the_robot->EDP_data.motion_type = ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = MIM;
+        the_robot->EDP_data.set_arm_type = lib::MOTOR;
+        the_robot->EDP_data.get_arm_type = lib::MOTOR;
+        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+         the_robot->EDP_data.next_interpolation_type = lib::MIM;
         break;
-    case JOINT:
-        the_robot->EDP_data.instruction_type = GET;
+    case lib::JOINT:
+        the_robot->EDP_data.instruction_type = lib::GET;
         the_robot->EDP_data.get_type = ARM_DV;
         the_robot->EDP_data.set_type = ARM_DV;
-        the_robot->EDP_data.set_arm_type = JOINT;
-        the_robot->EDP_data.get_arm_type = JOINT;
-        the_robot->EDP_data.motion_type = ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = MIM;
+        the_robot->EDP_data.set_arm_type = lib::JOINT;
+        the_robot->EDP_data.get_arm_type = lib::JOINT;
+        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+         the_robot->EDP_data.next_interpolation_type = lib::MIM;
         break;
-    case XYZ_EULER_ZYZ:
-        the_robot->EDP_data.instruction_type = GET;
+    case lib::XYZ_EULER_ZYZ:
+        the_robot->EDP_data.instruction_type = lib::GET;
         the_robot->EDP_data.get_type = ARM_DV;
         the_robot->EDP_data.set_type = ARM_DV;
-        the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
-        the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;
-        the_robot->EDP_data.motion_type = ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = MIM;
+        the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
+        the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
+        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+         the_robot->EDP_data.next_interpolation_type = lib::MIM;
         break;
-    case XYZ_ANGLE_AXIS:
-        the_robot->EDP_data.instruction_type = GET;
+    case lib::XYZ_ANGLE_AXIS:
+        the_robot->EDP_data.instruction_type = lib::GET;
         the_robot->EDP_data.get_type = ARM_DV;
         the_robot->EDP_data.set_type = ARM_DV;
-        the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
-        the_robot->EDP_data.get_arm_type = XYZ_ANGLE_AXIS;
-        the_robot->EDP_data.motion_type = ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = MIM;
+        the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
+        the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
+        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+         the_robot->EDP_data.next_interpolation_type = lib::MIM;
         break;
     default:
-        throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+        throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
     } // end : switch ( td.arm_type )
 
     //printf("first_step wywolanie\n");
@@ -634,18 +634,18 @@ bool smooth2::next_step () {
 		}
     } else {
     	//printf("kolejny makrokrok\n");
-    	the_robot->EDP_data.instruction_type = SET; //ustawienie parametrow ruchu w edp_data
+    	the_robot->EDP_data.instruction_type = lib::SET; //ustawienie parametrow ruchu w edp_data
     	the_robot->EDP_data.get_type = NOTHING_DV; //ponizej w caseach jest dalsze ustawianie
-    	the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
+    	the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
 
     	switch ( td.arm_type ) {//TODO dodac wiecej opcji wspolrzednych
-    		case XYZ_EULER_ZYZ:
+    		case lib::XYZ_EULER_ZYZ:
     		//	printf("wejscie do eulera\n");
-    			the_robot->EDP_data.instruction_type = SET; //dalsze ustawianie parametrow ruchu w edp
+    			the_robot->EDP_data.instruction_type = lib::SET; //dalsze ustawianie parametrow ruchu w edp
     			the_robot->EDP_data.set_type = ARM_DV; // ARM
-    			the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
-    			the_robot->EDP_data.motion_type = ABSOLUTE;
-    			the_robot->EDP_data.next_interpolation_type = MIM;
+    			the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
+    			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+    			the_robot->EDP_data.next_interpolation_type = lib::MIM;
     			the_robot->EDP_data.motion_steps = td.internode_step_no;
     			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -683,7 +683,7 @@ bool smooth2::next_step () {
     			break;
 
     		default:
-    			throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+    			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
     	}// end:switch
   //  	printf("koncowka ifa \n");
     }// end: if
@@ -725,7 +725,7 @@ void smooth2::calculate(void) {
 
 			switch (td.arm_type) {
 
-			case XYZ_EULER_ZYZ:
+			case lib::XYZ_EULER_ZYZ:
 				printf("euler w first_interval\n");
 				for (i = 0; i < 6; i++) {
 					pose_list_iterator->start_position[i] = the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];//pierwsze przypisanie start_position
@@ -752,7 +752,7 @@ void smooth2::calculate(void) {
 				break;
 
 			default:
-				throw ECP_error(NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 
 			} // end: switch
 
@@ -761,7 +761,7 @@ void smooth2::calculate(void) {
 		} else { // end: if(first_interval)
 			switch (td.arm_type) {
 
-			case XYZ_EULER_ZYZ:
+			case lib::XYZ_EULER_ZYZ:
 				for (i = 0; i < 6; i++) {
 					temp = pose_list_iterator->coordinates[i];
 					next_pose_list_ptr();
@@ -791,7 +791,7 @@ void smooth2::calculate(void) {
 				break;
 
 			default:
-				throw ECP_error(NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			}
 		}
 
@@ -1038,7 +1038,7 @@ void smooth2::calculate(void) {
                     else
                     {
                         printf("Blad w obliczaniu predkosci w 2 etapach!!\n");
-                        throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
+                        throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
                     }
 
                 }
@@ -1122,7 +1122,7 @@ void smooth2::calculate(void) {
                         else
                         {//blad - brak rozwiazania
                             printf("blad! nie da sie obliczyc predkosci (%d)\n", i);
-                            //throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
+                            //throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
                             v_r[i]=v_1;
                         }
                     }
@@ -1194,7 +1194,7 @@ void smooth2::calculate(void) {
 
         switch ( td.arm_type )
         {
-        case MOTOR:
+        case lib::MOTOR:
             for(i=0;i<MAX_SERVOS_NR;i++){
                 start_position[i]=the_robot->EDP_data.current_motor_arm_coordinates[i];
 					 if(type==2)
@@ -1210,7 +1210,7 @@ void smooth2::calculate(void) {
             calculate();
             break;
 
-        case JOINT:
+        case lib::JOINT:
             for(i=0;i<MAX_SERVOS_NR;i++)
                 start_position[i]=the_robot->EDP_data.current_joint_arm_coordinates[i];
             for(i=0; i<MAX_SERVOS_NR; i++)
@@ -1223,7 +1223,7 @@ void smooth2::calculate(void) {
             calculate();
             break;
 
-        case XYZ_EULER_ZYZ:
+        case lib::XYZ_EULER_ZYZ:
             for(i=0;i<6;i++)
                 start_position[i]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];//pierwsze przypisanie start_position
             start_position[6]=the_robot->EDP_data.current_gripper_coordinate;
@@ -1238,7 +1238,7 @@ void smooth2::calculate(void) {
             printf("w first interval\n");
             calculate();
             break;
-        case XYZ_ANGLE_AXIS:
+        case lib::XYZ_ANGLE_AXIS:
             for(i=0;i<6;i++)
                 start_position[i]=the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
             start_position[6]=the_robot->EDP_data.current_gripper_coordinate;
@@ -1253,7 +1253,7 @@ void smooth2::calculate(void) {
             calculate();
             break;
         default:
-            throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+            throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
         } // end:switch
 
         first_interval = false;
@@ -1292,7 +1292,7 @@ void smooth2::calculate(void) {
 
             switch ( td.arm_type )
             {
-            case MOTOR:
+            case lib::MOTOR:
                 for(i=0; i<MAX_SERVOS_NR; i++)
                 {
                     v_r[i]=v_max_motor[i]*v[i];
@@ -1303,7 +1303,7 @@ void smooth2::calculate(void) {
                 calculate();
                 break;
 
-            case JOINT:
+            case lib::JOINT:
                 for(i=0; i<MAX_SERVOS_NR; i++)
                 {
                     v_r[i]=v_max_joint[i]*v[i];
@@ -1314,7 +1314,7 @@ void smooth2::calculate(void) {
                 calculate();
                 break;
 
-            case XYZ_EULER_ZYZ:
+            case lib::XYZ_EULER_ZYZ:
                 for(i=0; i<MAX_SERVOS_NR; i++)
                 {
                     v_r[i]=v_max_zyz[i]*v[i];
@@ -1326,7 +1326,7 @@ void smooth2::calculate(void) {
                 fflush(stdout);
                 calculate();
                 break;
-            case XYZ_ANGLE_AXIS:
+            case lib::XYZ_ANGLE_AXIS:
                 for(i=0; i<MAX_SERVOS_NR; i++)
                 {
                     v_r[i]=v_max_aa[i]*v[i];
@@ -1337,7 +1337,7 @@ void smooth2::calculate(void) {
                 calculate();
                 break;
             default:
-                throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+                throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
             } // end:switch
       		 node_counter=1; //ustawienie makrokroku na 1
 
@@ -1347,19 +1347,19 @@ void smooth2::calculate(void) {
 
     // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 
-    the_robot->EDP_data.instruction_type = SET; //ustawienie parametrow ruchu w edp_data
+    the_robot->EDP_data.instruction_type = lib::SET; //ustawienie parametrow ruchu w edp_data
     the_robot->EDP_data.get_type = NOTHING_DV; //ponizej w caseach jest dalsze ustawianie
-    the_robot->EDP_data.get_arm_type = INVALID_END_EFFECTOR;
+    the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
 
 
     switch ( td.arm_type )
     {
-    case MOTOR:
-        the_robot->EDP_data.instruction_type = SET;
+    case lib::MOTOR:
+        the_robot->EDP_data.instruction_type = lib::SET;
         the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.set_arm_type = MOTOR;
-        the_robot->EDP_data.motion_type = ABSOLUTE;
-        the_robot->EDP_data.next_interpolation_type = MIM;
+        the_robot->EDP_data.set_arm_type = lib::MOTOR;
+        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+        the_robot->EDP_data.next_interpolation_type = lib::MIM;
         the_robot->EDP_data.motion_steps = td.internode_step_no;
         the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -1393,12 +1393,12 @@ void smooth2::calculate(void) {
         }
         break;
 
-    case JOINT:
-            the_robot->EDP_data.instruction_type = SET;
+    case lib::JOINT:
+            the_robot->EDP_data.instruction_type = lib::SET;
         the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.set_arm_type = JOINT;
-        the_robot->EDP_data.motion_type = ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = MIM;
+        the_robot->EDP_data.set_arm_type = lib::JOINT;
+        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+         the_robot->EDP_data.next_interpolation_type = lib::MIM;
         the_robot->EDP_data.motion_steps = td.internode_step_no;
         the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -1433,12 +1433,12 @@ void smooth2::calculate(void) {
         }
         break;
 
-    case XYZ_EULER_ZYZ:
-            the_robot->EDP_data.instruction_type = SET; //dalsze ustawianie parametrow ruchu w edp
+    case lib::XYZ_EULER_ZYZ:
+            the_robot->EDP_data.instruction_type = lib::SET; //dalsze ustawianie parametrow ruchu w edp
         the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.set_arm_type = XYZ_EULER_ZYZ;
-        the_robot->EDP_data.motion_type = ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = MIM;
+        the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
+        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+         the_robot->EDP_data.next_interpolation_type = lib::MIM;
         the_robot->EDP_data.motion_steps = td.internode_step_no;
         the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -1472,12 +1472,12 @@ void smooth2::calculate(void) {
 
         break;
 
-    case XYZ_ANGLE_AXIS:
-            the_robot->EDP_data.instruction_type = SET;
+    case lib::XYZ_ANGLE_AXIS:
+            the_robot->EDP_data.instruction_type = lib::SET;
         the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.set_arm_type = XYZ_ANGLE_AXIS;
-        the_robot->EDP_data.motion_type = ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = MIM;
+        the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
+        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+         the_robot->EDP_data.next_interpolation_type = lib::MIM;
         the_robot->EDP_data.motion_steps = td.internode_step_no;
         the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -1498,7 +1498,7 @@ void smooth2::calculate(void) {
         }
         break;
     default:
-            throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+            throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
     }// end:switch
 
 
@@ -1640,7 +1640,7 @@ void smooth2::calculate(void) {
                     else
                     {
                         printf("Blad w obliczaniu predkosci w 2 etapach!!\n");
-                        throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
+                        throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
                     }
 
                 }
@@ -1724,7 +1724,7 @@ void smooth2::calculate(void) {
                         else
                         {//blad - brak rozwiazania
                             printf("blad! nie da sie obliczyc predkosci (%d)\n", i);
-                            //throw ECP_error(NON_FATAL_ERROR, INVALID_MP_COMMAND);
+                            //throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
                             v_r[i]=v_1;
                         }
                     }

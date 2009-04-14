@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------
 //   ecp_t_pouring_irp6ot.cc - zadanie przelewania, ECP dla IRP6_ON_TRACK
 //
-//                     EFFECTOR CONTROL PROCESS (ECP) - main()
+//                     EFFECTOR CONTROL PROCESS (lib::ECP) - main()
 //
 // Ostatnia modyfikacja: 2008
 // ------------------------------------------------------------------------

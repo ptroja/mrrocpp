@@ -15,7 +15,7 @@ class playerpos : public common::generator::base
 		PlayerClient *client;
 		PositionProxy *device;
 		
-		playerpos_goal_t goal;
+		lib::playerpos_goal_t goal;
 		
 		int test_mode;
 
@@ -28,7 +28,7 @@ class playerpos : public common::generator::base
 
 		virtual bool next_step ();
 		
-		void set_goal(const playerpos_goal_t &_goal);
+		void set_goal(const lib::playerpos_goal_t &_goal);
 };
 
 }

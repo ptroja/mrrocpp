@@ -22,7 +22,7 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-void multiplayer::move_electron_robot(const playerpos_goal_t &goal)
+void multiplayer::move_electron_robot(const lib::playerpos_goal_t &goal)
 {
 	set_next_playerpos_goal (ROBOT_ELECTRON, goal);
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, ROBOT_ELECTRON, ROBOT_ELECTRON);
@@ -56,7 +56,7 @@ void multiplayer::main_task_algorithm(void)
 			sr_ecp_msg->message("Nowy makrokrok");
 
 			// pozycja robota mobilnego
-			playerpos_goal_t goal;
+			lib::playerpos_goal_t goal;
 #if 0
 			// dojezdzanie
 			goal.forward(1.2); move_electron_robot(goal);

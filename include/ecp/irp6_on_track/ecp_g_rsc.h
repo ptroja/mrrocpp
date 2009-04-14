@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP)
+// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP)
 // Plik:			ecp_rsc.h
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		robot_stopped_condition - deklaracja klasy

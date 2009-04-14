@@ -52,7 +52,7 @@ void base::Move()
 
     // generacja pierwszego kroku ruchu
     node_counter = 0;
-    ecp_t.set_ecp_reply(ECP_ACKNOWLEDGE);
+    ecp_t.set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 
     if (!first_step() ||
             (!(!communicate_with_mp_in_move || ecp_t.mp_buffer_receive_and_send())))

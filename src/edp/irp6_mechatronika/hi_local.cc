@@ -111,9 +111,9 @@ hardware_interface::hardware_interface ( effector &_master )   : common::hardwar
             // Ustawienie czestotliwosci przerwan
             int_freq = SET_INT_FREQUENCY | INT_FREC_DIVIDER;
             out8(ADR_OF_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR);
-            out16(SERVO_COMMAND_1_ADR, int_freq);
+            out16(SERVO_COMMAND1_ADR, int_freq);
             delay(10);
-            out16(SERVO_COMMAND_1_ADR, START_CLOCK_INTERRUPTS);
+            out16(SERVO_COMMAND1_ADR, START_CLOCK_INTERRUPTS);
         }
     }
 
@@ -134,11 +134,11 @@ hardware_interface::hardware_interface ( effector &_master )   : common::hardwar
         if(master.test_mode==0)
         {
             /*out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (BYTE)i);
-            out16(SERVO_COMMAND_1_ADR,RESET_MANUAL_MODE); // Zerowanie ruchow recznych
+            out16(SERVO_COMMAND1_ADR,RESET_MANUAL_MODE); // Zerowanie ruchow recznych
 
-            out16(SERVO_COMMAND_1_ADR, PROHIBIT_MANUAL_MODE); // Zabrania ruchow za pomoca przyciskow w szafie*/
+            out16(SERVO_COMMAND1_ADR, PROHIBIT_MANUAL_MODE); // Zabrania ruchow za pomoca przyciskow w szafie*/
             md	.card_adress=FIRST_SERVO_PTR + (BYTE)i;
-            md	.register_adress=SERVO_COMMAND_1_ADR;
+            md	.register_adress=SERVO_COMMAND1_ADR;
             md	.value=RESET_MANUAL_MODE;
             hi_int_wait(INT_SINGLE_COMMAND, 2);
             md	.value=PROHIBIT_MANUAL_MODE;
@@ -173,7 +173,7 @@ hardware_interface::~hardware_interface ( void )   // destruktor
         for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
         {
             md	.card_adress=FIRST_SERVO_PTR + (BYTE)i;
-            md	.register_adress=SERVO_COMMAND_1_ADR;
+            md	.register_adress=SERVO_COMMAND1_ADR;
             md	.value=ALLOW_MANUAL_MODE;
             hi_int_wait(INT_SINGLE_COMMAND, 2);
         }
@@ -241,7 +241,7 @@ void hardware_interface::reset_counters ( void )
     for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
     {
         md	.card_adress=FIRST_SERVO_PTR + (BYTE)i;
-        md	.register_adress=SERVO_COMMAND_1_ADR;
+        md	.register_adress=SERVO_COMMAND1_ADR;
         md	.value=MICROCONTROLLER_MODE;
         hi_int_wait(INT_SINGLE_COMMAND, 2);
         md	.value=STOP_MOTORS;
@@ -281,7 +281,7 @@ void hardware_interface::reset_counters ( void )
     read_write_hardware();
     // Odczyt polozenia osi slowo 32 bitowe - negacja licznikow 16-bitowych
     // out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR);
-    // out16(SERVO_COMMAND_1_ADR, RESET_POSITION_COUNTER);
+    // out16(SERVO_COMMAND1_ADR, RESET_POSITION_COUNTER);
     // robot_status[0].adr_offset_plus_4 = 0xFFFF ^ in16(SERVO_REPLY_POS_LOW_ADR); // Mlodsze slowo 16-bitowe
     // robot_status[0].adr_offset_plus_6 = 0xFFFF ^ in16(SERVO_REPLY_POS_HIGH_ADR);// Starsze slowo 16-bitowe
     // printf("L=%x U=%x  \n",robot_status[0].adr_offset_plus_4, robot_status[0].adr_offset_plus_6);
@@ -325,7 +325,7 @@ int hardware_interface::synchronise_via_lm629(void)
     {
         // tryb pojedynczych polecen w obsludze przerwania
         md	.card_adress=FIRST_SERVO_PTR + (BYTE)i;
-        md	.register_adress=SERVO_COMMAND_1_ADR;
+        md	.register_adress=SERVO_COMMAND1_ADR;
         md	.value=LM629_VIA_MICROCONTROLLER_MODE;
         hi_int_wait(INT_SINGLE_COMMAND, 10);
         md	.value=FINISH_SYNCHRO;
@@ -348,7 +348,7 @@ int hardware_interface::synchronise_via_lm629(void)
 
         // tryb pojedynczych polecen w obsludze przerwania
         md	.card_adress=FIRST_SERVO_PTR + (BYTE)i;
-        md	.register_adress=SERVO_COMMAND_1_ADR;
+        md	.register_adress=SERVO_COMMAND1_ADR;
         md	.value=MICROCONTROLLER_MODE;
         hi_int_wait(INT_SINGLE_COMMAND, 10);
     };
@@ -387,7 +387,7 @@ int hardware_interface::hi_int_wait (int inter_mode, int lag)
     if (iw_ret==-1)
     { // jesli przerwanie nie przyjdzie na czas
         if (interrupt_error == 1)
-            master.msg->message(NON_FATAL_ERROR, "Nie odebrano przerwania - sprawdz szafe");
+            master.msg->message(lib::NON_FATAL_ERROR, "Nie odebrano przerwania - sprawdz szafe");
         interrupt_error++;
         master.controller_state_edp_buf.is_wardrobe_on = false;
     }
@@ -411,7 +411,7 @@ int hardware_interface::hi_int_wait (int inter_mode, int lag)
     if ((interrupt_error>2) || (!master.controller_state_edp_buf.is_power_on))
     {
         if ((msg_send++) == 0)
-            master.msg->message(NON_FATAL_ERROR, "Wylaczono moc - robot zablokowany");
+            master.msg->message(lib::NON_FATAL_ERROR, "Wylaczono moc - robot zablokowany");
         md.is_robot_blocked = true;
     }
 
@@ -430,7 +430,7 @@ void hardware_interface::start_synchro ( int drive_number )
     trace_resolver_zero = true;
     // Wlacz sledzenie zera rezolwera (synchronizacja robota)
     md	.card_adress=FIRST_SERVO_PTR + (BYTE)drive_number;
-    md	.register_adress=SERVO_COMMAND_1_ADR;
+    md	.register_adress=SERVO_COMMAND1_ADR;
     md	.value=START_SYNCHRO;
     hi_int_wait(INT_SINGLE_COMMAND, 2);
 }
@@ -443,7 +443,7 @@ void hardware_interface::finish_synchro ( int drive_number )
 
     // Zakonczyc sledzenie zera rezolwera i przejdz do trybu normalnej pracy
     md	.card_adress=FIRST_SERVO_PTR + (BYTE)drive_number;
-    md	.register_adress=SERVO_COMMAND_1_ADR;
+    md	.register_adress=SERVO_COMMAND1_ADR;
     md	.value=FINISH_SYNCHRO;
     hi_int_wait(INT_SINGLE_COMMAND, 2);
 

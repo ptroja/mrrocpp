@@ -31,7 +31,7 @@ playerpos::~playerpos()
 	delete client;
 }
 
-void playerpos::set_goal(const playerpos_goal_t &_goal)
+void playerpos::set_goal(const lib::playerpos_goal_t &_goal)
 {
 	this->goal = _goal;
 }

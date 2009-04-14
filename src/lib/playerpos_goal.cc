@@ -2,6 +2,9 @@
 
 #include "lib/com_buf.h"
 
+namespace mrrocpp {
+namespace lib {
+
 void playerpos_goal_t::setGoal(double _x, double _y, double _t)
 {
 	x = _x;
@@ -44,3 +47,6 @@ playerpos_goal_t::playerpos_goal_t(double _x, double _y, double _t) :
 	x(_x), y(_y), t(_t)
 {
 }
+
+} // namespace lib
+} // namespace mrrocpp

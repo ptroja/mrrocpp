@@ -34,7 +34,7 @@ protected:
 	double v_grip, v_grip_min;
 
 	int first_interval;
-	trajectory_description td;
+	lib::trajectory_description td;
 	
 	int k[MAX_SERVOS_NR]; //kierunek ruchu (+/-)
 	
@@ -69,11 +69,11 @@ public:
 	void initiate_pose_list(void);
 	void next_pose_list_ptr (void);
 	void get_pose (void);
-	void set_pose (POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
+	void set_pose (lib::POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
 	bool is_pose_list_element ( void );
 	bool is_last_list_element ( void );
-	void create_pose_list_head (POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
-	void insert_pose_list_element (POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
+	void create_pose_list_head (lib::POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
+	void insert_pose_list_element (lib::POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
 	int pose_list_length(void);
 
 	void set_relative(void); //zmiana na tryb przyrostowy
@@ -88,8 +88,8 @@ public:
 	bool load_trajectory_from_xml(char* fileName, char* nodeName);
 	bool load_trajectory_from_xml(mp::common::Trajectory &trajectory);
 
-	void load_coordinates(POSE_SPECIFICATION,double,double,double,double,double,double,double,double);
-	void load_coordinates(POSE_SPECIFICATION,double[],double[],double[],double[],double[]);
+	void load_coordinates(lib::POSE_SPECIFICATION,double,double,double,double,double,double,double,double);
+	void load_coordinates(lib::POSE_SPECIFICATION,double[],double[],double[],double[],double[]);
 
 
 	virtual bool first_step();

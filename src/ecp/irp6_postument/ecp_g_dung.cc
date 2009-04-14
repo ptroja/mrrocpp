@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //                             ecp_gen_test.cc
-//             Effector Control Process (ECP) - force & torque methods
+//             Effector Control Process (lib::ECP) - force & torque methods
 // 			Test nowego EDP z wykorzystaniem sily
 // 			By Slawek Bazant
 //			Ostatnia modyfikacja: 05.01.2006r.
@@ -41,13 +41,13 @@ bool dung::first_step()
     lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
     tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
-    the_robot->EDP_data.instruction_type = GET;
+    the_robot->EDP_data.instruction_type = lib::GET;
     the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
     the_robot->EDP_data.set_type = ARM_DV;
-    the_robot->EDP_data.set_arm_type = JOINT;
-    the_robot->EDP_data.get_arm_type = JOINT;
-    the_robot->EDP_data.motion_type = ABSOLUTE;
-     the_robot->EDP_data.next_interpolation_type = MIM;
+    the_robot->EDP_data.set_arm_type = lib::JOINT;
+    the_robot->EDP_data.get_arm_type = lib::JOINT;
+    the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+     the_robot->EDP_data.next_interpolation_type = lib::MIM;
     the_robot->EDP_data.motion_steps = td.internode_step_no;
     the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
@@ -85,7 +85,7 @@ bool dung::next_step ( )
     {
         return false;
     }
-    the_robot->EDP_data.instruction_type = SET_GET;
+    the_robot->EDP_data.instruction_type = lib::SET_GET;
 
     // DUNG START
     q1 = the_robot->EDP_data.current_joint_arm_coordinates[0];

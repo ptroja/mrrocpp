@@ -38,7 +38,7 @@
 // #define MAMDEBUG
 
 // Wiadomosc wysylana do ECP.
-extern UI_ECP_message ui_ecp_msg;
+extern lib::UI_ECP_message ui_ecp_msg;
 // Rozkaz przeslany z ECP.
 extern ui_ecp_buffer* ui_ecp_obj;
 extern ui_state_def ui_state;
@@ -60,8 +60,8 @@ int MAM_btn_start_measures( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
     ui_ecp_msg.hdr.type = 0x00;
     ui_ecp_msg.hdr.subtype = 0x00;
     // Polecenie dla ECP -> start pomiarow.
-    ui_ecp_msg.command = MAM_START;
-    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), NULL, 0) == -1) {
+    ui_ecp_msg.command = lib::MAM_START;
+    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
         perror("MAM_btn_start_measures: Send to ECP failed");
     }else{
         // Ustawienie przyciskow.
@@ -87,8 +87,8 @@ int MAM_btn_stop_measures( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
     ui_ecp_msg.hdr.type = 0x00;
     ui_ecp_msg.hdr.subtype = 0x00;
     // Polecenie dla ECP -> kalibracja czujnika.
-    ui_ecp_msg.command = MAM_STOP;
-    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), NULL, 0) == -1) {
+    ui_ecp_msg.command = lib::MAM_STOP;
+    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
         perror("MAM_btn_stop_measures: Send to ECP failed");
     }else{
         // Ustawienie przyciskow.
@@ -114,8 +114,8 @@ int MAM_btn_clear_measures( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
     ui_ecp_msg.hdr.type = 0x00;
     ui_ecp_msg.hdr.subtype = 0x00;
     // Polecenie dla ECP -> kalibracja czujnika.
-    ui_ecp_msg.command = MAM_CLEAR;
-    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), NULL, 0) == -1) {
+    ui_ecp_msg.command = lib::MAM_CLEAR;
+    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
         perror("MAM_btn_clear_measures: Send to ECP failed");
     }else{
         // Ustawienie przyciskow.
@@ -138,7 +138,7 @@ int MAM_btn_save_measures( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
         printf("MAM_btn_save_measures\n");
     #endif
     // Komenda wysylana z okna FileDialog po wcisnieciu accept.
-    FDCommand = MAM_SAVE;
+    FDCommand = lib::MAM_SAVE;
     // Stworzenie okna wndFileLocation.
     ApCreateModule (ABM_wndFileLocation, widget, cbinfo);
     return( Pt_CONTINUE );
@@ -153,8 +153,8 @@ int MAM_btn_calibrate( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
     ui_ecp_msg.hdr.type = 0x00;
     ui_ecp_msg.hdr.subtype = 0x00;
     // Polecenie dla ECP -> kalibracja czujnika.
-    ui_ecp_msg.command = MAM_CALIBRATE;
-    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), NULL, 0) == -1) {
+    ui_ecp_msg.command = lib::MAM_CALIBRATE;
+    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
         perror("MAM_btn_calibrate: Send to ECP failed");
     }else{
         // Ustawienie przyciskow.
@@ -179,8 +179,8 @@ int MAM_btn_exit( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
     ui_ecp_msg.hdr.type = 0x00;
     ui_ecp_msg.hdr.subtype = 0x00;
     // Polecenie dla ECP.
-    ui_ecp_msg.command = MAM_EXIT;
-    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(UI_ECP_message), NULL, 0) == -1) {
+    ui_ecp_msg.command = lib::MAM_EXIT;
+    if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
          perror("MAM_btn_exit: Send to ECP failed");
         };
     // Zamkniecie polaczenia.

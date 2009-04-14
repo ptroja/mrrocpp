@@ -95,7 +95,7 @@ int main(int argc, char *argv[], char **arge) {
 #endif
 		/* Lokalizacja procesu wywietlania komunikatow SR */
 		/*
-		 if ((msg = new lib::sr_edp(EDP, config->return_string_value("resourceman_attach_point"),
+		 if ((msg = new lib::sr_edp(lib::EDP, config->return_string_value("resourceman_attach_point"),
 		 config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL) {
 		 perror ( "Unable to locate SR ");
 		 throw System_error();
@@ -135,7 +135,7 @@ int main(int argc, char *argv[], char **arge) {
 	catch (...) { // Dla zewnetrznej petli try
 		perror("Unidentified error in EDP");
 		// Komunikat o bledzie wysylamy do SR
-		edp::common::master->msg->message(FATAL_ERROR, EDP_UNIDENTIFIED_ERROR);
+		edp::common::master->msg->message(lib::FATAL_ERROR, EDP_UNIDENTIFIED_ERROR);
 		/*
 		 // Wystapil niezidentyfikowany blad, oczekiwanie na jawne zabicie procesu
 		 // przez operatora

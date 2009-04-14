@@ -12,10 +12,10 @@ namespace common {
 struct robot_ECP_transmission_data : ecp_mp::robot_transmission_data
 {
 public:
-    MP_COMMAND mp_command;                // polecenie przesylane z MP do ECP
-    ECP_REPLY  ecp_reply;                 // odpowiedz z ECP do MP
+    lib::MP_COMMAND mp_command;                // polecenie przesylane z MP do ECP
+    lib::ECP_REPLY  ecp_reply;                 // odpowiedz z ECP do MP
 
-    ecp_next_state_t ecp_next_state;
+    lib::ecp_next_state_t ecp_next_state;
 
     // speech command interface
     char commandRecognized[SPEECH_RECOGNITION_TEXT_LEN];
@@ -33,9 +33,9 @@ class robot : public ecp_mp::robot
     // musi zawierac pola danych (skladowe) dotyczace
     // ostatnio zrealizowanej pozycji oraz pozycji zadanej
 protected:
-    MP_COMMAND_PACKAGE mp_command;      // Bufor z rozkazem dla ECP
+    lib::MP_COMMAND_PACKAGE mp_command;      // Bufor z rozkazem dla ECP
     // - uzytkownik nie powinien z tego korzystac
-    ECP_REPLY_PACKAGE ecp_reply_package;        // Bufor z odpowiedzia z ECP
+    lib::ECP_REPLY_PACKAGE ecp_reply_package;        // Bufor z odpowiedzia z ECP
     // - uzytkownik nie powinien z tego korzystac
 
     task::base &mp_object;
@@ -69,9 +69,9 @@ public:
     class MP_error
     {  // Klasa obslugi bledow robotow
     public:
-        const ERROR_CLASS error_class;
+        const lib::ERROR_CLASS error_class;
         const uint64_t mp_error;
-        MP_error (ERROR_CLASS err0, uint64_t err1);
+        MP_error (lib::ERROR_CLASS err0, uint64_t err1);
     };
 
     // Zlecenie wykonania ruchu przez robota

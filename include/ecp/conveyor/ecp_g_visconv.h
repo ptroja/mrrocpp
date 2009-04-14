@@ -8,7 +8,7 @@
 #define _ECP_GEN_LEGOBRICK_CONV_H
 #include "sys/time.h"
 
-#include "lib/com_buf.h"		// trajectory_description
+#include "lib/com_buf.h"		// lib::trajectory_description
 
 #include "ecp/common/ecp_generator.h"
 
@@ -29,7 +29,7 @@ class incremental_move: public common::generator::base {
 	int step;
 	struct timeval acctime;
 public:	
-	trajectory_description td;
+	lib::trajectory_description td;
 	
 	// konstruktor
 	incremental_move(common::task::base& _ecp_task, double inc_move);  

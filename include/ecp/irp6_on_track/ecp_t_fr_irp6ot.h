@@ -10,9 +10,9 @@ namespace task {
 
 class fr: public common::task::base  {
 protected:
-	trajectory_description tdes_joint;
+	lib::trajectory_description tdes_joint;
 	common::generator::linear_parabolic *adg1;
-	// parabolic_generator adg1(JOINT, 20., joint_pp);   // generator dla trajektorii dojscia we wsp. wew
+	// parabolic_generator adg1(lib::JOINT, 20., joint_pp);   // generator dla trajektorii dojscia we wsp. wew
 	// generator dla trajektorii dojscia we wsp. zew.
 	common::generator::linear_parabolic *adg2;
 	common::generator::elipsoid *el;

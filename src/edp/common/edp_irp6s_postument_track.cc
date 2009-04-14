@@ -42,7 +42,7 @@ namespace edp {
 namespace common {
 
 /*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::set_rmodel(c_buffer &instruction)
+void irp6s_postument_track_effector::set_rmodel(lib::c_buffer &instruction)
 {
 	// BYTE previous_model;
 	// BYTE previous_corrector;
@@ -50,31 +50,31 @@ void irp6s_postument_track_effector::set_rmodel(c_buffer &instruction)
 	//printf(" SET RMODEL: ");
 	switch (instruction.set_rmodel_type)
 	{
-	case TOOL_FRAME:
+	case lib::TOOL_FRAME:
 		//printf("TOOL_FRAME\n");
 		// przepisa specyfikacj do TRANSFORMATORa
 		tool_frame_2_frame(instruction);
 		break;
-	case TOOL_XYZ_ANGLE_AXIS:
+	case lib::TOOL_XYZ_ANGLE_AXIS:
 		//printf("TOOL_XYZ_ANGLE_AXIS\n");
 		// przeksztaci i przepisa specyfikacj do TRANSFORMATORa
 		tool_xyz_aa_2_frame(instruction);
 		break;
-	case TOOL_XYZ_EULER_ZYZ:
+	case lib::TOOL_XYZ_EULER_ZYZ:
 		//printf("TOOL_XYZ_EULER_ZYZ\n");
 		// przeksztaci i przepisa specyfikacj do TRANSFORMATORa
 		tool_xyz_eul_zyz_2_frame(instruction);
 		break;
-	case ARM_KINEMATIC_MODEL:
+	case lib::ARM_KINEMATIC_MODEL:
 		//printf("ARM_KINEMATIC_MODEL\n");
 		// Ustawienie modelu kinematyki.
 		set_kinematic_model(instruction.rmodel.kinematic_model.kinematic_model_no);
 		break;
-	case SERVO_ALGORITHM:
+	case lib::SERVO_ALGORITHM:
 		// ustawienie algorytmw serworegulacji oraz ich parametrow
 		// zmiana algorytmu regulacji
 		/* Uformowanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow dla procesu SERVO_GROUP */
-		servo_command.instruction_code = SERVO_ALGORITHM_AND_PARAMETERS;
+		servo_command.instruction_code = lib::SERVO_ALGORITHM_AND_PARAMETERS;
 		for (int i = 0; i<number_of_servos; i++)
 		{
 			servo_command.parameters.servo_alg_par.servo_algorithm_no[i] = servo_algorithm_ecp[i]
@@ -85,7 +85,7 @@ void irp6s_postument_track_effector::set_rmodel(c_buffer &instruction)
 		/* Wyslanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow procesowi SERVO_GROUP */
 		send_to_SERVO_GROUP(); //
 		break;
-	case FORCE_TOOL:
+	case lib::FORCE_TOOL:
 		if(vs==NULL){
 			printf("Nie w�aczono force_tryb=2 w pliku ini\n");
 			break;
@@ -98,7 +98,7 @@ void irp6s_postument_track_effector::set_rmodel(c_buffer &instruction)
 		vs->next_force_tool_weight = instruction.rmodel.force_tool.weight;
 		vs->check_for_command_execution_finish();
 		break;
-	case FORCE_BIAS:
+	case lib::FORCE_BIAS:
 		if(vs==NULL){
 			printf("Nie w�aczono force_tryb=2 w pliku ini\n");
 			break;
@@ -114,33 +114,33 @@ void irp6s_postument_track_effector::set_rmodel(c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::get_rmodel(c_buffer &instruction)
+void irp6s_postument_track_effector::get_rmodel(lib::c_buffer &instruction)
 {
 	//printf(" GET RMODEL: ");
 	switch (instruction.get_rmodel_type)
 	{
-	case TOOL_FRAME:
+	case lib::TOOL_FRAME:
 		//printf("TOOL_FRAME\n");
 		// przepisa specyfikacj z TRANSFORMATORa do bufora wysykowego
 		tool_frame_2_frame_rep();
 		break;
-	case TOOL_XYZ_ANGLE_AXIS:
+	case lib::TOOL_XYZ_ANGLE_AXIS:
 		//printf("TOOL_XYZ_ANGLE_AXIS\n");
 		// przeksztaci i przepisa specyfikacj z TRANSFORMATORa do bufora wysykowego
 		tool_frame_2_xyz_aa();
 		break;
-	case TOOL_XYZ_EULER_ZYZ:
+	case lib::TOOL_XYZ_EULER_ZYZ:
 		//printf("TOOL_XYZ_EULER_ZYZ\n");
 		// przeksztaci i przepisa specyfikacj z TRANSFORMATORa do bufora wysykowego
 		tool_frame_2_xyz_eul_zyz();
 		break;
-	case ARM_KINEMATIC_MODEL:
-		reply.rmodel_type = ARM_KINEMATIC_MODEL;
+	case lib::ARM_KINEMATIC_MODEL:
+		reply.rmodel_type = lib::ARM_KINEMATIC_MODEL;
 		// okreslenie numeru zestawu parametrow przelicznika kinematycznego oraz jego korektora
 		reply.rmodel.kinematic_model.kinematic_model_no = get_current_kinematic_model_no();
 		break;
-	case SERVO_ALGORITHM:
-		reply.rmodel_type = SERVO_ALGORITHM;
+	case lib::SERVO_ALGORITHM:
+		reply.rmodel_type = lib::SERVO_ALGORITHM;
 		// ustawienie numeru algorytmu serworegulatora oraz numeru jego zestawu parametrow
 		for (int i = 0; i<number_of_servos; i++)
 			if (instruction.is_get_arm())
@@ -154,7 +154,7 @@ void irp6s_postument_track_effector::get_rmodel(c_buffer &instruction)
 				reply.rmodel.servo_algorithm.servo_parameters_no[i] = servo_parameters_sg[i];
 			}
 		break;
-	case FORCE_TOOL:
+	case lib::FORCE_TOOL:
 		for (int i = 0; i<3; i++)
 		{
 			reply.rmodel.force_tool.position[i] = vs->current_force_tool_position[i];
@@ -179,10 +179,10 @@ void irp6s_postument_track_effector::arm_frame_2_xyz_eul_zyz()
 	lib::Homog_matrix A(current_end_effector_frame);
 	switch (reply.reply_type)
 	{
-	case ARM:
-	case ARM_INPUTS:
-	case ARM_RMODEL:
-	case ARM_RMODEL_INPUTS:
+	case lib::ARM:
+	case lib::ARM_INPUTS:
+	case lib::ARM_RMODEL:
+	case lib::ARM_RMODEL_INPUTS:
 		//A.get_mech_xyz_euler_zyz(reply.arm.pf_def.arm_coordinates);
 		//A.get_mech_xyz_euler_zyz(rb_obj->step_data.current_cartesian_position);
 		A.get_xyz_euler_zyz(reply.arm.pf_def.arm_coordinates);
@@ -248,7 +248,7 @@ irp6s_postument_track_effector::irp6s_postument_track_effector(lib::configurator
 
 	}
 
-void irp6s_postument_track_effector::pose_force_linear_move(c_buffer &instruction)
+void irp6s_postument_track_effector::pose_force_linear_move(lib::c_buffer &instruction)
 {}
 
 /*--------------------------------------------------------------------------*/
@@ -261,7 +261,7 @@ void irp6s_postument_track_effector::create_threads()
 		// byY - utworzenie watku pomiarow sily
 		if (pthread_create(&force_tid, NULL, &force_thread_start, (void *) this) !=EOK)
 		{
-			msg->message(SYSTEM_ERROR, errno, "EDP: Failed to spawn READER");
+			msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to spawn READER");
 			char buf[20];
 			netmgr_ndtostr(ND2S_LOCAL_STR, ND_LOCAL_NODE, buf, sizeof(buf));
 			printf(" Failed to thread FORCE_thread on node: %s\n", buf);
@@ -273,7 +273,7 @@ void irp6s_postument_track_effector::create_threads()
 		// by Y - utworzenie watku komunikacji miedzy EDP a VSP
 		if (pthread_create(&edp_vsp_tid, NULL, &edp_vsp_thread_start, (void *) this) !=EOK)
 		{
-			msg->message(SYSTEM_ERROR, errno, "EDP: Failed to spawn READER");
+			msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to spawn READER");
 			char buf[20];
 			netmgr_ndtostr(ND2S_LOCAL_STR, ND_LOCAL_NODE, buf, sizeof(buf));
 			printf(" Failed to thread EDP_VSP_thread on node: %s\n", buf);
@@ -287,7 +287,7 @@ void irp6s_postument_track_effector::create_threads()
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffer &instruction)
+void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buffer &instruction)
 {
 	//	static int debugi=0;
 	//   debugi++;
@@ -297,12 +297,12 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffer &i
 	// zmienne z bufora wejsciowego
 	const WORD &ECP_motion_steps = instruction.motion_steps; // liczba krokow w makrokroku
 	const WORD &ECP_value_in_step_no = instruction.value_in_step_no; // liczba krokow po ktorych bedzie wyslana odpowiedz do ECP o przewidywanym zakonczeniu ruchu
-	const POSE_SPECIFICATION &set_arm_type = instruction.set_arm_type;
+	const lib::POSE_SPECIFICATION &set_arm_type = instruction.set_arm_type;
 
 	double (&force_xyz_torque_xyz)[6] = instruction.arm.pf_def.force_xyz_torque_xyz; // wartosci zadana sily
 	double (&inertia)[6] = instruction.arm.pf_def.inertia;
 	double (&reciprocal_damping)[6] = instruction.arm.pf_def.reciprocal_damping;
-	const BEHAVIOUR_SPECIFICATION (&behaviour)[6] = instruction.arm.pf_def.behaviour;
+	const lib::BEHAVIOUR_SPECIFICATION (&behaviour)[6] = instruction.arm.pf_def.behaviour;
 	const double &desired_gripper_coordinate = instruction.arm.pf_def.gripper_coordinate;
 	const double (&arm_coordinates)[MAX_SERVOS_NR] = instruction.arm.pf_def.arm_coordinates;
 	const frame_tab &arm_frame = instruction.arm.pf_def.arm_frame;
@@ -316,11 +316,11 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffer &i
 	{
 		switch (behaviour[i])
 		{
-		case UNGUARDED_MOTION:
+		case lib::UNGUARDED_MOTION:
 			reciprocal_damping[i]= 0.0; // the force influence is eliminated
 			// inertia is not eleliminated
 			break;
-		case GUARDED_MOTION:
+		case lib::GUARDED_MOTION:
 			force_xyz_torque_xyz[i] = 0.0; // the desired force is set to zero
 			break;
 		default:
@@ -363,23 +363,23 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffer &i
 
 	switch (motion_type)
 	{
-	case ABSOLUTE:
+	case lib::ABSOLUTE:
 		switch (set_arm_type)
 		{
-		case FRAME:
+		case lib::FRAME:
 			goal_frame.set_frame_tab(arm_frame);
 			break;
-		case XYZ_EULER_ZYZ:
+		case lib::XYZ_EULER_ZYZ:
 			goal_frame.set_xyz_euler_zyz(arm_coordinates);
 			break;
-		case XYZ_ANGLE_AXIS:
+		case lib::XYZ_ANGLE_AXIS:
 			goal_frame.set_xyz_angle_axis(arm_coordinates);
 			break;
-		case JOINT:
+		case lib::JOINT:
 			get_current_kinematic_model()->i2e_transform(arm_coordinates, &goal_frame_tab);
 			goal_frame.set_frame_tab(goal_frame_tab);
 			break;
-		case MOTOR:
+		case lib::MOTOR:
 			get_current_kinematic_model()->mp2i_transform(arm_coordinates, tmp_joints);
 			get_current_kinematic_model()->i2e_transform(tmp_joints, &goal_frame_tab);
 			goal_frame.set_frame_tab(goal_frame_tab);
@@ -388,22 +388,22 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffer &i
 			break;
 		}
 		break;
-		case RELATIVE:
+		case lib::RELATIVE:
 			switch (set_arm_type)
 			{
-			case FRAME:
+			case lib::FRAME:
 				goal_frame.set_frame_tab(arm_frame);
 				goal_frame = begining_end_effector_frame * goal_frame;
 				break;
-			case XYZ_EULER_ZYZ:
+			case lib::XYZ_EULER_ZYZ:
 				goal_frame.set_xyz_euler_zyz(arm_coordinates);
 				goal_frame = begining_end_effector_frame * goal_frame;
 				break;
-			case XYZ_ANGLE_AXIS:
+			case lib::XYZ_ANGLE_AXIS:
 				goal_frame.set_xyz_angle_axis(arm_coordinates); // tutaj goal_frame jako zmienna tymczasowa
 				goal_frame = begining_end_effector_frame * goal_frame;
 				break;
-			case JOINT:
+			case lib::JOINT:
 				for (int i = 0; i < MAX_SERVOS_NR; i++)
 				{
 					tmp_joints[i] = begining_joints[i] + arm_coordinates[i];
@@ -411,7 +411,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffer &i
 				get_current_kinematic_model()->i2e_transform(tmp_joints, &goal_frame_tab);
 				goal_frame.set_frame_tab(goal_frame_tab);
 				break;
-			case MOTOR:
+			case lib::MOTOR:
 				for (int i = 0; i < MAX_SERVOS_NR; i++)
 				{
 					tmp_motor_pos[i] = desired_motor_pos_new[i] + arm_coordinates[i];
@@ -433,11 +433,11 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffer &i
 
 	switch (set_arm_type)
 	{
-	case FRAME:
-	case XYZ_EULER_ZYZ:
-	case XYZ_ANGLE_AXIS:
-	case JOINT:
-	case MOTOR:
+	case lib::FRAME:
+	case lib::XYZ_EULER_ZYZ:
+	case lib::XYZ_ANGLE_AXIS:
+	case lib::JOINT:
+	case lib::MOTOR:
 		goal_frame_increment_in_end_effector = ((!begining_end_effector_frame)*goal_frame);
 		goal_frame_increment_in_end_effector.get_xyz_angle_axis(goal_xyz_angle_axis_increment_in_end_effector);
 		for (int i = 0; i < 6; i++)
@@ -446,7 +446,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffer &i
 					*((double)ECP_motion_steps) ) );
 		}
 		break;
-	case PF_VELOCITY:
+	case lib::PF_VELOCITY:
 		for (int i = 0; i < 6; i++)
 		{
 			pos_xyz_rot_xyz_vector[i] = arm_coordinates[i];
@@ -519,11 +519,11 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffer &i
 
 		switch (set_arm_type)
 		{
-		case FRAME:
-		case XYZ_EULER_ZYZ:
-		case XYZ_ANGLE_AXIS:
-		case JOINT:
-		case MOTOR:
+		case lib::FRAME:
+		case lib::XYZ_EULER_ZYZ:
+		case lib::XYZ_ANGLE_AXIS:
+		case lib::JOINT:
+		case lib::MOTOR:
 			pos_xyz_rot_xyz_vector = v_tr_inv_modified_beginning_to_desired_end_effector_frame
 			* base_pos_xyz_rot_xyz_vector;
 			break;
@@ -536,7 +536,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffer &i
 			// MODYFIKACJA PARAMETROW W ZALEZNOSCI OD ZALOZONEGO ZACHOWANIA DLA DANEGO KIERUNKU
 			switch (behaviour[i])
 			{
-			case CONTACT:
+			case lib::CONTACT:
 				pos_xyz_rot_xyz_vector[i] = 0.0; // the desired velocity is set to zero
 				break;
 			default:
@@ -611,26 +611,26 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(c_buffer &i
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::move_arm(c_buffer &instruction)
+void irp6s_postument_track_effector::move_arm(lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
-	if (instruction.interpolation_type == MIM)
+	if (instruction.interpolation_type == lib::MIM)
 	{
 		switch (instruction.set_arm_type)
 		{
-		case MOTOR:
+		case lib::MOTOR:
 			compute_motors(instruction);
 			move_servos();
 			mt_tt_obj->trans_t_to_master_order_status_ready();
 			break;
-		case JOINT:
+		case lib::JOINT:
 			compute_joints(instruction);
 			move_servos();
 			mt_tt_obj->trans_t_to_master_order_status_ready();
 			break;
-		case XYZ_EULER_ZYZ:
+		case lib::XYZ_EULER_ZYZ:
 
 			// zapisanie wartosci zadanej dla readera
 			rb_obj->lock_mutex();
@@ -647,12 +647,12 @@ void irp6s_postument_track_effector::move_arm(c_buffer &instruction)
 			mt_tt_obj->trans_t_to_master_order_status_ready();
 
 			break;
-		case XYZ_ANGLE_AXIS:
+		case lib::XYZ_ANGLE_AXIS:
 			compute_xyz_angle_axis(instruction);
 			move_servos();
 			mt_tt_obj->trans_t_to_master_order_status_ready();
 			break;
-		case FRAME:
+		case lib::FRAME:
 			compute_frame(instruction);
 			move_servos();
 			mt_tt_obj->trans_t_to_master_order_status_ready();
@@ -661,7 +661,7 @@ void irp6s_postument_track_effector::move_arm(c_buffer &instruction)
 		throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
 		}
 	}
-	else if (instruction.interpolation_type == TCIM)
+	else if (instruction.interpolation_type == lib::TCIM)
 	{
 
 		pose_force_torque_at_frame_move(instruction);
@@ -675,7 +675,7 @@ void irp6s_postument_track_effector::move_arm(c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void irp6s_postument_track_effector::get_arm_position(bool read_hardware, c_buffer &instruction)
+void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
 
 	//   printf(" GET ARM\n");
@@ -685,7 +685,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, c_buff
 	if (read_hardware)
 	{
 		// Uformowanie rozkazu odczytu dla SERVO_GROUP
-		servo_command.instruction_code = READ;
+		servo_command.instruction_code = lib::READ;
 		// Wyslanie rozkazu do SERVO_GROUP
 		// Pobranie z SERVO_GROUP aktualnej pozycji silnikow
 		//		printf("get_arm_position read_hardware\n");
@@ -722,24 +722,24 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, c_buff
 
 	switch (instruction.get_arm_type)
 	{
-	case FRAME:
+	case lib::FRAME:
 		// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
 		arm_frame_2_frame();
 		break;
-	case XYZ_ANGLE_AXIS:
+	case lib::XYZ_ANGLE_AXIS:
 		// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
 		arm_frame_2_xyz_aa();
 		break;
-	case XYZ_EULER_ZYZ:
+	case lib::XYZ_EULER_ZYZ:
 		// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
 		arm_frame_2_xyz_eul_zyz(); // dla sterowania pozycyjnego
-		reply.arm_type = XYZ_EULER_ZYZ;
+		reply.arm_type = lib::XYZ_EULER_ZYZ;
 		break;
-	case JOINT:
+	case lib::JOINT:
 		// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
 		arm_joints_2_joints();
 		break;
-	case MOTOR:
+	case lib::MOTOR:
 		arm_motors_2_motors();
 		break;
 	default: // blad: nieznany sposob zapisu wspolrzednych koncowki
@@ -747,7 +747,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, c_buff
 		throw NonFatal_error_2(INVALID_GET_END_EFFECTOR_TYPE);
 	}
 
-	if (instruction.interpolation_type == TCIM)
+	if (instruction.interpolation_type == lib::TCIM)
 	{
 		lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
 		lib::Ft_v_tr ft_tr_inv_current_frame_matrix(!current_frame_wo_offset, lib::Ft_v_tr::FT);

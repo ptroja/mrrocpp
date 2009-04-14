@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	VIRTUAL SENSOR PROCESS (VSP) 
+// Proces: 	VIRTUAL SENSOR PROCESS (lib::VSP) 
 // Plik:			vsp_sensor.h
 // System:	QNX/MRROCPP  v. 6.3
 // Opis:		Deklaracja klasy bazowej vsp_sensor - bazy czujnikow po stronie procesu VSP.

@@ -108,7 +108,7 @@ void sk::main_task_algorithm(void)
 		if ( save_activated && operator_reaction ("Save drawing ") )
 		{
 			sr_ecp_msg->message("Zapisywanie trajektorii");
-			yefg->save_file (PF_VELOCITY);
+			yefg->save_file (lib::PF_VELOCITY);
 		}
 
 	}

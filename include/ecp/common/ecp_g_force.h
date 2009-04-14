@@ -71,7 +71,7 @@ class y_nose_run_force : public common::generator::base
 
 
 public:
-    trajectory_description td;
+    lib::trajectory_description td;
     int step_no;
     double delta[6];
 
@@ -115,7 +115,7 @@ protected:
     int in_state_iteration; // numer interacji dla biezacego stanu generatora (powierzchni, uniesienia etc.)
 
 public:
-    trajectory_description td;
+    lib::trajectory_description td;
     int step_no;
     int int_mode; // wewnetrzny tryb pracy
     double delta[6];
@@ -155,11 +155,11 @@ class y_drawing_teach_in_force : public ecp_teach_in_generator
 
 protected:
 
-    POSE_SPECIFICATION emptyps;
+    lib::POSE_SPECIFICATION emptyps;
 
 public:
     double delta[6];
-    trajectory_description td;
+    lib::trajectory_description td;
     int step_no;
 
     // uczenie czy ruch - wybor trybu pracy generatora (definicje YG_TEACH, YG_MOVE)
@@ -197,8 +197,8 @@ class y_edge_follow_force : public ecp_teach_in_generator
 
 protected:
 
-    POSE_SPECIFICATION emptyps;
-    trajectory_description td;
+    lib::POSE_SPECIFICATION emptyps;
+    lib::trajectory_description td;
     int step_no;
     double delta[6];
     lib::Homog_matrix basic_rot_frame;
@@ -223,8 +223,8 @@ class legobrick_attach_force : public ecp_teach_in_generator
 
 protected:
 
-    POSE_SPECIFICATION emptyps;
-    trajectory_description td;
+    lib::POSE_SPECIFICATION emptyps;
+    lib::trajectory_description td;
     int step_no;
     double delta[6];
     lib::Homog_matrix basic_rot_frame;
@@ -250,8 +250,8 @@ class legobrick_detach_force : public ecp_teach_in_generator
 
 protected:
 
-    POSE_SPECIFICATION emptyps;
-    trajectory_description td;
+    lib::POSE_SPECIFICATION emptyps;
+    lib::trajectory_description td;
     int step_no;
     double delta[6];
     lib::Homog_matrix basic_rot_frame;
@@ -285,7 +285,7 @@ class tff_nose_run : public common::generator::base
 protected:
 
 
-    trajectory_description td;
+    lib::trajectory_description td;
     // skladowesilowe i pozycyjne (zablokowane)
     bool selection_vector_l[6];
     // czy pulse_check ma byc aktywne
@@ -296,7 +296,7 @@ protected:
 	{
 		double next_inertia[6], next_reciprocal_damping[6];
 		double next_velocity[MAX_SERVOS_NR], next_force_xyz_torque_xyz[6];
-		BEHAVIOUR_SPECIFICATION next_behaviour[6];
+		lib::BEHAVIOUR_SPECIFICATION next_behaviour[6];
 	} generator_edp_data;
 	
 
@@ -307,8 +307,8 @@ public:
     tff_nose_run(common::task::base& _ecp_task, int step=0);
     void execute_motion (void);
 
-	void configure_behaviour(BEHAVIOUR_SPECIFICATION x, BEHAVIOUR_SPECIFICATION y, BEHAVIOUR_SPECIFICATION z,
-		 BEHAVIOUR_SPECIFICATION ax, BEHAVIOUR_SPECIFICATION ay, BEHAVIOUR_SPECIFICATION az);
+	void configure_behaviour(lib::BEHAVIOUR_SPECIFICATION x, lib::BEHAVIOUR_SPECIFICATION y, lib::BEHAVIOUR_SPECIFICATION z,
+		 lib::BEHAVIOUR_SPECIFICATION ax, lib::BEHAVIOUR_SPECIFICATION ay, lib::BEHAVIOUR_SPECIFICATION az);
 	void configure_pulse_check(bool pulse_check_activated_l);
 	void configure_velocity(double x, double y, double z,	 double ax, double ay, double az);
 	void configure_force(double x, double y, double z,	 double ax, double ay, double az);
@@ -353,7 +353,7 @@ protected:
 
 
 
-    trajectory_description td;
+    lib::trajectory_description td;
 
     // do konfiguracji pracy generatora
     double goal_position, position_increment;
@@ -388,7 +388,7 @@ class tff_rubik_face_rotate : public common::generator::base
 protected:
 
 
-    trajectory_description td;
+    lib::trajectory_description td;
 
     // do konfiguracji pracy generatora
 
@@ -421,7 +421,7 @@ class tff_gripper_approach : public common::generator::base
 {
 protected:
 
-    trajectory_description td;
+    lib::trajectory_description td;
 
     // do konfiguracji pracy generatora
     double speed;

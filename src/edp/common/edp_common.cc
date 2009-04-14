@@ -38,7 +38,7 @@ effector::effector(lib::configurator &_config, ROBOT_ENUM l_robot_name) :
 
 	/* Lokalizacja procesu wywietlania komunikatow SR */
 
-	if ((msg = new lib::sr_edp(EDP, config.return_string_value("resourceman_attach_point"),
+	if ((msg = new lib::sr_edp(lib::EDP, config.return_string_value("resourceman_attach_point"),
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]")))
 			== NULL) {
 		perror("Unable to locate SR ");
@@ -92,7 +92,7 @@ bool effector::initialize_communication()
 				= name_attach(NULL, hardware_busy_attach_point, NAME_FLAG_ATTACH_GLOBAL);
 
 		if (tmp_attach == NULL) {
-			msg->message(SYSTEM_ERROR, errno, "EDP: hardware_busy_attach_point failed to attach");
+			msg->message(lib::SYSTEM_ERROR, errno, "EDP: hardware_busy_attach_point failed to attach");
 			fprintf( stderr, "hardware_busy_attach_point name_attach() failed: %s\n", strerror( errno ));
 
 			delete[] hardware_busy_attach_point;
@@ -127,7 +127,7 @@ bool effector::initialize_communication()
 	delete [] server_attach_point;
 
 	if (attach == NULL) {
-		msg->message(SYSTEM_ERROR, errno, "EDP: resmg failed to attach");
+		msg->message(lib::SYSTEM_ERROR, errno, "EDP: resmg failed to attach");
 		fprintf( stderr, "name_attach() failed: %s\n", strerror( errno ));
 		return false;
 	}
@@ -138,14 +138,14 @@ bool effector::initialize_communication()
 }
 
 
-void effector::insert_reply_type(REPLY_TYPE rt)
+void effector::insert_reply_type(lib::REPLY_TYPE rt)
 {
 	reply.reply_type = rt;
 }
 
 bool effector::is_reply_type_ERROR() const
 {
-	return (reply.reply_type==ERROR);
+	return (reply.reply_type==lib::ERROR);
 }
 
 void effector::main_loop()
@@ -154,13 +154,13 @@ void effector::main_loop()
 
 void effector::establish_error(uint64_t err0, uint64_t err1)
 {
-	reply.reply_type = ERROR;
+	reply.reply_type = lib::ERROR;
 	reply.error_no.error0 = err0;
 	reply.error_no.error1 = err1;
 }
 
-// r_buffer
-REPLY_TYPE effector::is_reply_type(void) const
+// lib::r_buffer
+lib::REPLY_TYPE effector::is_reply_type(void) const
 {
 	return reply.reply_type;
 }
@@ -176,7 +176,7 @@ uint64_t effector::is_error_no_1(void) const
 }
 
 
-INSTRUCTION_TYPE effector::receive_instruction(void)
+lib::INSTRUCTION_TYPE effector::receive_instruction(void)
 {
 	// oczekuje na polecenie od ECP, wczytuje je oraz zwraca jego typ
 	int rcvid;
@@ -186,7 +186,7 @@ INSTRUCTION_TYPE effector::receive_instruction(void)
 	while (1) {
 #if !defined(USE_MESSIP_SRR)
 		rcvid
-				= MsgReceive(attach->chid, &new_ecp_command, sizeof(ecp_command_buffer), NULL);
+				= MsgReceive(attach->chid, &new_ecp_command, sizeof(lib::ecp_command_buffer), NULL);
 
 		if (rcvid == -1) {/* Error condition, exit */
 			perror("MsgReceive()");
@@ -236,7 +236,7 @@ INSTRUCTION_TYPE effector::receive_instruction(void)
 		}
 #else /* USE_MESSIP_SRR */
 		int32_t type, subtype;
-		rcvid = messip_receive(attach, &type, &subtype, &new_ecp_command, sizeof(ecp_command_buffer), MESSIP_NOTIMEOUT);
+		rcvid = messip_receive(attach, &type, &subtype, &new_ecp_command, sizeof(lib::ecp_command_buffer), MESSIP_NOTIMEOUT);
 
 		if (rcvid == -1)
 		{/* Error condition, exit */
@@ -258,7 +258,7 @@ INSTRUCTION_TYPE effector::receive_instruction(void)
 	caller = rcvid;
 //	printf("edp instruction_type: %d\n", new_ecp_command.instruction.instruction_type);
 // flushall();
-	memcpy( &(new_instruction), &(new_ecp_command.instruction), sizeof(c_buffer) );
+	memcpy( &(new_instruction), &(new_ecp_command.instruction), sizeof(lib::c_buffer) );
 	
 	return new_instruction.instruction_type;
 }
@@ -270,7 +270,7 @@ void effector::reply_to_instruction(void)
 	// informacji o tym, ze przyslane polecenie nie moze byc przyjte
 	// do wykonania w aktualnym stanie EDP
 	// int reply_size;     // liczba bajtw wysyanej odpowiedzi
-	if ( !( (reply.reply_type == ERROR) || (reply.reply_type == SYNCHRO_OK) ))
+	if ( !( (reply.reply_type == lib::ERROR) || (reply.reply_type == lib::SYNCHRO_OK) ))
 		reply.reply_type = real_reply_type;
 #if !defined(USE_MESSIP_SRR)
 	if (MsgReply(caller, 0, &reply, sizeof(reply)) == -1) { // Odpowiedz dla procesu ECP badz UI by Y
@@ -279,10 +279,10 @@ void effector::reply_to_instruction(void)
 #endif /* USE_MESSIP_SRR */
 		uint64_t e= errno;
 		perror("Reply() to ECP failed");
-		msg->message(SYSTEM_ERROR, e, "Reply() to ECP failed");
+		msg->message(lib::SYSTEM_ERROR, e, "Reply() to ECP failed");
 		throw System_error();
 	}
-	real_reply_type = ACKNOWLEDGE;
+	real_reply_type = lib::ACKNOWLEDGE;
 }
 
 reader_buffer::reader_buffer()

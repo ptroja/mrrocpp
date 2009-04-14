@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //                            ecp.cc
-//            Effector Control Process (ECP) - methods
+//            Effector Control Process (lib::ECP) - methods
 // Funkcje do tworzenia procesow ECP
 // robot - irp6_mechatronika
 // 
@@ -39,36 +39,36 @@ void ecp_irp6_mechatronika_robot::create_command (void) {
   ecp_command.instruction.output_values = EDP_data.output_values;
 
   switch (EDP_data.instruction_type) {
-    case SET:
-    case SET_GET:
+    case lib::SET:
+    case lib::SET_GET:
 
         if (EDP_data.set_type & RMODEL_DV) {
           switch (EDP_data.set_rmodel_type) {
-            case TOOL_FRAME:
+            case lib::TOOL_FRAME:
             lib::copy_frame(ecp_command.instruction.rmodel.tool_frame_def.tool_frame, EDP_data.next_tool_frame);
               break;
-            case TOOL_XYZ_ANGLE_AXIS:
+            case lib::TOOL_XYZ_ANGLE_AXIS:
               for (int j=0; j<6; j++)
                 ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[j]
                      = EDP_data.next_XYZ_AA_tool_coordinates[j];
               break;
-            case TOOL_XYZ_EULER_ZYZ:
+            case lib::TOOL_XYZ_EULER_ZYZ:
               for (int j=0; j<6; j++)
                 ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[j]
                      = EDP_data.next_XYZ_ZYZ_tool_coordinates[j];
               break;
 			  ///////////////////K
-			case TOOL_AS_XYZ_EULER_ZY:
+			case lib::TOOL_AS_XYZ_EULER_ZY:
               for (int j=0; j<6; j++)
                 ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[j]
                      = EDP_data.next_XYZ_ZYZ_tool_coordinates[j];
               break;
 			  /////////////////K
-            case ARM_KINEMATIC_MODEL:
+            case lib::ARM_KINEMATIC_MODEL:
                 ecp_command.instruction.rmodel.kinematic_model.kinematic_model_no
                     = EDP_data.next_kinematic_model_no;
               break;
-            case SERVO_ALGORITHM:
+            case lib::SERVO_ALGORITHM:
               for (int j=0; j<IRP6_MECHATRONIKA_NUM_OF_SERVOS; j++) {
                 ecp_command.instruction.rmodel.servo_algorithm.servo_algorithm_no[j]
                    = EDP_data.next_servo_algorithm_no[j];
@@ -77,7 +77,7 @@ void ecp_irp6_mechatronika_robot::create_command (void) {
               }; // end: for
               break;
             default: // Blad: niewlasciwy typ modelu robota
-              throw ECP_error(NON_FATAL_ERROR, INVALID_RMODEL_TYPE);
+              throw ECP_error(lib::NON_FATAL_ERROR, INVALID_RMODEL_TYPE);
           } // end: switch (set_rmodel_type)
         }
         
@@ -88,42 +88,42 @@ void ecp_irp6_mechatronika_robot::create_command (void) {
           ecp_command.instruction.value_in_step_no = EDP_data.value_in_step_no;
           // Wypelniamy czesc zwiazana z polozeniem ramienia
           switch (EDP_data.set_arm_type) {
-            case FRAME:
+            case lib::FRAME:
             lib::copy_frame(ecp_command.instruction.arm.pf_def.arm_frame, EDP_data.next_arm_frame);
                break;
-            case  XYZ_ANGLE_AXIS:
+            case lib::XYZ_ANGLE_AXIS:
               for (int j=0; j<6 ; j++)
                 ecp_command.instruction.arm.pf_def.arm_coordinates[j]
                    = EDP_data.next_XYZ_AA_arm_coordinates[j];
              break;
-            case  XYZ_EULER_ZYZ:
+            case lib::XYZ_EULER_ZYZ:
               for (int j=0; j<6 ; j++)
                 ecp_command.instruction.arm.pf_def.arm_coordinates[j]
                    = EDP_data.next_XYZ_ZYZ_arm_coordinates[j];
               break;
-            case  JOINT:
+            case lib::JOINT:
               for (int j=0; j<IRP6_MECHATRONIKA_NUM_OF_SERVOS ; j++){
                 ecp_command.instruction.arm.pf_def.arm_coordinates[j]
                    = EDP_data.next_joint_arm_coordinates[j];
                   }
               break;
-            case  MOTOR:
+            case lib::MOTOR:
               for (int j=0; j<IRP6_MECHATRONIKA_NUM_OF_SERVOS ; j++)
                 ecp_command.instruction.arm.pf_def.arm_coordinates[j]
                    = EDP_data.next_motor_arm_coordinates[j];
               break;
             default: // Blad: niewlasciwy sposob zadawania polozenia ramienia
-              throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+              throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
           } // end: (set_arm_type)
 
         }
       break;
-    case GET:
-    case SYNCHRO:
-    case QUERY:
+    case lib::GET:
+    case lib::SYNCHRO:
+    case lib::QUERY:
       break;
     default: // blad: nieprawidlowe polecenie
-      throw ECP_error (NON_FATAL_ERROR, INVALID_ECP_COMMAND);
+      throw ECP_error (lib::NON_FATAL_ERROR, INVALID_ECP_COMMAND);
   } // end: switch (instruction_type)
 
 }; // end: ecp_irp6_mechatronika_robot::create_command
@@ -138,35 +138,35 @@ void ecp_irp6_mechatronika_robot::get_reply (void) {
  EDP_data.reply_type = reply_package.reply_type;
   
  switch (EDP_data.reply_type) {
-   case ERROR:
+   case lib::ERROR:
      EDP_data.error_no.error0 = reply_package.error_no.error0;
      EDP_data.error_no.error1 = reply_package.error_no.error1;
      break;
-   case ACKNOWLEDGE:
+   case lib::ACKNOWLEDGE:
      break;
-   case SYNCHRO_OK:
+   case lib::SYNCHRO_OK:
      break;
-   case ARM_INPUTS:
+   case lib::ARM_INPUTS:
 	get_input_reply();
-   case ARM:
+   case lib::ARM:
 	get_arm_reply();
      break;
-  case RMODEL_INPUTS:
+  case lib::RMODEL_INPUTS:
 	get_input_reply();
-   case RMODEL:
+   case lib::RMODEL:
    	get_rmodel_reply();
      break;
-   case INPUTS:
+   case lib::INPUTS:
 	get_input_reply();
      break;
-   case ARM_RMODEL_INPUTS:
+   case lib::ARM_RMODEL_INPUTS:
    	get_input_reply();
-   case ARM_RMODEL:
+   case lib::ARM_RMODEL:
 	get_arm_reply();
 	get_rmodel_reply();
      break;
    default:  // bledna przesylka
-     throw ECP_error (NON_FATAL_ERROR, INVALID_EDP_REPLY);
+     throw ECP_error (lib::NON_FATAL_ERROR, INVALID_EDP_REPLY);
  }
 }
 
@@ -184,64 +184,64 @@ void ecp_irp6_mechatronika_robot::get_input_reply (void)
 void ecp_irp6_mechatronika_robot::get_arm_reply (void)
 {
     switch (reply_package.arm_type) {
-       case MOTOR:
+       case lib::MOTOR:
          for (int i=0; i<IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
            EDP_data.current_motor_arm_coordinates[i] =
              reply_package.arm.pf_def.arm_coordinates[i];
          break;
-       case JOINT:
+       case lib::JOINT:
          for (int i=0; i<IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
            EDP_data.current_joint_arm_coordinates[i] =
              reply_package.arm.pf_def.arm_coordinates[i];
                break;
-       case FRAME:
+       case lib::FRAME:
        lib::copy_frame(EDP_data.current_arm_frame, reply_package.arm.pf_def.arm_frame);
         break;
-       case XYZ_EULER_ZYZ:
+       case lib::XYZ_EULER_ZYZ:
         for (int i=0; i<6; i++)
            EDP_data.current_XYZ_ZYZ_arm_coordinates[i] =
              reply_package.arm.pf_def.arm_coordinates[i];
          break;
          
-       case XYZ_ANGLE_AXIS: 
+       case lib::XYZ_ANGLE_AXIS: 
          for (int i=0; i<6; i++)
            EDP_data.current_XYZ_AA_arm_coordinates[i] =
              reply_package.arm.pf_def.arm_coordinates[i];
          break;
 
        default: // bledny typ specyfikacji pozycji
-         throw ECP_error (NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+         throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
      } // end: switch (...arm_type)
 }
 
 void ecp_irp6_mechatronika_robot::get_rmodel_reply (void)
 {
 	switch (reply_package.rmodel_type) {
-		case TOOL_FRAME:
+		case lib::TOOL_FRAME:
 			lib::copy_frame(EDP_data.current_tool_frame, reply_package.rmodel.tool_frame_def.tool_frame);
 			break;
-		case TOOL_XYZ_ANGLE_AXIS:
+		case lib::TOOL_XYZ_ANGLE_AXIS:
 			for (int i=0; i<6; i++)
 				EDP_data.current_XYZ_AA_tool_coordinates[i] =
 				    reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
 			break;
-		case TOOL_XYZ_EULER_ZYZ:
+		case lib::TOOL_XYZ_EULER_ZYZ:
 			for (int i=0; i<6; i++)
 				EDP_data.current_XYZ_ZYZ_tool_coordinates[i] =
 				    reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
 			break;
 			////////////////////K
-		case TOOL_AS_XYZ_EULER_ZY:
+		case lib::TOOL_AS_XYZ_EULER_ZY:
 			for (int i=0; i<6; i++)
 				EDP_data.current_XYZ_ZYZ_tool_coordinates[i] =
 				    reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
 			break;
 			//////////////////K
-		case ARM_KINEMATIC_MODEL:
+		case lib::ARM_KINEMATIC_MODEL:
 			EDP_data.current_kinematic_model_no =
 			    reply_package.rmodel.kinematic_model.kinematic_model_no;
 			break;
-		case SERVO_ALGORITHM:
+		case lib::SERVO_ALGORITHM:
 			for (int i=0; i<IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++) {
 				EDP_data.current_servo_algorithm_no[i] =
 				    reply_package.rmodel.servo_algorithm.servo_algorithm_no[i];
@@ -250,7 +250,7 @@ void ecp_irp6_mechatronika_robot::get_rmodel_reply (void)
 			}
 			break;
 		default: // bledny typ specyfikacji modelu robota
-			throw ECP_error(NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end: switch (...rmodel_type)
 }
 

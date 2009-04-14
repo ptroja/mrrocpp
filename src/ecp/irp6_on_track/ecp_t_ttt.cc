@@ -39,14 +39,14 @@ void ttt::main_task_algorithm(void)
 	{
 		switch(option)
 		{
-			case OPTION_ONE:
+			case lib::OPTION_ONE:
 				sprintf(path, "%s%s", mrrocpp_network_path, config.return_string_value("trajektoria_euler"));
 				pathLoaded = 1;
 			    sg->load_file_with_path(path);
 				sprintf(path,"%s loaded",config.return_string_value("trajektoria"));
 			    sr_ecp_msg->message("ECP Kolko-i-krzyzyk  - wcisnij start");
 				break;
-			case OPTION_TWO:
+			case lib::OPTION_TWO:
 				sprintf(path, "%s%s", mrrocpp_network_path, config.return_string_value("trajektoria_joint"));
 				pathLoaded = 1;
 			    sg->load_file_with_path(path);

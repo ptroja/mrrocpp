@@ -45,8 +45,8 @@ namespace sensor {
 #define __ERROR_BAD_COMMAND	5
 #define __ERROR_INIT_SEND 6
 #define __ERROR_INIT_COM	7
-#define __ERROr_buffer_MAX	8
-#define __ERROr_buffer_ZERO 9
+#define __ERROR_BUFFER_MAX	8
+#define __ERROR_BUFFER_ZERO 9
 
 
 // max & min svar values

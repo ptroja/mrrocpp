@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	VIRTUAL SENSOR PROCESS (VSP) 
+// Proces: 	VIRTUAL SENSOR PROCESS (lib::VSP) 
 // Plik:	vsp_rcs_kociemba.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:	Metody rozwiazywania kostki algorytmem Kociemby - po stronie procesu VSP.
@@ -139,7 +139,7 @@ void rcs_kociemba::configure_sensor (void){
 		    printf("ERR=%s\n", err);
 		    delete[] err;
 			bRCSErr = true;
-			throw sensor_error (FATAL_ERROR, RCS_INVALID_STATE);
+			throw sensor_error (lib::FATAL_ERROR, RCS_INVALID_STATE);
 		}
 	
 		// Czysci znalezione wczesniej rozwiazanie, jezeli takie istnieje
@@ -171,7 +171,7 @@ void rcs_kociemba::initiate_reading (void) {
 
 	// Zglasza blad, gdy czujnik nie jest skonfigurowany.
 	if(!is_sensor_configured)
-		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
     CubeSolution *pNSol = NULL;
 
@@ -191,7 +191,7 @@ void rcs_kociemba::initiate_reading (void) {
 	    printf("ERR=%s\n", err);
     	delete[] err;
 		bRCSErr = true;
-		throw sensor_error (FATAL_ERROR, RCS_EXCEPTION);
+		throw sensor_error (lib::FATAL_ERROR, RCS_EXCEPTION);
 	}
 
 	// Jezeli rozwiazanie jest krotsze od poprzedniego, zapamietuje je
@@ -231,7 +231,7 @@ void rcs_kociemba::get_reading (void) {
 
 	// Zglasza blad, gdy czujnik nie jest skonfigurowany.
 	if(!is_sensor_configured)
-		throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
 	// Niemozliwe znalezienie rozwiazania - wystapil blad podczas jego znajdywania
 	if (	bRCSErr) {
@@ -239,7 +239,7 @@ void rcs_kociemba::get_reading (void) {
 
 	// Ustawia brak rozwiazania, gdy odczyt nie jest gotowy.
 	} else if (!is_reading_ready || pSol == NULL) {
-		throw sensor_error (NON_FATAL_ERROR, READING_NOT_READY);
+		throw sensor_error (lib::NON_FATAL_ERROR, READING_NOT_READY);
 
 	// Ustawia brak potrzeby rozwiazania, gdy rozwiazanie o dlugosci 0
 	} else if (pSol->GetLength() == 0) {

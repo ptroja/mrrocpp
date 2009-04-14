@@ -127,7 +127,7 @@ protected:
     BYTE algorithm_parameters_no;   // przeslany numer zestawu parametrow algorytmu
     BYTE current_algorithm_parameters_no;  // numer aktualnie uzywanego zestawu parametrow algorytmu
 
-    GRIPPER_STATE_ENUM reg_state, next_reg_state, prev_reg_state; // stany w ktorych moze byc regulator
+    lib::GRIPPER_STATE_ENUM reg_state, next_reg_state, prev_reg_state; // stany w ktorych moze byc regulator
 
     // BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
     // stara wersja - nieuzywana
@@ -234,18 +234,18 @@ protected:
 
 
     // input_buffer
-    edp_master_command command; // polecenie z EDP_MASTER dla SERVO
+    lib::edp_master_command command; // polecenie z EDP_MASTER dla SERVO
 
     // output_buffer
-    servo_group_reply servo_data;    // informacja przesylana do EDP_MASTER
+    lib::servo_group_reply servo_data;    // informacja przesylana do EDP_MASTER
 
     name_attach_t *attach; // 7&Y
     bool send_after_last_step;    // decyduje, czy po realizacji ostatniego
     // kroku makrokroku ma byc wyslane aktualne
     // polozenie walu silnika do EDP_MASTER
-    edp_error reply_status;          // okresla blad jaki nalezy zasygnalizowac
+    lib::edp_error reply_status;          // okresla blad jaki nalezy zasygnalizowac
     // przy nastepnym kontakcie z EDP_MASTER
-    edp_error reply_status_tmp;      // okresla blad jaki wystapil ostatnim kroku
+    lib::edp_error reply_status_tmp;      // okresla blad jaki wystapil ostatnim kroku
     // pid_t caller;                    // Identyfikator EDP_MASTER
 
     BYTE Move_1_step (void);         // wykonac ruch o krok
@@ -264,8 +264,8 @@ public:
     irp6s_and_conv_effector &master;
 
     // input_buffer
-    SERVO_COMMAND command_type(void);
-    // by Yoyek & 7 -  typ returna na SERVO_COMMAND
+    lib::SERVO_COMMAND command_type(void);
+    // by Yoyek & 7 -  typ returna na lib::SERVO_COMMAND
 
     // output_buffer
     virtual void get_all_positions (void);

@@ -46,7 +46,7 @@ irp6s_effector::irp6s_effector (lib::configurator &_config, ROBOT_ENUM l_robot_n
 {}
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::compute_xyz_euler_zyz (const c_buffer &instruction)
+void irp6s_effector::compute_xyz_euler_zyz (const lib::c_buffer &instruction)
 {
     // obliczenia dla ruchu ramienia (kocwk: XYZ_EULER_ZYZ)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
@@ -75,10 +75,10 @@ void irp6s_effector::compute_xyz_euler_zyz (const c_buffer &instruction)
         throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
     switch (motion_type)
     {
-    case ABSOLUTE:   // ruch bezwzgledny
+    case lib::ABSOLUTE:   // ruch bezwzgledny
         arm_abs_xyz_eul_zyz_2_frame(p);
         break;
-    case RELATIVE:   // ruch wzgledny
+    case lib::RELATIVE:   // ruch wzgledny
         arm_rel_xyz_eul_zyz_2_frame(p);
         break;
     default:
@@ -104,7 +104,7 @@ void irp6s_effector::compute_xyz_euler_zyz (const c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::compute_xyz_angle_axis (const c_buffer &instruction)
+void irp6s_effector::compute_xyz_angle_axis (const lib::c_buffer &instruction)
 {
     // obliczenia dla ruchu ramienia (kocwk: XYZ_ANGLE_AXIS)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
@@ -130,10 +130,10 @@ void irp6s_effector::compute_xyz_angle_axis (const c_buffer &instruction)
         throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
     switch (motion_type)
     {
-    case ABSOLUTE:   // ruch bezwzgledny
+    case lib::ABSOLUTE:   // ruch bezwzgledny
         arm_abs_xyz_aa_2_frame(p);
         break;
-    case RELATIVE:   // ruch wzgledny
+    case lib::RELATIVE:   // ruch wzgledny
         arm_rel_xyz_aa_2_frame(p);
         break;
     default:
@@ -155,7 +155,7 @@ void irp6s_effector::compute_xyz_angle_axis (const c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::compute_frame (const c_buffer &instruction)
+void irp6s_effector::compute_frame (const lib::c_buffer &instruction)
 {
     // obliczenia dla ruchu ramienia (kocwk: FRAME)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
@@ -184,10 +184,10 @@ void irp6s_effector::compute_frame (const c_buffer &instruction)
     }
     switch (motion_type)
     {
-    case ABSOLUTE:   // ruch bezwzgledny
+    case lib::ABSOLUTE:   // ruch bezwzgledny
         arm_abs_frame_2_frame(p_m);
         break;
-    case RELATIVE:   // ruch wzgledny
+    case lib::RELATIVE:   // ruch wzgledny
         arm_rel_frame_2_frame(p_m);
         break;
     default:
@@ -212,13 +212,13 @@ void irp6s_effector::compute_frame (const c_buffer &instruction)
 // przeksztacenia do wewntrznych struktur danych REPLY_BUFFER.
 void irp6s_effector::tool_frame_2_xyz_aa (void)
 {
-    reply.rmodel_type = TOOL_XYZ_ANGLE_AXIS;
+    reply.rmodel_type = lib::TOOL_XYZ_ANGLE_AXIS;
     switch (reply.reply_type)
     {
-    case RMODEL:
-    case RMODEL_INPUTS:
-    case ARM_RMODEL:
-    case ARM_RMODEL_INPUTS:
+    case lib::RMODEL:
+    case lib::RMODEL_INPUTS:
+    case lib::ARM_RMODEL:
+    case lib::ARM_RMODEL_INPUTS:
         get_current_kinematic_model()->tool.get_xyz_angle_axis(reply.rmodel.tool_coordinate_def.tool_coordinates);
         break;
     default:
@@ -233,13 +233,13 @@ void irp6s_effector::tool_frame_2_xyz_aa (void)
 // przeksztacenia do wewntrznych struktur danych REPLY_BUFFER.
 void irp6s_effector::tool_frame_2_xyz_eul_zyz (void)
 {
-    reply.rmodel_type = TOOL_XYZ_EULER_ZYZ;
+    reply.rmodel_type = lib::TOOL_XYZ_EULER_ZYZ;
     switch (reply.reply_type)
     {
-    case RMODEL:
-    case RMODEL_INPUTS:
-    case ARM_RMODEL:
-    case ARM_RMODEL_INPUTS:
+    case lib::RMODEL:
+    case lib::RMODEL_INPUTS:
+    case lib::ARM_RMODEL:
+    case lib::ARM_RMODEL_INPUTS:
         get_current_kinematic_model()->tool.get_xyz_euler_zyz(reply.rmodel.tool_coordinate_def.tool_coordinates);
         break;
     default:
@@ -254,13 +254,13 @@ void irp6s_effector::tool_frame_2_xyz_eul_zyz (void)
 // do wewntrznych struktur danych REPLY_BUFFER
 void irp6s_effector::tool_frame_2_frame_rep (void)
 {
-    reply.rmodel_type = TOOL_FRAME;
+    reply.rmodel_type = lib::TOOL_FRAME;
     switch (reply.reply_type)
     {
-    case RMODEL:
-    case RMODEL_INPUTS:
-    case ARM_RMODEL:
-    case ARM_RMODEL_INPUTS:
+    case lib::RMODEL:
+    case lib::RMODEL_INPUTS:
+    case lib::ARM_RMODEL:
+    case lib::ARM_RMODEL_INPUTS:
         get_current_kinematic_model()->tool.get_frame_tab(reply.rmodel.tool_frame_def.tool_frame);
         break;
     default:
@@ -319,7 +319,7 @@ void irp6s_effector::tool_axially_symmetrical_frame_2_xyz_eul_zy (void)
                 psi =   M_PI/2;
         }
 
-    reply.rmodel_type = TOOL_AS_XYZ_EULER_ZY;
+    reply.rmodel_type = lib::TOOL_AS_XYZ_EULER_ZY;
 
     reply.rmodel.tool_coordinate_def.tool_coordinates[0]=q6[0];
     reply.rmodel.tool_coordinate_def.tool_coordinates[1]=q6[1];
@@ -332,7 +332,7 @@ void irp6s_effector::tool_axially_symmetrical_frame_2_xyz_eul_zy (void)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::tool_xyz_eul_zyz_2_frame (c_buffer &instruction)
+void irp6s_effector::tool_xyz_eul_zyz_2_frame (lib::c_buffer &instruction)
 {
     // Przeksztacenie definicji narzedzia z postaci
     // TOOL_XYZ_EULER_ZYZ do postaci TOOL_FRAME oraz przepisanie wyniku
@@ -364,7 +364,7 @@ void irp6s_effector::tool_xyz_eul_zyz_2_frame (c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::tool_frame_2_frame (c_buffer &instruction)
+void irp6s_effector::tool_frame_2_frame (lib::c_buffer &instruction)
 {
     // Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
     // do wewntrznych struktur danych TRANSFORMATORa
@@ -528,13 +528,13 @@ void irp6s_effector::arm_frame_2_xyz_aa (void)
 {
 
     lib::Homog_matrix A(current_end_effector_frame);
-    reply.arm_type = XYZ_ANGLE_AXIS;
+    reply.arm_type = lib::XYZ_ANGLE_AXIS;
     switch (reply.reply_type)
     {
-    case ARM:
-    case ARM_INPUTS:
-    case ARM_RMODEL:
-    case ARM_RMODEL_INPUTS:
+    case lib::ARM:
+    case lib::ARM_INPUTS:
+    case lib::ARM_RMODEL:
+    case lib::ARM_RMODEL_INPUTS:
         A.get_xyz_angle_axis(reply.arm.pf_def.arm_coordinates);
         break;
         // case FORCE:
@@ -558,7 +558,7 @@ void irp6s_effector::arm_frame_2_xyz_aa (void)
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::tool_xyz_aa_2_frame (c_buffer &instruction)
+void irp6s_effector::tool_xyz_aa_2_frame (lib::c_buffer &instruction)
 {
     // Przeksztacenie definicji narzedzia z postaci
     // TOOL_XYZ_ANGLE_AXIS do postaci TOOL_FRAME oraz przepisanie wyniku
@@ -612,7 +612,7 @@ void irp6s_effector::tool_xyz_aa_2_frame (c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::tool_axially_symmetrical_xyz_eul_zy_2_frame (c_buffer *instruction)
+void irp6s_effector::tool_axially_symmetrical_xyz_eul_zy_2_frame (lib::c_buffer *instruction)
 {
     // Przeksztacenie definicji narzdzia z postaci
     // TOOL_AS_XYZ_EULER_ZY do postaci TOOL_FRAME oraz przepisanie wyniku
@@ -691,13 +691,13 @@ void irp6s_effector::arm_frame_2_frame (void)
     // Przepisanie definicji koncowki danej w postaci
     // TRANS z wewntrznych struktur danych TRANSFORMATORa
     // do wewntrznych struktur danych REPLY_BUFFER
-    reply.arm_type = FRAME;
+    reply.arm_type = lib::FRAME;
     switch (reply.reply_type)
     {
-    case ARM:
-    case ARM_INPUTS:
-    case ARM_RMODEL:
-    case ARM_RMODEL_INPUTS:
+    case lib::ARM:
+    case lib::ARM_INPUTS:
+    case lib::ARM_RMODEL:
+    case lib::ARM_RMODEL_INPUTS:
         lib::Homog_matrix::copy_frame_tab(reply.arm.pf_def.arm_frame, current_end_effector_frame);
         for(int i=0; i < 6; i++)
         {

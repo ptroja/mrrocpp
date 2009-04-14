@@ -46,20 +46,20 @@ void operator_reaction_condition::get_supplementary (ecp_taught_in_pose& tip)
 	memcpy(tip.coordinates, pose_list_iterator->coordinates, MAX_SERVOS_NR*sizeof(double));
 }
 
-void operator_reaction_condition::set_supplementary (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR])
+void operator_reaction_condition::set_supplementary (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR])
 {
 	pose_list_iterator->arm_type = ps;
 	pose_list_iterator->motion_time = motion_time;
 	memcpy(pose_list_iterator->coordinates, coordinates, MAX_SERVOS_NR*sizeof(double));
 }
 
-void operator_reaction_condition::create_supplementary_list_head (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR])
+void operator_reaction_condition::create_supplementary_list_head (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR])
 {
 	pose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates));
 	pose_list_iterator = pose_list.begin();
 }
 
-void operator_reaction_condition::insert_supplementary_list_element (POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR])
+void operator_reaction_condition::insert_supplementary_list_element (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR])
 {
 	pose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates));
 	pose_list_iterator++;
@@ -116,10 +116,10 @@ bool operator_reaction_condition::next_step ()
 	// Przy spelnieniu warunku wczytuje stan robota w zaleznosci od rozkazu przygotowanego w EDP_data
 
 	// Stworzenie rozkazu odczytu wspolrzednych kartezjanskich
-	the_robot->EDP_data.instruction_type = GET;
+	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV; // ARM
-//  the_robot->EDP_data.get_arm_type = XYZ_EULER_ZYZ;// W.S.
-	the_robot->EDP_data.get_arm_type = MOTOR;
+//  the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;// W.S.
+	the_robot->EDP_data.get_arm_type = lib::MOTOR;
 
 
 	// Sprawdzenie warunku poczatkowego - reakcji operatora
@@ -133,12 +133,12 @@ bool operator_reaction_condition::next_step ()
 
 		if (!is_supplementary_list_head()) { // Czy wskaznik na glowe listy jest NULL
 			// Tworzymy glowe listy
-//      create_supplementary_list_head(XYZ_EULER_ZYZ, 0.0, the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates); // W.S.
-			create_supplementary_list_head(MOTOR, 0.0, the_robot->EDP_data.current_motor_arm_coordinates);
+//      create_supplementary_list_head(lib::XYZ_EULER_ZYZ, 0.0, the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates); // W.S.
+			create_supplementary_list_head(lib::MOTOR, 0.0, the_robot->EDP_data.current_motor_arm_coordinates);
 		} else {
 			// Wstaw do listy nowa pozycje
-//      insert_supplementary_list_element(XYZ_EULER_ZYZ, 0.0, the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates);
-			insert_supplementary_list_element(MOTOR, 0.0, the_robot->EDP_data.current_motor_arm_coordinates);
+//      insert_supplementary_list_element(lib::XYZ_EULER_ZYZ, 0.0, the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates);
+			insert_supplementary_list_element(lib::MOTOR, 0.0, the_robot->EDP_data.current_motor_arm_coordinates);
 		}
 		return false;
 	} else {

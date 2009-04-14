@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (ECP)
+// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP)
 // Plik:			configurator.h
 // System:	QNX/MRROCPP  v. 6.3
 // Opis:		Plik zawiera klase lib::configurator - obsluga konfiguracji z pliku INI.

@@ -4,7 +4,7 @@
 // 
 // -------------------------------------------------------------------------
 
-//   tdes.arm_type = XYZ_EULER_ZYZ;
+//   tdes.arm_type = lib::XYZ_EULER_ZYZ;
 
 #if !defined(_ECP_GEN_TEST_IRP6OT_H)
 #define _ECP_GEN_TEST_IRP6OT_H
@@ -29,7 +29,7 @@ protected:
 	frame_tab previous_frame;
 	
 public:	
-	trajectory_description td;
+	lib::trajectory_description td;
 	int step_no;
 	double delta[6];
 	double frame1[4][4];

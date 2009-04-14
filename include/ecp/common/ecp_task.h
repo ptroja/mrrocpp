@@ -32,7 +32,7 @@ class base : public ecp_mp::task::base
 		int receive_mp_message(void);
 
 		// Badanie typu polecenia z MP
-		MP_COMMAND mp_command_type(void) const;
+		lib::MP_COMMAND mp_command_type(void) const;
 
 	protected:
 		// Oczekiwanie na nowy stan od MP
@@ -40,10 +40,10 @@ class base : public ecp_mp::task::base
 
 	public: // TODO: following packages should be 'protected'
 		// Odpowiedz ECP do MP, pola do ew. wypelnienia przez generatory
-		ECP_REPLY_PACKAGE ecp_reply;
+		lib::ECP_REPLY_PACKAGE ecp_reply;
 
 		// Polecenie od MP dla TASKa
-		MP_COMMAND_PACKAGE mp_command;
+		lib::MP_COMMAND_PACKAGE mp_command;
 
 	public:
 		ecp_robot* ecp_m_robot;
@@ -90,7 +90,7 @@ class base : public ecp_mp::task::base
 		bool mp_buffer_receive_and_send(void);
 
 		// Ustawienie typu odpowiedzi z ECP do MP
-		void set_ecp_reply(ECP_REPLY ecp_r);
+		void set_ecp_reply(lib::ECP_REPLY ecp_r);
 };
 
 base* return_created_ecp_task (lib::configurator &_config);

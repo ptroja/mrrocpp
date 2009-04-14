@@ -67,9 +67,9 @@ effector::effector (lib::configurator &_config)
 
 void effector::initialize (void)
 {
-	real_reply_type = ACKNOWLEDGE;
+	real_reply_type = lib::ACKNOWLEDGE;
 	// inicjacja deskryptora pliku by 7&Y
-	// serwo_fd = name_open(EDP_ATTACH_POINT, 0);
+	// serwo_fd = name_open(lib::EDP_ATTACH_POINT, 0);
 
 	speaking=0;
 
@@ -221,7 +221,7 @@ void effector::create_threads ()
 
 	if (pthread_create (&speak_t_tid, NULL, &speak_thread_start, (void *) this)!=EOK)
 	{
-		msg->message(SYSTEM_ERROR, errno, "EDP: Failed to spawn SPEAKER");
+		msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to spawn SPEAKER");
 		char buf[20];
 		netmgr_ndtostr(ND2S_LOCAL_STR, ND_LOCAL_NODE, buf, sizeof(buf));
 		printf (" Failed to thread SPEAKER on node: %s\n", buf);
@@ -232,7 +232,7 @@ void effector::create_threads ()
 };
 
 /*--------------------------------------------------------------------------*/
-void effector::interpret_instruction (c_buffer *instruction)
+void effector::interpret_instruction (lib::c_buffer *instruction)
 {
 	// interpretuje otrzyman z ECP instrukcj;
 	// wypenaia struktury danych TRANSFORMATORa;
@@ -246,18 +246,18 @@ void effector::interpret_instruction (c_buffer *instruction)
 	// Wykonanie instrukcji
 	switch ( (*instruction).instruction_type )
 	{
-	case SET:
+	case lib::SET:
 		reply.arm.text_def.speaking=speaking;
 		if(!speaking)
 		{
 			mt_tt_obj->master_to_trans_t_order(common::MT_MOVE_ARM, 0);
 		}
 		break;
-	case GET:
+	case lib::GET:
 		reply.arm.text_def.speaking=speaking;
 		// mt_tt_obj->master_to_trans_t_order(MT_GET_ARM_POSITION, true);
 		break;
-	case SET_GET:
+	case lib::SET_GET:
 		reply.arm.text_def.speaking=speaking;
 		mt_tt_obj->master_to_trans_t_order(common::MT_MOVE_ARM, 0);
 		// mt_tt_obj->master_to_trans_t_order(MT_GET_ARM_POSITION, true);
@@ -276,22 +276,22 @@ void effector::interpret_instruction (c_buffer *instruction)
 
 
 /*--------------------------------------------------------------------------*/
-REPLY_TYPE effector::rep_type (c_buffer *instruction)
+lib::REPLY_TYPE effector::rep_type (lib::c_buffer *instruction)
 {
 	// ustalenie formatu odpowiedzi
-	reply.reply_type = ACKNOWLEDGE;
+	reply.reply_type = lib::ACKNOWLEDGE;
 
 	return reply.reply_type;
 }
 ; // end: edp_speaker_effector::rep_type
 /*--------------------------------------------------------------------------*/
 
-void effector::get_spoken (bool read_hardware, c_buffer *instruction)
+void effector::get_spoken (bool read_hardware, lib::c_buffer *instruction)
 { // MAC7
 	return;
 };
 
-int effector::speak (c_buffer *instruction)
+int effector::speak (lib::c_buffer *instruction)
 { // add by MAC7
 
 	strcpy(text2speak,(*instruction).arm.text_def.text);
@@ -343,20 +343,20 @@ void effector::main_loop (void)
 			case common::GET_INSTRUCTION:
 				switch ( receive_instruction() )
 				{
-				case SET:
+				case lib::SET:
 					// printf("jestesmy w set\n"); // MAC7
-				case GET:
+				case lib::GET:
 					// printf("jestesmy w get\n");// MAC7
-				case SET_GET:
+				case lib::SET_GET:
 					// printf("jestesmy w set_get\n");
 					// potwierdzenie przyjecia polecenia (dla ECP)
-					insert_reply_type(ACKNOWLEDGE);
+					insert_reply_type(lib::ACKNOWLEDGE);
 					reply_to_instruction();
 					break;
-				case SYNCHRO: // blad: robot jest juz zsynchronizowany
+				case lib::SYNCHRO: // blad: robot jest juz zsynchronizowany
 					// okreslenie numeru bledu
 					throw common::irp6s_effector::NonFatal_error_1(ALREADY_SYNCHRONISED);
-				case QUERY: // blad: nie ma o co pytac - zadne polecenie uprzednio nie zostalo wydane
+				case lib::QUERY: // blad: nie ma o co pytac - zadne polecenie uprzednio nie zostalo wydane
 					// okreslenie numeru bledu
 					throw common::irp6s_effector::NonFatal_error_1(QUERY_NOT_EXPECTED);
 				default: // blad: nieznana instrukcja
@@ -378,7 +378,7 @@ void effector::main_loop (void)
 				case common::WAIT:
 					//  	printf("jestesmy w wait\n");
 
-					if ( receive_instruction() == QUERY )
+					if ( receive_instruction() == lib::QUERY )
 					{ // instrukcja wlasciwa =>
 						// zle jej wykonanie, czyli wyslij odpowiedz
 						reply_to_instruction();
@@ -404,7 +404,7 @@ void effector::main_loop (void)
 			// printf("ERROR w EDP 1\n");
 			// informacja dla ECP o bledzie
 			reply_to_instruction();
-			msg->message(NON_FATAL_ERROR, nfe.error, (uint64_t) 0);
+			msg->message(lib::NON_FATAL_ERROR, nfe.error, (uint64_t) 0);
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = common::GET_INSTRUCTION;
 		} // end: catch(transformer::NonFatal_error_1 nfe)
@@ -417,7 +417,7 @@ void effector::main_loop (void)
 
 			// printf("ERROR w EDP 2\n");
 			establish_error(nfe.error,OK);
-			msg->message(NON_FATAL_ERROR, nfe.error, (uint64_t) 0);
+			msg->message(lib::NON_FATAL_ERROR, nfe.error, (uint64_t) 0);
 			// powrot do stanu: WAIT
 			next_state = common::WAIT;
 		} // end: catch(transformer::NonFatal_error_2 nfe)
@@ -430,7 +430,7 @@ void effector::main_loop (void)
 			// zapamietanie poprzedniej odpowiedzi
 			// Oczekiwano na QUERY a otrzymano co innego, wiec sygnalizacja bledu i
 			// dalsze oczekiwanie na QUERY
-			REPLY_TYPE rep_type = is_reply_type();
+			lib::REPLY_TYPE rep_type = is_reply_type();
 			uint64_t err_no_0 = is_error_no_0();
 			uint64_t err_no_1 = is_error_no_1();
 
@@ -441,8 +441,8 @@ void effector::main_loop (void)
 			insert_reply_type(rep_type);
 			establish_error(err_no_0,err_no_1);
 			// printf("ERROR w EDP 3\n");
-			msg->message(NON_FATAL_ERROR, nfe.error, (uint64_t) 0);
-			// msg->message(NON_FATAL_ERROR, err_no_0, err_no_1); // by Y - oryginalnie
+			msg->message(lib::NON_FATAL_ERROR, nfe.error, (uint64_t) 0);
+			// msg->message(lib::NON_FATAL_ERROR, err_no_0, err_no_1); // by Y - oryginalnie
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = common::GET_INSTRUCTION;
 		} // end: catch(transformer::NonFatal_error_3 nfe)
@@ -453,7 +453,7 @@ void effector::main_loop (void)
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu fe
 			// S to bledy dotyczace sprzetu oraz QNXa (komunikacji)
 			establish_error(fe.error0,fe.error1);
-			msg->message(FATAL_ERROR, fe.error0, fe.error1);
+			msg->message(lib::FATAL_ERROR, fe.error0, fe.error1);
 			// powrot do stanu: WAIT
 			next_state = common::WAIT;
 		} // end: catch(transformer::Fatal_error fe)

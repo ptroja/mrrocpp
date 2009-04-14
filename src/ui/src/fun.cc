@@ -306,14 +306,14 @@ yes_no_callback( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	 if (((cbinfo->event->type==Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo)) == ABN_PtButton_yes))||
 		((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x79 )) ) // Y
 	{
-		ui_ecp_obj->ui_rep.reply = ANSWER_YES;
+		ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
 	}
 
 	else  if (((cbinfo->event->type==Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo)) == ABN_PtButton_no))||
 		((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x6e )) ) // N
 
 	{
-		ui_ecp_obj->ui_rep.reply = ANSWER_NO;
+		ui_ecp_obj->ui_rep.reply = lib::ANSWER_NO;
 	}
 
 	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
@@ -346,14 +346,14 @@ input_integer_callback( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 	 if (((cbinfo->event->type==Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_input_integer_ok))||
 		((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x6f )) ) // O
 	 {
-		ui_ecp_obj->ui_rep.reply = ANSWER_YES;
+		ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
 		PtGetResource(ABW_PtNumericInteger_wind_input_integer_value, Pt_ARG_NUMERIC_VALUE, &(tmp_ptgr), 0 );
 		ui_ecp_obj->ui_rep.integer_number = *tmp_ptgr;
 	}
 	else if (((cbinfo->event->type==Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_input_integer_cancel))||
 		((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x63 )) ) // C
 	{
-		ui_ecp_obj->ui_rep.reply = QUIT;
+		ui_ecp_obj->ui_rep.reply = lib::QUIT;
 		ui_ecp_obj->ui_rep.integer_number = 0;
 	}
 	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
@@ -386,14 +386,14 @@ input_double_callback( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 	 if (((cbinfo->event->type==Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_input_double_ok))||
 		((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x6f )) ) // O
 	 {
-		ui_ecp_obj->ui_rep.reply = ANSWER_YES;
+		ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
 		PtGetResource(ABW_PtNumericFloat_wind_input_double_value, Pt_ARG_NUMERIC_VALUE, &(tmp_ptgr), 0 );
 		ui_ecp_obj->ui_rep.double_number = *tmp_ptgr;
 	}
 	else  	 if (((cbinfo->event->type==Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_input_double_cancel))||
 		((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x63 )) ) // C
 	{
-		ui_ecp_obj->ui_rep.reply = QUIT;
+		ui_ecp_obj->ui_rep.reply = lib::QUIT;
 		ui_ecp_obj->ui_rep.double_number = 0.0;
 	}
 	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
@@ -425,23 +425,23 @@ choose_option_callback( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
  	if (((cbinfo->event->type==Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_choose_option_1))||
 		((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x31 )) ) // 1
 	{
-		ui_ecp_obj->ui_rep.reply = OPTION_ONE;
+		ui_ecp_obj->ui_rep.reply = lib::OPTION_ONE;
 	}	else  	 if (((cbinfo->event->type==Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_choose_option_2))||
 		((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x32 )) ) // 2
 	{
-		ui_ecp_obj->ui_rep.reply = OPTION_TWO;
+		ui_ecp_obj->ui_rep.reply = lib::OPTION_TWO;
 	}	else  	 if (((cbinfo->event->type==Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_choose_option_3))||
 		((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x33 )) ) // 3
 	{
-		ui_ecp_obj->ui_rep.reply = OPTION_THREE;
+		ui_ecp_obj->ui_rep.reply = lib::OPTION_THREE;
 	}	else  	 if (((cbinfo->event->type==Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_choose_option_4))||
 		((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x34 )) ) // 4
 	{
-		ui_ecp_obj->ui_rep.reply = OPTION_FOUR;
+		ui_ecp_obj->ui_rep.reply = lib::OPTION_FOUR;
 	}	else  	 if (((cbinfo->event->type==Ph_EV_BUT_RELEASE) && (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_choose_option_cancel))||
 		((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x63 )) ) // C
 	{
-		ui_ecp_obj->ui_rep.reply = QUIT;
+		ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 
@@ -463,7 +463,7 @@ close_file_selection_window( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 
 	if ((ui_state.file_window_mode==FSTRAJECTORY) && (ui_ecp_obj->communication_state != UI_ECP_REPLY_READY))
 	{
-		ui_ecp_obj->ui_rep.reply = QUIT;
+		ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	ui_ecp_obj->trywait_sem();
 	ui_ecp_obj->post_sem();
@@ -486,7 +486,7 @@ close_teaching_window( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 
 	if (ui_ecp_obj->communication_state != UI_ECP_REPLY_READY)
 	{
-		ui_ecp_obj->ui_rep.reply = QUIT;
+		ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	ui_ecp_obj->trywait_sem();
 	ui_ecp_obj->post_sem();
@@ -524,7 +524,7 @@ init_teaching_window( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 	 // rodzaj polecenia z ECP
 	switch ( ui_ecp_obj->ecp_to_ui_msg.ecp_message )
 	{
-		case C_XYZ_ANGLE_AXIS:
+		case lib::C_XYZ_ANGLE_AXIS:
 			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
 			{
 				case ROBOT_IRP6_ON_TRACK:
@@ -540,7 +540,7 @@ init_teaching_window( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 				break;
 			}
 		break;
-		case C_XYZ_EULER_ZYZ:
+		case lib::C_XYZ_EULER_ZYZ:
 			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
 			{
 				case ROBOT_IRP6_ON_TRACK:
@@ -556,7 +556,7 @@ init_teaching_window( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 				break;
 			}
 		break;
-		case C_JOINT:
+		case lib::C_JOINT:
 			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
 			{
 				case ROBOT_IRP6_ON_TRACK:
@@ -572,7 +572,7 @@ init_teaching_window( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 				break;
 			}
 		break;
-		case C_MOTOR:
+		case lib::C_MOTOR:
 			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
 			{
 				case ROBOT_IRP6_ON_TRACK:
@@ -605,7 +605,7 @@ teaching_window_end_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	ui_state.teachingstate = MP_RUNNING;
-	ui_ecp_obj->ui_rep.reply = QUIT;
+	ui_ecp_obj->ui_rep.reply = lib::QUIT;
 
 	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 	PtDestroyWidget( ABW_teaching_window );
@@ -1245,7 +1245,7 @@ reload_whole_configuration() {
 		// inicjacja komunikacji z watkiem sr
 		if (ui_msg.ui == NULL)
 		{
-			if ((ui_msg.ui = new lib::sr_ui(UI, ui_state.ui_attach_point, ui_state.network_sr_attach_point)) == NULL) {
+			if ((ui_msg.ui = new lib::sr_ui(lib::UI, ui_state.ui_attach_point, ui_state.network_sr_attach_point)) == NULL) {
 				perror ( "Unable to locate SR\n");
 			} else {
 				ui_msg.ui->message("started");
@@ -1255,7 +1255,7 @@ reload_whole_configuration() {
 		// inicjacja komunikacji z watkiem sr
 		if (ui_msg.all_ecp == NULL)
 		{
-			if ((ui_msg.all_ecp = new lib::sr_ecp(ECP, "ui_all_ecp" , ui_state.network_sr_attach_point)) == NULL) {
+			if ((ui_msg.all_ecp = new lib::sr_ecp(lib::ECP, "ui_all_ecp" , ui_state.network_sr_attach_point)) == NULL) {
 				perror ( "Unable to locate SR\n");
 			} else {
 
@@ -2191,7 +2191,7 @@ close_yes_no_window( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 
 	if (ui_ecp_obj->communication_state != UI_ECP_REPLY_READY)
 	{
-		ui_ecp_obj->ui_rep.reply = QUIT;
+		ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	ui_ecp_obj->trywait_sem();
 	ui_ecp_obj->post_sem();
@@ -2210,7 +2210,7 @@ close_input_integer_window( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 
 	if (ui_ecp_obj->communication_state != UI_ECP_REPLY_READY)
 	{
-		ui_ecp_obj->ui_rep.reply = QUIT;
+		ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	ui_ecp_obj->trywait_sem();
 	ui_ecp_obj->post_sem();
@@ -2229,7 +2229,7 @@ close_input_double_window( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 
 	if (ui_ecp_obj->communication_state != UI_ECP_REPLY_READY)
 	{
-		ui_ecp_obj->ui_rep.reply = QUIT;
+		ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	ui_ecp_obj->trywait_sem();
 	ui_ecp_obj->post_sem();
@@ -2248,7 +2248,7 @@ close_choose_option_window( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 
 	if (ui_ecp_obj->communication_state != UI_ECP_REPLY_READY)
 	{
-		ui_ecp_obj->ui_rep.reply = QUIT;
+		ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	ui_ecp_obj->trywait_sem();
 	ui_ecp_obj->post_sem();
@@ -2307,7 +2307,7 @@ teaching_window_send_move( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 	}
 
 	ui_ecp_obj->ui_rep.double_number = *motion_time;
-	ui_ecp_obj->ui_rep.reply = NEXT;
+	ui_ecp_obj->ui_rep.reply = lib::NEXT;
 	ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 	ui_ecp_obj->trywait_sem();
 	ui_ecp_obj->post_sem();

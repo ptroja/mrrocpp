@@ -1,7 +1,7 @@
  // -------------------------------------------------------------------------
 //                             vsp_s.cc 		dla QNX6.2
 //
-//             Virtual Sensor Process (VSP) - Speach recognizin'
+//             Virtual Sensor Process (lib::VSP) - Speach recognizin'
 //
 // last update: 14.11.04
 // Author: mstaniak@elka.pw.edu.pl [based on tkornuta's vsp templates]
@@ -244,7 +244,7 @@ void vsp_mic::wait_for_event(){
 void mic::initiate_reading (void){
   
 //	if(!is_sensor_configured)
-//	     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED); //MAC7 odrem w MRROC++
+//	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED); //MAC7 odrem w MRROC++
  	
 	//listenin' to sounds
 	n = 1;
@@ -358,11 +358,11 @@ void mic::initiate_reading (void){
 void mic::get_reading (void){
 
 	//if(!is_sensor_configured)
-	//     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED); //MAC7 odrem w MRROC++
+	//     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED); //MAC7 odrem w MRROC++
 	
 	// jezeli chcemy jakikolwiek odczyt	-> is_reading_ready
 	//if(!is_reading_ready)
-	//     throw sensor_error (FATAL_ERROR, READING_NOT_READY);    //MAC7 odrem w MRROC++
+	//     throw sensor_error (lib::FATAL_ERROR, READING_NOT_READY);    //MAC7 odrem w MRROC++
 
 	//from_vsp.vsp_report= lib::VSP_REPLY_OK; //MAC7 odrem w MRROC++
 	
@@ -374,11 +374,11 @@ void mic::get_reading (void){
 	
 	
 	if(!is_sensor_configured)
-	     throw sensor_error (FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	// jezeli chcemy jakikolwiek odczyt	-> is_reading_ready
 	// printf("7 - still reading %d\n",is_reading_ready);
 	if(!is_reading_ready)
-	     throw sensor_error (FATAL_ERROR, READING_NOT_READY);   
+	     throw sensor_error (lib::FATAL_ERROR, READING_NOT_READY);   
 
 	// ok
 	from_vsp.vsp_report= lib::VSP_REPLY_OK;
