@@ -13,6 +13,9 @@
 #include <limits.h>
 #include "lib/typedefs.h"
 
+namespace mrrocpp {
+namespace lib {
+
 typedef struct _my_data { // wiadomosc wysylana do procesu spawnujacego
     msg_header_t hdr;
     int msg_type;
@@ -29,6 +32,9 @@ typedef struct _my_reply_data { // odpowiedz procesu spawnujacego
 } my_reply_data_t;
 
 int y_spawn(my_data_t input);// uwaga sciezka ze / na koncu
+
+} // namespace lib
+} // namespace mrrocpp
 
 #endif
 
