@@ -20,7 +20,7 @@ namespace generator {
 
 
 
-class base : public ecp_mp::generator::base
+class base : public ecp_mp::generator::generator
 {
 	protected:
 

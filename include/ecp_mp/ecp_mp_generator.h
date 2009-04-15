@@ -12,7 +12,7 @@ namespace generator {
 
 
 
-class base
+class generator
 {
 	// Klasa bazowa dla generatorow trajektorii (klasa abstrakcyjna)
 	// Sluzy zarowno do wyznaczania nastepnej wartosci zadanej jak i
@@ -24,13 +24,13 @@ protected:
 public:
 	bool trigger;			// informacja czy pszyszedl puls trigger
 
-	base(lib::sr_ecp& _sr_ecp_msg);
+	generator(lib::sr_ecp& _sr_ecp_msg);
 
 	bool check_and_null_trigger(); 		// zwraca wartosc trigger i zeruje go
 
 	int node_counter;  // biezacy wezel interpolacji
 
-	virtual ~base();
+	virtual ~generator();
 
 	// mapa wszystkich czujnikow
 	std::map <lib::SENSOR_ENUM, lib::sensor*> sensor_m;

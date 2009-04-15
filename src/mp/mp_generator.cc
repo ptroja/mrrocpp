@@ -33,7 +33,7 @@ void base::copy_generator_command(std::map<lib::ROBOT_ENUM, common::robot*>& _ro
 }
 
 base::base(task::base& _mp_task) :
-	ecp_mp::generator::base(*_mp_task.sr_ecp_msg), mp_t(_mp_task), wait_for_ECP_pulse(false), phase(BEFORE_FIRST_STEP),
+	ecp_mp::generator::generator(*_mp_task.sr_ecp_msg), mp_t(_mp_task), wait_for_ECP_pulse(false), phase(BEFORE_FIRST_STEP),
 			new_pulse_checked(true)
 {
 }
