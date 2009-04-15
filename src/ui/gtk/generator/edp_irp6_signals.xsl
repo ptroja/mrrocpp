@@ -29,13 +29,13 @@ EDP IRp6 RCSC window callback signals
 #include "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_uimodule.h"
 
 
-BYTE servo_alg_no[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
-BYTE servo_par_no[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
+mrrocpp::lib::BYTE servo_alg_no[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
+mrrocpp::lib::BYTE servo_par_no[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
 	
 gint servo_alg_no_tmp [</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
-BYTE servo_alg_no_output[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
+mrrocpp::lib::BYTE servo_alg_no_output[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
 gint servo_par_no_tmp [</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
-BYTE servo_par_no_output[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
+mrrocpp::lib::BYTE servo_par_no_output[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
 
 char buf[32];
 gchar buffer[500];
@@ -60,7 +60,7 @@ edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>::edp_</xsl:text><xsl:va
 				robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = new </xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>ui_conveyor_robot</xsl:text></xsl:when><xsl:otherwise><xsl:text>ui_common_robot</xsl:text></xsl:otherwise></xsl:choose><xsl:text>(
 				ui_model::instance().getConfigurator(),
 				&amp;ui_model::instance().getEcpSr()
-				</xsl:text><xsl:choose><xsl:when test="$name = 'irp6m'"><xsl:text>,ROBOT_IRP6_MECHATRONIKA</xsl:text></xsl:when><xsl:when test="$name = 'irp6o'"><xsl:text>,ROBOT_IRP6_ON_TRACK</xsl:text></xsl:when><xsl:when test="$name = 'irp6p'"><xsl:text>,ROBOT_IRP6_POSTUMENT</xsl:text></xsl:when><xsl:when test="$name = 'conveyor'"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>ROBOT_IRP6_NEWROBOT</xsl:text></xsl:otherwise></xsl:choose><xsl:text>
+				</xsl:text><xsl:choose><xsl:when test="$name = 'irp6m'"><xsl:text>,mrrocpp::lib::ROBOT_IRP6_MECHATRONIKA</xsl:text></xsl:when><xsl:when test="$name = 'irp6o'"><xsl:text>,mrrocpp::lib::ROBOT_IRP6_ON_TRACK</xsl:text></xsl:when><xsl:when test="$name = 'irp6p'"><xsl:text>,mrrocpp::lib::ROBOT_IRP6_POSTUMENT</xsl:text></xsl:when><xsl:when test="$name = 'conveyor'"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>ROBOT_IRP6_NEWROBOT</xsl:text></xsl:otherwise></xsl:choose><xsl:text>
 				);
 
 }
@@ -279,7 +279,7 @@ class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>
 		~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>();
 };
 ui_</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>conveyor</xsl:text></xsl:when><xsl:otherwise><xsl:text>common</xsl:text></xsl:otherwise></xsl:choose><xsl:text>_robot * robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
-controller_state_t state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
+mrrocpp::lib::controller_state_t state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
 GError *error = NULL;
 void *ui_synchronize_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> (gpointer userdata);
 GtkButton* button;

@@ -18,8 +18,10 @@ class edp_irp6o
 		edp_irp6o(ui_config_entry &entry);
 		~edp_irp6o();
 };
-ui_common_robot * robot;
-lib::controller_state_t state;
-
+ui_common_robot * robot_ontrack;
+mrrocpp::lib::controller_state_t state_ontrack;
+GError *error = NULL;
+void *ui_synchronize_ontrack (gpointer userdata);
+GtkButton* button;
 
 #endif /* __EDP_irp6o */

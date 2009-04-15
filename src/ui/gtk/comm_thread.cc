@@ -62,7 +62,7 @@ void *comm_thread(void* arg)
 				gtk_widget_hide(GTK_WIDGET(dialog));
 				gdk_flush();
 
-				ui_ecp_obj.ui_rep.double_number = (response == GTK_RESPONSE_OK) ? lib::ANSWER_YES : INVALID_REPLY;
+				ui_ecp_obj.ui_rep.double_number = (response == GTK_RESPONSE_OK) ? lib::ANSWER_YES : lib::INVALID_REPLY;
 				ui_ecp_obj.ui_rep.double_number = gtk_spin_button_get_value(input);
 
 				gdk_threads_leave();
@@ -90,7 +90,7 @@ void *comm_thread(void* arg)
 				gtk_widget_hide(GTK_WIDGET(dialog));
 				gdk_flush();
 
-				ui_ecp_obj.ui_rep.double_number = (response == GTK_RESPONSE_OK) ? lib::ANSWER_YES : INVALID_REPLY;
+				ui_ecp_obj.ui_rep.double_number = (response == GTK_RESPONSE_OK) ? lib::ANSWER_YES : lib::INVALID_REPLY;
 				ui_ecp_obj.ui_rep.double_number = gtk_spin_button_get_value(input);
 
 				gdk_threads_leave();

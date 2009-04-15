@@ -42,6 +42,6 @@ class xmlconfigurator
 		}
 };
 
-extern class xmllib::configurator *xmlconfig;
+extern class xmlconfigurator *xmlconfig;
 
 #endif /* __CONFIGURATOR_H */

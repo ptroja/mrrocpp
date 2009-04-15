@@ -110,6 +110,8 @@ void *sr_thread(void* arg)
 
 	while(1)
 	{
+		using namespace mrrocpp::lib;
+
 		sr_package_t sr_msg;
 		int32_t type, subtype;
 

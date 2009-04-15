@@ -7,7 +7,7 @@ TIMESTAMP_FILE = ../timestamp.xml
 all: $(TIMESTAMP_FILE)
 
 $(TIMESTAMP_FILE): $(XML_FILES) $(XSL_FILES) $(XSD_FILES)
-	xsltproc robots.xml --xinclude
+	xsltproc -noout robots.xml --xinclude
 
 clean:
 	rm -rf ../timestamp.xml

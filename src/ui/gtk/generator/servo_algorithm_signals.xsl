@@ -78,8 +78,8 @@ extern "C"
 
 		for(int i=0; i&lt;</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>; i++)
 		{
-			servo_alg_no_output[i] = BYTE(servo_alg_no_tmp[i]);
-			servo_par_no_output[i] = BYTE(servo_par_no_tmp[i]);
+			servo_alg_no_output[i] = mrrocpp::lib::BYTE(servo_alg_no_tmp[i]);
+			servo_par_no_output[i] = mrrocpp::lib::BYTE(servo_par_no_tmp[i]);
 		}
 
 		// zlecenie wykonania ruchu

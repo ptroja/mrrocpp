@@ -117,14 +117,14 @@ ui_model::ui_model() : tabs_visible(0),
 }
 
 void ui_model::init_sr(void) {
-	ui_report = new lib::sr_ui(UI, "ui", "sr");
-	ecp_report = new lib::sr_ecp(UI, "ui", "sr");
+	ui_report = new lib::sr_ui(mrrocpp::lib::UI, "ui", "sr");
+	ecp_report = new lib::sr_ecp(mrrocpp::lib::UI, "ui", "sr");
 
 	ui_report->message("UI report");
 	ecp_report->message("ECP report");
 }
 
-sr_ecp & ui_model::getEcpSr(void) const {
+mrrocpp::lib::sr_ecp & ui_model::getEcpSr(void) const {
 	return *(this->ecp_report);
 }
 
