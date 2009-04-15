@@ -218,7 +218,7 @@ void * irp6s_and_conv_effector::reader_thread(void* arg)
 			int rcvid = messip_receive(my_attach, &type, &subtype, NULL, 0, MESSIP_NOTIMEOUT);
 
 			if (rcvid >= 0) {
-				if (type == lib::READER_START) {
+				if (type == READER_START) {
 					start = true;
 				}
 			}
@@ -298,9 +298,9 @@ void * irp6s_and_conv_effector::reader_thread(void* arg)
 			int rcvid = messip_receive(my_attach, &type, &subtype, NULL, 0, 0);
 
 			if (rcvid >= 0) {
-				if (type == lib::READER_STOP) {
+				if (type == READER_STOP) {
 					stop = true;
-				} else if (type == lib::READER_TRIGGER) {
+				} else if (type == READER_TRIGGER) {
 					ui_trigger = true;
 				}
 			}
