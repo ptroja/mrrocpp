@@ -75,7 +75,7 @@ class ui_model
 		//! initialize SR client objects
 		void init_sr(void);
 
-		sr_ecp & getEcpSr(void) const;
+		mrrocpp::lib::sr_ecp & getEcpSr(void) const;
 
 		lib::configurator & getConfigurator(void) const;
 
@@ -104,10 +104,10 @@ class ui_model
 		lib::configurator *config;
 
 		//! SR object for UI
-		sr_ui* ui_report;
+		mrrocpp::lib::sr_ui* ui_report;
 
 		//! SR object for ECP
-		sr_ecp* ecp_report;
+		mrrocpp::lib::sr_ecp* ecp_report;
 };
 
 /*
