@@ -34,6 +34,7 @@
 #include <netdb.h>
 #include <signal.h>
 #include <assert.h>
+#include <limits.h>
 #ifdef __FreeBSD__
 #include <sys/uio.h>
 #endif /* __FreeBSD__ */

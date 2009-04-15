@@ -42,6 +42,7 @@
 #include <fcntl.h>
 #include <assert.h>
 #include <time.h>
+#include <limits.h>
 #ifdef __FreeBSD__
 #include <sys/uio.h>
 #endif
