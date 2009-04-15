@@ -115,7 +115,7 @@ int main (int argc, char *argv[], char **arge)
 			mp::common::mp_t->sr_ecp_msg->message (e.error_class, e.error_no);
 			printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		} /* end: catch sensor_error  */
-		catch (mp::generator::base::MP_error e) {
+		catch (mp::generator::generator::MP_error e) {
 					/* Wyswietlenie komunikatu. */
 			mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.mp_error);
 					printf("Mam blad mp_generator section 1 (@%s:%d)\n", __FILE__, __LINE__);
@@ -202,7 +202,7 @@ int main (int argc, char *argv[], char **arge)
 
 			} /*end: catch*/
 
-			catch (mp::generator::base::MP_error e) {
+			catch (mp::generator::generator::MP_error e) {
 
 				if (e.error_class == lib::SYSTEM_ERROR)
 					exit(EXIT_FAILURE);

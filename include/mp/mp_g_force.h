@@ -18,7 +18,7 @@ namespace generator {
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji
 
-class tff_single_robot_nose_run : public base
+class tff_single_robot_nose_run : public generator
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
@@ -47,7 +47,7 @@ public:
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji
 
-class tff_nose_run : public base 
+class tff_nose_run : public generator 
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
@@ -82,7 +82,7 @@ public:
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji
 
-class haptic : public base 
+class haptic : public generator 
 {
 protected:
    
@@ -115,7 +115,7 @@ public:
 // --------------------------------------------------------------------------
 // Generator do lapania kostki
 
-class tff_rubik_grab : public base 
+class tff_rubik_grab : public generator 
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
@@ -152,7 +152,7 @@ public:
 // --------------------------------------------------------------------------
 // Generator do obracania sciany kostki
 
-class tff_rubik_face_rotate : public base 
+class tff_rubik_face_rotate : public generator 
 {
 protected:
 	int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
@@ -183,7 +183,7 @@ public:
 // --------------------------------------------------------------------------
 // Generator do nasuniecia chwytaka na kostke
 
-class tff_gripper_approach : public base 
+class tff_gripper_approach : public generator 
 {
 protected:
 	int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
@@ -216,7 +216,7 @@ public:
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos
 
-class nose_run_force : public base 
+class nose_run_force : public generator 
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)

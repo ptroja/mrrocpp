@@ -10,7 +10,7 @@ namespace generator {
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji
 
-class vis_pbeclsac : public base 
+class vis_pbeclsac : public generator 
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)

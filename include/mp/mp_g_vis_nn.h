@@ -8,7 +8,7 @@ namespace generator {
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji
 
-class nn_eye : public base 
+class nn_eye : public generator 
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)

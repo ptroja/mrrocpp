@@ -43,7 +43,7 @@ using namespace std;
 
 
 teach_in::teach_in(task::base& _mp_task)
-	: base (_mp_task), UI_fd(_mp_task.UI_fd)
+	: generator (_mp_task), UI_fd(_mp_task.UI_fd)
 {
 	pose_list.clear();
 	pose_list_iterator = pose_list.end();
@@ -83,7 +83,7 @@ void teach_in::save_file (lib::POSE_SPECIFICATION ps) {
 		e = errno;
 		perror("ECP: Send() to UI failed\n");
 		sr_ecp_msg.message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw base::MP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		throw generator::MP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 	if ( ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
 		return;
@@ -110,13 +110,13 @@ void teach_in::save_file (lib::POSE_SPECIFICATION ps) {
 	cwd = getcwd (NULL, 0);
 	if ( chdir(ui_to_ecp_rep.path) != 0 ) {
 		perror(ui_to_ecp_rep.path);
-		throw base::MP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		throw generator::MP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
 	}
 	ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
 	e = errno;
 	if (!to_file) {
 		perror(ui_to_ecp_rep.filename);
-		throw base::MP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw generator::MP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	} else {
 		initiate_pose_list();
 		number_of_poses = pose_list_length();
@@ -161,12 +161,12 @@ bool teach_in::load_file_with_path (const char* file_name, short robot_number) {
 	ifstream from_file(file_name); // otworz plik do odczytu
 	if (!from_file) {
 		perror(file_name);
-		throw base::MP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw generator::MP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 
 	if ( !(from_file >> coordinate_type) ) {
 		from_file.close();
-		throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
 // Usuwanie spacji i tabulacji
@@ -194,12 +194,12 @@ bool teach_in::load_file_with_path (const char* file_name, short robot_number) {
 		ps = lib::PF_VELOCITY;
 	else {
 		from_file.close();
-		throw base::MP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+		throw generator::MP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
 	}
 
 	if ( !(from_file >> number_of_poses) ) {
 		from_file.close();
-		throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
@@ -207,19 +207,19 @@ bool teach_in::load_file_with_path (const char* file_name, short robot_number) {
 
 		if (!(from_file >> motion_time)) {
 			from_file.close();
-			throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+			throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 		}
 		for ( j = 0; j < MAX_SERVOS_NR; j++) {
 			if ( !(from_file >> irp6ot_coordinates[j]) ) { // Zabezpieczenie przed danymi nienumerycznymi
 				from_file.close();
-				throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+				throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 			}
 		}
 		if (robot_number > 1) {
 			for ( j = 0; j < MAX_SERVOS_NR; j++) {
 				if ( !(from_file >> irp6p_coordinates[j]) ) { // Zabezpieczenie przed danymi nienumerycznymi
 					from_file.close();
-					throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+					throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 				}
 			}
 		}
@@ -284,23 +284,23 @@ bool teach_in::load_file () {
 		e = errno;
 		perror("ECP: Send() to UI failed\n");
 		sr_ecp_msg.message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw base::MP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		throw generator::MP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 	if ( ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
 		return false;
 	if ( chdir(ui_to_ecp_rep.path) != 0 ) {
 		perror(ui_to_ecp_rep.path);
-		throw base::MP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		throw generator::MP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
 	}
 
 	ifstream from_file(ui_to_ecp_rep.filename); // otworz plik do odczytu
 	if (!from_file) {
 		perror(ui_to_ecp_rep.filename);
-		throw base::MP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw generator::MP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 	if ( !(from_file >> coordinate_type) ) {
 		from_file.close();
-		throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
 // Usuwanie spacji i tabulacji
@@ -328,29 +328,29 @@ bool teach_in::load_file () {
 		ps = lib::PF_VELOCITY;
 	else {
 		from_file.close();
-		throw base::MP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+		throw generator::MP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
 	}
 	if ( !(from_file >> number_of_poses) ) {
 		from_file.close();
-		throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
 	for ( i = 0; i < number_of_poses; i++) {
 		if (!(from_file >> motion_time)) {
 			from_file.close();
-			throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+			throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 		}
 		for ( j = 0; j < MAX_SERVOS_NR; j++) {
 			if ( !(from_file >> coordinates[j]) ) { // Zabezpieczenie przed danymi nienumerycznymi
 				from_file.close();
-				throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+				throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 			}
 		}
 
 		if (ps == lib::PF_VELOCITY) { // by Y
 			if ( !(from_file >> extra_info) ) { // Zabezpieczenie przed danymi nienumerycznymi
 				from_file.close();
-				throw base::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+				throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 			}
 			if (first_time) {
 				// Tworzymy glowe listy

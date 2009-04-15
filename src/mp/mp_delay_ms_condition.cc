@@ -8,7 +8,7 @@ namespace generator {
 
 // condition to wait for desired time in ms
 
-delay_ms_condition::delay_ms_condition(task::base& _mp_task, int _ms_delay): base (_mp_task)
+delay_ms_condition::delay_ms_condition(task::base& _mp_task, int _ms_delay): generator (_mp_task)
 {
 	local_timer = new lib::timer();
 	configure(_ms_delay);

@@ -84,7 +84,7 @@ double aux2=0;
 
 
 
-    vis_sac::vis_sac(task::base& _mp_task, int step): base (_mp_task), irp6ot_con(1), irp6p_con(1){ 
+    vis_sac::vis_sac(task::base& _mp_task, int step): generator (_mp_task), irp6ot_con(1), irp6p_con(1){ 
         step_no = step;          
     };  
 	

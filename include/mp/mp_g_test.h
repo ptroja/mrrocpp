@@ -15,7 +15,7 @@ namespace generator {
 // KLASA BAZOWA dla generatorow o zadany przyrost polozenia/orientacji  
 // ####################################################################################################
 
-class vis_force : public base 
+class vis_force : public generator 
 {
 protected:
   int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)

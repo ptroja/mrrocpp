@@ -9,7 +9,7 @@ namespace generator {
 
 // condition to wait for desired time in ms
 
-class delay_ms_condition: public base
+class delay_ms_condition: public generator
 {
 protected:
 	lib::timer* local_timer;

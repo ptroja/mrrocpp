@@ -24,7 +24,7 @@ namespace generator {
 
 // konstruktor
 tff_single_robot_nose_run::tff_single_robot_nose_run(task::base& _mp_task, int step) :
-	base(_mp_task)
+	generator(_mp_task)
 {
 	step_no = step;
 }
@@ -128,7 +128,7 @@ bool tff_single_robot_nose_run::next_step()
 }
 
 tff_nose_run::tff_nose_run(task::base& _mp_task, int step) :
-	base(_mp_task), irp6ot_con(1), irp6p_con(1)
+	generator(_mp_task), irp6ot_con(1), irp6p_con(1)
 {
 	step_no = step;
 }
@@ -285,7 +285,7 @@ bool tff_nose_run::next_step()
 }
 
 haptic::haptic(task::base& _mp_task, int step) :
-	base(_mp_task), irp6ot_con(1), irp6p_con(1), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
+	generator(_mp_task), irp6ot_con(1), irp6p_con(1), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
 {
 	step_no = step;
 }
@@ -479,7 +479,7 @@ bool haptic::next_step()
 }
 
 tff_rubik_grab::tff_rubik_grab(task::base& _mp_task, int step) :
-	base(_mp_task), irp6ot_con(0), irp6p_con(0)
+	generator(_mp_task), irp6ot_con(0), irp6p_con(0)
 {
 	step_no = step;
 }
@@ -704,7 +704,7 @@ bool tff_rubik_grab::next_step()
 }
 
 tff_rubik_face_rotate::tff_rubik_face_rotate(task::base& _mp_task, int step) :
-	base(_mp_task), irp6ot_con(1), irp6p_con(1)
+	generator(_mp_task), irp6ot_con(1), irp6p_con(1)
 {
 	step_no = step;
 }
@@ -956,7 +956,7 @@ bool tff_rubik_face_rotate::next_step()
 }
 
 tff_gripper_approach::tff_gripper_approach(task::base& _mp_task, int step) :
-	base(_mp_task), irp6ot_speed(1.0), irp6p_speed(1.0)
+	generator(_mp_task), irp6ot_speed(1.0), irp6p_speed(1.0)
 {
 	step_no = step;
 }
@@ -1104,7 +1104,7 @@ bool tff_gripper_approach::next_step()
 // ----------------------------------------------------------------------------------------------
 
 nose_run_force::nose_run_force(task::base& _mp_task, int step) :
-	base(_mp_task)
+	generator(_mp_task)
 {
 	step_no = step;
 }

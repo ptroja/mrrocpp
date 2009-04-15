@@ -10,7 +10,7 @@ namespace mrrocpp {
 namespace mp {
 namespace generator {
 
-class set_next_ecps_state : public base
+class set_next_ecps_state : public generator
 {
 protected:
 	lib::ecp_next_state_t ecp_next_state;
@@ -29,7 +29,7 @@ public:
 
 // generator for sending end_motion mesage to ecps
 
-class send_end_motion_to_ecps : public base
+class send_end_motion_to_ecps : public generator
 {
 public:
 
@@ -45,7 +45,7 @@ public:
 // Rozszerzony Generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
 // ####################################################################################################
 
-class extended_empty : public base {
+class extended_empty : public generator {
 	// Klasa dla generatorow trajektorii
 	// Sluzy zarowno do wyznaczania nastepnej wartosci zadanej jak i
 	// sprawdzania spelnienia warunku koncowego
@@ -68,7 +68,7 @@ class extended_empty : public base {
 // Generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
 // ####################################################################################################
 
-class empty : public base {
+class empty : public generator {
     // Klasa dla generatorow trajektorii
     // Sluzy zarowno do wyznaczania nastepnej wartosci zadanej jak i
     // sprawdzania spelnienia warunku koncowego
@@ -92,7 +92,7 @@ class empty : public base {
 // KLASA BAZOWA dla generatorow o zadany przyrost polozenia/orientacji
 // ####################################################################################################
 
-class delta : public base
+class delta : public generator
 {
 protected:
 

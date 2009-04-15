@@ -25,7 +25,7 @@ namespace generator {
 
 // Konstruktor.
 two_robots_measures::two_robots_measures(task::base& _mp_task)
-	: base (_mp_task), UI_fd(_mp_task.UI_fd)
+	: generator (_mp_task), UI_fd(_mp_task.UI_fd)
 {
 }
 
@@ -143,7 +143,7 @@ void two_robots_measures::save_measures_to_file (void)
 #endif
 	{
 		sr_ecp_msg.message (lib::SYSTEM_ERROR, errno, "Send to UI failed");
-		throw base::MP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		throw generator::MP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 	// Sprawdzenie katalogu.
 	if ( chdir(ui_to_ecp_rep.path) != 0 )

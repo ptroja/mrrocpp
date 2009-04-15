@@ -12,7 +12,7 @@ namespace mp {
 
 namespace generator {
 
-class base;
+class generator;
 }
 
 namespace task {
@@ -88,7 +88,7 @@ class base: public ecp_mp::task::base
 		void execute_all (std::map <lib::ROBOT_ENUM, common::robot*>& _robot_m);
 
 		// funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
-		void mp_receive_ui_or_ecp_pulse (std::map <lib::ROBOT_ENUM, common::robot*>& _robot_m, generator::base& the_generator );
+		void mp_receive_ui_or_ecp_pulse (std::map <lib::ROBOT_ENUM, common::robot*>& _robot_m, generator::generator& the_generator );
 
 		// obsluga sygnalu
 		virtual void catch_signal_in_mp_task(int sig);

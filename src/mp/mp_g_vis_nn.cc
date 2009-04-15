@@ -79,7 +79,7 @@ int steps2switch=0;
 
 
 
-    nn_eye::nn_eye(task::base& _mp_task, int step): base (_mp_task), irp6ot_con(1), irp6p_con(1){ 
+    nn_eye::nn_eye(task::base& _mp_task, int step): generator (_mp_task), irp6ot_con(1), irp6p_con(1){ 
         step_no = step;          
     };  
 	

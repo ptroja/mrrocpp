@@ -764,7 +764,7 @@ int base::mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs)
 
 // funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
 
-void base::mp_receive_ui_or_ecp_pulse (map <lib::ROBOT_ENUM, common::robot*>& _robot_m, generator::base& the_generator )
+void base::mp_receive_ui_or_ecp_pulse (map <lib::ROBOT_ENUM, common::robot*>& _robot_m, generator::generator& the_generator )
 {
 
 	enum MP_STATE_ENUM

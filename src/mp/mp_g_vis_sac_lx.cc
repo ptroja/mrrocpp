@@ -95,7 +95,7 @@ double aux2=0;
 #define PRINTA 0
 
 
-vis_sac_lx::vis_sac_lx(task::base& _mp_task, int step): base (_mp_task), irp6ot_con(1), irp6p_con(1)
+vis_sac_lx::vis_sac_lx(task::base& _mp_task, int step): generator (_mp_task), irp6ot_con(1), irp6p_con(1)
 {
     step_no = step;
 };

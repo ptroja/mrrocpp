@@ -24,7 +24,7 @@ namespace mrrocpp {
 namespace mp {
 namespace generator {
 
-class teach_in : public base {
+class teach_in : public generator {
 
 	protected:
 		std::list<common::mp_taught_in_pose> pose_list;

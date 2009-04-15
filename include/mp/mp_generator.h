@@ -20,7 +20,7 @@ namespace generator {
 
 
 
-class base : public ecp_mp::generator::generator
+class generator : public ecp_mp::generator::generator
 {
 	protected:
 
@@ -59,7 +59,7 @@ class base : public ecp_mp::generator::generator
 		//! mapa wszystkich robotow
 		std::map <lib::ROBOT_ENUM, common::robot*> robot_m;
 
-		base(task::base& _mp_task);
+		generator(task::base& _mp_task);
 
 		void re_run(void); // powrot do stanu wyjsciowego
 
