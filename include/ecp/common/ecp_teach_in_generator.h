@@ -14,7 +14,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-class ecp_teach_in_generator : public common::generator::base {
+class ecp_teach_in_generator : public common::generator::generator {
 
 protected:
     std::list<ecp_taught_in_pose> pose_list;

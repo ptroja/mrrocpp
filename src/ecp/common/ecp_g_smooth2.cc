@@ -117,13 +117,13 @@ bool smooth2::load_file_with_path(char* file_name) {
     if (!from_file)
     {
         perror(file_name);
-        throw base::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
     }
 
     if ( !(from_file >> coordinate_type) )
     {
         from_file.close();
-        throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+        throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
     }
 
     // Usuwanie spacji i tabulacji
@@ -161,14 +161,14 @@ bool smooth2::load_file_with_path(char* file_name) {
     else
     {
         from_file.close();
-        throw base::ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
     }
 
     // printf("po coord type %d\n", ps);
     if ( !(from_file >> number_of_poses) )
     {
         from_file.close();
-        throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+        throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
     }
 
     // printf("po number of poses %d\n", number_of_poses);
@@ -186,7 +186,7 @@ bool smooth2::load_file_with_path(char* file_name) {
             if ( !(from_file >> v[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
                 from_file.close();
-                throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+                throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         }
 
@@ -196,7 +196,7 @@ bool smooth2::load_file_with_path(char* file_name) {
             if ( !(from_file >> a[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
                 from_file.close();
-                throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+                throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         }
 
@@ -206,7 +206,7 @@ bool smooth2::load_file_with_path(char* file_name) {
             if ( !(from_file >> coordinates[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
                 from_file.close();
-                throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+                throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         }
 
@@ -352,13 +352,13 @@ bool smooth2::load_a_v_min (char* file_name)
     {
         // printf("error\n");
         perror(file_name);
-        throw base::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
     }
 
     if ( !(from_file >> v_grip_min) )
     { // Zabezpieczenie przed danymi nienumerycznymi
         from_file.close();
-        throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+        throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
     }
 
     from_file.close();
@@ -375,7 +375,7 @@ bool smooth2::load_a_v_max (char* file_name)
     {
         // printf("error\n");
         perror(file_name);
-        throw base::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
     }
 
     for ( j = 0; j < MAX_SERVOS_NR; j++)
@@ -383,7 +383,7 @@ bool smooth2::load_a_v_max (char* file_name)
         if ( !(from_file >> v_max_motor[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
     for ( j = 0; j < MAX_SERVOS_NR; j++)
@@ -391,7 +391,7 @@ bool smooth2::load_a_v_max (char* file_name)
         if ( !(from_file >> a_max_motor[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
 
@@ -400,7 +400,7 @@ bool smooth2::load_a_v_max (char* file_name)
         if ( !(from_file >> v_max_joint[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
     for ( j = 0; j < MAX_SERVOS_NR; j++)
@@ -408,7 +408,7 @@ bool smooth2::load_a_v_max (char* file_name)
         if ( !(from_file >> a_max_joint[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
 
@@ -417,7 +417,7 @@ bool smooth2::load_a_v_max (char* file_name)
         if ( !(from_file >> v_max_zyz[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
     for ( j = 0; j < MAX_SERVOS_NR; j++)
@@ -425,7 +425,7 @@ bool smooth2::load_a_v_max (char* file_name)
         if ( !(from_file >> a_max_zyz[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
 
@@ -434,7 +434,7 @@ bool smooth2::load_a_v_max (char* file_name)
         if ( !(from_file >> v_max_aa[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
     for ( j = 0; j < MAX_SERVOS_NR; j++)
@@ -442,7 +442,7 @@ bool smooth2::load_a_v_max (char* file_name)
         if ( !(from_file >> a_max_aa[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
             from_file.close();
-            throw base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
 

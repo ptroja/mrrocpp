@@ -9,7 +9,7 @@ namespace common {
 namespace generator {
 
 // Generator przezroczysty
-class transparent : public common::generator::base {
+class transparent : public common::generator::generator {
 
 public:
 	transparent(common::task::task& _ecp_task);

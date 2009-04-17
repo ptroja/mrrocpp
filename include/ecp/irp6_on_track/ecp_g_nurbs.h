@@ -27,7 +27,7 @@ namespace generator {
 
 //#############################################################################
 
-class nurbs : public common::generator::base 
+class nurbs : public common::generator::generator 
 {
 protected:
 	int mp_communication_mode_; //by Y - 0 bez TASK TERMINATED, 1 - z TASK TERMINATED

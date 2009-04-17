@@ -19,7 +19,7 @@ namespace generator {
 // - klasa odpowiadajaca za generowanie nowych wspolrzednych dla koncowki robota
 //   na podstawie informacji z systemu wizyjnego, z wykorzystaniem VSP FraDIA
 //   odpowiada za komunikacje z FraDIA, oraz aktualnych wspolrzednych robota
-class visioncoordinates : public common::generator::base
+class visioncoordinates : public common::generator::generator
 {
 public:
 	// ecp_visioncoordinates_generator(common::task::task& _ecp_task)

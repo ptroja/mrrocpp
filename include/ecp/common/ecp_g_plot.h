@@ -19,7 +19,7 @@ namespace generator {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej 
-class y_simple : public common::generator::base 
+class y_simple : public common::generator::generator 
 {
 
 protected:

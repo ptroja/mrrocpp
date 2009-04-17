@@ -15,7 +15,7 @@ namespace task {
 task::task(lib::configurator &_config) :
 	common::task::task(_config)
 {
-	fg = new generator::base (*this);
+	fg = new generator::generator (*this);
 }
 
 task::~task()
@@ -46,7 +46,7 @@ void task::main_task_algorithm(void)
 					sr_ecp_msg->message(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				else
 				{
-					fg->set_voice((generator::base::VOICE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
+					fg->set_voice((generator::generator::VOICE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
 					fg->set_phrase(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 					fg->Move();
 				}

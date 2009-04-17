@@ -5,7 +5,7 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-base::base (common::task::task& _ecp_task)
+generator::generator (common::task::task& _ecp_task)
         : ecp_mp::generator::generator(*(ecp_t.sr_ecp_msg)),
         ecp_t(_ecp_task),
         communicate_with_mp_in_move(true),
@@ -16,10 +16,10 @@ base::base (common::task::task& _ecp_task)
     sensor_m.clear();
 }
 
-base::~base()
+generator::~generator()
 {}
 
-base::ECP_error::ECP_error ( uint64_t err_cl, uint64_t err_no,
+generator::ECP_error::ECP_error ( uint64_t err_cl, uint64_t err_no,
                                       uint64_t err0, uint64_t err1 )
         :
         error_class(err_cl),
@@ -29,7 +29,7 @@ base::ECP_error::ECP_error ( uint64_t err_cl, uint64_t err_no,
     error.error1 =err1;
 }
 
-bool base::is_EDP_error (ecp_robot& the_robot) const
+bool generator::is_EDP_error (ecp_robot& the_robot) const
 {
     // Sprawdzenie czy nie wystapil blad w EDP
     // Funkcja zaklada, ze error_no zostalo zaktualizowane
@@ -46,7 +46,7 @@ bool base::is_EDP_error (ecp_robot& the_robot) const
 
 
 
-void base::Move()
+void generator::Move()
 {
     // Funkcja ruchu dla ECP
 
@@ -98,7 +98,7 @@ void base::Move()
 }
 
 
-void base::execute_motion(void)
+void generator::execute_motion(void)
 {
 	the_robot->execute_motion();
 }

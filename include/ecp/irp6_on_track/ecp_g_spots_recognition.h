@@ -21,7 +21,7 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-class spots : public common::generator::base
+class spots : public common::generator::generator
 {
 	lib::ECP_VSP_MSG comm_struct;
 	ecp_mp::sensor::cvfradia * sensor;

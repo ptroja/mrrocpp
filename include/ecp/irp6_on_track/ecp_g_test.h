@@ -21,7 +21,7 @@ namespace generator {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej dla zadan yoyka z wodzeniem za nos
-class y_simple : public common::generator::base {
+class y_simple : public common::generator::generator {
 
 protected:
 	long run_counter;

@@ -18,7 +18,7 @@ namespace generator {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej 
-class playerjoy : public common::generator::base 
+class playerjoy : public common::generator::generator 
 {
 
 protected:

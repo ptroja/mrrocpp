@@ -6,7 +6,7 @@ namespace common {
 namespace generator {
 
 transparent::transparent(common::task::task& _ecp_task) :
-	base(_ecp_task)
+	generator(_ecp_task)
 {
 	copy_edp_buffers_in_move=false;
 	throw_kinematics_exceptions = true;

@@ -33,7 +33,7 @@ namespace generator {
 
 weight_meassure::weight_meassure(common::task::task& _ecp_task,
 		double _weight_difference, double _catch_time) :
-	base(_ecp_task), weight_difference(_weight_difference),
+	generator(_ecp_task), weight_difference(_weight_difference),
 			current_buffer_pointer(0), initial_weight(0.0),
 			initial_weight_counted(false),
 			catch_time(_catch_time), terminate_state_recognized(false)
@@ -179,7 +179,7 @@ bool weight_meassure::next_step()
 
 y_nose_run_force::y_nose_run_force(common::task::task& _ecp_task,
 		int step) :
-	base(_ecp_task)
+			generator(_ecp_task)
 {
 	step_no = step;
 }
@@ -275,7 +275,7 @@ bool y_nose_run_force::next_step()
 
 y_egg_force::y_egg_force(common::task::task& _ecp_task, int step,
 		int mode) :
-	base(_ecp_task)
+			generator(_ecp_task)
 {
 	step_no = step;
 	int_mode = mode;
@@ -586,7 +586,7 @@ bool y_egg_force::next_step()
 
 
 bias_edp_force::bias_edp_force(common::task::task& _ecp_task) :
-	base(_ecp_task)
+	generator(_ecp_task)
 {
 }
 
@@ -1631,7 +1631,7 @@ bool y_advanced_drawing_teach_in_force::next_step()
 
 tff_nose_run::tff_nose_run(common::task::task& _ecp_task,
 		int step) :
-	base(_ecp_task)
+			generator(_ecp_task)
 {
 	step_no = step;
 	// domyslnie wszytkie osie podatne a pulse_check nieaktywne
@@ -1889,7 +1889,7 @@ void tff_nose_run::execute_motion(void)
 
 tff_rubik_grab::tff_rubik_grab(common::task::task& _ecp_task,
 		int step) :
-	base(_ecp_task)
+			generator(_ecp_task)
 {
 	step_no = step;
 }
@@ -2014,7 +2014,7 @@ bool tff_rubik_grab::next_step()
 
 tff_rubik_face_rotate::tff_rubik_face_rotate(
 		common::task::task& _ecp_task, int step) :
-	base(_ecp_task)
+			generator(_ecp_task)
 {
 	step_no = step;
 }
@@ -2185,7 +2185,7 @@ bool tff_rubik_face_rotate::next_step()
 
 tff_gripper_approach::tff_gripper_approach(
 		common::task::task& _ecp_task, int step) :
-	base(_ecp_task)
+			generator(_ecp_task)
 {
 	step_no = step;
 }
@@ -2304,7 +2304,7 @@ bool tff_gripper_approach::next_step()
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 force_tool_change::force_tool_change (common::task::task& _ecp_task)
-        :base (_ecp_task)
+        :generator (_ecp_task)
 {
 
     set_tool_parameters(-0.18, 0.0, 0.25, 0);

@@ -771,7 +771,7 @@ void rubik_cube_solver::approach_op(int mode)
 
 
 
-	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::base::POLISH_VOICE, "jestem podatny", 1, lib::ROBOT_FESTIVAL);
+	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, "jestem podatny", 1, lib::ROBOT_FESTIVAL);
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots

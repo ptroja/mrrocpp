@@ -9,7 +9,7 @@ namespace player {
 namespace generator {
 
 playerpos::playerpos(common::task::task& _ecp_task)
-	: base (_ecp_task)
+	: generator (_ecp_task)
 {
 	char *hostname = ecp_t.config.return_string_value("player_hostname");
 	assert(hostname);

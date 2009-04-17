@@ -143,7 +143,7 @@ struct vis_operations_t
  * \brief Abstract class responsible for visual servo.
  * \author tkornuta/mstaniak
  */
-class ecp_visual_servo : public common::generator::base
+class ecp_visual_servo : public common::generator::generator
 {
 private:
 

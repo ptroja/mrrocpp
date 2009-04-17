@@ -21,7 +21,7 @@ namespace generator {
 #define DEG 0.0174444 //Jeden stopien wyrazony w radianach
 
 
-class pw_kolo : public common::generator::base
+class pw_kolo : public common::generator::generator
 {
     lib::trajectory_description td;
     double next_position[8];  

@@ -13,7 +13,7 @@ namespace generator {
 
 #define PI 3.141592
 
-class wii : public common::generator::base
+class wii : public common::generator::generator
 {
 	private:
 		//ilosc krokow

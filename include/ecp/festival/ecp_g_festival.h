@@ -32,7 +32,7 @@ namespace generator {
  * z* - rzet
  */
 
-class base : public common::generator::base
+class generator : public common::generator::generator
 {
 	private:
 		int sock;
@@ -51,8 +51,8 @@ class base : public common::generator::base
 
 	public:
 		// konstruktor
-		base(common::task::task& _ecp_task);
-		~base();
+		generator(common::task::task& _ecp_task);
+		~generator();
 
 		virtual bool first_step ();
 

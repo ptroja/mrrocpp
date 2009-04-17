@@ -24,14 +24,14 @@ namespace generator {
  * \brief Generator responsible for communication with cvFraDIA (testing purposes).
  * \author tkornuta
  */
-class cvfradia : public common::generator::base
+class cvfradia : public common::generator::generator
 {
 public:
 	/*!
       * Constructor.
       */
 	cvfradia(common::task::task& _ecp_task)
-	  : base(_ecp_task)
+	  : generator(_ecp_task)
 	{  }
 
 	/*!

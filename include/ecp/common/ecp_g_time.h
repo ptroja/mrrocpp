@@ -21,7 +21,7 @@ namespace generator {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej 
-class time : public common::generator::base 
+class time : public common::generator::generator 
 {
 
 protected:

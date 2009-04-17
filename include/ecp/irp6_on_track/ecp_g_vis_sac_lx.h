@@ -18,7 +18,7 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-class vis_sac_lx : public common::generator::base {
+class vis_sac_lx : public common::generator::generator {
 protected:
 lib::sensor *vsp_force_irp6ot, *vsp_force_irp6p, *vsp_vis_sac;
 

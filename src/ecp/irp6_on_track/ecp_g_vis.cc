@@ -99,7 +99,7 @@ int steps2switch=0;
 // double frame1[4][4];
 
 	seven_eye_run_linear::seven_eye_run_linear(common::task::task& _ecp_task, int step): 
-		base (_ecp_task) { 		step_no = step;          	};  
+		generator (_ecp_task) { 		step_no = step;          	};  
 
 
 bool seven_eye_run_linear::first_step (  ) {

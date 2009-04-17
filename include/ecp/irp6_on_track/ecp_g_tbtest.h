@@ -23,7 +23,7 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-class tbtest : public common::generator::base
+class tbtest : public common::generator::generator
 {
 	//Buffer used to communicate between ECP and VSP
 //	ECP_VSP_MSG communication_buffer;

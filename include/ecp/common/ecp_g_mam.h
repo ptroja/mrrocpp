@@ -48,7 +48,7 @@ class mam_element{
 // #############    KLASA do odtwarzania listy pozycji i odczytywania linialow    ###############
 // ####################################################################
 
-class manual_moves_automatic_measures : public common::generator::base {
+class manual_moves_automatic_measures : public common::generator::generator {
 	private:
 		// Ostatnia pozycja.
 		double* last_motor_position;

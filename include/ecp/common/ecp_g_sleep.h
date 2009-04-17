@@ -15,7 +15,7 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-class sleep : public common::generator::base
+class sleep : public common::generator::generator
 {
 	private:
 		double waittime;		//seconds to wait

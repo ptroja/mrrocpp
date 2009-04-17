@@ -11,7 +11,7 @@ namespace task {
 
 class task: public common::task::task  {
 protected:
-	generator::base* fg;
+	generator::generator* fg;
 
 public:
 	task(lib::configurator &_config);

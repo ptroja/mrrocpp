@@ -254,7 +254,7 @@ void trajectory_reproduce::check_force_condition(ecp_mp::sensor::force& the_sens
     }; // end: check_force_condition
 
 /*********************** DANGEROUS FORCE HANDLER **************************/
-void trajectory_reproduce::dangerous_force_handler(base::ECP_error e){
+void trajectory_reproduce::dangerous_force_handler(generator::ECP_error e){
     // Komunikat o bledzie wysylamy do SR.
     sr_ecp_msg.message (lib::NON_FATAL_ERROR, e.error_no);
     // Wiadomosc wysylana do UI.

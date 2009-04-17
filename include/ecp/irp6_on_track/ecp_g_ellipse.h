@@ -13,7 +13,7 @@ namespace generator {
 
 #define PI 3.141592
 
-class ellipse : public common::generator::base
+class ellipse : public common::generator::generator
 {
 	private:
 		//wieksza polos

@@ -337,7 +337,7 @@ namespace generator {
 
 /** konstruktor **/
 force_meassure_generator::force_meassure_generator(common::task::task& _ecp_task, int _sleep_time, int _meassurement_count) :
-	base(_ecp_task)
+	generator(_ecp_task)
 {
 	sleep_time = _sleep_time;
 	meassurement_count = _meassurement_count;

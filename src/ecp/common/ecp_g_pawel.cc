@@ -48,7 +48,7 @@ FILE* research;
 
 
 pawel::pawel(common::task::task& _ecp_task, int step):
-        base (_ecp_task)
+	generator (_ecp_task)
 {
 
     step_no = step;

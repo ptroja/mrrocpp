@@ -32,7 +32,7 @@ namespace common {
 namespace generator {
 
 delta::delta(common::task::task& _ecp_task) :
-	base(_ecp_task)
+	generator(_ecp_task)
 {
 }
 
@@ -3300,7 +3300,7 @@ void ecp_save_trajectory(elipsoid& the_generator, common::task::task& _ecp_task)
 		e = errno;
 		perror("ECP: Send() to UI failed\n");
 		_ecp_task.sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw base::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
 	if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
@@ -3308,13 +3308,13 @@ void ecp_save_trajectory(elipsoid& the_generator, common::task::task& _ecp_task)
 
 	if (chdir(ui_to_ecp_rep.path) != 0) {
 		perror(ui_to_ecp_rep.path);
-		throw base::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
 	}
 	std::ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
 	e = errno;
 	if (!to_file) {
 		perror(ui_to_ecp_rep.filename);
-		throw base::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	} else {
 		number_of_poses = the_generator.get_number_of_intervals();
 		printf("OK=%lld   fn=%s\n", number_of_poses, ui_to_ecp_rep.filename);
@@ -3359,7 +3359,7 @@ void ecp_save_extended_file(calibration& the_generator, operator_reaction_condit
 		e = errno;
 		perror("ECP: Send() to UI failed\n");
 		_ecp_task.sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
-		throw base::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 	if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
 		return;
@@ -3368,20 +3368,20 @@ void ecp_save_extended_file(calibration& the_generator, operator_reaction_condit
 	cwd = getcwd(NULL, 0);
 	if (chdir(ui_to_ecp_rep.path) != 0) {
 		perror(ui_to_ecp_rep.path);
-		throw base::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
 	}
 	std::ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
 	e = errno;
 	if (!to_file) {
 		perror(ui_to_ecp_rep.filename);
-		throw base::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	} else {
 		the_generator.initiate_pose_list(); // inicjacja listy nauczonych pozycji
 		the_condition.initiate_supplementary_list(); // inicjacja listy odczytanych pozycji
 		number_of_sup = the_condition.supplementary_list_length();
 		number_of_poses = the_generator.pose_list_length(); // liczba pozycji
 		if (number_of_poses != number_of_sup)
-			throw base::ECP_error(lib::NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
+			throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
 
 		to_file << number_of_poses << '\n'; // ???
 		for (i = 0; i < number_of_poses; i++) {

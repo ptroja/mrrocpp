@@ -11,7 +11,7 @@ namespace ecp {
 namespace common {
 
 
-class operator_reaction_condition: public common::generator::base {
+class operator_reaction_condition: public common::generator::generator {
    // Klasa konkretnych warunkow poczatkowych dla robota irp6_on_track
    // Spelnienie warunku poczatkowego konczy wykonanie instrukcji MOVE.
    // Stanowi ono warunek poczatkowy, ktorego spelnienie umozliwia

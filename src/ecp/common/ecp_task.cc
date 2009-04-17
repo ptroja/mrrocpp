@@ -215,13 +215,13 @@ void task::ecp_wait_for_stop(void)
 		uint64_t e= errno; // kod bledu systemowego
 		perror("ECP: Reply to MP failed\n");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
-		throw common::generator::base::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		throw common::generator::generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
 	if (mp_command_type() != lib::STOP) {
 		fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
 		__FILE__, __LINE__);
-		throw common::generator::base::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 	}
 }
 
@@ -257,12 +257,12 @@ bool task::ecp_wait_for_start(void)
 		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 	if (ecp_stop)
-		throw common::generator::base::ECP_error (lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+		throw common::generator::generator::ECP_error (lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 
 	if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
 		fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
 		__FILE__, __LINE__);
-		throw common::generator::base::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 	}
 
 	sr_ecp_msg->message("ECP user program is running");
@@ -300,12 +300,12 @@ void task::get_next_state(void)
 	}
 
 	if (ecp_stop)
-		throw common::generator::base::ECP_error (lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+		throw common::generator::generator::ECP_error (lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 
 	if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
 		fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
 				__FILE__, __LINE__);
-		throw common::generator::base::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 	}
 
 	return;
@@ -350,12 +350,12 @@ bool task::mp_buffer_receive_and_send(void)
 	}
 
 	if (ecp_stop)
-		throw common::generator::base::ECP_error (lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+		throw common::generator::generator::ECP_error (lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 
 	if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
 		fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
 		__FILE__, __LINE__);
-		throw common::generator::base::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 	}
 
 	return returned_value;
@@ -504,7 +504,7 @@ std::map<char*, mp::common::Trajectory, task::str_cmp>* task::loadTrajectories(c
 	xmlXIncludeProcess(doc);
 	if(doc == NULL)
 	{
-		throw common::generator::base::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 
 	xmlNode *root = NULL;
@@ -512,7 +512,7 @@ std::map<char*, mp::common::Trajectory, task::str_cmp>* task::loadTrajectories(c
 	if(!root || !root->name)
 	{
 		xmlFreeDoc(doc);
-		throw common::generator::base::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw common::generator::generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
 	trajectoriesMap = new std::map<char*, mp::common::Trajectory, task::str_cmp>();

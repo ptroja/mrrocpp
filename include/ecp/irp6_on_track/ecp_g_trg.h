@@ -76,7 +76,7 @@ class trajectory_reproduce : public common::ecp_teach_in_generator {
 		// Zwrocenie danych z tablic.
 		void return_current_data(double robot_position[6], double sensor_reading[6]);
 		// Obsluga niebezpiecznej sily.
-		void dangerous_force_handler(base::ECP_error e);
+		void dangerous_force_handler(generator::ECP_error e);
 	}; // end: class trajectory_reproduce_generator
 
 }

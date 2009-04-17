@@ -17,7 +17,7 @@ using namespace std;
 
 
 spots::spots (common::task::task& _ecp_task)
-        : base (_ecp_task)
+        : generator (_ecp_task)
 {
 	//tool to plate frame initialization, all in rad and meters
 	//spots in plate coordinates

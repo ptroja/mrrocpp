@@ -238,7 +238,7 @@ void* trajectory_reproduce_thread(void* arg)
 				// Ruch wykonano poprawnie.
 				break;
 			} // end: try zewnetrzne.
-			catch (common::generator::base::ECP_error e)
+			catch (common::generator::generator::ECP_error e)
 			{
 				// Obsluga bledu.
 				trg->dangerous_force_handler(e);
@@ -290,7 +290,7 @@ void* trajectory_reproduce_thread(void* arg)
 				// Oczekiwanie na calkowite zatrzymanie robota.
 				rsc->Move();
 			} // end: try wewnetrzne.
-			catch (common::generator::base::ECP_error e)
+			catch (common::generator::generator::ECP_error e)
 			{
 				// Obsluga bledu.
 				trg->dangerous_force_handler(e);

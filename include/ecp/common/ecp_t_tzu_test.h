@@ -68,7 +68,7 @@ public:
 namespace generator {
 
 // taki maly prywatny generator
-class force_meassure_generator : public common::generator::base
+class force_meassure_generator : public common::generator::generator
 {
 private:
     //double weight;

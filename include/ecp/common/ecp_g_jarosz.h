@@ -33,7 +33,7 @@ namespace generator {
 // KLASA BAZOWA dla generatorow o zadany przyrost polozenia/orientacji  
 // ####################################################################################################
 
-class delta : public common::generator::base 
+class delta : public common::generator::generator 
 {
 protected:
 

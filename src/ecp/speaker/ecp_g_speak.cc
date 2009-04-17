@@ -22,7 +22,7 @@ namespace speaker {
 namespace generator {
 
 speaking::speaking(common::task::task& _ecp_task, int step):
-	 base(_ecp_task){	step_no = step;  };
+	generator(_ecp_task){	step_no = step;  };
 
 bool speaking::configure(const char* text)
 {

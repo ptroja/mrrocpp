@@ -10,7 +10,7 @@ namespace common {
 
 operator_reaction_condition::operator_reaction_condition (common::task::task& _ecp_task)
 	:
-		base (_ecp_task)
+	generator (_ecp_task)
 {
 	pose_list.clear();
 	pose_list_iterator = pose_list.end();

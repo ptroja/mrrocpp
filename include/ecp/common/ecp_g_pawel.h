@@ -20,7 +20,7 @@ namespace generator {
 
 // --------------------------------------------------------------------------
 
-class pawel : public common::generator::base {
+class pawel : public common::generator::generator {
 
 protected:
 

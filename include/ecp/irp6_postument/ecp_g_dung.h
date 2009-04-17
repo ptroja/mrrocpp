@@ -19,7 +19,7 @@ namespace generator {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej dla zadan yoyka z wodzeniem za nos
-class dung : public common::generator::base {
+class dung : public common::generator::generator {
 
 private:
 	double oq1;

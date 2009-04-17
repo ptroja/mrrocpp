@@ -10,7 +10,7 @@ namespace irp6ot {
 namespace generator {
 
 pw_kolo::pw_kolo (common::task::task& _ecp_task)
-        : base (_ecp_task)
+        : generator (_ecp_task)
 {
 }
 

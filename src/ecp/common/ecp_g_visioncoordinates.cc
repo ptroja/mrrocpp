@@ -32,7 +32,7 @@ namespace generator {
 // ecp_visioncoordinates_generator
 ////////////////////////////////////////////////////////////////////////////////////////////
 visioncoordinates::visioncoordinates(common::task::task& _ecp_task)
-: base(_ecp_task), SETTINGS_SECTION_NAME("[ecp_visioncoordinates_generator]")
+: generator(_ecp_task), SETTINGS_SECTION_NAME("[ecp_visioncoordinates_generator]")
 {
 	debugmsg("VCG: Creating virtual sensor to communicate with FraDIA");
 	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, SETTINGS_SECTION_NAME, ecp_t, sizeof(lib::sensor_image_t::sensor_union_t::visioncoordinates_t));

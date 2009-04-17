@@ -25,7 +25,7 @@ namespace generator {
 
 //enum SCENE_STATE {NOT_RECOGNIZED,RECOGNIZED}
 
-class pw_scena : public common::generator::base
+class pw_scena : public common::generator::generator
 {
 	int step_no;
     double next_position[8];

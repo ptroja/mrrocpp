@@ -19,8 +19,8 @@ namespace ecp {
 namespace festival {
 namespace generator {
 
-base::base(common::task::task& _ecp_task) :
-		common::generator::base (_ecp_task)
+generator::generator(common::task::task& _ecp_task) :
+		common::generator::generator (_ecp_task)
 {
 	host = ecp_t.config.return_string_value("server_host");
 	portnum = ecp_t.config.return_int_value("server_port");
@@ -29,17 +29,17 @@ base::base(common::task::task& _ecp_task) :
 	sock = -1;
 }
 
-base::~base()
+generator::~generator()
 {
 	delete [] host;
 }
 
-char * base::set_phrase(const char *text)
+char * generator::set_phrase(const char *text)
 {
 	return strncpy(phrase, text, sizeof(phrase));
 }
 
-bool base::set_voice(VOICE voice_id)
+bool generator::set_voice(VOICE voice_id)
 {
 	switch (voice_id) {
 		case CURRENT_VOICE:
@@ -57,7 +57,7 @@ bool base::set_voice(VOICE voice_id)
 	return true;			
 }
 
-bool base::first_step ( )
+bool generator::first_step ( )
 {
 	int command_max_len = strlen(voice)
 		+strlen(FESTIVAL_SAY_STRING_PREFIX)+sizeof(phrase)+strlen(FESTIVAL_SAY_STRING_SUFFIX)
@@ -137,7 +137,7 @@ bool base::first_step ( )
 	return true;
 }
 
-bool base::next_step ( )
+bool generator::next_step ( )
 {
 	if(test_mode) {
 		return false;

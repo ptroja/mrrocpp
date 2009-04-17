@@ -9,7 +9,7 @@ namespace ecp {
 namespace player {
 namespace generator {
 
-class playerpos : public common::generator::base
+class playerpos : public common::generator::generator
 {
 	private:
 		PlayerClient *client;

@@ -21,7 +21,7 @@ namespace generator {
 
 // --------------------------------------------------------------------------
 // Generator trajektorii prostoliniowej 
-class progpanel : public common::generator::base 
+class progpanel : public common::generator::generator 
 {
 
 protected:
