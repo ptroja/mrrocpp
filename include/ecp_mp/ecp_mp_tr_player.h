@@ -12,7 +12,7 @@ namespace ecp_mp {
 namespace transmitter {
 
 /***************** Klasa czujnikow ********************/
-class player: public base{
+class player: public transmitter{
   private:						// pola do komunikacji
     pthread_t worker;
     pthread_cond_t cond;

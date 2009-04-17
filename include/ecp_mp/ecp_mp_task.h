@@ -37,7 +37,7 @@ public:
 	static std::map <lib::SENSOR_ENUM, lib::sensor*> sensor_m;
 
 	// mapa wszystkich transmiterow
-	static std::map <transmitter::TRANSMITTER_ENUM, transmitter::base*> transmitter_m;
+	static std::map <transmitter::TRANSMITTER_ENUM, transmitter::transmitter*> transmitter_m;
 
 	static lib::sr_ecp* sr_ecp_msg;
 	lib::configurator &config;

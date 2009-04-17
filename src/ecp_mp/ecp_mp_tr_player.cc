@@ -19,7 +19,7 @@ player::player  (
     const char *host, unsigned int port,
     const char *devname, int devindex, int access
 )  :
-		base (_transmitter_name, _section_name, _ecp_mp_object)
+	transmitter (_transmitter_name, _section_name, _ecp_mp_object)
 {
 
 	int err;

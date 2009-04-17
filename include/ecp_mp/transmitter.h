@@ -64,7 +64,7 @@ typedef struct _FROM_VA
 	};
 } FROM_VA;
 
-class base
+class transmitter
 {
 		// Klasa bazowa dla transmitterow (klasa abstrakcyjna)
 		// Transmittery konkretne wyprowadzane sa z klasy bazowej
@@ -82,9 +82,9 @@ class base
 		lib::sr_ecp &sr_ecp_msg;
 
 	public:
-		base (TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object);
+		transmitter (TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object);
 
-		virtual ~base()
+		virtual ~transmitter()
 		{}
 		;
 

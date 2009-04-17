@@ -29,7 +29,7 @@ typedef struct {
 } rc_win_buf_typedef;
 
 /***************** Klasa czujnikow ********************/
-class rc_windows: public base{
+class rc_windows: public transmitter{
   private:									// pola do komunikacji
   	pthread_t worker;
 

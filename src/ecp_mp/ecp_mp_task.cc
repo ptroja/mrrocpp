@@ -37,7 +37,7 @@ lib::sr_ecp* task::sr_ecp_msg = NULL;
 
 // mapa wszystkich czujnikow
 std::map <lib::SENSOR_ENUM, lib::sensor*> task::sensor_m;
-std::map <transmitter::TRANSMITTER_ENUM, transmitter::base*> task::transmitter_m;
+std::map <transmitter::TRANSMITTER_ENUM, transmitter::transmitter*> task::transmitter_m;
 
 task::task(lib::configurator &_config)
 	: config(_config)

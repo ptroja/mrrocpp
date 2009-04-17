@@ -36,7 +36,7 @@ public:
 	std::map <lib::SENSOR_ENUM, lib::sensor*> sensor_m;
 
 	// mapa wszystkich transmiterow
-	std::map <transmitter::TRANSMITTER_ENUM, transmitter::base*> transmitter_m;
+	std::map <transmitter::TRANSMITTER_ENUM, transmitter::transmitter*> transmitter_m;
 
 	// generuje pierwszy krok ruchu -
 	// pierwszy krok czesto rozni sie od pozostalych,
