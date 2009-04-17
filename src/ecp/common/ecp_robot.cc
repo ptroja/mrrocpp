@@ -37,7 +37,7 @@ ecp_robot::ecp_robot(lib::ROBOT_ENUM _robot_name, lib::configurator &_config, li
 }
 
 // konstruktor wywolywany z ECP
-ecp_robot::ecp_robot(lib::ROBOT_ENUM _robot_name, common::task::base& _ecp_object) :
+ecp_robot::ecp_robot(lib::ROBOT_ENUM _robot_name, common::task::task& _ecp_object) :
 	robot(_robot_name), spawn_and_kill(false)
 {
 	sr_ecp_msg = _ecp_object.sr_ecp_msg;

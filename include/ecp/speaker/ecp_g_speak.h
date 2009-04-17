@@ -29,7 +29,7 @@ public:
 	speak_gen_state new_sg_state, last_sg_state;
 	
 	// konstruktor
-	speaking(common::task::base& _ecp_task, int step=0);  
+	speaking(common::task::task& _ecp_task, int step=0);  
 	
 	virtual bool first_step ();
 	bool configure(const char* text);

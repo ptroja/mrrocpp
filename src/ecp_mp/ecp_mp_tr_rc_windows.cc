@@ -34,7 +34,7 @@ rc_win_buf_typedef *rc_windows::rc_win_buf = NULL;
 rc_windows::rc_windows  (
 		TRANSMITTER_ENUM _transmitter_name,
 		const char* _section_name,
-		task::base& _ecp_mp_object)  :
+		task::task& _ecp_mp_object)  :
 			base (_transmitter_name, _section_name, _ecp_mp_object) {
 
 	if(!rc_win_buf) {

@@ -11,7 +11,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class multiplayer : public common::task::base
+class multiplayer : public common::task::task
 {
 private:
 	//generatory

@@ -19,7 +19,7 @@ namespace irp6p {
 namespace task {
 
 // KONSTRUKTORY
-jarosz::jarosz(lib::configurator &_config) : base(_config)
+jarosz::jarosz(lib::configurator &_config) : task(_config)
 {}
 
 jarosz::~jarosz()
@@ -318,7 +318,7 @@ void jarosz::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new irp6p::task::jarosz(_config);
 }

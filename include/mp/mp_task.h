@@ -20,7 +20,7 @@ namespace task {
 
 
 // klasa globalna dla calego procesu MP
-class base: public ecp_mp::task::base
+class task: public ecp_mp::task::task
 {
 	public:
 #if !defined(USE_MESSIP_SRR)
@@ -35,8 +35,8 @@ class base: public ecp_mp::task::base
 		static std::map <lib::ROBOT_ENUM, common::robot*> robot_m;
 
 		/// KONSTRUKTORY
-		base(lib::configurator &_config);
-		virtual ~base(void);
+		task(lib::configurator &_config);
+		virtual ~task(void);
 
 		void initialize_communication (void);
 		void stop_and_terminate (void);
@@ -113,7 +113,7 @@ class base: public ecp_mp::task::base
 		        WAIT_FOR_NEW_PULSE_ENUM process_mode, MP_RECEIVE_PULSE_MODE desired_wait_mode);
 };
 
-base* return_created_mp_task (lib::configurator &_config);
+task* return_created_mp_task (lib::configurator &_config);
 
 
 } // namespace task

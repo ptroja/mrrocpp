@@ -10,7 +10,7 @@ namespace ecp {
 namespace speaker {
 namespace task {
 
-class rcsc: public common::task::base  {
+class rcsc: public common::task::task  {
 protected:
 	common::generator::transparent* gt;
 	generator::speaking* speak;

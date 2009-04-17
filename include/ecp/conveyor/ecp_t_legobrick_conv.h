@@ -22,7 +22,7 @@ namespace ecp {
 namespace conveyor {
 namespace task {
 
-class lego_brick: public common::task::base 
+class lego_brick: public common::task::task 
 {
 	double absolute_position;
 

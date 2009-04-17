@@ -20,7 +20,7 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class two_robots_measures : public base  
+class two_robots_measures : public task  
 {
 protected:
 	generator::two_robots_measures *rmg;

@@ -32,7 +32,7 @@ public:
 	lib::trajectory_description td;
 	
 	// konstruktor
-	incremental_move(common::task::base& _ecp_task, double inc_move);  
+	incremental_move(common::task::task& _ecp_task, double inc_move);  
 	
 	virtual bool first_step ();
 

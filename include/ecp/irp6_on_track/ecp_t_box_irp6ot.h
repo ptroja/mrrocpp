@@ -11,7 +11,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class box: public common::task::base {
+class box: public common::task::task {
   
   protected:
 	  common::generator::smooth* smoothgen;

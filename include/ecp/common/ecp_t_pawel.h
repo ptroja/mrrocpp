@@ -16,7 +16,7 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class pawel: public common::task::base  {
+class pawel: public common::task::task  {
 	protected:
 		//	ecp_tff_nose_run_generator* nrg;
 		//	ecp_teach_in_generator* tig;

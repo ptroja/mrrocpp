@@ -7,7 +7,7 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class cxx: public base
+class cxx: public task
 {
 	
 public:

@@ -38,7 +38,7 @@ protected:
     lib::ECP_REPLY_PACKAGE ecp_reply_package;        // Bufor z odpowiedzia z ECP
     // - uzytkownik nie powinien z tego korzystac
 
-    task::base &mp_object;
+    task::task &mp_object;
 
 public:
     bool communicate; // okresla czy robot ma byc obslugiwany w Move
@@ -63,7 +63,7 @@ public:
     robot_ECP_transmission_data ecp_td; // Obraz danych robota wykorzystywanych przez generator
     // - do uzytku uzytkownika (generatora)
 
-    robot (lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::base &mp_object_l);
+    robot (lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::task &mp_object_l);
     ~robot();
 
     class MP_error

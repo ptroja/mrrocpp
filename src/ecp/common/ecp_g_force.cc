@@ -31,7 +31,7 @@ namespace generator {
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
-weight_meassure::weight_meassure(common::task::base& _ecp_task,
+weight_meassure::weight_meassure(common::task::task& _ecp_task,
 		double _weight_difference, double _catch_time) :
 	base(_ecp_task), weight_difference(_weight_difference),
 			current_buffer_pointer(0), initial_weight(0.0),
@@ -177,7 +177,7 @@ bool weight_meassure::next_step()
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
-y_nose_run_force::y_nose_run_force(common::task::base& _ecp_task,
+y_nose_run_force::y_nose_run_force(common::task::task& _ecp_task,
 		int step) :
 	base(_ecp_task)
 {
@@ -273,7 +273,7 @@ bool y_nose_run_force::next_step()
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
-y_egg_force::y_egg_force(common::task::base& _ecp_task, int step,
+y_egg_force::y_egg_force(common::task::task& _ecp_task, int step,
 		int mode) :
 	base(_ecp_task)
 {
@@ -585,7 +585,7 @@ bool y_egg_force::next_step()
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
-bias_edp_force::bias_edp_force(common::task::base& _ecp_task) :
+bias_edp_force::bias_edp_force(common::task::task& _ecp_task) :
 	base(_ecp_task)
 {
 }
@@ -616,7 +616,7 @@ bool bias_edp_force::next_step()
 
 
 y_edge_follow_force::y_edge_follow_force(
-		common::task::base& _ecp_task, int step) :
+		common::task::task& _ecp_task, int step) :
 	ecp_teach_in_generator(_ecp_task), tool_frame(0.0, 0.0, 0.25)
 {
 	step_no=step;
@@ -786,7 +786,7 @@ bool y_edge_follow_force::next_step()
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////
 legobrick_attach_force::legobrick_attach_force(
-		common::task::base& _ecp_task, int step) :
+		common::task::task& _ecp_task, int step) :
 	ecp_teach_in_generator(_ecp_task)//, tool_frame(0.026551, -0.011313, 0.25 + 0.028)
 {
 	//macierz jednorodna przejscia na uklad narzedzia do przemieszczania klockow
@@ -904,7 +904,7 @@ bool legobrick_attach_force::next_step()
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////
 legobrick_detach_force::legobrick_detach_force(
-		common::task::base& _ecp_task, int step) :
+		common::task::task& _ecp_task, int step) :
 	ecp_teach_in_generator(_ecp_task)//, tool_frame(0.026551, -0.011313, 0.25 + 0.028)
 {
 	//macierz jednorodna przejscia na uklad narzedzia do przemieszczania klockow
@@ -1032,7 +1032,7 @@ bool legobrick_detach_force::next_step()
 
 
 y_drawing_teach_in_force::y_drawing_teach_in_force(
-		common::task::base& _ecp_task, int step) :
+		common::task::task& _ecp_task, int step) :
 	ecp_teach_in_generator(_ecp_task)
 {
 	step_no=step;
@@ -1231,7 +1231,7 @@ bool y_drawing_teach_in_force::next_step()
 
 
 y_advanced_drawing_teach_in_force::y_advanced_drawing_teach_in_force(
-		common::task::base& _ecp_task, int step) :
+		common::task::task& _ecp_task, int step) :
 	y_drawing_teach_in_force(_ecp_task, step)
 {
 }
@@ -1629,7 +1629,7 @@ bool y_advanced_drawing_teach_in_force::next_step()
 // --------------------------------------------------------------------------
 
 
-tff_nose_run::tff_nose_run(common::task::base& _ecp_task,
+tff_nose_run::tff_nose_run(common::task::task& _ecp_task,
 		int step) :
 	base(_ecp_task)
 {
@@ -1887,7 +1887,7 @@ void tff_nose_run::execute_motion(void)
 
 
 
-tff_rubik_grab::tff_rubik_grab(common::task::base& _ecp_task,
+tff_rubik_grab::tff_rubik_grab(common::task::task& _ecp_task,
 		int step) :
 	base(_ecp_task)
 {
@@ -2013,7 +2013,7 @@ bool tff_rubik_grab::next_step()
 
 
 tff_rubik_face_rotate::tff_rubik_face_rotate(
-		common::task::base& _ecp_task, int step) :
+		common::task::task& _ecp_task, int step) :
 	base(_ecp_task)
 {
 	step_no = step;
@@ -2184,7 +2184,7 @@ bool tff_rubik_face_rotate::next_step()
 
 
 tff_gripper_approach::tff_gripper_approach(
-		common::task::base& _ecp_task, int step) :
+		common::task::task& _ecp_task, int step) :
 	base(_ecp_task)
 {
 	step_no = step;
@@ -2303,7 +2303,7 @@ bool tff_gripper_approach::next_step()
 //
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
-force_tool_change::force_tool_change (common::task::base& _ecp_task)
+force_tool_change::force_tool_change (common::task::task& _ecp_task)
         :base (_ecp_task)
 {
 

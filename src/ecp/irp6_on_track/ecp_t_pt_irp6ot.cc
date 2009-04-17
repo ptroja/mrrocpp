@@ -18,7 +18,7 @@ namespace task {
 
 
 // KONSTRUKTORY
-pteach::pteach(lib::configurator &_config) : base(_config)
+pteach::pteach(lib::configurator &_config) : task(_config)
 {
     cg = NULL;
     orc = NULL;
@@ -90,7 +90,7 @@ void pteach::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new irp6ot::task::pteach(_config);
 }

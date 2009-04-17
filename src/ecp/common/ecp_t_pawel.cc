@@ -16,7 +16,7 @@ namespace common {
 namespace task {
 
 // KONSTRUKTORY
-pawel::pawel(lib::configurator &_config) : base(_config)
+pawel::pawel(lib::configurator &_config) : task(_config)
 {
     pg = NULL;
 }
@@ -68,7 +68,7 @@ void pawel::main_task_algorithm(void)
     }
 }
 
-base* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new pawel(_config);
 }

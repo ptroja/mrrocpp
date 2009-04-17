@@ -36,7 +36,7 @@ class spots : public common::generator::base
 	void print_matrix(double[12]);
 
   public:
-	spots(common::task::base& _ecp_task);
+	spots(common::task::task& _ecp_task);
 	bool first_step();
 	bool next_step();
 

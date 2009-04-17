@@ -19,7 +19,7 @@ namespace irp6ot {
 namespace task {
 
 rcsc::rcsc(lib::configurator &_config) :
-        base(_config)
+	task(_config)
 {}
 
 // methods for ECP template to redefine in concrete classes
@@ -174,7 +174,7 @@ void rcsc::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task(lib::configurator &_config)
+task* return_created_ecp_task(lib::configurator &_config)
 {
 	return new irp6ot::task::rcsc(_config);
 }

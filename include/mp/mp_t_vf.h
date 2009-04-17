@@ -14,7 +14,7 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class vis_force: public base  {
+class vis_force: public task  {
 	
 public:
 	

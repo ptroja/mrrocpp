@@ -45,7 +45,7 @@ public:
 	/*!
       * Constructor. Creates socket connection to pcbird.
       */
- 	pcbird (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object);
+ 	pcbird (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object);
 
 	/*!
       * Sends sensor configuration to pcbird.

@@ -24,7 +24,7 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-base* return_created_mp_task (lib::configurator &_config)
+task* return_created_mp_task (lib::configurator &_config)
 {
 	return new pr(_config);
 }
@@ -54,7 +54,7 @@ void pr::mp_short_move_up(void)
 }
 
 
-pr::pr(lib::configurator &_config) : base(_config)
+pr::pr(lib::configurator &_config) : task(_config)
 {
 }
 

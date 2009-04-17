@@ -14,7 +14,7 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class pr: public base  {
+class pr: public task  {
 protected:
 	
 	void mp_short_move_up(void);

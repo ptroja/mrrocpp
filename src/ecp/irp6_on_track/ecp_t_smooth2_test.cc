@@ -12,7 +12,7 @@ namespace irp6ot {
 namespace task {
 
 //Constructors
-smooth2_test::smooth2_test(lib::configurator &_config): base(_config){
+smooth2_test::smooth2_test(lib::configurator &_config): task(_config){
   smoothgen2 = NULL;
 };
 //Desctructor
@@ -63,7 +63,7 @@ void smooth2_test::main_task_algorithm(void ) {
 namespace common {
 namespace task {
 
-base* return_created_ecp_task(lib::configurator &_config){
+task* return_created_ecp_task(lib::configurator &_config){
 	return new irp6ot::task::smooth2_test(_config);
 }
 

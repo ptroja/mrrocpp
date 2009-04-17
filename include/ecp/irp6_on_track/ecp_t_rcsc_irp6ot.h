@@ -10,7 +10,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class rcsc: public common::task::base
+class rcsc: public common::task::task
 {
 protected:
     //generatory

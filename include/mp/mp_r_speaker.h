@@ -14,7 +14,7 @@ namespace common {
 class speaker_robot: public robot {
 
  public:
-  speaker_robot (task::base &mp_object_l); // Konstruktor
+  speaker_robot (task::task &mp_object_l); // Konstruktor
 
 // virtual void execute_motion (void); // Zlecenie wykonania ruchu przez robota
                                       // na poziomie MP jest to polecenie dla ECP

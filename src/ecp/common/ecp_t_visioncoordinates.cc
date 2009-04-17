@@ -32,7 +32,7 @@ namespace task {
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 visioncoordinates::visioncoordinates(lib::configurator& _config)
-	: base(_config), SETTINGS_SECTION_NAME("[ecp_visioncoordinates_task]")
+	: task(_config), SETTINGS_SECTION_NAME("[ecp_visioncoordinates_task]")
 {
 }
 
@@ -98,7 +98,7 @@ void visioncoordinates::setStartPosition()
 /////////////////////////////////////////////////////////////////////////////////////////////
 // fabryk abstrakcyjna dla zada�
 /////////////////////////////////////////////////////////////////////////////////////////////
-base* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new visioncoordinates(_config);
 }

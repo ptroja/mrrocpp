@@ -20,7 +20,7 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class tran: public common::task::base  {
+class tran: public common::task::task  {
 
 public:
 	// KONSTRUKTORY

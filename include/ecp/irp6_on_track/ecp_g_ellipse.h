@@ -40,7 +40,7 @@ public:
 	 * @param max_steps ilosc krokow, w ktorych wykonany ma byc ruch po elipsie
 	 * @author jedrzej
 	 */
-    ellipse (common::task::base& _ecp_task,double major_axis,double minor_axis,int max_steps);
+    ellipse (common::task::task& _ecp_task,double major_axis,double minor_axis,int max_steps);
     
     /**
      * Generuje pierwszy krok - ustawienie w pozycji (0,b)

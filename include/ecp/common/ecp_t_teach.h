@@ -21,7 +21,7 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class teach: public common::task::base  {
+class teach: public common::task::task  {
 protected:
 	ecp_teach_in_generator* tig;
 

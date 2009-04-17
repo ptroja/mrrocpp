@@ -44,7 +44,7 @@ namespace generator {
 #define PRINTB 0
 #define PRINTA 0
 
-vis_sac_lx::vis_sac_lx(common::task::base& _ecp_task, int step) :
+vis_sac_lx::vis_sac_lx(common::task::task& _ecp_task, int step) :
 	base(_ecp_task)
 {
 	step_no = step;

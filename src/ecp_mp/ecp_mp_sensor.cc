@@ -20,7 +20,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-base::base(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object)
+base::base(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object)
 	: sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(_sensor_name)
 {
 	// cout<<"ecp_mp_sensor - konstruktor: "<<_section_name<<endl;

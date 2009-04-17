@@ -24,7 +24,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class pw_scena: public common::task::base  {
+class pw_scena: public common::task::task  {
 
 	generator::pw_scena* scena_gen;
 	//Smoth movement generator

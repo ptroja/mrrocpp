@@ -15,7 +15,7 @@ namespace task {
  * Odtwarza orientacje kontrolera
  * @author jkurylo
  */
-class wii: public common::task::base
+class wii: public common::task::task
 {
 protected:
 	//Generator ruchu

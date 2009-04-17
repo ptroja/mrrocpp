@@ -28,7 +28,7 @@ public:
        double delta[6];
 
     // konstruktor
-    seven_eye(task::base& _mp_task, int step=0);  
+    seven_eye(task::task& _mp_task, int step=0);  
 	
 	virtual bool first_step ();    
 	virtual bool next_step ();    

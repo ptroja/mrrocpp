@@ -14,7 +14,7 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class vis_sac_lx: public base  {
+class vis_sac_lx: public task  {
 protected:
 
 

@@ -26,12 +26,12 @@ namespace ecp_mp {
 namespace task {
 
 // klasa macierzysta dla klas globalnych procesow ECP i MP
-class base {
+class task {
 
 public:
 
-	base(lib::configurator &_config);
-	~base();
+	task(lib::configurator &_config);
+	~task();
 
 	// mapa wszystkich czujnikow
 	static std::map <lib::SENSOR_ENUM, lib::sensor*> sensor_m;

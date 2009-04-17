@@ -21,7 +21,7 @@ ecp_irp6_on_track_robot::ecp_irp6_on_track_robot(lib::configurator &_config, lib
 {
 }
 
-ecp_irp6_on_track_robot::ecp_irp6_on_track_robot(common::task::base& _ecp_object) :
+ecp_irp6_on_track_robot::ecp_irp6_on_track_robot(common::task::task& _ecp_object) :
 	ecp_robot(lib::ROBOT_IRP6_ON_TRACK, _ecp_object)
 {
 }

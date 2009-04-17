@@ -23,7 +23,7 @@ namespace irp6ot {
 namespace generator {
 
 
-y_simple::y_simple(common::task::base& _ecp_task, int step):
+y_simple::y_simple(common::task::task& _ecp_task, int step):
 	 base (_ecp_task, true) { 		step_no = step;          	};  
 
 

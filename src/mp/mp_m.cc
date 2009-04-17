@@ -22,7 +22,7 @@ namespace common {
 
 
 // obiekt z metodami i polami dla procesu MP (polimorficzny)
-task::base* mp_t;
+task::task* mp_t;
 
 void catch_signal_in_mp(int sig)
 {

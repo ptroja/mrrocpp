@@ -17,7 +17,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-wii::wii(lib::configurator &_config) : base(_config) {};
+wii::wii(lib::configurator &_config) : task(_config) {};
 
 void wii::task_initialization(void)
 {
@@ -58,7 +58,7 @@ void wii::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new irp6ot::task::wii(_config);
 }

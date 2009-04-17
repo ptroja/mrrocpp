@@ -7,7 +7,7 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class multiplayer : public base
+class multiplayer : public task
 {
 	private:
 		void move_electron_robot(const lib::playerpos_goal_t &goal);

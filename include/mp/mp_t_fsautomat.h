@@ -20,7 +20,7 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class fsautomat : public base  
+class fsautomat : public task  
 {
 	protected:
 		bool break_state;
@@ -43,7 +43,7 @@ class fsautomat : public base
 		
 		std::list<common::State> *takeStatesList(void);
 		common::State * createState(xmlNode *stateNode);
-		std::map<char *, common::State, ecp::common::task::base::str_cmp> * takeStatesMap();
+		std::map<char *, common::State, ecp::common::task::task::str_cmp> * takeStatesMap();
 		void executeMotion(common::State &state);
 		void runEmptyGenForSet(common::State &state);
 		void runEmptyGen(common::State &state);

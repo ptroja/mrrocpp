@@ -86,7 +86,7 @@ public:
 	double C_weight__EIH;
 	double f_weight__EIH;
 
-	ecp_vis_weights_driven_irp6ot(common::task::base& _ecp_task, int step=0);
+	ecp_vis_weights_driven_irp6ot(common::task::task& _ecp_task, int step=0);
 	virtual ~ecp_vis_weights_driven_irp6ot();
 
 	virtual void initalize_switching_parameters();

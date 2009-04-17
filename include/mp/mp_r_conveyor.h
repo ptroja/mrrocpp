@@ -8,7 +8,7 @@ namespace common {
 class conveyor_robot: public irp6s_and_conv_robot {
 
  public:
-  conveyor_robot (task::base &mp_object_l);
+  conveyor_robot (task::task &mp_object_l);
 };
 } // namespace common
 } // namespace mp

@@ -22,7 +22,7 @@ class vis_sac_lx: public base{
 
   public:
 	// Konstruktor czujnika wirtualnego - wywolanie konstruktora klasy bazowej.
- 	vis_sac_lx (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::base& _ecp_mp_object);
+ 	vis_sac_lx (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object);
 											// konstruktor czujnika virtualnego
 //	void get_reading (void);			// odebranie odczytu od VSP
 }; 

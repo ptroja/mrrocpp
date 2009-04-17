@@ -11,7 +11,7 @@ namespace mrrocpp {
 namespace mp {
 namespace common {
 
-speaker_robot::speaker_robot (task::base &mp_object_l) :
+speaker_robot::speaker_robot (task::task &mp_object_l) :
 		robot (lib::ROBOT_SPEAKER, "[ecp_speaker]", mp_object_l)
 {}
 

@@ -40,7 +40,7 @@ public:
 	lib::Homog_matrix E_Tx_G__O;
 
     // konstruktor
-    vis_sac(task::base& _mp_task, int step=0);  
+    vis_sac(task::task& _mp_task, int step=0);  
 	
 	virtual bool first_step ();    
 	virtual bool next_step ();    

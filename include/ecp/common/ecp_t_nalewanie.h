@@ -21,7 +21,7 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class nalewanie: public common::task::base  {
+class nalewanie: public common::task::task  {
 protected:
 	generator::smooth* sg;
 

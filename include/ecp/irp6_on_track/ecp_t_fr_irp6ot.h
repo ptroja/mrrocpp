@@ -8,7 +8,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class fr: public common::task::base  {
+class fr: public common::task::task  {
 protected:
 	lib::trajectory_description tdes_joint;
 	common::generator::linear_parabolic *adg1;

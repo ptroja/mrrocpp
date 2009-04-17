@@ -27,7 +27,7 @@ namespace task {
  */
 using namespace std;
 /** konstruktor konstruktor**/
-tzu_fs::tzu_fs(lib::configurator &_config) : base(_config)
+tzu_fs::tzu_fs(lib::configurator &_config) : task(_config)
 {
 	sg = NULL;
 	befg = NULL;
@@ -165,7 +165,7 @@ void tzu_fs::main_task_algorithm(void)
 	ecp_termination_notice();
 };
 
-base* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new tzu_fs(_config);
 };
@@ -336,7 +336,7 @@ namespace generator {
 /**** force meassure generator ****/
 
 /** konstruktor **/
-force_meassure_generator::force_meassure_generator(common::task::base& _ecp_task, int _sleep_time, int _meassurement_count) :
+force_meassure_generator::force_meassure_generator(common::task::task& _ecp_task, int _sleep_time, int _meassurement_count) :
 	base(_ecp_task)
 {
 	sleep_time = _sleep_time;

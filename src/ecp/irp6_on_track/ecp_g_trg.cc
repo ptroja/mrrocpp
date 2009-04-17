@@ -380,7 +380,7 @@ void trajectory_reproduce::set_dangerous_force(void){
 
 
 /*****************************  KONSTRUKTOR *********************************/
-trajectory_reproduce::trajectory_reproduce (common::task::base& _ecp_task):
+trajectory_reproduce::trajectory_reproduce (common::task::task& _ecp_task):
 	 ecp_teach_in_generator (_ecp_task)
 {
     // Ustawienie elementow list na NULL.

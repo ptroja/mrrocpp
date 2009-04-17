@@ -16,7 +16,7 @@ namespace mp {
 namespace task {
 
 
-class haptic : public base  
+class haptic : public task  
 {
 protected:
  

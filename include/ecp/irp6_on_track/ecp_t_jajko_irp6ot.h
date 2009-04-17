@@ -8,7 +8,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class jajko: public common::task::base  {
+class jajko: public common::task::task  {
 protected:
 	common::generator::y_egg_force* yefg;
 

@@ -35,7 +35,7 @@ public:
 	 * @param minor_axis wartosc mniejszej polosi
 	 * @author jedrzej
 	 */
-    wii (common::task::base& _ecp_task);
+    wii (common::task::task& _ecp_task);
 
     /**
      * Generuje pierwszy krok

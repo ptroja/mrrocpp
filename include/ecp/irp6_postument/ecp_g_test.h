@@ -32,7 +32,7 @@ public:
 	double delta[6];
 	
 	// konstruktor
-	y_simple(common::task::base& _ecp_task, int step=0);
+	y_simple(common::task::task& _ecp_task, int step=0);
 	
 	virtual bool first_step ();
 

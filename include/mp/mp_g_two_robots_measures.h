@@ -45,7 +45,7 @@ class two_robots_measures : public generator
 
 	public:
 		// Konstruktor.
-		two_robots_measures(task::base&);
+		two_robots_measures(task::task&);
 		// Pierwszy krok generatora.
 		virtual bool first_step (void);
 		// Nastepny krok generatora.

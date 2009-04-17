@@ -9,7 +9,7 @@ namespace mrrocpp {
 namespace mp {
 namespace common {
 
-irp6s_and_conv_robot::irp6s_and_conv_robot(lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::base &mp_object_l) :
+irp6s_and_conv_robot::irp6s_and_conv_robot(lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::task &mp_object_l) :
 	robot(l_robot_name, _section_name, mp_object_l), servos_number(0), has_gripper(false)
 {
 	switch (l_robot_name) {

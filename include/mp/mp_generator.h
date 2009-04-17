@@ -28,7 +28,7 @@ class generator : public ecp_mp::generator::generator
 
 	public:
 
-		task::base& mp_t;
+		task::task& mp_t;
 
 		// Funkcja ruchu
 		void Move (void);
@@ -59,7 +59,7 @@ class generator : public ecp_mp::generator::generator
 		//! mapa wszystkich robotow
 		std::map <lib::ROBOT_ENUM, common::robot*> robot_m;
 
-		generator(task::base& _mp_task);
+		generator(task::task& _mp_task);
 
 		void re_run(void); // powrot do stanu wyjsciowego
 

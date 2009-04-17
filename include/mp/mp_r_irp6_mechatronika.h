@@ -9,7 +9,7 @@ namespace common {
 class irp6_mechatronika_robot: public irp6s_and_conv_robot {
 
  public:
-  irp6_mechatronika_robot (task::base &mp_object_l);
+  irp6_mechatronika_robot (task::task &mp_object_l);
 };
 } // namespace common
 } // namespace mp

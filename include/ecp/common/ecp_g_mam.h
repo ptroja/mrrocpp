@@ -80,7 +80,7 @@ class manual_moves_automatic_measures : public common::generator::base {
 		void get_sensor_reading(ecp_mp::sensor::digital_scales& the_sensor, double* sensor_reading);
 
 	public:
-		manual_moves_automatic_measures(common::task::base& _ecp_task, 	int _axes_number);
+		manual_moves_automatic_measures(common::task::task& _ecp_task, 	int _axes_number);
 
 		~manual_moves_automatic_measures (void);
 		// Przygotowanie trajektorii do wykonania.

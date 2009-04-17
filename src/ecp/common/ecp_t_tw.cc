@@ -29,7 +29,7 @@ namespace common {
 namespace task {
 
 // KONSTRUKTORY
-tw::tw(lib::configurator &_config) : base(_config)
+tw::tw(lib::configurator &_config) : task(_config)
 {
 	nrg = NULL;
 	yefg = NULL;
@@ -108,7 +108,7 @@ void tw::main_task_algorithm(void)
 
 }
 
-base* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new tw(_config);
 }

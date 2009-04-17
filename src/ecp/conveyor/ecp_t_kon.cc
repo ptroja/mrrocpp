@@ -16,7 +16,7 @@ namespace conveyor {
 namespace task {
 
 // KONSTRUKTORY
-kon::kon(lib::configurator &_config) : base(_config)
+kon::kon(lib::configurator &_config) : task(_config)
 {}
 
 kon::~kon()
@@ -149,7 +149,7 @@ void kon::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new conveyor::task::kon(_config);
 }

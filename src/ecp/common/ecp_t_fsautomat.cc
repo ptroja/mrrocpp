@@ -19,7 +19,7 @@ namespace ecp {
 namespace common {
 namespace task {
 
-void ecp_gripper_opening (common::task::base& _ecp_task, double gripper_increment, int motion_time)
+void ecp_gripper_opening (common::task::task& _ecp_task, double gripper_increment, int motion_time)
 {
 
 	lib::trajectory_description tdes;

@@ -14,7 +14,7 @@ namespace ecp {
 namespace conveyor {
 namespace generator {
 
-incremental_move::incremental_move(common::task::base& _ecp_task, double inc_move):
+incremental_move::incremental_move(common::task::task& _ecp_task, double inc_move):
 		base (_ecp_task), move_length(inc_move) {}
 
 bool incremental_move::first_step ( )

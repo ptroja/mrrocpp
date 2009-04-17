@@ -51,7 +51,7 @@ class base : public common::generator::base
 
 	public:
 		// konstruktor
-		base(common::task::base& _ecp_task);
+		base(common::task::task& _ecp_task);
 		~base();
 
 		virtual bool first_step ();

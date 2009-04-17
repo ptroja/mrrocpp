@@ -10,7 +10,7 @@ namespace ecp {
 namespace irp6p {
 namespace task {
 
-class lego_brick: public common::task::base
+class lego_brick: public common::task::task
 {
 protected:
     //generatory

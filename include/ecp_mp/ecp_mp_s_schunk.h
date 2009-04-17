@@ -20,7 +20,7 @@ namespace sensor {
 class schunk: public base{
 	public:
 	// Konstruktor czujnika wirtualnego - wywolanie konstruktora klasy bazowej.
- 	schunk (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object);
+ 	schunk (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object);
 											// konstruktor czujnika virtualnego
 
 	void initiate_reading (void);		// zadanie odczytu od VSP

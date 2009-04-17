@@ -31,7 +31,7 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-delta::delta(common::task::base& _ecp_task) :
+delta::delta(common::task::task& _ecp_task) :
 	base(_ecp_task)
 {
 }
@@ -42,12 +42,12 @@ delta::delta(common::task::base& _ecp_task) :
 
 // ---------------------------------  KONSTRUKTOR  ----------------------------------------------
 
-linear::linear(common::task::base& _ecp_task) :
+linear::linear(common::task::task& _ecp_task) :
 	delta(_ecp_task)
 {
 }
 
-linear::linear(common::task::base& _ecp_task, lib::trajectory_description tr_des, int mp_communication_mode_arg) :
+linear::linear(common::task::task& _ecp_task, lib::trajectory_description tr_des, int mp_communication_mode_arg) :
 	delta(_ecp_task)
 {
 
@@ -235,7 +235,7 @@ bool linear::next_step()
 
 // ---------------------------------  KONSTRUKTOR  ----------------------------------------------
 
-linear_parabolic::linear_parabolic(common::task::base& _ecp_task, lib::trajectory_description tr_des, const double *time_a, const double *time_b) :
+linear_parabolic::linear_parabolic(common::task::task& _ecp_task, lib::trajectory_description tr_des, const double *time_a, const double *time_b) :
 	delta(_ecp_task)
 {
 	td = tr_des;
@@ -610,7 +610,7 @@ bool linear_parabolic::next_step()
 // ####################################################################################################
 
 
-polynomial::polynomial(common::task::base& _ecp_task) :
+polynomial::polynomial(common::task::task& _ecp_task) :
 	delta(_ecp_task)
 {
 }
@@ -691,7 +691,7 @@ bool polynomial::first_step()
 // -----------------  konstruktor dla dla zadanych predkosci vp i vk ----------------------------
 // ----------------------------------------------------------------------------------------------
 
-cubic::cubic(common::task::base& _ecp_task, lib::trajectory_description tr_des, double *vp, double *vk) :
+cubic::cubic(common::task::task& _ecp_task, lib::trajectory_description tr_des, double *vp, double *vk) :
 	polynomial(_ecp_task)
 {
 	td = tr_des;
@@ -942,7 +942,7 @@ bool cubic::next_step()
 // ---------------------------konstruktor ------------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-quintic::quintic(common::task::base& _ecp_task, lib::trajectory_description tr_des, double *vp, double *vk, double *ap, double *ak) :
+quintic::quintic(common::task::task& _ecp_task, lib::trajectory_description tr_des, double *vp, double *vk, double *ap, double *ak) :
 	polynomial(_ecp_task)
 {
 	td = tr_des;
@@ -1207,7 +1207,7 @@ bool quintic::next_step()
 // ####################################################################################################
 
 
-spline::spline(common::task::base& _ecp_task) :
+spline::spline(common::task::task& _ecp_task) :
 	ecp_teach_in_generator(_ecp_task)
 {
 }
@@ -1223,7 +1223,7 @@ spline::spline(common::task::base& _ecp_task) :
 // ---------------------------konstruktor ------------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-parabolic_teach_in::parabolic_teach_in(common::task::base& _ecp_task, double interval = 0.02) :
+parabolic_teach_in::parabolic_teach_in(common::task::task& _ecp_task, double interval = 0.02) :
 	spline(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
@@ -1537,7 +1537,7 @@ bool parabolic_teach_in::next_step()
 // ---------------------------konstruktor ------------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-calibration::calibration(common::task::base& _ecp_task, double interval) :
+calibration::calibration(common::task::task& _ecp_task, double interval) :
 	spline(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
@@ -1873,7 +1873,7 @@ bool calibration::next_step()
 // ####################################################################################################
 
 
-cubic_spline::cubic_spline(common::task::base& _ecp_task, double interval = 0.02) :
+cubic_spline::cubic_spline(common::task::task& _ecp_task, double interval = 0.02) :
 	spline(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
@@ -2190,7 +2190,7 @@ bool cubic_spline::next_step()
 // ---------------------------konstruktor ----------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-smooth_cubic_spline::smooth_cubic_spline(common::task::base& _ecp_task, double *vp, double *vk, double interval = 0.02) :
+smooth_cubic_spline::smooth_cubic_spline(common::task::task& _ecp_task, double *vp, double *vk, double interval = 0.02) :
 	spline(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
@@ -2693,7 +2693,7 @@ B					= 1-A;
 // ---------------------------konstruktor ----------------------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-quintic_spline::quintic_spline(common::task::base& _ecp_task, double interval = 0.02) :
+quintic_spline::quintic_spline(common::task::task& _ecp_task, double interval = 0.02) :
 	spline(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
@@ -3048,7 +3048,7 @@ bool quintic_spline::next_step()
 // --------------------------------------------------------------------------
 // Konstruktor generatora elipsy
 
-elipsoid::elipsoid(common::task::base& _ecp_task) :
+elipsoid::elipsoid(common::task::task& _ecp_task) :
 	ecp_teach_in_generator(_ecp_task)
 {
 	INTERVAL = 0.006; // Dlugosc okresu interpolacji w [sek]
@@ -3276,7 +3276,7 @@ bool elipsoid::next_step()
 
 // --------------------------------------------------------------------------
 // Zapis rzeczywistej trajektorii do pliku
-void ecp_save_trajectory(elipsoid& the_generator, common::task::base& _ecp_task)
+void ecp_save_trajectory(elipsoid& the_generator, common::task::task& _ecp_task)
 {
 	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
@@ -3333,7 +3333,7 @@ void ecp_save_trajectory(elipsoid& the_generator, common::task::base& _ecp_task)
 
 // --------------------------------------------------------------------------
 // Zapis danych z kalibracji do pliku
-void ecp_save_extended_file(calibration& the_generator, operator_reaction_condition& the_condition, common::task::base& _ecp_task)
+void ecp_save_extended_file(calibration& the_generator, operator_reaction_condition& the_condition, common::task::task& _ecp_task)
 {
 	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP

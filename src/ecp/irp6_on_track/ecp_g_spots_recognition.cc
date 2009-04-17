@@ -16,7 +16,7 @@ namespace generator {
 using namespace std;
 
 
-spots::spots (common::task::base& _ecp_task)
+spots::spots (common::task::task& _ecp_task)
         : base (_ecp_task)
 {
 	//tool to plate frame initialization, all in rad and meters

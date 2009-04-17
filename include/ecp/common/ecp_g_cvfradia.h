@@ -30,7 +30,7 @@ public:
 	/*!
       * Constructor.
       */
-	cvfradia(common::task::base& _ecp_task)
+	cvfradia(common::task::task& _ecp_task)
 	  : base(_ecp_task)
 	{  }
 

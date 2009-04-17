@@ -19,7 +19,7 @@ namespace ecp {
 namespace festival {
 namespace generator {
 
-base::base(common::task::base& _ecp_task) :
+base::base(common::task::task& _ecp_task) :
 		common::generator::base (_ecp_task)
 {
 	host = ecp_t.config.return_string_value("server_host");

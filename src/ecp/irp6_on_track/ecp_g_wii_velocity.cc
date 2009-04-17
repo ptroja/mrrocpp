@@ -11,7 +11,7 @@ namespace generator {
 
 sem_t sem;
 
-wii_velocity::wii_velocity (common::task::base& _ecp_task) : common::generator::tff_nose_run(_ecp_task,10)
+wii_velocity::wii_velocity (common::task::task& _ecp_task) : common::generator::tff_nose_run(_ecp_task,10)
 {
 	configure_behaviour(lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION);
 }

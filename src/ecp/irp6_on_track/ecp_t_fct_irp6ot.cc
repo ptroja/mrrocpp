@@ -271,7 +271,7 @@ void show_force_control_window
 
 // KONSTRUKTORY
 fct::fct(lib::configurator &_config) :
-	base(_config)
+	task(_config)
 {
 }
 
@@ -329,7 +329,7 @@ void fct::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task(lib::configurator &_config)
+task* return_created_ecp_task(lib::configurator &_config)
 {
 	return new irp6ot::task::fct(_config);
 }

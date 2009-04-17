@@ -38,7 +38,7 @@ protected:
    	lib::POSE_SPECIFICATION atype_;
 public:
 	// konstruktor
-	nurbs (common::task::base& _ecp_task, const nurbs_tdes& ntdes, int mp_communication_mode_arg = 1);
+	nurbs (common::task::task& _ecp_task, const nurbs_tdes& ntdes, int mp_communication_mode_arg = 1);
 	
   virtual bool first_step ();
   virtual bool next_step ();

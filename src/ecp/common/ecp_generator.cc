@@ -5,7 +5,7 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-base::base (common::task::base& _ecp_task)
+base::base (common::task::task& _ecp_task)
         : ecp_mp::generator::generator(*(ecp_t.sr_ecp_msg)),
         ecp_t(_ecp_task),
         communicate_with_mp_in_move(true),

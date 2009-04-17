@@ -25,12 +25,12 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-base* return_created_mp_task (lib::configurator &_config)
+task* return_created_mp_task (lib::configurator &_config)
 {
 	return new vis_pbeclsac(_config);
 }
 
-vis_pbeclsac::vis_pbeclsac(lib::configurator &_config) : base(_config)
+vis_pbeclsac::vis_pbeclsac(lib::configurator &_config) : task(_config)
 {}
 
 // methods fo mp template to redefine in concete class

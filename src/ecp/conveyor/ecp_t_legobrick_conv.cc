@@ -11,7 +11,7 @@ namespace conveyor {
 namespace task {
 
 // KONSTRUKTORY
-lego_brick::lego_brick(lib::configurator &_config) : base(_config)
+lego_brick::lego_brick(lib::configurator &_config) : task(_config)
 {
 	absolute_position = 0.0;
 }
@@ -74,7 +74,7 @@ void lego_brick::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new conveyor::task::lego_brick(_config);
 }

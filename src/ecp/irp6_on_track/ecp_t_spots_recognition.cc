@@ -23,7 +23,7 @@ namespace task {
 
 //own libraries
 //Constructors
-spots_recognition::spots_recognition(lib::configurator &_config): base(_config)
+spots_recognition::spots_recognition(lib::configurator &_config): task(_config)
 {
     trajektoria_poczatkowa = "../trj/spots/traj00.trj";
     trajektoria_koncowa = "../trj/spots/traj99.trj";
@@ -129,7 +129,7 @@ void spots_recognition::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task(lib::configurator &_config)
+task* return_created_ecp_task(lib::configurator &_config)
 {
 	return new irp6ot::task::spots_recognition(_config);
 }

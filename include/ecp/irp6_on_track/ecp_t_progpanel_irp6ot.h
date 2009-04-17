@@ -9,7 +9,7 @@ namespace irp6ot {
 namespace task {
 
 
-class progpanel: public common::task::base  {
+class progpanel: public common::task::task  {
 protected:
 	common::generator::progpanel* ppg;
 //	ecp_teach_in_generator* tig;

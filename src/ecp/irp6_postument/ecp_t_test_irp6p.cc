@@ -32,7 +32,7 @@ namespace task {
 
 
 // KONSTRUKTORY
-test::test(lib::configurator &_config) : base(_config)
+test::test(lib::configurator &_config) : task(_config)
 {
 }
 
@@ -79,7 +79,7 @@ void test::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new irp6p::task::test(_config);
 }

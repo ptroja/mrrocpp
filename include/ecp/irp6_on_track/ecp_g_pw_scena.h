@@ -37,7 +37,7 @@ class pw_scena : public common::generator::base
     double ydir;
 
 public:
-    pw_scena (common::task::base& _ecp_task);
+    pw_scena (common::task::task& _ecp_task);
     double* get_current_pose();
     virtual bool first_step();
     virtual bool next_step();

@@ -8,7 +8,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-operator_reaction_condition::operator_reaction_condition (common::task::base& _ecp_task)
+operator_reaction_condition::operator_reaction_condition (common::task::task& _ecp_task)
 	:
 		base (_ecp_task)
 {

@@ -11,7 +11,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
 // XXX Forward declaration
-class base;
+class task;
 }
 }
 }
@@ -82,7 +82,7 @@ class base
 		lib::sr_ecp &sr_ecp_msg;
 
 	public:
-		base (TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::base& _ecp_mp_object);
+		base (TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object);
 
 		virtual ~base()
 		{}

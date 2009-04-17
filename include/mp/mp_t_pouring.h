@@ -16,7 +16,7 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class pouring : public base  
+class pouring : public task  
 {
 protected:
 

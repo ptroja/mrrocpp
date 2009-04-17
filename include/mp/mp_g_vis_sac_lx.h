@@ -65,7 +65,7 @@ public:
 	double E_eps_EG[3][6]; //E_r_G; - prawdopodobnie to samo
 	
     // konstruktor
-    vis_sac_lx(task::base& _mp_task, int step=0);  
+    vis_sac_lx(task::task& _mp_task, int step=0);  
 	
 	virtual bool first_step ();    
 	virtual bool next_step ();    

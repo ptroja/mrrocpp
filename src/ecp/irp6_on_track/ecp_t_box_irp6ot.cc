@@ -7,7 +7,7 @@ namespace irp6ot {
 namespace task {
 
 //Constructors
-box::box(lib::configurator &_config): common::task::base(_config){
+box::box(lib::configurator &_config): common::task::task(_config){
   smoothgen = NULL;
 };
 //Desctructor
@@ -43,7 +43,7 @@ void box::main_task_algorithm(void ){
 namespace common {
 namespace task {
 
-base* return_created_ecp_task(lib::configurator &_config){
+task* return_created_ecp_task(lib::configurator &_config){
 	return new irp6ot::task::box(_config);
 }
 

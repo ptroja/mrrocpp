@@ -364,7 +364,7 @@ void show_trajectory_reproduce_window(messip_channel_t * UI_fd)
 
 // KONSTRUKTORY
 tr::tr(lib::configurator &_config) :
-	base(_config)
+	task(_config)
 {
 }
 
@@ -433,7 +433,7 @@ void tr::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task(lib::configurator &_config)
+task* return_created_ecp_task(lib::configurator &_config)
 {
 	return new irp6ot::task::tr(_config);
 }

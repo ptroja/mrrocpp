@@ -28,7 +28,7 @@ public:
        double delta[6];
 
     // konstruktor
-    nn_eye(task::base& _mp_task, int step=0);  
+    nn_eye(task::task& _mp_task, int step=0);  
 	
 	virtual bool first_step ();    
 	virtual bool next_step ();    

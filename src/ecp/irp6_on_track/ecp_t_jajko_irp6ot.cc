@@ -29,7 +29,7 @@ namespace task {
 
 
 // KONSTRUKTORY
-jajko::jajko(lib::configurator &_config) : base(_config)
+jajko::jajko(lib::configurator &_config) : task(_config)
 {
 	yefg = NULL;
 }
@@ -90,7 +90,7 @@ void jajko::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new irp6ot::task::jajko(_config);
 }

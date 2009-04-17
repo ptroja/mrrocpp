@@ -21,7 +21,7 @@ namespace generator {
 
 
 
-progpanel::progpanel(common::task::base& _ecp_task, int step):
+progpanel::progpanel(common::task::task& _ecp_task, int step):
         base (_ecp_task)
 {
     step_no = step;

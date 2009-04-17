@@ -8,7 +8,7 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class tw: public common::task::base  {
+class tw: public common::task::task  {
 protected:
 	generator::tff_nose_run* nrg;
 	generator::y_edge_follow_force* yefg;

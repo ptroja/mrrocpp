@@ -20,7 +20,7 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class mam: public common::task::base  {
+class mam: public common::task::task  {
 
 public:
 	// KONSTRUKTORY

@@ -42,7 +42,7 @@ using namespace std;
 
 
 
-teach_in::teach_in(task::base& _mp_task)
+teach_in::teach_in(task::task& _mp_task)
 	: generator (_mp_task), UI_fd(_mp_task.UI_fd)
 {
 	pose_list.clear();

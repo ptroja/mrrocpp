@@ -57,7 +57,7 @@ class trajectory_reproduce : public common::ecp_teach_in_generator {
 #else
 		messip_channel_t *UI_fd;
 #endif
-		trajectory_reproduce(common::task::base& _ecp_task);
+		trajectory_reproduce(common::task::task& _ecp_task);
 
 		~trajectory_reproduce (void);
 		// Przygotowanie trajektorii do wykonania.

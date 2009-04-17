@@ -21,7 +21,7 @@ private:
     void init();
 
 public:
-    ecp_sub_task_gripper_opening(base &_ecp_t);
+    ecp_sub_task_gripper_opening(task &_ecp_t);
     void configure(double gripper_increment, int motion_time);
     void execute();
 };

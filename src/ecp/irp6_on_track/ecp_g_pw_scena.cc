@@ -5,7 +5,7 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-pw_scena::pw_scena(common::task::base& _ecp_task) :
+pw_scena::pw_scena(common::task::task& _ecp_task) :
 	base(_ecp_task) {
 
 	recognized = false;

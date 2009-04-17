@@ -10,7 +10,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class pouring: public common::task::base
+class pouring: public common::task::task
 {
 protected:
 	common::generator::smooth* sg;

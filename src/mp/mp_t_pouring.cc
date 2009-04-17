@@ -159,7 +159,7 @@ void pouring::depart(void)
 }
 
 pouring::pouring(lib::configurator &_config) :
-	base(_config)
+	task(_config)
 	{
 	}
 
@@ -167,7 +167,7 @@ pouring::~pouring()
 {
 }
 
-base* return_created_mp_task(lib::configurator &_config)
+task* return_created_mp_task(lib::configurator &_config)
 {
 	return new pouring(_config);
 }

@@ -12,24 +12,24 @@ namespace festival {
 namespace task {
 
 // KONSTRUKTORY
-base::base(lib::configurator &_config) :
-	common::task::base(_config)
+task::task(lib::configurator &_config) :
+	common::task::task(_config)
 {
 	fg = new generator::base (*this);
 }
 
-base::~base()
+task::~task()
 {
 	delete fg;
 }
 
 // methods for ECP template to redefine in concrete classes
-void base::task_initialization(void)
+void task::task_initialization(void)
 {
 	sr_ecp_msg->message("ECP loaded");
 }
 
-void base::main_task_algorithm(void)
+void task::main_task_algorithm(void)
 {
 	int isTest = config.return_int_value("test_mode");
 
@@ -66,9 +66,9 @@ void base::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task(lib::configurator &_config)
+task* return_created_ecp_task(lib::configurator &_config)
 {
-	return new festival::task::base(_config);
+	return new festival::task::task(_config);
 }
 
 }

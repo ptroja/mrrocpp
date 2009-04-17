@@ -9,7 +9,7 @@ namespace ecp {
 namespace player {
 namespace task {
 
-class playerpos: public common::task::base  {
+class playerpos: public common::task::task  {
 protected:
 	generator::playerpos* ppg;
 

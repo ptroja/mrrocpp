@@ -53,7 +53,7 @@ public:
     void set_weight_difference(const double _weight_difference);
 
     // konstruktor
-    weight_meassure(common::task::base& _ecp_task, double _weight_difference=0.0, double _catch_time = 1.0);
+    weight_meassure(common::task::task& _ecp_task, double _weight_difference=0.0, double _catch_time = 1.0);
 
     bool first_step ();
     bool next_step ();
@@ -76,7 +76,7 @@ public:
     double delta[6];
 
     // konstruktor
-    y_nose_run_force(common::task::base& _ecp_task, int step=0);
+    y_nose_run_force(common::task::task& _ecp_task, int step=0);
 
     virtual bool first_step ();
     virtual bool next_step ();
@@ -121,7 +121,7 @@ public:
     double delta[6];
 
     // konstruktor
-    y_egg_force(common::task::base& _ecp_task, int step=0, int mode=0);
+    y_egg_force(common::task::task& _ecp_task, int step=0, int mode=0);
 
     virtual bool first_step ();
 
@@ -165,7 +165,7 @@ public:
     // uczenie czy ruch - wybor trybu pracy generatora (definicje YG_TEACH, YG_MOVE)
     Y_DRAWING_GEN_ENUM teach_or_move;
 
-    y_drawing_teach_in_force(common::task::base& _ecp_task, int step);
+    y_drawing_teach_in_force(common::task::task& _ecp_task, int step);
 
     virtual bool first_step ();
     virtual bool next_step ();
@@ -185,7 +185,7 @@ private:
     // wykorzsytywany w next_step;
 
 public:
-    y_advanced_drawing_teach_in_force(common::task::base& _ecp_task, int step);
+    y_advanced_drawing_teach_in_force(common::task::task& _ecp_task, int step);
 
     virtual bool first_step ();
     virtual bool next_step ();
@@ -208,7 +208,7 @@ protected:
 public:
 
     // konstruktor
-    y_edge_follow_force(common::task::base& _ecp_task, int step);
+    y_edge_follow_force(common::task::task& _ecp_task, int step);
 
     virtual bool first_step ();
 
@@ -234,7 +234,7 @@ protected:
 public:
 
     // konstruktor
-    legobrick_attach_force(common::task::base& _ecp_task, int step);
+    legobrick_attach_force(common::task::task& _ecp_task, int step);
 
     virtual bool first_step ();
 
@@ -264,7 +264,7 @@ protected:
 public:
 
     // konstruktor
-    legobrick_detach_force(common::task::base& _ecp_task, int step);
+    legobrick_detach_force(common::task::task& _ecp_task, int step);
 
     virtual bool first_step ();
 
@@ -304,7 +304,7 @@ public:
     int step_no;
 
     // konstruktor
-    tff_nose_run(common::task::base& _ecp_task, int step=0);
+    tff_nose_run(common::task::task& _ecp_task, int step=0);
     void execute_motion (void);
 
 	void configure_behaviour(lib::BEHAVIOUR_SPECIFICATION x, lib::BEHAVIOUR_SPECIFICATION y, lib::BEHAVIOUR_SPECIFICATION z,
@@ -337,7 +337,7 @@ class bias_edp_force : public common::generator::base
 public:
 
     // konstruktor
-    bias_edp_force(common::task::base& _ecp_task);
+    bias_edp_force(common::task::task& _ecp_task);
 
     virtual bool first_step ();
     virtual bool next_step ();
@@ -368,7 +368,7 @@ public:
 
 
     // konstruktor
-    tff_rubik_grab(common::task::base& _ecp_task, int step=0);
+    tff_rubik_grab(common::task::task& _ecp_task, int step=0);
 
     void configure(double l_goal_position, double l_position_increment, int l_min_node_counter,
                    bool l_both_axes_running = true);
@@ -402,7 +402,7 @@ public:
     int step_no;
 
     // konstruktor
-    tff_rubik_face_rotate(common::task::base& _ecp_task, int step=0);
+    tff_rubik_face_rotate(common::task::task& _ecp_task, int step=0);
 
     void configure(double l_turn_angle);
 
@@ -435,7 +435,7 @@ public:
 
 
     // konstruktor
-    tff_gripper_approach(common::task::base& _ecp_task, int step=0);
+    tff_gripper_approach(common::task::task& _ecp_task, int step=0);
 
     void configure(double l_speed, int l_motion_time);
 
@@ -451,8 +451,8 @@ protected:
 	double tool_parameters[3]; // zobaczyc jeszcze co z tymi parametrami jak to bedzie w przypadku tego generatora
 	double weight;
 public:
-	force_tool_change(common::task::base& _ecp_task);
-	//ecp_force_tool_change_generator(common::task::base& _ecp_task, bool _is_synchronised, bool _debug);
+	force_tool_change(common::task::task& _ecp_task);
+	//ecp_force_tool_change_generator(common::task::task& _ecp_task, bool _is_synchronised, bool _debug);
 	void set_tool_parameters(double x, double y, double z, double weight); // tez zobaczyc jakie tu mamy parametry
 	
 	virtual bool first_step();

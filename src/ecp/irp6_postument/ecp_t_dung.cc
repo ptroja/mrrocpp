@@ -29,7 +29,7 @@ namespace irp6p {
 namespace task {
 
 // KONSTRUKTORY
-dung::dung(lib::configurator &_config) : base(_config)
+dung::dung(lib::configurator &_config) : task(_config)
 {
 }
 
@@ -63,7 +63,7 @@ void dung::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new irp6p::task::dung(_config);
 }

@@ -34,7 +34,7 @@ class pw_kolo : public common::generator::base
     double y;	
     double z;
 public:
-    pw_kolo (common::task::base& _ecp_task);
+    pw_kolo (common::task::task& _ecp_task);
     virtual bool first_step();
     virtual bool next_step();
 };

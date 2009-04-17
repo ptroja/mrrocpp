@@ -22,7 +22,7 @@ namespace ecp_mp {
 namespace sensor {
 
 /***************************** CONSTRUCTOR ********************************/
-vis_sac::vis_sac (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task:: base& _ecp_mp_object):
+vis_sac::vis_sac (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object):
 	base (_sensor_name, _section_name, _ecp_mp_object) {
 
 //    printf("ecp_mp_vis_sac_sensor: [vsp_vis_sac_sac]\n");

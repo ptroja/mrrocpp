@@ -34,7 +34,7 @@ public:
        double delta[6];
 
     // konstruktor
-    tff_single_robot_nose_run(task::base& _mp_task, int step=0);
+    tff_single_robot_nose_run(task::task& _mp_task, int step=0);
 	
 	virtual bool first_step ();    
 	virtual bool next_step ();    
@@ -67,7 +67,7 @@ public:
        double delta[6];
 
     // konstruktor
-    tff_nose_run(task::base& _mp_task, int step=0);
+    tff_nose_run(task::task& _mp_task, int step=0);
 	
 	void configure (unsigned short l_irp6ot_con , unsigned short l_irp6p_con );
 
@@ -101,7 +101,7 @@ public:
   //     double delta[6];
 
     // konstruktor
-    haptic(task::base& _mp_task, int step=0);
+    haptic(task::task& _mp_task, int step=0);
 	
 	void configure (unsigned short l_irp6ot_con , unsigned short l_irp6p_con );
 
@@ -138,7 +138,7 @@ public:
        double delta[6];
 
     // konstruktor
-    tff_rubik_grab(task::base& _mp_task, int step=0);
+    tff_rubik_grab(task::task& _mp_task, int step=0);
 	
 	void configure(unsigned short l_irp6ot_con, unsigned short l_irp6p_con, double l_goal_position, 
 		double l_position_increment, int l_min_node_counter, bool l_irp6p_both_axes_running = true, bool l_irp6ot_both_axes_running = true);
@@ -169,7 +169,7 @@ public:
        double delta[6];
 
     // konstruktor
-    tff_rubik_face_rotate(task::base& _mp_task, int step=0);  
+    tff_rubik_face_rotate(task::task& _mp_task, int step=0);  
 	
 	void configure(double l_irp6ot_con, double l_irp6p_con);
 	
@@ -200,7 +200,7 @@ public:
        double delta[6];
 
     // konstruktor
-    tff_gripper_approach(task::base& _mp_task, int step=0);  
+    tff_gripper_approach(task::task& _mp_task, int step=0);  
 	
 	void configure(double l_irp6ot_speed, double l_irp6p_speed, int l_motion_time);
 	
@@ -231,7 +231,7 @@ public:
        double delta[6];
 
     // konstruktor
-    nose_run_force(task::base& _mp_task, int step=0);  
+    nose_run_force(task::task& _mp_task, int step=0);  
 
    virtual bool first_step ();    
    virtual bool next_step ();    
@@ -288,7 +288,7 @@ class drawing_teach_in_force : public teach_in {
         short teach_or_move;
         
     // konstruktor
-    drawing_teach_in_force(task::base& _mp_task, int step=0);
+    drawing_teach_in_force(task::task& _mp_task, int step=0);
         
         
         virtual bool first_step ();

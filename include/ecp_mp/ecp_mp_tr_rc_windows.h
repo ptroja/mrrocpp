@@ -40,7 +40,7 @@ class rc_windows: public base{
   	
   public:
 	// Konstruktor
- 	rc_windows (TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task:: base& _ecp_mp_object);
+ 	rc_windows (TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object);
 											// konstruktor czujnika virtualnego
 	~rc_windows();						// destruktor czujnika virtualnego
 

@@ -83,7 +83,7 @@ class force_controlled_trajectory : public common::ecp_teach_in_generator
 		// Mutex do odbierania pozycji robota
 		pthread_mutex_t ROBOT_POSITION_MUTEX;
 	public:
-		force_controlled_trajectory (common::task::base& _ecp_task);
+		force_controlled_trajectory (common::task::task& _ecp_task);
 		~force_controlled_trajectory (void);
 		// Dodanie nowego kroku do listy.
 		void add_step(int motion_time);

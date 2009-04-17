@@ -174,7 +174,7 @@ int steps2switch;//=0;
 	int phaseD;
   	
   // konstruktor
-	vis_sac_lx(common::task::base& _ecp_task, int step=0);  
+	vis_sac_lx(common::task::task& _ecp_task, int step=0);  
 
   virtual bool first_step ();
       // generuje pierwszy krok ruchu -

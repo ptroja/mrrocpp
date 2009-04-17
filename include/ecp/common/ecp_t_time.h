@@ -9,7 +9,7 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class time: public common::task::base  {
+class time: public common::task::task  {
 protected:
 	generator::time *tfg;
 

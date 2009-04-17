@@ -21,7 +21,7 @@ namespace mp {
 namespace common {
 
 // -------------------------------------------------------------------
-robot::robot( lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::base &mp_object_l) :
+robot::robot( lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::task &mp_object_l) :
 	ecp_mp::robot(l_robot_name),
 	mp_object(mp_object_l),
 	sr_ecp_msg(*(mp_object_l.sr_ecp_msg))

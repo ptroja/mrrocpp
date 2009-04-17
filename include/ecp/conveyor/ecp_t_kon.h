@@ -20,7 +20,7 @@ namespace ecp {
 namespace conveyor {
 namespace task {
 
-class kon: public common::task::base  {
+class kon: public common::task::task  {
 
 public:
 	// KONSTRUKTORY

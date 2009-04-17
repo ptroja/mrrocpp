@@ -8,7 +8,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class playerjoy: public common::task::base  {
+class playerjoy: public common::task::task  {
 protected:
 	common::generator::playerjoy* pjg;
 

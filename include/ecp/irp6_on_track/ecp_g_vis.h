@@ -34,7 +34,7 @@ public:
   bool the_first;
   
   // konstruktor
-	seven_eye_run_linear(common::task::base& _ecp_task, int step=0);  
+	seven_eye_run_linear(common::task::task& _ecp_task, int step=0);  
 
   virtual bool first_step ();
       // generuje pierwszy krok ruchu -

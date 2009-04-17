@@ -22,7 +22,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class fsautomat: public common::task::base
+class fsautomat: public common::task::task
 {
 	protected:
 		// generatory

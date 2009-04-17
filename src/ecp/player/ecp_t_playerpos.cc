@@ -17,7 +17,7 @@ namespace task {
 
 // KONSTRUKTORY
 playerpos::playerpos(lib::configurator &_config) :
-	base(_config)
+	task(_config)
 {
 	ppg = new generator::playerpos (*this);
 }
@@ -62,7 +62,7 @@ void playerpos::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new player::task::playerpos(_config);
 }

@@ -17,7 +17,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-ellipse::ellipse(lib::configurator &_config) : base(_config) {};
+ellipse::ellipse(lib::configurator &_config) : task(_config) {};
 
 void ellipse::task_initialization(void)
 {
@@ -93,7 +93,7 @@ double ellipse::read_double(char* name,double min,double max)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new irp6ot::task::ellipse(_config);
 }

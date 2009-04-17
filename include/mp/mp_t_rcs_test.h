@@ -14,7 +14,7 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class rcs_test : public base  
+class rcs_test : public task  
 {
 public:
 

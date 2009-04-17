@@ -8,7 +8,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class pr: public common::task::base  {
+class pr: public common::task::task  {
 protected:
 	common::generator::y_drawing_teach_in_force *tig;
 	int ecp_tryb;

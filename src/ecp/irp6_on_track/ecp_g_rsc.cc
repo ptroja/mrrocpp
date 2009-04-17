@@ -230,7 +230,7 @@ void robot_stopped_condition::save_rse_list(char* filename)
 }
 
 /*****************************  KONSTRUKTOR *********************************/
-robot_stopped_condition::robot_stopped_condition(common::task::base& _ecp_task) :
+robot_stopped_condition::robot_stopped_condition(common::task::task& _ecp_task) :
 	base(_ecp_task)
 {
 	// Ustawienie elementow list na NULL.

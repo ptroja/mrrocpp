@@ -44,7 +44,7 @@ void pr::short_move_up ()
 }
 
 // KONSTRUKTORY
-pr::pr(lib::configurator &_config) : base(_config)
+pr::pr(lib::configurator &_config) : task(_config)
 {
     tig = NULL;
 }
@@ -178,7 +178,7 @@ void pr::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-common::task::base* return_created_ecp_task (lib::configurator &_config)
+common::task::task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new irp6ot::task::pr(_config);
 }

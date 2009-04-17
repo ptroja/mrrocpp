@@ -1019,7 +1019,7 @@ bool smooth::load_a_v_max (char* file_name)
     return true;
 } // end: load_a_v_max()
 
-smooth::smooth (common::task::base& _ecp_task, bool _is_synchronised)
+smooth::smooth (common::task::task& _ecp_task, bool _is_synchronised)
         :
         delta (_ecp_task), debug(false),first_coordinate(true)
 {
@@ -1055,7 +1055,7 @@ smooth::smooth (common::task::base& _ecp_task, bool _is_synchronised)
 }
 ; // end : konstruktor
 
-smooth::smooth (common::task::base& _ecp_task, bool _is_synchronised, bool _debug)
+smooth::smooth (common::task::task& _ecp_task, bool _is_synchronised, bool _debug)
         :
         delta (_ecp_task), first_coordinate(true)
 {
@@ -1518,14 +1518,14 @@ void tool_change::set_tool_parameters(double x, double y, double z)
     tool_parameters[2]=z;
 }
 
-tool_change::tool_change (common::task::base& _ecp_task, bool _is_synchronised)
+tool_change::tool_change (common::task::task& _ecp_task, bool _is_synchronised)
         :smooth (_ecp_task, _is_synchronised)
 {
 
     set_tool_parameters(-0.18, 0.0, 0.25);
 
 }
-tool_change::tool_change (common::task::base& _ecp_task, bool _is_synchronised, bool _debug)
+tool_change::tool_change (common::task::task& _ecp_task, bool _is_synchronised, bool _debug)
         :smooth (_ecp_task, _is_synchronised, _debug)
 {
 

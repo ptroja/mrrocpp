@@ -17,9 +17,9 @@ namespace ecp {
 namespace common {
 namespace task {
 
-// class ecp_task_visioncoordinates : public common::task::base
+// class ecp_task_visioncoordinates : public common::task::task
 // - zadanie kierowania ramieniem robota w strone zidentyfikowanego obiektu na ekranie
-class visioncoordinates : public common::task::base  
+class visioncoordinates : public common::task::task  
 {
 public:
 	visioncoordinates(lib::configurator& _config);

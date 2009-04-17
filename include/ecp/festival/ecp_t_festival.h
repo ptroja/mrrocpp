@@ -9,13 +9,13 @@ namespace ecp {
 namespace festival {
 namespace task {
 
-class base: public common::task::base  {
+class task: public common::task::task  {
 protected:
 	generator::base* fg;
 
 public:
-	base(lib::configurator &_config);
-	~base();
+	task(lib::configurator &_config);
+	~task();
 	
 	// methods for ECP template to redefine in concrete classes
 	void task_initialization(void);

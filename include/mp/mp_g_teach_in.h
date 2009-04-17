@@ -38,7 +38,7 @@ class teach_in : public generator {
 	public:
 		// -------------------------------------------------------
 		// konstruktor
-		teach_in(task::base& _mp_task);
+		teach_in(task::task& _mp_task);
 
 		// -------------------------------------------------------
 		// destruktor

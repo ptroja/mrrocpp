@@ -26,7 +26,7 @@ namespace speaker {
 namespace task {
 
 // KONSTRUKTORY
-speaking::speaking(lib::configurator &_config) : base(_config)
+speaking::speaking(lib::configurator &_config) : task(_config)
 {
     speak = NULL;
 }
@@ -72,7 +72,7 @@ void speaking::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-base* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new speaker::task::speaking(_config);
 }

@@ -18,7 +18,7 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class rubik_cube_solver : public base  
+class rubik_cube_solver : public task  
 {
 protected:
 // sekwencja (lista) manipulacji

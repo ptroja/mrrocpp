@@ -36,7 +36,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-ecp_vis_weights_driven_irp6ot::ecp_vis_weights_driven_irp6ot(common::task::base& _ecp_task, int step) : common::ecp_visual_servo_manager(_ecp_task){
+ecp_vis_weights_driven_irp6ot::ecp_vis_weights_driven_irp6ot(common::task::task& _ecp_task, int step) : common::ecp_visual_servo_manager(_ecp_task){
 
 	measure_border_u[0]=ecp_t.config.return_double_value("measure_border_u0");
 	measure_border_u[1]=ecp_t.config.return_double_value("measure_border_u1");

@@ -11,7 +11,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class vislx: public common::task::base  {
+class vislx: public common::task::task  {
 
 	public:
 		//static std::map <lib::SENSOR_ENUM, generator*> generator_m;

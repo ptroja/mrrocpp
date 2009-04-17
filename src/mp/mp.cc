@@ -78,7 +78,7 @@ namespace generator {
 
 // generator for setting the next ecps state
 
-set_next_ecps_state::set_next_ecps_state(task::base& _mp_task):
+set_next_ecps_state::set_next_ecps_state(task::task& _mp_task):
         generator (_mp_task)
 {}
 
@@ -128,7 +128,7 @@ bool set_next_ecps_state::next_step ()
     return false;
 }
 
-send_end_motion_to_ecps::send_end_motion_to_ecps(task::base& _mp_task)
+send_end_motion_to_ecps::send_end_motion_to_ecps(task::task& _mp_task)
         : generator (_mp_task)
 {}
 
@@ -161,7 +161,7 @@ bool send_end_motion_to_ecps::next_step ()
 // Rozszerzony generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
 // ###############################################################
 
-extended_empty::extended_empty(task::base& _mp_task):
+extended_empty::extended_empty(task::task& _mp_task):
 	generator (_mp_task)
 {
     activate_trigger = true;
@@ -244,7 +244,7 @@ bool extended_empty::next_step ()
 // Generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
 // ###############################################################
 
-empty::empty(task::base& _mp_task): generator (_mp_task)
+empty::empty(task::task& _mp_task): generator (_mp_task)
 {}
 
 // ----------------------------------------------------------------------------------------------
@@ -300,14 +300,14 @@ bool empty::next_step ()
     return true;
 }
 
-delta::delta(task::base& _mp_task): generator (_mp_task)
+delta::delta(task::task& _mp_task): generator (_mp_task)
 {}
 
 // ####################################################################################################
 // Generator prostoliniowy o zadany przyrost polozenia/orientacji
 // ####################################################################################################
 
-tight_coop::tight_coop(task::base& _mp_task, lib::trajectory_description irp6ot_tr_des,
+tight_coop::tight_coop(task::task& _mp_task, lib::trajectory_description irp6ot_tr_des,
         lib::trajectory_description irp6p_tr_des): delta (_mp_task)
 {
     irp6ot_td = irp6ot_tr_des;

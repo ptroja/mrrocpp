@@ -8,7 +8,7 @@ namespace ecp {
 namespace player {
 namespace generator {
 
-speechrecognition::speechrecognition(common::task::base& _ecp_task)
+speechrecognition::speechrecognition(common::task::task& _ecp_task)
 	: base (_ecp_task)
 {
 	char * hostname = ecp_t.config.return_string_value("player_hostname");

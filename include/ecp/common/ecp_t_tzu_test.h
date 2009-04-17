@@ -32,7 +32,7 @@ namespace task {
 
 
 
-class tzu_test :  public common::task::base  
+class tzu_test :  public common::task::task  
 {
 protected:
 	generator::smooth *sg;
@@ -78,7 +78,7 @@ private:
 	lib::Ft_v_vector weight;
 public:
     // konstruktor
-    force_meassure_generator(common::task::base& _ecp_task, int _sleep_time = 0, int _meassurement_count = 1);
+    force_meassure_generator(common::task::task& _ecp_task, int _sleep_time = 0, int _meassurement_count = 1);
 	lib::Ft_v_vector& get_meassurement();
 	void set_configuration(int _sleep_time, int _meassurement_count);
 	

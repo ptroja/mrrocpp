@@ -25,7 +25,7 @@ namespace generator {
 class wii_velocity : public common::generator::tff_nose_run
 {
 	public:
-    wii_velocity (common::task::base& _ecp_task);
+    wii_velocity (common::task::task& _ecp_task);
     virtual bool first_step();
     virtual bool next_step();
 };

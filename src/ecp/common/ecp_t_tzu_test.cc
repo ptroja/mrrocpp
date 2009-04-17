@@ -25,7 +25,7 @@ namespace task {
 
 using namespace std;
 /** konstruktor **/
-tzu_test::tzu_test(lib::configurator &_config) : base(_config)
+tzu_test::tzu_test(lib::configurator &_config) : task(_config)
 {
 	befg = NULL;
 	ftcg = NULL;
@@ -496,7 +496,7 @@ const char* tzu_test::get_trajectory(double x[])
 	return "../trj/tzu/temp.trj";
 }
 
-base* return_created_ecp_task (lib::configurator &_config)
+task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new tzu_test(_config);
 };
@@ -507,7 +507,7 @@ namespace generator {
 /**** force meassure generator ****/
 
 /** konstruktor **/
-force_meassure_generator::force_meassure_generator(common::task::base& _ecp_task, int _sleep_time, int _meassurement_count) :
+force_meassure_generator::force_meassure_generator(common::task::task& _ecp_task, int _sleep_time, int _meassurement_count) :
 	base(_ecp_task)
 {
 	sleep_time = _sleep_time;

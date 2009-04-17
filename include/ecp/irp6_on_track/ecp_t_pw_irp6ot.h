@@ -15,7 +15,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class pw: public common::task::base  {
+class pw: public common::task::task  {
 
 	generator::pw_kolo * kolo_gen;
 

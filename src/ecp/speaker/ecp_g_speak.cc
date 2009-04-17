@@ -21,7 +21,7 @@ namespace ecp {
 namespace speaker {
 namespace generator {
 
-speaking::speaking(common::task::base& _ecp_task, int step):
+speaking::speaking(common::task::task& _ecp_task, int step):
 	 base(_ecp_task){	step_no = step;  };
 
 bool speaking::configure(const char* text)

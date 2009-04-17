@@ -54,7 +54,7 @@ ostream& operator<<(ostream& s, const valarray<double>& v) {
 
 //---------------------------------  KONSTRUKTOR  ----------------------------------------------
 
-nurbs::nurbs (common::task::base& _ecp_task,
+nurbs::nurbs (common::task::task& _ecp_task,
 	 const nurbs_tdes &ntdes, int mp_communication_mode_arg)
 : base (_ecp_task) 
 {

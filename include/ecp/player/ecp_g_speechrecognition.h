@@ -17,7 +17,7 @@ class speechrecognition : public common::generator::base
 
 	public:
 		// konstruktor
-		speechrecognition(common::task::base& _ecp_task);
+		speechrecognition(common::task::task& _ecp_task);
 		~speechrecognition();
 
 		virtual bool first_step ();

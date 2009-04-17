@@ -35,7 +35,7 @@ namespace ecp {
 namespace common {
 
 // Obiekt zawierajacy sciezki sieciowe.
-extern task::base* ecp_t;
+extern task::task* ecp_t;
 
 namespace task {
 
@@ -204,7 +204,7 @@ void show_mam_window(int UI_fd)
 
 // KONSTRUKTORY
 mam::mam(lib::configurator &_config) :
-	base(_config)
+	task(_config)
 {
 }
 
@@ -259,7 +259,7 @@ void mam::main_task_algorithm(void)
 	ecp_termination_notice();
 }
 
-base* return_created_ecp_task(lib::configurator &_config)
+task* return_created_ecp_task(lib::configurator &_config)
 {
 	return new mam(_config);
 }

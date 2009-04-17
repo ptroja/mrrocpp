@@ -9,7 +9,7 @@ namespace ecp {
 namespace speaker {
 namespace task {
 
-class speaking: public common::task::base  {
+class speaking: public common::task::task  {
 protected:
 	generator::speaking* speak;
 

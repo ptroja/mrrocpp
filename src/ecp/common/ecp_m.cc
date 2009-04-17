@@ -23,7 +23,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-common::task::base *ecp_t;
+common::task::task *ecp_t;
 
 void catch_signal_in_ecp(int sig)
 {

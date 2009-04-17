@@ -13,7 +13,7 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-tbtest::tbtest (common::task::base& _ecp_task) : common::generator::base (_ecp_task){
+tbtest::tbtest (common::task::task& _ecp_task) : common::generator::base (_ecp_task){
 
 }
 

@@ -24,7 +24,7 @@ namespace task {
  * \brief Class responsible for communication with pcbird (testing purposes).
  * \author tkornuta
  */
-class pcbird: public common::task::base  {
+class pcbird: public common::task::task  {
 protected:
 	/*!
       * Generator used for communication with pcbird.
@@ -36,7 +36,7 @@ public:
       * Constructor.
       */
 	pcbird(lib::configurator &_config)
-	  : base(_config)
+	  : task(_config)
 	{ }
 
 	/*!

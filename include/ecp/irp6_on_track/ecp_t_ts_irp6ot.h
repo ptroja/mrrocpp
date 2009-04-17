@@ -8,7 +8,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class ts: public common::task::base  {
+class ts: public common::task::task  {
 
 public:
 	// KONSTRUKTORY
