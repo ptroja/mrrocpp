@@ -36,7 +36,7 @@ namespace mrrocpp {
 namespace vsp {
 namespace sensor {
 
-base::base (lib::configurator &_config) :
+sensor::sensor (lib::configurator &_config) :
 	config(_config)
 	{
 
@@ -60,9 +60,9 @@ base::base (lib::configurator &_config) :
 	}
 
 
-void base::wait_for_event(void){};
+void sensor::wait_for_event(void){};
 
-void base::terminate(void) {
+void sensor::terminate(void) {
 	sr_msg->message("VSP terminated");
 }
 

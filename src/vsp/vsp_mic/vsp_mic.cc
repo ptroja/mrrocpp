@@ -60,14 +60,14 @@ namespace sensor {
 // extern pid_t UI_pid;           // identyfikator procesu UI
 // extern lib::configurator* config;
 
-base* return_created_sensor (lib::configurator &_config)
+sensor* return_created_sensor (lib::configurator &_config)
 {
 	return new mic(_config);
 }// : return_created_sensor
 
 
 // Rejstracja procesu VSP
-mic::mic(lib::configurator &_config) : base(_config){
+mic::mic(lib::configurator &_config) : sensor(_config){
 
 //	unsigned long int e;			// kod bledu systemowego	 
 	printf("Konstruktor VSP! - SOUND\n");

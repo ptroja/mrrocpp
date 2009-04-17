@@ -48,7 +48,7 @@ namespace vsp {
 namespace common {
 
 /********************************* GLOBALS **********************************/
-sensor::base *vs;		// czujnik wirtualny
+sensor::sensor *vs;		// czujnik wirtualny
 
 //lib::sr_vsp *vs->sr_msg;		// komunikacja z SR
 

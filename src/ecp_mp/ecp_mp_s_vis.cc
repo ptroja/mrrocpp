@@ -18,7 +18,7 @@ namespace sensor {
 
 /***************************** CONSTRUCTOR ********************************/
 vis::vis (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object):
-	base (_sensor_name, _section_name, _ecp_mp_object) {
+	sensor (_sensor_name, _section_name, _ecp_mp_object) {
   if (strcmp(_section_name, "[vsp_vis_eih]") == 0)
   {
 //    printf("ecp_mp_vis_sensor: [vsp_vis_eih]\n");

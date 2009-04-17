@@ -17,7 +17,7 @@ namespace ecp_mp {
 namespace sensor {
 
 /***************** Klasa czujnikow ********************/
-class pawel: public base{
+class pawel: public sensor{
 
 	private:
 	    FILE *f;

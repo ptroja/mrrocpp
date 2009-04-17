@@ -19,7 +19,7 @@ namespace sensor {
 // ####################################################################
 // ## KLASA czujnika - rozwiazywanie kostki Rubika algorytmem Kociemby  ##
 // ####################################################################
-class rcs_kociemba : public base{
+class rcs_kociemba : public sensor{
 
   public:
 	// Konstruktor czujnika wirtualnego - wywolanie konstruktora klasy bazowej.

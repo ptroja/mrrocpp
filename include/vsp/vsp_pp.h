@@ -17,7 +17,7 @@ namespace vsp {
 namespace sensor {
 
 /********** klasa czujnikow po stronie VSP **************/
-class pp : public base{
+class pp : public sensor{
 private:
     // Deskryptor portu RS-232
     int RS_descriptor;

@@ -22,7 +22,7 @@ namespace sensor {
 
 
 // klasa czujnikow po stronie VSP
-class rcs_korf : public base {
+class rcs_korf : public sensor {
   private:
 	// Stan kostki Rubika do rozwiazania.
 	CubieCube *pCube;

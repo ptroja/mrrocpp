@@ -19,7 +19,7 @@ namespace vsp {
 namespace sensor {
 
 /********** klasa czujnikow po stronie VSP **************/
-class base : public lib::sensor {
+class sensor : public lib::sensor {
 protected:
 	// Flaga - czy czujnik jest skonfigurowany.
 	short is_sensor_configured;
@@ -33,7 +33,7 @@ public:
 	
 	char* mrrocpp_network_path;
 	
-	base (lib::configurator &_config); 
+	sensor (lib::configurator &_config); 
 	
 	// Metoda uzywana przy wspolpracy nieinteraktywnej.
 	virtual void wait_for_event(void);
@@ -43,7 +43,7 @@ public:
 }; // end: class vsp_sensor
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-base* return_created_sensor (lib::configurator &_config);
+sensor* return_created_sensor (lib::configurator &_config);
 
 } // namespace sensor
 } // namespace vsp

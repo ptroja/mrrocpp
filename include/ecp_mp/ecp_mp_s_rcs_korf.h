@@ -19,7 +19,7 @@ namespace sensor {
 // ####################################################################
 // ## KLASA czujnika - rozwiazywanie kostki Rubika algorytmem Korfa  ##
 // ####################################################################
-class rcs_korf : public base{
+class rcs_korf : public sensor{
 
   public:
 	// Konstruktor czujnika wirtualnego - wywolanie konstruktora klasy bazowej.

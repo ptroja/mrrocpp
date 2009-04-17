@@ -17,7 +17,7 @@ namespace ecp_mp {
 namespace sensor {
 
 /***************** Klasa czujnikow ********************/
-class vis_sac_lx: public base{
+class vis_sac_lx: public sensor{
   private:									// pola do komunikacji
 
   public:

@@ -17,7 +17,7 @@ namespace vsp {
 namespace sensor {
 
 /********** klasa czujnikow po stronie VSP **************/
-class time : public base {
+class time : public sensor {
 private:
 	
     struct timespec ts;

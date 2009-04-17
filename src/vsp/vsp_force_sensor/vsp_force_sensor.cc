@@ -36,14 +36,14 @@ namespace sensor {
 
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-base* return_created_sensor (lib::configurator &_config)
+sensor* return_created_sensor (lib::configurator &_config)
 {
 	return new force(_config);
 }// : return_created_sensor
 
 
 // Konstruktor klasy czujnika wirtualnego, odpowiedzialnego za odczyty z czujnika sily.
-force::force(lib::configurator &_config) : base(_config){
+force::force(lib::configurator &_config) : sensor(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.force);
 

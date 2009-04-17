@@ -19,7 +19,7 @@ namespace sensor {
 
 
 /********** klasa czujnikow po stronie VSP **************/
-class force : public base {
+class force : public sensor {
 private:
 	int edp_vsp_fd; // do polaczenia z EDP
 

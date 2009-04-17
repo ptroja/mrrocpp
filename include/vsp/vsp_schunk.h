@@ -20,7 +20,7 @@ namespace sensor {
 #define VSP_MSG_SEND_TIMEOUT_HIGH 10000000
 
 /********** klasa czujnikow po stronie VSP **************/
-class schunk : public base{
+class schunk : public sensor{
 
 private:
 	short ap_state, prev_ap_state, next_ap_state; // stan aplikacji z punktu widzenia wykrywanych zdarzen

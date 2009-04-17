@@ -46,7 +46,7 @@ typedef struct{
 } Thsv;
 
 /********** klasa czujnikow po stronie VSP **************/
-class pawel: public base {
+class pawel: public sensor {
 
 private:
 	short zero;							// polozenie zerowe

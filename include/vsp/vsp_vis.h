@@ -17,7 +17,7 @@ namespace vsp {
 namespace sensor {
 
 /********** klasa czujnikow po stronie VSP **************/
-class vis: public base {
+class vis: public sensor {
 
 private:
 	short zero;							// polozenie zerowe

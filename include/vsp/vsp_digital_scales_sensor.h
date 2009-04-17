@@ -17,7 +17,7 @@ namespace vsp {
 namespace sensor {
 
 /********** klasa czujnikow po stronie VSP **************/
-class digital_scales : public base {
+class digital_scales : public sensor {
 private:
     // Odczyty w pozycji konfiguracji czujnika.
     double position_zero[6];

@@ -23,7 +23,7 @@ namespace sensor {
 // ####################################################################
 // ###################   KLASA czujnikow - obsluga  linialow    ########################
 // ####################################################################
-class pp:public base{
+class pp:public sensor{
   public:
 	// Konstruktor czujnika wirtualnego - wywolanie konstruktora klasy bazowej.
  	pp (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object);

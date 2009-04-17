@@ -41,13 +41,13 @@ namespace sensor {
 
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
-base* return_created_sensor (lib::configurator &_config) {
+sensor* return_created_sensor (lib::configurator &_config) {
 	return new rcs_kociemba(_config);
 } // : return_created_sensor
 
 
 // Konstruktor czujnika wirtualnego.
-rcs_kociemba::rcs_kociemba(lib::configurator &_config) : base(_config){
+rcs_kociemba::rcs_kociemba(lib::configurator &_config) : sensor(_config){
     printf("VSP KC construct\n");
 
 	// Inicjalizuje puste pola.

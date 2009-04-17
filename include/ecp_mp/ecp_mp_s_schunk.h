@@ -17,7 +17,7 @@ namespace ecp_mp {
 namespace sensor {
 
 /***************** Klasa czujnikow ********************/
-class schunk: public base{
+class schunk: public sensor{
 	public:
 	// Konstruktor czujnika wirtualnego - wywolanie konstruktora klasy bazowej.
  	schunk (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object);

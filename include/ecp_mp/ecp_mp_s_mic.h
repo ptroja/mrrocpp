@@ -18,7 +18,7 @@ namespace sensor {
 
 
 /***************** Klasa czujnikow ********************/
-class mic: public base{
+class mic: public sensor{
   public:
 	// Konstruktor czujnika wirtualnego - wywolanie konstruktora klasy bazowej.
  	mic (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object);

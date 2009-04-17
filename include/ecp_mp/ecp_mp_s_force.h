@@ -19,7 +19,7 @@ namespace sensor {
 
 
 // Klasa obrazujaca czujniki sily w systemie MRROC++.
-class force: public base{
+class force: public sensor{
   public:
 	// Konstruktor czujnika wirtualnego - wywolanie konstruktora klasy bazowej.
  	force (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object);
