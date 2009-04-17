@@ -47,7 +47,7 @@ bool spots::next_step()
 {
 	if(iter == 0) //first time next_step
 	{
-	    get_frame();
+	    get_frame(teg);
 	    iter++;
 	    return true;
 	}
@@ -55,31 +55,37 @@ bool spots::next_step()
 	// jesli zdjecia niegotowe, return true
     sensor->to_vsp.command = 0;
 
-
 	//printf("%d\n", sensor->from_vsp.comm_image.sensor_union.sp_r.pic_count);
 
     if(sensor->from_vsp.vsp_report == lib::VSP_REPLY_OK && sensor->from_vsp.comm_image.sensor_union.sp_r.pic_count <= -2)
 		//this position failed
+    {
+    	//beep();
+    	std::cout<<"\a"<<std::endl;
+    	std::cout<<"\a"<<std::endl;
 		return false;
+//<<<<<<< .mine
+    }
+//    else if(sensor->from_vsp.vsp_report != VSP_REPLY_OK || sensor->from_vsp.comm_image.sensor_union.sp_r.pic_count <= 0)
+//=======
     else if(sensor->from_vsp.vsp_report != lib::VSP_REPLY_OK || sensor->from_vsp.comm_image.sensor_union.sp_r.pic_count <= 0)
+//>>>>>>> .r2096
 		return true;
 
 		//teraz zabawa z wynikami
-
-
 		get_pic();
 		save_position();
-
+		std::cout<<"\a"<<std::endl;
 
 		return false;
 }
 
-void spots::get_frame()
+void spots::get_frame(double t[12])
 {
 	for(int i=0; i<3; i++)
 	{
 		for(int j=0; j<4; j++)
-			teg[4*i+j] = the_robot->EDP_data.current_arm_frame[i][j];
+			t[4*i+j] = the_robot->EDP_data.current_arm_frame[i][j];
 	}
 }
 
@@ -127,23 +133,72 @@ void spots::compute_TCE()
 	}
 
 	double norm = c->computeTCE(vec_cam1, vec_cam2, vec_cam3, vec_cam4, tce);
+
+	cout << "tce=[ " << endl;
+	print_matrix(tce);
+	cout << "];" << endl;
+
+	cout << "vec1 = [" << vec_cam1[0] << "  " << vec_cam1[1] << "  " << vec_cam1[2] << " 1 ]'" << endl;
+    cout << "vec2 = [" << vec_cam2[0] << "  " << vec_cam2[1] << "  " << vec_cam2[2] << " 1 ]'" << endl;
+	cout << "vec3 = [" << vec_cam3[0] << "  " << vec_cam3[1] << "  " << vec_cam3[2] << " 1 ]'" << endl;
+	cout << "vec4 = [" << vec_cam4[0] << "  " << vec_cam4[1] << "  " << vec_cam4[2] << " 1 ]'" << endl;
 }
 
-void spots::compute_TCG()
+//<<<<<<< .mine
+//void ecp_spots_generator::compute_TCG(double tcg_local[12])
+//=======
+void spots::compute_TCG(double tcg_local[12])
+//>>>>>>> .r2096
 {
 	//T_C^G = T_E^G * T_C^E
 	common::T_MatrixManip Teg_mm(teg);
-	Teg_mm.multiply_r_matrix4x4(tce, tcg);
 
-	cout << tcg[0] << "  " << tcg[1] << "  " << tcg[2] << "  " << tcg[3] << endl;
-	cout << tcg[4] << "  " << tcg[5] << "  " << tcg[6] << "  " << tcg[7] << endl;
-	cout << tcg[8] << "  " << tcg[9] << "  " << tcg[10] << "  " << tcg[11] << endl;
+	cout << "teg=[ " << endl;
+	print_matrix(teg);
+	cout << "];" << endl;
+
+	Teg_mm.multiply_r_matrix4x4(tce, tcg_local);
+
+	cout << "tcg=[ " << endl;
+	print_matrix(tcg_local);
+	cout << "];" << endl;
 }
 
 void spots::save_position()
 {
+	double tcg_local[12];
+
 	compute_TCE();
-	compute_TCG();
+	compute_TCG(tcg_local);
+
+	for(int i=0; i<12; i++)
+		tcg[i]+=(tcg_local[i]/16);
+}
+
+void spots::print_matrix(double m[12])
+{
+	cout << m[0] << "  " << m[1] << "  " << m[2] << "  " << m[3] << endl;
+	cout << m[4] << "  " << m[5] << "  " << m[6] << "  " << m[7] << endl;
+	cout << m[8] << "  " << m[9] << "  " << m[10] << "  " << m[11] << endl;
+	cout << "0 0 0 1" << endl;
+}
+
+double spots::move_and_return(double pos_hist)
+{
+	double ret[12];
+	double sum=0.;
+
+	get_frame(ret);
+
+	for (int i=3; i<12; i+=4)
+		sum += (ret[i]*ret[i]);
+
+	if(fabs(sum-pos_hist) < 0.2)
+		return 0.;
+
+	Move();
+	return sum;
+
 }
 
 /*void ecp_spots_generator::save_position()

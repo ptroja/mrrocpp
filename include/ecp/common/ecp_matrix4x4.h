@@ -29,6 +29,9 @@ class T_MatrixManip
 	void inv_matrix4x4(double[12]);
 	void multiply_r_matrix4x4(double[12], double[12]);
 	void multiply_l_matrix4x4(double[12], double[12]);
+
+	static double norm2m(double[12]);
+	static double norm2v(double[3]);
 };
 
 

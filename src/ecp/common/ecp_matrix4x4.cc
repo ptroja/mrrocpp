@@ -92,6 +92,35 @@ void T_MatrixManip::multiply_l_matrix4x4(double B[12], double ret[12])
 	}
 }
 
+double T_MatrixManip::norm2m(double ret[12])
+{
+	double norm = -1.;
+
+	for (int i=0; i<3; i++)
+	{
+		double vec[3];
+		vec[0] = ret[4*i];
+		vec[1] = ret[4*i+1];
+		vec[2] = ret[4*i+2];
+
+		double temp = norm2v(vec);
+		if (temp > norm)
+			norm = temp;
+	}
+
+	return norm;
+}
+
+double T_MatrixManip::norm2v(double ret[3])
+{
+	double sum = 0;
+
+	for (int i=0; i<3; i++)
+		sum += ret[i]*ret[i];
+
+	return sqrt(sum);
+}
+
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

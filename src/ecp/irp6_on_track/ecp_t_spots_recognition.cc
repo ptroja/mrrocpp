@@ -26,6 +26,7 @@ namespace task {
 spots_recognition::spots_recognition(lib::configurator &_config): base(_config)
 {
     trajektoria_poczatkowa = "../trj/spots/traj00.trj";
+    trajektoria_koncowa = "../trj/spots/traj99.trj";
     remove("../msr/kalibracja.txt");
 }
 
@@ -42,6 +43,7 @@ void spots_recognition::task_initialization(void)
 	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, "[vsp_cvfradia]", *this, sizeof(lib::sensor_image_t::sensor_union_t::sp_r_t));
 	// Configure sensor.
 	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
+    sr_ecp_msg->message("FraDIA sensor loaded");
 
 // Create an adequate robot. - depending on the ini section name.
 // Note - only on track working
@@ -62,24 +64,43 @@ if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	// Create smooth generator.
 	smooth = new common::generator::smooth(*this, true, false);
 
-	nose = new common::generator::y_nose_run_force(*this);
+//<<<<<<< .mine
+	nose = new common::generator::tff_nose_run(*this, 8);
+	nose->configure_pulse_check (true);
+//	befg = new common::generator::bias_edp_force(*this);
+//=======
+	//nose = new common::generator::y_nose_run_force(*this);
+
+//>>>>>>> .r2096
 
 }
 
 void spots_recognition::main_task_algorithm(void)
 {
+
 	/*!
 	    	 * smooth generator odczytuje trajektorie z pliku
 	    	 * po czym przesuwa sie do poczatkowej pozycji
 	 */
+	double pos;
 
 	smooth->load_file_with_path(trajektoria_poczatkowa);
 	smooth->Move();
+    sr_ecp_msg->message("Insert the plate");
 
-    for(int i=0; i<=15; i++)
+    int iter = 0;
+	double pos_hist = 0;
+    while(1)
     {
+    	iter++;
 
+    	char comm[40];
+    	sprintf(comm, "Go to desired position (%d)...", iter);
+		sr_ecp_msg->message(comm);
+		sr_ecp_msg->message("Press PULSE ECP trigger when done");
 
+		//befg->Move();
+		nose->Move();
 
 	    /*!
 	     * nastepnie nalezy odczekac ok 1s, zanim mozna rozpoczac sesje zdjeciowa
@@ -89,9 +110,17 @@ void spots_recognition::main_task_algorithm(void)
 	    /*!
 	     * zrob zdjecia, dokonaj obliczen
 	     */
-	    generator->Move();
+	    pos = generator->move_and_return(pos_hist);
+
+	    if(pos == 0.)
+	    	break;
+	    pos_hist = pos;
+	    sleep(2);
 
     }
+	smooth->load_file_with_path(trajektoria_koncowa);
+	smooth->Move();
+    sr_ecp_msg->message("Take off the plate");
 }
 
 }

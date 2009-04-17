@@ -33,16 +33,20 @@ class spots : public common::generator::base
 	//double vec_1[4], vec_2[4], vec_3[4], vec_4[4];
 	short iter; //0 - zero, 1 - one, 2 - many ;)
 
+	void print_matrix(double[12]);
+
   public:
 	spots(common::task::base& _ecp_task);
 	bool first_step();
 	bool next_step();
 
 	void get_pic();
-	void get_frame();
+	void get_frame(double[12]);
 	void compute_TCE();
-	void compute_TCG();
+	void compute_TCG(double[12]);
 	void save_position();
+
+	double move_and_return(double);
 };
 
 }

@@ -37,12 +37,14 @@ namespace task {
 class spots_recognition: public common::task::base
 {
 	char * trajektoria_poczatkowa;
+	char * trajektoria_koncowa;
 
 	protected:
 
 		generator::spots* generator;
 		common::generator::smooth* smooth;
-		common::generator::y_nose_run_force* nose;
+		common::generator::tff_nose_run* nose;
+//		common::generator::bias_edp_force* befg;
 
 
 	public:
