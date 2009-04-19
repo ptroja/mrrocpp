@@ -8,9 +8,15 @@
 
 
 
+
+
 /*! \namespace mrrocpp
- * \brief Root MRROC++ programming framework
+ * \brief MRROC++ programming framework
  */
+
+
+
+
 
 /*! \namespace mrrocpp::ecp
  * \brief MRROC++ ECP process
@@ -41,15 +47,15 @@
  */
 
 /*! \namespace mrrocpp::ecp::festival
- * \brief MRROC++ ECP process festival robot classes
+ * \brief MRROC++ ECP process festival classes
  */
 
 /*! \namespace mrrocpp::ecp::festival::generator
- * \brief MRROC++ ECP process festival robot generators
+ * \brief MRROC++ ECP process festival generators
  */
 
 /*! \namespace mrrocpp::ecp::festival::task
- * \brief MRROC++ ECP process festival robot tasks
+ * \brief MRROC++ ECP process festival tasks
  */
 
 /*! \namespace mrrocpp::ecp::irp6m
@@ -114,19 +120,19 @@
  */
 
 /*! \namespace mrrocpp::ecp_mp::generator
- * \brief MRROC++ ECP, MP shared generators classes
+ * \brief MRROC++ ECP, MP shared generators
  */
 
 /*! \namespace mrrocpp::ecp_mp::sensor
- * \brief MRROC++ ECP, MP shared sensors classes
+ * \brief MRROC++ ECP, MP shared sensors
  */
 
 /*! \namespace mrrocpp::ecp_mp::task
- * \brief MRROC++ ECP, MP shared tasks classes
+ * \brief MRROC++ ECP, MP shared tasks
  */
 
 /*! \namespace mrrocpp::ecp_mp::transmitter
- * \brief MRROC++ ECP, MP shared transmitters classes
+ * \brief MRROC++ ECP, MP shared transmitters
  */
 
 
