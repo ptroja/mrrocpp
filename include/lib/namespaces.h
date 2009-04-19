@@ -6,6 +6,14 @@
  */
 
 
+/*! \namespace mrrocpp::ecp::common
+ * \brief MRROC++ ECP process common classes
+ */
+
+/*! \namespace mrrocpp::ecp::common::generator
+ * \brief MRROC++ ECP process common generator classes
+ */
+
 /*!
  * \brief Root MRROC++ programming framework
  */
@@ -20,6 +28,8 @@ namespace ecp {
 
 } // namespace ecp
 } // namespace mrrocpp
+
+
 
 
 
