@@ -7,9 +7,18 @@
 
 
 /*!
- * \brief Root MRROC++ programming framework namespace
+ * \brief Root MRROC++ programming framework
  */
 namespace mrrocpp {
+
+/*!
+ * \brief MRROC++ ECP process
+ */
+namespace ecp {
+
+
+
+} // namespace ecp
 } // namespace mrrocpp
 
 
