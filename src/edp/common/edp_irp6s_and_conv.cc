@@ -569,7 +569,7 @@ void irp6s_and_conv_effector::send_to_SERVO_GROUP ()
 
     /* sigemptyset ( &set);
      sigaddset ( &set, SIGUSR1);
-     
+
      SignalProcmask( 0,serwo_tid, SIG_BLOCK, &set, NULL ); // by Y uniemozliwienie jednoczesnego wystawiania spotkania do serwo przez edp_m i readera
      */
 
@@ -604,7 +604,7 @@ void irp6s_and_conv_effector::send_to_SERVO_GROUP ()
     } else
     {
              motor_pos_increment_reading[i] = sg_reply.position[i] * 2*M_PI / IRP6_POSTUMENT_AXE_0_TO_5_INC_PER_REVOLUTION;
-    } 
+    }
              // Aktualnie odczytane polozenia walow silnikow (w radianach)
         current_motor_pos[i] +=   motor_pos_increment_reading[i];
         */
@@ -755,7 +755,7 @@ void irp6s_and_conv_effector::compute_motors(const lib::c_buffer &instruction)
     motion_type = instruction.motion_type;
     motion_steps = instruction.motion_steps;
     value_in_step_no = instruction.value_in_step_no;
-    p = &instruction.arm.pf_def.arm_coordinates[0];    
+    p = &instruction.arm.pf_def.arm_coordinates[0];
     if ( (motion_steps <= 0) /* || (value_in_step_no < 0) */ )
         throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
     switch (motion_type)
@@ -989,7 +989,7 @@ void irp6s_and_conv_effector::main_loop ()
                 }
 
                 /*
-                if (test_mode == 0) 
+                if (test_mode == 0)
             {
                  if (!is_power_on()) // jesli wzmacniacz mocy jest wylaczony
                  {
@@ -1402,7 +1402,7 @@ void in_out_buffer::set_output(const lib::WORD *out_value)
     set_output_flag=true;   // aby f. obslugi przerwania wiedziala ze ma ustawic wyjscie
     binary_output=*out_value;
 
-//    InterruptUnlock(&output_spinlock);
+ //   InterruptUnlock(&output_spinlock);
     yy_InterruptUnlock(&output_spinlock);
   //  InterruptDisable();
 }
@@ -1415,7 +1415,7 @@ void in_out_buffer::get_output(lib::WORD *out_value)
 	//InterruptEnable();
     *out_value=binary_output;
 
-  //  InterruptUnlock(&output_spinlock );
+ //   InterruptUnlock(&output_spinlock );
     yy_InterruptUnlock(&output_spinlock);
   //  InterruptDisable();
 }
@@ -1458,9 +1458,9 @@ void in_out_buffer::get_input (lib::WORD *binary_in_value, lib::BYTE *analog_in_
 
     /*	// ustawienie korzystanie z ukladu we-wy
     	out8(ADR_OF_SERVO_PTR, IN_OUT_PTR);
-     
+
     	// odczytanie wejsc
-    	// SERVO_REPLY_STATUS_ADR     0x210	
+    	// SERVO_REPLY_STATUS_ADR     0x210
     	lib::WORD read_analog = 0x00FF & in16(SERVO_REPLY_STATUS_ADR);
     	// SERVO_REPLY_REG_1_ADR       0x218
     	lib::WORD read_binary = 0x00FF & in16(SERVO_REPLY_REG_1_ADR);*/

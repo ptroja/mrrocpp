@@ -21,7 +21,7 @@ namespace sensor {
 #define BUFFER_SIZE 8*256
 
 /*!
- * \class ecp_mp_s_cvfradia.h
+ * \class cvfradia
  * \brief Virtual sensor on the ECP/MP side used for communication with cvFraDIA framework.
  * \author tkornuta
  */

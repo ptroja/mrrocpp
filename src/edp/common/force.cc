@@ -32,7 +32,7 @@
 
 /********************************* GLOBALS **********************************/
 
-//!< watek do komunikacji miedzy edp a vsp
+// watek do komunikacji miedzy edp a vsp
 
 namespace mrrocpp {
 namespace edp {
