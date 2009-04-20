@@ -29,8 +29,8 @@ ifeq ($(BUILD_TARGET), linux)
 else
   #VERSION=-V2.95.3,gcc_ntox86
   #VERSION=-V3.3.5,gcc_ntox86
-  #VERSION=-V4.2.4,gcc_ntox86
-  VERSION=-V4.3.3,gcc_ntox86
+  VERSION=-V4.2.4,gcc_ntox86
+  #VERSION=-V4.3.3,gcc_ntox86
   RPATHV=-Wl,-rpath /usr/pkg/lib
   CC=qcc ${VERSION}
   CXX=QCC ${VERSION}
