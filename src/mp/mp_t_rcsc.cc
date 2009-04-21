@@ -1007,7 +1007,7 @@ void rubik_cube_solver::task_initialization(void)
 
 	// dodanie transmitter'a
 	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] =
-		new ecp_mp::transmitter::rc_windows (ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]", *this);
+		new ecp_mp::transmitter::rc_windows (ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
 
 	sr_ecp_msg->message("MP rcsc loaded");
 }

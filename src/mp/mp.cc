@@ -397,7 +397,7 @@ bool tight_coop::next_step ()
     /*
       if (node_counter == td.interpolation_node_no) {
         // Zakonczenie generacji trajektorii
-        robot_list->E_ptr->ecp_td.mp_command = lib::END_MOTION; 
+        robot_list->E_ptr->ecp_td.mp_command = lib::END_MOTION;
       }
     */
 
