@@ -110,17 +110,17 @@ OnTimer( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 		switch (ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].message_type) {
 			case lib::FATAL_ERROR:
-				strcat(current_line, "lib::FATAL_ERROR:     ");
+				strcat(current_line, "FATAL_ERROR:     ");
 				attr.text_color=Pg_RED;
 				break;
 			case lib::NON_FATAL_ERROR:
-				strcat(current_line, "lib::NON_FATAL_ERROR: ");
+				strcat(current_line, "NON_FATAL_ERROR: ");
 				attr.text_color=Pg_BLUE;
 				break;
 			case lib::SYSTEM_ERROR:
 				// printf("SYSTEM ERROR W ONTIMER\n");
 				// Informacja do UI o koniecznosci zmiany stanu na INITIAL_STATE
-				strcat(current_line, "lib::SYSTEM_ERROR:    ");
+				strcat(current_line, "SYSTEM_ERROR:    ");
 				attr.text_color=Pg_PURPLE;
 				break;
 			case lib::NEW_MESSAGE:

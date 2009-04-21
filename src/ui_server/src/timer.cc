@@ -37,20 +37,20 @@ OnTimer()
 		//fprintf(stderr, "OnTimer()\n");
 
 	#define CHECK_SPEAKER_STATE_ITER 10 // co ile iteracji ma byc sprawdzony stan speakera
-	
+
 	static int closing_delay_counter; // do odliczania czasu do zamkniecia aplikacji
 	static int Iteration_counter = 0; // licznik uruchomienia fukcji
-	
-	
+
+
 	Iteration_counter++;
-	
-	
+
+
 	if (ui_sr_obj->check_new_msg() == 0) { // by Y jesli mamy co wypisywac
-	ui_sr_obj->lock_mutex(); 
+	ui_sr_obj->lock_mutex();
 // 	printf("timer\n");
 	int attributes_mask;
 
-	
+
 	// char buffer[ 80 ];
 
 	char current_line[400];
@@ -71,63 +71,63 @@ OnTimer()
 				strcat(current_line, "EDP: ");
 				break;
 			case lib::ECP:
-				strcat(current_line, "ECP: ");      
+				strcat(current_line, "ECP: ");
 				break;
 			case lib::MP:
 				// printf("MP w ontimer\n");
-				strcat(current_line, "MP:  ");  
+				strcat(current_line, "MP:  ");
 				break;
 			case lib::VSP:
-				strcat(current_line, "VSP: ");      
+				strcat(current_line, "VSP: ");
 				break;
 			case lib::UI:
-				strcat(current_line, "UI:  ");      
+				strcat(current_line, "UI:  ");
 				break;
 			default:
 				strcat(current_line, "???: ");
 				continue;
 		} // end: switch (message_buffer[reader_buf_position].process_type)
-      
+
 		ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].process_type = lib::UNKNOWN_PROCESS_TYPE;
 
 		char process_name_buffer[NAME_LENGTH+1];
 		snprintf(process_name_buffer, sizeof(process_name_buffer), "%-21s",
 				ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].process_name);
-    
+
 		strcat(current_line,process_name_buffer);
 
 	//jk
 			char code;
 		switch (ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].message_type) {
 			case lib::FATAL_ERROR:
-				strcat(current_line, "lib::FATAL_ERROR:     ");
+				strcat(current_line, "FATAL_ERROR:     ");
 				code = '1';
-				break;         
+				break;
 			case lib::NON_FATAL_ERROR:
-				strcat(current_line, "lib::NON_FATAL_ERROR: ");
+				strcat(current_line, "NON_FATAL_ERROR: ");
 				code = '2';
-				break; 
+				break;
 			case lib::SYSTEM_ERROR:
 				// printf("SYSTEM ERROR W ONTIMER\n");
 				// Informacja do UI o koniecznosci zmiany stanu na INITIAL_STATE
-				strcat(current_line, "lib::SYSTEM_ERROR:    ");
+				strcat(current_line, "SYSTEM_ERROR:    ");
 				code = '3';
 				break;
 			case lib::NEW_MESSAGE:
 				strcat(current_line, "MESSAGE:         ");
 				code = '4';
 				break;
-			default: 
+			default:
 				strcat(current_line, "UNKNOWN ERROR:   ");
 				code = '5';
 		}; // end: switch (message.message_type)
-    
+
 		strcat( current_line, ui_sr_obj->message_buffer[ui_sr_obj->reader_buf_position].description);
 		strcat( current_line, "\n" );
 		// 	printf("c_l W ONT: %s\n",current_line);
 		// delay(1000);
 		// 	attr.text_color=Pg_DBLUE;
-		
+
 		int l = strlen(current_line);
 		char* mes = new char[l+1];
 		memset(mes,'\0',l+1);
@@ -136,14 +136,14 @@ OnTimer()
 		replySend(new Message(code,'A','A',0,NULL,mes));
 		//~jk
 	    (*log_file_outfile) << current_line;
-			
+
 	} 	while (ui_sr_obj->writer_buf_position!=ui_sr_obj->reader_buf_position);
 
 		(*log_file_outfile).flush();
-		
-		ui_sr_obj->unlock_mutex(); 
-	} 
-	   
+
+		ui_sr_obj->unlock_mutex();
+	}
+
 	if (ui_state.ui_state==2) {// jesli ma nastapic zamkniecie z aplikacji
 		set_ui_state_notification(UI_N_EXITING);
 	// 	printf("w ontimer 2\n");
@@ -164,7 +164,7 @@ OnTimer()
 	} else if (ui_state.ui_state==5) {// odlcizanie do zamnkiecia
  	//	printf("w ontimer 5\n");
 		if ((--closing_delay_counter)<=0)
-			ui_state.ui_state=6;	
+			ui_state.ui_state=6;
 	} else if (ui_state.ui_state==6) {// zakonczenie aplikacji
 	      (*log_file_outfile).close();
 	      delete log_file_outfile;
@@ -173,7 +173,7 @@ OnTimer()
 	}  else {
 		set_ui_ready_state_notification();
 	}
-	
+
 
 	return 0;
 
