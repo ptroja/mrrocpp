@@ -1,9 +1,9 @@
 // -------------------------------------------------------------------------
 //                                  y_spawn_process.cc
-// 
+//
 // Proces do spawn'owania lokalnie i po sieci, oraz funkcja do takiego spawnowania // by Y
 // Potrzebny ze wzgledu na przedziwne dzialanie oryginalnego spawna (klopoty z chroot())
-// 
+//
 // Ostatnia modyfikacja: pazdziernik 2004
 // -------------------------------------------------------------------------
 
@@ -32,6 +32,7 @@
 
 #include "lib/y_spawn.h"
 
+
 /* Przechwycenie sygnalu */
 void catch_signal(int sig)
 {
@@ -51,7 +52,7 @@ void catch_signal(int sig)
 
 
 
-int main(int argc, char *argv[], char **arge) 
+int main(int argc, char *argv[], char **arge)
 {
 
 	signal(SIGTERM, &catch_signal);
@@ -60,7 +61,7 @@ int main(int argc, char *argv[], char **arge)
 
 	int process_state=0; // okresla stan procesu: 0 -przed komunikacja, 1 - po komunikacji
 	name_attach_t *my_attach;	// by Y
-	my_data_t msg;
+	mrrocpp::lib::my_data_t msg;
 	int rcvid;
 	//printf("spawn_prc 1\n");
 
@@ -94,7 +95,7 @@ int main(int argc, char *argv[], char **arge)
 			switch (msg.hdr.code) {
 			case _PULSE_CODE_DISCONNECT:
 				ConnectDetach(msg.hdr.scoid);
-				if (process_state==1) 
+				if (process_state==1)
 				{
 
 					_exit(EXIT_SUCCESS);
@@ -116,7 +117,7 @@ int main(int argc, char *argv[], char **arge)
 
 		if (msg.msg_type==1) {// wiadomosc od procesu macierzystrego
 
-			my_reply_data_t y_reply;
+			mrrocpp::lib::my_reply_data_t y_reply;
 			struct utsname sysinfo;
 			struct inheritance inherit;// by Y
 
@@ -145,7 +146,7 @@ int main(int argc, char *argv[], char **arge)
 			}
 			*ap = 0;
 			// by Y end szok !!
-			//	delay(10000);	
+			//	delay(10000);
 
 			if( uname( &sysinfo ) == -1 )
 			{
@@ -199,7 +200,7 @@ int main(int argc, char *argv[], char **arge)
 				y_reply.remote_errno = errno;
 			}// end if ...pid<0
 			//printf("spawn_prc 7\n");
-			MsgReply(rcvid, EOK, &y_reply, sizeof(y_reply)); 
+			MsgReply(rcvid, EOK, &y_reply, sizeof(y_reply));
 
 			process_state=1;
 			//printf("spawn_prc 8\n");
@@ -213,3 +214,6 @@ int main(int argc, char *argv[], char **arge)
 	//printf("spawn_prc 10\n");
 
 } // end:  main( )
+
+
+
