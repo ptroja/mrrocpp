@@ -31,6 +31,8 @@ class CameraToTool
 	double computeTCE(double[3], double[3], double[3], double[3], double[12]);
 	double computeTCE(double[12], double[12]);
 	void vec_prod(double[3], double[3], double[3]);
+
+	void get_tpe(double[12]);
 };
 
 } // namespace irp6ot

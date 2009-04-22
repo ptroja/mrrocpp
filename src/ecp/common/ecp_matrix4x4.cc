@@ -121,6 +121,58 @@ double T_MatrixManip::norm2v(double ret[3])
 	return sqrt(sum);
 }
 
+Spots_Data::Spots_Data()
+{
+	tcg = new vector<matrix12_t>;
+	vec_cam = new vector<vector4_t>;
+	vec_ground = new vector<vector4_t>;
+
+	count = 0;
+}
+
+Spots_Data::~Spots_Data()
+{
+	delete tcg;
+	delete vec_cam;
+	delete vec_ground;
+}
+
+void Spots_Data::add_tcg(double tcg_rec[12])
+{
+	matrix12_t m(tcg_rec, tcg_rec+12);
+	tcg->push_back(m);
+	count++;
+
+
+	cout << "tcg = [" << endl;
+	cout << m[0] << "  " << m[1] << "  " << m[2] << "  " << m[3] << endl;
+	cout << m[4] << "  " << m[5] << "  " << m[6] << "  " << m[7] << endl;
+	cout << m[8] << "  " << m[9] << "  " << m[10] << "  " << m[11] << endl;
+	cout << "0 0 0 1];" << endl;
+}
+
+void Spots_Data::add_vec_cam(double vec_cam_rec[4])
+{
+	vector4_t v(vec_cam_rec, vec_cam_rec+4);
+	tcg->push_back(v);
+
+
+	cout << "vec_cam = [" << endl;
+	cout << v[0] << "  " << v[1] << "  " << v[2] << "  " << v[3] << endl;
+	cout << "]';" << endl;
+}
+
+void Spots_Data::add_vec_ground(double vec_ground_rec[4])
+{
+	vector4_t v(vec_ground_rec, vec_ground_rec+4);
+	tcg->push_back(v);
+
+
+	cout << "vec_ground = [" << endl;
+	cout << v[0] << "  " << v[1] << "  " << v[2] << "  " << v[3] << endl;
+	cout << "]';" << endl;
+}
+
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

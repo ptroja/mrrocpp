@@ -13,6 +13,7 @@
 #include "ecp/common/ecp_t_cvfradia.h"
 
 #include "ecp/irp6_on_track/ecp_camera_to_tool.h"
+#include "ecp/common/ecp_matrix4x4.h"
 
 #include "ecp/common/ecp_generator.h"
 
@@ -29,6 +30,7 @@ class spots : public common::generator::generator
 	long no_of_tcg_in_one;
 	CameraToTool * c;
 	lib::SENSOR_IMAGE calib_data;
+	common::Spots_Data sdata;
 
 	//double vec_1[4], vec_2[4], vec_3[4], vec_4[4];
 	short iter; //0 - zero, 1 - one, 2 - many ;)

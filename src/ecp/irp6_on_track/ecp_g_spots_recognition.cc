@@ -87,6 +87,7 @@ void spots::get_frame(double t[12])
 		for(int j=0; j<4; j++)
 			t[4*i+j] = the_robot->EDP_data.current_arm_frame[i][j];
 	}
+
 }
 
 void spots::get_pic()
@@ -134,14 +135,19 @@ void spots::compute_TCE()
 
 	double norm = c->computeTCE(vec_cam1, vec_cam2, vec_cam3, vec_cam4, tce);
 
+	double vec_mean[4] = {0., 0., 0., 1.};
+	for (int i=0; i<3; i++)
+		vec_mean[i] = 0.25*(vec_cam1[i]+vec_cam2[i]+vec_cam3[i]+vec_cam4[i]);
+	sdata.add_vec_cam(vec_mean);
+
 	cout << "tce=[ " << endl;
 	print_matrix(tce);
 	cout << "];" << endl;
-
+/*
 	cout << "vec1 = [" << vec_cam1[0] << "  " << vec_cam1[1] << "  " << vec_cam1[2] << " 1 ]'" << endl;
     cout << "vec2 = [" << vec_cam2[0] << "  " << vec_cam2[1] << "  " << vec_cam2[2] << " 1 ]'" << endl;
 	cout << "vec3 = [" << vec_cam3[0] << "  " << vec_cam3[1] << "  " << vec_cam3[2] << " 1 ]'" << endl;
-	cout << "vec4 = [" << vec_cam4[0] << "  " << vec_cam4[1] << "  " << vec_cam4[2] << " 1 ]'" << endl;
+	cout << "vec4 = [" << vec_cam4[0] << "  " << vec_cam4[1] << "  " << vec_cam4[2] << " 1 ]'" << endl;*/
 }
 
 //<<<<<<< .mine
@@ -159,9 +165,9 @@ void spots::compute_TCG(double tcg_local[12])
 
 	Teg_mm.multiply_r_matrix4x4(tce, tcg_local);
 
-	cout << "tcg=[ " << endl;
-	print_matrix(tcg_local);
-	cout << "];" << endl;
+//	cout << "tcg=[ " << endl;
+//	print_matrix(tcg_local);
+//	cout << "];" << endl;
 }
 
 void spots::save_position()
@@ -171,8 +177,17 @@ void spots::save_position()
 	compute_TCE();
 	compute_TCG(tcg_local);
 
-	for(int i=0; i<12; i++)
-		tcg[i]+=(tcg_local[i]/16);
+	sdata.add_tcg(tcg_local);
+
+	double tpe[12], tpg[12], vec[4];
+	c->get_tpe(tpe);
+	common::T_MatrixManip Tpe_mm(tpe);
+	Tpe_mm.multiply_l_matrix4x4(teg, tpg);
+
+	for(int i=0; i<3; i++)
+		vec[i] = tpg[4*i+3];
+	vec[3] = 1;
+	sdata.add_vec_ground(vec);
 }
 
 void spots::print_matrix(double m[12])
@@ -193,7 +208,7 @@ double spots::move_and_return(double pos_hist)
 	for (int i=3; i<12; i+=4)
 		sum += (ret[i]*ret[i]);
 
-	if(fabs(sum-pos_hist) < 0.2)
+	if(fabs(sum-pos_hist) < 0.01)
 		return 0.;
 
 	Move();

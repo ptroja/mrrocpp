@@ -55,15 +55,14 @@ double CameraToTool::computeTCE(double vec1[3], double vec2[3], double vec3[3], 
 	double norm2_TPC = computeTPC(vec1, vec2, vec3, vec4, ret);
 	double tcp[12];
 
-//
-//	cout << "tpc = [" << endl;
-//	cout << ret[0] << "  " << ret[1] << "  " << ret[2] << "  " << ret[3] << endl;
-//	cout << ret[4] << "  " << ret[5] << "  " << ret[6] << "  " << ret[7] << endl;
-//	cout << ret[8] << "  " << ret[9] << "  " << ret[10] << "  " << ret[11] << endl;
-//	cout << " 0 0 0 1 ];" << endl;
-//
-//
-//
+
+		cout << "tpc = [" << endl;
+		cout << ret[0] << "  " << ret[1] << "  " << ret[2] << "  " << ret[3] << endl;
+		cout << ret[4] << "  " << ret[5] << "  " << ret[6] << "  " << ret[7] << endl;
+		cout << ret[8] << "  " << ret[9] << "  " << ret[10] << "  " << ret[11] << endl;
+		cout << " 0 0 0 1 ];" << endl;
+
+
 
 	common::T_MatrixManip Tpc_mm(ret);
 	Tpc_mm.inv_matrix4x4(tcp);
@@ -71,6 +70,13 @@ double CameraToTool::computeTCE(double vec1[3], double vec2[3], double vec3[3], 
 	common::T_MatrixManip Tcp_mm(tcp);
 	//TCE = TPE*TCP
 	Tcp_mm.multiply_l_matrix4x4(tpe, ret);
+
+
+		cout << "tpe = [" << endl;
+		cout << tpe[0] << "  " << tpe[1] << "  " << tpe[2] << "  " << tpe[3] << endl;
+		cout << tpe[4] << "  " << tpe[5] << "  " << tpe[6] << "  " << tpe[7] << endl;
+		cout << tpe[8] << "  " << tpe[9] << "  " << tpe[10] << "  " << tpe[11] << endl;
+		cout << " 0 0 0 1 ];" << endl;
 
 	double n = common::T_MatrixManip::norm2m(ret);
 	for(int i=0; i<12; i++)
@@ -83,6 +89,7 @@ double CameraToTool::computeTPC(double vec1[3], double vec2[3], double vec3[3], 
 {
 	double m1234[3], ri1[3], ri2[3], r3[3];
 	double b = a*sqrt(2);
+
 
 	for(int i=0; i<3; i++)
 	{
@@ -100,6 +107,10 @@ double CameraToTool::computeTPC(double vec1[3], double vec2[3], double vec3[3], 
 		ret[4*i+2] = r3[i];
 		ret[4*i+3]=m1234[i];
 	}
+//
+//	cout << "tce = " << ret[0] << "  " << ret[1] << "  " << ret[2] << "  " << ret[3] << endl;
+//	cout << "vec2 = " << ret[4] << "  " << ret[5] << "  " << ret[6] << "  " << ret[7] << endl;
+//	cout << "vec3 = " << ret[8] << "  " << ret[9] << "  " << ret[10] << "  " << ret[11] << endl;
 
 	return common::T_MatrixManip::norm2m(ret);
 }
@@ -109,6 +120,12 @@ void CameraToTool::vec_prod(double r1[3], double r2[3], double r3[3])
 	r3[0] = r1[1]*r2[2] - r2[1]*r1[2];
 	r3[1] = r1[2]*r2[0] - r2[2]*r1[0];
 	r3[2] = r1[0]*r2[1] - r2[0]*r1[1];
+}
+
+void CameraToTool::get_tpe(double temp[12])
+{
+	for (int i=0; i<12; i++)
+		temp[i] = tpe[i];
 }
 
 } // namespace irp6ot
