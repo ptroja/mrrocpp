@@ -592,7 +592,7 @@ bool smooth2::next_step () {
     //int j;
     //double tk = 10*STEP; //czas jednego makrokroku
 
-    printf("\n============================================================\n poczatek \n ============================================================= \n");
+    //printf("\n=========================\n poczatek \n ========================= \n");
 
     if (!trajectory_generated) {
     	calculate(); //wypelnienie pozostalych zmiennych w liscie pose_list
@@ -651,7 +651,7 @@ bool smooth2::next_step () {
 
     			if(node_counter < pose_list_iterator->interpolation_node_no) {//jezeli makrokrok nie jest ostatnim makrokrokiem w ruchu
 
-    			    printf("normalny makrokrok\n");
+    			    //printf("normalny makrokrok\n");
     				//printf("%f\n", next_position[1]);
     			    //generate_next_coords(); //obliczanie nastepnych wspolrzednych makrokroku
     			    //printf("\n %f\n", coordinate_list_iterator->coordinate[0]);
@@ -659,7 +659,7 @@ bool smooth2::next_step () {
     			        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
     			    }
 
-					coordinate_list_iterator++;
+					//coordinate_list_iterator++;
 
     			    //PROBA Z CHWYTAKIEM
 
@@ -670,7 +670,7 @@ bool smooth2::next_step () {
     			    }*/
     			    the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;//TODO to jest tymczasowe wiec trzeba poprawic
     			} else {
-    			//	printf("ostatni makrokrok ruchu\n");
+    				printf("ostatni makrokrok ruchu\n");
     			//OSTATNI PUNKT
     				for (i = 0; i < 6; i++) //ostatni makrokrok, przypisujemy final_position (coordinates)
     			        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i] = pose_list_iterator->coordinates[i];
@@ -715,12 +715,12 @@ void smooth2::calculate(void) {
     td.value_in_step_no = td.internode_step_no - 2;
 
     for (int j = 0; j < pose_list_length(); j++) {
-    	printf("petla listy pozycji\n");
+    	printf("petla listy pozycji %d\n", j);
 		td.arm_type = pose_list_iterator->arm_type;
 
 		if (first_interval) {//pierwszy makrokrok ruchu
 			//wywoluje sie tylko raz, przy pierwzszym makrokroku pierwszego ruchu, musi byc rozroznione, gdyz tutaj v_p jest = 0 a pozycja jest
-			// ...odczytywana z ramienia
+			// ...odczytywana z ramienia... tak naprawde tutaj wywoluje sie dla pierwszego elementu listy pozycji
 			//get_pose();//pobranie parametrow nowego ruchu (zapisanie zmiennych v, a i final_position(coordinates))
 
 			switch (td.arm_type) {
@@ -728,24 +728,41 @@ void smooth2::calculate(void) {
 			case lib::XYZ_EULER_ZYZ:
 				printf("euler w first_interval\n");
 				for (i = 0; i < 6; i++) {
+					temp = pose_list_iterator->coordinates[i];
 					pose_list_iterator->start_position[i] = the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];//pierwsze przypisanie start_position
+					if (!is_last_list_element()) {
+						next_pose_list_ptr();
+						pose_list_iterator->start_position[i] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
+						prev_pose_list_ptr();							//pozycje startowa nowego ruchu
+					}
 				}
+
+				/*for (i = 0; i < MAX_SERVOS_NR; i++) {
+					temp = pose_list_iterator->v_k[i];
+					if (!is_last_list_element()) {
+						next_pose_list_ptr();
+						pose_list_iterator->v_p[i] = temp; //koncowa predkosc poprzedniego ruchu jest poczatkowa
+						prev_pose_list_ptr();					//predkoscia nowego ruchu
+					}
+				}*/
 
 				pose_list_iterator->start_position[6] = the_robot->EDP_data.current_gripper_coordinate;
 				pose_list_iterator->start_position[7] = 0.0;//TODO sprawdzic czy tutaj ma byc 0
 
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
-					printf("predkosci (max i zadane): %f\t %f\n", v_max_zyz[i], pose_list_iterator->v[i]);
-					printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
+					//printf("predkosci (max i zadane): %f\t %f\n", v_max_zyz[i], pose_list_iterator->v[i]);
+					//printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
 					pose_list_iterator->v_r[i] = v_max_zyz[i] * pose_list_iterator->v[i];
 					pose_list_iterator->a_r[i] = a_max_zyz[i] * pose_list_iterator->a[i];
 					pose_list_iterator->v_p[i] = 0; //zalozenie, ze poczatkowa predkosc jest rowna 0
 
 					if(pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i] < 0) { //zapisanie kierunku dla pierwszego ruchu
-						pose_list_iterator->k[i]=-1;			//zapisanie kierunku nastepnych ruchow dokonywane jest dalej
+						//printf("ustawienie k w osi %d na -1\n", i);
+						pose_list_iterator->k[i] = -1;			//zapisanie kierunku nastepnych ruchow dokonywane jest dalej
 			        }
 			        else {
-			        	pose_list_iterator->k[i]=1;
+			        	//printf("ustawienie k w osi %d na 1\n", i);
+			        	pose_list_iterator->k[i] = 1;
 			        }
 				}
 
@@ -764,16 +781,20 @@ void smooth2::calculate(void) {
 			case lib::XYZ_EULER_ZYZ:
 				for (i = 0; i < 6; i++) {
 					temp = pose_list_iterator->coordinates[i];
-					next_pose_list_ptr();
-					pose_list_iterator->start_position[i] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
-					prev_pose_list_ptr();							//pozycje startowa nowego ruchu
+					if (!is_last_list_element()) {
+						next_pose_list_ptr();
+						pose_list_iterator->start_position[i] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
+						prev_pose_list_ptr();							//pozycje startowa nowego ruchu
+					}
 				}
 
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
 					temp = pose_list_iterator->v_k[i];
-					next_pose_list_ptr();
-					pose_list_iterator->v_p[i] = temp; //koncowa predkosc poprzedniego ruchu jest poczatkowa
-					prev_pose_list_ptr();					//predkoscia nowego ruchu
+					if (!is_last_list_element()) {
+						next_pose_list_ptr();
+						pose_list_iterator->v_p[i] = temp; //koncowa predkosc poprzedniego ruchu jest poczatkowa
+						prev_pose_list_ptr();					//predkoscia nowego ruchu
+					}
 				}
 
 				next_pose_list_ptr(); //inkrementacja iteratora listy pose_list
@@ -782,8 +803,8 @@ void smooth2::calculate(void) {
 				pose_list_iterator->start_position[7] = 0.0;//TODO sprawdzic czy tutaj ma byc 0
 
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
-					printf("predkosci (max i zadane): %f\t %f\n", v_max_zyz[i], pose_list_iterator->v[i]);
-					printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
+					//printf("predkosci (max i zadane): %f\t %f\n", v_max_zyz[i], pose_list_iterator->v[i]);
+					//printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
 					pose_list_iterator->v_r[i] = v_max_zyz[i] * pose_list_iterator->v[i];
 					pose_list_iterator->a_r[i] = a_max_zyz[i] * pose_list_iterator->a[i];
 				}
@@ -797,7 +818,7 @@ void smooth2::calculate(void) {
 
 		for(i=0;i<MAX_SERVOS_NR;i++) {//zapisanie coordinate_delta
 			td.coordinate_delta[i] = pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i];
-
+			printf("delta : coordinates %f i start_position %f\n",pose_list_iterator->coordinates[i], pose_list_iterator->start_position[i]);
 		}
 
 		for (i = 0; i < MAX_SERVOS_NR; i++) {//zapisanie v_r_next
@@ -809,19 +830,22 @@ void smooth2::calculate(void) {
 				temp = pose_list_iterator->k[i];
 				next_pose_list_ptr();
 
+				printf("coordinates %f i start_position %f\n",pose_list_iterator->coordinates[i], pose_list_iterator->start_position[i]);
 				if(pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i] < 0) {//nadpisanie k dla nastepnego ruchu
-					pose_list_iterator->k[i]=-1;
-		        }
-		        else {
-		        	pose_list_iterator->k[i]=1;
+					//printf("nadpisanie k dla ruchu nastepnego w osi %d na -1\n", i);
+					pose_list_iterator->k[i] = -1;
+				} else {
+					//printf("nadpisanie k dla ruchu nastepnego w osi %d na 1\n", i);
+		        	pose_list_iterator->k[i] = 1;
 		        }
 
 				if (pose_list_iterator->k[i] != temp) {
+					//printf("ustawianie v_r_next w osi %d\n", i);
 					v_r_next[i] = 0;
 				} else {
 					v_r_next[i] = v_max_zyz[i] * pose_list_iterator->v[i];
 				}
-				printf("ruch nieostatni, nastepna predkosc: %f\n", v_max_zyz[i] * pose_list_iterator->v[i]);
+				//printf("ruch nieostatni, nastepna predkosc: %f\n", v_max_zyz[i] * pose_list_iterator->v[i]);
 				prev_pose_list_ptr();
 			}
 		}
@@ -842,7 +866,7 @@ void smooth2::calculate(void) {
 		for (i = 0; i < MAX_SERVOS_NR; i++) { //petla w ktorej obliczany jest czas dla kazdej osi i sprawdzane jest czy da sie wykonac ruch w zalozonych etapach
 
 			if (s[i] < 0.001) {//najmniejsza wykrywalna droga
-				printf("droga 0 %d\n", i);
+				//printf("droga 0 %d\n", i);
 				continue;
 			}
 
@@ -872,10 +896,6 @@ void smooth2::calculate(void) {
 
 				pose_list_iterator->v_k[i] = v_r_next[i];
 
-				if (t[i] > t_max) {//napisanie najdluzszego czasu
-					t_max = t[i];
-				}
-
             } else if (pose_list_iterator->v_p[i] < pose_list_iterator->v_r[i] && (v_r_next[i] > pose_list_iterator->v_r[i] || eq(v_r_next[i], pose_list_iterator->v_r[i]))) { // drugi model
 
 			} else if (eq(pose_list_iterator->v_p[i], pose_list_iterator->v_r[i]) && (v_r_next[i] > pose_list_iterator->v_r[i] || eq(v_r_next[i], pose_list_iterator->v_r[i]))) { //trzeci model
@@ -883,13 +903,28 @@ void smooth2::calculate(void) {
 			} else if (eq(pose_list_iterator->v_p[i], pose_list_iterator->v_r[i]) && v_r_next[i] < pose_list_iterator->v_r[i]) { //czwarty model
 				printf("czwarty model\n");
 
+				s_temp1[i] = 0.5 * pose_list_iterator->a_r[i] * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]) * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]);
+				printf("s_temp1: %f\n", s_temp1[i]);
 
+				if (s_temp1[i] > s[i]) {
+					printf("redukcja predkosci w osi %d\n", i);
+				} else {
+					t_temp1 = (pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i];
 
-				printf("czas\t\tv_r\t\tv_r_next\ta_r\t\tv_p\n");
-									printf("%f\t%f\t%f\t%f\t%f\n", t[i], pose_list_iterator->v_r[i], v_r_next[i], pose_list_iterator->a_r[i], pose_list_iterator->v_p[i]);
+					printf("t_temp1: %f\n", t_temp1);
 
+					t[i] = t_temp1 + (s[i] - s_temp1[i])/pose_list_iterator->v_r[i];
+
+					printf("czas\t\tv_r\t\tv_r_next\ta_r\t\tv_p\n");
+					printf("%f\t%f\t%f\t%f\t%f\n", t[i], pose_list_iterator->v_r[i], v_r_next[i], pose_list_iterator->a_r[i], pose_list_iterator->v_p[i]);
+
+				}
 			} else {
 				printf("\n ten przypadek nigdy nie moze wystapic\n");
+			}
+
+			if (t[i] > t_max) {//nadpisanie najdluzszego czasu
+				t_max = t[i];
 			}
 		}
 
