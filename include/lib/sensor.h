@@ -126,7 +126,7 @@ typedef struct sensor_image_t
 		//spots recognition
 		struct sp_r_t
 		{
-			double x[4], y[4], z[4], dz;
+			double x[4], y[4], z[4], dz, x_sr, y_sr;
 			int pic_count;
 		} sp_r;
 

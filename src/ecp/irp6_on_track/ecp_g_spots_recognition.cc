@@ -100,6 +100,9 @@ void spots::get_pic()
 		calib_data.sensor_union.sp_r.y[i] = sensor->from_vsp.comm_image.sensor_union.sp_r.y[i];
 		calib_data.sensor_union.sp_r.z[i] = sensor->from_vsp.comm_image.sensor_union.sp_r.z[i];
 	}
+
+	calib_data.sensor_union.sp_r.x_sr = sensor->from_vsp.comm_image.sensor_union.sp_r.x_sr;
+	calib_data.sensor_union.sp_r.y_sr = sensor->from_vsp.comm_image.sensor_union.sp_r.y_sr;
 }
 
 void spots::compute_TCE()
@@ -140,9 +143,9 @@ void spots::compute_TCE()
 		vec_mean[i] = 0.25*(vec_cam1[i]+vec_cam2[i]+vec_cam3[i]+vec_cam4[i]);
 	sdata.add_vec_cam(vec_mean);
 
-	cout << "tce=[ " << endl;
-	print_matrix(tce);
-	cout << "];" << endl;
+//	cout << "tce=[ " << endl;
+//	print_matrix(tce);
+//	cout << "];" << endl;
 /*
 	cout << "vec1 = [" << vec_cam1[0] << "  " << vec_cam1[1] << "  " << vec_cam1[2] << " 1 ]'" << endl;
     cout << "vec2 = [" << vec_cam2[0] << "  " << vec_cam2[1] << "  " << vec_cam2[2] << " 1 ]'" << endl;
@@ -188,6 +191,11 @@ void spots::save_position()
 		vec[i] = tpg[4*i+3];
 	vec[3] = 1;
 	sdata.add_vec_ground(vec);
+
+
+	cout << "%Do minim:" << endl;
+	cout << calib_data.sensor_union.sp_r.x_sr << "  " << calib_data.sensor_union.sp_r.y_sr << "  ";
+	cout << tpg[3] << "  " << tpg[7] << "  " << tpg[11] << "  %pomiar" << endl;
 }
 
 void spots::print_matrix(double m[12])
