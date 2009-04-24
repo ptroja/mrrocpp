@@ -220,6 +220,7 @@ struct ECP_VSP_MSG
 
 		//spots recognition
 		short command;
+		double plate_pos[3];
 
 		//PW Scene_Recognition
 		SR_COMMAND sc_command;
