@@ -48,6 +48,16 @@ bool spots::next_step()
 	if(iter == 0) //first time next_step
 	{
 	    get_frame(teg);
+
+		double tpe[12], tpg[12];
+		c->get_tpe(tpe);
+		common::T_MatrixManip Tpe_mm(tpe);
+		Tpe_mm.multiply_l_matrix4x4(teg, tpg);
+
+		sensor->to_vsp.plate_pos[0] = tpg[3];
+		sensor->to_vsp.plate_pos[1] = tpg[7];
+		sensor->to_vsp.plate_pos[2] = tpg[11];
+
 	    iter++;
 	    return true;
 	}
@@ -180,22 +190,22 @@ void spots::save_position()
 	compute_TCE();
 	compute_TCG(tcg_local);
 
-	sdata.add_tcg(tcg_local);
+	//sdata.add_tcg(tcg_local);
 
-	double tpe[12], tpg[12], vec[4];
-	c->get_tpe(tpe);
-	common::T_MatrixManip Tpe_mm(tpe);
-	Tpe_mm.multiply_l_matrix4x4(teg, tpg);
+//	double tpe[12], tpg[12], vec[4];
+//	c->get_tpe(tpe);
+//	common::T_MatrixManip Tpe_mm(tpe);
+//	Tpe_mm.multiply_l_matrix4x4(teg, tpg);
 
-	for(int i=0; i<3; i++)
-		vec[i] = tpg[4*i+3];
-	vec[3] = 1;
-	sdata.add_vec_ground(vec);
+//	for(int i=0; i<3; i++)
+//		vec[i] = tpg[4*i+3];
+//	vec[3] = 1;
+//	sdata.add_vec_ground(vec);
 
 
-	cout << "%Do minim:" << endl;
-	cout << calib_data.sensor_union.sp_r.x_sr << "  " << calib_data.sensor_union.sp_r.y_sr << "  ";
-	cout << tpg[3] << "  " << tpg[7] << "  " << tpg[11] << "  %pomiar" << endl;
+//	cout << "%Do minim:" << endl;
+//	cout << calib_data.sensor_union.sp_r.x_sr << "  " << calib_data.sensor_union.sp_r.y_sr << "  ";
+//	cout << tpg[3] << "  " << tpg[7] << "  " << tpg[11] << "  %pomiar" << endl;
 }
 
 void spots::print_matrix(double m[12])
@@ -206,21 +216,23 @@ void spots::print_matrix(double m[12])
 	cout << "0 0 0 1" << endl;
 }
 
-double spots::move_and_return(double pos_hist)
+bool spots::move_and_return(double pos_hist[12])
 {
-	double ret[12];
-	double sum=0.;
+	bool ret = 0;
+	double sum = 0.;
+	double pos[12];
 
-	get_frame(ret);
+	get_frame(pos);
 
-	for (int i=3; i<12; i+=4)
-		sum += (ret[i]*ret[i]);
+	for (int i=0; i<12; i++)
+		sum += fabs(pos[i]-pos_hist[i]);
 
-	if(fabs(sum-pos_hist) < 0.01)
-		return 0.;
+	if(sum < 0.1)
+		return false;
 
 	Move();
-	return sum;
+	memcpy(pos_hist, pos, 12*sizeof(double));
+	return true;
 
 }
 

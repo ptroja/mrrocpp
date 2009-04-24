@@ -48,7 +48,7 @@ class spots : public common::generator::generator
 	void compute_TCG(double[12]);
 	void save_position();
 
-	double move_and_return(double);
+	bool move_and_return(double *);
 };
 
 }

@@ -64,14 +64,10 @@ if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	// Create smooth generator.
 	smooth = new common::generator::smooth(*this, true, false);
 
-//<<<<<<< .mine
+
 	nose = new common::generator::tff_nose_run(*this, 8);
 	nose->configure_pulse_check (true);
-//	befg = new common::generator::bias_edp_force(*this);
-//=======
-	//nose = new common::generator::y_nose_run_force(*this);
 
-//>>>>>>> .r2096
 
 }
 
@@ -82,14 +78,14 @@ void spots_recognition::main_task_algorithm(void)
 	    	 * smooth generator odczytuje trajektorie z pliku
 	    	 * po czym przesuwa sie do poczatkowej pozycji
 	 */
-	double pos;
+	double pos_hist[12];
+	bool cond;
 
 	smooth->load_file_with_path(trajektoria_poczatkowa);
-	smooth->Move();
+//	smooth->Move();
     sr_ecp_msg->message("Insert the plate");
 
     int iter = 0;
-	double pos_hist = 0;
     while(1)
     {
     	iter++;
@@ -110,12 +106,11 @@ void spots_recognition::main_task_algorithm(void)
 	    /*!
 	     * zrob zdjecia, dokonaj obliczen
 	     */
-	    pos = generator->move_and_return(pos_hist);
+	    cond = generator->move_and_return(pos_hist);
 
-	    if(pos == 0.)
+	    if(cond == false)
 	    	break;
-	    pos_hist = pos;
-	    sleep(2);
+	    sleep(1);
 
     }
 	smooth->load_file_with_path(trajektoria_koncowa);
