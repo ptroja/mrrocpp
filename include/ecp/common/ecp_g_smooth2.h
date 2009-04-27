@@ -66,6 +66,7 @@ class smooth2 : public delta {
 
 		int type; //1 - polozenie bezwzgledne , 2 - polozenie przyrostowe
 		bool first_coordinate;
+		float distance_eps;
 
 		bool trajectory_generated;
 

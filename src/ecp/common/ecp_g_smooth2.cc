@@ -463,6 +463,7 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
 	coordinate_list = new std::list<coordinates>();
 
 	trajectory_generated = false;
+	distance_eps = 0.001;
 
 	int size = 1 + strlen(ecp_t.mrrocpp_network_path) + strlen("data/a_v_max.txt");
 	char * path1 = new char[size];
@@ -730,21 +731,12 @@ void smooth2::calculate(void) {
 				for (i = 0; i < 6; i++) {
 					temp = pose_list_iterator->coordinates[i];
 					pose_list_iterator->start_position[i] = the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];//pierwsze przypisanie start_position
-					if (!is_last_list_element()) {
+					if (!is_last_list_element()) {		   //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu zadzialalo
 						next_pose_list_ptr();
 						pose_list_iterator->start_position[i] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
 						prev_pose_list_ptr();							//pozycje startowa nowego ruchu
 					}
 				}
-
-				/*for (i = 0; i < MAX_SERVOS_NR; i++) {
-					temp = pose_list_iterator->v_k[i];
-					if (!is_last_list_element()) {
-						next_pose_list_ptr();
-						pose_list_iterator->v_p[i] = temp; //koncowa predkosc poprzedniego ruchu jest poczatkowa
-						prev_pose_list_ptr();					//predkoscia nowego ruchu
-					}
-				}*/
 
 				pose_list_iterator->start_position[6] = the_robot->EDP_data.current_gripper_coordinate;
 				pose_list_iterator->start_position[7] = 0.0;//TODO sprawdzic czy tutaj ma byc 0
@@ -777,7 +769,7 @@ void smooth2::calculate(void) {
 
 		} else { // end: if(first_interval)
 			switch (td.arm_type) {
-
+			//tutaj jestesmy jeszcze ciagle w poprzedniej pozycji pose_list
 			case lib::XYZ_EULER_ZYZ:
 				for (i = 0; i < 6; i++) {
 					temp = pose_list_iterator->coordinates[i];
@@ -797,7 +789,7 @@ void smooth2::calculate(void) {
 					}
 				}
 
-				next_pose_list_ptr(); //inkrementacja iteratora listy pose_list
+				next_pose_list_ptr(); //GLOWNA INKREMENTACJA iteratora listy pose_list (bez powrotu)
 
 				pose_list_iterator->start_position[6] = the_robot->EDP_data.current_gripper_coordinate;
 				pose_list_iterator->start_position[7] = 0.0;//TODO sprawdzic czy tutaj ma byc 0
@@ -818,7 +810,7 @@ void smooth2::calculate(void) {
 
 		for(i=0;i<MAX_SERVOS_NR;i++) {//zapisanie coordinate_delta
 			td.coordinate_delta[i] = pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i];
-			printf("delta : coordinates %f i start_position %f\n",pose_list_iterator->coordinates[i], pose_list_iterator->start_position[i]);
+			//printf("delta : coordinates %f i start_position %f\n",pose_list_iterator->coordinates[i], pose_list_iterator->start_position[i]);
 		}
 
 		for (i = 0; i < MAX_SERVOS_NR; i++) {//zapisanie v_r_next
@@ -858,20 +850,24 @@ void smooth2::calculate(void) {
 		//obliczenie drogi dla kazdej osi
 		for (i = 0; i < MAX_SERVOS_NR; i++) {
 			s[i]=fabs(pose_list_iterator->coordinates[i] - pose_list_iterator->start_position[i]);
-			printf("%f\n", s[i]);
+			printf("droga dla osi %d = %f\n", i, s[i]);
 		}
 		//sprawdzanie czy droga w etapach przyspieszenia i hamowania nie jest wieksza niz droga calego ruchu
 
 		//warunki na modele ruchu dla wszystkich osi
 		for (i = 0; i < MAX_SERVOS_NR; i++) { //petla w ktorej obliczany jest czas dla kazdej osi i sprawdzane jest czy da sie wykonac ruch w zalozonych etapach
 
-			if (s[i] < 0.001) {//najmniejsza wykrywalna droga
+			if (s[i] < distance_eps) {//najmniejsza wykrywalna droga
 				//printf("droga 0 %d\n", i);
+				t[i] = 0;
 				continue;
 			}
 
 			if (pose_list_iterator->v_p[i] < pose_list_iterator->v_r[i] && v_r_next[i] < pose_list_iterator->v_r[i]) { //pierwszy model
-				printf("pierwszy model (droga) %d\n", i);
+				printf("pierwszy model w osi %d\n", i);
+
+				pose_list_iterator->model[i] = 1;
+
 				s_temp1[i] = 0.5 * pose_list_iterator->a_r[i] * ((pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i]) * ((pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i]);
 				s_temp2[i] = 0.5 * pose_list_iterator->a_r[i] * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]) * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]);
 
@@ -881,6 +877,7 @@ void smooth2::calculate(void) {
 					printf("redukcja predkosci w osi %d\n", i);
 					//nadpisanie v_r (ruch bedzie 2 etapowy)
 					//obliczenie czasu
+					s_temp2[i] = 0;
 				} else {//droga przyspieszenia i opoznienia nie przekracza drogi ruchu
 					t_temp1 = (pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i];
 					t_temp2 = (pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i];
@@ -894,14 +891,30 @@ void smooth2::calculate(void) {
 
 				}
 
+				pose_list_iterator->s_przysp[i] = s_temp1[i];
+				pose_list_iterator->s_jedn[i] = s_temp2[i];
+
 				pose_list_iterator->v_k[i] = v_r_next[i];
 
             } else if (pose_list_iterator->v_p[i] < pose_list_iterator->v_r[i] && (v_r_next[i] > pose_list_iterator->v_r[i] || eq(v_r_next[i], pose_list_iterator->v_r[i]))) { // drugi model
+            	printf("drugi model w osi %d\n", i);
 
+            	pose_list_iterator->model[i] = 2;
+
+				//pose_list_iterator->s_przysp[i] = s_temp1[i];
+				//pose_list_iterator->s_jedn[i] = s[i] - s_temp1[i];
 			} else if (eq(pose_list_iterator->v_p[i], pose_list_iterator->v_r[i]) && (v_r_next[i] > pose_list_iterator->v_r[i] || eq(v_r_next[i], pose_list_iterator->v_r[i]))) { //trzeci model
+				printf("drugi model w osi %d\n", i);
+
+				pose_list_iterator->model[i] = 3;
+
+				pose_list_iterator->s_przysp[i] = 0;
+				pose_list_iterator->s_jedn[i] = s[i];
 
 			} else if (eq(pose_list_iterator->v_p[i], pose_list_iterator->v_r[i]) && v_r_next[i] < pose_list_iterator->v_r[i]) { //czwarty model
-				printf("czwarty model\n");
+				printf("czwarty model w osi %d\n", i);
+
+				pose_list_iterator->model[i] = 4;
 
 				s_temp1[i] = 0.5 * pose_list_iterator->a_r[i] * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]) * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]);
 				printf("s_temp1: %f\n", s_temp1[i]);
@@ -919,6 +932,10 @@ void smooth2::calculate(void) {
 					printf("%f\t%f\t%f\t%f\t%f\n", t[i], pose_list_iterator->v_r[i], v_r_next[i], pose_list_iterator->a_r[i], pose_list_iterator->v_p[i]);
 
 				}
+
+				pose_list_iterator->s_przysp[i] = 0;
+				pose_list_iterator->s_jedn[i] = s[i] - s_temp1[i];
+
 			} else {
 				printf("\n ten przypadek nigdy nie moze wystapic\n");
 			}
@@ -933,17 +950,38 @@ void smooth2::calculate(void) {
 	    {
 	        t_max = ceil(t_max/tk);
 	        t_max = t_max*tk;
+	        printf("t_max = %f\n", t_max);
 	    }
 
 		pose_list_iterator->interpolation_node_no = (int)round(t_max / tk);
+		printf("liczba makrokrokow w ruchu %d\n", pose_list_iterator->interpolation_node_no);
 
 		for (i = 0; i < MAX_SERVOS_NR; i++) {
 
-			if (t[i] < t_max) {//redukcja predkosci w danej osi
-				//redukcja predkosci i przypisanie jedn, przysp
-			} else {
-				//zapisanie jedn przysp
+			printf("czas ruchu w osi %d = %f\n", i, t[i]);
 
+			if (s[i] < distance_eps || t[i] == 0) {//jesli droga jest mniejsza od najmniejszej wykrywalnej albo czas jest rowny 0
+				//printf("droga 0 (koncowe obliczenia) w osi %d\n", i);
+				pose_list_iterator->przysp[i] = 0;
+				pose_list_iterator->jedn[i] = 0;
+				continue;
+			}
+
+			if (fabs(t[i] - t_max) > tk) {//redukcja predkosci w danej osi
+				//redukcja predkosci i przypisanie jedn, przysp
+				printf("redukcja predkosci z powodu czasu w osi %d\n", i);
+			} else {
+				printf("normalne zapisanie jedn i przysp w osi %d\n", i);
+				if (pose_list_iterator->k[i] == 1) {
+					pose_list_iterator->przysp[i] = pose_list_iterator->start_position[i] + pose_list_iterator->s_przysp[i];
+					pose_list_iterator->jedn[i] = pose_list_iterator->przysp[i] + pose_list_iterator->s_jedn[i];
+				} else if (pose_list_iterator->k[i] == -1) {
+					pose_list_iterator->przysp[i] = pose_list_iterator->start_position[i] - pose_list_iterator->s_przysp[i];
+					pose_list_iterator->jedn[i] = pose_list_iterator->przysp[i] - pose_list_iterator->s_jedn[i];
+				}
+
+				printf("s: %f\n s_przysp: %f\t s_jedn: %f\n", s[i], pose_list_iterator->s_przysp[i], pose_list_iterator->s_jedn[i]);
+				printf("przysp: %f\t jedn: %f\n", pose_list_iterator->przysp[i], pose_list_iterator->jedn[i]);
 			}
 		}
     }
