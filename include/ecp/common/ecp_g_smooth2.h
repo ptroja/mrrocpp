@@ -74,7 +74,7 @@ class smooth2 : public delta {
 		void generate_cords();
 
 		void calculate(void);
-		//void generate_next_coords(void);
+		double generate_next_coords(double start_position, int node_counter, double v_p, double v_r, double v_k, double a_r, int k, double przysp, double jedn, double s_przysp, double s_jedn, double t_max);
 
 		//metody zwiazane z pose_list
 		void flush_pose_list(void);
