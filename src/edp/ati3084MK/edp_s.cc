@@ -206,10 +206,10 @@ void ATI3084_force::initiate_reading(void)
 		if (master.force_tryb == 2 && gravity_transformation)
 		{
 			for(int i=0;i<3;i++)
-				ft_table[i]/=20;
+				ft_table[i]/=20;// 10/115
 			//			for(int i=3;i<6;i++) ft_table[i]/=333;
 			for(int i=3;i<6;i++)
-				ft_table[i]/=1000; // by Y - korekta
+				ft_table[i]/=1000; // by Y - korekta 5/1000
 			lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
 			// lib::Homog_matrix frame(master.force_current_end_effector_frame);
 			double* output = gravity_transformation->getForce (ft_table, frame);
