@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------
+ // -------------------------------------------------------------------------
 //                            ecp_g_smooth2.cc
 //            Effector Control Process (lib::ECP) - smooth2 generator
 // generator powstal na podstawie generatora smooth, glowna zmiana jest
@@ -45,11 +45,13 @@ bool smooth2::eq(double a, double b) {
 	return diff < EPS && diff > -EPS;
 }
 
-double smooth2::generate_next_coords(double start_position, int node_counter, double v_p, double v_r, double v_k, double a_r, int k, double przysp, double jedn, double s_przysp, double s_jedn, double t_max) {
+double smooth2::generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r,
+									double v_k, double a_r, int k, double przysp, double jedn, double s_przysp, double s_jedn, double t_max) {
 	//next_position[1] -= 0.002;
     //funkcja obliczajaca polozenie w danym makrokroku
 
 	double next_position;
+
 
     double tk=10*STEP;
 
@@ -57,13 +59,14 @@ double smooth2::generate_next_coords(double start_position, int node_counter, do
         { //pierwszy etap
             if(v_p <= v_r)
             { //przyspieszanie w pierwszym etapie
-
+            	printf("start pos: %f\t node counter: %d\n", start_position, node_counter);
+            	printf(" przyspieszanie ");
                 next_position = start_position +
                                    k*(node_counter*v_p*tk + node_counter*node_counter*a_r*tk*tk/2);
             }
             else
             { //hamowanie w pierwszym etapie, nierealne
-
+            	printf("hamowanie w pierwszym etapie - nieralne BLAD!!\n");
                 next_position = start_position +
                                    k*((node_counter*tk*v_p) -
                                          (node_counter*node_counter*tk*tk*a_r/2));
@@ -71,14 +74,15 @@ double smooth2::generate_next_coords(double start_position, int node_counter, do
         }
         else if(node_counter <= jedn)
         { // drugi etap - ruch jednostajny
+        	printf(" jednostajny ");
             next_position = start_position +
                                k*(s_przysp + (node_counter*tk - fabs(v_r-v_p)/a_r)*v_r);
         }
-        else if(node_counter <= td.interpolation_node_no)
+        else if(node_counter <= interpolation_node_no)
         { //trzeci etap
             if(v_k <= v_r)
             { //hamowanie w trzecim etapie
-
+            	printf(" hamowanie ");
                 next_position = start_position +
                                    k*(s_przysp + s_jedn +
                                          (node_counter*tk + fabs(v_r-v_k)/a_r - t_max)*v_r -
@@ -86,7 +90,7 @@ double smooth2::generate_next_coords(double start_position, int node_counter, do
             }
             else
             { //przyspieszanie w trzecim etapie
-
+            	printf("przyspieszanie w trzecim etapie - nieralne BLAD!!\n");
                 next_position = start_position +
                                    k*(s_przysp + s_jedn +
                                          (node_counter*tk + fabs(v_r-v_k)/a_r - t_max)*v_r +
@@ -273,7 +277,7 @@ void smooth2::get_pose(void) {
 //						final_position[i]+=start_position[i];
 
 }
-// -------------------------------------------------------
+// -------------------------------------------position[i]------------
 void smooth2::set_pose (lib::POSE_SPECIFICATION ps, double vv[MAX_SERVOS_NR], double aa[MAX_SERVOS_NR], double c[MAX_SERVOS_NR]) {
     pose_list_iterator->arm_type = ps;
     memcpy(pose_list_iterator->coordinates, c, MAX_SERVOS_NR*sizeof(double));
@@ -495,25 +499,44 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
 void smooth2::generate_cords() {
 
 	double coordinate[MAX_SERVOS_NR];
+	//double position[MAX_SERVOS_NR];
+	int private_node_counter = 0;
+	initiate_pose_list();
 	for (int j = 0; j < pose_list_length(); j++) {
+
+		/*for (int k = 0; k < MAX_SERVOS_NR; k++) {
+			position[k] = pose_list_iterator->start_position[k];
+		}*/
+
 		for (int z = 0; z < pose_list_iterator->interpolation_node_no; z++) {
 			for (int i = 0; i < 6; i++) {
-				coordinate[i] = generate_next_coords(pose_list_iterator->start_position[i],
-				node_counter,
-				pose_list_iterator->v_p[i],
-				pose_list_iterator->v_r[i],
-				pose_list_iterator->v_k[i],
-				pose_list_iterator->a_r[i],
-				pose_list_iterator->k[i],
-				pose_list_iterator->przysp[i],
-				pose_list_iterator->jedn[i],
-				pose_list_iterator->s_przysp[i],
-				pose_list_iterator->s_jedn[i],
-				pose_list_iterator->t);
+
+				if (fabs(pose_list_iterator->start_position[i] - pose_list_iterator->coordinates[i]) < distance_eps) {
+					coordinate[i] = pose_list_iterator->start_position[i];
+					//printf("start pozycja %f\n", pose_list_iterator->start_position[i]);
+				} else {
+					coordinate[i] = generate_next_coords(private_node_counter,
+							pose_list_iterator->interpolation_node_no,
+							pose_list_iterator->start_position[i],
+							pose_list_iterator->v_p[i],
+							pose_list_iterator->v_r[i],
+							pose_list_iterator->v_k[i],
+							pose_list_iterator->a_r[i],
+							pose_list_iterator->k[i],
+							pose_list_iterator->przysp[i],
+							pose_list_iterator->jedn[i],
+							pose_list_iterator->s_przysp[i],
+							pose_list_iterator->s_jedn[i],
+							pose_list_iterator->t);
+					//position[i] = coordinate[i];
+				}
 			}
-			//coordinate_list->push_back(coordinates(coordinate));
-			//printf("%f\n", coordinate[1]);
+			private_node_counter++;
+			coordinate_list->push_back(coordinates(coordinate));
+			//printf("%f\t", coordinate[1]);
 		}
+		private_node_counter = 0;
+		next_pose_list_ptr();
 	}
 
 	/*initiate_coordinate_list();
@@ -523,7 +546,7 @@ void smooth2::generate_cords() {
 		coordinate_list_iterator++;
 	}*/
 
-	coordinate[0] = 0.800;
+	/*coordinate[0] = 0.800;
 	coordinate[1] = -0.288;
 	coordinate[2] = 0.435;
 	coordinate[3] = -1.136;
@@ -531,7 +554,7 @@ void smooth2::generate_cords() {
 	coordinate[5] = 2.351;
 	coordinate[6] = 0.074;
 
-	coordinate_list->push_back(coordinates(coordinate));
+	coordinate_list->push_back(coordinates(coordinate));*/
 
 	/*int i;
 
@@ -753,7 +776,7 @@ void smooth2::calculate(void) {
 			switch (td.arm_type) {
 
 			case lib::XYZ_EULER_ZYZ:
-				printf("euler w first_interval\n");
+				//printf("euler w first_interval\n");
 				for (i = 0; i < 6; i++) {
 					temp = pose_list_iterator->coordinates[i];
 					pose_list_iterator->start_position[i] = the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];//pierwsze przypisanie start_position
@@ -848,7 +871,7 @@ void smooth2::calculate(void) {
 				temp = pose_list_iterator->k[i];
 				next_pose_list_ptr();
 
-				printf("coordinates %f i start_position %f\n",pose_list_iterator->coordinates[i], pose_list_iterator->start_position[i]);
+				//printf("coordinates %f i start_position %f\n",pose_list_iterator->coordinates[i], pose_list_iterator->start_position[i]);
 				if(pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i] < 0) {//nadpisanie k dla nastepnego ruchu
 					//printf("nadpisanie k dla ruchu nastepnego w osi %d na -1\n", i);
 					pose_list_iterator->k[i] = -1;
@@ -890,17 +913,17 @@ void smooth2::calculate(void) {
 			}
 
 			if (pose_list_iterator->v_p[i] < pose_list_iterator->v_r[i] && v_r_next[i] < pose_list_iterator->v_r[i]) { //pierwszy model
-				//printf("pierwszy model w osi %d\n", i);
+				printf("pierwszy model w osi %d\n", i);
 
 				pose_list_iterator->model[i] = 1;
 
 				s_temp1[i] = 0.5 * pose_list_iterator->a_r[i] * ((pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i]) * ((pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i]);
 				s_temp2[i] = 0.5 * pose_list_iterator->a_r[i] * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]) * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]);
 
-				//printf("s_temp1: %f\ts_temp2: %f\n", s_temp1[i], s_temp2[i]);
+				printf("s_temp1: %f\ts_temp2: %f\n", s_temp1[i], s_temp2[i]);
 
 				if (s_temp1[i] + s_temp2[i] > s[i]) {
-					//printf("redukcja predkosci w osi %d\n", i);
+					printf("redukcja predkosci w osi %d\n", i);
 					//nadpisanie v_r (ruch bedzie 2 etapowy)
 					//obliczenie czasu
 					s_temp2[i] = 0;
@@ -908,7 +931,7 @@ void smooth2::calculate(void) {
 					t_temp1 = (pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i];
 					t_temp2 = (pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i];
 
-					//printf("t_temp1: %f\tt_temp2: %f\n", t_temp1, t_temp2);
+					printf("t_temp1: %f\tt_temp2: %f\n", t_temp1, t_temp2);
 
 					t[i] = t_temp1 + t_temp2 + (s[i] - (s_temp1[i] + s_temp2[i]))/pose_list_iterator->v_r[i];
 
@@ -923,14 +946,14 @@ void smooth2::calculate(void) {
 				pose_list_iterator->v_k[i] = v_r_next[i];
 
             } else if (pose_list_iterator->v_p[i] < pose_list_iterator->v_r[i] && (v_r_next[i] > pose_list_iterator->v_r[i] || eq(v_r_next[i], pose_list_iterator->v_r[i]))) { // drugi model
-            	//printf("drugi model w osi %d\n", i);
+            	printf("drugi model w osi %d\n", i);
 
             	pose_list_iterator->model[i] = 2;
 
 				//pose_list_iterator->s_przysp[i] = s_temp1[i];
 				//pose_list_iterator->s_jedn[i] = s[i] - s_temp1[i];
 			} else if (eq(pose_list_iterator->v_p[i], pose_list_iterator->v_r[i]) && (v_r_next[i] > pose_list_iterator->v_r[i] || eq(v_r_next[i], pose_list_iterator->v_r[i]))) { //trzeci model
-				//printf("drugi model w osi %d\n", i);
+				printf("drugi model w osi %d\n", i);
 
 				pose_list_iterator->model[i] = 3;
 
@@ -938,19 +961,19 @@ void smooth2::calculate(void) {
 				pose_list_iterator->s_jedn[i] = s[i];
 
 			} else if (eq(pose_list_iterator->v_p[i], pose_list_iterator->v_r[i]) && v_r_next[i] < pose_list_iterator->v_r[i]) { //czwarty model
-				//printf("czwarty model w osi %d\n", i);
+				printf("czwarty model w osi %d\n", i);
 
 				pose_list_iterator->model[i] = 4;
 
 				s_temp1[i] = 0.5 * pose_list_iterator->a_r[i] * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]) * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]);
-				//printf("s_temp1: %f\n", s_temp1[i]);
+				printf("s_temp1: %f\n", s_temp1[i]);
 
 				if (s_temp1[i] > s[i]) {
 					//printf("redukcja predkosci w osi %d\n", i);
 				} else {
 					t_temp1 = (pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i];
 
-					//printf("t_temp1: %f\n", t_temp1);
+					printf("t_temp1: %f\n", t_temp1);
 
 					t[i] = t_temp1 + (s[i] - s_temp1[i])/pose_list_iterator->v_r[i];
 
@@ -980,7 +1003,7 @@ void smooth2::calculate(void) {
 	    }
 
 		pose_list_iterator->interpolation_node_no = (int)round(t_max / tk);
-		//printf("liczba makrokrokow w ruchu %d\n", pose_list_iterator->interpolation_node_no);
+		printf("liczba makrokrokow w ruchu %d\n", pose_list_iterator->interpolation_node_no);
 
 		for (i = 0; i < MAX_SERVOS_NR; i++) {
 
@@ -994,23 +1017,36 @@ void smooth2::calculate(void) {
 			}
 
 			if (fabs(t[i] - t_max) >= tk) {//redukcja predkosci w danej osi
-				//redukcja predkosci i przypisanie jedn, przysp
+				//redukcja predkosci
 				//printf("redukcja predkosci z powodu czasu w osi %d\n", i);
-			} else {
-				//printf("normalne zapisanie jedn i przysp w osi %d\n", i);
-				if (pose_list_iterator->k[i] == 1) {
-					pose_list_iterator->przysp[i] = pose_list_iterator->start_position[i] + pose_list_iterator->s_przysp[i];
-					pose_list_iterator->jedn[i] = pose_list_iterator->przysp[i] + pose_list_iterator->s_jedn[i];
-				} else if (pose_list_iterator->k[i] == -1) {
-					pose_list_iterator->przysp[i] = pose_list_iterator->start_position[i] - pose_list_iterator->s_przysp[i];
-					pose_list_iterator->jedn[i] = pose_list_iterator->przysp[i] - pose_list_iterator->s_jedn[i];
-				}
-
-				//printf("s: %f\n s_przysp: %f\t s_jedn: %f\n", s[i], pose_list_iterator->s_przysp[i], pose_list_iterator->s_jedn[i]);
-				//printf("przysp: %f\t jedn: %f\n", pose_list_iterator->przysp[i], pose_list_iterator->jedn[i]);
 			}
+
+			printf("normalne zapisanie jedn i przysp w osi %d\n", i);
+
+			pose_list_iterator->przysp[i]=fabs((pose_list_iterator->v_r[i]-pose_list_iterator->v_p[i])/(pose_list_iterator->a_r[i]*tk));//zapisanie makrokroku w ktorym konczy sie przyspieszanie
+			pose_list_iterator->jedn[i]=(t_max-(fabs(pose_list_iterator->v_r[i]-pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i]))/tk;//zapisaine makrokroku w ktorym konczy sie jednostajny
+
+			/*if (pose_list_iterator->k[i] == 1) { //jesli przysp i jedn bylyby drogami w danych etapach a nie numerami makrokrokow... to to jest valid..
+				pose_list_iterator->przysp[i] = pose_list_iterator->start_position[i] + pose_list_iterator->s_przysp[i];
+				pose_list_iterator->jedn[i] = pose_list_iterator->przysp[i] + pose_list_iterator->s_jedn[i];
+			} else if (pose_list_iterator->k[i] == -1) {
+				pose_list_iterator->przysp[i] = pose_list_iterator->start_position[i] - pose_list_iterator->s_przysp[i];
+				pose_list_iterator->jedn[i] = pose_list_iterator->przysp[i] - pose_list_iterator->s_jedn[i];
+			}*/
+
+			//printf("s: %f\n s_przysp: %f\t s_jedn: %f\n", s[i], pose_list_iterator->s_przysp[i], pose_list_iterator->s_jedn[i]);
+			//printf("przysp: %f\t jedn: %f\n", pose_list_iterator->przysp[i], pose_list_iterator->jedn[i]);
+
 		}
-		//TODO dac tutaj drukowanie taught in pose
+		int os = 1;
+		printf("\n=============== pozycja trajektorii nr %d ==================\n", j);
+		printf("coordinates: %f\n", pose_list_iterator->coordinates[os]);
+		printf("jedn: %f\t przysp: %f\n", pose_list_iterator->jedn[os], pose_list_iterator->przysp[os]);
+		printf("start pos: %f\t kierunek (k): %f\n", pose_list_iterator->start_position[os], pose_list_iterator->k[os]);
+		printf("s: %f\ns_przysp: %f\t s_jedn: %f\n", s[os], pose_list_iterator->s_przysp[os], pose_list_iterator->s_jedn[os]);
+		printf("czas\t\tv_r\t\tv_r_next\ta_r\t\tv_p\t\tv_k\n");
+		printf("%f\t%f\t%f\t%f\t%f\t%f\n\n", t[os], pose_list_iterator->v_r[os], v_r_next[os], pose_list_iterator->a_r[os], pose_list_iterator->v_p[os], pose_list_iterator->v_k[os]);
+
     }// koniec petli listy pozycji
     /*for(i=0; i<MAX_SERVOS_NR; i++)
     {
