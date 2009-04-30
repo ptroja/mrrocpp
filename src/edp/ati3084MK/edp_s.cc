@@ -75,7 +75,7 @@ ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
 	force(_master)
 	{
 	if (!(master.test_mode)) {
-		// 	printf("Konstruktor VSP!\n");
+	//	 	printf("Konstruktor VSP!\n");
 
 		ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
 		// 	printf("KONTRUKTOR EDP_S POCATEK\n");
@@ -108,6 +108,7 @@ void ATI3084_force::configure_sensor(void)
 	is_sensor_configured=true;
 	//  printf("EDP Sensor configured\n");
 	sr_msg->message("EDP Sensor configured");
+
 	if (!(master.test_mode))
 	{
 		sendBias(uart);
@@ -162,7 +163,7 @@ void ATI3084_force::configure_sensor(void)
 void ATI3084_force::wait_for_event()
 {
 
-
+//	sr_msg->message("wait_for_event");
 
 	if (!(master.test_mode))
 	{
@@ -199,17 +200,33 @@ void ATI3084_force::initiate_reading(void)
 		{
 			ft_table[i] = static_cast<double>(ftxyz.ft[i]);
 		}
+/*
+		char aaa[50];
 
+		sprintf(aaa,"%f",ft_table[0]);
+
+
+
+			sr_msg->message(aaa);
+
+*/
 		is_reading_ready=true;
 
 		// jesli ma byc wykorzytstywana biblioteka transformacji sil
 		if (master.force_tryb == 2 && gravity_transformation)
 		{
 			for(int i=0;i<3;i++)
-				ft_table[i]/=20;// 10/115
+			{
+				ft_table[i]*=10;
+			ft_table[i]/=115;
+			}
+			//ft_table[i]*=(10/115);
 			//			for(int i=3;i<6;i++) ft_table[i]/=333;
 			for(int i=3;i<6;i++)
+			{
+				ft_table[i]*=5; // by Y - korekta 5/1000
 				ft_table[i]/=1000; // by Y - korekta 5/1000
+			}
 			lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
 			// lib::Homog_matrix frame(master.force_current_end_effector_frame);
 			double* output = gravity_transformation->getForce (ft_table, frame);
@@ -268,6 +285,7 @@ forceReadings ATI3084_force::getFT(int fd)
 	//	base_cycle = ClockCycles();
 
 
+
 	do
 	{
 		r=1;
@@ -287,22 +305,23 @@ forceReadings ATI3084_force::getFT(int fd)
 			if (iter_counter==1)
 			{
 				printf("Nie otrzymano oczekiwanej ilosci znakow: %d\n",r);
-				sr_msg->message(lib::NON_FATAL_ERROR, "Force / Torque read error - check sensor controller");
+				sr_msg->message(lib::NON_FATAL_ERROR, "MK Force / Torque read error - check sensor controller");
 			}
 
 			solve_transducer_controller_failure();
 		}else {
 			if (iter_counter>1) {
-				sr_msg->message("Force / Torque sensor connection reastablished");
+				sr_msg->message("MK Force / Torque sensor connection reastablished");
 			}
 		}
-	}
+	} while (r==0);
 
-	while (r==0);
+
 
 	for (i=0;i<6;i++) {
 		ftxyz.ft[i]=(reads[2*i])<<8 | reads[2*i+1];
 	}
+
 
 	return ftxyz;
 }
