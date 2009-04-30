@@ -225,7 +225,7 @@ void ATI3084_force::initiate_reading(void)
 			for(int i=3;i<6;i++)
 			{
 				ft_table[i]*=5; // by Y - korekta 5/1000
-				ft_table[i]/=1000; // by Y - korekta 5/1000
+				ft_table[i]/=940; // by Y - korekta 5/1000
 			}
 			lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
 			// lib::Homog_matrix frame(master.force_current_end_effector_frame);
