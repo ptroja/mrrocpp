@@ -260,7 +260,7 @@ void ATI3084_force::solve_transducer_controller_failure(void)
 {
 	usleep(10);
 	sendBias(uart);
-	usleep(10);
+	usleep(100);
 }
 
 
@@ -360,7 +360,7 @@ int ATI3084_force::open_port(void)
 	options.c_iflag &= ~IXON; // Software outgoing flow control - disable
 	options.c_iflag &= ~IXOFF; // Software incoming flow control - disable
 	options.c_oflag &= ~OPOST; // Post process output (not set = raw output)
-	options.c_cc[VTIME] = 1;
+	options.c_cc[VTIME] = 5;
 	options.c_cc[VMIN] = 0;
 	tcsetattr(fd, TCSADRAIN, &options);
 	fcntl(fd, F_SETFL, 0);
