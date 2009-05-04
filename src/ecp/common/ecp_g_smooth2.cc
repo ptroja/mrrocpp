@@ -47,7 +47,7 @@ bool smooth2::eq(double a, double b) {
 
 double smooth2::generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r,
 									double v_k, double a_r, int k, double przysp, double jedn, double s_przysp, double s_jedn, double t_max) {
-	//next_position[1] -= 0.002;
+
     //funkcja obliczajaca polozenie w danym makrokroku
 
 	double next_position;
@@ -64,10 +64,6 @@ double smooth2::generate_next_coords(int node_counter, int interpolation_node_no
                 next_position = start_position +
                                    k*(node_counter*v_p*tk + node_counter*node_counter*a_r*tk*tk/2);
                 //printf("next pos: %f\t node: %d\t", next_position, node_counter);
-            }
-            else
-            { //hamowanie w pierwszym etapie, nierealne
-            	printf("hamowanie w pierwszym etapie - nierealne BLAD!!\n");
             }
         }
         else if(node_counter <= jedn)
@@ -87,10 +83,6 @@ double smooth2::generate_next_coords(int node_counter, int interpolation_node_no
                                          ((node_counter - jedn)*tk)*v_r -
                                          ((node_counter - jedn)*tk)*((node_counter - jedn)*tk)*a_r/2);
                 //printf("next pos: %f\t node: %d\t", next_position, node_counter);
-            }
-            else
-            { //przyspieszanie w trzecim etapie
-            	printf("przyspieszanie w trzecim etapie - nierealne BLAD!!\n");
             }
         }
 
@@ -526,7 +518,6 @@ void smooth2::generate_cords() {
 							pose_list_iterator->s_przysp[i],
 							pose_list_iterator->s_jedn[i],
 							pose_list_iterator->t);
-					//position[i] = coordinate[i];
 				}
 			}
 			private_node_counter++;
@@ -537,9 +528,9 @@ void smooth2::generate_cords() {
 		next_pose_list_ptr();
 	}
 
-	initiate_coordinate_list();
-
-	/*for (int m = 0; m < coordinate_list->size(); m++) {
+	//printowanie listy coordinate
+	/*initiate_coordinate_list();
+	for (int m = 0; m < coordinate_list->size(); m++) {
 		printf("%f\n", coordinate_list_iterator->coordinate[1]);
 		coordinate_list_iterator++;
 	}*/
@@ -653,19 +644,6 @@ bool smooth2::next_step () {
     	trajectory_generated = true;
     	initiate_pose_list(); //ustawienie iteratora pose_list na poczatek
     	initiate_coordinate_list(); //ustawienie iteratora coordinate_list na poczatek
-    	/*pose_list_iterator->interpolation_node_no = 5;
-    	next_pose_list_ptr();
-    	pose_list_iterator->interpolation_node_no = 6;
-    	next_pose_list_ptr();
-    	pose_list_iterator->interpolation_node_no = 4;
-    	initiate_pose_list();
-    	next_position[0] = 0.849;
-    	next_position[1] = -0.288;
-    	next_position[2] = 0.305;
-    	next_position[3] = -1.136;
-    	next_position[4] = 1.390;
-    	next_position[5] = 2.351;
-    	next_position[6] = 0.074;*/
     	printf("trajektoria wygenerowana\n");
 
     }
@@ -703,7 +681,7 @@ bool smooth2::next_step () {
     			the_robot->EDP_data.motion_steps = td.internode_step_no;
     			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
-    			if(node_counter < pose_list_iterator->interpolation_node_no) {//jezeli makrokrok nie jest ostatnim makrokrokiem w ruchu
+    			//if(node_counter < pose_list_iterator->interpolation_node_no) {//jezeli makrokrok nie jest ostatnim makrokrokiem w ruchu
 
     			    //printf("normalny makrokrok\n");
     				//printf("%f\n", next_position[1]);
@@ -723,7 +701,7 @@ bool smooth2::next_step () {
     			        the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[6];
     			    }*/
     			    the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;//TODO to jest tymczasowe wiec trzeba poprawic
-    			} else {
+    			/*} else { //TODO to chyba nie jest potrzebne
     				printf("ostatni makrokrok ruchu\n");
     			//OSTATNI PUNKT
     				for (i = 0; i < 6; i++) //ostatni makrokrok, przypisujemy final_position (coordinates)
@@ -731,7 +709,7 @@ bool smooth2::next_step () {
 
     				//the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[6];
     				the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;//TODO tutaj musi byc cos innego
-    			}
+    			}*/
 
     	//		printf("koncowka w switchu\n");
     			break;
@@ -741,7 +719,6 @@ bool smooth2::next_step () {
     	}// end:switch
   //  	printf("koncowka ifa \n");
     }// end: if
-
     return true;
 
 } // end: bool ecp_smooth2_generator::next_step ( )
