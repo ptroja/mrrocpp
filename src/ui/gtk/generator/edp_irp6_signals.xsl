@@ -102,7 +102,10 @@ extern "C"
 		if (gtk_bin_get_child(GTK_BIN(scrolled))!=NULL)
 		{
 			GtkWidget* child = gtk_bin_get_child(GTK_BIN(scrolled));
-			gtk_widget_destroy(child);
+			GtkContainer * container = GTK_CONTAINER (scrolled);
+			GObject * object = G_OBJECT(child);
+			g_object_ref(object);			
+			gtk_container_remove(container, child);
 		}
 
 		gboolean isFile = 0;
