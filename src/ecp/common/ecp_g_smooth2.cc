@@ -59,45 +59,42 @@ double smooth2::generate_next_coords(int node_counter, int interpolation_node_no
         { //pierwszy etap
             if(v_p <= v_r)
             { //przyspieszanie w pierwszym etapie
-            	printf("start pos: %f\t node counter: %d\n", start_position, node_counter);
-            	printf(" przyspieszanie ");
+            	//printf("start pos: %f\t node counter: %d\n", start_position, node_counter);
+            	//printf(" przysp ");
                 next_position = start_position +
                                    k*(node_counter*v_p*tk + node_counter*node_counter*a_r*tk*tk/2);
+                //printf("next pos: %f\t node: %d\t", next_position, node_counter);
             }
             else
             { //hamowanie w pierwszym etapie, nierealne
-            	printf("hamowanie w pierwszym etapie - nieralne BLAD!!\n");
-                next_position = start_position +
-                                   k*((node_counter*tk*v_p) -
-                                         (node_counter*node_counter*tk*tk*a_r/2));
+            	printf("hamowanie w pierwszym etapie - nierealne BLAD!!\n");
             }
         }
         else if(node_counter <= jedn)
         { // drugi etap - ruch jednostajny
-        	printf(" jednostajny ");
+        	//printf(" jedn ");
             next_position = start_position +
-                               k*(s_przysp + (node_counter*tk - fabs(v_r-v_p)/a_r)*v_r);
+                               k*(s_przysp + ((node_counter - przysp)*tk)*v_r);
+            //printf("next pos: %f\t node: %d\t", next_position, node_counter);
         }
         else if(node_counter <= interpolation_node_no)
         { //trzeci etap
             if(v_k <= v_r)
             { //hamowanie w trzecim etapie
-            	printf(" hamowanie ");
+            	//printf(" ham ");
                 next_position = start_position +
                                    k*(s_przysp + s_jedn +
-                                         (node_counter*tk + fabs(v_r-v_k)/a_r - t_max)*v_r -
-                                         (node_counter*tk + fabs(v_r-v_k)/a_r - t_max)*(node_counter*tk + fabs(v_r-v_k)/a_r - t_max)*a_r/2);
+                                         ((node_counter - jedn)*tk)*v_r -
+                                         ((node_counter - jedn)*tk)*((node_counter - jedn)*tk)*a_r/2);
+                //printf("next pos: %f\t node: %d\t", next_position, node_counter);
             }
             else
             { //przyspieszanie w trzecim etapie
-            	printf("przyspieszanie w trzecim etapie - nieralne BLAD!!\n");
-                next_position = start_position +
-                                   k*(s_przysp + s_jedn +
-                                         (node_counter*tk + fabs(v_r-v_k)/a_r - t_max)*v_r +
-                                         (node_counter*tk + fabs(v_r-v_k)/a_r - t_max)*(node_counter*tk + fabs(v_r-v_k)/a_r - t_max)*a_r/2);
+            	printf("przyspieszanie w trzecim etapie - nierealne BLAD!!\n");
             }
         }
 
+    //printf("next pos: %f\t node: %d\t", next_position, node_counter);
     return next_position;
 }
 
@@ -500,8 +497,9 @@ void smooth2::generate_cords() {
 
 	double coordinate[MAX_SERVOS_NR];
 	//double position[MAX_SERVOS_NR];
-	int private_node_counter = 0;
+	int private_node_counter = 1;
 	initiate_pose_list();
+	flush_coordinate_list();
 	for (int j = 0; j < pose_list_length(); j++) {
 
 		/*for (int k = 0; k < MAX_SERVOS_NR; k++) {
@@ -535,13 +533,13 @@ void smooth2::generate_cords() {
 			coordinate_list->push_back(coordinates(coordinate));
 			//printf("%f\t", coordinate[1]);
 		}
-		private_node_counter = 0;
+		private_node_counter = 1;
 		next_pose_list_ptr();
 	}
 
-	/*initiate_coordinate_list();
+	initiate_coordinate_list();
 
-	for (int m = 0; m < coordinate_list->size(); m++) {
+	/*for (int m = 0; m < coordinate_list->size(); m++) {
 		printf("%f\n", coordinate_list_iterator->coordinate[1]);
 		coordinate_list_iterator++;
 	}*/
@@ -575,6 +573,11 @@ void smooth2::generate_cords() {
 	for (i = 0; i < 9; i++) {
 		for (int j = 0; j < 7; j++)
 			printf("%f\n", coordinate_list_iterator->coordinate[j]);
+		coordinate_list_iterator++;
+	}*/
+
+	/*for (int s = 0; s < coordinate_list->size(); s++) {
+		printf(" %f \t", coordinate_list_iterator->coordinate[1]);
 		coordinate_list_iterator++;
 	}*/
 	printf("\ngenerate_cords\n");
@@ -650,8 +653,8 @@ bool smooth2::next_step () {
     	trajectory_generated = true;
     	initiate_pose_list(); //ustawienie iteratora pose_list na poczatek
     	initiate_coordinate_list(); //ustawienie iteratora coordinate_list na poczatek
-    	pose_list_iterator->interpolation_node_no = 5;
-    	/*next_pose_list_ptr();
+    	/*pose_list_iterator->interpolation_node_no = 5;
+    	next_pose_list_ptr();
     	pose_list_iterator->interpolation_node_no = 6;
     	next_pose_list_ptr();
     	pose_list_iterator->interpolation_node_no = 4;
@@ -664,6 +667,7 @@ bool smooth2::next_step () {
     	next_position[5] = 2.351;
     	next_position[6] = 0.074;*/
     	printf("trajektoria wygenerowana\n");
+
     }
 
     //printf("node count: %d\n", node_counter);
@@ -709,7 +713,7 @@ bool smooth2::next_step () {
     			        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
     			    }
 
-					//coordinate_list_iterator++;
+					coordinate_list_iterator++;
 
     			    //PROBA Z CHWYTAKIEM
 
@@ -917,8 +921,8 @@ void smooth2::calculate(void) {
 
 				pose_list_iterator->model[i] = 1;
 
-				s_temp1[i] = 0.5 * pose_list_iterator->a_r[i] * ((pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i]) * ((pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i]);
-				s_temp2[i] = 0.5 * pose_list_iterator->a_r[i] * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]) * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]);
+				s_temp1[i] = pose_list_iterator->v_p[i] * (pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i] + (0.5 * pose_list_iterator->a_r[i] * ((pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i]) * ((pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i]));
+				s_temp2[i] = pose_list_iterator->v_r[i] * (pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i] - (0.5 * pose_list_iterator->a_r[i] * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]) * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]));
 
 				printf("s_temp1: %f\ts_temp2: %f\n", s_temp1[i], s_temp2[i]);
 
@@ -926,7 +930,7 @@ void smooth2::calculate(void) {
 					printf("redukcja predkosci w osi %d\n", i);
 					//nadpisanie v_r (ruch bedzie 2 etapowy)
 					//obliczenie czasu
-					s_temp2[i] = 0;
+					//s_temp2[i] = 0;
 				} else {//droga przyspieszenia i opoznienia nie przekracza drogi ruchu
 					t_temp1 = (pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i];
 					t_temp2 = (pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i];
@@ -965,7 +969,7 @@ void smooth2::calculate(void) {
 
 				pose_list_iterator->model[i] = 4;
 
-				s_temp1[i] = 0.5 * pose_list_iterator->a_r[i] * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]) * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]);
+				s_temp1[i] = pose_list_iterator->v_r[i] * (pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i] - (0.5 * pose_list_iterator->a_r[i] * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]) * ((pose_list_iterator->v_r[i] - v_r_next[i])/pose_list_iterator->a_r[i]));
 				printf("s_temp1: %f\n", s_temp1[i]);
 
 				if (s_temp1[i] > s[i]) {
