@@ -222,7 +222,9 @@ bool smooth2::load_file_with_path(char* file_name) {
 
 void smooth2::reset() {
 	flush_pose_list();
-	first_coordinate=true;
+	flush_coordinate_list();
+	first_coordinate = true;
+	first_interval = true;
 	trajectory_generated = false;
 }
 
@@ -251,10 +253,10 @@ void smooth2::prev_pose_list_ptr(void) {
 }
 
 // -------------------------------------------------------get all previously saved elements from actual iterator
-void smooth2::get_pose(void) {
+//void smooth2::get_pose(void) {
     //int i;
 
-    td.arm_type = pose_list_iterator->arm_type;
+  //  td.arm_type = pose_list_iterator->arm_type;
 /*    for(i=0; i<MAX_SERVOS_NR; i++)
     {
         v[i]=pose_list_iterator->v[i];
@@ -265,16 +267,16 @@ void smooth2::get_pose(void) {
 //					for(i=0; i<MAX_SERVOS_NR; i++)
 //						final_position[i]+=start_position[i];
 
-}
+//}
 // -------------------------------------------position[i]------------
-void smooth2::set_pose (lib::POSE_SPECIFICATION ps, double vv[MAX_SERVOS_NR], double aa[MAX_SERVOS_NR], double c[MAX_SERVOS_NR]) {
+/*void smooth2::set_pose (lib::POSE_SPECIFICATION ps, double vv[MAX_SERVOS_NR], double aa[MAX_SERVOS_NR], double c[MAX_SERVOS_NR]) {
     pose_list_iterator->arm_type = ps;
     memcpy(pose_list_iterator->coordinates, c, MAX_SERVOS_NR*sizeof(double));
     memcpy(pose_list_iterator->v, vv, MAX_SERVOS_NR*sizeof(double));
     memcpy(pose_list_iterator->a, aa, MAX_SERVOS_NR*sizeof(double));
-}
+}*/
 
-bool smooth2::is_pose_list_element(void) {
+/*bool smooth2::is_pose_list_element(void) {
     // sprawdza czy aktualnie wskazywany jest element listy, czy lista sie skonczyla
     if ( pose_list_iterator != pose_list->end())
     {
@@ -284,7 +286,7 @@ bool smooth2::is_pose_list_element(void) {
     {
         return false;
     }
-}
+}*/
 
 bool smooth2::is_last_list_element(void) {
     // sprawdza czy aktualnie wskazywany element listy ma nastepnik
@@ -488,15 +490,10 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
 void smooth2::generate_cords() {
 
 	double coordinate[MAX_SERVOS_NR];
-	//double position[MAX_SERVOS_NR];
 	int private_node_counter = 1;
 	initiate_pose_list();
 	flush_coordinate_list();
 	for (int j = 0; j < pose_list_length(); j++) {
-
-		/*for (int k = 0; k < MAX_SERVOS_NR; k++) {
-			position[k] = pose_list_iterator->start_position[k];
-		}*/
 
 		for (int z = 0; z < pose_list_iterator->interpolation_node_no; z++) {
 			for (int i = 0; i < 6; i++) {
@@ -534,43 +531,6 @@ void smooth2::generate_cords() {
 		printf("%f\n", coordinate_list_iterator->coordinate[1]);
 		coordinate_list_iterator++;
 	}*/
-
-	/*coordinate[0] = 0.800;
-	coordinate[1] = -0.288;
-	coordinate[2] = 0.435;
-	coordinate[3] = -1.136;
-	coordinate[4] = 1.390;
-	coordinate[5] = 2.351;
-	coordinate[6] = 0.074;
-
-	coordinate_list->push_back(coordinates(coordinate));*/
-
-	/*int i;
-
-	for (i = 0; i < 9; i++) {
-		coordinate[0] = 0.810;
-		coordinate[1] = -0.399;
-		coordinate[2] = 0.435;
-		coordinate[3] = -1.136;
-		coordinate[4] = 1.390;
-		coordinate[5] = 2.351;
-		coordinate[6] = 0.074;
-
-		coordinate_list->push_back(coordinates(coordinate));
-	}
-
-	/*initiate_coordinate_list();
-
-	for (i = 0; i < 9; i++) {
-		for (int j = 0; j < 7; j++)
-			printf("%f\n", coordinate_list_iterator->coordinate[j]);
-		coordinate_list_iterator++;
-	}*/
-
-	/*for (int s = 0; s < coordinate_list->size(); s++) {
-		printf(" %f \t", coordinate_list_iterator->coordinate[1]);
-		coordinate_list_iterator++;
-	}*/
 	printf("\ngenerate_cords\n");
 }
 
@@ -578,10 +538,11 @@ void smooth2::generate_cords() {
 bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
 
     initiate_pose_list();
-    get_pose();
-    //td.arm_type = pose_list_iterator->arm_type;
+    //get_pose();
+    td.arm_type = pose_list_iterator->arm_type;
 
     first_interval=true;
+
     switch ( td.arm_type )
     {
 
@@ -645,7 +606,6 @@ bool smooth2::next_step () {
     	initiate_pose_list(); //ustawienie iteratora pose_list na poczatek
     	initiate_coordinate_list(); //ustawienie iteratora coordinate_list na poczatek
     	printf("trajektoria wygenerowana\n");
-
     }
 
     //printf("node count: %d\n", node_counter);
@@ -660,7 +620,7 @@ bool smooth2::next_step () {
     		return false;
     	} else {//lista pozycji pose_list nie jest skonczona wiec idziemy do nastepnego punktu
     		//printf("wywolany else (nastepna pozycja pose_list)\n");
-			node_counter = 0; //ustawienie makrokroku na 1
+			node_counter = 0; //ustawienie makrokroku na 1 (jest za chwile inkrementowany przez move())
 		    next_pose_list_ptr();
 		    td.interpolation_node_no = pose_list_iterator->interpolation_node_no;
 		}
@@ -701,7 +661,7 @@ bool smooth2::next_step () {
     			        the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[6];
     			    }*/
     			    the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;//TODO to jest tymczasowe wiec trzeba poprawic
-    			/*} else { //TODO to chyba nie jest potrzebne
+    			/*} else { //TODO to chyba nie jest potrzebne (sprawdzic)
     				printf("ostatni makrokrok ruchu\n");
     			//OSTATNI PUNKT
     				for (i = 0; i < 6; i++) //ostatni makrokrok, przypisujemy final_position (coordinates)
@@ -725,22 +685,20 @@ bool smooth2::next_step () {
 
 void smooth2::calculate(void) {
 
-	double s[MAX_SERVOS_NR];
+	double s[MAX_SERVOS_NR];//droga w danych stopniach swobody w jednym ruchu
 	double s_temp1[MAX_SERVOS_NR], s_temp2[MAX_SERVOS_NR];
 	double t_temp1, t_temp2;
     double t[MAX_SERVOS_NR];
     double t_max; //nadluzszy czas ruchu w jednej osi w jednym ruchu
-    //double v_r[MAX_SERVOS_NR], a_r[MAX_SERVOS_NR];
     int i;
     double tk = 10 * STEP; //czas jednego makrokroku
 
-    double v_r_next[MAX_SERVOS_NR];
+    double v_r_next[MAX_SERVOS_NR];//predkosc kolejnego ruchu
 
     double temp;//generalny temp do wszystkiego
     //double v_r_prev[MAX_SERVOS_NR];
 
-    initiate_pose_list();
-
+    initiate_pose_list();//ustawianie wskaznika listy pozycji na poczatek
 
     td.internode_step_no = 10;
     td.value_in_step_no = td.internode_step_no - 2;
@@ -749,10 +707,9 @@ void smooth2::calculate(void) {
     	printf("petla listy pozycji %d\n", j);
 		td.arm_type = pose_list_iterator->arm_type;
 
-		if (first_interval) {//pierwszy makrokrok ruchu
-			//wywoluje sie tylko raz, przy pierwzszym makrokroku pierwszego ruchu, musi byc rozroznione, gdyz tutaj v_p jest = 0 a pozycja jest
-			// ...odczytywana z ramienia... tak naprawde tutaj wywoluje sie dla pierwszego elementu listy pozycji
-			//get_pose();//pobranie parametrow nowego ruchu (zapisanie zmiennych v, a i final_position(coordinates))
+		if (first_interval) {//pierwsza pozycja ruchu
+			//wywoluje sie tylko raz, przy pierwzszym ruchu w trajektorii, musi byc rozroznione, gdyz tutaj v_p jest = 0 a pozycja jest
+			// ...odczytywana z ramienia...
 
 			switch (td.arm_type) {
 
@@ -843,11 +800,11 @@ void smooth2::calculate(void) {
 			//printf("delta : coordinates %f i start_position %f\n",pose_list_iterator->coordinates[i], pose_list_iterator->start_position[i]);
 		}
 
-		for (i = 0; i < MAX_SERVOS_NR; i++) {//zapisanie v_r_next
+		for (i = 0; i < MAX_SERVOS_NR; i++) {//zapisanie v_r_next i k dla nastepnego ruchu
 			if (is_last_list_element()) {
 				//printf("ostatni ruch\n");
 				v_r_next[i] = 0.0;
-				pose_list_iterator->v_k[i] = 0; //to nie jest potrzebne tak naprawde...
+				//pose_list_iterator->v_k[i] = 0; //to nie jest potrzebne tak naprawde...
 			} else {
 				temp = pose_list_iterator->k[i];
 				next_pose_list_ptr();
@@ -915,10 +872,6 @@ void smooth2::calculate(void) {
 					printf("t_temp1: %f\tt_temp2: %f\n", t_temp1, t_temp2);
 
 					t[i] = t_temp1 + t_temp2 + (s[i] - (s_temp1[i] + s_temp2[i]))/pose_list_iterator->v_r[i];
-
-					//printf("czas\t\tv_r\t\tv_r_next\ta_r\t\tv_p\n");
-					//printf("%f\t%f\t%f\t%f\t%f\n", t[i], pose_list_iterator->v_r[i], v_r_next[i], pose_list_iterator->a_r[i], pose_list_iterator->v_p[i]);
-
 				}
 
 				pose_list_iterator->s_przysp[i] = s_temp1[i];
@@ -931,15 +884,32 @@ void smooth2::calculate(void) {
 
             	pose_list_iterator->model[i] = 2;
 
-				//pose_list_iterator->s_przysp[i] = s_temp1[i];
-				//pose_list_iterator->s_jedn[i] = s[i] - s_temp1[i];
+            	s_temp1[i] = pose_list_iterator->v_p[i] * (pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i] + (0.5 * pose_list_iterator->a_r[i] * ((pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i]) * ((pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i]));
+
+            	if (s_temp1[i] > s[i]) {
+            						//printf("redukcja predkosci w osi %d\n", i);
+            	} else {
+            		t_temp1 = (pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i];
+
+            		t[i] = t_temp1 + (s[i] - s_temp1[i])/pose_list_iterator->v_r[i];
+            	}
+
+				pose_list_iterator->s_przysp[i] = s_temp1[i];
+				pose_list_iterator->s_jedn[i] = s[i] - s_temp1[i];
+
+            	pose_list_iterator->v_k[i] = v_r_next[i];
+
 			} else if (eq(pose_list_iterator->v_p[i], pose_list_iterator->v_r[i]) && (v_r_next[i] > pose_list_iterator->v_r[i] || eq(v_r_next[i], pose_list_iterator->v_r[i]))) { //trzeci model
-				printf("drugi model w osi %d\n", i);
+				printf("trzeci model w osi %d\n", i);
 
 				pose_list_iterator->model[i] = 3;
 
+				t[i] = s[i]/pose_list_iterator->v_r[i];
+
 				pose_list_iterator->s_przysp[i] = 0;
 				pose_list_iterator->s_jedn[i] = s[i];
+
+				pose_list_iterator->v_k[i] = v_r_next[i];
 
 			} else if (eq(pose_list_iterator->v_p[i], pose_list_iterator->v_r[i]) && v_r_next[i] < pose_list_iterator->v_r[i]) { //czwarty model
 				printf("czwarty model w osi %d\n", i);
@@ -966,6 +936,8 @@ void smooth2::calculate(void) {
 				pose_list_iterator->s_przysp[i] = 0;
 				pose_list_iterator->s_jedn[i] = s[i] - s_temp1[i];
 
+				pose_list_iterator->v_k[i] = v_r_next[i];
+
 			} else {
 				printf("\n ten przypadek nigdy nie moze wystapic\n");
 			}
@@ -976,7 +948,7 @@ void smooth2::calculate(void) {
 		}
 
 	    //kwantyzacja czasu
-	    if(ceil(t_max/tk)*tk != t_max)
+	    if(ceil(t_max/tk)*tk != t_max)//zaokraglenie czasu do wielokrotnosci trwania makrokroku
 	    {
 	        t_max = ceil(t_max/tk);
 	        t_max = t_max*tk;
@@ -986,7 +958,7 @@ void smooth2::calculate(void) {
 		pose_list_iterator->interpolation_node_no = (int)round(t_max / tk);
 		printf("liczba makrokrokow w ruchu %d\n", pose_list_iterator->interpolation_node_no);
 
-		for (i = 0; i < MAX_SERVOS_NR; i++) {
+		for (i = 0; i < MAX_SERVOS_NR; i++) {//obliczanie przysp i jedn a takze ewentualna redukcja predkosci z powodu zbyt krotkiego czasu
 
 			//printf("czas ruchu w osi %d = %f\n", i, t[i]);
 
@@ -1007,14 +979,6 @@ void smooth2::calculate(void) {
 			pose_list_iterator->przysp[i]=fabs((pose_list_iterator->v_r[i]-pose_list_iterator->v_p[i])/(pose_list_iterator->a_r[i]*tk));//zapisanie makrokroku w ktorym konczy sie przyspieszanie
 			pose_list_iterator->jedn[i]=(t_max-(fabs(pose_list_iterator->v_r[i]-pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i]))/tk;//zapisaine makrokroku w ktorym konczy sie jednostajny
 
-			/*if (pose_list_iterator->k[i] == 1) { //jesli przysp i jedn bylyby drogami w danych etapach a nie numerami makrokrokow... to to jest valid..
-				pose_list_iterator->przysp[i] = pose_list_iterator->start_position[i] + pose_list_iterator->s_przysp[i];
-				pose_list_iterator->jedn[i] = pose_list_iterator->przysp[i] + pose_list_iterator->s_jedn[i];
-			} else if (pose_list_iterator->k[i] == -1) {
-				pose_list_iterator->przysp[i] = pose_list_iterator->start_position[i] - pose_list_iterator->s_przysp[i];
-				pose_list_iterator->jedn[i] = pose_list_iterator->przysp[i] - pose_list_iterator->s_jedn[i];
-			}*/
-
 			//printf("s: %f\n s_przysp: %f\t s_jedn: %f\n", s[i], pose_list_iterator->s_przysp[i], pose_list_iterator->s_jedn[i]);
 			//printf("przysp: %f\t jedn: %f\n", pose_list_iterator->przysp[i], pose_list_iterator->jedn[i]);
 
@@ -1028,870 +992,8 @@ void smooth2::calculate(void) {
 		printf("czas\t\tv_r\t\tv_r_next\ta_r\t\tv_p\t\tv_k\n");
 		printf("%f\t%f\t%f\t%f\t%f\t%f\n\n", t[os], pose_list_iterator->v_r[os], v_r_next[os], pose_list_iterator->a_r[os], pose_list_iterator->v_p[os], pose_list_iterator->v_k[os]);
 
-    }// koniec petli listy pozycji
-    /*for(i=0; i<MAX_SERVOS_NR; i++)
-    {
-        // Obliczenie drog dla wszystkich osi
-        s[i]=fabs(final_position[i]-start_position[i]);
-        // kierunek ruchu
-        if(final_position[i]-start_position[i] < 0)
-        {
-            k[i]=-1;
-        }
-        else
-        {
-            k[i]=1;
-        }
-
-        if(eq(s[i],0.0))
-        {
-            t=0;
-        }
-        else if(
-            ((v_r[i]>=v_p[i]) && (v[i]>=v_k[i]) && (((2*v_p[i]*(v_r[i]-v_p[i]) + 2*v_r[i]*(v_r[i]-v_k[i])
-                                                    +((v_r[i]-v_p[i])*(v_r[i]-v_p[i])) - ((v_k[i] - v_r[i])*(v_k[i] - v_r[i])))/(2*a_r[i])) < s[i]))
-            ||
-            ((v_r[i]<v_p[i]) && (v[i]>=v_k[i]) && (((2*v_p[i]*(v_p[i]-v_r[i]) + 2*v_r[i]*(v_r[i]-v_k[i])
-                                                    -((v_r[i]-v_p[i])*(v_r[i]-v_p[i])) - ((v_k[i] - v_r[i])*(v_k[i] - v_r[i])))/(2*a_r[i])) < s[i]))
-            ||
-            ((v_r[i]>=v_p[i]) && (v[i]<v_k[i]) && (((2*v_p[i]*(v_r[i]-v_p[i]) + 2*v_r[i]*(v_k[i] - v_r[i])
-                                                    +((v_r[i]-v_p[i])*(v_r[i]-v_p[i])) + ((v_k[i] - v_r[i])*(v_k[i] - v_r[i])))/(2*a_r[i])) < s[i]))
-            ||
-            ((v_r[i]<v_p[i]) && (v[i]<v_k[i]) && (((2*v_p[i]*(v_p[i]-v_r[i]) + 2*v_r[i]*(v_k[i] - v_r[i])
-                                                    -((v_r[i]-v_p[i])*(v_r[i]-v_p[i])) + ((v_k[i] - v_r[i])*(v_k[i] - v_r[i])))/(2*a_r[i])) < s[i]))
-        )
-
-            // zwykly ruch w 3 etapach
-        {
-            if(debug)
-            {
-                printf("%d - 3 etapy\n", i);
-            }
-            // Obliczenie najdluzszego czasu
-            if((v_r[i]>=v_p[i]) && (v_r[i]>=v_k[i]))
-            {// pierwszy model ruchu - przyspieszanie / hamowanie
-                t =
-                    fabs((v_r[i]-v_p[i])/a_r[i]) +
-                    ((2*s[i]*a_r[i] -2*v_p[i]*fabs(v_r[i] - v_p[i]) - (v_r[i]-v_p[i])*(v_r[i]-v_p[i]) - 2*v_r[i]*fabs(v_k[i]-v_r[i]) + (v_k[i] - v_r[i])*(v_k[i] - v_r[i])) /
-                     (2*a_r[i]*v_r[i])) +
-                    fabs((v_r[i]-v_k[i])/a_r[i]);
-            }
-            else if((v_r[i]>=v_p[i]) && (v_r[i]<v_k[i]))
-            {// drugi model ruchu - przyspieszanie / przyspieszanie
-                t =
-                    fabs((v_r[i]-v_p[i])/a_r[i]) +
-                    ((2*s[i]*a_r[i] -2*v_p[i]*fabs(v_r[i] - v_p[i]) - (v_r[i]-v_p[i])*(v_r[i]-v_p[i]) - 2*v_r[i]*fabs(v_k[i]-v_r[i]) - (v_k[i] - v_r[i])*(v_k[i] - v_r[i])) /
-                     (2*a_r[i]*v_r[i])) +
-                    fabs((v_r[i]-v_k[i])/a_r[i]);
-            }
-            else if((v_r[i]<v_p[i]) && (v_r[i]>=v_k[i]))
-            {// trzeci model ruchu - hamowanie / hamowanie
-                t =
-                    fabs((v_r[i]-v_p[i])/a_r[i]) +
-                    ((2*s[i]*a_r[i] -2*v_p[i]*fabs(v_r[i] - v_p[i]) + (v_r[i]-v_p[i])*(v_r[i]-v_p[i]) - 2*v_r[i]*fabs(v_k[i]-v_r[i]) + (v_k[i] - v_r[i])*(v_k[i] - v_r[i])) /
-                     (2*a_r[i]*v_r[i])) +
-                    fabs((v_r[i]-v_k[i])/a_r[i]);
-            }
-            else if((v_r[i]<v_p[i]) && (v_r[i]<v_k[i]))
-            {// czwarty model ruchu - hamowanie / przyspieszanie
-                t =
-                    fabs((v_r[i]-v_p[i])/a_r[i]) +
-                    ((2*s[i]*a_r[i] -2*v_p[i]*fabs(v_r[i] - v_p[i]) + (v_r[i]-v_p[i])*(v_r[i]-v_p[i]) - 2*v_r[i]*fabs(v_k[i]-v_r[i]) - (v_k[i] - v_r[i])*(v_k[i] - v_r[i])) /
-                     (2*a_r[i]*v_r[i])) +
-                    fabs((v_r[i]-v_k[i])/a_r[i]);
-            }
-
-        } //end - obliczanie czasu w 3 etapach
-        else //jesli droga jest krotsza niz osiagnieta przy przyspieszaniu i hamowaniu przy zadanych a i v
-        {
-            switch(i)
-            {
-            case 0:
-                sr_ecp_msg.message("Redukcja predkosci w osi 0");
-                break;
-            case 1:
-                sr_ecp_msg.message("Redukcja predkosci w osi 1");
-                break;
-            case 2:
-                sr_ecp_msg.message("Redukcja predkosci w osi 2");
-                break;
-            case 3:
-                sr_ecp_msg.message("Redukcja predkosci w osi 3");
-                break;
-            case 4:
-                sr_ecp_msg.message("Redukcja predkosci w osi 4");
-                break;
-            case 5:
-                sr_ecp_msg.message("Redukcja predkosci w osi 5");
-                break;
-            case 6:
-                sr_ecp_msg.message("Redukcja predkosci w osi 6");
-                break;
-            case 7:
-                sr_ecp_msg.message("Redukcja predkosci w osi 7");
-                break;
-            }
-            if(debug)
-            {
-                printf("%d - 2 etapy\n", i);
-            }
-            v_1=sqrt(v_p[i]*v_p[i]/2 + v_k[i]*v_k[i]/2 + s[i]*a_r[i]);
-            if(v_1>=v_p[i] && v_1>=v_k[i])
-            {
-                v_r[i]=v_1;
-            }
-            else
-            {
-                v_1=(v_p[i] + v_k[i])/2;
-                if((v_1<v_p[i] && v_1>=v_k[i]) || (v_1>=v_p[i] && v_1<v_k[i]))
-                    v_r[i]=v_1;
-                else
-                {
-                    v_1=sqrt(v_p[i]*v_p[i]/2 + v_k[i]*v_k[i]/2 - s[i]*a_r[i]);
-                    if(v_1<v_p[i] && v_1<v_k[i])
-                    {
-                        v_r[i] = v_1;
-                    }
-                    else
-                    {
-                        printf("Blad w obliczaniu predkosci w 2 etapach!!\n");
-                        throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
-                    }
-
-                }
-            }
-
-            t = (fabs(v_r[i] - v_p[i]) + fabs(v_r[i] - v_k[i]))/a_r[i];
-        }
-        if(t>t_max)
-            t_max=t;
     }
-
-    //kwantyzacja czasu
-    if(ceil(t_max/tk)*tk != t_max)
-    {
-        t_max = ceil(t_max/tk);
-        t_max = t_max*tk;
-    }
-
-    // Obliczenie predkosci dla wszystkich osi
-    for(i=0; i<MAX_SERVOS_NR; i++) {
-        if(eq(s[i],0.0)) {
-            v_r[i]=0;
-            printf("brak drogi\n");
-        }
-        else
-        {//pierszy model ruchu - przyspieszanie / hamowanie
-            v_1=(v_p[i]+v_k[i]+a_r[i]*t_max)/2 + sqrt(-4*v_p[i]*v_p[i]
-                    -4*v_k[i]*v_k[i]+8*v_p[i]*v_k[i]+8*v_p[i]*a_r[i]*t_max+8*v_k[i]
-                    *a_r[i]*t_max+4*a_r[i]*a_r[i]*t_max*t_max
-                    -16*a_r[i]*s[i])/4;
-
-            v_2=(v_p[i]+v_k[i]+a_r[i]*t_max)/2 - sqrt(-4*v_p[i]*v_p[i]
-                    -4*v_k[i]*v_k[i]+8*v_p[i]*v_k[i]+8*v_p[i]*a_r[i]*t_max+8*v_k[i]
-                    *a_r[i]*t_max+4*a_r[i]*a_r[i]*t_max*t_max
-                    -16*a_r[i]*s[i])/4;
-            printf("po pierwszym v1 = %lf, v2 = %lf\n", v_1, v_2);
-            if((v_1>=0)&&(v_1<=v_r[i])&&(v_1>=v_p[i])&&(v_1>=v_k[i])) {
-                v_r[i]=v_1;
-                printf("1 - przyspieszanie hamowanie\n");
-            }
-            else if((v_2>=0)&&(v_2<=v_r[i])&&(v_2>=v_p[i])&&(v_2>=v_k[i])) {
-                v_r[i]=v_2;
-                printf("1 - przyspieszanie hamowanie\n");
-            }
-            else
-            {//drugi model ruchu - przyspieszanie / przyspieszanie
-                v_1 = (v_k[i]*v_k[i] - 2*a_r[i]*s[i] - v_p[i]*v_p[i])/(2*(v_k[i]-v_p[i]-a_r[i]*t_max));
-                printf("po drugim v1 = %lf, v2 = %lf\n", v_1, v_2);
-                if((v_1>=0)&&(v_1<=v_r[i])&&(v_1>=v_p[i])&&(v_1<v_k[i])) {
-                    v_r[i]=v_1;
-                    printf("2 - przyspieszanie przyspieszanie\n");
-                }
-                else
-                {//trzeci model ruchu - hamowanie / hamowanie
-                    v_1 = (-2*a_r[i]*s[i] + v_p[i]*v_p[i] - v_k[i]*v_k[i])/(2*(v_p[i]-v_k[i]-a_r[i]*t_max));
-                    printf("po trzecim v1 = %lf, v2 = %lf\n", v_1, v_2);
-                    if((v_1>=0)&&(v_1<=v_r[i])&&(v_1<v_p[i])&&(v_1>=v_k[i])) {
-                        v_r[i]=v_1;
-                        printf("3 - hamowanie hamowanie\n");
-                    }
-                    else
-                    {//czwarty model ruchu - hamowanie / przyspieszanie
-                        v_1=(v_p[i]+v_k[i]-a_r[i]*t_max)/2 + sqrt(-4*v_p[i]*v_p[i]
-                                -4*v_k[i]*v_k[i]+8*v_p[i]*v_k[i]-8*v_p[i]*a_r[i]*t_max-8*v_k[i]
-                                *a_r[i]*t_max+4*a_r[i]*a_r[i]*t_max*t_max
-                                +16*a_r[i]*s[i])/4;
-
-                        v_2=(v_p[i]+v_k[i]-a_r[i]*t_max)/2 - sqrt(-4*v_p[i]*v_p[i]
-                                -4*v_k[i]*v_k[i]+8*v_p[i]*v_k[i]-8*v_p[i]*a_r[i]*t_max-8*v_k[i]
-                                *a_r[i]*t_max+4*a_r[i]*a_r[i]*t_max*t_max
-                                +16*a_r[i]*s[i])/4;
-
-                        if((v_1>=0)&&(v_1<=v_r[i])&&(v_1<v_p[i])&&(v_1<v_k[i])) {
-                            v_r[i]=v_1;
-                            printf("4 - hamowanie przyspieszanie\n");
-                        }
-                        else if((v_2>=0)&&(v_2<=v_r[i])&&(v_2<v_p[i])&&(v_2<v_k[i])) {
-                            v_r[i]=v_2;
-                            printf("4 - hamowanie przyspieszanie\n");
-                        }
-                        else
-                        {//blad - brak rozwiazania
-                            printf("blad! nie da sie obliczyc predkosci (%d)\n", i);
-                            //throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
-                            v_r[i]=v_1;
-                        }
-                    }
-                }
-            }
-
-            if(eq(s[i],0.0))
-                v_r[i]=0;
-            printf("koniec v1 = %lf, v2 = %lf\n\n\n", v_1, v_2);
-        }
-    }*/
-
-    // Wypelnienie struktury td
-    /*td.interpolation_node_no = (int)round(t_max / tk);
-    td.internode_step_no = 10;
-    td.value_in_step_no = td.internode_step_no - 2;
-
-    for(i=0;i<MAX_SERVOS_NR;i++)
-        td.coordinate_delta[i] = final_position[i]-
-                                 start_position[i];
-   /*if(debug)
-    {
-        printf("makrokroki: %d, mikrokroki: %d, czas kroku: %f, step: %f\n", td.interpolation_node_no, td.internode_step_no, tk, STEP);
-        printf("t: %f\n", t_max);
-        printf("v: %f, %f, %f, %f, %f, %f, %f, %f\n", v_r[0], v_r[1], v_r[2], v_r[3], v_r[4], v_r[5], v_r[6], v_r[7]);
-    }*/
-
-    /*for(i=0;i<MAX_SERVOS_NR;i++)
-    {
-        przysp[i]=fabs((v_r[i]-v_p[i])/(a_r[i]*tk));
-        jedn[i]=(t_max-(fabs(v_r[i]-v_k[i])/a_r[i]))/tk;
-
-        if(v_r[i]>=v_p[i])
-        {
-            s_przysp[i]=(2*v_p[i]*(v_r[i]-v_p[i]) + (v_r[i] - v_p[i])*(v_r[i] - v_p[i]))/(2*a_r[i]);
-        }
-        else
-        {
-            s_przysp[i]=(2*v_p[i]*(v_p[i] - v_r[i]) - (v_r[i] - v_p[i])*(v_r[i] - v_p[i]))/(2*a_r[i]);
-        }
-
-        s_jedn[i]= (t_max - (fabs(v_r[i] - v_p[i]) + fabs(v_r[i] - v_k[i]))/a_r[i])*v_r[i];
-    }
-
-    v_grip =	(final_position[i]/td.interpolation_node_no);
-    if(v_grip<v_grip_min)
-        v_grip=v_grip_min;*/
-
-
 }//end - calculate
-
-/*bool ecp_smooth2_generator::next_step ()
-{
-    int i;
-    double tk=10*STEP; //czas jednego makrokroku
-
-
-    // ---------------------------------   FIRST INTERVAL    ---------------------------------------
-    if ( first_interval )//pierwszy makrokrok ruchu
-    {//wywoluje sie tylko raz, przy pierwzszym makrokroku pierwszego ruchu, pozniej te obliczenia robione sa w nastepnym warunku "if"
-                                                  // ...po ostatnim makrokroku ruchu
-
-        t_max=0;
-        get_pose();//pobranie parametrow nowego ruchu (zapisanie zmiennych v, a i final_position(coordinates))
-
-        // Ponizszych obliczen nie mozna wykonac w first_step, gdyz wtedy odczyt
-        // aktualnego polozenia ramienia jeszcze nie zostanie zrealizowany. Zrobi
-        // to dopiero execute_motion po wyjsciu z first_step.
-
-        switch ( td.arm_type )
-        {
-        case lib::MOTOR:
-            for(i=0;i<MAX_SERVOS_NR;i++){
-                start_position[i]=the_robot->EDP_data.current_motor_arm_coordinates[i];
-					 if(type==2)
-						final_position[i]+=start_position[i];
-				}
-            for(i=0; i<MAX_SERVOS_NR; i++)
-            {
-                v_r[i]=v_max_motor[i]*v[i];
-                a_r[i]=a_max_motor[i]*a[i];
-                v_p[i]=0;
-                v_k[i]=0;
-            }
-            calculate();
-            break;
-
-        case lib::JOINT:
-            for(i=0;i<MAX_SERVOS_NR;i++)
-                start_position[i]=the_robot->EDP_data.current_joint_arm_coordinates[i];
-            for(i=0; i<MAX_SERVOS_NR; i++)
-            {
-                v_r[i]=v_max_joint[i]*v[i];
-                a_r[i]=a_max_joint[i]*a[i];
-                v_p[i]=0;
-                v_k[i]=0;
-            }
-            calculate();
-            break;
-
-        case lib::XYZ_EULER_ZYZ:
-            for(i=0;i<6;i++)
-                start_position[i]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];//pierwsze przypisanie start_position
-            start_position[6]=the_robot->EDP_data.current_gripper_coordinate;
-            start_position[7]=0.0;
-            for(i=0; i<MAX_SERVOS_NR; i++)
-            {
-                v_r[i]=v_max_zyz[i]*v[i];
-                a_r[i]=a_max_zyz[i]*a[i];
-                v_p[i]=0;
-                v_k[i]=0;
-            }
-            printf("w first interval\n");
-            calculate();
-            break;
-        case lib::XYZ_ANGLE_AXIS:
-            for(i=0;i<6;i++)
-                start_position[i]=the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
-            start_position[6]=the_robot->EDP_data.current_gripper_coordinate;
-            start_position[7]=0.0;
-            for(i=0; i<MAX_SERVOS_NR; i++)
-            {
-                v_r[i]=v_max_aa[i]*v[i];
-                a_r[i]=a_max_aa[i]*a[i];
-                v_p[i]=0;
-                v_k[i]=0;
-            }
-            calculate();
-            break;
-        default:
-            throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
-        } // end:switch
-
-        first_interval = false;
-    }	// end:if FIRST INTERVAL
-    // -------------------------------------------------------------------------------------------
-
-    // Kontakt z MP
-    if (node_counter-1 == td.interpolation_node_no) //czy poprzedni makrokrok byl ostatnim
-    { // Koniec odcinka
-        if(is_last_list_element())	//ostatni punkt (koniec listy pozycji pose_list)
-        {
-        	fflush(stdout);
-        	printf("po ostatnim elemencie trakejtorii\n");
-            return false;
-        }
-        else //lista pozycji nie jest skonczona wiec idziemy do nastepnego punktu
-        {
-            t_max=0;
-            for(i=0; i<MAX_SERVOS_NR; i++){
-					if(type==1) //wybor wzgledny/bezwzgledny
-						start_position[i]=pose_list_iterator->coordinates[i]; //przypisanie wartosci pozycji koncowej poprzedniego...
-					if(type==2)// ...ruchu jako wartosci poczatkowej nowego ruchu
-						start_position[i]+=pose_list_iterator->coordinates[i];
-				}
-            next_pose_list_ptr(); //przesuniecie iteratora na nastepna pozycje
-
-            get_pose(); //zapisanie v, a, final_position (= coordinates) z listy pozycji
-
-				if(type==2)
-					for(i=0; i<MAX_SERVOS_NR; i++)
-						final_position[i]+=start_position[i];
-
-
-            // Przepisanie danych z EDP_MASTER do obrazu robota
-
-
-            switch ( td.arm_type )
-            {
-            case lib::MOTOR:
-                for(i=0; i<MAX_SERVOS_NR; i++)
-                {
-                    v_r[i]=v_max_motor[i]*v[i];
-                    a_r[i]=a_max_motor[i]*a[i];
-                    v_p[i]=v_k[i];
-                    v_k[i]=0;
-                }
-                calculate();
-                break;
-
-            case lib::JOINT:
-                for(i=0; i<MAX_SERVOS_NR; i++)
-                {
-                    v_r[i]=v_max_joint[i]*v[i];
-                    a_r[i]=a_max_joint[i]*a[i];
-                    v_p[i]=v_k[i];
-                    v_k[i]=0;
-                }
-                calculate();
-                break;
-
-            case lib::XYZ_EULER_ZYZ:
-                for(i=0; i<MAX_SERVOS_NR; i++)
-                {
-                    v_r[i]=v_max_zyz[i]*v[i];
-                    a_r[i]=a_max_zyz[i]*a[i];
-                    v_p[i]=v_k[i];
-                    v_k[i]=0;
-                }
-                printf("ostatni makrokrok ruchu\n");
-                fflush(stdout);
-                calculate();
-                break;
-            case lib::XYZ_ANGLE_AXIS:
-                for(i=0; i<MAX_SERVOS_NR; i++)
-                {
-                    v_r[i]=v_max_aa[i]*v[i];
-                    a_r[i]=a_max_aa[i]*a[i];
-                    v_p[i]=v_k[i];
-                    v_k[i]=0;
-                }
-                calculate();
-                break;
-            default:
-                throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
-            } // end:switch
-      		 node_counter=1; //ustawienie makrokroku na 1
-
-        }
-    } //koniec: nastepny punkt trajektorii
-
-
-    // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-
-    the_robot->EDP_data.instruction_type = lib::SET; //ustawienie parametrow ruchu w edp_data
-    the_robot->EDP_data.get_type = NOTHING_DV; //ponizej w caseach jest dalsze ustawianie
-    the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
-
-
-    switch ( td.arm_type )
-    {
-    case lib::MOTOR:
-        the_robot->EDP_data.instruction_type = lib::SET;
-        the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.set_arm_type = lib::MOTOR;
-        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-        the_robot->EDP_data.next_interpolation_type = lib::MIM;
-        the_robot->EDP_data.motion_steps = td.internode_step_no;
-        the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-
-        if(node_counter < td.interpolation_node_no)
-        {
-            generate_next_coords();
-            for (i=0; i<MAX_SERVOS_NR; i++)
-                the_robot->EDP_data.next_motor_arm_coordinates[i] = next_position[i];
-
-            //PROBA Z CHWYTAKIEM
-
-            if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK)
-                i=8;
-            else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT)
-                i=7;
-
-            if(v_grip*node_counter < final_position[i])
-            {
-                the_robot->EDP_data.next_motor_arm_coordinates[i] = v_grip*node_counter;
-            }
-            else
-            {
-                the_robot->EDP_data.next_motor_arm_coordinates[i] = final_position[i];
-            }
-        }
-        else
-        {
-            //OSTATNI PUNKT
-            for (i=0; i<MAX_SERVOS_NR; i++)
-                the_robot->EDP_data.next_motor_arm_coordinates[i] = final_position[i];
-        }
-        break;
-
-    case lib::JOINT:
-            the_robot->EDP_data.instruction_type = lib::SET;
-        the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.set_arm_type = lib::JOINT;
-        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = lib::MIM;
-        the_robot->EDP_data.motion_steps = td.internode_step_no;
-        the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-
-        if(node_counter < td.interpolation_node_no)
-        {
-            generate_next_coords();
-            for (i=0; i<MAX_SERVOS_NR; i++)
-                the_robot->EDP_data.next_joint_arm_coordinates[i] = next_position[i];
-
-            //PROBA Z CHWYTAKIEM
-
-            if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK)
-                i=8;
-            else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT)
-                i=7;
-
-            if(v_grip*node_counter < final_position[i])
-            {
-                the_robot->EDP_data.next_joint_arm_coordinates[i] = v_grip*node_counter;
-            }
-            else
-            {
-                the_robot->EDP_data.next_joint_arm_coordinates[i] = final_position[i];
-            }
-        }
-        else
-        {
-            //OSTATNI PUNKT
-            generate_next_coords();
-            for (i=0; i<MAX_SERVOS_NR; i++)
-                the_robot->EDP_data.next_joint_arm_coordinates[i] = final_position[i];
-        }
-        break;
-
-    case lib::XYZ_EULER_ZYZ:
-            the_robot->EDP_data.instruction_type = lib::SET; //dalsze ustawianie parametrow ruchu w edp
-        the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
-        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = lib::MIM;
-        the_robot->EDP_data.motion_steps = td.internode_step_no;
-        the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-
-
-
-        if(node_counter < td.interpolation_node_no) //jezeli makrokrok nie jest ostatnim makrokrokiem w ruchu
-        {
-        	//printf("wywolanie generate_next_cords\n");
-            generate_next_coords(); //obliczanie nastepnych wspolrzednych makrokroku
-            for (i=0; i<6; i++)//zapisanie nastepnego polazenia (makrokroku) do robota
-                the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i] = next_position[i];
-
-            //PROBA Z CHWYTAKIEM
-
-            if(v_grip*node_counter < final_position[6])
-            {
-                the_robot->EDP_data.next_gripper_coordinate = v_grip*node_counter;
-            }
-            else
-            {
-                the_robot->EDP_data.next_gripper_coordinate = final_position[6];
-            }
-        }
-        else
-        {
-            //OSTATNI PUNKT
-            for (i=0; i<6; i++) //ostatni makrokrok, przypisujemy final_position
-                the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i] = final_position[i];
-            the_robot->EDP_data.next_gripper_coordinate = final_position[6];
-        }
-
-        break;
-
-    case lib::XYZ_ANGLE_AXIS:
-            the_robot->EDP_data.instruction_type = lib::SET;
-        the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
-        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = lib::MIM;
-        the_robot->EDP_data.motion_steps = td.internode_step_no;
-        the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-
-        if(node_counter < td.interpolation_node_no)
-        {
-            generate_next_coords();
-            for (i=0; i<6; i++)
-                the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = next_position[i];
-
-            the_robot->EDP_data.next_gripper_coordinate = next_position[6];
-        }
-        else
-        {
-            //OSTATNI PUNKT
-            for (i=0; i<6; i++)
-                the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = final_position[i];
-            the_robot->EDP_data.next_gripper_coordinate = final_position[6];
-        }
-        break;
-    default:
-            throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
-    }// end:switch
-
-
-    return true;
-
-}*/ // end: BOOLEAN ecp_smooth2_generator::next_step ( )
-
-/*void ecp_smooth2_generator::calculate(void)
-{
-    double s[MAX_SERVOS_NR];
-    double t;
-    double v_1, v_2;
-    int i, tmp;
-    double tk=10*STEP; //czas jednego makrokroku
-
-    for(i=0; i<MAX_SERVOS_NR; i++)
-    {
-        // Obliczenie drog dla wszystkich osi
-        s[i]=fabs(final_position[i]-start_position[i]);
-        // kierunek ruchu
-        if(final_position[i]-start_position[i] < 0)
-        {
-            k[i]=-1;
-        }
-        else
-        {
-            k[i]=1;
-        }
-
-        if(eq(s[i],0.0))
-        {
-            t=0;
-        }
-        else if(
-            ((v_r[i]>=v_p[i]) && (v[i]>=v_k[i]) && (((2*v_p[i]*(v_r[i]-v_p[i]) + 2*v_r[i]*(v_r[i]-v_k[i])
-                                                    +((v_r[i]-v_p[i])*(v_r[i]-v_p[i])) - ((v_k[i] - v_r[i])*(v_k[i] - v_r[i])))/(2*a_r[i])) < s[i]))
-            ||
-            ((v_r[i]<v_p[i]) && (v[i]>=v_k[i]) && (((2*v_p[i]*(v_p[i]-v_r[i]) + 2*v_r[i]*(v_r[i]-v_k[i])
-                                                    -((v_r[i]-v_p[i])*(v_r[i]-v_p[i])) - ((v_k[i] - v_r[i])*(v_k[i] - v_r[i])))/(2*a_r[i])) < s[i]))
-            ||
-            ((v_r[i]>=v_p[i]) && (v[i]<v_k[i]) && (((2*v_p[i]*(v_r[i]-v_p[i]) + 2*v_r[i]*(v_k[i] - v_r[i])
-                                                    +((v_r[i]-v_p[i])*(v_r[i]-v_p[i])) + ((v_k[i] - v_r[i])*(v_k[i] - v_r[i])))/(2*a_r[i])) < s[i]))
-            ||
-            ((v_r[i]<v_p[i]) && (v[i]<v_k[i]) && (((2*v_p[i]*(v_p[i]-v_r[i]) + 2*v_r[i]*(v_k[i] - v_r[i])
-                                                    -((v_r[i]-v_p[i])*(v_r[i]-v_p[i])) + ((v_k[i] - v_r[i])*(v_k[i] - v_r[i])))/(2*a_r[i])) < s[i]))
-        )
-
-            // zwykly ruch w 3 etapach
-        {
-            if(debug)
-            {
-                printf("%d - 3 etapy\n", i);
-            }
-            // Obliczenie najdluzszego czasu
-            if((v_r[i]>=v_p[i]) && (v_r[i]>=v_k[i]))
-            {// pierwszy model ruchu - przyspieszanie / hamowanie
-                t =
-                    fabs((v_r[i]-v_p[i])/a_r[i]) +
-                    ((2*s[i]*a_r[i] -2*v_p[i]*fabs(v_r[i] - v_p[i]) - (v_r[i]-v_p[i])*(v_r[i]-v_p[i]) - 2*v_r[i]*fabs(v_k[i]-v_r[i]) + (v_k[i] - v_r[i])*(v_k[i] - v_r[i])) /
-                     (2*a_r[i]*v_r[i])) +
-                    fabs((v_r[i]-v_k[i])/a_r[i]);
-            }
-            else if((v_r[i]>=v_p[i]) && (v_r[i]<v_k[i]))
-            {// drugi model ruchu - przyspieszanie / przyspieszanie
-                t =
-                    fabs((v_r[i]-v_p[i])/a_r[i]) +
-                    ((2*s[i]*a_r[i] -2*v_p[i]*fabs(v_r[i] - v_p[i]) - (v_r[i]-v_p[i])*(v_r[i]-v_p[i]) - 2*v_r[i]*fabs(v_k[i]-v_r[i]) - (v_k[i] - v_r[i])*(v_k[i] - v_r[i])) /
-                     (2*a_r[i]*v_r[i])) +
-                    fabs((v_r[i]-v_k[i])/a_r[i]);
-            }
-            else if((v_r[i]<v_p[i]) && (v_r[i]>=v_k[i]))
-            {// trzeci model ruchu - hamowanie / hamowanie
-                t =
-                    fabs((v_r[i]-v_p[i])/a_r[i]) +
-                    ((2*s[i]*a_r[i] -2*v_p[i]*fabs(v_r[i] - v_p[i]) + (v_r[i]-v_p[i])*(v_r[i]-v_p[i]) - 2*v_r[i]*fabs(v_k[i]-v_r[i]) + (v_k[i] - v_r[i])*(v_k[i] - v_r[i])) /
-                     (2*a_r[i]*v_r[i])) +
-                    fabs((v_r[i]-v_k[i])/a_r[i]);
-            }
-            else if((v_r[i]<v_p[i]) && (v_r[i]<v_k[i]))
-            {// czwarty model ruchu - hamowanie / przyspieszanie
-                t =
-                    fabs((v_r[i]-v_p[i])/a_r[i]) +
-                    ((2*s[i]*a_r[i] -2*v_p[i]*fabs(v_r[i] - v_p[i]) + (v_r[i]-v_p[i])*(v_r[i]-v_p[i]) - 2*v_r[i]*fabs(v_k[i]-v_r[i]) - (v_k[i] - v_r[i])*(v_k[i] - v_r[i])) /
-                     (2*a_r[i]*v_r[i])) +
-                    fabs((v_r[i]-v_k[i])/a_r[i]);
-            }
-
-        } //end - obliczanie czasu w 3 etapach
-        else //jesli droga jest krotsza niz osiagnieta przy przyspieszaniu i hamowaniu przy zadanych a i v
-        {
-            switch(i)
-            {
-            case 0:
-                sr_ecp_msg.message("Redukcja predkosci w osi 0");
-                break;
-            case 1:
-                sr_ecp_msg.message("Redukcja predkosci w osi 1");
-                break;
-            case 2:
-                sr_ecp_msg.message("Redukcja predkosci w osi 2");
-                break;
-            case 3:
-                sr_ecp_msg.message("Redukcja predkosci w osi 3");
-                break;
-            case 4:
-                sr_ecp_msg.message("Redukcja predkosci w osi 4");
-                break;
-            case 5:
-                sr_ecp_msg.message("Redukcja predkosci w osi 5");
-                break;
-            case 6:
-                sr_ecp_msg.message("Redukcja predkosci w osi 6");
-                break;
-            case 7:
-                sr_ecp_msg.message("Redukcja predkosci w osi 7");
-                break;
-            }
-            if(debug)
-            {
-                printf("%d - 2 etapy\n", i);
-            }
-            v_1=sqrt(v_p[i]*v_p[i]/2 + v_k[i]*v_k[i]/2 + s[i]*a_r[i]);
-            if(v_1>=v_p[i] && v_1>=v_k[i])
-            {
-                v_r[i]=v_1;
-            }
-            else
-            {
-                v_1=(v_p[i] + v_k[i])/2;
-                if((v_1<v_p[i] && v_1>=v_k[i]) || (v_1>=v_p[i] && v_1<v_k[i]))
-                    v_r[i]=v_1;
-                else
-                {
-                    v_1=sqrt(v_p[i]*v_p[i]/2 + v_k[i]*v_k[i]/2 - s[i]*a_r[i]);
-                    if(v_1<v_p[i] && v_1<v_k[i])
-                    {
-                        v_r[i] = v_1;
-                    }
-                    else
-                    {
-                        printf("Blad w obliczaniu predkosci w 2 etapach!!\n");
-                        throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
-                    }
-
-                }
-            }
-
-            t = (fabs(v_r[i] - v_p[i]) + fabs(v_r[i] - v_k[i]))/a_r[i];
-        }
-        if(t>t_max)
-            t_max=t;
-    }
-
-    //kwantyzacja czasu
-    if(ceil(t_max/tk)*tk != t_max)
-    {
-        t_max = ceil(t_max/tk);
-        t_max = t_max*tk;
-    }
-
-    // Obliczenie predkosci dla wszystkich osi
-    for(i=0; i<MAX_SERVOS_NR; i++) {
-        if(eq(s[i],0.0)) {
-            v_r[i]=0;
-            printf("brak drogi\n");
-        }
-        else
-        {//pierszy model ruchu - przyspieszanie / hamowanie
-            v_1=(v_p[i]+v_k[i]+a_r[i]*t_max)/2 + sqrt(-4*v_p[i]*v_p[i]
-                    -4*v_k[i]*v_k[i]+8*v_p[i]*v_k[i]+8*v_p[i]*a_r[i]*t_max+8*v_k[i]
-                    *a_r[i]*t_max+4*a_r[i]*a_r[i]*t_max*t_max
-                    -16*a_r[i]*s[i])/4;
-
-            v_2=(v_p[i]+v_k[i]+a_r[i]*t_max)/2 - sqrt(-4*v_p[i]*v_p[i]
-                    -4*v_k[i]*v_k[i]+8*v_p[i]*v_k[i]+8*v_p[i]*a_r[i]*t_max+8*v_k[i]
-                    *a_r[i]*t_max+4*a_r[i]*a_r[i]*t_max*t_max
-                    -16*a_r[i]*s[i])/4;
-            printf("po pierwszym v1 = %lf, v2 = %lf\n", v_1, v_2);
-            if((v_1>=0)&&(v_1<=v_r[i])&&(v_1>=v_p[i])&&(v_1>=v_k[i])) {
-                v_r[i]=v_1;
-                printf("1 - przyspieszanie hamowanie\n");
-            }
-            else if((v_2>=0)&&(v_2<=v_r[i])&&(v_2>=v_p[i])&&(v_2>=v_k[i])) {
-                v_r[i]=v_2;
-                printf("1 - przyspieszanie hamowanie\n");
-            }
-            else
-            {//drugi model ruchu - przyspieszanie / przyspieszanie
-                v_1 = (v_k[i]*v_k[i] - 2*a_r[i]*s[i] - v_p[i]*v_p[i])/(2*(v_k[i]-v_p[i]-a_r[i]*t_max));
-                printf("po drugim v1 = %lf, v2 = %lf\n", v_1, v_2);
-                if((v_1>=0)&&(v_1<=v_r[i])&&(v_1>=v_p[i])&&(v_1<v_k[i])) {
-                    v_r[i]=v_1;
-                    printf("2 - przyspieszanie przyspieszanie\n");
-                }
-                else
-                {//trzeci model ruchu - hamowanie / hamowanie
-                    v_1 = (-2*a_r[i]*s[i] + v_p[i]*v_p[i] - v_k[i]*v_k[i])/(2*(v_p[i]-v_k[i]-a_r[i]*t_max));
-                    printf("po trzecim v1 = %lf, v2 = %lf\n", v_1, v_2);
-                    if((v_1>=0)&&(v_1<=v_r[i])&&(v_1<v_p[i])&&(v_1>=v_k[i])) {
-                        v_r[i]=v_1;
-                        printf("3 - hamowanie hamowanie\n");
-                    }
-                    else
-                    {//czwarty model ruchu - hamowanie / przyspieszanie
-                        v_1=(v_p[i]+v_k[i]-a_r[i]*t_max)/2 + sqrt(-4*v_p[i]*v_p[i]
-                                -4*v_k[i]*v_k[i]+8*v_p[i]*v_k[i]-8*v_p[i]*a_r[i]*t_max-8*v_k[i]
-                                *a_r[i]*t_max+4*a_r[i]*a_r[i]*t_max*t_max
-                                +16*a_r[i]*s[i])/4;
-
-                        v_2=(v_p[i]+v_k[i]-a_r[i]*t_max)/2 - sqrt(-4*v_p[i]*v_p[i]
-                                -4*v_k[i]*v_k[i]+8*v_p[i]*v_k[i]-8*v_p[i]*a_r[i]*t_max-8*v_k[i]
-                                *a_r[i]*t_max+4*a_r[i]*a_r[i]*t_max*t_max
-                                +16*a_r[i]*s[i])/4;
-
-                        if((v_1>=0)&&(v_1<=v_r[i])&&(v_1<v_p[i])&&(v_1<v_k[i])) {
-                            v_r[i]=v_1;
-                            printf("4 - hamowanie przyspieszanie\n");
-                        }
-                        else if((v_2>=0)&&(v_2<=v_r[i])&&(v_2<v_p[i])&&(v_2<v_k[i])) {
-                            v_r[i]=v_2;
-                            printf("4 - hamowanie przyspieszanie\n");
-                        }
-                        else
-                        {//blad - brak rozwiazania
-                            printf("blad! nie da sie obliczyc predkosci (%d)\n", i);
-                            //throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
-                            v_r[i]=v_1;
-                        }
-                    }
-                }
-            }
-
-            if(eq(s[i],0.0))
-                v_r[i]=0;
-            printf("koniec v1 = %lf, v2 = %lf\n\n\n", v_1, v_2);
-        }
-    }
-
-    // Wypelnienie struktury td
-    td.interpolation_node_no = (int)round(t_max / tk);
-    td.internode_step_no = 10;
-    td.value_in_step_no = td.internode_step_no - 2;
-
-    for(i=0;i<MAX_SERVOS_NR;i++)
-        td.coordinate_delta[i] = final_position[i]-
-                                 start_position[i];
-   if(debug)
-    {
-        printf("makrokroki: %d, mikrokroki: %d, czas kroku: %f, step: %f\n", td.interpolation_node_no, td.internode_step_no, tk, STEP);
-        printf("t: %f\n", t_max);
-        printf("v: %f, %f, %f, %f, %f, %f, %f, %f\n", v_r[0], v_r[1], v_r[2], v_r[3], v_r[4], v_r[5], v_r[6], v_r[7]);
-    }
-
-    for(i=0;i<MAX_SERVOS_NR;i++)
-    {
-        przysp[i]=fabs((v_r[i]-v_p[i])/(a_r[i]*tk));
-        jedn[i]=(t_max-(fabs(v_r[i]-v_k[i])/a_r[i]))/tk;
-
-        if(v_r[i]>=v_p[i])
-        {
-            s_przysp[i]=(2*v_p[i]*(v_r[i]-v_p[i]) + (v_r[i] - v_p[i])*(v_r[i] - v_p[i]))/(2*a_r[i]);
-        }
-        else
-        {
-            s_przysp[i]=(2*v_p[i]*(v_p[i] - v_r[i]) - (v_r[i] - v_p[i])*(v_r[i] - v_p[i]))/(2*a_r[i]);
-        }
-
-        s_jedn[i]= (t_max - (fabs(v_r[i] - v_p[i]) + fabs(v_r[i] - v_k[i]))/a_r[i])*v_r[i];
-    }
-
-    v_grip =	(final_position[i]/td.interpolation_node_no);
-    if(v_grip<v_grip_min)
-        v_grip=v_grip_min;
-
-
-} *///end - calculate
 
 } // namespace generator
 } // namespace common
