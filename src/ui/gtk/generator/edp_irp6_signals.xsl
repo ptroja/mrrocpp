@@ -22,13 +22,15 @@ EDP IRp6 RCSC window callback signals
 <xsl:text>
 #include &lt;iostream&gt;
 
+//GTK libraries
 #include &lt;gtk/gtk.h&gt;
 #include &lt;glib.h&gt;
 
+//UI model libraries
 #include "ui_model.h"
 #include "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_uimodule.h"
 
-
+//mrrocpp UI constants
 mrrocpp::lib::BYTE servo_alg_no[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
 mrrocpp::lib::BYTE servo_par_no[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
 	
@@ -55,6 +57,7 @@ double </xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:te
 
 </xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>#include "ui/ui_ecp_r_conveyor.h"</xsl:text></xsl:when><xsl:otherwise><xsl:text>#include "ui/ui_ecp_r_irp6_common.h"</xsl:text></xsl:otherwise></xsl:choose><xsl:text>
 
+//UI robot constructor
 edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>(ui_config_entry &amp;entry)
 {
 				robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = new </xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>ui_conveyor_robot</xsl:text></xsl:when><xsl:otherwise><xsl:text>ui_common_robot</xsl:text></xsl:otherwise></xsl:choose><xsl:text>(
@@ -65,6 +68,7 @@ edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>::edp_</xsl:text><xsl:va
 
 }
 
+//UI robot desctructor
 edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>::~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>()
 {
 	if (robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>) {
@@ -77,6 +81,7 @@ static edp_</xsl:text><xsl:value-of select="$name" /><xsl:text> *edp_</xsl:text>
 
 extern "C" 
 { 
+	//callback signals for initializing the manual motion windows values
 	void on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_servo (GtkButton * button, gpointer userdata);
 	void on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (GtkButton * button, gpointer userdata);
 	void on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_inc (GtkButton * button, gpointer userdata);
@@ -85,7 +90,7 @@ extern "C"
 	void on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_ts (GtkButton * button, gpointer userdata);
 	void on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_euler_ts (GtkButton * button, gpointer userdata);
 
-
+	//handler for combo-box widget
 	void  on_combobox1_changed_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>(GtkComboBox *comboBox, gpointer userdata)  
 	{
 		ui_config_entry &amp; ChoseEntry = *(ui_config_entry *) userdata;
@@ -105,11 +110,12 @@ extern "C"
 		gint choice;
 		choice = gtk_combo_box_get_active (comboBox); 
 
+		//which window has been chosen
 		if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised)
 		{
 			switch (choice)
 			{
-			case 0: </xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>std::cout &lt;&lt; "Internal window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_int";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (button, userdata); break;
+			case 0: </xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>std::cout &lt;&lt; "Internal joint window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_int";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (button, userdata); break;
 			case 1: </xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>std::cout &lt;&lt; "Increment window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_inc";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_inc (button, userdata); break;
 			case 2: </xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>std::cout &lt;&lt; "Servo algorithm window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_servo";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_servo (button, userdata); break;
 			case 3: </xsl:text><xsl:if test="$axis_xyz &gt; 0"><xsl:text>std::cout &lt;&lt; "XYZ Angle Axis window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_axis_xyz";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_xyz (button, userdata); break;
@@ -119,11 +125,12 @@ extern "C"
 			default: std::cout &lt;&lt; "Synchronizing..." &lt;&lt; std::endl;
 			}
 		}
+		//if robot is not synchronized
 		else
 		{
 			switch (choice)
 			{
-			case 0: </xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>std::cout &lt;&lt; "Internal window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_int";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (button, userdata); break;
+			case 0: </xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>std::cout &lt;&lt; "Internal joint window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_int";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (button, userdata); break;
 			case 1: </xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>std::cout &lt;&lt; "Increment window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_inc";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_inc (button, userdata); break;
 			case 2: break;
 			case 3: break;
@@ -142,11 +149,13 @@ extern "C"
 			GtkWidget* windowWithoutParent = gtk_bin_get_child(GTK_BIN(chosenWindow));
 			gtk_widget_unparent(windowWithoutParent);
 			
+			//add specific manual motion window to the main window for the robot
 			gtk_scrolled_window_add_with_viewport (scrolled, windowWithoutParent);
 		}
 		
 	}	
 	
+	//handler for Synchronize button
 	void  on_clicked_synchronize_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>(GtkButton * button, gpointer userdata)  
 	{
 		ui_config_entry &amp; comboEntry = *(ui_config_entry *) userdata;
@@ -177,6 +186,7 @@ extern "C"
 	        }
 	}	
 
+	//UI module initializing function
 	void ui_module_init(ui_config_entry &amp;entry) 
 	{
 		edp_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = new edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>(entry);
@@ -190,10 +200,11 @@ extern "C"
 		{
 			GtkComboBox * combo = GTK_COMBO_BOX (gtk_builder_get_object(&amp;builder, "combobox1"));
 			
-			</xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>gtk_combo_box_remove_text(combo, counter); gtk_combo_box_insert_text(combo, counter, "Internal"); counter++; gtk_combo_box_insert_text(combo, counter, "Increment"); counter++;</xsl:text></xsl:if><xsl:text>
+			</xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>gtk_combo_box_remove_text(combo, counter); gtk_combo_box_insert_text(combo, counter, "Internal joint"); counter++; gtk_combo_box_insert_text(combo, counter, "Increment"); counter++;</xsl:text></xsl:if><xsl:text>
 		}
 	}
 
+	//executed when GTK main window is being closed. 
 	void ui_module_unload(void) 
 	{
 		if (edp_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>) 
@@ -204,6 +215,7 @@ extern "C"
 	}
 }
 
+//function used by the synchronization thread - used to synchronize the robot
 void *ui_synchronize_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> (gpointer userdata)
 {
 	ui_config_entry &amp; comboEntry = *(ui_config_entry *) userdata;

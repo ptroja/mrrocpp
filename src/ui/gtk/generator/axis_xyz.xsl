@@ -74,7 +74,7 @@ Axis_xyz window
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="label" translatable="yes">Execute move</property>
+                    <property name="label" translatable="yes">Execute motion</property>
                     <property name="response_id">0</property>
                     <signal name="clicked" handler="on_execute_button_clicked_{$fullName}_axis_xyz"/>
                   </widget>

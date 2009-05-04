@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?> 
 <!--
 MRROC++ GUI generator
 Axis_ts window
@@ -193,7 +193,7 @@ Axis_ts window
 </xsl:template>
 
 
-<!-- irp6 axis_xyz repeatable part -->
+<!-- irp6 axis_ts repeatable part -->
 <xsl:template name="for.each.edp.irp6.axis.ts">
 <xsl:param name="axis_ts"/>
 <xsl:param name="i"/>

@@ -20,7 +20,7 @@ extern "C"
 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
-		</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.1">
+		</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.arrow">
     		<xsl:with-param name="motorsNo" select="$motorsNo"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
@@ -32,7 +32,7 @@ extern "C"
 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
-	</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.6">
+	</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.read.1">
     		<xsl:with-param name="motorsNo" select="$motorsNo"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
@@ -45,7 +45,7 @@ extern "C"
 				if (!( robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->read_motors(</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos))) // Odczyt polozenia walow silnikow
 					printf("Blad w read motors\n");
 					
-</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.7">
+</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.read.2">
     				<xsl:with-param name="motorsNo" select="$motorsNo"/>
 					<xsl:with-param name="name" select="$name"/>
 					<xsl:with-param name="i" select="1"/>
@@ -68,7 +68,7 @@ extern "C"
 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
-	</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.3">
+	</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.execute.1">
     		<xsl:with-param name="motorsNo" select="$motorsNo"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
@@ -77,7 +77,7 @@ extern "C"
 		if (robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text></xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"></xsl:when><xsl:otherwise><xsl:text>->ecp</xsl:text></xsl:otherwise></xsl:choose><xsl:text>->get_EDP_pid()!=-1)
 		{
 			if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) {
-	</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.8">
+	</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.execute.2">
     		<xsl:with-param name="motorsNo" select="$motorsNo"/>
 			<xsl:with-param name="name" select="$name"/>
 			<xsl:with-param name="i" select="1"/>
@@ -92,7 +92,7 @@ extern "C"
 			robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->move_motors(</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos);
 			
 			 if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) {
-	</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.9">
+	</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.execute.3">
     		<xsl:with-param name="motorsNo" select="$motorsNo"/>
 			<xsl:with-param name="name" select="$name"/>
 			<xsl:with-param name="i" select="1"/>
@@ -110,17 +110,17 @@ extern "C"
  		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
-	</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.3">
+	</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.execute.1">
     	<xsl:with-param name="motorsNo" select="$motorsNo"/>
 		<xsl:with-param name="i" select="1"/>
 		<xsl:with-param name="name" select="$name"/>
  	</xsl:call-template><xsl:text>
- 		sprintf(buffer, "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text> INCREMENT position </xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.4">
+ 		sprintf(buffer, "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text> INCREMENT position </xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.export.1">
     		<xsl:with-param name="motorsNo" select="$motorsNo"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
  		</xsl:call-template><xsl:text>" 
- 		</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.5">
+ 		</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.export.2">
     		<xsl:with-param name="motorsNo" select="$motorsNo"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
@@ -136,7 +136,7 @@ extern "C"
  		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
 		
-		</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.2">
+		</xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.import.1">
     		<xsl:with-param name="motorsNo" select="$motorsNo"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
@@ -158,7 +158,7 @@ extern "C"
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
-<xsl:template name="irp6.inc.repeat.signals.cc.1">
+<xsl:template name="irp6.inc.repeat.signals.cc.arrow">
 <xsl:param name="motorsNo"/>
 <xsl:param name="i"/>
 <xsl:param name="name"/>
@@ -171,7 +171,7 @@ extern "C"
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $motorsNo">
-          <xsl:call-template name="irp6.inc.repeat.signals.cc.1">
+          <xsl:call-template name="irp6.inc.repeat.signals.cc.arrow">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
@@ -186,7 +186,7 @@ extern "C"
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
-<xsl:template name="irp6.inc.repeat.signals.cc.2">
+<xsl:template name="irp6.inc.repeat.signals.cc.import.1">
 <xsl:param name="motorsNo"/>
 <xsl:param name="i"/>
 <xsl:param name="name"/>
@@ -198,7 +198,7 @@ extern "C"
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $motorsNo">
-          <xsl:call-template name="irp6.inc.repeat.signals.cc.2">
+          <xsl:call-template name="irp6.inc.repeat.signals.cc.import.1">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
@@ -213,7 +213,7 @@ extern "C"
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
-<xsl:template name="irp6.inc.repeat.signals.cc.3">
+<xsl:template name="irp6.inc.repeat.signals.cc.execute.1">
 <xsl:param name="motorsNo"/>
 <xsl:param name="i"/>
 <xsl:param name="name"/>
@@ -223,7 +223,7 @@ extern "C"
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $motorsNo">
-          <xsl:call-template name="irp6.inc.repeat.signals.cc.3">
+          <xsl:call-template name="irp6.inc.repeat.signals.cc.execute.1">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
@@ -238,7 +238,7 @@ extern "C"
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
-<xsl:template name="irp6.inc.repeat.signals.cc.4">
+<xsl:template name="irp6.inc.repeat.signals.cc.export.1">
 <xsl:param name="motorsNo"/>
 <xsl:param name="i"/>
 <xsl:param name="name"/>
@@ -247,7 +247,7 @@ extern "C"
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $motorsNo">
-          <xsl:call-template name="irp6.inc.repeat.signals.cc.4">
+          <xsl:call-template name="irp6.inc.repeat.signals.cc.export.1">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
@@ -262,7 +262,7 @@ extern "C"
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
-<xsl:template name="irp6.inc.repeat.signals.cc.5">
+<xsl:template name="irp6.inc.repeat.signals.cc.export.2">
 <xsl:param name="motorsNo"/>
 <xsl:param name="i"/>
 <xsl:param name="name"/>
@@ -271,7 +271,7 @@ extern "C"
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $motorsNo">
-          <xsl:call-template name="irp6.inc.repeat.signals.cc.5">
+          <xsl:call-template name="irp6.inc.repeat.signals.cc.export.2">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
@@ -286,7 +286,7 @@ extern "C"
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
-<xsl:template name="irp6.inc.repeat.signals.cc.6">
+<xsl:template name="irp6.inc.repeat.signals.cc.read.1">
 <xsl:param name="motorsNo"/>
 <xsl:param name="i"/>
 <xsl:param name="name"/>
@@ -296,7 +296,7 @@ extern "C"
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $motorsNo">
-          <xsl:call-template name="irp6.inc.repeat.signals.cc.6">
+          <xsl:call-template name="irp6.inc.repeat.signals.cc.read.1">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
@@ -311,7 +311,7 @@ extern "C"
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
-<xsl:template name="irp6.inc.repeat.signals.cc.7">
+<xsl:template name="irp6.inc.repeat.signals.cc.read.2">
 <xsl:param name="motorsNo"/>
 <xsl:param name="name"/>
 <xsl:param name="i"/>
@@ -323,7 +323,7 @@ extern "C"
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $motorsNo">
-          <xsl:call-template name="irp6.inc.repeat.signals.cc.7">
+          <xsl:call-template name="irp6.inc.repeat.signals.cc.read.2">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
@@ -338,7 +338,7 @@ extern "C"
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
-<xsl:template name="irp6.inc.repeat.signals.cc.8">
+<xsl:template name="irp6.inc.repeat.signals.cc.execute.2">
 <xsl:param name="motorsNo"/>
 <xsl:param name="name"/>
 <xsl:param name="i"/>
@@ -348,7 +348,7 @@ extern "C"
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $motorsNo">
-          <xsl:call-template name="irp6.inc.repeat.signals.cc.8">
+          <xsl:call-template name="irp6.inc.repeat.signals.cc.execute.2">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
@@ -363,7 +363,7 @@ extern "C"
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
-<xsl:template name="irp6.inc.repeat.signals.cc.9">
+<xsl:template name="irp6.inc.repeat.signals.cc.execute.3">
 <xsl:param name="motorsNo"/>
 <xsl:param name="name"/>
 <xsl:param name="i"/>
@@ -373,7 +373,7 @@ extern "C"
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $motorsNo">
-          <xsl:call-template name="irp6.inc.repeat.signals.cc.9">
+          <xsl:call-template name="irp6.inc.repeat.signals.cc.execute.3">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>

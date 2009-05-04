@@ -22,7 +22,7 @@ extern "C"
 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
-		</xsl:text><xsl:call-template name="irp6.axis.ts.repeat.signals.cc">
+		</xsl:text><xsl:call-template name="irp6.axis.ts.repeat.signals.cc.arrow">
     		<xsl:with-param name="axis_ts" select="$axis_ts"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
@@ -34,7 +34,7 @@ extern "C"
 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
-	</xsl:text><xsl:call-template name="irp6.axis.ts.repeat.signals.cc.6">
+	</xsl:text><xsl:call-template name="irp6.axis.ts.repeat.signals.cc.read.1">
     		<xsl:with-param name="axis_ts" select="$axis_ts"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
@@ -62,7 +62,7 @@ extern "C"
 					tool_vector_a[5] = tool_vector_a[5]/alfa;
 				}
 					
-</xsl:text><xsl:call-template name="irp6.axis.ts.repeat.signals.cc.7">
+</xsl:text><xsl:call-template name="irp6.axis.ts.repeat.signals.cc.read.2">
     				<xsl:with-param name="axis_ts" select="$axis_ts"/>
 					<xsl:with-param name="name" select="$name"/>
 					<xsl:with-param name="i" select="1"/>
@@ -82,7 +82,7 @@ extern "C"
 		ui_config_entry * ChoseEntry = (ui_config_entry *) userdata;
         GtkBuilder &amp; thisBuilder = ((*ChoseEntry).getBuilder());
         
-	</xsl:text><xsl:call-template name="irp6.axis.ts.repeat.signals.cc.3">
+	</xsl:text><xsl:call-template name="irp6.axis.ts.repeat.signals.cc.set.1">
     		<xsl:with-param name="axis_ts" select="$axis_ts"/>
 			<xsl:with-param name="i" select="1"/>
 			<xsl:with-param name="name" select="$name"/>
@@ -90,7 +90,7 @@ extern "C"
 
 		if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised)
 		{
-	</xsl:text><xsl:call-template name="irp6.axis.ts.repeat.signals.cc.8">
+	</xsl:text><xsl:call-template name="irp6.axis.ts.repeat.signals.cc.set.2">
     		<xsl:with-param name="axis_ts" select="$axis_ts"/>
 			<xsl:with-param name="name" select="$name"/>
 			<xsl:with-param name="i" select="1"/>
@@ -121,7 +121,7 @@ extern "C"
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
-<xsl:template name="irp6.axis.ts.repeat.signals.cc.3">
+<xsl:template name="irp6.axis.ts.repeat.signals.cc.set.1">
 <xsl:param name="axis_ts"/>
 <xsl:param name="i"/>
 <xsl:param name="name"/>
@@ -131,7 +131,7 @@ extern "C"
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $axis_ts">
-          <xsl:call-template name="irp6.axis.ts.repeat.signals.cc.3">
+          <xsl:call-template name="irp6.axis.ts.repeat.signals.cc.set.1">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
@@ -146,7 +146,7 @@ extern "C"
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
-<xsl:template name="irp6.axis.ts.repeat.signals.cc.6">
+<xsl:template name="irp6.axis.ts.repeat.signals.cc.read.1">
 <xsl:param name="axis_ts"/>
 <xsl:param name="i"/>
 <xsl:param name="name"/>
@@ -156,7 +156,7 @@ extern "C"
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $axis_ts">
-          <xsl:call-template name="irp6.axis.ts.repeat.signals.cc.6">
+          <xsl:call-template name="irp6.axis.ts.repeat.signals.cc.read.1">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
@@ -171,7 +171,7 @@ extern "C"
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
-<xsl:template name="irp6.axis.ts.repeat.signals.cc.7">
+<xsl:template name="irp6.axis.ts.repeat.signals.cc.read.2">
 <xsl:param name="axis_ts"/>
 <xsl:param name="name"/>
 <xsl:param name="i"/>
@@ -202,7 +202,7 @@ extern "C"
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $axis_ts">
-          <xsl:call-template name="irp6.axis.ts.repeat.signals.cc.7">
+          <xsl:call-template name="irp6.axis.ts.repeat.signals.cc.read.2">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
@@ -217,7 +217,7 @@ extern "C"
 </xsl:template>
 
 <!-- irp6 servo algorithm repeatable part -->
-<xsl:template name="irp6.axis.ts.repeat.signals.cc.8">
+<xsl:template name="irp6.axis.ts.repeat.signals.cc.set.2">
 <xsl:param name="axis_ts"/>
 <xsl:param name="name"/>
 <xsl:param name="i"/>
@@ -227,7 +227,7 @@ extern "C"
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $axis_ts">
-          <xsl:call-template name="irp6.axis.ts.repeat.signals.cc.8">
+          <xsl:call-template name="irp6.axis.ts.repeat.signals.cc.set.2">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
@@ -243,7 +243,7 @@ extern "C"
 
 
 <!-- irp6 axis ts handling signals .cc repeatable part -->
-<xsl:template name="irp6.axis.ts.repeat.signals.cc">
+<xsl:template name="irp6.axis.ts.repeat.signals.cc.arrow">
 <xsl:param name="axis_ts"/>
 <xsl:param name="i"/>
 <xsl:param name="name"/>
@@ -256,7 +256,7 @@ extern "C"
        </xsl:if>
 	<!-- for loop --> 
        <xsl:if test="$i &lt;= $axis_ts">
-          <xsl:call-template name="irp6.axis.ts.repeat.signals.cc">
+          <xsl:call-template name="irp6.axis.ts.repeat.signals.cc.arrow">
               <xsl:with-param name="i">
                   <xsl:value-of select="$i + 1"/>
               </xsl:with-param>
