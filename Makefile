@@ -1,18 +1,18 @@
-///////////////////////////////////////////////////////////////////////////////
- /** @file     Makefile
-  *
-  *  Main makefile of the MRROC++ frame system.
-  *
-  *  @author   tkornuta
-  *  @date     2007-01-12
-  *  $URL$
-  *  $LastChangedRevision$
-  *  $LastChangedDate$  
-  *  $LastChangedBy$
-  *  
-  */
-///////////////////////////////////////////////////////////////////////////////
- 
+#///////////////////////////////////////////////////////////////////////////////
+# /** @file     Makefile
+#  *
+#  *  Main makefile of the MRROC++ frame system.
+#  *
+#  *  @author   tkornuta
+#  *  @date     2007-01-12
+#  *  $URL$
+#  *  $LastChangedRevision$
+#  *  $LastChangedDate$  
+#  *  $LastChangedBy$
+#  *  
+#  */
+#///////////////////////////////////////////////////////////////////////////////
+      
 
 #------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
