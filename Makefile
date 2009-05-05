@@ -1,5 +1,5 @@
 #///////////////////////////////////////////////////////////////////////////////
-# /** @file     Makefile
+# /** @file     
 #  *
 #  *  Main makefile of the MRROC++ frame system.
 #  *
