@@ -82,7 +82,7 @@ void spots_recognition::main_task_algorithm(void)
 	bool cond;
 
 	smooth->load_file_with_path(trajektoria_poczatkowa);
-//	smooth->Move();
+	smooth->Move();
     sr_ecp_msg->message("Insert the plate");
 
     int iter = 0;

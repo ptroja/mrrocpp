@@ -35,7 +35,7 @@ bool spots::first_step()
 	the_robot->EDP_data.get_arm_type = lib::FRAME;
 
 	//zadanie zrobienia zdjec od fraidii
-	sensor->to_vsp.command = 38;
+	sensor->to_vsp.ps_response.command = 38;
 	sensor->to_vsp.i_code = lib::VSP_INITIATE_READING;
 
 	iter = 0;
@@ -54,16 +54,17 @@ bool spots::next_step()
 		common::T_MatrixManip Tpe_mm(tpe);
 		Tpe_mm.multiply_l_matrix4x4(teg, tpg);
 
-		sensor->to_vsp.plate_pos[0] = tpg[3];
-		sensor->to_vsp.plate_pos[1] = tpg[7];
-		sensor->to_vsp.plate_pos[2] = tpg[11];
+		sensor->to_vsp.ps_response.plate_pos[0] = tpg[3];
+		sensor->to_vsp.ps_response.plate_pos[1] = tpg[7];
+		sensor->to_vsp.ps_response.plate_pos[2] = tpg[11];
+	    sensor->to_vsp.ps_response.command = 38;
 
 	    iter++;
 	    return true;
 	}
 
 	// jesli zdjecia niegotowe, return true
-    sensor->to_vsp.command = 0;
+    sensor->to_vsp.ps_response.command = 0;
 
 	//printf("%d\n", sensor->from_vsp.comm_image.sensor_union.sp_r.pic_count);
 
