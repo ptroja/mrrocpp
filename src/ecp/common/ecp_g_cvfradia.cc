@@ -1,7 +1,7 @@
 /**
- * @file ecp_g_cvfradia.h
+ * @file ecp_g_cvfradia.cc
  * @brief Generator responsible for communication with cvFraDIA (testing purposes).
- * - class declaration
+ * - class definition
  * @author tkornuta
  * @date 17.03.2008
  *

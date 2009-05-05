@@ -1,9 +1,9 @@
 /**
- * @file ecp_g_cvfradia.h
- * @brief Generator responsible for communication with cvFraDIA (testing purposes).
+ * @file ecp_g_force.cc
+ * @brief GFunkcje do tworzenia procesow ECP z wykorzystaniem sily
  * - class declaration
- * @author tkornuta
- * @date 17.03.2008
+ * @author yoyek
+ * @date 01.01.2002
  *
  * $URL$
  * $LastChangedRevision$
