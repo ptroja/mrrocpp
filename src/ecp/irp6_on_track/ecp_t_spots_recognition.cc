@@ -96,7 +96,7 @@ void spots_recognition::main_task_algorithm(void)
 		sr_ecp_msg->message(comm);
 		sr_ecp_msg->message("Press PULSE ECP trigger when done");
 
-		befg->Move();
+//		befg->Move();
 		nose->Move();
 
 	    /*!
