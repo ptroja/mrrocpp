@@ -39,6 +39,7 @@ spots_recognition::~spots_recognition()
 void spots_recognition::task_initialization(void)
 {
 
+	befg = new common::generator::bias_edp_force(*this);
 	// Create cvFraDIA sensor - for testing purposes.
 	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, "[vsp_cvfradia]", *this, sizeof(lib::sensor_image_t::sensor_union_t::sp_r_t));
 	// Configure sensor.
@@ -95,7 +96,7 @@ void spots_recognition::main_task_algorithm(void)
 		sr_ecp_msg->message(comm);
 		sr_ecp_msg->message("Press PULSE ECP trigger when done");
 
-		//befg->Move();
+		befg->Move();
 		nose->Move();
 
 	    /*!

@@ -44,7 +44,7 @@ class spots_recognition: public common::task::task
 		generator::spots* generator;
 		common::generator::smooth* smooth;
 		common::generator::tff_nose_run* nose;
-//		common::generator::bias_edp_force* befg;
+		common::generator::bias_edp_force* befg;
 
 
 	public:
