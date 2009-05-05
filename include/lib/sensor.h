@@ -226,7 +226,7 @@ struct ECP_VSP_MSG
 		} ps_response;
 
 		//PW Scene_Recognition
-		SR_COMMAND sc_command;
+//		SR_COMMAND sc_command;
 
 	};//: koniec unii
 };
