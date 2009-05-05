@@ -5,10 +5,10 @@
  * @author tkornuta
  * @date 17.03.2008
  *
- * $URL: https://segomo.elka.pw.edu.pl/svn/mrrocpp/base/trunk/src/ecp/common/ecp_g_cvfradia.cc $
- * $LastChangedRevision: 2156 $
- * $LastChangedDate: 2009-05-05 13:30:18 +0200 (Tue, 05 May 2009) $
- * $LastChangedBy: yoyek $
+ * $URL$
+ * $LastChangedRevision$
+ * $LastChangedDate$
+ * $LastChangedBy$
  */
 
 
