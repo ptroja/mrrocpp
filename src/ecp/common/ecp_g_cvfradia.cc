@@ -5,7 +5,7 @@
  * @author tkornuta
  * @date 17.03.2008
  *
- * $URL:  $
+ * URL:
  * $LastChangedRevision:  $
  * $LastChangedDate: $
  * $LastChangedBy: hgfdgfd $
