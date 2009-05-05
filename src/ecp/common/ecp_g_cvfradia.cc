@@ -1,14 +1,14 @@
 /**
- * \file ecp_g_cvfradia.h
- * \brief Generator responsible for communication with cvFraDIA (testing purposes).
+ * @file ecp_g_cvfradia.h
+ * @brief Generator responsible for communication with cvFraDIA (testing purposes).
  * - class declaration
- * \author tkornuta
- * \date 17.03.2008
+ * @author tkornuta
+ * @date 17.03.2008
  *
  * $URL:  $
  * $LastChangedRevision:  $
  * $LastChangedDate: $
- * $LastChangedBy:  $
+ * $LastChangedBy: hgfdgfd $
  */
 
 #include <stdio.h>
