@@ -218,9 +218,12 @@ struct ECP_VSP_MSG
 			char cube_state[54];
 		} rcs;
 
-		//spots recognition
-		short command;
-		double plate_pos[3];
+		//dane do spots recognition - zadanie wykonania odczytu
+		struct
+		{
+			short command;
+			double plate_pos[3];
+		} ps_response;
 
 		//PW Scene_Recognition
 		SR_COMMAND sc_command;
