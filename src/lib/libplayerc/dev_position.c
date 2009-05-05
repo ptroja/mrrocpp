@@ -40,7 +40,7 @@
  * Desc: Position device proxy
  * Author: Andrew Howard
  * Date: 13 May 2002
- * CVS: $Id: dev_position.c,v 1.22 2004/06/16 23:02:13 gerkey Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <math.h>

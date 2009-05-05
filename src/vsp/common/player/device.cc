@@ -21,7 +21,7 @@
  */
 
 /*
- * $Id: device.cc,v 1.29 2004/09/08 00:09:04 gerkey Exp $
+ * $Id$
  *
  * A device entry describes an instantiated driver/interface
  * combination.  Drivers may support more than one interface,

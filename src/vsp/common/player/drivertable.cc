@@ -21,7 +21,7 @@
  */
 
 /*
- * $Id: drivertable.cc,v 1.6 2004/09/07 00:20:38 gerkey Exp $
+ * $Id$
  *
  *   class to keep track of available drivers.  
  */

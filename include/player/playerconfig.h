@@ -2,7 +2,7 @@
 
 /*
  * Desc: Configured values.
- * CVS:  $Id: playerconfig.h.in,v 1.4 2005/01/27 03:33:20 gerkey Exp $
+ * CVS:  $Id$
  *
  * DO NOT EDIT playerconfig.h; edit playerconfig.h.in instead.
  */

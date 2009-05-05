@@ -41,7 +41,7 @@
  * Desc: Common device functions
  * Author: Andrew Howard
  * Date: 13 May 2002
- * CVS: $Id: device.c,v 1.8 2004/09/07 00:20:36 gerkey Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <stdlib.h>

@@ -40,7 +40,7 @@
  * Desc: Gripper device proxy
  * Author: Doug Blank
  * Date: 13 April 2005
- * CVS: $Id: dev_gripper.c,v 1.1 2005/04/22 04:43:22 gerkey Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <math.h>

@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: plannerproxy.cc,v 1.7 2005/01/14 22:24:09 gerkey Exp $
+ * $Id$
  *
  * client-side planner device 
  */

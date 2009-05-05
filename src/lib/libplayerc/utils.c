@@ -40,7 +40,7 @@
  * Desc: Utility functions.
  * Author: Andrew Howard
  * Date: 16 Aug 2002
- * CVS: $Id: utils.c,v 1.16 2004/11/11 01:45:02 gerkey Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <string.h>

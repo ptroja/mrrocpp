@@ -21,7 +21,7 @@
  */
 
 /*
- * $Id: devicetable.cc,v 1.14 2004/11/08 21:53:17 inspectorg Exp $
+ * $Id$
  *
  *   class to keep track of available devices.  
  */

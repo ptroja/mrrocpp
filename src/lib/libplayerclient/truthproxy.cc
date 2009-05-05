@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: truthproxy.cc,v 1.17 2004/11/16 01:27:30 gerkey Exp $
+ * $Id$
  */
 
 //#define DEBUG

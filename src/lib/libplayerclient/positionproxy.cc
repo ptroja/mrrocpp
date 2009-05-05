@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: positionproxy.cc,v 1.27 2005/05/03 00:24:00 gerkey Exp $
+ * $Id$
  *
  * client-side position device 
  */

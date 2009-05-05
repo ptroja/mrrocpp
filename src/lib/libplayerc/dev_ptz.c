@@ -40,7 +40,7 @@
  * Desc: PTZ device proxy
  * Author: Andrew Howard
  * Date: 26 May 2002
- * CVS: $Id: dev_ptz.c,v 1.10 2004/11/13 00:02:38 inspectorg Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <math.h>

@@ -21,7 +21,7 @@
  */
 
 /*
- * $Id: playertime.h,v 1.2 2004/10/21 16:51:59 inspectorg Exp $
+ * $Id$
  *
  * this is the base class for the WallclockTime and StageTime classes.
  *

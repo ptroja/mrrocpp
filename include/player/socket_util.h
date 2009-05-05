@@ -23,7 +23,7 @@
 /*
  * internal prototypes and such
  *
- * $Id: socket_util.h,v 1.3 2005/04/22 17:30:57 gerkey Exp $
+ * $Id$
  */
 
 #ifndef _PUBSUB_UTIL_H

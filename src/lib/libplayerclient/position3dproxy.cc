@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: position3dproxy.cc,v 1.11 2005/03/08 16:00:10 bradkratochvil Exp $
+ * $Id$
  *
  * client-side position3d device 
  */

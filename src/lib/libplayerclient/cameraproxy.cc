@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: cameraproxy.cc,v 1.14 2005/05/05 08:30:14 bradkratochvil Exp $
+ * $Id$
  *
  * client-side camera device 
  */

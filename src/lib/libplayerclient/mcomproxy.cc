@@ -38,7 +38,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-/* $Id: mcomproxy.cc,v 1.6 2004/11/08 21:53:17 inspectorg Exp $
+/* $Id$
  *
  *  MComProxy class by Matt Brewer at UMass Amherst 2002
  *  added to 1.3 by reed

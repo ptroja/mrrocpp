@@ -40,7 +40,7 @@
  * Desc: Planner device proxy
  * Author: Brian Gerkey
  * Date: June 2004
- * CVS: $Id: dev_planner.c,v 1.3 2005/01/14 22:24:10 gerkey Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <assert.h>

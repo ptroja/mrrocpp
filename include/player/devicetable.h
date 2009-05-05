@@ -21,7 +21,7 @@
  */
 
 /*
- * $Id: devicetable.h,v 1.11 2004/09/07 00:20:38 gerkey Exp $
+ * $Id$
  *
  *   class to keep track of available devices.  
  */

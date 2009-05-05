@@ -1,4 +1,4 @@
-/*  $Id: replace.h,v 1.6 2005/05/04 18:40:12 gerkey Exp $
+/*  $Id$
  *
  * replacement function prototypes
  */

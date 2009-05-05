@@ -40,7 +40,7 @@
  * Desc: Truth device proxy (works with Stage).
  * Author: Andrew Howard
  * Date: 26 May 2002
- * CVS: $Id: dev_truth.c,v 1.11 2004/11/13 00:02:38 inspectorg Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <assert.h>

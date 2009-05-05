@@ -21,7 +21,7 @@
  */
 
 /*
- * $Id: clientmanager.cc,v 1.37.2.2 2005/07/22 22:19:38 rtv Exp $
+ * $Id$
  *
  *  class to hold info about the client reader and writer threads
  */

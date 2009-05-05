@@ -21,7 +21,7 @@
  */
 
 /*
- * $Id: wallclocktime.h,v 1.1 2002/08/13 01:54:49 gerkey Exp $
+ * $Id$
  *
  * this is the WallclockTime class, which just calls gettimeofday() to get
  * the current time

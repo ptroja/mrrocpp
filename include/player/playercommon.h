@@ -22,7 +22,7 @@
 
 /*
  * Desc: Some useful macros
- * $Id: playercommon.h,v 1.8 2004/11/09 07:13:18 inspectorg Exp $
+ * $Id$
  */
 
 #ifndef _PLAYERCOMMON_H

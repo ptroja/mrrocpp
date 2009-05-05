@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: playerclient.cc,v 1.70 2005/01/26 18:48:28 gerkey Exp $
+ * $Id$
  *
  * The C++ client
  */

@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: position2dproxy.cc,v 1.3 2004/11/17 19:53:47 gerkey Exp $
+ * $Id$
  *
  * client-side position2D device 
  */

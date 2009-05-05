@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: playerclient.h,v 1.152 2005/05/04 15:05:42 bradkratochvil Exp $
+ * $Id$
  *
  * the C++ client
  */

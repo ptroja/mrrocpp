@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: laserproxy.cc,v 1.19 2005/03/01 01:09:29 gerkey Exp $
+ * $Id$
  *
  * client-side laser device 
  */

@@ -43,7 +43,7 @@
 /* Copyright (C) 2002
  *   John Sweeney, UMASS, Amherst, Laboratory for Perceptual Robotics
  *
- * $Id: irproxy.cc,v 1.8 2004/11/08 21:53:17 inspectorg Exp $
+ * $Id$
  * 
  * implementation of IRProxy.
  *

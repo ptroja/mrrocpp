@@ -21,7 +21,7 @@
  */
 
 /*
- * $Id: clientdata.cc,v 1.51.2.7 2005/07/22 22:19:28 rtv Exp $
+ * $Id$
  *
  *  various methods for managing data pertaining to clients, like
  *  reader and writer threads, permission lists, etc.

@@ -23,7 +23,7 @@
 /*
  * internal functions and such
  *
- * $Id: socket_util.cc,v 1.8 2005/05/03 19:18:06 gerkey Exp $
+ * $Id$
  */
 
 #if HAVE_CONFIG_H

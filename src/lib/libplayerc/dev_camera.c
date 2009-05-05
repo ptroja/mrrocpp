@@ -40,7 +40,7 @@
  * Desc: Truth device proxy (works with Stage).
  * Author: Andrew Howard
  * Date: 26 May 2002
- * CVS: $Id: dev_camera.c,v 1.10 2005/05/10 15:58:53 gerkey Exp $
+ * CVS: $Id$
  **************************************************************************/
 #if HAVE_CONFIG_H
   #include "config.h"

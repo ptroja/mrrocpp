@@ -40,7 +40,7 @@
  * Desc: Simulation device proxy
  * Author: Douglas S. Blank
  * Date: 13 May 2002
- * CVS: $Id: dev_simulation.c,v 1.2 2005/03/06 17:48:39 gerkey Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <math.h>

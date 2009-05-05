@@ -40,7 +40,7 @@
  * Desc: Player client
  * Author: Andrew Howard
  * Date: 24 Aug 2001
- # CVS: $Id: playerc.h,v 1.118 2005/04/22 04:43:22 gerkey Exp $
+ # CVS: $Id$
  **************************************************************************/
 
 #ifndef PLAYERC_H

@@ -20,7 +20,7 @@
  */
 
 /*
- * $Id: main.cc,v 1.130.2.4 2005/07/23 02:59:20 rtv Exp $
+ * $Id$
  *
  * the main code for the Player robot server.  here we instantiate
  * the device objects, do socket connection control and spawn

@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: clientproxy.cc,v 1.18 2005/01/26 18:48:28 gerkey Exp $
+ * $Id$
  *
  * parent class for client-side device proxies
  */

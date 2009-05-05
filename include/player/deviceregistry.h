@@ -21,7 +21,7 @@
  */
 
 /*
- * $Id: deviceregistry.h,v 1.9 2005/01/30 19:56:40 gerkey Exp $
+ * $Id$
  */
 #include <sys/types.h>  /* for types */
 #if HAVE_STDINT_H

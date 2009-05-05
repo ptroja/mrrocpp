@@ -42,7 +42,7 @@
  */
 
 /*
- * $Id: playercclient.h,v 1.25 2005/01/26 18:48:28 gerkey Exp $
+ * $Id$
  *
  * a pure C client
  */

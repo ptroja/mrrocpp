@@ -40,7 +40,7 @@
  * Desc: Fixed range finder (FRF) proxy
  * Author: Andrew Howard
  * Date: 13 May 2002
- * CVS: $Id: dev_sonar.c,v 1.12 2004/11/09 07:13:17 inspectorg Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <assert.h>

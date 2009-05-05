@@ -40,7 +40,7 @@
  * Desc: Fiducial device proxy
  * Author: Andrew Howard
  * Date: 15 May 2002
- * CVS: $Id: dev_fiducial.c,v 1.11 2004/09/07 00:20:36 gerkey Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <math.h>

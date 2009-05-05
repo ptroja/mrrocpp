@@ -40,7 +40,7 @@
  * Desc: Log device proxy
  * Author: Brian gerkey
  * Date: June 2004
- * CVS: $Id: dev_log.c,v 1.3 2005/01/15 00:00:06 gerkey Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <math.h>

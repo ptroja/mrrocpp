@@ -40,7 +40,7 @@
  * Desc: Visual blob finder proxy
  * Author: Andrew Howard
  * Date: 24 May 2002
- * CVS: $Id: dev_blobfinder.c,v 1.8 2005/05/03 00:10:39 gerkey Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <math.h>

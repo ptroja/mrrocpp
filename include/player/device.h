@@ -21,7 +21,7 @@
  */
 
 /*
- * $Id: device.h,v 1.18 2004/09/07 00:20:37 gerkey Exp $
+ * $Id$
  *
  * A device is a driver/interface pair.
  */

@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: gripperproxy.cc,v 1.13 2004/11/08 21:53:17 inspectorg Exp $
+ * $Id$
  *
  * client-side gripper device 
  */

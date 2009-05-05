@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: gpsproxy.cc,v 1.19 2004/11/13 00:02:36 inspectorg Exp $
+ * $Id$
  *
  * client-side GPS device 
  */

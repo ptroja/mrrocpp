@@ -40,7 +40,7 @@
  * Desc: Scanning range finder (SRF) proxy
  * Author: Andrew Howard
  * Date: 13 May 2002
- * CVS: $Id: dev_laser.c,v 1.25 2004/11/09 07:13:16 inspectorg Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <assert.h>

@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: speechrecognitionproxy.cc,v 1.6 2005/05/03 19:18:06 gerkey Exp $
+ * $Id$
  *
  * client-side speech device 
  */

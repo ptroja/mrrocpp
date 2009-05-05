@@ -42,7 +42,7 @@
  * Desc: Error handling
  * Author: Andrew Howard
  * Date: 13 May 2002
- * CVS: $Id: error.c,v 1.7 2003/05/31 19:03:58 gerkey Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include "playerc.h"

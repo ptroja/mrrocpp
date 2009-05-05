@@ -21,7 +21,7 @@
  */
 /* 
  * Desc: Player communication packet structures and codes
- * CVS:  $Id: player.h,v 1.149 2005/03/18 22:38:18 gerkey Exp $
+ * CVS:  $Id$
  */
 
 #ifndef PLAYER_H

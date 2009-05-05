@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: blobfinderproxy.cc,v 1.12 2004/11/11 00:09:40 gerkey Exp $
+ * $Id$
  *
  * client-side blobfinder device 
  */

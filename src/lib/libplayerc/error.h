@@ -42,7 +42,7 @@
  * Desc: Player client lib; stuff used internally.
  * Author: Andrew Howard
  * Date: 13 May 2002
- * CVS: $Id: error.h,v 1.6 2003/05/31 19:03:58 gerkey Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #ifndef PLAYERC_PRIVATE_H

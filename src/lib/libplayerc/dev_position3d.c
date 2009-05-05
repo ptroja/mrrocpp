@@ -40,7 +40,7 @@
  * Desc: Position3d device proxy
  * Author: Andrew Howard
  * Date: 13 May 2002
- * CVS: $Id: dev_position3d.c,v 1.6 2005/01/31 16:25:03 inspectorg Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <assert.h>

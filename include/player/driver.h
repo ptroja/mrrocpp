@@ -21,7 +21,7 @@
  */
 
 /*
- * $Id: driver.h,v 1.10 2004/11/12 20:02:13 gerkey Exp $
+ * $Id$
  *  
  *  The virtual class from which all driver classes inherit.  this
  *  defines the API that all drivers must implement.

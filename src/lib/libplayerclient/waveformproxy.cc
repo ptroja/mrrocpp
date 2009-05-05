@@ -20,7 +20,7 @@
  *
  */
 /*
- * $Id: waveformproxy.cc,v 1.9 2004/11/10 07:14:22 inspectorg Exp $
+ * $Id$
  *
  * reads raw sample data from a waveform interface. Supports writing
  * the wave to the DSP device - works for playing sounds captured with

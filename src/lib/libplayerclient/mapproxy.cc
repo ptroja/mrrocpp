@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: mapproxy.cc,v 1.7 2004/11/11 00:09:40 gerkey Exp $
+ * $Id$
  *
  * client-side map device 
  */

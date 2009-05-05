@@ -21,7 +21,7 @@
  */
 
 /*
- * $Id: clientdata.h,v 1.15 2004/09/10 15:35:10 gerkey Exp $
+ * $Id$
  * 
  *   class for encapsulating all the data pertaining to a single client
  */

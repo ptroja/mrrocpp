@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: fiducialproxy.cc,v 1.24 2004/11/09 07:13:15 inspectorg Exp $
+ * $Id$
  *
  * client-side beacon device 
  */

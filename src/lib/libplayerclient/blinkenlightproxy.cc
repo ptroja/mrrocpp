@@ -43,7 +43,7 @@
 /*
  *  Author: Richard Vaughan (rtv) vaughan@hrl.com 
  *  Desc: Control and inspect a blinking indicator light
- *  $Id: blinkenlightproxy.cc,v 1.2 2004/11/08 21:53:17 inspectorg Exp $
+ *  $Id$
  */
 
 #include <playerclient.h>

@@ -40,7 +40,7 @@
  * Desc: Motor device proxy
  * Author: Andrew Howard
  * Date: 13 May 2002
- * CVS: $Id: dev_motor.c,v 1.1 2004/07/23 18:37:49 gerkey Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <math.h>

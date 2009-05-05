@@ -21,7 +21,7 @@
  */
 
 /*
- * $Id: driver.cc,v 1.12 2005/04/22 17:30:57 gerkey Exp $
+ * $Id$
  *  
  *  the base class from which all device classes inherit.  here
  *  we implement some generic methods that most devices will not need

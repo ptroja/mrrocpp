@@ -3,7 +3,7 @@
  * Desc: Error handling macros
  * Author: Andrew Howard
  * Date: 13 May 2002
- * CVS: $Id: error.h,v 1.1 2004/11/08 21:53:17 inspectorg Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #ifndef ERROR_HH

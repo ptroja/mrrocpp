@@ -40,7 +40,7 @@
  * Desc: localize device proxy
  * Author: Boyoon Jung, Andrew Howard
  * Date: 20 Jun 2002
- * CVS: $Id: dev_localize.c,v 1.11 2005/03/17 20:52:16 gerkey Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <assert.h>

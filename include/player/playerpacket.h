@@ -6,7 +6,7 @@
  * TODO - inline documentation and parser for this file?
  *
  * Created 2002-11-18 rtv
- * $Id: playerpacket.h,v 1.6 2004/09/17 07:20:35 inspectorg Exp $
+ * $Id$
  */
 
 

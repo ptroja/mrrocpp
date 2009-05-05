@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: localizeproxy.cc,v 1.8 2004/11/08 21:53:17 inspectorg Exp $
+ * $Id$
  *
  * client-side localization device 
  */

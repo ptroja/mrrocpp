@@ -21,7 +21,7 @@
  */
 
 /*
- * $Id: configfile.h,v 1.17 2004/11/11 07:13:09 inspectorg Exp $
+ * $Id$
  */
 #ifndef CONFFILE_H
 #define CONFFILE_H

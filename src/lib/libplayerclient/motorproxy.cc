@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: motorproxy.cc,v 1.4 2005/02/25 17:56:05 bradkratochvil Exp $
+ * $Id$
  * 
  * client-side motor device 
  */

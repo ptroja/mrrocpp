@@ -43,7 +43,7 @@
  */
 
 /* 
- * $Id: wifiproxy.cc,v 1.8 2004/11/08 21:53:17 inspectorg Exp $
+ * $Id$
  * implementation of WiFi proxy class
  */
 

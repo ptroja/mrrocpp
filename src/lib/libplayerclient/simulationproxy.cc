@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: simulationproxy.cc,v 1.3.2.1 2005/07/27 17:16:04 rtv Exp $
+ * $Id$
  *
  * client-side beacon device 
  */

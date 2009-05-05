@@ -40,7 +40,7 @@
  * Desc: Joystick device proxy
  * Author: Andrew Howard
  * Date: 13 May 2002
- * CVS: $Id: dev_joystick.c,v 1.2 2004/08/12 00:45:36 inspectorg Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <math.h>

@@ -40,7 +40,7 @@
  * Desc: bumper proxy
  * Author: Toby Collett (based on sonar proxy by Andrew Howard)
  * Date: 13 Feb 2004
- * CVS: $Id: dev_bumper.c,v 1.2 2004/11/09 07:13:16 inspectorg Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <assert.h>

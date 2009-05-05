@@ -21,7 +21,7 @@
  */
 
 /*
- * $Id: drivertable.h,v 1.7 2004/11/11 07:40:44 inspectorg Exp $
+ * $Id$
  *
  *   class to keep track of available drivers.  
  */

@@ -1,6 +1,6 @@
-/* $Author: gerkey $
+/* $Author$
  * $Name: release-1-6-4 $
- * $Id: jpeg.c,v 1.3 2004/11/22 23:10:16 gerkey Exp $
+ * $Id$
  * $Source: /cvsroot/playerstage/code/player/client_libs/libplayerpacket/jpeg.c,v $
  * $Log: jpeg.c,v $
  * Revision 1.3  2004/11/22 23:10:16  gerkey

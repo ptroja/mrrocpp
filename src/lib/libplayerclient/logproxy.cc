@@ -40,7 +40,7 @@
  */
 
 /*
- * $Id: logproxy.cc,v 1.1 2005/05/02 23:42:29 gerkey Exp $
+ * $Id$
  *
  * client-side log device
  */

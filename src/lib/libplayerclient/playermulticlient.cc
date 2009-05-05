@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: playermulticlient.cc,v 1.14 2005/01/26 18:48:30 gerkey Exp $
+ * $Id$
  *
  * multiclient extension to the c++ client.
  */

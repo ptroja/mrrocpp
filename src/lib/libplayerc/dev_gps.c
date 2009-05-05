@@ -40,7 +40,7 @@
  * Desc: GPS device proxy
  * Author: Andrew Howard
  * Date: 26 May 2002
- * CVS: $Id: dev_gps.c,v 1.12 2004/11/13 00:02:38 inspectorg Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <assert.h>

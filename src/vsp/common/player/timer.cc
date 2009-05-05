@@ -24,7 +24,7 @@
  * A timer thread.  This thread has a main loop that sleeps, wakes up the
  * server thread, and repeats.
  *
- * $Id: timer.cc,v 1.1 2004/09/10 15:35:11 gerkey Exp $
+ * $Id$
  */
 
 #include "timer.h"

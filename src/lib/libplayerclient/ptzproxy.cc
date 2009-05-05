@@ -41,7 +41,7 @@
  */
 
 /*
- * $Id: ptzproxy.cc,v 1.11 2004/11/08 21:53:17 inspectorg Exp $
+ * $Id$
  *
  * client-side ptz device 
  */

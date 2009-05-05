@@ -40,7 +40,7 @@
  * Desc: Power device proxy
  * Author: Andrew Howard
  * Date: 13 May 2002
- * CVS: $Id: dev_power.c,v 1.6 2003/05/10 00:42:15 gerkey Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <math.h>

@@ -21,7 +21,7 @@
  */
 
 /*
- * $Id: deviceregistry.cc,v 1.132 2005/04/05 04:18:30 gerkey Exp $
+ * $Id$
  */
 #if HAVE_CONFIG_H
   #include <config.h>

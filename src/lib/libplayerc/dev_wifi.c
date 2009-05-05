@@ -40,7 +40,7 @@
  * Desc: WiFi device proxy
  * Author: Andrew Howard
  * Date: 13 May 2002
- * CVS: $Id: dev_wifi.c,v 1.10 2004/08/02 15:25:47 inspectorg Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <math.h>

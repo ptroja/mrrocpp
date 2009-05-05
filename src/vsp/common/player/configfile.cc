@@ -21,7 +21,7 @@
  */
 
 /*
- * $Id: configfile.cc,v 1.24 2005/03/02 00:34:10 gerkey Exp $
+ * $Id$
  */
 
 #include <assert.h>

@@ -40,7 +40,7 @@
  * Desc: Map device proxy
  * Author: Brian gerkey
  * Date: June 2004
- * CVS: $Id: dev_map.c,v 1.2 2004/11/09 07:13:16 inspectorg Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <assert.h>

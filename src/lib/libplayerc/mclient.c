@@ -40,7 +40,7 @@
  * Desc: Multi-client functions
  * Author: Andrew Howard
  * Date: 13 May 2002
- * CVS: $Id: mclient.c,v 1.6 2005/03/01 01:09:29 gerkey Exp $
+ * CVS: $Id$
  **************************************************************************/
 
 #include <stdio.h>

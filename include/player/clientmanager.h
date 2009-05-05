@@ -21,7 +21,7 @@
  */
 
 /*
- * $Id: clientmanager.h,v 1.8 2004/09/07 16:57:38 gerkey Exp $
+ * $Id$
  * 
  *   class for encapsulating all the data pertaining to the clients
  */
