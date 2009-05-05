@@ -1,18 +1,15 @@
-#///////////////////////////////////////////////////////////////////////////////
-# /** @file     Makefile
-#  *
-#  *  Main makefile of the MRROC++ frame system.
-#  *
-#  *  @author   tkornuta
-#  *  @date     2007-01-12
-#  *  $URL: https://segomo.elka.pw.edu.pl/svn/mrrocpp/base/trunk/Makefile $
-#  *  $LastChangedRevision: 2147 $
-#  *  $LastChangedDate: 2009-05-05 13:16:50 +0200 (Tue, 05 May 2009) $
-#  *  $LastChangedBy: yoyek $
-#  *
-#  */
-#///////////////////////////////////////////////////////////////////////////////
-
+/**
+ * @file ecp_g_cvfradia.h
+ * @brief Generator responsible for communication with cvFraDIA (testing purposes).
+ * - class declaration
+ * @author tkornuta
+ * @date 17.03.2008
+ *
+ * $URL:  $
+ * $LastChangedRevision:  $
+ * $LastChangedDate: $
+ * $LastChangedBy: hgfdgfd $
+ */
 
 #include <stdio.h>
 #include <fstream>
