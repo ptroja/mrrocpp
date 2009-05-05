@@ -1,3 +1,19 @@
+/**
+ * @file ecp_g_cvfradia.h
+ * @brief Generator responsible for communication with cvFraDIA (testing purposes).
+ * - class declaration
+ * @author tkornuta
+ * @date 17.03.2008
+ *
+ * $URL: https://segomo.elka.pw.edu.pl/svn/mrrocpp/base/trunk/src/ecp/common/ecp_g_cvfradia.cc $
+ * $LastChangedRevision: 2156 $
+ * $LastChangedDate: 2009-05-05 13:30:18 +0200 (Tue, 05 May 2009) $
+ * $LastChangedBy: yoyek $
+ */
+
+
+
+
 // -------------------------------------------------------------------------
 //                            ecp.cc
 //            Effector Control Process (lib::ECP) - force methods
@@ -1853,8 +1869,8 @@ void tff_nose_run::execute_motion(void)
 	 }
 	 */
 	if (the_robot->reply_package.reply_type == lib::ERROR) {
-		
-		
+
+
 		switch ( the_robot->reply_package.error_no.error0 ) {
 			case BEYOND_UPPER_D0_LIMIT:
 			case BEYOND_UPPER_THETA1_LIMIT:
@@ -1878,8 +1894,8 @@ void tff_nose_run::execute_motion(void)
 			break;
 
 		} /* end: switch */
-		
-	
+
+
 	}
 }
 
