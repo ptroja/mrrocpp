@@ -4,6 +4,11 @@
  * - class declaration
  * \author tkornuta
  * \date 17.03.2008
+ *
+ * $URL:  $
+ * $LastChangedRevision:  $
+ * $LastChangedDate: $
+ * $LastChangedBy:  $
  */
 
 #include <stdio.h>
