@@ -1,5 +1,5 @@
 #///////////////////////////////////////////////////////////////////////////////
-# /** @file     
+# /** @file     Makefile
 #  *
 #  *  Main makefile of the MRROC++ frame system.
 #  *
@@ -8,12 +8,12 @@
 #  *  $URL$
 #  *  $LastChangedRevision$
 #  *  $LastChangedDate$  
-#  *  $LastChangedBy$
+#  *  
 #  *  
 #  */
 #///////////////////////////////////////////////////////////////////////////////
  
- 
+
 #------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = .
