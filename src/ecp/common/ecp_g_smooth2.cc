@@ -526,11 +526,11 @@ void smooth2::generate_cords() {
 	}
 
 	//printowanie listy coordinate
-	/*initiate_coordinate_list();
+	initiate_coordinate_list();
 	for (int m = 0; m < coordinate_list->size(); m++) {
-		printf("%f\n", coordinate_list_iterator->coordinate[1]);
+		printf("%f\t", coordinate_list_iterator->coordinate[1]);
 		coordinate_list_iterator++;
-	}*/
+	}
 	printf("\ngenerate_cords\n");
 }
 
@@ -632,7 +632,7 @@ bool smooth2::next_step () {
 
     	switch ( td.arm_type ) {//TODO dodac wiecej opcji wspolrzednych
     		case lib::XYZ_EULER_ZYZ:
-    		//	printf("wejscie do eulera\n");
+
     			the_robot->EDP_data.instruction_type = lib::SET; //dalsze ustawianie parametrow ruchu w edp
     			the_robot->EDP_data.set_type = ARM_DV; // ARM
     			the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
@@ -641,43 +641,26 @@ bool smooth2::next_step () {
     			the_robot->EDP_data.motion_steps = td.internode_step_no;
     			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
-    			//if(node_counter < pose_list_iterator->interpolation_node_no) {//jezeli makrokrok nie jest ostatnim makrokrokiem w ruchu
+    			for (i = 0; i < 6; i++) {//zapisanie nastepnego polazenia (makrokroku) do robota
+    			    the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
+    			}
 
-    			    //printf("normalny makrokrok\n");
-    				//printf("%f\n", next_position[1]);
-    			    //generate_next_coords(); //obliczanie nastepnych wspolrzednych makrokroku
-    			    //printf("\n %f\n", coordinate_list_iterator->coordinate[0]);
-    			    for (i = 0; i < 6; i++) {//zapisanie nastepnego polazenia (makrokroku) do robota
-    			        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
-    			    }
+    			coordinate_list_iterator++;
 
-					coordinate_list_iterator++;
+    			//PROBA Z CHWYTAKIEM
 
-    			    //PROBA Z CHWYTAKIEM
-
-    			    /*if(pose_list_iterator->v_grip*node_counter < pose_list_iterator->coordinates[6]) {
-    			        the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->v_grip*node_counter;
-    			    } else {
-    			        the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[6];
-    			    }*/
-    			    the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;//TODO to jest tymczasowe wiec trzeba poprawic
-    			/*} else { //TODO to chyba nie jest potrzebne (sprawdzic)
-    				printf("ostatni makrokrok ruchu\n");
-    			//OSTATNI PUNKT
-    				for (i = 0; i < 6; i++) //ostatni makrokrok, przypisujemy final_position (coordinates)
-    			        the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i] = pose_list_iterator->coordinates[i];
-
-    				//the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[6];
-    				the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;//TODO tutaj musi byc cos innego
+    			/*if(pose_list_iterator->v_grip*node_counter < pose_list_iterator->coordinates[6]) {
+    			    the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->v_grip*node_counter;
+    			} else {
+    			    the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[6];
     			}*/
+    			the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;//TODO to jest tymczasowe wiec trzeba poprawic
 
-    	//		printf("koncowka w switchu\n");
     			break;
 
     		default:
     			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
     	}// end:switch
-  //  	printf("koncowka ifa \n");
     }// end: if
     return true;
 
