@@ -47,50 +47,6 @@ bool smooth2::eq(double a, double b) {
 	return diff < EPS && diff > -EPS;
 }
 
-double smooth2::generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r,
-									double v_k, double a_r, int k, double przysp, double jedn, double s_przysp, double s_jedn, double t_max) {
-
-    //funkcja obliczajaca polozenie w danym makrokroku
-
-	double next_position;
-
-    double tk=10*STEP;
-
-        if(node_counter < przysp)
-        { //pierwszy etap
-            if(v_p <= v_r)
-            { //przyspieszanie w pierwszym etapie
-            	//printf("start pos: %f\t node counter: %d\n", start_position, node_counter);
-            	//printf(" przysp ");
-                next_position = start_position +
-                                   k*(node_counter*v_p*tk + node_counter*node_counter*a_r*tk*tk/2);
-                //printf("next pos: %f\t node: %d\t", next_position, node_counter);
-            }
-        }
-        else if(node_counter <= jedn)
-        { // drugi etap - ruch jednostajny
-        	//printf(" jedn ");
-            next_position = start_position +
-                               k*(s_przysp + ((node_counter - przysp)*tk)*v_r);
-            //printf("next pos: %f\t node: %d\t", next_position, node_counter);
-        }
-        else if(node_counter <= interpolation_node_no)
-        { //trzeci etap
-            if(v_k <= v_r)
-            { //hamowanie w trzecim etapie
-            	//printf(" ham ");
-                next_position = start_position +
-                                   k*(s_przysp + s_jedn +
-                                         ((node_counter - jedn)*tk)*v_r -
-                                         ((node_counter - jedn)*tk)*((node_counter - jedn)*tk)*a_r/2);
-                //printf("next pos: %f\t node: %d\t", next_position, node_counter);
-            }
-        }
-
-    //printf("next pos: %f\t node: %d\t", next_position, node_counter);
-    return next_position;
-}
-
 bool smooth2::load_file_with_path(char* file_name) {
 
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
@@ -452,6 +408,50 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
 
 } // end : konstruktor
 
+double smooth2::generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r,
+									double v_k, double a_r, int k, double przysp, double jedn, double s_przysp, double s_jedn, double t_max) {
+
+    //funkcja obliczajaca polozenie w danym makrokroku
+
+	double next_position;
+
+    double tk=10*STEP;
+
+        if(node_counter < przysp)
+        { //pierwszy etap
+            if(v_p <= v_r)
+            { //przyspieszanie w pierwszym etapie
+            	//printf("start pos: %f\t node counter: %d\n", start_position, node_counter);
+            	//printf(" przysp ");
+                next_position = start_position +
+                                   k*(node_counter*v_p*tk + node_counter*node_counter*a_r*tk*tk/2);
+                //printf("next pos: %f\t node: %d\t", next_position, node_counter);
+            }
+        }
+        else if(node_counter <= jedn)
+        { // drugi etap - ruch jednostajny
+        	//printf(" jedn ");
+            next_position = start_position +
+                               k*(s_przysp + ((node_counter - przysp)*tk)*v_r);
+            //printf("next pos: %f\t node: %d\t", next_position, node_counter);
+        }
+        else if(node_counter <= interpolation_node_no)
+        { //trzeci etap
+            if(v_k <= v_r)
+            { //hamowanie w trzecim etapie
+            	//printf(" ham ");
+                next_position = start_position +
+                                   k*(s_przysp + s_jedn +
+                                         ((node_counter - jedn)*tk)*v_r -
+                                         ((node_counter - jedn)*tk)*((node_counter - jedn)*tk)*a_r/2);
+                //printf("next pos: %f\t node: %d\t", next_position, node_counter);
+            }
+        }
+
+    //printf("next pos: %f\t node: %d\t", next_position, node_counter);
+    return next_position;
+}
+
 void smooth2::generate_cords() {
 
 	double coordinate[MAX_SERVOS_NR];
@@ -460,7 +460,11 @@ void smooth2::generate_cords() {
 	flush_coordinate_list();
 	for (int j = 0; j < pose_list_length(); j++) {
 
-		for (int z = 0; z < pose_list_iterator->interpolation_node_no; z++) {
+		for (int z = 0; z <= pose_list_iterator->interpolation_node_no; z++) {
+			if (z > 0 && z == pose_list_iterator->interpolation_node_no) {
+				break; //przerwac petle przy makrokroku nastepnym po ostatnim
+				//dzieki temu ze jest z <= i ten warunek petla wywoluje sie raz dla ruchu o liczbie makrokrokow = 0 we wszystkich osiach
+			}	//w takiej sytuacji nastepuje chwilowe zatrzymanie robota, wszystkie osie zwalniaja do 0
 			for (int i = 0; i < 6; i++) {
 
 				if (fabs(pose_list_iterator->start_position[i] - pose_list_iterator->coordinates[i]) < distance_eps) {
@@ -908,7 +912,7 @@ void smooth2::calculate(void) {
 				continue;
 			}
 
-			if (fabs(t[i] - t_max) >= tk) {//redukcja predkosci w danej osi
+			if (fabs(t[i] - t_max) >= tk) {//redukcja predkosci w danej osi ze wzgledu na zbyt krotki czas ruchu
 				//redukcja predkosci
 				//printf("redukcja predkosci z powodu czasu w osi %d\n", i);
 			}
