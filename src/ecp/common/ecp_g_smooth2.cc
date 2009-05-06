@@ -1,8 +1,10 @@
  // -------------------------------------------------------------------------
 //                            ecp_g_smooth2.cc
 //            Effector Control Process (lib::ECP) - smooth2 generator
-// generator powstal na podstawie generatora smooth, glowna zmiana jest
-// rezygnacja z podawanie predkosci poczatkowej i koncowej w kazdym ruchu
+// Generator powstal na podstawie generatora smooth, glowna zmiana jest
+// rezygnacja z podawanie predkosci poczatkowej i koncowej w kazdym ruchu.
+// W przeciwienstwie do smootha generator smooth2 nie dopuszcza nigdy do przekroczenia
+// maksymalnej podanej predkosci ruchu dla danej osi
 // autor: Rafal Tulwin
 // Ostatnia modyfikacja: 2009
 // -------------------------------------------------------------------------
@@ -51,7 +53,6 @@ double smooth2::generate_next_coords(int node_counter, int interpolation_node_no
     //funkcja obliczajaca polozenie w danym makrokroku
 
 	double next_position;
-
 
     double tk=10*STEP;
 
@@ -251,42 +252,6 @@ void smooth2::prev_pose_list_ptr(void) {
 		pose_list_iterator--;
 	}
 }
-
-// -------------------------------------------------------get all previously saved elements from actual iterator
-//void smooth2::get_pose(void) {
-    //int i;
-
-  //  td.arm_type = pose_list_iterator->arm_type;
-/*    for(i=0; i<MAX_SERVOS_NR; i++)
-    {
-        v[i]=pose_list_iterator->v[i];
-        a[i]=pose_list_iterator->a[i];
-        final_position[i]=pose_list_iterator->coordinates[i];
-    }*/
-//	 if(type==2)
-//					for(i=0; i<MAX_SERVOS_NR; i++)
-//						final_position[i]+=start_position[i];
-
-//}
-// -------------------------------------------position[i]------------
-/*void smooth2::set_pose (lib::POSE_SPECIFICATION ps, double vv[MAX_SERVOS_NR], double aa[MAX_SERVOS_NR], double c[MAX_SERVOS_NR]) {
-    pose_list_iterator->arm_type = ps;
-    memcpy(pose_list_iterator->coordinates, c, MAX_SERVOS_NR*sizeof(double));
-    memcpy(pose_list_iterator->v, vv, MAX_SERVOS_NR*sizeof(double));
-    memcpy(pose_list_iterator->a, aa, MAX_SERVOS_NR*sizeof(double));
-}*/
-
-/*bool smooth2::is_pose_list_element(void) {
-    // sprawdza czy aktualnie wskazywany jest element listy, czy lista sie skonczyla
-    if ( pose_list_iterator != pose_list->end())
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}*/
 
 bool smooth2::is_last_list_element(void) {
     // sprawdza czy aktualnie wskazywany element listy ma nastepnik
@@ -500,7 +465,6 @@ void smooth2::generate_cords() {
 
 				if (fabs(pose_list_iterator->start_position[i] - pose_list_iterator->coordinates[i]) < distance_eps) {
 					coordinate[i] = pose_list_iterator->start_position[i];
-					//printf("start pozycja %f\n", pose_list_iterator->start_position[i]);
 				} else {
 					coordinate[i] = generate_next_coords(private_node_counter,
 							pose_list_iterator->interpolation_node_no,
@@ -519,7 +483,6 @@ void smooth2::generate_cords() {
 			}
 			private_node_counter++;
 			coordinate_list->push_back(coordinates(coordinate));
-			//printf("%f\t", coordinate[1]);
 		}
 		private_node_counter = 1;
 		next_pose_list_ptr();
@@ -528,7 +491,7 @@ void smooth2::generate_cords() {
 	//printowanie listy coordinate
 	initiate_coordinate_list();
 	for (int m = 0; m < coordinate_list->size(); m++) {
-		printf("%f\t", coordinate_list_iterator->coordinate[1]);
+	//	printf("%f\t", coordinate_list_iterator->coordinate[1]);
 		coordinate_list_iterator++;
 	}
 	printf("\ngenerate_cords\n");
@@ -538,7 +501,6 @@ void smooth2::generate_cords() {
 bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
 
     initiate_pose_list();
-    //get_pose();
     td.arm_type = pose_list_iterator->arm_type;
 
     first_interval=true;
@@ -586,18 +548,12 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
         throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
     } // end : switch ( td.arm_type )
 
-    //printf("first_step wywolanie\n");
-
     return true;
 } // end: bool ecp_smooth2_generator::first_step ( )
 
 bool smooth2::next_step () {
 
     int i; //licznik petli
-    //int j;
-    //double tk = 10*STEP; //czas jednego makrokroku
-
-    //printf("\n=========================\n poczatek \n ========================= \n");
 
     if (!trajectory_generated) {
     	calculate(); //wypelnienie pozostalych zmiennych w liscie pose_list
@@ -608,24 +564,20 @@ bool smooth2::next_step () {
     	printf("trajektoria wygenerowana\n");
     }
 
-    //printf("node count: %d\n", node_counter);
-    //printf("interpolation_node_no: %d\n", pose_list_iterator->interpolation_node_no);
-
     if (node_counter-1 == pose_list_iterator->interpolation_node_no) {//czy poprzedni makrokrok byl ostatnim
 
-    	//printf("po ostatnim makrokroku ruchu\n");
-
     	if(is_last_list_element()) { //ostatni punkt (koniec listy pozycji pose_list)
-    		//printf("ostatni element pose_list\n");
+
     		return false;
+
     	} else {//lista pozycji pose_list nie jest skonczona wiec idziemy do nastepnego punktu
-    		//printf("wywolany else (nastepna pozycja pose_list)\n");
+
 			node_counter = 0; //ustawienie makrokroku na 1 (jest za chwile inkrementowany przez move())
 		    next_pose_list_ptr();
 		    td.interpolation_node_no = pose_list_iterator->interpolation_node_no;
 		}
     } else {
-    	//printf("kolejny makrokrok\n");
+
     	the_robot->EDP_data.instruction_type = lib::SET; //ustawienie parametrow ruchu w edp_data
     	the_robot->EDP_data.get_type = NOTHING_DV; //ponizej w caseach jest dalsze ustawianie
     	the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
@@ -741,15 +693,8 @@ void smooth2::calculate(void) {
 			switch (td.arm_type) {
 			//tutaj jestesmy jeszcze ciagle w poprzedniej pozycji pose_list
 			case lib::XYZ_EULER_ZYZ:
-				for (i = 0; i < 6; i++) {
-					temp = pose_list_iterator->coordinates[i];
-					if (!is_last_list_element()) {
-						next_pose_list_ptr();
-						pose_list_iterator->start_position[i] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
-						prev_pose_list_ptr();							//pozycje startowa nowego ruchu
-					}
-				}
 
+				//zapisanie v_p
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
 					temp = pose_list_iterator->v_k[i];
 					if (!is_last_list_element()) {
@@ -760,6 +705,15 @@ void smooth2::calculate(void) {
 				}
 
 				next_pose_list_ptr(); //GLOWNA INKREMENTACJA iteratora listy pose_list (bez powrotu)
+
+				for (i = 0; i < 6; i++) {
+					temp = pose_list_iterator->coordinates[i];
+					if (!is_last_list_element()) {
+						next_pose_list_ptr();
+						pose_list_iterator->start_position[i] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
+						prev_pose_list_ptr();							//pozycje startowa nowego ruchu
+					}
+				}
 
 				pose_list_iterator->start_position[6] = the_robot->EDP_data.current_gripper_coordinate;
 				pose_list_iterator->start_position[7] = 0.0;//TODO sprawdzic czy tutaj ma byc 0
@@ -776,7 +730,7 @@ void smooth2::calculate(void) {
 			default:
 				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 			}
-		}
+		} //end else (first interval)
 
 		for(i=0;i<MAX_SERVOS_NR;i++) {//zapisanie coordinate_delta
 			td.coordinate_delta[i] = pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i];
@@ -880,7 +834,7 @@ void smooth2::calculate(void) {
 				pose_list_iterator->s_przysp[i] = s_temp1[i];
 				pose_list_iterator->s_jedn[i] = s[i] - s_temp1[i];
 
-            	pose_list_iterator->v_k[i] = v_r_next[i];
+            	pose_list_iterator->v_k[i] = pose_list_iterator->v_r[i];
 
 			} else if (eq(pose_list_iterator->v_p[i], pose_list_iterator->v_r[i]) && (v_r_next[i] > pose_list_iterator->v_r[i] || eq(v_r_next[i], pose_list_iterator->v_r[i]))) { //trzeci model
 				printf("trzeci model w osi %d\n", i);
@@ -892,7 +846,7 @@ void smooth2::calculate(void) {
 				pose_list_iterator->s_przysp[i] = 0;
 				pose_list_iterator->s_jedn[i] = s[i];
 
-				pose_list_iterator->v_k[i] = v_r_next[i];
+				pose_list_iterator->v_k[i] = pose_list_iterator->v_r[i];
 
 			} else if (eq(pose_list_iterator->v_p[i], pose_list_iterator->v_r[i]) && v_r_next[i] < pose_list_iterator->v_r[i]) { //czwarty model
 				printf("czwarty model w osi %d\n", i);
