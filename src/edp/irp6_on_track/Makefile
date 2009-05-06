@@ -28,7 +28,7 @@ all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
 # do wyboru wariant z czujnikiem ATI3084 i ATI6284
 #edp_irp6_on_track: $(EDPOBJS) ../ati6284/ati6284.a $(SHOBJ)
-edp_irp6_on_track: $(EDPOBJS) ../ati3084MK/ati3084MK.a $(SHOBJ)
+edp_irp6_on_track: $(EDPOBJS) ../ati3084/ati3084.a $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 #---------------------------------Special object build rules (user made)-------------------------------------#

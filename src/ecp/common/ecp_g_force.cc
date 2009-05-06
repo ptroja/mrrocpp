@@ -1,6 +1,6 @@
 /**
  * @file ecp_g_force.cc
- * @brief GFunkcje do tworzenia procesow ECP z wykorzystaniem sily
+ * @brief ECP force generators
  * - class declaration
  * @author yoyek
  * @date 01.01.2002
