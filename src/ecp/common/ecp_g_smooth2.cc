@@ -460,15 +460,11 @@ void smooth2::generate_cords() {
 	flush_coordinate_list();
 	for (int j = 0; j < pose_list_length(); j++) {
 
-		for (int z = 0; z <= pose_list_iterator->interpolation_node_no; z++) {
-			if (z > 0 && z == pose_list_iterator->interpolation_node_no) {
-				break; //przerwac petle przy makrokroku nastepnym po ostatnim
-				//dzieki temu ze jest z <= i ten warunek petla wywoluje sie raz dla ruchu o liczbie makrokrokow = 0 we wszystkich osiach
-			}	//w takiej sytuacji nastepuje chwilowe zatrzymanie robota, wszystkie osie zwalniaja do 0
+		for (int z = 0; z < pose_list_iterator->interpolation_node_no; z++) {
 			for (int i = 0; i < 6; i++) {
 
 				if (fabs(pose_list_iterator->start_position[i] - pose_list_iterator->coordinates[i]) < distance_eps) {
-					coordinate[i] = pose_list_iterator->start_position[i];
+					coordinate[i] = pose_list_iterator->start_position[i]; //dla drogi 0
 				} else {
 					coordinate[i] = generate_next_coords(private_node_counter,
 							pose_list_iterator->interpolation_node_no,
