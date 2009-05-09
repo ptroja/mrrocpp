@@ -2,9 +2,10 @@
 	<name>conveyor</name>
 	<fullName>conveyorRobot</fullName>
 	<motorsNo>1</motorsNo>
-	<axis_xyz>0</axis_xyz>
-	<axis_ts>0</axis_ts>
-	<euler_xyz>0</euler_xyz>
-	<euler_ts>0</euler_ts>
+	<xyz_angle_axis>0</xyz_angle_axis>
+	<xyz_angle_axis_tool>0</xyz_angle_axis_tool>
+	<xyz_euler_zyz>0</xyz_euler_zyz>
+	<xyz_euler_zyz_tool>0</xyz_euler_zyz_tool>
 	<kinematic>1</kinematic>
+	<robotType></robotType>
 </irp6conveyor>

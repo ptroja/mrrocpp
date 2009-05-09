@@ -2,9 +2,10 @@
 	<name>irp6p</name>
 	<fullName>postument</fullName>
 	<motorsNo>7</motorsNo>
-	<axis_xyz>8</axis_xyz>
-	<axis_ts>7</axis_ts>
-	<euler_xyz>7</euler_xyz>
-	<euler_ts>6</euler_ts>
+	<xyz_angle_axis>8</xyz_angle_axis>
+	<xyz_angle_axis_tool>7</xyz_angle_axis_tool>
+	<xyz_euler_zyz>7</xyz_euler_zyz>
+	<xyz_euler_zyz_tool>6</xyz_euler_zyz_tool>
 	<kinematic>1</kinematic>
+	<robotType>ROBOT_IRP6_POSTUMENT</robotType>
 </irp6postument>

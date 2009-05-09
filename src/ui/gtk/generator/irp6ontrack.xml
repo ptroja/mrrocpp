@@ -2,9 +2,10 @@
 	<name>irp6o</name>
 	<fullName>ontrack</fullName>
 	<motorsNo>8</motorsNo>
-	<axis_xyz>9</axis_xyz>
-	<axis_ts>7</axis_ts>
-	<euler_xyz>8</euler_xyz>
-	<euler_ts>6</euler_ts>
+	<xyz_angle_axis>9</xyz_angle_axis>
+	<xyz_angle_axis_tool>7</xyz_angle_axis_tool>
+	<xyz_euler_zyz>8</xyz_euler_zyz>
+	<xyz_euler_zyz_tool>6</xyz_euler_zyz_tool>
 	<kinematic>1</kinematic>
+	<robotType>ROBOT_IRP6_ON_TRACK</robotType>
 </irp6ontrack>
