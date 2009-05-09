@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 MRROC++ GUI generator
-EDP IRp6 RCSC window
+Main robot window
  -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output method="xml" doctype-system="glade-2.0.dtd" indent="yes" version="1.0"/>
@@ -83,6 +83,7 @@ EDP IRp6 RCSC window
 <xsl:call-template name="irp6.inc" />
 <xsl:call-template name="irp6.int" />
 <xsl:call-template name="irp6.servo" />
+<xsl:call-template name="irp6.kinematic" />
 </glade-interface>
 </xsl:document>
 <xsl:call-template name="irp6.edp.main.signals.cc" />

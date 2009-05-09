@@ -6,4 +6,5 @@
 	<axis_ts>0</axis_ts>
 	<euler_xyz>0</euler_xyz>
 	<euler_ts>0</euler_ts>
+	<kinematic>1</kinematic>
 </irp6conveyor>

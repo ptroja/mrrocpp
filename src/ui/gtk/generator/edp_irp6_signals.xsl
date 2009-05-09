@@ -15,6 +15,7 @@ EDP IRp6 RCSC window callback signals
 <xsl:variable name="axis_ts" select="axis_ts"/>
 <xsl:variable name="euler_xyz" select="euler_xyz"/>
 <xsl:variable name="euler_ts" select="euler_ts"/>
+<xsl:variable name="kinematic" select="kinematic"/>
 <xsl:document method="text" href="../signals/edp_{$name}_uimodule.cc">
 
 
@@ -38,6 +39,9 @@ gint servo_alg_no_tmp [</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>]
 mrrocpp::lib::BYTE servo_alg_no_output[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
 gint servo_par_no_tmp [</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
 mrrocpp::lib::BYTE servo_par_no_output[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
+
+mrrocpp::lib::BYTE model_no;
+gint model_no_tmp;
 
 char buf[32];
 gchar buffer[500];
@@ -89,6 +93,7 @@ extern "C"
 	void on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_euler_xyz (GtkButton * button, gpointer userdata);
 	void on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_ts (GtkButton * button, gpointer userdata);
 	void on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_euler_ts (GtkButton * button, gpointer userdata);
+	void on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_kinematic (GtkButton * button, gpointer userdata);
 
 	//handler for combo-box widget
 	void  on_combobox1_changed_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>(GtkComboBox *comboBox, gpointer userdata)  
@@ -125,6 +130,7 @@ extern "C"
 			case 4: </xsl:text><xsl:if test="$euler_xyz &gt; 0"><xsl:text>std::cout &lt;&lt; "XYZ Euler ZYZ window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_euler_xyz";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_euler_xyz (button, userdata); break;
 			case 5: </xsl:text><xsl:if test="$axis_ts &gt; 0"><xsl:text>std::cout &lt;&lt; "TS Angle Axis window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_axis_ts";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_axis_ts (button, userdata); break;
 			case 6: </xsl:text><xsl:if test="$euler_ts &gt; 0"><xsl:text>std::cout &lt;&lt; "TS Euler ZYZ window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_euler_ts";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_euler_ts (button, userdata); break;
+			case 7: </xsl:text><xsl:if test="$kinematic &gt; 0"><xsl:text>std::cout &lt;&lt; "Kinematic model window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_kinematic";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_kinematic (button, userdata); break;
 			default: std::cout &lt;&lt; "Synchronizing..." &lt;&lt; std::endl;
 			}
 		}
@@ -140,6 +146,7 @@ extern "C"
 			case 4: break;
 			case 5: break;
 			case 6: break;
+			case 7: break;
 			default: ;
 			}
 		}
@@ -185,6 +192,7 @@ extern "C"
 					</xsl:text><xsl:if test="$euler_xyz &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "XYZ Euler ZYZ"); counter_synch++;</xsl:text></xsl:if><xsl:text>
 					</xsl:text><xsl:if test="$axis_ts &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "TS Angle Axis"); counter_synch++;</xsl:text></xsl:if><xsl:text>
 					</xsl:text><xsl:if test="$euler_ts &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "TS Euler ZYZ"); counter_synch++;</xsl:text></xsl:if><xsl:text>
+					</xsl:text><xsl:if test="$kinematic &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "Kinematic"); counter_synch++;</xsl:text></xsl:if><xsl:text>
 
 	        }
 	}	
@@ -235,6 +243,7 @@ void *ui_synchronize_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> (g
 	</xsl:text><xsl:if test="$euler_xyz &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter, "XYZ Euler ZYZ"); counter++;</xsl:text></xsl:if><xsl:text>
 	</xsl:text><xsl:if test="$axis_ts &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter, "TS Angle Axis"); counter++;</xsl:text></xsl:if><xsl:text>
 	</xsl:text><xsl:if test="$euler_ts &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter, "TS Euler ZYZ"); counter++;</xsl:text></xsl:if><xsl:text>
+	</xsl:text><xsl:if test="$kinematic &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter, "Kinematic"); counter++;</xsl:text></xsl:if><xsl:text>
 	return NULL;
 }
 
@@ -257,7 +266,9 @@ void *ui_synchronize_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> (g
 	<xsl:if test="$euler_ts &gt; 0">
 		<xsl:call-template name="irp6.euler.ts.main.signals.cc" />
 	</xsl:if>
-
+	<xsl:if test="$kinematic &gt; 0">
+		<xsl:call-template name="irp6.kinematic.main.signals.cc" />
+	</xsl:if>
 
 
 </xsl:document>

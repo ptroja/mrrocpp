@@ -22,6 +22,8 @@ Main generator file - includes xsl files for each window
 <xsl:include href="euler_xyz_signals.xsl" />
 <xsl:include href="euler_ts.xsl" />
 <xsl:include href="euler_ts_signals.xsl" />
+<xsl:include href="kinematic.xsl" />
+<xsl:include href="kinematic_signals.xsl" />
 <xsl:include href="festival_signals.xsl" />
 <xsl:include href="timestamp.xsl" />
 <xsl:include href="festival.xsl" />
@@ -48,6 +50,10 @@ Main generator file - includes xsl files for each window
 <xsl:variable name="euler_ts" select="euler_ts"/>
 	<xsl:if test="$euler_ts &gt; 0">
 		<xsl:call-template name="irp6.euler.ts" />
+	</xsl:if>
+<xsl:variable name="kinematic" select="kinematic"/>
+	<xsl:if test="$kinematic &gt; 0">
+		<xsl:call-template name="irp6.kinematic" />
 	</xsl:if>
 <xsl:call-template name="irp6.edp.main" />
 </xsl:template>
