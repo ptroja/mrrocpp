@@ -748,7 +748,7 @@ void smooth2::calculate(void) {
 
 				//printf("coordinates %f i start_position %f\n",pose_list_iterator->coordinates[i], pose_list_iterator->start_position[i]);
 				if (eq(pose_list_iterator->coordinates[i],pose_list_iterator->start_position[i])) {
-					pose_list_iterator->k[i] = -temp;
+					pose_list_iterator->k[i] = -temp;//jesli droga jest rowna 0 w nastepnym ruchu to kierunek ustawiany jest na przeciwny aby robot zwolnil do 0
 				} else if(pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i] < 0) {//nadpisanie k dla nastepnego ruchu
 					//printf("nadpisanie k dla ruchu nastepnego w osi %d na -1\n", i);
 					pose_list_iterator->k[i] = -1;
@@ -892,6 +892,7 @@ void smooth2::calculate(void) {
 	        t_max = ceil(t_max/tk);
 	        t_max = t_max*tk;
 	        //printf("t_max = %f\n", t_max);
+	        pose_list_iterator->t = t_max;
 	    }
 
 		pose_list_iterator->interpolation_node_no = (int)round(t_max / tk);
@@ -908,9 +909,37 @@ void smooth2::calculate(void) {
 				continue;
 			}
 
-			if (fabs(t[i] - t_max) >= tk) {//redukcja predkosci w danej osi ze wzgledu na zbyt krotki czas ruchu
-				//redukcja predkosci
-				//printf("redukcja predkosci z powodu czasu w osi %d\n", i);
+			if (fabs(t[i] - t_max) >= tk) {//redukcja predkosci w danej osi ze wzgledu na zbyt krotki czas ruchu TODO przetestowac calosc
+				if (pose_list_iterator->model[i] == 1) { //model 1
+
+					if (pose_list_iterator->v_p[i] <= pose_list_iterator->v_k[i] && pose_list_iterator->v_k[i] * t_max
+							- 0,5 * ((pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) *
+									(pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]))/pose_list_iterator->a_r[i] > s[i]) {//proba dopasowania do modelu 2
+
+						pose_list_iterator->model[i] = 2;
+						reduction_model_2(pose_list_iterator, i, s[i]);
+
+					} else if (pose_list_iterator->v_p[i] > pose_list_iterator->v_k[i] && pose_list_iterator->v_p[i] * t_max
+							- 0,5 * ((pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i]) *
+									(pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i]))/pose_list_iterator->a_r[i] > s[i]){ // proba dopasowania do modelu 4
+
+						pose_list_iterator->model[i] = 4;
+						//redukcja model 4
+					} else { //normalna redukcja dla modelu 1, poprzez zastosowanie redukcji dla modelu 4 od momentu kończenia przyspieszania
+						//redukcja model 1 - ruch 4 etapowy ?
+					}
+
+				} else if (pose_list_iterator->model[i] == 2) {//model 2
+					reduction_model_2(pose_list_iterator, i, s[i]);
+				} else if (pose_list_iterator->model[i] == 3) {
+
+				} else if (pose_list_iterator->model[i] == 4) {
+
+				} else {
+					printf(" ten przypadek nie moze wystapic (redukcja ze wzgledu na czas)\n");
+				}
+
+				printf("redukcja predkosci z powodu czasu w osi %d\n", i);
 			}
 
 			pose_list_iterator->przysp[i]=fabs((pose_list_iterator->v_r[i]-pose_list_iterator->v_p[i])/(pose_list_iterator->a_r[i]*tk));//zapisanie makrokroku w ktorym konczy sie przyspieszanie
@@ -928,6 +957,61 @@ void smooth2::calculate(void) {
 
     }
 }//end - calculate
+
+void smooth2::reduction_model_2(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s) {//TODO przetestowac
+	//pierwszy rodzaj redukcji
+	double a;
+
+	a = (0,5 * (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) * (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i])
+			+ pose_list_iterator->v_p[i] * (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i])
+			- pose_list_iterator->v_k[i] * (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) )
+			/ (s - pose_list_iterator->v_k[i] * pose_list_iterator->t);
+
+	if ((pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) / pose_list_iterator->a_r[i] > pose_list_iterator->t) { //drugi rodzaj redukcji
+		if (s == pose_list_iterator->v_p[i] * pose_list_iterator->t) { //zabezpieczenie przed dzieleniem przez 0
+			a = -1; //powoduje przejscie do nastepnego stopnia redukcji (moglaby byc dowolna ujemna liczba)
+		} else {
+			a = (0,5 * (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i])) /
+				(s - pose_list_iterator->v_p[i]*pose_list_iterator->t);
+		}
+
+		if (a > pose_list_iterator->a_r[i] || a <= 0) {//trzeci stopien redukcji
+			double t1; //czas konca opoznienia
+			double s1; // droga w etapie w ktorym redukujemy czas (przed ostatnim przyspieszeniem)
+			double t3; //czas redukowanego kawalka
+
+			t3 = pose_list_iterator->t - ((pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) / pose_list_iterator->a_r[i]);
+
+			s1 = s - (pose_list_iterator->v_p[i] * t3 + 0,5 * pose_list_iterator->a_r[i] * t3 * t3);
+
+			t1 = (pose_list_iterator->a_r[i] * pose_list_iterator->t
+					- (sqrt(pose_list_iterator->a_r[i] * pose_list_iterator->a_r[i] * t3 * pose_list_iterator->t
+					- 4 * pose_list_iterator->a_r[i] * (pose_list_iterator->v_p[i] * t3 - s1))) )
+					/ (2 * pose_list_iterator->a_r[i]);
+
+			pose_list_iterator->v_r[i] = pose_list_iterator->v_p[i] - pose_list_iterator->a_r[i] * t1;
+			pose_list_iterator->s_przysp[i] = 0,5 * pose_list_iterator->a_r[i] * t1 * t1 + pose_list_iterator->v_r[i] * t1;
+			pose_list_iterator->s_jedn[i] = pose_list_iterator->v_r[i] * (pose_list_iterator->t - 2 * t1);
+
+			return;
+		}
+
+		pose_list_iterator->a_r[i] = a;
+		pose_list_iterator->v_r[i] = pose_list_iterator->v_p[i];
+		pose_list_iterator->s_przysp[i] = 0;
+		pose_list_iterator->s_jedn[i] = pose_list_iterator->v_r[i] * (pose_list_iterator->t -
+										(pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i]);
+
+		return;
+	}
+
+	pose_list_iterator->a_r[i] = a;
+	pose_list_iterator->v_r[i] = pose_list_iterator->v_k[i];
+	pose_list_iterator->s_przysp[i] = pose_list_iterator->v_p[i] * (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i]
+	                                  + 0,5 * (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i])
+	                                  * (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) / pose_list_iterator->a_r[i];
+	pose_list_iterator->s_jedn[i] = pose_list_iterator->v_r[i] * (pose_list_iterator->t - (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) / pose_list_iterator->a_r[i]);
+}
 
 } // namespace generator
 } // namespace common

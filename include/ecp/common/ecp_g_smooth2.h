@@ -75,6 +75,7 @@ class smooth2 : public delta {
 
 		void calculate(void);
 		double generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r, double v_k, double a_r, int k, double przysp, double jedn, double s_przysp, double s_jedn, double t_max);
+		void reduction_model_2(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s);
 
 		//metody zwiazane z pose_list
 		void flush_pose_list(void);
