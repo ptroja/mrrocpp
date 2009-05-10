@@ -417,34 +417,40 @@ double smooth2::generate_next_coords(int node_counter, int interpolation_node_no
 
     double tk=10*STEP;
 
-        if(node_counter < przysp)
-        { //pierwszy etap
-            if(v_p <= v_r)
-            { //przyspieszanie w pierwszym etapie
+        if(node_counter < przysp) { //pierwszy etap
+            if(v_p <= v_r) { //przyspieszanie w pierwszym etapie
             	//printf("start pos: %f\t node counter: %d\n", start_position, node_counter);
             	//printf(" przysp ");
                 next_position = start_position +
                                    k*(node_counter*v_p*tk + node_counter*node_counter*a_r*tk*tk/2);
                 //printf("next pos: %f\t node: %d\t", next_position, node_counter);
+            } else { //hamowanie w pierwszym etapie
+
+                next_position = start_position +
+                                   k*(node_counter*tk*v_p -
+                                         node_counter*node_counter*tk*tk*a_r/2);
             }
-        }
-        else if(node_counter <= jedn)
-        { // drugi etap - ruch jednostajny
+        } else if(node_counter <= jedn) { // drugi etap - ruch jednostajny
         	//printf(" jedn ");
             next_position = start_position +
                                k*(s_przysp + ((node_counter - przysp)*tk)*v_r);
             //printf("next pos: %f\t node: %d\t", next_position, node_counter);
-        }
-        else if(node_counter <= interpolation_node_no)
-        { //trzeci etap
-            if(v_k <= v_r)
-            { //hamowanie w trzecim etapie
+
+        } else if(node_counter <= interpolation_node_no) { //trzeci etap
+
+        	if(v_k <= v_r) { //hamowanie w trzecim etapie
             	//printf(" ham ");
                 next_position = start_position +
                                    k*(s_przysp + s_jedn +
                                          ((node_counter - jedn)*tk)*v_r -
                                          ((node_counter - jedn)*tk)*((node_counter - jedn)*tk)*a_r/2);
                 //printf("next pos: %f\t node: %d\t", next_position, node_counter);
+            } else { //przyspieszanie w trzecim etapie
+
+                next_position = start_position +
+                                   k*(s_przysp + s_jedn +
+                                         ((node_counter - jedn) * tk)*v_r +
+                                         a_r * ((node_counter - jedn) * tk) * ((node_counter - jedn) * tk) / 2);
             }
         }
 
@@ -931,10 +937,10 @@ void smooth2::calculate(void) {
 
 				} else if (pose_list_iterator->model[i] == 2) {//model 2
 					reduction_model_2(pose_list_iterator, i, s[i]);
-				} else if (pose_list_iterator->model[i] == 3) {
-
-				} else if (pose_list_iterator->model[i] == 4) {
-
+				} else if (pose_list_iterator->model[i] == 3) {//model 3
+					reduction_model_3(pose_list_iterator, i, s[i]);
+				} else if (pose_list_iterator->model[i] == 4) {//model 4
+					reduction_model_4(pose_list_iterator, i, s[i]);
 				} else {
 					printf(" ten przypadek nie moze wystapic (redukcja ze wzgledu na czas)\n");
 				}
@@ -958,8 +964,12 @@ void smooth2::calculate(void) {
     }
 }//end - calculate
 
+void smooth2::reduction_model_1(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s) {//TODO przetestowac
+
+}
+
 void smooth2::reduction_model_2(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s) {//TODO przetestowac
-	//pierwszy rodzaj redukcji
+	//pierwszy stopien redukcji
 	double a;
 
 	a = (0,5 * (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) * (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i])
@@ -967,31 +977,31 @@ void smooth2::reduction_model_2(std::list<ecp_smooth2_taught_in_pose>::iterator 
 			- pose_list_iterator->v_k[i] * (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) )
 			/ (s - pose_list_iterator->v_k[i] * pose_list_iterator->t);
 
-	if ((pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) / pose_list_iterator->a_r[i] > pose_list_iterator->t) { //drugi rodzaj redukcji
+	if ((pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) / a > pose_list_iterator->t) { //drugi stopien redukcji
 		if (s == pose_list_iterator->v_p[i] * pose_list_iterator->t) { //zabezpieczenie przed dzieleniem przez 0
 			a = -1; //powoduje przejscie do nastepnego stopnia redukcji (moglaby byc dowolna ujemna liczba)
 		} else {
-			a = (0,5 * (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i])) /
+			a = (0,5 * (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) * (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i])) /
 				(s - pose_list_iterator->v_p[i]*pose_list_iterator->t);
 		}
 
 		if (a > pose_list_iterator->a_r[i] || a <= 0) {//trzeci stopien redukcji
 			double t1; //czas konca opoznienia
-			double s1; // droga w etapie w ktorym redukujemy czas (przed ostatnim przyspieszeniem)
-			double t3; //czas redukowanego kawalka
+			double s1; // droga w etapie w ktorym redukujemy czas (przed etapem "odcinanym")
+			double t2; //czas redukowanego kawalka
 
-			t3 = pose_list_iterator->t - ((pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) / pose_list_iterator->a_r[i]);
+			t2 = pose_list_iterator->t - ((pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) / pose_list_iterator->a_r[i]);
 
-			s1 = s - (pose_list_iterator->v_p[i] * t3 + 0,5 * pose_list_iterator->a_r[i] * t3 * t3);
+			s1 = s - (pose_list_iterator->v_p[i] * t2 + 0,5 * pose_list_iterator->a_r[i] * t2 * t2);
 
-			t1 = (pose_list_iterator->a_r[i] * pose_list_iterator->t
-					- (sqrt(pose_list_iterator->a_r[i] * pose_list_iterator->a_r[i] * t3 * pose_list_iterator->t
-					- 4 * pose_list_iterator->a_r[i] * (pose_list_iterator->v_p[i] * t3 - s1))) )
+			t1 = (pose_list_iterator->a_r[i] * t2
+					- (sqrt(pose_list_iterator->a_r[i] * pose_list_iterator->a_r[i] * t2 * t2
+					- 4 * pose_list_iterator->a_r[i] * (pose_list_iterator->v_p[i] * t2 - s1))) )
 					/ (2 * pose_list_iterator->a_r[i]);
 
 			pose_list_iterator->v_r[i] = pose_list_iterator->v_p[i] - pose_list_iterator->a_r[i] * t1;
 			pose_list_iterator->s_przysp[i] = 0,5 * pose_list_iterator->a_r[i] * t1 * t1 + pose_list_iterator->v_r[i] * t1;
-			pose_list_iterator->s_jedn[i] = pose_list_iterator->v_r[i] * (pose_list_iterator->t - 2 * t1);
+			pose_list_iterator->s_jedn[i] = pose_list_iterator->v_r[i] * (t2 - 2 * t1);
 
 			return;
 		}
@@ -1011,6 +1021,75 @@ void smooth2::reduction_model_2(std::list<ecp_smooth2_taught_in_pose>::iterator 
 	                                  + 0,5 * (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i])
 	                                  * (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) / pose_list_iterator->a_r[i];
 	pose_list_iterator->s_jedn[i] = pose_list_iterator->v_r[i] * (pose_list_iterator->t - (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) / pose_list_iterator->a_r[i]);
+}
+
+void smooth2::reduction_model_3(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s) {//TODO przetestowac
+	double t1; //czas konca opoznienia
+
+	t1 = (pose_list_iterator->a_r[i] * pose_list_iterator->t
+			- (sqrt(pose_list_iterator->a_r[i] * pose_list_iterator->a_r[i] * pose_list_iterator->t * pose_list_iterator->t
+			- 4 * pose_list_iterator->a_r[i] * (pose_list_iterator->v_p[i] * pose_list_iterator->t - s))) )
+			/ (2 * pose_list_iterator->a_r[i]);
+
+	pose_list_iterator->v_r[i] = pose_list_iterator->v_p[i] - pose_list_iterator->a_r[i] * t1;
+	pose_list_iterator->s_przysp[i] = 0,5 * pose_list_iterator->a_r[i] * t1 * t1 + pose_list_iterator->v_r[i] * t1;
+	pose_list_iterator->s_jedn[i] = pose_list_iterator->v_r[i] * (pose_list_iterator->t - 2 * t1);
+}
+
+
+void smooth2::reduction_model_4(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s) {//TODO przetestowac
+	//pierwszy stopien redukcji
+	double a;
+
+	a = (pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i]) * (pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i]) /
+		((-2) * (s - pose_list_iterator->v_p[i] * pose_list_iterator->t));
+
+	if ((pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i]) / a > pose_list_iterator->t) { //drugi stopien redukcji
+		if (s == pose_list_iterator->v_k[i] * pose_list_iterator->t) { //zabezpieczenie przed dzieleniem przez 0
+			a = -1; //powoduje przejscie do nastepnego stopnia redukcji (moglaby byc dowolna ujemna liczba)
+		} else {
+			a = (0,5 * (pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i]) * (pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i])) /
+				(s - pose_list_iterator->v_k[i]*pose_list_iterator->t);
+		}
+
+		if (a > pose_list_iterator->a_r[i] || a <= 0) {//trzeci stopien redukcji
+			double t1; //czas konca opoznienia (relatywny - liczac od poczatku redukowanego odcinka)
+			double s1; // droga w etapie w ktorym redukujemy czas (przed etapem "odcinanym")
+			double t2; //czas redukowanego kawalka (relatywny)
+
+			t2 = pose_list_iterator->t - ((pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i]) / pose_list_iterator->a_r[i]);
+
+			s1 = s - (pose_list_iterator->v_k[i] * t2 + 0,5 * pose_list_iterator->a_r[i] * t2 * t2);
+
+			t1 = (pose_list_iterator->a_r[i] * t2
+					- (sqrt(pose_list_iterator->a_r[i] * pose_list_iterator->a_r[i] * t2 * t2
+					- 4 * pose_list_iterator->a_r[i] * (pose_list_iterator->v_k[i] * t2 - s1))) )
+					/ (2 * pose_list_iterator->a_r[i]);
+
+			pose_list_iterator->v_r[i] = pose_list_iterator->v_k[i] - pose_list_iterator->a_r[i] * t1;
+			pose_list_iterator->s_przysp[i] = 0,5 * pose_list_iterator->a_r[i] * t1 * t1 + pose_list_iterator->v_r[i] * t1
+											+ pose_list_iterator->v_k[i] * (pose_list_iterator->t - t2)
+											+ 0,5 * pose_list_iterator->a_r[i] * (pose_list_iterator->t - t2) * (pose_list_iterator->t - t2);
+			pose_list_iterator->s_jedn[i] = pose_list_iterator->v_r[i] * (t2 - 2 * t1);
+
+			return;
+		}
+
+		pose_list_iterator->a_r[i] = a;
+		pose_list_iterator->v_r[i] = pose_list_iterator->v_k[i];
+		pose_list_iterator->s_przysp[i] = pose_list_iterator->v_r[i] * (pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i]
+		                                + 0,5 * (pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i]) * (pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i])
+		                                /pose_list_iterator->a_r[i];
+		pose_list_iterator->s_jedn[i] = pose_list_iterator->v_r[i] * (pose_list_iterator->t
+									  - (pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i]);
+
+		return;
+	}
+
+	pose_list_iterator->a_r[i] = a;
+	pose_list_iterator->v_r[i] = pose_list_iterator->v_p[i];
+	pose_list_iterator->s_przysp[i] = 0;
+	pose_list_iterator->s_jedn[i] = pose_list_iterator->v_p[i] * (pose_list_iterator->t - (pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i]) / pose_list_iterator->a_r[i]);
 }
 
 } // namespace generator
