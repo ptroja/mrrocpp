@@ -31,6 +31,12 @@ public:
   double t; //czas ruchu
   int model[MAX_SERVOS_NR]; //model ruchu
 
+  //dla modelu 1 po redukcji (model 5)
+  double s_zero[MAX_SERVOS_NR];
+  double przysp_zero[MAX_SERVOS_NR];
+  double a_zero[MAX_SERVOS_NR];
+  double v_zero[MAX_SERVOS_NR];
+
   ecp_smooth2_taught_in_pose (void);
   ecp_smooth2_taught_in_pose (lib::POSE_SPECIFICATION at, double* vv, double* aa, double* coordinates);
 }; // end:class ecp_smooth2_taught_in_pose
