@@ -74,7 +74,7 @@ void pcbird::initiate_reading() {
 void pcbird::get_reading() {
 
 //  pcbird_get_streaming_position(sockfd, (pcbird_pos_t *)&image.sensor_union.pcbird);
-  pcbird_get_single_position(sockfd, (pcbird_pos_t *)&image.sensor_union.pcbird);
+  pcbird_get_single_position(sockfd, (pcbird_pos_t*) &image.sensor_union.pcbird);
 
   printf("[x, y, z] = [%.3f, %.3f, %.3f] ", image.sensor_union.pcbird.x, image.sensor_union.pcbird.y, image.sensor_union.pcbird.z);
   printf("[a, b, g] = [%.3f, %.3f, %.3f] ", image.sensor_union.pcbird.a, image.sensor_union.pcbird.b, image.sensor_union.pcbird.g);
