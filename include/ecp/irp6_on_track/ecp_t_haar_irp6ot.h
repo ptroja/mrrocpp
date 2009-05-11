@@ -1,5 +1,5 @@
-#if !defined(_ECP_T_PW_SCENA_IRP6OT_H)
-#define _ECP_T_PW_SCENA_IRP6OT_H
+#if !defined(_ECP_T_HAAR_IRP6OT_H)
+#define _ECP_T_HAAR_IRP6OT_H
 
 
 
@@ -24,9 +24,8 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-class pw_scena: public common::task::task  {
+class haar: public common::task::task  {
 
-	generator::pw_scena* scena_gen;
 	//Smoth movement generator
 	common::generator::smooth* smooth_gen;
 	//Calibration of force
@@ -42,7 +41,7 @@ class pw_scena: public common::task::task  {
 
 public:
 	//Konstruktory.
-	pw_scena(lib::configurator &_config);
+	haar(lib::configurator &_config);
 
 	//Methods for ECP template to redefine in concrete classes.
 	void task_initialization(void);

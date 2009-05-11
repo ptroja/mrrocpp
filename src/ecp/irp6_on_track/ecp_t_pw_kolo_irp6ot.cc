@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #include "ecp/irp6_on_track/ecp_local.h"
-#include "ecp/irp6_on_track/ecp_t_pw_irp6ot.h"
+#include "ecp/irp6_on_track/ecp_t_pw_kolo_irp6ot.h"
 
 namespace mrrocpp {
 namespace ecp {

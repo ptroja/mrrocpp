@@ -29,8 +29,8 @@ BINARIES =		ecp_pr \
 				ecp_vis_weights_driven_irp6ot \
 				ecp_tb \
 				ecp_spots_recognition \
-				ecp_pw\
-				ecp_pw_scena \
+				ecp_pw_kolo\
+				ecp_haar \
 				ecp_ttt \
 				ecp_ellipse \
         ecp_wii \
@@ -50,7 +50,7 @@ VPATH = ../common $(ECP_MPDIR)
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_pw_scena: ecp_g_pw_scena.o ecp_t_pw_scena_irp6ot.o ecp_g_force.o ecp_generator_t.o ecp_g_smooth.o ecp_g_jarosz.o\
+ecp_haar: ecp_g_pw_scena.o ecp_t_haar_irp6ot.o ecp_g_force.o ecp_generator_t.o ecp_g_smooth.o ecp_g_jarosz.o\
 		ecp_operator_reaction_condition.o ecp_vis_ib_eih_planar_irp6ot.o  ecp_mp_s_cvfradia.o  ecp_g_pw_scena.o  $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
@@ -76,7 +76,7 @@ ecp_wii_velocity: ecp_t_wii_velocity.o ecp_g_wii_velocity.o ecp_g_force.o ecp_g_
 
 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_pw: ecp_g_pw_kolo.o ecp_t_pw_irp6ot.o ecp_g_force.o ecp_st_go.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o\
+ecp_pw_kolo: ecp_g_pw_kolo.o ecp_t_pw_kolo_irp6ot.o ecp_g_force.o ecp_st_go.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o\
 		ecp_operator_reaction_condition.o ecp_g_sleep.o ecp_g_pw_kolo.o  $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#

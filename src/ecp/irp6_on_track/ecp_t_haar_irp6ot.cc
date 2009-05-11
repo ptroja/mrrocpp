@@ -1,4 +1,4 @@
-#include "ecp/irp6_on_track/ecp_t_pw_scena_irp6ot.h"
+#include "ecp/irp6_on_track/ecp_t_haar_irp6ot.h"
 
 #include <iostream>
 namespace mrrocpp {
@@ -9,11 +9,11 @@ namespace task {
 #define robot1
 
 //Konstruktory
-pw_scena::pw_scena(lib::configurator &_config) :
+haar::haar(lib::configurator &_config) :
 	task(_config) {
 }
 
-void pw_scena::task_initialization(void) {
+void haar::task_initialization(void) {
 
 	try {
 		//Create cvFraDIA sensor - for testing purposes.
@@ -25,11 +25,7 @@ void pw_scena::task_initialization(void) {
 
 
 		ecp_m_robot = new ecp_irp6_on_track_robot(*this);
-//
 
-		//Generator ruchu dla rozpoznawania sceny.
-		scena_gen = new generator::pw_scena(*this);
-		scena_gen->sensor_m = sensor_m;
 
 		planar_vis = new ecp_vis_ib_eih_planar_irp6ot(*this);
 		planar_vis->sensor_m = sensor_m;
@@ -49,7 +45,7 @@ void pw_scena::task_initialization(void) {
 	}
 }
 
-void pw_scena::main_task_algorithm(void) {
+void haar::main_task_algorithm(void) {
 
 	//Dojazd do pozycji nad stolem.
 	#ifdef robot1
@@ -112,7 +108,7 @@ void pw_scena::main_task_algorithm(void) {
 
 
 
-void pw_scena::set_td_coordinates(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6){
+void haar::set_td_coordinates(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6){
 	// Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
 	td.coordinate_delta[0] = cor0; // przyrost wspolrzednej X
 	td.coordinate_delta[1] = cor1;// przyrost wspolrzednej Y
@@ -124,7 +120,7 @@ void pw_scena::set_td_coordinates(double cor0, double cor1, double cor2, double 
 }
 
 //inicjacja struktury td - trajectory description
-void pw_scena::init_td(lib::POSE_SPECIFICATION pspec, int internode_no){
+void haar::init_td(lib::POSE_SPECIFICATION pspec, int internode_no){
 	td.arm_type=pspec;
 	td.interpolation_node_no=1;
 	td.internode_step_no=internode_no;	//motion time
@@ -138,8 +134,8 @@ namespace common {
 namespace task {
 
 task* return_created_ecp_task(lib::configurator &_config) {
-	return new irp6ot::task::pw_scena(_config);
-	
+	return new irp6ot::task::haar(_config);
+
 }
 
 }
