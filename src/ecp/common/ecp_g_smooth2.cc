@@ -409,7 +409,7 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
 } // end : konstruktor
 
 double smooth2::generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r,
-									double v_k, double a_r, int k, double przysp, double jedn, double s_przysp, double s_jedn, double t_max) {
+									double v_k, double a_r, int k, double przysp, double jedn, double s_przysp, double s_jedn) {
 
     //funkcja obliczajaca polozenie w danym makrokroku
 
@@ -472,7 +472,37 @@ void smooth2::generate_cords() {
 				if (fabs(pose_list_iterator->start_position[i] - pose_list_iterator->coordinates[i]) < distance_eps) {
 					coordinate[i] = pose_list_iterator->start_position[i]; //dla drogi 0
 				} else {
-					coordinate[i] = generate_next_coords(private_node_counter,
+					if (pose_list_iterator->model[i] == 5) { // dla 5 modelu ruchu
+
+						if (private_node_counter <= pose_list_iterator->przysp_zero[i]) {//pierwszy etap ruchu w modelu 5 (etap zero)
+							coordinate[i] = generate_next_coords(private_node_counter,
+								pose_list_iterator->interpolation_node_no,
+								pose_list_iterator->start_position[i],
+								pose_list_iterator->v_p[i],
+								pose_list_iterator->v_r[i],
+								pose_list_iterator->v_zero[i],
+								pose_list_iterator->a_zero[i],
+								pose_list_iterator->k[i],
+								pose_list_iterator->przysp_zero[i],
+								0,
+								pose_list_iterator->s_zero[i],
+								0);
+						} else { //kolejne etapy w modelu 5 //TODO poprawic wywolanie generate_next_coords() w tym warunku
+							coordinate[i] = generate_next_coords(private_node_counter - pose_list_iterator->przysp_zero[i],
+								pose_list_iterator->interpolation_node_no,
+								pose_list_iterator->start_position[i] + pose_list_iterator->s_zero[i],
+								pose_list_iterator->v_zero[i],
+								pose_list_iterator->v_r[i],
+								pose_list_iterator->v_k[i],
+								pose_list_iterator->a_r[i],
+								pose_list_iterator->k[i],
+								pose_list_iterator->przysp[i] - pose_list_iterator->przysp_zero[i],
+								pose_list_iterator->jedn[i] - pose_list_iterator->przysp_zero[i],
+								pose_list_iterator->s_przysp[i],
+								pose_list_iterator->s_jedn[i]);
+						}
+					} else {
+						coordinate[i] = generate_next_coords(private_node_counter,
 							pose_list_iterator->interpolation_node_no,
 							pose_list_iterator->start_position[i],
 							pose_list_iterator->v_p[i],
@@ -483,8 +513,8 @@ void smooth2::generate_cords() {
 							pose_list_iterator->przysp[i],
 							pose_list_iterator->jedn[i],
 							pose_list_iterator->s_przysp[i],
-							pose_list_iterator->s_jedn[i],
-							pose_list_iterator->t);
+							pose_list_iterator->s_jedn[i]);
+					}
 				}
 			}
 			private_node_counter++;
