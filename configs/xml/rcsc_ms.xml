@@ -47,7 +47,7 @@
 			<edp name="edp_irp6o" active="true" ui_def="edp_irp6o.xml">
 
 				<program_name>edp_irp6o</program_name>
-				<node_name>qnx632</node_name>
+				<node_name>robot1</node_name>
 
 			</edp>
 
@@ -179,7 +179,7 @@
 
 		</effector>
 
-		<effector name="conveyor" active="true">
+		<effector name="conveyor" active="false">
 			<ecp>
 				<program_name>ecp_conveyor_rcsc</program_name>
 				<node_name>qnx632</node_name>
@@ -209,7 +209,7 @@
 
 		</effector>
 
-		<effector name="festival" active="true" ui_def="festival.xml">
+		<effector name="festival" active="false" ui_def="festival.xml">
 			<ecp>
 				<test_mode>1</test_mode>
 				<node_name>qnx632</node_name>

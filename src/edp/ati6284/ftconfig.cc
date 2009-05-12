@@ -150,6 +150,7 @@ Calibration *createCalibration(char *CalFilePath,unsigned short index) {
 	//!<  find calibration specified by index
 	calibrationNodelist=DOM_Element_getElementsByTagName(eRoot,(char*)"Calibration");
 	if (calibrationNodelist->length<index) {    //!<  determine if invalid calibration index was used
+		free(cal);
 		return NULL;
 	}
 	eCalibration=DOM_NodeList_item(calibrationNodelist,index-1);	

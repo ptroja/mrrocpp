@@ -22,9 +22,6 @@ all: ${OBJECTS}
 #	$(CXX) -c user_flags -I$(HOMEDIR)/include -o $@ $<
 #vsp_m_int_nw.o:  vsp_m_int_nw.cc
 #	$(CXX) $(FLAGS) -I$(HOMEDIR)/include   -c -o $@ $<
-
-player:
-	@$(MAKE) -C $@
 #======================================================#	
 #----------------------------------------------- Maintain rules ----------------------------------------------------#
 #install:
@@ -33,7 +30,7 @@ player:
 clean:
 	@rm -f *.o *.err 
 
-#@$(MAKE) -C clean player
+#@$(MAKE) -C clean
 #-----------------------------------------------------------------------------------------------------------------------#
 
 include $(HOMEDIR)/depend.mk
