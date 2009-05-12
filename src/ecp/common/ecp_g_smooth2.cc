@@ -1019,6 +1019,8 @@ void smooth2::reduction_model_1(std::list<ecp_smooth2_taught_in_pose>::iterator 
 	pose_list_iterator->v_zero[i] = pose_list_iterator->v_r[i];
 	pose_list_iterator->model[i] = 5; //model 5 - ruch 4 etapowy
 
+	s2 = s - pose_list_iterator->s_zero[i];
+
 	t = pose_list_iterator->t - (pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i];
 
 	a = (pose_list_iterator->v_r[i] - pose_list_iterator->v_k[i]) * (pose_list_iterator->v_r[i] - pose_list_iterator->v_k[i]) /
