@@ -257,8 +257,10 @@ int PlayerClient::Read(bool await_sync, ClientProxy** dev)
   if((this->data_delivery_mode == PLAYER_DATAMODE_PULL_NEW) ||
      (this->data_delivery_mode == PLAYER_DATAMODE_PULL_ALL))
   {
-    if(this->RequestData() < 0)
+    if(this->RequestData() < 0) {
+	  delete[] buffer;
       return(-1);
+	}
   }
   
   // read until we get a SYNCH packet

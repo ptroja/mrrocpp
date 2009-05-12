@@ -344,6 +344,7 @@ int player_request(player_connection_t* conn,
               "(%d bytes > %d bytes); message NOT sent.\n", 
               payloadlen, 
               (PLAYER_MAX_MESSAGE_SIZE - sizeof(player_msghdr_t)));
+	free(buffer);
     return(-1);
   }
   hdr.stx = htons(PLAYER_STXX);
@@ -363,8 +364,10 @@ int player_request(player_connection_t* conn,
   memcpy(buffer,&hdr,sizeof(player_msghdr_t));
   memcpy(buffer+sizeof(player_msghdr_t),payload,payloadlen);
 
-  if(conn->sock < 0)
+  if(conn->sock < 0) {
+	free(buffer);
     return(-1);
+  }
 
   /* write the request */
   if(conn->protocol == PLAYER_TRANSPORT_TCP)
@@ -373,6 +376,7 @@ int player_request(player_connection_t* conn,
     {
       if(player_debug_level(-1) >= 2)
         perror("player_request(): write() failed.");
+      free(buffer);
       return(-1);
     }
   }
@@ -384,12 +388,14 @@ int player_request(player_connection_t* conn,
     {
       if(player_debug_level(-1) >= 2)
         perror("player_request(): sendto() failed.");
+      free(buffer);
       return(-1);
     }
   }
   else
   {
     puts("Unknown protocol");
+    free(buffer);
     return(-1);
   }
   
@@ -402,8 +408,10 @@ int player_request(player_connection_t* conn,
          (hdr.type != PLAYER_MSGTYPE_RESP_ERR) &&
          (retry < 10))
   {
-    if(player_read(conn, &hdr, buffer, PLAYER_MAX_MESSAGE_SIZE) == -1)
+    if(player_read(conn, &hdr, buffer, PLAYER_MAX_MESSAGE_SIZE) == -1) {
+      free(buffer);
       return(-1);
+    }
     ++retry;
   }
   
@@ -452,8 +460,10 @@ int player_request_device_access(player_connection_t* conn,
   //cannot use sizeof(replybuffer) because we malloc'd the memory.
   if(player_request(conn, PLAYER_PLAYER_CODE, 0, 
                     payload, sizeof(payload),
-                    &replyhdr, replybuffer, PLAYER_MAX_MESSAGE_SIZE) == -1)
+                    &replyhdr, replybuffer, PLAYER_MAX_MESSAGE_SIZE) == -1) {
+	free(replybuffer);
     return(-1);
+  }
 
   memcpy(&this_resp, replybuffer, sizeof(player_device_resp_t));
 
@@ -588,8 +598,10 @@ int player_read_tcp(player_connection_t* conn, player_msghdr_t* hdr,
   // Get memory from the heap, not the stack
   dummy = (char*)malloc(sizeof(char*)*PLAYER_MAX_MESSAGE_SIZE);
 
-  if(conn->sock < 0)
+  if(conn->sock < 0) {
+	free(dummy);
     return(-1);
+  }
 
   hdr->stx = 0;
   /* wait for the STX */
@@ -599,6 +611,7 @@ int player_read_tcp(player_connection_t* conn, player_msghdr_t* hdr,
     {
       if(player_debug_level(-1) >= 2)
         perror("player_read(): read() errored while looking for STX");
+	  free(dummy);
       return(-1);
     }
   }
@@ -611,6 +624,7 @@ int player_read_tcp(player_connection_t* conn, player_msghdr_t* hdr,
     {
       if(player_debug_level(-1) >= 2)
         perror("player_read(): read() errored while reading header.");
+	  free(dummy);
       return(-1);
     }
     readcnt += thisreadcnt;
@@ -645,6 +659,7 @@ int player_read_tcp(player_connection_t* conn, player_msghdr_t* hdr,
     {
       if(player_debug_level(-1) >= 2)
         perror("player_read(): read() errored while reading payload.");
+	  free(dummy);
       return(-1);
     }
     readcnt += thisreadcnt;
@@ -657,6 +672,7 @@ int player_read_tcp(player_connection_t* conn, player_msghdr_t* hdr,
     {
       if(player_debug_level(-1) >= 2)
         perror("player_read(): read() errored while reading excess bytes.");
+	  free(dummy);
       return(-1);
     }
     readcnt += thisreadcnt;
@@ -676,8 +692,10 @@ int player_read_udp(player_connection_t* conn, player_msghdr_t* hdr,
   buffer = (unsigned char *)
     malloc(sizeof(unsigned char*)*PLAYER_MAX_MESSAGE_SIZE);
 
-  if(conn->sock < 0)
+  if(conn->sock < 0) {
+	free(buffer);
     return(-1);
+  }
 
   if((numread = recvfrom(conn->sock,buffer,PLAYER_MAX_MESSAGE_SIZE,0,NULL,NULL)) < 0)
   {
@@ -773,6 +791,7 @@ int player_write(player_connection_t* conn,
               "(%d bytes > %d bytes); message NOT sent.\n", 
               commandlen, 
               (PLAYER_MAX_MESSAGE_SIZE - sizeof(player_msghdr_t)));
+	free(buffer);
     return(-1);
   }
 
@@ -792,8 +811,10 @@ int player_write(player_connection_t* conn,
   memcpy(buffer,&hdr,sizeof(player_msghdr_t));
   memcpy(buffer+sizeof(player_msghdr_t),command,commandlen);
 
-  if(conn->sock < 0)
+  if(conn->sock < 0) {
+	free(buffer);
     return(-1);
+  }
 
   if(conn->protocol == PLAYER_TRANSPORT_TCP)
   {
@@ -802,6 +823,7 @@ int player_write(player_connection_t* conn,
     {
       if(player_debug_level(-1) >= 2)
         perror("player_write(): write() errored.");
+	  free(buffer);
       return(-1);
     }
   }
@@ -813,6 +835,7 @@ int player_write(player_connection_t* conn,
     {
       if(player_debug_level(-1) >= 2)
         perror("player_write(): sendto() errored.");
+	  free(buffer);
       return(-1);
     }
   }

@@ -176,7 +176,6 @@ char* configurator::return_attach_point_name (const int _type, const char* _key,
 		name = new char[size];
 
 		// Stworzenie nazwy.
-		name = new char[size];
 		sprintf(name, "%s%s", attach_point, session_name);
 
 		// Zwalniam pamiec.

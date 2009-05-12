@@ -1080,6 +1080,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 		if ( info->send_sockfd < 0 )
 		{
 			perror("socket()");
+			free(info);
 			return NULL;
 		}
 		fcntl( info->send_sockfd, F_SETFL, FD_CLOEXEC );
@@ -1096,6 +1097,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 			fprintf( stderr, "%s %d:\n\tUnable to connect to host %s, port %d (name=%s)\n",
 			   __FILE__, __LINE__, inet_ntoa( sockaddr.sin_addr ), info->sin_port, name );
 			close( info->send_sockfd );
+			free(info);
 			return NULL;
 		}
 

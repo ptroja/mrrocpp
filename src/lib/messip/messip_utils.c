@@ -103,13 +103,14 @@ read_etc_messip(
 
 	}							// while
 
+	fclose( fp );
+
 	if ( first )
 	{
 		fprintf( stderr, "No hostname in " MESSIP_ETC "\n" );
 		return -1;
 	}
 
-	fclose( fp );
 	return 0;
 
 }								// read_etc_messip

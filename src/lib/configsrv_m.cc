@@ -18,7 +18,7 @@ sigint_handler(int signum)
 int
 main(int argc, char *argv[])
 {
-	configsrv *config = new configsrv(argv[1], argv[2], argv[3]);
+	configsrv config(argv[1], argv[2], argv[3]);
 
 	messip_channel_t *ch = messip_channel_create(NULL, CONFIGSRV_CHANNEL_NAME, MESSIP_NOTIMEOUT, 0);
 	assert(ch);
@@ -47,7 +47,7 @@ main(int argc, char *argv[])
 		switch(req) {
 			case CONFIG_CHANGE_INI_FILE:
 				{
-					config->change_ini_file(config_msg.configfile);
+					config.change_ini_file(config_msg.configfile);
 					messip_reply(ch, rcvid,
 						0, NULL, 0,
 						MESSIP_NOTIMEOUT);
@@ -55,7 +55,7 @@ main(int argc, char *argv[])
 				break;
 			case CONFIG_RETURN_INT_VALUE:
 				{
-					const int rep = config->return_int_value(
+					const int rep = config.return_int_value(
 							config_msg.key,
 							config_msg.section);
 
@@ -66,7 +66,7 @@ main(int argc, char *argv[])
 				break;
 			case CONFIG_RETURN_DOUBLE_VALUE:
 				{
-					const double rep = config->return_double_value(
+					const double rep = config.return_double_value(
 							config_msg.key,
 							config_msg.section);
 
@@ -77,7 +77,7 @@ main(int argc, char *argv[])
 				break;
 			case CONFIG_RETURN_STRING_VALUE:
 				{
-					const char *rep = config->return_string_value(
+					const char *rep = config.return_string_value(
 							config_msg.key,
 							config_msg.section);
 
@@ -92,7 +92,7 @@ main(int argc, char *argv[])
 				break;
 			case CONFIG_EXISTS:
 				{
-					const bool rep = config->exists(
+					const bool rep = config.exists(
 							config_msg.key,
 							config_msg.section);
 
