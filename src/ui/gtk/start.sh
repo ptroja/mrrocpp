@@ -3,7 +3,7 @@
 ./messip_mgr &
 MESSIP_PID=$!
 
-export UI_HOST=`hostname` 
+export UI_HOST=`hostname -s` 
 
 sleep 0.5
 
