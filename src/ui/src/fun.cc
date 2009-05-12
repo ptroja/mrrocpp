@@ -1478,7 +1478,7 @@ get_default_configuration_file_name() {
 		 strcpy(ui_state.config_file_relativepath, "../configs/");
 		 strcat(ui_state.config_file_relativepath, ui_state.config_file);
 
-		delete tmp_buf;
+		delete [] tmp_buf;
 		fclose(fp);
 		return 1;
 
