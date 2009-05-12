@@ -24,7 +24,7 @@ robotcalibgen::robotcalibgen (common::task::task& _ecp_task)
 
 bool robotcalibgen::first_step()
 {
-	sr_ecp_msg.message("robotcalibgen::first_step");
+	sr_ecp_msg.message("GENERATOR: first_step");
 
 /*	the_robot->EDP_data.instruction_type = lib::GET;
     	the_robot->EDP_data.get_type = ARM_DV;
@@ -32,9 +32,19 @@ bool robotcalibgen::first_step()
     	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
     	the_robot->EDP_data.next_interpolation_type = lib::MIM;
 */
+	communicate_with_edp=false;
 
 	// sensor_m represents our virtual sensor (Defns in include/sensor.h and include/ecp/mp/ecp_mp_s_pcbird.h)
-//	sensor = (ecp_mp::sensor::pcbird *)sensor_m[lib::SENSOR_PCBIRD];
+	try{
+		sensor = (ecp_mp::sensor::pcbird  *) sensor_m[lib::SENSOR_PCBIRD];
+//		sr_ecp_msg.message("PcBird sensor found in generator sensors list");
+	}
+	catch(...) {
+		sr_ecp_msg.message("Couldn't find PcBird sensor in generator sensors list");
+		return false;
+	}
+
+	sr_ecp_msg.message("GENERATOR: Tried to retrieve PcBird sensor.");
 
 	/* For pcbird, no need of configure sensor or initiate reading. The constructor of pcbird class 
 	   representing the virtual sensor creates a socket connection.Leter we just need to read the data 
@@ -76,15 +86,24 @@ bool robotcalibgen::first_step()
 bool robotcalibgen::next_step()
 {
 	sr_ecp_msg.message("robotcalibgen::next_step");
+	// Retrieve measures from sensor.
+	char measures[85];
+	sprintf(measures, "GENERATOR [x, y, z, a, b, g] = [%.3f, %.3f, %.3f, %.3f, %.3f, %.3f] ", 
+		sensor->image.sensor_union.pcbird.x, 
+		sensor->image.sensor_union.pcbird.y, 
+		sensor->image.sensor_union.pcbird.z, 
+		sensor->image.sensor_union.pcbird.a, 
+		sensor->image.sensor_union.pcbird.b, 
+		sensor->image.sensor_union.pcbird.g);
+	// Send message with measures to the UI (SRT).
+	sr_ecp_msg.message(measures);
 
-/*	if(iter == 0) //first time next_step
-	{
-		the_robot->EDP_data.instruction_type = lib::SET;
-    		the_robot->EDP_data.set_type = ARM_DV;
-    		the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
-	}*/
+	// Delay 1ms.	
 	delay(1);
-	return false;
+	// Check iteration number - break after 100.
+	if (iter++ > 10000)
+		return false;
+	return true;
 }
 
 

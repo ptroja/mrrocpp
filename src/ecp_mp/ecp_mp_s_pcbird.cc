@@ -72,14 +72,22 @@ void pcbird::initiate_reading() {
  * Retrieves aggregated data from pcbird.
  */
 void pcbird::get_reading() {
-
+//	sr_ecp_msg.message("PCBIRD: before get_reading");
+	
 //  pcbird_get_streaming_position(sockfd, (pcbird_pos_t *)&image.sensor_union.pcbird);
   pcbird_get_single_position(sockfd, (pcbird_pos_t*) &image.sensor_union.pcbird);
 
+/*
   printf("[x, y, z] = [%.3f, %.3f, %.3f] ", image.sensor_union.pcbird.x, image.sensor_union.pcbird.y, image.sensor_union.pcbird.z);
   printf("[a, b, g] = [%.3f, %.3f, %.3f] ", image.sensor_union.pcbird.a, image.sensor_union.pcbird.b, image.sensor_union.pcbird.g);
   printf("dist = %.3f ts=%d:%d\n", image.sensor_union.pcbird.distance, image.sensor_union.pcbird.ts_sec, image.sensor_union.pcbird.ts_usec);
+*/
 
+/*	char measures[80];
+	sprintf(measures, "PCBIRD [x, y, z, a, b, g] = [%.3f, %.3f, %.3f, %.3f, %.3f, %.3f] ", image.sensor_union.pcbird.x, image.sensor_union.pcbird.y, image.sensor_union.pcbird.z, image.sensor_union.pcbird.a, image.sensor_union.pcbird.b, image.sensor_union.pcbird.g);
+	//sprintf(measures, "PCBIRD [x, y, z]");
+	sr_ecp_msg.message(measures);
+*/
 }
 
 

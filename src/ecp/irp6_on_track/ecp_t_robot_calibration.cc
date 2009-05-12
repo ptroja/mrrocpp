@@ -33,33 +33,27 @@ robot_calibration::~robot_calibration()
 // methods for ECP template to redefine in concrete classes
 void robot_calibration::task_initialization(void)
 {
-	sr_ecp_msg->message("task_initialization");
+	sr_ecp_msg->message("(TASK: initialization");
 
-	// create pcbird sensor - for testing purposes.
-	sensor_m[lib::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird(lib::SENSOR_PCBIRD, "[vsp_calibration_pcbird]", *this);
-	sensor_m[lib::SENSOR_PCBIRD]->configure_sensor();
-   	sr_ecp_msg->message("PCBIRD sensor loaded");
-
-/*	// Create an adequate robot. - depending on the ini section name.
-	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
+	// Create an adequate robot. - depending on the ini section name.
+/*	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	{
     		ecp_m_robot = new ecp_irp6_on_track_robot (*this);
     		sr_ecp_msg->message("IRp6 on Track loaded");
-	}
-	*/
-	// Create spots generator and pass sensor to it.
-	generator = new generator::robotcalibgen(*this);
- 	//generator->sensor_m = sensor_m;
+	}*/
  	
+	// Create calibration generator.
+	generator = new generator::robotcalibgen(*this);
+	// Create pcbird sensor in the generato sensors list.
+ 	generator->sensor_m[lib::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird(lib::SENSOR_PCBIRD, "[vsp_calibration_pcbird]", *this);
+   	sr_ecp_msg->message("TASK: PCBIRD sensor added to list");
 }
 
 void robot_calibration::main_task_algorithm(void)
 {
-
-	sr_ecp_msg->message("robot_calibration::main_task_algorithm");
-	for(int i=0; i<100; i++)
-		generator->Move();
-	
+	// Execute generator Move method.
+	generator->Move();
+	// Send termination notice to the MP process.	
 	ecp_termination_notice();
 }
 
