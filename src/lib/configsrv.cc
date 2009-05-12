@@ -42,11 +42,11 @@ configsrv::configsrv (const char* _node, const char* _dir, const char* _ini_file
 	// Stworzenie sciezki do pliku.
 	sprintf(file_location, "%s%s%s", mrrocpp_network_path, "configs/", ini_file);
 
-	size = 1 + strlen(mrrocpp_network_path) + strlen("configs/") + strlen(ini_file);
+	size = 1 + strlen(mrrocpp_network_path) + strlen("configs/") + strlen("common.ini");
 	common_file_location = new char[size];
 	// Stworzenie sciezki do pliku.
 	sprintf(common_file_location, "%s%s%s", mrrocpp_network_path, "configs/", "common.ini");
-
+	printf("%s\n",common_file_location);
 }// : configsrv
 
 
@@ -172,6 +172,7 @@ char* configsrv::return_string_value(const char* _key, const char*_section_name)
 				 file_location, common_file_location, _section_name, _key);
 		}
 	}
+	printf("%s\n",common_file_location);
 	unlock_mutex();
 // 	throw ERROR
 	// Przepisanie wartosci.
