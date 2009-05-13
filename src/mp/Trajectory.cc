@@ -83,7 +83,7 @@ int Trajectory::setValuesInArray(double arrayToFill[], char *dataString)
 
 const char * Trajectory::toString(double valArr[], int length)
 {
-	char * afterConv = new char[160];
+	char * afterConv = new char[length];
 	for(int i=0; i<length; i++)
 	{
 		if(i==0)

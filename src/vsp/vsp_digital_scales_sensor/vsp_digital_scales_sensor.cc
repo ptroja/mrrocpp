@@ -87,6 +87,8 @@ void* digital_scale_thread(void*  arg ){
         // Odczyt gotowy (zawieszenie na barierze).
         pthread_barrier_wait( &reading_ready_barrier);
         }; // end: while
+    delete ds;
+
         return NULL;
     } // end: digital_scale_thread
 
@@ -97,7 +99,7 @@ digital_scales::digital_scales(lib::configurator &_config)  : sensor(_config) {
 
     // Struktura do pobierania danych z pliku konfiguracyjnego.
       number_of_scales = config.return_int_value("number_of_scales");
-      
+
     // Jesii za duzo linialow.
     if(number_of_scales > 6)
         number_of_scales = 6;

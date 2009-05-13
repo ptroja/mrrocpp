@@ -128,7 +128,7 @@ wnd_irp6m_xyz_zyz_ts_copy_cur_to_des( PtWidget_t *widget, ApInfo_t *apinfo, PtCa
 			PtGetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_ts_read_p5, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]) , 0);
 			PtGetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_ts_read_p6, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]) , 0);
 
-			for (int i=0; i< IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
+			for (int i=0; i< 6; i++)
 			{
 				wektor[i] = *wektor_ptgr[i];
 			}
@@ -171,10 +171,10 @@ EDP_irp6_mechatronika_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 	// dla robota irp6_mechatronika
 	if (ui_state.irp6_mechatronika.edp.state == 0)
 	{
-		
+
 		ui_state.irp6_mechatronika.edp.state = 0;
 		ui_state.irp6_mechatronika.edp.is_synchronised = false;
-		
+
 		strcpy(tmp_string, "/dev/name/global/");
 		strcat(tmp_string, ui_state.irp6_mechatronika.edp.hardware_busy_attach_point);
 
@@ -192,7 +192,7 @@ EDP_irp6_mechatronika_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 			ui_state.irp6_mechatronika.edp.node_nr = config->return_node_number(ui_state.irp6_mechatronika.edp.node_name);
 
 			ui_state.irp6_mechatronika.edp.state = 1;
-			
+
 			ui_robot.irp6_mechatronika = new ui_common_robot(
 					*config, ui_msg.all_ecp,
 					lib::ROBOT_IRP6_MECHATRONIKA);

@@ -139,7 +139,7 @@ Message::~Message()
 void replySend(Message* m)
 {
 	sem_wait(&sem);
-	q.push(m);	
+	q.push(m);
 	sem_post(&sem);
 }
 
@@ -155,7 +155,7 @@ char* Buffer = (char*)arg;
 	int RobotId = Buffer[0];
 	int DialogId = Buffer[1];
 	int ActionId = Buffer[2];
-	
+
 	if(strlen(Buffer)>5 && Buffer[3] == 65)
 	{
 		int varNum = Buffer[4];
@@ -169,7 +169,7 @@ char* Buffer = (char*)arg;
 			v[i] = (double)val/10000.0;
 			sprintf(Buffer2,"%-d",val);
 			pos2+= strlen(Buffer2);
-			if(val >= 0) ++pos2;			
+			if(val >= 0) ++pos2;
 			if(pos2 >= Buffer + strlen(Buffer) && i < varNum - 1)
 			{
 				perror("[ERROR] Not enough variables!!");
@@ -206,14 +206,14 @@ switch(RobotId)
 			/*ActionId = A (Set configuration)*/
 			case 'N':
 			{
-				set_config(Buffer);												
+				set_config(Buffer);
 				printf("Duppa\n");
 				break;
-				
+
 			}
 			case 'O':
 			{
-				get_configs();				
+				get_configs();
 				break;
 			}
 			}
@@ -239,7 +239,7 @@ switch(RobotId)
 				block_all = 1;
 				sem_post(&sem_all);
 				switch((int)v[0])
-				{				
+				{
 					case 0:	sem_wait(&sem_irp6_on_track);
 								if(block_irp6_on_track)
 								{
@@ -362,7 +362,7 @@ switch(RobotId)
 								block_irp6_mechatronika = 0;
 								sem_post(&sem_irp6_mechatronika);
 								break;
-				}				
+				}
 				sem_wait(&sem_all);
 				block_all = 0;
 				sem_post(&sem_all);
@@ -380,7 +380,7 @@ switch(RobotId)
 				block_all = 1;
 				sem_post(&sem_all);
 				switch((int)v[0])
-				{				
+				{
 					case 0:	sem_wait(&sem_irp6_on_track);
 								if(block_irp6_on_track)
 								{
@@ -503,7 +503,7 @@ switch(RobotId)
 								block_irp6_mechatronika = 0;
 								sem_post(&sem_irp6_mechatronika);
 								break;
-				}				
+				}
 				sem_wait(&sem_all);
 				block_all = 0;
 				sem_post(&sem_all);
@@ -521,7 +521,7 @@ switch(RobotId)
 				block_all = 1;
 				sem_post(&sem_all);
 				switch((int)v[0])
-				{				
+				{
 					case 0:	sem_wait(&sem_irp6_on_track);
 								if(block_irp6_on_track)
 								{
@@ -644,7 +644,7 @@ switch(RobotId)
 								block_irp6_mechatronika = 0;
 								sem_post(&sem_irp6_mechatronika);
 								break;
-				}				
+				}
 				sem_wait(&sem_all);
 				block_all = 0;
 				sem_post(&sem_all);
@@ -662,7 +662,7 @@ switch(RobotId)
 				block_all = 1;
 				sem_post(&sem_all);
 				switch((int)v[0])
-				{				
+				{
 					case 0:	sem_wait(&sem_irp6_on_track);
 								if(block_irp6_on_track)
 								{
@@ -785,12 +785,12 @@ switch(RobotId)
 								block_irp6_mechatronika = 0;
 								sem_post(&sem_irp6_mechatronika);
 								break;
-				}				
+				}
 				sem_wait(&sem_all);
 				block_all = 0;
 				sem_post(&sem_all);
 				break;
-			}	
+			}
 			/*ActionId = E (MP Start)*/
 			case 'E':
 			{
@@ -802,7 +802,7 @@ switch(RobotId)
 				}
 				block_mp = 1;
 				sem_post(&sem_mp);
-				pulse_start_mp();				
+				pulse_start_mp();
 				sem_wait(&sem_mp);
 				block_mp = 0;
 				sem_post(&sem_mp);
@@ -819,10 +819,10 @@ switch(RobotId)
 				}
 				block_mp = 1;
 				sem_post(&sem_mp);
-				pulse_stop_mp();	
+				pulse_stop_mp();
 				sem_wait(&sem_mp);
 				block_mp = 0;
-				sem_post(&sem_mp);			
+				sem_post(&sem_mp);
 				break;
 			}
 			/*ActionId = G (MP Trigger)*/
@@ -953,7 +953,7 @@ switch(RobotId)
 			}
 			block_ui = 1;
 			sem_post(&sem_ui);
-			process_control_window_init();			
+			process_control_window_init();
 			sem_wait(&sem_ui);
 			block_ui = 0;
 			sem_post(&sem_ui);
@@ -1257,7 +1257,7 @@ switch(RobotId)
 			}
 			sem_wait(&sem_ui);
 			block_ui = 0;
-			sem_post(&sem_ui);			
+			sem_post(&sem_ui);
 			break;
 		}
 		/*DialogId = P (FileSelection)*/
@@ -1708,7 +1708,7 @@ switch(RobotId)
 			return (void*)NULL;
 		}
 		block_irp6_postument = 1;
-		sem_post(&sem_irp6_postument);		
+		sem_post(&sem_irp6_postument);
 		switch(DialogId)
 		{
 		/*DialogId = A (Kinematic)*/
@@ -1887,7 +1887,7 @@ switch(RobotId)
 			/*ActionId = A (Read)*/
 			case 'A':
 			{
-				irp6p_read_motors();			
+				irp6p_read_motors();
 				break;
 			}
 			/*ActionId = B (Set)*/
@@ -1951,7 +1951,7 @@ switch(RobotId)
 			/*ActionId = A (Read)*/
 			case 'A':
 			{
-				irp6p_read_tool_euler();			
+				irp6p_read_tool_euler();
 				break;
 			}
 			/*ActionId = B (Set)*/
@@ -1977,12 +1977,12 @@ switch(RobotId)
 		}
 		/*DialogId = J (lib::EDP Load)*/
 		case 'J':
-		{		
+		{
 			switch(ActionId)
 			{
 			case 'A':
-			{			
-				EDP_irp6_postument_create();				
+			{
+				EDP_irp6_postument_create();
 				break;
 			}
 			}
@@ -2074,7 +2074,7 @@ switch(RobotId)
 	}
 	/*RobotId = D (Conveyor)*/
 	case 'D':
-	{	
+	{
 		sem_wait(&sem_conveyor);
 		if(block_conveyor || (!ui_robot.conveyor && DialogId != 'J'))
 		{
@@ -2093,7 +2093,7 @@ switch(RobotId)
 			/*ActionId = A (Read Motors)*/
 			case 'C':
 			{
-				conveyor_read_motors();			
+				conveyor_read_motors();
 				break;
 			}
 			/*ActionId = B (Set Motors)*/
@@ -2255,7 +2255,7 @@ switch(RobotId)
 		}
 		sem_wait(&sem_conveyor);
 		block_conveyor = 0;
-		
+
 		sem_post(&sem_conveyor);
 		break;
 	}
@@ -2356,13 +2356,13 @@ switch(RobotId)
 			}
 			}
 			break;
-		}	
+		}
 		}
 		sem_wait(&sem_speaker);
 		block_speaker = 0;
 		sem_post(&sem_speaker);
 		break;
-	} 
+	}
 	/*RobotId = F (IRP6 Mechatronika)*/
 	case 'F':
 	{	sem_wait(&sem_irp6_mechatronika);
@@ -2752,7 +2752,7 @@ void* reply_thread(void* arg)
 	int fd = (int)arg;
 	while(rid)
 	{
-		Message* m = NULL;	
+		Message* m = NULL;
 		sem_wait(&sem);
 		if(!q.empty())
 		{
@@ -2770,7 +2770,7 @@ void* reply_thread(void* arg)
 	}
 	while(!q.empty()) q.pop();
 	pthread_exit(NULL);
-		
+
 }
 
 
@@ -2792,7 +2792,7 @@ void* server_thread(void*)
 		perror("setsockopt");
 		exit(1);
 	}
-	
+
 	my_addr.sin_family = AF_INET;
 	my_addr.sin_port = htons(PORT);
 	my_addr.sin_addr.s_addr = INADDR_ANY;
@@ -2818,9 +2818,9 @@ void* server_thread(void*)
 			perror("accept");
 			continue;
 		}
-		
+
 		printf("[SERVER] Got connection from %s\n",inet_ntoa(their_addr.sin_addr));
-		
+
 		FD_ZERO(&sockets);
 		FD_SET(new_fd,&sockets);
 		int selectValue;
@@ -2832,11 +2832,11 @@ void* server_thread(void*)
 		{
 			char* Buffer = new char[128];
 			char length;
-			int size;	
+			int size;
 			int pos;
 			memset(Buffer,'\0',128);
 			Buffer[127] = '\n';
-			
+
 			selectValue = select(FD_SETSIZE,&sockets,(fd_set*)0,(fd_set*)0,&timeout);
 			if(selectValue < 0)
 			{
@@ -2851,12 +2851,12 @@ void* server_thread(void*)
 					break;
 				}
 				continue;
-			}			
+			}
 
 			//printf("[SERVER] Waiting for data\n");
 			if ((size = recv(new_fd,&length,1,0)) == -1) perror("recv");
 			else if(!size) break;
-			
+
 			pos = 0;
 			while(length)
 			{
@@ -2868,7 +2868,7 @@ void* server_thread(void*)
 			}
 			if(!size) break;
 			ftime(&start);
-			
+
 			//printf("[SERVER] Received: %s\n",Buffer);
 			pthread_t tid;
 			pthread_t tid2;
@@ -2890,7 +2890,7 @@ void* server_thread(void*)
 					pthread_attr_t  attr;
 					pthread_attr_init(&attr);
 					pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-					
+
 					callfunc((void*)Buffer);
 			//		pthread_create(&tid,&attr,callfunc,(void*)Buffer);
 					}
@@ -2905,7 +2905,7 @@ void* server_thread(void*)
 				manage_interface();
 			}
 		}
-		printf("[SERVER] Connection closed - Unloading all\n"); 
+		printf("[SERVER] Connection closed - Unloading all\n");
 		sem_wait(&sem);
 		id = 0;
 		rid = 0;
@@ -2914,7 +2914,7 @@ void* server_thread(void*)
 		unload_all();
 	}
 	close(sockfd);
-	
+
 	return 0;
 }
 //~jk
@@ -2942,24 +2942,24 @@ void *sr_thread(void* arg)
 	// 	char current_line[80];
 	int16_t status;
 	// 	int flags=0;
-	
+
 	name_attach_t *attach;
 	// my_data_t msg;
 	int rcvid;
-	
-	if ((attach = name_attach(NULL, ui_state.sr_attach_point, NAME_FLAG_ATTACH_GLOBAL)) == NULL) 
+
+	if ((attach = name_attach(NULL, ui_state.sr_attach_point, NAME_FLAG_ATTACH_GLOBAL)) == NULL)
 	{
 		perror("BLAD SR ATTACH, przypuszczalnie nie uruchomiono gns, albo blad wczytywania konfiguracji");
 		return NULL;
 	}
 	// printf("PO ATTACH ");
 	// flushall();
-	
+
 	while(1)
 	{
-	
+
 		rcvid = MsgReceive_r(attach->chid, &sr_msg, sizeof(sr_msg), NULL);
-		
+
 		if (rcvid < 0) /* Error condition, exit */
 		{
 			if (rcvid == -EINTR) {
@@ -2971,7 +2971,7 @@ void *sr_thread(void* arg)
 			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			break;
 		}
-		
+
 		if (rcvid == 0) /* Pulse received */
 		{
 			// printf("sr puls\n");
@@ -2987,7 +2987,7 @@ void *sr_thread(void* arg)
 			}
 			continue;
 		}
-		
+
 		/* A QNX IO message received, reject */
 		if (sr_msg.hdr.type >= _IO_BASE && sr_msg.hdr.type <= _IO_MAX)
 		{
@@ -2996,28 +2996,28 @@ void *sr_thread(void* arg)
 			MsgReply(rcvid, EOK, 0, 0);
 			continue;
 		}
-		
+
 		MsgReply(rcvid, EOK, &status, sizeof(status));
-		
+
 		if (strlen(sr_msg.process_name)>1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
 		{
-			
-			ui_sr_obj->lock_mutex(); 
-			
+
+			ui_sr_obj->lock_mutex();
+
 			ui_sr_obj->writer_buf_position++;
 			ui_sr_obj->writer_buf_position %= UI_SR_BUFFER_LENGHT;
-			
+
 			ui_sr_obj->message_buffer[ui_sr_obj->writer_buf_position]=sr_msg;
-			
-			ui_sr_obj->set_new_msg(); 
-			ui_sr_obj->unlock_mutex(); 
-		
+
+			ui_sr_obj->set_new_msg();
+			ui_sr_obj->unlock_mutex();
+
 		} else {
 			printf("SR(%s:%d) unexpected message\n", __FILE__, __LINE__);
 		}
-	
+
 	}
-	
+
 	return 0;
 };
 #else /* USE_MESSIP_SRR */
@@ -3038,7 +3038,7 @@ void *sr_thread(void* arg)
 
 	while(1)
 	{
-	
+
 		rcvid = messip_receive(ch, &type, &subtype, &sr_msg, sizeof(sr_msg), MESSIP_NOTIMEOUT);
 
 		if (rcvid == -1) /* Error condition, exit */
@@ -3051,28 +3051,28 @@ void *sr_thread(void* arg)
 			fprintf(stderr, "ie. MESSIP_MSG_DISCONNECT\n");
 			continue;
 		}
-	
+
 		status = 0;
 		messip_reply(ch, rcvid, EOK, &status, sizeof(status), MESSIP_NOTIMEOUT);
-		
+
 		if (strlen(sr_msg.process_name)>1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
 		{
-			ui_sr_obj->lock_mutex(); 
+			ui_sr_obj->lock_mutex();
 			// to sie zdarza choc nie wiem dlaczego
-			
+
 			ui_sr_obj->writer_buf_position++;
 			ui_sr_obj->writer_buf_position %= UI_SR_BUFFER_LENGHT;
-			
+
 			ui_sr_obj->message_buffer[ui_sr_obj->writer_buf_position]=sr_msg;
-			
-			ui_sr_obj->set_new_msg(); 
-			ui_sr_obj->unlock_mutex(); 
-		
+
+			ui_sr_obj->set_new_msg();
+			ui_sr_obj->unlock_mutex();
+
 		} else {
 			printf("SR(%s:%d) unexpected message\n", __FILE__, __LINE__);
 		}
 	}
-	
+
 	return 0;
 };
 #endif /* USE_MESSIP_SRR */
@@ -3085,18 +3085,18 @@ void *comm_thread(void* arg) {
 	// my_data_t msg;
 	int rcvid;
 	_msg_info* info;
-	
+
 	info = new  _msg_info;
-	
+
 	bool wyjscie;
-	
+
 	if ((attach = name_attach(NULL, ui_state.ui_attach_point, NAME_FLAG_ATTACH_GLOBAL)) == NULL)
 	{
 		// XXX TODO
 		// return EXIT_FAILURE;
 		// printf("NIE MA ATTACHA");
 	}
-	
+
 
 while(1) {
 	// ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
@@ -3145,20 +3145,20 @@ while(1) {
         case lib::C_XYZ_EULER_ZYZ:
         case lib::C_JOINT:
 		case lib::C_MOTOR:
-		
+
 			switch ( ui_ecp_obj->ecp_to_ui_msg.ecp_message )
 	{
 		case lib::C_XYZ_ANGLE_AXIS:
 			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
 			{
 				case lib::ROBOT_IRP6_ON_TRACK:
-					replySend(new Message('7','I','A',0,NULL,msg)); 
+					replySend(new Message('7','I','A',0,NULL,msg));
 				break;
 				case lib::ROBOT_IRP6_POSTUMENT:
-					replySend(new Message('7','I','B',0,NULL,msg)); 
+					replySend(new Message('7','I','B',0,NULL,msg));
 				break;
 				case lib::ROBOT_IRP6_MECHATRONIKA:
-					replySend(new Message('7','I','E',0,NULL,msg)); 
+					replySend(new Message('7','I','E',0,NULL,msg));
 				break;
 				default:
 				break;
@@ -3168,13 +3168,13 @@ while(1) {
 			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
 			{
 				case lib::ROBOT_IRP6_ON_TRACK:
-					replySend(new Message('7','J','A',0,NULL,msg)); 
+					replySend(new Message('7','J','A',0,NULL,msg));
 				break;
 				case lib::ROBOT_IRP6_POSTUMENT:
-					replySend(new Message('7','J','B',0,NULL,msg)); 
+					replySend(new Message('7','J','B',0,NULL,msg));
 				break;
 				case lib::ROBOT_IRP6_MECHATRONIKA:
-					replySend(new Message('7','J','E',0,NULL,msg)); 
+					replySend(new Message('7','J','E',0,NULL,msg));
 				break;
 				default:
 				break;
@@ -3184,13 +3184,13 @@ while(1) {
 			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
 			{
 				case lib::ROBOT_IRP6_ON_TRACK:
-					replySend(new Message('7','K','A',0,NULL,msg)); 
+					replySend(new Message('7','K','A',0,NULL,msg));
 				break;
 				case lib::ROBOT_IRP6_POSTUMENT:
-					replySend(new Message('7','K','B',0,NULL,msg)); 
+					replySend(new Message('7','K','B',0,NULL,msg));
 				break;
 				case lib::ROBOT_IRP6_MECHATRONIKA:
-					replySend(new Message('7','K','E',0,NULL,msg)); 
+					replySend(new Message('7','K','E',0,NULL,msg));
 				break;
 				default:
 				break;
@@ -3200,13 +3200,13 @@ while(1) {
 			switch ( ui_ecp_obj->ecp_to_ui_msg.robot_name )
 			{
 				case lib::ROBOT_IRP6_ON_TRACK:
-					replySend(new Message('7','L','A',0,NULL,msg)); 
+					replySend(new Message('7','L','A',0,NULL,msg));
 				break;
 				case lib::ROBOT_IRP6_POSTUMENT:
-					replySend(new Message('7','L','B',0,NULL,msg)); 
+					replySend(new Message('7','L','B',0,NULL,msg));
 				break;
 				case lib::ROBOT_IRP6_MECHATRONIKA:
-					replySend(new Message('7','L','E',0,NULL,msg)); 
+					replySend(new Message('7','L','E',0,NULL,msg));
 				break;
 				default:
 				break;
@@ -3215,11 +3215,11 @@ while(1) {
 	}
 		ui_ecp_obj->trywait_sem();
 		ui_ecp_obj->take_sem();
-			
-		
+
+
 		if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
 				printf("Blad w UI reply\n");
-			}		
+			}
 		break;
 		case lib::YES_NO:
 
@@ -3228,83 +3228,83 @@ while(1) {
 			strcpy(msg,ui_ecp_obj->ecp_to_ui_msg.string);
 			msg[len] = '\0';
 			replySend(new Message('7','A','A',0,NULL,msg));
-		
+
 			ui_ecp_obj->take_sem();
-		
+
 			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
 				printf("Blad w UI reply\n");
 			}
 		//~jk
           break;
         case lib::MESSAGE:
-	
+
 			len = strlen(ui_ecp_obj->ecp_to_ui_msg.string);
 			msg = new char(len+1);
 			strcpy(msg,ui_ecp_obj->ecp_to_ui_msg.string);
 			msg[len] = '\0';
 			replySend(new Message('7','B','A',0,NULL,msg));
-		
+
 			ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
- 
+
 			if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
 				printf("Blad w UI reply\n");
 			}
           break;
         case lib::DOUBLE_NUMBER:
-		
+
 		len = strlen(ui_ecp_obj->ecp_to_ui_msg.string);
 			msg = new char(len+1);
 			strcpy(msg,ui_ecp_obj->ecp_to_ui_msg.string);
 			msg[len] = '\0';
 			replySend(new Message('7','C','A',0,NULL,msg));
-		
+
 			ui_ecp_obj->take_sem();
-		
+
 	        if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
 		  	 	printf("Blad w UI reply\n");
 	  	  	}
 		break;
         case lib::INTEGER_NUMBER:
-		
+
 			len = strlen(ui_ecp_obj->ecp_to_ui_msg.string);
 			msg = new char(len+1);
 			strcpy(msg,ui_ecp_obj->ecp_to_ui_msg.string);
 			msg[len] = '\0';
 			replySend(new Message('7','D','A',0,NULL,msg));
-		
+
 			ui_ecp_obj->take_sem();
-							
+
 		   	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
 			   	printf("Blad w UI reply\n");
 		   	}
  		break;
           case lib::CHOOSE_OPTION:
 			// wybor ilosci dostepnych opcji w zaleznosci od wartosci ui_ecp_obj->ecp_to_ui_msg.nr_of_options
-	
-			replySend(new Message('7','E',(char)(ui_ecp_obj->ecp_to_ui_msg.nr_of_options),0,NULL,msg)); 
-			
+
+			replySend(new Message('7','E',(char)(ui_ecp_obj->ecp_to_ui_msg.nr_of_options),0,NULL,msg));
+
 			ui_ecp_obj->take_sem();
-		
+
 		    	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
 			   	printf("Blad w UI reply\n");
 		    	}
-			    	
-          break;  
+
+          break;
         case lib::LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
      //    printf("lib::LOAD_FILE\n");
-		          replySend(new Message('7','G','A',0,NULL,msg)); 
+		          replySend(new Message('7','G','A',0,NULL,msg));
 		          ui_ecp_obj->ui_rep.reply = lib::FILE_LOADED;
 		       	 ui_ecp_obj->take_sem();
-		
+
 		     	if (MsgReply(rcvid, EOK, &ui_ecp_obj->ui_rep, sizeof(ui_ecp_obj->ui_rep))<0) {
 			   	printf("Blad w UI reply\n");
 		    	}
-      
+
 
           break;
         case lib::SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 		   //    printf("lib::SAVE_FILE\n");
-          replySend(new Message('7','H','A',0,NULL,msg)); 
+          replySend(new Message('7','H','A',0,NULL,msg));
 		 ui_ecp_obj->ui_rep.reply = lib::FILE_SAVED;
   		ui_ecp_obj->take_sem();
 
@@ -3318,6 +3318,9 @@ while(1) {
           perror ("Strange ECP message\n");
 	}; // end: switch
 }// end while
+
+
+	delete info;
 
 return 0;
 };
@@ -3389,14 +3392,14 @@ int init()
 	//jk
 	if(sem_init(&sem,0,1) == -1 || sem_init(&sem_conveyor,0,1) == -1 || sem_init(&sem_irp6_on_track,0,1) == -1 || sem_init(&sem_irp6_postument,0,1) == -1 || sem_init(&sem_irp6_mechatronika,0,1) == -1 || sem_init(&sem_speaker,0,1) == -1 || sem_init(&sem_ui,0,1) == -1 || sem_init(&sem_mp,0,1) == -1)
 	{
-		perror("Unable to initialize semaphore\n");	
+		perror("Unable to initialize semaphore\n");
 		return NULL;
-		
+
 	}//~jk
-	
 
 
-	
+
+
 	set_ui_state_notification(UI_N_STARTING);
 
 	struct utsname sysinfo;
@@ -3404,11 +3407,11 @@ int init()
 	char buff[PATH_MAX + 1];
 	pthread_t ui_tid;
 	pthread_t sr_tid;
-	
+
 	//jk
 
 	//~jk
-	
+
 	signal( SIGINT, &catch_signal );// by y aby uniemozliwic niekontrolowane zakonczenie aplikacji ctrl-c z kalwiatury
  	signal( SIGALRM, &catch_signal );
  	signal( SIGSEGV, &catch_signal );
@@ -3423,7 +3426,7 @@ int init()
 	ui_state.ui_state=1;// ui working
 	ui_state.ui_attach_point = NULL;
 	ui_state.network_sr_attach_point = NULL;
-	
+
 	ui_state.irp6_on_track.edp.state=-1; // edp nieaktywne
 	ui_state.irp6_on_track.edp.last_state=-1; // edp nieaktywne
 	ui_state.irp6_on_track.ecp.trigger_fd = -1;
@@ -3448,8 +3451,8 @@ int init()
 	ui_state.irp6_mechatronika.edp.last_state=-1; // edp nieaktywne
 	ui_state.irp6_mechatronika.ecp.trigger_fd = -1;
 	strcpy(ui_state.irp6_mechatronika.edp.section_name, "[edp_irp6_mechatronika]");
-	strcpy(ui_state.irp6_mechatronika.ecp.section_name, "[ecp_irp6_mechatronika]");	
-		
+	strcpy(ui_state.irp6_mechatronika.ecp.section_name, "[ecp_irp6_mechatronika]");
+
 	ui_state.file_window_mode=FSTRAJECTORY; // uczenie
 	ui_state.all_edps = UI_ALL_EDPS_NONE_EDP_LOADED;
 	ui_state.mp.state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
@@ -3483,16 +3486,16 @@ int init()
 	ui_state.is_wind_irp6p_kinematic_open=false;
 	ui_state.is_wind_irp6m_kinematic_open=false;
 	ui_state.is_wind_speaker_play_open=false;
-	
+
 	ui_state.is_wind_irp6ot_servo_algorithm_open=false;
-	ui_state.is_wind_irp6p_servo_algorithm_open=false; 
-	ui_state.is_wind_irp6m_servo_algorithm_open=false; 
+	ui_state.is_wind_irp6p_servo_algorithm_open=false;
+	ui_state.is_wind_irp6m_servo_algorithm_open=false;
 	ui_state.is_wind_conv_servo_algorithm_open=false;
-	
+
 	ui_state.is_mp_and_ecps_active = false;
 	// ui_state.is_any_edp_active = false;
-	
-	
+
+
 	ui_state.irp6_on_track.edp.is_synchronised = false;
 	ui_state.irp6_postument.edp.is_synchronised = false;
 	ui_state.conveyor.edp.is_synchronised = false;
@@ -3531,10 +3534,10 @@ int init()
 	strcat(ui_state.config_file_fullpath, ui_state.ui_node_name);
 	strcat(ui_state.config_file_fullpath, ui_state.mrrocpp_local_path);
 	strcat(ui_state.config_file_fullpath, "configs");
-	
+
 	// printf ("Remember to create gns server\n");
 
-	// pierwsze zczytanie pliku konfiguracyjnego (aby pobrac nazwy dla pozostalych watkow UI)	
+	// pierwsze zczytanie pliku konfiguracyjnego (aby pobrac nazwy dla pozostalych watkow UI)
 	if (get_default_configuration_file_name()>=1) // zczytaj nazwe pliku konfiguracyjnego
 	 {
 		initiate_configuration();
@@ -3545,7 +3548,7 @@ int init()
 		printf ("Blad manage_default_configuration_file\n");
 		return 0;
 	}
-	
+
 	ui_sr_obj = new ui_sr_buffer();
 	ui_ecp_obj = new ui_ecp_buffer();
 
@@ -3566,7 +3569,7 @@ int init()
 	// Zablokowanie domyslnej obslugi sygnalu SIGINT w watkach UI_SR i UI_COMM
 
 	sigset_t set;
-	
+
 	sigemptyset( &set );
 	sigaddset( &set, SIGINT );
 	sigaddset( &set, SIGALRM );
@@ -3574,7 +3577,7 @@ int init()
 	if  (SignalProcmask(0, sr_tid, SIG_BLOCK, &set, NULL)==-1) {
 		 perror("SignalProcmask(sr_tid)");
 	}
-	
+
 	if  (SignalProcmask(0, ui_tid, SIG_BLOCK, &set, NULL)==-1) {
 		 perror("SignalProcmask(ui_tid)");
 	}
@@ -3584,46 +3587,46 @@ int init()
 	 {
 		reload_whole_configuration();
 
-			
+
 	} else {
 		printf ("Blad manage_default_configuration_file\n");
 		return 0;
 	}
 
 	// inicjacja pliku z logami sr
-	
+
 	time_t time_of_day;
 	char file_date[50];
 	char log_file_with_dir[100];
 	char file_name[50];
-	
+
 	time_of_day = time( NULL );
 	strftime( file_date, 40, "%g%m%d_%H-%M-%S", localtime( &time_of_day ) );
-	
+
 	sprintf(file_name,"/%s_sr_log", file_date);
-	
+
 	// 	strcpy(file_name,"/pomiar.p");
 	strcpy(log_file_with_dir, "../logs/");
 	strcat(log_file_with_dir, file_name);
-	
+
 	log_file_outfile = new ofstream(log_file_with_dir, ios::out);
-	
+
 	if (!(*log_file_outfile)) {
 		std::cerr << "Cannot open file: " << file_name << '\n';
 		perror("because of");
 	}
-	
-	manage_interface();			
-	
+
+	manage_interface();
+
 	while(true)
 	{
-		
+
 		OnTimer();
 		usleep(100000);
 	}
-	
+
 	quit();
-	
+
 	return 0;
 
 }

@@ -138,7 +138,7 @@ bool rubik_cube_solver::communicate_with_windows_solver()
 	//	char face_c, rot_c, curr_c;
 	int s;
 	int str_size;
-	char cube_tab_send[54];
+	char cube_tab_send[55];
 	char manipulation_sequence[200];
 
 	for(int i=0; i<3; i++)

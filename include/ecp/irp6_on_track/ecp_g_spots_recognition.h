@@ -39,6 +39,7 @@ class spots : public common::generator::generator
 
   public:
 	spots(common::task::task& _ecp_task);
+	~spots();
 	bool first_step();
 	bool next_step();
 

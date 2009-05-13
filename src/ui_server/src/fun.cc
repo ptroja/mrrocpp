@@ -509,6 +509,7 @@ int get_contents(char* Buffer)
 			else fn[0] = 'f';
 			fn[strlen(ep->d_name)+1] = '\0';
 			if(fn[1] != '.') replySend(new Message('8','A','A',0,NULL,fn));
+			delete[] path;
 		}
 		closedir(dp);
 	}
@@ -1337,7 +1338,7 @@ int fill_program_node_list()
 			tmp_s->node_name = config->return_string_value("node_name", *section_list_iterator);
 
 			ui_state.program_node_list.push_back(*tmp_s);
-
+			delete tmp_s;
 		}
 	}
 
@@ -1364,7 +1365,7 @@ get_default_configuration_file_name() {
 		 strcpy(ui_state.config_file_relativepath, "../configs/");
 		 strcat(ui_state.config_file_relativepath, ui_state.config_file);
 
-		delete tmp_buf;
+		delete[] tmp_buf;
 		fclose(fp);
 		return 1;
 

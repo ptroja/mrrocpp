@@ -25,6 +25,12 @@ spots::spots (common::task::task& _ecp_task)
 	no_of_tcg_in_one = 0;
 }
 
+
+spots::~spots ()
+{
+	delete c;
+}
+
 bool spots::first_step()
 {
 	sensor = (ecp_mp::sensor::cvfradia *)sensor_m[lib::SENSOR_CVFRADIA];

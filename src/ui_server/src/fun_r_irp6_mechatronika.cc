@@ -144,7 +144,7 @@ int irp6m_read_post_angle_axis()
 				v[0] = irp6m_current_pos[0];
 				v[1] = irp6m_current_pos[1];
 				v[2] = irp6m_current_pos[2];
-				v[7] = irp6m_current_pos[6];
+			//	v[7] = irp6m_current_pos[6];
 
 				alfa = sqrt(irp6m_current_pos[3]*irp6m_current_pos[3]
 				                                                   +irp6m_current_pos[4]*irp6m_current_pos[4]
@@ -454,7 +454,7 @@ int irp6m_xyz_euler_zyz_motion(double* v)
 	{
 		if ( ui_state.irp6_mechatronika.edp.is_synchronised )
 		{
-			for (int i = 0; i < 7; i++) irp6m_desired_pos[i] = v[i];
+			for (int i = 0; i < 6; i++) irp6m_desired_pos[i] = v[i];
 			ui_robot.irp6_mechatronika->move_xyz_euler_zyz(irp6m_desired_pos);
 			irp6m_read_joints();
 			irp6m_read_post_angle_axis();
@@ -503,7 +503,7 @@ int irp6m_xyz_angle_axis_motion(double* wektor_ptgr)
 				if( i >2) irp6m_desired_pos[i] *= wektor[6];
 			}
 
-			irp6m_desired_pos[6] = wektor[7];
+		//	irp6m_desired_pos[6] = wektor[7];
 			ui_robot.irp6_mechatronika->move_xyz_angle_axis(irp6m_desired_pos);
 			irp6m_read_tool_angle();
 			irp6m_read_tool_euler();

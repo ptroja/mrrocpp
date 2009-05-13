@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //
-// MP Master Process - methods�for task sporadic coordination
+// MP Master Process - methods���for task sporadic coordination
 //
 // -------------------------------------------------------------------------
 
@@ -515,7 +515,7 @@ void fsautomat::communicate_with_windows_solver(common::State &state)
 
 	char c_up, c_right, c_front, c_down, c_left, c_back;
 	int s, str_size;
-	char cube_tab_send[54];
+	char cube_tab_send[55];
 	char manipulation_sequence[200];
 
 	for (int i = 0; i < 3; i++)

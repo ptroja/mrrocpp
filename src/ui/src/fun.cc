@@ -1429,6 +1429,7 @@ int fill_program_node_list()
 			tmp_s->node_name = config->return_string_value("node_name", *section_list_iterator);
 
 			ui_state.program_node_list.push_back(*tmp_s);
+			delete tmp_s;
 
 		}
 	}

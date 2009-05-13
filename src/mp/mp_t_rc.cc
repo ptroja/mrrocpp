@@ -131,7 +131,7 @@ bool rubik_cube_solver::communicate_with_windows_solver()
 	//	char face_c, rot_c, curr_c;
 	int s;
 	int str_size;
-	char cube_tab_send[54];
+	char cube_tab_send[55];
 	char manipulation_sequence[200];
 
 	for(int i=0; i<3; i++)
@@ -197,7 +197,7 @@ bool rubik_cube_solver::communicate_with_windows_solver()
     	  	case 'y': cube_tab_send[i]='r'; break;
     	  	case 'w': cube_tab_send[i]='l'; break;
     	 }
-}		
+}
 			 */
 
 			cube_tab_send[54]='\0';
@@ -659,7 +659,7 @@ void rubik_cube_solver::approach_op(int mode)
 	/*
     	// docisniecie chwytaka do kostki
 
-    	generator::tff_gripper_approach mp_tff_ga_gen(*this, 10); 
+    	generator::tff_gripper_approach mp_tff_ga_gen(*this, 10);
     	mp_tff_ga_gen.configure(10.0 , 0.0, 100);
     	if (Move ( mp_tff_ga_gen)) {
     		return true;
@@ -693,7 +693,7 @@ void rubik_cube_solver::approach_op(int mode)
 
 	/*
         	generator::teach_in mp_ti3_gen(*this);
-    	mp_load_file_with_path (mp_ti3_gen, "../trj/rc/ap_3.trj", 2); 
+    	mp_load_file_with_path (mp_ti3_gen, "../trj/rc/ap_3.trj", 2);
     	mp_ti3_gen.initiate_pose_list();
 
 
@@ -873,11 +873,11 @@ void rubik_cube_solver::main_task_algorithm(void)
 			face_change_op(common::CL_0);
 
 			departure_op();
-			
+
 			break;
 
 		}
-	
+
 };
 
 
