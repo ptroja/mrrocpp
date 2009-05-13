@@ -12,8 +12,8 @@
 #include "lib/srlib.h"
 
 #include "ecp/irp6_on_track/ecp_local.h"
-#include "ecp/irp6_on_track/ecp_g_pw_scena.h"
 #include "ecp/irp6_on_track/ecp_vis_ib_eih_planar_irp6ot.h"
+#include "ecp/irp6_on_track/ecp_g_rotate_gripper.h"
 #include "ecp/common/ecp_g_smooth.h"
 #include "ecp/common/ecp_g_force.h"
 
@@ -26,6 +26,8 @@ namespace task {
 
 class haar: public common::task::task  {
 
+	bool rotation;
+	char* smooth_path;
 	//Smoth movement generator
 	common::generator::smooth* smooth_gen;
 	//Calibration of force
@@ -38,6 +40,8 @@ class haar: public common::task::task  {
 	ecp_vis_ib_eih_planar_irp6ot* planar_vis;
 	//Trajectory description.
 	lib::trajectory_description td;
+
+	 ecp_g_rotate_gripper* rot_gripper_gen;
 
 public:
 	//Konstruktory.

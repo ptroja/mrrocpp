@@ -16,23 +16,25 @@ haar::haar(lib::configurator &_config) :
 void haar::task_initialization(void) {
 
 	try {
+		//Wczytanie parametrow konfiguracyjnych.
+		rotation = config.return_int_value("rotation"); //Czy bedzie wyznaczana rotacja?
+		smooth_path = config.return_string_value("smooth_path");//Sciezka z opisem punktu startowego podawanego smooth_generatorowi
+
+
 		//Create cvFraDIA sensor - for testing purposes.
 		sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA,
 				"[vsp_cvfradia]", *this,
-				sizeof(lib::sensor_image_t::sensor_union_t::fradia_t));
+				sizeof(lib::sensor_image_t::sensor_union_t::deviation_t));
 		//Configure sensor.
 		sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
 
-
 		ecp_m_robot = new ecp_irp6_on_track_robot(*this);
-
 
 		planar_vis = new ecp_vis_ib_eih_planar_irp6ot(*this);
 		planar_vis->sensor_m = sensor_m;
 
 		//Smooth generator
 		smooth_gen = new common::generator::smooth(*this, true);
-
 		bef_gen=new common::generator::bias_edp_force(*this);
 		//gripper approach constructor (task&, no_of_steps)
 		ga_gen=new common::generator::tff_gripper_approach (*this, 8);
@@ -41,29 +43,38 @@ void haar::task_initialization(void) {
 
 		sr_ecp_msg->message("ECP PW loaded");
 	} catch (...) {
-		printf("EXCEPTION\n");
+		printf("EXCEPTION caught in task_initialization.\n");
 	}
 }
 
 void haar::main_task_algorithm(void) {
 
 	//Dojazd do pozycji nad stolem.
-	#ifdef robot1
-		smooth_gen->load_file_with_path("/net/robot1/home/pwilkows/workspace/mrrocpp/trj/nad_stolem_joint.trj");
-	#else
-		smooth_gen->load_file_with_path("/net/qnx_pw/home/pwilkows/workspace/mrrocpp/trj/nad_stolem_joint.trj");
-	#endif
-
+	smooth_gen->load_file_with_path(smooth_path);
 	smooth_gen->Move();
 
+	//	//czy FraDIA ma dokonac detekcji z rotacja.
+		if(rotation){
+			std::cout<<"Rotacja.\n";
+			rot_gripper_gen = new ecp_g_rotate_gripper(*this,0.12);
+			rot_gripper_gen->sensor_m = sensor_m;
+			std::cout<<"Przed move\n";
+			rot_gripper_gen->Move();
+			std::cout<<"Po move\n";
+		}else{
+			std::cout<<"bez rotacji\n";
+		}
+
 	//Czekam, az czujnik bedzie skonfigurowany.
-	sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
-	while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.vsp_report == lib::VSP_SENSOR_NOT_CONFIGURED){
-		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
-	}
+//	sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+//	while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.vsp_report == lib::VSP_SENSOR_NOT_CONFIGURED){
+//		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+//	}
+
+
 
 	//Generator nadjezdzajacy nad obiekt.
-	//scena_gen->Move();
+
 	sr_ecp_msg->message("Przed planar_vis");
 	planar_vis->Move();
 	sr_ecp_msg->message("Po planar_vis");

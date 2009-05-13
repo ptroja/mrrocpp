@@ -50,11 +50,12 @@ typedef enum
 	RCS_SOLUTION_NOTPOSSIBLE
 } RCS_READING;
 
-//Used in PiotrWilkowski Scece_Recognition task.
-typedef enum
-{
-	START_RECOGNITION
-} SR_COMMAND;
+/*!
+ * \enum HD_READING
+ * \brief Types commands get from PW_HaarDetect task.
+ */
+typedef enum { HD_SOLUTION_NOTFOUND, HD_SOLUTION_FOUND } HD_READING;
+
 
 /*! \struct sensor_image_t
  * \ Structure used for storing and passing sensors data.
@@ -145,11 +146,18 @@ typedef struct sensor_image_t
 		} time;
 
 		//uchyb vsp pwilkows
-		struct {
+		struct deviation_t{
 			int frame_number;
 			int x;
 			int y;
 		}deviation;
+
+
+		//Obraz fradii dla rotate_gripper
+		struct {
+			HD_READING reading_state;
+			float angle;
+		}hd_angle;
 
 		/*!
 		 * \struct fradia_t
@@ -200,6 +208,13 @@ typedef enum
 	RCS_BUILD_TABLES, RCS_CUBE_STATE
 } RCS_CONFIGURE;
 
+
+/*!
+ * \enum HD_MODE
+ * \brief Types commands sent to PW_HaarDetect task.
+ */
+typedef enum{  WITHOUT_ROTATION, PERFORM_ROTATION } HD_MODE;
+
 // BUFORY KOMUNIKACYJNE
 struct ECP_VSP_MSG
 {
@@ -225,9 +240,8 @@ struct ECP_VSP_MSG
 			double plate_pos[3];
 		} ps_response;
 
-		//PW Scene_Recognition
-//		SR_COMMAND sc_command;
-
+		// Tryb HaarDetect
+		HD_MODE haar_detect_mode;
 	};//: koniec unii
 };
 

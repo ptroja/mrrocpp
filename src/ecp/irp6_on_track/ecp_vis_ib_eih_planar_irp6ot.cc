@@ -13,18 +13,7 @@ namespace irp6ot {
 
 ecp_vis_ib_eih_planar_irp6ot::ecp_vis_ib_eih_planar_irp6ot(common::task::task& _ecp_task) :
 	common::ecp_visual_servo(_ecp_task) {
-
 	retrieve_parameters();
-
-//	v_max = 0.02;
-//	//Wartosc przyspieszenia z jakim osiagana jest maksymalna predkosc.
-//	a = 0.04;
-//	//Minimalna  wartosc predkosci do jakiej schodzimy przy hamowaniu.
-//	v_min = 0.002;
-//	//Predkosc chwilowa.
-//
-//	//Dystans wyrazony w pikselach, przy ktorym nastepuje hamowanie.
-//	breaking_dist = 7;
 }
 
 ecp_vis_ib_eih_planar_irp6ot::~ecp_vis_ib_eih_planar_irp6ot() {
@@ -73,7 +62,7 @@ bool ecp_vis_ib_eih_planar_irp6ot::first_step() {
 	std::cout << "vvv: " << v_min << std::endl;
 
 
-	return false;
+	return true;
 }
 
 bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints() {

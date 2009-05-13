@@ -51,8 +51,8 @@ VPATH = ../common $(ECP_MPDIR)
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_haar: ecp_g_pw_scena.o ecp_t_haar_irp6ot.o ecp_g_force.o ecp_generator_t.o ecp_g_smooth.o ecp_g_jarosz.o\
-		ecp_operator_reaction_condition.o ecp_vis_ib_eih_planar_irp6ot.o  ecp_mp_s_cvfradia.o  ecp_g_pw_scena.o  $(SHOBJ)
+ecp_haar: ecp_t_haar_irp6ot.o ecp_g_rotate_gripper.o ecp_g_force.o ecp_generator_t.o ecp_g_smooth.o ecp_g_jarosz.o\
+		ecp_operator_reaction_condition.o ecp_vis_ib_eih_planar_irp6ot.o  ecp_mp_s_cvfradia.o   $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#
