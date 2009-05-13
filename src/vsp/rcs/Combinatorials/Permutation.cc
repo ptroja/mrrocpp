@@ -28,7 +28,7 @@ Permutation::Permutation(const Permutation& perm) : Collection(perm)
 // STATIC COUNT OF NUMBER OF POSSIBLE PERMUTATIONS
 ////////////////////////////////////////////////////////////////////////////////
 
-int Permutation::NUMBER(int size) 
+int Permutation::NUMBER(int size)
     throw (CombinatorialsException)
 {
     int i, ret_val = 1;
@@ -39,7 +39,7 @@ int Permutation::NUMBER(int size)
     // Counts (size!)
     for (i=1; i<=size; i++)
         ret_val = ret_val * i;
-    
+
     return ret_val;
 }
 
@@ -55,25 +55,25 @@ char Permutation::GetType()          {  return 'P';                     }
 void Permutation::SetInitState()
 {
     int i;
-    
+
     // Set initial value of all elements
     for (i=0; i<iCollSize; i++)
         iaElems[i] = i;
 }
 
-void Permutation::FromOrdinal(int ord) 
+void Permutation::FromOrdinal(int ord)
      throw (CombinatorialsException)
 {
     int i, coeffI;
-    
+
     // Check parameters
     ValidateOrdinal(ord, NUMBER(iCollSize));
 
     // Set identity
     SetInitState();
-        
+
     // Find relative position of next biggest element
-    for (i = iCollSize-2; i >= 0; i--) 
+    for (i = iCollSize-2; i >= 0; i--)
     {
         // Get position of value i
         coeffI = ord % (iCollSize-i);
@@ -97,44 +97,44 @@ int Permutation::ToOrdinal()
     memcpy(elems, iaElems, iCollSize * sizeof(int));
 
     // For next subpermutation without smallest values
-    for (limit = 0; limit < iCollSize; limit++) 
+    for (limit = 0; limit < iCollSize; limit++)
     {
         // Find the minimum in current subpermutation
         temp = iCollSize;
-        for (i = limit; i < iCollSize; i++) 
+        for (i = limit; i < iCollSize; i++)
         {
-            if (elems[i] < temp) 
+            if (elems[i] < temp)
             {
                 temp = elems[i];
                 coeffI = i;
             }
         }
-        
+
         // Accumulate result
         ord = ord*(iCollSize-limit)+(coeffI-limit);
 
         // Move smallest element out of scope
         memmove(&elems[limit+1], &elems[limit], (coeffI-limit) * sizeof(int));
     }
-    
+
     delete[] elems;
     return ord;
 }
 
-int Permutation::Parity() 
+int Permutation::Parity()
 {
     int i,j;
     int parity = 0;
-    
-    for (i=0; i<iCollSize-1; i++) 
-        for (j=i+1; j<iCollSize; j++) 
-            if (iaElems[i] > iaElems[j]) 
+
+    for (i=0; i<iCollSize-1; i++)
+        for (j=i+1; j<iCollSize; j++)
+            if (iaElems[i] > iaElems[j])
                 parity++;
 
     return parity % 2;
 }
 
-void Permutation::CheckTable(const int tab[]) 
+void Permutation::CheckTable(const int tab[])
      throw (CombinatorialsException)
 {
     ValidatePermutation(tab, iCollSize);
@@ -148,29 +148,29 @@ void Permutation::CheckTable(const int tab[])
 void Permutation::Inverse()
 {
     int i, *elems = new int[iCollSize];
-     
+
     // Copy permutation
     memcpy(elems, iaElems, iCollSize*sizeof(int));
-     
+
     // Set inverse permutation
     for (i=0; i<iCollSize; i++)
         iaElems[elems[i]] = i;
-    
+
     delete[] elems;
 }
-             
-void Permutation::FromCycle(const int cycle[], int C) 
+
+void Permutation::FromCycle(const int cycle[], int C)
      throw (CombinatorialsException)
 {
      int i;
-     
+
      // Check parameters
      ValidateCycle(cycle, C, iCollSize);
-     
+
      // Set identity permutation
      for (i=0; i<iCollSize; i++)
          iaElems[i] = i;
-     
+
      // Set cycle
      for (i=0; i<C; i++)
          iaElems[cycle[i]] = cycle[(i+1)%C];
@@ -184,20 +184,23 @@ void Permutation::FromCycle(const int cycle[], int C)
 void Permutation::ValidateCycle(const int cycle[], int C, int N)
      throw (CombinatorialsException)
 {
+	// TODO: v should be local automatic variable
     int i, *v = new int[N];
-    
+
     // Validate only in validation mode
-    if (!bValidation)
+    if (!bValidation) {
+    	delete[] v;
         return;
-        
+    }
+
     // Check if C is allowed
-    if (C <= 0) 
+    if (C <= 0)
     {
         delete[] v;
         throw CombinatorialsException(NULL, C,
               CombinatorialsException::ERR_COMB_CYCLENOTPOS);
     }
-    if (C > N) 
+    if (C > N)
     {
         delete[] v;
         throw CombinatorialsException(NULL, C,
@@ -212,7 +215,7 @@ void Permutation::ValidateCycle(const int cycle[], int C, int N)
         if (cycle[i] >= N)
         {
             delete[] v;
-            throw CombinatorialsException(NULL, i, 
+            throw CombinatorialsException(NULL, i,
                   CombinatorialsException::ERR_COMB_CYCLEVALTOOBIG);
         }
         v[cycle[i]]++;
@@ -221,10 +224,10 @@ void Permutation::ValidateCycle(const int cycle[], int C, int N)
         if (v[i] > 1)
         {
             delete[] v;
-            throw CombinatorialsException(NULL, i, 
+            throw CombinatorialsException(NULL, i,
                   CombinatorialsException::ERR_COMB_CYCLEVALREP);
         }
-    
+
     delete[] v;
 }
 
@@ -232,14 +235,14 @@ void Permutation::ValidatePermutation(const int perm[], int size)
      throw (CombinatorialsException)
 {
     int i, *counter = new int[size];
-    
+
     // Validate only in validation mode
     if (!bValidation)
     {
         delete[] counter;
         return;
     }
-        
+
     // Check if values in perm form a permutation
     for (i=0; i<size; i++)
         counter[i] = 0;
@@ -249,9 +252,9 @@ void Permutation::ValidatePermutation(const int perm[], int size)
         if (counter[i] > 1)
         {
             delete[] counter;
-            throw CombinatorialsException(NULL, i, 
+            throw CombinatorialsException(NULL, i,
                   CombinatorialsException::ERR_COMB_TABREP);
         }
-    
+
     delete[] counter;
 }
