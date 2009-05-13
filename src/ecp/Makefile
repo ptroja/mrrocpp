@@ -21,6 +21,7 @@ irp6_mechatronika: common
 conveyor: common
 speaker: common
 festival: common
+player: common
 multi_robot_binaries: irp6_on_track conveyor irp6_postument speaker irp6_mechatronika
 
 $(SOURCEDIRS):
