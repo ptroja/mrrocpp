@@ -1,6 +1,13 @@
 DIRS = src
 ALLDIRS = src
 
+UIDIR = src/gcc_ntox86
+
+ifeq ($(TARGET), linux)
+$(UIDIR):
+	@$(MAKE) TARGET=linux -C $@
+endif
+
 shr:
 	@for i in ${DIRS} ; do (cd $$i && $(MAKE) shr) ; done
 
