@@ -6,7 +6,8 @@ ifeq ($(TARGET), qnx)
 	SOURCEDIRS = lib edp
 endif
 ifeq ($(TARGET), linux)
-	SOURCEDIRS = ecp ui
+	SOURCEDIRS = ecp 
+	#SOURCEDIRS = ecp ui
 	LIBDIR = lib
 endif
 ifeq ($(TARGET), linux_gtk)
