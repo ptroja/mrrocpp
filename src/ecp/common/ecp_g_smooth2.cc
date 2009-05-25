@@ -877,7 +877,7 @@ void smooth2::calculate(void) {
             	if (s_temp1[i] > s[i]) {
             		printf("redukcja predkosci w osi %d\n", i);
 					t[i] = t_temp1;
-					pose_list_iterator->t = t[i];
+					vk_reduction(pose_list_iterator, i, s[i], t[i]);
 
             	} else {
 
@@ -914,7 +914,8 @@ void smooth2::calculate(void) {
 				if (s_temp1[i] > s[i]) {
 					printf("redukcja predkosci w osi %d\n", i);
 					t[i] = t_temp1;
-					pose_list_iterator->t = t[i];
+					vp_reduction(pose_list_iterator, i, s[i], t[i]);
+				    printf("Reduce speed or increase acceleration in axe %d, in trajectory position no %d\n", i, j);
 				} else {
 
 					t[i] = t_temp1 + (s[i] - s_temp1[i])/pose_list_iterator->v_r[i];
@@ -984,7 +985,7 @@ void smooth2::calculate(void) {
 			//}
 
 		}
-		int os = 2;
+		int os = 1;
 		printf("\n=============== pozycja trajektorii nr %d ==================\n", j);
 		printf("czas ruchu %f\n", pose_list_iterator->t);
 		printf("coordinates: %f\n", pose_list_iterator->coordinates[os]);
@@ -1251,6 +1252,18 @@ void smooth2::reduction_model_4(std::list<ecp_smooth2_taught_in_pose>::iterator 
 	pose_list_iterator->v_r[i] = pose_list_iterator->v_p[i];
 	pose_list_iterator->s_przysp[i] = 0;
 	pose_list_iterator->s_jedn[i] = pose_list_iterator->v_p[i] * (pose_list_iterator->t - (pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i]) / pose_list_iterator->a_r[i]);
+}
+
+void smooth2::vp_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s, double t) {
+	//TODO tutaj musi byc odpowiednia redukcja predkosci poczatkowej z rekurencyjnym wywolaniem calculate()
+	sr_ecp_msg.message("Not supported case. Trajectory could not be calculated");
+	throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+}
+
+void smooth2::vk_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s, double t) {
+	//TODO tutaj musi byc odpowiednia redukcja predkosci poczatkowej z wywolaniem vp_reduction jesli bedzie taka potrzeba
+	sr_ecp_msg.message("Not supported case. Trajectory could not be calculated");
+	throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 }
 
 } // namespace generator

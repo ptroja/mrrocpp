@@ -81,6 +81,9 @@ class smooth2 : public delta {
 		void reduction_model_3(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s);
 		void reduction_model_4(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s);
 
+		void vk_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s, double t);
+		void vp_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s, double t);
+
 		//metody zwiazane z pose_list
 		void flush_pose_list(void);
 		void initiate_pose_list(void);
