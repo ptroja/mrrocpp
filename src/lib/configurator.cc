@@ -487,13 +487,25 @@ pid_t configurator::process_spawn(const char*_section_name) {
 					node, dir);
 		}
 
+		//ewentualne dodatkowe argumenty wywolania np. przekierowanie na konsole
+		char asa[PATH_MAX];
+		if (exists("additional_spawn_argument", "[ui]")) {
+			char * _asa = return_string_value("additional_spawn_argument", "[ui]");
+			strcpy(asa, _asa);
+			delete [] _asa;
+		} else {
+			strcpy(asa, "");
+		}
+
+
+
 		char process_path[PATH_MAX];
 		char *ui_host = getenv("UI_HOST");
-		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s",
+		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s %s",
 				bin_path, ui_host ? ui_host : "",
 				bin_path, spawned_program_name,
 				node, dir, ini_file, _section_name,
-				strlen(session_name) ? session_name : "\"\""
+				strlen(session_name) ? session_name : "\"\"", asa
 		);
 
 		delete [] spawned_program_name;
