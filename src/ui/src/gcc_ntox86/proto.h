@@ -16,6 +16,7 @@ int block_widget ( PtWidget_t *widget );
 int unblock_widget ( PtWidget_t *widget );
 int set_ui_busy_state_notification ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int set_ui_ready_state_notification ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int set_ui_state_notification ( UI_NOTIFICATION_STATE_ENUM new_notifacion );
 int EDP_irp6_postument_create ( void );
 int close_process_control_window ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int clear_teaching_window_flag ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
@@ -355,6 +356,7 @@ void *sr_thread ( void *arg );
 void *sr_thread ( void *arg );
 void *comm_thread ( void *arg );
 void catch_signal ( int sig );
+void UI_close ( void );
 int init ( PtWidget_t *link_instance , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 
 /* ../wndFileLocationEvents.cc */
