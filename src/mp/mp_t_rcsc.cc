@@ -69,15 +69,20 @@ void rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogladanie s
 		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 		(1, 1, lib::ROBOT_FESTIVAL, lib::ROBOT_FESTIVAL);
 
-
+		if (vis_servoing)
+				{
 		wait_ms(5000);
 		sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->initiate_reading();
 		wait_ms(1000);
 		sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->get_reading();
 
+
+
 		for(int i=0; i<3; i++)
 			for(int j=0; j<3; j++)
 				cube_state->cube_tab[k][3*i+j]=(char)sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->image.sensor_union.cube_face.colors[3*i+j];
+
+				}
 
 
 		printf("\nFACE FACE %d:\n",k);
@@ -983,6 +988,10 @@ void rubik_cube_solver::gripper_opening(double track_increment, double postument
 void rubik_cube_solver::task_initialization(void)
 {
 	// Powolanie czujnikow
+	vis_servoing = config.return_int_value("vis_servoing");
+
+	if (vis_servoing)
+	{
 
 	sensor_m[lib::SENSOR_CAMERA_ON_TRACK] =
 		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
@@ -1003,11 +1012,15 @@ void rubik_cube_solver::task_initialization(void)
 		sensor_m_iterator->second->configure_sensor();
 	}
 
+	}
 	usleep(1000*100);
-
+	if (vis_servoing)
+		{
 	// dodanie transmitter'a
 	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] =
 		new ecp_mp::transmitter::rc_windows (ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
+
+		}
 
 	sr_ecp_msg->message("MP rcsc loaded");
 }
@@ -1037,6 +1050,10 @@ void rubik_cube_solver::main_task_algorithm(void)
 	for(;;)
 	{
 		sr_ecp_msg->message("Nowa seria");
+
+		if (vis_servoing)
+		{
+
 		for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
 		sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 		{
@@ -1044,18 +1061,25 @@ void rubik_cube_solver::main_task_algorithm(void)
 			sensor_m_iterator->second->configure_sensor();
 		}
 
+		}
+
 		// przechwycenie kostki
-		approach_op( config.return_int_value("vis_servoing"));
+		approach_op( vis_servoing);
 
 		// IDENTIFY COLORS
 		identify_colors();
+
+		if (vis_servoing)
+			{
 
 		if (communicate_with_windows_solver())
 		{
 			break;
 		}
 
-		if (manipulation_sequence_computed)
+			}
+
+		if ((vis_servoing)&&(manipulation_sequence_computed))
 		{
 
 			// wykonanie sekwencji manipulacji

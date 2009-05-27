@@ -24,6 +24,7 @@ namespace task {
 class rubik_cube_solver : public task
 {
 protected:
+	int vis_servoing;
     // sekwencja (lista) manipulacji
 
     // stan kostki
