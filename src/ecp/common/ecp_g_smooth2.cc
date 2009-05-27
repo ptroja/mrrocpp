@@ -529,7 +529,7 @@ void smooth2::generate_cords() {
 	//printowanie listy coordinate
 	initiate_coordinate_list();
 	for (int m = 0; m < coordinate_list->size(); m++) {
-		//printf("%f\t", coordinate_list_iterator->coordinate[2]);
+		printf("%f\t", coordinate_list_iterator->coordinate[1]);
 		coordinate_list_iterator++;
 	}
 	printf("\ngenerate_cords\n");
@@ -656,8 +656,7 @@ bool smooth2::next_step () {
     		    the_robot->EDP_data.motion_steps = td.internode_step_no;
     		    the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
-
-    		    for (i=0; i<MAX_SERVOS_NR; i++) {
+    		    for (i=0; i < MAX_SERVOS_NR; i++) {
     		        the_robot->EDP_data.next_joint_arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
     		    }
 
@@ -674,8 +673,10 @@ bool smooth2::next_step () {
     		    if(pose_list_iterator->v_grip*node_counter < coordinate_list_iterator->coordinate[i]) {
     		    	the_robot->EDP_data.next_joint_arm_coordinates[i] = pose_list_iterator->v_grip*node_counter;
     		    } else {
-    		    	the_robot->EDP_data.next_joint_arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
+    		    	the_robot->EDP_data.next_joint_arm_coordinates[i] = pose_list_iterator->coordinates[i];
     		    }
+
+    		    //the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;//TODO to jest tymczasowe wiec trzeba poprawic
 
     		    break;
 
@@ -1114,21 +1115,12 @@ void smooth2::calculate(void) {
 		}
 
 		//obliczanie v_grip
-		switch (pose_list_iterator->arm_type) {
-
-		case lib::XYZ_EULER_ZYZ:
-			pose_list_iterator->v_grip = (pose_list_iterator->coordinates[6]/pose_list_iterator->interpolation_node_no);
-			if(pose_list_iterator->v_grip < v_grip_min) {
-				pose_list_iterator->v_grip = v_grip_min;
-			}
-
-			break;
-
-	    default:
-	        throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+		pose_list_iterator->v_grip = (pose_list_iterator->coordinates[gripp]/pose_list_iterator->interpolation_node_no);
+		if(pose_list_iterator->v_grip < v_grip_min) {
+			pose_list_iterator->v_grip = v_grip_min;
 		}
 
-		int os = 6;
+		int os = 1;
 		printf("\n=============== pozycja trajektorii nr %d ==================\n", j);
 		printf("czas ruchu %f\n", pose_list_iterator->t);
 		printf("coordinates: %f\n", pose_list_iterator->coordinates[os]);
@@ -1137,7 +1129,6 @@ void smooth2::calculate(void) {
 		printf("s: %f\ns_przysp: %f\t s_jedn: %f\n", s[os], pose_list_iterator->s_przysp[os], pose_list_iterator->s_jedn[os]);
 		printf("czas\t\tv_r\t\tv_r_next\ta_r\t\tv_p\t\tv_k\n");
 		printf("%f\t%f\t%f\t%f\t%f\t%f\n", t[os], pose_list_iterator->v_r[os], v_r_next[os], pose_list_iterator->a_r[os], pose_list_iterator->v_p[os], pose_list_iterator->v_k[os]);
-		printf("max servos nr %d", MAX_SERVOS_NR);
 		printf("v_grip: %f\n\n", pose_list_iterator->v_grip);
     }
 }//end - calculate
