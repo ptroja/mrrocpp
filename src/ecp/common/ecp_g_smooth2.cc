@@ -593,7 +593,7 @@ bool smooth2::next_step () {
     	the_robot->EDP_data.get_type = NOTHING_DV; //ponizej w caseach jest dalsze ustawianie
     	the_robot->EDP_data.get_arm_type = lib::INVALID_END_EFFECTOR;
 
-    	switch ( td.arm_type ) {//TODO dodac wiecej opcji wspolrzednych
+    	switch ( td.arm_type ) {
     		case lib::XYZ_EULER_ZYZ:
 
     			the_robot->EDP_data.instruction_type = lib::SET; //dalsze ustawianie parametrow ruchu w edp
@@ -738,7 +738,6 @@ void smooth2::calculate(void) {
     double v_r_next[MAX_SERVOS_NR];//predkosc kolejnego ruchu
 
     double temp;//generalny temp do wszystkiego
-    //double v_r_prev[MAX_SERVOS_NR];
 
     initiate_pose_list();//ustawianie wskaznika listy pozycji na poczatek
 
@@ -1583,7 +1582,7 @@ void smooth2::vp_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_
 		calculate();
 		return;
 	} else {
-		sr_ecp_msg.message("Are you insane??!! That trajectory can not be calculated!");
+		sr_ecp_msg.message("Are you insane?! That trajectory can not be calculated!");
 		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 	}
 }
