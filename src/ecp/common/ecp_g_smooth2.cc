@@ -612,12 +612,12 @@ bool smooth2::next_step () {
 
     			//gripper
 
-    			if(pose_list_iterator->v_grip*node_counter < pose_list_iterator->coordinates[6]) {
+    			/*if(pose_list_iterator->v_grip*node_counter < pose_list_iterator->coordinates[6]) {
     			    the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->v_grip*node_counter;
     			} else {
     			    the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[6];
-    			}
-    			//the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;//TODO to jest tymczasowe wiec trzeba poprawic
+    			}*/
+    			the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;//TODO to jest tymczasowe wiec trzeba poprawic
 
     			coordinate_list_iterator++;
 
