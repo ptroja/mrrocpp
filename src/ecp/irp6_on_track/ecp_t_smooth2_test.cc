@@ -38,7 +38,7 @@ void smooth2_test::main_task_algorithm(void ) {
 
 	smoothgen2->set_absolute();
 
-	if (smoothgen2->load_file_with_path("/net/grafika/mnt/mrroc/trj/smooth2jointtest1.trj")) {
+	if (smoothgen2->load_file_with_path("/net/grafika/mnt/mrroc/trj/smooth2test.trj")) {
 		char size[10];
 		double size2 = smoothgen2->pose_list_length();
 		sprintf(size,"%f",size2);
