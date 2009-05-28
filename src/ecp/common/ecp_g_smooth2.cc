@@ -183,6 +183,7 @@ void smooth2::reset() {
 	first_coordinate = true;
 	first_interval = true;
 	trajectory_generated = false;
+	trajectory_calculated = false;
 }
 
 void smooth2::flush_pose_list(void) {
@@ -474,37 +475,7 @@ void smooth2::generate_cords() {
 				if (fabs(pose_list_iterator->start_position[i] - pose_list_iterator->coordinates[i]) < distance_eps) {
 					coordinate[i] = pose_list_iterator->start_position[i]; //dla drogi 0
 				} else {
-					/*if (pose_list_iterator->model[i] == 5) { // dla 5 modelu ruchu
-
-						if (private_node_counter <= pose_list_iterator->przysp_zero[i]) {//pierwszy etap ruchu w modelu 5 (etap zero)
-							coordinate[i] = generate_next_coords(private_node_counter,
-								pose_list_iterator->interpolation_node_no,
-								pose_list_iterator->start_position[i],
-								pose_list_iterator->v_p[i],
-								pose_list_iterator->v_r[i],
-								pose_list_iterator->v_zero[i],
-								pose_list_iterator->a_zero[i],
-								pose_list_iterator->k[i],
-								pose_list_iterator->przysp_zero[i],
-								0,
-								pose_list_iterator->s_zero[i],
-								0);
-						} else { //kolejne etapy w modelu 5 //TODO poprawic wywolanie generate_next_coords() w tym warunku
-							coordinate[i] = generate_next_coords(private_node_counter - pose_list_iterator->przysp_zero[i],
-								pose_list_iterator->interpolation_node_no,
-								pose_list_iterator->start_position[i] + pose_list_iterator->k[i] * pose_list_iterator->s_zero[i],
-								pose_list_iterator->v_zero[i],
-								pose_list_iterator->v_r[i],
-								pose_list_iterator->v_k[i],
-								pose_list_iterator->a_r[i],
-								pose_list_iterator->k[i],
-								pose_list_iterator->przysp[i] - pose_list_iterator->przysp_zero[i],
-								pose_list_iterator->jedn[i] - pose_list_iterator->przysp_zero[i],
-								pose_list_iterator->s_przysp[i],
-								pose_list_iterator->s_jedn[i]);
-						}
-					} else {*/
-						coordinate[i] = generate_next_coords(private_node_counter,
+					coordinate[i] = generate_next_coords(private_node_counter,
 							pose_list_iterator->interpolation_node_no,
 							pose_list_iterator->start_position[i],
 							pose_list_iterator->v_p[i],
@@ -516,7 +487,6 @@ void smooth2::generate_cords() {
 							pose_list_iterator->jedn[i],
 							pose_list_iterator->s_przysp[i],
 							pose_list_iterator->s_jedn[i]);
-					//}
 				}
 			}
 			private_node_counter++;
@@ -529,7 +499,7 @@ void smooth2::generate_cords() {
 	//printowanie listy coordinate
 	initiate_coordinate_list();
 	for (int m = 0; m < coordinate_list->size(); m++) {
-		printf("%f\t", coordinate_list_iterator->coordinate[1]);
+		printf("%f\t", coordinate_list_iterator->coordinate[8]);
 		coordinate_list_iterator++;
 	}
 	printf("\ngenerate_cords\n");
@@ -592,13 +562,17 @@ bool smooth2::next_step () {
 
     int i; //licznik petli
 
-    if (!trajectory_generated) {
+    if (!trajectory_generated && !trajectory_calculated) {
     	calculate(); //wypelnienie pozostalych zmiennych w liscie pose_list
     	generate_cords(); //wypelnienie listy coordinate_list (lista kolejnych pozycji w makrokrokach)
     	trajectory_generated = true;
     	initiate_pose_list(); //ustawienie iteratora pose_list na poczatek
     	initiate_coordinate_list(); //ustawienie iteratora coordinate_list na poczatek
     	printf("trajektoria wygenerowana\n");
+    }
+
+    if (!trajectory_generated || !trajectory_calculated) {
+    	return false;
     }
 
     if (node_counter-1 == pose_list_iterator->interpolation_node_no) {//czy poprzedni makrokrok byl ostatnim
@@ -1206,6 +1180,10 @@ void smooth2::calculate(void) {
 					pose_list_iterator->t = t[i];
 					reduction_model_1(pose_list_iterator, i, s[i]);
 
+					if (trajectory_calculated == true) {
+						return;
+					}
+
 				} else {//droga przyspieszenia i opoznienia nie przekracza drogi ruchu
 
 					t[i] = t_temp1 + t_temp2 + (s[i] - (s_temp1[i] + s_temp2[i]))/pose_list_iterator->v_r[i];
@@ -1230,6 +1208,10 @@ void smooth2::calculate(void) {
             		printf("redukcja predkosci w osi %d\n", i);
 					t[i] = t_temp1;
 					vk_reduction(pose_list_iterator, i, s[i], t[i]);
+
+					if (trajectory_calculated == true) {
+						return;
+					}
 
             	} else {
 
@@ -1261,14 +1243,15 @@ void smooth2::calculate(void) {
 				pose_list_iterator->v_k[i] = v_r_next[i];
 
 				printf("s_temp1: %f\n", s_temp1[i]);
-				printf("t_temp1: %f\n", t_temp1);    td.internode_step_no = 10;
-			    td.value_in_step_no = td.internode_step_no - 2;
+				printf("t_temp1: %f\n", t_temp1);
 
 				if (s_temp1[i] > s[i]) {
 					printf("redukcja predkosci w osi %d\n", i);
 					t[i] = t_temp1;
 					vp_reduction(pose_list_iterator, i, s[i], t[i]);
-				    printf("Reduce speed or increase acceleration in axe %d, in trajectory position no %d\n", i, j);
+					if (trajectory_calculated == true) {
+						return;
+					}
 				} else {
 
 					t[i] = t_temp1 + (s[i] - s_temp1[i])/pose_list_iterator->v_r[i];
@@ -1311,31 +1294,33 @@ void smooth2::calculate(void) {
 			if (fabs(t[i] - t_max) > tk) {//redukcja predkosci w danej osi ze wzgledu na zbyt krotki czas ruchu
 				if (pose_list_iterator->model[i] == 1) { //model 1
 					reduction_model_1(pose_list_iterator, i, s[i]);
+					if (trajectory_calculated == true) {
+						return;
+					}
 				} else if (pose_list_iterator->model[i] == 2) {//model 2
 					reduction_model_2(pose_list_iterator, i, s[i]);
+					if (trajectory_calculated == true) {
+						return;
+					}
 				} else if (pose_list_iterator->model[i] == 3) {//model 3
 					reduction_model_3(pose_list_iterator, i, s[i]);
+					if (trajectory_calculated == true) {
+						return;
+					}
 				} else if (pose_list_iterator->model[i] == 4) {//model 4
 					reduction_model_4(pose_list_iterator, i, s[i]);
+					if (trajectory_calculated == true) {
+						return;
+					}
 				} else {
 					printf(" ten przypadek nie moze wystapic (redukcja ze wzgledu na czas)\n");
 				}
 
 				printf("redukcja predkosci z powodu czasu w osi %d\n", i);
 			}
-	/*		if (pose_list_iterator->model[i] == 5) {
-				//zapisanie przysp_zero, przysp i jedn dla modelu 5
-				pose_list_iterator->przysp_zero[i] = fabs((pose_list_iterator->v_zero[i]-pose_list_iterator->v_p[i])/(pose_list_iterator->a_zero[i]*tk));//makrokrok w ktorym konczy sie zerowy etap
-				pose_list_iterator->przysp[i] = pose_list_iterator->przysp_zero[i] + fabs((pose_list_iterator->v_zero[i]-pose_list_iterator->v_r[i])/(pose_list_iterator->a_r[i]*tk));//zapisanie makrokroku w ktorym konczy sie przyspieszanie
-				pose_list_iterator->jedn[i] = (pose_list_iterator->t -(fabs(pose_list_iterator->v_r[i]-pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i]))/tk;//zapisaine makrokroku w ktorym konczy sie jednostajny
 
-				printf("przysp_zero: %f\n", pose_list_iterator->przysp_zero[i]);
-				printf("s_zero: %f\n", pose_list_iterator->s_zero[i]);
-
-			} else {*/
-				pose_list_iterator->przysp[i]=fabs((pose_list_iterator->v_r[i]-pose_list_iterator->v_p[i])/(pose_list_iterator->a_r[i]*tk));//zapisanie makrokroku w ktorym konczy sie przyspieszanie
-				pose_list_iterator->jedn[i]=(t_max-(fabs(pose_list_iterator->v_r[i]-pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i]))/tk;//zapisaine makrokroku w ktorym konczy sie jednostajny
-			//}
+			pose_list_iterator->przysp[i]=fabs((pose_list_iterator->v_r[i]-pose_list_iterator->v_p[i])/(pose_list_iterator->a_r[i]*tk));//zapisanie makrokroku w ktorym konczy sie przyspieszanie
+			pose_list_iterator->jedn[i]=(t_max-(fabs(pose_list_iterator->v_r[i]-pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i]))/tk;//zapisaine makrokroku w ktorym konczy sie jednostajny
 
 		}
 
@@ -1356,6 +1341,7 @@ void smooth2::calculate(void) {
 		printf("%f\t%f\t%f\t%f\t%f\t%f\n", t[os], pose_list_iterator->v_r[os], v_r_next[os], pose_list_iterator->a_r[os], pose_list_iterator->v_p[os], pose_list_iterator->v_k[os]);
 		printf("v_grip: %f\n\n", pose_list_iterator->v_grip);
     }
+    trajectory_calculated = true;
 }//end - calculate
 
 void smooth2::reduction_model_1(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s) {
@@ -1407,81 +1393,6 @@ void smooth2::reduction_model_1(std::list<ecp_smooth2_taught_in_pose>::iterator 
 		pose_list_iterator->s_jedn[i] = pose_list_iterator->v_r[i] * t2;
 	}
 }
-
-/*void smooth2::reduction_model_1(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s) {
-	printf("*************** redukcja model 1 ******************\n");
-	//pierwszy stopien redukcji
-	double a;
-	double t; //czas obszaru redukowanego (obszar jednostajnego i opoznienia)
-	double s2; //droga redukowanej czesci ruchu
-
-	pose_list_iterator->a_zero[i] = pose_list_iterator->a_r[i];
-	pose_list_iterator->s_zero[i] = pose_list_iterator->v_p[i] * (pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i]
-	                              + (0.5 * ((pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])
-	                              * (pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i]))/pose_list_iterator->a_r[i]);
-	pose_list_iterator->v_zero[i] = pose_list_iterator->v_r[i];
-	pose_list_iterator->model[i] = 5; //model 5 - ruch 4 etapowy
-
-	//printf("s_zero: %f\n", pose_list_iterator->s_zero[i]);
-
-	s2 = s - pose_list_iterator->s_zero[i];
-
-	t = pose_list_iterator->t - (pose_list_iterator->v_r[i] - pose_list_iterator->v_p[i])/pose_list_iterator->a_r[i];
-
-	printf("t: %f\t s2: %f\t v_r: %f\t v_k: %f\n", t, s2, pose_list_iterator->v_r[i], pose_list_iterator->v_k[i]);
-
-	a = ((pose_list_iterator->v_r[i] - pose_list_iterator->v_k[i]) * (pose_list_iterator->v_r[i] - pose_list_iterator->v_k[i])) /
-		((-2) * (s2 - (pose_list_iterator->v_r[i] * t)));
-
-	printf("a: %f\n", a);
-
-	if (((pose_list_iterator->v_r[i] - pose_list_iterator->v_k[i]) / a) > t) { //drugi stopien redukcji
-		printf("drugi stopien");
-		if (s2 == pose_list_iterator->v_k[i] * t) { //zabezpieczenie przed dzieleniem przez 0
-			a = -1; //powoduje przejscie do nastepnego stopnia redukcji (moglaby byc dowolna ujemna liczba)
-		} else {
-			a = (0.5 * (pose_list_iterator->v_r[i] - pose_list_iterator->v_k[i]) * (pose_list_iterator->v_r[i] - pose_list_iterator->v_k[i])) /
-				(s2 - (pose_list_iterator->v_k[i] * t));
-		}
-		printf("a: %f\n", a);
-		if (a > pose_list_iterator->a_r[i] || a <= 0) {//trzeci stopien redukcji
-			printf("trzeci stopien\n");
-			double t1; //czas konca opoznienia (relatywny - liczac od poczatku redukowanego odcinka)
-			double s1; // droga w etapie w ktorym redukujemy czas (po etapie odcinanym)
-			double t2; //czas redukowanego kawalka (relatywny)
-
-			t2 = t - ((pose_list_iterator->v_r[i] - pose_list_iterator->v_k[i]) / pose_list_iterator->a_r[i]);
-
-			s1 = s2 - (pose_list_iterator->v_k[i] * (t - t2) + 0.5 * pose_list_iterator->a_r[i] * (t - t2) * (t - t2));
-
-			t1 = (pose_list_iterator->a_r[i] * t2
-					- (sqrt(pose_list_iterator->a_r[i] * pose_list_iterator->a_r[i] * t2 * t2
-					- 4 * pose_list_iterator->a_r[i] * (pose_list_iterator->v_k[i] * t2 - s1))) )
-					/ (2 * pose_list_iterator->a_r[i]);
-
-			pose_list_iterator->v_r[i] = pose_list_iterator->v_k[i] - pose_list_iterator->a_r[i] * t1;
-			pose_list_iterator->s_przysp[i] = 0.5 * pose_list_iterator->a_r[i] * t1 * t1 + pose_list_iterator->v_r[i] * t1
-											+ pose_list_iterator->v_k[i] * (t - t2)
-											+ 0.5 * pose_list_iterator->a_r[i] * (t - t2) * (t - t2);
-			pose_list_iterator->s_jedn[i] = pose_list_iterator->v_r[i] * (t2 - 2 * t1);
-
-			return;
-		}
-
-		pose_list_iterator->a_r[i] = a;
-		pose_list_iterator->v_r[i] = pose_list_iterator->v_k[i];
-		pose_list_iterator->s_przysp[i] = pose_list_iterator->v_r[i] * (pose_list_iterator->v_zero[i] - pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i]
-		                                + 0.5 * (pose_list_iterator->v_zero[i] - pose_list_iterator->v_k[i]) * (pose_list_iterator->v_zero[i] - pose_list_iterator->v_k[i])
-		                                /pose_list_iterator->a_r[i];
-		pose_list_iterator->s_jedn[i] = pose_list_iterator->v_r[i] * (t - (pose_list_iterator->v_zero[i] - pose_list_iterator->v_k[i])/pose_list_iterator->a_r[i]);
-
-		return;
-	}
-
-	pose_list_iterator->a_r[i] = a;
-	pose_list_iterator->s_przysp[i] = 0;
-	pose_list_iterator->s_jedn[i] = pose_list_iterator->v_r[i] * (t - (pose_list_iterator->v_r[i] - pose_list_iterator->v_k[i]) / pose_list_iterator->a_r[i]);
-}*/
 
 void smooth2::reduction_model_2(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s) {
 	printf("redukcja model 2\n");
@@ -1651,9 +1562,21 @@ void smooth2::reduction_model_4(std::list<ecp_smooth2_taught_in_pose>::iterator 
 
 void smooth2::vp_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s, double t) {
 	printf("v_p redukcja\n");
-	//TODO tutaj musi byc odpowiednia redukcja predkosci poczatkowej z rekurencyjnym wywolaniem calculate()
-	sr_ecp_msg.message("Not supported case. Trajectory could not be calculated");
-	throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+	//TODO sprawdzic czy to wyczerpuje wszystkie przypadki... chyba nie
+	double v_r; //zmiana ruchu na jednostajny
+
+	v_r = s/t;
+
+	if (v_r < pose_list_iterator->v_k[i] && v_r < pose_list_iterator->v_p[i]) {
+		printf("rekurencja!");
+		pose_list_iterator->v_p[i] = v_r;
+		pose_list_iterator->v_k[i] = v_r;
+		calculate();
+		return;
+	} else {
+		sr_ecp_msg.message("You are insane!!! That trajectory can not be calculated!");
+		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+	}
 }
 
 void smooth2::vk_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s, double t) {

@@ -46,29 +46,15 @@ class smooth2 : public delta {
 		int first_interval;
 		lib::trajectory_description td;
 
-		//int k[MAX_SERVOS_NR]; //kierunek ruchu (+/-)
-
-		//double v[MAX_SERVOS_NR], a [MAX_SERVOS_NR]; //wczytywane z pliku
-		//double v_r[MAX_SERVOS_NR], a_r[MAX_SERVOS_NR]; //predkosc i przyspieszenie w danym ruchu
-		//double v_p[MAX_SERVOS_NR], v_k[MAX_SERVOS_NR]; //predkosc poczatkowa i koncowa
-
-		//double final_position[MAX_SERVOS_NR]; //pozycja koncowa
-		//double start_position[MAX_SERVOS_NR]; //pozycja poczatkowa
-		//double next_position[MAX_SERVOS_NR]; //pozycja nastepego makrokroku
 		bool is_synchronised;
 		bool debug; //czy maja byc wyswietlane debugi
-
-		//double przysp[MAX_SERVOS_NR];  //moment, w ktorym konczy sie przyspieszanie
-		//double jedn[MAX_SERVOS_NR];  //moment, w ktorym konczy sie ruch jednostajny
-
-		//double s_przysp[MAX_SERVOS_NR];  //droga po etapie przyspieszania
-		//double s_jedn[MAX_SERVOS_NR];  //droga po etapie ruchu jednostajnego
 
 		int type; //1 - polozenie bezwzgledne , 2 - polozenie przyrostowe
 		bool first_coordinate;
 		float distance_eps;
 
 		bool trajectory_generated;
+		bool trajectory_calculated;
 
 		bool eq(double a, double b);
 		void generate_cords();
@@ -89,9 +75,6 @@ class smooth2 : public delta {
 		void initiate_pose_list(void);
 		void next_pose_list_ptr(void);
 		void prev_pose_list_ptr(void);
-		//void get_pose(void);
-		//void set_pose(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
-		//bool is_pose_list_element(void);
 		bool is_last_list_element(void);
 		void create_pose_list_head(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
 		void insert_pose_list_element(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
