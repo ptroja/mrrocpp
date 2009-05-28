@@ -646,6 +646,34 @@ bool smooth2::next_step () {
     			//the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;//TODO to jest tymczasowe wiec trzeba poprawic
 
     			break;
+
+    		case lib::XYZ_ANGLE_AXIS:
+
+    			the_robot->EDP_data.instruction_type = lib::SET; //dalsze ustawianie parametrow ruchu w edp
+    			the_robot->EDP_data.set_type = ARM_DV; // ARM
+    			the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
+    			the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+    			the_robot->EDP_data.next_interpolation_type = lib::MIM;
+    			the_robot->EDP_data.motion_steps = td.internode_step_no;
+    			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+
+    			for (i = 0; i < 6; i++) {//zapisanie nastepnego polazenia (makrokroku) do robota
+    			    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
+    			}
+
+    			coordinate_list_iterator++;
+
+    			//gripper
+
+    			if(pose_list_iterator->v_grip*node_counter < pose_list_iterator->coordinates[6]) {
+    			    the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->v_grip*node_counter;
+    			} else {
+    			    the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[6];
+    			}
+    			//the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;//TODO to jest tymczasowe wiec trzeba poprawic
+
+    			break;
+
     		case lib::JOINT:
 
     			the_robot->EDP_data.instruction_type = lib::SET;
@@ -674,6 +702,40 @@ bool smooth2::next_step () {
     		    	the_robot->EDP_data.next_joint_arm_coordinates[i] = pose_list_iterator->v_grip*node_counter;
     		    } else {
     		    	the_robot->EDP_data.next_joint_arm_coordinates[i] = pose_list_iterator->coordinates[i];
+    		    }
+
+    		    //the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;//TODO to jest tymczasowe wiec trzeba poprawic
+
+    		    break;
+
+    		case lib::MOTOR:
+
+    			the_robot->EDP_data.instruction_type = lib::SET;
+    		    the_robot->EDP_data.set_type = ARM_DV; // ARM
+    		    the_robot->EDP_data.set_arm_type = lib::MOTOR;
+    		    the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+    		    the_robot->EDP_data.next_interpolation_type = lib::MIM;
+    		    the_robot->EDP_data.motion_steps = td.internode_step_no;
+    		    the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+
+    		    for (i=0; i < MAX_SERVOS_NR; i++) {
+    		        the_robot->EDP_data.next_motor_arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
+    		    }
+
+    		    coordinate_list_iterator++;
+
+    		    //gripper
+
+    		    if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
+    		        i=7;
+    		    } else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT) {
+    		        i=6;
+				}
+
+    		    if(pose_list_iterator->v_grip*node_counter < coordinate_list_iterator->coordinate[i]) {
+    		    	the_robot->EDP_data.next_motor_arm_coordinates[i] = pose_list_iterator->v_grip*node_counter;
+    		    } else {
+    		    	the_robot->EDP_data.next_motor_arm_coordinates[i] = pose_list_iterator->coordinates[i];
     		    }
 
     		    //the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;//TODO to jest tymczasowe wiec trzeba poprawic
@@ -759,6 +821,46 @@ void smooth2::calculate(void) {
 
 				break;
 
+			case lib::XYZ_ANGLE_AXIS:
+				gripp = 6;
+
+				for (i = 0; i < gripp; i++) {
+					temp = pose_list_iterator->coordinates[i];
+					pose_list_iterator->start_position[i] = the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];//pierwsze przypisanie start_position
+					if (!is_last_list_element()) {		   //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
+						next_pose_list_ptr();
+						pose_list_iterator->start_position[i] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
+						prev_pose_list_ptr();							//pozycje startowa nowego ruchu
+					}
+				}
+				temp = pose_list_iterator->coordinates[gripp];
+				pose_list_iterator->start_position[gripp] = the_robot->EDP_data.current_gripper_coordinate;
+				if (!is_last_list_element()) {		   //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
+					next_pose_list_ptr();
+					pose_list_iterator->start_position[gripp] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
+					prev_pose_list_ptr();							//pozycje startowa nowego ruchu
+				}
+				pose_list_iterator->start_position[7] = 0.0;
+
+				for (i = 0; i < MAX_SERVOS_NR; i++) {
+					//printf("predkosci (max i zadane): %f\t %f\n", v_max_zyz[i], pose_list_iterator->v[i]);
+					//printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
+					pose_list_iterator->v_r[i] = v_max_aa[i] * pose_list_iterator->v[i];
+					pose_list_iterator->a_r[i] = a_max_aa[i] * pose_list_iterator->a[i];
+					pose_list_iterator->v_p[i] = 0; //zalozenie, ze poczatkowa predkosc jest rowna 0
+
+					if(pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i] < 0) { //zapisanie kierunku dla pierwszego ruchu
+						//printf("ustawienie k w osi %d na -1\n", i);
+						pose_list_iterator->k[i] = -1;			//zapisanie kierunku nastepnych ruchow dokonywane jest dalej
+			        }
+			        else {
+			        	//printf("ustawienie k w osi %d na 1\n", i);
+			        	pose_list_iterator->k[i] = 1;
+			        }
+				}
+
+				break;
+
 			case lib::JOINT:
 				if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
 					gripp=7;
@@ -776,7 +878,7 @@ void smooth2::calculate(void) {
 					}
 				}
 				temp = pose_list_iterator->coordinates[gripp];
-				pose_list_iterator->start_position[gripp] = the_robot->EDP_data.current_gripper_coordinate;
+				pose_list_iterator->start_position[gripp] = the_robot->EDP_data.current_joint_arm_coordinates[gripp];
 				if (!is_last_list_element()) {		   //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
 					next_pose_list_ptr();
 					pose_list_iterator->start_position[gripp] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
@@ -791,6 +893,51 @@ void smooth2::calculate(void) {
 					//printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
 					pose_list_iterator->v_r[i] = v_max_joint[i] * pose_list_iterator->v[i];
 					pose_list_iterator->a_r[i] = a_max_joint[i] * pose_list_iterator->a[i];
+					pose_list_iterator->v_p[i] = 0; //zalozenie, ze poczatkowa predkosc jest rowna 0
+
+					if(pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i] < 0) { //zapisanie kierunku dla pierwszego ruchu
+						//printf("ustawienie k w osi %d na -1\n", i);
+						pose_list_iterator->k[i] = -1;			//zapisanie kierunku nastepnych ruchow dokonywane jest dalej
+					} else {
+					//printf("ustawienie k w osi %d na 1\n", i);
+					pose_list_iterator->k[i] = 1;
+					}
+				}
+
+				break;
+
+			case lib::MOTOR:
+				if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
+					gripp=7;
+				} else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT) {
+					gripp=6;
+				}
+
+				for (i = 0; i < gripp; i++) {
+					temp = pose_list_iterator->coordinates[i];
+					pose_list_iterator->start_position[i] = the_robot->EDP_data.current_motor_arm_coordinates[i];//pierwsze przypisanie start_position
+					if (!is_last_list_element()) {		   //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
+						next_pose_list_ptr();
+						pose_list_iterator->start_position[i] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
+						prev_pose_list_ptr();							//pozycje startowa nowego ruchu
+					}
+				}
+				temp = pose_list_iterator->coordinates[gripp];
+				pose_list_iterator->start_position[gripp] = the_robot->EDP_data.current_motor_arm_coordinates[gripp];
+				if (!is_last_list_element()) {		   //musi byc zrobione tutaj zeby zadzialalo przypisanie kierunkow dla drugiego ruchu
+					next_pose_list_ptr();
+					pose_list_iterator->start_position[gripp] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
+					prev_pose_list_ptr();							//pozycje startowa nowego ruchu
+				}
+				if (gripp < (MAX_SERVOS_NR -1) ) {
+					pose_list_iterator->start_position[gripp + 1] = 0.0;//TODO sprawdzic
+				}
+
+				for (i = 0; i < MAX_SERVOS_NR; i++) {
+					//printf("predkosci (max i zadane): %f\t %f\n", v_max_zyz[i], pose_list_iterator->v[i]);
+					//printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
+					pose_list_iterator->v_r[i] = v_max_motor[i] * pose_list_iterator->v[i];
+					pose_list_iterator->a_r[i] = a_max_motor[i] * pose_list_iterator->a[i];
 					pose_list_iterator->v_p[i] = 0; //zalozenie, ze poczatkowa predkosc jest rowna 0
 
 					if(pose_list_iterator->coordinates[i]-pose_list_iterator->start_position[i] < 0) { //zapisanie kierunku dla pierwszego ruchu
@@ -849,6 +996,41 @@ void smooth2::calculate(void) {
 
 				break;
 
+			case lib::XYZ_ANGLE_AXIS:
+				gripp = 6;
+				//zapisanie v_p, musi byc tutaj bo wczesniej nie ma v_k poprzedniego ruchu
+				for (i = 0; i < MAX_SERVOS_NR; i++) {
+					temp = pose_list_iterator->v_k[i];
+					if (!is_last_list_element()) {
+						next_pose_list_ptr();
+						pose_list_iterator->v_p[i] = temp; //koncowa predkosc poprzedniego ruchu jest poczatkowa
+						prev_pose_list_ptr();					//predkoscia nowego ruchu
+					}
+				}
+
+				next_pose_list_ptr(); //GLOWNA INKREMENTACJA iteratora listy pose_list (bez powrotu)
+
+				for (i = 0; i < gripp; i++) {
+					temp = pose_list_iterator->coordinates[i];
+					if (!is_last_list_element()) {
+						next_pose_list_ptr();
+						pose_list_iterator->start_position[i] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
+						prev_pose_list_ptr();							//pozycje startowa nowego ruchu
+					}
+				}
+
+				pose_list_iterator->start_position[gripp] = the_robot->EDP_data.current_gripper_coordinate;
+				pose_list_iterator->start_position[7] = 0.0;
+
+				for (i = 0; i < MAX_SERVOS_NR; i++) {
+					//printf("predkosci (max i zadane): %f\t %f\n", v_max_zyz[i], pose_list_iterator->v[i]);
+					//printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
+					pose_list_iterator->v_r[i] = v_max_aa[i] * pose_list_iterator->v[i];
+					pose_list_iterator->a_r[i] = a_max_aa[i] * pose_list_iterator->a[i];
+				}
+
+				break;
+
 			case lib::JOINT:
 
 				if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
@@ -878,7 +1060,7 @@ void smooth2::calculate(void) {
 					}
 				}
 
-				pose_list_iterator->start_position[gripp] = the_robot->EDP_data.current_gripper_coordinate;
+				pose_list_iterator->start_position[gripp] = the_robot->EDP_data.current_joint_arm_coordinates[gripp];
 				if (gripp < (MAX_SERVOS_NR -1)) {
 					pose_list_iterator->start_position[gripp + 1] = 0.0;//TODO sprawdzic
 				}
@@ -886,8 +1068,51 @@ void smooth2::calculate(void) {
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
 					//printf("predkosci (max i zadane): %f\t %f\n", v_max_zyz[i], pose_list_iterator->v[i]);
 					//printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
-					pose_list_iterator->v_r[i] = v_max_zyz[i] * pose_list_iterator->v[i];
-					pose_list_iterator->a_r[i] = a_max_zyz[i] * pose_list_iterator->a[i];
+					pose_list_iterator->v_r[i] = v_max_joint[i] * pose_list_iterator->v[i];
+					pose_list_iterator->a_r[i] = a_max_joint[i] * pose_list_iterator->a[i];
+				}
+
+				break;
+
+			case lib::MOTOR:
+
+				if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
+					gripp=7;
+				} else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT) {
+					gripp=6;
+				}
+
+				//zapisanie v_p, musi byc tutaj bo wczesniej nie ma v_k poprzedniego ruchu
+				for (i = 0; i < MAX_SERVOS_NR; i++) {
+					temp = pose_list_iterator->v_k[i];
+					if (!is_last_list_element()) {
+						next_pose_list_ptr();
+						pose_list_iterator->v_p[i] = temp; //koncowa predkosc poprzedniego ruchu jest poczatkowa
+						prev_pose_list_ptr();					//predkoscia nowego ruchu
+					}
+				}
+
+				next_pose_list_ptr(); //GLOWNA INKREMENTACJA iteratora listy pose_list (bez powrotu)
+
+				for (i = 0; i < gripp; i++) {
+					temp = pose_list_iterator->coordinates[i];
+					if (!is_last_list_element()) {
+						next_pose_list_ptr();
+						pose_list_iterator->start_position[i] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
+						prev_pose_list_ptr();							//pozycje startowa nowego ruchu
+					}
+				}
+
+				pose_list_iterator->start_position[gripp] = the_robot->EDP_data.current_motor_arm_coordinates[gripp];
+				if (gripp < (MAX_SERVOS_NR -1)) {
+					pose_list_iterator->start_position[gripp + 1] = 0.0;//TODO sprawdzic
+				}
+
+				for (i = 0; i < MAX_SERVOS_NR; i++) {
+					//printf("predkosci (max i zadane): %f\t %f\n", v_max_zyz[i], pose_list_iterator->v[i]);
+					//printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
+					pose_list_iterator->v_r[i] = v_max_motor[i] * pose_list_iterator->v[i];
+					pose_list_iterator->a_r[i] = a_max_motor[i] * pose_list_iterator->a[i];
 				}
 
 				break;
@@ -1397,6 +1622,14 @@ void smooth2::vp_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_
 
 void smooth2::vk_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s, double t) {
 	//TODO tutaj musi byc odpowiednia redukcja predkosci poczatkowej z wywolaniem vp_reduction jesli bedzie taka potrzeba
+	/*double a;
+
+	a = (2 * (s - (pose_list_iterator->v_p[i] * t))) / (t * t);
+
+	if (a < 0) {
+		a =
+	}*/
+
 	sr_ecp_msg.message("Not supported case. Trajectory could not be calculated");
 	throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 }
