@@ -1569,8 +1569,9 @@ void smooth2::vp_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_
 
 	if (v_r < pose_list_iterator->v_k[i] && v_r < pose_list_iterator->v_p[i]) {
 		printf("rekurencja!");
-		pose_list_iterator->v_p[i] = v_r;
-		pose_list_iterator->v_k[i] = v_r;
+		pose_list_iterator->v_r[i] = v_r;
+		//pose_list_iterator->v_p[i] = v_r;
+		//pose_list_iterator->v_k[i] = v_r;
 		calculate();
 		return;
 	} else {
