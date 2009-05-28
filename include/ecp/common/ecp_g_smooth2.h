@@ -55,6 +55,7 @@ class smooth2 : public delta {
 
 		bool trajectory_generated;
 		bool trajectory_calculated;
+		bool rec;
 
 		bool eq(double a, double b);
 		void generate_cords();
