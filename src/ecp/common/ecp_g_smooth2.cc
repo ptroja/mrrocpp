@@ -1562,7 +1562,7 @@ void smooth2::reduction_model_4(std::list<ecp_smooth2_taught_in_pose>::iterator 
 
 void smooth2::vp_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s, double t) {
 	printf("v_p redukcja\n");
-	//TODO sprawdzic czy to wyczerpuje wszystkie przypadki... chyba nie
+	//TODO sprawdzic czy to wyczerpuje wszystkie przypadki... chyba tak
 	double v_r; //zmiana ruchu na jednostajny
 
 	v_r = s/t;
@@ -1570,12 +1570,20 @@ void smooth2::vp_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_
 	if (v_r < pose_list_iterator->v_k[i] && v_r < pose_list_iterator->v_p[i]) {
 		printf("rekurencja!");
 		pose_list_iterator->v_r[i] = v_r;
-		//pose_list_iterator->v_p[i] = v_r;
-		//pose_list_iterator->v_k[i] = v_r;
+		calculate();
+		return;
+	} else if (v_r < pose_list_iterator->v_p[i] && v_r > pose_list_iterator->v_k[i]) {
+		pose_list_iterator->v_p[i] = v_r;
+		reduction_model_4(pose_list_iterator, i, s);
+		calculate();
+		return;
+	} else if (v_r > pose_list_iterator->v_p[i] && v_r < pose_list_iterator->v_k[i]) {
+		pose_list_iterator->v_k[i] = v_r;
+		reduction_model_2(pose_list_iterator, i, s);
 		calculate();
 		return;
 	} else {
-		sr_ecp_msg.message("You are insane!!! That trajectory can not be calculated!");
+		sr_ecp_msg.message("Are you insane??!! That trajectory can not be calculated!");
 		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 	}
 }
