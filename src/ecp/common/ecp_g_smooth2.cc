@@ -563,6 +563,7 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
 bool smooth2::next_step () {
 
     int i; //licznik petli
+    double gripper_position;
 
     if (!trajectory_generated && !trajectory_calculated) {
     	calculate(); //wypelnienie pozostalych zmiennych w liscie pose_list
@@ -659,7 +660,7 @@ bool smooth2::next_step () {
     		    the_robot->EDP_data.motion_steps = td.internode_step_no;
     		    the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
-    		    for (i=0; i < MAX_SERVOS_NR; i++) {
+    		    for (i = 0; i < MAX_SERVOS_NR; i++) {
     		        the_robot->EDP_data.next_joint_arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
     		    }
 
@@ -671,14 +672,22 @@ bool smooth2::next_step () {
     		        i=6;
 				}
 
-    		    /*if(pose_list_iterator->v_grip*node_counter < coordinate_list_iterator->coordinate[i]) {
-    		    	double smooth2::generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r,
-    		    										double v_k, double a_r, int k, double przysp, double jedn, double s_przysp, double s_jedn)
+    		    /*gripper_position = generate_next_coords(node_counter, pose_list_iterator->interpolation_node_no,
+		    			pose_list_iterator->start_position[i], 0.01, 0.01,
+		    			0.01, pose_list_iterator->a_r[i], -pose_list_iterator->k[i], 0.0,
+		    			pose_list_iterator->interpolation_node_no, 0.0, fabs(pose_list_iterator->coordinates[i] - pose_list_iterator->start_position[i]));
+
+    		    printf(" %f ", gripper_position);
+
+    		    if((pose_list_iterator->k[i] == 1 && gripper_position > pose_list_iterator->coordinates[i])
+    		    		|| (pose_list_iterator->k[i] == -1 && gripper_position < pose_list_iterator->coordinates[i])) {
+    		    	the_robot->EDP_data.next_joint_arm_coordinates[i] = gripper_position;
     		    } else {
-    		    	printf("ostatni %f\t", pose_list_iterator->coordinates[i]);
+    		    	//printf("ostatni %f\t", pose_list_iterator->coordinates[i]);
     		    	the_robot->EDP_data.next_joint_arm_coordinates[i] = pose_list_iterator->coordinates[i];
     		    }*/
-
+    		    /*if (pose_list_iterator->coordinates[i] != 0.074 && pose_list_iterator->coordinates[i] != 0.064)
+    		    	printf(" %f ", pose_list_iterator->coordinates[i]);*/
     		    the_robot->EDP_data.next_joint_arm_coordinates[i] = pose_list_iterator->coordinates[i];
 
     		    coordinate_list_iterator++;
@@ -1343,13 +1352,16 @@ void smooth2::calculate(void) {
 		}
 
 		//obliczanie v_grip
+	    /*pose_list_iterator->v_grip = (pose_list_iterator->coordinates[gripp]/pose_list_iterator->interpolation_node_no);
+	    if(pose_list_iterator->v_grip<v_grip_min)
+	    	pose_list_iterator->v_grip=v_grip_min;*/
 		pose_list_iterator->v_grip = (s[i]/pose_list_iterator->t);
 
 		if(pose_list_iterator->v_grip < v_grip_min) {
 			pose_list_iterator->v_grip = v_grip_min;
 		}
 
-		int os = 1;
+		int os = 7;
 		printf("\n=============== pozycja trajektorii nr %d ==================\n", j);
 		printf("czas ruchu %f\n", pose_list_iterator->t);
 		printf("coordinates: %f\n", pose_list_iterator->coordinates[os]);
@@ -1615,7 +1627,22 @@ void smooth2::vk_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_
 	printf("v_k redukcja\n");
 	double a;
 	double v_k;
+	int temp;
 
+	temp = pose_list_iterator->k[i];//TODO sprawdzic to
+	if (!is_last_list_element()) {
+		next_pose_list_ptr();
+		if (pose_list_iterator->k[i] != temp) {
+			pose_list_iterator->v_k[i] = 0;
+			vp_reduction(pose_list_iterator, i, s, t);
+			return;
+		}
+		prev_pose_list_ptr();
+	} else {
+		pose_list_iterator->v_k[i] = 0;
+		vp_reduction(pose_list_iterator, i, s, t);
+		return;
+	}
 	a = (2 * (s - (pose_list_iterator->v_p[i] * t))) / (t * t);
 
 	if (a < 0) {
