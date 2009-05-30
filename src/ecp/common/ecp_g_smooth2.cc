@@ -752,6 +752,8 @@ void smooth2::calculate(void) {
 
     initiate_pose_list();//ustawianie wskaznika listy pozycji na poczatek
 
+    first_interval = true;
+
     td.internode_step_no = 10;
     td.value_in_step_no = td.internode_step_no - 2;
 
@@ -1599,7 +1601,7 @@ void smooth2::vp_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_
 
 	v_r = s/t;
 
-	if (v_r < pose_list_iterator->v_k[i] && v_r < pose_list_iterator->v_p[i]) {
+	/*if (v_r < pose_list_iterator->v_k[i] && v_r < pose_list_iterator->v_p[i]) {
 		printf("rekurencja! 1\n");
 		pose_list_iterator->v_r[i] = v_r;
 		rec = true;
@@ -1619,10 +1621,10 @@ void smooth2::vp_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_
 		rec = true;
 		calculate();
 		return;
-	} else {
+	} else {*/
 		sr_ecp_msg.message("Are you insane?! That trajectory can not be calculated!");
 		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	}
+	//}
 }
 
 void smooth2::vk_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_list_iterator, int i, double s, double t) {
