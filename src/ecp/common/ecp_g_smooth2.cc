@@ -1361,7 +1361,7 @@ void smooth2::calculate(void) {
 			pose_list_iterator->v_grip = v_grip_min;
 		}
 
-		int os = 7;
+		int os = 1;
 		printf("\n=============== pozycja trajektorii nr %d ==================\n", j);
 		printf("czas ruchu %f\n", pose_list_iterator->t);
 		printf("coordinates: %f\n", pose_list_iterator->coordinates[os]);
@@ -1600,18 +1600,20 @@ void smooth2::vp_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_
 	v_r = s/t;
 
 	if (v_r < pose_list_iterator->v_k[i] && v_r < pose_list_iterator->v_p[i]) {
-		printf("rekurencja!");
+		printf("rekurencja! 1\n");
 		pose_list_iterator->v_r[i] = v_r;
 		rec = true;
 		calculate();
 		return;
 	} else if (v_r < pose_list_iterator->v_p[i] && v_r > pose_list_iterator->v_k[i]) {
+		printf("rekurencja! 2\n");
 		pose_list_iterator->v_p[i] = v_r;
 		reduction_model_4(pose_list_iterator, i, s);
 		rec = true;
 		calculate();
 		return;
 	} else if (v_r > pose_list_iterator->v_p[i] && v_r < pose_list_iterator->v_k[i]) {
+		printf("rekurencja! 3\n");
 		pose_list_iterator->v_k[i] = v_r;
 		reduction_model_2(pose_list_iterator, i, s);
 		rec = true;
@@ -1627,7 +1629,7 @@ void smooth2::vk_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_
 	printf("v_k redukcja\n");
 	double a;
 	double v_k;
-	int temp;
+	/*int temp;
 
 	temp = pose_list_iterator->k[i];//TODO sprawdzic to
 	if (!is_last_list_element()) {
@@ -1642,7 +1644,8 @@ void smooth2::vk_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_
 		pose_list_iterator->v_k[i] = 0;
 		vp_reduction(pose_list_iterator, i, s, t);
 		return;
-	}
+	}*/
+
 	a = (2 * (s - (pose_list_iterator->v_p[i] * t))) / (t * t);
 
 	if (a < 0) {
@@ -1650,7 +1653,7 @@ void smooth2::vk_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_
 		a = (-2 * s + 2 * t * pose_list_iterator->v_p[i]) / (t * t);
 		v_k = -a * t + pose_list_iterator->v_p[i];
 
-		if (a > pose_list_iterator->a_r[i] || v_k < 0) {
+		if (a > pose_list_iterator->a_r[i] || v_k < 0 || v_k > pose_list_iterator->v_k[i]) {
 			vp_reduction(pose_list_iterator, i, s, t);
 			return;
 		}
@@ -1665,8 +1668,8 @@ void smooth2::vk_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_
 
 	pose_list_iterator->v_k[i] = a * t + pose_list_iterator->v_p[i];
 	pose_list_iterator->a_r[i] = a;
-	pose_list_iterator->v_r[i] = pose_list_iterator->v_p[i];
-	pose_list_iterator->s_przysp[i] = 0;
+	pose_list_iterator->v_r[i] = pose_list_iterator->v_k[i];
+	pose_list_iterator->s_przysp[i] = s;
 	pose_list_iterator->s_jedn[i] = 0;
 }
 
