@@ -310,20 +310,27 @@ void ui_model::slayAll(void) {
 	
 	char * username = (*this->config).return_string_value("username", "[ui]");
 	char * node_name = (*this->config).return_string_value("node_name", "[ui]");
+	std::string command;
+	std::string RSHcommand = "rsh -l ";
+	std::string space = " ";
+	std::string slayCommand = " slay -9 ";
 
 	std::vector <ui_config_entry *> edps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::EDP);
 	std::vector <ui_config_entry *> ecps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::ECP);
 	std::vector <ui_config_entry *> mp = ui_model::instance().getRootNode().getChildByType(ui_config_entry::MP);
 
 	for(std::vector<ui_config_entry *>::iterator Iter = edps.begin(); Iter != edps.end(); Iter++) {
-		std::cout << "rsh -l " << username << " " << node_name << " slay -9 " << (*Iter)->program_name <<  std::endl;
+		command = RSHcommand + username + space + node_name + slayCommand + (*Iter)->program_name;
+		system(command.c_str());
 	}
 	
 	for(std::vector<ui_config_entry *>::iterator Iter = ecps.begin(); Iter != ecps.end(); Iter++) {
-		std::cout << "rsh -l " << username << " " << node_name << " slay -9 " << (*Iter)->program_name <<  std::endl;
+		command = RSHcommand + username + space + node_name + slayCommand + (*Iter)->program_name;
+		system(command.c_str());
 	}
 	
 	for(std::vector<ui_config_entry *>::iterator Iter = mp.begin(); Iter != mp.end(); Iter++) {
-		std::cout << "rsh -l " << username << " " << node_name << " slay -9 " << (*Iter)->program_name <<  std::endl;
+		command = RSHcommand + username + space + node_name + slayCommand + (*Iter)->program_name;
+		system(command.c_str());
 	}
 }
