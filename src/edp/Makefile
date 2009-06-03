@@ -3,7 +3,7 @@
 HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 
-SOURCEDIRS = common ati3084 ati3084MK ati6284 conveyor irp6_on_track speaker irp6_postument irp6_mechatronika
+SOURCEDIRS = common ati3084 ati3084MK ati3084MS ati6284 conveyor irp6_on_track speaker irp6_postument irp6_mechatronika
 CLEANDIRS = ${SOURCEDIRS}
 INSTALLDIRS = ${SOURCEDIRS}
 # Data for makedepend 
