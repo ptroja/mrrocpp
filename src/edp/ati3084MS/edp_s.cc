@@ -45,7 +45,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "edp/ati3084MK/edp_s.h"
+#include "edp/ati3084MS/edp_s.h"
 
 // Konfigurator
 #include "lib/configurator.h"

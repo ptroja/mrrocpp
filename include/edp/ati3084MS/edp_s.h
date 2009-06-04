@@ -8,8 +8,8 @@
 // Autor: yoyek
 // -------------------------------------------------------------------------
 
-#if !defined(_EDP_S_ATI3084MK_H)
-#define _EDP_S_ATI3084MK_H
+#if !defined(_EDP_S_ATI3084MS_H)
+#define _EDP_S_ATI3084MS_H
 
 #include "edp/common/edp_irp6s_postument_track.h"
 

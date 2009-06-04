@@ -16,9 +16,9 @@ all: $(SOURCEDIRS)
 ati3084: common
 ati6284: common
 conveyor: common
-irp6_on_track: common ati3084 ati3084MK ati6284
+irp6_on_track: common ati3084 ati3084MK ati3084MS ati6284
 speaker: common
-irp6_postument: common ati3084 ati3084MK ati6284
+irp6_postument: common ati3084 ati3084MK ati3084MS ati6284
 irp6_mechatronika: common
 
 $(SOURCEDIRS):
