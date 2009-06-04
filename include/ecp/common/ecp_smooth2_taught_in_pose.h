@@ -30,6 +30,7 @@ public:
   double v_grip;
   double t; //czas ruchu
   int model[MAX_SERVOS_NR]; //model ruchu
+  int pos_num;
 
   ecp_smooth2_taught_in_pose (void);
   ecp_smooth2_taught_in_pose (lib::POSE_SPECIFICATION at, double* vv, double* aa, double* coordinates);
