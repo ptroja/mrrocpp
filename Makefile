@@ -43,26 +43,19 @@ all:
 #------------------------------ Maintain rules --------------------------------#
 clean:
 	-@rm -f $(CLEANEDFILES);
-	@for i in ${CLEANDIRS} ; do \
-		($(MAKE) -C $$i clean) ; \
-	done
+	@for i in ${CLEANDIRS} ; do ($(MAKE) -C $$i clean) ;done
 
 distclean: clean
 	@rm -f `find . -name "\.depend*" -or -name "\.depend\.bak"`
 	@rm -f cscope.out tags
 #------------------------------------------------------------------------------#
 install:
-	@for i in ${INSTALLDIRS} ; do \
-		($(MAKE) -C $$i install) ; \
-	done
+	@for i in ${INSTALLDIRS} ; do ($(MAKE) -C $$i install) ; done
 #------------------------------------------------------------------------------#
 depend:
-	@for i in ${DEPENDDIRS} ; do \
-		($(MAKE) -C $$i depend); \
-	done
+	@for i in ${DEPENDDIRS} ; do ($(MAKE) -C $$i depend); done
 #------------------------------------------------------------------------------#
 dist: clean
-	export VERSION && cd .. &&   tar czvf mrrocpp.tgz mrrocpp   && \
-	mv mrrocpp.tgz "mrrocpp${VERSION}.tgz"
+	export VERSION && cd .. &&   tar czvf mrrocpp.tgz mrrocpp   && mv mrrocpp.tgz "mrrocpp${VERSION}.tgz"
 
 #==============================================================================#	

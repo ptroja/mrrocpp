@@ -63,17 +63,11 @@ endif
 
 #----------------------------------------------- Maintain rules ----------------------------------------------------#
 clean:
-	@for i in ${CLEANDIRS} ; do \
-		($(MAKE) -C $$i clean) ; \
-	done
+	@for i in ${CLEANDIRS} ; do ($(MAKE) -C $$i clean) ; done
 #-----------------------------------------------------------------------------------------------------------------------#
 install:
-	@for i in ${INSTALLDIRS} ; do \
-		($(MAKE) -C $$i install) ; \
-	done
+	@for i in ${INSTALLDIRS} ; do ($(MAKE) -C $$i install) ; done
 #-----------------------------------------------------------------------------------------------------------------------#
 depend:
-	@for i in ${SOURCEDIRS}; do \
-		($(MAKE) -C $$i depend); \
-	done
+	@for i in ${SOURCEDIRS}; do ($(MAKE) -C $$i depend); done
 #======================================================#	
