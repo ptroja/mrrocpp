@@ -51,10 +51,6 @@
 #include "lib/configurator.h"
 
 
-void y_InterruptUnlock( intrspin_t* spinlock_local )
-{
-	InterruptUnlock(spinlock_local );
-}
 
 
 namespace mrrocpp {

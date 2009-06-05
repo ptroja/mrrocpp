@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <string.h> 
+#include <string.h>
 #include <signal.h>
 #include <process.h>
 #include <math.h>
@@ -247,8 +247,8 @@ ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
 		delay( 1);
 		out8(FCREG, 0x81); /*program fifo*/
 		delay( 1);
-		//InterruptUnlock(spinlock );
-		y_InterruptUnlock(spinlock);
+		InterruptUnlock(spinlock );
+		//y_InterruptUnlock(spinlock);
 		//InterruptDisable();
 		/* interrupts are enabled */
 
@@ -309,7 +309,7 @@ void ATI3084_force::configure_sensor(void)
 			//lib::frame_tab sensor_rot = {{0, -1, 0}, {1, 0, 0}, {0, 0, 1}, {0, 0, 0}};
 			// polozenie czujnika wzgledem  koncowki lancucha kinematycznego
 			// lib::Homog_matrix sensor_frame = lib::Homog_matrix(0, -1, 0,		1, 0, 0,	0, 0, 1,	0, 0, 0.09);
-			
+
 			double tab[6];
 			lib::Homog_matrix sensor_frame;
 			if (master.config.exists("sensor_in_wrist"))
@@ -319,13 +319,13 @@ void ATI3084_force::configure_sensor(void)
 					tab[i] = strtod( tmp, &tmp );
 				sensor_frame = lib::Homog_matrix(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, tab[0], tab[1], tab[2], tab[3], tab[4], tab[5]);
 				// std::cout<<sensor_frame<<std::endl;
-			} 
-			else 
+			}
+			else
 				sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
 			// lib::Homog_matrix sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
 
 			double weight = master.config.return_double_value("weight");
-			
+
 			double point[3];
 			char *tmp = master.config.return_string_value("default_mass_center_in_wrist");
 			for (int i=0; i<3; i++)
