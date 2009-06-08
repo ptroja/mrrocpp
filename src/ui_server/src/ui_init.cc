@@ -2930,7 +2930,7 @@ ui_state_def ui_state;
 
 ui_msg_def ui_msg;
 
-ofstream *log_file_outfile;
+std::ofstream *log_file_outfile;
 
 
 #if !defined(USE_MESSIP_SRR)
@@ -3609,7 +3609,7 @@ int init()
 	strcpy(log_file_with_dir, "../logs/");
 	strcat(log_file_with_dir, file_name);
 
-	log_file_outfile = new ofstream(log_file_with_dir, ios::out);
+    log_file_outfile = new std::ofstream(log_file_with_dir, std::ios::out);
 
 	if (!(*log_file_outfile)) {
 		std::cerr << "Cannot open file: " << file_name << '\n';

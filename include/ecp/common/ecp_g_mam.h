@@ -14,6 +14,7 @@
 /********************************* INCLUDES *********************************/
 #include <string.h>
 #include <list>
+#include <fstream>
 
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -71,7 +72,7 @@ class manual_moves_automatic_measures : public common::generator::generator {
 		bool is_mam_list_element (void);
 		bool is_mam_list_last_element ( void );
 		// Zapisanie pojedynczego elementu.
-		void save_mam_element(ofstream& to_file);
+		void save_mam_element(std::ofstream& to_file);
 
 		// Odczyt ostatniej pozycji na liscie.
           void get_mam_list_data (double* robot_position, double* sensor_reading);

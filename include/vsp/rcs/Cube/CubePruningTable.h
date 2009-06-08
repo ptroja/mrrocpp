@@ -80,5 +80,32 @@ class CubePruningTable : public DataTable
     
 };
 
+////////////////////////////////////////////////////////////////////////////////
+// DATA ACCESS INLINE METHODS
+////////////////////////////////////////////////////////////////////////////////
+
+inline int CubePruningTable::Get(int coord) 
+{
+    // Gets data from table and chooses only part of data relevant for coord
+    return ( ((char*) iaTable)[coord/2] >> (4*(coord%2))) & 0x0f;
+}
+    
+inline void CubePruningTable::Set(int coord, int value) 
+{
+    // Gets data from table and updates only part of data relevant for coord
+    ((char*) iaTable)[coord/2] = ( ((char*) iaTable)[coord/2] & ~(0x0f << ((4*(coord%2))))) 
+             | ( (value & 0x0f) << ((4*(coord%2))) );
+    
+}
+
+inline int CubePruningTable::GetDataCoord(int coord)
+{
+    return coord / (sizeof(int) / sizeof(char) * 2);
+}    
+
+inline int CubePruningTable::GetInDataPos(int coord)
+{
+    return 4 * coord % (sizeof(int) / sizeof(char) * 2);
+}    
 
 #endif // CubePruningTable_h

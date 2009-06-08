@@ -6,6 +6,7 @@
  */
 
 #include "ecp/irp6_on_track/ecp_g_spots_recognition.h"
+#include <cstring>
 #include <unistd.h>
 
 namespace mrrocpp {
@@ -238,7 +239,7 @@ bool spots::move_and_return(double pos_hist[12])
 		return false;
 
 	Move();
-	memcpy(pos_hist, pos, 12*sizeof(double));
+    std::memcpy(pos_hist, pos, 12*sizeof(double));
 	return true;
 
 }

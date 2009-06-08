@@ -27,7 +27,7 @@ extern ui_msg_def ui_msg;
 
 extern ui_state_def ui_state;
 
-extern ofstream *log_file_outfile;
+extern std::ofstream *log_file_outfile;
 
 int
 OnTimer()

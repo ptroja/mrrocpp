@@ -60,7 +60,7 @@ bool smooth2::load_file_with_path(char* file_name) {
     double a[MAX_SERVOS_NR];	// Wczytane wspolrzedne
     double coordinates[MAX_SERVOS_NR];     // Wczytane wspolrzedne
 
-    ifstream from_file(file_name); // otworz plik do odczytu
+    std::ifstream from_file(file_name); // otworz plik do odczytu
     if (!from_file)
     {
         perror(file_name);

@@ -1,4 +1,5 @@
 #include <string>
+#include <cstring>
 #include <vector>
 #include <fstream>
 #include <iostream>
@@ -257,13 +258,13 @@ void init_buffers_from_files()
 
 				fread(ChunkID, sizeof(BYTE), 4, input); 	//read in first four bytes
 				
-				if (!strcmp((char *)ChunkID, "RIFF"))
+				if (!std::strcmp((char *)ChunkID, "RIFF"))
 					{ 
 						fread(&WAVE_size, sizeof(DWORD), 1, input); 
 						
 						fread(Format, sizeof(BYTE), 4, input); 
 						
-						if (!strcmp((char *)Format,"WAVE"))
+						if (!std::strcmp((char *)Format,"WAVE"))
 							{ 
 								fread(ChunkID_fmt, sizeof(BYTE), 4, input); 
 								
@@ -1436,7 +1437,7 @@ N=0;
 
 //				fread(ChunkID, sizeof(BYTE), 4, input); 	//read in first four bytes
 				
-				if (!strcmp((char *)ChunkID, "RIFF"))
+				if (!std::strcmp((char *)ChunkID, "RIFF"))
 					{ 
 					/*
 						fread(&WAVE_size, sizeof(DWORD), 1, input); 
@@ -1444,7 +1445,7 @@ N=0;
 						fread(Format, sizeof(BYTE), 4, input); 
 						*/
 						
-						if (!strcmp((char *)Format,"WAVE"))
+						if (!std::strcmp((char *)Format,"WAVE"))
 							{ 
 							/*
 								fread(ChunkID_fmt, sizeof(BYTE), 4, input); 

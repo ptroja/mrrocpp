@@ -27,7 +27,7 @@
 #include <errno.h>
 #include <pthread.h>
 #include <semaphore.h>
-#include <new.h>
+#include <new>
 #include <process.h>
 #include <sys/netmgr.h>
 

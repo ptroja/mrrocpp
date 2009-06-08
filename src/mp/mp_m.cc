@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <unistd.h>
 
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -50,6 +51,8 @@ int main (int argc, char *argv[], char **arge)
 #if defined(__QNXNTO__)
 	flushall();
 #endif
+    printf("Waiting for GDB\n");
+    sleep(5);
 	// zewnetrzne try
 	try {
 

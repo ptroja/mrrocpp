@@ -320,7 +320,7 @@ void * irp6s_and_conv_effector::reader_thread(void* arg)
 
 		strcat(config_file_with_dir, file_name);
 
-		ofstream outfile(config_file_with_dir, ios::out);
+        std::ofstream outfile(config_file_with_dir, std::ios::out);
 		if (!outfile) // jesli plik nie instnieje
 		{
 			std::cerr << "Cannot open file: " << file_name << '\n';

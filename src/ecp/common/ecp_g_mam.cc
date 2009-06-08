@@ -264,7 +264,7 @@ void manual_moves_automatic_measures::add_mam_element(ecp_mp::sensor::digital_sc
 	};//: add_mam_element
 
 /**************************** SAVE MAM ELEMENTS ******************************/
-void manual_moves_automatic_measures::save_mam_element(ofstream& to_file)
+void manual_moves_automatic_measures::save_mam_element(std::ofstream& to_file)
 {
 	int i;
 	// Element listy.
@@ -290,7 +290,7 @@ void manual_moves_automatic_measures::save_mam_list(char* filename)
 	}
 	try {
 		// Otworzenie pliku.
-		ofstream to_file(filename);
+        std::ofstream to_file(filename);
 		if (!to_file)
 		throw ECP_main_error(lib::FATAL_ERROR, SAVE_FILE_ERROR);
 		// Przejscie na poczatek listy.

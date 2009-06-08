@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <iostream>
 
 
 #include "ecp/irp6_on_track/ecp_local.h"
@@ -22,7 +23,6 @@ smooth2_test::~smooth2_test(){
 
 //methods for ECP template to redefine in concrete classes
 void smooth2_test::task_initialization(void) {
-
 	ecp_m_robot = new ecp_irp6_on_track_robot(*this);
 	//delay(20000);
 	smoothgen2 = new common::generator::smooth2(*this, true);
