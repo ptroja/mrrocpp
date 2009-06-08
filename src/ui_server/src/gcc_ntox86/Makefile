@@ -47,7 +47,7 @@ app:	$(ABOBJ) $(MYOBJ) $(MRROCOBJ)
 		$(LD) $(MYOBJ) $(MRROCOBJ) $(LDFLAGS) -M -o ui_server -lang-c++
 
 clean:
-		@rm -f *.o *.err *~ *.map ui_server
+		@rm -f ../*.o *.err *~ *.map ui_server
 
 install: ui_server
 		-${INSTALL} ui_server $(HOMEDIR)/bin/
