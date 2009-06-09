@@ -26,11 +26,12 @@ ifeq ($(BUILD_TARGET), linux)
   CXX=g++
   LDFLAGS=-lrt `pkg-config --libs libxml-2.0`
   CPPFLAGS=-Wall -I$(HOMEDIR)/include `pkg-config --cflags libxml-2.0` -DUSE_MESSIP_SRR
+  BINDIR=$(HOMEDIR)/bin.linux
 else
   #VERSION=-V2.95.3,gcc_ntox86
   #VERSION=-V3.3.5,gcc_ntox86
-  #VERSION=-V4.2.4,gcc_ntox86
-  VERSION=-V4.3.3,gcc_ntox86
+  VERSION=-V4.2.4,gcc_ntox86
+  #VERSION=-V4.3.3,gcc_ntox86
   RPATHV=-Wl,-rpath /usr/pkg/lib
   CC=qcc ${VERSION}
   CXX=QCC ${VERSION}
@@ -39,10 +40,10 @@ else
   LDFLAGS=${DEBUG} -lm -lsocket -lcpp -lang-c++ $(RPATHV) -L$(QNX_TARGET)/mrlib/lib -lxml2 -liconv
   CPPFLAGS=-I$(HOMEDIR)/include -I$(QNX_TARGET)/mrlib/include
   AR=ntox86-ar
+  BINDIR=$(HOMEDIR)/bin
 endif
 
 LIBDIR=$(HOMEDIR)/lib
-BINDIR=$(HOMEDIR)/bin
 UI_DIR = $(HOMEDIR)/src/ui/src/gcc_ntox86
 ECP_DIR = $(HOMEDIR)/src/ecp
 ECP_MPDIR=$(HOMEDIR)/src/ecp_mp
