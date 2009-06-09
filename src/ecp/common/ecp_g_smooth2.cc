@@ -1004,6 +1004,7 @@ void smooth2::calculate(void) {
 			first_interval = false;
 
 		} else { // end: if(first_interval)
+
 			switch (td.arm_type) {
 			//tutaj jestesmy jeszcze ciagle w poprzedniej pozycji pose_list
 			case lib::XYZ_EULER_ZYZ:
@@ -1059,6 +1060,7 @@ void smooth2::calculate(void) {
 
 				next_pose_list_ptr(); //GLOWNA INKREMENTACJA iteratora listy pose_list (bez powrotu)
 
+		    	pose_list_iterator->pos_num = j;
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
 					temp = pose_list_iterator->coordinates[i];
 					if (!is_last_list_element()) {
@@ -1103,6 +1105,7 @@ void smooth2::calculate(void) {
 
 				next_pose_list_ptr(); //GLOWNA INKREMENTACJA iteratora listy pose_list (bez powrotu)
 
+		    	pose_list_iterator->pos_num = j;
 				for (i = 0; i <= gripp; i++) {
 					temp = pose_list_iterator->coordinates[i];
 					if (!is_last_list_element()) {
@@ -1149,6 +1152,7 @@ void smooth2::calculate(void) {
 
 				next_pose_list_ptr(); //GLOWNA INKREMENTACJA iteratora listy pose_list (bez powrotu)
 
+		    	pose_list_iterator->pos_num = j;
 				for (i = 0; i <= gripp; i++) {
 					temp = pose_list_iterator->coordinates[i];
 					if (!is_last_list_element()) {
