@@ -50,7 +50,7 @@ clean:
 		@rm -f ../*.o *.err *~ *.map ui_server
 
 install: ui_server
-		-${INSTALL} ui_server $(HOMEDIR)/bin/
+		-${INSTALL} ui_server $(BINDIR)
 
 #
 # Headers

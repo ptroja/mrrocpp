@@ -58,7 +58,7 @@ clean:
 		@rm -f *.o *.err *~ *.map ui
 
 install: ui
-		-${INSTALL} ui $(HOMEDIR)/bin/
+		-${INSTALL} ui $(BINDIR)
 
 #
 # Headers
