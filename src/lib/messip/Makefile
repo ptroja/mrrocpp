@@ -9,7 +9,7 @@ BINARIES = messip_sin messip_mgr
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
-CPPFLAGS += -I$(HOMEDIR)/include/messip -g
+CPPFLAGS += -I$(HOMEDIR)/src/messip -g
 LDFLAGS += -g
 
 #======================================================#	

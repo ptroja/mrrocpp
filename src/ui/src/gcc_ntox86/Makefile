@@ -18,7 +18,7 @@ PHABOPTS= -l socket
 
 HOMEDIR = ../../../..
 include $(HOMEDIR)/common.mk
-HEADERSDIR = $(HOMEDIR)/include
+HEADERSDIR = $(HOMEDIR)/src
 
 CXXFLAGS += -I $(HEADERSDIR) -I.
 LDFLAGS += -Bstatic -l phexlib $(ABLIB) $(PHABOPTS)

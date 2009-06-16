@@ -54,7 +54,7 @@ configsrv: configsrv.o cfgopts.o configsrv_m.o
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
 # plik.o: plik.cc plik1.h plik2.h ... itd
-#	$(CXX) -c user_flags -I$(HOMEDIR)/include -o $@ $<
+#	$(CXX) -c user_flags -I$(HOMEDIR)/src -o $@ $<
 #======================================================#	
 #----------------------------------------------- Maintain rules ----------------------------------------------------#
 install: ${BINARIES}

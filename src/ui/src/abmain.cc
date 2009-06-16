@@ -21,7 +21,7 @@ Examples:
   Same as above
 
 %C -x10 -y10 -h200 -w300
-  Run at initial position 10,10 with initial 
+  Run at initial position 10,10 with initial
   dimension of 200x300.
 #endif
 
@@ -33,7 +33,7 @@ Examples:
 
 /* Local headers */
 #include "ablibs.h"
-#include "../../../include/ui/ui.h"
+#include "ui/ui.h"
 #include "abimport.h"
 #include "proto.h"
 #include "abwidgets.h"

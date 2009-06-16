@@ -13,9 +13,9 @@ LIBS = ati6284.a
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
-CPPFLAGS += -I$(HOMEDIR)/include/edp/ati6284/ati \
-		-I$(HOMEDIR)/include/edp/ati6284/ni \
-		-I$(HOMEDIR)/include/edp/ati6284 \
+CPPFLAGS += -I$(HOMEDIR)/src/edp/ati6284/ati \
+		-I$(HOMEDIR)/src/edp/ati6284/ni \
+		-I$(HOMEDIR)/src/edp/ati6284 \
 		-I$(HOMEDIR)/src/edp/ati6284
 
 # search path for make, if you want create dependencies from files from other directory than ".", 
