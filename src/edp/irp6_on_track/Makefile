@@ -21,6 +21,12 @@ SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a
 # search path for make, if you want create dependencies from files from other directory than ".", 
 # then place that directory in the VPATH variable
 VPATH = ../common $(LIBDIR) ../irp6s
+
+# add required libs
+ifdef DOCENT_SENSOR
+LDFLAGS:=$(LDFLAGS) -lboost_system-mt -lkiper -lprotobuf
+endif
+
 #======================================================#	
 .PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#
@@ -28,8 +34,15 @@ all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
 # do wyboru wariant z czujnikiem ATI3084 i ATI6284
 #edp_irp6_on_track: $(EDPOBJS) ../ati6284/ati6284.a $(SHOBJ)
-edp_irp6_on_track: $(EDPOBJS) ../ati3084/ati3084.a $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ 
+
+SENSOR_OBJ=
+ifdef DOCENT_SENSOR
+	SENSOR_OBJ := ../ati3084MS/ati3084MS.a
+else
+	SENSOR_OBJ := ../ati3084/ati3084.a
+endif
+edp_irp6_on_track: $(EDPOBJS) $(SENSOR_OBJ) $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
 
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:

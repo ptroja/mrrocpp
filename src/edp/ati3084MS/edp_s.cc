@@ -1,76 +1,59 @@
 // -------------------------------------------------------------------------
 //                            edp_s.cc 		dla QNX6.3.0
 //
-//            Virtual Sensor Process (lib::VSP) - methods for Schunk force/torgue sensor
+//            Virtual Sensor Process (lib::VSP) - methods for Schunk force/torque sensor
 // Metody klasy VSP
 //
 // Ostatnia modyfikacja: grudzie 2004
 // Autor: Yoyek (Tomek Winiarski)
 // na podstawie szablonu vsp Tomka Kornuty i programu obslugi czujnika Artura Zarzyckiego
 // -------------------------------------------------------------------------
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <signal.h>
-#include <process.h>
-#include <math.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <sys/sched.h>
+
+#include <cstdlib>
 #include <fstream>
 #include <iomanip>
-#include <ctype.h>
-#include <errno.h>
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
 #include <iostream>
-#include <sys/neutrino.h>
-#include <hw/inout.h>
-#include <sys/dispatch.h>
-#include <hw/pci.h>
-#include <hw/pci_devices.h>
-#include <stddef.h>
-#include <sys/mman.h>
+
 #include <unistd.h>
 #include <fcntl.h>
-#include <errno.h>
+
+#include <sys/iofunc.h>
 #include <termios.h>
-#include <stdint.h>
-#include <pthread.h>
-#include <inttypes.h>
+
+#include <boost/bind.hpp>
+#include <boost/cstdint.hpp>
+
+#include <kiper/FunctorCallback.hpp>
+#include <kiper/RpcClient.hpp>
+#include <kiper/ClientRpcController.hpp>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-
 #include "lib/srlib.h"
-#include "edp/ati3084MS/edp_s.h"
 
-// Konfigurator
+#include <edp/ati3084MS/edp_s.h>
+
 #include "lib/configurator.h"
-
-
-
 
 namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
+using namespace kiper;
 
+static unsigned int ms_nr=0;// numer odczytu z czujnika
+static struct timespec start[9];
+static const bool FORCE_TEST_MODE = true;
 
-
-unsigned int ms_nr=0;// numer odczytu z czujnika
-
-
-struct timespec start[9];
-
+static ClientRpcController sendBiasController;
+static SendBiasReply sendBiasResponse;
 
 // Rejstracja procesu VSP
 ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
-	force(_master)
-	{
-	if (!(master.test_mode)) {
+	force(_master), udpClient_(SENSOR_BOARD_HOST, SENSOR_BOARD_PORT), sensor_(&udpClient_) {
+    std::cout << "ATI3084MS -> Start!" << std::endl;
+	if (FORCE_TEST_MODE) {
 	//	 	printf("Konstruktor VSP!\n");
 
 		ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
@@ -81,20 +64,19 @@ ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
 		tcflush(uart,TCIFLUSH);
 
 
-		sendBias(uart);
+		sendBias();
 	}
-	}
-
+}
 
 ATI3084_force::~ATI3084_force(void)
 {
-	if (!(master.test_mode)) {
-
+	if (FORCE_TEST_MODE) {
 		close(uart);
 	}
-	if (gravity_transformation)
+	if (gravity_transformation) {
 		delete gravity_transformation;
-	printf("Destruktor edp_ATI3084_force_sensor\n");
+	}
+    std::cout << "Destruktor edp_ATI3084_force_sensor" << std::endl;
 }
 ;
 
@@ -105,9 +87,9 @@ void ATI3084_force::configure_sensor(void)
 	//  printf("EDP Sensor configured\n");
 	sr_msg->message("EDP Sensor configured");
 
-	if (!(master.test_mode))
+	if (FORCE_TEST_MODE)
 	{
-		sendBias(uart);
+		sendBias();
 	}
 
 	if (master.force_tryb == 2) {
@@ -129,7 +111,7 @@ void ATI3084_force::configure_sensor(void)
 			{
 				char *tmp = master.config.return_string_value("sensor_in_wrist");
 				for (int i=0; i<6; i++)
-					tab[i] = strtod( tmp, &tmp );
+					tab[i] = std::strtod( tmp, &tmp );
 				sensor_frame = lib::Homog_matrix(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, tab[0], tab[1], tab[2], tab[3], tab[4], tab[5]);
 				// std::cout<<sensor_frame<<std::endl;
 			}
@@ -255,16 +237,16 @@ void ATI3084_force::terminate(void)
 void ATI3084_force::solve_transducer_controller_failure(void)
 {
 	usleep(10);
-	sendBias(uart);
+	sendBias();
 	usleep(100);
 }
 
 
 
-void ATI3084_force::sendBias(int fd)
+void ATI3084_force::sendBias()
 {
-	char bias='b';
-	if (write(fd, &bias, 1) <0) printf("Blad zapisu\n");
+	sensor_.SendBias(&sendBiasController, NULL, &sendBiasResponse,
+	  NewFunctorCallback(boost::bind(&ATI3084_force::handleSendBiasReply, this)));
 }
 
 forceReadings ATI3084_force::getFT(int fd)
@@ -287,7 +269,9 @@ forceReadings ATI3084_force::getFT(int fd)
 		r=1;
 		iter_counter++;
 
-		if (write(fd, &query, 1) <0) printf("Blad zapisu\n");
+		if (write(fd, &query, 1) <0) {
+            std::cout << "Blad zapisu" << std::endl;
+        }
 		//current_cycle = ClockCycles();
 		while ((current_bytes>0)&&(r!=0))
 		{//printf("aaa: %d\n",r);
@@ -300,7 +284,7 @@ forceReadings ATI3084_force::getFT(int fd)
 		if (r==0) {
 			if (iter_counter==1)
 			{
-				printf("Nie otrzymano oczekiwanej ilosci znakow: %d\n",r);
+                std::cout << "Nie otrzymano oczekiwanej ilosci znakow: " << r << std::endl;
 				sr_msg->message(lib::NON_FATAL_ERROR, "MK Force / Torque read error - check sensor controller");
 			}
 
@@ -330,7 +314,7 @@ int ATI3084_force::open_port(void)
 	fd = open(PORT, O_RDWR);
 	if(fd == -1)
 	{
-		printf("Can not open the port");
+        std::cout << "Can not open the port" << std::endl;
 		return -1;
 	}
 	//printf("3\n");
@@ -364,12 +348,15 @@ int ATI3084_force::open_port(void)
 	return fd;
 }
 
-
+void ATI3084_force::handleSendBiasReply() {
+	std::cout << "Bias sent!!!" << std::endl;
+}
 
 force* return_created_edp_force_sensor(common::irp6s_postument_track_effector &_master)
 {
 	return new ATI3084_force(_master);
 }// : return_created_sensor
+
 
 } // namespace sensor
 } // namespace edp

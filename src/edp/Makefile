@@ -3,7 +3,12 @@
 HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 
-SOURCEDIRS = common ati3084 ati3084MK ati3084MS ati6284 conveyor irp6_on_track speaker irp6_postument irp6_mechatronika
+ifdef DOCENT_SENSOR
+	SOURCEDIRS = common ati3084 ati3084MK ati3084MS ati6284 conveyor irp6_on_track speaker irp6_postument irp6_mechatronika
+else 
+	SOURCEDIRS = common ati3084 ati3084MK ati6284 conveyor irp6_on_track speaker irp6_postument irp6_mechatronika
+endif
+
 CLEANDIRS = ${SOURCEDIRS}
 INSTALLDIRS = ${SOURCEDIRS}
 # Data for makedepend 
@@ -16,9 +21,22 @@ all: $(SOURCEDIRS)
 ati3084: common
 ati6284: common
 conveyor: common
-irp6_on_track: common ati3084 ati3084MK ati3084MS ati6284
+IRP6ONT_DEPS = common ati3084 ati3084MK ati6284
+ifdef DOCENT_SENSOR
+	IRP6ONT_DEPS:=$(IRP6ONT_DEPS) ati3084MS
+endif
+
+irp6_on_track: $(IRP6ONT_DEPS)
+
 speaker: common
-irp6_postument: common ati3084 ati3084MK ati3084MS ati6284
+
+IRP6PST_DEPS = common ati3084 ati3084MK ati6284
+ifdef DOCENT_SENSOR
+	IRP6PST_DEPS:= $(IRP6ONT_DEPS) ati3084MS
+endif
+
+irp6_postument: $(IRP6ONT_DEPS)
+
 irp6_mechatronika: common
 
 $(SOURCEDIRS):

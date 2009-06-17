@@ -1,6 +1,4 @@
 // -------------------------------------------------------------------------
-//
-//
 // Definicje klasy edp_ATI3084_force_sensor
 // z interfejsem Macieja Kuleszy
 //
@@ -8,10 +6,13 @@
 // Autor: yoyek
 // -------------------------------------------------------------------------
 
-#if !defined(_EDP_S_ATI3084MS_H)
+#ifndef _EDP_S_ATI3084MS_H
 #define _EDP_S_ATI3084MS_H
 
+#include <kiper/clients/AsioUdpClient.hpp>
+
 #include "edp/common/edp_irp6s_postument_track.h"
+#include "ati3084.pb.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -29,27 +30,24 @@ int16_t ft[6];
 class ATI3084_force : public force{
 
 private:
-
-
+	kiper::clients::AsioUdpClient udpClient_;
+	Ati3084_Stub sensor_;
 	int uart, i,r;
 	//int licz=0;
 	forceReadings ftxyz;
-
+	static const char* SENSOR_BOARD_HOST;
+	static const unsigned int SENSOR_BOARD_PORT = 55555;
 
 	void solve_transducer_controller_failure(void);
-
-
 	short do_init(void);
-
 	int open_port(void);
 	forceReadings getFT(int fd);
-	void sendBias(int fd);
+	void sendBias();
 
+	void handleSendBiasReply();
 public:
-
 	ATI3084_force(common::irp6s_postument_track_effector &_master);
 	virtual ~ATI3084_force();
-
 	void configure_sensor (void);	// konfiguracja czujnika
 	void wait_for_event(void);		// oczekiwanie na zdarzenie
 	void initiate_reading (void);		// zadanie odczytu od VSP
@@ -57,6 +55,8 @@ public:
 	void terminate (void);				// rozkaz zakonczenia procesu VSP
 
 }; // end: class vsp_sensor
+
+const char* ATI3084_force::SENSOR_BOARD_HOST = "192.168.18.200";
 
 
 } // namespace sensor
