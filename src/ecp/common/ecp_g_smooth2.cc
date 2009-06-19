@@ -1601,7 +1601,7 @@ void smooth2::reduction_model_2(std::list<ecp_smooth2_taught_in_pose>::iterator 
 			a = (0.5 * (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) * (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i])) /
 				(s - pose_list_iterator->v_p[i]*pose_list_iterator->t);
 		}
-		printf("drugi stopien\n");
+		//printf("drugi stopien\n");
 		if (a > pose_list_iterator->a_r[i] || a <= 0) {//trzeci stopien redukcji
 			//printf("trzeci stopien\n");
 			double t1; //czas konca opoznienia

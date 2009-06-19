@@ -21,6 +21,7 @@ protected:
 	common::generator::tff_rubik_face_rotate* rfrg;
 	common::ecp_teach_in_generator* tig;
 	common::generator::smooth* sg;
+	common::generator::smooth2* sg2;
 	common::generator::bias_edp_force* befg;
 	common::generator::weight_meassure* wmg;
     //podzadania
