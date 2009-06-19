@@ -66,7 +66,7 @@ if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	smooth = new common::generator::smooth(*this, true, false);
 
 
-	nose = new common::generator::tff_nose_run(*this, 8);
+	nose = new common::generator::sr_nose_run(*this, 8);
 	nose->configure_pulse_check (true);
 
 
@@ -86,6 +86,9 @@ void spots_recognition::main_task_algorithm(void)
 	smooth->Move();
     sr_ecp_msg->message("Insert the plate");
 
+    // insert plate etc.
+    nose->Move();
+
     int iter = 0;
     while(1)
     {
@@ -94,10 +97,13 @@ void spots_recognition::main_task_algorithm(void)
     	char comm[40];
     	sprintf(comm, "Go to desired position (%d)...", iter);
 		sr_ecp_msg->message(comm);
-		sr_ecp_msg->message("Press PULSE ECP trigger when done");
+		//sr_ecp_msg->message("Press PULSE ECP trigger when done");
 
 //		befg->Move();
 		nose->Move();
+
+	    if(nose->get_state() == 2)
+	    	break;
 
 	    /*!
 	     * nastepnie nalezy odczekac ok 1s, zanim mozna rozpoczac sesje zdjeciowa
@@ -107,16 +113,16 @@ void spots_recognition::main_task_algorithm(void)
 	    /*!
 	     * zrob zdjecia, dokonaj obliczen
 	     */
-	    cond = generator->move_and_return(pos_hist);
+	    generator->Move();
 
-	    if(cond == false)
-	    	break;
+//	    if(cond == false)
 	    sleep(1);
 
     }
 	smooth->load_file_with_path(trajektoria_koncowa);
 	smooth->Move();
     sr_ecp_msg->message("Take off the plate");
+    nose->next_state();
 }
 
 }
