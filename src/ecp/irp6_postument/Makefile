@@ -31,7 +31,7 @@ ecp_test_irp6p: ecp_t_test_irp6p.o ecp_g_force_pose_test.o  ecp_mp_s_schunk.o $(
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_irp6p_rcsc: ecp_t_rcsc_irp6p.o ecp_g_smooth.o ecp_g_force.o  ecp_st_go.o ecp_mp_s_schunk.o ecp_generator_t.o \
+ecp_irp6p_rcsc: ecp_t_rcsc_irp6p.o ecp_g_smooth.o ecp_g_smooth2.o ecp_g_force.o  ecp_st_go.o ecp_mp_s_schunk.o ecp_generator_t.o \
 		ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 	
