@@ -43,28 +43,28 @@ class GenForceReading : public ::google::protobuf::Message {
  public:
   GenForceReading();
   virtual ~GenForceReading();
-  
+
   GenForceReading(const GenForceReading& from);
-  
+
   inline GenForceReading& operator=(const GenForceReading& from) {
     CopyFrom(from);
     return *this;
   }
-  
+
   inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
     return _unknown_fields_;
   }
-  
+
   inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
     return &_unknown_fields_;
   }
-  
+
   static const ::google::protobuf::Descriptor* descriptor();
   static const GenForceReading& default_instance();
   void Swap(GenForceReading* other);
-  
+
   // implements Message ----------------------------------------------
-  
+
   GenForceReading* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
@@ -72,7 +72,7 @@ class GenForceReading : public ::google::protobuf::Message {
   void MergeFrom(const GenForceReading& from);
   void Clear();
   bool IsInitialized() const;
-  
+
   int ByteSize() const;
   bool MergePartialFromCodedStream(
       ::google::protobuf::io::CodedInputStream* input);
@@ -85,60 +85,60 @@ class GenForceReading : public ::google::protobuf::Message {
   void SharedDtor();
   void SetCachedSize(int size) const { _cached_size_ = size; }
   public:
-  
+
   const ::google::protobuf::Descriptor* GetDescriptor() const;
   const ::google::protobuf::Reflection* GetReflection() const;
-  
+
   // nested types ----------------------------------------------------
-  
+
   // accessors -------------------------------------------------------
-  
+
   // required sint32 fx = 1;
   inline bool has_fx() const;
   inline void clear_fx();
   static const int kFxFieldNumber = 1;
   inline ::google::protobuf::int32 fx() const;
   inline void set_fx(::google::protobuf::int32 value);
-  
+
   // required sint32 fy = 2;
   inline bool has_fy() const;
   inline void clear_fy();
   static const int kFyFieldNumber = 2;
   inline ::google::protobuf::int32 fy() const;
   inline void set_fy(::google::protobuf::int32 value);
-  
+
   // required sint32 fz = 3;
   inline bool has_fz() const;
   inline void clear_fz();
   static const int kFzFieldNumber = 3;
   inline ::google::protobuf::int32 fz() const;
   inline void set_fz(::google::protobuf::int32 value);
-  
+
   // required sint32 tx = 4;
   inline bool has_tx() const;
   inline void clear_tx();
   static const int kTxFieldNumber = 4;
   inline ::google::protobuf::int32 tx() const;
   inline void set_tx(::google::protobuf::int32 value);
-  
+
   // required sint32 ty = 5;
   inline bool has_ty() const;
   inline void clear_ty();
   static const int kTyFieldNumber = 5;
   inline ::google::protobuf::int32 ty() const;
   inline void set_ty(::google::protobuf::int32 value);
-  
+
   // required sint32 tz = 6;
   inline bool has_tz() const;
   inline void clear_tz();
   static const int kTzFieldNumber = 6;
   inline ::google::protobuf::int32 tz() const;
   inline void set_tz(::google::protobuf::int32 value);
-  
+
  private:
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   mutable int _cached_size_;
-  
+
   ::google::protobuf::int32 fx_;
   ::google::protobuf::int32 fy_;
   ::google::protobuf::int32 fz_;
@@ -149,7 +149,7 @@ class GenForceReading : public ::google::protobuf::Message {
   friend void protobuf_AssignDesc_ati3084_2eproto();
   friend void protobuf_ShutdownFile_ati3084_2eproto();
   ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
-  
+
   // WHY DOES & HAVE LOWER PRECEDENCE THAN != !?
   inline bool _has_bit(int index) const {
     return (_has_bits_[index / 32] & (1u << (index % 32))) != 0;
@@ -160,7 +160,7 @@ class GenForceReading : public ::google::protobuf::Message {
   inline void _clear_bit(int index) {
     _has_bits_[index / 32] &= ~(1u << (index % 32));
   }
-  
+
   void InitAsDefaultInstance();
   static GenForceReading* default_instance_;
 };
@@ -170,28 +170,28 @@ class SendBiasRequest : public ::google::protobuf::Message {
  public:
   SendBiasRequest();
   virtual ~SendBiasRequest();
-  
+
   SendBiasRequest(const SendBiasRequest& from);
-  
+
   inline SendBiasRequest& operator=(const SendBiasRequest& from) {
     CopyFrom(from);
     return *this;
   }
-  
+
   inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
     return _unknown_fields_;
   }
-  
+
   inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
     return &_unknown_fields_;
   }
-  
+
   static const ::google::protobuf::Descriptor* descriptor();
   static const SendBiasRequest& default_instance();
   void Swap(SendBiasRequest* other);
-  
+
   // implements Message ----------------------------------------------
-  
+
   SendBiasRequest* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
@@ -199,7 +199,7 @@ class SendBiasRequest : public ::google::protobuf::Message {
   void MergeFrom(const SendBiasRequest& from);
   void Clear();
   bool IsInitialized() const;
-  
+
   int ByteSize() const;
   bool MergePartialFromCodedStream(
       ::google::protobuf::io::CodedInputStream* input);
@@ -212,31 +212,31 @@ class SendBiasRequest : public ::google::protobuf::Message {
   void SharedDtor();
   void SetCachedSize(int size) const { _cached_size_ = size; }
   public:
-  
+
   const ::google::protobuf::Descriptor* GetDescriptor() const;
   const ::google::protobuf::Reflection* GetReflection() const;
-  
+
   // nested types ----------------------------------------------------
-  
+
   // accessors -------------------------------------------------------
-  
+
   // optional bool dummy = 1;
   inline bool has_dummy() const;
   inline void clear_dummy();
   static const int kDummyFieldNumber = 1;
   inline bool dummy() const;
   inline void set_dummy(bool value);
-  
+
  private:
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   mutable int _cached_size_;
-  
+
   bool dummy_;
   friend void  protobuf_AddDesc_ati3084_2eproto();
   friend void protobuf_AssignDesc_ati3084_2eproto();
   friend void protobuf_ShutdownFile_ati3084_2eproto();
   ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
-  
+
   // WHY DOES & HAVE LOWER PRECEDENCE THAN != !?
   inline bool _has_bit(int index) const {
     return (_has_bits_[index / 32] & (1u << (index % 32))) != 0;
@@ -247,7 +247,7 @@ class SendBiasRequest : public ::google::protobuf::Message {
   inline void _clear_bit(int index) {
     _has_bits_[index / 32] &= ~(1u << (index % 32));
   }
-  
+
   void InitAsDefaultInstance();
   static SendBiasRequest* default_instance_;
 };
@@ -257,28 +257,28 @@ class SendBiasReply : public ::google::protobuf::Message {
  public:
   SendBiasReply();
   virtual ~SendBiasReply();
-  
+
   SendBiasReply(const SendBiasReply& from);
-  
+
   inline SendBiasReply& operator=(const SendBiasReply& from) {
     CopyFrom(from);
     return *this;
   }
-  
+
   inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
     return _unknown_fields_;
   }
-  
+
   inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
     return &_unknown_fields_;
   }
-  
+
   static const ::google::protobuf::Descriptor* descriptor();
   static const SendBiasReply& default_instance();
   void Swap(SendBiasReply* other);
-  
+
   // implements Message ----------------------------------------------
-  
+
   SendBiasReply* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
@@ -286,7 +286,7 @@ class SendBiasReply : public ::google::protobuf::Message {
   void MergeFrom(const SendBiasReply& from);
   void Clear();
   bool IsInitialized() const;
-  
+
   int ByteSize() const;
   bool MergePartialFromCodedStream(
       ::google::protobuf::io::CodedInputStream* input);
@@ -299,31 +299,31 @@ class SendBiasReply : public ::google::protobuf::Message {
   void SharedDtor();
   void SetCachedSize(int size) const { _cached_size_ = size; }
   public:
-  
+
   const ::google::protobuf::Descriptor* GetDescriptor() const;
   const ::google::protobuf::Reflection* GetReflection() const;
-  
+
   // nested types ----------------------------------------------------
-  
+
   // accessors -------------------------------------------------------
-  
+
   // optional bool dummy = 1;
   inline bool has_dummy() const;
   inline void clear_dummy();
   static const int kDummyFieldNumber = 1;
   inline bool dummy() const;
   inline void set_dummy(bool value);
-  
+
  private:
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   mutable int _cached_size_;
-  
+
   bool dummy_;
   friend void  protobuf_AddDesc_ati3084_2eproto();
   friend void protobuf_AssignDesc_ati3084_2eproto();
   friend void protobuf_ShutdownFile_ati3084_2eproto();
   ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
-  
+
   // WHY DOES & HAVE LOWER PRECEDENCE THAN != !?
   inline bool _has_bit(int index) const {
     return (_has_bits_[index / 32] & (1u << (index % 32))) != 0;
@@ -334,7 +334,7 @@ class SendBiasReply : public ::google::protobuf::Message {
   inline void _clear_bit(int index) {
     _has_bits_[index / 32] &= ~(1u << (index % 32));
   }
-  
+
   void InitAsDefaultInstance();
   static SendBiasReply* default_instance_;
 };
@@ -348,11 +348,11 @@ class Ati3084 : public ::google::protobuf::Service {
   inline Ati3084() {};
  public:
   virtual ~Ati3084();
-  
+
   typedef Ati3084_Stub Stub;
-  
+
   static const ::google::protobuf::ServiceDescriptor* descriptor();
-  
+
   virtual void GetGenGForceReading(::google::protobuf::RpcController* controller,
                        const ::kiper::VoidMsg* request,
                        ::mrrocpp::edp::sensor::GenForceReading* response,
@@ -361,9 +361,9 @@ class Ati3084 : public ::google::protobuf::Service {
                        const ::kiper::VoidMsg* request,
                        ::mrrocpp::edp::sensor::SendBiasReply* response,
                        ::google::protobuf::Closure* done);
-  
+
   // implements Service ----------------------------------------------
-  
+
   const ::google::protobuf::ServiceDescriptor* GetDescriptor();
   void CallMethod(const ::google::protobuf::MethodDescriptor* method,
                   ::google::protobuf::RpcController* controller,
@@ -385,11 +385,11 @@ class Ati3084_Stub : public Ati3084 {
   Ati3084_Stub(::google::protobuf::RpcChannel* channel,
                    ::google::protobuf::Service::ChannelOwnership ownership);
   ~Ati3084_Stub();
-  
+
   inline ::google::protobuf::RpcChannel* channel() { return channel_; }
-  
+
   // implements Ati3084 ------------------------------------------
-  
+
   void GetGenGForceReading(::google::protobuf::RpcController* controller,
                        const ::kiper::VoidMsg* request,
                        ::mrrocpp::edp::sensor::GenForceReading* response,

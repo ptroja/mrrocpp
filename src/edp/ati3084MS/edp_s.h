@@ -9,6 +9,9 @@
 #ifndef _EDP_S_ATI3084MS_H
 #define _EDP_S_ATI3084MS_H
 
+#include <boost/thread/condition_variable.hpp>
+#include <boost/thread/mutex.hpp>
+
 #include <kiper/clients/AsioUdpClient.hpp>
 
 #include "edp/common/edp_irp6s_postument_track.h"
@@ -38,13 +41,33 @@ private:
 	static const char* SENSOR_BOARD_HOST;
 	static const unsigned int SENSOR_BOARD_PORT = 55555;
 
+	unsigned int ms_nr;// numer odczytu z czujnika
+	struct timespec start[9];
+	const bool FORCE_TEST_MODE;
+
+	kiper::ClientRpcController sendBiasController;
+	kiper::ClientRpcController genForceReadingController;
+
+	SendBiasReply sendBiasResponse;
+	GenForceReading genForceReading;
+
+	bool sendBiasReplyArrived;
+	boost::mutex sendBiasReplyArrivedMt;
+	boost::condition_variable sendBiasReplyArrivedCv;
+
+	bool getForceReadingReplyArrived;
+	boost::mutex getForceReadingReplyArrivedMt;
+	boost::condition_variable getForceReadingReplyArrivedCv;
+
+
 	void solve_transducer_controller_failure(void);
 	short do_init(void);
 	int open_port(void);
 	forceReadings getFT(int fd);
 	void sendBias();
 
-	void handleSendBiasReply();
+	void handleSendBiasReply(kiper::ClientRpcController& controller);
+	void handleGetGenForceReading(kiper::ClientRpcController& controller);
 public:
 	ATI3084_force(common::irp6s_postument_track_effector &_master);
 	virtual ~ATI3084_force();
@@ -57,7 +80,6 @@ public:
 }; // end: class vsp_sensor
 
 const char* ATI3084_force::SENSOR_BOARD_HOST = "192.168.18.200";
-
 
 } // namespace sensor
 } // namespace edp

@@ -42,27 +42,17 @@ namespace sensor {
 
 using namespace kiper;
 
-static unsigned int ms_nr=0;// numer odczytu z czujnika
-static struct timespec start[9];
-static const bool FORCE_TEST_MODE = true;
-
-static ClientRpcController sendBiasController;
-static SendBiasReply sendBiasResponse;
 
 // Rejstracja procesu VSP
 ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
-	force(_master), udpClient_(SENSOR_BOARD_HOST, SENSOR_BOARD_PORT), sensor_(&udpClient_) {
+	force(_master), udpClient_(SENSOR_BOARD_HOST, SENSOR_BOARD_PORT), sensor_(&udpClient_), ms_nr(0),
+	sendBiasReplyArrived(false), getForceReadingReplyArrived(false), FORCE_TEST_MODE(true) {
     std::cout << "ATI3084MS -> Start!" << std::endl;
 	if (FORCE_TEST_MODE) {
 	//	 	printf("Konstruktor VSP!\n");
 
 		ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
 		// 	printf("KONTRUKTOR EDP_S POCATEK\n");
-
-		uart=open_port();
-		//printf("2\n");
-		tcflush(uart,TCIFLUSH);
-
 
 		sendBias();
 	}
@@ -245,111 +235,90 @@ void ATI3084_force::solve_transducer_controller_failure(void)
 
 void ATI3084_force::sendBias()
 {
+    //TODO: Change to permanent callback
 	sensor_.SendBias(&sendBiasController, NULL, &sendBiasResponse,
-	  NewFunctorCallback(boost::bind(&ATI3084_force::handleSendBiasReply, this)));
+	  NewFunctorCallback(boost::bind(&ATI3084_force::handleSendBiasReply, this,
+	    boost::ref(sendBiasController))));
+	{
+		boost::unique_lock<boost::mutex> lock(sendBiasReplyArrivedMt);
+		while (!sendBiasReplyArrived) {
+			sendBiasReplyArrivedCv.wait(lock);
+		}
+		sendBiasReplyArrived = false;
+	}
 }
 
-forceReadings ATI3084_force::getFT(int fd)
-{
-	char query='q';
-	int i,r;
-	int current_bytes=14;
-	int iter_counter=0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
-
-	//	printf("bbb \n");
+forceReadings ATI3084_force::getFT(int fd) {
 	uint8_t reads[14];
 	forceReadings ftxyz;
+	bool received = false;
 
-	//	base_cycle = ClockCycles();
-
-
-
-	do
-	{
-		r=1;
-		iter_counter++;
-
-		if (write(fd, &query, 1) <0) {
-            std::cout << "Blad zapisu" << std::endl;
-        }
-		//current_cycle = ClockCycles();
-		while ((current_bytes>0)&&(r!=0))
-		{//printf("aaa: %d\n",r);
-			r=read(fd, &(reads[14-current_bytes]), current_bytes);
-
-			current_bytes-=r;
+	for (int iter_counter = 1; received == false; ++iter_counter) {
+		//TODO: change to permanent callback
+		sensor_.GetGenGForceReading(&genForceReadingController, NULL, &genForceReading,
+		  NewFunctorCallback(boost::bind(
+		  &ATI3084_force::handleGetGenForceReading, this, boost::ref(genForceReadingController))));
+		{
+			boost::unique_lock<boost::mutex> lock(getForceReadingReplyArrivedMt);
+			while (!getForceReadingReplyArrived) {
+				getForceReadingReplyArrivedCv.wait(lock);
+			}
+			getForceReadingReplyArrived = false;
 		}
-		//	current_cycle2 = ClockCycles();
-
 		if (r==0) {
-			if (iter_counter==1)
-			{
+			if (iter_counter==1) {
                 std::cout << "Nie otrzymano oczekiwanej ilosci znakow: " << r << std::endl;
 				sr_msg->message(lib::NON_FATAL_ERROR, "MK Force / Torque read error - check sensor controller");
 			}
 
 			solve_transducer_controller_failure();
-		}else {
+		} else {
 			if (iter_counter>1) {
 				sr_msg->message("MK Force / Torque sensor connection reastablished");
 			}
 		}
-	} while (r==0);
-
-
+	}
 
 	for (i=0;i<6;i++) {
 		ftxyz.ft[i]=(reads[2*i])<<8 | reads[2*i+1];
 	}
-
-
 	return ftxyz;
 }
 
-int ATI3084_force::open_port(void)
-{
-	int fd;
-	struct termios options;
-	struct termios org_port_options;
-	fd = open(PORT, O_RDWR);
-	if(fd == -1)
-	{
-        std::cout << "Can not open the port" << std::endl;
-		return -1;
+void ATI3084_force::handleSendBiasReply(ClientRpcController& controller) {
+	std::cout << "Received reply for sendBias" << std::endl;
+	if (controller.expired()) {
+		std::cout << "Timeout: sendBias()" << std::endl;
+	} else if (controller.failed()) {
+		std::cout << "Failed: sendBias()" << std::endl;
+		std::cout << "Reason : " << controller.errorCode() << ", " <<
+		  controller.errorMessage() << std::endl;
+	} else {
+		// Success, do nothing
 	}
-	//printf("3\n");
-	tcgetattr(fd, &org_port_options);
-	options = org_port_options;
-
-	cfsetispeed(&options, SPEED);
-	cfsetospeed(&options, SPEED);
-
-	options.c_cflag |= CLOCAL; // Local line - Do not change the owner
-	options.c_cflag |= CREAD; // Enable receiver
-	options.c_cflag &= ~PARENB; // parity - enabled
-	options.c_cflag &= ~PARODD; // Odd parity - even
-	options.c_cflag &= ~CSTOPB; // stop bit - 1
-	options.c_cflag &= ~CSIZE; // bit mask for data bits
-	options.c_cflag |= CS8; // data bits - 8
-	options.c_lflag &= ~ECHO; // Echo the Terminal screen - off
-	options.c_lflag &= ~ICANON; // Canonical Input else raw - disable
-	options.c_iflag &= ~INPCK; // Parity Check - disable
-	options.c_iflag &= ~IGNBRK; // Parity Errors - Ignore
-	options.c_iflag &= ~PARMRK; // Mark Parity Errors - disable
-	options.c_iflag &= ~ISTRIP; // Strip Parity bits - disable
-	options.c_iflag &= ~IXON; // Software outgoing flow control - disable
-	options.c_iflag &= ~IXOFF; // Software incoming flow control - disable
-	options.c_oflag &= ~OPOST; // Post process output (not set = raw output)
-	options.c_cc[VTIME] = 5;
-	options.c_cc[VMIN] = 0;
-	tcsetattr(fd, TCSADRAIN, &options);
-	fcntl(fd, F_SETFL, 0);
-	//	printf("4\n");
-	return fd;
+	{
+		boost::lock_guard<boost::mutex> lock(sendBiasReplyArrivedMt);
+		sendBiasReplyArrived = true;
+	}
+	sendBiasReplyArrivedCv.notify_one();
 }
 
-void ATI3084_force::handleSendBiasReply() {
-	std::cout << "Bias sent!!!" << std::endl;
+void ATI3084_force::handleGetGenForceReading(ClientRpcController& controller) {
+	std::cout << "Received reply for getGenForceReading" << std::endl;
+	if (controller.expired()) {
+		std::cout << "Timeout: getGenForceReading()" << std::endl;
+	} else if (controller.failed()) {
+		std::cout << "Failed: getGenForceReading()" << std::endl;
+		std::cout << "Reason : " << controller.errorCode() << ", " <<
+		  controller.errorMessage() << std::endl;
+	} else {
+		// Success, do nothing
+	}
+	{
+		boost::lock_guard<boost::mutex> lock(getForceReadingReplyArrivedMt);
+		getForceReadingReplyArrived = true;
+	}
+	getForceReadingReplyArrivedCv.notify_one();
 }
 
 force* return_created_edp_force_sensor(common::irp6s_postument_track_effector &_master)
