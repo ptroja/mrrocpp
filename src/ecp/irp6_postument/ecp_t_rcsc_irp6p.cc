@@ -167,7 +167,7 @@ void rcsc::main_task_algorithm(void)
 										delete[] path1;
 										sg->Move();
 										break;
-									/*case ecp_mp::task::ECP_GEN_SMOOTH2:
+									case ecp_mp::task::ECP_GEN_SMOOTH2:
 										size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 										path1 = new char[size];
 										// Stworzenie sciezki do pliku.
@@ -177,7 +177,7 @@ void rcsc::main_task_algorithm(void)
 										//	printf("\nPOSTUMENT ECP_GEN_SMOOTH2 :%s\n\n", path1);
 										delete[] path1;
 										sg2->Move();
-										break;*/
+										break;
 									default:
 										break;
 		} // end switch
