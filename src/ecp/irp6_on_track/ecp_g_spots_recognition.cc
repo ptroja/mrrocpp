@@ -81,6 +81,8 @@ bool spots::next_step()
     	//beep();
     	std::cout<<"\a"<<std::endl;
     	std::cout<<"\a"<<std::endl;
+    	std::cout<<"\a"<<std::endl;
+    	std::cout<<"\a"<<std::endl;
 		return false;
 //<<<<<<< .mine
     }
@@ -94,6 +96,7 @@ bool spots::next_step()
 		get_pic();
 		save_position();
 		std::cout<<"\a"<<std::endl;
+    	std::cout<<"\a"<<std::endl;
 
 		return false;
 }

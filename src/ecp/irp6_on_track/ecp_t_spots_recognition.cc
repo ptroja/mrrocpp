@@ -108,6 +108,9 @@ void spots_recognition::main_task_algorithm(void)
 	    /*!
 	     * nastepnie nalezy odczekac ok 1s, zanim mozna rozpoczac sesje zdjeciowa
 	     */
+	    //beep();
+	    std::cout<<"\a"<<std::endl;
+
 	    sleep(2);
 
 	    /*!

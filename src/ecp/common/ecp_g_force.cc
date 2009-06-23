@@ -2067,6 +2067,14 @@ bool sr_nose_run::next_step()
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 	the_robot->EDP_data.instruction_type = lib::SET_GET;
 
+	//Kwantowanie sily
+	for (int i=0; i<12; i++)
+	{
+		int temp = (int)the_robot->EDP_data.current_force_xyz_torque_xyz[i];
+		the_robot->EDP_data.current_force_xyz_torque_xyz[i] = (double)temp;
+	}
+
+
 	// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 
 	if (node_counter==1)
@@ -2112,14 +2120,19 @@ bool sr_nose_run::check_and_decide()
 	bool cond = true;
 
 	for (int i=0; i<6; i++)
-		cond = cond && (fabs(the_robot->EDP_data.current_force_xyz_torque_xyz[i])<0.8);
+	{
+		cond = cond && (fabs(the_robot->EDP_data.current_force_xyz_torque_xyz[i])<2);
+//		if (fabs(the_robot->EDP_data.current_force_xyz_torque_xyz[i])>=0.8)
+//		fprintf(stderr, "%d -> %.2f\n", i, the_robot->EDP_data.current_force_xyz_torque_xyz[i]);
+	}
+	//std::cerr << std::endl;
 
 	if(cond)
 		iter_while_idle++;
 	else
 		iter_while_idle = 0;
-
-	if(iter_while_idle>200)
+//std::cerr << iter_while_idle << std::endl;
+	if(iter_while_idle>150)
 	{
 		iter_while_idle = 0;
 		return false;
