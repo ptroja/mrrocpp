@@ -2526,8 +2526,8 @@ bool smooth_cubic_spline::next_step()
 		double C;
 		double D;
 		// Tablice do przechowywania punktowych wartosci przyspieszen i predkosci
-		double acc[6];
-		double vel[6];
+		double acc[MAX_SERVOS_NR];
+		double vel[MAX_SERVOS_NR];
 
 		switch (tip.arm_type) {
 			// ---------------------------------------------------------------------------------------------------------
@@ -2536,7 +2536,7 @@ bool smooth_cubic_spline::next_step()
 
 				for (i = 0; i <MAX_SERVOS_NR; i++) {
 					A = (t(j+1, i) - node_counter) / (t(j+1, i) - t(j, i));
-B					= 1-A;
+					B = 1-A;
 					C = (1.0/6.0)*(A*A*A-A)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
 					D = (1.0/6.0)*(B*B*B-B)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
 
@@ -2566,7 +2566,7 @@ B					= 1-A;
 
 				for (i = 0; i <MAX_SERVOS_NR; i++) {
 					A = (t(j+1, i) - node_counter) / (t(j+1, i) - t(j, i));
-B					= 1-A;
+					B = 1-A;
 					C = (1.0/6.0)*(A*A*A-A)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
 					D = (1.0/6.0)*(B*B*B-B)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
 
@@ -2596,7 +2596,7 @@ B					= 1-A;
 
 				for (i = 0; i < 7; i++) {
 					A = (t(j+1, i) - node_counter) / (t(j+1, i) - t(j, i));
-B					= 1-A;
+					B					= 1-A;
 					C = (1.0/6.0)*(A*A*A-A)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
 					D = (1.0/6.0)*(B*B*B-B)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
 
@@ -2628,7 +2628,7 @@ B					= 1-A;
 
 				for (i = 0; i < 6; i++) {
 					A = (t(j+1, i) - node_counter) / (t(j+1, i) - t(j, i));
-B					= 1-A;
+					B = 1-A;
 					C = (1.0/6.0)*(A*A*A-A)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
 					D = (1.0/6.0)*(B*B*B-B)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
 
