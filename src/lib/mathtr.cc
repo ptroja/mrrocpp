@@ -523,7 +523,7 @@ void Homog_matrix::get_xyz_euler_zyz(double t[6]) const
 {
 	double alfa, beta, gamma; // Katy Euler'a Z-Y-Z
 	//const double EPS=1.0E-10;
-	const double EPS=0.1;
+	const double EPS=0.000001;
 	// Sprawdzenie czy cos(beta) == 1.
 	if (matrix_m[2][2] < 1+EPS && matrix_m[2][2] > 1-EPS)
 	{
