@@ -1350,8 +1350,10 @@ doContent(XML_Parser parser,
 	  if (!tag)
 	    return XML_ERROR_NO_MEMORY;
 	  tag->buf = (char *)malloc(INIT_TAG_BUF_SIZE);
-	  if (!tag->buf)
+	  if (!tag->buf) {
+		  free(tag);
 	    return XML_ERROR_NO_MEMORY;
+	  }
 	  tag->bufEnd = tag->buf + INIT_TAG_BUF_SIZE;
 	}
 	tag->bindings = 0;
