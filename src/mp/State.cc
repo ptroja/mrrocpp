@@ -259,7 +259,7 @@ char* State::getStringArgument() const
 
 //----------------------------------------------------------------------------------------------------------
 
-void State::setTransition(char *cond, char *target, lib::configurator &_config)
+void State::setTransition(const char *cond, const char *target, lib::configurator &_config)
 {
 	Transition *tempTr = new Transition(cond, target, _config);
 	stateTransitions->push_back(*tempTr);
@@ -271,7 +271,7 @@ void State::setProperTransitionResult(bool result)
 {
 	for(std::list<Transition>::iterator it = stateTransitions->begin(); it != stateTransitions->end(); ++it)
 	{
-		if(!strcmp((*it).getConditionDescription(), "stateOperationResult"))
+		if(((*it).getConditionDescription()).c_str() == "stateOperationResult")
 			(*it).setConditionResult(result);
 	}
 }

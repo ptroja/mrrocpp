@@ -13,31 +13,31 @@ class CubeState
 {
 protected:
 
-	
+
 public:
 	// okresla jak sciany kostki sa zorientowane wzgledem chwytaka truck'a z punkltu widzenia chwytaka
 	CUBE_COLOR up, down, front, rear, left, right;
-	
-	char cube_tab[6][9]; // NAZWA DO ZMIANY
+
+	char cube_tab[6][9]; // TODO: NAZWA DO ZMIANY
 
 	friend class rubik_cube_solver;
     // konstruktory
     CubeState();
-    CubeState(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is, 
+    CubeState(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is,
 		CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is);
-		
+
 	// kontruktor kopiujacy
 	CubeState (const CubeState& cs);
-	
+
 	// operatory
 	CubeState& operator= (const CubeState& cs);
-	
+
 	// metody
 	// okresla jak sciany kostki sa zorientowane wzgledem chwytaka truck'a z punkltu widzenia chwytaka
-	void set_state(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is, 
+	void set_state(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is,
 		CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is);
 	void set_state(CubeState &cubeState, int turnAngle);
-		
+
 	void print_face_color(CUBE_COLOR face_name);
 	void print_cube_colors();
 	CUBE_COLOR getUp() const;
@@ -46,7 +46,7 @@ public:
 	CUBE_COLOR getRear() const;
 	CUBE_COLOR getLeft() const;
 	CUBE_COLOR getRight() const;
-		
+
 };
 
 } // namespace common

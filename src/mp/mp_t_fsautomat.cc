@@ -238,7 +238,7 @@ common::State * fsautomat::createState(xmlNode *stateNode)
 			cond = xmlGetProp(child_node, (const xmlChar *) "condition");
 			trans = xmlGetProp(child_node, (const xmlChar *) "target");
 			if (cond && trans)
-				actState->setTransition((char *) cond, (char *) trans, config);
+				actState->setTransition((const char *) cond, (const char *) trans, config);
 		}
 	}
 	xmlFree(stateType);

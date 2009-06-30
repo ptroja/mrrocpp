@@ -14,15 +14,15 @@ class Transition
 {
 	public:
 		//Transition();
-		Transition(char *cond, char *targetID, lib::configurator &_config);
+		Transition(const char *cond, const char *targetID, lib::configurator &_config);
 		Transition(const Transition &transition);
 		~Transition();
 
 		void showContent();
 		bool getConditionResult();
 		void setConditionResult(bool result);
-		char * getTargetID(StateHeap &sh) const;
-		char * getConditionDescription() const;
+		const char * getTargetID(StateHeap &sh) const;
+		std::string getConditionDescription() const;
 
 	private:
 		char *targetID;

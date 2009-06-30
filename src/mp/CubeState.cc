@@ -14,21 +14,18 @@ CubeState::CubeState ()
 	rear = UNKNOWN_CUBE_COLOR;
 	left = UNKNOWN_CUBE_COLOR;
 	right = UNKNOWN_CUBE_COLOR;
-};
+}
 
-
-CubeState::CubeState (CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is, 
+CubeState::CubeState (CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is,
 	CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is)
 {
 	set_state(up_is, down_is, front_is, rear_is, left_is, right_is);
-};
-
+}
 
 CubeState::CubeState (const CubeState& cs)
 {
 	set_state(cs.up, cs.down, cs.front, cs.rear, cs.left, cs.right);
-};
-
+}
 
 CubeState& CubeState::operator= (const CubeState& cs)
 {
@@ -36,10 +33,9 @@ CubeState& CubeState::operator= (const CubeState& cs)
 		this->set_state(cs.up, cs.down, cs.front, cs.rear, cs.left, cs.right);
 
 	return *this;
-};
+}
 
-
-void CubeState::set_state(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is, 
+void CubeState::set_state(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is,
 		CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is)
 {
 	up = up_is;
@@ -48,12 +44,12 @@ void CubeState::set_state(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front
 	rear = rear_is;
 	left = left_is;
 	right = right_is;
-};
+}
 
 void CubeState::set_state(CubeState &cubeState, int turnAngle)
 {
 	switch(turnAngle)
-	{		
+	{
 		case 90:
 			this->set_state(cubeState.left, cubeState.right, cubeState.up, cubeState.down,
 					cubeState.front, cubeState.rear);
@@ -73,8 +69,7 @@ void CubeState::set_state(CubeState &cubeState, int turnAngle)
 		default:
 			break;
 	}
-};
-
+}
 
 void CubeState::print_face_color(CUBE_COLOR face_name)
 {
@@ -99,10 +94,9 @@ void CubeState::print_face_color(CUBE_COLOR face_name)
 			printf("BLUE");
 		break;
 		default:
-		break;			
-	}	
-};
-
+		break;
+	}
+}
 
 void CubeState::print_cube_colors()
 {
@@ -119,7 +113,7 @@ void CubeState::print_cube_colors()
 	printf(", right: ");
 	print_face_color(right);
 	printf("\n");
-};
+}
 
 CUBE_COLOR read_cube_color(char input_char)
 {
@@ -145,9 +139,9 @@ CUBE_COLOR read_cube_color(char input_char)
 		break;
 		default:
 			return UNKNOWN_CUBE_COLOR;
-		break;			
-	}	
-};
+		break;
+	}
+}
 
 CUBE_COLOR CubeState::getUp() const
 {

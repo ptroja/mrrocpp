@@ -9,7 +9,7 @@ namespace mp {
 namespace common {
 
 
-Transition::Transition(char *cond, char *targetID, lib::configurator &_config)
+Transition::Transition(const char *cond, const char *targetID, lib::configurator &_config)
 {
 	int size = strlen(targetID) + 1;
 	this->targetID = new char[size];
@@ -42,7 +42,7 @@ void Transition::setConditionResult(bool result)
 	condition->setResult(result);
 }
 
-char * Transition::getTargetID(StateHeap &sh) const
+const char * Transition::getTargetID(StateHeap &sh) const
 {
 	// TODO: reimplement ">>" operator as XML element
 	const char *sp = ">>";
@@ -56,9 +56,9 @@ char * Transition::getTargetID(StateHeap &sh) const
 		return targetID;
 }
 
-char * Transition::getConditionDescription() const
+std::string Transition::getConditionDescription() const
 {
-	return condition->getCondDesc();
+	return std::string(condition->getCondDesc());
 }
 
 void Transition::showContent()

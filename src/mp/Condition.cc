@@ -76,24 +76,26 @@ Condition::RELATIONAL_OPERATOR Condition::splitCondExpr()
 	// TODO: memory leak
 	char *myExpr = strdup(condition);
 	char *res;
-	if(myExpr != NULL)
 
-	for(int i=0; i<6; i++)
+	if(myExpr != NULL)
 	{
-		if((res = strstr(myExpr, opc[i])) != NULL)
+		for(int i=0; i<6; i++)
 		{
-			if(strlen(opc[i]) == 2)
-				strncpy(res, "  ", 2);
-			else
-				strncpy(res, " ", 1);
-			temp = strtok(myExpr, " ");
-			lhValue = new char[strlen(temp)];
-			strcpy(lhValue, temp);
-			temp = strtok(NULL, " ");
-			rhValue = new char[strlen(temp)];
-			strcpy(rhValue, temp);
-			//printf("lv: %s\nrv: %s\n", lhValue, rhValue);
-			return (Condition::RELATIONAL_OPERATOR)i;
+			if((res = strstr(myExpr, opc[i])) != NULL)
+			{
+				if(strlen(opc[i]) == 2)
+					strncpy(res, "  ", 2);
+				else
+					strncpy(res, " ", 1);
+				temp = strtok(myExpr, " ");
+				lhValue = new char[strlen(temp)];
+				strcpy(lhValue, temp);
+				temp = strtok(NULL, " ");
+				rhValue = new char[strlen(temp)];
+				strcpy(rhValue, temp);
+				//printf("lv: %s\nrv: %s\n", lhValue, rhValue);
+				return (Condition::RELATIONAL_OPERATOR)i;
+			}
 		}
 	}
 	return Condition::WITHOUT_OP;
