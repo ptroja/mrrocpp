@@ -40,20 +40,20 @@ void pcbird::task_initialization(void)
 		sensor_m[lib::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird(lib::SENSOR_PCBIRD, "[vsp_pcbird]", *this);
 		// Configure sensor.
 		sensor_m[lib::SENSOR_PCBIRD]->configure_sensor();
-    // Create an adequate robot. - depending on the ini section name.
-    if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
-    {
-        ecp_m_robot = new irp6ot::ecp_irp6_on_track_robot (*this);
-        sr_ecp_msg->message("IRp6ot loaded");
-    }
-    else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
-    {
-        ecp_m_robot = new irp6p::ecp_irp6_postument_robot (*this);
-        sr_ecp_msg->message("IRp6p loaded");
-    }
+		// Create an adequate robot. - depending on the ini section name.
+		if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
+		{
+			ecp_m_robot = new irp6ot::ecp_irp6_on_track_robot (*this);
+			sr_ecp_msg->message("IRp6ot loaded");
+		}
+		else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
+		{
+			ecp_m_robot = new irp6p::ecp_irp6_postument_robot (*this);
+			sr_ecp_msg->message("IRp6p loaded");
+		}
 		// Create generator and pass sensor to it.
 		cvg = new generator::cvfradia(*this);
-	 	cvg->sensor_m = sensor_m;
+		cvg->sensor_m = sensor_m;
 	}
 	catch(...)
 	{

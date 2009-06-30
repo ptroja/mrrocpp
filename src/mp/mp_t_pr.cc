@@ -1,8 +1,8 @@
 // ------------------------------------------------------------------------
 //             mp_m_pr.cc - powielanie rysunku - wersja wielorobotowa
-// 
+//
 //                      MASTER PROCESS (MP) - main()
-// 
+//
 // ------------------------------------------------------------------------
 
 
@@ -59,17 +59,17 @@ pr::pr(lib::configurator &_config) : task(_config)
 }
 
 // methods for mp template to redefine in concrete class
-void pr::task_initialization(void) 
+void pr::task_initialization(void)
 {
 	// Powolanie czujnikow
-	sensor_m[lib::SENSOR_FORCE_ON_TRACK] = 
+	sensor_m[lib::SENSOR_FORCE_ON_TRACK] =
 		new ecp_mp::sensor::schunk (lib::SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
 
-	sensor_m[lib::SENSOR_FORCE_POSTUMENT] = 
+	sensor_m[lib::SENSOR_FORCE_POSTUMENT] =
 		new ecp_mp::sensor::schunk (lib::SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
 
-	// Konfiguracja wszystkich czujnikow	
-	for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	// Konfiguracja wszystkich czujnikow
+	for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin();
 	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -79,24 +79,24 @@ void pr::task_initialization(void)
 	usleep(1000*100);
 	sr_ecp_msg->message("MP pr loaded");
 
-};
+}
 
 
 void pr::main_task_algorithm(void)
 {
 
-	generator::nose_run_force mp_nrf_gen(*this, 8); 
+	generator::nose_run_force mp_nrf_gen(*this, 8);
 	mp_nrf_gen.robot_m = robot_m;
 	mp_nrf_gen.sensor_m = sensor_m;
 	generator::drawing_teach_in_force mp_dtif_gen(*this, 8);
 	mp_dtif_gen.robot_m = robot_m;
 	mp_dtif_gen.sensor_m = sensor_m;
 	// printf("przed wait for start \n");
-	// Oczekiwanie na zlecenie START od UI  
+	// Oczekiwanie na zlecenie START od UI
 
 
 
-	for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin();
 	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika

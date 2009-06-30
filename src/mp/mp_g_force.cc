@@ -98,7 +98,7 @@ bool tff_single_robot_nose_run::next_step()
 
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 
-		for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
@@ -250,7 +250,7 @@ bool tff_nose_run::next_step()
 	//	cout << "next_step" << endl;
 
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
-		for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
@@ -313,7 +313,7 @@ bool haptic::first_step()
 	irp6p->communicate = true;
 
 	td.internode_step_no = step_no;
-	td.value_in_step_no = td.internode_step_no - 2;	
+	td.value_in_step_no = td.internode_step_no - 2;
 	irp6ot->ecp_td.mp_command = lib::NEXT_POSE;
 	irp6ot->ecp_td.instruction_type = lib::GET;
 	irp6ot->ecp_td.get_type = ARM_DV;
@@ -346,10 +346,10 @@ bool haptic::first_step()
 		 */
 		irp6ot->ecp_td.next_inertia[i] = FORCE_INERTIA;
 		irp6ot->ecp_td.next_inertia[i+3] = TORQUE_INERTIA;
-		
+
 //		irp6ot->ecp_td.next_inertia[i] = 0;
 //		irp6ot->ecp_td.next_inertia[i+3] = 0;
-		
+
 	}
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
@@ -390,7 +390,7 @@ bool haptic::first_step()
 
 		irp6p->ecp_td.next_inertia[i] = FORCE_INERTIA;
 		irp6p->ecp_td.next_inertia[i+3] = TORQUE_INERTIA;
-		
+
 //		irp6p->ecp_td.next_inertia[i] = 0;
 //		irp6p->ecp_td.next_inertia[i+3] = 0;
 
@@ -647,7 +647,7 @@ bool tff_rubik_grab::next_step()
 
 
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
-		for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
@@ -854,7 +854,7 @@ bool tff_rubik_face_rotate::next_step()
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
-		for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
@@ -1063,7 +1063,7 @@ bool tff_gripper_approach::next_step()
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
-		for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
@@ -1242,7 +1242,7 @@ bool nose_run_force::next_step()
 
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		// wylaczenie pomiaru sily
-		for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
@@ -1450,35 +1450,35 @@ bool drawing_teach_in_force::first_step()
 
 		/*
 		 irp6ot->ecp_td.force_axis_quantity=3;
-		 
+
 		 irp6ot->ecp_td.set_arm_type = POSE_FORCE_LINEAR;
 		 irp6ot->ecp_td.get_arm_type = POSE_FORCE_LINEAR;
 		 irp6ot->ecp_td.motion_type = lib::ABSOLUTE;
 		 irp6ot->ecp_td.motion_steps = td.internode_step_no;
 		 irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
-		 
+
 		 irp6ot->ecp_td.ECPtoEDP_force_coordinates[0]=0;
 		 irp6ot->ecp_td.ECPtoEDP_force_coordinates[1]=0;
 		 irp6ot->ecp_td.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
-		 
+
 		 for (int j=0; j<6 ; j++)	{
 		 irp6ot->ecp_td.position_increment[j]=0.0;
 		 }
 		 // zerowy przyrost pozycji
-		 
+
 		 irp6ot->ecp_td.dyslocation_matrix[0][0]=1;
 		 irp6ot->ecp_td.dyslocation_matrix[1][1]=1;
 		 irp6ot->ecp_td.dyslocation_matrix[2][2]=1;
 		 irp6ot->ecp_td.dyslocation_matrix[3][3]=0;
 		 irp6ot->ecp_td.dyslocation_matrix[4][4]=0;
 		 irp6ot->ecp_td.dyslocation_matrix[5][5]=0;
-		 
+
 		 // postument
 		 irp6p->ecp_td.mp_command = lib::NEXT_POSE;
 		 irp6p->ecp_td.instruction_type = lib::GET;
 		 irp6p->ecp_td.get_type = ARM_DV;
 		 irp6p->ecp_td.set_type = ARM_DV;
-		 
+
 		 irp6p->ecp_td.set_arm_type = lib::JOINT;
 		 irp6p->ecp_td.get_arm_type = lib::JOINT;
 		 irp6p->ecp_td.motion_type = lib::ABSOLUTE;
@@ -1513,7 +1513,7 @@ bool drawing_teach_in_force::next_step()
 {
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		// wylaczenie pomiaru sily
-		for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
@@ -1572,15 +1572,15 @@ bool drawing_teach_in_force::next_step()
 				td.value_in_step_no = td.internode_step_no - 2;
 				/*
 				 irp6p->ecp_td.force_axis_quantity=1;
-				 
+
 				 irp6p->ecp_td.motion_steps = td.internode_step_no;
 				 irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
-				 
+
 				 // inkrementacja numeru iteracji dla biezacego stanu
 				 in_state_iteration++;
-				 
+
 				 #define ST2_LOW_SEGMENT 20
-				 
+
 				 if (in_state_iteration < ST2_LOW_SEGMENT)
 				 {
 				 irp6ot->ecp_td.ECPtoEDP_force_coordinates[2]= (short) (MIN_SILA_DOCISKUEDP +
@@ -1592,8 +1592,8 @@ bool drawing_teach_in_force::next_step()
 				 irp6ot->ecp_td.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
 				 irp6p->ecp_td.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP;
 				 }
-				 
-				 
+
+
 				 irp6ot->ecp_td.position_increment[0]=tip.coordinates[0];
 				 // ponizej wersja jednorobotowa
 				 // irp6ot->ecp_td.position_increment[1]=tip.coordinates[1];
@@ -1603,8 +1603,8 @@ bool drawing_teach_in_force::next_step()
 				 irp6ot->ecp_td.position_increment[3]=0.0;
 				 irp6ot->ecp_td.position_increment[4]=0.0;
 				 irp6ot->ecp_td.position_increment[5]=0.0;
-				 
-				 
+
+
 				 irp6p->ecp_td.position_increment[0]=tip.coordinates[0];
 				 // ponizej wersja jednorobotowa
 				 // irp6ot->ecp_td.position_increment[1]=tip.coordinates[1];
@@ -1614,10 +1614,10 @@ bool drawing_teach_in_force::next_step()
 				 irp6p->ecp_td.position_increment[3]=0.0;
 				 irp6p->ecp_td.position_increment[4]=0.0;
 				 irp6p->ecp_td.position_increment[5]=0.0;
-				 
+
 				 // drugi robot - usunac w wersji jednorobotowej
 				 conv_summar_inc+=tip.coordinates[1];
-				 
+
 				 if ((tip.extra_info == 3)||(tip.extra_info == 4)||(tip.extra_info == 5)) {
 				 // nauczona trajektoria przeszla w unoszenie
 				 next_gen_state = 3;
@@ -1639,23 +1639,23 @@ bool drawing_teach_in_force::next_step()
 
 				/*
 				 irp6ot->ecp_td.force_axis_quantity=0;
-				 
+
 				 irp6ot->ecp_td.motion_steps = td.internode_step_no;
 				 irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
-				 
+
 				 irp6ot->ecp_td.position_increment[0]=0.0;
 				 irp6ot->ecp_td.position_increment[1]=0.0;
 				 irp6ot->ecp_td.position_increment[2]=0.01;
 				 irp6ot->ecp_td.position_increment[3]=0.0;
 				 irp6ot->ecp_td.position_increment[4]=0.0;
 				 irp6ot->ecp_td.position_increment[5]=0.0;
-				 
-				 
+
+
 				 irp6p->ecp_td.force_axis_quantity=0;
-				 
+
 				 irp6p->ecp_td.motion_steps = td.internode_step_no;
 				 irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
-				 
+
 				 irp6p->ecp_td.position_increment[0]=0.0;
 				 irp6p->ecp_td.position_increment[1]=0.0;
 				 irp6p->ecp_td.position_increment[2]=0.01;
@@ -1679,10 +1679,10 @@ bool drawing_teach_in_force::next_step()
 
 				/*
 				 irp6ot->ecp_td.force_axis_quantity = 0;
-				 
+
 				 irp6ot->ecp_td.motion_steps = td.internode_step_no;
 				 irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
-				 
+
 				 irp6ot->ecp_td.position_increment[0]=tip.coordinates[0];
 				 // ponziej wersja jednorobotowa
 				 // irp6ot->ecp_td.position_increment[1]=tip.coordinates[1];
@@ -1692,13 +1692,13 @@ bool drawing_teach_in_force::next_step()
 				 irp6ot->ecp_td.position_increment[3]=0.0;
 				 irp6ot->ecp_td.position_increment[4]=0.0;
 				 irp6ot->ecp_td.position_increment[5]=0.0;
-				 
-				 
+
+
 				 irp6p->ecp_td.force_axis_quantity = 0;
-				 
+
 				 irp6p->ecp_td.motion_steps = td.internode_step_no;
 				 irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
-				 
+
 				 irp6p->ecp_td.position_increment[0]=tip.coordinates[0];
 				 // ponziej wersja jednorobotowa
 				 // irp6ot->ecp_td.position_increment[1]=tip.coordinates[1];
@@ -1746,19 +1746,19 @@ bool drawing_teach_in_force::next_step()
 					 irp6ot->ecp_td.motion_steps = td.internode_step_no;
 					 irp6ot->ecp_td.value_in_step_no = td.value_in_step_no;
 					 irp6ot->ecp_td.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP_OPADANIE;
-					 
+
 					 irp6ot->ecp_td.position_increment[0]=0.0;
 					 irp6ot->ecp_td.position_increment[1]=0.0;
 					 irp6ot->ecp_td.position_increment[2]=0.0;
 					 irp6ot->ecp_td.position_increment[3]=0.0;
 					 irp6ot->ecp_td.position_increment[4]=0.0;
 					 irp6ot->ecp_td.position_increment[5]=0.0;
-					 
+
 					 irp6p->ecp_td.force_axis_quantity=1;
 					 irp6p->ecp_td.motion_steps = td.internode_step_no;
 					 irp6p->ecp_td.value_in_step_no = td.value_in_step_no;
 					 irp6p->ecp_td.ECPtoEDP_force_coordinates[2]=SILA_DOCISKUEDP_OPADANIE;
-					 
+
 					 irp6p->ecp_td.position_increment[0]=0.0;
 					 irp6p->ecp_td.position_increment[1]=0.0;
 					 irp6p->ecp_td.position_increment[2]=0.0;

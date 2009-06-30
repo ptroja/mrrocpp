@@ -40,7 +40,7 @@ void speaking::task_initialization(void)
         new ecp_mp::sensor::mic(lib::SENSOR_MIC, "[vsp_mic]", *this);
 
     // Konfiguracja wszystkich czujnikow
-    for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+    for (ecp_mp::sensor_map::iterator::iterator sensor_m_iterator = sensor_m.begin();
             sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
     {
         sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika

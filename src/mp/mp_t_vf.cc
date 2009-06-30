@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------
-// 
+//
 //                      MASTER PROCESS (MP) - main()
-// 
+//
 // ------------------------------------------------------------------------
 
 
@@ -33,17 +33,17 @@ vis_force::vis_force(lib::configurator &_config) : task(_config)
 }
 
 // methods fo mp template to redefine in concete class
-void vis_force::task_initialization(void) 
+void vis_force::task_initialization(void)
 {
 	// Powolanie czujnikow
-	sensor_m[lib::SENSOR_FORCE_ON_TRACK] = 
+	sensor_m[lib::SENSOR_FORCE_ON_TRACK] =
 		new ecp_mp::sensor::schunk (lib::SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
 
-	sensor_m[lib::SENSOR_CAMERA_SA] = 
+	sensor_m[lib::SENSOR_CAMERA_SA] =
 		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_SA, "[vsp2_section]", *this);
 
-	// Konfiguracja wszystkich czujnikow	
-	for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	// Konfiguracja wszystkich czujnikow
+	for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin();
 	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -58,7 +58,7 @@ void vis_force::task_initialization(void)
 
 void vis_force::main_task_algorithm(void)
 {
-	// Utworzenie generatora 
+	// Utworzenie generatora
 	generator::vis_force vf_gen(*this,8);
 	vf_gen.robot_m = robot_m;
 	vf_gen.sensor_m = sensor_m;

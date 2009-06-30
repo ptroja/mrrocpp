@@ -52,7 +52,7 @@ void trajectory_reproduce::get_current_position(double current_position[6]){
     the_robot->get_reply();
     // Przepisanie obecnego polozenia robota do bufora w zaleznosci od rodzaju wspolrzednych.
     memcpy(current_position, the_robot->EDP_data.current_motor_arm_coordinates, MAX_SERVOS_NR*sizeof(double));
-    }; // end: get_current_position
+    } // end: get_current_position
 
 /******************** PREPARE GENERATOR FOR MOTION  ************************/
 void trajectory_reproduce::prepare_generator_for_motion(void){
@@ -60,7 +60,7 @@ void trajectory_reproduce::prepare_generator_for_motion(void){
     initiate_pose_list();
     // Wyczyszczenie listy z pozycjami posrednimi.
     flush_interpose_list();
-    }; // end: prepare_generator_for_motion
+    } // end: prepare_generator_for_motion
 
 /*********************** CREATE COMMAND FOR POSE **************************/
 void trajectory_reproduce::create_command_for_pose(common::ecp_taught_in_pose& tip) {
@@ -110,9 +110,9 @@ void trajectory_reproduce::create_command_for_pose(common::ecp_taught_in_pose& t
         break;
     default:
         break;
-        }; // end: switch
+        } // end: switch
     the_robot->create_command();
-    }; // end: create_command_for_pose
+    } // end: create_command_for_pose
 
 
 /******************************** FIRST STEP ***********************************/
@@ -137,7 +137,7 @@ bool trajectory_reproduce::first_step (){
         the_sensor = (ecp_mp::sensor::force*)((sensor_m.begin())->second);
         // Sprawdzenie odczytow czujnika sily.
         check_force_condition(*the_sensor);
-        };
+        }
     // Jesli juz wykonano wszystkie ruchy.
     if (is_pose_list_element() == false)
         return false;
@@ -178,7 +178,7 @@ bool trajectory_reproduce::first_step (){
             current_position[i] += delta[i];
         // Stworzenie bnastepnego elementu listy polozen posrednich.
         insert_interpose_list_element (tip.arm_type, interpose_motion_time, current_position);
-        };
+        }
     // FAZA ZWALNIANIA.
     // Nastepne polozenie posrednie -> przesuniecie o delte.
     for (i=0; i<6; i++)
@@ -206,7 +206,7 @@ bool trajectory_reproduce::first_step (){
     next_interpose_list_element();
     // Mozna wykonac ruch.
     return true;
-    }; // end: first_step
+    } // end: first_step
 
 /******************************** NEXT STEP ***********************************/
 bool trajectory_reproduce::next_step (){
@@ -220,7 +220,7 @@ bool trajectory_reproduce::next_step (){
         the_sensor = (ecp_mp::sensor::force*)((sensor_m.begin())->second);
         // Sprawdzenie odczytow czujnika sily.
         check_force_condition(*the_sensor);
-        };
+        }
     // Sprawdzenie, czy nie wykonano calej trajektorii.
     if(!is_interpose_list_element()){
         // Oproznienie listy.
@@ -229,7 +229,7 @@ bool trajectory_reproduce::next_step (){
         next_pose_list_ptr();
         // Koniec ruchu.
         return false;
-        }; // end: if
+        } // end: if
     // Pobranie pozycji posredniej.
     get_interpose_list_element(interpose);
     // Stworzenie polecenia dla robota.
@@ -238,7 +238,7 @@ bool trajectory_reproduce::next_step (){
     next_interpose_list_element();
     // Nie wykonano jeszcze calego ruchu.
     return true;
-    }; // end: next_step
+    } // end: next_step
 
 /*********************  CHECK FORCE CONDITION **************************/
 void trajectory_reproduce::check_force_condition(ecp_mp::sensor::force& the_sensor){
@@ -251,7 +251,7 @@ void trajectory_reproduce::check_force_condition(ecp_mp::sensor::force& the_sens
         if (fabs(last_force_sensor_reading[i]) > dangerous_force)
                 throw ECP_error(lib::NON_FATAL_ERROR, DANGEROUS_FORCE_DETECTED);
     // Sila w porzadku.
-    }; // end: check_force_condition
+    } // end: check_force_condition
 
 /*********************** DANGEROUS FORCE HANDLER **************************/
 void trajectory_reproduce::dangerous_force_handler(generator::ECP_error e){
@@ -275,7 +275,7 @@ void trajectory_reproduce::dangerous_force_handler(generator::ECP_error e){
          sr_ecp_msg.message (lib::SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
     }else
         sr_ecp_msg.message("Press TRY AGAIN to continue move.");
-    }; // end: dangerous_force_handler
+    } // end: dangerous_force_handler
 
 
 /****************************** LOAD TRAJECTORY ******************************/
@@ -295,12 +295,12 @@ try{
 	std::ifstream from_file(filename);
     if (!from_file){
         throw common::ECP_main_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
-        };
+        }
     // Wczytanie rodzaju wspolrzednych.
     if ( !(from_file >> coordinate_type) ) {
         from_file.close();
         throw common::ECP_main_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
-        };
+        }
     // Usuniecie spacji i tabulacji.
     unsigned int i = 0;
     unsigned int j = 0;
@@ -311,7 +311,7 @@ try{
         coordinate_type[j] = toupper(coordinate_type[i]);
         i++;
         j++;
-        };
+        }
     coordinate_type[j] = '\0';
     // Sprawdzenie rodzaju wspolrzednych.
     if ( !strcmp(coordinate_type, "MOTOR") )
@@ -319,17 +319,17 @@ try{
    else{
         from_file.close();
         throw common::ECP_main_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
-        };
+        }
     // Wczytanie liczby elementow.
     if ( !(from_file >> number_of_poses) ){
         from_file.close();
         throw common::ECP_main_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
-        };
+        }
     // Musi byc wiecej niz 0 elementow.
     if ( number_of_poses <1){
         from_file.close();
         throw common::ECP_main_error(lib::NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
-        };
+        }
     // Usuniecie listy pozycji, o ile istnieje.
     flush_pose_list();
     // Dodanie kolejnych pozycji do listy.
@@ -339,15 +339,15 @@ try{
             // Zabezpieczenie przed danymi nienumerycznymi.
             from_file.close();
             throw common::ECP_main_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
-            };
+            }
         // Kolejne wspolrzedne.
         for ( j = 0; j < 6; j++) {
             if ( !(from_file >> coordinates[j]) ){
                 // Zabezpieczenie przed danymi nienumerycznymi.
                 from_file.close();
                 throw common::ECP_main_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
-                };
-            };
+                }
+            }
 //     printf("Wczytano pozycje %i: czas %f | %f, %f, %f, %f, %f, %f\n",i, motion_time,
 //         coordinates[0], coordinates[1], coordinates[2], coordinates[3], coordinates[4], coordinates[5]);
         // Dodanie elementu.
@@ -358,8 +358,8 @@ try{
         }else{
               // Wstawienie do listy nowej pozycji.
             insert_pose_list_element(ps,motion_time,coordinates);
-            };
-        }; // end: for
+            }
+        } // end: for
     // Zamkniecie pliku.
     from_file.close();
     sr_ecp_msg.message("Trajectory readed properly.");
@@ -369,8 +369,8 @@ try{
 }catch (...){
     // Wylapywanie niezdefiniowanych bledow.
     sr_ecp_msg.message (lib::NON_FATAL_ERROR, (uint64_t) ECP_UNIDENTIFIED_ERROR);
-    }; // end: catch
-}; // end load_trajectory
+    } // end: catch
+} // end load_trajectory
 
 
 /*************************  SET DANGEROUS FORCE *****************************/
@@ -392,29 +392,29 @@ trajectory_reproduce::trajectory_reproduce (common::task::task& _ecp_task):
 
     UI_fd = _ecp_task.UI_fd;
     set_dangerous_force();
-    }; // end: trajectory_reproduce_generator
+    } // end: trajectory_reproduce_generator
 
 /******************************  DESTRUKTOR **********************************/
 trajectory_reproduce::~trajectory_reproduce (void) {
     // Usuniecie elementow z wszystkich list.
     flush_pose_list();
     flush_interpose_list();
-    }; // end: trajectory_reproduce_generator
+    } // end: trajectory_reproduce_generator
 
 
 /************* METODY ZWIAZANE Z LISTA POZYCJI  POSREDNICH *****************/
 void trajectory_reproduce::flush_interpose_list ( void ) {
    interpose_list.clear();
-    }; // end: flush_interpose_list
+    } // end: flush_interpose_list
 
 void trajectory_reproduce::initiate_interpose_list(void) {
     interpose_list_iterator = interpose_list.begin();
-    }; // end: initiate_interpose_list
+    } // end: initiate_interpose_list
 
 void trajectory_reproduce::next_interpose_list_element (void) {
     // Przejscie na nastepny element.
     interpose_list_iterator++;
-    }; // end: next_interpose_list_element
+    } // end: next_interpose_list_element
 
 void trajectory_reproduce::get_interpose_list_element (common::ecp_taught_in_pose& tip){
     // Przepisanie danych ruchu.
@@ -422,7 +422,7 @@ void trajectory_reproduce::get_interpose_list_element (common::ecp_taught_in_pos
     tip.motion_time = interpose_list_iterator->motion_time;
     // Przepisanie polozenia z listy.
     memcpy(tip.coordinates, interpose_list_iterator->coordinates, MAX_SERVOS_NR*sizeof(double));
-    }; // end: get_interpose_list_element
+    } // end: get_interpose_list_element
 
 bool trajectory_reproduce::is_interpose_list_element ( void ) {
     // Sprawdza czy element nie jest NULL.
@@ -430,19 +430,19 @@ bool trajectory_reproduce::is_interpose_list_element ( void ) {
         return true;
     else
         return false;
-    }; // end: is_interpose_list_element
+    } // end: is_interpose_list_element
 
 void trajectory_reproduce::create_interpose_list_head (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[6]) {
     // Wstawienie glowy.
     	interpose_list.push_back(common::ecp_taught_in_pose(ps, motion_time, coordinates));
 	interpose_list_iterator = interpose_list.begin();
-    }; // end: create_interpose_list_head
+    } // end: create_interpose_list_head
 
 void trajectory_reproduce::insert_interpose_list_element (lib::POSE_SPECIFICATION ps, double motion_time, double coordinates[6]) {
     // Wlasciwe wstawienie elementu.
     	interpose_list.push_back(common::ecp_taught_in_pose(ps, motion_time, coordinates));
 	interpose_list_iterator++;
-    }; // end: insert_interpose_list_element
+    } // end: insert_interpose_list_element
 
 /**********  KONIEC: METODY ZWIAZANE Z LISTA POZYCJI POSREDNICH ************/
 

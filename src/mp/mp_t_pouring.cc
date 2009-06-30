@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
-// 
+//
 // MP Master Process - methods�for pouring task sporadic coordination
-// 
+//
 // -------------------------------------------------------------------------
 
 
@@ -36,7 +36,7 @@ void pouring::approach(void)
 
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_ap.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
 
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2, 
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2,
 			lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT);
 
 }
@@ -55,7 +55,7 @@ void pouring::grab(void)
 
 	set_next_ecps_state( (int) ecp_mp::task::GRIP, 0, "", 1, lib::ROBOT_IRP6_POSTUMENT);
 
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2, 
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2,
 			lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT);
 
 }
@@ -65,7 +65,7 @@ void pouring::weight(void)
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_weight.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_weight.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
 
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2, 
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2,
 			lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT);
 
 	/*	if(set_next_ecps_state( (int) WEIGHT, 0, "", 1, lib::ROBOT_IRP6_POSTUMENT))
@@ -118,7 +118,7 @@ void pouring::go_back(void)
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_go_back.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_go_back.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
 
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2, 
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2,
 			lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT);
 
 }
@@ -128,7 +128,7 @@ void pouring::put_back(void)
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_ot_put_back.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_put_back.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
 
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2, 
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2,
 			lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT);
 
 	//rozwarcie szczek chwytakow
@@ -136,7 +136,7 @@ void pouring::put_back(void)
 
 	set_next_ecps_state( (int) ecp_mp::task::LET_GO, 0, "", 1, lib::ROBOT_IRP6_POSTUMENT);
 
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2, 
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2,
 			lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT);
 
 	//wycofanie chwytakow
@@ -144,7 +144,7 @@ void pouring::put_back(void)
 
 	set_next_ecps_state( (int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/pouring/irp6_p_dep_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
 
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2, 
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2,
 			lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT);
 
 }
@@ -180,8 +180,8 @@ void pouring::task_initialization(void)
 
 	 sensor_m[lib::SENSOR_FORCE_POSTUMENT] = new ecp_mp_schunk_sensor(lib::SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
 
-	 // Konfiguracja wszystkich czujnikow	
-	 for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	 // Konfiguracja wszystkich czujnikow
+	 for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin();
 	 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	 {
 	 sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika

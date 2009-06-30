@@ -1,8 +1,8 @@
 // ------------------------------------------------------------------------
 //             mp_m_pr.cc - powielanie rysunku - wersja wielorobotowa
-// 
+//
 //                      MASTER PROCESS (MP) - main()
-// 
+//
 // ------------------------------------------------------------------------
 
 
@@ -43,9 +43,9 @@ void vis_sac_lx::task_initialization(void)
 
 	sensor_m[lib::SENSOR_CAMERA_SA] = new ecp_mp::sensor::vis_sac_lx (lib::SENSOR_CAMERA_SA, "[vsp_vis]", *this); //change if SENSOR_CAMERA_SA used for nonnn recog (vsp_vis_pbeolsac)
 
-	// Konfiguracja wszystkich czujnikow	
+	// Konfiguracja wszystkich czujnikow
 
-	for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+	for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 			!= sensor_m.end(); sensor_m_iterator++) {
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
 		sensor_m_iterator->second->configure_sensor();
@@ -54,7 +54,7 @@ void vis_sac_lx::task_initialization(void)
 	usleep(1000*100);
 	sr_ecp_msg->message("MP vis lx loaded");
 }
-;
+
 
 void vis_sac_lx::main_task_algorithm(void)
 {
@@ -72,7 +72,7 @@ void vis_sac_lx::main_task_algorithm(void)
 			//eyegen.sensor_m = sensor_m;
 			//po cholere biasujemy jeszcze raz te czujniki i co to w ogole oznacza???
 			/*
-			 for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+			 for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin();
 			 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 			 {
 			 printf("SSSSSSS\n");
@@ -82,14 +82,14 @@ void vis_sac_lx::main_task_algorithm(void)
 			 }
 			 */
 			//dojazd by lapka byla widziana
-			/*	
+			/*
 			 set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "../trj/rcsc/irp6ot_ap_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
-			 
-			 
+
+
 			 run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			 (1, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_ON_TRACK);
-			 
-			 
+
+
 			 set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "../trj/irp6ot_vis_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 			 run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 			 (1, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_ON_TRACK);
@@ -119,7 +119,7 @@ void vis_sac_lx::main_task_algorithm(void)
 			// uruchomienie generatora empty_gen
 			run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_ON_TRACK);
 
-		
+
 }
 
 } // namespace task

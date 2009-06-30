@@ -36,7 +36,7 @@ namespace generator {
 bool robot_stopped_condition::first_step (){
 	communicate_with_edp=false;
 	return true;
-	};
+	}
 
 bool robot_stopped_condition::next_step (){
 	double first_position[6], second_position[6];
@@ -65,17 +65,17 @@ bool robot_stopped_condition::next_step (){
 		fs->get_reading();
 		// Przepisanie obecnego polozenia robota do bufora w zaleznosci od rodzaju wspolrzednych.
 		memcpy(last_force_sensor_reading, fs->image.sensor_union.force.rez, 6*sizeof(double));
-		};
+		}
 	// Odswiezenie okna.
 	refresh_window();
 	return false;
-	};
+	}
 
 /********************* PREPARE CONDITION FOR MOVE **************************/
 void robot_stopped_condition::prepare_condition_for_motion(void){
 	// Wyczyszczenie listy RSE.
 	flush_rse_list();
-	};
+	}
 
 /************************* GET CURRENT POSITION *****************************/
 void robot_stopped_condition::get_current_position(double current_position[6]){
@@ -95,7 +95,7 @@ void robot_stopped_condition::get_current_position(double current_position[6]){
 	the_robot->get_reply();
 	// Przepisanie obecnego polozenia robota do bufora w zaleznosci od rodzaju wspolrzednych.
 	memcpy(current_position, the_robot->EDP_data.current_motor_arm_coordinates, 6*sizeof(double));
- 	}; // end: get_current_position
+ 	} // end: get_current_position
 
 /**************************** REFRESH WINDOW *******************************/
 void robot_stopped_condition::refresh_window(void){
@@ -124,9 +124,9 @@ void robot_stopped_condition::refresh_window(void){
 #endif
 			 perror("ECP trajectory_reproduce_thread(): Send() to UI failed");
 			 sr_ecp_msg.message (lib::SYSTEM_ERROR, errno, "ECP: Send() to UI failed");
-			};
-		}; // end: is_pose_list_element
-	}; // end: refresh_window
+			}
+		} // end: is_pose_list_element
+	} // end: refresh_window
 
 
 /***************************** ADD RSE ELEMENT *******************************/
@@ -161,7 +161,7 @@ void robot_stopped_condition::add_rse_element(ecp_mp::sensor::digital_scales& th
 		insert_rse_list_element(
 			the_robot->EDP_data.current_motor_arm_coordinates,
 			the_sensor.image.sensor_union.ds.readings);
-		}; // end else
+		} // end else
 	// Wyswietlenie dodanego elementu.
 /*	trajectory_reproduce_element tre;
 	get_tre_list_element(tre);
@@ -173,7 +173,7 @@ void robot_stopped_condition::add_rse_element(ecp_mp::sensor::digital_scales& th
 	for(i=0; i<6; i++)
 		printf("%f\t", tre.sensor_reading[i]);
 	printf("\n");
-*/	};
+*/	}
 
 /**************************** SAVE RSE ELEMENTS ******************************/
 void robot_stopped_condition::save_rse_list(char* filename)
@@ -253,20 +253,17 @@ void robot_stopped_condition::flush_rse_list(void)
 	// Jezeli sa jakies elementy
 	rse_list.clear();
 }
-; // end: flush_tre_list
 
 void robot_stopped_condition::initiate_rse_list(void)
 {
 	rse_list_iterator = rse_list.begin();
 }
-;
 
 void robot_stopped_condition::next_rse_list_element(void)
 {
 	// Przejscie na nastepny element.
 	rse_list_iterator++;
 }
-;
 
 void robot_stopped_condition::get_rse_list_element(robot_position_digital_scales_reading_element& rse)
 {

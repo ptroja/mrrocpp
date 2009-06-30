@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------
-// 
+//
 //                      MASTER PROCESS (MP) - main()
-// 
+//
 // ------------------------------------------------------------------------
 
 
@@ -35,17 +35,17 @@ vis::vis(lib::configurator &_config) : task(_config)
 }
 
 // methods fo mp template to redefine in concete class
-void vis::task_initialization(void) 
+void vis::task_initialization(void)
 {
 	// Powolanie czujnikow
-	sensor_m[lib::SENSOR_FORCE_ON_TRACK] = 
+	sensor_m[lib::SENSOR_FORCE_ON_TRACK] =
 		new ecp_mp::sensor::schunk (lib::SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
 
-	sensor_m[lib::SENSOR_CAMERA_SA] = 
+	sensor_m[lib::SENSOR_CAMERA_SA] =
 		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_SA, "[vsp_vis]", *this);
 
-	// Konfiguracja wszystkich czujnikow	
-	for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	// Konfiguracja wszystkich czujnikow
+	for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin();
 	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -63,7 +63,7 @@ void vis::main_task_algorithm(void)
 
 
 	generator::seven_eye eyegen(*this, 4);
-	eyegen.robot_m[lib::ROBOT_IRP6_ON_TRACK] = robot_m[lib::ROBOT_IRP6_ON_TRACK]; 
+	eyegen.robot_m[lib::ROBOT_IRP6_ON_TRACK] = robot_m[lib::ROBOT_IRP6_ON_TRACK];
 	eyegen.sensor_m[lib::SENSOR_CAMERA_SA] = sensor_m[lib::SENSOR_CAMERA_SA];
 
 
@@ -74,7 +74,7 @@ void vis::main_task_algorithm(void)
 	//eyegen.robot_m = robot_m;
 	//eyegen.sensor_m = sensor_m;
 	//po cholere biasujemy jeszcze raz te czujniki i co to w ogole oznacza???
-	for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+	for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin();
 	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika

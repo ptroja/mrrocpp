@@ -85,8 +85,7 @@ class transmitter
 		transmitter (TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object);
 
 		virtual ~transmitter()
-		{}
-		;
+		{};
 
 		// odczyt z zawieszaniem lub bez
 		virtual bool t_read (bool wait)
@@ -114,7 +113,6 @@ class transmitter
 		; // end: class transmitter_error
 }
 ; // end: class transmitter
-
 
 } // namespace transmitter
 } // namespace ecp_mp

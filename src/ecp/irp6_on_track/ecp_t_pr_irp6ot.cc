@@ -65,7 +65,7 @@ void pr::task_initialization(void)
         new ecp_mp::sensor::schunk (lib::SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
 
     // Konfiguracja wszystkich czujnikow
-    for (std::map <lib::SENSOR_ENUM, lib::sensor*>::iterator sensor_m_iterator = sensor_m.begin();
+    for (ecp_mp::sensor_map::iterator::iterator sensor_m_iterator = sensor_m.begin();
             sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
     {
         sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
