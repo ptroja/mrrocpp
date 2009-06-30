@@ -19,7 +19,7 @@ namespace common {
 }
 */
 
-Condition::Condition(char *condDesc, lib::configurator &_config)
+Condition::Condition(const char *condDesc, lib::configurator &_config)
 	: config(_config)
 {
 	this->condition = NULL;
@@ -70,10 +70,10 @@ Condition::~Condition()
 
 Condition::RELATIONAL_OPERATOR Condition::splitCondExpr()
 {
-	char opc[][3] = {"==", "!=", "<=", ">=", "<", ">"};
+	const char *opc[] = {"==", "!=", "<=", ">=", "<", ">"};
 	char *temp;
-	int size;
 
+	// TODO: memory leak
 	char *myExpr = strdup(condition);
 	char *res;
 	if(myExpr != NULL)
@@ -99,17 +99,17 @@ Condition::RELATIONAL_OPERATOR Condition::splitCondExpr()
 	return Condition::WITHOUT_OP;
 }
 
-char * Condition::getCondDesc() const
+const char * Condition::getCondDesc() const
 {
 	return condition;
 }
 
 bool Condition::checkCompareResult()
 {
-	if(!strcmp(condition, (const char *) "true") || !strcmp(condition, (const char *) "TRUE"))
+	if(!strcmp(condition, "true") || !strcmp(condition, "TRUE"))
 		return true;
 
-	if(!strcmp(condition, (const char *) "stateOperationResult"))
+	if(!strcmp(condition, "stateOperationResult"))
 		return result;
 
 	if(strstr(condition, ".") != NULL)

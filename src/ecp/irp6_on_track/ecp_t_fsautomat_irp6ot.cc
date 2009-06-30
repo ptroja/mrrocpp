@@ -73,15 +73,15 @@ void fsautomat::task_initialization(void)
 		return;
 	}
 
-   // XML root
-   xmlNode *root = NULL;
-   root = xmlDocGetRootElement(doc);
-   if(!root || !root->name)
-   {
-      printf("ECP initialization ERROR: Bad root node name!");
-      xmlFreeDoc(doc);
-      return;
-   }
+	// XML root
+	xmlNode *root = NULL;
+	root = xmlDocGetRootElement(doc);
+	if(!root || !root->name)
+	{
+		fprintf(stderr, "ECP initialization ERROR: Bad root node name!");
+		xmlFreeDoc(doc);
+		return;
+	}
 
    // for each root children "state"
    for(cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)

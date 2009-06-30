@@ -17,7 +17,7 @@ class Condition
 		enum RELATIONAL_OPERATOR {EQUAL_TO = 0, NOT_EQUAL, LESS_EQUAL, GREATER_EQUAL, LESS_THAN, GREATER_THAN, WITHOUT_OP};
 	public:
 		Condition();
-		Condition(char * condDesc, lib::configurator &_config);
+		Condition(const char * condDesc, lib::configurator &_config);
 		Condition(const Condition &cond);
 		~Condition();
 
@@ -25,7 +25,7 @@ class Condition
 		bool checkContext(char *toCheck);
 		void setResult(bool result);
 		std::list<char *> * returnSplitedStr(char *toSplit);
-		char * getCondDesc() const;
+		const char * getCondDesc() const;
 		RELATIONAL_OPERATOR splitCondExpr();
 
 	private:
