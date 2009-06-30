@@ -44,6 +44,7 @@ void Transition::setConditionResult(bool result)
 
 char * Transition::getTargetID(StateHeap &sh) const
 {
+	// TODO: reimplement ">>" operator as XML element
 	const char *sp = ">>";
 	if(strstr(targetID, sp) != NULL)
 	{
