@@ -33,7 +33,7 @@ class State
 			RobotSets();
 			RobotSets(const RobotSets & robotSets);
 			~RobotSets();
-			
+
 			int firstSetCount;
 			int secondSetCount;
 			lib::ROBOT_ENUM *firstSet;
@@ -41,27 +41,27 @@ class State
 		};
 
 		static lib::ROBOT_ENUM returnProperRobot(char * robotName);
-		void setStateID(char *stateID);
-		char * getStateID() const;
-		void setNumArgument(char *time);
+		void setStateID(const char *stateID);
+		const char * getStateID() const;
+		void setNumArgument(const char *time);
 		int getNumArgument() const;
-		void setType(char *type);
-		char *  getType() const;
+		void setType(const char *type);
+		const char * getType() const;
 		void setRobot(char *robot);
 		lib::ROBOT_ENUM getRobot() const;
 		void setGeneratorType(char *genType);
 		ecp_mp::task::STATE_MACHINE_ECP_STATES getGeneratorType() const;
 		void setStringArgument(char *trajFilePath);
-		char *  getStringArgument() const;
+		char * getStringArgument() const;
 		void setTransition(char *cond, char *target, lib::configurator &_config);
 		void setProperTransitionResult(bool result);
 		const char *returnNextStateID(StateHeap &sh);
 		std::list<Transition> * getTransitions() const;
 
 		void showStateContent() const;
-		
+
 		RobotSets *robotSet;
-		
+
 	private:
 		int numArgument;
 		char *id;
@@ -70,7 +70,7 @@ class State
 		ecp_mp::task::STATE_MACHINE_ECP_STATES generatorType;
 		char *stringArgument;
 		std::list<Transition> *stateTransitions;
-	
+
 };
 
 

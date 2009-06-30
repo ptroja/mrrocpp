@@ -158,7 +158,6 @@ void fsautomat::task_initialization(void)
 
 	sr_ecp_msg->message("MP fsautomat loaded");
 }
-;
 
 common::State * fsautomat::createState(xmlNode *stateNode)
 {
@@ -231,7 +230,7 @@ common::State * fsautomat::createState(xmlNode *stateNode)
 				|| !xmlStrcmp(child_node->name, (const xmlChar *) "AddArg"))) {
 			numArgument = xmlNodeGetContent(child_node);
 			if (numArgument)
-				actState->setNumArgument((char*) numArgument);
+				actState->setNumArgument((const char *)numArgument);
 			xmlFree(numArgument);
 		}
 		if (child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->name, (const xmlChar *) "transition")) {
@@ -379,17 +378,17 @@ void fsautomat::initializeCubeState(common::State &state)
 	char *temp;
 	int index = 0;
 	for (temp = strtok(colorStr, " \t"); temp != NULL; temp = strtok(NULL, " \t")) {
-		if (!strcmp(temp, (const char *) "BLUE"))
+		if (!strcmp(temp, "BLUE"))
 			colors[index++] = common::BLUE;
-		if (!strcmp(temp, (const char *) "GREEN"))
+		else if (!strcmp(temp, "GREEN"))
 			colors[index++] = common::GREEN;
-		if (!strcmp(temp, (const char *) "RED"))
+		else if (!strcmp(temp, "RED"))
 			colors[index++] = common::RED;
-		if (!strcmp(temp, (const char *) "ORANGE"))
+		else if (!strcmp(temp, "ORANGE"))
 			colors[index++] = common::ORANGE;
-		if (!strcmp(temp, (const char *) "WHITE"))
+		else if (!strcmp(temp, "WHITE"))
 			colors[index++] = common::WHITE;
-		if (!strcmp(temp, (const char *) "YELLOW"))
+		else if (!strcmp(temp, "YELLOW"))
 			colors[index++] = common::YELLOW;
 	}
 	//	for(int i=0; i<6; i++)
@@ -757,67 +756,67 @@ void fsautomat::main_task_algorithm(void)
 		// protection from wrong targetID specyfication
 		if (stateMap->count(nextState) == 0)
 			break;
-		if (strcmp((*stateMap)[nextState].getType(), (const char *) "runGenerator") == 0) {
+		if (strcmp((*stateMap)[nextState].getType(), "runGenerator") == 0) {
 			executeMotion((*stateMap)[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 		}
-		if (strcmp((*stateMap)[nextState].getType(), (const char *) "emptyGenForSet") == 0) {
+		if (strcmp((*stateMap)[nextState].getType(), "emptyGenForSet") == 0) {
 			runEmptyGenForSet((*stateMap)[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
 		}
-		if (strcmp((*stateMap)[nextState].getType(), (const char *) "emptyGen") == 0) {
+		if (strcmp((*stateMap)[nextState].getType(), "emptyGen") == 0) {
 			runEmptyGen((*stateMap)[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
 		}
-		if (strcmp((*stateMap)[nextState].getType(), (const char *) "wait") == 0) {
+		if (strcmp((*stateMap)[nextState].getType(), "wait") == 0) {
 			runWaitFunction((*stateMap)[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
 		}
-		if (strcmp((*stateMap)[nextState].getType(), (const char *) "stopGen") == 0) {
+		if (strcmp((*stateMap)[nextState].getType(), "stopGen") == 0) {
 			stopProperGen((*stateMap)[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
 		}
-		if (strcmp((*stateMap)[nextState].getType(), (const char *) "systemInitialization") == 0) {
+		if (strcmp((*stateMap)[nextState].getType(), "systemInitialization") == 0) {
 			std::cout << "In sensor initialization.." << std::endl;
 			sensorInitialization();
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
 		}
-		if (strcmp((*stateMap)[nextState].getType(), (const char *) "cubeStateInit") == 0) {
+		if (strcmp((*stateMap)[nextState].getType(), "cubeStateInit") == 0) {
 			initializeCubeState((*stateMap)[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
 		}
-		if (strcmp((*stateMap)[nextState].getType(), (const char *) "initiateSensorReading") == 0) {
+		if (strcmp((*stateMap)[nextState].getType(), "initiateSensorReading") == 0) {
 			initiateSensorReading((*stateMap)[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
 		}
-		if (strcmp((*stateMap)[nextState].getType(), (const char *) "getSensorReading") == 0) {
+		if (strcmp((*stateMap)[nextState].getType(), "getSensorReading") == 0) {
 			getSensorReading((*stateMap)[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
 		}
-		if (strcmp((*stateMap)[nextState].getType(), (const char *) "cubeStateWriting") == 0) {
+		if (strcmp((*stateMap)[nextState].getType(), "cubeStateWriting") == 0) {
 			writeCubeState((*stateMap)[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
 		}
-		if (strcmp((*stateMap)[nextState].getType(), (const char *) "cubeStateChange") == 0) {
+		if (strcmp((*stateMap)[nextState].getType(), "cubeStateChange") == 0) {
 			changeCubeState((*stateMap)[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
 		}
-		if (strcmp((*stateMap)[nextState].getType(), (const char *) "communicateWithSolver") == 0) {
+		if (strcmp((*stateMap)[nextState].getType(), "communicateWithSolver") == 0) {
 			communicate_with_windows_solver((*stateMap)[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
 		}
-		if (strcmp((*stateMap)[nextState].getType(), (const char *) "manipulationSeqTranslation") == 0) {
+		if (strcmp((*stateMap)[nextState].getType(), "manipulationSeqTranslation") == 0) {
 			translateManipulationSequence(sh);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 

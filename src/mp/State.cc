@@ -56,14 +56,14 @@ State::State(const State &state)
 
 State::~State()
 {
-	if(id != NULL)
+	if(id)
 		delete[] id;
-	if(type != NULL)
+	if(type)
 		delete[] type;
-	if(stringArgument != NULL)
+	if(stringArgument)
 		delete[] stringArgument;
 	delete stateTransitions;
-	if(robotSet != NULL)
+	if(robotSet)
 		delete robotSet;
 }
 
@@ -90,28 +90,28 @@ State::RobotSets::RobotSets(const RobotSets &robotSets)
 //-----------------------------------------------------------------------------------------------------------
 State::RobotSets::~RobotSets()
 {
-	if(firstSet!=NULL)
+	if(firstSet)
 		delete[] firstSet;
-	if(secondSet!=NULL)
+	if(secondSet)
 		delete[] secondSet;
 }
 //-----------------------------------------------------------------------------------------------------------
 
-void State::setStateID(char *stateID)
+void State::setStateID(const char *stateID)
 {
 	int size = strlen(stateID) + 1;
 	id = new char[size];
 	strcpy(this->id, stateID);
 }
 
-char* State::getStateID() const
+const char* State::getStateID() const
 {
 	return id;
 }
 
 //-----------------------------------------------------------------------------------------------------------
 
-void State::setNumArgument(char *numArgument)
+void State::setNumArgument(const char *numArgument)
 {
 	this->numArgument = atoi(numArgument);
 }
@@ -125,7 +125,7 @@ int State::getNumArgument() const
 
 //-----------------------------------------------------------------------------------------------------------
 
-void State::setType(char *type)
+void State::setType(const char *type)
 {
 	int size = strlen(type) + 1;
 	this->type =  new char[size];
@@ -134,7 +134,7 @@ void State::setType(char *type)
 
 //-----------------------------------------------------------------------------------------------------------
 
-char* State::getType() const
+const char * State::getType() const
 {
 	return type;
 }
@@ -143,23 +143,23 @@ char* State::getType() const
 
 lib::ROBOT_ENUM State::returnProperRobot(char * robotName)
 {
-	if(strcmp(robotName, (const char *)"ROBOT_IRP6_ON_TRACK") == 0)
+	if(strcmp(robotName, "ROBOT_IRP6_ON_TRACK") == 0)
 		return lib::ROBOT_IRP6_ON_TRACK;
-	else if(strcmp(robotName, (const char *)"ROBOT_IRP6_POSTUMENT") == 0)
+	else if(strcmp(robotName, "ROBOT_IRP6_POSTUMENT") == 0)
 		return lib::ROBOT_IRP6_POSTUMENT;
-	else if(strcmp(robotName, (const char *)"ROBOT_CONVEYOR") == 0)
+	else if(strcmp(robotName, "ROBOT_CONVEYOR") == 0)
 		return lib::ROBOT_CONVEYOR;
-	else if(strcmp(robotName, (const char *)"ROBOT_SPEAKER") == 0)
+	else if(strcmp(robotName, "ROBOT_SPEAKER") == 0)
 		return lib::ROBOT_SPEAKER;
-	else if(strcmp(robotName, (const char *)"ROBOT_IRP6_MECHATRONIKA") == 0)
+	else if(strcmp(robotName, "ROBOT_IRP6_MECHATRONIKA") == 0)
 		return lib::ROBOT_IRP6_MECHATRONIKA;
-	else if(strcmp(robotName, (const char *)"ROBOT_ELECTRON") == 0)
+	else if(strcmp(robotName, "ROBOT_ELECTRON") == 0)
 		return lib::ROBOT_ELECTRON;
-	else if(strcmp(robotName, (const char *)"ROBOT_FESTIVAL") == 0)
+	else if(strcmp(robotName, "ROBOT_FESTIVAL") == 0)
 		return lib::ROBOT_FESTIVAL;
-	else if(strcmp(robotName, (const char *)"ROBOT_HAND") == 0)
+	else if(strcmp(robotName, "ROBOT_HAND") == 0)
 		return lib::ROBOT_HAND;
-	else if(strcmp(robotName, (const char *)"ROBOT_SPEECHRECOGNITION") == 0)
+	else if(strcmp(robotName, "ROBOT_SPEECHRECOGNITION") == 0)
 		return lib::ROBOT_SPEECHRECOGNITION;
 	else
 		return lib::ROBOT_UNDEFINED;
@@ -171,25 +171,25 @@ void State::setRobot(char *robot)
 {
 	this->robot = returnProperRobot(robot);
 	//std::cout<<">>>>>>>>"<<robot<<"##"<<std::endl;
-	//std::cout<<strcmp(robot, (const char *)"ROBOT_IRP6_ON_TRACK")<<std::endl;
+	//std::cout<<strcmp(robot, "ROBOT_IRP6_ON_TRACK")<<std::endl;
 	//strcpy(this->robot, robot);
-/*	if(strcmp(robot, (const char *)"ROBOT_IRP6_ON_TRACK") == 0)
+/*	if(strcmp(robot, "ROBOT_IRP6_ON_TRACK") == 0)
 		this->robot = lib::ROBOT_IRP6_ON_TRACK;
-	else if(strcmp(robot, (const char *)"ROBOT_IRP6_POSTUMENT") == 0)
+	else if(strcmp(robot, "ROBOT_IRP6_POSTUMENT") == 0)
 		this->robot = lib::ROBOT_IRP6_POSTUMENT;
-	else if(strcmp(robot, (const char *)"ROBOT_CONVEYOR") == 0)
+	else if(strcmp(robot, "ROBOT_CONVEYOR") == 0)
 		this->robot = lib::ROBOT_CONVEYOR;
-	else if(strcmp(robot, (const char *)"ROBOT_SPEAKER") == 0)
+	else if(strcmp(robot, "ROBOT_SPEAKER") == 0)
 		this->robot = lib::ROBOT_SPEAKER;
-	else if(strcmp(robot, (const char *)"ROBOT_IRP6_MECHATRONIKA") == 0)
+	else if(strcmp(robot, "ROBOT_IRP6_MECHATRONIKA") == 0)
 		this->robot = lib::ROBOT_IRP6_MECHATRONIKA;
-	else if(strcmp(robot, (const char *)"ROBOT_ELECTRON") == 0)
+	else if(strcmp(robot, "ROBOT_ELECTRON") == 0)
 		this->robot = lib::ROBOT_ELECTRON;
-	else if(strcmp(robot, (const char *)"ROBOT_FESTIVAL") == 0)
+	else if(strcmp(robot, "ROBOT_FESTIVAL") == 0)
 		this->robot = lib::ROBOT_FESTIVAL;
-	else if(strcmp(robot, (const char *)"ROBOT_HAND") == 0)
+	else if(strcmp(robot, "ROBOT_HAND") == 0)
 		this->robot = lib::ROBOT_HAND;
-	else if(strcmp(robot, (const char *)"ROBOT_SPEECHRECOGNITION") == 0)
+	else if(strcmp(robot, "ROBOT_SPEECHRECOGNITION") == 0)
 		this->robot = lib::ROBOT_SPEECHRECOGNITION;
 	else
 		this->robot = lib::ROBOT_UNDEFINED;
@@ -208,27 +208,27 @@ void State::setGeneratorType(char *genType)
 	//std::cout<<"######"<<genType<<std::endl;
 	//std::cout<<strcmp(genType, (const char *)"ECP_GEN_TRANSPARENT")<<std::endl;
 	//strcpy(this->generatorType, genType);
-	if(strcmp(genType, (const char *)"ECP_GEN_TRANSPARENT") == 0)
+	if(strcmp(genType, "ECP_GEN_TRANSPARENT") == 0)
 		this->generatorType = ecp_mp::task::ECP_GEN_TRANSPARENT;
-	else if(strcmp(genType, (const char *)"ECP_GEN_TFF_NOSE_RUN") == 0)
+	else if(strcmp(genType, "ECP_GEN_TFF_NOSE_RUN") == 0)
 		this->generatorType = ecp_mp::task::ECP_GEN_TFF_NOSE_RUN;
-	else if(strcmp(genType, (const char *)"ECP_GEN_TEACH_IN") == 0)
+	else if(strcmp(genType, "ECP_GEN_TEACH_IN") == 0)
 		this->generatorType = ecp_mp::task::ECP_GEN_TEACH_IN;
-	else if(strcmp(genType, (const char *)"ECP_GEN_SMOOTH") == 0)
+	else if(strcmp(genType, "ECP_GEN_SMOOTH") == 0)
 		this->generatorType = ecp_mp::task::ECP_GEN_SMOOTH;
-	else if(strcmp(genType, (const char *)"ECP_GEN_TFF_RUBIK_GRAB") == 0)
+	else if(strcmp(genType, "ECP_GEN_TFF_RUBIK_GRAB") == 0)
 		this->generatorType = ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB;
-	else if(strcmp(genType, (const char *)"ECP_GEN_TFF_RUBIK_FACE_ROTATE") == 0)
+	else if(strcmp(genType, "ECP_GEN_TFF_RUBIK_FACE_ROTATE") == 0)
 		this->generatorType = ecp_mp::task::ECP_GEN_TFF_RUBIK_FACE_ROTATE;
-	else if(strcmp(genType, (const char *)"ECP_GEN_TFF_GRIPPER_APPROACH") == 0)
+	else if(strcmp(genType, "ECP_GEN_TFF_GRIPPER_APPROACH") == 0)
 		this->generatorType = ecp_mp::task::ECP_GEN_TFF_GRIPPER_APPROACH;
-	else if(strcmp(genType, (const char *)"RCSC_GRIPPER_OPENING") == 0)
+	else if(strcmp(genType, "RCSC_GRIPPER_OPENING") == 0)
 		this->generatorType = ecp_mp::task::RCSC_GRIPPER_OPENING;
-	else if(strcmp(genType, (const char *)"ECP_GEN_BIAS_EDP_FORCE") == 0)
+	else if(strcmp(genType, "ECP_GEN_BIAS_EDP_FORCE") == 0)
 		this->generatorType = ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE;
-	else if(strcmp(genType, (const char *)"ECP_WEIGHT_MEASURE_GENERATOR") == 0)
+	else if(strcmp(genType, "ECP_WEIGHT_MEASURE_GENERATOR") == 0)
 		this->generatorType = ecp_mp::task::ECP_WEIGHT_MEASURE_GENERATOR;
-	else if(strcmp(genType, (const char *)"ECP_TOOL_CHANGE_GENERATOR") == 0)
+	else if(strcmp(genType, "ECP_TOOL_CHANGE_GENERATOR") == 0)
 		this->generatorType = ecp_mp::task::ECP_TOOL_CHANGE_GENERATOR;
 	else
 		this->generatorType = ecp_mp::task::ECP_GEN_SPEAK;
@@ -271,7 +271,7 @@ void State::setProperTransitionResult(bool result)
 {
 	for(std::list<Transition>::iterator it = stateTransitions->begin(); it != stateTransitions->end(); ++it)
 	{
-		if(!strcmp((*it).getConditionDescription(), (const char *)"stateOperationResult"))
+		if(!strcmp((*it).getConditionDescription(), "stateOperationResult"))
 			(*it).setConditionResult(result);
 	}
 }
