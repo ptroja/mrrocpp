@@ -45,11 +45,6 @@ fsautomat::fsautomat(lib::configurator &_config) :
 
 }
 
-fsautomat::~fsautomat()
-{
-
-}
-
 task* return_created_mp_task(lib::configurator &_config)
 {
 	return new fsautomat(_config);
@@ -253,10 +248,10 @@ common::State * fsautomat::createState(xmlNode *stateNode)
 	return actState;
 }
 
-std::map<char *, common::State, ecp::common::task::task::str_cmp> * fsautomat::takeStatesMap()
+std::map<const char *, common::State, ecp::common::task::task::str_cmp> * fsautomat::takeStatesMap()
 {
 	xmlNode *cur_node, *child_node;
-	std::map<char *, common::State, ecp::common::task::task::str_cmp> * statesMap = new std::map<char *, common::State, ecp::common::task::task::str_cmp>();
+	std::map<const char *, common::State, ecp::common::task::task::str_cmp> * statesMap = new std::map<const char *, common::State, ecp::common::task::task::str_cmp>();
 
 	std::string fileName(config.return_string_value("xml_file", "[xml_settings]"));
 	std::string filePath(mrrocpp_network_path);
@@ -287,13 +282,13 @@ std::map<char *, common::State, ecp::common::task::task::str_cmp> * fsautomat::t
 			for (child_node = cur_node->children; child_node != NULL; child_node = child_node->next) {
 				if (child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->name, (const xmlChar *) "State")) {
 					actState = createState(child_node);
-					statesMap->insert(std::map<char *, common::State>::value_type(actState->getStateID(), *actState));
+					statesMap->insert(std::map<const char *, common::State>::value_type(actState->getStateID(), *actState));
 				}
 			}
 		}
 		if (cur_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cur_node->name, (const xmlChar *) "State")) {
 			actState = createState(cur_node);
-			statesMap->insert(std::map<char *, common::State>::value_type(actState->getStateID(), *actState));
+			statesMap->insert(std::map<const char *, common::State>::value_type(actState->getStateID(), *actState));
 		}
 	}
 	// free the document
@@ -304,7 +299,7 @@ std::map<char *, common::State, ecp::common::task::task::str_cmp> * fsautomat::t
 	return statesMap;
 }
 
-void fsautomat::configureProperSensor(char *propSensor)
+void fsautomat::configureProperSensor(const char *propSensor)
 {
 	// Powolanie czujnikow
 	sensor_m[lib::SENSOR_CAMERA_ON_TRACK] = new ecp_mp::sensor::vis(lib::SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
@@ -322,7 +317,7 @@ void fsautomat::configureProperSensor(char *propSensor)
 	usleep(1000 * 100);
 }
 
-void fsautomat::configureProperTransmitter(char *propTrans)
+void fsautomat::configureProperTransmitter(const char *propTrans)
 {
 	// dodanie transmitter'a
 	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] = new ecp_mp::transmitter::rc_windows(ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS,
@@ -740,7 +735,7 @@ void fsautomat::main_task_algorithm(void)
 	break_state = false;
 	char *nextState = new char[64];
 	//	std::list<State> *statesList = takeStatesList();
-	std::map<char *, common::State, ecp::common::task::task::str_cmp> * stateMap = takeStatesMap();
+	std::map<const char *, common::State, ecp::common::task::task::str_cmp> * stateMap = takeStatesMap();
 	std::cout << "Mapa zawiera: " << stateMap->size() << std::endl;
 	//	std::cout<<"ELEMENTOW INIT jest: "<<stateMap->count((const char *)"INIT")<<std::endl;
 

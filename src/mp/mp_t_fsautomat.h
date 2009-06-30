@@ -34,8 +34,6 @@ class fsautomat : public task
 		
 	    // konstruktor
 	    fsautomat(lib::configurator &_config);
-	
-	    ~fsautomat();
 
 		// methods for mp template
 		void task_initialization(void);
@@ -43,7 +41,7 @@ class fsautomat : public task
 		
 		std::list<common::State> *takeStatesList(void);
 		common::State * createState(xmlNode *stateNode);
-		std::map<char *, common::State, ecp::common::task::task::str_cmp> * takeStatesMap();
+		std::map<const char *, common::State, ecp::common::task::task::str_cmp> * takeStatesMap();
 		void executeMotion(common::State &state);
 		void runEmptyGenForSet(common::State &state);
 		void runEmptyGen(common::State &state);
@@ -59,8 +57,8 @@ class fsautomat : public task
 		void communicate_with_windows_solver(common::State &state);
 		void translateManipulationSequence(common::StateHeap &sh);
 
-		void configureProperSensor(char *propSensor);
-		void configureProperTransmitter(char *propTrans);
+		void configureProperSensor(const char *propSensor);
+		void configureProperTransmitter(const char *propTrans);
 
 }; // end : class mp_task_fsautomat
 

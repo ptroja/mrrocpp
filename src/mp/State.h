@@ -29,7 +29,7 @@ class State
 		State(const State &state);
 		~State();
 
-		typedef struct RobotSets{
+		struct RobotSets{
 			RobotSets();
 			RobotSets(const RobotSets & robotSets);
 			~RobotSets();
@@ -39,6 +39,7 @@ class State
 			lib::ROBOT_ENUM *firstSet;
 			lib::ROBOT_ENUM *secondSet;
 		};
+
 		static lib::ROBOT_ENUM returnProperRobot(char * robotName);
 		void setStateID(char *stateID);
 		char * getStateID() const;
