@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!DOCTYPE TaskDescription SYSTEM "fsautomat.dtd" >
+<!DOCTYPE SubTask SYSTEM "fsautomat.dtd" >
 
 <SubTask>
 	<!-- ########################################## FACE_CHANGE_OP ######################################################################### -->
