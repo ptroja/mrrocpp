@@ -25,13 +25,12 @@ protected:
 	short is_sensor_configured;
 	// Flaga - czy jakikolwiek odczyt jest gotowy.
 	short is_reading_ready;
-	
-	
+
 public:
 	lib::configurator &config;
 	lib::sr_vsp *sr_msg;
 	
-	char* mrrocpp_network_path;
+	std::string mrrocpp_network_path;
 	
 	sensor (lib::configurator &_config); 
 	

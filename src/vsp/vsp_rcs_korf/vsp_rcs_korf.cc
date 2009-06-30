@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	VIRTUAL SENSOR PROCESS (lib::VSP) 
+// Proces: 	VIRTUAL SENSOR PROCESS (lib::VSP)
 // Plik:	vsp_rcs_korf.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:	Metody rozwiazywania kostki algorytmem Korfa - po stronie procesu VSP.
@@ -89,19 +89,18 @@ void rcs_korf::configure_sensor (void){
 	if (to_vsp.rcs.configure_mode == lib::RCS_BUILD_TABLES) {
 
 		// Pobiera dane z pliku konfiguracyjnego.
-		char* path = config.return_string_value("tables_path");
+		const char* path = config.return_string_value("tables_path").c_str();
 		printf("VSP KR PATH = %s\n", path);
 
 		// Konfiguruje
 		DataTable::SetLog(false);
 		DataTable::SetFolderName(path);
-		delete path;
 
 		// Wczytuje tablice przeksztalcen i odleglosci od rozwiazania
 		KorfCube::SInit();
 		KorfSolver::SInit();
 	}
-	
+
 	// Ustawia czujnik jako skonfigurowany
 	is_sensor_configured=true;
 
@@ -122,7 +121,7 @@ void rcs_korf::initiate_reading (void) {
     for (int i=0; i<6; i++)
     	strncpy(&state[i*12+2], &to_vsp.rcs.cube_state[i*9], 9);
 	printf("VSP KR STATE=%s\n", state);
-	    
+
 	// Ustawia brak bledu
 	bRCSErr = false;
 
@@ -137,7 +136,7 @@ void rcs_korf::initiate_reading (void) {
 		// Znajduje rozwiazanie algorytmem Korfa
 		KorfSolver krSolver;
 		pSol = krSolver.FindSolution(pCube);
-		
+
 	} catch (CubeException &exp) {
 	    char *err = exp.ToString();
 	    printf("ERR=%s\n", err);
@@ -163,7 +162,7 @@ void rcs_korf::get_reading (void) {
 	// Zglasza blad, gdy czujnik nie jest skonfigurowany.
 	if(!is_sensor_configured)
 		throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
-	
+
 	// Niemozliwe znalezienie rozwiazania - wystapil blad podczas jego znajdywania
 	if (	bRCSErr) {
 		from_vsp.comm_image.sensor_union.rcs.reading_mode = lib::RCS_SOLUTION_NOTPOSSIBLE;
@@ -196,7 +195,7 @@ void rcs_korf::get_reading (void) {
 
 	// Ustawia odczyt jako juz odczytany
 	is_reading_ready=false;
-	
+
 	// Czysci pola
 	delete pCube;
 	pCube = NULL;

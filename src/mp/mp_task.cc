@@ -147,7 +147,6 @@ task::task(lib::configurator &_config) : ecp_mp::task::task(_config)
 
 task::~task()
 {
-	delete[] mrrocpp_network_path;
 }
 
 
@@ -866,59 +865,43 @@ void task::mp_receive_ui_or_ecp_pulse (map <lib::ROBOT_ENUM, common::robot*>& _r
 
 void task::initialize_communication()
 {
-	char* sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
-	char* mp_attach_point =	config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_attach_point");
+	std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
+	std::string mp_attach_point =	config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_attach_point");
 
 	if (( sr_ecp_msg = new lib::sr_ecp(lib::MP, mp_attach_point, sr_net_attach_point)) == NULL) { // Obiekt do komuniacji z SR
 		perror ( "Unable to locate SR\n");
 
-		delete [] sr_net_attach_point;
-		delete [] mp_attach_point;
-
 		throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
-	delete [] sr_net_attach_point;
-
-
 	// Rejestracja procesu MP
 #if !defined(USE_MESSIP_SRR)
-	if ((mp_attach = name_attach(NULL, mp_attach_point, NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+	if ((mp_attach = name_attach(NULL, mp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 #else
-		if ((mp_attach = messip_channel_create(NULL, mp_attach_point, MESSIP_NOTIMEOUT, 0)) == NULL) {
+		if ((mp_attach = messip_channel_create(NULL, mp_attach_point.c_str(), MESSIP_NOTIMEOUT, 0)) == NULL) {
 #endif
 			uint64_t e = errno; // kod bledu systemowego
 			perror("Failed to attach Master Process\n");
 			sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "MP: Failed to name attach");
 
-			delete [] mp_attach_point;
-
 			throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 		}
 
-		delete [] mp_attach_point;
-
-
-
-		char* mp_pulse_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point");
+		std::string mp_pulse_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point");
 
 		// Rejestracja kanalu dla pulsow z procesu UI i ECP
 #if !defined(USE_MESSIP_SRR)
-		if ((mp_pulse_attach = name_attach(NULL, mp_pulse_attach_point, NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+		if ((mp_pulse_attach = name_attach(NULL, mp_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 #else
-			if ((mp_pulse_attach = messip_channel_create(NULL, mp_pulse_attach_point, MESSIP_NOTIMEOUT, 0)) == NULL) {
+			if ((mp_pulse_attach = messip_channel_create(NULL, mp_pulse_attach_point.c_str(), MESSIP_NOTIMEOUT, 0)) == NULL) {
 #endif
 				uint64_t e = errno; // kod bledu systemowego
 				perror("Failed to attach UI Pulse chanel for Master Process\n");
 				sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "MP: Failed to name attach  UI Pulse");
 
-				delete [] mp_pulse_attach_point;
 
 				throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			}
-
-			delete [] mp_pulse_attach_point;
-
 
 			common::mp_receive_pulse_struct_t outputs;
 			if (mp_wait_for_name_open(&outputs) > 0) {

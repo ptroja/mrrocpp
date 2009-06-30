@@ -95,85 +95,83 @@ enum UI_ALL_EDPS_STATE
 #define SIGALRM_TIMEOUT 1000000
 
 
-typedef struct{
+typedef struct {
 	pid_t pid;
 	int test_mode;
-	char* node_name;
-	char section_name[50]; // nazwa sekcji, w ktorej zapisana jest konfiguracja
-	char* network_resourceman_attach_point;
-	char* hardware_busy_attach_point; // do sprawdzenie czy edp juz nie istnieje o ile nie jest tryb testowy
-	char* network_reader_attach_point;
+	std::string node_name;
+	std::string section_name; // nazwa sekcji, w ktorej zapisana jest konfiguracja
+	std::string network_resourceman_attach_point;
+	std::string hardware_busy_attach_point; // do sprawdzenie czy edp juz nie istnieje o ile nie jest tryb testowy
+	std::string network_reader_attach_point;
 	int node_nr;
 	int reader_fd;
 	bool is_synchronised;
 	int state; // -1, edp nie aktywne, 0 - edp wylaczone 1- wlaczone czeka na reader start 2 - wlaczone czeka na reader stop
 	int last_state;
-	char* preset_sound_0; // dla EDP speaker
-	char* preset_sound_1;
-	char* preset_sound_2;
-	double preset_position[3][8]; // pozycje zapisane w konfiguracji
-	} edp_state_def;
+	std::string preset_sound_0; // dla EDP speaker
+	std::string preset_sound_1;
+	std::string preset_sound_2;
+	double preset_position[3][MAX_SERVOS_NR]; // pozycje zapisane w konfiguracji
+} edp_state_def;
 
-
-typedef struct{
+typedef struct {
 	pid_t pid;
-	char* node_name;
-	char section_name[50]; // nazwa sekcji, w ktorej zapisana jest konfiguracja
-	char* network_trigger_attach_point;
+	std::string node_name;
+	std::string section_name; // nazwa sekcji, w ktorej zapisana jest konfiguracja
+	std::string network_trigger_attach_point;
 	int node_nr;
 	int trigger_fd;
 	int state;
 	int last_state;
-	} ecp_state_def;
+} ecp_state_def;
 
-
-typedef struct{
+typedef struct {
 	bool is_active;
 	edp_state_def edp;
 	ecp_state_def ecp;
-	} ecp_edp_ui_robot_def;
+} ecp_edp_ui_robot_def;
 
-
-typedef struct{
+typedef struct {
 	pid_t pid;
-	char* node_name;
-	char* network_pulse_attach_point;
+	std::string node_name;
+	std::string network_pulse_attach_point;
 	int node_nr;
 	int pulse_fd;
 	UI_MP_STATE state;
 	UI_MP_STATE last_state;
-	} mp_state_def;
+} mp_state_def;
 
-
-typedef struct{
-	char* program_name;
-	char* node_name;
-	} program_node_def;
+typedef struct {
+	std::string program_name;
+	std::string node_name;
+} program_node_def;
 
 
 typedef struct {
 
 	UI_ALL_EDPS_STATE all_edps;
-	char binaries_network_path[100]; // sieciowa sciezka binariow mrrocpp
-	char binaries_local_path[100]; // lokalna sciezka binariow mrrocpp
-	char mrrocpp_local_path[100]; // lokalna sciezka mrrocpp: np. "/home/yoyek/mrrocpp/". W niej katalogi bin, configs etc.
+	std::string binaries_network_path; // sieciowa sciezka binariow mrrocpp
+	std::string binaries_local_path; // lokalna sciezka binariow mrrocpp
+	std::string mrrocpp_local_path; // lokalna sciezka mrrocpp: np. "/home/yoyek/mrrocpp/". W niej katalogi bin, configs etc.
 
-	char teach_filesel_fullpath[100]; // sciezka domyslana dla fileselect dla generatora uczacego
-	char config_file[30];// nazwa pliku konfiguracyjnego dla UI
-	char session_name[20]; // nazwa sesji
-	char config_file_fullpath[100]; // sciezka globalna do konfiguracji
-	char config_file_relativepath[100]; // sciezka lokalana do konfiguracji wraz z plikiem konfiguracyjnym
+	std::string teach_filesel_fullpath; // sciezka domyslana dla fileselect dla generatora uczacego
+	std::string config_file;// nazwa pliku konfiguracyjnego dla UI
+	std::string session_name; // nazwa sesji
+	std::string config_file_fullpath; // sciezka globalna do konfiguracji
+	std::string config_file_relativepath; // sciezka lokalana do konfiguracji wraz z plikiem konfiguracyjnym
 
-	char* ui_attach_point;
-	char* network_sr_attach_point;
-	char* sr_attach_point;
+	std::string ui_attach_point;
+	std::string network_sr_attach_point;
+	std::string sr_attach_point;
+
+	typedef std::string list_t;
 
 	// listy sekcji i wezlow sieciowych plikow konfiguracyjnych
-	std::list<char*> section_list, config_node_list, all_node_list;
+	std::list<list_t> section_list, config_node_list, all_node_list;
 	// lista nazw programow i wezlow na ktorych maja byc uruchamiane
 	std::list<program_node_def> program_node_list;
 
-	char ui_node_name[30]; // nazwa wezla na ktorym jest uruchamiany UI
+	std::string ui_node_name; // nazwa wezla na ktorym jest uruchamiany UI
 	int	ui_node_nr; // numer wezla na ktorym jest uruchamiany UI
 	pid_t ui_pid; // pid UI
 	short ui_state; // 1 working, 2 exiting started, 3-5 exiting in progress - mrrocpp processes closing, 6 - exit imeditily

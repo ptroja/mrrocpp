@@ -15,13 +15,11 @@ namespace common {
 
 Trajectory::Trajectory()
 {
-	trjID = new char[80];
 	trjPoses	= new std::list<ecp::common::ecp_smooth_taught_in_pose>();
 }
 
 Trajectory::Trajectory(char *numOfPoses, char *trajectoryID, char *poseSpecification)
 {
-	trjID = new char[80];
 	strcpy(trjID, trajectoryID);
 	this->numOfPoses = (uint64_t)atoi(numOfPoses);
 	poseSpec = returnProperPS(poseSpecification);
@@ -31,7 +29,6 @@ Trajectory::Trajectory(char *numOfPoses, char *trajectoryID, char *poseSpecifica
 
 Trajectory::Trajectory(const Trajectory &trajectory)
 {
-	trjID = new char[80];
 	strcpy(trjID, trajectory.trjID);
 	numOfPoses = trajectory.numOfPoses;
 	poseSpec = trajectory.poseSpec;
@@ -40,7 +37,6 @@ Trajectory::Trajectory(const Trajectory &trajectory)
 
 Trajectory::~Trajectory()
 {
-	delete []trjID;
 	delete trjPoses;
 }
 
@@ -49,7 +45,7 @@ void Trajectory::setTrjID(char *trjID)
 	strcpy(this->trjID, trjID);
 }
 
-char * Trajectory::getTrjID() const
+const char * Trajectory::getTrjID() const
 {
 	return trjID;
 }

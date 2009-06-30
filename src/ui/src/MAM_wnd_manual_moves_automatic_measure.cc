@@ -197,19 +197,17 @@ int MAM_tmr_connect( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
         printf("MAM_tmr_connect: Create connection.\n");
     #endif
     // Nazwa polacznia.
-    char *tmp_name;
-    // Stworznie nazwy.
-    tmp_name = config->return_attach_point_name	(lib::configurator::CONFIG_SERVER, "attach_point", "[ecp_ui_channel]");
+    std::string attach_point = config->return_attach_point_name	(lib::configurator::CONFIG_SERVER, "attach_point", "[ecp_ui_channel]");
 //    tmp_name = config->return_attach_point_name	(CONFIG_SERVER, "ecp_chan_attach_point", "[ui]");
     
     #ifdef MAMDEBUG
         printf("MAM_tmr_connect: %s\n", tmp_name);
     #endif
     // Otworzenie polaczenia.
-    if ((ECPfd = name_open(tmp_name, NAME_FLAG_ATTACH_GLOBAL)) == -1) {
+    if ((ECPfd = name_open(attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == -1) {
         perror("MAM_tmr_connect: Connect to ECP failed");
         return EXIT_FAILURE;
-        };
+        }
     return( Pt_CONTINUE );
     } // end: MAM_tmr_connect
 

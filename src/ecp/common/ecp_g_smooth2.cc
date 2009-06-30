@@ -45,7 +45,7 @@ bool smooth2::eq(double a, double b) {
 	return diff < EPS && diff > -EPS;
 }
 
-bool smooth2::load_file_with_path(char* file_name) {
+bool smooth2::load_file_with_path(const char* file_name) {
 
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
@@ -258,7 +258,7 @@ void smooth2::flush_coordinate_list(void) {
 	}
 }
 
-bool smooth2::load_a_v_min (char* file_name)
+bool smooth2::load_a_v_min (const char* file_name)
 {
     uint64_t e;       // Kod bledu systemowego
     uint64_t j;    // Liczniki petli
@@ -299,10 +299,8 @@ bool smooth2::load_a_v_min (char* file_name)
     return true;
 } // end: bool load_a_v_min()
 
-bool smooth2::load_a_v_max (char* file_name)
+bool smooth2::load_a_v_max (const char* file_name)
 {
-    uint64_t e;       // Kod bledu systemowego
-    uint64_t j;    // Liczniki petli
     std::ifstream from_file(file_name); // otworz plik do odczytu
 
     if (!from_file)
@@ -312,7 +310,7 @@ bool smooth2::load_a_v_max (char* file_name)
         throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
     }
 
-    for ( j = 0; j < MAX_SERVOS_NR; j++)
+    for (int j = 0; j < MAX_SERVOS_NR; j++)
     {
         if ( !(from_file >> v_max_motor[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
@@ -320,7 +318,7 @@ bool smooth2::load_a_v_max (char* file_name)
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
-    for ( j = 0; j < MAX_SERVOS_NR; j++)
+    for (int j = 0; j < MAX_SERVOS_NR; j++)
     {
         if ( !(from_file >> a_max_motor[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
@@ -329,7 +327,7 @@ bool smooth2::load_a_v_max (char* file_name)
         }
     }
 
-    for ( j = 0; j < MAX_SERVOS_NR; j++)
+    for (int j = 0; j < MAX_SERVOS_NR; j++)
     {
         if ( !(from_file >> v_max_joint[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
@@ -337,7 +335,7 @@ bool smooth2::load_a_v_max (char* file_name)
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
-    for ( j = 0; j < MAX_SERVOS_NR; j++)
+    for (int j = 0; j < MAX_SERVOS_NR; j++)
     {
         if ( !(from_file >> a_max_joint[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
@@ -346,7 +344,7 @@ bool smooth2::load_a_v_max (char* file_name)
         }
     }
 
-    for ( j = 0; j < MAX_SERVOS_NR; j++)
+    for (int j = 0; j < MAX_SERVOS_NR; j++)
     {
         if ( !(from_file >> v_max_zyz[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
@@ -354,7 +352,7 @@ bool smooth2::load_a_v_max (char* file_name)
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
-    for ( j = 0; j < MAX_SERVOS_NR; j++)
+    for (int j = 0; j < MAX_SERVOS_NR; j++)
     {
         if ( !(from_file >> a_max_zyz[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
@@ -363,7 +361,7 @@ bool smooth2::load_a_v_max (char* file_name)
         }
     }
 
-    for ( j = 0; j < MAX_SERVOS_NR; j++)
+    for (int j = 0; j < MAX_SERVOS_NR; j++)
     {
         if ( !(from_file >> v_max_aa[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
@@ -371,7 +369,7 @@ bool smooth2::load_a_v_max (char* file_name)
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
-    for ( j = 0; j < MAX_SERVOS_NR; j++)
+    for (int j = 0; j < MAX_SERVOS_NR; j++)
     {
         if ( !(from_file >> a_max_aa[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
@@ -403,28 +401,19 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
 
 	distance_eps = 0.00001;
 
-	int size = 1 + strlen(ecp_t.mrrocpp_network_path) + strlen("data/a_v_max.txt");
-	char * path1 = new char[size];
-	// Stworzenie sciezki do pliku.
-	strcpy(path1, ecp_t.mrrocpp_network_path);
-	sprintf(path1, "%sdata/a_v_max.txt"	, ecp_t.mrrocpp_network_path);
+	std::string max_path(ecp_t.mrrocpp_network_path);
+	max_path += "data/a_v_max.txt";
 
-	size = 1 + strlen(ecp_t.mrrocpp_network_path) + strlen("data/a_v_min.txt");
-	char * path2 = new char[size];
-	// Stworzenie sciezki do pliku.
-	strcpy(path2, ecp_t.mrrocpp_network_path);
-	sprintf(path2, "%sdata/v_min_gripp.txt", ecp_t.mrrocpp_network_path);
+	std::string min_path(ecp_t.mrrocpp_network_path);
+	min_path += "data/v_min_gripp.txt";
 
-	load_a_v_max(path1);
-	load_a_v_min(path2);
+	load_a_v_max(max_path.c_str());
+	load_a_v_min(min_path.c_str());
 
-    delete[] path1;
-    delete[] path2;
-
-    is_synchronised = _is_synchronised;
-	  type=1;
-    //v_grip_min=5;
-       /*for (int g = 0; g < 8; g++) {
+	is_synchronised = _is_synchronised;
+	type=1;
+	//v_grip_min=5;
+	/*for (int g = 0; g < 8; g++) {
       v_k[g] = 0.0;
       v_p[g] = 0.0;
     }*/

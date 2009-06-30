@@ -99,60 +99,42 @@ vis_pbeclsac::vis_pbeclsac(lib::configurator &_config) : sensor(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.camera);
 
-//	uint64_t e;			// kod bledu systemowego
-	
 	is_sensor_configured=false;	// czujnik niezainicjowany 
 	is_reading_ready=false;				// nie ma zadnego gotowego odczytu
 	irq_no = 0;
 	ThreadCtl (_NTO_TCTL_IO, NULL);  // by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi 
-	
-	
-	//mrrocpp_network_path = config->return_mrrocpp_network_path();
-	
-	   int size = 1 + strlen(mrrocpp_network_path) + strlen("data/color.txt");
-	    char * path1 = new char[size];
-	    // Stworzenie sciezki do pliku.
-	    strcpy(path1, mrrocpp_network_path);
-	    sprintf(path1, "%sdata/color.txt", mrrocpp_network_path);
-	   
-	
-	 char * file_location = path1;
-	
-	   int size2 = 1 + strlen(mrrocpp_network_path) + strlen("data/pattern.txt");
-	    char * path2 = new char[size2];
-	    // Stworzenie sciezki do pliku.
-	    strcpy(path2, mrrocpp_network_path);
-	    sprintf(path2, "%sdata/pattern.txt", mrrocpp_network_path);
-	
-	     char * file_location2 = path2;
-	
 
+	std::string colors_file(mrrocpp_network_path);
+	colors_file += "data/color_eih.txt";
+
+	std::string pattern_file(mrrocpp_network_path);
+	pattern_file += "data/pattern.txt";
+
+	if (vision.loadColors(colors_file.c_str())){
+		vision.initialize(XMAX,YMAX);
+		vision.countLUT();
+		vision.initEstim(pattern_file.c_str());
+		vision.initGrid();
+	}
+	else
+	{
+		printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
+	}
 	
-	//vision.loadColors("color.txt");
-  	//printf("ret%d",ret);
-  	
-			if (vision.loadColors(file_location)){
-				 vision.initialize(XMAX,YMAX);
-				 vision.countLUT();
-				 vision.initEstim(file_location2);
-}
-else printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
 	fd = open("/dev/bttvx",O_RDWR); // bezposrednio odczyt ze sterownika zamiast konstruktora 
-		
+
 	z=0;
 	x=0;
-	
+
 	sr_msg->message ("VSP VIS PB-ECL-SAC started");
-	
-	};
+}
 
 vis_pbeclsac::~vis_pbeclsac(void){
 	close (fd);
 
-	
-	
+
 	printf("Destruktor VSP\n");
-	};
+}
 
 /**************************** inicjacja czujnika ****************************/
 void vis_pbeclsac::configure_sensor (void){

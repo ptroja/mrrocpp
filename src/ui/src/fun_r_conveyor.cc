@@ -517,32 +517,28 @@ EDP_conveyor_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 
 	set_ui_state_notification(UI_N_PROCESS_CREATION);
 
-	short tmp;
-	char tmp_string[100];
-	char tmp2_string[100];
-
 	try { // dla bledow robot :: ECP_error
 
 	// dla robota conveyor
 	if (ui_state.conveyor.edp.state == 0)
 	{
-		
 		ui_state.conveyor.edp.state = 0;
 		ui_state.conveyor.edp.is_synchronised = false;
 		
-		strcpy(tmp_string, "/dev/name/global/");
-		strcat(tmp_string, ui_state.conveyor.edp.hardware_busy_attach_point);
+		std::string tmp_string("/dev/name/global/");
+		tmp_string += ui_state.conveyor.edp.hardware_busy_attach_point;
 
-		strcpy(tmp2_string, "/dev/name/global/");
-		strcat(tmp2_string, ui_state.conveyor.edp.network_resourceman_attach_point);
-		// sprawdzeie czy nie jest juz zarejestrowany zarzadca zasobow
-		if((!(ui_state.conveyor.edp.test_mode)) && ( access(tmp_string, R_OK)== 0  )
-			|| (access(tmp2_string, R_OK)== 0 )
+		std::string tmp2_string("/dev/name/global/");
+		tmp2_string += ui_state.conveyor.edp.network_resourceman_attach_point;
+
+		// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
+		if((!(ui_state.conveyor.edp.test_mode)) && ( access(tmp_string.c_str(), R_OK)== 0  )
+			|| (access(tmp2_string.c_str(), R_OK)== 0 )
 		)
 		{
 			ui_msg.ui->message("edp_conveyor already exists");
 		} else {
-			ui_state.conveyor.edp.node_nr = config->return_node_number(ui_state.conveyor.edp.node_name);
+			ui_state.conveyor.edp.node_nr = config->return_node_number(ui_state.conveyor.edp.node_name.c_str());
 
 			ui_state.conveyor.edp.state = 1;
 			
@@ -556,16 +552,16 @@ EDP_conveyor_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 				delete ui_robot.conveyor;
 			} else {  // jesli spawn sie powiodl
 
-				 tmp = 0;
+				short tmp = 0;
 			 	// kilka sekund  (~1) na otworzenie urzadzenia
-				while((ui_state.conveyor.edp.reader_fd = name_open(ui_state.conveyor.edp.network_reader_attach_point,
+				while((ui_state.conveyor.edp.reader_fd = name_open(ui_state.conveyor.edp.network_reader_attach_point.c_str(),
 					NAME_FLAG_ATTACH_GLOBAL)) < 0)
 					if((tmp++)<CONNECT_RETRY)
 						delay(CONNECT_DELAY);
 					else{
 					   perror("blad odwolania do READER_C\n");
 	   				   break;
-					};
+					}
 
 				// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 				lib::controller_state_t robot_controller_initial_state_tmp;
@@ -732,7 +728,7 @@ pulse_ecp_conveyor( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 		 	// kilka sekund  (~1) na otworzenie urzadzenia
 		 	// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
 		 	ualarm( (useconds_t)( SIGALRM_TIMEOUT), 0);
-			while( (ui_state.conveyor.ecp.trigger_fd = name_open(ui_state.conveyor.ecp.network_trigger_attach_point, NAME_FLAG_ATTACH_GLOBAL)) < 0)
+			while( (ui_state.conveyor.ecp.trigger_fd = name_open(ui_state.conveyor.ecp.network_trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
 			{
 				if (errno == EINTR) break;
 				if((tmp++)<CONNECT_RETRY)
@@ -808,9 +804,8 @@ reload_conveyor_configuration ()
 
 		if (ui_state.is_mp_and_ecps_active)
 		{
-			delete [] ui_state.conveyor.ecp.network_trigger_attach_point;
-			ui_state.conveyor.ecp.network_trigger_attach_point =config->return_attach_point_name
-				(lib::configurator::CONFIG_SERVER, "trigger_attach_point", ui_state.conveyor.ecp.section_name);
+			ui_state.conveyor.ecp.network_trigger_attach_point = config->return_attach_point_name
+				(lib::configurator::CONFIG_SERVER, "trigger_attach_point", ui_state.conveyor.ecp.section_name.c_str());
 
 	 		ui_state.conveyor.ecp.pid = -1;
 	 		ui_state.conveyor.ecp.trigger_fd = -1;
@@ -837,22 +832,16 @@ reload_conveyor_configuration ()
 				else
 					ui_state.conveyor.edp.test_mode = 0;
 
-				delete [] ui_state.conveyor.edp.hardware_busy_attach_point;
 				ui_state.conveyor.edp.hardware_busy_attach_point = config->return_string_value
 					("hardware_busy_attach_point", ui_state.conveyor.edp.section_name);
 
-
-
-				delete [] ui_state.conveyor.edp.network_resourceman_attach_point;
 				ui_state.conveyor.edp.network_resourceman_attach_point = config->return_attach_point_name
-					(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", ui_state.conveyor.edp.section_name);
+					(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", ui_state.conveyor.edp.section_name.c_str());
 
-				delete [] ui_state.conveyor.edp.network_reader_attach_point;
 				ui_state.conveyor.edp.network_reader_attach_point = config->return_attach_point_name
-					(lib::configurator::CONFIG_SERVER, "reader_attach_point", ui_state.conveyor.edp.section_name);
+					(lib::configurator::CONFIG_SERVER, "reader_attach_point", ui_state.conveyor.edp.section_name.c_str());
 
-				delete [] ui_state.conveyor.edp.node_name;
-				ui_state.conveyor.edp.node_name = config->return_string_value ("node_name", ui_state.conveyor.edp.section_name);
+				ui_state.conveyor.edp.node_name = config->return_string_value ("node_name", ui_state.conveyor.edp.section_name.c_str());
 
 			break;
 			case 1:

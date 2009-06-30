@@ -26,22 +26,19 @@ robot::robot( lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::tas
 	mp_object(mp_object_l),
 	sr_ecp_msg(*(mp_object_l.sr_ecp_msg))
 {
-	char *node_name = mp_object.config.return_string_value("node_name", _section_name);
-	nd = mp_object.config.return_node_number(node_name);
-	delete[] node_name;
+	std::string node_name(mp_object.config.return_string_value("node_name", _section_name));
+	nd = mp_object.config.return_node_number(node_name.c_str());
 
-	char * network_ecp_attach_point;
-	network_ecp_attach_point = mp_object.config.return_attach_point_name
-	                           (lib::configurator::CONFIG_SERVER, "ecp_attach_point", _section_name);
+	std::string network_ecp_attach_point(mp_object.config.return_attach_point_name
+	                           (lib::configurator::CONFIG_SERVER, "ecp_attach_point", _section_name));
 
 #if !defined(USE_MESSIP_SRR)
 	char tmp_string[100];
-	sprintf(tmp_string, "/dev/name/global/%s", network_ecp_attach_point);
+	sprintf(tmp_string, "/dev/name/global/%s", network_ecp_attach_point.c_str());
 
 	// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny ECP
 	if (access(tmp_string, R_OK) == 0 ) {
 		sr_ecp_msg.message("ECP already exists");
-		delete[] network_ecp_attach_point;
 		throw MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 #endif
@@ -52,7 +49,6 @@ robot::robot( lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::tas
 		uint64_t e = errno; // kod bledu
 		perror ("Failed to spawn ECP process on node\n");
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "MP: Failed to spawn ECP");
-		delete[] network_ecp_attach_point;
 		throw MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
@@ -73,7 +69,7 @@ robot::robot( lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::tas
 	// kilka sekund  (~1) na otworzenie urzadzenia
 	// 	printf("aa: %s\n",	_config->return_attach_point_name	(CONFIG_SERVER, "ecp_attach_point", _section_name));
 #if !defined(USE_MESSIP_SRR)
-	while ((ECP_fd = name_open(network_ecp_attach_point, NAME_FLAG_ATTACH_GLOBAL)) < 0)
+	while ((ECP_fd = name_open(network_ecp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
 #else
 	while ((ECP_fd = messip_channel_connect(NULL, network_ecp_attach_point, MESSIP_NOTIMEOUT)) == NULL)
 #endif
@@ -83,11 +79,8 @@ robot::robot( lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::tas
 			uint64_t e = errno; // kod bledu
 			perror("Connect to ECP failed");
 			sr_ecp_msg.message (lib::SYSTEM_ERROR, e, "Connect to ECP failed");
-			delete[] network_ecp_attach_point;
 			throw MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 		}
-
-	delete[] network_ecp_attach_point;
 }
 // -------------------------------------------------------------------
 

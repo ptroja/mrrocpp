@@ -23,7 +23,7 @@ namespace transmitter {
 typedef struct {
 	char response[1024];
 	char request[255];
-	char* solver_hostname;
+	const char* solver_hostname;
 	uint16_t solver_port;
 	sem_t sem;
 } rc_win_buf_typedef;

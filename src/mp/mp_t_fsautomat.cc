@@ -255,19 +255,16 @@ common::State * fsautomat::createState(xmlNode *stateNode)
 
 std::map<char *, common::State, ecp::common::task::task::str_cmp> * fsautomat::takeStatesMap()
 {
-	int size;
-	char *filePath;
-	char *fileName = config.return_string_value("xml_file", "[xml_settings]");
 	xmlNode *cur_node, *child_node;
 	std::map<char *, common::State, ecp::common::task::task::str_cmp> * statesMap = new std::map<char *, common::State, ecp::common::task::task::str_cmp>();
 
-	size = 1 + strlen(mrrocpp_network_path) + strlen(fileName);
-	filePath = new char[size];
+	std::string fileName(config.return_string_value("xml_file", "[xml_settings]"));
+	std::string filePath(mrrocpp_network_path);
+	filePath += fileName;
 
-	sprintf(filePath, "%s%s", mrrocpp_network_path, fileName);
 	// open xml document
 	xmlDocPtr doc;
-	doc = xmlParseFile(filePath);
+	doc = xmlParseFile(filePath.c_str());
 	xmlXIncludeProcess(doc);
 	if (doc == NULL) {
 		std::cout << "ERROR: could not parse file: \"" << fileName << "\"." << std::endl;

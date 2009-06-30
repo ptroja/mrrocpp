@@ -36,7 +36,7 @@ sensor::sensor(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::t
  	// cout<<"VSP_NAME = "<<VSP_NAME<<endl;
 
 	// Sprawdzeie czy nie jest juz zarejestrowany zarzadca zasobow o tej nazwie.
-	if( access(VSP_NAME, R_OK)==0 )
+	if( access(VSP_NAME.c_str(), R_OK)==0 )
 	{
 		// by Y - usuniete bo mozna podlaczyc sie do istniejacego czujnika
 		// throw sensor_error(lib::SYSTEM_ERROR, DEVICE_ALREADY_EXISTS);
@@ -50,7 +50,7 @@ sensor::sensor(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::t
 
 	short tmp = 0;
  	// Kilka sekund  (~2) na otworzenie urzadzenia.
-	while( (sd = open(VSP_NAME, O_RDWR)) == -1)
+	while( (sd = open(VSP_NAME.c_str(), O_RDWR)) == -1)
 	{
 // 		cout<<tmp<<endl;
 		if((tmp++)<CONNECT_RETRY)

@@ -12,6 +12,7 @@
 
 #include <stdint.h>
 #include <time.h>
+#include <string>
 
 #include "lib/srlib.h"
 
@@ -327,7 +328,7 @@ public:
 	short current_period; // by Y ilosc krokow pozostajaca do odczytu z czujnika
 
 	int pid; // pid vsp
-	char* node_name; // nazwa wezla na ktorym jest powolane vsp
+	std::string node_name; // nazwa wezla na ktorym jest powolane vsp
 
 	// Obraz czujnika.
 	SENSOR_IMAGE image;

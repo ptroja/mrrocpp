@@ -21,16 +21,9 @@ namespace task {
 class rubik_cube_solver : public task  
 {
 protected:
-// sekwencja (lista) manipulacji
-
-// stan kostki
-// kolory scian patrzac przez os ramienia tracka (od kolumny), w plaszczynie ziemi
+	// stan kostki
+	// kolory scian patrzac przez os ramienia tracka (od kolumny), w plaszczynie ziemi
 	common::CubeState* cube_state;
- 
-  
-    // odczyt konfiguracji manipulacji
-	char* cube_initial_state;
- 
  
 public:
 
@@ -44,7 +37,6 @@ public:
     rubik_cube_solver(lib::configurator &_config);
 	
     ~rubik_cube_solver();
-
 	
 	// MANIPULACJA
 	// manipulacja pojedyncza sciana

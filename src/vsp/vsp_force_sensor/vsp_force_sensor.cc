@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	VIRTUAL SENSOR PROCESS (lib::ECP) 
+// Proces: 	VIRTUAL SENSOR PROCESS (lib::ECP)
 // Plik:			vsp_fs.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		Metody czujnika sily - po stronie procesu VSP.
@@ -47,31 +47,31 @@ force::force(lib::configurator &_config) : sensor(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.force);
 
-	char* network_edp_vsp_attach_point = 
-		config.return_attach_point_name (lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point", 
-		config.return_string_value("edp_section"));
+	std::string network_edp_vsp_attach_point =
+		config.return_attach_point_name (lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point",
+		config.return_string_value("edp_section").c_str());
 
  	ms_nr=0; // numer odczytu z czujnika
 
 	// Czujnik niezainicjowany.
-	is_sensor_configured=false;	
+	is_sensor_configured=false;
 	// Nie ma zadnego gotowego odczytu.
-	is_reading_ready=false;				
+	is_reading_ready=false;
 	// Wczytanie konfiguracji.
-	// ini_con->create_edp_irp6_on_track  ( ini_con->vsp->edp_section);	
+	// ini_con->create_edp_irp6_on_track  ( ini_con->vsp->edp_section);
 	// Nadanie odpowiednich uprawnien watkowi.
-	ThreadCtl (_NTO_TCTL_IO, NULL);  
+	ThreadCtl (_NTO_TCTL_IO, NULL);
 	// Nawiazanie komunikacji z edp.
 	short tmp = 0;
  	// Kilka sekund  (~1) na otworzenie urzadzenia.
-	while( (edp_vsp_fd = name_open(network_edp_vsp_attach_point, NAME_FLAG_ATTACH_GLOBAL))  < 0)
+	while( (edp_vsp_fd = name_open(network_edp_vsp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))  < 0)
 		if((tmp++)<CONNECT_RETRY)
 			delay(CONNECT_DELAY);
 		else{
 			throw sensor_error (lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 		};
-	
-	delete [] network_edp_vsp_attach_point;
+
+
 	}; // end: vsp_force_sensor
 
 // Metoda sluzaca do konfiguracji czujnika.
@@ -109,7 +109,7 @@ void force::initiate_reading (void){
 	if ((((ms_nr++)%5000)==0)&& (1)){
 		if( clock_gettime( CLOCK_REALTIME , &start[0]) == -1 ) {
 		    printf("blad pomiaru czasu");
-		     }; 
+		     };
 		};
 	}; // end: initiate_reading
 

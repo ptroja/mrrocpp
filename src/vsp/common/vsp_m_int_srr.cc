@@ -95,7 +95,7 @@ void error_handler(ERROR e){
 
 /*********************************** MAIN ***********************************/
 int main(int argc, char *argv[]) {
-    char* attach_point;
+    std::string attach_point;
 	messip_channel_t *ch;
     	
 	// ustawienie priorytetow
@@ -129,7 +129,7 @@ int main(int argc, char *argv[]) {
 		// Stworzenie nowego czujnika za pomoca funkcji (cos na ksztalt szablonu abstract factory).
 		vsp::common::vs = vsp::sensor::return_created_sensor(*_config);
 
-		if ((ch = messip_channel_create(NULL, attach_point, MESSIP_NOTIMEOUT, 0)) == NULL) {
+		if ((ch = messip_channel_create(NULL, attach_point.c_str(), MESSIP_NOTIMEOUT, 0)) == NULL) {
 			perror("messip_channel_create()");
 		}
 

@@ -140,8 +140,10 @@ static char line[256];
 /     struct Config_Tag configs[]; Configuration structure
 /     char *header            ; INI header name (i.e. "[TEST]")
 /-------------------------------------------------------------------<<*/
-int input_config(const char *filename, struct Config_Tag configs[], const char *header)
+int input_config(std::string _filename, struct Config_Tag configs[], std::string _header)
 {
+   const char *filename = _filename.c_str();
+   const char *header = _header.c_str();
    struct Config_Tag *ptr;
    int count=0,lineno=0,temp;
    FILE *file;

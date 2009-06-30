@@ -1,9 +1,9 @@
 // -------------------------------------------------------------------------
 //                            vsp_s.cc 		dla QNX6.2.1
-// 
+//
 //            Virtual Sensor Process (lib::VSP) - methods for Schunk force/torgue sensor
 // Metody klasy VSP
-// 
+//
 // Ostatnia modyfikacja: styczen 2005
 // Autor: Yoyek (Tomek Winiarski)
 // na podstawie szablonu vsp Tomka Kornuty i programu obslugi czujnika Artura Zarzyckiego
@@ -46,35 +46,33 @@ schunk::schunk(lib::configurator &_config) : sensor(_config)
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.force);
 
-	char* network_edp_vsp_attach_point = 
-		config.return_attach_point_name (lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point", 
-		config.return_string_value("edp_section"));
+	std::string network_edp_vsp_attach_point =
+		config.return_attach_point_name (lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point",
+		config.return_string_value("edp_section").c_str());
 
 	ms_nr=0; // numer odczytu z czujnika
 
 	is_sensor_configured=false;	// czujnik niezainicjowany
 	is_reading_ready=false;			// nie ma zadnego gotowego odczytu
-	
+
 	ThreadCtl (_NTO_TCTL_IO, NULL);  // nadanie odpowiednich uprawnien watkowi
 	// nawiazanie komunikacji z edp
-	
+
 	short tmp = 0;
  	// kilka sekund  (~1) na otworzenie urzadzenia
-	while( (edp_vsp_fd = name_open(network_edp_vsp_attach_point, NAME_FLAG_ATTACH_GLOBAL))  < 0)
+	while( (edp_vsp_fd = name_open(network_edp_vsp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))  < 0)
 		if((tmp++)<CONNECT_RETRY)
 			delay(CONNECT_DELAY);
 		else{
 			throw sensor_error (lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 		};
-	
-	delete [] network_edp_vsp_attach_point;
-	
-};
+
+}
 
 schunk::~schunk(void)
 {
    printf("Destruktor VSP\n");
-};
+}
 
 /**************************** inicjacja czujnika ****************************/
 void schunk::configure_sensor (void)// w obecnej implementacji zeruje poziom odczytow z czujnika w EDP
@@ -92,13 +90,13 @@ void schunk::configure_sensor (void)// w obecnej implementacji zeruje poziom odc
 		sr_msg->message ("Sensor initiated by configure_sensor method");
 		vsp_edp_command.konfigurowac=1;// zadanie konfiguracji czujnika sily skierowane do EDP
 		vsp_edp_command.hdr.type=0;
-		
+
 		msg_send_timeout=new(uint64_t);
 		*msg_send_timeout=VSP_MSG_SEND_TIMEOUT_HIGH;
 		tim_event.sigev_notify = SIGEV_UNBLOCK;
 		TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_SEND | _NTO_TIMEOUT_REPLY ,  &tim_event, msg_send_timeout, NULL );
 // 		printf("VSP aaaa\n");
-		if (MsgSend(edp_vsp_fd, &vsp_edp_command, sizeof(vsp_edp_command), 
+		if (MsgSend(edp_vsp_fd, &vsp_edp_command, sizeof(vsp_edp_command),
 		&edp_vsp_reply, sizeof(edp_vsp_reply)) < 0) // by Y
 		{
 			perror("blad odwolonia VSP_SCHUNK do EDP podczas proby konfiguracji\n");
@@ -106,7 +104,7 @@ void schunk::configure_sensor (void)// w obecnej implementacji zeruje poziom odc
 		}
 // 		printf("VSP bbbb\n");
 		delete msg_send_timeout;
-		
+
 	} else if (to_vsp.parameters>=2) {
 		next_ap_state=to_vsp.parameters;
 	}
@@ -118,15 +116,15 @@ void schunk::wait_for_event()
 	uint64_t *msg_send_timeout;
 	struct sigevent tim_event;
 	//	int iw_ret;
-	
+
 	// wyslanie i odbior danych z edp
 	vsp_edp_command.konfigurowac=0;// zadanie odczytu sily od EDP
 	vsp_edp_command.hdr.type=0;
-	
+
 	msg_send_timeout=new(uint64_t);
 	*msg_send_timeout=VSP_MSG_SEND_TIMEOUT_HIGH;
 	tim_event.sigev_notify = SIGEV_UNBLOCK;
-	
+
 	TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_SEND  | _NTO_TIMEOUT_REPLY ,  &tim_event, msg_send_timeout, NULL );
 	if (MsgSend(edp_vsp_fd, &vsp_edp_command, sizeof(vsp_edp_command),
 		 &edp_vsp_reply,sizeof(edp_vsp_reply)) < 0) // by Y
@@ -136,7 +134,7 @@ void schunk::wait_for_event()
 		delete msg_send_timeout;
 		wait_for_event();
 	}
-	
+
 	delete msg_send_timeout;
 
 // 	delay(1); // BY Y DEBUG
@@ -153,9 +151,9 @@ void schunk::initiate_reading (void)
 
 	if(!is_sensor_configured)
 		throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
-		
+
 // 		printf("force: VSP %f\n", edp_vsp_reply.force[2]);
-		
+
 	ap_state=next_ap_state;
 
 	switch (ap_state)
@@ -169,11 +167,11 @@ void schunk::initiate_reading (void)
 			if (edp_vsp_reply.force[2]>STATE_2_TO_4) {
 				next_ap_state=4;
 				}
-	
+
 		break;
 		case 3:  // unoszenie (narazie pominiete)
 			if (prev_ap_state!=ap_state)	{ sr_msg->message("VSP Unoszenie"); }
-	
+
 		break;
 		case 4: // uniesienie
 			if (prev_ap_state!=ap_state)	{ sr_msg->message("VSP Uniesienie"); }
@@ -181,7 +179,7 @@ void schunk::initiate_reading (void)
 			// 	printf("blabla\n");
 				next_ap_state=5;
 				}
-	
+
 		break;
 		case 5: // opuszczanie
 			if (prev_ap_state!=ap_state)	{ sr_msg->message("VSP Opuszczanie"); }
@@ -240,9 +238,9 @@ void schunk::get_reading (void)
 	if(!is_reading_ready)
 	{
 // 		printf("DELAY: %d, %d\n", old_diff, diff);
-	
+
 		throw sensor_error (lib::FATAL_ERROR, READING_NOT_READY);
-		
+
 		}
 // 	old_diff=diff;
 	// ok
@@ -251,9 +249,9 @@ void schunk::get_reading (void)
 	// przepisanie do bufora komunikacyjnego
 	for(int i=0; i<6; i++)
 		from_vsp.comm_image.sensor_union.force.rez[i] = image.sensor_union.force.rez[i];
-	
+
 	from_vsp.comm_image.sensor_union.force.event_type = image.sensor_union.force.event_type; // stan w ktorym jest system wykryty w VSP
-	
+
 	//    sr_msg->message ("VSP Get reading ok");
 	is_reading_ready=false;
 };

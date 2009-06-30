@@ -30,6 +30,7 @@
 #include <sys/mman.h>
 #include <unistd.h>
 #include <sys/neutrino.h>
+#include <string.h>
 
 #include "bttv.h"
 #define BTTV_MAX 4

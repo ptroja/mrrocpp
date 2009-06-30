@@ -47,9 +47,6 @@ void rcsc::task_initialization(void)
 
 void rcsc::main_task_algorithm(void)
 {
-	int size;
-	char * path1;
-
 	for(;;)
 	{
 		sr_ecp_msg->message("Waiting for MP order");
@@ -122,60 +119,58 @@ void rcsc::main_task_algorithm(void)
 				default:
 					break;
 				}
-			rfrg->Move();
-			break;
-			case ecp_mp::task::RCSC_GRIPPER_OPENING:
-				switch ( (ecp_mp::task::RCSC_TURN_ANGLES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
-				{
-				case ecp_mp::task::RCSC_GO_VAR_1:
-					go_st->configure(0.002, 1000);
-					go_st->execute();
+				rfrg->Move();
+				break;
+				case ecp_mp::task::RCSC_GRIPPER_OPENING:
+					switch ( (ecp_mp::task::RCSC_TURN_ANGLES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+					{
+					case ecp_mp::task::RCSC_GO_VAR_1:
+						go_st->configure(0.002, 1000);
+						go_st->execute();
+						break;
+					case ecp_mp::task::RCSC_GO_VAR_2:
+						go_st->configure(0.02, 1000);
+						go_st->execute();
+						break;
+					default:
+						break;
+					}
 					break;
-				case ecp_mp::task::RCSC_GO_VAR_2:
-					go_st->configure(0.02, 1000);
-					go_st->execute();
-					break;
-				default:
-					break;
-				}
-				break;
-			case ecp_mp::task::ECP_GEN_TEACH_IN:
-				size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-				path1 = new char[size];
-				// Stworzenie sciezki do pliku.
-				strcpy(path1, mrrocpp_network_path);
-				sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-				tig->flush_pose_list();
-				tig->load_file_with_path (path1);
-				//		printf("\nTRACK ECP_GEN_TEACH_IN :%s\n\n", path1);
-				tig->initiate_pose_list();
-				delete[] path1;
-				tig->Move();
-				break;
-			case ecp_mp::task::ECP_GEN_SMOOTH2:
-				size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-				path1 = new char[size];
-				// Stworzenie sciezki do pliku.
-				strcpy(path1, mrrocpp_network_path);
-				sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-				sg2->load_file_with_path (path1);
-				//				printf("\nTRACK ECP_GEN_SMOOTH2 :%s\n\n", path1);
-				delete[] path1;
-				sg2->Move();
-				break;
-			case ecp_mp::task::ECP_GEN_SMOOTH:
-				size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-				path1 = new char[size];
-				// Stworzenie sciezki do pliku.
-				strcpy(path1, mrrocpp_network_path);
-				sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-				sg->load_file_with_path (path1);
-				//				printf("\nTRACK ECP_GEN_SMOOTH :%s\n\n", path1);
-				delete[] path1;
-				sg->Move();
-				break;
-			default:
-				break;
+					case ecp_mp::task::ECP_GEN_TEACH_IN:
+					{
+						std::string path(mrrocpp_network_path);
+						path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+
+						tig->flush_pose_list();
+						tig->load_file_with_path (path.c_str());
+						//		printf("\nTRACK ECP_GEN_TEACH_IN :%s\n\n", path1);
+						tig->initiate_pose_list();
+
+						tig->Move();
+						break;
+					}
+					case ecp_mp::task::ECP_GEN_SMOOTH2:
+					{
+						std::string path(mrrocpp_network_path);
+						path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+
+						sg2->load_file_with_path (path.c_str());
+						//				printf("\nTRACK ECP_GEN_SMOOTH2 :%s\n\n", path1);
+						sg2->Move();
+						break;
+					}
+					case ecp_mp::task::ECP_GEN_SMOOTH:
+					{
+						std::string path(mrrocpp_network_path);
+						path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+
+						sg->load_file_with_path (path.c_str());
+						//				printf("\nTRACK ECP_GEN_SMOOTH :%s\n\n", path1);
+						sg->Move();
+						break;
+					}
+					default:
+						break;
 		}
 
 		ecp_termination_notice();

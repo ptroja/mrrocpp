@@ -82,7 +82,7 @@ void *sr_thread(void* arg)
 	// my_data_t msg;
 	int rcvid;
 
-	if ((attach = name_attach(NULL, ui_state.sr_attach_point, NAME_FLAG_ATTACH_GLOBAL)) == NULL)
+	if ((attach = name_attach(NULL, ui_state.sr_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
 	{
 		perror("BLAD SR ATTACH, przypuszczalnie nie uruchomiono gns, albo blad wczytywania konfiguracji");
 		return NULL;
@@ -225,7 +225,7 @@ void *comm_thread(void* arg) {
 
 	bool wyjscie;
 
-	if ((attach = name_attach(NULL, ui_state.ui_attach_point, NAME_FLAG_ATTACH_GLOBAL)) == NULL)
+	if ((attach = name_attach(NULL, ui_state.ui_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
 	{
 		// XXX TODO
 		// return EXIT_FAILURE;
@@ -613,34 +613,32 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	config = NULL;
 
 	ui_state.ui_state=1;// ui working
-	ui_state.ui_attach_point = NULL;
-	ui_state.network_sr_attach_point = NULL;
 
 	ui_state.irp6_on_track.edp.state=-1; // edp nieaktywne
 	ui_state.irp6_on_track.edp.last_state=-1; // edp nieaktywne
 	ui_state.irp6_on_track.ecp.trigger_fd = -1;
-	strcpy(ui_state.irp6_on_track.edp.section_name, "[edp_irp6_on_track]");
-	strcpy(ui_state.irp6_on_track.ecp.section_name, "[ecp_irp6_on_track]");
+	ui_state.irp6_on_track.edp.section_name = "[edp_irp6_on_track]";
+	ui_state.irp6_on_track.ecp.section_name = "[ecp_irp6_on_track]";
 	ui_state.irp6_postument.edp.state=-1; // edp nieaktywne
 	ui_state.irp6_postument.edp.last_state=-1; // edp nieaktywne
 	ui_state.irp6_postument.ecp.trigger_fd = -1;
-	strcpy(ui_state.irp6_postument.edp.section_name, "[edp_irp6_postument]");
-	strcpy(ui_state.irp6_postument.ecp.section_name, "[ecp_irp6_postument]");
+	ui_state.irp6_postument.edp.section_name = "[edp_irp6_postument]";
+	ui_state.irp6_postument.ecp.section_name = "[ecp_irp6_postument]";
 	ui_state.speaker.edp.state=-1; // edp nieaktywne
 	ui_state.speaker.edp.last_state=-1; // edp nieaktywne
 	ui_state.speaker.ecp.trigger_fd = -1;
-	strcpy(ui_state.speaker.edp.section_name, "[edp_speaker]");
-	strcpy(ui_state.speaker.ecp.section_name, "[ecp_speaker]");
+	ui_state.speaker.edp.section_name = "[edp_speaker]";
+	ui_state.speaker.ecp.section_name = "[ecp_speaker]";
 	ui_state.conveyor.edp.state=-1; // edp nieaktywne
 	ui_state.conveyor.edp.last_state=-1; // edp nieaktywne
 	ui_state.conveyor.ecp.trigger_fd = -1;
-	strcpy(ui_state.conveyor.edp.section_name, "[edp_conveyor]");
-	strcpy(ui_state.conveyor.ecp.section_name, "[ecp_conveyor]");
+	ui_state.conveyor.edp.section_name = "[edp_conveyor]";
+	ui_state.conveyor.ecp.section_name = "[ecp_conveyor]";
 	ui_state.irp6_mechatronika.edp.state=-1; // edp nieaktywne
 	ui_state.irp6_mechatronika.edp.last_state=-1; // edp nieaktywne
 	ui_state.irp6_mechatronika.ecp.trigger_fd = -1;
-	strcpy(ui_state.irp6_mechatronika.edp.section_name, "[edp_irp6_mechatronika]");
-	strcpy(ui_state.irp6_mechatronika.ecp.section_name, "[ecp_irp6_mechatronika]");
+	ui_state.irp6_mechatronika.edp.section_name = "[edp_irp6_mechatronika]";
+	ui_state.irp6_mechatronika.ecp.section_name = "[ecp_irp6_mechatronika]";
 
 	ui_state.file_window_mode=FSTRAJECTORY; // uczenie
 	ui_state.all_edps = UI_ALL_EDPS_NONE_EDP_LOADED;
@@ -702,28 +700,29 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 		perror( "Blad cwd w UI" );
 	}
 
-	strcpy(ui_state.ui_node_name, sysinfo.nodename);
+	ui_state.ui_node_name = sysinfo.nodename;
 
-	strcpy(ui_state.binaries_local_path, cwd);
-	strncpy(ui_state.mrrocpp_local_path, cwd, strlen(cwd)-3); // kopiowanie lokalnej sciezki bez "bin" - 3 znaki
-	strcpy(ui_state.binaries_network_path, "/net/");
-	strcat(ui_state.binaries_network_path, ui_state.ui_node_name);
-	strcat(ui_state.binaries_network_path, ui_state.binaries_local_path);
-	strcat(ui_state.binaries_network_path, "/");// wysylane jako argument do procesow potomnych (mp_m i dalej)
+	ui_state.binaries_local_path = cwd;
+	ui_state.mrrocpp_local_path = cwd;
+	ui_state.mrrocpp_local_path.erase(ui_state.mrrocpp_local_path.length()-3);// kopiowanie lokalnej sciezki bez "bin" - 3 znaki
+	ui_state.binaries_network_path = "/net/";
+	ui_state.binaries_network_path += ui_state.ui_node_name;
+	ui_state.binaries_network_path += ui_state.binaries_local_path;
+	ui_state.binaries_network_path += "/";// wysylane jako argument do procesow potomnych (mp_m i dalej)
 	// printf( "system name  : %s\n", ui_state.binaries_network_path);
 
 	// sciezka dla okna z wyborem pliku podczas wybor trajektorii dla uczenia
-	strcpy(ui_state.teach_filesel_fullpath, "/net/");
-	strcat(ui_state.teach_filesel_fullpath, ui_state.ui_node_name);
-	strcat(ui_state.teach_filesel_fullpath, ui_state.mrrocpp_local_path);
-	strcat(ui_state.teach_filesel_fullpath, "trj");
+	ui_state.teach_filesel_fullpath = "/net/";
+	ui_state.teach_filesel_fullpath += ui_state.ui_node_name;
+	ui_state.teach_filesel_fullpath += ui_state.mrrocpp_local_path;
+	ui_state.teach_filesel_fullpath += "trj";
 	// 	printf("abba: %s\n", ui_state.teach_filesel_fullpath);
 
 	// sciezka dla okna z wyborem pliku z trajektoria podczas wyboru pliku konfiguracyjnego
-	strcpy(ui_state.config_file_fullpath, "/net/");
-	strcat(ui_state.config_file_fullpath, ui_state.ui_node_name);
-	strcat(ui_state.config_file_fullpath, ui_state.mrrocpp_local_path);
-	strcat(ui_state.config_file_fullpath, "configs");
+	ui_state.config_file_fullpath = "/net/";
+	ui_state.config_file_fullpath += ui_state.ui_node_name;
+	ui_state.config_file_fullpath += ui_state.mrrocpp_local_path;
+	ui_state.config_file_fullpath += "configs";
 
 	// printf ("Remember to create gns server\n");
 

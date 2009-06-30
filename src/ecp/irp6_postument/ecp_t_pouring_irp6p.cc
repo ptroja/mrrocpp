@@ -66,11 +66,7 @@ void pouring::task_initialization(void)
 
 void pouring::main_task_algorithm(void)
 {
-
-    int size;
-    char * path1;
-
-    for(;;)
+   for(;;)
     {
     	sr_ecp_msg->message("Waiting for MP order");
 
@@ -81,14 +77,13 @@ void pouring::main_task_algorithm(void)
     	switch ( (ecp_mp::task::POURING_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
     	{
     		case ecp_mp::task::ECP_GEN_SMOOTH:
-    			size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-    			path1 = new char[size];
-    			strcpy(path1, mrrocpp_network_path);
-    			sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-    			sg->load_file_with_path (path1);
-    			delete[] path1;
+    		{
+    			std::string path(mrrocpp_network_path);
+    			path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+    			sg->load_file_with_path (path.c_str());
     			sg->Move();
     			break;
+    		}
     		case ecp_mp::task::GRIP:
     			go_st->configure(-0.018, 1000);
     			go_st->execute();

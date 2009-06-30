@@ -8,6 +8,7 @@
 #define __SRLIB_H
 
 #include <time.h>
+#include <string>
 
 #include "messip/messip.h"
 #include "lib/typedefs.h"
@@ -60,39 +61,49 @@ protected:
   int send_package(void);
 
 public :
-  sr(PROCESS_TYPE process_type, const char *process_name, const char *sr_name);
+  sr(PROCESS_TYPE process_type, std::string process_name, std::string sr_name);
   virtual ~sr(void);
   int message(int16_t message_type, uint64_t error_code);
   int message(int16_t message_type, uint64_t error_code0, uint64_t error_code1);
   int message(int16_t message_type, uint64_t error_code, const char *text);
+  int message(int16_t message_type, uint64_t error_code, std::string text) {
+	  return message(message_type, error_code, text.c_str());
+  }
   int message(const char *text);
+  int message(std::string text) {
+	  return message(text.c_str());
+  }
   int message(int16_t message_type, const char *text);
+  int message(int16_t message_type, std::string text) {
+	  return message(message_type, text.c_str());
+  }
+
   virtual void interpret() = 0;
 };
 
 class sr_edp: public sr {
 public:
-  sr_edp(PROCESS_TYPE process_type, const char *process_name, const char *sr_name);
+  sr_edp(PROCESS_TYPE process_type, std::string process_name, std::string sr_name);
   virtual void interpret(void);
 };
 
 class sr_ecp: public sr {
 public:
-  sr_ecp(PROCESS_TYPE process_type, const char *process_name, const char *sr_name);
+  sr_ecp(PROCESS_TYPE process_type, std::string process_name, std::string sr_name);
   virtual void interpret(void);
 };
 
 // obsluga komunikatow generowanych przez VSP
 class sr_vsp: public sr {
 public:
-  sr_vsp(PROCESS_TYPE process_type, const char *process_name, const char *sr_name);
+  sr_vsp(PROCESS_TYPE process_type, std::string process_name, std::string sr_name);
   virtual void interpret(void);
 };
 
 // obsluga komunikatow generowanych przez UI// by Y
 class sr_ui: public sr {
 public:
-  sr_ui(PROCESS_TYPE process_type, const char *process_name, const char *sr_name);
+  sr_ui(PROCESS_TYPE process_type, std::string process_name, std::string sr_name);
   virtual void interpret(void);
 };
 

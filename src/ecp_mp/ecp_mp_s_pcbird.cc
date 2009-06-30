@@ -37,10 +37,10 @@ pcbird::pcbird(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::t
 
 	// Retrieve pcbird node name and port from configuration file.
 	int pcbird_port = _ecp_mp_object.config.return_int_value("pcbird_port", _section_name);
-	char* pcbird_node_name = _ecp_mp_object.config.return_string_value("pcbird_node_name", _section_name);
+	std::string pcbird_node_name = _ecp_mp_object.config.return_string_value("pcbird_node_name", _section_name);
 
   // Try to connect to pcbird.
-  if ((sockfd = pcbird_connect(pcbird_node_name, pcbird_port)) == -1)
+  if ((sockfd = pcbird_connect(pcbird_node_name.c_str(), pcbird_port)) == -1)
 		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 
 	sr_ecp_msg.message("Connected to pcbird");
@@ -73,7 +73,7 @@ void pcbird::initiate_reading() {
  */
 void pcbird::get_reading() {
 //	sr_ecp_msg.message("PCBIRD: before get_reading");
-	
+
 //  pcbird_get_streaming_position(sockfd, (pcbird_pos_t *)&image.sensor_union.pcbird);
   pcbird_get_single_position(sockfd, (pcbird_pos_t*) &image.sensor_union.pcbird);
 

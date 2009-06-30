@@ -44,14 +44,14 @@ task::task(lib::configurator &_config)
 {
 	mrrocpp_network_path = config.return_mrrocpp_network_path();
 
-	char* ui_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", "[ui]");
+	std::string ui_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", "[ui]");
 
     // kilka sekund  (~1) na otworzenie urzadzenia
     short tmp = 0;
 #if !defined(USE_MESSIP_SRR)
-    while ((UI_fd = name_open(ui_net_attach_point, NAME_FLAG_ATTACH_GLOBAL)) < 0) {
+    while ((UI_fd = name_open(ui_net_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0) {
 #else
-	while ((UI_fd = messip_channel_connect(NULL, ui_net_attach_point, MESSIP_NOTIMEOUT)) == NULL) {
+	while ((UI_fd = messip_channel_connect(NULL, ui_net_attach_point.c_str(), MESSIP_NOTIMEOUT)) == NULL) {
 #endif
         if ((tmp++)<CONNECT_RETRY)
             usleep(1000*CONNECT_DELAY);
@@ -63,15 +63,6 @@ task::task(lib::configurator &_config)
             throw ecp::common::ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
         }
     }
-	
-
-
-    delete [] ui_net_attach_point;
-}
-
-    task::~task()
-{
-	delete [] mrrocpp_network_path;
 }
 
 

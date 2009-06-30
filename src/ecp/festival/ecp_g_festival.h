@@ -42,17 +42,16 @@ class generator : public common::generator::generator
 		char buf[256];
 
 		int portnum;
-		const char *host;
+		std::string host;
 		
 		char phrase[MAX_FESTIVAL_PHRASE];
-		const char *voice;
+		std::string voice;
 		
 		int test_mode;	
 
 	public:
 		// konstruktor
 		generator(common::task::task& _ecp_task);
-		~generator();
 
 		virtual bool first_step ();
 

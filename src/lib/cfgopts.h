@@ -6,6 +6,7 @@ plik naglowkowy do procedur odczytu i zapisu z pliku INI
 #if !defined(__CFGOPTS_H)
 #define __CFGOPTS_H
 
+#include <string>
 
 #ifdef __cplusplus
 extern "C" {
@@ -47,8 +48,8 @@ struct Config_Tag {
       void        *buf;                 /* Storage location     */
 };
 
-int input_config(const char *, struct Config_Tag *, const char *);
-int update_config(const char *, struct Config_Tag *, const char *);
+int input_config(std::string, struct Config_Tag *, std::string);
+int update_config(std::string, struct Config_Tag *, std::string);
 
 #ifdef __cplusplus
 }

@@ -29,7 +29,6 @@ void rubik_cube_solver::initiate(common::CUBE_COLOR up_is, common::CUBE_COLOR do
 {
 	cube_state = new common::CubeState(up_is, down_is, front_is, rear_is, left_is, right_is);
 
-	cube_initial_state = NULL;
 	manipulation_sequence_computed = false;
 }
 
@@ -1028,13 +1027,10 @@ void rubik_cube_solver::task_initialization(void)
 
 void rubik_cube_solver::main_task_algorithm(void)
 {
+	std::string cube_initial_state_string = config.return_string_value("cube_initial_state");
 
+	const char * cube_initial_state = cube_initial_state_string.c_str();
 
-
-	// odczyt konfiguracji manipulacji
-	if (cube_initial_state)
-		delete[] cube_initial_state;
-	cube_initial_state = config.return_string_value("cube_initial_state");
 	//	enum common::CUBE_COLOR {UKNOWN, common::RED, common::YELLOW, common::GREEN, common::BLUE, common::ORANGE, common::WHITE};
 	//	 cube_state::set_state(common::CUBE_COLOR up_is, common::CUBE_COLOR down_is, common::CUBE_COLOR front_is,
 	//		common::CUBE_COLOR rear_is, common::CUBE_COLOR left_is, common::CUBE_COLOR right_is)

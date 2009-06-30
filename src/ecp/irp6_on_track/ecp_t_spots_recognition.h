@@ -36,8 +36,8 @@ namespace task {
 
 class spots_recognition: public common::task::task
 {
-	char * trajektoria_poczatkowa;
-	char * trajektoria_koncowa;
+	const char * trajektoria_poczatkowa;
+	const char * trajektoria_koncowa;
 
 	protected:
 

@@ -647,7 +647,7 @@ file_selection_window_send_location( PtWidget_t *widget, ApInfo_t *apinfo, PtCal
 			}
 
 			// kopiowanie biezacej sciezki, aby w nastepnym wywolaniu okna od niej zaczynac
-			strcpy(ui_state.teach_filesel_fullpath, ui_ecp_obj->ui_rep.path);
+			ui_state.teach_filesel_fullpath = ui_ecp_obj->ui_rep.path;
 			// opuszczenie semaforu dla watku UI_COMM
 			ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 
@@ -656,16 +656,15 @@ file_selection_window_send_location( PtWidget_t *widget, ApInfo_t *apinfo, PtCal
 		{
 			if ((item->type) == Pt_FS_FILE)
 			{
-				// 	char file_name[strlen(rindex(item->fullpath,'/'))];
-				// 	char directory[strlen(item->fullpath)-strlen(rindex(item->fullpath,'/'))];
-				// 	printf ("asdad %s\n", item->fullpath);
-				strncpy(ui_state.config_file,rindex(item->fullpath,'/')+1,strlen(rindex(item->fullpath,'/'))-1);
-				ui_state.config_file[strlen(rindex(item->fullpath,'/'))-1]='\0';
+				// TODO: what is going on here ?!
+				char buff[PATH_MAX];
+				strncpy(buff,rindex(item->fullpath,'/')+1,strlen(rindex(item->fullpath,'/'))-1);
+				buff[strlen(rindex(item->fullpath,'/'))-1]='\0';
 
-			     PtSetResource(ABW_PtText_config_file, Pt_ARG_TEXT_STRING, ui_state.config_file, 0);
+				ui_state.config_file = buff;
+
+				PtSetResource(ABW_PtText_config_file, Pt_ARG_TEXT_STRING, ui_state.config_file.c_str(), 0);
 		     	PtDamageWidget( ABW_PtText_config_file );
-	 			//  		strcpy(ui_state.config_file, tmp_buf);
-
 			}
 		}
 
@@ -704,7 +703,7 @@ file_selection_window_post_realize( PtWidget_t *widget, ApInfo_t *apinfo, PtCall
 		case FSCONFIG:
 				// 	printf("aaa:\n");
 			// ustawienie katalogu root
-			PtSetArg(&args[0], Pt_ARG_FS_ROOT_DIR, ui_state.config_file_fullpath, 0);
+			PtSetArg(&args[0], Pt_ARG_FS_ROOT_DIR, ui_state.config_file_fullpath.c_str(), 0);
 			PtSetResources(ABW_PtFileSel_sl, 1, args);
 			PtDamageWidget(ABW_PtFileSel_sl);
 
@@ -721,7 +720,7 @@ file_selection_window_post_realize( PtWidget_t *widget, ApInfo_t *apinfo, PtCall
 			PtDamageWidget(ABW_PtFileSel_sl);
 
 			// przejscie do katalogu z trajektoriami
-			buffer = strdup(ui_state.teach_filesel_fullpath);
+			buffer = strdup(ui_state.teach_filesel_fullpath.c_str());
 			strcpy(current_path,"");
 
 			// 	    printf( "%s\n", buffer );
@@ -1013,7 +1012,7 @@ task_param_actualization( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 	char*	tmp_buf;
 
 	PtGetResource(ABW_PtText_config_file, Pt_ARG_TEXT_STRING, &tmp_buf, 0);
-    		strcpy(ui_state.config_file, tmp_buf);
+	ui_state.config_file = tmp_buf;
 
 	return( Pt_CONTINUE );
 	}
@@ -1030,8 +1029,8 @@ task_window_param_actualization( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 /*			printf("aaa: %s\n",ui_state.mp_name);
 			printf("bbb: %s\n",ui_state.mp_node_name);*/
 
-     PtSetResource(ABW_PtText_config_file,Pt_ARG_TEXT_STRING, ui_state.config_file, 0);
-     PtSetResource(ABW_PtLabel_bin_directory, Pt_ARG_TEXT_STRING, ui_state.binaries_network_path, 0);
+     PtSetResource(ABW_PtText_config_file,Pt_ARG_TEXT_STRING, ui_state.config_file.c_str(), 0);
+     PtSetResource(ABW_PtLabel_bin_directory, Pt_ARG_TEXT_STRING, ui_state.binaries_network_path.c_str(), 0);
 
 	return( Pt_CONTINUE );
 }
@@ -1041,83 +1040,54 @@ task_window_param_actualization( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 int clear_all_configuration_lists()
 {
 	// clearing of lists
-	for (std::list<char*>::iterator list_iterator = ui_state.section_list.begin(); list_iterator != ui_state.section_list.end(); list_iterator++)
-	{
-		delete *list_iterator;
-	}
 	ui_state.section_list.clear();
-
-	for (std::list<char*>::iterator node_list_iterator = ui_state.config_node_list.begin(); node_list_iterator != ui_state.config_node_list.end(); node_list_iterator++)
-	{
-		delete *node_list_iterator;
-	}
 	ui_state.config_node_list.clear();
-
-	for (std::list<char*>::iterator node_list_iterator = ui_state.all_node_list.begin(); node_list_iterator != ui_state.all_node_list.end(); node_list_iterator++)
-	{
-		delete *node_list_iterator;
-	}
 	ui_state.all_node_list.clear();
-
-	for (std::list<program_node_def>::iterator program_node_list_iterator = ui_state.program_node_list.begin(); program_node_list_iterator != ui_state.program_node_list.end(); program_node_list_iterator++)
-	{
-		delete program_node_list_iterator->program_name;
-		delete program_node_list_iterator->node_name;
-	}
 	ui_state.program_node_list.clear();
-
 }
 
 
 
 int initiate_configuration()
 {
-
-	char* tmp;
-
-	bool wyjscie = false;
-
- 	 if (access(ui_state.config_file_relativepath, R_OK)!= 0 )
+	if (access(ui_state.config_file_relativepath.c_str(), R_OK)!= 0 )
 	{
-	 	printf ("Wrong entry in default_file.cfg - load another configuration than: %s\n", ui_state.config_file_relativepath);
-		strcpy(ui_state.config_file_relativepath,"../configs/common.ini");
-
-	 }
+		fprintf (stderr, "Wrong entry in default_file.cfg - load another configuration than: %s\n", ui_state.config_file_relativepath.c_str());
+		ui_state.config_file_relativepath = "../configs/common.ini";
+	}
 
 	// sprawdzenie czy nazwa sesji jest unikalna
 
+	bool wyjscie = false;
+
 	while (!wyjscie)
 	{
-
-        time_t time_of_day;
-        char file_date[50];
-        char log_file_with_dir[100];
-        char file_name[50];
-
-		char* tmp;
-
-        time_of_day = time( NULL );
-        strftime( ui_state.session_name, 8, "_%H%M%S", localtime( &time_of_day ) );
+        time_t now = time( NULL );
+        char now_string[32];
+        strftime( now_string, 8, "_%H%M%S", localtime( &now ) );
+        ui_state.session_name = now_string;
 
         if (config) delete config;
-		config = new lib::configurator(ui_state.ui_node_name, ui_state.mrrocpp_local_path, ui_state.config_file, "[ui]",
-		ui_state.session_name);
+		config = new lib::configurator(
+				ui_state.ui_node_name.c_str(),
+				ui_state.mrrocpp_local_path.c_str(),
+				ui_state.config_file.c_str(),
+				"[ui]",
+				ui_state.session_name.c_str());
 
-		tmp = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
+		std::string attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
 
-		// wykrycie identyczneych nazw sesji
+		// wykrycie identycznych nazw sesji
 		wyjscie = true;
-		DIR* dirp;
-	    struct dirent* direntp;
 
-	    dirp = opendir( "/dev/name/global" );
+	    DIR* dirp = opendir( "/dev/name/global" );
 	    if( dirp != NULL ) {
 	        for(;;) {
-	            direntp = readdir( dirp );
+	        	struct dirent* direntp = readdir( dirp );
 	            if( direntp == NULL ) break;
 
 	            // printf( "%s\n", direntp->d_name );
-	            if  (strcmp(direntp->d_name, tmp) == 0)
+	            if  (attach_point == direntp->d_name)
 	            {
 	            	wyjscie = false;
 	            }
@@ -1126,8 +1096,6 @@ int initiate_configuration()
 	        closedir( dirp );
 
 	    }
-
-	    delete[] tmp;
 
 	}
 
@@ -1138,11 +1106,10 @@ int initiate_configuration()
 	clear_all_configuration_lists();
 
 	// sczytanie listy sekcji
-	fill_section_list (ui_state.config_file_relativepath);
-	fill_section_list ((char*)"../configs/common.ini");
+	fill_section_list (ui_state.config_file_relativepath.c_str());
+	fill_section_list ("../configs/common.ini");
 	fill_node_list();
 	fill_program_node_list();
-
 
 	return 1;
 }
@@ -1152,18 +1119,16 @@ int initiate_configuration()
 int
 reload_whole_configuration() {
 
-	char sr_msg_buf[100];
-
- 	 if (access(ui_state.config_file_relativepath, R_OK) != 0 )
+	if (access(ui_state.config_file_relativepath.c_str(), R_OK) != 0 )
 	{
-	 	printf ("Wrong entry in default_file.cfg - load another configuration than: %s\n", ui_state.config_file_relativepath);
-		strcpy(ui_state.config_file_relativepath,"../configs/common.ini");
-		 }
+		fprintf (stderr, "Wrong entry in default_file.cfg - load another configuration than: %s\n", ui_state.config_file_relativepath.c_str());
+		ui_state.config_file_relativepath = "../configs/common.ini";
+	}
 
 
 	if ((ui_state.mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (ui_state.mp.state == UI_MP_PERMITED_TO_RUN) ){ // jesli nie dziala mp podmien mp ecp vsp
 
-		config->change_ini_file (ui_state.config_file);
+		config->change_ini_file (ui_state.config_file.c_str());
 
 		ui_state.is_mp_and_ecps_active = config->return_int_value("is_mp_and_ecps_active");
 
@@ -1196,34 +1161,28 @@ reload_whole_configuration() {
 		clear_all_configuration_lists();
 
 		// sczytanie listy sekcji
-		fill_section_list (ui_state.config_file_relativepath);
-		fill_section_list ((char*)"../configs/common.ini");
+		fill_section_list (ui_state.config_file_relativepath.c_str());
+		fill_section_list ("../configs/common.ini");
 		fill_node_list();
 		fill_program_node_list();
 
-
-		//ui_state.section_list.clear();
-		// ui_state.section_list.push_front("ala");
-		//  ui_state.section_list.push_front("bala");
-		//   ui_state.section_list.push_front("mala");
-		//	printf("bbb: %d\n", ui_state.section_list.size());
 		/*
-			for (list<char*>::iterator list_iterator = ui_state.section_list.begin(); list_iterator != ui_state.section_list.end(); list_iterator++)
-			{
-				printf("section_name: %s\n", *list_iterator);
+		for (list<char*>::iterator list_iterator = ui_state.section_list.begin(); list_iterator != ui_state.section_list.end(); list_iterator++)
+		{
+			printf("section_name: %s\n", *list_iterator);
 
-			}
+		}
 
-			for (list<char*>::iterator node_list_iterator = ui_state.node_list.begin(); node_list_iterator != ui_state.node_list.end(); node_list_iterator++)
-			{
-				printf("node_name: %s\n", *node_list_iterator);
-			}
+		for (list<char*>::iterator node_list_iterator = ui_state.node_list.begin(); node_list_iterator != ui_state.node_list.end(); node_list_iterator++)
+		{
+			printf("node_name: %s\n", *node_list_iterator);
+		}
 
-			for (list<program_node_def>::iterator program_node_list_iterator = ui_state.program_node_list.begin(); program_node_list_iterator != ui_state.program_node_list.end(); program_node_list_iterator++)
-			{
-				printf("node_name: %s\n", program_node_list_iterator->node_name);
-			}
-			*/
+		for (list<program_node_def>::iterator program_node_list_iterator = ui_state.program_node_list.begin(); program_node_list_iterator != ui_state.program_node_list.end(); program_node_list_iterator++)
+		{
+			printf("node_name: %s\n", program_node_list_iterator->node_name);
+		}
+		*/
 
 		// zczytanie konfiguracji UI
 
@@ -1232,42 +1191,37 @@ reload_whole_configuration() {
 
 		if (ui_state.is_mp_and_ecps_active)
 		{
-
-			delete [] ui_state.mp.network_pulse_attach_point;
 			ui_state.mp.network_pulse_attach_point = config->return_attach_point_name	(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", "[mp]");
-
-			delete [] ui_state.mp.node_name;
 			ui_state.mp.node_name = config->return_string_value ("node_name", "[mp]");
-
 			ui_state.mp.pid = -1;
 		}
 
 		// inicjacja komunikacji z watkiem sr
 		if (ui_msg.ui == NULL)
 		{
-			if ((ui_msg.ui = new lib::sr_ui(lib::UI, ui_state.ui_attach_point, ui_state.network_sr_attach_point)) == NULL) {
-				perror ( "Unable to locate SR\n");
-			} else {
-				ui_msg.ui->message("started");
-			}
+			ui_msg.ui = new lib::sr_ui(
+					lib::UI,
+					ui_state.ui_attach_point.c_str(),
+					ui_state.network_sr_attach_point.c_str()
+					);
 		}
 
 		// inicjacja komunikacji z watkiem sr
 		if (ui_msg.all_ecp == NULL)
 		{
-			if ((ui_msg.all_ecp = new lib::sr_ecp(lib::ECP, "ui_all_ecp" , ui_state.network_sr_attach_point)) == NULL) {
-				perror ( "Unable to locate SR\n");
-			} else {
-
-			}
+			ui_msg.all_ecp = new lib::sr_ecp(
+					lib::ECP,
+					"ui_all_ecp",
+					ui_state.network_sr_attach_point.c_str()
+					);
 		}
 
 		// wypisanie komunikatu o odczytaniu konfiguracji
 		if (ui_msg.ui)
 		{
-			strcpy(sr_msg_buf, ui_state.config_file);
-			strcat(sr_msg_buf, " config file loaded");
-			ui_msg.ui->message(sr_msg_buf);
+			std::string msg(ui_state.config_file);
+			msg += " config file loaded";
+			ui_msg.ui->message(msg.c_str());
 		}
 
 	}
@@ -1280,19 +1234,12 @@ reload_whole_configuration() {
 
 
 // fills section list of configuration files
-int fill_section_list(char* file_name_and_path)
+int fill_section_list(const char* file_name_and_path)
 {
-
 	static char line[256];
-	// char program_name[50];
-	// char node_name[50];
-
-	FILE *file;
-  	char *fptr;
-	std::list<char*>::iterator list_iterator;
 
 	// otworz plik konfiguracyjny
-	file=fopen(file_name_and_path, "r");
+	FILE * file=fopen(file_name_and_path, "r");
 	if ( file==NULL )
 	{
 		printf ("UI fill_section_list Wrong file_name: %s\n", file_name_and_path);
@@ -1300,7 +1247,7 @@ int fill_section_list(char* file_name_and_path)
 	}
 
 	// sczytaj nazwy wszytkich sekcji na liste dynamiczna
-	fptr = fgets(line,255,file);  // get input line
+	char * fptr = fgets(line,255,file);  // get input line
 
 	// dopoki nie osiagnieto konca pliku
 
@@ -1313,22 +1260,18 @@ int fill_section_list(char* file_name_and_path)
 		    strncpy(current_section, line, strlen(line)-1);
 		    current_section[strlen(line)-1]='\0';
 
-			//		printf("outside: %s\n", current_section);
+		  	std::list<ui_state_def::list_t>::iterator list_iterator;
 
 			// checking if section is already considered
 			for (list_iterator = ui_state.section_list.begin(); list_iterator != ui_state.section_list.end(); list_iterator++)
 			{
-				if (strcmp(current_section, *list_iterator) == 0 ) break;
+				if ((*list_iterator) == current_section) break;
 			}
 
 			// if the section does not exists
 			if (list_iterator == ui_state.section_list.end())
 			{
-			//		printf("inside: %s\n", current_section);
-				char * tmp;
-				tmp = new char[50];
-				strcpy(tmp, current_section);
-				ui_state.section_list.push_back(tmp);
+				ui_state.section_list.push_back(std::string(current_section));
 			}
 
 		} // end 	if (( fptr!=NULL )&&( line[0]=='[' ))
@@ -1348,45 +1291,31 @@ int fill_section_list(char* file_name_and_path)
 // fills node list
 int fill_node_list()
 {
-//	printf("fill_node_list\n");
-	std::list<char*>::iterator node_list_iterator;
-
-    DIR* dirp;
-    struct dirent* direntp;
-
-
 	// fill all network nodes list
 
-    dirp = opendir( "/net" );
-    if( dirp != NULL ) {
-        for(;;) {
-            direntp = readdir( dirp );
-            if( direntp == NULL ) break;
-
-		char* tmp;
-		tmp = new char[30];
-		strcpy(tmp, direntp->d_name);
-          ui_state.all_node_list.push_back(tmp);
-        }
-
-        closedir( dirp );
-
-    }
+	DIR* dirp = opendir( "/net" );
+	if( dirp != NULL ) {
+		for(;;) {
+			struct dirent *direntp = readdir( dirp );
+			if( direntp == NULL ) break;
+			ui_state.all_node_list.push_back(std::string(direntp->d_name));
+		}
+		closedir( dirp );
+	}
 
 
-	for (std::list<char*>::iterator section_list_iterator = ui_state.section_list.begin(); section_list_iterator != ui_state.section_list.end(); section_list_iterator++)
+	for (std::list<ui_state_def::list_t>::iterator section_list_iterator = ui_state.section_list.begin(); section_list_iterator != ui_state.section_list.end(); section_list_iterator++)
 	{
-
 		if (config->exists("node_name", *section_list_iterator))
 		{
-			char* tmp = config->return_string_value("node_name", *section_list_iterator);
-	//		printf("bbb: %s\n", config->return_string_value("node_name", *section_list_iterator));
+			std::string tmp = config->return_string_value("node_name", *section_list_iterator);
+
+			std::list<ui_state_def::list_t>::iterator node_list_iterator;
 
 			for (node_list_iterator = ui_state.config_node_list.begin(); node_list_iterator != ui_state.config_node_list.end(); node_list_iterator++)
 			{
-				if (strcmp(tmp, *node_list_iterator) == 0 )
+				if (tmp == (*node_list_iterator))
 				{
-		//			printf("bbb\n");
 					break;
 				}
 			}
@@ -1394,17 +1323,13 @@ int fill_node_list()
 			// if the node does not exists
 			if (node_list_iterator == ui_state.config_node_list.end())
 			{
-		//		printf("aaa\n");
 				ui_state.config_node_list.push_back(tmp);
-			} else {
-				delete tmp;
 			}
-
 		}
 
 	}
 
-return 1;
+	return 1;
 }
 
 
@@ -1414,7 +1339,7 @@ int fill_program_node_list()
 {
 //	printf("fill_program_node_list\n");
 
-	for (std::list<char*>::iterator section_list_iterator = ui_state.section_list.begin(); section_list_iterator != ui_state.section_list.end(); section_list_iterator++)
+	for (std::list<ui_state_def::list_t>::iterator section_list_iterator = ui_state.section_list.begin(); section_list_iterator != ui_state.section_list.end(); section_list_iterator++)
 	{
 
 		if ((config->exists("program_name", *section_list_iterator) && config->exists("node_name", *section_list_iterator)))
@@ -1422,15 +1347,12 @@ int fill_program_node_list()
 			//	char* tmp_p = config->return_string_value("program_name", *section_list_iterator);
 			//	char* tmp_n = config->return_string_value("node_name", *section_list_iterator);
 
-			program_node_def* tmp_s;
-			tmp_s = new program_node_def;
+			program_node_def tmp_s;
 
-			tmp_s->program_name = config->return_string_value("program_name", *section_list_iterator);
-			tmp_s->node_name = config->return_string_value("node_name", *section_list_iterator);
+			tmp_s.program_name = config->return_string_value("program_name", *section_list_iterator);
+			tmp_s.node_name = config->return_string_value("node_name", *section_list_iterator);
 
-			ui_state.program_node_list.push_back(*tmp_s);
-			delete tmp_s;
-
+			ui_state.program_node_list.push_back(tmp_s);
 		}
 	}
 
@@ -1465,21 +1387,17 @@ manage_configuration_file( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 int
 get_default_configuration_file_name() {
 
-	FILE *fp;
-	char *tmp_buf, *tmp_buf1;
-
-	fp = fopen("../configs/default_file.cfg","r");
+	FILE * fp = fopen("../configs/default_file.cfg","r");
 	if (fp != NULL)
-		{
-		tmp_buf = new char[255];
-		fgets(tmp_buf, 255,fp); // Uwaga na zwracanego NULLa
-		tmp_buf1=strtok(tmp_buf,"=\n\r");   // get first token
-		strcpy(ui_state.config_file, tmp_buf1);
+	{
+		char tmp_buf[255];
+		fgets(tmp_buf, 255, fp); // Uwaga na zwracanego NULLa
+		char *tmp_buf1=strtok(tmp_buf,"=\n\r");   // get first token
+		ui_state.config_file = tmp_buf1;
 
-		 strcpy(ui_state.config_file_relativepath, "../configs/");
-		 strcat(ui_state.config_file_relativepath, ui_state.config_file);
+		ui_state.config_file_relativepath = "../configs/";
+		ui_state.config_file_relativepath += ui_state.config_file;
 
-		delete [] tmp_buf;
 		fclose(fp);
 		return 1;
 
@@ -1489,23 +1407,22 @@ get_default_configuration_file_name() {
 		fp = fopen("../configs/default_file.cfg","w");
 		fclose(fp);
 
-		 strcpy(ui_state.config_file, "common.ini");
-		 strcpy(ui_state.config_file_relativepath, "../configs/");
-		 strcat(ui_state.config_file_relativepath, ui_state.config_file);
+		ui_state.config_file = "common.ini";
+		ui_state.config_file_relativepath = "../configs/";
+		ui_state.config_file_relativepath += ui_state.config_file;
 
-         std::ofstream outfile("../configs/default_file.cfg", std::ios::out);
-	      if (!outfile) {
-			  std::cerr << "Cannot open file: default_file.cfg\n";
+		std::ofstream outfile("../configs/default_file.cfg", std::ios::out);
+		if (!outfile) {
+			std::cerr << "Cannot open file: default_file.cfg" << std::endl;
 			perror("because of");
-			}
-          else
+		}
+		else
 			outfile << ui_state.config_file;
 
-	      outfile.close();
+		outfile.close();
 
 		return 2;
 	}
-
 }
 
 
@@ -1515,19 +1432,18 @@ get_default_configuration_file_name() {
 int
 set_default_configuration_file_name() {
 
+	ui_state.config_file_relativepath = "../configs/";
+	ui_state.config_file_relativepath += ui_state.config_file;
 
-	 strcpy(ui_state.config_file_relativepath, "../configs/");
-	 strcat(ui_state.config_file_relativepath, ui_state.config_file);
-
-     std::ofstream outfile("../configs/default_file.cfg", std::ios::out);
-      if (!outfile) {
-		  std::cerr << "Cannot open file: default_file.cfg\n";
+	std::ofstream outfile("../configs/default_file.cfg", std::ios::out);
+	if (!outfile) {
+		std::cerr << "Cannot open file: default_file.cfg\n";
 		perror("because of");
-		}
-         else
+	}
+	else
 		outfile << ui_state.config_file;
 
-      outfile.close();
+	outfile.close();
 
 	return 1;
 }
@@ -1878,13 +1794,13 @@ slay_all( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 #if 0 && defined(PROCESS_SPAWN_RSH)
 		sprintf(system_command, "rsh %s killall -e -q -v %s",
-				program_node_list_iterator->node_name,
-				program_node_list_iterator->program_name
+				program_node_list_iterator->node_name.c_str(),
+				program_node_list_iterator->program_name.c_str()
 			   );
 #else
 		sprintf(system_command, "slay -9 -v -f -n %s %s",
-				program_node_list_iterator->node_name,
-				program_node_list_iterator->program_name
+				program_node_list_iterator->node_name.c_str(),
+				program_node_list_iterator->program_name.c_str()
 			   );
 #endif
 		printf("bbb: %s\n", system_command);
@@ -1904,160 +1820,138 @@ slay_all( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 int
 check_gns()
+{
+	if (access("/etc/system/config/useqnet", R_OK))
 	{
-	DIR* dirp;
-   	unsigned short number_of_gns_serwers = 0;
-	 char* gns_server_node;
-
- 	 if (access("/etc/system/config/useqnet", R_OK))
-	{
-	 	printf ("UI: There is no /etc/system/config/useqnet file; the qnet will not work properly.\n");
+		printf ("UI: There is no /etc/system/config/useqnet file; the qnet will not work properly.\n");
 		PtExit( EXIT_SUCCESS );
-	 }
+	}
 
-   	// poszukiwanie serwerow gns
-    	for (std::list<char*>::iterator node_list_iterator = ui_state.all_node_list.begin(); node_list_iterator != ui_state.all_node_list.end(); node_list_iterator++)
+	DIR* dirp;
+	unsigned short number_of_gns_servers = 0;
+	std::string gns_server_node;
+
+	// poszukiwanie serwerow gns
+	for (std::list<ui_state_def::list_t>::iterator node_list_iterator = ui_state.all_node_list.begin(); node_list_iterator != ui_state.all_node_list.end(); node_list_iterator++)
 	{
-   		char opendir_path[100];
+		std::string opendir_path("/net/");
 
-		strcpy(opendir_path, "/net/");
-		strcat(opendir_path, *node_list_iterator);
-		strcat(opendir_path, "/proc/mount/dev/name/gns_server");
-		//strcat(opendir_path, "/dev/name/gns_server");
+		opendir_path += *node_list_iterator;
+		opendir_path += "/proc/mount/dev/name/gns_server";
 
- 	 	// sprawdzenie czy dziala serwer gns
- 	   	 if ((dirp = opendir(opendir_path))!=NULL)
+		// sprawdzenie czy dziala serwer gns
+		if ((dirp = opendir(opendir_path.c_str()))!=NULL)
 		{
-			number_of_gns_serwers++;
-			gns_server_node = new char[strlen(*node_list_iterator)];
-			strcpy(gns_server_node, *node_list_iterator);
-		 	closedir( dirp );
-		 }
-
+			number_of_gns_servers++;
+			gns_server_node = *node_list_iterator;
+			closedir( dirp );
+		}
 	}
 
 
-   	// there is more than one gns server in the QNX network
-   	if (number_of_gns_serwers > 1)
-   	{
-   		printf ("UI: There is more than one gns server in the QNX network; the qnet will not work properly.\n");
-   		// printing of gns server nodes
-   	    	for (std::list<char*>::iterator node_list_iterator = ui_state.all_node_list.begin(); node_list_iterator != ui_state.all_node_list.end(); node_list_iterator++)
+	// there is more than one gns server in the QNX network
+	if (number_of_gns_servers > 1)
+	{
+		printf ("UI: There is more than one gns server in the QNX network; the qnet will not work properly.\n");
+		// printing of gns server nodes
+		for (std::list<ui_state_def::list_t>::iterator node_list_iterator = ui_state.all_node_list.begin(); node_list_iterator != ui_state.all_node_list.end(); node_list_iterator++)
 		{
-	   		char opendir_path[100];
+			std::string opendir_path("/net/");
 
-			strcpy(opendir_path, "/net/");
-			strcat(opendir_path, *node_list_iterator);
-			//strcat(opendir_path, "/dev/name/gns_server");
-			strcat(opendir_path, "/proc/mount/dev/name/gns_server");
+			opendir_path += *node_list_iterator;
+			opendir_path += "/proc/mount/dev/name/gns_server";
 
-	 	 	// sprawdzenie czy dziala serwer gns
-	 	   	 if ((dirp = opendir(opendir_path))!=NULL)
+			// sprawdzenie czy dziala serwer gns
+			if ((dirp = opendir(opendir_path.c_str()))!=NULL)
 			{
-			 	closedir( dirp );
-				printf ("There is gns server on %s node\n", *node_list_iterator);
-			 }
+				closedir( dirp );
+				printf ("There is gns server on %s node\n", (*node_list_iterator).c_str());
+			}
 		}
-  	delete[] gns_server_node;
 		PtExit( EXIT_SUCCESS );
-   	}
-   	// gns server was not found in the QNX network
-   	else if (!number_of_gns_serwers)
-   	{
-   		printf("UI: gns server was not found in the QNX network, it will be automatically run on local node\n");
+	}
+	// gns server was not found in the QNX network
+	else if (!number_of_gns_servers)
+	{
+		printf("UI: gns server was not found in the QNX network, it will be automatically run on local node\n");
 
 		// ew. zabicie klienta gns
 		if ((dirp = opendir( "/dev/name" )) != NULL)
 		{
 			closedir( dirp );
 			system("slay gns");
-		 }
+		}
 
 		// uruchomienie serwera
 		system("gns -s");
 
-		   	// poszukiwanie serwerow gns
-    	for (std::list<char*>::iterator node_list_iterator = ui_state.all_node_list.begin(); node_list_iterator != ui_state.all_node_list.end(); node_list_iterator++)
-	{
-   		char opendir_path[100];
-
-		strcpy(opendir_path, "/net/");
-		strcat(opendir_path, *node_list_iterator);
-		strcat(opendir_path, "/proc/mount/dev/name/gns_server");
-	//	strcat(opendir_path, "/dev/name/gns_server");
-
- 	 	// sprawdzenie czy dziala serwer gns
- 	   	 if ((dirp = opendir(opendir_path))!=NULL)
+		// poszukiwanie serwerow gns
+		for (std::list<ui_state_def::list_t>::iterator node_list_iterator = ui_state.all_node_list.begin(); node_list_iterator != ui_state.all_node_list.end(); node_list_iterator++)
 		{
-			number_of_gns_serwers++;
-			gns_server_node = new char[strlen(*node_list_iterator)];
-			strcpy(gns_server_node, *node_list_iterator);
-		 	closedir( dirp );
-		 }
+			std::string opendir_path("/net/");
 
+			opendir_path += *node_list_iterator;
+			opendir_path += "/proc/mount/dev/name/gns_server";
+			//	strcat(opendir_path, "/dev/name/gns_server");
+
+			// sprawdzenie czy dziala serwer gns
+			if ((dirp = opendir(opendir_path.c_str()))!=NULL)
+			{
+				number_of_gns_servers++;
+				gns_server_node = *node_list_iterator;
+				closedir( dirp );
+			}
+		}
 	}
 
-
-   	}
-    	// sprawdzanie lokalne
-  	 if ((dirp = opendir( "/proc/mount/dev/name" )) == NULL)
+	// sprawdzanie lokalne
+	if ((dirp = opendir( "/proc/mount/dev/name" )) == NULL)
 	{
-			char system_command[100];
-			strcpy(system_command, "gns -c ");
-			strcat(system_command, gns_server_node);
-			system(system_command);
-	 } else
+		std::string system_command("gns -c ");
+		system_command += gns_server_node;
+		system(system_command.c_str());
+	} else
 	{
-		 closedir( dirp );
+		closedir( dirp );
 	}
 
 	// sprawdzenie czy wezly w konfiuracji sa uruchomione i ew. uruchomienie na nich brakujacych klientow gns
-
- 	for (std::list<char*>::iterator node_list_iterator = ui_state.config_node_list.begin(); node_list_iterator != ui_state.config_node_list.end(); node_list_iterator++)
+	for (std::list<ui_state_def::list_t>::iterator node_list_iterator = ui_state.config_node_list.begin(); node_list_iterator != ui_state.config_node_list.end(); node_list_iterator++)
 	{
+		std::string opendir_path("/net/");
 
-		char opendir_path[100];
-
-		strcpy(opendir_path, "/net/");
-		strcat(opendir_path, *node_list_iterator);
+		opendir_path += *node_list_iterator;
 
 		// sprawdzenie czy istnieje wezel
-		if ((dirp = opendir (opendir_path)) != NULL)
+		if ((dirp = opendir (opendir_path.c_str())) != NULL)
 		{
 			closedir( dirp );
-			strcat(opendir_path, "/proc/mount/dev/name");
+			opendir_path += "/proc/mount/dev/name";
 
-	 	 	// sprawdzenie czy dziala gns
-	 	   	 if ((dirp = opendir(opendir_path))==NULL)
+			// sprawdzenie czy dziala gns
+			if ((dirp = opendir(opendir_path.c_str()))==NULL)
 			{
-				char system_command[100];
+				std::string system_command("on -f ");
 
-				strcpy(system_command, "on -f ");
-				strcat(system_command, *node_list_iterator);
-				strcat(system_command, " gns -c ");
-				strcat(system_command, gns_server_node);
+				system_command += *node_list_iterator;
+				system_command += " gns -c ";
+				system_command += gns_server_node;
 
-				system(system_command);
-
-
-			 }  else
+				system(system_command.c_str());
+			}  else
 			{
-				 closedir( dirp );
+				closedir( dirp );
 			}
 
 		} else
 		{
-			printf("check_gns - Nie wykryto wezla: %s, ktory wystepuje w pliku konfiguracyjnym\n", *node_list_iterator);
+			fprintf(stderr, "check_gns - Nie wykryto wezla: %s, ktory wystepuje w pliku konfiguracyjnym\n", (*node_list_iterator).c_str());
 		}
 	}
 
-
-
-	delete[] gns_server_node;
-
 	return( Pt_CONTINUE );
 
-	};
+}
 
 
 
@@ -2397,17 +2291,15 @@ MPup( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 	set_ui_state_notification(UI_N_PROCESS_CREATION);
 
-	char tmp_string[100];
-
 	if (ui_state.mp.pid ==-1) {
 
-		ui_state.mp.node_nr = config->return_node_number(ui_state.mp.node_name);
+		ui_state.mp.node_nr = config->return_node_number(ui_state.mp.node_name.c_str());
 
-		strcpy(tmp_string, "/dev/name/global/");
-		strcat(tmp_string, ui_state.mp.network_pulse_attach_point);
+		std::string mp_network_pulse_attach_point("/dev/name/global/");
+		mp_network_pulse_attach_point += ui_state.mp.network_pulse_attach_point;
 
 		// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny MP
-		if( access(tmp_string, R_OK)== 0  )
+		if( access(mp_network_pulse_attach_point.c_str(), R_OK)== 0  )
 		{
 			ui_msg.ui->message("MP already exists");
 		}
@@ -2419,13 +2311,13 @@ MPup( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 
 				short tmp = 0;
 				// kilka sekund  (~1) na otworzenie urzadzenia
-				while( (ui_state.mp.pulse_fd = name_open(ui_state.mp.network_pulse_attach_point, NAME_FLAG_ATTACH_GLOBAL))  < 0 )
+				while( (ui_state.mp.pulse_fd = name_open(ui_state.mp.network_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))  < 0 )
 					if((tmp++)<CONNECT_RETRY)
 						delay(CONNECT_DELAY);
 					else{
-						printf("blad odwolania do: %s,\n", ui_state.mp.network_pulse_attach_point);
+						fprintf(stderr, "blad odwolania do: %s,\n", ui_state.mp.network_pulse_attach_point.c_str());
 						break;
-					};
+					}
 
 					ui_state.teachingstate = MP_RUNNING;
 

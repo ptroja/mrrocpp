@@ -272,7 +272,7 @@ int main(int argc, char *argv[]) {
     dispatch_t           *dpp;
     dispatch_context_t   *ctp;
     int                  id;
-    char* resourceman_attach_point;
+    std::string resourceman_attach_point;
 
     static resmgr_connect_funcs_t   connect_funcs;
     static resmgr_io_funcs_t        io_funcs;
@@ -310,7 +310,7 @@ int main(int argc, char *argv[]) {
 		vsp::common::vs = vsp::sensor::return_created_sensor(*_config);
 
 		// Sprawdzenie czy istnieje /dev/TWOJSENSOR.
-		if( access(resourceman_attach_point, R_OK)== 0  ){
+		if( access(resourceman_attach_point.c_str(), R_OK)== 0  ){
 
 			throw lib::VSP_main_error(lib::SYSTEM_ERROR, DEVICE_EXISTS);	// wyrzucany blad
 			};
@@ -338,7 +338,7 @@ int main(int argc, char *argv[]) {
 		if ( (id = resmgr_attach
 				   (dpp,					/* dispatch handle        */
                        &resmgr_attr,			/* resource manager attrs */
-                       resourceman_attach_point,				/* device name            */
+                       resourceman_attach_point.c_str(),				/* device name            */
                        _FTYPE_ANY,			/* open type              */
                        0,						 /* flags                  */
                        &connect_funcs,		/* connect routines       */

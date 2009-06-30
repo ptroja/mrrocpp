@@ -24,7 +24,7 @@ wiimote::wiimote(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task:
 
 	// Retrieve wiimote node name and port from configuration file.
 	int wiimote_port = _ecp_mp_object.config.return_int_value("wiimote_port", _section_name);
-	char* wiimote_node_name = _ecp_mp_object.config.return_string_value("wiimote_node_name", _section_name);
+	const char* wiimote_node_name = _ecp_mp_object.config.return_string_value("wiimote_node_name", _section_name).c_str();
 
 	// Try to open socket.
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);

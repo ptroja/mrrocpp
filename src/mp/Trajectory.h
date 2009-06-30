@@ -33,7 +33,7 @@ class Trajectory
 		void createNewPose();
 		void addPoseToTrajectory();
 		void setTrjID(char *trjID);
-		char * getTrjID() const;
+		const char * getTrjID() const;
 		void setNumOfPoses(uint64_t numOfPoses);
 		uint64_t getNumberOfPoses() const;
 		void setPoseSpecification(char *poseSpecification);
@@ -53,7 +53,7 @@ class Trajectory
 		std::list<ecp::common::ecp_smooth_taught_in_pose> * getPoses();
 
 	private:
-		char * trjID;
+		char trjID[80];
 		uint64_t numOfPoses;		
 		lib::POSE_SPECIFICATION poseSpec;
 		ecp::common::ecp_smooth_taught_in_pose *actPose;

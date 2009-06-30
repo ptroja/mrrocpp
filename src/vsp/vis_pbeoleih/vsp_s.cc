@@ -151,24 +151,22 @@ vis::vis(lib::configurator &_config) : sensor(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.cube_face);
 
-//	uint64_t e;			// kod bledu systemowego
-	
 	is_sensor_configured=false;	// czujnik niezainicjowany 
 	is_reading_ready=false;				// nie ma zadnego gotowego odczytu
 	irq_no = 0;
 	ThreadCtl (_NTO_TCTL_IO, NULL);  // by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi 
-	
-//	printf("Konstruktor VSP_VIS pbeoleih!\n");
-	
+
+	//	printf("Konstruktor VSP_VIS pbeoleih!\n");
+
 	nr=0;
-/*
+	/*
 	cc=vvector(2);
 	fc=vvector(2);
 	kc=vvector(5);
 
-	*/
-	
-/*	
+	 */
+
+	/*
 	fc[1]=751.860077541601300;
 	fc[2]=757.240379484519850;
 
@@ -180,9 +178,9 @@ vis::vis(lib::configurator &_config) : sensor(_config){
 	kc[3]= 0.002144573630332; 
 	kc[4]= 0.000737975434375; 
 	kc[5]= 0.000000000000000;
-*/ //stare
+	 */ //stare
 
-/*
+	/*
 		fc[1]=1624.23566; //751.860077541601300;
 	fc[2]=1630.87379; //757.240379484519850;
 
@@ -201,48 +199,31 @@ vis::vis(lib::configurator &_config) : sensor(_config){
 	omckk=vvector(3);
 	Tckk=vvector(3);
 	Rckk=matrix(3,3);
-*/
-	
-//	mrrocpp_network_path = config->return_mrrocpp_network_path();
-		
-		   int size = 1 + strlen(mrrocpp_network_path) + strlen("data/color_eih.txt");
-		    char * path1 = new char[size];
-		    // Stworzenie sciezki do pliku.
-		    strcpy(path1, mrrocpp_network_path);
-		    sprintf(path1, "%sdata/color_eih.txt", mrrocpp_network_path);
-		   
-		
-		 char * file_location = path1;
-		
-		   int size2 = 1 + strlen(mrrocpp_network_path) + strlen("data/pattern.txt");
-		    char * path2 = new char[size2];
-		    // Stworzenie sciezki do pliku.
-		    strcpy(path2, mrrocpp_network_path);
-		    sprintf(path2, "%sdata/pattern.txt", mrrocpp_network_path);
-		
-		     char * file_location2 = path2;
-	
-	//vision.loadColors("color.txt");
-  	//printf("ret%d",ret);
-  	
-			if (vision.loadColors(file_location)){
-				 vision.initialize(XMAX,YMAX);
-				 vision.countLUT();
-				 vision.initEstim(file_location2);
-				 vision.initGrid();
-}
-else 
-	{
-	printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
-	fflush(stdout);
+	 */
+
+	std::string colors_file(mrrocpp_network_path);
+	colors_file += "data/color_eih.txt";
+
+	std::string pattern_file(mrrocpp_network_path);
+	pattern_file += "data/pattern.txt";
+
+	if (vision.loadColors(colors_file.c_str())){
+		vision.initialize(XMAX,YMAX);
+		vision.countLUT();
+		vision.initEstim(pattern_file.c_str());
+		vision.initGrid();
 	}
+	else
+	{
+		printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
+	}
+
 	fd = open("/dev/bttvx",O_RDWR); // bezposrednio odczyt ze sterownika zamiast konstruktora 
 	printf("vsp fs:%d\n",fd);
-	fflush(stdout);	
+
 	z=0;
 	x=0;
-	
-	};
+}
 
 vis::~vis(void){
 	close (fd);
@@ -255,19 +236,19 @@ vis::~vis(void){
 	free_vector(kc);
 	free_vector(omckk);
 	free_vector(Tckk);
-	*/
-	
-	
+	 */
+
+
 	printf("Destruktor VSP\n");
-	};
+}
 
 /**************************** inicjacja czujnika ****************************/
 void vis::configure_sensor (void){
-// printf("7 - config\n");
+	// printf("7 - config\n");
 	is_sensor_configured=true;
- //   printf("Sensor initiated\n");
-     sr_msg->message ("Sensor initiated"); // 7 
-	};
+	//   printf("Sensor initiated\n");
+	sr_msg->message ("Sensor initiated"); // 7
+}
 	
 void vis::wait_for_event(){
 // printf("7 - wait_for_event\n");

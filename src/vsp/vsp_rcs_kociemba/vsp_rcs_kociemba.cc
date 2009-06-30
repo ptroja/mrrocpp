@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	VIRTUAL SENSOR PROCESS (lib::VSP) 
+// Proces: 	VIRTUAL SENSOR PROCESS (lib::VSP)
 // Plik:	vsp_rcs_kociemba.cc
 // System:	QNX/MRROC++  v. 6.3
 // Opis:	Metody rozwiazywania kostki algorytmem Kociemby - po stronie procesu VSP.
@@ -71,7 +71,7 @@ rcs_kociemba::rcs_kociemba(lib::configurator &_config) : sensor(_config){
 
 	// Ustawia brak rozwiazania optymalnego
 	bRCSOpt = false;
-	
+
 }; // end: vsp_rcs_kociemba
 
 
@@ -82,8 +82,8 @@ rcs_kociemba::~rcs_kociemba(void) {
 	// Zwalnia pamiec zajmowana przez struktury pomocnicze
 	KociembaPhase1Cube::SClear();
 	KociembaPhase2Cube::SClear();
-	KociembaPhase1Solver::SClear(); 
-	KociembaPhase2Solver::SClear(); 
+	KociembaPhase1Solver::SClear();
+	KociembaPhase2Solver::SClear();
 	DataTable::ClearFolderName();
 
 	// Czysci pola
@@ -98,26 +98,25 @@ rcs_kociemba::~rcs_kociemba(void) {
 // Konfiguracja czujnika.
 void rcs_kociemba::configure_sensor (void){
     printf("VSP KC configure\n");
-	
+
 	if (to_vsp.rcs.configure_mode == lib::RCS_BUILD_TABLES) {
 
 		// Pobiera dane z pliku konfiguracyjnego.
-		char* path = config.return_string_value("tables_path");
+		const char* path = config.return_string_value("tables_path").c_str();
 		printf("VSP KC PATH = %s\n", path);
 
 		// Konfiguruje
 		DataTable::SetLog(false);
 		DataTable::SetFolderName(path);
-		delete path;
 
 		// Wczytuje tablice przeksztalcen i odleglosci od rozwiazania
 		KociembaPhase1Cube::SInit();
 		KociembaPhase2Cube::SInit();
-		KociembaPhase1Solver::SInit(); 
+		KociembaPhase1Solver::SInit();
 		KociembaPhase2Solver::SInit();
-		
+
 		// Ustawia czujnik jako skonfigurowany
-		is_sensor_configured=true;		
+		is_sensor_configured=true;
 	}
 
 	else if (to_vsp.rcs.configure_mode == lib::RCS_CUBE_STATE) {
@@ -127,7 +126,7 @@ void rcs_kociemba::configure_sensor (void){
 		for (int i=0; i<6; i++)
    	 		strncpy(&state[i*12+2], &to_vsp.rcs.cube_state[i*9], 9);
 		printf("VSP KC STATE=%s\n", state);
-	    
+
 		// Ustawia stan kostki Rubika do rozwiazania
 		try {
 			FaceletCube fCube;
@@ -141,7 +140,7 @@ void rcs_kociemba::configure_sensor (void){
 			bRCSErr = true;
 			throw sensor_error (lib::FATAL_ERROR, RCS_INVALID_STATE);
 		}
-	
+
 		// Czysci znalezione wczesniej rozwiazanie, jezeli takie istnieje
 		if (pSol)
 			delete pSol;
@@ -150,10 +149,10 @@ void rcs_kociemba::configure_sensor (void){
 		// czujnik gotowy do znajdywania rozwiazania - nie ma bledow
 		bRCSErr = false;
 	}
-	
+
 	// Ustawia brak gotowego odczytu.
 	is_reading_ready = false;
-	
+
 	// nieznalezione rozwiazanie optymalne
 	bRCSOpt = false;
 
@@ -185,7 +184,7 @@ void rcs_kociemba::initiate_reading (void) {
 		if (pSol)
 			pNSol = kcSolver.FindNextSolution((CubieCube*) pCube, *((KociembaSolution*) pSol));
 		else
-			pNSol = kcSolver.FindSolution((CubieCube*) pCube);		
+			pNSol = kcSolver.FindSolution((CubieCube*) pCube);
 	} catch (KociembaException &exp) {
 	    char *err = exp.ToString();
 	    printf("ERR=%s\n", err);
@@ -199,7 +198,7 @@ void rcs_kociemba::initiate_reading (void) {
 		if (pSol)
 		    delete pSol;
 		pSol = pNSol;
-		
+
 		if (pSol->GetInfo(CubeSolution::INFO_OPTIMAL) || pSol->GetLength() == 0) {
 			bRCSOpt = true;
 			printf("VSP KC OPTIMUM\n");

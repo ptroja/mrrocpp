@@ -76,11 +76,13 @@ class task : public ecp_mp::task::task
 		void ecp_wait_for_stop(void);
 
 		// funkcjonalnosc dodana na potrzeby czytania trajektorii z pliku xml
-		struct str_cmp{
+		class str_cmp{
+		public:
 			bool operator()(char const *a, char const *b) const;
 		};
+
 		mp::common::Trajectory * createTrajectory(xmlNode *actNode, xmlChar *stateID);
-		std::map<char*, mp::common::Trajectory, str_cmp>* loadTrajectories(char * fileName, lib::ROBOT_ENUM propRobot);
+		std::map<const char*, mp::common::Trajectory, str_cmp>* loadTrajectories(const char * fileName, lib::ROBOT_ENUM propRobot);
 
 	public: // TODO: what follows should be private method
 

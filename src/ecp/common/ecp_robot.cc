@@ -156,7 +156,7 @@ void ecp_robot::connect_to_edp(lib::configurator &config)
 
 	EDP_MASTER_Pid = (spawn_and_kill) ? config.process_spawn(edp_section) : -1;
 
-	const char* edp_net_attach_point =
+	std::string edp_net_attach_point =
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", edp_section);
 
 	printf("connect_to_edp");
@@ -164,9 +164,9 @@ void ecp_robot::connect_to_edp(lib::configurator &config)
 
 	short tmp = 0;
 #if !defined(USE_MESSIP_SRR)
-	while ((EDP_fd = name_open(edp_net_attach_point, NAME_FLAG_ATTACH_GLOBAL)) < 0)
+	while ((EDP_fd = name_open(edp_net_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
 #else
-	while ((EDP_fd = messip_channel_connect(NULL, edp_net_attach_point, MESSIP_NOTIMEOUT)) == NULL )
+	while ((EDP_fd = messip_channel_connect(NULL, edp_net_attach_point.c_str(), MESSIP_NOTIMEOUT)) == NULL )
 #endif
 	{
 		if ((tmp++)<CONNECT_RETRY) {
@@ -175,14 +175,12 @@ void ecp_robot::connect_to_edp(lib::configurator &config)
 			fflush(stdout);
 		} else {
 			int e = errno; // kod bledu systemowego
-			fprintf(stderr, "Unable to locate EDP_MASTER process at channel \"%s\": %s\n", edp_net_attach_point, sys_errlist[errno]);
+			fprintf(stderr, "Unable to locate EDP_MASTER process at channel \"%s\": %s\n", edp_net_attach_point.c_str(), sys_errlist[errno]);
 			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Unable to locate EDP_MASTER process");
 			throw ecp_robot::ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 		}
 	}
 	printf(".done\n");
-
-	delete [] edp_net_attach_point;
 }
 
 void ecp_robot::synchronise(void)

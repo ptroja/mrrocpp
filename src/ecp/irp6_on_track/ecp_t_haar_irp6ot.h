@@ -27,7 +27,7 @@ namespace task {
 class haar: public common::task::task  {
 
 	bool rotation;
-	char* smooth_path;
+	std::string smooth_path;
 	//Smoth movement generator
 	common::generator::smooth* smooth_gen;
 	//Calibration of force

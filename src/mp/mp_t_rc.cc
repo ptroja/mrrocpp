@@ -34,15 +34,13 @@ void rubik_cube_solver::initiate(common::CUBE_COLOR up_is, common::CUBE_COLOR do
 		common::CUBE_COLOR rear_is, common::CUBE_COLOR left_is, common::CUBE_COLOR right_is)
 {
 	cube_state = new common::CubeState(up_is, down_is, front_is, rear_is, left_is, right_is);
-
-	cube_initial_state = NULL;
-};
+}
 
 
 rubik_cube_solver::rubik_cube_solver(lib::configurator &_config) : task(_config)
 {
 }
-;
+
 
 rubik_cube_solver::~rubik_cube_solver()
 {
@@ -51,7 +49,6 @@ rubik_cube_solver::~rubik_cube_solver()
 
 void rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogladanie scian)
 {
-
 	//sekwencja poczatkowa w kolejnosci: UP, DOWN, FRONT, BACK, LEFT, RIGHT
 	//cube_initial_state=BGROWY
 
@@ -73,7 +70,6 @@ void rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogladanie s
 		for(int i=0; i<3; i++)
 			for(int j=0; j<3; j++)
 				cube_state->cube_tab[k][3*i+j]=(char)sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->image.sensor_union.cube_face.colors[3*i+j];
-
 
 		printf("\nFACE FACE %d:\n",k);
 		for(int i=0; i<9; i++)
@@ -621,8 +617,7 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 	*cube_state = tmp_cube_state;
 
 	//	cube_state->print_cube_colors();
-
-};
+}
 
 
 // dojscie
@@ -701,8 +696,7 @@ void rubik_cube_solver::approach_op(int mode)
               return true;
         }
 	 */
-
-};
+}
 
 
 // odejscie
@@ -808,12 +802,9 @@ void rubik_cube_solver::task_initialization(void)
 
 void rubik_cube_solver::main_task_algorithm(void)
 {
+	std::string cube_initial_state_string(config.return_string_value("cube_initial_state"));
 
-
-	// odczyt konfiguracji manipulacji
-	if (cube_initial_state)
-		delete[] cube_initial_state;
-	cube_initial_state = config.return_string_value("cube_initial_state");
+	const char * cube_initial_state = cube_initial_state_string.c_str();
 
 	//	enum CUBE_COLOR {UKNOWN, RED, YELLOW, GREEN, BLUE, ORANGE, WHITE};
 	//	 cube_state::set_state(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is,
@@ -822,9 +813,6 @@ void rubik_cube_solver::main_task_algorithm(void)
 	initiate (common::read_cube_color(cube_initial_state[0]),
 			common::read_cube_color(cube_initial_state[1]), common::read_cube_color(cube_initial_state[2]),  common::read_cube_color(cube_initial_state[3]),
 			common::read_cube_color(cube_initial_state[4]), common::read_cube_color(cube_initial_state[5]));
-
-
-
 
 		// Zlecenie wykonania kolejnego makrokroku
 		// printf("po start all \n");
@@ -878,7 +866,7 @@ void rubik_cube_solver::main_task_algorithm(void)
 
 		}
 
-};
+}
 
 
 } // namespace task

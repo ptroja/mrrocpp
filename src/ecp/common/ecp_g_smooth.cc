@@ -247,7 +247,7 @@ void smooth::set_pose_from_xml(xmlNode *stateNode, bool &first_time)
 	xmlFree(numOfPoses);
 }
 
-bool smooth::load_trajectory_from_xml(char* fileName, char* nodeName)
+bool smooth::load_trajectory_from_xml(const char* fileName, const char* nodeName)
 {
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
@@ -317,7 +317,6 @@ bool smooth::load_trajectory_from_xml(char* fileName, char* nodeName)
 	
 	return true;
 }
-; // end: load_file()
 
 bool smooth::load_file_with_path (const char* file_name)
 {
@@ -501,7 +500,6 @@ bool smooth::load_file_with_path (const char* file_name)
     from_file.close();
     return true;
 }
-; // end: load_file()
 
 void smooth::reset(){
 	flush_pose_list();
@@ -509,7 +507,7 @@ void smooth::reset(){
 }
 
 
-//wczytuje wspolrzedne punkt�w poprzez funkcje
+//wczytuje wspolrzedne punkt���w poprzez funkcje
 //poki co przy zmiane trybu nalezy usunac instniejaca instancje smooth_generatora i stworzyc nowa.
 void smooth::load_coordinates(lib::POSE_SPECIFICATION ps, double vp[MAX_SERVOS_NR], double vk[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]){
 
@@ -519,7 +517,7 @@ void smooth::load_coordinates(lib::POSE_SPECIFICATION ps, double vp[MAX_SERVOS_N
 	if (first_coordinate){	// Tworzymy glowe listy
 		first_coordinate=false;
 		create_pose_list_head(ps, vp, vk, v, a, coordinates);
-	}else					// Wstaw do listy nowa pozycje
+	} else					// Wstaw do listy nowa pozycje
 		insert_pose_list_element(ps, vp, vk, v, a, coordinates);
 
 }
@@ -804,22 +802,19 @@ void smooth::calculate(void)
     v_grip =	(final_position[i]/td.interpolation_node_no);
     if(v_grip<v_grip_min)
         v_grip=v_grip_min;
-
-
-} //end - calculate
+}
 
 void smooth::flush_pose_list ( void )
 {
     pose_list->clear();
 	 first_coordinate=true;
 }
-; // end: flush_pose_list
 
 // -------------------------------------------------------return iterator to beginning of the list
 void smooth::initiate_pose_list(void)
 {
     pose_list_iterator = pose_list->begin();
-};
+}
 // -------------------------------------------------------
 void smooth::next_pose_list_ptr (void)
 {
@@ -889,7 +884,7 @@ bool smooth::is_last_list_element ( void )
         ; // end if
     }
     return false;
-};
+}
 // -------------------------------------------------------
 
 void smooth::create_pose_list_head (lib::POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR])
@@ -909,12 +904,10 @@ void smooth::insert_pose_list_element (lib::POSE_SPECIFICATION ps, double v_p[MA
 int smooth::pose_list_length(void)
 {
     return pose_list->size();
-};
+}
 
-bool smooth::load_a_v_min (char* file_name)
+bool smooth::load_a_v_min (const char* file_name)
 {
-    uint64_t e;       // Kod bledu systemowego
-    uint64_t j;    // Liczniki petli
     std::ifstream from_file(file_name); // otworz plik do odczytu
 
     if (!from_file)
@@ -934,9 +927,8 @@ bool smooth::load_a_v_min (char* file_name)
     return true;
 } // end: load_a_v_min()
 
-bool smooth::load_a_v_max (char* file_name)
+bool smooth::load_a_v_max (const char* file_name)
 {
-    uint64_t e;       // Kod bledu systemowego
     uint64_t j;    // Liczniki petli
     std::ifstream from_file(file_name); // otworz plik do odczytu
 
@@ -1019,47 +1011,10 @@ bool smooth::load_a_v_max (char* file_name)
     return true;
 } // end: load_a_v_max()
 
-smooth::smooth (common::task::task& _ecp_task, bool _is_synchronised)
-        :
-        delta (_ecp_task), debug(false),first_coordinate(true)
-{
-    int i;
-    double vp[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-    double vk[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-    double v[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
-    double a[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
-
-	pose_list = new std::list<ecp_smooth_taught_in_pose>();
-
-    int size = 1 + strlen(ecp_t.mrrocpp_network_path) + strlen("data/a_v_max.txt");
-    char * path1 = new char[size];
-    // Stworzenie sciezki do pliku.
-    strcpy(path1, ecp_t.mrrocpp_network_path);
-    sprintf(path1, "%sdata/a_v_max.txt", ecp_t.mrrocpp_network_path);
-
-    size = 1 + strlen(ecp_t.mrrocpp_network_path) + strlen("data/a_v_min.txt");
-    char * path2 = new char[size];
-    // Stworzenie sciezki do pliku.
-    strcpy(path2, ecp_t.mrrocpp_network_path);
-    sprintf(path2, "%sdata/a_v_min.txt", ecp_t.mrrocpp_network_path);
-
-    load_a_v_max(path1);
-    load_a_v_min(path2);
-
-    delete[] path1;
-    delete[] path2;
-
-    is_synchronised = _is_synchronised;
-	 type=1;
-    //v_grip_min=5;
-}
-; // end : konstruktor
-
 smooth::smooth (common::task::task& _ecp_task, bool _is_synchronised, bool _debug)
         :
         delta (_ecp_task), first_coordinate(true)
 {
-    int i;
     double vp[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     double vk[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     double v[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
@@ -1067,36 +1022,25 @@ smooth::smooth (common::task::task& _ecp_task, bool _is_synchronised, bool _debu
 
 	pose_list = new std::list<ecp_smooth_taught_in_pose>();
 
+    // Stworzenie sciezek do plików
+    std::string path1(ecp_t.mrrocpp_network_path);
+    path1 += "data/a_v_max.txt";
 
-    int size = 1 + strlen(ecp_t.mrrocpp_network_path) + strlen("data/a_v_max.txt");
-    char * path1 = new char[size];
-    // Stworzenie sciezki do pliku.
-    strcpy(path1, ecp_t.mrrocpp_network_path);
-    sprintf(path1, "%sdata/a_v_max.txt", ecp_t.mrrocpp_network_path);
+    std::string path2(ecp_t.mrrocpp_network_path);
+    path2 += "data/a_v_min.txt";
 
-    size = 1 + strlen(ecp_t.mrrocpp_network_path) + strlen("data/a_v_min.txt");
-    char * path2 = new char[size];
-    // Stworzenie sciezki do pliku.
-    strcpy(path2, ecp_t.mrrocpp_network_path);
-    sprintf(path2, "%sdata/a_v_min.txt", ecp_t.mrrocpp_network_path);
-
-    load_a_v_max(path1);
-    load_a_v_min(path2);
-
-    delete[] path1;
-    delete[] path2;
+    load_a_v_max(path1.c_str());
+    load_a_v_min(path2.c_str());
 
     is_synchronised = _is_synchronised;
     debug = _debug;
 	 type=1;
     //v_grip_min=5;
 }
-; // end : konstruktor
 
 //set necessary instructions, and other data for preparing the robot
 bool smooth::first_step ()
 {
-
     initiate_pose_list();
     get_pose();
 
@@ -1146,7 +1090,6 @@ bool smooth::first_step ()
 
     return true;
 }
-; // end: bool ecp_smooth_generator::first_step ( )
 
 bool smooth::next_step ()
 {
@@ -1471,9 +1414,7 @@ bool smooth::next_step ()
             throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
     }// end:switch
 
-
     return true;
-
 } // end: BOOLEAN ecp_smooth_generator::next_step ( )
 
 /**************************************************************************/
@@ -1482,8 +1423,6 @@ bool smooth::next_step ()
 
 bool tool_change::first_step ()
 {
-
-
     lib::Homog_matrix tool_frame(tool_parameters[0], tool_parameters[1], tool_parameters[2]);
     tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
 
@@ -1495,21 +1434,15 @@ bool tool_change::first_step ()
     the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
     the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
     the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-     the_robot->EDP_data.next_interpolation_type = lib::MIM;
-
+    the_robot->EDP_data.next_interpolation_type = lib::MIM;
 
     return true;
-
 }
-; // end: bool ecp_smooth_pouring_generator::first_step ( )
 
 bool tool_change::next_step ()
 {
-
-
     return false;
-
-} // end: BOOLEAN ecp_smooth_pouring_generator::next_step ( )
+}
 
 void tool_change::set_tool_parameters(double x, double y, double z)
 {
@@ -1518,19 +1451,10 @@ void tool_change::set_tool_parameters(double x, double y, double z)
     tool_parameters[2]=z;
 }
 
-tool_change::tool_change (common::task::task& _ecp_task, bool _is_synchronised)
-        :smooth (_ecp_task, _is_synchronised)
-{
-
-    set_tool_parameters(-0.18, 0.0, 0.25);
-
-}
 tool_change::tool_change (common::task::task& _ecp_task, bool _is_synchronised, bool _debug)
-        :smooth (_ecp_task, _is_synchronised, _debug)
+        : smooth (_ecp_task, _is_synchronised, _debug)
 {
-
     set_tool_parameters(-0.18, 0.0, 0.25);
-
 }
 
 } // namespace generator

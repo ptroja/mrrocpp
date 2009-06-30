@@ -94,9 +94,9 @@ class smooth2 : public delta {
 		void set_absolute(void); //zmiana na tryb bezwzgledny
 		void reset(void);
 
-		bool load_a_v_max(char* file_name);
-		bool load_a_v_min(char* file_name);
-		bool load_file_with_path(char* file_name);
+		bool load_a_v_max(const char* file_name);
+		bool load_a_v_min(const char* file_name);
+		bool load_file_with_path(const char* file_name);
 
 		virtual bool first_step();
 		virtual bool next_step();

@@ -46,7 +46,7 @@ int task_window_param_actualization ( PtWidget_t *widget , ApInfo_t *apinfo , Pt
 int clear_all_configuration_lists ( void );
 int initiate_configuration ( void );
 int reload_whole_configuration ( void );
-int fill_section_list ( char *file_name_and_path );
+int fill_section_list ( const char *file_name_and_path );
 int fill_node_list ( void );
 int fill_program_node_list ( void );
 int manage_configuration_file ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );

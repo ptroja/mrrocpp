@@ -59,8 +59,7 @@ protected:
 	bool first_coordinate;
 
 public:
-	smooth(common::task::task& _ecp_task, bool _is_synchronised);
-	smooth(common::task::task& _ecp_task, bool _is_synchronised, bool _debug);
+	smooth(common::task::task& _ecp_task, bool _is_synchronised, bool _debug = false);
 	
 	void calculate(void);
 	void generate_next_coords(void);
@@ -80,12 +79,12 @@ public:
 	void set_absolute(void); //zmiana na tryb bezwzgledny
 	void reset(void);
 	
-	bool load_a_v_max(char* file_name);
-	bool load_a_v_min (char* file_name);
+	bool load_a_v_max(const char* file_name);
+	bool load_a_v_min (const char* file_name);
 	bool load_file_with_path (const char* file_name);
 	
 	void set_pose_from_xml(xmlNode *stateNode, bool &first_time);
-	bool load_trajectory_from_xml(char* fileName, char* nodeName);
+	bool load_trajectory_from_xml(const char* fileName, const char* nodeName);
 	bool load_trajectory_from_xml(mp::common::Trajectory &trajectory);
 
 	void load_coordinates(lib::POSE_SPECIFICATION,double,double,double,double,double,double,double,double);
@@ -105,8 +104,7 @@ protected:
 	double tool_parameters[3];
 	
 public:
-	tool_change(common::task::task& _ecp_task, bool _is_synchronised);
-	tool_change(common::task::task& _ecp_task, bool _is_synchronised, bool _debug);
+	tool_change(common::task::task& _ecp_task, bool _is_synchronised, bool _debug = false);
 	void set_tool_parameters(double x, double y, double z);
 	
 	virtual bool first_step();

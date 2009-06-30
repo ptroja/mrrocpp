@@ -297,12 +297,12 @@ public:
   
   bool initGrid();
   
-  bool initEstim(char *filename); //init estimation 
+  bool initEstim(const char *filename); //init estimation
   void freeEstim();
   
   bool countLUT();
   
-  bool loadColors(char *filename);
+  bool loadColors(const char *filename);
   
   void close();
 

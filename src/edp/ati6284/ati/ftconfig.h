@@ -1,5 +1,5 @@
 /* ! \file include/edp/ati6284/ati/ftconfig.h
-    * \brief plik nag³ówkowy ATI
+    * \brief plik nagï¿½ï¿½wkowy ATI
     * Ostatnia modyfikacja: 04.2006 
     * ATIDAQ F/T C Library 
      * Copyright (c) ATI Industrial Automation
@@ -79,7 +79,7 @@ struct Calibration {
 };
 
 int ftconvert(float SampleReading[6],float SampleBias[6], float FT[6]);
-int DisplayInfo(Calibration *cal,char *CalFilePath,unsigned short index);
+int DisplayInfo(Calibration *cal,const char *CalFilePath,unsigned short index);
 
  /* !\brief  Loads calibration info for a transducer into a new Calibration struct
   * Parameters:
@@ -89,7 +89,7 @@ int DisplayInfo(Calibration *cal,char *CalFilePath,unsigned short index);
   * NULL: Could not load the desired calibration.
   * Notes: For each Calibration object initialized by this function, 
   * destroyCalibration must be called for cleanup.*/
-Calibration *createCalibration(char *CalFilePath, unsigned short index);
+Calibration *createCalibration(const char *CalFilePath, unsigned short index);
 
 /* ! \brief Frees memory allocated for Calibration struct by a successful
 * call to createCalibration.  Must be called when Calibration 

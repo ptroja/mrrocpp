@@ -137,10 +137,8 @@ speaker_preset_sound_play( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 		my_data = (PhKeyEvent_t *) PhGetData(cbinfo->event);
 	}
 
-	char local_text[MAX_TEXT];
-	char local_prosody[MAX_PROSODY];
-	//	char* ref_local_text;
-	// char* ref_local_prosody;
+	std::string text;
+	std::string prosody;
 
 	try
 	{
@@ -150,19 +148,19 @@ speaker_preset_sound_play( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 
 		if ((ApName(ApWidget(cbinfo)) == ABN_mm_speaker_preset_sound_0)||
 			((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x30 ))) {
-			strcpy(local_text, ui_state.speaker.edp.preset_sound_0);
-			strcpy(local_prosody, "neutral");
+			text = ui_state.speaker.edp.preset_sound_0;
+			prosody = "neutral";
 		} else  if ((ApName(ApWidget(cbinfo)) == ABN_mm_speaker_preset_sound_1)||
 			((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x31 ))) {
-			strcpy(local_text, ui_state.speaker.edp.preset_sound_1);
-			strcpy(local_prosody, "neutral");
+			text = ui_state.speaker.edp.preset_sound_1;
+			prosody = "neutral";
 		} else  if ((ApName(ApWidget(cbinfo)) == ABN_mm_speaker_preset_sound_2)||
 			((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x32 ))) {
-			strcpy(local_text, ui_state.speaker.edp.preset_sound_2);
-			strcpy(local_prosody, "neutral");
+			text = ui_state.speaker.edp.preset_sound_2;
+			prosody = "neutral";
 		}
 
-		ui_robot.speaker->send_command(local_text, local_prosody);
+		ui_robot.speaker->send_command(text.c_str(), prosody.c_str());
 
 	}
 
@@ -266,15 +264,15 @@ EDP_speaker_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 		ui_state.speaker.edp.state = 0;
 		ui_state.speaker.edp.is_synchronised = false;
 		
-		strcpy(tmp_string, "/dev/name/global/");
-		strcat(tmp_string, ui_state.speaker.edp.hardware_busy_attach_point);
+		std::string tmp_string("/dev/name/global/");
+		tmp_string += ui_state.speaker.edp.hardware_busy_attach_point;
 
-		strcpy(tmp2_string, "/dev/name/global/");
-		strcat(tmp2_string, ui_state.speaker.edp.network_resourceman_attach_point);
+		std::string tmp2_string("/dev/name/global/");
+		tmp2_string += ui_state.speaker.edp.network_resourceman_attach_point;
 
 		// sprawdzeie czy nie jest juz zarejestrowany zarzadca zasobow
-		if( (!(ui_state.speaker.edp.test_mode)) && (access(tmp_string, R_OK)== 0 )
-			|| (access(tmp2_string, R_OK)== 0 )
+		if( (!(ui_state.speaker.edp.test_mode)) && (access(tmp_string.c_str(), R_OK)== 0 )
+			|| (access(tmp2_string.c_str(), R_OK)== 0 )
 		)
 		{
 			ui_msg.ui->message("edp_speaker already exists");
@@ -471,7 +469,7 @@ pulse_ecp_speaker( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 		 	// kilka sekund  (~1) na otworzenie urzadzenia
 		 	// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
 		 	ualarm( (useconds_t)( SIGALRM_TIMEOUT), 0);
-			while( (ui_state.speaker.ecp.trigger_fd = name_open(ui_state.speaker.ecp.network_trigger_attach_point, NAME_FLAG_ATTACH_GLOBAL)) < 0)
+			while( (ui_state.speaker.ecp.trigger_fd = name_open(ui_state.speaker.ecp.network_trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
 			{
 				if (errno == EINTR) break;
 				if((tmp++)<CONNECT_RETRY)
@@ -514,7 +512,6 @@ reload_speaker_configuration ()
 		//ui_state.is_any_edp_active = true;
 		if (ui_state.is_mp_and_ecps_active)
 		{
-			delete [] ui_state.speaker.ecp.network_trigger_attach_point;
 			ui_state.speaker.ecp.network_trigger_attach_point =config->return_attach_point_name
 				(lib::configurator::CONFIG_SERVER, "trigger_attach_point", ui_state.speaker.ecp.section_name);
 
@@ -538,26 +535,19 @@ reload_speaker_configuration ()
 				else
 					ui_state.speaker.edp.test_mode = 0;
 
-				delete [] ui_state.speaker.edp.hardware_busy_attach_point;
 				ui_state.speaker.edp.hardware_busy_attach_point = config->return_string_value
 					("hardware_busy_attach_point", ui_state.speaker.edp.section_name);
 
 
 
-				delete [] ui_state.speaker.edp.network_resourceman_attach_point;
 				ui_state.speaker.edp.network_resourceman_attach_point = config->return_attach_point_name
 					(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", ui_state.speaker.edp.section_name);
 
-				delete [] ui_state.speaker.edp.network_reader_attach_point;
 				ui_state.speaker.edp.network_reader_attach_point = config->return_attach_point_name
 					(lib::configurator::CONFIG_SERVER, "reader_attach_point", ui_state.speaker.edp.section_name);
 
-				delete [] ui_state.speaker.edp.node_name;
 				ui_state.speaker.edp.node_name = config->return_string_value ("node_name", ui_state.speaker.edp.section_name);
 
-				delete [] ui_state.speaker.edp.preset_sound_0;
-				delete [] ui_state.speaker.edp.preset_sound_1;
-				delete [] ui_state.speaker.edp.preset_sound_2;
 				ui_state.speaker.edp.preset_sound_0 = config->return_string_value("preset_sound_0", ui_state.speaker.edp.section_name);
 				ui_state.speaker.edp.preset_sound_1 = config->return_string_value("preset_sound_1", ui_state.speaker.edp.section_name);
 				ui_state.speaker.edp.preset_sound_2 = config->return_string_value("preset_sound_2", ui_state.speaker.edp.section_name);

@@ -32,7 +32,7 @@ public:
 	short int irq_no;
 	short int szafa_id;
 	short int index;
-	char *calfilepath;     //!< �cie�ka do pliku zawieraj�cego parametry konfiguracyjne czujnika
+	std::string calfilepath;     //!< �cie�ka do pliku zawieraj�cego parametry konfiguracyjne czujnika
 
 	short ERROR_CODE;
 

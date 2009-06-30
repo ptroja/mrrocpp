@@ -99,20 +99,14 @@ const struct sigevent *isr_handler(void *area, int id)
 ATI6284_force::ATI6284_force(common::irp6s_postument_track_effector &_master) :
 	force(_master)
 {
-
 	// unsigned  uCount;  //!< Count index
 	// unsigned  uStatus; //!< Flag to indicate FIFO not empty
 	if (!(master.test_mode)) {
 		Total_Number_of_Samples=6;
 		index=1;
 
-		   int size = 1 + strlen(master.mrrocpp_network_path) + strlen("data/ft6284.cal");
-		    char * path1 = new char[size];
-		    // Stworzenie sciezki do pliku.
-		    strcpy(path1, master.mrrocpp_network_path);
-		    sprintf(path1, "%sdata/ft6284.cal", master.mrrocpp_network_path);
-
-		calfilepath=(char*)path1;
+		std::string calfilepath(master.mrrocpp_network_path);
+		calfilepath += "data/ft6284.cal";
 
 		for (int i=0; i<5; i++)
 			last_correct[i]=0;
@@ -121,10 +115,9 @@ ATI6284_force::ATI6284_force(common::irp6s_postument_track_effector &_master) :
 		przerwanie =0;
 
 		//!< create Calibration struct
-		cal=createCalibration(calfilepath, index);
+		cal=createCalibration(calfilepath.c_str(), index);
 		if (cal==NULL) {
 			printf("\nSpecified calibration could not be loaded.\n");
-
 		}
 
 		if (ThreadCtl( _NTO_TCTL_IO, NULL)==-1) //!< dostep do sprzetu
@@ -193,9 +186,7 @@ ATI6284_force::ATI6284_force(common::irp6s_postument_track_effector &_master) :
 			perror("Unable to attach szafa interrupt handler: ");
 		}
 	}
-
 }
-;
 
 // // // // // // // // // // // // // // /   odlaczenie czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
@@ -217,7 +208,6 @@ ATI6284_force::~ATI6284_force(void)
 	}
 	printf("Destruktor VSP\n");
 }
-;
 
 // // // // // // // // // // // // // // /   inicjacja odczytu // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 void ATI6284_force::configure_sensor(void)
@@ -379,9 +369,10 @@ void ATI6284_force::configure_sensor(void)
 			lib::Homog_matrix sensor_frame;
 			if (master.config.exists("sensor_in_wrist"))
 			{
-				char *tmp = master.config.return_string_value("sensor_in_wrist");
+				char *tmp = strdup(master.config.return_string_value("sensor_in_wrist").c_str());
 				for (int i=0; i<6; i++)
 					tab[i] = strtod( tmp, &tmp );
+				free(tmp);
 				sensor_frame = lib::Homog_matrix(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, tab[0], tab[1], tab[2], tab[3], tab[4], tab[5]);
 
 			}
@@ -392,9 +383,10 @@ void ATI6284_force::configure_sensor(void)
 			double weight = master.config.return_double_value("weight");
 
 			double point[3];
-			char *tmp = master.config.return_string_value("default_mass_center_in_wrist");
+			char *tmp = strdup(master.config.return_string_value("default_mass_center_in_wrist").c_str());
 			for (int i=0; i<3; i++)
 				point[i] = strtod( tmp, &tmp );
+			free(tmp);
 			// double point[3] = { master.config.return_double_value("x_axis_arm"),
 			// 		master.config.return_double_value("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
 			lib::K_vector pointofgravity(point);
@@ -403,9 +395,7 @@ void ATI6284_force::configure_sensor(void)
 			gravity_transformation->synchro(frame);
 		}
 	}
-
 }
-;
 
 // // // // // // // // // // // // // // /   inicjalizacja zbierania danych z czujnika, wait_for_event // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
@@ -450,7 +440,6 @@ void ATI6284_force::wait_for_event()
 	is_reading_ready=true;
 
 }
-;
 // // // // // // // // // // // // // // /   odczyt danych  // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
 void ATI6284_force::initiate_reading(void)
@@ -639,20 +628,17 @@ void ATI6284_force::initiate_reading(void)
 	show++;
 	is_reading_ready=true;
 }
-;
 
 // // // // // // // // // // // // // // /   odczyt z czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 void ATI6284_force::get_reading(void)
 {
 }
-;
 
 // // // // // // // // // // // // // // /   zakonczenie dzialania czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 void ATI6284_force::terminate(void)
 {
 	//	printf("VSP terminate\n");
 }
-;
 
 // // // // // // // // // // // // // // /  inne potrzebne funkcje // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 

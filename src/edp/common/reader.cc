@@ -69,14 +69,15 @@ void * irp6s_and_conv_effector::reader_thread(void* arg)
 	struct sigevent stop_event; // do oblugi pulsu stopu
 
 	// czytanie konfiguracji
-	char* reader_meassures_dir;
+	std::string reader_meassures_dir;
+
 	if (config.exists("reader_meassures_dir")) {
 		reader_meassures_dir = config.return_string_value("reader_meassures_dir", "[ui]");
 	} else {
 		reader_meassures_dir = config.return_default_reader_measures_path();
 	}
 
-	char* robot_name = config.return_string_value("reader_attach_point");
+	std::string robot_name = config.return_string_value("reader_attach_point");
 
 	if (config.exists("reader_samples"))
 		nr_of_samples = config.return_int_value("reader_samples");
@@ -158,7 +159,7 @@ void * irp6s_and_conv_effector::reader_thread(void* arg)
 	// by Y komuniakicja pomiedzy ui i reader'em rozwiazalem poprzez pulsy
 	// powolanie kanalu komunikacyjnego do odbioru pulsow sterujacych
 #if !defined(USE_MESSIP_SRR)
-	if ((my_attach = name_attach(NULL, config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point"), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+	if ((my_attach = name_attach(NULL, config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point").c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 #else
 	if ((my_attach = messip_channel_create(NULL, config.return_attach_point_name(lib::configurator::CONFIG_SERVER,
 			"reader_attach_point"), MESSIP_NOTIMEOUT, 0)) == NULL) {
@@ -315,8 +316,8 @@ void * irp6s_and_conv_effector::reader_thread(void* arg)
 		time_of_day = time(NULL);
 		strftime(file_date, 40, "%g%m%d_%H-%M-%S", localtime(&time_of_day));
 
-		sprintf(file_name, "/%s_%s_pomiar-%d", file_date, robot_name, ++file_counter);
-		strcpy(config_file_with_dir, reader_meassures_dir);
+		sprintf(file_name, "/%s_%s_pomiar-%d", file_date, robot_name.c_str(), ++file_counter);
+		strcpy(config_file_with_dir, reader_meassures_dir.c_str());
 
 		strcat(config_file_with_dir, file_name);
 
@@ -428,10 +429,6 @@ void * irp6s_and_conv_effector::reader_thread(void* arg)
 		lib::set_thread_priority(pthread_self(), MAX_PRIORITY-10);
 
 	} // end: for (;;)
-
-	delete[] r_measptr;
-	delete[] robot_name;
-	delete[] reader_meassures_dir;
 }
 
 } // namespace common

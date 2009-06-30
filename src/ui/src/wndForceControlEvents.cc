@@ -94,15 +94,14 @@ int FCCreateConnection(void){
 	// Wiadomosc z polozeniem robota otrzymana z ECP.
 // 	lib::ECP_message from_ecp;
 
-	char *tmp_name;
 	// Stworzenie nazwy.
-	tmp_name = config->return_attach_point_name	(lib::configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point", "[ecp_irp6_on_track]");
+	std::string tmp_name = config->return_attach_point_name	(lib::configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point", "[ecp_irp6_on_track]");
 
 	#ifdef FCDEBUG
-		printf("FCCreateConnection: %s\n",tmp_name);
+		printf("FCCreateConnection: %s\n",tmp_name.c_str());
 	#endif
 	// Otwarcie polaczenia.
-	if ((ECPfd = name_open(tmp_name, NAME_FLAG_ATTACH_GLOBAL)) == -1) {
+	if ((ECPfd = name_open(tmp_name.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == -1) {
 	     e = errno;
 		perror("FCCreateConnection: Connect to ECP failed");
 		return EXIT_FAILURE;

@@ -60,10 +60,9 @@ configurator::configurator (const char* _node, const char* _dir, const char* _in
 		perror( "uname" );
 	}
 
-	int size = 1 + strlen("/net/") + strlen(node) + strlen(dir);
-	mrrocpp_network_path = new char[size];
-	// Stworzenie sciezki do pliku.
-	sprintf(mrrocpp_network_path, "/net/%s%s", node, dir);
+	mrrocpp_network_path = "/net/";
+	mrrocpp_network_path += node;
+	mrrocpp_network_path += dir;
 
 #ifdef USE_MESSIP_SRR
 	if ((ch = messip_channel_connect(NULL, CONFIGSRV_CHANNEL_NAME, MESSIP_NOTIMEOUT)) == NULL) {
@@ -96,9 +95,6 @@ void configurator::change_ini_file (const char* _ini_file)
 	if (ini_file) free(ini_file);
 	ini_file = strdup(_ini_file);
 
-	delete [] file_location;
-	delete [] common_file_location;
-
 	file_location = return_ini_file_path();
 	common_file_location = return_common_ini_file_path();
 
@@ -118,121 +114,85 @@ int	configurator::unlock_mutex() // zwolnienie mutex'a
 
 
 // Zwraca numer wezla.
-int configurator::return_node_number(const char* node_name_l)
+int configurator::return_node_number(std::string node_name_l)
 {
 #if defined(PROCESS_SPAWN_RSH)
 #warning configurator::return_node_number by RSH
 	return ND_LOCAL_NODE;
 #else
-	return netmgr_strtond(node_name_l, NULL);
+	return netmgr_strtond(node_name_l.c_str(), NULL);
 #endif
 }// : return_node_number
 
 
 // Zwraca attach point'a dla serwerow.
-char* configurator::return_attach_point_name (const int _type, const char* _key, const char* __section_name)
+std::string configurator::return_attach_point_name (const int _type, const char* _key, const char* __section_name)
 {
 	const char *_section_name = (__section_name) ? __section_name : section_name;
-	char * name = NULL;
+	std::string name;
 
 	if (_type == CONFIG_RESOURCEMAN_LOCAL)
 	{
-		// Odczytanie zmiennych z INI.
-		char* attach_point = return_string_value(_key, _section_name);
-		// Obliczenie dlugosci nazwy.
-		int size = 1 + strlen("/dev/") + strlen(attach_point)  + strlen(session_name);
+		name = "/dev/";
+		name += return_string_value(_key, _section_name);
+		name += session_name;
 
-		// Przydzielenie pamieci.
-		name = new char[size];
-		// Stworzenie nazwy.
-		sprintf(name, "/dev/%s%s", attach_point, session_name);
-
-		// Zwalniam pamiec.
-		delete [] attach_point;
 	} else if (_type == CONFIG_RESOURCEMAN_GLOBAL)
 	{
-		// Odczytanie zmiennych z INI.
-		char* node_name = return_string_value("node_name", _section_name);
-		char* attach_point = return_string_value(_key, _section_name);
+		name = "/net/";
+		name += return_string_value("node_name", _section_name);
+		name += "/dev/";
+		name += return_string_value(_key, _section_name);
+		name += session_name;
 
-		// Obliczenie dlugosci nazwy.
-		int size = 1 + strlen("/net/") + strlen(node_name) + strlen("/dev/") + strlen(attach_point)  + strlen(session_name);
-		// Przydzielenie pamieci.
-		name = new char[size];
-		// Stworzenie nazwy.
-		sprintf(name, "/net/%s/dev/%s%s", node_name, attach_point, session_name);
-
-		// Zwalniam pamiec.
-		delete [] node_name;
-		delete [] attach_point;
 	} else if (_type == CONFIG_SERVER)
 	{
-		char* attach_point = return_string_value(_key, _section_name);
+		name = return_string_value(_key, _section_name);
+		name += session_name;
 
-		// Obliczenie dlugosci nazwy.
-		int size = 1 + strlen(attach_point) + strlen(session_name);
-
-		// Przydzielenie pamieci.
-		name = new char[size];
-
-		// Stworzenie nazwy.
-		sprintf(name, "%s%s", attach_point, session_name);
-
-		// Zwalniam pamiec.
-		delete [] attach_point;
 	} else {
-		printf("Nieznany argument w metodzie configuratora return_attach_point_name\n");
+		fprintf(stderr, "Nieznany argument w metodzie configuratora return_attach_point_name\n");
+		throw;
 	}
 
 	// Zwrocenie atach_point'a.
-	return name;
+	return (name);
 }// : return_created_resourceman_attach_point_name
 
 #ifndef USE_MESSIP_SRR
 // Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.
-char* configurator::return_ini_file_path()
+std::string configurator::return_ini_file_path()
 {
-	int size = 1 + strlen(mrrocpp_network_path) + strlen("configs/") + strlen(ini_file);
-	char * value = new char[size];
-	// Stworzenie sciezki do pliku.
-	sprintf(value, "%sconfigs/%s", mrrocpp_network_path, ini_file);
+	std::string value(mrrocpp_network_path);
+	value += "configs/";
+	value += ini_file;
 
 	return value;
 }
 
 // Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego z konfiguracja domyslna (common.ini)
-char* configurator::return_common_ini_file_path()
+std::string configurator::return_common_ini_file_path()
 {
-	int size = 1 + strlen(mrrocpp_network_path) + strlen("configs/common.ini");
-	char * value = new char[size];
-	// Stworzenie sciezki do pliku.
-	sprintf(value, "%sconfigs/common.ini", mrrocpp_network_path);
+	std::string value(mrrocpp_network_path);
+	value += "configs/common.ini";
 
 	return value;
 }
 #endif
 
 // Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.
-char* configurator::return_default_reader_measures_path()
+std::string configurator::return_default_reader_measures_path()
 {
-	int size = 1 + strlen(mrrocpp_network_path) + strlen("msr/");
-	char * value = new char[size];
-	// Stworzenie sciezki do pliku.
-	strcpy(value, mrrocpp_network_path);
-	sprintf(value, "%smsr/", mrrocpp_network_path);
+	std::string path(mrrocpp_network_path);
+	path += "msr/";
 
-	return value;
+	return path;
 }
 
 // Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.
-char* configurator::return_mrrocpp_network_path()
+std::string configurator::return_mrrocpp_network_path()
 {
-	int size = 1 + strlen(mrrocpp_network_path);
-	char * value = new char[size];
-	// Stworzenie sciezki do pliku.
-	strcpy(value, mrrocpp_network_path);
-
-	return value;
+	return mrrocpp_network_path;
 }
 
 // Zwraca czy dany klucz istnieje
@@ -323,7 +283,7 @@ int configurator::return_int_value(const char* _key, const char* __section_name)
 	lock_mutex();
 	if (input_config(file_location, configs, _section_name)<1) {
 		if (input_config(common_file_location, configs, _section_name)<1) {
-			printf("Blad input_config() w return_int_value file_location:%s, _section_name:%s, _key:%s\n", file_location, _section_name, _key);
+			fprintf(stderr, "Blad input_config() w return_int_value file_location:%s, _section_name:%s, _key:%s\n", file_location.c_str(), _section_name, _key);
 		}
 	}
 	unlock_mutex();
@@ -376,8 +336,8 @@ double configurator::return_double_value(const char* _key, const char*__section_
 	lock_mutex();
 	if (input_config(file_location, configs, _section_name)<1) {
 		if (input_config(common_file_location, configs, _section_name)<1) {
-			printf("Blad input_config() w return_double_value file_location:%s, _section_name:%s, _key:%s\n",
-					file_location, _section_name, _key);
+			fprintf(stderr, "Blad input_config() w return_double_value file_location:%s, _section_name:%s, _key:%s\n",
+					file_location.c_str(), _section_name, _key);
 		}
 	}
 	unlock_mutex();
@@ -391,7 +351,7 @@ double configurator::return_double_value(const char* _key, const char*__section_
 
 
 // Zwraca wartosc (char*) dla klucza.
-char* configurator::return_string_value(const char* _key, const char*__section_name)
+std::string configurator::return_string_value(const char* _key, const char*__section_name)
 {
 #ifdef USE_MESSIP_SRR
 	const char *_section_name = (__section_name) ? __section_name : section_name;
@@ -414,13 +374,8 @@ char* configurator::return_string_value(const char* _key, const char*__section_n
 
 	//printf("configurator::return_string_value(%s, %s) = %s\n", _key, _section_name, value);
 
-	// Przepisanie wartosci.
-	int size = 1 + strlen(value);
-	char * _value = new char [size];
-	strcpy(_value, value);
-
 	// Zwrocenie wartosci.
-	return _value;
+	return std::string(value);
 #else
 	const char *_section_name = (__section_name) ? __section_name : section_name;
 	// Zwracana zmienna.
@@ -436,19 +391,15 @@ char* configurator::return_string_value(const char* _key, const char*__section_n
 	lock_mutex();
 	if (input_config(file_location, configs, _section_name)<1) {
 		if (input_config(common_file_location, configs, _section_name)<1) {
-			printf("Blad input_config() w return_string_value file_location:%s, _section_name:%s, _key:%s\n",
-					file_location, _section_name, _key);
+			fprintf(stderr, "Blad input_config() w return_string_value file_location:%s, _section_name:%s, _key:%s\n",
+					file_location.c_str(), _section_name, _key);
 		}
 	}
 	unlock_mutex();
 	// 	throw ERROR
-	// Przepisanie wartosci.
-	int size = 1 + strlen(tmp);
-	char * value = new char [size];
-	strcpy(value, tmp);
 
 	// Zwrocenie wartosci.
-	return value;
+	return std::string(tmp);
 #endif /* USE_MESSIP_SRR */
 }// : return_string_value
 
@@ -460,80 +411,68 @@ pid_t configurator::process_spawn(const char*_section_name) {
 
 	if (child_pid == 0) {
 
-		char * spawned_program_name = return_string_value("program_name", _section_name);
-		char * spawned_node_name = return_string_value("node_name", _section_name);
+		std::string spawned_program_name = return_string_value("program_name", _section_name);
+		std::string spawned_node_name = return_string_value("node_name", _section_name);
 
-		char rsh_spawn_node[PATH_MAX];
+		std::string rsh_spawn_node;
 
-		if (strcmp(sysinfo.nodename,spawned_node_name) == 0)
+		if (spawned_node_name == sysinfo.nodename)
 		{
-			strcpy(rsh_spawn_node, "localhost");
+			rsh_spawn_node = "localhost";
 		} else
 		{
-			strcpy(rsh_spawn_node, spawned_node_name);
+			rsh_spawn_node = spawned_node_name;
 		}
 
 		// Sciezka do binariow.
 		char bin_path[PATH_MAX];
 		if (exists("binpath", _section_name)) {
-			char * _bin_path = return_string_value("binpath", _section_name);
-			strcpy(bin_path, _bin_path);
+			std::string _bin_path = return_string_value("binpath", _section_name);
+			strcpy(bin_path, _bin_path.c_str());
 			if(strlen(bin_path) && bin_path[strlen(bin_path)-1] != '/') {
 				strcat(bin_path, "/");
 			}
-			delete [] _bin_path;
+
 		} else {
 			snprintf(bin_path, sizeof(bin_path), "/net/%s%sbin/",
 					node, dir);
 		}
 
 		//ewentualne dodatkowe argumenty wywolania np. przekierowanie na konsole
-		char asa[PATH_MAX];
+		std::string asa;
 		if (exists("additional_spawn_argument", "[ui]")) {
-			char * _asa = return_string_value("additional_spawn_argument", "[ui]");
-			strcpy(asa, _asa);
-			delete [] _asa;
-		} else {
-			strcpy(asa, "");
+			asa = return_string_value("additional_spawn_argument", "[ui]");
 		}
-
-
 
 		char process_path[PATH_MAX];
 		char *ui_host = getenv("UI_HOST");
 		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s %s",
 				bin_path, ui_host ? ui_host : "",
-				bin_path, spawned_program_name,
+				bin_path, spawned_program_name.c_str(),
 				node, dir, ini_file, _section_name,
-				strlen(session_name) ? session_name : "\"\"", asa
+				strlen(session_name) ? session_name : "\"\"", asa.c_str()
 		);
 
-		delete [] spawned_program_name;
-
 		if (exists("username", _section_name)) {
-			char * username = return_string_value("username", _section_name);
+			std::string username = return_string_value("username", _section_name);
 
-			printf("rsh -l %s %s \"%s\"\n", username, rsh_spawn_node, process_path);
+			printf("rsh -l %s %s \"%s\"\n", username.c_str(), rsh_spawn_node.c_str(), process_path);
 
 			execlp("rsh",
 					"rsh",
-					"-l", username,
-					rsh_spawn_node,
+					"-l", username.c_str(),
+					rsh_spawn_node.c_str(),
 					process_path,
 					NULL);
-
-			delete [] username;
 		} else {
-			printf("rsh %s \"%s\"\n", rsh_spawn_node, process_path);
+			printf("rsh %s \"%s\"\n", rsh_spawn_node.c_str(), process_path);
 
 			execlp("rsh",
 					"rsh",
-					rsh_spawn_node,
+					rsh_spawn_node.c_str(),
 					process_path,
 					NULL);
 		}
-
-		delete [] spawned_node_name;
 
 	} else if (child_pid > 0) {
 		printf("child %d created\n", child_pid);
@@ -841,12 +780,8 @@ configurator::~configurator() {
 	free(ini_file);
 	free(section_name);
 	free(session_name);
-	delete [] mrrocpp_network_path;
 #ifdef USE_MESSIP_SRR
 	messip_channel_disconnect(ch, MESSIP_NOTIMEOUT);
-#else
-	delete [] file_location;
-	delete [] common_file_location;
 #endif /* USE_MESSIP_SRR */
 }
 

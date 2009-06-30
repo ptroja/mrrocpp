@@ -57,7 +57,7 @@ void pawel::initiate_reading() {
 void pawel::get_reading() {
 
 	if(read(sd, &from_vsp, sizeof(lib::VSP_ECP_MSG)) == -1)
-		sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
+		sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME.c_str());
 
 	if(from_vsp.vsp_report == lib::VSP_REPLY_OK)
 	{

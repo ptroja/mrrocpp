@@ -28,25 +28,27 @@ namespace lib {
 
 #if !defined(USE_MESSIP_SRR)
 // Konstruktor
-sr::sr(PROCESS_TYPE process_type, const char *process_name, const char *sr_name) {
+sr::sr(PROCESS_TYPE process_type, std::string process_name, std::string sr_name) {
 	struct utsname sysinfo;
     int tmp = 0;
  	// kilka sekund  (~1) na otworzenie urzadzenia
-	while((fd = name_open(sr_name, NAME_FLAG_ATTACH_GLOBAL)) < 0) {
+	while((fd = name_open(sr_name.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0) {
 		if((tmp++)<CONNECT_RETRY) {
 			delay(CONNECT_DELAY);
 		} else {
+			// TODO: throw
 		    perror ("SR cannot be located ");
 		    return;
-		};
+		}
 	}
 	if( uname( &sysinfo ) == -1 ) {
+		// TODO: throw
 		perror( "uname" );
 	}
 	strcpy(sr_message.host_name, sysinfo.nodename);
 	sr_message.process_type = process_type;
 	sr_message.message_type = NEW_MESSAGE;
-	strcpy(sr_message.process_name, process_name);
+	strcpy(sr_message.process_name, process_name.c_str());
 	for (int i=0; i < ERROR_TAB_SIZE; i++) {
 		error_tab[i] = 0;
 	}
@@ -70,10 +72,10 @@ int sr::send_package(void) {
 }
 #else /* USE_MESSIP_SRR */
 // Konstruktor
-sr::sr(const PROCESS_TYPE process_type, const char *process_name, const char *sr_name) {
+sr::sr(const PROCESS_TYPE process_type, std::string process_name, std::string sr_name) {
 
 	int tmp = 0;
-	while ((ch = messip_channel_connect(NULL, sr_name, MESSIP_NOTIMEOUT)) == NULL) {
+	while ((ch = messip_channel_connect(NULL, sr_name.c_str(), MESSIP_NOTIMEOUT)) == NULL) {
 		if (tmp++ < 50) {
 			delay(50);
 		} else {
@@ -93,7 +95,7 @@ sr::sr(const PROCESS_TYPE process_type, const char *process_name, const char *sr
 	strcpy(sr_message.host_name, sysinfo.nodename);
 	sr_message.process_type = process_type;
 	sr_message.message_type = NEW_MESSAGE;
-	strcpy(sr_message.process_name, process_name);
+	strcpy(sr_message.process_name, process_name.c_str());
 	for (int i=0; i < ERROR_TAB_SIZE; i++) {
 		error_tab[i] = 0;
 	}
@@ -179,7 +181,7 @@ int sr::message(int16_t message_type, uint64_t error_code0, uint64_t error_code1
 // --------------------------------------------------------------------
 // interpretacja bledu dla EDP robota irp6_on_track
 
-sr_edp::sr_edp(PROCESS_TYPE process_type, const char *process_name, const char *sr_name) :
+sr_edp::sr_edp(PROCESS_TYPE process_type, std::string process_name, std::string sr_name) :
 	sr(process_type, process_name, sr_name) { }
 
 
@@ -338,7 +340,7 @@ void sr_edp::interpret(void) {
 } // end: sr_edp::interpret()
 // ---------------------------------------------------------------------
 
-sr_ecp::sr_ecp(PROCESS_TYPE process_type, const char *process_name, const char *sr_name) :
+sr_ecp::sr_ecp(PROCESS_TYPE process_type, std::string process_name, std::string sr_name) :
 	sr(process_type, process_name, sr_name)
 {
 }
@@ -435,7 +437,7 @@ switch (sr_message.message_type) {
 } // end: switch (sr_message.message_type)
 } // end: sr_ecp::interpret()
 // ---------------------------------------------------------------------
-  sr_ui::sr_ui(PROCESS_TYPE process_type, const char *process_name, const char *sr_name) :
+  sr_ui::sr_ui(PROCESS_TYPE process_type, std::string process_name, std::string sr_name) :
               sr(process_type, process_name, sr_name) { }
 
 // Interpretacja bledow generowanych w UI // by Y - UWAGA UZUPELNIC
@@ -467,7 +469,7 @@ switch (sr_message.message_type) {
 } // end: switch (sr_message.message_type)
 } // end: sr_vsp::interpret()
 
-  sr_vsp::sr_vsp(PROCESS_TYPE process_type, const char *process_name, const char *sr_name) :
+  sr_vsp::sr_vsp(PROCESS_TYPE process_type, std::string process_name, std::string sr_name) :
               sr(process_type, process_name, sr_name) { }
 
 // Interpretacja bledow generowanych w VSP

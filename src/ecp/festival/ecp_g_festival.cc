@@ -29,11 +29,6 @@ generator::generator(common::task::task& _ecp_task) :
 	sock = -1;
 }
 
-generator::~generator()
-{
-	delete [] host;
-}
-
 char * generator::set_phrase(const char *text)
 {
 	return strncpy(phrase, text, sizeof(phrase));
@@ -59,21 +54,15 @@ bool generator::set_voice(VOICE voice_id)
 
 bool generator::first_step ( )
 {
-	int command_max_len = strlen(voice)
-		+strlen(FESTIVAL_SAY_STRING_PREFIX)+sizeof(phrase)+strlen(FESTIVAL_SAY_STRING_SUFFIX)
-		+1;
-	char command[command_max_len];
+	std::string command;
 
-	snprintf(command, command_max_len, "%s%s%s%s",
-			 voice,
-	         FESTIVAL_SAY_STRING_PREFIX,
-	         this->phrase,
-	         FESTIVAL_SAY_STRING_SUFFIX);
-
-	int command_len = strlen(command);
+	command += voice;
+	command += FESTIVAL_SAY_STRING_PREFIX;
+	command += phrase;
+	command += FESTIVAL_SAY_STRING_SUFFIX;
 
 	if (test_mode) {
-		printf("festival_command->%s:%d = %s", host, portnum, command);
+		printf("festival_command->%s:%d = %s", host.c_str(), portnum, command.c_str());
 		return true;
 	}
 
@@ -86,9 +75,9 @@ bool generator::first_step ( )
 	 * this is okay to do, because gethostbyname(3) does no lookup if the 
 	 * 'host' * arg is already an IP addr
 	 */
-	if((entp = gethostbyname(host)) == NULL) {
+	if((entp = gethostbyname(host.c_str())) == NULL) {
 		fprintf(stderr, "festival_generator::first_step(): \"%s\" is unknown host; "
-		        "can't connect to Festival\n", host);
+		        "can't connect to Festival\n", host.c_str());
 		return false;
 	}
 
@@ -120,19 +109,19 @@ bool generator::first_step ( )
 		return false;
 	}
 
-	int written = write(sock, (const void *) command, command_len);
+	int written = write(sock, (const void *) command.c_str(), command.length());
 	if (written == -1) {
 		perror("festival_generator::first_step(): write()");
 		close(sock);
 		return false;
-	} else if (written < command_len) {
+	} else if (written < command.length()) {
 		fprintf(stderr, "festival_generator::first_step(): write() %d of %d bytes written\n",
-		        written, command_len);
+		        written, command.length());
 		return false;
 	}
 
 	numread = 0;
-	read_pending_status = 2 + (strlen(voice) ? 1 : 0); // number of festival commands requested
+	read_pending_status = 2 + (strlen(voice.c_str()) ? 1 : 0); // number of festival commands requested
 
 	return true;
 }

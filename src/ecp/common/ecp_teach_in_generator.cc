@@ -223,7 +223,7 @@ bool ecp_teach_in_generator::load_file_from_ui()
   // --------------------------------------------------------------------------
 
 
-bool ecp_teach_in_generator::load_file_with_path(char* file_name)
+bool ecp_teach_in_generator::load_file_with_path(const char* file_name)
   {
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 

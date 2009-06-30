@@ -28,7 +28,6 @@ task::task(lib::configurator &_config) :
 
 task::~task()
 {
-	delete[] mrrocpp_network_path;
 }
 
 bool task::pulse_check()
@@ -112,44 +111,38 @@ void task::initialize_communication()
 {
 	uint64_t e; // kod bledu systemowego
 
-	char* sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
-	char* ecp_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_attach_point");
-	char* trigger_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point");
-	char* mp_pulse_attach_point =
+	std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
+	std::string ecp_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_attach_point");
+	std::string trigger_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point");
+	std::string mp_pulse_attach_point =
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", "[mp]");
 
-	if ((sr_ecp_msg = new lib::sr_ecp(lib::ECP, ecp_attach_point, sr_net_attach_point)) == NULL) { // Obiekt do komuniacji z SR
+	if ((sr_ecp_msg = new lib::sr_ecp(lib::ECP, ecp_attach_point.c_str(), sr_net_attach_point.c_str())) == NULL) { // Obiekt do komuniacji z SR
 		perror("Unable to locate SR\n");
 		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
 	// Lokalizacja procesu MP - okreslenie identyfikatora (pid)
-	if ( (MP_fd = name_open(mp_pulse_attach_point, NAME_FLAG_ATTACH_GLOBAL)) < 0) {
+	if ( (MP_fd = name_open(mp_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0) {
 		e = errno;
 		perror("ECP: Unable to locate MP_MASTER process\n");
 		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
 	// Rejstracja procesu ECP
-	if ((ecp_attach = name_attach(NULL, ecp_attach_point, NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+	if ((ecp_attach = name_attach(NULL, ecp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		e = errno;
 		perror("Failed to attach Effector Control Process\n");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Failed to attach Effector Control Process");
 		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
-	if ((trigger_attach = name_attach(NULL, trigger_attach_point, NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+	if ((trigger_attach = name_attach(NULL, trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		e = errno;
 		perror("Failed to attach TRIGGER pulse chanel for ecp\n");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Failed  Failed to name attach (trigger pulse)");
 		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
-
-	delete [] ecp_attach_point;
-	delete [] sr_net_attach_point;
-	delete [] trigger_attach_point;
-	delete [] mp_pulse_attach_point;
-
 }
 // -------------------------------------------------------------------
 
@@ -482,25 +475,22 @@ mp::common::Trajectory * task::createTrajectory(xmlNode *actNode, xmlChar *state
 	return actTrajectory;
 }
 
-std::map<char*, mp::common::Trajectory, task::str_cmp>* task::loadTrajectories(char * fileName, lib::ROBOT_ENUM propRobot)
+std::map<const char*, mp::common::Trajectory, task::str_cmp>* task::loadTrajectories(const char * fileName, lib::ROBOT_ENUM propRobot)
 {
-	int size;
-	char * filePath;
 	const char * robotName = mp::common::Trajectory::returnRobotName(propRobot);
 	mp::common::Trajectory* actTrajectory;
 	xmlNode *cur_node, *child_node, *subTaskNode;
 	xmlChar *coordinateType, *numOfPoses, *robot;
 	xmlChar *xmlDataLine;
 	xmlChar *stateID, *stateType;
-	std::map<char*, mp::common::Trajectory, str_cmp>* trajectoriesMap;
-
-	xmlDocPtr doc;
-	size = 1 + strlen(mrrocpp_network_path) + strlen(fileName);
-	filePath = new char[size];
+	std::map<const char*, mp::common::Trajectory, str_cmp>* trajectoriesMap;
 
 	// Stworzenie sciezki do pliku.
-	sprintf(filePath, "%s%s", mrrocpp_network_path, fileName);
-	doc = xmlParseFile(filePath);
+	std::string filePath(mrrocpp_network_path);
+	filePath += fileName;
+
+	xmlDocPtr doc = xmlParseFile(filePath.c_str());
+
 	xmlXIncludeProcess(doc);
 	if(doc == NULL)
 	{
@@ -515,7 +505,7 @@ std::map<char*, mp::common::Trajectory, task::str_cmp>* task::loadTrajectories(c
 		throw common::generator::generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
-	trajectoriesMap = new std::map<char*, mp::common::Trajectory, task::str_cmp>();
+	trajectoriesMap = new std::map<const char*, mp::common::Trajectory, task::str_cmp>();
 
    for(cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
    {
@@ -539,7 +529,7 @@ std::map<char*, mp::common::Trajectory, task::str_cmp>* task::loadTrajectories(c
 									!xmlStrcmp(robot, (const xmlChar *)robotName))
 							{
 								actTrajectory = createTrajectory(child_node, stateID);//new Trajectory((char *)numOfPoses, (char *)stateID, (char *)coordinateType);
-								trajectoriesMap->insert(std::map<char *, mp::common::Trajectory>::value_type(actTrajectory->getTrjID(), *actTrajectory));
+								trajectoriesMap->insert(std::map<const char *, mp::common::Trajectory>::value_type(actTrajectory->getTrjID(), *actTrajectory));
 							}
 						}
 						xmlFree(robot);
@@ -563,7 +553,7 @@ std::map<char*, mp::common::Trajectory, task::str_cmp>* task::loadTrajectories(c
 							!xmlStrcmp(robot, (const xmlChar *)robotName))
 	            {
 						actTrajectory = createTrajectory(child_node, stateID);//new Trajectory((char *)numOfPoses, (char *)stateID, (char *)coordinateType);
-						trajectoriesMap->insert(std::map<char *, mp::common::Trajectory>::value_type(actTrajectory->getTrjID(), *actTrajectory));
+						trajectoriesMap->insert(std::map<const char *, mp::common::Trajectory>::value_type(actTrajectory->getTrjID(), *actTrajectory));
 	            }
 	         }
 				xmlFree(robot);

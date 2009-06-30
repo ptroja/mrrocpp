@@ -31,7 +31,6 @@ class task {
 public:
 
 	task(lib::configurator &_config);
-	~task();
 
 	// mapa wszystkich czujnikow
 	static std::map <lib::SENSOR_ENUM, lib::sensor*> sensor_m;
@@ -46,7 +45,7 @@ public:
 #else
 	messip_channel_t *UI_fd;
 #endif
-	char* mrrocpp_network_path;
+	std::string mrrocpp_network_path;
 
 	// METODY
 	// Odpowiedz operatora na zadane pytanie: (Yes/No)

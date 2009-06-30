@@ -55,23 +55,21 @@ void fsautomat::task_initialization(void)
 	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 	const char * whichECP = "ROBOT_IRP6_ON_TRACK";
 
-	int size, conArg;
-	char *filePath;
-	char *fileName = config.return_string_value("xml_file", "[xml_settings]");
+	int conArg;
 	xmlNode *cur_node, *child_node;
 	xmlChar *robot;
 	xmlChar *stateType, *argument;
 
-	size = 1 + strlen(mrrocpp_network_path) + strlen(fileName);
-	filePath = new char[size];
+	std::string fileName = config.return_string_value("xml_file", "[xml_settings]");
+	std::string filePath(mrrocpp_network_path);
+	filePath += fileName;
 
-	sprintf(filePath, "%s%s", mrrocpp_network_path, fileName);
 	// open xml document
 	xmlDocPtr doc;
-	doc = xmlParseFile(filePath);
+	doc = xmlParseFile(filePath.c_str());
 	if(doc == NULL)
 	{
-		printf("ERROR in ecp initialization: could not parse file: %s\n",fileName);
+		fprintf(stderr, "ERROR in ecp initialization: could not parse file: %s\n", fileName.c_str());
 		return;
 	}
 
@@ -210,16 +208,13 @@ void fsautomat::task_initialization(void)
 
 void fsautomat::main_task_algorithm(void)
 {
-	int size;
-	char * path1;
-	double *gen_args;
-	char * fileName = config.return_string_value("xml_file", "[xml_settings]");
+	std::string fileName = config.return_string_value("xml_file", "[xml_settings]");
 	int trjConf = config.return_int_value("trajectory_from_xml", "[xml_settings]");
 	int ecpLevel = config.return_int_value("trajectory_on_ecp_level", "[xml_settings]");
 
 	if(trjConf && ecpLevel)
 	{
-		trjMap = loadTrajectories(fileName, lib::ROBOT_IRP6_ON_TRACK);
+		trjMap = loadTrajectories(fileName.c_str(), lib::ROBOT_IRP6_ON_TRACK);
 		printf("Lista ROBOT_IRP6_ON_TRACK zawiera: %d elementow\n", trjMap->size());
 	}
 
@@ -244,18 +239,18 @@ void fsautomat::main_task_algorithm(void)
 		switch ( (ecp_mp::task::STATE_MACHINE_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
 		{
 			case ecp_mp::task::ECP_GEN_TEACH_IN:
-				size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-				path1 = new char[size];
-				sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+			{
+				std::string path(mrrocpp_network_path);
+				path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 				tig->flush_pose_list();
-				//tig->load_file_with_path (path1);
+				//tig->load_file_with_path (path.c_str());
 				//tig->initiate_pose_list();
 				tig->teach(lib::MOTOR, "asdasdkjasdj");
 				if(operator_reaction("Save?"))
 					tig->save_file(lib::MOTOR);
-				delete[] path1;
 				//tig->Move();
 				break;
+			}
 			case ecp_mp::task::ECP_GEN_SMOOTH:
 				if(trjConf)
 				{
@@ -265,20 +260,16 @@ void fsautomat::main_task_algorithm(void)
 					}
 					else
 					{
-						size = 1 + strlen(mrrocpp_network_path) + strlen(fileName);
-						path1 = new char[size];
-						sprintf(path1, "%s%s", mrrocpp_network_path, fileName);
-						sg->load_trajectory_from_xml(path1, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-						delete[] path1;
+						std::string path(mrrocpp_network_path);
+						path += fileName;
+						sg->load_trajectory_from_xml(path.c_str(), mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 					}
 				}
 				else
 				{
-					size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-					path1 = new char[size];
-					sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-					sg->load_file_with_path (path1);
-					delete[] path1;
+					std::string path(mrrocpp_network_path);
+					path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+					sg->load_file_with_path (path.c_str());
 				}
 				sg->Move();
 				break;
@@ -295,43 +286,48 @@ void fsautomat::main_task_algorithm(void)
 				nrg->Move();
 				break;
 			case ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB:
-				gen_args = new double[4];
-				size = mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+			{
+				double gen_args[4];
+				int size = mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				if(size > 3)
 					rgg->configure(gen_args[0], gen_args[1], (int)gen_args[2], (bool)gen_args[3]);
 				else
 					rgg->configure(gen_args[0], gen_args[1], (int)gen_args[2]);
 				rgg->Move();
-				delete[] gen_args;
 				break;
+			}
 			case ecp_mp::task::ECP_GEN_TFF_RUBIK_FACE_ROTATE:
-				gen_args = new double[1];
+			{
+				double gen_args[1];
 				mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				rfrg->configure(gen_args[0]);
 				rfrg->Move();
-				delete[] gen_args;
 				break;
+			}
 			case ecp_mp::task::ECP_GEN_TFF_GRIPPER_APPROACH:
-				gen_args = new double[2];
+			{
+				double gen_args[2];
 				mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				gag->configure(gen_args[0] , (int)gen_args[1]);
 				gag->Move();
-				delete[] gen_args;
 				break;
+			}
 			case ecp_mp::task::ECP_TOOL_CHANGE_GENERATOR:
-				gen_args = new double[3];
+			{
+				double gen_args[3];
 				mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				tcg->set_tool_parameters(gen_args[0], gen_args[1], gen_args[2]);
 				tcg->Move();
-				delete[] gen_args;
 				break;
+			}
 			case ecp_mp::task::RCSC_GRIPPER_OPENING:
-				gen_args = new double[2];
+			{
+				double gen_args[2];
 				mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				go_st->configure(gen_args[0], (int)gen_args[1]);
 				go_st->execute();
-				delete[] gen_args;
 				break;
+			}
 			default:
 				break;
 		}

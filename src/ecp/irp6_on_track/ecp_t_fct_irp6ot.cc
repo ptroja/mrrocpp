@@ -282,11 +282,10 @@ void fct::task_initialization(void)
 	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 
 	// Stworzenie nazwy.
-	char *tmp_name;
-	tmp_name = config.return_attach_point_name	(lib::configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point", "[ecp_irp6_on_track]");
+	std::string attach_point = config.return_attach_point_name	(lib::configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point", "[ecp_irp6_on_track]");
 
 	// Dolaczenie globalnej nazwy procesu ECP - kanal do odbioru polecen z UI.
-	if ((UI_ECP_attach = name_attach(NULL, tmp_name, NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+	if ((UI_ECP_attach = name_attach(NULL, attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 //		printf("%s\n", tmp_name);
 		// W razie niepowodzenia.
 		throw common::ECP_main_error(lib::SYSTEM_ERROR, NAME_ATTACH_ERROR);

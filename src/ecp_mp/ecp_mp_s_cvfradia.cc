@@ -34,7 +34,7 @@ cvfradia::cvfradia(lib::SENSOR_ENUM _sensor_name, const char* _section_name, tas
 
 	// Retrieve cvfradia node name and port from configuration file.
 	int cvfradia_port = _ecp_mp_object.config.return_int_value("cvfradia_port", _section_name);
-	char* cvfradia_node_name = _ecp_mp_object.config.return_string_value("cvfradia_node_name", _section_name);
+	const char* cvfradia_node_name = _ecp_mp_object.config.return_string_value("cvfradia_node_name", _section_name).c_str();
 
 	// Try to open socket.
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -64,9 +64,8 @@ cvfradia::cvfradia(lib::SENSOR_ENUM _sensor_name, const char* _section_name, tas
 	}
 
 	// Retrieve task name.
-	char* task = _ecp_mp_object.config.return_string_value("cvfradia_task", _section_name);
-	strcpy(to_vsp.cvfradia_task_name, task);
-	delete []task;
+	std::string task = _ecp_mp_object.config.return_string_value("cvfradia_task", _section_name).c_str();
+	strcpy(to_vsp.cvfradia_task_name, task.c_str());
 
 	sr_ecp_msg.message("Connected to cvFraDIA");
 }// end: ecp_mp_sensor

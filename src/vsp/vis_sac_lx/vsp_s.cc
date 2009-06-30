@@ -111,7 +111,7 @@ int C_T_G[16];
 
 
 int irq_no;
-int id;  
+int id;
 int md;
 struct timespec start[9], stop[9], res;
 //short tmp[9];
@@ -128,8 +128,8 @@ struct timespec crr_time, s_time, e_time;
 
 int debug=0;
 
-char SAC_node_name[20]; 
-char EIH_node_name[20]; 
+char SAC_node_name[20];
+char EIH_node_name[20];
 
 int ret=0;
 //CMVision vision;
@@ -141,16 +141,16 @@ vis_sac_lx::vis_sac_lx(lib::configurator &_config) : sensor(_config){
 	// Wielkosc unii.
 	union_size = sizeof(image.sensor_union.vis_sac);
 
-	is_sensor_configured=false; // czujnik niezainicjowany 
+	is_sensor_configured=false; // czujnik niezainicjowany
 	is_reading_ready=false; // nie ma zadnego gotowego odczytu
 	irq_no = 0;
-	ThreadCtl(_NTO_TCTL_IO, NULL); // by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi 
+	ThreadCtl(_NTO_TCTL_IO, NULL); // by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi
 
 	z=0;
 	x=0;
-	
-	strcpy(SAC_node_name, config.return_string_value("SAC_node_name"));
-	strcpy(EIH_node_name, config.return_string_value("EIH_node_name"));
+
+	strcpy(SAC_node_name, config.return_string_value("SAC_node_name").c_str());
+	strcpy(EIH_node_name, config.return_string_value("EIH_node_name").c_str());
 
 	//SAC
 	if(strcmp( SAC_node_name, "NULL" )!=0)
@@ -178,7 +178,7 @@ vis_sac_lx::vis_sac_lx(lib::configurator &_config) : sensor(_config){
 	}
 	//EIH
 	if(strcmp( EIH_node_name, "NULL" )!=0)
-	{	
+	{
 		portno_eih = PORT_EIH;
 		sockfd_eih = socket(AF_INET, SOCK_STREAM, 0);
 		if (sockfd_eih < 0) {
@@ -186,7 +186,7 @@ vis_sac_lx::vis_sac_lx(lib::configurator &_config) : sensor(_config){
 			throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 		}
 		//server_eih = gethostbyname(HOST_EIH);
-		server_eih = gethostbyname(EIH_node_name);	
+		server_eih = gethostbyname(EIH_node_name);
 		if (server_eih == NULL) {
 			printf("ERROR, no such host\n");
 			throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
@@ -215,9 +215,9 @@ void vis_sac_lx::configure_sensor(void)
 {
 	is_sensor_configured=true;
 
-	sr_msg->message("Sensor initiated"); // 7 
+	sr_msg->message("Sensor initiated"); // 7
 }
-	
+
 void vis_sac_lx::wait_for_event(){
 	//delay(10);
 }
@@ -238,9 +238,9 @@ void vis_sac_lx::initiate_reading(void)
 			perror("write() to sockfd_sac error");
 			exit(-1);
 		}
-		
+
 		bzero(buffer,BUFFER_SIZE);
-		
+
 		n = read(sockfd_sac,buffer,BUFFER_SIZE);
 		if (n < 0) {
 			perror("read() from socket");
@@ -259,14 +259,14 @@ void vis_sac_lx::initiate_reading(void)
 		//EIH
 	if(strcmp( EIH_node_name, "NULL" )!=0)
 	{
-	
+
 		if (write(sockfd_eih,"x",1) != 1) {
 			perror("write() to sockfd_eih error");
 			exit(-1);
 		}
-		
+
 		bzero(buffer_eih,BUFFER_SIZE);
-		
+
 		n = read(sockfd_eih,buffer_eih,BUFFER_EIH_SIZE);
 		if (n < 0) {
 			perror("read() from socket");
@@ -275,8 +275,8 @@ void vis_sac_lx::initiate_reading(void)
 			printf("read() from socket returned no data");
 			exit(-1);
 		}
-		
-		if (sscanf(buffer_eih,"%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d", 
+
+		if (sscanf(buffer_eih,"%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d",
 						&x,&y,&z, &a, &b, &g, &x_jack_eih, &y_jack_eih, &z_jack_eih, &a_jack_eih, &b_jack_eih, &g_jack_eih,
 						&f1x_eih, &f1y_eih, &f2x_eih, &f2y_eih, &f3x_eih, &f3y_eih, &f4x_eih, &f4y_eih) != 20) { //12
 			fprintf(stderr, "sscanf(buffer) failed\n");
@@ -288,7 +288,7 @@ void vis_sac_lx::initiate_reading(void)
 //	}
 //	catch(...)
 //	{
-//		sr_msg->message ("Catched ERROR"); // 7 
+//		sr_msg->message ("Catched ERROR"); // 7
 //	}
 	//for(int i=0; i<12; i++)
 	/*
@@ -305,7 +305,7 @@ void vis_sac_lx::initiate_reading(void)
 	//printf("XXX=%d\n",x);
 	is_reading_ready=true; // odczyt jakikolwiek
 }
-		
+
 /***************************** odczyt z czujnika *****************************/
 void vis_sac_lx::get_reading(void)
 {
@@ -363,10 +363,10 @@ void vis_sac_lx::get_reading(void)
 	/*
 	 for(int j=0; j<12; j++)
 	 from_vsp.comm_image.sensor_union.vis_sac.frame_E_T_G[j]=(double)  C_T_G[j]/10000;
-	 
+
 	 for(int j=0; j<3; j++)
 	 from_vsp.comm_image.sensor_union.vis_sac.frame_E_T_G[12+j]=0;
-	 
+
 	 from_vsp.comm_image.sensor_union.vis_sac.frame_E_T_G[15]=1;
 	 */
 	//if (vision.whole_face)
@@ -394,7 +394,7 @@ void vis_sac_lx::get_reading(void)
 	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G[3]=(double) a_sac/100000;
 	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G[4]=(double) b_sac/100000;
 	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G[5]=(double) g_sac/100000;
-	
+
 	from_vsp.comm_image.sensor_union.vis_sac.fEIH_G[0]=(double) f1x_eih/1000;
 	from_vsp.comm_image.sensor_union.vis_sac.fEIH_G[1]=(double) f1y_eih/1000;
 	from_vsp.comm_image.sensor_union.vis_sac.fEIH_G[2]=(double) f2x_eih/1000;
@@ -403,7 +403,7 @@ void vis_sac_lx::get_reading(void)
 	from_vsp.comm_image.sensor_union.vis_sac.fEIH_G[5]=(double) f3y_eih/1000;
 	from_vsp.comm_image.sensor_union.vis_sac.fEIH_G[6]=(double) f4x_eih/1000;
 	from_vsp.comm_image.sensor_union.vis_sac.fEIH_G[7]=(double) f4y_eih/1000;
-	
+
 
 	//for(int i=2; i<6; i++)
 	//	from_vsp.comm_image.sensor_union.vis_sac.frame_E_r_G__f[i]=0;
@@ -415,7 +415,7 @@ void vis_sac_lx::get_reading(void)
 	//std::cout << std::endl;
 	// for(int i=0; i<16; i++)
 	// 	from_vsp.comm_image.sensor_union.camera.frame[i] = 0.5;
-	// sr_msg->message ("VSP Get reading ok");   
+	// sr_msg->message ("VSP Get reading ok");
 	is_reading_ready=false; // 7
 }
 

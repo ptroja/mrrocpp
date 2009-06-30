@@ -40,7 +40,7 @@ class fsautomat: public common::task::task
 		common::task::ecp_sub_task_gripper_opening* go_st;
 
 
-		std::map<char*, mp::common::Trajectory, str_cmp>* trjMap;
+		std::map<const char*, mp::common::Trajectory, str_cmp>* trjMap;
 
 	public:
 		// KONSTRUKTORY

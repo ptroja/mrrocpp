@@ -20,7 +20,6 @@ void haar::task_initialization(void) {
 		rotation = config.return_int_value("rotation"); //Czy bedzie wyznaczana rotacja?
 		smooth_path = config.return_string_value("smooth_path");//Sciezka z opisem punktu startowego podawanego smooth_generatorowi
 
-
 		//Create cvFraDIA sensor - for testing purposes.
 		sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA,
 				"[vsp_cvfradia]", *this,
@@ -50,7 +49,7 @@ void haar::task_initialization(void) {
 void haar::main_task_algorithm(void) {
 
 	//Dojazd do pozycji nad stolem.
-	smooth_gen->load_file_with_path(smooth_path);
+	smooth_gen->load_file_with_path(smooth_path.c_str());
 	smooth_gen->Move();
 
 	//	//czy FraDIA ma dokonac detekcji z rotacja.

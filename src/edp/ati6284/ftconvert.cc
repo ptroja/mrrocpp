@@ -129,7 +129,7 @@ int ftconvert(float SampleReading[6],float SampleBias[6],float FT[6]) {
 }
 
 
-int DisplayInfo(Calibration *cal,char *calfilepath,unsigned short index){
+int DisplayInfo(Calibration *cal,const char *calfilepath,unsigned short index){
 	int i,j; //!<  liczniki
 	//!<  display info from calibration file
 	printf("Calibration Information for %s, index #%i\n",calfilepath,index);

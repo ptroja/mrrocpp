@@ -106,7 +106,7 @@ pulse_ecp_conveyor()
 		 	// kilka sekund  (~1) na otworzenie urzadzenia
 		 	// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
 		 	ualarm( (useconds_t)( SIGALRM_TIMEOUT), 0);
-			while( (ui_state.conveyor.ecp.trigger_fd = name_open(ui_state.conveyor.ecp.network_trigger_attach_point, NAME_FLAG_ATTACH_GLOBAL)) < 0)
+			while( (ui_state.conveyor.ecp.trigger_fd = name_open(ui_state.conveyor.ecp.network_trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
 			{
 				if (errno == EINTR) break;
 				if((tmp++)<20)
@@ -412,23 +412,20 @@ int EDP_conveyor_create()
 {
 	set_ui_state_notification(UI_N_PROCESS_CREATION);
 
-	short tmp;
-	char tmp_string[100];
-	char tmp2_string[100];
-
 	try {
 		if (ui_state.conveyor.edp.state == 0)
 		{
 			ui_state.conveyor.edp.state = 0;
 			ui_state.conveyor.edp.is_synchronised = false;
 			
-			strcpy(tmp_string, "/dev/name/global/");
-			strcat(tmp_string, ui_state.conveyor.edp.hardware_busy_attach_point);
+			std::string busy_attach_point("/dev/name/global/");
+			busy_attach_point += ui_state.conveyor.edp.hardware_busy_attach_point;
 
-			strcpy(tmp2_string, "/dev/name/global/");
-			strcat(tmp2_string, ui_state.conveyor.edp.network_resourceman_attach_point);
-			if((!(ui_state.conveyor.edp.test_mode)) && ( access(tmp_string, R_OK)== 0  )
-				|| (access(tmp2_string, R_OK)== 0 )
+			std::string resourceman_attach_point("/dev/name/global/");
+			resourceman_attach_point += ui_state.conveyor.edp.network_resourceman_attach_point;
+
+			if((!(ui_state.conveyor.edp.test_mode)) && ( access(busy_attach_point.c_str(), R_OK)== 0  )
+				|| (access(resourceman_attach_point.c_str(), R_OK)== 0 )
 			)
 			{
 				ui_msg.ui->message("edp_conveyor already exists");
@@ -445,9 +442,9 @@ int EDP_conveyor_create()
 					delete ui_robot.conveyor;
 				} else {  // jesli spawn sie powiodl
 
-					 tmp = 0;
+					short tmp = 0;
 				 	// kilka sekund  (~1) na otworzenie urzadzenia
-					while((ui_state.conveyor.edp.reader_fd = name_open(ui_state.conveyor.edp.network_reader_attach_point,
+					while((ui_state.conveyor.edp.reader_fd = name_open(ui_state.conveyor.edp.network_reader_attach_point.c_str(),
 						NAME_FLAG_ATTACH_GLOBAL))  < 0)
 						if((tmp++)<20)
 							delay(50);
@@ -568,7 +565,6 @@ reload_conveyor_configuration ()
 
 		if (ui_state.is_mp_and_ecps_active)
 		{
-			delete [] ui_state.conveyor.ecp.network_trigger_attach_point;
 			ui_state.conveyor.ecp.network_trigger_attach_point =config->return_attach_point_name
 				(lib::configurator::CONFIG_SERVER, "trigger_attach_point", ui_state.conveyor.ecp.section_name);
 
@@ -597,21 +593,17 @@ reload_conveyor_configuration ()
 				else
 					ui_state.conveyor.edp.test_mode = 0;
 
-				delete [] ui_state.conveyor.edp.hardware_busy_attach_point;
 				ui_state.conveyor.edp.hardware_busy_attach_point = config->return_string_value
 					("hardware_busy_attach_point", ui_state.conveyor.edp.section_name);
 
 
 
-				delete [] ui_state.conveyor.edp.network_resourceman_attach_point;
 				ui_state.conveyor.edp.network_resourceman_attach_point = config->return_attach_point_name
 					(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", ui_state.conveyor.edp.section_name);
 
-				delete [] ui_state.conveyor.edp.network_reader_attach_point;
 				ui_state.conveyor.edp.network_reader_attach_point = config->return_attach_point_name
 					(lib::configurator::CONFIG_SERVER, "reader_attach_point", ui_state.conveyor.edp.section_name);
 
-				delete [] ui_state.conveyor.edp.node_name;
 				ui_state.conveyor.edp.node_name = config->return_string_value ("node_name", ui_state.conveyor.edp.section_name);
 
 			break;

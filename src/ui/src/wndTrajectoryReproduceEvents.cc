@@ -249,15 +249,13 @@ int TRConnect( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo ){
         printf("TRConnect: Create connection.\n");
     #endif
     // Nazwa polacznia.
-    char *tmp_name;
-    // Stworznie nazwy.
-    tmp_name = config->return_attach_point_name	(lib::configurator::CONFIG_SERVER, "ecp_third_chan_attach_point", "[ecp_irp6_on_track]");
+    std::string tmp_name = config->return_attach_point_name	(lib::configurator::CONFIG_SERVER, "ecp_third_chan_attach_point", "[ecp_irp6_on_track]");
 
     #ifdef TRDEBUG
-        printf("TRConnect: %s\n", tmp_name);
+        printf("TRConnect: %s\n", tmp_name.c_str());
     #endif
     // Otworzenie polaczenia.
-    if ((ECPfd = name_open(tmp_name, NAME_FLAG_ATTACH_GLOBAL)) == -1) {
+    if ((ECPfd = name_open(tmp_name.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == -1) {
         perror("TRConnect: Connect to ECP failed");
         return EXIT_FAILURE;
         };

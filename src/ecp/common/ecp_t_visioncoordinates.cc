@@ -38,7 +38,6 @@ visioncoordinates::visioncoordinates(lib::configurator& _config)
 
 void visioncoordinates::task_initialization()
 {
-
 	// tworzymy robota
     if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     {
@@ -84,11 +83,10 @@ void visioncoordinates::setStartPosition()
 	debugmsg("setStartPosition()");
 	double bf[MAX_SERVOS_NR]; 
 	memset(bf, 0, sizeof(bf));
-	char* position = config.return_string_value("start_joint_position", SETTINGS_SECTION_NAME);
+	std::string position = config.return_string_value("start_joint_position", SETTINGS_SECTION_NAME);
 
-	std::istringstream iss(position);
+	std::istringstream iss(position.c_str());
 	iss >> bf[0] >> bf[1] >> bf[2] >> bf[3] >> bf[4] >> bf[5] >> bf[6]; 
-	delete[] position;
 
 	itsSmoothGen->load_coordinates(lib::JOINT, bf[0], bf[1], bf[2], bf[3], bf[4], bf[5], bf[6], bf[7]);
 	itsSmoothGen->Move();

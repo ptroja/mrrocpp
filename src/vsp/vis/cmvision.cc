@@ -530,7 +530,7 @@ bool CMVision::initGrid()
 return 0;	
 };
 
-bool CMVision::initEstim(char *filename)
+bool CMVision::initEstim(const char *filename)
 {
 //w mroku vvector zamiast vector
 	float x,y;
@@ -652,7 +652,7 @@ void clear_bits(unsigned int *arr,int len,int l,int r,unsigned int k)
 #define CMV_STATE_THRESH 2
 #define CMV_MAX_BUF 256
 
-bool CMVision::loadColors(char *filename)
+bool CMVision::loadColors(const char *filename)
 // Loads in colors file specifying color names and representative
 // rgb triplets.  Also loads in color class threshold values.
 {

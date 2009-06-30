@@ -38,8 +38,8 @@ effector::effector(lib::configurator &_config, lib::ROBOT_ENUM l_robot_name) :
 
 	/* Lokalizacja procesu wywietlania komunikatow SR */
 
-	if ((msg = new lib::sr_edp(lib::EDP, config.return_string_value("resourceman_attach_point"),
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]")))
+	if ((msg = new lib::sr_edp(lib::EDP, config.return_string_value("resourceman_attach_point").c_str(),
+			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]").c_str()))
 			== NULL) {
 		perror("Unable to locate SR ");
 		throw System_error();
@@ -49,8 +49,8 @@ effector::effector(lib::configurator &_config, lib::ROBOT_ENUM l_robot_name) :
 		test_mode = config.return_int_value("test_mode");
 	else
 		test_mode = 0;
-	mrrocpp_network_path = config.return_mrrocpp_network_path();
 
+	mrrocpp_network_path = config.return_mrrocpp_network_path();
 }
 
 void effector::check_config(const char* string, uint8_t* input)
@@ -64,26 +64,23 @@ void effector::check_config(const char* string, uint8_t* input)
 /*--------------------------------------------------------------------------*/
 bool effector::initialize_communication()
 {
-	char* server_attach_point;
-	server_attach_point
-			= config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point");
+	std::string server_attach_point(
+			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point"));
 
 #if !defined(USE_MESSIP_SRR)
 	// obsluga mechanizmu sygnalizacji zajetosci sprzetu
 	if (!(test_mode)) {
-		char* hardware_busy_attach_point;
+		const char* hardware_busy_attach_point;
 		char full_path_to_hardware_busy_attach_point[100];
 		name_attach_t *tmp_attach;
 
 		hardware_busy_attach_point
-				= config.return_string_value("hardware_busy_attach_point");
+				= config.return_string_value("hardware_busy_attach_point").c_str();
 		sprintf(full_path_to_hardware_busy_attach_point, "/dev/name/global/%s", hardware_busy_attach_point);
 
 		// sprawdzenie czy nie jakis proces EDP nie zajmuje juz sprzetu
 		if (access(full_path_to_hardware_busy_attach_point, R_OK)== 0) {
 			fprintf( stderr, "EDP: hardware busy\n");
-
-			delete[] hardware_busy_attach_point;
 
 			return false;
 		}
@@ -95,20 +92,16 @@ bool effector::initialize_communication()
 			msg->message(lib::SYSTEM_ERROR, errno, "EDP: hardware_busy_attach_point failed to attach");
 			fprintf( stderr, "hardware_busy_attach_point name_attach() failed: %s\n", strerror( errno ));
 
-			delete[] hardware_busy_attach_point;
-
 			return false;
 		}
-
-		delete[] hardware_busy_attach_point;
 	}
 #endif /* !defined(USE_MESSIP_SRR */
 
-	char full_path_to_server_attach_point[100];
-	sprintf(full_path_to_server_attach_point, "/dev/name/global/%s", server_attach_point);
+	std::string full_path_to_server_attach_point("/dev/name/global/");
+	full_path_to_server_attach_point += server_attach_point;
 
 	// sprawdzenie czy nie jest juz zarejestrowany server EDP
-	if (access(full_path_to_server_attach_point, R_OK)== 0) {
+	if (access(full_path_to_server_attach_point.c_str(), R_OK)== 0) {
 		fprintf( stderr, "edp already exists() failed: %s\n", strerror( errno ));
 		return false;
 	}
@@ -119,12 +112,10 @@ bool effector::initialize_communication()
 
 	attach =
 #if !defined(USE_MESSIP_SRR)
-		name_attach(NULL, server_attach_point, NAME_FLAG_ATTACH_GLOBAL);
+		name_attach(NULL, server_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
 #else /* USE_MESSIP_SRR */
-		messip_channel_create(NULL, server_attach_point, MESSIP_NOTIMEOUT, 0);
+		messip_channel_create(NULL, server_attach_point.c_str(), MESSIP_NOTIMEOUT, 0);
 #endif /* USE_MESSIP_SRR */
-
-	delete [] server_attach_point;
 
 	if (attach == NULL) {
 		msg->message(lib::SYSTEM_ERROR, errno, "EDP: resmg failed to attach");
@@ -253,13 +244,13 @@ lib::INSTRUCTION_TYPE effector::receive_instruction(void)
 		/* A message (presumable ours) received, handle */
 		break;
 	}
-	
+
 	//memcpy( &new_instruction, msg_cb, sizeof(*msg_cb) );
 	caller = rcvid;
 //	printf("edp instruction_type: %d\n", new_ecp_command.instruction.instruction_type);
 // flushall();
 	memcpy( &(new_instruction), &(new_ecp_command.instruction), sizeof(lib::c_buffer) );
-	
+
 	return new_instruction.instruction_type;
 }
 

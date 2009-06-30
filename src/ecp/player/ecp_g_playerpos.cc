@@ -11,10 +11,8 @@ namespace generator {
 playerpos::playerpos(common::task::task& _ecp_task)
 	: generator (_ecp_task)
 {
-	char *hostname = ecp_t.config.return_string_value("player_hostname");
-	assert(hostname);
-	client = new PlayerClient(hostname, PLAYER_PORTNUM);
-	delete [] hostname;
+	std::string hostname = ecp_t.config.return_string_value("player_hostname");
+	client = new PlayerClient(hostname.c_str(), PLAYER_PORTNUM);
 	
 	client->SetDataMode(PLAYER_DATAMODE_PULL_NEW);
 	

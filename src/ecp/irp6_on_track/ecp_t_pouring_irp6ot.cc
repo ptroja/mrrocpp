@@ -46,60 +46,55 @@ void pouring::task_initialization(void)
     go_st = new common::task::ecp_sub_task_gripper_opening(*this);
 
     sr_ecp_msg->message("ECP loaded");
-};
+}
 
 
 void pouring::main_task_algorithm(void)
 {
+	for(;;)
+	{
+		sr_ecp_msg->message("Waiting for MP order");
 
-    int size;
-    char * path1;
+		get_next_state ();
 
-        for(;;)
-        {
-            sr_ecp_msg->message("Waiting for MP order");
+		sr_ecp_msg->message("Order received");
 
-            get_next_state ();
+		switch ( (ecp_mp::task::POURING_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
+		{
+		case ecp_mp::task::ECP_GEN_SMOOTH:
+		{
+			std::string path(mrrocpp_network_path);
+			path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 
-            sr_ecp_msg->message("Order received");
+			sg->load_file_with_path (path.c_str());
+			//printf("\nON_TRACK ECP_GEN_SMOOTH :%s\n\n", path1);
+			//printf("OT po delete\n");
+			sg->Move();
+			//printf("OT po move\n");
+			break;
+		}
+		case ecp_mp::task::ECP_GEN_POURING:
+			tcg->set_tool_parameters(-0.18, 0.0, 0.25);
+			tcg->Move();
+			break;
+		case ecp_mp::task::ECP_END_POURING:
+			tcg->set_tool_parameters(0.0, 0.0, 0.25);
+			tcg->Move();
+			break;
+		case ecp_mp::task::GRIP:
+			go_st->configure(-0.03, 1000);
+			go_st->execute();
+			break;
+		case ecp_mp::task::LET_GO:
+			go_st->configure(0.03, 1000);
+			go_st->execute();
+			break;
+		default:
+			break;
+		}
+		ecp_termination_notice();
 
-            switch ( (ecp_mp::task::POURING_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
-            {
-            case ecp_mp::task::ECP_GEN_SMOOTH:
-                size = 1 + strlen(mrrocpp_network_path) + strlen(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-                path1 = new char[size];
-                // Stworzenie sciezki do pliku.
-                strcpy(path1, mrrocpp_network_path);
-                sprintf(path1, "%s%s", mrrocpp_network_path, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-                sg->load_file_with_path (path1);
-                //printf("\nON_TRACK ECP_GEN_SMOOTH :%s\n\n", path1);
-                delete[] path1;
-                //printf("OT po delete\n");
-                sg->Move();
-                //printf("OT po move\n");
-                break;
-            case ecp_mp::task::ECP_GEN_POURING:
-                tcg->set_tool_parameters(-0.18, 0.0, 0.25);
-                tcg->Move();
-                break;
-            case ecp_mp::task::ECP_END_POURING:
-                tcg->set_tool_parameters(0.0, 0.0, 0.25);
-                tcg->Move();
-                break;
-            case ecp_mp::task::GRIP:
-                go_st->configure(-0.03, 1000);
-                go_st->execute();
-                break;
-            case ecp_mp::task::LET_GO:
-                go_st->configure(0.03, 1000);
-                go_st->execute();
-                break;
-            default:
-                break;
-            }
-            ecp_termination_notice();
-
-        } //end for
+	} //end for
 }
 
 }

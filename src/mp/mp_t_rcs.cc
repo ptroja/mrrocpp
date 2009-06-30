@@ -36,8 +36,6 @@ void rubik_cube_solver::initiate(common::CUBE_COLOR up_is, common::CUBE_COLOR do
 		common::CUBE_COLOR rear_is, common::CUBE_COLOR left_is, common::CUBE_COLOR right_is)
 {
 	cube_state = new common::CubeState(up_is, down_is, front_is, rear_is, left_is, right_is);
-
-	cube_initial_state = NULL;
 }
 
 
@@ -365,14 +363,14 @@ bool rubik_cube_solver::find_rcs()
 			lib::ROBOT_SPEAKER);
 
 	// Pobiera metoda znajdywania rozwiazania z pliku konfiguracyjnego.
-	char* solver = config.return_string_value("solver");
+	std::string solver(config.return_string_value("solver"));
 
 	// znalezienie rozwiazania zadana metoda
 	int sol_status;
 
-	if (!strcmp(solver, "VSP"))
+	if (solver == "VSP")
 		sol_status = find_rcs_with_VSP(cube_tab_send, cube_sol_rec);
-	else if (!strcmp(solver, "windows_solver"))
+	else if (solver == "windows_solver")
 		sol_status = find_rcs_with_windows_solver(cube_tab_send, cube_sol_rec);
 	else
 		sol_status = lib::RCS_SOLUTION_NOTPOSSIBLE;
@@ -1168,11 +1166,9 @@ void rubik_cube_solver::task_initialization(void)
 
 void rubik_cube_solver::main_task_algorithm(void)
 {
+	std::string cube_initial_state_string(config.return_string_value("cube_initial_state"));
 
-
-	// odczyt konfiguracji manipulacji
-	if (cube_initial_state) delete[] cube_initial_state;
-	cube_initial_state = config.return_string_value("cube_initial_state");
+	const char * cube_initial_state = cube_initial_state_string.c_str();
 
 	//	enum common::CUBE_COLOR {UKNOWN, RED, YELLOW, GREEN, BLUE, ORANGE, WHITE};
 	//	 cube_state::set_state(common::CUBE_COLOR up_is, common::CUBE_COLOR down_is, common::CUBE_COLOR front_is,

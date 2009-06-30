@@ -30,7 +30,7 @@ protected:
 	messip_channel_t *ch;
 #endif /* USE_MESSIP_SRR */
 	// Nazwa czujnika.
-	char *VSP_NAME;
+	std::string VSP_NAME;
 	
 	// Wskaznik na obiekt do komunikacji z SR
 	lib::sr_ecp &sr_ecp_msg;
