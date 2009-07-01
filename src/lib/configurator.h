@@ -85,14 +85,14 @@ public:
 
 	// Zwraca attach point'a serwerow w zaleznosci od typu
 
-	enum config_path_type {
+	typedef enum config_path_type {
 		CONFIG_RESOURCEMAN_LOCAL,
 		CONFIG_RESOURCEMAN_GLOBAL,
 		CONFIG_SERVER
-	};
+	} config_path_type_t;
 
-	std::string return_attach_point_name (const int _type, const char* _key, const char* __section_name = NULL);
-	std::string return_attach_point_name (const int _type, const char* _key, std::string __section_name) {
+	std::string return_attach_point_name (config_path_type_t _type, const char* _key, const char* __section_name = NULL);
+	std::string return_attach_point_name (config_path_type_t _type, const char* _key, std::string __section_name) {
 		return return_attach_point_name(_type, _key, __section_name.c_str());
 	};
 

@@ -126,7 +126,7 @@ int configurator::return_node_number(std::string node_name_l)
 
 
 // Zwraca attach point'a dla serwerow.
-std::string configurator::return_attach_point_name (const int _type, const char* _key, const char* __section_name)
+std::string configurator::return_attach_point_name (config_path_type_t _type, const char* _key, const char* __section_name)
 {
 	const char *_section_name = (__section_name) ? __section_name : section_name;
 	std::string name;
