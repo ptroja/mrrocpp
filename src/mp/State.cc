@@ -141,25 +141,25 @@ const char * State::getType() const
 
 //-----------------------------------------------------------------------------------------------------------
 
-lib::ROBOT_ENUM State::returnProperRobot(char * robotName)
+lib::ROBOT_ENUM State::returnProperRobot(std::string robotName)
 {
-	if(strcmp(robotName, "ROBOT_IRP6_ON_TRACK") == 0)
+	if(robotName == "ROBOT_IRP6_ON_TRACK")
 		return lib::ROBOT_IRP6_ON_TRACK;
-	else if(strcmp(robotName, "ROBOT_IRP6_POSTUMENT") == 0)
+	else if(robotName == "ROBOT_IRP6_POSTUMENT")
 		return lib::ROBOT_IRP6_POSTUMENT;
-	else if(strcmp(robotName, "ROBOT_CONVEYOR") == 0)
+	else if(robotName == "ROBOT_CONVEYOR")
 		return lib::ROBOT_CONVEYOR;
-	else if(strcmp(robotName, "ROBOT_SPEAKER") == 0)
+	else if(robotName == "ROBOT_SPEAKER")
 		return lib::ROBOT_SPEAKER;
-	else if(strcmp(robotName, "ROBOT_IRP6_MECHATRONIKA") == 0)
+	else if(robotName == "ROBOT_IRP6_MECHATRONIKA")
 		return lib::ROBOT_IRP6_MECHATRONIKA;
-	else if(strcmp(robotName, "ROBOT_ELECTRON") == 0)
+	else if(robotName == "ROBOT_ELECTRON")
 		return lib::ROBOT_ELECTRON;
-	else if(strcmp(robotName, "ROBOT_FESTIVAL") == 0)
+	else if(robotName == "ROBOT_FESTIVAL")
 		return lib::ROBOT_FESTIVAL;
-	else if(strcmp(robotName, "ROBOT_HAND") == 0)
+	else if(robotName == "ROBOT_HAND")
 		return lib::ROBOT_HAND;
-	else if(strcmp(robotName, "ROBOT_SPEECHRECOGNITION") == 0)
+	else if(robotName == "ROBOT_SPEECHRECOGNITION")
 		return lib::ROBOT_SPEECHRECOGNITION;
 	else
 		return lib::ROBOT_UNDEFINED;
@@ -167,33 +167,9 @@ lib::ROBOT_ENUM State::returnProperRobot(char * robotName)
 
 //-----------------------------------------------------------------------------------------------------------
 
-void State::setRobot(char *robot)
+void State::setRobot(const char *robot)
 {
 	this->robot = returnProperRobot(robot);
-	//std::cout<<">>>>>>>>"<<robot<<"##"<<std::endl;
-	//std::cout<<strcmp(robot, "ROBOT_IRP6_ON_TRACK")<<std::endl;
-	//strcpy(this->robot, robot);
-/*	if(strcmp(robot, "ROBOT_IRP6_ON_TRACK") == 0)
-		this->robot = lib::ROBOT_IRP6_ON_TRACK;
-	else if(strcmp(robot, "ROBOT_IRP6_POSTUMENT") == 0)
-		this->robot = lib::ROBOT_IRP6_POSTUMENT;
-	else if(strcmp(robot, "ROBOT_CONVEYOR") == 0)
-		this->robot = lib::ROBOT_CONVEYOR;
-	else if(strcmp(robot, "ROBOT_SPEAKER") == 0)
-		this->robot = lib::ROBOT_SPEAKER;
-	else if(strcmp(robot, "ROBOT_IRP6_MECHATRONIKA") == 0)
-		this->robot = lib::ROBOT_IRP6_MECHATRONIKA;
-	else if(strcmp(robot, "ROBOT_ELECTRON") == 0)
-		this->robot = lib::ROBOT_ELECTRON;
-	else if(strcmp(robot, "ROBOT_FESTIVAL") == 0)
-		this->robot = lib::ROBOT_FESTIVAL;
-	else if(strcmp(robot, "ROBOT_HAND") == 0)
-		this->robot = lib::ROBOT_HAND;
-	else if(strcmp(robot, "ROBOT_SPEECHRECOGNITION") == 0)
-		this->robot = lib::ROBOT_SPEECHRECOGNITION;
-	else
-		this->robot = lib::ROBOT_UNDEFINED;
-*/
 }
 
 //-----------------------------------------------------------------------------------------------------------

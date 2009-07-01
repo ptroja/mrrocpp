@@ -732,17 +732,16 @@ void fsautomat::main_task_algorithm(void)
 {
 	common::StateHeap sh;
 	break_state = false;
-	char *nextState = new char[64];
+	char nextState[64];
 	//	std::list<State> *statesList = takeStatesList();
 	std::map<const char *, common::State, ecp::common::task::task::str_cmp> * stateMap = takeStatesMap();
 	std::cout << "Mapa zawiera: " << stateMap->size() << std::endl;
 	//	std::cout<<"ELEMENTOW INIT jest: "<<stateMap->count((const char *)"INIT")<<std::endl;
 
-
 	sr_ecp_msg->message("Nowa seria");
 	// adding first state name
 	//strcmp(nextState, (char *)"INIT");
-	sprintf(nextState, "INIT");
+	strcpy(nextState, "INIT");
 	// temporary sensor config in this place
 	for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 			!= sensor_m.end(); sensor_m_iterator++) {

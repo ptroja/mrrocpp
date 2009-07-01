@@ -40,14 +40,14 @@ class State
 			lib::ROBOT_ENUM *secondSet;
 		};
 
-		static lib::ROBOT_ENUM returnProperRobot(char * robotName);
+		static lib::ROBOT_ENUM returnProperRobot(std::string robotName);
 		void setStateID(const char *stateID);
 		const char * getStateID() const;
 		void setNumArgument(const char *time);
 		int getNumArgument() const;
 		void setType(const char *type);
 		const char * getType() const;
-		void setRobot(char *robot);
+		void setRobot(const char *robot);
 		lib::ROBOT_ENUM getRobot() const;
 		void setGeneratorType(char *genType);
 		ecp_mp::task::STATE_MACHINE_ECP_STATES getGeneratorType() const;
