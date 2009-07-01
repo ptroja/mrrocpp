@@ -123,13 +123,13 @@ bool Condition::checkCompareResult()
 		return false;
 }
 
-bool Condition::checkContext(char *toCheck)
+bool Condition::checkContext(const char *toCheck)
 {
 	const char *iniFile = "iniFile";
 	if(strstr(toCheck, ".")!=NULL)
 	{
-		std::list<char *> *args = returnSplitedStr(toCheck);
-		std::list<char *>::iterator it = args->begin();
+		std::list<const char *> *args = returnSplitedStr(toCheck);
+		std::list<const char *>::iterator it = args->begin();
 		if(!strcmp(iniFile, (*it)))
 		{
 			if(config.exists(*(++it)))
@@ -142,11 +142,12 @@ bool Condition::checkContext(char *toCheck)
 	return false;
 }
 
-std::list<char *> * Condition::returnSplitedStr(char *toSplit)
+std::list<const char *> * Condition::returnSplitedStr(const char *toSplit)
 {
+	// TODO: memory leak - change from char * to std::string implementation
 	char *dataStr = strdup(toSplit);
 	char *element;
-	std::list<char *> *splitedStr = new std::list<char *>();
+	std::list<const char *> *splitedStr = new std::list<const char *>();
 
 	element = strtok(dataStr, ".");
 	splitedStr->push_back(element);

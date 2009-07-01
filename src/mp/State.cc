@@ -27,19 +27,19 @@ State::State(const State &state)
 	stringArgument =  NULL;
 	robotSet = NULL;
 	this->numArgument = state.numArgument;
-	if(state.id != NULL)
+	if(state.id)
 	{
 		size = strlen(state.id) + 1;
 		this->id = new char[size];
 		strcpy(this->id, state.id);
 	}
-	if(state.type != NULL)
+	if(state.type)
 	{
 		size = strlen(state.type) + 1;
 		this->type =  new char[size];
 		strcpy(this->type, state.type);
 	}
-	if(state.stringArgument != NULL)
+	if(state.stringArgument)
 	{
 		size = strlen(state.stringArgument) + 1;
 		this->stringArgument =  new char[size];
@@ -47,7 +47,7 @@ State::State(const State &state)
 	}
 	robot = state.robot;
 	generatorType = state.generatorType;
-	if(state.robotSet != NULL )
+	if(state.robotSet)
 		this->robotSet = new RobotSets(*(state.robotSet));
 	this->stateTransitions = new std::list<Transition>(*(state.stateTransitions));
 }
@@ -179,35 +179,36 @@ lib::ROBOT_ENUM State::getRobot() const
 	return robot;
 }
 //-----------------------------------------------------------------------------------------------------------
-void State::setGeneratorType(char *genType)
+void State::setGeneratorType(std::string genType)
 {
 	//std::cout<<"######"<<genType<<std::endl;
 	//std::cout<<strcmp(genType, (const char *)"ECP_GEN_TRANSPARENT")<<std::endl;
 	//strcpy(this->generatorType, genType);
-	if(strcmp(genType, "ECP_GEN_TRANSPARENT") == 0)
+	if(genType == "ECP_GEN_TRANSPARENT")
 		this->generatorType = ecp_mp::task::ECP_GEN_TRANSPARENT;
-	else if(strcmp(genType, "ECP_GEN_TFF_NOSE_RUN") == 0)
+	else if(genType == "ECP_GEN_TFF_NOSE_RUN")
 		this->generatorType = ecp_mp::task::ECP_GEN_TFF_NOSE_RUN;
-	else if(strcmp(genType, "ECP_GEN_TEACH_IN") == 0)
+	else if(genType == "ECP_GEN_TEACH_IN")
 		this->generatorType = ecp_mp::task::ECP_GEN_TEACH_IN;
-	else if(strcmp(genType, "ECP_GEN_SMOOTH") == 0)
+	else if(genType == "ECP_GEN_SMOOTH")
 		this->generatorType = ecp_mp::task::ECP_GEN_SMOOTH;
-	else if(strcmp(genType, "ECP_GEN_TFF_RUBIK_GRAB") == 0)
+	else if(genType == "ECP_GEN_TFF_RUBIK_GRAB")
 		this->generatorType = ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB;
-	else if(strcmp(genType, "ECP_GEN_TFF_RUBIK_FACE_ROTATE") == 0)
+	else if(genType == "ECP_GEN_TFF_RUBIK_FACE_ROTATE")
 		this->generatorType = ecp_mp::task::ECP_GEN_TFF_RUBIK_FACE_ROTATE;
-	else if(strcmp(genType, "ECP_GEN_TFF_GRIPPER_APPROACH") == 0)
+	else if(genType == "ECP_GEN_TFF_GRIPPER_APPROACH")
 		this->generatorType = ecp_mp::task::ECP_GEN_TFF_GRIPPER_APPROACH;
-	else if(strcmp(genType, "RCSC_GRIPPER_OPENING") == 0)
+	else if(genType == "RCSC_GRIPPER_OPENING")
 		this->generatorType = ecp_mp::task::RCSC_GRIPPER_OPENING;
-	else if(strcmp(genType, "ECP_GEN_BIAS_EDP_FORCE") == 0)
+	else if(genType == "ECP_GEN_BIAS_EDP_FORCE")
 		this->generatorType = ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE;
-	else if(strcmp(genType, "ECP_WEIGHT_MEASURE_GENERATOR") == 0)
+	else if(genType == "ECP_WEIGHT_MEASURE_GENERATOR")
 		this->generatorType = ecp_mp::task::ECP_WEIGHT_MEASURE_GENERATOR;
-	else if(strcmp(genType, "ECP_TOOL_CHANGE_GENERATOR") == 0)
+	else if(genType == "ECP_TOOL_CHANGE_GENERATOR")
 		this->generatorType = ecp_mp::task::ECP_TOOL_CHANGE_GENERATOR;
 	else
 		this->generatorType = ecp_mp::task::ECP_GEN_SPEAK;
+	// TODO: unknown generatorType handler should throw an exception
 }
 
 //----------------------------------------------------------------------------------------------------------
@@ -219,7 +220,7 @@ ecp_mp::task::STATE_MACHINE_ECP_STATES State::getGeneratorType() const
 
 //----------------------------------------------------------------------------------------------------------
 
-void State::setStringArgument(char* trajFilePath)
+void State::setStringArgument(const char* trajFilePath)
 {
 	int size = strlen(trajFilePath) + 1;
 	stringArgument =  new char[size];

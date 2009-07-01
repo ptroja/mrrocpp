@@ -41,20 +41,28 @@ class State
 		};
 
 		static lib::ROBOT_ENUM returnProperRobot(std::string robotName);
+
 		void setStateID(const char *stateID);
 		const char * getStateID() const;
+
 		void setNumArgument(const char *time);
 		int getNumArgument() const;
+
 		void setType(const char *type);
 		const char * getType() const;
+
 		void setRobot(const char *robot);
 		lib::ROBOT_ENUM getRobot() const;
-		void setGeneratorType(char *genType);
+
+		void setGeneratorType(std::string genType);
 		ecp_mp::task::STATE_MACHINE_ECP_STATES getGeneratorType() const;
-		void setStringArgument(char *trajFilePath);
+
+		void setStringArgument(const char *trajFilePath);
 		char * getStringArgument() const;
+
 		void setTransition(const char *cond, const char *target, lib::configurator &_config);
 		void setProperTransitionResult(bool result);
+
 		const char *returnNextStateID(StateHeap &sh);
 		std::list<Transition> * getTransitions() const;
 

@@ -22,9 +22,9 @@ class Condition
 		~Condition();
 
 		bool checkCompareResult();
-		bool checkContext(char *toCheck);
+		bool checkContext(const char *toCheck);
 		void setResult(bool result);
-		std::list<char *> * returnSplitedStr(char *toSplit);
+		std::list<const char *> * returnSplitedStr(const char *toSplit);
 		const char * getCondDesc() const;
 		RELATIONAL_OPERATOR splitCondExpr();
 
