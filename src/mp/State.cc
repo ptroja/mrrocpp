@@ -229,7 +229,7 @@ void State::setStringArgument(const char* trajFilePath)
 
 //----------------------------------------------------------------------------------------------------------
 
-char* State::getStringArgument() const
+const char* State::getStringArgument() const
 {
 	return stringArgument;
 }

@@ -200,31 +200,31 @@ void smooth::set_pose_from_xml(xmlNode *stateNode, bool &first_time)
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"StartVelocity") )
 				{	
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					mp::common::Trajectory::setValuesInArray(vp, (char *)xmlDataLine);
+					mp::common::Trajectory::setValuesInArray(vp, (const char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"EndVelocity") )
 				{										
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					mp::common::Trajectory::setValuesInArray(vk, (char *)xmlDataLine);
+					mp::common::Trajectory::setValuesInArray(vk, (const char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
 				{										
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					mp::common::Trajectory::setValuesInArray(v, (char *)xmlDataLine);
+					mp::common::Trajectory::setValuesInArray(v, (const char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
 				{										
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					mp::common::Trajectory::setValuesInArray(a, (char *)xmlDataLine);
+					mp::common::Trajectory::setValuesInArray(a, (const char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
 				{										
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					mp::common::Trajectory::setValuesInArray(coordinates, (char *)xmlDataLine);
+					mp::common::Trajectory::setValuesInArray(coordinates, (const char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 			}

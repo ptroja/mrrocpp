@@ -17,37 +17,46 @@ class Trajectory
 {
 	public:
 		Trajectory();
-		Trajectory(char *numOfPoses, char *trajectoryName, char *poseSpecification);
+		Trajectory(const char *numOfPoses, const char *trajectoryName, const char *poseSpecification);
 		Trajectory(const Trajectory &trajectory);
 		~Trajectory();
 
-		static int setValuesInArray(double arrayToFill[], char *dataString);
-		static lib::POSE_SPECIFICATION returnProperPS(char *poseSpecification);
+		static int setValuesInArray(double arrayToFill[], const char *dataString);
+		static lib::POSE_SPECIFICATION returnProperPS(const char *poseSpecification);
 		static const char * toString(double valArr[], int length);
 		static const char * toString(int numberOfPoses);
 		static const char * toString(lib::POSE_SPECIFICATION ps);
 		static const char * returnRobotName(lib::ROBOT_ENUM robot);
 
-		static bool writeTrajectoryToXmlFile(char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp::common::ecp_smooth_taught_in_pose> &poses);
+		static bool writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp::common::ecp_smooth_taught_in_pose> &poses);
 		
 		void createNewPose();
 		void addPoseToTrajectory();
-		void setTrjID(char *trjID);
+
+		void setTrjID(const char *trjID);
 		const char * getTrjID() const;
+
 		void setNumOfPoses(uint64_t numOfPoses);
 		uint64_t getNumberOfPoses() const;
-		void setPoseSpecification(char *poseSpecification);
+
+		void setPoseSpecification(const char *poseSpecification);
 		lib::POSE_SPECIFICATION getPoseSpecification() const;
-		void setStartVelocities(char *startVelocities);
+
+		void setStartVelocities(const char *startVelocities);
 		double *getStartVelocities() const;
-		void setEndVelocities(char *endVelocities);
+
+		void setEndVelocities(const char *endVelocities);
 		double *getEndVelocities() const;
-		void setVelocities(char *Velocities);
+
+		void setVelocities(const char *Velocities);
 		double *getVelocities() const;
-		void setAccelerations(char *accelerations);
+
+		void setAccelerations(const char *accelerations);
 		double *getAccelerations() const;
-		void setCoordinates(char *cCoordinates);
+
+		void setCoordinates(const char *cCoordinates);
 		double *getCoordinates() const;
+
 		void showTime();
 
 		std::list<ecp::common::ecp_smooth_taught_in_pose> * getPoses();

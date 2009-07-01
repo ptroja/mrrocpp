@@ -18,7 +18,7 @@ Trajectory::Trajectory()
 	trjPoses	= new std::list<ecp::common::ecp_smooth_taught_in_pose>();
 }
 
-Trajectory::Trajectory(char *numOfPoses, char *trajectoryID, char *poseSpecification)
+Trajectory::Trajectory(const char *numOfPoses, const char *trajectoryID, const char *poseSpecification)
 {
 	strcpy(trjID, trajectoryID);
 	this->numOfPoses = (uint64_t)atoi(numOfPoses);
@@ -40,7 +40,7 @@ Trajectory::~Trajectory()
 	delete trjPoses;
 }
 
-void Trajectory::setTrjID(char *trjID)
+void Trajectory::setTrjID(const char *trjID)
 {
 	strcpy(this->trjID, trjID);
 }
@@ -50,7 +50,7 @@ const char * Trajectory::getTrjID() const
 	return trjID;
 }
 
-lib::POSE_SPECIFICATION Trajectory::returnProperPS(char *poseSpecification)
+lib::POSE_SPECIFICATION Trajectory::returnProperPS(const char *poseSpecification)
 {
 	if ( !strcmp(poseSpecification, (const char *)"MOTOR") )
 	{	return lib::MOTOR;	}
@@ -64,7 +64,7 @@ lib::POSE_SPECIFICATION Trajectory::returnProperPS(char *poseSpecification)
 		return lib::INVALID_END_EFFECTOR;
 }
 
-int Trajectory::setValuesInArray(double arrayToFill[], char *dataString)
+int Trajectory::setValuesInArray(double arrayToFill[], const char *dataString)
 {
 	int index = 0;
 	char *value;
@@ -74,6 +74,9 @@ int Trajectory::setValuesInArray(double arrayToFill[], char *dataString)
 	arrayToFill[index++] = atof(value);
 	while((value = strtok(NULL, " \t"))!=NULL)
 		arrayToFill[index++] = atof(value);
+
+	free(toSplit);
+
 	return index;
 }
 
@@ -138,7 +141,7 @@ const char * Trajectory::toString(lib::POSE_SPECIFICATION ps)
 		return "INVALID_END_EFFECTOR";
 }
 
-bool Trajectory::writeTrajectoryToXmlFile(char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp::common::ecp_smooth_taught_in_pose> &poses)
+bool Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp::common::ecp_smooth_taught_in_pose> &poses)
 {
 	char * file = new char[80];
 	int posCount = poses.size();
@@ -190,7 +193,7 @@ uint64_t Trajectory::getNumberOfPoses() const
 	return numOfPoses;
 }
 
-void Trajectory::setPoseSpecification(char *poseSpecification)
+void Trajectory::setPoseSpecification(const char *poseSpecification)
 {
 	poseSpec = returnProperPS(poseSpecification);
 }
@@ -200,7 +203,7 @@ lib::POSE_SPECIFICATION Trajectory::getPoseSpecification() const
 	return poseSpec;
 }
 
-void Trajectory::setStartVelocities(char *startVelocities)
+void Trajectory::setStartVelocities(const char *startVelocities)
 {
 	setValuesInArray(actPose->v_p, startVelocities);
 }
@@ -210,7 +213,7 @@ double * Trajectory::getStartVelocities() const
 	return actPose->v_p;
 }
 
-void Trajectory::setEndVelocities(char *endVelocities)
+void Trajectory::setEndVelocities(const char *endVelocities)
 {
 	setValuesInArray(actPose->v_k, endVelocities);
 }
@@ -220,7 +223,7 @@ double * Trajectory::getEndVelocities() const
 	return actPose->v_k;
 }
 
-void Trajectory::setVelocities(char *Velocities)
+void Trajectory::setVelocities(const char *Velocities)
 {
 	setValuesInArray(actPose->v, Velocities);
 }
@@ -230,7 +233,7 @@ double * Trajectory::getVelocities() const
 	return actPose->v;
 }
 
-void Trajectory::setAccelerations(char *accelerations)
+void Trajectory::setAccelerations(const char *accelerations)
 {
 	setValuesInArray(actPose->a, accelerations);
 }
@@ -240,7 +243,7 @@ double * Trajectory::getAccelerations() const
 	return actPose->a;
 }
 
-void Trajectory::setCoordinates(char *cCoordinates)
+void Trajectory::setCoordinates(const char *cCoordinates)
 {
 	setValuesInArray(actPose->coordinates, cCoordinates);
 }

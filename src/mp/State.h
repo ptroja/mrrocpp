@@ -58,7 +58,7 @@ class State
 		ecp_mp::task::STATE_MACHINE_ECP_STATES getGeneratorType() const;
 
 		void setStringArgument(const char *trajFilePath);
-		char * getStringArgument() const;
+		const char * getStringArgument() const;
 
 		void setTransition(const char *cond, const char *target, lib::configurator &_config);
 		void setProperTransitionResult(bool result);
