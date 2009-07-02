@@ -1,5 +1,5 @@
 
-	<!ELEMENT TaskDescription (State+,SubTask*)>
+	<!ELEMENT TaskDescription (State+,SubTask*,xi:include*)>
 	<!ELEMENT SubTask (State+)>
 	
 
@@ -69,3 +69,8 @@
 		accept          CDATA       #IMPLIED
 		accept-language CDATA       #IMPLIED
 	>
+	
+	<!ELEMENT xi:fallback ANY>
+	<!ATTLIST xi:fallback
+        xmlns:xi   CDATA   #FIXED   "http://www.w3.org/2001/XInclude"
+    >
