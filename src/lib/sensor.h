@@ -199,6 +199,13 @@ typedef struct sensor_image_t
 			double z;	// wzgledem osi Z
 		} visioncoordinates;
 
+		// struktura z informacja czy znaleziono szachownice
+		struct chessboard_t
+		{
+			int frame_number;
+			bool found;
+		}chessboard;
+
 	} sensor_union; // koniec unii
 } SENSOR_IMAGE;
 
