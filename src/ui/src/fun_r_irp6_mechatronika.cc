@@ -2474,11 +2474,12 @@ reload_irp6m_configuration ()
 					{
 						char* tmp, *tmp1;
 						tmp1 = tmp = strdup(config->return_string_value(tmp_string, ui_state.irp6_mechatronika.edp.section_name).c_str());
+						char* toDel = tmp;
 						for (int j=0; j<8; j++)
 						{
 							ui_state.irp6_mechatronika.edp.preset_position[i][j] = strtod( tmp1, &tmp1 );
 						}
-						free(tmp);
+						free(toDel);
 					} else {
 						 for (int j=0; j<7; j++)
 						{

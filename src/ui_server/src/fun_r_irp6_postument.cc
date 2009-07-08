@@ -718,7 +718,7 @@ short tmp;
 		{
 			ui_state.irp6_postument.edp.state = 0;
 			ui_state.irp6_postument.edp.is_synchronised = false;
-					
+
 			std::string busy_attach_point("/dev/name/global/");
 			busy_attach_point += ui_state.irp6_postument.edp.hardware_busy_attach_point;
 
@@ -916,11 +916,12 @@ reload_irp6p_configuration()
 					{
 						char *tmp, *tmp1;
 						tmp1 = tmp = strdup((config->return_string_value(tmp_string, ui_state.irp6_postument.edp.section_name)).c_str());
+						char* toDel = tmp;
 						 for (int j=0; j<8; j++)
 						{
 							ui_state.irp6_postument.edp.preset_position[i][j] = strtod( tmp1, &tmp1 );
 						}
-						free(tmp);
+						free(toDel);
 					} else {
 						 for (int j=0; j<7; j++)
 						{

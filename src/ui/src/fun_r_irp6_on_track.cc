@@ -2286,10 +2286,10 @@ EDP_irp6_on_track_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 	// dla robota irp6_on_track
 	if (ui_state.irp6_on_track.edp.state == 0)
 	{
-		
+
 		ui_state.irp6_on_track.edp.state = 0;
 		ui_state.irp6_on_track.edp.is_synchronised = false;
-		
+
 		std::string tmp_string("/dev/name/global/");
 		tmp_string += ui_state.irp6_on_track.edp.hardware_busy_attach_point;
 
@@ -2306,7 +2306,7 @@ EDP_irp6_on_track_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 			ui_state.irp6_on_track.edp.node_nr = config->return_node_number(ui_state.irp6_on_track.edp.node_name);
 
 			ui_state.irp6_on_track.edp.state = 1;
-			
+
 			ui_robot.irp6_on_track = new ui_common_robot
 				(*config, ui_msg.all_ecp,
 						lib::ROBOT_IRP6_ON_TRACK);
@@ -2621,11 +2621,12 @@ reload_irp6ot_configuration()
 					{
 						char* tmp, *tmp1;
 						tmp1 = tmp = strdup(config->return_string_value(tmp_string, ui_state.irp6_on_track.edp.section_name).c_str());
+						char* toDel = tmp;
 						 for (int j=0; j<8; j++)
 						{
 							ui_state.irp6_on_track.edp.preset_position[i][j] = strtod( tmp1, &tmp1 );
 						}
-						free(tmp);
+						free(toDel);
 					} else {
 						 for (int j=0; j<8; j++)
 						{

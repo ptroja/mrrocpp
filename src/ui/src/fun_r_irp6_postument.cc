@@ -2218,10 +2218,10 @@ EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 	// dla robota irp6_postument
 	if (ui_state.irp6_postument.edp.state == 0)
 	{
-		
+
 		ui_state.irp6_postument.edp.state = 0;
 		ui_state.irp6_postument.edp.is_synchronised = false;
-		
+
 		std::string tmp_string("/dev/name/global/");
 		tmp_string += ui_state.irp6_postument.edp.hardware_busy_attach_point;
 
@@ -2238,7 +2238,7 @@ EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 			ui_state.irp6_postument.edp.node_nr = config->return_node_number(ui_state.irp6_postument.edp.node_name);
 
 			ui_state.irp6_postument.edp.state = 1;
-			
+
 			ui_robot.irp6_postument = new ui_common_robot(
 					*config, ui_msg.all_ecp,
 					lib::ROBOT_IRP6_POSTUMENT);
@@ -2555,11 +2555,12 @@ reload_irp6p_configuration()
 						char* tmp, *tmp1;
 
 						tmp1 = tmp = strdup(config->return_string_value(tmp_string, ui_state.irp6_postument.edp.section_name).c_str());
+						char* toDel = tmp;
 						 for (int j=0; j<8; j++)
 						{
 							ui_state.irp6_postument.edp.preset_position[i][j] = strtod( tmp1, &tmp1 );
 						}
-						free(tmp);
+						free(toDel);
 					} else {
 						 for (int j=0; j<7; j++)
 						{

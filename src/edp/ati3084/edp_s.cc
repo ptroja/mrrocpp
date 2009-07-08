@@ -315,10 +315,11 @@ void ATI3084_force::configure_sensor(void)
 			if (master.config.exists("sensor_in_wrist"))
 			{
 				char *tmp = strdup(master.config.return_string_value("sensor_in_wrist").c_str());
+				char* toDel = tmp;
 				for (int i=0; i<6; i++)
 					tab[i] = strtod( tmp, &tmp );
 				sensor_frame = lib::Homog_matrix(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, tab[0], tab[1], tab[2], tab[3], tab[4], tab[5]);
-				free(tmp);
+				free(toDel);
 				// std::cout<<sensor_frame<<std::endl;
 			}
 			else
@@ -329,9 +330,10 @@ void ATI3084_force::configure_sensor(void)
 
 			double point[3];
 			char *tmp = strdup(master.config.return_string_value("default_mass_center_in_wrist").c_str());
+			char* toDel = tmp;
 			for (int i=0; i<3; i++)
 				point[i] = strtod( tmp, &tmp );
-			free(tmp);
+			free(toDel);
 			// double point[3] = { master.config.return_double_value("x_axis_arm"),
 			//		master.config.return_double_value("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
 			lib::K_vector pointofgravity(point);
