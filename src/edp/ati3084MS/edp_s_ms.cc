@@ -32,7 +32,7 @@
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
 
-#include <edp/ati3084MS/edp_s.h>
+#include <edp/ati3084MS/edp_s_ms.h>
 
 #include "lib/configurator.h"
 
@@ -99,11 +99,12 @@ void ATI3084_force::configure_sensor(void)
 			lib::Homog_matrix sensor_frame;
 			if (master.config.exists("sensor_in_wrist"))
 			{
-				char *tmp = master.config.return_string_value("sensor_in_wrist");
+				char *tmp = strdup(master.config.return_string_value("sensor_in_wrist").c_str());
 				for (int i=0; i<6; i++)
 					tab[i] = std::strtod( tmp, &tmp );
 				sensor_frame = lib::Homog_matrix(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, tab[0], tab[1], tab[2], tab[3], tab[4], tab[5]);
 				// std::cout<<sensor_frame<<std::endl;
+				delete tmp;
 			}
 			else
 				sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
@@ -112,14 +113,15 @@ void ATI3084_force::configure_sensor(void)
 			double weight = master.config.return_double_value("weight");
 
 			double point[3];
-			char *tmp = master.config.return_string_value("default_mass_center_in_wrist");
+			std::string lol = master.config.return_string_value("default_mass_center_in_wrist");
+			char* tmp = strdup(lol.c_str());
 			for (int i=0; i<3; i++)
 				point[i] = strtod( tmp, &tmp );
 			// double point[3] = { master.config.return_double_value("x_axis_arm"),
 			//		master.config.return_double_value("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
 			lib::K_vector pointofgravity(point);
 			gravity_transformation = new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity);
-
+			free(tmp);
 		} else {
 			gravity_transformation->synchro(frame);
 		}
@@ -128,22 +130,21 @@ void ATI3084_force::configure_sensor(void)
 }
 
 
-void ATI3084_force::wait_for_event()
-{
-
-//	sr_msg->message("wait_for_event");
-
-	if (!(master.test_mode))
-	{
-
+void ATI3084_force::wait_for_event() {
+	static unsigned int recvd = 0;
+	if (FORCE_TEST_MODE) {
 		ftxyz=getFT(uart);
-
-
+		++recvd;
+		if (recvd % 100 == 0) {
+			std::cout << "Recvd 100 readings" << std::endl;
+			std::cout << "Ft = " << ftxyz.ft[0] << " " <<  ftxyz.ft[1] << " "
+			  << ftxyz.ft[2] << " " << ftxyz.ft[3] << " " << ftxyz.ft[4] << " "
+			  << ftxyz.ft[5] << std::endl;
+		}
 	} else {
 		usleep(1000);
 	}
 }
-;
 
 /*************************** inicjacja odczytu ******************************/
 void ATI3084_force::initiate_reading(void)
@@ -154,16 +155,13 @@ void ATI3084_force::initiate_reading(void)
 	if (!is_sensor_configured)
 		throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
-	if (master.test_mode) {
+	if (!FORCE_TEST_MODE) {
 		for (int i = 0; i < 6; ++i) {
 			kartez_force[i] = 0.0;
 		}
 		master.force_msr_upload(kartez_force);
-	} else
-	{
-
+	} else {
 		double ft_table[6];
-
 		for (int i=0;i<6;i++)
 		{
 			ft_table[i] = static_cast<double>(ftxyz.ft[i]);
@@ -249,7 +247,6 @@ void ATI3084_force::sendBias()
 }
 
 forceReadings ATI3084_force::getFT(int fd) {
-	uint8_t reads[14];
 	forceReadings ftxyz;
 	bool received = false;
 
@@ -260,14 +257,17 @@ forceReadings ATI3084_force::getFT(int fd) {
 		  &ATI3084_force::handleGetGenForceReading, this, boost::ref(genForceReadingController))));
 		{
 			boost::unique_lock<boost::mutex> lock(getForceReadingReplyArrivedMt);
+			std::cout << "Waiting for getForceReading" << std::endl;
 			while (!getForceReadingReplyArrived) {
 				getForceReadingReplyArrivedCv.wait(lock);
 			}
 			getForceReadingReplyArrived = false;
 		}
-		if (r==0) {
+		std::cout << "Got getForceReading" << std::endl;
+		received = true;
+		if (!received) {
 			if (iter_counter==1) {
-                std::cout << "Nie otrzymano oczekiwanej ilosci znakow: " << r << std::endl;
+                std::cout << "Timeout while getting force readings: " << r << std::endl;
 				sr_msg->message(lib::NON_FATAL_ERROR, "MK Force / Torque read error - check sensor controller");
 			}
 
@@ -279,14 +279,16 @@ forceReadings ATI3084_force::getFT(int fd) {
 		}
 	}
 
-	for (i=0;i<6;i++) {
-		ftxyz.ft[i]=(reads[2*i])<<8 | reads[2*i+1];
-	}
+	ftxyz.ft[0] = genForceReading.fx();
+	ftxyz.ft[1] = genForceReading.fy();
+	ftxyz.ft[2] = genForceReading.fz();
+	ftxyz.ft[3] = genForceReading.tx();
+	ftxyz.ft[4] = genForceReading.ty();
+	ftxyz.ft[5] = genForceReading.tz();
 	return ftxyz;
 }
 
 void ATI3084_force::handleSendBiasReply(ClientRpcController& controller) {
-	std::cout << "Received reply for sendBias" << std::endl;
 	if (controller.expired()) {
 		std::cout << "Timeout: sendBias()" << std::endl;
 	} else if (controller.failed()) {
@@ -300,11 +302,11 @@ void ATI3084_force::handleSendBiasReply(ClientRpcController& controller) {
 		boost::lock_guard<boost::mutex> lock(sendBiasReplyArrivedMt);
 		sendBiasReplyArrived = true;
 	}
-	sendBiasReplyArrivedCv.notify_one();
+	sendBiasReplyArrivedCv.notify_all();
 }
 
 void ATI3084_force::handleGetGenForceReading(ClientRpcController& controller) {
-	std::cout << "Received reply for getGenForceReading" << std::endl;
+	std::cout << "handleGetGenForceReading" << std::endl;
 	if (controller.expired()) {
 		std::cout << "Timeout: getGenForceReading()" << std::endl;
 	} else if (controller.failed()) {
@@ -312,13 +314,14 @@ void ATI3084_force::handleGetGenForceReading(ClientRpcController& controller) {
 		std::cout << "Reason : " << controller.errorCode() << ", " <<
 		  controller.errorMessage() << std::endl;
 	} else {
+		std::cout << "Success: getGetForceReading" << std::endl;
 		// Success, do nothing
 	}
 	{
 		boost::lock_guard<boost::mutex> lock(getForceReadingReplyArrivedMt);
 		getForceReadingReplyArrived = true;
 	}
-	getForceReadingReplyArrivedCv.notify_one();
+	getForceReadingReplyArrivedCv.notify_all();
 }
 
 force* return_created_edp_force_sensor(common::irp6s_postument_track_effector &_master)
