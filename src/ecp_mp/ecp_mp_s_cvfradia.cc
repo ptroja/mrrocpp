@@ -34,7 +34,7 @@ cvfradia::cvfradia(lib::SENSOR_ENUM _sensor_name, const char* _section_name, tas
 
 	// Retrieve cvfradia node name and port from configuration file.
 	int cvfradia_port = _ecp_mp_object.config.return_int_value("cvfradia_port", _section_name);
-	const char* cvfradia_node_name = _ecp_mp_object.config.return_string_value("cvfradia_node_name", _section_name).c_str();
+	std::string cvfradia_node_name = _ecp_mp_object.config.return_string_value("cvfradia_node_name", _section_name);
 
 	// Try to open socket.
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -44,9 +44,9 @@ cvfradia::cvfradia(lib::SENSOR_ENUM _sensor_name, const char* _section_name, tas
 	}
 
 	// Get server hostname.
-	server = gethostbyname(cvfradia_node_name);
+	server = gethostbyname(cvfradia_node_name.c_str());
 	if (server == NULL) {
-		printf("ERROR, no host %s\n", cvfradia_node_name);
+		printf("ERROR, no host '%s'\n", cvfradia_node_name.c_str());
 		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
 
@@ -126,7 +126,7 @@ void cvfradia::get_reading() {
 	if(from_vsp.vsp_report == lib::VSP_REPLY_OK)
 		memcpy( &(image.sensor_union.begin), &(from_vsp.comm_image.sensor_union.begin), union_size);
 	else
-		sr_ecp_msg.message ("Reply from VSP not ok");
+		sr_ecp_msg.message ("mp_cvfradia: Reply from VSP not ok");
 	//cout<<"cvFraDIA: ("<<image.cvFraDIA.x<<","<<image.cvFraDIA.y<<") size: "<<image.cvFraDIA.width<<","<<image.cvFraDIA.height<<")\n";
 }
 
