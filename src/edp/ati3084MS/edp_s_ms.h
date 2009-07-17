@@ -9,10 +9,12 @@
 #ifndef _EDP_S_ATI3084MS_H
 #define _EDP_S_ATI3084MS_H
 
+#include <boost/scoped_ptr.hpp>
+
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
 
-#include <kiper/clients/AsioUdpClient.hpp>
+#include <kiper/clients/RawEthernetClient.hpp>
 
 #include "edp/common/edp_irp6s_postument_track.h"
 #include "ati3084.pb.h"
@@ -31,9 +33,10 @@ int16_t ft[6];
 
 /********** klasa czujnikow po stronie VSP **************/
 class ATI3084_force : public force{
-
+typedef boost::scoped_ptr<google::protobuf::Closure> ClosurePtr;
 private:
-	kiper::clients::AsioUdpClient udpClient_;
+	//kiper::clients::AsioUdpClient rpcClient_;
+	kiper::clients::RawEthernetClient rpcClient_;
 	Ati3084_Stub sensor_;
 	int uart, i,r;
 	//int licz=0;
@@ -41,24 +44,21 @@ private:
 	static const char* SENSOR_BOARD_HOST;
 	static const unsigned int SENSOR_BOARD_PORT = 55555;
 
+	static const char* SENSOR_DEVICE_NAME;
+	static uint8_t SENSOR_BOARD_MAC[6];
+
 	unsigned int ms_nr;// numer odczytu z czujnika
 	struct timespec start[9];
 	const bool FORCE_TEST_MODE;
 
 	kiper::ClientRpcController sendBiasController;
-	kiper::ClientRpcController genForceReadingController;
+	kiper::ClientRpcController getForceReadingController;
+
+	ClosurePtr sendBiasClosure_;
+	ClosurePtr getForceReadingClosure_;
 
 	SendBiasReply sendBiasResponse;
 	GenForceReading genForceReading;
-
-	bool sendBiasReplyArrived;
-	boost::mutex sendBiasReplyArrivedMt;
-	boost::condition_variable sendBiasReplyArrivedCv;
-
-	bool getForceReadingReplyArrived;
-	boost::mutex getForceReadingReplyArrivedMt;
-	boost::condition_variable getForceReadingReplyArrivedCv;
-
 
 	void solve_transducer_controller_failure(void);
 	short do_init(void);
@@ -79,7 +79,6 @@ public:
 
 }; // end: class vsp_sensor
 
-const char* ATI3084_force::SENSOR_BOARD_HOST = "192.168.18.200";
 
 } // namespace sensor
 } // namespace edp

@@ -16,6 +16,7 @@
 
 #include <unistd.h>
 #include <fcntl.h>
+#include <signal.h>
 
 #include <sys/iofunc.h>
 #include <termios.h>
@@ -42,11 +43,22 @@ namespace sensor {
 
 using namespace kiper;
 
+const char* ATI3084_force::SENSOR_BOARD_HOST = "192.168.18.200";
+const char* ATI3084_force::SENSOR_DEVICE_NAME = "en0";
+uint8_t ATI3084_force::SENSOR_BOARD_MAC[6] = {0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
 // Rejstracja procesu VSP
 ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
-	force(_master), udpClient_(SENSOR_BOARD_HOST, SENSOR_BOARD_PORT), sensor_(&udpClient_), ms_nr(0),
-	sendBiasReplyArrived(false), getForceReadingReplyArrived(false), FORCE_TEST_MODE(true) {
+  force(_master), rpcClient_(SENSOR_DEVICE_NAME, SENSOR_BOARD_MAC), sensor_(&rpcClient_), ms_nr(0),
+  //force(_master), rpcClient_(SENSOR_BOARD_HOST, SENSOR_BOARD_PORT), sensor_(&rpcClient_), ms_nr(0),
+  sendBiasClosure_(NewPermanentFunctorCallback(boost::bind(&ATI3084_force::handleSendBiasReply, this,
+  boost::ref(sendBiasController)))),
+  getForceReadingClosure_(NewPermanentFunctorCallback(boost::bind(&ATI3084_force::handleGetGenForceReading, this,
+  boost::ref(getForceReadingController)))),
+  FORCE_TEST_MODE(true) {
+
+	//getForceReadingController.setTimeout(boost::posix_time::milliseconds(1));
+	sendBiasController.setTimeout(boost::posix_time::milliseconds(1));
     std::cout << "ATI3084MS -> Start!" << std::endl;
 	if (FORCE_TEST_MODE) {
 	//	 	printf("Konstruktor VSP!\n");
@@ -213,6 +225,7 @@ void ATI3084_force::get_reading(void)
 }
 
 
+
 /********************** zakonczenie dzialania czujnika *************************/
 void ATI3084_force::terminate(void)
 {
@@ -235,17 +248,9 @@ void ATI3084_force::solve_transducer_controller_failure(void)
 
 void ATI3084_force::sendBias()
 {
-    //TODO: Change to permanent callback
+	sendBiasController.reset();
 	sensor_.SendBias(&sendBiasController, NULL, &sendBiasResponse,
-	  NewFunctorCallback(boost::bind(&ATI3084_force::handleSendBiasReply, this,
-	    boost::ref(sendBiasController))));
-	{
-		boost::unique_lock<boost::mutex> lock(sendBiasReplyArrivedMt);
-		while (!sendBiasReplyArrived) {
-			sendBiasReplyArrivedCv.wait(lock);
-		}
-		sendBiasReplyArrived = false;
-	}
+	  sendBiasClosure_.get());
 }
 
 forceReadings ATI3084_force::getFT(int fd) {
@@ -254,18 +259,9 @@ forceReadings ATI3084_force::getFT(int fd) {
 
 	for (int iter_counter = 1; received == false; ++iter_counter) {
 		//TODO: change to permanent callback
-		sensor_.GetGenGForceReading(&genForceReadingController, NULL, &genForceReading,
-		  NewFunctorCallback(boost::bind(
-		  &ATI3084_force::handleGetGenForceReading, this, boost::ref(genForceReadingController))));
-		{
-			boost::unique_lock<boost::mutex> lock(getForceReadingReplyArrivedMt);
-			std::cout << "Waiting for getForceReading" << std::endl;
-			while (!getForceReadingReplyArrived) {
-				getForceReadingReplyArrivedCv.wait(lock);
-			}
-			getForceReadingReplyArrived = false;
-		}
-		std::cout << "Got getForceReading" << std::endl;
+		getForceReadingController.reset();
+		sensor_.GetGenGForceReading(&getForceReadingController, NULL, &genForceReading,
+		  getForceReadingClosure_.get());
 		received = true;
 		if (!received) {
 			if (iter_counter==1) {
@@ -280,6 +276,7 @@ forceReadings ATI3084_force::getFT(int fd) {
 			}
 		}
 	}
+
 
 	ftxyz.ft[0] = genForceReading.fx();
 	ftxyz.ft[1] = genForceReading.fy();
@@ -300,11 +297,6 @@ void ATI3084_force::handleSendBiasReply(ClientRpcController& controller) {
 	} else {
 		// Success, do nothing
 	}
-	{
-		boost::lock_guard<boost::mutex> lock(sendBiasReplyArrivedMt);
-		sendBiasReplyArrived = true;
-	}
-	sendBiasReplyArrivedCv.notify_all();
 }
 
 void ATI3084_force::handleGetGenForceReading(ClientRpcController& controller) {
@@ -319,11 +311,6 @@ void ATI3084_force::handleGetGenForceReading(ClientRpcController& controller) {
 		std::cout << "Success: getGetForceReading" << std::endl;
 		// Success, do nothing
 	}
-	{
-		boost::lock_guard<boost::mutex> lock(getForceReadingReplyArrivedMt);
-		getForceReadingReplyArrived = true;
-	}
-	getForceReadingReplyArrivedCv.notify_all();
 }
 
 force* return_created_edp_force_sensor(common::irp6s_postument_track_effector &_master)
