@@ -126,7 +126,7 @@ bool visioncoordinates::next_step()
 	
 	//lib::Homog_matrix move(lib::Homog_matrix::MTR_XYZ_EULER_ZYZ, 0.0, 0.0, 0.0, z, xoz, -z); 
 
-	/* 
+	// 
 	// z wyznacza nam kolejny numer argumentu, do ktorego podamy sterowanie w xoz 
 	// to w celu przetestowania kolejnych osi chwytaka -- gdy juz ustalimy osie chwytaka, i przetestujemy obroty wokol nich
 	// 
@@ -145,7 +145,7 @@ bool visioncoordinates::next_step()
 			(mode == 3) ? xoz : 0.0,
 			(mode == 4) ? xoz : 0.0,
 			(mode == 5) ? xoz : 0.0);
-			*/
+	//		*/
 
 	describe_matrix(current_position, "current_position");
 	describe_matrix(move, "move");
