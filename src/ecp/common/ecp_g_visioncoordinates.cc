@@ -123,8 +123,29 @@ bool visioncoordinates::next_step()
 
 	// current_XYZ_AA_arm_coordinates zawiera 8 elementow, wykorzystujemy 6 pierwszych xyz_zyz
 	lib::Homog_matrix current_position(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, arm[0], arm[1], arm[2], arm[3], arm[4], arm[5]); // aktualna pozycja ramienia robota
-	lib::Homog_matrix move(lib::Homog_matrix::MTR_XYZ_EULER_ZYZ, 0.0, 0.0, 0.0, z, xoz, -z); 
+	
+	//lib::Homog_matrix move(lib::Homog_matrix::MTR_XYZ_EULER_ZYZ, 0.0, 0.0, 0.0, z, xoz, -z); 
 
+	/* 
+	// z wyznacza nam kolejny numer argumentu, do ktorego podamy sterowanie w xoz 
+	// to w celu przetestowania kolejnych osi chwytaka -- gdy juz ustalimy osie chwytaka, i przetestujemy obroty wokol nich
+	// 
+	// natepnym testem po ustaleniu osi obrotow, bedzie dodanie przesuniecia wzgledem osi chwytaka z (ruch do przodu po skierowaniu sie 
+	// w strone chwytaka)
+	// 
+	// nastepnym krokiem moze byc sprawdzenie zachowania sie robota przy troche innym polozeniu poczatkowym (moze tak, by robot nie mial za bardzo mozliwosci
+	// zmiany orientacji chwytaka na inna - w sensie by nie wystepowaly niejednoznacznosci. oprocz tego kwestia osobna jest gdy odchyla sie na bok - robot na bok odchylic sie nie 
+	// moze, ale jesli dostanie rotacje ze nie musi odchylac sie na bok, to przeciez nie bedzie probowal... Czyli podsumowujac - niech nasz ,,bocian'' patrzy bardziej w dol
+	// i dla takiego polozenia poczatkowego (gdy nie bedzie niejednoznacznosci) sprawdzac czy rotacje rusza.
+	int mode = int(z + 0.1);
+	lib::Homog_matrix move(lib::Homog_matrix::MTR_XYZ_EULER_ZYZ,
+			(mode == 0) ? xoz : 0.0,
+			(mode == 1) ? xoz : 0.0,
+			(mode == 2) ? xoz : 0.0,
+			(mode == 3) ? xoz : 0.0,
+			(mode == 4) ? xoz : 0.0,
+			(mode == 5) ? xoz : 0.0);
+			*/
 
 	describe_matrix(current_position, "current_position");
 	describe_matrix(move, "move");
