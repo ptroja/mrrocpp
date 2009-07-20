@@ -138,7 +138,9 @@ bool visioncoordinates::next_step()
 	// moze, ale jesli dostanie rotacje ze nie musi odchylac sie na bok, to przeciez nie bedzie probowal... Czyli podsumowujac - niech nasz ,,bocian'' patrzy bardziej w dol
 	// i dla takiego polozenia poczatkowego (gdy nie bedzie niejednoznacznosci) sprawdzac czy rotacje rusza.
 	int mode = int(z + 0.1);
-	lib::Homog_matrix move(lib::Homog_matrix::MTR_XYZ_EULER_ZYZ,
+
+	debugmsg("move in MTR_XYZ_ANGLE_AXIS");
+	lib::Homog_matrix move(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS,
 			(mode == 0) ? xoz : 0.0,
 			(mode == 1) ? xoz : 0.0,
 			(mode == 2) ? xoz : 0.0,
