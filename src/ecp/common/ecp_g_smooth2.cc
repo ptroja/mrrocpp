@@ -47,8 +47,10 @@ bool smooth2::eq(double a, double b) {
 
 bool smooth2::load_file_with_path(const char* file_name) {
 
+	sr_ecp_msg.message(file_name);
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
-
+	printf("load file with path\n");
+	flushall();
     char coordinate_type[80];  // Opis wspolrzednych: "MOTOR", "JOINT", ...
     lib::POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
     uint64_t e;       // Kod bledu systemowego
@@ -519,7 +521,10 @@ void smooth2::generate_cords() {
 //set necessary instructions, and other data for preparing the robot
 bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
 
+	//flush_coordinate_list();
     initiate_pose_list();
+    printf("first step \n%d",pose_list_iterator->arm_type);
+    flushall();
     td.arm_type = pose_list_iterator->arm_type;
 
     first_interval=true;
@@ -563,6 +568,7 @@ bool smooth2::first_step() { //wywolywane tylko raz w calej trajektorii
         the_robot->EDP_data.next_interpolation_type = lib::MIM;
         break;
     default:
+    	sr_ecp_msg.message("w first stepie");
         throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
     } // end : switch ( td.arm_type )
 
@@ -582,6 +588,7 @@ bool smooth2::next_step () {
     	initiate_pose_list(); //ustawienie iteratora pose_list na poczatek
     	initiate_coordinate_list(); //ustawienie iteratora coordinate_list na poczatek
     	printf("trajektoria wygenerowana\n");
+    	flushall();
     }
 
     if (!trajectory_generated || !trajectory_calculated) {
@@ -591,7 +598,7 @@ bool smooth2::next_step () {
     if (node_counter-1 == pose_list_iterator->interpolation_node_no) {//czy poprzedni makrokrok byl ostatnim
 
     	if(is_last_list_element()) { //ostatni punkt (koniec listy pozycji pose_list)
-
+    		reset();
     		return false;
 
     	} else {//lista pozycji pose_list nie jest skonczona wiec idziemy do nastepnego punktu
