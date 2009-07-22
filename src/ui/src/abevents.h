@@ -51,6 +51,8 @@ ApEventLink_t AbInternalLinks[] = {
 	{ 3, 0, 0L, 0L, 0L, &wnd_irp6_mechatronika_xyz_angle_axis_ts, NULL, NULL, 0, NULL, 0, 11, 10, 30, },
 	{ 3, 0, 0L, 0L, 0L, &wnd_irp6_mechatronika_xyz_euler_zyz, NULL, NULL, 0, NULL, 0, 11, 10, 30, },
 	{ 3, 0, 0L, 0L, 0L, &wnd_irp6_mechatronika_xyz_euler_zyz_ts, NULL, NULL, 0, NULL, 0, 11, 10, 30, },
+	{ 3, 0, 0L, 0L, 0L, &wnd_irp6_on_track_xyz_angle_axis_relative, NULL, NULL, 0, NULL, 0, 11, 10, 30, },
+	{ 3, 0, 0L, 0L, 0L, &wnd_irp6_postument_xyz_angle_axis_relative, NULL, NULL, 0, NULL, 0, 11, 10, 30, },
 	{ 0 }
 	};
 

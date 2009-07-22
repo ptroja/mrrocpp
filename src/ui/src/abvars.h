@@ -46,6 +46,8 @@ const int ABI_wnd_irp6_mechatronika_xyz_angle_axis = 37;
 const int ABI_wnd_irp6_mechatronika_xyz_angle_axis_ts = 38;
 const int ABI_wnd_irp6_mechatronika_xyz_euler_zyz = 39;
 const int ABI_wnd_irp6_mechatronika_xyz_euler_zyz_ts = 40;
+const int ABI_wnd_irp6_on_track_xyz_angle_axis_relative = 41;
+const int ABI_wnd_irp6_postument_xyz_angle_axis_relative = 42;
 
 /* 'task_config_window' Window link */
 const int ABN_task_config_window = 0;

@@ -87,6 +87,10 @@ extern const int ABI_wnd_irp6_mechatronika_xyz_euler_zyz;
 #define ABM_wnd_irp6_mechatronika_xyz_euler_zyz &AbInternalLinks[ABI_wnd_irp6_mechatronika_xyz_euler_zyz]
 extern const int ABI_wnd_irp6_mechatronika_xyz_euler_zyz_ts;
 #define ABM_wnd_irp6_mechatronika_xyz_euler_zyz_ts &AbInternalLinks[ABI_wnd_irp6_mechatronika_xyz_euler_zyz_ts]
+extern const int ABI_wnd_irp6_on_track_xyz_angle_axis_relative;
+#define ABM_wnd_irp6_on_track_xyz_angle_axis_relative &AbInternalLinks[ABI_wnd_irp6_on_track_xyz_angle_axis_relative]
+extern const int ABI_wnd_irp6_postument_xyz_angle_axis_relative;
+#define ABM_wnd_irp6_postument_xyz_angle_axis_relative &AbInternalLinks[ABI_wnd_irp6_postument_xyz_angle_axis_relative]
 
 /* 'task_config_window' Window link */
 extern const int ABN_task_config_window;
