@@ -2816,6 +2816,108 @@ irp6ot_xyz_aa_relative_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	double *wektor_ptgr[7], wektor[7];
+
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	// wychwytania ew. bledow ECP::robot
+	try
+	{
+	if ( ui_state.irp6_postument.edp.is_synchronised )
+	{
+
+		PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_px, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[0], 0 );
+		PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_py, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[1], 0 );
+		PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_pz, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[2], 0 );
+		PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_pox, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[3], 0 );
+		PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_poy, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[4], 0 );
+		PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_poz, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[5], 0 );
+		PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_pg, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[6], 0 );
+
+		for (int i=0; i< 7; i++)
+		{
+			wektor[i] = *wektor_ptgr[i];
+			irp6ot_desired_pos[i] = 0.0;
+		}
+
+
+		// wektor przesuniecia
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_aa_xl)
+			irp6ot_desired_pos[0]=-wektor[0];
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_aa_xr)
+			irp6ot_desired_pos[0]=wektor[0];
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_aa_yl)
+			irp6ot_desired_pos[1]=-wektor[1];
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_aa_yr)
+			irp6ot_desired_pos[1]=wektor[1];
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_aa_zl)
+			irp6ot_desired_pos[2]=-wektor[2];
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_aa_zr)
+			irp6ot_desired_pos[2]=wektor[2];
+
+
+
+		// kat obrotu i chwytak
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_aa_oxl)
+			irp6ot_desired_pos[3]=-wektor[3];
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_aa_oxr)
+			irp6ot_desired_pos[3]=wektor[3];
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_aa_oyl)
+			irp6ot_desired_pos[4]=-wektor[4];
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_aa_oyr)
+			irp6ot_desired_pos[4]=wektor[4];
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_aa_ozl)
+			irp6ot_desired_pos[5]=-wektor[5];
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_aa_ozr)
+			irp6ot_desired_pos[5]=wektor[5];
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_aa_gl)
+			irp6ot_desired_pos[6]=-wektor[6];
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_aa_gr)
+			irp6ot_desired_pos[6]=wektor[6];
+
+
+		// wszysktkie naraz
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_aa_l)
+			for (int i=0; i< 7; i++)
+				{
+					irp6ot_desired_pos[i]=-wektor[i];
+				}
+
+		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_aa_r)
+			for (int i=0; i< 7; i++)
+				{
+					irp6ot_desired_pos[i]=wektor[i];
+				}
+
+
+
+
+		// zlecenie wykonania ruchu
+		ui_robot.irp6_on_track->move_xyz_angle_axis_relative(irp6ot_desired_pos);
+
+
+	}
+	else
+	{
+	}
+	} // end try
+	CATCH_SECTION_UI
+
+
 	return( Pt_CONTINUE );
 
 	}

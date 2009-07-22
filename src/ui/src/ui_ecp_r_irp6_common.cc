@@ -624,10 +624,57 @@ bool ui_common_robot::move_xyz_angle_axis ( double final_position[7] )
 }
 
 
-bool move_xyz_angle_axis_relative ( double position_increment[7] )
+bool ui_common_robot::move_xyz_angle_axis_relative ( double position_increment[7] )
 {
 
 
+	    int nr_of_steps; // Liczba krokow
+	    int nr_ang, nr_lin, nr_grip;
+
+	    double max_inc_ang = 0.0, max_inc_lin = 0.0, max_inc_grip = 0.0 , temp_lin, temp_ang, temp_grip; // Zmienne pomocnicze
+	    int i,j;	// licznik petli
+
+	    max_inc_ang = max_inc_lin = 0.0;
+	    for (i = 0; i < 3; i++)
+	    {
+	        temp_lin = fabs(position_increment[i]);
+	        temp_ang = fabs(position_increment[i+3]);
+	        if(temp_ang > max_inc_ang)
+	            max_inc_ang = temp_ang;
+	        if(temp_lin > max_inc_lin)
+	            max_inc_lin = temp_lin;
+	    }
+
+		   max_inc_grip = position_increment[6];
+
+	    nr_ang = (int) ceil(max_inc_ang / END_EFFECTOR_ANGULAR_STEP);
+	    nr_lin = (int) ceil(max_inc_lin / END_EFFECTOR_LINEAR_STEP);
+	    nr_grip = (int) ceil(max_inc_grip / END_EFFECTOR_GRIPPER_STEP);
+
+	    nr_of_steps = (nr_ang > nr_lin) ? nr_ang : nr_lin;
+	    nr_of_steps = (nr_of_steps > nr_grip) ? nr_of_steps : nr_grip;
+
+	    // Zadano ruch do aktualnej pozycji
+	    if (nr_of_steps < 1)
+	        return true;
+
+
+	  ecp->ecp_command.instruction.instruction_type = lib::SET_GET;
+	    ecp->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
+	    ecp->ecp_command.instruction.set_type = ARM_DV; // ARM
+	    ecp->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+	    ecp->ecp_command.instruction.motion_type = lib::RELATIVE;
+	    ecp->ecp_command.instruction.interpolation_type = lib::MIM;
+	    ecp->ecp_command.instruction.motion_steps = nr_of_steps;
+	    ecp->ecp_command.instruction.value_in_step_no = nr_of_steps;
+
+	    for (j = 0; j < 6; j++)
+	    {
+	        ecp->ecp_command.instruction.arm.pf_def.arm_coordinates[j] = position_increment[j];
+	    }
+
+	    ecp->ecp_command.instruction.arm.pf_def.gripper_coordinate = position_increment[6];
+	    execute_motion();
 
 	return true;
 }
