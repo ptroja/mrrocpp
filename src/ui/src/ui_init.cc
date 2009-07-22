@@ -674,6 +674,9 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	ui_state.is_wind_irp6m_kinematic_open=false;
 	ui_state.is_wind_speaker_play_open=false;
 
+	ui_state.is_wind_irp6ot_xyz_aa_relative_open=false;
+	ui_state.is_wind_irp6p_xyz_aa_relative_open=false;
+
 	ui_state.is_wind_irp6ot_servo_algorithm_open=false;
 	ui_state.is_wind_irp6p_servo_algorithm_open=false;
 	ui_state.is_wind_irp6m_servo_algorithm_open=false;

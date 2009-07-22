@@ -210,6 +210,9 @@ typedef struct {
 	bool is_wind_irp6p_xyz_angle_axis_open;  // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
 	bool is_wind_irp6m_xyz_angle_axis_open;  // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
 
+	bool is_wind_irp6ot_xyz_aa_relative_open;  // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
+	bool is_wind_irp6p_xyz_aa_relative_open;  // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
+
 	bool is_wind_irp6ot_xyz_angle_axis_ts_open;  // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
 	bool is_wind_irp6p_xyz_angle_axis_ts_open;  // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
 	bool is_wind_irp6m_xyz_angle_axis_ts_open;  // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte

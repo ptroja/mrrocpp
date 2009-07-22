@@ -2397,6 +2397,7 @@ close_all_irp6ot_windows( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 	close_wnd_irp6_on_track_int(NULL, NULL, NULL);
 	close_wnd_irp6_on_track_xyz_angle_axis(NULL, NULL, NULL);
 	close_wnd_irp6_on_track_xyz_angle_axis_ts(NULL, NULL, NULL);
+	close_wnd_irp6_on_track_xyz_aa_relative(NULL, NULL, NULL);
 	close_wnd_irp6_on_track_xyz_euler_zyz(NULL, NULL, NULL);
 	close_wnd_irp6_on_track_xyz_euler_zyz_ts(NULL, NULL, NULL);
 	close_wnd_irp6_on_track_kinematic(NULL, NULL, NULL);
@@ -2761,6 +2762,15 @@ start_wnd_irp6_on_track_xyz_aa_relative( PtWidget_t *widget, ApInfo_t *apinfo, P
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+
+	if (	!ui_state.is_wind_irp6ot_xyz_aa_relative_open) // otworz okno
+	{
+		ApCreateModule (ABM_wnd_irp6_on_track_xyz_angle_axis_relative, widget, cbinfo);
+		ui_state.is_wind_irp6ot_xyz_aa_relative_open=true;
+	} else { // przelacz na okno
+		PtWindowToFront (ABW_wnd_irp6_on_track_xyz_angle_axis_relative);
+	}
+
 	return( Pt_CONTINUE );
 
 	}
@@ -2773,6 +2783,25 @@ clear_wnd_irp6ot_xyz_aa_relative_flag( PtWidget_t *widget, ApInfo_t *apinfo, PtC
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	ui_state.is_wind_irp6ot_xyz_aa_relative_open=false;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+close_wnd_irp6_on_track_xyz_aa_relative( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	if (ui_state.is_wind_irp6ot_xyz_aa_relative_open)
+	{
+		PtDestroyWidget( ABW_wnd_irp6_on_track_xyz_angle_axis_relative );
+	}
 
 	return( Pt_CONTINUE );
 
