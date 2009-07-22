@@ -259,6 +259,7 @@ int reload_irp6ot_configuration ( void );
 int manage_interface_irp6ot ( void );
 int start_wnd_irp6_on_track_xyz_aa_relative ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int clear_wnd_irp6ot_xyz_aa_relative_flag ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int close_wnd_irp6_on_track_xyz_aa_relative ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int irp6ot_xyz_aa_relative_motion ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 
 /* ../fun_r_irp6_postument.cc */
@@ -332,6 +333,7 @@ int reload_irp6p_configuration ( void );
 int manage_interface_irp6p ( void );
 int start_wnd_irp6_postument_xyz_aa_relative ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int clear_wnd_irp6p_xyz_aa_relative_flag ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
+int close_wnd_irp6_postument_xyz_aa_relative ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 int irp6p_xyz_aa_relative_motion ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 
 /* ../fun_r_speaker.cc */
