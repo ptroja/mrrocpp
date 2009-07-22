@@ -64,11 +64,7 @@ void irp6s_effector::compute_xyz_euler_zyz (const lib::c_buffer &instruction)
     for (int i=0;i<6;i++)
         rb_obj->step_data.current_cartesian_position[i] = instruction.arm.pf_def.arm_coordinates[i];
 
-    // dla robotow track i postument - oblicz chwytak
-    if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
-    {
-        desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate;
-    }
+
 
     // if ( (value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )
     if ( (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )// by Y
@@ -76,9 +72,19 @@ void irp6s_effector::compute_xyz_euler_zyz (const lib::c_buffer &instruction)
     switch (motion_type)
     {
     case lib::ABSOLUTE:   // ruch bezwzgledny
+        // dla robotow track i postument - oblicz chwytak
+        if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
+        {
+            desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate;
+        }
         arm_abs_xyz_eul_zyz_2_frame(p);
         break;
     case lib::RELATIVE:   // ruch wzgledny
+        // dla robotow track i postument - oblicz chwytak
+         if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
+         {
+             desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate + current_joints[gripper_servo_nr];
+         }
         arm_rel_xyz_eul_zyz_2_frame(p);
         break;
     default:
@@ -119,11 +125,7 @@ void irp6s_effector::compute_xyz_angle_axis (const lib::c_buffer &instruction)
         p = &instruction.arm.pf_def.arm_coordinates[0];
     }
 
-    // dla robotow track i postument - oblicz chwytak
-    if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
-    {
-        desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate;
-    }
+
 
     // if ( (value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )
     if ( (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )// by Y
@@ -131,9 +133,19 @@ void irp6s_effector::compute_xyz_angle_axis (const lib::c_buffer &instruction)
     switch (motion_type)
     {
     case lib::ABSOLUTE:   // ruch bezwzgledny
+        // dla robotow track i postument - oblicz chwytak
+        if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
+        {
+            desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate;
+        }
         arm_abs_xyz_aa_2_frame(p);
         break;
     case lib::RELATIVE:   // ruch wzgledny
+        // dla robotow track i postument - oblicz chwytak
+        if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
+        {
+            desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate + current_joints[gripper_servo_nr];
+        }
         arm_rel_xyz_aa_2_frame(p);
         break;
     default:
@@ -172,11 +184,7 @@ void irp6s_effector::compute_frame (const lib::c_buffer &instruction)
 
     } // end: then
 
-    // dla robotow track i postument - oblicz chwytak
-    if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
-    {
-        desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate;
-    }
+
 
     if ( (value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )
     {
@@ -185,9 +193,19 @@ void irp6s_effector::compute_frame (const lib::c_buffer &instruction)
     switch (motion_type)
     {
     case lib::ABSOLUTE:   // ruch bezwzgledny
+        // dla robotow track i postument - oblicz chwytak
+        if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
+        {
+            desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate;
+        }
         arm_abs_frame_2_frame(p_m);
         break;
     case lib::RELATIVE:   // ruch wzgledny
+        // dla robotow track i postument - oblicz chwytak
+         if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
+         {
+             desired_joints_tmp[gripper_servo_nr] = instruction.arm.pf_def.gripper_coordinate + current_joints[gripper_servo_nr];
+         }
         arm_rel_frame_2_frame(p_m);
         break;
     default:

@@ -60,6 +60,7 @@ class ui_common_robot {
   bool move_joints ( double final_position[IRP6_ON_TRACK_NUM_OF_SERVOS] );
   bool move_xyz_euler_zyz ( double final_position[7] );
   bool move_xyz_angle_axis ( double final_position[7] );
+  bool move_xyz_angle_axis_relative ( double position_increment[7] );
   bool set_tool_xyz_angle_axis ( double tool_vector[6] );
   bool set_tool_xyz_euler_zyz ( double tool_vector[6] );
   bool set_kinematic (lib::BYTE kinematic_model_no);
