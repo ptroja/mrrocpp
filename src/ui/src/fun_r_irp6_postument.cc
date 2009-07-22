@@ -2702,7 +2702,7 @@ start_wnd_irp6_postument_xyz_aa_relative( PtWidget_t *widget, ApInfo_t *apinfo, 
 		ApCreateModule (ABM_wnd_irp6_postument_xyz_angle_axis_relative, widget, cbinfo);
 		ui_state.is_wind_irp6p_xyz_aa_relative_open=true;
 	} else { // przelacz na okno
-		PtWindowToFront (ABM_wnd_irp6_postument_xyz_angle_axis_relative);
+		PtWindowToFront (ABW_wnd_irp6_postument_xyz_angle_axis_relative);
 	}
 
 
