@@ -46,7 +46,7 @@ bool smooth::eq(double a, double b)
 {
 	const double EPS = 0.0001;
 	const double& diff = a - b;
-	return diff < EPS && diff > -EPS; 
+	return diff < EPS && diff > -EPS;
 }
 
 void smooth::generate_next_coords (void)
@@ -61,7 +61,7 @@ void smooth::generate_next_coords (void)
         if(node_counter<przysp[i])
         { //pierwszy etap
 			if (debug && i == 0) printf("etap 1: ");
-				
+
             if(v_p[i]<=v_r[i])
             { //przyspieszanie w pierwszym etapie
                 if(debug)
@@ -151,7 +151,7 @@ bool smooth::load_trajectory_from_xml(mp::common::Trajectory &trajectory)
 	int numOfPoses = trajectory.getNumberOfPoses();
 	trajectory.showTime();
 //	std::list<Trajectory::Pose>::iterator it;
-	
+
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
 	pose_list = trajectory.getPoses();
 	pose_list_iterator = pose_list->end();
@@ -183,9 +183,9 @@ void smooth::set_pose_from_xml(xmlNode *stateNode, bool &first_time)
 	double v[MAX_SERVOS_NR];
 	double a[MAX_SERVOS_NR];	// Wczytane wspolrzedne
 	double coordinates[MAX_SERVOS_NR];     // Wczytane wspolrzedne
-	
+
 	xmlNode *cchild_node, *ccchild_node;
-	xmlChar *coordinateType, *numOfPoses;	 
+	xmlChar *coordinateType, *numOfPoses;
 	xmlChar *xmlDataLine;
 
 	coordinateType = xmlGetProp(stateNode, (const xmlChar *)"coordinateType");
@@ -193,36 +193,36 @@ void smooth::set_pose_from_xml(xmlNode *stateNode, bool &first_time)
 	numOfPoses = xmlGetProp(stateNode, (const xmlChar *)"numOfPoses");
 	number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
 	for(cchild_node = stateNode->children; cchild_node!=NULL; cchild_node = cchild_node->next)
-	{							
+	{
 		if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )							{
 			for(ccchild_node = cchild_node->children; ccchild_node!=NULL; ccchild_node = ccchild_node->next)
 			{
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"StartVelocity") )
-				{	
+				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
 					mp::common::Trajectory::setValuesInArray(vp, (const char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"EndVelocity") )
-				{										
+				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
 					mp::common::Trajectory::setValuesInArray(vk, (const char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
-				{										
+				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
 					mp::common::Trajectory::setValuesInArray(v, (const char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
-				{										
+				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
 					mp::common::Trajectory::setValuesInArray(a, (const char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
-				{										
+				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
 					mp::common::Trajectory::setValuesInArray(coordinates, (const char *)xmlDataLine);
 					xmlFree(xmlDataLine);
@@ -251,10 +251,10 @@ bool smooth::load_trajectory_from_xml(const char* fileName, const char* nodeName
 {
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
-    bool first_time = true; // Znacznik	
+    bool first_time = true; // Znacznik
 	 xmlNode *cur_node, *child_node, *subTaskNode;
 	 xmlChar *stateID;
-	 
+
 	 xmlDocPtr doc;
 	 doc = xmlParseFile(fileName);
 	 xmlXIncludeProcess(doc);
@@ -262,7 +262,7 @@ bool smooth::load_trajectory_from_xml(const char* fileName, const char* nodeName
 	 {
         throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	 }
-				
+
 	 xmlNode *root = NULL;
 	 root = xmlDocGetRootElement(doc);
 	 if(!root || !root->name)
@@ -270,9 +270,9 @@ bool smooth::load_trajectory_from_xml(const char* fileName, const char* nodeName
 		 xmlFreeDoc(doc);
 		 throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	 }
- 
+
 	 flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
-	
+
    for(cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
    {
       if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "SubTask" ) )
@@ -314,7 +314,7 @@ bool smooth::load_trajectory_from_xml(const char* fileName, const char* nodeName
 	}
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
-	
+
 	return true;
 }
 
@@ -445,25 +445,25 @@ bool smooth::load_file_with_path (const char* file_name)
         // printf("po coord\n");
 
         /*		if (ps == POSE_FORCE_LINEAR)
-        		{ 
-        			if ( !(from_file >> extra_info) ) 
+        		{
+        			if ( !(from_file >> extra_info) )
         			{ // Zabezpieczenie przed danymi nienumerycznymi
         				from_file.close();
         				throw ecp_generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         			}
-        			if (first_time) 
+        			if (first_time)
         			{
         				// Tworzymy glowe listy
         				first_time = false;
         				create_pose_list_head(ps, vp, vk, v, coordinates);
-        			} 
-        			else 
+        			}
+        			else
         			{
         				// Wstaw do listy nowa pozycje
         				insert_pose_list_element(ps, vp, vk, v, coordinates);
         			}
-        		} 
-        		else 
+        		}
+        		else
         		{*/
         if (first_time)
         {
@@ -532,7 +532,7 @@ void smooth::load_coordinates(lib::POSE_SPECIFICATION ps, double cor0, double co
 
 	if(first_coordinate)	//in case if there are some already read coordinates from file.
 		flush_pose_list();
-	
+
 	coordinates[0]=cor0;
 	coordinates[1]=cor1;
 	coordinates[2]=cor2;
@@ -1199,14 +1199,14 @@ bool smooth::next_step ()
             }
 
             get_pose();
-				
+
 				if(type==2)
 					for(i=0; i<MAX_SERVOS_NR; i++)
 						final_position[i]+=start_position[i];
-				
+
 
             // Przepisanie danych z EDP_MASTER do obrazu robota
-    
+
 
             switch ( td.arm_type )
             {

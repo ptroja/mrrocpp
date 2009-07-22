@@ -785,6 +785,7 @@ void smooth2::calculate(void) {
     double tk = 10 * STEP; //czas jednego makrokroku
     int gripp; //os grippera
 
+    //TODO dorobic zabezpieczenia dla 0 predkosci w osmej wspolrzednej postumenta
 
     double v_r_next[MAX_SERVOS_NR];//predkosc kolejnego ruchu
 
@@ -934,9 +935,11 @@ void smooth2::calculate(void) {
 				}
 
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
-					if (v_max_joint[i] == 0 || a_max_joint[i] == 0 || pose_list_iterator->v[i] == 0 || pose_list_iterator->a[i] == 0) {
-						sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
-						throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+					if(!(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT && i == (MAX_SERVOS_NR - 1))) {
+						if (v_max_joint[i] == 0 || a_max_joint[i] == 0 || pose_list_iterator->v[i] == 0 || pose_list_iterator->a[i] == 0) {
+							sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
+							throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+						}
 					}
 					//printf("predkosci (max i zadane): %f\t %f\n", v_max_zyz[i], pose_list_iterator->v[i]);
 					//printf("przyspieszenia (max i zadane): %f\t %f\n", a_max_zyz[i], pose_list_iterator->a[i]);
@@ -1755,16 +1758,18 @@ void smooth2::vp_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_
 	v_r = s/t;
 
 	if (v_r <= pose_list_iterator->v_k[i] && v_r <= pose_list_iterator->v_p[i]) {
-		//printf("rekurencja! 1, v_r: %f\n", v_r);//trzeba nadpisać v a nie v_r
+		printf("rekurencja! 1, v_r: %f\n", v_r);//trzeba nadpisać v a nie v_r
 		//printf("pos_num: %d\n", pose_list_iterator->pos_num);
+		flushall();
 		pose_list_iterator->v_r[i] = v_r;
 		rec = true;
 		rec_pos = pose_list_iterator->pos_num;
 		calculate();
 		return;
 	} else if (v_r <= pose_list_iterator->v_p[i] && v_r >= pose_list_iterator->v_k[i]) {
-		//printf("rekurencja! 2, v_r: %f\n", v_r);
+		printf("rekurencja! 2, v_r: %f\t os: %d\n", v_r, i);
 		//printf("pos_num: %d\n", pose_list_iterator->pos_num);
+		flushall();
 		//pose_list_iterator->v_r[i] = v_r;
 		pose_list_iterator->v_p[i] = v_r;
 		reduction_model_1(pose_list_iterator, i, s);
@@ -1773,8 +1778,9 @@ void smooth2::vp_reduction(std::list<ecp_smooth2_taught_in_pose>::iterator pose_
 		calculate();
 		return;
 	} else if (v_r >= pose_list_iterator->v_p[i] && v_r <= pose_list_iterator->v_k[i]) {
-		//printf("rekurencja! 3, v_r: %f\n", v_r);
+		printf("rekurencja! 3, v_r: %f\n", v_r);
 		//printf("pos_num: %d\n", pose_list_iterator->pos_num);
+		flushall();
 		//pose_list_iterator->v_r[i] = v_r;
 		pose_list_iterator->v_k[i] = v_r;
 		reduction_model_1(pose_list_iterator, i, s);
