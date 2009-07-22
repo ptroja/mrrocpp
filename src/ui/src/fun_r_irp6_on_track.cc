@@ -2692,7 +2692,8 @@ manage_interface_irp6ot ()
 		break;
 		case 0:
 			ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_unload,
-				ABN_mm_irp6_on_track_pre_synchro_moves, ABN_mm_irp6_on_track_post_synchro_moves,
+				ABN_mm_irp6_on_track_pre_synchro_moves, ABN_mm_irp6_on_track_absolute_moves,
+				ABN_mm_irp6_on_track_relative_moves,
 				 ABN_mm_irp6_on_track_tool_specification,  ABN_mm_irp6_on_track_preset_positions,
 				 ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
 			ApModifyItemState( &robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track, ABN_mm_irp6_on_track_edp_load, NULL);
@@ -2713,20 +2714,23 @@ manage_interface_irp6ot ()
 					case UI_MP_NOT_PERMITED_TO_RUN:
 					case UI_MP_PERMITED_TO_RUN:
 						ApModifyItemState( &robot_menu, AB_ITEM_NORMAL,  ABN_mm_irp6_on_track_edp_unload,
-							ABN_mm_irp6_on_track_post_synchro_moves, ABN_mm_irp6_on_track_tool_specification,
+								ABN_mm_irp6_on_track_absolute_moves, ABN_mm_irp6_on_track_relative_moves,
+								ABN_mm_irp6_on_track_tool_specification,
 							ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
 						ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_load, NULL);
 					break;
 					case UI_MP_WAITING_FOR_START_PULSE:
 						ApModifyItemState( &robot_menu, AB_ITEM_NORMAL,
-							ABN_mm_irp6_on_track_post_synchro_moves, ABN_mm_irp6_on_track_tool_specification,
+								ABN_mm_irp6_on_track_absolute_moves, ABN_mm_irp6_on_track_relative_moves,
+								ABN_mm_irp6_on_track_tool_specification,
 							ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
 						ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_load, ABN_mm_irp6_on_track_edp_unload, NULL);
 					break;
 					case UI_MP_TASK_RUNNING:
 					case UI_MP_TASK_PAUSED:
 						ApModifyItemState( &robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-							ABN_mm_irp6_on_track_post_synchro_moves, ABN_mm_irp6_on_track_preset_positions,
+								ABN_mm_irp6_on_track_absolute_moves, ABN_mm_irp6_on_track_relative_moves,
+								ABN_mm_irp6_on_track_preset_positions,
 							ABN_mm_irp6_on_track_tool_specification,  ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
 					break;
 					default:
@@ -2748,3 +2752,16 @@ manage_interface_irp6ot ()
 
 	return 1;
 }
+
+int
+start_wnd_irp6_on_track_xyz_aa_relative( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+

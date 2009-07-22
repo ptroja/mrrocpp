@@ -2546,7 +2546,7 @@ manage_interface_irp6m ()
 		break;
 		case 0:
 			ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6_mechatronika_edp_unload,
-				ABN_mm_irp6_mechatronika_pre_synchro_moves, ABN_mm_irp6_mechatronika_post_synchro_moves,
+				ABN_mm_irp6_mechatronika_pre_synchro_moves, ABN_mm_irp6_mechatronika_absolute_moves,
 				   ABN_mm_irp6_mechatronika_tool_specification, ABN_mm_irp6_mechatronika_preset_positions,
 				 ABN_mm_irp6_mechatronika_kinematic, ABN_mm_irp6_mechatronika_servo_algorithm, NULL);
 			ApModifyItemState( &robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_mechatronika, ABN_mm_irp6_mechatronika_edp_load, NULL);
@@ -2568,20 +2568,20 @@ manage_interface_irp6m ()
 					case UI_MP_NOT_PERMITED_TO_RUN:
 					case UI_MP_PERMITED_TO_RUN:
 						ApModifyItemState( &robot_menu, AB_ITEM_NORMAL,  ABN_mm_irp6_mechatronika_edp_unload,
-							ABN_mm_irp6_mechatronika_post_synchro_moves, ABN_mm_irp6_mechatronika_tool_specification,
+							ABN_mm_irp6_mechatronika_absolute_moves, ABN_mm_irp6_mechatronika_tool_specification,
 							 ABN_mm_irp6_mechatronika_preset_positions, ABN_mm_irp6_mechatronika_kinematic, ABN_mm_irp6_mechatronika_servo_algorithm, NULL);
 						ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6_mechatronika_edp_load, NULL);
 					break;
 					case UI_MP_WAITING_FOR_START_PULSE:
 						ApModifyItemState( &robot_menu, AB_ITEM_NORMAL,
-							ABN_mm_irp6_mechatronika_post_synchro_moves, ABN_mm_irp6_mechatronika_preset_positions,
+							ABN_mm_irp6_mechatronika_absolute_moves, ABN_mm_irp6_mechatronika_preset_positions,
 							ABN_mm_irp6_mechatronika_tool_specification, ABN_mm_irp6_mechatronika_kinematic, ABN_mm_irp6_mechatronika_servo_algorithm, NULL);
 						ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6_mechatronika_edp_load, ABN_mm_irp6_mechatronika_edp_unload, NULL);
 					break;
 					case UI_MP_TASK_RUNNING:
 					case UI_MP_TASK_PAUSED:
 						ApModifyItemState( &robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-							ABN_mm_irp6_mechatronika_post_synchro_moves, ABN_mm_irp6_mechatronika_preset_positions,
+							ABN_mm_irp6_mechatronika_absolute_moves, ABN_mm_irp6_mechatronika_preset_positions,
 							ABN_mm_irp6_mechatronika_tool_specification, ABN_mm_irp6_mechatronika_kinematic, ABN_mm_irp6_mechatronika_servo_algorithm, NULL);
 					break;
 					default:

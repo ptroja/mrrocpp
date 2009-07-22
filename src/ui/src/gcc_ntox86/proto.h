@@ -257,6 +257,7 @@ int pulse_ecp_irp6_on_track ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallback
 int process_control_window_irp6ot_section_init ( bool &wlacz_PtButton_wnd_processes_control_all_reader_start , bool &wlacz_PtButton_wnd_processes_control_all_reader_stop , bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger );
 int reload_irp6ot_configuration ( void );
 int manage_interface_irp6ot ( void );
+int start_wnd_irp6_on_track_xyz_aa_relative ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 
 /* ../fun_r_irp6_postument.cc */
 int close_wnd_irp6_postument_inc ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
@@ -327,6 +328,7 @@ int pulse_ecp_irp6_postument ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbac
 int process_control_window_irp6p_section_init ( bool &wlacz_PtButton_wnd_processes_control_all_reader_start , bool &wlacz_PtButton_wnd_processes_control_all_reader_stop , bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger );
 int reload_irp6p_configuration ( void );
 int manage_interface_irp6p ( void );
+int start_wnd_irp6_postument_xyz_aa_relative ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );
 
 /* ../fun_r_speaker.cc */
 int close_wnd_speaker_play ( PtWidget_t *widget , ApInfo_t *apinfo , PtCallbackInfo_t *cbinfo );

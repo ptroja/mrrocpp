@@ -2626,7 +2626,8 @@ manage_interface_irp6p ()
 		break;
 		case 0:
 			ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_edp_unload,
-				ABN_mm_irp6_postument_pre_synchro_moves, ABN_mm_irp6_postument_post_synchro_moves,
+				ABN_mm_irp6_postument_pre_synchro_moves, ABN_mm_irp6_postument_absolute_moves,
+				ABN_mm_irp6_postument_relative_moves,
 				   ABN_mm_irp6_postument_tool_specification, ABN_mm_irp6_postument_preset_positions,
 				 ABN_mm_irp6_postument_kinematic, ABN_mm_irp6_postument_servo_algorithm, NULL);
 			ApModifyItemState( &robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_postument, ABN_mm_irp6_postument_edp_load, NULL);
@@ -2647,20 +2648,23 @@ manage_interface_irp6p ()
 					case UI_MP_NOT_PERMITED_TO_RUN:
 					case UI_MP_PERMITED_TO_RUN:
 						ApModifyItemState( &robot_menu, AB_ITEM_NORMAL,  ABN_mm_irp6_postument_edp_unload,
-							ABN_mm_irp6_postument_post_synchro_moves, ABN_mm_irp6_postument_tool_specification,
+							ABN_mm_irp6_postument_absolute_moves, ABN_mm_irp6_postument_relative_moves,
+							ABN_mm_irp6_postument_tool_specification,
 							 ABN_mm_irp6_postument_preset_positions, ABN_mm_irp6_postument_kinematic, ABN_mm_irp6_postument_servo_algorithm, NULL);
 						ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_edp_load, NULL);
 					break;
 					case UI_MP_WAITING_FOR_START_PULSE:
 						ApModifyItemState( &robot_menu, AB_ITEM_NORMAL,
-							ABN_mm_irp6_postument_post_synchro_moves, ABN_mm_irp6_postument_preset_positions,
+							ABN_mm_irp6_postument_absolute_moves, ABN_mm_irp6_postument_relative_moves,
+							ABN_mm_irp6_postument_preset_positions,
 							ABN_mm_irp6_postument_tool_specification, ABN_mm_irp6_postument_kinematic, ABN_mm_irp6_postument_servo_algorithm, NULL);
 						ApModifyItemState( &robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_edp_load, ABN_mm_irp6_postument_edp_unload, NULL);
 					break;
 					case UI_MP_TASK_RUNNING:
 					case UI_MP_TASK_PAUSED:
 						ApModifyItemState( &robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-							ABN_mm_irp6_postument_post_synchro_moves, ABN_mm_irp6_postument_preset_positions,
+							ABN_mm_irp6_postument_absolute_moves, ABN_mm_irp6_postument_relative_moves,
+							ABN_mm_irp6_postument_preset_positions,
 							ABN_mm_irp6_postument_tool_specification, ABN_mm_irp6_postument_kinematic, ABN_mm_irp6_postument_servo_algorithm, NULL);
 					break;
 					default:
@@ -2682,3 +2686,16 @@ manage_interface_irp6p ()
 
 	return 1;
 }
+
+int
+start_wnd_irp6_postument_xyz_aa_relative( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+

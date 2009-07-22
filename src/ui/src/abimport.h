@@ -347,4 +347,6 @@ int start_wnd_irp6m_xyz_angle_axis( PtWidget_t *widget, ApInfo_t *data, PtCallba
 int EDP_conveyor_synchronise( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int unload_all( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int close_task_config_window( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int start_wnd_irp6_on_track_xyz_aa_relative( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int start_wnd_irp6_postument_xyz_aa_relative( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 #endif
