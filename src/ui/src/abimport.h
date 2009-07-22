@@ -52,7 +52,7 @@ extern ApWindowLink_t wndFileLocation;
 extern ApWindowLink_t file_selection_window;
 extern ApWindowLink_t wnd_irp6_on_track_xyz_angle_axis_relative;
 extern ApWindowLink_t wnd_irp6_postument_xyz_angle_axis_relative;
-extern ApWidget_t AbWidgets[ 961 ];
+extern ApWidget_t AbWidgets[ 967 ];
 
 extern ApMenuLink_t file_menu;
 extern ApMenuLink_t task_menu;

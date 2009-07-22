@@ -2055,6 +2055,12 @@ extern const int ABN_PtButton_wind_irp6ot_xyz_aa_l;
 #define ABW_PtButton_wind_irp6ot_xyz_aa_l    AbGetABW( ABN_PtButton_wind_irp6ot_xyz_aa_l )
 extern const int ABN_PtButton_wind_irp6ot_xyz_aa_r;
 #define ABW_PtButton_wind_irp6ot_xyz_aa_r    AbGetABW( ABN_PtButton_wind_irp6ot_xyz_aa_r )
+extern const int ABN_PtNumericFloat_wind_irp6ot_xyz_aa_relative_pg;
+#define ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_pg AbGetABW( ABN_PtNumericFloat_wind_irp6ot_xyz_aa_relative_pg )
+extern const int ABN_PtButton_wind_irp6ot_xyz_aa_gl;
+#define ABW_PtButton_wind_irp6ot_xyz_aa_gl   AbGetABW( ABN_PtButton_wind_irp6ot_xyz_aa_gl )
+extern const int ABN_PtButton_wind_irp6ot_xyz_aa_gr;
+#define ABW_PtButton_wind_irp6ot_xyz_aa_gr   AbGetABW( ABN_PtButton_wind_irp6ot_xyz_aa_gr )
 
 /* 'wnd_irp6_postument_xyz_angle_axis_relative' Window link */
 extern const int ABN_wnd_irp6_postument_xyz_angle_axis_relative;
@@ -2101,6 +2107,12 @@ extern const int ABN_PtButton_wind_irp6p_xyz_aa_l;
 #define ABW_PtButton_wind_irp6p_xyz_aa_l     AbGetABW( ABN_PtButton_wind_irp6p_xyz_aa_l )
 extern const int ABN_PtButton_wind_irp6p_xyz_aa_r;
 #define ABW_PtButton_wind_irp6p_xyz_aa_r     AbGetABW( ABN_PtButton_wind_irp6p_xyz_aa_r )
+extern const int ABN_PtNumericFloat_wind_irp6p_xyz_aa_relative_pg;
+#define ABW_PtNumericFloat_wind_irp6p_xyz_aa_relative_pg AbGetABW( ABN_PtNumericFloat_wind_irp6p_xyz_aa_relative_pg )
+extern const int ABN_PtButton_wind_irp6p_xyz_aa_gl;
+#define ABW_PtButton_wind_irp6p_xyz_aa_gl    AbGetABW( ABN_PtButton_wind_irp6p_xyz_aa_gl )
+extern const int ABN_PtButton_wind_irp6p_xyz_aa_gr;
+#define ABW_PtButton_wind_irp6p_xyz_aa_gr    AbGetABW( ABN_PtButton_wind_irp6p_xyz_aa_gr )
 
 #define AbGetABW( n ) ( AbWidgets[ n ].wgt )
 

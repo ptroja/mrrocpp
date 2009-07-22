@@ -261,13 +261,13 @@ ApWindowLink_t file_selection_window = {
 ApWindowLink_t wnd_irp6_on_track_xyz_angle_axis_relative = {
 	"wnd_irp6_on_track_xyz_angle_axis_relative.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_on_track_xyz_angle_axis_relative, 917, 15
+	AbLinks_wnd_irp6_on_track_xyz_angle_axis_relative, 917, 17
 	};
 
 ApWindowLink_t wnd_irp6_postument_xyz_angle_axis_relative = {
 	"wnd_irp6_postument_xyz_angle_axis_relative.wgtw",
 	&AbContext,
-	AbLinks_wnd_irp6_postument_xyz_angle_axis_relative, 939, 15
+	AbLinks_wnd_irp6_postument_xyz_angle_axis_relative, 942, 17
 	};
 
 static ApItem_t ApItems_file_menu[ 2 ] = {
@@ -283,7 +283,7 @@ ApMenuLink_t file_menu = {
 	ApItems_file_menu,
 	& AbContext,
 	AbLinks_file_menu,
-	961, 1, 1
+	967, 1, 1
 	};
 
 static ApItem_t ApItems_task_menu[ 6 ] = {
@@ -303,7 +303,7 @@ ApMenuLink_t task_menu = {
 	ApItems_task_menu,
 	& AbContext,
 	AbLinks_task_menu,
-	963, 4, 5
+	969, 4, 5
 	};
 
 static ApItem_t ApItems_help_menu[ 2 ] = {
@@ -319,7 +319,7 @@ ApMenuLink_t help_menu = {
 	ApItems_help_menu,
 	& AbContext,
 	AbLinks_help_menu,
-	969, 1, 1
+	975, 1, 1
 	};
 
 static ApItem_t ApItems_special_menu[ 5 ] = {
@@ -338,7 +338,7 @@ ApMenuLink_t special_menu = {
 	ApItems_special_menu,
 	& AbContext,
 	AbLinks_special_menu,
-	971, 3, 4
+	977, 3, 4
 	};
 
 static ApItem_t ApItems_all_robots_menu[ 10 ] = {
@@ -362,7 +362,7 @@ ApMenuLink_t all_robots_menu = {
 	ApItems_all_robots_menu,
 	& AbContext,
 	AbLinks_all_robots_menu,
-	976, 7, 9
+	982, 7, 9
 	};
 
 static ApItem_t ApItems_robot_menu[ 97 ] = {
@@ -473,7 +473,7 @@ ApMenuLink_t robot_menu = {
 	ApItems_robot_menu,
 	& AbContext,
 	AbLinks_robot_menu,
-	986, 65, 96
+	992, 65, 96
 	};
 
 

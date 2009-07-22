@@ -983,6 +983,8 @@ static const ApEventLink_t AbLinks_wnd_irp6_on_track_xyz_angle_axis_relative[] =
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_aa_ozr", 2009, irp6ot_xyz_aa_relative_motion, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_aa_l", 2009, irp6ot_xyz_aa_relative_motion, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_aa_r", 2009, irp6ot_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_aa_gl", 2009, irp6ot_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_aa_gr", 2009, irp6ot_xyz_aa_relative_motion, 0, 0, 0, 0, },
 	{ 0 }
 	};
 
@@ -1002,6 +1004,8 @@ static const ApEventLink_t AbLinks_wnd_irp6_postument_xyz_angle_axis_relative[] 
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_aa_ozr", 2009, irp6p_xyz_aa_relative_motion, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_aa_l", 2009, irp6p_xyz_aa_relative_motion, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_aa_r", 2009, irp6p_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_aa_gl", 2009, irp6p_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_aa_gr", 2009, irp6p_xyz_aa_relative_motion, 0, 0, 0, 0, },
 	{ 0 }
 	};
 
