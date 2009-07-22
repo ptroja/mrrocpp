@@ -47,6 +47,8 @@ bool smooth2::eq(double a, double b) {
 
 bool smooth2::load_file_with_path(const char* file_name) {
 
+	reset();
+
 	sr_ecp_msg.message(file_name);
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 	printf("load file with path\n");
