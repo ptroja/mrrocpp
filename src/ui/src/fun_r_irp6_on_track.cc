@@ -2813,6 +2813,8 @@ irp6ot_xyz_aa_relative_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 
 	{
 
+
+
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
@@ -2825,7 +2827,7 @@ irp6ot_xyz_aa_relative_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	// wychwytania ew. bledow ECP::robot
 	try
 	{
-	if ( ui_state.irp6_postument.edp.is_synchronised )
+	if ( ui_state.irp6_on_track.edp.is_synchronised )
 	{
 
 		PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_aa_relative_px, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[0], 0 );
@@ -2886,11 +2888,13 @@ irp6ot_xyz_aa_relative_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_aa_gl)
 			irp6ot_desired_pos[6]=-wektor[6];
 
+
+
 		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_aa_gr)
 			irp6ot_desired_pos[6]=wektor[6];
 
 
-		// wszysktkie naraz
+		// wszystkie naraz
 		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6ot_xyz_aa_l)
 			for (int i=0; i< 7; i++)
 				{

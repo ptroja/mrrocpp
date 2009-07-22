@@ -627,7 +627,6 @@ bool ui_common_robot::move_xyz_angle_axis ( double final_position[7] )
 bool ui_common_robot::move_xyz_angle_axis_relative ( double position_increment[7] )
 {
 
-
 	    int nr_of_steps; // Liczba krokow
 	    int nr_ang, nr_lin, nr_grip;
 
@@ -645,7 +644,7 @@ bool ui_common_robot::move_xyz_angle_axis_relative ( double position_increment[7
 	            max_inc_lin = temp_lin;
 	    }
 
-		   max_inc_grip = position_increment[6];
+		   max_inc_grip = fabs(position_increment[6]);
 
 	    nr_ang = (int) ceil(max_inc_ang / END_EFFECTOR_ANGULAR_STEP);
 	    nr_lin = (int) ceil(max_inc_lin / END_EFFECTOR_LINEAR_STEP);
