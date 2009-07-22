@@ -965,6 +965,44 @@ static const ApEventLink_t AbLinks_file_selection_window[] = {
 	{ 0 }
 	};
 
+static const ApEventLink_t AbLinks_wnd_irp6_on_track_xyz_angle_axis_relative[] = {
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_irp6_on_track_xyz_angle_axis_relative", 1013, clear_wnd_irp6ot_xyz_aa_relative_flag, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_aa_xl", 2009, irp6ot_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_aa_xr", 2009, irp6ot_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_aa_yl", 2009, irp6ot_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_aa_yr", 2009, irp6ot_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_aa_zl", 2009, irp6ot_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_aa_zr", 2009, irp6ot_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_aa_oxl", 2009, irp6ot_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_aa_oxr", 2009, irp6ot_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_aa_oyl", 2009, irp6ot_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_aa_oyr", 2009, irp6ot_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_aa_ozl", 2009, irp6ot_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_aa_ozr", 2009, irp6ot_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_aa_l", 2009, irp6ot_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6ot_xyz_aa_r", 2009, irp6ot_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 0 }
+	};
+
+static const ApEventLink_t AbLinks_wnd_irp6_postument_xyz_angle_axis_relative[] = {
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_irp6_postument_xyz_angle_axis_relative", 1013, clear_wnd_irp6p_xyz_aa_relative_flag, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_aa_xl", 2009, irp6p_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_aa_xr", 2009, irp6p_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_aa_yl", 2009, irp6p_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_aa_yr", 2009, irp6p_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_aa_zl", 2009, irp6p_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_aa_zr", 2009, irp6p_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_aa_oxl", 2009, irp6p_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_aa_oxr", 2009, irp6p_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_aa_oyl", 2009, irp6p_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_aa_oyr", 2009, irp6p_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_aa_ozl", 2009, irp6p_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_aa_ozr", 2009, irp6p_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_aa_l", 2009, irp6p_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_irp6p_xyz_aa_r", 2009, irp6p_xyz_aa_relative_motion, 0, 0, 0, 0, },
+	{ 0 }
+	};
+
 static const ApEventLink_t AbLinks_file_menu[] = {
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_file_quit", 2009, quit, 0, 0, 0, 0, },
 	{ 0 }

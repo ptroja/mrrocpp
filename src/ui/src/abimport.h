@@ -50,7 +50,10 @@ extern ApWindowLink_t wnd_irp6_mechatronika_xyz_euler_zyz;
 extern ApWindowLink_t wnd_irp6_mechatronika_xyz_euler_zyz_ts;
 extern ApWindowLink_t wndFileLocation;
 extern ApWindowLink_t file_selection_window;
-extern ApWidget_t AbWidgets[ 917 ];
+extern ApWindowLink_t wnd_irp6_on_track_xyz_angle_axis_relative;
+extern ApWindowLink_t wnd_irp6_postument_xyz_angle_axis_relative;
+extern ApWindowLink_t wnd_irp6_postument_xyz_angle_axis_relative0;
+extern ApWidget_t AbWidgets[ 983 ];
 
 extern ApMenuLink_t file_menu;
 extern ApMenuLink_t task_menu;
@@ -349,4 +352,8 @@ int unload_all( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int close_task_config_window( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int start_wnd_irp6_on_track_xyz_aa_relative( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int start_wnd_irp6_postument_xyz_aa_relative( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int clear_wnd_irp6ot_xyz_aa_relative_flag( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int clear_wnd_irp6p_xyz_aa_relative_flag( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int irp6ot_xyz_aa_relative_motion( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int irp6p_xyz_aa_relative_motion( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 #endif
