@@ -74,8 +74,8 @@ bool effector::initialize_communication()
 		char full_path_to_hardware_busy_attach_point[100];
 		name_attach_t *tmp_attach;
 
-		hardware_busy_attach_point
-				= config.return_string_value("hardware_busy_attach_point").c_str();
+		std::string hbap = config.return_string_value("hardware_busy_attach_point");
+		hardware_busy_attach_point = hbap.c_str();
 		sprintf(full_path_to_hardware_busy_attach_point, "/dev/name/global/%s", hardware_busy_attach_point);
 
 		// sprawdzenie czy nie jakis proces EDP nie zajmuje juz sprzetu
@@ -90,7 +90,7 @@ bool effector::initialize_communication()
 
 		if (tmp_attach == NULL) {
 			msg->message(lib::SYSTEM_ERROR, errno, "EDP: hardware_busy_attach_point failed to attach");
-			fprintf( stderr, "hardware_busy_attach_point name_attach() failed: %s\n", strerror( errno ));
+			fprintf( stderr, "hardware_busy_attach_point name_attach() to %s failed: %s\n", hardware_busy_attach_point, strerror( errno ));
 
 			return false;
 		}
