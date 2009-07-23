@@ -1,6 +1,6 @@
-// ecp_t_visioncoordinates.h - definicja zadania podazania w strone zidentyfikowanego obiektu na ekranie
-// (c)2009 Maciej Jerzy Nowak
-// Created: 20.02.2009  Last Update: 20.02.2009
+/// \file ecp_t_visioncoordinates.h 
+/// \brief definicja zadania podazania w strone zidentyfikowanego obiektu na ekranie
+/// \author 2009 Maciej Jerzy Nowak
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -17,33 +17,34 @@ namespace ecp {
 namespace common {
 namespace task {
 
-// class ecp_task_visioncoordinates : public common::task::task
-// - zadanie kierowania ramieniem robota w strone zidentyfikowanego obiektu na ekranie
-class visioncoordinates : public common::task::task  
-{
-public:
-	visioncoordinates(lib::configurator& _config);
+	/// zadanie kierowania ramieniem robota w strone zidentyfikowanego obiektu na ekranie
+	class visioncoordinates : public common::task::task  
+	{
+	public:
+		visioncoordinates(lib::configurator& _config);
+		
+		/// Initialize task - robot, sensors and generators.
+		void task_initialization();
 
-	// void task_initialization()
-	// - Initialize task - robot, sensors and generators.
-	void task_initialization();
+		///  Main algorithm loop.
+		void main_task_algorithm();
+		
 
-	// void main_task_algorithm()
-	// -  Main algorithm loop.
-	void main_task_algorithm();
+	private:
+		/// ustawia poczatkowa pozycje (z kamera powyzje ramienia robota n`a podstawie pozycji zadanej w pliku konfiguracyjnym
 	
+		void setStartPosition();
 
-private:
-	// void setStartPosition()
-	// ustawia poczatkowa pozycje (z kamera powyzje ramienia robota)
-	// na podstawie pozycji zadanej w pliku konfiguracyjnym
-	void setStartPosition();
-
-	generator::visioncoordinates* itsVisionGen;
-	generator::smooth* itsSmoothGen;
-
-	// nazwa sekcji zawierajacej ustawienia dla zadania
-	const char* SETTINGS_SECTION_NAME;
+	
+			
+		generator::visioncoordinates* itsVisionGen;	///< czujnik wizji
+		generator::smooth* itsSmoothGen;			///< generator ruchu
+	
+	
+		/// nazwa sekcji zawierajacej ustawienia dla zadania
+	
+		const char* SETTINGS_SECTION_NAME;
+	
 };
 
 } // namespace task

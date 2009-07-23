@@ -1,12 +1,11 @@
-// ecp_t_visioncoordinates.cc - definiuje zadanie podazania chwytaka (kamery) robota w strone obiektu
-//    zlokalizowanego na ekranie
-// (c)2009 Maciej Jerzy Nowak
-// Created: 20.02.2009  Last Update: 20.02.2009
+/// \file ecp_t_visioncoordinates.cc
+/// \brief definiuje zadanie podazania chwytaka (kamery) robota w strone obiektu zlokalizowanego na ekranie
+/// \author Maciej Jerzy Nowak
+/// \date 2009.07.22
 ///////////////////////////////////////////////////////////////////////////////
 
-//#include <stdio.h>
 #include <string.h>
-//#include <unistd.h>
+#include <unistd.h>
 #include <sstream>
 
 #include "lib/typedefs.h"
@@ -51,6 +50,7 @@ void visioncoordinates::task_initialization()
     }
 
 	// i powiazane z nim generatory - czucia wizji i ruchu :)
+	
 	itsVisionGen = new generator::visioncoordinates(*this);
 	itsSmoothGen = new generator::smooth(*this, true, false); // synchronized, debug
 }
@@ -59,9 +59,47 @@ void visioncoordinates::main_task_algorithm()
 {
 	debugmsg("main_task_alogrithm");
 
-	setStartPosition();
+	double bf[8];			// bufor na wspolrzedne prezkazywane do generatora smooth
 
-	double bf[8];			// bufor na wspolrzedne prezkazywane do generatora smooth
+	while (true)
+	{
+		// narazie testowo - wybór opcji "czego poszukujemy" - w programie.
+		if (choose_option("Wybierz rodzaj wyszukiwanego obiektu:\n1 - wybrany w FraDIA\n0 - przerwij", 2) == 0)
+			return;
+
+		// aktualnie opieramy sie na wyborze poszukiwanego obiektu w ramach FraDIA (tam wybieramy obiekt z listy)
+		setStartPosition();
+
+	
+		itsVisionGen->Move();		// wykonujemy ruch, polegajacy na rozpoznaniu okolicy :)
+		
+		bool found = false;
+		while (itsVisionGen->getCoordinates(bf))
+		{
+			// --- po pobraniu wspó³rzêdnych wykonujemy ruch ---
+			itsSmoothGen->load_coordinates(lib::XYZ_EULER_ZYZ, bf[0], bf[1], bf[2], bf[3], bf[4], bf[5], bf[6], bf[7]);
+			itsSmoothGen->Move();
+			itsSmoothGen->reset();
+
+			// --- czekamy a¿ chwytak siê ustabilizuje ---
+			sleep(1);
+
+			// --- sprawdzamy, czy widzimy dany obiekt ---
+			if (itsVisionGen->test())
+			{
+				found = true;
+				break;		// obiekt zostal znaleziony, nie szukamy nastepnych obiektow
+			}
+		}
+
+		if (found)	
+			show_message("Znaleziono poszukiwany obiekt!\nZnajduje siê na wprost chwytaka robota.");
+		else
+			show_message("Poszukiwanego obiektu NIE znaleziono :-(");
+	}
+
+/*	double bf[8];			// bufor na wspolrzedne prezkazywane do generatora smooth
+	
 	int loop = 5;
 	while (loop--)
 	{
@@ -75,31 +113,43 @@ void visioncoordinates::main_task_algorithm()
 		itsSmoothGen->Move();
 		debugmsg("itsShoothGen->reset()");
 		itsSmoothGen->reset();
-	}
+	
+	}*/
 }
 
 void visioncoordinates::setStartPosition()
+
 {
+	
 	debugmsg("setStartPosition()");
+
 	double bf[MAX_SERVOS_NR]; 
+	
 	memset(bf, 0, sizeof(bf));
+	
 	std::string position = config.return_string_value("start_joint_position", SETTINGS_SECTION_NAME);
 
+	
 	std::istringstream iss(position.c_str());
 	iss >> bf[0] >> bf[1] >> bf[2] >> bf[3] >> bf[4] >> bf[5] >> bf[6]; 
 
+	
 	itsSmoothGen->load_coordinates(lib::JOINT, bf[0], bf[1], bf[2], bf[3], bf[4], bf[5], bf[6], bf[7]);
+
 	itsSmoothGen->Move();
+	
 	itsSmoothGen->reset();
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-// fabryk abstrakcyjna dla zadaï¿½
+// fabryk abstrakcyjna dla zadan
 /////////////////////////////////////////////////////////////////////////////////////////////
 task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new visioncoordinates(_config);
 }
+
 
 #undef debugmsg
 

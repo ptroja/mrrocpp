@@ -192,12 +192,25 @@ typedef struct sensor_image_t
 			float orientation_z;
 		} wiimote;
 
-		//Struktura zawiwarajaca katy pod jakimi widac obiekt na obrazie z kamery
-		struct visioncoordinates_t
+		/// \brief Communication with EdgeShapeAnalyzer (FraDIA)
+		/// \author mnowak
+		union visioncoordinates_union_t
 		{
-			double xOz;	// wzgledem plaszczyzny XOZ
-			double z;	// wzgledem osi Z
-		} visioncoordinates;
+			/// \brief Array of 8 structures, contains coordinates of found 8 best objects (in SEARCH mode) from FraDIA
+			/// \note if we are used less then 8 structures, first unused structure must have distance == 0
+			struct Search
+			{
+				double rot_z;		///< wokol osi Z, wzgledem osi y, w plaszczyznie obrazu (x0y)
+				double rot_dev;	///< miedzy osia Z, a prosta 'kamera-obiekt'
+				double dist;		///< approximate distance to object
+			} search[8];
+
+			/// Structure for response to mrrocpp "is it that object" (is TEST mode) from FraDIA
+			struct Test
+			{
+				bool found;		///< is object found
+			} test;
+		} visioncoordinates_union;
 
 		// struktura z informacja czy znaleziono szachownice
 		struct chessboard_t
@@ -223,6 +236,15 @@ typedef enum
  */
 typedef enum{  WITHOUT_ROTATION, PERFORM_ROTATION } HD_MODE;
 
+/// \brief search or test against choosen object (in FraDIA with EdgeShapeAnalyzer)
+/// \author mnowak
+enum ESA_MODE
+{ 
+	EM_UNKNOWN = 0,		///< unknown, not used
+	EM_SEARCH = 1,		///< search - we get all ROI's with possible interesting objects
+	EM_TEST = 2			///< test - we test object on screen against choosed object from list
+};
+
 // BUFORY KOMUNIKACYJNE
 struct ECP_VSP_MSG
 {
@@ -247,6 +269,14 @@ struct ECP_VSP_MSG
 			short command;
 			double plate_pos[3];
 		} ps_response;
+
+		/// \struct esa
+		/// \brief Structure used for choosing mode for FraDIA with EdgeShapeAnalyzer
+		/// \author mnowak
+		struct
+		{
+			ESA_MODE mode;		///< mode for EdgeShapeAnalyzer
+		} esa;			
 
 		// Tryb HaarDetect
 		HD_MODE haar_detect_mode;

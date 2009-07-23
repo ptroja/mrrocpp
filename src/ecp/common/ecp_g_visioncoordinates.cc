@@ -35,8 +35,11 @@ visioncoordinates::visioncoordinates(common::task::task& _ecp_task)
 : generator(_ecp_task), SETTINGS_SECTION_NAME("[ecp_visioncoordinates_generator]")
 {
 	debugmsg("VCG: Creating virtual sensor to communicate with FraDIA");
-	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, SETTINGS_SECTION_NAME, ecp_t, sizeof(lib::sensor_image_t::sensor_union_t::visioncoordinates_t));
+	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, SETTINGS_SECTION_NAME, ecp_t, sizeof(lib::sensor_image_t::sensor_union_t::visioncoordinates_union_t));
 	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
+
+	sensor_in = &sensor_m[lib::SENSOR_CVFRADIA]->image;
+	sensor_out = &sensor_m[lib::SENSOR_CVFRADIA]->to_vsp;
 
 	debugmsg("VCG: Sensor configured");
 
@@ -44,12 +47,13 @@ visioncoordinates::visioncoordinates(common::task::task& _ecp_task)
 
 bool visioncoordinates::first_step()
 {
-	// przygotowywujemy sie do pobrania danych z robota
+	// przygotowywujemy sie do pobrania polozenia robota
 	debugmsg("VCG: first_step()");
 
 	if (!the_robot)
 		debugmsg("VCG: the robot not exists");
 
+	// --- przygotowywujemy sie do pobrania polozenia robota w ramach Move() -> execute_motion() ---
 	ecp_mp::robot_transmission_data& data = the_robot->EDP_data;
 
 	debugmsg("VCG: robot_transmission_data ready");
@@ -58,12 +62,14 @@ bool visioncoordinates::first_step()
 
 	debugmsg("VCG: setting instruction type GET done");
 	data.get_type = ARM_DV;
-	data.get_arm_type = lib::XYZ_ANGLE_AXIS;	// XYZ_EULER_ZYZ;
+	data.get_arm_type = lib::XYZ_ANGLE_AXIS;
 	data.motion_type = lib::ABSOLUTE;
 	data.next_interpolation_type = lib::MIM;
 
-	debugmsg("VCG: Ready to get data");
+	// FraDIA ma znaleŸæ wszystkie obiekty, nawet trochê podobne do poszukiwanego
+	sensor_out->esa.mode = lib::EM_SEARCH;
 
+	debugmsg("VCG: Ready to get data");
 	return true;
 }
 
@@ -101,12 +107,78 @@ void describe_matrix(lib::Homog_matrix& matrix, const char* name)
 	debugmsg(oss.str().c_str());
 }
 
+lib::Homog_matrix visioncoordinates::calculateMove(double rot_z, double rot_dev, double distance)
+{
+	// nie wiem jak narazie policzyc dystans, o ktory sie powinnismy przesunac. dystanss powinien byc niewielki, 
+	// najlepiej ograniczony z gory, by nie narobic szkody robotem np. wbijajac sie w stol gdy zobaczymy plamke,
+	// zinterpretowana jako widziany z daleka sztuciec. Jesli za bardzo sie przysuniemy do sztucca, to tez nie zobaczymy
+	// go w calosci. Otrzymany dystans powinien byc wiec dystansem o ktory mamy sie przyblizyc, np. poprzez
+	// skalowanie ROI tak, by miescil sie na 2/3 ekranu (jego najszersza przekatna wzgledem wysokosci obrazu otrzymanego z kamery)
+	// etc - tylko ze to sie powinno dziac ze stronie fradii, tutaj powinno byc tylko ograniczenie na max. wysiegnik
+
+	const double MAX_DISTANCE = 0.5; // [m]
+	if (distance > MAX_DISTANCE)
+		distance = MAX_DISTANCE;
+
+	lib::Homog_matrix move_z(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, 0.0, 0.0, 0.0,				0.0, 0.0, rot_z);
+	lib::Homog_matrix move_y(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, 0.0, 0.0, 0.0,				0.0, 0.0, rot_dev);
+	lib::Homog_matrix move_dist(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, 0.0, 0.0, distance,		0.0, 0.0, 0.0);
+	
+	lib::Homog_matrix move_back_z(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, 0.0, 0.0, 0.0,		0.0, 0.0, -rot_z);			// narazie przywracamy istniejacy kierunek
+
+	return move_z * move_y * move_dist * move_back_z;
+}
+
 bool visioncoordinates::next_step()
 {
+	typedef lib::sensor_image_t::sensor_union_t::visioncoordinates_union_t::Search Search;
+
 	debugmsg("VCG: Processing data");
 
-	lib::SENSOR_IMAGE& sensor = sensor_m[lib::SENSOR_CVFRADIA]->image;
-	const double xoz = sensor.sensor_union.visioncoordinates.xOz;
+	ecp_mp::robot_transmission_data& data = the_robot->EDP_data;
+
+	// current_XYZ_AA_arm_coordinates zawiera 6 elementow, chwytak (gripper) jest osobno
+	lib::Homog_matrix current_position(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, data.current_XYZ_AA_arm_coordinates); // aktualna pozycja ramienia robota
+
+	for (int it = 0; it < sizeof(sensor_in->sensor_union.visioncoordinates_union.search) / sizeof(sensor_in->sensor_union.visioncoordinates_union.search[0]); ++it)
+	{
+		Search* search = &(sensor_in->sensor_union.visioncoordinates_union.search[it]);
+		lib::Homog_matrix move = calculateMove(search->rot_z, search->rot_dev, search->dist);
+		lib::Homog_matrix target = current_position * move;
+
+		EulerCoordinates ec;
+		target.get_xyz_euler_zyz(ec.bf);
+		ec.bf[6] = data.current_gripper_coordinate;
+		itsCoordinates.push_back(ec);
+	}
+
+	return false;			// koniec pracy generatora, teraz zadanie powinno wywolac generator smooth
+}
+
+bool visioncoordinates::getCoordinates(double output[8])
+{
+	if (itsCoordinates.size() == 0)			// nie ma wiecej elementow do sprawdzenia
+		return false;
+
+	itsCoordinates.front().to(output);	// jest jeszcze cos do sprawdzenia - kopiujemy
+	itsCoordinates.pop_front();			// i bysmy ponownie nie uzywali tych wspolrzednych
+
+	return true;			// przekazane wspolrzedne moga zostac sprawdzone
+}
+
+bool visioncoordinates::test()
+{
+	typedef lib::sensor_image_t::sensor_union_t::visioncoordinates_union_t::Test Test;
+
+	sensor_out->esa.mode = lib::EM_TEST;
+	sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+	Test* ret = &(sensor_in->sensor_union.visioncoordinates_union.test);
+	return ret->found;
+}
+
+/*
+
+	const double xoz = sensor_in->sensor_union.visioncoordinates.xOz;
 	const double z = sensor.sensor_union.visioncoordinates.z;
 
 	ecp_mp::robot_transmission_data& data = the_robot->EDP_data;
@@ -148,7 +220,7 @@ bool visioncoordinates::next_step()
 			(mode == 4) ? xoz : 0.0,
 			(mode == 5) ? xoz : 0.0);
 	//		*/
-
+/*
 	describe_matrix(current_position, "current_position");
 	describe_matrix(move, "move");
 
@@ -184,9 +256,10 @@ bool visioncoordinates::next_step()
 	debugmsg(oss4.str().c_str());
 
 	debugmsg("VCG: Data processed");
-
-	return false;		// koniec pracy generatora, teraz zadanie powinno wywolac generator smooth
-}
+	
+	
+	return false;		// koniec pracy generatora, teraz zadanie powinno wywolac generator smooth	
+}*/
 
 #undef debugmsg
 
