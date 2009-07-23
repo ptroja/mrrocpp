@@ -447,7 +447,7 @@ void irp6s_and_conv_effector::synchronise ()
 // Synchronizacja robota.
 void irp6s_and_conv_effector::common_synchronise ()
 {
-
+	flushall();
     /* Uformowanie rozkazu synchronizacji dla procesu SERVO_GROUP */
     servo_command.instruction_code = lib::SYNCHRONISE;
     /* Wyslanie rozkazu synchronizacji do realizacji procesowi SERVO_GROUP */
@@ -905,9 +905,7 @@ void irp6s_and_conv_effector::update_servo_current_motor_pos_abs(double abs_moto
 
 
 
-
-//   sprawdza stan robota
-void irp6s_and_conv_effector::get_controller_state(lib::c_buffer &instruction)
+void irp6s_and_conv_effector::common_get_controller_state(lib::c_buffer &instruction)
 {
     synchronised = reply.controller_state.is_synchronised = controller_state_edp_buf.is_synchronised;
     reply.controller_state.is_power_on = controller_state_edp_buf.is_power_on;
@@ -927,6 +925,8 @@ void irp6s_and_conv_effector::get_controller_state(lib::c_buffer &instruction)
     // dla pierwszego wypelnienia current_joints
     get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
+
+
     // Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
     for( int i = 0; i < number_of_servos; i++)
     {
@@ -934,6 +934,14 @@ void irp6s_and_conv_effector::get_controller_state(lib::c_buffer &instruction)
                                          desired_motor_pos_old[i] = current_motor_pos[i];
         desired_joints_tmp[i] = desired_joints[i] = current_joints[i];
     }
+}
+
+
+
+//   sprawdza stan robota
+void irp6s_and_conv_effector::get_controller_state(lib::c_buffer &instruction)
+{
+	common_get_controller_state(instruction);
 }
 
 

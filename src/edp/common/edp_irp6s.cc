@@ -763,11 +763,21 @@ void irp6s_effector::master_joints_and_frame_download (void)
 void irp6s_effector::synchronise ()
 {
 
-	irp6s_and_conv_effector::common_synchronise();
-   	get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
-
-
+	common_synchronise();
+	get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
 }
+
+//   sprawdza stan robota
+void irp6s_effector::get_controller_state(lib::c_buffer &instruction)
+{
+	common_get_controller_state(instruction);
+    if (is_synchronised())
+                  {
+   	get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
+                  }
+}
+
+
 
 
 

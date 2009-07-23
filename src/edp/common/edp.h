@@ -179,6 +179,7 @@ protected:
     void move_servos ();
 
     void common_synchronise();
+    void common_get_controller_state(lib::c_buffer &instruction); // by Y
 
     // Wyslanie polecenia ruchu do SERVO_GROUP oraz odebranie wyniku
     // realizacji pierwszej fazy ruchu
@@ -305,7 +306,7 @@ public:
     // odczytanie numerow algorytmow i numerow zestawow ich parametrow
     void get_algorithms ();
 
-    void get_controller_state(lib::c_buffer &instruction); // by Y
+    virtual void get_controller_state(lib::c_buffer &instruction); // by Y
 
     bool is_power_on() const;
 
@@ -470,6 +471,7 @@ public:
     irp6s_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name );       // konstruktor
 
     void synchronise (); // synchronizacja robota
+    void get_controller_state (lib::c_buffer &instruction); // synchronizacja robota
 
     // wyznaczenie polozenia lokalnego i globalnego transformera
     // przepisanie lokalnego zestawu lokalnego edp_servo na globalny (chronione mutexem)
