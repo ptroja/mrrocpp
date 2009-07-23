@@ -439,6 +439,15 @@ void irp6s_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
 void irp6s_and_conv_effector::synchronise ()
 {
 
+	common_synchronise ();
+
+}
+
+
+// Synchronizacja robota.
+void irp6s_and_conv_effector::common_synchronise ()
+{
+
     /* Uformowanie rozkazu synchronizacji dla procesu SERVO_GROUP */
     servo_command.instruction_code = lib::SYNCHRONISE;
     /* Wyslanie rozkazu synchronizacji do realizacji procesowi SERVO_GROUP */
@@ -454,8 +463,9 @@ void irp6s_and_conv_effector::synchronise ()
 
     send_to_SERVO_GROUP ();
 
-    // dla pierwszego wypelnienia current_joints
+    // dla pierwszego wypelnienia current_joints i current_end_effector_frame
     get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+
 
     // Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
     for( int i = 0; i < number_of_servos; i++)
@@ -466,7 +476,6 @@ void irp6s_and_conv_effector::synchronise ()
     }
 
 }
-
 
 
 

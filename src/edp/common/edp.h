@@ -178,6 +178,8 @@ protected:
 
     void move_servos ();
 
+    void common_synchronise();
+
     // Wyslanie polecenia ruchu do SERVO_GROUP oraz odebranie wyniku
     // realizacji pierwszej fazy ruchu
 
@@ -288,7 +290,7 @@ public:
 
     virtual void get_arm_position (bool read_hardware, lib::c_buffer &instruction) = 0; // odczytanie pozycji ramienia
 
-    void synchronise (); // synchronizacja robota
+    virtual void synchronise (); // synchronizacja robota
     virtual void servo_joints_and_frame_actualization_and_upload(void) = 0; // by Y
 
     void main_loop(); // main loop
@@ -298,7 +300,7 @@ public:
     void interpret_instruction (lib::c_buffer &instruction);
     // interpretuje otrzymana z ECP instrukcje;
     // wypelnaia struktury danych TRANSFORMATORa;
-    // przygotowuje odpowied� dla ECP
+    // przygotowuje odpowied��� dla ECP
 
     // odczytanie numerow algorytmow i numerow zestawow ich parametrow
     void get_algorithms ();
@@ -340,6 +342,7 @@ protected:
 
     void compute_frame (const lib::c_buffer &instruction);             // obliczenia dla ruchu ramienia (koncowka: FRAME)
 
+    void set_tool_frame_in_kinematic_model(const lib::Homog_matrix& hm);
 
     // lib::r_buffer
 
@@ -465,6 +468,8 @@ protected:
 
 public:
     irp6s_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name );       // konstruktor
+
+    void synchronise (); // synchronizacja robota
 
     // wyznaczenie polozenia lokalnego i globalnego transformera
     // przepisanie lokalnego zestawu lokalnego edp_servo na globalny (chronione mutexem)

@@ -372,10 +372,7 @@ void irp6s_effector::tool_xyz_eul_zyz_2_frame (lib::c_buffer &instruction)
 
     lib::Homog_matrix A_B_T (lib::Homog_matrix::MTR_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
     // Sprawdzenie, czy macierz jest jednorodna.
-    if (!(A_B_T.is_valid()))
-        throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
-    // Ustawienie macierzy reprezentujacej narzedzie.
-    get_current_kinematic_model()->tool = A_B_T;
+    set_tool_frame_in_kinematic_model(A_B_T);
 
 }
 /*--------------------------------------------------------------------------*/
@@ -394,10 +391,7 @@ void irp6s_effector::tool_frame_2_frame (lib::c_buffer &instruction)
         // Przyslano dane dotyczace narzedzia i koncowki.
         lib::Homog_matrix A_B_T (instruction.rmodel.tool_frame_def.tool_frame);
         // Sprawdzenie poprawnosci macierzy
-        if (!(A_B_T.is_valid()))
-            throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
-        // Przepisanie do kinematyki.
-        get_current_kinematic_model()->tool = A_B_T;
+        set_tool_frame_in_kinematic_model(A_B_T);
     }
 }
 /*--------------------------------------------------------------------------*/
@@ -574,6 +568,24 @@ void irp6s_effector::arm_frame_2_xyz_aa (void)
 }
 /*--------------------------------------------------------------------------*/
 
+void irp6s_effector::set_tool_frame_in_kinematic_model (const lib::Homog_matrix& hm)
+{
+
+	 if (!(hm.is_valid()))
+	 {
+	            throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
+	 }
+	  // Ustawienie macierzy reprezentujacej narzedzie.
+	 get_current_kinematic_model()->tool = hm;
+	 // odswierzanie
+	 get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+	 	get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
+
+}
+
+
+
+
 
 /*--------------------------------------------------------------------------*/
 void irp6s_effector::tool_xyz_aa_2_frame (lib::c_buffer &instruction)
@@ -607,10 +619,7 @@ void irp6s_effector::tool_xyz_aa_2_frame (lib::c_buffer &instruction)
     {
         lib::Homog_matrix A_B_T(x, y, z);
         // Sprawdzenie, czy macierz jest jednorodna.
-        if (!(A_B_T.is_valid()))
-            throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
-        // Ustawienie macierzy reprezentujacej narzedzie.
-        get_current_kinematic_model()->tool = A_B_T;
+        set_tool_frame_in_kinematic_model(A_B_T);
     }
     else
     {
@@ -619,10 +628,7 @@ void irp6s_effector::tool_xyz_aa_2_frame (lib::c_buffer &instruction)
         kz = kz/alfa;
         lib::Homog_matrix A_B_T(kx, ky, kz, alfa, x, y, z);
         // Sprawdzenie, czy macierz jest jednorodna.
-        if (!(A_B_T.is_valid()))
-            throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
-        // Ustawienie macierzy reprezentujacej narzedzie.
-        get_current_kinematic_model()->tool = A_B_T;
+        set_tool_frame_in_kinematic_model(A_B_T);
     }
 }
 /*--------------------------------------------------------------------------*/
@@ -696,7 +702,7 @@ void irp6s_effector::tool_axially_symmetrical_xyz_eul_zy_2_frame (lib::c_buffer 
     }
 
     // Ustawienie macierzy reprezentujacej narzedzie.
-    get_current_kinematic_model()->tool = G_R_T;
+    set_tool_frame_in_kinematic_model(G_R_T);
 
 }
 /*--------------------------------------------------------------------------*/
@@ -751,6 +757,19 @@ void irp6s_effector::master_joints_and_frame_download (void)
 }
 
 /*--------------------------------------------------------------------------*/
+
+
+// Synchronizacja robota.
+void irp6s_effector::synchronise ()
+{
+
+	irp6s_and_conv_effector::common_synchronise();
+   	get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
+
+
+}
+
+
 
 } // namespace common
 } // namespace edp
