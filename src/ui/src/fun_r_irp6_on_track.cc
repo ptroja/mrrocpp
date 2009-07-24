@@ -923,13 +923,13 @@ irp6ot_move_to_preset_position( PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 			 irp6ot_desired_pos[i] = ui_state.irp6_on_track.edp.preset_position[2][i];
 		}
 	} else  if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6_on_track_preset_position_front)||
-			(ApName(ApWidget(cbinfo)) == ABN_mm_all_robots_preset_position_front))||
-			((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x66 ))
-			)&&(ui_state.irp6_on_track.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-			for(int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++) {
-				 irp6ot_desired_pos[i] = ui_state.irp6_on_track.edp.front_position[i];
-			}
+		(ApName(ApWidget(cbinfo)) == ABN_mm_all_robots_preset_position_front))||
+		((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x66 ))
+		)&&(ui_state.irp6_on_track.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
+		for(int i = 0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++) {
+			 irp6ot_desired_pos[i] = ui_state.irp6_on_track.edp.front_position[i];
 		}
+	}
 
 	ui_robot.irp6_on_track->move_motors(irp6ot_desired_pos);
 
