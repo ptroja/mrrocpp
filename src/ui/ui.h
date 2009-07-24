@@ -112,6 +112,7 @@ typedef struct {
 	std::string preset_sound_1;
 	std::string preset_sound_2;
 	double preset_position[3][MAX_SERVOS_NR]; // pozycje zapisane w konfiguracji
+	double front_position[MAX_SERVOS_NR];
 } edp_state_def;
 
 typedef struct {

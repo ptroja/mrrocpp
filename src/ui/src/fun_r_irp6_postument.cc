@@ -830,6 +830,13 @@ irp6p_move_to_preset_position( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 		for(int i = 0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++) {
 			 irp6p_desired_pos[i] = ui_state.irp6_postument.edp.preset_position[2][i];
 		}
+	} else  if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6_postument_preset_position_front)||
+		(ApName(ApWidget(cbinfo)) == ABN_mm_all_robots_preset_position_front))||
+		((cbinfo->event->type==Ph_EV_KEY)&&(my_data->key_cap== 0x66 ))
+		)&&(ui_state.irp6_postument.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
+		for(int i = 0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++) {
+			 irp6p_desired_pos[i] = ui_state.irp6_postument.edp.front_position[i];
+		}
 	}
 
 	ui_robot.irp6_postument->move_motors(irp6p_desired_pos);
@@ -2546,10 +2553,15 @@ reload_irp6p_configuration()
 				ui_state.irp6_postument.edp.reader_fd = -1;
 				ui_state.irp6_postument.edp.state = 0;
 
-				for (int i=0; i<3; i++)
+				for (int i=0; i<4; i++)
 				{
 					char tmp_string[50];
-					sprintf(tmp_string, "preset_position_%d", i);
+					if (i<3)
+					{
+						sprintf(tmp_string, "preset_position_%d", i);
+					} else {
+						sprintf(tmp_string, "front_position", i);
+					}
 
 					if (config->exists(tmp_string, ui_state.irp6_postument.edp.section_name))
 					{
@@ -2557,15 +2569,26 @@ reload_irp6p_configuration()
 
 						tmp1 = tmp = strdup(config->return_string_value(tmp_string, ui_state.irp6_postument.edp.section_name).c_str());
 						char* toDel = tmp;
-						 for (int j=0; j<8; j++)
+						 for (int j=0; j<IRP6_POSTUMENT_NUM_OF_SERVOS; j++)
 						{
-							ui_state.irp6_postument.edp.preset_position[i][j] = strtod( tmp1, &tmp1 );
+							 if (i<3)
+							{
+								ui_state.irp6_postument.edp.preset_position[i][j] = strtod( tmp1, &tmp1 );
+							} else {
+								ui_state.irp6_postument.edp.front_position[j] = strtod( tmp1, &tmp1 );
+							}
 						}
 						free(toDel);
 					} else {
-						 for (int j=0; j<7; j++)
+						 for (int j=0; j<IRP6_POSTUMENT_NUM_OF_SERVOS; j++)
 						{
-							ui_state.irp6_postument.edp.preset_position[i][j] = 0.0;
+							if (i<3)
+							{
+								ui_state.irp6_postument.edp.preset_position[i][j] = 0.0;
+							} else {
+								ui_state.irp6_postument.edp.front_position[j] = 0.0;
+								printf("nie zdefiniowano irp6p front_postion w common.ini\n");
+							}
 						}
 					}
 				}
