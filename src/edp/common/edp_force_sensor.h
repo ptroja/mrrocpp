@@ -18,11 +18,6 @@ namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
     /********** klasa czujnikow po stronie EDP **************/
     class force : public lib::sensor
     {
@@ -67,10 +62,6 @@ extern "C"
     // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
     force* return_created_edp_force_sensor (common::irp6s_postument_track_effector &_master);
 
-
-#ifdef __cplusplus
-};
-#endif
 
 } // namespace sensor
 } // namespace edp
