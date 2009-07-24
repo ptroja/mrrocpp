@@ -14,6 +14,7 @@
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
 
+#include <kiper/clients/AsioUdpClient.hpp>
 #include <kiper/clients/RawEthernetClient.hpp>
 
 #include "edp/common/edp_irp6s_postument_track.h"

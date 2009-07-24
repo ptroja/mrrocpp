@@ -24,6 +24,7 @@
 #include <boost/bind.hpp>
 #include <boost/cstdint.hpp>
 
+#include <kiper/Log.hpp>
 #include <kiper/FunctorCallback.hpp>
 #include <kiper/RpcClient.hpp>
 #include <kiper/ClientRpcController.hpp>
@@ -56,8 +57,7 @@ ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
   getForceReadingClosure_(NewPermanentFunctorCallback(boost::bind(&ATI3084_force::handleGetGenForceReading, this,
   boost::ref(getForceReadingController)))),
   FORCE_TEST_MODE(true) {
-
-	//getForceReadingController.setTimeout(boost::posix_time::milliseconds(1));
+	getForceReadingController.setTimeout(boost::posix_time::milliseconds(1));
 	sendBiasController.setTimeout(boost::posix_time::milliseconds(1));
     std::cout << "ATI3084MS -> Start!" << std::endl;
 	if (FORCE_TEST_MODE) {
@@ -72,9 +72,6 @@ ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
 
 ATI3084_force::~ATI3084_force(void)
 {
-	if (FORCE_TEST_MODE) {
-		close(uart);
-	}
 	if (gravity_transformation) {
 		delete gravity_transformation;
 	}
@@ -146,15 +143,10 @@ void ATI3084_force::configure_sensor(void)
 
 void ATI3084_force::wait_for_event() {
 	static unsigned int recvd = 0;
+	usleep(300);
 	if (FORCE_TEST_MODE) {
 		ftxyz=getFT(uart);
 		++recvd;
-		if (recvd % 100 == 0) {
-			std::cout << "Recvd 100 readings" << std::endl;
-			std::cout << "Ft = " << ftxyz.ft[0] << " " <<  ftxyz.ft[1] << " "
-			  << ftxyz.ft[2] << " " << ftxyz.ft[3] << " " << ftxyz.ft[4] << " "
-			  << ftxyz.ft[5] << std::endl;
-		}
 	} else {
 		usleep(1000);
 	}
@@ -295,21 +287,22 @@ void ATI3084_force::handleSendBiasReply(ClientRpcController& controller) {
 		std::cout << "Reason : " << controller.errorCode() << ", " <<
 		  controller.errorMessage() << std::endl;
 	} else {
-		// Success, do nothing
 	}
 }
 
 void ATI3084_force::handleGetGenForceReading(ClientRpcController& controller) {
-	std::cout << "handleGetGenForceReading" << std::endl;
+	static int iter = 0;
 	if (controller.expired()) {
-		std::cout << "Timeout: getGenForceReading()" << std::endl;
+		//std::cout << "Timeout: getGenForceReading()" << std::endl;
 	} else if (controller.failed()) {
 		std::cout << "Failed: getGenForceReading()" << std::endl;
 		std::cout << "Reason : " << controller.errorCode() << ", " <<
 		  controller.errorMessage() << std::endl;
 	} else {
-		std::cout << "Success: getGetForceReading" << std::endl;
-		// Success, do nothing
+		++iter;
+		if (iter % 1000 == 0) {
+
+		}
 	}
 }
 
