@@ -21,7 +21,6 @@ namespace common {
  ------------------------------------------------------------------------ */
 model::model(void)
 {
-    kinematic_model_label = NULL;
     // Flaga - czy przeliczac do globalnego ukladu odniesienia.
     global_frame_computations = false;
     // Flaga - czy wykonywac przeliczenia zwiazane z narzedziami.
@@ -228,9 +227,9 @@ void model::e2i_transform(double* local_desired_joints, double* local_current_jo
 /* ------------------------------------------------------------------------
   Zwraca etykiete modelu kinematycznego.
  ------------------------------------------------------------------------ */
-char* model::get_kinematic_model_label(void)
+const char* model::get_kinematic_model_label(void)
 {
-    return kinematic_model_label;
+    return kinematic_model_label.c_str();
 }
 
 /* ------------------------------------------------------------------------
@@ -238,10 +237,7 @@ char* model::get_kinematic_model_label(void)
  ------------------------------------------------------------------------ */
 void model::set_kinematic_model_label(const char * _label)
 {
-    if (kinematic_model_label != NULL)
-        delete(kinematic_model_label);
-    kinematic_model_label = new char[strlen(_label)];
-    kinematic_model_label = strcpy(kinematic_model_label, _label);
+	kinematic_model_label = std::string(_label);
 }
 
 } // namespace common

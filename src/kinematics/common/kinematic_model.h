@@ -7,7 +7,7 @@
  *
  *						<szczegolowy opis>.
  *	\bug			Na razie nie stwierdzono.
- *	\warning	Na razie nie stwierdzono.			
+ *	\warning	Na razie nie stwierdzono.
  *\endpolish
  *
  *\english
@@ -25,8 +25,10 @@
  */////////////////////////////////////////////////////////////////////////////////////
 // *INDENT-ON*
 
-#if !defined(__EDP_KIN_MODEL)  
+#if !defined(__EDP_KIN_MODEL)
 #define __EDP_KIN_MODEL
+
+#include <string>
 
 // Klasa lib::Homog_matrix.
 #include "lib/mathtr.h"
@@ -41,7 +43,7 @@ class model
 {
 protected:
   // Etykieta kinematyki.
-  char* kinematic_model_label;
+  std::string kinematic_model_label;
 
   // Ustawienie parametrow kinematycznych.
   virtual void set_kinematic_parameters(void) = 0;
@@ -77,9 +79,9 @@ public:
 
   // Konstruktor.
   model(void);
-  
+
   // Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne.
-  virtual void mp2i_transform(const double* local_current_motor_pos, double* local_current_joints) = 0; 
+  virtual void mp2i_transform(const double* local_current_motor_pos, double* local_current_joints) = 0;
 
   // Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow.
   virtual void i2mp_transform(double* local_desired_motor_pos_new, double* local_desired_joints) = 0;
@@ -110,19 +112,19 @@ public:
 
   // Rozwiazanie prostego zagadnienia kinematyki.
   virtual void direct_kinematics_transform(const double* local_current_joints, lib::frame_tab* local_current_end_effector_frame) = 0;
-  
+
   // Rozwiazanie odwrotnego zagadnienia kinematyki.
   virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame) = 0;
 
   // Zwraca etykiete modelu kinematycznego.
-  virtual char* get_kinematic_model_label(void);
+  virtual const char* get_kinematic_model_label(void);
   // Ustawia pokazywana etykiete modelu kinematycznego.
   virtual void set_kinematic_model_label(const char*);
-  
+
 };//: kinematic_model
 
 } // namespace common
 } // namespace kinematic
 } // namespace mrrocpp
 
-#endif					   
+#endif
