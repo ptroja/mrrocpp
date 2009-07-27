@@ -42,6 +42,9 @@ public:
 	/// @return true - gdy na obrazie zostal zidentyfikowany dany obiekt, inaczej false.
 	bool test();
 
+	/// \brief ustawia nazwe obiektu, ktory bedzie poszukiwany/testowany czy jest, za pomoca VSP FraDIA
+	void searchObject(const std::string& object) { itsSearchObject = object; }
+
 private:
 	/// \brief oblicza macierz ruchu na podstawie danych z obrazu otrzymanego z FraDIA
 	/// @param rot_z - rotacji wokol osi z obrazu, by srodek poszukiwanego obiektu
@@ -78,6 +81,9 @@ private:
 	typedef CoordinatesCache<8> EulerCoordinates;
 
 	std::list<EulerCoordinates> itsCoordinates;	///< lista wspolrzednych, z ktorych maja byc przetestowane obiekty
+
+	/// poszukiwany obiekt (jego nazwa)
+	std::string itsSearchObject;
 };
 
 } // namespace generator

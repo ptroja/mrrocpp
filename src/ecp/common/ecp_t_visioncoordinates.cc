@@ -69,12 +69,24 @@ void visioncoordinates::main_task_algorithm()
 
 	while (true)
 	{
-		// narazie testowo - wybór opcji "czego poszukujemy" - w programie.
-		if (choose_option("Wybierz rodzaj wyszukiwanego obiektu:\n1 - wybrany w FraDIA\n0 - przerwij", 2) == 0)
+		// wybór opcji "czego poszukujemy" - po stronie mrroc++, musza byc znane we fradia
+		int option = choose_option("Wybierz obiekt: 1 - lyzka  2 - widelec  3 - lopatka  4 - nalesnikowa", 4);
+		switch (option)
+		{
+		case lib::OPTION_ONE: itsVisionGen->searchObject("lyzka"); break;
+		case lib::OPTION_TWO: itsVisionGen->searchObject("widelec"); break;
+		case lib::OPTION_THREE: itsVisionGen->searchObject("lopatka"); break;
+		case lib::OPTION_FOUR: itsVisionGen->searchObject("nalesnikowa"); break;
+		default: 
+			setStartPosition();
 			return;
+		}
+		//itsVisionGen->searchObject("lopatka");
+
 
 		// aktualnie opieramy sie na wyborze poszukiwanego obiektu w ramach FraDIA (tam wybieramy obiekt z listy)
 		setStartPosition();
+		sleep(1);
 
 	
 		itsVisionGen->Move();		// wykonujemy ruch, polegajacy na rozpoznaniu okolicy :)
@@ -90,16 +102,17 @@ void visioncoordinates::main_task_algorithm()
 			itsSmoothGen->reset();
 
 			// --- czekamy a¿ chwytak siê ustabilizuje ---
-			debugmsg("wykonano ruch, czekam na stabilizacje ramienia...");
 			sleep(1);
 
 			// --- sprawdzamy, czy widzimy dany obiekt ---
 			debugmsg("test");
-			if (itsVisionGen->test())
+			if (itsVisionGen->test() || // test wykonujemy podwojnie
+				itsVisionGen->test())   // by wyeliminowac ew. zakolcenia
 			{
 				found = true;
 				break;		// obiekt zostal znaleziony, nie szukamy nastepnych obiektow
-			}
+			} 
+
 			debugmsg("niestety to nie jest ten obiekt");
 		}
 

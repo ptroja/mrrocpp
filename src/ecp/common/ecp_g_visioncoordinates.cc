@@ -64,6 +64,7 @@ bool visioncoordinates::first_step()
 
 	// FraDIA ma znaleŸæ wszystkie obiekty, nawet trochê podobne do poszukiwanego
 	sensor_out->esa.mode = lib::EM_SEARCH;
+	strcpy(sensor_out->esa.object, itsSearchObject.c_str());
 
 	debugmsg("ecp_g_visioncoordinates: Ready to get data");
 	return true;
@@ -136,6 +137,7 @@ bool visioncoordinates::next_step()
 	// current_XYZ_AA_arm_coordinates zawiera 6 elementow, chwytak (gripper) jest osobno
 	lib::Homog_matrix current_position(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, data.current_XYZ_AA_arm_coordinates); // aktualna pozycja ramienia robota
 
+	itsCoordinates.clear();
 	for (int it = 0; it < 8 /* sizeof(sensor_in->sensor_union.visioncoordinates_union.search) / sizeof(sensor_in->sensor_union.visioncoordinates_union.search[0])*/ ; ++it)
 	{
 		Search* search = &(sensor_in->sensor_union.visioncoordinates_union.search[it]);
@@ -169,13 +171,13 @@ bool visioncoordinates::test()
 	typedef lib::sensor_image_t::sensor_union_t::visioncoordinates_union_t::Test Test;
 
 	sensor_out->esa.mode = lib::EM_TEST;
+	strcpy(sensor_out->esa.object, itsSearchObject.c_str());
 	sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 	Test* ret = &(sensor_in->sensor_union.visioncoordinates_union.test);
 	return ret->found;
 }
 
 /*
-
 	const double xoz = sensor_in->sensor_union.visioncoordinates.xOz;
 	const double z = sensor.sensor_union.visioncoordinates.z;
 

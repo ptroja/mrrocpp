@@ -276,6 +276,7 @@ struct ECP_VSP_MSG
 		struct
 		{
 			ESA_MODE mode;		///< mode for EdgeShapeAnalyzer
+			char object[32];	///< name of object (must be known 
 		} esa;			
 
 		// Tryb HaarDetect
