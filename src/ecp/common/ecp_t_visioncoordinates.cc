@@ -25,7 +25,7 @@ namespace ecp {
 namespace common {
 namespace task {
 
-#define debugmsg(msg)		sr_ecp_msg->message(msg);
+#define debugmsg(msg)		sr_ecp_msg->message(msg)
 /////////////////////////////////////////////////////////////////////////////////////////////
 // ecp_task_visioncoordinates
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,6 +61,12 @@ void visioncoordinates::main_task_algorithm()
 
 	double bf[8];			// bufor na wspolrzedne prezkazywane do generatora smooth
 
+	// --- sterowania dla generatora smooth, by robot wolniej przyspieszal ---
+	double vp[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	double vk[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	double v[MAX_SERVOS_NR]={0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 5.0};
+	double a[MAX_SERVOS_NR]={0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.5};
+
 	while (true)
 	{
 		// narazie testowo - wybór opcji "czego poszukujemy" - w programie.
@@ -76,26 +82,31 @@ void visioncoordinates::main_task_algorithm()
 		bool found = false;
 		while (itsVisionGen->getCoordinates(bf))
 		{
+			debugmsg("sa nowe wspolrzedne...");
 			// --- po pobraniu wspó³rzêdnych wykonujemy ruch ---
-			itsSmoothGen->load_coordinates(lib::XYZ_EULER_ZYZ, bf[0], bf[1], bf[2], bf[3], bf[4], bf[5], bf[6], bf[7]);
+			//itsSmoothGen->load_coordinates(lib::XYZ_EULER_ZYZ, bf[0], bf[1], bf[2], bf[3], bf[4], bf[5], bf[6], bf[7]);
+			itsSmoothGen->load_coordinates(lib::XYZ_EULER_ZYZ, vp, vp, v, a, bf);
 			itsSmoothGen->Move();
 			itsSmoothGen->reset();
 
 			// --- czekamy a¿ chwytak siê ustabilizuje ---
+			debugmsg("wykonano ruch, czekam na stabilizacje ramienia...");
 			sleep(1);
 
 			// --- sprawdzamy, czy widzimy dany obiekt ---
+			debugmsg("test");
 			if (itsVisionGen->test())
 			{
 				found = true;
 				break;		// obiekt zostal znaleziony, nie szukamy nastepnych obiektow
 			}
+			debugmsg("niestety to nie jest ten obiekt");
 		}
 
 		if (found)	
-			show_message("Znaleziono poszukiwany obiekt!\nZnajduje siê na wprost chwytaka robota.");
+			debugmsg("Znaleziono poszukiwany obiekt!");
 		else
-			show_message("Poszukiwanego obiektu NIE znaleziono :-(");
+			debugmsg("Poszukiwanego obiektu NIE znaleziono :-(");
 	}
 
 /*	double bf[8];			// bufor na wspolrzedne prezkazywane do generatora smooth
@@ -120,11 +131,15 @@ void visioncoordinates::main_task_algorithm()
 void visioncoordinates::setStartPosition()
 
 {
-	
 	debugmsg("setStartPosition()");
 
-	double bf[MAX_SERVOS_NR]; 
+	// --- sterowania dla generatora smooth, by robot wolniej przyspieszal ---
+	double vp[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	double vk[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	double v[MAX_SERVOS_NR]={0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 5.0};
+	double a[MAX_SERVOS_NR]={0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.5};
 	
+	double bf[MAX_SERVOS_NR]; 
 	memset(bf, 0, sizeof(bf));
 	
 	std::string position = config.return_string_value("start_joint_position", SETTINGS_SECTION_NAME);
@@ -134,7 +149,7 @@ void visioncoordinates::setStartPosition()
 	iss >> bf[0] >> bf[1] >> bf[2] >> bf[3] >> bf[4] >> bf[5] >> bf[6]; 
 
 	
-	itsSmoothGen->load_coordinates(lib::JOINT, bf[0], bf[1], bf[2], bf[3], bf[4], bf[5], bf[6], bf[7]);
+	itsSmoothGen->load_coordinates(lib::JOINT, vp, vk, v, a, bf);
 
 	itsSmoothGen->Move();
 	

@@ -34,33 +34,29 @@ namespace generator {
 visioncoordinates::visioncoordinates(common::task::task& _ecp_task)
 : generator(_ecp_task), SETTINGS_SECTION_NAME("[ecp_visioncoordinates_generator]")
 {
-	debugmsg("VCG: Creating virtual sensor to communicate with FraDIA");
+	debugmsg("ecp_g_visioncoordinates: Creating virtual sensor to communicate with FraDIA");
 	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, SETTINGS_SECTION_NAME, ecp_t, sizeof(lib::sensor_image_t::sensor_union_t::visioncoordinates_union_t));
 	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
 
 	sensor_in = &sensor_m[lib::SENSOR_CVFRADIA]->image;
 	sensor_out = &sensor_m[lib::SENSOR_CVFRADIA]->to_vsp;
 
-	debugmsg("VCG: Sensor configured");
+	debugmsg("ecp_g_visioncoordinates: Sensor configured");
 
 }
 
 bool visioncoordinates::first_step()
 {
 	// przygotowywujemy sie do pobrania polozenia robota
-	debugmsg("VCG: first_step()");
-
 	if (!the_robot)
-		debugmsg("VCG: the robot not exists");
+		debugmsg("ecp_g_visioncoordinates: the robot not exists");
 
 	// --- przygotowywujemy sie do pobrania polozenia robota w ramach Move() -> execute_motion() ---
 	ecp_mp::robot_transmission_data& data = the_robot->EDP_data;
 
-	debugmsg("VCG: robot_transmission_data ready");
+	debugmsg("ecp_g_visioncoordinates: robot_transmission_data ready");
 
 	data.instruction_type = lib::GET;
-
-	debugmsg("VCG: setting instruction type GET done");
 	data.get_type = ARM_DV;
 	data.get_arm_type = lib::XYZ_ANGLE_AXIS;
 	data.motion_type = lib::ABSOLUTE;
@@ -69,7 +65,7 @@ bool visioncoordinates::first_step()
 	// FraDIA ma znaleŸæ wszystkie obiekty, nawet trochê podobne do poszukiwanego
 	sensor_out->esa.mode = lib::EM_SEARCH;
 
-	debugmsg("VCG: Ready to get data");
+	debugmsg("ecp_g_visioncoordinates: Ready to get data");
 	return true;
 }
 
@@ -116,12 +112,12 @@ lib::Homog_matrix visioncoordinates::calculateMove(double rot_z, double rot_dev,
 	// skalowanie ROI tak, by miescil sie na 2/3 ekranu (jego najszersza przekatna wzgledem wysokosci obrazu otrzymanego z kamery)
 	// etc - tylko ze to sie powinno dziac ze stronie fradii, tutaj powinno byc tylko ograniczenie na max. wysiegnik
 
-	const double MAX_DISTANCE = 0.5; // [m]
+	const double MAX_DISTANCE = 0.20; // [m]
 	if (distance > MAX_DISTANCE)
 		distance = MAX_DISTANCE;
 
 	lib::Homog_matrix move_z(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, 0.0, 0.0, 0.0,				0.0, 0.0, rot_z);
-	lib::Homog_matrix move_y(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, 0.0, 0.0, 0.0,				0.0, 0.0, rot_dev);
+	lib::Homog_matrix move_y(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, 0.0, 0.0, 0.0,				0.0, rot_dev, 0.0);
 	lib::Homog_matrix move_dist(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, 0.0, 0.0, distance,		0.0, 0.0, 0.0);
 	
 	lib::Homog_matrix move_back_z(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, 0.0, 0.0, 0.0,		0.0, 0.0, -rot_z);			// narazie przywracamy istniejacy kierunek
@@ -133,16 +129,18 @@ bool visioncoordinates::next_step()
 {
 	typedef lib::sensor_image_t::sensor_union_t::visioncoordinates_union_t::Search Search;
 
-	debugmsg("VCG: Processing data");
+	debugmsg("ecp_g_visioncoordinates: Processing data");
 
 	ecp_mp::robot_transmission_data& data = the_robot->EDP_data;
 
 	// current_XYZ_AA_arm_coordinates zawiera 6 elementow, chwytak (gripper) jest osobno
 	lib::Homog_matrix current_position(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, data.current_XYZ_AA_arm_coordinates); // aktualna pozycja ramienia robota
 
-	for (int it = 0; it < sizeof(sensor_in->sensor_union.visioncoordinates_union.search) / sizeof(sensor_in->sensor_union.visioncoordinates_union.search[0]); ++it)
+	for (int it = 0; it < 8 /* sizeof(sensor_in->sensor_union.visioncoordinates_union.search) / sizeof(sensor_in->sensor_union.visioncoordinates_union.search[0])*/ ; ++it)
 	{
 		Search* search = &(sensor_in->sensor_union.visioncoordinates_union.search[it]);
+		if (search->dist == 0.0)
+			break;
 		lib::Homog_matrix move = calculateMove(search->rot_z, search->rot_dev, search->dist);
 		lib::Homog_matrix target = current_position * move;
 
