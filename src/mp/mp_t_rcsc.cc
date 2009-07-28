@@ -344,7 +344,6 @@ bool rubik_cube_solver::communicate_with_windows_solver()
 			return false;
 }
 
-
 void rubik_cube_solver::execute_manipulation_sequence()
 {
 	for(std::list<common::SingleManipulation>::iterator manipulation_list_iterator = manipulation_list.begin();
@@ -353,8 +352,6 @@ void rubik_cube_solver::execute_manipulation_sequence()
 		manipulate(manipulation_list_iterator->face_to_turn, manipulation_list_iterator->turn_angle);
 	}
 }
-
-
 
 void rubik_cube_solver::manipulate(common::CUBE_COLOR face_to_turn, common::CUBE_TURN_ANGLE turn_angle )
 {
@@ -473,14 +470,15 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	// wlaczenie generatora do konfiguracji czujnika w EDP w obydwu robotach
 	configure_edp_force_sensor(true, true);
 
-
-
-
+	// wlaczenie generatora zacisku na kostce w robocie irp6p
+	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FACE_TURN_PHASE_0, "", 1, lib::ROBOT_IRP6_POSTUMENT);
+	// uruchomienie generatora empty_gen
+	run_extended_empty_gen (false, 1, lib::ROBOT_IRP6_POSTUMENT);
 	// wlaczenie generatora zacisku na kostce w robocie irp6p
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FROM_OPEARTOR_PHASE_1, "", 1, lib::ROBOT_IRP6_POSTUMENT);
 	// uruchomienie generatora empty_gen
 	run_extended_empty_gen (false, 1, lib::ROBOT_IRP6_POSTUMENT);
-	// wlaczenie generatora zacisku na kostce w robocie irp6ot
+	// wlaczenie generatora zacisku na kostce w robocie irp6p
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FROM_OPEARTOR_PHASE_2, "", 1, lib::ROBOT_IRP6_POSTUMENT);
 	// uruchomienie generatora empty_gen
 	run_extended_empty_gen (false, 1, lib::ROBOT_IRP6_POSTUMENT);
@@ -784,7 +782,7 @@ void rubik_cube_solver::approach_op(int mode)
 	if ((config.exists("irp6p_compliant")) && ((bool) config.return_int_value("irp6p_compliant")))
 	{
 
-		// wlaczenie genrator tff_nose_run_generator w tracku
+		// wlaczenie genrator tff_nose_run_generator w postumencie
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TFF_NOSE_RUN, (int) 0, "", 1, lib::ROBOT_IRP6_POSTUMENT);
 
 		// uruchomienie generatora empty_gen
@@ -876,6 +874,10 @@ void rubik_cube_solver::approach_op(int mode)
 	// zacisniecie chwytaka na kostce
 
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
+	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FACE_TURN_PHASE_0, "", 1, lib::ROBOT_IRP6_ON_TRACK);
+	// uruchomienie generatora empty_gen
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
+			(2, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_FESTIVAL, lib::ROBOT_IRP6_ON_TRACK);
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FROM_OPEARTOR_PHASE_1, "", 1, lib::ROBOT_IRP6_ON_TRACK);
 	// uruchomienie generatora empty_gen
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
@@ -1050,6 +1052,8 @@ void rubik_cube_solver::main_task_algorithm(void)
 		if (vis_servoing)
 		{
 
+		printf("if vis servoing\n");
+		flushall();
 		for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin();
 		sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 		{
@@ -1067,7 +1071,8 @@ void rubik_cube_solver::main_task_algorithm(void)
 
 		if (vis_servoing)
 			{
-
+				printf("if vis servoing 2\n");
+				flushall();
 		if (communicate_with_windows_solver())
 		{
 			break;
@@ -1077,7 +1082,8 @@ void rubik_cube_solver::main_task_algorithm(void)
 
 		if ((vis_servoing)&&(manipulation_sequence_computed))
 		{
-
+				printf("trzeci if\n");
+				flushall();
 			// wykonanie sekwencji manipulacji
 			face_turn_op(common::CL_0);
 

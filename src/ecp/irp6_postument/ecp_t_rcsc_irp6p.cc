@@ -62,6 +62,8 @@ void rcsc::main_task_algorithm(void)
 		get_next_state ();
 
 		sr_ecp_msg->message("Order received");
+		//printf("postument: %d\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
+		flushall();
 
 		switch ( (ecp_mp::task::RCSC_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
 		{
@@ -78,6 +80,9 @@ void rcsc::main_task_algorithm(void)
 			case ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB:
 				switch ( (ecp_mp::task::RCSC_RUBIK_GRAB_PHASES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
 				{
+					case ecp_mp::task::RCSC_RG_FACE_TURN_PHASE_0:
+						rgg->configure(0.072, 0.00005, 0, false);
+						break;
 					case ecp_mp::task::RCSC_RG_FROM_OPEARTOR_PHASE_1:
 						rgg->configure(0.057, 0.00005, 0);
 						break;
@@ -88,7 +93,7 @@ void rcsc::main_task_algorithm(void)
 						rgg->configure(0.072, 0.00005, 0, false);
 						break;
 					case ecp_mp::task::RCSC_RG_FCHANGE_PHASE_2:
-						rgg->configure(0.062, 0.00005, 0);
+						rgg->configure(0.065, 0.00005, 0);
 						break;
 					case ecp_mp::task::RCSC_RG_FCHANGE_PHASE_3:
 						rgg->configure(0.057, 0.00005, 0);
