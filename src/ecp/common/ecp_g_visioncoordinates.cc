@@ -41,8 +41,9 @@ visioncoordinates::visioncoordinates(common::task::task& _ecp_task)
 	sensor_in = &sensor_m[lib::SENSOR_CVFRADIA]->image;
 	sensor_out = &sensor_m[lib::SENSOR_CVFRADIA]->to_vsp;
 
-	debugmsg("ecp_g_visioncoordinates: Sensor configured");
+	getKnownObjects();
 
+	debugmsg("ecp_g_visioncoordinates: Sensor configured");
 }
 
 bool visioncoordinates::first_step()
@@ -175,6 +176,34 @@ bool visioncoordinates::test()
 	sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 	Test* ret = &(sensor_in->sensor_union.visioncoordinates_union.test);
 	return ret->found;
+}
+
+void visioncoordinates::getKnownObjects()
+{
+	typedef lib::sensor_image_t::sensor_union_t::visioncoordinates_union_t::List List;
+
+	sensor_out->esa.mode = lib::EM_LIST;
+	sensor_out->esa.offset = 0;
+	sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+	List* ret = &(sensor_in->sensor_union.visioncoordinates_union.list);
+	itsKnownObjects.resize(ret->count);
+	int it = 0;
+
+	while (it < ret->count)
+	{
+		itsKnownObjects[it] = std::string(ret->object[it % 8]);
+		std::cout << "we known object " << itsKnownObjects[it] << std::endl;
+		
+		++it;
+
+		if (it % 8 == 0)				// --- byc moze musimy pobrac kolejna porcje danych
+		{
+			sensor_out->esa.mode = lib::EM_LIST;
+			sensor_out->esa.offset = it;
+			sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+			ret = &(sensor_in->sensor_union.visioncoordinates_union.list);
+		}
+	}
 }
 
 /*

@@ -210,6 +210,12 @@ typedef struct sensor_image_t
 			{
 				bool found;		///< is object found
 			} test;
+
+			struct List
+			{
+				int count;			 ///< count of known objects in structure
+				char object[8][32]; ///< known objects
+			} list;
 		} visioncoordinates_union;
 
 		// struktura z informacja czy znaleziono szachownice
@@ -242,7 +248,8 @@ enum ESA_MODE
 { 
 	EM_UNKNOWN = 0,		///< unknown, not used
 	EM_SEARCH = 1,		///< search - we get all ROI's with possible interesting objects
-	EM_TEST = 2			///< test - we test object on screen against choosed object from list
+	EM_TEST = 2,		///< test - we test object on screen against choosed object from list
+	EM_LIST = 3			///< list - we read list of known objects from FraDIA
 };
 
 // BUFORY KOMUNIKACYJNE
@@ -276,7 +283,11 @@ struct ECP_VSP_MSG
 		struct
 		{
 			ESA_MODE mode;		///< mode for EdgeShapeAnalyzer
-			char object[32];	///< name of object (must be known 
+			union
+			{
+				char object[32];///< name of object (must be known)
+				int offset;     ///< i.e. for LIST
+			};
 		} esa;			
 
 		// Tryb HaarDetect

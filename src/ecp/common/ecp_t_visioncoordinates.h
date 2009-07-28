@@ -36,6 +36,10 @@ namespace task {
 		void setStartPosition();
 
 	
+
+		/// umozliwia uzytkownikowi wybranie obiektu do poszukiwania
+		/// @return true, gdy zadanie ma byc kontynuowane
+		bool selectObject();
 			
 		generator::visioncoordinates* itsVisionGen;	///< czujnik wizji
 		generator::smooth* itsSmoothGen;			///< generator ruchu

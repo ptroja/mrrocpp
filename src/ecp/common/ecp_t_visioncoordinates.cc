@@ -69,22 +69,10 @@ void visioncoordinates::main_task_algorithm()
 
 	while (true)
 	{
-		// wybór opcji "czego poszukujemy" - po stronie mrroc++, musza byc znane we fradia
-		int option = choose_option("Wybierz obiekt: 1 - lyzka  2 - widelec  3 - lopatka  4 - nalesnikowa", 4);
-		switch (option)
-		{
-		case lib::OPTION_ONE: itsVisionGen->searchObject("lyzka"); break;
-		case lib::OPTION_TWO: itsVisionGen->searchObject("widelec"); break;
-		case lib::OPTION_THREE: itsVisionGen->searchObject("lopatka"); break;
-		case lib::OPTION_FOUR: itsVisionGen->searchObject("nalesnikowa"); break;
-		default: 
-			setStartPosition();
-			return;
-		}
-		//itsVisionGen->searchObject("lopatka");
+		// pozwalamy uzytkownikowi wybrac, jaki obiekt mamy rozpoznac/czy zakonczyc zadanie
+		if (!selectObject())
+			return;		// nie wybralismy obiektu => konczymy zadanie
 
-
-		// aktualnie opieramy sie na wyborze poszukiwanego obiektu w ramach FraDIA (tam wybieramy obiekt z listy)
 		setStartPosition();
 		sleep(1);
 
@@ -168,6 +156,30 @@ void visioncoordinates::setStartPosition()
 	
 	itsSmoothGen->reset();
 
+}
+
+bool visioncoordinates::selectObject()
+{
+	// wybór opcji "czego poszukujemy" - po stronie mrroc++, na podstawie obiektow z FraDIA
+	std::ostringstream msg;
+	const std::vector<std::string>& known = itsVisionGen->knownObjects();
+	for (int opt = 0; opt < known.size(); ++opt)
+		msg << " " << (opt + 1) << ". " << known[opt];
+
+
+	// GUI MRROC++ pozwala wybrac uzytkownikowi tylko max. z 4 obiektow - do celow demonstracyjnych to wystarczy
+	int option = choose_option(msg.str().c_str(), std::min<int>(known.size(), 4));
+	switch (option)
+	{
+	case lib::OPTION_ONE: itsVisionGen->searchObject(0); break;
+	case lib::OPTION_TWO: itsVisionGen->searchObject(1); break;
+	case lib::OPTION_THREE: itsVisionGen->searchObject(2); break;
+	case lib::OPTION_FOUR: itsVisionGen->searchObject(3); break;
+	default: 
+		setStartPosition();
+		return false;
+	}
+	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////

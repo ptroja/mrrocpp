@@ -8,6 +8,7 @@
 #ifndef ECP_G_VISIONCOORDINATES_H_INCLUDED
 #define ECP_G_VISIONCOORDINATES_H_INCLUDED
 
+#include <vector>
 #include "ecp/common/ecp_task.h"
 #include "ecp/common/ecp_generator.h"
 #include "lib/mathtr.h"
@@ -43,7 +44,14 @@ public:
 	bool test();
 
 	/// \brief ustawia nazwe obiektu, ktory bedzie poszukiwany/testowany czy jest, za pomoca VSP FraDIA
+	/// \note nazwa obiektu nie jest weryfikowana (czy znajduje sie na liscie znanych FraDIA'i obiektow)
 	void searchObject(const std::string& object) { itsSearchObject = object; }
+
+	/// \brief na podstawie numeru elementu w tablicy znanych obiektow, wybiera obiekt poszukiwany za pomoca VSP FraDIA
+	void searchObject(int i) { itsSearchObject = itsKnownObjects[i]; }
+
+	/// \brief pobiera nazwy rozpoznawanych obiektow
+	const std::vector<std::string>& knownObjects() const { return itsKnownObjects; }
 
 private:
 	/// \brief oblicza macierz ruchu na podstawie danych z obrazu otrzymanego z FraDIA
@@ -84,6 +92,12 @@ private:
 
 	/// poszukiwany obiekt (jego nazwa)
 	std::string itsSearchObject;
+
+	/// pobiera liste nazw znanych FraDIA obiektow
+	void getKnownObjects();
+
+	/// tablica znanych obiektow
+	std::vector<std::string> itsKnownObjects;
 };
 
 } // namespace generator
