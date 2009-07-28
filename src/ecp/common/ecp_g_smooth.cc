@@ -322,6 +322,9 @@ bool smooth::load_file_with_path (const char* file_name)
 {
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
+	//printf("%s\n", file_name);
+	//flushall();
+
     char coordinate_type[80];  // Opis wspolrzednych: "MOTOR", "JOINT", ...
     lib::POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
     uint64_t e;       // Kod bledu systemowego
