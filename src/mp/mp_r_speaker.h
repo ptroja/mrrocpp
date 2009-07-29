@@ -11,10 +11,10 @@ namespace mrrocpp {
 namespace mp {
 namespace robot {
 // ---------------------------------------------------------------
-class speaker_robot: public robot {
+class speaker: public robot {
 
  public:
-  speaker_robot (task::task &mp_object_l); // Konstruktor
+  speaker (task::task &mp_object_l); // Konstruktor
 
 // virtual void execute_motion (void); // Zlecenie wykonania ruchu przez robota
                                       // na poziomie MP jest to polecenie dla ECP

@@ -6,14 +6,14 @@
 namespace mrrocpp {
 namespace mp {
 namespace robot {
-class irp6s_and_conv_robot : public robot
+class irp6s_and_conv : public robot
 {
 	private:
 		int servos_number;
 		bool has_gripper;
 
 	public:
-		irp6s_and_conv_robot (lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::task &mp_object_l);
+		irp6s_and_conv (lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::task &mp_object_l);
 
 		virtual void create_next_pose_command (void);
 

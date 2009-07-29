@@ -5,10 +5,10 @@
 namespace mrrocpp {
 namespace mp {
 namespace robot {
-class irp6_postument_robot: public irp6s_and_conv_robot {
+class irp6_postument: public irp6s_and_conv {
 
  public:
-  irp6_postument_robot (task::task &mp_object_l);
+  irp6_postument (task::task &mp_object_l);
 };
 } // namespace robot
 } // namespace mp

@@ -170,31 +170,31 @@ void task::create_robots()
 
 	// ROBOT IRP6_ON_TRACK
 	if (config.return_int_value("is_irp6_on_track_active", "[ui]")) {
-		created_robot = new robot::irp6_on_track_robot (*this);
+		created_robot = new robot::irp6_on_track (*this);
 		robot_m[lib::ROBOT_IRP6_ON_TRACK] = created_robot;
 	}
 
 	// ROBOT IRP6_POSTUMENT
 	if (config.return_int_value("is_irp6_postument_active", "[ui]")) {
-		created_robot = new robot::irp6_postument_robot (*this);
+		created_robot = new robot::irp6_postument (*this);
 		robot_m[lib::ROBOT_IRP6_POSTUMENT] = created_robot;
 	}
 
 	// ROBOT CONVEYOR
 	if (config.return_int_value("is_conveyor_active", "[ui]")) {
-		created_robot = new robot::conveyor_robot (*this);
+		created_robot = new robot::conveyor (*this);
 		robot_m[lib::ROBOT_CONVEYOR] = created_robot;
 	}
 
 	// ROBOT SPEAKER
 	if (config.return_int_value("is_speaker_active", "[ui]")) {
-		created_robot = new robot::speaker_robot (*this);
+		created_robot = new robot::speaker (*this);
 		robot_m[lib::ROBOT_SPEAKER] = created_robot;
 	}
 
 	// ROBOT IRP6_MECHATRONIKA
 	if (config.return_int_value("is_irp6_mechatronika_active", "[ui]")) {
-		created_robot = new robot::irp6_mechatronika_robot (*this);
+		created_robot = new robot::irp6_mechatronika (*this);
 		robot_m[lib::ROBOT_IRP6_MECHATRONIKA] = created_robot;
 	}
 

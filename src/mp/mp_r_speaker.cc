@@ -11,11 +11,11 @@ namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-speaker_robot::speaker_robot (task::task &mp_object_l) :
+speaker::speaker (task::task &mp_object_l) :
 		robot (lib::ROBOT_SPEAKER, "[ecp_speaker]", mp_object_l)
 {}
 
-void speaker_robot::create_next_pose_command (void)
+void speaker::create_next_pose_command (void)
 {
 	// wypelnia bufor wysylkowy do ECP na podstawie danych
 	// zawartych w skladowych generatora lub warunku
@@ -38,7 +38,7 @@ void speaker_robot::create_next_pose_command (void)
 	}
 }
 
-void speaker_robot::get_reply(void)
+void speaker::get_reply(void)
 {
 	// pobiera z pakietu przeslanego z ECP informacje i wstawia je do
 	// odpowiednich skladowych generatora lub warunku
