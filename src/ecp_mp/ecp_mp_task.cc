@@ -62,7 +62,7 @@ task::task(lib::configurator &_config)
             int e = errno;
             perror("Connect to UI failed");
             sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "Connect to UI failed");
-            throw ecp::common::ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+            throw ecp_mp::task::ECP_MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
         }
     }
 }

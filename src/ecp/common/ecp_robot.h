@@ -63,7 +63,7 @@ public:
 	lib::r_buffer reply_package;
 
 	lib::sr_ecp* sr_ecp_msg;     // by Y - Wskaznik na obiekt do komunikacji z SR
-	
+
 	bool synchronised; // Flaga synchronizacji robota (true - zsynchronizowany, false - nie)
 
 

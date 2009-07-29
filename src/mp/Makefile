@@ -41,7 +41,7 @@ BINARIES = \
 HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 
-SHOBJ = $(LIBMPMAIN) $(LIBMPROBOTS) $(LIBDIR)/libmrrocpp.a ../ecp/common/libecp.a
+SHOBJ = $(LIBMPMAIN) $(LIBMPROBOTS) $(LIBDIR)/libmrrocpp.a $(LIBDIR)/libecp_mp.a $(LIBDIR)/libecp.a
 
 # search path for make, if you want create dependencies from files from other directory than ".", 
 # then place that directory in the VPATH variable
