@@ -22,7 +22,7 @@ HEADERSDIR = $(HOMEDIR)/src
 
 CXXFLAGS += -I $(HEADERSDIR) -I.
 LDFLAGS += -Bstatic -l phexlib $(ABLIB) $(PHABOPTS)
-SDFLAGS = -l phexlib $(ABLIB) $(PHABOPTS)
+SDFLAGS = -l phexlib $(ABLIB) $(PHABOPTS) -L/opt/qnx641/target/qnx6/mrlib/lib -lxml2 -liconv
 
 MRROCOBJ = \
 	$(ECP_DIR)/irp6_on_track/ecp_local.o \
@@ -30,7 +30,7 @@ MRROCOBJ = \
 	$(ECP_DIR)/irp6_mechatronika/ecp_local.o\
 	$(ECP_DIR)/conveyor/ecp_local.o \
 	$(ECP_DIR)/speaker/ecp_local.o \
-	$(ECP_DIR)/common/libecp.a $(LIBDIR)/libmrrocpp.a
+	$(LIBDIR)/libecp.a $(LIBDIR)/libecp_mp.a  $(LIBDIR)/libmrrocpp.a
 
 MYOBJ = ui_ecp_r_conveyor.o ui_ecp_r_speaker.o \
 	ui_ecp_r_irp6_common.o ui.o

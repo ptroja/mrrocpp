@@ -247,10 +247,10 @@ common::State * fsautomat::createState(xmlNode *stateNode)
 	return actState;
 }
 
-std::map<const char *, common::State, ecp::common::task::task::str_cmp> * fsautomat::takeStatesMap()
+std::map<const char *, common::State, ecp_mp::task::task::str_cmp> * fsautomat::takeStatesMap()
 {
 	xmlNode *cur_node, *child_node;
-	std::map<const char *, common::State, ecp::common::task::task::str_cmp> * statesMap = new std::map<const char *, common::State, ecp::common::task::task::str_cmp>();
+	std::map<const char *, common::State, ecp_mp::task::task::str_cmp> * statesMap = new std::map<const char *, common::State, ecp_mp::task::task::str_cmp>();
 
 	std::string fileName(config.return_string_value("xml_file", "[xml_settings]"));
 	std::string filePath(mrrocpp_network_path);
@@ -734,7 +734,7 @@ void fsautomat::main_task_algorithm(void)
 	break_state = false;
 	char nextState[64];
 	//	std::list<State> *statesList = takeStatesList();
-	std::map<const char *, common::State, ecp::common::task::task::str_cmp> * stateMap = takeStatesMap();
+	std::map<const char *, common::State, ecp_mp::task::task::str_cmp> * stateMap = takeStatesMap();
 	std::cout << "Mapa zawiera: " << stateMap->size() << std::endl;
 	//	std::cout<<"ELEMENTOW INIT jest: "<<stateMap->count((const char *)"INIT")<<std::endl;
 

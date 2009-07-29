@@ -21,6 +21,11 @@
 #include "ecp_mp/transmitter.h"
 #include "lib/sensor.h"
 
+#include <libxml/tree.h>
+
+#include <map>
+#include "ecp_mp/Trajectory.h"
+
 namespace mrrocpp {
 namespace ecp_mp {
 
@@ -81,6 +86,9 @@ public:
 	public:
 		bool operator()(char const *a, char const *b) const;
 	};
+
+	ecp_mp::common::Trajectory * createTrajectory(xmlNode *actNode, xmlChar *stateID);
+	std::map<const char*, ecp_mp::common::Trajectory, str_cmp>* loadTrajectories(const char * fileName, lib::ROBOT_ENUM propRobot);
 
 };
 

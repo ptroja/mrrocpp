@@ -10,7 +10,7 @@
 #define __MP_TASK_FSAUTOMAT
 
 #include "mp/mp.h"
-#include "ecp/common/ecp_task.h"
+#include "ecp_mp/ecp_mp_task.h"
 //#include "ecp_mp/ecp_mp_t_fsautomat.h"
 #include "mp/State.h"
 #include "mp/CubeState.h"
@@ -20,7 +20,7 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class fsautomat : public task  
+class fsautomat : public task
 {
 	protected:
 		bool break_state;
@@ -31,17 +31,17 @@ class fsautomat : public task
 	public:
 		// stl'owa lista manipulacji
 		std::list<common::SingleManipulation> manipulation_list;
-		
+
 	    // konstruktor
 	    fsautomat(lib::configurator &_config);
 
 		// methods for mp template
 		void task_initialization(void);
 		void main_task_algorithm(void);
-		
+
 		std::list<common::State> *takeStatesList(void);
 		common::State * createState(xmlNode *stateNode);
-		std::map<const char *, common::State, ecp::common::task::task::str_cmp> * takeStatesMap();
+		std::map<const char *, common::State, ecp_mp::task::task::str_cmp> * takeStatesMap();
 		void executeMotion(common::State &state);
 		void runEmptyGenForSet(common::State &state);
 		void runEmptyGen(common::State &state);
