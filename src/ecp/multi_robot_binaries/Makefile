@@ -25,18 +25,19 @@ all: ${BINARIES}
 
 ecp_tran: \
 		../common/ecp_t_tran.o \
-		../irp6_on_track/ecp_local.o \
-		../irp6_postument/ecp_local.o \
+		../irp6_on_track/ecp_r_irp6ot.o \
+		../irp6_postument/ecp_r_irp6p.o \
 		../conveyor/ecp_r_conv.o \
-		../speaker/ecp_local.o \
-		../irp6_mechatronika/ecp_local.o \
+		../speaker/ecp_r_speaker.o \
+		../irp6_mechatronika/ecp_r_irp6m.o \
+		../polycrank/ecp_r_polycrank.o \
 		../common/ecp_generator_t.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 ecp_mam: \
-		../irp6_on_track/ecp_local.o \
-		../irp6_postument/ecp_local.o \
+		../irp6_on_track/ecp_r_irp6ot.o \
+		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_mam.o \
 		../common/ecp_g_mam.o \
 		ecp_mp_s_digital_scales.o \
@@ -44,8 +45,8 @@ ecp_mam: \
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 ecp_sk: \
-		../irp6_on_track/ecp_local.o \
-		../irp6_postument/ecp_local.o \
+		../irp6_on_track/ecp_r_irp6ot.o \
+		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_sk.o \
 		../common/ecp_g_force.o \
 		ecp_mp_s_schunk.o \
@@ -53,8 +54,8 @@ ecp_sk: \
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 ecp_tw: \
-		../irp6_on_track/ecp_local.o \
-		../irp6_postument/ecp_local.o \
+		../irp6_on_track/ecp_r_irp6ot.o \
+		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_tw.o \
 		../common/ecp_g_force.o \
 		ecp_mp_s_schunk.o \
@@ -62,16 +63,16 @@ ecp_tw: \
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 ecp_t: \
-		../irp6_on_track/ecp_local.o \
-		../irp6_postument/ecp_local.o \
-		../irp6_mechatronika/ecp_local.o  \
+		../irp6_on_track/ecp_r_irp6ot.o \
+		../irp6_postument/ecp_r_irp6p.o \
+		../irp6_mechatronika/ecp_r_irp6m.o  \
 		../common/ecp_t_teach.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 ecp_nalewanie: \
-		../irp6_on_track/ecp_local.o \
-		../irp6_postument/ecp_local.o \
+		../irp6_on_track/ecp_r_irp6ot.o \
+		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_nalewanie.o \
 		../common/ecp_g_smooth.o \
 		../common/ecp_g_jarosz.o \
@@ -80,8 +81,8 @@ ecp_nalewanie: \
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 ecp_time: \
-		../irp6_on_track/ecp_local.o \
-		../irp6_postument/ecp_local.o \
+		../irp6_on_track/ecp_r_irp6ot.o \
+		../irp6_postument/ecp_r_irp6p.o \
 		ecp_mp_s_time.o \
 		../common/ecp_t_time.o \
 		../common/ecp_g_time.o \
@@ -89,7 +90,7 @@ ecp_time: \
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 ecp_ttt: \
-		../irp6_on_track/ecp_local.o \
+		../irp6_on_track/ecp_r_irp6ot.o \
 		../common/ecp_t_ttt.o \
 		../common/ecp_g_smooth.o \
 		../common/ecp_g_jarosz.o \
@@ -98,7 +99,7 @@ ecp_ttt: \
 	$(LD) $(LDFLAGS) -o $@ $^
 
 ecp_ellipse: \
-		../irp6_on_track/ecp_local.o \
+		../irp6_on_track/ecp_r_irp6ot.o \
 		../common/ecp_t_ellipse.o \
 		../common/ecp_g_smooth.o \
 		../common/ecp_g_ellipse.o \		
@@ -108,7 +109,7 @@ ecp_ellipse: \
 	$(LD) $(LDFLAGS) -o $@ $^
 
 ecp_wii: \
-	    ../irp6_on_track/ecp_local.o \
+	    ../irp6_on_track/ecp_r_irp6ot.o \
     	../common/ecp_t_wii.o \
 	    ../common/ecp_g_smooth.o \
 	    ../common/ecp_g_wii.o \
@@ -119,8 +120,8 @@ ecp_wii: \
 
 
 ecp_pawel: \
-		../irp6_on_track/ecp_local.o \
-		../irp6_postument/ecp_local.o \
+		../irp6_on_track/ecp_r_irp6ot.o \
+		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_pawel.o \
 		../common/ecp_g_pawel.o \
 		ecp_mp_s_pawel.o \
@@ -128,8 +129,8 @@ ecp_pawel: \
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 ecp_cvfradia: \
-		../irp6_on_track/ecp_local.o \
-		../irp6_postument/ecp_local.o \
+		../irp6_on_track/ecp_r_irp6ot.o \
+		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_cvfradia.o \
 		../common/ecp_g_cvfradia.o \
 		ecp_mp_s_cvfradia.o \
@@ -137,8 +138,8 @@ ecp_cvfradia: \
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 ecp_visioncoordinates: \
-		../irp6_on_track/ecp_local.o \
-		../irp6_postument/ecp_local.o \
+		../irp6_on_track/ecp_r_irp6ot.o \
+		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_visioncoordinates.o \
 		../common/ecp_g_visioncoordinates.o \
 		../common/ecp_g_smooth.o \
@@ -149,8 +150,8 @@ ecp_visioncoordinates: \
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 ecp_tzu: \
-		../irp6_on_track/ecp_local.o \
-		../irp6_postument/ecp_local.o \
+		../irp6_on_track/ecp_r_irp6ot.o \
+		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_tzu_fs.o \
 		../common/ecp_g_force.o \
 		../common/ecp_g_smooth.o \
@@ -160,8 +161,8 @@ ecp_tzu: \
 	$(LD) $(LDFLAGS) -o $@ $^
 
 ecp_tzu_test: \
-		../irp6_on_track/ecp_local.o \
-		../irp6_postument/ecp_local.o \
+		../irp6_on_track/ecp_r_irp6ot.o \
+		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_tzu_test.o \
 		../common/ecp_g_force.o \
 		../common/ecp_g_smooth.o \
@@ -171,8 +172,8 @@ ecp_tzu_test: \
 	$(LD) $(LDFLAGS) -o $@ $^  
 
 ecp_pcbird: \
-		../irp6_on_track/ecp_local.o \
-		../irp6_postument/ecp_local.o \
+		../irp6_on_track/ecp_r_irp6ot.o \
+		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_pcbird.o \
 		../common/ecp_g_cvfradia.o \
 		birdclient.o \

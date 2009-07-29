@@ -10,7 +10,7 @@
 //#include "ecp_mp/ecp_mp_t_rcsc.h"
 
 
-#include "ecp/irp6_on_track/ecp_local.h"
+#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 //#include "ecp/common/ecp_g_force.h"
 #include "ecp/irp6_on_track/ecp_vis_pb_eih_irp6ot.h"
 #include "ecp_mp/ecp_mp_s_vis.h"

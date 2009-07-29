@@ -11,7 +11,7 @@
 #include "lib/com_buf.h"
 #include "lib/mis_fun.h"
 
-#include "ecp/speaker/ecp_local.h"
+#include "ecp/speaker/ecp_r_speaker.h"
 
 namespace mrrocpp {
 namespace ecp {

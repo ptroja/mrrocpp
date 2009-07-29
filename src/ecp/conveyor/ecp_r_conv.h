@@ -2,11 +2,11 @@
 //                            ecp.h dla QNX6
 // Definicje struktur danych i metod dla procesow ECP
 // robot - conveyor
-// 
+//
 // -------------------------------------------------------------------------
 
-#if !defined(_ECP_CONVEYOR_LOCAL_H)
-#define _ECP_CONVEYOR_LOCAL_H
+#if !defined(_ECP_R_CONVEYOR_H)
+#define _ECP_R_CONVEYOR_H
 
 #include "ecp/common/ecp_robot.h"
 
@@ -29,7 +29,7 @@ class ecp_conveyor_robot: public common::ecp_robot
 	// Ten bufor znajduje sie w robocie
 
 	void get_reply (void);
-	virtual void get_input_reply (void);  
+	virtual void get_input_reply (void);
 	virtual void get_arm_reply (void);
 	virtual void get_rmodel_reply (void);
 

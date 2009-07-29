@@ -25,11 +25,11 @@ LDFLAGS += -Bstatic -l phexlib $(ABLIB) $(PHABOPTS)
 SDFLAGS = -l phexlib $(ABLIB) $(PHABOPTS) -L/opt/qnx641/target/qnx6/mrlib/lib -lxml2 -liconv
 
 MRROCOBJ = \
-	$(ECP_DIR)/irp6_on_track/ecp_local.o \
-	$(ECP_DIR)/irp6_postument/ecp_local.o \
-	$(ECP_DIR)/irp6_mechatronika/ecp_local.o\
+	$(ECP_DIR)/irp6_on_track/ecp_r_irp6ot.o \
+	$(ECP_DIR)/irp6_postument/ecp_r_irp6p.o \
+	$(ECP_DIR)/irp6_mechatronika/ecp_r_irp6m.o\
 	$(ECP_DIR)/conveyor/ecp_r_conv.o \
-	$(ECP_DIR)/speaker/ecp_local.o \
+	$(ECP_DIR)/speaker/ecp_r_speaker.o \
 	$(LIBDIR)/libecp.a $(LIBDIR)/libecp_mp.a  $(LIBDIR)/libmrrocpp.a
 
 MYOBJ = ui_ecp_r_conveyor.o ui_ecp_r_speaker.o \

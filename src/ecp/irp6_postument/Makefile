@@ -17,7 +17,7 @@ BINARIES = 			ecp_jarosz_irp6p\
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
-SHOBJ = ecp_local.o ../common/libecp.a $(LIBDIR)/libmrrocpp.a
+SHOBJ = ecp_r_irp6p.o ../common/libecp.a $(LIBDIR)/libmrrocpp.a
 # path for SHOBJ
 # search path for make, if you want create dependencies from files from other directory than ".", 
 # then place that directory in the VPATH variable

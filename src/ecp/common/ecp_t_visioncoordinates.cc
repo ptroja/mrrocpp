@@ -14,8 +14,8 @@
 
 #include "lib/srlib.h"
 
-#include "ecp/irp6_on_track/ecp_local.h"
-#include "ecp/irp6_postument/ecp_local.h"
+#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
+#include "ecp/irp6_postument/ecp_r_irp6p.h"
 
 #include "ecp_mp/ecp_mp_s_cvfradia.h"
 #include "ecp/common/ecp_t_visioncoordinates.h"
@@ -83,13 +83,13 @@ void visioncoordinates::main_task_algorithm()
 		while (itsVisionGen->getCoordinates(bf))
 		{
 			debugmsg("sa nowe wspolrzedne...");
-			// --- po pobraniu wspó³rzêdnych wykonujemy ruch ---
+			// --- po pobraniu wspï¿½rzï¿½dnych wykonujemy ruch ---
 			//itsSmoothGen->load_coordinates(lib::XYZ_EULER_ZYZ, bf[0], bf[1], bf[2], bf[3], bf[4], bf[5], bf[6], bf[7]);
 			itsSmoothGen->load_coordinates(lib::XYZ_EULER_ZYZ, vp, vp, v, a, bf);
 			itsSmoothGen->Move();
 			itsSmoothGen->reset();
 
-			// --- czekamy a¿ chwytak siê ustabilizuje ---
+			// --- czekamy aï¿½ chwytak siï¿½ ustabilizuje ---
 			sleep(1);
 
 			// --- sprawdzamy, czy widzimy dany obiekt ---
@@ -160,7 +160,7 @@ void visioncoordinates::setStartPosition()
 
 bool visioncoordinates::selectObject()
 {
-	// wybór opcji "czego poszukujemy" - po stronie mrroc++, na podstawie obiektow z FraDIA
+	// wybï¿½r opcji "czego poszukujemy" - po stronie mrroc++, na podstawie obiektow z FraDIA
 	std::ostringstream msg;
 	const std::vector<std::string>& known = itsVisionGen->knownObjects();
 	for (int opt = 0; opt < known.size(); ++opt)

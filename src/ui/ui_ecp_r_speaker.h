@@ -8,7 +8,7 @@
 #ifndef _UI_ECP_R_SPEAKER_H
 #define _UI_ECP_R_SPEAKER_H
 
-#include "ecp/speaker/ecp_local.h"
+#include "ecp/speaker/ecp_r_speaker.h"
 
 #include "ui/ui.h"
 // Konfigurator.

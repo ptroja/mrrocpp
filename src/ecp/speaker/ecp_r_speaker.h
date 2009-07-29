@@ -2,11 +2,11 @@
 //                            ecp.h dla QNX6
 // Definicje struktur danych i metod dla procesow ECP
 // robot - speaker
-// 
+//
 // -------------------------------------------------------------------------
 
-#if !defined(_ECP_SPEAKER_LOCAL_H)
-#define _ECP_SPEAKER_LOCAL_H
+#if !defined(_ECP_R_SPEAKER_H)
+#define _ECP_R_SPEAKER_H
 
 #include "ecp/common/ecp_robot.h"
 

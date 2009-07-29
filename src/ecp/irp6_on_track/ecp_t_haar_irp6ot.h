@@ -11,7 +11,7 @@
 
 #include "lib/srlib.h"
 
-#include "ecp/irp6_on_track/ecp_local.h"
+#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_vis_ib_eih_planar_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_g_rotate_gripper.h"
 #include "ecp/common/ecp_g_smooth.h"

@@ -5,23 +5,23 @@
 //
 // -------------------------------------------------------------------------
 
-#if !defined(_ECP_POLYCRANK_LOCAL_H)
-#define _ECP_POLYCRANK_LOCAL_H
+#if !defined(_ECP_R_IRP6_MECHATRONIKA_H)
+#define _ECP_R_IRP6_MECHATRONIKA_H
 
 #include "ecp/common/ecp_robot.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace polycrank {
+namespace irp6m {
 
 // ---------------------------------------------------------------
-class robot: public common::ecp_robot
+class ecp_irp6_mechatronika_robot: public common::ecp_robot
 {
 	// Klasa dla robota irp6_postument (sztywnego)
 
 	public:
-	robot (lib::configurator &_config, lib::sr_ecp *_sr_ecp);
-	robot (common::task::task& _ecp_object);
+	ecp_irp6_mechatronika_robot (lib::configurator &_config, lib::sr_ecp *_sr_ecp);
+	ecp_irp6_mechatronika_robot (common::task::task& _ecp_object);
 
 	virtual void create_command (void);
 	// wypelnia bufor wysylkowy do EDP na podstawie danych zawartych w obrazie
@@ -36,7 +36,7 @@ class robot: public common::ecp_robot
 }; // end: class ecp_irp6_mechatronika_robot
 // ---------------------------------------------------------------
 
-} // namespace polycrank
+} // namespace irp6m
 } // namespace ecp
 } // namespace mrrocpp
 

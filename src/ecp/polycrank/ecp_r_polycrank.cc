@@ -3,26 +3,26 @@
 //            Effector Control Process (lib::ECP) - methods
 // Funkcje do tworzenia procesow ECP
 // robot - irp6_mechatronika
-// 
+//
 // -------------------------------------------------------------------------
 
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/mis_fun.h"
 
-#include "ecp/irp6_mechatronika/ecp_local.h"
+#include "ecp/polycrank/ecp_r_polycrank.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6m {
+namespace polycrank {
 
-ecp_irp6_mechatronika_robot::ecp_irp6_mechatronika_robot (lib::configurator &_config, lib::sr_ecp *_sr_ecp):
-	ecp_robot (lib::ROBOT_IRP6_MECHATRONIKA, _config, _sr_ecp){};
-ecp_irp6_mechatronika_robot::ecp_irp6_mechatronika_robot (common::task::task& _ecp_object):
-	ecp_robot (lib::ROBOT_IRP6_MECHATRONIKA, _ecp_object){};
+robot::robot (lib::configurator &_config, lib::sr_ecp *_sr_ecp):
+	ecp_robot (lib::ROBOT_POLYCRANK, _config, _sr_ecp){};
+robot::robot (common::task::task& _ecp_object):
+	ecp_robot (lib::ROBOT_POLYCRANK, _ecp_object){};
 
 // --------------------------------------------------------------------------
-void ecp_irp6_mechatronika_robot::create_command (void) {
+void robot::create_command (void) {
   // wypelnia bufor wysylkowy do EDP na podstawie danych
   // zawartych w skladowych generatora lub warunku
 
@@ -69,7 +69,7 @@ void ecp_irp6_mechatronika_robot::create_command (void) {
                     = EDP_data.next_kinematic_model_no;
               break;
             case lib::SERVO_ALGORITHM:
-              for (int j=0; j<IRP6_MECHATRONIKA_NUM_OF_SERVOS; j++) {
+              for (int j=0; j<POLYCRANK_NUM_OF_SERVOS; j++) {
                 ecp_command.instruction.rmodel.servo_algorithm.servo_algorithm_no[j]
                    = EDP_data.next_servo_algorithm_no[j];
                 ecp_command.instruction.rmodel.servo_algorithm.servo_parameters_no[j]
@@ -80,7 +80,7 @@ void ecp_irp6_mechatronika_robot::create_command (void) {
               throw ECP_error(lib::NON_FATAL_ERROR, INVALID_RMODEL_TYPE);
           } // end: switch (set_rmodel_type)
         }
-        
+
          if (EDP_data.set_type & ARM_DV) {
           ecp_command.instruction.motion_type = EDP_data.motion_type;
           ecp_command.instruction.interpolation_type = EDP_data.next_interpolation_type;
@@ -102,13 +102,13 @@ void ecp_irp6_mechatronika_robot::create_command (void) {
                    = EDP_data.next_XYZ_ZYZ_arm_coordinates[j];
               break;
             case lib::JOINT:
-              for (int j=0; j<IRP6_MECHATRONIKA_NUM_OF_SERVOS ; j++){
+              for (int j=0; j<POLYCRANK_NUM_OF_SERVOS ; j++){
                 ecp_command.instruction.arm.pf_def.arm_coordinates[j]
                    = EDP_data.next_joint_arm_coordinates[j];
                   }
               break;
             case lib::MOTOR:
-              for (int j=0; j<IRP6_MECHATRONIKA_NUM_OF_SERVOS ; j++)
+              for (int j=0; j<POLYCRANK_NUM_OF_SERVOS ; j++)
                 ecp_command.instruction.arm.pf_def.arm_coordinates[j]
                    = EDP_data.next_motor_arm_coordinates[j];
               break;
@@ -126,17 +126,17 @@ void ecp_irp6_mechatronika_robot::create_command (void) {
       throw ECP_error (lib::NON_FATAL_ERROR, INVALID_ECP_COMMAND);
   } // end: switch (instruction_type)
 
-}; // end: ecp_irp6_mechatronika_robot::create_command
+}; // end: robot::create_command
 // ---------------------------------------------------------------
 
 
 /*---------------------------------------------------------------------*/
-void ecp_irp6_mechatronika_robot::get_reply (void) {
+void robot::get_reply (void) {
   // pobiera z pakietu przeslanego z EDP informacje i wstawia je do
   // odpowiednich skladowych generatora lub warunku
 
  EDP_data.reply_type = reply_package.reply_type;
-  
+
  switch (EDP_data.reply_type) {
    case lib::ERROR:
      EDP_data.error_no.error0 = reply_package.error_no.error0;
@@ -172,7 +172,7 @@ void ecp_irp6_mechatronika_robot::get_reply (void) {
 
 
 
-void ecp_irp6_mechatronika_robot::get_input_reply (void)
+void robot::get_input_reply (void)
 {
     EDP_data.input_values = reply_package.input_values;
 	for (int i=0; i<8; i++) {
@@ -181,16 +181,16 @@ void ecp_irp6_mechatronika_robot::get_input_reply (void)
 }
 
 
-void ecp_irp6_mechatronika_robot::get_arm_reply (void)
+void robot::get_arm_reply (void)
 {
     switch (reply_package.arm_type) {
        case lib::MOTOR:
-         for (int i=0; i<IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
+         for (int i=0; i<POLYCRANK_NUM_OF_SERVOS; i++)
            EDP_data.current_motor_arm_coordinates[i] =
              reply_package.arm.pf_def.arm_coordinates[i];
          break;
        case lib::JOINT:
-         for (int i=0; i<IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
+         for (int i=0; i<POLYCRANK_NUM_OF_SERVOS; i++)
            EDP_data.current_joint_arm_coordinates[i] =
              reply_package.arm.pf_def.arm_coordinates[i];
                break;
@@ -202,8 +202,8 @@ void ecp_irp6_mechatronika_robot::get_arm_reply (void)
            EDP_data.current_XYZ_ZYZ_arm_coordinates[i] =
              reply_package.arm.pf_def.arm_coordinates[i];
          break;
-         
-       case lib::XYZ_ANGLE_AXIS: 
+
+       case lib::XYZ_ANGLE_AXIS:
          for (int i=0; i<6; i++)
            EDP_data.current_XYZ_AA_arm_coordinates[i] =
              reply_package.arm.pf_def.arm_coordinates[i];
@@ -214,7 +214,7 @@ void ecp_irp6_mechatronika_robot::get_arm_reply (void)
      } // end: switch (...arm_type)
 }
 
-void ecp_irp6_mechatronika_robot::get_rmodel_reply (void)
+void robot::get_rmodel_reply (void)
 {
 	switch (reply_package.rmodel_type) {
 		case lib::TOOL_FRAME:
@@ -242,7 +242,7 @@ void ecp_irp6_mechatronika_robot::get_rmodel_reply (void)
 			    reply_package.rmodel.kinematic_model.kinematic_model_no;
 			break;
 		case lib::SERVO_ALGORITHM:
-			for (int i=0; i<IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++) {
+			for (int i=0; i<POLYCRANK_NUM_OF_SERVOS; i++) {
 				EDP_data.current_servo_algorithm_no[i] =
 				    reply_package.rmodel.servo_algorithm.servo_algorithm_no[i];
 				EDP_data.current_servo_parameters_no[i] =
@@ -254,7 +254,7 @@ void ecp_irp6_mechatronika_robot::get_rmodel_reply (void)
 	} // end: switch (...rmodel_type)
 }
 
-} // namespace irp6m
+} // namespace polycrank
 } // namespace ecp
 } // namespace mrrocpp
 

@@ -44,7 +44,7 @@ BINARIES =		ecp_pr \
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
-SHOBJ = ecp_local.o ../common/libecp.a $(LIBDIR)/libmrrocpp.a
+SHOBJ = ecp_r_irp6ot.o ../common/libecp.a $(LIBDIR)/libmrrocpp.a
 VPATH = ../common $(ECP_MPDIR)
 #======================================================#	
 .PHONY: all clean install depend

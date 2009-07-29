@@ -16,8 +16,8 @@
 
 #include "lib/srlib.h"
 
-#include "ecp/irp6_on_track/ecp_local.h"
-#include "ecp/irp6_postument/ecp_local.h"
+#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
+#include "ecp/irp6_postument/ecp_r_irp6p.h"
 
 #include "ecp_mp/ecp_mp_s_cvfradia.h"
 #include "ecp/common/ecp_t_cvfradia.h"

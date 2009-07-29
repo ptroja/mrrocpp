@@ -4,7 +4,7 @@
 #include "lib/srlib.h"
 #include "ecp_mp/ecp_mp_t_multiplayer.h"
 
-#include "ecp/irp6_on_track/ecp_local.h"
+#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/common/ecp_g_smooth.h"
 #include "ecp/common/ecp_g_force.h"
 #include "ecp/irp6_on_track/ecp_t_multiplayer_irp6ot.h"

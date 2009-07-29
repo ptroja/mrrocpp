@@ -13,7 +13,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "ecp/speaker/ecp_local.h"
+#include "ecp/speaker/ecp_r_speaker.h"
 #include "ecp/speaker/ecp_g_speak.h"
 
 namespace mrrocpp {

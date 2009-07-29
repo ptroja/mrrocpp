@@ -19,7 +19,7 @@
 //#include "lib/matrix.h"
 #include "lib/nurbs.h"
 #include "lib/nurbs_tdes.h"
-#include "ecp/irp6_on_track/ecp_local.h"
+#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_g_nurbs.h"
 
 

@@ -12,11 +12,12 @@
 
 #include "lib/srlib.h"
 
-#include "ecp/irp6_on_track/ecp_local.h"
-#include "ecp/irp6_postument/ecp_local.h"
-#include "ecp/irp6_mechatronika/ecp_local.h"
+#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
+#include "ecp/irp6_postument/ecp_r_irp6p.h"
+#include "ecp/irp6_mechatronika/ecp_r_irp6m.h"
 #include "ecp/conveyor/ecp_r_conv.h"
-#include "ecp/speaker/ecp_local.h"
+#include "ecp/speaker/ecp_r_speaker.h"
+#include "ecp/polycrank/ecp_r_polycrank.h"
 
 #include "ecp/common/ecp_t_tran.h"
 #include "ecp/common/ecp_generator_t.h"
@@ -55,6 +56,10 @@ void tran::task_initialization(void)
 	else if (!strcmp(config.section_name, "[ecp_irp6_mechatronika]"))
 	{
 		ecp_m_robot = new irp6m::ecp_irp6_mechatronika_robot (*this);
+	}
+	else if (!strcmp(config.section_name, "[ecp_polycrank]"))
+	{
+		ecp_m_robot = new polycrank::robot (*this);
 	}
 
 	sr_ecp_msg->message("ECP loaded");

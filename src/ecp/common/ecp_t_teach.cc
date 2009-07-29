@@ -12,9 +12,9 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
-#include "ecp/irp6_on_track/ecp_local.h"
-#include "ecp/irp6_postument/ecp_local.h"
-#include "ecp/irp6_mechatronika/ecp_local.h"
+#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
+#include "ecp/irp6_postument/ecp_r_irp6p.h"
+#include "ecp/irp6_mechatronika/ecp_r_irp6m.h"
 
 #include "ecp/common/ecp_t_teach.h"
 #include "ecp/common/ecp_teach_in_generator.h"

@@ -1,4 +1,4 @@
-#include "ecp/irp6_postument/ecp_local.h"
+#include "ecp/irp6_postument/ecp_r_irp6p.h"
 #include "ecp/irp6_postument/ecp_t_eihcalibration_irp6p.h"
 #include <unistd.h>
 

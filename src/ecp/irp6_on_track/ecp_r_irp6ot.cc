@@ -2,7 +2,7 @@
 //                            ecp.cc
 //            Effector Control Process (lib::ECP) - methods
 // Funkcje do tworzenia procesow ECP
-// robot - irp6_postument
+// robot - irp6_on_track
 //
 // -------------------------------------------------------------------------
 
@@ -10,29 +10,27 @@
 #include "lib/com_buf.h"
 #include "lib/mis_fun.h"
 
-#include "ecp/irp6_postument/ecp_local.h"
+#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6p {
+namespace irp6ot {
 
-ecp_irp6_postument_robot::ecp_irp6_postument_robot(lib::configurator &_config, lib::sr_ecp *_sr_ecp) :
-	ecp_robot(lib::ROBOT_IRP6_POSTUMENT, _config, _sr_ecp)
+ecp_irp6_on_track_robot::ecp_irp6_on_track_robot(lib::configurator &_config, lib::sr_ecp *_sr_ecp) :
+	ecp_robot(lib::ROBOT_IRP6_ON_TRACK, _config, _sr_ecp)
 {
 }
-;
-ecp_irp6_postument_robot::ecp_irp6_postument_robot(common::task::task& _ecp_object) :
-	ecp_robot(lib::ROBOT_IRP6_POSTUMENT, _ecp_object)
+
+ecp_irp6_on_track_robot::ecp_irp6_on_track_robot(common::task::task& _ecp_object) :
+	ecp_robot(lib::ROBOT_IRP6_ON_TRACK, _ecp_object)
 {
 }
-;
 
 // --------------------------------------------------------------------------
-void ecp_irp6_postument_robot::create_command(void)
+void ecp_irp6_on_track_robot::create_command(void)
 {
 	// wypelnia bufor wysylkowy do EDP na podstawie danych
 	// zawartych w skladowych generatora lub warunku
-	int j; // pomocnicze liczniki petli
 
 	ecp_command.instruction.instruction_type = EDP_data.instruction_type;
 	ecp_command.instruction.set_type = EDP_data.set_type;
@@ -45,7 +43,6 @@ void ecp_irp6_postument_robot::create_command(void)
 	ecp_command.instruction.set_arm_type = EDP_data.set_arm_type;
 	ecp_command.instruction.get_arm_type = EDP_data.get_arm_type;
 	ecp_command.instruction.output_values = EDP_data.output_values;
-
 	ecp_command.instruction.interpolation_type = EDP_data.next_interpolation_type;
 
 	switch (EDP_data.instruction_type) {
@@ -58,28 +55,21 @@ void ecp_irp6_postument_robot::create_command(void)
 						lib::copy_frame(ecp_command.instruction.rmodel.tool_frame_def.tool_frame, EDP_data.next_tool_frame);
 						break;
 					case lib::TOOL_XYZ_ANGLE_AXIS:
-						for (j=0; j<6; j++)
+						for (int j=0; j<6; j++)
 							ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[j]
 									= EDP_data.next_XYZ_AA_tool_coordinates[j];
 						break;
 					case lib::TOOL_XYZ_EULER_ZYZ:
-						for (j=0; j<6; j++)
+						for (int j=0; j<6; j++)
 							ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[j]
 									= EDP_data.next_XYZ_ZYZ_tool_coordinates[j];
 						break;
-						///////////////////K
-					case lib::TOOL_AS_XYZ_EULER_ZY:
-						for (j=0; j<6; j++)
-							ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates[j]
-									= EDP_data.next_XYZ_ZYZ_tool_coordinates[j];
-						break;
-						/////////////////K
 					case lib::ARM_KINEMATIC_MODEL:
 						ecp_command.instruction.rmodel.kinematic_model.kinematic_model_no
 								= EDP_data.next_kinematic_model_no;
 						break;
 					case lib::SERVO_ALGORITHM:
-						for (j=0; j<IRP6_POSTUMENT_NUM_OF_SERVOS; j++) {
+						for (int j=0; j<IRP6_ON_TRACK_NUM_OF_SERVOS; j++) {
 							ecp_command.instruction.rmodel.servo_algorithm.servo_algorithm_no[j]
 									= EDP_data.next_servo_algorithm_no[j];
 							ecp_command.instruction.rmodel.servo_algorithm.servo_parameters_no[j]
@@ -110,37 +100,30 @@ void ecp_irp6_postument_robot::create_command(void)
 				switch (EDP_data.set_arm_type) {
 					case lib::FRAME:
 						lib::copy_frame(ecp_command.instruction.arm.pf_def.arm_frame, EDP_data.next_arm_frame);
-
 						break;
 					case lib::XYZ_ANGLE_AXIS:
-						for (j=0; j<6; j++)
+						for (int j=0; j<6; j++)
 							ecp_command.instruction.arm.pf_def.arm_coordinates[j]
 									= EDP_data.next_XYZ_AA_arm_coordinates[j];
-
 						break;
 					case lib::XYZ_EULER_ZYZ:
-						for (j=0; j<6; j++)
+						for (int j=0; j<6; j++)
 							ecp_command.instruction.arm.pf_def.arm_coordinates[j]
 									= EDP_data.next_XYZ_ZYZ_arm_coordinates[j];
-
 						break;
 
 					case lib::JOINT:
-						for (j=0; j<IRP6_POSTUMENT_NUM_OF_SERVOS; j++) {
-							ecp_command.instruction.arm.pf_def.desired_torque[j]
-									= EDP_data.desired_torque[j];
+						for (int j=0; j<IRP6_ON_TRACK_NUM_OF_SERVOS; j++)
 							ecp_command.instruction.arm.pf_def.arm_coordinates[j]
 									= EDP_data.next_joint_arm_coordinates[j];
-						}
 						break;
 					case lib::MOTOR:
-						for (j=0; j<IRP6_POSTUMENT_NUM_OF_SERVOS; j++)
+						for (int j=0; j<IRP6_ON_TRACK_NUM_OF_SERVOS; j++)
 							ecp_command.instruction.arm.pf_def.arm_coordinates[j]
 									= EDP_data.next_motor_arm_coordinates[j];
 						break;
 					case lib::PF_VELOCITY:
-
-						for (int j=0; j<IRP6_POSTUMENT_NUM_OF_SERVOS; j++) {
+						for (int j=0; j<IRP6_ON_TRACK_NUM_OF_SERVOS; j++) {
 							ecp_command.instruction.arm.pf_def.arm_coordinates[j]
 									= EDP_data.next_velocity[j]; // pozycja poczatkowa
 						}
@@ -181,12 +164,12 @@ void ecp_irp6_postument_robot::create_command(void)
 	} // end: switch (instruction_type)
 
 }
-; // end: ecp_irp6_postument_robot::create_command
+; // end: ecp_irp6_on_track_robot::create_command
 // ---------------------------------------------------------------
 
 
 /*---------------------------------------------------------------------*/
-void ecp_irp6_postument_robot::get_reply(void)
+void ecp_irp6_on_track_robot::get_reply(void)
 {
 	// pobiera z pakietu przeslanego z EDP informacje i wstawia je do
 	// odpowiednich skladowych generatora lub warunku
@@ -223,10 +206,12 @@ void ecp_irp6_postument_robot::get_reply(void)
 			break;
 		default: // bledna przesylka
 			throw ECP_error (lib::NON_FATAL_ERROR, INVALID_EDP_REPLY);
-	}
+	}; // end: switch (EDP_data.reply_type)
 }
+; // end: ecp_irp6_on_track_robot::get_reply ()
 
-void ecp_irp6_postument_robot::get_input_reply(void)
+
+void ecp_irp6_on_track_robot::get_input_reply(void)
 {
 	EDP_data.input_values = reply_package.input_values;
 	for (int i=0; i<8; i++) {
@@ -234,27 +219,28 @@ void ecp_irp6_postument_robot::get_input_reply(void)
 	}
 }
 
-void ecp_irp6_postument_robot::get_arm_reply(void)
+void ecp_irp6_on_track_robot::get_arm_reply(void)
 {
-
 	switch (reply_package.arm_type) {
 		case lib::MOTOR:
-			for (int i=0; i<IRP6_POSTUMENT_NUM_OF_SERVOS; i++)
+			for (int i=0; i<IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
 				EDP_data.current_motor_arm_coordinates[i]
 						= reply_package.arm.pf_def.arm_coordinates[i];
 			break;
 		case lib::JOINT:
-			for (int i=0; i<IRP6_POSTUMENT_NUM_OF_SERVOS; i++)
+			for (int i=0; i<IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
 				EDP_data.current_joint_arm_coordinates[i]
 						= reply_package.arm.pf_def.arm_coordinates[i];
 			break;
 		case lib::FRAME:
 			lib::copy_frame(EDP_data.current_arm_frame, reply_package.arm.pf_def.arm_frame);
+
 			break;
 		case lib::XYZ_EULER_ZYZ:
 			for (int i=0; i<6; i++)
 				EDP_data.current_XYZ_ZYZ_arm_coordinates[i]
 						= reply_package.arm.pf_def.arm_coordinates[i];
+
 			break;
 
 		case lib::XYZ_ANGLE_AXIS:
@@ -276,9 +262,10 @@ void ecp_irp6_postument_robot::get_arm_reply(void)
 
 	EDP_data.current_gripper_coordinate = reply_package.arm.pf_def.gripper_coordinate;
 	EDP_data.gripper_reg_state = reply_package.arm.pf_def.gripper_reg_state;
+
 }
 
-void ecp_irp6_postument_robot::get_rmodel_reply(void)
+void ecp_irp6_on_track_robot::get_rmodel_reply(void)
 {
 	switch (reply_package.rmodel_type) {
 		case lib::TOOL_FRAME:
@@ -294,17 +281,12 @@ void ecp_irp6_postument_robot::get_rmodel_reply(void)
 				EDP_data.current_XYZ_ZYZ_tool_coordinates[i]
 						= reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
 			break;
-		case lib::TOOL_AS_XYZ_EULER_ZY:
-			for (int i=0; i<6; i++)
-				EDP_data.current_XYZ_ZYZ_tool_coordinates[i]
-						= reply_package.rmodel.tool_coordinate_def.tool_coordinates[i];
-			break;
 		case lib::ARM_KINEMATIC_MODEL:
 			EDP_data.current_kinematic_model_no
 					= reply_package.rmodel.kinematic_model.kinematic_model_no;
 			break;
 		case lib::SERVO_ALGORITHM:
-			for (int i=0; i<IRP6_POSTUMENT_NUM_OF_SERVOS; i++) {
+			for (int i=0; i<IRP6_ON_TRACK_NUM_OF_SERVOS; i++) {
 				EDP_data.current_servo_algorithm_no[i]
 						= reply_package.rmodel.servo_algorithm.servo_algorithm_no[i];
 				EDP_data.current_servo_parameters_no[i]
@@ -322,7 +304,8 @@ void ecp_irp6_postument_robot::get_rmodel_reply(void)
 			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	} // end: switch (...rmodel_type)
 }
-
-} // namespace irp6p
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
+
+

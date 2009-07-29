@@ -10,7 +10,7 @@
 #include "ecp_mp/ecp_mp_t_rcsc.h"
 #include "ecp_mp/ecp_mp_s_schunk.h"
 
-#include "ecp/irp6_on_track/ecp_local.h"
+#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_g_vis.h"
 #include "ecp_mp/ecp_mp_s_vis.h"
 #include "ecp/irp6_on_track/ecp_t_vis_irp6ot.h"

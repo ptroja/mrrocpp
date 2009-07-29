@@ -14,7 +14,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp/irp6_postument/ecp_local.h"
+#include "ecp/irp6_postument/ecp_r_irp6p.h"
 #include "ecp/irp6_postument/ecp_g_test.h"
 
 #include "lib/mathtr.h"

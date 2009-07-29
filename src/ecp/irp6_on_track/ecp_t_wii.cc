@@ -8,7 +8,7 @@
 #include "lib/srlib.h"
 #include "ecp_mp/ecp_mp_s_wiimote.h"
 
-#include "ecp/irp6_on_track/ecp_local.h"
+#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_t_wii.h"
 #include "lib/mathtr.h"
 
