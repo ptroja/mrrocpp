@@ -15,7 +15,7 @@ HEADERSDIR = $(HOMEDIR)/include
 
 CXXFLAGS += -I $(HEADERSDIR) -I.
 LDFLAGS += -Bstatic $(PHABOPTS)
-SDFLAGS = $(PHABOPTS) -L/opt/qnx641/target/qnx6/mrlib/lib -lxml2 -liconv
+SDFLAGS = $(PHABOPTS) -L$(QNX_TARGET)/mrlib/lib -lxml2 -liconv
 
 MRROCOBJ = \
 	$(ECP_DIR)/irp6_on_track/ecp_r_irp6ot.o \

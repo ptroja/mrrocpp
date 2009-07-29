@@ -22,7 +22,7 @@ HEADERSDIR = $(HOMEDIR)/src
 
 CXXFLAGS += -I $(HEADERSDIR) -I.
 LDFLAGS += -Bstatic -l phexlib $(ABLIB) $(PHABOPTS)
-SDFLAGS = -l phexlib $(ABLIB) $(PHABOPTS) -L/opt/qnx641/target/qnx6/mrlib/lib -lxml2 -liconv
+SDFLAGS = -l phexlib $(ABLIB) $(PHABOPTS) -L$(QNX_TARGET)/mrlib/lib -lxml2 -liconv
 
 MRROCOBJ = \
 	$(ECP_DIR)/irp6_on_track/ecp_r_irp6ot.o \
