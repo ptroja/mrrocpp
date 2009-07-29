@@ -1,10 +1,10 @@
 #include <string.h>
 
-#include "ecp/common/ecp_smooth_taught_in_pose.h"
+#include "ecp_mp/ecp_mp_smooth_taught_in_pose.h"
 #include "lib/impconst.h"
 
 namespace mrrocpp {
-namespace ecp {
+namespace ecp_mp {
 namespace common {
 
 smooth_taught_in_pose::smooth_taught_in_pose (void)
@@ -22,6 +22,6 @@ smooth_taught_in_pose::smooth_taught_in_pose (lib::POSE_SPECIFICATION at, double
 
 
 } // namespace common
-} // namespace ecp
+} // namespace ecp_mp
 } // namespace mrrocpp
 

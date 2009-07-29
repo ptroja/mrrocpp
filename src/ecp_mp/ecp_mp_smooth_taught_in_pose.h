@@ -5,24 +5,24 @@
 #include "lib/impconst.h"	// MAX_SERVOS_NR
 
 namespace mrrocpp {
-namespace ecp {
+namespace ecp_mp {
 namespace common {
 
 class smooth_taught_in_pose {
 public:
   lib::POSE_SPECIFICATION arm_type;
-  double v_p[MAX_SERVOS_NR];  
+  double v_p[MAX_SERVOS_NR];
   double v_k[MAX_SERVOS_NR];
   double v[MAX_SERVOS_NR];
   double a[MAX_SERVOS_NR];
   double coordinates[MAX_SERVOS_NR];
-  
+
   smooth_taught_in_pose (void);
   smooth_taught_in_pose (lib::POSE_SPECIFICATION at, double* vp, double* vk, double* vv, double* aa, double* coordinates);
 }; // end:class ecp_smooth_taught_in_pose
 
 } // namespace common
-} // namespace ecp
+} // namespace ecp_mp
 } // namespace mrrocpp
 
 #endif /* _ECP_SMOOTH_TAUGHT_IN_POSE_H */
