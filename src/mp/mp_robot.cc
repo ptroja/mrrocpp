@@ -18,7 +18,12 @@
 
 namespace mrrocpp {
 namespace mp {
-namespace common {
+namespace robot {
+
+
+robot::MP_error::MP_error(lib::ERROR_CLASS err0, uint64_t err1) :
+        error_class(err0), mp_error(err1)
+{}
 
 // -------------------------------------------------------------------
 robot::robot( lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::task &mp_object_l) :
@@ -39,7 +44,7 @@ robot::robot( lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::tas
 	// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny ECP
 	if (access(tmp_string, R_OK) == 0 ) {
 		sr_ecp_msg.message("ECP already exists");
-		throw MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 #endif
 
@@ -49,14 +54,14 @@ robot::robot( lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::tas
 		uint64_t e = errno; // kod bledu
 		perror ("Failed to spawn ECP process on node\n");
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "MP: Failed to spawn ECP");
-		throw MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
 	new_pulse = false;
 	robot_new_pulse_checked = false;
 	communicate = true; // domyslnie robot jest aktywny
 
-	mp_receive_pulse_struct_t input;
+	common::mp_receive_pulse_struct_t input;
 
 	// oczekiwanie na zgloszenie procesu ECP
 	// ret = mp_object.mp_wait_for_name_open(&input, nd, ECP_pid);
@@ -79,7 +84,7 @@ robot::robot( lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::tas
 			uint64_t e = errno; // kod bledu
 			perror("Connect to ECP failed");
 			sr_ecp_msg.message (lib::SYSTEM_ERROR, e, "Connect to ECP failed");
-			throw MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+			throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 		}
 }
 // -------------------------------------------------------------------
@@ -113,7 +118,7 @@ void robot::start_ecp ( void ) {
 		uint64_t e = errno;
 		perror("Send to ECP failed\n");
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "MP: Send to ECP failed");
-		throw MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
 	// by Y - ECP_ACKNOWLEDGE zamienione na lib::TASK_TERMINATED
@@ -121,7 +126,7 @@ void robot::start_ecp ( void ) {
 	if (ecp_reply_package.reply != lib::TASK_TERMINATED ) {
 		// Odebrano od ECP informacje o bledzie
 		printf("Error w start_ecp w ECP\n");
-		throw MP_main_error(lib::NON_FATAL_ERROR, ECP_ERRORS);
+		throw common::MP_main_error(lib::NON_FATAL_ERROR, ECP_ERRORS);
 	}
 }
 // ------------------------------------------------------------------------
@@ -227,7 +232,7 @@ void robot::get_reply(void) {
 	}
 }
 
-} // namespace common
+} // namespace robot
 } // namespace mp
 } // namespace mrrocpp
 

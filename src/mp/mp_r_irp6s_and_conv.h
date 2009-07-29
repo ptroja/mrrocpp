@@ -5,7 +5,7 @@
 #include "mp/mp_robot.h"
 namespace mrrocpp {
 namespace mp {
-namespace common {
+namespace robot {
 class irp6s_and_conv_robot : public robot
 {
 	private:
@@ -22,7 +22,7 @@ class irp6s_and_conv_robot : public robot
 		virtual void get_arm_reply (void);
 		virtual void get_rmodel_reply (void);
 };
-} // namespace common
+} // namespace robot
 } // namespace mp
 } // namespace mrrocpp
 #endif /*MP_R_IRP6S_AND_CONV_H_*/

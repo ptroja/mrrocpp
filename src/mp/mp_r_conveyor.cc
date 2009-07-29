@@ -8,14 +8,14 @@
 
 namespace mrrocpp {
 namespace mp {
-namespace common {
+namespace robot {
 
 conveyor_robot::conveyor_robot(task::task &mp_object_l) :
 	irp6s_and_conv_robot(lib::ROBOT_CONVEYOR, "[ecp_conveyor]", mp_object_l)
 {
 }
 
-} // namespace common
+} // namespace robot
 } // namespace mp
 } // namespace mrrocpp
 

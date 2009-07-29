@@ -20,11 +20,15 @@
 
 namespace mrrocpp {
 namespace mp {
+namespace robot {
+class robot;
+}
+
 namespace common {
 
 
 //class base;
-class robot;
+
 
 enum WAIT_FOR_STOP_ENUM {
 	MP_EXIT,

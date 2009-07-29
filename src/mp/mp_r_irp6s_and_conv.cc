@@ -7,7 +7,7 @@
 
 namespace mrrocpp {
 namespace mp {
-namespace common {
+namespace robot {
 
 irp6s_and_conv_robot::irp6s_and_conv_robot(lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::task &mp_object_l) :
 	robot(l_robot_name, _section_name, mp_object_l), servos_number(0), has_gripper(false)
@@ -345,7 +345,7 @@ void irp6s_and_conv_robot::get_rmodel_reply(void)
 			throw MP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}
 }
-} // namespace common
+} // namespace robot
 } // namespace mp
 } // namespace mrrocpp
 

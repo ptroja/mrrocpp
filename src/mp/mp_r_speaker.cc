@@ -9,7 +9,7 @@
 
 namespace mrrocpp {
 namespace mp {
-namespace common {
+namespace robot {
 
 speaker_robot::speaker_robot (task::task &mp_object_l) :
 		robot (lib::ROBOT_SPEAKER, "[ecp_speaker]", mp_object_l)
@@ -62,7 +62,7 @@ void speaker_robot::get_reply(void)
 	}
 }
 
-} // namespace common
+} // namespace robot
 } // namespace mp
 } // namespace mrrocpp
 

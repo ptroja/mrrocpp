@@ -9,7 +9,7 @@
 #include "mp/mp.h"
 namespace mrrocpp {
 namespace mp {
-namespace common {
+namespace robot {
 // ---------------------------------------------------------------
 class speaker_robot: public robot {
 
@@ -33,7 +33,7 @@ class speaker_robot: public robot {
 
 }; // end: class mp_conveyor_robot
 // --------------------------------------------------------------------------
-} // namespace common
+} // namespace robot
 } // namespace mp
 } // namespace mrrocpp
 #endif

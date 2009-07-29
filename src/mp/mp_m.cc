@@ -179,7 +179,7 @@ int main (int argc, char *argv[], char **arge)
 
 
 			} /*end: catch */
-			catch (mp::common::robot::MP_error e) {
+			catch (mp::robot::robot::MP_error e) {
 				if (e.error_class == lib::SYSTEM_ERROR) {
 					exit(EXIT_FAILURE);
 				}

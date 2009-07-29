@@ -57,17 +57,17 @@ class generator : public ecp_mp::generator::generator
 		bool wait_for_ECP_pulse;
 
 		//! mapa wszystkich robotow
-		std::map <lib::ROBOT_ENUM, common::robot*> robot_m;
+		std::map <lib::ROBOT_ENUM, robot::robot*> robot_m;
 
 		generator(task::task& _mp_task);
 
 		void re_run(void); // powrot do stanu wyjsciowego
 
 		//! Kopiuje dane z robotow do generatora
-		void copy_data(std::map <lib::ROBOT_ENUM, common::robot*>& _robot_m);
+		void copy_data(std::map <lib::ROBOT_ENUM, robot::robot*>& _robot_m);
 
 		//! Kopiuje polecenie stworzone w generatorze do robotow
-		void copy_generator_command (std::map <lib::ROBOT_ENUM, common::robot*>& _robot_m);
+		void copy_generator_command (std::map <lib::ROBOT_ENUM, robot::robot*>& _robot_m);
 
 		//! Klasa obslugi bledow generatora na poziomie MP
 		class MP_error

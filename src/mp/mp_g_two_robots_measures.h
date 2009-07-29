@@ -31,7 +31,7 @@ class two_robots_measures : public generator
 {
 	protected:
 		// Pomocnicze wskazniki na roboty.
-		common::robot *irp6ot, *irp6p;
+		robot::robot *irp6ot, *irp6p;
 		// Lista kinematyk.
 		std::vector <two_robots_measure> measures;
 		// Ostatni odczyt - do porownywania, czy pozycja jest nowa.

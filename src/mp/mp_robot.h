@@ -6,7 +6,7 @@
 
 namespace mrrocpp {
 namespace mp {
-namespace common {
+namespace robot {
 
 // ------------------------------------------------------------------------
 struct robot_ECP_transmission_data : ecp_mp::robot_transmission_data
@@ -96,7 +96,7 @@ public:
     // pobiera z pakietu przeslanego z EDP informacje i wstawia je do odpowiednich swoich skladowych
     virtual void get_reply ( void );
 };
-} // namespace common
+} // namespace robot
 } // namespace mp
 } // namespace mrrocpp
 #endif /*MP_ROBOT_H_*/
