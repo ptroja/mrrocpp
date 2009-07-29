@@ -14,7 +14,7 @@ pw::pw(lib::configurator &_config) : task(_config)
 
 void pw::task_initialization(void)
 {
-	ecp_m_robot= new ecp_irp6_on_track_robot(*this);
+	ecp_m_robot= new robot(*this);
 	kolo_gen= new generator::pw_kolo(*this);
 
 	sr_ecp_msg->message("ECP PW loaded");

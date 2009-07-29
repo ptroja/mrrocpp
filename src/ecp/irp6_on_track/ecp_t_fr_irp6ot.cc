@@ -35,7 +35,7 @@ fr::fr(lib::configurator &_config) : task(_config)
 // methods for ECP template to redefine in concrete classes
 void fr::task_initialization(void)
 {
-    ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+    ecp_m_robot = new robot (*this);
 
     tdes_joint.arm_type = lib::JOINT;
     tdes_joint.interpolation_node_no =200;

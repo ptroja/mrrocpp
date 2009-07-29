@@ -68,7 +68,7 @@ progpanel::progpanel(lib::configurator &_config) : task(_config)
 // methods for ECP template to redefine in concrete classes
 void progpanel::task_initialization(void)
 {
-    ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+    ecp_m_robot = new robot (*this);
 
     // powolanie czujnikow
     sensor_m[lib::SENSOR_PP] =

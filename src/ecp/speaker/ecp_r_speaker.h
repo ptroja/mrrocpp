@@ -15,13 +15,13 @@ namespace ecp {
 namespace speaker {
 
 // ---------------------------------------------------------------
-class ecp_speaker_robot: public common::ecp_robot
+class robot: public common::ecp_robot
 {
 	// Klasa dla robota speaker
 
 	public:
-	ecp_speaker_robot (lib::configurator &_config, lib::sr_ecp *_sr_ecp);
-	ecp_speaker_robot (common::task::task& _ecp_object);
+	robot (lib::configurator &_config, lib::sr_ecp *_sr_ecp);
+	robot (common::task::task& _ecp_object);
 
 	virtual void create_command (void);
 	// wypelnia bufor wysylkowy do EDP na podstawie danych zawartych w obrazie

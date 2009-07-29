@@ -50,7 +50,7 @@ void spots_recognition::task_initialization(void)
 // Note - only on track working
 if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 {
-    ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+    ecp_m_robot = new robot (*this);
     sr_ecp_msg->message("IRp6 on Track loaded");
 }
 /*else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)

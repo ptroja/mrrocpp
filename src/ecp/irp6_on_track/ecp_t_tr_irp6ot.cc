@@ -372,7 +372,7 @@ tr::tr(lib::configurator &_config) :
 void tr::task_initialization(void)
 {
 	// Stworzenie obiektu robot.
-	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+	ecp_m_robot = new robot (*this);
 	// Nawiazanie komunikacji z EDP.
 
 	// Dolaczenie globalnej nazwy procesu ECP - kanal do odbioru polecen z UI.

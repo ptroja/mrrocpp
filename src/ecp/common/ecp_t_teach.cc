@@ -35,15 +35,15 @@ void teach::task_initialization(void)
 {
     if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     {
-        ecp_m_robot = new irp6ot::ecp_irp6_on_track_robot (*this);
+        ecp_m_robot = new irp6ot::robot (*this);
     }
     else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
     {
-        ecp_m_robot = new irp6p::ecp_irp6_postument_robot (*this);
+        ecp_m_robot = new irp6p::robot (*this);
     }
     else if (strcmp(config.section_name, "[ecp_irp6_mechatronika]") == 0)
     {
-        ecp_m_robot = new irp6m::ecp_irp6_mechatronika_robot (*this);
+        ecp_m_robot = new irp6m::robot (*this);
     }
 
     tig = new ecp_teach_in_generator (*this);

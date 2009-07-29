@@ -41,12 +41,12 @@ void cvfradia::task_initialization(void)
     // Create an adequate robot. - depending on the ini section name.
     if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     {
-        ecp_m_robot = new irp6ot::ecp_irp6_on_track_robot (*this);
+        ecp_m_robot = new irp6ot::robot (*this);
         sr_ecp_msg->message("IRp6ot loaded");
     }
     else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
     {
-        ecp_m_robot = new irp6p::ecp_irp6_postument_robot (*this);
+        ecp_m_robot = new irp6p::robot (*this);
         sr_ecp_msg->message("IRp6p loaded");
     }
 		// Create generator and pass sensor to it.

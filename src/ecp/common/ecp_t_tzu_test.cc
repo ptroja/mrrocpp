@@ -49,12 +49,12 @@ void tzu_test::task_initialization(void)
 	// ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	{
-		ecp_m_robot = new irp6ot::ecp_irp6_on_track_robot (*this);
+		ecp_m_robot = new irp6ot::robot (*this);
 		robot = ON_TRACK;
 	}
 	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
 	{
-		ecp_m_robot = new irp6p::ecp_irp6_postument_robot (*this);
+		ecp_m_robot = new irp6p::robot (*this);
 		robot = POSTUMENT;
 	}
 

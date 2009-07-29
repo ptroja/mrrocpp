@@ -22,18 +22,18 @@ namespace speaker {
 // ####################################################################################################
 // ####################################################################################################
 
-ecp_speaker_robot::ecp_speaker_robot(lib::configurator &_config, lib::sr_ecp *_sr_ecp) :
+robot::robot(lib::configurator &_config, lib::sr_ecp *_sr_ecp) :
 	ecp_robot(lib::ROBOT_SPEAKER, _config, _sr_ecp)
 {
 }
 
-ecp_speaker_robot::ecp_speaker_robot(common::task::task& _ecp_object) :
+robot::robot(common::task::task& _ecp_object) :
 	ecp_robot(lib::ROBOT_SPEAKER, _ecp_object)
 {
 }
 
 // --------------------------------------------------------------------------
-void ecp_speaker_robot::create_command(void)
+void robot::create_command(void)
 {
 	// wypelnia bufor wysylkowy do EDP na podstawie danych
 	// zawartych w skladowych generatora lub warunku
@@ -58,7 +58,7 @@ void ecp_speaker_robot::create_command(void)
 // ---------------------------------------------------------------
 
 /*---------------------------------------------------------------------*/
-void ecp_speaker_robot::get_reply(void)
+void robot::get_reply(void)
 {
 	// pobiera z pakietu przeslanego z EDP informacje i wstawia je do
 	// odpowiednich skladowych generatora lub warunku

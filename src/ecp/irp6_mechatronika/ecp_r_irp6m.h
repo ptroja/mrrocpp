@@ -15,13 +15,13 @@ namespace ecp {
 namespace irp6m {
 
 // ---------------------------------------------------------------
-class ecp_irp6_mechatronika_robot: public common::ecp_robot
+class robot: public common::ecp_robot
 {
 	// Klasa dla robota irp6_postument (sztywnego)
 
 	public:
-	ecp_irp6_mechatronika_robot (lib::configurator &_config, lib::sr_ecp *_sr_ecp);
-	ecp_irp6_mechatronika_robot (common::task::task& _ecp_object);
+	robot (lib::configurator &_config, lib::sr_ecp *_sr_ecp);
+	robot (common::task::task& _ecp_object);
 
 	virtual void create_command (void);
 	// wypelnia bufor wysylkowy do EDP na podstawie danych zawartych w obrazie

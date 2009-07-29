@@ -30,7 +30,7 @@ rcsc::rcsc(lib::configurator &_config) : task(_config)
 // methods for ECP template to redefine in concrete classes
 void rcsc::task_initialization(void)
 {
-    ecp_m_robot = new ecp_speaker_robot (*this);
+    ecp_m_robot = new robot (*this);
 
     gt = new common::generator::transparent(*this);
     speak = new generator::speaking (*this, 8);

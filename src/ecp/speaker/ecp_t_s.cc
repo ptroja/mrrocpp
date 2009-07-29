@@ -34,7 +34,7 @@ speaking::speaking(lib::configurator &_config) : task(_config)
 // methods for ECP template to redefine in concrete classes
 void speaking::task_initialization(void)
 {
-    ecp_m_robot = new ecp_speaker_robot (*this);
+    ecp_m_robot = new robot (*this);
 
     sensor_m[lib::SENSOR_MIC] =
         new ecp_mp::sensor::mic(lib::SENSOR_MIC, "[vsp_mic]", *this);

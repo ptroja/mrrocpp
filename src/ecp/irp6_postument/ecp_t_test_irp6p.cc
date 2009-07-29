@@ -39,7 +39,7 @@ test::test(lib::configurator &_config) : task(_config)
 // methods for ECP template to redefine in concrete classes
 void test::task_initialization(void)
 {
-	ecp_m_robot = new ecp_irp6_postument_robot (*this);
+	ecp_m_robot = new robot (*this);
 
 		// Powolanie czujnikow
 	sensor_m[lib::SENSOR_FORCE_POSTUMENT] =

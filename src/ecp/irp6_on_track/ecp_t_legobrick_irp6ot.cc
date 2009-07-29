@@ -26,7 +26,7 @@ lego_brick::lego_brick(lib::configurator &_config) :
 void lego_brick::task_initialization(void)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+	ecp_m_robot = new robot (*this);
 
 	//gt = new ecp_generator_t (*this);
 	//nrg = new ecp_tff_nose_run_generator (*this, 8);

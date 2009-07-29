@@ -40,12 +40,12 @@ void visioncoordinates::task_initialization()
 	// tworzymy robota
     if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     {
-        ecp_m_robot = new irp6ot::ecp_irp6_on_track_robot (*this);
+        ecp_m_robot = new irp6ot::robot (*this);
         debugmsg("IRp6ot loaded");
     }
     else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
     {
-        ecp_m_robot = new irp6p::ecp_irp6_postument_robot(*this);
+        ecp_m_robot = new irp6p::robot(*this);
         debugmsg("IRp6p loaded");
     }
 

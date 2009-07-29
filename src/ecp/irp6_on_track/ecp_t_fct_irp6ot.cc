@@ -279,7 +279,7 @@ fct::fct(lib::configurator &_config) :
 void fct::task_initialization(void)
 {
 	// Nawiazanie komunikacji z EDP.
-	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+	ecp_m_robot = new robot (*this);
 
 	// Stworzenie nazwy.
 	std::string attach_point = config.return_attach_point_name	(lib::configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point", "[ecp_irp6_on_track]");

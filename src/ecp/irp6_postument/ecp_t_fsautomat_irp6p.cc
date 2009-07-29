@@ -56,7 +56,7 @@ fsautomat::fsautomat(lib::configurator &_config) : task(_config)
 
 void fsautomat::task_initialization(void)
 {
-	ecp_m_robot = new ecp_irp6_postument_robot (*this);
+	ecp_m_robot = new robot (*this);
 
 	const char * whichECP = "ROBOT_IRP6_POSTUMENT";
 

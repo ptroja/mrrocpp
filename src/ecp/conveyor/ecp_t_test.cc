@@ -22,7 +22,7 @@ test::~test()
 // methods for ECP template to redefine in concrete classes
 void test::task_initialization(void)
 {
-	ecp_m_robot = new ecp_conveyor_robot (*this);
+	ecp_m_robot = new robot (*this);
 
 	sr_ecp_msg->message("ECP loaded");
 }

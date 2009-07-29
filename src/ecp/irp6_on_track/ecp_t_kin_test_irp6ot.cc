@@ -28,7 +28,7 @@ kin_test::kin_test(lib::configurator &_config) : task(_config)
 // methods for ECP template to redefine in concrete classes
 void kin_test::task_initialization(void)
 {
-    ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+    ecp_m_robot = new robot (*this);
 
     sr_ecp_msg->message("ECP kin test irp6ot loaded");
 }

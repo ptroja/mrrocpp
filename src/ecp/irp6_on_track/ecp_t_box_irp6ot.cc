@@ -18,7 +18,7 @@ box::~box(){
 //methods for ECP template to redefine in concrete classes
 void box::task_initialization(void) {
 
-	ecp_m_robot = new ecp_irp6_on_track_robot(*this);
+	ecp_m_robot = new robot(*this);
 	smoothgen = new common::generator::smooth(*this, true);
 	sr_ecp_msg->message("ECP loaded box");
 };

@@ -36,7 +36,7 @@ dung::dung(lib::configurator &_config) : task(_config)
 // methods for ECP template to redefine in concrete classes
 void dung::task_initialization(void)
 {
-	ecp_m_robot = new ecp_irp6_postument_robot (*this);
+	ecp_m_robot = new robot (*this);
 
 
 

@@ -38,7 +38,7 @@ pouring::pouring(lib::configurator &_config) : task(_config)
 void pouring::task_initialization(void)
 {
     // the robot is choose dependendat on the section of configuration file sent as argv[4]
-    ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+    ecp_m_robot = new robot (*this);
 
     sg = new common::generator::smooth (*this, true);
     tcg = new common::generator::tool_change(*this, true);

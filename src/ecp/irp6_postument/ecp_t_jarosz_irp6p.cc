@@ -28,7 +28,7 @@ jarosz::~jarosz()
 // methods for ECP template to redefine in concrete classes
 void jarosz::task_initialization(void)
 {
-	ecp_m_robot = new ecp_irp6_postument_robot (*this);
+	ecp_m_robot = new robot (*this);
 
 	sr_ecp_msg->message("ECP loaded");
 }

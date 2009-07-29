@@ -39,23 +39,23 @@ void tran::task_initialization(void)
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
 	if (!strcmp(config.section_name, "[ecp_irp6_on_track]"))
 	{
-		ecp_m_robot = new irp6ot::ecp_irp6_on_track_robot (*this);
+		ecp_m_robot = new irp6ot::robot (*this);
 	}
 	else if (!strcmp(config.section_name, "[ecp_irp6_postument]"))
 	{
-		ecp_m_robot = new irp6p::ecp_irp6_postument_robot (*this);
+		ecp_m_robot = new irp6p::robot (*this);
 	}
 	else if (!strcmp(config.section_name, "[ecp_conveyor]"))
 	{
-		ecp_m_robot = new conveyor::ecp_conveyor_robot (*this);
+		ecp_m_robot = new conveyor::robot (*this);
 	}
 	else if (!strcmp(config.section_name, "[ecp_speaker]"))
 	{
-		ecp_m_robot = new speaker::ecp_speaker_robot (*this);
+		ecp_m_robot = new speaker::robot (*this);
 	}
 	else if (!strcmp(config.section_name, "[ecp_irp6_mechatronika]"))
 	{
-		ecp_m_robot = new irp6m::ecp_irp6_mechatronika_robot (*this);
+		ecp_m_robot = new irp6m::robot (*this);
 	}
 	else if (!strcmp(config.section_name, "[ecp_polycrank]"))
 	{

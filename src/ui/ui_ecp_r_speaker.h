@@ -16,7 +16,7 @@
 
 
 // ---------------------------------------------------------------
-class ui_speaker_robot: public ecp::speaker::ecp_speaker_robot {
+class ui_speaker_robot: public ecp::speaker::robot {
 // Klasa do obslugi robota irp6_on_track (sztywnego) z poziomu UI
 
  public:

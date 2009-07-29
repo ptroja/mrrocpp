@@ -15,16 +15,16 @@ namespace mrrocpp {
 namespace ecp {
 namespace conveyor {
 
-ecp_conveyor_robot::ecp_conveyor_robot (lib::configurator &_config, lib::sr_ecp *_sr_ecp):
+robot::robot (lib::configurator &_config, lib::sr_ecp *_sr_ecp):
         ecp_robot (lib::ROBOT_CONVEYOR, _config, _sr_ecp)
 {}
-ecp_conveyor_robot::ecp_conveyor_robot (common::task::task& _ecp_object):
+robot::robot (common::task::task& _ecp_object):
         ecp_robot (lib::ROBOT_CONVEYOR, _ecp_object)
 {}
 
 
 // --------------------------------------------------------------------------
-void ecp_conveyor_robot::create_command (void)
+void robot::create_command (void)
 {
     // wypelnia bufor wysylkowy do EDP na podstawie danych
     // zawartych w skladowych generatora lub warunku
@@ -106,7 +106,7 @@ void ecp_conveyor_robot::create_command (void)
 
 
 /*---------------------------------------------------------------------*/
-void ecp_conveyor_robot::get_reply (void)
+void robot::get_reply (void)
 {
     // pobiera z pakietu przeslanego z EDP informacje i wstawia je do
     // odpowiednich skladowych generatora lub warunku
@@ -149,7 +149,7 @@ void ecp_conveyor_robot::get_reply (void)
 
 
 
-void ecp_conveyor_robot::get_input_reply (void)
+void robot::get_input_reply (void)
 {
     EDP_data.input_values = reply_package.input_values;
     for (int i=0; i<8; i++)
@@ -159,7 +159,7 @@ void ecp_conveyor_robot::get_input_reply (void)
 }
 
 
-void ecp_conveyor_robot::get_arm_reply (void)
+void robot::get_arm_reply (void)
 {
     switch (reply_package.arm_type)
     {
@@ -179,7 +179,7 @@ void ecp_conveyor_robot::get_arm_reply (void)
     } // end: switch (...arm_type)
 }
 
-void ecp_conveyor_robot::get_rmodel_reply (void)
+void robot::get_rmodel_reply (void)
 {
     switch (reply_package.rmodel_type)
     {

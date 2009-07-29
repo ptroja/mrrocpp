@@ -40,7 +40,7 @@ pouring::pouring(lib::configurator &_config) : task(_config)
 
 void pouring::task_initialization(void)
 {
-    ecp_m_robot = new ecp_irp6_postument_robot (*this);
+    ecp_m_robot = new robot (*this);
 
     // Powolanie czujnikow
     //	sensor_m[lib::SENSOR_FORCE_POSTUMENT] =

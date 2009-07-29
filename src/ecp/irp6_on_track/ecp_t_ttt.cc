@@ -22,7 +22,7 @@ ttt::ttt(lib::configurator &_config) : common::task::task(_config) {}
 
 void ttt::task_initialization(void)
 {
-	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+	ecp_m_robot = new robot (*this);
 
     sg = new common::generator::smooth (*this, true, true);
 

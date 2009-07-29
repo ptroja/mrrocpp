@@ -28,7 +28,7 @@
 
 // ---------------------------------------------------------------
 ui_conveyor_robot::ui_conveyor_robot (lib::configurator &_config, lib::sr_ecp* _sr_ecp_msg)
-        : ecp_conveyor_robot (_config, sr_ecp_msg)
+        : robot (_config, sr_ecp_msg)
 {
 
     // Konstruktor klasy

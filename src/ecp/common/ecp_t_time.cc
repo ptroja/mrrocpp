@@ -37,9 +37,9 @@ void time::task_initialization(void)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
-		{ ecp_m_robot = new irp6ot::ecp_irp6_on_track_robot (*this); }
+		{ ecp_m_robot = new irp6ot::robot (*this); }
 	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
-		{ ecp_m_robot = new irp6p::ecp_irp6_postument_robot (*this); }
+		{ ecp_m_robot = new irp6p::robot (*this); }
 
 	// Powolanie czujnikow
 	sensor_m[lib::SENSOR_TIME] = new ecp_mp::sensor::time (lib::SENSOR_TIME, "[vsp_time]", *this);

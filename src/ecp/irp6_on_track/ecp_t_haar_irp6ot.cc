@@ -27,7 +27,7 @@ void haar::task_initialization(void) {
 		//Configure sensor.
 		sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
 
-		ecp_m_robot = new ecp_irp6_on_track_robot(*this);
+		ecp_m_robot = new robot(*this);
 
 		planar_vis = new ecp_vis_ib_eih_planar_irp6ot(*this);
 		planar_vis->sensor_m = sensor_m;

@@ -37,7 +37,7 @@ jajko::jajko(lib::configurator &_config) : task(_config)
 // methods for ECP template to redefine in concrete classes
 void jajko::task_initialization(void)
 {
-	ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+	ecp_m_robot = new robot (*this);
 
 	// Powolanie czujnikow
 	sensor_m[lib::SENSOR_FORCE_ON_TRACK] =

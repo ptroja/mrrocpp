@@ -30,7 +30,7 @@ void tb::task_initialization(void){
 	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA,"[vsp_cvfradia]", *this,	sizeof(lib::sensor_image_t::sensor_union_t::fradia_t));
 	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
 
-	ecp_m_robot=new ecp_irp6_on_track_robot(*this);				//initialization of robot
+	ecp_m_robot=new robot(*this);				//initialization of robot
 	sgen=new common::generator::smooth(*this, true);
 	befgen=new common::generator::bias_edp_force(*this);
 	gagen=new common::generator::tff_gripper_approach (*this, 8);	//gripper approach constructor (task&, no_of_steps)
