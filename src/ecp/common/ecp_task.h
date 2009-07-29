@@ -75,11 +75,6 @@ class task : public ecp_mp::task::task
 		// Oczekiwanie na STOP
 		void ecp_wait_for_stop(void);
 
-		// funkcjonalnosc dodana na potrzeby czytania trajektorii z pliku xml
-		class str_cmp{
-		public:
-			bool operator()(char const *a, char const *b) const;
-		};
 
 		ecp_mp::common::Trajectory * createTrajectory(xmlNode *actNode, xmlChar *stateID);
 		std::map<const char*, ecp_mp::common::Trajectory, str_cmp>* loadTrajectories(const char * fileName, lib::ROBOT_ENUM propRobot);

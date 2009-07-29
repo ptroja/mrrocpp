@@ -411,10 +411,6 @@ ecp_sub_task::ecp_sub_task(task &_ecp_t) :
 {
 }
 
-bool task::str_cmp::operator()(char const *a, char const *b) const
-{
-	return strcmp(a, b)<0;
-}
 
 ecp_mp::common::Trajectory * task::createTrajectory(xmlNode *actNode, xmlChar *stateID)
 {

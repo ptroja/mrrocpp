@@ -262,6 +262,12 @@ void task::all_sensors_get_reading (std::map <lib::SENSOR_ENUM, lib::sensor*>& _
 	}
 }
 
+bool task::str_cmp::operator()(char const *a, char const *b) const
+{
+	return strcmp(a, b)<0;
+}
+
+
 } // namespace task
 } // namespace ecp_mp
 } // namespace mrrocpp

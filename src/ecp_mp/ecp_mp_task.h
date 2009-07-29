@@ -76,6 +76,12 @@ public:
 	void all_sensors_initiate_reading (std::map <lib::SENSOR_ENUM, lib::sensor*>& _sensor_m);
 	void all_sensors_get_reading (std::map <lib::SENSOR_ENUM, lib::sensor*>& _sensor_m);
 
+	// funkcjonalnosc dodana na potrzeby czytania trajektorii z pliku xml
+	class str_cmp{
+	public:
+		bool operator()(char const *a, char const *b) const;
+	};
+
 };
 
 // ---------------------------------------------------------------
