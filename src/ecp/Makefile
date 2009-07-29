@@ -4,9 +4,9 @@
 HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 
-SOURCEDIRS = irp6_on_track conveyor irp6_postument speaker irp6_mechatronika festival player multi_robot_binaries common
+SOURCEDIRS = irp6_on_track conveyor irp6_postument speaker irp6_mechatronika polycrank festival player multi_robot_binaries common
 COMMON_SOURCEDIRS = common
-IRP6_SOURCEDIRS = irp6_on_track irp6_postument irp6_mechatronika conveyor
+MANIPULATOR_SOURCEDIRS = irp6_on_track irp6_postument irp6_mechatronika conveyor
 CLEANDIRS = ${SOURCEDIRS}
 INSTALLDIRS = ${SOURCEDIRS}
 # Data for makedepend 
@@ -20,6 +20,7 @@ all: $(SOURCEDIRS)
 irp6_on_track: common
 irp6_postument: common
 irp6_mechatronika: common
+polycrank: common
 conveyor: common
 speaker: common
 festival: common
@@ -29,7 +30,7 @@ multi_robot_binaries: irp6_on_track conveyor irp6_postument speaker irp6_mechatr
 ifeq ($(TARGET), linux)
 $(COMMON_SOURCEDIRS):
 	@$(MAKE) BUILD_TARGET=linux -C $@
-$(IRP6_SOURCEDIRS):
+$(MANIPULATOR_SOURCEDIRS):
 	@$(MAKE) BUILD_TARGET=linux ecp_local.o	-C $@
 else
 $(SOURCEDIRS):
