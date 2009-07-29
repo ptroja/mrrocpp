@@ -14,7 +14,7 @@
 #include "ecp/common/ecp_st_go.h"
 #include "ecp/common/ecp_generator_t.h"
 
-#include "mp/Trajectory.h"
+#include "ecp_mp/Trajectory.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -38,7 +38,7 @@ class fsautomat: public common::task::task
 		//podzadania
 		common::task::ecp_sub_task_gripper_opening* go_st;
 
-		std::map<const char*, mp::common::Trajectory, str_cmp>* trjMap;
+		std::map<const char*, ecp_mp::common::Trajectory, str_cmp>* trjMap;
 
 	public:
 		// KONSTRUKTORY

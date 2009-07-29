@@ -13,7 +13,7 @@ ECPOBJ_SHARED = ECP_main_error.o ecp_mp_generator.o \
 		ecp_smooth_taught_in_pose.o ecp_smooth2_taught_in_pose.o\
 		ecp_g_smooth2.o \
 		ecp_mp_sensor.o transmitter.o ecp_mp_task.o ecp_mp_robot.o \
-		../../mp/Trajectory.o
+		../../ecp_mp/Trajectory.o
 ECPOBJ = $(ECPOBJ_SHARED) \
 	 ecp_m.o ecp_task.o \
 	 ecp_generator.o ecp_teach_in_generator.o \

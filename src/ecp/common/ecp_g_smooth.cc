@@ -145,7 +145,7 @@ void smooth::generate_next_coords (void)
 
 }
 
-bool smooth::load_trajectory_from_xml(mp::common::Trajectory &trajectory)
+bool smooth::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory)
 {
 	bool first_time = true;
 	int numOfPoses = trajectory.getNumberOfPoses();
@@ -189,7 +189,7 @@ void smooth::set_pose_from_xml(xmlNode *stateNode, bool &first_time)
 	xmlChar *xmlDataLine;
 
 	coordinateType = xmlGetProp(stateNode, (const xmlChar *)"coordinateType");
-	ps = mp::common::Trajectory::returnProperPS((char *)coordinateType);
+	ps = ecp_mp::common::Trajectory::returnProperPS((char *)coordinateType);
 	numOfPoses = xmlGetProp(stateNode, (const xmlChar *)"numOfPoses");
 	number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
 	for(cchild_node = stateNode->children; cchild_node!=NULL; cchild_node = cchild_node->next)
@@ -200,31 +200,31 @@ void smooth::set_pose_from_xml(xmlNode *stateNode, bool &first_time)
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"StartVelocity") )
 				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					mp::common::Trajectory::setValuesInArray(vp, (const char *)xmlDataLine);
+					ecp_mp::common::Trajectory::setValuesInArray(vp, (const char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"EndVelocity") )
 				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					mp::common::Trajectory::setValuesInArray(vk, (const char *)xmlDataLine);
+					ecp_mp::common::Trajectory::setValuesInArray(vk, (const char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
 				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					mp::common::Trajectory::setValuesInArray(v, (const char *)xmlDataLine);
+					ecp_mp::common::Trajectory::setValuesInArray(v, (const char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
 				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					mp::common::Trajectory::setValuesInArray(a, (const char *)xmlDataLine);
+					ecp_mp::common::Trajectory::setValuesInArray(a, (const char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
 				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					mp::common::Trajectory::setValuesInArray(coordinates, (const char *)xmlDataLine);
+					ecp_mp::common::Trajectory::setValuesInArray(coordinates, (const char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 			}

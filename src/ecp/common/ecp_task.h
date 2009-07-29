@@ -7,7 +7,7 @@
 #include <libxml/tree.h>
 
 #include <map>
-#include "mp/Trajectory.h"
+#include "ecp_mp/Trajectory.h"
 
 
 namespace mrrocpp {
@@ -81,8 +81,8 @@ class task : public ecp_mp::task::task
 			bool operator()(char const *a, char const *b) const;
 		};
 
-		mp::common::Trajectory * createTrajectory(xmlNode *actNode, xmlChar *stateID);
-		std::map<const char*, mp::common::Trajectory, str_cmp>* loadTrajectories(const char * fileName, lib::ROBOT_ENUM propRobot);
+		ecp_mp::common::Trajectory * createTrajectory(xmlNode *actNode, xmlChar *stateID);
+		std::map<const char*, ecp_mp::common::Trajectory, str_cmp>* loadTrajectories(const char * fileName, lib::ROBOT_ENUM propRobot);
 
 	public: // TODO: what follows should be private method
 

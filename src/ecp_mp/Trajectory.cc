@@ -6,10 +6,10 @@
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 
-#include "mp/Trajectory.h"
+#include "ecp_mp/Trajectory.h"
 
 namespace mrrocpp {
-namespace mp {
+namespace ecp_mp {
 namespace common {
 
 
@@ -279,7 +279,7 @@ std::list<ecp::common::ecp_smooth_taught_in_pose> * Trajectory::getPoses()
 }
 
 } // namespace common
-} // namespace mp
+} // namespace ecp_mp
 } // namespace mrrocpp
 
 

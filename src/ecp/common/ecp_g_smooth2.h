@@ -14,7 +14,7 @@
 #include "ecp/common/ecp_smooth2_taught_in_pose.h"
 
 #include "ecp/common/ecp_g_jarosz.h"
-#include "mp/Trajectory.h"
+#include "ecp_mp/Trajectory.h"
 
 namespace mrrocpp {
 namespace ecp {

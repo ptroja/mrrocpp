@@ -9,7 +9,7 @@
 #include "ecp/common/ecp_smooth_taught_in_pose.h"
 
 namespace mrrocpp {
-namespace mp {
+namespace ecp_mp {
 namespace common {
 
 
@@ -29,7 +29,7 @@ class Trajectory
 		static const char * returnRobotName(lib::ROBOT_ENUM robot);
 
 		static bool writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp::common::ecp_smooth_taught_in_pose> &poses);
-		
+
 		void createNewPose();
 		void addPoseToTrajectory();
 
@@ -63,14 +63,14 @@ class Trajectory
 
 	private:
 		char trjID[80];
-		uint64_t numOfPoses;		
+		uint64_t numOfPoses;
 		lib::POSE_SPECIFICATION poseSpec;
 		ecp::common::ecp_smooth_taught_in_pose *actPose;
 		std::list<ecp::common::ecp_smooth_taught_in_pose> *trjPoses;
 };
 
 } // namespace common
-} // namespace mp
+} // namespace ecp_mp
 } // namespace mrrocpp
 
 

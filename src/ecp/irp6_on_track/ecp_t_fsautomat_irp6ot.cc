@@ -16,7 +16,7 @@
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-#include "mp/Trajectory.h"
+#include "ecp_mp/Trajectory.h"
 
 #include "lib/srlib.h"
 #include "ecp_mp/ecp_mp_t_fsautomat.h"
@@ -288,7 +288,7 @@ void fsautomat::main_task_algorithm(void)
 			case ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB:
 			{
 				double gen_args[4];
-				int size = mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+				int size = ecp_mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				if(size > 3)
 					rgg->configure(gen_args[0], gen_args[1], (int)gen_args[2], (bool)gen_args[3]);
 				else
@@ -299,7 +299,7 @@ void fsautomat::main_task_algorithm(void)
 			case ecp_mp::task::ECP_GEN_TFF_RUBIK_FACE_ROTATE:
 			{
 				double gen_args[1];
-				mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+				ecp_mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				rfrg->configure(gen_args[0]);
 				rfrg->Move();
 				break;
@@ -307,7 +307,7 @@ void fsautomat::main_task_algorithm(void)
 			case ecp_mp::task::ECP_GEN_TFF_GRIPPER_APPROACH:
 			{
 				double gen_args[2];
-				mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+				ecp_mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				gag->configure(gen_args[0] , (int)gen_args[1]);
 				gag->Move();
 				break;
@@ -315,7 +315,7 @@ void fsautomat::main_task_algorithm(void)
 			case ecp_mp::task::ECP_TOOL_CHANGE_GENERATOR:
 			{
 				double gen_args[3];
-				mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+				ecp_mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				tcg->set_tool_parameters(gen_args[0], gen_args[1], gen_args[2]);
 				tcg->Move();
 				break;
@@ -323,7 +323,7 @@ void fsautomat::main_task_algorithm(void)
 			case ecp_mp::task::RCSC_GRIPPER_OPENING:
 			{
 				double gen_args[2];
-				mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+				ecp_mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				go_st->configure(gen_args[0], (int)gen_args[1]);
 				go_st->execute();
 				break;

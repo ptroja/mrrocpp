@@ -416,9 +416,9 @@ bool task::str_cmp::operator()(char const *a, char const *b) const
 	return strcmp(a, b)<0;
 }
 
-mp::common::Trajectory * task::createTrajectory(xmlNode *actNode, xmlChar *stateID)
+ecp_mp::common::Trajectory * task::createTrajectory(xmlNode *actNode, xmlChar *stateID)
 {
-	mp::common::Trajectory* actTrajectory;
+	ecp_mp::common::Trajectory* actTrajectory;
 	xmlNode *cchild_node, *ccchild_node;
 	xmlChar *coordinateType, *numOfPoses, *robot;
 	xmlChar *xmlDataLine;
@@ -426,7 +426,7 @@ mp::common::Trajectory * task::createTrajectory(xmlNode *actNode, xmlChar *state
 
 	coordinateType = xmlGetProp(actNode, (const xmlChar *)"coordinateType");
 	numOfPoses = xmlGetProp(actNode, (const xmlChar *)"numOfPoses");
-	actTrajectory = new mp::common::Trajectory((char *)numOfPoses, (char *)stateID, (char *)coordinateType);
+	actTrajectory = new ecp_mp::common::Trajectory((char *)numOfPoses, (char *)stateID, (char *)coordinateType);
 	for(cchild_node = actNode->children; cchild_node!=NULL; cchild_node = cchild_node->next)
 	{
 		if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )
@@ -475,15 +475,15 @@ mp::common::Trajectory * task::createTrajectory(xmlNode *actNode, xmlChar *state
 	return actTrajectory;
 }
 
-std::map<const char*, mp::common::Trajectory, task::str_cmp>* task::loadTrajectories(const char * fileName, lib::ROBOT_ENUM propRobot)
+std::map<const char*, ecp_mp::common::Trajectory, task::str_cmp>* task::loadTrajectories(const char * fileName, lib::ROBOT_ENUM propRobot)
 {
-	const char * robotName = mp::common::Trajectory::returnRobotName(propRobot);
-	mp::common::Trajectory* actTrajectory;
+	const char * robotName = ecp_mp::common::Trajectory::returnRobotName(propRobot);
+	ecp_mp::common::Trajectory* actTrajectory;
 	xmlNode *cur_node, *child_node, *subTaskNode;
 	xmlChar *coordinateType, *numOfPoses, *robot;
 	xmlChar *xmlDataLine;
 	xmlChar *stateID, *stateType;
-	std::map<const char*, mp::common::Trajectory, str_cmp>* trajectoriesMap;
+	std::map<const char*, ecp_mp::common::Trajectory, str_cmp>* trajectoriesMap;
 
 	// Stworzenie sciezki do pliku.
 	std::string filePath(mrrocpp_network_path);
@@ -505,7 +505,7 @@ std::map<const char*, mp::common::Trajectory, task::str_cmp>* task::loadTrajecto
 		throw common::generator::generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
-	trajectoriesMap = new std::map<const char*, mp::common::Trajectory, task::str_cmp>();
+	trajectoriesMap = new std::map<const char*, ecp_mp::common::Trajectory, task::str_cmp>();
 
    for(cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
    {
@@ -529,7 +529,7 @@ std::map<const char*, mp::common::Trajectory, task::str_cmp>* task::loadTrajecto
 									!xmlStrcmp(robot, (const xmlChar *)robotName))
 							{
 								actTrajectory = createTrajectory(child_node, stateID);//new Trajectory((char *)numOfPoses, (char *)stateID, (char *)coordinateType);
-								trajectoriesMap->insert(std::map<const char *, mp::common::Trajectory>::value_type(actTrajectory->getTrjID(), *actTrajectory));
+								trajectoriesMap->insert(std::map<const char *, ecp_mp::common::Trajectory>::value_type(actTrajectory->getTrjID(), *actTrajectory));
 							}
 						}
 						xmlFree(robot);
@@ -553,7 +553,7 @@ std::map<const char*, mp::common::Trajectory, task::str_cmp>* task::loadTrajecto
 							!xmlStrcmp(robot, (const xmlChar *)robotName))
 	            {
 						actTrajectory = createTrajectory(child_node, stateID);//new Trajectory((char *)numOfPoses, (char *)stateID, (char *)coordinateType);
-						trajectoriesMap->insert(std::map<const char *, mp::common::Trajectory>::value_type(actTrajectory->getTrjID(), *actTrajectory));
+						trajectoriesMap->insert(std::map<const char *, ecp_mp::common::Trajectory>::value_type(actTrajectory->getTrjID(), *actTrajectory));
 	            }
 	         }
 				xmlFree(robot);

@@ -148,7 +148,7 @@ ecp_irp6ot_pouring: ecp_t_pouring_irp6ot.o ecp_st_go.o ecp_g_smooth.o ecp_genera
 	ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_irp6ot_fsautomat: ecp_t_fsautomat_irp6ot.o ../../mp/Trajectory.o ecp_g_force.o ecp_st_go.o ecp_g_smooth.o \
+ecp_irp6ot_fsautomat: ecp_t_fsautomat_irp6ot.o ../../ecp_mp/Trajectory.o ecp_g_force.o ecp_st_go.o ecp_g_smooth.o \
 	ecp_generator_t.o ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
