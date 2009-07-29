@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 //                            impconst.h
 // Typy i stale wykorzystywane w MRROC++
-// 
+//
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ extern "C" {
 #endif
 
 
-	
+
 #define CONNECT_RETRY	200
 #define CONNECT_DELAY	50
 
@@ -38,7 +38,7 @@ typedef uint16_t  WORD;
 typedef uint8_t BYTE;
 
 #ifndef ABS
-#define ABS(x) (((x)<0)?-(x):(x))   // wartosc bezwzgledna 'x' 
+#define ABS(x) (((x)<0)?-(x):(x))   // wartosc bezwzgledna 'x'
 #endif
 
 // by Y - ROBOTY
@@ -50,6 +50,7 @@ enum ROBOT_ENUM {
 	ROBOT_CONVEYOR,
 	ROBOT_SPEAKER,
 	ROBOT_IRP6_MECHATRONIKA,
+	ROBOT_POLYCRANK,
 	ROBOT_ELECTRON,
 	ROBOT_FESTIVAL,
 	ROBOT_HAND,
@@ -66,8 +67,9 @@ enum FORCE_SENSOR_ENUM {
 
 // Liczba osi (stopni swobody)
 #define IRP6_ON_TRACK_NUM_OF_SERVOS	8
-#define IRP6_POSTUMENT_NUM_OF_SERVOS	7 
+#define IRP6_POSTUMENT_NUM_OF_SERVOS	7
 #define IRP6_MECHATRONIKA_NUM_OF_SERVOS	5
+#define POLYCRANK_NUM_OF_SERVOS	8
 #define CONVEYOR_NUM_OF_SERVOS		1
 #define HAND_NUM_OF_SERVOS		2
 
@@ -96,9 +98,9 @@ enum FORCE_SENSOR_ENUM {
 
 // dla starej wersji sterowania
 //#define FORCE_INERTIA 0.96
-//#define TORQUE_INERTIA 0.98  
+//#define TORQUE_INERTIA 0.98
 //#define FORCE_RECIPROCAL_DAMPING -0.00025
-//#define TORQUE_RECIPROCAL_DAMPING -0.005  
+//#define TORQUE_RECIPROCAL_DAMPING -0.005
 
 // wartosci podstawowe dla sterowania silowego
 #define FORCE_INERTIA 20
@@ -108,8 +110,8 @@ enum FORCE_SENSOR_ENUM {
 
 
 // Stale czasowe
-#define ONE_MSEC  1000000L // 1 milisek w nanosekundach 
-#define TEN_MSEC 10000000L // 10 milisek w nanosekundach 
+#define ONE_MSEC  1000000L // 1 milisek w nanosekundach
+#define TEN_MSEC 10000000L // 10 milisek w nanosekundach
 
 #define MAX_PRIORITY    50
 
