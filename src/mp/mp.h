@@ -14,7 +14,6 @@
 #endif
 
 
-#include "ecp_mp/ecp_mp_robot.h"
 #include "ecp_mp/ecp_mp_task.h"
 #include "lib/configurator.h"
 #include "lib/timer.h"
