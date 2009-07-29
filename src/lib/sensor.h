@@ -245,7 +245,7 @@ typedef enum{  WITHOUT_ROTATION, PERFORM_ROTATION } HD_MODE;
 /// \brief search or test against choosen object (in FraDIA with EdgeShapeAnalyzer)
 /// \author mnowak
 enum ESA_MODE
-{ 
+{
 	EM_UNKNOWN = 0,		///< unknown, not used
 	EM_SEARCH = 1,		///< search - we get all ROI's with possible interesting objects
 	EM_TEST = 2,		///< test - we test object on screen against choosed object from list
@@ -288,7 +288,15 @@ struct ECP_VSP_MSG
 				char object[32];///< name of object (must be known)
 				int offset;     ///< i.e. for LIST
 			};
-		} esa;			
+		} esa;
+
+		// struct eihcalibration
+		// structure used to send to fradia data needed for eih calibration
+		struct
+		{
+			int frame_number;
+			double transformation_matrix;
+		}eihcalibration;
 
 		// Tryb HaarDetect
 		HD_MODE haar_detect_mode;

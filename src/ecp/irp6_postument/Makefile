@@ -57,7 +57,7 @@ ecp_irp6p_fsautomat: ecp_t_fsautomat_irp6p.o ../../mp/Trajectory.o ecp_st_go.o e
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
 ecp_irp6p_eihcalibration: ecp_t_eihcalibration_irp6p.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o \
-	ecp_operator_reaction_condition.o ecp_g_force.o ecp_mp_s_cvfradia.o $(SHOBJ)
+	ecp_operator_reaction_condition.o ecp_g_force.o ecp_mp_s_cvfradia.o ecp_g_eihcalibration.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@  $^
 	
 #-----------------------------------------------------------------------------------------------------------------------#
