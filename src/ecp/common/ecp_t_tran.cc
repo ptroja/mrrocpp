@@ -15,7 +15,7 @@
 #include "ecp/irp6_on_track/ecp_local.h"
 #include "ecp/irp6_postument/ecp_local.h"
 #include "ecp/irp6_mechatronika/ecp_local.h"
-#include "ecp/conveyor/ecp_local.h"
+#include "ecp/conveyor/ecp_r_conv.h"
 #include "ecp/speaker/ecp_local.h"
 
 #include "ecp/common/ecp_t_tran.h"

@@ -9,7 +9,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-#include "ecp/conveyor/ecp_local.h"
+#include "ecp/conveyor/ecp_r_conv.h"
 
 namespace mrrocpp {
 namespace ecp {

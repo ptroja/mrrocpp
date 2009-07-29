@@ -9,7 +9,7 @@ BINARIES = 	ecp_test_conv ecp_kon ecp_legobrick_conv ecp_visconv ecp_visconvsin
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
-SHOBJ = ecp_local.o ../common/libecp.a $(LIBDIR)/libmrrocpp.a
+SHOBJ = ecp_r_conv.o ../common/libecp.a $(LIBDIR)/libmrrocpp.a
 # path for SHOBJ
 # search path for make, if you want create dependencies from files from other directory than ".", 
 # then place that directory in the VPATH variable

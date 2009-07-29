@@ -6,7 +6,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
-#include "ecp/conveyor/ecp_local.h"
+#include "ecp/conveyor/ecp_r_conv.h"
 #include "ecp/conveyor/ecp_g_legobrick.h"
 
 namespace mrrocpp {

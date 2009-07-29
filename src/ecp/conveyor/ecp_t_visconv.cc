@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #include "lib/srlib.h"
-#include "ecp/conveyor/ecp_local.h"
+#include "ecp/conveyor/ecp_r_conv.h"
 #include "ecp/conveyor/ecp_t_legobrick_conv.h"
 //#include "ecp/conveyor/ecp_g_legobrick.h"
 

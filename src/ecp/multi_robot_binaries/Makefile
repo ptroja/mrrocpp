@@ -27,7 +27,7 @@ ecp_tran: \
 		../common/ecp_t_tran.o \
 		../irp6_on_track/ecp_local.o \
 		../irp6_postument/ecp_local.o \
-		../conveyor/ecp_local.o \
+		../conveyor/ecp_r_conv.o \
 		../speaker/ecp_local.o \
 		../irp6_mechatronika/ecp_local.o \
 		../common/ecp_generator_t.o \

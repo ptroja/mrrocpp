@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #include "lib/srlib.h"
-#include "ecp/conveyor/ecp_local.h"
+#include "ecp/conveyor/ecp_r_conv.h"
 #include "ecp/conveyor/ecp_t_test.h"
 #include "ecp_mp/ecp_mp_t_rcsc.h"
 #include "ecp/common/ecp_g_jarosz.h"
