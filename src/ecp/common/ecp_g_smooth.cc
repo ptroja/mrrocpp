@@ -892,14 +892,14 @@ bool smooth::is_last_list_element ( void )
 
 void smooth::create_pose_list_head (lib::POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR])
 {
-    pose_list->push_back(ecp_smooth_taught_in_pose(ps, v_p, v_k, v, a, coordinates));
+    pose_list->push_back(smooth_taught_in_pose(ps, v_p, v_k, v, a, coordinates));
     pose_list_iterator = pose_list->begin();
 }
 
 
 void smooth::insert_pose_list_element (lib::POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR])
 {
-    pose_list->push_back(ecp_smooth_taught_in_pose(ps, v_p, v_k, v, a, coordinates));
+    pose_list->push_back(smooth_taught_in_pose(ps, v_p, v_k, v, a, coordinates));
     pose_list_iterator++;
 }
 
@@ -1023,7 +1023,7 @@ smooth::smooth (common::task::task& _ecp_task, bool _is_synchronised, bool _debu
     double v[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
     double a[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 
-	pose_list = new std::list<ecp_smooth_taught_in_pose>();
+	pose_list = new std::list<smooth_taught_in_pose>();
 
     // Stworzenie sciezek do plików
     std::string path1(ecp_t.mrrocpp_network_path);

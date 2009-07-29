@@ -15,7 +15,7 @@ namespace common {
 
 Trajectory::Trajectory()
 {
-	trjPoses	= new std::list<ecp::common::ecp_smooth_taught_in_pose>();
+	trjPoses	= new std::list<ecp::common::smooth_taught_in_pose>();
 }
 
 Trajectory::Trajectory(const char *numOfPoses, const char *trajectoryID, const char *poseSpecification)
@@ -23,7 +23,7 @@ Trajectory::Trajectory(const char *numOfPoses, const char *trajectoryID, const c
 	strcpy(trjID, trajectoryID);
 	this->numOfPoses = (uint64_t)atoi(numOfPoses);
 	poseSpec = returnProperPS(poseSpecification);
-	trjPoses	= new std::list<ecp::common::ecp_smooth_taught_in_pose>();
+	trjPoses	= new std::list<ecp::common::smooth_taught_in_pose>();
 
 }
 
@@ -32,7 +32,7 @@ Trajectory::Trajectory(const Trajectory &trajectory)
 	strcpy(trjID, trajectory.trjID);
 	numOfPoses = trajectory.numOfPoses;
 	poseSpec = trajectory.poseSpec;
-	trjPoses = new std::list<ecp::common::ecp_smooth_taught_in_pose>(trajectory.trjPoses->begin(), trajectory.trjPoses->end());
+	trjPoses = new std::list<ecp::common::smooth_taught_in_pose>(trajectory.trjPoses->begin(), trajectory.trjPoses->end());
 }
 
 Trajectory::~Trajectory()
@@ -141,13 +141,13 @@ const char * Trajectory::toString(lib::POSE_SPECIFICATION ps)
 		return "INVALID_END_EFFECTOR";
 }
 
-bool Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp::common::ecp_smooth_taught_in_pose> &poses)
+bool Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp::common::smooth_taught_in_pose> &poses)
 {
 	char * file = new char[80];
 	int posCount = poses.size();
 	xmlDocPtr doc;
 	xmlNodePtr tree, subtree;
-	std::list<ecp::common::ecp_smooth_taught_in_pose>::iterator it;
+	std::list<ecp::common::smooth_taught_in_pose>::iterator it;
 
 	doc = xmlNewDoc((const xmlChar *) "1.0");
 
@@ -174,7 +174,7 @@ bool Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIF
 
 void Trajectory::createNewPose()
 {
-	actPose = new ecp::common::ecp_smooth_taught_in_pose();
+	actPose = new ecp::common::smooth_taught_in_pose();
 	actPose->arm_type = this->poseSpec;
 }
 
@@ -255,7 +255,7 @@ double * Trajectory::getCoordinates() const
 
 void Trajectory::showTime()
 {
-	std::list<ecp::common::ecp_smooth_taught_in_pose>::iterator it;
+	std::list<ecp::common::smooth_taught_in_pose>::iterator it;
 	printf("Nazwa: %s, PoseSpec: %d, NumOfPoses: %llu\n", trjID, poseSpec, numOfPoses);
 	for(it=trjPoses->begin(); it!=trjPoses->end(); ++it)
 	{
@@ -273,9 +273,9 @@ void Trajectory::showTime()
 
 }
 
-std::list<ecp::common::ecp_smooth_taught_in_pose> * Trajectory::getPoses()
+std::list<ecp::common::smooth_taught_in_pose> * Trajectory::getPoses()
 {
-	return new std::list<ecp::common::ecp_smooth_taught_in_pose>(*trjPoses);
+	return new std::list<ecp::common::smooth_taught_in_pose>(*trjPoses);
 }
 
 } // namespace common

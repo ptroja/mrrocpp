@@ -26,8 +26,8 @@ class smooth : public delta
 {
 
 protected:
-	std::list<ecp_smooth_taught_in_pose> *pose_list;
- 	std::list<ecp_smooth_taught_in_pose>::iterator pose_list_iterator;
+	std::list<smooth_taught_in_pose> *pose_list;
+ 	std::list<smooth_taught_in_pose>::iterator pose_list_iterator;
 
 	double a_max_motor[MAX_SERVOS_NR], a_max_joint[MAX_SERVOS_NR], a_max_zyz[MAX_SERVOS_NR], a_max_aa[MAX_SERVOS_NR];
 	double v_max_motor[MAX_SERVOS_NR], v_max_joint[MAX_SERVOS_NR], v_max_zyz[MAX_SERVOS_NR], v_max_aa[MAX_SERVOS_NR];

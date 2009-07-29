@@ -8,7 +8,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-class ecp_smooth_taught_in_pose {
+class smooth_taught_in_pose {
 public:
   lib::POSE_SPECIFICATION arm_type;
   double v_p[MAX_SERVOS_NR];  
@@ -17,8 +17,8 @@ public:
   double a[MAX_SERVOS_NR];
   double coordinates[MAX_SERVOS_NR];
   
-  ecp_smooth_taught_in_pose (void);
-  ecp_smooth_taught_in_pose (lib::POSE_SPECIFICATION at, double* vp, double* vk, double* vv, double* aa, double* coordinates);
+  smooth_taught_in_pose (void);
+  smooth_taught_in_pose (lib::POSE_SPECIFICATION at, double* vp, double* vk, double* vv, double* aa, double* coordinates);
 }; // end:class ecp_smooth_taught_in_pose
 
 } // namespace common
