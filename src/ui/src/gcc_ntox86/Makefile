@@ -28,6 +28,7 @@ MRROCOBJ = \
 	$(ECP_DIR)/irp6_on_track/ecp_r_irp6ot.o \
 	$(ECP_DIR)/irp6_postument/ecp_r_irp6p.o \
 	$(ECP_DIR)/irp6_mechatronika/ecp_r_irp6m.o\
+	$(ECP_DIR)/polycrank/ecp_r_polycrank.o\
 	$(ECP_DIR)/conveyor/ecp_r_conv.o \
 	$(ECP_DIR)/speaker/ecp_r_speaker.o \
 	$(LIBDIR)/libecp.a $(LIBDIR)/libecp_mp.a  $(LIBDIR)/libmrrocpp.a
