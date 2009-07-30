@@ -3,7 +3,7 @@
 HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 
-SOURCEDIRS = common conveyor irp6_on_track irp6_postument irp6_mechatronika
+SOURCEDIRS = common conveyor irp6_on_track irp6_postument irp6_mechatronika polycrank
 CLEANDIRS = ${SOURCEDIRS}
 INSTALLDIRS = ${SOURCEDIRS}
 # Data for makedepend 
@@ -18,6 +18,7 @@ conveyor: common
 irp6_on_track: common
 irp6_postument: common
 irp6_mechatronika: common
+polycrank: common
 
 $(SOURCEDIRS):
 	@$(MAKE) -C $@
