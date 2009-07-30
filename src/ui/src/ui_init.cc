@@ -652,9 +652,11 @@ int init( PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo 
 	ui_state.is_wind_irp6ot_int_open=false;
 	ui_state.is_wind_irp6p_int_open=false;
 	ui_state.is_wind_irp6m_int_open=false;
+	ui_state.is_wind_polycrank_int_open=false;
 	ui_state.is_wind_irp6ot_inc_open=false;
 	ui_state.is_wind_irp6p_inc_open=false;
 	ui_state.is_wind_irp6m_inc_open=false;
+	ui_state.is_wind_polycrank_inc_open=false;
 	ui_state.is_wind_irp6ot_xyz_euler_zyz_open=false;
 	ui_state.is_wind_irp6p_xyz_euler_zyz_open=false;
 	ui_state.is_wind_irp6m_xyz_euler_zyz_open=false;

@@ -180,6 +180,7 @@ typedef struct {
 	ecp_edp_ui_robot_def irp6_on_track;
 	ecp_edp_ui_robot_def irp6_postument;
 	ecp_edp_ui_robot_def irp6_mechatronika;
+	ecp_edp_ui_robot_def polycrank;
 	ecp_edp_ui_robot_def conveyor;
 	ecp_edp_ui_robot_def speaker;
 
@@ -198,10 +199,12 @@ typedef struct {
 	bool is_wind_irp6ot_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
 	bool is_wind_irp6p_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
 	bool is_wind_irp6m_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
+	bool is_wind_polycrank_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
 
 	bool is_wind_irp6ot_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte
 	bool is_wind_irp6p_inc_open;  // informacja czy okno ruchow w radianach na wale silnika jest otwarte
 	bool is_wind_irp6m_inc_open;  // informacja czy okno ruchow w radianach na wale silnika jest otwarte
+	bool is_wind_polycrank_inc_open;  // informacja czy okno ruchow w radianach na wale silnika jest otwarte
 
 	bool is_wind_irp6ot_xyz_euler_zyz_open;  // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
 	bool is_wind_irp6p_xyz_euler_zyz_open;  // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
