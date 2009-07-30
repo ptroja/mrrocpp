@@ -4,9 +4,11 @@ HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 
 ifdef DOCENT_SENSOR
-	SOURCEDIRS = common ati3084 ati3084MK ati3084MS ati6284 conveyor irp6_on_track speaker irp6_postument irp6_mechatronika
+	SOURCEDIRS = common ati3084 ati3084MK ati3084MS ati6284 conveyor irp6_on_track speaker\
+	polycrank irp6_postument irp6_mechatronika
 else 
-	SOURCEDIRS = common ati3084 ati3084MK ati6284 conveyor irp6_on_track speaker irp6_postument irp6_mechatronika
+	SOURCEDIRS = common ati3084 ati3084MK ati6284 conveyor irp6_on_track speaker\
+	polycrank irp6_postument irp6_mechatronika
 endif
 
 CLEANDIRS = ${SOURCEDIRS}
@@ -21,6 +23,7 @@ all: $(SOURCEDIRS)
 ati3084: common
 ati6284: common
 conveyor: common
+
 IRP6ONT_DEPS = common ati3084 ati3084MK ati6284
 ifdef DOCENT_SENSOR
 	IRP6ONT_DEPS:=$(IRP6ONT_DEPS) ati3084MS
@@ -38,6 +41,7 @@ endif
 irp6_postument: $(IRP6ONT_DEPS)
 
 irp6_mechatronika: common
+polycrank: common
 
 $(SOURCEDIRS):
 	@$(MAKE) -C $@
