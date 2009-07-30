@@ -3,13 +3,13 @@
 
 #include "lib/mis_fun.h"
 #include "lib/srlib.h"
-#include "mp/mp_r_irp6s_and_conv.h"
+#include "mp/mp_r_manip_and_conv.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-irp6s_and_conv::irp6s_and_conv(lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::task &mp_object_l) :
+manip_and_conv::manip_and_conv(lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::task &mp_object_l) :
 	robot(l_robot_name, _section_name, mp_object_l), servos_number(0), has_gripper(false)
 {
 	switch (l_robot_name) {
@@ -32,7 +32,7 @@ irp6s_and_conv::irp6s_and_conv(lib::ROBOT_ENUM l_robot_name, const char* _sectio
 	}
 }
 
-void irp6s_and_conv::create_next_pose_command(void)
+void manip_and_conv::create_next_pose_command(void)
 {
 	// wypelnia bufor wysylkowy do ECP na podstawie danych
 	// zawartych w skladowych generatora lub warunku
@@ -179,7 +179,7 @@ void irp6s_and_conv::create_next_pose_command(void)
 	}
 }
 
-void irp6s_and_conv::get_reply(void)
+void manip_and_conv::get_reply(void)
 {
 	// pobiera z pakietu przeslanego z ECP informacje i wstawia je do
 	// odpowiednich skladowych generatora lub warunku
@@ -218,7 +218,7 @@ void irp6s_and_conv::get_reply(void)
 	}
 }
 
-void irp6s_and_conv::get_input_reply(void)
+void manip_and_conv::get_input_reply(void)
 {
 	ecp_td.input_values = ecp_reply_package.reply_package.input_values;
 	for (int i=0; i<8; i++) {
@@ -226,7 +226,7 @@ void irp6s_and_conv::get_input_reply(void)
 	}
 }
 
-void irp6s_and_conv::get_arm_reply(void)
+void manip_and_conv::get_arm_reply(void)
 {
 	switch (ecp_reply_package.reply_package.arm_type) {
 		case lib::MOTOR:
@@ -283,7 +283,7 @@ void irp6s_and_conv::get_arm_reply(void)
 
 }
 
-void irp6s_and_conv::get_rmodel_reply(void)
+void manip_and_conv::get_rmodel_reply(void)
 {
 	switch (ecp_reply_package.reply_package.rmodel_type) {
 		case lib::TOOL_FRAME:

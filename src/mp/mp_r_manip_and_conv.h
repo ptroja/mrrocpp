@@ -1,19 +1,19 @@
-#ifndef MP_R_IRP6S_AND_CONV_H_
-#define MP_R_IRP6S_AND_CONV_H_
+#ifndef MP_R_MANIP_AND_CONV_H_
+#define MP_R_MANIP_AND_CONV_H_
 
 #include "mp/mp.h"
 #include "mp/mp_robot.h"
 namespace mrrocpp {
 namespace mp {
 namespace robot {
-class irp6s_and_conv : public robot
+class manip_and_conv : public robot
 {
 	private:
 		int servos_number;
 		bool has_gripper;
 
 	public:
-		irp6s_and_conv (lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::task &mp_object_l);
+		manip_and_conv (lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::task &mp_object_l);
 
 		virtual void create_next_pose_command (void);
 
@@ -25,4 +25,4 @@ class irp6s_and_conv : public robot
 } // namespace robot
 } // namespace mp
 } // namespace mrrocpp
-#endif /*MP_R_IRP6S_AND_CONV_H_*/
+#endif /*MP_R_MANIP_AND_CONV_H_*/
