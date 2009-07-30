@@ -29,6 +29,7 @@
 #include "mp/mp_r_irp6_postument.h"
 #include "mp/mp_r_irp6_mechatronika.h"
 #include "mp/mp_r_speaker.h"
+#include "mp/mp_r_polycrank.h"
 #include "mp/mp_common_generators.h"
 #include "mp/mp_delay_ms_condition.h"
 
@@ -196,6 +197,12 @@ void task::create_robots()
 	if (config.return_int_value("is_irp6_mechatronika_active", "[ui]")) {
 		created_robot = new robot::irp6_mechatronika (*this);
 		robot_m[lib::ROBOT_IRP6_MECHATRONIKA] = created_robot;
+	}
+
+	// ROBOT POLYCRANK
+	if (config.return_int_value("is_polycrank_active", "[ui]")) {
+		created_robot = new robot::polycrank (*this);
+		robot_m[lib::ROBOT_POLYCRANK] = created_robot;
 	}
 
 	// ROBOT_ELECTRON

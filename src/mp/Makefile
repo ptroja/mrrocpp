@@ -9,6 +9,7 @@ MP_ROBOTS_OBJECTS = \
 	mp_r_irp6_postument.o \
 	mp_r_speaker.o \
 	mp_r_irp6_mechatronika.o \
+	mp_r_polycrank.o \
 	mp_r_manip_and_conv.o
 	
 MP_MAIN_OBJECTS = mp.o mp_task.o mp_robot.o mp_m.o \
