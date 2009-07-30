@@ -10,7 +10,7 @@
 #include <assert.h>
 
 #include "lib/impconst.h"
-#include "edp/common/edp.h"
+#include "edp/common/edp_e_manip_and_conv.h"
 
 #define MAXBUFLEN 100
 

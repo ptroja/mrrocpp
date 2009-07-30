@@ -6,8 +6,8 @@ KINEMATDIR = ${HOMEDIR}/src/kinematics
 include $(HOMEDIR)/common.mk
 
 SOURCES = ${wildcard *.cc}
-EDPOBJ = edp_common.o edp_m.o \
-	edp_irp6s.o edp_irp6s_and_conv.o \
+EDPOBJ = edp_common.o edp_m.o edp_effector.o\
+	edp_e_manip.o edp_e_manip_and_conv.o \
 	edp_force_sensor.o force.o \
 	servo_gr.o servo_ms.o \
 	trans_t.o vis_server.o reader.o \

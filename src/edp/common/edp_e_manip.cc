@@ -33,8 +33,9 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/mis_fun.h"
-#include "edp/common/edp.h"
 #include "lib/mathtr.h"
+
+#include "edp/common/edp_e_manip.h"
 
 namespace mrrocpp {
 namespace edp {

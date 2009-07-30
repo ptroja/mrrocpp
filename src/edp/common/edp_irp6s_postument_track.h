@@ -10,7 +10,7 @@
 
 
 
-#include "edp/common/edp.h"
+#include "edp/common/edp_e_manip.h"
 #include "edp/common/edp_force_sensor.h"
 
 
@@ -28,7 +28,7 @@ class irp6s_postument_track_effector: public manip_effector
 
 
 protected:
-    
+
         sem_t force_master_sem; //!< semafor dostepu do nowej wiadomosci dla vsp
     // czy chwytak wlaczony ?
     short is_gripper_active;
@@ -98,7 +98,7 @@ public:
     void force_msr_download(double *new_value, double *old_value);// by Y odczytanie globalnego zestawu danych
 
     void create_threads ();
-    
+
     void set_rmodel (lib::c_buffer &);
     void get_rmodel (lib::c_buffer &);
     void move_arm (lib::c_buffer &);

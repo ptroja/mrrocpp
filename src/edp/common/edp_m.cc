@@ -27,7 +27,7 @@
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
 #include "lib/mis_fun.h"
-#include "edp/common/edp.h"
+#include "edp/common/edp_effector.h"
 
 namespace mrrocpp {
 namespace edp {

@@ -12,7 +12,7 @@
 #ifndef __edp_conveyor_effector_H
 #define __edp_conveyor_effector_H
 
-#include "edp/common/edp.h"
+#include "edp/common/edp_e_manip_and_conv.h"
 
 namespace mrrocpp {
 namespace edp {
