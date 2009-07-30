@@ -23,7 +23,7 @@ namespace common {
 
 
 /************************ edp_irp6s_effector ****************************/
-class irp6s_postument_track_effector: public irp6s_effector
+class irp6s_postument_track_effector: public manip_effector
 {
 
 

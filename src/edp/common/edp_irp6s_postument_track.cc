@@ -225,7 +225,7 @@ void irp6s_postument_track_effector::arm_abs_xyz_eul_zyz_2_frame(const double *p
 
 /*--------------------------------------------------------------------------*/
 irp6s_postument_track_effector::irp6s_postument_track_effector(lib::configurator &_config, lib::ROBOT_ENUM l_robot_name) :
-	irp6s_effector(_config, l_robot_name)
+	manip_effector(_config, l_robot_name)
 	{
 
 	pthread_mutex_init(&force_mutex, NULL);
@@ -281,7 +281,7 @@ void irp6s_postument_track_effector::create_threads()
 		}
 	}
 
-	irp6s_effector::create_threads();
+	manip_effector::create_threads();
 }
 
 

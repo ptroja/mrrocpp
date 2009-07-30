@@ -20,12 +20,12 @@ namespace edp {
 namespace common {
 
 
-void * irp6s_and_conv_effector::servo_thread_start(void* arg)
+void * manip_and_conv_effector::servo_thread_start(void* arg)
 {
-    static_cast<irp6s_and_conv_effector*> (arg)->servo_thread(arg);
+    static_cast<manip_and_conv_effector*> (arg)->servo_thread(arg);
 }
 
-void * irp6s_and_conv_effector::servo_thread(void* arg)
+void * manip_and_conv_effector::servo_thread(void* arg)
 {
     /* DEKLARACJE ZMIENNYCH */
 

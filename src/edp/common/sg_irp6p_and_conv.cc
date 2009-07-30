@@ -27,7 +27,7 @@ namespace common {
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_1_irp6p::NL_regulator_1_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master)
+NL_regulator_1_irp6p::NL_regulator_1_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
         : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
@@ -39,7 +39,7 @@ NL_regulator_1_irp6p::NL_regulator_1_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_2_irp6p::NL_regulator_2_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master)
+NL_regulator_2_irp6p::NL_regulator_2_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
         : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
@@ -53,7 +53,7 @@ NL_regulator_2_irp6p::NL_regulator_2_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_3_irp6p::NL_regulator_3_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master)
+NL_regulator_3_irp6p::NL_regulator_3_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
         : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
@@ -67,7 +67,7 @@ NL_regulator_3_irp6p::NL_regulator_3_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_4_irp6p::NL_regulator_4_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master)
+NL_regulator_4_irp6p::NL_regulator_4_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
         : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
@@ -81,7 +81,7 @@ NL_regulator_4_irp6p::NL_regulator_4_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_5_irp6p::NL_regulator_5_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master)
+NL_regulator_5_irp6p::NL_regulator_5_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
         : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
@@ -97,7 +97,7 @@ NL_regulator_5_irp6p::NL_regulator_5_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_6_irp6p::NL_regulator_6_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master)
+NL_regulator_6_irp6p::NL_regulator_6_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
         : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
@@ -111,7 +111,7 @@ NL_regulator_6_irp6p::NL_regulator_6_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_7_irp6p::NL_regulator_7_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master)
+NL_regulator_7_irp6p::NL_regulator_7_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
         : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     // Konstruktor regulatora konkretnego
@@ -125,7 +125,7 @@ NL_regulator_7_irp6p::NL_regulator_7_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_8_irp6p::NL_regulator_8_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master)
+NL_regulator_8_irp6p::NL_regulator_8_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
         : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
     reg_state = next_reg_state = prev_reg_state = lib::GRIPPER_START_STATE;

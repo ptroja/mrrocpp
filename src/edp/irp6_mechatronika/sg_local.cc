@@ -434,7 +434,7 @@ uint64_t servo_buffer::compute_all_set_values (void)
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_2_irp6m::NL_regulator_2_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master)
+NL_regulator_2_irp6m::NL_regulator_2_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
 : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
 	// Konstruktor regulatora konkretnego
@@ -446,7 +446,7 @@ NL_regulator_2_irp6m::NL_regulator_2_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_3_irp6m::NL_regulator_3_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master)
+NL_regulator_3_irp6m::NL_regulator_3_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
 : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
 	// Konstruktor regulatora konkretnego
@@ -458,7 +458,7 @@ NL_regulator_3_irp6m::NL_regulator_3_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_4_irp6m::NL_regulator_4_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master)
+NL_regulator_4_irp6m::NL_regulator_4_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
 : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
 	// Konstruktor regulatora konkretnego
@@ -470,7 +470,7 @@ NL_regulator_4_irp6m::NL_regulator_4_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_5_irp6m::NL_regulator_5_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master)
+NL_regulator_5_irp6m::NL_regulator_5_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
 : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
 	// Konstruktor regulatora konkretnego
@@ -483,7 +483,7 @@ NL_regulator_5_irp6m::NL_regulator_5_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_6_irp6m::NL_regulator_6_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master)
+NL_regulator_6_irp6m::NL_regulator_6_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
 : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
 	// Konstruktor regulatora konkretnego
@@ -1568,7 +1568,7 @@ lib::BYTE NL_regulator_6_irp6m::compute_set_value (void)
 
 namespace common {
 
-servo_buffer* return_created_servo_buffer (irp6s_and_conv_effector &_master)
+servo_buffer* return_created_servo_buffer (manip_and_conv_effector &_master)
 {
 	return new irp6m::servo_buffer ((irp6m::effector &)(_master));
 };

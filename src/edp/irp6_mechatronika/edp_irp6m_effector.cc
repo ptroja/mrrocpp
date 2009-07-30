@@ -32,7 +32,7 @@ namespace irp6m {
 
 // Konstruktor.
 effector::effector (lib::configurator &_config) :
-        irp6s_effector (_config, lib::ROBOT_IRP6_MECHATRONIKA)
+        manip_effector (_config, lib::ROBOT_IRP6_MECHATRONIKA)
 {
 
 }

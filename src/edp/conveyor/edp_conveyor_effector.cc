@@ -28,7 +28,7 @@ namespace conveyor {
 
 // Konstruktor.
 effector::effector (lib::configurator &_config) :
-	irp6s_and_conv_effector (_config, lib::ROBOT_CONVEYOR)
+	manip_and_conv_effector (_config, lib::ROBOT_CONVEYOR)
 	{
 	}
 

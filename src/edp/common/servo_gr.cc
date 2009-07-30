@@ -61,7 +61,7 @@ void servo_buffer::get_all_positions (void)
 ;
 
 
-servo_buffer::servo_buffer (irp6s_and_conv_effector &_master)
+servo_buffer::servo_buffer (manip_and_conv_effector &_master)
         : master(_master)
 {}
 ;             // konstruktor
@@ -422,7 +422,7 @@ void servo_buffer::Change_algorithm (void)
 
 
 /*-----------------------------------------------------------------------*/
-regulator::regulator(lib::BYTE reg_no, lib::BYTE reg_par_no, common::irp6s_and_conv_effector &_master)
+regulator::regulator(lib::BYTE reg_no, lib::BYTE reg_par_no, common::manip_and_conv_effector &_master)
         : master(_master)
 {
     // Konstruktor abstrakcyjnego regulatora
@@ -737,7 +737,7 @@ void regulator::clear_regulator ()
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator::NL_regulator (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::irp6s_and_conv_effector &_master)
+NL_regulator::NL_regulator (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
         : regulator(reg_no, reg_par_no, _master)
 {
     // Konstruktor regulatora konkretnego

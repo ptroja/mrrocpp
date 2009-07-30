@@ -355,13 +355,13 @@ void effector::main_loop (void)
 					break;
 				case lib::SYNCHRO: // blad: robot jest juz zsynchronizowany
 					// okreslenie numeru bledu
-					throw common::irp6s_effector::NonFatal_error_1(ALREADY_SYNCHRONISED);
+					throw common::manip_effector::NonFatal_error_1(ALREADY_SYNCHRONISED);
 				case lib::QUERY: // blad: nie ma o co pytac - zadne polecenie uprzednio nie zostalo wydane
 					// okreslenie numeru bledu
-					throw common::irp6s_effector::NonFatal_error_1(QUERY_NOT_EXPECTED);
+					throw common::manip_effector::NonFatal_error_1(QUERY_NOT_EXPECTED);
 				default: // blad: nieznana instrukcja
 					// okreslenie numeru bledu
-					throw common::irp6s_effector::NonFatal_error_1(UNKNOWN_INSTRUCTION);
+					throw common::manip_effector::NonFatal_error_1(UNKNOWN_INSTRUCTION);
 				}
 				; // end: switch ( receive_instruction(msg_cb) )
 				if (is_reply_type_ERROR())
@@ -385,7 +385,7 @@ void effector::main_loop (void)
 					}
 					else
 					{ // blad: powinna byla nadejsc instrukcja QUERY
-						throw common::irp6s_effector::NonFatal_error_3(QUERY_EXPECTED);
+						throw common::manip_effector::NonFatal_error_3(QUERY_EXPECTED);
 					}
 					next_state = common::GET_INSTRUCTION;
 					break;
@@ -395,7 +395,7 @@ void effector::main_loop (void)
 			; // end: switch (next_state)
 		} // end: try
 
-		catch(common::irp6s_effector::NonFatal_error_1 nfe)
+		catch(common::manip_effector::NonFatal_error_1 nfe)
 		{
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -409,7 +409,7 @@ void effector::main_loop (void)
 			next_state = common::GET_INSTRUCTION;
 		} // end: catch(transformer::NonFatal_error_1 nfe)
 
-		catch(common::irp6s_effector::NonFatal_error_2 nfe)
+		catch(common::manip_effector::NonFatal_error_2 nfe)
 		{
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -422,7 +422,7 @@ void effector::main_loop (void)
 			next_state = common::WAIT;
 		} // end: catch(transformer::NonFatal_error_2 nfe)
 
-		catch(common::irp6s_effector::NonFatal_error_3 nfe)
+		catch(common::manip_effector::NonFatal_error_3 nfe)
 		{
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
@@ -447,7 +447,7 @@ void effector::main_loop (void)
 			next_state = common::GET_INSTRUCTION;
 		} // end: catch(transformer::NonFatal_error_3 nfe)
 
-		catch(common::irp6s_effector::Fatal_error fe)
+		catch(common::manip_effector::Fatal_error fe)
 		{
 			// Obsluga bledow fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu fe

@@ -18,13 +18,13 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-void * irp6s_and_conv_effector::visualisation_thread_start(void* arg)
+void * manip_and_conv_effector::visualisation_thread_start(void* arg)
 {
-	static_cast<irp6s_and_conv_effector*> (arg)->visualisation_thread(arg);
+	static_cast<manip_and_conv_effector*> (arg)->visualisation_thread(arg);
 }
 
 
-void * irp6s_and_conv_effector::visualisation_thread(void * arg)
+void * manip_and_conv_effector::visualisation_thread(void * arg)
 {
 	int sockfd;
 	struct sockaddr_in my_addr;	// my address information

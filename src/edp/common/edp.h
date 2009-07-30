@@ -120,7 +120,7 @@ public:
 // base class for EDP robots with manipulators and conveyor
 
 /************************ edp_irp6s_and_conv_effector ****************************/
-class irp6s_and_conv_effector : public effector, public kinematic::common::manager
+class manip_and_conv_effector : public effector, public kinematic::common::manager
 {
 
 protected:
@@ -277,7 +277,7 @@ public:
     in_out_buffer* in_out_obj; // bufor wejsc wyjsc
     reader_buffer *rb_obj;
     master_trans_t_buffer *mt_tt_obj;
-    irp6s_and_conv_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name);       // konstruktor
+    manip_and_conv_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name);       // konstruktor
 
     virtual void set_rmodel (lib::c_buffer &instruction) = 0;                    // zmiana narzedzia
     virtual void get_rmodel (lib::c_buffer &instruction) = 0;                    // odczytanie narzedzia
@@ -333,7 +333,7 @@ public:
 
 
 /************************ edp_irp6s_effector ****************************/
-class irp6s_effector: public common::irp6s_and_conv_effector
+class manip_effector: public common::manip_and_conv_effector
 {
 
 protected:
@@ -468,7 +468,7 @@ protected:
     // manipulatora wzgledem ukladu bazowego (polozenie w mm)
 
 public:
-    irp6s_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name );       // konstruktor
+    manip_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name );       // konstruktor
 
     void synchronise (); // synchronizacja robota
     void get_controller_state (lib::c_buffer &instruction); // synchronizacja robota

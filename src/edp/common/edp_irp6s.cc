@@ -41,12 +41,12 @@ namespace edp {
 namespace common {
 
 /*--------------------------------------------------------------------------*/
-irp6s_effector::irp6s_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name) :
-        irp6s_and_conv_effector (_config, l_robot_name)
+manip_effector::manip_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name) :
+        manip_and_conv_effector (_config, l_robot_name)
 {}
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::compute_xyz_euler_zyz (const lib::c_buffer &instruction)
+void manip_effector::compute_xyz_euler_zyz (const lib::c_buffer &instruction)
 {
     // obliczenia dla ruchu ramienia (kocwk: XYZ_EULER_ZYZ)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
@@ -110,7 +110,7 @@ void irp6s_effector::compute_xyz_euler_zyz (const lib::c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::compute_xyz_angle_axis (const lib::c_buffer &instruction)
+void manip_effector::compute_xyz_angle_axis (const lib::c_buffer &instruction)
 {
     // obliczenia dla ruchu ramienia (kocwk: XYZ_ANGLE_AXIS)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
@@ -167,7 +167,7 @@ void irp6s_effector::compute_xyz_angle_axis (const lib::c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::compute_frame (const lib::c_buffer &instruction)
+void manip_effector::compute_frame (const lib::c_buffer &instruction)
 {
     // obliczenia dla ruchu ramienia (kocwk: FRAME)
     /* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
@@ -228,7 +228,7 @@ void irp6s_effector::compute_frame (const lib::c_buffer &instruction)
 // Przeksztacenie definicji narzedzia z postaci
 // TOOL_FRAME do postaci TOOL_XYZ_ANGLE_AXIS oraz przepisanie wyniku
 // przeksztacenia do wewntrznych struktur danych REPLY_BUFFER.
-void irp6s_effector::tool_frame_2_xyz_aa (void)
+void manip_effector::tool_frame_2_xyz_aa (void)
 {
     reply.rmodel_type = lib::TOOL_XYZ_ANGLE_AXIS;
     switch (reply.reply_type)
@@ -249,7 +249,7 @@ void irp6s_effector::tool_frame_2_xyz_aa (void)
 // Przeksztacenie definicji narzedzia z postaci
 // TOOL_FRAME do postaci TOOL_XYZ_EULER_ZYZ oraz przepisanie wyniku
 // przeksztacenia do wewntrznych struktur danych REPLY_BUFFER.
-void irp6s_effector::tool_frame_2_xyz_eul_zyz (void)
+void manip_effector::tool_frame_2_xyz_eul_zyz (void)
 {
     reply.rmodel_type = lib::TOOL_XYZ_EULER_ZYZ;
     switch (reply.reply_type)
@@ -270,7 +270,7 @@ void irp6s_effector::tool_frame_2_xyz_eul_zyz (void)
 // Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
 // z wewntrznych struktur danych TRANSFORMATORa
 // do wewntrznych struktur danych REPLY_BUFFER
-void irp6s_effector::tool_frame_2_frame_rep (void)
+void manip_effector::tool_frame_2_frame_rep (void)
 {
     reply.rmodel_type = lib::TOOL_FRAME;
     switch (reply.reply_type)
@@ -289,7 +289,7 @@ void irp6s_effector::tool_frame_2_frame_rep (void)
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::tool_axially_symmetrical_frame_2_xyz_eul_zy (void)
+void manip_effector::tool_axially_symmetrical_frame_2_xyz_eul_zy (void)
 {
     // Przeksztacenie definicji narzdzia z postaci
     // TOOL_FRAME do postaci TOOL_AS_XYZ_EULER_ZY oraz przepisanie wyniku
@@ -350,7 +350,7 @@ void irp6s_effector::tool_axially_symmetrical_frame_2_xyz_eul_zy (void)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::tool_xyz_eul_zyz_2_frame (lib::c_buffer &instruction)
+void manip_effector::tool_xyz_eul_zyz_2_frame (lib::c_buffer &instruction)
 {
     // Przeksztacenie definicji narzedzia z postaci
     // TOOL_XYZ_EULER_ZYZ do postaci TOOL_FRAME oraz przepisanie wyniku
@@ -379,7 +379,7 @@ void irp6s_effector::tool_xyz_eul_zyz_2_frame (lib::c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::tool_frame_2_frame (lib::c_buffer &instruction)
+void manip_effector::tool_frame_2_frame (lib::c_buffer &instruction)
 {
     // Przepisanie definicji narzedzia danej w postaci TOOL_FRAME
     // do wewntrznych struktur danych TRANSFORMATORa
@@ -398,7 +398,7 @@ void irp6s_effector::tool_frame_2_frame (lib::c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::arm_abs_xyz_aa_2_frame (const double *p)
+void manip_effector::arm_abs_xyz_aa_2_frame (const double *p)
 {
     double alfa;				// kat obrotu
     double x, y, z;			// wspolrzedne wektora przesuniecia
@@ -436,7 +436,7 @@ void irp6s_effector::arm_abs_xyz_aa_2_frame (const double *p)
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::arm_abs_frame_2_frame (lib::frame_tab p_m)
+void manip_effector::arm_abs_frame_2_frame (lib::frame_tab p_m)
 {
     // Przepisanie definicji koncowki danej
     // w postaci TRANS wyraonej bezwzgldnie
@@ -449,7 +449,7 @@ void irp6s_effector::arm_abs_frame_2_frame (lib::frame_tab p_m)
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::arm_rel_xyz_aa_2_frame (const double* p)
+void manip_effector::arm_rel_xyz_aa_2_frame (const double* p)
 {
 
     double alfa;			// kat obrotu
@@ -495,7 +495,7 @@ void irp6s_effector::arm_rel_xyz_aa_2_frame (const double* p)
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::arm_rel_xyz_eul_zyz_2_frame (const double* p)
+void manip_effector::arm_rel_xyz_eul_zyz_2_frame (const double* p)
 {
 
     double x, y, z;			// wspolrzedne wektora przesuniecia
@@ -518,7 +518,7 @@ void irp6s_effector::arm_rel_xyz_eul_zyz_2_frame (const double* p)
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::arm_rel_frame_2_frame (lib::frame_tab p_m)
+void manip_effector::arm_rel_frame_2_frame (lib::frame_tab p_m)
 {
     // Przepisanie definicji koncowki danej
     // w postaci TRANS wyraonej wzgldnie
@@ -536,7 +536,7 @@ void irp6s_effector::arm_rel_frame_2_frame (lib::frame_tab p_m)
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::arm_frame_2_xyz_aa (void)
+void manip_effector::arm_frame_2_xyz_aa (void)
 {
 
     lib::Homog_matrix A(current_end_effector_frame);
@@ -568,7 +568,7 @@ void irp6s_effector::arm_frame_2_xyz_aa (void)
 }
 /*--------------------------------------------------------------------------*/
 
-void irp6s_effector::set_tool_frame_in_kinematic_model (const lib::Homog_matrix& hm)
+void manip_effector::set_tool_frame_in_kinematic_model (const lib::Homog_matrix& hm)
 {
 
 	 if (!(hm.is_valid()))
@@ -588,7 +588,7 @@ void irp6s_effector::set_tool_frame_in_kinematic_model (const lib::Homog_matrix&
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::tool_xyz_aa_2_frame (lib::c_buffer &instruction)
+void manip_effector::tool_xyz_aa_2_frame (lib::c_buffer &instruction)
 {
     // Przeksztacenie definicji narzedzia z postaci
     // TOOL_XYZ_ANGLE_AXIS do postaci TOOL_FRAME oraz przepisanie wyniku
@@ -636,7 +636,7 @@ void irp6s_effector::tool_xyz_aa_2_frame (lib::c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::tool_axially_symmetrical_xyz_eul_zy_2_frame (lib::c_buffer *instruction)
+void manip_effector::tool_axially_symmetrical_xyz_eul_zy_2_frame (lib::c_buffer *instruction)
 {
     // Przeksztacenie definicji narzdzia z postaci
     // TOOL_AS_XYZ_EULER_ZY do postaci TOOL_FRAME oraz przepisanie wyniku
@@ -710,7 +710,7 @@ void irp6s_effector::tool_axially_symmetrical_xyz_eul_zy_2_frame (lib::c_buffer 
 
 
 /*--------------------------------------------------------------------------*/
-void irp6s_effector::arm_frame_2_frame (void)
+void manip_effector::arm_frame_2_frame (void)
 {
     // Przepisanie definicji koncowki danej w postaci
     // TRANS z wewntrznych struktur danych TRANSFORMATORa
@@ -743,7 +743,7 @@ void irp6s_effector::arm_frame_2_frame (void)
 }
 /*--------------------------------------------------------------------------*/
 
-void irp6s_effector::master_joints_and_frame_download (void)
+void manip_effector::master_joints_and_frame_download (void)
 { // by Y
     pthread_mutex_lock( &edp_irp6s_effector_mutex );
     // przepisanie danych na zestaw lokalny dla edp_master
@@ -760,7 +760,7 @@ void irp6s_effector::master_joints_and_frame_download (void)
 
 
 // Synchronizacja robota.
-void irp6s_effector::synchronise ()
+void manip_effector::synchronise ()
 {
 
 	common_synchronise();
@@ -768,7 +768,7 @@ void irp6s_effector::synchronise ()
 }
 
 //   sprawdza stan robota
-void irp6s_effector::get_controller_state(lib::c_buffer &instruction)
+void manip_effector::get_controller_state(lib::c_buffer &instruction)
 {
 	common_get_controller_state(instruction);
     if (is_synchronised())

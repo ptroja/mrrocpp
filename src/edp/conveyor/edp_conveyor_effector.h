@@ -19,7 +19,7 @@ namespace edp {
 namespace conveyor {
 
 // Klasa reprezentujaca tasmociag.
-class effector  : public common::irp6s_and_conv_effector
+class effector  : public common::manip_and_conv_effector
 {
 protected:
     // Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
