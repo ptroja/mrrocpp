@@ -1,12 +1,22 @@
 #include "ecp/irp6_on_track/ecp_t_haar_irp6ot.h"
 
 #include <iostream>
+#include <stdio.h>
+#include <unistd.h>
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 namespace task {
 
 #define robot1
+
+#define JAW_PINCHING_0 -0.016//zacisk szczeki dla puszki
+#define JAW_PINCHING_1 -0.026//zacisk szczeki dla pudelka
+#define LOWERNIG_INTERVAL_0 -0.073 //interwal co ktory wlaczany jest serwomechanizm w plaszczyznie							//dla puszki
+#define LOWERNIG_INTERVAL_1 -0.18
+#define GAGEN_INTERVAL_0 500 // ustawienie generatora gripper approach
+#define GAGEN_INTERVAL_1 401
+
 
 //Konstruktory
 haar::haar(lib::configurator &_config) :
@@ -17,8 +27,28 @@ void haar::task_initialization(void) {
 
 	try {
 		//Wczytanie parametrow konfiguracyjnych.
-		rotation = config.return_int_value("rotation"); //Czy bedzie wyznaczana rotacja?
+		rotation    = config.return_int_value("rotation"); //Czy bedzie wyznaczana rotacja?
 		smooth_path = config.return_string_value("smooth_path");//Sciezka z opisem punktu startowego podawanego smooth_generatorowi
+		object_type = config.return_int_value("object_type");
+
+		if (object_type == 0)//Ustawiamy zadanie dla puszki.
+		{
+			jaw_pinching = JAW_PINCHING_0;
+			lowering_interval = LOWERNIG_INTERVAL_0;
+			ga_gen_interval = GAGEN_INTERVAL_0;
+		}else if( object_type == 1 )
+		{
+			jaw_pinching = JAW_PINCHING_1;
+			lowering_interval = LOWERNIG_INTERVAL_1;
+			ga_gen_interval = GAGEN_INTERVAL_1;
+		}else
+		{
+			sr_ecp_msg->message("Zle zdefiniowany obiekt: USTAW PLIK KONFIGURACYJNY");
+			ecp_termination_notice();
+			ecp_wait_for_stop();
+		}
+
+		std::cout<<"Object_type: "<<object_type<<std::endl;
 
 		//Create cvFraDIA sensor - for testing purposes.
 		sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA,
@@ -52,43 +82,43 @@ void haar::main_task_algorithm(void) {
 	smooth_gen->load_file_with_path(smooth_path.c_str());
 	smooth_gen->Move();
 
-	//	//czy FraDIA ma dokonac detekcji z rotacja.
-		if(rotation){
-			std::cout<<"Rotacja.\n";
-			rot_gripper_gen = new ecp_g_rotate_gripper(*this,0.12);
-			rot_gripper_gen->sensor_m = sensor_m;
-			std::cout<<"Przed move\n";
-			rot_gripper_gen->Move();
-			std::cout<<"Po move\n";
-		}else{
-			std::cout<<"bez rotacji\n";
-		}
+	//Czy FraDIA ma dokonac detekcji z rotacja.
+	if (rotation) {
+		sr_ecp_msg->message("Rotacja");
+		std::cout << "Rotacja.\n";
+		rot_gripper_gen = new ecp_g_rotate_gripper(*this, 0.12);
+		rot_gripper_gen->sensor_m = sensor_m;
+		rot_gripper_gen->Move();
+	} else {
+		sr_ecp_msg->message("BEZ Rotacja");
+		std::cout << "Bez rotacji.\n";
+	}
 
-	//Czekam, az czujnik bedzie skonfigurowany.
-//	sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
-//	while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.vsp_report == lib::VSP_SENSOR_NOT_CONFIGURED){
-//		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
-//	}
+	sr_ecp_msg->message("Po rotacji");
+	//Centrowanie wykonuje w kilku krokach.
+	init_td(lib::XYZ_ANGLE_AXIS, 1000+9*object_type);
+	for (int i = 0; i< 1; i++){
+		//Generator nadjezdzajacy nad obiekt.
+		planar_vis->Move();
 
+		set_td_coordinates(0.0, 0.0, lowering_interval, 0.0, 0.0, 0.0, 0.0);
+		sleep(4);
+		std::cout<<"lower" <<lowering_interval<<std::endl;
+		linear_gen=new common::generator::linear(*this,td,1);
+		linear_gen->Move();
+		//sleep(4);
+		delete linear_gen;
+	}
 
+	sleep(6);
 
-	//Generator nadjezdzajacy nad obiekt.
-
-	sr_ecp_msg->message("Przed planar_vis");
-	planar_vis->Move();
-	sr_ecp_msg->message("Po planar_vis");
-
-	sr_ecp_msg->message("przed befgen\n");
-	//Kalibracja sily..
 	bef_gen->Move();
-
-	sr_ecp_msg->message("przed gagen\n");
 	//Configuration of gripper approach configure(speed, time_period).
-	ga_gen->configure(0.02, 900);
+	ga_gen->configure(0.02, ga_gen_interval);
 	ga_gen->Move();
 
 	//Inicjalizacja td.
-	init_td(lib::XYZ_ANGLE_AXIS, 500);
+	init_td(lib::XYZ_ANGLE_AXIS, 400);
 
 	sr_ecp_msg->message("linear_gen\n");
 	//Podniesienie chwytaka o 0.4 cm.
@@ -98,7 +128,7 @@ void haar::main_task_algorithm(void) {
 	delete linear_gen;
 
 	//Zacisniecie szczek.
-	set_td_coordinates(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.024);
+	set_td_coordinates(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, jaw_pinching);
 	linear_gen=new common::generator::linear(*this,td,1);
 	linear_gen->Move();
 	delete linear_gen;

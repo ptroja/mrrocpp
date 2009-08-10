@@ -32,6 +32,7 @@ ecp_g_rotate_gripper::~ecp_g_rotate_gripper() {
 bool ecp_g_rotate_gripper::first_step() {
 	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
 	vsp_fradia->to_vsp.haar_detect_mode = lib::PERFORM_ROTATION;
+	ecp_t.sr_ecp_msg->message("first_step");
 
     the_robot->EDP_data.instruction_type = lib::GET;
     the_robot->EDP_data.get_type = ARM_DV;
@@ -45,7 +46,7 @@ bool ecp_g_rotate_gripper::first_step() {
 }
 
 bool ecp_g_rotate_gripper::next_step() {
-
+	ecp_t.sr_ecp_msg->message("Next step");
 
 	if( lastStep ){
 		std::cout<<"Last step\n";
@@ -60,18 +61,23 @@ bool ecp_g_rotate_gripper::next_step() {
 	if(vsp_fradia->from_vsp.vsp_report != lib::VSP_REPLY_OK){
 		angle = 0.0;
 		td.internode_step_no = 30;
+		vsp_fradia->to_vsp.haar_detect_mode = lib::PERFORM_ROTATION;
 		std::cout<<"Weszlo do NOT VSP_REP_OK\n";
+		ecp_t.sr_ecp_msg->message("Weszlo do NOT VSP_REP_OK\n");
 	}
-	else {std::cout<<"Weszlo do VSP_REP_OK\n";
+	else {
+		ecp_t.sr_ecp_msg->message("Weszlo do  VSP_REP_OK\n");
 		state = vsp_fradia->from_vsp.comm_image.sensor_union.hd_angle.reading_state;
 		if(state == lib::HD_SOLUTION_NOTFOUND){
 			std::cout<<"Weszlo do HD_SOLUTION_NOTFOUND\n";
+			ecp_t.sr_ecp_msg->message("Weszlo do HD_SOLUTION_NOTFOUND\n");
 			vsp_fradia->to_vsp.haar_detect_mode = lib::WITHOUT_ROTATION;
 			return false;
 		}
 		else if(state == lib::HD_SOLUTION_FOUND){
 			angle = vsp_fradia->from_vsp.comm_image.sensor_union.hd_angle.angle;
 			//Obliczam ile krokow.
+			ecp_t.sr_ecp_msg->message("Weszlo do HD_SOLUTION_FOUND\n");
 			td.internode_step_no = (int)((angle/speed)/0.002);
 			std::cout<<"angle: "<<angle<<std::endl;
 			std::cout<<"motionsteps: "<<td.internode_step_no<<std::endl;

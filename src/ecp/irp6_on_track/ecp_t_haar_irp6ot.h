@@ -19,15 +19,22 @@
 
 #include "ecp_mp/ecp_mp_s_cvfradia.h"
 
+//#define JAW_PINCHING_0 -0.016//zacisk szczeki dla puszki
+//#define JAW_PINCHING_1 -0.024//zacisk szczeki dla pudelka
+//#define LOWERNIG_INTERVAL_0 -0.073 //interwal co ktory wlaczany jest serwomechanizm w plaszczyznie							//dla puszki
+//#define LOWERNIG_INTERVAL_1 -0.51
+//#define GAGEN_INTERVAL_0 500 // ustawienie generatora gripper approach
+//#define GAGEN_INTERVAL_1 401
+
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 namespace task {
 
 class haar: public common::task::task  {
-
 	bool rotation;
 	std::string smooth_path;
+	int object_type;
 	//Smoth movement generator
 	common::generator::smooth* smooth_gen;
 	//Calibration of force
@@ -40,8 +47,12 @@ class haar: public common::task::task  {
 	ecp_vis_ib_eih_planar_irp6ot* planar_vis;
 	//Trajectory description.
 	lib::trajectory_description td;
+	//Rotation generator.
+	ecp_g_rotate_gripper* rot_gripper_gen;
 
-	 ecp_g_rotate_gripper* rot_gripper_gen;
+	float jaw_pinching;
+	float lowering_interval;
+	int ga_gen_interval;
 
 public:
 	//Konstruktory.

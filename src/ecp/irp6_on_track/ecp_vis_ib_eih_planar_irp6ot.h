@@ -58,6 +58,9 @@ public:
 	double t_m;
 	//Droga do przejechania w nastepnym makrokroku.
 
+	double old_direction;
+	double old_frame_no;
+	bool first_move;
 	bool breaking;
 
 	ecp_vis_ib_eih_planar_irp6ot(common::task::task& _ecp_task);
