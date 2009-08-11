@@ -29,6 +29,7 @@ namespace irp6ot {
 
 
 class ecp_vis_ib_eih_planar_irp6ot: public common::ecp_visual_servo {
+	bool check_if_followed();
 public:
 	//Wirtualny sensor
 	lib::sensor *vsp_fradia;
@@ -58,10 +59,11 @@ public:
 	double t_m;
 	//Droga do przejechania w nastepnym makrokroku.
 
-	double old_direction;
 	double old_frame_no;
 	bool first_move;
 	bool breaking;
+	int holes;
+	bool above_object;
 
 	ecp_vis_ib_eih_planar_irp6ot(common::task::task& _ecp_task);
 	virtual ~ecp_vis_ib_eih_planar_irp6ot();

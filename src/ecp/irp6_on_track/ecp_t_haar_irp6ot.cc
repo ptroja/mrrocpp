@@ -10,10 +10,10 @@ namespace task {
 
 #define robot1
 
-#define JAW_PINCHING_0 -0.016//zacisk szczeki dla puszki
-#define JAW_PINCHING_1 -0.026//zacisk szczeki dla pudelka
+#define JAW_PINCHING_0 -0.01//zacisk szczeki dla puszki
+#define JAW_PINCHING_1 -0.02//zacisk szczeki dla pudelka
 #define LOWERNIG_INTERVAL_0 -0.073 //interwal co ktory wlaczany jest serwomechanizm w plaszczyznie							//dla puszki
-#define LOWERNIG_INTERVAL_1 -0.18
+#define LOWERNIG_INTERVAL_1 -0.05
 #define GAGEN_INTERVAL_0 500 // ustawienie generatora gripper approach
 #define GAGEN_INTERVAL_1 401
 
@@ -48,7 +48,6 @@ void haar::task_initialization(void) {
 			ecp_wait_for_stop();
 		}
 
-		std::cout<<"Object_type: "<<object_type<<std::endl;
 
 		//Create cvFraDIA sensor - for testing purposes.
 		sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA,
@@ -85,32 +84,30 @@ void haar::main_task_algorithm(void) {
 	//Czy FraDIA ma dokonac detekcji z rotacja.
 	if (rotation) {
 		sr_ecp_msg->message("Rotacja");
-		std::cout << "Rotacja.\n";
-		rot_gripper_gen = new ecp_g_rotate_gripper(*this, 0.12);
+
+		rot_gripper_gen = new ecp_g_rotate_gripper(*this, 0.36);
 		rot_gripper_gen->sensor_m = sensor_m;
 		rot_gripper_gen->Move();
 	} else {
 		sr_ecp_msg->message("BEZ Rotacja");
-		std::cout << "Bez rotacji.\n";
 	}
 
-	sr_ecp_msg->message("Po rotacji");
+	sr_ecp_msg->message("Centrowanie");
 	//Centrowanie wykonuje w kilku krokach.
 	init_td(lib::XYZ_ANGLE_AXIS, 1000+9*object_type);
-	for (int i = 0; i< 1; i++){
+	for (int i = 0; i< 3; i++){
 		//Generator nadjezdzajacy nad obiekt.
 		planar_vis->Move();
-
-		set_td_coordinates(0.0, 0.0, lowering_interval, 0.0, 0.0, 0.0, 0.0);
-		sleep(4);
-		std::cout<<"lower" <<lowering_interval<<std::endl;
-		linear_gen=new common::generator::linear(*this,td,1);
-		linear_gen->Move();
-		//sleep(4);
-		delete linear_gen;
+		if (i == 0 && !planar_vis->above_object)
+			i--; //W pierwszym etapie nadjezdzania wywoujemy generator do skutku;
+		else{
+			set_td_coordinates(0.0, 0.0, lowering_interval, 0.0, 0.0, 0.0, 0.0);
+			//Opuszczamy manilpulator.
+			linear_gen=new common::generator::linear(*this,td,1);
+			linear_gen->Move();
+			delete linear_gen;
+		}
 	}
-
-	sleep(6);
 
 	bef_gen->Move();
 	//Configuration of gripper approach configure(speed, time_period).
@@ -134,7 +131,7 @@ void haar::main_task_algorithm(void) {
 	delete linear_gen;
 
 	//Podniesienie o 2cm.
-	set_td_coordinates(0,0,0.02,0,0,0,0);
+	set_td_coordinates(0,0,0.04,0,0,0,0);
 	linear_gen=new common::generator::linear(*this,td,1);
 	linear_gen->Move();
 	delete linear_gen;
