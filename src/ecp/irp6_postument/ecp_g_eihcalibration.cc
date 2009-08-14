@@ -21,7 +21,7 @@ using namespace std;
 eihgenerator::eihgenerator (common::task::task& _ecp_task)
         : generator (_ecp_task)
 {
-
+	count = 0;
 }
 
 
@@ -32,35 +32,38 @@ eihgenerator::~eihgenerator ()
 
 bool eihgenerator::first_step()
 {
-//	sensor = (ecp_mp::sensor::cvfradia *)sensor_m[lib::SENSOR_CVFRADIA];
+	sensor = (ecp_mp::sensor::cvfradia *)sensor_m[lib::SENSOR_CVFRADIA];
 
 	//proste zadanie kinematyki
 	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV;
 	the_robot->EDP_data.get_arm_type = lib::FRAME;
 
-/*	//zadanie zrobienia zdjec od fraidii
-	sensor->to_vsp.ps_response.command = 38;
 	sensor->to_vsp.i_code = lib::VSP_INITIATE_READING;
-*/
+
 	return true;
 }
 
 bool eihgenerator::next_step()
 {
-	double t[12];
+	float t[12];
+	if(sensor->from_vsp.comm_image.sensor_union.chessboard.found == true)
+		count++;
 	get_frame(t);
+	sensor->to_vsp.eihcalibration.frame_number = count;
 	for(int i=0; i<12; i++)
 	{
 		std::cout<<t[i]<<"\t";
+		sensor->to_vsp.eihcalibration.transformation_matrix[i] = t[i];
 		if(i%4==3)
 			std::cout<<std::endl;
 	}
 	std::cout<<std::endl;
+	return false;
 
 }
 
-void eihgenerator::get_frame(double t[12])
+void eihgenerator::get_frame(float t[12])
 {
 	for(int i=0; i<3; i++)
 	{

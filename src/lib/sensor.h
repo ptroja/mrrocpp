@@ -295,7 +295,7 @@ struct ECP_VSP_MSG
 		struct
 		{
 			int frame_number;
-			double transformation_matrix;
+			float transformation_matrix[12];
 		}eihcalibration;
 
 		// Tryb HaarDetect

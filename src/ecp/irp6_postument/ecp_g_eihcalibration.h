@@ -21,10 +21,8 @@ namespace generator {
 
 class eihgenerator : public common::generator::generator
 {
-/*	lib::ECP_VSP_MSG comm_struct;
 	ecp_mp::sensor::cvfradia * sensor;
-	lib::SENSOR_IMAGE calib_data;
-*/
+	int count;
 
   public:
 	eihgenerator(common::task::task& _ecp_task);
@@ -32,7 +30,7 @@ class eihgenerator : public common::generator::generator
 	bool first_step();
 	bool next_step();
 
-	void get_frame(double[12]);
+	void get_frame(float[12]);
 
 };
 

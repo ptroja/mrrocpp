@@ -2051,7 +2051,7 @@ bool eih_nose_run::next_step()
 
 	count++;
 
-	if (count>100)
+	if (count > 25)
 	{// co jakis czas generator sie zatrzymuje
 		count = 0;
 		return false;

@@ -12,6 +12,7 @@ eihcalibration::eihcalibration(lib::configurator &_config): common::task::task(_
 	smoothgen = NULL;
 	nose = NULL;
 	linear_gen = NULL;
+	generator = NULL;
 };
 
 //Desctructor
@@ -39,11 +40,13 @@ void eihcalibration::task_initialization(void) {
 	nose = new common::generator::eih_nose_run(*this, 8);
 	nose->configure_pulse_check (true);
 
-	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, "[vsp_cvfradia]", *this, sizeof(lib::sensor_image_t::sensor_union_t::fradia_t));
+	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, "[vsp_cvfradia]", *this, sizeof(lib::sensor_image_t::sensor_union_t::chessboard_t));
+	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
 
 	sr_ecp_msg->message("ECP loaded eihcalibration");
 
 	generator = new generator::eihgenerator(*this);
+	generator->sensor_m = sensor_m;
 };
 
 void eihcalibration::main_task_algorithm(void ){
@@ -51,23 +54,26 @@ void eihcalibration::main_task_algorithm(void ){
 	sr_ecp_msg->message("ECP eihcalibration ready");
 
 	//Czekam, az czujnik bedzie skonfigurowany.
-/*	sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+	sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 	while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.vsp_report == lib::VSP_SENSOR_NOT_CONFIGURED){
 		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 	}
-*/
+
 	smoothgen->set_absolute();
+
+	// wczytanie pozycji poczatkowej i przejscie do niej za pomoca smooth
 	if (smoothgen->load_file_with_path("../trj/nad_stolem_postument.trj")) {
 	  smoothgen->Move();
 	}
-/*	smoothgen->reset();
 
+	// doprowadzenie chwytaka do szachownicy "wodzeniem za nos"
 	while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == false){
-		std::cout<<"costam"<<sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found<<std::endl;
+//		std::cout<<"costam"<<sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found<<std::endl;
 		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 		nose->Move();
 	}
-*/
+	nose->Move();
+
 
 	sleep(2);
 
@@ -78,15 +84,45 @@ void eihcalibration::main_task_algorithm(void ){
 	//Inicjalizacja td.
 	init_td(lib::XYZ_ANGLE_AXIS, 500);
 
-	//opuszczenie chwytaka
+	// obrot
+	set_td_coordinates(0.0, 0.0, 0.0, -0.3, 0.0, 0.0, 0.0);
+	linear_gen=new common::generator::linear(*this, td, 1);
+	linear_gen->Move();
+	delete linear_gen;
+
+	sleep(2);
+
+	generator->Move();
+
+	// obrot
+	set_td_coordinates(0.0, 0.0, 0.0, 0.0, -0.3, 0.0, 0.0);
+	linear_gen=new common::generator::linear(*this, td, 1);
+	linear_gen->Move();
+	delete linear_gen;
+
+	sleep(2);
+
+	generator->Move();
+
+	// obrot
+	set_td_coordinates(0.0, 0.0, 0.0, 0.0, 0.0, -0.3, 0.0);
+	linear_gen=new common::generator::linear(*this, td, 1);
+	linear_gen->Move();
+	delete linear_gen;
+
+	sleep(2);
+
+	generator->Move();
+
+	//opuszczenie chwytaka o 10 cm
 	set_td_coordinates(0.0, 0.0, -0.1, 0.0, 0.0, 0.0, 0.0);
 	linear_gen=new common::generator::linear(*this, td, 1);
 	linear_gen->Move();
 	delete linear_gen;
 
-	generator->Move();
-
 	sleep(2);
+
+	generator->Move();
 
 	//przesuniecie w prawo (patrzac na manipulator z przodu)
 	set_td_coordinates(0.0, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -94,9 +130,9 @@ void eihcalibration::main_task_algorithm(void ){
 	linear_gen->Move();
 	delete linear_gen;
 
-	generator->Move();
-
 	sleep(2);
+
+	generator->Move();
 
 	//przesuniecie do operatora (patrzac na manipulator z przodu)
 	set_td_coordinates(0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -104,44 +140,16 @@ void eihcalibration::main_task_algorithm(void ){
 	linear_gen->Move();
 	delete linear_gen;
 
-	generator->Move();
-
 	sleep(2);
-
-	// obrot
-	set_td_coordinates(0.0, 0.0, 0.0, -0.2, 0.0, 0.0, 0.0);
-	linear_gen=new common::generator::linear(*this, td, 1);
-	linear_gen->Move();
-	delete linear_gen;
 
 	generator->Move();
 
-	sleep(2);
-
-	// obrot
-	set_td_coordinates(0.0, 0.0, 0.0, 0.0, -0.2, 0.0, 0.0);
-	linear_gen=new common::generator::linear(*this, td, 1);
-	linear_gen->Move();
-	delete linear_gen;
-
-	generator->Move();
-
-	sleep(2);
-
-	// obrot
-	set_td_coordinates(0.0, 0.0, 0.0, 0.0, 0.0, -0.2, 0.0);
-	linear_gen=new common::generator::linear(*this, td, 1);
-	linear_gen->Move();
-	delete linear_gen;
-
-	sleep(2);
-
-	// zacisniecie szczek
+/*	// zacisniecie szczek
 	set_td_coordinates(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.002);
 	linear_gen=new common::generator::linear(*this, td, 1);
 	linear_gen->Move();
 	delete linear_gen;
-
+*/
 	ecp_termination_notice();
 	//ecp_wait_for_stop();
 };

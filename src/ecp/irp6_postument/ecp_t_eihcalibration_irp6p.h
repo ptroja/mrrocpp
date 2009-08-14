@@ -24,9 +24,13 @@ namespace task {
 class eihcalibration: public common::task::task {
 
 	protected:
+		// generator do wodzenia za nos
 		common::generator::eih_nose_run* nose;
+		// generator smooth
 		common::generator::smooth* smoothgen;
+		// generator o zadany przyrost polozenia/orientacji
 		common::generator::linear* linear_gen;
+		// generator do wysylania danych do fradii
 		generator::eihgenerator* generator;
 		//Trajectory description.
 		lib::trajectory_description td;
