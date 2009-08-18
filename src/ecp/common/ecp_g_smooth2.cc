@@ -883,6 +883,8 @@ void smooth2::calculate(void) {
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
 
 					if (v_max_aa[i] == 0 || a_max_aa[i] == 0 || pose_list_iterator->v[i] == 0 || pose_list_iterator->a[i] == 0) {
+						//printf("first interval: v_max: %f\t a_max: %f\t v: %f\t a: %f\n",v_max_aa[i], a_max_aa[i], pose_list_iterator->v[i], pose_list_iterator->a[i]);
+						//flushall();
 						sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
 						throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 					}
@@ -1096,6 +1098,8 @@ void smooth2::calculate(void) {
 
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
 					if (v_max_aa[i] == 0 || a_max_aa[i] == 0 || pose_list_iterator->v[i] == 0 || pose_list_iterator->a[i] == 0) {
+						//printf("nie first interval: v_max: %f\t a_max: %f\t v: %f\t a: %f\n",v_max_aa[i], a_max_aa[i], pose_list_iterator->v[i], pose_list_iterator->a[i]);
+						//flushall();
 						sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
 						throw ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 					}
@@ -1391,12 +1395,18 @@ void smooth2::calculate(void) {
 
 				pose_list_iterator->s_przysp[i] = 0;
 
-				if (v_r_next[i] > pose_list_iterator->v_r[i]) {
+				if (v_r_next[i] > pose_list_iterator->v_r[i]) { //ten przypadek wystepuje w rekurencji, po redukcji
 
-					t[i] = t_max; //to niekoniecznie jest potrzebne
-					pose_list_iterator->s_jedn[i] = 0;
+					t[i] = pose_list_iterator->t;
 					pose_list_iterator->v_k[i] = v_r_next[i];
 
+					if (eq(pose_list_iterator->v_r[i],0)) {
+						pose_list_iterator->s_jedn[i] = 0;
+					} else {
+						t_temp1 = (pose_list_iterator->v_k[i] - pose_list_iterator->v_r[i])/pose_list_iterator->a_r[i];
+						pose_list_iterator->s_jedn[i] = s[i] -
+										((pose_list_iterator->a_r[i] * t_temp1 * t_temp1)/2 + (pose_list_iterator->v_r[i] * t_temp1));
+					}
 				} else {
 					t[i] = s[i]/pose_list_iterator->v_r[i];
 
@@ -1479,7 +1489,7 @@ void smooth2::calculate(void) {
 			if (fabs(t[i] - t_max) > tk) {//redukcja predkosci w danej osi ze wzgledu na zbyt krotki czas ruchu
 				if (pose_list_iterator->model[i] == 1) { //model 1
 					reduction_model_1(pose_list_iterator, i, s[i]);
-					if (trajectory_calculated == true) {
+					if (trajectory_calculated == true) {//wyjscie z rekurencji
 						return;
 					}
 				} else if (pose_list_iterator->model[i] == 2) {//model 2
@@ -1550,7 +1560,7 @@ void smooth2::calculate(void) {
 			pose_list_iterator->v_grip = pose_list_iterator->v_r[gripp];
 		}*/
 
-		int os = 5;
+		int os = 7;
 		printf("\n=============== pozycja trajektorii nr %d pos: %d ==================\n", j, pose_list_iterator->pos_num);
 		printf("czas ruchu %f\n", pose_list_iterator->t);
 		printf("coordinates: %f\n", pose_list_iterator->coordinates[os]);
