@@ -29,10 +29,11 @@ namespace transmitter {
 enum TRANSMITTER_ENUM {
     TRANSMITTER_UNDEFINED,
     TRANSMITTER_RC_WINDOWS,
-    TRANSMITTER_PLAYER
+    TRANSMITTER_PLAYER,
+    TRANSMITTER_DRAUGHTSAI
 };
 
-enum VA_UNION_VARIANT {RC_WINDOWS};
+enum VA_UNION_VARIANT {RC_WINDOWS,DRAUGHTSAI};
 
 /************ Struktura obrazow czujnika ***************/
 typedef struct _TO_VA
@@ -44,6 +45,12 @@ typedef struct _TO_VA
 		struct {
 			char rc_state[54];
 		} rc_windows;
+
+		struct{
+			char board[32];
+			char player;
+		}draughts_ai;
+
 	};
 } TO_VA;
 
@@ -58,6 +65,10 @@ typedef struct _FROM_VA
 		struct {
 			char sequence[100];
 		} rc_windows;
+		struct {
+			char move[25];
+			char status;
+		}draughts_ai;
 		playerc_joystick_t player_joystick;
 		playerc_position_t player_position;
 		playerc_speech_recognition_t player_speech_recognition;

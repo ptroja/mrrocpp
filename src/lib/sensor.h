@@ -57,6 +57,23 @@ typedef enum
  */
 typedef enum { HD_SOLUTION_NOTFOUND, HD_SOLUTION_FOUND } HD_READING;
 
+/*commands from mrrocpp used in Draughts task*/
+typedef enum{
+	XY_TRACKER,
+	Z_TRACKER,
+	WHOLE_BOARD_DETECTION,
+	NONE,
+	STORE_BOARD,
+	CHECK_MOVE
+}DRAUGHTS_MODE;
+
+/*information returned to mrrocpp used in Draughts task*/
+typedef enum{
+	STATE_CHANGED,
+	STATE_UNCHANGED,
+	STATE_OK,
+	BOARD_DETECTION_ERROR
+}BOARD_STATUS;
 
 /*! \struct sensor_image_t
  * \ Structure used for storing and passing sensors data.
@@ -153,6 +170,15 @@ typedef struct sensor_image_t
 			int y;
 		}deviation;
 
+		/*
+		 * Structure for storing pawn coordinates from cvFraDIA
+		 * used in Draughts task
+		 * \author tbem
+		 */
+		struct{
+			char fields[32];
+			BOARD_STATUS status;
+		}board;
 
 		//Obraz fradii dla rotate_gripper
 		struct {
@@ -276,6 +302,9 @@ struct ECP_VSP_MSG
 			short command;
 			double plate_pos[3];
 		} ps_response;
+
+		//structure for controlling fraDIA form mrrocpp
+		DRAUGHTS_MODE draughts_mode;
 
 		/// \struct esa
 		/// \brief Structure used for choosing mode for FraDIA with EdgeShapeAnalyzer
