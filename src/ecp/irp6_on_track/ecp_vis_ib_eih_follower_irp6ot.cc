@@ -20,7 +20,7 @@ ecp_vis_ib_eih_follower_irp6ot::~ecp_vis_ib_eih_follower_irp6ot() {
 
 }
 
-/*void ecp_vis_ib_eih_planar_irp6ot::retrieve_parameters() {
+/*void ecp_vis_ib_eih_follower_irp6ot::retrieve_parameters() {
 	//Maksymalna wartosc  predkosci.
 	v_max = ecp_t.config.return_double_value("v_max");
 
@@ -46,18 +46,51 @@ bool ecp_vis_ib_eih_follower_irp6ot::first_step() {
 	//t_m = MOTION_STEPS * STEP;
 	//x = 0;y = 0;v = 0;s = 0;
 	//breaking = false;
-	//first_move =  true;
+	first_move =  true;
 
-	//ecp_t.sr_ecp_msg->message("PIERWSZY");
+	ecp_t.sr_ecp_msg->message("PIERWSZY");
 
 	//above_object = false;
 
 	return true;
 }
 
-bool ecp_vis_ib_eih_follower_irp6ot::next_step() {
+bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
+
+	the_robot->EDP_data.instruction_type = lib::SET_GET;
+	the_robot->EDP_data.get_type = ARM_DV;
+	the_robot->EDP_data.set_type = ARM_DV;
+	the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
+	the_robot->EDP_data.get_arm_type = lib::JOINT;
+	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+	the_robot->EDP_data.next_interpolation_type = lib::MIM;
+	the_robot->EDP_data.motion_steps = MOTION_STEPS;
+	the_robot->EDP_data.value_in_step_no = MOTION_STEPS - 2;
+
+	if (first_move) {
+		for (int i = 0; i < 6; i++) {
+			next_position[i] = the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
+			//printf("%f\n", next_position[i]);
+			//flushall();
+		}
+		next_position[6] = the_robot->EDP_data.current_gripper_coordinate;
+
+		first_move = false;
+	}
+
+	alpha = the_robot->EDP_data.current_joint_arm_coordinates[1]- the_robot->EDP_data.current_joint_arm_coordinates[6];
+	//Uchyb wyrazony w pikselach.
+	double ux = vsp_fradia->from_vsp.comm_image.sensor_union.deviation.x;
+	double uy = vsp_fradia->from_vsp.comm_image.sensor_union.deviation.y;
+
+	for (int i = 0; i < 6; i++) {
+		the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = next_position[i];
+	}
+	the_robot->EDP_data.next_gripper_coordinate = next_position[6];
+
+
 	//Odczytanie pozycji poczatkowej koncowki w reprezentacji os-kat.
-	if (node_counter == 1) {
+	/*if (node_counter == 1) {
 
 		memcpy(next_position,
 	 			the_robot->EDP_data.current_XYZ_AA_arm_coordinates, 6
@@ -122,8 +155,8 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step() {
 		}
 
 		//Sprawdzamy czy nie bylo zbyt dluzej przerwy.
-		if(!check_if_followed())
-			return false;
+		//if(!check_if_followed())
+		//	return false;
 
 		//Kierunek ruchu wzgledem ukladu chwytaka.
 		double direction = atan2(-ux, -uy) + alpha;
@@ -151,10 +184,11 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step() {
 		the_robot->EDP_data.next_gripper_coordinate = next_position[6];
 
 		return true;
-	}
+	}*/
+	return true;
 }
 
-/*bool ecp_vis_ib_eih_planar_irp6ot::check_if_followed(){
+/*bool ecp_vis_ib_eih_follower_irp6ot::check_if_followed(){
 	double frame_no =
 			vsp_fradia->from_vsp.comm_image.sensor_union.deviation.frame_number;
 
@@ -181,9 +215,9 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step() {
 
 }*/
 
-/*void ecp_vis_ib_eih_planar_irp6ot::entertain_constraints() {
+void ecp_vis_ib_eih_follower_irp6ot::entertain_constraints() {
 
-}*/
+}
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp

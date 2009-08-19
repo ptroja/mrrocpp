@@ -25,7 +25,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-#define MOTION_STEPS 25
+#define MOTION_STEPS 10
 
 
 class ecp_vis_ib_eih_follower_irp6ot: public common::ecp_visual_servo {
@@ -36,16 +36,16 @@ public:
 	//Pozycja w nastepnym kroku.
     double next_position[8];
     //Obliczone sterowanie dla osi x;
-    double x;
+    /*double x;
     //Obliczone sterowanie dla osi y;
     double y;
     //Przyrost polozenia w makrokroku
-    double s;
+    double s;*/
 
     //Orientacja koncokwi wzgledem ukladu bazowego.
     double alpha;
 
-	//Maksymalna wartosc  predkosci.
+	/*//Maksymalna wartosc  predkosci.
 	double v_max;
 	//Wartosc przyspieszenia z jakim osiagana jest maksymalna predkosc.
 	double  a;
@@ -59,17 +59,17 @@ public:
 	double t_m;
 	//Droga do przejechania w nastepnym makrokroku.
 
-	double old_frame_no;
+	double old_frame_no;*/
 	bool first_move;
-	bool breaking;
+	/*bool breaking;
 	int holes;
-	bool above_object;
+	bool above_object;*/
 
 	ecp_vis_ib_eih_follower_irp6ot(common::task::task& _ecp_task);
 	virtual ~ecp_vis_ib_eih_follower_irp6ot();
 	virtual bool first_step(void);
-	virtual bool next_step();
-	//virtual void entertain_constraints();
+	virtual bool next_step_without_constraints();
+	virtual void entertain_constraints();
 	//virtual void retrieve_parameters();
 };
 

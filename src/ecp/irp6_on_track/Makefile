@@ -83,7 +83,7 @@ ecp_pw_kolo: ecp_g_pw_kolo.o ecp_t_pw_kolo_irp6ot.o ecp_g_force.o ecp_st_go.o ec
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_draughts: ecp_t_draughts.o ecp_g_force.o ecp_st_go.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o\
 		 ecp_operator_reaction_condition.o ecp_mp_s_cvfradia.o ecp_g_sleep.o ecp_vis_ib_eih_planar_irp6ot.o\
-		 ecp_mp_tr_draughtsAI.o $(SHOBJ)
+		 ecp_mp_tr_draughtsAI.o ecp_vis_ib_eih_follower_irp6ot.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 #-----------------------------------------------------------------------------------------------------------------------#
