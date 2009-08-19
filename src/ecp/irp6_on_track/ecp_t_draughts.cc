@@ -285,7 +285,7 @@ int Draughts::makeAIMove(int player){
 	sleep(2);
 	getAIMove(player);
 
-	printf("status: %d \nincoming: ",aitrans->from_va.draughts_ai.status);
+	//printf("status: %d \nincoming: ",aitrans->from_va.draughts_ai.status);
 	switch(aitrans->from_va.draughts_ai.status){
 		case AI_NORMAL_MOVE:
 			printf("status: normal move\n");
@@ -304,16 +304,17 @@ int Draughts::makeAIMove(int player){
 	//count number of jumper fields
 
 	for(movesnr=0;movesnr<25;movesnr++){
+		printf("%d ",move[movesnr]);
 		if(move[movesnr]==-1){
 			break;
 		}
 	}
 
 	movesnr--;
-	printf("\nmovesnr: %d\n\n",movesnr);
+//	printf("\nmovesnr: %d\n\n",movesnr);
 
 	//chenge to dame
-	printf("change: %d %d\n",move[movesnr],board[move[0]]);
+//	printf("change: %d %d\n",move[movesnr],board[move[0]]);
 	if((move[movesnr]<4 || move[movesnr]>27) && board[move[0]]>1 ){
 		if(board[move[0]]==2){
 			wPawn2wKing(move[0],move[movesnr]);
