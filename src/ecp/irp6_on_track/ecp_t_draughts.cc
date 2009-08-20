@@ -105,7 +105,10 @@ void Draughts::getAIMove(int player){
 			vsp_fradia->get_reading();
 	}
 
-	aitrans->AIconnect("chrobry",10050);
+	int port=config.return_int_value("ai_port","[AI]");
+	std::string node_name=config.return_string_value("ai_node_name","[AI]");
+
+	aitrans->AIconnect(node_name.c_str(),port);
 
 	vsp_fradia->get_reading();
 	printf("dane: \n");
@@ -260,6 +263,11 @@ void Draughts::throwPawn(int from){
 
 /*=============================wPawn2wKing===================================*/
 void Draughts::wPawn2wKing(int from, int to){
+	if(wkings>4){
+		printf("there is no more kings available");
+		return;
+	}
+
 	throwPawn(from);
 	takeStaticPawn(wkings,WKING);
 	wkings++;
@@ -269,6 +277,10 @@ void Draughts::wPawn2wKing(int from, int to){
 
 /*=============================bPawn2bKing===================================*/
 void Draughts::bPawn2bKing(int from, int to){
+	if(bkings>4){
+		printf("there is no more kings available");
+		return;
+	}
 	throwPawn(from);
 	takeStaticPawn(bkings,BKING);
 	bkings++;
@@ -393,15 +405,17 @@ void Draughts::wait4move(){
 		}
 	}while(status!=lib::STATE_CHANGED);
 
-	fradiaControl(lib::WHOLE_BOARD_DETECTION);
+	fradiaControl(lib::DETECT_BOARD_STATE);
 
 
 }
 
 /*=========================main_task_algorithm===============================*/
 void Draughts::main_task_algorithm(void){
+	wkings=0;
+	bkings=0;
 	goToInitialPos();
-	fradiaControl(lib::WHOLE_BOARD_DETECTION);
+	fradiaControl(lib::DETECT_BOARD_STATE);
 	lib::BYTE choice;
 	choice=choose_option ("Do you want to play: 1 - Black(blue), or 2 - White(red)", 2);
 	if (choice==lib::OPTION_ONE){

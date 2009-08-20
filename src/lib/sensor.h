@@ -59,9 +59,9 @@ typedef enum { HD_SOLUTION_NOTFOUND, HD_SOLUTION_FOUND } HD_READING;
 
 /*commands from mrrocpp used in Draughts task*/
 typedef enum{
-	XY_TRACKER,
+	TRACK_PAWN,
 	Z_TRACKER,
-	WHOLE_BOARD_DETECTION,
+	DETECT_BOARD_STATE,
 	NONE,
 	STORE_BOARD,
 	CHECK_MOVE
