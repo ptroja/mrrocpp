@@ -42,11 +42,13 @@ bool ecp_vis_ib_eih_follower_irp6ot::first_step() {
 	the_robot->EDP_data.get_type = ARM_DV;
 	the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
 	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+	the_robot->EDP_data.next_interpolation_type = lib::MIM;
 	vsp_fradia->to_vsp.haar_detect_mode = lib::WITHOUT_ROTATION;
 	//t_m = MOTION_STEPS * STEP;
 	//x = 0;y = 0;v = 0;s = 0;
 	//breaking = false;
 	first_move =  true;
+	z_counter = 0;
 
 	ecp_t.sr_ecp_msg->message("PIERWSZY");
 
@@ -55,37 +57,52 @@ bool ecp_vis_ib_eih_follower_irp6ot::first_step() {
 	return true;
 }
 
-bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
+bool ecp_vis_ib_eih_follower_irp6ot::next_step() {
 
-	the_robot->EDP_data.instruction_type = lib::SET_GET;
+	the_robot->EDP_data.instruction_type = lib::SET;
 	the_robot->EDP_data.get_type = ARM_DV;
 	the_robot->EDP_data.set_type = ARM_DV;
 	the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
 	the_robot->EDP_data.get_arm_type = lib::JOINT;
 	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 	the_robot->EDP_data.next_interpolation_type = lib::MIM;
-	the_robot->EDP_data.motion_steps = MOTION_STEPS;
-	the_robot->EDP_data.value_in_step_no = MOTION_STEPS - 2;
+	the_robot->EDP_data.motion_steps = 10;
+	the_robot->EDP_data.value_in_step_no = 10 - 2;
 
-	if (first_move) {
-		for (int i = 0; i < 6; i++) {
+	if (first_move == true) {
+		printf("first move");
+		/*for (int i = 0; i < 6; i++) {
 			next_position[i] = the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
 			//printf("%f\n", next_position[i]);
 			//flushall();
-		}
+		}*/
+		memcpy(next_position,
+	 			the_robot->EDP_data.current_XYZ_AA_arm_coordinates, 6
+						* sizeof(double));
 		next_position[6] = the_robot->EDP_data.current_gripper_coordinate;
 
 		first_move = false;
 	}
 
+
+	/*if (z_counter < 5) {
+		next_position[2] -= 0.005;
+		//printf("%f\n", next_position[2]);
+		z_counter++;
+	}*/
+
 	alpha = the_robot->EDP_data.current_joint_arm_coordinates[1]- the_robot->EDP_data.current_joint_arm_coordinates[6];
 	//Uchyb wyrazony w pikselach.
-	double ux = vsp_fradia->from_vsp.comm_image.sensor_union.deviation.x;
-	double uy = vsp_fradia->from_vsp.comm_image.sensor_union.deviation.y;
+	//double ux = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.x;
+	//double uy = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.y;
 
-	for (int i = 0; i < 6; i++) {
+	/*for (int i = 0; i < 6; i++) {
 		the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = next_position[i];
-	}
+	}*/
+
+	memcpy(the_robot->EDP_data.next_XYZ_AA_arm_coordinates, next_position,
+			6 * sizeof(double));
+
 	the_robot->EDP_data.next_gripper_coordinate = next_position[6];
 
 

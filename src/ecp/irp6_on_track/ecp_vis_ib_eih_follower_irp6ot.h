@@ -45,6 +45,8 @@ public:
     //Orientacja koncokwi wzgledem ukladu bazowego.
     double alpha;
 
+    int z_counter;
+
 	/*//Maksymalna wartosc  predkosci.
 	double v_max;
 	//Wartosc przyspieszenia z jakim osiagana jest maksymalna predkosc.
@@ -68,7 +70,7 @@ public:
 	ecp_vis_ib_eih_follower_irp6ot(common::task::task& _ecp_task);
 	virtual ~ecp_vis_ib_eih_follower_irp6ot();
 	virtual bool first_step(void);
-	virtual bool next_step_without_constraints();
+	virtual bool next_step();
 	virtual void entertain_constraints();
 	//virtual void retrieve_parameters();
 };
