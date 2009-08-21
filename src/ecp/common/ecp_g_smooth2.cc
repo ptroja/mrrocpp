@@ -660,7 +660,7 @@ bool smooth2::next_step () {
     			the_robot->EDP_data.motion_steps = td.internode_step_no;
     			the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
-    			for (i = 0; i < 7; i++) {//zapisanie nastepnego polazenia (makrokroku) do robota
+    			for (i = 0; i < 6; i++) {//zapisanie nastepnego polazenia (makrokroku) do robota
     			    the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = coordinate_list_iterator->coordinate[i];
     			}
 
@@ -671,15 +671,15 @@ bool smooth2::next_step () {
     			} else {
     			    the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[6];
     			}*/
-    			gripper_position = pose_list_iterator->start_position[7] +
-    			                                   pose_list_iterator->k[7]*((node_counter*tk)*pose_list_iterator->v_grip);
+    			gripper_position = pose_list_iterator->start_position[6] +
+    			                                   pose_list_iterator->k[6]*((node_counter*tk)*pose_list_iterator->v_grip);
     			//printf(" %f ", gripper_position);
-                if((gripper_position > pose_list_iterator->coordinates[7] && pose_list_iterator->k[7] == -1) ||
-                		gripper_position < pose_list_iterator->coordinates[7] && pose_list_iterator->k[7] == 1) {
+                if((gripper_position > pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == -1) ||
+                		gripper_position < pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == 1) {
                 	//printf("git");
                 	the_robot->EDP_data.next_gripper_coordinate = gripper_position;
                 } else {
-                	the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[7];
+                	the_robot->EDP_data.next_gripper_coordinate = pose_list_iterator->coordinates[6];
                 }
     			//the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate;//TODO to jest tymczasowe wiec trzeba poprawic
     			coordinate_list_iterator++;
@@ -785,7 +785,7 @@ void smooth2::calculate(void) {
     double tk = 10 * STEP; //czas jednego makrokroku
     int gripp; //os grippera
 
-    //TODO dorobic zabezpieczenia dla 0 predkosci w osmej wspolrzednej postumenta
+    //TODO dorobic zabezpieczenia dla 0 predkosci w osmej wspolrzednej postumenta i w angle axes
 
     double v_r_next[MAX_SERVOS_NR];//predkosc kolejnego ruchu
 
@@ -860,7 +860,7 @@ void smooth2::calculate(void) {
 				break;
 
 			case lib::XYZ_ANGLE_AXIS:
-				gripp = 7;
+				gripp = 6;
 
 				for (i = 0; i < gripp; i++) {
 					temp = pose_list_iterator->coordinates[i];
@@ -1070,7 +1070,7 @@ void smooth2::calculate(void) {
 				break;
 
 			case lib::XYZ_ANGLE_AXIS:
-				gripp = 7;
+				gripp = 6;
 				//zapisanie v_p, musi byc tutaj bo wczesniej nie ma v_k poprzedniego ruchu
 				for (i = 0; i < MAX_SERVOS_NR; i++) {
 					temp = pose_list_iterator->v_k[i];
@@ -1277,10 +1277,7 @@ void smooth2::calculate(void) {
 							throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 					}
 				}
-				//TODO blad polega na tym, ze v_r jest zapisywane wczesniej do osi 5 jesli rekurencja jest w osi 5... w osi 6 nie ma go juz...
-				//tutaj wypieprza sie na osi 6 gdzie vr jest rowne nan
-				//"petla wewnetrzna w momencie wejscia w rekurencje nie konczy sie co powoduje nie zapisanie wszystkich zmiennych przechowujacych predkosci wymaganych przy nastepnym wywolaniu funkcji nadrzednej; wartosc zmiennej rowna jest nan; wymagane dodanie flagi oznaczajacej ośw ktorej zatrzymała się rekurencja"
-				//TODO dodac zmienna osi rekurencji
+
 				if (pose_list_iterator->k[i] != temp) {
 					//printf("ustawianie v_r_next w osi %d\n", i);
 					v_r_next[i] = 0;
