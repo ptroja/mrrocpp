@@ -20,21 +20,6 @@ ecp_vis_ib_eih_follower_irp6ot::~ecp_vis_ib_eih_follower_irp6ot() {
 
 }
 
-/*void ecp_vis_ib_eih_follower_irp6ot::retrieve_parameters() {
-	//Maksymalna wartosc  predkosci.
-	v_max = ecp_t.config.return_double_value("v_max");
-
-	//Wartosc przyspieszenia z jakim osiagana jest maksymalna predkosc.
-	a = ecp_t.config.return_double_value("a");
-
-	//Minimalna  wartosc predkosci do jakiej schodzimy przy hamowaniu.
-	v_min = ecp_t.config.return_double_value("v_min");
-
-	//Dystans wyrazony w pikselach, przy ktorym powinnismy hamowac.
-	breaking_dist = ecp_t.config.return_double_value("breaking_dist");
-
-}*/
-
 bool ecp_vis_ib_eih_follower_irp6ot::first_step() {
 	vsp_fradia = sensor_m[lib::SENSOR_CVFRADIA];
 
@@ -42,22 +27,16 @@ bool ecp_vis_ib_eih_follower_irp6ot::first_step() {
 	the_robot->EDP_data.get_type = ARM_DV;
 	the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
 	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-	the_robot->EDP_data.next_interpolation_type = lib::MIM;
 	vsp_fradia->to_vsp.haar_detect_mode = lib::WITHOUT_ROTATION;
-	//t_m = MOTION_STEPS * STEP;
-	//x = 0;y = 0;v = 0;s = 0;
-	//breaking = false;
 	first_move =  true;
 	z_counter = 0;
 
 	ecp_t.sr_ecp_msg->message("PIERWSZY");
 
-	//above_object = false;
-
 	return true;
 }
 
-bool ecp_vis_ib_eih_follower_irp6ot::next_step() {
+bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 
 	the_robot->EDP_data.instruction_type = lib::SET;
 	the_robot->EDP_data.get_type = ARM_DV;
@@ -66,16 +45,11 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step() {
 	the_robot->EDP_data.get_arm_type = lib::JOINT;
 	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 	the_robot->EDP_data.next_interpolation_type = lib::MIM;
-	the_robot->EDP_data.motion_steps = 10;
-	the_robot->EDP_data.value_in_step_no = 10 - 2;
+	the_robot->EDP_data.motion_steps = MOTION_STEPS;
+	the_robot->EDP_data.value_in_step_no = MOTION_STEPS - 1;
 
 	if (first_move == true) {
-		printf("first move");
-		/*for (int i = 0; i < 6; i++) {
-			next_position[i] = the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
-			//printf("%f\n", next_position[i]);
-			//flushall();
-		}*/
+
 		memcpy(next_position,
 	 			the_robot->EDP_data.current_XYZ_AA_arm_coordinates, 6
 						* sizeof(double));
@@ -84,10 +58,8 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step() {
 		first_move = false;
 	}
 
-
 	/*if (z_counter < 5) {
 		next_position[2] -= 0.005;
-		//printf("%f\n", next_position[2]);
 		z_counter++;
 	}*/
 
@@ -96,145 +68,18 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step() {
 	//double ux = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.x;
 	//double uy = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.y;
 
-	/*for (int i = 0; i < 6; i++) {
-		the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = next_position[i];
-	}*/
-
 	memcpy(the_robot->EDP_data.next_XYZ_AA_arm_coordinates, next_position,
 			6 * sizeof(double));
 
 	the_robot->EDP_data.next_gripper_coordinate = next_position[6];
 
-
-	//Odczytanie pozycji poczatkowej koncowki w reprezentacji os-kat.
-	/*if (node_counter == 1) {
-
-		memcpy(next_position,
-	 			the_robot->EDP_data.current_XYZ_AA_arm_coordinates, 6
-						* sizeof(double));
-		next_position[6] = the_robot->EDP_data.current_gripper_coordinate;
-
-		the_robot->EDP_data.instruction_type = lib::SET_GET;
-		the_robot->EDP_data.get_type = ARM_DV;
-		the_robot->EDP_data.set_type = ARM_DV;
-		the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
-		the_robot->EDP_data.get_arm_type = lib::JOINT;
-		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-		the_robot->EDP_data.next_interpolation_type = lib::MIM;
-		the_robot->EDP_data.motion_steps = MOTION_STEPS;
-		the_robot->EDP_data.value_in_step_no = MOTION_STEPS - 1;
-
-		memcpy(the_robot->EDP_data.next_XYZ_AA_arm_coordinates, next_position,
-				6 * sizeof(double));
-		the_robot->EDP_data.next_gripper_coordinate = next_position[6];
-	}
-
-	//Zadawanie ruchu wzgledem aktualnego polozenia koncowki.
-	else {
-		alpha = the_robot->EDP_data.current_joint_arm_coordinates[1]- the_robot->EDP_data.current_joint_arm_coordinates[6];
-		//Uchyb wyrazony w pikselach.
-		double ux = vsp_fradia->from_vsp.comm_image.sensor_union.deviation.x;
-		double uy = vsp_fradia->from_vsp.comm_image.sensor_union.deviation.y;
-
-		//Sprawdz czy jest odczyt z fradii.
-		lib::VSP_REPORT vsp_report = vsp_fradia->from_vsp.vsp_report;
-		if (vsp_report == lib::VSP_REPLY_OK) {
-			//Sprawdzam czy osiagnieto odleglosc przy ktorej hamujemy.
-			if (fabs(ux) < breaking_dist && fabs(uy) < breaking_dist)
-				breaking = true;
-			if (breaking) { //Gdy raz wkroczymy w rejon hamowania hamujemy do konca.
-				if (v <= v_min)//Osiagnieto zadana predkosc przy hamowaniu.
-				{
-					breaking = false;
-					above_object = true;
-					return false;
-				}
-				else { //Wyhamuj
-					s = v * t_m - 0.5 * a * t_m * t_m;
-					v = v - a * t_m;//Predkosc w nastepnym makrokroku.
-					//Sprawdzam czy nie przekroczono predkosci mnimalnej.
-					if (v < v_min)
-						v = v_min;
-				}
-			} else if (v < v_max) { //Przyspieszanie
-				s = v * t_m + 0.5 * a * t_m * t_m;
-				v = v + a * t_m;//Predkosc w nastepnym makrokroku.
-				//Sprawdzam czy nie przekroczono predkosci maxymalnej.
-				if (v > v_max)
-					v = v_max;
-			} else if (v = v_max) { //Ruch jednostajny.
-				//return false;
-				s = v * t_m;
-			}
-		} else{
-			s = 0;
-			first_move=true;
-		}
-
-		//Sprawdzamy czy nie bylo zbyt dluzej przerwy.
-		//if(!check_if_followed())
-		//	return false;
-
-		//Kierunek ruchu wzgledem ukladu chwytaka.
-		double direction = atan2(-ux, -uy) + alpha;
-		x = cos(direction) * s;
-		y = sin(direction) * s;
-
-
-		//std::cout << frame_no << " " << s << " " << x << " " << y << "<< direction << std::endl;
-
-		next_position[0] += x;
-		next_position[1] += y;
-//		next_position[2] += -0.002;
-
-		the_robot->EDP_data.instruction_type = lib::SET_GET;
-		the_robot->EDP_data.get_type = ARM_DV;
-		the_robot->EDP_data.set_type = ARM_DV;
-		the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
-		the_robot->EDP_data.get_arm_type = lib::JOINT;
-		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-		the_robot->EDP_data.next_interpolation_type = lib::MIM;
-		the_robot->EDP_data.motion_steps = MOTION_STEPS;
-		the_robot->EDP_data.value_in_step_no = MOTION_STEPS - 1;
-		memcpy(the_robot->EDP_data.next_XYZ_AA_arm_coordinates, next_position,
-				6 * sizeof(double));
-		the_robot->EDP_data.next_gripper_coordinate = next_position[6];
-
-		return true;
-	}*/
 	return true;
 }
-
-/*bool ecp_vis_ib_eih_follower_irp6ot::check_if_followed(){
-	double frame_no =
-			vsp_fradia->from_vsp.comm_image.sensor_union.deviation.frame_number;
-
-	//Ograniczenia na ruch
-	if (first_move){
-		first_move = false;
-		old_frame_no = frame_no;
-		holes=0;
-	}else {
-		if (old_frame_no == frame_no)//ten sam obiekt
-			holes++;
-		else
-			holes = 0;
-	}
-	old_frame_no = frame_no;
-	//sprawdzam czy nie bylo zbyt dlugiej przerwy w wykryciach obiektu
-	if (holes > 10) {
-		ecp_t.sr_ecp_msg->message("Zgubiono obiekt\n");
-		first_move = true;
-		holes = 0;
-		return false;
-	}else
-		return true;
-
-}*/
 
 void ecp_vis_ib_eih_follower_irp6ot::entertain_constraints() {
 
 }
+
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
