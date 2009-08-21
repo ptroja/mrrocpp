@@ -413,20 +413,20 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	switch (turn_angle)
 	{
 	case common::CL_90:
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fturn_ap_cl_90_phase_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6p_sm_fturn_ap_cl_90_phase_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fturn_ap_cl_90_phase_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6p_sm_fturn_ap_cl_90_phase_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
 		break;
 	case common::CL_0:
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fturn_ap_cl_0_phase_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6p_sm_fturn_ap_cl_0_phase_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fturn_ap_cl_0_phase_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6p_sm_fturn_ap_cl_0_phase_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
 		break;
 	case common::CCL_90:
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fturn_ap_ccl_90_phase_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6p_sm_fturn_ap_ccl_90_phase_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fturn_ap_ccl_90_phase_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6p_sm_fturn_ap_ccl_90_phase_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
 		break;
 	case common::CL_180:
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fturn_ap_cl_180_phase_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6p_sm_fturn_ap_cl_180_phase_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fturn_ap_cl_180_phase_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6p_sm_fturn_ap_cl_180_phase_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
 		break;
 	default:
 		break;
@@ -442,16 +442,16 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	switch (turn_angle)
 	{
 	case common::CL_90:
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fturn_ap_cl_90_phase_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fturn_ap_cl_90_phase_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 		break;
 	case common::CL_0:
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fturn_ap_cl_0_phase_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fturn_ap_cl_0_phase_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 		break;
 	case common::CCL_90:
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fturn_ap_ccl_90_phase_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fturn_ap_ccl_90_phase_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 		break;
 	case common::CL_180:
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fturn_ap_cl_180_phase_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fturn_ap_cl_180_phase_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 		break;
 	default:
 		break;
@@ -532,7 +532,7 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 
 	// wlaczenie generatora uczacego  robocie irp6ot
 	//	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "trj/rcsc/irp6ot_fturn_de.trj", 1, lib::ROBOT_IRP6_ON_TRACK)) {  return true;  }
-	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fturn_de.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fturn_de.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 	// uruchomienie generatora empty_gen
 	run_extended_empty_gen (false, 1, lib::ROBOT_IRP6_ON_TRACK);
 };
@@ -558,23 +558,23 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 	{
 	case common::CL_90:
 
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_ap_cl_90_phase_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6p_sm_fchange_ap_cl_90_phase_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fchange_ap_cl_90_phase_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6p_sm_fchange_ap_cl_90_phase_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
 		break;
 	case common::CL_0:
 
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_ap_cl_0_phase_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6p_sm_fchange_ap_cl_0_phase_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fchange_ap_cl_0_phase_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6p_sm_fchange_ap_cl_0_phase_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
 		break;
 	case common::CCL_90:
 
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_ap_ccl_90_phase_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6p_sm_fchange_ap_ccl_90_phase_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fchange_ap_ccl_90_phase_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6p_sm_fchange_ap_ccl_90_phase_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
 		break;
 	case common::CL_180:
 
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_ap_cl_180_phase_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6p_sm_fchange_ap_cl_180_phase_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fchange_ap_cl_180_phase_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6p_sm_fchange_ap_cl_180_phase_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
 		break;
 	default:
 		break;
@@ -592,16 +592,16 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 	switch (turn_angle)
 	{
 	case common::CL_90:
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_ap_cl_90_phase_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fchange_ap_cl_90_phase_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 		break;
 	case common::CL_0:
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_ap_cl_0_phase_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fchange_ap_cl_0_phase_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 		break;
 	case common::CCL_90:
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_ap_ccl_90_phase_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fchange_ap_ccl_90_phase_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 		break;
 	case common::CL_180:
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_ap_cl_180_phase_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fchange_ap_cl_180_phase_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 		break;
 	default:
 		break;
@@ -678,19 +678,19 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 	{
 	case common::CL_90:
 
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_de_cl_90.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fchange_de_cl_90.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 		break;
 	case common::CL_0:
 
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_de_cl_0.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fchange_de_cl_0.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 		break;
 	case common::CCL_90:
 
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_de_ccl_90.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fchange_de_ccl_90.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 		break;
 	case common::CL_180:
 
-		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_fchange_de_cl_180.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fchange_de_cl_180.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 		break;
 	default:
 		break;
@@ -810,9 +810,9 @@ void rubik_cube_solver::approach_op(int mode)
 
 	// wlaczenie generatora uczacego w obu robotach
 	//	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "trj/rcsc/irp6ot_ap_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK)) {  return true;  }
-	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_ap_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_ap_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 	//	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "trj/rcsc/irp6p_ap_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT)) {  return true;  }
-	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6p_sm_ap_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
+	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6p_sm_ap_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 
@@ -826,7 +826,7 @@ void rubik_cube_solver::approach_op(int mode)
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_FESTIVAL, 0, "jestem robotem usl/ugowym", 1, lib::ROBOT_FESTIVAL);
 	// wlaczenie generatora uczacego  robocie irp6ot
 	// 	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "trj/rcsc/irp6ot_ap_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK)) {  return true;  }
-	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_ap_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_ap_2.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 	/*
        	if (run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
      		(3, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT, lib::ROBOT_FESTIVAL,
@@ -899,7 +899,7 @@ void rubik_cube_solver::approach_op(int mode)
 
 	// wlaczenie generatora uczacego w obu robotach
 	//	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "trj/rcsc/irp6ot_ap_3.trj", 1, lib::ROBOT_IRP6_ON_TRACK)) {  return true;  }
-	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_ap_3.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_ap_3.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 
 	//	(1, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT)) {  return true;  }
@@ -920,9 +920,9 @@ void rubik_cube_solver::departure_op()
 
 	// wlaczenie generatora uczacego w obu robotach
 	//	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "trj/rcsc/irp6ot_de_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK)) {  return true;  }
-	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6ot_sm_de_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
+	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_de_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 	//	if (set_next_ecps_state ((int) ECP_GEN_TEACH_IN, 0, "trj/rcsc/irp6p_de_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT)) {  return true;  }
-	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH, 0, "trj/rcsc/irp6p_sm_de_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
+	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6p_sm_de_1.trj", 1, lib::ROBOT_IRP6_POSTUMENT);
 
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
