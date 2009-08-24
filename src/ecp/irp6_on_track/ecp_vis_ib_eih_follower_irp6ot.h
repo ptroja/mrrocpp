@@ -38,7 +38,18 @@ public:
     //Orientacja koncokwi wzgledem ukladu bazowego.
     double alpha;
 
-    int z_counter;
+    //zmienne ruchu
+    double a_max[3]; //maks przyspieszenie;
+    double s[3]; //droga jednego makrokroku ruchu
+    double v[3]; //aktualna predkosc
+    double v_max[3]; //maks predkosc;
+
+    double s_z; //droga do przebycia w z
+    double z_start; //pozycja początkowa z
+    double s_acc; //droga przyspieszania, hamowania w z
+    bool z_stop;
+
+    //int z_counter;
 	//flaga pierwszego makrokroku
 	bool first_move;
 
