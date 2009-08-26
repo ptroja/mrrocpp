@@ -53,12 +53,8 @@ bool eihgenerator::next_step()
 	sensor->to_vsp.eihcalibration.frame_number = count;
 	for(int i=0; i<12; i++)
 	{
-		std::cout<<t[i]<<"\t";
 		sensor->to_vsp.eihcalibration.transformation_matrix[i] = t[i];
-		if(i%4==3)
-			std::cout<<std::endl;
 	}
-	std::cout<<std::endl;
 	return false;
 
 }

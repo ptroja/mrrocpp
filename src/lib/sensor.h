@@ -249,6 +249,7 @@ typedef struct sensor_image_t
 		{
 			int frame_number;
 			bool found;
+			bool calibrated;
 		}chessboard;
 
 	} sensor_union; // koniec unii

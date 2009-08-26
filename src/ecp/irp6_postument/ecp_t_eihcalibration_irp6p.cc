@@ -62,94 +62,277 @@ void eihcalibration::main_task_algorithm(void ){
 	smoothgen->set_absolute();
 
 	// wczytanie pozycji poczatkowej i przejscie do niej za pomoca smooth
-	if (smoothgen->load_file_with_path("../trj/nad_stolem_postument.trj")) {
+	if (smoothgen->load_file_with_path("../trj/eih_calibration_start1.trj")) {
 	  smoothgen->Move();
 	}
 
 	// doprowadzenie chwytaka do szachownicy "wodzeniem za nos"
 	while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == false){
-//		std::cout<<"costam"<<sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found<<std::endl;
 		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 		nose->Move();
+		generator->Move();
 	}
 	nose->Move();
-
-
-	sleep(2);
-
-	generator->Move();
 
 	sr_ecp_msg->message("linear_gen\n");
 
 	//Inicjalizacja td.
 	init_td(lib::XYZ_ANGLE_AXIS, 500);
 
-	// obrot
-	set_td_coordinates(0.0, 0.0, 0.0, -0.3, 0.0, 0.0, 0.0);
+	int i = 0, j = 0, k, l, m = 0;
+	double a, b, c, d, e;
+	struct timespec delay;
+	delay.tv_nsec = 400000000;//400ms
+	delay.tv_sec = 0;
+
+	set_td_coordinates(0.0, 0.0, -0.025, 0.0, 0.0, 0.0, 0.0);
+	linear_gen=new common::generator::linear(*this, td, 1);
+	//opusc chwytak az przestanie "widziec" szachownice
+	while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == true){
+		//opuszczenie chwytaka o 2.5 cm
+		linear_gen->Move();
+		nanosleep(&delay, NULL);
+		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+		generator->Move();
+		++i;
+	}
+	delete linear_gen;
+
+	// podnies chwytak do ostatniej pozycji w ktorej wykryto szachownice
+	set_td_coordinates(0.0, 0.0, 0.025, 0.0, 0.0, 0.0, 0.0);
 	linear_gen=new common::generator::linear(*this, td, 1);
 	linear_gen->Move();
 	delete linear_gen;
+	nanosleep(&delay, NULL);
+	--i;
+	sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 
-	sleep(2);
+	// zabezpieczenie przed przekroczeniem obszaru roboczego robota
+	bool flaga = true;
 
-	generator->Move();
+	// pomachaj chwytakiem zeby zrobic fajne zdjecia
+	while(i >= 0 && sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.calibrated == false)
+	{
+		for(l = 0; l < 6; ++l)
+		{
+			c = 0.0;
+			d = 0.0;
+			e = 0.0;
+			if(l == 0)
+			{	// obrot
+				c = 0.075;
+//				c = 0.04;
+			}
+			else if(l == 1)
+			{	// obrot
+				c = -0.075;
+//				c = -0.04;
+			}
+			else if(l == 2)
+			{	// obrot
+				d = -0.07;
+//				d = -0.048;
+			}
+			else if(l == 3)
+			{	// obrot
+				d = 0.07;
+//				d = 0.048;
+			}
+			else if(l == 4)
+			{	// obrot
+				e = 0.1;
+//				e = 0.07;
+			}
+			else if(l == 5)
+			{	// obrot
+				e = -0.1;
+//				e = -0.07;
+			}
 
-	// obrot
-	set_td_coordinates(0.0, 0.0, 0.0, 0.0, -0.3, 0.0, 0.0);
-	linear_gen=new common::generator::linear(*this, td, 1);
-	linear_gen->Move();
-	delete linear_gen;
+			set_td_coordinates(0.0, 0.0, 0.0, e, c, d, 0.0);
+			linear_gen=new common::generator::linear(*this, td, 1);
 
-	sleep(2);
+			while(((sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found) == true)
+				&& ((sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.calibrated) == false) && m < 2 )
+			{
+				linear_gen->Move();
+				nanosleep(&delay, NULL);
+				generator->Move();
+				++m;
+				sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+			}
 
-	generator->Move();
+			delete linear_gen;
 
-	// obrot
-	set_td_coordinates(0.0, 0.0, 0.0, 0.0, 0.0, -0.3, 0.0);
-	linear_gen=new common::generator::linear(*this, td, 1);
-	linear_gen->Move();
-	delete linear_gen;
+			if(m != 0)
+			{
+				//powrot do poprzedniej pozycji
+				set_td_coordinates(0.0, 0.0, 0.0, -1 * m * e, -1 * m * c, -1 * m * d, 0.0);
+				linear_gen=new common::generator::linear(*this, td, 1);
+				linear_gen->Move();
+				delete linear_gen;
+				m = 0;
+				nanosleep(&delay, NULL);
+				sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+			}
+		}
 
-	sleep(2);
+		for(k = 0; k < 8; ++k)
+		{
+			a = 0.0;
+			b = 0.0;
+			if(k == 0)
+			{	//przesuniecie w prawo (patrzac na manipulator z przodu)
+				b = 0.025;
+			}
+			else if(k == 1)
+			{	//przesuniecie w lewo (patrzac na manipulator z przodu)
+				b = -0.025;
+			}
+			else if(k == 2)
+			{//przesuniecie do operatora (patrzac na manipulator z przodu)
+				a = 0.025;
+			}
+			else if(k == 3)
+			{//przesuniecie od operatora (patrzac na manipulator z przodu)
+				a = -0.025;
+			}
+			else if(k == 4)
+			{	//przesuniecie na skos
+				a = 0.025;
+				b = 0.025;
+			}
+			else if(k == 5)
+			{	//przesuniecie na skos
+				a = -0.025;
+				b = 0.025;
+			}
+			else if(k == 6)
+			{	//przesuniecie na skos
+				a = 0.025;
+				b = -0.025;
+			}
+			else if(k == 7)
+			{	//przesuniecie na skos
+				a = -0.025;
+				b = -0.025;
+			}
 
-	generator->Move();
+			while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == true
+				&& sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.calibrated == false && flaga)
+			{
+				set_td_coordinates(a, b, 0.0, 0.0, 0.0, 0.0, 0.0);
+				linear_gen=new common::generator::linear(*this, td, 1);
+				linear_gen->Move();
+				nanosleep(&delay, NULL);
+				generator->Move();
+				++j;
+				delete linear_gen;
+				sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 
-	//opuszczenie chwytaka o 10 cm
-	set_td_coordinates(0.0, 0.0, -0.1, 0.0, 0.0, 0.0, 0.0);
-	linear_gen=new common::generator::linear(*this, td, 1);
-	linear_gen->Move();
-	delete linear_gen;
+				for(l = 0; l < 6; ++l)
+				{
 
-	sleep(2);
+					c = 0.0;
+					d = 0.0;
+					e = 0.0;
+					if(l == 0)
+					{	// obrot
+						c = 0.075;
+//						c = 0.04;
+					}
+					else if(l == 1)
+					{	// obrot
+						c = -0.075;
+//						c = -0.04;
+					}
+					else if(l == 2)
+					{	// obrot
+						d = -0.07;
+//						d = -0.048;
+					}
+					else if(l == 3)
+					{	// obrot
+						d = 0.07;
+//						d = 0.048;
+					}
+					else if(l == 4)
+					{	// obrot
+						e = 0.1;
+//						e = 0.07;
+					}
+					else if(l == 5)
+					{	// obrot
+						e = -0.1;
+//						e = -0.07;
+					}
 
-	generator->Move();
+					set_td_coordinates(0.0, 0.0, 0.0, e, c, d, 0.0);
+					linear_gen=new common::generator::linear(*this, td, 1);
 
-	//przesuniecie w prawo (patrzac na manipulator z przodu)
-	set_td_coordinates(0.0, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0);
-	linear_gen=new common::generator::linear(*this, td, 1);
-	linear_gen->Move();
-	delete linear_gen;
+					// zabezpieczenie przed przekroczeniem obszaru roboczego robota
+					if (a > 0.0 && m == 0 && i == 0 && j == 1)
+						flaga = false;
 
-	sleep(2);
+					while(((sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found) == true)
+						&& ((sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.calibrated) == false) && m < 2 && flaga)
+					{
+						linear_gen->Move();
+						nanosleep(&delay, NULL);
+						generator->Move();
+						++m;
+						// zabezpieczenie przed przekroczeniem obszaru roboczego robota
+						if(a > 0.0 && m == 1 && (( i == 1 && j == 1) || (i == 2 && j == 2)||(i == 3 && j == 3)))
+							flaga = false;
+						sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+					}
 
-	generator->Move();
+					delete linear_gen;
 
-	//przesuniecie do operatora (patrzac na manipulator z przodu)
-	set_td_coordinates(0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-	linear_gen=new common::generator::linear(*this, td, 1);
-	linear_gen->Move();
-	delete linear_gen;
+					flaga = true;
 
-	sleep(2);
+					if(m != 0)
+					{
+						//powrot do poprzedniej pozycji
+						set_td_coordinates(0.0, 0.0, 0.0, -1 * m * e, -1 * m * c, -1 * m * d, 0.0);
+						linear_gen=new common::generator::linear(*this, td, 1);
+						linear_gen->Move();
+						delete linear_gen;
+						m = 0;
+						nanosleep(&delay, NULL);
+						sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+					}
+				}
+				// zabezpieczenie przed przekroczeniem obszaru roboczego robota
+				if(a > 0.0 && ((i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3) || (i == 0 && j == 1)))
+					flaga = false;
+			}
 
-	generator->Move();
+			flaga = true;
 
-/*	// zacisniecie szczek
-	set_td_coordinates(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.002);
-	linear_gen=new common::generator::linear(*this, td, 1);
-	linear_gen->Move();
-	delete linear_gen;
-*/
+			if(j != 0)
+			{
+				//powrot do poprzedniej pozycji
+				set_td_coordinates(-1.0 * j * a, -1.0 * j * b, 0.0, 0.0, 0.0, 0.0, 0.0);
+				linear_gen=new common::generator::linear(*this, td, 1);
+				linear_gen->Move();
+				delete linear_gen;
+				j = 0;
+				nanosleep(&delay, NULL);
+				sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+			}
+		}
+
+		// podnies chwytak o 2.5 cm
+		set_td_coordinates(0.0, 0.0, 0.025, 0.0, 0.0, 0.0, 0.0);
+		linear_gen=new common::generator::linear(*this, td, 1);
+		linear_gen->Move();
+		delete linear_gen;
+		nanosleep(&delay, NULL);
+		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
+		--i;
+	}
+
 	ecp_termination_notice();
 	//ecp_wait_for_stop();
 };
@@ -157,7 +340,7 @@ void eihcalibration::main_task_algorithm(void ){
 void eihcalibration::set_td_coordinates(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6){
 	// Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
 	td.coordinate_delta[0] = cor0; // przyrost wspolrzednej X
-	td.coordinate_delta[1] = cor1;// przyrost wspolrzednej Y
+	td.coordinate_delta[1] = cor1; // przyrost wspolrzednej Y
 	td.coordinate_delta[2] = cor2; // przyrost wspolrzednej Z
 	td.coordinate_delta[3] = cor3; // przyrost wspolrzednej FI
 	td.coordinate_delta[4] = cor4; // przyrost wspolrzednej TETA
