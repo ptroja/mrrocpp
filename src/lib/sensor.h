@@ -170,6 +170,13 @@ typedef struct sensor_image_t
 			int y;
 		}deviation;
 
+		//uchyb w follower
+		struct {
+			bool tracking;
+			int x;
+			int y;
+		}tracker;
+
 		/*
 		 * Structure for storing pawn coordinates from cvFraDIA
 		 * used in Draughts task
