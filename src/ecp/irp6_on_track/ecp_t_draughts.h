@@ -10,6 +10,7 @@
 #include "ecp_mp/ecp_mp_s_cvfradia.h"
 #include "ecp_mp/ecp_mp_tr_draughtsAI.h"
 #include "ecp/irp6_on_track/ecp_vis_ib_eih_planar_irp6ot.h"
+#include "ecp/irp6_on_track/ecp_vis_ib_eih_follower_irp6ot.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -38,6 +39,7 @@ class Draughts: public common::task::task{
 		common::generator::sleep* sleepgen;				//sleep generator
 		ecp_mp::transmitter::TRDraughtsAI *aitrans;		//AI transmiter
 		ecp_vis_ib_eih_planar_irp6ot* planar_vis;	//Planar servomechanism.
+		ecp_vis_ib_eih_follower_irp6ot* follower_vis; //Follower servomechanism
 
 		static const double moves_table[32][8];
 		static const double bkings_table[4][8];
