@@ -121,7 +121,7 @@ hardware_interface::hardware_interface ( effector &_master ) : common::hardware_
 		robot_status[i].adr_offset_plus_a = 0;
 		meassured_current[i] = 0;
 
-	};
+	}
 
 	if(master.test_mode==0) {
 		/*out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
@@ -145,7 +145,7 @@ hardware_interface::hardware_interface ( effector &_master ) : common::hardware_
 
 	first = true; // Pierwszy krok
 
-}; // koniec: hardware_interface::hardware_interface( )
+} // koniec: hardware_interface::hardware_interface( )
 // ------------------------------------------------------------------------
 
 
@@ -164,7 +164,7 @@ hardware_interface::~hardware_interface ( void )    // destruktor
 		hi_int_wait(INT_SINGLE_COMMAND, 2);
 
 	}
-}; // end: hardware_interface::~hardware_interface()
+} // end: hardware_interface::~hardware_interface()
 // ------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------
@@ -206,7 +206,7 @@ uint64_t hardware_interface::read_write_hardware ( void )
 
 	return md.hardware_error;
 
-}; // end: hardware_interface::read_write_hardware()
+} // end: hardware_interface::read_write_hardware()
 // ------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------
@@ -223,7 +223,7 @@ void hardware_interface::reset_counters ( void )
 
 		// 	in16(SERVO_REPLY_INT_ADR);
 
-	}; // end: for
+	} // end: for
 
 	md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)CONVEYOR_SERVO_NR;
 	md	.register_adress=SERVO_COMMAND1_ADR;
@@ -245,7 +245,7 @@ void hardware_interface::reset_counters ( void )
 	for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++ )
 	{
 		robot_control[i].adr_offset_plus_0 = 0x0200;
-	}; // end: for
+	} // end: for
 
 	// wyzerowanie przyrostu pozycji
 	read_write_hardware();
@@ -257,7 +257,7 @@ void hardware_interface::reset_counters ( void )
 	// robot_status[0].adr_offset_plus_4 = 0xFFFF ^ in16(SERVO_REPLY_POS_LOW_ADR); // Mlodsze slowo 16-bitowe
 	// robot_status[0].adr_offset_plus_6 = 0xFFFF ^ in16(SERVO_REPLY_POS_HIGH_ADR);// Starsze slowo 16-bitowe
 	// printf("L=%x U=%x   \n",robot_status[0].adr_offset_plus_4, robot_status[0].adr_offset_plus_6);
-}; // end: hardware_interface::reset_counters()
+} // end: hardware_interface::reset_counters()
 // ------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------
@@ -280,7 +280,7 @@ bool hardware_interface::is_hardware_error ( void)
 		}
 	} // end: for
 	return h_error;
-}; // end: hardware_interface::is_hardware_error ()
+} // end: hardware_interface::is_hardware_error ()
 // ------------------------------------------------------------------------
 
 
@@ -288,18 +288,16 @@ bool hardware_interface::is_hardware_error ( void)
 
 int hardware_interface::hi_int_wait (int inter_mode, int lag)
 {
-	uint64_t *int_timeout;
+	const uint64_t int_timeout = HI_RYDZ_INTR_TIMEOUT_HIGH;
 	struct sigevent tim_event;
 	int iw_ret;
 
 	static short interrupt_error = 0;
 	static short msg_send = 0;
 
-	int_timeout=new(uint64_t);
-	*int_timeout=HI_RYDZ_INTR_TIMEOUT_HIGH;
 	tim_event.sigev_notify = SIGEV_UNBLOCK;
 
-	TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR ,   &tim_event, int_timeout, NULL );
+	TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR ,   &tim_event, &int_timeout, NULL );
 	md	.interrupt_mode=inter_mode;   // przypisanie odpowiedniego trybu oprzerwania
 
 	iw_ret=InterruptWait (0, NULL);
@@ -328,9 +326,8 @@ int hardware_interface::hi_int_wait (int inter_mode, int lag)
 
 	if (lag!=0) delay(lag); // opoznienie niezbedne do przyjecia niektorych komend
 
-	delete int_timeout;
 	return iw_ret;
-};
+}
 
 } // namespace conveyor
 } // namespace edp

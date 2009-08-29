@@ -138,7 +138,7 @@ hardware_interface::hardware_interface (  effector &_master )  : common::hardwar
 			md.value=max_current[i];
 			hi_int_wait(INT_SINGLE_COMMAND, 2);
 		}
-	};
+	}
 
 	if(master.test_mode==0) {
 		// Zerowanie licznikow polozenia wszystkich osi
@@ -148,7 +148,7 @@ hardware_interface::hardware_interface (  effector &_master )  : common::hardwar
 
 	first = true; // Pierwszy krok
 
-}; // koniec: hardware_interface::hardware_interface( )
+}
 // ------------------------------------------------------------------------
 
 
@@ -169,7 +169,7 @@ hardware_interface::~hardware_interface ( void )   // destruktor
 			hi_int_wait(INT_SINGLE_COMMAND, 2);
 		}
 	}
-}; // end: hardware_interface::~hardware_interface()
+}
 // ------------------------------------------------------------------------
 
 
@@ -207,7 +207,7 @@ uint64_t hardware_interface::read_write_hardware ( void )
 		current_absolute_position[i] = md.current_absolute_position[i];
 		current_position_inc[i] = current_absolute_position[i] -  previous_absolute_position[i];
 		previous_absolute_position[i] = current_absolute_position[i];
-}
+	}
 
 
 
@@ -219,7 +219,7 @@ uint64_t hardware_interface::read_write_hardware ( void )
 
 	return md.hardware_error;
 
-}; // end: hardware_interface::read_write_hardware()
+}
 // ------------------------------------------------------------------------
 
 
@@ -253,7 +253,7 @@ void hardware_interface::reset_counters ( void )
 
 		// 	in16(SERVO_REPLY_INT_ADR);
 
-	}; // end: for
+	}
 
 	// Dwukrotny odczyt polozenia dla wyzerowania przyrostu wynikajacego z pierwszego
 	// odczytu rezolwera
@@ -261,7 +261,7 @@ void hardware_interface::reset_counters ( void )
 	for (int i = 0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++ )
 	{
 		robot_control[i].adr_offset_plus_0 = 0x0200;
-	}; // end: for
+	}
 
 	// wyzerowanie przyrostu pozycji
 	read_write_hardware();
@@ -273,7 +273,7 @@ void hardware_interface::reset_counters ( void )
 	// robot_status[0].adr_offset_plus_4 = 0xFFFF ^ in16(SERVO_REPLY_POS_LOW_ADR); // Mlodsze slowo 16-bitowe
 	// robot_status[0].adr_offset_plus_6 = 0xFFFF ^ in16(SERVO_REPLY_POS_HIGH_ADR);// Starsze slowo 16-bitowe
 	// printf("L=%x U=%x  \n",robot_status[0].adr_offset_plus_4, robot_status[0].adr_offset_plus_6);
-}; // end: hardware_interface::reset_counters()
+}
 // ------------------------------------------------------------------------
 
 
@@ -297,7 +297,7 @@ bool hardware_interface::is_hardware_error ( void)
 		}
 	} // end: for
 	return h_error;
-}; // end: hardware_interface::is_hardware_error ()
+}
 // ------------------------------------------------------------------------
 
 
@@ -336,25 +336,23 @@ int hardware_interface::synchronise_via_lm629(void)
 		md	.register_adress=SERVO_COMMAND1_ADR;
 		md	.value=MICROCONTROLLER_MODE;
 		hi_int_wait(INT_SINGLE_COMMAND, 10);
-	};
+	}
 
 	// docelowo zwracac ew. bledy
 	return 1;
-};
+}
 
 
 
 int hardware_interface::hi_int_wait (int inter_mode, int lag)
 {
-	uint64_t *int_timeout;
+	const uint64_t int_timeout = HI_RYDZ_INTR_TIMEOUT_HIGH;
 	struct sigevent tim_event;
 	int iw_ret;
 
 	static short interrupt_error = 0;
 	static short msg_send = 0;
 
-	int_timeout=new(uint64_t);
-	*int_timeout=HI_RYDZ_INTR_TIMEOUT_HIGH;
 	tim_event.sigev_notify = SIGEV_UNBLOCK;
 
 //	printf("aaa\n");
@@ -364,7 +362,7 @@ printf("1: %x, %x, %x, %x, %x, %x, %x\n", robot_control[0].adr_offset_plus_0, ro
 	, robot_control[5].adr_offset_plus_0, robot_control[6].adr_offset_plus_0);
 
 	*/
-	TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR ,  &tim_event, int_timeout, NULL );
+	TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR ,  &tim_event, &int_timeout, NULL );
 	md	.interrupt_mode=inter_mode;  // przypisanie odpowiedniego trybu oprzerwania
 //	md.is_power_on = true;
 	iw_ret=InterruptWait (0, NULL);
@@ -401,9 +399,8 @@ printf("1: %x, %x, %x, %x, %x, %x, %x\n", robot_control[0].adr_offset_plus_0, ro
 
 	if (lag!=0) delay(lag); // opoznienie niezbedne do przyjecia niektorych komend
 
-	delete int_timeout;
 	return iw_ret;
-};
+}
 
 
  void hardware_interface::start_synchro ( int drive_number )  {

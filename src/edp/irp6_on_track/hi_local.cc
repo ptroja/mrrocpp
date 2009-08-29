@@ -311,15 +311,13 @@ bool hardware_interface::is_hardware_error ( void)
 
 int hardware_interface::hi_int_wait (int inter_mode, int lag)
 {
-	uint64_t *int_timeout;
+	const uint64_t int_timeout = HI_RYDZ_INTR_TIMEOUT_HIGH;
 	struct sigevent tim_event;
 	int iw_ret;
 
 	static short interrupt_error = 0;
 	static short msg_send = 0;
 
-	int_timeout=new(uint64_t);
-	*int_timeout=HI_RYDZ_INTR_TIMEOUT_HIGH;
 	tim_event.sigev_notify = SIGEV_UNBLOCK;
 
 	/*
@@ -329,7 +327,7 @@ printf("1: %x, %x, %x, %x, %x, %x, %x\n", robot_control[0].adr_offset_plus_0, ro
 
 	 */
 
-	TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR ,  &tim_event, int_timeout, NULL );
+	TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR ,  &tim_event, &int_timeout, NULL );
 	md.interrupt_mode=inter_mode;  // przypisanie odpowiedniego trybu oprzerwania
 	//	md.is_power_on = true;
 	iw_ret=InterruptWait (0, NULL);
@@ -357,7 +355,6 @@ printf("1: %x, %x, %x, %x, %x, %x, %x\n", robot_control[0].adr_offset_plus_0, ro
 
 	if (lag!=0) delay(lag); // opoznienie niezbedne do przyjecia niektorych komend
 
-	delete int_timeout;
 	return iw_ret;
 }
 
