@@ -176,7 +176,7 @@ void effector::move_arm (lib::c_buffer &instruction)
 		// aktualizacja transformera
 		move_servos ();
 
-		mt_tt_obj->trans_t_to_master_order_status_ready();
+		mt_tt_obj.trans_t_to_master_order_status_ready();
 		break;
 	default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
 		throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
@@ -241,12 +241,11 @@ void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
 		throw NonFatal_error_2(INVALID_GET_END_EFFECTOR_TYPE);
 	}
 
-	rb_obj->lock_mutex();// by Y
-	reply.servo_step=rb_obj->step_data.step;
-	rb_obj->unlock_mutex();
+	rb_obj.lock_mutex();// by Y
+	reply.servo_step=rb_obj.step_data.step;
+	rb_obj.unlock_mutex();
 
 }
-; //: get_arm_position
 
 
 

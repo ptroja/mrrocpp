@@ -56,16 +56,16 @@ lib::BYTE servo_buffer::Move_a_step (void)
 			}
 
 			/*
-            		if (i==7) 
+            		if (i==7)
         {
             	  master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_ON_TRACK_AXIS_7_INC_PER_REVOLUTION,  i);
-             } else if (i==6) 
-        {		
+             } else if (i==6)
+        {
             	master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_ON_TRACK_AXIS_6_INC_PER_REVOLUTION,  i);
-             } else 
-        {		
+             } else
+        {
             	master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION,  i);
-             } 
+             }
 			 */
 		}
 
@@ -683,7 +683,7 @@ lib::BYTE NL_regulator_1_irp6ot::compute_set_value (void)
 	// przeliczenie radianow na impulsy
 	step_new_pulse = step_new*IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	/*
-    if (!aaa)   
+    if (!aaa)
      if ( (fabs(step_new_pulse) < 0.0001) && (fabs(position_increment_new ) > 1) ) {
       aaa++;
      }
@@ -820,21 +820,15 @@ lib::BYTE NL_regulator_1_irp6ot::compute_set_value (void)
 		set_value_new = 0; // zerowe nowe sterowanie
 		break;
 	}
-	;  // end: switch (algorithm_no)
 
+	master.rb_obj.lock_mutex();
 
-	master.rb_obj->lock_mutex();
+	master.rb_obj.step_data.desired_inc[0] = (float) step_new_pulse; // pozycja osi 0
+	master.rb_obj.step_data.current_inc[0] = (short int) position_increment_new;
+	master.rb_obj.step_data.pwm[0] = (float) set_value_new;
+	master.rb_obj.step_data.uchyb[0]=(float) (step_new_pulse - position_increment_new);
 
-
-
-	master.rb_obj->step_data.desired_inc[0] = (float) step_new_pulse; // pozycja osi 0
-	master.rb_obj->step_data.current_inc[0] = (short int) position_increment_new;
-	master.rb_obj->step_data.pwm[0] = (float) set_value_new;
-	master.rb_obj->step_data.uchyb[0]=(float) (step_new_pulse - position_increment_new);
-
-
-
-	master.rb_obj->unlock_mutex();
+	master.rb_obj.unlock_mutex();
 
 	// ograniczenie na sterowanie
 	if (set_value_new > MAX_PWM)
@@ -909,7 +903,7 @@ lib::BYTE NL_regulator_2_irp6ot::compute_set_value (void)
 	step_new_pulse = step_new*IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 
 	/*
-    if (!bbb)   
+    if (!bbb)
      if ( (fabs(step_new_pulse) < 0.0001) && (fabs(position_increment_new - position_increment_old ) > 40) ) {
       bbb++;
      }
@@ -1031,16 +1025,16 @@ lib::BYTE NL_regulator_2_irp6ot::compute_set_value (void)
 
 	// printf("banana1: %f\n", set_value_new);
 
-	master.rb_obj->lock_mutex();
+	master.rb_obj.lock_mutex();
 
 
-	master.rb_obj->step_data.desired_inc[1] = (float) step_new_pulse; // pozycja osi 0
-	master.rb_obj->step_data.current_inc[1] = (short int) position_increment_new;
-	master.rb_obj->step_data.pwm[1] = (float) set_value_new;
-	master.rb_obj->step_data.uchyb[1]=(float) (step_new_pulse - position_increment_new);
+	master.rb_obj.step_data.desired_inc[1] = (float) step_new_pulse; // pozycja osi 0
+	master.rb_obj.step_data.current_inc[1] = (short int) position_increment_new;
+	master.rb_obj.step_data.pwm[1] = (float) set_value_new;
+	master.rb_obj.step_data.uchyb[1]=(float) (step_new_pulse - position_increment_new);
 
 
-	master.rb_obj->unlock_mutex();
+	master.rb_obj.unlock_mutex();
 
 	// ograniczenie na sterowanie
 	if (set_value_new > MAX_PWM)
@@ -1107,7 +1101,7 @@ lib::BYTE NL_regulator_3_irp6ot::compute_set_value (void)
 	// przeliczenie radianow na impulsy
 	step_new_pulse = step_new*IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	/*
-    if (!ccc)   
+    if (!ccc)
      if ( (fabs(step_new_pulse) < 0.0001) && (fabs(position_increment_new - position_increment_old ) > 40) ) {
       ccc++;
      }
@@ -1228,14 +1222,14 @@ lib::BYTE NL_regulator_3_irp6ot::compute_set_value (void)
 	;  // end: switch (algorithm_no)
 
 
-	master.rb_obj->lock_mutex();
+	master.rb_obj.lock_mutex();
 
-	master.rb_obj->step_data.desired_inc[2] = (float) step_new_pulse; // pozycja osi 0
-	master.rb_obj->step_data.current_inc[2] = (short int) position_increment_new;
-	master.rb_obj->step_data.pwm[2] = (float) set_value_new;
-	master.rb_obj->step_data.uchyb[2]=(float) (step_new_pulse - position_increment_new);
+	master.rb_obj.step_data.desired_inc[2] = (float) step_new_pulse; // pozycja osi 0
+	master.rb_obj.step_data.current_inc[2] = (short int) position_increment_new;
+	master.rb_obj.step_data.pwm[2] = (float) set_value_new;
+	master.rb_obj.step_data.uchyb[2]=(float) (step_new_pulse - position_increment_new);
 
-	master.rb_obj->unlock_mutex();
+	master.rb_obj.unlock_mutex();
 
 	// ograniczenie na sterowanie
 	if (set_value_new > MAX_PWM)
@@ -1303,7 +1297,7 @@ lib::BYTE NL_regulator_4_irp6ot::compute_set_value (void)
 	step_new_pulse = step_new*IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 
 	/*
-    if (!ddd)   
+    if (!ddd)
      if ( (fabs(step_new_pulse) < 0.0001) && (fabs(position_increment_new - position_increment_old ) > 40) ) {
       ddd++;
      }
@@ -1425,15 +1419,15 @@ lib::BYTE NL_regulator_4_irp6ot::compute_set_value (void)
 
 
 
-	master.rb_obj->lock_mutex();
+	master.rb_obj.lock_mutex();
 
-	master.rb_obj->step_data.desired_inc[3] = (float) step_new_pulse; // pozycja osi 0
-	master.rb_obj->step_data.current_inc[3] = (short int) position_increment_new;
-	master.rb_obj->step_data.pwm[3] = (float) set_value_new;
-	master.rb_obj->step_data.uchyb[3]=(float) (step_new_pulse - position_increment_new);
-	// master.rb_obj->step_data.uchyb[3]=(float) (step_new_pulse - position_increment_new);
+	master.rb_obj.step_data.desired_inc[3] = (float) step_new_pulse; // pozycja osi 0
+	master.rb_obj.step_data.current_inc[3] = (short int) position_increment_new;
+	master.rb_obj.step_data.pwm[3] = (float) set_value_new;
+	master.rb_obj.step_data.uchyb[3]=(float) (step_new_pulse - position_increment_new);
+	// master.rb_obj.step_data.uchyb[3]=(float) (step_new_pulse - position_increment_new);
 
-	master.rb_obj->unlock_mutex();
+	master.rb_obj.unlock_mutex();
 
 	// ograniczenie na sterowanie
 	if (set_value_new > MAX_PWM)
@@ -1502,7 +1496,7 @@ lib::BYTE NL_regulator_5_irp6ot::compute_set_value (void)
 	step_new_pulse = step_new*IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 
 	/*
-    if (!eee)   
+    if (!eee)
      if ( (fabs(step_new_pulse) < 0.0001) && (fabs(position_increment_new - position_increment_old ) > 40) ) {
       eee++;
      }
@@ -1621,14 +1615,14 @@ lib::BYTE NL_regulator_5_irp6ot::compute_set_value (void)
 	}
 	;  // end: switch (algorithm_no)
 
-	master.rb_obj->lock_mutex();
+	master.rb_obj.lock_mutex();
 
-	master.rb_obj->step_data.desired_inc[4] = (float) step_new_pulse; // pozycja osi 0
-	master.rb_obj->step_data.current_inc[4] = (short int) position_increment_new;
-	master.rb_obj->step_data.pwm[4] = (float) set_value_new;
-	master.rb_obj->step_data.uchyb[4]=(float) (step_new_pulse - position_increment_new);
+	master.rb_obj.step_data.desired_inc[4] = (float) step_new_pulse; // pozycja osi 0
+	master.rb_obj.step_data.current_inc[4] = (short int) position_increment_new;
+	master.rb_obj.step_data.pwm[4] = (float) set_value_new;
+	master.rb_obj.step_data.uchyb[4]=(float) (step_new_pulse - position_increment_new);
 
-	master.rb_obj->unlock_mutex();
+	master.rb_obj.unlock_mutex();
 
 	// ograniczenie na sterowanie
 	if (set_value_new > MAX_PWM)
@@ -1702,7 +1696,7 @@ lib::BYTE NL_regulator_6_irp6ot::compute_set_value (void)
 	step_new_pulse = step_new*IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 
 	/*
-    if (!fff)   
+    if (!fff)
      if ( (fabs(step_new_pulse) < 0.0001) && (fabs(position_increment_new - position_increment_old ) > 40) ) {
       fff++;
      }
@@ -1836,14 +1830,14 @@ lib::BYTE NL_regulator_6_irp6ot::compute_set_value (void)
 	if (set_value_new- set_value_old < -IRP6_ON_TRACK_AXE6_MAX_PWM_INCREMENT)
 		set_value_new = set_value_old - IRP6_ON_TRACK_AXE6_MAX_PWM_INCREMENT;
 
-	master.rb_obj->lock_mutex();
+	master.rb_obj.lock_mutex();
 
-	master.rb_obj->step_data.desired_inc[5] = (float) step_new_pulse; // pozycja osi 0
-	master.rb_obj->step_data.current_inc[5] = (short int) position_increment_new;
-	master.rb_obj->step_data.pwm[5] = (float) set_value_new;
-	master.rb_obj->step_data.uchyb[5]=(float) (step_new_pulse - position_increment_new);
+	master.rb_obj.step_data.desired_inc[5] = (float) step_new_pulse; // pozycja osi 0
+	master.rb_obj.step_data.current_inc[5] = (short int) position_increment_new;
+	master.rb_obj.step_data.pwm[5] = (float) set_value_new;
+	master.rb_obj.step_data.uchyb[5]=(float) (step_new_pulse - position_increment_new);
 
-	master.rb_obj->unlock_mutex();
+	master.rb_obj.unlock_mutex();
 
 	// if (set_value_new > 0.0) {
 	//  cprintf("svn = %lf  pin = %lf\n",set_value_new, position_increment_new);
@@ -1908,7 +1902,7 @@ lib::BYTE NL_regulator_7_irp6ot::compute_set_value (void)
 	// if (step_new!=0.0) printf(" 7 reg:%f\n", step_new);
 
 	/*
-    if (!fff)   
+    if (!fff)
      if ( (fabs(step_new_pulse) < 0.0001) && (fabs(position_increment_new - position_increment_old ) > 40) ) {
       fff++;
      }
@@ -1925,7 +1919,7 @@ lib::BYTE NL_regulator_7_irp6ot::compute_set_value (void)
 	// Jesli przyrost jest wiekszy od dopuszczalnego
 	/* // by Y - bez sensu
     // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-     if (fabs(position_increment_new) > MAX_INC) 
+     if (fabs(position_increment_new) > MAX_INC)
        position_increment_new = position_increment_old;
 	 */
 
@@ -2061,14 +2055,14 @@ lib::BYTE NL_regulator_7_irp6ot::compute_set_value (void)
 	if (set_value_new- set_value_old < -IRP6_ON_TRACK_AXE7_MAX_PWM_INCREMENT)
 		set_value_new = set_value_old - IRP6_ON_TRACK_AXE7_MAX_PWM_INCREMENT;
 
-	master.rb_obj->lock_mutex();
+	master.rb_obj.lock_mutex();
 
-	master.rb_obj->step_data.desired_inc[6] = (float) step_new_pulse; // pozycja osi 0
-	master.rb_obj->step_data.current_inc[6] = (short int) position_increment_new;
-	master.rb_obj->step_data.pwm[6] = (float) set_value_new;
-	master.rb_obj->step_data.uchyb[6]=(float) (step_new_pulse - position_increment_new);
+	master.rb_obj.step_data.desired_inc[6] = (float) step_new_pulse; // pozycja osi 0
+	master.rb_obj.step_data.current_inc[6] = (short int) position_increment_new;
+	master.rb_obj.step_data.pwm[6] = (float) set_value_new;
+	master.rb_obj.step_data.uchyb[6]=(float) (step_new_pulse - position_increment_new);
 
-	master.rb_obj->unlock_mutex();
+	master.rb_obj.unlock_mutex();
 
 	// if (set_value_new > 0.0) {
 	//  cprintf("svn = %lf  pin = %lf\n",set_value_new, position_increment_new);
@@ -2135,7 +2129,7 @@ lib::BYTE NL_regulator_8_irp6ot::compute_set_value (void)
 	// if (step_new!=0.0) printf(" 8 reg:%f\n", step_new);
 
 	/*
-    if (!fff)   
+    if (!fff)
      if ( (fabs(step_new_pulse) < 0.0001) && (fabs(position_increment_new - position_increment_old ) > 40) ) {
       fff++;
      }
@@ -2151,7 +2145,7 @@ lib::BYTE NL_regulator_8_irp6ot::compute_set_value (void)
 
 	/* // by Y - bez sensu
     // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-     if (fabs(position_increment_new) > MAX_INC) 
+     if (fabs(position_increment_new) > MAX_INC)
        position_increment_new = position_increment_old;
 	 */
 
@@ -2288,9 +2282,9 @@ lib::BYTE NL_regulator_8_irp6ot::compute_set_value (void)
 	/*
     #define MAXX_PWM 250
       // ograniczenie na sterowanie
-      if (set_value_new > MAXX_PWM) 
+      if (set_value_new > MAXX_PWM)
          set_value_new = MAXX_PWM;
-      if (set_value_new < -MAXX_PWM) 
+      if (set_value_new < -MAXX_PWM)
          set_value_new = -MAXX_PWM;
 
 	 */
@@ -2304,14 +2298,14 @@ lib::BYTE NL_regulator_8_irp6ot::compute_set_value (void)
 	if (set_value_new- set_value_old < -IRP6_ON_TRACK_AXE8_MAX_PWM_INCREMENT)
 		set_value_new = set_value_old - IRP6_ON_TRACK_AXE8_MAX_PWM_INCREMENT;
 
-	master.rb_obj->lock_mutex();
+	master.rb_obj.lock_mutex();
 
-	master.rb_obj->step_data.desired_inc[7] = (float) step_new_pulse; // pozycja osi 0
-	master.rb_obj->step_data.current_inc[7] = (short int) position_increment_new;
-	master.rb_obj->step_data.pwm[7] = (float) set_value_new;
-	master.rb_obj->step_data.uchyb[7]=(float) (step_new_pulse - position_increment_new);
+	master.rb_obj.step_data.desired_inc[7] = (float) step_new_pulse; // pozycja osi 0
+	master.rb_obj.step_data.current_inc[7] = (short int) position_increment_new;
+	master.rb_obj.step_data.pwm[7] = (float) set_value_new;
+	master.rb_obj.step_data.uchyb[7]=(float) (step_new_pulse - position_increment_new);
 
-	master.rb_obj->unlock_mutex();
+	master.rb_obj.unlock_mutex();
 
 	// if (set_value_new > 0.0) {
 	//  cprintf("svn = %lf  pin = %lf\n",set_value_new, position_increment_new);

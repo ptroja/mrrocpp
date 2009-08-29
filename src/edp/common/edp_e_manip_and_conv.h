@@ -181,9 +181,9 @@ public:
     int servo_to_tt_chid;
     virtual void initialize (void) = 0;
 
-    in_out_buffer *in_out_obj; // bufor wejsc wyjsc
-    reader_buffer *rb_obj;
-    master_trans_t_buffer *mt_tt_obj;
+    in_out_buffer in_out_obj; // bufor wejsc wyjsc
+    reader_buffer rb_obj;
+    master_trans_t_buffer mt_tt_obj;
 
     manip_and_conv_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name);       // konstruktor
     virtual ~manip_and_conv_effector();

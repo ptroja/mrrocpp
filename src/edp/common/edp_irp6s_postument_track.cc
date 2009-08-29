@@ -184,9 +184,9 @@ void irp6s_postument_track_effector::arm_frame_2_xyz_eul_zyz()
 	case lib::ARM_RMODEL:
 	case lib::ARM_RMODEL_INPUTS:
 		//A.get_mech_xyz_euler_zyz(reply.arm.pf_def.arm_coordinates);
-		//A.get_mech_xyz_euler_zyz(rb_obj->step_data.current_cartesian_position);
+		//A.get_mech_xyz_euler_zyz(rb_obj.step_data.current_cartesian_position);
 		A.get_xyz_euler_zyz(reply.arm.pf_def.arm_coordinates);
-		A.get_xyz_euler_zyz(rb_obj->step_data.current_cartesian_position);
+		A.get_xyz_euler_zyz(rb_obj.step_data.current_cartesian_position);
 		break;
 	default: // blad:
 		throw NonFatal_error_2(STRANGE_GET_ARM_REQUEST);
@@ -560,9 +560,9 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 		// wyliczenie nowej pozycji zadanej
 		next_frame = next_frame * rot_frame;
 
-		rb_obj->lock_mutex();
-		next_frame.get_xyz_euler_zyz(rb_obj->step_data.current_cartesian_position);
-		rb_obj->unlock_mutex();
+		rb_obj.lock_mutex();
+		next_frame.get_xyz_euler_zyz(rb_obj.step_data.current_cartesian_position);
+		rb_obj.unlock_mutex();
 
 		next_frame.get_frame_tab(desired_end_effector_frame);
 		desired_joints_tmp[gripper_servo_nr] = beginning_gripper_coordinate + (((desired_gripper_coordinate
@@ -596,7 +596,7 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
              reply.arm.pf_def.force_xyz_torque_xyz[i] = current_force_torque[i];
              }
 			 */
-			mt_tt_obj->trans_t_to_master_order_status_ready();
+			mt_tt_obj.trans_t_to_master_order_status_ready();
 		}
 
 		last_force_step_counter = step_counter;
@@ -623,39 +623,39 @@ void irp6s_postument_track_effector::move_arm(lib::c_buffer &instruction)
 		case lib::MOTOR:
 			compute_motors(instruction);
 			move_servos();
-			mt_tt_obj->trans_t_to_master_order_status_ready();
+			mt_tt_obj.trans_t_to_master_order_status_ready();
 			break;
 		case lib::JOINT:
 			compute_joints(instruction);
 			move_servos();
-			mt_tt_obj->trans_t_to_master_order_status_ready();
+			mt_tt_obj.trans_t_to_master_order_status_ready();
 			break;
 		case lib::XYZ_EULER_ZYZ:
 
 			// zapisanie wartosci zadanej dla readera
-			rb_obj->lock_mutex();
+			rb_obj.lock_mutex();
 
 			for (int i=0; i<6; i++)
 			{
-				rb_obj->step_data.current_cartesian_position[i]=instruction.arm.pf_def.arm_coordinates[i];
+				rb_obj.step_data.current_cartesian_position[i]=instruction.arm.pf_def.arm_coordinates[i];
 			}
 
-			rb_obj->unlock_mutex();
+			rb_obj.unlock_mutex();
 
 			compute_xyz_euler_zyz(instruction);
 			move_servos();
-			mt_tt_obj->trans_t_to_master_order_status_ready();
+			mt_tt_obj.trans_t_to_master_order_status_ready();
 
 			break;
 		case lib::XYZ_ANGLE_AXIS:
 			compute_xyz_angle_axis(instruction);
 			move_servos();
-			mt_tt_obj->trans_t_to_master_order_status_ready();
+			mt_tt_obj.trans_t_to_master_order_status_ready();
 			break;
 		case lib::FRAME:
 			compute_frame(instruction);
 			move_servos();
-			mt_tt_obj->trans_t_to_master_order_status_ready();
+			mt_tt_obj.trans_t_to_master_order_status_ready();
 			break;
 		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
 		throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
@@ -770,9 +770,9 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 		}
 	}
 
-	rb_obj->lock_mutex();// by Y
-	reply.servo_step=rb_obj->step_data.step;
-	rb_obj->unlock_mutex();
+	rb_obj.lock_mutex();// by Y
+	reply.servo_step=rb_obj.step_data.step;
+	rb_obj.unlock_mutex();
 
 }
 /*--------------------------------------------------------------------------*/
@@ -798,14 +798,14 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 	{
 		get_current_kinematic_model()->mp2i_transform(servo_current_motor_pos, servo_current_joints);
 
-		rb_obj->lock_mutex();
+		rb_obj.lock_mutex();
 
 		for (int j = 0; j < number_of_servos; j++)
 		{
-			rb_obj->step_data.current_joints[j] = servo_current_joints[j];
+			rb_obj.step_data.current_joints[j] = servo_current_joints[j];
 		}
 
-		rb_obj->unlock_mutex();
+		rb_obj.unlock_mutex();
 
 		// T.K.: Obecne wywolanie
 		// get_current_kinematic_model()->i2e_transform(servo_current_joints, &servo_current_end_effector_frame, NULL);
@@ -814,7 +814,7 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 		//Uwaga: w edp_conveyor_effector jest podobnie.
 
 		get_current_kinematic_model()->direct_kinematics_transform(servo_current_joints, &servo_current_frame_wo_tool);
-		//    
+		//
 
 		// Stworzenie macierzy, ktora bedzie uzywana w dalszych obliczeniach.
 		lib::Homog_matrix servo_current_frame (servo_current_frame_wo_tool);
@@ -864,16 +864,16 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 #endif
 
 		// zapisanie wartosci rzeczywistej dla readera
-		rb_obj->lock_mutex();
+		rb_obj.lock_mutex();
 
 		for (int i=0; i<6; i++)
 		{
-			rb_obj->step_data.real_cartesian_position[i] = servo_real_kartez_pos[i];
-			rb_obj->step_data.real_cartesian_vel[i] = servo_real_kartez_vel[i];
-			rb_obj->step_data.real_cartesian_acc[i] = servo_real_kartez_acc[i];
+			rb_obj.step_data.real_cartesian_position[i] = servo_real_kartez_pos[i];
+			rb_obj.step_data.real_cartesian_vel[i] = servo_real_kartez_vel[i];
+			rb_obj.step_data.real_cartesian_acc[i] = servo_real_kartez_acc[i];
 		}
 
-		rb_obj->unlock_mutex();
+		rb_obj.unlock_mutex();
 
 		// Jesli obliczenia zwiazane z baza maja byc wykonane.
 		if (get_current_kinematic_model()->global_frame_computations)

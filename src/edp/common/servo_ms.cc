@@ -46,9 +46,9 @@ void * manip_and_conv_effector::servo_thread(void* arg)
         if (!(sb->get_command()))
         {
 
-            rb_obj->lock_mutex();
-            rb_obj->step_data.servo_mode = false;  // bierny
-            rb_obj->unlock_mutex();
+            rb_obj.lock_mutex();
+            rb_obj.step_data.servo_mode = false;  // bierny
+            rb_obj.unlock_mutex();
 
             /* Nie otrzymano nowego polecenia */
             /* Krok bierny - zerowy przyrost polozenia */
@@ -58,9 +58,9 @@ void * manip_and_conv_effector::servo_thread(void* arg)
         else
         { // nowe polecenie
 
-            rb_obj->lock_mutex();
-            rb_obj->step_data.servo_mode = true;  // czynny
-            rb_obj->unlock_mutex();
+            rb_obj.lock_mutex();
+            rb_obj.step_data.servo_mode = true;  // czynny
+            rb_obj.unlock_mutex();
 
             switch (sb->command_type())
             {

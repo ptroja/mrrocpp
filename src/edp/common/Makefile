@@ -12,7 +12,7 @@ EDPOBJ = edp_common.o edp_m.o edp_effector.o\
 	servo_gr.o servo_ms.o \
 	trans_t.o vis_server.o reader.o \
 	${KINEMATDIR}/common/transformer_error.o ${KINEMATDIR}/common/kinematic_model.o ${KINEMATDIR}/common/kinematics_manager.o \
-	hi_rydz.o sg_irp6p_and_conv.o
+	hi_rydz.o sg_irp6p_and_conv.o edp_irp6s_postument_track.o
 
 #======================================================#	
 .PHONY: all clean install depend

@@ -35,37 +35,37 @@ void * manip_and_conv_effector::trans_thread(void *arg)
     while(1)
     {
         // oczekiwanie na zezwolenie ruchu od edp_master
-        mt_tt_obj->trans_t_wait_for_master_order();
+        mt_tt_obj.trans_t_wait_for_master_order();
 
         // przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)
         memcpy( &(current_instruction), &(new_instruction), sizeof(lib::c_buffer) );
 
-        mt_tt_obj->error = NO_ERROR; // wyjsciowo brak bledu (dla rzutowania)
+        mt_tt_obj.error = NO_ERROR; // wyjsciowo brak bledu (dla rzutowania)
 
         try
         {
 
-            switch (mt_tt_obj->trans_t_task)
+            switch (mt_tt_obj.trans_t_task)
             {
             case MT_GET_CONTROLLER_STATE:
                 get_controller_state(current_instruction);
-                mt_tt_obj->trans_t_to_master_order_status_ready();
+                mt_tt_obj.trans_t_to_master_order_status_ready();
                 break;
             case MT_SET_RMODEL:
                 set_rmodel(current_instruction);
-                mt_tt_obj->trans_t_to_master_order_status_ready();
+                mt_tt_obj.trans_t_to_master_order_status_ready();
                 break;
             case MT_GET_ARM_POSITION:
-                get_arm_position(mt_tt_obj->trans_t_tryb, current_instruction);
-                mt_tt_obj->trans_t_to_master_order_status_ready();
+                get_arm_position(mt_tt_obj.trans_t_tryb, current_instruction);
+                mt_tt_obj.trans_t_to_master_order_status_ready();
                 break;
             case MT_GET_ALGORITHMS:
                 get_algorithms();
-                mt_tt_obj->trans_t_to_master_order_status_ready();
+                mt_tt_obj.trans_t_to_master_order_status_ready();
                 break;
             case MT_SYNCHRONISE:
                 synchronise();
-                mt_tt_obj->trans_t_to_master_order_status_ready();
+                mt_tt_obj.trans_t_to_master_order_status_ready();
                 break;
             case MT_MOVE_ARM:
                 move_arm(current_instruction); 	 // wariant dla watku edp_trans_t
@@ -79,51 +79,51 @@ void * manip_and_conv_effector::trans_thread(void *arg)
 
         catch(transformer_error::NonFatal_error_1 nfe)
         {
-            mt_tt_obj->error_pointer= new transformer_error::NonFatal_error_1(nfe);
-            mt_tt_obj->error = NonFatal_erroR_1;
-            mt_tt_obj->trans_t_to_master_order_status_ready();
+            mt_tt_obj.error_pointer= new transformer_error::NonFatal_error_1(nfe);
+            mt_tt_obj.error = NonFatal_erroR_1;
+            mt_tt_obj.trans_t_to_master_order_status_ready();
         }
 
         catch(transformer_error::NonFatal_error_2 nfe)
         {
-            mt_tt_obj->error_pointer= new transformer_error::NonFatal_error_2(nfe);
-            mt_tt_obj->error = NonFatal_erroR_2;
-            mt_tt_obj->trans_t_to_master_order_status_ready();
+            mt_tt_obj.error_pointer= new transformer_error::NonFatal_error_2(nfe);
+            mt_tt_obj.error = NonFatal_erroR_2;
+            mt_tt_obj.trans_t_to_master_order_status_ready();
         }
 
         catch(transformer_error::NonFatal_error_3 nfe)
         {
-            mt_tt_obj->error_pointer= new transformer_error::NonFatal_error_3(nfe);
-            mt_tt_obj->error = NonFatal_erroR_3;
-            mt_tt_obj->trans_t_to_master_order_status_ready();
+            mt_tt_obj.error_pointer= new transformer_error::NonFatal_error_3(nfe);
+            mt_tt_obj.error = NonFatal_erroR_3;
+            mt_tt_obj.trans_t_to_master_order_status_ready();
         }
 
         catch(transformer_error::NonFatal_error_4 nfe)
         {
-            mt_tt_obj->error_pointer= new transformer_error::NonFatal_error_4(nfe);
-            mt_tt_obj->error = NonFatal_erroR_4;
-            mt_tt_obj->trans_t_to_master_order_status_ready();
+            mt_tt_obj.error_pointer= new transformer_error::NonFatal_error_4(nfe);
+            mt_tt_obj.error = NonFatal_erroR_4;
+            mt_tt_obj.trans_t_to_master_order_status_ready();
         }
 
         catch(transformer_error::Fatal_error fe)
         {
-            mt_tt_obj->error_pointer= new transformer_error::Fatal_error(fe);
-            mt_tt_obj->error = Fatal_erroR;
-            mt_tt_obj->trans_t_to_master_order_status_ready();
+            mt_tt_obj.error_pointer= new transformer_error::Fatal_error(fe);
+            mt_tt_obj.error = Fatal_erroR;
+            mt_tt_obj.trans_t_to_master_order_status_ready();
         }
 
         catch (System_error fe)
         {
-            mt_tt_obj->error_pointer= new System_error(fe);
-            mt_tt_obj->error = System_erroR;
-            mt_tt_obj->trans_t_to_master_order_status_ready();
+            mt_tt_obj.error_pointer= new System_error(fe);
+            mt_tt_obj.error = System_erroR;
+            mt_tt_obj.trans_t_to_master_order_status_ready();
         }
 
         catch (...)
         {
             printf("transformation thread unidentified_error\n");
 
-            mt_tt_obj->trans_t_to_master_order_status_ready();
+            mt_tt_obj.trans_t_to_master_order_status_ready();
             // Wylapywanie niezdefiniowanych bledow
             // printf("zlapane cos");// by Y&W
         }

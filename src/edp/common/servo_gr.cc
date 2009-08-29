@@ -138,24 +138,24 @@ lib::BYTE servo_buffer::Move_1_step (void)
 
     struct timespec step_time;
 
-    master.rb_obj->set_new_step();// odwieszenie watku edp_reader - teraz moze odczytac dane pomiarowe
+    master.rb_obj.set_new_step();// odwieszenie watku edp_reader - teraz moze odczytac dane pomiarowe
 
     reply_status_tmp.error1 = compute_all_set_values();  // obliczenie nowej wartosci zadanej dla regulatorow
     reply_status_tmp.error0 = hi->read_write_hardware();  // realizacja kroku przez wszystkie napedy oraz
     // odczyt poprzedniego polozenia
     master.step_counter++;
 
-    master.rb_obj->lock_mutex();
+    master.rb_obj.lock_mutex();
 
     if( clock_gettime( CLOCK_REALTIME , &step_time) == -1 )
     {
         printf("blad pomiaru czasu");
     }
 
-    master.rb_obj->step_data.step =  master.step_counter;
-    master.rb_obj->step_data.msec=(int)(step_time.tv_nsec/1000000);
+    master.rb_obj.step_data.step =  master.step_counter;
+    master.rb_obj.step_data.msec=(int)(step_time.tv_nsec/1000000);
 
-    master.rb_obj->unlock_mutex();
+    master.rb_obj.unlock_mutex();
 
 
     if ( reply_status_tmp.error0 || reply_status_tmp.error1 )
@@ -472,31 +472,31 @@ void regulator::constraint_detector(double max_acc_local, double max_vel_local, 
 	double step_new_tmp = step_new;
 	// przyspieszenie i roznica predkosci
 	double current_acc, vel_diff;
-	
+
 	//	if (debug) printf("step_new: %f, step_new_over_constraint_sum: %f\n", step_new, step_new_over_constraint_sum);
 	step_new += step_new_over_constraint_sum;
-	
+
 	step_new_over_constraint_sum_tmp = step_new;
- 
+
 	// ograniczenie na przekroczenie step_new (aby predkosc biezaca nie odbiegala zby mocno od zadanej,
 	// co zmniejsza przeregulowania i oscylacje)
 	vel_diff = step_new - step_new_tmp;
 	if (vel_diff > max_diff_local) step_new = step_new_tmp + max_diff_local;
 	if (vel_diff < -max_diff_local) step_new = step_new_tmp - max_diff_local;
- 
+
 	// sprawdzenie ograniczenia na predkosc (co do predkosci maksymalnej)
 	if (step_new > max_vel_local) step_new = max_vel_local;
 	if (step_new < -max_vel_local) step_new = -max_vel_local;
- 
+
 	// sprawdzenie ograniczenia na przyspieszenie
 	current_acc = step_new - step_old;
 	if (current_acc > max_acc_local) step_new = step_old + max_acc_local;
 	if (current_acc < -max_acc_local) step_new = step_old - max_acc_local;
-	
+
 	step_new_over_constraint_sum = step_new_over_constraint_sum_tmp - step_new;
- 
+
 	//	if (debug) printf("acc: %f, vel: %f, const_sum: %f\n", current_acc, step_new, step_new_over_constraint_sum);
- 
+
 	step_old = step_new;
 };
 */
