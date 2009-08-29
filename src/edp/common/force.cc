@@ -256,7 +256,6 @@ void * irp6s_postument_track_effector::force_thread(void *arg)
 				vs->from_vsp.vsp_report= lib::VSP_READING_NOT_READY;
 				break;
 			}
-			; //!< end switch
 			vs->sr_msg->message (lib::FATAL_ERROR, e.error_no);
 
 		} //!< end CATCH
@@ -264,7 +263,7 @@ void * irp6s_postument_track_effector::force_thread(void *arg)
 		catch(...)
 		{
 			printf("unidentified error force thread w EDP\n");
-		};
+		}
 
 	} //!< //!< end while(;;)
 

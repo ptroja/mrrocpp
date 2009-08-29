@@ -1400,8 +1400,8 @@ in_out_buffer::in_out_buffer()
     }
 
     // inicjacja spinlockow
-    memset( &input_spinlock, 0, sizeof( input_spinlock ) );
-    memset( &output_spinlock, 0, sizeof( output_spinlock ) );
+    memset( &input_spinlock, 0, sizeof(input_spinlock));
+    memset( &output_spinlock, 0, sizeof(output_spinlock));
     set_output_flag=false;
 }
 
@@ -1411,35 +1411,29 @@ void in_out_buffer::set_output(const lib::WORD *out_value)
 {
 
     InterruptLock(&output_spinlock);
-//	InterruptEnable();
+
     set_output_flag=true;   // aby f. obslugi przerwania wiedziala ze ma ustawic wyjscie
     binary_output=*out_value;
 
     InterruptUnlock(&output_spinlock);
-    //yy_InterruptUnlock(&output_spinlock);
-  //  InterruptDisable();
 }
 
 // odczytanie wyjsc
 void in_out_buffer::get_output(lib::WORD *out_value)
 {
+    InterruptLock(&output_spinlock);
 
-    InterruptLock(&output_spinlock );
-	//InterruptEnable();
     *out_value=binary_output;
 
-    InterruptUnlock(&output_spinlock );
-   // yy_InterruptUnlock(&output_spinlock);
-  //  InterruptDisable();
+    InterruptUnlock(&output_spinlock);
 }
 
 
 // ustawienie wejsc
 void in_out_buffer::set_input (const lib::WORD *binary_in_value, const lib::BYTE *analog_in_table)
 {
-
     InterruptLock(&input_spinlock );
-//	InterruptEnable();
+
     binary_input=*binary_in_value;		// wejscie binarne
     for (int i=0; i<8; i++)
     {
@@ -1447,8 +1441,6 @@ void in_out_buffer::set_input (const lib::WORD *binary_in_value, const lib::BYTE
     }
 
     InterruptUnlock(&input_spinlock );
- //   yy_InterruptUnlock(&input_spinlock);
-  //  InterruptDisable();
 
     /*	analog_in_value = & read_analog;
     	binary_in_value =   & read_binary;*/
@@ -1462,7 +1454,7 @@ void in_out_buffer::get_input (lib::WORD *binary_in_value, lib::BYTE *analog_in_
 {
 
     InterruptLock(&input_spinlock );
-//	InterruptEnable();
+
     *binary_in_value=binary_input;		// wejscie binarne
     for (int i=0; i<8; i++)
     {
@@ -1479,8 +1471,6 @@ void in_out_buffer::get_input (lib::WORD *binary_in_value, lib::BYTE *analog_in_
     	lib::WORD read_binary = 0x00FF & in16(SERVO_REPLY_REG_1_ADR);*/
 
     InterruptUnlock(&input_spinlock );
-   // yy_InterruptUnlock(&input_spinlock);
-  //  InterruptDisable();
 
     /*	analog_in_value = & read_analog;
     	binary_in_value =   & read_binary;*/

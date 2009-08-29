@@ -14,10 +14,12 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#ifdef __QNXNTO__
 #include <sys/neutrino.h>
 #include <sys/sched.h>
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
+#endif /* __QNXNTO__ */
 #include <pthread.h>
 #include <semaphore.h>
 #include <errno.h>
@@ -62,22 +64,20 @@ bool effector::initialize_communication()
 #if !defined(USE_MESSIP_SRR)
 	// obsluga mechanizmu sygnalizacji zajetosci sprzetu
 	if (!(test_mode)) {
-		const char* hardware_busy_attach_point;
-		char full_path_to_hardware_busy_attach_point[100];
-		name_attach_t *tmp_attach;
 
 		std::string hbap = config.return_string_value("hardware_busy_attach_point");
-		hardware_busy_attach_point = hbap.c_str();
+		const char * hardware_busy_attach_point = hbap.c_str();
+
+		char full_path_to_hardware_busy_attach_point[100];
 		sprintf(full_path_to_hardware_busy_attach_point, "/dev/name/global/%s", hardware_busy_attach_point);
 
 		// sprawdzenie czy nie jakis proces EDP nie zajmuje juz sprzetu
 		if (access(full_path_to_hardware_busy_attach_point, R_OK)== 0) {
 			fprintf( stderr, "EDP: hardware busy\n");
-
 			return false;
 		}
 
-		tmp_attach
+		name_attach_t * tmp_attach
 				= name_attach(NULL, hardware_busy_attach_point, NAME_FLAG_ATTACH_GLOBAL);
 
 		if (tmp_attach == NULL) {

@@ -12,14 +12,11 @@
 #include <unistd.h>
 #include <string.h>
 #include <signal.h>
-#include <process.h>
 #include <errno.h>
 #include <sys/wait.h>
+#ifdef __QNXNTO__
 #include <sys/neutrino.h>
-#include <sys/iofunc.h>
-#include <sys/types.h>
-#include <sys/sched.h>
-#include <sys/netmgr.h>
+#endif /* __QNXNTO__ */
 #include <pthread.h>
 
 #include "lib/typedefs.h"
@@ -33,8 +30,6 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-// sr_edp *msg;                // Wskaznik na obiekt do komunikacji z SR
-
 effector* master; // Bufor polecen i odpowiedzi EDP_MASTER
 
 static _clockperiod old_cp;
@@ -43,7 +38,9 @@ static _clockperiod old_cp;
 void catch_signal(int sig) {
 	switch (sig) {
 	case SIGTERM:
+#ifdef __QNXNTO__
 		ClockPeriod(CLOCK_REALTIME, &old_cp, NULL, 0);
+#endif /* __QNXNTO__ */
 		master->msg->message("EDP terminated");
 		_exit(EXIT_SUCCESS);
 		break;
@@ -61,7 +58,6 @@ void catch_signal(int sig) {
 int main(int argc, char *argv[], char **arge) {
 
 	// delay(10000);
-	// STATE next_state;    // stan nastepny, do ktorego przejdzie EDP_MASTER
 
 	try {
 		if (argc < 6) {
@@ -70,11 +66,13 @@ int main(int argc, char *argv[], char **arge) {
 			exit(EXIT_FAILURE);
 		}
 
+#ifdef __QNXNTO__
 		// zmniejszenie stalej czasowej ticksize dla szeregowania
 		_clockperiod new_cp;
 		new_cp.nsec = TIME_SLICE; // impconst.h
 		new_cp.fract = 0;
 		ClockPeriod(CLOCK_REALTIME, &new_cp, &edp::common::old_cp, 0);
+#endif /* __QNXNTO__ */
 
 		// przechwycenie SIGTERM
 		signal(SIGTERM, &edp::common::catch_signal);

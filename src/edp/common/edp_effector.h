@@ -11,8 +11,9 @@
 #include <stdint.h>
 #include <semaphore.h>
 #include <pthread.h>
+#if !defined(USE_MESSIP_SRR)
 #include <sys/dispatch.h>
-
+#endif /* !USE_MESSIP_SRR */
 #include <string>
 
 #include "lib/typedefs.h"
@@ -60,10 +61,8 @@ public:
     std::string mrrocpp_network_path;
 
 #if !defined(USE_MESSIP_SRR)
-
     name_attach_t *attach;
 #else /* USE_MESSIP_SRR */
-
     messip_channel_t *attach;
 #endif /* USE_MESSIP_SRR */
 

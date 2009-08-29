@@ -11,20 +11,12 @@
 #include <stdint.h>
 #include <semaphore.h>
 #include <pthread.h>
-#include <sys/dispatch.h>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
-#include "lib/srlib.h"
 
-#include "messip/messip.h"
 #include "kinematics/common/transformer_error.h"
-#include "kinematics/common/kinematics_manager.h"
-
-// Konfigurator
-#include "lib/configurator.h"
-
 
 namespace mrrocpp {
 namespace edp {
@@ -42,16 +34,10 @@ enum STATE { GET_STATE, GET_SYNCHRO, SYNCHRO_TERMINATED, GET_INSTRUCTION, EXECUT
 enum TRANSLATION_ENUM { WITH_TRANSLATION, WITHOUT_TRANSLATION };
 // extern int errno;
 
-
-
-
 class System_error
 {
     // Klasa bledow systemowych zawiazanych z komunikacja miedzyprocesowa
-
 };
-
-
 
 // Struktura z informacja, ktore elementy struktury reader_data maja byc zapisane do pliku
 struct reader_config
@@ -80,7 +66,6 @@ struct reader_config
     bool servo_mode; // by Y 0 - petla bierna 1- wykonywanie zleconego przemieszczenia
 };
 
-
 struct reader_data
 {   // Struktura z danymi pomiarowymi w reader do zapisu do pliku
     unsigned long step;       // numer kroku
@@ -107,8 +92,6 @@ struct reader_data
     bool ui_trigger; // by Y: false - nie wystapil w biezacym kroku, true - wystapil
 };
 
-
-
 /**************************** reader_buffer *****************************/
 
 class reader_buffer
@@ -128,10 +111,7 @@ public:
 
     int	lock_mutex(); // zajecie mutex'a
     int	unlock_mutex(); // zwolnienie mutex'a
-
 };
-
-
 /**************************** end of reader_buffer *****************************/
 
 
@@ -139,7 +119,6 @@ public:
 
 enum MT_ORDER { MT_GET_CONTROLLER_STATE, MT_SET_RMODEL, MT_GET_ARM_POSITION, MT_GET_ALGORITHMS, MT_MOVE_ARM, MT_SYNCHRONISE};
 enum ERROR_TYPE { NO_ERROR, Fatal_erroR, NonFatal_erroR_1, NonFatal_erroR_2, NonFatal_erroR_3, NonFatal_erroR_4, System_erroR};
-
 
 class master_trans_t_buffer : public kinematic::common::transformer_error
 {
@@ -162,7 +141,6 @@ public:
     int	master_wait_for_trans_t_order_status();
     int	trans_t_to_master_order_status_ready();
     int	trans_t_wait_for_master_order();
-
 };
 /**************************** master_trans_t_buffer *****************************/
 
@@ -183,7 +161,8 @@ public:
     // konstruktor
     in_out_buffer();
 
-    lib::BYTE set_output_flag; // flaga czy ustawic wyjcie na robota
+    bool set_output_flag; // flaga czy ustawic wyjcie na robota
+
     void set_output (const lib::WORD *out_value);
     void get_output (lib::WORD *out_value);
     void set_input (const lib::WORD *binary_in_value, const lib::BYTE *analog_in_table);
