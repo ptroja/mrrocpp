@@ -290,8 +290,6 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
 
         rb_obj.unlock_mutex();
 
-
-
         // T.K.: Obecne wywolanie
         // get_current_kinematic_model()->i2e_transform(servo_current_joints, &servo_current_end_effector_frame, NULL);
         // zastepuje wywolaniem metody, direct_kinematics_transform(), ktora rozwiazuje proste zagadnienie kinematyki
@@ -301,7 +299,6 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
         lib::Homog_matrix A(servo_current_frame_wo_tool);
         A.get_mech_xyz_euler_zyz(servo_real_kartez_pos);
         //A.get_xyz_euler_zyz(servo_real_kartez_pos);
-
 
         // zapisanie wartosci rzeczywistej dla readera
         rb_obj.lock_mutex();

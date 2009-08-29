@@ -85,17 +85,9 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
     edp_tid=1;// numer watku edp_master
 
     ThreadCtl (_NTO_TCTL_IO, NULL);
-
-//    rb_obj = new reader_buffer();
-//    mt_tt_obj = new master_trans_t_buffer();
-//    in_out_obj = new in_out_buffer(); // bufor wejsc wyjsc
 }
 
 manip_and_conv_effector::~manip_and_conv_effector() {
-//	delete in_out_obj;
-//	delete mt_tt_obj;
-//	delete rb_obj;
-
 	// TODO: error check or use object oriented mutex
 	pthread_mutex_destroy(&edp_irp6s_effector_mutex);
 }
