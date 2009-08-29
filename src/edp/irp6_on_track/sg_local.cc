@@ -44,13 +44,13 @@ lib::BYTE servo_buffer::Move_a_step (void)
 				switch (i)
 				{
 				case IRP6OT_GRIPPER_CATCH_AXE:
-					master.update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_ON_TRACK_AXE_7_INC_PER_REVOLUTION, i);
+					master.update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_ON_TRACK_AXIS_7_INC_PER_REVOLUTION, i);
 					break;
 				case IRP6OT_GRIPPER_TURN_AXE:
-					master.update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_ON_TRACK_AXE_6_INC_PER_REVOLUTION, i);
+					master.update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_ON_TRACK_AXIS_6_INC_PER_REVOLUTION, i);
 					break;
 				default:
-					master.update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_ON_TRACK_AXE_0_TO_5_INC_PER_REVOLUTION, i);
+					master.update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION, i);
 					break;
 				}
 			}
@@ -58,13 +58,13 @@ lib::BYTE servo_buffer::Move_a_step (void)
 			/*
             		if (i==7) 
         {
-            	  master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_ON_TRACK_AXE_7_INC_PER_REVOLUTION,  i);
+            	  master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_ON_TRACK_AXIS_7_INC_PER_REVOLUTION,  i);
              } else if (i==6) 
         {		
-            	master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_ON_TRACK_AXE_6_INC_PER_REVOLUTION,  i);
+            	master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_ON_TRACK_AXIS_6_INC_PER_REVOLUTION,  i);
              } else 
         {		
-            	master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_ON_TRACK_AXE_0_TO_5_INC_PER_REVOLUTION,  i);
+            	master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION,  i);
              } 
 			 */
 		}
@@ -160,13 +160,13 @@ void servo_buffer::synchronise (void)
 				switch (i)
 				{
 				case IRP6OT_GRIPPER_CATCH_AXE:
-					synchro_step = IRP6_ON_TRACK_AXE_7_SYNCHRO_STEP_COARSE/NS;
+					synchro_step = IRP6_ON_TRACK_AXIS_7_SYNCHRO_STEP_COARSE/NS;
 					break;
 				case IRP6OT_GRIPPER_TURN_AXE:
-					synchro_step = IRP6_ON_TRACK_AXE_6_SYNCHRO_STEP_COARSE/NS;
+					synchro_step = IRP6_ON_TRACK_AXIS_6_SYNCHRO_STEP_COARSE/NS;
 					break;
 				default:
-					synchro_step = IRP6_ON_TRACK_AXE_0_TO_5_SYNCHRO_STEP_COARSE/NS;
+					synchro_step = IRP6_ON_TRACK_AXIS_0_TO_5_SYNCHRO_STEP_COARSE/NS;
 					break;
 				}
 
@@ -192,23 +192,23 @@ void servo_buffer::synchronise (void)
 				switch (j)
 				{
 				case IRP6OT_GRIPPER_CATCH_AXE:
-					if (synchro_step > IRP6_ON_TRACK_AXE_7_SYNCHRO_STEP_COARSE )
+					if (synchro_step > IRP6_ON_TRACK_AXIS_7_SYNCHRO_STEP_COARSE )
 					{
-						synchro_step += IRP6_ON_TRACK_AXE_7_SYNCHRO_STEP_COARSE/NS;
+						synchro_step += IRP6_ON_TRACK_AXIS_7_SYNCHRO_STEP_COARSE/NS;
 						crp->insert_new_step(synchro_step);
 					}
 					break;
 				case IRP6OT_GRIPPER_TURN_AXE:
-					if (synchro_step > IRP6_ON_TRACK_AXE_6_SYNCHRO_STEP_COARSE )
+					if (synchro_step > IRP6_ON_TRACK_AXIS_6_SYNCHRO_STEP_COARSE )
 					{
-						synchro_step += IRP6_ON_TRACK_AXE_6_SYNCHRO_STEP_COARSE/NS;
+						synchro_step += IRP6_ON_TRACK_AXIS_6_SYNCHRO_STEP_COARSE/NS;
 						crp->insert_new_step(synchro_step);
 					}
 					break;
 				default:
-					if (synchro_step > IRP6_ON_TRACK_AXE_0_TO_5_SYNCHRO_STEP_COARSE )
+					if (synchro_step > IRP6_ON_TRACK_AXIS_0_TO_5_SYNCHRO_STEP_COARSE )
 					{
-						synchro_step += IRP6_ON_TRACK_AXE_0_TO_5_SYNCHRO_STEP_COARSE/NS;
+						synchro_step += IRP6_ON_TRACK_AXIS_0_TO_5_SYNCHRO_STEP_COARSE/NS;
 						crp->insert_new_step(synchro_step);
 					}
 					break;
@@ -288,13 +288,13 @@ void servo_buffer::synchronise (void)
 		switch (j)
 		{
 		case IRP6OT_GRIPPER_CATCH_AXE:
-			synchro_step = -IRP6_ON_TRACK_AXE_7_SYNCHRO_STEP_FINE/NS;
+			synchro_step = -IRP6_ON_TRACK_AXIS_7_SYNCHRO_STEP_FINE/NS;
 			break;
 		case IRP6OT_GRIPPER_TURN_AXE:
-			synchro_step = -IRP6_ON_TRACK_AXE_6_SYNCHRO_STEP_FINE/NS;
+			synchro_step = -IRP6_ON_TRACK_AXIS_6_SYNCHRO_STEP_FINE/NS;
 			break;
 		default:
-			synchro_step = -IRP6_ON_TRACK_AXE_0_TO_5_SYNCHRO_STEP_FINE/NS;
+			synchro_step = -IRP6_ON_TRACK_AXIS_0_TO_5_SYNCHRO_STEP_FINE/NS;
 			break;
 		}
 
@@ -314,23 +314,23 @@ void servo_buffer::synchronise (void)
 			switch (j)
 			{
 			case IRP6OT_GRIPPER_CATCH_AXE:
-				if (synchro_step < -IRP6_ON_TRACK_AXE_7_SYNCHRO_STEP_FINE )
+				if (synchro_step < -IRP6_ON_TRACK_AXIS_7_SYNCHRO_STEP_FINE )
 				{
-					synchro_step -= IRP6_ON_TRACK_AXE_7_SYNCHRO_STEP_FINE / NS;
+					synchro_step -= IRP6_ON_TRACK_AXIS_7_SYNCHRO_STEP_FINE / NS;
 					crp->insert_new_step(synchro_step);
 				}
 				break;
 			case IRP6OT_GRIPPER_TURN_AXE:
-				if (synchro_step < -IRP6_ON_TRACK_AXE_6_SYNCHRO_STEP_FINE )
+				if (synchro_step < -IRP6_ON_TRACK_AXIS_6_SYNCHRO_STEP_FINE )
 				{
-					synchro_step -= IRP6_ON_TRACK_AXE_6_SYNCHRO_STEP_FINE / NS;
+					synchro_step -= IRP6_ON_TRACK_AXIS_6_SYNCHRO_STEP_FINE / NS;
 					crp->insert_new_step(synchro_step);
 				}
 				break;
 			default:
-				if (synchro_step < -IRP6_ON_TRACK_AXE_0_TO_5_SYNCHRO_STEP_FINE )
+				if (synchro_step < -IRP6_ON_TRACK_AXIS_0_TO_5_SYNCHRO_STEP_FINE )
 				{
-					synchro_step -= IRP6_ON_TRACK_AXE_0_TO_5_SYNCHRO_STEP_FINE / NS;
+					synchro_step -= IRP6_ON_TRACK_AXIS_0_TO_5_SYNCHRO_STEP_FINE / NS;
 					crp->insert_new_step(synchro_step);
 				}
 				break;
@@ -466,13 +466,13 @@ void servo_buffer::get_all_positions (void)
 		switch (i)
 		{
 		case IRP6OT_GRIPPER_CATCH_AXE:
-			servo_data.abs_position[i]  = hi->get_position(i)*(2*M_PI)/IRP6_ON_TRACK_AXE_7_INC_PER_REVOLUTION;
+			servo_data.abs_position[i]  = hi->get_position(i)*(2*M_PI)/IRP6_ON_TRACK_AXIS_7_INC_PER_REVOLUTION;
 			break;
 		case IRP6OT_GRIPPER_TURN_AXE:
-			servo_data.abs_position[i]  = hi->get_position(i)*(2*M_PI)/IRP6_ON_TRACK_AXE_6_INC_PER_REVOLUTION;
+			servo_data.abs_position[i]  = hi->get_position(i)*(2*M_PI)/IRP6_ON_TRACK_AXIS_6_INC_PER_REVOLUTION;
 			break;
 		default:
-			servo_data.abs_position[i]  = hi->get_position(i)*(2*M_PI)/IRP6_ON_TRACK_AXE_0_TO_5_INC_PER_REVOLUTION;
+			servo_data.abs_position[i]  = hi->get_position(i)*(2*M_PI)/IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION;
 			break;
 		}
 
@@ -507,15 +507,15 @@ uint64_t servo_buffer::compute_all_set_values (void)
 			{
 			case IRP6OT_GRIPPER_CATCH_AXE:
 				regulator_ptr[j]->insert_new_pos_increment(regulator_ptr[j]->return_new_step()
-						*IRP6_ON_TRACK_AXE_7_INC_PER_REVOLUTION/(2*M_PI));
+						*IRP6_ON_TRACK_AXIS_7_INC_PER_REVOLUTION/(2*M_PI));
 				break;
 			case IRP6OT_GRIPPER_TURN_AXE:
 				regulator_ptr[j]->insert_new_pos_increment(regulator_ptr[j]->return_new_step()
-						*IRP6_ON_TRACK_AXE_6_INC_PER_REVOLUTION/(2*M_PI));
+						*IRP6_ON_TRACK_AXIS_6_INC_PER_REVOLUTION/(2*M_PI));
 				break;
 			default:
 				regulator_ptr[j]->insert_new_pos_increment(regulator_ptr[j]->return_new_step()
-						*IRP6_ON_TRACK_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI));
+						*IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI));
 				break;
 			}
 
@@ -681,7 +681,7 @@ lib::BYTE NL_regulator_1_irp6ot::compute_set_value (void)
 	constraint_detector(common::SG_REG_1_MAX_ACC, common::SG_REG_1_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
-	step_new_pulse = step_new*IRP6_ON_TRACK_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	/*
     if (!aaa)   
      if ( (fabs(step_new_pulse) < 0.0001) && (fabs(position_increment_new ) > 1) ) {
@@ -906,7 +906,7 @@ lib::BYTE NL_regulator_2_irp6ot::compute_set_value (void)
 
 
 	// przeliczenie radianow na impulsy
-	step_new_pulse = step_new*IRP6_ON_TRACK_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 
 	/*
     if (!bbb)   
@@ -1105,7 +1105,7 @@ lib::BYTE NL_regulator_3_irp6ot::compute_set_value (void)
 	constraint_detector(common::SG_REG_3_MAX_ACC, common::SG_REG_3_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
-	step_new_pulse = step_new*IRP6_ON_TRACK_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	/*
     if (!ccc)   
      if ( (fabs(step_new_pulse) < 0.0001) && (fabs(position_increment_new - position_increment_old ) > 40) ) {
@@ -1300,7 +1300,7 @@ lib::BYTE NL_regulator_4_irp6ot::compute_set_value (void)
 	constraint_detector(common::SG_REG_4_MAX_ACC, common::SG_REG_4_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
-	step_new_pulse = step_new*IRP6_ON_TRACK_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 
 	/*
     if (!ddd)   
@@ -1499,7 +1499,7 @@ lib::BYTE NL_regulator_5_irp6ot::compute_set_value (void)
 	constraint_detector(common::SG_REG_5_MAX_ACC, common::SG_REG_5_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
-	step_new_pulse = step_new*IRP6_ON_TRACK_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 
 	/*
     if (!eee)   
@@ -1699,7 +1699,7 @@ lib::BYTE NL_regulator_6_irp6ot::compute_set_value (void)
 	constraint_detector(common::SG_REG_6_MAX_ACC, common::SG_REG_6_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
-	step_new_pulse = step_new*IRP6_ON_TRACK_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 
 	/*
     if (!fff)   
@@ -1901,8 +1901,8 @@ lib::BYTE NL_regulator_7_irp6ot::compute_set_value (void)
 	constraint_detector(common::SG_REG_7_MAX_ACC, common::SG_REG_7_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
-	// step_new_pulse = step_new*IRP6_POSTUMENT_AXE_6_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_ON_TRACK_AXE_6_INC_PER_REVOLUTION/(2*M_PI);
+	// step_new_pulse = step_new*IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
+	step_new_pulse = step_new*IRP6_ON_TRACK_AXIS_6_INC_PER_REVOLUTION/(2*M_PI);
 	//position_increment_new= position_increment_new/AXE_6_POSTUMENT_TO_TRACK_RATIO;
 
 	// if (step_new!=0.0) printf(" 7 reg:%f\n", step_new);
@@ -2126,7 +2126,7 @@ lib::BYTE NL_regulator_8_irp6ot::compute_set_value (void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_ON_TRACK_AXE_7_INC_PER_REVOLUTION/(2*M_PI);//*AXE_7_POSTUMENT_TO_TRACK_RATIO);
+	step_new_pulse = step_new*IRP6_ON_TRACK_AXIS_7_INC_PER_REVOLUTION/(2*M_PI);//*AXE_7_POSTUMENT_TO_TRACK_RATIO);
 	//position_increment_new= position_increment_new/AXE_7_POSTUMENT_TO_TRACK_RATIO;
 
 	// printf("bbb: %d\n",  meassured_current);

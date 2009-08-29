@@ -138,7 +138,7 @@ const struct sigevent *
 
             if (i<6) // osie z rezolwerami
             {
-                md.current_absolute_position[i] =  ((uint32_t) (high_word* (int)(IRP6_ON_TRACK_AXE_0_TO_5_INC_PER_REVOLUTION))) + ((uint32_t) low_word);
+                md.current_absolute_position[i] =  ((uint32_t) (high_word* (int)(IRP6_ON_TRACK_AXIS_0_TO_5_INC_PER_REVOLUTION))) + ((uint32_t) low_word);
             } else
             { // osie z enkoderami
                 md.current_absolute_position[i] =  (((uint32_t) (high_word<<16)) & (0xFFFF0000)) | ((uint16_t) low_word);

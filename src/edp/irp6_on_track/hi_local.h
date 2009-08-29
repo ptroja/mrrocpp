@@ -48,16 +48,16 @@ const unsigned short int INT_FREC_DIVIDER = 4; // Dzielnik czestotliwosci przerw
 #define START_CLOCK_INTERRUPTS           0x5000 // Wlacz przerwania zegarowe
 #define STOP_CLOCK_INTERRUPTS           0x5400 // Wylacz przerwania zegarowe
 
-#define IRP6_ON_TRACK_AXE_1_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_ON_TRACK_AXE_2_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_ON_TRACK_AXE_3_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_ON_TRACK_AXE_4_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_ON_TRACK_AXE_5_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_ON_TRACK_AXE_6_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_ON_TRACK_AXE_7_MAX_CURRENT           0x2410 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_ON_TRACK_AXIS_1_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_ON_TRACK_AXIS_2_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_ON_TRACK_AXIS_3_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_ON_TRACK_AXIS_4_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_ON_TRACK_AXIS_5_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_ON_TRACK_AXIS_6_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_ON_TRACK_AXIS_7_MAX_CURRENT           0x2410 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
 // 13,7 j na amper
 
-#define IRP6_ON_TRACK_AXE_8_MAX_CURRENT           0x2427 // ustawienie pradu maksymalnego dla zacisku chwytaka
+#define IRP6_ON_TRACK_AXIS_8_MAX_CURRENT           0x2427 // ustawienie pradu maksymalnego dla zacisku chwytaka
 // by Y - UWAGA nieczulosc nieznana, rozdzielczosc do ustalenia
 // 25,3 j na 100ma, strefa nieczulosci na poziomie 40ma
 

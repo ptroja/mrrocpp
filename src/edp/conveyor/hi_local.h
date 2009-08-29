@@ -60,7 +60,7 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 #define INT_SINGLE_COMMAND 2 // do synchronizacji, inicjacji, etc.
 #define INT_CHECK_STATE 3 // do odczytu stanu z adresu 0x220
 
-#define CONVEYOR_AXE_1_MAX_CURRENT 0x2460
+#define CONVEYOR_AXIS_1_MAX_CURRENT 0x2460
 // 13,7 j na A
 
 
@@ -70,24 +70,21 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-class hardware_interface : public common::hardware_interface
-{
-
+class hardware_interface: public common::hardware_interface {
 
 public:
-    hardware_interface( effector &_master );    // Konstruktor
-    ~hardware_interface( void );   // Destruktor
-    bool is_hardware_error ( void); // Sprawdzenie czy wystapil blad sprzetowy
-    effector &master;
-    uint64_t read_write_hardware ( void );    // Obsluga sprzetu
-    void reset_counters ( void );  // Zerowanie licznikow polozenia
+	hardware_interface(effector &_master); // Konstruktor
+	~hardware_interface(void); // Destruktor
+	bool is_hardware_error(void); // Sprawdzenie czy wystapil blad sprzetowy
+	effector &master;
+	uint64_t read_write_hardware(void); // Obsluga sprzetu
+	void reset_counters(void); // Zerowanie licznikow polozenia
 
 
-    // oczekiwanie na przerwanie - tryb obslugi i delay(lag) po odebraniu przerwania
-    int hi_int_wait (int inter_mode, int lag);
+	// oczekiwanie na przerwanie - tryb obslugi i delay(lag) po odebraniu przerwania
+	int hi_int_wait(int inter_mode, int lag);
 
-}
-; // koniec: class hardware_interface
+}; // koniec: class hardware_interface
 
 #ifdef __cplusplus
 extern "C"

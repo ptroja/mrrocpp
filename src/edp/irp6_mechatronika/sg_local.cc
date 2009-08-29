@@ -39,7 +39,7 @@ lib::BYTE servo_buffer::Move_a_step (void)
 		{
 			if (!(master.test_mode))
 			{
-				master.update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_MECHATRONIKA_AXE_0_TO_5_INC_PER_REVOLUTION, i);
+				master.update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION, i);
 			}
 		}
 
@@ -383,7 +383,7 @@ void servo_buffer::get_all_positions (void)
 	for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
 	{
 
-		servo_data.abs_position[i]  = hi->get_position(i)*(2*M_PI)/IRP6_MECHATRONIKA_AXE_0_TO_5_INC_PER_REVOLUTION;
+		servo_data.abs_position[i]  = hi->get_position(i)*(2*M_PI)/IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION;
 
 
 		// przyrost polozenia w impulsach
@@ -411,7 +411,7 @@ uint64_t servo_buffer::compute_all_set_values (void)
 		if (master.test_mode)
 		{
 			regulator_ptr[j]->insert_new_pos_increment(regulator_ptr[j]->return_new_step()
-					*IRP6_MECHATRONIKA_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI));
+					*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI));
 		}
 		else
 		{
@@ -535,7 +535,7 @@ lib::BYTE NL_regulator_2_irp6m::compute_set_value (void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_MECHATRONIKA_TO_TRACK_RATIO;
 
 	// if (step_new!=0.0) printf(" 2 reg:%f\n", step_new);
@@ -751,7 +751,7 @@ lib::BYTE NL_regulator_3_irp6m::compute_set_value (void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	///position_increment_new= position_increment_new;
 
 	// if (step_new!=0.0) printf(" 3 reg:%f\n", step_new);
@@ -962,7 +962,7 @@ lib::BYTE NL_regulator_4_irp6m::compute_set_value (void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_MECHATRONIKA_TO_TRACK_RATIO;
 
 	// if (step_new!=0.0) printf(" 4 reg:%f\n", step_new);
@@ -1174,7 +1174,7 @@ lib::BYTE NL_regulator_5_irp6m::compute_set_value (void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_MECHATRONIKA_TO_TRACK_RATIO;
 	/*
     if (!eee)   
@@ -1390,7 +1390,7 @@ lib::BYTE NL_regulator_6_irp6m::compute_set_value (void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_MECHATRONIKA_TO_TRACK_RATIO;
 
 	/*

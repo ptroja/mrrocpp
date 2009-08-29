@@ -49,15 +49,15 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 #define STOP_CLOCK_INTERRUPTS           0x5400 // Wylacz przerwania zegarowe
 
 
-#define IRP6_MECHATRONIKA_AXE_1_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_MECHATRONIKA_AXE_2_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_MECHATRONIKA_AXE_3_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_MECHATRONIKA_AXE_4_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_MECHATRONIKA_AXE_5_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_MECHATRONIKA_AXE_6_MAX_CURRENT           0x2410 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_MECHATRONIKA_AXIS_1_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_MECHATRONIKA_AXIS_2_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_MECHATRONIKA_AXIS_3_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_MECHATRONIKA_AXIS_4_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_MECHATRONIKA_AXIS_5_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_MECHATRONIKA_AXIS_6_MAX_CURRENT           0x2410 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
 // 13,7 j na amper
 
-#define IRP6_MECHATRONIKA_AXE_7_MAX_CURRENT           0x2420 // ustawienie pradu maksymalnego dla zacisku chwytaka
+#define IRP6_MECHATRONIKA_AXIS_7_MAX_CURRENT           0x2420 // ustawienie pradu maksymalnego dla zacisku chwytaka
 // 34,7 j na 100ma, streafa nieczulosci 40ma
 
 

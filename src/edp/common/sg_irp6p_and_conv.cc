@@ -184,7 +184,7 @@ lib::BYTE NL_regulator_1_irp6p::compute_set_value (void)
 
     // przeliczenie radianow na impulsy
     // step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-    step_new_pulse = step_new*IRP6_POSTUMENT_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+    step_new_pulse = step_new*IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
     //position_increment_new=position_increment_new/AXE_0_TO_5_POSTUMENT_TO_TRACK_RATIO;
 
     /*
@@ -419,7 +419,7 @@ lib::BYTE NL_regulator_2_irp6p::compute_set_value (void)
 
     // przeliczenie radianow na impulsy
     // step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-    step_new_pulse = step_new*IRP6_POSTUMENT_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+    step_new_pulse = step_new*IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
     //position_increment_new= position_increment_new/AXE_0_TO_5_POSTUMENT_TO_TRACK_RATIO;
 
     // if (step_new!=0.0) printf(" 2 reg:%f\n", step_new);
@@ -661,7 +661,7 @@ lib::BYTE NL_regulator_3_irp6p::compute_set_value (void)
 
     // przeliczenie radianow na impulsy
     // step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-    step_new_pulse = step_new*IRP6_POSTUMENT_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+    step_new_pulse = step_new*IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
     ///position_increment_new= position_increment_new;
 
     // if (step_new!=0.0) printf(" 3 reg:%f\n", step_new);
@@ -900,7 +900,7 @@ lib::BYTE NL_regulator_4_irp6p::compute_set_value (void)
 
     // przeliczenie radianow na impulsy
     // step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-    step_new_pulse = step_new*IRP6_POSTUMENT_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+    step_new_pulse = step_new*IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
     //position_increment_new= position_increment_new/AXE_0_TO_5_POSTUMENT_TO_TRACK_RATIO;
 
     // if (step_new!=0.0) printf(" 4 reg:%f\n", step_new);
@@ -1141,7 +1141,7 @@ lib::BYTE NL_regulator_5_irp6p::compute_set_value (void)
 
     // przeliczenie radianow na impulsy
     // step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-    step_new_pulse = step_new*IRP6_POSTUMENT_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+    step_new_pulse = step_new*IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
     //position_increment_new= position_increment_new/AXE_0_TO_5_POSTUMENT_TO_TRACK_RATIO;
     /*
     if (!eee)   
@@ -1383,7 +1383,7 @@ lib::BYTE NL_regulator_6_irp6p::compute_set_value (void)
 
     // przeliczenie radianow na impulsy
     // step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-    step_new_pulse = step_new*IRP6_POSTUMENT_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+    step_new_pulse = step_new*IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
     //position_increment_new= position_increment_new/AXE_0_TO_5_POSTUMENT_TO_TRACK_RATIO;
 
     /*
@@ -1620,8 +1620,8 @@ lib::BYTE NL_regulator_7_irp6p::compute_set_value (void)
     constraint_detector(common::SG_REG_7_MAX_ACC, common::SG_REG_7_MAX_SPEED);
 
     // przeliczenie radianow na impulsy
-    // step_new_pulse = step_new*IRP6_POSTUMENT_AXE_6_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-    step_new_pulse = step_new*IRP6_POSTUMENT_AXE_6_INC_PER_REVOLUTION/(2*M_PI);
+    // step_new_pulse = step_new*IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
+    step_new_pulse = step_new*IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION/(2*M_PI);
     //position_increment_new= position_increment_new/AXE_6_POSTUMENT_TO_TRACK_RATIO;
 
     // if (step_new!=0.0) printf(" 7 reg:%f\n", step_new);
@@ -1864,7 +1864,7 @@ lib::BYTE NL_regulator_8_irp6p::compute_set_value (void)
 
     // przeliczenie radianow na impulsy
     // step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-    step_new_pulse = step_new*IRP6_POSTUMENT_AXE_7_INC_PER_REVOLUTION/(2*M_PI);//*AXE_7_POSTUMENT_TO_TRACK_RATIO);
+    step_new_pulse = step_new*IRP6_POSTUMENT_AXIS_7_INC_PER_REVOLUTION/(2*M_PI);//*AXE_7_POSTUMENT_TO_TRACK_RATIO);
     //position_increment_new= position_increment_new/AXE_7_POSTUMENT_TO_TRACK_RATIO;
 
 

@@ -49,15 +49,15 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 #define STOP_CLOCK_INTERRUPTS           0x5400 // Wylacz przerwania zegarowe
 
 
-#define IRP6_POSTUMENT_AXE_1_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_POSTUMENT_AXE_2_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_POSTUMENT_AXE_3_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_POSTUMENT_AXE_4_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_POSTUMENT_AXE_5_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_POSTUMENT_AXE_6_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_POSTUMENT_AXIS_1_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_POSTUMENT_AXIS_2_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_POSTUMENT_AXIS_3_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_POSTUMENT_AXIS_4_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_POSTUMENT_AXIS_5_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+#define IRP6_POSTUMENT_AXIS_6_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
 // 13,7 j na amper
 
-#define IRP6_POSTUMENT_AXE_7_MAX_CURRENT           0x2420 // ustawienie pradu maksymalnego dla zacisku chwytaka
+#define IRP6_POSTUMENT_AXIS_7_MAX_CURRENT           0x2420 // ustawienie pradu maksymalnego dla zacisku chwytaka
 // 34,7 j na 100ma, streafa nieczulosci 40ma
 
 
@@ -80,32 +80,29 @@ class effector;
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-class hardware_interface : public common::hardware_interface
-{
-
+class hardware_interface: public common::hardware_interface {
 
 public:
-    hardware_interface( effector &_master );    // Konstruktor
-    ~hardware_interface( void );   // Destruktor
-    bool is_hardware_error ( void); // Sprawdzenie czy wystapil blad sprzetowy
+	hardware_interface(effector &_master); // Konstruktor
+	~hardware_interface(void); // Destruktor
+	bool is_hardware_error(void); // Sprawdzenie czy wystapil blad sprzetowy
 
-    effector &master;
+	effector &master;
 
-    uint64_t read_write_hardware ( void );    // Obsluga sprzetu
-    void reset_counters ( void );  // Zerowanie licznikow polozenia
+	uint64_t read_write_hardware(void); // Obsluga sprzetu
+	void reset_counters(void); // Zerowanie licznikow polozenia
 
-    void start_synchro ( int drive_number );
+	void start_synchro(int drive_number);
 
-    // synchronizacja automatyczna z wykrorzystaniem lm629
-    int synchronise_via_lm629(void);
+	// synchronizacja automatyczna z wykrorzystaniem lm629
+	int synchronise_via_lm629(void);
 
-    // oczekiwanie na przerwanie - tryb obslugi i delay(lag) po odebraniu przerwania
-    int hi_int_wait (int inter_mode, int lag);
+	// oczekiwanie na przerwanie - tryb obslugi i delay(lag) po odebraniu przerwania
+	int hi_int_wait(int inter_mode, int lag);
 
-    void finish_synchro ( int drive_number );
+	void finish_synchro(int drive_number);
 
-}
-; // koniec: class hardware_interface
+}; // koniec: class hardware_interface
 
 #ifdef __cplusplus
 extern "C"
@@ -127,4 +124,3 @@ extern "C"
 } // namespace mrrocpp
 
 #endif // __HI_RYDZ_H
-

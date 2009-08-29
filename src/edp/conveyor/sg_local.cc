@@ -36,8 +36,8 @@ lib::BYTE servo_buffer::Move_a_step (void)
 		{
 			if (!(master.test_mode))
 			{
-				//  master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_POSTUMENT_AXE_0_TO_5_INC_PER_REVOLUTION,  i);
-				master.update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_POSTUMENT_AXE_0_TO_5_INC_PER_REVOLUTION, i);
+				//  master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION,  i);
+				master.update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION, i);
 			}
 		}
 		master.servo_joints_and_frame_actualization_and_upload(); // by Y - aktualizacja trasformatora
@@ -146,7 +146,7 @@ void servo_buffer::get_all_positions (void)
 	for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++)
 	{
 		// przyrost polozenia w impulsach
-		servo_data.abs_position[i]  = hi->get_position(i)*(2*M_PI)/IRP6_POSTUMENT_AXE_0_TO_5_INC_PER_REVOLUTION;
+		servo_data.abs_position[i]  = hi->get_position(i)*(2*M_PI)/IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION;
 		servo_data.position[i]  = regulator_ptr[i]->get_position_inc(1);
 		servo_data.current[i]   = regulator_ptr[i]->get_meassured_current();
 		servo_data.PWM_value[i] = regulator_ptr[i]->get_PWM_value();
@@ -172,7 +172,7 @@ uint64_t servo_buffer::compute_all_set_values (void)
 		if (master.test_mode)
 		{
 			regulator_ptr[j]->insert_new_pos_increment(regulator_ptr[j]->return_new_step()
-					*IRP6_POSTUMENT_AXE_0_TO_5_INC_PER_REVOLUTION/(2*M_PI));
+					*IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI));
 		}
 		else
 		{

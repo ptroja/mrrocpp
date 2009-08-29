@@ -56,9 +56,9 @@ hardware_interface::hardware_interface ( effector &_master )   : common::hardwar
     lib::WORD int_freq; // Ustawienie czestotliwosci przerwan
 
     // tablica pradow maksymalnych d;a poszczegolnych osi
-    int max_current [IRP6_MECHATRONIKA_NUM_OF_SERVOS] = { IRP6_MECHATRONIKA_AXE_1_MAX_CURRENT,
-            IRP6_MECHATRONIKA_AXE_2_MAX_CURRENT,	 IRP6_MECHATRONIKA_AXE_3_MAX_CURRENT, IRP6_MECHATRONIKA_AXE_4_MAX_CURRENT,
-            IRP6_MECHATRONIKA_AXE_5_MAX_CURRENT};
+    int max_current [IRP6_MECHATRONIKA_NUM_OF_SERVOS] = { IRP6_MECHATRONIKA_AXIS_1_MAX_CURRENT,
+            IRP6_MECHATRONIKA_AXIS_2_MAX_CURRENT,	 IRP6_MECHATRONIKA_AXIS_3_MAX_CURRENT, IRP6_MECHATRONIKA_AXIS_4_MAX_CURRENT,
+            IRP6_MECHATRONIKA_AXIS_5_MAX_CURRENT};
 
     // Sledzenie zera rezolwera - wylaczane
     trace_resolver_zero = false;

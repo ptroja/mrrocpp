@@ -55,10 +55,10 @@ hardware_interface::hardware_interface ( effector &_master  )  : common::hardwar
 	lib::WORD int_freq; // Ustawienie czestotliwosci przerwan
 
 	// tablica pradow maksymalnych d;a poszczegolnych osi
-	int max_current [IRP6_ON_TRACK_NUM_OF_SERVOS] = { IRP6_ON_TRACK_AXE_1_MAX_CURRENT,
-			IRP6_ON_TRACK_AXE_2_MAX_CURRENT,	 IRP6_ON_TRACK_AXE_3_MAX_CURRENT, IRP6_ON_TRACK_AXE_4_MAX_CURRENT,
-			IRP6_ON_TRACK_AXE_5_MAX_CURRENT, IRP6_ON_TRACK_AXE_6_MAX_CURRENT, IRP6_ON_TRACK_AXE_7_MAX_CURRENT,
-			IRP6_ON_TRACK_AXE_8_MAX_CURRENT};
+	int max_current [IRP6_ON_TRACK_NUM_OF_SERVOS] = { IRP6_ON_TRACK_AXIS_1_MAX_CURRENT,
+			IRP6_ON_TRACK_AXIS_2_MAX_CURRENT,	 IRP6_ON_TRACK_AXIS_3_MAX_CURRENT, IRP6_ON_TRACK_AXIS_4_MAX_CURRENT,
+			IRP6_ON_TRACK_AXIS_5_MAX_CURRENT, IRP6_ON_TRACK_AXIS_6_MAX_CURRENT, IRP6_ON_TRACK_AXIS_7_MAX_CURRENT,
+			IRP6_ON_TRACK_AXIS_8_MAX_CURRENT};
 
 	// Sledzenie zera rezolwera - wylaczane
 	trace_resolver_zero = false;

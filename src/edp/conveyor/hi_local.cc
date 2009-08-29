@@ -133,7 +133,7 @@ hardware_interface::hardware_interface ( effector &_master ) : common::hardware_
 		hi_int_wait(INT_SINGLE_COMMAND, 2);
 		md	.value=PROHIBIT_MANUAL_MODE;
 		hi_int_wait(INT_SINGLE_COMMAND, 2);
-		md.value=CONVEYOR_AXE_1_MAX_CURRENT;
+		md.value=CONVEYOR_AXIS_1_MAX_CURRENT;
 		hi_int_wait(INT_SINGLE_COMMAND, 2);
 	}
 
