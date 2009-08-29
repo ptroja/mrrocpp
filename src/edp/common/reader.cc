@@ -41,7 +41,6 @@ void * manip_and_conv_effector::reader_thread_start(void* arg)
 
 void * manip_and_conv_effector::reader_thread(void* arg)
 {
-	int i;
 	uint64_t k;
 	uint64_t nr_of_samples; // maksymalna liczba pomiarow
 	reader_data* r_measptr; // tablica - bufor cykliczny z danymi pomiarowymi
@@ -89,62 +88,47 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 	rb_obj->reader_cnf.msec = check_config("msec");
 
 	char tmp_string[50];
-	char tmp2_string[3];
 
 	for (int j = 0; j < MAX_SERVOS_NR; j++) {
-		sprintf(tmp2_string, "%d", j);
 
-		strcpy(tmp_string, "desired_inc_");
-		strcat(tmp_string, tmp2_string);
+		sprintf(tmp_string, "desired_inc_%d", j);
 		rb_obj->reader_cnf.desired_inc[j] = check_config(tmp_string);
 
-		strcpy(tmp_string, "current_inc_");
-		strcat(tmp_string, tmp2_string);
+		sprintf(tmp_string, "current_inc_%d", j);
 		rb_obj->reader_cnf.current_inc[j] = check_config(tmp_string);
 
-		strcpy(tmp_string, "pwm_");
-		strcat(tmp_string, tmp2_string);
+		sprintf(tmp_string, "pwm_%d", j);
 		rb_obj->reader_cnf.pwm[j] = check_config(tmp_string);
 
-		strcpy(tmp_string, "uchyb_");
-		strcat(tmp_string, tmp2_string);
+		sprintf(tmp_string, "uchyb_%d", j);
 		rb_obj->reader_cnf.uchyb[j] = check_config(tmp_string);
 
-		strcpy(tmp_string, "abs_pos_");
-		strcat(tmp_string, tmp2_string);
+		sprintf(tmp_string, "abs_pos_%d", j);
 		rb_obj->reader_cnf.abs_pos[j] = check_config(tmp_string);
 
-		strcpy(tmp_string, "current_joints_");
-		strcat(tmp_string, tmp2_string);
+		sprintf(tmp_string, "current_joints_%d", j);
 		rb_obj->reader_cnf.current_joints[j] = check_config(tmp_string);
 
 		if (j < 6) {
-			strcpy(tmp_string, "force_");
-			strcat(tmp_string, tmp2_string);
+			sprintf(tmp_string, "force_%d", j);
 			rb_obj->reader_cnf.force[j] = check_config(tmp_string);
 
-			strcpy(tmp_string, "desired_force_");
-			strcat(tmp_string, tmp2_string);
+			sprintf(tmp_string, "desired_force_%d", j);
 			rb_obj->reader_cnf.desired_force[j] = check_config(tmp_string);
 
-			strcpy(tmp_string, "filtered_force_");
-			strcat(tmp_string, tmp2_string);
+			sprintf(tmp_string, "filtered_force_%d", j);
 			rb_obj->reader_cnf.filtered_force[j] = check_config(tmp_string);
 
-			strcpy(tmp_string, "current_cartesian_position_");
-			strcat(tmp_string, tmp2_string);
+			sprintf(tmp_string, "current_cartesian_position_%d", j);
 			rb_obj->reader_cnf.current_cartesian_position[j] = check_config(tmp_string);
 
-			strcpy(tmp_string, "real_cartesian_position_");
-			strcat(tmp_string, tmp2_string);
+			sprintf(tmp_string, "real_cartesian_position_%d", j);
 			rb_obj->reader_cnf.real_cartesian_position[j] = check_config(tmp_string);
 
-			strcpy(tmp_string, "real_cartesian_vel_");
-			strcat(tmp_string, tmp2_string);
+			sprintf(tmp_string, "real_cartesian_vel_%d", j);
 			rb_obj->reader_cnf.real_cartesian_vel[j] = check_config(tmp_string);
 
-			strcpy(tmp_string, "real_cartesian_acc_");
-			strcat(tmp_string, tmp2_string);
+			sprintf(tmp_string, "real_cartesian_acc_%d", j);
 			rb_obj->reader_cnf.real_cartesian_acc[j] = check_config(tmp_string);
 		}
 	}
@@ -340,7 +324,7 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 
 			// dla calego horyzontu pomiarow
 
-			for (i = 0; i < msr_counter; i++) {
+			for (int i = 0; i < msr_counter; i++) {
 
 				if (k == nr_of_samples)
 					k = 0;
