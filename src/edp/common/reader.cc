@@ -85,8 +85,8 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 		nr_of_samples = 1000;
 
 	rb_obj->reader_cnf.step = 1;
-	check_config("servo_tryb", &(rb_obj->reader_cnf.servo_mode));
-	check_config("msec", &(rb_obj->reader_cnf.msec));
+	rb_obj->reader_cnf.servo_mode = check_config("servo_tryb");
+	rb_obj->reader_cnf.msec = check_config("msec");
 
 	char tmp_string[50];
 	char tmp2_string[3];
@@ -96,56 +96,56 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 
 		strcpy(tmp_string, "desired_inc_");
 		strcat(tmp_string, tmp2_string);
-		check_config(tmp_string, &(rb_obj->reader_cnf.desired_inc[j]));
+		rb_obj->reader_cnf.desired_inc[j] = check_config(tmp_string);
 
 		strcpy(tmp_string, "current_inc_");
 		strcat(tmp_string, tmp2_string);
-		check_config(tmp_string, &(rb_obj->reader_cnf.current_inc[j]));
+		rb_obj->reader_cnf.current_inc[j] = check_config(tmp_string);
 
 		strcpy(tmp_string, "pwm_");
 		strcat(tmp_string, tmp2_string);
-		check_config(tmp_string, &(rb_obj->reader_cnf.pwm[j]));
+		rb_obj->reader_cnf.pwm[j] = check_config(tmp_string);
 
 		strcpy(tmp_string, "uchyb_");
 		strcat(tmp_string, tmp2_string);
-		check_config(tmp_string, &(rb_obj->reader_cnf.uchyb[j]));
+		rb_obj->reader_cnf.uchyb[j] = check_config(tmp_string);
 
 		strcpy(tmp_string, "abs_pos_");
 		strcat(tmp_string, tmp2_string);
-		check_config(tmp_string, &(rb_obj->reader_cnf.abs_pos[j]));
+		rb_obj->reader_cnf.abs_pos[j] = check_config(tmp_string);
 
 		strcpy(tmp_string, "current_joints_");
 		strcat(tmp_string, tmp2_string);
-		check_config(tmp_string, &(rb_obj->reader_cnf.current_joints[j]));
+		rb_obj->reader_cnf.current_joints[j] = check_config(tmp_string);
 
 		if (j < 6) {
 			strcpy(tmp_string, "force_");
 			strcat(tmp_string, tmp2_string);
-			check_config(tmp_string, &(rb_obj->reader_cnf.force[j]));
+			rb_obj->reader_cnf.force[j] = check_config(tmp_string);
 
 			strcpy(tmp_string, "desired_force_");
 			strcat(tmp_string, tmp2_string);
-			check_config(tmp_string, &(rb_obj->reader_cnf.desired_force[j]));
+			rb_obj->reader_cnf.desired_force[j] = check_config(tmp_string);
 
 			strcpy(tmp_string, "filtered_force_");
 			strcat(tmp_string, tmp2_string);
-			check_config(tmp_string, &(rb_obj->reader_cnf.filtered_force[j]));
+			rb_obj->reader_cnf.filtered_force[j] = check_config(tmp_string);
 
 			strcpy(tmp_string, "current_cartesian_position_");
 			strcat(tmp_string, tmp2_string);
-			check_config(tmp_string, &(rb_obj->reader_cnf.current_cartesian_position[j]));
+			rb_obj->reader_cnf.current_cartesian_position[j] = check_config(tmp_string);
 
 			strcpy(tmp_string, "real_cartesian_position_");
 			strcat(tmp_string, tmp2_string);
-			check_config(tmp_string, &(rb_obj->reader_cnf.real_cartesian_position[j]));
+			rb_obj->reader_cnf.real_cartesian_position[j] = check_config(tmp_string);
 
 			strcpy(tmp_string, "real_cartesian_vel_");
 			strcat(tmp_string, tmp2_string);
-			check_config(tmp_string, &(rb_obj->reader_cnf.real_cartesian_vel[j]));
+			rb_obj->reader_cnf.real_cartesian_vel[j] = check_config(tmp_string);
 
 			strcpy(tmp_string, "real_cartesian_acc_");
 			strcat(tmp_string, tmp2_string);
-			check_config(tmp_string, &(rb_obj->reader_cnf.real_cartesian_acc[j]));
+			rb_obj->reader_cnf.real_cartesian_acc[j] = check_config(tmp_string);
 		}
 	}
 

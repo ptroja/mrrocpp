@@ -13,6 +13,8 @@
 #include <pthread.h>
 #include <sys/dispatch.h>
 
+#include <string>
+
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -51,7 +53,7 @@ public:
     lib::configurator &config;
     lib::sr_edp *msg;
 
-    void check_config(const char* string, uint8_t* input);
+    bool check_config(const std::string & s);
     bool initialize_communication (void);
 
     virtual void initialize (void) = 0;

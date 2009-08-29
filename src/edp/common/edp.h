@@ -56,29 +56,28 @@ class System_error
 // Struktura z informacja, ktore elementy struktury reader_data maja byc zapisane do pliku
 struct reader_config
 {
-    uint8_t step;       // numer kroku
+	bool step;       // numer kroku
 
-    uint8_t msec; // czas wykonania pomiaru (w ms)
+    bool msec; // czas wykonania pomiaru (w ms)
 
-    uint8_t desired_inc[MAX_SERVOS_NR];       // wejscie dla osi 0,2,3,4
-    uint8_t current_inc[MAX_SERVOS_NR]; // wyjscie
-    // float current_position[6];
-    uint8_t pwm[MAX_SERVOS_NR];       // wypelnienie PWM
-    uint8_t uchyb[MAX_SERVOS_NR];                 // wypelnienie PWM
-    uint8_t abs_pos[MAX_SERVOS_NR];
+    bool desired_inc[MAX_SERVOS_NR];       // wejscie dla osi 0,2,3,4
+    bool current_inc[MAX_SERVOS_NR]; // wyjscie
 
-    uint8_t force[6]; // pierwsze 3 z 6
-    uint8_t desired_force[6]; // pierwsze 3 z 6
-    uint8_t filtered_force[6]; // sila po przefiltrowaniu
+    bool pwm[MAX_SERVOS_NR];       // wypelnienie PWM
+    bool uchyb[MAX_SERVOS_NR];                 // wypelnienie PWM
+    bool abs_pos[MAX_SERVOS_NR];
 
-    uint8_t current_joints[MAX_SERVOS_NR];
+    bool force[6]; // pierwsze 3 z 6
+    bool desired_force[6]; // pierwsze 3 z 6
+    bool filtered_force[6]; // sila po przefiltrowaniu
 
-    uint8_t current_cartesian_position[6]; // skaldowe liniowe polozenia zadanego
-    uint8_t real_cartesian_position[6]; // polozenie rzeczywiste
-    uint8_t real_cartesian_vel[6]; // predkosc rzeczywista
-    uint8_t real_cartesian_acc[6]; // przyspieszenie rzeczywiste
-    uint8_t servo_mode; // by Y 0 - petla bierna 1- wykonywanie zleconego przemieszczenia
+    bool current_joints[MAX_SERVOS_NR];
 
+    bool current_cartesian_position[6]; // skaldowe liniowe polozenia zadanego
+    bool real_cartesian_position[6]; // polozenie rzeczywiste
+    bool real_cartesian_vel[6]; // predkosc rzeczywista
+    bool real_cartesian_acc[6]; // przyspieszenie rzeczywiste
+    bool servo_mode; // by Y 0 - petla bierna 1- wykonywanie zleconego przemieszczenia
 };
 
 

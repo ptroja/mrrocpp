@@ -48,12 +48,9 @@ effector::effector(lib::configurator &_config, lib::ROBOT_ENUM l_robot_name) :
 	mrrocpp_network_path = config.return_mrrocpp_network_path();
 }
 
-void effector::check_config(const char* string, uint8_t* input)
+bool effector::check_config(const std::string & s)
 {
-	if ((config.exists(string))&&(config.return_int_value(string)))
-		*input=1;
-	else
-		*input=0;
+	return (config.exists(s.c_str()) && config.return_int_value(s.c_str()));
 }
 
 /*--------------------------------------------------------------------------*/
