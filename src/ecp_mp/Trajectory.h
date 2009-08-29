@@ -28,7 +28,7 @@ class Trajectory
 		static const char * toString(lib::POSE_SPECIFICATION ps);
 		static const char * returnRobotName(lib::ROBOT_ENUM robot);
 
-		static bool writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth_taught_in_pose> &poses);
+		static void writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth_taught_in_pose> &poses);
 
 		void createNewPose();
 		void addPoseToTrajectory();
@@ -36,8 +36,8 @@ class Trajectory
 		void setTrjID(const char *trjID);
 		const char * getTrjID() const;
 
-		void setNumOfPoses(uint64_t numOfPoses);
-		uint64_t getNumberOfPoses() const;
+		void setNumOfPoses(unsigned int numOfPoses);
+		unsigned int getNumberOfPoses() const;
 
 		void setPoseSpecification(const char *poseSpecification);
 		lib::POSE_SPECIFICATION getPoseSpecification() const;
@@ -63,7 +63,7 @@ class Trajectory
 
 	private:
 		char trjID[80];
-		uint64_t numOfPoses;
+		unsigned int numOfPoses;
 		lib::POSE_SPECIFICATION poseSpec;
 		ecp_mp::common::smooth_taught_in_pose *actPose;
 		std::list<ecp_mp::common::smooth_taught_in_pose> *trjPoses;

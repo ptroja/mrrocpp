@@ -39,6 +39,8 @@ class task {
 
 public:
 
+	typedef std::map<const char*, ecp_mp::common::Trajectory /*, str_cmp */> trajectories_t;
+
 	task(lib::configurator &_config);
 
 	// mapa wszystkich czujnikow
@@ -88,7 +90,7 @@ public:
 	};
 
 	ecp_mp::common::Trajectory * createTrajectory(xmlNode *actNode, xmlChar *stateID);
-	std::map<const char*, ecp_mp::common::Trajectory, str_cmp>* loadTrajectories(const char * fileName, lib::ROBOT_ENUM propRobot);
+	trajectories_t * loadTrajectories(const char * fileName, lib::ROBOT_ENUM propRobot);
 
 };
 

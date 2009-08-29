@@ -179,7 +179,7 @@ ATI6284_force::ATI6284_force(common::irp6s_postument_track_effector &_master) :
 		memset(&hi_event, 0, sizeof(hi_event));
 		hi_event.sigev_notify = SIGEV_INTR;
 
-		irq_no = IRQ_REAL; //!< Numer przerwania sprzetowego od karty ISA
+		irq_no = edp::irp6p::IRQ_REAL; //!< Numer przerwania sprzetowego od karty ISA
 
 		if ( (szafa_id = InterruptAttach(irq_no, szafa_handler, NULL, NULL, 0)) == -1) {
 			//!< Obsluga bledu

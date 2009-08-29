@@ -20,9 +20,9 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 
 #define HI_RYDZ_INTR_TIMEOUT_HIGH 10000000 // by Y - timeout przerwania z szafy badz zegara
 
-
 #define FIRST_SERVO_PTR           0xC1
 #define INTERRUPT_GENERATOR_SERVO_PTR	 0xC1
+
 
 #define ISA_CARD_OFFSET 0x10 // w zaleznosci od ustawienia na karcie isa
 #define ADR_OF_SERVO_PTR          0x305 + ISA_CARD_OFFSET
@@ -47,7 +47,6 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 #define SET_MAX_CURRENT           0x2400 // Ustaw prad maksymalny
 #define START_CLOCK_INTERRUPTS           0x5000 // Wlacz przerwania zegarowe
 #define STOP_CLOCK_INTERRUPTS           0x5400 // Wylacz przerwania zegarowe
-
 
 #define IRP6_MECHATRONIKA_AXE_1_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
 #define IRP6_MECHATRONIKA_AXE_2_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka

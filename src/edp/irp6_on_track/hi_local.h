@@ -18,10 +18,7 @@ namespace irp6ot {
 const int IRQ_REAL = 9; // Numer przerwania sprzetowego
 const unsigned short int INT_FREC_DIVIDER = 4; // Dzielnik czestotliwosci przerwan
 
-
-
 #define HI_RYDZ_INTR_TIMEOUT_HIGH 10000000 // by Y - timeout przerwania z szafy badz zegara
-
 
 #define FIRST_SERVO_PTR           0xC0
 #define INTERRUPT_GENERATOR_SERVO_PTR	 0xC0
@@ -50,7 +47,6 @@ const unsigned short int INT_FREC_DIVIDER = 4; // Dzielnik czestotliwosci przerw
 #define SET_MAX_CURRENT           0x2400 // Ustaw prad maksymalny
 #define START_CLOCK_INTERRUPTS           0x5000 // Wlacz przerwania zegarowe
 #define STOP_CLOCK_INTERRUPTS           0x5400 // Wylacz przerwania zegarowe
-
 
 #define IRP6_ON_TRACK_AXE_1_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
 #define IRP6_ON_TRACK_AXE_2_MAX_CURRENT           0x2430 // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka

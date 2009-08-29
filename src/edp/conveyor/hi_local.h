@@ -18,12 +18,11 @@ namespace conveyor {
 const int IRQ_REAL = 10; // Numer przerwania sprzetowego
 const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwan (odpowiada 2ms)
 
-
 #define HI_RYDZ_INTR_TIMEOUT_HIGH 10000000 // by Y - timeout przerwania z szafy badz zegara
-
 
 #define FIRST_SERVO_PTR           0xC0
 #define INTERRUPT_GENERATOR_SERVO_PTR	 0xC0
+
 
 #define ISA_CARD_OFFSET 0x20 // w zaleznosci od ustawienia na karcie isa
 #define ADR_OF_SERVO_PTR          0x305 + ISA_CARD_OFFSET

@@ -39,8 +39,7 @@ class fsautomat: public common::task::task
 		//podzadania
 		common::task::ecp_sub_task_gripper_opening* go_st;
 
-
-		std::map<const char*, ecp_mp::common::Trajectory, str_cmp>* trjMap;
+		trajectories_t * trjMap;
 
 	public:
 		// KONSTRUKTORY

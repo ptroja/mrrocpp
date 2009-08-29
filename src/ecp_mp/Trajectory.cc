@@ -141,7 +141,7 @@ const char * Trajectory::toString(lib::POSE_SPECIFICATION ps)
 		return "INVALID_END_EFFECTOR";
 }
 
-bool Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth_taught_in_pose> &poses)
+void Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth_taught_in_pose> &poses)
 {
 	char * file = new char[80];
 	int posCount = poses.size();
@@ -168,8 +168,6 @@ bool Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIF
 	xmlKeepBlanksDefault(0);
 	xmlSaveFormatFile(file, doc, 1);
 	printf("-->  File \"%s\" was saved to XML file\n", fileName);
-
-	return true;
 }
 
 void Trajectory::createNewPose()
@@ -183,12 +181,12 @@ void Trajectory::addPoseToTrajectory()
 	trjPoses->push_back(*actPose);
 }
 
-void Trajectory::setNumOfPoses(uint64_t numOfPoses)
+void Trajectory::setNumOfPoses(unsigned int numOfPoses)
 {
 	this->numOfPoses = numOfPoses;
 }
 
-uint64_t Trajectory::getNumberOfPoses() const
+unsigned int Trajectory::getNumberOfPoses() const
 {
 	return numOfPoses;
 }
@@ -259,18 +257,17 @@ void Trajectory::showTime()
 	printf("Nazwa: %s, PoseSpec: %d, NumOfPoses: %llu\n", trjID, poseSpec, numOfPoses);
 	for(it=trjPoses->begin(); it!=trjPoses->end(); ++it)
 	{
-		printf("%f %f %f %f %f %f %f %f \n", (*it).v_p[0], (*it).v_p[1], (*it).v_p[2], (*it).v_p[3],
+		printf("%f %f %f %f %f %f %f %f\n", (*it).v_p[0], (*it).v_p[1], (*it).v_p[2], (*it).v_p[3],
 				(*it).v_p[4], (*it).v_p[5], (*it).v_p[6], (*it).v_p[7]);
-		printf("%f %f %f %f %f %f %f %f \n", (*it).v_k[0], (*it).v_k[1], (*it).v_k[2], (*it).v_k[3],
+		printf("%f %f %f %f %f %f %f %f\n", (*it).v_k[0], (*it).v_k[1], (*it).v_k[2], (*it).v_k[3],
 				(*it).v_k[4], (*it).v_k[5], (*it).v_k[6], (*it).v_k[7]);
-		printf("%f %f %f %f %f %f %f %f \n", (*it).v[0], (*it).v[1], (*it).v[2], (*it).v[3],
+		printf("%f %f %f %f %f %f %f %f\n", (*it).v[0], (*it).v[1], (*it).v[2], (*it).v[3],
 				(*it).v[4], (*it).v[5], (*it).v[6], (*it).v[7]);
-		printf("%f %f %f %f %f %f %f %f \n", (*it).a[0], (*it).a[1], (*it).a[2], (*it).a[3],
+		printf("%f %f %f %f %f %f %f %f\n", (*it).a[0], (*it).a[1], (*it).a[2], (*it).a[3],
 				(*it).a[4], (*it).a[5], (*it).a[6], (*it).a[7]);
-		printf("%f %f %f %f %f %f %f %f \n***\n\n", (*it).coordinates[0], (*it).coordinates[1], (*it).coordinates[2], (*it).coordinates[3],
+		printf("%f %f %f %f %f %f %f %f\n***\n\n", (*it).coordinates[0], (*it).coordinates[1], (*it).coordinates[2], (*it).coordinates[3],
 				(*it).coordinates[4], (*it).coordinates[5], (*it).coordinates[6], (*it).coordinates[7]);
 	}
-
 }
 
 std::list<ecp_mp::common::smooth_taught_in_pose> * Trajectory::getPoses()
