@@ -48,7 +48,7 @@ volatile common::motor_data md; // Dane przesylane z/do funkcji obslugi przerwan
 
 
 // ------------------------------------------------------------------------
-hardware_interface::hardware_interface ( effector &_master  )  : common::hardware_interface(_master), master(_master)  // konstruktor
+hardware_interface::hardware_interface ( effector &_master  )  : common::hardware_interface(_master)
 {
 	int irq_no;    // Numer przerwania sprzetowego
 	int i;         // Zmienna pomocnicze

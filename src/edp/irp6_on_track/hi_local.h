@@ -80,28 +80,24 @@ const unsigned short int INT_FREC_DIVIDER = 4; // Dzielnik czestotliwosci przerw
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-class hardware_interface : public common::hardware_interface
-{
-
+class hardware_interface: public common::hardware_interface {
 
 public:
-    hardware_interface( effector &_master );    // Konstruktor
-    ~hardware_interface( void );   // Destruktor
-    bool is_hardware_error ( void); // Sprawdzenie czy wystapil blad sprzetowy
-    effector &master;
-    uint64_t read_write_hardware ( void );    // Obsluga sprzetu
-    void reset_counters ( void );  // Zerowanie licznikow polozenia
+	hardware_interface(effector &_master); // Konstruktor
+	~hardware_interface(void); // Destruktor
+	bool is_hardware_error(void); // Sprawdzenie czy wystapil blad sprzetowy
 
-    void start_synchro ( int drive_number );
+	uint64_t read_write_hardware(void); // Obsluga sprzetu
+	void reset_counters(void); // Zerowanie licznikow polozenia
 
-    void finish_synchro ( int drive_number );
+	void start_synchro(int drive_number);
 
-    // oczekiwanie na przerwanie - tryb obslugi i delay(lag) po odebraniu przerwania
-    int hi_int_wait (int inter_mode, int lag);
+	void finish_synchro(int drive_number);
 
+	// oczekiwanie na przerwanie - tryb obslugi i delay(lag) po odebraniu przerwania
+	int hi_int_wait(int inter_mode, int lag);
 
-}
-; // koniec: class hardware_interface
+}; // koniec: class hardware_interface
 
 #ifdef __cplusplus
 extern "C"
@@ -122,7 +118,4 @@ extern "C"
 } // namespace edp
 } // namespace mrrocpp
 
-
-
 #endif // __HI_RYDZ_H
-

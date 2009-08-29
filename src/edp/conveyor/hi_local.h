@@ -76,7 +76,7 @@ public:
 	hardware_interface(effector &_master); // Konstruktor
 	~hardware_interface(void); // Destruktor
 	bool is_hardware_error(void); // Sprawdzenie czy wystapil blad sprzetowy
-	effector &master;
+
 	uint64_t read_write_hardware(void); // Obsluga sprzetu
 	void reset_counters(void); // Zerowanie licznikow polozenia
 
@@ -105,8 +105,4 @@ extern "C"
 } // namespace edp
 } // namespace mrrocpp
 
-
-
-
 #endif // __HI_RYDZ_H
-

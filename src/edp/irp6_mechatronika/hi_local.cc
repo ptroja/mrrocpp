@@ -49,7 +49,7 @@ volatile common::motor_data md; // Dane przesylane z/do funkcji obslugi przerwan
 
 
 // ------------------------------------------------------------------------
-hardware_interface::hardware_interface ( effector &_master )   : common::hardware_interface(_master), master(_master) // konstruktor
+hardware_interface::hardware_interface ( effector &_master )   : common::hardware_interface(_master)
 {
     int irq_no;    // Numer przerwania sprzetowego
     int i;         // Zmienna pomocnicze
@@ -85,7 +85,7 @@ hardware_interface::hardware_interface ( effector &_master )   : common::hardwar
         // domyslnie robot nie jest zsynchronizowany
         md.is_synchronised = false;
     }
-    
+
     	// inicjacja wystawiania przerwan
 		if(master.test_mode==0)
 		{
@@ -94,7 +94,7 @@ hardware_interface::hardware_interface ( effector &_master )   : common::hardwar
 			in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
 			in16(SERVO_REPLY_INT_ADR);
 		}
-    
+
 
     if ( (int_id =InterruptAttach (irq_no, int_handler, (void *) &md , sizeof(md), 0)) == -1)
     {
@@ -374,10 +374,10 @@ int hardware_interface::hi_int_wait (int inter_mode, int lag)
 
     //	printf("aaa\n");
     /*
-    printf("1: %x, %x, %x, %x, %x, %x, %x\n", robot_control[0].adr_offset_plus_0, robot_control[1].adr_offset_plus_0, 
+    printf("1: %x, %x, %x, %x, %x, %x, %x\n", robot_control[0].adr_offset_plus_0, robot_control[1].adr_offset_plus_0,
     	robot_control[2].adr_offset_plus_0, robot_control[3].adr_offset_plus_0, robot_control[4].adr_offset_plus_0
     	, robot_control[5].adr_offset_plus_0, robot_control[6].adr_offset_plus_0);
-    	
+
     	*/
     TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR ,  &tim_event, int_timeout, NULL );
     md	.interrupt_mode=inter_mode;  // przypisanie odpowiedniego trybu oprzerwania
@@ -401,8 +401,8 @@ int hardware_interface::hi_int_wait (int inter_mode, int lag)
     }
 
     /*
-    	if ((md.robot_control[5].adr_offset_plus_0 > 810) && (md.robot_control[5].adr_offset_plus_0 < 900))  
-    	printf("ttt: %d, %x, %d, %d\n", md.current_absolute_position[5],  md.robot_control[5].adr_offset_plus_0,  
+    	if ((md.robot_control[5].adr_offset_plus_0 > 810) && (md.robot_control[5].adr_offset_plus_0 < 900))
+    	printf("ttt: %d, %x, %d, %d\n", md.current_absolute_position[5],  md.robot_control[5].adr_offset_plus_0,
     		md.robot_control[5].adr_offset_plus_0, md.current_absolute_position[4]);
     */
 
