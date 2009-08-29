@@ -49,11 +49,11 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 	int msr_counter; // liczba pomiarow, ktore maja byc zapisane do pliku
 #if !defined(USE_MESSIP_SRR)
 	name_attach_t *my_attach; // nazwa kanalu komunikacyjnego
+	_pulse_msg ui_msg;// wiadomosc z ui
 #else
 	messip_channel_t *my_attach;
 #endif
 	uint64_t e; // kod bledu systemowego
-	_pulse_msg ui_msg;// wiadomosc z ui
 	bool start; // shall we start the reader?
 	bool stop; // shall we stop the reader?
 
@@ -331,7 +331,6 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 
 				// zapis pomiarow z biezacego kroku do pliku
 				// printf("EDP %f\n", r_measptr[k].current_cartesian_position[1]);
-
 
 				outfile << r_measptr[k].step << " ";
 				if (rb_obj->reader_cnf.msec)

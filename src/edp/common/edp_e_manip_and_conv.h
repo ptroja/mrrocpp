@@ -102,8 +102,6 @@ protected:
     void send_to_SERVO_GROUP ();
     // Wyslanie polecenia do procesu SERVO_GROUP i odebranie odpowiedzi
 
-
-
     void arm_joints_2_joints (void);
     // Przepisanie definicji koncowki danej w postaci
     // JOINTS z wewnetrznych struktur danych TRANSFORMATORa
@@ -113,8 +111,6 @@ protected:
     // Przepisanie definicji koncowki danej w postaci
     // MOTORS z wewnetrznych struktur danych TRANSFORMATORa
     // do wewnetrznych struktur danych REPLY_BUFFER
-
-
 
     // transformer
 
@@ -164,9 +160,6 @@ protected:
     int16_t current[MAX_SERVOS_NR];                // prad sterujacy
     lib::MOTION_TYPE motion_type;        // sposob zadania ruchu: ABSOLUTE/RELATIVE
 
-
-
-
     lib::BYTE servo_algorithm_ecp[MAX_SERVOS_NR];
     // Tablica numerow algorytmow serworegulacji przyslanych z ECP
     lib::BYTE servo_parameters_ecp[MAX_SERVOS_NR];
@@ -179,7 +172,6 @@ protected:
     // algorytmow serworegulacji przyslanych z SERVO_GROUP
     bool synchronised;         // Flaga zsynchronizowania robota
 
-
     // stan regulatora chwytaka
     short servo_gripper_reg_state;
 
@@ -189,10 +181,12 @@ public:
     int servo_to_tt_chid;
     virtual void initialize (void) = 0;
 
-    in_out_buffer* in_out_obj; // bufor wejsc wyjsc
+    in_out_buffer *in_out_obj; // bufor wejsc wyjsc
     reader_buffer *rb_obj;
     master_trans_t_buffer *mt_tt_obj;
+
     manip_and_conv_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name);       // konstruktor
+    virtual ~manip_and_conv_effector();
 
     virtual void set_rmodel (lib::c_buffer &instruction) = 0;                    // zmiana narzedzia
     virtual void get_rmodel (lib::c_buffer &instruction) = 0;                    // odczytanie narzedzia
@@ -233,7 +227,7 @@ public:
 
     // sprawdzenie czy jest to dopuszczalny rozkaz ruchu
     // przed wykonaniem synchronizacji robota
-    bool pre_synchro_motion(lib::c_buffer &instruction);
+    bool pre_synchro_motion(lib::c_buffer &instruction) const;
 
 
     // Czy robot zsynchronizowany? // by Y - wziete z ecp

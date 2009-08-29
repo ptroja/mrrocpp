@@ -8,12 +8,8 @@
 #ifndef __EDP_IRP6S_P_T_H
 #define __EDP_IRP6S_P_T_H
 
-
-
 #include "edp/common/edp_e_manip.h"
 #include "edp/common/edp_force_sensor.h"
-
-
 
 namespace mrrocpp {
 namespace edp {
@@ -26,16 +22,14 @@ namespace common {
 class irp6s_postument_track_effector: public manip_effector
 {
 
-
 protected:
 
-        sem_t force_master_sem; //!< semafor dostepu do nowej wiadomosci dla vsp
+	sem_t force_master_sem; //!< semafor dostepu do nowej wiadomosci dla vsp
     // czy chwytak wlaczony ?
     short is_gripper_active;
 
     pthread_t force_tid;
     pthread_t edp_vsp_tid;
-
 
     void arm_abs_xyz_eul_zyz_2_frame (const double *p);
     // Przeksztalcenie definicji koncowki z postaci
@@ -54,8 +48,6 @@ protected:
     // FRAME do postaci XYZ_EULER_ZYZ
     // oraz przepisanie wyniku przeksztalcenia do
     // wewnetrznych struktur danych REPLY_BUFFER
-
-    // lib::r_buffer
 
     double global_kartez_force_msr[7], prevoius_global_kartez_force_msr[7]; // sila we wspolrzednych kartezjankich    XXXXX
     // 	i	 odczytana bezposrednio z czujnika - zestaw globalny dla procesu EDP

@@ -7,26 +7,10 @@
 // Ostatnia modyfikacja: styczen 2005
 // -------------------------------------------------------------------------
 
-
 #include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <stddef.h>
-#include <unistd.h>
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
-#include <devctl.h>
-#include <string.h>
-#include <signal.h>
-#include <process.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <sys/sched.h>
-#include <sys/netmgr.h>
 #include <semaphore.h>
-#include <fstream>
 
-#include <edp/common/edp.h>
+#include "edp/common/edp.h"
 #include "edp/common/edp_irp6s_postument_track.h"
 
 namespace mrrocpp {
@@ -47,20 +31,15 @@ force::force(common::irp6s_postument_track_effector &_master)
 
     sem_init( &new_ms, 0, 0);
     sem_init( &new_ms_for_edp, 0, 0);
-    
-    
-    /*!Lokalizacja procesu wywietlania komunikatow SR */
-    if ((sr_msg = new lib::sr_vsp(lib::EDP, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point").c_str(),
-                                 master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]").c_str())) == NULL)
-    {
-        printf("communication with SR not ready\n");
-    }
-    
-};
 
+    /*!Lokalizacja procesu wywietlania komunikatow SR */
+    sr_msg = new lib::sr_vsp(lib::EDP, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point").c_str(),
+                                 master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]").c_str());
+}
+
+// oczekiwanie na zdarzenie
 void force::wait_for_event(void)
 {}
-;			// oczekiwanie na zdarzenie
 
 void force::set_force_tool(void)
 {
@@ -74,9 +53,7 @@ void force::set_force_tool(void)
         current_force_tool_position[i] = next_force_tool_position[i];
     }
     current_force_tool_weight = next_force_tool_weight;
-
 }
-;
 
 int	force::set_command_execution_finish() // podniesienie semafora
 {
@@ -86,14 +63,13 @@ int	force::set_command_execution_finish() // podniesienie semafora
         sem_trywait(&(new_ms_for_edp));
         return sem_post(&new_ms_for_edp);// odwieszenie watku edp_master
     }
-
-};
+}
 
 int	force::check_for_command_execution_finish() // oczekiwanie na semafor
 {
     new_edp_command = true;
     return sem_wait(&new_ms_for_edp);
-};
+}
 
 } // namespace sensor
 } // namespace edp

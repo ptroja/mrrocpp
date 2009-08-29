@@ -27,7 +27,6 @@
 #include <errno.h>
 #include <pthread.h>
 #include <semaphore.h>
-#include <new>
 #include <process.h>
 #include <sys/netmgr.h>
 
@@ -74,14 +73,10 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
         fprintf(stderr, "nie utworzylem serwo serwo_fd\n");
     }
 
-
-
     motion_type = lib::ABSOLUTE;
     synchronised = false;
 
-
     // z edp_m
-
 
     if (test_mode)
     {
@@ -94,7 +89,15 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
     rb_obj = new reader_buffer();
     mt_tt_obj = new master_trans_t_buffer();
     in_out_obj = new in_out_buffer(); // bufor wejsc wyjsc
+}
 
+manip_and_conv_effector::~manip_and_conv_effector() {
+	delete in_out_obj;
+	delete mt_tt_obj;
+	delete rb_obj;
+
+	// TODO: error check or use object oriented mutex
+	pthread_mutex_destroy(&edp_irp6s_effector_mutex);
 }
 
 void manip_and_conv_effector::master_joints_read (double* output)
@@ -114,36 +117,27 @@ void manip_and_conv_effector::create_threads ()
     // Y&W - utworzenie watku serwa
     if (pthread_create (&serwo_tid, NULL, &servo_thread_start, (void *) this)!=EOK)
     {
-        msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create SERVO_GROUP");
-        char buf[20];
-        netmgr_ndtostr(ND2S_LOCAL_STR, ND_LOCAL_NODE, buf, sizeof(buf));
-        printf (" Failed to thread SERVO_thread on node: %s\n", buf);
+        msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create SERVO_GROUP thread");
         throw System_error();
     }
 
     // Y&W - utworzenie watku readera
     if (pthread_create (&reader_tid, NULL, &reader_thread_start, (void *) this)!=EOK)
     {
-        msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create READER");
-        char buf[20];
-        netmgr_ndtostr(ND2S_LOCAL_STR, ND_LOCAL_NODE, buf, sizeof(buf));
-        printf (" Failed to thread READER_thread on node: %s\n", buf);
+        msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create READER thread");
         throw System_error();
     }
 
     if (pthread_create (&trans_t_tid, NULL, &trans_thread_start, (void *) this)!=EOK)
     {
-        msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create TRANSFORMER");
-        char buf[20];
-        netmgr_ndtostr(ND2S_LOCAL_STR, ND_LOCAL_NODE, buf, sizeof(buf));
-        printf (" Failed to thread TRANSFORMER_thread on node: %s\n", buf);
+        msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create TRANSFORMER thread");
         throw System_error();
     }
 
     // PT - utworzenie watku wizualizacji
     if (pthread_create (&vis_t_tid, NULL, &visualisation_thread_start, (void *) this)!=EOK)
     {
-        msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create VISUALISATION THREAD");
+        msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create VISUALISATION thread");
         throw System_error();
     }
 }
@@ -153,7 +147,7 @@ void manip_and_conv_effector::create_threads ()
 void manip_and_conv_effector::reset_variables ()
 {
     int i; // Liczniki petli
-    // Servomechanizmy
+    // Serwomechanizmy
     for(i=0; i<number_of_servos; i++)
     {
         servo_algorithm_ecp[i] = 0;
@@ -176,6 +170,7 @@ void manip_and_conv_effector::reset_variables ()
         current_joints[i] = 0.0; // ??? wspolrzedne q2 i q3 nie mog by zerowe
         servo_current_joints[i]=0.0;
     }
+
     for (i=0; i<number_of_servos; i++)
     {
         desired_motor_pos_new[i] = 0.0;
@@ -184,7 +179,6 @@ void manip_and_conv_effector::reset_variables ()
         motor_pos_increment_reading[i] = 0.0;
         servo_current_motor_pos[i]=0.0;   // Polozenia walow silnikow -// dla watku edp_servo
     }
-
 }
 
 void manip_and_conv_effector::servo_joints_and_frame_actualization_and_upload(void)
@@ -195,7 +189,7 @@ bool manip_and_conv_effector::is_power_on() const
     return controller_state_edp_buf.is_power_on;
 }
 
-bool manip_and_conv_effector::pre_synchro_motion(lib::c_buffer &instruction)
+bool manip_and_conv_effector::pre_synchro_motion(lib::c_buffer &instruction) const
 // sprawdzenie czy jest to dopuszczalny rozkaz ruchu
 // przed wykonaniem synchronizacji robota
 {
@@ -208,7 +202,7 @@ bool manip_and_conv_effector::pre_synchro_motion(lib::c_buffer &instruction)
         return true;
     else
         return false;
-}; // end: pre_synchro_motion()
+}
 
 
 
@@ -323,7 +317,6 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
             // ustawi numer bledu
             throw NonFatal_error_2(INVALID_REPLY_TYPE);
         }
-        ; // end: switch (rep_type())
         break;
     case lib::SET_GET:
         // tu wykonanie instrukcji SET i GET
@@ -438,9 +431,7 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
 // Synchronizacja robota.
 void manip_and_conv_effector::synchronise ()
 {
-
-	common_synchronise ();
-
+	common_synchronise();
 }
 
 
@@ -466,7 +457,6 @@ void manip_and_conv_effector::common_synchronise ()
     // dla pierwszego wypelnienia current_joints i current_end_effector_frame
     get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
-
     // Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
     for( int i = 0; i < number_of_servos; i++)
     {
@@ -474,7 +464,6 @@ void manip_and_conv_effector::common_synchronise ()
                                          desired_motor_pos_old[i] = current_motor_pos[i];
         desired_joints_tmp[i] = desired_joints[i] = current_joints[i];
     }
-
 }
 
 
@@ -873,9 +862,6 @@ void manip_and_conv_effector::move_servos ()
 
         desired_motor_pos_old[i] = desired_motor_pos_new[i];
     }
-    ; // end: for (i=0; i<number_of_servos; i++)
-
-
 
     /*
          printf("move_servos_aa: %f, %f, %f, %f, %f, %f, %f, %d\n", servo_command.parameters.move.abs_position[0], servo_command.parameters.move.abs_position[1], servo_command.parameters.move.abs_position[2], servo_command.parameters.move.abs_position[3],
@@ -924,8 +910,6 @@ void manip_and_conv_effector::common_get_controller_state(lib::c_buffer &instruc
 
     // dla pierwszego wypelnienia current_joints
     get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-
-
 
     // Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
     for( int i = 0; i < number_of_servos; i++)
