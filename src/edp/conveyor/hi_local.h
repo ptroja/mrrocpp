@@ -25,34 +25,6 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 
 
 #define ISA_CARD_OFFSET 0x20 // w zaleznosci od ustawienia na karcie isa
-#define ADR_OF_SERVO_PTR          0x305 + ISA_CARD_OFFSET
-#define SERVO_COMMAND1_ADR       0x200 + ISA_CARD_OFFSET
-#define SERVO_COMMAND2_ADR       0x202 + ISA_CARD_OFFSET
-#define SERVO_REPLY_STATUS_ADR    0x200 + ISA_CARD_OFFSET
-#define SERVO_REPLY_INT_ADR       0x202 + ISA_CARD_OFFSET
-#define SERVO_REPLY_POS_LOW_ADR   0x204 + ISA_CARD_OFFSET
-#define SERVO_REPLY_POS_HIGH_ADR  0x206 + ISA_CARD_OFFSET
-#define SERVO_REPLY_REG_1_ADR     0x208 + ISA_CARD_OFFSET
-#define SERVO_REPLY_REG_2_ADR     0x20A + ISA_CARD_OFFSET
-
-// Polecenia dla sterownikow mikroprocesorowych osi
-#define RESET_POSITION_COUNTER    0x0400 // Zerowanie licznika polozenia
-#define RESET_MANUAL_MODE         0x0800 // Zerowanie pracy recznej
-#define RESET_ALARM               0x0C00 // Zerowanie alarmu sytuacji awaryjnej
-#define PROHIBIT_MANUAL_MODE      0x1000 // Zakaz pracy recznej
-#define ALLOW_MANUAL_MODE         0x1400 // Zezwolenie na prace reczna
-#define START_SYNCHRO             0x1800 // Rozpoczecie synchronizacji
-#define FINISH_SYNCHRO            0x1C00 // Zakoncz synchronizacje osi
-#define SET_INT_FREQUENCY         0x2000 // Ustaw dzielnik czestotliowsci przerwan
-#define SET_MAX_CURRENT           0x2400 // Ustaw prad maksymalny
-#define START_CLOCK_INTERRUPTS           0x5000 // Wlacz przerwania zegarowe
-#define STOP_CLOCK_INTERRUPTS           0x5400 // Wylacz przerwania zegarowe
-
-#define LM629_VIA_MICROCONTROLLER_MODE 0x4C01
-#define MICROCONTROLLER_MODE 0x4C00
-#define ZERO_ORDER 0x0000
-
-#define STOP_MOTORS               0x0200 // Zatrzymanie silnikow (W.S. ???)
 
 #define CONVEYOR_AXIS_1_MAX_CURRENT 0x2460
 // 13,7 j na A

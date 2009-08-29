@@ -175,10 +175,8 @@ uint64_t hardware_interface::read_write_hardware ( void )
 	// Obsluga sprzetu: odczyt aktualnych wartosci polozenia i zapis wartosci
 	// wypelnienia PWM
 
-	int i;
-
 	// zapis wartosci zadanych
-	for (i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++ )
+	for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++ )
 	{
 		md.robot_control[i].adr_offset_plus_0 = robot_control[i].adr_offset_plus_0;
 	}
@@ -191,7 +189,7 @@ uint64_t hardware_interface::read_write_hardware ( void )
 		return md.hardware_error;
 	}
 
-	for (i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++ ) {
+	for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++ ) {
 
 		// przepisanie wartosci pradu
 		meassured_current[i] = (md.robot_status[i].adr_offset_plus_2 & 0xFF00)>>8;
@@ -298,7 +296,7 @@ int hardware_interface::hi_int_wait (int inter_mode, int lag)
 	tim_event.sigev_notify = SIGEV_UNBLOCK;
 
 	TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR ,   &tim_event, &int_timeout, NULL );
-	md	.interrupt_mode=inter_mode;   // przypisanie odpowiedniego trybu oprzerwania
+	md.interrupt_mode=inter_mode;   // przypisanie odpowiedniego trybu oprzerwania
 
 	iw_ret=InterruptWait (0, NULL);
 
@@ -313,8 +311,6 @@ int hardware_interface::hi_int_wait (int inter_mode, int lag)
 		master.controller_state_edp_buf.is_wardrobe_on = true;
 		master.controller_state_edp_buf.is_power_on = md.is_power_on;
 	}
-
-
 
 	if ((interrupt_error>2) || (!master.controller_state_edp_buf.is_power_on))
 	{

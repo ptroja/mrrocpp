@@ -3,12 +3,11 @@
 HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 
+SOURCEDIRS = common ati3084 ati3084MK ati6284 conveyor irp6_on_track speaker\
+	polycrank irp6_postument irp6_mechatronika
+
 ifdef DOCENT_SENSOR
-	SOURCEDIRS = common ati3084 ati3084MK ati3084MS ati6284 conveyor irp6_on_track speaker\
-	polycrank irp6_postument irp6_mechatronika
-else 
-	SOURCEDIRS = common ati3084 ati3084MK ati6284 conveyor irp6_on_track speaker\
-	polycrank irp6_postument irp6_mechatronika
+	SOURCEDIRS += ati3084MS
 endif
 
 CLEANDIRS = ${SOURCEDIRS}

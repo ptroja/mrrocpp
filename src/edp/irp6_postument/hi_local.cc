@@ -181,10 +181,8 @@ uint64_t hardware_interface::read_write_hardware ( void )
    // Obsluga sprzetu: odczyt aktualnych wartosci polozenia i zapis wartosci
    // wypelnienia PWM
 
-	int i;
-
 	// zapis wartosci zadanych
-	for (i = 0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++ )
+	for (int i = 0; i < master.number_of_servos; i++ )
 	{
 		md.robot_control[i].adr_offset_plus_0 = robot_control[i].adr_offset_plus_0;
 	}
@@ -199,7 +197,7 @@ uint64_t hardware_interface::read_write_hardware ( void )
 
 //	 printf("hi rydz 1 current_absolute_position: %d, hex: %x\n", md.current_absolute_position[5], md.current_absolute_position[5] ); // debug
 
-	for (i = 0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++ ) {
+	for (int i = 0; i < master.number_of_servos; i++ ) {
 
 		// przepisanie wartosci pradu
 		meassured_current[i] = (md.robot_status[i].adr_offset_plus_2 & 0xFF00)>>8;
@@ -209,16 +207,13 @@ uint64_t hardware_interface::read_write_hardware ( void )
 		previous_absolute_position[i] = current_absolute_position[i];
 	}
 
-
-
 	if (!trace_resolver_zero)
 	{
 	//	printf("read_write_hardware: w mask resolver_zero\n");
 		md.hardware_error &= lib::MASK_RESOLVER_ZERO;
-		}
+	}
 
 	return md.hardware_error;
-
 }
 // ------------------------------------------------------------------------
 

@@ -238,20 +238,20 @@ void hardware_interface::reset_counters ( void )
 
     for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
     {
-        md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
-        md	.register_adress=SERVO_COMMAND1_ADR;
-        md	.value=MICROCONTROLLER_MODE;
+        md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
+        md.register_adress=SERVO_COMMAND1_ADR;
+        md.value=MICROCONTROLLER_MODE;
         hi_int_wait(INT_SINGLE_COMMAND, 2);
-        md	.value=STOP_MOTORS;
+        md.value=STOP_MOTORS;
         hi_int_wait(INT_SINGLE_COMMAND, 2);
-        md	.value=RESET_MANUAL_MODE;
+        md.value=RESET_MANUAL_MODE;
         hi_int_wait(INT_SINGLE_COMMAND, 2);
-        md	.value=RESET_ALARM;
+        md.value=RESET_ALARM;
         hi_int_wait(INT_SINGLE_COMMAND, 2);
 
         if (!md.is_synchronised)
         {
-            md	.value=RESET_POSITION_COUNTER;
+            md.value=RESET_POSITION_COUNTER;
             hi_int_wait(INT_SINGLE_COMMAND, 2);
         }
 
@@ -319,15 +319,15 @@ int hardware_interface::synchronise_via_lm629(void)
     for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ ) // UWAGA NA -1
     {
         // tryb pojedynczych polecen w obsludze przerwania
-        md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
-        md	.register_adress=SERVO_COMMAND1_ADR;
-        md	.value=LM629_VIA_MICROCONTROLLER_MODE;
+        md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
+        md.register_adress=SERVO_COMMAND1_ADR;
+        md.value=LM629_VIA_MICROCONTROLLER_MODE;
         hi_int_wait(INT_SINGLE_COMMAND, 10);
-        md	.value=FINISH_SYNCHRO;
+        md.value=FINISH_SYNCHRO;
         hi_int_wait(INT_SINGLE_COMMAND, 10);
-        md	.value=START_SYNCHRO;
+        md.value=START_SYNCHRO;
         hi_int_wait(INT_SINGLE_COMMAND, 10);
-        md	.value=ZERO_ORDER;
+        md.value=ZERO_ORDER;
         hi_int_wait(INT_SINGLE_COMMAND, 10);
 
         wyjscie=0;
@@ -342,9 +342,9 @@ int hardware_interface::synchronise_via_lm629(void)
         }
 
         // tryb pojedynczych polecen w obsludze przerwania
-        md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
-        md	.register_adress=SERVO_COMMAND1_ADR;
-        md	.value=MICROCONTROLLER_MODE;
+        md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
+        md.register_adress=SERVO_COMMAND1_ADR;
+        md.value=MICROCONTROLLER_MODE;
         hi_int_wait(INT_SINGLE_COMMAND, 10);
     }
 
@@ -421,9 +421,9 @@ void hardware_interface::start_synchro ( int drive_number )
 {
     trace_resolver_zero = true;
     // Wlacz sledzenie zera rezolwera (synchronizacja robota)
-    md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)drive_number;
-    md	.register_adress=SERVO_COMMAND1_ADR;
-    md	.value=START_SYNCHRO;
+    md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)drive_number;
+    md.register_adress=SERVO_COMMAND1_ADR;
+    md.value=START_SYNCHRO;
     hi_int_wait(INT_SINGLE_COMMAND, 2);
 }
 
@@ -433,13 +433,13 @@ void hardware_interface::finish_synchro ( int drive_number )
     trace_resolver_zero = false;
 
     // Zakonczyc sledzenie zera rezolwera i przejdz do trybu normalnej pracy
-    md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)drive_number;
-    md	.register_adress=SERVO_COMMAND1_ADR;
-    md	.value=FINISH_SYNCHRO;
+    md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)drive_number;
+    md.register_adress=SERVO_COMMAND1_ADR;
+    md.value=FINISH_SYNCHRO;
     hi_int_wait(INT_SINGLE_COMMAND, 2);
 
     // by Y - UWAGA NIE WIEDZIEC CZEMU BEZ TEGO NIE ZAWSZE DZIALAJA RUCHY NA OSI PO SYNCHGORNIZACJi
-    md	.value=MICROCONTROLLER_MODE;
+    md.value=MICROCONTROLLER_MODE;
     hi_int_wait(INT_SINGLE_COMMAND, 2);
 
 }
