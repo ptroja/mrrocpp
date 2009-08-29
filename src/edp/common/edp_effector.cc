@@ -37,13 +37,8 @@ effector::effector(lib::configurator &_config, lib::ROBOT_ENUM l_robot_name) :
 {
 
 	/* Lokalizacja procesu wywietlania komunikatow SR */
-
-	if ((msg = new lib::sr_edp(lib::EDP, config.return_string_value("resourceman_attach_point").c_str(),
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]").c_str()))
-			== NULL) {
-		perror("Unable to locate SR ");
-		throw System_error();
-	}
+	msg = new lib::sr_edp(lib::EDP, config.return_string_value("resourceman_attach_point").c_str(),
+			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]").c_str());
 
 	if (config.exists("test_mode"))
 		test_mode = config.return_int_value("test_mode");
