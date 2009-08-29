@@ -13,6 +13,8 @@
 #include <pthread.h>
 #if !defined(USE_MESSIP_SRR)
 #include <sys/dispatch.h>
+#else
+#include "messip/messip.h"
 #endif /* !USE_MESSIP_SRR */
 #include <string>
 
@@ -21,7 +23,6 @@
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
 
-#include "messip/messip.h"
 #include "kinematics/common/transformer_error.h"
 #include "kinematics/common/kinematics_manager.h"
 #include "edp/common/edp.h"
@@ -66,7 +67,9 @@ public:
     messip_channel_t *attach;
 #endif /* USE_MESSIP_SRR */
 
-    effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name);       // konstruktor
+    effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name);
+    virtual ~effector();
+
     lib::controller_state_t controller_state_edp_buf; // do okreslenia stanu robota
 
     int test_mode;

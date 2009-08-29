@@ -7,25 +7,11 @@
 // Ostatnia modyfikacja: styczen 2005
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <signal.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <sys/neutrino.h>
-#include <sys/sched.h>
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
 #include <pthread.h>
 #include <semaphore.h>
-#include <errno.h>
 
 #include "lib/mis_fun.h"
 #include "edp/common/edp.h"
-
-#include "messip/messip.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -35,7 +21,6 @@ namespace common {
 reader_buffer::reader_buffer()
 {
 	pthread_mutex_init(&reader_mutex, NULL);
-
 	sem_init(&reader_sem, 0, 0);
 }
 
@@ -62,11 +47,9 @@ int reader_buffer::unlock_mutex() // zwolnienie mutex'a
 
 master_trans_t_buffer::master_trans_t_buffer()
 {
-
 	// semafory do komunikacji miedzy EDP_MASTER a EDP_TRANS
-	sem_init( &(master_to_trans_t_sem), 0, 0);
-	sem_init( &(trans_t_to_master_sem), 0, 0);
-
+	sem_init(&master_to_trans_t_sem, 0, 0);
+	sem_init(&trans_t_to_master_sem, 0, 0);
 }
 
 int master_trans_t_buffer::master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb)
@@ -75,11 +58,11 @@ int master_trans_t_buffer::master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb
 	trans_t_tryb = nm_tryb; // tryb dla zadania
 
 	// odwieszenie watku transformation
-	sem_trywait(&(master_to_trans_t_sem));
-	sem_post(&(master_to_trans_t_sem));
+	sem_trywait(&master_to_trans_t_sem);
+	sem_post(&master_to_trans_t_sem);
 
 	// oczekiwanie na zwolniene samafora przez watek trans_t
-	sem_wait(&(trans_t_to_master_sem)); // oczekiwanie na zezwolenie ruchu od edp_master
+	sem_wait(&trans_t_to_master_sem); // oczekiwanie na zezwolenie ruchu od edp_master
 
 	// sekcja sprawdzajaca czy byl blad w watku transforamation i ew. rzucajaca go w watku master
 
@@ -112,7 +95,6 @@ int master_trans_t_buffer::master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb
 // oczekiwanie na semafor statusu polecenia z trans_t
 int master_trans_t_buffer::master_wait_for_trans_t_order_status()
 {
-
 	// oczekiwanie na odpowiedz z watku transformation
 	return sem_wait(&(trans_t_to_master_sem));
 }
@@ -120,7 +102,6 @@ int master_trans_t_buffer::master_wait_for_trans_t_order_status()
 // oczekiwanie na semafor statusu polecenia z trans_t
 int master_trans_t_buffer::trans_t_to_master_order_status_ready()
 {
-
 	// odwieszenie watku new master
 	sem_trywait(&(trans_t_to_master_sem));
 	return sem_post(&(trans_t_to_master_sem));// odwieszenie watku edp_master
@@ -129,7 +110,6 @@ int master_trans_t_buffer::trans_t_to_master_order_status_ready()
 // oczekiwanie na semafor statusu polecenia z trans_t
 int master_trans_t_buffer::trans_t_wait_for_master_order()
 {
-
 	// oczekiwanie na rozkaz z watku master
 	return sem_wait(&(master_to_trans_t_sem));
 }

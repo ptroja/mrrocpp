@@ -62,10 +62,9 @@ void manip_effector::compute_xyz_euler_zyz (const lib::c_buffer &instruction)
         value_in_step_no = instruction.value_in_step_no;
         p = (double*) instruction.arm.pf_def.arm_coordinates;
     }
+
     for (int i=0;i<6;i++)
         rb_obj->step_data.current_cartesian_position[i] = instruction.arm.pf_def.arm_coordinates[i];
-
-
 
     // if ( (value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )
     if ( (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )// by Y
@@ -103,7 +102,6 @@ void manip_effector::compute_xyz_euler_zyz (const lib::c_buffer &instruction)
         desired_joints[i] = desired_joints_tmp[i];
         desired_motor_pos_new[i] = desired_motor_pos_new_tmp[i];
     }
-
 }
 /*------------------------------------------------------------------*/
 
@@ -125,8 +123,6 @@ void manip_effector::compute_xyz_angle_axis (const lib::c_buffer &instruction)
         value_in_step_no = instruction.value_in_step_no;
         p = &instruction.arm.pf_def.arm_coordinates[0];
     }
-
-
 
     // if ( (value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )
     if ( (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )// by Y
@@ -182,10 +178,7 @@ void manip_effector::compute_frame (const lib::c_buffer &instruction)
         value_in_step_no = instruction.value_in_step_no;
 
         lib::copy_frame(p_m, instruction.arm.pf_def.arm_frame);
-
-    } // end: then
-
-
+    }
 
     if ( (value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no   > motion_steps + 1) )
     {
@@ -211,7 +204,7 @@ void manip_effector::compute_frame (const lib::c_buffer &instruction)
         break;
     default:
         throw NonFatal_error_2(INVALID_MOTION_TYPE);
-    } // end: switch (instruction.motion_type)
+    }
     // Przeliczenie wspolrzednych zewnetrznych na wspolrzedne wewnetrzne
     get_current_kinematic_model()->e2i_transform(desired_joints_tmp, current_joints, &desired_end_effector_frame);
     // Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
@@ -243,7 +236,7 @@ void manip_effector::tool_frame_2_xyz_aa (void)
     default:
         // Blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia.
         throw NonFatal_error_2(ERROR_IN_RMODEL_REQUEST);
-    } // end: switch (reply_type)
+    }
 }
 
 
@@ -285,7 +278,7 @@ void manip_effector::tool_frame_2_frame_rep (void)
     default:
         // Blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia.
         throw NonFatal_error_2(ERROR_IN_RMODEL_REQUEST);
-    } // end: switch (reply_type)
+    }
 }
 
 
@@ -374,7 +367,6 @@ void manip_effector::tool_xyz_eul_zyz_2_frame (lib::c_buffer &instruction)
     lib::Homog_matrix A_B_T (lib::Homog_matrix::MTR_XYZ_EULER_ZYZ, x, y, z, alfa, beta, gamma);
     // Sprawdzenie, czy macierz jest jednorodna.
     set_tool_frame_in_kinematic_model(A_B_T);
-
 }
 /*--------------------------------------------------------------------------*/
 
@@ -443,8 +435,6 @@ void manip_effector::arm_abs_frame_2_frame (lib::frame_tab p_m)
     // w postaci TRANS wyraonej bezwzgldnie
     // do wewntrznych struktur danych TRANSFORMATORa
     lib::copy_frame(desired_end_effector_frame, p_m);
-
-
 }
 /*--------------------------------------------------------------------------*/
 
@@ -452,7 +442,6 @@ void manip_effector::arm_abs_frame_2_frame (lib::frame_tab p_m)
 /*--------------------------------------------------------------------------*/
 void manip_effector::arm_rel_xyz_aa_2_frame (const double* p)
 {
-
     double alfa;			// kat obrotu
 
     double x, y, z;			// wspolrzedne wektora przesuniecia
@@ -490,7 +479,6 @@ void manip_effector::arm_rel_xyz_aa_2_frame (const double* p)
         G_R_T = G_K_T * K_R_T;			// obliczenie macierzy przeksztalcenia
     }
     G_R_T.get_frame_tab(desired_end_effector_frame);
-
 }
 /*--------------------------------------------------------------------------*/
 
@@ -498,7 +486,6 @@ void manip_effector::arm_rel_xyz_aa_2_frame (const double* p)
 /*--------------------------------------------------------------------------*/
 void manip_effector::arm_rel_xyz_eul_zyz_2_frame (const double* p)
 {
-
     double x, y, z;			// wspolrzedne wektora przesuniecia
     double alfa, beta, gamma;	// Katy Eulera
 
@@ -513,7 +500,6 @@ void manip_effector::arm_rel_xyz_eul_zyz_2_frame (const double* p)
     lib::Homog_matrix G_K_T(current_end_effector_frame);	// pobranie aktualnej macierzy przeksztalcenia
     lib::Homog_matrix G_R_T = G_K_T * K_R_T;
     G_R_T.get_frame_tab(desired_end_effector_frame);			// przepisanie uzyskanego wyniku do transformera
-
 }
 /*--------------------------------------------------------------------------*/
 
@@ -539,7 +525,6 @@ void manip_effector::arm_rel_frame_2_frame (lib::frame_tab p_m)
 /*--------------------------------------------------------------------------*/
 void manip_effector::arm_frame_2_xyz_aa (void)
 {
-
     lib::Homog_matrix A(current_end_effector_frame);
     reply.arm_type = lib::XYZ_ANGLE_AXIS;
     switch (reply.reply_type)
@@ -565,23 +550,19 @@ void manip_effector::arm_frame_2_xyz_aa (void)
         reply.arm.pf_def.gripper_reg_state = servo_gripper_reg_state;
         reply.arm.pf_def.gripper_coordinate = current_joints[gripper_servo_nr];
     }
-
 }
 /*--------------------------------------------------------------------------*/
 
-void manip_effector::set_tool_frame_in_kinematic_model (const lib::Homog_matrix& hm)
+void manip_effector::set_tool_frame_in_kinematic_model(const lib::Homog_matrix& hm)
 {
-
-	 if (!(hm.is_valid()))
-	 {
-	            throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
-	 }
-	  // Ustawienie macierzy reprezentujacej narzedzie.
-	 get_current_kinematic_model()->tool = hm;
-	 // odswierzanie
-	 get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-	 	get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
-
+	if (!(hm.is_valid())) {
+		throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
+	}
+	// Ustawienie macierzy reprezentujacej narzedzie.
+	get_current_kinematic_model()->tool = hm;
+	// odswierzanie
+	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+	get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
 }
 
 
@@ -679,11 +660,9 @@ void manip_effector::tool_axially_symmetrical_xyz_eul_zy_2_frame (lib::c_buffer 
     //obliczenie kata obrotu alfa i wartosci funkcji trygonometrycznych
     alfa = sqrt(kx*kx + ky*ky + kz*kz);
 
-
     //korekta wartosci x, y, z
     if((alfa   < ALFA_SENSITIVITY) && (alfa > -ALFA_SENSITIVITY))
     {
-
         lib::Homog_matrix K_R_T(x, y, z);
 
         //obliczenie macierzy przeksztalcenia
@@ -704,7 +683,6 @@ void manip_effector::tool_axially_symmetrical_xyz_eul_zy_2_frame (lib::c_buffer 
 
     // Ustawienie macierzy reprezentujacej narzedzie.
     set_tool_frame_in_kinematic_model(G_R_T);
-
 }
 /*--------------------------------------------------------------------------*/
 
@@ -761,9 +739,8 @@ void manip_effector::master_joints_and_frame_download (void)
 
 
 // Synchronizacja robota.
-void manip_effector::synchronise ()
+void manip_effector::synchronise()
 {
-
 	common_synchronise();
 	get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
 }
@@ -772,15 +749,10 @@ void manip_effector::synchronise ()
 void manip_effector::get_controller_state(lib::c_buffer &instruction)
 {
 	common_get_controller_state(instruction);
-    if (is_synchronised())
-                  {
-   	get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
-                  }
+	if (is_synchronised()) {
+		get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
+	}
 }
-
-
-
-
 
 } // namespace common
 } // namespace edp

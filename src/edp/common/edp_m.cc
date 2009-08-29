@@ -32,7 +32,9 @@ namespace common {
 
 effector* master; // Bufor polecen i odpowiedzi EDP_MASTER
 
+#ifdef __QNXNTO__
 static _clockperiod old_cp;
+#endif /* __QNXNTO__ */
 
 /* Przechwycenie sygnalu */
 void catch_signal(int sig) {

@@ -1409,7 +1409,6 @@ in_out_buffer::in_out_buffer()
 // ustawienie wyjsc
 void in_out_buffer::set_output(const lib::WORD *out_value)
 {
-
     InterruptLock(&output_spinlock);
 
     set_output_flag=true;   // aby f. obslugi przerwania wiedziala ze ma ustawic wyjscie

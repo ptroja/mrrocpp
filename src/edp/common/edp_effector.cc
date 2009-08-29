@@ -14,20 +14,20 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <sys/types.h>
-#ifdef __QNXNTO__
+#if !defined(USE_MESSIP_SRR)
 #include <sys/neutrino.h>
 #include <sys/sched.h>
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
-#endif /* __QNXNTO__ */
+#else
+#include "messip/messip.h"
+#endif /* !USE_MESSIP_SRR */
 #include <pthread.h>
 #include <semaphore.h>
 #include <errno.h>
 
 #include "lib/mis_fun.h"
 #include "edp/common/edp_effector.h"
-
-#include "messip/messip.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -48,6 +48,10 @@ effector::effector(lib::configurator &_config, lib::ROBOT_ENUM l_robot_name) :
 		test_mode = 0;
 
 	mrrocpp_network_path = config.return_mrrocpp_network_path();
+}
+
+effector::~effector() {
+	delete msg;
 }
 
 bool effector::check_config(const std::string & s)
@@ -241,7 +245,7 @@ lib::INSTRUCTION_TYPE effector::receive_instruction(void)
 	caller = rcvid;
 //	printf("edp instruction_type: %d\n", new_ecp_command.instruction.instruction_type);
 // flushall();
-	memcpy( &(new_instruction), &(new_ecp_command.instruction), sizeof(lib::c_buffer) );
+	memcpy( &new_instruction, &(new_ecp_command.instruction), sizeof(lib::c_buffer) );
 
 	return new_instruction.instruction_type;
 }
