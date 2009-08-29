@@ -24,6 +24,12 @@ reader_buffer::reader_buffer()
 	sem_init(&reader_sem, 0, 0);
 }
 
+reader_buffer::~reader_buffer()
+{
+	pthread_mutex_destroy(&reader_mutex);
+	sem_destroy(&reader_sem);
+}
+
 int reader_buffer::set_new_step() // podniesienie semafora
 {
 	sem_trywait(&(reader_sem));

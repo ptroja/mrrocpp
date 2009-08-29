@@ -20,15 +20,13 @@
 #include <errno.h>
 #include <sys/wait.h>
 #include <sys/types.h>
-#include <sys/neutrino.h>
-#include <sys/sched.h>
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
 #include <errno.h>
 #include <pthread.h>
 #include <semaphore.h>
-#include <process.h>
+
+#include <sys/neutrino.h>
 #include <sys/netmgr.h>
+#include <process.h>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -49,6 +47,7 @@ namespace common {
 manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name) :
         effector (_config, l_robot_name), manager(), step_counter(0)
 {
+	pthread_mutex_init(&edp_irp6s_effector_mutex, NULL);
 
     controller_state_edp_buf.is_synchronised = false;
     controller_state_edp_buf.is_power_on = true;
@@ -58,23 +57,22 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
 
     real_reply_type = lib::ACKNOWLEDGE;
     // inicjacja deskryptora pliku by 7&Y
-    // serwo_fd = name_open(lib::EDP_ATTACH_POINT, 0);
-
-    pthread_mutex_init(&edp_irp6s_effector_mutex, NULL );
+    // servo_fd = name_open(lib::EDP_ATTACH_POINT, 0);
 
     trans_t_command = false;
 
-  //  is_get_arm_read_hardware=false;
+    // is_get_arm_read_hardware=false;
     previous_set_arm_type = lib::MOTOR;
-    servo_to_tt_chid = ChannelCreate(_NTO_CHF_UNBLOCK);
-
-    if ((serwo_fd = ConnectAttach(0, 0, servo_to_tt_chid, 0, _NTO_COF_CLOEXEC )) == -1)
-    {
-        fprintf(stderr, "nie utworzylem serwo serwo_fd\n");
-    }
 
     motion_type = lib::ABSOLUTE;
     synchronised = false;
+
+    servo_to_tt_chid = ChannelCreate(_NTO_CHF_UNBLOCK);
+    if ((servo_fd = ConnectAttach(0, 0, servo_to_tt_chid, 0, _NTO_COF_CLOEXEC )) == -1)
+    {
+        fprintf(stderr, "nie utworzylem serwo serwo_fd\n");
+    }
+    ThreadCtl (_NTO_TCTL_IO, NULL);
 
     // z edp_m
 
@@ -83,13 +81,13 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
         msg->message("Test mode activated");
     }
     edp_tid=1;// numer watku edp_master
-
-    ThreadCtl (_NTO_TCTL_IO, NULL);
 }
 
 manip_and_conv_effector::~manip_and_conv_effector() {
-	// TODO: error check or use object oriented mutex
+	// TODO: error checks
 	pthread_mutex_destroy(&edp_irp6s_effector_mutex);
+	ConnectDetach_r(servo_fd);
+	ChannelDestroy_r(servo_to_tt_chid);
 }
 
 void manip_and_conv_effector::master_joints_read (double* output)
@@ -430,7 +428,9 @@ void manip_and_conv_effector::synchronise ()
 // Synchronizacja robota.
 void manip_and_conv_effector::common_synchronise ()
 {
+#ifdef __QNXNTO__
 	flushall();
+#endif
     /* Uformowanie rozkazu synchronizacji dla procesu SERVO_GROUP */
     servo_command.instruction_code = lib::SYNCHRONISE;
     /* Wyslanie rozkazu synchronizacji do realizacji procesowi SERVO_GROUP */
@@ -559,7 +559,7 @@ void manip_and_conv_effector::send_to_SERVO_GROUP ()
      SignalProcmask( 0,serwo_tid, SIG_BLOCK, &set, NULL ); // by Y uniemozliwienie jednoczesnego wystawiania spotkania do serwo przez edp_m i readera
      */
 
-    if (MsgSend(serwo_fd, &servo_command, sizeof(servo_command), &sg_reply, sizeof(sg_reply)) < 0)
+    if (MsgSend(servo_fd, &servo_command, sizeof(servo_command), &sg_reply, sizeof(sg_reply)) < 0)
     {
 
         uint64_t e = errno;
@@ -1376,38 +1376,75 @@ in_out_buffer::in_out_buffer()
     }
 
     // inicjacja spinlockow
+#ifdef __QNXNTO__
     memset( &input_spinlock, 0, sizeof(input_spinlock));
     memset( &output_spinlock, 0, sizeof(output_spinlock));
+#else
+    pthread_spin_init(&input_spinlock, PTHREAD_PROCESS_PRIVATE);
+    pthread_spin_init(&output_spinlock, PTHREAD_PROCESS_PRIVATE);
+#endif
     set_output_flag=false;
+}
+
+in_out_buffer::~in_out_buffer() {
+#ifndef __QNXNTO__
+	pthread_spin_destroy(&input_spinlock);
+	pthread_spin_destroy(&output_spinlock);
+#endif
 }
 
 
 // ustawienie wyjsc
 void in_out_buffer::set_output(const lib::WORD *out_value)
 {
-    InterruptLock(&output_spinlock);
+#ifdef __QNXNTO__
+    InterruptLock
+#else
+    pthread_spin_lock
+#endif
+		(&output_spinlock);
 
     set_output_flag=true;   // aby f. obslugi przerwania wiedziala ze ma ustawic wyjscie
     binary_output=*out_value;
 
-    InterruptUnlock(&output_spinlock);
+#ifdef __QNXNTO__
+    InterruptUnlock
+#else
+    pthread_spin_unlock
+#endif
+		(&output_spinlock);
 }
 
 // odczytanie wyjsc
 void in_out_buffer::get_output(lib::WORD *out_value)
 {
-    InterruptLock(&output_spinlock);
+#ifdef __QNXNTO__
+    InterruptLock
+#else
+    pthread_spin_lock
+#endif
+		(&output_spinlock);
 
     *out_value=binary_output;
 
-    InterruptUnlock(&output_spinlock);
+#ifdef __QNXNTO__
+    InterruptUnlock
+#else
+    pthread_spin_unlock
+#endif
+		(&output_spinlock);
 }
 
 
 // ustawienie wejsc
 void in_out_buffer::set_input (const lib::WORD *binary_in_value, const lib::BYTE *analog_in_table)
 {
-    InterruptLock(&input_spinlock );
+#ifdef __QNXNTO__
+    InterruptLock
+#else
+    pthread_spin_lock
+#endif
+		(&input_spinlock);
 
     binary_input=*binary_in_value;		// wejscie binarne
     for (int i=0; i<8; i++)
@@ -1415,7 +1452,12 @@ void in_out_buffer::set_input (const lib::WORD *binary_in_value, const lib::BYTE
         analog_input[i]=analog_in_table[i];
     }
 
-    InterruptUnlock(&input_spinlock );
+#ifdef __QNXNTO__
+    InterruptUnlock
+#else
+    pthread_spin_unlock
+#endif
+		(&input_spinlock);
 
     /*	analog_in_value = & read_analog;
     	binary_in_value =   & read_binary;*/
@@ -1427,8 +1469,12 @@ void in_out_buffer::set_input (const lib::WORD *binary_in_value, const lib::BYTE
 // odczytanie wejsc
 void in_out_buffer::get_input (lib::WORD *binary_in_value, lib::BYTE *analog_in_table)
 {
-
-    InterruptLock(&input_spinlock );
+#ifdef __QNXNTO__
+    InterruptLock
+#else
+    pthread_spin_lock
+#endif
+		(&input_spinlock);
 
     *binary_in_value=binary_input;		// wejscie binarne
     for (int i=0; i<8; i++)
@@ -1445,7 +1491,12 @@ void in_out_buffer::get_input (lib::WORD *binary_in_value, lib::BYTE *analog_in_
     	// SERVO_REPLY_REG_1_ADR       0x218
     	lib::WORD read_binary = 0x00FF & in16(SERVO_REPLY_REG_1_ADR);*/
 
-    InterruptUnlock(&input_spinlock );
+#ifdef __QNXNTO__
+    InterruptUnlock
+#else
+    pthread_spin_unlock
+#endif
+		(&input_spinlock);
 
     /*	analog_in_value = & read_analog;
     	binary_in_value =   & read_binary;*/

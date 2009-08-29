@@ -9,9 +9,7 @@
 #define __EDP_E_MANIP_AND_CONV_H
 
 #include <stdint.h>
-#include <semaphore.h>
 #include <pthread.h>
-#include <sys/dispatch.h>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -64,7 +62,7 @@ protected:
     //fazy makrokroku.
     lib::WORD value_in_step_no;
 
-    int serwo_fd;
+    int servo_fd;
 
     // numer serwo chwytaka
     short gripper_servo_nr;

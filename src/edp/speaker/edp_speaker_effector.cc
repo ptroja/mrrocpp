@@ -69,7 +69,7 @@ void effector::initialize (void)
 {
 	real_reply_type = lib::ACKNOWLEDGE;
 	// inicjacja deskryptora pliku by 7&Y
-	// serwo_fd = name_open(lib::EDP_ATTACH_POINT, 0);
+	// servo_fd = name_open(lib::EDP_ATTACH_POINT, 0);
 
 	speaking=0;
 

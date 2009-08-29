@@ -105,6 +105,7 @@ public:
     reader_config reader_cnf; //   Struktura z informacja, ktore elementy struktury reader_data maja byc zapisane do pliku
 
     reader_buffer();
+    ~reader_buffer();
 
     int	set_new_step(); // podniesienie semafora
     int	reader_wait_for_new_step(); // oczekiwanie na semafor
@@ -153,13 +154,18 @@ private:
     lib::BYTE analog_input[8];		// wejscie analogowe - dla 8 kanalow
 
     lib::WORD binary_output;		// wyjscie binarne
-    intrspin_t output_spinlock; // spinlock (semafor) do wyjscia
-    intrspin_t input_spinlock; // spinlock (semafor) do wejscia
+#ifdef __QNXNTO__
+    intrspin_t
+#else
+    pthread_spinlock_t
+#endif /* __QNXNTO__ */
+		output_spinlock, input_spinlock; // spinlocki do wejścia/wyjscia
 
 public:
 
     // konstruktor
     in_out_buffer();
+    virtual ~in_out_buffer();
 
     bool set_output_flag; // flaga czy ustawic wyjcie na robota
 
