@@ -48,12 +48,7 @@ int main(int argc, char *argv[])
 
 		// configuration read
 		lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
-#if defined(PROCESS_SPAWN_YRSH)
-		if (argc>6) {
-			_config->answer_to_y_rsh_spawn(argv[6]);
-			signal(SIGINT, SIG_IGN);
-		}
-#endif
+
 		ecp::common::ecp_t = ecp::common::task::return_created_ecp_task(*_config);
 
 		lib::set_thread_priority(pthread_self(), MAX_PRIORITY-3);

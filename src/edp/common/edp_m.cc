@@ -85,12 +85,6 @@ int main(int argc, char *argv[], char **arge) {
 		lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3],
 				argv[4], argv[5]);
 
-#if defined(PROCESS_SPAWN_YRSH)
-		if (argc > 6) {
-			_config->answer_to_y_rsh_spawn(argv[6]);
-			signal(SIGINT, SIG_IGN);
-		}
-#endif
 		/* Lokalizacja procesu wywietlania komunikatow SR */
 		/*
 		 if ((msg = new lib::sr_edp(lib::EDP, config->return_string_value("resourceman_attach_point"),

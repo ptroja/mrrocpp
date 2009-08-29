@@ -60,12 +60,7 @@ int main (int argc, char *argv[], char **arge)
 
 		try	{
 			lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3], "[mp]", argv[5]);
-#if defined(PROCESS_SPAWN_YRSH)
-			if (argc>6) {
-		 		_config->answer_to_y_rsh_spawn(argv[6]);
-		 		signal(SIGINT, SIG_IGN);
-		 	}
-#endif
+
 			mp::common::mp_t = mp::task::return_created_mp_task(*_config);
 
 			lib::set_thread_priority(pthread_self(), MAX_PRIORITY-4);

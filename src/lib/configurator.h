@@ -25,8 +25,6 @@ namespace mrrocpp {
 namespace lib {
 
 #define PROCESS_SPAWN_RSH
-// Z wykorzystaniem rsh w odpowiedzi na buga w qnx 6.4.0
-//#define PROCESS_SPAWN_YRSH
 // by Y - jesli usuna buga to mozna powrocic do tego rozwiazania ale sadze ze nie warto
 //#define PROCESS_SPAWN_SPAWN
 
@@ -74,9 +72,6 @@ public:
 	// zmiana nazwy sesji z modyfikacja pliku konfiguracyjnego
 	void change_ini_file (const char* _ini_file);
 
-#if defined(PROCESS_SPAWN_YRSH)
-	int answer_to_y_rsh_spawn(const char* rsh_spl);
-#endif
 	// Odpalenie procesu zapisanego w danej sekcji INI.
 	pid_t process_spawn(const char* _section_name);
 

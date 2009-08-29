@@ -2,8 +2,8 @@
 // Proces:		VIRTUAL SENSOR PROCESS (lib::VSP)
 // Plik:            vsp_m_nint.cc
 // System:	QNX/MRROC++  v. 6.3
-// Opis:		Interaktywna powloka procesow VSP 
-// 
+// Opis:		Interaktywna powloka procesow VSP
+//
 // 	-	interaktywne odczytywanie stanu czujnika rzeczywistego, oczekiwanie na zakonczenie operacji
 // 	-	jednowatkowy
 //
@@ -86,7 +86,7 @@ void error_handler(ERROR e){
 			break;
 		default:
 			vs->sr_msg->message (lib::NON_FATAL_ERROR, VSP_UNIDENTIFIED_ERROR);
-		} // end switch  
+		} // end switch
 	} // end error_handler
 
 } // namespace common
@@ -97,9 +97,9 @@ void error_handler(ERROR e){
 int main(int argc, char *argv[]) {
     std::string attach_point;
 	messip_channel_t *ch;
-    	
+
 	// ustawienie priorytetow
-	//setprio(getpid(), MAX_PRIORITY-3); 
+	//setprio(getpid(), MAX_PRIORITY-3);
 	// wylapywanie sygnalow
 	signal(SIGTERM, &vsp::common::catch_signal);
 	signal(SIGSEGV, &vsp::common::catch_signal);
@@ -116,16 +116,11 @@ int main(int argc, char *argv[]) {
 
 	 // zczytanie konfiguracji calego systemu
 	lib::configurator *_config = new lib::configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
-#if defined(PROCESS_SPAWN_YRSH)
-	if (argc>6) {
- 		config->answer_to_y_rsh_spawn(argv[6]); 
- 		signal(SIGINT, SIG_IGN);
- 	}
-#endif
+
 	attach_point = _config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point");
 
 	try {
-	
+
 		// Stworzenie nowego czujnika za pomoca funkcji (cos na ksztalt szablonu abstract factory).
 		vsp::common::vs = vsp::sensor::return_created_sensor(*_config);
 
@@ -139,9 +134,9 @@ int main(int argc, char *argv[]) {
 
 			int32_t type, subtype;
 			int rcvid;
-	
+
 			rcvid = messip_receive(ch, &type, &subtype, &(vsp::common::vs->to_vsp), sizeof(vsp::common::vs->to_vsp), MESSIP_NOTIMEOUT);
-	
+
 			if (rcvid == -1) /* Error condition, exit */
 			{
 				perror("VSP: Receive failed\n");
@@ -151,9 +146,9 @@ int main(int argc, char *argv[]) {
 				fprintf(stderr, "VSP: ie. MESSIP_MSG_DISCONNECT\n");
 				continue;
 			}
-	
+
 			vsp::common::vs->from_vsp.vsp_report= lib::VSP_REPLY_OK;
-	
+
 			try {
 				switch(vsp::common::vs->to_vsp.i_code) {
 					case lib::VSP_CONFIGURE_SENSOR :
@@ -180,7 +175,7 @@ int main(int argc, char *argv[]) {
 			catch (lib::sensor::sensor_error e){
 				vsp::common::error_handler(e);
 			} // end CATCH
-		
+
 			messip_reply(ch, rcvid, 0, &vsp::common::vs->from_vsp, sizeof(lib::VSP_REPORT) + vsp::common::vs->union_size, MESSIP_NOTIMEOUT);
  		} // end while()
 		vsp::common::vs->sr_msg->message ("VSP terminated");
