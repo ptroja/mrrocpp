@@ -69,13 +69,6 @@ const unsigned short int INT_FREC_DIVIDER = 4; // Dzielnik czestotliwosci przerw
 
 #define STOP_MOTORS               0x0200 // Zatrzymanie silnikow (W.S. ???)
 
-// tryby obslugi przerwania
-#define INT_EMPTY 0 // obluga pusta
-#define INT_SERVOING 1 // tryb regulacji osi
-#define INT_SINGLE_COMMAND 2 // do synchronizacji, inicjacji, etc.
-#define INT_CHECK_STATE 3 // do odczytu stanu z adresu 0x220
-
-
 // ------------------------------------------------------------------------
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
