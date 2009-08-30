@@ -27,15 +27,9 @@ void * manip_and_conv_effector::servo_thread_start(void* arg)
 
 void * manip_and_conv_effector::servo_thread(void* arg)
 {
-    /* DEKLARACJE ZMIENNYCH */
-
-    //		printf("servo 1\n");
-
     servo_buffer* sb = return_created_servo_buffer(*this); // bufor do komunikacji z EDP_MASTER
 
-    //	 printf("servo 2\n");
-
-    lib::set_thread_priority(pthread_self() , MAX_PRIORITY+2);
+    lib::set_thread_priority(pthread_self(), MAX_PRIORITY+2);
 
     /* BEGIN SERVO_GROUP */
 
@@ -83,6 +77,8 @@ void * manip_and_conv_effector::servo_thread(void* arg)
             }
         } // end: else
     }
+
+    delete sb;
 
 } // end: main() SERVO_GROUP
 

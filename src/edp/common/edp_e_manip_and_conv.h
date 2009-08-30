@@ -67,16 +67,17 @@ protected:
     // numer serwo chwytaka
     short gripper_servo_nr;
 
-    pthread_t edp_tid;
     pthread_t serwo_tid;
     pthread_t reader_tid;
     pthread_t trans_t_tid;
     pthread_t vis_t_tid;
+
     STATE next_state;    // stan nastepny, do ktorego przejdzie EDP_MASTER
 
-    lib::edp_master_command servo_command;    // Polecenie z EDP_MASTER dla SERVO_GROUP
+    friend class servo_buffer;
 
-    lib::servo_group_reply sg_reply;            // bufor na informacje przesylane z SERVO_GROUP
+    lib::edp_master_command servo_command;    // polecenie z EDP_MASTER dla SERVO_GROUP
+    lib::servo_group_reply sg_reply;          // bufor na informacje odbierane z SERVO_GROUP
 
     void set_outputs (const lib::c_buffer &instruction);                // ustawienie wyjsc binarnych
 
@@ -176,7 +177,13 @@ protected:
 public:
 
     void master_joints_read (double*);
+
+#ifdef __QNXNTO__
     int servo_to_tt_chid;
+#else
+    sem_t servo_command_ready, sg_reply_ready;
+#endif
+
     virtual void initialize (void) = 0;
 
     in_out_buffer in_out_obj; // bufor wejsc wyjsc

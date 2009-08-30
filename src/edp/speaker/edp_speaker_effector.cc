@@ -77,12 +77,7 @@ void effector::initialize (void)
 	/* Ustawienie priorytetu procesu */
 
 	lib::set_thread_priority(pthread_self() , MAX_PRIORITY-2);
-
-	edp_tid=1;// numer watku edp_master
-
 }
-;
-
 
 int effector::init ()
 {

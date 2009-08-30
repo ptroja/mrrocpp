@@ -73,12 +73,24 @@ uint64_t servo_buffer::compute_all_set_values (void)
 bool servo_buffer::get_command (void)
 {
     // Odczytanie polecenia z EDP_MASTER o ile zostalo przyslane
+	bool new_command_available = false;
 
+#ifdef __QNXNTO__
     struct sigevent msg_event;
     msg_event.sigev_notify = SIGEV_UNBLOCK;// by Y zamiast creceive
 
     TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE,  &msg_event, NULL, NULL ); // by Y zamiast creceive i flagi z EDP_MASTER
-    if ((edp_caller = MsgReceive(master.servo_to_tt_chid, &command, sizeof(command), NULL)) != -1)
+    if ((edp_caller = MsgReceive_r(master.servo_to_tt_chid, &command, sizeof(command), NULL)) < 0)
+    	new_command_available = true;
+#else
+    int r; // lock return value
+    if((r = sem_trywait(&master.servo_command_ready)) == 0) {
+    	command = master.servo_command;
+    	new_command_available = true;
+    }
+#endif
+
+    if (new_command_available)
     { // jezeli jest nowa wiadomosc
 
         /* Otrzymano nowe polecenie */
@@ -91,7 +103,6 @@ bool servo_buffer::get_command (void)
             reply_to_EDP_MASTER();
             return false; // Potraktowac jakby nie bylo polecenia
         } // end: if
-
 
         // Uprzednio nie bylo bledu => wstepna analiza polecenia
         switch (command_type())
@@ -113,11 +124,24 @@ bool servo_buffer::get_command (void)
         } // end: switch
     }
     else
-    { /* Nie otrzymano nowego polecenia ruchu */
-        if (errno!=ETIMEDOUT) // jezeli nastapil blad przy odbieraniu wiadomosci rozny od jej braku
-            perror("SERVO_GROUP: Receive error from EDP_MASTER");
+#ifdef __QNXNTO__
+    {
+    	/* Nie otrzymano nowego polecenia ruchu */
+        if (edp_caller != -ETIMEDOUT) {
+        	// nastapil blad przy odbieraniu wiadomosci rozny od jej braku
+            fprintf(stderr, "SERVO_GROUP: Receive error from EDP_MASTER");
+        }
         return false;
     }
+#else
+	{    	/* Nie otrzymano nowego polecenia ruchu */
+        if (r != EAGAIN) {
+        	// nastapil blad przy odbieraniu wiadomosci rozny od jej braku
+            fprintf(stderr, "SERVO_GROUP: Receive error from EDP_MASTER");
+        }
+        return false;
+	}
+#endif
 } // end: servo_buffer::get_command
 /*-----------------------------------------------------------------------*/
 
@@ -330,10 +354,13 @@ void servo_buffer::reply_to_EDP_MASTER (void)
     get_all_positions();
 
     // Wyslac informacje do EDP_MASTER
-
+#ifdef __QNXNTO__
     if (MsgReply(edp_caller,EOK, &servo_data, sizeof(lib::servo_group_reply)) < 0)
         perror (" Reply to EDP_MASTER error");
-
+#else
+    master.sg_reply = servo_data;
+    sem_post(&master.sg_reply_ready);
+#endif
     // Wyzerowac zmienne sygnalizujace stan procesu
     clear_reply_status();
     send_after_last_step = false;

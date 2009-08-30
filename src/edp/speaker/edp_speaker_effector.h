@@ -27,8 +27,6 @@ namespace speaker {
 class effector  : public common::effector
 {
 protected:
-
-    pthread_t edp_tid;
     pthread_t speak_t_tid;
     common::STATE next_state;   // stan nastepny, do ktorego przejdzie EDP_MASTER
 

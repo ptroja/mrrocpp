@@ -19,15 +19,9 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <sys/types.h>
-#include <sys/neutrino.h>
-#include <sys/sched.h>
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
 #include <errno.h>
 #include <pthread.h>
 #include <semaphore.h>
-#include <process.h>
-#include <sys/netmgr.h>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -257,26 +251,19 @@ void irp6s_postument_track_effector::create_threads()
 	// jesli wlaczono obsluge sily
 	if (force_tryb > 0)
 	{
-
 		// byY - utworzenie watku pomiarow sily
-		if (pthread_create(&force_tid, NULL, &force_thread_start, (void *) this) !=EOK)
+		if (pthread_create(&force_tid, NULL, &force_thread_start, (void *) this))
 		{
 			msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to spawn READER");
-			char buf[20];
-			netmgr_ndtostr(ND2S_LOCAL_STR, ND_LOCAL_NODE, buf, sizeof(buf));
-			printf(" Failed to thread FORCE_thread on node: %s\n", buf);
 			throw System_error();
 		}
 
 		sem_wait(&force_master_sem);
 
 		// by Y - utworzenie watku komunikacji miedzy EDP a VSP
-		if (pthread_create(&edp_vsp_tid, NULL, &edp_vsp_thread_start, (void *) this) !=EOK)
+		if (pthread_create(&edp_vsp_tid, NULL, &edp_vsp_thread_start, (void *) this))
 		{
 			msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to spawn READER");
-			char buf[20];
-			netmgr_ndtostr(ND2S_LOCAL_STR, ND_LOCAL_NODE, buf, sizeof(buf));
-			printf(" Failed to thread EDP_VSP_thread on node: %s\n", buf);
 			throw System_error();
 		}
 	}
@@ -351,7 +338,6 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	get_current_kinematic_model()->i2e_transform(begining_joints, &begining_frame);
 	lib::Homog_matrix begining_end_effector_frame(begining_frame);
 	lib::Homog_matrix next_frame = begining_end_effector_frame;
-
 
 	// WYZNACZENIE goal_frame
 	lib::frame_tab goal_frame_tab;
@@ -452,6 +438,8 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 			pos_xyz_rot_xyz_vector[i] = arm_coordinates[i];
 		}
 		break;
+	default:
+		throw System_error();
 	}
 
 
@@ -527,6 +515,8 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 			pos_xyz_rot_xyz_vector = v_tr_inv_modified_beginning_to_desired_end_effector_frame
 			* base_pos_xyz_rot_xyz_vector;
 			break;
+		default:
+			throw System_error();
 		}
 
 		// wyznaczenie predkosci z uwzglednieniem wirtualnej inercji i wirtualnego tarcia wiskotycznego

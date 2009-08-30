@@ -8,19 +8,20 @@
 #include <errno.h>
 #include <stddef.h>
 #include <unistd.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <semaphore.h>
+#include <fstream>
+#if !defined(USE_MESSIP_SRR)
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #include <devctl.h>
 #include <string.h>
 #include <signal.h>
 #include <process.h>
-#include <sys/wait.h>
-#include <sys/types.h>
 #include <sys/sched.h>
 #include <sys/netmgr.h>
-#include <semaphore.h>
-#include <fstream>
-
+#endif /* USE_MESSIP_SRR */
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -45,6 +46,7 @@ void * irp6s_postument_track_effector::edp_vsp_thread_start(void* arg)
 
 void * irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 {
+#if !defined(USE_MESSIP_SRR)
 	name_attach_t *edp_vsp_attach;
 	uint64_t e; //!< kod bledu systemowego
 	int vsp_caller; //!< by Y&W
@@ -132,7 +134,8 @@ void * irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 			vs->sr_msg->message(lib::SYSTEM_ERROR, e, "EDP: Reply to VSP failed");
 		}
 	} //!< end while
-	return 0;
+#endif /* USE_MESSIP_SRR */
+	return NULL;
 }
 
 void * irp6s_postument_track_effector::force_thread_start(void* arg)
@@ -143,7 +146,7 @@ void * irp6s_postument_track_effector::force_thread_start(void* arg)
 //!< watek do komunikacji ze sprzetem
 void * irp6s_postument_track_effector::force_thread(void *arg)
 {
-
+#if !defined(USE_MESSIP_SRR)
 	lib::set_thread_priority(pthread_self() , MAX_PRIORITY-1);
 
 	vs = sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
@@ -168,7 +171,6 @@ void * irp6s_postument_track_effector::force_thread(void *arg)
 			vs->from_vsp.vsp_report= lib::VSP_READING_NOT_READY;
 			break;
 		}
-		; //!< end switch
 		vs->sr_msg->message (lib::FATAL_ERROR, e.error_no);
 
 	} //!< end CATCH
@@ -215,7 +217,6 @@ void * irp6s_postument_track_effector::force_thread(void *arg)
 
 				vs->initiate_reading();
 				//!< 		cout << "Initiate reading" << endl;
-
 
 				double current_force[6];
 
@@ -264,7 +265,7 @@ void * irp6s_postument_track_effector::force_thread(void *arg)
 		}
 
 	} //!< //!< end while(;;)
-
+#endif /* USE_MESSIP_SRR */
 	return NULL;
 } //!< end MAIN
 

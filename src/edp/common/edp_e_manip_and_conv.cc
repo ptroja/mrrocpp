@@ -23,10 +23,10 @@
 #include <errno.h>
 #include <pthread.h>
 #include <semaphore.h>
-
+#ifdef __QNXNTO__
 #include <sys/neutrino.h>
 #include <sys/netmgr.h>
-
+#endif
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -66,13 +66,17 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
     synchronised = false;
 
 #ifdef __QNXNTO__
-    servo_to_tt_chid = ChannelCreate(_NTO_CHF_UNBLOCK);
+    if((servo_to_tt_chid = ChannelCreate(_NTO_CHF_UNBLOCK)) == -1) {
+    	perror("ChannelCreate()");
+    }
     if ((servo_fd = ConnectAttach(0, 0, servo_to_tt_chid, 0, _NTO_COF_CLOEXEC )) == -1)
     {
-        fprintf(stderr, "nie utworzylem serwo serwo_fd\n");
+        perror("ConnectAttach()");
     }
     ThreadCtl (_NTO_TCTL_IO, NULL);
 #else
+    sem_init(&servo_command_ready, 0, 0);
+    sem_init(&sg_reply_ready, 0, 0);
 #endif
 
     // z edp_m
@@ -81,14 +85,18 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
     {
         msg->message("Test mode activated");
     }
-    edp_tid=1;// numer watku edp_master
 }
 
 manip_and_conv_effector::~manip_and_conv_effector() {
 	// TODO: error checks
 	pthread_mutex_destroy(&edp_irp6s_effector_mutex);
+#ifdef __QNXNTO__
 	ConnectDetach_r(servo_fd);
 	ChannelDestroy_r(servo_to_tt_chid);
+#else
+	sem_destroy(&servo_command_ready);
+	sem_destroy(&sg_reply_ready);
+#endif
 }
 
 void manip_and_conv_effector::master_joints_read (double* output)
@@ -106,27 +114,27 @@ void manip_and_conv_effector::master_joints_read (double* output)
 void manip_and_conv_effector::create_threads ()
 {
     // Y&W - utworzenie watku serwa
-    if (pthread_create (&serwo_tid, NULL, &servo_thread_start, (void *) this)!=EOK)
+    if (pthread_create (&serwo_tid, NULL, &servo_thread_start, (void *) this))
     {
         msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create SERVO_GROUP thread");
         throw System_error();
     }
 
     // Y&W - utworzenie watku readera
-    if (pthread_create (&reader_tid, NULL, &reader_thread_start, (void *) this)!=EOK)
+    if (pthread_create (&reader_tid, NULL, &reader_thread_start, (void *) this))
     {
         msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create READER thread");
         throw System_error();
     }
 
-    if (pthread_create (&trans_t_tid, NULL, &trans_thread_start, (void *) this)!=EOK)
+    if (pthread_create (&trans_t_tid, NULL, &trans_thread_start, (void *) this))
     {
         msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create TRANSFORMER thread");
         throw System_error();
     }
 
     // PT - utworzenie watku wizualizacji
-    if (pthread_create (&vis_t_tid, NULL, &visualisation_thread_start, (void *) this)!=EOK)
+    if (pthread_create (&vis_t_tid, NULL, &visualisation_thread_start, (void *) this))
     {
         msg->message(lib::SYSTEM_ERROR, errno, "EDP: Failed to create VISUALISATION thread");
         throw System_error();
@@ -525,7 +533,6 @@ void manip_and_conv_effector::arm_joints_2_joints (void)
     }
 
 }
-; // end: edp_irp6s_and_conv_effector::arm_joints_2_joints
 /*--------------------------------------------------------------------------*/
 
 
@@ -559,15 +566,18 @@ void manip_and_conv_effector::send_to_SERVO_GROUP ()
 
      SignalProcmask( 0,serwo_tid, SIG_BLOCK, &set, NULL ); // by Y uniemozliwienie jednoczesnego wystawiania spotkania do serwo przez edp_m i readera
      */
-
+#ifdef __QNXNTO__
     if (MsgSend(servo_fd, &servo_command, sizeof(servo_command), &sg_reply, sizeof(sg_reply)) < 0)
     {
-
         uint64_t e = errno;
         perror ("Send() from EDP to SERVO error");
         msg->message(lib::SYSTEM_ERROR, e, "Send() from EDP to SERVO error");
         throw System_error();
     }
+#else
+    sem_post(&servo_command_ready);
+    sem_wait(&sg_reply_ready);
+#endif
 
     //   SignalProcmask( 0,serwo_tid, SIG_UNBLOCK, &set, NULL );
 
