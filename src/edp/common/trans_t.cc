@@ -22,10 +22,8 @@ namespace common {
 
 void * manip_and_conv_effector::trans_thread_start(void* arg)
 {
-    static_cast<manip_and_conv_effector*> (arg)->trans_thread(arg);
+    return static_cast<manip_and_conv_effector*> (arg)->trans_thread(arg);
 }
-
-
 
 void * manip_and_conv_effector::trans_thread(void *arg)
 {

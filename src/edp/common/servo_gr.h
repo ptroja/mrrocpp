@@ -5,9 +5,6 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#include <sys/iofunc.h>// Y&7
-#include <sys/dispatch.h>// Y&7
-
 #ifndef __SERVO_GR_H
 #define __SERVO_GR_H
 
@@ -256,8 +253,6 @@ protected:
     void clear_reply_status ( void );
 
     void clear_reply_status_tmp ( void );
-
-
 
 public:
 

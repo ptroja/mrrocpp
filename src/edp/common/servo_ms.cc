@@ -22,7 +22,7 @@ namespace common {
 
 void * manip_and_conv_effector::servo_thread_start(void* arg)
 {
-    static_cast<manip_and_conv_effector*> (arg)->servo_thread(arg);
+    return static_cast<manip_and_conv_effector*> (arg)->servo_thread(arg);
 }
 
 void * manip_and_conv_effector::servo_thread(void* arg)
@@ -81,7 +81,6 @@ void * manip_and_conv_effector::servo_thread(void* arg)
                 // wczesniej zostalo wychwycone przez get_command()
                 break;
             }
-            ; // end: switch
         } // end: else
     }
 
@@ -93,4 +92,3 @@ void * manip_and_conv_effector::servo_thread(void* arg)
 } // namespace common
 } // namespace edp
 } // namespace mrrocpp
-

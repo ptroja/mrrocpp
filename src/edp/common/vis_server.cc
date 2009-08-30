@@ -20,7 +20,7 @@ namespace common {
 
 void * manip_and_conv_effector::visualisation_thread_start(void* arg)
 {
-	static_cast<manip_and_conv_effector*> (arg)->visualisation_thread(arg);
+	return static_cast<manip_and_conv_effector*> (arg)->visualisation_thread(arg);
 }
 
 
@@ -94,7 +94,8 @@ void * manip_and_conv_effector::visualisation_thread(void * arg)
 				tmp[2] -= tmp[1] +M_PI_2;
 				tmp[3] -= tmp[2] + tmp[1] +M_PI_2;
 				break;
-
+			default:
+				break;
 			}
 
 			reply.synchronised = (is_synchronised()) ? 1 : 0;
@@ -121,6 +122,8 @@ void * manip_and_conv_effector::visualisation_thread(void * arg)
 	}
 
 	close(sockfd);
+
+	return NULL;
 }
 
 } // namespace common

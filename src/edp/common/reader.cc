@@ -15,13 +15,17 @@
 #include <errno.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#if !defined(USE_MESSIP_SRR)
 #include <sys/neutrino.h>
 #include <sys/sched.h>
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
+#include <sys/netmgr.h>
+#else
+#include "messip/messip.h"
+#endif
 #include <errno.h>
 #include <pthread.h>
-#include <sys/netmgr.h>
 #include <time.h>
 
 #include "lib/typedefs.h"
@@ -36,7 +40,7 @@ namespace common {
 
 void * manip_and_conv_effector::reader_thread_start(void* arg)
 {
-	static_cast<manip_and_conv_effector*> (arg)->reader_thread(arg);
+	return static_cast<manip_and_conv_effector*> (arg)->reader_thread(arg);
 }
 
 void * manip_and_conv_effector::reader_thread(void* arg)
@@ -47,12 +51,6 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 	uint64_t msr_nr; // numer pomiaru
 	int przepelniony; // czy bufor byl przepelniony
 	int msr_counter; // liczba pomiarow, ktore maja byc zapisane do pliku
-#if !defined(USE_MESSIP_SRR)
-	name_attach_t *my_attach; // nazwa kanalu komunikacyjnego
-	_pulse_msg ui_msg;// wiadomosc z ui
-#else
-	messip_channel_t *my_attach;
-#endif
 	uint64_t e; // kod bledu systemowego
 	bool start; // shall we start the reader?
 	bool stop; // shall we stop the reader?
@@ -64,8 +62,6 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 	char file_name[50];
 	char file_date[40];
 	char config_file_with_dir[80];
-
-	struct sigevent stop_event; // do oblugi pulsu stopu
 
 	// czytanie konfiguracji
 	std::string reader_meassures_dir;
@@ -143,10 +139,14 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 	// by Y komuniakicja pomiedzy ui i reader'em rozwiazalem poprzez pulsy
 	// powolanie kanalu komunikacyjnego do odbioru pulsow sterujacych
 #if !defined(USE_MESSIP_SRR)
+	name_attach_t *my_attach; // nazwa kanalu komunikacyjnego
+
 	if ((my_attach = name_attach(NULL, config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point").c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 #else
+	messip_channel_t *my_attach;
+
 	if ((my_attach = messip_channel_create(NULL, config.return_attach_point_name(lib::configurator::CONFIG_SERVER,
-			"reader_attach_point"), MESSIP_NOTIMEOUT, 0)) == NULL) {
+			"reader_attach_point").c_str(), MESSIP_NOTIMEOUT, 0)) == NULL) {
 #endif
 		e = errno;
 		perror("Failed to attach pulse chanel for READER\n");
@@ -165,6 +165,8 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 		// dopoki nie przyjdzie puls startu
 		while (!start) {
 #if !defined(USE_MESSIP_SRR)
+			_pulse_msg ui_msg;// wiadomosc z ui
+
 			int rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
 
 			if (rcvid == -1) {/* Error condition, exit */
@@ -242,6 +244,10 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 			ui_trigger = false;
 
 #if !defined(USE_MESSIP_SRR)
+			_pulse_msg ui_msg;// wiadomosc z ui
+
+			struct sigevent stop_event; // do oblugi pulsu stopu
+
 			stop_event.sigev_notify = SIGEV_UNBLOCK;
 			TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, &stop_event, NULL, NULL); // czekamy na odbior pulsu stopu
 			int rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg), NULL);

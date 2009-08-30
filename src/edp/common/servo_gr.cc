@@ -28,7 +28,6 @@ lib::BYTE servo_buffer::Move_a_step (void)
 {
     return 0;
 }
-;         // wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH i SYNCHRO_T
 
 void servo_buffer::clear_reply_status ( void )
 {
@@ -36,7 +35,6 @@ void servo_buffer::clear_reply_status ( void )
     reply_status.error0 = OK;
     reply_status.error1 = OK;
 }
-; // end: clear_reply_status ( )
 
 void servo_buffer::clear_reply_status_tmp ( void )
 {
@@ -44,35 +42,31 @@ void servo_buffer::clear_reply_status_tmp ( void )
     reply_status_tmp.error0 = OK;
     reply_status_tmp.error1 = OK;
 }
-; // end: clear_reply_status_tmp ( )
-
-
 
 // input_buffer
 lib::SERVO_COMMAND servo_buffer::command_type()
 {
     return command.instruction_code;
-};
+}
 // by Yoyek & 7 -  typ returna na lib::SERVO_COMMAND
 
 // output_buffer
 void servo_buffer::get_all_positions (void)
 {}
-;
 
 
 servo_buffer::servo_buffer (manip_and_conv_effector &_master)
         : master(_master)
 {}
-;             // konstruktor
+             // konstruktor
 
 void servo_buffer::synchronise (void)
 {}
-;         // synchronizacja
+         // synchronizacja
 uint64_t servo_buffer::compute_all_set_values (void)
 {
     return 0;
-};
+}
 
 
 /*-----------------------------------------------------------------------*/
@@ -166,7 +160,6 @@ lib::BYTE servo_buffer::Move_1_step (void)
     else
         return NO_ERROR_DETECTED;
 }
-; // end: servo_buffer::Move_1_step
 /*-----------------------------------------------------------------------*/
 
 
@@ -194,7 +187,6 @@ lib::BYTE servo_buffer::convert_error (void)
     else
         return NO_ERROR_DETECTED;
 }
-; // end: servo_buffer::convert_error
 /*-----------------------------------------------------------------------*/
 
 
@@ -207,7 +199,6 @@ void servo_buffer::Move_passive (void)
     {
         regulator_ptr[j]->insert_new_step(0.0); // zerowy przyrost polozenia dla wszystkich napedow
     }
-    ; // end: for
 
     // Wykonanie pojedynczego kroku ruchu
     if ( Move_a_step() )
@@ -224,9 +215,7 @@ void servo_buffer::Move_passive (void)
     { // Tak, przeslac
         reply_to_EDP_MASTER();
     }
-    ; // end: if (send_after_last_step)
 }
-; // end: servo_buffer::Move_passive
 /*-----------------------------------------------------------------------*/
 
 
@@ -253,7 +242,6 @@ void servo_buffer::Move (void)
     {
         new_increment[k] = command.parameters.move.macro_step[k] / command.parameters.move.number_of_steps;
     }
-    ; // end: for
 
 
     // realizacja makrokroku przez wszystkie napedy;  i - licznik krokow ruchu
@@ -286,12 +274,8 @@ void servo_buffer::Move (void)
                     regulator_ptr[k]->previous_abs_position + new_increment[k]*j ,k);
             }
         }
-        ; // end: for
 
-
-
-
-        if ( Move_a_step() == NO_ERROR_DETECTED)
+      if ( Move_a_step() == NO_ERROR_DETECTED)
         { // NO_ERROR_DETECTED
             //  std::cout<<"NO_ERROR_DETECTED\n";
             if ((command.parameters.move.return_value_in_step_no>0)&&(j == command.parameters.move.return_value_in_step_no-1))
@@ -321,21 +305,16 @@ void servo_buffer::Move (void)
                 std::cout<<"ERROR_DETECTED 2\n";
                 reply_to_EDP_MASTER();
             }
-            ; // end: else
             break; // przerwac ruch, bo byl blad
         }
-        ; // end: else od: if (Move_a_step ...) == NO_ERROR_DETECTED
     }
-    ; // end: for(j)
 
     for ( int i = 0;  i < master.number_of_servos; i++)
     {
         regulator_ptr[i]->previous_abs_position = command.parameters.move.abs_position[i];
     }
 
-
 }
-; // end: servo_buffer::Move
 /*-----------------------------------------------------------------------*/
 
 
@@ -359,7 +338,6 @@ void servo_buffer::reply_to_EDP_MASTER (void)
     clear_reply_status();
     send_after_last_step = false;
 }
-; // end: servo_buffer::reply_to_EDP_MASTER
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
@@ -370,7 +348,6 @@ void servo_buffer::ppp (void) const
     std::cout << " number_of_steps= " << command.parameters.move.number_of_steps << "\n";
     std::cout << " return_value_in_step_no= " << command.parameters.move.return_value_in_step_no << "\n";
 }
-; // end: servo_buffer::ppp
 /*-----------------------------------------------------------------------*/
 
 
@@ -384,7 +361,6 @@ servo_buffer::~servo_buffer(void)
     for (int j = 0; j < master.number_of_servos; j++)
         delete regulator_ptr[j];
 }
-; // end: regulator_group::~regulator_group
 /*-----------------------------------------------------------------------*/
 
 
@@ -397,7 +373,6 @@ void servo_buffer::Read (void)
     // wyslac do EDP_MASTER
     reply_to_EDP_MASTER();
 }
-; // end: servo_buffer::Read ( )
 /*-----------------------------------------------------------------------*/
 
 
@@ -413,7 +388,6 @@ void servo_buffer::Change_algorithm (void)
     ; // end: for
     reply_to_EDP_MASTER();
 }
-; // end: servo_buffer::Change_algorithm ( )
 /*-----------------------------------------------------------------------*/
 
 
@@ -459,7 +433,6 @@ regulator::regulator(lib::BYTE reg_no, lib::BYTE reg_par_no, common::manip_and_c
     meassured_current = 0;                 // prad zmierzony
     PWM_value = 0;               // zadane wypelnienie PWM
 }
-;  // end: regulator::regulator(lib::BYTE reg_no, lib::BYTE reg_par_no)
 /*-----------------------------------------------------------------------*/
 
 
@@ -498,7 +471,7 @@ void regulator::constraint_detector(double max_acc_local, double max_vel_local, 
 	//	if (debug) printf("acc: %f, vel: %f, const_sum: %f\n", current_acc, step_new, step_new_over_constraint_sum);
 
 	step_old = step_new;
-};
+}
 */
 
 // BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie regulatorow
@@ -594,7 +567,7 @@ void regulator::constraint_detector(double max_acc_local, double max_vel_local, 
         printf("sn: %f, snb: %f, sum: %f\n", step_new, step_new_beginning, step_new_over_constraint_sum);
 
     step_old = step_new;
-};
+}
 
 
 
@@ -604,21 +577,18 @@ double regulator::get_set_value ( void )
     // odczytanie aktualnej wartosci zadanej  - metoda konkretna
     return set_value_new;
 }
-;  // end: get_set_value ( )
 
 void regulator::insert_new_step (double ns)
 {
     // wstawienie nowej wartosci zadanej - metoda konkretna
     step_new = ns;
 }
-;  // end: insert_new_step ( )
 
 void regulator::insert_meassured_current (int meassured_current_l)
 {
     // wstawienie wartosci zmierzonej pradu
     meassured_current = meassured_current_l;
 }
-;  // end: insert_meassured_current ( )
 
 
 double regulator::return_new_step ( void )
@@ -634,7 +604,6 @@ void regulator::insert_new_pos_increment (double inc)
     // Do przepisywania zrealizowanego polozenia z HI do regulatora
     position_increment_new = inc;
 }
-;  // end: insert_new_pos_increment ( )
 
 double regulator::get_position_inc ( int tryb )
 { // by Y: 0 dla servo i 1 dla paczki dla edp;
@@ -652,21 +621,18 @@ double regulator::get_position_inc ( int tryb )
     }
     return pins;
 }
-;  // end: get_position_inc ( )
 
 int regulator::get_meassured_current ( void )
 {
     // odczytanie rzeczywistego pradu - metoda konkretna
     return meassured_current;
 }
-;  // end: get_current ( )
 
 int regulator::get_PWM_value ( void )
 {
     // odczytanie zadanego wypelnienia PWM - metoda abstrakcyjna
     return PWM_value;
 }
-; // end: get_PWM_value()
 
 // do odczytu stanu regulatora (w szczegolnosci regulatora chwytaka)
 int regulator::get_reg_state ( void )
@@ -674,15 +640,12 @@ int regulator::get_reg_state ( void )
     // odczytanie zadanego wypelnienia PWM - metoda abstrakcyjna
     return reg_state;
 }
-; // end: get_PWM_value()
-
 
 int regulator::get_actual_inc ( void )
 {
     // odczytanie rzeczywistego przyrostu polozenia w pojedynczym kroku
     return (int) position_increment_new;
 }
-; // end: get_actual_inc()
 
 // double get_desired_inc ( int axe_nr );
 
@@ -692,28 +655,24 @@ void regulator::insert_algorithm_no ( lib::BYTE new_number )
     // wpisanie nowego numeru algorytmu regulacji
     algorithm_no = new_number;
 }
-; // end: insert_algorithm_no ( )
 
 lib::BYTE regulator::get_algorithm_no ( void )
 {
     // odczytanie aktualnie uzywanego numeru algorytmu regulacji
     return current_algorithm_no;
 }
-; // end: get_algorithm_no ( )
 
 void regulator::insert_algorithm_parameters_no ( lib::BYTE new_number )
 {
     // wpisanie nowego numeru zestawu parametrow algorytmu regulacji
     algorithm_parameters_no = new_number;
 }
-; // end: insert_algorithm_parameters_no ( )
 
 lib::BYTE regulator::get_algorithm_parameters_no ( void )
 {
     // wpisanie nowego numeru zestawu parametrow algorytmu regulacji
     return current_algorithm_parameters_no;
 }
-; // end: get_algorithm_parameters_no ( )
 
 void regulator::clear_regulator ()
 
@@ -731,7 +690,6 @@ void regulator::clear_regulator ()
     delta_eint = 0.0;
     delta_eint_old = 0.0;
 }
-;  // end: clear_regulator ( )
 
 
 
@@ -755,9 +713,7 @@ NL_regulator::NL_regulator (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, d
     counter = 0;
 
     meassured_current = 0;
-
 }
-; // end: NL_regulator::NL_regulator
 /*-----------------------------------------------------------------------*/
 
 } // namespace common

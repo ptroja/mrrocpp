@@ -23,8 +23,6 @@ namespace sensor {
     {
 
     protected:
-
-
         short is_reading_ready;			// czy jakikolwiek odczyt jest gotowy?
 
         lib::ForceTrans *gravity_transformation; // klasa likwidujaca wplyw grawitacji na czujnik

@@ -18,7 +18,7 @@ namespace edp {
 namespace sensor {
 
 force::force(common::irp6s_postument_track_effector &_master)
-        : master(_master), new_edp_command(false)
+        : new_edp_command(false), master(_master)
 {
     gravity_transformation = NULL;
     is_sensor_configured=false;	//!< czujnik niezainicjowany
@@ -63,6 +63,8 @@ int	force::set_command_execution_finish() // podniesienie semafora
         sem_trywait(&(new_ms_for_edp));
         return sem_post(&new_ms_for_edp);// odwieszenie watku edp_master
     }
+
+    return 0; // TODO: check for return or throw in future object-oriented version
 }
 
 int	force::check_for_command_execution_finish() // oczekiwanie na semafor
