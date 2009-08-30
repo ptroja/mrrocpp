@@ -38,15 +38,11 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6m {
+namespace polycrank {
 
 struct sigevent event;
 
-// extern ini_configs* ini_con;
-
-
 volatile common::motor_data md; // Dane przesylane z/do funkcji obslugi przerwania
-
 
 // ------------------------------------------------------------------------
 hardware_interface::hardware_interface ( effector &_master )   : common::hardware_interface(_master)
@@ -146,7 +142,7 @@ hardware_interface::hardware_interface ( effector &_master )   : common::hardwar
             md.value=max_current[i];
             hi_int_wait(INT_SINGLE_COMMAND, 2);
         }
-    };
+    }
 
     if(master.test_mode==0)
     {
@@ -157,14 +153,13 @@ hardware_interface::hardware_interface ( effector &_master )   : common::hardwar
 
     first = true; // Pierwszy krok
 
-}; // koniec: hardware_interface::hardware_interface( )
+}
 // ------------------------------------------------------------------------
 
 
 // ------------------------------------------------------------------------
 hardware_interface::~hardware_interface ( void )   // destruktor
 {
-
     if(master.test_mode==0)
     {
         reset_counters();
@@ -178,14 +173,13 @@ hardware_interface::~hardware_interface ( void )   // destruktor
             hi_int_wait(INT_SINGLE_COMMAND, 2);
         }
     }
-}; // end: hardware_interface::~hardware_interface()
+}
 // ------------------------------------------------------------------------
 
 
 // ------------------------------------------------------------------------
 uint64_t hardware_interface::read_write_hardware ( void )
 {
-
     // ------------------------------------------------------------------------
     // Obsluga sprzetu: odczyt aktualnych wartosci polozenia i zapis wartosci
     // wypelnienia PWM
@@ -211,7 +205,6 @@ uint64_t hardware_interface::read_write_hardware ( void )
 
     for (i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
     {
-
         // przepisanie wartosci pradu
         meassured_current[i] = (md.robot_status[i].adr_offset_plus_2 & 0xFF00)>>8;
 
@@ -229,7 +222,6 @@ uint64_t hardware_interface::read_write_hardware ( void )
     return md.hardware_error;
 
 }
-; // end: hardware_interface::read_write_hardware()
 // ------------------------------------------------------------------------
 
 
@@ -240,15 +232,15 @@ void hardware_interface::reset_counters ( void )
 
     for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
     {
-        md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
-        md	.register_adress=SERVO_COMMAND1_ADR;
-        md	.value=MICROCONTROLLER_MODE;
+        md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
+        md.register_adress=SERVO_COMMAND1_ADR;
+        md.value=MICROCONTROLLER_MODE;
         hi_int_wait(INT_SINGLE_COMMAND, 2);
-        md	.value=STOP_MOTORS;
+        md.value=STOP_MOTORS;
         hi_int_wait(INT_SINGLE_COMMAND, 2);
-        md	.value=RESET_MANUAL_MODE;
+        md.value=RESET_MANUAL_MODE;
         hi_int_wait(INT_SINGLE_COMMAND, 2);
-        md	.value=RESET_ALARM;
+        md.value=RESET_ALARM;
         hi_int_wait(INT_SINGLE_COMMAND, 2);
 
         if (!md.is_synchronised)
@@ -262,9 +254,7 @@ void hardware_interface::reset_counters ( void )
         current_position_inc[i] = 0.0;
 
         // 	in16(SERVO_REPLY_INT_ADR);
-
     }
-    ; // end: for
 
     // Dwukrotny odczyt polozenia dla wyzerowania przyrostu wynikajacego z pierwszego
     // odczytu rezolwera
@@ -273,7 +263,6 @@ void hardware_interface::reset_counters ( void )
     {
         robot_control[i].adr_offset_plus_0 = 0x0200;
     }
-    ; // end: for
 
     // wyzerowanie przyrostu pozycji
     read_write_hardware();
@@ -286,7 +275,6 @@ void hardware_interface::reset_counters ( void )
     // robot_status[0].adr_offset_plus_6 = 0xFFFF ^ in16(SERVO_REPLY_POS_HIGH_ADR);// Starsze slowo 16-bitowe
     // printf("L=%x U=%x  \n",robot_status[0].adr_offset_plus_4, robot_status[0].adr_offset_plus_6);
 }
-; // end: hardware_interface::reset_counters()
 // ------------------------------------------------------------------------
 
 
@@ -311,7 +299,6 @@ bool hardware_interface::is_hardware_error ( void)
     } // end: for
     return h_error;
 }
-; // end: hardware_interface::is_hardware_error ()
 // ------------------------------------------------------------------------
 
 
@@ -324,15 +311,15 @@ int hardware_interface::synchronise_via_lm629(void)
     for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ ) // UWAGA NA -1
     {
         // tryb pojedynczych polecen w obsludze przerwania
-        md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
-        md	.register_adress=SERVO_COMMAND1_ADR;
-        md	.value=LM629_VIA_MICROCONTROLLER_MODE;
+        md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
+        md.register_adress=SERVO_COMMAND1_ADR;
+        md.value=LM629_VIA_MICROCONTROLLER_MODE;
         hi_int_wait(INT_SINGLE_COMMAND, 10);
-        md	.value=FINISH_SYNCHRO;
+        md.value=FINISH_SYNCHRO;
         hi_int_wait(INT_SINGLE_COMMAND, 10);
-        md	.value=START_SYNCHRO;
+        md.value=START_SYNCHRO;
         hi_int_wait(INT_SINGLE_COMMAND, 10);
-        md	.value=ZERO_ORDER;
+        md.value=ZERO_ORDER;
         hi_int_wait(INT_SINGLE_COMMAND, 10);
 
         wyjscie=0;
@@ -351,11 +338,11 @@ int hardware_interface::synchronise_via_lm629(void)
         md	.register_adress=SERVO_COMMAND1_ADR;
         md	.value=MICROCONTROLLER_MODE;
         hi_int_wait(INT_SINGLE_COMMAND, 10);
-    };
+    }
 
     // docelowo zwracac ew. bledy
     return 1;
-};
+}
 
 
 
@@ -434,7 +421,6 @@ void hardware_interface::start_synchro ( int drive_number )
     md	.value=START_SYNCHRO;
     hi_int_wait(INT_SINGLE_COMMAND, 2);
 }
-;  // end: start_synchro()
 
 
 void hardware_interface::finish_synchro ( int drive_number )
@@ -442,17 +428,16 @@ void hardware_interface::finish_synchro ( int drive_number )
     trace_resolver_zero = false;
 
     // Zakonczyc sledzenie zera rezolwera i przejdz do trybu normalnej pracy
-    md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)drive_number;
-    md	.register_adress=SERVO_COMMAND1_ADR;
-    md	.value=FINISH_SYNCHRO;
+    md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)drive_number;
+    md.register_adress=SERVO_COMMAND1_ADR;
+    md.value=FINISH_SYNCHRO;
     hi_int_wait(INT_SINGLE_COMMAND, 2);
 
     // by Y - UWAGA NIE WIEDZIEC CZEMU BEZ TEGO NIE ZAWSZE DZIALAJA RUCHY NA OSI PO SYNCHGORNIZACJi
-    md	.value=MICROCONTROLLER_MODE;
+    md.value=MICROCONTROLLER_MODE;
     hi_int_wait(INT_SINGLE_COMMAND, 2);
 
 }
-;  // end: finis_synchro()
 
 } // namespace common
 } // namespace edp

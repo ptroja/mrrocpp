@@ -24,7 +24,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6m {
+namespace polycrank {
 
 /*-----------------------------------------------------------------------*/
 lib::BYTE servo_buffer::Move_a_step (void)
@@ -1561,7 +1561,7 @@ lib::BYTE NL_regulator_6_irp6m::compute_set_value (void)
 ; // end: NL_regulator_6::compute_set_value
 /*-----------------------------------------------------------------------*/
 
-} // namespace irp6m
+} // namespace polycrank
 
 namespace common {
 

@@ -50,7 +50,7 @@ public:
     void get_arm_position (bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
 };
 
-} // namespace irp6m
+} // namespace polycrank
 } // namespace edp
 } // namespace mrrocpp
 

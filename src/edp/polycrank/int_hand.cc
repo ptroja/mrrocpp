@@ -41,7 +41,7 @@ extern irp6m::effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
 
 namespace mrrocpp {
 namespace edp {
-namespace irp6m {
+namespace polycrank {
 
 // Zmienne globalne do komunikacji z procedura obslugi przerwan
 
