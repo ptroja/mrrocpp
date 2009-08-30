@@ -61,6 +61,9 @@ public:
 
 	void finish_synchro(int drive_number);
 
+private:
+	edp::common::irq_data_t irq_data;
+
 }; // koniec: class hardware_interface
 
 #ifdef __cplusplus

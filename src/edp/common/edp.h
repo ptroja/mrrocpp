@@ -29,10 +29,8 @@ class in_out_buffer;
 class irp6s_postument_track_effector;
 
 enum STATE { GET_STATE, GET_SYNCHRO, SYNCHRO_TERMINATED, GET_INSTRUCTION, EXECUTE_INSTRUCTION, WAIT, WAIT_Q };
-// extern int errno;
 
 enum TRANSLATION_ENUM { WITH_TRANSLATION, WITHOUT_TRANSLATION };
-// extern int errno;
 
 class System_error
 {

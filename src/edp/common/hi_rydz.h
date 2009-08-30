@@ -49,8 +49,15 @@ struct motor_data
 
     status_of_a_dof robot_status[MAX_SERVOS_NR];
     // long int high_word;
-
 };
+
+typedef struct {
+#ifdef __QNXNTO__
+	struct sigevent event; // sygnalilzacja przerwania dla glownego watku
+#endif
+	common::motor_data md; // Dane przesylane z/do funkcji obslugi przerwania
+} irq_data_t;
+
 // ------------------------------------------------------------------------
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------

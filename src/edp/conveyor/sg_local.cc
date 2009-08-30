@@ -44,7 +44,6 @@ lib::BYTE servo_buffer::Move_a_step (void)
 	}
 	return convert_error();
 }
-; // end: servo_buffer::Move_a_step
 /*-----------------------------------------------------------------------*/
 
 
@@ -52,9 +51,7 @@ lib::BYTE servo_buffer::Move_a_step (void)
 /*-----------------------------------------------------------------------*/
 servo_buffer::servo_buffer (effector &_master) : common::servo_buffer(_master), master(_master)
 {
-
 	hi = new hardware_interface(_master);
-
 
 	// utworzenie tablicy regulatorow
 
@@ -67,14 +64,9 @@ servo_buffer::servo_buffer (effector &_master) : common::servo_buffer(_master), 
 
 	for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
 	{
-
 		command.parameters.move.abs_position[j]=0.0;
 	}
-	; // end: for
-
 }
-; // end: servo_buffer::servo_buffer
-
 
 /*-----------------------------------------------------------------------*/
 
@@ -82,7 +74,6 @@ servo_buffer::servo_buffer (effector &_master) : common::servo_buffer(_master), 
 
 void servo_buffer::synchronise (void)
 {
-
 	common::regulator* crp = NULL; // wskaznik aktualnie synchronizowanego napedu
 
 	int j;
@@ -114,7 +105,7 @@ void servo_buffer::synchronise (void)
 		synchro_step=0.0;
 		crp = regulator_ptr[j];
 		crp->insert_new_step(synchro_step);
-	};
+	}
 
 	for (j = 0; j < 25; j++)
 		Move_1_step();
@@ -126,7 +117,6 @@ void servo_buffer::synchronise (void)
 	reply_to_EDP_MASTER();
 	return;
 }
-; // end: servo_buffer::synchronise()
 
 /*-----------------------------------------------------------------------*/
 
@@ -135,7 +125,6 @@ void servo_buffer::synchronise (void)
 servo_buffer::~servo_buffer(void)
 {
 }
-; // end: regulator_group::~regulator_group
 /*-----------------------------------------------------------------------*/
 
 
@@ -153,9 +142,7 @@ void servo_buffer::get_all_positions (void)
 		servo_data.algorithm_no[i] = regulator_ptr[i]->get_algorithm_no();
 		servo_data.algorithm_parameters_no[i] = regulator_ptr[i]->get_algorithm_parameters_no();
 	}
-	; // end: for
 }
-; // end: output_buffer::get_all_positions
 /*-----------------------------------------------------------------------*/
 
 
@@ -167,8 +154,6 @@ uint64_t servo_buffer::compute_all_set_values (void)
 
 	for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
 	{
-
-
 		if (master.test_mode)
 		{
 			regulator_ptr[j]->insert_new_pos_increment(regulator_ptr[j]->return_new_step()
@@ -184,10 +169,8 @@ uint64_t servo_buffer::compute_all_set_values (void)
 		// przepisanie obliczonej wartosci zadanej do hardware interface
 		hi->insert_set_value(j, regulator_ptr[j]->get_set_value());
 	}
-	; // end: for
 	return status;
 }
-; // end: servo_buffer::compute_all_set_values
 /*-----------------------------------------------------------------------*/
 
 } // namespace conveyor
