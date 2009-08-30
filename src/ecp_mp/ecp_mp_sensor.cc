@@ -65,7 +65,7 @@ sensor::sensor(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::t
  	// cout<<"VSP_NAME = "<<VSP_NAME<<endl;
 
 	// Sprawdzeie czy nie jest juz zarejestrowany zarzadca zasobow o tej nazwie.
-	if( (ch = messip_channel_connect(NULL, VSP_NAME, MESSIP_NOTIMEOUT)))
+	if( (ch = messip_channel_connect(NULL, VSP_NAME.c_str(), MESSIP_NOTIMEOUT)))
 	{
 		// by Y - usuniete bo mozna podlaczyc sie do istniejacego czujnika
 		// throw sensor_error(lib::SYSTEM_ERROR, DEVICE_ALREADY_EXISTS);
@@ -79,13 +79,13 @@ sensor::sensor(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::t
 
 	short tmp = 0;
  	// Kilka sekund  (~2) na otworzenie urzadzenia.
-	while( (ch = messip_channel_connect(NULL, VSP_NAME, MESSIP_NOTIMEOUT)) == NULL)
+	while( (ch = messip_channel_connect(NULL, VSP_NAME.c_str(), MESSIP_NOTIMEOUT)) == NULL)
 	{
 // 		cout<<tmp<<endl;
 		if((tmp++)<CONNECT_RETRY)
 			usleep(1000*CONNECT_DELAY);
 		else {
-			fprintf(stderr, "ecp_mp_sensor: messip_channel_connect(%s) failed\n", VSP_NAME);
+			fprintf(stderr, "ecp_mp_sensor: messip_channel_connect(%s) failed\n", VSP_NAME.c_str());
 			throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 		}
 	}// end: while

@@ -12,7 +12,11 @@
 #include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
+#if !defined(USE_MESSIP_SRR)
 #include <devctl.h>
+#else
+#warning file not ported to MESSIP yet
+#endif
 
 #include "lib/com_buf.h"
 
@@ -35,6 +39,7 @@ rcs_kociemba::rcs_kociemba(lib::SENSOR_ENUM _sensor_name, const char* _section_n
 
 /************************** CONFIGURE SENSOR ******************************/
 void rcs_kociemba::configure_sensor() {
+#if !defined(USE_MESSIP_SRR)
 	// Rozkaz konfiguracjii czujnika.
 	devmsg.to_vsp.i_code= lib::VSP_CONFIGURE_SENSOR;
 	memcpy(&devmsg.to_vsp.rcs, &to_vsp.rcs, union_size);
@@ -42,10 +47,12 @@ void rcs_kociemba::configure_sensor() {
 	// Wyslanie polecenia do procesu VSP.
 	if (devctl(sd, DEVCTL_RW, &devmsg, sizeof(lib::DEVCTL_MSG), NULL) == 9)
 		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+#endif
 } // end: configure_sensor
 
 /************************** INITIATE READING *********************************/
 void rcs_kociemba::initiate_reading(){
+#if !defined(USE_MESSIP_SRR)
 	devmsg.to_vsp.i_code= lib::VSP_INITIATE_READING;
 	memcpy(&devmsg.to_vsp.rcs, &to_vsp.rcs, union_size);
 	if (devctl(sd, DEVCTL_RW, &devmsg, sizeof(lib::DEVCTL_MSG), NULL) == 9) {
@@ -58,6 +65,7 @@ void rcs_kociemba::initiate_reading(){
 		image.sensor_union.rcs.init_mode = lib::RCS_INIT_FAILURE;
 		printf("ECP_MP KR initiate_reading: Reply from VSP not OK!\n");
 	}
+#endif
 }
 
 /***************************** GET  READING *********************************/

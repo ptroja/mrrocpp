@@ -29,7 +29,7 @@ class generator : public ecp_mp::generator::generator {
 	    // Zlecenie ruchu dla EDP
   		void Move(void);
   		virtual void execute_motion (void);
-	
+
 		bool communicate_with_mp_in_move;
 		bool communicate_with_edp;
 		bool copy_edp_buffers_in_move;
@@ -38,7 +38,6 @@ class generator : public ecp_mp::generator::generator {
 		generator(common::task::task& _ecp_task);
 
 		virtual ~generator();
-		
 
 		bool is_EDP_error (ecp_robot& the_robot) const;
 

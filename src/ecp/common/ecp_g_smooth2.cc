@@ -638,7 +638,7 @@ bool smooth2::next_step () {
     			                                   pose_list_iterator->k[6]*((node_counter*tk)*pose_list_iterator->v_grip);
     			//printf(" %f ", gripper_position);
                 if((gripper_position > pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == -1) ||
-                		gripper_position < pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == 1) {
+                		(gripper_position < pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == 1)) {
                 	//printf("git");
                 	the_robot->EDP_data.next_gripper_coordinate = gripper_position;
                 } else {
@@ -675,7 +675,7 @@ bool smooth2::next_step () {
     			                                   pose_list_iterator->k[6]*((node_counter*tk)*pose_list_iterator->v_grip);
     			//printf(" %f ", gripper_position);
                 if((gripper_position > pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == -1) ||
-                		gripper_position < pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == 1) {
+                		(gripper_position < pose_list_iterator->coordinates[6] && pose_list_iterator->k[6] == 1)) {
                 	//printf("git");
                 	the_robot->EDP_data.next_gripper_coordinate = gripper_position;
                 } else {
@@ -712,7 +712,7 @@ bool smooth2::next_step () {
     			                                   pose_list_iterator->k[i]*((node_counter*tk)*pose_list_iterator->v_grip);
     			//printf(" %f ", gripper_position);
                 if((gripper_position > pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == -1) ||
-                		gripper_position < pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == 1) {
+                		(gripper_position < pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == 1)) {
                 	//printf("git");
                 	the_robot->EDP_data.next_gripper_coordinate = gripper_position;
                 } else {
@@ -755,7 +755,7 @@ bool smooth2::next_step () {
     			                                   pose_list_iterator->k[i]*((node_counter*tk)*pose_list_iterator->v_grip);
     			//printf(" %f ", gripper_position);
                 if((gripper_position > pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == -1) ||
-                		gripper_position < pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == 1) {
+                		(gripper_position < pose_list_iterator->coordinates[i] && pose_list_iterator->k[i] == 1)) {
                 	//printf("git");
                 	the_robot->EDP_data.next_gripper_coordinate = gripper_position;
                 } else {

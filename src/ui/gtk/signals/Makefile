@@ -5,11 +5,11 @@ HOMEDIR = ../../../..
 include $(HOMEDIR)/common.mk
 
 PACKAGES=libxml-2.0 gtk+-2.0 gtkmm-2.4 gthread-2.0
-CPPFLAGS=-I${HOMEDIR}/include -I.. `pkg-config --cflags ${PACKAGES}` -DUSE_MESSIP_SRR
+CPPFLAGS=-I${HOMEDIR}/src -I.. `pkg-config --cflags ${PACKAGES}` -DUSE_MESSIP_SRR
 CXXFLAGS=-Wall -g -O0 -fpic -I $(HEADERSDIR) -I.
 LDFLAGS+=`pkg-config --libs ${PACKAGES}` -export-dynamic -L${HOMEDIR}/lib
 ECP_DIR = $(HOMEDIR)/src/ecp
-HEADERSDIR = $(HOMEDIR)/include
+HEADERSDIR = $(HOMEDIR)/src
 
 #LIBS = `pwd`/../../../../lib/libecp.so `pwd`/../../../../lib/libmrrocpp.so `pwd`/../../../../lib/libmessip.so
 
@@ -37,7 +37,7 @@ edp_irp6p.so: edp_irp6p_uimodule.o \
 	$(CXX) ${LDFLAGS} -shared -o $@ $(LIBS) $^
 
 edp_conveyor.so: edp_conveyor_uimodule.o \
-	$(ECP_DIR)/conveyor/ecp_local.o \
+	$(ECP_DIR)/conveyor/ecp_r_conv.o \
 	$(UI_DIR)/ui_ecp_r_conveyor.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $(LIBS) $^
 	

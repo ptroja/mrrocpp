@@ -307,9 +307,9 @@ void ui_model::loadEdps(void) {
 }
 
 void ui_model::slayAll(void) {
-	
-	char * username = (*this->config).return_string_value("username", "[ui]");
-	char * node_name = (*this->config).return_string_value("node_name", "[ui]");
+
+	std::string username = (*this->config).return_string_value("username", "[ui]");
+	std::string node_name = (*this->config).return_string_value("node_name", "[ui]");
 	std::string command;
 	std::string RSHcommand = "rsh -l ";
 	std::string space = " ";
@@ -323,12 +323,12 @@ void ui_model::slayAll(void) {
 		command = RSHcommand + username + space + node_name + slayCommand + (*Iter)->program_name;
 		system(command.c_str());
 	}
-	
+
 	for(std::vector<ui_config_entry *>::iterator Iter = ecps.begin(); Iter != ecps.end(); Iter++) {
 		command = RSHcommand + username + space + node_name + slayCommand + (*Iter)->program_name;
 		system(command.c_str());
 	}
-	
+
 	for(std::vector<ui_config_entry *>::iterator Iter = mp.begin(); Iter != mp.end(); Iter++) {
 		command = RSHcommand + username + space + node_name + slayCommand + (*Iter)->program_name;
 		system(command.c_str());

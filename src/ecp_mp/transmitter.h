@@ -120,10 +120,8 @@ class transmitter
 					error_class = err_cl;
 					error_no = err_no;
 				};
-		}
-		; // end: class transmitter_error
-}
-; // end: class transmitter
+		}; // end: class transmitter_error
+}; // end: class transmitter
 
 } // namespace transmitter
 } // namespace ecp_mp

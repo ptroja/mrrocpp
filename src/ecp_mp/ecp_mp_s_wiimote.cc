@@ -3,6 +3,7 @@
 #include <strings.h>
 #include <unistd.h>
 #include <iostream>
+#include <string.h>
 
 #include "ecp_mp/ecp_mp_s_wiimote.h"
 #include "ecp_mp/ecp_mp_task.h"

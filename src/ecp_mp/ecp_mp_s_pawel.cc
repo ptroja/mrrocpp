@@ -10,7 +10,11 @@
 #include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
+#if !defined(USE_MESSIP_SRR)
 #include <devctl.h>
+#else
+#warning file not ported to MESSIP yet
+#endif
 #include <math.h>
 
 #include "lib/com_buf.h"
@@ -34,23 +38,24 @@ pawel::pawel (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::ta
 }
 /************************** CONFIGURE SENSOR ******************************/
 void pawel::configure_sensor() {
-
+#if !defined(USE_MESSIP_SRR)
 	devmsg.to_vsp.i_code= lib::VSP_CONFIGURE_SENSOR;
 //	printf ("[ecp_mp]\tkonfiguracja czujnika\n");
 	// Wyslanie polecenia do procesu VSP.
 	if (devctl(sd, DEVCTL_RW, &devmsg, sizeof(lib::DEVCTL_MSG), NULL) == 9)
 		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
+#endif
 }
 
 /************************** INITIATE  READING *********************************/
 void pawel::initiate_reading() {
-
+#if !defined(USE_MESSIP_SRR)
 	devmsg.to_vsp.i_code= lib::VSP_INITIATE_READING;
 	if (devctl(sd, DEVCTL_RW, &devmsg, sizeof(lib::DEVCTL_MSG), NULL) == 9)
 		throw sensor_error(lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE);
 
 //	printf("[ecp_mp]\tinitiate reading\n");
-
+#endif
 }
 
 /***************************** GET  READING *********************************/
@@ -71,9 +76,7 @@ void pawel::get_reading() {
 		/*f = fopen("../data/faketrajectory.txt","a");
 		fprintf(f,"%i %f %f %f %i\n",image.sensor_union.ball.nr,image.sensor_union.ball.x,image.sensor_union.ball.y,image.sensor_union.ball.z,image.sensor_union.ball.ts.tv_sec);
 		fclose(f);*/
-
 	} else {
-
 		printf("[ecp_mp]\treply from VSP not OK\n");
 	}
 }

@@ -7,7 +7,9 @@ OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 
-ECP_MPOBJ_SHARED = ecp_mp_generator.o ecp_mp_sensor.o transmitter.o ecp_mp_task.o ecp_mp_robot.o Trajectory.o ecp_mp_smooth_taught_in_pose.o
+ECP_MPOBJ_SHARED = ecp_mp_generator.o ecp_mp_sensor.o transmitter.o \
+	ecp_mp_task.o ecp_mp_robot.o Trajectory.o \
+	ecp_mp_smooth_taught_in_pose.o
 
 ECP_MPOBJ = $(ECP_MPOBJ_SHARED) 
 
