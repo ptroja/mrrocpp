@@ -85,7 +85,7 @@ vis_sac_lx::vis_sac_lx(common::task::task& _ecp_task, int step) :
 	gain[4]=ecp_t.config.return_double_value("gain4");
 	gain[5]=ecp_t.config.return_double_value("gain5");
 
-	//SAC	
+	//SAC
 	O_weight__SAC=ecp_t.config.return_double_value("O_weight__SAC");
 	O_gain__SAC[0]=ecp_t.config.return_double_value("O_gain0__SAC");
 	O_gain__SAC[1]=ecp_t.config.return_double_value("O_gain1__SAC");
@@ -93,7 +93,7 @@ vis_sac_lx::vis_sac_lx(common::task::task& _ecp_task, int step) :
 	O_gain__SAC[3]=ecp_t.config.return_double_value("O_gain3__SAC");
 	O_gain__SAC[4]=ecp_t.config.return_double_value("O_gain4__SAC");
 	O_gain__SAC[5]=ecp_t.config.return_double_value("O_gain5__SAC");
-	
+
 	C_weight__SAC=ecp_t.config.return_double_value("C_weight__SAC");
 	C_gain__SAC[0]=ecp_t.config.return_double_value("C_gain0__SAC");
 	C_gain__SAC[1]=ecp_t.config.return_double_value("C_gain1__SAC");
@@ -101,7 +101,7 @@ vis_sac_lx::vis_sac_lx(common::task::task& _ecp_task, int step) :
 	C_gain__SAC[3]=ecp_t.config.return_double_value("C_gain3__SAC");
 	C_gain__SAC[4]=ecp_t.config.return_double_value("C_gain4__SAC");
 	C_gain__SAC[5]=ecp_t.config.return_double_value("C_gain5__SAC");
-	
+
 	f_weight__SAC=ecp_t.config.return_double_value("f_weight__SAC");
 	f_gain__SAC[0]=ecp_t.config.return_double_value("f_gain0__SAC");
 	f_gain__SAC[1]=ecp_t.config.return_double_value("f_gain1__SAC");
@@ -118,7 +118,7 @@ vis_sac_lx::vis_sac_lx(common::task::task& _ecp_task, int step) :
 	C_gain__EIH[3]=ecp_t.config.return_double_value("C_gain3__EIH");
 	C_gain__EIH[4]=ecp_t.config.return_double_value("C_gain4__EIH");
 	C_gain__EIH[5]=ecp_t.config.return_double_value("C_gain5__EIH");
-		
+
 	f_weight__EIH=ecp_t.config.return_double_value("f_weight__EIH");
 	f_gain__EIH[0]=ecp_t.config.return_double_value("f_gain0__EIH");
 	f_gain__EIH[1]=ecp_t.config.return_double_value("f_gain1__EIH");
@@ -143,7 +143,7 @@ vis_sac_lx::vis_sac_lx(common::task::task& _ecp_task, int step) :
 	steps2switch=0;
 
 	phaseCEIH=0;
-	
+
 	CSAC_Tx_G_firstvalid=1;
 	CEIH_Tx_G_firstvalid=1;
 
@@ -168,7 +168,7 @@ bool vis_sac_lx::first_step()
 	//	the_robot = robot_m[lib::ROBOT_IRP6_ON_TRACK];
 
 	vsp_vis_sac = sensor_m[lib::SENSOR_CAMERA_SA];
-	
+
 	printf("KAMERA, KAMERA %d \n\n",vsp_vis_sac);
 
 	idle_step_counter = 1;
@@ -262,10 +262,10 @@ bool vis_sac_lx::next_step()
 		//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 2.341);	//jesli chwytamy po przekatnej
 	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.002, 1.481+0.03, 3.141); // jesli chwytak na plasko oryginal
 	G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 0.00, 1.57, 3.141); // jesli chwytak na plasko
-	
-	
+
+
 	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0, 1.564, 0.0, 0.000); //rover
-	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0,1.569070, 3.141593, 0.000000);
+	//G_Tx_G2.set_xyz_euler_zyz( 0,0,0,1.569070, M_PI, 0.000000);
 
 
 	if (node_counter==1)
@@ -301,29 +301,29 @@ bool vis_sac_lx::next_step()
 
 			//O_r_Ep_d[i][1]=0;
 			//O_r_Ep_d[i][2]=0;
-			
+
 			O_r_Ep_d[1][i]=0;
 			O_r_Ep_d[1][i]=0;
 			O_r_Ep_d[2][i]=0;
-			
+
 			CEIH_rpy_G[0][i]=0;
 			CEIH_rpy_G[1][i]=0;
 			CEIH_rpy_G[2][i]=0;
-			
+
 		}
 		//	for (int i=0; i<6; i++)
 		//		vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[i]=O_r_E[0][i]; //nie wiem czy potrzebne bo chyba  robot sie nie rusza
 
 
 
-	
+
 
 		std::cout << node_counter
 				<<"------------------------------------------------------------------"
 				<< std::endl;
 	}
 
-	
+
 
 
 	//SAC
@@ -337,15 +337,15 @@ bool vis_sac_lx::next_step()
 
 	//EIH
 	//rover VSP_REPORT::
-	//jesli byl odczyt z czujnika to przepisz odczytane wartosci - jesli nie przepisz stare 
-	
+	//jesli byl odczyt z czujnika to przepisz odczytane wartosci - jesli nie przepisz stare
+
 	if(vsp_vis_sac->vsp_report_aux== lib::VSP_REPLY_OK)
 	{
 		CEIH_rpy_G[0][0]=vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0]-0.015; //-0.15
 		CEIH_rpy_G[0][1]=vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[1]+0.03; //0.04
 		CEIH_rpy_G[0][2]=-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[2]+0.01; // kalib Y w O //+0.02
 		CEIH_rpy_G[0][3]=0;
-	 	CEIH_rpy_G[0][4]=0; 
+	 	CEIH_rpy_G[0][4]=0;
 	 	if(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[5]<=0)
 	 	{
 			CEIH_rpy_G[0][5]=-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[5]-0.800; //rover //0.8
@@ -370,10 +370,10 @@ bool vis_sac_lx::next_step()
 		for(int i=0; i<6; i++)
 		{
 			CEIH_rpy_G[0][i]=0.0;
-		}		
+		}
 	}
 	std::cout<<"RPY: ";
-		
+
 		for(int i=0; i<6; i++)
 		{
 			printf("%f ",CEIH_rpy_G[0][i]);
@@ -382,9 +382,9 @@ bool vis_sac_lx::next_step()
 	std::cout<<std::endl;
 
 	CEIH_Tx_G.set_xyz_rpy(CEIH_rpy_G[0][0], CEIH_rpy_G[0][1], CEIH_rpy_G[0][2], CEIH_rpy_G[0][3], CEIH_rpy_G[0][4], CEIH_rpy_G[0][5]);
-		
 
-		
+
+
 	/*
 		CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0]-0.015, //-0.15
 			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[1]+0.03, //0.04
@@ -393,17 +393,17 @@ bool vis_sac_lx::next_step()
 			//0, 0, -vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[5]-0.785000); //rover
 			0, 0, -vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[5]-0.800); //rover //0.8
 	*/
-		
-	
-	
+
+
+
 //vsp_vis_sac->vsp_report_aux==VSP_REPORT::VSP_REPLY_OK
 
-//kostka	
+//kostka
 /*
 	CEIH_Tx_G.set_xyz_rpy(vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[0],
 			vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[1],
 			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[2], // kalib Y w O
-			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[3], 0, 0); 	
+			-vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[3], 0, 0);
 */
 
 
@@ -467,15 +467,15 @@ bool vis_sac_lx::next_step()
 	O_Tx_G__CSAC=O_Tx_CSAC*CSAC_Tx_G;
 	O_Tx_G__CSAC=O_Tx_G__CSAC*G_Tx_S; //skrot myslowy
 	O_Tx_G__CSAC.get_xyz_angle_axis(O_r_G__CSAC[0]);
-	
+
 	O_eps_EG__CSAC_norm=0.0;
 	for (int i=0; i<6; i++)
 		{
 			O_eps_EG__CSAC[0][i]=(O_r_G__CSAC[0][i]-O_r_E[0][i]);
 			O_eps_EG__CSAC_norm+=O_eps_EG__CSAC[0][i]*O_eps_EG__CSAC[0][i];
-			O_eps_E__CSAC[0][i]=O_gain__SAC[i]*O_eps_EG__CSAC[0][i];		
-		}	
-	
+			O_eps_E__CSAC[0][i]=O_gain__SAC[i]*O_eps_EG__CSAC[0][i];
+		}
+
 //jesli nie widzi kostki bo jest za blisko zostaw stare namiary
 	CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	CEIH_Tx_G__f.get_xyz_angle_axis(CEIH_r_G__f[0]);
@@ -483,7 +483,7 @@ bool vis_sac_lx::next_step()
 	{
 		std::cout << CEIH_r_G[0][i] << " ";
 	}
-/*	
+/*
 	for (int i=0; i<6; i++)
 	{
 		std::cout << CEIH_r_G__f[0][i] << " ";
@@ -492,19 +492,19 @@ bool vis_sac_lx::next_step()
 	//rover
 //	std::cout << " ZZZ " << CEIH_r_G[0][0] << " " << -vsp_vis_sac->image.sensor_union.vis_sac.frame_E_r_G__f[5] << std::endl;
 
-	if(CEIH_r_G[0][0]>0.12  
+	if(CEIH_r_G[0][0]>0.12
 || (CEIH_rpy_G[0][0]==0.0 && CEIH_rpy_G[0][1]==0.0 && CEIH_rpy_G[0][2]==0.0 &&
  CEIH_rpy_G[0][3]==0.0 && CEIH_rpy_G[0][4]==0.0 && CEIH_rpy_G[0][5]==0.0)) // || CEIH_Tx_G_firstvalid==0) //0.15
 	{
 	//EIH
-	CEIH_Tx_G=CEIH_Tx_G*G_Tx_S;	
+	CEIH_Tx_G=CEIH_Tx_G*G_Tx_S;
 	O_Tx_G__CEIH=O_Tx_E*CEIH_Tx_G; //rota O_Tx_E 0,0,0 //E_TX_CEIH=1
 	O_Tx_G__CEIH.get_xyz_angle_axis(O_r_G__CEIH[0]);
-	
+
 	}
-	
-	
-/*	
+
+
+/*
 std::cout << " O_Tx_G_CEIH ";
 	std::cout << std::endl;
 	std::cout << O_Tx_G__CEIH;
@@ -524,11 +524,11 @@ std::cout << " O_Tx_G_CEIH ";
 	{
 		return false;
 	}
-	
+
 //	O_rf_G__CEIH.set_values(O_r_G__CEIH[0]);
 //	lib::Ft_v_tr Jack(O_Tx_E,lib::Ft_v_tr::V);
-	
-	
+
+
 	//jak cos przyjdzie glupiego z CEIH
 	//VSP_REPORT::VSP_REPLY_OK
 	if (O_r_G__CEIH[0][0]>100 || O_r_G__CEIH[0][0]<-100)
@@ -538,28 +538,28 @@ std::cout << " O_Tx_G_CEIH ";
 			O_r_G__CEIH[0][i]=O_r_G__CEIH[1][i]; //EIH ONLY
 		}
 	}
-	
+
 	O_eps_EG__CEIH_norm=0.0;
 	for (int i=0; i<6; i++)
 		{
 			O_eps_EG__CEIH[0][i]=(O_r_G__CEIH[0][i]-O_r_E[0][i]);
 			O_eps_EG__CEIH_norm+=O_eps_EG__CEIH[0][i]*O_eps_EG__CEIH[0][i];
-			O_eps_E__CEIH[0][i]=C_gain__EIH[i]*O_eps_EG__CEIH[0][i];		
+			O_eps_E__CEIH[0][i]=C_gain__EIH[i]*O_eps_EG__CEIH[0][i];
 		}
-	
+
 //printf("delta = %f %f %f", O_r_G__CEIH[0][0]-O_r_E[0][0], O_r_G__CEIH[0][1]-O_r_E[0][1], O_r_G__CEIH[0][2]-O_r_E[0][2]);
 
 	//EIHJACK
 	CEIH_Tx_G__f=CEIH_Tx_G__f*G_Tx_S;
 	O_Tx_G__fEIH=O_Tx_E*CEIH_Tx_G__f; //rota O_Tx_E 0,0,0
 	O_Tx_G__fEIH.get_xyz_angle_axis(O_r_G__fEIH[0]);
-	
+
 	O_eps_EG__fEIH_norm=0.0;
 	for (int i=0; i<6; i++)
 		{
 			O_eps_EG__fEIH[0][i]=(O_r_G__fEIH[0][i]-O_r_E[0][i]);
 			O_eps_EG__fEIH_norm+=O_eps_EG__fEIH[0][i]*O_eps_EG__fEIH[0][i];
-			O_eps_E__fEIH[0][i]=f_gain__EIH[i]*O_eps_EG__fEIH[0][i];		
+			O_eps_E__fEIH[0][i]=f_gain__EIH[i]*O_eps_EG__fEIH[0][i];
 		}
 
 CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
@@ -570,7 +570,7 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 		std::cout << O_r_E[0][i] << " ";
 	}
 //	std::cout << std::endl;
-/*	
+/*
 	//std::cout << " SAC ";
 	for (int i=0; i<6; i++)
 	{
@@ -600,9 +600,9 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	//std::cout << std::endl;
 
 	std::cout <<  O_eps_EG__CSAC_norm << " ";
-*/	
+*/
 	std::cout << std::endl;
-	
+
 
 	//SWITCH
 	/*
@@ -618,7 +618,7 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 		{
 			O_eps_EG__fEIH[0][i]=(O_r_G__CSAC[0][i]-O_r_E[0][i]);
 			O_eps_EG__fEIH_norm+=O_eps_EG__CSAC[0][i]*O_eps_EG__CSAC[0][i];
-		}	
+		}
 */
 //std::cout << " EPS " << O_eps_EG__CSAC_norm << std::endl;
 
@@ -629,9 +629,9 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 		O_r_G[0][i]=O_r_G__CSAC[0][i]; //SAC ONLY
 		//O_r_G[0][i]=O_r_G__CEIH[0][i]; //EIH ONLY
 		//O_r_G[0][i]=O_r_G__fEIH[0][i]; //EIH JACK ONLY
-		
+
 		//SWITCH
-/*		
+/*
 		if(O_eps_EG__CSAC_norm>=0.007 && phaseCEIH==0)
 		{
 			//O_r_G[0][i]=O_r_G__CSAC[0][i]; //SAC ONLY
@@ -639,17 +639,17 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 		}
 		else
 		{
-			//O_r_G[0][i]=O_r_G__fEIH[0][i]; //EIH JACK ONLY	
+			//O_r_G[0][i]=O_r_G__fEIH[0][i]; //EIH JACK ONLY
 			phaseCEIH=1;
 			//O_r_G[0][i]=O_r_G__CEIH[0][i]; //EIH ONLY
 			O_weight__SAC=0;
-			C_weight__EIH=1;			
-			
+			C_weight__EIH=1;
+
 		}
 */
 	}
-	
-		
+
+
 
 	std::cout<<std::endl;
 
@@ -860,12 +860,12 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 
 		O_r_G[1][i]=O_r_G[0][i];
 		C_r_G[1][i]=C_r_G[0][i];
-		
-		
+
+
 		CEIH_r_G[1][i]=CEIH_r_G[0][i];
 		CEIH_r_G__f[1][i]=CEIH_r_G__f[0][i];
 		CEIH_rpy_G[1][i]=CEIH_rpy_G[1][i];
-		
+
 	}
 
 

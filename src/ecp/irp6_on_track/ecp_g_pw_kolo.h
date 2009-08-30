@@ -17,21 +17,19 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-#define PI 3.14159265
-#define DEG 0.0174444 //Jeden stopien wyrazony w radianach
-
+#define DEG (M_PI/180) //Jeden stopien wyrazony w radianach
 
 class pw_kolo : public common::generator::generator
 {
     lib::trajectory_description td;
-    double next_position[8];  
+    double next_position[8];
     int step_no;
     double d_rad; //Przyrost k�ta w radianach.
     double prev_rad; //Wcz�niejszy k�t(koncowka, srodek kola)
     double r; //Promien rysowanego okregu.
     double y0; //�rodek ko�a - wsp y.
     double z0; //�rodek ko�a - wsp z.
-    double y;	
+    double y;
     double z;
 public:
     pw_kolo (common::task::task& _ecp_task);

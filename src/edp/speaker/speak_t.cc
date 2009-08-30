@@ -42,8 +42,8 @@ void catch_signal_speak_t(int sig)
 void * effector::speak_thread_start(void* arg)
 {
 //	 edp_irp6s_and_conv_effector *master = (edp_irp6s_and_conv_effector *) arg;
-	
-	 static_cast<effector*> (arg)->speak_thread(arg);
+
+	 return static_cast<effector*> (arg)->speak_thread(arg);
 }
 
 
@@ -84,7 +84,6 @@ void * effector::speak_thread(void *arg)
             default: // blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia
                 break;
             }
-            ; // end: switch (reply_type)
 
         }
 

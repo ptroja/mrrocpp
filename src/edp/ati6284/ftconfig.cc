@@ -3,17 +3,17 @@
      * Copyright (c) 2001 ATI Industrial Automation
      *
      * The MIT License
-     * 
+     *
      * Permission is hereby granted, free of charge, to any person obtaining a
      * copy of this software and associated documentation files (the "Software"),
      * to deal in the Software without restriction, including without limitation
      * the rights to use, copy, modify, merge, publish, distribute, sublicense,
      * and/or sell copies of the Software, and to permit persons to whom the
      * Software is furnished to do so, subject to the following conditions:
-     * 
+     *
      * The above copyright notice and this permission notice shall be included
      * in all copies or substantial portions of the Software.
-     * 
+     *
      * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
      * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
      * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
@@ -30,7 +30,7 @@
 
 
 // -------------------------------------------------
-// private functions 
+// private functions
 // -------------------------------------------------
 
 //!<  from ftrt.h (these functions are defined in ftrt.c)
@@ -72,7 +72,7 @@ short SetToolTransform(Calibration *cal, float Vector[6],char *DistUnits,char *A
 	cal->cfg.UserTransform.DistUnits=ATI_strdup(DistUnits);
 	free(cal->cfg.UserTransform.AngleUnits);
 	cal->cfg.UserTransform.AngleUnits=ATI_strdup(AngleUnits);
-		
+
 	return CalcMatrix(cal);
 } //!<  SetToolTransform()
 
@@ -94,7 +94,7 @@ short SetTorqueUnits(Calibration *cal, char *NewUnits) {
 
 short SetTempComp(Calibration *cal, int TCEnabled) {
 	if (cal==NULL) return 1;
-	if (TCEnabled) 
+	if (TCEnabled)
 		if (cal->TempCompAvailable) {
 			cal->cfg.TempCompEnabled=true;
 		} else return 2;
@@ -120,9 +120,9 @@ Calibration *createCalibration(const char *CalFilePath, unsigned short index) {
 	unsigned short i,j;             //!<  counter variables
 	float temparray[MAX_GAUGES];    //!<  used when loading calibration rows
 	float scale;                    //!<  used when loading calibration rows
-	
-	cal=(Calibration *) calloc(1,sizeof(Calibration));	
-	doc = DOM_Implementation_createDocument(NULL, NULL, NULL);  //!<  initialize DOM document	
+
+	cal=(Calibration *) calloc(1,sizeof(Calibration));
+	doc = DOM_Implementation_createDocument(NULL, NULL, NULL);  //!<  initialize DOM document
 	if (DOM_DocumentLS_load(doc,CalFilePath)!=1) {              //!<  open calibration file
 		free(cal);
 		DOM_Document_destroyNode(doc, doc);    //!<  clean up DOM stuff
@@ -153,8 +153,8 @@ Calibration *createCalibration(const char *CalFilePath, unsigned short index) {
 		free(cal);
 		return NULL;
 	}
-	eCalibration=DOM_NodeList_item(calibrationNodelist,index-1);	
-	
+	eCalibration=DOM_NodeList_item(calibrationNodelist,index-1);
+
 	//!<  set Calibration structure attributes found in Calibration element
 	ReadAttribute(eCalibration,&temp,(char*)"PartNumber",true,(char*)"");
 	cal->PartNumber=ATI_strdup(temp);
@@ -183,13 +183,13 @@ Calibration *createCalibration(const char *CalFilePath, unsigned short index) {
 		cal->rt.gain_slopes[i]=0;
 	}
 	cal->rt.thermistor=0;
-	
+
 	//!<  store basic matrix
 	axisNodelist=DOM_Element_getElementsByTagName(eCalibration,(char*)"Axis");
 
 	cal->rt.NumAxes=(unsigned short) axisNodelist->length;
 	for (i=0;i<axisNodelist->length;i++) {
-		node=DOM_NodeList_item(axisNodelist,i);		
+		node=DOM_NodeList_item(axisNodelist,i);
 		ReadAttribute(node, &temp,(char*)"scale", false,(char*)"1");
 		scale=(float) atof(temp);
 		free(temp);
@@ -201,7 +201,7 @@ Calibration *createCalibration(const char *CalFilePath, unsigned short index) {
 		free(temp);
 		ReadAttribute(node, &temp,(char*)"max", false,(char*)"0");
 		cal->MaxLoads[i]=(float) atof(temp);
-		free(temp);		
+		free(temp);
 		ReadAttribute(node, &temp,(char*)"Name", true,(char*)"");
 		cal->AxisNames[i]=ATI_strdup(temp);
 		free(temp);
@@ -248,17 +248,17 @@ Calibration *createCalibration(const char *CalFilePath, unsigned short index) {
 	}
 
 	DOM_Document_destroyNodeList(eRoot->ownerDocument, calibrationNodelist,0);
-	DOM_Document_destroyNodeList(eRoot->ownerDocument, axisNodelist,0);	
-	DOM_Document_destroyNode(doc, doc);    //!<  clean up DOM stuff		
-	ResetDefaults(cal);                    //!<  calculate working matrix and set default values		
-	return cal;	
+	DOM_Document_destroyNodeList(eRoot->ownerDocument, axisNodelist,0);
+	DOM_Document_destroyNode(doc, doc);    //!<  clean up DOM stuff
+	ResetDefaults(cal);                    //!<  calculate working matrix and set default values
+	return cal;
 
 
 
 
 
 
-	
+
 } //!<  createCalibration();
 
 
@@ -303,7 +303,7 @@ void ConvertToFT(Calibration *cal, float voltages[],float result[]) {
 void printCalInfo(Calibration *cal) {
 	unsigned short i,j;     //!<  loop variables
 
-	
+
 	//!<  display info from calibration file
 	printf("Calibration Information:\n");
 	printf("                  Serial: %s\n",cal->Serial);
@@ -316,7 +316,7 @@ void printCalInfo(Calibration *cal) {
 	printf("             Force Units: %s\n",cal->ForceUnits);
 	printf("            Torque Units: %s\n",cal->TorqueUnits);
 	printf("Temperature Compensation: %s\n",(cal->TempCompAvailable ? "Yes" : "No"));
-	
+
 	//!<  print maximum loads of axes
 	printf("\nRated Loads\n");
 	for (i=0;i<cal->rt.NumAxes;i++) {
@@ -360,9 +360,9 @@ void printCalInfo(Calibration *cal) {
 // ----------------------------------------------
 void ResetDefaults(Calibration *cal) {
 //!<  Restores all configuration options to their default values
-	unsigned short i;	
+	unsigned short i;
 	cal->cfg.ForceUnits=ATI_strdup(cal->ForceUnits);  //!<  set output units to calibration file defaults
-	cal->cfg.TorqueUnits=ATI_strdup(cal->TorqueUnits);	
+	cal->cfg.TorqueUnits=ATI_strdup(cal->TorqueUnits);
 	for (i=0;i<6;i++)                                 //!<  clear user Tool Transform
 		cal->cfg.UserTransform.TT[i]=0;
 	for (i=0;i < cal->rt.NumChannels-1;i++) {         //!<  clear bias vectors
@@ -371,7 +371,7 @@ void ResetDefaults(Calibration *cal) {
 	}
 	cal->rt.bias_vector[cal->rt.NumChannels-1]=0;     //!<  thermistor reading of bias vector
 	cal->cfg.TempCompEnabled=cal->TempCompAvailable;  //!<  turn temp comp on by default, if available
-	
+
 	CalcMatrix(cal);                                  //!<  compute working matrix and store in rt
 } //!<  ResetDefaults()
 
@@ -385,13 +385,13 @@ short GetMatrix(Calibration *cal, float *result) {
 //!<  Calculates a working matrix based on the basic matrix,
 //!<  basic tool transform, user tool transform, and user units,
 //!<  and stores in result.
-	float UserTTM[6][6];           //!<  the User tool transform matrix 
+	float UserTTM[6][6];           //!<  the User tool transform matrix
     float BasicTTM[6][6];          //!<  basic (built-in) tool transform matrix
 	float result1[6][MAX_GAUGES];  //!<  temporary intermediate result
 	float FConv, TConv;            //!<  unit conversion factors
 	unsigned short i, j;           //!<  loop variables
 	unsigned short NumGauges=cal->rt.NumChannels-1;  //!<  number of strain gages
-	short sts;                     //!<  return value 
+	short sts;                     //!<  return value
 
 	if (cal->rt.NumAxes==6) {
 		sts=TTM(cal->BasicTransform,BasicTTM,cal->ForceUnits,cal->TorqueUnits);
@@ -434,17 +434,17 @@ short TTM(Transform xform,float result[6][6],Units ForceUnits,Units TorqueUnits)
 	if ((DistConv(xform.DistUnits)==0) || (AngleConv(xform.AngleUnits)==0)) return 1; //!<  invalid units
 	DC = TorqueConv(TorqueUnits) / (ForceConv(ForceUnits) * DistConv(xform.DistUnits));
 	AC = (float) 1.0/AngleConv(xform.AngleUnits);
-	
+
 
 	//!<  calculate sin & cos of angles
-	sx = (float) sin(PI/180 * xform.TT[3] * AC);
-	cx = (float) cos(PI/180 * xform.TT[3] * AC);
-	
-	sy = (float) sin(PI/180 * xform.TT[4] * AC);
-	cy = (float) cos(PI/180 * xform.TT[4] * AC);
+	sx = (float) sin(M_PI/180 * xform.TT[3] * AC);
+	cx = (float) cos(M_PI/180 * xform.TT[3] * AC);
 
-	sz = (float) sin(PI/180 * xform.TT[5] * AC);
-	cz = (float) cos(PI/180 * xform.TT[5] * AC);
+	sy = (float) sin(M_PI/180 * xform.TT[4] * AC);
+	cy = (float) cos(M_PI/180 * xform.TT[4] * AC);
+
+	sz = (float) sin(M_PI/180 * xform.TT[5] * AC);
+	cz = (float) cos(M_PI/180 * xform.TT[5] * AC);
 
 
 	//!<  calculate Dx, Dy, Dz
@@ -551,7 +551,7 @@ float AngleConv(Units u) {
 	if ((strcmp(u,(char*)"deg")==0) || (strcmp(u,(char*)"degrees")==0) || (strcmp(u,(char*)"degree")==0)) {
 		return (float) 1;
 	} else if ((strcmp(u,(char*)"rad")==0) || (strcmp(u,(char*)"radians")==0) || (strcmp(u,(char*)"radian")==0)) {
-		return (float) PI / 180;
+		return (float) M_PI / 180;
 	} else return (float) 0;
 } //!<  AngleConv()
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

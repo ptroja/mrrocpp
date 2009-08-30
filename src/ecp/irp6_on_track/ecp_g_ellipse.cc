@@ -9,7 +9,7 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-ellipse::ellipse (common::task::task& _ecp_task,double major_axis,double minor_axis,int max_steps) : common::generator::generator (_ecp_task),major_axis(major_axis),minor_axis(minor_axis),max_steps(max_steps),d_rad(2*PI/max_steps) {}
+ellipse::ellipse (common::task::task& _ecp_task,double major_axis,double minor_axis,int max_steps) : common::generator::generator (_ecp_task),major_axis(major_axis),minor_axis(minor_axis),max_steps(max_steps),d_rad(2*M_PI/max_steps) {}
 
 bool ellipse::first_step()
 {
@@ -22,7 +22,7 @@ bool ellipse::first_step()
     the_robot->EDP_data.next_interpolation_type = lib::MIM;
     the_robot->EDP_data.motion_steps = 8;
     the_robot->EDP_data.value_in_step_no = 6;
-    
+
 	step_no = 0;
     rad = 0;
     return true;
@@ -78,9 +78,9 @@ bool ellipse::next_step()
 	{
 		//return false;
 	}
-	
+
 	rad += d_rad;
-	
+
     the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] = 1;
     the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] = major_axis*sin(rad);
     the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[2] = 0.15+minor_axis*cos(rad);
@@ -102,7 +102,7 @@ double* ellipse::getFirstPosition()
 	firstPosition[4] = 1.57;
 	firstPosition[5] = 3.14;
 	firstPosition[6] = 0.08;
-	
+
 	return firstPosition;
 }
 

@@ -11,8 +11,6 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-#define PI 3.141592
-
 class wii : public common::generator::generator
 {
 	private:

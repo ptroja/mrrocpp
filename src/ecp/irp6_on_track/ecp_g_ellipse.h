@@ -11,8 +11,6 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-#define PI 3.141592
-
 class ellipse : public common::generator::generator
 {
 	private:
@@ -41,7 +39,7 @@ public:
 	 * @author jedrzej
 	 */
     ellipse (common::task::task& _ecp_task,double major_axis,double minor_axis,int max_steps);
-    
+
     /**
      * Generuje pierwszy krok - ustawienie w pozycji (0,b)
      * @author jedrzej
@@ -51,9 +49,9 @@ public:
     /**
      * Generuje kolejne punkty trajektorii
      * @author jedrzej
-     */    
+     */
     virtual bool next_step();
-    
+
     double* getFirstPosition();
 };
 

@@ -275,7 +275,7 @@ void CROSMDoc::InitObiekt(int czProbek, int pCiszy, double wspOdstepuOkna, int l
 
 	// Oblicz i stablicuj funkcje okna Hamminga
     int okno1 = okno-1;
-	const double pipi = 2 * 3.141592653589793; // sta�a 2 pi
+	const double pipi = 2 * M_PI; // sta�a 2 pi
 	windowFun = new double[okno];
 	int k=0;
 	for (k=0; k< okno; k++)
@@ -917,12 +917,12 @@ void CROSMDoc::ObliczCechyOkien(int typ_spektro, int bezPrzerw)
 		{
 			Cepstrum[j] = 0.0;
 			for (l=1; l<= liczbaCechMFC; l++)
-				Cepstrum[j] += spektA[i+ l] * cos (j * (l - 0.5)* 3.141592653589793/ liczbaCechMFC) ;
+				Cepstrum[j] += spektA[i+ l] * cos (j * (l - 0.5)* M_PI/ liczbaCechMFC) ;
 		}
 
 	  // 6) Liftracja cech MFCC
 	 // for (j=1; j< lCechMFCC ; j++)
-	//	  Cepstrum[j] = (1 + lambda_pol * sin (3.141592653589793 * j / lambda)) * Cepstrum[j];
+	//	  Cepstrum[j] = (1 + lambda_pol * sin (M_PI * j / lambda)) * Cepstrum[j];
 
 	  // 7) Przepisz cechy cepstralne po liftracji do spektA
 		for (j=1; j< lCechMFCC ; j++)

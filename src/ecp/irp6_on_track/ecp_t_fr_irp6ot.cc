@@ -60,8 +60,8 @@ void fr::task_initialization(void)
     tdes_ext.coordinate_delta[1] = 1.47171;
     tdes_ext.coordinate_delta[2] = 1;
     tdes_ext.coordinate_delta[3] = 2.87979;
-    tdes_ext.coordinate_delta[4] = 1.57080;
-    tdes_ext.coordinate_delta[5] = -3.14159;
+    tdes_ext.coordinate_delta[4] = M_PI_2;
+    tdes_ext.coordinate_delta[5] = -M_PI;
     tdes_ext.coordinate_delta[6] = 0.074;
 
     for (int i = 0; i < MAX_SERVOS_NR; i++)

@@ -20,9 +20,6 @@
 
 #define CMV_NONE ((unsigned)(-1))
 
-//#define PI 3.1415926535897932384626433832795
-#define INV_PI 0.31830988618379067153776752674503
-
 #define BLOB_SIZE_BIGGER 1
 #define BLOB_SIZE_SMALLER 2
 #define BLOB_CIRCULARITY_BIGGER 3
@@ -39,7 +36,7 @@
 
 #define WINDOW_COLOR 5
 
-#define PATTERNSMAX 1728 //12^3;     2197=13^3  
+#define PATTERNSMAX 1728 //12^3;     2197=13^3
 #define TILESMAX 27
 
 #define SHIFT_X 5
@@ -81,7 +78,7 @@ struct roi_rubik{
 	};
 
 
-struct hsv{		
+struct hsv{
   int h,s,v;	/*moje*/
 };
 
@@ -100,8 +97,8 @@ struct rectangle{
 
 class CMVision{
 public:
-  
-	
+
+
 
 
   struct rle{
@@ -146,24 +143,24 @@ struct QpVertices {
 	point points[80000];
 	unsigned int length;
 };
-	
+
 	QpBlob blobs[CMV_MAX_REGIONS];
 	unsigned int filtered_blobs[CMV_MAX_REGIONS];
 	unsigned char valid_blobs[CMV_MAX_REGIONS];
 	unsigned char goal_blobs[CMV_MAX_REGIONS];
 	unsigned char endeffector_blobs[CMV_MAX_REGIONS];
-	
+
 	unsigned int filtered_blobs_count;
 	unsigned int blobs_count;
-	
+
 	unsigned char goal_blobs_count;
 	unsigned char endeffector_blobs_count;
-	
-	
+
+
 	QpContour contour;
 	QpVertices vertices;
 
-	
+
     //unsigned *map;
 
     int width,height;
@@ -189,9 +186,9 @@ public:
   unsigned *map; //should be private
   unsigned *labels;
   rle rmap[CMV_MAX_RUNS];
-  
+
   color_info colors[CMV_MAX_COLORS];
-  
+
   int face_colors[9];
   int face_h[9];
   int face_s[9];
@@ -211,53 +208,53 @@ public:
   point_d goal_f2;
   point_d goal_f3;
   point_d goal_f4;
-  
+
   point_d endeffector_f1;
   point_d endeffector_f2;
   point_d endeffector_f3;
   point_d endeffector_f4;
- 
+
   point_d error_f1;
   point_d error_f2;
   point_d error_f3;
   point_d error_f4;
- 
+
 
   //effector
 	double endeffector_meanx;
-	double endeffector_meany;  
+	double endeffector_meany;
 
 
-  
+
   int endeffector_matched_pattern;
   double endeffector_matched_Z;
-  
-  
-  
+
+
+
   int whole_face;
-  
+
   double goal_meanx;
   double goal_meany;
-  
+
   int goal_matched_pattern;
   double goal_matched_Z;
-  
+
   double *cc, *fc, *kc; //globalnie widoczne parametry kamery
   int alloc_m;
   int alloc_v; //globalnie widoczne liczby zaalokowanych macierzy i wektorow
   double **x_kk, **X_kk;
   double *omckk;
   double *Tckk;
-  double **Rckk;  
-  
+  double **Rckk;
+
   double C_T_E[4][4]; // ^{C}T_{E}
   double C_T_G[4][4]; // ^{C}T_{G} // ^{C}T_{E}
   double E_T_G__C[4][4]; // ^{E}T_{G}= \, (^{C}T_{G}) \,^{-1} \, ^{C}T_{G}
-  
+
   double C_r_E[6];  // ^{C}r_{E}
   double C_r_G[6];  // ^{C}r_{G}
   double C_eps_EG[6];  // ^{C}\vareps_{E,G}
-  
+
   lib::Homog_matrix C_Tx_G;
 lib::Homog_matrix C_Tx_E;
 lib::Homog_matrix O_Tx_E;
@@ -267,7 +264,7 @@ lib::Homog_matrix O_Tx_G__C;
 
 lib::Homog_matrix E_Tx_G;
 lib::Homog_matrix E_Tx_G__O;
-  
+
   //double *cube_vector;
   //double *cube_center;
   //double *cube_temp;
@@ -278,7 +275,7 @@ public:
   void connectComponents(rle * rmap,int num);
   int  extractRegions(rle * rmap,int num);
   //void classifyFrame(image_pixel * img,unsigned * map);
-  
+
   void classifyFrame(unsigned short * buffer, unsigned * map);
   int  encodeRuns(rle * out,unsigned * map);
 
@@ -292,25 +289,25 @@ public:
 
 //unsigned int labels[1000][1000]; //witek do tworzenia obrazu etykiet
 									// da sie to obejsc i nie spowalniac
-  
+
   bool initialize(int nwidth,int nheight);
-  
+
   bool initGrid();
-  
+
   bool initEstim(const char *filename); //init estimation
   void freeEstim();
-  
+
   bool countLUT();
-  
+
   bool loadColors(const char *filename);
-  
+
   void close();
 
 
  // bool findBlobs(image_pixel *image);
  bool findBlobs(unsigned short * buffer);
  // bool findBlobsfilter(image_pixel *image, filter data);
- 
+
 int findContour(int blob_nr);
 void findVertices(int dokl);
 void findVerticesAll(void);

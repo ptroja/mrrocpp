@@ -76,25 +76,25 @@ void CMVision::classifyFrame(unsigned short * buffer, unsigned * map)
   int y1,y2,x1,x2,m;
   // image_pixel p;
   int x,y;
-  
+
   //unsigned *sclas = s_class; // Ahh, the joys of a compiler that
  // unsigned *vclas = v_class; //   has to consider pointer aliasing
  // unsigned *hclas = h_class;
 
- /* 
+ /*
   size = width * height;
   for(i=0; i<size; i++){
    p = img[i];
     //m = hclas[p.h] & sclas[p.s] & vclas[p.v];
    m = h_class[p.h] & s_class[p.s] & v_class[p.v];
-	//map[i] = m; 
+	//map[i] = m;
 	map[i]=color_tab[m%37];
   }
   */
-  
+
   y1=roi.y1*width;
   y2=roi.y2*width;
-  
+
   for(y=y1; y<=y2; y+=width)
   {
 	x1=y+roi.x1;
@@ -102,13 +102,13 @@ void CMVision::classifyFrame(unsigned short * buffer, unsigned * map)
 	for(x=x1; x<=x2; x++)
   {
 //	p = img[x];
-	
+
 	m = h_class[RGB2H[buffer[x]]] & s_class[RGB2S[buffer[x]]] & v_class[RGB2V[buffer[x]]];
 	m=color_tab[m%37];
 	map[x]=m;
 	}
   }
- 
+
 };
 
 void CMVision::classifyFace(unsigned short * buffer)
@@ -119,12 +119,12 @@ void CMVision::classifyFace(unsigned short * buffer)
   int y1,y2,x1,x2,m;
   // image_pixel p;
   int x,y;
-  
+
   int H,S,V;
   H=0;
   S=0;
   V=0;
-  
+
   for(int i=0; i<9; i++)
   {
 	  y1=(static_middle_grid_ya[i]-WINDOW_COLOR)*width;
@@ -134,38 +134,38 @@ void CMVision::classifyFace(unsigned short * buffer)
 			x1=y+static_middle_grid_xa[i]-WINDOW_COLOR;
 			x2=y+static_middle_grid_xa[i]+WINDOW_COLOR;
 			for(x=x1; x<=x2; x++)
-	  		{	
-	  			
+	  		{
+
 				H+=RGB2H[buffer[x]];
 				S+=RGB2S[buffer[x]];
 				V+=RGB2V[buffer[x]];
-		
+
 		//m = h_class[RGB2H[buffer[x]]] & s_class[RGB2S[buffer[x]]] & v_class[RGB2V[buffer[x]]];
 		//m=color_tab[m%37];
 		//map[x]=m;
 		//printf("HSV: %d %d %d\n",RGB2H[buffer[x]],RGB2S[buffer[x]],RGB2V[buffer[x]]);
  			}
 	  }
-	  
+
 	  H/=121;
 	  S/=121;
 	  V/=121;
-	  
+
 	  printf("HSV: %d %d %d\n",H, S, V);
-	  
+
 	  m = h_class[H] & s_class[S] & v_class[V];
 	  m=color_tab[m%37];
-	
-	  face_colors[i]=m;	
-	  
+
+	  face_colors[i]=m;
+
 	  face_h[i]=H;
 	  face_s[i]=S;
 	  face_v[i]=V;
-	  
-	
-	 
+
+
+
 	 //printf("%d\n", m);
-  } 
+  }
   //printf("\n");
 };
 
@@ -185,7 +185,7 @@ int CMVision::encodeRuns(rle * out,unsigned * map)
 	width2=roi.x2+1;
   else
 	  width2=width;
-  
+
 
   // initialize terminator restore
   save = map[roi.y1*width]; //bylo map[0]
@@ -194,8 +194,8 @@ int CMVision::encodeRuns(rle * out,unsigned * map)
   //j=roi.y1*width+roi.x1;
  // for(y=0; y<height; y++){
   for(y=roi.y1; y<=roi.y2; y++){
-    row = &map[y * width];  
-	  
+    row = &map[y * width];
+
     // restore previous terminator and store next
     // one in the first pixel on the next row
     //row[0] = save;
@@ -217,7 +217,7 @@ int CMVision::encodeRuns(rle * out,unsigned * map)
 	  r.length = x - l;
       r.parent = j;
       out[j++] = r;
-      if(j >= CMV_MAX_RUNS) 
+      if(j >= CMV_MAX_RUNS)
 		  return(0);
     }
   }
@@ -338,16 +338,16 @@ int CMVision::extractRegions(rle * rmap,int num)
 		blobs[b].start.x=x;
 		blobs[b].start.y=y;
         n++;
-		
+
 		 //witek - wypelnianie obrazu etykiet - wolne!
 		 for(int j=0;j<r.length;j++)
 			labels[x+j+width*y]=n;
-		
+
 			//labels[x+j][y]=n;
-		
-		
-		
-        if(n >= CMV_MAX_REGIONS) 
+
+
+
+        if(n >= CMV_MAX_REGIONS)
 			return(CMV_MAX_REGIONS);
       }else{
         // Otherwise update region stats incrementally
@@ -362,22 +362,22 @@ int CMVision::extractRegions(rle * rmap,int num)
 		 //witek - wypelnianie obrazu etykiet - wolne!
 	   	for(int j=0;j<r.length;j++)
 			labels[x+j+width*y]=b+1;
-		
+
 			//labels[x+j][y]=b+1;
-		
-		
+
+
       }
     }
 
     // step to next location
     //x = (x + r.length) % width;
-	x = x + r.length % width2; 
+	x = x + r.length % width2;
 	if(x==roi.x2+1)
 		x=roi.x1;	//moje
     //y += (x == 0);
-	
+
 	y += (x == roi.x1);
-	
+
   }
 
 
@@ -405,7 +405,7 @@ void CMVision::clear()
   ZERO(colors);
 
   map = NULL;
-  
+
 };
 
 bool CMVision::countLUT()
@@ -425,7 +425,7 @@ ig=(i&0x07e0)>>3;
 ib=(i&0x001f)<<3;
 
 maxrgb=max3(ir,ig,ib);
-			
+
 minrgb=min3(ir,ig,ib);
 
 					if(maxrgb==minrgb)
@@ -446,13 +446,13 @@ minrgb=min3(ir,ig,ib);
 							else
 								oh=240+60*(ir-ig)/(maxrgb-minrgb);
 					}
-				
+
 			//out[c].h*=60;
 			if( oh < 0 )
 				oh = (int)oh+360;
 			else
 				oh = (int)oh;
-			
+
 			oh=oh*255/360;
 
 RGB2H[i]=(unsigned char)(oh+30);
@@ -488,18 +488,18 @@ bool CMVision::initialize(int nwidth,int nheight)
   if(labels) delete(labels);
 
  // labels = new unsigned int[width * height];
-  
+
   labels = new unsigned[width * height + 1];
-  
+
 // ZERO(labels);
-  
+
   return(map != NULL);
 };
 
 bool CMVision::initGrid()
 {
 	int korekta=360;
-	
+
 	static_middle_grid_xa[0]=173;
 	static_middle_grid_xa[1]=207;
 	static_middle_grid_xa[2]=242;
@@ -509,7 +509,7 @@ bool CMVision::initGrid()
 	static_middle_grid_xa[6]=105;
 	static_middle_grid_xa[7]=137;
 	static_middle_grid_xa[8]=173;
-	
+
 	static_middle_grid_ya[0]=72;
 	static_middle_grid_ya[1]=107;
 	static_middle_grid_ya[2]=142;
@@ -519,15 +519,15 @@ bool CMVision::initGrid()
 	static_middle_grid_ya[6]=142;
 	static_middle_grid_ya[7]=178;
 	static_middle_grid_ya[8]=214;
-	
+
 	if(korekta==360)
 	for(int i=0; i<9; i++)
 	{
 		static_middle_grid_xa[i]+=12;
 		static_middle_grid_ya[i]-=12;
 	}
-	
-return 0;	
+
+return 0;
 };
 
 bool CMVision::initEstim(const char *filename)
@@ -538,62 +538,62 @@ bool CMVision::initEstim(const char *filename)
 	cc=vvector(2);
 	fc=vvector(2);
 	kc=vvector(5);
-	
-/*	
+
+/*
 	fc[1]=751.860077541601300;
 	fc[2]=757.240379484519850;
 
-	cc[1]=368.297088758283450; 
+	cc[1]=368.297088758283450;
 	cc[2]=275.241113833860310;
 
-	kc[1]= -0.353305987532453; 
-	kc[2]= 0.224942921451107; 
-	kc[3]= 0.002144573630332; 
-	kc[4]= 0.000737975434375; 
+	kc[1]= -0.353305987532453;
+	kc[2]= 0.224942921451107;
+	kc[3]= 0.002144573630332;
+	kc[4]= 0.000737975434375;
 	kc[5]= 0.000000000000000;
 */
 	fc[1]=1624.23566; //751.860077541601300;
 	fc[2]=1630.87379; //757.240379484519850;
 
-	cc[1]=378.16536; //368.297088758283450; 
+	cc[1]=378.16536; //368.297088758283450;
 	cc[2]=266.82798; //275.241113833860310;
 
-	//cc[1]=0; //368.297088758283450; 
+	//cc[1]=0; //368.297088758283450;
 	//cc[2]=0; //275.241113833860310;
 
-	kc[1]= 0.00481; //-0.353305987532453; 
-	kc[2]= 0.47232; //0.224942921451107; 
-	kc[3]= -0.00174; //0.002144573630332; 
-	kc[4]= -0.00569; //0.000737975434375; 
+	kc[1]= 0.00481; //-0.353305987532453;
+	kc[2]= 0.47232; //0.224942921451107;
+	kc[3]= -0.00174; //0.002144573630332;
+	kc[4]= -0.00569; //0.000737975434375;
 	kc[5]= 0.000000000000000;
 
 	x_kk=matrix(2,4);
 	X_kk=matrix(3,4);
-	
+
 	omckk=vvector(3);
 	Tckk=vvector(3);
 	Rckk=matrix(3,3);
-	
-	
-	alloc_m=0; 
+
+
+	alloc_m=0;
 	alloc_v=0;
-	
-	
-	
-	X_kk[1][1]=-BETWEEN_CENTERS/2; X_kk[1][2]=BETWEEN_CENTERS/2; X_kk[1][3]=-BETWEEN_CENTERS/2; X_kk[1][4]=BETWEEN_CENTERS/2; 
-	X_kk[2][1]=BETWEEN_CENTERS/2; X_kk[2][2]=BETWEEN_CENTERS/2; X_kk[2][3]=-BETWEEN_CENTERS/2; X_kk[2][4]=-BETWEEN_CENTERS/2; 
+
+
+
+	X_kk[1][1]=-BETWEEN_CENTERS/2; X_kk[1][2]=BETWEEN_CENTERS/2; X_kk[1][3]=-BETWEEN_CENTERS/2; X_kk[1][4]=BETWEEN_CENTERS/2;
+	X_kk[2][1]=BETWEEN_CENTERS/2; X_kk[2][2]=BETWEEN_CENTERS/2; X_kk[2][3]=-BETWEEN_CENTERS/2; X_kk[2][4]=-BETWEEN_CENTERS/2;
 	X_kk[3][1]=-HALF_CUBE; X_kk[3][2]=-HALF_CUBE; X_kk[3][3]=-HALF_CUBE; X_kk[3][4]=-HALF_CUBE;
-	
+
 
 	pattern_fp = fopen( filename, "r" );
-	
-	
+
+
 	for(int j=0; j<PATTERNSMAX; j++)
 	{
 		fscanf(pattern_fp,"%f %f ",&x,&y);
 		whichpattern[j]=(int)(x);
   		tiles_count[j]=(int)(y);
-	
+
 	//	printf("%d -> \n",j);
 		for(int i=0; i<tiles_count[j];i++)
 		{
@@ -605,9 +605,9 @@ bool CMVision::initEstim(const char *filename)
 		//fscanf(pattern_fp,"\n");
 	//	printf("\n");
 	}
-	
+
 	fclose(pattern_fp);
-	
+
 	return 1;
 };
 
@@ -728,7 +728,7 @@ bool CMVision::loadColors(const char *filename)
             c->v_low = v1;  c->v_high = v2;
 
             k = (1 << i); //kolejne zapalone bity oznaczaj� kolejne kolory
-			
+
 			set_bits(h_class,CMV_COLOR_LEVELS,h1,h2,k);
             set_bits(s_class,CMV_COLOR_LEVELS,s1,s2,k);
             set_bits(v_class,CMV_COLOR_LEVELS,v1,v2,k);
@@ -755,7 +755,7 @@ void CMVision::close()
 {
   if(map) delete(map);
   map = NULL;
-  
+
 	free_matrix(Rckk);
 	free_matrix(x_kk);
 	free_matrix(X_kk);
@@ -764,7 +764,7 @@ void CMVision::close()
 	free_vector(kc);
 	free_vector(omckk);
 	free_vector(Tckk);
-	
+
 //	free_vector(cube_vector);
 // 	free_vector(cube_center);
 // 	free_vector(cube_temp);
@@ -791,9 +791,9 @@ bool CMVision::findBlobs(unsigned short * buffer)
 bool CMVision::findBlobsfilter(image_pixel *image, filter data)
 {
 	findBlobs(image);
-				
+
 	filterBlobsReset();
-				
+
 	filterBlobs(BLOB_SIZE_BIGGER, data.area_min);
 	filterBlobs(BLOB_SIZE_SMALLER, data.area_max);
 	findVerticesAll();
@@ -810,33 +810,33 @@ bool CMVision::findBlobsfilter(image_pixel *image, filter data)
 
 unsigned char CMVision::contour_point(int x, int y, unsigned int nr) //nr labels wokol ktorej szukamy krawedzi
 		{
-			
+
 			if(x<roi.x1 || x>roi.x2 || y<roi.y1 || y>roi.y2) return 0;
 			if(map[x+y*width]==nr)
 			{
 				if(x==roi.x1 || y==roi.y1) goto jest;
 				if(y>roi.y1 && map[x+(y-1)*width]!=nr) goto jest;
-				
+
 				if(y<roi.y2 && map[x+(y+1)*width]!=nr) goto jest;
-				
+
 				if(x>roi.x1 && map[x-1+y*width]!=nr) goto jest;
-				
+
 				if(x<roi.x2 && map[x+1+y*width]!=nr) goto jest;
 
 				if(y>roi.y1 && x>roi.x1 && map[x-1+(y-1)*width]!=nr) goto jest;
 				if(y>roi.y1 && x<roi.x2 && map[x+1+(y-1)*width]!=nr) goto jest;
 				if(y<roi.y2 && x<roi.x2 && map[x+1+(y+1)*width]!=nr) goto jest;
-				if(y<roi.y2 && x>roi.x1 && map[x-1+(y+1)*width]!=nr) goto jest;				
-				return 0;	
-				
+				if(y<roi.y2 && x>roi.x1 && map[x-1+(y+1)*width]!=nr) goto jest;
+				return 0;
+
 			jest:
 				//jesli jakikolwiek punkt wokol danego byl pusty, to znaczy ze dany
 				//punkt nalezy do krawedzi (nie uwzglednia to dziur!)
-				contour.length++;	
+				contour.length++;
 				contour.points[contour.length].x=x;
 				contour.points[contour.length].y=y;
 				return 1;
-				
+
 			}
 			return 0;
 		};
@@ -861,14 +861,14 @@ int CMVision::findContour(int blob_nr)
 			//zawsze sprawdzamy punkty z przodu i z prawej wzgledem kierunku
 			unsigned char jest=0, koniec=0;
 
-			
+
 			contour.length=0;
 			contour.points[contour.length].x=x;
 			contour.points[contour.length].y=y;
-			
+
 			do
 			{	//sprawdzamy 2 punkty;  po prawej i na wprost
-					
+
 				// punkt z prawej
 				if(kierunek==2)	jest=contour_point(contour.points[contour.length].x-1,contour.points[contour.length].y,k);
 				else
@@ -877,7 +877,7 @@ int CMVision::findContour(int blob_nr)
 					if(kierunek==0)	jest=contour_point(contour.points[contour.length].x+1,contour.points[contour.length].y,k);
 				else
 					if(kierunek==1)	jest=contour_point(contour.points[contour.length].x,contour.points[contour.length].y-1,k);
-					
+
 				if(jest==1) //znaleziono punkt z prawej wiec nastepuje zmiana kierunku
 				{
 					//zmiana kierunku z S na W
@@ -901,8 +901,8 @@ int CMVision::findContour(int blob_nr)
 					if(kierunek==0)	jest=contour_point(contour.points[contour.length].x,contour.points[contour.length].y-1,k);
 				else
 					if(kierunek==1)	jest=contour_point(contour.points[contour.length].x-1,contour.points[contour.length].y,k);
-				
-								
+
+
 				//jesli nie ma nowego punktu zmieniamy kierunek poszukiwan o 90 st w lewo
 				if(jest==0)
 				{
@@ -923,7 +923,7 @@ int CMVision::findContour(int blob_nr)
 				if(contour.length>1)
 					if(contour.points[contour.length].x==contour.points[1].x && contour.points[contour.length].y==contour.points[1].y)
 					//jesli dodatkowo poprzedni punkt to punkt startowy to KONIEC
-						if(contour.points[contour.length-1].x==contour.points[0].x && contour.points[contour.length-1].y==contour.points[0].y)						
+						if(contour.points[contour.length-1].x==contour.points[0].x && contour.points[contour.length-1].y==contour.points[0].y)
 							koniec=1;
 						else
 							koniec=0;
@@ -933,11 +933,11 @@ int CMVision::findContour(int blob_nr)
 		contour.length-=1; //zmniejszamy o 1 bo zamykajac petle doszlismy
 					 //az do pierwszego punktu (zerowy i pierwszy)
 					//ale nie zmniejszamy o 2 bo punkty liczymy od zerowego
-		
+
 		//dopisanie parametrow krawedzi do bloba
 		blobs[blob_nr].contour_length=contour.length;
 		return(contour.length);
-		
+
 		};
 
 
@@ -946,25 +946,25 @@ void CMVision::znajdz_najdalszy(int p1, int p2, int kwadrat_odl, unsigned char w
 			double a=0,b=0,b2=0,tmp=0,x1,y1,x2,y2,odleglosc=0;
 			unsigned char pion=0, poziom=0, wstecz=0;
 			int i,najdalszy=0,p2d; //p2d - dodatkowy punkt zeby nie zamazac oryginalnego
-		
+
 	p2d=p2;
 			//wyznaczenie rownania prostej przechadzacej przez punkty o numerach: l1, l2
-		
-		
+
+
 			if(contour.points[p1].x==contour.points[p2].x) pion=1;	// prosta pionowa
 			if(contour.points[p1].y==contour.points[p2].y) poziom=1;	// prosta pozioma
 
-			
-			if(pion==0 && poziom==0)			
+
+			if(pion==0 && poziom==0)
 			{
 				a=(double)(contour.points[p1].y-contour.points[p2].y)/(double)(contour.points[p1].x-contour.points[p2].x);
 				b=(double)contour.points[p1].y-(double)a*contour.points[p1].x;
 			}
 
 			//wyznaczenie najwiekszej odleglosci punktu segmentu od prostej
-			
+
 			//odleglosc=0; //najwiekszy kwadrat odleglosci prostej od punktu
-		
+
 
 			if(p1>p2) //przeszukiwanie drugiej czesci figury od prawego do lewego
 			{
@@ -996,7 +996,7 @@ void CMVision::znajdz_najdalszy(int p1, int p2, int kwadrat_odl, unsigned char w
 
 					x2=(b2-b)/(a+1.0/a);	// punkt "prostopadly"
 					y2=a*x2+b;
-				
+
 					tmp=(x1-x2)*(x1-x2)+(y1-y2)*(y1-y2); //kwadrat odleglosci
 				}
 				if(tmp>=odleglosc)
@@ -1031,10 +1031,10 @@ void CMVision::znajdz_najdalszy(int p1, int p2, int kwadrat_odl, unsigned char w
 
 						x2=(b2-b)/(a+1.0/a);	// punkt "prostopadly"
 						y2=a*x2+b;
-				
+
 						tmp=(x1-x2)*(x1-x2)+(y1-y2)*(y1-y2); //kwadrat odleglosci
 					}
-					
+
 
 					if(tmp>=odleglosc)
 					{
@@ -1042,8 +1042,8 @@ void CMVision::znajdz_najdalszy(int p1, int p2, int kwadrat_odl, unsigned char w
 						najdalszy=i;
 					}
 				}
-					
-					
+
+
 			if(odleglosc>kwadrat_odl) //znaczy, ze trzeba dokonac kolejnego podzialu
 			{
 				(vertices.count)++;	//zwiekszenie licznika wierzcholkow
@@ -1072,52 +1072,52 @@ void CMVision::znajdz_najdalszy(int p1, int p2, int kwadrat_odl, unsigned char w
 				else
 					vertices.points[vertices.count-1]=vertices.points[0];
 			}
-			
+
 		};
 
 void CMVision::findVertices(int dokl)
 		{
 			unsigned int i,j,tmp;
 			int lewy=0, prawy=0;
-			
-			
+
+
 			//znalezienie skrajnych punktow z lewej i prawej
-			
+
 				for(i=0;i<contour.length;i++)
 					if(contour.points[i].x<contour.points[lewy].x) lewy=i;
 					else
 					if(contour.points[i].x>contour.points[prawy].x) prawy=i;
 
-			
+
 				//zapisanie pierwszych dwoch wierzcholkow
 				vertices.count=2;		//liczba wierzcholkow
-				vertices.points[0]=lewy;	
+				vertices.points[0]=lewy;
 				vertices.points[1]=prawy;
-				
+
 				for(int ile=0;ile<3;ile++)
-				{		
+				{
 				//teraz wyznaczymy dwa najdalej polozone punkty w dol i w gore od prostej laczacej
 				//dwa wstepne skrajne punkty
 				znajdz_najdalszy(lewy,prawy,1,0);
 				znajdz_najdalszy(prawy,lewy,1,0);
 				//te dwa nowe punkty beda naszymi wyjsciowymi punktami do poszukiwania aproksymacji
-				vertices.count=2;	
+				vertices.count=2;
 				vertices.points[0]=vertices.points[2];
 				vertices.points[1]=vertices.points[3];
-				lewy=vertices.points[0];	
+				lewy=vertices.points[0];
 				prawy=vertices.points[1];
 
 // ten fragment powtorzony dla lepszego znalezienie skrajnych punktow
 			znajdz_najdalszy(lewy,prawy,1,0);
 			znajdz_najdalszy(prawy,lewy,1,0);
 			//te dwa nowe punkty beda naszymi wyjsciowymi punktami do poszukiwania aproksymacji
-			vertices.count=2;	
+			vertices.count=2;
 			vertices.points[1]=vertices.points[2]; //zamiana kolejnosci
 			vertices.points[0]=vertices.points[3];
-			lewy=vertices.points[0];	
+			lewy=vertices.points[0];
 			prawy=vertices.points[1];
 		}
-			
+
 			znajdz_najdalszy(lewy,prawy,dokl,1);
 			znajdz_najdalszy(prawy,lewy,dokl,1);
 
@@ -1136,14 +1136,14 @@ void CMVision::findVertices(int dokl)
 			};
 int CMVision::findVertices(int dokl, int blob_nr)
 {
-	
+
 	if(dokl==AUTO)
 	{
 		double x=blobs[blob_nr].contour_length;
 		dokl=(int)(0.00001*x*x*x-0.003375*x*x+0.518*x-10);
 		//dokl=(int)(0.00001*x*x*x-0.005375*x*x+0.518*x-10);
 		if(dokl<1) dokl=1;
-		
+
 	}
 
 	findVertices(dokl);
@@ -1152,7 +1152,7 @@ int CMVision::findVertices(int dokl, int blob_nr)
 
 void CMVision::findVerticesAll(void)
 {
-	
+
 			for(unsigned int i=0;i<filtered_blobs_count;i++)
 				{
 				findContour(filtered_blobs[i]);
@@ -1213,8 +1213,8 @@ bool CMVision::filterBlobs(int filter, double value)
 		for(int i=0;i<starting_size;i++)
 			if(blobs[filtered_blobs[i]].area>=value)
 				filtered_blobs[filtered_blobs_count++]=filtered_blobs[i];
-			
-		
+
+
 	}
 	else
 	if(filter==BLOB_SIZE_SMALLER)
@@ -1222,7 +1222,7 @@ bool CMVision::filterBlobs(int filter, double value)
 		for(int i=0;i<starting_size;i++)
 			if(blobs[filtered_blobs[i]].area<=value)
 				filtered_blobs[filtered_blobs_count++]=filtered_blobs[i];
-		
+
 	}
 	else
 	if(filter==BLOB_CIRCULARITY_BIGGER) //idealne kolo ma wskaznik ok. 0.8 w naszym przypadku
@@ -1232,19 +1232,19 @@ bool CMVision::filterBlobs(int filter, double value)
 										//trojkat rownoramienny 1.3
 										//gwiazda 2.5-3.0
 										//pierscien (stosunek srednic 0.66) 1.5
-										
+
 		for(int i=0;i<starting_size;i++)
-			if(blobs[filtered_blobs[i]].contour_length*blobs[filtered_blobs[i]].contour_length*0.25*INV_PI/(double)(blobs[filtered_blobs[i]].area)>=value)
+			if(blobs[filtered_blobs[i]].contour_length*blobs[filtered_blobs[i]].contour_length*0.25*M_1_PI/(double)(blobs[filtered_blobs[i]].area)>=value)
 				filtered_blobs[filtered_blobs_count++]=filtered_blobs[i];
-		
+
 	}
 	else
 	if(filter==BLOB_CIRCULARITY_SMALLER)
 	{
 		for(int i=0;i<starting_size;i++)
-			if(blobs[filtered_blobs[i]].contour_length*blobs[filtered_blobs[i]].contour_length*0.25*INV_PI/(double)(blobs[filtered_blobs[i]].area)<=value)
+			if(blobs[filtered_blobs[i]].contour_length*blobs[filtered_blobs[i]].contour_length*0.25*M_1_PI/(double)(blobs[filtered_blobs[i]].area)<=value)
 				filtered_blobs[filtered_blobs_count++]=filtered_blobs[i];
-		
+
 	}
 	else
 	if(filter==CONTOUR_LENGTH_BIGGER)
@@ -1252,7 +1252,7 @@ bool CMVision::filterBlobs(int filter, double value)
 		for(int i=0;i<starting_size;i++)
 			if(blobs[filtered_blobs[i]].contour_length>=value)
 				filtered_blobs[filtered_blobs_count++]=filtered_blobs[i];
-		
+
 	}
 	else
 	if(filter==CONTOUR_LENGTH_SMALLER)
@@ -1260,7 +1260,7 @@ bool CMVision::filterBlobs(int filter, double value)
 		for(int i=0;i<starting_size;i++)
 			if(blobs[filtered_blobs[i]].contour_length<=value)
 				filtered_blobs[filtered_blobs_count++]=filtered_blobs[i];
-		
+
 	}
 	else
 	if(filter==VERTICES_BIGGER)
@@ -1268,7 +1268,7 @@ bool CMVision::filterBlobs(int filter, double value)
 		for(int i=0;i<starting_size;i++)
 			if(blobs[filtered_blobs[i]].vertices_count>=value)
 				filtered_blobs[filtered_blobs_count++]=filtered_blobs[i];
-		
+
 	}
 	else
 	if(filter==VERTICES_SMALLER)
@@ -1276,13 +1276,13 @@ bool CMVision::filterBlobs(int filter, double value)
 		for(int i=0;i<starting_size;i++)
 			if(blobs[filtered_blobs[i]].vertices_count<=value)
 				filtered_blobs[filtered_blobs_count++]=filtered_blobs[i];
-		
+
 	}
 
 	else
 	if(filter==NEIGHBORS)
 	{
-		//odrzuca te bloby, ktore maja mniej niz number sasiadow o podobnej wielkosci w poblizu. 
+		//odrzuca te bloby, ktore maja mniej niz number sasiadow o podobnej wielkosci w poblizu.
 		int distance_sq; //kwadrat odleglosci - nie ma potrzeby pierwiastkowac
 		int tmp[1000]; //tymczasowa kopia wektora blobow
 		int t;
@@ -1316,7 +1316,7 @@ bool CMVision::filterBlobs(int filter, double value)
 			filtered_blobs[i]=tmp[i+1];
 
 		filtered_blobs_count=tmp[0];
-			
+
 	}
 return true;
 };
@@ -1324,8 +1324,8 @@ return true;
 
 
 void CMVision::setRoi(roi_rubik r, int m){
-	
-	
+
+
 	roi.x1=r.x1-m;
 	roi.y1=r.y1-m;
 	roi.x2=r.x2+m;
@@ -1334,7 +1334,7 @@ void CMVision::setRoi(roi_rubik r, int m){
 	if(roi.y1<0) roi.y1=0;
 	if(roi.x2>width-1) roi.x2=width-1;
 	if(roi.y2>height-1) roi.y2=height-1;
-	
+
 
 };
 
@@ -1346,7 +1346,7 @@ bool CMVision::estimPose()
 	compute_extrinsic_init(x_kk,X_kk,omckk,Tckk,Rckk,fc,cc,kc);
 
 	compute_extrinsic_refine(x_kk,X_kk,omckk,Tckk,Rckk,fc,cc,kc);
-	 
+
 
 	return 1;
 };
@@ -1355,26 +1355,26 @@ bool CMVision::objectClass()
 {
 	goal_meanx=0;
 	goal_meany=0;
-	
+
 	endeffector_meanx=0;
 	endeffector_meany=0;
 	goal_blobs_count=0;
 	endeffector_blobs_count=0;
-	
+
 	if(filtered_blobs_count<3)
 	{
 		whole_face=0;
 		return 1;
 	}
-	
+
 	for(unsigned int i=0;i<blobs_count;i++)
 		valid_blobs[i]=0;
-		
+
 	for(unsigned int i=0;i<blobs_count;i++)
 		goal_blobs[i]=0;
 	for(unsigned int i=0;i<blobs_count;i++)
 		endeffector_blobs[i]=0;
-	
+
 	for (unsigned int i=0; i<filtered_blobs_count; i++)
 	{
 			goal_meanx+=(blobs[filtered_blobs[i]].color!=6)*blobs[filtered_blobs[i]].center.x;
@@ -1409,21 +1409,21 @@ bool CMVision::estimPose2(int is_effector, double meanx, double meany, double &m
 	int matched_regions_count=0;
 	int matched_for_min=0;
 	unsigned char unchecked_blobs[CMV_MAX_REGIONS];
-	
+
 	int nr_in_pattern;
 
-		
-	
+
+
 	dist_min=1000000;
-	
-	
+
+
 	for(int j=0; j<PATTERNSMAX; j++)
 	{
 		for(int m=-5; m<=2; m++)
-		{		
+		{
 			n=1-(double)m/10;
 			for(int l=0; l<=0; l++)
-			{			
+			{
 				for(int k=0; k<=0; k++)
 				{
 					for (unsigned int ii=0; ii<filtered_blobs_count; ii++)
@@ -1432,60 +1432,60 @@ bool CMVision::estimPose2(int is_effector, double meanx, double meany, double &m
 					}
 					dist_acc=0;
 					matched_regions_count=0;
-					
+
 					if(!is_effector)
 					{
 						for(int i=0; i<tiles_count[j];i++)
-						{					
+						{
 							blob_nr=labels[(unsigned)(mappattern[j][i].x*n+meanx+k)+width*(unsigned)(mappattern[j][i].y*n+meany+l)]-1;
-					 		
-							//goal	
+
+							//goal
 							dist_acc+=
 							(blobs[blob_nr].color!=6)*unchecked_blobs[blob_nr]*valid_blobs[blob_nr]*
 							((blobs[blob_nr].center.x-mappattern[j][i].x*n-meanx-k)*(blobs[blob_nr].center.x-mappattern[j][i].x*n-meanx-k)+
 							(blobs[blob_nr].center.y-mappattern[j][i].y*n-meany-l)*(blobs[blob_nr].center.y-mappattern[j][i].y*n-meany-l));
-				
+
 							matched_regions_count+=(blobs[blob_nr].color!=6)*unchecked_blobs[blob_nr]*valid_blobs[blob_nr];
-							
+
 							unchecked_blobs[blob_nr]=0;
 						}
-					}		
-				
+					}
+
 					if(is_effector)
-					{			
+					{
 					for(int i=0; i<=8;i+=2) //for 0, 2 6, 8 - corners from 9 points pattern
-						{					
+						{
 							blob_nr=labels[(unsigned)(mappattern[j][i].x*n+meanx+k)+width*(unsigned)(mappattern[j][i].y*n+meany+l)]-1;
-					 		
-							//goal	
+
+							//goal
 							dist_acc+=
 							(blobs[blob_nr].color==6)*unchecked_blobs[blob_nr]*valid_blobs[blob_nr]*
 							((blobs[blob_nr].center.x-mappattern[j][i].x*n-meanx-k)*(blobs[blob_nr].center.x-mappattern[j][i].x*n-meanx-k)+
 							(blobs[blob_nr].center.y-mappattern[j][i].y*n-meany-l)*(blobs[blob_nr].center.y-mappattern[j][i].y*n-meany-l));
-				
+
 							matched_regions_count+=(blobs[blob_nr].color==6)*unchecked_blobs[blob_nr]*valid_blobs[blob_nr];
-							
+
 							unchecked_blobs[blob_nr]=0;
-							
+
 							i+=(2*(i==2));
-							
+
 						}
-					}			
-			
+					}
+
 					//goal
 					dist_acc/=matched_regions_count;
-					
+
 					if(!is_effector)
 					{
-						if( matched_regions_count<=5) 
+						if( matched_regions_count<=5)
 						{
 							dist_acc=1000000;
 						}
 					}
-					
+
 					if(is_effector)
 					{
-						if( matched_regions_count<=3) 
+						if( matched_regions_count<=3)
 						{
 							dist_acc=1000000;
 						}
@@ -1494,39 +1494,39 @@ bool CMVision::estimPose2(int is_effector, double meanx, double meany, double &m
 					/*
 					if(j==0)
 						printf("SSS 0 %f \n", dist_acc);
-					
+
 					if(j==8)
 						printf("SSS 8 %f \n", dist_acc);
-					
+
 					if(j==9)
 						printf("SSS 9 %f \n", dist_acc);
-					
+
 					if(j==10)
-						printf("SSS 10 %f \n", dist_acc); 
+						printf("SSS 10 %f \n", dist_acc);
 					*/
-					
+
 					if(dist_acc<dist_min)
 					{
 						dist_argmin=j;
 						dist_min=dist_acc;
 						n_dist_min=n;
 						matched_for_min=matched_regions_count;
-						
+
 						//4 narozne
 						if(dist_argmin%12<=6)
 						{
 							blob_nr=labels[(unsigned)(mappattern[j][8].x*n+meanx+k)+width*(unsigned)(mappattern[j][8].y*n+meany+l)]-1;
 							ff4.x=valid_blobs[blob_nr]*blobs[blob_nr].center.x+(!valid_blobs[blob_nr])*(mappattern[j][8].x*n+meanx+k);
 							ff4.y=valid_blobs[blob_nr]*blobs[blob_nr].center.y+(!valid_blobs[blob_nr])*(mappattern[j][8].y*n+meany+l);
-							
+
 							blob_nr=labels[(unsigned)(mappattern[j][6].x*n+meanx+k)+width*(unsigned)(mappattern[j][6].y*n+meany+l)]-1;
 							ff3.x=valid_blobs[blob_nr]*blobs[blob_nr].center.x+(!valid_blobs[blob_nr])*(mappattern[j][6].x*n+meanx+k);
 							ff3.y=valid_blobs[blob_nr]*blobs[blob_nr].center.y+(!valid_blobs[blob_nr])*(mappattern[j][6].y*n+meany+l);
-							
+
 							blob_nr=labels[(unsigned)(mappattern[j][2].x*n+meanx+k)+width*(unsigned)(mappattern[j][2].y*n+meany+l)]-1;
 							ff2.x=valid_blobs[blob_nr]*blobs[blob_nr].center.x+(!valid_blobs[blob_nr])*(mappattern[j][2].x*n+meanx+k);
 							ff2.y=valid_blobs[blob_nr]*blobs[blob_nr].center.y+(!valid_blobs[blob_nr])*(mappattern[j][2].y*n+meany+l);
-							
+
 							blob_nr=labels[(unsigned)(mappattern[j][0].x*n+meanx+k)+width*(unsigned)(mappattern[j][0].y*n+meany+l)]-1;
 							ff1.x=valid_blobs[blob_nr]*blobs[blob_nr].center.x+(!valid_blobs[blob_nr])*(mappattern[j][0].x*n+meanx+k);
 							ff1.y=valid_blobs[blob_nr]*blobs[blob_nr].center.y+(!valid_blobs[blob_nr])*(mappattern[j][0].y*n+meany+l);
@@ -1550,35 +1550,35 @@ bool CMVision::estimPose2(int is_effector, double meanx, double meany, double &m
 							ff1.x=valid_blobs[blob_nr]*blobs[blob_nr].center.x+(!valid_blobs[blob_nr])*(mappattern[j][nr_in_pattern].x*n+meanx+k);
 							ff1.y=valid_blobs[blob_nr]*blobs[blob_nr].center.y+(!valid_blobs[blob_nr])*(mappattern[j][nr_in_pattern].y*n+meany+l);
 						}
-						
-				
-						
-						
+
+
+
+
 					}
-					
-			
 
-			}	
-		
+
+
+			}
+
 		}
-		
-	
 
-		}	
+
+
+		}
 	}
-	
 
 
-//	x_kk[1][1]=a2.x; x_kk[1][2]=a3.x; x_kk[1][4]=a5.x; x_kk[1][3]=a4.x; 
-//	x_kk[2][1]=a2.y; x_kk[2][2]=a3.y; x_kk[2][4]=a5.y; x_kk[2][3]=a4.y; 
+
+//	x_kk[1][1]=a2.x; x_kk[1][2]=a3.x; x_kk[1][4]=a5.x; x_kk[1][3]=a4.x;
+//	x_kk[2][1]=a2.y; x_kk[2][2]=a3.y; x_kk[2][4]=a5.y; x_kk[2][3]=a4.y;
 
 	matched_pattern=dist_argmin;
 	matched_Z=n_dist_min;
 	whole_face=1;
-	
-/*	
+
+/*
 	printf("XXXXXXXX %d, %f\n", matched_pattern, matched_Z);
-	
+
 						cout << "FUN" << endl;
 						cout << ff1.x<<"; " << ff2.x<<"; " << ff3.x<<"; " << ff4.x << endl;
 						cout << ff1.y<<"; " << ff2.y<<"; " << ff3.y<<"; " << ff4.y << endl;
@@ -1589,7 +1589,7 @@ bool CMVision::estimPose2(int is_effector, double meanx, double meany, double &m
 bool CMVision::estimPose3()
 {
 	objectClass();
-	
+
 	//0 - goal, 1 - endeffector
 	estimPose2(0, goal_meanx, goal_meany, goal_matched_Z, goal_matched_pattern, goal_f1, goal_f2, goal_f3, goal_f4);
 	estimPose2(1, endeffector_meanx, endeffector_meany, endeffector_matched_Z, endeffector_matched_pattern, endeffector_f1, endeffector_f2, endeffector_f3, endeffector_f4);
@@ -1599,7 +1599,7 @@ bool CMVision::estimPose3()
 	error_f2.x=goal_f2.x-endeffector_f2.x;
 	error_f3.x=goal_f3.x-endeffector_f3.x;
 	error_f4.x=goal_f4.x-endeffector_f4.x;
-	
+
 	error_f1.y=goal_f1.y-endeffector_f1.y;
 	error_f2.y=goal_f2.y-endeffector_f2.y;
 	error_f3.y=goal_f3.y-endeffector_f3.y;
@@ -1609,14 +1609,14 @@ bool CMVision::estimPose3()
 	C_eps_EG[0]=880*(error_f1.y+error_f2.y+error_f3.y+error_f4.y)/(4*fc[2]);
 
 	//Pose estim
-	x_kk[1][1]=goal_f1.x; x_kk[1][2]=goal_f2.x; x_kk[1][4]=goal_f4.x; x_kk[1][3]=goal_f3.x; 
-	x_kk[2][1]=goal_f1.y; x_kk[2][2]=goal_f2.y; x_kk[2][4]=goal_f4.y; x_kk[2][3]=goal_f3.y; 
+	x_kk[1][1]=goal_f1.x; x_kk[1][2]=goal_f2.x; x_kk[1][4]=goal_f4.x; x_kk[1][3]=goal_f3.x;
+	x_kk[2][1]=goal_f1.y; x_kk[2][2]=goal_f2.y; x_kk[2][4]=goal_f4.y; x_kk[2][3]=goal_f3.y;
 
 	estimPose();
 	C_T_G[0][0]=Rckk[1][1]; C_T_G[0][1]=Rckk[1][2]; C_T_G[0][2]=Rckk[1][3]; C_T_G[0][3]=Tckk[1];
 	C_T_G[1][0]=Rckk[2][1]; C_T_G[1][1]=Rckk[2][2]; C_T_G[1][2]=Rckk[2][3]; C_T_G[1][3]=Tckk[2];
 	C_T_G[2][0]=Rckk[3][1]; C_T_G[2][1]=Rckk[3][2]; C_T_G[2][2]=Rckk[3][3]; C_T_G[2][3]=Tckk[3];
-/*	
+/*
 C_T_G[0][0]=Rckk[1][1]; C_T_G[0][1]=Rckk[1][2]; C_T_G[0][2]=Rckk[1][3]; C_T_G[0][3]=Tckk[1];
 C_T_G[1][0]=Rckk[2][1]; C_T_G[1][1]=Rckk[2][2]; C_T_G[1][2]=Rckk[2][3]; C_T_G[1][3]=Tckk[2];
 C_T_G[2][0]=Rckk[3][1]; C_T_G[2][1]=Rckk[3][2]; C_T_G[2][2]=Rckk[3][3]; C_T_G[2][3]=Tckk[3];
@@ -1629,13 +1629,13 @@ C_T_G[2][0]=Rckk[3][1]; C_T_G[2][1]=Rckk[3][2]; C_T_G[2][2]=Rckk[3][3]; C_T_G[2]
  	C_r_G[3]=atan2(C_T_G[1][0],C_T_G[0][0]);
 */
 
-x_kk[1][1]=endeffector_f1.x; x_kk[1][2]=endeffector_f2.x; x_kk[1][4]=endeffector_f4.x; x_kk[1][3]=endeffector_f3.x; 
-x_kk[2][1]=endeffector_f1.y; x_kk[2][2]=endeffector_f2.y; x_kk[2][4]=endeffector_f4.y; x_kk[2][3]=endeffector_f3.y; 
+x_kk[1][1]=endeffector_f1.x; x_kk[1][2]=endeffector_f2.x; x_kk[1][4]=endeffector_f4.x; x_kk[1][3]=endeffector_f3.x;
+x_kk[2][1]=endeffector_f1.y; x_kk[2][2]=endeffector_f2.y; x_kk[2][4]=endeffector_f4.y; x_kk[2][3]=endeffector_f3.y;
 
 
 
 	estimPose();
-//CAMERA	
+//CAMERA
 C_T_E[0][0]=Rckk[1][1]; C_T_E[0][1]=Rckk[1][2]; C_T_E[0][2]=Rckk[1][3]; C_T_E[0][3]=Tckk[1];
 C_T_E[1][0]=Rckk[2][1]; C_T_E[1][1]=Rckk[2][2]; C_T_E[1][2]=Rckk[2][3]; C_T_E[1][3]=Tckk[2];
 C_T_E[2][0]=Rckk[3][1]; C_T_E[2][1]=Rckk[3][2]; C_T_E[2][2]=Rckk[3][3]; C_T_E[2][3]=Tckk[3];
@@ -1647,7 +1647,7 @@ C_T_E[2][0]=Rckk[3][1]; C_T_E[2][1]=Rckk[3][2]; C_T_E[2][2]=Rckk[3][3]; C_T_E[2]
  	C_r_G[4]=atan2(-C_T_G[2][0],sqrt(C_T_G[0][0]*C_T_G[0][0]+C_T_G[1][0]*C_T_G[1][0]));
  	C_r_G[3]=atan2(C_T_G[1][0],C_T_G[0][0]);
 
-	
+
 	C_r_E[0]=C_T_E[3][0];
 	C_r_E[1]=C_T_E[3][1];
 	C_r_E[2]=C_T_E[3][2];
@@ -1749,28 +1749,28 @@ cout<<"E_T_G "<<endl<<E_Tx_G<<endl;
 cout<<"E_T_G__O "<<endl<<E_Tx_G__O<<endl;
 */
 
-}; 
+};
 
 bool CMVision::estimPose4()
 {
 	objectClass();
-	
+
 	//0 - goal, 1 - endeffector
 	estimPose2(0, goal_meanx, goal_meany, goal_matched_Z, goal_matched_pattern, goal_f1, goal_f2, goal_f3, goal_f4);
 //	estimPose2(1, endeffector_meanx, endeffector_meany, endeffector_matched_Z, endeffector_matched_pattern, endeffector_f1, endeffector_f2, endeffector_f3, endeffector_f4);
 
 
-	x_kk[1][1]=goal_f1.x; x_kk[1][2]=goal_f2.x; x_kk[1][4]=goal_f4.x; x_kk[1][3]=goal_f3.x; 
-	x_kk[2][1]=goal_f1.y; x_kk[2][2]=goal_f2.y; x_kk[2][4]=goal_f4.y; x_kk[2][3]=goal_f3.y; 
+	x_kk[1][1]=goal_f1.x; x_kk[1][2]=goal_f2.x; x_kk[1][4]=goal_f4.x; x_kk[1][3]=goal_f3.x;
+	x_kk[2][1]=goal_f1.y; x_kk[2][2]=goal_f2.y; x_kk[2][4]=goal_f4.y; x_kk[2][3]=goal_f3.y;
 
 	estimPose();
-	
+
 };
 
 bool CMVision::estimError()
 {
 	objectClass();
-	
+
 	//0 - goal, 1 - endeffector
 	estimPose2(0, goal_meanx, goal_meany, goal_matched_Z, goal_matched_pattern, goal_f1, goal_f2, goal_f3, goal_f4);
 	estimPose2(1, endeffector_meanx, endeffector_meany, endeffector_matched_Z, endeffector_matched_pattern, endeffector_f1, endeffector_f2, endeffector_f3, endeffector_f4);
@@ -1779,7 +1779,7 @@ bool CMVision::estimError()
 	error_f2.x=goal_f2.x-endeffector_f2.x;
 	error_f3.x=goal_f3.x-endeffector_f3.x;
 	error_f4.x=goal_f4.x-endeffector_f4.x;
-	
+
 	error_f1.y=goal_f1.y-endeffector_f1.y;
 	error_f2.y=goal_f2.y-endeffector_f2.y;
 	error_f3.y=goal_f3.y-endeffector_f3.y;

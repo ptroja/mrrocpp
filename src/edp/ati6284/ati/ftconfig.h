@@ -1,21 +1,21 @@
 /* ! \file include/edp/ati6284/ati/ftconfig.h
     * \brief plik nag��wkowy ATI
-    * Ostatnia modyfikacja: 04.2006 
-    * ATIDAQ F/T C Library 
+    * Ostatnia modyfikacja: 04.2006
+    * ATIDAQ F/T C Library
      * Copyright (c) ATI Industrial Automation
      *
      * The MIT License
-     * 
+     *
      * Permission is hereby granted, free of charge, to any person obtaining a
      * copy of this software and associated documentation files (the "Software"),
      * to deal in the Software without restriction, including without limitation
      * the rights to use, copy, modify, merge, publish, distribute, sublicense,
      * and/or sell copies of the Software, and to permit persons to whom the
      * Software is furnished to do so, subject to the following conditions:
-     * 
+     *
      * The above copyright notice and this permission notice shall be included
      * in all copies or substantial portions of the Software.
-     * 
+     *
      * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
      * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
      * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
@@ -29,16 +29,13 @@
  */
 
 #ifndef ___FTCONFIG_H___
-#define ___FTCONFIG_H___ 
+#define ___FTCONFIG_H___
 
-#include "ftsharedrt.h"		
+#include "ftsharedrt.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#define PI 3.14159265358979
-
 
 typedef char *Units;
 typedef struct Configuration Configuration;
@@ -87,12 +84,12 @@ int DisplayInfo(Calibration *cal,const char *CalFilePath,unsigned short index);
   * index: the number of the calibration within the file (usually 1)
   * Return Values:
   * NULL: Could not load the desired calibration.
-  * Notes: For each Calibration object initialized by this function, 
+  * Notes: For each Calibration object initialized by this function,
   * destroyCalibration must be called for cleanup.*/
 Calibration *createCalibration(const char *CalFilePath, unsigned short index);
 
 /* ! \brief Frees memory allocated for Calibration struct by a successful
-* call to createCalibration.  Must be called when Calibration 
+* call to createCalibration.  Must be called when Calibration
 * struct is no longer needed.
 * Parameters:
 *  cal: initialized Calibration struct*/

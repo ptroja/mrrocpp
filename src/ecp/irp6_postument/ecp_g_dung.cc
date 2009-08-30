@@ -121,7 +121,7 @@ bool dung::next_step ( )
         dq3 = (q3-oq3)/0.01;
         oq3 = q3;
     }
-    q4 = the_robot->EDP_data.current_joint_arm_coordinates[3] - the_robot->EDP_data.current_joint_arm_coordinates[2] - 3.1415/2;
+    q4 = the_robot->EDP_data.current_joint_arm_coordinates[3] - the_robot->EDP_data.current_joint_arm_coordinates[2] - M_PI_2;
     if (oq4 >= 100)
     {
         dq4 = 0.0;
@@ -154,14 +154,14 @@ bool dung::next_step ( )
         dq6 = (q6-oq6)/0.01;
         oq6 = q6;
     }
-    //printf("q1 = %f,    q2 = %f,    q3 = %f\n", q1*180/3.1415, q2*180/3.1415, q3*180/3.1415);
+    //printf("q1 = %f,    q2 = %f,    q3 = %f\n", q1*180/M_PI, q2*180/M_PI, q3*180/M_PI);
     // compute the jacobian
     /*		J[0][0] = -(sin(q1)*(a2*cos(q2) + a3*cos(q2 + q3) - d5*sin(q2 + q3 + q4)));
     		J[0][1] = -(cos(q1)*(d5*cos(q2 + q3 + q4) + a2*sin(q2) + a3*sin(q2 + q3)));
     		J[0][2] = -(cos(q1)*(d5*cos(q2 + q3 + q4) + a3*sin(q2 + q3)));
     		J[0][3] = -(d5*cos(q1)*cos(q2 + q3 + q4));
     		J[0][4] = 0;
-    		J[0][5] = 0;		
+    		J[0][5] = 0;
     		J[1][0] = cos(q1)*(a2*cos(q2) + a3*cos(q2 + q3) - d5*sin(q2 + q3 + q4));
     		J[1][1] = -(sin(q1)*(d5*cos(q2 + q3 + q4) + a2*sin(q2) + a3*sin(q2 + q3)));
     		J[1][2] = -(sin(q1)*(d5*cos(q2 + q3 + q4) + a3*sin(q2 + q3)));
@@ -197,7 +197,7 @@ bool dung::next_step ( )
     g[1] = 9.8 * (17.57*cos(q2) - 0.343*cos(q2+q3) - 1.05*sin(q2+q3+q4) + 0.05*cos(q2+q3+q4)*sin(q5));
     g[2] = -9.8 * (0.34*cos(q2+q3) + 1.05*sin(q2+q3+q4) - 0.05*cos(q2+q3+q4)*sin(q5));
     g[3] = g[4] = g[5] = 0.0;
-    //printf("q1 = %f,    q2 = %f,    q3 = %f,    q4 = %f,    q5 = %f,    q6 = %f,    g[2] = %f\n", q1*180/3.1415, q2*180/3.1415, q3*180/3.1415, q4*180/3.1415, q5*180/3.1415, q6*180/3.1415, g[1]);
+    //printf("q1 = %f,    q2 = %f,    q3 = %f,    q4 = %f,    q5 = %f,    q6 = %f,    g[2] = %f\n", q1*180/M_PI, q2*180/M_PI, q3*180/M_PI, q4*180/M_PI, q5*180/M_PI, q6*180/M_PI, g[1]);
     // compute the lump parameters
     /*		l1 = power(a3,2)*(m4 + m5 + m6) + power(a2,2)*(m3 + m4 + m5 + m6) + m2*power(xc2,2) + m3*power(xc3,2) + yy2 + yy3 + yy4 + zz1;
     		l2 = -(power(a2,2)*(m3 + m4 + m5 + m6)) - m2*power(xc2,2) + xx2 - yy2;

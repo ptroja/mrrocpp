@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------------
-// Proces:		- 
+// Proces:		-
 // Plik:			mathtr.h
 // System:	QNX/MRROC++  v. 6.3
 // Opis:		Klasy K_vector, Homog_matrix, Ft_v_vector,  Jacobian_matrix
@@ -23,7 +23,7 @@ namespace mrrocpp {
 namespace lib {
 
 
-#define delta_m M_PI - 3.14154
+#define delta_m (M_PI - 3.14154)
 #define DEGREES_TO_RADIANS 57.295780
 
 #define zero_eps 1.0E-4
@@ -44,7 +44,7 @@ class K_vector
 {
 private:
 	double w[3];
-	
+
 public:
 	friend class Homog_matrix;						// klasa Homog_matrix musi miec dostep do prywatnych
 															// skladnikow klasy vector
@@ -74,7 +74,7 @@ public:
 	K_vector operator*(double) const;					// skalowanie wektora						- by Slawek Bazant
 	void operator+=(const K_vector &);				// dodanie wektora podanego jako agument do aktualnego
 	void operator*=(const double);					// skalowanie wektora						- by Slawek Bazant
-	
+
 	// in theory, the RHS operator
       const double operator[](const int i ) const;
       // in theory, the LHS operator
@@ -94,14 +94,14 @@ class Homog_matrix
 
 private:
 	// Zmienna przechowujaca parametry macierzy jednorodnej.
-	frame_tab matrix_m;						
+	frame_tab matrix_m;
 
 public:
 	// Klasa Ft_v_tr musi miec dostep do prywatnych skladnikow klasy Homog_matrix.
-	friend class Ft_v_tr;						
+	friend class Ft_v_tr;
 
 	enum POSE_SPECIFICATION { MTR_XYZ_ANGLE_AXIS, MTR_XYZ_EULER_ZYZ, MTR_MECH_XYZ_EULER_ZYZ, MTR_XYZ_RPY};
-											
+
 	// Konstruktor domniemany - tworzy macierz jednostkowa.
 	Homog_matrix();
 	// Stworzenie macierzy na podstawie zawartosci tablicy.
@@ -117,22 +117,22 @@ public:
 	// Utworzenie macierzy jednorodnej na podstawie podanej macierzy obrotu r i wektora przesuniecia t.
 	Homog_matrix(double r[3][3], double t[3]);
 	// Utworzenie macierzy jednorodnej na podstawie jej 12 elementow (notacja z Craiga)
-	Homog_matrix (double r11, double r12, double r13, double t1, double r21, double r22, double r23, double t2, double r31, double r32, 
+	Homog_matrix (double r11, double r12, double r13, double t1, double r21, double r22, double r23, double t2, double r31, double r32,
 	 double r33, double t3);
 	// Utworzenie macierzy jednorodnej na podstawie rozkazu w formie XYZ_ANGLE_AXIS.
-	Homog_matrix(double kx, double ky, double kz, double alfa, double x, double y, double z);			
+	Homog_matrix(double kx, double ky, double kz, double alfa, double x, double y, double z);
 	// Utworzenie macierzy jednorodnej na podstawie rozkazu w formie XYZ_EULER_ZYZ.
 	Homog_matrix (POSE_SPECIFICATION mtr_ps, double x, double y, double z, double alfa, double beta, double gamma);
-	
+
 	// Konstruktor, ktory wypelnienia wspolczynniki macierzy na podstawie danych w formie
 	Homog_matrix(POSE_SPECIFICATION mtr_ps, const K_vector axis_with_angle, const K_vector translation);
 
 	// Konstruktor, ktory wypelnienia wspolczynniki macierzy na podstawie danych w formie
 	Homog_matrix(POSE_SPECIFICATION mtr_ps, const Ft_v_vector translation_and_axis_with_angle);
-	
+
 	// Konstruktor, ktory wypelnienia wspolczynniki macierzy na podstawie danych w formie
 	Homog_matrix(POSE_SPECIFICATION mtr_ps, const double t[6]);
-	
+
 	Homog_matrix return_with_with_removed_translation() const;
 	Homog_matrix return_with_with_removed_rotation() const;
 
@@ -150,7 +150,7 @@ public:
 	void set_xyz_euler_zyz(const double t[6]);
 	// Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_EULER_ZYZ dla robota IRP-6_MECHATRONIKA
 	void set_mech_xyz_euler_zyz(double x, double y, double z, double alfa, double beta, double gamma);
-	
+
      // Przeksztalcenie do formy XYZ_RPY (rool pitch yaw) i zwrocenie w tablicy.
 	void get_xyz_rpy(double t[6]) const;
 	// Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_RPY.
@@ -161,14 +161,14 @@ public:
 	void get_xyz_angle_axis(double t[6]) const;
 	void get_xyz_angle_axis(K_vector& axis_with_angle, K_vector& translation) const;
 	void get_xyz_angle_axis(Ft_v_vector& translation_and_axis_with_angle) const;
-	
+
 	// Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_ANGLE_AXIS.
 	void set_xyz_angle_axis(double kx, double ky, double kz, double alfa, double x, double y, double z);
 	void set_xyz_angle_axis(double kx, double ky, double kz, double x, double y, double z); // kat wliczony w os
 	void set_xyz_angle_axis(const K_vector axis_with_angle, const K_vector translation);  // kat wliczony w os
 	void set_xyz_angle_axis(const Ft_v_vector translation_and_axis_with_angle);  // kat wliczony w os
 	void set_xyz_angle_axis(const double t[6]);  // kat wliczony w os
-	
+
 	// Operacje na kwaternionach
 	void set_xyz_quaternion(double eta, double eps1, double eps2, double eps3, double x, double y, double z);
 	void get_xyz_quaternion(double t[7]) const;
@@ -179,17 +179,17 @@ public:
 
 	// wyzerowanie wektora translacji.
 	void remove_translation();
-	
+
 	// wstawienie jedynek na diagonalii rotacji
 	void remove_rotation();
 
 	// Ustawienie wektora translacji. Macierz rotacji pozostaje niezmieniona.
 	void set_translation_vector(double t[3]);
-	
+
 	void set_translation_vector(double x, double y, double z);
-	
+
 	void set_translation_vector(const K_vector xyz);
-	
+
 	void set_translation_vector(const Homog_matrix &wzor);
 
 	// Zwrocenie macierzy rotacji.
@@ -205,7 +205,7 @@ public:
 	void get_value(int i, int j, double &value) const;
 	// Zwrocenie elementu macierzy.
 	double get_value(int i, int j) const;
-	
+
 
 	// Operator przypisania.
 	Homog_matrix & operator=(const Homog_matrix &);
@@ -259,31 +259,31 @@ private:
 public:
 	friend class Ft_v_tr;						// klasa Ft_v_tr musi miec dostep do prywatnych
 												// skladnikow klasy Ft_v_vector
-     friend class Jacobian_matrix;			//Klasa Jacobian_matrix ma miec dostep do skladowych - Sibi										
+     friend class Jacobian_matrix;			//Klasa Jacobian_matrix ma miec dostep do skladowych - Sibi
 
 	Ft_v_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
 	Ft_v_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
 	Ft_v_vector(double fx, double fy, double fz, double tx, double ty, double tz);
-	
+
 	Ft_v_vector(const K_vector force, const K_vector torque);
-		
+
 	Ft_v_vector(const Ft_v_vector &);								// konstruktor kopiujacy
-	
+
 	void set_values(const double t[6]);										// wypelnienie wektora na podstawie podanej tablicy
 	void set_values(double fx, double fy, double fz, double tx, double ty, double tz);
-	
+
 	// Ustawienie elementu wektora.
 	void set_value(int i, const double value);
 	// Zwrocenie elementu wektora.
 	void get_value(int i, double &value) const;
 	// Zwrocenie elementu wektora.
 	double get_value(int i) const;
-	
+
 	//Sibi
-	 //Wektor predkosci jako odleglosc dwuch pozycji zadanych w postaci ramek 
+	 //Wektor predkosci jako odleglosc dwuch pozycji zadanych w postaci ramek
 	void position_distance(frame_tab* local_current_end_effector_frame, frame_tab* local_desired_end_effector_frame);
 
-	
+
 	K_vector get_force_K_vector()  const;
 	K_vector get_torque_K_vector()  const;
 
@@ -294,21 +294,21 @@ public:
       const double operator[](const int i ) const;
       // in theory, the LHS operator
       double& operator[](const int i );
-	
+
 	// Odwracanie macierzy.
 	Ft_v_vector operator!() const;
 	Ft_v_vector operator-() const;
-	Ft_v_vector & operator=(const Ft_v_vector &);			// operator przypisania	
+	Ft_v_vector & operator=(const Ft_v_vector &);			// operator przypisania
 	Ft_v_vector operator+(const Ft_v_vector &) const;
 	Ft_v_vector operator-(const Ft_v_vector &) const;
-	Ft_v_vector operator*(double) const;					// skalowanie wektora	
+	Ft_v_vector operator*(double) const;					// skalowanie wektora
 	void operator+=(const Ft_v_vector &);
-	
+
 
 	void to_table(double tablica[6]) const;					// przepisanie wektora do tablicy podanej jako argument
 
 	friend std::ostream& operator<<(std::ostream & s, Ft_v_vector & w);		// operator wypisania
-	
+
 	//Sibi
 	//Wyciagniecie max elementu z wektora
 	double max_element ();	//wyciagniecie maksymalnego elementu wektora
@@ -331,7 +331,7 @@ public:
 
 	Ft_v_tr ();																	// kostruktor domniemany
 //	Ft_v_tr(VARIANT variant_l);
-	Ft_v_tr (const Homog_matrix &, VARIANT variant_l);		
+	Ft_v_tr (const Homog_matrix &, VARIANT variant_l);
 	Ft_v_tr(const Ft_v_tr &);												// konstruktor kopiujacy
 
 	void set_from_frame(const Homog_matrix & p);		// ustawia na podstawie trojscianu
@@ -342,7 +342,7 @@ public:
 
 	Ft_v_tr & operator = (const Ft_v_tr &);									// operator przypisania
 	Ft_v_vector operator*(const Ft_v_vector &) const;					// mnozenie wektora
-	
+
 
 	friend std::ostream&  operator<<(std::ostream & strumien, Ft_v_tr &);		// operator wypisania
 
@@ -358,16 +358,16 @@ private:
 
 public:
 	Jacobian_matrix ();													// kostruktor domniemany
-		
-     void irp6_6dof_equations(const Ft_v_vector & w);			//Wzory na jakobian dla Irp-6 o 6 stopniach swobody	
-     void irp6_6dof_inverse_equations(const Ft_v_vector & w);				//Wzory na odwrotnosc jakobianu dla Irp-6 o 6 stopniach swobody			
-	 double irp6_6dof_determinant(const Ft_v_vector & w);					//Wzory na wyznacznik jaokbianu dla Irp-6 o 6 stopniach swobody	
-		
+
+     void irp6_6dof_equations(const Ft_v_vector & w);			//Wzory na jakobian dla Irp-6 o 6 stopniach swobody
+     void irp6_6dof_inverse_equations(const Ft_v_vector & w);				//Wzory na odwrotnosc jakobianu dla Irp-6 o 6 stopniach swobody
+	 double irp6_6dof_determinant(const Ft_v_vector & w);					//Wzory na wyznacznik jaokbianu dla Irp-6 o 6 stopniach swobody
+
      void jacobian_transpose();										//Wyznaczenie transpozycji jakobianu
      void wypisz();														//Wypisanie zawartosci macierzy na konsole
      void to_table(double tablica[6][6]) const;						// przepisanie elementw jakobianu do tablicy[6][6] podanej jako argument
 
-	Ft_v_vector jacobian_inverse_gauss(const Ft_v_vector & dist);				//Rozwiazanie ukladu rownan AX=Y (A, Y - zadane) 
+	Ft_v_vector jacobian_inverse_gauss(const Ft_v_vector & dist);				//Rozwiazanie ukladu rownan AX=Y (A, Y - zadane)
 																								//za pomoca metody eliminacji Gaussa
 	Ft_v_vector operator* (const Ft_v_vector & w) const;		//Przeciazenie operacji mnozenia dla jakobianu i wektora
 
