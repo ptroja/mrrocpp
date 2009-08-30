@@ -67,7 +67,7 @@ float config_fPreEliminationThreshold = static_cast<float> (0.1);
 
 	unsigned	int z,n,i;
 	short *WAVE_buffer1;
-	
+
 	int t_corr;
 	float t_dev;
 	unsigned long tk_new,ts_new;
@@ -85,11 +85,11 @@ float config_fPreEliminationThreshold = static_cast<float> (0.1);
 				BYTE ChunkID_fmt[5];
 				BYTE ChunkID[5];
 				//prepare buffer for holding wave data
-				short *WAVE_buffer; 
+				short *WAVE_buffer;
 
 				//prepare variables for wave file header data
-				DWORD WAVE_size; 
-				short WAVE_format_tag, WAVE_channels, WAVE_block_align, WAVE_bits_per_sample; 
+				DWORD WAVE_size;
+				short WAVE_format_tag, WAVE_channels, WAVE_block_align, WAVE_bits_per_sample;
 				DWORD WAVE_format_length, WAVE_sample_rate, WAVE_av_byte_per_sec, WAVE_data_size;
 
 
@@ -160,7 +160,7 @@ void Phoneme::name(string sString)
 		cCategory = 0;
 		bVoiced = false;
 	}
-	if (sName == "k'" || sName == "g'" || sName == "s'" || sName == "z'"|| sName == "Ts" || sName == "Dz" || sName == "n'" || sName == "j") 
+	if (sName == "k'" || sName == "g'" || sName == "s'" || sName == "z'"|| sName == "Ts" || sName == "Dz" || sName == "n'" || sName == "j")
 		bSoft = true;
 	else
 		bSoft = false;
@@ -219,7 +219,7 @@ void init_buffers_from_files()
 {
 	vcF0 = fnReadF0("../data/corpus.f0");	//reading in F0 info
 	vphoCorpus = fnReadCorpus("../data/corpus.nlp", "../data/corpus.lab", vcF0);
-	
+
 	input = fopen("../data/corpus.wav","rb");
 	if (input==NULL)					/*Check source file for open/access errors*/
 	        {
@@ -227,11 +227,11 @@ void init_buffers_from_files()
                 	system("PAUSE");
 	   				exit(1);
 	         }
- 
-	
+
+
 	//set to output wave file
 	//file_output=true;
-	
+
 	if (input)
 			{
 			/*
@@ -240,14 +240,14 @@ void init_buffers_from_files()
 				BYTE ChunkID_fmt[5];
 				BYTE ChunkID[5];
 				//prepare buffer for holding wave data
-				short *WAVE_buffer; 
+				short *WAVE_buffer;
 				data[4]='\0';
 				Format[4]='\0';//
 				ChunkID_fmt[4]='\0';//
 				ChunkID[4]='\0';//
 				//prepare variables for wave file header data
-				DWORD WAVE_size; 
-				short WAVE_format_tag, WAVE_channels, WAVE_block_align, WAVE_bits_per_sample; 
+				DWORD WAVE_size;
+				short WAVE_format_tag, WAVE_channels, WAVE_block_align, WAVE_bits_per_sample;
 				DWORD WAVE_format_length, WAVE_sample_rate, WAVE_av_byte_per_sec, WAVE_data_size;
 */
 
@@ -257,29 +257,29 @@ void init_buffers_from_files()
 				ChunkID[4]='\0';//
 
 				fread(ChunkID, sizeof(BYTE), 4, input); 	//read in first four bytes
-				
+
 				if (!std::strcmp((char *)ChunkID, "RIFF"))
-					{ 
-						fread(&WAVE_size, sizeof(DWORD), 1, input); 
-						
-						fread(Format, sizeof(BYTE), 4, input); 
-						
+					{
+						fread(&WAVE_size, sizeof(DWORD), 1, input);
+
+						fread(Format, sizeof(BYTE), 4, input);
+
 						if (!std::strcmp((char *)Format,"WAVE"))
-							{ 
-								fread(ChunkID_fmt, sizeof(BYTE), 4, input); 
-								
+							{
+								fread(ChunkID_fmt, sizeof(BYTE), 4, input);
+
 								fread(&WAVE_format_length, sizeof(DWORD),1,input);
-								
+
 								fread(&WAVE_format_tag, sizeof(short), 1, input);
 								fread(&WAVE_channels, sizeof(short),1,input);
-								fread(&WAVE_sample_rate, sizeof(DWORD), 1, input); 
+								fread(&WAVE_sample_rate, sizeof(DWORD), 1, input);
 								fread(&WAVE_av_byte_per_sec, sizeof(DWORD), 1, input);
-								fread(&WAVE_block_align, sizeof(short), 1, input); 
+								fread(&WAVE_block_align, sizeof(short), 1, input);
 								fread(&WAVE_bits_per_sample, sizeof(short), 1, input);
-								fread(data, sizeof(BYTE), 4, input); 
-		
-				
-								fread(&WAVE_data_size, sizeof(DWORD), 1, input); 	
+								fread(data, sizeof(BYTE), 4, input);
+
+
+								fread(&WAVE_data_size, sizeof(DWORD), 1, input); 
 
 								WAVE_buffer = (short *) malloc (sizeof(short) * (WAVE_data_size/WAVE_block_align)); //set buffer for data
 								fread(WAVE_buffer, sizeof(short), WAVE_data_size/WAVE_block_align, input); //read in our whole sound data chunk
@@ -288,7 +288,7 @@ void init_buffers_from_files()
 		}
 		fclose(input);
 	}
-	
+
 };
 
 
@@ -313,35 +313,35 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 	for (stI = 0; stI < sText.length(); stI++)
 	{
 		chCharIn = sText.at(stI);
-		
+
 		switch (chCharIn)
 		{
-			case 'A':	chCharIn = '¹'; break;	
-			case 'C':	chCharIn = 'æ'; break;	
-			case 'E':	chCharIn = 'ê'; break;	
-			case 'L':	chCharIn = '³'; break;	
-			case 'N':	chCharIn = 'ñ'; break;	
-			case 'O':	chCharIn = 'ó'; break;	
-			case 'S':	chCharIn = 'œ'; break;	
-			case 'X':	chCharIn = 'Ÿ'; break;	
-			case 'Z':	chCharIn = '¿'; break;	
+			case 'A':	chCharIn = '¹'; break;
+			case 'C':	chCharIn = 'æ'; break;
+			case 'E':	chCharIn = 'ê'; break;
+			case 'L':	chCharIn = '³'; break;
+			case 'N':	chCharIn = 'ñ'; break;
+			case 'O':	chCharIn = 'ó'; break;
+			case 'S':	chCharIn = 'œ'; break;
+			case 'X':	chCharIn = 'Ÿ'; break;
+			case 'Z':	chCharIn = '¿'; break;
 			default:
-		
+
 		//} //by MS polish diactric signs as upper case
-		
+
 						if ((chCharIn > 64) && (chCharIn < 91))
 							chCharIn += 32;
 						else switch (chCharIn)
 						{
-							case '¥':	chCharIn = '¹'; break;	
-							case 'Æ':	chCharIn = 'æ'; break;	
-							case 'Ê':	chCharIn = 'ê'; break;	
-							case '£':	chCharIn = '³'; break;	
-							case 'Ñ':	chCharIn = 'ñ'; break;	
-							case 'Ó':	chCharIn = 'ó'; break;	
-							case 'Œ':	chCharIn = 'œ'; break;	
-							case '':	chCharIn = 'Ÿ'; break;	
-							case '¯':	chCharIn = '¿'; break;	
+							case '¥':	chCharIn = '¹'; break;
+							case 'Æ':	chCharIn = 'æ'; break;
+							case 'Ê':	chCharIn = 'ê'; break;
+							case '£':	chCharIn = '³'; break;
+							case 'Ñ':	chCharIn = 'ñ'; break;
+							case 'Ó':	chCharIn = 'ó'; break;
+							case 'Œ':	chCharIn = 'œ'; break;
+							case '':	chCharIn = 'Ÿ'; break;
+							case '¯':	chCharIn = '¿'; break;
 						}
 		break;
 		}
@@ -354,14 +354,16 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 
 	for (stI = 0; stI < sText.length(); stI++)
 	{
-		chCharIn = sText.at(stI); 
-		
+		chCharIn = sText.at(stI);
+
 		if (stI < sText.length()-1)
 		 chCharInR = sText.at(stI+1);	//kontekst prawy
-	//	if (chCharInR == ' ') 		
+		else
+		 chCharInR = 0; // aby uniknac niezainicjalizowanej wartosci
+	//	if (chCharInR == ' ') 
 //		 if (stI < sText.length()-1)
 //		  chCharInR = sText.at(stI+2); //jeœli spacja, to jeden znak dalej
-		
+
 		chCharInR2 = 0;								//czy samog³oska 2 znaki dalej
 		if (stI < sText.length()-2)
 		{
@@ -372,23 +374,23 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 		}
 
 		chLeftVoiced = 0;
-		if (stI>0) 
+		if (stI>0)
 			{
 			chCharInL = sText.at(stI-1);		//kontekst lewy
 			if ((chCharInL == 'a')||(chCharInL == 'b')||(chCharInL == 'd')||(chCharInL == 'e')||(chCharInL == 'g')||(chCharInL == 'i')||(chCharInL == 'j')||(chCharInL == 'l')||(chCharInL == '³')||(chCharInL == 'm')||(chCharInL == 'n')||(chCharInL == 'o')||(chCharInL == 'ó')||(chCharInL == 'r')||(chCharInL == 'u')||(chCharInL == 'w')||(chCharInL == 'y')||(chCharInL == 'z')||(chCharInL == 'Ÿ')||(chCharInL == '¿')||(chCharInL == '¹')||(chCharInL == 'ê'))
 				chLeftVoiced = 1;
 			}
 		else chCharInL = ' ';
-		
+
 		//czy dŸwiêczny prawy kontekst
 		chRightVoiced = 0;
 		if ((chCharInR == 'a')||(chCharInR == 'b')||(chCharInR == 'd')||(chCharInR == 'e')||(chCharInR == 'g')||(chCharInR == 'i')||(chCharInR == 'j')||(chCharInR == 'l')||(chCharInR == '³')||(chCharInR == 'm')||(chCharInR == 'n')||(chCharInR == 'o')||(chCharInR == 'ó')||(chCharInR == 'r')||(chCharInR == 'u')||(chCharInR == 'w')||(chCharInR == 'y')||(chCharInR == 'z')||(chCharInR == 'Ÿ')||(chCharInR == '¿')||(chCharInR == '¹')||(chCharInR == 'ê')||(chCharInR == '.'))
 			chRightVoiced = 1;
-		
+
 
 		switch (chCharIn)			//zasady wymowy litera po literze
 		{
-		case '¹':	
+		case '¹':
 			AddPhoneme("o",&vphoPhonemes);
 			if ((chCharInR == 'c')||(chCharInR == 't')||(chCharInR == 'd'))
 				AddPhoneme("n",&vphoPhonemes);
@@ -398,7 +400,7 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 				AddPhoneme("N",&vphoPhonemes);
 			break;
 
-		case 'ê':	
+		case 'ê':
 			AddPhoneme("e",&vphoPhonemes);
 			if ((chCharInR == 'c')||(chCharInR == 't')||(chCharInR == 'd'))
 				AddPhoneme("n",&vphoPhonemes);
@@ -408,25 +410,25 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 				AddPhoneme("N",&vphoPhonemes);
 			break;
 
-		case 'i':	
+		case 'i':
 			if ((chCharInR == 'a')||(chCharInR == 'e')||(chCharInR == 'o')||(chCharInR == 'u')||(chCharInR == '¹')||(chCharInR == 'ê'))
 				AddPhoneme("j",&vphoPhonemes);
 			else
 				AddPhoneme("i",&vphoPhonemes);
 			break;
 
-		case 'c':	
-			if (chCharInR == 'i') 
+		case 'c':
+			if (chCharInR == 'i')
 			{
 				AddPhoneme("Ts",&vphoPhonemes);
 				if (chCharInR2) stI++;
 			}
-			else if (chCharInR == 'z') 
+			else if (chCharInR == 'z')
 			{
 			AddPhoneme("tS",&vphoPhonemes);
 			stI++;
 			}
-			else if (chCharInR == 'h') 
+			else if (chCharInR == 'h')
 			{
 			AddPhoneme("x",&vphoPhonemes);
 			stI++;
@@ -435,15 +437,15 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 				AddPhoneme("ts",&vphoPhonemes);
 			break;
 
-		case 'd':	
-			if (chCharInR == 'z') 
-			{ 
+		case 'd':
+			if (chCharInR == 'z')
+			{
 				stI++;
 				if (chCharInR2 != 2)
 				{
 				if (chRightVoiced)
 					AddPhoneme("dz",&vphoPhonemes);
-				else 
+				else
 					AddPhoneme("ts",&vphoPhonemes);
 				}
 				else
@@ -453,19 +455,19 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 						stI++;
 				}
 			}
-			else if (chCharInR == '¿') 
-			{ 
+			else if (chCharInR == '¿')
+			{
 				if (chRightVoiced)
 					AddPhoneme("dZ",&vphoPhonemes);
-				else 
+				else
 					AddPhoneme("tS",&vphoPhonemes);
 				stI++;
 			}
 			else if (chCharInR == 'Ÿ')
-			{ 
+			{
 				if (chRightVoiced)
 					AddPhoneme("Dz",&vphoPhonemes);
-				else 
+				else
 					AddPhoneme("Ts",&vphoPhonemes);
 				stI++;
 			}
@@ -473,29 +475,29 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 			{
 				if (chRightVoiced)
 					AddPhoneme("d",&vphoPhonemes);
-				else 
+				else
 					AddPhoneme("t",&vphoPhonemes);
 			}
 			break;
 
-		case 'n':	
-			if (chCharInR == 'i') 
+		case 'n':
+			if (chCharInR == 'i')
 			{
 				AddPhoneme("n'",&vphoPhonemes);
 				if (chCharInR2) stI++;
 			}
 			else if ((chCharInR == 'k')||(chCharInR == 'g'))
 				AddPhoneme("N",&vphoPhonemes);
-			else 
+			else
 				AddPhoneme("n",&vphoPhonemes);
 			break;
 
 		case 'ñ':
-				AddPhoneme("n'",&vphoPhonemes); //MS 
+				AddPhoneme("n'",&vphoPhonemes); //MS
 			break;
 
-		case 'k':	
-			if (chCharInR == 'i') 
+		case 'k':
+			if (chCharInR == 'i')
 				{
 				AddPhoneme("k'",&vphoPhonemes);
 				if (chCharInR2) stI++;
@@ -504,8 +506,8 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 				AddPhoneme("k",&vphoPhonemes);
 			break;
 
-		case 'g':	
-			if (chCharInR == 'i') 
+		case 'g':
+			if (chCharInR == 'i')
 				{
 				AddPhoneme("g'",&vphoPhonemes);
 				if (chCharInR2) stI++;
@@ -514,7 +516,7 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 				AddPhoneme("g",&vphoPhonemes);
 			break;
 
-		case 'r':	
+		case 'r':
 			if (chCharInR == 'z')
 			{
 			if ((chLeftVoiced)&&(chRightVoiced))
@@ -527,13 +529,13 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 				AddPhoneme("r",&vphoPhonemes);
 			break;
 
-		case 's':	
-			if (chCharInR == 'i') 
+		case 's':
+			if (chCharInR == 'i')
 			{
 				AddPhoneme("s'",&vphoPhonemes);
 				if (chCharInR2) stI++;
 			}
-			else if (chCharInR == 'z') 
+			else if (chCharInR == 'z')
 			{
 				AddPhoneme("S",&vphoPhonemes);
 				stI++;
@@ -542,7 +544,7 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 				AddPhoneme("s",&vphoPhonemes);
 			break;
 
-		case 'w':	
+		case 'w':
 			if (chRightVoiced)
 				AddPhoneme("v",&vphoPhonemes);
 			else
@@ -556,21 +558,21 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 		case 'ó':	AddPhoneme("u", &vphoPhonemes);		break;
 		case 'œ':	AddPhoneme("s'",&vphoPhonemes);		break;
 
-		case '¿':	
-			if (chRightVoiced) 				
+		case '¿':
+			if (chRightVoiced) 
 				AddPhoneme("Z",&vphoPhonemes);
 			else
 				AddPhoneme("S",&vphoPhonemes);
 			break;
 
 		case ' ':	AddPhoneme("|",&vphoPhonemes);	break;
-		
+
 		default:
 			sprintf(pszBuff,"%c",chCharIn);
 			AddPhoneme(pszBuff,&vphoPhonemes);
 		}
-		
-		
+
+
 	}
 
 //	AddPhoneme("#",&vphoPhonemes);		//cisza na koniec, na wszelki wypadek
@@ -580,13 +582,13 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 	signed char cBoundaryType = -1;
 	for (stI = vphoPhonemes.size(); stI > 0; stI--)
 	{
-		phoPhoneme = vphoPhonemes.at(stI-(string::size_type)1); 
+		phoPhoneme = vphoPhonemes.at(stI-(string::size_type)1);
 		sPhonemeName = phoPhoneme.sName;
 		if (phoPhoneme.cCategory == 101)
 			cBoundaryType = 0;
 		if (phoPhoneme.cCategory == 1 && cBoundaryType != -1)
 			cBoundaryType++;
-		if (cBoundaryType > 2 || cBoundaryType == 2 && phoPhoneme.cCategory == 110) 
+		if ((cBoundaryType > 2) || ((cBoundaryType == 2) && (phoPhoneme.cCategory == 110)))
 			cBoundaryType = -1;
 		phoPhoneme.cPhraseBoundary = cBoundaryType;
 		vphoPhonemes.at(stI-(string::size_type)1) = phoPhoneme;
@@ -594,14 +596,14 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 
 	for (stI = vphoPhonemes.size(); stI > 0; stI--)
 	{
-		phoPhoneme = vphoPhonemes.at(stI-(string::size_type)1); 
+		phoPhoneme = vphoPhonemes.at(stI-(string::size_type)1);
 		if( phoPhoneme.cPhraseBoundary == -1)
 		{
 			if (phoPhoneme.cCategory == 102)
 				cBoundaryType = 2;
 			if (phoPhoneme.cCategory == 1 && cBoundaryType != -1)
 				cBoundaryType++;
-			if (cBoundaryType > 4 || cBoundaryType ==4 && phoPhoneme.cCategory == 110) //gdy drugie 
+			if ((cBoundaryType > 4) || ((cBoundaryType == 4) && (phoPhoneme.cCategory == 110))) //gdy drugie
 				cBoundaryType = -1;
 			phoPhoneme.cPhraseBoundary = cBoundaryType;
 			vphoPhonemes.at(stI-(string::size_type)1) = phoPhoneme;
@@ -610,7 +612,7 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 
 	for (stI = 0; stI < vphoPhonemes.size(); stI++)	//PB = 0 zamiast -1
 	{
-		phoPhoneme = vphoPhonemes.at(stI); 
+		phoPhoneme = vphoPhonemes.at(stI);
 		if (phoPhoneme.cPhraseBoundary == -1)
 			phoPhoneme.cPhraseBoundary = 0;
 		vphoPhonemes.at(stI) = phoPhoneme;
@@ -622,7 +624,7 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 	signed char cLastPhonemeCategory = 0;
 	for (stI = vphoPhonemes.size(); stI > 0; stI--)
 	{
-		phoPhoneme = vphoPhonemes.at(stI-(string::size_type)1); 
+		phoPhoneme = vphoPhonemes.at(stI-(string::size_type)1);
 		sPhonemeName = phoPhoneme.sName;
 		if (phoPhoneme.cCategory == 1)
 			cSyllableNo++;
@@ -640,8 +642,8 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 	cLastPhonemeCategory = 0;		//modyfikowanie granic, jeœli plo bezdŸw
 	for (stI = vphoPhonemes.size(); stI > 1; stI--)
 	{
-		phoPhoneme = vphoPhonemes.at(stI-(string::size_type)1); 
-		phoPhonemeBefore = vphoPhonemes.at(stI-(string::size_type)2); 
+		phoPhoneme = vphoPhonemes.at(stI-(string::size_type)1);
+		phoPhonemeBefore = vphoPhonemes.at(stI-(string::size_type)2);
 		sPhonemeName = phoPhoneme.sName;
 		if ((phoPhoneme.cHalfSyllable == 1)&&(phoPhoneme.cCategory != 2))
 			if ((cLastPhonemeCategory == 2)||(cLastPhonemeCategory == 3))	//poprzendni plo
@@ -657,7 +659,7 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 	char cLastPhraseBoundary = 0;
 	for (stI = 1; stI < vphoPhonemes.size(); stI++)	//uzupe³nianie numerów koncowym fonemom sylaby
 	{
-		phoPhoneme = vphoPhonemes.at(stI); 
+		phoPhoneme = vphoPhonemes.at(stI);
 		sPhonemeName = phoPhoneme.sName;
 		if (phoPhoneme.cSyllableFromWordEnd  == 0)
 			if (sPhonemeName.compare("|"))
@@ -673,7 +675,7 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 	char cLastSyllableFromWordEnd = 0;
 	for (stI = 1; stI < vphoPhonemes.size(); stI++)	//zero dla jednosylabowych
 	{
-		phoPhoneme = vphoPhonemes.at(stI); 
+		phoPhoneme = vphoPhonemes.at(stI);
 		if (phoPhoneme.cSyllableFromWordEnd  == 1)
 			if (cLastSyllableFromWordEnd == 0)
 				phoPhoneme.cSyllableFromWordEnd = 0;
@@ -686,14 +688,14 @@ vector<Phoneme> PerformNLPAnalysis(string sText)
 //	if (0)			//!!!!!!!!
 	for (itI = vphoPhonemes.begin()+1; itI < vphoPhonemes.end(); itI++)
 	{
-		phoPhoneme = *itI; 
+		phoPhoneme = *itI;
 		if (phoPhoneme.cCategory  > 109)		//usuwanie spacji
 			vphoPhonemes.erase(itI--);
 	}
 
 	return vphoPhonemes;
 	}
-//koniec funkcji PerformNLPAnalysis 
+//koniec funkcji PerformNLPAnalysis
 
 
 
@@ -860,7 +862,7 @@ float fnTargetCost(PhonemePlus pCandidate, Phoneme pText)
 	if (pCandidate.cPhraseBoundary != pText.cPhraseBoundary) {
 		if ((pCandidate.cPhraseBoundary == 1 && pText.cPhraseBoundary == 2) ||
 			(pCandidate.cPhraseBoundary == 2 && pText.cPhraseBoundary == 1) ||
-			
+
 	//		(pCandidate.cPhraseBoundary == 2 && pText.cPhraseBoundary == 0) ||	//AJ beg
 	//		(pCandidate.cPhraseBoundary == 0 && pText.cPhraseBoundary == 2) ||
 			(pCandidate.cPhraseBoundary == 4 && pText.cPhraseBoundary == 0) ||
@@ -955,7 +957,7 @@ float fnConcatenationCost(Unit uPrevious, Unit uCurrent, vector<PhonemePlus>& vp
 
 	if (phoCurrentFirstNeighbour.sName == "#" &&
 		phoPreviousLast.sName != "#") fCost += config_CC_fSilenceNeighbourMismatchPenalty;
-	
+
 	// left to right
 	if (phoPreviousLast.sName == phoCurrentFirstNeighbour.sName) {
 		fCost += config_CC_fSamePhonemes;				// same phoneme
@@ -1011,7 +1013,7 @@ vector<unsigned int> fnFindBestPath(unsigned int iUnit, unsigned int iWindowSize
 				break;
 			}
 		}
-			
+
 		if (iDigitToIncrement < static_cast<short int> (iWindowSize) - 4) break;
 
 		float fTargetCost = 0;
@@ -1039,7 +1041,7 @@ vector<unsigned int> fnFindBestPath(unsigned int iUnit, unsigned int iWindowSize
 		}
 
 		float fCurrentTotalCost = (fTargetCost * config_fTargetCostWeight) + (fConcatenationCost * (1 - config_fTargetCostWeight));
-		
+
 		if (fCurrentTotalCost < fTotalCost) {
 			// new best path found
 			viBestPath = viCurrentPath;
@@ -1174,10 +1176,10 @@ vector<Segment> SelectUnits(vector<Phoneme> vphoText, vector<unsigned char>& vcF
 					uTemp.viPhonemePlus.push_back(iCorpus);
 
 					uTemp.fTargetCost = fnUnitTargetCost(uTemp, vuText[iUnit], vphoCorpus, vphoText);
-					
+
 					// new, experimental pre-elimination
 					if (uTemp.fTargetCost > config_fPreEliminationThreshold) continue;
-					
+
 					vuTemp.push_back(uTemp);
 				}
 			}
@@ -1190,15 +1192,15 @@ vector<Segment> SelectUnits(vector<Phoneme> vphoText, vector<unsigned char>& vcF
 						if (vphoCorpus[iCorpus].cStress == -1) continue;	//AJ
 						if (vphoCorpus[iCorpus].iLength < 25) continue;	//AJ
 										// new, experimental pre-elimination
-					
+
 
 						uTemp.clear();
 						uTemp.iType = 0;
 						uTemp.viPhonemePlus.push_back(iCorpus);
 						uTemp.fTargetCost = fnUnitTargetCost(uTemp, vuText[iUnit], vphoCorpus, vphoText);
-						
+
 				//		if (uTemp.fTargetCost > config_fPreEliminationThreshold) continue; //AJ
-						
+
 						vuTemp.push_back(uTemp);
 					}
 				}
@@ -1237,7 +1239,7 @@ vector<Segment> SelectUnits(vector<Phoneme> vphoText, vector<unsigned char>& vcF
 				if (fMinTargetCostPerPhonemePlus > config_fMaxTargetCostPerPhoneme) bTargetCostToHigh = true;
 				// if there are no candidates with target cost per phoneme lower or equal config_fMaxTargetCostPerPhoneme divide this unit into phonemes
 			}
-			
+
 			if (vuTemp.empty() || bTargetCostToHigh == true) {
 				//if (vuTemp.empty()) cout << endl << "NUU module | info | no candidates found for unit " << iUnit << " (syllable) - dividing into phonemes";
 				//else cout << endl << "NUU module | info | all candidates found for unit " << iUnit << " (syllable) have target cost per phoneme > 1 - dividing into phonemes";
@@ -1255,7 +1257,7 @@ vector<Segment> SelectUnits(vector<Phoneme> vphoText, vector<unsigned char>& vcF
 				for (unsigned int iTemp = 0 ; iTemp < iUnit ; iTemp++) vuTextIterator++;
 				vuText.erase(vuTextIterator);
 				vuText.insert(vuTextIterator, vuInsert.begin(), vuInsert.end());
-				
+
 				// unit nr iUnit has been removed. added units start with nr iUnit - reduce iUnit by one to find candidates for the first added unit in next cycle. (otherwis it would be skipped)
 				iUnit--;
 				break;
@@ -1281,7 +1283,7 @@ vector<Segment> SelectUnits(vector<Phoneme> vphoText, vector<unsigned char>& vcF
 	// CHOOSE BEST CONCATENATION PATHS
 	bool bInitialization = true; // first set consists of 4 units, saves 1st and 2nd and doesn't increase iUnit
 	for (unsigned int iUnit = 0 ; iUnit < vCandidates.size() - 4 ; ) {
-		/*		
+		/*
 		[X][X][?][?][_][_]
 		 1  2  3  4  5  6
 		- iUnit points to the first unit
@@ -1370,7 +1372,7 @@ vector<short int> ConcatenateUnits(vector<Segment> vsegUnit, vector<unsigned cha
 
 	unsigned	int z,n,i;
 	short *WAVE_buffer1;
-	
+
 	int t_corr;
 	float t_dev;
 	unsigned long tk_new,ts_new;
@@ -1390,7 +1392,7 @@ vector<short int> ConcatenateUnits(vector<Segment> vsegUnit, vector<unsigned cha
  i_win_size2=0;
 	 detect_space=false;
 	 file_output=false;
-	
+
 
 
 
@@ -1407,10 +1409,10 @@ N=0;
 	   				exit(1);
 	         }
  */
-	
+
 	//set to output wave file
 	//file_output=true;
-	
+
 	if (input)
 			{
 			/*
@@ -1419,14 +1421,14 @@ N=0;
 				BYTE ChunkID_fmt[5];
 				BYTE ChunkID[5];
 				//prepare buffer for holding wave data
-				short *WAVE_buffer; 
+				short *WAVE_buffer;
 				data[4]='\0';
 				Format[4]='\0';//
 				ChunkID_fmt[4]='\0';//
 				ChunkID[4]='\0';//
 				//prepare variables for wave file header data
-				DWORD WAVE_size; 
-				short WAVE_format_tag, WAVE_channels, WAVE_block_align, WAVE_bits_per_sample; 
+				DWORD WAVE_size;
+				short WAVE_format_tag, WAVE_channels, WAVE_block_align, WAVE_bits_per_sample;
 				DWORD WAVE_format_length, WAVE_sample_rate, WAVE_av_byte_per_sec, WAVE_data_size;
 */
 
@@ -1436,32 +1438,32 @@ N=0;
 				ChunkID[4]='\0';//
 
 //				fread(ChunkID, sizeof(BYTE), 4, input); 	//read in first four bytes
-				
+
 				if (!std::strcmp((char *)ChunkID, "RIFF"))
-					{ 
+					{
 					/*
-						fread(&WAVE_size, sizeof(DWORD), 1, input); 
-						
-						fread(Format, sizeof(BYTE), 4, input); 
+						fread(&WAVE_size, sizeof(DWORD), 1, input);
+
+						fread(Format, sizeof(BYTE), 4, input);
 						*/
-						
+
 						if (!std::strcmp((char *)Format,"WAVE"))
-							{ 
+							{
 							/*
-								fread(ChunkID_fmt, sizeof(BYTE), 4, input); 
-								
+								fread(ChunkID_fmt, sizeof(BYTE), 4, input);
+
 								fread(&WAVE_format_length, sizeof(DWORD),1,input);
-								
+
 								fread(&WAVE_format_tag, sizeof(short), 1, input);
 								fread(&WAVE_channels, sizeof(short),1,input);
-								fread(&WAVE_sample_rate, sizeof(DWORD), 1, input); 
+								fread(&WAVE_sample_rate, sizeof(DWORD), 1, input);
 								fread(&WAVE_av_byte_per_sec, sizeof(DWORD), 1, input);
-								fread(&WAVE_block_align, sizeof(short), 1, input); 
+								fread(&WAVE_block_align, sizeof(short), 1, input);
 								fread(&WAVE_bits_per_sample, sizeof(short), 1, input);
-								fread(data, sizeof(BYTE), 4, input); 
-		
-				
-								fread(&WAVE_data_size, sizeof(DWORD), 1, input); 	
+								fread(data, sizeof(BYTE), 4, input);
+
+
+								fread(&WAVE_data_size, sizeof(DWORD), 1, input); 
 
 								WAVE_buffer = (short *) malloc (sizeof(short) * (WAVE_data_size/WAVE_block_align)); //set buffer for data
 								fread(WAVE_buffer, sizeof(short), WAVE_data_size/WAVE_block_align, input); //read in our whole sound data chunk
@@ -1470,37 +1472,37 @@ N=0;
 								memset(WAVE_buffer1,0,(WAVE_data_size/WAVE_block_align));//initialize buffer
 
 
-								//vector<unsigned char>vF0=fnReadF0("corpus.f0");								
-								
-								for (unsigned int iTemp = 0; iTemp < vsegUnit.size() ; iTemp++) 
-								{	
+								//vector<unsigned char>vF0=fnReadF0("corpus.f0");
+
+								for (unsigned int iTemp = 0; iTemp < vsegUnit.size() ; iTemp++)
+								{
 									ts=vsegUnit[iTemp].dTimeBeg;
 									tk=vsegUnit[iTemp].dTimeEnd;
 
 									detect_space=false;
 									if ((ts > static_cast<double> (1.86)) && (ts < static_cast<double> (1.87))) detect_space=true;
-																		
+
 									start_byte=WAVE_block_align*(int)((double)WAVE_sample_rate*ts);
 									end_byte=WAVE_block_align*(int)((double)WAVE_sample_rate*tk);
-									
-									if (start_byte>WAVE_data_size) 
+
+									if (start_byte>WAVE_data_size)
 									{
 										printf("Data outside the corpus");
 										system("PAUSE");
 										exit(1);
 									}
-									
-									if (end_byte>WAVE_data_size) 
+
+									if (end_byte>WAVE_data_size)
 									{
 										printf("Data outside the corpus");
 										system("PAUSE");
 										exit(1);
 									}
-						
+
 									unsigned int ts_sample=(int)(ts*WAVE_sample_rate);
 									unsigned int tk_sample=(int)(tk*WAVE_sample_rate);
 
-																	
+
 									long lines=static_cast<long>(ts*100);
 									float t_rounded=static_cast<float>(ts*100);
 									if ((t_rounded-lines)>0.5) lines++;
@@ -1510,121 +1512,121 @@ N=0;
 									if ((t_rounded-lines2)>0.5) lines2++;
 
 
-									
+
 									f0=vF0[lines];
-																		
+
 									if (f0<10.0) f0=averagef0;
-									
+
 									period1=(1/f0);
 									win_size=2*period1;
 									win_size=win_size*WAVE_sample_rate;
 									i_win_size1=static_cast<unsigned int>(win_size);
 									if (((win_size)-i_win_size1)>=0.5) i_win_size1++;
-									
+
 									t_dev=(period1*WAVE_sample_rate);
-									
+
 									maximum=0;
 									ts_sample--;
-									
-									for (i=ts_sample-static_cast<unsigned int>(0.003*WAVE_sample_rate);i<=ts_sample+static_cast<unsigned int>(t_dev-0.003*WAVE_sample_rate);i=i+static_cast<unsigned int>(0.001*WAVE_sample_rate)) 
-										{	
+
+									for (i=ts_sample-static_cast<unsigned int>(0.003*WAVE_sample_rate);i<=ts_sample+static_cast<unsigned int>(t_dev-0.003*WAVE_sample_rate);i=i+static_cast<unsigned int>(0.001*WAVE_sample_rate))
+										{
 											result=0.0;
 										for (n=0;n<=i_win_size1-1;n++)
-										{	
+										{
 											window1=static_cast<float>((0.53836-0.46164*cos((2*3.14*n)/(i_win_size1-1)))*WAVE_buffer[i+n]);
 											result=result+(window1*window1);
 										}
-										
+
 										if (result>maximum)
-										{	
+										{
 											maximum=result;
 											ts_new=i;
 										}
 									}
-									
+
 									t_corr=(ts_new-ts_sample);
 									ts_sample=ts_sample+t_corr;
-									
-									
+
+
 									unsigned int g=0;
 									float h=0;
 									h=static_cast<float>(((i_win_size1/2)+(i_win_size2/2)));
 									h=h/2;
-									
+
 									g=static_cast<unsigned int>(h);
 									if ((h-g)>=0.5) g++;
-																		
+
 									n=0;
-									
+
 									if (N>=g) N=N-g;
 
 										for (z=ts_sample;z<ts_sample+((i_win_size1-1)/2);z++) //bylo <= //bylo win_size zamiast i_win_size
 										{
-									 	float window=static_cast<float>(0.53836-0.46164*cos(((2*3.14*n)/(i_win_size1-1)))); 
-									
+									 	float window=static_cast<float>(0.53836-0.46164*cos(((2*3.14*n)/(i_win_size1-1))));
+
 											WAVE_buffer1[N]+=static_cast<short>(WAVE_buffer[z]*window);
 											N++;
 										n++;
-								   
-									
+
+
 									}
 
-								
+
 								f0=vF0[lines2];
 								if (f0<10.0) f0=averagef0;  //if f0 is smaller then 10, then estimate the approx f0 value.
-								
+
 								period2=(1/f0);
 								win_size1=win_size;
 								win_size=2*period2;
-								win_size=win_size*WAVE_sample_rate;							
+								win_size=win_size*WAVE_sample_rate;
 								i_win_size2=static_cast<unsigned int>(win_size);
 								if (((win_size)-i_win_size2)>=0.5) i_win_size2++;
-								
+
 								tk_sample--;
 								t_dev=(period2*WAVE_sample_rate);
 								maximum=0;
-								
-									for (i=tk_sample+static_cast<unsigned int>(0.003*WAVE_sample_rate);i>tk_sample-t_dev+static_cast<unsigned int>(0.003*WAVE_sample_rate);i=i-static_cast<unsigned int>(0.001*WAVE_sample_rate)) 
+
+									for (i=tk_sample+static_cast<unsigned int>(0.003*WAVE_sample_rate);i>tk_sample-t_dev+static_cast<unsigned int>(0.003*WAVE_sample_rate);i=i-static_cast<unsigned int>(0.001*WAVE_sample_rate))
 										{
 										result=0;
 										for (n=0;n<=i_win_size2-1;n++)
 										{
 											window1=static_cast<float>((0.53836-0.46164*cos((2*3.14*n)/(i_win_size2-1)))*WAVE_buffer[i-n]);
-											result=result+(window1*window1);						
+											result=result+(window1*window1);
 										}
-								
+
 										if (result>maximum)
 											{
 												maximum=result;
 												tk_new=i;
 											}
-									}			
+									}
 									t_corr=(tk_new-tk_sample);
 									tk_sample=tk_sample+t_corr;
 
-								
-														
+
+
 								for (unsigned int j=ts_sample+((i_win_size1-1)/2);j<tk_sample-(i_win_size2/2);j++)
 								{
 									WAVE_buffer1[N]=WAVE_buffer[j];//copy data to secondary buffer. basing on the sample number;
 									N++;
 								}
-								
+
 								n=(int)((i_win_size2-1)/2);
 
-								for (z=tk_sample-((i_win_size2-1)/2);z<tk_sample;z++) 
+								for (z=tk_sample-((i_win_size2-1)/2);z<tk_sample;z++)
 								{
 									float window=static_cast<float>(0.53836-0.46164*cos((2*3.14*n)/(i_win_size2-1)));
 									WAVE_buffer1[N]=static_cast<short>(WAVE_buffer[z]*window);
 									n++;
-									N++;  
+									N++;
 								}
-								
-								
-							}	
+
+
+							}
 								file_output=false;
 								if (file_output==true)
-								{	
+								{
 									output = fopen("output.wav","wb");
 									if (output==NULL)					/*Check destination file for open/access errors*/
 										{
@@ -1638,24 +1640,24 @@ N=0;
 									fwrite(Format, sizeof(BYTE), 4, output);
 									fwrite(ChunkID_fmt, sizeof(BYTE), 4, output);
 									fwrite(&WAVE_format_length, sizeof(DWORD),1,output);
-									fwrite(&WAVE_format_tag, sizeof(short), 1, output); 
-									fwrite(&WAVE_channels, sizeof(short),1,output); 
+									fwrite(&WAVE_format_tag, sizeof(short), 1, output);
+									fwrite(&WAVE_channels, sizeof(short),1,output);
 									fwrite(&WAVE_sample_rate, sizeof(DWORD), 1, output);
 									fwrite(&WAVE_av_byte_per_sec, sizeof(DWORD), 1, output);
 									fwrite(&WAVE_block_align, sizeof(short), 1, output);
 									fwrite(&WAVE_bits_per_sample, sizeof(short), 1, output);
-									fwrite(data, sizeof(BYTE), 4, output); 
+									fwrite(data, sizeof(BYTE), 4, output);
 
 									long new_data_size=N*WAVE_block_align;//write data after windowing
-									fwrite(&new_data_size, sizeof(DWORD) ,1,output); //data size must be written before actual data 
+									fwrite(&new_data_size, sizeof(DWORD) ,1,output); //data size must be written before actual data
 									fwrite(WAVE_buffer1,sizeof(short),N,output);	//save data from buffer to file
 									fclose(output);
 								}
-								
+
 								for(z=0;z<N;z++)
 								{
 									voutput.push_back(WAVE_buffer1[z]);
-								}	
+								}
 //								free(WAVE_buffer);
 								free(WAVE_buffer1);
 //								fclose(input);
@@ -1664,23 +1666,23 @@ N=0;
 			}
 			return voutput;
 			}
-			
+
 
 unsigned long SayIt(char *pszInputText, char *pszEmotionType, short int *piBuffSpeechOut)
 {
-	string sText (pszInputText); 
+	string sText (pszInputText);
 	unsigned long uiI, uiJ;
-	
+
 	// vcF0 = fnReadF0("/net/yoyek64/dev/shmem/corpus.f0");	//reading in F0 info
 	vector <short int> vsiSpeechOut;
-	
+
 	//3 main synthesis processes
 	vector<Phoneme> vphoText = PerformNLPAnalysis (sText);
 	vector<Segment> vsegUnits = SelectUnits (vphoText, vcF0);
 	vsiSpeechOut = ConcatenateUnits (vsegUnits, vcF0);
 
 	for (uiI = 0, uiJ=0; uiI < vsiSpeechOut.size(); uiI++)
-		*(piBuffSpeechOut+uiJ++) = vsiSpeechOut.at(uiI); 
+		*(piBuffSpeechOut+uiJ++) = vsiSpeechOut.at(uiI);
 
 	//returns number of samples
 	return uiJ;
