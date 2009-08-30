@@ -26,7 +26,6 @@
 
 #include <sys/neutrino.h>
 #include <sys/netmgr.h>
-#include <process.h>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -36,7 +35,6 @@
 #include "lib/mathtr.h"
 
 #include "kinematics/common/kinematic_model.h"
-
 
 namespace mrrocpp {
 namespace edp {
@@ -67,12 +65,15 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
     motion_type = lib::ABSOLUTE;
     synchronised = false;
 
+#ifdef __QNXNTO__
     servo_to_tt_chid = ChannelCreate(_NTO_CHF_UNBLOCK);
     if ((servo_fd = ConnectAttach(0, 0, servo_to_tt_chid, 0, _NTO_COF_CLOEXEC )) == -1)
     {
         fprintf(stderr, "nie utworzylem serwo serwo_fd\n");
     }
     ThreadCtl (_NTO_TCTL_IO, NULL);
+#else
+#endif
 
     // z edp_m
 
