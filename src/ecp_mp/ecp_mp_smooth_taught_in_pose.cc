@@ -10,7 +10,12 @@ namespace common {
 smooth_taught_in_pose::smooth_taught_in_pose (void)
 {}
 
-smooth_taught_in_pose::smooth_taught_in_pose (lib::POSE_SPECIFICATION at, double* vp, double* vk, double* vv, double* aa, double* c)
+smooth_taught_in_pose::smooth_taught_in_pose (lib::POSE_SPECIFICATION at,
+		const double* vp,
+		const double* vk,
+		const double* vv,
+		const double* aa,
+		const double* c)
 {
 	arm_type=at;
 	memcpy(v_p, vp, MAX_SERVOS_NR*sizeof(double));

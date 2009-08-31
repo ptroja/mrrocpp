@@ -18,7 +18,12 @@ public:
   double coordinates[MAX_SERVOS_NR];
 
   smooth_taught_in_pose (void);
-  smooth_taught_in_pose (lib::POSE_SPECIFICATION at, double* vp, double* vk, double* vv, double* aa, double* coordinates);
+  smooth_taught_in_pose (lib::POSE_SPECIFICATION at,
+		  const double* vp,
+		  const double* vk,
+		  const double* vv,
+		  const double* aa,
+		  const double* coordinates);
 }; // end:class ecp_smooth_taught_in_pose
 
 } // namespace common
