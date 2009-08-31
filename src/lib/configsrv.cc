@@ -98,7 +98,7 @@ bool configsrv::exists(const char* _key, const char* _section_name)
 int configsrv::return_int_value(const char* _key, const char* _section_name)
 {
 	// Zwracana zmienna.
-	int value;
+	int value = 0;
 	struct Config_Tag configs[] = {
 		// Pobierane pole.
 		{ (char *) _key, Int_Tag, &value},
@@ -118,6 +118,8 @@ int configsrv::return_int_value(const char* _key, const char* _section_name)
 // 	throw ERROR
 	// Zwrocenie wartosci.
 
+	printf("configsrv::return_int_value(\"%s\", \"%s\") = %d\n", _key, _section_name, value);
+
 	return value;
 }// : return_int_value
 
@@ -126,7 +128,7 @@ int configsrv::return_int_value(const char* _key, const char* _section_name)
 double configsrv::return_double_value(const char* _key, const char*_section_name)
 {
 	// Zwracana zmienna.
-	double value;
+	double value = 0;
 	struct Config_Tag configs[] = {
 		// Pobierane pole.
 		{ (char *) _key, Double_Tag, &value},

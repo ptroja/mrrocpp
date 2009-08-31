@@ -255,7 +255,7 @@ int configurator::return_int_value(const char* _key, const char* __section_name)
 	snprintf(config_msg.section, sizeof(config_msg.section), "%s", _section_name);
 	int32_t answer;
 
-	int value;
+	int value = 0;
 
 	lock_mutex();
 
@@ -266,11 +266,13 @@ int configurator::return_int_value(const char* _key, const char* __section_name)
 
 	unlock_mutex();
 
+	printf("configurator::return_int_value(\"%s\", \"%s\") = %d\n", _key, __section_name, value);
+
 	return value;
 #else
 	const char *_section_name = (__section_name) ? __section_name : section_name;
 	// Zwracana zmienna.
-	int value;
+	int value = 0;
 	struct Config_Tag configs[] = {
 			// Pobierane pole.
 			{ (char *) _key, Int_Tag, &value},
@@ -308,7 +310,7 @@ double configurator::return_double_value(const char* _key, const char*__section_
 	snprintf(config_msg.section, sizeof(config_msg.section), "%s", _section_name);
 	int32_t answer;
 
-	double value;
+	double value = 0;
 
 	lock_mutex();
 
@@ -456,7 +458,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		if (exists("username", _section_name)) {
 			std::string username = return_string_value("username", _section_name);
 
-			printf("rsh -l %s %s \"%s\"\n", username.c_str(), rsh_spawn_node.c_str(), process_path);
+			fprintf(stderr, "rsh -l %s %s \"%s\"\n", username.c_str(), rsh_spawn_node.c_str(), process_path);
 
 			execlp("rsh",
 					"rsh",
@@ -466,6 +468,23 @@ pid_t configurator::process_spawn(const char*_section_name) {
 					NULL);
 		} else {
 			printf("rsh %s \"%s\"\n", rsh_spawn_node.c_str(), process_path);
+
+			fprintf(stderr,
+					"bin_path ->%s<-\n"
+					"ui_host ->%s<-\n"
+					"spawned_program_name ->%s<-\n"
+					"node ->%s<-\n"
+					"dir ->%s<-\n"
+					"ini_file ->%s<-\n"
+					"_section_name ->%s<-\n"
+					"session_name ->%s<-\n"
+					"asa ->%s<-\n",
+					bin_path, ui_host ? ui_host : "",
+					spawned_program_name.c_str(),
+					node, dir, ini_file, _section_name,
+					strlen(session_name) ? session_name : "\"\"",
+					asa.c_str()
+			);
 
 			execlp("rsh",
 					"rsh",
