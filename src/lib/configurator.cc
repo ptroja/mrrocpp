@@ -266,8 +266,6 @@ int configurator::return_int_value(const char* _key, const char* __section_name)
 
 	unlock_mutex();
 
-	printf("configurator::return_int_value(\"%s\", \"%s\") = %d\n", _key, __section_name, value);
-
 	return value;
 #else
 	const char *_section_name = (__section_name) ? __section_name : section_name;

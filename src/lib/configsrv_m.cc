@@ -4,6 +4,7 @@
 #include <string.h>
 #include <signal.h>
 #include <stdlib.h>
+#include <string>
 
 #include "lib/configsrv.h"
 #include "messip/messip.h"
@@ -77,7 +78,7 @@ main(int argc, char *argv[])
 				break;
 			case CONFIG_RETURN_STRING_VALUE:
 				{
-					const char *rep = config.return_string_value(
+					const std::string rep = config.return_string_value(
 							config_msg.key,
 							config_msg.section);
 
@@ -85,9 +86,8 @@ main(int argc, char *argv[])
 					//		config_msg.key, config_msg.section, rep);
 
 					messip_reply(ch, rcvid,
-						0, rep, strlen(rep)+1,
+						0, rep.c_str(), rep.size()+1,
 						MESSIP_NOTIMEOUT);
-					delete[] rep;
 				}
 				break;
 			case CONFIG_EXISTS:

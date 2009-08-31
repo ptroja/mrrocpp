@@ -118,8 +118,6 @@ int configsrv::return_int_value(const char* _key, const char* _section_name)
 // 	throw ERROR
 	// Zwrocenie wartosci.
 
-	printf("configsrv::return_int_value(\"%s\", \"%s\") = %d\n", _key, _section_name, value);
-
 	return value;
 }// : return_int_value
 
@@ -154,7 +152,7 @@ double configsrv::return_double_value(const char* _key, const char*_section_name
 
 
 // Zwraca wartosc (char*) dla klucza.
-char* configsrv::return_string_value(const char* _key, const char*_section_name)
+std::string configsrv::return_string_value(const char* _key, const char*_section_name)
 {
 	// Zwracana zmienna.
 	char tmp[200];
@@ -175,12 +173,9 @@ char* configsrv::return_string_value(const char* _key, const char*_section_name)
 	}
 	unlock_mutex();
 // 	throw ERROR
-	// Przepisanie wartosci.
-	int size = 1 + strlen(tmp);
-	char * value = new char [size];
-	strcpy(value, tmp);
+
 	// Zwrocenie wartosci.
-	return value;
+	return std::string(tmp);
 }// : return_string_value
 
 configsrv::~configsrv() {

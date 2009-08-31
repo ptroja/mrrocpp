@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP) 
+// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP)
 // Plik:			configsrv.h
 // System:	QNX/MRROCPP  v. 6.3
 // Opis:		Plik zawiera klase configsrv - obsluga konfiguracji z pliku INI.
@@ -24,7 +24,7 @@ private:
 	char* mrrocpp_network_path;
 	// do ochrony wylacznosci dostepu do pliku miedzy watkami jednego procesu
 	pthread_mutex_t mutex; // = PTHREAD_MUTEX_INITIALIZER ;
-	
+
 	int	lock_mutex(); // zajecie mutex'a
 	int	unlock_mutex(); // zwolnienie mutex'a
 
@@ -34,7 +34,7 @@ public:
 
 	// Konstruktor obiektu - konfiguratora.
 	configsrv(const char* _node, const char* _dir, const char* _ini_file);
-	
+
 	void change_ini_file (const char* _ini_file);
 
 	// Zwraca wartosc (int) dla klucza.
@@ -44,13 +44,13 @@ public:
 	double return_double_value(const char* _key, const char* _section_name);
 
 	// Zwraca wartosc (char*) dla klucza.
-	char* return_string_value(const char* _key, const char* _section_name);
-	
+	std::string return_string_value(const char* _key, const char* _section_name);
+
 	// Zwraca czy dany klucz istnieje
 	bool exists(const char* _key, const char* _section_name);
 
 	~configsrv();
-	
+
 };// : configsrv
 
 #endif /* _CONFIGSRV_H */
