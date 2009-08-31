@@ -49,7 +49,7 @@ clean:
 
 # TODO: ponizsza regule "install" trzeba ladniej przepisac
 install: all
-	cp *.so $(HOMEDIR)/bin/
+	$(INSTALL) *.so $(BINDIR)
 
 # Directory with dependences.
 DEPDIR = .deps

@@ -2,6 +2,7 @@ ui_defs = festival.xml \
 	edp_irp6m.xml edp_irp6o.xml edp_irp6p.xml edp_conveyor.xml
 
 HOMEDIR = ../../../..
+include $(HOMEDIR)/common.mk
 
 all: $(ui_defs)
 
@@ -9,7 +10,7 @@ all: $(ui_defs)
 	gtk-builder-convert $< $@
 
 install: all
-	cp *.xml $(HOMEDIR)/bin/
+	$(INSTALL) *.xml $(BINDIR)
 
 clean:
 	rm -f *.xml
