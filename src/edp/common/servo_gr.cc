@@ -129,15 +129,15 @@ bool servo_buffer::get_command (void)
     	/* Nie otrzymano nowego polecenia ruchu */
         if (edp_caller != -ETIMEDOUT) {
         	// nastapil blad przy odbieraniu wiadomosci rozny od jej braku
-            fprintf(stderr, "SERVO_GROUP: Receive error from EDP_MASTER");
+            fprintf(stderr, "SERVO_GROUP: Receive error from EDP_MASTER\n");
         }
         return false;
     }
 #else
 	{    	/* Nie otrzymano nowego polecenia ruchu */
-        if (r != EAGAIN) {
+        if (errno != EAGAIN) {
         	// nastapil blad przy odbieraniu wiadomosci rozny od jej braku
-            fprintf(stderr, "SERVO_GROUP: Receive error from EDP_MASTER");
+            perror("SERVO_GROUP: Receive error from EDP_MASTER");
         }
         return false;
 	}
