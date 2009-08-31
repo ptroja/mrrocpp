@@ -30,22 +30,12 @@ void * manip_and_conv_effector::visualisation_thread(void * arg)
 	struct sockaddr_in my_addr;	// my address information
 	struct sockaddr_in their_addr; // connector's address information
 	socklen_t addr_len;
-	int numbytes;
-	char buf[MAXBUFLEN];
-	struct
-	{
-		int synchronised;
-		float joints[MAX_SERVOS_NR];
-	}
-	reply;
-	int i;
-	uint16_t port;
 
-	port = config.return_int_value("visual_udp_port");
+	uint16_t port = config.return_int_value("visual_udp_port");
 	if (port == 0)
 	{
-		msg->message("visualisation_thread bad or missing <visual_udp_port> config entry");
-
+		msg->message("visualisation_thread: bad or missing <visual_udp_port> config entry");
+		return NULL;
 	}
 
 	if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
@@ -69,6 +59,8 @@ void * manip_and_conv_effector::visualisation_thread(void * arg)
 
 	while (1)
 	{
+		int numbytes;
+		char buf[MAXBUFLEN];
 
 		if ((numbytes = recvfrom(sockfd, buf, MAXBUFLEN-1 , 0,
 				(struct sockaddr *)&their_addr, &addr_len)) == -1)
@@ -98,9 +90,15 @@ void * manip_and_conv_effector::visualisation_thread(void * arg)
 				break;
 			}
 
+			struct
+			{
+				int synchronised;
+				float joints[MAX_SERVOS_NR];
+			} reply;
+
 			reply.synchronised = (is_synchronised()) ? 1 : 0;
 
-			for (i = 0; i < number_of_servos; i++)
+			for (int i = 0; i < number_of_servos; i++)
 			{
 				reply.joints[i] = static_cast <float> (tmp[i]);
 			}
