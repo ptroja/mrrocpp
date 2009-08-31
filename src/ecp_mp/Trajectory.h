@@ -3,6 +3,7 @@
 #define _TRAJECTORY_H_
 
 #include <list>
+#include <string>
 
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -22,7 +23,7 @@ class Trajectory
 		~Trajectory();
 
 		static int setValuesInArray(double arrayToFill[], const char *dataString);
-		static lib::POSE_SPECIFICATION returnProperPS(const char *poseSpecification);
+		static lib::POSE_SPECIFICATION returnProperPS(const std::string & poseSpecification);
 		static const char * toString(double valArr[], int length);
 		static const char * toString(int numberOfPoses);
 		static const char * toString(lib::POSE_SPECIFICATION ps);

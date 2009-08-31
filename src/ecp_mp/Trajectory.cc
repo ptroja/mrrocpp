@@ -15,7 +15,7 @@ namespace common {
 
 Trajectory::Trajectory()
 {
-	trjPoses	= new std::list<ecp_mp::common::smooth_taught_in_pose>();
+	trjPoses = new std::list<ecp_mp::common::smooth_taught_in_pose>();
 }
 
 Trajectory::Trajectory(const char *numOfPoses, const char *trajectoryID, const char *poseSpecification)
@@ -23,7 +23,7 @@ Trajectory::Trajectory(const char *numOfPoses, const char *trajectoryID, const c
 	strcpy(trjID, trajectoryID);
 	this->numOfPoses = (uint64_t)atoi(numOfPoses);
 	poseSpec = returnProperPS(poseSpecification);
-	trjPoses	= new std::list<ecp_mp::common::smooth_taught_in_pose>();
+	trjPoses = new std::list<ecp_mp::common::smooth_taught_in_pose>();
 
 }
 
@@ -50,15 +50,15 @@ const char * Trajectory::getTrjID() const
 	return trjID;
 }
 
-lib::POSE_SPECIFICATION Trajectory::returnProperPS(const char *poseSpecification)
+lib::POSE_SPECIFICATION Trajectory::returnProperPS(const std::string & poseSpecification)
 {
-	if ( !strcmp(poseSpecification, (const char *)"MOTOR") )
+	if (poseSpecification == "MOTOR")
 	{	return lib::MOTOR;	}
-	if ( !strcmp(poseSpecification, (const char *)"JOINT") )
+	if (poseSpecification == "JOINT")
 	{	return lib::JOINT;	}
-	if ( !strcmp(poseSpecification, (const char *)"XYZ_ANGLE_AXIS") )
+	if (poseSpecification == "XYZ_ANGLE_AXIS")
 	{	return lib::XYZ_ANGLE_AXIS;	}
-	if ( !strcmp(poseSpecification, (const char *)"XYZ_EULER_ZYZ") )
+	if (poseSpecification == "XYZ_EULER_ZYZ")
 	{	return lib::XYZ_EULER_ZYZ;	}
 	else
 		return lib::INVALID_END_EFFECTOR;
@@ -104,27 +104,30 @@ const char * Trajectory::toString(int numberOfPoses)
 
 const char * Trajectory::returnRobotName(lib::ROBOT_ENUM robot)
 {
-
-	if(robot == lib::ROBOT_IRP6_ON_TRACK)
-		return "ROBOT_IRP6_ON_TRACK";
-	else if(robot == lib::ROBOT_IRP6_POSTUMENT)
-		return "ROBOT_IRP6_POSTUMENT";
-	else if(robot == lib::ROBOT_CONVEYOR)
-		return "ROBOT_CONVEYOR";
-	else if(robot == lib::ROBOT_SPEAKER)
-		return "ROBOT_SPEAKER";
-	else if(robot == lib::ROBOT_IRP6_MECHATRONIKA)
-		return "ROBOT_IRP6_MECHATRONIKA";
-	else if(robot == lib::ROBOT_ELECTRON)
-		return "ROBOT_ELECTRON";
-	else if(robot == lib::ROBOT_FESTIVAL)
-		return "ROBOT_FESTIVAL";
-	else if(robot == lib::ROBOT_HAND)
-		return "ROBOT_HAND";
-	else if(robot == lib::ROBOT_SPEECHRECOGNITION)
-		return "ROBOT_SPEECHRECOGNITION";
-	else
-		return "ROBOT_UNDEFINED";
+	using namespace lib;
+	switch (robot)
+	{
+		case ROBOT_IRP6_ON_TRACK:
+			return "ROBOT_IRP6_ON_TRACK";
+		case ROBOT_IRP6_POSTUMENT:
+			return "ROBOT_IRP6_POSTUMENT";
+		case ROBOT_CONVEYOR:
+			return "ROBOT_CONVEYOR";
+		case ROBOT_SPEAKER:
+			return "ROBOT_SPEAKER";
+		case ROBOT_IRP6_MECHATRONIKA:
+			return "ROBOT_IRP6_MECHATRONIKA";
+		case ROBOT_ELECTRON:
+			return "ROBOT_ELECTRON";
+		case ROBOT_FESTIVAL:
+			return "ROBOT_FESTIVAL";
+		case ROBOT_HAND:
+			return "ROBOT_HAND";
+		case ROBOT_SPEECHRECOGNITION:
+			return "ROBOT_SPEECHRECOGNITION";
+		default:
+			return "ROBOT_UNDEFINED";
+	}
 }
 
 const char * Trajectory::toString(lib::POSE_SPECIFICATION ps)
@@ -254,7 +257,7 @@ double * Trajectory::getCoordinates() const
 void Trajectory::showTime()
 {
 	std::list<ecp_mp::common::smooth_taught_in_pose>::iterator it;
-	printf("Nazwa: %s, PoseSpec: %d, NumOfPoses: %llu\n", trjID, poseSpec, numOfPoses);
+	printf("Nazwa: %s, PoseSpec: %d, NumOfPoses: %u\n", trjID, poseSpec, numOfPoses);
 	for(it=trjPoses->begin(); it!=trjPoses->end(); ++it)
 	{
 		printf("%f %f %f %f %f %f %f %f\n", (*it).v_p[0], (*it).v_p[1], (*it).v_p[2], (*it).v_p[3],
