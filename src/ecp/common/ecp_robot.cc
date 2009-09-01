@@ -12,11 +12,11 @@
 #include <sys/wait.h>
 #include <signal.h>
 
-#ifdef __LINUX__
+#ifdef __gnu_linux__
 #include <execinfo.h>
 #include <exception>
 #include <iostream>
-#endif /* __LINUX__ */
+#endif /* __gnu_linux__ */
 
 #include "ecp/common/ecp_robot.h"
 #include "ecp/common/ecp_task.h"
@@ -83,7 +83,7 @@ ecp_robot::ECP_error::ECP_error ( uint64_t err_cl, uint64_t err_no,
 {
     error.error0 = err0;
     error.error1 = err1;
-#ifdef __LINUX__
+#ifdef __gnu_linux__
     void * array[25];
     int nSize = backtrace(array, 25);
     char ** symbols = backtrace_symbols(array, nSize);
@@ -94,7 +94,7 @@ ecp_robot::ECP_error::ECP_error ( uint64_t err_cl, uint64_t err_no,
     }
 
     free(symbols);
-#endif /* __LINUX__ */
+#endif /* __gnu_linux__ */
 }
 
 ecp_robot::ECP_main_error::ECP_main_error ( uint64_t err_cl, uint64_t err_no)
@@ -268,8 +268,8 @@ void ecp_robot::send()
 			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 	}
 
+	// TODO: this is called much too often (?!)
 	lib::set_thread_priority(pthread_self(), MAX_PRIORITY-2);
-
 }
 
 
