@@ -23,6 +23,7 @@ EDP IRp6 RCSC window callback signals
 
 <xsl:text>
 #include &lt;iostream&gt;
+#include &lt;stdio.h&gt;
 
 //GTK libraries
 #include &lt;gtk/gtk.h&gt;

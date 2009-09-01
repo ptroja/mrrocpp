@@ -43,7 +43,7 @@ extern "C"
 			if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				if (!( robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->read_motors(</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos))) // Odczyt polozenia walow silnikow
-					printf("Blad w read motors\n");
+					fprintf(stderr, "read increment failed\n");
 					
 </xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.read.2">
     				<xsl:with-param name="motorsNo" select="$motorsNo"/>

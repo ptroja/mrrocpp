@@ -45,7 +45,7 @@ extern "C"
 			if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				if (!( robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->read_tool_xyz_angle_axis(tool_vector_a))) // Odczyt polozenia walow silnikow
-					printf("Blad w read external\n");
+					fprintf(stderr, "read axis_tool failed\n");
 					
 				alfa = sqrt(tool_vector_a[3]*tool_vector_a[3]
 				+tool_vector_a[4]*tool_vector_a[4]

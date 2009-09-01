@@ -43,7 +43,7 @@ extern "C"
 				if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised)  // Czy robot jest zsynchronizowany?
 				{
 					if (!(robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_servo_algorithm(servo_alg_no, servo_par_no))) // Odczyt polozenia walow silnikow
-						printf("Blad w mechatronika get_servo_algorithm\n");
+						fprintf(stderr, "get_servo_algorithm failed\n");
 					
 </xsl:text><xsl:call-template name="irp6.servo.repeat.signals.cc.read.2">
     						<xsl:with-param name="motorsNo" select="$motorsNo"/>
@@ -127,8 +127,11 @@ extern "C"
 <xsl:param name="i"/>
 <xsl:param name="name"/>
 	<xsl:if test="$i &lt;= $motorsNo">
-	<xsl:text>					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="($i*2)-1" /><xsl:text>_servo_</xsl:text><xsl:value-of select="$name" /><xsl:text>, (const gchar*)servo_alg_no[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
-					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="($i*2)" /><xsl:text>_servo_</xsl:text><xsl:value-of select="$name" /><xsl:text>, (const gchar*)servo_par_no[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);	
+<xsl:text>		
+					snprintf (buf, sizeof(buf), "%u", servo_alg_no[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
+					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="($i*2)-1" /><xsl:text>_servo_</xsl:text><xsl:value-of select="$name" /><xsl:text>, buf);
+					snprintf (buf, sizeof(buf), "%u", servo_par_no[</xsl:text><xsl:value-of select="($i - 1)" /><xsl:text>]);
+					gtk_entry_set_text(entry</xsl:text><xsl:value-of select="($i*2)" /><xsl:text>_servo_</xsl:text><xsl:value-of select="$name" /><xsl:text>, buf);	
 </xsl:text>
        </xsl:if>
 	<!-- for loop --> 
