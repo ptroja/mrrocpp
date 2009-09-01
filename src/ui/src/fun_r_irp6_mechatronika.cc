@@ -42,8 +42,8 @@ extern ui_robot_def ui_robot;
 extern ui_ecp_buffer* ui_ecp_obj;
 
 
-double irp6m_current_pos[6]; // pozycja biezaca
-double irp6m_desired_pos[6]; // pozycja zadana
+double irp6m_current_pos[IRP6_MECHATRONIKA_NUM_OF_SERVOS]; // pozycja biezaca
+double irp6m_desired_pos[IRP6_MECHATRONIKA_NUM_OF_SERVOS]; // pozycja zadana
 
 
 

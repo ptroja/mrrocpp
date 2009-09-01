@@ -41,8 +41,8 @@ extern lib::configurator* config;
 extern ui_robot_def ui_robot;
 extern ui_ecp_buffer* ui_ecp_obj;
 
-double irp6p_current_pos[7]; // pozycja biezaca
-double irp6p_desired_pos[7]; // pozycja zadana
+double irp6p_current_pos[IRP6_POSTUMENT_NUM_OF_SERVOS]; // pozycja biezaca
+double irp6p_desired_pos[IRP6_POSTUMENT_NUM_OF_SERVOS]; // pozycja zadana
 
 // zamykanie okien ruchow recznych dla robota irp6_postument
 
