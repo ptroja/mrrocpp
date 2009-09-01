@@ -169,6 +169,7 @@ extern "C"
 		
 		robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state (&amp;state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>);
 	        if(!state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) {
+	   	        GError *error = NULL;
 	   	        GThread * synchronization_thread_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = g_thread_create(ui_synchronize_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>, userdata, false, &amp;error);
 	        	if (synchronization_thread_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> == NULL) 
 	     		{
@@ -301,7 +302,6 @@ class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>
 };
 ui_</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>conveyor</xsl:text></xsl:when><xsl:otherwise><xsl:text>common</xsl:text></xsl:otherwise></xsl:choose><xsl:text>_robot * robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
 mrrocpp::lib::controller_state_t state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
-GError *error = NULL;
 void *ui_synchronize_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> (gpointer userdata);
 GtkButton* button;
 
