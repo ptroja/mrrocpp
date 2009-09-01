@@ -474,7 +474,7 @@ void manip_and_conv_effector::common_synchronise ()
 void manip_and_conv_effector::arm_motors_2_motors (void)
 {
     // Przepisanie definicji koncowki danej w postaci
-    // MOTORS z wewntrznych struktur danych TRANSFORMATORa
+    // MOTORS z wewnetrznych struktur danych TRANSFORMATORa
     // do wewntrznych struktur danych REPLY_BUFFER
     reply.arm_type = lib::MOTOR;
     switch (reply.reply_type)
