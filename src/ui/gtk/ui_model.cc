@@ -25,7 +25,6 @@ ui_config_entry & ui_model::getNodeByPath(GtkTreePath *path) {
 
 ui_model& ui_model::instance()
 {
-	printf("pthread_mutex_lock()..."); fflush(stdout);
 	// lock the guard mutex
 	if (pthread_mutex_lock(&mtx) != 0) {
 		perror("ui_model::pthread_mutex_lock()");
@@ -43,7 +42,6 @@ ui_model& ui_model::instance()
 		perror("ui_model::pthread_mutex_lock()");
 		throw std::exception();
 	}
-	printf("done\n");
 
 	return *pointerToTheSingletonInstance;
 }
