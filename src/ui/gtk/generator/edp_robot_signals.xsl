@@ -62,6 +62,9 @@ double </xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[</xsl:te
 
 </xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>#include "ui/ui_ecp_r_conveyor.h"</xsl:text></xsl:when><xsl:otherwise><xsl:text>#include "ui/ui_ecp_r_irp6_common.h"</xsl:text></xsl:otherwise></xsl:choose><xsl:text>
 
+ui_</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>conveyor</xsl:text></xsl:when><xsl:otherwise><xsl:text>common</xsl:text></xsl:otherwise></xsl:choose><xsl:text>_robot * robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
+mrrocpp::lib::controller_state_t state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
+
 //UI robot constructor
 edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>::edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>()
 {
@@ -124,14 +127,14 @@ extern "C"
 		{
 			switch (choice)
 			{
-			case 0: </xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>std::cout &lt;&lt; "Internal joint window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_int";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (button, userdata); break;
-			case 1: </xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>std::cout &lt;&lt; "Increment window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_inc";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_inc (button, userdata); break;
-			case 2: </xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>std::cout &lt;&lt; "Servo algorithm window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_servo";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_servo (button, userdata); break;
-			case 3: </xsl:text><xsl:if test="$xyz_angle_axis &gt; 0"><xsl:text>std::cout &lt;&lt; "XYZ Angle Axis window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_xyz_angle_axis";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_xyz_angle_axis (button, userdata); break;
-			case 4: </xsl:text><xsl:if test="$xyz_euler_zyz &gt; 0"><xsl:text>std::cout &lt;&lt; "XYZ Euler ZYZ window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_xyz_euler_zyz";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_xyz_euler_zyz (button, userdata); break;
-			case 5: </xsl:text><xsl:if test="$xyz_angle_axis_tool &gt; 0"><xsl:text>std::cout &lt;&lt; "XYZ Angle Axis tool window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_xyz_angle_axis_tool";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_xyz_angle_axis_tool (button, userdata); break;
-			case 6: </xsl:text><xsl:if test="$xyz_euler_zyz_tool &gt; 0"><xsl:text>std::cout &lt;&lt; "XYZ Euler ZYZ tool window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_xyz_euler_zyz_tool";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_xyz_euler_zyz_tool (button, userdata); break;
-			case 7: </xsl:text><xsl:if test="$kinematic &gt; 0"><xsl:text>std::cout &lt;&lt; "Kinematic model window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_kinematic";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_kinematic (button, userdata); break;
+			case 0: </xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>std::cout &lt;&lt; "Internal joint window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_int";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (NULL, userdata); break;
+			case 1: </xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>std::cout &lt;&lt; "Increment window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_inc";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_inc (NULL, userdata); break;
+			case 2: </xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>std::cout &lt;&lt; "Servo algorithm window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_servo";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_servo (NULL, userdata); break;
+			case 3: </xsl:text><xsl:if test="$xyz_angle_axis &gt; 0"><xsl:text>std::cout &lt;&lt; "XYZ Angle Axis window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_xyz_angle_axis";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_xyz_angle_axis (NULL, userdata); break;
+			case 4: </xsl:text><xsl:if test="$xyz_euler_zyz &gt; 0"><xsl:text>std::cout &lt;&lt; "XYZ Euler ZYZ window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_xyz_euler_zyz";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_xyz_euler_zyz (NULL, userdata); break;
+			case 5: </xsl:text><xsl:if test="$xyz_angle_axis_tool &gt; 0"><xsl:text>std::cout &lt;&lt; "XYZ Angle Axis tool window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_xyz_angle_axis_tool";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_xyz_angle_axis_tool (NULL, userdata); break;
+			case 6: </xsl:text><xsl:if test="$xyz_euler_zyz_tool &gt; 0"><xsl:text>std::cout &lt;&lt; "XYZ Euler ZYZ tool window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_xyz_euler_zyz_tool";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_xyz_euler_zyz_tool (NULL, userdata); break;
+			case 7: </xsl:text><xsl:if test="$kinematic &gt; 0"><xsl:text>std::cout &lt;&lt; "Kinematic model window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_kinematic";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_kinematic (NULL, userdata); break;
 			default: std::cout &lt;&lt; "Synchronizing..." &lt;&lt; std::endl;
 			}
 		}
@@ -140,8 +143,8 @@ extern "C"
 		{
 			switch (choice)
 			{
-			case 0: </xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>std::cout &lt;&lt; "Internal joint window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_int";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (button, userdata); break;
-			case 1: </xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>std::cout &lt;&lt; "Increment window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_inc";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_inc (button, userdata); break;
+			case 0: </xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>std::cout &lt;&lt; "Internal joint window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_int";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_int (NULL, userdata); break;
+			case 1: </xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>std::cout &lt;&lt; "Increment window chosen" &lt;&lt; std::endl; isFile = 1; windowName = "window_inc";</xsl:text></xsl:if><xsl:text> on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_inc (NULL, userdata); break;
 			default: ;
 			}
 		}
@@ -165,32 +168,33 @@ extern "C"
 	{
 		ui_config_entry &amp; comboEntry = *(ui_config_entry *) userdata;
 		GtkBuilder &amp; builder = (comboEntry.getBuilder());
-		gint counter_synch;
 		
 		robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state (&amp;state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>);
-	        if(!state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) {
-	   	        GError *error = NULL;
-	   	        GThread * synchronization_thread_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = g_thread_create(ui_synchronize_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>, userdata, false, &amp;error);
-	        	if (synchronization_thread_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> == NULL) 
+
+		if(!state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) {
+	   		GError *error = NULL;
+	   		GThread * synchronization_thread_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = g_thread_create(ui_synchronize_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>, userdata, false, &amp;error);
+			if (synchronization_thread_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> == NULL) 
 	     		{
-	        		fprintf(stderr, "g_thread_create(): %s\n", error->message);
-	        	}
-	      }
-	        robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state (&amp;state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>);
-	        if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) {
-	            gtk_widget_set_sensitive( GTK_WIDGET(button), FALSE);
-	            
-	            	GtkComboBox * combo = GTK_COMBO_BOX (gtk_builder_get_object(&amp;builder, "combobox1"));
+				fprintf(stderr, "g_thread_create(): %s\n", error->message);
+			}
+		}
 
-					</xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>counter_synch = 2;</xsl:text></xsl:if><xsl:text>
-					</xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "Servo algorithm"); counter_synch++;</xsl:text></xsl:if><xsl:text>
-					</xsl:text><xsl:if test="$xyz_angle_axis &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "XYZ Angle Axis"); counter_synch++;</xsl:text></xsl:if><xsl:text>
-					</xsl:text><xsl:if test="$xyz_euler_zyz &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "XYZ Euler ZYZ"); counter_synch++;</xsl:text></xsl:if><xsl:text>
-					</xsl:text><xsl:if test="$xyz_angle_axis_tool &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "XYZ Angle Axis tool"); counter_synch++;</xsl:text></xsl:if><xsl:text>
-					</xsl:text><xsl:if test="$xyz_euler_zyz_tool &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "XYZ Euler ZYZ tool"); counter_synch++;</xsl:text></xsl:if><xsl:text>
-					</xsl:text><xsl:if test="$kinematic &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "Kinematic"); counter_synch++;</xsl:text></xsl:if><xsl:text>
+		robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state (&amp;state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>);
 
-	        }
+		if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) {
+			gtk_widget_set_sensitive( GTK_WIDGET(button), FALSE);
+		    
+			GtkComboBox * combo = GTK_COMBO_BOX (gtk_builder_get_object(&amp;builder, "combobox1"));
+
+			</xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>gint counter_synch = 2;</xsl:text></xsl:if><xsl:text>
+			</xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "Servo algorithm"); counter_synch++;</xsl:text></xsl:if><xsl:text>
+			</xsl:text><xsl:if test="$xyz_angle_axis &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "XYZ Angle Axis"); counter_synch++;</xsl:text></xsl:if><xsl:text>
+			</xsl:text><xsl:if test="$xyz_euler_zyz &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "XYZ Euler ZYZ"); counter_synch++;</xsl:text></xsl:if><xsl:text>
+			</xsl:text><xsl:if test="$xyz_angle_axis_tool &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "XYZ Angle Axis tool"); counter_synch++;</xsl:text></xsl:if><xsl:text>
+			</xsl:text><xsl:if test="$xyz_euler_zyz_tool &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "XYZ Euler ZYZ tool"); counter_synch++;</xsl:text></xsl:if><xsl:text>
+			</xsl:text><xsl:if test="$kinematic &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "Kinematic"); counter_synch++;</xsl:text></xsl:if><xsl:text>
+		}
 	}	
 
 	//UI module initializing function
@@ -300,10 +304,8 @@ class edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>
 		edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>();
 		~edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>();
 };
-ui_</xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>conveyor</xsl:text></xsl:when><xsl:otherwise><xsl:text>common</xsl:text></xsl:otherwise></xsl:choose><xsl:text>_robot * robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
-mrrocpp::lib::controller_state_t state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>;
+
 void *ui_synchronize_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> (gpointer userdata);
-GtkButton* button;
 
 #endif /* __EDP_</xsl:text><xsl:value-of select="$name" /><xsl:text> */
 </xsl:text>
