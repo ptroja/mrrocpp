@@ -80,7 +80,7 @@ bool servo_buffer::get_command (void)
     msg_event.sigev_notify = SIGEV_UNBLOCK;// by Y zamiast creceive
 
     TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE,  &msg_event, NULL, NULL ); // by Y zamiast creceive i flagi z EDP_MASTER
-    if ((edp_caller = MsgReceive_r(master.servo_to_tt_chid, &command, sizeof(command), NULL)) < 0)
+    if ((edp_caller = MsgReceive_r(master.servo_to_tt_chid, &command, sizeof(command), NULL)) >= 0)
     	new_command_available = true;
 #else
     int r; // lock return value
