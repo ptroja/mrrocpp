@@ -58,6 +58,13 @@ master_trans_t_buffer::master_trans_t_buffer()
 	sem_init(&trans_t_to_master_sem, 0, 0);
 }
 
+master_trans_t_buffer::~master_trans_t_buffer()
+{
+	// semafory do komunikacji miedzy EDP_MASTER a EDP_TRANS
+	sem_destroy(&master_to_trans_t_sem);
+	sem_destroy(&trans_t_to_master_sem);
+}
+
 int master_trans_t_buffer::master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb)
 { // zlecenie z watku master dla trans_t
 	trans_t_task = nm_task; // force, arm etc.

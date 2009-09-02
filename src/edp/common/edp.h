@@ -135,6 +135,7 @@ public:
     void* error_pointer;
 
     master_trans_t_buffer();
+    ~master_trans_t_buffer();
 
     int	master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb);
     int	master_wait_for_trans_t_order_status();
