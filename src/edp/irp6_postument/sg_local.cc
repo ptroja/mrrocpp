@@ -53,16 +53,16 @@ lib::BYTE servo_buffer::Move_a_step (void)
 			}
 
 			/*
-            	if (i==6) 
+            	if (i==6)
         {
               master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_POSTUMENT_AXIS_7_INC_PER_REVOLUTION,  i);
-        } else if (i==5) 
-        {		
+        } else if (i==5)
+        {
             master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION,  i);
-        } else 
-        {		
+        } else
+        {
             master.update_servo_current_motor_pos(regulator_ptr[i]->get_position_inc(0)*2*M_PI/IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION,  i);
-        } 
+        }
 			 */
 		}
 
@@ -70,7 +70,6 @@ lib::BYTE servo_buffer::Move_a_step (void)
 	}
 	return convert_error();
 }
-; // end: servo_buffer::Move_a_step
 /*-----------------------------------------------------------------------*/
 
 
@@ -113,11 +112,7 @@ servo_buffer::servo_buffer ( effector &_master) : common::servo_buffer(_master),
 
 		command.parameters.move.abs_position[j]=0.0;
 	}
-	; // end: for
-
-
 }
-; // end: servo_buffer::servo_buffer
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
@@ -132,9 +127,9 @@ void servo_buffer::synchronise (void) {
 
 	if(master.test_mode) {
 		// W.S. Tylko przy testowaniu
-		clear_reply_status();  
+		clear_reply_status();
 		clear_reply_status_tmp();
-		reply_to_EDP_MASTER(); 
+		reply_to_EDP_MASTER();
 		return;
 	}
 
@@ -151,18 +146,18 @@ void servo_buffer::synchronise (void) {
 
 
 	// zatrzymanie na chwile robota
-	for (j = 0; j < IRP6_POSTUMENT_NUM_OF_SERVOS; j++) 
+	for (j = 0; j < IRP6_POSTUMENT_NUM_OF_SERVOS; j++)
 	{
 		synchro_step=0.0;
 		crp = regulator_ptr[j];
 		crp->insert_new_step(synchro_step);
 	};
 
-	for (j = 0; j < 25; j++) 
+	for (j = 0; j < 25; j++)
 		Move_1_step();
 
 	kk = 0;
-	clear_reply_status();  
+	clear_reply_status();
 	clear_reply_status_tmp();
 
 	reply_to_EDP_MASTER();
@@ -500,7 +495,6 @@ void servo_buffer::synchronise (void)
 	return;
 
 }
-; // end: servo_buffer::synchronise()
 
 /*-----------------------------------------------------------------------*/
 
@@ -508,8 +502,11 @@ void servo_buffer::synchronise (void)
 
 /*-----------------------------------------------------------------------*/
 servo_buffer::~servo_buffer(void)
-{}
-; // end: regulator_group::~regulator_group
+{
+	for(int i = 0; i < IRP6_POSTUMENT_NUM_OF_SERVOS; i++) {
+		delete regulator_ptr[i];
+	}
+}
 /*-----------------------------------------------------------------------*/
 
 
@@ -541,13 +538,11 @@ void servo_buffer::get_all_positions (void)
 		servo_data.algorithm_no[i] = regulator_ptr[i]->get_algorithm_no();
 		servo_data.algorithm_parameters_no[i] = regulator_ptr[i]->get_algorithm_parameters_no();
 	}
-	; // end: for
 
 	// przepisanie stanu regulatora chwytaka do bufora odpowiedzi dla EDP_master
 	servo_data.gripper_reg_state = regulator_ptr[6]->get_reg_state();
 
 }
-; // end: output_buffer::get_all_positions
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
@@ -587,10 +582,8 @@ uint64_t servo_buffer::compute_all_set_values (void)
 		// przepisanie obliczonej wartosci zadanej do hardware interface
 		hi->insert_set_value(j, regulator_ptr[j]->get_set_value());
 	}
-	; // end: for
 	return status;
 }
-; // end: servo_buffer::compute_all_set_values
 /*-----------------------------------------------------------------------*/
 
 } // namespace irp6p
@@ -599,7 +592,7 @@ namespace common {
 servo_buffer* return_created_servo_buffer (manip_and_conv_effector &_master)
 {
 	return new irp6p::servo_buffer ((irp6p::effector &)(_master));
-};
+}
 
 } // namespace common
 } // namespace edp
