@@ -11,12 +11,9 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-// Klasa edp_irp6m_effector.
-#include "edp/irp6_mechatronika/edp_irp6m_effector.h"
-// Klasa hardware_interface.
-#include "edp/irp6_mechatronika/hi_local.h"
-// Klasa servo_buffer.
-#include "edp/irp6_mechatronika/sg_local.h"
+#include "edp/polycrank/edp_e_polycrank.h"
+#include "edp/polycrank/hi_local.h"
+#include "edp/polycrank/sg_local.h"
 
 // extern edp_irp6m_effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
 
@@ -1512,7 +1509,7 @@ namespace common {
 
 servo_buffer* return_created_servo_buffer (manip_and_conv_effector &_master)
 {
-	return new irp6m::servo_buffer ((irp6m::effector &)(_master));
+	return new polycrank::servo_buffer ((polycrank::effector &)(_master));
 };
 
 

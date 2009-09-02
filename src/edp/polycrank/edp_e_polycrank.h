@@ -13,7 +13,6 @@
 #ifndef __EDP_E_POLYCRANK_H
 #define __EDP_E_POLYCRANK_H
 
-// Klasa edp_irp6s_robot.
 #include "edp/common/edp_e_manip.h"
 
 namespace mrrocpp {
