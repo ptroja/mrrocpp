@@ -29,7 +29,7 @@ namespace irp6m {
 /*-----------------------------------------------------------------------*/
 lib::BYTE servo_buffer::Move_a_step (void)
 {
-	// wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH ora SYNCHRO_ZERO
+	// wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH oraz SYNCHRO_ZERO
 
 	Move_1_step ();
 	if (master.is_synchronised())
@@ -354,7 +354,11 @@ void servo_buffer::synchronise (void)
 
 /*-----------------------------------------------------------------------*/
 servo_buffer::~servo_buffer(void)
-{}
+{
+	for(int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++) {
+		delete regulator_ptr[i];
+	}
+}
 /*-----------------------------------------------------------------------*/
 
 
