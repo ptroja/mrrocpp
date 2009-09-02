@@ -80,7 +80,7 @@ sr::sr(const PROCESS_TYPE process_type, std::string process_name, std::string sr
 			delay(50);
 		} else {
 			fprintf(stderr, "messip_channel_connect(\"%s\") @ %s:%d: %s\n",
-				sr_name, __FILE__, __LINE__, strerror(errno));
+				sr_name.c_str(), __FILE__, __LINE__, strerror(errno));
 			return;
 		}
 	}
