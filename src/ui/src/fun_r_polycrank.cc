@@ -247,7 +247,12 @@ EDP_polycrank_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 	// dla robota irp6_mechatronika
 	if (ui_state.irp6_mechatronika.edp.state>0)
 	 { // jesli istnieje EDP
-		name_close(ui_state.irp6_mechatronika.edp.reader_fd);
+		if (ui_state.polycrank.edp.reader_fd >= 0) {
+			if (name_close(ui_state.polycrank.edp.reader_fd) == -1) {
+				fprintf(stderr, "UI: EDP_polycrank, %s:%d, name_close(): %s\n",
+						__FILE__, __LINE__, strerror(errno));
+			}
+		}
 
 		delete ui_robot.irp6_mechatronika;
 		ui_state.irp6_mechatronika.edp.state = 0; // edp wylaczone

@@ -2370,9 +2370,11 @@ EDP_irp6_on_track_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 	// dla robota irp6_on_track
 	if (ui_state.irp6_on_track.edp.state>0)
 	 { // jesli istnieje EDP
-		if (name_close(ui_state.irp6_on_track.edp.reader_fd) == -1) {
-			fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n",
-					__FILE__, __LINE__, strerror(errno));
+		if (ui_state.irp6_on_track.edp.reader_fd >= 0) {
+			if (name_close(ui_state.irp6_on_track.edp.reader_fd) == -1) {
+				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n",
+						__FILE__, __LINE__, strerror(errno));
+			}
 		}
 		delete ui_robot.irp6_on_track;
 		ui_state.irp6_on_track.edp.state = 0; // edp wylaczone

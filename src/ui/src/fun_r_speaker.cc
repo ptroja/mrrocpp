@@ -263,7 +263,7 @@ EDP_speaker_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 	{
 		ui_state.speaker.edp.state = 0;
 		ui_state.speaker.edp.is_synchronised = false;
-		
+
 		std::string tmp_string("/dev/name/global/");
 		tmp_string += ui_state.speaker.edp.hardware_busy_attach_point;
 
@@ -282,7 +282,7 @@ EDP_speaker_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 			ui_state.speaker.edp.node_nr = config->return_node_number(ui_state.speaker.edp.node_name);
 
 			ui_state.speaker.edp.state = 1;
-			
+
 			ui_robot.speaker = new ui_speaker_robot(&ui_state.speaker.edp, *config, ui_msg.all_ecp);
 			ui_state.speaker.edp.pid = ui_robot.speaker->get_EDP_pid();
 
@@ -335,7 +335,12 @@ EDP_speaker_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 	// dla robota speaker
 	if (ui_state.speaker.edp.state>0)
 	 { // jesli istnieje EDP
-		name_close(ui_state.speaker.edp.reader_fd);
+		if (ui_state.speaker.edp.reader_fd >= 0) {
+			if (name_close(ui_state.speaker.edp.reader_fd) == -1) {
+				fprintf(stderr, "UI: EDP_speaker, %s:%d, name_close(): %s\n",
+						__FILE__, __LINE__, strerror(errno));
+			}
+		}
 
 		delete ui_robot.speaker;
 		ui_state.speaker.edp.state = 0; // edp wylaczone

@@ -524,7 +524,7 @@ EDP_conveyor_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 	{
 		ui_state.conveyor.edp.state = 0;
 		ui_state.conveyor.edp.is_synchronised = false;
-		
+
 		std::string tmp_string("/dev/name/global/");
 		tmp_string += ui_state.conveyor.edp.hardware_busy_attach_point;
 
@@ -541,7 +541,7 @@ EDP_conveyor_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 			ui_state.conveyor.edp.node_nr = config->return_node_number(ui_state.conveyor.edp.node_name.c_str());
 
 			ui_state.conveyor.edp.state = 1;
-			
+
 			ui_robot.conveyor = new ui_conveyor_robot(*config, ui_msg.all_ecp);
 			ui_state.conveyor.edp.pid = ui_robot.conveyor->ecp_robot::get_EDP_pid();
 
@@ -596,7 +596,12 @@ EDP_conveyor_slay( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 	// dla robota conveyor
 	if (ui_state.conveyor.edp.state>0)
 	 { // jesli istnieje EDP
-		name_close(ui_state.conveyor.edp.reader_fd);
+		if (ui_state.conveyor.edp.reader_fd >= 0) {
+			if (name_close(ui_state.conveyor.edp.reader_fd) == -1) {
+				fprintf(stderr, "UI: EDP_conv, %s:%d, name_close(): %s\n",
+						__FILE__, __LINE__, strerror(errno));
+			}
+		}
 
 		delete ui_robot.conveyor;
 		ui_state.conveyor.edp.state = 0; // edp wylaczone
