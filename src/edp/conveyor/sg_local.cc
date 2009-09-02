@@ -127,6 +127,8 @@ servo_buffer::~servo_buffer(void)
 	for(int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++) {
 		delete regulator_ptr[i];
 	}
+
+	delete hi;
 }
 /*-----------------------------------------------------------------------*/
 
