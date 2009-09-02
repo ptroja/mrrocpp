@@ -76,7 +76,7 @@ robot::robot( lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::tas
 #if !defined(USE_MESSIP_SRR)
 	while ((ECP_fd = name_open(network_ecp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
 #else
-	while ((ECP_fd = messip_channel_connect(NULL, network_ecp_attach_point, MESSIP_NOTIMEOUT)) == NULL)
+	while ((ECP_fd = messip_channel_connect(NULL, network_ecp_attach_point.c_str(), MESSIP_NOTIMEOUT)) == NULL)
 #endif
 		if ((tmp++) < CONNECT_RETRY)
 			usleep(1000 * CONNECT_DELAY);
