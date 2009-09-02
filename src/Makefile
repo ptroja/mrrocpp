@@ -1,25 +1,19 @@
 #--------------------- src catalog makefile of the MRROC++ frame system ----------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ..
-# Data for makedepend 
+# Directories for dependency generation
 ifeq ($(TARGET), qnx)
 	SOURCEDIRS = lib edp
-endif
-ifeq ($(TARGET), linux)
+else ifeq ($(TARGET), linux)
 	SOURCEDIRS = ecp 
 	#SOURCEDIRS = ecp ui
 	LIBDIR = lib
-endif
-ifeq ($(TARGET), linux_gtk)
+else ifeq ($(TARGET), linux_gtk)
 	SOURCEDIRS = ui/gtk
-endif
-ifneq ($(TARGET), qnx)
-ifneq ($(TARGET), linux)
-ifneq ($(TARGET), linux_gtk)
+else
 	SOURCEDIRS = bt848 lib kinematics vsp edp ecp ecp_mp mp ui ui_server
 endif
-endif
-endif
+
 ifeq ($(TARGET), linux)
 	CLEANDIRS = ${LIBDIR}
 else
@@ -41,24 +35,17 @@ ui_server: ui
 ifeq ($(TARGET), qnx)
 $(SOURCEDIRS):
 	@$(MAKE) CXXFLAGS=-DUSE_MESSIP_SRR -C $@
-endif
-ifeq ($(TARGET), linux)
+else ifeq ($(TARGET), linux)
 $(SOURCEDIRS):
 	@$(MAKE) TARGET=linux -B -C $@
 $(LIBDIR):
 	@$(MAKE) BUILD_TARGET=linux -C $@
-endif
-ifeq ($(TARGET), linux_gtk)
+else ifeq ($(TARGET), linux_gtk)
 $(SOURCEDIRS):
 	@$(MAKE) BUILD_TARGET=linux -B -C $@
-endif
-ifneq ($(TARGET), qnx)
-ifneq ($(TARGET), linux)
-ifneq ($(TARGET), linux_gtk)
+else
 $(SOURCEDIRS):
 	@$(MAKE) -C $@
-endif
-endif
 endif
 
 #----------------------------------------------- Maintain rules ----------------------------------------------------#
