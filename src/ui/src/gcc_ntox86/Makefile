@@ -51,7 +51,6 @@ shr: \
 	ui_ecp_r_speaker.o
 else
 shr: ui
-endif
 
 ui:	$(ABOBJ) $(MYOBJ) $(MRROCOBJ)
 		$(LD) $(ABOBJ) $(MYOBJ) $(MRROCOBJ) $(SDFLAGS) -M -o ui
@@ -63,11 +62,12 @@ app:	$(ABOBJ) $(MYOBJ) $(MRROCOBJ)
 		usemsg ui ../Usemsg
 		phabbind ui $(ABMOD)
 
-clean:
-		@rm -f *.o *.err *~ *.map ui
-
 install: ui
 		-${INSTALL} ui $(BINDIR)
+endif
+
+clean:
+		@rm -f *.o *.err *~ *.map ui
 
 #
 # Headers

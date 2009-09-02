@@ -9,6 +9,9 @@ SOURCEDIRS = generator $(INSTALLDIRS)
 
 all: $(SOURCEDIRS) ui.gtk ui.xml $(ui_defs) $(ui_modules)
 
+# for QNX Photon Application Builder compatibility
+shr: all
+
 glade: generator
 signals: generator
 
@@ -44,7 +47,7 @@ clean:
 	@for i in ${INSTALLDIRS} ; do \
 		($(MAKE) -C $$i clean) ; \
 	done
-	rm -f *.xml ui.gtk *.o *.so
+	@rm -f *.xml ui.gtk *.o *.so
 
 # TODO: ponizsza regule "install" trzeba ladniej przepisac
 install: all

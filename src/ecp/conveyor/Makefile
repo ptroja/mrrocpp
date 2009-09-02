@@ -17,7 +17,11 @@ VPATH = ../common $(ECP_MPDIR)
 #======================================================#	
 .PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#
+ifeq ($(BUILD_TARGET), linux)
+all: ecp_r_conv.o
+else
 all: ${BINARIES}
+endif
 #---------------------------------Special object build rules (user made)-------------------------------------#
 
 ecp_test_conv: ecp_t_test.o ecp_g_test.o $(SHOBJ)

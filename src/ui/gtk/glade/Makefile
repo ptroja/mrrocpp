@@ -13,4 +13,4 @@ install: all
 	$(INSTALL) *.xml $(BINDIR)
 
 clean:
-	rm -f *.xml
+	@rm -f *.xml

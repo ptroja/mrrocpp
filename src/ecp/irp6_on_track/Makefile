@@ -34,8 +34,8 @@ BINARIES =		ecp_pr \
 				ecp_ttt \
 				ecp_ellipse \
 				ecp_robot_calibration \
-        ecp_wii \
-        ecp_wii_velocity \
+				ecp_wii \
+				ecp_wii_velocity \
 				ecp_t_box_irp6ot \
 				ecp_t_smooth2_test
 
@@ -49,7 +49,11 @@ VPATH = ../common $(ECP_MPDIR)
 #======================================================#	
 .PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#
+ifeq ($(BUILD_TARGET), linux)
+all: ecp_r_irp6ot.o
+else
 all: ${BINARIES}
+endif
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_haar: ecp_t_haar_irp6ot.o ecp_g_rotate_gripper.o ecp_g_force.o ecp_generator_t.o ecp_g_smooth.o ecp_g_jarosz.o\
 		ecp_operator_reaction_condition.o ecp_vis_ib_eih_planar_irp6ot.o  ecp_mp_s_cvfradia.o   $(SHOBJ)

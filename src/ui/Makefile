@@ -1,11 +1,11 @@
+ifeq ($(BUILD_TARGET), linux)
+DIRS = src gtk
+ALLDIRS = src gtk
+INSTALLDIRS = gtk
+else
 DIRS = src
-ALLDIRS = src
-
-UIDIR = src/gcc_ntox86
-
-ifeq ($(TARGET), linux)
-$(UIDIR):
-	@$(MAKE) TARGET=linux -C $@
+ALLDIRS = $(DIRS)
+INSTALLDIRS = $(DIRS)
 endif
 
 shr:
@@ -21,7 +21,7 @@ clean:
 	@for i in ${ALLDIRS} ; do (cd $$i && $(MAKE) clean) ; done
 
 install:
-	@for i in ${DIRS} ; do (cd $$i && $(MAKE) install) ; done
+	@for i in ${INSTALLDIRS} ; do (cd $$i && $(MAKE) install) ; done
 
 depend:
 	@for i in ${DIRS} ; do (cd $$i && $(MAKE) depend) ; done
