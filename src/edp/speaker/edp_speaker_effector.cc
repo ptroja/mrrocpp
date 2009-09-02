@@ -227,7 +227,7 @@ void effector::create_threads ()
 };
 
 /*--------------------------------------------------------------------------*/
-void effector::interpret_instruction (lib::c_buffer *instruction)
+void effector::interpret_instruction (lib::c_buffer &instruction)
 {
 	// interpretuje otrzyman z ECP instrukcj;
 	// wypenaia struktury danych TRANSFORMATORa;
@@ -239,7 +239,7 @@ void effector::interpret_instruction (lib::c_buffer *instruction)
 	reply.error_no.error1 = OK;
 
 	// Wykonanie instrukcji
-	switch ( (*instruction).instruction_type )
+	switch ( instruction.instruction_type )
 	{
 	case lib::SET:
 		reply.arm.text_def.speaking=speaking;
@@ -261,12 +261,10 @@ void effector::interpret_instruction (lib::c_buffer *instruction)
 		// ustawi numer bledu
 		throw NonFatal_error_2(INVALID_INSTRUCTION_TYPE);
 	}
-	; // end: switch
 
 	// printf("interpret instruction koniec\n");
 
 }
-; // end: edp_speaker_effector::interpret_instruction
 /*--------------------------------------------------------------------------*/
 
 
@@ -274,17 +272,16 @@ void effector::interpret_instruction (lib::c_buffer *instruction)
 lib::REPLY_TYPE effector::rep_type (lib::c_buffer *instruction)
 {
 	// ustalenie formatu odpowiedzi
-	reply.reply_type = lib::ACKNOWLEDGE;
+	insert_reply_type(lib::ACKNOWLEDGE);
 
 	return reply.reply_type;
 }
-; // end: edp_speaker_effector::rep_type
 /*--------------------------------------------------------------------------*/
 
 void effector::get_spoken (bool read_hardware, lib::c_buffer *instruction)
 { // MAC7
 	return;
-};
+}
 
 int effector::speak (lib::c_buffer *instruction)
 { // add by MAC7
@@ -318,7 +315,6 @@ int effector::speak (lib::c_buffer *instruction)
 
 	return 1;
 }
-; // MAC
 
 
 
@@ -358,7 +354,6 @@ void effector::main_loop (void)
 					// okreslenie numeru bledu
 					throw common::manip_effector::NonFatal_error_1(UNKNOWN_INSTRUCTION);
 				}
-				; // end: switch ( receive_instruction(msg_cb) )
 				if (is_reply_type_ERROR())
 					printf("ERROR GET_INSTRUCTION 2 aaa\n");
 				next_state = common::EXECUTE_INSTRUCTION;
@@ -387,7 +382,6 @@ void effector::main_loop (void)
 				default:
 					break;
 			}
-			; // end: switch (next_state)
 		} // end: try
 
 		catch(common::manip_effector::NonFatal_error_1 nfe)
@@ -457,7 +451,7 @@ void effector::main_loop (void)
 		// } // end if important_message_flag // by Y juz zbedne
 
 	} // end: for (;;)
-};
+}
 
 } // namespace common
 } // namespace edp
