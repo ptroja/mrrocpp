@@ -528,6 +528,20 @@ enum REPLY_TYPE {
 	RMODEL_INPUTS,
 	ARM_RMODEL_INPUTS,
 	CONTROLLER_STATE
+/*
+ * TODO: would not be it easier to handle with the following?
+	ERROR = 0,
+	ACKNOWLEDGE = 0x01,
+	SYNCHRO_OK = 0x02,
+	ARM = 0x04,
+	RMODEL = 0x08,
+	INPUTS = 0x10,
+	ARM_RMODEL = 0x20,
+	ARM_INPUTS = 0x40,
+	RMODEL_INPUTS = 0x80,
+	ARM_RMODEL_INPUTS = 0x100,
+	CONTROLLER_STATE = 0x200
+ */
 };
 
 //------------------------------------------------------------------------------
