@@ -115,17 +115,17 @@ void irp6s_postument_track_effector::get_rmodel(lib::c_buffer &instruction)
 	{
 	case lib::TOOL_FRAME:
 		//printf("TOOL_FRAME\n");
-		// przepisa specyfikacj z TRANSFORMATORa do bufora wysykowego
+		// przepisac specyfikacje z TRANSFORMATORa do bufora wysylkowego
 		tool_frame_2_frame_rep();
 		break;
 	case lib::TOOL_XYZ_ANGLE_AXIS:
 		//printf("TOOL_XYZ_ANGLE_AXIS\n");
-		// przeksztaci i przepisa specyfikacj z TRANSFORMATORa do bufora wysykowego
+		// przeksztacic i przepisac specyfikacje z TRANSFORMATORa do bufora wysylkowego
 		tool_frame_2_xyz_aa();
 		break;
 	case lib::TOOL_XYZ_EULER_ZYZ:
 		//printf("TOOL_XYZ_EULER_ZYZ\n");
-		// przeksztaci i przepisa specyfikacj z TRANSFORMATORa do bufora wysykowego
+		// przeksztacic i przepisac specyfikacje z TRANSFORMATORa do bufora wysylkowego
 		tool_frame_2_xyz_eul_zyz();
 		break;
 	case lib::ARM_KINEMATIC_MODEL:
@@ -198,7 +198,6 @@ void irp6s_postument_track_effector::arm_frame_2_xyz_eul_zyz()
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::arm_abs_xyz_eul_zyz_2_frame(const double *p)
 {
-
 	double x, y, z; // wspolrzedne wektora przesuniecia
 	double alfa, beta, gamma; // Katy Eulera
 

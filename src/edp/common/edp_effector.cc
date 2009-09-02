@@ -257,8 +257,10 @@ void effector::reply_to_instruction(void)
 	// informacji o tym, ze przyslane polecenie nie moze byc przyjte
 	// do wykonania w aktualnym stanie EDP
 	// int reply_size;     // liczba bajtw wysyanej odpowiedzi
+
 	if ( !( (reply.reply_type == lib::ERROR) || (reply.reply_type == lib::SYNCHRO_OK) ))
-		reply.reply_type = real_reply_type;
+			reply.reply_type = real_reply_type;
+
 #if !defined(USE_MESSIP_SRR)
 	if (MsgReply(caller, 0, &reply, sizeof(reply)) == -1) { // Odpowiedz dla procesu ECP badz UI by Y
 #else /* USE_MESSIP_SRR */

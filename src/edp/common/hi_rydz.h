@@ -145,8 +145,7 @@ public:
 
     void reset_position (int i);
 
-}
-; // koniec: class hardware_interface
+}; // koniec: class hardware_interface
 
 
 } // namespace common

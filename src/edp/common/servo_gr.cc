@@ -167,7 +167,7 @@ lib::BYTE servo_buffer::Move_1_step (void)
 
     if( clock_gettime( CLOCK_REALTIME , &step_time) == -1 )
     {
-        printf("blad pomiaru czasu");
+        perror("clock_gettime()");
     }
 
     master.rb_obj.step_data.step =  master.step_counter;
