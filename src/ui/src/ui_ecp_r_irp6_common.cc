@@ -112,12 +112,16 @@ void ui_common_robot::execute_motion (void)
 
 
   //  printf("UI :%d\n",ecp->ecp_command.instruction.instruction_type);
-
-    ecp->execute_motion();
-
-
-
-
+    try {
+    	ecp->execute_motion();
+    } catch (ecp::common::ecp_robot::ECP_error & e) {
+    	fprintf(stderr, "ECP error catched at %s:%d."
+    			"class %llu, no %llu, err0 %llu, err1 %llu\n",
+    			__FILE__, __LINE__,
+    			e.error_class, e.error_no, e.error.error0, e.error.error1
+    			);
+    	exit(-1);
+    }
 }
 // ---------------------------------------------------------------
 
@@ -155,7 +159,7 @@ bool ui_common_robot::get_kinematic (lib::BYTE* kinematic_model_no)
     ecp->ecp_command.instruction.get_rmodel_type = lib::ARM_KINEMATIC_MODEL; // RMODEL
     execute_motion();
 
-    *kinematic_model_no  = ecp->reply_package.rmodel.kinematic_model.kinematic_model_no;
+    *kinematic_model_no = ecp->reply_package.rmodel.kinematic_model.kinematic_model_no;
 
     return true;
 }
