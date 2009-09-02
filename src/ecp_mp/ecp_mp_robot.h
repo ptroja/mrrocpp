@@ -30,7 +30,7 @@ struct robot_transmission_data
 
 	// sposob zdefiniowania polozenia koncowki
 	lib::POSE_SPECIFICATION set_arm_type; // przy jej zadawaniu
-	lib::POSE_SPECIFICATION get_arm_type; // przy jeg odczycie
+	lib::POSE_SPECIFICATION get_arm_type; // przy jego odczycie
 
 	lib::WORD output_values; // zadane wartosci wyjsc binarnych
 	lib::WORD input_values; // odczytane wartosci wejsc binarnych
