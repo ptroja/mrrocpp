@@ -43,7 +43,15 @@ VPATH = ..
 #
 #ui_ecp_r_irp6_on_track.o ui_ecp_r_irp6_postument.o
 
+ifeq ($(BUILD_TARGET), linux)
+shr: \
+	ui.o \
+	ui_ecp_r_conveyor.o \
+	ui_ecp_r_irp6_common.o \
+	ui_ecp_r_speaker.o
+else
 shr: ui
+endif
 
 ui:	$(ABOBJ) $(MYOBJ) $(MRROCOBJ)
 		$(LD) $(ABOBJ) $(MYOBJ) $(MRROCOBJ) $(SDFLAGS) -M -o ui
