@@ -6,7 +6,6 @@
 // -------------------------------------------------------------------------
 
 
-
 #ifndef __SG_IRP6P_H
 #define __SG_IRP6P_H
 
@@ -20,32 +19,25 @@ namespace mrrocpp {
 namespace edp {
 namespace irp6p {
 
-/************************ EDP_SPEAKER ****************************/
-class servo_buffer  : public common::servo_buffer
+class servo_buffer: public common::servo_buffer
 {
-    // Bufor polecen przysylanych z EDP_MASTER dla SERVO
-    // Obiekt z algorytmem regulacji
+		// Bufor polecen przysylanych z EDP_MASTER dla SERVO
+		// Obiekt z algorytmem regulacji
 
+		lib::BYTE Move_a_step(void); // wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH i SYNCHRO_T
 
-    lib::BYTE Move_a_step (void);         // wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH i SYNCHRO_T
+	public:
+		// output_buffer
+		void get_all_positions(void);
+		effector &master;
 
-public:
+		servo_buffer(effector &_master); // konstruktor
+		~servo_buffer(void); // destruktor
 
-    // output_buffer
-    void get_all_positions (void);
-    effector &master;
-
-    servo_buffer (effector &_master);             // konstruktor
-    ~servo_buffer (void);      // destruktor
-
-    void synchronise (void);         // synchronizacja
-    uint64_t compute_all_set_values (void);
-    // obliczenie nastepnej wartosci zadanej dla wszystkich napedow
-
-
-}
-; // end: class servo_buffer
-/************************ EDP_SPEAKER ****************************/
+		void synchronise(void); // synchronizacja
+		uint64_t compute_all_set_values(void);
+		// obliczenie nastepnej wartosci zadanej dla wszystkich napedow
+};
 
 } // namespace common
 } // namespace edp
