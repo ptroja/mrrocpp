@@ -26,16 +26,16 @@ namespace common {
 manager::manager(void)
 {
     //	create_kinematics_list_for_given_robot();
-}
-;//: manager
+};//: manager
+
 
 
 // Destruktor - niszczy liste kinematyk.
 manager::~manager(void)
 {
     // tutaj usuniecie kinematyk z listy oraz samej listy.
-}
-;//:~manager
+};//:~manager
+
 
 // Zmiana aktywnego modelu kinematyki.
 void manager::set_kinematic_model (int _desired_kinematic_model_nr)
