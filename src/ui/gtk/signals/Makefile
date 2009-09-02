@@ -15,25 +15,22 @@ HEADERSDIR = $(HOMEDIR)/src
 
 all: $(ui_modules)
 
-edp_irp6m.so: edp_irp6m_uimodule.o \
+IRP6_COMMON_OBJS = \
 	$(ECP_DIR)/irp6_on_track/ecp_r_irp6ot.o \
 	$(ECP_DIR)/irp6_postument/ecp_r_irp6p.o \
 	$(ECP_DIR)/irp6_mechatronika/ecp_r_irp6m.o \
-	$(UI_DIR)/ui_ecp_r_irp6_common.o
+	$(ECP_DIR)/polycrank/ecp_r_polycrank.o \
+
+edp_irp6m.so: edp_irp6m_uimodule.o \
+	$(IRP6_COMMON_OBJS) $(UI_DIR)/ui_ecp_r_irp6_common.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $(LIBS) $^
 
 edp_irp6o.so: edp_irp6o_uimodule.o \
-	$(ECP_DIR)/irp6_on_track/ecp_r_irp6ot.o \
-	$(ECP_DIR)/irp6_postument/ecp_r_irp6p.o \
-	$(ECP_DIR)/irp6_mechatronika/ecp_r_irp6m.o \
-	$(UI_DIR)/ui_ecp_r_irp6_common.o
+	$(IRP6_COMMON_OBJS) $(UI_DIR)/ui_ecp_r_irp6_common.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $(LIBS) $^
 
 edp_irp6p.so: edp_irp6p_uimodule.o \
-	$(ECP_DIR)/irp6_on_track/ecp_r_irp6ot.o \
-	$(ECP_DIR)/irp6_postument/ecp_r_irp6p.o \
-	$(ECP_DIR)/irp6_mechatronika/ecp_r_irp6m.o \
-	$(UI_DIR)/ui_ecp_r_irp6_common.o
+	$(IRP6_COMMON_OBJS) $(UI_DIR)/ui_ecp_r_irp6_common.o
 	$(CXX) ${LDFLAGS} -shared -o $@ $(LIBS) $^
 
 edp_conveyor.so: edp_conveyor_uimodule.o \

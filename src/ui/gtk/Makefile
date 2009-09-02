@@ -23,8 +23,7 @@ include $(HOMEDIR)/common.mk
 PACKAGES=libxml-2.0 gtk+-2.0 gtkmm-2.4 gthread-2.0
 CPPFLAGS=-I${HOMEDIR}/src `pkg-config --cflags ${PACKAGES}` -DUSE_MESSIP_SRR
 CXXFLAGS=-Wall -g -O0 -fpic -I $(HEADERSDIR) -I.
-#LDFLAGS+=`pkg-config --libs ${PACKAGES}` -export-dynamic -L${HOMEDIR}/lib -lmessip -lecp -lmrrocpp -I $(HEADERSDIR) -I.
-LDFLAGS+=`pkg-config --libs ${PACKAGES}` -export-dynamic -L${HOMEDIR}/lib -lmessip -lmrrop -I $(HEADERSDIR) -I.
+LDFLAGS+=`pkg-config --libs ${PACKAGES}` -g -export-dynamic -L${HOMEDIR}/lib -lmessip -lecp -lmrrocpp -I $(HEADERSDIR) -I.
 XSLTPROC=xsltproc robots.xml --xinclude
 ECP_DIR = $(HOMEDIR)/src/ecp
 HEADERSDIR = $(HOMEDIR)/src
@@ -42,6 +41,9 @@ ui.gtk: main.o xmlconfigurator.o \
 	$(CXX) ${LDFLAGS} -shared -o $@ $<
 	
 clean:
+	@for i in ${INSTALLDIRS} ; do \
+		($(MAKE) -C $$i clean) ; \
+	done
 	rm -f *.xml ui.gtk *.o *.so
 
 # TODO: ponizsza regule "install" trzeba ladniej przepisac
