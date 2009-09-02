@@ -269,7 +269,7 @@ void effector::interpret_instruction (lib::c_buffer &instruction)
 
 
 /*--------------------------------------------------------------------------*/
-lib::REPLY_TYPE effector::rep_type (lib::c_buffer *instruction)
+lib::REPLY_TYPE effector::rep_type (lib::c_buffer & instruction)
 {
 	// ustalenie formatu odpowiedzi
 	insert_reply_type(lib::ACKNOWLEDGE);
@@ -361,7 +361,7 @@ void effector::main_loop (void)
 				case common::EXECUTE_INSTRUCTION:
 					// printf("jestesmy w execute instruction\n"); // MAC7
 					// wykonanie instrukcji - wszelkie bledy powoduja zgloszenie wyjtku NonFatal_error_2 lub Fatal_error
-					interpret_instruction (&(new_instruction));
+					interpret_instruction (new_instruction);
 					//      printf("w execute po interpret\n");
 					next_state = common::WAIT;
 					break;

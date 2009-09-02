@@ -74,7 +74,7 @@ public:
     // Interpretuje otrzymana z ECP instrukcje, przygotowuje odpowiedz dla ECP.
     void interpret_instruction (lib::c_buffer &instruction);
     // Ustalenie formatu odpowiedzi.
-    lib::REPLY_TYPE rep_type (lib::c_buffer *instruction);
+    lib::REPLY_TYPE rep_type (lib::c_buffer & instruction);
 
     // Glowna petla.
     void main_loop();
