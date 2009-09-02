@@ -9,12 +9,7 @@
 #if !defined(__TYPEDEFS_H) // Czy 'typedefs.h' juz wczytany ?
 #define __TYPEDEFS_H
 
-/* -------------------------------------------------------------------- */
-/* Konieczne definicje typow (ze wzgledu na rozne reprezentacje w sys-  */
-/* temach 32-bitowych i 16-bitowych)                                    */
-/* -------------------------------------------------------------------- */
-
-#ifdef __QNXNTO__
+#if defined(__QNXNTO__)
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #else
@@ -120,6 +115,8 @@ extern uint64_t ClockCycles(void);
 #define ND_LOCAL_NODE			0
 
 #define delay(ms)	usleep(1000*(ms))
+
+#define flushall(x)	(void)0
 
 #endif /* ! __QNXNTO__ */
 
