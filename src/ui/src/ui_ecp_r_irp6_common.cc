@@ -112,16 +112,7 @@ void ui_common_robot::execute_motion (void)
 
 
   //  printf("UI :%d\n",ecp->ecp_command.instruction.instruction_type);
-    try {
-    	ecp->execute_motion();
-    } catch (ecp::common::ecp_robot::ECP_error & e) {
-    	fprintf(stderr, "ECP error catched at %s:%d."
-    			"class %llu, no %llu, err0 %llu, err1 %llu\n",
-    			__FILE__, __LINE__,
-    			e.error_class, e.error_no, e.error.error0, e.error.error1
-    			);
-    	exit(-1);
-    }
+  ecp->execute_motion();
 }
 // ---------------------------------------------------------------
 
