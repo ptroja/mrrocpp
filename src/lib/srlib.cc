@@ -29,23 +29,26 @@ namespace lib {
 #if !defined(USE_MESSIP_SRR)
 // Konstruktor
 sr::sr(PROCESS_TYPE process_type, std::string process_name, std::string sr_name) {
-	struct utsname sysinfo;
-    int tmp = 0;
+
  	// kilka sekund  (~1) na otworzenie urzadzenia
+	int tmp = 0;
 	while((fd = name_open(sr_name.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0) {
 		if((tmp++)<CONNECT_RETRY) {
 			delay(CONNECT_DELAY);
 		} else {
 			// TODO: throw
 		    perror ("SR cannot be located ");
-		    return;
+		    throw;
 		}
 	}
+
+	struct utsname sysinfo;
 	if( uname( &sysinfo ) == -1 ) {
 		// TODO: throw
 		perror( "uname" );
 	}
 	strcpy(sr_message.host_name, sysinfo.nodename);
+
 	sr_message.process_type = process_type;
 	sr_message.message_type = NEW_MESSAGE;
 	strcpy(sr_message.process_name, process_name.c_str());
