@@ -950,7 +950,7 @@ void task::initialize_communication()
 				common::mp_receive_pulse_struct_t input;
 				int rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, WITHOUT_TIMEOUT);
 
-				if (rcvid == -1)/* Error condition, exit */
+				if (rcvid < 0)/* Error condition, exit */
 				{
 					if (input.e != ETIMEDOUT)
 					{
