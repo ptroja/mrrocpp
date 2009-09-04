@@ -663,7 +663,7 @@ int task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct
 		ret = mp_receive_pulse (outputs, current_wait_mode);
 
 		if (ret < 0) {
-			if (outputs->e != ETIMEDOUT) {
+			if (ret != -ETIMEDOUT) {
 				// tu ma byc wyjatek
 				fprintf (stderr, "MP: MsgReceive() na kanale ecp_pusle: %s @ %s:%d\n", strerror(-ret), __FILE__, __LINE__);
 				throw;
