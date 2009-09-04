@@ -515,7 +515,8 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 			* base_pos_xyz_rot_xyz_vector;
 			break;
 		default:
-			throw System_error();
+			fprintf(stderr, "Unhandled force motion specification @ %s:%d\n", __FILE__, __LINE__);
+			break;
 		}
 
 		// wyznaczenie predkosci z uwzglednieniem wirtualnej inercji i wirtualnego tarcia wiskotycznego
