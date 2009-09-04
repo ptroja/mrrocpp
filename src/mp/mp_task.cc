@@ -570,7 +570,7 @@ int task::mp_receive_pulse (common::mp_receive_pulse_struct_t* outputs, MP_RECEI
 
 		if (outputs->rcvid < 0) {/* Error condition, exit */
 
-			outputs->e = errno;
+			outputs->e = outputs->rcvid;
 			exit_loop = true;
 			continue;
 		}
