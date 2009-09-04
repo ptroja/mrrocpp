@@ -689,74 +689,6 @@ lib::REPLY_TYPE manip_and_conv_effector::rep_type (const lib::c_buffer &instruct
 {
 	// ustalenie formatu odpowiedzi
 	// TODO: kurwa, ta funkcja to jeden wielki barok!!! PT
-#if 0
-    // ustalenie formatu odpowiedzi
-	lib::REPLY_TYPE get_reply_type = lib::ACKNOWLEDGE;
-    if (instruction.is_get_inputs())
-    {
-    	get_reply_type = lib::INPUTS;
-    }
-    if (instruction.is_get_rmodel())
-    {
-        if (get_reply_type == lib::ACKNOWLEDGE)
-        	get_reply_type = lib::RMODEL;
-        else
-        	get_reply_type = lib::RMODEL_INPUTS;
-    }
-    if (instruction.is_get_arm())
-    {
-        switch (get_reply_type)
-        {
-        case lib::ACKNOWLEDGE:
-        	get_reply_type = lib::ARM;
-            break;
-        case lib::INPUTS:
-        	get_reply_type = lib::ARM_INPUTS;
-            break;
-        case lib::RMODEL:
-        	get_reply_type = lib::ARM_RMODEL;
-            break;
-        case lib::RMODEL_INPUTS:
-        	get_reply_type = lib::ARM_RMODEL_INPUTS;
-            break;
-        default:
-            break;
-        }
-    }
-    real_reply_type = get_reply_type;
-
-    lib::REPLY_TYPE set_reply_type = get_reply_type;
-    if (instruction.is_set_arm())
-    {// by Y ORIGINAL
-        // if (is_set_arm()||is_set_force()) {// by Y DEBUG
-        switch (set_reply_type)
-        {
-        case lib::ACKNOWLEDGE:
-        	set_reply_type = lib::ARM;
-            break;
-        case lib::INPUTS:
-        	set_reply_type = lib::ARM_INPUTS;
-            break;
-        case lib::RMODEL:
-        	set_reply_type = lib::ARM_RMODEL;
-            break;
-        case lib::RMODEL_INPUTS:
-        	set_reply_type = lib::ARM_RMODEL_INPUTS;
-            break;
-        default:
-            break;
-        }
-    }
-    // by Y
-    if (instruction.is_get_controller_state())
-    {
-    	set_reply_type = lib::CONTROLLER_STATE;
-    }
-
-    insert_reply_type(set_reply_type);
-
-    return reply.reply_type;
-#else
     reply.reply_type = lib::ACKNOWLEDGE;
     if (instruction.is_get_inputs())
     {
@@ -818,7 +750,6 @@ lib::REPLY_TYPE manip_and_conv_effector::rep_type (const lib::c_buffer &instruct
     }
 
     return reply.reply_type;
-#endif
 }
 /*--------------------------------------------------------------------------*/
 
