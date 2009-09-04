@@ -152,6 +152,7 @@ int input_config(std::string _filename, struct Config_Tag configs[], std::string
    file=fopen(filename,"r");
    if ( file==NULL ) {
 	   perror("fopen()");
+	   fprintf(stderr, "Error opening config file %s\n");
 	   return INCFG_ERROR;   // return error designation.
    }
 
