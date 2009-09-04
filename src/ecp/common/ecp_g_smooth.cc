@@ -884,7 +884,6 @@ bool smooth::is_last_list_element ( void )
             --pose_list_iterator;
             return true;
         }
-        ; // end if
     }
     return false;
 }
