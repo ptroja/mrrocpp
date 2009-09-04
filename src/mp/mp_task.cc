@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fstream>
+#include <string.h>
 
 
 #include "lib/typedefs.h"
@@ -554,23 +555,23 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 int task::mp_receive_pulse (common::mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PULSE_MODE tryb)
 {
 
-	struct sigevent event;
-	int wyjscie = 0;
+	bool exit_loop = false;
 
+	struct sigevent event;
 	event.sigev_notify = SIGEV_UNBLOCK;
 
-	while (!wyjscie) {
+	while (!exit_loop) {
 
 		if (tryb == WITH_TIMEOUT) {
 			TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE,  &event, NULL, NULL );// by Y zamiast creceive
 		}
 
-		outputs->rcvid = MsgReceive (mp_pulse_attach->chid, &(outputs->pulse_msg), sizeof(_pulse_msg), &(outputs->msg_info));
+		outputs->rcvid = MsgReceive_r (mp_pulse_attach->chid, &(outputs->pulse_msg), sizeof(_pulse_msg), &(outputs->msg_info));
 
-		if (outputs->rcvid == -1) {/* Error condition, exit */
+		if (outputs->rcvid < 0) {/* Error condition, exit */
 
 			outputs->e = errno;
-			wyjscie++;
+			exit_loop = true;
 			continue;
 		}
 
@@ -604,7 +605,7 @@ int task::mp_receive_pulse (common::mp_receive_pulse_struct_t* outputs, MP_RECEI
 				break;
 			}
 
-			wyjscie++;
+			exit_loop = true;
 			continue;
 		}
 
@@ -616,7 +617,7 @@ int task::mp_receive_pulse (common::mp_receive_pulse_struct_t* outputs, MP_RECEI
 				//  MsgError(rcvid, ENOSYS);
 				//			  printf("mp_receive_ecp_pulse_return_t name_open: %d, %d\n", info.pid, info.scoid);
 				MsgReply (outputs->rcvid, EOK, 0, 0);
-				wyjscie++;
+				exit_loop = true;
 				//		ret.rt = false;
 				continue;
 			}
@@ -661,10 +662,10 @@ int task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct
 	while (!exit_from_while) {
 		ret = mp_receive_pulse (outputs, current_wait_mode);
 
-		if (ret == -1) {
+		if (ret < 0) {
 			if (outputs->e != ETIMEDOUT) {
 				// tu ma byc wyjatek
-				printf ("Blad MsgReceive() na kanale ecp_pusle w receive_pending_pulses\n");
+				fprintf (stderr, "MP: MsgReceive() na kanale ecp_pusle: %s @ %s:%d\n", strerror(ret), __FILE__, __LINE__);
 			} else {
 				if ((desired_wait_mode == WITHOUT_TIMEOUT) && (!(desired_pulse_found))) {
 					current_wait_mode = WITHOUT_TIMEOUT;
@@ -728,9 +729,9 @@ int task::mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs)
 	while (!wyjscie) {
 		ret = mp_receive_pulse (outputs, WITHOUT_TIMEOUT);
 		// jakis inny robot wyslal puls
-		if (ret == -1) {
+		if (ret < 0) {
 			// TODO: tu ma byc wyjatek
-			fprintf (stderr, "Blad MsgReceive() na kanale ecp_pusle w mp_wait_for_name_open_ecp_pulse\n");
+			fprintf (stderr, "MP: MsgReceive() na kanale ecp_pusle: %s @ %s:%d\n", strerror(ret), __FILE__, __LINE__);
 		} else if (ret == 0) {
 
 			// wstawiamy informacje o pulsie ktory przyszedl od innego robota
