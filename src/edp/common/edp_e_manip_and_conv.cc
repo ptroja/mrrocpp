@@ -213,16 +213,22 @@ bool manip_and_conv_effector::is_synchronised ( void ) const
 /*--------------------------------------------------------------------------*/
 void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
 {
-    // interpretuje otrzyman z ECP instrukcj;
-    // wypenaia struktury danych TRANSFORMATORa;
-    // przygotowuje odpowied dla ECP
+//	fprintf(stderr, "instruction:\n");
+//	fprintf(stderr, "\tinstruction_type: %d\n", instruction.instruction_type);
+//	fprintf(stderr, "\tget_type: %d\n", instruction.get_type);
+//	fprintf(stderr, "\tget_rmodel_type: %d\n", instruction.get_rmodel_type);
+
+    // interpretuje otrzymana z ECP instrukcje;
+    // wypelnaia struktury danych TRANSFORMATORa;
+    // przygotowuje odpowiedz dla ECP
     // 	printf("interpret instruction poczatek\n");
-    // wstpne przygotowanie bufora odpowiedzi
+    // wstepne przygotowanie bufora odpowiedzi
     rep_type(instruction); // okreslenie typu odpowiedzi
     reply.error_no.error0 = OK;
     reply.error_no.error1 = OK;
     // Wykonanie instrukcji
-    switch ( instruction.instruction_type )
+//    switch ( instruction.instruction_type )
+    switch(rep_type(instruction))
     {
     case lib::SET:
         // tu wykonanie instrukcji SET
@@ -249,7 +255,8 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
     case lib::GET:
         // tu wykonanie instrukcji GET
         // ustalenie formatu odpowiedzi
-        switch (rep_type(instruction))
+        //switch (rep_type(instruction))
+    	switch(reply.reply_type)
         {
         case lib::CONTROLLER_STATE:
             // odczytanie TCP i orientacji koncowki
@@ -467,8 +474,9 @@ void manip_and_conv_effector::common_synchronise ()
     }
 }
 
-
-
+#if defined(__gnu_linux__)
+#include <execinfo.h>
+#endif
 
 /*--------------------------------------------------------------------------*/
 void manip_and_conv_effector::arm_motors_2_motors (void)
@@ -477,6 +485,35 @@ void manip_and_conv_effector::arm_motors_2_motors (void)
     // MOTORS z wewnetrznych struktur danych TRANSFORMATORa
     // do wewntrznych struktur danych REPLY_BUFFER
     reply.arm_type = lib::MOTOR;
+#if 0
+    fprintf(stderr, "(%s@%s:%d) reply.reply_type %d thread %lu\n", __PRETTY_FUNCTION__, __FILE__, __LINE__, reply.reply_type, pthread_self());
+#if defined(__gnu_linux__)
+    {
+        int j, nptrs;
+    #define SIZE 100
+        void *buffer[100];
+        char **strings;
+
+        nptrs = backtrace(buffer, SIZE);
+        fprintf(stderr, "BACKTRACE() returned %d addresses\n", nptrs);
+
+        /* The call backtrace_symbols_fd(buffer, nptrs, STDOUT_FILENO)
+           would produce similar output to the following: */
+
+        strings = backtrace_symbols(buffer, nptrs);
+        if (strings == NULL) {
+            perror("backtrace_symbols");
+            exit(EXIT_FAILURE);
+        }
+
+        for (j = 0; j < nptrs; j++)
+            fprintf(stderr, "%s\n", strings[j]);
+
+        free(strings);
+    }
+#endif
+#endif
+
     switch (reply.reply_type)
     {
     case lib::ARM:
@@ -491,6 +528,7 @@ void manip_and_conv_effector::arm_motors_2_motors (void)
         }
         break;
     default: // blad:
+    	fprintf(stderr, "STRANGE_GET_ARM_REQUEST@%s:%d\n", __FILE__, __LINE__);
         throw NonFatal_error_2(STRANGE_GET_ARM_REQUEST);
     }
 
@@ -513,6 +551,7 @@ void manip_and_conv_effector::arm_joints_2_joints (void)
     // JOINTS z wewntrznych struktur danych TRANSFORMATORa
     // do wewntrznych struktur danych REPLY_BUFFER
     reply.arm_type = lib::JOINT;
+
     switch (reply.reply_type)
     {
     case lib::ARM:
@@ -523,7 +562,8 @@ void manip_and_conv_effector::arm_joints_2_joints (void)
             reply.arm.pf_def.arm_coordinates[i] = current_joints[i];
         break;
     default: // blad:
-            throw NonFatal_error_2(STRANGE_GET_ARM_REQUEST);
+    	fprintf(stderr, "STRANGE_GET_ARM_REQUEST@%s:%d\n", __FILE__, __LINE__);
+    	throw NonFatal_error_2(STRANGE_GET_ARM_REQUEST);
     }
 
     if ((robot_name == lib::ROBOT_IRP6_ON_TRACK) || (robot_name == lib::ROBOT_IRP6_POSTUMENT))
@@ -575,8 +615,12 @@ void manip_and_conv_effector::send_to_SERVO_GROUP ()
         throw System_error();
     }
 #else
-    sem_post(&servo_command_ready);
-    sem_wait(&sg_reply_ready);
+    if(sem_post(&servo_command_ready) == -1) {
+    	perror("sem_post()");
+    }
+    if(sem_wait(&sg_reply_ready) == -1) {
+    	perror("sem_wait()");
+    }
 #endif
 
     //   SignalProcmask( 0,serwo_tid, SIG_UNBLOCK, &set, NULL );
@@ -674,9 +718,78 @@ void manip_and_conv_effector::get_algorithms ()
 
 
 /*--------------------------------------------------------------------------*/
-lib::REPLY_TYPE manip_and_conv_effector::rep_type (lib::c_buffer &instruction)
+lib::REPLY_TYPE manip_and_conv_effector::rep_type (const lib::c_buffer &instruction)
 {
+	// ustalenie formatu odpowiedzi
+	// TODO: kurwa, ta funkcja to jeden wielki barok!!! PT
+#if 0
     // ustalenie formatu odpowiedzi
+	lib::REPLY_TYPE get_reply_type = lib::ACKNOWLEDGE;
+    if (instruction.is_get_inputs())
+    {
+    	get_reply_type = lib::INPUTS;
+    }
+    if (instruction.is_get_rmodel())
+    {
+        if (get_reply_type == lib::ACKNOWLEDGE)
+        	get_reply_type = lib::RMODEL;
+        else
+        	get_reply_type = lib::RMODEL_INPUTS;
+    }
+    if (instruction.is_get_arm())
+    {
+        switch (get_reply_type)
+        {
+        case lib::ACKNOWLEDGE:
+        	get_reply_type = lib::ARM;
+            break;
+        case lib::INPUTS:
+        	get_reply_type = lib::ARM_INPUTS;
+            break;
+        case lib::RMODEL:
+        	get_reply_type = lib::ARM_RMODEL;
+            break;
+        case lib::RMODEL_INPUTS:
+        	get_reply_type = lib::ARM_RMODEL_INPUTS;
+            break;
+        default:
+            break;
+        }
+    }
+    real_reply_type = get_reply_type;
+
+    lib::REPLY_TYPE set_reply_type = get_reply_type;
+    if (instruction.is_set_arm())
+    {// by Y ORIGINAL
+        // if (is_set_arm()||is_set_force()) {// by Y DEBUG
+        switch (set_reply_type)
+        {
+        case lib::ACKNOWLEDGE:
+        	set_reply_type = lib::ARM;
+            break;
+        case lib::INPUTS:
+        	set_reply_type = lib::ARM_INPUTS;
+            break;
+        case lib::RMODEL:
+        	set_reply_type = lib::ARM_RMODEL;
+            break;
+        case lib::RMODEL_INPUTS:
+        	set_reply_type = lib::ARM_RMODEL_INPUTS;
+            break;
+        default:
+            break;
+        }
+    }
+    // by Y
+    if (instruction.is_get_controller_state())
+    {
+    	set_reply_type = lib::CONTROLLER_STATE;
+    }
+
+    insert_reply_type(set_reply_type);
+
+    return reply.reply_type;
+#endif
     reply.reply_type = lib::ACKNOWLEDGE;
     if (instruction.is_get_inputs())
     {
@@ -936,7 +1049,6 @@ void manip_and_conv_effector::get_controller_state(lib::c_buffer &instruction)
 
 void manip_and_conv_effector::main_loop ()
 {
-
     // by Y pierwsza petla while do odpytania o stan EDP przez UI zaraz po starcie EDP
     next_state = GET_STATE;
 
@@ -1293,7 +1405,7 @@ void manip_and_conv_effector::main_loop ()
             case WAIT:
                 if ( receive_instruction() == lib::QUERY )
                 { // instrukcja wlasciwa =>
-                    // zle jej wykonanie, czyli wyslij odpowiedz
+                    // zlec jej wykonanie, czyli wyslij odpowiedz
                     reply_to_instruction();
                 }
                 else

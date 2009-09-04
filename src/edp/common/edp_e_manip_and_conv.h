@@ -228,7 +228,7 @@ public:
     void update_servo_current_motor_pos_abs(double abs_motor_position, int i);
 
     // ustalenie formatu odpowiedzi
-    lib::REPLY_TYPE rep_type (lib::c_buffer &instruction);
+    lib::REPLY_TYPE rep_type (const lib::c_buffer &instruction);
 
     // sprawdzenie czy jest to dopuszczalny rozkaz ruchu
     // przed wykonaniem synchronizacji robota
