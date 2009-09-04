@@ -199,7 +199,6 @@ y_nose_run_force::y_nose_run_force(common::task::task& _ecp_task,
 {
 	step_no = step;
 }
-;
 
 bool y_nose_run_force::first_step()
 {
@@ -248,7 +247,6 @@ bool y_nose_run_force::first_step()
 
 	return true;
 }
-; // end: bool y_nose_run_force_generator::first_step ( )
 // --------------------------------------------------------------------------
 
 
@@ -279,7 +277,6 @@ bool y_nose_run_force::next_step()
 
 	return true;
 }
-; // end: bool y_nose_run_force_generator::next_step ( )
 
 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
@@ -296,7 +293,6 @@ y_egg_force::y_egg_force(common::task::task& _ecp_task, int step,
 	step_no = step;
 	int_mode = mode;
 }
-;
 
 bool y_egg_force::first_step()
 {
@@ -345,7 +341,6 @@ bool y_egg_force::first_step()
 
 	return true;
 }
-; // end: bool y_egg_force_generator::first_step ( )
 // --------------------------------------------------------------------------
 
 
@@ -591,7 +586,6 @@ bool y_egg_force::next_step()
 
 	return true;
 }
-; // end: bool y_egg_force_generator::next_step ( )
 
 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
@@ -2035,7 +2029,6 @@ bool eih_nose_run::first_step()
 
 	return true;
 }
-; // end: ecp_eih_nose_run_generator::first_step()
 
 // ----------------------------------------------------------------------------------------------
 // -----------------------------------  metoda	next_step -----------------------------------

@@ -58,8 +58,7 @@ public:
     bool first_step ();
     bool next_step ();
 
-}
-; // end:
+}; // end:
 
 
 
@@ -81,8 +80,7 @@ public:
     virtual bool first_step ();
     virtual bool next_step ();
 
-}
-; // end:
+}; // end:
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
@@ -127,8 +125,7 @@ public:
 
     virtual bool next_step ();
 
-}
-; // end:
+}; // end:
 // --------------------------------------------------------------------------
 
 
@@ -169,8 +166,7 @@ public:
 
     virtual bool first_step ();
     virtual bool next_step ();
-}
-; // end: class y_drawing_teach_in_force_generator
+}; // end: class y_drawing_teach_in_force_generator
 // --------------------------------------------------------------------------
 
 
@@ -214,8 +210,7 @@ public:
 
     virtual bool next_step ();
 
-}
-; // end:
+}; // end:
 ///
 // --------------------------------------------------------------------------
 class legobrick_attach_force : public ecp_teach_in_generator
@@ -240,8 +235,7 @@ public:
 
     virtual bool next_step ();
 
-}
-; // end:
+}; // end:
 // --------------------------------------------------------------------------
 
 //
@@ -270,8 +264,7 @@ public:
 
     virtual bool next_step ();
 
-}
-; // end:
+}; // end:
 // --------------------------------------------------------------------------
 
 
@@ -320,8 +313,7 @@ public:
 
     void set_force_meassure(bool fm);
 
-}
-; // end : class ecp_tff_nose_run_generator
+}; // end : class ecp_tff_nose_run_generator
 
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadania kalibracji ukladu eih.
@@ -369,8 +361,7 @@ public:
 
     void set_force_meassure(bool fm);
 
-}
-; // end : class ecp_eih_nose_run_generator
+}; // end : class ecp_eih_nose_run_generator
 
 
 // --------------------------------------------------------------------------
@@ -424,8 +415,7 @@ public:
     short get_state();
     void next_state();
 
-}
-; // end : class ecp_sr_nose_run_generator
+}; // end : class ecp_sr_nose_run_generator
 
 
 
@@ -479,8 +469,7 @@ public:
     virtual bool first_step ();
     virtual bool next_step ();
 
-}
-; // end : class ecp_tff_rubik_grab_generator
+}; // end : class ecp_tff_rubik_grab_generator
 
 
 // --------------------------------------------------------------------------
@@ -512,8 +501,7 @@ public:
     virtual bool first_step ();
     virtual bool next_step ();
 
-}
-; // end : class ecp_tff_rubik_face_rotate_generator
+}; // end : class ecp_tff_rubik_face_rotate_generator
 
 
 
@@ -545,8 +533,7 @@ public:
     virtual bool first_step ();
     virtual bool next_step ();
 
-}
-; // end : class ecp_tff_gripper_approach_generator
+}; // end : class ecp_tff_gripper_approach_generator
 
 class force_tool_change : public common::generator::generator
 {
