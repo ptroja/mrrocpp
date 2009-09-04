@@ -227,8 +227,7 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
     reply.error_no.error0 = OK;
     reply.error_no.error1 = OK;
     // Wykonanie instrukcji
-//    switch ( instruction.instruction_type )
-    switch(rep_type(instruction))
+    switch ( instruction.instruction_type )
     {
     case lib::SET:
         // tu wykonanie instrukcji SET
@@ -474,10 +473,6 @@ void manip_and_conv_effector::common_synchronise ()
     }
 }
 
-#if defined(__gnu_linux__)
-#include <execinfo.h>
-#endif
-
 /*--------------------------------------------------------------------------*/
 void manip_and_conv_effector::arm_motors_2_motors (void)
 {
@@ -485,34 +480,6 @@ void manip_and_conv_effector::arm_motors_2_motors (void)
     // MOTORS z wewnetrznych struktur danych TRANSFORMATORa
     // do wewntrznych struktur danych REPLY_BUFFER
     reply.arm_type = lib::MOTOR;
-#if 0
-    fprintf(stderr, "(%s@%s:%d) reply.reply_type %d thread %lu\n", __PRETTY_FUNCTION__, __FILE__, __LINE__, reply.reply_type, pthread_self());
-#if defined(__gnu_linux__)
-    {
-        int j, nptrs;
-    #define SIZE 100
-        void *buffer[100];
-        char **strings;
-
-        nptrs = backtrace(buffer, SIZE);
-        fprintf(stderr, "BACKTRACE() returned %d addresses\n", nptrs);
-
-        /* The call backtrace_symbols_fd(buffer, nptrs, STDOUT_FILENO)
-           would produce similar output to the following: */
-
-        strings = backtrace_symbols(buffer, nptrs);
-        if (strings == NULL) {
-            perror("backtrace_symbols");
-            exit(EXIT_FAILURE);
-        }
-
-        for (j = 0; j < nptrs; j++)
-            fprintf(stderr, "%s\n", strings[j]);
-
-        free(strings);
-    }
-#endif
-#endif
 
     switch (reply.reply_type)
     {
@@ -789,7 +756,7 @@ lib::REPLY_TYPE manip_and_conv_effector::rep_type (const lib::c_buffer &instruct
     insert_reply_type(set_reply_type);
 
     return reply.reply_type;
-#endif
+#else
     reply.reply_type = lib::ACKNOWLEDGE;
     if (instruction.is_get_inputs())
     {
@@ -851,6 +818,7 @@ lib::REPLY_TYPE manip_and_conv_effector::rep_type (const lib::c_buffer &instruct
     }
 
     return reply.reply_type;
+#endif
 }
 /*--------------------------------------------------------------------------*/
 
