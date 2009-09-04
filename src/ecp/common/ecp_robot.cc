@@ -254,9 +254,9 @@ void ecp_robot::send()
 							MESSIP_NOTIMEOUT) == -1 )
 #endif
 			{
-				uint64_t e= errno; // kod bledu systemowego
-				perror("Send error to EDP_MASTER");
-				sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Send error to EDP_MASTER");
+				uint64_t e = errno; // kod bledu systemowego
+				perror("ECP: Send to EDP_MASTER error");
+				sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Send to EDP_MASTER error");
 				throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			}
 			//printf("sizeof(lib::r_buffer) = %d\n", sizeof(lib::r_buffer));
