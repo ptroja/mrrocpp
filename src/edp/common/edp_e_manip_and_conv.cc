@@ -217,6 +217,8 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
 //	fprintf(stderr, "\tinstruction_type: %d\n", instruction.instruction_type);
 //	fprintf(stderr, "\tget_type: %d\n", instruction.get_type);
 //	fprintf(stderr, "\tget_rmodel_type: %d\n", instruction.get_rmodel_type);
+//	fprintf(stderr, "\tset_type: %d\n", instruction.set_type);
+//	fprintf(stderr, "\tset_rmodel_type: %d\n", instruction.set_rmodel_type);
 
     // interpretuje otrzymana z ECP instrukcje;
     // wypelnaia struktury danych TRANSFORMATORa;
