@@ -13,12 +13,12 @@ eihcalibration::eihcalibration(lib::configurator &_config): common::task::task(_
 	nose = NULL;
 	linear_gen = NULL;
 	generator = NULL;
-};
+}
 
 //Desctructor
 eihcalibration::~eihcalibration(){
 
-};
+}
 
 //methods for ECP template to redefine in concrete classes
 void eihcalibration::task_initialization(void) {
@@ -37,8 +37,8 @@ void eihcalibration::task_initialization(void) {
 */
 	smoothgen = new common::generator::smooth(*this, true);
 
-	//nose = new common::generator::eih_nose_run(*this, 8);
-	//nose->configure_pulse_check (true);
+	nose = new common::generator::eih_nose_run(*this, 8);
+	nose->configure_pulse_check (true);
 
 	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, "[vsp_cvfradia]", *this, sizeof(lib::sensor_image_t::sensor_union_t::chessboard_t));
 	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
@@ -47,7 +47,7 @@ void eihcalibration::task_initialization(void) {
 
 	generator = new common::generator::eihgenerator(*this);
 	generator->sensor_m = sensor_m;
-};
+}
 
 void eihcalibration::main_task_algorithm(void ){
 
@@ -69,10 +69,10 @@ void eihcalibration::main_task_algorithm(void ){
 	// doprowadzenie chwytaka do szachownicy "wodzeniem za nos"
 	while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == false){
 		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
-		//nose->Move();
-		//generator->Move();
+		nose->Move();
+		generator->Move();
 	}
-	//nose->Move();
+	nose->Move();
 
 	sr_ecp_msg->message("linear_gen\n");
 
@@ -113,7 +113,12 @@ void eihcalibration::main_task_algorithm(void ){
 	// pomachaj chwytakiem zeby zrobic fajne zdjecia
 	while(i >= 0 && sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.calibrated == false)
 	{
-		for(l = 0; l < 6; ++l)
+		if (i % 2 == 1)
+			l = 1;
+		else
+			l = 0;
+
+		for(; l < 6; l += 2)
 		{
 			c = 0.0;
 			d = 0.0;
@@ -134,13 +139,13 @@ void eihcalibration::main_task_algorithm(void ){
 			{	// obrot
 //				d = -0.14;
 //				d = -0.03;
-				d = -0.06;
+				d = -0.05;
 			}
 			else if(l == 3)
 			{	// obrot
 //				d = 0.14;
 //				d = 0.03;
-				d = 0.06;
+				d = -0.05;
 			}
 			else if(l == 4)
 			{	// obrot
@@ -236,7 +241,12 @@ void eihcalibration::main_task_algorithm(void ){
 				delete linear_gen;
 				sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 
-				for(l = 0; l < 6; ++l)
+				if (a < 0.0)
+					l = 1;
+				else
+					l = 0;
+
+				for(; l < 6; l += 2)
 				{
 
 					c = 0.0;
@@ -258,13 +268,13 @@ void eihcalibration::main_task_algorithm(void ){
 					{	// obrot
 //						d = -0.14;
 //						d = -0.04;
-						d = -0.06;
+						d = -0.05;
 					}
 					else if(l == 3)
 					{	// obrot
 //						d = 0.14;
 //						d = 0.04;
-						d = 0.06;
+						d = -0.05;
 					}
 					else if(l == 4)
 					{	// obrot
@@ -283,7 +293,7 @@ void eihcalibration::main_task_algorithm(void ){
 					linear_gen=new common::generator::linear(*this, td, 1);
 
 					// zabezpieczenie przed przekroczeniem obszaru roboczego robota
-/*start2 b>0 d<0*/					if (b > 0.0 && m == 0 && d < 0 && ((i == 0 && j == 1) || ( i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3)))
+/*start2 b>0 d<0*/					if (a > 0.0 && m == 0 && c > 0 && ((i == 0 && j == 1) || ( i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3)))
 /*start1 a>0 c>0*/						flaga = false;
 
 					while(((sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found) == true)
@@ -313,7 +323,7 @@ void eihcalibration::main_task_algorithm(void ){
 					}
 				}
 				// zabezpieczenie przed przekroczeniem obszaru roboczego robota
-/*start2 b>0*/				if(b > 0.0 && ((i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3) || (i == 0 && j == 1)))
+/*start2 b>0*/				if(a > 0.0 && ((i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3) || (i == 0 && j == 1)))
 /*start1 a>0*/					flaga = false;
 			}
 
@@ -344,7 +354,7 @@ void eihcalibration::main_task_algorithm(void ){
 
 	ecp_termination_notice();
 	//ecp_wait_for_stop();
-};
+}
 
 void eihcalibration::set_td_coordinates(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6){
 	// Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
