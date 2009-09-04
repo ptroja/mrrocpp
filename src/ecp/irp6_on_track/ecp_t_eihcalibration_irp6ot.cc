@@ -1,10 +1,10 @@
-#include "ecp/irp6_postument/ecp_r_irp6p.h"
-#include "ecp/irp6_postument/ecp_t_eihcalibration_irp6p.h"
+#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
+#include "ecp/irp6_on_track/ecp_t_eihcalibration_irp6ot.h"
 #include <unistd.h>
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6p {
+namespace irp6ot {
 namespace task {
 
 //Constructors
@@ -24,21 +24,21 @@ eihcalibration::~eihcalibration(){
 void eihcalibration::task_initialization(void) {
 
     // Create an adequate robot. - depending on the ini section name.
-/*    if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
+    if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     {
-        ecp_m_robot = new ecp_irp6_on_track_robot (*this);
+        ecp_m_robot = new robot (*this);
         sr_ecp_msg->message("IRp6ot loaded");
     }
-    else */if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
+/*    else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
     {
     	ecp_m_robot = new robot (*this);
     	sr_ecp_msg->message("IRp6p loaded");
     }
-
+*/
 	smoothgen = new common::generator::smooth(*this, true);
 
-	nose = new common::generator::eih_nose_run(*this, 8);
-	nose->configure_pulse_check (true);
+	//nose = new common::generator::eih_nose_run(*this, 8);
+	//nose->configure_pulse_check (true);
 
 	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, "[vsp_cvfradia]", *this, sizeof(lib::sensor_image_t::sensor_union_t::chessboard_t));
 	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
@@ -62,17 +62,17 @@ void eihcalibration::main_task_algorithm(void ){
 	smoothgen->set_absolute();
 
 	// wczytanie pozycji poczatkowej i przejscie do niej za pomoca smooth
-	if (smoothgen->load_file_with_path("../trj/eihcalibration/eih_calibration_start1.trj")) {
+	if (smoothgen->load_file_with_path("../trj/eihcalibration/eih_calibration_start1_track.trj")) {
 	  smoothgen->Move();
 	}
 
 	// doprowadzenie chwytaka do szachownicy "wodzeniem za nos"
 	while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == false){
 		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
-		nose->Move();
-		generator->Move();
+		//nose->Move();
+		//generator->Move();
 	}
-	nose->Move();
+	//nose->Move();
 
 	sr_ecp_msg->message("linear_gen\n");
 
@@ -113,7 +113,7 @@ void eihcalibration::main_task_algorithm(void ){
 	// pomachaj chwytakiem zeby zrobic fajne zdjecia
 	while(i >= 0 && sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.calibrated == false)
 	{
-		for(l = 0; l < 6; l += 2)
+		for(l = 0; l < 6; ++l)
 		{
 			c = 0.0;
 			d = 0.0;
@@ -122,37 +122,37 @@ void eihcalibration::main_task_algorithm(void ){
 			{	// obrot
 //				c = 0.15;
 //				c = 0.02;
-				c = 0.0375;
+				c = 0.06;
 			}
 			else if(l == 1)
 			{	// obrot
 //				c = -0.15;
 //				c = -0.02;
-				c = -0.0375;
+				c = -0.06;
 			}
 			else if(l == 2)
 			{	// obrot
 //				d = -0.14;
 //				d = -0.03;
-				d = -0.035;
+				d = -0.06;
 			}
 			else if(l == 3)
 			{	// obrot
 //				d = 0.14;
 //				d = 0.03;
-				d = 0.035;
+				d = 0.06;
 			}
 			else if(l == 4)
 			{	// obrot
 //				e = 0.2;
 //				e = 0.05;
-				e = 0.05;
+				e = 0.06;
 			}
 			else if(l == 5)
 			{	// obrot
 //				e = -0.2;
 //				e = -0.05;
-				e = -0.05;
+				e = -0.06;
 			}
 
 			set_td_coordinates(0.0, 0.0, 0.0, e, c, d, 0.0);
@@ -236,13 +236,9 @@ void eihcalibration::main_task_algorithm(void ){
 				delete linear_gen;
 				sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 
-				if (a > 0)
-					l = 1;
-				else
-					l = 0;
-
-				for(; l < 6; l += 2)
+				for(l = 0; l < 6; ++l)
 				{
+
 					c = 0.0;
 					d = 0.0;
 					e = 0.0;
@@ -250,44 +246,44 @@ void eihcalibration::main_task_algorithm(void ){
 					{	// obrot
 //						c = 0.15;
 //						c = 0.03;
-						c = 0.0375;
+						c = 0.06;
 					}
 					else if(l == 1)
 					{	// obrot
 //						c = -0.15;
 //						c = -0.03;
-						c = -0.0375;
+						c = -0.06;
 					}
 					else if(l == 2)
 					{	// obrot
 //						d = -0.14;
 //						d = -0.04;
-						d = -0.035;
+						d = -0.06;
 					}
 					else if(l == 3)
 					{	// obrot
 //						d = 0.14;
 //						d = 0.04;
-						d = 0.035;
+						d = 0.06;
 					}
 					else if(l == 4)
 					{	// obrot
 //						e = 0.2;
 //						e = 0.1;
-						e = 0.05;
+						e = 0.07;
 					}
 					else if(l == 5)
 					{	// obrot
 //						e = -0.2;
 //						e = -0.1;
-						e = -0.05;
+						e = -0.07;
 					}
 
 					set_td_coordinates(0.0, 0.0, 0.0, e, c, d, 0.0);
 					linear_gen=new common::generator::linear(*this, td, 1);
 
 					// zabezpieczenie przed przekroczeniem obszaru roboczego robota
-/*start2 b>0 d<0*/					if (a > 0.0 && m == 0 && c > 0 && ((i == 0 && j == 1) || ( i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3)))
+/*start2 b>0 d<0*/					if (b > 0.0 && m == 0 && d < 0 && ((i == 0 && j == 1) || ( i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3)))
 /*start1 a>0 c>0*/						flaga = false;
 
 					while(((sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found) == true)
@@ -317,7 +313,7 @@ void eihcalibration::main_task_algorithm(void ){
 					}
 				}
 				// zabezpieczenie przed przekroczeniem obszaru roboczego robota
-/*start2 b>0*/				if(a > 0.0 && ((i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3) || (i == 0 && j == 1)))
+/*start2 b>0*/				if(b > 0.0 && ((i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3) || (i == 0 && j == 1)))
 /*start1 a>0*/					flaga = false;
 			}
 
@@ -376,11 +372,11 @@ namespace common {
 namespace task {
 
 task* return_created_ecp_task(lib::configurator &_config){
-	return new irp6p::task::eihcalibration(_config);
+	return new irp6ot::task::eihcalibration(_config);
 }
 
 } // namespace task
-} // namespace common
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

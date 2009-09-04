@@ -5,14 +5,14 @@
  *      Author: jkosiore
  */
 
-#include "ecp/irp6_postument/ecp_g_eihcalibration.h"
+#include "ecp/common/ecp_g_eihcalibration.h"
 #include <cstring>
 #include <iostream>
 #include <unistd.h>
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6p {
+namespace common {
 namespace generator {
 
 using namespace std;
@@ -71,7 +71,7 @@ void eihgenerator::get_frame(float t[12])
 
 
 }
-} // namespace irp6p
+} // namespace common
 } // namespace ecp
 } // namespace mrrocpp
 

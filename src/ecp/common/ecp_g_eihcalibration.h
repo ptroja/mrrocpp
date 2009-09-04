@@ -16,7 +16,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6p {
+namespace common {
 namespace generator {
 
 class eihgenerator : public common::generator::generator
@@ -35,7 +35,7 @@ class eihgenerator : public common::generator::generator
 };
 
 }
-} // namespace irp6p
+} // namespace common
 } // namespace ecp
 } // namespace mrrocpp
 

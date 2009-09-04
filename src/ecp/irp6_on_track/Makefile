@@ -3,7 +3,7 @@
 
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-BINARIES =		ecp_pr \
+BINARIES =			ecp_pr \
 				ecp_jarosz_irp6ot \
 				ecp_vis \
 				ecp_vislx \
@@ -34,10 +34,11 @@ BINARIES =		ecp_pr \
 				ecp_ttt \
 				ecp_ellipse \
 				ecp_robot_calibration \
-				ecp_wii \
-				ecp_wii_velocity \
+			        ecp_wii \
+			        ecp_wii_velocity \
 				ecp_t_box_irp6ot \
-				ecp_t_smooth2_test
+				ecp_t_smooth2_test \
+				ecp_irp6ot_eihcalibration
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -49,11 +50,7 @@ VPATH = ../common $(ECP_MPDIR)
 #======================================================#	
 .PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#
-ifeq ($(BUILD_TARGET), linux)
-all: ecp_r_irp6ot.o
-else
 all: ${BINARIES}
-endif
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_haar: ecp_t_haar_irp6ot.o ecp_g_rotate_gripper.o ecp_g_force.o ecp_generator_t.o ecp_g_smooth.o ecp_g_jarosz.o\
 		ecp_operator_reaction_condition.o ecp_vis_ib_eih_planar_irp6ot.o  ecp_mp_s_cvfradia.o   $(SHOBJ)
@@ -195,7 +192,11 @@ ecp_t_box_irp6ot: ecp_t_box_irp6ot.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jaro
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_t_smooth2_test: ecp_t_smooth2_test.o ecp_g_smooth2.o ecp_generator_t.o ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
-	
+#-----------------------------------------------------------------------------------------------------------------------#
+ecp_irp6ot_eihcalibration: ecp_t_eihcalibration_irp6ot.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o \
+			ecp_operator_reaction_condition.o ecp_g_force.o ecp_mp_s_cvfradia.o ecp_g_eihcalibration.o $(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
+
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
 # plik.o: plik.cc plik1.h plik2.h ... itd

@@ -1,6 +1,6 @@
 //Zadanie kalibracji oko - reka wykorzystujace smooth generator
-#if !defined(_ECP_T_EIHCALIBRATION_IRP6P_H)
-#define _ECP_T_EIHCALIBRATION_IRP6P_H
+#if !defined(_ECP_T_EIHCALIBRATION_IRP6OT_H)
+#define _ECP_T_EIHCALIBRATION_IRP6OT_H
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -18,7 +18,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6p {
+namespace irp6ot {
 namespace task {
 
 class eihcalibration: public common::task::task {
@@ -47,7 +47,7 @@ class eihcalibration: public common::task::task {
 };
 
 }
-} // namespace irp6p
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

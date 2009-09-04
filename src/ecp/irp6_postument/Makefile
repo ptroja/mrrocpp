@@ -25,11 +25,7 @@ VPATH = ../common $(ECP_MPDIR)
 #======================================================#	
 .PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#
-ifeq ($(BUILD_TARGET), linux)
-all: ecp_r_irp6p.o
-else
 all: ${BINARIES}
-endif
 #---------------------------------Special object build rules (user made)-------------------------------------#
 
 ecp_test_irp6p: ecp_t_test_irp6p.o ecp_g_force_pose_test.o  ecp_mp_s_schunk.o $(SHOBJ)
