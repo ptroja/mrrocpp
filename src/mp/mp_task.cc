@@ -570,7 +570,7 @@ int task::mp_receive_pulse (common::mp_receive_pulse_struct_t* outputs, MP_RECEI
 
 		if (outputs->rcvid < 0) {/* Error condition, exit */
 
-			outputs->e = outputs->rcvid;
+			outputs->e = -outputs->rcvid;
 			exit_loop = true;
 			continue;
 		}
@@ -666,6 +666,7 @@ int task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct
 			if (outputs->e != ETIMEDOUT) {
 				// tu ma byc wyjatek
 				fprintf (stderr, "MP: MsgReceive() na kanale ecp_pusle: %s @ %s:%d\n", strerror(-ret), __FILE__, __LINE__);
+				throw;
 			} else {
 				if ((desired_wait_mode == WITHOUT_TIMEOUT) && (!(desired_pulse_found))) {
 					current_wait_mode = WITHOUT_TIMEOUT;
