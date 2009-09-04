@@ -665,7 +665,7 @@ int task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct
 		if (ret < 0) {
 			if (outputs->e != ETIMEDOUT) {
 				// tu ma byc wyjatek
-				fprintf (stderr, "MP: MsgReceive() na kanale ecp_pusle: %s @ %s:%d\n", strerror(ret), __FILE__, __LINE__);
+				fprintf (stderr, "MP: MsgReceive() na kanale ecp_pusle: %s @ %s:%d\n", strerror(-ret), __FILE__, __LINE__);
 			} else {
 				if ((desired_wait_mode == WITHOUT_TIMEOUT) && (!(desired_pulse_found))) {
 					current_wait_mode = WITHOUT_TIMEOUT;
@@ -731,7 +731,7 @@ int task::mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs)
 		// jakis inny robot wyslal puls
 		if (ret < 0) {
 			// TODO: tu ma byc wyjatek
-			fprintf (stderr, "MP: MsgReceive() na kanale ecp_pusle: %s @ %s:%d\n", strerror(ret), __FILE__, __LINE__);
+			fprintf (stderr, "MP: MsgReceive() na kanale ecp_pusle: %s @ %s:%d\n", strerror(-ret), __FILE__, __LINE__);
 		} else if (ret == 0) {
 
 			// wstawiamy informacje o pulsie ktory przyszedl od innego robota
