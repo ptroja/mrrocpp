@@ -45,6 +45,8 @@ void eihcalibration::task_initialization(void) {
         sr_ecp_msg->message("IRp6p loaded");
     }
 
+    smooth_path = config.return_string_value("smooth_path");
+
 	smoothgen = new generator::smooth(*this, true);
 
 	nose = new generator::eih_nose_run(*this, 8);
@@ -72,7 +74,7 @@ void eihcalibration::main_task_algorithm(void ){
 	smoothgen->set_absolute();
 
 	// wczytanie pozycji poczatkowej i przejscie do niej za pomoca smooth
-	if (smoothgen->load_file_with_path("../trj/eihcalibration/eih_calibration_start1_track.trj")) {
+	if (smoothgen->load_file_with_path(smooth_path.c_str())) {
 	  smoothgen->Move();
 	}
 

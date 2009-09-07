@@ -1923,7 +1923,7 @@ bool eih_nose_run::next_step()
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	// cout << "next_step" << endl;
 
-	count++;
+	++count;
 
 	if (count > 25)
 	{// co jakis czas generator sie zatrzymuje
