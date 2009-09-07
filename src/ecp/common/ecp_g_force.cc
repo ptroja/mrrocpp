@@ -1893,10 +1893,8 @@ void tff_nose_run::execute_motion(void)
 	}
 }
 
-
 eih_nose_run::eih_nose_run(common::task::task& _ecp_task,
-		int step) :
-			generator(_ecp_task)
+		int step) : tff_nose_run(_ecp_task, step)
 {
 	step_no = step;
 	count = 0;
@@ -1911,123 +1909,6 @@ eih_nose_run::eih_nose_run(common::task::task& _ecp_task,
 
 	set_force_meassure (false);
 
-
-}
-
-
-
-void eih_nose_run::set_force_meassure(bool fm)
-{
-	force_meassure = fm;
-}
-
-
-void eih_nose_run::configure_pulse_check(bool pulse_check_activated_l)
-{
-	pulse_check_activated = pulse_check_activated_l;
-}
-
-
-void eih_nose_run::configure_behaviour(lib::BEHAVIOUR_SPECIFICATION x, lib::BEHAVIOUR_SPECIFICATION y, lib::BEHAVIOUR_SPECIFICATION z,
-	 lib::BEHAVIOUR_SPECIFICATION ax, lib::BEHAVIOUR_SPECIFICATION ay, lib::BEHAVIOUR_SPECIFICATION az)
- {
-	generator_edp_data.next_behaviour[0] = x;
-	generator_edp_data.next_behaviour[1] = y;
-	generator_edp_data.next_behaviour[2] = z;
-	generator_edp_data.next_behaviour[3] = ax;
-	generator_edp_data.next_behaviour[4] = ay;
-	generator_edp_data.next_behaviour[5] = az;
- }
-
-
-void eih_nose_run::configure_velocity(double x, double y, double z, double ax, double ay, double az)
-{
-	generator_edp_data.next_velocity[0] = x;
-	generator_edp_data.next_velocity[1] = y;
-	generator_edp_data.next_velocity[2] = z;
-	generator_edp_data.next_velocity[3] = ax;
-	generator_edp_data.next_velocity[4] = ay;
-	generator_edp_data.next_velocity[5] = az;
-}
-
-
-void eih_nose_run::configure_force(double x, double y, double z, double ax, double ay, double az)
-{
-	generator_edp_data.next_force_xyz_torque_xyz[0] = x;
-	generator_edp_data.next_force_xyz_torque_xyz[1] = y;
-	generator_edp_data.next_force_xyz_torque_xyz[2] = z;
-	generator_edp_data.next_force_xyz_torque_xyz[3] = ax;
-	generator_edp_data.next_force_xyz_torque_xyz[4] = ay;
-	generator_edp_data.next_force_xyz_torque_xyz[5] = az;
-}
-
-
-void eih_nose_run::configure_reciprocal_damping(double x, double y, double z, double ax, double ay, double az)
-{
-	generator_edp_data.next_reciprocal_damping[0] = x;
-	generator_edp_data.next_reciprocal_damping[1] = y;
-	generator_edp_data.next_reciprocal_damping[2] = z;
-	generator_edp_data.next_reciprocal_damping[3] = ax;
-	generator_edp_data.next_reciprocal_damping[4] = ay;
-	generator_edp_data.next_reciprocal_damping[5] = az;
-}
-
-
-void eih_nose_run::configure_inertia(double x, double y, double z, double ax, double ay, double az)
-{
-	generator_edp_data.next_inertia[0] = x;
-	generator_edp_data.next_inertia[1] = y;
-	generator_edp_data.next_inertia[2] = z;
-	generator_edp_data.next_inertia[3] = ax;
-	generator_edp_data.next_inertia[4] = ay;
-	generator_edp_data.next_inertia[5] = az;
-}
-
-
-
-
-// ----------------------------------------------------------------------------------------------
-// ---------------------------------    metoda	first_step -------------------------------------
-// ----------------------------------------------------------------------------------------------
-
-bool eih_nose_run::first_step()
-{
-	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
-	// Funkcja zwraca false gdy koniec generacji trajektorii
-	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-	// cout << "first_step" << endl;
-
-	td.interpolation_node_no = 1;
-	td.internode_step_no = step_no;
-	td.value_in_step_no = td.internode_step_no - 2;
-
-	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(the_robot->EDP_data.next_tool_frame);
-
-	the_robot->EDP_data.instruction_type = lib::GET;
-	the_robot->EDP_data.get_type = ARM_DV; // arm - ORYGINAL
-	the_robot->EDP_data.set_type = ARM_DV | RMODEL_DV;
-	//	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.set_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.get_rmodel_type = lib::TOOL_FRAME;
-	the_robot->EDP_data.set_arm_type = lib::PF_VELOCITY;
-	the_robot->EDP_data.get_arm_type = lib::FRAME;
-	the_robot->EDP_data.motion_type = lib::RELATIVE;
-	the_robot->EDP_data.next_interpolation_type = lib::TCIM;
-	the_robot->EDP_data.motion_steps = td.internode_step_no;
-	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
-
-	for (int i=0; i<6; i++)
-	{
-		 the_robot->EDP_data.next_behaviour[i] = generator_edp_data.next_behaviour[i];
-		 the_robot->EDP_data.next_velocity[i] = generator_edp_data.next_velocity[i];
-		 the_robot->EDP_data.next_force_xyz_torque_xyz[i] = generator_edp_data.next_force_xyz_torque_xyz[i];
-		 the_robot->EDP_data.next_reciprocal_damping[i] = generator_edp_data.next_reciprocal_damping[i];
-		 the_robot->EDP_data.next_inertia[i] = generator_edp_data.next_inertia[i];
-	}
-
-
-	return true;
 }
 
 // ----------------------------------------------------------------------------------------------
@@ -2081,80 +1962,6 @@ bool eih_nose_run::next_step()
 
 }
 ; // end: bool ecp_eih_nose_run_generator::next_step ()
-
-
-// metoda przeciazona bo nie chcemy rzucac wyjatku wyjscia poza zakres ruchu - UWAGA napisany szkielet skorygowac cialo funkcji
-
-
-void eih_nose_run::execute_motion(void)
-{
-	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
-	/*
-	 // maskowanie sygnalu SIGTERM
-	 // w celu zapobierzenia przerwania komunikacji ECP z EDP pomiedzy SET a QUERY - usuniete
-
-	 sigset_t set;
-
-	 sigemptyset( &set );
-	 sigaddset( &set, SIGTERM );
-
-	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1)
-	 {
-	 printf ("blad w ECP procmask signal\n");
-	 }
-	 */
-	// komunikacja wlasciwa
-	the_robot->send();
-	if (the_robot->reply_package.reply_type == lib::ERROR) {
-
-		the_robot->query();
-		throw ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
-
-	}
-	the_robot->query();
-
-	/*
-	 // odmaskowanie sygnalu SIGTERM
-
-	 sigemptyset( &set );
-
-	 if  (sigprocmask( SIG_SETMASK, &set, NULL)==-1)
-	 {
-	 printf ("blad w ECP procmask signal\n");
-	 }
-	 */
-	if (the_robot->reply_package.reply_type == lib::ERROR) {
-
-
-		switch ( the_robot->reply_package.error_no.error0 ) {
-			case BEYOND_UPPER_D0_LIMIT:
-			case BEYOND_UPPER_THETA1_LIMIT:
-			case BEYOND_UPPER_THETA2_LIMIT:
-			case BEYOND_UPPER_THETA3_LIMIT:
-			case BEYOND_UPPER_THETA4_LIMIT:
-			case BEYOND_UPPER_THETA5_LIMIT:
-			case BEYOND_UPPER_THETA6_LIMIT:
-			case BEYOND_UPPER_THETA7_LIMIT:
-			case BEYOND_LOWER_D0_LIMIT:
-			case BEYOND_LOWER_THETA1_LIMIT:
-			case BEYOND_LOWER_THETA2_LIMIT:
-			case BEYOND_LOWER_THETA3_LIMIT:
-			case BEYOND_LOWER_THETA4_LIMIT:
-			case BEYOND_LOWER_THETA5_LIMIT:
-			case BEYOND_LOWER_THETA6_LIMIT:
-			case BEYOND_LOWER_THETA7_LIMIT:
-			break;
-			default:
-				throw ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
-			break;
-
-		} /* end: switch */
-
-
-	}
-}
-
-
 
 sr_nose_run::sr_nose_run(common::task::task& _ecp_task,
 		int step) :

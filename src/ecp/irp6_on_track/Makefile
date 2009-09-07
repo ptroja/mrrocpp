@@ -37,8 +37,7 @@ BINARIES =			ecp_pr \
 			        ecp_wii \
 			        ecp_wii_velocity \
 				ecp_t_box_irp6ot \
-				ecp_t_smooth2_test \
-				ecp_irp6ot_eihcalibration
+				ecp_t_smooth2_test
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -192,10 +191,6 @@ ecp_t_box_irp6ot: ecp_t_box_irp6ot.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jaro
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_t_smooth2_test: ecp_t_smooth2_test.o ecp_g_smooth2.o ecp_generator_t.o ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
-#-----------------------------------------------------------------------------------------------------------------------#
-ecp_irp6ot_eihcalibration: ecp_t_eihcalibration_irp6ot.o ecp_g_smooth.o ecp_generator_t.o ecp_g_jarosz.o \
-			ecp_operator_reaction_condition.o ecp_g_force.o ecp_mp_s_cvfradia.o ecp_g_eihcalibration.o $(SHOBJ)
-	$(LD) $(LDFLAGS) -o $@ $^
 
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
