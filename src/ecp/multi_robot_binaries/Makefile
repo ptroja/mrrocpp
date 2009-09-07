@@ -4,7 +4,7 @@
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
-BINARIES = ecp_tran ecp_mam ecp_t ecp_nalewanie ecp_sk ecp_tw ecp_time ecp_pawel ecp_cvfradia ecp_tzu ecp_tzu_test ecp_pcbird ecp_visioncoordinates
+BINARIES = ecp_tran ecp_mam ecp_t ecp_nalewanie ecp_sk ecp_tw ecp_time ecp_pawel ecp_cvfradia ecp_tzu ecp_tzu_test ecp_pcbird ecp_visioncoordinates ecp_eihcalibration
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
@@ -178,6 +178,19 @@ ecp_pcbird: \
 		../common/ecp_g_cvfradia.o \
 		birdclient.o \
 		ecp_mp_s_pcbird.o \
+		$(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^ 
+	
+ecp_eihcalibration: \
+		../irp6_on_track/ecp_r_irp6ot.o \
+		../irp6_postument/ecp_r_irp6p.o \
+		../common/ecp_t_eihcalibration.o \
+		../common/ecp_g_eihcalibration.o \
+		../common/ecp_g_smooth.o \
+		../common/ecp_g_jarosz.o \
+		../common/ecp_g_force.o \
+		../common/ecp_operator_reaction_condition.o \
+		ecp_mp_s_cvfradia.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
