@@ -59,6 +59,8 @@ public:
 	double t_m;
 	//Droga do przejechania w nastepnym makrokroku.
 
+	//int z;
+
 	double old_frame_no;
 	bool first_move;
 	bool breaking;

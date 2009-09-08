@@ -50,6 +50,8 @@ bool ecp_vis_ib_eih_planar_irp6ot::first_step() {
 
 	ecp_t.sr_ecp_msg->message("PIERWSZY");
 
+	//z = 0;
+
 	above_object = false;
 
 	return true;
@@ -135,7 +137,10 @@ bool ecp_vis_ib_eih_planar_irp6ot::next_step_without_constraints() {
 
 		next_position[0] += x;
 		next_position[1] += y;
+		//if (z < 10) {
 //		next_position[2] += -0.002;
+			//z++;
+		//}
 
 		the_robot->EDP_data.instruction_type = lib::SET_GET;
 		the_robot->EDP_data.get_type = ARM_DV;

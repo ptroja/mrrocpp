@@ -415,13 +415,110 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
 
 	is_synchronised = _is_synchronised;
 	type=1;
-	//v_grip_min=5;
-	/*for (int g = 0; g < 8; g++) {
-      v_k[g] = 0.0;
-      v_p[g] = 0.0;
-    }*/
 
 } // end : konstruktor
+
+void smooth2::calculate_absolute_positions() {
+	if (type == 1) {//dodatkowe zabezpieczenie
+		return;
+	}
+
+	double actual_coordinates[MAX_SERVOS_NR];
+	bool first_coordinate = true;
+	int gripp;
+
+	initiate_pose_list();
+
+	for (int j = 0; j < pose_list_length(); j++) {
+		switch ( td.arm_type ) {
+		    case lib::MOTOR:
+
+    		    if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
+    		        gripp=7;
+    		    } else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT) {
+    		        gripp=6;
+				}
+
+		    	for (int i = 0; i < gripp; i++) {
+		    		if (first_coordinate == true) {
+		    			actual_coordinates[i] = the_robot->EDP_data.current_motor_arm_coordinates[i];
+		    		}
+		    		pose_list_iterator->coordinates[i] += actual_coordinates[i];
+		    		actual_coordinates[i] = pose_list_iterator->coordinates[i];
+		    	}
+
+	    		if (first_coordinate == true) {
+	    			actual_coordinates[gripp] = the_robot->EDP_data.current_gripper_coordinate;
+	    		}
+	    		pose_list_iterator->coordinates[gripp] += actual_coordinates[gripp];
+	    		actual_coordinates[gripp] = pose_list_iterator->coordinates[gripp];
+
+		    	first_coordinate = false;
+		        break;
+		    case lib::JOINT:
+
+    		    if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
+    		        gripp=7;
+    		    } else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT) {
+    		        gripp=6;
+				}
+
+		    	for (int i = 0; i < gripp; i++) {
+		    		if (first_coordinate == true) {
+		    			actual_coordinates[i] = the_robot->EDP_data.current_joint_arm_coordinates[i];
+		    		}
+		    		pose_list_iterator->coordinates[i] += actual_coordinates[i];
+		    		actual_coordinates[i] = pose_list_iterator->coordinates[i];
+		    	}
+
+	    		if (first_coordinate == true) {
+	    			actual_coordinates[gripp] = the_robot->EDP_data.current_gripper_coordinate;
+	    		}
+	    		pose_list_iterator->coordinates[gripp] += actual_coordinates[gripp];
+	    		actual_coordinates[gripp] = pose_list_iterator->coordinates[gripp];
+
+		    	first_coordinate = false;
+		        break;
+		    case lib::XYZ_EULER_ZYZ:
+		    	for (int i = 0; i < 6; i++) {
+		    		if (first_coordinate == true) {
+		    			actual_coordinates[i] = the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
+		    		}
+		    		pose_list_iterator->coordinates[i] += actual_coordinates[i];
+		    		actual_coordinates[i] = pose_list_iterator->coordinates[i];
+		    	}
+
+	    		if (first_coordinate == true) {
+	    			actual_coordinates[6] = the_robot->EDP_data.current_gripper_coordinate;
+	    		}
+	    		pose_list_iterator->coordinates[6] += actual_coordinates[6];
+	    		actual_coordinates[6] = pose_list_iterator->coordinates[6];
+
+		    	first_coordinate = false;
+		        break;
+		    case lib::XYZ_ANGLE_AXIS:
+		    	for (int i = 0; i < 6; i++) {
+		    		if (first_coordinate == true) {
+		    			actual_coordinates[i] = the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
+		    		}
+		    		pose_list_iterator->coordinates[i] += actual_coordinates[i];
+		    		actual_coordinates[i] = pose_list_iterator->coordinates[i];
+		    	}
+
+	    		if (first_coordinate == true) {
+	    			actual_coordinates[6] = the_robot->EDP_data.current_gripper_coordinate;
+	    		}
+	    		pose_list_iterator->coordinates[6] += actual_coordinates[6];
+	    		actual_coordinates[6] = pose_list_iterator->coordinates[6];
+
+		    	first_coordinate = false;
+		        break;
+		    default:
+		        throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+		} // end : switch ( td.arm_type )
+		pose_list_iterator++;
+	}
+}
 
 double smooth2::generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r,
 									double v_k, double a_r, int k, double przysp, double jedn, double s_przysp, double s_jedn) {
@@ -580,6 +677,9 @@ bool smooth2::next_step () {
     double tk=10*STEP;
 
     if (!trajectory_generated && !trajectory_calculated) {
+    	if (type == 2) {
+    		calculate_absolute_positions();
+    	}
     	calculate(); //wypelnienie pozostalych zmiennych w liscie pose_list
     	generate_cords(); //wypelnienie listy coordinate_list (lista kolejnych pozycji w makrokrokach)
     	trajectory_generated = true;
@@ -783,7 +883,7 @@ void smooth2::calculate(void) {
     double tk = 10 * STEP; //czas jednego makrokroku
     int gripp; //os grippera
 
-    //TODO dorobic zabezpieczenia dla 0 predkosci w osmej wspolrzednej postumenta i w angle axes
+    //TODO dorobic zabezpieczenia dla 0 predkosci w osmej wspolrzednej postumenta i w angle axis
 
     double v_r_next[MAX_SERVOS_NR];//predkosc kolejnego ruchu
 

@@ -147,7 +147,6 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 				v_max[i] = v_min[i];
 			}
 
-			printf("i: %d\n", i);
 			if (fabs(u[i]) < 25) {
 				reached[i] = true;
 			} else {
