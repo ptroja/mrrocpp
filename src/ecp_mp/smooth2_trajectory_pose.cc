@@ -1,19 +1,19 @@
 #include <string.h>
 
-#include "ecp/common/ecp_smooth2_taught_in_pose.h"
+#include "ecp_mp/smooth2_trajectory_pose.h"
 #include "lib/impconst.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-ecp_smooth2_taught_in_pose::ecp_smooth2_taught_in_pose (void)
+smooth2_trajectory_pose::smooth2_trajectory_pose (void)
 {}
 
-ecp_smooth2_taught_in_pose::ecp_smooth2_taught_in_pose (lib::POSE_SPECIFICATION at,
+smooth2_trajectory_pose::smooth2_trajectory_pose (lib::POSE_SPECIFICATION at,
+		const double* c,
 		const double* vv,
-		const double* aa,
-		const double* c)
+		const double* aa)
 {
 	arm_type=at;
 	memcpy(v, vv, MAX_SERVOS_NR*sizeof(double));

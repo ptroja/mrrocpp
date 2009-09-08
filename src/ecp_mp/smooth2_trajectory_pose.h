@@ -8,7 +8,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-class ecp_smooth2_taught_in_pose {
+class smooth2_trajectory_pose {
 public:
   lib::POSE_SPECIFICATION arm_type;
   double v_p[MAX_SERVOS_NR];
@@ -33,12 +33,13 @@ public:
   int model[MAX_SERVOS_NR]; //model ruchu
   int pos_num;
 
-  ecp_smooth2_taught_in_pose (void);
-  ecp_smooth2_taught_in_pose (lib::POSE_SPECIFICATION at,
+  smooth2_trajectory_pose (void);
+  smooth2_trajectory_pose (lib::POSE_SPECIFICATION at,
+		  const double* coordinates,
 		  const double* vv,
-		  const double* aa,
-		  const double* coordinates);
-}; // end:class ecp_smooth2_taught_in_pose
+		  const double* aa
+		  );
+}; // end:class smooth2_trajectory_pose
 
 } // namespace common
 } // namespace ecp

@@ -8,6 +8,9 @@
 #ifndef __HI_LOCAL_IRP6M_H
 #define __HI_LOCAL_IRP6M_H
 
+#include <signal.h>
+#include <time.h>
+
 #include "edp/common/hi_rydz.h"
 
 namespace mrrocpp {
@@ -41,8 +44,14 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-class hardware_interface: public common::hardware_interface {
+#define SIG	SIGRTMIN
 
+class hardware_interface: public common::hardware_interface {
+#ifndef __QNXNTO__
+	//! periodic timer
+	timer_t timerid;
+	sigset_t mask;
+#endif
 public:
 	hardware_interface(effector &_master); // Konstruktor
 	~hardware_interface(void); // Destruktor

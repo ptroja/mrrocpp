@@ -75,8 +75,8 @@ class mp_taught_in_pose {
 	public:
 		lib::POSE_SPECIFICATION arm_type;
 		double motion_time;
-		double coordinates[MAX_SERVOS_NR];
-		double irp6p_coordinates[MAX_SERVOS_NR];
+		double coordinates[MAX_SERVOS_NR]; // irp6ot coordinates
+		double irp6p_coordinates[MAX_SERVOS_NR]; // irp6p coordinates
 
 		int extra_info; // by Y uzupelnienie struktury o dodatkowe pole, do dowolnego wykorzystania
 

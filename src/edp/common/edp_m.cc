@@ -82,6 +82,20 @@ int main(int argc, char *argv[], char **arge) {
 #if defined(PROCESS_SPAWN_RSH)
 		signal(SIGINT, SIG_IGN);
 #endif
+#ifndef	__QNXNTO__
+	    /* Block timer signal for test mode timer in Linux*/
+	    fprintf(stderr, "Blocking signal %d\n", SIGRTMIN);
+	    sigset_t mask;
+	    if (sigemptyset (&mask) == -1) {
+	    	perror("sigemptyset()");
+	    }
+	    if (sigaddset (&mask, SIGRTMIN) == -1) {
+	    	perror("sigaddset()");
+	    }
+	    if (sigprocmask (SIG_BLOCK, &mask, NULL)) {
+	    	perror("sigprocmask()");
+	    }
+#endif /* __QNXNTO__ */
 
 		// odczytanie konfiguracji
 		lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3],

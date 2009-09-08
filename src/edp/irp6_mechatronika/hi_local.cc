@@ -18,6 +18,7 @@
 #include <time.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <semaphore.h>
 #ifdef __QNXNTO__
 #include <process.h>
 #include <sys/neutrino.h>
@@ -40,15 +41,22 @@ namespace mrrocpp {
 namespace edp {
 namespace irp6m {
 
+/*
+#define CLOCKID CLOCK_REALTIME
+#define SIG SIGRTMIN
+*/
+
 // ------------------------------------------------------------------------
 hardware_interface::hardware_interface ( effector &_master )   : common::hardware_interface(_master)
 {
-    int i;         // Zmienna pomocnicze
-
     // tablica pradow maksymalnych d;a poszczegolnych osi
-    int max_current [IRP6_MECHATRONIKA_NUM_OF_SERVOS] = { IRP6_MECHATRONIKA_AXIS_1_MAX_CURRENT,
-            IRP6_MECHATRONIKA_AXIS_2_MAX_CURRENT,	 IRP6_MECHATRONIKA_AXIS_3_MAX_CURRENT, IRP6_MECHATRONIKA_AXIS_4_MAX_CURRENT,
-            IRP6_MECHATRONIKA_AXIS_5_MAX_CURRENT};
+    int max_current [IRP6_MECHATRONIKA_NUM_OF_SERVOS] = {
+    		IRP6_MECHATRONIKA_AXIS_1_MAX_CURRENT,
+            IRP6_MECHATRONIKA_AXIS_2_MAX_CURRENT,
+            IRP6_MECHATRONIKA_AXIS_3_MAX_CURRENT,
+            IRP6_MECHATRONIKA_AXIS_4_MAX_CURRENT,
+            IRP6_MECHATRONIKA_AXIS_5_MAX_CURRENT
+    };
 
     // Sledzenie zera rezolwera - wylaczane
     trace_resolver_zero = false;
@@ -65,21 +73,25 @@ hardware_interface::hardware_interface ( effector &_master )   : common::hardwar
     irq_data.event.sigev_notify = SIGEV_INTR;
 
     int irq_no;    // Numer przerwania sprzetowego
-    lib::WORD int_freq; // Ustawienie czestotliwosci przerwan
+#endif
 
     if(master.test_mode)
     {
+#ifdef __QNXNTO__
         irq_no = 0;   // Przerwanie od zegara o okresie 1ms
+#endif
         // domyslnie robot jest zsynchronizowany
         irq_data.md.is_synchronised = true;
     }
     else
     {
+#ifdef __QNXNTO__
         irq_no = IRQ_REAL;   // Numer przerwania sprzetowego od karty ISA
+#endif
         // domyslnie robot nie jest zsynchronizowany
         irq_data.md.is_synchronised = false;
     }
-
+#ifdef __QNXNTO__
     // inicjacja wystawiania przerwan
 	if (master.test_mode == 0) {
 		// konieczne dla skasowania przyczyny przerwania
@@ -101,12 +113,40 @@ hardware_interface::hardware_interface ( effector &_master )   : common::hardwar
         if(master.test_mode==0)
         {
             // Ustawienie czestotliwosci przerwan
-            int_freq = SET_INT_FREQUENCY | INT_FREC_DIVIDER;
+        	lib::WORD int_freq = SET_INT_FREQUENCY | INT_FREC_DIVIDER;
             out8(ADR_OF_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR);
             out16(SERVO_COMMAND1_ADR, int_freq);
             delay(10);
             out16(SERVO_COMMAND1_ADR, START_CLOCK_INTERRUPTS);
         }
+    }
+#else
+    fprintf(stderr, "Blocking signal %d\n", SIGRTMIN);
+    if (sigemptyset (&mask) == -1) {
+    	perror("sigemptyset()");
+    }
+    if (sigaddset (&mask, SIGRTMIN) == -1) {
+    	perror("sigaddset()");
+    }
+
+    /* Create the timer */
+    struct sigevent sev;
+    sev.sigev_notify = SIGEV_SIGNAL;
+    sev.sigev_signo = SIGRTMIN;
+    sev.sigev_value.sival_ptr = &timerid;
+    if (timer_create (CLOCK_REALTIME, &sev, &timerid) == -1) {
+    	perror("timer_create()");
+    }
+
+    /* Start the timer */
+    struct itimerspec its;
+    its.it_value.tv_sec = 0;
+    its.it_value.tv_nsec = 1000000; // 1kHz
+    its.it_interval.tv_sec = its.it_value.tv_sec;
+    its.it_interval.tv_nsec = its.it_value.tv_nsec;
+
+    if (timer_settime (timerid, 0, &its, NULL) == -1) {
+    	perror("timer_settime()");
     }
 #endif
 
@@ -114,7 +154,7 @@ hardware_interface::hardware_interface ( effector &_master )   : common::hardwar
 
     // Zakaz pracy recznej we wszystkich osiach
 
-    for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
+    for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
     {
         robot_status[i].adr_offset_plus_0 = 0;
         robot_status[i].adr_offset_plus_2 = 0;
@@ -150,6 +190,8 @@ hardware_interface::hardware_interface ( effector &_master )   : common::hardwar
     }
 
     first = true; // Pierwszy krok
+
+    fprintf(stderr, "!!! OK !!!\n");
 }
 // ------------------------------------------------------------------------
 
@@ -172,6 +214,11 @@ hardware_interface::~hardware_interface ( void )   // destruktor
         }
 
         // TODO: should not call InterruptDetach()?
+    }
+#else
+    /* delete interval timer */
+    if(timer_delete(&timerid) == -1) {
+    	perror("timer_delete()");
     }
 #endif
 }
@@ -354,10 +401,9 @@ int hardware_interface::hi_int_wait (int inter_mode, int lag)
 #ifdef __QNXNTO__
     const uint64_t int_timeout = HI_RYDZ_INTR_TIMEOUT_HIGH;
     struct sigevent tim_event;
-    int iw_ret;
 
     static short interrupt_error = 0;
-    static short msg_send = 0;
+    static bool msg_send = false;
 
     tim_event.sigev_notify = SIGEV_UNBLOCK;
 
@@ -371,7 +417,7 @@ int hardware_interface::hi_int_wait (int inter_mode, int lag)
     TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR ,  &tim_event, &int_timeout, NULL );
     irq_data.md.interrupt_mode=inter_mode;  // przypisanie odpowiedniego trybu oprzerwania
     //	irq_data.md.is_power_on = true;
-    iw_ret=InterruptWait (0, NULL);
+    int iw_ret=InterruptWait (0, NULL);
 
     if (iw_ret==-1)
     { // jesli przerwanie nie przyjdzie na czas
@@ -397,8 +443,10 @@ int hardware_interface::hi_int_wait (int inter_mode, int lag)
 
     if ((interrupt_error>2) || (!master.controller_state_edp_buf.is_power_on))
     {
-        if ((msg_send++) == 0)
+        if (msg_send == false) {
             master.msg->message(lib::NON_FATAL_ERROR, "Wylaczono moc - robot zablokowany");
+            msg_send = true;
+        }
         irq_data.md.is_robot_blocked = true;
     }
 
@@ -409,6 +457,12 @@ int hardware_interface::hi_int_wait (int inter_mode, int lag)
 
     return iw_ret;
 #else
+    int sig;
+    int s = sigwait(&mask, &sig);
+    if (s != 0) {
+    	perror("sigwait()");
+    	return -1;
+    }
     return 0;
 #endif
 }

@@ -46,10 +46,9 @@ mp_taught_in_pose::mp_taught_in_pose(lib::POSE_SPECIFICATION at, double mt,
 
 mp_taught_in_pose::mp_taught_in_pose(lib::POSE_SPECIFICATION at, double mt,
                                      int e_info, double* c) :
-        arm_type(at), motion_time(mt)
+        arm_type(at), motion_time(mt), extra_info(e_info)
 { // by Y
     memcpy(coordinates, c, MAX_SERVOS_NR*sizeof(double));
-    extra_info = e_info;
 }
 
 

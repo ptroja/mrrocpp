@@ -1,25 +1,21 @@
 #include <string.h>
 
-#include "ecp_mp/ecp_mp_smooth_taught_in_pose.h"
+#include "ecp_mp/trajectory_pose.h"
 #include "lib/impconst.h"
 
 namespace mrrocpp {
 namespace ecp_mp {
 namespace common {
 
-smooth_taught_in_pose::smooth_taught_in_pose (void)
+trajectory_pose::trajectory_pose (void)
 {}
 
-smooth_taught_in_pose::smooth_taught_in_pose (lib::POSE_SPECIFICATION at,
-		const double* vp,
-		const double* vk,
+trajectory_pose::trajectory_pose (lib::POSE_SPECIFICATION at,
+		const double* c,
 		const double* vv,
-		const double* aa,
-		const double* c)
+		const double* aa)
 {
 	arm_type=at;
-	memcpy(v_p, vp, MAX_SERVOS_NR*sizeof(double));
-	memcpy(v_k, vk, MAX_SERVOS_NR*sizeof(double));
 	memcpy(v, vv, MAX_SERVOS_NR*sizeof(double));
 	memcpy(a, aa, MAX_SERVOS_NR*sizeof(double));
 	memcpy(coordinates, c, MAX_SERVOS_NR*sizeof(double));

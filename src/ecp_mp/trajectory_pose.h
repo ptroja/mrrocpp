@@ -8,23 +8,19 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace common {
 
-class smooth_taught_in_pose {
+class trajectory_pose {
 public:
   lib::POSE_SPECIFICATION arm_type;
-  double v_p[MAX_SERVOS_NR];
-  double v_k[MAX_SERVOS_NR];
   double v[MAX_SERVOS_NR];
   double a[MAX_SERVOS_NR];
   double coordinates[MAX_SERVOS_NR];
 
-  smooth_taught_in_pose (void);
-  smooth_taught_in_pose (lib::POSE_SPECIFICATION at,
-		  const double* vp,
-		  const double* vk,
+  trajectory_pose (void);
+  trajectory_pose (lib::POSE_SPECIFICATION at,
+		  const double* coordinates,
 		  const double* vv,
-		  const double* aa,
-		  const double* coordinates);
-}; // end:class ecp_smooth_taught_in_pose
+		  const double* aa);
+};
 
 } // namespace common
 } // namespace ecp_mp
