@@ -28,6 +28,8 @@ namespace task {
 
 class eihcalibration: public common::task::task {
 	std::string smooth_path;
+	int delay_ms;
+	double A, C, D, E;
 
 	protected:
 		// generator do wodzenia za nos

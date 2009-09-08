@@ -12,11 +12,6 @@ namespace ecp {
 namespace common {
 namespace task {
 
-#define A 0.025
-#define C 0.02	//0.15
-#define D 0.02	//0.14
-#define E 0.02	//0.2
-
 //Constructors
 eihcalibration::eihcalibration(lib::configurator &_config): task(_config){
 	smoothgen = NULL;
@@ -46,6 +41,11 @@ void eihcalibration::task_initialization(void) {
     }
 
     smooth_path = config.return_string_value("smooth_path");
+    delay_ms = config.return_int_value("delay");
+    A = config.return_double_value("A");
+    C = config.return_double_value("C");
+    D = config.return_double_value("D");
+    E = config.return_double_value("E");
 
 	smoothgen = new generator::smooth(*this, true);
 
@@ -94,7 +94,7 @@ void eihcalibration::main_task_algorithm(void ){
 	int i = 0, j = 0, k, l, m = 0;
 	double a, b, c, d, e;
 	struct timespec delay;
-	delay.tv_nsec = 400000000;//400ms
+	delay.tv_nsec = delay_ms * 1000000;//400ms
 	delay.tv_sec = 0;
 
 	set_td_coordinates(0.0, 0.0, -1 * A, 0.0, 0.0, 0.0, 0.0);
