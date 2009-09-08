@@ -178,9 +178,89 @@ bool smooth2::load_file_with_path(const char* file_name) {
     return true;
 } // end: load_file_with_path()
 
+//jesli w ponizszych metodach podamy reset jako true lista pozycji zostanie wyczyszczona, jesli jako false pozycja zostanie dolozona do tego co jest
+void smooth2::load_coordinates(lib::POSE_SPECIFICATION ps, double coordinates[MAX_SERVOS_NR], bool reset) {
+
+	double v[MAX_SERVOS_NR]={0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.5};
+	double a[MAX_SERVOS_NR]={0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.5};
+
+	if (reset == true) {
+		flush_pose_list();
+	}
+
+	if (pose_list_length() == 0) {
+		create_pose_list_head(ps, v, a, coordinates);
+	} else {					// Wstaw do listy nowa pozycje
+		insert_pose_list_element(ps, v, a, coordinates);
+	}
+}
+
+void smooth2::load_coordinates(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset){
+
+	if (reset == true) {
+		flush_pose_list();
+	}
+
+	if (pose_list_length() == 0) {
+		create_pose_list_head(ps, v, a, coordinates);
+	} else {					// Wstaw do listy nowa pozycje
+		insert_pose_list_element(ps, v, a, coordinates);
+	}
+}
+
+void smooth2::load_coordinates(lib::POSE_SPECIFICATION ps, double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+
+	double v[MAX_SERVOS_NR]={0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.5};
+	double a[MAX_SERVOS_NR]={0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.5};
+	double coordinates[MAX_SERVOS_NR];
+
+	if (reset == true) {
+		flush_pose_list();
+	}
+
+	coordinates[0]=cor0;
+	coordinates[1]=cor1;
+	coordinates[2]=cor2;
+	coordinates[3]=cor3;
+	coordinates[4]=cor4;
+	coordinates[5]=cor5;
+	coordinates[6]=cor6;
+	coordinates[7]=cor7;
+
+	if (pose_list_length() == 0) {
+		create_pose_list_head(ps, v, a, coordinates);
+	} else {					// Wstaw do listy nowa pozycje
+		insert_pose_list_element(ps, v, a, coordinates);
+	}
+}
+
+void smooth2::load_coordinates(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset) {
+
+	double coordinates[MAX_SERVOS_NR];
+
+	if (reset == true) {
+		flush_pose_list();
+	}
+
+	coordinates[0]=cor0;
+	coordinates[1]=cor1;
+	coordinates[2]=cor2;
+	coordinates[3]=cor3;
+	coordinates[4]=cor4;
+	coordinates[5]=cor5;
+	coordinates[6]=cor6;
+	coordinates[7]=cor7;
+
+	if (pose_list_length() == 0) {
+		create_pose_list_head(ps, v, a, coordinates);
+	} else {					// Wstaw do listy nowa pozycje
+		insert_pose_list_element(ps, v, a, coordinates);
+	}
+}
+
 void smooth2::reset() {
-	flush_pose_list();
-	flush_coordinate_list();
+	//flush_pose_list();//TODO sprawdzic czy to jest potrzebne
+	//flush_coordinate_list();//TODO sprawdzic czy to jest potrzebne
 	first_coordinate = true;
 	first_interval = true;
 	trajectory_generated = false;
@@ -390,8 +470,8 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
 {
 
     int i;
-    double v[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
-    double a[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+    //double v[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+    //double a[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 
 	pose_list = new std::list<smooth2_trajectory_pose>();
 	coordinate_list = new std::list<coordinates>();
