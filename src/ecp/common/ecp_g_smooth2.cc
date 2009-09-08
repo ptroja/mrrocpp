@@ -259,8 +259,8 @@ void smooth2::load_coordinates(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_N
 }
 
 void smooth2::reset() {
-	//flush_pose_list();//TODO sprawdzic czy to jest potrzebne
-	//flush_coordinate_list();//TODO sprawdzic czy to jest potrzebne
+	flush_pose_list();//TODO sprawdzic czy to jest potrzebne
+	flush_coordinate_list();//TODO sprawdzic czy to jest potrzebne
 	first_coordinate = true;
 	first_interval = true;
 	trajectory_generated = false;
