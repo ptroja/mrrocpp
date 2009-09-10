@@ -54,7 +54,9 @@ class ui_config_entry
 			if (this->builder) {
 				return *(GTK_BUILDER(this->builder));
 			} else {
-				throw ("no GtkBuilder in module " + program_name);
+				std::string message = "no GtkBuilder in module ";
+				message += program_name;
+				throw (message);
 			}
 		}
 

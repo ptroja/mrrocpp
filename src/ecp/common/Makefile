@@ -10,13 +10,15 @@ include $(HOMEDIR)/common.mk
 
 ECPOBJ_SHARED = ECP_main_error.o ecp_mp_generator.o \
 		ecp_robot.o ecp_taught_in_pose.o \
+		ecp_generator.o \
 		../../ecp_mp/smooth_trajectory_pose.o ../../ecp_mp/smooth2_trajectory_pose.o \
 		ecp_g_smooth2.o \
-		ecp_mp_sensor.o transmitter.o ecp_mp_task.o ecp_mp_robot.o \
-		../../ecp_mp/Trajectory.o
+		ecp_mp_sensor.o transmitter.o ecp_mp_robot.o \
+		../../ecp_mp/Trajectory.o \
+		ecp_mp_task.o ecp_task.o
 ECPOBJ = $(ECPOBJ_SHARED) \
-	 ecp_m.o ecp_task.o \
-	 ecp_generator.o ecp_teach_in_generator.o \
+	 ecp_m.o \
+	 ecp_teach_in_generator.o \
 	 ecp_visual_servo_manager.o ecp_visual_servo.o 
 		
 # search path for make, if you want create dependencies from files from other directory than ".", 

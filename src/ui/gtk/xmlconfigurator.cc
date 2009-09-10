@@ -229,7 +229,7 @@ xmlconfigurator::xmlconfigurator() : doc(NULL)
 	// go up 1 level
 	char *ptr;
 	for (int i = 0; i < 1; i++) {
-		ptr = rindex(config_dir, '/');
+		ptr = (char *) rindex(config_dir, '/');
 		*ptr = '\0';
 	}
 	strcat(config_dir, "/configs/xml");
