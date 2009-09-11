@@ -673,7 +673,7 @@ pulse_ecp_irp6_mechatronika( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 				delay(CONNECT_DELAY);
 			else{
 			   perror("blad odwolania do ECP_TRIGGER\n");
-			};
+			}
 		}
 		// odwolanie alarmu
 		ualarm( (useconds_t)( 0), 0);

@@ -72,7 +72,7 @@ edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>::edp_</xsl:text><xsl:va
 {
 				robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = new </xsl:text><xsl:choose><xsl:when test="$name = 'conveyor'"><xsl:text>ui_conveyor_robot</xsl:text></xsl:when><xsl:otherwise><xsl:text>ui_common_robot</xsl:text></xsl:otherwise></xsl:choose><xsl:text>(
 				ui_model::instance().getConfigurator(),
-				&amp;ui_model::instance().getEcpSr()
+				ui_model::instance().getEcpSr()
 				</xsl:text><xsl:if test="$robotType != ''"><xsl:text>,mrrocpp::lib::</xsl:text></xsl:if><xsl:value-of select="$robotType" /><xsl:text>
 				);
 
