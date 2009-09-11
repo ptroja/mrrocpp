@@ -2247,7 +2247,7 @@ EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 			ui_state.irp6_postument.edp.state = 1;
 
 			ui_robot.irp6_postument = new ui_common_robot(
-					*config, ui_msg.all_ecp,
+					*config, *ui_msg.all_ecp,
 					lib::ROBOT_IRP6_POSTUMENT);
 
 			ui_state.irp6_postument.edp.pid = ui_robot.irp6_postument->ecp->get_EDP_pid();

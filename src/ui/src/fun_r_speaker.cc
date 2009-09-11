@@ -283,7 +283,7 @@ EDP_speaker_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 
 			ui_state.speaker.edp.state = 1;
 
-			ui_robot.speaker = new ui_speaker_robot(&ui_state.speaker.edp, *config, ui_msg.all_ecp);
+			ui_robot.speaker = new ui_speaker_robot(&ui_state.speaker.edp, *config, *ui_msg.all_ecp);
 			ui_state.speaker.edp.pid = ui_robot.speaker->get_EDP_pid();
 
 			if (ui_state.speaker.edp.pid<0)

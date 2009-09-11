@@ -2315,7 +2315,7 @@ EDP_irp6_on_track_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 			ui_state.irp6_on_track.edp.state = 1;
 
 			ui_robot.irp6_on_track = new ui_common_robot
-				(*config, ui_msg.all_ecp,
+				(*config, *ui_msg.all_ecp,
 						lib::ROBOT_IRP6_ON_TRACK);
 
 			ui_state.irp6_on_track.edp.pid = ui_robot.irp6_on_track->ecp->get_EDP_pid();

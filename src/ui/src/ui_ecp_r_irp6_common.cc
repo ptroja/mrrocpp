@@ -32,22 +32,22 @@
 #include "lib/mathtr.h"
 
 // ---------------------------------------------------------------
-ui_common_robot::ui_common_robot (lib::configurator &_config, lib::sr_ecp* _sr_ecp_msg, lib::ROBOT_ENUM _robot_name)
+ui_common_robot::ui_common_robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::ROBOT_ENUM _robot_name)
 {
 
     switch (_robot_name)
     {
     case lib::ROBOT_IRP6_ON_TRACK:
-        ecp = new ecp::irp6ot::robot(_config, *_sr_ecp_msg);
+        ecp = new ecp::irp6ot::robot(_config, _sr_ecp_msg);
         break;
     case lib::ROBOT_IRP6_POSTUMENT:
-        ecp = new ecp::irp6p::robot(_config, *_sr_ecp_msg);
+        ecp = new ecp::irp6p::robot(_config, _sr_ecp_msg);
         break;
     case lib::ROBOT_IRP6_MECHATRONIKA:
-        ecp = new ecp::irp6m::robot(_config, *_sr_ecp_msg);
+        ecp = new ecp::irp6m::robot(_config, _sr_ecp_msg);
         break;
     case lib::ROBOT_POLYCRANK:
-        ecp = new ecp::polycrank::robot(_config, *_sr_ecp_msg);
+        ecp = new ecp::polycrank::robot(_config, _sr_ecp_msg);
         break;
 //    case lib::ROBOT_SPEAKER:
 //    case lib::ROBOT_CONVEYOR:

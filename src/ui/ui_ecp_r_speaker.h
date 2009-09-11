@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 //                            robot.h
 // Definicje struktur danych i metod do komunikacji UI z EDP
-// 
+//
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
@@ -21,17 +21,17 @@ class ui_speaker_robot: public ecp::speaker::robot {
 
  public:
 	int speaking_state; // stan EDP
-	
-	ui_speaker_robot (edp_state_def* edp_state, lib::configurator &_config, lib::sr_ecp* _sr_ecp_msg); // Konstruktor
-	
+
+	ui_speaker_robot (edp_state_def* edp_state, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg); // Konstruktor
+
 	virtual void execute_motion ( void );
-	
+
 	// wyslanie polecenia do EDP
 	bool send_command (const char* local_text, const char* local_prosody);
-	
-	// Odczyt stanu EDP 
+
+	// Odczyt stanu EDP
 	bool read_state (int* local_state);
-	
+
 
 }; // end: class ui_speaker_robot
 
