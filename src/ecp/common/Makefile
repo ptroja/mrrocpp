@@ -36,6 +36,10 @@ libecp.a: $(ECPOBJ)
 	$(AR) $(ARFLAGS) $@ $? 
 	${INSTALL} $@ $(LIBDIR)
 
+ifeq ($(BUILD_TARGET), linux)
+LDFLAGS+=-export-dynamic
+endif
+
 libecp.so: $(ECPOBJ_SHARED)
 	$(CXX) $^ $(LDFLAGS) -shared -o $@
 	${INSTALL} $@ $(LIBDIR)
