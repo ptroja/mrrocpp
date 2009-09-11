@@ -49,8 +49,8 @@ catch (ecp::common::ecp_robot::ECP_error er) { \
 \
 catch (...) {  /* Dla zewnetrznej petli try*/ \
 	/* Wylapywanie niezdefiniowanych bledow*/ \
-	/*Komunikat o bledzie wysylamy do SR*/ \
-	printf("uneidentified error in UI\n"); \
+	/* Komunikat o bledzie wysylamy do SR (?) */ \
+	fprintf(stderr, "unidentified error in UI\n"); \
 } /*end: catch */\
 
 
