@@ -29,18 +29,18 @@ namespace common {
 
 // konstruktor wywolywany z UI
 ecp_robot::ecp_robot(lib::ROBOT_ENUM _robot_name, lib::configurator &_config, lib::sr_ecp *_sr_ecp_msg) :
-	robot(_robot_name), spawn_and_kill(true)
+	robot(_robot_name), spawn_and_kill(true), sr_ecp_msg(*_sr_ecp_msg)
 {
-	sr_ecp_msg = _sr_ecp_msg;
+//	sr_ecp_msg = _sr_ecp_msg;
 
 	connect_to_edp(_config);
 }
 
 // konstruktor wywolywany z ECP
 ecp_robot::ecp_robot(lib::ROBOT_ENUM _robot_name, common::task::task& _ecp_object) :
-	robot(_robot_name), spawn_and_kill(false)
+	robot(_robot_name), spawn_and_kill(false), sr_ecp_msg(*_ecp_object.sr_ecp_msg)
 {
-	sr_ecp_msg = _ecp_object.sr_ecp_msg;
+//	sr_ecp_msg = _ecp_object.sr_ecp_msg;
 
 	connect_to_edp(_ecp_object.config);
 }
@@ -176,7 +176,7 @@ void ecp_robot::connect_to_edp(lib::configurator &config)
 		} else {
 			int e = errno; // kod bledu systemowego
 			fprintf(stderr, "Unable to locate EDP_MASTER process at channel \"%s\": %s\n", edp_net_attach_point.c_str(), sys_errlist[errno]);
-			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Unable to locate EDP_MASTER process");
+			sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "Unable to locate EDP_MASTER process");
 			throw ecp_robot::ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 		}
 	}
@@ -256,7 +256,7 @@ void ecp_robot::send()
 			{
 				uint64_t e = errno; // kod bledu systemowego
 				perror("ECP: Send to EDP_MASTER error");
-				sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Send to EDP_MASTER error");
+				sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ECP: Send to EDP_MASTER error");
 				throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			}
 			//printf("sizeof(lib::r_buffer) = %d\n", sizeof(lib::r_buffer));
@@ -264,7 +264,7 @@ void ecp_robot::send()
 			break;
 		default: // blad: nieprawidlowe polecenie
 			perror("ECP: INVALID COMMAND TO EDP\n");
-			sr_ecp_msg->message(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			sr_ecp_msg.message(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 	}
 
