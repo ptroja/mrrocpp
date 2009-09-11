@@ -31,6 +31,17 @@ enum
 	NUM_COLS
 };
 
+namespace mrrocpp {
+namespace ecp_mp {
+namespace task {
+namespace task {
+lib::sr_ecp* sr_ecp_msg = NULL;
+}
+}
+}
+}
+//lib::sr_ecp* mrrocpp::ecp_mp::task::task::sr_ecp_msg = NULL;
+
 void *sr_thread(void* arg)
 {
 	messip_channel_t *ch;

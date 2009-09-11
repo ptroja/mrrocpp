@@ -26,8 +26,8 @@ include $(HOMEDIR)/common.mk
 PACKAGES=libxml-2.0 gtk+-2.0 gtkmm-2.4 gthread-2.0
 CPPFLAGS=-I${HOMEDIR}/src `pkg-config --cflags ${PACKAGES}` -DUSE_MESSIP_SRR
 CXXFLAGS=-Wall -g -O0 -fpic -I $(HEADERSDIR) -I.
-LDFLAGS+=`pkg-config --libs ${PACKAGES}` -g -L${HOMEDIR}/lib -lmessip -lecp -lmrrocpp -I $(HEADERSDIR) -I.
-#LDFLAGS+=-export-dynamic
+LDFLAGS+=`pkg-config --libs ${PACKAGES}` -g -L${HOMEDIR}/lib -lmessip -lecp -lmrrocpp
+LDFLAGS+=-export-dynamic
 XSLTPROC=xsltproc robots.xml --xinclude
 ECP_DIR = $(HOMEDIR)/src/ecp
 HEADERSDIR = $(HOMEDIR)/src
