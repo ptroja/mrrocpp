@@ -735,7 +735,7 @@ short tmp;
 				ui_state.irp6_postument.edp.node_nr = config->return_node_number(ui_state.irp6_postument.edp.node_name);
 				ui_state.irp6_postument.edp.state = 1;
 		ui_robot.irp6_postument = new ui_common_robot(
-					*config, ui_msg.all_ecp,
+					*config, *ui_msg.all_ecp,
 					lib::ROBOT_IRP6_POSTUMENT);
 
 			ui_state.irp6_postument.edp.pid = ui_robot.irp6_postument->ecp->get_EDP_pid();

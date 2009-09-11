@@ -145,7 +145,7 @@ int EDP_speaker_create()
 	{
 		if (ui_state.speaker.edp.state == 0)
 		{
-			
+
 			ui_state.speaker.edp.state = 0;
 			ui_state.speaker.edp.is_synchronised = false;
 
@@ -166,7 +166,7 @@ int EDP_speaker_create()
 
 				ui_state.speaker.edp.node_nr = config->return_node_number(ui_state.speaker.edp.node_name);
 				ui_state.speaker.edp.state = 1;
-				ui_robot.speaker = new ui_speaker_robot(&ui_state.speaker.edp, *config, ui_msg.all_ecp);
+				ui_robot.speaker = new ui_speaker_robot(&ui_state.speaker.edp, *config, *ui_msg.all_ecp);
 				ui_state.speaker.edp.pid = ui_robot.speaker->get_EDP_pid();
 				replySend(new Message('E','B','A',0,NULL,NULL));
 				if (ui_state.speaker.edp.pid<0)
