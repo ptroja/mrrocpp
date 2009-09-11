@@ -127,7 +127,14 @@ int main(int argc, char *argv[])
 //	gtk_widget_show_all(GTK_WIDGET(input));
 
 
+	try {
 	gtk_main();
+	}
+	catch (...) {  /* Dla zewnetrznej petli try*/ \
+		/* Wylapywanie niezdefiniowanych bledow*/ \
+		/* Komunikat o bledzie wysylamy do SR (?) */ \
+		fprintf(stderr, "unidentified error in UI\n"); \
+	}
 
 	printf("main() exiting...\n");
 
