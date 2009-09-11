@@ -38,16 +38,16 @@ ui_common_robot::ui_common_robot (lib::configurator &_config, lib::sr_ecp* _sr_e
     switch (_robot_name)
     {
     case lib::ROBOT_IRP6_ON_TRACK:
-        ecp = new ecp::irp6ot::robot(_config, _sr_ecp_msg);
+        ecp = new ecp::irp6ot::robot(_config, *_sr_ecp_msg);
         break;
     case lib::ROBOT_IRP6_POSTUMENT:
-        ecp = new ecp::irp6p::robot(_config, _sr_ecp_msg);
+        ecp = new ecp::irp6p::robot(_config, *_sr_ecp_msg);
         break;
     case lib::ROBOT_IRP6_MECHATRONIKA:
-        ecp = new ecp::irp6m::robot(_config, _sr_ecp_msg);
+        ecp = new ecp::irp6m::robot(_config, *_sr_ecp_msg);
         break;
     case lib::ROBOT_POLYCRANK:
-        ecp = new ecp::polycrank::robot(_config, _sr_ecp_msg);
+        ecp = new ecp::polycrank::robot(_config, *_sr_ecp_msg);
         break;
 //    case lib::ROBOT_SPEAKER:
 //    case lib::ROBOT_CONVEYOR:
@@ -61,7 +61,6 @@ ui_common_robot::ui_common_robot (lib::configurator &_config, lib::sr_ecp* _sr_e
     assert(ecp);
 
     // Konstruktor klasy
-    ecp->sr_ecp_msg = _sr_ecp_msg;
     ecp->ecp_command.instruction.rmodel.kinematic_model.kinematic_model_no = 0;
     ecp->ecp_command.instruction.get_type = ARM_DV; // ARM
     ecp->ecp_command.instruction.get_arm_type = lib::MOTOR;

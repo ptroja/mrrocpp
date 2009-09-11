@@ -16,7 +16,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
 
-robot::robot(lib::configurator &_config, lib::sr_ecp *_sr_ecp) :
+robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 	ecp_robot(lib::ROBOT_IRP6_ON_TRACK, _config, _sr_ecp)
 {
 }

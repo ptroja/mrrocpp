@@ -3,7 +3,7 @@
 //            Effector Control Process (lib::ECP) - methods
 // Funkcje do tworzenia procesow ECP
 // robot - irp6_mechatronika
-// 
+//
 // -------------------------------------------------------------------------
 
 #include "lib/impconst.h"
@@ -16,7 +16,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6m {
 
-robot::robot (lib::configurator &_config, lib::sr_ecp *_sr_ecp):
+robot::robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp):
 	ecp_robot (lib::ROBOT_IRP6_MECHATRONIKA, _config, _sr_ecp){};
 robot::robot (common::task::task& _ecp_object):
 	ecp_robot (lib::ROBOT_IRP6_MECHATRONIKA, _ecp_object){};
@@ -80,7 +80,7 @@ void robot::create_command (void) {
               throw ECP_error(lib::NON_FATAL_ERROR, INVALID_RMODEL_TYPE);
           } // end: switch (set_rmodel_type)
         }
-        
+
          if (EDP_data.set_type & ARM_DV) {
           ecp_command.instruction.motion_type = EDP_data.motion_type;
           ecp_command.instruction.interpolation_type = EDP_data.next_interpolation_type;
@@ -136,7 +136,7 @@ void robot::get_reply (void) {
   // odpowiednich skladowych generatora lub warunku
 
  EDP_data.reply_type = reply_package.reply_type;
-  
+
  switch (EDP_data.reply_type) {
    case lib::ERROR:
      EDP_data.error_no.error0 = reply_package.error_no.error0;
@@ -202,8 +202,8 @@ void robot::get_arm_reply (void)
            EDP_data.current_XYZ_ZYZ_arm_coordinates[i] =
              reply_package.arm.pf_def.arm_coordinates[i];
          break;
-         
-       case lib::XYZ_ANGLE_AXIS: 
+
+       case lib::XYZ_ANGLE_AXIS:
          for (int i=0; i<6; i++)
            EDP_data.current_XYZ_AA_arm_coordinates[i] =
              reply_package.arm.pf_def.arm_coordinates[i];

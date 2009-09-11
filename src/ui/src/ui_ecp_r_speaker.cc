@@ -31,8 +31,6 @@ ui_speaker_robot::ui_speaker_robot(edp_state_def* _edp_state, lib::configurator 
 	robot(_config, sr_ecp_msg)
 {
 	// Konstruktor klasy
-	sr_ecp_msg = _sr_ecp_msg;
-
 	synchronised = true;
 }
 // ---------------------------------------------------------------

@@ -62,7 +62,7 @@ public:
 	lib::ecp_command_buffer ecp_command;
 	lib::r_buffer reply_package;
 
-	lib::sr_ecp & sr_ecp_msg;     // by Y - Wskaznik na obiekt do komunikacji z SR
+	lib::sr_ecp & sr_ecp_msg;     // obiekt do komunikacji z SR
 
 	bool synchronised; // Flaga synchronizacji robota (true - zsynchronizowany, false - nie)
 
@@ -85,7 +85,7 @@ public:
 	// Zlecenie wykonania ruchu przez robota (realizowane przez klase konkretna):
 	// na poziomie ECP jest to polecenie dla EDP
 
-	ecp_robot(lib::ROBOT_ENUM _robot_name, lib::configurator &_config, lib::sr_ecp *_sr_ecp);
+	ecp_robot(lib::ROBOT_ENUM _robot_name, lib::configurator &_config, lib::sr_ecp &_sr_ecp);
 	ecp_robot(lib::ROBOT_ENUM _robot_name, common::task::task& _ecp_object);
 
 	pid_t get_EDP_pid(void) const;

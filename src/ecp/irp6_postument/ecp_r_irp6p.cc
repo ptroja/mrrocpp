@@ -16,16 +16,15 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6p {
 
-robot::robot(lib::configurator &_config, lib::sr_ecp *_sr_ecp) :
+robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 	ecp_robot(lib::ROBOT_IRP6_POSTUMENT, _config, _sr_ecp)
 {
 }
-;
+
 robot::robot(common::task::task& _ecp_object) :
 	ecp_robot(lib::ROBOT_IRP6_POSTUMENT, _ecp_object)
 {
 }
-;
 
 // --------------------------------------------------------------------------
 void robot::create_command(void)
@@ -85,7 +84,6 @@ void robot::create_command(void)
 							ecp_command.instruction.rmodel.servo_algorithm.servo_parameters_no[j]
 									= EDP_data.next_servo_parameters_no[j];
 						}
-						; // end: for
 						break;
 					case lib::FORCE_TOOL:
 						for (int j=0; j<3; j++) {
@@ -181,7 +179,6 @@ void robot::create_command(void)
 	} // end: switch (instruction_type)
 
 }
-; // end: ecp_irp6_postument_robot::create_command
 // ---------------------------------------------------------------
 
 

@@ -22,7 +22,7 @@ namespace speaker {
 // ####################################################################################################
 // ####################################################################################################
 
-robot::robot(lib::configurator &_config, lib::sr_ecp *_sr_ecp) :
+robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 	ecp_robot(lib::ROBOT_SPEAKER, _config, _sr_ecp)
 {
 }

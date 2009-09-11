@@ -20,7 +20,7 @@ class robot: public common::ecp_robot
 	// Klasa dla robota irp6_on_track
 
 	public:
-	robot (lib::configurator &_config, lib::sr_ecp *_sr_ecp);
+	robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp);
 	robot (common::task::task& _ecp_object);
 
 	virtual void create_command (void);

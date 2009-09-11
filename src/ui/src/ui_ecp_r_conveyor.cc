@@ -32,7 +32,6 @@ ui_conveyor_robot::ui_conveyor_robot (lib::configurator &_config, lib::sr_ecp* _
 {
 
     // Konstruktor klasy
-    sr_ecp_msg = _sr_ecp_msg;
     ecp_command.instruction.rmodel.kinematic_model.kinematic_model_no = 0;
     ecp_command.instruction.get_type = ARM_DV; // ARM
     ecp_command.instruction.get_arm_type = lib::MOTOR;

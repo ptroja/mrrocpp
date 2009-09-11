@@ -28,11 +28,9 @@ namespace ecp {
 namespace common {
 
 // konstruktor wywolywany z UI
-ecp_robot::ecp_robot(lib::ROBOT_ENUM _robot_name, lib::configurator &_config, lib::sr_ecp *_sr_ecp_msg) :
-	robot(_robot_name), spawn_and_kill(true), sr_ecp_msg(*_sr_ecp_msg)
+ecp_robot::ecp_robot(lib::ROBOT_ENUM _robot_name, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
+	robot(_robot_name), spawn_and_kill(true), sr_ecp_msg(_sr_ecp_msg)
 {
-//	sr_ecp_msg = _sr_ecp_msg;
-
 	connect_to_edp(_config);
 }
 
@@ -40,8 +38,6 @@ ecp_robot::ecp_robot(lib::ROBOT_ENUM _robot_name, lib::configurator &_config, li
 ecp_robot::ecp_robot(lib::ROBOT_ENUM _robot_name, common::task::task& _ecp_object) :
 	robot(_robot_name), spawn_and_kill(false), sr_ecp_msg(*_ecp_object.sr_ecp_msg)
 {
-//	sr_ecp_msg = _ecp_object.sr_ecp_msg;
-
 	connect_to_edp(_ecp_object.config);
 }
 

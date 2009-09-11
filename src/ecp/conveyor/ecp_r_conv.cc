@@ -15,7 +15,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace conveyor {
 
-robot::robot (lib::configurator &_config, lib::sr_ecp *_sr_ecp):
+robot::robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp):
         ecp_robot (lib::ROBOT_CONVEYOR, _config, _sr_ecp)
 {}
 robot::robot (common::task::task& _ecp_object):
