@@ -278,6 +278,11 @@ std::list<ecp_mp::common::smooth_trajectory_pose> * Trajectory::getPoses()
 	return new std::list<ecp_mp::common::smooth_trajectory_pose>(*trjPoses);
 }
 
+/*std::list<ecp_mp::common::smooth2_trajectory_pose> * Trajectory::getPoses2()
+{
+	return new std::list<ecp_mp::common::smooth2_trajectory_pose>(*trjPoses);
+}*/
+
 } // namespace common
 } // namespace ecp_mp
 } // namespace mrrocpp

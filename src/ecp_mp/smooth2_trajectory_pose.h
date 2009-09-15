@@ -5,7 +5,7 @@
 #include "lib/impconst.h"	// MAX_SERVOS_NR
 
 namespace mrrocpp {
-namespace ecp {
+namespace ecp_mp {
 namespace common {
 
 class smooth2_trajectory_pose {

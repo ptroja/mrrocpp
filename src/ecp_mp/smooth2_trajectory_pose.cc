@@ -4,11 +4,12 @@
 #include "lib/impconst.h"
 
 namespace mrrocpp {
-namespace ecp {
+namespace ecp_mp {
 namespace common {
 
 smooth2_trajectory_pose::smooth2_trajectory_pose (void)
-{}
+{
+}
 
 smooth2_trajectory_pose::smooth2_trajectory_pose (lib::POSE_SPECIFICATION at,
 		const double* c,

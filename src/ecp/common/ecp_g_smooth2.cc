@@ -14,6 +14,11 @@
 #include <math.h>
 #include <ctype.h>
 
+#include <libxml/xmlmemory.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <libxml/xinclude.h>
+
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -43,6 +48,147 @@ bool smooth2::eq(double a, double b) {
 	const double& diff = a - b;
 	return diff < EPS && diff > -EPS;
 }
+
+/*bool smooth2::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory)
+{
+
+	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
+	pose_list = trajectory.getPoses();
+	pose_list_iterator = pose_list->end();
+
+	return true;
+}
+
+void smooth2::set_pose_from_xml(xmlNode *stateNode, bool &first_time)
+{
+	char *dataLine, *value;
+	uint64_t number_of_poses; // Liczba zapamietanych pozycji
+	lib::POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
+	double v[MAX_SERVOS_NR];
+	double a[MAX_SERVOS_NR];	// Wczytane wspolrzedne
+	double coordinates[MAX_SERVOS_NR];     // Wczytane wspolrzedne
+
+	xmlNode *cchild_node, *ccchild_node;
+	xmlChar *coordinateType, *numOfPoses;
+	xmlChar *xmlDataLine;
+
+	coordinateType = xmlGetProp(stateNode, (const xmlChar *)"coordinateType");
+	ps = ecp_mp::common::Trajectory::returnProperPS((char *)coordinateType);
+	numOfPoses = xmlGetProp(stateNode, (const xmlChar *)"numOfPoses");
+	number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
+	for(cchild_node = stateNode->children; cchild_node!=NULL; cchild_node = cchild_node->next)
+	{
+		if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )							{
+			for(ccchild_node = cchild_node->children; ccchild_node!=NULL; ccchild_node = ccchild_node->next)
+			{
+				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
+				{
+					xmlDataLine = xmlNodeGetContent(ccchild_node);
+					ecp_mp::common::Trajectory::setValuesInArray(v, (const char *)xmlDataLine);
+					xmlFree(xmlDataLine);
+				}
+				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
+				{
+					xmlDataLine = xmlNodeGetContent(ccchild_node);
+					ecp_mp::common::Trajectory::setValuesInArray(a, (const char *)xmlDataLine);
+					xmlFree(xmlDataLine);
+				}
+				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
+				{
+					xmlDataLine = xmlNodeGetContent(ccchild_node);
+					ecp_mp::common::Trajectory::setValuesInArray(coordinates, (const char *)xmlDataLine);
+					xmlFree(xmlDataLine);
+				}
+			}
+			if (first_time)
+			{
+				// Tworzymy glowe listy
+				first_time = false;
+				create_pose_list_head(ps, v, a, coordinates);
+				 //printf("Pose list head: %d, %f, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0], coordinates[0]);
+			}
+			else
+			{
+				// Wstaw do listy nowa pozycje
+   			insert_pose_list_element(ps, v, a, coordinates);
+				//printf("Pose list element: %d, %f, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0], coordinates[0]);
+			}
+		}
+	}
+	xmlFree(coordinateType);
+	xmlFree(numOfPoses);
+}
+
+bool smooth2::load_trajectory_from_xml(const char* fileName, const char* nodeName)
+{
+    // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
+
+    //bool first_time = true; // Znacznik
+	 xmlNode *cur_node, *child_node, *subTaskNode;
+	 xmlChar *stateID;
+
+	 xmlDocPtr doc;
+	 doc = xmlParseFile(fileName);
+	 xmlXIncludeProcess(doc);
+	 if(doc == NULL)
+	 {
+        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+	 }
+
+	 xmlNode *root = NULL;
+	 root = xmlDocGetRootElement(doc);
+	 if(!root || !root->name)
+	 {
+		 xmlFreeDoc(doc);
+		 throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+	 }
+
+	 flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
+
+   for(cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
+   {
+      if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "SubTask" ) )
+      {
+   		for(subTaskNode = cur_node->children; subTaskNode != NULL; subTaskNode = subTaskNode->next)
+			{
+      		if ( subTaskNode->type == XML_ELEMENT_NODE  && !xmlStrcmp(subTaskNode->name, (const xmlChar *) "State" ) )
+				{
+					stateID = xmlGetProp(subTaskNode, (const xmlChar *) "id");
+					if(stateID && !strcmp((const char *)stateID, nodeName))
+					{
+						for(child_node = subTaskNode->children; child_node != NULL; child_node = child_node->next)
+						{
+							if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") )
+							{
+								set_pose_from_xml(child_node, first_time);
+							}
+						}
+					}
+         		xmlFree(stateID);
+				}
+			}
+		}
+      if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "State" ) )
+      {
+         stateID = xmlGetProp(cur_node, (const xmlChar *) "id");
+         if(stateID && !strcmp((const char *)stateID, nodeName))
+			{
+	         for(child_node = cur_node->children; child_node != NULL; child_node = child_node->next)
+	         {
+	            if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") )
+	            {
+						set_pose_from_xml(child_node, first_time);
+	            }
+	         }
+			}
+         xmlFree(stateID);
+		}
+	}
+	xmlFreeDoc(doc);
+	xmlCleanupParser();
+
+	return true;
+}*/
 
 bool smooth2::load_file_with_path(const char* file_name) {
 
@@ -313,12 +459,12 @@ bool smooth2::is_last_list_element(void) {
 }
 
 void smooth2::create_pose_list_head (lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
-    pose_list->push_back(smooth2_trajectory_pose(ps, coordinates, v, a));
+    pose_list->push_back(ecp_mp::common::smooth2_trajectory_pose(ps, coordinates, v, a));
     pose_list_iterator = pose_list->begin();
 }
 
 void smooth2::insert_pose_list_element (lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]) {
-    pose_list->push_back(smooth2_trajectory_pose(ps, coordinates, v, a));
+    pose_list->push_back(ecp_mp::common::smooth2_trajectory_pose(ps, coordinates, v, a));
     pose_list_iterator++;
 }
 
@@ -473,7 +619,7 @@ smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)
     //double v[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
     //double a[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 
-	pose_list = new std::list<smooth2_trajectory_pose>();
+	pose_list = new std::list<ecp_mp::common::smooth2_trajectory_pose>();
 	coordinate_list = new std::list<coordinates>();
 
 	trajectory_generated = false;
@@ -1751,7 +1897,7 @@ void smooth2::calculate(void) {
     rec = false;
 }//end - calculate
 
-void smooth2::reduction_model_1(std::list<smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
+void smooth2::reduction_model_1(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
 	//printf("redukcja model 1\n");
 	if (pose_list_iterator->v_p[i] < pose_list_iterator->v_k[i] && (pose_list_iterator->v_k[i] * pose_list_iterator->t
 			- 0.5 * ((pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) *
@@ -1801,7 +1947,7 @@ void smooth2::reduction_model_1(std::list<smooth2_trajectory_pose>::iterator pos
 	}
 }
 
-void smooth2::reduction_model_2(std::list<smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
+void smooth2::reduction_model_2(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
 	//printf("redukcja model 2\n");
 	//pierwszy stopien redukcji
 	double a;
@@ -1875,7 +2021,7 @@ void smooth2::reduction_model_2(std::list<smooth2_trajectory_pose>::iterator pos
 	pose_list_iterator->s_jedn[i] = pose_list_iterator->v_r[i] * (pose_list_iterator->t - (pose_list_iterator->v_k[i] - pose_list_iterator->v_p[i]) / pose_list_iterator->a_r[i]);
 }
 
-void smooth2::reduction_model_3(std::list<smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
+void smooth2::reduction_model_3(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
 	//printf("redukcja model 3\n");
 	double t1; //czas konca opoznienia
 
@@ -1901,7 +2047,7 @@ void smooth2::reduction_model_3(std::list<smooth2_trajectory_pose>::iterator pos
 }
 
 
-void smooth2::reduction_model_4(std::list<smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
+void smooth2::reduction_model_4(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s) {
 	//printf("redukcja model 4\n");
 	//pierwszy stopien redukcji
 	double a;
@@ -1970,7 +2116,7 @@ void smooth2::reduction_model_4(std::list<smooth2_trajectory_pose>::iterator pos
 	pose_list_iterator->s_jedn[i] = pose_list_iterator->v_p[i] * (pose_list_iterator->t - (pose_list_iterator->v_p[i] - pose_list_iterator->v_k[i]) / pose_list_iterator->a_r[i]);
 }
 
-void smooth2::vp_reduction(std::list<smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t) {
+void smooth2::vp_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t) {
 	//printf("v_p redukcja\n");
 	//TODO sprawdzic czy to wyczerpuje wszystkie przypadki... chyba tak
 	double v_r; //zmiana ruchu na jednostajny
@@ -2017,7 +2163,7 @@ void smooth2::vp_reduction(std::list<smooth2_trajectory_pose>::iterator pose_lis
 	}
 }
 
-void smooth2::vk_reduction(std::list<smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t) {
+void smooth2::vk_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t) {
 	//printf("v_k redukcja\n");
 	double a;
 	double v_k;

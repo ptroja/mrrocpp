@@ -33,8 +33,8 @@ class smooth2 : public delta {
 				double coordinate[MAX_SERVOS_NR];
 		};
 
-		std::list<smooth2_trajectory_pose> *pose_list;
-		std::list<smooth2_trajectory_pose>::iterator pose_list_iterator;
+		std::list<ecp_mp::common::smooth2_trajectory_pose> *pose_list;
+		std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator;
 
 		std::list<coordinates> *coordinate_list;
 		std::list<coordinates>::iterator coordinate_list_iterator;
@@ -66,13 +66,13 @@ class smooth2 : public delta {
 		void calculate(void);
 		double generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r, double v_k, double a_r, int k, double przysp, double jedn, double s_przysp, double s_jedn);
 
-		void reduction_model_1(std::list<smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s);
-		void reduction_model_2(std::list<smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s);
-		void reduction_model_3(std::list<smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s);
-		void reduction_model_4(std::list<smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s);
+		void reduction_model_1(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s);
+		void reduction_model_2(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s);
+		void reduction_model_3(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s);
+		void reduction_model_4(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s);
 
-		void vk_reduction(std::list<smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t);
-		void vp_reduction(std::list<smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t);
+		void vk_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t);
+		void vp_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator pose_list_iterator, int i, double s, double t);
 
 		//metody zwiazane z pose_list
 		void flush_pose_list(void);
@@ -103,6 +103,10 @@ class smooth2 : public delta {
 		void load_coordinates(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset);
 		void load_coordinates(lib::POSE_SPECIFICATION ps, double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
 		void load_coordinates(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
+
+		bool load_trajectory_from_xml(const char* fileName, const char* nodeName);
+		void set_pose_from_xml(xmlNode *stateNode, bool &first_time);
+		bool load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory);
 
 		virtual bool first_step();
 		virtual bool next_step();

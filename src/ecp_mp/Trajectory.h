@@ -8,6 +8,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "ecp_mp/smooth_trajectory_pose.h"
+#include "ecp_mp/smooth2_trajectory_pose.h"
 
 namespace mrrocpp {
 namespace ecp_mp {
@@ -30,7 +31,7 @@ class Trajectory
 		static const char * returnRobotName(lib::ROBOT_ENUM robot);
 
 		static void writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth_trajectory_pose> &poses);
-
+		static void writeTrajectoryToXmlFile2(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth2_trajectory_pose> &poses);//for smooth2
 		void createNewPose();
 		void addPoseToTrajectory();
 
@@ -61,13 +62,16 @@ class Trajectory
 		void showTime();
 
 		std::list<ecp_mp::common::smooth_trajectory_pose> * getPoses();
+		std::list<ecp_mp::common::smooth2_trajectory_pose> * getPoses2();//for smooth2
 
 	private:
 		char trjID[80];
 		unsigned int numOfPoses;
 		lib::POSE_SPECIFICATION poseSpec;
 		ecp_mp::common::smooth_trajectory_pose *actPose;
+		ecp_mp::common::smooth2_trajectory_pose *actPose2;//for smooth2
 		std::list<ecp_mp::common::smooth_trajectory_pose> *trjPoses;
+		std::list<ecp_mp::common::smooth2_trajectory_pose> *trjPoses2;//for smooth2
 };
 
 } // namespace common
