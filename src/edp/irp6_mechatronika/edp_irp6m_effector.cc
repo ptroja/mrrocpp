@@ -121,12 +121,6 @@ void effector::get_rmodel (lib::c_buffer &instruction)
         reply.rmodel_type = lib::SERVO_ALGORITHM;
         // ustawienie numeru algorytmu serworegulatora oraz numeru jego zestawu parametrow
         for (int i = 0; i<number_of_servos; i++)
-            if ( instruction.is_get_arm() )
-            {
-                reply.rmodel.servo_algorithm.servo_algorithm_no[i] = servo_algorithm_sg[i];
-                reply.rmodel.servo_algorithm.servo_parameters_no[i] = servo_parameters_sg[i];
-            }
-            else
             {
                 reply.rmodel.servo_algorithm.servo_algorithm_no[i] = servo_algorithm_sg[i];
                 reply.rmodel.servo_algorithm.servo_parameters_no[i] = servo_parameters_sg[i];
