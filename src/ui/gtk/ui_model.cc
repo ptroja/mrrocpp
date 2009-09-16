@@ -306,6 +306,11 @@ void ui_model::loadEdps(void) {
 
 void ui_model::slayAll(void)
 {
+	/*
+	 * TODO: all the slay&killall command should be added to list,
+	 * then called clear() to gently unload all nodes and finally
+	 * execute commands from the list
+	 */
 	using namespace std;
 
 	const string RSHcommand = "rsh ";
@@ -316,6 +321,7 @@ void ui_model::slayAll(void)
 	ui_config_entry::childrens_t mp = ui_model::instance().getRootNode().getChildByType(ui_config_entry::MP);
 
 	// TODO: rewrite with boost::foreach
+
 	for(ui_config_entry::childrens_t::iterator Iter = edps.begin(); Iter != edps.end(); Iter++) {
 		string command = RSHcommand + (*Iter)->node_name + slayCommand + (*Iter)->program_name;
 		cout << command << endl;
