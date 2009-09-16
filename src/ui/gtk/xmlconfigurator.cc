@@ -134,79 +134,66 @@ void xmlconfigurator::populate_tree_model_with_effectors()
 
 		xmlNodeSetPtr nodeset = active_effectors->nodesetval;
 		for (int i = 0; i < nodeset->nodeNr; i++) {
-			// get name attribute of the sensors
+			// get name of the effector
 			xmlChar *effector_name = xmlGetProp(nodeset->nodeTab[i], (xmlChar *) "name");
+
+			// skip if name is missing
 			if (!effector_name)
 				continue;
 
-			char *program_name = this->get_string("/config/effectors/effector[@name='%s']/ecp/program_name", effector_name);
-			if (!program_name) {
-				g_error("missing program name for %s process", (char *) effector_name);
+			/*
+			 * Effector widget loading; ECP part
+			 */
+
+			// handle ECP program name
+			char *ecp_program_name = this->get_string("/config/effectors/effector[@name='%s']/ecp/program_name", effector_name);
+
+			if (!ecp_program_name) {
+				g_error("missing program name for %s ECP process", (char *) effector_name);
 				continue;
 			}
 
-			char *node_name = this->get_string("/config/effectors/effector[@name='%s']/ecp/node_name", effector_name);
+			// handle ECP node name
+			char *ecp_node_name = this->get_string("/config/effectors/effector[@name='%s']/ecp/node_name", effector_name);
 
-			if (!node_name) {
-				g_error("missing node name for %s process", (char *) effector_name);
+			if (!ecp_node_name) {
+				g_error("missing node name for %s ECP process", (char *) effector_name);
 				continue;
 			}
 
-			char *ui_def = NULL;
+			// handle ECP widget definition
+			char * ecp_ui_def = this->get_string("/config/effectors/effector[@name='%s']/@ui_def", effector_name);
+			ecp_ui_def = (ecp_ui_def) ? ecp_ui_def : this->get_string("/config/effectors/effector[@name='%s']/ui_def", effector_name);
 
-			ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='%s']/@ui_def", effector_name);
-			ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='%s']/ui_def", effector_name);
+			// add ECP entry
+			ui_config_entry & ecp_entry = ui_model::instance().add_ui_config_entry(parent, ui_config_entry::ECP, ecp_program_name, ecp_node_name, ecp_ui_def);
 
-			ui_config_entry & ecp_entry = ui_model::instance().add_ui_config_entry(parent, ui_config_entry::ECP, program_name, node_name, ui_def);
+			/*
+			 * Effector widget loading; EDP part
+			 */
 
-			program_name = this->get_string("/config/effectors/effector[@name='%s']/edp/program_name", effector_name);
+			// handle EDP program name
+			char * edp_program_name = this->get_string("/config/effectors/effector[@name='%s']/edp/program_name", effector_name);
 
-
-			if (program_name && xmlStrEqual(effector_name, (xmlChar*)"irp6_mechatronika"))
-			 {
-
-				char *ui_def = NULL;
-				program_name = this->get_string("/config/effectors/effector[@name='irp6_mechatronika']/edp[@name='edp_irp6m']/program_name");
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_mechatronika']/edp[@name='edp_irp6m']/@ui_def");
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_mechatronika']/edp[@name='edp_irp6m']/ui_def");
-				ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EDP, program_name, node_name, ui_def);
-
+			if (!edp_program_name) {
+				g_error("missing program name for %s EDP process", (char *) effector_name);
+				continue;
 			}
 
+			// handle EDP node name
+			char *edp_node_name = this->get_string("/config/effectors/effector[@name='%s']/edp/node_name", effector_name);
 
-			if (program_name && xmlStrEqual(effector_name, (xmlChar*)"irp6_ontrack"))
-			 {
-
-				char *ui_def = NULL;
-				program_name = this->get_string("/config/effectors/effector[@name='irp6_ontrack']/edp[@name='edp_irp6o']/program_name");
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_ontrack']/edp[@name='edp_irp6o']/@ui_def");
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_ontrack']/edp[@name='edp_irp6o']/ui_def");
-				ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EDP, program_name, node_name, ui_def);
-
+			if (!edp_node_name) {
+				g_error("missing node name for %s EDP process", (char *) effector_name);
+				continue;
 			}
 
-			if (program_name && xmlStrEqual(effector_name, (xmlChar*)"irp6_postument"))
-			 {
+			// handle EDP widget definition
+			char * edp_ui_def = this->get_string("/config/effectors/effector[@name='%s']/edp/@ui_def", effector_name);
+			edp_ui_def = (edp_ui_def) ? edp_ui_def : this->get_string("/config/effectors/effector[@name='%s']/edp/ui_def", effector_name);
 
-				char *ui_def = NULL;
-				program_name = this->get_string("/config/effectors/effector[@name='irp6_postument']/edp[@name='edp_irp6p']/program_name");
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_postument']/edp[@name='edp_irp6p']/@ui_def");
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='irp6_postument']/edp[@name='edp_irp6p']/ui_def");
-				ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EDP, program_name, node_name, ui_def);
-
-			}
-
-			if (program_name && xmlStrEqual(effector_name, (xmlChar*)"conveyor"))
-			 {
-
-				char *ui_def = NULL;
-				program_name = this->get_string("/config/effectors/effector[@name='conveyor']/edp[@name='edp_conveyor']/program_name");
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='conveyor']/edp[@name='edp_conveyor']/@ui_def");
-				ui_def = (ui_def) ? ui_def : this->get_string("/config/effectors/effector[@name='conveyor']/edp[@name='edp_conveyor']/ui_def");
-				ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EDP, program_name, node_name, ui_def);
-
-			}
-
+			// add EDP entry
+			ui_model::instance().add_ui_config_entry(ecp_entry, ui_config_entry::EDP, edp_program_name, edp_node_name, edp_ui_def);
 		}
 		xmlXPathFreeObject(active_effectors);
 	}
