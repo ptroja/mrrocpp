@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //                            sg_local.h
-// Definicje struktur danych i metod dla procesu EDP mechatronika
+// Definicje struktur danych i metod dla procesu EDP polycrank
 //
 // Ostatnia modyfikacja: 2006
 // -------------------------------------------------------------------------

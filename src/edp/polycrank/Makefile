@@ -25,8 +25,6 @@ VPATH = ../common $(LIBDIR)
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#
-# do wyboru wariant z czujnikiem ATI3084 i ATI6284
-#edp_irp6_mechatronika: $(EDPOBJS) ../ati3084/ati3084.a $(SHOBJ)
 edp_polycrank: $(EDPOBJS) $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 

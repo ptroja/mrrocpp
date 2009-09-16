@@ -58,8 +58,8 @@ servo_buffer::servo_buffer (effector &_master) : common::servo_buffer(_master), 
 	// Serwomechanizm 1
 
 	// regulator_ptr[1] = new NL_regulator_2 (0, 0, 0.71, 13./4, 12.57/4, 0.35);
-	// kolumna dla irp6 mechatronika
-	regulator_ptr[0] = new NL_regulator_2_irp6m (0, 0, 0.429, 6.834, 6.606, 0.35, master); // kolumna dla irp6 mechatronika
+	// kolumna dla irp6 polycrank
+	regulator_ptr[0] = new NL_regulator_2_irp6m (0, 0, 0.429, 6.834, 6.606, 0.35, master); // kolumna dla irp6 polycrank
 
 	regulator_ptr[1] = new NL_regulator_3_irp6m (0, 0, 0.64, 9.96/4, 9.54/4, 0.35, master);
 

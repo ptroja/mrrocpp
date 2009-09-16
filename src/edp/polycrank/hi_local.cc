@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------
 //                            hi_rydz.cc
 //
-// Funkcje do obslugi sprzetu (serwomechanizmow cyfrowych) dla robota irp6 mechatronika
+// Funkcje do obslugi sprzetu (serwomechanizmow cyfrowych) dla robota irp6 polycrank
 //
 // Ostatnia modyfikacja: styczen 2005
 // cala komunikacja ze sprzetem przerzucona do oblsugi przerwania ze wzgledou na drugi proces korzsytajacy z tego samego
