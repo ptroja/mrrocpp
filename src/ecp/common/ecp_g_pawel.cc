@@ -58,14 +58,14 @@ pawel::pawel(common::task::task& _ecp_task, int step):
     ux1=uy1=uz1=0.0;
     research = fopen( "/net/mieszko/home/pnajgebauer/mrrocpp2/data/res.txt", "w" );
 
-};
+}
 
 pawel::~pawel()
 {
 
     fclose( research );
 
-};
+}
 
 bool pawel::first_step ( )
 {
@@ -91,7 +91,7 @@ bool pawel::first_step ( )
 
 
     return true;
-};
+}
 // --------------------------------------------------------------------------
 
 
@@ -208,7 +208,7 @@ bool pawel::next_step ( )
 
 
     return true;
-};
+}
 
 } // namespace generator
 } // namespace common
