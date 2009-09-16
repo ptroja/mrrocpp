@@ -37,9 +37,10 @@ public:
   smooth2_trajectory_pose (lib::POSE_SPECIFICATION at,
 		  const double* coordinates,
 		  const double* vv,
-		  const double* aa
-		  );
+		  const double* aa);
+
 }; // end:class smooth2_trajectory_pose
+
 
 } // namespace common
 } // namespace ecp
