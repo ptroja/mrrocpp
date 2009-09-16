@@ -32,7 +32,7 @@ lib::BYTE servo_buffer::Move_a_step (void)
 	if (master.is_synchronised())
 	{// by Y aktualizacja transformera am jedynie sens po synchronizacji (kiedy robot zna swoja pozycje)
 		// by Y - do dokonczenia
-		for (int i=0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
+		for (int i=0; i < POLYCRANK_NUM_OF_SERVOS; i++)
 		{
 			if (!(master.test_mode))
 			{
@@ -77,7 +77,7 @@ servo_buffer::servo_buffer (effector &_master) : common::servo_buffer(_master), 
 	clear_reply_status();
 	clear_reply_status_tmp();
 
-	for (int j = 0; j < IRP6_MECHATRONIKA_NUM_OF_SERVOS; j++)
+	for (int j = 0; j < POLYCRANK_NUM_OF_SERVOS; j++)
 	{
 		command.parameters.move.abs_position[j]=0.0;
 	}
@@ -106,21 +106,21 @@ void servo_buffer::synchronise (void)
 		return;
 	}
 
-	for (int j = 0; j < (IRP6_MECHATRONIKA_NUM_OF_SERVOS); j++)
+	for (int j = 0; j < (POLYCRANK_NUM_OF_SERVOS); j++)
 	{
 		command.parameters.move.abs_position[j]=0.0;
 	}
 
 
 	// szeregowa synchronizacja serwomechanizmow
-	for (int k = 0; k < (IRP6_MECHATRONIKA_NUM_OF_SERVOS); k++)
+	for (int k = 0; k < (POLYCRANK_NUM_OF_SERVOS); k++)
 	{
-		int j = ((k+IRP6M_SYN_INIT_AXE)%(IRP6_MECHATRONIKA_NUM_OF_SERVOS));
+		int j = ((k+IRP6M_SYN_INIT_AXE)%(POLYCRANK_NUM_OF_SERVOS));
 
 		// printf("os synchronizopwana: %d \n",j);
-		for (int l= 0; l < (IRP6_MECHATRONIKA_NUM_OF_SERVOS); l++)
+		for (int l= 0; l < (POLYCRANK_NUM_OF_SERVOS); l++)
 		{
-			int i = ((l+IRP6M_SYN_INIT_AXE)%(IRP6_MECHATRONIKA_NUM_OF_SERVOS));
+			int i = ((l+IRP6M_SYN_INIT_AXE)%(POLYCRANK_NUM_OF_SERVOS));
 			// zerowy przyrost polozenia dla wszystkich napedow procz j-tego
 			if ( i == j)
 			{
@@ -327,9 +327,9 @@ void servo_buffer::synchronise (void)
 	}
 
 	// zatrzymanie na chwile robota
-	for (int k = 0; k < (IRP6_MECHATRONIKA_NUM_OF_SERVOS); k++)
+	for (int k = 0; k < (POLYCRANK_NUM_OF_SERVOS); k++)
 	{
-		int j = ((k+IRP6M_SYN_INIT_AXE)%(IRP6_MECHATRONIKA_NUM_OF_SERVOS));
+		int j = ((k+IRP6M_SYN_INIT_AXE)%(POLYCRANK_NUM_OF_SERVOS));
 		synchro_step=0.0;
 		crp = regulator_ptr[j];
 		crp->insert_new_step(synchro_step);
@@ -360,7 +360,7 @@ servo_buffer::~servo_buffer(void)
 void servo_buffer::get_all_positions (void)
 {
 	// Przepisanie aktualnych polozen servo do pakietu wysylkowego
-	for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++)
+	for (int i = 0; i < POLYCRANK_NUM_OF_SERVOS; i++)
 	{
 
 		servo_data.abs_position[i]  = hi->get_position(i)*(2*M_PI)/IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION;
@@ -384,7 +384,7 @@ uint64_t servo_buffer::compute_all_set_values (void)
 	uint64_t status = OK; // kumuluje numer bledu
 
 
-	for (int j = 0; j < IRP6_MECHATRONIKA_NUM_OF_SERVOS; j++)
+	for (int j = 0; j < POLYCRANK_NUM_OF_SERVOS; j++)
 	{
 		if (master.test_mode)
 		{

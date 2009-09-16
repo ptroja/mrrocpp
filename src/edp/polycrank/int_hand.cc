@@ -57,7 +57,7 @@ extern volatile common::motor_data md; // Aktualne dane we/wy (obsluga przerwani
 const struct sigevent *
 int_handler (void *arg, int int_id)
 {
-	common::status_of_a_dof robot_status[IRP6_MECHATRONIKA_NUM_OF_SERVOS];
+	common::status_of_a_dof robot_status[POLYCRANK_NUM_OF_SERVOS];
 	short int low_word, high_word;
 	int i;
 

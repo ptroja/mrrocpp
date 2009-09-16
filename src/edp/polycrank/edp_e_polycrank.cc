@@ -139,7 +139,7 @@ void effector::initialize (void)
     //  Stworzenie listy dostepnych kinematyk.
     create_kinematic_models_for_given_robot();
 
-    number_of_servos = IRP6_MECHATRONIKA_NUM_OF_SERVOS;
+    number_of_servos = POLYCRANK_NUM_OF_SERVOS;
 
     reset_variables();
 }

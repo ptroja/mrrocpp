@@ -52,7 +52,7 @@ hardware_interface::hardware_interface ( effector &_master )   : common::hardwar
     lib::WORD int_freq; // Ustawienie czestotliwosci przerwan
 
     // tablica pradow maksymalnych d;a poszczegolnych osi
-    int max_current [IRP6_MECHATRONIKA_NUM_OF_SERVOS] = { POLYCRANK_AXIS_1_MAX_CURRENT,
+    int max_current [POLYCRANK_NUM_OF_SERVOS] = { POLYCRANK_AXIS_1_MAX_CURRENT,
     		POLYCRANK_AXIS_2_MAX_CURRENT,	 POLYCRANK_AXIS_3_MAX_CURRENT, POLYCRANK_AXIS_4_MAX_CURRENT,
     		POLYCRANK_AXIS_5_MAX_CURRENT};
 
@@ -117,7 +117,7 @@ hardware_interface::hardware_interface ( effector &_master )   : common::hardwar
 
     // Zakaz pracy recznej we wszystkich osiach
 
-    for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
+    for ( i = 0; i < POLYCRANK_NUM_OF_SERVOS; i++ )
     {
         robot_status[i].adr_offset_plus_0 = 0;
         robot_status[i].adr_offset_plus_2 = 0;
@@ -165,7 +165,7 @@ hardware_interface::~hardware_interface ( void )   // destruktor
         reset_counters();
         // Zezwolenie na prace reczna
 
-        for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
+        for (int i = 0; i < POLYCRANK_NUM_OF_SERVOS; i++ )
         {
             md	.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
             md	.register_adress=SERVO_COMMAND1_ADR;
@@ -187,7 +187,7 @@ uint64_t hardware_interface::read_write_hardware ( void )
     int i;
 
     // zapis wartosci zadanych
-    for (i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
+    for (i = 0; i < POLYCRANK_NUM_OF_SERVOS; i++ )
     {
         md.robot_control[i].adr_offset_plus_0 = robot_control[i].adr_offset_plus_0;
     }
@@ -203,7 +203,7 @@ uint64_t hardware_interface::read_write_hardware ( void )
 
     //	 printf("hi rydz 1 current_absolute_position: %d, hex: %x\n", md.current_absolute_position[5], md.current_absolute_position[5] ); // debug
 
-    for (i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
+    for (i = 0; i < POLYCRANK_NUM_OF_SERVOS; i++ )
     {
         // przepisanie wartosci pradu
         meassured_current[i] = (md.robot_status[i].adr_offset_plus_2 & 0xFF00)>>8;
@@ -230,7 +230,7 @@ uint64_t hardware_interface::read_write_hardware ( void )
 void hardware_interface::reset_counters ( void )
 {
 
-    for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
+    for (int i = 0; i < POLYCRANK_NUM_OF_SERVOS; i++ )
     {
         md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
         md.register_adress=SERVO_COMMAND1_ADR;
@@ -259,7 +259,7 @@ void hardware_interface::reset_counters ( void )
     // Dwukrotny odczyt polozenia dla wyzerowania przyrostu wynikajacego z pierwszego
     // odczytu rezolwera
     // wyzerowanie wypelnienia
-    for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
+    for (int i = 0; i < POLYCRANK_NUM_OF_SERVOS; i++ )
     {
         robot_control[i].adr_offset_plus_0 = 0x0200;
     }
@@ -289,7 +289,7 @@ bool hardware_interface::is_hardware_error ( void)
     // oczekiwanie na przerwanie
     hi_int_wait(INT_SINGLE_COMMAND, 0);
 
-    for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
+    for (int i = 0; i < POLYCRANK_NUM_OF_SERVOS; i++ )
     {
         if ( (md.robot_status[i].adr_offset_plus_0 ^ 0x6000) & MASK )
         {
@@ -308,7 +308,7 @@ int hardware_interface::synchronise_via_lm629(void)
     int i;
     int wyjscie;
 
-    for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ ) // UWAGA NA -1
+    for ( i = 0; i < POLYCRANK_NUM_OF_SERVOS; i++ ) // UWAGA NA -1
     {
         // tryb pojedynczych polecen w obsludze przerwania
         md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
