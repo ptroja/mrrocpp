@@ -417,7 +417,7 @@ int EDP_conveyor_create()
 		{
 			ui_state.conveyor.edp.state = 0;
 			ui_state.conveyor.edp.is_synchronised = false;
-			
+
 			std::string busy_attach_point("/dev/name/global/");
 			busy_attach_point += ui_state.conveyor.edp.hardware_busy_attach_point;
 
@@ -432,7 +432,7 @@ int EDP_conveyor_create()
 			} else {
 				ui_state.conveyor.edp.node_nr = config->return_node_number(ui_state.conveyor.edp.node_name);
 				ui_state.conveyor.edp.state = 1;
-				ui_robot.conveyor = new ui_conveyor_robot(*config, ui_msg.all_ecp);
+				ui_robot.conveyor = new ui_conveyor_robot(*config, *ui_msg.all_ecp);
 				ui_state.conveyor.edp.pid = ui_robot.conveyor->get_EDP_pid();
 
 				if (ui_state.conveyor.edp.pid<0)
