@@ -297,38 +297,42 @@ int ui_model::set_tree_view(void)
 }
 
 void ui_model::loadEdps(void) {
-	std::vector <ui_config_entry *> edps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::EDP);
+	ui_config_entry::childrens_t edps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::EDP);
 
-	for(std::vector<ui_config_entry *>::iterator Iter = edps.begin(); Iter != edps.end(); Iter++) {
+	for(ui_config_entry::childrens_t::iterator Iter = edps.begin(); Iter != edps.end(); Iter++) {
 		std::cout << (*Iter)->program_name << "@" << (*Iter)->node_name << std::endl;
 	}
 }
 
-void ui_model::slayAll(void) {
+void ui_model::slayAll(void)
+{
+	using namespace std;
 
-	std::string username = (*this->config).return_string_value("username", "[ui]");
-	std::string node_name = (*this->config).return_string_value("node_name", "[ui]");
-	std::string command;
-	std::string RSHcommand = "rsh -l ";
-	std::string space = " ";
-	std::string slayCommand = " slay -9 ";
+	const string RSHcommand = "rsh ";
+	const string slayCommand = " killall -9 ";
 
-	std::vector <ui_config_entry *> edps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::EDP);
-	std::vector <ui_config_entry *> ecps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::ECP);
-	std::vector <ui_config_entry *> mp = ui_model::instance().getRootNode().getChildByType(ui_config_entry::MP);
+	ui_config_entry::childrens_t edps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::EDP);
+	ui_config_entry::childrens_t ecps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::ECP);
+	ui_config_entry::childrens_t mp = ui_model::instance().getRootNode().getChildByType(ui_config_entry::MP);
 
-	for(std::vector<ui_config_entry *>::iterator Iter = edps.begin(); Iter != edps.end(); Iter++) {
-		command = RSHcommand + username + space + node_name + slayCommand + (*Iter)->program_name;
-		system(command.c_str());
+	// TODO: rewrite with boost::foreach
+	for(ui_config_entry::childrens_t::iterator Iter = edps.begin(); Iter != edps.end(); Iter++) {
+		string command = RSHcommand + (*Iter)->node_name + slayCommand + (*Iter)->program_name;
+		cout << command << endl;
+//		system(command.c_str());
 	}
 
-	for(std::vector<ui_config_entry *>::iterator Iter = ecps.begin(); Iter != ecps.end(); Iter++) {
-		command = RSHcommand + username + space + node_name + slayCommand + (*Iter)->program_name;
-		system(command.c_str());
+	for(ui_config_entry::childrens_t::iterator Iter = ecps.begin(); Iter != ecps.end(); Iter++) {
+		string command = RSHcommand + (*Iter)->node_name + slayCommand + (*Iter)->program_name;
+		cout << command << endl;
+//		system(command.c_str());
 	}
 
-	for(std::vector<ui_config_entry *>::iterator Iter = mp.begin(); Iter != mp.end(); Iter++) {
-		command = RSHcommand + username + space + node_name + slayCommand + (*Iter)->program_name;
-		system(command.c_str());
+	for(ui_config_entry::childrens_t::iterator Iter = mp.begin(); Iter != mp.end(); Iter++) {
+		string command = RSHcommand + (*Iter)->node_name + slayCommand + (*Iter)->program_name;
+		cout << command << endl;
+//		system(command.c_str());
 	}
+
+//	this->clear();
 }

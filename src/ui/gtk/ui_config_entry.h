@@ -46,7 +46,8 @@ class ui_config_entry
 		int childrens(void);
 
 		//! children nodes
-		std::vector <ui_config_entry *> children;
+		typedef std::vector <ui_config_entry *> childrens_t;
+		childrens_t children;
 
 		void show_page(bool visible);
 
@@ -60,7 +61,7 @@ class ui_config_entry
 			}
 		}
 
-		std::vector <ui_config_entry *> getChildByType(ui_config_entry_type _type);
+		childrens_t getChildByType(ui_config_entry_type _type);
 		void addWidget(ui_widget_entry *entry);
 		ui_widget_entry * getWidget(gint whichOne);
 

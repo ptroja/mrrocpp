@@ -55,7 +55,7 @@ void ui_config_entry::add_child(ui_config_entry & child)  {
 
 void ui_config_entry::remove_childs(void)  {
 
-	for (std::vector<ui_config_entry *>::iterator Iter = children.begin(); Iter != children.end(); Iter++) {
+	for (childrens_t::iterator Iter = children.begin(); Iter != children.end(); Iter++) {
 
 		if ((*Iter)->childrens()) {
 			(*Iter)->remove_childs();
@@ -201,17 +201,17 @@ ui_config_entry::~ui_config_entry() {
 	}
 }
 
-std::vector <ui_config_entry *> ui_config_entry::getChildByType(ui_config_entry_type _type) {
+ui_config_entry::childrens_t ui_config_entry::getChildByType(ui_config_entry_type _type) {
 
-	std::vector <ui_config_entry *> ret;
+	childrens_t ret;
 
-	for (std::vector<ui_config_entry *>::iterator Iter = children.begin(); Iter != children.end(); Iter++) {
+	for (childrens_t::iterator Iter = children.begin(); Iter != children.end(); Iter++) {
 		if ((*Iter)->type == _type) {
 			ret.push_back((*Iter));
 		}
 
-		std::vector <ui_config_entry *> childrensOf = (*Iter)->getChildByType(_type);
-		for (std::vector<ui_config_entry *>::iterator Iter2 = childrensOf.begin(); Iter2 != childrensOf.end(); Iter2++) {
+		childrens_t childrensOf = (*Iter)->getChildByType(_type);
+		for (childrens_t::iterator Iter2 = childrensOf.begin(); Iter2 != childrensOf.end(); Iter2++) {
 			ret.push_back((*Iter2));
 		}
 	}
