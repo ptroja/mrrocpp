@@ -20,16 +20,16 @@ namespace polycrank {
 
 // numeracja od 2 ze wzgledu na analogie irp6_postument
 
-// ograniczenia przyrostu PWM dla IRP6_MECHATRONIKA
-#define IRP6_MECHATRONIKA_AXIS2_MAX_PWM_INCREMENT	1000
-#define IRP6_MECHATRONIKA_AXIS3_MAX_PWM_INCREMENT	1000
-#define IRP6_MECHATRONIKA_AXIS4_MAX_PWM_INCREMENT	1000
-#define IRP6_MECHATRONIKA_AXIS5_MAX_PWM_INCREMENT	1000
-#define IRP6_MECHATRONIKA_AXIS6_MAX_PWM_INCREMENT	1000
+// ograniczenia przyrostu PWM dla POLYCRANK
+#define POLYCRANK_AXIS2_MAX_PWM_INCREMENT	1000
+#define POLYCRANK_AXIS3_MAX_PWM_INCREMENT	1000
+#define POLYCRANK_AXIS4_MAX_PWM_INCREMENT	1000
+#define POLYCRANK_AXIS5_MAX_PWM_INCREMENT	1000
+#define POLYCRANK_AXIS6_MAX_PWM_INCREMENT	1000
 
-// Stale dla celow synchronizacji IRP6_MECHATRONIKA
-#define IRP6_MECHATRONIKA_SYNCHRO_STEP_COARSE -0.03
-#define IRP6_MECHATRONIKA_SYNCHRO_STEP_FINE   -0.007
+// Stale dla celow synchronizacji POLYCRANK
+#define POLYCRANK_SYNCHRO_STEP_COARSE -0.03
+#define POLYCRANK_SYNCHRO_STEP_FINE   -0.007
 
 // os od ktorej startuje synchronizacja - numeracja od 0
 #define IRP6M_SYN_INIT_AXIS 1
@@ -49,8 +49,7 @@ public:
     virtual lib::BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}
-; // end: class NL_regulator_2
+};
 // ----------------------------------------------------------------------
 
 /*-----------------------------------------------------------------------*/
@@ -66,8 +65,7 @@ public:
     virtual lib::BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}
-; // end: class NL_regulator_3
+};
 // ----------------------------------------------------------------------
 
 /*-----------------------------------------------------------------------*/
@@ -83,8 +81,7 @@ public:
     virtual lib::BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}
-; // end: class NL_regulator_4
+};
 // ----------------------------------------------------------------------
 
 
@@ -102,8 +99,7 @@ public:
     virtual lib::BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}
-; // end: class NL_regulator_5
+};
 // ----------------------------------------------------------------------
 
 
@@ -120,14 +116,13 @@ public:
     virtual lib::BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}
-; // end: class NL_regulator_6
+};
 // ----------------------------------------------------------------------
 
 
 
 
-class servo_buffer: public common::servo_buffer
+class servo_buffer : public common::servo_buffer
 {
 		// Bufor polecen przysylanych z EDP_MASTER dla SERVO
 		// Obiekt z algorytmem regulacji
@@ -147,7 +142,7 @@ class servo_buffer: public common::servo_buffer
 		// obliczenie nastepnej wartosci zadanej dla wszystkich napedow
 };
 
-} // namespace common
+} // namespace polycrank
 } // namespace edp
 } // namespace mrrocpp
 

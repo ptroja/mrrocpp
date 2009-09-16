@@ -36,7 +36,7 @@ lib::BYTE servo_buffer::Move_a_step (void)
 		{
 			if (!(master.test_mode))
 			{
-				master.update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION, i);
+				master.update_servo_current_motor_pos_abs(hi->get_position(i)*(2*M_PI)/POLYCRANK_AXIS_0_TO_5_INC_PER_REVOLUTION, i);
 			}
 		}
 
@@ -44,7 +44,6 @@ lib::BYTE servo_buffer::Move_a_step (void)
 	}
 	return convert_error();
 }
-; // end: servo_buffer::Move_a_step
 /*-----------------------------------------------------------------------*/
 
 
@@ -127,7 +126,7 @@ void servo_buffer::synchronise (void)
 				crp = regulator_ptr[i];
 				// W.S.        crp->insert_new_step(lib::SYNCHRO_STEP_COARSE);
 
-				synchro_step = IRP6_MECHATRONIKA_SYNCHRO_STEP_COARSE/NS;
+				synchro_step = POLYCRANK_SYNCHRO_STEP_COARSE/NS;
 
 				crp->insert_new_step(synchro_step);
 			}
@@ -148,9 +147,9 @@ void servo_buffer::synchronise (void)
 			do
 			{
 
-				if (synchro_step > IRP6_MECHATRONIKA_SYNCHRO_STEP_COARSE )
+				if (synchro_step > POLYCRANK_SYNCHRO_STEP_COARSE )
 				{
-					synchro_step += IRP6_MECHATRONIKA_SYNCHRO_STEP_COARSE/NS;
+					synchro_step += POLYCRANK_SYNCHRO_STEP_COARSE/NS;
 					crp->insert_new_step(synchro_step);
 				}
 
@@ -221,7 +220,7 @@ void servo_buffer::synchronise (void)
 
 		// zjazd z wylacznika synchronizacji
 		// W.S.  crp->insert_new_step(lib::SYNCHRO_STEP_FINE);
-		synchro_step = -IRP6_MECHATRONIKA_SYNCHRO_STEP_FINE/NS;
+		synchro_step = -POLYCRANK_SYNCHRO_STEP_FINE/NS;
 
 		crp->insert_new_step(synchro_step);
 
@@ -236,9 +235,9 @@ void servo_buffer::synchronise (void)
 			// W.S. -----------------------------------------------------
 			//	printf("ccc: %d\n", j);
 
-			if (synchro_step < -IRP6_MECHATRONIKA_SYNCHRO_STEP_FINE )
+			if (synchro_step < -POLYCRANK_SYNCHRO_STEP_FINE )
 			{
-				synchro_step -= IRP6_MECHATRONIKA_SYNCHRO_STEP_FINE / NS;
+				synchro_step -= POLYCRANK_SYNCHRO_STEP_FINE / NS;
 				crp->insert_new_step(synchro_step);
 			}
 
@@ -352,7 +351,6 @@ void servo_buffer::synchronise (void)
 /*-----------------------------------------------------------------------*/
 servo_buffer::~servo_buffer(void)
 {}
-; // end: regulator_group::~regulator_group
 /*-----------------------------------------------------------------------*/
 
 
@@ -363,7 +361,7 @@ void servo_buffer::get_all_positions (void)
 	for (int i = 0; i < POLYCRANK_NUM_OF_SERVOS; i++)
 	{
 
-		servo_data.abs_position[i]  = hi->get_position(i)*(2*M_PI)/IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION;
+		servo_data.abs_position[i]  = hi->get_position(i)*(2*M_PI)/POLYCRANK_AXIS_0_TO_5_INC_PER_REVOLUTION;
 
 
 		// przyrost polozenia w impulsach
@@ -389,7 +387,7 @@ uint64_t servo_buffer::compute_all_set_values (void)
 		if (master.test_mode)
 		{
 			regulator_ptr[j]->insert_new_pos_increment(regulator_ptr[j]->return_new_step()
-					*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI));
+					*POLYCRANK_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI));
 		}
 		else
 		{
@@ -505,8 +503,8 @@ lib::BYTE NL_regulator_2_irp6m::compute_set_value (void)
 	constraint_detector(common::SG_REG_2_MAX_ACC, common::SG_REG_2_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
-	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	// step_new_pulse = step_new*POLYCRANK_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
+	step_new_pulse = step_new*POLYCRANK_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	//position_increment_new= position_increment_new/AXIS_0_TO_5_MECHATRONIKA_TO_TRACK_RATIO;
 
 	// if (step_new!=0.0) printf(" 2 reg:%f\n", step_new);
@@ -658,10 +656,10 @@ lib::BYTE NL_regulator_2_irp6m::compute_set_value (void)
 
 	// ograniczenie przyrostu PWM
 	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_MECHATRONIKA_AXIS2_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_MECHATRONIKA_AXIS2_MAX_PWM_INCREMENT;
-	if (set_value_new- set_value_old < -IRP6_MECHATRONIKA_AXIS2_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_MECHATRONIKA_AXIS2_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old > POLYCRANK_AXIS2_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old + POLYCRANK_AXIS2_MAX_PWM_INCREMENT;
+	if (set_value_new- set_value_old < -POLYCRANK_AXIS2_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old - POLYCRANK_AXIS2_MAX_PWM_INCREMENT;
 
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;
@@ -713,8 +711,8 @@ lib::BYTE NL_regulator_3_irp6m::compute_set_value (void)
 	constraint_detector(common::SG_REG_3_MAX_ACC, common::SG_REG_3_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
-	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	// step_new_pulse = step_new*POLYCRANK_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
+	step_new_pulse = step_new*POLYCRANK_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	///position_increment_new= position_increment_new;
 
 	// if (step_new!=0.0) printf(" 3 reg:%f\n", step_new);
@@ -863,10 +861,10 @@ lib::BYTE NL_regulator_3_irp6m::compute_set_value (void)
 
 	// ograniczenie przyrostu PWM
 	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_MECHATRONIKA_AXIS3_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_MECHATRONIKA_AXIS3_MAX_PWM_INCREMENT;
-	if (set_value_new- set_value_old < -IRP6_MECHATRONIKA_AXIS3_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_MECHATRONIKA_AXIS3_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old > POLYCRANK_AXIS3_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old + POLYCRANK_AXIS3_MAX_PWM_INCREMENT;
+	if (set_value_new- set_value_old < -POLYCRANK_AXIS3_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old - POLYCRANK_AXIS3_MAX_PWM_INCREMENT;
 
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;
@@ -918,8 +916,8 @@ lib::BYTE NL_regulator_4_irp6m::compute_set_value (void)
 	constraint_detector(common::SG_REG_4_MAX_ACC, common::SG_REG_4_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
-	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	// step_new_pulse = step_new*POLYCRANK_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
+	step_new_pulse = step_new*POLYCRANK_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	//position_increment_new= position_increment_new/AXIS_0_TO_5_MECHATRONIKA_TO_TRACK_RATIO;
 
 	// if (step_new!=0.0) printf(" 4 reg:%f\n", step_new);
@@ -1069,10 +1067,10 @@ lib::BYTE NL_regulator_4_irp6m::compute_set_value (void)
 
 	// ograniczenie przyrostu PWM
 	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_MECHATRONIKA_AXIS4_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_MECHATRONIKA_AXIS4_MAX_PWM_INCREMENT;
-	if (set_value_new- set_value_old < -IRP6_MECHATRONIKA_AXIS4_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_MECHATRONIKA_AXIS4_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old > POLYCRANK_AXIS4_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old + POLYCRANK_AXIS4_MAX_PWM_INCREMENT;
+	if (set_value_new- set_value_old < -POLYCRANK_AXIS4_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old - POLYCRANK_AXIS4_MAX_PWM_INCREMENT;
 
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;
@@ -1124,8 +1122,8 @@ lib::BYTE NL_regulator_5_irp6m::compute_set_value (void)
 	constraint_detector(common::SG_REG_5_MAX_ACC, common::SG_REG_5_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
-	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	// step_new_pulse = step_new*POLYCRANK_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
+	step_new_pulse = step_new*POLYCRANK_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	//position_increment_new= position_increment_new/AXIS_0_TO_5_MECHATRONIKA_TO_TRACK_RATIO;
 	/*
     if (!eee)
@@ -1271,10 +1269,10 @@ lib::BYTE NL_regulator_5_irp6m::compute_set_value (void)
 
 	// ograniczenie przyrostu PWM
 	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_MECHATRONIKA_AXIS5_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_MECHATRONIKA_AXIS5_MAX_PWM_INCREMENT;
-	if (set_value_new- set_value_old < -IRP6_MECHATRONIKA_AXIS5_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_MECHATRONIKA_AXIS5_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old > POLYCRANK_AXIS5_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old + POLYCRANK_AXIS5_MAX_PWM_INCREMENT;
+	if (set_value_new- set_value_old < -POLYCRANK_AXIS5_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old - POLYCRANK_AXIS5_MAX_PWM_INCREMENT;
 
 	// if (fabs(set_value_new) > 200.0 && first) {
 	// cprintf("PIN=%lf PIO=%lf DIN=%lf DIO=%lf SO=%lf SVVO=%lf SV0=%lf\n", position_increment_new,
@@ -1334,8 +1332,8 @@ lib::BYTE NL_regulator_6_irp6m::compute_set_value (void)
 	constraint_detector(common::SG_REG_6_MAX_ACC, common::SG_REG_6_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
-	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	// step_new_pulse = step_new*POLYCRANK_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
+	step_new_pulse = step_new*POLYCRANK_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	//position_increment_new= position_increment_new/AXIS_0_TO_5_MECHATRONIKA_TO_TRACK_RATIO;
 
 	/*
@@ -1472,10 +1470,10 @@ lib::BYTE NL_regulator_6_irp6m::compute_set_value (void)
 
 	// ograniczenie przyrostu PWM
 	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_MECHATRONIKA_AXIS6_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_MECHATRONIKA_AXIS6_MAX_PWM_INCREMENT;
-	if (set_value_new- set_value_old < -IRP6_MECHATRONIKA_AXIS6_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_MECHATRONIKA_AXIS6_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old > POLYCRANK_AXIS6_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old + POLYCRANK_AXIS6_MAX_PWM_INCREMENT;
+	if (set_value_new- set_value_old < -POLYCRANK_AXIS6_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old - POLYCRANK_AXIS6_MAX_PWM_INCREMENT;
 
 	master.rb_obj.lock_mutex();
 
@@ -1510,7 +1508,7 @@ namespace common {
 servo_buffer* return_created_servo_buffer (manip_and_conv_effector &_master)
 {
 	return new polycrank::servo_buffer ((polycrank::effector &)(_master));
-};
+}
 
 
 } // namespace common
