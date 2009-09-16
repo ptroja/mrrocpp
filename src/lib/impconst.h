@@ -91,6 +91,8 @@ enum FORCE_SENSOR_ENUM {
 
 #define IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION  2000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
 
+#define POLYCRANK_AXIS_0_TO_5_INC_PER_REVOLUTION  2000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
+
 
 #define STEP              0.002  // Krok sterowania w [s]
 
