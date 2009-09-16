@@ -36,6 +36,8 @@ namespace polycrank {
 
 // numeracja od 2 ze wzgledu na analogie irp6_postument
 
+#define POLYCRANK_AXIS_0_TO_5_INC_PER_REVOLUTION  2000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
+
 /*-----------------------------------------------------------------------*/
 class NL_regulator_2_irp6m: public common::NL_regulator
 {

@@ -59,8 +59,7 @@ public:
     virtual lib::BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}
-; // end: class NL_regulator_1
+}; // end: class NL_regulator_1
 // ----------------------------------------------------------------------
 
 /*-----------------------------------------------------------------------*/
@@ -76,8 +75,7 @@ public:
     virtual lib::BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}
-; // end: class NL_regulator_2
+}; // end: class NL_regulator_2
 // ----------------------------------------------------------------------
 
 /*-----------------------------------------------------------------------*/
@@ -93,8 +91,7 @@ public:
     virtual lib::BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}
-; // end: class NL_regulator_3
+}; // end: class NL_regulator_3
 // ----------------------------------------------------------------------
 
 /*-----------------------------------------------------------------------*/
@@ -110,8 +107,7 @@ public:
     virtual lib::BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}
-; // end: class NL_regulator_4
+}; // end: class NL_regulator_4
 // ----------------------------------------------------------------------
 
 
@@ -129,8 +125,7 @@ public:
     virtual lib::BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}
-; // end: class NL_regulator_5
+}; // end: class NL_regulator_5
 // ----------------------------------------------------------------------
 
 
@@ -147,8 +142,7 @@ public:
     virtual lib::BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}
-; // end: class NL_regulator_6
+}; // end: class NL_regulator_6
 // ----------------------------------------------------------------------
 
 
@@ -165,8 +159,7 @@ public:
     virtual lib::BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}
-; // end: class NL_regulator_7
+}; // end: class NL_regulator_7
 // ----------------------------------------------------------------------
 
 
@@ -188,8 +181,7 @@ public:
     virtual lib::BYTE compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
-}
-; // end: class NL_regulator_8
+}; // end: class NL_regulator_8
 // ----------------------------------------------------------------------
 
 } // namespace common

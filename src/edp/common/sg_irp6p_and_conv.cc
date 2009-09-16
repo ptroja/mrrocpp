@@ -34,7 +34,6 @@ NL_regulator_1_irp6p::NL_regulator_1_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_
     // Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
     // zgodne z faktycznie przekazywanym zestawem parametrow inicjujacych.
 }
-; // end: NL_regulator_1::NL_regulator_1
 /*-----------------------------------------------------------------------*/
 
 
@@ -48,7 +47,6 @@ NL_regulator_2_irp6p::NL_regulator_2_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_
     int_current_error = 0;
     display = 0;
 }
-; // end: NL_regulator_2::NL_regulator_2
 /*-----------------------------------------------------------------------*/
 
 
@@ -62,7 +60,6 @@ NL_regulator_3_irp6p::NL_regulator_3_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_
     int_current_error = 0;
     display = 0;
 }
-; // end: NL_regulator_3::NL_regulator_3
 /*-----------------------------------------------------------------------*/
 
 
@@ -76,7 +73,6 @@ NL_regulator_4_irp6p::NL_regulator_4_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_
     int_current_error = 0;
     display = 0;
 }
-; // end: NL_regulator_4::NL_regulator_4
 /*-----------------------------------------------------------------------*/
 
 
@@ -92,7 +88,6 @@ NL_regulator_5_irp6p::NL_regulator_5_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_
 
     first = true;
 }
-; // end: NL_regulator_5::NL_regulator_5
 /*-----------------------------------------------------------------------*/
 
 
@@ -106,7 +101,6 @@ NL_regulator_6_irp6p::NL_regulator_6_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_
     int_current_error = 0;
     display = 0;
 }
-; // end: NL_regulator_6::NL_regulator_6
 /*-----------------------------------------------------------------------*/
 
 
@@ -120,7 +114,6 @@ NL_regulator_7_irp6p::NL_regulator_7_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_
     int_current_error = 0;
     display = 0;
 }
-; // end: NL_regulator_6::NL_regulator_6
 /*-----------------------------------------------------------------------*/
 
 
@@ -139,7 +132,6 @@ NL_regulator_8_irp6p::NL_regulator_8_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_
     // Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
     // zgodne z faktycznie przekazywanym zestawem parametrow inicjujacych.
 }
-; // end: NL_regulator_6::NL_regulator_6
 /*-----------------------------------------------------------------------*/
 
 
@@ -260,7 +252,6 @@ lib::BYTE NL_regulator_1_irp6p::compute_set_value (void)
                 alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
                 break;
             }
-            ; // end: switch (algorithm_parameters_no)
             break;
         case 1: // algorytm nr 1
             switch (algorithm_parameters_no)
@@ -299,7 +290,6 @@ lib::BYTE NL_regulator_1_irp6p::compute_set_value (void)
         }
         ;  // end: switch (algorithm_no)
     }
-    ; // end: if
 
 
 
@@ -337,7 +327,6 @@ lib::BYTE NL_regulator_1_irp6p::compute_set_value (void)
         set_value_new = 0; // zerowe nowe sterowanie
         break;
     }
-    ;  // end: switch (algorithm_no)
 
     master.rb_obj.lock_mutex();
 
@@ -372,7 +361,6 @@ lib::BYTE NL_regulator_1_irp6p::compute_set_value (void)
     return alg_par_status;
 
 }
-; // end: NL_regulator_1::compute_set_value
 /*-----------------------------------------------------------------------*/
 
 
@@ -491,7 +479,6 @@ lib::BYTE NL_regulator_2_irp6p::compute_set_value (void)
                 alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
                 break;
             }
-            ; // end: switch (algorithm_parameters_no)
             break;
         case 1: // algorytm nr 1
             switch (algorithm_parameters_no)
@@ -532,9 +519,7 @@ lib::BYTE NL_regulator_2_irp6p::compute_set_value (void)
             alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
             break;
         }
-        ;  // end: switch (algorithm_no)
     }
-    ; // end: if
 
     a=0.412429378531;
     b0=2.594932; //stara z przelicz rezolwer/enkoder 15.219541375872
@@ -576,7 +561,6 @@ lib::BYTE NL_regulator_2_irp6p::compute_set_value (void)
         set_value_new = 0; // zerowe nowe sterowanie
         break;
     }
-    ;  // end: switch (algorithm_no)
 
 
     master.rb_obj.lock_mutex();
@@ -615,7 +599,6 @@ lib::BYTE NL_regulator_2_irp6p::compute_set_value (void)
     return alg_par_status;
 
 }
-; // end: NL_regulator_2::compute_set_value
 /*-----------------------------------------------------------------------*/
 
 
@@ -732,7 +715,6 @@ lib::BYTE NL_regulator_3_irp6p::compute_set_value (void)
                 alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
                 break;
             }
-            ; // end: switch (algorithm_parameters_no)
             break;
         case 1: // algorytm nr 1
             switch (algorithm_parameters_no)
@@ -773,9 +755,7 @@ lib::BYTE NL_regulator_3_irp6p::compute_set_value (void)
             alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
             break;
         }
-        ;  // end: switch (algorithm_no)
     }
-    ; // end: if
 
     a=0.655629139073;
     b0=1.030178; //6.042100283822;
@@ -816,7 +796,6 @@ lib::BYTE NL_regulator_3_irp6p::compute_set_value (void)
         set_value_new = 0; // zerowe nowe sterowanie
         break;
     }
-    ;  // end: switch (algorithm_no)
 
 
     master.rb_obj.lock_mutex();
@@ -852,7 +831,6 @@ lib::BYTE NL_regulator_3_irp6p::compute_set_value (void)
     return alg_par_status;
 
 }
-; // end: NL_regulator_3::compute_set_value
 /*-----------------------------------------------------------------------*/
 
 
@@ -971,7 +949,6 @@ lib::BYTE NL_regulator_4_irp6p::compute_set_value (void)
                 alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
                 break;
             }
-            ; // end: switch (algorithm_parameters_no)
             break;
         case 1: // algorytm nr 1
             switch (algorithm_parameters_no)
@@ -999,7 +976,6 @@ lib::BYTE NL_regulator_4_irp6p::compute_set_value (void)
                 alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
                 break;
             }
-            ; // end: switch (algorithm_parameters_no)
             break;
         case 2:  // algorytm nr 2 - sterowanie pradowe
             current_algorithm_parameters_no = algorithm_parameters_no;
@@ -1012,10 +988,7 @@ lib::BYTE NL_regulator_4_irp6p::compute_set_value (void)
             alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
             break;
         }
-        ;  // end: switch (algorithm_no)
     }
-    ; // end: if
-
 
     a=0.315789473684;
     b0=1.997464;
@@ -1056,8 +1029,6 @@ lib::BYTE NL_regulator_4_irp6p::compute_set_value (void)
         set_value_new = 0; // zerowe nowe sterowanie
         break;
     }
-    ;  // end: switch (algorithm_no)
-
 
 
     master.rb_obj.lock_mutex();
@@ -1094,7 +1065,6 @@ lib::BYTE NL_regulator_4_irp6p::compute_set_value (void)
     return alg_par_status;
 
 }
-; // end: NL_regulator_4::compute_set_value
 /*-----------------------------------------------------------------------*/
 
 
@@ -1208,7 +1178,6 @@ lib::BYTE NL_regulator_5_irp6p::compute_set_value (void)
                 alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
                 break;
             }
-            ; // end: switch (algorithm_parameters_no)
             break;
         case 1: // algorytm nr 1
             switch (algorithm_parameters_no)
@@ -1236,7 +1205,6 @@ lib::BYTE NL_regulator_5_irp6p::compute_set_value (void)
                 alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
                 break;
             }
-            ; // end: switch (algorithm_parameters_no)
             break;
         case 2:  // algorytm nr 2 - sterowanie pradowe
             current_algorithm_parameters_no = algorithm_parameters_no;
@@ -1249,9 +1217,7 @@ lib::BYTE NL_regulator_5_irp6p::compute_set_value (void)
             alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
             break;
         }
-        ;  // end: switch (algorithm_no)
     }
-    ; // end: if
 
 
     a=0.548946716233;
@@ -1294,7 +1260,6 @@ lib::BYTE NL_regulator_5_irp6p::compute_set_value (void)
         set_value_new = 0; // zerowe nowe sterowanie
         break;
     }
-    ;  // end: switch (algorithm_no)
 
     master.rb_obj.lock_mutex();
 
@@ -1337,7 +1302,6 @@ lib::BYTE NL_regulator_5_irp6p::compute_set_value (void)
     return alg_par_status;
 
 }
-; // end: NL_regulator_5::compute_set_value
 /*-----------------------------------------------------------------------*/
 
 
@@ -1451,7 +1415,6 @@ lib::BYTE NL_regulator_6_irp6p::compute_set_value (void)
                 alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
                 break;
             }
-            ; // end: switch (algorithm_parameters_no)
             break;
         case 1: // algorytm nr 1
             switch (algorithm_parameters_no)
@@ -1479,7 +1442,6 @@ lib::BYTE NL_regulator_6_irp6p::compute_set_value (void)
                 alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
                 break;
             }
-            ; // end: switch (algorithm_parameters_no)
             break;
         case 2:  // algorytm nr 2 - sterowanie pradowe
             current_algorithm_parameters_no = algorithm_parameters_no;
@@ -1492,9 +1454,7 @@ lib::BYTE NL_regulator_6_irp6p::compute_set_value (void)
             alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
             break;
         }
-        ;  // end: switch (algorithm_no)
     }
-    ; // end: if
 
     a=0.391982182628;
     b0=1.114648; //6.537527839644;
@@ -1536,7 +1496,6 @@ lib::BYTE NL_regulator_6_irp6p::compute_set_value (void)
         set_value_new = 0; // zerowe nowe sterowanie
         break;
     }
-    ;  // end: switch (algorithm_no)
 
     // ograniczenie na sterowanie
     if (set_value_new > MAX_PWM)
@@ -1575,7 +1534,6 @@ lib::BYTE NL_regulator_6_irp6p::compute_set_value (void)
     return alg_par_status;
 
 }
-; // end: NL_regulator_6::compute_set_value
 /*-----------------------------------------------------------------------*/
 
 
@@ -1691,7 +1649,6 @@ lib::BYTE NL_regulator_7_irp6p::compute_set_value (void)
                 alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
                 break;
             }
-            ; // end: switch (algorithm_parameters_no)
             break;
         case 1: // algorytm nr 1
             switch (algorithm_parameters_no)
@@ -1732,9 +1689,7 @@ lib::BYTE NL_regulator_7_irp6p::compute_set_value (void)
             alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
             break;
         }
-        ;  // end: switch (algorithm_no)
     }
-    ; // end: if
 
     /*
     a=0.391982182628;
@@ -1781,7 +1736,6 @@ lib::BYTE NL_regulator_7_irp6p::compute_set_value (void)
         set_value_new = 0; // zerowe nowe sterowanie
         break;
     }
-    ;  // end: switch (algorithm_no)
 
     // ograniczenie na sterowanie
     if (set_value_new > MAX_PWM)
@@ -1823,7 +1777,6 @@ lib::BYTE NL_regulator_7_irp6p::compute_set_value (void)
     return alg_par_status;
 
 }
-; // end: NL_regulator_7::compute_set_value
 /*-----------------------------------------------------------------------*/
 
 
@@ -1972,9 +1925,7 @@ lib::BYTE NL_regulator_8_irp6p::compute_set_value (void)
             alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
             break;
         }
-        ;  // end: switch (algorithm_no)
     }
-    ; // end: if
     /*
     a=0.391982182628;
     b0=6.537527839644;
@@ -2007,7 +1958,6 @@ lib::BYTE NL_regulator_8_irp6p::compute_set_value (void)
         set_value_new = 0; // zerowe nowe sterowanie
         break;
     }
-    ;  // end: switch (algorithm_no)
 
 
     // ograniczenie na sterowanie
@@ -2122,7 +2072,6 @@ lib::BYTE NL_regulator_8_irp6p::compute_set_value (void)
     return alg_par_status;
 
 }
-; // end: NL_regulator_8::compute_set_value
 /*-----------------------------------------------------------------------*/
 
 } // namespace common

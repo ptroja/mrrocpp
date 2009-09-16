@@ -66,8 +66,9 @@ const double SG_REG_7_MAX_ACC = 1;
 const double SG_REG_8_MAX_SPEED = 1000.0;
 const double SG_REG_8_MAX_ACC = 1000.0;
 
-
-// typedef struct reader_data reader_data;
+#define IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION  4000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
+#define IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION  2000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
+#define IRP6_POSTUMENT_AXIS_7_INC_PER_REVOLUTION  128.0  // Liczba impulsow enkodera na obrot walu - musi byc float
 
 /*-----------------------------------------------------------------------*/
 class regulator
@@ -111,12 +112,6 @@ protected:
     double delta_eint;              // przyrost calki uchybu
     double delta_eint_old;          // przyrost calki uchybu w poprzednim kroku
 
-
-
-    //
-    double int_current_error;
-    int display;
-    //
 
     int PWM_value;                  // zadane wypelnienie PWM
     lib::BYTE algorithm_no;              // przeslany numer algorytmu
@@ -193,6 +188,10 @@ protected:
     unsigned int counter;        // Licznik krokow zerowego PWM
     double MAX_PWM;
 
+    //
+    double int_current_error;
+    int display;
+    //
 
 public:
 
