@@ -2,7 +2,6 @@
 #include <sys/socket.h>
 #include <iostream>
 #include <unistd.h>
-#include <string.h>
 
 #include "ecp_mp/ecp_mp_tr_draughtsAI.h"
 
@@ -59,8 +58,6 @@ bool TRDraughtsAI::t_read(bool wait){
 		close(socketDescriptor);
 		throw ecp_mp::transmitter::transmitter::transmitter_error(0,0);
 	}
-
-	return true;
 }
 
 bool TRDraughtsAI::t_write(){
@@ -69,8 +66,6 @@ bool TRDraughtsAI::t_write(){
 		close(socketDescriptor);
 		throw ecp_mp::transmitter::transmitter::transmitter_error(0,0);
 	}
-
-	return true;
 }
 
 } // namespace transmitter

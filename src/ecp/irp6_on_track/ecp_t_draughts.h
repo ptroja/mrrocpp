@@ -9,7 +9,6 @@
 #include "ecp/common/ecp_g_sleep.h"
 #include "ecp_mp/ecp_mp_s_cvfradia.h"
 #include "ecp_mp/ecp_mp_tr_draughtsAI.h"
-#include "ecp/irp6_on_track/ecp_vis_ib_eih_planar_irp6ot.h"
 #include "ecp/irp6_on_track/ecp_vis_ib_eih_follower_irp6ot.h"
 
 namespace mrrocpp {
@@ -33,44 +32,40 @@ class Draughts: public common::task::task{
 		common::generator::smooth* sgen;				//smooth movement generator
 		common::generator::bias_edp_force* befgen;		//calibration of force
 		common::generator::tff_gripper_approach* gagen;	//gripper approach with force control
-		common::generator::linear *lgen;				//linear generator
 		lib::trajectory_description tdes;				//trajectory description from com_buf.h
-		common::task::ecp_sub_task_gripper_opening* go_st;		//sub_task_gripper_opening
 		common::generator::sleep* sleepgen;				//sleep generator
 		ecp_mp::transmitter::TRDraughtsAI *aitrans;		//AI transmiter
-		ecp_vis_ib_eih_planar_irp6ot* planar_vis;	//Planar servomechanism.
 		ecp_vis_ib_eih_follower_irp6ot* follower_vis; //Follower servomechanism
 
 		static const double moves_table[32][8];
-		static const double bkings_table[4][8];
-		static const double wkings_table[4][8];
+		static const double bkings_table[8][8];
+		static const double wkings_table[8][8];
 		int bkings;
 		int wkings;
 	public:
 		Draughts(lib::configurator &_config);
 		~Draughts();
-		void set_tdes(double, double, double, double, double, double, double);
-		void init_tdes(lib::POSE_SPECIFICATION, int);
-		void task_initialization(void);
-		void main_task_algorithm(void);
-		int AIConnect(const char*,unsigned short int);
-		void test();
-		void getAIMove(int player);
-		void movePawn(int from, int to);
-		void trackPawn();
-		void takeStaticPawn(int from, int type);
-		void putStaticPawn(int to);
-		void throwPawn(int from);
-		void closeGripper();
-		int makeAIMove(int player);
 		void bPawn2bKing(int from, int to);
-		void wPawn2wKing(int from, int to);
-		void fradiaControl(lib::DRAUGHTS_MODE);
-		void wait4move();
-		void snooze(double);
+		void closeGripper();
+		void fradiaControl(lib::DRAUGHTS_MODE,char);
+		void getAIMove(int player);
 		lib::BOARD_STATUS getBoardStatus();
 		void goToInitialPos();
 		void goUp();
+		void init_tdes(lib::POSE_SPECIFICATION, int);
+		void main_task_algorithm(void);
+		int makeAIMove(int player);
+		void movePawn(int from, int to);
+		void putStaticPawn(int to);
+		void set_tdes(double, double, double, double, double, double, double);
+		void snooze(double);
+		void takeDynamicPawn(int from);
+		void takeStaticPawn(int from, int type);
+		void task_initialization(void);\
+		void throwPawn(int from);
+		void trackPawn(char);
+		void wait4move();
+		void wPawn2wKing(int from, int to);
 };
 
 }

@@ -312,7 +312,11 @@ struct ECP_VSP_MSG
 		} ps_response;
 
 		//structure for controlling fraDIA form mrrocpp
-		DRAUGHTS_MODE draughts_mode;
+		struct{
+			DRAUGHTS_MODE draughts_mode;
+			char pawn_nr;
+		}draughts_control;
+
 
 		/// \struct esa
 		/// \brief Structure used for choosing mode for FraDIA with EdgeShapeAnalyzer

@@ -212,7 +212,7 @@ Polozenia synchronizacji - odczyty z enkoderow silnikow.
   synchro_motor_position[2]= -5.012;		// ramie d. [rad]
   synchro_motor_position[3]= -4.219;		// ramie g. [rad]
   synchro_motor_position[4]= 150.997;		// kisc T [rad]
-  synchro_motor_position[5]= 351.0;		// kisc V [rad]
+  synchro_motor_position[5]= 349.0;		// kisc V [rad]
   synchro_motor_position[6]= 769.7;		// kisc N [rad]
   synchro_motor_position[7]= 4830;			// chwytak [-]
 
@@ -459,9 +459,9 @@ void model_with_wrist::mp2i_transform(const double* local_current_motor_pos, dou
  ------------------------------------------------------------------------ */
 void model_with_wrist::i2mp_transform(double* local_desired_motor_pos_new, double* local_desired_joints)
 {
-  // Niejednoznacznosc polozenia dla 4-tej osi (obrot kisci < 180���������).
+  // Niejednoznacznosc polozenia dla 4-tej osi (obrot kisci < 180���������������������������).
   double joint_4_revolution = M_PI;
-  // Niejednoznacznosc polozenia dla 5-tej osi (obrot kisci > 360���������).
+  // Niejednoznacznosc polozenia dla 5-tej osi (obrot kisci > 360���������������������������).
   double axis_5_revolution = 2*M_PI;
 
   // Sprawdzenie wartosci wspolrzednych wewnetrznych.
