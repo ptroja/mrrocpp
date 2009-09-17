@@ -70,14 +70,13 @@ void * manip_and_conv_effector::visualisation_thread(void * arg)
 		}
 
 		//	printf("got %d bytes packet from %s\n", numbytes, inet_ntoa(their_addr.sin_addr));
+
+		double tmp[number_of_servos];
+		master_joints_read(tmp);
+
+		// korekta aby polozenia byly wzgledem poprzedniego czlonu
+		switch (robot_name)
 		{
-
-			double tmp[number_of_servos];
-			master_joints_read(tmp);
-
-			// korekta aby polozenia byly wzgledem poprzedniego czlonu
-			switch (robot_name)
-			{
 			case lib::ROBOT_IRP6_ON_TRACK:
 				tmp[3] -= tmp[2] +M_PI_2;
 				tmp[4] -= tmp[3] + tmp[2] +M_PI_2;
@@ -88,20 +87,20 @@ void * manip_and_conv_effector::visualisation_thread(void * arg)
 				break;
 			default:
 				break;
-			}
+		}
 
-			struct
-			{
-				int synchronised;
-				float joints[MAX_SERVOS_NR];
-			} reply;
+		struct
+		{
+			int synchronised;
+			float joints[MAX_SERVOS_NR];
+		}
+		reply;
 
-			reply.synchronised = (is_synchronised()) ? 1 : 0;
+		reply.synchronised = (is_synchronised()) ? 1 : 0;
 
-			for (int i = 0; i < number_of_servos; i++)
-			{
-				reply.joints[i] = static_cast <float> (tmp[i]);
-			}
+		for (int i = 0; i < number_of_servos; i++)
+		{
+			reply.joints[i] = static_cast <float> (tmp[i]);
 		}
 
 		numbytes = sendto(sockfd, &reply, sizeof(reply),
