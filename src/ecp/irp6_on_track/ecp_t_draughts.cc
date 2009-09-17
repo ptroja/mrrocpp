@@ -427,8 +427,8 @@ void Draughts::throwPawn(int from){
 	//takeStaticPawn(from,PAWN);
 	sgen->reset();
 	sgen->set_absolute();
-	sgen->load_coordinates(lib::MOTOR,0,45,30,21,151,-5,649,GRIPPER_CLOSED);		//go beyond board
-	sgen->load_coordinates(lib::MOTOR,0,45,30,21,151,-5,649,GRIPPER_OPENED);		//throw pawn
+	sgen->load_coordinates(lib::MOTOR,0,45,30,21,151,-11,649,GRIPPER_CLOSED);		//go beyond board
+	sgen->load_coordinates(lib::MOTOR,0,45,30,21,151,-11,649,GRIPPER_OPENED);		//throw pawn
 	sgen->Move();
 }
 
