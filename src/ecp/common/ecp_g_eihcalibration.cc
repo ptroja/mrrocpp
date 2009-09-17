@@ -61,11 +61,19 @@ bool eihgenerator::next_step()
 
 void eihgenerator::get_frame(float t[12])
 {
+	std::cout.precision(3);
+	std::cout.width(6);
+	std::cout.setf(ios::fixed,ios::floatfield);
 	for(int i=0; i<3; i++)
 	{
 		for(int j=0; j<4; j++)
+		{
 			t[4*i+j] = the_robot->EDP_data.current_arm_frame[i][j];
+			std::cout << t[4*i+j] << "\t";
+		}
+		std::cout<<std::endl;
 	}
+	std::cout<<std::endl;
 
 }
 

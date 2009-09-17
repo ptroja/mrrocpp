@@ -14,10 +14,9 @@ namespace task {
 
 //Constructors
 eihcalibration::eihcalibration(lib::configurator &_config): task(_config){
-	smoothgen = NULL;
 	nose = NULL;
-	linear_gen = NULL;
 	generator = NULL;
+	smooth2gen = NULL;
 }
 
 //Desctructor
@@ -47,18 +46,18 @@ void eihcalibration::task_initialization(void) {
     D = config.return_double_value("D");
     E = config.return_double_value("E");
 
-	smoothgen = new generator::smooth(*this, true);
+	smooth2gen = new generator::smooth2(*this, true);
 
 	nose = new generator::eih_nose_run(*this, 8);
-	nose->tff_nose_run::configure_pulse_check (true);
+	nose->eih_nose_run::configure_pulse_check (true);
 
 	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, "[vsp_cvfradia]", *this, sizeof(lib::sensor_image_t::sensor_union_t::chessboard_t));
 	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
 
-	sr_ecp_msg->message("ECP loaded eihcalibration");
-
 	generator = new generator::eihgenerator(*this);
 	generator->sensor_m = sensor_m;
+
+	sr_ecp_msg->message("ECP loaded eihcalibration");
 }
 
 void eihcalibration::main_task_algorithm(void ){
@@ -71,11 +70,11 @@ void eihcalibration::main_task_algorithm(void ){
 		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 	}
 
-	smoothgen->set_absolute();
+	smooth2gen->set_absolute();
 
 	// wczytanie pozycji poczatkowej i przejscie do niej za pomoca smooth
-	if (smoothgen->load_file_with_path(smooth_path.c_str())) {
-	  smoothgen->Move();
+	if (smooth2gen->load_file_with_path(smooth_path.c_str())) {
+	  smooth2gen->Move();
 	}
 
 	// doprowadzenie chwytaka do szachownicy "wodzeniem za nos"
@@ -86,35 +85,34 @@ void eihcalibration::main_task_algorithm(void ){
 	}
 	nose->Move();
 
-	sr_ecp_msg->message("linear_gen\n");
-
-	//Inicjalizacja td.
-	init_td(lib::XYZ_ANGLE_AXIS, 500);
+	sr_ecp_msg->message("Data collection\n");
 
 	int i = 0, j = 0, k, l, m = 0;
 	double a, b, c, d, e;
 	struct timespec delay;
-	delay.tv_nsec = delay_ms * 1000000;//400ms
+	delay.tv_nsec = delay_ms * 1000000;//delay in ms
 	delay.tv_sec = 0;
 
-	set_td_coordinates(0.0, 0.0, -1 * A, 0.0, 0.0, 0.0, 0.0);
-	linear_gen=new common::generator::linear(*this, td, 1);
+	// maximum velocity and acceleration of smooth2 generator
+	double vv[MAX_SERVOS_NR]={0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4};
+	double aa[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+	double coordinates[MAX_SERVOS_NR]={0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0};
+	smooth2gen->set_relative();
+
 	//opusc chwytak az przestanie "widziec" szachownice
 	while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == true){
 		//opuszczenie chwytaka o 2.5 cm
-		linear_gen->Move();
+		smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+		smooth2gen->Move();
 		nanosleep(&delay, NULL);
 		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 		generator->Move();
 		++i;
 	}
-	delete linear_gen;
 
 	// podnies chwytak do ostatniej pozycji w ktorej wykryto szachownice
-	set_td_coordinates(0.0, 0.0, A, 0.0, 0.0, 0.0, 0.0);
-	linear_gen=new common::generator::linear(*this, td, 1);
-	linear_gen->Move();
-	delete linear_gen;
+	smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+	smooth2gen->Move();
 	nanosleep(&delay, NULL);
 	--i;
 	sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
@@ -125,12 +123,13 @@ void eihcalibration::main_task_algorithm(void ){
 	// pomachaj chwytakiem zeby zrobic fajne zdjecia
 	while(i >= 0 && sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.calibrated == false)
 	{
-		if (i % 2 == 1)
+/*		if (i % 2 == 1)
 			l = 1;
 		else
 			l = 0;
 
 		for(; l < 6; l += 2)
+*/		for(l = 0; l < 6; l += 1)
 		{
 			c = 0.0;
 			d = 0.0;
@@ -141,7 +140,7 @@ void eihcalibration::main_task_algorithm(void ){
 			}
 			else if(l == 1)
 			{	// obrot
-				c = -1 * C;
+				c = -1.0 * C;
 			}
 			else if(l == 2)
 			{	// obrot
@@ -149,7 +148,7 @@ void eihcalibration::main_task_algorithm(void ){
 			}
 			else if(l == 3)
 			{	// obrot
-				d = D;
+				d = -1.0 * D;
 			}
 			else if(l == 4)
 			{	// obrot
@@ -157,31 +156,26 @@ void eihcalibration::main_task_algorithm(void ){
 			}
 			else if(l == 5)
 			{	// obrot
-				e = -1 * E;
+				e = -1.0 * E;
 			}
 
-			set_td_coordinates(0.0, 0.0, 0.0, e, c, d, 0.0);
-			linear_gen=new common::generator::linear(*this, td, 1);
+			smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, 0.0, e, c, d, 0.0, 0.0, true);
 
 			while(((sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found) == true)
 				&& ((sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.calibrated) == false) && m < 1 )
 			{
-				linear_gen->Move();
+				smooth2gen->Move();
 				nanosleep(&delay, NULL);
 				generator->Move();
 				++m;
 				sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 			}
 
-			delete linear_gen;
-
 			if(m != 0)
 			{
 				//powrot do poprzedniej pozycji
-				set_td_coordinates(0.0, 0.0, 0.0, -1.0 * m * e, -1.0 * m * c, -1.0 * m * d, 0.0);
-				linear_gen=new common::generator::linear(*this, td, 1);
-				linear_gen->Move();
-				delete linear_gen;
+				smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, 0.0, -1.0 * m * e, -1.0 * m * c, -1.0 * m * d, 0.0, 0.0, true);
+				smooth2gen->Move();
 				m = 0;
 				nanosleep(&delay, NULL);
 				sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
@@ -198,7 +192,7 @@ void eihcalibration::main_task_algorithm(void ){
 			}
 			else if(k == 1)
 			{	//przesuniecie w lewo (patrzac na manipulator z przodu)
-				b = -1 * A;
+				b = -1.0 * A;
 			}
 			else if(k == 2)
 			{//przesuniecie do operatora (patrzac na manipulator z przodu)
@@ -206,7 +200,7 @@ void eihcalibration::main_task_algorithm(void ){
 			}
 			else if(k == 3)
 			{//przesuniecie od operatora (patrzac na manipulator z przodu)
-				a = -1 * A;
+				a = -1.0 * A;
 			}
 			else if(k == 4)
 			{	//przesuniecie na skos
@@ -215,38 +209,37 @@ void eihcalibration::main_task_algorithm(void ){
 			}
 			else if(k == 5)
 			{	//przesuniecie na skos
-				a = -1 * A;
+				a = -1.0 * A;
 				b = A;
 			}
 			else if(k == 6)
 			{	//przesuniecie na skos
 				a = A;
-				b = -1 * A;
+				b = -1.0 * A;
 			}
 			else if(k == 7)
 			{	//przesuniecie na skos
-				a = -1 * A;
-				b = -1 * A;
+				a = -1.0 * A;
+				b = -1.0 * A;
 			}
 
 			while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == true
 				&& sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.calibrated == false && flaga)
 			{
-				set_td_coordinates(a, b, 0.0, 0.0, 0.0, 0.0, 0.0);
-				linear_gen=new common::generator::linear(*this, td, 1);
-				linear_gen->Move();
+				smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, a, b, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+				smooth2gen->Move();
 				nanosleep(&delay, NULL);
 				generator->Move();
 				++j;
-				delete linear_gen;
 				sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 
-				if (a < 0.0)
+/*				if (i % 2 == 1)
 					l = 1;
 				else
 					l = 0;
 
 				for(; l < 6; l += 2)
+*/				for(l = 0; l < 6; l += 1)
 				{
 					c = 0.0;
 					d = 0.0;
@@ -257,7 +250,7 @@ void eihcalibration::main_task_algorithm(void ){
 					}
 					else if(l == 1)
 					{	// obrot
-						c = -1 * C;
+						c = -1.0 * C;
 					}
 					else if(l == 2)
 					{	// obrot
@@ -265,7 +258,7 @@ void eihcalibration::main_task_algorithm(void ){
 					}
 					else if(l == 3)
 					{	// obrot
-						d = D;
+						d = -1.0 * D;
 					}
 					else if(l == 4)
 					{	// obrot
@@ -273,11 +266,10 @@ void eihcalibration::main_task_algorithm(void ){
 					}
 					else if(l == 5)
 					{	// obrot
-						e = -1 * E;
+						e = -1.0 * E;
 					}
 
-					set_td_coordinates(0.0, 0.0, 0.0, e, c, d, 0.0);
-					linear_gen=new common::generator::linear(*this, td, 1);
+					smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, 0.0, e, c, d, 0.0, 0.0, true);
 
 					// zabezpieczenie przed przekroczeniem obszaru roboczego robota
 /*start2 b>0 d<0*/					if (a > 0.0 && m == 0 && c > 0 && ((i == 0 && j == 1) || ( i == 1 && j == 1) || (i == 2 && j == 2) || (i == 3 && j == 3)))
@@ -286,24 +278,20 @@ void eihcalibration::main_task_algorithm(void ){
 					while(((sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found) == true)
 						&& ((sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.calibrated) == false) && m < 1 && flaga)
 					{
-						linear_gen->Move();
+						smooth2gen->Move();
 						nanosleep(&delay, NULL);
 						generator->Move();
 						++m;
 						sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 					}
 
-					delete linear_gen;
-
 					flaga = true;
 
 					if(m != 0)
 					{
 						//powrot do poprzedniej pozycji
-						set_td_coordinates(0.0, 0.0, 0.0, -1.0 * m * e, -1.0 * m * c, -1.0 * m * d, 0.0);
-						linear_gen=new common::generator::linear(*this, td, 1);
-						linear_gen->Move();
-						delete linear_gen;
+						smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, 0.0, -1.0 * m * e, -1.0 * m * c, -1.0 * m * d, 0.0, 0.0, true);
+						smooth2gen->Move();
 						m = 0;
 						nanosleep(&delay, NULL);
 						sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
@@ -319,10 +307,8 @@ void eihcalibration::main_task_algorithm(void ){
 			if(j != 0)
 			{
 				//powrot do poprzedniej pozycji
-				set_td_coordinates(-1.0 * j * a, -1.0 * j * b, 0.0, 0.0, 0.0, 0.0, 0.0);
-				linear_gen=new common::generator::linear(*this, td, 1);
-				linear_gen->Move();
-				delete linear_gen;
+				smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, -1.0 * j * a, -1.0 * j * b, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+				smooth2gen->Move();
 				j = 0;
 				nanosleep(&delay, NULL);
 				sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
@@ -330,10 +316,8 @@ void eihcalibration::main_task_algorithm(void ){
 		}
 
 		// podnies chwytak o 2.5 cm
-		set_td_coordinates(0.0, 0.0, 0.025, 0.0, 0.0, 0.0, 0.0);
-		linear_gen=new common::generator::linear(*this, td, 1);
-		linear_gen->Move();
-		delete linear_gen;
+		smooth2gen->load_coordinates(lib::XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+		smooth2gen->Move();
 		nanosleep(&delay, NULL);
 		sensor_m[lib::SENSOR_CVFRADIA]->get_reading();
 		--i;
@@ -341,25 +325,6 @@ void eihcalibration::main_task_algorithm(void ){
 
 	ecp_termination_notice();
 	//ecp_wait_for_stop();
-}
-
-void eihcalibration::set_td_coordinates(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6){
-	// Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
-	td.coordinate_delta[0] = cor0; // przyrost wspolrzednej X
-	td.coordinate_delta[1] = cor1; // przyrost wspolrzednej Y
-	td.coordinate_delta[2] = cor2; // przyrost wspolrzednej Z
-	td.coordinate_delta[3] = cor3; // przyrost wspolrzednej FI
-	td.coordinate_delta[4] = cor4; // przyrost wspolrzednej TETA
-	td.coordinate_delta[5] = cor5; // przyrost wspolrzednej PSI
-	td.coordinate_delta[6] = cor6; // przyrost wspolrzednej PSI
-}
-
-//inicjacja struktury td - trajectory description
-void eihcalibration::init_td(lib::POSE_SPECIFICATION pspec, int internode_no){
-	td.arm_type=pspec;
-	td.interpolation_node_no=1;
-	td.internode_step_no=internode_no;	//motion time
-	td.value_in_step_no=internode_no-2;			//motion time-2 ??
 }
 
 task* return_created_ecp_task(lib::configurator &_config){

@@ -27,7 +27,6 @@
 #include "lib/mathtr.h"
 #include "ecp/common/ecp_g_smooth2.h"
 #include <fstream>
-#include <string.h>
 #include "ecp_mp/smooth2_trajectory_pose.h"
 
 namespace mrrocpp {
@@ -1804,7 +1803,7 @@ void smooth2::calculate(void) {
 			}
 
 			if (eq(pose_list_iterator->v_p[i], 0) && eq(pose_list_iterator->v_r[i], 0)) {
-				t[i] = t_max; //uniknięcie dalszej redukcji w sytuacji gdy v_p i v_r wynoszą 0 (mozna wtedy dowolnie wydluzycz czas postoju bez redukcji predkosci)
+				t[i] = t_max; //unikniecie dalszej redukcji w sytuacji gdy v_p i v_r wynosza 0 (mozna wtedy dowolnie wydluzycz czas postoju bez redukcji predkosci)
 			}
 
 			if (fabs(t[i] - t_max) > tk) {//redukcja predkosci w danej osi ze wzgledu na zbyt krotki czas ruchu
@@ -2124,7 +2123,7 @@ void smooth2::vp_reduction(std::list<ecp_mp::common::smooth2_trajectory_pose>::i
 	v_r = s/t;
 
 	if (v_r <= pose_list_iterator->v_k[i] && v_r <= pose_list_iterator->v_p[i]) {
-		//printf("rekurencja! 1, v_r: %f\n", v_r);//trzeba nadpisać v a nie v_r
+		//printf("rekurencja! 1, v_r: %f\n", v_r);//trzeba nadpisac v a nie v_r
 		//printf("pos_num: %d\n", pose_list_iterator->pos_num);
 		//flushall();
 		pose_list_iterator->v_r[i] = v_r;

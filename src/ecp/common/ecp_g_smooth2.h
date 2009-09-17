@@ -10,6 +10,8 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
+#include <string.h>
+
 #include <list>
 #include "ecp_mp/smooth2_trajectory_pose.h"
 
