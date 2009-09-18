@@ -4,7 +4,8 @@
 // Generator powstal na podstawie generatora smooth, glowna zmiana jest
 // rezygnacja z podawanie predkosci poczatkowej i koncowej w kazdym ruchu.
 // W przeciwienstwie do smootha generator smooth2 nie dopuszcza nigdy do przekroczenia
-// maksymalnej podanej predkosci ruchu dla danej osi
+// maksymalnej podanej predkosci ruchu i przyspieszenia dla danej osi.
+// Generator z zalozenia jest w stanie policzyc kazda trajektorie.
 // autor: Rafal Tulwin
 // Ostatnia modyfikacja: 2009
 // -------------------------------------------------------------------------
@@ -48,18 +49,19 @@ bool smooth2::eq(double a, double b) {
 	return diff < EPS && diff > -EPS;
 }
 
-/*bool smooth2::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory)
-{
+bool smooth2::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory) {
+	bool first_time = true;
+	int numOfPoses = trajectory.getNumberOfPoses();
+	trajectory.showTime();
 
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
-	pose_list = trajectory.getPoses();
+	pose_list = trajectory.getPoses2();
 	pose_list_iterator = pose_list->end();
 
 	return true;
 }
 
-void smooth2::set_pose_from_xml(xmlNode *stateNode, bool &first_time)
-{
+void smooth2::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 	char *dataLine, *value;
 	uint64_t number_of_poses; // Liczba zapamietanych pozycji
 	lib::POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
@@ -118,11 +120,10 @@ void smooth2::set_pose_from_xml(xmlNode *stateNode, bool &first_time)
 	xmlFree(numOfPoses);
 }
 
-bool smooth2::load_trajectory_from_xml(const char* fileName, const char* nodeName)
-{
+bool smooth2::load_trajectory_from_xml(const char* fileName, const char* nodeName) {
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
-    //bool first_time = true; // Znacznik
+	 bool first_time = true; // Znacznik
 	 xmlNode *cur_node, *child_node, *subTaskNode;
 	 xmlChar *stateID;
 
@@ -187,7 +188,7 @@ bool smooth2::load_trajectory_from_xml(const char* fileName, const char* nodeNam
 	xmlCleanupParser();
 
 	return true;
-}*/
+}
 
 bool smooth2::load_file_with_path(const char* file_name) {
 
@@ -323,7 +324,7 @@ bool smooth2::load_file_with_path(const char* file_name) {
     return true;
 } // end: load_file_with_path()
 
-//jesli w ponizszych metodach podamy reset jako true lista pozycji zostanie wyczyszczona, jesli jako false pozycja zostanie dolozona do tego co jest
+//jesli w ponizszych metodach podamy reset jako true lista pozycji zostanie wyczyszczona, jesli jako false pozycja zostanie dodana do listy bez jej czyszczenia
 void smooth2::load_coordinates(lib::POSE_SPECIFICATION ps, double coordinates[MAX_SERVOS_NR], bool reset) {
 
 	double v[MAX_SERVOS_NR]={0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.5};

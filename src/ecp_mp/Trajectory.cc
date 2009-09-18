@@ -16,6 +16,7 @@ namespace common {
 Trajectory::Trajectory()
 {
 	trjPoses = new std::list<ecp_mp::common::smooth_trajectory_pose>();
+	trjPoses2 = new std::list<ecp_mp::common::smooth2_trajectory_pose>(); //for smooth2
 }
 
 Trajectory::Trajectory(const char *numOfPoses, const char *trajectoryID, const char *poseSpecification)
@@ -24,6 +25,7 @@ Trajectory::Trajectory(const char *numOfPoses, const char *trajectoryID, const c
 	this->numOfPoses = (uint64_t)atoi(numOfPoses);
 	poseSpec = returnProperPS(poseSpecification);
 	trjPoses = new std::list<ecp_mp::common::smooth_trajectory_pose>();
+	trjPoses2 = new std::list<ecp_mp::common::smooth2_trajectory_pose>(); //for smooth2
 
 }
 
@@ -33,11 +35,13 @@ Trajectory::Trajectory(const Trajectory &trajectory)
 	numOfPoses = trajectory.numOfPoses;
 	poseSpec = trajectory.poseSpec;
 	trjPoses = new std::list<ecp_mp::common::smooth_trajectory_pose>(trajectory.trjPoses->begin(), trajectory.trjPoses->end());
+	trjPoses2 = new std::list<ecp_mp::common::smooth2_trajectory_pose>(trajectory.trjPoses2->begin(), trajectory.trjPoses2->end()); //for smooth2
 }
 
 Trajectory::~Trajectory()
 {
 	delete trjPoses;
+	delete trjPoses2;
 }
 
 void Trajectory::setTrjID(const char *trjID)
@@ -173,15 +177,53 @@ void Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIF
 	printf("-->  File \"%s\" was saved to XML file\n", fileName);
 }
 
+void Trajectory::writeTrajectoryToXmlFile2(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth2_trajectory_pose> &poses)
+{
+	char * file = new char[80];
+	int posCount = poses.size();
+	xmlDocPtr doc;
+	xmlNodePtr tree, subtree;
+	std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator it;
+
+	doc = xmlNewDoc((const xmlChar *) "1.0");
+
+	doc->children = xmlNewDocNode(doc, NULL, (const xmlChar *) "Trajectory", NULL);
+	xmlSetProp(doc->children, (const xmlChar *) "coordinateType", (const xmlChar *) Trajectory::toString(ps));
+	xmlSetProp(doc->children, (const xmlChar *) "numOfPoses", (const xmlChar *) Trajectory::toString(posCount));
+	for(it = poses.begin(); it != poses.end(); ++it)
+	{
+		tree = xmlNewChild(doc->children, NULL, (const xmlChar *) "Pose", NULL);
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Velocity", (const xmlChar *)Trajectory::toString((*it).v, MAX_SERVOS_NR));
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Accelerations", (const xmlChar *)Trajectory::toString((*it).a, MAX_SERVOS_NR));
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Coordinates", (const xmlChar *)Trajectory::toString((*it).coordinates, MAX_SERVOS_NR));
+	}
+	sprintf(file, "%s%s", fileName, ".xml");
+
+	xmlKeepBlanksDefault(0);
+	xmlSaveFormatFile(file, doc, 1);
+	printf("-->  File \"%s\" was saved to XML file\n", fileName);
+}
+
 void Trajectory::createNewPose()
 {
 	actPose = new ecp_mp::common::smooth_trajectory_pose();
 	actPose->arm_type = this->poseSpec;
 }
 
+void Trajectory::createNewPose2() //for smooth2
+{
+	actPose2 = new ecp_mp::common::smooth2_trajectory_pose();
+	actPose2->arm_type = this->poseSpec;
+}
+
 void Trajectory::addPoseToTrajectory()
 {
 	trjPoses->push_back(*actPose);
+}
+
+void Trajectory::addPoseToTrajectory2()//for smooth2
+{
+	trjPoses2->push_back(*actPose2);
 }
 
 void Trajectory::setNumOfPoses(unsigned int numOfPoses)
@@ -244,6 +286,26 @@ double * Trajectory::getAccelerations() const
 	return actPose->a;
 }
 
+void Trajectory::setVelocities2(const char *Velocities)//for smooth2
+{
+	setValuesInArray(actPose2->v, Velocities);
+}
+
+double * Trajectory::getVelocities2() const//for smooth2
+{
+	return actPose2->v;
+}
+
+void Trajectory::setAccelerations2(const char *accelerations)//for smooth2
+{
+	setValuesInArray(actPose2->a, accelerations);
+}
+
+double * Trajectory::getAccelerations2() const//for smooth2
+{
+	return actPose2->a;
+}
+
 void Trajectory::setCoordinates(const char *cCoordinates)
 {
 	setValuesInArray(actPose->coordinates, cCoordinates);
@@ -252,6 +314,16 @@ void Trajectory::setCoordinates(const char *cCoordinates)
 double * Trajectory::getCoordinates() const
 {
 	return actPose->coordinates;
+}
+
+void Trajectory::setCoordinates2(const char *cCoordinates)//for smooth2
+{
+	setValuesInArray(actPose2->coordinates, cCoordinates);
+}
+
+double * Trajectory::getCoordinates2() const//for smooth2
+{
+	return actPose2->coordinates;
 }
 
 void Trajectory::showTime()
@@ -273,15 +345,30 @@ void Trajectory::showTime()
 	}
 }
 
+void Trajectory::showTime2()//for smooth2
+{
+	std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator it;
+	printf("Nazwa: %s, PoseSpec: %d, NumOfPoses: %u\n", trjID, poseSpec, numOfPoses);
+	for(it=trjPoses2->begin(); it!=trjPoses2->end(); ++it)
+	{
+		printf("%f %f %f %f %f %f %f %f\n", (*it).v[0], (*it).v[1], (*it).v[2], (*it).v[3],
+				(*it).v[4], (*it).v[5], (*it).v[6], (*it).v[7]);
+		printf("%f %f %f %f %f %f %f %f\n", (*it).a[0], (*it).a[1], (*it).a[2], (*it).a[3],
+				(*it).a[4], (*it).a[5], (*it).a[6], (*it).a[7]);
+		printf("%f %f %f %f %f %f %f %f\n***\n\n", (*it).coordinates[0], (*it).coordinates[1], (*it).coordinates[2], (*it).coordinates[3],
+				(*it).coordinates[4], (*it).coordinates[5], (*it).coordinates[6], (*it).coordinates[7]);
+	}
+}
+
 std::list<ecp_mp::common::smooth_trajectory_pose> * Trajectory::getPoses()
 {
 	return new std::list<ecp_mp::common::smooth_trajectory_pose>(*trjPoses);
 }
 
-/*std::list<ecp_mp::common::smooth2_trajectory_pose> * Trajectory::getPoses2()
+std::list<ecp_mp::common::smooth2_trajectory_pose> * Trajectory::getPoses2()//for smooth2
 {
-	return new std::list<ecp_mp::common::smooth2_trajectory_pose>(*trjPoses);
-}*/
+	return new std::list<ecp_mp::common::smooth2_trajectory_pose>(*trjPoses2);
+}
 
 } // namespace common
 } // namespace ecp_mp

@@ -33,7 +33,9 @@ class Trajectory
 		static void writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth_trajectory_pose> &poses);
 		static void writeTrajectoryToXmlFile2(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth2_trajectory_pose> &poses);//for smooth2
 		void createNewPose();
+		void createNewPose2();//for smooth2
 		void addPoseToTrajectory();
+		void addPoseToTrajectory2();//for smooth2
 
 		void setTrjID(const char *trjID);
 		const char * getTrjID() const;
@@ -56,10 +58,20 @@ class Trajectory
 		void setAccelerations(const char *accelerations);
 		double *getAccelerations() const;
 
-		void setCoordinates(const char *cCoordinates);
-		double *getCoordinates() const;
+		void setVelocities2(const char *Velocities);//for smooth2
+		double *getVelocities2() const;//for smooth2
+
+		void setAccelerations2(const char *accelerations);//for smooth2
+		double *getAccelerations2() const;//for smooth2
+
+		void setCoordinates(const char *cCoordinates);//for smooth2
+		double *getCoordinates() const;//for smooth2
+
+		void setCoordinates2(const char *cCoordinates);//for smooth2
+		double *getCoordinates2() const;//for smooth2
 
 		void showTime();
+		void showTime2();//for smooth2
 
 		std::list<ecp_mp::common::smooth_trajectory_pose> * getPoses();
 		std::list<ecp_mp::common::smooth2_trajectory_pose> * getPoses2();//for smooth2
