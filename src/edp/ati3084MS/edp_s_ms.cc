@@ -20,9 +20,12 @@
 
 #include <sys/iofunc.h>
 #include <termios.h>
+#include <sys/neutrino.h>
+#include <inttypes.h>
 
 #include <boost/bind.hpp>
 #include <boost/cstdint.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 #include <kiper/Log.hpp>
 #include <kiper/FunctorCallback.hpp>
@@ -50,8 +53,8 @@ uint8_t ATI3084_force::SENSOR_BOARD_MAC[6] = {0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 
 // Rejstracja procesu VSP
 ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
-  force(_master), rpcClient_(SENSOR_DEVICE_NAME, SENSOR_BOARD_MAC), sensor_(&rpcClient_), ms_nr(0),
-  //force(_master), rpcClient_(SENSOR_BOARD_HOST, SENSOR_BOARD_PORT), sensor_(&rpcClient_), ms_nr(0),
+  //force(_master), rpcClient_(SENSOR_DEVICE_NAME, SENSOR_BOARD_MAC), sensor_(&rpcClient_), ms_nr(0),
+  force(_master), rpcClient_(SENSOR_BOARD_HOST, SENSOR_BOARD_PORT), sensor_(&rpcClient_), ms_nr(0),
   sendBiasClosure_(NewPermanentFunctorCallback(boost::bind(&ATI3084_force::handleSendBiasReply, this,
   boost::ref(sendBiasController)))),
   getForceReadingClosure_(NewPermanentFunctorCallback(boost::bind(&ATI3084_force::handleGetGenForceReading, this,
@@ -76,8 +79,30 @@ ATI3084_force::~ATI3084_force(void)
 		delete gravity_transformation;
 	}
     std::cout << "Destruktor edp_ATI3084_force_sensor" << std::endl;
+
+    // Dump readings
+
+    boost::posix_time::ptime currentTime(boost::posix_time::second_clock::local_time());
+    std::string fileName;
+    for (unsigned int i = 0; i < 10; ++i) {
+
+    }
 }
-;
+
+
+bool ATI3084_force::sensorWorks() {
+	for (unsigned int i = 0; i < 3; ++i) {
+		getForceReadingController.reset();
+		sensor_.GetGenGForceReading(&getForceReadingController, NULL, &genForceReading,
+		  getForceReadingClosure_.get());
+		if (getForceReadingController.expired() || getForceReadingController.failed()) {
+			std::cerr << "Sensor reading failed, retrying..." << std::endl;
+		} else {
+			return true;
+		}
+	}
+	return false;
+}
 
 /**************************** inicjacja czujnika ****************************/
 void ATI3084_force::configure_sensor(void)
@@ -144,9 +169,26 @@ void ATI3084_force::configure_sensor(void)
 void ATI3084_force::wait_for_event() {
 	static unsigned int recvd = 0;
 	usleep(300);
+
+	static unsigned int nReads = 0;
+	static uint16_t reads[1048576];
+	static unsigned int iReads = 0;
+	static uint64_t totalTime = 0;
+	static unsigned int CPU_CLOCK = 500000000;
+
 	if (FORCE_TEST_MODE) {
+		uint64_t cycles = ClockCycles();
 		ftxyz=getFT(uart);
+		uint64_t elapsedCycles = ClockCycles() - cycles;
+		uint16_t timeMicroSec = (uint16_t) (((double) elapsedCycles) / (CPU_CLOCK/1000000));
+		totalTime += timeMicroSec;
+		reads[iReads] = timeMicroSec;
 		++recvd;
+		++iReads;
+		if (iReads % 2000 == 0) {
+			std::cout << "Mean time = " << double(totalTime) / 2000 << std::endl;
+			totalTime = 0;
+		}
 	} else {
 		usleep(1000);
 	}

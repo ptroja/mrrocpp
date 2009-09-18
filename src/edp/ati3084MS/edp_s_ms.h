@@ -36,8 +36,8 @@ int16_t ft[6];
 class ATI3084_force : public force{
 typedef boost::scoped_ptr<google::protobuf::Closure> ClosurePtr;
 private:
-	//kiper::clients::AsioUdpClient rpcClient_;
-	kiper::clients::RawEthernetClient rpcClient_;
+	kiper::clients::AsioUdpClient rpcClient_;
+	//kiper::clients::RawEthernetClient rpcClient_;
 	Ati3084_Stub sensor_;
 	int uart, i,r;
 	//int licz=0;
@@ -66,6 +66,7 @@ private:
 	int open_port(void);
 	forceReadings getFT(int fd);
 	void sendBias();
+	bool sensorWorks();
 
 	void handleSendBiasReply(kiper::ClientRpcController& controller);
 	void handleGetGenForceReading(kiper::ClientRpcController& controller);
