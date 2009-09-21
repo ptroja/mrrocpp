@@ -79,7 +79,6 @@ lib::BYTE servo_buffer::Move_a_step (void)
 	}
 	return convert_error();
 }
-; // end: servo_buffer::Move_a_step
 /*-----------------------------------------------------------------------*/
 
 
@@ -344,10 +343,8 @@ void servo_buffer::synchronise (void)
 				//   	printf("baabb: default\n");
 				break;
 			}
-			; // end: switch
 			break;
 		}
-		; // end: while
 		//	 printf("D\n ");
 
 		// analiza powstalej sytuacji (czy zjechano z wylacznika synchronizacji)
