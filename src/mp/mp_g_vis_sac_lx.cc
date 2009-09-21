@@ -634,8 +634,8 @@ bool vis_sac_lx::next_step ()
 
 
     //force regulator
+#if 0
     //sterujemy predkoscia
-    /*
     for(int i=0;i<3; i++) {
 
     	irp6ot->ecp_td.MPtoECP_position_velocity[i] = 0; //1.5*E_r_Ep[0][i];//*2*td.internode_step_no;
@@ -657,7 +657,7 @@ bool vis_sac_lx::next_step ()
     	irp6ot->ecp_td.MPtoECP_position_velocity[i] = E_r_Ep[0][i]*
     	(double) (1/ ( ((double)STEP)*((double)step_no)*1) );//*2*td.internode_step_no;
 }
-    */
+#endif
 
     //sterujemy polozeniem
 
