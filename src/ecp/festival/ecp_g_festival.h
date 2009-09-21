@@ -38,7 +38,7 @@ class generator : public common::generator::generator
 		int sock;
 		
 		int read_pending_status;
-		int numread;
+		ssize_t numread;
 		char buf[256];
 
 		int portnum;

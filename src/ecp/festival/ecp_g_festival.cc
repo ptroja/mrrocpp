@@ -109,12 +109,12 @@ bool generator::first_step ( )
 		return false;
 	}
 
-	int written = write(sock, (const void *) command.c_str(), command.length());
+	ssize_t written = write(sock, (const void *) command.c_str(), command.length());
 	if (written == -1) {
 		perror("festival_generator::first_step(): write()");
 		close(sock);
 		return false;
-	} else if (written < command.length()) {
+	} else if (written < (int) command.length()) {
 		fprintf(stderr, "festival_generator::first_step(): write() %d of %d bytes written\n",
 		        written, command.length());
 		return false;
@@ -164,7 +164,7 @@ bool generator::next_step ( )
 	}
 
 	if (has_data) {
-		if (numread < strlen(FESTIVAL_CODE_OK)) {
+		if (numread < (int) strlen(FESTIVAL_CODE_OK)) {
 			int numthisread;
 
 			if ((numthisread = read(sock, buf+numread, sizeof(buf)-numread)) == -1) {
@@ -175,7 +175,7 @@ bool generator::next_step ( )
 			buf[numread] = 0;
 		}
 
-		if (numread < strlen(FESTIVAL_CODE_OK)) {
+		if (numread < (int) strlen(FESTIVAL_CODE_OK)) {
 			fprintf(stderr, "festival_generator::next_step(): something went wrong, "
 			        "expected %d bytes of code, but got %d\n",
 			        (int) strlen(FESTIVAL_CODE_OK),numread);
