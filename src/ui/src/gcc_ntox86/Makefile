@@ -21,8 +21,9 @@ include $(HOMEDIR)/common.mk
 HEADERSDIR = $(HOMEDIR)/src
 
 CXXFLAGS += -I $(HEADERSDIR) -I.
-LDFLAGS += -Bstatic -l phexlib $(ABLIB) $(PHABOPTS)
-SDFLAGS = -l phexlib $(ABLIB) $(PHABOPTS) -L$(QNX_TARGET)/mrlib/lib -lxml2 -liconv
+#LDFLAGS += -Bstatic -l phexlib $(ABLIB) $(PHABOPTS)
+LDFLAGS += -l phexlib $(ABLIB) $(PHABOPTS)
+#SDFLAGS = -l phexlib $(ABLIB) $(PHABOPTS) -L$(QNX_TARGET)/mrlib/lib -lxml2 -liconv
 
 MRROCOBJ = \
 	$(ECP_DIR)/irp6_on_track/ecp_r_irp6ot.o \
@@ -53,7 +54,7 @@ else
 shr: ui
 
 ui:	$(ABOBJ) $(MYOBJ) $(MRROCOBJ)
-		$(LD) $(ABOBJ) $(MYOBJ) $(MRROCOBJ) $(SDFLAGS) -M -o ui
+		$(LD) $(ABOBJ) $(MYOBJ) $(MRROCOBJ) $(LDFLAGS) -M -o ui
 		usemsg ui ../Usemsg
 		phabbind ui $(ABMOD)
 
