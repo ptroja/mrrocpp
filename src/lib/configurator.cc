@@ -608,6 +608,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 }// : spawn
 
 configurator::~configurator() {
+	pthread_mutex_destroy(&mutex);
 	free(node);
 	free(dir);
 	free(ini_file);
