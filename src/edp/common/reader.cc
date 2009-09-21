@@ -185,6 +185,9 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 					default:
 					if (ui_msg.hdr.code==READER_START) { // odebrano puls start
 						start = true;
+#ifdef DOCENT_SENSOR
+						onReaderStarted();
+#endif
 					}
 				}
 				continue;
@@ -267,6 +270,9 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 					default:
 					if (ui_msg.hdr.code==READER_STOP) {
 						stop = true; // dostalismy puls STOP
+#ifdef DOCENT_SENSOR
+						onReaderStopped();
+#endif
 					} else if (ui_msg.hdr.code==READER_TRIGGER) {
 						ui_trigger = true; // dostaliśmy puls TRIGGER
 					}

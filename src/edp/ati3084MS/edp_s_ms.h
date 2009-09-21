@@ -70,6 +70,9 @@ private:
 
 	void handleSendBiasReply(kiper::ClientRpcController& controller);
 	void handleGetGenForceReading(kiper::ClientRpcController& controller);
+
+	void onReaderStarted();
+	void onReaderStopped();
 public:
 	ATI3084_force(common::irp6s_postument_track_effector &_master);
 	virtual ~ATI3084_force();

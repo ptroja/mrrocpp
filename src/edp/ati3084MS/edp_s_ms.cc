@@ -47,7 +47,8 @@ namespace sensor {
 
 using namespace kiper;
 
-const char* ATI3084_force::SENSOR_BOARD_HOST = "192.168.18.200";
+//const char* ATI3084_force::SENSOR_BOARD_HOST = "192.168.18.200";
+const char* ATI3084_force::SENSOR_BOARD_HOST = "192.160.10.20";
 const char* ATI3084_force::SENSOR_DEVICE_NAME = "en0";
 uint8_t ATI3084_force::SENSOR_BOARD_MAC[6] = {0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
@@ -71,6 +72,8 @@ ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
 
 		sendBias();
 	}
+	master.registerReaderStartedCallback(boost::bind(&ATI3084_force::onReaderStarted, this));
+	master.registerReaderStoppedCallback(boost::bind(&ATI3084_force::onReaderStopped, this));
 }
 
 ATI3084_force::~ATI3084_force(void)
@@ -83,7 +86,8 @@ ATI3084_force::~ATI3084_force(void)
     // Dump readings
 
     boost::posix_time::ptime currentTime(boost::posix_time::second_clock::local_time());
-    std::string fileName;
+    std::string fileName = to_iso_string(currentTime);
+    std::cout << "File name = " << fileName << std::endl;
     for (unsigned int i = 0; i < 10; ++i) {
 
     }
@@ -171,7 +175,8 @@ void ATI3084_force::wait_for_event() {
 	usleep(300);
 
 	static unsigned int nReads = 0;
-	static uint16_t reads[1048576];
+	static const int STORED_READS = 1048576;
+	static uint16_t reads[STORED_READS];
 	static unsigned int iReads = 0;
 	static uint64_t totalTime = 0;
 	static unsigned int CPU_CLOCK = 500000000;
@@ -182,6 +187,9 @@ void ATI3084_force::wait_for_event() {
 		uint64_t elapsedCycles = ClockCycles() - cycles;
 		uint16_t timeMicroSec = (uint16_t) (((double) elapsedCycles) / (CPU_CLOCK/1000000));
 		totalTime += timeMicroSec;
+		if (iReads == STORED_READS) {
+			iReads = 0;
+		}
 		reads[iReads] = timeMicroSec;
 		++recvd;
 		++iReads;
@@ -335,7 +343,7 @@ void ATI3084_force::handleSendBiasReply(ClientRpcController& controller) {
 void ATI3084_force::handleGetGenForceReading(ClientRpcController& controller) {
 	static int iter = 0;
 	if (controller.expired()) {
-		//std::cout << "Timeout: getGenForceReading()" << std::endl;
+		std::cout << "Timeout: getGenForceReading()" << std::endl;
 	} else if (controller.failed()) {
 		std::cout << "Failed: getGenForceReading()" << std::endl;
 		std::cout << "Reason : " << controller.errorCode() << ", " <<
@@ -343,7 +351,13 @@ void ATI3084_force::handleGetGenForceReading(ClientRpcController& controller) {
 	} else {
 		++iter;
 		if (iter % 1000 == 0) {
+			std::cout << genForceReading.fx() << " " <<
 
+				genForceReading.fy() << " " <<
+				genForceReading.fz() << " " <<
+				genForceReading.tx() << " " <<
+				genForceReading.ty() << " " <<
+				genForceReading.tz() << " " << std::endl;
 		}
 	}
 }
@@ -352,6 +366,14 @@ force* return_created_edp_force_sensor(common::irp6s_postument_track_effector &_
 {
 	return new ATI3084_force(_master);
 }// : return_created_sensor
+
+void ATI3084_force::onReaderStarted() {
+	std::cout << "DOCENT: reader started!" << std::endl;
+}
+
+void ATI3084_force::onReaderStopped() {
+	std::cout << "DOCENT: reader stopped!" << std::endl;
+}
 
 
 } // namespace sensor

@@ -34,6 +34,7 @@
 
 #include "lib/mathtr.h"
 
+
 #include "kinematics/common/kinematic_model.h"
 
 namespace mrrocpp {
@@ -64,6 +65,11 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
 
     motion_type = lib::ABSOLUTE;
     synchronised = false;
+
+#ifdef DOCENT_SENSOR
+    startedCallbackRegistered_ = false;
+    stoppedCallbackRegistered_ = false;
+#endif
 
 #ifdef __QNXNTO__
     if((servo_to_tt_chid = ChannelCreate(_NTO_CHF_UNBLOCK)) == -1) {
@@ -1527,6 +1533,30 @@ void in_out_buffer::get_input (lib::WORD *binary_in_value, lib::BYTE *analog_in_
 
     // printf("%x\n", 0x00FF&(~odczyt));
 }
+
+#ifdef DOCENT_SENSOR
+
+void manip_and_conv_effector::registerReaderStartedCallback(boost::function<void()> startedCallback) {
+	startedCallback_ = startedCallback;
+	startedCallbackRegistered_ = true;
+}
+
+void manip_and_conv_effector::registerReaderStoppedCallback(boost::function<void()> stoppedCallback) {
+	stoppedCallback_ = stoppedCallback;
+	stoppedCallbackRegistered_ = true;
+}
+
+void manip_and_conv_effector::onReaderStarted() {
+	if (startedCallbackRegistered_) {
+		startedCallback_();
+	}
+}
+void manip_and_conv_effector::onReaderStopped() {
+	if (stoppedCallbackRegistered_) {
+		stoppedCallback_();
+	}
+}
+#endif
 
 /**************************** IN_OUT_BUFFER *****************************/
 

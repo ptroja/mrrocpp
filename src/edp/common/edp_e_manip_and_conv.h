@@ -24,6 +24,10 @@
 #include "lib/configurator.h"
 
 
+#ifdef DOCENT_SENSOR
+#include <boost/function.hpp>
+#endif
+
 namespace mrrocpp {
 namespace edp {
 namespace common {
@@ -45,6 +49,13 @@ protected:
     void *servo_thread(void* arg);
     static void *visualisation_thread_start(void* arg);
     void *visualisation_thread(void* arg);
+
+#ifdef DOCENT_SENSOR
+    void onReaderStarted();
+    void onReaderStopped();
+
+#endif
+
 
     lib::WORD motion_steps;            // liczba krokow ruchu zadanego (makrokroku)
 
@@ -73,6 +84,14 @@ protected:
     pthread_t vis_t_tid;
 
     STATE next_state;    // stan nastepny, do ktorego przejdzie EDP_MASTER
+
+#ifdef DOCENT_SENSOR
+    boost::function<void()> startedCallback_;
+    bool startedCallbackRegistered_;
+    boost::function<void()> stoppedCallback_;
+    bool stoppedCallbackRegistered_;
+#endif
+
 
     friend class servo_buffer;
 
@@ -177,6 +196,10 @@ protected:
 public:
 
     void master_joints_read (double*);
+#ifdef DOCENT_SENSOR
+    void registerReaderStartedCallback(boost::function<void()> startedCallback);
+    void registerReaderStoppedCallback(boost::function<void()> stoppedCallback);
+#endif
 
 #ifdef __QNXNTO__
     int servo_to_tt_chid;
