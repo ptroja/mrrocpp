@@ -14,8 +14,9 @@ UISRCDIR=$(HOMEDIR)/src/ui/src
 HEADERSDIR = $(HOMEDIR)/include
 
 CXXFLAGS += -I $(HEADERSDIR) -I.
-LDFLAGS += -Bstatic $(PHABOPTS)
-SDFLAGS = $(PHABOPTS) -L$(QNX_TARGET)/mrlib/lib -lxml2 -liconv
+#LDFLAGS += -Bstatic $(PHABOPTS)
+LDFLAGS += $(PHABOPTS)
+#SDFLAGS = $(PHABOPTS) -L$(QNX_TARGET)/mrlib/lib -lxml2 -liconv
 
 MRROCOBJ = \
 	$(ECP_DIR)/irp6_on_track/ecp_r_irp6ot.o \
@@ -42,7 +43,7 @@ VPATH = ..
 shr: ui_server
 
 ui_server:	$(MYOBJ) $(MRROCOBJ)
-		$(LD) $(MYOBJ) $(MRROCOBJ) $(SDFLAGS) -M -o ui_server -lang-c++
+		$(LD) $(MYOBJ) $(MRROCOBJ) $(LDFLAGS) -M -o ui_server -lang-c++
 
 app:	$(ABOBJ) $(MYOBJ) $(MRROCOBJ)
 		$(LD) $(MYOBJ) $(MRROCOBJ) $(LDFLAGS) -M -o ui_server -lang-c++
