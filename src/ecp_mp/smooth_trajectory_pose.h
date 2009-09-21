@@ -30,4 +30,4 @@ public:
 } // namespace ecp_mp
 } // namespace mrrocpp
 
-#endif /* _ECP_SMOOTH_TAUGHT_IN_POSE_H */
+#endif /* _ECP_SMOOTH_TRAJECTORY_POSE_H */

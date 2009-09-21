@@ -1,5 +1,5 @@
-#if !defined(_ECP_MP_SMOOTH_TAUGHT_IN_POSE_H)
-#define  _ECP_MP_SMOOTH_TAUGHT_IN_POSE_H
+#if !defined(_ECP_MP_TRAJECTORY_POSE_H)
+#define  _ECP_MP_TRAJECTORY_POSE_H
 
 #include "lib/com_buf.h"		// lib::POSE_SPECIFICATION
 #include "lib/impconst.h"	// MAX_SERVOS_NR
@@ -26,4 +26,4 @@ public:
 } // namespace ecp_mp
 } // namespace mrrocpp
 
-#endif /* _ECP_SMOOTH_TAUGHT_IN_POSE_H */
+#endif /* _ECP_TRAJECTORY_POSE_H */

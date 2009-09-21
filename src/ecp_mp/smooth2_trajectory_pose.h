@@ -46,4 +46,4 @@ public:
 } // namespace ecp
 } // namespace mrrocpp
 
-#endif /* _ECP_SMOOTH2_TAUGHT_IN_POSE_H */
+#endif /* _ECP_SMOOTH2_TRAJECTORY_POSE_H */
