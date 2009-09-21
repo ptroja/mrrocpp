@@ -171,7 +171,7 @@ void ecp_robot::connect_to_edp(lib::configurator &config)
 			fflush(stdout);
 		} else {
 			int e = errno; // kod bledu systemowego
-			fprintf(stderr, "Unable to locate EDP_MASTER process at channel \"%s\": %s\n", edp_net_attach_point.c_str(), sys_errlist[errno]);
+			fprintf(stderr, "Unable to locate EDP_MASTER process at channel \"%s\": %s\n", edp_net_attach_point.c_str(), strerror(errno));
 			sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "Unable to locate EDP_MASTER process");
 			throw ecp_robot::ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 		}
