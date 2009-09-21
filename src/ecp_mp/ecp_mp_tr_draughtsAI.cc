@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstring>
 #include <unistd.h>
+#include <string.h>
 
 
 #include "ecp_mp/ecp_mp_tr_draughtsAI.h"
@@ -30,12 +31,12 @@ int TRDraughtsAI::AIconnect(const char *host,unsigned short int serverPort){
 	hostInfo=gethostbyname(host);
 	if (hostInfo==NULL) {
 		cout<<"problem interpreting host: "<<host<<"\n";
-		throw ecp_mp::transmitter::transmitter::transmitter_error(0,0);
+		throw ecp_mp::transmitter::transmitter::transmitter_error(lib::SYSTEM_ERROR,0);
 	}
 	socketDesc = socket(AF_INET, SOCK_STREAM, 0);
 	if (socketDesc < 0) {
 		cerr << "cannot create socket\n";
-		throw ecp_mp::transmitter::transmitter::transmitter_error(0,0);
+		throw ecp_mp::transmitter::transmitter::transmitter_error(lib::SYSTEM_ERROR,0);
 	}
 
 	serverAddress.sin_family = hostInfo->h_addrtype;
@@ -44,7 +45,7 @@ int TRDraughtsAI::AIconnect(const char *host,unsigned short int serverPort){
 
 	if (connect(socketDesc,(struct sockaddr *) &serverAddress,sizeof(serverAddress)) < 0) {
 		cerr << "cannot connect\n";
-		throw ecp_mp::transmitter::transmitter::transmitter_error(0,0);
+		throw ecp_mp::transmitter::transmitter::transmitter_error(lib::SYSTEM_ERROR,0);
 	}
 
 	socketDescriptor=socketDesc;
@@ -58,7 +59,7 @@ bool TRDraughtsAI::t_read(bool wait){
 	if (recv(socketDescriptor, &from_va.draughts_ai, sizeof(from_va.draughts_ai), 0) < 0) {
 		cerr << "didn't get response from server?";
 		close(socketDescriptor);
-		throw ecp_mp::transmitter::transmitter::transmitter_error(0,0);
+		throw ecp_mp::transmitter::transmitter::transmitter_error(lib::SYSTEM_ERROR,0);
 	}
 }
 
@@ -66,7 +67,7 @@ bool TRDraughtsAI::t_write(){
 	if (send(socketDescriptor, &to_va.draughts_ai, sizeof(to_va.draughts_ai), 0) < 0) {
 		cerr << "cannot send data ";
 		close(socketDescriptor);
-		throw ecp_mp::transmitter::transmitter::transmitter_error(0,0);
+		throw ecp_mp::transmitter::transmitter::transmitter_error(lib::SYSTEM_ERROR,0);
 	}
 }
 

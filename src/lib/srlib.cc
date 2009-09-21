@@ -143,7 +143,7 @@ int sr::message(const char *text) {
 } // end: sr::message()
 
 
-int sr::message(int16_t message_type, const char *text) {
+int sr::message(enum ERROR_CLASS message_type, const char *text) {
   sr_message.message_type = message_type;
   if(text == NULL)
     sr_message.description[0] = '\0';
@@ -157,7 +157,7 @@ int sr::message(int16_t message_type, const char *text) {
 } // end: sr::message()
 
 
-int sr::message(int16_t message_type, uint64_t error_code, const char *text) {
+int sr::message(enum ERROR_CLASS message_type, uint64_t error_code, const char *text) {
   sr_message.message_type = message_type;
   error_tab[0] = error_code;
   interpret();
@@ -165,14 +165,14 @@ int sr::message(int16_t message_type, uint64_t error_code, const char *text) {
   return send_package();
 } // end: sr::message()
 
-int sr::message(int16_t message_type, uint64_t error_code) {
+int sr::message(enum ERROR_CLASS message_type, uint64_t error_code) {
   sr_message.message_type = message_type;
   error_tab[0] = error_code;
   interpret();
   return send_package();
 } // end: sr::message()
 
-int sr::message(int16_t message_type, uint64_t error_code0, uint64_t error_code1) {
+int sr::message(enum ERROR_CLASS message_type, uint64_t error_code0, uint64_t error_code1) {
   sr_message.message_type = message_type;
   error_tab[0] = error_code0;
   error_tab[1] = error_code1;

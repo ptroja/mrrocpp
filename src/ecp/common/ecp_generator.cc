@@ -19,7 +19,7 @@ generator::generator (common::task::task& _ecp_task)
 generator::~generator()
 {}
 
-generator::ECP_error::ECP_error ( uint64_t err_cl, uint64_t err_no,
+generator::ECP_error::ECP_error ( lib::ERROR_CLASS err_cl, uint64_t err_no,
                                       uint64_t err0, uint64_t err1 )
         :
         error_class(err_cl),

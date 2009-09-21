@@ -50,6 +50,7 @@ typedef struct sr_package {
 // tymczasowe rozwiazanie porponowane przez ekipe QNX
 
 class sr {
+private:
 #if !defined(USE_MESSIP_SRR)
   int fd;	// by W
 #else
@@ -63,18 +64,18 @@ protected:
 public :
   sr(PROCESS_TYPE process_type, std::string process_name, std::string sr_name);
   virtual ~sr(void);
-  int message(int16_t message_type, uint64_t error_code);
-  int message(int16_t message_type, uint64_t error_code0, uint64_t error_code1);
-  int message(int16_t message_type, uint64_t error_code, const char *text);
-  int message(int16_t message_type, uint64_t error_code, std::string text) {
+  int message(enum ERROR_CLASS message_type, uint64_t error_code);
+  int message(enum ERROR_CLASS message_type, uint64_t error_code0, uint64_t error_code1);
+  int message(enum ERROR_CLASS message_type, uint64_t error_code, const char *text);
+  int message(enum ERROR_CLASS message_type, uint64_t error_code, std::string text) {
 	  return message(message_type, error_code, text.c_str());
   }
   int message(const char *text);
   int message(std::string text) {
 	  return message(text.c_str());
   }
-  int message(int16_t message_type, const char *text);
-  int message(int16_t message_type, std::string text) {
+  int message(enum ERROR_CLASS message_type, const char *text);
+  int message(enum ERROR_CLASS message_type, std::string text) {
 	  return message(message_type, text.c_str());
   }
 
