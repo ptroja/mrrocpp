@@ -98,8 +98,7 @@ int main(int argc, char *argv[], char **arge) {
 #endif /* __QNXNTO__ */
 
 		// odczytanie konfiguracji
-		lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3],
-				argv[4], argv[5]);
+		lib::configurator _config = lib::configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
 
 		/* Lokalizacja procesu wywietlania komunikatow SR */
 		/*
@@ -112,7 +111,7 @@ int main(int argc, char *argv[], char **arge) {
 		//	printf("przed\n");
 		//		delay(10000);
 		//			printf("za\n");
-		edp::common::master = edp::common::return_created_efector(*_config);
+		edp::common::master = edp::common::return_created_efector(_config);
 
 		edp::common::master->initialize();
 
