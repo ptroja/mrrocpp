@@ -9,6 +9,7 @@
 
 #include <time.h>
 #include <string>
+#include <boost/thread/mutex.hpp>
 
 #include "messip/messip.h"
 #include "lib/typedefs.h"
@@ -51,6 +52,7 @@ typedef struct sr_package {
 
 class sr {
 private:
+  boost::mutex srMutex;		//! one-thread a time access mutex
 #if !defined(USE_MESSIP_SRR)
   int fd;	// by W
 #else
@@ -85,12 +87,14 @@ public :
 class sr_edp: public sr {
 public:
   sr_edp(PROCESS_TYPE process_type, std::string process_name, std::string sr_name);
+protected:
   virtual void interpret(void);
 };
 
 class sr_ecp: public sr {
 public:
   sr_ecp(PROCESS_TYPE process_type, std::string process_name, std::string sr_name);
+protected:
   virtual void interpret(void);
 };
 
@@ -98,6 +102,7 @@ public:
 class sr_vsp: public sr {
 public:
   sr_vsp(PROCESS_TYPE process_type, std::string process_name, std::string sr_name);
+protected:
   virtual void interpret(void);
 };
 
@@ -105,6 +110,7 @@ public:
 class sr_ui: public sr {
 public:
   sr_ui(PROCESS_TYPE process_type, std::string process_name, std::string sr_name);
+protected:
   virtual void interpret(void);
 };
 

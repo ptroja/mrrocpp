@@ -24,7 +24,8 @@ ifeq ($(BUILD_TARGET), linux)
   LD=g++
   CC=gcc
   CXX=g++
-  LDFLAGS=-lrt `pkg-config --libs libxml-2.0`
+  CXXFLAGS=${FLAGS}
+  LDFLAGS=-lrt `pkg-config --libs libxml-2.0` -lboost_thread-mt
   CPPFLAGS=-Wall -I$(HOMEDIR)/src `pkg-config --cflags libxml-2.0` -DUSE_MESSIP_SRR
   BINDIR=$(HOMEDIR)/bin.linux
 else
@@ -34,7 +35,7 @@ else
   CXX=QCC ${VERSION}
   CXXFLAGS=${FLAGS}
   LD=QCC ${VERSION}
-  LDFLAGS=${DEBUG} -lm -lsocket -lcpp -lang-c++ $(RPATHV) -L$(QNX_TARGET)/mrlib/lib -lxml2 -liconv
+  LDFLAGS=${DEBUG} -lm -lsocket -lcpp -lang-c++ $(RPATHV) -L$(QNX_TARGET)/mrlib/lib -lxml2 -liconv -lboost_thread-mt
   CPPFLAGS=-I$(HOMEDIR)/src -I$(QNX_TARGET)/mrlib/include
   AR=ntox86-ar
   BINDIR=$(HOMEDIR)/bin

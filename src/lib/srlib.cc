@@ -16,6 +16,8 @@
 #include <assert.h>
 #include <sys/utsname.h>
 
+#include <boost/thread/mutex.hpp>
+
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -130,6 +132,8 @@ int sr::send_package(void) {
 /* -------------------------------------------------------------------- */
 
 int sr::message(const char *text) {
+  boost::mutex::scoped_lock lock(srMutex);
+
   sr_message.message_type = NEW_MESSAGE;
   if(text == NULL)
     sr_message.description[0] = '\0';
@@ -144,6 +148,8 @@ int sr::message(const char *text) {
 
 
 int sr::message(enum ERROR_CLASS message_type, const char *text) {
+  boost::mutex::scoped_lock lock(srMutex);
+
   sr_message.message_type = message_type;
   if(text == NULL)
     sr_message.description[0] = '\0';
@@ -158,6 +164,8 @@ int sr::message(enum ERROR_CLASS message_type, const char *text) {
 
 
 int sr::message(enum ERROR_CLASS message_type, uint64_t error_code, const char *text) {
+  boost::mutex::scoped_lock lock(srMutex);
+
   sr_message.message_type = message_type;
   error_tab[0] = error_code;
   interpret();
@@ -166,6 +174,8 @@ int sr::message(enum ERROR_CLASS message_type, uint64_t error_code, const char *
 } // end: sr::message()
 
 int sr::message(enum ERROR_CLASS message_type, uint64_t error_code) {
+  boost::mutex::scoped_lock lock(srMutex);
+
   sr_message.message_type = message_type;
   error_tab[0] = error_code;
   interpret();
@@ -173,6 +183,8 @@ int sr::message(enum ERROR_CLASS message_type, uint64_t error_code) {
 } // end: sr::message()
 
 int sr::message(enum ERROR_CLASS message_type, uint64_t error_code0, uint64_t error_code1) {
+  boost::mutex::scoped_lock lock(srMutex);
+
   sr_message.message_type = message_type;
   error_tab[0] = error_code0;
   error_tab[1] = error_code1;

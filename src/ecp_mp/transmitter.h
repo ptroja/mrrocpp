@@ -3,9 +3,8 @@
 
 #include <stdint.h>				// for uint64_t
 
-#include "player/playerc.h"
-
 #include "lib/srlib.h"
+#include "player/playerc.h"
 
 namespace mrrocpp {
 namespace ecp_mp {
