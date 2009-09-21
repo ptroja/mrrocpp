@@ -122,10 +122,10 @@ public:
 	class ECP_main_error
 	{  // Klasa obslugi bledow ECP
 	public:
-		uint64_t error_class;
+		lib::ERROR_CLASS error_class;
 		uint64_t error_no;
 
-		ECP_main_error ( uint64_t err_cl, uint64_t err_no);
+		ECP_main_error ( lib::ERROR_CLASS err_cl, uint64_t err_no);
 	};
 
 };
