@@ -1,9 +1,6 @@
 #if !defined(_ECP_T_PAWEL_H)
 #define _ECP_T_PAWEL_H
 
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
-
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
@@ -22,7 +19,6 @@ class pawel: public common::task::task  {
 		//	ecp_teach_in_generator* tig;
 		generator::pawel* pg;
 		double x,y,z;
-
 
 	public:
 		// KONSTRUKTORY
