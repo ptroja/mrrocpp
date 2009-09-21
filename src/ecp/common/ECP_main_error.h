@@ -2,6 +2,7 @@
 #define  _ECP_MAIN_ERROR_H
 
 #include <stdint.h>
+#include "lib/com_buf.h"
 
 namespace mrrocpp {
 namespace ecp {
