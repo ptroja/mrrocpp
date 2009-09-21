@@ -1,7 +1,9 @@
 #include <netdb.h>
 #include <sys/socket.h>
 #include <iostream>
+#include <cstring>
 #include <unistd.h>
+
 
 #include "ecp_mp/ecp_mp_tr_draughtsAI.h"
 
@@ -37,7 +39,7 @@ int TRDraughtsAI::AIconnect(const char *host,unsigned short int serverPort){
 	}
 
 	serverAddress.sin_family = hostInfo->h_addrtype;
-	memcpy((char *) &serverAddress.sin_addr.s_addr,hostInfo->h_addr_list[0], hostInfo->h_length);
+	std::memcpy((char *) &serverAddress.sin_addr.s_addr,hostInfo->h_addr_list[0], hostInfo->h_length);
 	serverAddress.sin_port = htons(serverPort);
 
 	if (connect(socketDesc,(struct sockaddr *) &serverAddress,sizeof(serverAddress)) < 0) {
