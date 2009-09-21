@@ -248,7 +248,7 @@ void State::setProperTransitionResult(bool result)
 {
 	for(std::list<Transition>::iterator it = stateTransitions->begin(); it != stateTransitions->end(); ++it)
 	{
-		if(((*it).getConditionDescription()).c_str() == "stateOperationResult")
+		if(((*it).getConditionDescription()) == "stateOperationResult")
 			(*it).setConditionResult(result);
 	}
 }
