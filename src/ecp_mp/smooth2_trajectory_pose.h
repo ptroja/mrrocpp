@@ -1,5 +1,5 @@
-#if !defined(_ECP_SMOOTH2_TAUGHT_IN_POSE_H)
-#define  _ECP_SMOOTH2_TAUGHT_IN_POSE_H
+#if !defined(_ECP_SMOOTH2_TRAJECTORY_POSE_H)
+#define  _ECP_SMOOTH2_TRAJECTORY_POSE_H
 
 #include "lib/com_buf.h"		// lib::POSE_SPECIFICATION
 #include "lib/impconst.h"	// MAX_SERVOS_NR
