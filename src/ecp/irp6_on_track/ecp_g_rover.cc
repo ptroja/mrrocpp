@@ -169,7 +169,7 @@ bool vis_sac_lx::first_step()
 
 	vsp_vis_sac = sensor_m[lib::SENSOR_CAMERA_SA];
 
-	printf("KAMERA, KAMERA %d \n\n",vsp_vis_sac);
+	//printf("KAMERA, KAMERA %d \n\n",vsp_vis_sac);
 
 	idle_step_counter = 1;
 	vsp_vis_sac->base_period=0; //1

@@ -982,7 +982,7 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 
 	//force regulator
 	//sterujemy predkoscia
-	/*
+#if 0
 	 for(int i=0;i<3; i++) {
 
 	 the_robot->EDP_data.ECPtoEDP_position_velocity[i] = 0; //1.5*E_r_Ep[0][i];//*2*td.internode_step_no;
@@ -1004,7 +1004,7 @@ CEIH_Tx_G.get_xyz_angle_axis(CEIH_r_G[0]);
 	 the_robot->EDP_data.ECPtoEDP_position_velocity[i] = E_r_Ep[0][i]*
 	 (double) (1/ ( ((double)STEP)*((double)step_no)*1) );//*2*td.internode_step_no;
 	 }
-	 */
+#endif	
 
 	//sterujemy polozeniem
 
