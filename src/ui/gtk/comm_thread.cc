@@ -41,6 +41,9 @@ void *comm_thread(void* arg)
 			perror("UI: Receive failed\n");
 			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			break;
+		} else if (rcvid < -1) {
+			// channel open/close message
+			continue;
 		}
 
 		switch (ui_ecp_obj.ecp_to_ui_msg.ecp_message)
