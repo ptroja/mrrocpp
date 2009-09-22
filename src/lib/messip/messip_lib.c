@@ -1935,6 +1935,21 @@ messip_receive( messip_channel_t * ch,
 			ch->remote_pid = datasend.type;
 		return MESSIP_MSG_NOREPLY;
 	}
+	else if (datasend.flag == MESSIP_FLAG_1WAY_MESSAGE)
+	{
+		ch->new_sockfd[index] = -1;
+		ch->channel_type[index] = -1;
+		
+		/*
+		if (ch->receive_allmsg[index]) {
+		    free( ch->receive_allmsg[index] );
+		}
+		ch->receive_allmsg[index] = NULL;
+		ch->receive_allmsg_sz[index] = 0;
+		*/
+
+		return MESSIP_MSG_NOREPLY;
+	}
 	else
 	{
 		ch->nb_replies_pending++;
@@ -2010,7 +2025,7 @@ printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
 	}
 
 	/*--- Message to send ---*/
-	datasend.flag = 0;
+	datasend.flag = (reply_maxlen < 0) ? MESSIP_FLAG_1WAY_MESSAGE : 0;
 	datasend.pid = getpid(  );
 	datasend.tid = pthread_self(  );
 	datasend.type = type;
@@ -2035,6 +2050,13 @@ printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
 	}
 	assert( dcount == (ssize_t) ( sizeof( messip_datasend_t ) + sizeof( uint32_t ) + send_len ) );
 
+	/* nonblocking 1way send */
+	if (reply_maxlen < 0) {
+		/*--- Ok ---*/
+		ch->datalen    = 0;
+		ch->datalenr   = 0;
+		return 0;
+	}
 	/*--- Timeout to read ? ---*/
 	if ( msec_timeout != MESSIP_NOTIMEOUT )
 	{

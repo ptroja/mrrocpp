@@ -363,6 +363,7 @@ messip_reply_death_notify_t;
 #define MESSIP_FLAG_PING			7
 #define MESSIP_FLAG_PROXY			8
 #define MESSIP_FLAG_DEATH_PROCESS	9
+#define MESSIP_FLAG_1WAY_MESSAGE	10
 
 typedef struct
 {
