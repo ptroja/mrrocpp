@@ -17,8 +17,8 @@ enum config_request {
 };
 
 typedef struct config_msg {
-	union config_msg_u {
-		struct {
+	union /*data*/ {
+		struct /*query*/ {
 			char key[CONFIG_MAX_KEY_LEN];
 			char section[CONFIG_MAX_SECTION_NAME_LEN];
 			int attach_type;
