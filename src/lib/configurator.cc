@@ -79,7 +79,7 @@ void configurator::change_ini_file (const char* _ini_file)
 {
 #ifdef USE_MESSIP_SRR
 	config_msg_t config_msg;
-	snprintf(config_msg.configfile, sizeof(config_msg.configfile), "%s", _ini_file);
+	snprintf(config_msg.data.configfile, sizeof(config_msg.data.configfile), "%s", _ini_file);
 	int32_t answer;
 
 	lock_mutex();
@@ -202,8 +202,8 @@ bool configurator::exists(const char* _key, const char* __section_name)
 	const char *_section_name = (__section_name) ? __section_name : section_name;
 
 	config_msg_t config_msg;
-	snprintf(config_msg.key, sizeof(config_msg.key), "%s", _key);
-	snprintf(config_msg.section, sizeof(config_msg.section), "%s", _section_name);
+	snprintf(config_msg.data.query.key, sizeof(config_msg.data.query.key), "%s", _key);
+	snprintf(config_msg.data.query.section, sizeof(config_msg.data.query.section), "%s", _section_name);
 	int32_t answer;
 
 	bool value;
@@ -251,8 +251,8 @@ int configurator::return_int_value(const char* _key, const char* __section_name)
 	const char *_section_name = (__section_name) ? __section_name : section_name;
 
 	config_msg_t config_msg;
-	snprintf(config_msg.key, sizeof(config_msg.key), "%s", _key);
-	snprintf(config_msg.section, sizeof(config_msg.section), "%s", _section_name);
+	snprintf(config_msg.data.query.key, sizeof(config_msg.data.query.key), "%s", _key);
+	snprintf(config_msg.data.query.section, sizeof(config_msg.data.query.section), "%s", _section_name);
 	int32_t answer;
 
 	int value = 0;
@@ -304,8 +304,8 @@ double configurator::return_double_value(const char* _key, const char*__section_
 	const char *_section_name = (__section_name) ? __section_name : section_name;
 
 	config_msg_t config_msg;
-	snprintf(config_msg.key, sizeof(config_msg.key), "%s", _key);
-	snprintf(config_msg.section, sizeof(config_msg.section), "%s", _section_name);
+	snprintf(config_msg.data.query.key, sizeof(config_msg.data.query.key), "%s", _key);
+	snprintf(config_msg.data.query.section, sizeof(config_msg.data.query.section), "%s", _section_name);
 	int32_t answer;
 
 	double value = 0;
@@ -357,8 +357,9 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 	const char *_section_name = (__section_name) ? __section_name : section_name;
 
 	config_msg_t config_msg;
-	snprintf(config_msg.key, sizeof(config_msg.key), "%s", _key);
-	snprintf(config_msg.section, sizeof(config_msg.section), "%s", _section_name);
+
+	snprintf(config_msg.data.query.key, sizeof(config_msg.data.query.key), "%s", _key);
+	snprintf(config_msg.data.query.section, sizeof(config_msg.data.query.section), "%s", _section_name);
 	int32_t answer;
 
 	char value[255];

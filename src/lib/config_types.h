@@ -16,16 +16,19 @@ enum config_request {
 	CONFIG_EXISTS
 };
 
-typedef struct config_msg {
-	union /*data*/ {
-		struct /*query*/ {
+typedef struct config_query {
+	union data_t {
+		struct query_t {
 			char key[CONFIG_MAX_KEY_LEN];
 			char section[CONFIG_MAX_SECTION_NAME_LEN];
 			int attach_type;
-		};
+		} query;
 		char configfile[CONFIG_MAX_CONFIGFILE_LEN];
 		char nodename[CONFIG_MAX_NODENAME_LEN];
-	};
+	} data;
+	config_query() {
+		memset(&data, 0, sizeof(data));
+	}
 } config_msg_t;
 
 #endif /* _CONFIG_TYPES_H */
