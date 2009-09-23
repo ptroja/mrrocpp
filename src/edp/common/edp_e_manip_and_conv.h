@@ -9,7 +9,8 @@
 #define __EDP_E_MANIP_AND_CONV_H
 
 #include <stdint.h>
-#include <pthread.h>
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/condition.hpp>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -140,9 +141,6 @@ protected:
 
     double servo_current_joints[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -// dla watku EDP_SERVO   XXXXXX
 
-
-    bool trans_t_command; // by Y dalej do komunikacji master z servo   XXXXX
-
     pthread_mutex_t edp_irp6s_effector_mutex;	// mutex    XXXXXX
 
     double desired_joints[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
@@ -204,7 +202,12 @@ public:
 #ifdef __QNXNTO__
     int servo_to_tt_chid;
 #else
-    sem_t servo_command_ready, sg_reply_ready;
+    bool servo_command_rdy;
+    boost::mutex servo_command_mtx;
+
+    bool sg_reply_rdy;
+    boost::mutex sg_reply_mtx;
+    boost::condition sg_reply_cond;
 #endif
 
     virtual void initialize (void) = 0;

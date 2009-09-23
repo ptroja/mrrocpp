@@ -83,10 +83,13 @@ bool servo_buffer::get_command (void)
     if ((edp_caller = MsgReceive_r(master.servo_to_tt_chid, &command, sizeof(command), NULL)) >= 0)
     	new_command_available = true;
 #else
-    int r; // lock return value
-    if((r = sem_trywait(&master.servo_command_ready)) == 0) {
-    	command = master.servo_command;
-    	new_command_available = true;
+    {
+    	boost::lock_guard<boost::mutex> lock(master.servo_command_mtx);
+    	if(master.servo_command_rdy) {
+    		command = master.servo_command;
+    		master.servo_command_rdy = false;
+    		new_command_available = true;
+    	}
     }
 #endif
 
@@ -134,11 +137,8 @@ bool servo_buffer::get_command (void)
         return false;
     }
 #else
-	{    	/* Nie otrzymano nowego polecenia ruchu */
-        if (errno != EAGAIN) {
-        	// nastapil blad przy odbieraniu wiadomosci rozny od jej braku
-            perror("SERVO_GROUP: Receive error from EDP_MASTER");
-        }
+	{
+		/* Nie otrzymano nowego polecenia ruchu */
         return false;
 	}
 #endif
@@ -202,7 +202,7 @@ lib::BYTE servo_buffer::convert_error (void)
         err1 |= (reply_status_tmp.error0 & 0x07) << (3*i);
         reply_status_tmp.error0 >>= 3;
     }
-    ; // end: for
+
     reply_status_tmp.error0 = err1;
     if ( reply_status_tmp.error0 || reply_status_tmp.error1 )
     {
@@ -358,8 +358,14 @@ void servo_buffer::reply_to_EDP_MASTER (void)
     if (MsgReply(edp_caller,EOK, &servo_data, sizeof(lib::servo_group_reply)) < 0)
         perror (" Reply to EDP_MASTER error");
 #else
-    master.sg_reply = servo_data;
-    sem_post(&master.sg_reply_ready);
+    {
+    	boost::lock_guard<boost::mutex> lock(master.sg_reply_mtx);
+
+    	master.sg_reply = servo_data;
+    	master.sg_reply_rdy = true;
+    }
+
+    master.sg_reply_cond.notify_one();
 #endif
     // Wyzerowac zmienne sygnalizujace stan procesu
     clear_reply_status();

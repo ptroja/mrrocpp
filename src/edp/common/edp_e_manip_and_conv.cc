@@ -44,7 +44,11 @@ namespace common {
 
 /*--------------------------------------------------------------------------*/
 manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name) :
-        effector (_config, l_robot_name), manager(), step_counter(0)
+        effector (_config, l_robot_name), manager()
+#ifndef __QNXNTO__
+        , servo_command_rdy(false), sg_reply_rdy(false)
+#endif
+        , step_counter(0)
 {
 	pthread_mutex_init(&edp_irp6s_effector_mutex, NULL);
 
@@ -57,8 +61,6 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
     real_reply_type = lib::ACKNOWLEDGE;
     // inicjacja deskryptora pliku by 7&Y
     // servo_fd = name_open(lib::EDP_ATTACH_POINT, 0);
-
-    trans_t_command = false;
 
     // is_get_arm_read_hardware=false;
     previous_set_arm_type = lib::MOTOR;
@@ -80,9 +82,6 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
         perror("ConnectAttach()");
     }
     ThreadCtl (_NTO_TCTL_IO, NULL);
-#else
-    sem_init(&servo_command_ready, 0, 0);
-    sem_init(&sg_reply_ready, 0, 0);
 #endif
 
     // z edp_m
@@ -99,21 +98,22 @@ manip_and_conv_effector::~manip_and_conv_effector() {
 #ifdef __QNXNTO__
 	ConnectDetach_r(servo_fd);
 	ChannelDestroy_r(servo_to_tt_chid);
-#else
-	sem_destroy(&servo_command_ready);
-	sem_destroy(&sg_reply_ready);
 #endif
 }
 
 void manip_and_conv_effector::master_joints_read (double* output)
-{ // by Y
-    pthread_mutex_lock( &edp_irp6s_effector_mutex );
+{
+    if(pthread_mutex_lock( &edp_irp6s_effector_mutex )) {
+    	fprintf(stderr, "locking effector_mutex failed\n");
+    }
     // przepisanie danych na zestaw lokalny dla edp_master
     for (int i=0; i < number_of_servos; i++)
     {
         output[i]=global_current_joints[i];
     }
-    pthread_mutex_unlock( &edp_irp6s_effector_mutex );
+    if(pthread_mutex_unlock( &edp_irp6s_effector_mutex )) {
+    	fprintf(stderr, "unlocking effector_mutex failed\n");
+    }
 }
 
 /*--------------------------------------------------------------------------*/
@@ -151,6 +151,7 @@ void manip_and_conv_effector::create_threads ()
 // kasuje zmienne - uwaga najpierw nalezy ustawic number_of_servos
 void manip_and_conv_effector::reset_variables ()
 {
+	// TODO: this should be handled in one loop
     int i; // Liczniki petli
     // Serwomechanizmy
     for(i=0; i<number_of_servos; i++)
@@ -590,11 +591,17 @@ void manip_and_conv_effector::send_to_SERVO_GROUP ()
         throw System_error();
     }
 #else
-    if(sem_post(&servo_command_ready) == -1) {
-    	perror("sem_post()");
+    {
+    	boost::lock_guard<boost::mutex> lock(servo_command_mtx);
+    	servo_command_rdy = true;
     }
-    if(sem_wait(&sg_reply_ready) == -1) {
-    	perror("sem_wait()");
+
+    {
+    	boost::unique_lock<boost::mutex> lock(sg_reply_mtx);
+    	while(!sg_reply_rdy) {
+    		sg_reply_cond.wait(sg_reply_mtx);
+    	}
+    	sg_reply_rdy = false;
     }
 #endif
 
@@ -937,8 +944,9 @@ void manip_and_conv_effector::common_get_controller_state(lib::c_buffer &instruc
     // Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
     for( int i = 0; i < number_of_servos; i++)
     {
+    	// TODO: race condition at servo_current_motor_pos
         servo_current_motor_pos[i] = desired_motor_pos_new_tmp[i] = desired_motor_pos_new[i] =
-                                         desired_motor_pos_old[i] = current_motor_pos[i];
+                                     desired_motor_pos_old[i] = current_motor_pos[i];
         desired_joints_tmp[i] = desired_joints[i] = current_joints[i];
     }
 }
