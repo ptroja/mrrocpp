@@ -28,6 +28,18 @@
 namespace mrrocpp {
 namespace lib {
 
+/*
+sr_package::sr_package()
+	: process_type(UNKNOWN_PROCESS_TYPE),
+	message_type(-1)
+{
+	  memset(process_name, 0, sizeof(process_name));
+	  memset(host_name, 0, sizeof(host_name));
+	  memset(description, 0, sizeof(description));
+	  ts.tv_sec = ts.tv_nsec = 0;
+}
+*/
+
 #if !defined(USE_MESSIP_SRR)
 // Konstruktor
 sr::sr(PROCESS_TYPE process_type, std::string process_name, std::string sr_name) {
@@ -91,6 +103,8 @@ sr::sr(const PROCESS_TYPE process_type, std::string process_name, std::string sr
 	}
 
 	assert(ch != NULL);
+
+	memset(&sr_message, 0, sizeof(sr_message));
 
 	struct utsname sysinfo;
 

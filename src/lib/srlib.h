@@ -41,7 +41,8 @@ typedef struct sr_package {
   char process_name[NAME_LENGTH];  // nazwa globalna procesu np: /irp6_on_track/EDP1
   char host_name[NAME_LENGTH]; // nazwa hosta na ktorym uruchamiany jest proces
   char description[TEXT_LENGTH];  // tresc wiadomosci
-} sr_package_t;
+//  sr_package();
+} /*__attribute__((__packed__))*/ sr_package_t; // not packed in case of msg_header_t
 
 /* -------------------------------------------------------------------- */
 /* Klasa komunikacji z procesem SR                                      */
