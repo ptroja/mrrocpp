@@ -103,15 +103,60 @@ void ui_common_robot::synchronise ( void ) {
 // ---------------------------------------------------------------
 // virtual  // by Y - wywalone
 
-void ui_common_robot::execute_motion (void)
+void ui_common_robot::execute_motion(void)
 {
 
-    // Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
-    set_ui_state_notification(UI_N_COMMUNICATION);
+	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
+	set_ui_state_notification(UI_N_COMMUNICATION);
 
+	// TODO: in QNX/Photon exceptions are handled at the main loop
+	// in GTK exceptions triggered signals cannot be handled in main loop
+#ifdef __gnu_linux__
+//#if 0
+	try {
+		ecp->execute_motion();
+	}
 
-  //  printf("UI :%d\n",ecp->ecp_command.instruction.instruction_type);
-  ecp->execute_motion();
+	catch (ecp::common::ecp_robot::ECP_main_error e) {
+		/* Obsluga bledow ECP */
+		if (e.error_class == lib::SYSTEM_ERROR)
+			printf("ECP lib::SYSTEM_ERROR error in UI\n");
+//		ui_state.ui_state = 2;
+		/*  exit(EXIT_FAILURE);*/
+	}
+
+	catch (ecp::common::ecp_robot::ECP_error er) {
+		/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */
+		if (er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunikat do SR */
+			perror("ECP lib::SYSTEM_ERROR in UI\n");
+			/* PtExit( EXIT_SUCCESS ); */
+		} else {
+			switch (er.error_no)
+			{
+				case INVALID_POSE_SPECIFICATION:
+				case INVALID_ECP_COMMAND:
+				case INVALID_COMMAND_TO_EDP:
+				case EDP_ERROR:
+				case INVALID_EDP_REPLY:
+				case INVALID_RMODEL_TYPE:
+					/* Komunikat o bledzie wysylamy do SR */
+					ecp->sr_ecp_msg.message(lib::NON_FATAL_ERROR, er.error_no);
+					break;
+				default:
+					ecp->sr_ecp_msg.message(lib::NON_FATAL_ERROR, 0, "ECP: Unidentified exception");
+					perror("Unidentified exception");
+			} /* end: switch */
+		}
+	} /* end: catch */
+
+	catch (...) { /* Dla zewnetrznej petli try*/
+		/* Wylapywanie niezdefiniowanych bledow*/
+		/* Komunikat o bledzie wysylamy do SR (?) */
+		fprintf	(stderr, "unidentified error in UI\n");
+	} /*end: catch */
+#else
+		ecp->execute_motion();
+#endif
 }
 // ---------------------------------------------------------------
 
@@ -133,7 +178,6 @@ void ui_common_robot::get_current_position ( double c_position[])
         c_position[j] = current_position[j];
 
 }
-;// end: ui_common_robot::get_current_position()
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
