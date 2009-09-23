@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 //                            typedefs.h
 // Definicje typow calkowitych
-// 
+//
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
@@ -17,7 +17,7 @@
 #include <signal.h>
 
 /* --- Symbolic names of the error return conditions --- */
-    
+
 #define EOK              0  /* No error                                 */
 
 /*
@@ -114,7 +114,7 @@ extern uint64_t ClockCycles(void);
 #define _NTO_TIMEOUT_RECEIVE	1
 #define ND_LOCAL_NODE			0
 
-#define delay(ms)	usleep(1000*(ms))
+#define delay(ms)	::usleep(1000*(ms))
 
 #define flushall(x)	(void)0
 
@@ -124,7 +124,7 @@ typedef struct _pulse msg_header_t;
 
 typedef struct  { // wiadomosc odbierana przez readera
     msg_header_t hdr;
-    int data;	// TODO: to pole chyba nie jest potrzebne (ptroja)  
+    int data;	// TODO: to pole chyba nie jest potrzebne (ptroja)
 } _pulse_msg;
 
-#endif /* __TYPEDEFS_H */ 
+#endif /* __TYPEDEFS_H */

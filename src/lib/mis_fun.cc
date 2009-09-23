@@ -28,7 +28,7 @@ void set_thread_priority(pthread_t thread, int sched_priority_l)
 	if ((sched_priority_l < policy_priority_min) ||
 		(sched_priority_l > policy_priority_max)) {
 		// TODO: rewerite static with pthread_once
-		static bool warned; // priorities warning apply only to Linux
+		static bool warned = true; // priorities warning apply only to Linux, skip for now
 		if (!warned) fprintf(stderr,
 				"requested thread priority (%d) not in <%d:%d> priority range\n",
 				sched_priority_l,
