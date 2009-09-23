@@ -16,8 +16,8 @@ enum config_request {
 	CONFIG_EXISTS
 };
 
-typedef struct {
-	union {
+typedef struct config_msg {
+	union config_msg_u {
 		struct {
 			char key[CONFIG_MAX_KEY_LEN];
 			char section[CONFIG_MAX_SECTION_NAME_LEN];
@@ -28,4 +28,4 @@ typedef struct {
 	};
 } config_msg_t;
 
-#endif /* _CONFIG_TYPES_H */ 
+#endif /* _CONFIG_TYPES_H */
