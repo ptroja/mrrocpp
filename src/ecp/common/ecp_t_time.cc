@@ -26,7 +26,7 @@ namespace common {
 namespace task {
 
 
-// KONSTRUKTORY
+// Initilization
 time::time(lib::configurator &_config) : task(_config)
 {
 	tfg = NULL;
@@ -40,19 +40,19 @@ void time::task_initialization(void)
 		{ ecp_m_robot = new irp6ot::robot (*this); }
 	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
 		{ ecp_m_robot = new irp6p::robot (*this); }
-
-	// Powolanie czujnikow
+#if 0
+	// Create sensors
 	sensor_m[lib::SENSOR_TIME] = new ecp_mp::sensor::time (lib::SENSOR_TIME, "[vsp_time]", *this);
 
-	// Konfiguracja wszystkich czujnikow
+	// Configure sensors
 	for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin();
 		 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->configure_sensor();
 	}
-
+#endif
 	tfg = new generator::time(*this, 8);
-	tfg->sensor_m = sensor_m;
+	//tfg->sensor_m = sensor_m;
 
 	sr_ecp_msg->message("ECP time loaded");
 }
@@ -68,6 +68,7 @@ task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new time(_config);
 }
+
 } // namespace task
 } // namespace common
 } // namespace ecp
