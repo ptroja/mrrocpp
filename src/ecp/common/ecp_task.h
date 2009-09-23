@@ -17,9 +17,12 @@ namespace task {
 class task : public ecp_mp::task::task
 {
 	private:
+#if !defined(USE_MESSIP_SRR)
 		name_attach_t *ecp_attach, *trigger_attach; // by Y
-
 		int MP_fd;
+#else
+		messip_channel_t *ecp_attach, *trigger_attach, *MP_fd;
+#endif
 		// Wysyla puls do Mp przed oczekiwaniem na spotkanie
 		void send_pulse_to_mp(int pulse_code, int pulse_value);
 
@@ -49,7 +52,7 @@ class task : public ecp_mp::task::task
 		// KONSTRUKTOR
 		task(lib::configurator &_config);
 
-		// dla gcc: `'class Foo' has virtual functions but non-virtualdestructor` warning.
+		// dla gcc: `'class Foo' has virtual functions but non-virtual destructor` warning.
 		virtual ~task();
 
 		void initialize_communication(void);

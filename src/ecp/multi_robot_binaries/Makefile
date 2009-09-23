@@ -4,8 +4,23 @@
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 
-BINARIES = ecp_tran ecp_mam ecp_t ecp_nalewanie ecp_sk ecp_tw ecp_time ecp_pawel ecp_cvfradia ecp_tzu ecp_tzu_test ecp_pcbird ecp_visioncoordinates ecp_eihcalibration
+BINARIES = ecp_tran \
+	ecp_t \
+	ecp_nalewanie \
+	ecp_sk \
+	ecp_tw \
+	ecp_time \
+	ecp_pawel \
+	ecp_cvfradia \
+	ecp_tzu \
+	ecp_tzu_test \
+	ecp_pcbird \
+	ecp_visioncoordinates \
+	ecp_eihcalibration
 
+ifneq ($(BUILD_TARGET), linux)
+BINARIES+= ecp_mam
+endif
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ../../..

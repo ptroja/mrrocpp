@@ -4,15 +4,8 @@
 HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 
-ifeq ($(BUILD_TARGET), linux)
-#MANIPULATOR_SOURCEDIRS = irp6_on_track irp6_postument irp6_mechatronika conveyor
-MANIPULATOR_SOURCEDIRS = irp6_mechatronika #irp6_on_track irp6_postument conveyor
-SOURCEDIRS = common $(MANIPULATOR_SOURCEDIRS)
-INSTALLDIRS = 
-else
 SOURCEDIRS = irp6_on_track conveyor irp6_postument speaker irp6_mechatronika polycrank festival player multi_robot_binaries common
 INSTALLDIRS = ${SOURCEDIRS}
-endif
 CLEANDIRS = ${SOURCEDIRS}
 # Data for makedepend 
 DEPENDDIRS = ${SOURCEDIRS}

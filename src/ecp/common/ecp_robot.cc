@@ -86,7 +86,7 @@ ecp_robot::ECP_error::ECP_error ( uint64_t err_cl, uint64_t err_no,
 
     for (int i = 0; i < nSize; i++)
     {
-        std::cout << symbols[i] << std::endl;
+        std::cerr << symbols[i] << std::endl;
     }
 
     free(symbols);

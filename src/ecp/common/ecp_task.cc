@@ -29,6 +29,7 @@ task::~task()
 
 bool task::pulse_check()
 {
+#if !defined(USE_MESSIP_SRR)
 	struct sigevent stop_event;
 
 	_pulse_msg ui_msg; // wiadomosc z ui
@@ -58,7 +59,7 @@ bool task::pulse_check()
 				 */
 				break;
 			default:
-				if (ui_msg.hdr.code== ECP_TRIGGER) { // odebrano puls ECP_TRIGGER
+				if (ui_msg.hdr.code == ECP_TRIGGER) { // odebrano puls ECP_TRIGGER
 					return true;
 				}
 				/*
@@ -80,6 +81,20 @@ bool task::pulse_check()
 	}
 
 	return false;
+#else
+	int32_t type, subtype;
+	int recvid;
+	if ((recvid = messip_receive(trigger_attach, &type, &subtype, NULL, 0, 0)) == -1) {
+		perror("messip_receive()");
+		return false;
+	}
+
+	if (recvid == MESSIP_MSG_NOREPLY && type == ECP_TRIGGER) {
+		return true;
+	}
+
+	return false;
+#endif
 }
 // ---------------------------------------------------------------
 
@@ -120,23 +135,38 @@ void task::initialize_communication()
 	}
 
 	// Lokalizacja procesu MP - okreslenie identyfikatora (pid)
-	if ( (MP_fd = name_open(mp_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0) {
+#if !defined(USE_MESSIP_SRR)
+	if ( (MP_fd = name_open(mp_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
+#else
+	if ( (MP_fd = messip_channel_connect(NULL, mp_pulse_attach_point.c_str(), MESSIP_NOTIMEOUT)) == NULL)
+#endif
+	{
 		e = errno;
 		perror("ECP: Unable to locate MP_MASTER process\n");
 		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
 	// Rejstracja procesu ECP
-	if ((ecp_attach = name_attach(NULL, ecp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+#if !defined(USE_MESSIP_SRR)
+	if ((ecp_attach = name_attach(NULL, ecp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
+#else
+	if ((ecp_attach = messip_channel_create(NULL, ecp_attach_point.c_str(), MESSIP_NOTIMEOUT, 0)) == NULL)
+#endif
+	{
 		e = errno;
 		perror("Failed to attach Effector Control Process\n");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Failed to attach Effector Control Process");
 		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
-	if ((trigger_attach = name_attach(NULL, trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+#if !defined(USE_MESSIP_SRR)
+	if ((trigger_attach = name_attach(NULL, trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
+#else
+	if ((trigger_attach = messip_channel_create(NULL, trigger_attach_point.c_str(), MESSIP_NOTIMEOUT, 0)) == NULL)
+#endif
+	{
 		e = errno;
-		perror("Failed to attach TRIGGER pulse chanel for ecp\n");
+		perror("Failed to attach TRIGGER pulse chanel for ecp");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Failed  Failed to name attach (trigger pulse)");
 		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
@@ -180,7 +210,13 @@ void task::ecp_termination_notice(void)
 // Wysyla puls do Mp przed oczekiwaniem na spotkanie
 void task::send_pulse_to_mp(int pulse_code, int pulse_value)
 {
-	if (MsgSendPulse(MP_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value) == -1) {
+#if !defined(USE_MESSIP_SRR)
+	if (MsgSendPulse(MP_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value) == -1)
+#else
+	int32_t answer;
+	if (messip_send(MP_fd, pulse_code, pulse_value, NULL, 0, &answer, NULL, -1, MESSIP_NOTIMEOUT) < 0)
+#endif
+	{
 		perror("Blad w wysylaniu pulsu do mp\n");
 	}
 }
@@ -201,7 +237,12 @@ void task::ecp_wait_for_stop(void)
 	}
 
 	// Wyslanie odpowiedzi.
-	if (MsgReply(caller, EOK, &ecp_reply, sizeof(ecp_reply)) ==-1) {// by Y&W
+#if !defined(USE_MESSIP_SRR)
+	if (MsgReply(caller, EOK, &ecp_reply, sizeof(ecp_reply)) ==-1)
+#else
+	if (messip_reply(ecp_attach, caller, 0, &ecp_reply, sizeof(ecp_reply), MESSIP_NOTIMEOUT) < 0)
+#endif
+	{// by Y&W
 		uint64_t e= errno; // kod bledu systemowego
 		perror("ECP: Reply to MP failed\n");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
@@ -240,7 +281,12 @@ bool task::ecp_wait_for_start(void)
 	}
 
 	// if (Reply (caller, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) == -1 ) {
-	if (MsgReply(caller, EOK, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) ==-1) {// by Y&W
+#if !defined(USE_MESSIP_SRR)
+	if (MsgReply(caller, EOK, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) ==-1)
+#else
+	if (messip_reply(ecp_attach, caller, 0, &ecp_reply, sizeof(ecp_reply), MESSIP_NOTIMEOUT) < 0)
+#endif
+	{// by Y&W
 		uint64_t e= errno; // kod bledu systemowego
 		perror("ECP: Reply to MP failed\n");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
@@ -282,7 +328,12 @@ void task::get_next_state(void)
 			break;
 	}
 
-	if (MsgReply(caller, EOK, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) ==-1) {// by Y&W
+#if !defined(USE_MESSIP_SRR)
+	if (MsgReply(caller, EOK, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) ==-1)
+#else
+	if (messip_reply(ecp_attach, caller, 0, &ecp_reply, sizeof(ecp_reply), MESSIP_NOTIMEOUT) < 0)
+#endif
+	{// by Y&W{
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ECP: Reply to MP failed\n");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
@@ -331,8 +382,12 @@ bool task::mp_buffer_receive_and_send(void)
 			set_ecp_reply(lib::INCORRECT_MP_COMMAND);
 			break;
 	}
-
-	if (MsgReply(caller, EOK, &ecp_reply, sizeof(ecp_reply)) ==-1) {// by Y&W
+#if !defined(USE_MESSIP_SRR)
+	if (MsgReply(caller, EOK, &ecp_reply, sizeof(ecp_reply)) ==-1)
+#else
+	if (messip_reply(ecp_attach, caller, 0, &ecp_reply, sizeof(ecp_reply), MESSIP_NOTIMEOUT) < 0)
+#endif
+	{// by Y&W
 		uint64_t e= errno; // kod bledu systemowego
 		perror("ECP: Reply to MP failed\n");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
@@ -355,8 +410,12 @@ bool task::mp_buffer_receive_and_send(void)
 int task::receive_mp_message(void)
 {
 	while (1) {
-
+#if !defined(USE_MESSIP_SRR)
 		int caller = MsgReceive(ecp_attach->chid, &mp_command, sizeof(mp_command), NULL);
+#else
+		int32_t type, subtype;
+		int caller = messip_receive(ecp_attach, &type, &subtype, &mp_command, sizeof(mp_command), MESSIP_NOTIMEOUT);
+#endif
 
 		if (caller == -1) {/* Error condition, exit */
 			uint64_t e= errno; // kod bledu systemowego
@@ -364,7 +423,7 @@ int task::receive_mp_message(void)
 			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Receive from MP failed");
 			throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 		}
-
+#if !defined(USE_MESSIP_SRR)
 		if (caller == 0) {/* Pulse received */
 			switch (mp_command.hdr.code) {
 				case _PULSE_CODE_DISCONNECT:
@@ -398,7 +457,13 @@ int task::receive_mp_message(void)
 			MsgReply(caller, EOK, 0, 0);
 			continue;
 		}
-
+#else
+		if (caller < -1) {
+			// ie. MESSIP_MSG_DISCONNECT
+			fprintf(stderr, "MP: messip_receive() -> %d, ie. MESSIP_MSG_DISCONNECT\n", caller);
+			continue;
+		}
+#endif
 		return caller;
 	}
 }

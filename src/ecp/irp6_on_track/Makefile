@@ -10,8 +10,6 @@ BINARIES =			ecp_pr \
 				ecp_rover \
 				ecp_jajko \
 				ecp_kbochnia \
-				ecp_fct \
-				ecp_tr \
 				ecp_plot \
 				ecp_pt \
 				ecp_playerjoy \
@@ -36,8 +34,12 @@ BINARIES =			ecp_pr \
 				ecp_robot_calibration \
 			        ecp_wii \
 			        ecp_wii_velocity \
-				ecp_t_box_irp6ot \
+				ecp_t_box_irp6ot
+ifneq ($(BUILD_TARGET), linux)
+BINARIES+=			ecp_fct \
+				ecp_tr \
 				ecp_t_smooth2_test
+endif
 
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
