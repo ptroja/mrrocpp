@@ -266,7 +266,7 @@ void effector::reply_to_instruction(void)
 #else /* USE_MESSIP_SRR */
 	if (messip_reply(attach, caller, 0, &reply, sizeof(reply), MESSIP_NOTIMEOUT) == -1) {
 #endif /* USE_MESSIP_SRR */
-		uint64_t e= errno;
+		uint64_t e = errno;
 		perror("Reply() to ECP failed");
 		msg->message(lib::SYSTEM_ERROR, e, "Reply() to ECP failed");
 		throw System_error();

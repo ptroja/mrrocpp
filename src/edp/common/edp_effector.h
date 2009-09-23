@@ -108,7 +108,6 @@ public:
 /************************ EDP_EFFECTOR ****************************/
 
 
-
 // Zwrocenie stworzonego obiektu - efektora. Funkcja implementowana w plikach efektorow konkretnych (jadro).
 effector* return_created_efector (lib::configurator &_config);
 

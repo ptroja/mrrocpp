@@ -32,7 +32,7 @@ reader_buffer::~reader_buffer()
 
 int reader_buffer::set_new_step() // podniesienie semafora
 {
-	sem_trywait(&(reader_sem));
+	sem_trywait(&reader_sem);
 	return sem_post(&reader_sem);// odwieszenie watku edp_master
 }
 

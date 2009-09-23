@@ -888,7 +888,6 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 		global_current_motor_pos[i]=servo_current_motor_pos[i];
 		global_current_joints[i]=servo_current_joints[i];
 	}
-	//	printf("lala: %f\n", servo_current_joints[1]);
 	lib::copy_frame(global_current_frame_wo_tool, servo_current_frame_wo_tool);
 
 	pthread_mutex_unlock( &edp_irp6s_effector_mutex);
