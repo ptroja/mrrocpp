@@ -64,9 +64,9 @@ hardware_interface::hardware_interface ( effector &_master )   : common::hardwar
     irq_data.md.is_power_on = true;
     irq_data.md.is_robot_blocked = false;
 
+#ifdef __QNXNTO__
     // nadanie odpowiednich uprawnien watkowi
     // w celu umozliwienia komunikacji z magistral isa i obslugi przerwania
-#ifdef __QNXNTO__
     ThreadCtl (_NTO_TCTL_IO, NULL);
 
     memset(&irq_data.event, 0, sizeof(irq_data.event));
@@ -91,6 +91,7 @@ hardware_interface::hardware_interface ( effector &_master )   : common::hardwar
         // domyslnie robot nie jest zsynchronizowany
         irq_data.md.is_synchronised = false;
     }
+
 #ifdef __QNXNTO__
     // inicjacja wystawiania przerwan
 	if (master.test_mode == 0) {
@@ -103,7 +104,7 @@ hardware_interface::hardware_interface ( effector &_master )   : common::hardwar
     if ( (int_id = InterruptAttach (irq_no, int_handler, (void *) &irq_data , sizeof(irq_data), 0)) == -1)
     {
         // Obsluga bledu
-        perror( "Unable to attach interrupt handler: ");
+        perror("Unable to attach interrupt handler");
     }
 
     // oczekiwanie na przerwanie
@@ -113,7 +114,7 @@ hardware_interface::hardware_interface ( effector &_master )   : common::hardwar
         if(master.test_mode==0)
         {
             // Ustawienie czestotliwosci przerwan
-        	lib::WORD int_freq = SET_INT_FREQUENCY | INT_FREC_DIVIDER;
+        	uint16_t int_freq = SET_INT_FREQUENCY | INT_FREC_DIVIDER;
             out8(ADR_OF_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR);
             out16(SERVO_COMMAND1_ADR, int_freq);
             delay(10);
@@ -190,8 +191,6 @@ hardware_interface::hardware_interface ( effector &_master )   : common::hardwar
     }
 
     first = true; // Pierwszy krok
-
-    fprintf(stderr, "!!! OK !!!\n");
 }
 // ------------------------------------------------------------------------
 
@@ -233,10 +232,8 @@ uint64_t hardware_interface::read_write_hardware ( void )
     // Obsluga sprzetu: odczyt aktualnych wartosci polozenia i zapis wartosci
     // wypelnienia PWM
 
-    int i;
-
     // zapis wartosci zadanych
-    for (i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
+    for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
     {
         irq_data.md.robot_control[i].adr_offset_plus_0 = robot_control[i].adr_offset_plus_0;
     }
@@ -252,7 +249,7 @@ uint64_t hardware_interface::read_write_hardware ( void )
 
     //	 printf("hi rydz 1 current_absolute_position: %d, hex: %x\n", irq_data.md.current_absolute_position[5], irq_data.md.current_absolute_position[5] ); // debug
 
-    for (i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
+    for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
     {
 
         // przepisanie wartosci pradu
@@ -330,16 +327,15 @@ void hardware_interface::reset_counters ( void )
 // ------------------------------------------------------------------------
 bool hardware_interface::is_hardware_error ( void)
 {
-    bool h_error;
-    lib::WORD MASK = 0x7E00;
-
-    h_error = false;
+    bool h_error = false;
 
     // oczekiwanie na przerwanie
     hi_int_wait(INT_SINGLE_COMMAND, 0);
 
     for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
     {
+    	lib::WORD MASK = 0x7E00;
+
         if ( (irq_data.md.robot_status[i].adr_offset_plus_0 ^ 0x6000) & MASK )
         {
             h_error = true;
@@ -355,10 +351,7 @@ bool hardware_interface::is_hardware_error ( void)
 // synchronizacja automatyczna z wykrorzystaniem lm629
 int hardware_interface::synchronise_via_lm629(void)
 {
-    int i;
-    int wyjscie;
-
-    for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ ) // UWAGA NA -1
+    for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ ) // UWAGA NA -1
     {
         // tryb pojedynczych polecen w obsludze przerwania
         irq_data.md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
@@ -372,7 +365,7 @@ int hardware_interface::synchronise_via_lm629(void)
         irq_data.md.value=ZERO_ORDER;
         hi_int_wait(INT_SINGLE_COMMAND, 10);
 
-        wyjscie=0;
+        bool wyjscie=false;
         // dopoki nie osiagnieto pozycji synchronizacji
         while (!wyjscie)
         {
@@ -380,7 +373,7 @@ int hardware_interface::synchronise_via_lm629(void)
             hi_int_wait(INT_CHECK_STATE,0);
             if (0x0040&(irq_data.md.robot_status[i].adr_offset_plus_0))
             // jesli pojawi sie flaga zakonczenie synchronizacji
-                wyjscie++;
+                wyjscie=true;
         }
 
         // tryb pojedynczych polecen w obsludze przerwania

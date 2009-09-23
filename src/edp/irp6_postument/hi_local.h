@@ -8,6 +8,9 @@
 #ifndef __HI_LOCAL_IRP6P_H
 #define __HI_LOCAL_IRP6P_H
 
+#include <signal.h>
+#include <time.h>
+
 #include "edp/common/hi_rydz.h"
 
 namespace mrrocpp {
@@ -44,7 +47,6 @@ class effector;
 // ------------------------------------------------------------------------
 
 class hardware_interface: public common::hardware_interface {
-
 public:
 	hardware_interface(effector &_master); // Konstruktor
 	~hardware_interface(void); // Destruktor
@@ -63,18 +65,22 @@ public:
 
 	void finish_synchro(int drive_number);
 
+private:
+	edp::common::irq_data_t irq_data;
+
+#ifndef __QNXNTO__
+	//! periodic timer
+	timer_t timerid;
+	sigset_t mask;
+#endif
 }; // koniec: class hardware_interface
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-    // pid_t far int_handler (void);  // Obsluga przerwania
-    // by YOYEK & 7 - zastapic inna procedura obslugi prrzerwania
-
     const struct sigevent *
-                int_handler (void *arg, int id); // by YOYEK & 7 - nowa forma z helpu
-
+                int_handler (void *arg, int id);
 #ifdef __cplusplus
 }
 #endif

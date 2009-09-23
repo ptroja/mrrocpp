@@ -14,9 +14,11 @@
 #include <ctype.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#ifdef __QNXNTO__
 #include <sys/neutrino.h>
 #include <sys/sched.h>
 #include <hw/inout.h>
+#endif
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -37,20 +39,19 @@ extern irp6ot::effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
 
 namespace irp6ot {
 
-// Zmienne globalne do komunikacji z procedura obslugi przerwan
-
-extern struct sigevent event; // by y&w
-extern volatile common::motor_data md; // Aktualne dane we/wy (obsluga przerwania)
-
 // ------------------------------------------------------------------------
 
 // Obsluga przerwania sprzetowego
 
 // UWAGA - zmienna ilosc serwomechanizmow w zaleznosci od tego czy gripper jest dolaczony czy nie
-
+#ifdef __QNXNTO__
 const struct sigevent *
 int_handler (void *arg, int int_id)
 {
+	common::irq_data_t *irq_data = (common::irq_data_t *) arg;
+	common::motor_data & md = irq_data->md;
+	struct sigevent & event = irq_data->event;
+
     common::status_of_a_dof robot_status[IRP6_ON_TRACK_NUM_OF_SERVOS];
     short int low_word, high_word;
 
@@ -304,8 +305,8 @@ int_handler (void *arg, int int_id)
 
     return (&event);// Yoyek & wojtek
 }
+#endif /*__QNXNTO__ */
 
-// #pragma on(check_stack);
 // ------------------------------------------------------------------------
 
 } // namespace common

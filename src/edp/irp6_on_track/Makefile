@@ -36,10 +36,12 @@ all: ${BINARIES}
 #edp_irp6_on_track: $(EDPOBJS) ../ati6284/ati6284.a $(SHOBJ)
 
 SENSOR_OBJ=
+ifneq ($(BUILD_TARGET), linux)
 ifdef DOCENT_SENSOR
 	SENSOR_OBJ := ../ati3084MS/ati3084MS.a
 else
 	SENSOR_OBJ := ../ati3084/ati3084.a
+endif
 endif
 edp_irp6_on_track: $(EDPOBJS) $(SENSOR_OBJ) $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^

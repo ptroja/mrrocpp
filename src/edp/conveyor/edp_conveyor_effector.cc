@@ -136,7 +136,6 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
 		global_current_joints[i]=servo_current_joints[i];
 	}//: for
 
-
 	pthread_mutex_unlock( &edp_irp6s_effector_mutex );
 }//: servo_joints_and_frame_actualization_and_upload
 

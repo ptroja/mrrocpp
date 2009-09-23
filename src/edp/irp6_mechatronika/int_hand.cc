@@ -24,12 +24,10 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
-
 // Klasa edp_irp6m_effector.
 #include "edp/irp6_mechatronika/edp_irp6m_effector.h"
 // Klasa hardware_interface.
 #include "edp/irp6_mechatronika/hi_local.h"
-
 
 namespace mrrocpp {
 namespace edp {
@@ -38,11 +36,7 @@ namespace common {
 extern irp6m::effector* master;   // Bufor polecen i odpowiedzi EDP_MASTER
 
 }
-}
-}
 
-namespace mrrocpp {
-namespace edp {
 namespace irp6m {
 
 // ------------------------------------------------------------------------
