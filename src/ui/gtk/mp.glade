@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Nov 27 16:14:32 2008 -->
+<!--Generated with glade3 3.4.5 on Tue Sep 22 10:25:13 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <child>
@@ -26,110 +26,13 @@
                       <placeholder/>
                     </child>
                     <child>
-                      <widget class="GtkHSeparator" id="hseparatorLower">
+                      <widget class="GtkLabel" id="AllRobotsLabel">
                         <property name="visible">True</property>
+                        <property name="label" translatable="yes">All robots</property>
                       </widget>
                       <packing>
-                        <property name="right_attach">5</property>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkHSeparator" id="hseparatorUpper">
-                        <property name="visible">True</property>
-                      </widget>
-                      <packing>
-                        <property name="right_attach">5</property>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkVSeparator" id="ReaderSeparator">
-                        <property name="visible">True</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="bottom_attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkVSeparator" id="EcpSeparator">
-                        <property name="visible">True</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="right_attach">4</property>
-                        <property name="bottom_attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="label4">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Pulse ECP</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">4</property>
-                        <property name="right_attach">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="label3">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Pulse READER</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="right_attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkButton" id="AllRobotsEcpTrigger">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="response_id">0</property>
-                        <accelerator key="t" modifiers="" signal="clicked"/>
-                        <child>
-                          <widget class="GtkHBox" id="hbox8">
-                            <property name="visible">True</property>
-                            <property name="homogeneous">True</property>
-                            <child>
-                              <widget class="GtkImage" id="image7">
-                                <property name="visible">True</property>
-                                <property name="xalign">1</property>
-                                <property name="stock">gtk-index</property>
-                              </widget>
-                              <packing>
-                                <property name="expand">False</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkLabel" id="label12">
-                                <property name="visible">True</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">T_rigger</property>
-                                <property name="use_markup">True</property>
-                                <property name="use_underline">True</property>
-                              </widget>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </widget>
-                        </child>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">4</property>
-                        <property name="right_attach">5</property>
                         <property name="top_attach">3</property>
                         <property name="bottom_attach">4</property>
-                        <property name="x_options"></property>
                         <property name="y_options"></property>
                       </packing>
                     </child>
@@ -137,7 +40,7 @@
                       <widget class="GtkHButtonBox" id="AllRobotsReaderPulses">
                         <property name="visible">True</property>
                         <child>
-                          <widget class="GtkButton" id="MpTriggerButton4">
+                          <widget class="GtkButton" id="AllRobotsReaderButton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -174,7 +77,7 @@
                           </widget>
                         </child>
                         <child>
-                          <widget class="GtkButton" id="MpTriggerButton5">
+                          <widget class="GtkButton" id="AllRobotsReaderTriggerButton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -225,13 +128,110 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="AllRobotsLabel">
+                      <widget class="GtkButton" id="AllRobotsEcpTrigger">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">All robots</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="response_id">0</property>
+                        <accelerator key="t" modifiers="" signal="clicked"/>
+                        <child>
+                          <widget class="GtkHBox" id="hbox8">
+                            <property name="visible">True</property>
+                            <property name="homogeneous">True</property>
+                            <child>
+                              <widget class="GtkImage" id="image7">
+                                <property name="visible">True</property>
+                                <property name="xalign">1</property>
+                                <property name="stock">gtk-index</property>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label12">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">T_rigger</property>
+                                <property name="use_markup">True</property>
+                                <property name="use_underline">True</property>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </widget>
+                        </child>
                       </widget>
                       <packing>
+                        <property name="left_attach">4</property>
+                        <property name="right_attach">5</property>
                         <property name="top_attach">3</property>
                         <property name="bottom_attach">4</property>
+                        <property name="x_options"></property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label3">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Pulse READER</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="right_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label4">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Pulse ECP</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">4</property>
+                        <property name="right_attach">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkVSeparator" id="EcpSeparator">
+                        <property name="visible">True</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">3</property>
+                        <property name="right_attach">4</property>
+                        <property name="bottom_attach">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkVSeparator" id="ReaderSeparator">
+                        <property name="visible">True</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="bottom_attach">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkHSeparator" id="hseparatorUpper">
+                        <property name="visible">True</property>
+                      </widget>
+                      <packing>
+                        <property name="right_attach">5</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkHSeparator" id="hseparatorLower">
+                        <property name="visible">True</property>
+                      </widget>
+                      <packing>
+                        <property name="right_attach">5</property>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
                         <property name="y_options"></property>
                       </packing>
                     </child>
@@ -262,16 +262,18 @@
                         <child>
                           <widget class="GtkButton" id="MpStartPauseButton">
                             <property name="visible">True</property>
+                            <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="response_id">0</property>
+                            <signal name="clicked" handler="on_MpStartPauseButton_clicked"/>
                             <accelerator key="i" modifiers="" signal="clicked"/>
                             <child>
                               <widget class="GtkHBox" id="hbox3">
                                 <property name="visible">True</property>
                                 <property name="homogeneous">True</property>
                                 <child>
-                                  <widget class="GtkImage" id="image2">
+                                  <widget class="GtkImage" id="MpStartButtonImage">
                                     <property name="visible">True</property>
                                     <property name="xalign">1</property>
                                     <property name="stock">gtk-media-play</property>
@@ -281,10 +283,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <widget class="GtkLabel" id="label5">
+                                  <widget class="GtkLabel" id="MpStartButtonLabel">
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Start/Pause</property>
+                                    <property name="label" translatable="yes">Start</property>
                                     <property name="use_markup">True</property>
                                     <property name="use_underline">True</property>
                                   </widget>
@@ -298,11 +300,13 @@
                           </widget>
                         </child>
                         <child>
-                          <widget class="GtkButton" id="MpTriggerButton2">
+                          <widget class="GtkButton" id="MpStopButton">
                             <property name="visible">True</property>
+                            <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="response_id">0</property>
+                            <signal name="clicked" handler="on_MpStopButton_clicked"/>
                             <accelerator key="i" modifiers="" signal="clicked"/>
                             <child>
                               <widget class="GtkHBox" id="hbox4">
@@ -341,9 +345,11 @@
                         <child>
                           <widget class="GtkButton" id="MpTriggerButton">
                             <property name="visible">True</property>
+                            <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="response_id">0</property>
+                            <signal name="clicked" handler="on_MpTriggerButton_clicked"/>
                             <accelerator key="i" modifiers="" signal="clicked"/>
                             <child>
                               <widget class="GtkHBox" id="hbox2">

@@ -71,6 +71,9 @@ class ui_config_entry
 		//! kill process
 		void process_kill(int signum);
 
+		//! user data, intended for widget main object
+		void *user_data;
+
 	private:
 
 		GtkBuilder *builder;

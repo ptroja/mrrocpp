@@ -5,6 +5,9 @@
 #include <vector>
 #include <iostream>
 
+#include <sys/types.h>
+#include <signal.h>
+
 #include "ui_config_entry.h"
 #include "ui_model.h"
 
@@ -12,11 +15,10 @@ using namespace Glib;
 using namespace Gtk;
 
 extern "C" {
-	//void on_button_clicked(GtkButton *button, gpointer user_data) {
-	void on_button_clicked() {
-		g_warn_if_reached();
-	}
+	//void on_button_clicked(GtkButton *button, gpointer user_data);
+	void on_button_clicked();
 }
+
 
 class PulseButton : public Gtk::Button {
 	public:
@@ -62,21 +64,64 @@ class MpPanel {
 
 		~MpPanel(void);
 
+		void execute_mp_pulse(int pulse_code, int pulse_value = 1);
+		void StartButtonSensitive(bool sensitive);
+		void StopButtonSensitive(bool sensitive);
+		void TriggerButtonSensitive(bool sensitive);
+
+		enum StartButtonMode_t{ START, PAUSE, RESUME};
+		void StartButtonMode(StartButtonMode_t mode);
+
+		typedef enum { STARTED, PAUSED, STOPPED, UNLOADED} MP_state_t;
+
+		MP_state_t getMP_state() const
+		{
+			return MP_state;
+		}
+
+		void setMP_state(MP_state_t state)
+		{
+			this->MP_state = state;
+		}
+
 	private:
+		ui_config_entry & config_entry;
 		std::vector<Gtk::Widget*> PanelWidgets;
+		pid_t mp_pid;
+		MP_state_t MP_state;
+		messip_channel_t *pulse_fd;
+		GtkButton *MpStartPauseButton, *MpStopButton, *MpTriggerButton,
+					*AllRobotsReaderButton, *AllRobotsReaderTriggerButton, *AllRobotsEcpTrigger;
 };
 
-MpPanel::~MpPanel(void) {
-	for (std::vector<Gtk::Widget *>::iterator Iter = PanelWidgets.begin(); Iter != PanelWidgets.end(); Iter++) {
-		delete (*Iter);
-	}
-	PanelWidgets.clear();
-}
-
-MpPanel::MpPanel(ui_config_entry &entry) {
+MpPanel::MpPanel(ui_config_entry &entry)
+	: config_entry(entry), MP_state(UNLOADED)
+	{
 
 	GtkBuilder & builder = (entry.getBuilder());
 
+	// Assign objects
+	struct builder_widget {
+		GtkButton **object;
+		const char *name;
+	} builder_widgets[] = {
+			{ &MpStartPauseButton, "MpStartPauseButton" },
+			{ &MpStopButton, "MpStopButton" },
+			{ &MpTriggerButton, "MpTriggerButton" },
+			{ &AllRobotsReaderButton, "AllRobotsReaderButton" },
+			{ &AllRobotsReaderTriggerButton, "AllRobotsReaderTriggerButton" },
+			{ &AllRobotsEcpTrigger, "AllRobotsEcpTrigger" },
+	};
+	for (size_t i = 0; i < sizeof(builder_widgets)/sizeof(builder_widgets[0]); i++) {
+		*builder_widgets[i].object = GTK_BUTTON(gtk_builder_get_object(&builder, builder_widgets[i].name));
+		if(!*builder_widgets[i].object) {
+			fprintf(stderr, "MP button object %d (\"%s\") assignment failed\n", i, builder_widgets[i].name);
+
+		}
+		g_assert(*builder_widgets[i].object);
+	}
+
+	// get the ECPs
 	std::vector <ui_config_entry *> ecps = ui_model::instance().getRootNode().getChildByType(ui_config_entry::ECP);
 
 	GtkTable *pulsetable = GTK_TABLE(gtk_builder_get_object(&builder, "pulsetable"));
@@ -180,6 +225,189 @@ MpPanel::MpPanel(ui_config_entry &entry) {
 		gtk_container_child_set(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(object), "bottom-attach", bottom, "top-attach", top, NULL);
 	}
 
+	//! spawn MP
+	mp_pid = ui_model::instance().getConfigurator().process_spawn("[mp]");
+
+	if (mp_pid > 0) {
+
+		const std::string network_pulse_attach_point = ui_model::instance().getConfigurator()
+			.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", "[mp]");
+
+		short tmp = 0;
+		// try to open channel
+		while( (pulse_fd = messip_channel_connect(NULL, network_pulse_attach_point.c_str(), MESSIP_NOTIMEOUT)) == NULL)
+			if((tmp++)<CONNECT_RETRY) {
+//				fprintf(stderr, "."); fflush(stderr);
+				delay(CONNECT_DELAY);
+			} else {
+				fprintf(stderr, "blad odwolania do: %s,\n", network_pulse_attach_point.c_str());
+				break;
+			}
+//		fprintf(stderr, "messip_channel_connect done\n");
+	} else {
+		fprintf(stderr, "MP spawn failed\n");
+		return;
+	}
+
+	StartButtonSensitive(true);
+	MP_state = STOPPED;
+}
+
+MpPanel::~MpPanel(void) {
+
+	for (std::vector<Gtk::Widget *>::iterator Iter = PanelWidgets.begin(); Iter != PanelWidgets.end(); Iter++) {
+		delete (*Iter);
+	}
+	PanelWidgets.clear();
+/*
+
+	if ((ui_state.mp.state == UI_MP_TASK_RUNNING) || (ui_state.mp.state == UI_MP_TASK_PAUSED)){
+
+		pulse_stop_mp (widget,apinfo,cbinfo);
+	}
+
+*/
+	if (pulse_fd) {
+		messip_channel_disconnect(pulse_fd, MESSIP_NOTIMEOUT);
+	}
+
+	if (mp_pid > 0) {
+		kill(mp_pid, SIGTERM);
+	}
+}
+
+void MpPanel::execute_mp_pulse (int pulse_code, int pulse_value)
+{
+	if (pulse_fd) {
+		int32_t answer;
+		// send 1WAY empty message
+		if (messip_send(pulse_fd, pulse_code, pulse_value, NULL, 0, &answer, NULL, -1, MESSIP_NOTIMEOUT) ==-1) {
+			  perror("messip_send");
+			  throw;
+		}
+	}
+}
+
+void MpPanel::StartButtonSensitive(bool sensitive) {
+	gtk_widget_set_sensitive(GTK_WIDGET(MpStartPauseButton), sensitive);
+}
+
+void MpPanel::StopButtonSensitive(bool sensitive) {
+	gtk_widget_set_sensitive(GTK_WIDGET(MpStopButton), sensitive);
+}
+
+void MpPanel::TriggerButtonSensitive(bool sensitive) {
+	gtk_widget_set_sensitive(GTK_WIDGET(MpTriggerButton), sensitive);
+}
+
+void MpPanel::StartButtonMode(StartButtonMode_t mode) {
+	// get the builder
+	GtkBuilder & builder = (config_entry.getBuilder());
+
+	// get the button image
+	GtkImage *button_image = GTK_IMAGE(gtk_builder_get_object(&builder, "MpStartButtonImage"));
+	g_assert(button_image);
+
+	// get the stock image size
+	char *stock_id;
+	GtkIconSize icon_size;
+	gtk_image_get_stock(button_image, &stock_id, &icon_size);
+
+	// get the button label
+	GtkLabel *button_label = GTK_LABEL(gtk_builder_get_object(&builder, "MpStartButtonLabel"));
+	g_assert(button_label);
+
+	switch (mode) {
+		case START:
+			gtk_image_set_from_stock(button_image, GTK_STOCK_MEDIA_PLAY, icon_size);
+			gtk_label_set_label(button_label, "Start");
+			break;
+		case PAUSE:
+			gtk_image_set_from_stock(button_image, GTK_STOCK_MEDIA_PAUSE, icon_size);
+			gtk_label_set_label(button_label, "Pause");
+			break;
+		case RESUME:
+			gtk_image_set_from_stock(button_image, GTK_STOCK_MEDIA_PLAY, icon_size);
+			gtk_label_set_label(button_label, "Resume");
+			break;
+	}
+}
+
+
+extern "C" {
+	//void on_button_clicked(GtkButton *button, gpointer user_data) {
+	void on_button_clicked() {
+		g_warn_if_reached();
+	}
+
+	void on_MpStartPauseButton_clicked(GtkButton *button, gpointer user_data) {
+		// get the mp object
+		ui_config_entry & entry = *(ui_config_entry *) user_data;
+		MpPanel & mp = *(MpPanel *) entry.user_data;
+
+		switch(mp.getMP_state()) {
+			case MpPanel::STOPPED:
+				// execute pulse
+				mp.execute_mp_pulse(MP_START);
+
+				// manage the buttons
+				mp.StartButtonMode(MpPanel::PAUSE);
+				mp.StopButtonSensitive(true);
+				mp.TriggerButtonSensitive(true);
+
+				mp.setMP_state(MpPanel::STARTED);
+				break;
+			case MpPanel::STARTED:
+				// execute pulse
+				mp.execute_mp_pulse(MP_PAUSE);
+
+				// manage the buttons
+				mp.StartButtonMode(MpPanel::RESUME);
+				mp.StopButtonSensitive(true);
+				mp.TriggerButtonSensitive(true);
+
+				mp.setMP_state(MpPanel::PAUSED);
+				break;
+			case MpPanel::PAUSED:
+				// execute pulse
+				mp.execute_mp_pulse(MP_RESUME);
+
+				// manage the buttons
+				mp.StartButtonMode(MpPanel::PAUSE);
+				mp.StopButtonSensitive(true);
+				mp.TriggerButtonSensitive(true);
+
+				mp.setMP_state(MpPanel::STARTED);
+				break;
+			default:
+				break;
+		}
+
+	}
+
+	void on_MpStopButton_clicked(GtkButton *button, gpointer user_data) {
+		// get the mp object
+		ui_config_entry & entry = *(ui_config_entry *) user_data;
+		MpPanel & mp = *(MpPanel *) entry.user_data;
+
+		// execute pulse
+		mp.execute_mp_pulse(MP_STOP);
+
+		// manage the buttons
+		mp.StartButtonMode(MpPanel::START);
+		mp.StopButtonSensitive(false);
+		mp.TriggerButtonSensitive(false);
+		mp.setMP_state(MpPanel::STOPPED);
+	}
+
+	void on_MpTriggerButton_clicked(GtkButton *button, gpointer user_data) {
+		// get the mp object
+		ui_config_entry & entry = *(ui_config_entry *) user_data;
+		MpPanel & mp = *(MpPanel *) entry.user_data;
+
+		// execute pulse
+		mp.execute_mp_pulse(MP_TRIGGER);
+	}
 }
 
 static MpPanel *panel;
@@ -188,6 +416,7 @@ extern "C" {
 
 	void ui_module_init(ui_config_entry &entry) {
 		panel = new MpPanel(entry);
+		entry.user_data = panel;
 		fprintf(stderr, "module %s loaded\n", __FILE__);
 	}
 
