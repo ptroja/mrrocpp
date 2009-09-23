@@ -13,7 +13,7 @@ typedef enum
 int
 logg( 
 	logg_type_t type,
-	char *fmt,
+	const char *fmt,
 	... )
 __attribute__ ((format (printf, 2, 3)))
 ;

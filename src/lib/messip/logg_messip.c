@@ -55,10 +55,10 @@
 #include "logg_messip.h"
 
 
+char *logg_dir;				// Specified by --l or set to NULL
+
 // Updated by messip_logg_on() and messip_logg_off()
 static	int	is_logg = 1;
-
-char *logg_dir;				// Specified by --l or set to NULL
 
 __inline__ unsigned long long int
 rdtsc(void)
@@ -148,7 +148,7 @@ file_logg(
 		{
 			char tmp[400];
 			const long long int cpu_cycles = (long long int)get_cpu_clock_speed();
-			char *stype;
+			const char *stype;
 			t = (t1-t0)/cpu_cycles;
 			switch ( type )
 			{
@@ -198,7 +198,7 @@ file_logg(
 int
 logg(
 	logg_type_t type,
-	char *fmt,
+	const char *fmt,
 	... )
 {
 	int saved_errno = errno;

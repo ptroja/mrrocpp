@@ -493,8 +493,8 @@ debug_thread( void *arg )
 
 static void
 http_table_column_title( char *msg,
-   char *title,
-   char *tag )
+   const char *title,
+   const char *tag )
 {
 	strcat( msg, "      <td valign=\"top\" align=\"center\" bgcolor=\"#c0c0c0\">" );
 	strcat( msg, "<a href=\"" );
@@ -1116,6 +1116,7 @@ client_channel_create( int sockfd,
 #endif
 
 	/*--- Is there any channel with this name ? ---*/
+	memset(&reply, 0, sizeof(reply));
 	LOCK;
 	pch = (channel_t **) bsearch( msg.channel_name,
 	   channels, nb_channels, sizeof( channel_t * ), bsearch_channels );
@@ -1134,7 +1135,7 @@ client_channel_create( int sockfd,
 			channels = (channel_t **) malloc( sizeof( channel_t * ) );
 		else
 			channels = (channel_t **) realloc( channels, ( nb_channels + 1 ) * sizeof( channel_t * ) );
-		ch = (channel_t *) malloc( sizeof( channel_t ) );
+		ch = (channel_t *) calloc( 1, sizeof( channel_t ) );
 		channels[nb_channels++] = ch;
 
 		/*--- Create a new channel ---*/
@@ -1348,6 +1349,7 @@ client_channel_connect( int sockfd,
 	UNLOCK;
 
 	/*--- Reply to the client ---*/
+	memset(&reply, 0, sizeof(reply));
 	if ( ch == NULL )
 	{
 		reply.ok = MESSIP_NOK;

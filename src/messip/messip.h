@@ -102,6 +102,7 @@ typedef struct
 	int 			*receive_allmsg_sz;			// Size allocated for these Dynamic buffer
 	int 			nb_timers;
 	int				mgr_sockfd;					// Socket in the messip_mgr
+	int				lastmsg_sockfd;				// socket number of the last message, for QNX scoid comptibility
 #ifdef USE_SRRMOD
 	int				srr_name_id;
 	int				srr_pid;
@@ -116,7 +117,7 @@ typedef struct
 	int				fd;								// open decriptor
 	dispatch_t	*dpp;							// select/message dispatch
 	dispatch_context_t   *ctp;					// select/message dispatch context
-	dispatch_context_t   *new_ctp;					// select/message dispatch context	
+	dispatch_context_t   *new_ctp;					// select/message dispatch context
 	int			msgcnt, selcnt;
 	int			index;
 #endif /* USE_QNXMSG */
@@ -128,6 +129,7 @@ typedef struct
 #define MESSIP_MSG_TIMER			-5
 #define MESSIP_MSG_NOREPLY			-6
 #define MESSIP_MSG_DEATH_PROCESS	-7
+#define MESSIP_MSG_CONNECTING		-8
 
 
 // -----------------------
@@ -200,7 +202,7 @@ timer_t messip_timer_create( messip_channel_t * ch,
    int32_t msec_timeout );
 int messip_timer_delete( messip_channel_t * ch,
    timer_t timer_id );
-int messip_death_notify( messip_cnx_t * cnx, 
+int messip_death_notify( messip_cnx_t * cnx,
    int32_t msec_timeout,
    int status );
 
