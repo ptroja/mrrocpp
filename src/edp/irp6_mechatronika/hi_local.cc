@@ -168,11 +168,11 @@ hardware_interface::hardware_interface ( effector &_master )   : common::hardwar
         if(master.test_mode==0)
         {
             /*
-            out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
+            out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (uint8_t)i);
             out16(SERVO_COMMAND1_ADR,RESET_MANUAL_MODE); // Zerowanie ruchow recznych
             out16(SERVO_COMMAND1_ADR, PROHIBIT_MANUAL_MODE); // Zabrania ruchow za pomoca przyciskow w szafie
             */
-            irq_data.md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
+            irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)i;
             irq_data.md.register_adress=SERVO_COMMAND1_ADR;
             irq_data.md.value=RESET_MANUAL_MODE;
             hi_int_wait(INT_SINGLE_COMMAND, 2);
@@ -206,7 +206,7 @@ hardware_interface::~hardware_interface ( void )   // destruktor
 
         for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
         {
-            irq_data.md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
+            irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)i;
             irq_data.md.register_adress=SERVO_COMMAND1_ADR;
             irq_data.md.value=ALLOW_MANUAL_MODE;
             hi_int_wait(INT_SINGLE_COMMAND, 2);
@@ -278,7 +278,7 @@ void hardware_interface::reset_counters ( void )
 {
     for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
     {
-        irq_data.md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
+        irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)i;
         irq_data.md.register_adress=SERVO_COMMAND1_ADR;
         irq_data.md.value=MICROCONTROLLER_MODE;
         hi_int_wait(INT_SINGLE_COMMAND, 2);
@@ -334,7 +334,7 @@ bool hardware_interface::is_hardware_error ( void)
 
     for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
     {
-    	lib::WORD MASK = 0x7E00;
+    	uint16_t MASK = 0x7E00;
 
         if ( (irq_data.md.robot_status[i].adr_offset_plus_0 ^ 0x6000) & MASK )
         {
@@ -354,7 +354,7 @@ int hardware_interface::synchronise_via_lm629(void)
     for (int i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ ) // UWAGA NA -1
     {
         // tryb pojedynczych polecen w obsludze przerwania
-        irq_data.md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
+        irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)i;
         irq_data.md.register_adress=SERVO_COMMAND1_ADR;
         irq_data.md.value=LM629_VIA_MICROCONTROLLER_MODE;
         hi_int_wait(INT_SINGLE_COMMAND, 10);
@@ -377,7 +377,7 @@ int hardware_interface::synchronise_via_lm629(void)
         }
 
         // tryb pojedynczych polecen w obsludze przerwania
-        irq_data.md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)i;
+        irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)i;
         irq_data.md.register_adress=SERVO_COMMAND1_ADR;
         irq_data.md.value=MICROCONTROLLER_MODE;
         hi_int_wait(INT_SINGLE_COMMAND, 10);
@@ -465,7 +465,7 @@ void hardware_interface::start_synchro ( int drive_number )
 {
     trace_resolver_zero = true;
     // Wlacz sledzenie zera rezolwera (synchronizacja robota)
-    irq_data.md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)drive_number;
+    irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)drive_number;
     irq_data.md.register_adress=SERVO_COMMAND1_ADR;
     irq_data.md.value=START_SYNCHRO;
     hi_int_wait(INT_SINGLE_COMMAND, 2);
@@ -477,7 +477,7 @@ void hardware_interface::finish_synchro ( int drive_number )
     trace_resolver_zero = false;
 
     // Zakonczyc sledzenie zera rezolwera i przejdz do trybu normalnej pracy
-    irq_data.md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)drive_number;
+    irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)drive_number;
     irq_data.md.register_adress=SERVO_COMMAND1_ADR;
     irq_data.md.value=FINISH_SYNCHRO;
     hi_int_wait(INT_SINGLE_COMMAND, 2);

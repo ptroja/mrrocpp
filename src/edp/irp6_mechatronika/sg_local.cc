@@ -27,7 +27,7 @@ namespace edp {
 namespace irp6m {
 
 /*-----------------------------------------------------------------------*/
-lib::BYTE servo_buffer::Move_a_step (void)
+uint8_t servo_buffer::Move_a_step (void)
 {
 	// wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH oraz SYNCHRO_ZERO
 
@@ -418,7 +418,7 @@ uint64_t servo_buffer::compute_all_set_values (void)
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_2_irp6m::NL_regulator_2_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
+NL_regulator_2_irp6m::NL_regulator_2_irp6m (uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
 : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
 	// Konstruktor regulatora konkretnego
@@ -429,7 +429,7 @@ NL_regulator_2_irp6m::NL_regulator_2_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_3_irp6m::NL_regulator_3_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
+NL_regulator_3_irp6m::NL_regulator_3_irp6m (uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
 : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
 	// Konstruktor regulatora konkretnego
@@ -440,7 +440,7 @@ NL_regulator_3_irp6m::NL_regulator_3_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_4_irp6m::NL_regulator_4_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
+NL_regulator_4_irp6m::NL_regulator_4_irp6m (uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
 : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
 	// Konstruktor regulatora konkretnego
@@ -451,7 +451,7 @@ NL_regulator_4_irp6m::NL_regulator_4_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_5_irp6m::NL_regulator_5_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
+NL_regulator_5_irp6m::NL_regulator_5_irp6m (uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
 : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
 	// Konstruktor regulatora konkretnego
@@ -463,7 +463,7 @@ NL_regulator_5_irp6m::NL_regulator_5_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_6_irp6m::NL_regulator_6_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
+NL_regulator_6_irp6m::NL_regulator_6_irp6m (uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master)
 : NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
 	// Konstruktor regulatora konkretnego
@@ -477,7 +477,7 @@ NL_regulator_6_irp6m::NL_regulator_6_irp6m (lib::BYTE reg_no, lib::BYTE reg_par_
 
 // kolumna i tak dalej
 /*-----------------------------------------------------------------------*/
-lib::BYTE NL_regulator_2_irp6m::compute_set_value (void)
+uint8_t NL_regulator_2_irp6m::compute_set_value (void)
 {
 	// algorytm regulacji dla serwomechanizmu
 
@@ -501,7 +501,7 @@ lib::BYTE NL_regulator_2_irp6m::compute_set_value (void)
 	double step_new_pulse; // nastepna wartosc zadana dla jednego kroku regulacji
 	// (przyrost wartosci zadanej polozenia --
 	// delta r[k-1] -- mierzone w impulsach)
-	lib::BYTE alg_par_status;   // okresla prawidlowosc numeru algorytmu regulacji
+	uint8_t alg_par_status;   // okresla prawidlowosc numeru algorytmu regulacji
 	// i zestawu jego parametrow
 
 
@@ -689,7 +689,7 @@ lib::BYTE NL_regulator_2_irp6m::compute_set_value (void)
 
 
 /*-----------------------------------------------------------------------*/
-lib::BYTE NL_regulator_3_irp6m::compute_set_value (void)
+uint8_t NL_regulator_3_irp6m::compute_set_value (void)
 {
 	// algorytm regulacji dla serwomechanizmu
 
@@ -713,7 +713,7 @@ lib::BYTE NL_regulator_3_irp6m::compute_set_value (void)
 	double step_new_pulse; // nastepna wartosc zadana dla jednego kroku regulacji
 	// (przyrost wartosci zadanej polozenia --
 	// delta r[k-1] -- mierzone w impulsach)
-	lib::BYTE alg_par_status;   // okresla prawidlowosc numeru algorytmu regulacji
+	uint8_t alg_par_status;   // okresla prawidlowosc numeru algorytmu regulacji
 	// i zestawu jego parametrow
 
 	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
@@ -895,7 +895,7 @@ lib::BYTE NL_regulator_3_irp6m::compute_set_value (void)
 
 
 /*-----------------------------------------------------------------------*/
-lib::BYTE NL_regulator_4_irp6m::compute_set_value (void)
+uint8_t NL_regulator_4_irp6m::compute_set_value (void)
 {
 	// algorytm regulacji dla serwomechanizmu
 
@@ -919,7 +919,7 @@ lib::BYTE NL_regulator_4_irp6m::compute_set_value (void)
 	double step_new_pulse; // nastepna wartosc zadana dla jednego kroku regulacji
 	// (przyrost wartosci zadanej polozenia --
 	// delta r[k-1] -- mierzone w impulsach)
-	lib::BYTE alg_par_status;   // okresla prawidlowosc numeru algorytmu regulacji
+	uint8_t alg_par_status;   // okresla prawidlowosc numeru algorytmu regulacji
 	// i zestawu jego parametrow
 
 	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
@@ -1099,7 +1099,7 @@ lib::BYTE NL_regulator_4_irp6m::compute_set_value (void)
 
 
 /*-----------------------------------------------------------------------*/
-lib::BYTE NL_regulator_5_irp6m::compute_set_value (void)
+uint8_t NL_regulator_5_irp6m::compute_set_value (void)
 {
 	// algorytm regulacji dla serwomechanizmu
 
@@ -1123,7 +1123,7 @@ lib::BYTE NL_regulator_5_irp6m::compute_set_value (void)
 	double step_new_pulse; // nastepna wartosc zadana dla jednego kroku regulacji
 	// (przyrost wartosci zadanej polozenia --
 	// delta r[k-1] -- mierzone w impulsach)
-	lib::BYTE alg_par_status;   // okresla prawidlowosc numeru algorytmu regulacji
+	uint8_t alg_par_status;   // okresla prawidlowosc numeru algorytmu regulacji
 	// i zestawu jego parametrow
 
 	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
@@ -1309,7 +1309,7 @@ lib::BYTE NL_regulator_5_irp6m::compute_set_value (void)
 
 
 /*-----------------------------------------------------------------------*/
-lib::BYTE NL_regulator_6_irp6m::compute_set_value (void)
+uint8_t NL_regulator_6_irp6m::compute_set_value (void)
 {
 	// algorytm regulacji dla serwomechanizmu
 
@@ -1333,7 +1333,7 @@ lib::BYTE NL_regulator_6_irp6m::compute_set_value (void)
 	double step_new_pulse; // nastepna wartosc zadana dla jednego kroku regulacji
 	// (przyrost wartosci zadanej polozenia --
 	// delta r[k-1] -- mierzone w impulsach)
-	lib::BYTE alg_par_status;   // okresla prawidlowosc numeru algorytmu regulacji
+	uint8_t alg_par_status;   // okresla prawidlowosc numeru algorytmu regulacji
 	// i zestawu jego parametrow
 
 	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;

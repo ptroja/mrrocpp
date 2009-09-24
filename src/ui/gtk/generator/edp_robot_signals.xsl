@@ -35,15 +35,15 @@ EDP IRp6 RCSC window callback signals
 #include "edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>_uimodule.h"
 
 //mrrocpp UI constants
-mrrocpp::lib::BYTE servo_alg_no[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
-mrrocpp::lib::BYTE servo_par_no[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
+uint8_t servo_alg_no[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
+uint8_t servo_par_no[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
 	
 gint servo_alg_no_tmp [</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
-mrrocpp::lib::BYTE servo_alg_no_output[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
+uint8_t servo_alg_no_output[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
 gint servo_par_no_tmp [</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
-mrrocpp::lib::BYTE servo_par_no_output[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
+uint8_t servo_par_no_output[</xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>];
 
-mrrocpp::lib::BYTE model_no;
+uint8_t model_no;
 gint model_no_tmp;
 
 char buf[32];

@@ -1963,7 +1963,7 @@ init_wnd_irp6_postument_kinematic( PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	lib::BYTE model_no;
+	uint8_t model_no;
 
 	// wychwytania ew. bledow ECP::robot
 	try
@@ -2000,8 +2000,8 @@ irp6p_kinematic_set( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	lib::BYTE *model_no_tmp;
-	lib::BYTE model_no_output;
+	uint8_t *model_no_tmp;
+	uint8_t model_no_output;
 
 	// wychwytania ew. bledow ECP::robot
 	try
@@ -2035,8 +2035,8 @@ init_wnd_irp6_postument_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, P
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	lib::BYTE servo_alg_no[IRP6_POSTUMENT_NUM_OF_SERVOS];
-	lib::BYTE servo_par_no[IRP6_POSTUMENT_NUM_OF_SERVOS];
+	uint8_t servo_alg_no[IRP6_POSTUMENT_NUM_OF_SERVOS];
+	uint8_t servo_par_no[IRP6_POSTUMENT_NUM_OF_SERVOS];
 
 	// wychwytania ew. bledow ECP::robot
 	try
@@ -2087,7 +2087,7 @@ wnd_irp6p_ser_alg_copy_cur_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, PtC
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// wychwytania ew. bledow ECP::robot
-	lib::BYTE *wektor_ptgr[IRP6_POSTUMENT_NUM_OF_SERVOS], *wektor2_ptgr[IRP6_POSTUMENT_NUM_OF_SERVOS],
+	uint8_t *wektor_ptgr[IRP6_POSTUMENT_NUM_OF_SERVOS], *wektor2_ptgr[IRP6_POSTUMENT_NUM_OF_SERVOS],
 		wektor[IRP6_POSTUMENT_NUM_OF_SERVOS], wektor2[IRP6_POSTUMENT_NUM_OF_SERVOS];
 
 	if (ui_state.irp6_postument.edp.pid!=-1)
@@ -2161,10 +2161,10 @@ irp6p_servo_algorithm_set( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	lib::BYTE *servo_alg_no_tmp [IRP6_POSTUMENT_NUM_OF_SERVOS];
-	lib::BYTE servo_alg_no_output[IRP6_POSTUMENT_NUM_OF_SERVOS];
-	lib::BYTE *servo_par_no_tmp [IRP6_POSTUMENT_NUM_OF_SERVOS];
-	lib::BYTE servo_par_no_output[IRP6_POSTUMENT_NUM_OF_SERVOS];
+	uint8_t *servo_alg_no_tmp [IRP6_POSTUMENT_NUM_OF_SERVOS];
+	uint8_t servo_alg_no_output[IRP6_POSTUMENT_NUM_OF_SERVOS];
+	uint8_t *servo_par_no_tmp [IRP6_POSTUMENT_NUM_OF_SERVOS];
+	uint8_t servo_par_no_output[IRP6_POSTUMENT_NUM_OF_SERVOS];
 
 	// wychwytania ew. bledow ECP::robot
 	try

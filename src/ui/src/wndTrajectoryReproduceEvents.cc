@@ -49,7 +49,7 @@ int current_macrostep_number;
 // PID ECP.
 extern int ECPfd;
 // Komenda wysylana z okna FileDialog po wcisnieciu accept.
-extern lib::BYTE FDCommand;
+extern uint8_t FDCommand;
 
 void SetButtonState( PtWidget_t *widget, short active){
     // Przydzielenie pamieci.

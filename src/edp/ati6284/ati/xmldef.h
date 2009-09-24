@@ -58,7 +58,7 @@ particular environments. */
 #define realloc(x, y) PR_Realloc((x), (size_t)(y))
 #define calloc(x, y) PR_Calloc((x),(y))
 #define free(x) PR_Free(x)
-#if PR_lib::BYTES_PER_INT != 4
+#if PR_uint8_tS_PER_INT != 4
 #define int int32
 #endif
 

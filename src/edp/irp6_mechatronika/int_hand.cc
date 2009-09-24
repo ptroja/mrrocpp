@@ -72,7 +72,7 @@ int_handler (void *arg, int int_id)
 		md.is_synchronised = true;
 		for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
 		{
-			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
+			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (uint8_t)i);
 			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
 			md.robot_status[i].adr_offset_plus_2 = robot_status[i].adr_offset_plus_2 = in16(SERVO_REPLY_INT_ADR);
 
@@ -98,7 +98,7 @@ int_handler (void *arg, int int_id)
 		for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
 		{
 			// Odczyty stanu osi, polozenia oraz pradu wirnikow
-			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
+			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (uint8_t)i);
 			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
 
 			md.robot_status[i].adr_offset_plus_2 = robot_status[i].adr_offset_plus_2 = in16(SERVO_REPLY_INT_ADR);
@@ -132,7 +132,7 @@ int_handler (void *arg, int int_id)
 
 			// wylaczniki krancowe
 			if ( ~(robot_status[i].adr_offset_plus_0) & 0x1000 ) {
-			//	out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
+			//	out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (uint8_t)i);
 			//	out16(SERVO_COMMAND1_ADR, RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
 				md.hardware_error |= (uint64_t) (lib::UPPER_LIMIT_SWITCH << (5*i)); // Zadzialal wylacznik "gorny" krancowy
 			}
@@ -144,7 +144,7 @@ int_handler (void *arg, int int_id)
 			if ( robot_status[i].adr_offset_plus_0 & 0x0400 )
 			{
 				md.hardware_error |= (uint64_t) (lib::OVER_CURRENT << (5*i));
-				//     out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
+				//     out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (uint8_t)i);
 				//     out16(SERVO_COMMAND1_ADR, RESET_ALARM); // Skasowanie alarmu i umozliwienie ruchu osi
 			}
 		}
@@ -162,7 +162,7 @@ int_handler (void *arg, int int_id)
 		{
 			for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ ) {
 				// Zapis wartosci zadanej wypelnienia PWM
-				out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
+				out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (uint8_t)i);
 				out16(SERVO_COMMAND1_ADR, STOP_MOTORS);
 			}
 			return (&event);
@@ -170,7 +170,7 @@ int_handler (void *arg, int int_id)
 
 		for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ ) {
 			// Zapis wartosci zadanej wypelnienia PWM
-			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
+			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (uint8_t)i);
 			if (md.is_robot_blocked) md.robot_control[i].adr_offset_plus_0 &= 0xff00;
 			out16(SERVO_COMMAND1_ADR, md.robot_control[i].adr_offset_plus_0);
 		}
@@ -192,7 +192,7 @@ int_handler (void *arg, int int_id)
 
 		for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
 		{
-			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
+			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (uint8_t)i);
 			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
 			md.robot_status[i].adr_offset_plus_2 = robot_status[i].adr_offset_plus_2 = in16(SERVO_REPLY_INT_ADR);
 		}
@@ -212,7 +212,7 @@ int_handler (void *arg, int int_id)
 
 		for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ )
 		{
-			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
+			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (uint8_t)i);
 			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
 			md.robot_status[i].adr_offset_plus_2 = robot_status[i].adr_offset_plus_2 = in16(SERVO_REPLY_INT_ADR);
 		}

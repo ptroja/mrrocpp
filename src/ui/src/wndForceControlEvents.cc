@@ -63,7 +63,7 @@ bool READER_ON;
 lib::POSE_SPECIFICATION ps;
 
 // komenda wysylana z okna FileDialog po wcisnieciu accept
-extern lib::BYTE FDCommand;
+extern uint8_t FDCommand;
 
 int FCwndForceControlRealised( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo ){
 	#ifdef FCDEBUG

@@ -429,8 +429,8 @@ init_wnd_conveyor_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	lib::BYTE servo_alg_no[CONVEYOR_NUM_OF_SERVOS];
-	lib::BYTE servo_par_no[CONVEYOR_NUM_OF_SERVOS];
+	uint8_t servo_alg_no[CONVEYOR_NUM_OF_SERVOS];
+	uint8_t servo_par_no[CONVEYOR_NUM_OF_SERVOS];
 
 	// wychwytania ew. bledow ECP::robot
 	try
@@ -467,10 +467,10 @@ conv_servo_algorithm_set( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	lib::BYTE *servo_alg_no_tmp [CONVEYOR_NUM_OF_SERVOS];
-	lib::BYTE servo_alg_no_output[CONVEYOR_NUM_OF_SERVOS];
-	lib::BYTE *servo_par_no_tmp [CONVEYOR_NUM_OF_SERVOS];
-	lib::BYTE servo_par_no_output[CONVEYOR_NUM_OF_SERVOS];
+	uint8_t *servo_alg_no_tmp [CONVEYOR_NUM_OF_SERVOS];
+	uint8_t servo_alg_no_output[CONVEYOR_NUM_OF_SERVOS];
+	uint8_t *servo_par_no_tmp [CONVEYOR_NUM_OF_SERVOS];
+	uint8_t servo_par_no_output[CONVEYOR_NUM_OF_SERVOS];
 
 	// wychwytania ew. bledow ECP::robot
 	try

@@ -58,16 +58,16 @@ class ui_conveyor_robot: public ecp::conveyor::robot {
   // Zlecenie ruchu
   bool move_motors ( double final_position[CONVEYOR_NUM_OF_SERVOS] );
   bool move_joints ( double final_position[CONVEYOR_NUM_OF_SERVOS] );
-  bool set_kinematic (lib::BYTE kinematic_model_no);
-  bool set_servo_algorithm (lib::BYTE algorithm_no[CONVEYOR_NUM_OF_SERVOS],
-	 lib::BYTE parameters_no[CONVEYOR_NUM_OF_SERVOS] );
+  bool set_kinematic (uint8_t kinematic_model_no);
+  bool set_servo_algorithm (uint8_t algorithm_no[CONVEYOR_NUM_OF_SERVOS],
+	 uint8_t parameters_no[CONVEYOR_NUM_OF_SERVOS] );
 
   // Odczyt polozenia
   bool read_motors ( double current_position[CONVEYOR_NUM_OF_SERVOS] );
   bool read_joints ( double current_position[CONVEYOR_NUM_OF_SERVOS] );
-  bool get_kinematic (lib::BYTE* kinematic_model_no);
-  bool get_servo_algorithm ( lib::BYTE algorithm_no[CONVEYOR_NUM_OF_SERVOS],
-      lib::BYTE parameters_no[CONVEYOR_NUM_OF_SERVOS]);
+  bool get_kinematic (uint8_t* kinematic_model_no);
+  bool get_servo_algorithm ( uint8_t algorithm_no[CONVEYOR_NUM_OF_SERVOS],
+      uint8_t parameters_no[CONVEYOR_NUM_OF_SERVOS]);
 
   // Przekazanie identyfikatora procesu MP
 

@@ -184,7 +184,7 @@ void ui_common_robot::get_current_position ( double c_position[])
 // zlecenie odczytu numeru modelu kinematyki i korektora oraz numerow
 // algorytmow serwo i numerow zestawow parametrow algorytmow
 
-bool ui_common_robot::get_kinematic (lib::BYTE* kinematic_model_no)
+bool ui_common_robot::get_kinematic (uint8_t* kinematic_model_no)
 {
 
     // Zlecenie odczytu numeru modelu i korektora kinematyki
@@ -199,8 +199,8 @@ bool ui_common_robot::get_kinematic (lib::BYTE* kinematic_model_no)
 }
 
 
-bool ui_common_robot::get_servo_algorithm ( lib::BYTE algorithm_no[],
-        lib::BYTE parameters_no[])
+bool ui_common_robot::get_servo_algorithm ( uint8_t algorithm_no[],
+        uint8_t parameters_no[])
 {
 
     // Zlecenie odczytu numerow algorytmow i zestawow parametrow
@@ -211,9 +211,9 @@ bool ui_common_robot::get_servo_algorithm ( lib::BYTE algorithm_no[],
 
     // Przepisanie aktualnych numerow algorytmow i zestawow parametrow
     memcpy (algorithm_no, ecp->reply_package.rmodel.servo_algorithm.servo_algorithm_no,
-            ecp->number_of_servos*sizeof(lib::BYTE) );
+            ecp->number_of_servos*sizeof(uint8_t) );
     memcpy (parameters_no, ecp->reply_package.rmodel.servo_algorithm.servo_parameters_no,
-            ecp->number_of_servos*sizeof(lib::BYTE) );
+            ecp->number_of_servos*sizeof(uint8_t) );
 
     return true;
 }
@@ -240,7 +240,7 @@ bool ui_common_robot::get_controller_state (lib::controller_state_t* robot_contr
 
 
 // ---------------------------------------------------------------
-bool ui_common_robot::set_kinematic (lib::BYTE kinematic_model_no)
+bool ui_common_robot::set_kinematic (uint8_t kinematic_model_no)
 {
 
     // zlecenie zapisu numeru modelu kinematyki i korektora oraz numerow
@@ -263,16 +263,16 @@ bool ui_common_robot::set_kinematic (lib::BYTE kinematic_model_no)
 
 
 // ---------------------------------------------------------------
-bool ui_common_robot::set_servo_algorithm (lib::BYTE algorithm_no[],
-        lib::BYTE parameters_no[] )
+bool ui_common_robot::set_servo_algorithm (uint8_t algorithm_no[],
+        uint8_t parameters_no[] )
 {
 
     // Zlecenie zapisu numerow algorytmow i zestawow parametrow
     // Przepisanie zadanych numerow algorytmow i zestawow parametrow
     memcpy (ecp->ecp_command.instruction.rmodel.servo_algorithm.servo_algorithm_no, algorithm_no,
-            ecp->number_of_servos*sizeof(lib::BYTE) );
+            ecp->number_of_servos*sizeof(uint8_t) );
     memcpy (ecp->ecp_command.instruction.rmodel.servo_algorithm.servo_parameters_no, parameters_no,
-            ecp->number_of_servos*sizeof(lib::BYTE) );
+            ecp->number_of_servos*sizeof(uint8_t) );
     ecp->ecp_command.instruction.instruction_type = lib::SET;
     ecp->ecp_command.instruction.set_type = RMODEL_DV; // RMODEL
     ecp->ecp_command.instruction.set_rmodel_type = lib::SERVO_ALGORITHM; //

@@ -26,7 +26,7 @@ namespace irp6p {
 
 
 /*-----------------------------------------------------------------------*/
-lib::BYTE servo_buffer::Move_a_step (void)
+uint8_t servo_buffer::Move_a_step (void)
 {
 	// wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH ora SYNCHRO_ZERO
 

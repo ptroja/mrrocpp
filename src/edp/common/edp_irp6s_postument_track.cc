@@ -38,8 +38,8 @@ namespace common {
 /*--------------------------------------------------------------------------*/
 void irp6s_postument_track_effector::set_rmodel(lib::c_buffer &instruction)
 {
-	// lib::BYTE previous_model;
-	// lib::BYTE previous_corrector;
+	// uint8_t previous_model;
+	// uint8_t previous_corrector;
 
 	//printf(" SET RMODEL: ");
 	switch (instruction.set_rmodel_type)
@@ -276,8 +276,8 @@ void irp6s_postument_track_effector::pose_force_torque_at_frame_move(lib::c_buff
 	motion_type = instruction.motion_type;
 
 	// zmienne z bufora wejsciowego
-	const lib::WORD &ECP_motion_steps = instruction.motion_steps; // liczba krokow w makrokroku
-	const lib::WORD &ECP_value_in_step_no = instruction.value_in_step_no; // liczba krokow po ktorych bedzie wyslana odpowiedz do ECP o przewidywanym zakonczeniu ruchu
+	const uint16_t &ECP_motion_steps = instruction.motion_steps; // liczba krokow w makrokroku
+	const uint16_t &ECP_value_in_step_no = instruction.value_in_step_no; // liczba krokow po ktorych bedzie wyslana odpowiedz do ECP o przewidywanym zakonczeniu ruchu
 	const lib::POSE_SPECIFICATION &set_arm_type = instruction.set_arm_type;
 
 	double (&force_xyz_torque_xyz)[6] = instruction.arm.pf_def.force_xyz_torque_xyz; // wartosci zadana sily

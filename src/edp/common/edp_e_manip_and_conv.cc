@@ -565,13 +565,13 @@ void manip_and_conv_effector::send_to_SERVO_GROUP ()
     switch(servo_command.instruction_code) {
       case lib::READ:
       case lib::SYNCHRONISE:
-         command_size = (int) (((lib::BYTE*) (&servo_command.address_byte)) - ((lib::BYTE*) (&servo_command.instruction_code)));
+         command_size = (int) (((uint8_t*) (&servo_command.address_byte)) - ((uint8_t*) (&servo_command.instruction_code)));
          break;
       case lib::MOVE:
-         command_size = (int) (((lib::BYTE*) (&servo_command.parameters.move.address_byte)) - ((lib::BYTE*) (&servo_command.instruction_code)));
+         command_size = (int) (((uint8_t*) (&servo_command.parameters.move.address_byte)) - ((uint8_t*) (&servo_command.instruction_code)));
          break;
       case lib::SERVO_ALGORITHM_AND_PARAMETERS:
-         command_size = (int) (((lib::BYTE*) (&servo_command.parameters.servo_alg_par.address_byte)) - ((lib::BYTE*) (&servo_command.instruction_code)));
+         command_size = (int) (((uint8_t*) (&servo_command.parameters.servo_alg_par.address_byte)) - ((uint8_t*) (&servo_command.instruction_code)));
          break;
 }; // end: switch
     // if (Send(&servo_command, &sg_reply, command_size, sizeof(lib::servo_group_reply)) < 0) {
@@ -1433,7 +1433,7 @@ in_out_buffer::~in_out_buffer() {
 
 
 // ustawienie wyjsc
-void in_out_buffer::set_output(const lib::WORD *out_value)
+void in_out_buffer::set_output(const uint16_t *out_value)
 {
 #ifdef __QNXNTO__
     InterruptLock
@@ -1454,7 +1454,7 @@ void in_out_buffer::set_output(const lib::WORD *out_value)
 }
 
 // odczytanie wyjsc
-void in_out_buffer::get_output(lib::WORD *out_value)
+void in_out_buffer::get_output(uint16_t *out_value)
 {
 #ifdef __QNXNTO__
     InterruptLock
@@ -1475,7 +1475,7 @@ void in_out_buffer::get_output(lib::WORD *out_value)
 
 
 // ustawienie wejsc
-void in_out_buffer::set_input (const lib::WORD *binary_in_value, const lib::BYTE *analog_in_table)
+void in_out_buffer::set_input (const uint16_t *binary_in_value, const uint8_t *analog_in_table)
 {
 #ifdef __QNXNTO__
     InterruptLock
@@ -1505,7 +1505,7 @@ void in_out_buffer::set_input (const lib::WORD *binary_in_value, const lib::BYTE
 
 
 // odczytanie wejsc
-void in_out_buffer::get_input (lib::WORD *binary_in_value, lib::BYTE *analog_in_table)
+void in_out_buffer::get_input (uint16_t *binary_in_value, uint8_t *analog_in_table)
 {
 #ifdef __QNXNTO__
     InterruptLock
@@ -1525,9 +1525,9 @@ void in_out_buffer::get_input (lib::WORD *binary_in_value, lib::BYTE *analog_in_
 
     	// odczytanie wejsc
     	// SERVO_REPLY_STATUS_ADR     0x210
-    	lib::WORD read_analog = 0x00FF & in16(SERVO_REPLY_STATUS_ADR);
+    	uint16_t read_analog = 0x00FF & in16(SERVO_REPLY_STATUS_ADR);
     	// SERVO_REPLY_REG_1_ADR       0x218
-    	lib::WORD read_binary = 0x00FF & in16(SERVO_REPLY_REG_1_ADR);*/
+    	uint16_t read_binary = 0x00FF & in16(SERVO_REPLY_REG_1_ADR);*/
 
 #ifdef __QNXNTO__
     InterruptUnlock

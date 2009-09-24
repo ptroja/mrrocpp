@@ -36,7 +36,7 @@ bool hardware_interface::is_hardware_error (void)
 
 void hardware_interface::insert_set_value ( int drive_number, double set_value)
 { // Wprowadzenie wartosci zadanej PWM
-    robot_control[drive_number].adr_offset_plus_0 = (lib::WORD) fabs(set_value);
+    robot_control[drive_number].adr_offset_plus_0 = (uint16_t) fabs(set_value);
     if (set_value < 0 )
         robot_control[drive_number].adr_offset_plus_0 |= 0x300;
     else

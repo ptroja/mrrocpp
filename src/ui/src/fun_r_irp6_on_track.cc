@@ -2022,7 +2022,7 @@ init_wnd_irp6_on_track_kinematic( PtWidget_t *widget, ApInfo_t *apinfo, PtCallba
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	lib::BYTE model_no;
+	uint8_t model_no;
 
 	// wychwytania ew. bledow ECP::robot
 	try
@@ -2059,8 +2059,8 @@ irp6ot_kinematic_set( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	lib::BYTE *model_no_tmp;
-	lib::BYTE model_no_output;
+	uint8_t *model_no_tmp;
+	uint8_t model_no_output;
 
 	// wychwytania ew. bledow ECP::robot
 	try
@@ -2094,8 +2094,8 @@ init_wnd_irp6_on_track_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, Pt
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	lib::BYTE servo_alg_no[IRP6_ON_TRACK_NUM_OF_SERVOS];
-	lib::BYTE servo_par_no[IRP6_ON_TRACK_NUM_OF_SERVOS];
+	uint8_t servo_alg_no[IRP6_ON_TRACK_NUM_OF_SERVOS];
+	uint8_t servo_par_no[IRP6_ON_TRACK_NUM_OF_SERVOS];
 
 	// wychwytania ew. bledow ECP::robot
 	try
@@ -2149,7 +2149,7 @@ wnd_irp6ot_seralg_copy_current_to_desired( PtWidget_t *widget, ApInfo_t *apinfo,
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// wychwytania ew. bledow ECP::robot
-	lib::BYTE *wektor_ptgr[IRP6_ON_TRACK_NUM_OF_SERVOS], *wektor2_ptgr[IRP6_ON_TRACK_NUM_OF_SERVOS],
+	uint8_t *wektor_ptgr[IRP6_ON_TRACK_NUM_OF_SERVOS], *wektor2_ptgr[IRP6_ON_TRACK_NUM_OF_SERVOS],
 		wektor[IRP6_ON_TRACK_NUM_OF_SERVOS], wektor2[IRP6_ON_TRACK_NUM_OF_SERVOS];
 
 	if (ui_state.irp6_on_track.edp.pid!=-1)
@@ -2227,10 +2227,10 @@ irp6ot_servo_algorithm_set( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	lib::BYTE *servo_alg_no_tmp [IRP6_ON_TRACK_NUM_OF_SERVOS];
-	lib::BYTE servo_alg_no_output[IRP6_ON_TRACK_NUM_OF_SERVOS];
-	lib::BYTE *servo_par_no_tmp [IRP6_ON_TRACK_NUM_OF_SERVOS];
-	lib::BYTE servo_par_no_output[IRP6_ON_TRACK_NUM_OF_SERVOS];
+	uint8_t *servo_alg_no_tmp [IRP6_ON_TRACK_NUM_OF_SERVOS];
+	uint8_t servo_alg_no_output[IRP6_ON_TRACK_NUM_OF_SERVOS];
+	uint8_t *servo_par_no_tmp [IRP6_ON_TRACK_NUM_OF_SERVOS];
+	uint8_t servo_par_no_output[IRP6_ON_TRACK_NUM_OF_SERVOS];
 
 	// wychwytania ew. bledow ECP::robot
 	try

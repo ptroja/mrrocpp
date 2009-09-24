@@ -165,7 +165,7 @@ struct ECP_message
 	/*! Robot name. */
 	ROBOT_ENUM robot_name;
 	/*! Number of options - from 2 to 4 - - for CHOOSE_OPTION mode. */
-	BYTE nr_of_options;
+	uint8_t nr_of_options;
 
 	//----------------------------------------------------------
 	union{
@@ -576,37 +576,37 @@ struct edp_master_command
 	/*! Code for the instruction sent to SERVO_GROUP. */
 	SERVO_COMMAND instruction_code;
 	//*! A byte for calculating the length of the command */
-	//BYTE address_byte;
+	//uint8_t address_byte;
 	union {
 		//------------------------------------------------------
 		struct
 		{
 			/*! Number of steps for a macrostep. */
-			WORD number_of_steps;
+			uint16_t number_of_steps;
 			/*!
 			 *  Number of steps after which the information about the previously
 			 *  realized position is to be sent.
 			 *  Information is sent to EDP_MASTER using READING_BUFFER.
 			 *  After k steps SERVO has the position from the k-1 step.
 			 */
-			WORD return_value_in_step_no;
+			uint16_t return_value_in_step_no;
 			/*! Length of a macrostep (given value of a macrostep - increase). */
 			double macro_step[MAX_SERVOS_NR];
 			/*! Given absolute position at the end of a macrostep. */
 			double abs_position [MAX_SERVOS_NR];
 			//*! Byte for calculating the command's length. */
-			// BYTE address_byte;
+			// uint8_t address_byte;
 		}
 		move;
 		//------------------------------------------------------
 		struct
 		{
 			/*! Servo algorithm numbers. */
-			BYTE servo_algorithm_no[MAX_SERVOS_NR];
+			uint8_t servo_algorithm_no[MAX_SERVOS_NR];
 			/*! Numbers fo servo algorithm parameters set. */
-			BYTE servo_parameters_no[MAX_SERVOS_NR];
+			uint8_t servo_parameters_no[MAX_SERVOS_NR];
 			//*! Byte for calculating the command's length. */
-			// BYTE address_byte;
+			// uint8_t address_byte;
 		}
 		servo_alg_par;
 
@@ -628,8 +628,8 @@ struct servo_group_reply
 	/*! Control current - (usualy unnecessary). */
 	int16_t current[MAX_SERVOS_NR];
 	/*! Numbers for the regulation algorithms in use. */
-	BYTE algorithm_no[MAX_SERVOS_NR];
-	BYTE algorithm_parameters_no[MAX_SERVOS_NR];
+	uint8_t algorithm_no[MAX_SERVOS_NR];
+	uint8_t algorithm_parameters_no[MAX_SERVOS_NR];
 	/*! Gripper regulator state. */
 	short gripper_reg_state;
 };
@@ -650,7 +650,7 @@ typedef union c_buffer_rmodel
 		/*! Tool trihedron ralative to the collar. */
 		frame_tab tool_frame;
 		//*! Byte for calculating the command's length. */
-		//	BYTE address_byte;
+		//	uint8_t address_byte;
 	}
 	tool_frame_def;
 	//----------------------------------------------------------
@@ -659,27 +659,27 @@ typedef union c_buffer_rmodel
 		/*! XYZ + tool orientation relative to the collar. */
 		double tool_coordinates[6];
 		//*! Byte for calculating the command's length. */
-		// 	BYTE address_byte;
+		// 	uint8_t address_byte;
 	}
 	tool_coordinate_def;
 	//----------------------------------------------------------
 	struct
 	{
 		/*! Parameter set number for the kinematic model. */
-		BYTE kinematic_model_no;
+		uint8_t kinematic_model_no;
 		//*! Byte for calculating the command's length. */
-		// 	BYTE address_byte;
+		// 	uint8_t address_byte;
 	}
 	kinematic_model;
 	//----------------------------------------------------------
 	struct
 	{
 		/*! Numbers for the servo-regulation algorithms. */
-		BYTE servo_algorithm_no[MAX_SERVOS_NR];
+		uint8_t servo_algorithm_no[MAX_SERVOS_NR];
 		/*! Parameter set numbers for the servo-regulation algorithms. */
-		BYTE servo_parameters_no[MAX_SERVOS_NR];
+		uint8_t servo_parameters_no[MAX_SERVOS_NR];
 		//*! Byte for calculating the command's length. */
-		// 	BYTE address_byte;
+		// 	uint8_t address_byte;
 	}
 	servo_algorithm;
 	//----------------------------------------------------------
@@ -719,7 +719,7 @@ typedef union c_buffer_arm
 		/*! Dilation degree of the gripper. */
 		double gripper_coordinate;
 		//*! Byte for calculating the command's length. */
-		// 	BYTE address_byte;
+		// 	uint8_t address_byte;
 	}
 	pf_def;
 	//----------------------------------------------------------
@@ -730,7 +730,7 @@ typedef union c_buffer_arm
 		/*! MAC7. */
 		char prosody[MAX_PROSODY];
 		//*! Byte for calculating the command's length. */
-		// 	BYTE address_byte;
+		// 	uint8_t address_byte;
 	}
 	text_def;
 
@@ -744,9 +744,9 @@ struct c_buffer
 	/*! Type of the instruction. */
 	INSTRUCTION_TYPE instruction_type;
 	/*! Type of the SET instruction. */
-	BYTE set_type;
+	uint8_t set_type;
 	/*! Type of the GET instruction. */
-	BYTE get_type;
+	uint8_t get_type;
 	/*! Tool definition type - setting. */
 	RMODEL_SPECIFICATION set_rmodel_type;
 	/*! Tool definition type - reading. */
@@ -756,9 +756,9 @@ struct c_buffer
 	/*! Definition type of the end-effector's read position. */
 	POSE_SPECIFICATION get_arm_type;
 	/*! Binary outputs values. */
-	WORD output_values;
+	uint16_t output_values;
 	//*! Byte for calculating the command's length. */
-	//BYTE address_byte;
+	//uint8_t address_byte;
 
 	/*! Type of interpolation. */
 	INTERPOLATION_TYPE interpolation_type;
@@ -766,7 +766,7 @@ struct c_buffer
 	/*! Type of motion - means of describing the shift. */
 	MOTION_TYPE motion_type;
 	/*! Number of steps for a given shift (macrostep). */
-	WORD motion_steps;
+	uint16_t motion_steps;
 	/*!
 	 *  Number of steps for the 1st movemement phase.
 	 *  Krok, w ktorym ma zostac przekazana informacja
@@ -789,7 +789,7 @@ struct c_buffer
 	 *  i informacja o polozeniu bedzie dotyczyc
 	 *  realizacji srodkowej fazy makrokroku.
 	 */
-	WORD value_in_step_no;
+	uint16_t value_in_step_no;
 	c_buffer_rmodel_t rmodel;
 	c_buffer_arm_t arm;
 
@@ -852,7 +852,7 @@ typedef union r_buffer_rmodel
 		 */
 		frame_tab tool_frame;
 		//*! Byte for calculating the command's length. */
-		// 	BYTE address_byte;
+		// 	uint8_t address_byte;
 	}
 	tool_frame_def;
 	//----------------------------------------------------------
@@ -864,7 +864,7 @@ typedef union r_buffer_rmodel
 		 */
 		double tool_coordinates[6];
 		//*! Byte for calculating the command's length. */
-		// 	BYTE address_byte;
+		// 	uint8_t address_byte;
 	}
 	tool_coordinate_def;
 	//----------------------------------------------------------
@@ -874,10 +874,10 @@ typedef union r_buffer_rmodel
 		 *  Numer modelu kinematyki.
 		 *  @todo Translate to English.
 		 */
-		BYTE kinematic_model_no;
+		uint8_t kinematic_model_no;
 
 		//*! Byte for calculating the command's length. */
-		// 	BYTE address_byte;
+		// 	uint8_t address_byte;
 	}
 	kinematic_model;
 	//----------------------------------------------------------
@@ -887,12 +887,12 @@ typedef union r_buffer_rmodel
 		 *  Numery algorytmow serworegulacji.
 		 *  @todo Translate to English.
 		 */
-		BYTE servo_algorithm_no[MAX_SERVOS_NR];
+		uint8_t servo_algorithm_no[MAX_SERVOS_NR];
 		/*!
 		 *  Numery zestawu parametrow algorytmow serworegulacji.
 		 *  @todo Translate to English.
 		 */
-		BYTE servo_parameters_no[MAX_SERVOS_NR];
+		uint8_t servo_parameters_no[MAX_SERVOS_NR];
 	}
 	servo_algorithm;
 	//----------------------------------------------------------
@@ -967,7 +967,7 @@ typedef union r_buffer_arm
 		 */
 		double gripper_coordinate;
 		//*! Byte for calculating the command's length. */
-		// 	BYTE address_byte;
+		// 	uint8_t address_byte;
 
 	}
 	pf_def;
@@ -980,7 +980,7 @@ typedef union r_buffer_arm
 		 */
 		int speaking;
 		//*! Byte for calculating the command's length. */
-		// 	BYTE address_byte;
+		// 	uint8_t address_byte;
 	}
 	text_def;
 
@@ -1007,14 +1007,14 @@ struct r_buffer
 	 *  Wartosci wejsc binarnych.
 	 *  @todo Translate to English.
 	 */
-	WORD input_values;
+	uint16_t input_values;
 	/*! Analog input. */
-	BYTE analog_input[8];
+	uint8_t analog_input[8];
 	controller_state_t controller_state;
 	/*! Number of the servo step. */
 	unsigned long servo_step;
 	/*! Byte for calculating the command's length. */
-	BYTE address_byte;
+	uint8_t address_byte;
 	/*! Given values for PWM fill (Phase Wave Modulation) - (usualy unnecessary). */
 	int16_t PWM_value[MAX_SERVOS_NR];
 	/*! Control current - (usualy unnecessary). */

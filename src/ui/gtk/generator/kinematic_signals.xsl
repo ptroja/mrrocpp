@@ -65,7 +65,7 @@ extern "C"
 		if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised)
 		{
 			model_no_tmp = gtk_spin_button_get_value(spin1_kinematic_</xsl:text><xsl:value-of select="$name" /><xsl:text>);
-			model_no = mrrocpp::lib::BYTE(model_no_tmp);
+			model_no = uint8_t(model_no_tmp);
 
 			robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->set_kinematic(model_no);
 		}

@@ -63,9 +63,9 @@ class ui_common_robot {
   bool move_xyz_angle_axis_relative ( double position_increment[7] );
   bool set_tool_xyz_angle_axis ( double tool_vector[6] );
   bool set_tool_xyz_euler_zyz ( double tool_vector[6] );
-  bool set_kinematic (lib::BYTE kinematic_model_no);
-  bool set_servo_algorithm (lib::BYTE algorithm_no[MAX_SERVOS_NR],
-  lib::BYTE parameters_no[MAX_SERVOS_NR] );
+  bool set_kinematic (uint8_t kinematic_model_no);
+  bool set_servo_algorithm (uint8_t algorithm_no[MAX_SERVOS_NR],
+  uint8_t parameters_no[MAX_SERVOS_NR] );
 
   // Odczyt polozenia
   bool read_motors ( double current_position[MAX_SERVOS_NR] );
@@ -74,9 +74,9 @@ class ui_common_robot {
   bool read_xyz_angle_axis ( double current_position[7] );
   bool read_tool_xyz_angle_axis ( double tool_vector[6] );
   bool read_tool_xyz_euler_zyz ( double tool_vector[6] );
-  bool get_kinematic (lib::BYTE* kinematic_model_no);
-  bool get_servo_algorithm ( lib::BYTE algorithm_no[MAX_SERVOS_NR],
-  lib::BYTE parameters_no[MAX_SERVOS_NR]);
+  bool get_kinematic (uint8_t* kinematic_model_no);
+  bool get_servo_algorithm ( uint8_t algorithm_no[MAX_SERVOS_NR],
+  uint8_t parameters_no[MAX_SERVOS_NR]);
 
 };
 #endif

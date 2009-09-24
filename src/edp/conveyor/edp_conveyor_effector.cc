@@ -47,8 +47,8 @@ void effector::initialize (void)
 /*--------------------------------------------------------------------------*/
 void effector::set_rmodel (lib::c_buffer &instruction)
 {
-	// lib::BYTE previous_model;
-	// lib::BYTE previous_corrector;
+	// uint8_t previous_model;
+	// uint8_t previous_corrector;
 	//printf(" SET RMODEL: ");
 	switch (instruction.set_rmodel_type)
 	{

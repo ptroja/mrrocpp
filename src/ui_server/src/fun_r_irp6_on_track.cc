@@ -136,7 +136,7 @@ manage_interface_irp6ot ()
 
 int irp6ot_read_kinematic()
 {
-	lib::BYTE model_no;
+	uint8_t model_no;
 	try
 	{
 		if (ui_state.irp6_on_track.edp.pid!=-1)
@@ -159,8 +159,8 @@ int irp6ot_read_kinematic()
 
 int irp6ot_read_servo_algorithm()
 {
-	lib::BYTE servo_alg_no[IRP6_ON_TRACK_NUM_OF_SERVOS];
-	lib::BYTE servo_par_no[IRP6_ON_TRACK_NUM_OF_SERVOS];
+	uint8_t servo_alg_no[IRP6_ON_TRACK_NUM_OF_SERVOS];
+	uint8_t servo_par_no[IRP6_ON_TRACK_NUM_OF_SERVOS];
 
 	try
 	{
@@ -682,8 +682,8 @@ int pulse_reader_irp6ot_trigger()
 
 int irp6ot_servo_algorithm_set(double* v)
 {
-	lib::BYTE servo_alg_no_output[IRP6_ON_TRACK_NUM_OF_SERVOS];
-	lib::BYTE servo_par_no_output[IRP6_ON_TRACK_NUM_OF_SERVOS];
+	uint8_t servo_alg_no_output[IRP6_ON_TRACK_NUM_OF_SERVOS];
+	uint8_t servo_par_no_output[IRP6_ON_TRACK_NUM_OF_SERVOS];
 
 	try
 	{
@@ -773,12 +773,12 @@ int EDP_irp6_on_track_create()
 
 int irp6ot_kinematic_set(double* v)
 {
-	lib::BYTE model_no_output;
+	uint8_t model_no_output;
 	try
 	{
 		if ( ui_state.irp6_on_track.edp.is_synchronised )
 		{
-			model_no_output = (lib::BYTE)(v[0]);
+			model_no_output = (uint8_t)(v[0]);
 			ui_robot.irp6_on_track->set_kinematic(model_no_output);
 			irp6ot_read_kinematic();
 		}

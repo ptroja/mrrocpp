@@ -148,10 +148,10 @@ hardware_interface::hardware_interface ( effector &_master ) : common::hardware_
 	}
 
 	if(master.test_mode==0) {
-		/*out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (lib::BYTE)i);
+		/*out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (uint8_t)i);
 		out16(SERVO_COMMAND1_ADR,RESET_MANUAL_MODE); // Zerowanie ruchow recznych
 		out16(SERVO_COMMAND1_ADR, PROHIBIT_MANUAL_MODE); // Zabrania ruchow za pomoca przyciskow w szafie*/
-		irq_data.md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)CONVEYOR_SERVO_NR;
+		irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)CONVEYOR_SERVO_NR;
 		irq_data.md.register_adress=SERVO_COMMAND1_ADR;
 		irq_data.md.value=RESET_MANUAL_MODE;
 		hi_int_wait(INT_SINGLE_COMMAND, 2);
@@ -182,7 +182,7 @@ hardware_interface::~hardware_interface ( void )    // destruktor
 		reset_counters();
 		// Zezwolenie na prace reczna
 
-		irq_data.md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)CONVEYOR_SERVO_NR;
+		irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)CONVEYOR_SERVO_NR;
 		irq_data.md.register_adress=SERVO_COMMAND1_ADR;
 		irq_data.md.value=ALLOW_MANUAL_MODE;
 		hi_int_wait(INT_SINGLE_COMMAND, 2);
@@ -252,7 +252,7 @@ void hardware_interface::reset_counters ( void )
 
 	} // end: for
 
-	irq_data.md.card_adress=FIRST_SERVO_PTR + (lib::BYTE)CONVEYOR_SERVO_NR;
+	irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)CONVEYOR_SERVO_NR;
 	irq_data.md.register_adress=SERVO_COMMAND1_ADR;
 	irq_data.md.value=MICROCONTROLLER_MODE;
 	hi_int_wait(INT_SINGLE_COMMAND, 2);
@@ -297,7 +297,7 @@ bool hardware_interface::is_hardware_error ( void)
 
 	for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++ )
 	{
-		lib::WORD MASK = 0x7E00;
+		uint16_t MASK = 0x7E00;
 		if ( (irq_data.md.robot_status[i].adr_offset_plus_0 ^ 0x6000) & MASK )
 		{
 			h_error = true;

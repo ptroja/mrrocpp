@@ -112,7 +112,7 @@ bool task::operator_reaction (const char* question )
 
 // --------------------------------------------------------------------------
 // by Y - Wybor przez operatora jednej z opcji
-lib::BYTE task::choose_option (const char* question, lib::BYTE nr_of_options_input )
+uint8_t task::choose_option (const char* question, uint8_t nr_of_options_input )
 {
 	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	lib::UI_reply ui_to_ecp_rep;    // Odpowiedz UI do ECP

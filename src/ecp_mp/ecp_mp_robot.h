@@ -21,8 +21,8 @@ struct robot_transmission_data
 	lib::REPLY_TYPE reply_type; // typ odpowiedzi EDP
 	lib::edp_error error_no; // blad wykryty w EDP
 
-	lib::BYTE set_type; // typ instrukcji set: ARM/RMODEL/OUTPUTS
-	lib::BYTE get_type; // typ instrukcji get: ARM/RMODEL/INPUTS
+	uint8_t set_type; // typ instrukcji set: ARM/RMODEL/OUTPUTS
+	uint8_t get_type; // typ instrukcji get: ARM/RMODEL/INPUTS
 
 	// okreslenie modelu robota (narzedzia, serworegulatora, korektora kinematycznego)
 	lib::RMODEL_SPECIFICATION set_rmodel_type; // przy jego zadawaniu
@@ -32,15 +32,15 @@ struct robot_transmission_data
 	lib::POSE_SPECIFICATION set_arm_type; // przy jej zadawaniu
 	lib::POSE_SPECIFICATION get_arm_type; // przy jego odczycie
 
-	lib::WORD output_values; // zadane wartosci wyjsc binarnych
-	lib::WORD input_values; // odczytane wartosci wejsc binarnych
-	lib::BYTE analog_input[8]; // odczytane wartosci wejsc analogowych - 8 kanalow
+	uint16_t output_values; // zadane wartosci wyjsc binarnych
+	uint16_t input_values; // odczytane wartosci wejsc binarnych
+	uint8_t analog_input[8]; // odczytane wartosci wejsc analogowych - 8 kanalow
 
 	lib::MOTION_TYPE motion_type; // sposob zadania ruchu
 	lib::INTERPOLATION_TYPE next_interpolation_type; // sposob interpolacji
 	lib::INTERPOLATION_TYPE current_interpolation_type; // sposob interpolacji - narazie nieuzywane
 
-	lib::WORD motion_steps; // liczba krokow ruchu zadanego (makrokroku)
+	uint16_t motion_steps; // liczba krokow ruchu zadanego (makrokroku)
 	/*
 	 liczba krokow pierwszej fazy ruchu, czyli krok,
 	 w ktorym ma zostac przekazana informacja o realizacji pierwszej fazy ruchu:
@@ -56,7 +56,7 @@ struct robot_transmission_data
 	 wiadomosc dotrze przed zrealizowaniem makrokroku i informacja o polozeniu
 	 bedzie dotyczyc realizacji srodkowej fazy makrokroku
 	 */
-	lib::WORD value_in_step_no;
+	uint16_t value_in_step_no;
 
 	// polozenie trojscianu koncowki wzgledem ukladu bazowego
 	lib::frame_tab current_arm_frame; // aktualne
@@ -98,16 +98,16 @@ struct robot_transmission_data
 	double next_gripper_coordinate; // zadany
 
 	// numer zestawu parametrow
-	lib::BYTE current_kinematic_model_no; // odczytany
-	lib::BYTE next_kinematic_model_no; // wygenerowany
+	uint8_t current_kinematic_model_no; // odczytany
+	uint8_t next_kinematic_model_no; // wygenerowany
 
 	// numery algorytmow serworegulacji
-	lib::BYTE current_servo_algorithm_no[MAX_SERVOS_NR]; // odczytane
-	lib::BYTE next_servo_algorithm_no[MAX_SERVOS_NR]; // wygenerowane
+	uint8_t current_servo_algorithm_no[MAX_SERVOS_NR]; // odczytane
+	uint8_t next_servo_algorithm_no[MAX_SERVOS_NR]; // wygenerowane
 
 	// numery zestawow parametrow algorytmow serworegulacji
-	lib::BYTE current_servo_parameters_no[MAX_SERVOS_NR]; // odczytane
-	lib::BYTE next_servo_parameters_no[MAX_SERVOS_NR]; // wygenerowane
+	uint8_t current_servo_parameters_no[MAX_SERVOS_NR]; // odczytane
+	uint8_t next_servo_parameters_no[MAX_SERVOS_NR]; // wygenerowane
 
 	// edp speaker data
 	char text[MAX_TEXT];

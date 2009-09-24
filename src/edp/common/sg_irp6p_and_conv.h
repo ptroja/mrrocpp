@@ -53,10 +53,10 @@ class NL_regulator_1_irp6p: public common::NL_regulator
     // Obiekt z algorytmem regulacji
 
 public:
-    NL_regulator_1_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no,
+    NL_regulator_1_irp6p (uint8_t reg_no, uint8_t reg_par_no,
                           double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master); // konstruktor
 
-    virtual lib::BYTE compute_set_value ( void );
+    virtual uint8_t compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
 }; // end: class NL_regulator_1
@@ -69,10 +69,10 @@ class NL_regulator_2_irp6p: public common::NL_regulator
     // Obiekt z algorytmem regulacji
 
 public:
-    NL_regulator_2_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no,
+    NL_regulator_2_irp6p (uint8_t reg_no, uint8_t reg_par_no,
                           double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master); // konstruktor
 
-    virtual lib::BYTE compute_set_value ( void );
+    virtual uint8_t compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
 }; // end: class NL_regulator_2
@@ -85,10 +85,10 @@ class NL_regulator_3_irp6p: public common::NL_regulator
     // Obiekt z algorytmem regulacji
 
 public:
-    NL_regulator_3_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no,
+    NL_regulator_3_irp6p (uint8_t reg_no, uint8_t reg_par_no,
                           double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master); // konstruktor
 
-    virtual lib::BYTE compute_set_value ( void );
+    virtual uint8_t compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
 }; // end: class NL_regulator_3
@@ -101,10 +101,10 @@ class NL_regulator_4_irp6p: public common::NL_regulator
     // Obiekt z algorytmem regulacji
 
 public:
-    NL_regulator_4_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no,
+    NL_regulator_4_irp6p (uint8_t reg_no, uint8_t reg_par_no,
                           double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master); // konstruktor
 
-    virtual lib::BYTE compute_set_value ( void );
+    virtual uint8_t compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
 }; // end: class NL_regulator_4
@@ -119,10 +119,10 @@ class NL_regulator_5_irp6p: public common::NL_regulator
 
 public:
     bool first;
-    NL_regulator_5_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no,
+    NL_regulator_5_irp6p (uint8_t reg_no, uint8_t reg_par_no,
                           double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master); // konstruktor
 
-    virtual lib::BYTE compute_set_value ( void );
+    virtual uint8_t compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
 }; // end: class NL_regulator_5
@@ -136,10 +136,10 @@ class NL_regulator_6_irp6p: public common::NL_regulator
     // Obiekt z algorytmem regulacji
 
 public:
-    NL_regulator_6_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no,
+    NL_regulator_6_irp6p (uint8_t reg_no, uint8_t reg_par_no,
                           double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master); // konstruktor
 
-    virtual lib::BYTE compute_set_value ( void );
+    virtual uint8_t compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
 }; // end: class NL_regulator_6
@@ -153,10 +153,10 @@ class NL_regulator_7_irp6p: public common::NL_regulator
     // Obiekt z algorytmem regulacji
 
 public:
-    NL_regulator_7_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no,
+    NL_regulator_7_irp6p (uint8_t reg_no, uint8_t reg_par_no,
                           double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master); // konstruktor
 
-    virtual lib::BYTE compute_set_value ( void );
+    virtual uint8_t compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
 }; // end: class NL_regulator_7
@@ -175,10 +175,10 @@ class NL_regulator_8_irp6p: public common::NL_regulator
 
 
 public:
-    NL_regulator_8_irp6p (lib::BYTE reg_no, lib::BYTE reg_par_no,
+    NL_regulator_8_irp6p (uint8_t reg_no, uint8_t reg_par_no,
                           double aa, double bb0, double bb1, double k_ff, common::manip_and_conv_effector &_master); // konstruktor
 
-    virtual lib::BYTE compute_set_value ( void );
+    virtual uint8_t compute_set_value ( void );
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
 
 }; // end: class NL_regulator_8

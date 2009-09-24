@@ -24,7 +24,7 @@ extern effector* master;
 //extern uint64_t kk;	// numer pomiaru od momentu startu pomiarow
 
 /*-----------------------------------------------------------------------*/
-lib::BYTE servo_buffer::Move_a_step (void)
+uint8_t servo_buffer::Move_a_step (void)
 {
 	// wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH ora SYNCHRO_ZERO
 

@@ -149,10 +149,10 @@ public:
 class in_out_buffer
 {
 private:
-    lib::WORD binary_input;		// wejscie binarne
-    lib::BYTE analog_input[8];		// wejscie analogowe - dla 8 kanalow
+    uint16_t binary_input;		// wejscie binarne
+    uint8_t analog_input[8];		// wejscie analogowe - dla 8 kanalow
 
-    lib::WORD binary_output;		// wyjscie binarne
+    uint16_t binary_output;		// wyjscie binarne
 #ifdef __QNXNTO__
     intrspin_t
 #else
@@ -168,10 +168,10 @@ public:
 
     bool set_output_flag; // flaga czy ustawic wyjcie na robota
 
-    void set_output (const lib::WORD *out_value);
-    void get_output (lib::WORD *out_value);
-    void set_input (const lib::WORD *binary_in_value, const lib::BYTE *analog_in_table);
-    void get_input (lib::WORD *binary_in_value, lib::BYTE *analog_in_table);
+    void set_output (const uint16_t *out_value);
+    void get_output (uint16_t *out_value);
+    void set_input (const uint16_t *binary_in_value, const uint8_t *analog_in_table);
+    void get_input (uint16_t *binary_in_value, uint8_t *analog_in_table);
 };
 /**************************** IN_OUT_BUFFER *****************************/
 

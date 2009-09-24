@@ -58,7 +58,7 @@ protected:
 #endif
 
 
-    lib::WORD motion_steps;            // liczba krokow ruchu zadanego (makrokroku)
+    uint16_t motion_steps;            // liczba krokow ruchu zadanego (makrokroku)
 
     //Liczba krokow pierwszej fazy ruchu, czyli krok, w ktorym ma zostac
     //przekazana informacja o realizacji pierwszej fazy ruchu:
@@ -72,7 +72,7 @@ protected:
     //Dla value_in_step_no < motion_steps wiadomosc dotrze przed zrealizowaniem
     //makrokroku i informacja o polozeniu bedzie dotyczyc realizacji srodkowej
     //fazy makrokroku.
-    lib::WORD value_in_step_no;
+    uint16_t value_in_step_no;
 
     int servo_fd;
 
@@ -176,14 +176,14 @@ protected:
     int16_t current[MAX_SERVOS_NR];                // prad sterujacy
     lib::MOTION_TYPE motion_type;        // sposob zadania ruchu: ABSOLUTE/RELATIVE
 
-    lib::BYTE servo_algorithm_ecp[MAX_SERVOS_NR];
+    uint8_t servo_algorithm_ecp[MAX_SERVOS_NR];
     // Tablica numerow algorytmow serworegulacji przyslanych z ECP
-    lib::BYTE servo_parameters_ecp[MAX_SERVOS_NR];
+    uint8_t servo_parameters_ecp[MAX_SERVOS_NR];
     // Tablica numerow zestawow parametrow
     // algorytmow serworegulacji przyslanych z ECP
-    lib::BYTE servo_algorithm_sg[MAX_SERVOS_NR];
+    uint8_t servo_algorithm_sg[MAX_SERVOS_NR];
     // Tablica numerow algorytmow serworegulacji przyslanych z SERVO_GROUP
-    lib::BYTE servo_parameters_sg[MAX_SERVOS_NR];
+    uint8_t servo_parameters_sg[MAX_SERVOS_NR];
     // Tablica numerow zestawow parametrow
     // algorytmow serworegulacji przyslanych z SERVO_GROUP
     bool synchronised;         // Flaga zsynchronizowania robota

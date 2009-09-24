@@ -34,8 +34,6 @@ extern "C" {
 
 // ----------------------- PRZYDATNE STALE ---------------------------
 typedef double frame_tab[3][4];
-typedef uint16_t  WORD;
-typedef uint8_t BYTE;
 
 #ifndef ABS
 #define ABS(x) (((x)<0)?-(x):(x))   // wartosc bezwzgledna 'x'
