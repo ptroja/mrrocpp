@@ -236,7 +236,7 @@ void ecp_robot::send()
 		case lib::SYNCHRO:
 		case lib::QUERY:
 		case lib::INVALID:
-			// command_size = ((lib::BYTE*) (&instruction.address_byte)) - ((lib::BYTE*) (&instruction.instruction_type));
+			// command_size = ((uint8_t*) (&instruction.address_byte)) - ((uint8_t*) (&instruction.instruction_type));
 			// by Y bylo command_size zamiast sizeof(in..)
 			// by Y&W doszlo  dodatkowe pole w instruction zwiazane z obsluga resource managera
 

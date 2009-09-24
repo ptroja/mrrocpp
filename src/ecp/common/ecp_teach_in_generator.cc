@@ -508,7 +508,7 @@ bool ecp_teach_in_generator::next_step()
       the_robot->EDP_data.set_arm_type = lib::MOTOR;
       the_robot->EDP_data.motion_type = lib::ABSOLUTE;
       the_robot->EDP_data.next_interpolation_type = lib::MIM;
-      the_robot->EDP_data.motion_steps = (lib::WORD) ceil(tip.motion_time/STEP);
+      the_robot->EDP_data.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
       the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
       memcpy(the_robot->EDP_data.next_motor_arm_coordinates, tip.coordinates,
       MAX_SERVOS_NR*sizeof (double));
@@ -519,7 +519,7 @@ bool ecp_teach_in_generator::next_step()
       the_robot->EDP_data.set_arm_type = lib::JOINT;
       the_robot->EDP_data.motion_type = lib::ABSOLUTE;
       the_robot->EDP_data.next_interpolation_type = lib::MIM;
-      the_robot->EDP_data.motion_steps = (lib::WORD) ceil(tip.motion_time/STEP);
+      the_robot->EDP_data.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
       the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
       memcpy(the_robot->EDP_data.next_joint_arm_coordinates, tip.coordinates,
       MAX_SERVOS_NR*sizeof (double));
@@ -531,7 +531,7 @@ bool ecp_teach_in_generator::next_step()
       the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
       the_robot->EDP_data.motion_type = lib::ABSOLUTE;
       the_robot->EDP_data.next_interpolation_type = lib::MIM;
-      the_robot->EDP_data.motion_steps = (lib::WORD) ceil(tip.motion_time/STEP);
+      the_robot->EDP_data.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
       the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
       memcpy(the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates, tip.coordinates,
           6*sizeof(double));
@@ -543,7 +543,7 @@ bool ecp_teach_in_generator::next_step()
       the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
       the_robot->EDP_data.motion_type = lib::ABSOLUTE;
       the_robot->EDP_data.next_interpolation_type = lib::MIM;
-      the_robot->EDP_data.motion_steps = (lib::WORD) ceil(tip.motion_time/STEP);
+      the_robot->EDP_data.motion_steps = (uint16_t) ceil(tip.motion_time/STEP);
       the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps;
       memcpy(the_robot->EDP_data.next_XYZ_AA_arm_coordinates, tip.coordinates,
           6*sizeof(double));

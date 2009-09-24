@@ -207,7 +207,7 @@ void Draughts::main_task_algorithm(void){
 	bkings=0;
 	goToInitialPos();
 	fradiaControl(lib::DETECT_BOARD_STATE);
-	lib::BYTE choice;
+	uint8_t choice;
 	choice=choose_option ("Do you want to play: 1 - Black(blue), or 2 - White(red)", 2);
 	if (choice==lib::OPTION_ONE){
 		sr_ecp_msg->message("You will play black, while I will play white");

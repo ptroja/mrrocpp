@@ -1431,7 +1431,7 @@ bool parabolic_teach_in::next_step()
 		the_robot->EDP_data.set_type = ARM_DV; // ARM
 		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		the_robot->EDP_data.next_interpolation_type = lib::MIM;
-		the_robot->EDP_data.motion_steps = (lib::WORD) (INTERVAL/STEP);
+		the_robot->EDP_data.motion_steps = (uint16_t) (INTERVAL/STEP);
 		the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
 		first_interval = false;
 
@@ -1743,7 +1743,7 @@ bool calibration::next_step()
 		the_robot->EDP_data.set_type = ARM_DV; // ARM
 		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		the_robot->EDP_data.next_interpolation_type = lib::MIM;
-		the_robot->EDP_data.motion_steps = (lib::WORD) (INTERVAL/STEP);
+		the_robot->EDP_data.motion_steps = (uint16_t) (INTERVAL/STEP);
 		the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
 		first_interval = false;
 
@@ -2045,7 +2045,7 @@ bool cubic_spline::next_step()
 		the_robot->EDP_data.set_type = ARM_DV; // ARM
 		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		the_robot->EDP_data.next_interpolation_type = lib::MIM;
-		the_robot->EDP_data.motion_steps = (lib::WORD) (INTERVAL/STEP);
+		the_robot->EDP_data.motion_steps = (uint16_t) (INTERVAL/STEP);
 		the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
 
 		first_interval = false;
@@ -2510,7 +2510,7 @@ bool smooth_cubic_spline::next_step()
 		the_robot->EDP_data.set_type = ARM_DV; // ARM
 		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		the_robot->EDP_data.next_interpolation_type = lib::MIM;
-		the_robot->EDP_data.motion_steps = (lib::WORD) (INTERVAL/STEP);
+		the_robot->EDP_data.motion_steps = (uint16_t) (INTERVAL/STEP);
 		the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
 
 		first_interval = false;
@@ -2885,7 +2885,7 @@ bool quintic_spline::next_step()
 		the_robot->EDP_data.set_type = ARM_DV; // ARM
 		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		the_robot->EDP_data.next_interpolation_type = lib::MIM;
-		the_robot->EDP_data.motion_steps = (lib::WORD) (INTERVAL/STEP);
+		the_robot->EDP_data.motion_steps = (uint16_t) (INTERVAL/STEP);
 		the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
 
 		first_interval = false;
@@ -3195,7 +3195,7 @@ bool elipsoid::next_step()
 		the_robot->EDP_data.get_arm_type = lib::JOINT;
 		the_robot->EDP_data.motion_type = lib::ABSOLUTE;
 		the_robot->EDP_data.next_interpolation_type = lib::MIM;
-		the_robot->EDP_data.motion_steps = (lib::WORD) (INTERVAL/STEP);
+		the_robot->EDP_data.motion_steps = (uint16_t) (INTERVAL/STEP);
 		the_robot->EDP_data.value_in_step_no = the_robot->EDP_data.motion_steps-2;
 		first_interval = false;
 
