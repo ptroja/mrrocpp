@@ -25,6 +25,9 @@
 #include <sys/dispatch.h>
 #include <sys/mman.h>
 #endif
+#ifdef	linux
+#include <sys/io.h>
+#endif
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
