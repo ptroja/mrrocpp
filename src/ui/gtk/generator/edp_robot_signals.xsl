@@ -76,6 +76,7 @@ edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>::edp_</xsl:text><xsl:va
 				</xsl:text><xsl:if test="$robotType != ''"><xsl:text>,mrrocpp::lib::</xsl:text></xsl:if><xsl:value-of select="$robotType" /><xsl:text>
 				);
 
+				robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state (&amp;state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>);
 }
 
 //UI robot desctructor
@@ -171,8 +172,6 @@ extern "C"
 		ui_config_entry &amp; comboEntry = *(ui_config_entry *) userdata;
 		GtkBuilder &amp; builder = (comboEntry.getBuilder());
 		
-		robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state (&amp;state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>);
-
 		if(!state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) {
 	   		GError *error = NULL;
 	   		GThread * synchronization_thread_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = g_thread_create(ui_synchronize_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>, userdata, false, &amp;error);
@@ -184,6 +183,7 @@ extern "C"
 
 		robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state (&amp;state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>);
 
+		// TODO: this should be checked in synchronization thread
 		if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) {
 			gtk_widget_set_sensitive( GTK_WIDGET(button), FALSE);
 		    
@@ -205,15 +205,27 @@ extern "C"
 		edp_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> = new edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>();
 		fprintf(stderr, "module %s loaded\n", __FILE__);
 
-		gint counter = 0;
 		GtkBuilder &amp; builder = (entry.getBuilder());
+
 		GtkButton * button = GTK_BUTTON (gtk_builder_get_object(&amp;builder, "button_synchronize"));
-		if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) gtk_widget_set_sensitive( GTK_WIDGET(button), FALSE);
-		else
-		{
-			GtkComboBox * combo = GTK_COMBO_BOX (gtk_builder_get_object(&amp;builder, "combobox1"));
+
+		GtkComboBox * combo = GTK_COMBO_BOX (gtk_builder_get_object(&amp;builder, "combobox1"));
+		gint counter = 0;
+		</xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>gtk_combo_box_remove_text(combo, counter);
+		gtk_combo_box_insert_text(combo, counter++, "Internal joint");
+		gtk_combo_box_insert_text(combo, counter++, "Increment");</xsl:text></xsl:if><xsl:text>
+
+		if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) {
+			gtk_widget_set_sensitive(GTK_WIDGET(button), FALSE);
 			
-			</xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>gtk_combo_box_remove_text(combo, counter); gtk_combo_box_insert_text(combo, counter, "Internal joint"); counter++; gtk_combo_box_insert_text(combo, counter, "Increment"); counter++;</xsl:text></xsl:if><xsl:text>
+			</xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter++, "Servo algorithm");</xsl:text></xsl:if><xsl:text>
+			</xsl:text><xsl:if test="$xyz_angle_axis &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter++, "XYZ Angle Axis");</xsl:text></xsl:if><xsl:text>
+			</xsl:text><xsl:if test="$xyz_euler_zyz &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter++, "XYZ Euler ZYZ");</xsl:text></xsl:if><xsl:text>
+			</xsl:text><xsl:if test="$xyz_angle_axis_tool &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter++, "XYZ Angle Axis tool");</xsl:text></xsl:if><xsl:text>
+			</xsl:text><xsl:if test="$xyz_euler_zyz_tool &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter++, "XYZ Euler ZYZ tool");</xsl:text></xsl:if><xsl:text>
+			</xsl:text><xsl:if test="$kinematic &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter++, "Kinematic");</xsl:text></xsl:if><xsl:text>
+		} else {
+			gtk_widget_set_sensitive(GTK_WIDGET(button), TRUE);
 		}
 	}
 
