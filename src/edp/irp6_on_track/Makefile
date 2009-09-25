@@ -13,7 +13,7 @@ KIN_OBJECTS = ${KINEMATDIR}/irp6_on_track/kinematic_model_irp6ot_with_track.o \
 	      ${KINEMATDIR}/irp6_on_track/kinematic_model_calibrated_irp6ot_with_wrist.o \
 	      ${KINEMATDIR}/irp6_on_track/kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist.o
 
-OBJECTS = force.o edp_irp6ot_effector.o hi_local.o int_hand.o sg_local.o edp_irp6s_postument_track.o
+OBJECTS = force.o edp_irp6ot_effector.o hi_irp6ot.o int_hand_irp6ot.o sg_irp6ot.o edp_irp6s_postument_track.o
 EDPOBJS  = ${OBJECTS} ${KIN_OBJECTS}
 BINARIES  = edp_irp6_on_track
 

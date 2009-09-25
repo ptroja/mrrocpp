@@ -16,7 +16,7 @@ KIN_OBJECTS = ${KINEMATDIR}/irp6_postument/kinematic_model_irp6p_with_wrist.o \
 	      ${KINEMATDIR}/irp6_postument/kinematic_model_irp6p_jacobian_with_wrist.o \
 	      ${KINEMATDIR}/irp6_postument/kinematic_model_irp6p_jacobian_transpose_with_wrist.o
 	       
-OBJECTS = force.o edp_irp6p_effector.o hi_local.o int_hand.o sg_local.o edp_irp6s_postument_track.o
+OBJECTS = force.o edp_irp6p_effector.o hi_irp6p.o int_hand_irp6p.o sg_irp6p.o edp_irp6s_postument_track.o
 EDPOBJS  = ${OBJECTS} ${KIN_OBJECTS}
 BINARIES  = edp_irp6_postument
 

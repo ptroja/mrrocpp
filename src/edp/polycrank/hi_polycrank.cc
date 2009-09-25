@@ -32,7 +32,7 @@
 // Klasa edp_irp6m_effector.
 #include "edp/polycrank/edp_e_polycrank.h"
 // Klasa hardware_interface.
-#include "edp/polycrank/hi_local.h"
+#include "edp/polycrank/hi_polycrank.h"
 
 
 

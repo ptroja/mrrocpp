@@ -36,7 +36,7 @@
 // Klasa edp_irp6p_effector.
 #include "edp/irp6_postument/edp_irp6p_effector.h"
 // Klasa hardware_interface.
-#include "edp/irp6_postument/hi_local.h"
+#include "edp/irp6_postument/hi_irp6p.h"
 
 namespace mrrocpp {
 namespace edp {

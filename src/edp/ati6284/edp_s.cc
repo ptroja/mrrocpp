@@ -20,7 +20,7 @@
 
 #include <unistd.h>
 
-#include "edp/irp6_postument/hi_local.h"
+#include "edp/irp6_postument/hi_irp6p.h"
 #include <time.h>
 
 short int invalid_value;

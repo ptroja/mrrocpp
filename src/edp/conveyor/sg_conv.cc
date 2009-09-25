@@ -10,9 +10,9 @@
 // Klasa edp_conveyor_effector.
 #include "edp/conveyor/edp_conveyor_effector.h"
 // Klasa hardware_interface.
-#include "edp/conveyor/hi_local.h"
+#include "edp/conveyor/hi_conv.h"
 // Klasa servo_buffer.
-#include "edp/conveyor/sg_local.h"
+#include "edp/conveyor/sg_conv.h"
 
 
 

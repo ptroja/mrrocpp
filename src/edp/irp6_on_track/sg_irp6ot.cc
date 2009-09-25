@@ -14,9 +14,9 @@
 // Klasa edp_irp6ot_effector.
 #include "edp/irp6_on_track/edp_irp6ot_effector.h"
 // Klasa hardware_interface.
-#include "edp/irp6_on_track/hi_local.h"
+#include "edp/irp6_on_track/hi_irp6ot.h"
 // Klasa servo_buffer.
-#include "edp/irp6_on_track/sg_local.h"
+#include "edp/irp6_on_track/sg_irp6ot.h"
 
 namespace mrrocpp {
 namespace edp {
