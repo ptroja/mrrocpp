@@ -62,8 +62,8 @@
 #define GETFIRSTUINT32(x) (*((uint32_t*)x))
 #define GETFIRSTINT32(x)  (*((int32_t*)x))
 
-#define LOlib::BYTE(w) ((uint8_t) (w & 0xFF))
-#define HIlib::BYTE(w) ((uint8_t) ((w >> 8) & 0xFF))
+#define LOBYTE(w) ((uint8_t) (w & 0xFF))
+#define HIBYTE(w) ((uint8_t) ((w >> 8) & 0xFF))
 #define MAKEUINT16(lo, hi) ((((uint16_t) (hi)) << 8) | ((uint16_t) (lo)))
 
 ////////////////////////////////////////////////////////////////////////////////
