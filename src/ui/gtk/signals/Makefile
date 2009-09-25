@@ -1,13 +1,13 @@
 ui_modules = festival.so \
 	edp_irp6m.so edp_irp6o.so edp_irp6p.so edp_conveyor.so  
 
-HOMEDIR = ../../../..
+HOMEDIR = $(shell pwd)/../../../..
 include $(HOMEDIR)/common.mk
 
 PACKAGES=libxml-2.0 gtk+-2.0 gtkmm-2.4 gthread-2.0
 CPPFLAGS+=`pkg-config --cflags ${PACKAGES}` -I. -I../
 CXXFLAGS+=-fpic
-LDFLAGS+=`pkg-config --libs ${PACKAGES}` -L${HOMEDIR}/lib
+LDFLAGS+=`pkg-config --libs ${PACKAGES}` -L${LIBDIR}
 LDFLAGS+=-export-dynamic
 ECP_DIR = $(HOMEDIR)/src/ecp
 

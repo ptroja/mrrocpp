@@ -20,13 +20,13 @@ $(SOURCEDIRS):
 
 install:
 
-HOMEDIR = ../../..
+HOMEDIR = $(shell pwd)/../../../
 include $(HOMEDIR)/common.mk
 
 PACKAGES=libxml-2.0 gtk+-2.0 gtkmm-2.4 gthread-2.0
 CPPFLAGS+=`pkg-config --cflags ${PACKAGES}`
 CXXFLAGS+=-fpic -I.
-LDFLAGS+=`pkg-config --libs ${PACKAGES}` -g -L${HOMEDIR}/lib -lmessip -lecp -lmrrocpp
+LDFLAGS+=`pkg-config --libs ${PACKAGES}` -g -L${LIBDIR} -lmessip -lecp -lmrrocpp
 LDFLAGS+=-export-dynamic
 XSLTPROC=xsltproc robots.xml --xinclude
 ECP_DIR = $(HOMEDIR)/src/ecp
@@ -35,7 +35,7 @@ ui.gtk: main.o xmlconfigurator.o \
 	ui_model.o ui_config_entry.o ui_widget_entry.o \
 	sr_console.o comm_thread.o \
 	../src/gcc_ntox86/ui.o
-	$(CXX) -Wl,-rpath `pwd`/../../../lib -g -o $@ $^ ${LDFLAGS}
+	$(CXX) -Wl,-rpath $(LIBDIR) -g -o $@ $^ ${LDFLAGS}
 
 %.xml: %.glade
 	gtk-builder-convert $< $@ 

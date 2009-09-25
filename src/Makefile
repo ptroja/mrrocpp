@@ -2,10 +2,9 @@
 # Should be modified only by developers not by users
 HOMEDIR = ..
 # Directories for dependency generation
-ifeq ($(BUILD_TARGET), linux)
-	SOURCEDIRS = lib kinematics edp ecp ecp_mp ui
-else
-	SOURCEDIRS = bt848 lib kinematics vsp edp ecp ecp_mp mp ui ui_server
+SOURCEDIRS = lib kinematics edp ecp ecp_mp mp ui
+ifneq ($(BUILD_TARGET), linux)
+SOURCEDIRS+= bt848 vsp ui_server
 endif
 
 CLEANDIRS = $(SOURCEDIRS)

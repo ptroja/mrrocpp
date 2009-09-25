@@ -5,7 +5,8 @@ OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 BINARIES = configsrv #y_spawn_process
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
-HOMEDIR = ../..
+
+HOMEDIR = $(shell pwd)/../..
 include $(HOMEDIR)/common.mk
 #======================================================#	
 .PHONY: all clean install depend libplayerc libplayerclient messip
@@ -50,7 +51,7 @@ y_spawn_process: y_spawn_process.o
 	$(LD) $(LDFLAGS) -o $@  $^	
 
 configsrv: configsrv.o cfgopts.o configsrv_m.o
-	$(LD) $(LDFLAGS) -o $@ $^ -L$(LIBDIR) -lmessip -Wl,-rpath `pwd`/../../lib
+	$(LD) $(LDFLAGS) -o $@ $^ -L$(LIBDIR) -lmessip -Wl,-rpath $(LIBDIR)
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
 # plik.o: plik.cc plik1.h plik2.h ... itd
