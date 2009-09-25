@@ -17,8 +17,8 @@
 #------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = .
-CLEANDIRS = src lib
-CLEANEDFILES = ./bin/* ./msr/* ./logs/* ./html/*
+CLEANDIRS = src lib lib.linux
+CLEANEDFILES = ./bin/* ./bin.linux/* ./msr/* ./logs/* ./html/*
 INSTALLDIRS = src
 
 # Data for makedepend 

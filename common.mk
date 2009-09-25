@@ -24,10 +24,14 @@ ifeq ($(BUILD_TARGET), linux)
   LD=g++
   CC=gcc
   CXX=g++
+  #LD=icpc
+  #CC=icc
+  #CXX=icpc
   CXXFLAGS=${FLAGS}
   LDFLAGS=-lrt `pkg-config --libs libxml-2.0` -lboost_thread-mt
-  CPPFLAGS=-Wall -I$(HOMEDIR)/src `pkg-config --cflags libxml-2.0` -DUSE_MESSIP_SRR
+  CPPFLAGS=-I$(HOMEDIR)/src `pkg-config --cflags libxml-2.0` -DUSE_MESSIP_SRR -Wall #-Wall -Werror
   BINDIR=$(HOMEDIR)/bin.linux
+  LIBDIR=$(HOMEDIR)/lib.linux
 else
   VERSION=-V4.3.3,gcc_ntox86
   RPATHV=-Wl,-rpath /usr/pkg/lib
@@ -39,9 +43,9 @@ else
   CPPFLAGS=-I$(HOMEDIR)/src -I$(QNX_TARGET)/mrlib/include
   AR=ntox86-ar
   BINDIR=$(HOMEDIR)/bin
+  LIBDIR=$(HOMEDIR)/lib
 endif
 
-LIBDIR=$(HOMEDIR)/lib
 UI_DIR = $(HOMEDIR)/src/ui/src/gcc_ntox86
 ECP_DIR = $(HOMEDIR)/src/ecp
 ECP_MPDIR=$(HOMEDIR)/src/ecp_mp
