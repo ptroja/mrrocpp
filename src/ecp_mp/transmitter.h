@@ -42,7 +42,7 @@ typedef struct _TO_VA
 	// wlasciwe pola obrazu - unie!
 	union {
 		struct {
-			char rc_state[54];
+			char rc_state[54+1];	// 6faces*9facets+trailing '0'
 		} rc_windows;
 
 		struct{

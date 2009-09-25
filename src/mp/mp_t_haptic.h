@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------
 //                            mp_t_haptic.h
-// 
+//
 // MP task for two robot haptic device
 // Ostatnia modyfikacja: 2007
 // -------------------------------------------------------------------------
@@ -16,14 +16,14 @@ namespace mp {
 namespace task {
 
 
-class haptic : public task  
+class haptic : public task
 {
 protected:
- 
-      bool configure_edp_force_sensor(bool configure_track, bool configure_postument);
-  
+
+	void configure_edp_force_sensor(bool configure_track, bool configure_postument);
+
 public:
-	
+
 	haptic(lib::configurator &_config);
 
 	// methods for mp template

@@ -48,7 +48,7 @@ void model_5dof::set_kinematic_parameters(void)
   // Zmiana ustawienia czesci standardowego narzedzia na osiowo-symetryczne [m].
   tool.set_translation_vector(0, 0, 0);
 
-};//: set_kinematic_parameters
+}//: set_kinematic_parameters
 
 
 /* ------------------------------------------------------------------------
@@ -57,10 +57,10 @@ void model_5dof::set_kinematic_parameters(void)
   metoda musi byc pusta - przedefiniowanie standardowej metody.
   W prostym zadaniu narzedzue jest "dolaczone" normalnie.
  ------------------------------------------------------------------------ */
-void model_5dof::attached_tool_inverse_transform(lib::frame_tab* local_current_end_effector_frame)
-{
-	return;
-};//: attached_tool_inverse_transform
+//void model_5dof::attached_tool_inverse_transform(lib::frame_tab* local_current_end_effector_frame)
+//{
+//	return;
+//}//: attached_tool_inverse_transform
 
 
 /* ------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-/* 
+/*
  *  libplayerc : a Player client library
  *  Copyright (C) Andrew Howard 2002-2003
  *
@@ -20,7 +20,7 @@
 /*
  *  Player - One Hell of a Robot Server
  *  Copyright (C) Andrew Howard 2003
- *                      
+ *
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -64,7 +64,7 @@ playerc_position3d_t *playerc_position3d_create(playerc_client_t *client, int in
   playerc_device_init(&device->info, client, PLAYER_POSITION3D_CODE, index,
                       (playerc_putdata_fn_t) playerc_position3d_putdata);
 
-  
+
   return device;
 }
 
@@ -112,7 +112,7 @@ void playerc_position3d_putdata(playerc_position3d_t *device, player_msghdr_t *h
   device->vel_roll = (long) ntohl(data->rollspeed) / 1000.0;
   device->vel_pitch = (long) ntohl(data->pitchspeed) / 1000.0;
   device->vel_yaw = (long) ntohl(data->yawspeed) / 1000.0;
-  
+
   device->stall = data->stall;
 }
 
@@ -128,7 +128,7 @@ int playerc_position3d_enable(playerc_position3d_t *device, int enable)
 
   return playerc_client_request(device->info.client, &device->info,
                                 &config, sizeof(config),
-                                &config, sizeof(config));    
+                                &config, sizeof(config));
 }
 
 
@@ -156,20 +156,22 @@ int playerc_position3d_get_geom(playerc_position3d_t *device)
   device->pose[1] = ((int16_t) ntohs(config.pose[1])) / 1000.0;
   device->pose[2] = ((int16_t) ntohs(config.pose[2])) / 1000.0;
 
-  device->pose[3] = ((int16_t) ntohs(config.pose[3]))  / 1000.0;
-  device->pose[4] = ((int16_t) ntohs(config.pose[4])) / 1000.0;
-  device->pose[5] = ((int16_t) ntohs(config.pose[5])) / 1000.0;
+  // TODO: subscript out of range
+  //device->pose[3] = ((int16_t) ntohs(config.pose[3])) / 1000.0;
+  //device->pose[4] = ((int16_t) ntohs(config.pose[4])) / 1000.0;
+  //device->pose[5] = ((int16_t) ntohs(config.pose[5])) / 1000.0;
 
   device->size[0] = ((int16_t) ntohs(config.size[0])) / 1000.0;
   device->size[1] = ((int16_t) ntohs(config.size[1])) / 1000.0;
-  device->size[2] = ((int16_t) ntohs(config.size[2])) / 1000.0;
+  // TODO: subscript out of range
+  //device->size[2] = ((int16_t) ntohs(config.size[2])) / 1000.0;
 
   return 0;
 }
 
 
 // Set the robot speed
-int playerc_position3d_set_velocity(playerc_position3d_t *device, 
+int playerc_position3d_set_velocity(playerc_position3d_t *device,
                      double vx, double vy, double vz,
                      double vr, double vp, double vt, int state)
 {

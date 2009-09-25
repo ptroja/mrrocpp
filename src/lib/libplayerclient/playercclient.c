@@ -2,7 +2,7 @@
  *  Player - One Hell of a Robot Server
  *  Copyright (C) 2000-2003
  *     Brian Gerkey, Kasper Stoy, Richard Vaughan, & Andrew Howard
- *                      
+ *
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
  *  Player - One Hell of a Robot Server
  *  Copyright (C) 2003
  *     Brian Gerkey, Kasper Stoy, Richard Vaughan, & Andrew Howard
- *                      
+ *
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -43,7 +43,7 @@
 
 /*
  * $Id$
- * 
+ *
  * the core functions for a pure C client for Player
  */
 
@@ -73,7 +73,7 @@
  *
  * higher numbers are more output, 0 is none.
  *
- * incidentally, it returns the current level, and if you give 
+ * incidentally, it returns the current level, and if you give
  * -1 for <level>, then the current level is unchanged
  */
 int player_debug_level(int level)
@@ -110,9 +110,9 @@ player_connect_host(player_connection_t* conn, const char* host, int port)
   /* pointers must be good */
   assert( conn );
   assert( host );
-  
-  /* 
-   * this is okay to do, because gethostbyname(3) does no lookup if the 
+
+  /*
+   * this is okay to do, because gethostbyname(3) does no lookup if the
    * 'host' arg is already an IP addr
    */
   if((entp = gethostbyname(host)) == NULL)
@@ -129,7 +129,7 @@ player_connect_host(player_connection_t* conn, const char* host, int port)
   /* fill in server structure */
   server.sin_family = PF_INET;
   server.sin_port = htons(port);
-  
+
   /* make the connection */
   return player_connect_sockaddr( conn, &server );
 }
@@ -143,8 +143,8 @@ player_connect_host(player_connection_t* conn, const char* host, int port)
  *    0 if everything is OK (connection opened)
  *   -1 if something went wrong (connection NOT opened)
  */
-int player_connect_ip(player_connection_t* conn, 
-		   const struct in_addr* addr, 
+int player_connect_ip(player_connection_t* conn,
+		   const struct in_addr* addr,
 		   const int port)
 {
   struct sockaddr_in server;
@@ -160,7 +160,7 @@ int player_connect_ip(player_connection_t* conn,
   /* bounds check before copying in the address */
   assert(sizeof(server.sin_addr) <= sizeof(addr->s_addr));
   memcpy(&server.sin_addr, &addr->s_addr, sizeof(addr->s_addr));
-  
+
   /* make the connection */
   return player_connect_sockaddr(conn, &server);
 }
@@ -173,7 +173,7 @@ int player_connect_ip(player_connection_t* conn,
  * Returns:
  *    0 if everything is OK (connection opened)
  *   -1 if something went wrong (connection NOT opened) */
-int player_connect_sockaddr(player_connection_t* conn, 
+int player_connect_sockaddr(player_connection_t* conn,
 			    const struct sockaddr_in* server)
 {
   int sock;
@@ -196,7 +196,7 @@ int player_connect_sockaddr(player_connection_t* conn,
       return(-1);
     }
 
-    /* 
+    /*
      * hook it up
      */
     if(connect(sock, (struct sockaddr*)server, sizeof(*server)) == -1)
@@ -213,7 +213,7 @@ int player_connect_sockaddr(player_connection_t* conn,
     numread = 0;
     while(numread < PLAYER_IDENT_STRLEN)
     {
-      if((thisnumread = 
+      if((thisnumread =
           read(sock,banner+numread,PLAYER_IDENT_STRLEN-numread)) < 0)
       {
         if(player_debug_level(-1) >= 2)
@@ -240,7 +240,7 @@ int player_connect_sockaddr(player_connection_t* conn,
     client.sin_addr.s_addr = INADDR_ANY;
     client.sin_port = 0;
 
-    if(bind(sock, (struct sockaddr*)&client, sizeof(client)) == -1) 
+    if(bind(sock, (struct sockaddr*)&client, sizeof(client)) == -1)
     {
       perror("player_connect_sockaddr():bind() failed:");
       close(sock);
@@ -270,7 +270,7 @@ int player_connect_sockaddr(player_connection_t* conn,
       return(-1);
     }
     printf("Connected to %s\n", banner);
-    
+
     conn->sock = sock;
 
     /* read the ACK that gives us our ID */
@@ -316,7 +316,7 @@ int player_disconnect(player_connection_t* conn)
 }
 
 /*
- * issue some request to the server. payloadlen is the length of the 
+ * issue some request to the server. payloadlen is the length of the
  * payload.  reply, if non-NULL, will be used to hold the reply; replylen
  * is the size of the buffer (player_request() will not overrun your buffer)
  *
@@ -324,9 +324,9 @@ int player_disconnect(player_connection_t* conn)
  *      0 if everything's OK
  *     -1 if something went wrong (you should probably close the connection!)
  */
-int player_request(player_connection_t* conn, 
-                   uint16_t device, uint16_t device_index, 
-                   const char* payload, size_t payloadlen, 
+int player_request(player_connection_t* conn,
+                   uint16_t device, uint16_t device_index,
+                   const char* payload, size_t payloadlen,
                    player_msghdr_t* replyhdr, char* reply, size_t replylen)
 {
   player_msghdr_t hdr;
@@ -341,8 +341,8 @@ int player_request(player_connection_t* conn,
   {
     if(player_debug_level(-1) >= 2)
       fprintf(stderr, "player_request(): tried to send too large of a payload"
-              "(%d bytes > %d bytes); message NOT sent.\n", 
-              payloadlen, 
+              "(%d bytes > %d bytes); message NOT sent.\n",
+              payloadlen,
               (PLAYER_MAX_MESSAGE_SIZE - sizeof(player_msghdr_t)));
 	free(buffer);
     return(-1);
@@ -398,7 +398,7 @@ int player_request(player_connection_t* conn,
     free(buffer);
     return(-1);
   }
-  
+
 
   memset(&hdr,0,sizeof(hdr));
   /* eat data until a response comes back (it may not be for the request we
@@ -408,13 +408,13 @@ int player_request(player_connection_t* conn,
          (hdr.type != PLAYER_MSGTYPE_RESP_ERR) &&
          (retry < 10))
   {
-    if(player_read(conn, &hdr, buffer, PLAYER_MAX_MESSAGE_SIZE) == -1) {
+    if(player_read(conn, &hdr, (char *) buffer, PLAYER_MAX_MESSAGE_SIZE) == -1) {
       free(buffer);
       return(-1);
     }
     ++retry;
   }
-  
+
   if (retry >= 10)
     hdr.type = PLAYER_MSGTYPE_RESP_ERR;
 
@@ -458,9 +458,9 @@ int player_request_device_access(player_connection_t* conn,
   memcpy(payload,&this_req,sizeof(player_device_req_t));
 
   //cannot use sizeof(replybuffer) because we malloc'd the memory.
-  if(player_request(conn, PLAYER_PLAYER_CODE, 0, 
-                    payload, sizeof(payload),
-                    &replyhdr, replybuffer, PLAYER_MAX_MESSAGE_SIZE) == -1) {
+  if(player_request(conn, PLAYER_PLAYER_CODE, 0,
+		            (char *) payload, sizeof(payload),
+                    &replyhdr, (char *) replybuffer, PLAYER_MAX_MESSAGE_SIZE) == -1) {
 	free(replybuffer);
     return(-1);
   }
@@ -470,7 +470,7 @@ int player_request_device_access(player_connection_t* conn,
   if(grant_access)
     *grant_access = this_resp.access;
   if(driver_name)
-    strncpy(driver_name, this_resp.driver_name, driver_name_len);
+    strncpy(driver_name, (char *) this_resp.driver_name, driver_name_len);
 
   free(replybuffer);
 
@@ -479,7 +479,7 @@ int player_request_device_access(player_connection_t* conn,
 
 #if 0
 /*
- * read one message header from the indicated connection. 
+ * read one message header from the indicated connection.
  *
  * Returns:
  *    0 if everything went OK
@@ -529,12 +529,12 @@ int player_read_header(player_connection_t* conn, player_msghdr_t* hdr )
   /*printf("time: %Lu\tts:%Lu\n", hdr->time,hdr->timestamp);*/
   /*timesec = (time_t)(hdr->time / 1000);*/
   /*printf("time: %s\n", ctime(&timesec));*/
-  
+
   return 0;
 }
 
 /*
- * read the data part of a message from the indicated connection.  put the 
+ * read the data part of a message from the indicated connection.  put the
  * data in buffer, up to bufferlen.
  *
  * Returns:
@@ -565,7 +565,7 @@ int player_read_payload(player_connection_t* conn, char* payload, size_t payload
 #endif
 
 /*
- * read one complete message from the indicated connection.  put the 
+ * read one complete message from the indicated connection.  put the
  * data in buffer, up to bufferlen.
  *
  * Returns:
@@ -591,7 +591,7 @@ int player_read_tcp(player_connection_t* conn, player_msghdr_t* hdr,
                     char* payload, size_t payloadlen)
 {
   /*time_t timesec;*/
-  int mincnt; 
+  int mincnt;
   int readcnt=0,thisreadcnt;
   char *dummy;
 
@@ -643,7 +643,7 @@ int player_read_tcp(player_connection_t* conn, player_msghdr_t* hdr,
   /*timesec = (time_t)(hdr->time / 1000);*/
   /*printf("time: %s\n", ctime(&timesec));*/
   //printf("hdr->size %d, payloadlen %d\n",hdr->size,payloadlen);
-  
+
   /* get the payload */
   if(hdr->size > payloadlen)
     if(player_debug_level(-1) >= 2)
@@ -773,7 +773,7 @@ int player_read_udp(player_connection_t* conn, player_msghdr_t* hdr,
  *    0 if everything goes OK
  *   -1 if something went wrong (you should probably close the connection!)
  */
-int player_write(player_connection_t* conn, 
+int player_write(player_connection_t* conn,
                  uint16_t device, uint16_t device_index,
                  const char* command, size_t commandlen)
 {
@@ -788,8 +788,8 @@ int player_write(player_connection_t* conn,
   {
     if(player_debug_level(-1) >= 2)
       fprintf(stderr, "player_write(): tried to send too large of a command"
-              "(%d bytes > %d bytes); message NOT sent.\n", 
-              commandlen, 
+              "(%d bytes > %d bytes); message NOT sent.\n",
+              commandlen,
               (PLAYER_MAX_MESSAGE_SIZE - sizeof(player_msghdr_t)));
 	free(buffer);
     return(-1);
@@ -849,12 +849,12 @@ int player_peek(player_connection_t *conn, int timeout)
 {
   int count;
   struct pollfd fd;
-  
+
   fd.fd = conn->sock;
   fd.events = POLLIN | POLLHUP;
   fd.revents = 0;
 
-  // Wait for incoming data 
+  // Wait for incoming data
   count = poll(&fd, 1, timeout);
   if (count < 0)
   {

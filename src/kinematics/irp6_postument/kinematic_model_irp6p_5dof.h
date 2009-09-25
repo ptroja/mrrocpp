@@ -253,7 +253,7 @@ public:
   virtual void inverse_kinematics_transform(double* local_desired_joints, double* local_current_joints, lib::frame_tab* local_desired_end_effector_frame);
 
   // Przeliczenie polozenia koncowki zwiazane z dolaczonym narzedziem - transformacja odwrotna.
-  virtual void attached_tool_inverse_transform(lib::frame_tab*);
+//  virtual void attached_tool_inverse_transform(lib::frame_tab*);
 
 };//: kinematic_model_irp6p_5dof;
 

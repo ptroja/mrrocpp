@@ -1,4 +1,4 @@
-/* 
+/*
  *  libplayerc : a Player client library
  *  Copyright (C) Andrew Howard 2002-2003
  *
@@ -20,7 +20,7 @@
 /*
  *  Player - One Hell of a Robot Server
  *  Copyright (C) Andrew Howard 2003
- *                      
+ *
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -62,7 +62,7 @@ playerc_log_t *playerc_log_create(playerc_client_t *client, int index)
   memset(device, 0, sizeof(playerc_log_t));
   playerc_device_init(&device->info, client, PLAYER_LOG_CODE, index,
                       (playerc_putdata_fn_t) NULL);
-    
+
   return device;
 }
 
@@ -159,7 +159,7 @@ int playerc_log_set_read_rewind(playerc_log_t* device)
   return(0);
 }
 
-// Change filename 
+// Change filename
 int playerc_log_set_filename(playerc_log_t* device, const char* fname)
 {
   player_log_set_filename_t req;
@@ -170,7 +170,7 @@ int playerc_log_set_filename(playerc_log_t* device, const char* fname)
     PLAYERC_ERR("filename too long");
     return(-1);
   }
-  strcpy(req.filename,fname);
+  strcpy((char *) req.filename,fname);
 
   if(playerc_client_request(device->info.client, &device->info,
                             &req, sizeof(req), NULL, 0) < 0)

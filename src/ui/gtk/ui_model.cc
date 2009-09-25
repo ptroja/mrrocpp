@@ -281,16 +281,16 @@ int ui_model::set_tree_view(void)
 	renderer = gtk_cell_renderer_text_new();
 
 	column = gtk_tree_view_column_new_with_attributes("Program name", renderer, "markup",
-			ui_model::NAME_COLUMN, NULL);
+			ui_model::NAME_COLUMN, (void *) NULL);
 	gtk_tree_view_append_column(tree, column);
 
 	column = gtk_tree_view_column_new_with_attributes("Node name", renderer, "text",
-			ui_model::NODE_NAME_COLUMN, NULL);
+			ui_model::NODE_NAME_COLUMN, (void *) NULL);
 	gtk_tree_view_append_column(tree, column);
 
 	renderer = gtk_cell_renderer_toggle_new();
 	column = gtk_tree_view_column_new_with_attributes("Running", renderer, "active",
-			ui_model::IS_RUNNING_COLUMN, NULL);
+			ui_model::IS_RUNNING_COLUMN, (void *) NULL);
 	gtk_tree_view_append_column(tree, column);
 
 	return 0;

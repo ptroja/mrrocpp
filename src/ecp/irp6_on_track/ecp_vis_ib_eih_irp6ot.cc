@@ -154,6 +154,8 @@ bool ecp_vis_ib_eih_irp6ot::next_step_without_constraints(){
 		}
 	}
 
+	// TODO: this return was missing
+	return false;
 }
 
 #if 0

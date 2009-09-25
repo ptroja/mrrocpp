@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP) 
+// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP)
 // Plik:			ecp_mp_s_vis.h
 // System:	QNX/MRROCPP  v. 6.3
 // Opis:		Ogolna struktura obrazow czujnika
@@ -28,9 +28,9 @@ class pawel: public sensor{
 	    // konstruktor czujnika virtualnego
 
 	    void configure_sensor (void);
-	    void initiate_reading (void);	
-	    void get_reading (void);											
-}; 
+	    void initiate_reading (void);
+	    void get_reading (void);
+};
 
 } // namespace sensor
 } // namespace ecp_mp

@@ -223,14 +223,14 @@ return s;
 
 
 // in theory, the RHS operator
-const double K_vector::operator[](const int i ) const
+double K_vector::operator[](const int i) const
 {
 	//    printf("RHS a[%2d]\n", i );
 	return w[i];
 }
 
 // in theory, the LHS operator
-double& K_vector::operator[](const int i )
+double& K_vector::operator[](const int i)
 {
 	// printf("LHS a[%2d]\n", i );
 	return w[i];
@@ -1639,7 +1639,7 @@ void Ft_v_vector::wypisz_wartosc_na_konsole() const
 
 
  // in theory, the RHS operator
-  const double Ft_v_vector::operator[](const int i ) const
+  double Ft_v_vector::operator[](const int i ) const
   {
 //    printf("RHS a[%2d]\n", i );
     return w[i];

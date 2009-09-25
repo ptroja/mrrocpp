@@ -76,10 +76,9 @@ public:
 	void operator*=(const double);					// skalowanie wektora						- by Slawek Bazant
 
 	// in theory, the RHS operator
-      const double operator[](const int i ) const;
-      // in theory, the LHS operator
-      double& operator[](const int i );
-
+    double operator[](const int i) const;
+    // in theory, the LHS operator
+    double& operator[](const int i);
 
 	friend std::ostream& operator<<(std::ostream & s, K_vector & w);	// operator wypisania
 
@@ -291,9 +290,9 @@ public:
 	void wypisz_wartosc_na_konsole() const;
 
 	// in theory, the RHS operator
-      const double operator[](const int i ) const;
+    double operator[](const int i) const;
       // in theory, the LHS operator
-      double& operator[](const int i );
+    double& operator[](const int i);
 
 	// Odwracanie macierzy.
 	Ft_v_vector operator!() const;

@@ -1,6 +1,8 @@
 #include <gtk/gtk.h>
 #include <gtk/gtktreemodel.h>
 
+#include <stdlib.h>
+
 #include <gtkmm.h>
 
 #include "xmlconfigurator.h"
@@ -23,9 +25,14 @@ extern "C" {
 	{
 		GtkWidget *dialog;
 
-		dialog = gtk_file_chooser_dialog_new("Open File", NULL, //parent_window,
-				GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL,
-				GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+		dialog = gtk_file_chooser_dialog_new(
+				"Open File", // title
+				NULL, // parent_window,
+				GTK_FILE_CHOOSER_ACTION_OPEN, // action
+				// stock/respone ID pairs, ending with NULL
+				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+				(void *) NULL);
 
 		GtkFileFilter *filter = gtk_file_filter_new();
 		gtk_file_filter_add_pattern(filter, "*.xml");

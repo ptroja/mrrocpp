@@ -24,14 +24,14 @@ namespace sensor {
 class sensor: public lib::sensor{
 protected:
 	// Sensor descriptor - uchwyt do /dev/twoj_sensor.
-	
-	int sd;									
+
+	int sd;
 #if defined(USE_MESSIP_SRR)
 	messip_channel_t *ch;
 #endif /* USE_MESSIP_SRR */
 	// Nazwa czujnika.
 	std::string VSP_NAME;
-	
+
 	// Wskaznik na obiekt do komunikacji z SR
 	lib::sr_ecp &sr_ecp_msg;
 
@@ -41,12 +41,12 @@ public:
 
 	// Wlasciwy konstruktor czujnika wirtualnego.
 	sensor(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object);
-	
-	virtual void configure_sensor();
-	virtual void initiate_reading();
-	virtual void terminate();
-	virtual void get_reading();
-	virtual void get_reading(lib::SENSOR_IMAGE *sensor_image);
+
+	virtual void configure_sensor(void);
+	virtual void initiate_reading(void);
+	virtual void terminate(void);
+	virtual void get_reading(void);
+	void get_reading(lib::SENSOR_IMAGE *sensor_image);
 };
 
 } // namespace sensor

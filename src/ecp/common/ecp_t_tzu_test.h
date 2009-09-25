@@ -28,11 +28,11 @@ namespace task {
 #define TEST 1
 #define ON_TRACK 0
 #define POSTUMENT 1
-#define NUMBER_OF_TEST_TRAJECTORIES 10
+#define NUMBER_OF_TEST_TRAJECTORIES 11
 
 
 
-class tzu_test :  public common::task::task  
+class tzu_test :  public common::task::task
 {
 protected:
 	generator::smooth *sg;
@@ -81,7 +81,7 @@ public:
     force_meassure_generator(common::task::task& _ecp_task, int _sleep_time = 0, int _meassurement_count = 1);
 	lib::Ft_v_vector& get_meassurement();
 	void set_configuration(int _sleep_time, int _meassurement_count);
-	
+
     bool first_step ();
     bool next_step ();
 }

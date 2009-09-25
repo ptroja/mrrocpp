@@ -105,7 +105,7 @@ bool y_simple::next_step ( )
     if(node_counter < 2)
     {
         ruch =0;
-        for(int i; i<3; i++)
+        for(int i = 0; i<3; i++)
         {
             pozycja[i] = the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
             nowa_pozycja[i] = the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
@@ -263,14 +263,14 @@ bool y_simple::next_step ( )
             nowa_pozycja[0] += 0.0001;
             if(nowa_pozycja[0] - pozycja[0]>0.04/2)
             {
-           
+
                 return true;
             }
             the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] += 0.0001;
             temp = sqrt(pow(0.04/2, 2) - pow((nowa_pozycja[0] - pozycja[0]), 2));
             if(temp ==0)
             {
-             
+
                 return true;
             }
             //			nowa_pozycja[1] += (0.02 - temp) - (nowa_pozycja[1] - pozycja[1]);
@@ -278,7 +278,7 @@ bool y_simple::next_step ( )
             nowa_pozycja[1] += (0.04/2 - temp) - roznica;
             if((0.04/2 - temp) - roznica >= 0.001)
             {
-         
+
                 return true;
             }
 
@@ -300,7 +300,7 @@ bool y_simple::next_step ( )
             {
                 ruch = 2;
                 fprintf(file, "\nznacznik_1\n");
-          
+
                 return true;
             }
             the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0] += 0.0001;
@@ -314,7 +314,7 @@ bool y_simple::next_step ( )
             {
                 ruch = 2;
                 fprintf(file, "\nznacznik_2\n");
-      
+
                 ruch = 99;
             }
             printf("dwa: %f; %f  <%f; %f>\n", nowa_pozycja[0], nowa_pozycja[1], the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[0],
@@ -350,7 +350,7 @@ bool y_simple::next_step ( )
             the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[1] += -temp;
             if(nowa_pozycja[0] - pozycja[0] > 0.04)
             {
-           
+
                 ruch = 99;
             }
             fprintf(file, "cztery: %f; %f\n", nowa_pozycja[0], nowa_pozycja[1]);

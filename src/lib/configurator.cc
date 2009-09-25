@@ -117,7 +117,6 @@ int	configurator::unlock_mutex() // zwolnienie mutex'a
 int configurator::return_node_number(std::string node_name_l)
 {
 #if defined(PROCESS_SPAWN_RSH)
-#warning configurator::return_node_number by RSH
 	return ND_LOCAL_NODE;
 #else
 	return netmgr_strtond(node_name_l.c_str(), NULL);
@@ -407,7 +406,6 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 
 pid_t configurator::process_spawn(const char*_section_name) {
 #if defined(PROCESS_SPAWN_RSH)
-#warning configurator::process_spawn by RSH
 	pid_t child_pid = vfork();
 
 	if (child_pid == 0) {

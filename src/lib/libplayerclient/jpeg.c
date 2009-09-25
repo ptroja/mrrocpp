@@ -84,10 +84,10 @@ METHODDEF(void)
 term_destination (j_compress_ptr cinfo)
 {
   /* expose the finale compressed image size */
-  
+
   mem_dest_ptr dest = (mem_dest_ptr) cinfo->dest;
   dest->datacount = dest->bufsize - dest->pub.free_in_buffer;
-  
+
 }
 
 static void my_error_exit(j_common_ptr cinfo)
@@ -106,7 +106,7 @@ jpeg_memory_dest(j_compress_ptr cinfo, JOCTET *buffer,int bufsize)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
                                   sizeof(memory_destination_mgr));
   }
-  
+
   dest = (mem_dest_ptr) cinfo->dest;
   dest->bufsize=bufsize;
   dest->buffer=buffer;
@@ -131,12 +131,12 @@ jpeg_compress(char *dst, char *src, int width, int height, int dstsize, int qual
   memset (&cinfo,0,sizeof(cinfo));
   cinfo.err = jpeg_std_error(&jerr);
   jpeg_create_compress(&cinfo);
- 
+
   /* Setup JPEG datastructures */
   cinfo.image_width = width;      /* image width and height, in pixels */
   cinfo.image_height = height;
   cinfo.input_components = 3;   /* # of color components per pixel=3 RGB */
-  cinfo.in_color_space = JCS_RGB;               
+  cinfo.in_color_space = JCS_RGB;
   jpgbuff = (JOCTET*)dst;
 
   /* Setup compression and do it */
@@ -158,7 +158,7 @@ jpeg_compress(char *dst, char *src, int width, int height, int dstsize, int qual
   return csize;
 }
 
-static void 
+static void
 init_source(j_decompress_ptr cinfo)
 {
     /* nothing to do */
@@ -168,7 +168,7 @@ static boolean
 fill_input_buffer(j_decompress_ptr cinfo)
 {
     /* can't fill */
-    return FALSE; 
+    return FALSE;
 }
 
 static void
@@ -187,13 +187,13 @@ static void
 term_source(j_decompress_ptr cinfo)
 {
     /* nothing to do */
-} 
+}
 
 
 /**
  * set momory-jpeg image to JPEG lib Info struct
  * @param cinfo  JPEG lib decompress infomation structure
- * @param ptr    JPEG image 
+ * @param ptr    JPEG image
  * @param size   JPEG image size
  */
 extern void
@@ -201,7 +201,7 @@ jpeg_memory_src(j_decompress_ptr cinfo, unsigned char *ptr, size_t size)
 {
     struct jpeg_source_mgr *src;
     src = cinfo->src = (struct jpeg_source_mgr *)
-        (*cinfo->mem->alloc_small) ((j_common_ptr)cinfo, 
+        (*cinfo->mem->alloc_small) ((j_common_ptr)cinfo,
                                     JPOOL_PERMANENT,
                                     sizeof(*src));
     src->init_source       = init_source;
@@ -283,5 +283,5 @@ jpeg_decompress_from_file(unsigned char *dst, char *file, int size, int *w, int 
 }
 
 #else
-  #warning "libjpeg not available, so JPEG support is not included in libplayerpacket"
+//  #warning "libjpeg not available, so JPEG support is not included in libplayerpacket"
 #endif // HAVE_LIBJPEG

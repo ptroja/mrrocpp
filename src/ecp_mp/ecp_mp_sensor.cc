@@ -91,7 +91,7 @@ sensor::sensor(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::t
 	}// end: while
 #endif /* !USE_MESSIP_SRR */
 }
-void sensor::terminate() {
+void sensor::terminate(void) {
 	to_vsp.i_code= lib::VSP_TERMINATE;
 #if !defined(USE_MESSIP_SRR)
 	if(write(sd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
@@ -108,7 +108,7 @@ void sensor::terminate() {
 #endif /* !USE_MESSIP_SRR */
 }
 
-void sensor::initiate_reading() {
+void sensor::initiate_reading(void) {
 	to_vsp.i_code= lib::VSP_INITIATE_READING;
 #if !defined(USE_MESSIP_SRR)
 	if(write(sd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
@@ -120,7 +120,7 @@ void sensor::initiate_reading() {
 		sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
 }
 
-void sensor::configure_sensor() {
+void sensor::configure_sensor(void) {
 	to_vsp.i_code= lib::VSP_CONFIGURE_SENSOR;
 #if !defined(USE_MESSIP_SRR)
 	if(write(sd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
@@ -133,7 +133,7 @@ void sensor::configure_sensor() {
 }
 
 
-void sensor::get_reading() {
+void sensor::get_reading(void) {
 	get_reading(&image);
 }
 

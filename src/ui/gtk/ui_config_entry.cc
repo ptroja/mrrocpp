@@ -25,7 +25,7 @@ void ui_config_entry::setTree_iter(GtkTreeIter & _tree_iter) {
 
 void ui_config_entry::show_page(bool visible) {
 	if (!content) return;
-	g_object_set(this->content, "visible", visible, NULL);
+	g_object_set(this->content, "visible", visible, (void *) NULL);
 
 	ui_model::instance().show_page(visible);
 

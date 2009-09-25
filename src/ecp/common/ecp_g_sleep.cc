@@ -19,16 +19,16 @@ sleep::sleep (common::task::task& _ecp_task, double s): generator (_ecp_task){
 }
 
 //allow for later change of a sleep time
-int sleep::init_time(double s){
-	waittime=s*1000;			//conversion from seconds to nanoseconds
+void sleep::init_time(double s){
+	waittime=s*1000; //TODO: conversion from seconds to nanoseconds (?!)
 }
 
 bool sleep::first_step(){
-	if( clock_gettime( CLOCK_REALTIME , &acttime) == -1 ){	//acquiring actual time 
+	if( clock_gettime( CLOCK_REALTIME , &acttime) == -1 ){	//acquiring actual time
 		printf("sleep generator: first step time measurement error");
 		return false;
 	}
-	
+
 	starttime=acttime;
 	return true;
 }
@@ -40,12 +40,12 @@ bool sleep::next_step(){
 	if( clock_gettime( CLOCK_REALTIME , &acttime) == -1 ){
 		printf("sleep generator: next step time measurement error");
 	}
-	
+
 	//difference between consecutive next_steeps, check if the pause button was pressed (difference bigger than 100ms)
 	diff=(acttime.tv_sec-prevtime.tv_sec)*1000+(acttime.tv_nsec-prevtime.tv_nsec)/1000000;
 	if(diff>100)
 		waittime=waittime+diff;
-		
+
 	//difference between start time and actual time, check if wait time already passed
 	diff=(acttime.tv_sec-starttime.tv_sec)*1000+(acttime.tv_nsec-starttime.tv_nsec)/1000000;
 	if(diff>waittime)

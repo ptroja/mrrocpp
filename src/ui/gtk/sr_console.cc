@@ -67,7 +67,7 @@ void *sr_thread(void* arg)
 			"Timestamp",
 			renderer,
 			"text", COL_TIMESTAMP,
-			NULL);
+			(void *) NULL);
 
 	/* --- Column #2 --- */
 
@@ -77,7 +77,7 @@ void *sr_thread(void* arg)
 			"Process",
 			renderer,
 			"text", COL_PROCESS_NAME,
-			NULL);
+			(void *) NULL);
 
 	/* --- Column #3 --- */
 
@@ -87,7 +87,7 @@ void *sr_thread(void* arg)
 			"Host",
 			renderer,
 			"text", COL_HOST_NAME,
-			NULL);
+			(void *) NULL);
 
 	/* --- Column #4 --- */
 
@@ -97,7 +97,7 @@ void *sr_thread(void* arg)
 			"Description",
 			renderer,
 			"text", COL_DESCRIPTION,
-			NULL);
+			(void *) NULL);
 
 	// TODO: error class column
 

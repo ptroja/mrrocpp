@@ -117,6 +117,9 @@ std::cout << "N: " << node_counter << " " << pbeolsac->node_counter << std::endl
 	pbeolsac->node_counter++;
 	pbeih->node_counter++;
 	ibeih->node_counter++;
+
+	// TODO: this return was missing
+	return false;
 }
 
 #if 0

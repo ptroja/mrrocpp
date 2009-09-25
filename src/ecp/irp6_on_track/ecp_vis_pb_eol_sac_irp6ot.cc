@@ -201,6 +201,9 @@ bool ecp_vis_pb_eol_sac_irp6ot::next_step_without_constraints(){
 			O_r_Ep[0][i]=O_r_E[0][i];
 		}
 	}
+
+	// TODO: this return was missing
+	return false;
 }
 
 #if 0

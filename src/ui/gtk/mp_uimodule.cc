@@ -159,7 +159,7 @@ MpPanel::MpPanel(ui_config_entry &entry)
 		// there should be some C++ method insted C call
 		// http://bugzilla.gnome.org/show_bug.cgi?id=140515
 		gtk_container_child_set(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(rbb->gobj()),
-				"x-padding", 10, "x-options", GTK_EXPAND|GTK_FILL, NULL);
+				"x-padding", 10, "x-options", GTK_EXPAND|GTK_FILL, (void *) NULL);
 
 		PulseButton *EcpTriggerButton = new PulseButton("Trigger", Gtk::Stock::INDEX);
 		PanelWidgets.push_back(EcpTriggerButton);
@@ -180,11 +180,11 @@ MpPanel::MpPanel(ui_config_entry &entry)
 
 		bottom = 2;
 		top = 1;
-		gtk_container_child_set(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(gtk_builder_get_object(&builder, "hseparatorLower")), "bottom-attach", bottom, "top-attach", top, NULL);
+		gtk_container_child_set(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(gtk_builder_get_object(&builder, "hseparatorLower")), "bottom-attach", bottom, "top-attach", top, (void *) NULL);
 
 		bottom = 2+ecps.size()+1;
 		top = 1+ecps.size()+1;
-		gtk_container_child_set(GTK_CONTAINER(pulsetable), GTK_WIDGET(gtk_builder_get_object(&builder, "hseparatorUpper")), "bottom-attach", bottom, "top-attach", top, NULL);
+		gtk_container_child_set(GTK_CONTAINER(pulsetable), GTK_WIDGET(gtk_builder_get_object(&builder, "hseparatorUpper")), "bottom-attach", bottom, "top-attach", top, (void *) NULL);
 	}
 
 	//! reposition boot line
@@ -199,12 +199,12 @@ MpPanel::MpPanel(ui_config_entry &entry)
 		guint bottom, top;
 		GObject *object = gtk_builder_get_object(&builder, *widget_name);
 
-		gtk_container_child_get(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(object), "bottom-attach", &bottom, "top-attach", &top, NULL);
+		gtk_container_child_get(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(object), "bottom-attach", &bottom, "top-attach", &top, (void *) NULL);
 
 		bottom += ecps.size();
 		top += ecps.size();
 
-		gtk_container_child_set(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(object), "bottom-attach", bottom, "top-attach", top, NULL);
+		gtk_container_child_set(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(object), "bottom-attach", bottom, "top-attach", top, (void *) NULL);
 	}
 
 	const char *vseparators[] = {
@@ -217,12 +217,12 @@ MpPanel::MpPanel(ui_config_entry &entry)
 		guint bottom, top;
 		GObject *object = gtk_builder_get_object(&builder, *widget_name);
 
-		gtk_container_child_get(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(object), "bottom-attach", &bottom, "top-attach", &top, NULL);
+		gtk_container_child_get(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(object), "bottom-attach", &bottom, "top-attach", &top, (void *) NULL);
 
 		bottom += ecps.size();
 		top = 0;
 
-		gtk_container_child_set(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(object), "bottom-attach", bottom, "top-attach", top, NULL);
+		gtk_container_child_set(GTK_CONTAINER(PulseTable.gobj()), GTK_WIDGET(object), "bottom-attach", bottom, "top-attach", top, (void *) NULL);
 	}
 
 	//! spawn MP

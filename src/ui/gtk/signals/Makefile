@@ -5,12 +5,11 @@ HOMEDIR = ../../../..
 include $(HOMEDIR)/common.mk
 
 PACKAGES=libxml-2.0 gtk+-2.0 gtkmm-2.4 gthread-2.0
-CPPFLAGS=-I${HOMEDIR}/src -I.. `pkg-config --cflags ${PACKAGES}` -DUSE_MESSIP_SRR
-CXXFLAGS=-Wall -g -O0 -fpic -I $(HEADERSDIR) -I.
+CPPFLAGS+=`pkg-config --cflags ${PACKAGES}` -I. -I../
+CXXFLAGS+=-fpic
 LDFLAGS+=`pkg-config --libs ${PACKAGES}` -L${HOMEDIR}/lib
 LDFLAGS+=-export-dynamic
 ECP_DIR = $(HOMEDIR)/src/ecp
-HEADERSDIR = $(HOMEDIR)/src
 
 #LIBS = `pwd`/../../../../lib/libecp.so `pwd`/../../../../lib/libmrrocpp.so `pwd`/../../../../lib/libmessip.so
 

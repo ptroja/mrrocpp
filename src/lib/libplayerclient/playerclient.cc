@@ -2,7 +2,7 @@
  *  Player - One Hell of a Robot Server
  *  Copyright (C) 2000-2003
  *     Brian Gerkey, Kasper Stoy, Richard Vaughan, & Andrew Howard
- *                      
+ *
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
  *  Player - One Hell of a Robot Server
  *  Copyright (C) 2003
  *     Brian Gerkey, Kasper Stoy, Richard Vaughan, & Andrew Howard
- *                      
+ *
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -75,7 +75,7 @@ PlayerClient::PlayerClient(const char* hostname,
 
   this->timestamp.tv_sec = 0;
   this->timestamp.tv_usec = 0;
-  
+
   reserved = 0;
 
   if(hostname)
@@ -91,8 +91,8 @@ PlayerClient::PlayerClient(const char* hostname,
 
 // alternate constructor using a binary IP instead of a hostname
 // just make a client, and connect, if instructed
-PlayerClient::PlayerClient(const struct in_addr* hostaddr, 
-                           const int port, 
+PlayerClient::PlayerClient(const struct in_addr* hostaddr,
+                           const int port,
                            const int protocol)
 {
   conn.protocol = protocol;
@@ -110,7 +110,7 @@ PlayerClient::PlayerClient(const struct in_addr* hostaddr,
 
   this->timestamp.tv_sec = 0;
   this->timestamp.tv_usec = 0;
-  
+
   reserved = 0;
 
   if(hostaddr)
@@ -137,7 +137,7 @@ int PlayerClient::Connect(const char* hostname, int port)
 {
   // look up the IP address from the hostname
   struct hostent *entp = gethostbyname( hostname );
-  
+
   // check for valid address
   if(entp && entp->h_addr_list[0] && (entp->h_length > 0))
   {
@@ -147,7 +147,7 @@ int PlayerClient::Connect(const char* hostname, int port)
     {
       // printf( "connected  to Player on port %d\n", port );
       // connect good - store the hostname and returm sucess
-      strncpy(this->hostname, hostname, 255);     
+      strncpy(this->hostname, hostname, 255);
       return(0);
     }
   }
@@ -160,7 +160,7 @@ int PlayerClient::Connect(const struct in_addr* addr, int port)
   // we make the hostname blank.
   // this would mess up clients that check the hostname, but they should
   // connect using the hostname and all would be well.
- 
+
   Disconnect(); // make sure we're cleaned up first
 
   // attempt a connect
@@ -177,7 +177,7 @@ int PlayerClient::Connect(const struct in_addr* addr, int port)
     return(1);
 }
 
-int 
+int
 PlayerClient::ConnectRNS(const char* robotname, const char* hostname, int port)
 {
   PlayerClient tmppc;
@@ -186,7 +186,7 @@ PlayerClient::ConnectRNS(const char* robotname, const char* hostname, int port)
   if(tmppc.Connect(hostname, port))
   {
     if(player_debug_level(-1) >= 2)
-      fprintf(stderr, 
+      fprintf(stderr,
               "WARNING: couldn't get name service from %s:%d\n",
               hostname, port);
     return(-1);
@@ -195,7 +195,7 @@ PlayerClient::ConnectRNS(const char* robotname, const char* hostname, int port)
   if((robotport = tmppc.LookupPort(robotname)) < 0)
   {
     if(player_debug_level(-1) >= 2)
-      fprintf(stderr, 
+      fprintf(stderr,
               "WARNING: name service failed at %s:%d\n",
               hostname, port);
     return(-1);
@@ -203,7 +203,7 @@ PlayerClient::ConnectRNS(const char* robotname, const char* hostname, int port)
   if(!robotport)
   {
     if(player_debug_level(-1) >= 2)
-      fprintf(stderr, 
+      fprintf(stderr,
               "WARNING: name service at %s:%d couldn't find robot \"%s\"\n",
               hostname, port, robotname);
     return(-1);
@@ -239,13 +239,13 @@ int PlayerClient::Peek(int timeout)
 int PlayerClient::Read(bool await_sync, ClientProxy** dev)
 {
   player_msghdr_t hdr;
-  
+
   struct timeval curr;
   ClientProxy* thisproxy;
   char *buffer;
 
   assert(buffer = new char[PLAYER_MAX_MESSAGE_SIZE]);
-  
+
   if(!Connected())
   {
     fprintf(stderr,"ERROR PlayerClient not connected\n" );
@@ -262,7 +262,7 @@ int PlayerClient::Read(bool await_sync, ClientProxy** dev)
       return(-1);
 	}
   }
-  
+
   // read until we get a SYNCH packet
   for(;;)
   {
@@ -356,9 +356,9 @@ int PlayerClient::Read(bool await_sync, ClientProxy** dev)
   delete[] buffer;
   return(0);
 }
-    
+
 //
-// write a message to our connection.  
+// write a message to our connection.
 //
 // Returns:
 //    0 if everything went OK
@@ -385,20 +385,20 @@ int PlayerClient::Request(player_device_id_t device_id,
   return(player_request(&conn, device_id.code,device_id.index, payload, payloadlen,
                         replyhdr, reply, replylen));
 }
-    
-// use this one if you don't want the reply. it will return -1 if 
+
+// use this one if you don't want the reply. it will return -1 if
 // the request failed outright or if the response type is not ACK
 int PlayerClient::Request(player_device_id_t device_id,
                           const char* payload,
                           size_t payloadlen)
-{ 
+{
   int retval;
   player_msghdr_t hdr;
   retval = Request(device_id,payload,payloadlen,&hdr,NULL,0);
 
-  if((retval < 0) || 
-     (hdr.type != PLAYER_MSGTYPE_RESP_ACK) || 
-     (hdr.device != device_id.code) || 
+  if((retval < 0) ||
+     (hdr.type != PLAYER_MSGTYPE_RESP_ACK) ||
+     (hdr.device != device_id.code) ||
      (hdr.device_index != device_id.index))
     return(-1);
   else
@@ -424,20 +424,20 @@ int PlayerClient::RequestDeviceAccess(player_device_id_t device_id,
 
   if(!Connected())
     return(-1);
-  
+
   retval = player_request_device_access(&conn, device_id.code,device_id.index,
-                                        req_access, grant_access, 
+                                        req_access, grant_access,
                                         driver_name, driver_name_len);
 
-  
+
   /* if(driver_name)
-    printf("%d:%d:%d with driver %s\n", 
+    printf("%d:%d:%d with driver %s\n",
 	   this->port, device_id.code, device_id.index, driver_name);
   */
 
   return(retval);
 }
-    
+
 // Player device configurations
 
 // change continuous data rate (freq is in Hz)
@@ -578,8 +578,8 @@ void PlayerClient::RemoveProxy(ClientProxy* proxy)
   {
     ClientProxyNode* thisnode;
     ClientProxyNode* prevnode;
-    for(thisnode = proxies, prevnode = (ClientProxyNode*)NULL; 
-        thisnode; 
+    for(thisnode = proxies, prevnode = (ClientProxyNode*)NULL;
+        thisnode;
         prevnode = thisnode, thisnode=thisnode->next)
     {
       if(thisnode->proxy == proxy)
@@ -613,7 +613,7 @@ ClientProxy* PlayerClient::GetProxy(player_device_id_t id)
 {
   for(ClientProxyNode* thisnode=proxies;thisnode;thisnode=thisnode->next)
   {
-    if(thisnode->proxy && 
+    if(thisnode->proxy &&
        (thisnode->proxy->m_device_id.code == id.code) &&
        (thisnode->proxy->m_device_id.index == id.index))
       return(thisnode->proxy);
@@ -628,7 +628,7 @@ ClientProxy* PlayerClient::GetProxy(player_device_id_t id)
 int PlayerClient::GetDeviceList()
 {
   int i;
- 
+
   player_device_id_t id;
   player_msghdr_t hdr;
   player_device_devlist_t config;
@@ -645,12 +645,13 @@ int PlayerClient::GetDeviceList()
   this->Request(id, (const char*)&config, sizeof(config), &hdr,
       (char *)&config, sizeof(config));
 
-  if (hdr.size <0)             
-    return -1;
+  // FIXED:  pointless comparison of unsigned integer with zero
+  //if (hdr.size <0)
+  //  return -1;
 
   if (hdr.size != sizeof(config))
   {
-    fprintf(stderr, "Device list reply has incorrect length (%d!=%d)", hdr.size, sizeof(config)); 
+    fprintf(stderr, "Device list reply has incorrect length (%d!=%d)", hdr.size, sizeof(config));
     return -1;
   }
 
@@ -665,7 +666,7 @@ int PlayerClient::GetDeviceList()
   this->id_count = config.device_count;
 
 
-   // Get the driver info for all devices. 
+   // Get the driver info for all devices.
   for (i=0; i < this->id_count; i++)
   {
     req.subtype = htons(PLAYER_PLAYER_DRIVERINFO_REQ);
@@ -677,8 +678,9 @@ int PlayerClient::GetDeviceList()
     this->Request(id, (const char*)&req, sizeof(req), &hdr,
         (char *)&rep, sizeof(rep));
 
-    if (hdr.size < 0)
-      return -1;
+    // FIXED:  pointless comparison of unsigned integer with zero
+    //if (hdr.size < 0)
+    //  return -1;
 
     if (hdr.size != sizeof(rep))
     {
@@ -689,7 +691,7 @@ int PlayerClient::GetDeviceList()
 
     strcpy(this->drivernames[i], rep.driver_name);
   }
- 
+
   return 0;
 }
 

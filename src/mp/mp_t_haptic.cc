@@ -1,8 +1,8 @@
 // -------------------------------------------------------------------------
 //                              mp_t_haptic.cc
-// 
+//
 // MP task for two robot haptic device
-// 
+//
 // -------------------------------------------------------------------------
 
 
@@ -35,19 +35,19 @@ haptic::haptic(lib::configurator &_config) : task(_config)
 }
 
 // methods fo mp template to redefine in concete class
-void haptic::task_initialization(void) 
+void haptic::task_initialization(void)
 {
 	sr_ecp_msg->message("MP haptic device loaded");
-};
+}
 
 
 
-bool haptic::configure_edp_force_sensor(bool configure_track, bool configure_postument)
+void haptic::configure_edp_force_sensor(bool configure_track, bool configure_postument)
 {
     if (configure_track)
     {
         set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE, 0, "", 1, lib::ROBOT_IRP6_ON_TRACK);
-      
+
     }
 
     if (configure_postument)
@@ -71,14 +71,14 @@ bool haptic::configure_edp_force_sensor(bool configure_track, bool configure_pos
                 (2, 2, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT,
                 		lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_POSTUMENT );
     }
-   
+
 }
 
- 
+
 void haptic::main_task_algorithm(void)
 {
 
-	generator::haptic mp_h_gen(*this, 10); 
+	generator::haptic mp_h_gen(*this, 10);
    	mp_h_gen.robot_m = robot_m;
 
 

@@ -129,10 +129,10 @@ bool ecp_vis_pb_eih_irp6ot::next_step_without_constraints(){
 				<<"------------------------------------------------------------------"
 				<< std::endl;
 	}
-	
+
 	if (node_counter==2)
 	{
-		O_Tx_E.set_frame_tab(the_robot->EDP_data.current_arm_frame); 
+		O_Tx_E.set_frame_tab(the_robot->EDP_data.current_arm_frame);
 		O_Tx_E.get_xyz_angle_axis(O_r_E1);
 	}
 	//EIH
@@ -144,16 +144,16 @@ bool ecp_vis_pb_eih_irp6ot::next_step_without_constraints(){
 	G_Tx_S.set_xyz_rpy(x2g, 0, 0, 0, 0, 0);
 
 	O_Tx_E.set_frame_tab(the_robot->EDP_data.current_arm_frame);
-	
+
 	/*
-	O_Tx_E.get_xyz_angle_axis(O_r_E[0]);	
+	O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
 	for (int i=0; i<6; i++)
 		{
 			std::cout << O_r_E[0][i] << " ";
 		}
 	std::cout << std::endl;
 	*/
-	
+
 	O_Tx_E=O_Tx_E*!G_Tx_G2;
 	O_Tx_E.get_xyz_angle_axis(O_r_E[0]);
 
@@ -195,17 +195,19 @@ bool ecp_vis_pb_eih_irp6ot::next_step_without_constraints(){
 			O_r_Ep[0][i]=O_r_E[0][i];
 		}
 	}
-	
-	
+
+
 	gettimeofday(&acctime,NULL);
-	
+
 	//pomiary
 	//for (int i=0; i<6; i++)
 	//	{
 			std::cout << acctime.tv_sec << " " << acctime.tv_usec << " " << O_r_Ep[0][1] << " ";
 	//	}
-		std::cout << std::endl;
+	std::cout << std::endl;
 
+	// TODO: this return was missing
+	return false;
 }
 
 #if 0

@@ -22,7 +22,7 @@ TRDraughtsAI::~TRDraughtsAI(){
 
 }
 
-int TRDraughtsAI::AIconnect(const char *host,unsigned short int serverPort){
+void TRDraughtsAI::AIconnect(const char *host,unsigned short int serverPort){
 	int socketDesc;
 	struct sockaddr_in serverAddress;
 	struct hostent *hostInfo;
@@ -51,7 +51,7 @@ int TRDraughtsAI::AIconnect(const char *host,unsigned short int serverPort){
 	socketDescriptor=socketDesc;
 }
 
-int TRDraughtsAI::AIdisconnect(){
+void TRDraughtsAI::AIdisconnect(){
 	close(socketDescriptor);
 }
 
@@ -61,6 +61,8 @@ bool TRDraughtsAI::t_read(bool wait){
 		close(socketDescriptor);
 		throw ecp_mp::transmitter::transmitter::transmitter_error(lib::SYSTEM_ERROR,0);
 	}
+
+	return true;
 }
 
 bool TRDraughtsAI::t_write(){
@@ -69,6 +71,8 @@ bool TRDraughtsAI::t_write(){
 		close(socketDescriptor);
 		throw ecp_mp::transmitter::transmitter::transmitter_error(lib::SYSTEM_ERROR,0);
 	}
+
+	return true;
 }
 
 } // namespace transmitter

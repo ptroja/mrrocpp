@@ -1,4 +1,4 @@
-/* 
+/*
  *  libplayerc : a Player client library
  *  Copyright (C) Andrew Howard 2002-2003
  *
@@ -20,7 +20,7 @@
 /*
  *  Player - One Hell of a Robot Server
  *  Copyright (C) Andrew Howard 2003
- *                      
+ *
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -99,7 +99,7 @@ playerc_client_t *playerc_client_create(playerc_mclient_t *mclient, const char *
     playerc_mclient_addclient(mclient, client);
 
   client->data = (char*) malloc(PLAYER_MAX_MESSAGE_SIZE);
-  
+
   client->qfirst = 0;
   client->qlen = 0;
   client->qsize = sizeof(client->qitems) / sizeof(client->qitems[0]);
@@ -108,7 +108,7 @@ playerc_client_t *playerc_client_create(playerc_mclient_t *mclient, const char *
 
   /* this is the server's default */
   client->mode = PLAYER_DATAMODE_PUSH_NEW;
-  
+
   return client;
 }
 
@@ -130,7 +130,7 @@ int playerc_client_connect(playerc_client_t *client)
   struct sockaddr_in server;
   char banner[32];
 
-  // Construct socket 
+  // Construct socket
   client->sock = socket(PF_INET, SOCK_STREAM, 0);
   if (client->sock < 0)
   {
@@ -138,7 +138,7 @@ int playerc_client_connect(playerc_client_t *client)
     return -1;
   }
 
-  // Construct server address 
+  // Construct server address
   entp = gethostbyname(client->host);
   if (entp == NULL)
   {
@@ -149,7 +149,7 @@ int playerc_client_connect(playerc_client_t *client)
   memcpy(&server.sin_addr, entp->h_addr_list[0], entp->h_length);
   server.sin_port = htons(client->port);
 
-  // Connect the socket 
+  // Connect the socket
   if (connect(client->sock, (struct sockaddr*) &server, sizeof(server)) < 0)
   {
     PLAYERC_ERR3("connect call on [%s:%d] failed with error [%s]",
@@ -157,7 +157,7 @@ int playerc_client_connect(playerc_client_t *client)
     return -1;
   }
 
-  // Get the banner 
+  // Get the banner
   if (recv(client->sock, banner, sizeof(banner), 0) < sizeof(banner))
   {
     PLAYERC_ERR("incomplete initialization string");
@@ -201,7 +201,7 @@ int playerc_client_datamode(playerc_client_t *client, int mode)
 
   /* cache the change */
   client->mode = mode;
-  
+
   return 0;
 }
 
@@ -215,7 +215,7 @@ int playerc_client_datafreq(playerc_client_t *client, int freq)
 
   if (playerc_client_request(client, NULL, &req, sizeof(req), NULL, 0) < 0)
     return -1;
-  
+
   return 0;
 }
 
@@ -225,18 +225,18 @@ int playerc_client_peek(playerc_client_t *client, int timeout)
 {
   int count;
   struct pollfd fd;
-  
+
   fd.fd = client->sock;
   fd.events = POLLIN | POLLHUP;
   fd.revents = 0;
 
-  // Wait for incoming data 
+  // Wait for incoming data
   count = poll(&fd, 1, timeout);
   if (count < 0)
   {
     PLAYERC_ERR1("poll returned error [%s]", strerror(errno));
     return -1;
-  }  
+  }
   if (count > 0 && (fd.revents & POLLHUP))
   {
     PLAYERC_ERR("socket disconnected");
@@ -245,7 +245,7 @@ int playerc_client_peek(playerc_client_t *client, int timeout)
   return count;
 }
 
-// Request a round of data; only valid when in a request/reply 
+// Request a round of data; only valid when in a request/reply
 // (aka PULL) mode
 int
 playerc_client_requestdata(playerc_client_t* client)
@@ -287,8 +287,8 @@ void *playerc_client_read(playerc_client_t *client)
   // Catch and ignore sync messages
   if (header.type == PLAYER_MSGTYPE_SYNCH)
     return client->id;
-  
-  // Check the return type 
+
+  // Check the return type
   if (header.type != PLAYER_MSGTYPE_DATA)
   {
     PLAYERC_WARN1("unexpected message type [%d]", header.type);
@@ -308,7 +308,7 @@ int playerc_client_write(playerc_client_t *client, playerc_device_t *device,
 
   //if (!(device->access == PLAYER_WRITE_MODE || device->access == PLAYER_ALL_MODE))
   //  PLAYERC_WARN("writing to device without write permission");
-    
+
   header.stx = PLAYER_STXX;
   header.type = PLAYER_MSGTYPE_CMD;
   header.device = device->code;
@@ -330,7 +330,7 @@ int playerc_client_request(playerc_client_t *client, playerc_device_t *deviceinf
   {
     req_header.stx = PLAYER_STXX;
     req_header.type = PLAYER_MSGTYPE_REQ;
-    req_header.device = PLAYER_PLAYER_CODE;    
+    req_header.device = PLAYER_PLAYER_CODE;
     req_header.device_index = 0;
     req_header.size = req_len;
   }
@@ -395,12 +395,12 @@ int playerc_client_request(playerc_client_t *client, playerc_device_t *deviceinf
     PLAYERC_ERR("timed out waiting for server reply to request");
     return -1;
   }
-    
+
   return len;
 }
 
 
-// Add a device proxy 
+// Add a device proxy
 int playerc_client_adddevice(playerc_client_t *client, playerc_device_t *device)
 {
   if (client->device_count >= sizeof(client->device) / sizeof(client->device[0]))
@@ -410,7 +410,7 @@ int playerc_client_adddevice(playerc_client_t *client, playerc_device_t *device)
   }
   device->fresh = 0;
   client->device[client->device_count++] = device;
-  return 0; 
+  return 0;
 }
 
 
@@ -523,7 +523,7 @@ int playerc_client_subscribe(playerc_client_t *client, int code, int index,
   }
 
   // Copy the driver name
-  strncpy(drivername, rep.driver_name, len);
+  strncpy(drivername, (char *) rep.driver_name, len);
 
   return 0;
 }
@@ -576,7 +576,7 @@ int playerc_client_delcallback(playerc_client_t *client, playerc_device_t *devic
                                playerc_callback_fn_t callback, void *data)
 {
   int i;
-    
+
   for (i = 0; i < device->callback_count; i++)
   {
     if (device->callback[i] != callback)
@@ -638,8 +638,8 @@ int playerc_client_readpacket(playerc_client_t *client, player_msghdr_t *header,
     PLAYERC_ERR2("got incomplete header, %d of %d bytes", bytes, sizeof(player_msghdr_t) - 2);
     return -1;
   }
-  
-  // Do the network byte re-ordering 
+
+  // Do the network byte re-ordering
   header->stx = ntohs(header->stx);
   header->type = ntohs(header->type);
   header->device = ntohs(header->device);
@@ -680,13 +680,13 @@ int playerc_client_writepacket(playerc_client_t *client, player_msghdr_t *header
 {
   int bytes;
 
-  // Do the network byte re-ordering 
+  // Do the network byte re-ordering
   header->stx = htons(header->stx);
   header->type = htons(header->type);
   header->device = htons(header->device);
   header->device_index = htons(header->device_index);
   header->size = htonl(header->size);
-  
+
   bytes = send(client->sock, header, sizeof(player_msghdr_t), 0);
   if (bytes < 0)
   {
@@ -699,13 +699,13 @@ int playerc_client_writepacket(playerc_client_t *client, player_msghdr_t *header
     return -1;
   }
 
-  // Now undo the network byte re-ordering 
+  // Now undo the network byte re-ordering
   header->stx = ntohs(header->stx);
   header->type = ntohs(header->type);
   header->device = ntohs(header->device);
   header->device_index = ntohs(header->device_index);
   header->size = ntohl(header->size);
-    
+
   bytes = send(client->sock, data, len, 0);
   if (bytes < 0)
   {
@@ -766,12 +766,12 @@ int playerc_client_pop(playerc_client_t *client,
   memcpy(data, item->data, item->len);
   free(item->data);
   *len = item->len;
-  
+
   client->qfirst = (client->qfirst + 1) % client->qsize;
   client->qlen -= 1;
 
   //printf("pop : %d\n", client->qlen);
-  
+
   return -1;
 }
 
@@ -786,24 +786,24 @@ void *playerc_client_dispatch(playerc_client_t *client, player_msghdr_t *header,
   // We get zero-length packets sometimes
   if (len == 0)
     return NULL;
-  
-  // Look for a device proxy to handle this data 
+
+  // Look for a device proxy to handle this data
   for (i = 0; i < client->device_count; i++)
   {
     device = client->device[i];
-        
+
     if (device->code == header->device && device->index == header->device_index)
     {
-      // Fill out timing info 
+      // Fill out timing info
       device->datatime = header->timestamp_sec + header->timestamp_usec * 1e-6;
 
-      // Call the registerd handler for this device 
+      // Call the registerd handler for this device
       (*device->putdata) (device, (char*) header, data, len);
 
       // mark as fresh
       device->fresh = 1;
 
-      // Call any additional registered callbacks 
+      // Call any additional registered callbacks
       for (j = 0; j < device->callback_count; j++)
         (*device->callback[j]) (device->callback_data[j]);
 
