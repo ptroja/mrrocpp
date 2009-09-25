@@ -421,7 +421,7 @@ void hardware_interface::finish_synchro (int drive_number)
 
 }  // end: finish_synchro()
 
-} // namespace common
+} // namespace irp6ot
 } // namespace edp
 } // namespace mrrocpp
 
