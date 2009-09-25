@@ -44,9 +44,9 @@ namespace edp {
 namespace irp6ot {
 
 // ------------------------------------------------------------------------
-hardware_interface::hardware_interface ( effector &_master  )  : common::hardware_interface(_master)
+hardware_interface::hardware_interface (effector &_master)  : common::hardware_interface(_master)
 {
-		// tablica pradow maksymalnych d;a poszczegolnych osi
+	// tablica pradow maksymalnych d;a poszczegolnych osi
 	int max_current [IRP6_ON_TRACK_NUM_OF_SERVOS] = {
 			IRP6_ON_TRACK_AXIS_1_MAX_CURRENT, IRP6_ON_TRACK_AXIS_2_MAX_CURRENT,
 			IRP6_ON_TRACK_AXIS_3_MAX_CURRENT, IRP6_ON_TRACK_AXIS_4_MAX_CURRENT,
@@ -177,7 +177,6 @@ hardware_interface::hardware_interface ( effector &_master  )  : common::hardwar
 	if(master.test_mode==0) {
 		// Zerowanie licznikow polozenia wszystkich osi
 		reset_counters();
-		// delay(200);
 		is_hardware_error();
 	}
 
@@ -258,9 +257,9 @@ uint64_t hardware_interface::read_write_hardware ( void )
 	}
 
 	return irq_data.md.hardware_error;
-
 } // end: hardware_interface::read_write_hardware()
 // ------------------------------------------------------------------------
+
 
 // ------------------------------------------------------------------------
 // Zerowanie licznikow polozenia wszystkich osi
@@ -306,7 +305,6 @@ void hardware_interface::reset_counters ( void )
 	read_write_hardware();
 	read_write_hardware();
 	read_write_hardware();
-	//	delay(100);
 	// Odczyt polozenia osi slowo 32 bitowe - negacja licznikow 16-bitowych
 	// out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR);
 	// out16(SERVO_COMMAND1_ADR, RESET_POSITION_COUNTER);
@@ -339,7 +337,6 @@ bool hardware_interface::is_hardware_error ( void)
 // ------------------------------------------------------------------------
 
 
-
 int hardware_interface::hi_int_wait (int inter_mode, int lag)
 {
 	if(master.test_mode == 0) {
@@ -351,15 +348,6 @@ int hardware_interface::hi_int_wait (int inter_mode, int lag)
 	static short msg_send = 0;
 
 	tim_event.sigev_notify = SIGEV_UNBLOCK;
-
-	/*
-	printf("1: %x, %x, %x, %x, %x, %x, %x\n",
-		robot_control[0].adr_offset_plus_0, robot_control[1].adr_offset_plus_0,
-		robot_control[2].adr_offset_plus_0, robot_control[3].adr_offset_plus_0,
-		robot_control[4].adr_offset_plus_0, robot_control[5].adr_offset_plus_0,
-		robot_control[6].adr_offset_plus_0);
-	 */
-
 	TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR ,  &tim_event, &int_timeout, NULL );
 	irq_data.md.interrupt_mode=inter_mode;  // przypisanie odpowiedniego trybu oprzerwania
 	//	irq_data.md.is_power_on = true;
@@ -404,29 +392,30 @@ int hardware_interface::hi_int_wait (int inter_mode, int lag)
 }
 
 
-void hardware_interface::start_synchro ( int drive_number )  {
+void hardware_interface::start_synchro (int drive_number)
+{
 	trace_resolver_zero = true;
 	// Wlacz sledzenie zera rezolwera (synchronizacja robota)
-	irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)drive_number;
-	irq_data.md.register_adress=SERVO_COMMAND1_ADR;
-	irq_data.md.value=START_SYNCHRO;
+	irq_data.md.card_adress = FIRST_SERVO_PTR + (uint8_t) drive_number;
+	irq_data.md.register_adress = SERVO_COMMAND1_ADR;
+	irq_data.md.value = START_SYNCHRO;
 	hi_int_wait(INT_SINGLE_COMMAND, 2);
 }  // end: start_synchro()
 
-
-void hardware_interface::finish_synchro ( int drive_number )  {
+void hardware_interface::finish_synchro (int drive_number)
+{
 	trace_resolver_zero = false;
 
 	// Zakonczyc sledzenie zera rezolwera i przejdz do trybu normalnej pracy
-	irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)drive_number;
-	irq_data.md.register_adress=SERVO_COMMAND1_ADR;
-	irq_data.md.value=FINISH_SYNCHRO;
+	irq_data.md.card_adress = FIRST_SERVO_PTR + (uint8_t)drive_number;
+	irq_data.md.register_adress = SERVO_COMMAND1_ADR;
+	irq_data.md.value = FINISH_SYNCHRO;
 	hi_int_wait(INT_SINGLE_COMMAND, 2);
 
 	// by Y - UWAGA NIE WIEDZIEC CZEMU BEZ TEGO NIE ZAWSZE DZIALAJA RUCHY NA OSI PO SYNCHRONIZACJi
 	if (drive_number>5)
 	{
-		irq_data.md.value=MICROCONTROLLER_MODE;
+		irq_data.md.value = MICROCONTROLLER_MODE;
 		hi_int_wait(INT_SINGLE_COMMAND, 2);
 	}
 

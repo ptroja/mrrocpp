@@ -4,7 +4,7 @@
 // Funkcje do obslugi sprzetu (serwomechanizmow cyfrowych) dla robota irp6 postument
 //
 // Ostatnia modyfikacja: styczen 2005
-// cala komunikacja ze sprzetem przerzucona do oblsugi przerwania ze wzgledou na drugi proces korzsytajacy z tego samego
+// cala komunikacja ze sprzetem przerzucona do oblsugi przerwania ze wzgledu na drugi proces korzystajacy z tego samego
 // przerwania - tasmociag
 // ------------------------------------------------------------------------
 
@@ -43,12 +43,15 @@ namespace edp {
 namespace irp6p {
 
 // ------------------------------------------------------------------------
-hardware_interface::hardware_interface (  effector &_master )  : common::hardware_interface(_master)
+hardware_interface::hardware_interface (effector &_master)  : common::hardware_interface(_master)
 {
 	// tablica pradow maksymalnych d;a poszczegolnych osi
-	int max_current [IRP6_POSTUMENT_NUM_OF_SERVOS] = { IRP6_POSTUMENT_AXIS_1_MAX_CURRENT,
-		IRP6_POSTUMENT_AXIS_2_MAX_CURRENT,	 IRP6_POSTUMENT_AXIS_3_MAX_CURRENT, IRP6_POSTUMENT_AXIS_4_MAX_CURRENT,
-		IRP6_POSTUMENT_AXIS_5_MAX_CURRENT, IRP6_POSTUMENT_AXIS_6_MAX_CURRENT, IRP6_POSTUMENT_AXIS_7_MAX_CURRENT};
+	int max_current [IRP6_POSTUMENT_NUM_OF_SERVOS] = {
+			IRP6_POSTUMENT_AXIS_1_MAX_CURRENT, IRP6_POSTUMENT_AXIS_2_MAX_CURRENT,
+			IRP6_POSTUMENT_AXIS_3_MAX_CURRENT, IRP6_POSTUMENT_AXIS_4_MAX_CURRENT,
+			IRP6_POSTUMENT_AXIS_5_MAX_CURRENT, IRP6_POSTUMENT_AXIS_6_MAX_CURRENT,
+			IRP6_POSTUMENT_AXIS_7_MAX_CURRENT
+	};
 
 	// Sledzenie zera rezolwera - wylaczane
 	trace_resolver_zero = false;
@@ -124,9 +127,8 @@ hardware_interface::hardware_interface (  effector &_master )  : common::hardwar
 #endif
 	}
 
-
 	// oczekiwanie na przerwanie
-	if (hi_int_wait(INT_EMPTY, 0)==-1) // jesli sie nie przyjdzie na czas
+	if (hi_int_wait(INT_EMPTY, 0)==-1) // jesli nie przyjdzie na czas
 	{
 		// inicjacja wystawiania przerwan
 		if(master.test_mode==0)
@@ -137,10 +139,8 @@ hardware_interface::hardware_interface (  effector &_master )  : common::hardwar
 			out16(SERVO_COMMAND1_ADR, int_freq);
 			delay(10);
 			out16(SERVO_COMMAND1_ADR, START_CLOCK_INTERRUPTS);
-
 		}
 	}
-
 
 	master.controller_state_edp_buf.is_synchronised = irq_data.md.is_synchronised;
 
@@ -157,9 +157,11 @@ hardware_interface::hardware_interface (  effector &_master )  : common::hardwar
 		meassured_current[i] = 0;
 
 		if(master.test_mode==0) {
-			/*out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (uint8_t)i);
+			/*
+			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (uint8_t)i);
 			out16(SERVO_COMMAND1_ADR,RESET_MANUAL_MODE); // Zerowanie ruchow recznych
-			out16(SERVO_COMMAND1_ADR, PROHIBIT_MANUAL_MODE); // Zabrania ruchow za pomoca przyciskow w szafie*/
+			out16(SERVO_COMMAND1_ADR, PROHIBIT_MANUAL_MODE); // Zabrania ruchow za pomoca przyciskow w szafie
+			*/
 			irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)i;
 			irq_data.md.register_adress=SERVO_COMMAND1_ADR;
 			irq_data.md.value=RESET_MANUAL_MODE;
@@ -178,7 +180,7 @@ hardware_interface::hardware_interface (  effector &_master )  : common::hardwar
 	}
 
 	first = true; // Pierwszy krok
-}
+} // koniec: hardware_interface::hardware_interface( )
 // ------------------------------------------------------------------------
 
 
@@ -205,17 +207,16 @@ hardware_interface::~hardware_interface ( void )   // destruktor
 			perror("timer_delete()");
 		}
 	}
-}
+} // end: hardware_interface::~hardware_interface()
 // ------------------------------------------------------------------------
-
 
 // ------------------------------------------------------------------------
 uint64_t hardware_interface::read_write_hardware ( void )
 {
 
-// ------------------------------------------------------------------------
-   // Obsluga sprzetu: odczyt aktualnych wartosci polozenia i zapis wartosci
-   // wypelnienia PWM
+	// ------------------------------------------------------------------------
+	// Obsluga sprzetu: odczyt aktualnych wartosci polozenia i zapis wartosci
+	// wypelnienia PWM
 
 	// zapis wartosci zadanych
 	for (int i = 0; i < master.number_of_servos; i++ )
@@ -231,7 +232,7 @@ uint64_t hardware_interface::read_write_hardware ( void )
 		return irq_data.md.hardware_error;
 	}
 
-//	 printf("hi rydz 1 current_absolute_position: %d, hex: %x\n", irq_data.md.current_absolute_position[5], irq_data.md.current_absolute_position[5] ); // debug
+	//	 printf("hi rydz 1 current_absolute_position: %d, hex: %x\n", irq_data.md.current_absolute_position[5], irq_data.md.current_absolute_position[5] ); // debug
 
 	for (int i = 0; i < master.number_of_servos; i++ ) {
 
@@ -239,18 +240,18 @@ uint64_t hardware_interface::read_write_hardware ( void )
 		meassured_current[i] = (irq_data.md.robot_status[i].adr_offset_plus_2 & 0xFF00)>>8;
 
 		current_absolute_position[i] = irq_data.md.current_absolute_position[i];
-		current_position_inc[i] = current_absolute_position[i] -  previous_absolute_position[i];
+		current_position_inc[i] = current_absolute_position[i] - previous_absolute_position[i];
 		previous_absolute_position[i] = current_absolute_position[i];
 	}
 
 	if (!trace_resolver_zero)
 	{
-	//	printf("read_write_hardware: w mask resolver_zero\n");
+		//	printf("read_write_hardware: w mask resolver_zero\n");
 		irq_data.md.hardware_error &= lib::MASK_RESOLVER_ZERO;
 	}
 
 	return irq_data.md.hardware_error;
-}
+} // end: hardware_interface::read_write_hardware()
 // ------------------------------------------------------------------------
 
 
@@ -284,7 +285,7 @@ void hardware_interface::reset_counters ( void )
 
 		// 	in16(SERVO_REPLY_INT_ADR);
 
-	}
+	} // end: for
 
 	// Dwukrotny odczyt polozenia dla wyzerowania przyrostu wynikajacego z pierwszego
 	// odczytu rezolwera
@@ -292,7 +293,7 @@ void hardware_interface::reset_counters ( void )
 	for (int i = 0; i < master.number_of_servos; i++ )
 	{
 		robot_control[i].adr_offset_plus_0 = 0x0200;
-	}
+	} // end: for
 
 	// wyzerowanie przyrostu pozycji
 	read_write_hardware();
@@ -304,9 +305,8 @@ void hardware_interface::reset_counters ( void )
 	// robot_status[0].adr_offset_plus_4 = 0xFFFF ^ in16(SERVO_REPLY_POS_LOW_ADR); // Mlodsze slowo 16-bitowe
 	// robot_status[0].adr_offset_plus_6 = 0xFFFF ^ in16(SERVO_REPLY_POS_HIGH_ADR);// Starsze slowo 16-bitowe
 	// printf("L=%x U=%x  \n",robot_status[0].adr_offset_plus_4, robot_status[0].adr_offset_plus_6);
-}
+} // end: hardware_interface::reset_counters()
 // ------------------------------------------------------------------------
-
 
 // ------------------------------------------------------------------------
 bool hardware_interface::is_hardware_error ( void)
@@ -327,48 +327,8 @@ bool hardware_interface::is_hardware_error ( void)
 		}
 	} // end: for
 	return h_error;
-}
+} // end: hardware_interface::is_hardware_error ()
 // ------------------------------------------------------------------------
-
-
-// synchronizacja automatyczna z wykrorzystaniem lm629
-int hardware_interface::synchronise_via_lm629(void)
-{
-	for (int i = 0; i < master.number_of_servos; i++ ) // UWAGA NA -1
-	{
-		// tryb pojedynczych polecen w obsludze przerwania
-		irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)i;
-		irq_data.md.register_adress=SERVO_COMMAND1_ADR;
-		irq_data.md.value=LM629_VIA_MICROCONTROLLER_MODE;
-		hi_int_wait(INT_SINGLE_COMMAND, 10);
-		irq_data.md.value=FINISH_SYNCHRO;
-		hi_int_wait(INT_SINGLE_COMMAND, 10);
-		irq_data.md.value=START_SYNCHRO;
-		hi_int_wait(INT_SINGLE_COMMAND, 10);
-		irq_data.md.value=ZERO_ORDER;
-		hi_int_wait(INT_SINGLE_COMMAND, 10);
-
-		bool wyjscie=false;
-		// dopoki nie osiagnieto pozycji synchronizacji
-		while (!wyjscie)
-		{
-			// oczekiwanie na przerwanie
-			hi_int_wait(INT_CHECK_STATE,0);
-			// jesli pojawi sie flaga zakonczenie synchronizacji
-			if (0x0040&(irq_data.md.robot_status[i].adr_offset_plus_0)) wyjscie = true;
-		}
-
-		// tryb pojedynczych polecen w obsludze przerwania
-		irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)i;
-		irq_data.md.register_adress=SERVO_COMMAND1_ADR;
-		irq_data.md.value=MICROCONTROLLER_MODE;
-		hi_int_wait(INT_SINGLE_COMMAND, 10);
-	}
-
-	// docelowo zwracac ew. bledy
-	return 1;
-}
-
 
 
 int hardware_interface::hi_int_wait (int inter_mode, int lag)
@@ -382,45 +342,28 @@ int hardware_interface::hi_int_wait (int inter_mode, int lag)
 	static short msg_send = 0;
 
 	tim_event.sigev_notify = SIGEV_UNBLOCK;
-
-//	printf("aaa\n");
-/*
-printf("1: %x, %x, %x, %x, %x, %x, %x\n", robot_control[0].adr_offset_plus_0, robot_control[1].adr_offset_plus_0,
-	robot_control[2].adr_offset_plus_0, robot_control[3].adr_offset_plus_0, robot_control[4].adr_offset_plus_0
-	, robot_control[5].adr_offset_plus_0, robot_control[6].adr_offset_plus_0);
-
-	*/
 	TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR ,  &tim_event, &int_timeout, NULL );
 	irq_data.md.interrupt_mode=inter_mode;  // przypisanie odpowiedniego trybu oprzerwania
-//	irq_data.md.is_power_on = true;
+	//	irq_data.md.is_power_on = true;
 	int iw_ret=InterruptWait (0, NULL);
 
 	if (iw_ret==-1) { // jesli przerwanie nie przyjdzie na czas
-
 		if (interrupt_error == 1) master.msg->message(lib::NON_FATAL_ERROR, "Nie odebrano przerwania - sprawdz szafe");
-		 interrupt_error++;
-		 master.controller_state_edp_buf.is_wardrobe_on = false;
+		interrupt_error++;
+		master.controller_state_edp_buf.is_wardrobe_on = false;
 	} else {
-
 		if (interrupt_error >= 1) master.msg->message("Przywrocono obsluge przerwania");
 		interrupt_error = 0;
 		master.controller_state_edp_buf.is_wardrobe_on = true;
-	 	master.controller_state_edp_buf.is_power_on = irq_data.md.is_power_on;
+		master.controller_state_edp_buf.is_power_on = irq_data.md.is_power_on;
 	}
-
-
-	/*
-		if ((irq_data.md.robot_control[5].adr_offset_plus_0 > 810) && (irq_data.md.robot_control[5].adr_offset_plus_0 < 900))
-		printf("ttt: %d, %x, %d, %d\n", irq_data.md.current_absolute_position[5],  irq_data.md.robot_control[5].adr_offset_plus_0,
-			irq_data.md.robot_control[5].adr_offset_plus_0, irq_data.md.current_absolute_position[4]);
-	*/
 
 
 
 	if ((interrupt_error>2) || (!master.controller_state_edp_buf.is_power_on))
 	{
 		if ((msg_send++) == 0) master.msg->message(lib::NON_FATAL_ERROR, "Wylaczono moc - robot zablokowany");
-		  irq_data.md.is_robot_blocked = true;
+		irq_data.md.is_robot_blocked = true;
 	}
 
 	master.controller_state_edp_buf.is_robot_blocked = irq_data.md.is_robot_blocked;
@@ -429,7 +372,7 @@ printf("1: %x, %x, %x, %x, %x, %x, %x\n", robot_control[0].adr_offset_plus_0, ro
 
 	return iw_ret;
 #else
-    return -1;
+	return -1;
 #endif
 	} else {
 		int sig;
@@ -443,7 +386,7 @@ printf("1: %x, %x, %x, %x, %x, %x, %x\n", robot_control[0].adr_offset_plus_0, ro
 }
 
 
-void hardware_interface::start_synchro(int drive_number)
+void hardware_interface::start_synchro (int drive_number)
 {
 	trace_resolver_zero = true;
 	// Wlacz sledzenie zera rezolwera (synchronizacja robota)
@@ -451,22 +394,22 @@ void hardware_interface::start_synchro(int drive_number)
 	irq_data.md.register_adress = SERVO_COMMAND1_ADR;
 	irq_data.md.value = START_SYNCHRO;
 	hi_int_wait(INT_SINGLE_COMMAND, 2);
-}
+}  // end: start_synchro()
 
-void hardware_interface::finish_synchro(int drive_number)
+void hardware_interface::finish_synchro (int drive_number)
 {
 	trace_resolver_zero = false;
 
 	// Zakonczyc sledzenie zera rezolwera i przejdz do trybu normalnej pracy
-	irq_data.md.card_adress = FIRST_SERVO_PTR + (uint8_t) drive_number;
+	irq_data.md.card_adress = FIRST_SERVO_PTR + (uint8_t)drive_number;
 	irq_data.md.register_adress = SERVO_COMMAND1_ADR;
 	irq_data.md.value = FINISH_SYNCHRO;
 	hi_int_wait(INT_SINGLE_COMMAND, 2);
 
-	// by Y - UWAGA NIE WIEDZIEC CZEMU BEZ TEGO NIE ZAWSZE DZIALAJA RUCHY NA OSI PO SYNCHGORNIZACJi
+	// by Y - UWAGA NIE WIEDZIEC CZEMU BEZ TEGO NIE ZAWSZE DZIALAJA RUCHY NA OSI PO SYNCHRONIZACJi
 	irq_data.md.value = MICROCONTROLLER_MODE;
 	hi_int_wait(INT_SINGLE_COMMAND, 2);
-}
+}  // end: finish_synchro()
 
 } // namespace common
 } // namespace edp
