@@ -68,11 +68,11 @@ public:
 private:
 	edp::common::irq_data_t irq_data;
 
-#ifndef __QNXNTO__
 	//! periodic timer
 	timer_t timerid;
+
+	//! periodic timer signal mask
 	sigset_t mask;
-#endif
 }; // koniec: class hardware_interface
 
 #ifdef __cplusplus

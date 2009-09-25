@@ -10,16 +10,13 @@
 
 
 #include <stdio.h>
-#include <math.h>
 #include <string.h>
-#include <iostream>
-#include <fstream>
 #include <stdlib.h>
 #include <signal.h>
 #include <time.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <semaphore.h>
+#include <stdint.h>
 #ifdef __QNXNTO__
 #include <process.h>
 #include <sys/neutrino.h>
@@ -27,6 +24,10 @@
 #include <hw/inout.h>
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
+#include <sys/mman.h>
+#endif
+#ifdef	linux
+#include <sys/io.h>
 #endif
 
 #include "lib/typedefs.h"
@@ -53,37 +54,72 @@ hardware_interface::hardware_interface ( effector &_master ) : common::hardware_
 	irq_data.md.is_power_on = true;
 	irq_data.md.is_robot_blocked = false;
 
-#ifdef __QNXNTO__
-    // nadanie odpowiednich uprawnien watkowi
-    // w celu umozliwienia komunikacji z magistral isa i obslugi przerwania
-    ThreadCtl (_NTO_TCTL_IO, NULL);
-
-    memset(&irq_data.event, 0, sizeof(irq_data.event));
-    irq_data.event.sigev_notify = SIGEV_INTR;
-
-    int irq_no;    // Numer przerwania sprzetowego
-
 	if(master.test_mode) {
+		// domyslnie robot jest zsynchronizowany
+		irq_data.md.is_synchronised = true;
 
-		irq_no = 0;    // Przerwanie od zegara o okre sie 1ms
+	    fprintf(stderr, "Blocking signal %d\n", SIGRTMIN);
+	    if (sigemptyset (&mask) == -1) {
+	    	perror("sigemptyset()");
+	    }
+	    if (sigaddset (&mask, SIGRTMIN) == -1) {
+	    	perror("sigaddset()");
+	    }
+
+	    /* Create the timer */
+	    struct sigevent sev;
+	    sev.sigev_notify = SIGEV_SIGNAL;
+	    sev.sigev_signo = SIGRTMIN;
+	    sev.sigev_value.sival_ptr = &timerid;
+	    if (timer_create (CLOCK_REALTIME, &sev, &timerid) == -1) {
+	    	perror("timer_create()");
+	    }
+
+	    /* Start the timer */
+	    struct itimerspec its;
+	    its.it_value.tv_sec = 0;
+	    its.it_value.tv_nsec = 1000000; // 1kHz
+	    its.it_interval.tv_sec = its.it_value.tv_sec;
+	    its.it_interval.tv_nsec = its.it_value.tv_nsec;
+
+	    if (timer_settime (timerid, 0, &its, NULL) == -1) {
+	    	perror("timer_settime()");
+	    }
 	} else {
-		irq_no = IRQ_REAL;    // Numer przerwania sprzetowego od karty ISA
-	}
+		// domyslnie robot nie jest zsynchronizowany
+		irq_data.md.is_synchronised = false;
 
-	// inicjacja wystawiania przerwan
-	if(master.test_mode==0)
-	{
+#ifdef __QNXNTO__
+		// by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi
+		// 	w celu umozliwienia komunikacji z magistral isa i obslugi przerwania
+		ThreadCtl (_NTO_TCTL_IO, NULL);
+
+		if (mmap_device_io(0xC, SERVO_COMMAND1_ADR) == MAP_DEVICE_FAILED) {
+			perror("mmap_device_io");
+		}
+
+		if (mmap_device_io(1, ADR_OF_SERVO_PTR) == MAP_DEVICE_FAILED) {
+			perror("mmap_device_io");
+		}
+
+		memset(&irq_data.event, 0, sizeof(irq_data.event));// by y&w
+		irq_data.event.sigev_notify = SIGEV_INTR;// by y&w
+#endif
+
+		irq_data.md.interrupt_mode=INT_EMPTY;
+
 		// konieczne dla skasowania przyczyny przerwania
 		out8(ADR_OF_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR);
 		in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
 		in16(SERVO_REPLY_INT_ADR);
-	}
 
-
-	if ( (int_id =InterruptAttach (irq_no, int_handler, (void *) &irq_data, sizeof(irq_data), 0)) == -1)
-	{
-		// Obsluga bledu
-		perror( "Unable to attach interrupt handler: ");
+#ifdef __QNXNTO__
+		int irq_no = IRQ_REAL;   // Numer przerwania sprzetowego od karty ISA
+		if ((int_id = InterruptAttach (irq_no, int_handler, (void *) &irq_data, sizeof(irq_data), 0)) == -1)
+		{
+			perror("Unable to attach interrupt handler");
+		}
+#endif
 	}
 
 	// oczekiwanie na przerwanie
@@ -100,42 +136,13 @@ hardware_interface::hardware_interface ( effector &_master ) : common::hardware_
 			out16(SERVO_COMMAND1_ADR, START_CLOCK_INTERRUPTS);
 		}
 	}
-#else
-    fprintf(stderr, "Blocking signal %d\n", SIGRTMIN);
-    if (sigemptyset (&mask) == -1) {
-    	perror("sigemptyset()");
-    }
-    if (sigaddset (&mask, SIGRTMIN) == -1) {
-    	perror("sigaddset()");
-    }
-
-    /* Create the timer */
-    struct sigevent sev;
-    sev.sigev_notify = SIGEV_SIGNAL;
-    sev.sigev_signo = SIGRTMIN;
-    sev.sigev_value.sival_ptr = &timerid;
-    if (timer_create (CLOCK_REALTIME, &sev, &timerid) == -1) {
-    	perror("timer_create()");
-    }
-
-    /* Start the timer */
-    struct itimerspec its;
-    its.it_value.tv_sec = 0;
-    its.it_value.tv_nsec = 1000000; // 1kHz
-    its.it_interval.tv_sec = its.it_value.tv_sec;
-    its.it_interval.tv_nsec = its.it_value.tv_nsec;
-
-    if (timer_settime (timerid, 0, &its, NULL) == -1) {
-    	perror("timer_settime()");
-    }
-#endif
 
 	// robot conveyor jest domyslnie zsynchronizowany
 	master.controller_state_edp_buf.is_synchronised = irq_data.md.is_synchronised = true;
 
 	// Zakaz pracy recznej we wszystkich osiach
 
-	for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++ )
+	for (int i = 0; i < master.number_of_servos; i++ )
 	{
 		robot_status[i].adr_offset_plus_0 = 0;
 		robot_status[i].adr_offset_plus_2 = 0;
@@ -176,23 +183,26 @@ hardware_interface::hardware_interface ( effector &_master ) : common::hardware_
 // ------------------------------------------------------------------------
 hardware_interface::~hardware_interface ( void )    // destruktor
 {
-#ifdef __QNXNTO__
 	if(master.test_mode==0)
 	{
 		reset_counters();
-		// Zezwolenie na prace reczna
 
-		irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)CONVEYOR_SERVO_NR;
-		irq_data.md.register_adress=SERVO_COMMAND1_ADR;
-		irq_data.md.value=ALLOW_MANUAL_MODE;
-		hi_int_wait(INT_SINGLE_COMMAND, 2);
+		// Zezwolenie na prace reczna
+		for (int i = 0; i < master.number_of_servos; i++ )
+		{
+			irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)CONVEYOR_SERVO_NR;
+			irq_data.md.register_adress=SERVO_COMMAND1_ADR;
+			irq_data.md.value=ALLOW_MANUAL_MODE;
+			hi_int_wait(INT_SINGLE_COMMAND, 2);
+		}
+
+		// TODO: InterruptDetach(), munmap_device_io()
+	} else {
+		/* delete interval timer */
+		if(timer_delete(timerid) == -1) {
+			perror("timer_delete()");
+		}
 	}
-#else
-    /* delete interval timer */
-    if(timer_delete(&timerid) == -1) {
-    	perror("timer_delete()");
-    }
-#endif
 } // end: hardware_interface::~hardware_interface()
 // ------------------------------------------------------------------------
 
@@ -205,7 +215,7 @@ uint64_t hardware_interface::read_write_hardware ( void )
 	// wypelnienia PWM
 
 	// zapis wartosci zadanych
-	for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++ )
+	for (int i = 0; i < master.number_of_servos; i++ )
 	{
 		irq_data.md.robot_control[i].adr_offset_plus_0 = robot_control[i].adr_offset_plus_0;
 	}
@@ -218,7 +228,7 @@ uint64_t hardware_interface::read_write_hardware ( void )
 		return irq_data.md.hardware_error;
 	}
 
-	for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++ ) {
+	for (int i = 0; i < master.number_of_servos; i++ ) {
 
 		// przepisanie wartosci pradu
 		meassured_current[i] = (irq_data.md.robot_status[i].adr_offset_plus_2 & 0xFF00)>>8;
@@ -241,7 +251,7 @@ uint64_t hardware_interface::read_write_hardware ( void )
 void hardware_interface::reset_counters ( void )
 {
 
-	for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++ )
+	for (int i = 0; i < master.number_of_servos; i++ )
 	{
 
 		current_absolute_position[i] =   0;
@@ -269,7 +279,7 @@ void hardware_interface::reset_counters ( void )
 	// Dwukrotny odczyt polozenia dla wyzerowania przyrostu wynikajacego z pierwszego
 
 	// wyzerowanie wypelnienia
-	for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++ )
+	for (int i = 0; i < master.number_of_servos; i++ )
 	{
 		robot_control[i].adr_offset_plus_0 = 0x0200;
 	} // end: for
@@ -295,7 +305,7 @@ bool hardware_interface::is_hardware_error ( void)
 	// oczekiwanie na przerwanie
 	hi_int_wait(INT_SINGLE_COMMAND, 0);
 
-	for (int i = 0; i < CONVEYOR_NUM_OF_SERVOS; i++ )
+	for (int i = 0; i < master.number_of_servos; i++ )
 	{
 		uint16_t MASK = 0x7E00;
 		if ( (irq_data.md.robot_status[i].adr_offset_plus_0 ^ 0x6000) & MASK )
@@ -313,6 +323,7 @@ bool hardware_interface::is_hardware_error ( void)
 
 int hardware_interface::hi_int_wait (int inter_mode, int lag)
 {
+	if(master.test_mode == 0) {
 #ifdef __QNXNTO__
 	const uint64_t int_timeout = HI_RYDZ_INTR_TIMEOUT_HIGH;
 	struct sigevent tim_event;
@@ -351,14 +362,17 @@ int hardware_interface::hi_int_wait (int inter_mode, int lag)
 
 	return iw_ret;
 #else
-    int sig;
-    int s = sigwait(&mask, &sig);
-    if (s != 0) {
-    	perror("sigwait()");
-    	return -1;
-    }
-    return 0;
+	return -1;
 #endif
+	} else {
+		int sig;
+		int s = sigwait(&mask, &sig);
+		if (s != 0) {
+			perror("sigwait()");
+			return -1;
+		}
+		return 0;
+	}
 }
 
 } // namespace conveyor

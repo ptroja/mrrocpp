@@ -82,36 +82,26 @@ int main(int argc, char *argv[], char **arge) {
 #if defined(PROCESS_SPAWN_RSH)
 		signal(SIGINT, SIG_IGN);
 #endif
-#ifndef	__QNXNTO__
-	    /* Block timer signal for test mode timer in Linux*/
-	    fprintf(stderr, "Blocking signal %d\n", SIGRTMIN);
-	    sigset_t mask;
-	    if (sigemptyset (&mask) == -1) {
-	    	perror("sigemptyset()");
-	    }
-	    if (sigaddset (&mask, SIGRTMIN) == -1) {
-	    	perror("sigaddset()");
-	    }
-	    if (sigprocmask (SIG_BLOCK, &mask, NULL)) {
-	    	perror("sigprocmask()");
-	    }
-#endif /* __QNXNTO__ */
 
 		// odczytanie konfiguracji
 		lib::configurator _config = lib::configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
 
-		/* Lokalizacja procesu wywietlania komunikatow SR */
-		/*
-		 if ((msg = new lib::sr_edp(lib::EDP, config->return_string_value("resourceman_attach_point"),
-		 config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]"))) == NULL) {
-		 perror ( "Unable to locate SR ");
-		 throw System_error();
-		 }
-		 */
-		//	printf("przed\n");
-		//		delay(10000);
-		//			printf("za\n");
 		edp::common::master = edp::common::return_created_efector(_config);
+
+		if(edp::common::master->test_mode) {
+		    /* Block timer signal from test mode timer for all threads */
+		    fprintf(stderr, "Blocking signal %d\n", SIGRTMIN);
+		    sigset_t mask;
+		    if (sigemptyset (&mask) == -1) {
+		    	perror("sigemptyset()");
+		    }
+		    if (sigaddset (&mask, SIGRTMIN) == -1) {
+		    	perror("sigaddset()");
+		    }
+		    if (sigprocmask (SIG_BLOCK, &mask, NULL)) {
+		    	perror("sigprocmask()");
+		    }
+		}
 
 		edp::common::master->initialize();
 

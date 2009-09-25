@@ -44,11 +44,12 @@ namespace common {
 
 /*--------------------------------------------------------------------------*/
 manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name) :
-        effector (_config, l_robot_name), manager()
+        effector (_config, l_robot_name), manager(),
+        number_of_servos(-1),
 #ifndef __QNXNTO__
-        , servo_command_rdy(false), sg_reply_rdy(false)
+        servo_command_rdy(false), sg_reply_rdy(false),
 #endif
-        , step_counter(0)
+        step_counter(0)
 {
 	pthread_mutex_init(&edp_irp6s_effector_mutex, NULL);
 

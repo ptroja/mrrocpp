@@ -118,6 +118,11 @@ extern uint64_t ClockCycles(void);
 
 #define flushall(x)	(void)0
 
+#define	out8(port,val)	outbx((val),(port))
+#define	out16(port,val)	outw((val),(port))
+#define	in8(port)		inb(port)
+#define	in16(port)		inw(port)
+
 #endif /* ! __QNXNTO__ */
 
 typedef struct _pulse msg_header_t;
