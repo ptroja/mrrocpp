@@ -57,9 +57,6 @@ public:
 
 	void start_synchro(int drive_number);
 
-	// synchronizacja automatyczna z wykrorzystaniem lm629
-	int synchronise_via_lm629(void);
-
 	// oczekiwanie na przerwanie - tryb obslugi i delay(lag) po odebraniu przerwania
 	int hi_int_wait(int inter_mode, int lag);
 

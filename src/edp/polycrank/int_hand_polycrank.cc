@@ -45,10 +45,6 @@ namespace polycrank {
 
 // Zmienne globalne do komunikacji z procedura obslugi przerwan
 
-extern struct sigevent event; // by y&w
-extern volatile common::motor_data md; // Aktualne dane we/wy (obsluga przerwania)
-
-
 
 // ------------------------------------------------------------------------
 
@@ -57,6 +53,11 @@ extern volatile common::motor_data md; // Aktualne dane we/wy (obsluga przerwani
 const struct sigevent *
 int_handler (void *arg, int int_id)
 {
+	common::irq_data_t *irq_data = (common::irq_data_t *) arg;
+	common::motor_data & md = irq_data->md;
+	struct sigevent & event = irq_data->event;
+
+
 	common::status_of_a_dof robot_status[POLYCRANK_NUM_OF_SERVOS];
 	short int low_word, high_word;
 	int i;
