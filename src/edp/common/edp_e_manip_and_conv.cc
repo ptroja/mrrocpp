@@ -1522,13 +1522,13 @@ void in_out_buffer::get_input (uint16_t *binary_in_value, uint8_t *analog_in_tab
     }
 
     /*	// ustawienie korzystanie z ukladu we-wy
-    	out8(ADR_OF_SERVO_PTR, IN_OUT_PTR);
+    	out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), IN_OUT_PTR);
 
     	// odczytanie wejsc
-    	// SERVO_REPLY_STATUS_ADR     0x210
-    	uint16_t read_analog = 0x00FF & in16(SERVO_REPLY_STATUS_ADR);
-    	// SERVO_REPLY_REG_1_ADR       0x218
-    	uint16_t read_binary = 0x00FF & in16(SERVO_REPLY_REG_1_ADR);*/
+    	// (SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)     0x210
+    	uint16_t read_analog = 0x00FF & in16((SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET));
+    	// (SERVO_REPLY_REG_1_ADR + ISA_CARD_OFFSET)       0x218
+    	uint16_t read_binary = 0x00FF & in16((SERVO_REPLY_REG_1_ADR + ISA_CARD_OFFSET));*/
 
 #ifdef __QNXNTO__
     InterruptUnlock

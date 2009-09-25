@@ -46,9 +46,9 @@ namespace irp6ot {
 // ------------------------------------------------------------------------
 hardware_interface::hardware_interface (common::manip_and_conv_effector &_master, int _hi_irq_real,
 		unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high,
-		unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr)
+		unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset)
 		: common::hardware_interface(_master, _hi_irq_real, _hi_intr_freq_divider,
-		_hi_intr_timeout_high, _hi_first_servo_ptr, _hi_intr_generator_servo_ptr)
+		_hi_intr_timeout_high, _hi_first_servo_ptr, _hi_intr_generator_servo_ptr, _hi_isa_card_offset)
 {
 	// tablica pradow maksymalnych d;a poszczegolnych osi
 	int max_current [IRP6_ON_TRACK_NUM_OF_SERVOS] = {
@@ -104,11 +104,11 @@ hardware_interface::hardware_interface (common::manip_and_conv_effector &_master
 		// 	w celu umozliwienia komunikacji z magistral isa i obslugi przerwania
 		ThreadCtl (_NTO_TCTL_IO, NULL);
 
-		if (mmap_device_io(0xC, SERVO_COMMAND1_ADR) == MAP_DEVICE_FAILED) {
+		if (mmap_device_io(0xC, (SERVO_COMMAND1_ADR + ISA_CARD_OFFSET)) == MAP_DEVICE_FAILED) {
 			perror("mmap_device_io");
 		}
 
-		if (mmap_device_io(1, ADR_OF_SERVO_PTR) == MAP_DEVICE_FAILED) {
+		if (mmap_device_io(1, (ADR_OF_SERVO_PTR + ISA_CARD_OFFSET)) == MAP_DEVICE_FAILED) {
 			perror("mmap_device_io");
 		}
 
@@ -119,9 +119,9 @@ hardware_interface::hardware_interface (common::manip_and_conv_effector &_master
 		irq_data.md.interrupt_mode=INT_EMPTY;
 
 		// konieczne dla skasowania przyczyny przerwania
-		out8(ADR_OF_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR);
-		in16(SERVO_REPLY_STATUS_ADR); // Odczyt stanu wylacznikow
-		in16(SERVO_REPLY_INT_ADR);
+		out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), INTERRUPT_GENERATOR_SERVO_PTR);
+		in16((SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
+		in16((SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 
 #ifdef __QNXNTO__
 		int irq_no = IRQ_REAL;   // Numer przerwania sprzetowego od karty ISA
@@ -140,10 +140,10 @@ hardware_interface::hardware_interface (common::manip_and_conv_effector &_master
 		{
 			// Ustawienie czestotliwosci przerwan
 			uint16_t int_freq = SET_INT_FREQUENCY | INT_FREC_DIVIDER;
-			out8(ADR_OF_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR);
-			out16(SERVO_COMMAND1_ADR, int_freq);
+			out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), INTERRUPT_GENERATOR_SERVO_PTR);
+			out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), int_freq);
 			delay(10);
-			out16(SERVO_COMMAND1_ADR, START_CLOCK_INTERRUPTS);
+			out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), START_CLOCK_INTERRUPTS);
 		}
 	}
 
@@ -163,12 +163,12 @@ hardware_interface::hardware_interface (common::manip_and_conv_effector &_master
 
 		if(master.test_mode==0) {
 			/*
-			out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (uint8_t)i);
-			out16(SERVO_COMMAND1_ADR,RESET_MANUAL_MODE); // Zerowanie ruchow recznych
-			out16(SERVO_COMMAND1_ADR, PROHIBIT_MANUAL_MODE); // Zabrania ruchow za pomoca przyciskow w szafie
+			out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
+			out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET),RESET_MANUAL_MODE); // Zerowanie ruchow recznych
+			out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), PROHIBIT_MANUAL_MODE); // Zabrania ruchow za pomoca przyciskow w szafie
 			*/
 			irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)i;
-			irq_data.md.register_adress=SERVO_COMMAND1_ADR;
+			irq_data.md.register_adress=(SERVO_COMMAND1_ADR + ISA_CARD_OFFSET);
 			irq_data.md.value=RESET_MANUAL_MODE;
 			hi_int_wait(INT_SINGLE_COMMAND, 2);
 			irq_data.md.value=PROHIBIT_MANUAL_MODE;
@@ -200,7 +200,7 @@ hardware_interface::~hardware_interface ( void )   // destruktor
 		for (int i = 0; i < master.number_of_servos; i++ )
 		{
 			irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)i;
-			irq_data.md.register_adress=SERVO_COMMAND1_ADR;
+			irq_data.md.register_adress=(SERVO_COMMAND1_ADR + ISA_CARD_OFFSET);
 			irq_data.md.value=ALLOW_MANUAL_MODE;
 			hi_int_wait(INT_SINGLE_COMMAND, 2);
 		}
@@ -273,7 +273,7 @@ void hardware_interface::reset_counters ( void )
 	for (int i = 0; i < master.number_of_servos; i++ )
 	{
 		irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)i;
-		irq_data.md.register_adress=SERVO_COMMAND1_ADR;
+		irq_data.md.register_adress=(SERVO_COMMAND1_ADR + ISA_CARD_OFFSET);
 		irq_data.md.value=MICROCONTROLLER_MODE;
 		hi_int_wait(INT_SINGLE_COMMAND, 2);
 		irq_data.md.value=STOP_MOTORS;
@@ -293,7 +293,7 @@ void hardware_interface::reset_counters ( void )
 		previous_absolute_position[i] = 0;
 		current_position_inc[i] = 0.0;
 
-		// 	in16(SERVO_REPLY_INT_ADR);
+		// 	in16((SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 
 	} // end: for
 
@@ -310,10 +310,10 @@ void hardware_interface::reset_counters ( void )
 	read_write_hardware();
 	read_write_hardware();
 	// Odczyt polozenia osi slowo 32 bitowe - negacja licznikow 16-bitowych
-	// out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR);
-	// out16(SERVO_COMMAND1_ADR, RESET_POSITION_COUNTER);
-	// robot_status[0].adr_offset_plus_4 = 0xFFFF ^ in16(SERVO_REPLY_POS_LOW_ADR); // Mlodsze slowo 16-bitowe
-	// robot_status[0].adr_offset_plus_6 = 0xFFFF ^ in16(SERVO_REPLY_POS_HIGH_ADR);// Starsze slowo 16-bitowe
+	// out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR);
+	// out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), RESET_POSITION_COUNTER);
+	// robot_status[0].adr_offset_plus_4 = 0xFFFF ^ in16((SERVO_REPLY_POS_LOW_ADR + ISA_CARD_OFFSET)); // Mlodsze slowo 16-bitowe
+	// robot_status[0].adr_offset_plus_6 = 0xFFFF ^ in16((SERVO_REPLY_POS_HIGH_ADR+ ISA_CARD_OFFSET));// Starsze slowo 16-bitowe
 	// printf("L=%x U=%x  \n",robot_status[0].adr_offset_plus_4, robot_status[0].adr_offset_plus_6);
 } // end: hardware_interface::reset_counters()
 // ------------------------------------------------------------------------
@@ -401,7 +401,7 @@ void hardware_interface::start_synchro (int drive_number)
 	trace_resolver_zero = true;
 	// Wlacz sledzenie zera rezolwera (synchronizacja robota)
 	irq_data.md.card_adress = FIRST_SERVO_PTR + (uint8_t) drive_number;
-	irq_data.md.register_adress = SERVO_COMMAND1_ADR;
+	irq_data.md.register_adress = (SERVO_COMMAND1_ADR + ISA_CARD_OFFSET);
 	irq_data.md.value = START_SYNCHRO;
 	hi_int_wait(INT_SINGLE_COMMAND, 2);
 }  // end: start_synchro()
@@ -412,7 +412,7 @@ void hardware_interface::finish_synchro (int drive_number)
 
 	// Zakonczyc sledzenie zera rezolwera i przejdz do trybu normalnej pracy
 	irq_data.md.card_adress = FIRST_SERVO_PTR + (uint8_t)drive_number;
-	irq_data.md.register_adress = SERVO_COMMAND1_ADR;
+	irq_data.md.register_adress = (SERVO_COMMAND1_ADR + ISA_CARD_OFFSET);
 	irq_data.md.value = FINISH_SYNCHRO;
 	hi_int_wait(INT_SINGLE_COMMAND, 2);
 

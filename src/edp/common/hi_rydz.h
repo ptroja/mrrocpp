@@ -85,15 +85,15 @@ typedef struct {
 #define INT_CHECK_STATE 3 // do odczytu stanu z adresu 0x220
 
 // ISA_CARD_OFFSET needs to be defined in hi_local.h
-#define ADR_OF_SERVO_PTR          (0x305 + (ISA_CARD_OFFSET))
-#define SERVO_COMMAND1_ADR        (0x200 + (ISA_CARD_OFFSET))
-#define SERVO_COMMAND2_ADR        (0x202 + (ISA_CARD_OFFSET))
-#define SERVO_REPLY_STATUS_ADR    (0x200 + (ISA_CARD_OFFSET))
-#define SERVO_REPLY_INT_ADR       (0x202 + (ISA_CARD_OFFSET))
-#define SERVO_REPLY_POS_LOW_ADR   (0x204 + (ISA_CARD_OFFSET))
-#define SERVO_REPLY_POS_HIGH_ADR  (0x206 + (ISA_CARD_OFFSET))
-#define SERVO_REPLY_REG_1_ADR     (0x208 + (ISA_CARD_OFFSET))
-#define SERVO_REPLY_REG_2_ADR     (0x20A + (ISA_CARD_OFFSET))
+#define ADR_OF_SERVO_PTR          (0x305)
+#define SERVO_COMMAND1_ADR        (0x200)
+#define SERVO_COMMAND2_ADR        (0x202)
+#define SERVO_REPLY_STATUS_ADR    (0x200)
+#define SERVO_REPLY_INT_ADR       (0x202)
+#define SERVO_REPLY_POS_LOW_ADR   (0x204)
+#define SERVO_REPLY_POS_HIGH_ADR  (0x206)
+#define SERVO_REPLY_REG_1_ADR     (0x208)
+#define SERVO_REPLY_REG_2_ADR     (0x20A)
 
 class hardware_interface
 {
@@ -116,6 +116,14 @@ protected:
     unsigned int hi_intr_timeout_high;
     unsigned int hi_first_servo_ptr;
     unsigned int hi_intr_generator_servo_ptr;
+    unsigned int hi_isa_card_offset;
+
+    irq_data_t irq_data;
+	//! periodic timer
+	timer_t timerid;
+
+	//! periodic timer signal mask
+	sigset_t mask;
 
 
 public:
@@ -126,7 +134,7 @@ public:
 	//hardware_interface();    // Konstruktor
     hardware_interface (manip_and_conv_effector &_master, int _hi_irq_real,
     		unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high,
-    		unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr);    // Konstruktor
+    		unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset);    // Konstruktor
 
     virtual ~hardware_interface( void );   // Destruktor
     virtual bool is_hardware_error ( void); // Sprawdzenie czy wystapil blad sprzetowy
@@ -156,6 +164,16 @@ public:
 
 }; // koniec: class hardware_interface
 
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+    const struct sigevent *
+                int_handler (void *arg, int id);
+#ifdef __cplusplus
+}
+#endif
 
 } // namespace common
 } // namespace edp
