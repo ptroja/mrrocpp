@@ -48,7 +48,10 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 
 class hardware_interface: public common::hardware_interface {
 public:
-	hardware_interface(effector &_master); // Konstruktor
+    hardware_interface (common::manip_and_conv_effector &_master, int _hi_irq_real,
+    		unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high,
+    		unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr);    // Konstruktor
+
 	~hardware_interface(void); // Destruktor
 	bool is_hardware_error(void); // Sprawdzenie czy wystapil blad sprzetowy
 

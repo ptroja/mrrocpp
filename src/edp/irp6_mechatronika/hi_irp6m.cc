@@ -43,7 +43,11 @@ namespace edp {
 namespace irp6m {
 
 // ------------------------------------------------------------------------
-hardware_interface::hardware_interface (effector &_master)  : common::hardware_interface(_master)
+hardware_interface::hardware_interface (common::manip_and_conv_effector &_master, int _hi_irq_real,
+		unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high,
+		unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr)
+		: common::hardware_interface(_master, _hi_irq_real, _hi_intr_freq_divider,
+		_hi_intr_timeout_high, _hi_first_servo_ptr, _hi_intr_generator_servo_ptr)
 {
 	// tablica pradow maksymalnych d;a poszczegolnych osi
 	int max_current [IRP6_MECHATRONIKA_NUM_OF_SERVOS] = {

@@ -51,7 +51,7 @@ uint8_t servo_buffer::Move_a_step (void)
 servo_buffer::servo_buffer (effector &_master) : common::servo_buffer(_master), master(_master)
 {
 
-	hi = new hardware_interface(_master);
+	hi = new hardware_interface(_master, IRQ_REAL, INT_FREC_DIVIDER, HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR);
 
 	// utworzenie tablicy regulatorow
 	// Serwomechanizm 1

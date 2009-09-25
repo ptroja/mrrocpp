@@ -20,8 +20,12 @@ namespace edp {
 namespace common {
 
 // Konstruktor
-hardware_interface::hardware_interface( manip_and_conv_effector &_master )
-        : master(_master)
+hardware_interface::hardware_interface (manip_and_conv_effector &_master, int _hi_irq_real,
+		unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high,
+		unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr)
+        : master(_master), hi_irq_real(_hi_irq_real), hi_intr_freq_divider(_hi_intr_freq_divider),
+        hi_intr_timeout_high (_hi_intr_timeout_high), hi_first_servo_ptr(_hi_first_servo_ptr),
+        hi_intr_generator_servo_ptr(_hi_intr_generator_servo_ptr)
 {}
 
 // Destruktor
