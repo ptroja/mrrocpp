@@ -133,7 +133,7 @@ hardware_interface::hardware_interface (effector &_master)  : common::hardware_i
 			out16(SERVO_COMMAND1_ADR, START_CLOCK_INTERRUPTS);
 		}
 	}
-	
+
 	// robot conveyor jest zawsze zsynchronizowany
 	master.controller_state_edp_buf.is_synchronised = irq_data.md.is_synchronised = true;
 
@@ -155,7 +155,7 @@ hardware_interface::hardware_interface (effector &_master)  : common::hardware_i
 		/*out8(ADR_OF_SERVO_PTR, FIRST_SERVO_PTR + (uint8_t)i);
 		out16(SERVO_COMMAND1_ADR,RESET_MANUAL_MODE); // Zerowanie ruchow recznych
 		out16(SERVO_COMMAND1_ADR, PROHIBIT_MANUAL_MODE); // Zabrania ruchow za pomoca przyciskow w szafie*/
-		irq_data.md.card_adress=FIRST_SERVO_PTR + (uint8_t)CONVEYOR_SERVO_NR;
+		irq_data.md.card_adress=FIRST_SERVO_PTR;
 		irq_data.md.register_adress=SERVO_COMMAND1_ADR;
 		irq_data.md.value=RESET_MANUAL_MODE;
 		hi_int_wait(INT_SINGLE_COMMAND, 2);

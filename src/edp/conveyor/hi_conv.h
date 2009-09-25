@@ -29,8 +29,6 @@ const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwa
 #define CONVEYOR_AXIS_1_MAX_CURRENT 0x2460
 // 13,7 j na A
 
-#define CONVEYOR_SERVO_NR 0 // by Y numer serwa robota CONVEYOR w szafie (numeracja od 0)
-
 // ------------------------------------------------------------------------
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------

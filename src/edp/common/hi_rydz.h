@@ -74,7 +74,6 @@ typedef struct {
 #define SET_MAX_CURRENT                  0x2400 // Ustaw prad maksymalny
 #define START_CLOCK_INTERRUPTS           0x5000 // Wlacz przerwania zegarowe
 #define STOP_CLOCK_INTERRUPTS            0x5400 // Wylacz przerwania zegarowe
-#define LM629_VIA_MICROCONTROLLER_MODE   0x4C01
 #define MICROCONTROLLER_MODE             0x4C00
 #define ZERO_ORDER                       0x0000
 #define STOP_MOTORS                      0x0200 // Zatrzymanie silnikow (W.S. ???)
