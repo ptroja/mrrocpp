@@ -124,6 +124,24 @@ hardware_interface::hardware_interface (  effector &_master )  : common::hardwar
 #endif
 	}
 
+
+	// oczekiwanie na przerwanie
+	if (hi_int_wait(INT_EMPTY, 0)==-1) // jesli sie nie przyjdzie na czas
+	{
+		// inicjacja wystawiania przerwan
+		if(master.test_mode==0)
+		{
+			// Ustawienie czestotliwosci przerwan
+			uint16_t int_freq = SET_INT_FREQUENCY | INT_FREC_DIVIDER;
+			out8(ADR_OF_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR);
+			out16(SERVO_COMMAND1_ADR, int_freq);
+			delay(10);
+			out16(SERVO_COMMAND1_ADR, START_CLOCK_INTERRUPTS);
+
+		}
+	}
+
+
 	master.controller_state_edp_buf.is_synchronised = irq_data.md.is_synchronised;
 
 	// Zakaz pracy recznej we wszystkich osiach
