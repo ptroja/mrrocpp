@@ -118,7 +118,7 @@ extern uint64_t ClockCycles(void);
 
 #define flushall(x)	(void)0
 
-#define	out8(port,val)	outbx((val),(port))
+#define	out8(port,val)	outb((val),(port))
 #define	out16(port,val)	outw((val),(port))
 #define	in8(port)		inb(port)
 #define	in16(port)		inw(port)
