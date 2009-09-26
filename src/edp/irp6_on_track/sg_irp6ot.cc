@@ -86,7 +86,16 @@ uint8_t servo_buffer::Move_a_step (void)
 servo_buffer::servo_buffer (effector &_master ) : common::servo_buffer(_master), master(_master)
 {
 
-	hi = new hardware_interface(_master, IRQ_REAL, INT_FREC_DIVIDER, HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET);
+	// tablica pradow maksymalnych d;a poszczegolnych osi
+	int max_current [IRP6_ON_TRACK_NUM_OF_SERVOS] = {
+			IRP6_ON_TRACK_AXIS_1_MAX_CURRENT, IRP6_ON_TRACK_AXIS_2_MAX_CURRENT,
+			IRP6_ON_TRACK_AXIS_3_MAX_CURRENT, IRP6_ON_TRACK_AXIS_4_MAX_CURRENT,
+			IRP6_ON_TRACK_AXIS_5_MAX_CURRENT, IRP6_ON_TRACK_AXIS_6_MAX_CURRENT,
+			IRP6_ON_TRACK_AXIS_7_MAX_CURRENT, IRP6_ON_TRACK_AXIS_8_MAX_CURRENT
+	};
+
+	hi = new hardware_interface(_master, IRQ_REAL, INT_FREC_DIVIDER, HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR,
+			INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET, max_current);
 
 	// utworzenie tablicy regulatorow
 	// Serwomechanizm 1

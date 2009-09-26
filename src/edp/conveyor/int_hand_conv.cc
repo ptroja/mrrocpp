@@ -53,6 +53,7 @@ int_handler (void *arg, int int_id)
 	short int low_word, high_word;
 
 	md.hardware_error = (uint64_t) lib::ALL_RIGHT; // Nie ma bledow sprzetowych
+	md.is_synchronised = true; // conveyor jest stale zsynchronizowany
 
 	if(common::master->test_mode)
 	{
