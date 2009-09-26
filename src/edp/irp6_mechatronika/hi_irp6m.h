@@ -52,27 +52,6 @@ public:
     		unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high,
     		unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset);    // Konstruktor
 
-	~hardware_interface(void); // Destruktor
-	bool is_hardware_error(void); // Sprawdzenie czy wystapil blad sprzetowy
-
-	uint64_t read_write_hardware(void); // Obsluga sprzetu
-	void reset_counters(void); // Zerowanie licznikow polozenia
-
-	void start_synchro(int drive_number);
-
-	// oczekiwanie na przerwanie - tryb obslugi i delay(lag) po odebraniu przerwania
-	int hi_int_wait(int inter_mode, int lag);
-
-	void finish_synchro(int drive_number);
-
-private:
-	edp::common::irq_data_t irq_data;
-
-	//! periodic timer
-	timer_t timerid;
-
-	//! periodic timer signal mask
-	sigset_t mask;
 }; // koniec: class hardware_interface
 
 #ifdef __cplusplus
