@@ -141,10 +141,6 @@ hardware_interface::hardware_interface (manip_and_conv_effector &_master, int _h
 		}
 	}
 
-	master.controller_state_edp_buf.is_synchronised = irq_data.md.is_synchronised;
-
-	// Zakaz pracy recznej we wszystkich osiach
-
 	for (int i = 0; i < master.number_of_servos; i++ )
 	{
 		robot_status[i].adr_offset_plus_0 = 0;
@@ -155,30 +151,7 @@ hardware_interface::hardware_interface (manip_and_conv_effector &_master, int _h
 		robot_status[i].adr_offset_plus_a = 0;
 		meassured_current[i] = 0;
 
-		if(master.test_mode==0) {
-			/*
-			out8((ADR_OF_SERVO_PTR + hi_isa_card_offset), hi_first_servo_ptr + (uint8_t)i);
-			out16((SERVO_COMMAND1_ADR + hi_isa_card_offset),RESET_MANUAL_MODE); // Zerowanie ruchow recznych
-			out16((SERVO_COMMAND1_ADR + hi_isa_card_offset), PROHIBIT_MANUAL_MODE); // Zabrania ruchow za pomoca przyciskow w szafie
-			*/
-			irq_data.md.card_adress=hi_first_servo_ptr + (uint8_t)i;
-			irq_data.md.register_adress=(SERVO_COMMAND1_ADR + hi_isa_card_offset);
-			irq_data.md.value=RESET_MANUAL_MODE;
-			hi_int_wait(INT_SINGLE_COMMAND, 2);
-			irq_data.md.value=PROHIBIT_MANUAL_MODE;
-			hi_int_wait(INT_SINGLE_COMMAND, 2);
-
-			hi_int_wait(INT_SINGLE_COMMAND, 2);
-		}
 	}
-
-	if(master.test_mode==0) {
-		// Zerowanie licznikow polozenia wszystkich osi
-		reset_counters();
-		is_hardware_error();
-	}
-
-	first = true; // Pierwszy krok
 
 }
 

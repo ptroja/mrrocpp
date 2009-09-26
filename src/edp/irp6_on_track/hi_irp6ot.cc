@@ -64,17 +64,9 @@ hardware_interface::hardware_interface (common::manip_and_conv_effector &_master
 
 	// Zakaz pracy recznej we wszystkich osiach
 
-	for (int i = 0; i < master.number_of_servos; i++ )
-	{
-		robot_status[i].adr_offset_plus_0 = 0;
-		robot_status[i].adr_offset_plus_2 = 0;
-		robot_status[i].adr_offset_plus_4 = 0;
-		robot_status[i].adr_offset_plus_6 = 0;
-		robot_status[i].adr_offset_plus_8 = 0;
-		robot_status[i].adr_offset_plus_a = 0;
-		meassured_current[i] = 0;
-
-		if(master.test_mode==0) {
+	if(master.test_mode==0) {
+		for (int i = 0; i < master.number_of_servos; i++ )
+		{
 			/*
 			out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
 			out16((SERVO_COMMAND1_ADR + ISA_CARD_OFFSET),RESET_MANUAL_MODE); // Zerowanie ruchow recznych
@@ -88,10 +80,8 @@ hardware_interface::hardware_interface (common::manip_and_conv_effector &_master
 			hi_int_wait(INT_SINGLE_COMMAND, 2);
 			irq_data.md.value=max_current[i];
 			hi_int_wait(INT_SINGLE_COMMAND, 2);
-		}
-	}
 
-	if(master.test_mode==0) {
+		}
 		// Zerowanie licznikow polozenia wszystkich osi
 		reset_counters();
 		is_hardware_error();
