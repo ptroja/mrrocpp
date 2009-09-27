@@ -57,6 +57,7 @@ hardware_interface::hardware_interface (manip_and_conv_effector &_master, int _h
 
 	irq_data.md.is_power_on = true;
 	irq_data.md.is_robot_blocked = false;
+	irq_data.md.hardware_error = 0;
 
 	if(master.test_mode) {
 		// domyslnie robot jest zsynchronizowany
