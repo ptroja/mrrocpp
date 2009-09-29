@@ -1,36 +1,9 @@
 // ------------------------------------------------------------------------
 //							hi_rydz.cc
 //
-// Funkcje do obslugi sprzetu (serwomechanizmow cyfrowych) dla robota irp6 polycrank
+// Funkcje do obslugi sprzetu (serwomechanizmow cyfrowych) dla robota polycrank
 //
-// Ostatnia modyfikacja: styczen 2005
-
 // ------------------------------------------------------------------------
-
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <time.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <stdint.h>
-#ifdef __QNXNTO__
-#include <process.h>
-#include <sys/neutrino.h>
-#include <sys/sched.h>
-#include <hw/inout.h>
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
-#include <sys/mman.h>
-#endif
-#ifdef	linux
-#include <sys/io.h>
-#endif
-
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
 
 // Klasa edp_irp6m_effector.
 #include "edp/polycrank/edp_e_polycrank.h"

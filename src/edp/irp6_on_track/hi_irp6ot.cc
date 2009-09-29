@@ -3,39 +3,12 @@
 //
 // Funkcje do obslugi sprzetu (serwomechanizmow cyfrowych) dla robota irp6 on_track
 //
-// Ostatnia modyfikacja: styczen 2005
 // cala komunikacja ze sprzetem przerzucona do oblsugi przerwania ze wzgledu na drugi proces korzystajacy z tego samego
 // przerwania - tasmociag
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <time.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <stdint.h>
-#ifdef __QNXNTO__
-#include <process.h>
-#include <sys/neutrino.h>
-#include <sys/sched.h>
-#include <hw/inout.h>
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
-#include <sys/mman.h>
-#endif
-#ifdef	linux
-#include <sys/io.h>
-#endif
-
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-
 // Klasa edp_irp6ot_effector.
 #include "edp/irp6_on_track/edp_irp6ot_effector.h"
-
 // Klasa hardware_interface.
 #include "edp/irp6_on_track/hi_irp6ot.h"
 
