@@ -29,7 +29,6 @@ y_simple::y_simple(common::task::task& _ecp_task, int step) :
 {
 	step_no = step;
 }
-;
 
 bool y_simple::first_step()
 {
@@ -83,7 +82,6 @@ bool y_simple::first_step()
 
 	return true;
 }
-; // end: bool y_simple_generator::first_step (map <lib::SENSOR_ENUM, lib::sensor*>& sensor_m, robot& the_robot )
 //--------------------------------------------------------------------------
 
 
@@ -152,7 +150,6 @@ bool y_simple::next_step()
 	//	if(++run_counter==1000) return false;	
 	return true;
 }
-; // end:  y_simple_generator::next_step (, robot& the_robot )
 
 }
 } // namespace irp6p
