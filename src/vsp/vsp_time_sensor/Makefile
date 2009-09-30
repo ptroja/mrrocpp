@@ -4,9 +4,9 @@
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
 ifeq ($(BUILD_TARGET), linux)
-  VSPOBJS = vsp_m_int_srr.o
+  VSPOBJS = ../common/vsp_m_int_srr.o
 else
-  VSPOBJS = vsp_m_int.o
+  VSPOBJS = ../common/vsp_m_int.o
 endif
 VSPOBJS+= $(OBJECTS) $(SHOBJ)
 BINARIES = vsp_time_sensor
@@ -15,10 +15,7 @@ BINARIES = vsp_time_sensor
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
-SHOBJ = $(LIBDIR)/libmrrocpp.a vsp_sensor.o
-# search path for make, if you want create dependencies from files from other directory than ".", 
-# then place that directory in the VPATH variable
-VPATH = $(LIBDIR) ../common
+SHOBJ = $(LIBDIR)/libmrrocpp.a ../common/vsp_sensor.o
 #======================================================#	
 .PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#

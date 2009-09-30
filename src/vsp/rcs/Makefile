@@ -10,9 +10,6 @@ HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
 SHOBJ = $(LIBDIR)/libmrrocpp.a vsp_sensor.o
-# search path for make, if you want create dependencies from files from other directory than ".", 
-# then place that directory in the VPATH variable
-VPATH = $(LIBDIR) ../common
 #======================================================#	
 .PHONY: all clean depend
 #------------------------------------------------- Build rules -------------------------------------------------------#

@@ -5,17 +5,14 @@ RCS_SRCS=${wildcard ../rcs/General/*.cc} ${wildcard ../rcs/Combinatorials/*.cc} 
 RCS_OBJS = ${patsubst %.cc,%.o,${RCS_SRCS}}
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-VSPOBJS = vsp_m_int_nw.o $(OBJECTS) $(SHOBJ) ${RCS_OBJS}
+VSPOBJS = ../common/vsp_m_int_nw.o $(OBJECTS) $(SHOBJ) ${RCS_OBJS}
 BINARIES = vsp_rcs_korf
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
-SHOBJ = $(LIBDIR)/libmrrocpp.a vsp_sensor.o
-# search path for make, if you want create dependencies from files from other directory than ".", 
-# then place that directory in the VPATH variable
-VPATH = $(LIBDIR) ../common
+SHOBJ = $(LIBDIR)/libmrrocpp.a ../common/vsp_sensor.o
 #======================================================#	
 .PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#

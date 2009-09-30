@@ -3,17 +3,14 @@
 # Tworzy	: PP VSP for QNX 6.2.1 (interaktywna wspolpraca z panelem programowania)
 SOURCES = ${wildcard *.cc}
 OBJECTS = ${patsubst %.cc,%.o,${SOURCES}}
-VSPOBJS = vsp_m_int_nw.o $(OBJECTS) $(SHOBJ) 
+VSPOBJS = ../common/vsp_m_int_nw.o $(OBJECTS) $(SHOBJ) 
 BINARIES = vsp_pp
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
-SHOBJ = $(LIBDIR)/libmrrocpp.a vsp_sensor.o
-# search path for make, if you want create dependencies from files from other directory than ".", 
-# then place that directory in the VPATH variable
-VPATH = $(LIBDIR) ../common
+SHOBJ = $(LIBDIR)/libmrrocpp.a ../common/vsp_sensor.o
 #======================================================#	
 .PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#
