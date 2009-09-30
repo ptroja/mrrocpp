@@ -21,6 +21,9 @@
 #include "ecp/common/ecp_g_force.h"
 #include "ecp/common/ecp_g_eihcalibration.h"
 
+#define POSTUMENT 0
+#define TRACK 1
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -28,7 +31,7 @@ namespace task {
 
 class eihcalibration: public common::task::task {
 	std::string smooth_path;
-	int delay_ms;
+	int delay_ms, robot, M;
 	double A, C, D, E;
 
 	protected:
