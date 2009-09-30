@@ -78,7 +78,7 @@ xyz_euler_zyz_tool window
                     <property name="response_id">0</property>
 					<signal name="clicked" handler="on_arrow_button_clicked_{$fullName}_xyz_euler_zyz_tool"/>
                     <child>
-                      <widget class="GtkArrow" id="arrowLeft1">
+                      <widget class="GtkArrow" id="arrowLeft1"><xsl:attribute name="id">arrowLeft1_xyz_euler_zyz_tool_<xsl:value-of select="$name" /></xsl:attribute>
                         <property name="visible">True</property>
                       </widget>
                     </child>
@@ -115,7 +115,7 @@ xyz_euler_zyz_tool window
                   </widget>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="labelUp2">
+                  <widget class="GtkLabel" id="labelUp2"><xsl:attribute name="id">labelUp2_xyz_euler_zyz_tool_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="width_request">77</property>
                     <property name="visible">True</property>
                     <property name="label" translatable="yes">current tool</property>

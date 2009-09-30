@@ -20,7 +20,7 @@ $(SOURCEDIRS):
 
 install:
 
-HOMEDIR = $(shell pwd)/../../../
+HOMEDIR = $(shell pwd)/../../..
 include $(HOMEDIR)/common.mk
 
 PACKAGES=libxml-2.0 gtk+-2.0 gtkmm-2.4 gthread-2.0

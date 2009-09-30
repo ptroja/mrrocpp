@@ -152,7 +152,7 @@ Servo_algorithm window
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkHBox" id="hbox1"><xsl:attribute name="id">hbox1_servo_<xsl:value-of select="$name" /></xsl:attribute>
+                      <widget class="GtkHBox" id="hbox0"><xsl:attribute name="id">hbox0_servo_<xsl:value-of select="$name" /></xsl:attribute>
                         <property name="visible">True</property>
                         <child>
                           <widget class="GtkLabel" id="labelUp2"><xsl:attribute name="id">labelUp2_servo_<xsl:value-of select="$name" /></xsl:attribute>

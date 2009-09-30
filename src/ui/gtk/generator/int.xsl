@@ -366,7 +366,7 @@ Int window
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="labelSpace"><xsl:attribute name="id">labelSpace_int_<xsl:value-of select="$name" /></xsl:attribute>
+                  <widget class="GtkLabel" id="labelSpace"><xsl:attribute name="id">labelSpace_int_<xsl:value-of select="$name" />_<xsl:value-of select="$i" /></xsl:attribute>
                     <property name="width_request">36</property>
                     <property name="visible">True</property>
                   </widget>

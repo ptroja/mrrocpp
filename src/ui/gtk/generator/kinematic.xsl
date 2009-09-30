@@ -78,7 +78,7 @@ kinematic window
                     <property name="response_id">0</property>
 					<signal name="clicked" handler="on_arrow_button_clicked_{$fullName}_kinematic"/>
                     <child>
-                      <widget class="GtkArrow" id="arrowLeft1">
+                      <widget class="GtkArrow" id="arrowLeft1"><xsl:attribute name="id">arrowLeft1_kinematic_<xsl:value-of select="$name" /></xsl:attribute>
                         <property name="visible">True</property>
                       </widget>
                     </child>
@@ -115,7 +115,7 @@ kinematic window
                   </widget>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="labelUp2">
+                  <widget class="GtkLabel" id="labelUp2"><xsl:attribute name="id">labelUp2_kinematic_<xsl:value-of select="$name" /></xsl:attribute>
                     <property name="width_request">77</property>
                     <property name="visible">True</property>
                     <property name="label" translatable="yes">current</property>
