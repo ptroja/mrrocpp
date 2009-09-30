@@ -41,7 +41,7 @@ uint64_t hardware_interface::read_write_hardware ( void )
 	}
 
 	// oczekiwanie na przerwanie
-	hi_int_wait(INT_SERVOING, 0);
+	hi_int_wait(edp::common::INT_SERVOING, 0);
 
 	if(master.test_mode) {
 		// Tylko dla testow
@@ -85,13 +85,13 @@ void hardware_interface::finish_synchro (int drive_number)
 	irq_data.md.card_adress = FIRST_SERVO_PTR + (uint8_t)drive_number;
 	irq_data.md.register_adress = (SERVO_COMMAND1_ADR + ISA_CARD_OFFSET);
 	irq_data.md.value = FINISH_SYNCHRO;
-	hi_int_wait(INT_SINGLE_COMMAND, 2);
+	hi_int_wait(edp::common::INT_SINGLE_COMMAND, 2);
 
 	// by Y - UWAGA NIE WIEDZIEC CZEMU BEZ TEGO NIE ZAWSZE DZIALAJA RUCHY NA OSI PO SYNCHRONIZACJi
 	if (drive_number>5)
 	{
 		irq_data.md.value = MICROCONTROLLER_MODE;
-		hi_int_wait(INT_SINGLE_COMMAND, 2);
+		hi_int_wait(edp::common::INT_SINGLE_COMMAND, 2);
 	}
 
 }  // end: finish_synchro()

@@ -15,6 +15,46 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
+// ------------------------------------------------------------------------
+//                HARDWARE_INTERFACE class
+// ------------------------------------------------------------------------
+
+// Polecenia dla sterownikow mikroprocesorowych osi
+#define RESET_POSITION_COUNTER           0x0400 // Zerowanie licznika polozenia
+#define RESET_MANUAL_MODE                0x0800 // Zerowanie pracy recznej
+#define RESET_ALARM                      0x0C00 // Zerowanie alarmu sytuacji awaryjnej
+#define PROHIBIT_MANUAL_MODE             0x1000 // Zakaz pracy recznej
+#define ALLOW_MANUAL_MODE                0x1400 // Zezwolenie na prace reczna
+#define START_SYNCHRO                    0x1800 // Rozpoczecie synchronizacji
+#define FINISH_SYNCHRO                   0x1C00 // Zakoncz synchronizacje osi
+#define SET_INT_FREQUENCY                0x2000 // Ustaw dzielnik czestotliowsci przerwan
+#define SET_MAX_CURRENT                  0x2400 // Ustaw prad maksymalny
+#define START_CLOCK_INTERRUPTS           0x5000 // Wlacz przerwania zegarowe
+#define STOP_CLOCK_INTERRUPTS            0x5400 // Wylacz przerwania zegarowe
+#define MICROCONTROLLER_MODE             0x4C00
+#define ZERO_ORDER                       0x0000
+#define STOP_MOTORS                      0x0200 // Zatrzymanie silnikow (W.S. ???)
+
+// tryby obslugi przerwania
+typedef enum INTERRUPT_MODE {
+	INT_EMPTY, // obluga pusta
+	INT_SERVOING, // tryb regulacji osi
+	INT_SINGLE_COMMAND, // do synchronizacji, inicjacji, etc.
+	INT_CHECK_STATE // do odczytu stanu z adresu 0x220
+} interrupt_mode_t;
+
+// ISA_CARD_OFFSET needs to be defined in hi_local.h
+#define ADR_OF_SERVO_PTR          (0x305)
+#define SERVO_COMMAND1_ADR        (0x200)
+#define SERVO_COMMAND2_ADR        (0x202)
+#define SERVO_REPLY_STATUS_ADR    (0x200)
+#define SERVO_REPLY_INT_ADR       (0x202)
+#define SERVO_REPLY_POS_LOW_ADR   (0x204)
+#define SERVO_REPLY_POS_HIGH_ADR  (0x206)
+#define SERVO_REPLY_REG_1_ADR     (0x208)
+#define SERVO_REPLY_REG_2_ADR     (0x20A)
+
+
 struct control_a_dof
 {
     uint16_t adr_offset_plus_0;
@@ -38,7 +78,7 @@ struct motor_data
     bool is_power_on; // czy wzmacniacze mocy sa wlaczone
     bool is_robot_blocked; // czy robot jest zablokowany
 
-    int interrupt_mode;
+    interrupt_mode_t interrupt_mode;
     uint8_t card_adress; // adres karty dla trybu INT_SINGLE_COMMAND
     uint16_t register_adress;  // adres rejestru dla trybu INT_SINGLE_COMMAND
     uint16_t value; // wartosc do wstawienia dla trybu INT_SINGLE_COMMAND
@@ -51,91 +91,61 @@ struct motor_data
     // long int high_word;
 };
 
-typedef struct {
+typedef struct _irq_data {
 #ifdef __QNXNTO__
 	struct sigevent event; // sygnalilzacja przerwania dla glownego watku
 #endif
 	common::motor_data md; // Dane przesylane z/do funkcji obslugi przerwania
 } irq_data_t;
 
-// ------------------------------------------------------------------------
-//                HARDWARE_INTERFACE class
-// ------------------------------------------------------------------------
-
-// Polecenia dla sterownikow mikroprocesorowych osi
-#define RESET_POSITION_COUNTER           0x0400 // Zerowanie licznika polozenia
-#define RESET_MANUAL_MODE                0x0800 // Zerowanie pracy recznej
-#define RESET_ALARM                      0x0C00 // Zerowanie alarmu sytuacji awaryjnej
-#define PROHIBIT_MANUAL_MODE             0x1000 // Zakaz pracy recznej
-#define ALLOW_MANUAL_MODE                0x1400 // Zezwolenie na prace reczna
-#define START_SYNCHRO                    0x1800 // Rozpoczecie synchronizacji
-#define FINISH_SYNCHRO                   0x1C00 // Zakoncz synchronizacje osi
-#define SET_INT_FREQUENCY                0x2000 // Ustaw dzielnik czestotliowsci przerwan
-#define SET_MAX_CURRENT                  0x2400 // Ustaw prad maksymalny
-#define START_CLOCK_INTERRUPTS           0x5000 // Wlacz przerwania zegarowe
-#define STOP_CLOCK_INTERRUPTS            0x5400 // Wylacz przerwania zegarowe
-#define MICROCONTROLLER_MODE             0x4C00
-#define ZERO_ORDER                       0x0000
-#define STOP_MOTORS                      0x0200 // Zatrzymanie silnikow (W.S. ???)
-
-// tryby obslugi przerwania
-#define INT_EMPTY 0 // obluga pusta
-#define INT_SERVOING 1 // tryb regulacji osi
-#define INT_SINGLE_COMMAND 2 // do synchronizacji, inicjacji, etc.
-#define INT_CHECK_STATE 3 // do odczytu stanu z adresu 0x220
-
-// ISA_CARD_OFFSET needs to be defined in hi_local.h
-#define ADR_OF_SERVO_PTR          (0x305)
-#define SERVO_COMMAND1_ADR        (0x200)
-#define SERVO_COMMAND2_ADR        (0x202)
-#define SERVO_REPLY_STATUS_ADR    (0x200)
-#define SERVO_REPLY_INT_ADR       (0x202)
-#define SERVO_REPLY_POS_LOW_ADR   (0x204)
-#define SERVO_REPLY_POS_HIGH_ADR  (0x206)
-#define SERVO_REPLY_REG_1_ADR     (0x208)
-#define SERVO_REPLY_REG_2_ADR     (0x20A)
 
 class hardware_interface
 {
+private:
 
-protected:
+    int int_id;		// Identyfikator obslugi przerwania
 
-    bool trace_resolver_zero;
     long int tick;// minimalny kwant czasu CPU
-    control_a_dof robot_control[MAX_SERVOS_NR];
-    status_of_a_dof robot_status[MAX_SERVOS_NR];
 
-    int meassured_current[MAX_SERVOS_NR]; // by Y - zmierzona wartosc pradu
-    long int current_absolute_position[MAX_SERVOS_NR];  // aktualne polozenia osi
-    long int previous_absolute_position[MAX_SERVOS_NR]; // poprzednie polozenia osi
-    double current_position_inc[MAX_SERVOS_NR];         // aktualny przyrost polozenia
     bool first; // true jesli pierwszy krok
 
-    int hi_irq_real;
-    unsigned short int hi_intr_freq_divider;
-    unsigned int hi_intr_timeout_high;
-    unsigned int hi_first_servo_ptr;
-    unsigned int hi_intr_generator_servo_ptr;
-    unsigned int hi_isa_card_offset;
+    const int hi_irq_real;
+    const unsigned short int hi_intr_freq_divider;
+    const unsigned int hi_intr_timeout_high;
+    const unsigned int hi_first_servo_ptr;
+    const unsigned int hi_intr_generator_servo_ptr;
+    const unsigned int hi_isa_card_offset;
 
-    irq_data_t irq_data;
 	//! periodic timer
 	timer_t timerid;
 
 	//! periodic timer signal mask
 	sigset_t mask;
 
+protected:
+    irq_data_t irq_data;
+
+    int meassured_current[MAX_SERVOS_NR]; // by Y - zmierzona wartosc pradu
+    long int current_absolute_position[MAX_SERVOS_NR];  // aktualne polozenia osi
+    long int previous_absolute_position[MAX_SERVOS_NR]; // poprzednie polozenia osi
+    double current_position_inc[MAX_SERVOS_NR];         // aktualny przyrost polozenia
+
+    bool trace_resolver_zero;
+
+    control_a_dof robot_control[MAX_SERVOS_NR];
+    status_of_a_dof robot_status[MAX_SERVOS_NR];
 
 public:
 	manip_and_conv_effector &master;
 
-    int irq_no;    // Numer przerwania sprzetowego
-    int int_id;                 // Identyfikator obslugi przerwania
-	//hardware_interface();    // Konstruktor
-    hardware_interface (manip_and_conv_effector &_master, int _hi_irq_real,
-    		unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high,
-    		unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr,
-    		unsigned int _hi_isa_card_offset, int* _max_current);    // Konstruktor
+    hardware_interface (manip_and_conv_effector &_master,
+    		int _hi_irq_real,
+    		unsigned short int _hi_intr_freq_divider,
+    		unsigned int _hi_intr_timeout_high,
+    		unsigned int _hi_first_servo_ptr,
+    		unsigned int _hi_intr_generator_servo_ptr,
+    		unsigned int _hi_isa_card_offset,
+    		int* _max_current);    // Konstruktor
 
     virtual ~hardware_interface( void );   // Destruktor
     virtual bool is_hardware_error ( void); // Sprawdzenie czy wystapil blad sprzetowy
@@ -157,7 +167,7 @@ public:
     virtual void finish_synchro ( int drive_number ) ;
 
     // oczekiwanie na przerwanie - tryb obslugi i delay(lag) po odebraniu przerwania
-    int hi_int_wait (int inter_mode, int lag);
+    int hi_int_wait (interrupt_mode_t _interrupt_mode, int lag);
 
     bool is_impulse_zero ( int drive_number );
 

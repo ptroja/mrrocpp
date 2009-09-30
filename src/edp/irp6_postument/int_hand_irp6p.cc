@@ -64,7 +64,7 @@ int_handler (void *arg, int int_id)
 
 	// INT_EMPTY obluga pusta
 	// z zalozenia to pierwszy tryb w ktorym jest uruchomiona fukcja obslugi przewania  ze wzgledu na synchronizacje
-	if (md.interrupt_mode == INT_EMPTY)
+	if (md.interrupt_mode == edp::common::INT_EMPTY)
 	{
 		// konieczne dla skasowania przyczyny przerwania
 		out8((ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), INTERRUPT_GENERATOR_SERVO_PTR);
@@ -89,7 +89,7 @@ int_handler (void *arg, int int_id)
 	}
 
 	// INT_SERVOING tryb regulacji osi
-	else if (md.interrupt_mode == INT_SERVOING)
+	else if (md.interrupt_mode == edp::common::INT_SERVOING)
 	{
 
 		// konieczne dla skasowania przyczyny przerwania
@@ -189,7 +189,7 @@ int_handler (void *arg, int int_id)
 	} // end INT_SERVOING
 
 	// INT_SINGLE_COMMAND do synchronizacji, inicjacji, etc.
-	else if (md.interrupt_mode == INT_SINGLE_COMMAND)
+	else if (md.interrupt_mode == edp::common::INT_SINGLE_COMMAND)
 	{
 
 		// konieczne dla skasowania przyczyny przerwania
@@ -206,13 +206,13 @@ int_handler (void *arg, int int_id)
 			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16((SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
 			md.robot_status[i].adr_offset_plus_2 = robot_status[i].adr_offset_plus_2 = in16((SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 		}
-		md.interrupt_mode=INT_EMPTY; // aby tylko raz wyslac polecenie
+		md.interrupt_mode=edp::common::INT_EMPTY; // aby tylko raz wyslac polecenie
 
 		return (&event);
 	}
 
 	// INT_CHECK_STATE do odczytu stanu z adresu 0x220
-	else if (md.interrupt_mode == INT_CHECK_STATE)
+	else if (md.interrupt_mode == edp::common::INT_CHECK_STATE)
 	{
 
 		// konieczne dla skasowania przyczyny przerwania
@@ -226,7 +226,7 @@ int_handler (void *arg, int int_id)
 			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16((SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
 			md.robot_status[i].adr_offset_plus_2 = robot_status[i].adr_offset_plus_2 = in16((SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 		}
-		md.interrupt_mode=INT_EMPTY; // aby tylko raz sprawdzic stan
+		md.interrupt_mode=edp::common::INT_EMPTY; // aby tylko raz sprawdzic stan
 
 		return (&event);
 	}
