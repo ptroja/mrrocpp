@@ -11,9 +11,6 @@ include $(HOMEDIR)/common.mk
 
 CXXFLAGS += -O3
 SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a $(QNX_TARGET)/x86/lib/libasound.so
-# search path for make, if you want create dependencies from files from other directory than ".", 
-# then place that directory in the VPATH variable
-VPATH = ../common $(LIBDIR) ../irp6s
 #======================================================#	
 .PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#

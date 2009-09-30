@@ -17,10 +17,6 @@ CPPFLAGS += -I$(HOMEDIR)/src/edp/ati6284/ati \
 		-I$(HOMEDIR)/src/edp/ati6284/ni \
 		-I$(HOMEDIR)/src/edp/ati6284 \
 		-I$(HOMEDIR)/src/edp/ati6284
-
-# search path for make, if you want create dependencies from files from other directory than ".", 
-# then place that directory in the VPATH variable
-VPATH = ../common $(LIBDIR) ../irp6s
 #======================================================#	
 .PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#

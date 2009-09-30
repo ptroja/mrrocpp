@@ -13,14 +13,11 @@ KIN_OBJECTS = ${KINEMATDIR}/irp6_on_track/kinematic_model_irp6ot_with_track.o \
 	      ${KINEMATDIR}/irp6_on_track/kinematic_model_calibrated_irp6ot_with_wrist.o \
 	      ${KINEMATDIR}/irp6_on_track/kinematic_model_calibrated_correction_matrix_irp6ot_with_wrist.o
 
-OBJECTS = force.o edp_irp6ot_effector.o hi_irp6ot.o int_hand_irp6ot.o sg_irp6ot.o edp_irp6s_postument_track.o
+OBJECTS = ../common/force.o edp_irp6ot_effector.o hi_irp6ot.o int_hand_irp6ot.o sg_irp6ot.o ../common/edp_irp6s_postument_track.o
 EDPOBJS  = ${OBJECTS} ${KIN_OBJECTS}
 BINARIES  = edp_irp6_on_track
 
 SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a
-# search path for make, if you want create dependencies from files from other directory than ".", 
-# then place that directory in the VPATH variable
-VPATH = ../common $(LIBDIR) ../irp6s
 
 # add required libs
 ifdef DOCENT_SENSOR

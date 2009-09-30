@@ -16,15 +16,12 @@ KIN_OBJECTS = ${KINEMATDIR}/irp6_postument/kinematic_model_irp6p_with_wrist.o \
 	      ${KINEMATDIR}/irp6_postument/kinematic_model_irp6p_jacobian_with_wrist.o \
 	      ${KINEMATDIR}/irp6_postument/kinematic_model_irp6p_jacobian_transpose_with_wrist.o
 	       
-OBJECTS = force.o edp_irp6p_effector.o hi_irp6p.o int_hand_irp6p.o sg_irp6p.o edp_irp6s_postument_track.o
+OBJECTS = ../common/force.o edp_irp6p_effector.o hi_irp6p.o int_hand_irp6p.o sg_irp6p.o ../common/edp_irp6s_postument_track.o
 EDPOBJS  = ${OBJECTS} ${KIN_OBJECTS}
 BINARIES  = edp_irp6_postument
 
 
 SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a
-# search path for make, if you want create dependencies from files from other directory than ".", 
-# then place that directory in the VPATH variable
-VPATH = ../common $(LIBDIR) ../irp6s
 #======================================================#	
 .PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#

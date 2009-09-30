@@ -17,9 +17,6 @@ BINARIES  = edp_polycrank
 
 
 SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a
-# search path for make, if you want create dependencies from files from other directory than ".", 
-# then place that directory in the VPATH variable
-VPATH = ../common $(LIBDIR)
 #======================================================#	
 .PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#

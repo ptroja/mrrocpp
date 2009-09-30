@@ -18,9 +18,6 @@ BINARIES  = edp_irp6_mechatronika
 
 
 SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a
-# search path for make, if you want create dependencies from files from other directory than ".", 
-# then place that directory in the VPATH variable
-VPATH = ../common $(LIBDIR) ../irp6s
 #======================================================#	
 .PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#
