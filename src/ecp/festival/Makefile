@@ -9,10 +9,6 @@ HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
 SHOBJ = ../common/libecp.a $(LIBDIR)/libmrrocpp.a
-# path for SHOBJ
-# search path for make, if you want create dependencies from files from other directory than ".", 
-# then place that directory in the VPATH variable
-VPATH = ../common $(ECP_MPDIR)
 #======================================================#	
 .PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#

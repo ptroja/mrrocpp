@@ -16,7 +16,8 @@ BINARIES = ecp_tran \
 	ecp_tzu_test \
 	ecp_pcbird \
 	ecp_visioncoordinates \
-	ecp_eihcalibration
+	ecp_eihcalibration \
+	ecp_fsautomat
 
 ifneq ($(BUILD_TARGET), linux)
 BINARIES+= ecp_mam
@@ -27,10 +28,6 @@ HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
 SHOBJ = ../common/libecp.a $(LIBDIR)/libmrrocpp.a
-
-# search path for make, if you want create dependencies from files from other directory than ".", 
-# then place that directory in the VPATH variable
-VPATH = $(ECP_MPDIR)
 #======================================================#	
 .PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#
@@ -64,7 +61,7 @@ ecp_sk: \
 		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_sk.o \
 		../common/ecp_g_force.o \
-		ecp_mp_s_schunk.o \
+		$(ECP_MPDIR)/ecp_mp_s_schunk.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
@@ -73,7 +70,7 @@ ecp_tw: \
 		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_tw.o \
 		../common/ecp_g_force.o \
-		ecp_mp_s_schunk.o \
+		$(ECP_MPDIR)/ecp_mp_s_schunk.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
@@ -98,7 +95,7 @@ ecp_nalewanie: \
 ecp_time: \
 		../irp6_on_track/ecp_r_irp6ot.o \
 		../irp6_postument/ecp_r_irp6p.o \
-		ecp_mp_s_time.o \
+		$(ECP_MPDIR)/ecp_mp_s_time.o \
 		../common/ecp_t_time.o \
 		../common/ecp_g_time.o \
 		$(SHOBJ)
@@ -124,22 +121,35 @@ ecp_ellipse: \
 	$(LD) $(LDFLAGS) -o $@ $^
 
 ecp_wii: \
-	    ../irp6_on_track/ecp_r_irp6ot.o \
-    	../common/ecp_t_wii.o \
-	    ../common/ecp_g_smooth.o \
-	    ../common/ecp_g_wii.o \
-    	../common/ecp_g_jarosz.o \
-	    ../common/ecp_operator_reaction_condition.o \
-    	$(SHOBJ)
+		../irp6_on_track/ecp_r_irp6ot.o \
+		../common/ecp_t_wii.o \
+		../common/ecp_g_smooth.o \
+		../common/ecp_g_wii.o \
+		../common/ecp_g_jarosz.o \
+		../common/ecp_operator_reaction_condition.o \
+		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
-
+ecp_fsautomat: \
+		../irp6_on_track/ecp_r_irp6ot.o \
+		../irp6_postument/ecp_r_irp6p.o \
+		../common/ecp_t_fsautomat.o \
+		../../ecp_mp/Trajectory.o \
+		../common/ecp_g_force.o \
+		../common/ecp_st_go.o \
+		../common/ecp_g_smooth.o \
+		../common/ecp_generator_t.o \
+		../common/ecp_g_jarosz.o \
+		../common/ecp_operator_reaction_condition.o \
+		$(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
+	
 ecp_pawel: \
 		../irp6_on_track/ecp_r_irp6ot.o \
 		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_pawel.o \
 		../common/ecp_g_pawel.o \
-		ecp_mp_s_pawel.o \
+		$(ECP_MPDIR)/ecp_mp_s_pawel.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
@@ -148,7 +158,7 @@ ecp_cvfradia: \
 		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_cvfradia.o \
 		../common/ecp_g_cvfradia.o \
-		ecp_mp_s_cvfradia.o \
+		$(ECP_MPDIR)/ecp_mp_s_cvfradia.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
@@ -160,7 +170,7 @@ ecp_visioncoordinates: \
 		../common/ecp_g_smooth.o \
 		../common/ecp_g_jarosz.o \
 		../common/ecp_operator_reaction_condition.o \
-		ecp_mp_s_cvfradia.o \
+		$(ECP_MPDIR)/ecp_mp_s_cvfradia.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 
@@ -191,8 +201,8 @@ ecp_pcbird: \
 		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_pcbird.o \
 		../common/ecp_g_cvfradia.o \
-		birdclient.o \
-		ecp_mp_s_pcbird.o \
+		$(ECP_MPDIR)/birdclient.o \
+		$(ECP_MPDIR)/ecp_mp_s_pcbird.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 	
@@ -206,7 +216,7 @@ ecp_eihcalibration: \
 		../common/ecp_g_jarosz.o \
 		../common/ecp_g_force.o \
 		../common/ecp_operator_reaction_condition.o \
-		ecp_mp_s_cvfradia.o \
+		$(ECP_MPDIR)/ecp_mp_s_cvfradia.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 

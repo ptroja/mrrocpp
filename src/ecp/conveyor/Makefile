@@ -10,10 +10,7 @@ HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
 SHOBJ = ecp_r_conv.o ../common/libecp.a $(LIBDIR)/libmrrocpp.a
-# path for SHOBJ
-# search path for make, if you want create dependencies from files from other directory than ".", 
-# then place that directory in the VPATH variable
-VPATH = ../common $(ECP_MPDIR)
+
 #======================================================#	
 .PHONY: all clean install depend
 #------------------------------------------------- Build rules -------------------------------------------------------#
@@ -23,16 +20,16 @@ all: ${BINARIES}
 ecp_test_conv: ecp_t_test.o ecp_g_test.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_kon: ecp_t_kon.o ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
+ecp_kon: ecp_t_kon.o ../common/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_legobrick_conv: ecp_t_legobrick_conv.o ecp_g_smooth.o ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
+ecp_legobrick_conv: ecp_t_legobrick_conv.o ../common/ecp_g_smooth.o ../common/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_visconv: ecp_t_visconv.o ecp_g_smooth.o ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
+ecp_visconv: ecp_t_visconv.o ../common/ecp_g_smooth.o ../common/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_visconvsin: ecp_t_visconvsin.o ecp_g_visconv.o ecp_g_jarosz.o ecp_operator_reaction_condition.o $(SHOBJ)
+ecp_visconvsin: ecp_t_visconvsin.o ecp_g_visconv.o ../common/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 # e.g:
