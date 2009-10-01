@@ -52,7 +52,7 @@ ecp_mam: \
 		../irp6_postument/ecp_r_irp6p.o \
 		../common/ecp_t_mam.o \
 		../common/ecp_g_mam.o \
-		ecp_mp_s_digital_scales.o \
+		$(ECP_MPDIR)/ecp_mp_s_digital_scales.o \
 		$(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 

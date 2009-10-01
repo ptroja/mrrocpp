@@ -127,10 +127,10 @@ ecp_rover: ecp_t_rover_irp6ot.o ecp_g_rover.o ../common/ecp_g_force.o $(ECP_MPDI
 #ecp_nurbs: ecp_t_ts_irp6ot.o ecp_g_nurbs.o $(SHOBJ) 
 #	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_fct: ecp_t_fct_irp6ot.o ecp_g_fctg.o ecp_mp_s_force.o $(SHOBJ)
+ecp_fct: ecp_t_fct_irp6ot.o ecp_g_fctg.o $(ECP_MPDIR)/ecp_mp_s_force.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
-ecp_tr: ecp_t_tr_irp6ot.o ecp_g_trg.o ecp_g_rsc.o ecp_mp_s_force.o ecp_mp_s_digital_scales.o $(SHOBJ)
+ecp_tr: ecp_t_tr_irp6ot.o ecp_g_trg.o ecp_g_rsc.o $(ECP_MPDIR)/ecp_mp_s_force.o $(ECP_MPDIR)/ecp_mp_s_digital_scales.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_pt: ecp_t_pt_irp6ot.o ../common/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
