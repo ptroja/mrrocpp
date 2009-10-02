@@ -19,7 +19,7 @@ class Trajectory
 {
 	public:
 		Trajectory();
-		Trajectory(const char *numOfPoses, const char *trajectoryName, const char *poseSpecification);
+		Trajectory(const char *numOfPoses, std::string trajectoryName, const char *poseSpecification);
 		Trajectory(const Trajectory &trajectory);
 		~Trajectory();
 
@@ -73,17 +73,17 @@ class Trajectory
 		void showTime();
 		void showTime2();//for smooth2
 
-		std::list<ecp_mp::common::smooth_trajectory_pose> * getPoses();
-		std::list<ecp_mp::common::smooth2_trajectory_pose> * getPoses2();//for smooth2
+		std::list<ecp_mp::common::smooth_trajectory_pose> & getPoses();
+		std::list<ecp_mp::common::smooth2_trajectory_pose> & getPoses2();//for smooth2
 
 	private:
-		char trjID[80];
+		std::string trjID;
 		unsigned int numOfPoses;
 		lib::POSE_SPECIFICATION poseSpec;
 		ecp_mp::common::smooth_trajectory_pose *actPose;
 		ecp_mp::common::smooth2_trajectory_pose *actPose2;//for smooth2
-		std::list<ecp_mp::common::smooth_trajectory_pose> *trjPoses;
-		std::list<ecp_mp::common::smooth2_trajectory_pose> *trjPoses2;//for smooth2
+		std::list<ecp_mp::common::smooth_trajectory_pose> trjPoses;
+		std::list<ecp_mp::common::smooth2_trajectory_pose> trjPoses2;//for smooth2
 };
 
 } // namespace common

@@ -90,7 +90,6 @@ public:
 	void load_coordinates(lib::POSE_SPECIFICATION,double,double,double,double,double,double,double,double);
 	void load_coordinates(lib::POSE_SPECIFICATION,double[],double[],double[],double[],double[]);
 
-
 	virtual bool first_step();
 	virtual bool next_step();
 

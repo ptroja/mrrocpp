@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <string>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
@@ -17,43 +18,36 @@ namespace common {
 
 Trajectory::Trajectory()
 {
-	trjPoses = new std::list<ecp_mp::common::smooth_trajectory_pose>();
-	trjPoses2 = new std::list<ecp_mp::common::smooth2_trajectory_pose>(); //for smooth2
 }
 
-Trajectory::Trajectory(const char *numOfPoses, const char *trajectoryID, const char *poseSpecification)
+Trajectory::Trajectory(const char *numOfPoses, std::string trajectoryID, const char *poseSpecification)
 {
-	strcpy(trjID, trajectoryID);
+	trjID = trajectoryID;
 	this->numOfPoses = (uint64_t)atoi(numOfPoses);
 	poseSpec = returnProperPS(poseSpecification);
-	trjPoses = new std::list<ecp_mp::common::smooth_trajectory_pose>();
-	trjPoses2 = new std::list<ecp_mp::common::smooth2_trajectory_pose>(); //for smooth2
-
 }
 
 Trajectory::Trajectory(const Trajectory &trajectory)
 {
-	strcpy(trjID, trajectory.trjID);
+	trjID = trajectory.trjID;
 	numOfPoses = trajectory.numOfPoses;
 	poseSpec = trajectory.poseSpec;
-	trjPoses = new std::list<ecp_mp::common::smooth_trajectory_pose>(trajectory.trjPoses->begin(), trajectory.trjPoses->end());
-	trjPoses2 = new std::list<ecp_mp::common::smooth2_trajectory_pose>(trajectory.trjPoses2->begin(), trajectory.trjPoses2->end()); //for smooth2
+	trjPoses = trajectory.trjPoses;
+	trjPoses2 = trajectory.trjPoses2;
 }
 
 Trajectory::~Trajectory()
 {
-	delete trjPoses;
-	delete trjPoses2;
 }
 
 void Trajectory::setTrjID(const char *trjID)
 {
-	strcpy(this->trjID, trjID);
+	this->trjID = trjID;
 }
 
 const char * Trajectory::getTrjID() const
 {
-	return trjID;
+	return trjID.c_str();
 }
 
 lib::POSE_SPECIFICATION Trajectory::returnProperPS(const std::string & poseSpecification)
@@ -183,7 +177,6 @@ void Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIF
 
 void Trajectory::writeTrajectoryToXmlFile2(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth2_trajectory_pose> &poses)
 {
-	char * file = new char[80];
 	int posCount = poses.size();
 	xmlDocPtr doc;
 	xmlNodePtr tree, subtree;
@@ -201,10 +194,11 @@ void Trajectory::writeTrajectoryToXmlFile2(const char *fileName, lib::POSE_SPECI
 		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Accelerations", (const xmlChar *)Trajectory::toString((*it).a, MAX_SERVOS_NR).c_str());
 		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Coordinates", (const xmlChar *)Trajectory::toString((*it).coordinates, MAX_SERVOS_NR).c_str());
 	}
-	sprintf(file, "%s%s", fileName, ".xml");
+	std::string file(fileName);
+	file+=".xml";
 
 	xmlKeepBlanksDefault(0);
-	xmlSaveFormatFile(file, doc, 1);
+	xmlSaveFormatFile(file.c_str(), doc, 1);
 	printf("-->  File \"%s\" was saved to XML file\n", fileName);
 }
 
@@ -222,12 +216,12 @@ void Trajectory::createNewPose2() //for smooth2
 
 void Trajectory::addPoseToTrajectory()
 {
-	trjPoses->push_back(*actPose);
+	trjPoses.push_back(*actPose);
 }
 
 void Trajectory::addPoseToTrajectory2()//for smooth2
 {
-	trjPoses2->push_back(*actPose2);
+	trjPoses2.push_back(*actPose2);
 }
 
 void Trajectory::setNumOfPoses(unsigned int numOfPoses)
@@ -333,8 +327,8 @@ double * Trajectory::getCoordinates2() const//for smooth2
 void Trajectory::showTime()
 {
 	std::list<ecp_mp::common::smooth_trajectory_pose>::iterator it;
-	printf("Nazwa: %s, PoseSpec: %d, NumOfPoses: %u\n", trjID, poseSpec, numOfPoses);
-	for(it=trjPoses->begin(); it!=trjPoses->end(); ++it)
+	printf("Nazwa: %s, PoseSpec: %d, NumOfPoses: %u\n", trjID.c_str(), poseSpec, numOfPoses);
+	for(it=trjPoses.begin(); it!=trjPoses.end(); ++it)
 	{
 		printf("%f %f %f %f %f %f %f %f\n", (*it).v_p[0], (*it).v_p[1], (*it).v_p[2], (*it).v_p[3],
 				(*it).v_p[4], (*it).v_p[5], (*it).v_p[6], (*it).v_p[7]);
@@ -352,8 +346,8 @@ void Trajectory::showTime()
 void Trajectory::showTime2()//for smooth2
 {
 	std::list<ecp_mp::common::smooth2_trajectory_pose>::iterator it;
-	printf("Nazwa: %s, PoseSpec: %d, NumOfPoses: %u\n", trjID, poseSpec, numOfPoses);
-	for(it=trjPoses2->begin(); it!=trjPoses2->end(); ++it)
+	printf("Nazwa: %s, PoseSpec: %d, NumOfPoses: %u\n", trjID.c_str(), poseSpec, numOfPoses);
+	for(it=trjPoses2.begin(); it!=trjPoses2.end(); ++it)
 	{
 		printf("%f %f %f %f %f %f %f %f\n", (*it).v[0], (*it).v[1], (*it).v[2], (*it).v[3],
 				(*it).v[4], (*it).v[5], (*it).v[6], (*it).v[7]);
@@ -364,14 +358,14 @@ void Trajectory::showTime2()//for smooth2
 	}
 }
 
-std::list<ecp_mp::common::smooth_trajectory_pose> * Trajectory::getPoses()
+std::list<ecp_mp::common::smooth_trajectory_pose> & Trajectory::getPoses()
 {
-	return new std::list<ecp_mp::common::smooth_trajectory_pose>(*trjPoses);
+	return trjPoses;
 }
 
-std::list<ecp_mp::common::smooth2_trajectory_pose> * Trajectory::getPoses2()//for smooth2
+std::list<ecp_mp::common::smooth2_trajectory_pose> & Trajectory::getPoses2()//for smooth2
 {
-	return new std::list<ecp_mp::common::smooth2_trajectory_pose>(*trjPoses2);
+	return trjPoses2;
 }
 
 } // namespace common

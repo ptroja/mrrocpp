@@ -55,7 +55,7 @@ bool smooth2::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory) {
 	trajectory.showTime();
 
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
-	pose_list = trajectory.getPoses2();
+	pose_list = &trajectory.getPoses2();
 	pose_list_iterator = pose_list->end();
 
 	return true;
