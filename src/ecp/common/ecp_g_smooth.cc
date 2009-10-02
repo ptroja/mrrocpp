@@ -183,35 +183,37 @@ void smooth::set_pose_from_xml(xmlNode *stateNode)
 		if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )							{
 			for(ccchild_node = cchild_node->children; ccchild_node!=NULL; ccchild_node = ccchild_node->next)
 			{
-				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"StartVelocity") )
-				{
-					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					ecp_mp::common::Trajectory::setValuesInArray(vp, (const char *)xmlDataLine);
-					xmlFree(xmlDataLine);
-				}
-				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"EndVelocity") )
-				{
-					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					ecp_mp::common::Trajectory::setValuesInArray(vk, (const char *)xmlDataLine);
-					xmlFree(xmlDataLine);
-				}
-				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
-				{
-					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					ecp_mp::common::Trajectory::setValuesInArray(v, (const char *)xmlDataLine);
-					xmlFree(xmlDataLine);
-				}
-				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
-				{
-					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					ecp_mp::common::Trajectory::setValuesInArray(a, (const char *)xmlDataLine);
-					xmlFree(xmlDataLine);
-				}
-				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
-				{
-					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					ecp_mp::common::Trajectory::setValuesInArray(coordinates, (const char *)xmlDataLine);
-					xmlFree(xmlDataLine);
+				if ( ccchild_node->type == XML_ELEMENT_NODE ) {
+					if(!xmlStrcmp(ccchild_node->name, (const xmlChar *)"StartVelocity"))
+					{
+						xmlDataLine = xmlNodeGetContent(ccchild_node);
+						ecp_mp::common::Trajectory::setValuesInArray(vp, (const char *)xmlDataLine);
+						xmlFree(xmlDataLine);
+					}
+					else if (!xmlStrcmp(ccchild_node->name, (const xmlChar *)"EndVelocity") )
+					{
+						xmlDataLine = xmlNodeGetContent(ccchild_node);
+						ecp_mp::common::Trajectory::setValuesInArray(vk, (const char *)xmlDataLine);
+						xmlFree(xmlDataLine);
+					}
+					else if (!xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
+					{
+						xmlDataLine = xmlNodeGetContent(ccchild_node);
+						ecp_mp::common::Trajectory::setValuesInArray(v, (const char *)xmlDataLine);
+						xmlFree(xmlDataLine);
+					}
+					else if (!xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
+					{
+						xmlDataLine = xmlNodeGetContent(ccchild_node);
+						ecp_mp::common::Trajectory::setValuesInArray(a, (const char *)xmlDataLine);
+						xmlFree(xmlDataLine);
+					}
+					else if (!xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
+					{
+						xmlDataLine = xmlNodeGetContent(ccchild_node);
+						ecp_mp::common::Trajectory::setValuesInArray(coordinates, (const char *)xmlDataLine);
+						xmlFree(xmlDataLine);
+					}
 				}
 			}
 			insert_pose_list_element(ps, vp, vk, v, a, coordinates);
