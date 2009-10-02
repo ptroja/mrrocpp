@@ -171,7 +171,7 @@ void Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIF
 	file+=".xml";
 
 	xmlKeepBlanksDefault(0);
-	xmlSaveFormatFile(file, doc, 1);
+	xmlSaveFormatFile(file.c_str(), doc, 1);
 	printf("-->  File \"%s\" was saved to XML file\n", fileName);
 }
 
