@@ -80,15 +80,16 @@ fsautomat::fsautomat(lib::configurator &_config) : task(_config)
 void fsautomat::task_initialization(void)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
-	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
-		{ ecp_m_robot = new irp6ot::robot (*this); }
-	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
-		{ ecp_m_robot = new irp6p::robot (*this); }
+	if (!strcmp(config.section_name, "[ecp_irp6_on_track]")) {
+		ecp_m_robot = new irp6ot::robot (*this);
+	} else if (!strcmp(config.section_name, "[ecp_irp6_postument]")) {
+		ecp_m_robot = new irp6p::robot (*this);
+	} else {
+		// TODO: throw, robot unsupported
+		return;
+	}
 
 	const char * whichECP = ecp_mp::common::Trajectory::returnRobotName(ecp_m_robot->robot_name);
-
-	xmlNode *cur_node, *child_node;
-	xmlChar *stateType, *argument;
 
 	std::string filePath(mrrocpp_network_path);
 	std::string fileName = config.return_string_value("xml_file", "[xml_settings]");
@@ -111,127 +112,118 @@ void fsautomat::task_initialization(void)
 		return;
 	}
 
-   // for each root children "state"
-   for(cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
-   {
-      if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "State" ) )
-      {
-         stateType = xmlGetProp(cur_node, (const xmlChar *) "type");
+	// for each root children "state"
+	for(xmlNode *cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
+	{
+		if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "State" ) )
+		{
+			xmlChar * stateType = xmlGetProp(cur_node, (const xmlChar *) "type");
 			if(!xmlStrcmp(stateType, (const xmlChar *)"systemInitialization"))
 			{
 				while(xmlStrcmp(cur_node->children->name, (const xmlChar *)"taskInit"))
 					cur_node->children = cur_node->children->next;
-	         // For each child of state: i.e. Robot
-	         for(child_node = cur_node->children->children; child_node != NULL; child_node = child_node->next)
-	         {
-	            if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"ecp") )
-	            {
-	               xmlChar * robot = xmlGetProp(child_node, (const xmlChar *)"name");
-	               if(robot && !xmlStrcmp(robot, (const xmlChar *) whichECP))
+				// For each child of state: i.e. Robot
+				for(xmlNode *child_node = cur_node->children->children; child_node != NULL; child_node = child_node->next)
+				{
+					if (child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"ecp") )
+					{
+						xmlChar * robot = xmlGetProp(child_node, (const xmlChar *)"name");
+						if(robot && !xmlStrcmp(robot, (const xmlChar *) whichECP))
 						{
 							for(;child_node->children; child_node->children = child_node->children->next)
 							{
-								if(child_node->children->type == XML_ELEMENT_NODE &&
-										!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_gen_t"))
-								{
-									argument = xmlNodeGetContent(child_node->children);
-									if(argument && xmlStrcmp(argument, (const xmlChar *)""));
-									gt = new common::generator::transparent(*this);
-									xmlFree(argument);
-								}
-								if(child_node->children->type == XML_ELEMENT_NODE &&
-										!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_tff_nose_run_gen"))
-								{
-									argument = xmlNodeGetContent(child_node->children);
-									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										nrg = new common::generator::tff_nose_run(*this, atoi((char *)argument));
-									xmlFree(argument);
-								}
-								if(child_node->children->type == XML_ELEMENT_NODE &&
-										!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_tff_rubik_grab_gen"))
-								{
-									argument = xmlNodeGetContent(child_node->children);
-									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										rgg = new common::generator::tff_rubik_grab(*this, atoi((char *)argument));
-									xmlFree(argument);
-								}
-								if(child_node->children->type == XML_ELEMENT_NODE &&
-										!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_tff_gripper_approach_gen"))
-								{
-									argument = xmlNodeGetContent(child_node->children);
-									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										gag = new common::generator::tff_gripper_approach(*this, atoi((char *)argument));
-									xmlFree(argument);
-								}
-								if(child_node->children->type == XML_ELEMENT_NODE &&
-										!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_tff_rubik_face_rotate_gen"))
-								{
-									argument = xmlNodeGetContent(child_node->children);
-									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										rfrg = new common::generator::tff_rubik_face_rotate(*this, atoi((char *)argument));
-									xmlFree(argument);
-								}
-								if(child_node->children->type == XML_ELEMENT_NODE &&
-										!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_teach_in_gen"))
-								{
-									argument = xmlNodeGetContent(child_node->children);
-									if(argument && xmlStrcmp(argument, (const xmlChar *)""));
-									tig = new common::ecp_teach_in_generator(*this);
-									xmlFree(argument);
-								}
-								if(child_node->children->type == XML_ELEMENT_NODE &&
-										!xmlStrcmp(child_node->children->name, (const xmlChar *)"bias_edp_force_gen"))
-								{
-									argument = xmlNodeGetContent(child_node->children);
-									if(argument && xmlStrcmp(argument, (const xmlChar *)""));
-									befg = new common::generator::bias_edp_force(*this);
-									xmlFree(argument);
-								}
-								if(child_node->children->type == XML_ELEMENT_NODE &&
-										!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_tool_change_gen"))
-								{
-									argument = xmlNodeGetContent(child_node->children);
-									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										tcg = new common::generator::tool_change(*this, atoi((char *)argument));
-									xmlFree(argument);
-								}
-								if(child_node->children->type == XML_ELEMENT_NODE &&
-										!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_smooth_gen"))
-								{
-									argument = xmlNodeGetContent(child_node->children);
-									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										sg = new common::generator::smooth(*this, (bool)atoi((char *)argument));
-									xmlFree(argument);
-								}
-								if(child_node->children->type == XML_ELEMENT_NODE &&
-										!xmlStrcmp(child_node->children->name, (const xmlChar *)"weight_meassure_gen"))
-								{
-									argument = xmlNodeGetContent(child_node->children);
-									if(argument && xmlStrcmp(argument, (const xmlChar *)""))
-										wmg = new common::generator::weight_meassure(*this, atoi((char *)argument));
-									xmlFree(argument);
-								}
-								if(child_node->children->type == XML_ELEMENT_NODE &&
-										!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_sub_task_gripper_opening"))
-								{
-									argument = xmlNodeGetContent(child_node->children);
-									if(argument && xmlStrcmp(argument, (const xmlChar *)""));
-									go_st = new common::task::ecp_sub_task_gripper_opening(*this);
-									xmlFree(argument);
+								if(child_node->children->type == XML_ELEMENT_NODE) {
+									if(!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_gen_t"))
+									{
+										xmlChar *argument = xmlNodeGetContent(child_node->children);
+										if(argument && xmlStrcmp(argument, (const xmlChar *)""));
+										gt = new common::generator::transparent(*this);
+										xmlFree(argument);
+									}
+									else if(!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_tff_nose_run_gen"))
+									{
+										xmlChar *argument = xmlNodeGetContent(child_node->children);
+										if(argument && xmlStrcmp(argument, (const xmlChar *)""))
+											nrg = new common::generator::tff_nose_run(*this, atoi((char *)argument));
+										xmlFree(argument);
+									}
+									else if(!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_tff_rubik_grab_gen"))
+									{
+										xmlChar *argument = xmlNodeGetContent(child_node->children);
+										if(argument && xmlStrcmp(argument, (const xmlChar *)""))
+											rgg = new common::generator::tff_rubik_grab(*this, atoi((char *)argument));
+										xmlFree(argument);
+									}
+									else if(!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_tff_gripper_approach_gen"))
+									{
+										xmlChar *argument = xmlNodeGetContent(child_node->children);
+										if(argument && xmlStrcmp(argument, (const xmlChar *)""))
+											gag = new common::generator::tff_gripper_approach(*this, atoi((char *)argument));
+										xmlFree(argument);
+									}
+									else if(!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_tff_rubik_face_rotate_gen"))
+									{
+										xmlChar *argument = xmlNodeGetContent(child_node->children);
+										if(argument && xmlStrcmp(argument, (const xmlChar *)""))
+											rfrg = new common::generator::tff_rubik_face_rotate(*this, atoi((char *)argument));
+										xmlFree(argument);
+									}
+									else if(!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_teach_in_gen"))
+									{
+										xmlChar *argument = xmlNodeGetContent(child_node->children);
+										if(argument && xmlStrcmp(argument, (const xmlChar *)""));
+										tig = new common::ecp_teach_in_generator(*this);
+										xmlFree(argument);
+									}
+									else if(!xmlStrcmp(child_node->children->name, (const xmlChar *)"bias_edp_force_gen"))
+									{
+										xmlChar *argument = xmlNodeGetContent(child_node->children);
+										if(argument && xmlStrcmp(argument, (const xmlChar *)""));
+										befg = new common::generator::bias_edp_force(*this);
+										xmlFree(argument);
+									}
+									else if(!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_tool_change_gen"))
+									{
+										xmlChar *argument = xmlNodeGetContent(child_node->children);
+										if(argument && xmlStrcmp(argument, (const xmlChar *)""))
+											tcg = new common::generator::tool_change(*this, atoi((char *)argument));
+										xmlFree(argument);
+									}
+									else if(!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_smooth_gen"))
+									{
+										xmlChar *argument = xmlNodeGetContent(child_node->children);
+										if(argument && xmlStrcmp(argument, (const xmlChar *)""))
+											sg = new common::generator::smooth(*this, (bool)atoi((char *)argument));
+										xmlFree(argument);
+									}
+									else if(!xmlStrcmp(child_node->children->name, (const xmlChar *)"weight_meassure_gen"))
+									{
+										xmlChar *argument = xmlNodeGetContent(child_node->children);
+										if(argument && xmlStrcmp(argument, (const xmlChar *)""))
+											wmg = new common::generator::weight_meassure(*this, atoi((char *)argument));
+										xmlFree(argument);
+									}
+									else if(!xmlStrcmp(child_node->children->name, (const xmlChar *)"ecp_sub_task_gripper_opening"))
+									{
+										xmlChar *argument = xmlNodeGetContent(child_node->children);
+										if(argument && xmlStrcmp(argument, (const xmlChar *)""));
+										go_st = new common::task::ecp_sub_task_gripper_opening(*this);
+										xmlFree(argument);
+									}
 								}
 							}
 						}
-	               xmlFree(robot);
-	            }
-	         }
+						xmlFree(robot);
+					}
+				}
 			}
-         xmlFree(stateType);
+			xmlFree(stateType);
 		}
-   }
-   xmlFreeDoc(doc);
-   xmlCleanupParser();
+	}
+	xmlFreeDoc(doc);
+	xmlCleanupParser();
 
-   sr_ecp_msg->message("ECP loaded");
+	sr_ecp_msg->message("ECP loaded");
 }
 
 void fsautomat::main_task_algorithm(void)
