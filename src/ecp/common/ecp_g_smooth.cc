@@ -143,7 +143,7 @@ void smooth::generate_next_coords (void)
 
 }
 
-bool smooth::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory)
+void smooth::set_trajectory(ecp_mp::common::Trajectory &trajectory)
 {
 	trajectory.showTime();
 
@@ -157,7 +157,6 @@ bool smooth::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory)
          insert_pose_list_element(trajectory.getPoseSpecification(), (*it).startVelocity, (*it).endVelocity, (*it).velocity, (*it).accelerations, (*it).coordinates);
 	}
 	*/
-	return true;
 }
 
 void smooth::set_pose_from_xml(xmlNode *stateNode)
@@ -293,7 +292,7 @@ bool smooth::load_trajectory_from_xml(const char* fileName, const char* nodeName
 	return true;
 }
 
-bool smooth::load_file_with_path (const char* file_name)
+void smooth::load_file_with_path (const char* file_name)
 {
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
@@ -311,7 +310,7 @@ bool smooth::load_file_with_path (const char* file_name)
     double coordinates[MAX_SERVOS_NR];     // Wczytane wspolrzedne
 
     std::ifstream from_file(file_name); // otworz plik do odczytu
-    if (!from_file)
+    if (!from_file.good())
     {
         perror(file_name);
         throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
@@ -319,7 +318,6 @@ bool smooth::load_file_with_path (const char* file_name)
 
     if ( !(from_file >> coordinate_type) )
     {
-        from_file.close();
         throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
     }
 
@@ -358,13 +356,11 @@ bool smooth::load_file_with_path (const char* file_name)
     //		ps = POSE_FORCE_LINEAR;
     else
     {
-        from_file.close();
         throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
     }
     // printf("po coord type %d\n", ps);
     if ( !(from_file >> number_of_poses) )
     {
-        from_file.close();
         throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
     }
     // printf("po number of poses %d\n", number_of_poses);
@@ -377,7 +373,6 @@ bool smooth::load_file_with_path (const char* file_name)
         {
             if ( !(from_file >> vp[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
-                from_file.close();
                 throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         }
@@ -386,7 +381,6 @@ bool smooth::load_file_with_path (const char* file_name)
         {
             if ( !(from_file >> vk[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
-                from_file.close();
                 throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         }
@@ -395,7 +389,6 @@ bool smooth::load_file_with_path (const char* file_name)
         {
             if ( !(from_file >> v[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
-                from_file.close();
                 throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         }
@@ -404,7 +397,6 @@ bool smooth::load_file_with_path (const char* file_name)
         {
             if ( !(from_file >> a[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
-                from_file.close();
                 throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         }
@@ -413,7 +405,6 @@ bool smooth::load_file_with_path (const char* file_name)
         {
             if ( !(from_file >> coordinates[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
-                from_file.close();
                 throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         }
@@ -440,8 +431,6 @@ bool smooth::load_file_with_path (const char* file_name)
     } // end: for
 	// only for trajectory xml writing -> for now
 	//Trajectory::writeTrajectoryToXmlFile(file_name, ps, *pose_list);
-    from_file.close();
-    return true;
 }
 
 void smooth::reset(){
@@ -826,7 +815,7 @@ int smooth::pose_list_length(void)
     return pose_list->size();
 }
 
-bool smooth::load_a_v_min (const char* file_name)
+void smooth::load_a_v_min (const char* file_name)
 {
     std::ifstream from_file(file_name); // otworz plik do odczytu
 
@@ -840,12 +829,9 @@ bool smooth::load_a_v_min (const char* file_name)
     { // Zabezpieczenie przed danymi nienumerycznymi
         throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
     }
-
-    from_file.close();
-    return true;
 } // end: load_a_v_min()
 
-bool smooth::load_a_v_max (const char* file_name)
+void smooth::load_a_v_max (const char* file_name)
 {
     uint64_t j;    // Liczniki petli
     std::ifstream from_file(file_name); // otworz plik do odczytu
@@ -916,8 +902,6 @@ bool smooth::load_a_v_max (const char* file_name)
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
-
-    return true;
 } // end: load_a_v_max()
 
 smooth::smooth (common::task::task& _ecp_task, bool _is_synchronised, bool _debug)

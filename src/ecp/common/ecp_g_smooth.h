@@ -78,13 +78,13 @@ public:
 	void set_absolute(void); //zmiana na tryb bezwzgledny
 	void reset(void);
 
-	bool load_a_v_max(const char* file_name);
-	bool load_a_v_min (const char* file_name);
-	bool load_file_with_path (const char* file_name);
+	void load_a_v_max(const char* file_name);
+	void load_a_v_min (const char* file_name);
+	void load_file_with_path (const char* file_name);
 
 	void set_pose_from_xml(xmlNode *stateNode);
 	bool load_trajectory_from_xml(const char* fileName, const char* nodeName);
-	bool load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory);
+	void set_trajectory(ecp_mp::common::Trajectory &trajectory);
 
 	void load_coordinates(lib::POSE_SPECIFICATION,double,double,double,double,double,double,double,double);
 	void load_coordinates(lib::POSE_SPECIFICATION,double[],double[],double[],double[],double[]);

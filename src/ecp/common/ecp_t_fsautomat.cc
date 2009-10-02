@@ -87,9 +87,7 @@ void fsautomat::task_initialization(void)
 
 	const char * whichECP = ecp_mp::common::Trajectory::returnRobotName(ecp_m_robot->robot_name);
 
-	int conArg;
 	xmlNode *cur_node, *child_node;
-	xmlChar *robot;
 	xmlChar *stateType, *argument;
 
 	std::string filePath(mrrocpp_network_path);
@@ -97,8 +95,7 @@ void fsautomat::task_initialization(void)
 	filePath += fileName;
 
 	// open xml document
-	xmlDocPtr doc;
-	doc = xmlParseFile(filePath.c_str());
+	xmlDocPtr doc = xmlParseFile(filePath.c_str());;
 	if(doc == NULL)
 	{
 		fprintf(stderr, "ERROR in ecp initialization: could not parse file: %s\n", fileName.c_str());
@@ -106,8 +103,7 @@ void fsautomat::task_initialization(void)
 	}
 
 	// XML root
-	xmlNode *root = NULL;
-	root = xmlDocGetRootElement(doc);
+	xmlNode *root = xmlDocGetRootElement(doc);
 	if(!root || !root->name)
 	{
 		fprintf(stderr, "ECP initialization ERROR: Bad root node name!");
@@ -130,7 +126,7 @@ void fsautomat::task_initialization(void)
 	         {
 	            if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"ecp") )
 	            {
-						robot = xmlGetProp(child_node, (const xmlChar *)"name");
+	               xmlChar * robot = xmlGetProp(child_node, (const xmlChar *)"name");
 	               if(robot && !xmlStrcmp(robot, (const xmlChar *) whichECP))
 						{
 							for(;child_node->children; child_node->children = child_node->children->next)
@@ -279,7 +275,7 @@ void fsautomat::main_task_algorithm(void)
 				{
 					if(ecpLevel)
 					{
-						sg->load_trajectory_from_xml((*trjMap)[mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
+						sg->set_trajectory((*trjMap)[mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
 					}
 					else
 					{
