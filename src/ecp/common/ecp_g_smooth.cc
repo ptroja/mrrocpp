@@ -45,18 +45,16 @@ void smooth::set_absolute(void){
 bool smooth::eq(double a, double b)
 {
 	const double EPS = 0.0001;
-	const double& diff = a - b;
-	return diff < EPS && diff > -EPS;
+	const double diff = a - b;
+	return fabs(diff < EPS);
 }
 
 void smooth::generate_next_coords (void)
 {
     //funkcja obliczajaca polozenie w danym makrokroku
+    const double tk=10*STEP;
 
-    int i;
-    double tk=10*STEP;
-
-    for(i=0; i<MAX_SERVOS_NR; i++)
+    for(int i=0; i<MAX_SERVOS_NR; i++)
     {
         if(node_counter<przysp[i])
         { //pierwszy etap
@@ -154,7 +152,6 @@ bool smooth::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory)
 	pose_list_iterator = pose_list->end();
 
 	/*
-	bool first_time = true;
 	for(std::list<Trajectory::Pose>::iterator it = trajectory.getPoses()->begin(); it != trajectory.getPoses()->end(); ++it)
 	{
          insert_pose_list_element(trajectory.getPoseSpecification(), (*it).startVelocity, (*it).endVelocity, (*it).velocity, (*it).accelerations, (*it).coordinates);
@@ -753,10 +750,8 @@ void smooth::next_pose_list_ptr (void)
 // -------------------------------------------------------get all previously saved elements from actual iterator
 void smooth::get_pose (void)
 {
-    int i;
-
-    td.arm_type = pose_list_iterator->arm_type;
-    for(i=0; i<MAX_SERVOS_NR; i++)
+	td.arm_type = pose_list_iterator->arm_type;
+    for(int i=0; i<MAX_SERVOS_NR; i++)
     {
         v_p[i]=pose_list_iterator->v_p[i];
         v_k[i]=pose_list_iterator->v_k[i];
@@ -764,10 +759,9 @@ void smooth::get_pose (void)
         a[i]=pose_list_iterator->a[i];
         final_position[i]=pose_list_iterator->coordinates[i];
     }
-//	 if(type==2)
-//					for(i=0; i<MAX_SERVOS_NR; i++)
-//						final_position[i]+=start_position[i];
-
+//	if(type==2)
+//		for(i=0; i<MAX_SERVOS_NR; i++)
+//			final_position[i]+=start_position[i];
 }
 // -------------------------------------------------------
 void smooth::set_pose (lib::POSE_SPECIFICATION ps, double vp[MAX_SERVOS_NR], double vk[MAX_SERVOS_NR], double vv[MAX_SERVOS_NR], double aa[MAX_SERVOS_NR], double c[MAX_SERVOS_NR])
@@ -834,16 +828,14 @@ bool smooth::load_a_v_min (const char* file_name)
 {
     std::ifstream from_file(file_name); // otworz plik do odczytu
 
-    if (!from_file)
+    if (!from_file.good())
     {
-        // printf("error\n");
         perror(file_name);
         throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
     }
 
     if ( !(from_file >> v_grip_min) )
     { // Zabezpieczenie przed danymi nienumerycznymi
-        from_file.close();
         throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
     }
 
@@ -856,7 +848,7 @@ bool smooth::load_a_v_max (const char* file_name)
     uint64_t j;    // Liczniki petli
     std::ifstream from_file(file_name); // otworz plik do odczytu
 
-    if (!from_file)
+    if (!from_file.good())
     {
         // printf("error\n");
         perror(file_name);
@@ -867,7 +859,6 @@ bool smooth::load_a_v_max (const char* file_name)
     {
         if ( !(from_file >> v_max_motor[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            from_file.close();
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
@@ -875,7 +866,6 @@ bool smooth::load_a_v_max (const char* file_name)
     {
         if ( !(from_file >> a_max_motor[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            from_file.close();
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
@@ -884,7 +874,6 @@ bool smooth::load_a_v_max (const char* file_name)
     {
         if ( !(from_file >> v_max_joint[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            from_file.close();
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
@@ -892,7 +881,6 @@ bool smooth::load_a_v_max (const char* file_name)
     {
         if ( !(from_file >> a_max_joint[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            from_file.close();
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
@@ -901,7 +889,6 @@ bool smooth::load_a_v_max (const char* file_name)
     {
         if ( !(from_file >> v_max_zyz[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            from_file.close();
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
@@ -909,7 +896,6 @@ bool smooth::load_a_v_max (const char* file_name)
     {
         if ( !(from_file >> a_max_zyz[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            from_file.close();
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
@@ -918,7 +904,6 @@ bool smooth::load_a_v_max (const char* file_name)
     {
         if ( !(from_file >> v_max_aa[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            from_file.close();
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
@@ -926,12 +911,10 @@ bool smooth::load_a_v_max (const char* file_name)
     {
         if ( !(from_file >> a_max_aa[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            from_file.close();
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
 
-    from_file.close();
     return true;
 } // end: load_a_v_max()
 
@@ -972,7 +955,7 @@ bool smooth::first_step ()
         the_robot->EDP_data.set_arm_type = lib::MOTOR;
         the_robot->EDP_data.get_arm_type = lib::MOTOR;
         the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = lib::MIM;
+        the_robot->EDP_data.next_interpolation_type = lib::MIM;
         break;
     case lib::JOINT:
         the_robot->EDP_data.instruction_type = lib::GET;
@@ -981,7 +964,7 @@ bool smooth::first_step ()
         the_robot->EDP_data.set_arm_type = lib::JOINT;
         the_robot->EDP_data.get_arm_type = lib::JOINT;
         the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = lib::MIM;
+        the_robot->EDP_data.next_interpolation_type = lib::MIM;
         break;
     case lib::XYZ_EULER_ZYZ:
         the_robot->EDP_data.instruction_type = lib::GET;
@@ -990,7 +973,7 @@ bool smooth::first_step ()
         the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
         the_robot->EDP_data.get_arm_type = lib::XYZ_EULER_ZYZ;
         the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = lib::MIM;
+        the_robot->EDP_data.next_interpolation_type = lib::MIM;
         break;
     case lib::XYZ_ANGLE_AXIS:
         the_robot->EDP_data.instruction_type = lib::GET;
@@ -999,7 +982,7 @@ bool smooth::first_step ()
         the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
         the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
         the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = lib::MIM;
+        the_robot->EDP_data.next_interpolation_type = lib::MIM;
         break;
     default:
         throw ECP_error (lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
