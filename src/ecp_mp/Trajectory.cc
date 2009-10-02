@@ -148,7 +148,6 @@ const char * Trajectory::toString(lib::POSE_SPECIFICATION ps)
 
 void Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth_trajectory_pose> &poses)
 {
-	char * file = new char[80];
 	int posCount = poses.size();
 	xmlDocPtr doc;
 	xmlNodePtr tree, subtree;
@@ -168,7 +167,8 @@ void Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIF
 		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Accelerations", (const xmlChar *)Trajectory::toString((*it).a, MAX_SERVOS_NR).c_str());
 		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Coordinates", (const xmlChar *)Trajectory::toString((*it).coordinates, MAX_SERVOS_NR).c_str());
 	}
-	sprintf(file, "%s%s", fileName, ".xml");
+	std::string file(fileName);
+	file+=".xml";
 
 	xmlKeepBlanksDefault(0);
 	xmlSaveFormatFile(file, doc, 1);
