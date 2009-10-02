@@ -407,7 +407,7 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	// zacisniecie postumenta na kostce
 
 
-	for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin();
+	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
 	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -508,7 +508,7 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 
 	// zacisniecie tracka na kostce
 
-	for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin();
+	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
 	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -783,7 +783,7 @@ void rubik_cube_solver::task_initialization(void)
 		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 
 	// Konfiguracja wszystkich czujnikow
-	for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin();
+	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
 	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -819,7 +819,7 @@ void rubik_cube_solver::main_task_algorithm(void)
 		for(;;)
 		{
 			sr_ecp_msg->message("Nowa seria");
-			for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin();
+			for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
 			sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 			{
 				sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika

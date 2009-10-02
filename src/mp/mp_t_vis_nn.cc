@@ -45,7 +45,7 @@ void vis_nn::task_initialization(void)
 	sensor_m[lib::SENSOR_CAMERA_SA] = new ecp_mp::sensor::vis_nn (lib::SENSOR_CAMERA_SA, "[vsp_nn]", *this); //change if SENSOR_CAMERA_SA used for nonnn recog (vsp_vis_pbeolsac)
 
 	// Konfiguracja wszystkich czujnikow
-	for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 	!= sensor_m.end(); sensor_m_iterator++) {
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
 		sensor_m_iterator->second->configure_sensor();
@@ -70,7 +70,7 @@ void vis_nn::main_task_algorithm(void)
 	//eyegen.robot_m = robot_m;
 	//eyegen.sensor_m = sensor_m;
 	//po cholere biasujemy jeszcze raz te czujniki i co to w ogole oznacza???
-	for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 	!= sensor_m.end(); sensor_m_iterator++) {
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
 		sensor_m_iterator->second->configure_sensor();

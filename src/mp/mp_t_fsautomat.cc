@@ -142,7 +142,7 @@ void fsautomat::task_initialization(void)
 	}
 
 	// Konfiguracja wszystkich czujnikow
-	for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 			!= sensor_m.end(); sensor_m_iterator++) {
 		sensor_m_iterator->second->to_vsp.parameters = 1; // biasowanie czujnika
 		sensor_m_iterator->second->configure_sensor();
@@ -308,7 +308,7 @@ void fsautomat::configureProperSensor(const char *propSensor)
 	}
 
 	// Konfiguracja wszystkich czujnikow
-	for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 			!= sensor_m.end(); sensor_m_iterator++) {
 		sensor_m_iterator->second->to_vsp.parameters = 1; // biasowanie czujnika
 		sensor_m_iterator->second->configure_sensor();
@@ -361,7 +361,7 @@ void fsautomat::executeMotion(common::State &state)
 
 void fsautomat::sensorInitialization()
 {
-	/*	for (sensor_map::iterator sensor_m_iterator = sensor_m.begin();
+	/*	for (sensors_t::iterator sensor_m_iterator = sensor_m.begin();
 	 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	 {
 	 sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -743,7 +743,7 @@ void fsautomat::main_task_algorithm(void)
 	//strcmp(nextState, (char *)"INIT");
 	strcpy(nextState, "INIT");
 	// temporary sensor config in this place
-	for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 			!= sensor_m.end(); sensor_m_iterator++) {
 		sensor_m_iterator->second->to_vsp.parameters = 1; // biasowanie czujnika
 		sensor_m_iterator->second->configure_sensor();

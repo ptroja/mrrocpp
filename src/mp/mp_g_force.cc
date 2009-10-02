@@ -98,7 +98,7 @@ bool tff_single_robot_nose_run::next_step()
 
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 
-		for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
@@ -250,7 +250,7 @@ bool tff_nose_run::next_step()
 	//	cout << "next_step" << endl;
 
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
-		for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
@@ -647,7 +647,7 @@ bool tff_rubik_grab::next_step()
 
 
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
-		for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
@@ -854,7 +854,7 @@ bool tff_rubik_face_rotate::next_step()
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
-		for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
@@ -1063,7 +1063,7 @@ bool tff_gripper_approach::next_step()
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
-		for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
@@ -1242,7 +1242,7 @@ bool nose_run_force::next_step()
 
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		// wylaczenie pomiaru sily
-		for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;
@@ -1513,7 +1513,7 @@ bool drawing_teach_in_force::next_step()
 {
 	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		// wylaczenie pomiaru sily
-		for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
+		for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
 				!= sensor_m.end(); sensor_m_iterator++) {
 			sensor_m_iterator->second->base_period=0;
 			sensor_m_iterator->second->current_period=0;

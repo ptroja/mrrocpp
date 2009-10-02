@@ -181,7 +181,7 @@ void pouring::task_initialization(void)
 	 sensor_m[lib::SENSOR_FORCE_POSTUMENT] = new ecp_mp_schunk_sensor(lib::SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
 
 	 // Konfiguracja wszystkich czujnikow
-	 for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin();
+	 for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
 	 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	 {
 	 sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika

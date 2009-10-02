@@ -49,7 +49,7 @@ namespace task {
 lib::sr_ecp* task::sr_ecp_msg = NULL;
 
 // mapa wszystkich czujnikow
-sensor_map task::sensor_m;
+sensors_t task::sensor_m;
 
 // mapa wszystkich transmitterów
 transmitters_t task::transmitter_m;
@@ -229,10 +229,10 @@ bool task::show_message (const char* message)
 // Funkcje do obslugi czujnikow
 
 // ------------------------------------------------------------------------
-void task::kill_all_VSP (sensor_map & _sensor_m)
+void task::kill_all_VSP (sensors_t & _sensor_m)
 {
 	// Zabicie wszystkich procesow VSP
-	for (ecp_mp::sensor_map::iterator sensor_m_iterator = _sensor_m.begin();
+	for (ecp_mp::sensors_t::iterator sensor_m_iterator = _sensor_m.begin();
 	        sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++) {
 		if (sensor_m_iterator->second->pid !=0) {
 #if defined(PROCESS_SPAWN_RSH)
@@ -247,9 +247,9 @@ void task::kill_all_VSP (sensor_map & _sensor_m)
 // ------------------------------------------------------------------------
 
 
-void task::all_sensors_initiate_reading (sensor_map & _sensor_m)
+void task::all_sensors_initiate_reading (sensors_t & _sensor_m)
 {
-	for (ecp_mp::sensor_map::iterator sensor_m_iterator = _sensor_m.begin();
+	for (ecp_mp::sensors_t::iterator sensor_m_iterator = _sensor_m.begin();
 	        sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++) {
 		if (sensor_m_iterator->second->base_period > 0) {
 			if (sensor_m_iterator->second->current_period == sensor_m_iterator->second->base_period) {
@@ -260,10 +260,10 @@ void task::all_sensors_initiate_reading (sensor_map & _sensor_m)
 	}
 }
 
-void task::all_sensors_get_reading (sensor_map & _sensor_m)
+void task::all_sensors_get_reading (sensors_t & _sensor_m)
 {
 
-	for (ecp_mp::sensor_map::iterator sensor_m_iterator = _sensor_m.begin();
+	for (ecp_mp::sensors_t::iterator sensor_m_iterator = _sensor_m.begin();
 	        sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++) {
 		// jesli wogole mamy robic pomiar
 		if (sensor_m_iterator->second->base_period > 0) {

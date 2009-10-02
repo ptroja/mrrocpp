@@ -29,7 +29,7 @@
 namespace mrrocpp {
 namespace ecp_mp {
 
-typedef std::map<lib::SENSOR_ENUM, lib::sensor*> sensor_map;
+typedef std::map<lib::SENSOR_ENUM, lib::sensor*> sensors_t;
 typedef std::map<transmitter::TRANSMITTER_ENUM, transmitter::transmitter*> transmitters_t;
 
 namespace task {
@@ -77,11 +77,11 @@ public:
 	bool show_message (const char* message);
 
 	// Zatrzymanie wszystkich VSP
-	static void kill_all_VSP (sensor_map & _sensor_m);
+	static void kill_all_VSP (sensors_t & _sensor_m);
 
 	// funkcje do obslugi czujnikow
-	void all_sensors_initiate_reading (sensor_map & _sensor_m);
-	void all_sensors_get_reading (sensor_map & _sensor_m);
+	void all_sensors_initiate_reading (sensors_t & _sensor_m);
+	void all_sensors_get_reading (sensors_t & _sensor_m);
 
 	// funkcjonalnosc dodana na potrzeby czytania trajektorii z pliku xml
 	class str_cmp{

@@ -45,7 +45,7 @@ void time::task_initialization(void)
 	sensor_m[lib::SENSOR_TIME] = new ecp_mp::sensor::time (lib::SENSOR_TIME, "[vsp_time]", *this);
 
 	// Configure sensors
-	for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin();
+	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
 		 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->configure_sensor();

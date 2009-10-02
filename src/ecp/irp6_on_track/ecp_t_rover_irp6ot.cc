@@ -42,7 +42,7 @@ void vislx::task_initialization(void)
 
 	// Konfiguracja wszystkich czujnikow
 
-	for (ecp_mp::sensor_map::iterator sensor_m_iterator = sensor_m.begin();
+	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
 		 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
@@ -132,7 +132,7 @@ void ecp_task_vislx_irp6ot::task_initialization(void)
 
 	// Konfiguracja wszystkich czujnikow
 
-	for (ecp_mp::sensor_map::iterator::iterator sensor_m_iterator = sensor_m.begin();
+	for (ecp_mp::sensors_t::iterator::iterator sensor_m_iterator = sensor_m.begin();
 		 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
 	{
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
