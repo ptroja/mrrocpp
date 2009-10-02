@@ -46,8 +46,8 @@ protected:
 	double final_position[MAX_SERVOS_NR]; //pozycja koncowa
 	double start_position[MAX_SERVOS_NR]; //pozycja poczatkowa
 	double next_position[MAX_SERVOS_NR]; //pozycja nastepego makrokroku
-	bool is_synchronised;
-	bool debug; //czy maja byc wyswietlane debugi
+	const bool is_synchronised;
+	const bool debug; //czy maja byc wyswietlane debugi
 
 	double przysp[MAX_SERVOS_NR];  //moment, w ktorym konczy sie przyspieszanie
 	double jedn[MAX_SERVOS_NR];  //moment, w ktorym konczy sie ruch jednostajny
@@ -56,7 +56,6 @@ protected:
 	double s_jedn[MAX_SERVOS_NR];  //droga po etapie ruchu jednostajnego
 
 	int type; //1 - polozenie bezwzgledne , 2 - polozenie przyrostowe
-	bool first_coordinate;
 
 public:
 	smooth(common::task::task& _ecp_task, bool _is_synchronised, bool _debug = false);
@@ -71,7 +70,7 @@ public:
 	void set_pose (lib::POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
 	bool is_pose_list_element ( void );
 	bool is_last_list_element ( void );
-	void create_pose_list_head (lib::POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
+
 	void insert_pose_list_element (lib::POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
 	int pose_list_length(void);
 
@@ -83,7 +82,7 @@ public:
 	bool load_a_v_min (const char* file_name);
 	bool load_file_with_path (const char* file_name);
 
-	void set_pose_from_xml(xmlNode *stateNode, bool &first_time);
+	void set_pose_from_xml(xmlNode *stateNode);
 	bool load_trajectory_from_xml(const char* fileName, const char* nodeName);
 	bool load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory);
 

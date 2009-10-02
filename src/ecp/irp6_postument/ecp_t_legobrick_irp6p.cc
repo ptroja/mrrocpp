@@ -37,8 +37,6 @@ void lego_brick::task_initialization(void)
 
 void lego_brick::main_task_algorithm(void)
 {
-	sg->flush_pose_list();
-
 	lib::POSE_SPECIFICATION ps = lib::JOINT;
 
 	double coordinates[MAX_SERVOS_NR];
@@ -61,7 +59,7 @@ void lego_brick::main_task_algorithm(void)
 		v[i] = 0.1;
 		a[i] = 0.02;
 	}
-	sg->create_pose_list_head(ps, vp, vk, v, a, coordinates);
+	sg->insert_pose_list_element(ps, vp, vk, v, a, coordinates);
 
 	// generator oparty na detekcji sily
 	// legobrick_detach_force_generator force_gen(*this, 10);

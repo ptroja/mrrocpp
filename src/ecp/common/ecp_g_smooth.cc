@@ -157,23 +157,13 @@ bool smooth::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory)
 	bool first_time = true;
 	for(std::list<Trajectory::Pose>::iterator it = trajectory.getPoses()->begin(); it != trajectory.getPoses()->end(); ++it)
 	{
-		if (first_time)
-		{
-			// Tworzymy glowe listy
-			first_time = false;
-			create_pose_list_head(trajectory.getPoseSpecification(), (*it).startVelocity, (*it).endVelocity, (*it).velocity, (*it).accelerations, (*it).coordinates);
-		}
-		else
-		{
-			// Wstaw do listy nowa pozycje
          insert_pose_list_element(trajectory.getPoseSpecification(), (*it).startVelocity, (*it).endVelocity, (*it).velocity, (*it).accelerations, (*it).coordinates);
-		}
 	}
 	*/
 	return true;
 }
 
-void smooth::set_pose_from_xml(xmlNode *stateNode, bool &first_time)
+void smooth::set_pose_from_xml(xmlNode *stateNode)
 {
 	uint64_t number_of_poses; // Liczba zapamietanych pozycji
 	lib::POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
@@ -227,19 +217,7 @@ void smooth::set_pose_from_xml(xmlNode *stateNode, bool &first_time)
 					xmlFree(xmlDataLine);
 				}
 			}
-			if (first_time)
-			{
-				// Tworzymy glowe listy
-				first_time = false;
-				create_pose_list_head(ps, vp, vk, v, a, coordinates);
-				 //printf("Pose list head: %d, %f, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0], coordinates[0]);
-			}
-			else
-			{
-				// Wstaw do listy nowa pozycje
-   			insert_pose_list_element(ps, vp, vk, v, a, coordinates);
-				//printf("Pose list element: %d, %f, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0], coordinates[0]);
-			}
+			insert_pose_list_element(ps, vp, vk, v, a, coordinates);
 		}
 	}
 	xmlFree(coordinateType);
@@ -248,37 +226,36 @@ void smooth::set_pose_from_xml(xmlNode *stateNode, bool &first_time)
 
 bool smooth::load_trajectory_from_xml(const char* fileName, const char* nodeName)
 {
-    // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
+	// Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
-    bool first_time = true; // Znacznik
-	 xmlNode *cur_node, *child_node, *subTaskNode;
-	 xmlChar *stateID;
+	xmlNode *cur_node, *child_node, *subTaskNode;
+	xmlChar *stateID;
 
-	 xmlDocPtr doc;
-	 doc = xmlParseFile(fileName);
-	 xmlXIncludeProcess(doc);
-	 if(doc == NULL)
-	 {
-        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
-	 }
+	xmlDocPtr doc;
+	doc = xmlParseFile(fileName);
+	xmlXIncludeProcess(doc);
+	if(doc == NULL)
+	{
+		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+	}
 
-	 xmlNode *root = NULL;
-	 root = xmlDocGetRootElement(doc);
-	 if(!root || !root->name)
-	 {
-		 xmlFreeDoc(doc);
-		 throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
-	 }
+	xmlNode *root = NULL;
+	root = xmlDocGetRootElement(doc);
+	if(!root || !root->name)
+	{
+		xmlFreeDoc(doc);
+		throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+	}
 
-	 flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
+	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
 
-   for(cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
-   {
-      if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "SubTask" ) )
-      {
-   		for(subTaskNode = cur_node->children; subTaskNode != NULL; subTaskNode = subTaskNode->next)
+	for(cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
+	{
+		if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "SubTask" ) )
+		{
+			for(subTaskNode = cur_node->children; subTaskNode != NULL; subTaskNode = subTaskNode->next)
 			{
-      		if ( subTaskNode->type == XML_ELEMENT_NODE  && !xmlStrcmp(subTaskNode->name, (const xmlChar *) "State" ) )
+				if ( subTaskNode->type == XML_ELEMENT_NODE  && !xmlStrcmp(subTaskNode->name, (const xmlChar *) "State" ) )
 				{
 					stateID = xmlGetProp(subTaskNode, (const xmlChar *) "id");
 					if(stateID && !strcmp((const char *)stateID, nodeName))
@@ -287,28 +264,28 @@ bool smooth::load_trajectory_from_xml(const char* fileName, const char* nodeName
 						{
 							if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") )
 							{
-								set_pose_from_xml(child_node, first_time);
+								set_pose_from_xml(child_node);
 							}
 						}
 					}
-         		xmlFree(stateID);
+					xmlFree(stateID);
 				}
 			}
 		}
-      if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "State" ) )
-      {
-         stateID = xmlGetProp(cur_node, (const xmlChar *) "id");
-         if(stateID && !strcmp((const char *)stateID, nodeName))
+		if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "State" ) )
+		{
+			stateID = xmlGetProp(cur_node, (const xmlChar *) "id");
+			if(stateID && !strcmp((const char *)stateID, nodeName))
 			{
-	         for(child_node = cur_node->children; child_node != NULL; child_node = child_node->next)
-	         {
-	            if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") )
-	            {
-						set_pose_from_xml(child_node, first_time);
-	            }
-	         }
+				for(child_node = cur_node->children; child_node != NULL; child_node = child_node->next)
+				{
+					if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") )
+					{
+						set_pose_from_xml(child_node);
+					}
+				}
 			}
-         xmlFree(stateID);
+			xmlFree(stateID);
 		}
 	}
 	xmlFreeDoc(doc);
@@ -326,11 +303,8 @@ bool smooth::load_file_with_path (const char* file_name)
 
     char coordinate_type[80];  // Opis wspolrzednych: "MOTOR", "JOINT", ...
     lib::POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
-    uint64_t e;       // Kod bledu systemowego
     uint64_t number_of_poses; // Liczba zapamietanych pozycji
     uint64_t i, j;    // Liczniki petli
-    bool first_time = true; // Znacznik
-    int extra_info;
     double vp[MAX_SERVOS_NR];
     double vk[MAX_SERVOS_NR];
     double v[MAX_SERVOS_NR];
@@ -446,55 +420,23 @@ bool smooth::load_file_with_path (const char* file_name)
         }
         // printf("po coord\n");
 
-        /*		if (ps == POSE_FORCE_LINEAR)
+        /*
+        if (ps == POSE_FORCE_LINEAR)
         		{
         			if ( !(from_file >> extra_info) )
         			{ // Zabezpieczenie przed danymi nienumerycznymi
         				from_file.close();
         				throw ecp_generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         			}
-        			if (first_time)
-        			{
-        				// Tworzymy glowe listy
-        				first_time = false;
-        				create_pose_list_head(ps, vp, vk, v, coordinates);
-        			}
-        			else
-        			{
-        				// Wstaw do listy nowa pozycje
-        				insert_pose_list_element(ps, vp, vk, v, coordinates);
-        			}
+       				// Wstaw do listy nowa pozycje
+       				insert_pose_list_element(ps, vp, vk, v, coordinates);
         		}
         		else
-        		{*/
-        if (first_time)
-        {
-            // Tworzymy glowe listy
-            first_time = false;
-            create_pose_list_head(ps, vp, vk, v, a, coordinates);
-//				for(i=0;i<MAX_SERVOS_NR; i++)
-//					printf("\t%f", vp[i]);
-//				printf("\nvk\n");
-//				for(i=0;i<MAX_SERVOS_NR; i++)
-//					printf("\t%f", vk[i]);
-//				printf("\nv\n");
-//				for(i=0;i<MAX_SERVOS_NR; i++)
-//					printf("\t%f", v[i]);
-//				printf("\na\n");
-//				for(i=0;i<MAX_SERVOS_NR; i++)
-//					printf("\t%f", a[i]);
-//				printf("\ncoordinates\n");
-//				for(i=0;i<MAX_SERVOS_NR; i++)
-//					printf("\t%f", coordinates[i]);
-//				printf("\n\n");
-            // printf("Pose list head: %d, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0]);
-        }
-        else
-        {
+        		{
+        */
             // Wstaw do listy nowa pozycje
             insert_pose_list_element(ps, vp, vk, v, a, coordinates);
             // printf("Pose list element: %d, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0]);
-        }
         //		}
     } // end: for
 	// only for trajectory xml writing -> for now
@@ -505,23 +447,15 @@ bool smooth::load_file_with_path (const char* file_name)
 
 void smooth::reset(){
 	flush_pose_list();
-	first_coordinate=true;
 }
 
 
 //wczytuje wspolrzedne punkt���w poprzez funkcje
 //poki co przy zmiane trybu nalezy usunac instniejaca instancje smooth_generatora i stworzyc nowa.
-void smooth::load_coordinates(lib::POSE_SPECIFICATION ps, double vp[MAX_SERVOS_NR], double vk[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]){
-
-	if(first_coordinate)	//in case if there are some already read coordinates from file.
-		flush_pose_list();
-
-	if (first_coordinate){	// Tworzymy glowe listy
-		first_coordinate=false;
-		create_pose_list_head(ps, vp, vk, v, a, coordinates);
-	} else					// Wstaw do listy nowa pozycje
-		insert_pose_list_element(ps, vp, vk, v, a, coordinates);
-
+void smooth::load_coordinates(lib::POSE_SPECIFICATION ps, double vp[MAX_SERVOS_NR], double vk[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR])
+{
+	// Wstaw do listy nowa pozycje
+	insert_pose_list_element(ps, vp, vk, v, a, coordinates);
 }
 
 void smooth::load_coordinates(lib::POSE_SPECIFICATION ps, double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7){
@@ -532,9 +466,6 @@ void smooth::load_coordinates(lib::POSE_SPECIFICATION ps, double cor0, double co
 	double a[MAX_SERVOS_NR]={0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 5.0};
 	double coordinates[MAX_SERVOS_NR];     // Wczytane wspolrzedne
 
-	if(first_coordinate)	//in case if there are some already read coordinates from file.
-		flush_pose_list();
-
 	coordinates[0]=cor0;
 	coordinates[1]=cor1;
 	coordinates[2]=cor2;
@@ -544,12 +475,8 @@ void smooth::load_coordinates(lib::POSE_SPECIFICATION ps, double cor0, double co
 	coordinates[6]=cor6;
 	coordinates[7]=cor7;
 
-	if (first_coordinate){	// Tworzymy glowe listy
-		first_coordinate=false;
-		create_pose_list_head(ps, vp, vk, v, a, coordinates);
-	}else					// Wstaw do listy nowa pozycje
-		insert_pose_list_element(ps, vp, vk, v, a, coordinates);
-
+	// Wstaw do listy nowa pozycje
+	insert_pose_list_element(ps, vp, vk, v, a, coordinates);
 }
 
 void smooth::calculate(void)
@@ -557,10 +484,9 @@ void smooth::calculate(void)
     double s[MAX_SERVOS_NR];
     double t;
     double v_1, v_2;
-    int i, tmp;
     double tk=10*STEP; //czas jednego makrokroku
 
-    for(i=0; i<MAX_SERVOS_NR; i++)
+    for(int i=0; i<MAX_SERVOS_NR; i++)
     {
         // Obliczenie drog dla wszystkich osi
         s[i]=fabs(final_position[i]-start_position[i]);
@@ -706,7 +632,7 @@ void smooth::calculate(void)
     }
 
     // Obliczenie predkosci dla wszystkich osi
-    for(i=0; i<MAX_SERVOS_NR; i++)
+    for(int i=0; i<MAX_SERVOS_NR; i++)
         if(eq(s[i], 0.0))
             v_r[i]=0;
         else
@@ -774,7 +700,7 @@ void smooth::calculate(void)
     td.internode_step_no = 10;
     td.value_in_step_no = td.internode_step_no - 2;
 
-    for(i=0;i<MAX_SERVOS_NR;i++)
+    for(int i=0;i<MAX_SERVOS_NR;i++)
         td.coordinate_delta[i] = final_position[i]-
                                  start_position[i];
     if(debug)
@@ -784,7 +710,7 @@ void smooth::calculate(void)
         printf("v: %f, %f, %f, %f, %f, %f, %f, %f\n", v_r[0], v_r[1], v_r[2], v_r[3], v_r[4], v_r[5], v_r[6], v_r[7]);
     }
 
-    for(i=0;i<MAX_SERVOS_NR;i++)
+    for(int i=0;i<MAX_SERVOS_NR;i++)
     {
         przysp[i]=fabs((v_r[i]-v_p[i])/(a_r[i]*tk));
         jedn[i]=(t_max-(fabs(v_r[i]-v_k[i])/a_r[i]))/tk;
@@ -801,15 +727,15 @@ void smooth::calculate(void)
         s_jedn[i]= (t_max - (fabs(v_r[i] - v_p[i]) + fabs(v_r[i] - v_k[i]))/a_r[i])*v_r[i];
     }
 
-    v_grip =	(final_position[i]/td.interpolation_node_no);
-    if(v_grip<v_grip_min)
+    // TODO: fixit
+//    v_grip = (final_position[i]/td.interpolation_node_no);
+//    if(v_grip<v_grip_min)
         v_grip=v_grip_min;
 }
 
 void smooth::flush_pose_list ( void )
 {
 	pose_list->clear();
-	first_coordinate=true;
 }
 
 // -------------------------------------------------------return iterator to beginning of the list
@@ -888,17 +814,14 @@ bool smooth::is_last_list_element ( void )
 }
 // -------------------------------------------------------
 
-void smooth::create_pose_list_head (lib::POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR])
-{
-    pose_list->push_back(ecp_mp::common::smooth_trajectory_pose(ps, coordinates, v, a, v_p, v_k));
-    pose_list_iterator = pose_list->begin();
-}
-
-
 void smooth::insert_pose_list_element (lib::POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR])
 {
     pose_list->push_back(ecp_mp::common::smooth_trajectory_pose(ps, coordinates, v, a, v_p, v_k));
-    pose_list_iterator++;
+    if(pose_list->size() == 1) {
+    	pose_list_iterator = pose_list->begin();
+    } else {
+    	pose_list_iterator++;
+    }
 }
 
 // -------------------------------------------------------
@@ -1014,29 +937,22 @@ bool smooth::load_a_v_max (const char* file_name)
 
 smooth::smooth (common::task::task& _ecp_task, bool _is_synchronised, bool _debug)
         :
-        delta (_ecp_task), first_coordinate(true)
+        delta (_ecp_task), is_synchronised(_is_synchronised), debug(_debug)
 {
-    double vp[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-    double vk[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-    double v[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
-    double a[MAX_SERVOS_NR]={1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
-
 	pose_list = new std::list<ecp_mp::common::smooth_trajectory_pose>();
 
-    // Stworzenie sciezek do plików
-    std::string path1(ecp_t.mrrocpp_network_path);
-    path1 += "data/a_v_max.txt";
+	// Stworzenie sciezek do plików
+	std::string path1(ecp_t.mrrocpp_network_path);
+	path1 += "data/a_v_max.txt";
 
-    std::string path2(ecp_t.mrrocpp_network_path);
-    path2 += "data/a_v_min.txt";
+	std::string path2(ecp_t.mrrocpp_network_path);
+	path2 += "data/a_v_min.txt";
 
-    load_a_v_max(path1.c_str());
-    load_a_v_min(path2.c_str());
+	load_a_v_max(path1.c_str());
+	load_a_v_min(path2.c_str());
 
-    is_synchronised = _is_synchronised;
-    debug = _debug;
-	 type=1;
-    //v_grip_min=5;
+	type=1;
+	//v_grip_min=5;
 }
 
 //set necessary instructions, and other data for preparing the robot
@@ -1094,10 +1010,6 @@ bool smooth::first_step ()
 
 bool smooth::next_step ()
 {
-    int i;
-    double tk=10*STEP; //czas jednego makrokroku
-
-
     // ---------------------------------   FIRST INTERVAL    ---------------------------------------
     if ( first_interval )
     {
@@ -1111,12 +1023,12 @@ bool smooth::next_step ()
         switch ( td.arm_type )
         {
         case lib::MOTOR:
-            for(i=0;i<MAX_SERVOS_NR;i++){
+            for(int i=0;i<MAX_SERVOS_NR;i++){
                 start_position[i]=the_robot->EDP_data.current_motor_arm_coordinates[i];
 					 if(type==2)
 						final_position[i]+=start_position[i];
 				}
-            for(i=0; i<MAX_SERVOS_NR; i++)
+            for(int i=0; i<MAX_SERVOS_NR; i++)
             {
                 v_r[i]=v_max_motor[i]*v[i];
                 a_r[i]=a_max_motor[i]*a[i];
@@ -1127,9 +1039,9 @@ bool smooth::next_step ()
             break;
 
         case lib::JOINT:
-            for(i=0;i<MAX_SERVOS_NR;i++)
+            for(int i=0;i<MAX_SERVOS_NR;i++)
                 start_position[i]=the_robot->EDP_data.current_joint_arm_coordinates[i];
-            for(i=0; i<MAX_SERVOS_NR; i++)
+            for(int i=0; i<MAX_SERVOS_NR; i++)
             {
                 v_r[i]=v_max_joint[i]*v[i];
                 a_r[i]=a_max_joint[i]*a[i];
@@ -1140,11 +1052,11 @@ bool smooth::next_step ()
             break;
 
         case lib::XYZ_EULER_ZYZ:
-            for(i=0;i<6;i++)
+            for(int i=0;i<6;i++)
                 start_position[i]=the_robot->EDP_data.current_XYZ_ZYZ_arm_coordinates[i];
             start_position[6]=the_robot->EDP_data.current_gripper_coordinate;
             start_position[7]=0.0;
-            for(i=0; i<MAX_SERVOS_NR; i++)
+            for(int i=0; i<MAX_SERVOS_NR; i++)
             {
                 v_r[i]=v_max_zyz[i]*v[i];
                 a_r[i]=a_max_zyz[i]*a[i];
@@ -1154,11 +1066,11 @@ bool smooth::next_step ()
             calculate();
             break;
         case lib::XYZ_ANGLE_AXIS:
-            for(i=0;i<6;i++)
+            for(int i=0;i<6;i++)
                 start_position[i]=the_robot->EDP_data.current_XYZ_AA_arm_coordinates[i];
             start_position[6]=the_robot->EDP_data.current_gripper_coordinate;
             start_position[7]=0.0;
-            for(i=0; i<MAX_SERVOS_NR; i++)
+            for(int i=0; i<MAX_SERVOS_NR; i++)
             {
                 v_r[i]=v_max_aa[i]*v[i];
                 a_r[i]=a_max_aa[i]*a[i];
@@ -1186,7 +1098,7 @@ bool smooth::next_step ()
         else
         {
             t_max=0;
-            for(i=0; i<MAX_SERVOS_NR; i++){
+            for(int i=0; i<MAX_SERVOS_NR; i++){
 					if(type==1)
 						start_position[i]=pose_list_iterator->coordinates[i];
 					if(type==2)
@@ -1201,18 +1113,17 @@ bool smooth::next_step ()
 
             get_pose();
 
-				if(type==2)
-					for(i=0; i<MAX_SERVOS_NR; i++)
-						final_position[i]+=start_position[i];
-
+			if(type==2) {
+				for(int i=0; i<MAX_SERVOS_NR; i++) {
+					final_position[i]+=start_position[i];
+				}
+			}
 
             // Przepisanie danych z EDP_MASTER do obrazu robota
-
-
             switch ( td.arm_type )
             {
             case lib::MOTOR:
-                for(i=0; i<MAX_SERVOS_NR; i++)
+                for(int i=0; i<MAX_SERVOS_NR; i++)
                 {
                     v_r[i]=v_max_motor[i]*v[i];
                     a_r[i]=a_max_motor[i]*a[i];
@@ -1223,7 +1134,7 @@ bool smooth::next_step ()
                 break;
 
             case lib::JOINT:
-                for(i=0; i<MAX_SERVOS_NR; i++)
+                for(int i=0; i<MAX_SERVOS_NR; i++)
                 {
                     v_r[i]=v_max_joint[i]*v[i];
                     a_r[i]=a_max_joint[i]*a[i];
@@ -1234,7 +1145,7 @@ bool smooth::next_step ()
                 break;
 
             case lib::XYZ_EULER_ZYZ:
-                for(i=0; i<MAX_SERVOS_NR; i++)
+                for(int i=0; i<MAX_SERVOS_NR; i++)
                 {
                     v_r[i]=v_max_zyz[i]*v[i];
                     a_r[i]=a_max_zyz[i]*a[i];
@@ -1244,7 +1155,7 @@ bool smooth::next_step ()
                 calculate();
                 break;
             case lib::XYZ_ANGLE_AXIS:
-                for(i=0; i<MAX_SERVOS_NR; i++)
+                for(int i=0; i<MAX_SERVOS_NR; i++)
                 {
                     v_r[i]=v_max_aa[i]*v[i];
                     a_r[i]=a_max_aa[i]*a[i];
@@ -1276,22 +1187,24 @@ bool smooth::next_step ()
         the_robot->EDP_data.set_type = ARM_DV; // ARM
         the_robot->EDP_data.set_arm_type = lib::MOTOR;
         the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = lib::MIM;
+        the_robot->EDP_data.next_interpolation_type = lib::MIM;
         the_robot->EDP_data.motion_steps = td.internode_step_no;
         the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
         if(node_counter < td.interpolation_node_no)
         {
             generate_next_coords();
+            int i;
             for (i=0; i<MAX_SERVOS_NR; i++)
                 the_robot->EDP_data.next_motor_arm_coordinates[i] = next_position[i];
 
             //PROBA Z CHWYTAKIEM
 
-            if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK)
+            if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
                 i=8;
-            else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT)
+            } else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT) {
                 i=7;
+            }
 
             if(v_grip*node_counter < final_position[i])
             {
@@ -1305,32 +1218,35 @@ bool smooth::next_step ()
         else
         {
             //OSTATNI PUNKT
-            for (i=0; i<MAX_SERVOS_NR; i++)
+            for (int i=0; i<MAX_SERVOS_NR; i++)
                 the_robot->EDP_data.next_motor_arm_coordinates[i] = final_position[i];
         }
         break;
 
     case lib::JOINT:
-            the_robot->EDP_data.instruction_type = lib::SET;
-        the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.set_arm_type = lib::JOINT;
-        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = lib::MIM;
-        the_robot->EDP_data.motion_steps = td.internode_step_no;
-        the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+    	the_robot->EDP_data.instruction_type = lib::SET;
+    	the_robot->EDP_data.set_type = ARM_DV; // ARM
+    	the_robot->EDP_data.set_arm_type = lib::JOINT;
+    	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+    	the_robot->EDP_data.next_interpolation_type = lib::MIM;
+    	the_robot->EDP_data.motion_steps = td.internode_step_no;
+    	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
         if(node_counter < td.interpolation_node_no)
         {
             generate_next_coords();
-            for (i=0; i<MAX_SERVOS_NR; i++)
+            int i;
+            for (i=0; i<MAX_SERVOS_NR; i++) {
                 the_robot->EDP_data.next_joint_arm_coordinates[i] = next_position[i];
+            }
 
             //PROBA Z CHWYTAKIEM
 
-            if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK)
+            if(the_robot->robot_name == lib::ROBOT_IRP6_ON_TRACK) {
                 i=8;
-            else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT)
+            } else if(the_robot->robot_name == lib::ROBOT_IRP6_POSTUMENT) {
                 i=7;
+            }
 
             if(v_grip*node_counter < final_position[i])
             {
@@ -1345,24 +1261,24 @@ bool smooth::next_step ()
         {
             //OSTATNI PUNKT
             generate_next_coords();
-            for (i=0; i<MAX_SERVOS_NR; i++)
+            for (int i=0; i<MAX_SERVOS_NR; i++)
                 the_robot->EDP_data.next_joint_arm_coordinates[i] = final_position[i];
         }
         break;
 
     case lib::XYZ_EULER_ZYZ:
-            the_robot->EDP_data.instruction_type = lib::SET;
-        the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
-        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = lib::MIM;
-        the_robot->EDP_data.motion_steps = td.internode_step_no;
-        the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+    	the_robot->EDP_data.instruction_type = lib::SET;
+    	the_robot->EDP_data.set_type = ARM_DV; // ARM
+    	the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
+    	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+    	the_robot->EDP_data.next_interpolation_type = lib::MIM;
+    	the_robot->EDP_data.motion_steps = td.internode_step_no;
+    	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
         if(node_counter < td.interpolation_node_no)
         {
             generate_next_coords();
-            for (i=0; i<6; i++)
+            for (int i=0; i<6; i++)
                 the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i] = next_position[i];
 
             //PROBA Z CHWYTAKIEM
@@ -1379,26 +1295,25 @@ bool smooth::next_step ()
         else
         {
             //OSTATNI PUNKT
-            for (i=0; i<6; i++)
+            for (int i=0; i<6; i++)
                 the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[i] = final_position[i];
             the_robot->EDP_data.next_gripper_coordinate = final_position[6];
         }
-
         break;
 
     case lib::XYZ_ANGLE_AXIS:
-            the_robot->EDP_data.instruction_type = lib::SET;
-        the_robot->EDP_data.set_type = ARM_DV; // ARM
-        the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
-        the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-         the_robot->EDP_data.next_interpolation_type = lib::MIM;
-        the_robot->EDP_data.motion_steps = td.internode_step_no;
-        the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
+    	the_robot->EDP_data.instruction_type = lib::SET;
+    	the_robot->EDP_data.set_type = ARM_DV; // ARM
+    	the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
+    	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+    	the_robot->EDP_data.next_interpolation_type = lib::MIM;
+    	the_robot->EDP_data.motion_steps = td.internode_step_no;
+    	the_robot->EDP_data.value_in_step_no = td.value_in_step_no;
 
         if(node_counter < td.interpolation_node_no)
         {
             generate_next_coords();
-            for (i=0; i<6; i++)
+            for (int i=0; i<6; i++)
                 the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = next_position[i];
 
             the_robot->EDP_data.next_gripper_coordinate = next_position[6];
@@ -1406,7 +1321,7 @@ bool smooth::next_step ()
         else
         {
             //OSTATNI PUNKT
-            for (i=0; i<6; i++)
+            for (int i=0; i<6; i++)
                 the_robot->EDP_data.next_XYZ_AA_arm_coordinates[i] = final_position[i];
             the_robot->EDP_data.next_gripper_coordinate = final_position[6];
         }

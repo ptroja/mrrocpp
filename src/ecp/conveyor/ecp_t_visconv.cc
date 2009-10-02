@@ -34,11 +34,8 @@ void lego_brick::main_task_algorithm(void)
 	//conveyor_incremental_move ysg(*this, 100);
 	common::generator::smooth gen(*this, true, true);
 	common::generator::smooth gen2(*this, true, true);
-	gen.flush_pose_list();
-	gen2.flush_pose_list();
 
-	lib::POSE_SPECIFICATION ps;
-	ps = lib::JOINT;
+	lib::POSE_SPECIFICATION ps = lib::JOINT;
 
 	double coordinates[MAX_SERVOS_NR];
 	double coordinates2[MAX_SERVOS_NR];
@@ -64,9 +61,8 @@ void lego_brick::main_task_algorithm(void)
 		coordinates2[i] = 0.0;
 	}
 
-	gen.create_pose_list_head(ps, vp, vk, v, a, coordinates);
-	gen2.create_pose_list_head(ps, vp, vk, v, a, coordinates2);
-	//ysg.sensor_m = sensor_m;
+	gen.insert_pose_list_element(ps, vp, vk, v, a, coordinates);
+	gen2.insert_pose_list_element(ps, vp, vk, v, a, coordinates2);
 
 	for(;;) {
 		sr_ecp_msg->message("Ruch");

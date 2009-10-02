@@ -25,7 +25,6 @@ void lego_brick::task_initialization(void)
 	ecp_m_robot = new robot (*this);
 
 	sr_ecp_msg->message("ECP loaded");
-
 }
 
 
@@ -58,8 +57,7 @@ void lego_brick::main_task_algorithm(void)
 		coordinates[i] = 0.0;
 	}
 
-	gen.create_pose_list_head(ps, vp, vk, v, a, coordinates);
-	//ysg.sensor_m = sensor_m;
+	gen.insert_pose_list_element(ps, vp, vk, v, a, coordinates);
 
 	for(;;) {
 		sr_ecp_msg->message("Ruch");
@@ -67,7 +65,6 @@ void lego_brick::main_task_algorithm(void)
 		gen.Move();
 	}
 }
-
 }
 } // namespace conveyor
 
