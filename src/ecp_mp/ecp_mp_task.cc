@@ -229,7 +229,7 @@ bool task::show_message (const char* message)
 // Funkcje do obslugi czujnikow
 
 // ------------------------------------------------------------------------
-void task::kill_all_VSP (std::map <lib::SENSOR_ENUM, lib::sensor*>& _sensor_m)
+void task::kill_all_VSP (sensor_map & _sensor_m)
 {
 	// Zabicie wszystkich procesow VSP
 	for (ecp_mp::sensor_map::iterator sensor_m_iterator = _sensor_m.begin();
@@ -247,7 +247,7 @@ void task::kill_all_VSP (std::map <lib::SENSOR_ENUM, lib::sensor*>& _sensor_m)
 // ------------------------------------------------------------------------
 
 
-void task::all_sensors_initiate_reading (std::map <lib::SENSOR_ENUM, lib::sensor*>& _sensor_m)
+void task::all_sensors_initiate_reading (sensor_map & _sensor_m)
 {
 	for (ecp_mp::sensor_map::iterator sensor_m_iterator = _sensor_m.begin();
 	        sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++) {
@@ -260,7 +260,7 @@ void task::all_sensors_initiate_reading (std::map <lib::SENSOR_ENUM, lib::sensor
 	}
 }
 
-void task::all_sensors_get_reading (std::map <lib::SENSOR_ENUM, lib::sensor*>& _sensor_m)
+void task::all_sensors_get_reading (sensor_map & _sensor_m)
 {
 
 	for (ecp_mp::sensor_map::iterator sensor_m_iterator = _sensor_m.begin();
@@ -281,19 +281,19 @@ bool task::str_cmp::operator()(char const *a, char const *b) const
 }
 
 
-ecp_mp::common::Trajectory * task::createTrajectory(xmlNode *actNode, xmlChar *stateID)
+ecp_mp::common::Trajectory * task::createTrajectory(xmlNodePtr actNode, xmlChar *stateID)
 {
 	xmlChar * coordinateType = xmlGetProp(actNode, (const xmlChar *)"coordinateType");
 	xmlChar * numOfPoses = xmlGetProp(actNode, (const xmlChar *)"numOfPoses");
 
 	ecp_mp::common::Trajectory * actTrajectory = new ecp_mp::common::Trajectory((char *)numOfPoses, (char *)stateID, (char *)coordinateType);
 
-	for(xmlNode * cchild_node = actNode->children; cchild_node!=NULL; cchild_node = cchild_node->next)
+	for(xmlNodePtr cchild_node = actNode->children; cchild_node!=NULL; cchild_node = cchild_node->next)
 	{
-		if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )
+		if ( cchild_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )
 		{
 			actTrajectory->createNewPose();
-			for(xmlNode * ccchild_node = cchild_node->children; ccchild_node!=NULL; ccchild_node = ccchild_node->next)
+			for(xmlNodePtr ccchild_node = cchild_node->children; ccchild_node!=NULL; ccchild_node = ccchild_node->next)
 			{
 				if ( ccchild_node->type == XML_ELEMENT_NODE ) {
 					if(!xmlStrcmp(ccchild_node->name, (const xmlChar *)"StartVelocity") )
@@ -371,7 +371,7 @@ task::trajectories_t * task::loadTrajectories(const char * fileName, lib::ROBOT_
 
 	for(xmlNodePtr cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
 	{
-		if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "SubTask" ) )
+		if ( cur_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cur_node->name, (const xmlChar *) "SubTask" ) )
 		{
 			for(xmlNodePtr subTaskNode = cur_node->children; subTaskNode != NULL; subTaskNode = subTaskNode->next)
 			{

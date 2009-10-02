@@ -77,11 +77,11 @@ public:
 	bool show_message (const char* message);
 
 	// Zatrzymanie wszystkich VSP
-	static void kill_all_VSP (std::map <lib::SENSOR_ENUM, lib::sensor*>& _sensor_m);
+	static void kill_all_VSP (sensor_map & _sensor_m);
 
 	// funkcje do obslugi czujnikow
-	void all_sensors_initiate_reading (std::map <lib::SENSOR_ENUM, lib::sensor*>& _sensor_m);
-	void all_sensors_get_reading (std::map <lib::SENSOR_ENUM, lib::sensor*>& _sensor_m);
+	void all_sensors_initiate_reading (sensor_map & _sensor_m);
+	void all_sensors_get_reading (sensor_map & _sensor_m);
 
 	// funkcjonalnosc dodana na potrzeby czytania trajektorii z pliku xml
 	class str_cmp{
@@ -89,9 +89,8 @@ public:
 		bool operator()(char const *a, char const *b) const;
 	};
 
-	ecp_mp::common::Trajectory * createTrajectory(xmlNode *actNode, xmlChar *stateID);
+	ecp_mp::common::Trajectory * createTrajectory(xmlNodePtr actNode, xmlChar *stateID);
 	trajectories_t * loadTrajectories(const char * fileName, lib::ROBOT_ENUM propRobot);
-
 };
 
 // ---------------------------------------------------------------
