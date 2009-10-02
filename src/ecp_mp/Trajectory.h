@@ -25,7 +25,7 @@ class Trajectory
 
 		static int setValuesInArray(double arrayToFill[], const char *dataString);
 		static lib::POSE_SPECIFICATION returnProperPS(const std::string & poseSpecification);
-		static const char * toString(double valArr[], int length);
+		static std::string toString(double valArr[], int length);
 		static std::string toString(int numberOfPoses);
 		static const char * toString(lib::POSE_SPECIFICATION ps);
 		static const char * returnRobotName(lib::ROBOT_ENUM robot);

@@ -86,18 +86,19 @@ int Trajectory::setValuesInArray(double arrayToFill[], const char *dataString)
 	return index;
 }
 
-const char * Trajectory::toString(double valArr[], int length)
+std::string Trajectory::toString(double valArr[], int length)
 {
-	char * afterConv = new char[length];
+	std::ostringstream stm;
 	for(int i=0; i<length; i++)
 	{
 		if(i==0)
-			sprintf(afterConv, "%g", valArr[i]);
+			stm << valArr[i];
 		else
-			sprintf(afterConv, "%s\t%g", afterConv, valArr[i]);
+			stm << "\t" << valArr[i];
 	}
-//	std::cout<<afterConv<<std::endl;
-	return afterConv;
+
+//	std::cout<<stm.str()<<std::endl;
+	return stm.str();
 }
 
 std::string Trajectory::toString(int numberOfPoses)
@@ -167,11 +168,11 @@ void Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIF
 	for(it = poses.begin(); it != poses.end(); ++it)
 	{
 		tree = xmlNewChild(doc->children, NULL, (const xmlChar *) "Pose", NULL);
-		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"StartVelocity", (const xmlChar *)Trajectory::toString((*it).v_p, MAX_SERVOS_NR));
-		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"EndVelocity", (const xmlChar *)Trajectory::toString((*it).v_k, MAX_SERVOS_NR));
-		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Velocity", (const xmlChar *)Trajectory::toString((*it).v, MAX_SERVOS_NR));
-		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Accelerations", (const xmlChar *)Trajectory::toString((*it).a, MAX_SERVOS_NR));
-		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Coordinates", (const xmlChar *)Trajectory::toString((*it).coordinates, MAX_SERVOS_NR));
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"StartVelocity", (const xmlChar *)Trajectory::toString((*it).v_p, MAX_SERVOS_NR).c_str());
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"EndVelocity", (const xmlChar *)Trajectory::toString((*it).v_k, MAX_SERVOS_NR).c_str());
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Velocity", (const xmlChar *)Trajectory::toString((*it).v, MAX_SERVOS_NR).c_str());
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Accelerations", (const xmlChar *)Trajectory::toString((*it).a, MAX_SERVOS_NR).c_str());
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Coordinates", (const xmlChar *)Trajectory::toString((*it).coordinates, MAX_SERVOS_NR).c_str());
 	}
 	sprintf(file, "%s%s", fileName, ".xml");
 
@@ -196,9 +197,9 @@ void Trajectory::writeTrajectoryToXmlFile2(const char *fileName, lib::POSE_SPECI
 	for(it = poses.begin(); it != poses.end(); ++it)
 	{
 		tree = xmlNewChild(doc->children, NULL, (const xmlChar *) "Pose", NULL);
-		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Velocity", (const xmlChar *)Trajectory::toString((*it).v, MAX_SERVOS_NR));
-		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Accelerations", (const xmlChar *)Trajectory::toString((*it).a, MAX_SERVOS_NR));
-		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Coordinates", (const xmlChar *)Trajectory::toString((*it).coordinates, MAX_SERVOS_NR));
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Velocity", (const xmlChar *)Trajectory::toString((*it).v, MAX_SERVOS_NR).c_str());
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Accelerations", (const xmlChar *)Trajectory::toString((*it).a, MAX_SERVOS_NR).c_str());
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Coordinates", (const xmlChar *)Trajectory::toString((*it).coordinates, MAX_SERVOS_NR).c_str());
 	}
 	sprintf(file, "%s%s", fileName, ".xml");
 
