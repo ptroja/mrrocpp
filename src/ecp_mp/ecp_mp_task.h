@@ -30,7 +30,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 
 typedef std::map<lib::SENSOR_ENUM, lib::sensor*> sensor_map;
-typedef std::map<transmitter::TRANSMITTER_ENUM, transmitter::transmitter*> transmitter_map;
+typedef std::map<transmitter::TRANSMITTER_ENUM, transmitter::transmitter*> transmitters_t;
 
 namespace task {
 

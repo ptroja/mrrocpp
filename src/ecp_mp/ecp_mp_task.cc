@@ -52,7 +52,7 @@ lib::sr_ecp* task::sr_ecp_msg = NULL;
 sensor_map task::sensor_m;
 
 // mapa wszystkich transmitterów
-transmitter_map task::transmitter_m;
+transmitters_t task::transmitter_m;
 
 task::task(lib::configurator &_config)
 	: config(_config)
