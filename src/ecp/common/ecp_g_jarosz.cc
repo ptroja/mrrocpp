@@ -2211,7 +2211,7 @@ void smooth_cubic_spline::Build_Coeff(double *tt, double *yy, int nn, double vvp
 	sr_ecp_msg.message("Metoda Build_Coeff wyznacza przyspieszenia w punktach wezlowych");
 	double p, qn, sig, un;
 
-	double *uu = new double[nn-2];
+	double uu[nn-2];
 
 	aa[0]= -0.5;
 	uu[0]=( 3.0 /(tt[1]-tt[0]) ) * ( (yy[1]-yy[0]) / (tt[1]-tt[0])-vvp);
@@ -2233,8 +2233,6 @@ void smooth_cubic_spline::Build_Coeff(double *tt, double *yy, int nn, double vvp
 	{
 		aa[k]=aa[k]*aa[k+1]+uu[k];
 	}
-
-	delete [] uu;
 }
 
 // ----------------------------------------------------------------------------------------------
@@ -2400,9 +2398,9 @@ bool smooth_cubic_spline::next_step()
 
 		for (int i=0; i<MAX_SERVOS_NR; i++) { // DLA KAZDEJ WSPOLRZEDNEJ BUDUJEMY WSPOLCZYNNIKI METODA BUILD_COEFF
 
-			double *t_temp = new double[pose_list_length() + 1];
-			double *y_temp = new double[pose_list_length() + 1];
-			double *a_temp = new double[pose_list_length() + 1];
+			double t_temp[pose_list_length() + 1];
+			double y_temp[pose_list_length() + 1];
+			double a_temp[pose_list_length() + 1];
 
 			for (int z=0; z<=pose_list_length(); z++) {
 				t_temp[z] = t(z, i);
@@ -2414,10 +2412,6 @@ bool smooth_cubic_spline::next_step()
 			for (int z=0; z<=pose_list_length(); z++) {
 				a(z, i)= a_temp[z];
 			}// end:for
-
-			delete [] t_temp;
-			delete [] y_temp;
-			delete [] a_temp;
 
 		} // end:for DLA KAZDEJ WSPOLRZEDNEJ
 
@@ -2495,7 +2489,7 @@ bool smooth_cubic_spline::next_step()
 			case lib::MOTOR:
 				the_robot->EDP_data.set_arm_type = lib::MOTOR;
 
-				for (i = 0; i <MAX_SERVOS_NR; i++) {
+				for (int i = 0; i <MAX_SERVOS_NR; i++) {
 					A = (t(j+1, i) - node_counter) / (t(j+1, i) - t(j, i));
 					B = 1-A;
 					C = (1.0/6.0)*(A*A*A-A)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
@@ -2525,7 +2519,7 @@ bool smooth_cubic_spline::next_step()
 			case lib::JOINT:
 				the_robot->EDP_data.set_arm_type = lib::JOINT;
 
-				for (i = 0; i <MAX_SERVOS_NR; i++) {
+				for (int i = 0; i <MAX_SERVOS_NR; i++) {
 					A = (t(j+1, i) - node_counter) / (t(j+1, i) - t(j, i));
 					B = 1-A;
 					C = (1.0/6.0)*(A*A*A-A)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
@@ -2555,7 +2549,7 @@ bool smooth_cubic_spline::next_step()
 			case lib::XYZ_EULER_ZYZ:
 				the_robot->EDP_data.set_arm_type = lib::XYZ_EULER_ZYZ;
 
-				for (i = 0; i < 7; i++) {
+				for (int i = 0; i < 7; i++) {
 					A = (t(j+1, i) - node_counter) / (t(j+1, i) - t(j, i));
 					B					= 1-A;
 					C = (1.0/6.0)*(A*A*A-A)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
@@ -2587,7 +2581,7 @@ bool smooth_cubic_spline::next_step()
 			case lib::XYZ_ANGLE_AXIS:
 				the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
 
-				for (i = 0; i < 6; i++) {
+				for (int i = 0; i < 6; i++) {
 					A = (t(j+1, i) - node_counter) / (t(j+1, i) - t(j, i));
 					B = 1-A;
 					C = (1.0/6.0)*(A*A*A-A)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
