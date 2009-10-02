@@ -25,8 +25,6 @@ smooth_trajectory_pose::smooth_trajectory_pose (lib::POSE_SPECIFICATION at,
 	memcpy(coordinates, c, MAX_SERVOS_NR*sizeof(double));
 }
 
-
 } // namespace common
 } // namespace ecp_mp
 } // namespace mrrocpp
-
