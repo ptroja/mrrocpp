@@ -147,16 +147,15 @@ void smooth::generate_next_coords (void)
 
 bool smooth::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory)
 {
-	bool first_time = true;
-	int numOfPoses = trajectory.getNumberOfPoses();
 	trajectory.showTime();
-//	std::list<Trajectory::Pose>::iterator it;
 
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
 	pose_list = &trajectory.getPoses();
 	pose_list_iterator = pose_list->end();
-//	trajectory.showTime();
-	/*for(it = trajectory.getPoses()->begin(); it != trajectory.getPoses()->end(); ++it)
+
+	/*
+	bool first_time = true;
+	for(std::list<Trajectory::Pose>::iterator it = trajectory.getPoses()->begin(); it != trajectory.getPoses()->end(); ++it)
 	{
 		if (first_time)
 		{
@@ -169,13 +168,13 @@ bool smooth::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory)
 			// Wstaw do listy nowa pozycje
          insert_pose_list_element(trajectory.getPoseSpecification(), (*it).startVelocity, (*it).endVelocity, (*it).velocity, (*it).accelerations, (*it).coordinates);
 		}
-	}*/
+	}
+	*/
 	return true;
 }
 
 void smooth::set_pose_from_xml(xmlNode *stateNode, bool &first_time)
 {
-	char *dataLine, *value;
 	uint64_t number_of_poses; // Liczba zapamietanych pozycji
 	lib::POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
 	double vp[MAX_SERVOS_NR];
@@ -809,8 +808,8 @@ void smooth::calculate(void)
 
 void smooth::flush_pose_list ( void )
 {
-    pose_list->clear();
-	 first_coordinate=true;
+	pose_list->clear();
+	first_coordinate=true;
 }
 
 // -------------------------------------------------------return iterator to beginning of the list
