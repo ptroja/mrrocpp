@@ -1,7 +1,9 @@
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
+#include <iostream>
+#include <sstream>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
@@ -98,12 +100,13 @@ const char * Trajectory::toString(double valArr[], int length)
 	return afterConv;
 }
 
-const char * Trajectory::toString(int numberOfPoses)
+std::string Trajectory::toString(int numberOfPoses)
 {
-	char * numStr = new char[10];
-	sprintf(numStr, "%d", numberOfPoses);
+	std::ostringstream stm;
 
-	return numStr;
+	stm << numberOfPoses;
+
+	return stm.str();
 }
 
 const char * Trajectory::returnRobotName(lib::ROBOT_ENUM robot)
@@ -160,7 +163,7 @@ void Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIF
 
 	doc->children = xmlNewDocNode(doc, NULL, (const xmlChar *) "Trajectory", NULL);
 	xmlSetProp(doc->children, (const xmlChar *) "coordinateType", (const xmlChar *) Trajectory::toString(ps));
-	xmlSetProp(doc->children, (const xmlChar *) "numOfPoses", (const xmlChar *) Trajectory::toString(posCount));
+	xmlSetProp(doc->children, (const xmlChar *) "numOfPoses", (const xmlChar *) Trajectory::toString(posCount).c_str());
 	for(it = poses.begin(); it != poses.end(); ++it)
 	{
 		tree = xmlNewChild(doc->children, NULL, (const xmlChar *) "Pose", NULL);
@@ -189,7 +192,7 @@ void Trajectory::writeTrajectoryToXmlFile2(const char *fileName, lib::POSE_SPECI
 
 	doc->children = xmlNewDocNode(doc, NULL, (const xmlChar *) "Trajectory", NULL);
 	xmlSetProp(doc->children, (const xmlChar *) "coordinateType", (const xmlChar *) Trajectory::toString(ps));
-	xmlSetProp(doc->children, (const xmlChar *) "numOfPoses", (const xmlChar *) Trajectory::toString(posCount));
+	xmlSetProp(doc->children, (const xmlChar *) "numOfPoses", (const xmlChar *) Trajectory::toString(posCount).c_str());
 	for(it = poses.begin(); it != poses.end(); ++it)
 	{
 		tree = xmlNewChild(doc->children, NULL, (const xmlChar *) "Pose", NULL);
