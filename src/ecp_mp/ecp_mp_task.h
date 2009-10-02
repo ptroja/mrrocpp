@@ -44,10 +44,10 @@ public:
 	task(lib::configurator &_config);
 
 	// mapa wszystkich czujnikow
-	static std::map <lib::SENSOR_ENUM, lib::sensor*> sensor_m;
+	static sensors_t sensor_m;
 
 	// mapa wszystkich transmiterow
-	static std::map <transmitter::TRANSMITTER_ENUM, transmitter::transmitter*> transmitter_m;
+	static transmitters_t transmitter_m;
 
 	static lib::sr_ecp* sr_ecp_msg;
 	lib::configurator &config;
