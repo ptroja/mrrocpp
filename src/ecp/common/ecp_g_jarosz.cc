@@ -85,7 +85,6 @@ linear::linear(common::task::task& _ecp_task, lib::trajectory_description tr_des
 	v_max_aa[6] = 0.0;
 	// 	EDP_buffer.sr_ecp_msg.message("Skonstruowano obiekt klasy irp6p_irp6p_linear_generator");
 }
-;
 
 // ----------------------------------------------------------------------------------------------
 // ---------------------------------    metoda	first_step -------------------------------------
@@ -145,7 +144,6 @@ bool linear::first_step()
 
 	return true;
 }
-; // end: bool irp6p_irp6p_linear_generator::first_step ( )
 
 // ----------------------------------------------------------------------------------------------
 // -----------------------------------  metoda	next_step --------------------------------------
@@ -226,7 +224,7 @@ bool linear::next_step()
 
 	return true;
 
-} // end: bool irp6p_linear_generator::next_step ( )
+}
 
 // ####################################################################################################
 // Generator o zadany przyrost polozenia/orientacji
@@ -284,7 +282,6 @@ linear_parabolic::linear_parabolic(common::task::task& _ecp_task, lib::trajector
 
 	// 	EDP_buffer.sr_ecp_msg.message("Skonstruowano obiekt klasy ecp_linear_parabolic_generator");
 }
-; // end:konstruktor
 
 // ----------------------------------------------------------------------------------------------
 // --------------------------------  funckja liczaca droge  -------------------------------------
@@ -295,30 +292,29 @@ double linear_parabolic::calculate_s(const double t, const double ta, const doub
 	double s=0;
 
 	if (t <0 || t >1 ){
-	throw ECP_error(lib::NON_FATAL_ERROR, INVALID_TIME_SPECIFICATION);
-}
+		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_TIME_SPECIFICATION);
+	}
 
-if (t<ta)
-{
-	// przyspieszenie=1
-	s=0.5*t*t;
-}
-else if (t<tb)
-{
-	// przyspieszenie = 1
-	s=0.5*ta*ta +ta*(t-ta);
-}
-else
-{ // tb<czas<=1
-	// przyspieszenie=-ta/(1-tb) (wynika z rownosci predkosci 1*ta=a*(1-tb) )
-	s=0.5*ta*ta + ta*(tb-ta) + ta*(t-tb)-0.5*(ta/(1-tb))*(t-tb)*(t-tb);
-}
-s=s/ (0.5*ta*ta+ta*(tb-ta)+0.5*(ta*(1-tb)) ); // przyrost/calka z predkosci
+	if (t<ta)
+	{
+		// przyspieszenie=1
+		s=0.5*t*t;
+	}
+	else if (t<tb)
+	{
+		// przyspieszenie = 1
+		s=0.5*ta*ta +ta*(t-ta);
+	}
+	else
+	{ // tb<czas<=1
+		// przyspieszenie=-ta/(1-tb) (wynika z rownosci predkosci 1*ta=a*(1-tb) )
+		s=0.5*ta*ta + ta*(tb-ta) + ta*(t-tb)-0.5*(ta/(1-tb))*(t-tb)*(t-tb);
+	}
+	s= s / (0.5*ta*ta+ta*(tb-ta)+0.5*(ta*(1-tb)) ); // przyrost/calka z predkosci
 
-return s;
+	return s;
 
 }
-; // end : ecp_linear_parabolic_generator::calculate_s
 
 // ----------------------------------------------------------------------------------------------
 // --------------------------------- metoda	first_step -----------------------------------------
@@ -378,9 +374,7 @@ bool linear_parabolic::first_step()
 	} // end : switch ( td.arm_type )
 
 	return true;
-
 }
-; // end: bool ecp_linear_parabolic_generator::first_step ( )
 
 // ----------------------------------------------------------------------------------------------
 // -----------------------------------  metoda	next_step --------------------------------------
@@ -600,9 +594,7 @@ bool linear_parabolic::next_step()
 
 
 	return true;
-
 }
-; // end: bool ecp_linear_parabolic_generator::next_step ( )
 
 // ####################################################################################################
 // Klasa bazowa dla generatorow o zadany przyrost polozenia/orientacji
@@ -614,7 +606,6 @@ polynomial::polynomial(common::task::task& _ecp_task) :
 	delta(_ecp_task)
 {
 }
-;
 
 // ----------------------------------------------------------------------------------------------
 // --------------------------------- metoda	first_step -----------------------------------------
@@ -678,7 +669,6 @@ bool polynomial::first_step()
 
 	return true;
 }
-; // end: bool ecp_polynomial_generator::first_step ( )
 
 // ####################################################################################################
 // Generator o zadany przyrost polozenia/orientacji wykorzystuj�cy do interpolacji wielomian 3 stopnia
@@ -733,7 +723,6 @@ cubic::cubic(common::task::task& _ecp_task, lib::trajectory_description tr_des, 
 	v_max_aa[6] = 0.0;
 	// 	sr_ecp_msg.message("Skonstruowano obiekt klasy ecp_cubic_generator");
 }
-; // end : konstruktor
 
 // ----------------------------------------------------------------------------------------------
 // ----------------------  metoda	next_step --------------------------------------------------
@@ -930,7 +919,6 @@ bool cubic::next_step()
 
 	return true;
 }
-; // end: bool ecp_cubic_generator::next_step ( )
 
 // ####################################################################################################
 // Generator o zadany przyrost polozenia/orientacji wykorzystujacy do interpolacji wielomian 5 stopnia
@@ -989,7 +977,6 @@ quintic::quintic(common::task::task& _ecp_task, lib::trajectory_description tr_d
 	v_max_aa[6] = 0.0;
 	// 	sr_ecp_msg.message("Skonstruowano obiekt klasy ecp_quintic_generator");
 }
-; // end : konstruktor
 
 // ----------------------------------------------------------------------------------------------
 // ----------------------------------  metoda	next_step --------------------------------------
@@ -1198,9 +1185,7 @@ bool quintic::next_step()
 
 
 	return true;
-
 }
-; // end: bool ecp_quintic_generator::next_step ( )
 
 // ####################################################################################################
 // ############################     Odtwarzanie listy pozycji    ######################################
@@ -1211,7 +1196,6 @@ spline::spline(common::task::task& _ecp_task) :
 	ecp_teach_in_generator(_ecp_task)
 {
 }
-;
 
 // ####################################################################################################
 // Generator odtwarzajacy liste nauczonych pozycji, z rozpedzaniem i hamowaniem miedzy pozycjami,
@@ -1259,7 +1243,6 @@ parabolic_teach_in::parabolic_teach_in(common::task::task& _ecp_task, double int
 	a_max_aa[6] = 0.0; // przyspieszenie katowe koncowki 1rad/s^2
 	v_max_aa[6] = 0.0;
 }
-; // end: ecp_parabolic_teach_in_generator::ecp_parabolic_teach_in_generator()
 
 // ----------------------------------------------------------------------------------------------
 // ----------------------  metoda	first_step -------------------------------------------------
@@ -1309,7 +1292,6 @@ bool parabolic_teach_in::first_step()
 
 	return true;
 }
-; // end: bool ecp_parabolic_teach_in_generator::first_step ( )
 
 // ----------------------------------------------------------------------------------------------
 // ----------------------  metoda	next_step --------------------------------------------------
@@ -1527,7 +1509,6 @@ bool parabolic_teach_in::next_step()
 		return false;
 	}
 }
-; // end: bool ecp_parabolic_teach_in_generator::next_step ( )
 
 // ####################################################################################################
 // Generator odtwarzajacy liste nauczonych pozycji, wykorzystywany do kalibracji
@@ -1573,7 +1554,6 @@ calibration::calibration(common::task::task& _ecp_task, double interval) :
 	a_max_aa[6] = 0.0; // przyspieszenie katowe koncowki 1rad/s^2
 	v_max_aa[6] = 0.0;
 }
-; // end: ecp_calibration_generator::ecp_calibration_generator()
 
 // ----------------------------------------------------------------------------------------------
 // ----------------------  metoda	first_step -------------------------------------------------
@@ -1626,8 +1606,6 @@ bool calibration::first_step()
 	return true;
 
 }
-; // end: bool ecp_calibration_generator::first_step ( )
-
 
 // ----------------------------------------------------------------------------------------------
 // ----------------------  metoda	next_step --------------------------------------------------
@@ -1865,7 +1843,6 @@ bool calibration::next_step()
 		return false;
 	}
 }
-; // end: bool ecp_calibration_generator::next_step ( )
 
 // ####################################################################################################
 // Generator interpolujacy sklejanymi wielomianami 3 stopnia,
@@ -1911,7 +1888,6 @@ cubic_spline::cubic_spline(common::task::task& _ecp_task, double interval = 0.02
 	// 	sr_ecp_msg.message("Skonstruowano obiekt klasy ecp_cubic_spline_generator");
 
 }
-; // end : ecp_cubic_spline_generator::ecp_cubic_spline_generator
 
 // ----------------------------------------------------------------------------------------------
 // ----------------------  metoda	first_step --------------------------------------------------
@@ -1920,9 +1896,7 @@ cubic_spline::cubic_spline(common::task::task& _ecp_task, double interval = 0.02
 bool cubic_spline::first_step()
 {
 
-	if (is_pose_list_element()) {
-	} else {
-
+	if (!is_pose_list_element()) {
 		return false;
 	}
 
@@ -1959,9 +1933,7 @@ bool cubic_spline::first_step()
 	} // end: switch
 
 	return true;
-
 }
-; // end : ecp_cubic_spline_generator::first_step()
 
 // ----------------------------------------------------------------------------------------------
 // ----------------------  metoda	next_step --------------------------------------------------
@@ -1971,7 +1943,6 @@ bool cubic_spline::next_step()
 {
 
 	char messg[128]; // komunikat do SR
-	int i; // Licznik
 
 	// ---------------------------------   FIRST INTERVAL    ---------------------------------------
 	if (first_interval) {
@@ -2066,7 +2037,7 @@ bool cubic_spline::next_step()
 		// Obliczenie polozenia na podstawie danych interpolacyjnych (zgodnie z uplywem czasu)
 		switch (tip.arm_type) {
 			case lib::MOTOR:
-				for (i = 0; i <MAX_SERVOS_NR; i++) {
+				for (int i = 0; i <MAX_SERVOS_NR; i++) {
 					acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
 					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_motor[i]);
@@ -2085,7 +2056,7 @@ bool cubic_spline::next_step()
 				break;
 				// ---------------------------------------------------------------------------------------------------------
 			case lib::JOINT:
-				for (i=0; i <MAX_SERVOS_NR; i++) {
+				for (int i=0; i <MAX_SERVOS_NR; i++) {
 					acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
 					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_joint[i]);
@@ -2104,7 +2075,7 @@ bool cubic_spline::next_step()
 				break;
 				// ---------------------------------------------------------------------------------------------------------
 			case lib::XYZ_EULER_ZYZ:
-				for (i = 0; i < 7; i++) {
+				for (int i = 0; i < 7; i++) {
 					acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
 					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_zyz[i]);
@@ -2128,7 +2099,7 @@ bool cubic_spline::next_step()
 				break;
 				// ---------------------------------------------------------------------------------------------------------
 			case lib::XYZ_ANGLE_AXIS:
-				for (i = 0; i < 7; i++) {
+				for (int i = 0; i < 7; i++) {
 					acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
 					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_aa[i]);
@@ -2180,7 +2151,6 @@ bool cubic_spline::next_step()
 		return false;
 	}
 }
-; // end: bool ecp_cubic_spline_generator::next_step ( )
 
 // ####################################################################################################
 // Generator interpolujacy sklejanymi wielomianami 3 stopnia
@@ -2194,7 +2164,6 @@ smooth_cubic_spline::smooth_cubic_spline(common::task::task& _ecp_task, double *
 	spline(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
-	int i;
 	build_coeff = true;
 
 	// Tworzymy macierze:
@@ -2202,7 +2171,7 @@ smooth_cubic_spline::smooth_cubic_spline(common::task::task& _ecp_task, double *
 	t(pose_list_length() + 1, 6);
 	a(pose_list_length() + 1, 6);
 
-	for (i = 0; i <MAX_SERVOS_NR; i++) {
+	for (int i = 0; i <MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -2212,7 +2181,7 @@ smooth_cubic_spline::smooth_cubic_spline(common::task::task& _ecp_task, double *
 		v_max_joint[i] = 1.5;
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 	}
-	for (i = 0; i < 3; i++) {
+	for (int i = 0; i < 3; i++) {
 		a_max_zyz[i] = 5.0; // przyspieszenie liniowe koncowki 0.1G
 		a_max_zyz[i+3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
@@ -2232,7 +2201,6 @@ smooth_cubic_spline::smooth_cubic_spline(common::task::task& _ecp_task, double *
 	a_max_aa[6] = 0.0; // przyspieszenie katowe koncowki 1rad/s^2
 	v_max_aa[6] = 0.0;
 }
-; // end : ecp_smooth_cubic_spline_generator::ecp_smooth_cubic_spline_generator
 
 // ----------------------------------------------------------------------------------------------
 // ---------------------------metoda BuildCoeff -------------------------------------------
@@ -2241,7 +2209,6 @@ smooth_cubic_spline::smooth_cubic_spline(common::task::task& _ecp_task, double *
 void smooth_cubic_spline::Build_Coeff(double *tt, double *yy, int nn, double vvp, double vvk, double *aa)
 {
 	sr_ecp_msg.message("Metoda Build_Coeff wyznacza przyspieszenia w punktach wezlowych");
-	int i, k;
 	double p, qn, sig, un;
 
 	double *uu = new double[nn-2];
@@ -2249,7 +2216,7 @@ void smooth_cubic_spline::Build_Coeff(double *tt, double *yy, int nn, double vvp
 	aa[0]= -0.5;
 	uu[0]=( 3.0 /(tt[1]-tt[0]) ) * ( (yy[1]-yy[0]) / (tt[1]-tt[0])-vvp);
 
-	for (i=1; i<=nn-2; i++) { // petla algorytmu trojdiagonalnego
+	for (int i=1; i<=nn-2; i++) { // petla algorytmu trojdiagonalnego
 
 		sig=(tt[i]-tt[i-1])/(tt[i+1]-tt[i-1]);
 		p=sig*aa[i-1]+2.0;
@@ -2262,15 +2229,13 @@ void smooth_cubic_spline::Build_Coeff(double *tt, double *yy, int nn, double vvp
 	un=( 3.0 /(tt[nn-1]-tt[nn-2]) )*(vvk-(yy[nn-1]-yy[nn-2]) / (tt[nn-1]-tt[nn-2]));
 	aa[nn-1]=(un-qn*uu[nn-2])/(qn*aa[nn-2]+1.0);
 
-	for (k=nn-2; k>=0; k--) // petla wstecznego zastepowania algorytmu trojdiagonalnego
+	for (int k=nn-2; k>=0; k--) // petla wstecznego zastepowania algorytmu trojdiagonalnego
 	{
 		aa[k]=aa[k]*aa[k+1]+uu[k];
 	}
 
 	delete [] uu;
-
 }
-; // end :	 ecp_smooth_cubic_spline_generator::Build_Coeff
 
 // ----------------------------------------------------------------------------------------------
 // ----------------------  metoda	first_step -------------------------------------------------
@@ -2279,9 +2244,7 @@ void smooth_cubic_spline::Build_Coeff(double *tt, double *yy, int nn, double vvp
 bool smooth_cubic_spline::first_step()
 {
 
-	if (is_pose_list_element()) {
-	} else {
-
+	if (!is_pose_list_element()) {
 		return false;
 	}
 
@@ -2321,7 +2284,6 @@ bool smooth_cubic_spline::first_step()
 
 	return true;
 }
-; // end :	 ecp_smooth_cubic_spline_generator::first_step
 
 // ----------------------------------------------------------------------------------------------
 // ----------------------  metoda	next_step -------------------------------------------------
@@ -2331,7 +2293,6 @@ bool smooth_cubic_spline::next_step()
 {
 
 	char messg[128]; // komunikat do SR
-	int i; // Licznik
 
 	// ---------------------------------   BUILD COEFF    ---------------------------------------
 	if (build_coeff) {
@@ -2682,7 +2643,6 @@ bool smooth_cubic_spline::next_step()
 	}
 
 }
-; // end :	 ecp_smooth_cubic_spline_generator::next_step
 
 // ####################################################################################################
 // Generator interpolujacy sklejanymi wielomianami 5 stopnia,
@@ -2697,9 +2657,8 @@ quintic_spline::quintic_spline(common::task::task& _ecp_task, double interval = 
 	spline(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
-	int i;
 
-	for (i = 0; i <MAX_SERVOS_NR; i++) {
+	for (int i = 0; i <MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -2710,7 +2669,7 @@ quintic_spline::quintic_spline(common::task::task& _ecp_task, double interval = 
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 	}
 
-	for (i = 0; i < 3; i++) {
+	for (int i = 0; i < 3; i++) {
 		a_max_zyz[i] = 5.0; // przyspieszenie liniowe koncowki 0.1G
 		a_max_zyz[i+3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
@@ -2732,7 +2691,6 @@ quintic_spline::quintic_spline(common::task::task& _ecp_task, double interval = 
 	// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 	a_max_aa[6] = 0.0;
 }
-; // end : ecp_quintic_spline_generator::ecp_quintic_spline_generator
 
 // ----------------------------------------------------------------------------------------------
 // ----------------------  metoda	first_step -------------------------------------------------
@@ -2746,8 +2704,10 @@ bool quintic_spline::first_step()
 
 	// Zlecenie odczytu aktualnego polozenia ramienia
 
-	if (!is_pose_list_element())
+	if (!is_pose_list_element()) {
 		return false;
+	}
+
 	// Pobranie kolejnej pozycji z listy i wstawienie danych do generatora
 	// Na podstawie odczytanej aktualnej pozycji oraz kolejnej pozycji na liscie
 	// wyznaczane beda przedzialy interpolacji, czyli makrokroki do realizacji przez EDP.
@@ -2781,9 +2741,7 @@ bool quintic_spline::first_step()
 	} // end: switch
 
 	return true;
-
 }
-; // end : ecp_quintic_spline_generator::first_step()
 
 // ----------------------------------------------------------------------------------------------
 // ----------------------  metoda	next_step -------------------------------------------------
@@ -2793,7 +2751,6 @@ bool quintic_spline::next_step()
 {
 
 	char messg[128]; // komunikat do SR
-	int i; // Licznik
 
 	// ---------------------------------   FIRST INTERVAL    ---------------------------------------
 	if (first_interval) {
@@ -2906,7 +2863,7 @@ bool quintic_spline::next_step()
 		switch (tip.arm_type) {
 			// ---------------------------------------------------------------------------------------------------------
 			case lib::MOTOR:
-				for (i = 0; i <MAX_SERVOS_NR; i++) {
+				for (int i = 0; i <MAX_SERVOS_NR; i++) {
 					acc[i] = 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
 							*(node_counter*node_counter*node_counter);
 					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
@@ -2928,7 +2885,7 @@ bool quintic_spline::next_step()
 				break;
 				// ---------------------------------------------------------------------------------------------------------
 			case lib::JOINT:
-				for (i = 0; i <MAX_SERVOS_NR; i++) {
+				for (int i = 0; i <MAX_SERVOS_NR; i++) {
 					acc[i] = 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
 							*(node_counter*node_counter*node_counter);
 					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
@@ -2951,7 +2908,7 @@ bool quintic_spline::next_step()
 				break;
 				// ---------------------------------------------------------------------------------------------------------
 			case lib::XYZ_EULER_ZYZ:
-				for (i = 0; i < 7; i++) {
+				for (int i = 0; i < 7; i++) {
 					acc[i] = 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
 							*(node_counter*node_counter*node_counter);
 					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
@@ -2981,7 +2938,7 @@ bool quintic_spline::next_step()
 				break;
 				// ---------------------------------------------------------------------------------------------------------
 			case lib::XYZ_ANGLE_AXIS:
-				for (i = 0; i < 7; i++) {
+				for (int i = 0; i < 7; i++) {
 					acc[i] = 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
 							*(node_counter*node_counter*node_counter);
 					if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
@@ -3032,7 +2989,6 @@ bool quintic_spline::next_step()
 		return false;
 	}
 }
-; // end : ecp_quintic_spline_generator::next_step()
 
 // ####################################################################################################
 // Generator odtwarzajacy liste nauczonych pozycji, z rozpedzaniem i hamowaniem miedzy pozycjami,
@@ -3052,9 +3008,8 @@ elipsoid::elipsoid(common::task::task& _ecp_task) :
 	ecp_teach_in_generator(_ecp_task)
 {
 	INTERVAL = 0.006; // Dlugosc okresu interpolacji w [sek]
-	int i;
 
-	for (i = 0; i <MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -3064,7 +3019,7 @@ elipsoid::elipsoid(common::task::task& _ecp_task) :
 		v_max_joint[i] = 0.0;
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 	}
-	for (i = 0; i < 3; i++) {
+	for (int i = 0; i < 3; i++) {
 		a_max_zyz[i] = 5.0; // przyspieszenie liniowe koncowki 0.1G
 		a_max_zyz[i+3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
@@ -3086,7 +3041,6 @@ elipsoid::elipsoid(common::task::task& _ecp_task) :
 	// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 	v_max_aa[6] = 0.0;
 }
-; // end: ecp_elipsoid_generator::ecp_elipsoid_generator()
 
 
 void elipsoid::get_sample(one_sample& cp, int sn)
@@ -3099,7 +3053,7 @@ void elipsoid::clear_buffer(void)
 {
 	delete trj_ptr;
 }
-;
+
 // --------------------------------------------------------------------------
 // Generator do odtwarzajacy nauczone pozycje z dokladna pozycja zadana
 // Ruch miedzy kolejnymi pozycjami listy ma trojkatny profil predkosci
@@ -3144,16 +3098,14 @@ bool elipsoid::first_step()
 	} // end: switch
 
 	return true;
-
 }
-; // end: bool ecp_elipsoid_generator::first_step ( )
+
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
 // Generator odtwarzajacy nauczone pozycje z dokladna pozycja zadana
 bool elipsoid::next_step()
 {
-
 	if (first_interval) {
 		// Ponizszych obliczen nie mozna wykonac w first_step, gdyz wtedy odczyt
 		// aktualnego polozenia ramienia jeszcze nie zostanie zrealizowany. Zrobi
@@ -3246,7 +3198,6 @@ bool elipsoid::next_step()
 				 the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[4] = M_PI/2.;
 				 the_robot->EDP_data.next_XYZ_ZYZ_arm_coordinates[5] = -M_PI;
 				 */
-
 				break;
 			case lib::XYZ_ANGLE_AXIS:
 				break;
@@ -3271,7 +3222,6 @@ bool elipsoid::next_step()
 		return false;
 	}
 }
-; // end: bool ecp_elipsoid_generator::next_step ( )
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
@@ -3401,7 +3351,6 @@ void ecp_save_extended_file(calibration& the_generator, operator_reaction_condit
 		the_condition.initiate_supplementary_list(); // inicjacja listy odczytanych pozycji
 	}
 }
-; // // end: irp6_postument_save_extended_file()
 // --------------------------------------------------------------------------
 
 } // namespace generator
