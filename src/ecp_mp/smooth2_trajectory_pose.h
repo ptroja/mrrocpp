@@ -4,6 +4,8 @@
 #include "lib/com_buf.h"		// lib::POSE_SPECIFICATION
 #include "lib/impconst.h"	// MAX_SERVOS_NR
 
+#include <boost/serialization/utility.hpp>
+
 namespace mrrocpp {
 namespace ecp_mp {
 namespace common {
@@ -39,6 +41,17 @@ public:
 		  const double* vv,
 		  const double* aa);
 
+private:
+	// boost serialization methods
+	friend class boost::serialization::access;
+
+	template<class Archive>
+	    void serialize(Archive & ar, const unsigned int version) {
+		ar & boost::serialization::make_nvp("coordinateType", arm_type);
+		ar & boost::serialization::make_nvp("Velocity", v);
+		ar & boost::serialization::make_nvp("Accelerations", a);
+		ar & boost::serialization::make_nvp("Coordinates", coordinates);
+	}
 }; // end:class smooth2_trajectory_pose
 
 

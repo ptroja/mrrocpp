@@ -10,6 +10,8 @@
 #include "ecp_mp/smooth_trajectory_pose.h"
 #include "ecp_mp/smooth2_trajectory_pose.h"
 
+#include <boost/serialization/utility.hpp>
+
 namespace mrrocpp {
 namespace ecp_mp {
 namespace common {
@@ -84,6 +86,18 @@ class Trajectory
 		ecp_mp::common::smooth2_trajectory_pose *actPose2;//for smooth2
 		std::list<ecp_mp::common::smooth_trajectory_pose> trjPoses;
 		std::list<ecp_mp::common::smooth2_trajectory_pose> trjPoses2;//for smooth2
+
+		// boost serialization methods
+		friend class boost::serialization::access;
+
+		template<class Archive>
+		    void serialize(Archive & ar, const unsigned int version) {
+			ar & BOOST_SERIALIZATION_NVP(trjID);
+			ar & BOOST_SERIALIZATION_NVP(numOfPoses);
+			ar & BOOST_SERIALIZATION_NVP(poseSpec);
+			ar & BOOST_SERIALIZATION_NVP(trjPoses);
+//			ar & BOOST_SERIALIZATION_NVP(trjPoses2);
+		}
 };
 
 } // namespace common
