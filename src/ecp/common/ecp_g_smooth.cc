@@ -153,7 +153,7 @@ bool smooth::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory)
 //	std::list<Trajectory::Pose>::iterator it;
 
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
-	pose_list = trajectory.getPoses();
+	pose_list = &trajectory.getPoses();
 	pose_list_iterator = pose_list->end();
 //	trajectory.showTime();
 	/*for(it = trajectory.getPoses()->begin(); it != trajectory.getPoses()->end(); ++it)
