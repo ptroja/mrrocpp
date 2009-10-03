@@ -33,18 +33,9 @@
 #include <libxml/tree.h>
 #include <libxml/xinclude.h>
 
-
-
-
-
-
 namespace mrrocpp {
-
-
-
 namespace ecp_mp {
 namespace task {
-
 
 lib::sr_ecp* task::sr_ecp_msg = NULL;
 
@@ -262,7 +253,6 @@ void task::all_sensors_initiate_reading (sensors_t & _sensor_m)
 
 void task::all_sensors_get_reading (sensors_t & _sensor_m)
 {
-
 	for (ecp_mp::sensors_t::iterator sensor_m_iterator = _sensor_m.begin();
 	        sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++) {
 		// jesli wogole mamy robic pomiar
@@ -400,7 +390,7 @@ task::trajectories_t * task::loadTrajectories(const char * fileName, lib::ROBOT_
 				}
 			}
 		}
-		if (cur_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cur_node->name, (const xmlChar *) "State")) {
+		else if (cur_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cur_node->name, (const xmlChar *) "State")) {
 			xmlChar * stateID = xmlGetProp(cur_node, (const xmlChar *) "id");
 			xmlChar * stateType = xmlGetProp(cur_node, (const xmlChar *) "type");
 			if (stateID && !strcmp((const char *) stateType, "runGenerator")) {
