@@ -161,84 +161,83 @@ void fsautomat::task_initialization(void)
 
 common::State * fsautomat::createState(xmlNode *stateNode)
 {
-	int index;
-	common::State *actState;
-	xmlNode *child_node, *cchild_node, *set_node;
-	xmlChar *ecpGeneratorType, *robot, *robotSet;
-	xmlChar *stateID, *stateType, *stringArgument, *numArgument;
-	xmlChar *cond, *trans;
+	common::State * actState = new common::State();
 
-	actState = new common::State();
-	stateID = xmlGetProp(stateNode, (const xmlChar *) "id");
+	xmlChar * stateID = xmlGetProp(stateNode, (const xmlChar *) "id");
 
 	if (stateID) {
 		actState->setStateID((char*) stateID);
 	}
-	stateType = xmlGetProp(stateNode, (const xmlChar *) "type");
+
+	xmlChar * stateType = xmlGetProp(stateNode, (const xmlChar *) "type");
+
 	if (stateType) {
 		actState->setType((char*) stateType);
 	}
+
 	// For each child of state: i.e. Robot
-	for (child_node = stateNode->children; child_node != NULL; child_node = child_node->next) {
-		if (child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->name, (const xmlChar *) "ECPGeneratorType")) {
-			ecpGeneratorType = xmlNodeGetContent(child_node);
-			if (ecpGeneratorType)
-				actState->setGeneratorType((char*) ecpGeneratorType);
-			xmlFree(ecpGeneratorType);
-		}
-		if (child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->name, (const xmlChar *) "ROBOT")) {
-			robot = xmlNodeGetContent(child_node);
-			if (robot)
-				actState->setRobot((char*) robot);
-			xmlFree(robot);
-		}
-		if (child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->name, (const xmlChar *) "SetOfRobots")) {
-			actState->robotSet = new common::State::RobotSets();
-			for (cchild_node = child_node->children; cchild_node != NULL; cchild_node = cchild_node->next) {
-				if (cchild_node->type == XML_ELEMENT_NODE
-						&& !xmlStrcmp(cchild_node->name, (const xmlChar *) "FirstSet")) {
-					actState->robotSet->firstSetCount = ((xmlLsCountNode(cchild_node)) - 1) / 2;
-					actState->robotSet->firstSet = new lib::ROBOT_ENUM[actState->robotSet->firstSetCount];
-					index = 0;
-					for (set_node = cchild_node->children; set_node != NULL; set_node = set_node->next)
-						if (set_node->type == XML_ELEMENT_NODE && !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))
-							actState->robotSet->firstSet[index++] = common::State::returnProperRobot(
-									(char *) xmlNodeGetContent(set_node));
-				}
-				if (cchild_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cchild_node->name, (const xmlChar *) "SecSet")) {
-					actState->robotSet->secondSetCount = ((xmlLsCountNode(cchild_node)) - 1) / 2;
-					actState->robotSet->secondSet = new lib::ROBOT_ENUM[actState->robotSet->secondSetCount];
-					index = 0;
-					for (set_node = cchild_node->children; set_node != NULL; set_node = set_node->next)
-						if (set_node->type == XML_ELEMENT_NODE && !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))
-							actState->robotSet->secondSet[index++] = common::State::returnProperRobot(
-									(char *) xmlNodeGetContent(set_node));
+	for (xmlNodePtr child_node = stateNode->children; child_node != NULL; child_node = child_node->next) {
+		if (child_node->type == XML_ELEMENT_NODE) {
+			if(!xmlStrcmp(child_node->name, (const xmlChar *) "ECPGeneratorType")) {
+				xmlChar * ecpGeneratorType = xmlNodeGetContent(child_node);
+				if (ecpGeneratorType)
+					actState->setGeneratorType((char*) ecpGeneratorType);
+				xmlFree(ecpGeneratorType);
+			}
+			else if (!xmlStrcmp(child_node->name, (const xmlChar *) "ROBOT")) {
+				xmlChar * robot = xmlNodeGetContent(child_node);
+				if (robot)
+					actState->setRobot((char*) robot);
+				xmlFree(robot);
+			}
+			else if (!xmlStrcmp(child_node->name, (const xmlChar *) "SetOfRobots")) {
+				actState->robotSet = new common::State::RobotSets();
+				for (xmlNodePtr cchild_node = child_node->children; cchild_node != NULL; cchild_node = cchild_node->next) {
+					if (cchild_node->type == XML_ELEMENT_NODE
+							&& !xmlStrcmp(cchild_node->name, (const xmlChar *) "FirstSet")) {
+						actState->robotSet->firstSetCount = ((xmlLsCountNode(cchild_node)) - 1) / 2;
+						actState->robotSet->firstSet = new lib::ROBOT_ENUM[actState->robotSet->firstSetCount];
+						int index = 0;
+						for (xmlNodePtr set_node = cchild_node->children; set_node != NULL; set_node = set_node->next)
+							if (set_node->type == XML_ELEMENT_NODE && !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))
+								actState->robotSet->firstSet[index++] = common::State::returnProperRobot(
+										(char *) xmlNodeGetContent(set_node));
+					}
+					if (cchild_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cchild_node->name, (const xmlChar *) "SecSet")) {
+						actState->robotSet->secondSetCount = ((xmlLsCountNode(cchild_node)) - 1) / 2;
+						actState->robotSet->secondSet = new lib::ROBOT_ENUM[actState->robotSet->secondSetCount];
+						int index = 0;
+						for (xmlNodePtr set_node = cchild_node->children; set_node != NULL; set_node = set_node->next)
+							if (set_node->type == XML_ELEMENT_NODE && !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))
+								actState->robotSet->secondSet[index++] = common::State::returnProperRobot(
+										(char *) xmlNodeGetContent(set_node));
+					}
 				}
 			}
-		}
-		if (child_node->type == XML_ELEMENT_NODE && (!xmlStrcmp(child_node->name,
-				(const xmlChar *) "TrajectoryFilePath") || !xmlStrcmp(child_node->name,
-				(const xmlChar *) "GeneratorParameters")
-				|| !xmlStrcmp(child_node->name, (const xmlChar *) "Parameters") || !xmlStrcmp(child_node->name,
-				(const xmlChar *) "Sensor") || !xmlStrcmp(child_node->name, (const xmlChar *) "Speech"))) {
-			stringArgument = xmlNodeGetContent(child_node);
-			if (stringArgument)
-				actState->setStringArgument((char*) stringArgument);
-			xmlFree(stringArgument);
-		}
-		if (child_node->type == XML_ELEMENT_NODE && (!xmlStrcmp(child_node->name, (const xmlChar *) "TimeSpan")
-				|| !xmlStrcmp(child_node->name, (const xmlChar *) "AddArg"))) {
-			numArgument = xmlNodeGetContent(child_node);
-			if (numArgument)
-				actState->setNumArgument((const char *)numArgument);
-			xmlFree(numArgument);
-		}
-		if (child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->name, (const xmlChar *) "transition")) {
-			//printf("name: %s\n", (char *)child_node->name);
-			cond = xmlGetProp(child_node, (const xmlChar *) "condition");
-			trans = xmlGetProp(child_node, (const xmlChar *) "target");
-			if (cond && trans)
-				actState->setTransition((const char *) cond, (const char *) trans, config);
+			else if (!xmlStrcmp(child_node->name, (const xmlChar *) "TrajectoryFilePath") ||
+					!xmlStrcmp(child_node->name, (const xmlChar *) "GeneratorParameters") ||
+					!xmlStrcmp(child_node->name, (const xmlChar *) "Parameters") ||
+					!xmlStrcmp(child_node->name, (const xmlChar *) "Sensor") ||
+					!xmlStrcmp(child_node->name, (const xmlChar *) "Speech")) {
+				xmlChar * stringArgument = xmlNodeGetContent(child_node);
+				if (stringArgument)
+					actState->setStringArgument((char*) stringArgument);
+				xmlFree(stringArgument);
+			}
+			else if (!xmlStrcmp(child_node->name, (const xmlChar *) "TimeSpan")	||
+					!xmlStrcmp(child_node->name, (const xmlChar *) "AddArg")) {
+				xmlChar * numArgument = xmlNodeGetContent(child_node);
+				if (numArgument)
+					actState->setNumArgument((const char *)numArgument);
+				xmlFree(numArgument);
+			}
+			else if (!xmlStrcmp(child_node->name, (const xmlChar *) "transition")) {
+				//printf("name: %s\n", (char *)child_node->name);
+				xmlChar *cond = xmlGetProp(child_node, (const xmlChar *) "condition");
+				xmlChar *trans = xmlGetProp(child_node, (const xmlChar *) "target");
+				if (cond && trans)
+					actState->setTransition((const char *) cond, (const char *) trans, config);
+			}
 		}
 	}
 	xmlFree(stateType);
