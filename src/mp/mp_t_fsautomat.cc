@@ -159,7 +159,7 @@ void fsautomat::task_initialization(void)
 	sr_ecp_msg->message("MP fsautomat loaded");
 }
 
-common::State * fsautomat::createState(xmlNode *stateNode)
+common::State * fsautomat::createState(xmlNodePtr stateNode)
 {
 	common::State * actState = new common::State();
 

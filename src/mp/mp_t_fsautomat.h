@@ -40,7 +40,7 @@ class fsautomat : public task
 		void main_task_algorithm(void);
 
 		std::list<common::State> *takeStatesList(void);
-		common::State * createState(xmlNode *stateNode);
+		common::State * createState(xmlNodePtr stateNode);
 		std::map<const char *, common::State, ecp_mp::task::task::str_cmp> * takeStatesMap();
 		void executeMotion(common::State &state);
 		void runEmptyGenForSet(common::State &state);
