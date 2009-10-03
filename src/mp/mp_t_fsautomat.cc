@@ -4,7 +4,6 @@
 //
 // -------------------------------------------------------------------------
 
-
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
@@ -42,7 +41,6 @@ namespace task {
 fsautomat::fsautomat(lib::configurator &_config) :
 	task(_config)
 {
-
 }
 
 task* return_created_mp_task(lib::configurator &_config)
@@ -248,7 +246,6 @@ common::State * fsautomat::createState(xmlNodePtr stateNode)
 
 std::map<const char *, common::State, ecp_mp::task::task::str_cmp> * fsautomat::takeStatesMap()
 {
-	xmlNode *cur_node, *child_node;
 	std::map<const char *, common::State, ecp_mp::task::task::str_cmp> * statesMap = new std::map<const char *, common::State, ecp_mp::task::task::str_cmp>();
 
 	std::string fileName(config.return_string_value("xml_file", "[xml_settings]"));
@@ -256,8 +253,7 @@ std::map<const char *, common::State, ecp_mp::task::task::str_cmp> * fsautomat::
 	filePath += fileName;
 
 	// open xml document
-	xmlDocPtr doc;
-	doc = xmlParseFile(filePath.c_str());
+	xmlDocPtr doc = xmlParseFile(filePath.c_str());
 	xmlXIncludeProcess(doc);
 	if (doc == NULL) {
 		std::cout << "ERROR: could not parse file: \"" << fileName << "\"." << std::endl;
@@ -265,27 +261,25 @@ std::map<const char *, common::State, ecp_mp::task::task::str_cmp> * fsautomat::
 	}
 
 	// XML root
-	xmlNode *root = NULL;
-	root = xmlDocGetRootElement(doc);
+	xmlNode *root = xmlDocGetRootElement(doc);
 	if (!root || !root->name) {
 		std::cout << "Bad root node name!" << std::endl;
 		xmlFreeDoc(doc);
 		return statesMap;
 	}
-	common::State *actState = NULL;
 
 	// for each root children
-	for (cur_node = root->children; cur_node != NULL; cur_node = cur_node->next) {
+	for (xmlNodePtr cur_node = root->children; cur_node != NULL; cur_node = cur_node->next) {
 		if (cur_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cur_node->name, (const xmlChar *) "SubTask")) {
-			for (child_node = cur_node->children; child_node != NULL; child_node = child_node->next) {
+			for (xmlNodePtr child_node = cur_node->children; child_node != NULL; child_node = child_node->next) {
 				if (child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->name, (const xmlChar *) "State")) {
-					actState = createState(child_node);
+					common::State * actState = createState(child_node);
 					statesMap->insert(std::map<const char *, common::State>::value_type(actState->getStateID(), *actState));
 				}
 			}
 		}
 		if (cur_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cur_node->name, (const xmlChar *) "State")) {
-			actState = createState(cur_node);
+			common::State * actState = createState(cur_node);
 			statesMap->insert(std::map<const char *, common::State>::value_type(actState->getStateID(), *actState));
 		}
 	}
