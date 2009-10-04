@@ -33,6 +33,8 @@
 #include "mp/mp_common_generators.h"
 #include "mp/mp_delay_ms_condition.h"
 
+#include <boost/foreach.hpp>
+
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -340,7 +342,6 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 	// utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
 	robots_t robots_to_move, robots_to_wait_for_task_termination;
 	robots_t robots_to_move_tmp, robots_to_wait_for_task_termination_tmp;
-	robots_t::iterator robots_map_iter;
 
 	// powolanie generatora i jego konfiguracja
 	generator::extended_empty mp_ext_empty_gen (*this);
@@ -382,7 +383,7 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 	for (robots_t::iterator robot_m_iterator = robots_to_wait_for_task_termination.begin();
 	robot_m_iterator != robots_to_wait_for_task_termination.end(); robot_m_iterator++) {
 
-		robots_map_iter = robots_to_move.find(robot_m_iterator->first);
+		robots_t::iterator robots_map_iter = robots_to_move.find(robot_m_iterator->first);
 		if (robots_map_iter == robots_to_move.end()) {
 			sr_ecp_msg->message (lib::SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
 			throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
@@ -447,7 +448,6 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 	// utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
 	robots_t robots_to_move, robots_to_wait_for_task_termination;
 	robots_t robots_to_move_tmp, robots_to_wait_for_task_termination_tmp;
-	robots_t::iterator robots_map_iter;
 
 	// powolanie generatora i jego konfiguracja
 	generator::extended_empty mp_ext_empty_gen (*this);
@@ -489,7 +489,7 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 	for (robots_t::iterator robot_m_iterator = robots_to_wait_for_task_termination.begin();
 	robot_m_iterator != robots_to_wait_for_task_termination.end(); robot_m_iterator++) {
 
-		robots_map_iter = robots_to_move.find(robot_m_iterator->first);
+		robots_t::iterator robots_map_iter = robots_to_move.find(robot_m_iterator->first);
 		if (robots_map_iter == robots_to_move.end()) {
 			sr_ecp_msg->message (lib::SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
 			throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
