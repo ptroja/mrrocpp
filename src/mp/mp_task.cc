@@ -1067,12 +1067,9 @@ void task::start_all (const robots_t & _robot_m)
 	// Wystartowanie wszystkich ECP
 
 	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
-	robots_t robots_m_tmp = _robot_m, robots_m_tmp2;
+	robots_t robots_m_tmp = _robot_m;
 
-	while (!(robots_m_tmp.empty())) {
-
-		// przygotowanie wersji tymczasowej do usuwania robotow
-		robots_m_tmp2.clear();
+	while (1) {
 
 		BOOST_FOREACH(const robot_pair_t & robot_node, robots_m_tmp) {
 			if (robot_node.second->new_pulse ) {
@@ -1084,16 +1081,13 @@ void task::start_all (const robots_t & _robot_m)
 					printf("phase 2 bledny kod pulsu w start_all\n");
 					throw common::MP_main_error(lib::NON_FATAL_ERROR, INVALID_ECP_PULSE_IN_MP_START_ALL);
 				}
-			} else {
-				// dodaj robota do listy jeszcze nie obsluzonych
-				robots_m_tmp2.insert(robot_node);
+				robots_m_tmp.erase(robot_node.first);
 			}
 		}
 
-		// ponowne przepisanie map
-		robots_m_tmp = robots_m_tmp2;
-
-		if (!(robots_m_tmp.empty())) {
+		if (robots_m_tmp.empty()) {
+			break;
+		} else {
 			common::mp_receive_pulse_struct_t input;
 			check_and_optional_wait_for_new_pulse (&input, NEW_ECP_PULSE, WITHOUT_TIMEOUT);
 		}
@@ -1117,10 +1111,7 @@ void task::execute_all (const robots_t & _robot_m)
 		}
 	}
 
-	while (!(robots_m_tmp.empty())) {
-
-		// przygotowanie wersji tymczasowej do usuwania robotow
-		robots_t robots_m_tmp2;
+	while (1) {
 
 		BOOST_FOREACH(const robot_pair_t & robot_node, robots_m_tmp) {
 			// komunikujemy sie tylko z aktywnymi robotami
@@ -1133,16 +1124,13 @@ void task::execute_all (const robots_t & _robot_m)
 				} else {
 					throw common::MP_main_error(lib::NON_FATAL_ERROR, INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL);
 				}
-			} else {
-				// dodaj robota do listy jeszcze nie obsluzonych
-				robots_m_tmp2.insert(robot_node);
+				robots_m_tmp.erase(robot_node.first);
 			}
 		}
 
-		// ponowne przepisanie map
-		robots_m_tmp = robots_m_tmp2;
-
-		if (!(robots_m_tmp.empty())) {
+		if (robots_m_tmp.empty()) {
+			break;
+		} else {
 			common::mp_receive_pulse_struct_t input;
 			check_and_optional_wait_for_new_pulse (&input, NEW_ECP_PULSE, WITHOUT_TIMEOUT);
 		}
@@ -1157,13 +1145,11 @@ void task::terminate_all (const robots_t & _robot_m)
 	// Zatrzymanie wszystkich ECP
 
 	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
-	robots_t robots_m_tmp = _robot_m, robots_m_tmp2;
+	robots_t robots_m_tmp = _robot_m;
 
-	while (!(robots_m_tmp.empty())) {
+	while (1) {
 
 		// przygotowanie wersji tymczasowej do usuwania robotow
-		robots_m_tmp2.clear();
-
 		BOOST_FOREACH(const robot_pair_t & robot_node, robots_m_tmp) {
 
 			if (robot_node.second->new_pulse) {
@@ -1176,16 +1162,13 @@ void task::terminate_all (const robots_t & _robot_m)
 					printf("phase 2 bledny kod pulsu w terminate_all\n");
 					throw common::MP_main_error(lib::NON_FATAL_ERROR, INVALID_ECP_PULSE_IN_MP_TERMINATE_ALL);
 				}
-			} else {
-				// dodaj robota do listy jeszcze nie obsluzonych
-				robots_m_tmp2.insert(robot_node);
+				robots_m_tmp.erase(robot_node.first);
 			}
 		}
 
-		// ponowne przepisanie map
-		robots_m_tmp = robots_m_tmp2;
-
-		if (!(robots_m_tmp.empty())) {
+		if (robots_m_tmp.empty()) {
+			break;
+		} else {
 			common::mp_receive_pulse_struct_t input;
 			check_and_optional_wait_for_new_pulse (&input, NEW_ECP_PULSE, WITHOUT_TIMEOUT);
 		}
