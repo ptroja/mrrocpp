@@ -4,7 +4,6 @@
 #include "mp/mp_generator.h"
 #include "mp/mp.h"
 
-#include <list>
 #include <map>
 
 namespace mrrocpp {
@@ -16,8 +15,6 @@ class generator;
 }
 
 namespace task {
-
-
 
 // klasa globalna dla calego procesu MP
 class task: public ecp_mp::task::task
@@ -32,7 +29,8 @@ class task: public ecp_mp::task::task
 #endif
 
 		/// mapa wszystkich robotow
-		static std::map <lib::ROBOT_ENUM, robot::robot*> robot_m;
+		typedef std::map <lib::ROBOT_ENUM, robot::robot*> robots_t;
+		static robots_t robot_m;
 
 		/// KONSTRUKTORY
 		task(lib::configurator &_config);
@@ -76,25 +74,25 @@ class task: public ecp_mp::task::task
 		void wait_for_start (void);// by Y&W
 
 		// Oczekiwanie na zlecenie STOP od UI
-		void wait_for_stop ( common::WAIT_FOR_STOP_ENUM tryb);// by Y&W dodany tryb
+		void wait_for_stop (common::WAIT_FOR_STOP_ENUM tryb);// by Y&W dodany tryb
 
 		// Wystartowanie wszystkich ECP
-		void start_all (std::map <lib::ROBOT_ENUM, robot::robot*>& _robot_m);
+		void start_all (robots_t & _robot_m);
 
 		// Zatrzymanie wszystkich ECP
-		void terminate_all (std::map <lib::ROBOT_ENUM, robot::robot*>& _robot_m );
+		void terminate_all (robots_t & _robot_m );
 
 		// Wyslanie rozkazu do wszystkich ECP
-		void execute_all (std::map <lib::ROBOT_ENUM, robot::robot*>& _robot_m);
+		void execute_all (robots_t & _robot_m);
 
 		// funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
-		void mp_receive_ui_or_ecp_pulse (std::map <lib::ROBOT_ENUM, robot::robot*>& _robot_m, generator::generator& the_generator );
+		void mp_receive_ui_or_ecp_pulse (robots_t & _robot_m, generator::generator& the_generator );
 
 		// obsluga sygnalu
 		virtual void catch_signal_in_mp_task(int sig);
 
 		/// Zatrzymanie wszystkich ECP
-		static void kill_all_ECP (std::map <lib::ROBOT_ENUM, robot::robot*>& _robot_m);
+		static void kill_all_ECP (robots_t & _robot_m);
 
 		/// utworzenie robotow
 		virtual void create_robots(void);
