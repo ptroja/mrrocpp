@@ -426,7 +426,6 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 			break;
 
 		// przypisanie generatorowi mp_ext_empty_gen zbioru robots_to_move
-		mp_ext_empty_gen.robot_m.clear();
 		mp_ext_empty_gen.robot_m = robots_to_move;
 
 		//	if (debug_tmp) printf("PRZED MOVE run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
@@ -530,7 +529,6 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 			break;
 
 		// przypisanie generatorowi mp_ext_empty_gen zbioru robots_to_move
-		mp_ext_empty_gen.robot_m.clear();
 		mp_ext_empty_gen.robot_m = robots_to_move;
 
 		//	if (debug_tmp) printf("PRZED MOVE run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
@@ -828,7 +826,6 @@ int task::mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs)
 
 void task::mp_receive_ui_or_ecp_pulse (robots_t & _robot_m, generator::generator& the_generator )
 {
-
 	enum MP_STATE_ENUM
 	{
 		MP_STATE_RUNNING,
@@ -887,16 +884,17 @@ void task::mp_receive_ui_or_ecp_pulse (robots_t & _robot_m, generator::generator
 
 				ui_new_pulse = false;
 
-				if (ui_pulse_code == MP_STOP) {
-					terminate_all (_robot_m);
-					throw common::MP_main_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-					//return true;
-				}
-
-				if (ui_pulse_code == MP_PAUSE) {
-					mp_state = MP_STATE_PAUSED;
-					ui_exit_from_while = false;
-					continue;
+				switch (ui_pulse_code) {
+					case MP_STOP:
+						terminate_all (_robot_m);
+						throw common::MP_main_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+						//return true;
+					case MP_PAUSE:
+						mp_state = MP_STATE_PAUSED;
+						ui_exit_from_while = false;
+						continue;
+					default:
+						break;
 				}
 
 				if (mp_state == MP_STATE_PAUSED) {// oczekujemy na resume
