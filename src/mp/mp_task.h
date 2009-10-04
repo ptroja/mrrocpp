@@ -29,6 +29,7 @@ class task: public ecp_mp::task::task
 #endif
 
 		/// mapa wszystkich robotow
+		typedef std::pair<lib::ROBOT_ENUM, robot::robot*> robot_pair_t;
 		typedef std::map <lib::ROBOT_ENUM, robot::robot*> robots_t;
 		static robots_t robot_m;
 
