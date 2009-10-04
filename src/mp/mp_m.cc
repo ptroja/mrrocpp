@@ -59,6 +59,7 @@ int main (int argc, char *argv[], char **arge)
 		}
 
 		try	{
+			// TODO: new/delete fixup
 			lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3], "[mp]", argv[5]);
 
 			mp::common::mp_t = mp::task::return_created_mp_task(*_config);
@@ -132,9 +133,9 @@ int main (int argc, char *argv[], char **arge)
 			try {
 				mp::common::mp_t->sr_ecp_msg->message("MP - wcisnij start");
 				// Oczekiwanie na zlecenie START od UI
-				mp::common::mp_t->wait_for_start ();
+				mp::common::mp_t->wait_for_start();
 				// Wyslanie START do wszystkich ECP
-				mp::common::mp_t->start_all (mp::common::mp_t->robot_m);
+				mp::common::mp_t->start_all(mp::common::mp_t->robot_m);
 				mp::common::mp_t->main_task_algorithm();
 
 				// Oczekiwanie na STOP od UI

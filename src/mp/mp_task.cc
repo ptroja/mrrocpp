@@ -1062,7 +1062,7 @@ void task::wait_for_stop (common::WAIT_FOR_STOP_ENUM tryb)
 
 // ------------------------------------------------------------------------
 
-void task::start_all (robots_t & _robot_m)
+void task::start_all (const robots_t & _robot_m)
 {
 	// Wystartowanie wszystkich ECP
 
@@ -1086,7 +1086,7 @@ void task::start_all (robots_t & _robot_m)
 				}
 			} else {
 				// dodaj robota do listy jeszcze nie obsluzonych
-				robots_m_tmp2[robot_node.first] = robot_node.second;
+				robots_m_tmp2.insert(robot_node);
 			}
 		}
 
@@ -1103,7 +1103,7 @@ void task::start_all (robots_t & _robot_m)
 
 
 // ------------------------------------------------------------------------
-void task::execute_all (robots_t & _robot_m)
+void task::execute_all (const robots_t & _robot_m)
 {
 	// Wystartowanie wszystkich ECP
 	// do przepisania wg http://www.thescripts.com/forum/thread62378.html
@@ -1113,22 +1113,20 @@ void task::execute_all (robots_t & _robot_m)
 	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
 	BOOST_FOREACH(const robot_pair_t & robot_node, _robot_m) {
 		if (robot_node.second->communicate) {
-			robots_m_tmp[robot_node.first] = robot_node.second;
+			robots_m_tmp.insert(robot_node);
 		}
 	}
-
-	robots_t robots_m_tmp2;
 
 	while (!(robots_m_tmp.empty())) {
 
 		// przygotowanie wersji tymczasowej do usuwania robotow
-		robots_m_tmp2.clear();
+		robots_t robots_m_tmp2;
 
 		BOOST_FOREACH(const robot_pair_t & robot_node, robots_m_tmp) {
 			// komunikujemy sie tylko z aktywnymi robotami
 			if (robot_node.second->new_pulse) {
 				if ((robot_node.second->pulse_code == ECP_WAIT_FOR_COMMAND) ||
-						(robot_node.second->pulse_code == ECP_WAIT_FOR_NEXT_STATE)) {
+					(robot_node.second->pulse_code == ECP_WAIT_FOR_NEXT_STATE)) {
 					robot_node.second->new_pulse = false;
 					robot_node.second->robot_new_pulse_checked = false;
 					robot_node.second->execute_motion();
@@ -1137,7 +1135,7 @@ void task::execute_all (robots_t & _robot_m)
 				}
 			} else {
 				// dodaj robota do listy jeszcze nie obsluzonych
-				robots_m_tmp2[robot_node.first] = robot_node.second;
+				robots_m_tmp2.insert(robot_node);
 			}
 		}
 
@@ -1154,7 +1152,7 @@ void task::execute_all (robots_t & _robot_m)
 
 
 // ------------------------------------------------------------------------
-void task::terminate_all (robots_t & _robot_m)
+void task::terminate_all (const robots_t & _robot_m)
 {
 	// Zatrzymanie wszystkich ECP
 
@@ -1165,7 +1163,6 @@ void task::terminate_all (robots_t & _robot_m)
 
 		// przygotowanie wersji tymczasowej do usuwania robotow
 		robots_m_tmp2.clear();
-
 
 		BOOST_FOREACH(const robot_pair_t & robot_node, robots_m_tmp) {
 
@@ -1181,7 +1178,7 @@ void task::terminate_all (robots_t & _robot_m)
 				}
 			} else {
 				// dodaj robota do listy jeszcze nie obsluzonych
-				robots_m_tmp2[robot_node.first] = robot_node.second;
+				robots_m_tmp2.insert(robot_node);
 			}
 		}
 
@@ -1198,7 +1195,7 @@ void task::terminate_all (robots_t & _robot_m)
 
 
 // ------------------------------------------------------------------------
-void task::kill_all_ECP (robots_t & _robot_m)
+void task::kill_all_ECP (const robots_t & _robot_m)
 {
 	// Zabicie wszystkich ECP z mapy
 	BOOST_FOREACH(const robot_pair_t & robot_node, _robot_m) {

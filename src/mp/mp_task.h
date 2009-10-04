@@ -78,13 +78,13 @@ class task: public ecp_mp::task::task
 		void wait_for_stop (common::WAIT_FOR_STOP_ENUM tryb);// by Y&W dodany tryb
 
 		// Wystartowanie wszystkich ECP
-		void start_all (robots_t & _robot_m);
+		void start_all (const robots_t & _robot_m);
 
 		// Zatrzymanie wszystkich ECP
-		void terminate_all (robots_t & _robot_m );
+		void terminate_all (const robots_t & _robot_m );
 
 		// Wyslanie rozkazu do wszystkich ECP
-		void execute_all (robots_t & _robot_m);
+		void execute_all (const robots_t & _robot_m);
 
 		// funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
 		void mp_receive_ui_or_ecp_pulse (robots_t & _robot_m, generator::generator& the_generator );
@@ -93,7 +93,7 @@ class task: public ecp_mp::task::task
 		virtual void catch_signal_in_mp_task(int sig);
 
 		/// Zatrzymanie wszystkich ECP
-		static void kill_all_ECP (robots_t & _robot_m);
+		static void kill_all_ECP (const robots_t & _robot_m);
 
 		/// utworzenie robotow
 		virtual void create_robots(void);
