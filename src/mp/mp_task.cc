@@ -548,7 +548,7 @@ int task::mp_receive_pulse (common::mp_receive_pulse_struct_t* outputs, MP_RECEI
 
 	while (!exit_loop) {
 #if !defined(USE_MESSIP_SRR)
-		if (tryb == WITH_TIMEOUT) {
+		if (tryb == NONBLOCK) {
 			struct sigevent event;
 			event.sigev_notify = SIGEV_UNBLOCK;
 			TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE,  &event, NULL, NULL );// by Y zamiast creceive
@@ -561,7 +561,7 @@ int task::mp_receive_pulse (common::mp_receive_pulse_struct_t* outputs, MP_RECEI
 		outputs->rcvid = messip_receive(mp_pulse_attach,
 				&type, &subtype,
 				NULL, 0,
-				(tryb == WITH_TIMEOUT) ? 0 : MESSIP_NOTIMEOUT);
+				(tryb == NONBLOCK) ? 0 : MESSIP_NOTIMEOUT);
 //		fprintf(stderr, "%d\n", outputs->rcvid);
 #endif
 
@@ -655,9 +655,6 @@ int task::mp_receive_pulse (common::mp_receive_pulse_struct_t* outputs, MP_RECEI
 int task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct_t* outputs,
 		WAIT_FOR_NEW_PULSE_ENUM process_mode, MP_RECEIVE_PULSE_MODE desired_wait_mode)
 {
-
-	MP_RECEIVE_PULSE_MODE current_wait_mode = WITH_TIMEOUT;
-
 	// checking of already registered pulses
 
 	bool desired_pulse_found = false;
@@ -668,9 +665,7 @@ int task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct
 				desired_pulse_found = true;
 			}
 		}
-	}
-
-	if ((process_mode == NEW_UI_PULSE) || (process_mode == NEW_UI_OR_ECP_PULSE)) {
+	} else if ((process_mode == NEW_UI_PULSE) || (process_mode == NEW_UI_OR_ECP_PULSE)) {
 		if (ui_new_pulse) {
 			desired_pulse_found = true;
 		}
@@ -679,6 +674,7 @@ int task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct
 	// receiving new pulses
 	int ret;
 	bool exit_from_while = false;
+	MP_RECEIVE_PULSE_MODE current_wait_mode = NONBLOCK;
 
 	while (!exit_from_while) {
 		ret = mp_receive_pulse (outputs, current_wait_mode);
@@ -688,17 +684,19 @@ int task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct
 #else
 		if (ret == MESSIP_MSG_NOREPLY) {
 #endif
-			//			printf("check_and_optional_wait_for_new_pulse ret == 0\n");
-			// wstawiamy informacje o pulsie ktory przyszedl do innego robota
+			// printf("check_and_optional_wait_for_new_pulse ret == 0\n");
+
+			// wstawiamy informacje o pulsie ktory przyszedl od robota
 			BOOST_FOREACH(const robot_pair_t & robot_node, robot_m) {
 				if (outputs->pulse_msg.hdr.scoid == robot_node.second->scoid) {
-					//					printf("check_and_optional_wait_for_new_pulse w ECP\n");
+					// printf("check_and_optional_wait_for_new_pulse w ECP\n");
 					robot_node.second->pulse_code = outputs->pulse_msg.hdr.code;
 					robot_node.second->new_pulse = true;
+
 					if ((process_mode == NEW_ECP_PULSE) || (process_mode == NEW_UI_OR_ECP_PULSE)) {
 						if (!(robot_node.second->robot_new_pulse_checked)) {
 							desired_pulse_found = true;
-							if (current_wait_mode == WITHOUT_TIMEOUT) {
+							if (current_wait_mode == BLOCK) {
 								exit_from_while = true;
 							}
 						}
@@ -707,42 +705,41 @@ int task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct
 				}
 			}
 
+			// wstawiamy informacje o pulsie ktory przyszedl od UI
 			if (outputs->pulse_msg.hdr.scoid == ui_scoid) {
 				ui_pulse_code = outputs->pulse_msg.hdr.code;
 				ui_new_pulse = true;
+
 				if ((process_mode == NEW_UI_PULSE) || (process_mode == NEW_UI_OR_ECP_PULSE)) {
 					desired_pulse_found = true;
-					if (current_wait_mode == WITHOUT_TIMEOUT) {
+					if (current_wait_mode == BLOCK) {
 						exit_from_while = true;
 					}
 				}
 				continue;
 			}
-		} else if (ret < 0) {
 #if !defined(USE_MESSIP_SRR)
-			if (ret != -ETIMEDOUT) {
+		} else if (ret == -ETIMEDOUT) {
 #else
-			if (ret != MESSIP_MSG_TIMEOUT) {
+		} else if (ret == MESSIP_MSG_TIMEOUT) {
 #endif
-				// tu ma byc wyjatek
-				fprintf (stderr, "MP: MsgReceive() na kanale ecp_pusle: %s @ %s:%d\n", strerror(-ret), __FILE__, __LINE__);
-//				throw;
+			if ((desired_wait_mode == BLOCK) && (!desired_pulse_found)) {
+				current_wait_mode = BLOCK;
 			} else {
-				if ((desired_wait_mode == WITHOUT_TIMEOUT) && (!desired_pulse_found)) {
-					current_wait_mode = WITHOUT_TIMEOUT;
-				} else {
-					exit_from_while = true;
-				}
-				continue;
+				exit_from_while = true;
 			}
+			continue;
 #if !defined(USE_MESSIP_SRR)
 		} else if (ret > 0) {
 #else
 		} else if (ret == MESSIP_MSG_CONNECTING) {
 #endif
-			// jesli wlasciwy proces zrobil name_open
+			// wlasciwy proces zrobil name_open
+		} else {
+			// tu ma byc wyjatek
+			fprintf (stderr, "MP: MsgReceive() na kanale ecp_pulse: %s @ %s:%d\n", strerror(-ret), __FILE__, __LINE__);
+//			throw;
 		}
-
 	}
 
 	if (desired_pulse_found) {
@@ -767,7 +764,7 @@ int task::mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs)
 	fprintf(stderr, "mp_wait_for_name_open...cont\n");
 
 	while (!wyjscie) {
-		ret = mp_receive_pulse (outputs, WITHOUT_TIMEOUT);
+		ret = mp_receive_pulse (outputs, BLOCK);
 
 #if !defined(USE_MESSIP_SRR)
 		if (ret < 0) {
@@ -775,7 +772,7 @@ int task::mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs)
 		if (ret == -1) {
 #endif
 			// TODO: tu ma byc wyjatek
-			fprintf (stderr, "MP: MsgReceive() na kanale ecp_pusle: %s @ %s:%d\n", strerror(-ret), __FILE__, __LINE__);
+			fprintf (stderr, "MP: MsgReceive() na kanale ecp_pulse: %s @ %s:%d\n", strerror(-ret), __FILE__, __LINE__);
 #if !defined(USE_MESSIP_SRR)
 		} else if (ret == 0) {
 #else
@@ -841,9 +838,9 @@ void task::mp_receive_ui_or_ecp_pulse (robots_t & _robot_m, generator::generator
 		if (mp_state == MP_STATE_RUNNING){
 			rcvid = check_and_optional_wait_for_new_pulse (
 					&input, NEW_UI_OR_ECP_PULSE,
-					ecp_exit_from_while ? WITH_TIMEOUT : WITHOUT_TIMEOUT);
+					ecp_exit_from_while ? NONBLOCK : BLOCK);
 		} else {
-			rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, WITHOUT_TIMEOUT);
+			rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, BLOCK);
 		}
 
 		if (rcvid == -1) {// Error condition
@@ -969,7 +966,7 @@ void task::initialize_communication()
 		ui_scoid = outputs.msg_info.scoid;
 		std::cerr << "ui_scoid = " << ui_scoid << std::endl;
 	} else {
-		std::cerr << "Error, connection from ui expected" << ui_scoid << std::endl;
+		std::cerr << "Error, connection from ui expected " << ui_scoid << std::endl;
 	}
 }
 // -------------------------------------------------------------------
@@ -980,7 +977,7 @@ void task::wait_for_start ()
 
 	while (1) {
 		common::mp_receive_pulse_struct_t input;
-		check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, WITHOUT_TIMEOUT);
+		check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, BLOCK);
 		if (ui_new_pulse) {
 			ui_new_pulse = false;
 			if (ui_pulse_code == MP_START) {
@@ -1003,7 +1000,7 @@ void task::wait_for_stop (common::WAIT_FOR_STOP_ENUM tryb)
 
 	while (!wyjscie) {
 		common::mp_receive_pulse_struct_t input;
-		int rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, WITHOUT_TIMEOUT);
+		int rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, BLOCK);
 
 		if (rcvid < 0)/* Error condition, exit */
 		{
@@ -1012,15 +1009,15 @@ void task::wait_for_stop (common::WAIT_FOR_STOP_ENUM tryb)
 				perror("Receive StopProxy failed (MP)");
 				sr_ecp_msg->message(lib::SYSTEM_ERROR, input.e, "MP: Receive StopProxy failed");
 				switch (tryb) {
-				case common::MP_THROW:
-					throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
-					break;
-				case common::MP_EXIT:
-					exit(EXIT_FAILURE);
-					break;
-				default:
-					printf("bledny tryb w wait_for_stop\n");
-					break;
+					case common::MP_THROW:
+						throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+						break;
+					case common::MP_EXIT:
+						exit(EXIT_FAILURE);
+						break;
+					default:
+						printf("bledny tryb w wait_for_stop\n");
+						break;
 				}
 			}
 		} else {
@@ -1068,7 +1065,7 @@ void task::start_all (const robots_t & _robot_m)
 			break;
 		} else {
 			common::mp_receive_pulse_struct_t input;
-			check_and_optional_wait_for_new_pulse (&input, NEW_ECP_PULSE, WITHOUT_TIMEOUT);
+			check_and_optional_wait_for_new_pulse (&input, NEW_ECP_PULSE, BLOCK);
 		}
 	}
 }
@@ -1111,7 +1108,7 @@ void task::execute_all (const robots_t & _robot_m)
 			break;
 		} else {
 			common::mp_receive_pulse_struct_t input;
-			check_and_optional_wait_for_new_pulse (&input, NEW_ECP_PULSE, WITHOUT_TIMEOUT);
+			check_and_optional_wait_for_new_pulse (&input, NEW_ECP_PULSE, BLOCK);
 		}
 	}
 }
@@ -1149,7 +1146,7 @@ void task::terminate_all (const robots_t & _robot_m)
 			break;
 		} else {
 			common::mp_receive_pulse_struct_t input;
-			check_and_optional_wait_for_new_pulse (&input, NEW_ECP_PULSE, WITHOUT_TIMEOUT);
+			check_and_optional_wait_for_new_pulse (&input, NEW_ECP_PULSE, BLOCK);
 		}
 	}
 }

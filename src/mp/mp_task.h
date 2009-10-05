@@ -40,8 +40,8 @@ class task: public ecp_mp::task::task
 
 		// oczekiwanie na puls z ECP
 		enum MP_RECEIVE_PULSE_MODE {
-			WITH_TIMEOUT,
-			WITHOUT_TIMEOUT
+			NONBLOCK,
+			BLOCK
 		};
 
 		enum WAIT_FOR_NEW_PULSE_ENUM {
