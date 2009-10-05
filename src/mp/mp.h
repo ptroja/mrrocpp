@@ -26,9 +26,8 @@ class robot;
 
 namespace common {
 
-
-//class base;
-
+typedef std::pair<lib::ROBOT_ENUM, robot::robot*> robot_pair_t;
+typedef std::map <lib::ROBOT_ENUM, robot::robot*> robots_t;
 
 enum WAIT_FOR_STOP_ENUM {
 	MP_EXIT,

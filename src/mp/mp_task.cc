@@ -138,7 +138,7 @@ messip_channel_t* task::mp_pulse_attach = NULL;
 #endif
 
 // mapa wszystkich robotow z iteratorem
-task::robots_t task::robot_m;
+common::robots_t task::robot_m;
 
 // KONSTRUKTORY
 task::task(lib::configurator &_config) : ecp_mp::task::task(_config)
@@ -338,8 +338,8 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 {
 	// CZYNNOSCI WSTEPNE
 	// utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
-	robots_t robots_to_move, robots_to_wait_for_task_termination;
-	robots_t robots_to_move_tmp, robots_to_wait_for_task_termination_tmp;
+	common::robots_t robots_to_move, robots_to_wait_for_task_termination;
+	common::robots_t robots_to_move_tmp, robots_to_wait_for_task_termination_tmp;
 
 	// powolanie generatora i jego konfiguracja
 	generator::extended_empty mp_ext_empty_gen (*this);
@@ -378,9 +378,9 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 
 	// sprawdzenie czy zbior robots_to_wait_for_task_termination nie zawiera robotow, ktorych nie ma w zbiorze robots_to_move
 
-	BOOST_FOREACH(const robot_pair_t & robot_node, robots_to_wait_for_task_termination) {
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination) {
 
-		robots_t::iterator robots_map_iter = robots_to_move.find(robot_node.first);
+		common::robots_t::iterator robots_map_iter = robots_to_move.find(robot_node.first);
 
 		if (robots_map_iter == robots_to_move.end()) {
 			sr_ecp_msg->message (lib::SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
@@ -403,7 +403,7 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 		robots_to_wait_for_task_termination_tmp = robots_to_wait_for_task_termination;
 
 		// sprawdzenie zbioru robots_to_move
-		BOOST_FOREACH(const robot_pair_t & robot_node, robots_to_move_tmp) {
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_move_tmp) {
 			if (robot_node.second->ecp_td.ecp_reply == lib::TASK_TERMINATED  ) {
 				//	if (debug_tmp) robot_m_iterator->second->printf_state("1 ");
 				robots_to_move.erase (robot_node.first);
@@ -411,7 +411,7 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 		}
 
 		// sprawdzenie zbioru robots_to_wait_for_task_termination
-		BOOST_FOREACH(const robot_pair_t & robot_node, robots_to_wait_for_task_termination_tmp) {
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination_tmp) {
 			if (robot_node.second->ecp_td.ecp_reply == lib::TASK_TERMINATED  ) {
 				//	if (debug_tmp) robot_m_iterator->second->printf_state("2 ");
 				robots_to_wait_for_task_termination.erase (robot_node.first);
@@ -439,8 +439,8 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 {
 	// CZYNNOSCI WSTEPNE
 	// utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
-	robots_t robots_to_move, robots_to_wait_for_task_termination;
-	robots_t robots_to_move_tmp, robots_to_wait_for_task_termination_tmp;
+	common::robots_t robots_to_move, robots_to_wait_for_task_termination;
+	common::robots_t robots_to_move_tmp, robots_to_wait_for_task_termination_tmp;
 
 	// powolanie generatora i jego konfiguracja
 	generator::extended_empty mp_ext_empty_gen (*this);
@@ -479,9 +479,9 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 
 	// sprawdzenie czy zbior robots_to_wait_for_task_termination nie zawiera robotow, ktorych nie ma w zbiorze robots_to_move
 
-	BOOST_FOREACH(const robot_pair_t & robot_node, robots_to_wait_for_task_termination) {
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination) {
 
-		robots_t::iterator robots_map_iter = robots_to_move.find(robot_node.first);
+		common::robots_t::iterator robots_map_iter = robots_to_move.find(robot_node.first);
 
 		if (robots_map_iter == robots_to_move.end()) {
 			sr_ecp_msg->message (lib::SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
@@ -504,7 +504,7 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 		robots_to_wait_for_task_termination_tmp = robots_to_wait_for_task_termination;
 
 		// sprawdzenie zbioru robots_to_move
-		BOOST_FOREACH(const robot_pair_t & robot_node, robots_to_move_tmp) {
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_move_tmp) {
 			if (robot_node.second->ecp_td.ecp_reply == lib::TASK_TERMINATED  ) {
 				//	if (debug_tmp) robot_m_iterator->second->printf_state("1 ");
 				robots_to_move.erase (robot_node.first);
@@ -512,7 +512,7 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 		}
 
 		// sprawdzenie zbioru robots_to_wait_for_task_termination
-		BOOST_FOREACH(const robot_pair_t & robot_node, robots_to_wait_for_task_termination_tmp) {
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination_tmp) {
 			if (robot_node.second->ecp_td.ecp_reply == lib::TASK_TERMINATED  ) {
 				//	if (debug_tmp) robot_m_iterator->second->printf_state("2 ");
 				robots_to_wait_for_task_termination.erase (robot_node.first);
@@ -660,7 +660,7 @@ int task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct
 	bool desired_pulse_found = false;
 
 	if ((process_mode == NEW_ECP_PULSE) || (process_mode == NEW_UI_OR_ECP_PULSE)) {
-		BOOST_FOREACH(const robot_pair_t & robot_node, robot_m) {
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
 			if ((robot_node.second->new_pulse) && (!(robot_node.second->robot_new_pulse_checked))) {
 				desired_pulse_found = true;
 			}
@@ -689,7 +689,7 @@ int task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct
 			// printf("check_and_optional_wait_for_new_pulse ret == 0\n");
 
 			// wstawiamy informacje o pulsie ktory przyszedl od robota
-			BOOST_FOREACH(const robot_pair_t & robot_node, robot_m) {
+			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
 				if (outputs->pulse_msg.hdr.scoid == robot_node.second->scoid) {
 					// printf("check_and_optional_wait_for_new_pulse w ECP\n");
 					robot_node.second->pulse_code = outputs->pulse_msg.hdr.code;
@@ -777,7 +777,7 @@ int task::mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs)
 		} else if (ret == MESSIP_MSG_NOREPLY) {
 #endif
 			// wstawiamy informacje o pulsie ktory przyszedl od innego robota
-			BOOST_FOREACH(const robot_pair_t & robot_node, robot_m) {
+			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
 				if (outputs->pulse_msg.hdr.scoid == robot_node.second->scoid) {
 					robot_node.second->pulse_code = outputs->pulse_msg.hdr.code;
 					robot_node.second->new_pulse = true;
@@ -814,7 +814,7 @@ int task::mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs)
 
 // funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
 
-void task::mp_receive_ui_or_ecp_pulse (robots_t & _robot_m, generator::generator& the_generator )
+void task::mp_receive_ui_or_ecp_pulse (common::robots_t & _robot_m, generator::generator& the_generator )
 {
 	enum MP_STATE_ENUM
 	{
@@ -907,7 +907,7 @@ void task::mp_receive_ui_or_ecp_pulse (robots_t & _robot_m, generator::generator
 			}
 
 			if (the_generator.wait_for_ECP_pulse) {
-				BOOST_FOREACH(const robot_pair_t & robot_node, robot_m) {
+				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
 					if ((robot_node.second->new_pulse) && (!(robot_node.second->robot_new_pulse_checked))) {
 						robot_node.second->robot_new_pulse_checked = true;
 						//	 if (debug_tmp)	printf("wait_for_ECP_pulse r: %d, pc: %d\n", robot_node.first, robot_node.second->pulse_code);
@@ -1035,16 +1035,16 @@ void task::wait_for_stop (common::WAIT_FOR_STOP_ENUM tryb)
 
 // ------------------------------------------------------------------------
 
-void task::start_all (const robots_t & _robot_m)
+void task::start_all (const common::robots_t & _robot_m)
 {
 	// Wystartowanie wszystkich ECP
 
 	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
-	robots_t robots_m_tmp = _robot_m;
+	common::robots_t robots_m_tmp = _robot_m;
 
 	while (1) {
 
-		BOOST_FOREACH(const robot_pair_t & robot_node, robots_m_tmp) {
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_m_tmp) {
 			if (robot_node.second->new_pulse ) {
 				if (robot_node.second->pulse_code == ECP_WAIT_FOR_START) {
 					robot_node.second->new_pulse = false;
@@ -1070,15 +1070,15 @@ void task::start_all (const robots_t & _robot_m)
 
 
 // ------------------------------------------------------------------------
-void task::execute_all (const robots_t & _robot_m)
+void task::execute_all (const common::robots_t & _robot_m)
 {
 	// Wystartowanie wszystkich ECP
 	// do przepisania wg http://www.thescripts.com/forum/thread62378.html
 
-	robots_t robots_m_tmp;
+	common::robots_t robots_m_tmp;
 
 	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
-	BOOST_FOREACH(const robot_pair_t & robot_node, _robot_m) {
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
 		if (robot_node.second->communicate) {
 			robots_m_tmp.insert(robot_node);
 		}
@@ -1086,7 +1086,7 @@ void task::execute_all (const robots_t & _robot_m)
 
 	while (1) {
 
-		BOOST_FOREACH(const robot_pair_t & robot_node, robots_m_tmp) {
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_m_tmp) {
 			// komunikujemy sie tylko z aktywnymi robotami
 			if (robot_node.second->new_pulse) {
 				if ((robot_node.second->pulse_code == ECP_WAIT_FOR_COMMAND) ||
@@ -1113,17 +1113,17 @@ void task::execute_all (const robots_t & _robot_m)
 
 
 // ------------------------------------------------------------------------
-void task::terminate_all (const robots_t & _robot_m)
+void task::terminate_all (const common::robots_t & _robot_m)
 {
 	// Zatrzymanie wszystkich ECP
 
 	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
-	robots_t robots_m_tmp = _robot_m;
+	common::robots_t robots_m_tmp = _robot_m;
 
 	while (1) {
 
 		// przygotowanie wersji tymczasowej do usuwania robotow
-		BOOST_FOREACH(const robot_pair_t & robot_node, robots_m_tmp) {
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_m_tmp) {
 
 			if (robot_node.second->new_pulse) {
 				//if ((robot_m_iterator->second->pulse_code == ECP_WAIT_FOR_STOP) || (robot_m_iterator->second->pulse_code == ECP_WAIT_FOR_COMMAND))
@@ -1151,10 +1151,10 @@ void task::terminate_all (const robots_t & _robot_m)
 
 
 // ------------------------------------------------------------------------
-void task::kill_all_ECP (const robots_t & _robot_m)
+void task::kill_all_ECP (const common::robots_t & _robot_m)
 {
 	// Zabicie wszystkich ECP z mapy
-	BOOST_FOREACH(const robot_pair_t & robot_node, _robot_m) {
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
 #if defined(PROCESS_SPAWN_RSH)
 		kill(robot_node.second->ECP_pid, SIGTERM);
 #else

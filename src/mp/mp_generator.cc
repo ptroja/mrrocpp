@@ -1,5 +1,4 @@
 #include <iostream>
-#include <map>
 
 #include "mp/mp_generator.h"
 #include "mp/mp_robot.h"
@@ -15,18 +14,18 @@ void generator::re_run(void) // powrot do stanu wyjsciowego
 }
 
 // kopiuje dane z robotow do generatora
-void generator::copy_data(std::map<lib::ROBOT_ENUM, robot::robot*>& _robot_m)
+void generator::copy_data(common::robots_t & _robot_m)
 {
-	for (std::map<lib::ROBOT_ENUM, robot::robot*>::iterator robot_m_iterator = _robot_m.begin(); robot_m_iterator
+	for (common::robots_t::iterator robot_m_iterator = _robot_m.begin(); robot_m_iterator
 			!= _robot_m.end(); robot_m_iterator++) {
 		robot_m_iterator->second->get_reply(); // odpowiedz z ECP
 	}
 }
 
 // kopiuje polecenie stworzone w generatorze do robotow
-void generator::copy_generator_command(std::map<lib::ROBOT_ENUM, robot::robot*>& _robot_m)
+void generator::copy_generator_command(common::robots_t & _robot_m)
 {
-	for (std::map<lib::ROBOT_ENUM, robot::robot*>::iterator robot_m_iterator = _robot_m.begin(); robot_m_iterator
+	for (common::robots_t::iterator robot_m_iterator = _robot_m.begin(); robot_m_iterator
 			!= _robot_m.end(); robot_m_iterator++) {
 		robot_m_iterator->second->create_command(); // rozkaz dla ECP
 	}
@@ -35,7 +34,7 @@ void generator::copy_generator_command(std::map<lib::ROBOT_ENUM, robot::robot*>&
 generator::generator(task::task& _mp_task) :
 	ecp_mp::generator::generator(*_mp_task.sr_ecp_msg),
 	mp_t(_mp_task),
-	phase(BEFORE_FIRST_STEP), 
+	phase(BEFORE_FIRST_STEP),
 	new_pulse_checked(true),
 	wait_for_ECP_pulse(false)
 {
@@ -48,7 +47,7 @@ void generator::Move()
 	// Funkcja zwraca true gdy koniec ruchu wywolany jest przez STOP
 
 	// czyszczenie aby nie czekac na pulsy z ECP
-	for (std::map<lib::ROBOT_ENUM, robot::robot*>::iterator robot_m_iterator = mp_t.robot_m.begin(); robot_m_iterator
+	for (common::robots_t::iterator robot_m_iterator = mp_t.robot_m.begin(); robot_m_iterator
 			!= mp_t.robot_m.end(); robot_m_iterator++) {
 		if (robot_m_iterator->second->new_pulse) {
 			robot_m_iterator->second->robot_new_pulse_checked = false;
@@ -60,7 +59,7 @@ void generator::Move()
 	mp_t.mp_receive_ui_or_ecp_pulse(mp_t.robot_m, *this);
 
 	// czyszczenie aby nie czekac na pulsy z ECP
-	for (std::map<lib::ROBOT_ENUM, robot::robot*>::iterator robot_m_iterator = mp_t.robot_m.begin(); robot_m_iterator
+	for (common::robots_t::iterator robot_m_iterator = mp_t.robot_m.begin(); robot_m_iterator
 			!= mp_t.robot_m.end(); robot_m_iterator++) {
 		if (robot_m_iterator->second->new_pulse) {
 			robot_m_iterator->second->robot_new_pulse_checked = false;
