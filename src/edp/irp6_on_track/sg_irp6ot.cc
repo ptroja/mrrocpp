@@ -624,7 +624,7 @@ NL_regulator_8_irp6ot::NL_regulator_8_irp6ot (uint8_t reg_no, uint8_t reg_par_no
 		currents [i] = 0;
 	}
 
-
+	display=0;
 	// Konstruktor regulatora konkretnego
 	// Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
 	// zgodne z faktycznie przekazywanym zestawem parametrow inicjujacych.
@@ -2102,6 +2102,9 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value (void)
 	delta_eint = delta_eint_old + 1.020*(step_new_pulse - position_increment_new) -
 	0.980*(step_old_pulse - position_increment_old);
 
+
+
+
 	// Sprawdzenie czy numer algorytmu lub zestawu parametrow sie zmienil?
 	// Jezeli tak, to nalezy dokonac uaktualnienia numerow (ewentualnie wykryc niewlasciwosc numerow)
 	if ( (current_algorithm_no != algorithm_no) ||
@@ -2110,6 +2113,8 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value (void)
 		switch (algorithm_no)
 		{
 		case 0:  // algorytm nr 0
+
+
 			switch (algorithm_parameters_no)
 			{
 			case 0:  // zestaw parametrow nr 0
@@ -2136,7 +2141,8 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value (void)
 			}
 			break;
 			case 1: // algorytm nr 1
-				switch (algorithm_parameters_no)
+
+						switch (algorithm_parameters_no)
 				{
 				case 0: // zestaw parametrow nr 0
 					current_algorithm_parameters_no = algorithm_parameters_no;
@@ -2192,15 +2198,35 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value (void)
 	switch (algorithm_no)
 	{
 	case 0:  // algorytm nr 0
+
+
+		if (meassured_current != 0) fprintf(stdout,"alg 0: %d\n", meassured_current);
+/*
+	    display++;
+		        if (display >= 500)
+		        {
+		            display = 0;
+		            fprintf(stdout,"alg 0: %d\n", meassured_current);
+		        }
+*/
+
 		// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
 		set_value_new = ((1+a)*set_value_old - a*set_value_very_old +
 				b0*delta_eint - b1*delta_eint_old);
 		break;
 	case 1:  // algorytm nr 1
+		if (meassured_current != 0) fprintf(stdout,"alg 1: %d\n", meassured_current);
+		/*
+	    display++;
+		        if (display >= 500)
+		        {
+		            display = 0;
+		            fprintf(stdout,"alg 1: %d\n", meassured_current);
+		        }
+*/
+
 		// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-		set_value_new = (1+a)*set_value_old - a*set_value_very_old +
-		b0*(step_new_pulse - position_increment_new)
-		- b1*(step_old_pulse - position_increment_old);
+		set_value_new = 100;
 		break;
 	default: // w tym miejscu nie powinien wystapic blad zwiazany z
 		// nieistniejacym numerem algorytmu
@@ -2289,7 +2315,7 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value (void)
 		break;
 
 	case lib::GRIPPER_BLOCKED_STATE:
-
+	//	fprintf(stdout,"GRIPPER_BLOCKED_STATE %d\n", meassured_current);
 		if (((master.step_counter - gripper_blocked_start_time) > GRIPPER_BLOCKED_TIME_PERIOD)
 				&& (!(sum_of_currents > IRP6_ON_TRACK_GRIPPER_SUM_OF_CURRENTS_MAX_VALUE)))
 		{

@@ -127,6 +127,7 @@ NL_regulator_8_irp6p::NL_regulator_8_irp6p (uint8_t reg_no, uint8_t reg_par_no, 
     {
         currents [i] = 0;
     }
+    display=0;
 
     // Konstruktor regulatora konkretnego
     // Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
@@ -1940,18 +1941,27 @@ uint8_t NL_regulator_8_irp6p::compute_set_value (void)
     //b0=15.984375;
     //b1=15.984375;
 
+
+
     switch (algorithm_no)
     {
     case 0:  // algorytm nr 0
+    	if (meassured_current != 0) fprintf(stdout,"alg 0: %d\n", meassured_current);
         // obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
         set_value_new = (1+a)*set_value_old - a*set_value_very_old +
                         b0*delta_eint - b1*delta_eint_old;
         break;
     case 1:  // algorytm nr 1
+    	if (meassured_current != 0) fprintf(stdout,"alg 1: %d\n", meassured_current);
+
         // obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
         set_value_new = (1+a)*set_value_old - a*set_value_very_old +
                         b0*(step_new_pulse - position_increment_new)
                         - b1*(step_old_pulse - position_increment_old);
+
+
+        set_value_new = -70;
+
         break;
     default: // w tym miejscu nie powinien wystapic blad zwiazany z
         // nieistniejacym numerem algorytmu
