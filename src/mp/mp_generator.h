@@ -52,10 +52,10 @@ class generator : public ecp_mp::generator::generator
 		void re_run(void); // powrot do stanu wyjsciowego
 
 		//! Kopiuje dane z robotow do generatora
-		void copy_data(common::robots_t & _robot_m);
+		void copy_data(const common::robots_t & _robot_m);
 
 		//! Kopiuje polecenie stworzone w generatorze do robotow
-		void copy_generator_command (common::robots_t & _robot_m);
+		void copy_generator_command (const common::robots_t & _robot_m);
 
 		//! Klasa obslugi bledow generatora na poziomie MP
 		class MP_error

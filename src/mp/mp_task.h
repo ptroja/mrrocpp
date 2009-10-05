@@ -4,8 +4,6 @@
 #include "mp/mp_generator.h"
 #include "mp/mp.h"
 
-#include <map>
-
 namespace mrrocpp {
 namespace mp {
 

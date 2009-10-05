@@ -8,11 +8,12 @@
 #if !defined(__MP_H)
 #define __MP_H
 
+#include <map>
+
 #if defined(__QNXNTO__)
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #endif
-
 
 #include "ecp_mp/ecp_mp_task.h"
 #include "lib/configurator.h"

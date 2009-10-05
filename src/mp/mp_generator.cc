@@ -1,7 +1,7 @@
-#include <iostream>
-
 #include "mp/mp_generator.h"
 #include "mp/mp_robot.h"
+
+#include <boost/foreach.hpp>
 
 namespace mrrocpp {
 namespace mp {
@@ -14,20 +14,18 @@ void generator::re_run(void) // powrot do stanu wyjsciowego
 }
 
 // kopiuje dane z robotow do generatora
-void generator::copy_data(common::robots_t & _robot_m)
+void generator::copy_data(const common::robots_t & _robot_m)
 {
-	for (common::robots_t::iterator robot_m_iterator = _robot_m.begin(); robot_m_iterator
-			!= _robot_m.end(); robot_m_iterator++) {
-		robot_m_iterator->second->get_reply(); // odpowiedz z ECP
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
+		robot_node.second->get_reply(); // odpowiedz z ECP
 	}
 }
 
 // kopiuje polecenie stworzone w generatorze do robotow
-void generator::copy_generator_command(common::robots_t & _robot_m)
+void generator::copy_generator_command(const common::robots_t & _robot_m)
 {
-	for (common::robots_t::iterator robot_m_iterator = _robot_m.begin(); robot_m_iterator
-			!= _robot_m.end(); robot_m_iterator++) {
-		robot_m_iterator->second->create_command(); // rozkaz dla ECP
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
+		robot_node.second->create_command(); // rozkaz dla ECP
 	}
 }
 
@@ -47,10 +45,9 @@ void generator::Move()
 	// Funkcja zwraca true gdy koniec ruchu wywolany jest przez STOP
 
 	// czyszczenie aby nie czekac na pulsy z ECP
-	for (common::robots_t::iterator robot_m_iterator = mp_t.robot_m.begin(); robot_m_iterator
-			!= mp_t.robot_m.end(); robot_m_iterator++) {
-		if (robot_m_iterator->second->new_pulse) {
-			robot_m_iterator->second->robot_new_pulse_checked = false;
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, mp_t.robot_m) {
+		if (robot_node.second->new_pulse) {
+			robot_node.second->robot_new_pulse_checked = false;
 		}
 	}
 
@@ -59,12 +56,12 @@ void generator::Move()
 	mp_t.mp_receive_ui_or_ecp_pulse(mp_t.robot_m, *this);
 
 	// czyszczenie aby nie czekac na pulsy z ECP
-	for (common::robots_t::iterator robot_m_iterator = mp_t.robot_m.begin(); robot_m_iterator
-			!= mp_t.robot_m.end(); robot_m_iterator++) {
-		if (robot_m_iterator->second->new_pulse) {
-			robot_m_iterator->second->robot_new_pulse_checked = false;
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, mp_t.robot_m) {
+		if (robot_node.second->new_pulse) {
+			robot_node.second->robot_new_pulse_checked = false;
 		}
 	}
+
 	node_counter = 0;
 	// (Inicjacja) generacja pierwszego kroku ruchu
 	if (!first_step())

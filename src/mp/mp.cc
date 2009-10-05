@@ -9,6 +9,8 @@
 #include <unistd.h>
 #include <string.h>
 
+#include <boost/foreach.hpp>
+
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -101,15 +103,11 @@ void set_next_ecps_state::configure (const lib::playerpos_goal_t &_goal)
 
 bool set_next_ecps_state::first_step ()
 {
-    for (map <lib::ROBOT_ENUM, robot::robot*>::iterator robot_m_iterator = robot_m.begin();
-            robot_m_iterator != robot_m.end(); robot_m_iterator++)
+    BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
     {
-
-        robot_m_iterator->second->ecp_td.mp_command = lib::NEXT_STATE;
-
-        robot_m_iterator->second->ecp_td.ecp_next_state = ecp_next_state;
-
-        robot_m_iterator->second->communicate = true;
+    	robot_node.second->ecp_td.mp_command = lib::NEXT_STATE;
+    	robot_node.second->ecp_td.ecp_next_state = ecp_next_state;
+    	robot_node.second->communicate = true;
     }
 
     return true;
@@ -134,11 +132,10 @@ send_end_motion_to_ecps::send_end_motion_to_ecps(task::task& _mp_task)
 
 bool send_end_motion_to_ecps::first_step ()
 {
-    for (map <lib::ROBOT_ENUM, robot::robot*>::iterator robot_m_iterator = robot_m.begin();
-            robot_m_iterator != robot_m.end(); robot_m_iterator++)
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
     {
-        robot_m_iterator->second->ecp_td.mp_command = lib::END_MOTION;
-        robot_m_iterator->second->communicate = true;
+    	robot_node.second->ecp_td.mp_command = lib::END_MOTION;
+    	robot_node.second->communicate = true;
     }
 
     return true;
@@ -174,14 +171,12 @@ void extended_empty::configure (bool l_activate_trigger)
 
 bool extended_empty::first_step ()
 {
-
     wait_for_ECP_pulse = true;
-    for (map <lib::ROBOT_ENUM, robot::robot*>::iterator robot_m_iterator = robot_m.begin();
-            robot_m_iterator != robot_m.end(); robot_m_iterator++)
+    BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
     {
-        robot_m_iterator->second->ecp_td.mp_command = lib::NEXT_POSE;
-        robot_m_iterator->second->ecp_td.instruction_type = lib::QUERY;
-        robot_m_iterator->second->communicate = false;
+    	robot_node.second->ecp_td.mp_command = lib::NEXT_POSE;
+    	robot_node.second->ecp_td.instruction_type = lib::QUERY;
+    	robot_node.second->communicate = false;
     }
 
     return true;
@@ -198,8 +193,6 @@ bool extended_empty::next_step ()
     // Na podstawie ecp_reply dla poszczegolnych robotow nalezy okreslic czy
     // skonczono zadanie uzytkownika
 
-
-
     // 	if (trigger) printf("Yh\n"); else printf("N\n");
     // printf("mp next step\n");
     // UWAGA: dzialamy na jednoelementowej liscie robotow
@@ -209,24 +202,14 @@ bool extended_empty::next_step ()
         return false;
     }
 
-    for (map <lib::ROBOT_ENUM, robot::robot*>::iterator robot_m_iterator = robot_m.begin();
-            robot_m_iterator != robot_m.end(); robot_m_iterator++)
+    BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
     {
-        if (robot_m_iterator->second->new_pulse)
-        {
-            // printf("mpextempty_gen r: %d, pc: %d\n", robot_m_iterator->first, robot_m_iterator->second->pulse_code);
-            robot_m_iterator->second->communicate = true;
-        }
-        else
-        {
-            robot_m_iterator->second->communicate = false;
-        }
+    	robot_node.second->communicate = (robot_node.second->new_pulse);
     }
 
-    for (map <lib::ROBOT_ENUM, robot::robot*>::iterator robot_m_iterator = robot_m.begin();
-            robot_m_iterator != robot_m.end(); robot_m_iterator++)
+    BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
     {
-        if ( robot_m_iterator->second->ecp_td.ecp_reply == lib::TASK_TERMINATED )
+        if ( robot_node.second->ecp_td.ecp_reply == lib::TASK_TERMINATED )
         {
           //  sr_ecp_msg.message("w mp task terminated");
             return false;
@@ -255,12 +238,11 @@ bool empty::first_step ()
     // Inicjacja generatora trajektorii
     // printf("mp first step\n");
     // wait_for_ECP_pulse = true;
-    for (map <lib::ROBOT_ENUM, robot::robot*>::iterator robot_m_iterator = robot_m.begin();
-            robot_m_iterator != robot_m.end(); robot_m_iterator++)
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
     {
-        robot_m_iterator->second->ecp_td.mp_command = lib::NEXT_POSE;
-        robot_m_iterator->second->ecp_td.instruction_type = lib::QUERY;
-        robot_m_iterator->second->communicate = true;
+		robot_node.second->ecp_td.mp_command = lib::NEXT_POSE;
+		robot_node.second->ecp_td.instruction_type = lib::QUERY;
+		robot_node.second->communicate = true;
     }
 
     return true;
@@ -283,10 +265,9 @@ bool empty::next_step ()
     // printf("mp next step\n");
     // UWAGA: dzialamy na jednoelementowej liscie robotow
 
-    for (map <lib::ROBOT_ENUM, robot::robot*>::iterator robot_m_iterator = robot_m.begin();
-            robot_m_iterator != robot_m.end(); robot_m_iterator++)
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
     {
-        if ( robot_m_iterator->second->ecp_td.ecp_reply == lib::TASK_TERMINATED )
+        if ( robot_node.second->ecp_td.ecp_reply == lib::TASK_TERMINATED )
         {
             sr_ecp_msg.message("w mp task terminated");
             return false;
@@ -325,20 +306,19 @@ bool tight_coop::first_step ()
 
     idle_step_counter = 2;
 
-    for (map <lib::ROBOT_ENUM, robot::robot*>::iterator robot_m_iterator = robot_m.begin();
-            robot_m_iterator != robot_m.end(); robot_m_iterator++)
+    BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
     {
-        robot_m_iterator->second->ecp_td.mp_command = lib::NEXT_POSE;
-        robot_m_iterator->second->ecp_td.instruction_type = lib::GET;
-        robot_m_iterator->second->ecp_td.get_type = ARM_DV;
-        robot_m_iterator->second->ecp_td.set_type = ARM_DV;
-        robot_m_iterator->second->ecp_td.set_arm_type = lib::XYZ_EULER_ZYZ;
-        robot_m_iterator->second->ecp_td.get_arm_type = lib::XYZ_EULER_ZYZ;
-        robot_m_iterator->second->ecp_td.motion_type = lib::ABSOLUTE;
-        robot_m_iterator->second->ecp_td.next_interpolation_type = lib::MIM;
-        robot_m_iterator->second->ecp_td.motion_steps = irp6ot_td.internode_step_no;
-        robot_m_iterator->second->ecp_td.value_in_step_no = irp6ot_td.value_in_step_no;
-        robot_m_iterator->second->communicate = true;
+    	robot_node.second->ecp_td.mp_command = lib::NEXT_POSE;
+    	robot_node.second->ecp_td.instruction_type = lib::GET;
+    	robot_node.second->ecp_td.get_type = ARM_DV;
+    	robot_node.second->ecp_td.set_type = ARM_DV;
+    	robot_node.second->ecp_td.set_arm_type = lib::XYZ_EULER_ZYZ;
+    	robot_node.second->ecp_td.get_arm_type = lib::XYZ_EULER_ZYZ;
+    	robot_node.second->ecp_td.motion_type = lib::ABSOLUTE;
+    	robot_node.second->ecp_td.next_interpolation_type = lib::MIM;
+    	robot_node.second->ecp_td.motion_steps = irp6ot_td.internode_step_no;
+    	robot_node.second->ecp_td.value_in_step_no = irp6ot_td.value_in_step_no;
+    	robot_node.second->communicate = true;
     }
 
     return true;
@@ -365,9 +345,7 @@ bool tight_coop::next_step ()
     if (node_counter-1 == irp6ot_td.interpolation_node_no)
         return false;
 
-
-
-    map <lib::ROBOT_ENUM, robot::robot*>::iterator robot_m_iterator = robot_m.begin();
+    common::robots_t::iterator robot_m_iterator = robot_m.begin();
 
     // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
     robot_m_iterator->second->ecp_td.instruction_type = lib::SET;

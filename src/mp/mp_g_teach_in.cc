@@ -17,6 +17,8 @@
 #include <math.h>
 #include <fstream>
 
+#include <boost/foreach.hpp>
+
 #if defined(__QNXNTO__)
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
@@ -505,15 +507,13 @@ bool teach_in::first_step () {
 //   printf("w teach_in::first_step 2\n");
 	initiate_pose_list();
 
-	for (map <lib::ROBOT_ENUM, robot::robot*>::iterator robot_m_iterator = robot_m.begin();
-	        robot_m_iterator != robot_m.end(); robot_m_iterator++) {
-		robot_m_iterator->second->ecp_td.mp_command = lib::NEXT_POSE;
-		robot_m_iterator->second->ecp_td.instruction_type = lib::GET;
-		robot_m_iterator->second->ecp_td.get_type = ARM_DV;
-		robot_m_iterator->second->ecp_td.get_arm_type = lib::MOTOR;
-		robot_m_iterator->second->communicate = true;
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
+		robot_node.second->ecp_td.mp_command = lib::NEXT_POSE;
+		robot_node.second->ecp_td.instruction_type = lib::GET;
+		robot_node.second->ecp_td.get_type = ARM_DV;
+		robot_node.second->ecp_td.get_arm_type = lib::MOTOR;
+		robot_node.second->communicate = true;
 	}
-
 
 //  printf("w teach_in::first_step za initiate_pose_list\n");
 	return next_step ();
@@ -550,7 +550,7 @@ bool teach_in::next_step () {
 
 	get_pose (tip);
 
-	map <lib::ROBOT_ENUM, robot::robot*>::iterator robot_m_iterator;
+	common::robots_t::iterator robot_m_iterator;
 
 	// Przepisanie pozycji z listy
 
