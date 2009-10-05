@@ -133,10 +133,8 @@ void task::catch_signal_in_mp_task(int sig)
 
 #if !defined(USE_MESSIP_SRR)
 name_attach_t* task::mp_pulse_attach = NULL;
-name_attach_t* task::mp_attach = NULL;
 #else
 messip_channel_t* task::mp_pulse_attach = NULL;
-messip_channel_t* task::mp_attach = NULL;
 #endif
 
 // mapa wszystkich robotow z iteratorem
@@ -431,11 +429,9 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 		//	if (debug_tmp) printf("PRZED MOVE run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
 		// uruchomienie generatora
 		mp_ext_empty_gen.Move();
+
 		//		if (debug_tmp) printf("ZA MOVE move run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
 	} while (true);
-	// koniec petli
-
-
 }
 
 void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
@@ -660,13 +656,11 @@ int task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct
 		WAIT_FOR_NEW_PULSE_ENUM process_mode, MP_RECEIVE_PULSE_MODE desired_wait_mode)
 {
 
-	int ret;
-	bool exit_from_while = false;
-	bool desired_pulse_found = false;
-
 	MP_RECEIVE_PULSE_MODE current_wait_mode = WITH_TIMEOUT;
 
 	// checking of already registered pulses
+
+	bool desired_pulse_found = false;
 
 	if ((process_mode == NEW_ECP_PULSE) || (process_mode == NEW_UI_OR_ECP_PULSE)) {
 		BOOST_FOREACH(const robot_pair_t & robot_node, robot_m) {
@@ -683,6 +677,8 @@ int task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct
 	}
 
 	// receiving new pulses
+	int ret;
+	bool exit_from_while = false;
 
 	while (!exit_from_while) {
 		ret = mp_receive_pulse (outputs, current_wait_mode);
@@ -833,13 +829,14 @@ void task::mp_receive_ui_or_ecp_pulse (robots_t & _robot_m, generator::generator
 	};
 
 	MP_STATE_ENUM mp_state = MP_STATE_RUNNING;
-	int rcvid;
-	common::mp_receive_pulse_struct_t input;
 
 	bool ui_exit_from_while = false;
 	bool ecp_exit_from_while = (the_generator.wait_for_ECP_pulse) ? false : true;
 
 	while (!(ui_exit_from_while && ecp_exit_from_while)) {
+
+		int rcvid;
+		common::mp_receive_pulse_struct_t input;
 
 		if (mp_state == MP_STATE_RUNNING){
 			rcvid = check_and_optional_wait_for_new_pulse (
@@ -933,7 +930,6 @@ void task::mp_receive_ui_or_ecp_pulse (robots_t & _robot_m, generator::generator
 		}
 	}
 	//	return false;
-
 }
 
 void task::initialize_communication()
@@ -942,21 +938,7 @@ void task::initialize_communication()
 	std::string mp_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_attach_point");
 
 	if (( sr_ecp_msg = new lib::sr_ecp(lib::MP, mp_attach_point, sr_net_attach_point)) == NULL) { // Obiekt do komuniacji z SR
-		perror ( "Unable to locate SR\n");
-
-		throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
-	}
-
-	// Rejestracja procesu MP
-#if !defined(USE_MESSIP_SRR)
-	if ((mp_attach = name_attach(NULL, mp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
-#else
-	if ((mp_attach = messip_channel_create(NULL, mp_attach_point.c_str(), MESSIP_NOTIMEOUT, 0)) == NULL)
-#endif
-	{
-		uint64_t e = errno; // kod bledu systemowego
-		perror("Failed to attach Master Process\n");
-		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "MP: Failed to name attach");
+		perror ("Unable to locate SR\n");
 
 		throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
@@ -974,7 +956,6 @@ void task::initialize_communication()
 		perror("Failed to attach UI Pulse chanel for Master Process\n");
 		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "MP: Failed to name attach  UI Pulse");
 
-
 		throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
@@ -991,7 +972,7 @@ void task::initialize_communication()
 		std::cerr << "Error, connection from ui expected" << ui_scoid << std::endl;
 	}
 }
-		// -------------------------------------------------------------------
+// -------------------------------------------------------------------
 
 void task::wait_for_start ()
 {

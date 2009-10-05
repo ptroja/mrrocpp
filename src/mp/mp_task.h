@@ -22,10 +22,8 @@ class task: public ecp_mp::task::task
 	public:
 #if !defined(USE_MESSIP_SRR)
 		static name_attach_t *mp_pulse_attach;
-		static name_attach_t *mp_attach;
 #else
 		static messip_channel_t *mp_pulse_attach;
-		static messip_channel_t *mp_attach;
 #endif
 
 		/// mapa wszystkich robotow
