@@ -665,7 +665,9 @@ int task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct
 				desired_pulse_found = true;
 			}
 		}
-	} else if ((process_mode == NEW_UI_PULSE) || (process_mode == NEW_UI_OR_ECP_PULSE)) {
+	}
+
+	if ((process_mode == NEW_UI_PULSE) || (process_mode == NEW_UI_OR_ECP_PULSE)) {
 		if (ui_new_pulse) {
 			desired_pulse_found = true;
 		}
@@ -759,10 +761,6 @@ int task::mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs)
 	int ret;
 	bool wyjscie = false;
 
-	fprintf(stderr, "mp_wait_for_name_open...\n");
-//	sleep(10);
-	fprintf(stderr, "mp_wait_for_name_open...cont\n");
-
 	while (!wyjscie) {
 		ret = mp_receive_pulse (outputs, BLOCK);
 
@@ -811,7 +809,6 @@ int task::mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs)
 			 */
 		}
 	}
-	fprintf(stderr, "mp_wait_for_name_open...done\n");
 	return ret;
 }
 
