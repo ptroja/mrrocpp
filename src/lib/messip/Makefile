@@ -29,6 +29,10 @@ messip_mgr: messip_mgr.o logg_messip.o libmessip.a
 
 messip_sin: messip_sin.o libmessip.a
 
+# for testing 
+client: client.o libmessip.a
+server: server.o libmessip.a
+
 #---------------------------------Special object build rules (user made)-------------------------------------#
 # e.g:
 # plik.o: plik.cc plik1.h plik2.h ... itd

@@ -123,6 +123,19 @@ typedef struct
 #endif /* USE_QNXMSG */
 } messip_channel_t;
 
+typedef struct messip_message_handler {
+	messip_channel_t *ch;
+	int (*func) (messip_channel_t * ch, void * arg );
+	void * arg;
+} messip_message_handler_t;
+
+typedef struct messip_dispatch {
+	struct timeval timeout;
+	fd_set	ready;
+	messip_message_handler_t *handlers;
+	unsigned int nb_handlers;
+} messip_dispatch_t;
+
 #define MESSIP_MSG_DISCONNECT		-2
 #define MESSIP_MSG_DISMISSED		-3
 #define MESSIP_MSG_TIMEOUT			-4
@@ -205,6 +218,16 @@ int messip_timer_delete( messip_channel_t * ch,
 int messip_death_notify( messip_cnx_t * cnx,
    int32_t msec_timeout,
    int status );
+
+messip_dispatch_t *messip_dispatch_create(void);
+void messip_dispatch_delete(messip_dispatch_t *dpp);
+int messip_dispatch_attach(messip_dispatch_t *dpp,
+		messip_channel_t * ch,
+		int (*func) (messip_channel_t * ch, void * arg),
+		void * arg);
+//int messip_dispatch_dettach(messip_dispatch_t *dispatch, messip_channel_t * ch);
+int messip_dispatch_block(messip_dispatch_t *dpp, int32_t msec_timeout);
+int messip_dispatch_handler(messip_dispatch_t *dpp);
 
 #ifdef __cplusplus
 }

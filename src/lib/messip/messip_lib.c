@@ -48,6 +48,7 @@
 #include <fcntl.h>
 #include <signal.h>
 #include <assert.h>
+#include <sys/select.h>
 #if defined(__linux__)
 #include <endian.h>
 #elif defined(__FreeBSD__)
@@ -227,14 +228,14 @@ messip_select( int fd,
    struct timeval *timeout )
 {
 	int	status;
-	fd_set ready;
 
 	do
 	{
-		status = select( fd, NULL, &ready, NULL, NULL );
+		status = select( fd, readfds, writefds, exceptfds, timeout );
 		if ( (status < 0) && (status != EINTR) )
 			return status;
 	} while ( status < 0 );
+
 	return status;
 
 }								// messip_select
@@ -823,6 +824,7 @@ messip_channel_delete( messip_channel_t * ch,
 	op = messip_int_little_endian( MESSIP_OP_CHANNEL_DELETE );
 	iovec[0].iov_base = &op;
 	iovec[0].iov_len = sizeof( int32_t );
+	memset(&msgsend, 0, sizeof(msgsend));
 	msgsend.pid = getpid(  );
 	msgsend.tid = pthread_self(  );
 	strcpy( msgsend.name, ch->name );
@@ -1574,9 +1576,11 @@ messip_receive( messip_channel_t * ch,
 	}
 	else
 	{
+//		printf("for(index = 0; index < %d; index++)...", ch->new_sockfd_sz);
 		for ( index = 0; index < ch->new_sockfd_sz; index++ )
 			if ( ch->new_sockfd[index] == -1 )
 				break;
+//		printf("-> index = %d\n", index);
 		assert( index < ch->new_sockfd_sz );
 	}
 
@@ -1647,6 +1651,7 @@ messip_receive( messip_channel_t * ch,
 		FD_ZERO( &ready );
 		for ( n = 0; n < ch->recv_sockfd_sz; n++ )
 		{
+//			printf("messip_receive(): FD_SET(%d)\n", ch->recv_sockfd[n]);
 			FD_SET( ch->recv_sockfd[n], &ready );
 			if ( ch->recv_sockfd[n] > maxfd )
 				maxfd = ch->recv_sockfd[n];
@@ -1665,6 +1670,7 @@ messip_receive( messip_channel_t * ch,
 		{
 			if ( msec_timeout == 1 )
 			{
+				// the smallest possible timeout requested
 				tv.tv_sec = 0;
 				tv.tv_usec = 1;
 			}
@@ -1786,7 +1792,9 @@ messip_receive( messip_channel_t * ch,
 		for ( k = (n) ? n + 1 : ch->recv_sockfd_sz; k < ch->recv_sockfd_sz; k++ )
 			ch->recv_sockfd[k - 1] = ch->recv_sockfd[k];
 		ch->recv_sockfd_sz--;
-		goto restart;
+		ch->new_sockfd[index] = -1;
+//		goto restart;
+		return MESSIP_MSG_DISCONNECT;
 	}
 	if ( dcount == -1 )
 	{
@@ -1811,7 +1819,8 @@ messip_receive( messip_channel_t * ch,
 		*type    = -1;
 		*subtype = new_sockfd;
 		ch->new_sockfd[index] = -1;
-		return MESSIP_MSG_DISCONNECT;
+//		return MESSIP_MSG_DISCONNECT;
+		goto restart;
 	}							// if
 	if ( datasend.flag == MESSIP_FLAG_DISMISSED )
 	{
@@ -2340,7 +2349,7 @@ messip_reply( messip_channel_t * ch,
 			ret = 0;
 			break;
 	    default:
-	    	fprintf(stderr, "unknown channel type %d at index %d\n", ch->channel_type[index], index);
+			fprintf(stderr, "unknown channel type %d at index %d\n", ch->channel_type[index], index);
 #ifdef __gnu_linux__
 	    	{
 			void * array[25];
@@ -2608,3 +2617,95 @@ messip_death_notify( messip_cnx_t *cnx,
 	return msgreply.ok;
 
 }								// messip_death_notify
+
+
+
+
+messip_dispatch_t *messip_dispatch_create(void) {
+	messip_dispatch_t *dpp;
+
+	dpp = malloc(sizeof(messip_dispatch_t));
+	if(!dpp) {
+		return NULL;
+	}
+
+	dpp->handlers = NULL;
+	dpp->nb_handlers = 0;
+	FD_ZERO(&dpp->ready);
+
+	return dpp;
+}
+
+void messip_dispatch_delete(messip_dispatch_t *dpp) {
+	free(dpp->handlers);
+	free(dpp);
+}
+
+int messip_dispatch_attach(messip_dispatch_t *dpp,
+		messip_channel_t * ch,
+		int (*func) (messip_channel_t * ch, void * arg),
+		void * arg) {
+
+	int i;
+
+	assert(ch);
+
+	for (i = 0; i < dpp->nb_handlers; i++) {
+		assert (dpp->handlers[i].ch != ch);
+	}
+
+	dpp->handlers = realloc(dpp->handlers, sizeof(messip_message_handler_t) * (dpp->nb_handlers+1));
+
+	if (!dpp->handlers) {
+		return -1;
+	}
+
+	dpp->handlers[dpp->nb_handlers].ch = ch;
+	dpp->handlers[dpp->nb_handlers].func = func;
+	dpp->handlers[dpp->nb_handlers].arg = arg;
+
+	return dpp->nb_handlers++;
+}
+
+int messip_dispatch_block(messip_dispatch_t *dpp, int32_t msec_timeout) {
+	int i, n; // iterators
+	int maxfd = 0; // maximum filedescriptor number
+
+	FD_ZERO(&dpp->ready);
+
+	for(i = 0; i < dpp->nb_handlers; i++) {
+
+		for (n = 0; n < dpp->handlers[i].ch->recv_sockfd_sz; n++ )
+		{
+			if(!FD_ISSET(dpp->handlers[i].ch->recv_sockfd[n], &dpp->ready)) {
+//				printf("FD_SET(%d)\n", dpp->handlers[i].ch->recv_sockfd[n]);
+				FD_SET( dpp->handlers[i].ch->recv_sockfd[n], &dpp->ready );
+			}
+			if ( dpp->handlers[i].ch->recv_sockfd[n] > maxfd )
+				maxfd = dpp->handlers[i].ch->recv_sockfd[n];
+		}
+
+	}
+
+//	printf("maxfd = %d\n", maxfd);
+
+	return messip_select(maxfd+1, &dpp->ready, NULL, NULL, (msec_timeout == MESSIP_NOTIMEOUT) ? NULL : &dpp->timeout);
+}
+
+int messip_dispatch_handler(messip_dispatch_t *dpp) {
+	int i, n; // interators
+	int handled = 0;
+
+	for(i = 0; i < dpp->nb_handlers; i++) {
+		for (n = 0; n < dpp->handlers[i].ch->recv_sockfd_sz; n++ )
+			{
+				if (FD_ISSET( dpp->handlers[i].ch->recv_sockfd[n], &dpp->ready )) {
+					dpp->handlers[i].func(dpp->handlers[i].ch, dpp->handlers[i].arg);
+					handled++;
+					FD_CLR(dpp->handlers[i].ch->recv_sockfd[n], &dpp->ready );
+			}
+		}
+	}
+
+	return handled;
+}
