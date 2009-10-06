@@ -20,11 +20,8 @@ HOMEDIR = .
 CLEANDIRS = src lib lib.linux
 CLEANEDFILES = ./bin/* ./bin.linux/* ./msr/* ./logs/* ./html/*
 INSTALLDIRS = src
-
-# Data for makedepend 
-DEPENDDIRS = src
 #======================================================#	
-.PHONY: all distclean clean install depend dist
+.PHONY: all distclean clean install dist
 
 
 #------------------------------- Build rules ----------------------------------#
@@ -46,14 +43,11 @@ clean:
 	@for i in ${CLEANDIRS} ; do ($(MAKE) -C $$i clean) ;done
 
 distclean: clean
-	@rm -f `find . -name "\.depend*" -or -name "\.depend\.bak"`
+	@rm -f `find . -type d -name "\.deps"`
 	@rm -f cscope.out tags
 #------------------------------------------------------------------------------#
 install:
 	@for i in ${INSTALLDIRS} ; do ($(MAKE) -C $$i install) ; done
-#------------------------------------------------------------------------------#
-depend:
-	@for i in ${DEPENDDIRS} ; do ($(MAKE) -C $$i depend); done
 #------------------------------------------------------------------------------#
 dist: clean
 	export VERSION && cd .. &&   tar czvf mrrocpp.tgz mrrocpp   && mv mrrocpp.tgz "mrrocpp${VERSION}.tgz"

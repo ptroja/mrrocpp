@@ -10,7 +10,7 @@ include $(HOMEDIR)/common.mk
 
 SHOBJ = $(LIBDIR)/libecp.a $(LIBDIR)/libmrrocpp.a $(LIBDIR)/libplayerclient.a
 #======================================================#	
-.PHONY: all clean install depend
+.PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #---------------------------------Special object build rules (user made)-------------------------------------#

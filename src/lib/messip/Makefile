@@ -13,7 +13,7 @@ CPPFLAGS += -I$(HOMEDIR)/src/messip -g
 LDFLAGS += -g
 
 #======================================================#	
-.PHONY: all clean install depend
+.PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: libmessip.a libmessip.so ${BINARIES}
 	@cp libmessip.a ${LIBDIR}

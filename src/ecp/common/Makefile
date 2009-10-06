@@ -22,7 +22,7 @@ ECPOBJ = $(ECPOBJ_SHARED) \
 		$(ECP_MPDIR)/Trajectory.o
 		
 #======================================================#	
-.PHONY: all clean install depend
+.PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: libecp.a libecp.so
 

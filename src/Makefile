@@ -1,7 +1,6 @@
 #--------------------- src catalog makefile of the MRROC++ frame system ----------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ..
-# Directories for dependency generation
 SOURCEDIRS = lib kinematics edp ecp ecp_mp mp ui
 ifneq ($(BUILD_TARGET), linux)
 SOURCEDIRS+= bt848 vsp ui_server
@@ -10,7 +9,7 @@ endif
 CLEANDIRS = $(SOURCEDIRS)
 INSTALLDIRS = ${CLEANDIRS}
 #======================================================#	
-.PHONY: all clean install depend $(SOURCEDIRS) $(CLEANDIRS) $(INSTALLDIRS)
+.PHONY: all clean install $(SOURCEDIRS) $(CLEANDIRS) $(INSTALLDIRS)
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: $(SOURCEDIRS) $(UIDIR)
 #-----------------------------------------------------------------------------------------------------------------------#
@@ -30,7 +29,4 @@ clean:
 #-----------------------------------------------------------------------------------------------------------------------#
 install:
 	@for i in ${INSTALLDIRS} ; do ($(MAKE) -C $$i install) ; done
-#-----------------------------------------------------------------------------------------------------------------------#
-depend:
-	@for i in ${SOURCEDIRS}; do ($(MAKE) -C $$i depend); done
 #======================================================#	

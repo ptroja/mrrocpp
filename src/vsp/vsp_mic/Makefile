@@ -13,7 +13,7 @@ include $(HOMEDIR)/common.mk
 SHOBJ = $(LIBDIR)/libmrrocpp.a vsp_mic.o ../common/vsp_sensor.o \
 	$(QNX_TARGET)/x86/lib/libasound.so
 #======================================================#	
-.PHONY: all clean install depend
+.PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#

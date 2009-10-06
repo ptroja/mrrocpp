@@ -17,7 +17,7 @@ include $(HOMEDIR)/common.mk
 
 SHOBJ = ecp_r_irp6p.o ../common/libecp.a $(LIBDIR)/libmrrocpp.a
 #======================================================#	
-.PHONY: all clean install depend
+.PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #---------------------------------Special object build rules (user made)-------------------------------------#

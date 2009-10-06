@@ -11,7 +11,7 @@ LIBPLAYERCLIENT=libplayerclient.a
 
 CPPFLAGS += -I$(HOMEDIR)/src -DHAVE_CONFIG_H -I$(HOMEDIR)/src/player
 #======================================================#	
-.PHONY: all clean install depend
+.PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: $(LIBPLAYERCLIENT)
 

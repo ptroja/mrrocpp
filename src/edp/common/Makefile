@@ -15,7 +15,7 @@ EDPOBJ = edp_common.o edp_m.o edp_effector.o\
 	hi_rydz.o sg_irp6p_and_conv.o edp_irp6s_postument_track.o
 
 #======================================================#	
-.PHONY: all clean install depend
+.PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: libedp.a
 

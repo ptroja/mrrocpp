@@ -13,8 +13,7 @@ ECP_MPOBJ_SHARED = ecp_mp_generator.o ecp_mp_sensor.o transmitter.o \
 
 ECP_MPOBJ = $(ECP_MPOBJ_SHARED) 
 
-
-.PHONY: all clean install depend
+.PHONY: all clean install
 #------------------------------------------------- Build rules ---------------------------------------------------------#
 
 all: libecp_mp.a libecp_mp.so ${OBJECTS}

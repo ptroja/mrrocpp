@@ -1,8 +1,37 @@
-SYS_HEADER_DIRS = $(QNX_TARGET)/usr/include/cpp $(QNX_TARGET)/usr/include/cpp/c $(QNX_TARGET)/usr/include
-#
-depend:
-	@touch .depend
-	@makedepend	-f.depend -I$(HOMEDIR)/src  ${patsubst %,-I%,${SYS_HEADER_DIRS}} ${SOURCES} 2> /dev/null
+#SYS_HEADER_DIRS = $(QNX_TARGET)/usr/include/cpp $(QNX_TARGET)/usr/include/cpp/c $(QNX_TARGET)/usr/include
 
+# Directory with dependences.
+#DEPDIR = $(*D)/.deps
+DEPDIR = $(dir *D).deps
+# File with dependendencies.
+df = $(DEPDIR)/$(*F)
+# Makedepend command.
+MAKEDEPEND = mkdir -p $(DEPDIR); $(GCCDEP) -M ${CPPFLAGS} -o $(DEPDIR)/$(*F).d $<
 
--include .depend
+# Overwritten command for *.cc compilation - also creates dependency files (*.P) in adequate directory.
+%.o : %.cc
+	@$(MAKEDEPEND); \
+	cp $(df).d $(df).P; \
+	sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+	-e '/^$$/ d' -e 's/$$/ :/' < $(df).d >> $(df).P; \
+	rm -f $(df).d
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
+
+# Overwritten command for *.c compilation - also creates dependency files (*.P) in adequate directory.
+%.o : %.c
+	@$(MAKEDEPEND); \
+	cp $(df).d $(df).P; \
+	sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+	-e '/^$$/ d' -e 's/$$/ :/' < $(df).d >> $(df).P; \
+	rm -f $(df).d
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+
+## Wildcards used during dependency include.
+CC_DEPENDS = ${patsubst %.cc,$(DEPDIR)/%.P,${SOURCES}} # substitute C++ sources
+DEPENDS  = ${patsubst %.c,$(DEPDIR)/%.P,${CC_DEPENDS}} # substitute C sources
+
+depdebug:
+	@echo DEPENDS: $(DEPENDS)
+
+# Include created dependency files.
+-include $(DEPENDS)

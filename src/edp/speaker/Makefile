@@ -12,7 +12,7 @@ include $(HOMEDIR)/common.mk
 CXXFLAGS += -O3
 SHOBJ = ../common/libedp.a $(LIBDIR)/libmrrocpp.a $(QNX_TARGET)/x86/lib/libasound.so
 #======================================================#	
-.PHONY: all clean install depend
+.PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#

@@ -9,7 +9,7 @@ include $(HOMEDIR)/common.mk
 
 CPPFLAGS += -I$(HOMEDIR)/include -DHAVE_CONFIG_H -I$(HOMEDIR)/src/player
 #======================================================#	
-.PHONY: all clean install depend
+.PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: libplayerc.a
 

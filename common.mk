@@ -32,6 +32,7 @@ ifeq ($(BUILD_TARGET), linux)
   CPPFLAGS=-I$(HOMEDIR)/src `pkg-config --cflags libxml-2.0` -DUSE_MESSIP_SRR -Wall #-Wall -Werror
   BINDIR=$(HOMEDIR)/bin.linux
   LIBDIR=$(HOMEDIR)/lib.linux
+  GCCDEP=gcc
 else
   VERSION=-V4.3.3,gcc_ntox86
   RPATHV=-Wl,-rpath /usr/pkg/lib
@@ -44,6 +45,7 @@ else
   AR=ntox86-ar
   BINDIR=$(HOMEDIR)/bin
   LIBDIR=$(HOMEDIR)/lib
+  GCCDEP=ntox86-gcc
 endif
 
 UI_DIR = $(HOMEDIR)/src/ui/src/gcc_ntox86

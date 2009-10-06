@@ -9,7 +9,7 @@ BINARIES = configsrv #y_spawn_process
 HOMEDIR = $(shell pwd)/../..
 include $(HOMEDIR)/common.mk
 #======================================================#	
-.PHONY: all clean install depend libplayerc libplayerclient messip
+.PHONY: all clean install libplayerc libplayerclient messip
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: messip libplayerc libplayerclient libmrrocpp.a libmrrocpp.so ${OBJECTS} ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#

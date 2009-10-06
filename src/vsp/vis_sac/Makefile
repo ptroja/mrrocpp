@@ -13,7 +13,7 @@ include $(HOMEDIR)/common.mk
 SHOBJ = ../common/vsp_sensor.o ../vis/cmvision.o \
 	../vis/cube.o ../vis/global.o ../vis/calib.o ../vis/macierze_nr.o $(LIBDIR)/libmrrocpp.a 
 #======================================================#	
-.PHONY: all clean install depend
+.PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${BINARIES}
 #-----------------------------------------------------------------------------------------------------------------------#

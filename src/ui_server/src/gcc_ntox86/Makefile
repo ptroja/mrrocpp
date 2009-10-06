@@ -67,5 +67,3 @@ $(MYOBJ):	$(MYHDR)
 proto:
 		@rm -f proto.h
 		approto -p $(MYSRC) > proto.h
-		
--include ../.depend

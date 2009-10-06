@@ -1,12 +1,11 @@
 #--------------------- src catalog makefile of the MRROC++ frame system ----------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ..
-# Data for makedepend 
 SOURCEDIRS = bttvxa testbt848
 CLEANDIRS = ${SOURCEDIRS}
 INSTALLDIRS = ${CLEANDIRS}
 #======================================================#	
-.PHONY: all clean install depend $(SOURCEDIRS) $(CLEANDIRS) $(INSTALLDIRS)
+.PHONY: all clean install $(SOURCEDIRS) $(CLEANDIRS) $(INSTALLDIRS)
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: $(SOURCEDIRS) $(UIDIR)
 #-----------------------------------------------------------------------------------------------------------------------#
@@ -21,7 +20,4 @@ clean:
 #-----------------------------------------------------------------------------------------------------------------------#
 install:
 	@for i in ${INSTALLDIRS} ; do ($(MAKE) -C $$i install) ; done
-#-----------------------------------------------------------------------------------------------------------------------#
-depend:
-	@true
 #======================================================#	

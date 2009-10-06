@@ -45,7 +45,7 @@ include $(HOMEDIR)/common.mk
 SHOBJ = $(LIBMPMAIN) $(LIBMPROBOTS) $(LIBDIR)/libmrrocpp.a $(LIBDIR)/libecp_mp.a
 
 #======================================================#	
-.PHONY: all clean install depend
+.PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${OBJECTS} ${BINARIES}
 

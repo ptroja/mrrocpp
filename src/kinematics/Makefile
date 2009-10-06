@@ -6,10 +6,8 @@ include $(HOMEDIR)/common.mk
 SOURCEDIRS = common conveyor irp6_on_track irp6_postument irp6_mechatronika polycrank
 CLEANDIRS = ${SOURCEDIRS}
 INSTALLDIRS = ${SOURCEDIRS}
-# Data for makedepend 
-DEPENDDIRS = ${SOURCEDIRS}
 #======================================================#	
-.PHONY: all clean install depend $(SOURCEDIRS) $(CLEANDIRS) $(INSTALLDIRS) $(DEPENDDIRS)
+.PHONY: all clean install $(SOURCEDIRS) $(CLEANDIRS) $(INSTALLDIRS) $(DEPENDDIRS)
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: $(SOURCEDIRS)
 
@@ -33,7 +31,4 @@ clean:
 #-----------------------------------------------------------------------------------------------------------------------#
 install:
 	@for i in ${INSTALLDIRS} ; do ($(MAKE) -C $$i install) ; done
-#-----------------------------------------------------------------------------------------------------------------------#
-depend:
-	@for i in ${DEPENDDIRS}; do ($(MAKE) -C $$i depend); done
 #======================================================#	

@@ -13,7 +13,7 @@ HOMEDIR = ../../..
 include $(HOMEDIR)/common.mk
 
 #======================================================#	
-.PHONY: all clean install depend
+.PHONY: all clean install
 #------------------------------------------------- Build rules -------------------------------------------------------#
 all: ${OBJECTS}
 #---------------------------------Special object build rules (user made)-------------------------------------#
