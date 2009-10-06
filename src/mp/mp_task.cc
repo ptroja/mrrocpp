@@ -756,21 +756,23 @@ int task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct
 }
 
 
-int task::mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs)
+int task::mp_wait_for_name_open(void)
 {
-	int ret;
-	bool wyjscie = false;
+	while (1) {
 
-	while (!wyjscie) {
-		ret = mp_receive_pulse (outputs, BLOCK);
+		common::mp_receive_pulse_struct_t outputs;
+
+		int ret = mp_receive_pulse (&outputs, BLOCK);
 
 #if !defined(USE_MESSIP_SRR)
 		if (ret < 0) {
+			fprintf (stderr, "MP: MsgReceive() na kanale ecp_pulse: %s @ %s:%d\n", strerror(-ret), __FILE__, __LINE__);
+			throw common::MP_main_error(lib::SYSTEM_ERROR, -ret);
 #else
 		if (ret == -1) {
-#endif
-			// TODO: tu ma byc wyjatek
 			fprintf (stderr, "MP: MsgReceive() na kanale ecp_pulse: %s @ %s:%d\n", strerror(-ret), __FILE__, __LINE__);
+			throw common::MP_main_error(lib::SYSTEM_ERROR, errno);
+#endif
 #if !defined(USE_MESSIP_SRR)
 		} else if (ret == 0) {
 #else
@@ -778,25 +780,21 @@ int task::mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs)
 #endif
 			// wstawiamy informacje o pulsie ktory przyszedl od innego robota
 			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-				if (outputs->pulse_msg.hdr.scoid == robot_node.second->scoid) {
-					robot_node.second->pulse_code = outputs->pulse_msg.hdr.code;
+				if (outputs.pulse_msg.hdr.scoid == robot_node.second->scoid) {
+					robot_node.second->pulse_code = outputs.pulse_msg.hdr.code;
 					robot_node.second->new_pulse = true;
 					continue;
 				}
 			}
 
-			if (outputs->pulse_msg.hdr.scoid == ui_scoid) {
-				ui_pulse_code = outputs->pulse_msg.hdr.code;
+			if (outputs.pulse_msg.hdr.scoid == ui_scoid) {
+				ui_pulse_code = outputs.pulse_msg.hdr.code;
 				ui_new_pulse = true;
 				continue;
 			}
 #if !defined(USE_MESSIP_SRR)
 		} else if (ret > 0) {
-#else
-		} else if (ret == MESSIP_MSG_CONNECTING) {
-#endif
 			// zakladamy ze wlasciwy proces zrobi name_open
-			wyjscie = true;
 
 			/*
 			// jesli wlasciwy proces zrobil name_open
@@ -807,32 +805,44 @@ int task::mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs)
 				printf ("niewlasciwy proces zrobil name_open na kanale ECP_PULSE\n");
 			}
 			 */
+
+			return outputs.pulse_msg.hdr.scoid;
 		}
+#else
+		} else if (ret == MESSIP_MSG_CONNECTING) {
+			return outputs.pulse_msg.hdr.scoid;
+		}
+#endif
 	}
-	return ret;
 }
 
 // funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
 
+// intended use:
+// 1) block for ECP pulse and react to UI pulses (when the_generator.wait_for_ECP_pulse is set)
+//
 void task::mp_receive_ui_or_ecp_pulse (common::robots_t & _robot_m, generator::generator& the_generator )
 {
 	enum MP_STATE_ENUM
 	{
 		MP_STATE_RUNNING,
 		MP_STATE_PAUSED
-	};
-
-	MP_STATE_ENUM mp_state = MP_STATE_RUNNING;
+	} mp_state = MP_STATE_RUNNING;
 
 	bool ui_exit_from_while = false;
 	bool ecp_exit_from_while = (the_generator.wait_for_ECP_pulse) ? false : true;
 
+	// 0 0 -> enter
+	// 0 1 -> enter
+	// 1 0 -> enter
+	// 1 1 -> not enter
 	while (!(ui_exit_from_while && ecp_exit_from_while)) {
 
 		int rcvid;
 		common::mp_receive_pulse_struct_t input;
 
-		if (mp_state == MP_STATE_RUNNING){
+		if (mp_state == MP_STATE_RUNNING) {
+			// check for UI pulse or block for UI/ECP pulse
 			rcvid = check_and_optional_wait_for_new_pulse (
 					&input, NEW_UI_OR_ECP_PULSE,
 					ecp_exit_from_while ? NONBLOCK : BLOCK);
@@ -923,7 +933,6 @@ void task::mp_receive_ui_or_ecp_pulse (common::robots_t & _robot_m, generator::g
 			fprintf(stderr, "MP_TRIGGER server receive strange message\n");
 		}
 	}
-	//	return false;
 }
 
 void task::initialize_communication()
@@ -953,18 +962,7 @@ void task::initialize_communication()
 		throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
-	common::mp_receive_pulse_struct_t outputs;
-#if !defined(USE_MESSIP_SRR)
-	if (mp_wait_for_name_open(&outputs) > 0)
-#else
-	if (mp_wait_for_name_open(&outputs) == MESSIP_MSG_CONNECTING)
-#endif
-	{
-		ui_scoid = outputs.msg_info.scoid;
-		std::cerr << "ui_scoid = " << ui_scoid << std::endl;
-	} else {
-		std::cerr << "Error, connection from ui expected " << ui_scoid << std::endl;
-	}
+	ui_scoid = mp_wait_for_name_open();
 }
 // -------------------------------------------------------------------
 

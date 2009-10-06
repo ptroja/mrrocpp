@@ -61,9 +61,8 @@ class task: public ecp_mp::task::task
 
 		void wait_ms (int _ms_delay); // zamiast delay
 
-		// mp_receive_ecp_pulse_return_t mp_receive_ecp_pulse (int tryb);
-		// oczekwianie na name_open do kanalu do przesylania pulsow miedzy ECP i MP
-		int mp_wait_for_name_open(common::mp_receive_pulse_struct_t* outputs);
+		// oczekwianie na name_open do kanalu do przesylania pulsow miedzy UI/ECP i MP
+		int mp_wait_for_name_open(void);
 
 		// Oczekiwanie na zlecenie START od UI
 		void wait_for_start (void);// by Y&W

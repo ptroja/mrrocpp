@@ -64,10 +64,7 @@ robot::robot( lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::tas
 	common::mp_receive_pulse_struct_t input;
 
 	// oczekiwanie na zgloszenie procesu ECP
-	// ret = mp_object.mp_wait_for_name_open(&input, nd, ECP_pid);
-	mp_object.mp_wait_for_name_open(&input);
-
-	scoid = input.msg_info.scoid;
+	scoid = mp_object.mp_wait_for_name_open();
 
 	// nawiazanie komunikacji z ECP
 	short tmp = 0;
