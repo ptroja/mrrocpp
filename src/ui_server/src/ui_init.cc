@@ -44,7 +44,7 @@
 #include "ui/ui.h"
 #include "lib/configurator.h"
 
-#include "messip/messip.h"
+#include "lib/messip/messip.h"
 
 /* Local headers */
 #include "proto.h"

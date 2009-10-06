@@ -31,7 +31,7 @@
 #include "lib/impconst.h"
 #include "lib/configurator.h"
 #include "lib/y_spawn.h"
-#include "messip/messip.h"
+#include "lib/messip/messip.h"
 #include "lib/config_types.h"
 
 namespace mrrocpp {

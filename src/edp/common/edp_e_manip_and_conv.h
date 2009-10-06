@@ -17,7 +17,7 @@
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
 
-#include "messip/messip.h"
+#include "lib/messip/messip.h"
 #include "kinematics/common/transformer_error.h"
 #include "kinematics/common/kinematics_manager.h"
 #include "edp/common/edp_effector.h"

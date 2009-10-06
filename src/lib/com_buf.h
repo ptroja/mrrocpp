@@ -25,7 +25,7 @@
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
-#include "messip/messip.h"
+#include "lib/messip/messip.h"
 
 namespace mrrocpp {
 namespace lib {

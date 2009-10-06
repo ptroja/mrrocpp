@@ -16,7 +16,7 @@
 #endif /* USE_SRRMOD */
 
 #ifdef USE_MESSIP
-#include "messip/messip.h"
+#include "lib/messip/messip.h"
 #define P_SRR_MESSIP_SUPPORTED	1
 #else
 #define P_SRR_MESSIP_SUPPORTED	0

@@ -23,7 +23,7 @@
 #include "lib/com_buf.h"
 #include "lib/srlib.h"
 
-#include "messip/messip.h"
+#include "lib/messip/messip.h"
 
 namespace mrrocpp {
 namespace lib {

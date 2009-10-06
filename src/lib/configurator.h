@@ -19,7 +19,7 @@
 // Typy zmiennych odczytywanych z pliku INI.
 #include "lib/cfgopts.h"
 
-#include "messip/messip.h"
+#include "lib/messip/messip.h"
 
 namespace mrrocpp {
 namespace lib {

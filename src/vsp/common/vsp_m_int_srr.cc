@@ -22,7 +22,7 @@
 
 #include "lib/srlib.h"
 #include "vsp/vsp_sensor.h"				// zawiera deklaracje klasy vsp_sensor + struktury komunikacyjne
-#include "messip/messip.h"
+#include "lib/messip/messip.h"
 
 // Konfigurator
 #include "lib/configurator.h"

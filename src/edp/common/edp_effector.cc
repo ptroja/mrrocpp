@@ -20,7 +20,7 @@
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #else
-#include "messip/messip.h"
+#include "lib/messip/messip.h"
 #endif /* !USE_MESSIP_SRR */
 #include <pthread.h>
 #include <semaphore.h>
