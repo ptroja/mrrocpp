@@ -3316,11 +3316,8 @@ while(1) {
           //~jk
 	default:
           perror ("Strange ECP message\n");
-	}; // end: switch
+	} // end: switch
 }// end while
-
-
-	delete info;
 
 return 0;
 };
