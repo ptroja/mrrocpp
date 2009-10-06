@@ -143,6 +143,7 @@ common::robots_t task::robot_m;
 // KONSTRUKTORY
 task::task(lib::configurator &_config) : ecp_mp::task::task(_config)
 {
+	ui_scoid = -1;
 	ui_new_pulse = false;
 }
 
@@ -154,7 +155,11 @@ task::~task()
 void task::stop_and_terminate()
 {
 	sr_ecp_msg->message("To terminate MP click STOP icon");
-	wait_for_stop (common::MP_EXIT);
+	try {
+		wait_for_stop ();
+	} catch(common::MP_main_error & e) {
+		exit(EXIT_FAILURE);
+	}
 	terminate_all (robot_m);
 }
 
@@ -541,7 +546,7 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 // inicjacja polaczen, rejestracja nazwy MP, odszukanie UI, SR by Y&W
 // -------------------------------------------------------------------
 
-int task::mp_receive_pulse (common::mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PULSE_MODE tryb)
+int task::mp_receive_pulse (common::mp_receive_pulse_struct_t* outputs, RECEIVE_PULSE_MODE tryb)
 {
 
 	bool exit_loop = false;
@@ -653,7 +658,7 @@ int task::mp_receive_pulse (common::mp_receive_pulse_struct_t* outputs, MP_RECEI
 }
 
 int task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct_t* outputs,
-		WAIT_FOR_NEW_PULSE_ENUM process_mode, MP_RECEIVE_PULSE_MODE desired_wait_mode)
+		WAIT_FOR_NEW_PULSE_MODE process_mode, RECEIVE_PULSE_MODE desired_wait_mode)
 {
 	// checking of already registered pulses
 
@@ -676,7 +681,7 @@ int task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct
 	// receiving new pulses
 	int ret;
 	bool exit_from_while = false;
-	MP_RECEIVE_PULSE_MODE current_wait_mode = NONBLOCK;
+	RECEIVE_PULSE_MODE current_wait_mode = NONBLOCK;
 
 	while (!exit_from_while) {
 		ret = mp_receive_pulse (outputs, current_wait_mode);
@@ -739,8 +744,7 @@ int task::check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct
 			// wlasciwy proces zrobil name_open
 		} else {
 			// tu ma byc wyjatek
-			fprintf (stderr, "MP: MsgReceive() na kanale ecp_pulse: %s @ %s:%d\n", strerror(-ret), __FILE__, __LINE__);
-//			throw;
+			throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
 		}
 	}
 
@@ -766,19 +770,17 @@ int task::mp_wait_for_name_open(void)
 
 #if !defined(USE_MESSIP_SRR)
 		if (ret < 0) {
-			fprintf (stderr, "MP: MsgReceive() na kanale ecp_pulse: %s @ %s:%d\n", strerror(-ret), __FILE__, __LINE__);
 			throw common::MP_main_error(lib::SYSTEM_ERROR, -ret);
 #else
 		if (ret == -1) {
-			fprintf (stderr, "MP: MsgReceive() na kanale ecp_pulse: %s @ %s:%d\n", strerror(-ret), __FILE__, __LINE__);
 			throw common::MP_main_error(lib::SYSTEM_ERROR, errno);
 #endif
 #if !defined(USE_MESSIP_SRR)
-		} else if (ret == 0) {
+		} else if (ret == 0) {ENUM
 #else
 		} else if (ret == MESSIP_MSG_NOREPLY) {
 #endif
-			// wstawiamy informacje o pulsie ktory przyszedl od innego robota
+			// wstawiamy informacje o pulsie ktory przyszedl od ECP
 			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
 				if (outputs.pulse_msg.hdr.scoid == robot_node.second->scoid) {
 					robot_node.second->pulse_code = outputs.pulse_msg.hdr.code;
@@ -787,11 +789,13 @@ int task::mp_wait_for_name_open(void)
 				}
 			}
 
+			// wstawiamy informacje o pulsie ktory przyszedl od UI
 			if (outputs.pulse_msg.hdr.scoid == ui_scoid) {
 				ui_pulse_code = outputs.pulse_msg.hdr.code;
 				ui_new_pulse = true;
 				continue;
 			}
+
 #if !defined(USE_MESSIP_SRR)
 		} else if (ret > 0) {
 			// zakladamy ze wlasciwy proces zrobi name_open
@@ -810,17 +814,21 @@ int task::mp_wait_for_name_open(void)
 		}
 #else
 		} else if (ret == MESSIP_MSG_CONNECTING) {
-			return outputs.pulse_msg.hdr.scoid;
+			return outputs.msg_info.scoid;
 		}
 #endif
 	}
 }
 
-// funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
-
-// intended use:
-// 1) block for ECP pulse and react to UI pulses (when the_generator.wait_for_ECP_pulse is set)
 //
+// funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
+//
+// intended use:
+//
+// when the_generator.wait_for_ECP_pulse is set
+//     1) block for ECP pulse and react to UI pulses ()
+// otherwise
+//     2)
 void task::mp_receive_ui_or_ecp_pulse (common::robots_t & _robot_m, generator::generator& the_generator )
 {
 	enum MP_STATE_ENUM
@@ -841,46 +849,45 @@ void task::mp_receive_ui_or_ecp_pulse (common::robots_t & _robot_m, generator::g
 		int rcvid;
 		common::mp_receive_pulse_struct_t input;
 
+		WAIT_FOR_NEW_PULSE_MODE from_who;
+		RECEIVE_PULSE_MODE block_mode;
+
 		if (mp_state == MP_STATE_RUNNING) {
 			// check for UI pulse or block for UI/ECP pulse
-			rcvid = check_and_optional_wait_for_new_pulse (
-					&input, NEW_UI_OR_ECP_PULSE,
-					ecp_exit_from_while ? NONBLOCK : BLOCK);
+			from_who = NEW_UI_OR_ECP_PULSE;
+			block_mode = ecp_exit_from_while ? NONBLOCK : BLOCK;
 		} else {
-			rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, BLOCK);
+			// block for UI resume/stop pulse
+			from_who = NEW_UI_PULSE;
+			block_mode = BLOCK;
 		}
 
-		if (rcvid == -1) {// Error condition
-			if (mp_state == MP_STATE_RUNNING) {
-				if (input.e != ETIMEDOUT) {// by Y zamiast creceive
-					// Blad komunikacji miedzyprocesowej - wyjatek
-					perror("Creceive STOP or PAUSE proxy from UI failed ?");
-					sr_ecp_msg->message(lib::SYSTEM_ERROR, input.e, "MP:Creceive STOP pulse from UI failed");
-					throw common::MP_main_error (lib::SYSTEM_ERROR, (uint64_t) 0);
-				} else {
-					ui_exit_from_while = true;
-					continue;
-				}
-			} else if (mp_state == MP_STATE_PAUSED) {
-				perror("Creceive RESUME proxy from UI failed ?\n");
-				sr_ecp_msg->message(lib::SYSTEM_ERROR, input.e, "MP: receive RESUME pulse from UI failed");
-				throw common::MP_main_error (lib::SYSTEM_ERROR, (uint64_t) 0);
-			}
+		rcvid = check_and_optional_wait_for_new_pulse (&input, from_who, block_mode);
+
 #if !defined(USE_MESSIP_SRR)
-		} else if (rcvid == 0) {
-#else
-		} else if (rcvid == MESSIP_MSG_TIMEOUT) {// Error condition
-			if (mp_state == MP_STATE_RUNNING) {
+		if (rcvid < 0) { // Error condition
+			if (mp_state == MP_STATE_RUNNING && input.e == ETIMEDOUT) {
 				ui_exit_from_while = true;
 				continue;
-			} else if (mp_state == MP_STATE_PAUSED) {
-				perror("Creceive RESUME proxy from UI failed ?\n");
+				// equals to:
+				// return;
+			} else {
+				perror("Creceive RESUME proxy from UI failed");
 				sr_ecp_msg->message(lib::SYSTEM_ERROR, input.e, "MP: receive RESUME pulse from UI failed");
 				throw common::MP_main_error (lib::SYSTEM_ERROR, (uint64_t) 0);
 			}
+		} else if (rcvid == 0) {
+#else
+		if (rcvid == -1) { // Error condition
+			// Blad komunikacji miedzyprocesowej - wyjatek
+			perror("Creceive STOP or PAUSE proxy from UI failed ?");
+			sr_ecp_msg->message(lib::SYSTEM_ERROR, input.e, "MP:Creceive STOP pulse from UI failed");
+			throw common::MP_main_error (lib::SYSTEM_ERROR, (uint64_t) 0);
+		} else if (rcvid == MESSIP_MSG_TIMEOUT) {
+			return;
 		} else if (rcvid == MESSIP_MSG_NOREPLY) {
 #endif
-			// Pulse arrived
+			// UI Pulse arrived
 			if (ui_new_pulse) {
 
 				ui_new_pulse = false;
@@ -889,7 +896,6 @@ void task::mp_receive_ui_or_ecp_pulse (common::robots_t & _robot_m, generator::g
 					case MP_STOP:
 						terminate_all (_robot_m);
 						throw common::MP_main_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-						//return true;
 					case MP_PAUSE:
 						mp_state = MP_STATE_PAUSED;
 						ui_exit_from_while = false;
@@ -918,7 +924,7 @@ void task::mp_receive_ui_or_ecp_pulse (common::robots_t & _robot_m, generator::g
 
 			if (the_generator.wait_for_ECP_pulse) {
 				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-					if ((robot_node.second->new_pulse) && (!(robot_node.second->robot_new_pulse_checked))) {
+					if ((robot_node.second->new_pulse) && !(robot_node.second->robot_new_pulse_checked)) {
 						robot_node.second->robot_new_pulse_checked = true;
 						//	 if (debug_tmp)	printf("wait_for_ECP_pulse r: %d, pc: %d\n", robot_node.first, robot_node.second->pulse_code);
 						ecp_exit_from_while = true;
@@ -927,8 +933,6 @@ void task::mp_receive_ui_or_ecp_pulse (common::robots_t & _robot_m, generator::g
 			} else {
 				ecp_exit_from_while = true;
 			}
-			continue;
-
 		} else if (rcvid > 0) {
 			fprintf(stderr, "MP_TRIGGER server receive strange message\n");
 		}
@@ -986,7 +990,7 @@ void task::wait_for_start ()
 // ------------------------------------------------------------------------
 
 
-void task::wait_for_stop (common::WAIT_FOR_STOP_ENUM tryb)
+void task::wait_for_stop (void)
 {
 	// Oczekiwanie na zlecenie STOP od UI
 
@@ -997,24 +1001,15 @@ void task::wait_for_stop (common::WAIT_FOR_STOP_ENUM tryb)
 		common::mp_receive_pulse_struct_t input;
 		int rcvid = check_and_optional_wait_for_new_pulse (&input, NEW_UI_PULSE, BLOCK);
 
+#if !defined(USE_MESSIP_SRR)
 		if (rcvid < 0)/* Error condition, exit */
+#else
+		if (rcvid == -1)/* Error condition, exit */
+#endif
 		{
-			if (input.e != ETIMEDOUT)
-			{
-				perror("Receive StopProxy failed (MP)");
-				sr_ecp_msg->message(lib::SYSTEM_ERROR, input.e, "MP: Receive StopProxy failed");
-				switch (tryb) {
-					case common::MP_THROW:
-						throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
-						break;
-					case common::MP_EXIT:
-						exit(EXIT_FAILURE);
-						break;
-					default:
-						printf("bledny tryb w wait_for_stop\n");
-						break;
-				}
-			}
+			perror("Receive StopProxy failed (MP)");
+			sr_ecp_msg->message(lib::SYSTEM_ERROR, input.e, "MP: Receive StopProxy failed");
+			throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
 		} else {
 			// if UI pulse occured
 			if (ui_new_pulse) {

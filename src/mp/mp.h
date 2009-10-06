@@ -30,11 +30,6 @@ namespace common {
 typedef std::pair<lib::ROBOT_ENUM, robot::robot*> robot_pair_t;
 typedef std::map <lib::ROBOT_ENUM, robot::robot*> robots_t;
 
-enum WAIT_FOR_STOP_ENUM {
-	MP_EXIT,
-	MP_THROW
-};
-
 // struktura zwracana przez funkcje mp_receive_ecp_pulse
 typedef struct mp_receive_ecp_pulse_return {
 	uint32_t nd; // deskryptor wezla na ktorym jest powolane ECP

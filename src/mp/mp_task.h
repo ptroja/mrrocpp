@@ -35,16 +35,16 @@ class task: public ecp_mp::task::task
 		void stop_and_terminate (void);
 
 		// oczekiwanie na puls z ECP
-		enum MP_RECEIVE_PULSE_MODE {
+		typedef enum _MP_RECEIVE_PULSE_ENUM {
 			NONBLOCK,
 			BLOCK
-		};
+		} RECEIVE_PULSE_MODE;
 
-		enum WAIT_FOR_NEW_PULSE_ENUM {
+		typedef enum _WAIT_FOR_NEW_PULSE_ENUM {
 		    NEW_ECP_PULSE,
 		    NEW_UI_PULSE,
 		    NEW_UI_OR_ECP_PULSE
-		};
+		} WAIT_FOR_NEW_PULSE_MODE;
 
 		void set_next_playerpos_goal (lib::ROBOT_ENUM robot_l, const lib::playerpos_goal_t &goal);
 
@@ -68,7 +68,7 @@ class task: public ecp_mp::task::task
 		void wait_for_start (void);// by Y&W
 
 		// Oczekiwanie na zlecenie STOP od UI
-		void wait_for_stop (common::WAIT_FOR_STOP_ENUM tryb);// by Y&W dodany tryb
+		void wait_for_stop (void);// by Y&W dodany tryb
 
 		// Wystartowanie wszystkich ECP
 		void start_all (const common::robots_t & _robot_m);
@@ -100,9 +100,9 @@ class task: public ecp_mp::task::task
 		char ui_pulse_code; // kod pulsu ktory zostal wyslany przez ECP w celu zgloszenia gotowosci do komunikacji (wartosci w impconst.h)
 		bool ui_new_pulse; // okresla czy jest nowy puls
 
-		int mp_receive_pulse (common::mp_receive_pulse_struct_t* outputs, MP_RECEIVE_PULSE_MODE tryb);
+		int mp_receive_pulse (common::mp_receive_pulse_struct_t* outputs, RECEIVE_PULSE_MODE tryb);
 		int check_and_optional_wait_for_new_pulse (common::mp_receive_pulse_struct_t* outputs,
-		        WAIT_FOR_NEW_PULSE_ENUM process_mode, MP_RECEIVE_PULSE_MODE desired_wait_mode);
+		        WAIT_FOR_NEW_PULSE_MODE process_mode, RECEIVE_PULSE_MODE desired_wait_mode);
 };
 
 task* return_created_mp_task (lib::configurator &_config);

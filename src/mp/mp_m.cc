@@ -139,7 +139,7 @@ int main (int argc, char *argv[], char **arge)
 				mp::common::mp_t->main_task_algorithm();
 
 				// Oczekiwanie na STOP od UI
-				mp::common::mp_t->wait_for_stop (mp::common::MP_THROW); // by Y - wlaczony tryb
+				mp::common::mp_t->wait_for_stop();
 
 				// Wyslanie STOP do wszystkich ECP po zakonczeniu programu uzytkownika
 				mp::common::mp_t->terminate_all (mp::common::mp_t->robot_m);
