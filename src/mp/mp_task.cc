@@ -776,7 +776,7 @@ int task::mp_wait_for_name_open(void)
 			throw common::MP_main_error(lib::SYSTEM_ERROR, errno);
 #endif
 #if !defined(USE_MESSIP_SRR)
-		} else if (ret == 0) {ENUM
+		} else if (ret == 0) {
 #else
 		} else if (ret == MESSIP_MSG_NOREPLY) {
 #endif
