@@ -70,7 +70,7 @@
  */
 typedef struct messip_cnx
 {
-	char path[80];								// "/' if only server
+//	char path[80];								// "/' if only server
 	int sockfd;
 	pid_t remote_pid;
 	pthread_t remote_tid;
