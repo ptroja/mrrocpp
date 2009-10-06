@@ -3,7 +3,7 @@
 
 #include "lib/sensor.h"
 
-#include "messip/messip.h"
+#include "lib/messip/messip.h"
 
 namespace mrrocpp {
 namespace ecp_mp {
