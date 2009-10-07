@@ -254,6 +254,10 @@ bool smooth2::load_file_with_path(const char* file_name) {
         ps = lib::XYZ_EULER_ZYZ;
     }
 
+    if (true) {
+
+    }
+
     else
     {
         from_file.close();
