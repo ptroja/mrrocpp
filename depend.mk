@@ -6,24 +6,20 @@ DEPDIR = $(dir *D).deps
 # File with dependendencies.
 df = $(DEPDIR)/$(*F)
 # Makedepend command.
-MAKEDEPEND = mkdir -p $(DEPDIR); $(GCCDEP) -M ${CPPFLAGS} -o $(DEPDIR)/$(*F).d $<
+MAKEDEPEND = mkdir -p $(DEPDIR); $(GCCDEP) -M ${CPPFLAGS} -o $(DEPDIR)/$(*F).d $<;	\
+	cp $(df).d $(df).P; \
+	sed -e 's/\#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+	-e '/^$$/ d' -e 's/$$/ :/' < $(df).d >> $(df).P; \
+	rm -f $(df).d
 
 # Overwritten command for *.cc compilation - also creates dependency files (*.P) in adequate directory.
 %.o : %.cc
-	@$(MAKEDEPEND); \
-	cp $(df).d $(df).P; \
-	sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
-	-e '/^$$/ d' -e 's/$$/ :/' < $(df).d >> $(df).P; \
-	rm -f $(df).d
+	@$(MAKEDEPEND)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
 
 # Overwritten command for *.c compilation - also creates dependency files (*.P) in adequate directory.
 %.o : %.c
-	@$(MAKEDEPEND); \
-	cp $(df).d $(df).P; \
-	sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
-	-e '/^$$/ d' -e 's/$$/ :/' < $(df).d >> $(df).P; \
-	rm -f $(df).d
+	@$(MAKEDEPEND)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
 
 ## Wildcards used during dependency include.
