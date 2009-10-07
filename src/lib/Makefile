@@ -68,19 +68,5 @@ clean:
 	@$(MAKE) -C libplayerclient clean
 	@$(MAKE) -C messip clean
 #-----------------------------------------------------------------------------------------------------------------------#
-#DEPDIR = .deps
-#df = $(DEPDIR)/$(*F)
-#
-#export MAKEDEPEND = i386-pc-nto-qnx6.3.0-gcc -M $(CPPFLAGS) $(CXXFLAGS) -o $(DEPDIR)/$*.d $<
-#
-#%.o : %.cc
-#	@$(MAKEDEPEND); \
-#	${INSTALL} $(df).d $(df).P; \
-#	  sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
-#	  -e '/^$$/ d' -e 's/$$/ :/' < $(df).d >> $(df).P; \
-#	rm -f $(df).d
-#	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) -o $@ $<
-#
-#-include $(SRCS:%.c=$(DEPDIR)/%.P)
 
-include $(HOMEDIR)/depend.mk
+# include $(HOMEDIR)/depend.mk
