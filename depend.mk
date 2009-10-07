@@ -6,7 +6,7 @@ DEPDIR = $(dir *D).deps
 # File with dependendencies.
 df = $(DEPDIR)/$(*F)
 # Makedepend command.
-MAKEDEPEND = mkdir -p $(DEPDIR); $(GCCDEP) -M ${CPPFLAGS} -o $(DEPDIR)/$(*F).d $<;	\
+MAKEDEPEND = mkdir -p $(DEPDIR); $(GCCDEP) -M ${CPPFLAGS} -o $(DEPDIR)/$(*F).d $<; \
 	cp $(df).d $(df).P; \
 	sed -e 's/\#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
 	-e '/^$$/ d' -e 's/$$/ :/' < $(df).d >> $(df).P; \
