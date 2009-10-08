@@ -43,15 +43,21 @@ namespace edp {
 namespace common {
 
 // Konstruktor
-hardware_interface::hardware_interface (manip_and_conv_effector &_master, int _hi_irq_real,
-		unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high,
-		unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, int* _max_current)
-        : master(_master), hi_irq_real(_hi_irq_real), hi_intr_freq_divider(_hi_intr_freq_divider),
-        hi_intr_timeout_high (_hi_intr_timeout_high), hi_first_servo_ptr(_hi_first_servo_ptr), hi_isa_card_offset(_hi_isa_card_offset),
-        hi_intr_generator_servo_ptr (_hi_intr_generator_servo_ptr)
+hardware_interface::hardware_interface (manip_and_conv_effector &_master,
+		int _hi_irq_real,
+		unsigned short int _hi_intr_freq_divider,
+		unsigned int _hi_intr_timeout_high,
+		unsigned int _hi_first_servo_ptr,
+		unsigned int _hi_intr_generator_servo_ptr,
+		unsigned int _hi_isa_card_offset, int* _max_current)
+        : master(_master),
+        hi_irq_real(_hi_irq_real),
+        hi_intr_freq_divider(_hi_intr_freq_divider),
+        hi_intr_timeout_high(_hi_intr_timeout_high),
+        hi_first_servo_ptr(_hi_first_servo_ptr),
+        hi_isa_card_offset(_hi_isa_card_offset),
+        hi_intr_generator_servo_ptr(_hi_intr_generator_servo_ptr)
 {
-
-
 	// Sledzenie zera rezolwera - wylaczane
 	trace_resolver_zero = false;
 
@@ -82,8 +88,8 @@ hardware_interface::hardware_interface (manip_and_conv_effector &_master, int _h
 
 	    /* Start the timer */
 	    struct itimerspec its;
-	    its.it_value.tv_sec = 0;
-	    its.it_value.tv_nsec = 1000000; // 1kHz
+	    its.it_value.tv_sec = 1;
+	    its.it_value.tv_nsec = 0; // 1kHz
 	    its.it_interval.tv_sec = its.it_value.tv_sec;
 	    its.it_interval.tv_nsec = its.it_value.tv_nsec;
 
@@ -390,8 +396,6 @@ int hardware_interface::hi_int_wait (interrupt_mode_t _interrupt_mode, int lag)
 		master.controller_state_edp_buf.is_wardrobe_on = true;
 		master.controller_state_edp_buf.is_power_on = irq_data.md.is_power_on;
 	}
-
-
 
 	if ((interrupt_error>2) || (!master.controller_state_edp_buf.is_power_on))
 	{

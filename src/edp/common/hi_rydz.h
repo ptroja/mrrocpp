@@ -101,40 +101,6 @@ typedef struct _irq_data {
 
 class hardware_interface
 {
-private:
-
-    int int_id;		// Identyfikator obslugi przerwania
-
-    long int tick;// minimalny kwant czasu CPU
-
-    bool first; // true jesli pierwszy krok
-
-    const int hi_irq_real;
-    const unsigned short int hi_intr_freq_divider;
-    const unsigned int hi_intr_timeout_high;
-    const unsigned int hi_first_servo_ptr;
-    const unsigned int hi_intr_generator_servo_ptr;
-    const unsigned int hi_isa_card_offset;
-
-	//! periodic timer
-	timer_t timerid;
-
-	//! periodic timer signal mask
-	sigset_t mask;
-
-protected:
-    irq_data_t irq_data;
-
-    int meassured_current[MAX_SERVOS_NR]; // by Y - zmierzona wartosc pradu
-    long int current_absolute_position[MAX_SERVOS_NR];  // aktualne polozenia osi
-    long int previous_absolute_position[MAX_SERVOS_NR]; // poprzednie polozenia osi
-    double current_position_inc[MAX_SERVOS_NR];         // aktualny przyrost polozenia
-
-    bool trace_resolver_zero;
-
-    control_a_dof robot_control[MAX_SERVOS_NR];
-    status_of_a_dof robot_status[MAX_SERVOS_NR];
-
 public:
 	manip_and_conv_effector &master;
 
@@ -173,6 +139,38 @@ public:
 
     void reset_position (int i);
 
+private:
+    int int_id;		// Identyfikator obslugi przerwania
+
+    long int tick;// minimalny kwant czasu CPU
+
+    bool first; // true jesli pierwszy krok
+
+    const int hi_irq_real;
+    const unsigned short int hi_intr_freq_divider;
+    const unsigned int hi_intr_timeout_high;
+    const unsigned int hi_first_servo_ptr;
+    const unsigned int hi_isa_card_offset;
+    const unsigned int hi_intr_generator_servo_ptr;
+
+	//! periodic timer
+	timer_t timerid;
+
+	//! periodic timer signal mask
+	sigset_t mask;
+
+protected:
+    irq_data_t irq_data;
+
+    int meassured_current[MAX_SERVOS_NR]; // by Y - zmierzona wartosc pradu
+    long int current_absolute_position[MAX_SERVOS_NR];  // aktualne polozenia osi
+    long int previous_absolute_position[MAX_SERVOS_NR]; // poprzednie polozenia osi
+    double current_position_inc[MAX_SERVOS_NR];         // aktualny przyrost polozenia
+
+    bool trace_resolver_zero;
+
+    control_a_dof robot_control[MAX_SERVOS_NR];
+    status_of_a_dof robot_status[MAX_SERVOS_NR];
 }; // koniec: class hardware_interface
 
 
