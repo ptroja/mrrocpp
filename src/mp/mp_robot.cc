@@ -61,8 +61,6 @@ robot::robot( lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::tas
 	robot_new_pulse_checked = false;
 	communicate = true; // domyslnie robot jest aktywny
 
-	common::mp_receive_pulse_struct_t input;
-
 	// oczekiwanie na zgloszenie procesu ECP
 	scoid = mp_object.mp_wait_for_name_open();
 
