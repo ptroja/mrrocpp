@@ -23,7 +23,6 @@
 
 #include <libxml/tree.h>
 
-#include <map>
 #include "ecp_mp/Trajectory.h"
 
 namespace mrrocpp {
