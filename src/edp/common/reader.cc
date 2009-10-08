@@ -28,6 +28,8 @@
 #include <pthread.h>
 #include <time.h>
 
+#include <boost/scoped_array.hpp>
+
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -132,8 +134,11 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 	lib::set_thread_priority(pthread_self(), MAX_PRIORITY-10);
 
 	// alokacja pamieci pod lokalny bufor z pomiarami
-	reader_data r_measptr[nr_of_samples];
-//	fprintf(stderr, "reader buffer size %dKB\n", nr_of_samples*sizeof(reader_data)/1024);
+
+	// NOTE: readed buffer has to be allocated on heap (using "new" operator) due to huge size
+	// boost::scoped_array takes care of deallocating in case of exception
+	boost::scoped_array<reader_data> r_measptr (new reader_data[nr_of_samples]);
+//	fprintf(stderr, "reader buffer size %lluKB\n", nr_of_samples*sizeof(reader_data)/1024);
 
 	// by Y komuniakicja pomiedzy ui i reader'em rozwiazalem poprzez pulsy
 	// powolanie kanalu komunikacyjnego do odbioru pulsow sterujacych
