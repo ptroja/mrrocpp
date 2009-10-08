@@ -2,6 +2,7 @@
 #define MP_DELAY_MS_CONDITION_H_
 
 #include "mp/mp.h"
+#include "lib/timer.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -12,7 +13,7 @@ namespace generator {
 class delay_ms_condition: public generator
 {
 protected:
-	lib::timer* local_timer;
+	lib::timer local_timer;
 	float sec;
 	int ms_delay;
 
