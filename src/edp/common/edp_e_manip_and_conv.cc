@@ -34,7 +34,6 @@
 
 #include "lib/mathtr.h"
 
-
 #include "kinematics/common/kinematic_model.h"
 
 namespace mrrocpp {
@@ -45,11 +44,11 @@ namespace common {
 /*--------------------------------------------------------------------------*/
 manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name) :
         effector (_config, l_robot_name), manager(),
-        number_of_servos(-1),
 #ifndef __QNXNTO__
         servo_command_rdy(false), sg_reply_rdy(false),
 #endif
-        step_counter(0)
+        step_counter(0),
+        number_of_servos(-1)
 {
 	pthread_mutex_init(&edp_irp6s_effector_mutex, NULL);
 
@@ -924,6 +923,7 @@ void manip_and_conv_effector::update_servo_current_motor_pos_abs(double abs_moto
 
 void manip_and_conv_effector::common_get_controller_state(lib::c_buffer &instruction)
 {
+	printf("common_get_controller_state: %d %d %d\n", synchronised, reply.controller_state.is_synchronised, controller_state_edp_buf.is_synchronised); fflush(stdout);
     synchronised = reply.controller_state.is_synchronised = controller_state_edp_buf.is_synchronised;
     reply.controller_state.is_power_on = controller_state_edp_buf.is_power_on;
     reply.controller_state.is_wardrobe_on = controller_state_edp_buf.is_wardrobe_on;

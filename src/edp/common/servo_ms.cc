@@ -14,11 +14,9 @@
 #include "edp/common/edp.h"
 #include "lib/mis_fun.h"
 
-
 namespace mrrocpp {
 namespace edp {
 namespace common {
-
 
 void * manip_and_conv_effector::servo_thread_start(void* arg)
 {
@@ -35,12 +33,12 @@ void * manip_and_conv_effector::servo_thread(void* arg)
 
     for (;;)
     {
-        // 	komunikacja z transformation
+        // komunikacja z transformation
         if (!(sb->get_command()))
         {
 
             rb_obj.lock_mutex();
-            rb_obj.step_data.servo_mode = false;  // bierny
+            rb_obj.step_data.servo_mode = false; // tryb bierny
             rb_obj.unlock_mutex();
 
             /* Nie otrzymano nowego polecenia */
@@ -49,10 +47,10 @@ void * manip_and_conv_effector::servo_thread(void* arg)
             sb->Move_passive();
         }
         else
-        { // nowe polecenie
-
+        {
+        	// nowe polecenie
             rb_obj.lock_mutex();
-            rb_obj.step_data.servo_mode = true;  // czynny
+            rb_obj.step_data.servo_mode = true; // tryb czynny
             rb_obj.unlock_mutex();
 
             switch (sb->command_type())

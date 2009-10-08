@@ -24,7 +24,6 @@
 // Konfigurator
 #include "lib/configurator.h"
 
-
 #ifdef DOCENT_SENSOR
 #include <boost/function.hpp>
 #endif
@@ -54,9 +53,7 @@ protected:
 #ifdef DOCENT_SENSOR
     void onReaderStarted();
     void onReaderStopped();
-
 #endif
-
 
     uint16_t motion_steps;            // liczba krokow ruchu zadanego (makrokroku)
 
@@ -92,7 +89,6 @@ protected:
     boost::function<void()> stoppedCallback_;
     bool stoppedCallbackRegistered_;
 #endif
-
 
     friend class servo_buffer;
 

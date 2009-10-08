@@ -47,7 +47,6 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 {
 	uint64_t k;
 	uint64_t nr_of_samples; // maksymalna liczba pomiarow
-	reader_data* r_measptr; // tablica - bufor cykliczny z danymi pomiarowymi
 	uint64_t msr_nr; // numer pomiaru
 	int przepelniony; // czy bufor byl przepelniony
 	int msr_counter; // liczba pomiarow, ktore maja byc zapisane do pliku
@@ -133,7 +132,7 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 	lib::set_thread_priority(pthread_self(), MAX_PRIORITY-10);
 
 	// alokacja pamieci pod lokalny bufor z pomiarami
-	r_measptr = new reader_data[nr_of_samples];
+	reader_data r_measptr[nr_of_samples];
 //	fprintf(stderr, "reader buffer size %dKB\n", nr_of_samples*sizeof(reader_data)/1024);
 
 	// by Y komuniakicja pomiedzy ui i reader'em rozwiazalem poprzez pulsy
