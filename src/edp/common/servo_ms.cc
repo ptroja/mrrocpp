@@ -14,6 +14,8 @@
 #include "edp/common/edp.h"
 #include "lib/mis_fun.h"
 
+#include <memory>
+
 namespace mrrocpp {
 namespace edp {
 namespace common {
@@ -25,7 +27,7 @@ void * manip_and_conv_effector::servo_thread_start(void* arg)
 
 void * manip_and_conv_effector::servo_thread(void* arg)
 {
-    servo_buffer* sb = return_created_servo_buffer(*this); // bufor do komunikacji z EDP_MASTER
+    std::auto_ptr<servo_buffer> sb(return_created_servo_buffer(*this)); // bufor do komunikacji z EDP_MASTER
 
     lib::set_thread_priority(pthread_self(), MAX_PRIORITY+2);
 
@@ -55,28 +57,25 @@ void * manip_and_conv_effector::servo_thread(void* arg)
 
             switch (sb->command_type())
             {
-            case lib::SYNCHRONISE:
-                sb->synchronise(); // synchronizacja
-                break;
-            case lib::MOVE:
-                sb->Move(); // realizacja makrokroku ruchu
-                break;
-            case lib::READ:
-                sb->Read(); // Odczyt polozen
-                break;
-            case lib::SERVO_ALGORITHM_AND_PARAMETERS:
-                sb->Change_algorithm(); // Zmiana algorytmu serworegulacji lub jego parametrow
-                break;
-            default:
-                // niezidentyfikowane polecenie (blad) nie moze wystapic, bo juz
-                // wczesniej zostalo wychwycone przez get_command()
-                break;
+				case lib::SYNCHRONISE:
+					sb->synchronise(); // synchronizacja
+					break;
+				case lib::MOVE:
+					sb->Move(); // realizacja makrokroku ruchu
+					break;
+				case lib::READ:
+					sb->Read(); // Odczyt polozen
+					break;
+				case lib::SERVO_ALGORITHM_AND_PARAMETERS:
+					sb->Change_algorithm(); // Zmiana algorytmu serworegulacji lub jego parametrow
+					break;
+				default:
+					// niezidentyfikowane polecenie (blad) nie moze wystapic, bo juz
+					// wczesniej zostalo wychwycone przez get_command()
+					break;
             }
         } // end: else
     }
-
-    delete sb;
-
 } // end: main() SERVO_GROUP
 
 

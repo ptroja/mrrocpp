@@ -39,7 +39,6 @@ namespace common {
 /************************ edp_irp6s_and_conv_effector ****************************/
 class manip_and_conv_effector : public effector, public kinematic::common::manager
 {
-
 protected:
     static void *reader_thread_start(void* arg);
     void *reader_thread(void* arg);
@@ -182,7 +181,6 @@ protected:
     uint8_t servo_parameters_sg[MAX_SERVOS_NR];
     // Tablica numerow zestawow parametrow
     // algorytmow serworegulacji przyslanych z SERVO_GROUP
-    bool synchronised;         // Flaga zsynchronizowania robota
 
     // stan regulatora chwytaka
     short servo_gripper_reg_state;
@@ -256,10 +254,8 @@ public:
     // przed wykonaniem synchronizacji robota
     bool pre_synchro_motion(lib::c_buffer &instruction) const;
 
-
     // Czy robot zsynchronizowany? // by Y - wziete z ecp
     bool is_synchronised ( void ) const;
-
 };
 /************************ edp_irp6s_and_conv_effector ****************************/
 

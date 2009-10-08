@@ -359,7 +359,7 @@ void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
             desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
         }
 
-        if (synchronised)
+        if (is_synchronised())
         {
             //  check_motor_position(desired_motor_pos_new);
             // dla sprawdzenia ograncizen w joints i motors

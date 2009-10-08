@@ -66,7 +66,6 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
     previous_set_arm_type = lib::MOTOR;
 
     motion_type = lib::ABSOLUTE;
-    synchronised = false;
 
 #ifdef DOCENT_SENSOR
     startedCallbackRegistered_ = false;
@@ -214,7 +213,7 @@ bool manip_and_conv_effector::pre_synchro_motion(lib::c_buffer &instruction) con
 
 bool manip_and_conv_effector::is_synchronised ( void ) const
 {
-    return synchronised;
+    return controller_state_edp_buf.is_synchronised;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -459,7 +458,7 @@ void manip_and_conv_effector::common_synchronise ()
     servo_command.instruction_code = lib::SYNCHRONISE;
     /* Wyslanie rozkazu synchronizacji do realizacji procesowi SERVO_GROUP */
     send_to_SERVO_GROUP ();
-    controller_state_edp_buf.is_synchronised = synchronised = true; // Ustawienie flagi zsynchronizowania robota
+    controller_state_edp_buf.is_synchronised = true; // Ustawienie flagi zsynchronizowania robota
 
     // aktualizacja pozycji robota
     // Uformowanie rozkazu odczytu dla SERVO_GROUP
@@ -802,7 +801,7 @@ void manip_and_conv_effector::compute_motors(const lib::c_buffer &instruction)
             desired_motor_pos_new_tmp[i] = p[i] + desired_motor_pos_new[i];
         }
         // Jesli robot zsynchronizowany sprawdzi przekroczenie dopuszczalnego zakresu
-        if (synchronised)
+        if (is_synchronised())
         {
             //  check_motor_position(desired_motor_pos_new);
             // dla sprawdzenia ograncizen w joints i motors
@@ -923,12 +922,8 @@ void manip_and_conv_effector::update_servo_current_motor_pos_abs(double abs_moto
 
 void manip_and_conv_effector::common_get_controller_state(lib::c_buffer &instruction)
 {
-	printf("common_get_controller_state: %d %d %d\n", synchronised, reply.controller_state.is_synchronised, controller_state_edp_buf.is_synchronised); fflush(stdout);
-    synchronised = reply.controller_state.is_synchronised = controller_state_edp_buf.is_synchronised;
-    reply.controller_state.is_power_on = controller_state_edp_buf.is_power_on;
-    reply.controller_state.is_wardrobe_on = controller_state_edp_buf.is_wardrobe_on;
-    reply.controller_state.is_controller_card_present = controller_state_edp_buf.is_controller_card_present;
-    reply.controller_state.is_robot_blocked = controller_state_edp_buf.is_robot_blocked;
+	printf("common_get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
+    reply.controller_state = controller_state_edp_buf;
 
     // aktualizacja pozycji robota
     // Uformowanie rozkazu odczytu dla SERVO_GROUP

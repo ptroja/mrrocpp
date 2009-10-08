@@ -177,7 +177,6 @@ void effector::move_arm (lib::c_buffer &instruction)
 
 	// by Y - uwaga na wyjatki, po rzuceniu wyjatku nie zostanie zaktualizowany previous_set_arm_type
 	previous_set_arm_type = instruction.set_arm_type;
-
 }
 
 // Odczytanie pozycji tasmociagu.
@@ -194,13 +193,12 @@ void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
 
 		send_to_SERVO_GROUP ();
 
-
 		// Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
 		for( int i = 0; i < number_of_servos; i++)
 		{
 			desired_motor_pos_old[i] = current_motor_pos[i];
 		}
-		if (synchronised)
+		if (is_synchronised())
 		{
 			//  check_motor_position(desired_motor_pos_new);
 			// dla sprawdzenia ograncizen w joints i motors
@@ -211,11 +209,8 @@ void effector::get_arm_position (bool read_hardware, lib::c_buffer &instruction)
 			{
 				desired_joints[i] = current_joints[i] = desired_joints_tmp[i];
 			}
-
 		}
-
 	}
-	; // end: if
 
 	// okreslenie rodzaju wspolrzednych, ktore maja by odczytane
 	// oraz adekwatne wypelnienie bufora odpowiedzi

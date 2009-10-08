@@ -682,7 +682,7 @@ void irp6s_postument_track_effector::get_arm_position(bool read_hardware, lib::c
 			desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
 		}
 
-		if (synchronised)
+		if (is_synchronised())
 		{
 			//  check_motor_position(desired_motor_pos_new);
 			// dla sprawdzenia ograncizen w joints i motors
@@ -867,7 +867,7 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 			tmp_eem.get_frame_tab(servo_current_frame_wo_tool);
 		}
 
-		if ( (force_tryb> 0)&&(synchronised)&&(!(vs->first_configure_done))&&(!(vs->force_sensor_do_first_configure)))
+		if ( (force_tryb> 0)&&(is_synchronised())&&(!(vs->first_configure_done))&&(!(vs->force_sensor_do_first_configure)))
 		{
 			vs->force_sensor_do_first_configure = true;
 		}
