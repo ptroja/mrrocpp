@@ -605,7 +605,7 @@ void regulator::constraint_detector(double max_acc_local, double max_vel_local, 
 
 
 
-double regulator::get_set_value ( void )
+double regulator::get_set_value ( void ) const
 {
     // odczytanie aktualnej wartosci zadanej  - metoda konkretna
     return set_value_new;
@@ -624,12 +624,11 @@ void regulator::insert_meassured_current (int meassured_current_l)
 }
 
 
-double regulator::return_new_step ( void )
-                        {
-                            // wstawienie nowej wartosci zadanej - metoda konkretna
-                            return step_new;
-                        }
-                        ;  // end: insert_new_step ( )
+double regulator::return_new_step ( void ) const
+{
+	// wstawienie nowej wartosci zadanej - metoda konkretna
+	return step_new;
+}
 
 void regulator::insert_new_pos_increment (double inc)
 {
@@ -655,26 +654,26 @@ double regulator::get_position_inc ( int tryb )
     return pins;
 }
 
-int regulator::get_meassured_current ( void )
+int regulator::get_meassured_current ( void ) const
 {
     // odczytanie rzeczywistego pradu - metoda konkretna
     return meassured_current;
 }
 
-int regulator::get_PWM_value ( void )
+int regulator::get_PWM_value ( void ) const
 {
     // odczytanie zadanego wypelnienia PWM - metoda abstrakcyjna
     return PWM_value;
 }
 
 // do odczytu stanu regulatora (w szczegolnosci regulatora chwytaka)
-int regulator::get_reg_state ( void )
+int regulator::get_reg_state ( void ) const
 {
     // odczytanie zadanego wypelnienia PWM - metoda abstrakcyjna
     return reg_state;
 }
 
-int regulator::get_actual_inc ( void )
+int regulator::get_actual_inc ( void ) const
 {
     // odczytanie rzeczywistego przyrostu polozenia w pojedynczym kroku
     return (int) position_increment_new;
@@ -689,7 +688,7 @@ void regulator::insert_algorithm_no ( uint8_t new_number )
     algorithm_no = new_number;
 }
 
-uint8_t regulator::get_algorithm_no ( void )
+uint8_t regulator::get_algorithm_no ( void ) const
 {
     // odczytanie aktualnie uzywanego numeru algorytmu regulacji
     return current_algorithm_no;
@@ -701,7 +700,7 @@ void regulator::insert_algorithm_parameters_no ( uint8_t new_number )
     algorithm_parameters_no = new_number;
 }
 
-uint8_t regulator::get_algorithm_parameters_no ( void )
+uint8_t regulator::get_algorithm_parameters_no ( void ) const
 {
     // wpisanie nowego numeru zestawu parametrow algorytmu regulacji
     return current_algorithm_parameters_no;

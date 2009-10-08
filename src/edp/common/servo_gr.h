@@ -134,37 +134,36 @@ public:
     virtual uint8_t compute_set_value ( void ) = 0;
     // obliczenie nastepnej wartosci zadanej dla napedu - metoda abstrakcyjna
 
-    double get_set_value ( void );
+    double get_set_value ( void ) const;
     double previous_abs_position; // poprzednia pozycja absolutna dla potrzeb trybu testowego
     void insert_new_step (double ns);
     void insert_meassured_current (int meassured_current_l);
 
-
-    double return_new_step () ;
+    double return_new_step () const;
 
     void insert_new_pos_increment (double inc);
 
     double get_position_inc ( int tryb );
 
-    int get_meassured_current ( void );
+    int get_meassured_current ( void ) const;
 
-    int get_PWM_value ( void );
+    int get_PWM_value ( void ) const;
 
     // do odczytu stanu regulatora (w szczegolnosci regulatora chwytaka)
-    int get_reg_state ( void ) ;
+    int get_reg_state ( void ) const;
 
 
-    int get_actual_inc ( void ) ;
+    int get_actual_inc ( void ) const;
 
     // double get_desired_inc ( int axe_nr );
 
     void insert_algorithm_no ( uint8_t new_number );
 
-    uint8_t get_algorithm_no ( void ) ;
+    uint8_t get_algorithm_no ( void ) const;
 
     void insert_algorithm_parameters_no ( uint8_t new_number );
 
-    uint8_t get_algorithm_parameters_no ( void );
+    uint8_t get_algorithm_parameters_no ( void ) const;
 
     void clear_regulator (void);
 };
