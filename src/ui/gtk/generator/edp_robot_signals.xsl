@@ -76,7 +76,7 @@ edp_</xsl:text><xsl:value-of select="$name" /><xsl:text>::edp_</xsl:text><xsl:va
 				</xsl:text><xsl:if test="$robotType != ''"><xsl:text>,mrrocpp::lib::</xsl:text></xsl:if><xsl:value-of select="$robotType" /><xsl:text>
 				);
 
-				robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state (&amp;state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>);
+				robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state(state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>);
 }
 
 //UI robot desctructor
@@ -181,7 +181,7 @@ extern "C"
 			}
 		}
 
-		robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state (&amp;state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>);
+		robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>);
 
 		// TODO: this should be checked in synchronization thread
 		if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) {

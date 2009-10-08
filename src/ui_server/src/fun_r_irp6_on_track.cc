@@ -757,7 +757,7 @@ int EDP_irp6_on_track_create()
 
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;
-					ui_robot.irp6_on_track->get_controller_state(&robot_controller_initial_state_tmp);
+					ui_robot.irp6_on_track->get_controller_state(robot_controller_initial_state_tmp);
 					//ui_state.irp6_on_track.edp.state = 1; // edp wlaczone reader czeka na start
 					replySend(new Message('B','J','A',0,NULL,NULL));
 					ui_state.irp6_on_track.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;

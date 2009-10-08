@@ -220,7 +220,7 @@ bool ui_common_robot::get_servo_algorithm ( uint8_t algorithm_no[],
 
 
 // do odczytu stanu poczatkowego robota
-bool ui_common_robot::get_controller_state (lib::controller_state_t* robot_controller_initial_state_l)
+bool ui_common_robot::get_controller_state (lib::controller_state_t & robot_controller_initial_state_l)
 {
 
     // Zlecenie odczytu numeru modelu i korektora kinematyki
@@ -229,11 +229,11 @@ bool ui_common_robot::get_controller_state (lib::controller_state_t* robot_contr
 
     execute_motion();
 
-    ecp->synchronised = (*robot_controller_initial_state_l).is_synchronised  = ecp->reply_package.controller_state.is_synchronised;
-    (*robot_controller_initial_state_l).is_power_on  = ecp->reply_package.controller_state.is_power_on;
-    (*robot_controller_initial_state_l).is_wardrobe_on  = ecp->reply_package.controller_state.is_wardrobe_on;
-    (*robot_controller_initial_state_l).is_controller_card_present  = ecp->reply_package.controller_state.is_controller_card_present;
-    (*robot_controller_initial_state_l).is_robot_blocked  = ecp->reply_package.controller_state.is_robot_blocked;
+    ecp->synchronised = robot_controller_initial_state_l.is_synchronised  = ecp->reply_package.controller_state.is_synchronised;
+    robot_controller_initial_state_l.is_power_on  = ecp->reply_package.controller_state.is_power_on;
+    robot_controller_initial_state_l.is_wardrobe_on  = ecp->reply_package.controller_state.is_wardrobe_on;
+    robot_controller_initial_state_l.is_controller_card_present  = ecp->reply_package.controller_state.is_controller_card_present;
+    robot_controller_initial_state_l.is_robot_blocked  = ecp->reply_package.controller_state.is_robot_blocked;
     return true;
 }
 

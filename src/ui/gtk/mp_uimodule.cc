@@ -112,6 +112,7 @@ MpPanel::MpPanel(ui_config_entry &entry)
 			{ &AllRobotsReaderTriggerButton, "AllRobotsReaderTriggerButton" },
 			{ &AllRobotsEcpTrigger, "AllRobotsEcpTrigger" },
 	};
+
 	for (size_t i = 0; i < sizeof(builder_widgets)/sizeof(builder_widgets[0]); i++) {
 		*builder_widgets[i].object = GTK_BUTTON(gtk_builder_get_object(&builder, builder_widgets[i].name));
 		if(!*builder_widgets[i].object) {

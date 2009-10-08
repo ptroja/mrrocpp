@@ -119,7 +119,7 @@ bool ui_conveyor_robot::get_servo_algorithm ( uint8_t algorithm_no[CONVEYOR_NUM_
 
 
 // do odczytu stanu poczatkowego robota
-bool ui_conveyor_robot::get_controller_state (lib::controller_state_t* robot_controller_initial_state_l)
+bool ui_conveyor_robot::get_controller_state (lib::controller_state_t & robot_controller_initial_state_l)
 {
 
     // Zlecenie odczytu numeru modelu i korektora kinematyki
@@ -128,11 +128,11 @@ bool ui_conveyor_robot::get_controller_state (lib::controller_state_t* robot_con
 
     execute_motion();
 
-    synchronised = (*robot_controller_initial_state_l).is_synchronised  = reply_package.controller_state.is_synchronised;
-    (*robot_controller_initial_state_l).is_power_on  = reply_package.controller_state.is_power_on;
-    (*robot_controller_initial_state_l).is_wardrobe_on  = reply_package.controller_state.is_wardrobe_on;
-    (*robot_controller_initial_state_l).is_controller_card_present  = reply_package.controller_state.is_controller_card_present;
-    (*robot_controller_initial_state_l).is_robot_blocked  = reply_package.controller_state.is_robot_blocked;
+    synchronised = robot_controller_initial_state_l.is_synchronised  = reply_package.controller_state.is_synchronised;
+    robot_controller_initial_state_l.is_power_on  = reply_package.controller_state.is_power_on;
+    robot_controller_initial_state_l.is_wardrobe_on  = reply_package.controller_state.is_wardrobe_on;
+    robot_controller_initial_state_l.is_controller_card_present  = reply_package.controller_state.is_controller_card_present;
+    robot_controller_initial_state_l.is_robot_blocked  = reply_package.controller_state.is_robot_blocked;
     return true;
 }
 

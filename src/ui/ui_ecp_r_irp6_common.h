@@ -53,7 +53,7 @@ class ui_common_robot {
   virtual void get_current_position ( double c_position[MAX_SERVOS_NR] );  // Pobranie aktualnych polozen
 
   // by Y - do odczytu stanu poczatkowego robota
-  bool get_controller_state (lib::controller_state_t* robot_controller_initial_state_l);
+  bool get_controller_state (lib::controller_state_t & robot_controller_initial_state_l);
 
   // Zlecenie ruchu
   bool move_motors ( double final_position[MAX_SERVOS_NR] );
