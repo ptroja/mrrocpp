@@ -1,6 +1,8 @@
 ui_modules = festival.so \
 	edp_irp6m.so edp_irp6o.so edp_irp6p.so edp_conveyor.so  
 
+SOURCES = ${wildcard *.cc}
+
 HOMEDIR = $(shell pwd)/../../../..
 include $(HOMEDIR)/common.mk
 
@@ -47,3 +49,5 @@ clean:
 # TODO: ponizsza regule "install" trzeba ladniej przepisac
 install: all
 	$(INSTALL) *.so $(BINDIR)
+
+include $(HOMEDIR)/depend.mk
