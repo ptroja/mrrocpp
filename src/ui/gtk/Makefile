@@ -15,6 +15,8 @@ shr: all
 glade: generator
 signals: generator
 
+SOURCES = ${wildcard *.cc}
+
 $(SOURCEDIRS):
 	@$(MAKE) -C $@
 
@@ -55,3 +57,5 @@ install: all
 		($(MAKE) -C $$i install) ; \
 	done
 	$(INSTALL) ui.gtk start.sh *.xml *.so $(BINDIR)
+
+include $(HOMEDIR)/depend.mk
