@@ -1809,6 +1809,11 @@ uint8_t NL_regulator_8_irp6p::compute_set_value (void)
     uint8_t alg_par_status;   // okresla prawidlowosc numeru algorytmu regulacji
     // i zestawu jego parametrow
 
+    double current_error;
+    double current_desired;
+    double current_measured;
+
+
     alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
 
     // double root_position_increment_new=position_increment_new;
@@ -1919,6 +1924,10 @@ uint8_t NL_regulator_8_irp6p::compute_set_value (void)
             }
             ; // end: switch (algorithm_parameters_no)
             break;
+           case 2:  // algorytm nr 2 - sterowanie pradowe
+                current_algorithm_parameters_no = algorithm_parameters_no;
+                current_algorithm_no = algorithm_no;
+                break;
         default: // blad - nie ma takiego algorytmu
             // => przywrocic stary algorytm i j stary zestaw parametrow
             algorithm_no = current_algorithm_no;
@@ -1946,23 +1955,69 @@ uint8_t NL_regulator_8_irp6p::compute_set_value (void)
     switch (algorithm_no)
     {
     case 0:  // algorytm nr 0
-    	if (meassured_current != 0) fprintf(stdout,"alg 0: %d\n", meassured_current);
+    //	if (meassured_current != 0) fprintf(stdout,"alg 0: %d\n", meassured_current);
         // obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
         set_value_new = (1+a)*set_value_old - a*set_value_very_old +
                         b0*delta_eint - b1*delta_eint_old;
+
+        set_value_old = set_value_new;
+
         break;
     case 1:  // algorytm nr 1
-    	if (meassured_current != 0) fprintf(stdout,"alg 1: %d\n", meassured_current);
+    //	if (meassured_current != 0) fprintf(stdout,"alg 1: %d\n", meassured_current);
 
-        // obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
         set_value_new = (1+a)*set_value_old - a*set_value_very_old +
-                        b0*(step_new_pulse - position_increment_new)
-                        - b1*(step_old_pulse - position_increment_old);
+                        b0*delta_eint - b1*delta_eint_old;
 
 
-        set_value_new = -70;
+        set_value_old = set_value_new;
+
+        current_desired = set_value_new / 10;
+        if (current_desired>15) current_desired=15;
+        if (current_desired<-15) current_desired=-15;
+        if (set_value_new>0) current_measured = (float)meassured_current;
+         else current_measured = (float) (-meassured_current);
+         current_error = current_desired - current_measured;
+         int_current_error =  int_current_error + current_error;		// 500Hz => 0.02s
+         //int_current_error = 0;
+         if (int_current_error>200) int_current_error = 200;
+         if (int_current_error<-200) int_current_error = -200;
+
+
+         if ((current_desired<1)&&(current_desired>-1)) int_current_error=0;
+         set_value_new = 1 * current_error + 0.2*int_current_error;
+
+         display++;
+         if (display >= 2)
+         {
+             display = 0;
+             printf("joint 7:  current_desired = %f,  meassured_current = %f, int_current_error = %f,  set_value_new = %f \n",
+            		 current_desired,   current_measured, int_current_error, set_value_new);
+         }
+
+
 
         break;
+    case 2:  // algorytm nr 2 - sterowanie pradowe
+        // DUNG START
+        current_desired = -10;
+        if (set_value_new>0) current_measured = (float)meassured_current;
+        else current_measured = (float) (-meassured_current);
+        current_error = current_desired - current_measured;
+        int_current_error =  int_current_error + current_error;		// 500Hz => 0.02s
+        //int_current_error = 0;
+        if (int_current_error>1000) int_current_error = 1000;
+        if (int_current_error<-1000) int_current_error = -1000;
+        set_value_new = 1 * current_error + 0.2*int_current_error;
+
+        display++;
+        if (display >= 100)
+        {
+            display = 0;
+            printf("joint 7:   meassured_current = %f,    int_current_error = %f,     set_value_new = %f \n", current_measured, int_current_error, set_value_new);
+        }
+        // DUNG END
+    break;
     default: // w tym miejscu nie powinien wystapic blad zwiazany z
         // nieistniejacym numerem algorytmu
         set_value_new = 0; // zerowe nowe sterowanie
@@ -2012,7 +2067,7 @@ uint8_t NL_regulator_8_irp6p::compute_set_value (void)
     delta_eint_old = delta_eint;
     step_old_pulse = step_new_pulse;
     set_value_very_old = set_value_old;
-    set_value_old = set_value_new;
+
     PWM_value = (int) set_value_new;
 
 
@@ -2042,7 +2097,7 @@ uint8_t NL_regulator_8_irp6p::compute_set_value (void)
     {
     case lib::GRIPPER_START_STATE:
 
-        if (sum_of_currents > IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_MAX_VALUE)
+        if (sum_of_currents > IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_MAX_VALUE*100)
         {
             next_reg_state = lib::GRIPPER_BLOCKED_STATE;
             gripper_blocked_start_time = master.step_counter;
@@ -2053,7 +2108,7 @@ uint8_t NL_regulator_8_irp6p::compute_set_value (void)
     case lib::GRIPPER_BLOCKED_STATE:
 
         if (((master.step_counter - gripper_blocked_start_time) > GRIPPER_BLOCKED_TIME_PERIOD)
-                && (!(sum_of_currents > IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_MAX_VALUE)))
+                && (!(sum_of_currents > IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_MAX_VALUE*100)))
         {
             //			printf("gripper GRIPPER_START_STATE state\n");
             next_reg_state = lib::GRIPPER_START_STATE;
