@@ -33,7 +33,7 @@ libecp.a: $(ECPOBJ)
 	${INSTALL} $@ $(LIBDIR)
 
 ifeq ($(BUILD_TARGET), linux)
-LDFLAGS+=-export-dynamic
+LDFLAGS+=-Wl,-export-dynamic
 endif
 
 libecp.so: $(ECPOBJ_SHARED)
