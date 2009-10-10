@@ -82,23 +82,23 @@ LogProxy::GetState()
 }
 
 int 
-LogProxy::SetWriteState(int state)
+LogProxy::SetWriteState(int state_)
 {
   player_log_set_write_state_t req;
 
   req.subtype = PLAYER_LOG_SET_WRITE_STATE_REQ;
-  req.state = (uint8_t)state;
+  req.state = (uint8_t)state_;
 
   return(client->Request(m_device_id, (const char *)&req, sizeof(req)));
 }
 
 int 
-LogProxy::SetReadState(int state)
+LogProxy::SetReadState(int state_)
 {
   player_log_set_read_state_t req;
 
   req.subtype = PLAYER_LOG_SET_READ_STATE_REQ;
-  req.state = (uint8_t)state;
+  req.state = (uint8_t)state_;
 
   if(client->Request(m_device_id, (const char *)&req, sizeof(req)) < 0)
     return(-1);

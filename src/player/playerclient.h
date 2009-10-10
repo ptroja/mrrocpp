@@ -1197,8 +1197,8 @@ class PositionProxy : public ClientProxy
 
   /** Same as the previous SetSpeed(), but doesn't take the sideways speed
       (so use this one for non-holonomic robots). */
-  int SetSpeed(double speed, double turnrate)
-      { return(SetSpeed(speed,0.0,turnrate));}
+  int SetSpeed(double _speed, double _turnrate)
+      { return(SetSpeed(_speed,0.0,_turnrate));}
 
   /** Send a motor command for position control mode.  Specify the
       desired pose of the robot in m, m, radians. Returns: 0 if
@@ -1497,17 +1497,17 @@ class Position3DProxy : public ClientProxy
       and rad/s, respectively.  Returns: 0 if everything's ok,
       -1 otherwise.
   */
-  int SetSpeed(double xspeed,double yspeed,
-				double zspeed,double yawspeed)
-  { return(SetSpeed(xspeed,yspeed,zspeed,0,0,yawspeed)); }
+  int SetSpeed(double xspeed_,double yspeed_,
+				double zspeed_,double yawspeed_)
+  { return(SetSpeed(xspeed_,yspeed_,zspeed_,0,0,yawspeed_)); }
 
-  int SetSpeed(double xspeed, double yspeed, double yawspeed)
-    {  return SetSpeed(xspeed, yspeed, 0, 0, 0, yawspeed); }
+  int SetSpeed(double xspeed_, double yspeed_, double yawspeed_)
+    {  return SetSpeed(xspeed_, yspeed_, 0, 0, 0, yawspeed_); }
 
   /** Same as the previous SetSpeed(), but doesn't take the sideways speed
       (so use this one for non-holonomic robots). */
-  int SetSpeed(double xspeed, double yawspeed)
-      { return(SetSpeed(xspeed,0,0,0,0,yawspeed));}
+  int SetSpeed(double xspeed_, double yawspeed_)
+      { return(SetSpeed(xspeed_,0,0,0,0,yawspeed_));}
 
 
   /** Send a motor command for position control mode.  Specify the

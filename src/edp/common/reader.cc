@@ -73,7 +73,7 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 		reader_meassures_dir = config.return_default_reader_measures_path();
 	}
 
-	std::string robot_name = config.return_string_value("reader_attach_point");
+	std::string robot_filename = config.return_string_value("reader_attach_point");
 
 	if (config.exists("reader_samples"))
 		nr_of_samples = config.return_int_value("reader_samples");
@@ -316,7 +316,7 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 		time_of_day = time(NULL);
 		strftime(file_date, 40, "%g%m%d_%H-%M-%S", localtime(&time_of_day));
 
-		sprintf(file_name, "/%s_%s_pomiar-%d", file_date, robot_name.c_str(), ++file_counter);
+		sprintf(file_name, "/%s_%s_pomiar-%d", file_date, robot_filename.c_str(), ++file_counter);
 		strcpy(config_file_with_dir, reader_meassures_dir.c_str());
 
 		strcat(config_file_with_dir, file_name);
@@ -428,6 +428,8 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 		lib::set_thread_priority(pthread_self(), MAX_PRIORITY-10);
 
 	} // end: for (;;)
+
+	return NULL;
 }
 
 } // namespace common

@@ -126,6 +126,8 @@ void * manip_and_conv_effector::trans_thread(void *arg)
             // printf("zlapane cos");// by Y&W
         }
     }
+
+    return NULL;
 }
 
 } // namespace common

@@ -26,7 +26,7 @@
 #include <string.h>
 #include <stdio.h>
 
-int AudioDSPProxy::Configure( uint8_t _channels, uint16_t _sampleRate, 
+int AudioDSPProxy::Configure( uint8_t _channels, uint16_t _sampleRate,
     int16_t _sampleFormat)
 {
   if(!client)
@@ -69,7 +69,7 @@ int AudioDSPProxy::GetConfigure()
 
 void AudioDSPProxy::FillData(player_msghdr_t hdr, const char *buffer)
 {
-  if(hdr.size != sizeof(player_audiodsp_data_t)) 
+  if(hdr.size != sizeof(player_audiodsp_data_t))
   {
     if(player_debug_level(-1) >= 1)
       fprintf(stderr,"WARNING: AudioProxy expected %d bytes of "
@@ -84,32 +84,32 @@ void AudioDSPProxy::FillData(player_msghdr_t hdr, const char *buffer)
     freq[i]=ntohs(((player_audiodsp_data_t*)buffer)->freq[i]);
     amp[i]=ntohs(((player_audiodsp_data_t*)buffer)->amp[i]);
   }
- 
+
 }
 
-int AudioDSPProxy::PlayTone(unsigned short freq, unsigned short amp,
-    unsigned int dur)
+int AudioDSPProxy::PlayTone(unsigned short freq_, unsigned short amp_,
+    unsigned int dur_)
 {
   player_audiodsp_cmd_t cmd;
 
   cmd.subtype = PLAYER_AUDIODSP_PLAY_TONE;
-  cmd.frequency = htons(freq);
-  cmd.amplitude = htons(amp);
-  cmd.duration = htonl(dur);
+  cmd.frequency = htons(freq_);
+  cmd.amplitude = htons(amp_);
+  cmd.duration = htonl(dur_);
 
   return( client->Write(m_device_id, (const char*)&cmd, sizeof(cmd)) );
 }
 
-int AudioDSPProxy::PlayChirp(unsigned short freq, unsigned short amp, 
-    unsigned int dur, const unsigned char bitString[], 
+int AudioDSPProxy::PlayChirp(unsigned short freq_, unsigned short amp_,
+    unsigned int dur_, const unsigned char bitString[],
     unsigned short bitStringLen)
 {
   player_audiodsp_cmd_t cmd;
 
   cmd.subtype = PLAYER_AUDIODSP_PLAY_CHIRP;
-  cmd.frequency = htons(freq);
-  cmd.amplitude = htons(amp);
-  cmd.duration = htonl(dur);
+  cmd.frequency = htons(freq_);
+  cmd.amplitude = htons(amp_);
+  cmd.duration = htonl(dur_);
   strcpy((char*)(cmd.bitString),(char*)(bitString));
   cmd.bitStringLen = htons(bitStringLen);
 
@@ -128,7 +128,7 @@ int AudioDSPProxy::Replay()
 // interface that all proxies SHOULD provide
 void AudioDSPProxy::Print()
 {
-  printf("#Acoustics(%d:%d) - %c\n", m_device_id.code, m_device_id.index, 
+  printf("#Acoustics(%d:%d) - %c\n", m_device_id.code, m_device_id.index,
       access);
 
   printf("\tSample Rate:%d\n",sampleRate);
@@ -141,6 +141,6 @@ void AudioDSPProxy::Print()
     printf("(%6u,%6u) ",freq[i],amp[i]);
   }
   printf("\n");
- 
+
 }
 

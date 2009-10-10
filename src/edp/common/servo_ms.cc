@@ -76,6 +76,8 @@ void * manip_and_conv_effector::servo_thread(void* arg)
             }
         } // end: else
     }
+
+    return NULL;
 } // end: main() SERVO_GROUP
 
 

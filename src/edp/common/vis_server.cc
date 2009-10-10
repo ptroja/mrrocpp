@@ -23,7 +23,6 @@ void * manip_and_conv_effector::visualisation_thread_start(void* arg)
 	return static_cast<manip_and_conv_effector*> (arg)->visualisation_thread(arg);
 }
 
-
 void * manip_and_conv_effector::visualisation_thread(void * arg)
 {
 	int sockfd;

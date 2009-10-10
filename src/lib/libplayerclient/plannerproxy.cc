@@ -70,7 +70,7 @@ PlannerProxy::~PlannerProxy()
 
 
 // Set a new goal point
-int PlannerProxy::SetCmdPose( double gx, double gy, double ga)
+int PlannerProxy::SetCmdPose( double gx_, double gy_, double ga_)
 {
   if (!client)
     return -1;
@@ -79,9 +79,9 @@ int PlannerProxy::SetCmdPose( double gx, double gy, double ga)
   player_planner_cmd_t cmd;
   memset (&cmd, 0, sizeof(cmd));
 
-  cmd.gx = (int32_t)htonl((int) (gx * 1000.0));
-  cmd.gy = (int32_t)htonl((int) (gy * 1000.0));
-  cmd.ga = (int32_t)htonl((int) (ga * 180.0 / M_PI));
+  cmd.gx = (int32_t)htonl((int) (gx_ * 1000.0));
+  cmd.gy = (int32_t)htonl((int) (gy_ * 1000.0));
+  cmd.ga = (int32_t)htonl((int) (ga_ * 180.0 / M_PI));
 
   return (client->Write( m_device_id, (const char*)&cmd, sizeof(cmd)));
 }

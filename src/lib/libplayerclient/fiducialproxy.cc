@@ -2,7 +2,7 @@
  *  Player - One Hell of a Robot Server
  *  Copyright (C) 2000-2003
  *     Brian Gerkey, Kasper Stoy, Richard Vaughan, & Andrew Howard
- *                      
+ *
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
  *  Player - One Hell of a Robot Server
  *  Copyright (C) 2003
  *     Brian Gerkey, Kasper Stoy, Richard Vaughan, & Andrew Howard
- *                      
+ *
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -43,7 +43,7 @@
 /*
  * $Id$
  *
- * client-side beacon device 
+ * client-side beacon device
  */
 
 #include <playerclient.h>
@@ -57,7 +57,7 @@
 void FiducialProxy::FillData(player_msghdr_t hdr, const char* buffer)
 {
   player_fiducial_data_t *data = (player_fiducial_data_t*) buffer;
-  
+
   if(hdr.size != sizeof(player_fiducial_data_t))
   {
     if(player_debug_level(-1) >= 1)
@@ -103,8 +103,8 @@ void FiducialProxy::Print()
   printf("%d\n", count);
   puts("#id\txpos\typos\torient\tx_err\ty_err\to_err");
   for(unsigned short i=0;i<count && i<PLAYER_FIDUCIAL_MAX_SAMPLES;i++){
-    printf("%d\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\n", 
-	   beacons[i].id, 
+    printf("%d\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\n",
+	   beacons[i].id,
 	   beacons[i].pose[0], beacons[i].pose[1], beacons[i].pose[2],
 	   beacons[i].upose[0], beacons[i].upose[1], beacons[i].upose[2]);
     if (beacons[i].type!=0){
@@ -121,13 +121,13 @@ beacons[i].end_y);
 
 int FiducialProxy::PrintFOV()
 {
-  int res = this->GetFOV();  
+  int res = this->GetFOV();
   if( res < 0 ) return res;
 
   printf("#Fiducial(%d:%d) - %c\n",
          m_device_id.code, m_device_id.index, access);
   printf( "#FOV\tmin_range\tmax_range\tview_angle\n"
-	  "\t%.2f\t\t%.2f\t\t%.2f\n", 
+	  "\t%.2f\t\t%.2f\t\t%.2f\n",
 	  this->min_range, this->max_range, this->view_angle );
   return(res);
 }
@@ -137,14 +137,14 @@ int FiducialProxy::PrintGeometry()
   printf("#Fiducial(%d:%d) - %c\n",
          m_device_id.code, m_device_id.index, access);
 
-  int res = this->GetConfigure();  
+  int res = this->GetConfigure();
   if( res < 0 ) return res;
-  
+
   printf( "#geometry:\n  pose [%.2f %.2f %.2f]  size [%.2f %.2f]"
 	  "   target size [%.2f %.2f]\n",
-	  pose[0], pose[1], pose[2], size[0], size[1], 
+	  pose[0], pose[1], pose[2], size[0], size[1],
 	  fiducial_size[0], fiducial_size[1] );
-  
+
   return res;
 }
 
@@ -168,18 +168,18 @@ int FiducialProxy::GetConfigure()
       puts( "fiducial config geometry request failed" );
       return(-1);
     }
-  
+
   this->pose[0] = ((int16_t) ntohs(config.pose[0])) / 1e3;
   this->pose[1] = ((int16_t) ntohs(config.pose[1])) / 1e3;
   this->pose[2] = RTOD(((int16_t) ntohs(config.pose[2])));
   this->size[0] = ((int16_t) ntohs(config.size[0])) / 1e3;
   this->size[1] = ((int16_t) ntohs(config.size[1])) / 1e3;
-  
-  this->fiducial_size[0] = 
+
+  this->fiducial_size[0] =
     ((uint16_t) ntohl(config.fiducial_size[0])) / 1000.0;
-  this->fiducial_size[1] = 
+  this->fiducial_size[1] =
     ((uint16_t) ntohl(config.fiducial_size[1])) / 1000.0;
-  
+
   return 0; // OK
 }
 
@@ -187,23 +187,23 @@ int FiducialProxy::GetConfigure()
 // rather than returning it to the caller.
 int FiducialProxy::GetFOV()
 {
- 
+
   player_fiducial_fov_t fov;
   player_msghdr_t hdr;
 
   fov.subtype = PLAYER_FIDUCIAL_GET_FOV;
-  
+
   int result = client->Request(m_device_id,
 			       (const char*)&fov, sizeof(fov),
 			       &hdr, (char*)&fov, sizeof(fov) );
-  
+
   if( result < 0 || hdr.type != PLAYER_MSGTYPE_RESP_ACK )
     {
       puts( "fiducial config FOV request failed" );
       return(-1);
     }
 
-  FiducialFovUnpack( &fov, 
+  FiducialFovUnpack( &fov,
 		     &this->min_range, &this->max_range, &this->view_angle );
 
   return 0; // OK
@@ -213,29 +213,29 @@ int FiducialProxy::GetFOV()
 
 // Set the fiducial geometry.  The writes the result into the proxy
 // rather than returning it to the caller.
-int FiducialProxy::SetFOV( double min_range, 
-			   double max_range, 
-			   double view_angle)
+int FiducialProxy::SetFOV( double min_range_,
+			   double max_range_,
+			   double view_angle_)
 {
   int len;
   player_fiducial_fov_t fov;
   player_msghdr_t hdr;
-  
-  FiducialFovPack( &fov, 1, min_range, max_range, view_angle );
-    
+
+  FiducialFovPack( &fov, 1, min_range_, max_range_, view_angle_ );
+
   len = client->Request(m_device_id,
 			(const char*)&fov, sizeof(fov),
 			&hdr, (char*)&fov, sizeof(fov) );
-  
+
   if( len < 0 || hdr.type != PLAYER_MSGTYPE_RESP_ACK )
     {
       puts( "fiducial config FOV request failed" );
       return(-1);
     }
 
-  FiducialFovUnpack( &fov, 
+  FiducialFovUnpack( &fov,
 		     &this->min_range, &this->max_range, &this->view_angle );
-  
+
   return 0; // OK
 }
 
@@ -243,18 +243,18 @@ int FiducialProxy::SetFOV( double min_range,
 // supported) returns the value actually used by the device, which may
 // differ from the one requested, or -1 on error.
 int FiducialProxy::SetId( int id )
-{ 
+{
   int len;
   player_fiducial_id_t pid;
   player_msghdr_t hdr;
-  
+
   pid.subtype = PLAYER_FIDUCIAL_SET_ID;
   pid.id = htonl( id );
 
   len = client->Request(m_device_id,
 			(const char*)&pid, sizeof(pid),
 			&hdr, (char*)&pid, sizeof(pid) );
-  
+
   if( len < 0 || hdr.type != PLAYER_MSGTYPE_RESP_ACK )
     {
       puts( "fiducial config ID request failed" );
@@ -273,17 +273,17 @@ int FiducialProxy::SetId( int id )
 // Get the fiducial identification value displayed by this device (if supported)
 // returns the ID or -1 on error
 int FiducialProxy::GetId( void )
-{ 
+{
   int len;
   player_fiducial_id_t pid;
   player_msghdr_t hdr;
-  
+
   pid.subtype = PLAYER_FIDUCIAL_GET_ID;
 
   len = client->Request(m_device_id,
 			(const char*)&pid, sizeof(pid),
 			&hdr, (char*)&pid, sizeof(pid) );
-  
+
   if( len < 0 || hdr.type != PLAYER_MSGTYPE_RESP_ACK )
     {
       puts( "fiducial config ID request failed" );
@@ -313,9 +313,9 @@ int FiducialProxy::SendMessage( player_fiducial_msg_t* msg, bool consume )
   tx_req.msg.intensity = (uint8_t)msg->intensity;
   memcpy( tx_req.msg.bytes, msg->bytes, PLAYER_FIDUCIAL_MAX_MSG_LEN );
   tx_req.msg.len = (uint8_t)msg->len;
-  
+
   //printf( "sending message of %d bytes\n", msg->len );
-  
+
   player_msghdr_t hdr;
   if( client->Request(m_device_id,
 		      (const char*)&tx_req, sizeof(tx_req),
@@ -324,7 +324,7 @@ int FiducialProxy::SendMessage( player_fiducial_msg_t* msg, bool consume )
       puts( "error: fiducial send message request failed" );
       return(-1);
     }
-  
+
   if( hdr.type != PLAYER_MSGTYPE_RESP_ACK )
     {
     puts( "error: fiducial send message request received NACK" );
@@ -343,28 +343,28 @@ int FiducialProxy::SendMessage( player_fiducial_msg_t* msg, bool consume )
    (or later) fiducial driver.
 */
 
-int FiducialProxy::RecvMessage( player_fiducial_msg_t* recv_msg, 
+int FiducialProxy::RecvMessage( player_fiducial_msg_t* recv_msg,
 				bool consume )
-{ 
+{
   assert(recv_msg);
-  
+
   player_fiducial_msg_rx_req_t rx_req;
   rx_req.subtype = PLAYER_FIDUCIAL_RECV_MSG;
   rx_req.consume = (uint8_t)consume;
-  
+
   //printf( "requesting receive message\n" );
-  
+
   player_msghdr_t hdr;
   if( client->Request(m_device_id,
-		      (const char*)&rx_req, 
+		      (const char*)&rx_req,
 		      sizeof(player_fiducial_msg_rx_req_t),
-		      &hdr, (char*)recv_msg,  
+		      &hdr, (char*)recv_msg,
 		      sizeof(player_fiducial_msg_t)) < 0 )
      {
        puts( "error: fiducial recv message request failed" );
        return(-1);
      }
-  
+
   // byteswap the fields for local use
   recv_msg->target_id = ntohl( recv_msg->target_id );
 
@@ -372,6 +372,6 @@ int FiducialProxy::RecvMessage( player_fiducial_msg_t* recv_msg,
   // message was available
   if(  hdr.type != PLAYER_MSGTYPE_RESP_ACK )
       return(-1);
-  
+
   return 0; // OK
 }

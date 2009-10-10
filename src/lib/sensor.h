@@ -368,7 +368,7 @@ typedef union
 
 // by Y - CZUJNIKI
 
-enum SENSOR_ENUM
+typedef enum SENSOR_ENUM
 {
 	SENSOR_UNDEFINED,
 	SENSOR_FORCE_ON_TRACK,
@@ -397,8 +397,8 @@ enum SENSOR_ENUM
 	 * Sensor used for communication with the PCBird.
 	 */
 	SENSOR_PCBIRD,
-	SENSOR_WIIMOTE,
-};
+	SENSOR_WIIMOTE
+} SENSOR_t;
 
 // Klasa obslugi bledow procesu VSP.
 class VSP_main_error
