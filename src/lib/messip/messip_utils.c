@@ -55,13 +55,13 @@ struct dinfo_s {
 
 
 int
-read_etc_messip( 
+read_etc_messip(
 	char *hostname,
 	int *port_used,
 	int *port_http_used )
 {
 	FILE *fp;
-	char line[512], 
+	char line[512],
 	   host[80],
 	   path[80];
 	int len,
@@ -90,7 +90,7 @@ read_etc_messip(
 		if ( !strcmp( line, "" ) || ( line[0] == '#' ) )
 			continue;
 
-		sscanf( line, "%s %d %d %s", 
+		sscanf( line, "%s %d %d %s",
 			host, &port, &port_http, path );
 //		if ( !strcmp( hostname, host ) )
 		{
@@ -119,7 +119,7 @@ read_etc_messip(
 /*
 	get_taskname
 		Get the Process Name, from the PID
-		
+
 	This is a Linux and QNXNTO only version
 */
 
@@ -198,50 +198,3 @@ get_taskname( pid_t pid, char *pname )
 #endif
 	return pname;
 }								// get_taskname
-
-/* Returns the clock speed of the system's CPU in MHz, as reported by
-  /proc/cpuinfo. On a multiprocessor machine, returns the speed of
-  the first CPU. On error returns zero. */
-
-static float 
-cpu_clock_speed( void)
-{
-	FILE* fp;
-	char buffer[4095+1];
-	size_t bytes_read;
-	char* match;
-	float clock_speed;
-
-	/* Read the entire contents of /proc/cpuinfo into the buffer. */
-	fp = fopen( "/proc/cpuinfo", "r" );
-	if ( fp == NULL )
-		return 0;
-	bytes_read = fread( buffer, 1, sizeof(buffer), fp );
-	fclose( fp );
-
-	/* Bail if read failed or if buffer isn't big enough. */
-	if ( bytes_read == 0 || bytes_read == sizeof (buffer) )
-		return 0;
-
-	/* NUL-terminate the text. */
-	buffer[bytes_read] = '\0';
-
-	/* Locate the line that starts with "cpu MHz". */
-	match = strstr( buffer, "cpu MHz" );
-	if (match == NULL)
-		return 0;
-
-	/* Parse the line to extract the clock speed. */
-	sscanf( match, "cpu MHz : %f", &clock_speed );
-	return clock_speed;
-}								// cpu_clock_speed
-
-
-float 
-get_cpu_clock_speed( void)
-{
-	static float speed = 0;
-	if ( speed == 0 )
-		speed = cpu_clock_speed() * 1000;
-	return speed;
-}								// get_cpu_clock_speed

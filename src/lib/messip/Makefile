@@ -22,7 +22,7 @@ libmessip.a: ${MESSIP_OBJECTS}
 	$(AR) $(ARFLAGS) $@ $?
 
 libmessip.so: ${MESSIP_OBJECTS}
-	$(CXX) $^ $(LDFLAGS) -shared -o $@
+	$(LD) $^ $(LDFLAGS) -shared -o $@
 	${INSTALL} $@ $(LIBDIR)
 
 messip_mgr: messip_mgr.o logg_messip.o libmessip.a
@@ -43,7 +43,7 @@ install: ${BINARIES}
 	${INSTALL} ${BINARIES} $(BINDIR)
 #-----------------------------------------------------------------------------------------------------------------------#
 clean:
-	@rm -f *.o *.err ${BINARIES} *.a *.so
+	@rm -f *.o *.err ${BINARIES} *.a *.so server client
 #-----------------------------------------------------------------------------------------------------------------------#
 
 include $(HOMEDIR)/depend.mk

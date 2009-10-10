@@ -61,15 +61,6 @@ char *logg_dir;				// Specified by --l or set to NULL
 // Updated by messip_logg_on() and messip_logg_off()
 static	int	is_logg = 1;
 
-__inline__ unsigned long long int
-rdtsc(void)
-{
-	unsigned long long int x;
-	__asm__ volatile( ".byte 0x0f, 0x31" : "=A" (x) );
-	return x;
-}
-
-
 /*
 	In case the logg_mgr would be not be there!!
 */
@@ -79,21 +70,21 @@ file_logg(
 	logg_type_t type,
 	char *text )
 {
-	int seqnb=-1;
-	unsigned long long int t0, t1, t;
+	static int seqnb=0;
+	struct timespec ts;
+
+	// get the time as soon as possible
+	if(clock_gettime(CLOCK_REALTIME, &ts) == -1) {
+		perror("clock_gettime()");
+		return -1;
+	}
 
 	if ( logg_dir )
 	{
-
-		/*
-			Try to lock the file
-		*/
 		char filename[PATH_MAX];
 		time_t now;
 		struct tm *tm;
-		int fd;
-		int create = 0;
-		struct flock lock;
+		FILE * f;
 
 		time( &now );
 		tm = localtime( &now );
@@ -102,100 +93,10 @@ file_logg(
 			tm->tm_year + 1900,
 			tm->tm_mon + 1,
 			tm->tm_mday );
-		fd = open( filename, O_RDWR | O_CREAT | O_EXCL, 0664 );
-		if ( fd == -1 ) {
-			if (errno == EEXIST) {
-				if((fd = open( filename, O_RDWR )) == -1) {
-					perror("file_logg existing file open()");
-					return -1;
-				}
-			} else {
-				perror("file_logg open()");
-				return -1;
-			}
-		} else {
-			create = 1;
-		}
-		assert( fd != -1 );
-		lock.l_type = F_WRLCK;
-		lock.l_whence = SEEK_SET;
-		lock.l_start = 0;
-		lock.l_len = 0;
-		if(fcntl( fd, F_SETLKW, &lock ) == -1) {
-			perror("fcntl()");
-			close(fd);
+		f = fopen( filename, "a" );
+		if ( !f ) {
+			perror("fopen()");
 			return -1;
-		}
-
-		/*
-			Seq. number
-		*/
-		if ( create )
-		{
-			const char *initstr = "00000001 000000000000000000\n";
-			int written = write( fd, initstr, strlen(initstr) );
-			if (written == -1) {
-				perror("file_logg write()");
-				close(fd);
-				return -1;
-			} else if (written != strlen(initstr)) {
-				fprintf(stderr, "could not write full seqence number, only %d/%d bytes\n", written, strlen(initstr));
-			}
-			if (lseek( fd, 0, SEEK_END ) == (off_t) -1) {
-				perror("file_logg()");
-				close(fd);
-				return -1;
-			}
-			seqnb = 1;
-			t0 = rdtsc();
-			t1 = t0;
-		}
-		else
-		{
-			int readed;
-			char temp[32];
-			if (lseek( fd, 0, SEEK_SET ) == (off_t) -1) {
-				perror("lseek()");
-				close(fd);
-				return -1;
-			}
-			readed = read( fd, temp, 8+1+18+1 );
-			if (readed != 28) {
-				fprintf(stderr, "expected to read 28, found %d\n", readed);
-				if (readed == -1)
-					perror("read()");
-				close(fd);
-				return -1;
-			}
-			seqnb = atoi( temp ) + 1;
-			t0 = atoll( &temp[8+1] );
-			t1 = rdtsc();
-			if ( text )
-			{
-				ssize_t written;
-
-				if (lseek( fd, 0, SEEK_SET ) == (off_t) -1) {
-					perror("lseek()");
-					close(fd);
-					return -1;
-				}
-				sprintf( temp, "%08d %018lld", seqnb, t1 );
-
-				written = write( fd, temp, 8+1+18 );
-				if(written == -1) {
-					perror("write sequence number failed()");
-					close(fd);
-					return -1;
-				} else if (written != 27){
-					fprintf(stderr, "could not write full seqence number, only %d/27 bytes\n", written);
-				}
-
-				if (lseek( fd, 0, SEEK_END ) == (off_t) -1) {
-					perror("lseek()");
-					close(fd);
-					return -1;
-				}
-			}
 		}
 
 		/*
@@ -203,11 +104,8 @@ file_logg(
 		*/
 		if ( text )
 		{
-			int written;
-			char tmp[400];
-			const long long int cpu_cycles = (long long int)get_cpu_clock_speed();
 			const char *stype;
-			t = (t1-t0)/cpu_cycles;
+
 			switch ( type )
 			{
 				case LOG_MESSIP_DEBUG_LEVEL1 	: stype = "debug-level1"; break;
@@ -220,45 +118,18 @@ file_logg(
 				case LOG_MESSIP_NOT_YET_DONE	: stype = "not-yet-done"; break;
 				default : stype="?"; break;
 			}						// switch (type)
-			sprintf( tmp, "%6d %9lld %-15s %6d %-15s: ",
-				seqnb,
-				t,
+			if(fprintf( f, "%6d %9lu.%09lu %-15s %6d %-15s: %s",
+				seqnb++,
+				ts.tv_sec, ts.tv_nsec,
 				stype,
 				getpid(),
-				"messip_mgr" );
-
-			written = write( fd, tmp, 6+1+9+1+15+1+6+1+15+1+1 );
-			if(written == -1) {
-				perror("write()");
-				close(fd);
-				return -1;
-			} else if (written != 57) {
-				fprintf(stderr, "could not write full seqence number, only %d/%d bytes\n", strlen(text), written);
-			}
-
-			written = write( fd, text, strlen(text));
-			if(written == -1) {
-				perror("write()");
-				close(fd);
-				return -1;
-			} else if (written != strlen(text)) {
-				fprintf(stderr, "could not write full seqence number, only %d/%d bytes\n", strlen(text), written);
+				"messip_mgr",
+				text) < 0) {
+				perror("fprintf()");
 			}
 		}							// if
 
-		/*
-			Release the lock
-		*/
-		lock.l_type = F_UNLCK;
-		lock.l_whence = SEEK_SET;
-		lock.l_start = 0;
-		lock.l_len = 0;
-		if(fcntl( fd, F_SETLKW, &lock ) == -1) {
-			perror("fcntl()");
-			close(fd);
-			return -1;
-		}
-		close( fd );
+		fclose( f );
 	}							// if ( logg_dir )
 
 	/*
@@ -266,7 +137,7 @@ file_logg(
 	*/
 	if ( output )
 		fputs( text, output );
-//	exit(-1);
+
 	return seqnb;
 
 }								// file_logg
