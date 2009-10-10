@@ -139,7 +139,7 @@ protected:
 
     double servo_current_joints[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -// dla watku EDP_SERVO   XXXXXX
 
-    pthread_mutex_t edp_irp6s_effector_mutex;	// mutex    XXXXXX
+    boost::mutex edp_irp6s_effector_mutex;	// mutex    XXXXXX
 
     double desired_joints[MAX_SERVOS_NR];       // Wspolrzedne wewnetrzne -
     // ostatnio obliczone (zadane) (w radianach)

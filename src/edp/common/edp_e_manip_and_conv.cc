@@ -51,8 +51,6 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
         step_counter(0),
         number_of_servos(-1)
 {
-	pthread_mutex_init(&edp_irp6s_effector_mutex, NULL);
-
     controller_state_edp_buf.is_synchronised = false;
     controller_state_edp_buf.is_power_on = true;
     controller_state_edp_buf.is_wardrobe_on = true;
@@ -92,8 +90,6 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
 }
 
 manip_and_conv_effector::~manip_and_conv_effector() {
-	// TODO: error checks
-	pthread_mutex_destroy(&edp_irp6s_effector_mutex);
 #ifdef __QNXNTO__
 	ConnectDetach_r(servo_fd);
 	ChannelDestroy_r(servo_to_tt_chid);
@@ -105,16 +101,12 @@ manip_and_conv_effector::~manip_and_conv_effector() {
 
 void manip_and_conv_effector::master_joints_read (double* output)
 {
-    if(pthread_mutex_lock( &edp_irp6s_effector_mutex )) {
-    	fprintf(stderr, "locking effector_mutex failed\n");
-    }
-    // przepisanie danych na zestaw lokalny dla edp_master
+	boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
+
+	// przepisanie danych na zestaw lokalny dla edp_master
     for (int i=0; i < number_of_servos; i++)
     {
         output[i]=global_current_joints[i];
-    }
-    if(pthread_mutex_unlock( &edp_irp6s_effector_mutex )) {
-    	fprintf(stderr, "unlocking effector_mutex failed\n");
     }
 }
 
@@ -940,17 +932,17 @@ void manip_and_conv_effector::common_get_controller_state(lib::c_buffer &instruc
     // dla pierwszego wypelnienia current_joints
     get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
-    pthread_mutex_lock( &edp_irp6s_effector_mutex);
-
-    // Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
-    for( int i = 0; i < number_of_servos; i++)
     {
-        servo_current_motor_pos[i] = desired_motor_pos_new_tmp[i] = desired_motor_pos_new[i] =
-                                     desired_motor_pos_old[i] = current_motor_pos[i];
-        desired_joints_tmp[i] = desired_joints[i] = current_joints[i];
-    }
+    	boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
 
-    pthread_mutex_unlock( &edp_irp6s_effector_mutex);
+		// Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
+		for( int i = 0; i < number_of_servos; i++)
+		{
+			servo_current_motor_pos[i] = desired_motor_pos_new_tmp[i] = desired_motor_pos_new[i] =
+										 desired_motor_pos_old[i] = current_motor_pos[i];
+			desired_joints_tmp[i] = desired_joints[i] = current_joints[i];
+		}
+    }
 }
 
 

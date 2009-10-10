@@ -10,6 +10,8 @@
 #if !defined(_EDP_FORCE_SENSOR_H)
 #define _EDP_FORCE_SENSOR_H
 
+#include <semaphore.h>
+
 #include "lib/ForceTrans.h"
 #include "lib/sensor.h"				// klasa bazowa sensor
 #include "edp/common/edp.h"				// klasa bazowa sensor

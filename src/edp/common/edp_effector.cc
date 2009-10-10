@@ -23,7 +23,6 @@
 #include "lib/messip/messip.h"
 #endif /* !USE_MESSIP_SRR */
 #include <pthread.h>
-#include <semaphore.h>
 #include <errno.h>
 
 #include "lib/mis_fun.h"

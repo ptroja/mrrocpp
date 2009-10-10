@@ -714,15 +714,15 @@ void manip_effector::arm_frame_2_frame (void)
 
 void manip_effector::master_joints_and_frame_download (void)
 { // by Y
-    pthread_mutex_lock( &edp_irp6s_effector_mutex );
-    // przepisanie danych na zestaw lokalny dla edp_master
+	boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
+
+	// przepisanie danych na zestaw lokalny dla edp_master
     for (int i=0; i < number_of_servos; i++)
     {
         current_motor_pos[i]=global_current_motor_pos[i];
         current_joints[i]=global_current_joints[i];
     }
     lib::copy_frame(servo_current_frame_wo_tool, global_current_frame_wo_tool);
-    pthread_mutex_unlock( &edp_irp6s_effector_mutex );
 }
 
 /*--------------------------------------------------------------------------*/

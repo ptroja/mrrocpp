@@ -325,19 +325,20 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
             printf("servo thread servo_joints_and_frame_actualization_and_upload throw catch exception\n");
     }
 
-    pthread_mutex_lock( &edp_irp6s_effector_mutex );
-    // przepisnie danych na zestaw globalny
-    for (int i=0; i < number_of_servos; i++)
     {
-        global_current_motor_pos[i]=servo_current_motor_pos[i];
-        global_current_joints[i]=servo_current_joints[i];
+    	boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
+		// przepisnie danych na zestaw globalny
+		for (int i=0; i < number_of_servos; i++)
+		{
+			global_current_motor_pos[i]=servo_current_motor_pos[i];
+			global_current_joints[i]=servo_current_joints[i];
+		}
+
+		// T.K.: Nad tym trzeba pomyslec - co w tym momencie dzieje sie z global_current_end_effector_frame?
+		// Jezeli zmienna ta przechowyje polozenie bez narzedzia, to nazwa jest nie tylko nieadekwatna, a wrecz mylaca.
+		lib::copy_frame(global_current_frame_wo_tool, servo_current_frame_wo_tool);
+
     }
-
-    // T.K.: Nad tym trzeba pomyslec - co w tym momencie dzieje sie z global_current_end_effector_frame?
-    // Jezeli zmienna ta przechowyje polozenie bez narzedzia, to nazwa jest nie tylko nieadekwatna, a wrecz mylaca.
-    lib::copy_frame(global_current_frame_wo_tool, servo_current_frame_wo_tool);
-
-    pthread_mutex_unlock( &edp_irp6s_effector_mutex );
 }
 
 

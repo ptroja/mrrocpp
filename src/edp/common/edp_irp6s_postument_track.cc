@@ -23,6 +23,9 @@
 #include <pthread.h>
 #include <semaphore.h>
 
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/condition.hpp>
+
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -780,9 +783,10 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 	// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
 	try
 	{
-		pthread_mutex_lock( &edp_irp6s_effector_mutex);
-		get_current_kinematic_model()->mp2i_transform(servo_current_motor_pos, servo_current_joints);
-		pthread_mutex_unlock( &edp_irp6s_effector_mutex);
+		{
+			boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
+			get_current_kinematic_model()->mp2i_transform(servo_current_motor_pos, servo_current_joints);
+		}
 
 		rb_obj.lock_mutex();
 
@@ -883,25 +887,26 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 			printf("servo thread servo_joints_and_frame_actualization_and_upload throw catch exception\n");
 	}
 
-	pthread_mutex_lock( &edp_irp6s_effector_mutex);
-	// przepisnie danych na zestaw globalny
-	for (i=0; i < number_of_servos; i++)
 	{
-		global_current_motor_pos[i]=servo_current_motor_pos[i];
-		global_current_joints[i]=servo_current_joints[i];
-	}
-	lib::copy_frame(global_current_frame_wo_tool, servo_current_frame_wo_tool);
+		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
 
-	pthread_mutex_unlock( &edp_irp6s_effector_mutex);
+		// przepisnie danych na zestaw globalny
+		for (i=0; i < number_of_servos; i++)
+		{
+			global_current_motor_pos[i]=servo_current_motor_pos[i];
+			global_current_joints[i]=servo_current_joints[i];
+		}
+		lib::copy_frame(global_current_frame_wo_tool, servo_current_frame_wo_tool);
+
+	}
 }
 
 lib::Homog_matrix irp6s_postument_track_effector::return_current_frame(TRANSLATION_ENUM translation_mode)
 {// by Y
-	pthread_mutex_lock( &edp_irp6s_effector_mutex);
+	boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
 	// przepisanie danych na zestaw lokalny dla edp_force
 	// lib::copy_frame(force_current_end_effector_frame, global_current_end_effector_frame);
 	lib::Homog_matrix return_frame(global_current_frame_wo_tool);
-	pthread_mutex_unlock( &edp_irp6s_effector_mutex);
 
 	if (translation_mode == WITHOUT_TRANSLATION)
 		return_frame.remove_translation();

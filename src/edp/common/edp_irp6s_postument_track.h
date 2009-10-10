@@ -8,6 +8,8 @@
 #ifndef __EDP_IRP6S_P_T_H
 #define __EDP_IRP6S_P_T_H
 
+#include <semaphore.h>
+
 #include "edp/common/edp_e_manip.h"
 #include "edp/common/edp_force_sensor.h"
 

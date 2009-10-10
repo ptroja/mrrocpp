@@ -128,15 +128,17 @@ void effector::servo_joints_and_frame_actualization_and_upload (void)
 			printf("servo thread servo_joints_and_frame_actualization_and_upload throw catch exception\n");
 	}//: catch
 
-	pthread_mutex_lock( &edp_irp6s_effector_mutex );
-	// przepisnie danych na zestaw globalny
-	for (i=0; i < number_of_servos; i++)
 	{
-		global_current_motor_pos[i]=servo_current_motor_pos[i];
-		global_current_joints[i]=servo_current_joints[i];
-	}//: for
+		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
 
-	pthread_mutex_unlock( &edp_irp6s_effector_mutex );
+		// przepisnie danych na zestaw globalny
+		for (i=0; i < number_of_servos; i++)
+		{
+			global_current_motor_pos[i]=servo_current_motor_pos[i];
+			global_current_joints[i]=servo_current_joints[i];
+		}//: for
+
+	}
 }//: servo_joints_and_frame_actualization_and_upload
 
 

@@ -9,7 +9,6 @@
 #define __EDP_EFFECTOR_H
 
 #include <stdint.h>
-#include <semaphore.h>
 #include <pthread.h>
 #if !defined(USE_MESSIP_SRR)
 #include <sys/dispatch.h>
