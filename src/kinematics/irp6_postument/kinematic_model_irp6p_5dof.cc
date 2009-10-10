@@ -138,7 +138,7 @@ void model_5dof::inverse_kinematics_transform(double* local_desired_joints, doub
   double interpolation_period;
   double Theta[5];
   double tsin[5];
-  double tcos[5];
+  double tcos[5];
 
   interpolation_period = INTER_PERIOD;
 
