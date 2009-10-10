@@ -164,7 +164,6 @@ void robot::create_command(void)
 	} // end: switch (instruction_type)
 
 }
-; // end: ecp_irp6_on_track_robot::create_command
 // ---------------------------------------------------------------
 
 

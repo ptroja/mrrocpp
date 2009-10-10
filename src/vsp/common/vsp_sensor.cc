@@ -24,7 +24,6 @@
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #include <pthread.h>
-#include <semaphore.h>
 #include <errno.h>
 
 

@@ -2,7 +2,6 @@
 #define __ECP_MP_TR_RC_WINDOWS_H
 
 #include <pthread.h>
-#include <semaphore.h>
 
 #include "ecp_mp/transmitter.h"				// klasa bazowa transmitter
 #include "player/playerc.h"

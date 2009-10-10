@@ -9,8 +9,6 @@ namespace ecp {
 namespace irp6ot {
 namespace generator {
 
-sem_t sem;
-
 wii_velocity::wii_velocity (common::task::task& _ecp_task) : common::generator::tff_nose_run(_ecp_task,10)
 {
 	configure_behaviour(lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION);
@@ -18,8 +16,6 @@ wii_velocity::wii_velocity (common::task::task& _ecp_task) : common::generator::
 
 bool wii_velocity::first_step()
 {
-	sem_init(&sem,0,0);
-
 	td.interpolation_node_no = 1;
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 3;

@@ -8,7 +8,6 @@
 #include <unistd.h>
 #include <string.h>
 #include <strings.h>
-#include <semaphore.h>
 #include <iostream>
 #include <fstream>
 #include <dirent.h>
