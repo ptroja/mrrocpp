@@ -1055,7 +1055,7 @@ class MotorProxy : public ClientProxy
   double theta;
 
   /// Angular speeds in radians/sec.
-  double thetaspeed;;
+  double thetaspeed;
 
   /// Stall flag: 1 if the robot is stalled and 0 otherwise.
   unsigned char stall;
