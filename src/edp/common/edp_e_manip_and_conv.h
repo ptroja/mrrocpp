@@ -36,6 +36,9 @@ namespace common {
 
 // base class for EDP robots with manipulators and conveyor
 
+// forward declaration
+class servo_buffer;
+
 /************************ edp_irp6s_and_conv_effector ****************************/
 class manip_and_conv_effector : public effector, public kinematic::common::manager
 {
@@ -54,6 +57,8 @@ protected:
     void onReaderStopped();
 #endif
 
+    servo_buffer * sb_ptr;
+
     uint16_t motion_steps;            // liczba krokow ruchu zadanego (makrokroku)
 
     //Liczba krokow pierwszej fazy ruchu, czyli krok, w ktorym ma zostac
@@ -69,8 +74,6 @@ protected:
     //makrokroku i informacja o polozeniu bedzie dotyczyc realizacji srodkowej
     //fazy makrokroku.
     uint16_t value_in_step_no;
-
-    int servo_fd;
 
     // numer serwo chwytaka
     short gripper_servo_nr;
@@ -194,6 +197,9 @@ public:
 #endif
 
 #ifdef __QNXNTO__
+protected:
+    int servo_fd;
+public:
     int servo_to_tt_chid;
 #else
     bool servo_command_rdy;

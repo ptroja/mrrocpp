@@ -9,6 +9,8 @@
 
 #include <pthread.h>
 #include <semaphore.h>
+#include <stdio.h>
+#include <errno.h>
 
 #include "lib/mis_fun.h"
 #include "edp/common/edp.h"
@@ -32,7 +34,10 @@ reader_buffer::~reader_buffer()
 
 int reader_buffer::set_new_step() // podniesienie semafora
 {
-	sem_trywait(&reader_sem);
+	if(sem_trywait(&reader_sem) == -1) {
+		if(errno != EAGAIN)
+			perror("reader_buffer::sem_wait()");
+	}
 	return sem_post(&reader_sem);// odwieszenie watku edp_master
 }
 
@@ -109,22 +114,22 @@ int master_trans_t_buffer::master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb
 int master_trans_t_buffer::master_wait_for_trans_t_order_status()
 {
 	// oczekiwanie na odpowiedz z watku transformation
-	return sem_wait(&(trans_t_to_master_sem));
+	return sem_wait(&trans_t_to_master_sem);
 }
 
 // oczekiwanie na semafor statusu polecenia z trans_t
 int master_trans_t_buffer::trans_t_to_master_order_status_ready()
 {
 	// odwieszenie watku new master
-	sem_trywait(&(trans_t_to_master_sem));
-	return sem_post(&(trans_t_to_master_sem));// odwieszenie watku edp_master
+	sem_trywait(&trans_t_to_master_sem);
+	return sem_post(&trans_t_to_master_sem);// odwieszenie watku edp_master
 }
 
 // oczekiwanie na semafor statusu polecenia z trans_t
 int master_trans_t_buffer::trans_t_wait_for_master_order()
 {
 	// oczekiwanie na rozkaz z watku master
-	return sem_wait(&(master_to_trans_t_sem));
+	return sem_wait(&master_to_trans_t_sem);
 }
 
 } // namespace common

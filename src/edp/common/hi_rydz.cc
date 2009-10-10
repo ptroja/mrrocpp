@@ -79,6 +79,8 @@ hardware_interface::hardware_interface (manip_and_conv_effector &_master,
 
 	    /* Create the timer */
 	    struct sigevent sev;
+	    // clear the structure to avaoid valgrind's warning
+	    memset(&sev, 0, sizeof(sev));
 	    sev.sigev_notify = SIGEV_SIGNAL;
 	    sev.sigev_signo = SIGRTMIN;
 	    sev.sigev_value.sival_ptr = &timerid;
@@ -88,8 +90,8 @@ hardware_interface::hardware_interface (manip_and_conv_effector &_master,
 
 	    /* Start the timer */
 	    struct itimerspec its;
-	    its.it_value.tv_sec = 1;
-	    its.it_value.tv_nsec = 0; // 1kHz
+	    its.it_value.tv_sec = 0;
+	    its.it_value.tv_nsec = 1000000; // 1kHz
 	    its.it_interval.tv_sec = its.it_value.tv_sec;
 	    its.it_interval.tv_nsec = its.it_value.tv_nsec;
 

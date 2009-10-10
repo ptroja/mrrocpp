@@ -780,7 +780,9 @@ void irp6s_postument_track_effector::servo_joints_and_frame_actualization_and_up
 	// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
 	try
 	{
+		pthread_mutex_lock( &edp_irp6s_effector_mutex);
 		get_current_kinematic_model()->mp2i_transform(servo_current_motor_pos, servo_current_joints);
+		pthread_mutex_unlock( &edp_irp6s_effector_mutex);
 
 		rb_obj.lock_mutex();
 

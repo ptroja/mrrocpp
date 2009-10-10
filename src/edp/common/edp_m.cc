@@ -57,12 +57,13 @@ void catch_signal(int sig) {
 } // namespace edp
 } // namespace mrrocpp
 
-int main(int argc, char *argv[], char **arge) {
+int main(int argc, char *argv[]) {
 
 	// delay(10000);
 
 	try {
-		if (argc < 6) {
+		// allow for empty session name for easier valgrind/tcheck_cl launching
+		if (argc < 5) {
 			fprintf(
 					stderr, "Usage: edp_m binaries_node_name mrrocpp_path config_file edp_config_section <session_name> [rsp_attach_name]\n");
 			exit(EXIT_FAILURE);
@@ -79,16 +80,17 @@ int main(int argc, char *argv[], char **arge) {
 		// przechwycenie SIGTERM
 		signal(SIGTERM, &edp::common::catch_signal);
 		signal(SIGSEGV, &edp::common::catch_signal);
+
+		// avoid transporting Ctrl-C signal from UI console
 #if defined(PROCESS_SPAWN_RSH)
 		signal(SIGINT, SIG_IGN);
 #endif
 
-		// odczytanie konfiguracji
-		lib::configurator _config = lib::configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
+		// create configuration object
+		lib::configurator _config = lib::configurator(argv[1], argv[2], argv[3], argv[4], (argc < 6) ? "" : argv[5]);
 
-		edp::common::master = edp::common::return_created_efector(_config);
-
-		if(edp::common::master->test_mode) {
+		// block test-mode timer signal for all the threads
+		if(_config.return_int_value("test_mode")) {
 		    /* Block timer signal from test mode timer for all threads */
 		    fprintf(stderr, "Blocking signal %d\n", SIGRTMIN);
 		    sigset_t mask;
@@ -102,6 +104,8 @@ int main(int argc, char *argv[], char **arge) {
 		    	perror("sigprocmask()");
 		    }
 		}
+
+		edp::common::master = edp::common::return_created_efector(_config);
 
 		edp::common::master->initialize();
 

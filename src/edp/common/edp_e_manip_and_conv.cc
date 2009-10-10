@@ -22,7 +22,6 @@
 #include <sys/types.h>
 #include <errno.h>
 #include <pthread.h>
-#include <semaphore.h>
 #ifdef __QNXNTO__
 #include <sys/neutrino.h>
 #include <sys/netmgr.h>
@@ -31,6 +30,8 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 #include "edp/common/edp_e_manip_and_conv.h"
+
+#include "edp/common/servo_gr.h"
 
 #include "lib/mathtr.h"
 
@@ -59,8 +60,6 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
     controller_state_edp_buf.is_robot_blocked = false;
 
     real_reply_type = lib::ACKNOWLEDGE;
-    // inicjacja deskryptora pliku by 7&Y
-    // servo_fd = name_open(lib::EDP_ATTACH_POINT, 0);
 
     // is_get_arm_read_hardware=false;
     previous_set_arm_type = lib::MOTOR;
@@ -83,7 +82,8 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
     ThreadCtl (_NTO_TCTL_IO, NULL);
 #endif
 
-    // z edp_m
+    // create servo buffer object before starting EDP threads
+    sb_ptr = return_created_servo_buffer(*this);
 
     if (test_mode)
     {
@@ -98,6 +98,9 @@ manip_and_conv_effector::~manip_and_conv_effector() {
 	ConnectDetach_r(servo_fd);
 	ChannelDestroy_r(servo_to_tt_chid);
 #endif
+
+	// delete servo buffer object
+	delete sb_ptr;
 }
 
 void manip_and_conv_effector::master_joints_read (double* output)
@@ -937,14 +940,17 @@ void manip_and_conv_effector::common_get_controller_state(lib::c_buffer &instruc
     // dla pierwszego wypelnienia current_joints
     get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
+    pthread_mutex_lock( &edp_irp6s_effector_mutex);
+
     // Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
     for( int i = 0; i < number_of_servos; i++)
     {
-    	// TODO: race condition at servo_current_motor_pos
         servo_current_motor_pos[i] = desired_motor_pos_new_tmp[i] = desired_motor_pos_new[i] =
                                      desired_motor_pos_old[i] = current_motor_pos[i];
         desired_joints_tmp[i] = desired_joints[i] = current_joints[i];
     }
+
+    pthread_mutex_unlock( &edp_irp6s_effector_mutex);
 }
 
 
