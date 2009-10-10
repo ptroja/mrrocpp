@@ -111,52 +111,8 @@ void ui_common_robot::execute_motion(void)
 
 	// TODO: in QNX/Photon exceptions are handled at the main loop
 	// in GTK exceptions triggered signals cannot be handled in main loop
-#ifdef __gnu_linux__
-//#if 0
-	try {
-		ecp->execute_motion();
-	}
 
-	catch (ecp::common::ecp_robot::ECP_main_error e) {
-		/* Obsluga bledow ECP */
-		if (e.error_class == lib::SYSTEM_ERROR)
-			printf("ECP lib::SYSTEM_ERROR error in UI\n");
-//		ui_state.ui_state = 2;
-		/*  exit(EXIT_FAILURE);*/
-	}
-
-	catch (ecp::common::ecp_robot::ECP_error er) {
-		/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */
-		if (er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunikat do SR */
-			perror("ECP lib::SYSTEM_ERROR in UI\n");
-			/* PtExit( EXIT_SUCCESS ); */
-		} else {
-			switch (er.error_no)
-			{
-				case INVALID_POSE_SPECIFICATION:
-				case INVALID_ECP_COMMAND:
-				case INVALID_COMMAND_TO_EDP:
-				case EDP_ERROR:
-				case INVALID_EDP_REPLY:
-				case INVALID_RMODEL_TYPE:
-					/* Komunikat o bledzie wysylamy do SR */
-					ecp->sr_ecp_msg.message(lib::NON_FATAL_ERROR, er.error_no);
-					break;
-				default:
-					ecp->sr_ecp_msg.message(lib::NON_FATAL_ERROR, 0, "ECP: Unidentified exception");
-					perror("Unidentified exception");
-			} /* end: switch */
-		}
-	} /* end: catch */
-
-	catch (...) { /* Dla zewnetrznej petli try*/
-		/* Wylapywanie niezdefiniowanych bledow*/
-		/* Komunikat o bledzie wysylamy do SR (?) */
-		fprintf	(stderr, "unidentified error in UI\n");
-	} /*end: catch */
-#else
-		ecp->execute_motion();
-#endif
+	ecp->execute_motion();
 }
 // ---------------------------------------------------------------
 
@@ -166,7 +122,6 @@ void ui_common_robot::set_desired_position ( double d_position[] )
     // Przepisanie polozen zadanych do tablicy desired_position[]
     for (int j = 0; j < ecp->number_of_servos; j++)
         desired_position[j] = d_position[j];
-
 }
 // ---------------------------------------------------------------
 
@@ -176,7 +131,6 @@ void ui_common_robot::get_current_position ( double c_position[])
     // Pobranie aktualnych polozen
     for (int j = 0; j < ecp->number_of_servos; j++)
         c_position[j] = current_position[j];
-
 }
 // ---------------------------------------------------------------
 
@@ -184,9 +138,8 @@ void ui_common_robot::get_current_position ( double c_position[])
 // zlecenie odczytu numeru modelu kinematyki i korektora oraz numerow
 // algorytmow serwo i numerow zestawow parametrow algorytmow
 
-bool ui_common_robot::get_kinematic (uint8_t* kinematic_model_no)
+void ui_common_robot::get_kinematic (uint8_t* kinematic_model_no)
 {
-
     // Zlecenie odczytu numeru modelu i korektora kinematyki
     ecp->ecp_command.instruction.instruction_type = lib::GET;
     ecp->ecp_command.instruction.get_type = RMODEL_DV; // RMODEL
@@ -194,12 +147,10 @@ bool ui_common_robot::get_kinematic (uint8_t* kinematic_model_no)
     execute_motion();
 
     *kinematic_model_no = ecp->reply_package.rmodel.kinematic_model.kinematic_model_no;
-
-    return true;
 }
 
 
-bool ui_common_robot::get_servo_algorithm ( uint8_t algorithm_no[],
+void ui_common_robot::get_servo_algorithm ( uint8_t algorithm_no[],
         uint8_t parameters_no[])
 {
 
@@ -214,35 +165,27 @@ bool ui_common_robot::get_servo_algorithm ( uint8_t algorithm_no[],
             ecp->number_of_servos*sizeof(uint8_t) );
     memcpy (parameters_no, ecp->reply_package.rmodel.servo_algorithm.servo_parameters_no,
             ecp->number_of_servos*sizeof(uint8_t) );
-
-    return true;
 }
 
 
 // do odczytu stanu poczatkowego robota
-bool ui_common_robot::get_controller_state (lib::controller_state_t & robot_controller_initial_state_l)
+void ui_common_robot::get_controller_state (lib::controller_state_t & robot_controller_initial_state_l)
 {
-
     // Zlecenie odczytu numeru modelu i korektora kinematyki
     ecp->ecp_command.instruction.instruction_type = lib::GET;
     ecp->ecp_command.instruction.get_type = CONTROLLER_STATE_DV;
 
     execute_motion();
 
-    ecp->synchronised = robot_controller_initial_state_l.is_synchronised  = ecp->reply_package.controller_state.is_synchronised;
-    robot_controller_initial_state_l.is_power_on  = ecp->reply_package.controller_state.is_power_on;
-    robot_controller_initial_state_l.is_wardrobe_on  = ecp->reply_package.controller_state.is_wardrobe_on;
-    robot_controller_initial_state_l.is_controller_card_present  = ecp->reply_package.controller_state.is_controller_card_present;
-    robot_controller_initial_state_l.is_robot_blocked  = ecp->reply_package.controller_state.is_robot_blocked;
-    return true;
+    robot_controller_initial_state_l = ecp->reply_package.controller_state;
+    ecp->synchronised = robot_controller_initial_state_l.is_synchronised;
 }
 
 
 
 // ---------------------------------------------------------------
-bool ui_common_robot::set_kinematic (uint8_t kinematic_model_no)
+void ui_common_robot::set_kinematic (uint8_t kinematic_model_no)
 {
-
     // zlecenie zapisu numeru modelu kinematyki i korektora oraz numerow
     // algorytmow serwo i numerow zestawow parametrow algorytmow
 
@@ -255,15 +198,13 @@ bool ui_common_robot::set_kinematic (uint8_t kinematic_model_no)
     ecp->ecp_command.instruction.rmodel.kinematic_model.kinematic_model_no = kinematic_model_no;
 
     execute_motion();
-
-    return true;
 }
 // ---------------------------------------------------------------
 
 
 
 // ---------------------------------------------------------------
-bool ui_common_robot::set_servo_algorithm (uint8_t algorithm_no[],
+void ui_common_robot::set_servo_algorithm (uint8_t algorithm_no[],
         uint8_t parameters_no[] )
 {
 
@@ -278,14 +219,13 @@ bool ui_common_robot::set_servo_algorithm (uint8_t algorithm_no[],
     ecp->ecp_command.instruction.set_rmodel_type = lib::SERVO_ALGORITHM; //
     ecp->ecp_command.instruction.get_rmodel_type = lib::SERVO_ALGORITHM; //
     execute_motion();
-    return true;
 }
 // ---------------------------------------------------------------
 
 
 // ZADANIE NARZEDZIA
 // ---------------------------------------------------------------
-bool ui_common_robot::set_tool_xyz_angle_axis ( double tool_vector[6] )
+void ui_common_robot::set_tool_xyz_angle_axis ( double tool_vector[6] )
 {
 
     ecp->ecp_command.instruction.instruction_type = lib::SET;
@@ -295,15 +235,13 @@ bool ui_common_robot::set_tool_xyz_angle_axis ( double tool_vector[6] )
 
     memcpy (ecp->ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates, tool_vector, 6*sizeof(double) );
     execute_motion();
-
-    return true;
 }
 // ---------------------------------------------------------------
 
 
 // ZADANIE NARZEDZIA
 // ---------------------------------------------------------------
-bool ui_common_robot::set_tool_xyz_euler_zyz ( double tool_vector[6] )
+void ui_common_robot::set_tool_xyz_euler_zyz ( double tool_vector[6] )
 {
 
     ecp->ecp_command.instruction.instruction_type = lib::SET;
@@ -313,8 +251,6 @@ bool ui_common_robot::set_tool_xyz_euler_zyz ( double tool_vector[6] )
 
     memcpy (ecp->ecp_command.instruction.rmodel.tool_coordinate_def.tool_coordinates, tool_vector, 6*sizeof(double) );
     execute_motion();
-
-    return true;
 }
 // ---------------------------------------------------------------
 
@@ -322,7 +258,7 @@ bool ui_common_robot::set_tool_xyz_euler_zyz ( double tool_vector[6] )
 
 // ODCZYT NARZEDZIA
 // ---------------------------------------------------------------
-bool ui_common_robot::read_tool_xyz_angle_axis ( double tool_vector[6] )
+void ui_common_robot::read_tool_xyz_angle_axis ( double tool_vector[6] )
 {
 
     // Zlecenie odczytu numeru modelu i korektora kinematyki
@@ -334,15 +270,13 @@ bool ui_common_robot::read_tool_xyz_angle_axis ( double tool_vector[6] )
     execute_motion();
 
     memcpy (tool_vector, ecp->reply_package.rmodel.tool_coordinate_def.tool_coordinates, 6*sizeof(double) );
-
-    return true;
 }
 // ---------------------------------------------------------------
 
 
 // ODCZYT NARZEDZIA
 // ---------------------------------------------------------------
-bool ui_common_robot::read_tool_xyz_euler_zyz ( double tool_vector[6] )
+void ui_common_robot::read_tool_xyz_euler_zyz ( double tool_vector[6] )
 {
 
     // Zlecenie odczytu numeru modelu i korektora kinematyki
@@ -354,14 +288,12 @@ bool ui_common_robot::read_tool_xyz_euler_zyz ( double tool_vector[6] )
     execute_motion();
 
     memcpy (tool_vector, ecp->reply_package.rmodel.tool_coordinate_def.tool_coordinates, 6*sizeof(double) );
-
-    return true;
 }
 // ---------------------------------------------------------------
 
 
 // ---------------------------------------------------------------
-bool ui_common_robot::move_motors ( double final_position[] )
+void ui_common_robot::move_motors ( double final_position[] )
 {
     // Zlecenie wykonania makrokroku ruchu zadanego dla walow silnikow
     int nr_of_steps, nr_ang, nr_grip; // Liczba krokow
@@ -377,11 +309,8 @@ bool ui_common_robot::move_motors ( double final_position[] )
     {  // Robot zsynchronizowany
         // Odczyt aktualnego polozenia
         //   	printf("is synchronised przed read motors\n");
-        if (!read_motors(current_position))
-        {
-            //   printf("przyslowiowa p... mokra \n");
-            return false;
-        }
+        read_motors(current_position);
+
         for (int j = 0; j < ecp->number_of_servos; j++)
         {
             temp = fabs(final_position[j] - current_position[j]);
@@ -427,7 +356,8 @@ bool ui_common_robot::move_motors ( double final_position[] )
     ecp->ecp_command.instruction.value_in_step_no = nr_of_steps;
 
     if (nr_of_steps < 1) // Nie wykowywac bo zadano ruch do aktualnej pozycji
-        return true;
+        return;
+
     for (int j = 0; j < ecp->number_of_servos; j++)
     {
         ecp->ecp_command.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
@@ -443,27 +373,23 @@ bool ui_common_robot::move_motors ( double final_position[] )
     if (ecp->is_synchronised())
         for (int j = 0; j < ecp->number_of_servos; j++) // Przepisanie aktualnych polozen
             current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
-
-    return true;
 }
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-bool ui_common_robot::move_joints (double final_position[] )
+void ui_common_robot::move_joints (double final_position[] )
 {
     // Zlecenie wykonania makrokroku ruchu zadanego dla wspolrzednych wewnetrznych
     int nr_of_steps; // Liczba krokow
     int nr_ang, nr_grip, nr_lin;
     double max_inc_ang = 0.0, max_inc_lin = 0.0, max_inc_grip = 0.0  , temp = 0.0; // Zmienne pomocnicze
-    int j;
 
     max_inc_ang = max_inc_lin = 0.0;
 
     // Odczyt aktualnego polozenia
-    if (!read_joints(current_position))
-        return false;
+    read_joints(current_position);
 
-    for (j = 0; j < ecp->number_of_servos; j++)
+    for (int j = 0; j < ecp->number_of_servos; j++)
     {
         temp = fabs(final_position[j] - current_position[j]);
         if ( ecp->robot_name == lib::ROBOT_IRP6_ON_TRACK && j == 0 )  // tor
@@ -496,9 +422,9 @@ bool ui_common_robot::move_joints (double final_position[] )
     ecp->ecp_command.instruction.value_in_step_no = nr_of_steps;
 
     if (nr_of_steps < 1) // Nie wykowywac bo zadano ruch do aktualnej pozycji
-        return true;
+        return;
 
-    for (j = 0; j < ecp->number_of_servos; j++)
+    for (int j = 0; j < ecp->number_of_servos; j++)
     {
         ecp->ecp_command.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
         ecp->ecp_command.instruction.arm.pf_def.desired_torque[j]  = final_position[j];
@@ -506,15 +432,13 @@ bool ui_common_robot::move_joints (double final_position[] )
 
     execute_motion();
 
-    for (j = 0; j < ecp->number_of_servos; j++) // Przepisanie aktualnych polozen
+    for (int j = 0; j < ecp->number_of_servos; j++) // Przepisanie aktualnych polozen
         current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
-
-    return true;
 }
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-bool ui_common_robot::move_xyz_euler_zyz ( double final_position[7] )
+void ui_common_robot::move_xyz_euler_zyz ( double final_position[7] )
 {
     // Zlecenie wykonania makrokroku ruchu zadanego we wspolrzednych
     // zewnetrznych: xyz i katy Euler'a Z-Y-Z
@@ -522,13 +446,12 @@ bool ui_common_robot::move_xyz_euler_zyz ( double final_position[7] )
     int nr_of_steps; // Liczba krokow
     int nr_ang, nr_lin, nr_grip;
     double max_inc_ang = 0.0, max_inc_lin = 0.0, max_inc_grip = 0.0 , temp_lin, temp_ang, temp_grip; // Zmienne pomocnicze
-    int j;
 
     max_inc_ang = max_inc_lin = 0.0;
     // Odczyt aktualnego polozenia we wsp. zewn. xyz i katy Euler'a Z-Y-Z
-    if (!read_xyz_euler_zyz(current_position))
-        return false;
-    for (j = 0; j < 3; j++)
+    read_xyz_euler_zyz(current_position);
+
+    for (int j = 0; j < 3; j++)
     {
         temp_lin = fabs(final_position[j] - current_position[j]);
         temp_ang = fabs(final_position[j+3] - current_position[j+3]);
@@ -558,12 +481,10 @@ bool ui_common_robot::move_xyz_euler_zyz ( double final_position[7] )
 
     // cprintf("eNOS=%u\n",ecp->ecp_command.instruction.motion_steps);
     if (nr_of_steps < 1) // Nie wykowywac bo zadano ruch do aktualnej pozycji
-    {
-        return true;
-    }
+        return;
 
 
-    for (j = 0; j < 6; j++)
+    for (int j = 0; j < 6; j++)
     {
         ecp->ecp_command.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
     }
@@ -571,18 +492,16 @@ bool ui_common_robot::move_xyz_euler_zyz ( double final_position[7] )
 
     execute_motion();
 
-    for (j = 0; j < 6; j++)
+    for (int j = 0; j < 6; j++)
     { // Przepisanie aktualnych polozen
         current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
     }
     current_position[6] = ecp->reply_package.arm.pf_def.gripper_coordinate;
-
-    return true;
 }
 // ---------------------------------------------------------------
 
 
-bool ui_common_robot::move_xyz_angle_axis ( double final_position[7] )
+void ui_common_robot::move_xyz_angle_axis ( double final_position[7] )
 {
     double aa_eul[6];	// tablica przechowujaca polecenie przetransformowane
     // do formy XYZ_EULER_ZYZ
@@ -604,18 +523,16 @@ bool ui_common_robot::move_xyz_angle_axis ( double final_position[7] )
     A.get_xyz_euler_zyz(aa_eul);	// zadane polecenie w formie XYZ_EULER_ZYZ
 
     // Odczyt aktualnego polozenia we wsp. zewn. xyz i katy Euler'a Z-Y-Z
-    if (!read_xyz_euler_zyz(current_position))
-        return false;
+    read_xyz_euler_zyz(current_position);
 
     // Wyznaczenie liczby krokow
 
     int nr_of_steps; // Liczba krokow
     int nr_ang, nr_lin, nr_grip;
     double max_inc_ang = 0.0, max_inc_lin = 0.0, max_inc_grip = 0.0 , temp_lin, temp_ang, temp_grip; // Zmienne pomocnicze
-    int i,j;	// licznik petli
 
     max_inc_ang = max_inc_lin = 0.0;
-    for (i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
         temp_lin = fabs(aa_eul[i] - current_position[i]);
         temp_ang = fabs(aa_eul[i+3] - current_position[i+3]);
@@ -637,7 +554,7 @@ bool ui_common_robot::move_xyz_angle_axis ( double final_position[7] )
 
     // Zadano ruch do aktualnej pozycji
     if (nr_of_steps < 1)
-        return true;
+        return;
 
     ecp->ecp_command.instruction.instruction_type = lib::SET_GET;
     ecp->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
@@ -648,7 +565,7 @@ bool ui_common_robot::move_xyz_angle_axis ( double final_position[7] )
     ecp->ecp_command.instruction.motion_steps = nr_of_steps;
     ecp->ecp_command.instruction.value_in_step_no = nr_of_steps;
 
-    for (j = 0; j < 6; j++)
+    for (int j = 0; j < 6; j++)
     {
         ecp->ecp_command.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
     }
@@ -656,78 +573,71 @@ bool ui_common_robot::move_xyz_angle_axis ( double final_position[7] )
     ecp->ecp_command.instruction.arm.pf_def.gripper_coordinate = final_position[6];
     execute_motion();
 
-    for (j = 0; j < 6; j++)
+    for (int j = 0; j < 6; j++)
     { // Przepisanie aktualnych polozen
         current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
     }
     current_position[6] = ecp->reply_package.arm.pf_def.gripper_coordinate;
-
-    return true;
 }
 
 
-bool ui_common_robot::move_xyz_angle_axis_relative ( double position_increment[7] )
+void ui_common_robot::move_xyz_angle_axis_relative ( double position_increment[7] )
 {
+	int nr_of_steps; // Liczba krokow
+	int nr_ang, nr_lin, nr_grip;
 
-	    int nr_of_steps; // Liczba krokow
-	    int nr_ang, nr_lin, nr_grip;
+	double max_inc_ang = 0.0, max_inc_lin = 0.0, max_inc_grip = 0.0 , temp_lin, temp_ang, temp_grip; // Zmienne pomocnicze
 
-	    double max_inc_ang = 0.0, max_inc_lin = 0.0, max_inc_grip = 0.0 , temp_lin, temp_ang, temp_grip; // Zmienne pomocnicze
-	    int i,j;	// licznik petli
+	max_inc_ang = max_inc_lin = 0.0;
+	for (int i = 0; i < 3; i++)
+	{
+		temp_lin = fabs(position_increment[i]);
+		temp_ang = fabs(position_increment[i+3]);
+		if(temp_ang > max_inc_ang)
+			max_inc_ang = temp_ang;
+		if(temp_lin > max_inc_lin)
+			max_inc_lin = temp_lin;
+	}
 
-	    max_inc_ang = max_inc_lin = 0.0;
-	    for (i = 0; i < 3; i++)
-	    {
-	        temp_lin = fabs(position_increment[i]);
-	        temp_ang = fabs(position_increment[i+3]);
-	        if(temp_ang > max_inc_ang)
-	            max_inc_ang = temp_ang;
-	        if(temp_lin > max_inc_lin)
-	            max_inc_lin = temp_lin;
-	    }
+	max_inc_grip = fabs(position_increment[6]);
 
-		   max_inc_grip = fabs(position_increment[6]);
+	nr_ang = (int) ceil(max_inc_ang / END_EFFECTOR_ANGULAR_STEP);
+	nr_lin = (int) ceil(max_inc_lin / END_EFFECTOR_LINEAR_STEP);
+	nr_grip = (int) ceil(max_inc_grip / END_EFFECTOR_GRIPPER_STEP);
 
-	    nr_ang = (int) ceil(max_inc_ang / END_EFFECTOR_ANGULAR_STEP);
-	    nr_lin = (int) ceil(max_inc_lin / END_EFFECTOR_LINEAR_STEP);
-	    nr_grip = (int) ceil(max_inc_grip / END_EFFECTOR_GRIPPER_STEP);
+	nr_of_steps = (nr_ang > nr_lin) ? nr_ang : nr_lin;
+	nr_of_steps = (nr_of_steps > nr_grip) ? nr_of_steps : nr_grip;
 
-	    nr_of_steps = (nr_ang > nr_lin) ? nr_ang : nr_lin;
-	    nr_of_steps = (nr_of_steps > nr_grip) ? nr_of_steps : nr_grip;
+	// Zadano ruch do aktualnej pozycji
+	if (nr_of_steps < 1)
+		return;
 
-	    // Zadano ruch do aktualnej pozycji
-	    if (nr_of_steps < 1)
-	        return true;
+	ecp->ecp_command.instruction.instruction_type = lib::SET_GET;
+	ecp->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
+	ecp->ecp_command.instruction.set_type = ARM_DV; // ARM
+	ecp->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
+	ecp->ecp_command.instruction.motion_type = lib::RELATIVE;
+	ecp->ecp_command.instruction.interpolation_type = lib::MIM;
+	ecp->ecp_command.instruction.motion_steps = nr_of_steps;
+	ecp->ecp_command.instruction.value_in_step_no = nr_of_steps;
 
+	for (int j = 0; j < 6; j++)
+	{
+		ecp->ecp_command.instruction.arm.pf_def.arm_coordinates[j] = position_increment[j];
+	}
 
-	  ecp->ecp_command.instruction.instruction_type = lib::SET_GET;
-	    ecp->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
-	    ecp->ecp_command.instruction.set_type = ARM_DV; // ARM
-	    ecp->ecp_command.instruction.set_arm_type = lib::XYZ_ANGLE_AXIS;
-	    ecp->ecp_command.instruction.motion_type = lib::RELATIVE;
-	    ecp->ecp_command.instruction.interpolation_type = lib::MIM;
-	    ecp->ecp_command.instruction.motion_steps = nr_of_steps;
-	    ecp->ecp_command.instruction.value_in_step_no = nr_of_steps;
-
-	    for (j = 0; j < 6; j++)
-	    {
-	        ecp->ecp_command.instruction.arm.pf_def.arm_coordinates[j] = position_increment[j];
-	    }
-
-	    ecp->ecp_command.instruction.arm.pf_def.gripper_coordinate = position_increment[6];
-	    execute_motion();
-
-	return true;
+	ecp->ecp_command.instruction.arm.pf_def.gripper_coordinate = position_increment[6];
+	execute_motion();
 }
 
 
 
 
 // ---------------------------------------------------------------
-bool ui_common_robot::read_motors ( double current_position[] )
+void ui_common_robot::read_motors ( double current_position[] )
 {
     // Zlecenie odczytu polozenia
-    int j;
+
     // printf("poczatek read motors\n");
     // Parametry zlecenia ruchu i odczytu polozenia
     ecp->ecp_command.instruction.get_type = ARM_DV;
@@ -737,20 +647,19 @@ bool ui_common_robot::read_motors ( double current_position[] )
 
     execute_motion();
     // printf("dalej za query read motors\n");
-    for (j = 0; j < ecp->number_of_servos; j++) // Przepisanie aktualnych polozen
-        // { // printf("current position: %f\n",ecp->reply_package.arm.pf_def.arm_coordinates[j]);
-        current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
+    for (int i = 0; i < ecp->number_of_servos; i++) // Przepisanie aktualnych polozen
+        // { // printf("current position: %f\n",ecp->reply_package.arm.pf_def.arm_coordinates[i]);
+        current_position[i] = ecp->reply_package.arm.pf_def.arm_coordinates[i];
     // 			    }
     // printf("koniec read motors\n");
-    return true;
 }
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-bool ui_common_robot::read_joints ( double current_position[] )
+void ui_common_robot::read_joints ( double current_position[] )
 {
     // Zlecenie odczytu polozenia
-    int j;
+
     // Parametry zlecenia ruchu i odczytu polozenia
     ecp->ecp_command.instruction.instruction_type = lib::GET;
     ecp->ecp_command.instruction.get_type = ARM_DV;
@@ -759,17 +668,16 @@ bool ui_common_robot::read_joints ( double current_position[] )
 
     execute_motion();
 
-    for (j = 0; j < ecp->number_of_servos; j++) // Przepisanie aktualnych polozen
-        current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
-    return true;
+    for (int i = 0; i < ecp->number_of_servos; i++) // Przepisanie aktualnych polozen
+        current_position[i] = ecp->reply_package.arm.pf_def.arm_coordinates[i];
 }
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-bool ui_common_robot::read_xyz_euler_zyz (double current_position[])
+void ui_common_robot::read_xyz_euler_zyz (double current_position[])
 {
     // Zlecenie odczytu polozenia
-    int j;
+
     // Parametry zlecenia ruchu i odczytu polozenia
     ecp->ecp_command.instruction.get_type = ARM_DV;
     ecp->ecp_command.instruction.instruction_type = lib::GET;
@@ -778,19 +686,18 @@ bool ui_common_robot::read_xyz_euler_zyz (double current_position[])
 
     execute_motion();
 
-    for (j = 0; j < 6; j++) // Przepisanie aktualnych polozen
-        current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
+    for (int i = 0; i < 6; i++) // Przepisanie aktualnych polozen
+        current_position[i] = ecp->reply_package.arm.pf_def.arm_coordinates[i];
     current_position[6] = ecp->reply_package.arm.pf_def.gripper_coordinate;
-
-    return true;
 }
 // ---------------------------------------------------------------
 
 
-bool ui_common_robot::read_xyz_angle_axis (double current_position[])
+void ui_common_robot::read_xyz_angle_axis (double current_position[])
 {
     // Pobranie aktualnego polozenia ramienia robota
 
+    // Parametry zlecenia ruchu i odczytu polozenia
     ecp->ecp_command.instruction.get_type = ARM_DV;
     ecp->ecp_command.instruction.instruction_type = lib::GET;
     ecp->ecp_command.instruction.get_arm_type = lib::XYZ_ANGLE_AXIS;
@@ -801,6 +708,4 @@ bool ui_common_robot::read_xyz_angle_axis (double current_position[])
     for(int i=0; i<6; i++)
         current_position[i] = ecp->reply_package.arm.pf_def.arm_coordinates[i];
     current_position[6] = ecp->reply_package.arm.pf_def.gripper_coordinate;
-
-    return true;
 }

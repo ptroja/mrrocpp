@@ -53,29 +53,29 @@ class ui_common_robot {
   virtual void get_current_position ( double c_position[MAX_SERVOS_NR] );  // Pobranie aktualnych polozen
 
   // by Y - do odczytu stanu poczatkowego robota
-  bool get_controller_state (lib::controller_state_t & robot_controller_initial_state_l);
+  void get_controller_state (lib::controller_state_t & robot_controller_initial_state_l);
 
   // Zlecenie ruchu
-  bool move_motors ( double final_position[MAX_SERVOS_NR] );
-  bool move_joints ( double final_position[MAX_SERVOS_NR] );
-  bool move_xyz_euler_zyz ( double final_position[7] );
-  bool move_xyz_angle_axis ( double final_position[7] );
-  bool move_xyz_angle_axis_relative ( double position_increment[7] );
-  bool set_tool_xyz_angle_axis ( double tool_vector[6] );
-  bool set_tool_xyz_euler_zyz ( double tool_vector[6] );
-  bool set_kinematic (uint8_t kinematic_model_no);
-  bool set_servo_algorithm (uint8_t algorithm_no[MAX_SERVOS_NR],
+  void move_motors ( double final_position[MAX_SERVOS_NR] );
+  void move_joints ( double final_position[MAX_SERVOS_NR] );
+  void move_xyz_euler_zyz ( double final_position[7] );
+  void move_xyz_angle_axis ( double final_position[7] );
+  void move_xyz_angle_axis_relative ( double position_increment[7] );
+  void set_tool_xyz_angle_axis ( double tool_vector[6] );
+  void set_tool_xyz_euler_zyz ( double tool_vector[6] );
+  void set_kinematic (uint8_t kinematic_model_no);
+  void set_servo_algorithm (uint8_t algorithm_no[MAX_SERVOS_NR],
   uint8_t parameters_no[MAX_SERVOS_NR] );
 
   // Odczyt polozenia
-  bool read_motors ( double current_position[MAX_SERVOS_NR] );
-  bool read_joints ( double current_position[MAX_SERVOS_NR] );
-  bool read_xyz_euler_zyz ( double current_position[7] );
-  bool read_xyz_angle_axis ( double current_position[7] );
-  bool read_tool_xyz_angle_axis ( double tool_vector[6] );
-  bool read_tool_xyz_euler_zyz ( double tool_vector[6] );
-  bool get_kinematic (uint8_t* kinematic_model_no);
-  bool get_servo_algorithm ( uint8_t algorithm_no[MAX_SERVOS_NR],
+  void read_motors ( double current_position[MAX_SERVOS_NR] );
+  void read_joints ( double current_position[MAX_SERVOS_NR] );
+  void read_xyz_euler_zyz ( double current_position[7] );
+  void read_xyz_angle_axis ( double current_position[7] );
+  void read_tool_xyz_angle_axis ( double tool_vector[6] );
+  void read_tool_xyz_euler_zyz ( double tool_vector[6] );
+  void get_kinematic (uint8_t* kinematic_model_no);
+  void get_servo_algorithm ( uint8_t algorithm_no[MAX_SERVOS_NR],
   uint8_t parameters_no[MAX_SERVOS_NR]);
 
 };

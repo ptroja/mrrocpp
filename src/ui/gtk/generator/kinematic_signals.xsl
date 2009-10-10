@@ -39,12 +39,14 @@ extern "C"
 		{
 			if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				if (!( robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_kinematic(&amp;model_no))) // Odczyt polozenia walow silnikow
-					fprintf(stderr, "read kinematics failed\n");
-
-					snprintf (buf, sizeof(buf), "%u", model_no);
-					gtk_entry_set_text(entry1_kinematic_</xsl:text><xsl:value-of select="$name" /><xsl:text>, buf);
-
+			    try {
+    				robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_kinematic(&amp;model_no); // Odczyt polozenia walow silnikow
+    
+    				snprintf (buf, sizeof(buf), "%u", model_no);
+    				gtk_entry_set_text(entry1_kinematic_</xsl:text><xsl:value-of select="$name" /><xsl:text>, buf);
+                }
+                
+                </xsl:text><xsl:call-template name="catch" /><xsl:text>
 			}
 			else
 			{

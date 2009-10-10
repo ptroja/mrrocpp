@@ -44,29 +44,32 @@ extern "C"
 		{
 			if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				if (!( robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->read_tool_xyz_angle_axis(tool_vector_a))) // Odczyt polozenia walow silnikow
-					fprintf(stderr, "read axis_tool failed\n");
-					
-				alfa = sqrt(tool_vector_a[3]*tool_vector_a[3]
-				+tool_vector_a[4]*tool_vector_a[4]
-				+tool_vector_a[5]*tool_vector_a[5]);
-				
-				if (alfa==0){
-					tool_vector_a[3] = -1;
-					tool_vector_a[4] = 0;
-					tool_vector_a[5] = 0;
-				}
-				else{
-					tool_vector_a[3] = tool_vector_a[3]/alfa;
-					tool_vector_a[4] = tool_vector_a[4]/alfa;
-					tool_vector_a[5] = tool_vector_a[5]/alfa;
-				}
-					
-</xsl:text><xsl:call-template name="irp6.xyz_angle_axis_tool.repeat.signals.cc.read.2">
-    				<xsl:with-param name="xyz_angle_axis_tool" select="$xyz_angle_axis_tool"/>
-					<xsl:with-param name="name" select="$name"/>
-					<xsl:with-param name="i" select="1"/>
- 				</xsl:call-template><xsl:text>				
+			    try {
+    				robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->read_tool_xyz_angle_axis(tool_vector_a); // Odczyt polozenia walow silnikow
+    					
+    				alfa = sqrt(tool_vector_a[3]*tool_vector_a[3]
+    				+tool_vector_a[4]*tool_vector_a[4]
+    				+tool_vector_a[5]*tool_vector_a[5]);
+    				
+    				if (alfa==0){
+    					tool_vector_a[3] = -1;
+    					tool_vector_a[4] = 0;
+    					tool_vector_a[5] = 0;
+    				}
+    				else{
+    					tool_vector_a[3] = tool_vector_a[3]/alfa;
+    					tool_vector_a[4] = tool_vector_a[4]/alfa;
+    					tool_vector_a[5] = tool_vector_a[5]/alfa;
+    				}
+    					
+    </xsl:text><xsl:call-template name="irp6.xyz_angle_axis_tool.repeat.signals.cc.read.2">
+        				<xsl:with-param name="xyz_angle_axis_tool" select="$xyz_angle_axis_tool"/>
+    					<xsl:with-param name="name" select="$name"/>
+    					<xsl:with-param name="i" select="1"/>
+     				</xsl:call-template><xsl:text>				
+     			}
+     			
+     				</xsl:text><xsl:call-template name="catch" /><xsl:text disable-output-escaping="yes">
 			}
 			else
 			{

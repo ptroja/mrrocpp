@@ -42,14 +42,17 @@ extern "C"
 		{
 			if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				if (!( robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->read_tool_xyz_euler_zyz(tool_vector_e))) // Odczyt polozenia walow silnikow
-					fprintf(stderr, "read euler_zyz_tool failed\n");
-					
-</xsl:text><xsl:call-template name="irp6.xyz_euler_zyz_tool.repeat.signals.cc.read.2">
-    				<xsl:with-param name="xyz_euler_zyz_tool" select="$xyz_euler_zyz_tool"/>
-					<xsl:with-param name="name" select="$name"/>
-					<xsl:with-param name="i" select="1"/>
- 				</xsl:call-template><xsl:text>				
+			    try {
+    				robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->read_tool_xyz_euler_zyz(tool_vector_e); // Odczyt polozenia walow silnikow
+    					
+    </xsl:text><xsl:call-template name="irp6.xyz_euler_zyz_tool.repeat.signals.cc.read.2">
+        				<xsl:with-param name="xyz_euler_zyz_tool" select="$xyz_euler_zyz_tool"/>
+    					<xsl:with-param name="name" select="$name"/>
+    					<xsl:with-param name="i" select="1"/>
+     				</xsl:call-template><xsl:text>				
+     			}
+     			
+     			</xsl:text><xsl:call-template name="catch" /><xsl:text>
 			}
 			else
 			{

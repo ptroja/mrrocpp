@@ -27,6 +27,7 @@ Main generator file - includes xsl files for each window
 <xsl:include href="festival_signals.xsl" />
 <xsl:include href="timestamp.xsl" />
 <xsl:include href="festival.xsl" />
+<xsl:include href="catch.xsl" />
 
 <xsl:template name="call.all.irp6.templates" match="*[substring(name(),1,4)='irp6']">
 <xsl:variable name="motorsNo" select="motorsNo"/>

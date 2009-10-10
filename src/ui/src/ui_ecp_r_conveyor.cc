@@ -30,7 +30,6 @@
 ui_conveyor_robot::ui_conveyor_robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg)
         : robot (_config, sr_ecp_msg)
 {
-
     // Konstruktor klasy
     ecp_command.instruction.rmodel.kinematic_model.kinematic_model_no = 0;
     ecp_command.instruction.get_type = ARM_DV; // ARM
@@ -45,6 +44,7 @@ ui_conveyor_robot::ui_conveyor_robot (lib::configurator &_config, lib::sr_ecp &_
     MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
     JOINT_LINEAR_STEP = 0.00004;     // Przyrost liniowy w przegubach posuwistych [m]
 
+    ecp = this;
 }
 // ---------------------------------------------------------------
 
@@ -55,7 +55,6 @@ void ui_conveyor_robot::execute_motion (void)
     set_ui_state_notification(UI_N_COMMUNICATION);
 
     ecp_robot::execute_motion();
-
 }
 // ---------------------------------------------------------------
 
@@ -65,7 +64,6 @@ void ui_conveyor_robot::set_desired_position ( double d_position[CONVEYOR_NUM_OF
     // Przepisanie polozen zadanych do tablicy desired_position[]
     for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
         desired_position[j] = d_position[j];
-
 }
 // ---------------------------------------------------------------
 
@@ -75,7 +73,6 @@ void ui_conveyor_robot::get_current_position ( double c_position[CONVEYOR_NUM_OF
     // Pobranie aktualnych polozen
     for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
         c_position[j] = current_position[j];
-
 }
 // ---------------------------------------------------------------
 
@@ -83,7 +80,7 @@ void ui_conveyor_robot::get_current_position ( double c_position[CONVEYOR_NUM_OF
 // zlecenie odczytu numeru modelu kinematyki i korektora oraz numerow
 // algorytmow serwo i numerow zestawow parametrow algorytmow
 
-bool ui_conveyor_robot::get_kinematic (uint8_t* kinematic_model_no)
+void ui_conveyor_robot::get_kinematic (uint8_t* kinematic_model_no)
 {
 
     // Zlecenie odczytu numeru modelu i korektora kinematyki
@@ -93,12 +90,10 @@ bool ui_conveyor_robot::get_kinematic (uint8_t* kinematic_model_no)
     execute_motion();
 
     *kinematic_model_no  = reply_package.rmodel.kinematic_model.kinematic_model_no;
-
-    return true;
 }
 
 
-bool ui_conveyor_robot::get_servo_algorithm ( uint8_t algorithm_no[CONVEYOR_NUM_OF_SERVOS],
+void ui_conveyor_robot::get_servo_algorithm ( uint8_t algorithm_no[CONVEYOR_NUM_OF_SERVOS],
         uint8_t parameters_no[CONVEYOR_NUM_OF_SERVOS])
 {
 
@@ -113,33 +108,25 @@ bool ui_conveyor_robot::get_servo_algorithm ( uint8_t algorithm_no[CONVEYOR_NUM_
             CONVEYOR_NUM_OF_SERVOS*sizeof(uint8_t) );
     memcpy (parameters_no, reply_package.rmodel.servo_algorithm.servo_parameters_no,
             CONVEYOR_NUM_OF_SERVOS*sizeof(uint8_t) );
-
-    return true;
 }
 
 
 // do odczytu stanu poczatkowego robota
-bool ui_conveyor_robot::get_controller_state (lib::controller_state_t & robot_controller_initial_state_l)
+void ui_conveyor_robot::get_controller_state (lib::controller_state_t & robot_controller_initial_state_l)
 {
-
     // Zlecenie odczytu numeru modelu i korektora kinematyki
     ecp_command.instruction.instruction_type = lib::GET;
     ecp_command.instruction.get_type = CONTROLLER_STATE_DV;
 
     execute_motion();
 
-    synchronised = robot_controller_initial_state_l.is_synchronised  = reply_package.controller_state.is_synchronised;
-    robot_controller_initial_state_l.is_power_on  = reply_package.controller_state.is_power_on;
-    robot_controller_initial_state_l.is_wardrobe_on  = reply_package.controller_state.is_wardrobe_on;
-    robot_controller_initial_state_l.is_controller_card_present  = reply_package.controller_state.is_controller_card_present;
-    robot_controller_initial_state_l.is_robot_blocked  = reply_package.controller_state.is_robot_blocked;
-    return true;
+    robot_controller_initial_state_l = reply_package.controller_state;
+    synchronised = robot_controller_initial_state_l.is_synchronised;
 }
 
 
-
 // ---------------------------------------------------------------
-bool ui_conveyor_robot::set_kinematic (uint8_t kinematic_model_no)
+void ui_conveyor_robot::set_kinematic (uint8_t kinematic_model_no)
 {
 
     // zlecenie zapisu numeru modelu kinematyki i korektora oraz numerow
@@ -154,19 +141,17 @@ bool ui_conveyor_robot::set_kinematic (uint8_t kinematic_model_no)
     ecp_command.instruction.rmodel.kinematic_model.kinematic_model_no = kinematic_model_no;
 
     execute_motion();
-
-    return true;
 }
 // ---------------------------------------------------------------
 
 
 
 // ---------------------------------------------------------------
-bool ui_conveyor_robot::set_servo_algorithm (uint8_t algorithm_no[CONVEYOR_NUM_OF_SERVOS],
+void ui_conveyor_robot::set_servo_algorithm (uint8_t algorithm_no[CONVEYOR_NUM_OF_SERVOS],
         uint8_t parameters_no[CONVEYOR_NUM_OF_SERVOS] )
 {
-
     // Zlecenie zapisu numerow algorytmow i zestawow parametrow
+
     // Przepisanie zadanych numerow algorytmow i zestawow parametrow
     memcpy (ecp_command.instruction.rmodel.servo_algorithm.servo_algorithm_no, algorithm_no,
             CONVEYOR_NUM_OF_SERVOS*sizeof(uint8_t) );
@@ -177,13 +162,12 @@ bool ui_conveyor_robot::set_servo_algorithm (uint8_t algorithm_no[CONVEYOR_NUM_O
     ecp_command.instruction.set_rmodel_type = lib::SERVO_ALGORITHM; //
     ecp_command.instruction.get_rmodel_type = lib::SERVO_ALGORITHM; //
     execute_motion();
-    return true;
 }
 // ---------------------------------------------------------------
 
 
 // ---------------------------------------------------------------
-bool ui_conveyor_robot::move_motors ( double final_position[CONVEYOR_NUM_OF_SERVOS] )
+void ui_conveyor_robot::move_motors ( double final_position[CONVEYOR_NUM_OF_SERVOS] )
 {
     // Zlecenie wykonania makrokroku ruchu zadanego dla walow silnikow
     int nr_of_steps; // Liczba krokow
@@ -199,11 +183,8 @@ bool ui_conveyor_robot::move_motors ( double final_position[CONVEYOR_NUM_OF_SERV
     {  // Robot zsynchronizowany
         // Odczyt aktualnego polozenia
         //   	printf("is synchronised przed read motors\n");
-        if (!read_motors(current_position))
-        {
-            //   printf("przyslowiowa p... mokra \n");
-            return false;
-        }
+        read_motors(current_position);
+
         for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
         {
             temp = fabs(final_position[j] - current_position[j]);
@@ -241,7 +222,7 @@ bool ui_conveyor_robot::move_motors ( double final_position[CONVEYOR_NUM_OF_SERV
     ecp_command.instruction.value_in_step_no = nr_of_steps;
 
     if (nr_of_steps < 1) // Nie wykowywac bo zadano ruch do aktualnej pozycji
-        return true;
+        return;
     for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
         ecp_command.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
 
@@ -252,33 +233,27 @@ bool ui_conveyor_robot::move_motors ( double final_position[CONVEYOR_NUM_OF_SERV
     if (is_synchronised())
         for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
             current_position[j] = reply_package.arm.pf_def.arm_coordinates[j];
-
-    return true;
 }
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-bool ui_conveyor_robot::move_joints (double final_position[CONVEYOR_NUM_OF_SERVOS] )
+void ui_conveyor_robot::move_joints (double final_position[CONVEYOR_NUM_OF_SERVOS] )
 {
     // Zlecenie wykonania makrokroku ruchu zadanego dla wspolrzednych wewnetrznych
     int nr_of_steps; // Liczba krokow
 
     double max_inc_lin = 0.0 , temp = 0.0; // Zmienne pomocnicze
-    int j;
-
 
     // Odczyt aktualnego polozenia
-    if (!read_joints(current_position))
-        return false;
+    read_joints(current_position);
 
-    for (j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
+    for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
     {
         temp = fabs(final_position[j] - current_position[j]);
         max_inc_lin = (max_inc_lin > temp) ? max_inc_lin : temp;
 
     }
     nr_of_steps = (int) ceil(max_inc_lin / JOINT_LINEAR_STEP);
-
 
     // Parametry zlecenia ruchu i odczytu polozenia
     ecp_command.instruction.instruction_type = lib::SET_GET;
@@ -294,26 +269,24 @@ bool ui_conveyor_robot::move_joints (double final_position[CONVEYOR_NUM_OF_SERVO
     // cprintf("NOS=%u\n",ecp_command.instruction.motion_steps);
 
     if (nr_of_steps < 1) // Nie wykowywac bo zadano ruch do aktualnej pozycji
-        return true;
+        return;
 
-    for (j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
+    for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++)
         ecp_command.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
 
     execute_motion();
 
-    for (j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
+    for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
         current_position[j] = reply_package.arm.pf_def.arm_coordinates[j];
-
-    return true;
 }
 // ---------------------------------------------------------------
 
 
 // ---------------------------------------------------------------
-bool ui_conveyor_robot::read_motors ( double current_position[CONVEYOR_NUM_OF_SERVOS] )
+void ui_conveyor_robot::read_motors ( double current_position[CONVEYOR_NUM_OF_SERVOS] )
 {
     // Zlecenie odczytu polozenia
-    int j;
+
     // printf("poczatek read motors\n");
     // Parametry zlecenia ruchu i odczytu polozenia
     ecp_command.instruction.get_type = ARM_DV;
@@ -322,24 +295,21 @@ bool ui_conveyor_robot::read_motors ( double current_position[CONVEYOR_NUM_OF_SE
     ecp_command.instruction.interpolation_type = lib::MIM;
 
     execute_motion();
-    // printf("za query read motors\n");
-    if ( reply_package.reply_type == lib::ERROR)
-        return false;
+
     // printf("dalej za query read motors\n");
-    for (j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
+    for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
         // { // printf("current position: %f\n",reply_package.arm.pf_def.arm_coordinates[j]);
         current_position[j] = reply_package.arm.pf_def.arm_coordinates[j];
     // 			    }
     // printf("koniec read motors\n");
-    return true;
 }
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-bool ui_conveyor_robot::read_joints ( double current_position[CONVEYOR_NUM_OF_SERVOS] )
+void ui_conveyor_robot::read_joints ( double current_position[CONVEYOR_NUM_OF_SERVOS] )
 {
     // Zlecenie odczytu polozenia
-    int j;
+
     // Parametry zlecenia ruchu i odczytu polozenia
     ecp_command.instruction.instruction_type = lib::GET;
     ecp_command.instruction.get_type = ARM_DV;
@@ -348,10 +318,9 @@ bool ui_conveyor_robot::read_joints ( double current_position[CONVEYOR_NUM_OF_SE
 
     execute_motion();
 
-    for (j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
+    for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) // Przepisanie aktualnych polozen
         current_position[j] = reply_package.arm.pf_def.arm_coordinates[j];
     //   printf("read_joints: %f\n", current_position[0]);
-    return true;
 }
 // ---------------------------------------------------------------
 

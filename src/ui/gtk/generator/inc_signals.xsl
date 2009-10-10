@@ -42,8 +42,8 @@ extern "C"
 		{
 			if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				if (!( robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->read_motors(</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos))) // Odczyt polozenia walow silnikow
-					fprintf(stderr, "read increment failed\n");
+			    try {
+				robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->read_motors(</xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos); // Odczyt polozenia walow silnikow
 					
 </xsl:text><xsl:call-template name="irp6.inc.repeat.signals.cc.read.2">
     				<xsl:with-param name="motorsNo" select="$motorsNo"/>
@@ -52,7 +52,10 @@ extern "C"
  				</xsl:call-template><xsl:text>	
  				
  				for (int i = 0; i &lt; </xsl:text><xsl:value-of select="$motorsNo" /><xsl:text>; i++)
-				</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[i] = </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[i];			
+ 				</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos[i] = </xsl:text><xsl:value-of select="$name" /><xsl:text>_current_pos[i];
+ 			    }
+ 			    
+ 				</xsl:text><xsl:call-template name="catch" /><xsl:text>
 			}
 			else
 			{

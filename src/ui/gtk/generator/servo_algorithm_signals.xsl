@@ -42,14 +42,18 @@ extern "C"
 		{
 				if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised)  // Czy robot jest zsynchronizowany?
 				{
-					if (!(robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_servo_algorithm(servo_alg_no, servo_par_no))) // Odczyt polozenia walow silnikow
-						fprintf(stderr, "get_servo_algorithm failed\n");
-					
-</xsl:text><xsl:call-template name="irp6.servo.repeat.signals.cc.read.2">
-    						<xsl:with-param name="motorsNo" select="$motorsNo"/>
-							<xsl:with-param name="i" select="1"/>
-							<xsl:with-param name="name" select="$name"/>
- 						</xsl:call-template><xsl:text>					
+				    try {
+    					robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_servo_algorithm(servo_alg_no, servo_par_no); // Odczyt polozenia walow silnikow
+    						fprintf(stderr, "get_servo_algorithm failed\n");
+    					
+    </xsl:text><xsl:call-template name="irp6.servo.repeat.signals.cc.read.2">
+        						<xsl:with-param name="motorsNo" select="$motorsNo"/>
+    							<xsl:with-param name="i" select="1"/>
+    							<xsl:with-param name="name" select="$name"/>
+     						</xsl:call-template><xsl:text>					
+     				}
+     				
+     				</xsl:text><xsl:call-template name="catch" /><xsl:text>
 				} else
 				{
 					std::cout &lt;&lt; "Robot is not synchronized" &lt;&lt; std::endl;
