@@ -37,7 +37,7 @@ LDFLAGS+=-Wl,-export-dynamic
 endif
 
 libecp.so: $(ECPOBJ_SHARED)
-	$(CXX) $^ $(LDFLAGS) -shared -o $@
+	$(LD) $^ $(LDFLAGS) -shared -o $@
 	${INSTALL} $@ $(LIBDIR)
 
 #---------------------------------Special object build rules (user made)-------------------------------------#

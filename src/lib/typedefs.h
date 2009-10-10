@@ -116,7 +116,7 @@ extern uint64_t ClockCycles(void);
 
 #define delay(ms)	::usleep(1000*(ms))
 
-#define flushall(x)	(void)0
+#define flushall()	(void)0
 
 #define	out8(port,val)	outb((val),(port))
 #define	out16(port,val)	outw((val),(port))

@@ -29,12 +29,12 @@ generator::ECP_error::ECP_error ( lib::ERROR_CLASS err_cl, uint64_t err_no,
     error.error1 =err1;
 }
 
-bool generator::is_EDP_error (ecp_robot& the_robot) const
+bool generator::is_EDP_error (ecp_robot& _robot) const
 {
     // Sprawdzenie czy nie wystapil blad w EDP
     // Funkcja zaklada, ze error_no zostalo zaktualizowane
     // za pomoca conveyor_generator::get_reply
-    if ( the_robot.EDP_data.error_no.error0 || the_robot.EDP_data.error_no.error1 )
+    if ( _robot.EDP_data.error_no.error0 || _robot.EDP_data.error_no.error1 )
     {
         return true;
     }

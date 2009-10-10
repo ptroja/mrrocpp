@@ -44,9 +44,9 @@ void smooth::set_absolute(void){
 
 bool smooth::eq(double a, double b)
 {
-	const double EPS = 0.0001;
+	const double EPS = 0.0001f;
 	const double diff = a - b;
-	return fabs(diff < EPS);
+	return fabs((double) (diff < EPS));
 }
 
 void smooth::generate_next_coords (void)

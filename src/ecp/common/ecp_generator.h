@@ -39,7 +39,7 @@ class generator : public ecp_mp::generator::generator {
 
 		virtual ~generator();
 
-		bool is_EDP_error (ecp_robot& the_robot) const;
+		bool is_EDP_error (ecp_robot& _robot) const;
 
 		class ECP_error {  // Klasa obslugi bledow generatora
 			public:

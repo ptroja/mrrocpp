@@ -7,6 +7,8 @@
 
 #include "ecp/irp6_on_track/ecp_camera_to_tool.h"
 
+#include <math.h>
+
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot {
@@ -24,7 +26,7 @@ CameraToTool::CameraToTool(double dn, double hn, double an)
 
 void CameraToTool::fillTPE()
 {
-	double b = sqrt(2)/2;
+	double b = sqrt(2.0)/2;
 
 	tpe[0] = tpe[1] = tpe[6] = tpe[7] = tpe[10] = 0;
 	tpe[2] = 1;
@@ -88,7 +90,7 @@ double CameraToTool::computeTCE(double vec1[3], double vec2[3], double vec3[3], 
 double CameraToTool::computeTPC(double vec1[3], double vec2[3], double vec3[3], double vec4[3], double ret[12])
 {
 	double m1234[3], ri1[3], ri2[3], r3[3];
-	double b = a*sqrt(2);
+	double b = a*sqrt(2.0);
 
 
 	for(int i=0; i<3; i++)

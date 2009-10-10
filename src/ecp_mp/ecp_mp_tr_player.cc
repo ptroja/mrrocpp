@@ -270,6 +270,8 @@ void * player::query_loop(void * arg)
 
 		pthread_testcancel();
 	}
+
+	return NULL;
 }
 
 // Set the robot speed
@@ -299,7 +301,7 @@ int player::position_set_cmd_pose(double gx, double gy, double ga, int state)
 	player_position_cmd_t cmd;
 
 	memset(&cmd, 0, sizeof(cmd));
-	
+
 	cmd.xpos = htonl((int) (gx * 1000.0));
 	cmd.ypos = htonl((int) (gy * 1000.0));
 	cmd.yaw = htonl((int) (ga * 180.0 / M_PI));
@@ -314,7 +316,7 @@ int player::say(const char *str)
 {
 	if (if_code != PLAYER_SPEECH_CODE)
 		return -1;
-		
+
 	player_speech_cmd_t cmd;
 
 	memset(&cmd, 0, sizeof(cmd));

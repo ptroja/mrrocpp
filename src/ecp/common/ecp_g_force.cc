@@ -27,6 +27,7 @@
 #include <iostream>
 #include <time.h>
 #include <unistd.h>
+#include <math.h>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
