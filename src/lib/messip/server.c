@@ -11,7 +11,6 @@
 
 int message_handler(messip_channel_t * ch, void * handle)
 {
-
 	int32_t type, subtype;
 	int index;
 	char rec_buff[256], snd_buff[256];

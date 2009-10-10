@@ -53,7 +53,7 @@
 #include <sys/endian.h>
 #elif defined(__QNX__)
 #include <sys/param.h>
-#elif
+#else
 #error Unsupported platform!
 #endif
 
@@ -347,7 +347,7 @@ do_readv( int sockfd,
 #	define TID_DISPLAY	"%010X"
 #elif defined(__QNX__)
 #	define TID_DISPLAY	"%10d"
-#elif
+#else
 #error Unsupported platform!
 #endif
 
@@ -487,7 +487,6 @@ debug_thread( void *arg )
 
 	/*--- Never exit anyway ---*/
 	return NULL;
-
 }								// debug_thread
 
 
@@ -905,7 +904,9 @@ thread_http_thread( void *arg )
 	if ( close( descr->sockfd_accept ) == -1 )
 			fprintf( stderr, "Error %d while closing socket %d\n", errno, descr->sockfd_accept );
 	free( descr );
-	pthread_exit( NULL );
+
+	pthread_exit(NULL);
+
 	return NULL;
 }								// thread_http_thread
 
@@ -1000,6 +1001,7 @@ http_thread( void *arg )
 	/*--- Never exit anyway ---*/
 	if ( close( sockfd ) == -1 )
 		fprintf( stderr, "Error %d while closing socket %d\n", errno, sockfd );
+
 	return NULL;
 
 }								// http_thread

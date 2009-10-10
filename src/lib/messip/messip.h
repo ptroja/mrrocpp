@@ -219,11 +219,14 @@ int messip_death_notify( messip_cnx_t * cnx,
    int32_t msec_timeout,
    int status );
 
+typedef int (*messip_callback_t) (messip_channel_t * ch, void * arg);
+
 messip_dispatch_t *messip_dispatch_create(void);
 void messip_dispatch_delete(messip_dispatch_t *dpp);
 int messip_dispatch_attach(messip_dispatch_t *dpp,
 		messip_channel_t * ch,
-		int (*func) (messip_channel_t * ch, void * arg),
+//		int (*func) (messip_channel_t * ch, void * arg),
+		messip_callback_t func,
 		void * arg);
 //int messip_dispatch_dettach(messip_dispatch_t *dispatch, messip_channel_t * ch);
 int messip_dispatch_block(messip_dispatch_t *dpp, int32_t msec_timeout);

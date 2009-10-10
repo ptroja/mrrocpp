@@ -60,7 +60,7 @@ struct itimerspec
 #	define SIGVAL_PTR sigval_ptr
 #elif defined(__QNX__)
 #	define SIGVAL_PTR sival_ptr
-#elif
+#else
 #error Unsupported platform!
 #endif
 
