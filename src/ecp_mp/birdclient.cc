@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/io.h>
 #include <sys/types.h>
 #include <inttypes.h>
 #include <fcntl.h>
@@ -13,8 +12,9 @@
 #include <errno.h>
 #include <netdb.h>
 #include <math.h>
-
 #include <sys/poll.h>
+#include <netinet/in.h>
+
 #include "ecp_mp/birdclient.h"
 
 namespace mrrocpp {

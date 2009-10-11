@@ -118,10 +118,19 @@ extern uint64_t ClockCycles(void);
 
 #define flushall()	(void)0
 
+#if defined(linux)
 #define	out8(port,val)	outb((val),(port))
 #define	out16(port,val)	outw((val),(port))
 #define	in8(port)		inb(port)
 #define	in16(port)		inw(port)
+#elif defined(__FreeBSD__)
+#include <machine/sysarch.h>
+//#include <machine/cpufunc.h>
+#define	out8(port,val)	outb((port),(val))
+#define	out16(port,val)	outw((port),(val))
+#define	in8(port)		inb(port)
+#define	in16(port)		inw(port)
+#endif
 
 #endif /* ! __QNXNTO__ */
 

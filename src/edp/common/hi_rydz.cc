@@ -16,7 +16,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <stdint.h>
-#ifdef __QNXNTO__
+#if defined(__QNXNTO__)
 #include <process.h>
 #include <sys/neutrino.h>
 #include <sys/sched.h>
@@ -24,9 +24,10 @@
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #include <sys/mman.h>
-#endif
-#ifdef	linux
+#elif defined(linux)
 #include <sys/io.h>
+#elif defined(__FreeBSD__)
+#include <machine/cpufunc.h>
 #endif
 
 #include "lib/typedefs.h"
