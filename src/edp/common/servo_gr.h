@@ -233,8 +233,9 @@ protected:
 
     // output_buffer
     lib::servo_group_reply servo_data;    // informacja przesylana do EDP_MASTER
-
+#ifdef __QNXNTO__
     name_attach_t *attach; // 7&Y
+#endif
     bool send_after_last_step;    // decyduje, czy po realizacji ostatniego
     // kroku makrokroku ma byc wyslane aktualne
     // polozenie walu silnika do EDP_MASTER
