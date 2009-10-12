@@ -15,6 +15,10 @@
 #include <stdint.h>
 #include <signal.h>
 
+/* --- Symbolic names of the error return conditions --- */
+
+#define EOK              0  /* No error */
+
 #define _PULSE_CODE_MINAVAIL	0	/* QNX managers will never use this range */
 
 struct _pulse {
