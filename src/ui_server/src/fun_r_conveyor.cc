@@ -202,9 +202,9 @@ int conveyor_read_joints()
 		{
 			if ( ui_state.conveyor.edp.is_synchronised )
 			{
-				if (!(ui_robot.conveyor->read_joints(vv))) printf("Blad w read motors\n");
+				ui_robot.conveyor->read_joints(vv);
 				v[1] = *vv;
-				if (!(ui_robot.conveyor->read_motors(vv))) printf("Blad w read motors\n");
+				ui_robot.conveyor->read_motors(vv);
 				v[0] = *vv;
 				replySend(new Message('D','A','A',2,v,NULL));
 			}
@@ -222,9 +222,9 @@ int conveyor_read_motors()
 		{
 			if ( ui_state.conveyor.edp.is_synchronised )
 			{
-				if (!(ui_robot.conveyor->read_joints(vv))) printf("Blad w read motors\n");
+				ui_robot.conveyor->read_joints(vv);
 				v[1] = *vv;
-				if (!(ui_robot.conveyor->read_motors(vv))) printf("Blad w read motors\n");
+				ui_robot.conveyor->read_motors(vv);
 				v[0] = *vv;
 				replySend(new Message('D','A','A',2,v,NULL));
 			}

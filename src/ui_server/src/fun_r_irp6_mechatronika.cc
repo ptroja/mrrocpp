@@ -83,13 +83,11 @@ int irp6m_read_kinematic()
 		{
 			if ( ui_state.irp6_mechatronika.edp.is_synchronised )
 			{
-				if (!(ui_robot.irp6_mechatronika->get_kinematic(&model_no))) printf("Blad w read external\n");
-				else
-				{
-					double* v = new double[1];
-					v[0] = model_no;
-					replySend(new Message('F','A','A',1,v,NULL));
-				}
+				ui_robot.irp6_mechatronika->get_kinematic(&model_no);
+
+				double* v = new double[1];
+				v[0] = model_no;
+				replySend(new Message('F','A','A',1,v,NULL));
 			}
 		}
 	}
@@ -108,17 +106,15 @@ int irp6m_read_servo_algorithm()
 		{
 			if ( ui_state.irp6_mechatronika.edp.is_synchronised )
 			{
-				if (!(ui_robot.irp6_mechatronika->get_servo_algorithm(servo_alg_no, servo_par_no))) printf("Blad w mechatronika get_servo_algorithm\n");
-				else
+				ui_robot.irp6_mechatronika->get_servo_algorithm(servo_alg_no, servo_par_no);
+
+				double* v = new double[IRP6_MECHATRONIKA_NUM_OF_SERVOS*2];
+				for(int i = 0;i < IRP6_MECHATRONIKA_NUM_OF_SERVOS;++i)
 				{
-					double* v = new double[IRP6_MECHATRONIKA_NUM_OF_SERVOS*2];
-					for(int i = 0;i < IRP6_MECHATRONIKA_NUM_OF_SERVOS;++i)
-					{
-						v[2*i] = servo_alg_no[i];
-						v[2*i+1] = servo_par_no[i];
-					}
-					replySend(new Message('F','B','A',IRP6_MECHATRONIKA_NUM_OF_SERVOS*2,v,NULL));
+					v[2*i] = servo_alg_no[i];
+					v[2*i+1] = servo_par_no[i];
 				}
+				replySend(new Message('F','B','A',IRP6_MECHATRONIKA_NUM_OF_SERVOS*2,v,NULL));
 			}
 		}
 	}
@@ -137,8 +133,7 @@ int irp6m_read_post_angle_axis()
 		{
 			if ( ui_state.irp6_mechatronika.edp.is_synchronised )  // Czy robot jest zsynchronizowany?
 			{
-				if (!(ui_robot.irp6_mechatronika->read_xyz_angle_axis(irp6m_current_pos))) // Odczyt polozenia walow silnikow
-					printf("Blad w read_xyz_angle_axis\n");
+				ui_robot.irp6_mechatronika->read_xyz_angle_axis(irp6m_current_pos); // Odczyt polozenia walow silnikow
 
 				v[0] = irp6m_current_pos[0];
 				v[1] = irp6m_current_pos[1];
@@ -146,8 +141,8 @@ int irp6m_read_post_angle_axis()
 			//	v[7] = irp6m_current_pos[6];
 
 				alfa = sqrt(irp6m_current_pos[3]*irp6m_current_pos[3]
-				                                                   +irp6m_current_pos[4]*irp6m_current_pos[4]
-				                                                                                           +irp6m_current_pos[5]*irp6m_current_pos[5]);
+						   +irp6m_current_pos[4]*irp6m_current_pos[4]
+						   +irp6m_current_pos[5]*irp6m_current_pos[5]);
 
 				kx = irp6m_current_pos[3]/alfa;
 				ky = irp6m_current_pos[4]/alfa;
@@ -175,9 +170,8 @@ int irp6m_read_post_euler()
 		{
 			if ( ui_state.irp6_mechatronika.edp.is_synchronised )
 			{
-				if (!(ui_robot.irp6_mechatronika->read_xyz_euler_zyz(v)))
-					printf("Blad w read external\n");
-				else replySend(new Message('F','D','A',7,v,NULL));
+				ui_robot.irp6_mechatronika->read_xyz_euler_zyz(v);
+				replySend(new Message('F','D','A',7,v,NULL));
 			}
 		}
 	}
@@ -195,8 +189,8 @@ int irp6m_read_joints()
 		{
 			if ( ui_state.irp6_mechatronika.edp.is_synchronised )
 			{
-				if (!(ui_robot.irp6_mechatronika->read_joints(v))) printf("Blad w read joints\n");
-				else replySend(new Message('F','E','A',IRP6_MECHATRONIKA_NUM_OF_SERVOS,v,NULL));
+				ui_robot.irp6_mechatronika->read_joints(v);
+				replySend(new Message('F','E','A',IRP6_MECHATRONIKA_NUM_OF_SERVOS,v,NULL));
 			}
 		}
 	}
@@ -213,8 +207,8 @@ int irp6m_read_motors()
 		{
 			if ( ui_state.irp6_mechatronika.edp.is_synchronised )
 			{
-				if (!(ui_robot.irp6_mechatronika->read_motors(v))) printf("Blad w read joints\n");
-				else replySend(new Message('F','F','A',IRP6_MECHATRONIKA_NUM_OF_SERVOS,v,NULL));
+				ui_robot.irp6_mechatronika->read_motors(v);
+				replySend(new Message('F','F','A',IRP6_MECHATRONIKA_NUM_OF_SERVOS,v,NULL));
 			}
 		}
 	}
@@ -234,8 +228,7 @@ int irp6m_read_tool_angle()
 		{
 			if ( ui_state.irp6_mechatronika.edp.is_synchronised )  // Czy robot jest zsynchronizowany?
 			{
-				if (!(ui_robot.irp6_mechatronika->read_tool_xyz_angle_axis(v))) // Odczyt polozenia walow silnikow
-					printf("Blad w read external\n");
+				ui_robot.irp6_mechatronika->read_tool_xyz_angle_axis(v); // Odczyt polozenia walow silnikow
 
 				alfa = sqrt(v[3]*v[3]
 				                   +v[4]*v[4]
@@ -274,8 +267,8 @@ int irp6m_read_tool_euler()
 		{
 			if ( ui_state.irp6_mechatronika.edp.is_synchronised )
 			{
-				if (!(ui_robot.irp6_mechatronika->read_tool_xyz_euler_zyz(v))) printf("Blad w read external\n");
-				else replySend(new Message('F','I','A',6,v,NULL));
+				ui_robot.irp6_mechatronika->read_tool_xyz_euler_zyz(v);
+				replySend(new Message('F','I','A',6,v,NULL));
 			}
 		}
 	}
