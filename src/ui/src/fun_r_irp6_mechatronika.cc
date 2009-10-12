@@ -64,8 +64,7 @@ init_wnd_irp6m_xyz_euler_zyz_ts( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 	{
 		if ( ui_state.irp6_mechatronika.edp.is_synchronised )  // Czy robot jest zsynchronizowany?
 		{
-			if (!(ui_robot.irp6_mechatronika->read_tool_xyz_euler_zyz(tool_vector))) // Odczyt polozenia walow silnikow
-				printf("Blad w read external\n");
+			ui_robot.irp6_mechatronika->read_tool_xyz_euler_zyz(tool_vector); // Odczyt polozenia walow silnikow
 
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_ts_read_p1, Pt_ARG_NUMERIC_VALUE, &tool_vector[0] , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_ts_read_p2, Pt_ARG_NUMERIC_VALUE, &tool_vector[1] , 0);
@@ -856,8 +855,7 @@ init_wnd_irp6m_inc( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 		{
 
 			unblock_widget(ABW_PtPane_wind_irp6m_inc_post_synchro_moves);
-			if (!( ui_robot.irp6_mechatronika->read_motors(irp6m_current_pos))) // Odczyt polozenia walow silnikow
-				printf("Blad w read motors\n");
+			ui_robot.irp6_mechatronika->read_motors(irp6m_current_pos); // Odczyt polozenia walow silnikow
 
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_motors_cur_p0, Pt_ARG_NUMERIC_VALUE, &irp6m_current_pos[0] , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_motors_cur_p1, Pt_ARG_NUMERIC_VALUE, &irp6m_current_pos[1] , 0);
@@ -1087,8 +1085,7 @@ init_wnd_irp6m_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 	{
 		if ( ui_state.irp6_mechatronika.edp.is_synchronised )  // Czy robot jest zsynchronizowany?
 		{
-			if (!(ui_robot.irp6_mechatronika->read_joints(irp6m_current_pos))) // Odczyt polozenia walow silnikow
-				printf("Blad w read joints\n");
+			ui_robot.irp6_mechatronika->read_joints(irp6m_current_pos); // Odczyt polozenia walow silnikow
 
 		// 	unblock_widget(ABW_PtPane_wind_irp6m_int_post_synchro_moves);
 
@@ -1190,8 +1187,7 @@ init_wnd_irp6m_kinematic( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 	{
 		if ( ui_state.irp6_mechatronika.edp.is_synchronised )  // Czy robot jest zsynchronizowany?
 		{
-			if (!(ui_robot.irp6_mechatronika->get_kinematic(&model_no))) // Odczyt polozenia walow silnikow
-				printf("Blad w read external\n");
+			ui_robot.irp6_mechatronika->get_kinematic(&model_no); // Odczyt polozenia walow silnikow
 
 			PtSetResource(ABW_PtNumericInteger_wnd_irp6m_read_kinematic_model_no, Pt_ARG_NUMERIC_VALUE, model_no , 0);
 		} else
@@ -1330,8 +1326,7 @@ init_wnd_irp6m_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 	{
 		if ( ui_state.irp6_mechatronika.edp.is_synchronised )  // Czy robot jest zsynchronizowany?
 		{
-			if (!(ui_robot.irp6_mechatronika->get_servo_algorithm(servo_alg_no, servo_par_no))) // Odczyt polozenia walow silnikow
-				printf("Blad w mechatronika get_servo_algorithm\n");
+			ui_robot.irp6_mechatronika->get_servo_algorithm(servo_alg_no, servo_par_no); // Odczyt polozenia walow silnikow
 
 			PtSetResource(ABW_PtNumericInteger_wnd_irp6m_servo_algorithm_read_alg_1, Pt_ARG_NUMERIC_VALUE, servo_alg_no[0] , 0);
 			PtSetResource(ABW_PtNumericInteger_wnd_irp6m_servo_algorithm_read_alg_2, Pt_ARG_NUMERIC_VALUE, servo_alg_no[1] , 0);
@@ -1597,7 +1592,7 @@ init_wnd_irp6m_xyz_angle_axis( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	{
 		if ( ui_state.irp6_mechatronika.edp.is_synchronised )  // Czy robot jest zsynchronizowany?
 		{
-			if (!(ui_robot.irp6_mechatronika->read_xyz_angle_axis(irp6m_current_pos))) // Odczyt polozenia walow silnikow
+			ui_robot.irp6_mechatronika->read_xyz_angle_axis(irp6m_current_pos); // Odczyt polozenia walow silnikow
 				printf("Blad w read read_xyz_angle_axis\n");
 
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_angle_axis_read_p1, Pt_ARG_NUMERIC_VALUE, &irp6m_current_pos[0] , 0);
@@ -1650,8 +1645,7 @@ init_wnd_irp6m_xyz_aa_ts( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 	{
 		if ( ui_state.irp6_mechatronika.edp.is_synchronised )  // Czy robot jest zsynchronizowany?
 		{
-			if (!(ui_robot.irp6_mechatronika->read_tool_xyz_angle_axis(tool_vector))) // Odczyt polozenia walow silnikow
-				printf("Blad w read external\n");
+			ui_robot.irp6_mechatronika->read_tool_xyz_angle_axis(tool_vector); // Odczyt polozenia walow silnikow
 
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_angle_axis_ts_read_p1, Pt_ARG_NUMERIC_VALUE, &tool_vector[0] , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_angle_axis_ts_read_p2, Pt_ARG_NUMERIC_VALUE, &tool_vector[1] , 0);
@@ -1990,8 +1984,7 @@ init_wnd_irp6m_xyz_euler_zyz( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 	{
 		if ( ui_state.irp6_mechatronika.edp.is_synchronised )  // Czy robot jest zsynchronizowany?
 		{
-			if (!(ui_robot.irp6_mechatronika->read_xyz_euler_zyz(irp6m_current_pos))) // Odczyt polozenia walow silnikow
-				printf("Blad w read external\n");
+			ui_robot.irp6_mechatronika->read_xyz_euler_zyz(irp6m_current_pos); // Odczyt polozenia walow silnikow
 
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_read_p1, Pt_ARG_NUMERIC_VALUE, &irp6m_current_pos[0] , 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_read_p2, Pt_ARG_NUMERIC_VALUE, &irp6m_current_pos[1] , 0);

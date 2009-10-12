@@ -194,13 +194,11 @@ wind_conveyor_moves_init( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 			unblock_widget(ABW_PtNumericFloat_wind_conveyor_moves_int_pos);
 			unblock_widget(ABW_PtButton_wind_conveyor_moves_int_exec);
 
-			if (!(ui_robot.conveyor->read_motors(conveyor_current_pos))) // Odczyt polozenia walow silnikow
-				printf("Blad w read motors\n");
+			ui_robot.conveyor->read_motors(conveyor_current_pos); // Odczyt polozenia walow silnikow
 
 			PtSetResource(ABW_PtNumericFloat_wind_conveyor_moves_read_motor_pos, Pt_ARG_NUMERIC_VALUE, &conveyor_current_pos[0] , 0);
 
-			if (!(ui_robot.conveyor->read_joints(conveyor_current_pos))) // Odczyt polozenia walow silnikow
-				printf("Blad w read joints\n");
+			ui_robot.conveyor->read_joints(conveyor_current_pos);
 
 			PtSetResource(ABW_PtNumericFloat_wind_conveyor_moves_read_int_pos, Pt_ARG_NUMERIC_VALUE, &conveyor_current_pos[0] , 0);
 
@@ -438,8 +436,7 @@ init_wnd_conveyor_servo_algorithm( PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 	{
 		if ( ui_state.conveyor.edp.is_synchronised )  // Czy robot jest zsynchronizowany?
 		{
-			if (!(ui_robot.conveyor->get_servo_algorithm(servo_alg_no, servo_par_no))) // Odczyt polozenia walow silnikow
-				printf("Blad w conveyor get_servo_algorithm\n");
+			ui_robot.conveyor->get_servo_algorithm(servo_alg_no, servo_par_no);
 
 			PtSetResource(ABW_PtNumericInteger_wnd_conv_servo_algorithm_read_alg_1, Pt_ARG_NUMERIC_VALUE, servo_alg_no[0] , 0);
 
