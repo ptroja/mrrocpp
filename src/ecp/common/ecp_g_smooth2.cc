@@ -1787,7 +1787,7 @@ void smooth2::calculate(void) {
 	        pose_list_iterator->t = t_max;
 	    }
 
-		pose_list_iterator->interpolation_node_no = (int)round(t_max / tk);
+		pose_list_iterator->interpolation_node_no = lround(t_max / tk);
 		//printf("liczba makrokrokow w ruchu %d\n", pose_list_iterator->interpolation_node_no);
 
 		for (i = 0; i < MAX_SERVOS_NR; i++) {//obliczanie przysp i jedn a takze ewentualna redukcja predkosci z powodu zbyt krotkiego czasu

@@ -101,34 +101,34 @@ bool y_simple::next_step()
 	/*
 	 double wx = sensor_m.begin()->second->image.sensor_union.force.rez[0];
 	 double wy = sensor_m.begin()->second->image.sensor_union.force.rez[1];
-	 
+
 	 double v = sqrt (wx*wx + wy*wy);
 
 	 double s_alfa = wy / v;
 	 double c_alfa = - wx / v;
-	 
+
 	 the_robot->EDP_data.ECPtoEDP_pos_xyz_rot_xyz[1] = -0.00006*v;
-	 
+
 	 the_robot->EDP_data.ECPtoEDP_reference_frame[0][0] = c_alfa;
 	 the_robot->EDP_data.ECPtoEDP_reference_frame[0][1] = s_alfa;
-	 
+
 	 the_robot->EDP_data.ECPtoEDP_reference_frame[1][0] = -s_alfa;
 	 the_robot->EDP_data.ECPtoEDP_reference_frame[1][1] = c_alfa;
 
 	 the_robot->EDP_data.ECPtoEDP_reference_frame[0][0] = 1;
 	 the_robot->EDP_data.ECPtoEDP_reference_frame[0][1] = 0;
-	 
-	 the_robot->EDP_data.ECPtoEDP_reference_frame[1][0] = 0;
-	 the_robot->EDP_data.ECPtoEDP_reference_frame[1][1] = 1; 
 
-	 printf("sensor: x: %+d, y: %+d, v:%+d\n", (int)round(wx),  (int)round(wy), (int)round(v));
+	 the_robot->EDP_data.ECPtoEDP_reference_frame[1][0] = 0;
+	 the_robot->EDP_data.ECPtoEDP_reference_frame[1][1] = 1;
+
+	 printf("sensor: x: %+ld, y: %+ld, v:%+ld\n", lround(wx), lround(wy), lround(v));
 	 */
 
 	printf("sensor: z: %f\n", the_robot->EDP_data.current_force_xyz_torque_xyz[2]);
 
 	//	else the_robot->EDP_data.next_gripper_coordinate = the_robot->EDP_data.current_gripper_coordinate-0.0001;
 
-	/*	
+	/*
 	 lib::frame_tab beggining_frame;
 	 lib::copy_frame(beggining_frame,the_robot->EDP_data.current_arm_frame);
 	 lib::Homog_matrix beg_frame = lib::Homog_matrix(beggining_frame);
@@ -147,7 +147,7 @@ bool y_simple::next_step()
 	 for(int i=0;i<6;i++) cout << force[i] << "  " ;
 	 cout << endl;
 	 */
-	//	if(++run_counter==1000) return false;	
+	//	if(++run_counter==1000) return false;
 	return true;
 }
 

@@ -782,8 +782,8 @@ bool y_edge_follow_force::next_step()
 		 the_robot->EDP_data.ECPtoEDP_reference_frame[1][1] = c_alfa;
 		 */
 
-		printf("sensor: x: %+d, y: %+d, v:%+d, %f\n", (int) round(wx),
-				(int) round(wy), (int) round(v), atan2(s_alfa, c_alfa)
+		printf("sensor: x: %+ld, y: %+ld, v:%+ld, %f\n", lround(wx),
+				lround(wy), lround(v), atan2(s_alfa, c_alfa)
 						*DEGREES_TO_RADIANS);
 	}
 

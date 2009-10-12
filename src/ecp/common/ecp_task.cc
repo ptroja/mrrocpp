@@ -126,8 +126,7 @@ void task::initialize_communication()
 	std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
 	std::string ecp_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_attach_point");
 	std::string trigger_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point");
-	std::string mp_pulse_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", "[mp]");
+	std::string mp_pulse_attach_point =	ecp_attach_point + std::string("_PULSE");
 
 	if ((sr_ecp_msg = new lib::sr_ecp(lib::ECP, ecp_attach_point.c_str(), sr_net_attach_point.c_str())) == NULL) { // Obiekt do komuniacji z SR
 		perror("Unable to locate SR\n");
@@ -142,8 +141,8 @@ void task::initialize_communication()
 #endif
 	{
 		e = errno;
-		perror("ECP: Unable to locate MP_MASTER process\n");
-		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		perror("ECP: Unable to locate MP_MASTER process");
+		throw ECP_main_error(lib::SYSTEM_ERROR, e);
 	}
 
 	// Rejstracja procesu ECP

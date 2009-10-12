@@ -684,7 +684,7 @@ void smooth::calculate(void)
         }
 
     // Wypelnienie struktury td
-    td.interpolation_node_no = (int)round(t_max / tk);
+    td.interpolation_node_no = lround(t_max / tk);
     td.internode_step_no = 10;
     td.value_in_step_no = td.internode_step_no - 2;
 
