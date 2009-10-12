@@ -17,7 +17,7 @@ namespace common {
 
 // stale dla automatu w regulatorze chwytka
 #define GRIPPER_BLOCKED_TIME_PERIOD 200
-#define MAX_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS 10
+#define MAX_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS 1000
 
 
 #define MAX_INC 80

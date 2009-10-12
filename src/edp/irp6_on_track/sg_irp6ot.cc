@@ -2226,7 +2226,7 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value (void)
 */
 
 		// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-		set_value_new = 100;
+		set_value_new = 50;
 		break;
 	default: // w tym miejscu nie powinien wystapic blad zwiazany z
 		// nieistniejacym numerem algorytmu
