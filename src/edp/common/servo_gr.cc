@@ -362,6 +362,7 @@ void servo_buffer::reply_to_EDP_MASTER (void)
     	master.sg_reply_rdy = true;
     }
 
+	// TODO: should not call notify with mutex locked?
     master.sg_reply_cond.notify_one();
 #endif
     // Wyzerowac zmienne sygnalizujace stan procesu

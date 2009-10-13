@@ -35,8 +35,6 @@ uint8_t servo_buffer::Move_a_step (void)
 	// by Y aktualizacja transformera ma jedynie sens po synchronizacji (kiedy robot zna swoja pozycje)
 	if (master.is_synchronised())
 	{
-
-
 		for (int i=0; i < IRP6_ON_TRACK_NUM_OF_SERVOS; i++)
 		{
 			if (!(master.test_mode))
@@ -69,9 +67,6 @@ uint8_t servo_buffer::Move_a_step (void)
 			 */
 		}
 
-
-
-
 		//		printf("aallalal\n");
 		// by Y - aktualizacja trasformatora
 		master.servo_joints_and_frame_actualization_and_upload();
@@ -85,7 +80,6 @@ uint8_t servo_buffer::Move_a_step (void)
 /*-----------------------------------------------------------------------*/
 servo_buffer::servo_buffer (effector &_master ) : common::servo_buffer(_master), master(_master)
 {
-
 	// tablica pradow maksymalnych d;a poszczegolnych osi
 	int max_current [IRP6_ON_TRACK_NUM_OF_SERVOS] = {
 			IRP6_ON_TRACK_AXIS_1_MAX_CURRENT, IRP6_ON_TRACK_AXIS_2_MAX_CURRENT,
@@ -129,7 +123,6 @@ servo_buffer::servo_buffer (effector &_master ) : common::servo_buffer(_master),
 /*-----------------------------------------------------------------------*/
 void servo_buffer::synchronise (void)
 {
-
 	const int NS = 10;     // liczba krokow rozpedzania/hamowania
 	common::regulator* crp = NULL; // wskaznik aktualnie synchronizowanego napedu
 

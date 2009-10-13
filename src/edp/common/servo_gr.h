@@ -25,7 +25,6 @@ namespace common {
 // #define MAX_INCR2 234
 // #define MAX_INCR3 30 // 15
 
-
 #define ERROR_DETECTED     1
 #define NO_ERROR_DETECTED  0
 

@@ -85,10 +85,9 @@ struct motor_data
 
     long int current_absolute_position[MAX_SERVOS_NR];
     control_a_dof robot_control[MAX_SERVOS_NR];
-    uint64_t hardware_error;
-
     status_of_a_dof robot_status[MAX_SERVOS_NR];
-    // long int high_word;
+
+    uint64_t hardware_error;
 };
 
 typedef struct _irq_data {

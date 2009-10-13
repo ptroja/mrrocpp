@@ -32,6 +32,15 @@ void * manip_and_conv_effector::servo_thread(void* arg)
 
     lib::set_thread_priority(pthread_self(), MAX_PRIORITY+2);
 
+    // signal master thread to continue executing
+    {
+    	boost::mutex::scoped_lock lock(thread_started_mutex);
+
+    	thread_started = true;
+
+    	thread_started_cond.notify_one();
+    }
+
     /* BEGIN SERVO_GROUP */
 
     for (;;)

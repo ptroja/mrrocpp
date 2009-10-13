@@ -231,6 +231,15 @@ public:
 
     void main_loop(); // main loop
 
+    //! thread starting synchronization flag
+    bool thread_started;
+
+    //! thread starting synchronization mutex
+    boost::mutex thread_started_mutex;
+
+    //! thread starting synchronization condition variable
+    boost::condition thread_started_cond;
+
     virtual void create_threads ();
 
     void interpret_instruction (lib::c_buffer &instruction);

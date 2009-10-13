@@ -29,7 +29,6 @@ hardware_interface::hardware_interface (common::manip_and_conv_effector &_master
 // ------------------------------------------------------------------------
 uint64_t hardware_interface::read_write_hardware ( void )
 {
-
 	// ------------------------------------------------------------------------
 	// Obsluga sprzetu: odczyt aktualnych wartosci polozenia i zapis wartosci
 	// wypelnienia PWM

@@ -113,6 +113,16 @@ void manip_and_conv_effector::create_threads ()
         throw System_error();
     }
 
+    // wait for initialization of servo thread
+    {
+    	boost::unique_lock<boost::mutex> lock(thread_started_mutex);
+
+        while(!thread_started)
+        {
+            thread_started_cond.wait(thread_started_mutex);
+        }
+    }
+
     // Y&W - utworzenie watku readera
     if (pthread_create (&reader_tid, NULL, &reader_thread_start, (void *) this))
     {
