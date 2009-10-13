@@ -731,14 +731,14 @@ void manip_effector::master_joints_and_frame_download (void)
 // Synchronizacja robota.
 void manip_effector::synchronise()
 {
-	common_synchronise();
+	manip_and_conv_effector::synchronise();
 	get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
 }
 
 //   sprawdza stan robota
 void manip_effector::get_controller_state(lib::c_buffer &instruction)
 {
-	common_get_controller_state(instruction);
+	manip_and_conv_effector::get_controller_state(instruction);
 	if (is_synchronised()) {
 		get_current_kinematic_model()->i2e_transform(current_joints, &current_end_effector_frame);
 	}

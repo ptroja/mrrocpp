@@ -49,7 +49,8 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
         servo_command_rdy(false), sg_reply_rdy(false),
 #endif
         step_counter(0),
-        number_of_servos(-1)
+        number_of_servos(-1),
+        sb_ptr(NULL)
 {
     controller_state_edp_buf.is_synchronised = false;
     controller_state_edp_buf.is_power_on = true;
@@ -80,9 +81,6 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
     ThreadCtl (_NTO_TCTL_IO, NULL);
 #endif
 
-    // create servo buffer object before starting EDP threads
-    sb_ptr = return_created_servo_buffer(*this);
-
     if (test_mode)
     {
         msg->message("Test mode activated");
@@ -96,7 +94,7 @@ manip_and_conv_effector::~manip_and_conv_effector() {
 #endif
 
 	// delete servo buffer object
-	delete sb_ptr;
+	if(sb_ptr) delete sb_ptr;
 }
 
 void manip_and_conv_effector::master_joints_read (double* output)
@@ -113,6 +111,9 @@ void manip_and_conv_effector::master_joints_read (double* output)
 /*--------------------------------------------------------------------------*/
 void manip_and_conv_effector::create_threads ()
 {
+    // create servo buffer object before starting servo thread
+    sb_ptr = return_created_servo_buffer(*this);
+
     // Y&W - utworzenie watku serwa
     if (pthread_create (&serwo_tid, NULL, &servo_thread_start, (void *) this))
     {
@@ -145,40 +146,29 @@ void manip_and_conv_effector::create_threads ()
 // kasuje zmienne - uwaga najpierw nalezy ustawic number_of_servos
 void manip_and_conv_effector::reset_variables ()
 {
-	// TODO: this should be handled in one loop
-    int i; // Liczniki petli
-    // Serwomechanizmy
-    for(i=0; i<number_of_servos; i++)
+    for(int i=0; i<number_of_servos; i++)
     {
+    	// Serwomechanizmy
         servo_algorithm_ecp[i] = 0;
         servo_parameters_ecp[i] = 0;
         servo_algorithm_sg[i] = 0;
         servo_parameters_sg[i] = 0;
-    }
 
-    for (i=0; i<number_of_servos; i++)
-    {
         desired_joints[i] = 0.0;
         previous_joints[i]= 0.0;
-    }
-    // wspolrzedne q2 i q3 mog by zerowe ale powinny byc jak nizej
-    // desired_joints[1] = LOWER_LEFT_LIMIT;
-    // desired_joints[2] = LOWER_RIGHT_LIMIT;
 
-    for (i=0; i<number_of_servos; i++)
-    {
         current_joints[i] = 0.0; // ??? wspolrzedne q2 i q3 nie mog by zerowe
         servo_current_joints[i]=0.0;
-    }
 
-    for (i=0; i<number_of_servos; i++)
-    {
         desired_motor_pos_new[i] = 0.0;
         desired_motor_pos_old[i] = 0.0;
         current_motor_pos[i] = 0.0;
         motor_pos_increment_reading[i] = 0.0;
         servo_current_motor_pos[i]=0.0;   // Polozenia walow silnikow -// dla watku edp_servo
     }
+    // wspolrzedne q2 i q3 mog by zerowe ale powinny byc jak nizej
+    // desired_joints[1] = LOWER_LEFT_LIMIT;
+    // desired_joints[2] = LOWER_RIGHT_LIMIT;
 }
 
 void manip_and_conv_effector::servo_joints_and_frame_actualization_and_upload(void)
@@ -434,17 +424,8 @@ void manip_and_conv_effector::interpret_instruction (lib::c_buffer &instruction)
 }
 /*--------------------------------------------------------------------------*/
 
-
-
 // Synchronizacja robota.
 void manip_and_conv_effector::synchronise ()
-{
-	common_synchronise();
-}
-
-
-// Synchronizacja robota.
-void manip_and_conv_effector::common_synchronise ()
 {
 #ifdef __QNXNTO__
 	flushall();
@@ -915,9 +896,9 @@ void manip_and_conv_effector::update_servo_current_motor_pos_abs(double abs_moto
 
 
 
-void manip_and_conv_effector::common_get_controller_state(lib::c_buffer &instruction)
+void manip_and_conv_effector::get_controller_state(lib::c_buffer &instruction)
 {
-	printf("common_get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
+	printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
     reply.controller_state = controller_state_edp_buf;
 
     // aktualizacja pozycji robota
@@ -944,17 +925,6 @@ void manip_and_conv_effector::common_get_controller_state(lib::c_buffer &instruc
 		}
     }
 }
-
-
-
-//   sprawdza stan robota
-void manip_and_conv_effector::get_controller_state(lib::c_buffer &instruction)
-{
-	common_get_controller_state(instruction);
-}
-
-
-
 
 void manip_and_conv_effector::main_loop ()
 {

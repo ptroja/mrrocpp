@@ -39,7 +39,7 @@ void * manip_and_conv_effector::servo_thread(void* arg)
     for (;;)
     {
         // komunikacja z transformation
-        if (!(sb->get_command()))
+        if (!sb->get_command())
         {
 
             rb_obj.lock_mutex();

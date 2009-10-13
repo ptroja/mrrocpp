@@ -110,9 +110,6 @@ protected:
 
     void move_servos ();
 
-    void common_synchronise();
-    void common_get_controller_state(lib::c_buffer &instruction); // by Y
-
     // Wyslanie polecenia ruchu do SERVO_GROUP oraz odebranie wyniku
     // realizacji pierwszej fazy ruchu
 

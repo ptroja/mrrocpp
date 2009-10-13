@@ -215,7 +215,9 @@ class servo_buffer
     // Bufor polecen przysylanych z EDP_MASTER dla SERVO
     // Obiekt z algorytmem regulacji
 private:
+#ifdef __QNXNTO__
     int edp_caller;						// by 7&Y
+#endif
 
 protected:
 
