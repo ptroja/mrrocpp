@@ -923,17 +923,11 @@ typedef struct _controller_state_t
 	 */
 	bool is_wardrobe_on;
 	/*!
-	 *  Czy karta kontrolera robota jest w zamontowana w komputerze?
-	 *  @todo Translate to English.
-	 */
-	bool is_controller_card_present;
-	/*!
 	 *  Czy wyzerowano sterowanie na silnikach po awarii sprzetowej?
 	 *  @todo Translate to English.
 	 */
-	bool is_robot_blocked;
-}
-controller_state_t;
+	bool is_robot_blocked;	
+} controller_state_t;
 
 //------------------------------------------------------------------------------
 /*! arm */
