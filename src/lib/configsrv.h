@@ -11,24 +11,19 @@
 #if !defined(_CONFIGSRV_H)
 #define _CONFIGSRV_H
 
-#include <pthread.h>
+#include <boost/thread/mutex.hpp>
 // Typy zmiennych odczytywanych z pliku INI.
 #include "lib/cfgopts.h"
 
 class configsrv
 {
 private:
-	char* node;
-	char* dir;
-	char* ini_file;
-	char* mrrocpp_network_path;
+	const std::string node, dir;
+	std::string ini_file, mrrocpp_network_path;
+	std::string file_location, common_file_location;
+
 	// do ochrony wylacznosci dostepu do pliku miedzy watkami jednego procesu
-	pthread_mutex_t mutex; // = PTHREAD_MUTEX_INITIALIZER ;
-
-	int	lock_mutex(); // zajecie mutex'a
-	int	unlock_mutex(); // zwolnienie mutex'a
-
-	char * file_location, * common_file_location;
+	boost::mutex mtx;
 
 public:
 
@@ -48,9 +43,6 @@ public:
 
 	// Zwraca czy dany klucz istnieje
 	bool exists(const char* _key, const char* _section_name);
-
-	~configsrv();
-
 };// : configsrv
 
 #endif /* _CONFIGSRV_H */

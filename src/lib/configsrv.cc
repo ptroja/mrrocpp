@@ -15,58 +15,36 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/locks.hpp>
+
 #include "lib/configsrv.h"
 
 // Konstruktor obiektu - konfiguratora.
 configsrv::configsrv (const char* _node, const char* _dir, const char* _ini_file)
+	: node(_node), dir(_dir), ini_file(_ini_file)
 {
-	assert(_node);
-	assert(_dir);
-	assert(_ini_file);
-
-	node = strdup(_node);
-	dir = strdup(_dir);
-	ini_file = strdup(_ini_file);
-
-	pthread_mutex_init(&mutex, NULL );
-
-	int size;
-
-	size = 1 + strlen("/net/") + strlen(node) + strlen(dir);
-	mrrocpp_network_path = new char[size];
 	// Stworzenie sciezki do pliku.
-	sprintf(mrrocpp_network_path, "/net/%s%s", node, dir);
+	mrrocpp_network_path = "/net/";
+	mrrocpp_network_path += node;
+	mrrocpp_network_path += dir;
 
-	size = 1 + strlen(mrrocpp_network_path) + strlen("configs/") + strlen(ini_file);
-	file_location = new char[size];
 	// Stworzenie sciezki do pliku.
-	sprintf(file_location, "%s%s%s", mrrocpp_network_path, "configs/", ini_file);
+	file_location = mrrocpp_network_path;
+	file_location += "configs/";
+	file_location += ini_file;
 
-	size = 1 + strlen(mrrocpp_network_path) + strlen("configs/") + strlen("common.ini");
-	common_file_location = new char[size];
 	// Stworzenie sciezki do pliku.
-	sprintf(common_file_location, "%s%s%s", mrrocpp_network_path, "configs/", "common.ini");
+	common_file_location = mrrocpp_network_path;
+	common_file_location += "configs/";
+	common_file_location += "common.ini";
 }// : configsrv
-
 
 void configsrv::change_ini_file (const char* _ini_file)
 {
-	lock_mutex();
-	if (ini_file) free(ini_file);
-	ini_file = strdup(_ini_file);
-	unlock_mutex();
+	boost::mutex::scoped_lock l(mtx);
+	ini_file = _ini_file;
 }
-
-int	configsrv::lock_mutex() // zajecie mutex'a
-{
-	return pthread_mutex_lock( &mutex );
-}
-
-int	configsrv::unlock_mutex() // zwolnienie mutex'a
-{
-	return pthread_mutex_unlock( &mutex );
-}
-
 
 // Zwraca czy dany klucz istnieje
 bool configsrv::exists(const char* _key, const char* _section_name)
@@ -79,15 +57,12 @@ bool configsrv::exists(const char* _key, const char* _section_name)
 		{ NULL , Error_Tag, NULL }
 	};
 
-	lock_mutex();
+	boost::mutex::scoped_lock l(mtx);
 	if (input_config(file_location, configs, _section_name)<1) {
 		if (input_config(common_file_location, configs, _section_name)<1) {
-			unlock_mutex();
-
 			return false;
 		}
 	}
-	unlock_mutex();
 
 	return true;
 }
@@ -107,17 +82,17 @@ int configsrv::return_int_value(const char* _key, const char* _section_name)
 		};
 
 	// Odczytanie zmiennej.
-	lock_mutex();
+	boost::mutex::scoped_lock l(mtx);
 	if (input_config(file_location, configs, _section_name)<1) {
 		if (input_config(common_file_location, configs, _section_name)<1) {
-			printf("Blad input_config() w return_int_value file_location:%s, _section_name:%s, _key:%s\n", file_location, _section_name, _key);
+			fprintf(stderr, "Blad input_config() w return_int_value file_location: %s, _section_name:%s, _key:%s\n",
+					file_location.c_str(), _section_name, _key);
 		}
 	}
-	unlock_mutex();
 
-// 	throw ERROR
+// 	TODO: throw ERROR
+
 	// Zwrocenie wartosci.
-
 	return value;
 }// : return_int_value
 
@@ -135,16 +110,16 @@ double configsrv::return_double_value(const char* _key, const char*_section_name
 		};
 
 	// Odczytanie zmiennej.
-	lock_mutex();
+	boost::mutex::scoped_lock l(mtx);
 	if (input_config(file_location, configs, _section_name)<1) {
 		if (input_config(common_file_location, configs, _section_name)<1) {
 			printf("Blad input_config() w return_double_value file_location:%s, _section_name:%s, _key:%s\n",
-				file_location, _section_name, _key);
+				file_location.c_str(), _section_name, _key);
 		}
 	}
-	unlock_mutex();
 
-// 	throw ERROR
+// 	TODO: throw ERROR
+
 	// Zwrocenie wartosci.
 	return value;
 }// : return_int_value
@@ -164,25 +139,16 @@ std::string configsrv::return_string_value(const char* _key, const char*_section
 		};
 
 	// Odczytanie zmiennej.
-	lock_mutex();
+	boost::mutex::scoped_lock l(mtx);
 	if (input_config(file_location, configs, _section_name)<1) {
 		if (input_config(common_file_location, configs, _section_name)<1) {
 			printf("Blad input_config() w return_string_value file_location:{%s,%s}, _section_name:%s, _key:%s\n",
-				 file_location, common_file_location, _section_name, _key);
+				 file_location.c_str(), common_file_location.c_str(), _section_name, _key);
 		}
 	}
-	unlock_mutex();
-// 	throw ERROR
+
+// 	TODO: throw ERROR
 
 	// Zwrocenie wartosci.
 	return std::string(tmp);
 }// : return_string_value
-
-configsrv::~configsrv() {
-	free(node);
-	free(dir);
-	free(ini_file);
-
-	delete [] common_file_location;
-	delete [] file_location;
-}
