@@ -55,7 +55,6 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
     controller_state_edp_buf.is_synchronised = false;
     controller_state_edp_buf.is_power_on = true;
     controller_state_edp_buf.is_wardrobe_on = true;
-    controller_state_edp_buf.is_controller_card_present = true;
     controller_state_edp_buf.is_robot_blocked = false;
 
     real_reply_type = lib::ACKNOWLEDGE;
