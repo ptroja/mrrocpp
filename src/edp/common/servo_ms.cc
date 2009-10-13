@@ -28,9 +28,7 @@ void * manip_and_conv_effector::servo_thread_start(void* arg)
 void * manip_and_conv_effector::servo_thread(void* arg)
 {
 	// servo buffer has to be created before servo thread starts
-
-//	std::auto_ptr<servo_buffer> sb(return_created_servo_buffer(*this)); // bufor do komunikacji z EDP_MASTER
-	servo_buffer * sb = this->sb_ptr;
+	std::auto_ptr<servo_buffer> sb(return_created_servo_buffer(*this)); // bufor do komunikacji z EDP_MASTER
 
     lib::set_thread_priority(pthread_self(), MAX_PRIORITY+2);
 

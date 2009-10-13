@@ -57,8 +57,6 @@ protected:
     void onReaderStopped();
 #endif
 
-    servo_buffer * sb_ptr;
-
     uint16_t motion_steps;            // liczba krokow ruchu zadanego (makrokroku)
 
     //Liczba krokow pierwszej fazy ruchu, czyli krok, w ktorym ma zostac

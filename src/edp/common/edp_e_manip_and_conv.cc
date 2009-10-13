@@ -49,8 +49,7 @@ manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, li
         servo_command_rdy(false), sg_reply_rdy(false),
 #endif
         step_counter(0),
-        number_of_servos(-1),
-        sb_ptr(NULL)
+        number_of_servos(-1)
 {
     controller_state_edp_buf.is_synchronised = false;
     controller_state_edp_buf.is_power_on = true;
@@ -91,9 +90,6 @@ manip_and_conv_effector::~manip_and_conv_effector() {
 	ConnectDetach_r(servo_fd);
 	ChannelDestroy_r(servo_to_tt_chid);
 #endif
-
-	// delete servo buffer object
-	if(sb_ptr) delete sb_ptr;
 }
 
 void manip_and_conv_effector::master_joints_read (double* output)
@@ -110,9 +106,6 @@ void manip_and_conv_effector::master_joints_read (double* output)
 /*--------------------------------------------------------------------------*/
 void manip_and_conv_effector::create_threads ()
 {
-    // create servo buffer object before starting servo thread
-    sb_ptr = return_created_servo_buffer(*this);
-
     // Y&W - utworzenie watku serwa
     if (pthread_create (&serwo_tid, NULL, &servo_thread_start, (void *) this))
     {
