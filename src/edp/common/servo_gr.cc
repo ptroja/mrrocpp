@@ -154,8 +154,6 @@ uint8_t servo_buffer::Move_1_step (void)
     // Obliczenie nowej wartosci zadanej
     // Wyslanie wartosci zadanej do hardware'u
 
-    struct timespec step_time;
-
     master.rb_obj.set_new_step();// odwieszenie watku edp_reader - teraz moze odczytac dane pomiarowe
 
     reply_status_tmp.error1 = compute_all_set_values();  // obliczenie nowej wartosci zadanej dla regulatorow
@@ -164,6 +162,8 @@ uint8_t servo_buffer::Move_1_step (void)
     master.step_counter++;
 
     master.rb_obj.lock_mutex();
+
+    struct timespec step_time;
 
     if( clock_gettime( CLOCK_REALTIME , &step_time) == -1 )
     {
@@ -267,7 +267,6 @@ void servo_buffer::Move (void)
         new_increment[k] = command.parameters.move.macro_step[k] / command.parameters.move.number_of_steps;
     }
 
-
     // realizacja makrokroku przez wszystkie napedy;  i - licznik krokow ruchu
     for (uint16_t j = 0; j < command.parameters.move.number_of_steps; j++)
     {
@@ -287,7 +286,6 @@ void servo_buffer::Move (void)
         // end by Y
         // Wykonanie pojedynczego kroku ruchu z jednoczesnym
         // sprawdzeniem, czy w jakims serwomechanizmie nastapila awaria
-
 
         for (int  k = 0; k < master.number_of_servos; k++)
         {
@@ -337,7 +335,6 @@ void servo_buffer::Move (void)
     {
         regulator_ptr[i]->previous_abs_position = command.parameters.move.abs_position[i];
     }
-
 }
 /*-----------------------------------------------------------------------*/
 
@@ -418,7 +415,6 @@ void servo_buffer::Change_algorithm (void)
         regulator_ptr[j]->insert_algorithm_no(command.parameters.servo_alg_par.servo_algorithm_no[j]);
         regulator_ptr[j]->insert_algorithm_parameters_no(command.parameters.servo_alg_par.servo_parameters_no[j]);
     }
-    ; // end: for
     reply_to_EDP_MASTER();
 }
 /*-----------------------------------------------------------------------*/
@@ -461,7 +457,6 @@ regulator::regulator(uint8_t reg_no, uint8_t reg_par_no, common::manip_and_conv_
 
     step_new_over_constraint_sum = 0.0;
     previous_abs_position = 0.0;
-
 
     meassured_current = 0;                 // prad zmierzony
     PWM_value = 0;               // zadane wypelnienie PWM
