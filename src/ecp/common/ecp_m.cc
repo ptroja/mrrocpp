@@ -68,8 +68,15 @@ int main(int argc, char *argv[])
 			exit(EXIT_FAILURE);
 	}
 	catch (ecp::common::ecp_robot::ECP_main_error e) {
-		if (e.error_class == lib::SYSTEM_ERROR)
-			exit(EXIT_FAILURE);
+		switch (e.error_class ) {
+			case lib::SYSTEM_ERROR:
+			case lib::FATAL_ERROR:
+				ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
+				exit(EXIT_FAILURE);
+				break;
+			default:
+				break;
+		}
 	}
 	catch (ecp::common::generator::generator::ECP_error e) {
 		ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);

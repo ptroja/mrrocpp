@@ -55,8 +55,6 @@ protected:
 	// przez generator.next_step()
 	// Funkcja generator.next_step() przygotowuje rozkazy dla EDP wypelniajac
 
-
-
 public:
 
 	lib::ecp_command_buffer ecp_command;
@@ -66,10 +64,8 @@ public:
 
 	bool synchronised; // Flaga synchronizacji robota (true - zsynchronizowany, false - nie)
 
-
 	void send  ();
 	void query ();
-
 
 	int number_of_servos;
 
@@ -127,7 +123,6 @@ public:
 
 		ECP_main_error ( lib::ERROR_CLASS err_cl, uint64_t err_no);
 	};
-
 };
 
 } // namespace common

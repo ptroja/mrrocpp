@@ -19,6 +19,8 @@
 #include "ecp/common/ecp_t_teach.h"
 #include "ecp/common/ecp_teach_in_generator.h"
 
+#include "ecp/common/ecp_robot.h"
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -45,11 +47,15 @@ void teach::task_initialization(void)
     {
         ecp_m_robot = new irp6m::robot (*this);
     }
+    else {
+    	fprintf(stderr, "unknown robot \"%s\" in teach task\n", config.section_name);
+    	throw(ecp_robot::ECP_main_error(lib::FATAL_ERROR, 0));
+    }
 
     tig = new ecp_teach_in_generator (*this);
 
     sr_ecp_msg->message("ECP loaded");
-};
+}
 
 
 void teach::main_task_algorithm(void)
@@ -96,6 +102,7 @@ task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new teach(_config);
 }
+
 } // namespace task
 } // namespace common
 } // namespace ecp
