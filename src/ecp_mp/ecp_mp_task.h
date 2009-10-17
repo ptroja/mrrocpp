@@ -48,8 +48,10 @@ public:
 	// mapa wszystkich transmiterow
 	static transmitters_t transmitter_m;
 
-	static lib::sr_ecp* sr_ecp_msg;
+	static lib::sr_ecp* sr_ecp_msg; // TODO: rename from _ecp_ (?!)
+
 	lib::configurator &config;
+
 #if !defined(USE_MESSIP_SRR)
 	int UI_fd;
 #else

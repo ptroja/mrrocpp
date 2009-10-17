@@ -68,7 +68,7 @@ void pawel::get_reading(void) {
 	{
 		memcpy(&image.sensor_union.ball, &from_vsp.comm_image.sensor_union.ball, union_size);
 
-		//int nsec = round((double)image.sensor_union.ball.ts.tv_nsec/10000000.0);
+		//int nsec = lround((double)image.sensor_union.ball.ts.tv_nsec/10000000.0);
 
 //		printf ("[nr] %i\t[x] %f\t[y] %f\t[z] %f\n", image.sensor_union.ball.nr, image.sensor_union.ball.x, image.sensor_union.ball.y, image.sensor_union.ball.z);
 //		printf ("[ts] %i\n\n", image.sensor_union.ball.ts.tv_sec);
