@@ -50,15 +50,27 @@ public:
     pid_t ECP_pid;
 
 #if !defined(USE_MESSIP_SRR)
-    int ECP_fd;	// deskryptor do komunikacji z ECP
+    //! main ECP request channel
+    int ECP_fd;
+
+    //! A server connection ID identifing ECP
+    int scoid;
+
+    //! flag indicating opened pulse connection from ECP
+    bool opened;
 #else
-    messip_channel_t *ECP_fd;
+    //! main ECP request channel
+    messip_channel_t* ECP_fd;
+
+    //! channel for ECP pulses
+    messip_channel_t* ECP_pulse_fd;
+
+    static int pulse_dispatch(messip_channel_t *ch, void * arg);
 #endif
 
-    int32_t scoid; // server connection id
     char pulse_code; // kod pulsu ktory zostal wyslany przez ECP w celu zgloszenia gotowosci do komunikacji (wartosci w impconst.h)
     bool new_pulse; // okresla czy jest nowy puls
-    bool robot_new_pulse_checked; // okresla czy czy nowy puls zostal juz uwzgledniony w generatorze
+    bool new_pulse_checked; // okresla czy czy nowy puls zostal juz uwzgledniony w generatorze
 
     robot_ECP_transmission_data ecp_td; // Obraz danych robota wykorzystywanych przez generator
     // - do uzytku uzytkownika (generatora)

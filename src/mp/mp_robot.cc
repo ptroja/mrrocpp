@@ -16,6 +16,8 @@
 #include "mp/mp.h"
 #include "mp/mp_task.h"
 
+#include <boost/foreach.hpp>
+
 namespace mrrocpp {
 namespace mp {
 namespace robot {
@@ -29,22 +31,31 @@ robot::MP_error::MP_error(lib::ERROR_CLASS err0, uint64_t err1) :
 robot::robot( lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::task &mp_object_l) :
 	ecp_mp::robot(l_robot_name),
 	mp_object(mp_object_l),
-	sr_ecp_msg(*(mp_object_l.sr_ecp_msg))
+	sr_ecp_msg(*(mp_object_l.sr_ecp_msg)),
+	new_pulse(false),
+	new_pulse_checked(false),
+	opened(false),
+	communicate(true) // domyslnie robot jest aktywny
 {
 	std::string node_name(mp_object.config.return_string_value("node_name", _section_name));
 	nd = mp_object.config.return_node_number(node_name.c_str());
 
-	std::string network_ecp_attach_point(mp_object.config.return_attach_point_name
+	std::string ecp_attach_point(mp_object.config.return_attach_point_name
 	                           (lib::configurator::CONFIG_SERVER, "ecp_attach_point", _section_name));
 
-#if !defined(USE_MESSIP_SRR)
-	char tmp_string[100];
-	sprintf(tmp_string, "/dev/name/global/%s", network_ecp_attach_point.c_str());
+#if defined(USE_MESSIP_SRR)
+	// create ECP response pulse channel
+	std::string robot_pulse_attach_point = ecp_attach_point + std::string("_PULSE");
 
-	// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny ECP
-	if (access(tmp_string, R_OK) == 0 ) {
-		sr_ecp_msg.message("ECP already exists");
-		throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+	std::cout << "MP: Attaching for ecp pulses at '" << robot_pulse_attach_point << "'" << std::endl;
+
+	if ((ECP_pulse_fd = messip_channel_create(NULL, robot_pulse_attach_point.c_str(), MESSIP_NOTIMEOUT, 0)) == NULL)
+	{
+		uint64_t e = errno; // kod bledu systemowego
+		perror("Failed to attach UI pulse chanel for MP");
+		sr_ecp_msg.message (lib::SYSTEM_ERROR, e, "MP: Failed to name attach for ECP pulses channel");
+
+		throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 #endif
 
@@ -52,35 +63,38 @@ robot::robot( lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::tas
 
 	if ( ECP_pid < 0) {
 		uint64_t e = errno; // kod bledu
-		perror ("Failed to spawn ECP process on node\n");
+		perror ("Failed to spawn ECP");
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "MP: Failed to spawn ECP");
-		throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 
-	new_pulse = false;
-	robot_new_pulse_checked = false;
-	communicate = true; // domyslnie robot jest aktywny
-
-	// oczekiwanie na zgloszenie procesu ECP
-	scoid = mp_object.mp_wait_for_name_open();
+#if !defined(USE_MESSIP_SRR)
+	// handle ECP's name_open() call
+	scoid = mp_object.wait_for_name_open();
+	opened = true;
+#endif
 
 	// nawiazanie komunikacji z ECP
 	short tmp = 0;
 	// kilka sekund  (~1) na otworzenie urzadzenia
-	// 	printf("aa: %s\n",	_config->return_attach_point_name	(CONFIG_SERVER, "ecp_attach_point", _section_name));
 #if !defined(USE_MESSIP_SRR)
-	while ((ECP_fd = name_open(network_ecp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
+	while ((ECP_fd = name_open(ecp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
 #else
-	while ((ECP_fd = messip_channel_connect(NULL, network_ecp_attach_point.c_str(), MESSIP_NOTIMEOUT)) == NULL)
+	while ((ECP_fd = messip_channel_connect(NULL, ecp_attach_point.c_str(), MESSIP_NOTIMEOUT)) == NULL)
 #endif
 		if ((tmp++) < CONNECT_RETRY)
 			usleep(1000 * CONNECT_DELAY);
 		else {
 			uint64_t e = errno; // kod bledu
+			fprintf(stderr, "Connect to ECP failed at channel '%s'\n", ecp_attach_point.c_str());
 			perror("Connect to ECP failed");
 			sr_ecp_msg.message (lib::SYSTEM_ERROR, e, "Connect to ECP failed");
 			throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 		}
+
+#if defined(USE_MESSIP_SRR)
+	messip_dispatch_attach(mp_object.dpp, ECP_pulse_fd, reinterpret_cast<messip_callback_t>(&pulse_dispatch), this);
+#endif
 }
 // -------------------------------------------------------------------
 
@@ -226,6 +240,60 @@ void robot::get_reply(void) {
 			throw MP_error (lib::NON_FATAL_ERROR, INVALID_EDP_REPLY);
 	}
 }
+
+#if defined(USE_MESSIP_SRR)
+int robot::pulse_dispatch(messip_channel_t *ch, void * arg) {
+
+	robot * me = (robot *) arg;
+
+	printf("ECP message_handler at channel \"%s\"\n", ch->name);
+
+	int32_t type, subtype;
+	char rec_buff[256];
+
+	int index = messip_receive(ch, &type, &subtype, rec_buff, sizeof(rec_buff), MESSIP_NOTIMEOUT);
+	if (index < 0) {
+		switch (index)
+		{
+			case -1:
+				perror("messip_receive()");
+				break;
+			case MESSIP_MSG_DISCONNECT:
+				printf("MESSIP_MSG_DISCONNECT\n");
+				break;
+			case MESSIP_MSG_DISMISSED:
+				printf("MESSIP_MSG_DISMISSED\n");
+				break;
+			case MESSIP_MSG_TIMEOUT:
+				printf("MESSIP_MSG_TIMEOUT\n");
+				break;
+			case MESSIP_MSG_TIMER:
+				printf("MESSIP_MSG_TIMER\n");
+				break;
+			case MESSIP_MSG_DEATH_PROCESS:
+				printf("MESSIP_MSG_DEATH_PROCESS\n");
+				break;
+			case MESSIP_MSG_NOREPLY:
+				me->new_pulse = true;
+				me->pulse_code = type;
+				me->new_pulse_checked = false;
+				break;
+			case MESSIP_MSG_CONNECTING:
+				printf("MESSIP_MSG_CONNECTING\n");
+				break;
+			default:
+				printf("MESSIP_MSG_UNKNOWN %d\n", index);
+				break;
+		}
+		return 0;
+	}
+
+	// we do not expect nothing but pulses
+	assert(0);
+
+	return 0;
+}
+#endif
 
 } // namespace robot
 } // namespace mp

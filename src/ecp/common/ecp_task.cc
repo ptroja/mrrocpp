@@ -126,21 +126,30 @@ void task::initialize_communication()
 	std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
 	std::string ecp_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_attach_point");
 	std::string trigger_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point");
-	std::string mp_pulse_attach_point =	ecp_attach_point + std::string("_PULSE");
 
 	if ((sr_ecp_msg = new lib::sr_ecp(lib::ECP, ecp_attach_point.c_str(), sr_net_attach_point.c_str())) == NULL) { // Obiekt do komuniacji z SR
-		perror("Unable to locate SR\n");
+		perror("Unable to locate SR");
 		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
 	// Lokalizacja procesu MP - okreslenie identyfikatora (pid)
 #if !defined(USE_MESSIP_SRR)
+	std::string mp_pulse_attach_point =
+			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", "[mp]");
+
+//	std::cout << "ECP: Opening qnet MP pulses channel at '" << mp_pulse_attach_point << "'" << std::endl;
+
 	if ( (MP_fd = name_open(mp_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
 #else
+	std::string mp_pulse_attach_point =	ecp_attach_point + std::string("_PULSE");
+
+//	std::cout << "ECP: Connecting to messip MP pulses channel at '" << mp_pulse_attach_point << "'" << std::endl;
+
 	if ( (MP_fd = messip_channel_connect(NULL, mp_pulse_attach_point.c_str(), MESSIP_NOTIMEOUT)) == NULL)
 #endif
 	{
 		e = errno;
+		fprintf(stderr, "ECP: Unable to locate MP_MASTER process at '%s'\n", mp_pulse_attach_point.c_str());
 		perror("ECP: Unable to locate MP_MASTER process");
 		throw ECP_main_error(lib::SYSTEM_ERROR, e);
 	}
@@ -153,7 +162,7 @@ void task::initialize_communication()
 #endif
 	{
 		e = errno;
-		perror("Failed to attach Effector Control Process\n");
+		perror("Failed to attach Effector Control Process");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Failed to attach Effector Control Process");
 		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}

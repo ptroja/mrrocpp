@@ -46,10 +46,6 @@ void catch_signal_in_mp(int sig)
 
 int main (int argc, char *argv[], char **arge)
 {
-	printf("MP\n");
-#if defined(__QNXNTO__)
-	flushall();
-#endif
 	// zewnetrzne try
 	try {
 

@@ -61,7 +61,7 @@ class teach_in : public generator {
 
 		void flush_pose_list ( void );
 		// -------------------------------------------------------
-		void initiate_pose_list(void);;
+		void initiate_pose_list(void);
 		// -------------------------------------------------------
 		void next_pose_list_ptr (void);
 		// -------------------------------------------------------

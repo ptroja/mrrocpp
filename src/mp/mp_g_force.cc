@@ -508,13 +508,13 @@ bool tff_rubik_grab::first_step()
 		irp6ot->communicate=true;
 	else {
 		irp6ot->communicate=false;
-		irp6ot->robot_new_pulse_checked = true;
+		irp6ot->new_pulse_checked = true;
 	}
 	if (irp6p_con)
 		irp6p->communicate=true;
 	else {
 		irp6p->communicate=false;
-		irp6p->robot_new_pulse_checked = true;
+		irp6p->new_pulse_checked = true;
 	}
 
 	vsp_force_irp6ot = sensor_m[lib::SENSOR_FORCE_ON_TRACK];

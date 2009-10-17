@@ -47,7 +47,7 @@ void generator::Move()
 	// czyszczenie aby nie czekac na pulsy z ECP
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, mp_t.robot_m) {
 		if (robot_node.second->new_pulse) {
-			robot_node.second->robot_new_pulse_checked = false;
+			robot_node.second->new_pulse_checked = false;
 		}
 	}
 
@@ -58,7 +58,7 @@ void generator::Move()
 	// czyszczenie aby nie czekac na pulsy z ECP
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, mp_t.robot_m) {
 		if (robot_node.second->new_pulse) {
-			robot_node.second->robot_new_pulse_checked = false;
+			robot_node.second->new_pulse_checked = false;
 		}
 	}
 

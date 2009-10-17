@@ -9,15 +9,16 @@
 #define __MP_H
 
 #include <map>
+#include <stdio.h>
 
 #if defined(__QNXNTO__)
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #endif
 
-#include "ecp_mp/ecp_mp_task.h"
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
 #include "lib/configurator.h"
-#include "lib/timer.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -27,27 +28,8 @@ class robot;
 
 namespace common {
 
-typedef std::pair<lib::ROBOT_ENUM, robot::robot*> robot_pair_t;
+typedef std::pair<const lib::ROBOT_ENUM, robot::robot*> robot_pair_t;
 typedef std::map <lib::ROBOT_ENUM, robot::robot*> robots_t;
-
-// struktura zwracana przez funkcje mp_receive_ecp_pulse
-typedef struct mp_receive_ecp_pulse_return {
-	uint32_t nd; // deskryptor wezla na ktorym jest powolane ECP
-	pid_t ECP_pid;
-	bool rt;
-	int32_t scoid; // server connection id
-	char pulse_code;
-	int rcvid;
-	uint64_t e; // errno
-} mp_receive_ecp_pulse_return_t;
-
-// struktura wykorzystywana przez funkcje mp_receive_pulse
-typedef struct mp_receive_pulse_struct {
-	_msg_info msg_info;
-	_pulse_msg pulse_msg;
-	int rcvid;
-	uint64_t e;       // Kod bledu systemowego
-} mp_receive_pulse_struct_t;
 
 // ---------------------------------------------------------------
 class MP_main_error
@@ -85,15 +67,14 @@ class mp_taught_in_pose {
 // ------------------------------------------------------------------------
 
 } // namespace common
+
 } // namespace mp
 } // namespace mrrocpp
-
-
 
 // to fix forward declaration issues
 #include "mp/mp_generator.h"
 #include "mp/mp_task.h"
 #include "mp/mp_robot.h"
-#include "../lib/com_buf.h"
+#include "lib/com_buf.h"
 
 #endif
