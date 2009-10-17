@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
 		// block test-mode timer signal for all the threads
 		if(_config.return_int_value("test_mode")) {
 		    /* Block timer signal from test mode timer for all threads */
-		    fprintf(stderr, "Blocking signal %d\n", SIGRTMIN);
+//		    fprintf(stderr, "Blocking signal %d\n", SIGRTMIN);
 		    sigset_t mask;
 		    if (sigemptyset (&mask) == -1) {
 		    	perror("sigemptyset()");

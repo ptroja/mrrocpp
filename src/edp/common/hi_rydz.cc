@@ -70,7 +70,8 @@ hardware_interface::hardware_interface (manip_and_conv_effector &_master,
 		// domyslnie robot jest zsynchronizowany
 		irq_data.md.is_synchronised = true;
 
-	    fprintf(stderr, "Blocking signal %d\n", SIGRTMIN);
+		// Initliaze mask to waiting for a signal
+	    //fprintf(stderr, "Blocking signal %d\n", SIGRTMIN);
 	    if (sigemptyset (&mask) == -1) {
 	    	perror("sigemptyset()");
 	    }
@@ -151,7 +152,7 @@ hardware_interface::hardware_interface (manip_and_conv_effector &_master,
 		}
 	}
 
-	fprintf(stderr, "SETTING SINCHRONIZED TO %d\n", irq_data.md.is_synchronised);
+	// fprintf(stderr, "SETTING SINCHRONIZED TO %d\n", irq_data.md.is_synchronised);
 	master.controller_state_edp_buf.is_synchronised = irq_data.md.is_synchronised;
 
 	for (int i = 0; i < master.number_of_servos; i++ )

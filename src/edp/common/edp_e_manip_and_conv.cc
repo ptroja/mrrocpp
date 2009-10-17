@@ -900,7 +900,7 @@ void manip_and_conv_effector::update_servo_current_motor_pos_abs(double abs_moto
 
 void manip_and_conv_effector::get_controller_state(lib::c_buffer &instruction)
 {
-	printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
+	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
     reply.controller_state = controller_state_edp_buf;
 
     // aktualizacja pozycji robota

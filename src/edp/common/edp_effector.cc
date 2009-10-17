@@ -68,25 +68,24 @@ bool effector::initialize_communication()
 	// obsluga mechanizmu sygnalizacji zajetosci sprzetu
 	if (!(test_mode)) {
 
-		std::string hbap = config.return_string_value("hardware_busy_attach_point");
-		const char * hardware_busy_attach_point = hbap.c_str();
+		std::string hardware_busy_attach_point = config.return_string_value("hardware_busy_attach_point");
 
-		char full_path_to_hardware_busy_attach_point[100];
-		sprintf(full_path_to_hardware_busy_attach_point, "/dev/name/global/%s", hardware_busy_attach_point);
+		std::string full_path_to_hardware_busy_attach_point("/dev/name/global/");
+		full_path_to_hardware_busy_attach_point += hardware_busy_attach_point;
 
 		// sprawdzenie czy nie jakis proces EDP nie zajmuje juz sprzetu
-		if (access(full_path_to_hardware_busy_attach_point, R_OK)== 0) {
+		if (access(full_path_to_hardware_busy_attach_point.c_str(), R_OK)== 0) {
 			fprintf( stderr, "EDP: hardware busy\n");
 			return false;
 		}
 
 		name_attach_t * tmp_attach
-				= name_attach(NULL, hardware_busy_attach_point, NAME_FLAG_ATTACH_GLOBAL);
+				= name_attach(NULL, hardware_busy_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
 
 		if (tmp_attach == NULL) {
 			msg->message(lib::SYSTEM_ERROR, errno, "EDP: hardware_busy_attach_point failed to attach");
-			fprintf( stderr, "hardware_busy_attach_point name_attach() to %s failed: %s\n", hardware_busy_attach_point, strerror( errno ));
-
+			fprintf( stderr, "hardware_busy_attach_point name_attach() to %s failed: %s\n", hardware_busy_attach_point.c_str(), strerror( errno ));
+			// TODO: throw
 			return false;
 		}
 	}
@@ -171,8 +170,7 @@ lib::INSTRUCTION_TYPE effector::receive_instruction(void)
 	/* Do your MsgReceive's here now with the chid */
 	while (1) {
 #if !defined(USE_MESSIP_SRR)
-		rcvid
-				= MsgReceive(attach->chid, &new_ecp_command, sizeof(lib::ecp_command_buffer), NULL);
+		rcvid = MsgReceive(attach->chid, &new_ecp_command, sizeof(lib::ecp_command_buffer), NULL);
 
 		if (rcvid == -1) {/* Error condition, exit */
 			perror("MsgReceive()");
