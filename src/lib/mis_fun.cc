@@ -3,6 +3,10 @@
 #include <pthread.h>
 #include <stdio.h>
 
+#if defined(linux)
+#include <sys/prctl.h>
+#endif
+
 namespace mrrocpp {
 namespace lib {
 
