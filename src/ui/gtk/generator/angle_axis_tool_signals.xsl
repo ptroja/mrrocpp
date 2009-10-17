@@ -48,15 +48,14 @@ extern "C"
     				robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->read_tool_xyz_angle_axis(tool_vector_a); // Odczyt polozenia walow silnikow
     					
     				alfa = sqrt(tool_vector_a[3]*tool_vector_a[3]
-    				+tool_vector_a[4]*tool_vector_a[4]
-    				+tool_vector_a[5]*tool_vector_a[5]);
+    				            +tool_vector_a[4]*tool_vector_a[4]
+    				            +tool_vector_a[5]*tool_vector_a[5]);
     				
     				if (alfa==0){
     					tool_vector_a[3] = -1;
     					tool_vector_a[4] = 0;
     					tool_vector_a[5] = 0;
-    				}
-    				else{
+    				} else {
     					tool_vector_a[3] = tool_vector_a[3]/alfa;
     					tool_vector_a[4] = tool_vector_a[4]/alfa;
     					tool_vector_a[5] = tool_vector_a[5]/alfa;
@@ -115,8 +114,11 @@ extern "C"
 		
 			robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->set_tool_xyz_angle_axis(tool_vector_a);		
 		}
-		on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_xyz_angle_axis_tool (button, userdata);
-
+		
+		try {
+		    on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_xyz_angle_axis_tool (button, userdata);
+        }
+        </xsl:text><xsl:call-template name="catch" /><xsl:text>
 	}
 
 }

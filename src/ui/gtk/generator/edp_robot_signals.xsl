@@ -181,22 +181,25 @@ extern "C"
 			}
 		}
 
-		robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>);
+		try {
+			robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_controller_state (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>);
 
-		// TODO: this should be checked in synchronization thread
-		if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) {
-			gtk_widget_set_sensitive( GTK_WIDGET(button), FALSE);
-		    
-			GtkComboBox * combo = GTK_COMBO_BOX (gtk_builder_get_object(&amp;builder, "combobox1"));
-
-			</xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>gint counter_synch = 2;</xsl:text></xsl:if><xsl:text>
-			</xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "Servo algorithm"); counter_synch++;</xsl:text></xsl:if><xsl:text>
-			</xsl:text><xsl:if test="$xyz_angle_axis &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "XYZ Angle Axis"); counter_synch++;</xsl:text></xsl:if><xsl:text>
-			</xsl:text><xsl:if test="$xyz_euler_zyz &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "XYZ Euler ZYZ"); counter_synch++;</xsl:text></xsl:if><xsl:text>
-			</xsl:text><xsl:if test="$xyz_angle_axis_tool &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "XYZ Angle Axis tool"); counter_synch++;</xsl:text></xsl:if><xsl:text>
-			</xsl:text><xsl:if test="$xyz_euler_zyz_tool &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "XYZ Euler ZYZ tool"); counter_synch++;</xsl:text></xsl:if><xsl:text>
-			</xsl:text><xsl:if test="$kinematic &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "Kinematic"); counter_synch++;</xsl:text></xsl:if><xsl:text>
+			// TODO: this should be checked in synchronization thread
+			if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) {
+				gtk_widget_set_sensitive( GTK_WIDGET(button), FALSE);
+			    
+				GtkComboBox * combo = GTK_COMBO_BOX (gtk_builder_get_object(&amp;builder, "combobox1"));
+	
+				</xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>gint counter_synch = 2;</xsl:text></xsl:if><xsl:text>
+				</xsl:text><xsl:if test="$motorsNo &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "Servo algorithm"); counter_synch++;</xsl:text></xsl:if><xsl:text>
+				</xsl:text><xsl:if test="$xyz_angle_axis &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "XYZ Angle Axis"); counter_synch++;</xsl:text></xsl:if><xsl:text>
+				</xsl:text><xsl:if test="$xyz_euler_zyz &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "XYZ Euler ZYZ"); counter_synch++;</xsl:text></xsl:if><xsl:text>
+				</xsl:text><xsl:if test="$xyz_angle_axis_tool &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "XYZ Angle Axis tool"); counter_synch++;</xsl:text></xsl:if><xsl:text>
+				</xsl:text><xsl:if test="$xyz_euler_zyz_tool &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "XYZ Euler ZYZ tool"); counter_synch++;</xsl:text></xsl:if><xsl:text>
+				</xsl:text><xsl:if test="$kinematic &gt; 0"><xsl:text>gtk_combo_box_insert_text(combo, counter_synch, "Kinematic"); counter_synch++;</xsl:text></xsl:if><xsl:text>
+			}
 		}
+		</xsl:text><xsl:call-template name="catch" /><xsl:text>
 	}	
 
 	//UI module initializing function
@@ -247,7 +250,10 @@ void *ui_synchronize_</xsl:text><xsl:value-of select="$fullName" /><xsl:text> (g
 	GtkBuilder &amp; builder = (comboEntry.getBuilder());
 	gint counter = 0;
 
-	robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:choose><xsl:when test="$name != 'conveyor'"><xsl:text>->ecp</xsl:text></xsl:when></xsl:choose><xsl:text>->synchronise();
+	try {
+		robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:choose><xsl:when test="$name != 'conveyor'"><xsl:text>->ecp</xsl:text></xsl:when></xsl:choose><xsl:text>->synchronise();
+	}
+	</xsl:text><xsl:call-template name="catch" /><xsl:text>
     
 	GtkComboBox * combo = GTK_COMBO_BOX (gtk_builder_get_object(&amp;builder, "combobox1"));
 

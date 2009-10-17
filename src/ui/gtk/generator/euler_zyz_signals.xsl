@@ -86,18 +86,18 @@ extern "C"
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>    
 			
-			robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->move_xyz_euler_zyz(</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos_e);
+	    		robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->move_xyz_euler_zyz(</xsl:text><xsl:value-of select="$name" /><xsl:text>_desired_pos_e);
 			}
-			 if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) {
+		
+		    if (state_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>.is_synchronised) {
 	</xsl:text><xsl:call-template name="irp6.xyz_euler_zyz.repeat.signals.cc.execute.3">
     		<xsl:with-param name="xyz_euler_zyz" select="$xyz_euler_zyz"/>
     		<xsl:with-param name="name" select="$name"/>
 			<xsl:with-param name="i" select="1"/>
  		</xsl:call-template><xsl:text>  
-			 }
+			}
 		}
 		on_read_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_xyz_euler_zyz (button, userdata);
-
 	}
 	
 	void on_export_button_clicked_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>_xyz_euler_zyz (GtkButton* button, gpointer userdata)

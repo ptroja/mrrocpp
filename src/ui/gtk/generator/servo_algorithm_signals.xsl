@@ -44,7 +44,6 @@ extern "C"
 				{
 				    try {
     					robot_</xsl:text><xsl:value-of select="$fullName" /><xsl:text>->get_servo_algorithm(servo_alg_no, servo_par_no); // Odczyt polozenia walow silnikow
-    						fprintf(stderr, "get_servo_algorithm failed\n");
     					
     </xsl:text><xsl:call-template name="irp6.servo.repeat.signals.cc.read.2">
         						<xsl:with-param name="motorsNo" select="$motorsNo"/>
