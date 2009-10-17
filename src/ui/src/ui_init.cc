@@ -42,6 +42,7 @@
 #include "ui/ui_const.h"
 #include "ui/ui.h"
 #include "lib/configurator.h"
+#include "lib/mis_fun.h"
 
 #include "lib/messip/messip.h"
 
@@ -66,33 +67,24 @@ ui_msg_def ui_msg;
 
 std::ofstream *log_file_outfile;
 
-
 #if !defined(USE_MESSIP_SRR)
 void *sr_thread(void* arg)
 {
-	// printf("watek testowy dziala\n");		// by Y&W
-	lib::sr_package_t sr_msg;
-	// 	char current_line[40];
-	// 	char current_line[80];
-	int16_t status;
-	// 	int flags=0;
+	lib::set_thread_name("sr");
 
 	name_attach_t *attach;
-	// my_data_t msg;
-	int rcvid;
 
 	if ((attach = name_attach(NULL, ui_state.sr_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
 	{
 		perror("BLAD SR ATTACH, przypuszczalnie nie uruchomiono gns, albo blad wczytywania konfiguracji");
 		return NULL;
 	}
-	// printf("PO ATTACH ");
-	// flushall();
 
 	while(1)
 	{
+		lib::sr_package_t sr_msg;
 
-		rcvid = MsgReceive_r(attach->chid, &sr_msg, sizeof(sr_msg), NULL);
+		int rcvid = MsgReceive_r(attach->chid, &sr_msg, sizeof(sr_msg), NULL);
 
 		if (rcvid < 0) /* Error condition, exit */
 		{
@@ -131,6 +123,7 @@ void *sr_thread(void* arg)
 			continue;
 		}
 
+		int16_t status;
 		MsgReply(rcvid, EOK, &status, sizeof(status));
 
 		if (strlen(sr_msg.process_name)>1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
@@ -158,12 +151,7 @@ void *sr_thread(void* arg)
 #warning "use messip :)"
 void *sr_thread(void* arg)
 {
-	sr_package_t sr_msg;
-	int16_t status;
-
 	messip_channel_t *ch;
-	int32_t type, subtype;
-	int rcvid;
 
 	if ((ch = messip_channel_create(NULL, ui_state.sr_attach_point, MESSIP_NOTIMEOUT, 0)) == NULL) {
 		perror("messip_channel_create()");
@@ -172,8 +160,10 @@ void *sr_thread(void* arg)
 
 	while(1)
 	{
+		int32_t type, subtype;
+		sr_package_t sr_msg;
 
-		rcvid = messip_receive(ch, &type, &subtype, &sr_msg, sizeof(sr_msg), MESSIP_NOTIMEOUT);
+		int rcvid = messip_receive(ch, &type, &subtype, &sr_msg, sizeof(sr_msg), MESSIP_NOTIMEOUT);
 
 		if (rcvid == -1) /* Error condition, exit */
 		{
@@ -186,7 +176,7 @@ void *sr_thread(void* arg)
 			continue;
 		}
 
-		status = 0;
+		int16_t status = 0;
 		messip_reply(ch, rcvid, EOK, &status, sizeof(status), MESSIP_NOTIMEOUT);
 
 		if (strlen(sr_msg.process_name)>1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
@@ -214,26 +204,25 @@ void *sr_thread(void* arg)
 
 void *comm_thread(void* arg) {
 
+	lib::set_thread_name("comm");
 
 	name_attach_t *attach;
-	// my_data_t msg;
-	int rcvid;
+
 	_msg_info info;
 
 	bool wyjscie;
 
 	if ((attach = name_attach(NULL, ui_state.ui_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
 	{
-		// XXX TODO
+		// TODO: throw
 		// return EXIT_FAILURE;
 		// printf("NIE MA ATTACHA");
 	}
 
-
 	while(1) {
 		// ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
 		ui_ecp_obj->communication_state = UI_ECP_AFTER_REPLY;
-		rcvid = MsgReceive(attach->chid, &ui_ecp_obj->ecp_to_ui_msg, sizeof(ui_ecp_obj->ecp_to_ui_msg), &info);
+		int rcvid = MsgReceive(attach->chid, &ui_ecp_obj->ecp_to_ui_msg, sizeof(ui_ecp_obj->ecp_to_ui_msg), &info);
 		ui_ecp_obj->communication_state = UI_ECP_AFTER_RECEIVE;
 		if (rcvid == -1) {/* Error condition, exit */
 			perror("UI: Receive failed\n");
@@ -525,23 +514,24 @@ void *comm_thread(void* arg) {
 void catch_signal(int sig) {
 	int status;
 	pid_t child_pid;
+
+	// print a message
+	fprintf(stderr, "UI: %s\n", strsignal(sig));
+
 	switch(sig) {
 	case SIGINT :
 		UI_close();
 		break;
 	case SIGALRM:
-		printf("SIGALRM received\n");
 		break;
 	case SIGSEGV:
-		fprintf(stderr, "Segmentation fault in UI process\n");
 		signal(SIGSEGV, SIG_DFL);
 		break;
 	case SIGCHLD:
-
-		printf("waitpid(...)"); fflush(stdout);
-		child_pid = waitpid(-1, &status, /*WNOHANG*/ WEXITED);
+		child_pid = waitpid(-1, &status, 0);
 
 		if (child_pid == -1) {
+			int e = errno;
 			perror("UI: waitpid()");
 		} else if (child_pid == 0) {
 			fprintf(stderr, "UI: no child exited\n");

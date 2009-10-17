@@ -42,5 +42,25 @@ void set_thread_priority(pthread_t thread, int sched_priority_l)
 	}
 }
 
+#if defined(__FreeBSD__)
+#include <pthread_np.h>
+#endif
+
+//! set the thread name for debugging
+int set_thread_name(const char * newname) {
+#if defined(__QNXNTO__)
+	return pthread_setname_np(pthread_self(), newname);
+#elif defined(linux)
+	char comm[16];
+	snprintf(comm, sizeof(comm), "%s", newname);
+	return prctl(PR_SET_NAME, comm, 0l, 0l, 0l);
+#elif defined(__FreeBSD__)
+	// FreeBSD defines this call to void
+	pthread_set_name_np(pthread_self(), newname);
+
+	return 0;
+#endif
+}
+
 } // namespace lib
 } // namespace mrrocpp

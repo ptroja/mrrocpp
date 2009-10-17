@@ -2313,8 +2313,8 @@ MPup( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
 				while( (ui_state.mp.pulse_fd = name_open(ui_state.mp.network_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))  < 0 )
 					if((tmp++)<CONNECT_RETRY)
 						delay(CONNECT_DELAY);
-					else{
-						fprintf(stderr, "blad odwolania do: %s,\n", ui_state.mp.network_pulse_attach_point.c_str());
+					else {
+						fprintf(stderr, "name_open() for %s failed: %s\n", ui_state.mp.network_pulse_attach_point.c_str(), strerror(errno));
 						break;
 					}
 

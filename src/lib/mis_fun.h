@@ -21,6 +21,9 @@ namespace lib {
 // setting of thread priority
 void set_thread_priority(pthread_t thread, int sched_priority_l);
 
+// set thread name (for QNX Momentics debugger)
+int set_thread_name(const char *);
+
 // by Y
 inline void copy_frame(lib::frame_tab destination_frame, const lib::frame_tab source_frame)
 {
