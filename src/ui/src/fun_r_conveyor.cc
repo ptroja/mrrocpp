@@ -555,7 +555,7 @@ EDP_conveyor_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 					if((tmp++)<CONNECT_RETRY)
 						delay(CONNECT_DELAY);
 					else{
-					   perror("blad odwolania do READER_C\n");
+					   perror("blad odwolania do READER_C");
 	   				   break;
 					}
 
@@ -735,8 +735,8 @@ pulse_ecp_conveyor( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 				if((tmp++)<CONNECT_RETRY)
 					delay(CONNECT_DELAY);
 				else{
-				   perror("blad odwolania do ECP_TRIGGER\n");
-				};
+				   perror("blad odwolania do ECP_TRIGGER");
+				}
 			}
 			// odwolanie alarmu
 			ualarm( (useconds_t)( 0), 0);

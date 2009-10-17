@@ -259,7 +259,7 @@ void ecp_robot::send()
 
 			break;
 		default: // blad: nieprawidlowe polecenie
-			perror("ECP: INVALID COMMAND TO EDP\n");
+			perror("ECP: INVALID COMMAND TO EDP");
 			sr_ecp_msg.message(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 	}

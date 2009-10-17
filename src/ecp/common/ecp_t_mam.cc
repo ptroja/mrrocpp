@@ -94,7 +94,7 @@ void* UI_communication_thread(void* arg)
 		rcvid = MsgReceive(UI_ECP_attach->chid, &from_ui_msg, sizeof(from_ui_msg), NULL);
 		// Jesli zla wiadomosc.
 		if (rcvid == -1) {
-			perror("UI_communication_thread: Receive failed\n");
+			perror("UI_communication_thread: Receive failed");
 			continue;
 		}
 		// Jesli nadszedl puls.

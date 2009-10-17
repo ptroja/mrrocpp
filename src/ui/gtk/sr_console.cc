@@ -131,7 +131,7 @@ void *sr_thread(void* arg)
 
 		if (rcvid == -1) /* Error condition, exit */
 		{
-			perror("SR: Receive failed\n");
+			perror("SR: Receive failed");
 			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			break;
 		} else if (rcvid < -1) {

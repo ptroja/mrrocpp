@@ -139,7 +139,7 @@ void CameraProxy::Decompress()
 
   if (this->compression != PLAYER_CAMERA_COMPRESS_JPEG)
   {
-    perror("CameraProxy::Decompress() not a JPEG image, not good!\n");
+    perror("CameraProxy::Decompress() not a JPEG image, not good!");
     //return;
   }
 

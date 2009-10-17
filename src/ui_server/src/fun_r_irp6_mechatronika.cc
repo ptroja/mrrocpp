@@ -739,8 +739,8 @@ int pulse_ecp_irp6_mechatronika()
 				if ((tmp++)<20)
 					delay(50);
 				else{
-					perror("blad odwolania do ECP_TRIGGER\n");
-				};
+					perror("blad odwolania do ECP_TRIGGER");
+				}
 			}
 			// odwolanie alarmu
 			ualarm( (useconds_t)( 0), 0);

@@ -111,8 +111,8 @@ pulse_ecp_conveyor()
 				if((tmp++)<20)
 					delay(50);
 				else{
-				   perror("blad odwolania do ECP_TRIGGER\n");
-				};
+				   perror("blad odwolania do ECP_TRIGGER");
+				}
 			}
 			// odwolanie alarmu
 			ualarm( (useconds_t)( 0), 0);
@@ -448,9 +448,9 @@ int EDP_conveyor_create()
 						if((tmp++)<20)
 							delay(50);
 						else{
-						   perror("blad odwolania do READER_C\n");
+						   perror("blad odwolania do READER_C");
 		   				   break;
-						};
+						}
 
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;

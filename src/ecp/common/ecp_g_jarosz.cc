@@ -3242,7 +3242,7 @@ void ecp_save_trajectory(elipsoid& the_generator, common::task::task& _ecp_task)
 	if (messip_send(_ecp_task.UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message), &status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
 #endif
 		e = errno;
-		perror("ECP: Send() to UI failed\n");
+		perror("ECP: Send() to UI failed");
 		_ecp_task.sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
 		throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
@@ -3301,7 +3301,7 @@ void ecp_save_extended_file(calibration& the_generator, operator_reaction_condit
 	if (messip_send(_ecp_task.UI_fd, 0, 0, &ecp_to_ui_msg, sizeof(lib::ECP_message), &status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
 #endif
 		e = errno;
-		perror("ECP: Send() to UI failed\n");
+		perror("ECP: Send() to UI failed");
 		_ecp_task.sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
 		throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}

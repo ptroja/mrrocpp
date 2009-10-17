@@ -153,7 +153,7 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 			"reader_attach_point").c_str(), MESSIP_NOTIMEOUT, 0)) == NULL) {
 #endif
 		e = errno;
-		perror("Failed to attach pulse chanel for READER\n");
+		perror("Failed to attach pulse chanel for READER");
 		msg->message("Failed to attach pulse chanel for READER");
 		//  throw MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
@@ -174,7 +174,7 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 			int rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
 
 			if (rcvid == -1) {/* Error condition, exit */
-				perror("blad receive w reader\n");
+				perror("blad receive w reader");
 				break;
 			}
 
@@ -260,7 +260,7 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 			int rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
 
 			if (rcvid == -1) {/* Error condition, exit */
-				// perror("blad receive w reader\n");
+				// perror("blad receive w reader");
 			}
 
 			if (rcvid == 0) {/* Pulse received */

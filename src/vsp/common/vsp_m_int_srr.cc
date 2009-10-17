@@ -139,7 +139,7 @@ int main(int argc, char *argv[]) {
 
 			if (rcvid == -1) /* Error condition, exit */
 			{
-				perror("VSP: Receive failed\n");
+				perror("VSP: Receive failed");
 				break;
 			} else if (rcvid < -1) {
 				// ie. MESSIP_MSG_DISCONNECT

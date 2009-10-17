@@ -113,7 +113,7 @@ void ecp_teach_in_generator::save_file(lib::POSE_SPECIFICATION ps)
 #endif
     {// by Y&W
         e = errno;
-        perror("ECP: Send() to UI failed\n");
+        perror("ECP: Send() to UI failed");
         sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
         throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
       }
@@ -205,7 +205,7 @@ bool ecp_teach_in_generator::load_file_from_ui()
 #endif
     {// by Y&W
         e = errno;
-        perror("ECP: Send() to UI failed\n");
+        perror("ECP: Send() to UI failed");
         sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
         throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
       }

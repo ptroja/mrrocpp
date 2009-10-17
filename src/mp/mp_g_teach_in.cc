@@ -83,7 +83,7 @@ void teach_in::save_file (lib::POSE_SPECIFICATION ps) {
 					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
 #endif
 		e = errno;
-		perror("ECP: Send() to UI failed\n");
+		perror("ECP: Send() to UI failed");
 		sr_ecp_msg.message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
 		throw generator::MP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
@@ -284,7 +284,7 @@ bool teach_in::load_file () {
 					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
 #endif
 		e = errno;
-		perror("ECP: Send() to UI failed\n");
+		perror("ECP: Send() to UI failed");
 		sr_ecp_msg.message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
 		throw generator::MP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}

@@ -2257,7 +2257,7 @@ EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 					if((tmp++)<CONNECT_RETRY) {
 						delay(CONNECT_DELAY);
 					} else {
-					   perror("blad odwolania do READER_P\n");
+					   perror("blad odwolania do READER_P");
 					   break;
 					}
 				// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
@@ -2462,7 +2462,7 @@ pulse_ecp_irp6_postument( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 				if ((tmp++)<CONNECT_RETRY) {
 					delay(CONNECT_DELAY);
 				} else {
-					perror("blad odwolania do ECP_TRIGGER\n");
+					perror("blad odwolania do ECP_TRIGGER");
 				};
 			}
 			// odwolanie alarmu

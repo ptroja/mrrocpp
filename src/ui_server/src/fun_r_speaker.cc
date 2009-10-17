@@ -243,7 +243,7 @@ int pulse_ecp_speaker()
 				if((tmp++)<20)
 					delay(50);
 				else{
-				   perror("blad odwolania do ECP_TRIGGER\n");
+				   perror("blad odwolania do ECP_TRIGGER");
 				};
 			}
 			// odwolanie alarmu

@@ -300,7 +300,7 @@ EDP_speaker_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 					if((tmp++)<20)
 						delay(50);
 					else{
-					   perror("blad odwolania do READER_START\n");
+					   perror("blad odwolania do READER_START");
 	   				   break;
 					};
 				*/
@@ -479,7 +479,7 @@ pulse_ecp_speaker( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 				if((tmp++)<CONNECT_RETRY)
 					delay(CONNECT_DELAY);
 				else{
-				   perror("blad odwolania do ECP_TRIGGER\n");
+				   perror("blad odwolania do ECP_TRIGGER");
 				};
 			}
 			// odwolanie alarmu

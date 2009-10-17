@@ -125,7 +125,7 @@ void robot::start_ecp ( void ) {
 				&status, &ecp_reply_package, sizeof(ecp_reply_package), MESSIP_NOTIMEOUT) < 0) {
 #endif
 		uint64_t e = errno;
-		perror("Send to ECP failed\n");
+		perror("Send to ECP failed");
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "MP: Send to ECP failed");
 		throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
@@ -155,7 +155,7 @@ void robot::execute_motion(void) { // zlecenie wykonania ruchu
 #endif
 		// Blad komunikacji miedzyprocesowej - wyjatek
 		uint64_t e = errno;
-		perror("Send to ECP failed\n");
+		perror("Send to ECP failed");
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "MP: Send() to ECP failed");
 		throw MP_error (lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
@@ -185,7 +185,7 @@ void robot::terminate_ecp(void) { // zlecenie STOP zakonczenia ruchu
 #endif
 		// Blad komunikacji miedzyprocesowej - wyjatek
 		uint64_t e = errno;
-		perror("Send to ECP failed ?\n");
+		perror("Send to ECP failed ?");
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "MP: Send() to ECP failed");
 		throw MP_error (lib::SYSTEM_ERROR, (uint64_t) 0);
 	}

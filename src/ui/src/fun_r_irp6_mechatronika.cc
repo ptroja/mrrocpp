@@ -208,9 +208,9 @@ EDP_irp6_mechatronika_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 					if((tmp++)<CONNECT_RETRY)
 						delay(CONNECT_DELAY);
 					else{
-					   perror("blad odwolania do READER_M\n");
+					   perror("blad odwolania do READER_M");
 					   break;
-					};
+					}
 
 				// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 				lib::controller_state_t robot_controller_initial_state_tmp;
@@ -670,7 +670,7 @@ pulse_ecp_irp6_mechatronika( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 			if((tmp++)<CONNECT_RETRY)
 				delay(CONNECT_DELAY);
 			else{
-			   perror("blad odwolania do ECP_TRIGGER\n");
+			   perror("blad odwolania do ECP_TRIGGER");
 			}
 		}
 		// odwolanie alarmu

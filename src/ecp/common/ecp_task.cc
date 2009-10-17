@@ -39,7 +39,7 @@ bool task::pulse_check()
 	int rcvid = MsgReceive(trigger_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
 
 	if (rcvid == -1) {/* Error condition, exit */
-		// perror("blad receive w reader\n");
+		// perror("blad receive w reader");
 	}
 
 	if (rcvid == 0) {/* Pulse received */
@@ -225,7 +225,7 @@ void task::send_pulse_to_mp(int pulse_code, int pulse_value)
 	if (messip_send(MP_fd, pulse_code, pulse_value, NULL, 0, &answer, NULL, -1, MESSIP_NOTIMEOUT) < 0)
 #endif
 	{
-		perror("Blad w wysylaniu pulsu do mp\n");
+		perror("Blad w wysylaniu pulsu do mp");
 	}
 }
 
@@ -252,7 +252,7 @@ void task::ecp_wait_for_stop(void)
 #endif
 	{// by Y&W
 		uint64_t e= errno; // kod bledu systemowego
-		perror("ECP: Reply to MP failed\n");
+		perror("ECP: Reply to MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
 		throw common::generator::generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
@@ -296,7 +296,7 @@ bool task::ecp_wait_for_start(void)
 #endif
 	{// by Y&W
 		uint64_t e= errno; // kod bledu systemowego
-		perror("ECP: Reply to MP failed\n");
+		perror("ECP: Reply to MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
 		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
@@ -343,7 +343,7 @@ void task::get_next_state(void)
 #endif
 	{// by Y&W{
 		uint64_t e = errno; // kod bledu systemowego
-		perror("ECP: Reply to MP failed\n");
+		perror("ECP: Reply to MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
 		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
@@ -397,7 +397,7 @@ bool task::mp_buffer_receive_and_send(void)
 #endif
 	{// by Y&W
 		uint64_t e= errno; // kod bledu systemowego
-		perror("ECP: Reply to MP failed\n");
+		perror("ECP: Reply to MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
 		throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
@@ -427,7 +427,7 @@ int task::receive_mp_message(void)
 
 		if (caller == -1) {/* Error condition, exit */
 			uint64_t e= errno; // kod bledu systemowego
-			perror("ECP: Receive from MP failed\n");
+			perror("ECP: Receive from MP failed");
 			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Receive from MP failed");
 			throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 		}

@@ -60,7 +60,7 @@ void * irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 	if ((edp_vsp_attach = name_attach(NULL, config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point").c_str(),
 	NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		e = errno;
-		perror("Failed to attach EDP_VSP\n");
+		perror("Failed to attach EDP_VSP");
 		vs->sr_msg->message(lib::SYSTEM_ERROR, e, "Failed to attach Effector Control Process");
 	}
 	long counter = 0;
@@ -70,7 +70,7 @@ void * irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 		if (vsp_caller == -1) /*!Error condition, exit */
 		{
 			e = errno;
-			perror("EDP_VSP: Receive from VSP failed\n");
+			perror("EDP_VSP: Receive from VSP failed");
 			vs->sr_msg->message(lib::SYSTEM_ERROR, e, "EDP: Receive from VSP failed");
 			break;
 		}
@@ -130,7 +130,7 @@ void * irp6s_postument_track_effector::edp_vsp_thread(void *arg)
 		if (MsgReply(vsp_caller, EOK, &edp_vsp_reply, sizeof(edp_vsp_reply)) ==-1) //!< by Y&W
 		{
 			e = errno;
-			perror("EDP_VSP: Reply to VSP failed\n");
+			perror("EDP_VSP: Reply to VSP failed");
 			vs->sr_msg->message(lib::SYSTEM_ERROR, e, "EDP: Reply to VSP failed");
 		}
 	} //!< end while

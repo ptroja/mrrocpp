@@ -209,7 +209,7 @@ EDP_polycrank_create( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 					if((tmp++)<CONNECT_RETRY)
 						delay(CONNECT_DELAY);
 					else{
-					   perror("blad odwolania do READER_M\n");
+					   perror("blad odwolania do READER_M");
 					   break;
 					};
 
@@ -671,7 +671,7 @@ pulse_ecp_polycrank( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 			if((tmp++)<CONNECT_RETRY)
 				delay(CONNECT_DELAY);
 			else{
-			   perror("blad odwolania do ECP_TRIGGER\n");
+			   perror("blad odwolania do ECP_TRIGGER");
 			};
 		}
 		// odwolanie alarmu

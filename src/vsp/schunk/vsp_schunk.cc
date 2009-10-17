@@ -99,7 +99,7 @@ void schunk::configure_sensor (void)// w obecnej implementacji zeruje poziom odc
 		if (MsgSend(edp_vsp_fd, &vsp_edp_command, sizeof(vsp_edp_command),
 		&edp_vsp_reply, sizeof(edp_vsp_reply)) < 0) // by Y
 		{
-			perror("blad odwolonia VSP_SCHUNK do EDP podczas proby konfiguracji\n");
+			perror("blad odwolonia VSP_SCHUNK do EDP podczas proby konfiguracji");
 			sr_msg->message("blad odwolonia VSP_SCHUNK do EDP podczas proby konfiguracji");
 		}
 // 		printf("VSP bbbb\n");

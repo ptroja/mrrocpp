@@ -3045,7 +3045,7 @@ void *sr_thread(void* arg)
 
 		if (rcvid == -1) /* Error condition, exit */
 		{
-			perror("SR: Receive failed\n");
+			perror("SR: Receive failed");
 			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			break;
 		} else if (rcvid < -1) {
@@ -3104,7 +3104,7 @@ while(1) {
 	rcvid = MsgReceive(attach->chid, &ui_ecp_obj->ecp_to_ui_msg, sizeof(ui_ecp_obj->ecp_to_ui_msg), &info);
 	ui_ecp_obj->communication_state = UI_ECP_AFTER_RECEIVE;
      if (rcvid == -1) {/* Error condition, exit */
-   		  perror("UI: Receive failed\n");
+   		  perror("UI: Receive failed");
 		// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
          break;
      }
@@ -3389,7 +3389,7 @@ int init()
 	//jk
 	if(sem_init(&sem,0,1) == -1 || sem_init(&sem_conveyor,0,1) == -1 || sem_init(&sem_irp6_on_track,0,1) == -1 || sem_init(&sem_irp6_postument,0,1) == -1 || sem_init(&sem_irp6_mechatronika,0,1) == -1 || sem_init(&sem_speaker,0,1) == -1 || sem_init(&sem_ui,0,1) == -1 || sem_init(&sem_mp,0,1) == -1)
 	{
-		perror("Unable to initialize semaphore\n");
+		perror("Unable to initialize semaphore");
 		return NULL;
 
 	}//~jk

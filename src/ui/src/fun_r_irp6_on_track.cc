@@ -2530,8 +2530,8 @@ pulse_ecp_irp6_on_track( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 				if ((tmp++)<CONNECT_RETRY) {
 					delay(CONNECT_DELAY);
 				} else {
-					perror("blad odwolania do ECP_TRIGGER\n");
-				};
+					perror("blad odwolania do ECP_TRIGGER");
+				}
 			}
 			// odwolanie alarmu
 			ualarm( (useconds_t)( 0), 0);

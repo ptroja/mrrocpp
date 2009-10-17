@@ -121,7 +121,7 @@ uint8_t task::choose_option (const char* question, uint8_t nr_of_options_input )
 					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
 #endif
 		uint64_t e = errno;
-		perror("ECP: Send() to UI failed\n");
+		perror("ECP: Send() to UI failed");
 		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
 		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
@@ -150,7 +150,7 @@ int task::input_integer (const char* question )
 					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
 #endif
 		uint64_t e = errno;
-		perror("ECP: Send() to UI failed\n");
+		perror("ECP: Send() to UI failed");
 		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
 		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
@@ -179,7 +179,7 @@ double task::input_double (const char* question )
 					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
 #endif
 		uint64_t e = errno;
-		perror("ECP: Send() to UI failed\n");
+		perror("ECP: Send() to UI failed");
 		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
 		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
@@ -207,7 +207,7 @@ bool task::show_message (const char* message)
 					&status, &ui_to_ecp_rep, sizeof(lib::UI_reply), MESSIP_NOTIMEOUT) < 0) {
 #endif
 		uint64_t e = errno;
-		perror("ECP: Send() to UI failed\n");
+		perror("ECP: Send() to UI failed");
 		sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "ECP: Send() to UI failed");
 		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
 	}

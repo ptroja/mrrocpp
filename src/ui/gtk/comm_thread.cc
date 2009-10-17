@@ -38,7 +38,7 @@ void *comm_thread(void* arg)
 		//		ui_ecp_obj->communication_state = UI_ECP_AFTER_RECEIVE;
 
 		if (rcvid == -1) {/* Error condition, exit */
-			perror("UI: Receive failed\n");
+			perror("UI: Receive failed");
 			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			break;
 		} else if (rcvid < -1) {
@@ -314,7 +314,7 @@ void *comm_thread(void* arg)
 				break;
 #else
 			default:
-				perror("Strange ECP message\n");
+				perror("Strange ECP message");
 		}; // end: switch
 
 		messip_reply(ch, rcvid, EOK, NULL, 0, MESSIP_NOTIMEOUT);

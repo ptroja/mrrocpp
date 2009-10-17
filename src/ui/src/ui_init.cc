@@ -167,7 +167,7 @@ void *sr_thread(void* arg)
 
 		if (rcvid == -1) /* Error condition, exit */
 		{
-			perror("SR: Receive failed\n");
+			perror("SR: Receive failed");
 			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			break;
 		} else if (rcvid < -1) {
@@ -225,7 +225,7 @@ void *comm_thread(void* arg) {
 		int rcvid = MsgReceive(attach->chid, &ui_ecp_obj->ecp_to_ui_msg, sizeof(ui_ecp_obj->ecp_to_ui_msg), &info);
 		ui_ecp_obj->communication_state = UI_ECP_AFTER_RECEIVE;
 		if (rcvid == -1) {/* Error condition, exit */
-			perror("UI: Receive failed\n");
+			perror("UI: Receive failed");
 			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			break;
 		}
@@ -502,7 +502,7 @@ void *comm_thread(void* arg) {
 			break;
 
 		default:
-			perror ("Strange ECP message\n");
+			perror("Strange ECP message");
 		}; // end: switch
 	}// end while
 

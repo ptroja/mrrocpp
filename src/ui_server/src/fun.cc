@@ -669,8 +669,8 @@ execute_mp_pulse (char pulse_code)
 	if (ui_state.mp.pulse_fd>0) {
 		if (ret == MsgSendPulse (ui_state.mp.pulse_fd , sched_get_priority_min(SCHED_FIFO),  pulse_code,  pulse_value)==-1) {
 
-			  perror("Blad w wysylaniu pulsu do mp\n");
-			   fprintf( stderr, "Blad w wysylaniu pulsu do mp error: %s \n",       strerror( errno ) );
+			  perror("Blad w wysylaniu pulsu do MP");
+			   fprintf( stderr, "Blad w wysylaniu pulsu do MP error:%s \n",       strerror( errno ) );
 			   delay(1000);
 		}
 	}

@@ -27,7 +27,7 @@
 catch (ecp::common::ecp_robot::ECP_error er) { \
 	/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */ \
 	if ( er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunikat do SR */ \
-		perror("ECP lib::SYSTEM_ERROR in UI\n"); \
+		perror("ECP lib::SYSTEM_ERROR in UI"); \
 		/* PtExit( EXIT_SUCCESS ); */ \
 	} else { \
 	switch ( er.error_no ) { \
