@@ -418,8 +418,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		if (spawned_node_name == sysinfo.nodename)
 		{
 			rsh_spawn_node = "localhost";
-		} else
-		{
+		} else {
 			rsh_spawn_node = spawned_node_name;
 		}
 
@@ -455,7 +454,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		if (exists("username", _section_name)) {
 			std::string username = return_string_value("username", _section_name);
 
-			fprintf(stderr, "rsh -l %s %s \"%s\"\n", username.c_str(), rsh_spawn_node.c_str(), process_path);
+//			fprintf(stderr, "rsh -l %s %s \"%s\"\n", username.c_str(), rsh_spawn_node.c_str(), process_path);
 
 			execlp("rsh",
 					"rsh",
@@ -464,24 +463,24 @@ pid_t configurator::process_spawn(const char*_section_name) {
 					process_path,
 					NULL);
 		} else {
-			printf("rsh %s \"%s\"\n", rsh_spawn_node.c_str(), process_path);
+//			printf("rsh %s \"%s\"\n", rsh_spawn_node.c_str(), process_path);
 
-			fprintf(stderr,
-					"bin_path ->%s<-\n"
-					"ui_host ->%s<-\n"
-					"spawned_program_name ->%s<-\n"
-					"node ->%s<-\n"
-					"dir ->%s<-\n"
-					"ini_file ->%s<-\n"
-					"_section_name ->%s<-\n"
-					"session_name ->%s<-\n"
-					"asa ->%s<-\n",
-					bin_path, ui_host ? ui_host : "",
-					spawned_program_name.c_str(),
-					node, dir, ini_file, _section_name,
-					strlen(session_name) ? session_name : "\"\"",
-					asa.c_str()
-			);
+//			fprintf(stderr,
+//					"bin_path ->%s<-\n"
+//					"ui_host ->%s<-\n"
+//					"spawned_program_name ->%s<-\n"
+//					"node ->%s<-\n"
+//					"dir ->%s<-\n"
+//					"ini_file ->%s<-\n"
+//					"_section_name ->%s<-\n"
+//					"session_name ->%s<-\n"
+//					"asa ->%s<-\n",
+//					bin_path, ui_host ? ui_host : "",
+//					spawned_program_name.c_str(),
+//					node, dir, ini_file, _section_name,
+//					strlen(session_name) ? session_name : "\"\"",
+//					asa.c_str()
+//			);
 
 			execlp("rsh",
 					"rsh",
@@ -553,7 +552,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		else{
 			fprintf( stderr, "Cannot open y_spawn_process.\n");
 			return -1;
-		};
+		}
 		//printf("conf 1\n");
 		// Wiadomosci odbierane i wysylane.
 		my_data_t input;
