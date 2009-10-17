@@ -30,20 +30,9 @@ class task: public ecp_mp::task::task
 	public:
 #if !defined(USE_MESSIP_SRR)
 		static name_attach_t *mp_pulse_attach;
-
-	    //! A server connection ID identifing UI
-	    int ui_scoid;
-
-	    //! flag indicating opened pulse connection from UI
-	    bool ui_opened;
 #else
 		static messip_channel_t *mp_pulse_attach;
-		messip_dispatch_t *dpp;
 #endif
-
-		/// mapa wszystkich robotow
-		static common::robots_t robot_m;
-
 		/// KONSTRUKTORY
 		task(lib::configurator &_config);
 		virtual ~task(void);
@@ -109,18 +98,24 @@ class task: public ecp_mp::task::task
 		virtual void task_initialization(void);
 		virtual void main_task_algorithm(void);
 
+		/// mapa wszystkich robotow
+		static common::robots_t robot_m;
+
+		//! wait until ECP/UI calls name_open() to pulse channel;
+		//! \return {identifier (scoid/QNET or socket/messip) of the next connected process}
+		int wait_for_name_open(void);
+
 	private:
+	    //! A server connection ID identifing UI
+	    int ui_scoid;
+
+	    //! flag indicating opened pulse connection from UI
+	    bool ui_opened;
+
 		char ui_pulse_code; // kod pulsu ktory zostal wyslany przez ECP w celu zgloszenia gotowosci do komunikacji (wartosci w impconst.h)
 		bool ui_new_pulse; // okresla czy jest nowy puls
 
 		bool check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE process_type, RECEIVE_PULSE_MODE wait_mode);
-
-	public:
-#if !defined(USE_MESSIP_SRR)
-		int wait_for_name_open(void);
-#else
-		static int pulse_dispatch(messip_channel_t * ch, void * arg);
-#endif
 };
 
 task* return_created_mp_task (lib::configurator &_config);

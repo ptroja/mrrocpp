@@ -132,19 +132,14 @@ void task::initialize_communication()
 		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 
-	// Lokalizacja procesu MP - okreslenie identyfikatora (pid)
-#if !defined(USE_MESSIP_SRR)
 	std::string mp_pulse_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", "[mp]");
+				config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", "[mp]");
 
-//	std::cout << "ECP: Opening qnet MP pulses channel at '" << mp_pulse_attach_point << "'" << std::endl;
+//	std::cout << "ECP: Opening MP pulses channel at '" << mp_pulse_attach_point << "'" << std::endl;
 
+#if !defined(USE_MESSIP_SRR)
 	if ( (MP_fd = name_open(mp_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
 #else
-	std::string mp_pulse_attach_point =	ecp_attach_point + std::string("_PULSE");
-
-//	std::cout << "ECP: Connecting to messip MP pulses channel at '" << mp_pulse_attach_point << "'" << std::endl;
-
 	if ( (MP_fd = messip_channel_connect(NULL, mp_pulse_attach_point.c_str(), MESSIP_NOTIMEOUT)) == NULL)
 #endif
 	{

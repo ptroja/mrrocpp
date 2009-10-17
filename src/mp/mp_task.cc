@@ -109,24 +109,14 @@ common::robots_t task::robot_m;
 // KONSTRUKTORY
 task::task(lib::configurator &_config)
 	: ecp_mp::task::task(_config),
-	ui_new_pulse(false),
-	ui_opened(false)
+	ui_opened(false),
+	ui_new_pulse(false)
 {
-#if defined(USE_MESSIP_SRR)
-	if ( ( dpp = messip_dispatch_create()) == NULL ) {
-		perror("messip_dispatch_create()");
-		throw(common::MP_main_error(lib::SYSTEM_ERROR, errno));
-	}
-#endif
 }
 
 task::~task()
 {
-#if defined(USE_MESSIP_SRR)
-	messip_dispatch_delete(dpp);
-#endif
 }
-
 
 void task::stop_and_terminate()
 {
@@ -516,9 +506,10 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 	// koniec petli
 }
 
-#if !defined(USE_MESSIP_SRR)
+
 int task::wait_for_name_open(void)
 {
+#if !defined(USE_MESSIP_SRR)
    /* Do your MsgReceive's here now with the chid */
    while (1) {
 	   struct _pulse msg;
@@ -592,8 +583,40 @@ int task::wait_for_name_open(void)
 
 	   throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
    }
+#else
+   while(1) {
+	   int32_t type, subtype;
+	   int rcvid = messip_receive(mp_pulse_attach,
+			   &type, &subtype,
+			   NULL, 0,
+			   MESSIP_NOTIMEOUT);
+
+	   if (rcvid == -1) {
+		   int e = errno;
+		   perror("MP: messip_receive()");
+		   throw common::MP_main_error(lib::SYSTEM_ERROR, e);
+	   } else if (rcvid >= 0) {
+		   fprintf(stderr, "MP: unexpected message received\n");
+		   throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
+	   } else if (rcvid == MESSIP_MSG_NOREPLY) {
+		   // handle pulse
+		   if (ui_opened && ui_scoid == mp_pulse_attach->lastmsg_sockfd) {
+			   ui_new_pulse = true;
+			   ui_pulse_code = type;
+		   }
+
+		   BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
+			   if (robot_node.second->opened && robot_node.second->scoid == mp_pulse_attach->lastmsg_sockfd) {
+				   robot_node.second->new_pulse = true;
+				   robot_node.second->pulse_code = type;
+			   }
+		   }
+	   } else if (rcvid == MESSIP_MSG_CONNECTING) {
+		   return mp_pulse_attach->lastmsg_sockfd;
+	   }
+   }
+#endif
 }
-#endif /* !USE_MESSIP_SRR */
 
 bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE process_type, RECEIVE_PULSE_MODE wait_mode)
 {
@@ -687,20 +710,42 @@ bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE proces
 			throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
 		}
 #else
-		int r = messip_dispatch_block(dpp, (wait_mode == BLOCK) ? MESSIP_NOTIMEOUT : 0);
+		int32_t type, subtype;
+		int rcvid = messip_receive(mp_pulse_attach,
+				&type, &subtype,
+				NULL, 0,
+				(wait_mode == BLOCK) ? MESSIP_NOTIMEOUT : 0);
 
-		if (r < 0) {
-			perror("messip_dispatch_block()");
+		if (rcvid == -1) {
+			int e = errno;
+			perror("MP: messip_receive()");
+			throw common::MP_main_error(lib::SYSTEM_ERROR, e);
+		} else if (rcvid == MESSIP_MSG_TIMEOUT) {
+			if (wait_mode == NONBLOCK) {
+				return false;
+			}
+			int e = errno;
+			perror("MP: messip_receive() unexpected timeout");
+			throw common::MP_main_error(lib::SYSTEM_ERROR, e);
+		} else if (rcvid >= 0) {
+			fprintf(stderr, "MP: unexpected message received\n");
 			throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
-		}
-		else if (r == 0) {
-			// timeout
-			return false;
-		}
+		} else if (rcvid == MESSIP_MSG_NOREPLY) {
+			// handle pulse
+			if (ui_opened && ui_scoid == mp_pulse_attach->lastmsg_sockfd) {
+				ui_new_pulse = true;
+				ui_pulse_code = type;
+			}
 
-		messip_dispatch_handler(dpp);
+			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
+				if (robot_node.second->opened && robot_node.second->scoid == mp_pulse_attach->lastmsg_sockfd) {
+					robot_node.second->new_pulse = true;
+					robot_node.second->pulse_code = type;
+				}
+			}
+			// continue; ?
+		}
 #endif
-
 	} while (wait_mode == BLOCK);
 
 	return false;
@@ -712,9 +757,9 @@ bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE proces
 // intended use:
 //
 // when the_generator.wait_for_ECP_pulse is set
-//     1) block for ECP pulse and react to UI pulses ()
+//     1) block for ECP pulse and react to UI pulses
 // otherwise
-//     2)
+//     2) peak for UI pulse and eventually react for in in pause/resume/stop/trigger cycle
 void task::mp_receive_ui_or_ecp_pulse (common::robots_t & _robot_m, generator::generator& the_generator )
 {
 	enum MP_STATE_ENUM
@@ -833,10 +878,6 @@ void task::initialize_communication()
 
 	ui_scoid = wait_for_name_open();
 	ui_opened = true;
-
-#if defined(USE_MESSIP_SRR)
-	messip_dispatch_attach(dpp, mp_pulse_attach, reinterpret_cast<messip_callback_t>(&pulse_dispatch), this);
-#endif
 }
 // -------------------------------------------------------------------
 
@@ -1007,60 +1048,6 @@ void task::kill_all_ECP (const common::robots_t & _robot_m)
 	}
 }
 // ------------------------------------------------------------------------
-
-
-#if defined(USE_MESSIP_SRR)
-int task::pulse_dispatch(messip_channel_t *ch, void * arg) {
-
-	task * me = (task *) arg;
-
-	printf("ECP message_handler at channel \"%s\"\n", ch->name);
-
-	int32_t type, subtype;
-	char rec_buff[256];
-
-	int index = messip_receive(ch, &type, &subtype, rec_buff, sizeof(rec_buff), MESSIP_NOTIMEOUT);
-	if (index < 0) {
-		switch (index)
-		{
-			case -1:
-				perror("messip_receive()");
-				break;
-			case MESSIP_MSG_DISCONNECT:
-				printf("MESSIP_MSG_DISCONNECT\n");
-				break;
-			case MESSIP_MSG_DISMISSED:
-				printf("MESSIP_MSG_DISMISSED\n");
-				break;
-			case MESSIP_MSG_TIMEOUT:
-				printf("MESSIP_MSG_TIMEOUT\n");
-				break;
-			case MESSIP_MSG_TIMER:
-				printf("MESSIP_MSG_TIMER\n");
-				break;
-			case MESSIP_MSG_DEATH_PROCESS:
-				printf("MESSIP_MSG_DEATH_PROCESS\n");
-				break;
-			case MESSIP_MSG_NOREPLY:
-				me->ui_new_pulse = true;
-				me->ui_pulse_code = type;
-				break;
-			case MESSIP_MSG_CONNECTING:
-				printf("MESSIP_MSG_CONNECTING\n");
-				break;
-			default:
-				printf("MESSIP_MSG_UNKNOWN %d\n", index);
-				break;
-		}
-		return 0;
-	}
-
-	// we do not expect nothing but pulses
-	assert(0);
-
-	return 0;
-}
-#endif
 
 } // namespace task
 } // namespace mp

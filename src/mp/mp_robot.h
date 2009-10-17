@@ -61,12 +61,12 @@ public:
 #else
     //! main ECP request channel
     messip_channel_t* ECP_fd;
-
-    //! channel for ECP pulses
-    messip_channel_t* ECP_pulse_fd;
-
-    static int pulse_dispatch(messip_channel_t *ch, void * arg);
 #endif
+    //! A server connection ID identifing UI
+    int scoid;
+
+    //! flag indicating opened pulse connection from UI
+    bool opened;
 
     char pulse_code; // kod pulsu ktory zostal wyslany przez ECP w celu zgloszenia gotowosci do komunikacji (wartosci w impconst.h)
     bool new_pulse; // okresla czy jest nowy puls
