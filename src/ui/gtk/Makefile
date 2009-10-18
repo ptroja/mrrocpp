@@ -27,7 +27,7 @@ include $(HOMEDIR)/common.mk
 
 PACKAGES=libxml-2.0 gtk+-2.0 gtkmm-2.4 gthread-2.0
 CPPFLAGS+=`pkg-config --cflags ${PACKAGES}`
-CXXFLAGS+=-fpic -I.
+CXXFLAGS+=-I.
 LDFLAGS+=`pkg-config --libs ${PACKAGES}` -g -L${LIBDIR} -lmessip -lecp -lmrrocpp
 LDFLAGS+=-Wl,-export-dynamic
 XSLTPROC=xsltproc robots.xml --xinclude

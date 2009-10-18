@@ -8,7 +8,6 @@ include $(HOMEDIR)/common.mk
 
 PACKAGES=libxml-2.0 gtk+-2.0 gtkmm-2.4 gthread-2.0
 CPPFLAGS+=`pkg-config --cflags ${PACKAGES}` -I. -I..
-CXXFLAGS+=-fPIC
 # uncomment the following for the sunCC compiler
 #CPPFLAGS+=-DSIGC_HAVE_SUN_REVERSE_ITERATOR -DGLIBMM_HAVE_SUN_REVERSE_ITERATOR
 LDFLAGS+=`pkg-config --libs ${PACKAGES}` -L${LIBDIR}
