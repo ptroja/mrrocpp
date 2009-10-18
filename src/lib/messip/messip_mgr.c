@@ -44,6 +44,7 @@
 #include <signal.h>
 #include <fcntl.h>
 #include <assert.h>
+#include <netinet/tcp.h>
 #if defined(__linux__)
 #include <endian.h>
 #elif defined(__FreeBSD__)
@@ -920,6 +921,7 @@ http_thread( void *arg )
 	int sockfd;
 	int status;
 	int reuse;
+	int flag = 1;
 	struct sockaddr_in server_addr;
 
 	sigemptyset( &set );
@@ -940,6 +942,11 @@ http_thread( void *arg )
 					(void *) &reuse, sizeof(int))) < 0) {
 		fprintf( stderr, "%s %d\n\tUnable to set SO_REUSEADDR a socket!\n", __FILE__, __LINE__ );
 		exit( -1 );
+	}
+
+	/* Disable the Nagle (TCP No Delay) algorithm */
+	if (setsockopt( sockfd, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(int) ) == -1) {
+	  perror("setsockopt(TCP_NODELAY)");
 	}
 
 	/*--- Bind the socket ---*/
@@ -975,6 +982,7 @@ http_thread( void *arg )
 		clientdescr_t *descr;
 		pthread_t tid;
 		pthread_attr_t attr;
+		int flag = 1;
 
 		descr = (clientdescr_t *) malloc( sizeof( clientdescr_t ) );
 		descr->client_addr_len = sizeof( struct sockaddr_in );
@@ -989,6 +997,12 @@ http_thread( void *arg )
 				fprintf( stderr, "Error %d while closing socket %d\n", errno, sockfd );
 			exit( -1 );
 		}
+
+		/* Disable the Nagle (TCP No Delay) algorithm */
+		if (setsockopt(descr->sockfd_accept, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(int)) == -1) {
+		  perror("setsockopt(TCP_NODELAY)");
+		}
+
 #if 1
 		logg( LOG_MESSIP_DEBUG_LEVEL1, "http: accepted a msg from %s, port=%d, socket=%d\n",
 			  inet_ntoa( descr->client_addr.sin_addr ),
