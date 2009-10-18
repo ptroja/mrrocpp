@@ -285,7 +285,7 @@ messip_connect0(const char *mgr_ref,
 	messip_send_connect_t msgsend;
 	messip_reply_connect_t reply;
 	struct iovec iovec[2];
-	int flag = 1;
+	int flag = 0;
 
 #if BYTE_ORDER == BIG_ENDIAN
 	pid = messip_int_little_endian( pid );
@@ -482,7 +482,7 @@ messip_sin( char *mgr_ref )
 	int32_t op;
 	struct iovec iovec[1];
 	int sockfd;
-	int flag = 1;
+	int flag = 0;
 
 	/*--- NULL and /etc/messip does not exist ? ---*/
 	port = MESSIP_DEFAULT_PORT;
@@ -600,7 +600,7 @@ messip_channel_create( messip_cnx_t * cnx,
 	messip_send_channel_create_t msgsend;
 	messip_reply_channel_create_t reply;
 	struct iovec iovec[2];
-	int flag = 1;
+	int flag = 0;
 #ifdef USE_QNXMSG
 	char namepath[PATH_MAX + NAME_MAX + 1] = "/dev/";
 #endif /* USE_QNXMSG */
@@ -953,7 +953,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 	messip_reply_channel_connect_t msgreply;
 	struct iovec iovec[2];
 	struct sockaddr_in sockaddr;
-	int flag = 1;
+	int flag = 0;
 #ifdef USE_QNXMSG
 	char namepath[PATH_MAX + NAME_MAX + 1];
 #endif /* USE_QNXMSG */

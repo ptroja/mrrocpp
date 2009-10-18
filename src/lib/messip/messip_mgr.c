@@ -921,7 +921,7 @@ http_thread( void *arg )
 	int sockfd;
 	int status;
 	int reuse;
-	int flag = 1;
+	int flag = 0;
 	struct sockaddr_in server_addr;
 
 	sigemptyset( &set );
@@ -982,7 +982,7 @@ http_thread( void *arg )
 		clientdescr_t *descr;
 		pthread_t tid;
 		pthread_attr_t attr;
-		int flag = 1;
+		int flag = 0;
 
 		descr = (clientdescr_t *) malloc( sizeof( clientdescr_t ) );
 		descr->client_addr_len = sizeof( struct sockaddr_in );
