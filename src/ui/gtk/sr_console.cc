@@ -20,8 +20,6 @@
 #include "lib/messip/messip.h"
 #include "lib/srlib.h"
 
-GtkListStore *store;
-
 enum
 {
 	COL_TIMESTAMP = 0,
@@ -52,7 +50,10 @@ void *sr_thread(void* arg)
 		return NULL;
 	}
 
-	store = gtk_list_store_new (NUM_COLS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+	GtkListStore *store = gtk_list_store_new (NUM_COLS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+
+	GtkScrolledWindow *scrolled = GTK_SCROLLED_WINDOW(ui_model::instance().getUiGObject("sr_scrolledwindow"));
+	g_assert(scrolled);
 
 	GtkWidget *view = GTK_WIDGET(ui_model::instance().getUiGObject("sr_treeview"));
 	g_assert(view);
@@ -145,7 +146,7 @@ void *sr_thread(void* arg)
 
 		if (strlen(sr_msg.process_name)>1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
 		{
-			//! write to UI console
+			// write to UI console
 			char timestamp[16];
 
 			strftime(timestamp, 100, "%H:%M:%S", localtime(&sr_msg.ts.tv_sec));
@@ -160,7 +161,11 @@ void *sr_thread(void* arg)
 					COL_DESCRIPTION, sr_msg.description,
 					-1);
 
-			//! write to logfile
+			// scroll buffer to the most recent entry
+			gboolean ret;
+			g_signal_emit_by_name(G_OBJECT(scrolled), "scroll-child", GTK_SCROLL_END, false, &ret);
+
+			// write to logfile
 			char current_line[400];
 
 			snprintf(current_line, 100, "%-10s", sr_msg.host_name);

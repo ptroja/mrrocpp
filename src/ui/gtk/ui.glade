@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Oct 19 01:03:35 2009 -->
+<!--Generated with glade3 3.4.5 on Mon Oct 19 01:24:09 2009 -->
 <glade-interface>
   <widget class="GtkDialog" id="window_input_number">
     <property name="border_width">5</property>
@@ -345,7 +345,7 @@
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">GTK_SHADOW_ETCHED_OUT</property>
                     <child>
-                      <widget class="GtkScrolledWindow" id="scrolledwindow3">
+                      <widget class="GtkScrolledWindow" id="sr_scrolledwindow">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
