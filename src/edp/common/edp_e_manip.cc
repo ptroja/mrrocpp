@@ -17,7 +17,6 @@
 #include <math.h>
 #include <iostream>
 #include <errno.h>
-#include <pthread.h>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

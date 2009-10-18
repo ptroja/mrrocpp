@@ -37,7 +37,6 @@
 #include <errno.h>
 #include <termios.h>
 #include <stdint.h>
-#include <pthread.h>
 #include <inttypes.h>
 
 #include "lib/typedefs.h"

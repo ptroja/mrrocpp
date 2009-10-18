@@ -48,6 +48,20 @@ struct _pulse {
 #define	out16(port,val)	outw((port),(val))
 #define	in8(port)		inb(port)
 #define	in16(port)		inw(port)
+#elif defined(sun)
+/*
+// These functions are obsolete, but more handy; use ddi_put8(9F) and similar instead
+#include <sys/ddi.h>
+#include <sys/sunddi.h>
+#define	out8(port,val)	outb((port),(val))
+#define	out16(port,val)	outw((port),(val))
+#define	in8(port)		inb(port)
+#define	in16(port)		inw(port)
+*/
+#define	out8(port,val)	(void) 0
+#define	out16(port,val)	(void) 0
+#define	in8(port)		0
+#define	in16(port)		0
 #endif
 
 #endif /* ! __QNXNTO__ */

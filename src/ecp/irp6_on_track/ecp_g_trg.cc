@@ -14,7 +14,6 @@
 #include <string.h>
 #include <math.h>
 #include <errno.h>
-#include <pthread.h>
 #include <fstream>
 
 #include "lib/typedefs.h"

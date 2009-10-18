@@ -75,6 +75,10 @@ extern "C" {
 
 
 #include <player/player.h>
+#include <stdint.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <inttypes.h>
 #include <netinet/in.h> /* for struct in_addr */
 
 /** @addtogroup player_clientlib_c C client library */

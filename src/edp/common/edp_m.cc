@@ -17,7 +17,6 @@
 #ifdef __QNXNTO__
 #include <sys/neutrino.h>
 #endif /* __QNXNTO__ */
-#include <pthread.h>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

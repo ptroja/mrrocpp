@@ -7,8 +7,10 @@ HOMEDIR = $(shell pwd)/../../../..
 include $(HOMEDIR)/common.mk
 
 PACKAGES=libxml-2.0 gtk+-2.0 gtkmm-2.4 gthread-2.0
-CPPFLAGS+=`pkg-config --cflags ${PACKAGES}` -I. -I../
-CXXFLAGS+=-fpic
+CPPFLAGS+=`pkg-config --cflags ${PACKAGES}` -I. -I..
+CXXFLAGS+=-fPIC
+# uncomment the following for the sunCC compiler
+#CPPFLAGS+=-DSIGC_HAVE_SUN_REVERSE_ITERATOR -DGLIBMM_HAVE_SUN_REVERSE_ITERATOR
 LDFLAGS+=`pkg-config --libs ${PACKAGES}` -L${LIBDIR}
 LDFLAGS+=-Wl,-export-dynamic
 ECP_DIR = $(HOMEDIR)/src/ecp

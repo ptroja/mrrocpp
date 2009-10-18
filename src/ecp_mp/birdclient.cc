@@ -4,7 +4,6 @@
 #include <inttypes.h>
 #include <fcntl.h>
 #include <string.h>
-#include <pthread.h>
 #include <unistd.h>
 #include <sys/time.h>
 #include <sys/socket.h>

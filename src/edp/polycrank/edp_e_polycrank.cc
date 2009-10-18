@@ -11,7 +11,6 @@
 // ------------------------------------------------------------------------
 
 #include <stdio.h>
-#include <pthread.h>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"

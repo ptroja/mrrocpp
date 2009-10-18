@@ -23,7 +23,6 @@
 #include <sys/sched.h>
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
-#include <pthread.h>
 #include <errno.h>
 
 

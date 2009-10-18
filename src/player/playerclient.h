@@ -85,6 +85,10 @@ writes appropriate commands to the motors.
 #ifndef PLAYERCLIENT_H
 #define PLAYERCLIENT_H
 
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <inttypes.h>
+
 #include <player/player.h>       /* from the server; gives message types */
 #include <player/playercclient.h>  /* pure C networking building blocks */
 

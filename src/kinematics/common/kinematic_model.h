@@ -80,6 +80,9 @@ public:
   // Konstruktor.
   model(void);
 
+  // Destruktor wirtualny, wskazany przy klasach abstrakcyjnych
+  virtual ~model();
+
   // Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne.
   virtual void mp2i_transform(const double* local_current_motor_pos, double* local_current_joints) = 0;
 

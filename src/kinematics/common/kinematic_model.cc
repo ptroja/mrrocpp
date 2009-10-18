@@ -29,6 +29,12 @@ model::model(void)
     local_corrector_computations = false;
 }
 
+/* ------------------------------------------------------------------------
+  Destruktor wirtualny.
+ ------------------------------------------------------------------------ */
+model::~model(void)
+{
+}
 
 /* ------------------------------------------------------------------------
   Przeliczenie polozenia koncowki zwiazane z dolaczonym narzedziem.

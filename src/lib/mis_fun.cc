@@ -64,6 +64,7 @@ int set_thread_name(const char * newname) {
 
 	return 0;
 #endif
+	return -1;
 }
 
 } // namespace lib
