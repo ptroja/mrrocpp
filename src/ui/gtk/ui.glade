@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sun Oct 18 23:55:57 2009 -->
+<!--Generated with glade3 3.4.5 on Mon Oct 19 01:03:35 2009 -->
 <glade-interface>
   <widget class="GtkDialog" id="window_input_number">
     <property name="border_width">5</property>
@@ -299,6 +299,7 @@
                       <widget class="GtkTreeView" id="process_treeview">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <signal name="row_activated" handler="on_process_treeview_row_activated"/>
                       </widget>
                     </child>
                   </widget>

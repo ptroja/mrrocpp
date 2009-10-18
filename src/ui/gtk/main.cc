@@ -153,11 +153,11 @@ int main(int argc, char *argv[])
 }
 
 extern "C" {
-	void mp_load_clicked(GtkToolButton *toolbutton, gpointer user_data)	{
+	void on_MpLoadButton_clicked(GtkToolButton *toolbutton, gpointer user_data)	{
 		ui_model::instance().setMpLoadButton(true, false);
 	}
 
-	void edp_load_clicked(GtkToolButton *toolbutton, gpointer user_data) {
+	void on_EdpsLoadButton_clicked(GtkToolButton *toolbutton, gpointer user_data) {
 		ui_model::instance().setEdpsLoadButton(true, false);
 		ui_model::instance().loadEdps();
 	}
