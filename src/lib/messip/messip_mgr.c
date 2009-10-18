@@ -53,6 +53,7 @@
 #include <sys/endian.h>
 #elif defined(__QNX__)
 #include <sys/param.h>
+#elif defined(sun)
 #else
 #error Unsupported platform!
 #endif
@@ -341,7 +342,7 @@ do_readv( int sockfd,
 
 }								// do_readv
 
-#if defined(__linux__)
+#if defined(__linux__) || defined(sun)
 #	define TID_DISPLAY	"%10lu"
 #elif defined(__FreeBSD__)
 #	define TID_DISPLAY	"%010X"

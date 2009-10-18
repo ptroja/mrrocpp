@@ -97,7 +97,7 @@ int scandir(const char *dir, struct dirent ***namelist,
   #include <dirent.h>
   #ifdef __CYGWIN__
     #include <mingw/dir.h>
-  #else
+  #elif !defined(sun)
     #include <sys/dir.h>
   #endif
 #endif

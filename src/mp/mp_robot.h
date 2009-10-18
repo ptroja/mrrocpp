@@ -76,7 +76,7 @@ public:
     // - do uzytku uzytkownika (generatora)
 
     robot (lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::task &mp_object_l);
-    ~robot();
+    virtual ~robot();
 
     class MP_error
     {  // Klasa obslugi bledow robotow

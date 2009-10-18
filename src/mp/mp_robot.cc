@@ -31,11 +31,11 @@ robot::MP_error::MP_error(lib::ERROR_CLASS err0, uint64_t err1) :
 robot::robot( lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::task &mp_object_l) :
 	ecp_mp::robot(l_robot_name),
 	mp_object(mp_object_l),
+	communicate(true), // domyslnie robot jest aktywny
 	sr_ecp_msg(*(mp_object_l.sr_ecp_msg)),
 	opened(false),
-	new_pulse_checked(false),
 	new_pulse(false),
-	communicate(true) // domyslnie robot jest aktywny
+	new_pulse_checked(false)
 {
 	std::string node_name(mp_object.config.return_string_value("node_name", _section_name));
 	nd = mp_object.config.return_node_number(node_name.c_str());

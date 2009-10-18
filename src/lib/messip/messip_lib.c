@@ -56,6 +56,7 @@
 #elif defined(__QNX__)
 #include <sys/param.h>
 #include <sys/netmgr.h>
+#elif defined(sun)
 #else
 #error Unsupported platform!
 #endif
