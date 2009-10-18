@@ -52,12 +52,6 @@ public:
 #if !defined(USE_MESSIP_SRR)
     //! main ECP request channel
     int ECP_fd;
-
-    //! A server connection ID identifing ECP
-    int scoid;
-
-    //! flag indicating opened pulse connection from ECP
-    bool opened;
 #else
     //! main ECP request channel
     messip_channel_t* ECP_fd;
