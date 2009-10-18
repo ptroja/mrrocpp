@@ -15,30 +15,44 @@
 
 DEBUG=-g
 #OPTIM = -O2
-#WARN = -w9
-FLAGS=${DEBUG} ${OPTIM} ${WARN}
+#WARN = -w0
+FLAGS=-fPIC ${DEBUG} ${OPTIM} ${WARN}
 CFLAGS=${FLAGS}
+CXXFLAGS=${FLAGS}
 
 # Linker, compilator, and default global flags for both
 ifeq ($(BUILD_TARGET), linux)
+  # for gcc toolchain:
   LD=g++
   CC=gcc
   CXX=g++
+  GCCDEP=gcc
+  # for Intel Compiler toolchain:
   #LD=icpc
   #CC=icc
   #CXX=icpc
-  CXXFLAGS=${FLAGS}
+  #AR=xiar
+  #GCCDEP=icpc
+  # for SunStudio SunCC toolchain: this is not ready yet since sunCC does
+  # not support variable lenght arrays (C99 extension imported to g++/QCC/icpc)
+  #CXX=sunCC -mt
+  #CC=suncc -mt
+  #LD=suncc/sunCC
+  #GCCDEP=gcc
+  # other flags
   LDFLAGS=-lrt `pkg-config --libs libxml-2.0` -lboost_thread-mt
-  CPPFLAGS=-I$(HOMEDIR)/src `pkg-config --cflags libxml-2.0` -DUSE_MESSIP_SRR -Wall #-Wall -Werror
+  CPPFLAGS=-I$(HOMEDIR)/src `pkg-config --cflags libxml-2.0` -DUSE_MESSIP_SRR -Wall #-Werror
+  # uncomment the following for Solaris OS
+  #LDFLAGS+=-L/export/home/ptroja/boost_1_39_0/stage/lib -lboost_thread-gcc34-mt \
+  #	-lsocket -lnsl -lpthread
+  #CPPFLAGS+=-D_POSIX_PTHREAD_SEMANTICS -pthreads -I/export/home/ptroja/boost_1_39_0
   BINDIR=$(HOMEDIR)/bin.linux
   LIBDIR=$(HOMEDIR)/lib.linux
-  GCCDEP=gcc
 else
   VERSION=-V4.3.3,gcc_ntox86
   RPATHV=-Wl,-rpath /usr/pkg/lib
   CC=qcc ${VERSION}
   CXX=QCC ${VERSION}
-  CXXFLAGS=${FLAGS}
   LD=QCC ${VERSION}
   LDFLAGS=${DEBUG} -lm -lsocket -lcpp -lang-c++ $(RPATHV) -L$(QNX_TARGET)/mrlib/lib -lxml2 -liconv -lboost_thread-mt
   CPPFLAGS=-I$(HOMEDIR)/src -I$(QNX_TARGET)/mrlib/include
