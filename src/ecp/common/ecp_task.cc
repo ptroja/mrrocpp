@@ -121,15 +121,14 @@ void task::terminate()
 // ---------------------------------------------------------------
 void task::initialize_communication()
 {
-	uint64_t e; // kod bledu systemowego
-
 	std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
 	std::string ecp_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_attach_point");
 	std::string trigger_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point");
 
 	if ((sr_ecp_msg = new lib::sr_ecp(lib::ECP, ecp_attach_point.c_str(), sr_net_attach_point.c_str())) == NULL) { // Obiekt do komuniacji z SR
+		int e = errno; // kod bledu systemowego
 		perror("Unable to locate SR");
-		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		throw ECP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 
 	std::string mp_pulse_attach_point =
@@ -143,7 +142,7 @@ void task::initialize_communication()
 	if ( (MP_fd = messip_channel_connect(NULL, mp_pulse_attach_point.c_str(), MESSIP_NOTIMEOUT)) == NULL)
 #endif
 	{
-		e = errno;
+		int e = errno; // kod bledu systemowego
 		fprintf(stderr, "ECP: Unable to locate MP_MASTER process at '%s'\n", mp_pulse_attach_point.c_str());
 		perror("ECP: Unable to locate MP_MASTER process");
 		throw ECP_main_error(lib::SYSTEM_ERROR, e);
@@ -156,7 +155,7 @@ void task::initialize_communication()
 	if ((ecp_attach = messip_channel_create(NULL, ecp_attach_point.c_str(), MESSIP_NOTIMEOUT, 0)) == NULL)
 #endif
 	{
-		e = errno;
+		int e = errno; // kod bledu systemowego
 		perror("Failed to attach Effector Control Process");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Failed to attach Effector Control Process");
 		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
@@ -168,7 +167,7 @@ void task::initialize_communication()
 	if ((trigger_attach = messip_channel_create(NULL, trigger_attach_point.c_str(), MESSIP_NOTIMEOUT, 0)) == NULL)
 #endif
 	{
-		e = errno;
+		int e = errno; // kod bledu systemowego
 		perror("Failed to attach TRIGGER pulse chanel for ecp");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Failed  Failed to name attach (trigger pulse)");
 		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);

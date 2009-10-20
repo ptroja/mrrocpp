@@ -10,10 +10,9 @@ generator::generator (common::task::task& _ecp_task)
         ecp_t(_ecp_task),
         communicate_with_mp_in_move(true),
         communicate_with_edp(true),
-        copy_edp_buffers_in_move(true)
+        copy_edp_buffers_in_move(true),
+        the_robot(ecp_t.ecp_m_robot)
 {
-    the_robot = ecp_t.ecp_m_robot;
-    sensor_m.clear();
 }
 
 generator::~generator()
