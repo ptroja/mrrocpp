@@ -42,7 +42,9 @@ void * manip_and_conv_effector::trans_thread(void *arg)
 
         try
         {
-
+			// TODO: this thread is for handling special case of move_arm instruction;
+        	// all the othrer call can (and should...) be done from the main communication thread;
+        	// they do not need to be processed asynchronously.
             switch (mt_tt_obj.trans_t_task)
             {
             case MT_GET_CONTROLLER_STATE:
