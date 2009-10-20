@@ -417,7 +417,6 @@ bool haptic::next_step()
 	//	cout << "next_step" << endl;
 
 	if (node_counter<3) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
-
 		return true;
 	}
 	/*

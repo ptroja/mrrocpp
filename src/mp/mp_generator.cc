@@ -7,12 +7,6 @@ namespace mrrocpp {
 namespace mp {
 namespace generator {
 
-void generator::re_run(void) // powrot do stanu wyjsciowego
-{
-	phase = BEFORE_FIRST_STEP;
-	new_pulse_checked = true;
-}
-
 // kopiuje dane z robotow do generatora
 void generator::copy_data(const common::robots_t & _robot_m)
 {
@@ -31,10 +25,7 @@ void generator::copy_generator_command(const common::robots_t & _robot_m)
 
 generator::generator(task::task& _mp_task) :
 	ecp_mp::generator::generator(*_mp_task.sr_ecp_msg),
-	mp_t(_mp_task),
-	phase(BEFORE_FIRST_STEP),
-	new_pulse_checked(true),
-	wait_for_ECP_pulse(false)
+	mp_t(_mp_task)
 {
 }
 

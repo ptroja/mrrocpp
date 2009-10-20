@@ -134,9 +134,7 @@ void fsautomat::task_initialization(void)
 	sensor_m[lib::SENSOR_CAMERA_ON_TRACK] = new ecp_mp::sensor::vis(lib::SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
 
 	if (config.return_int_value("vis_servoing")) {
-
 		sensor_m[lib::SENSOR_CAMERA_SA] = new ecp_mp::sensor::vis(lib::SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
-
 	}
 
 	// Konfiguracja wszystkich czujnikow
@@ -145,8 +143,6 @@ void fsautomat::task_initialization(void)
 		sensor_m_iterator->second->to_vsp.parameters = 1; // biasowanie czujnika
 		sensor_m_iterator->second->configure_sensor();
 	}
-
-	usleep(1000 * 100);
 
 	// dodanie transmitter'a
 	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] = new ecp_mp::transmitter::rc_windows(ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS,

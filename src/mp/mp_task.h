@@ -88,9 +88,6 @@ class task: public ecp_mp::task::task
 		// obsluga sygnalu
 		virtual void catch_signal_in_mp_task(int sig);
 
-		/// Zatrzymanie wszystkich ECP
-		static void kill_all_ECP (const common::robots_t & _robot_m);
-
 		/// utworzenie robotow
 		virtual void create_robots(void);
 
@@ -106,7 +103,7 @@ class task: public ecp_mp::task::task
 		int wait_for_name_open(void);
 
 	private:
-	    //! A server connection ID identifing UI
+	    //! A server connection ID identifying UI
 	    int ui_scoid;
 
 	    //! flag indicating opened pulse connection from UI
@@ -116,6 +113,9 @@ class task: public ecp_mp::task::task
 		bool ui_new_pulse; // okresla czy jest nowy puls
 
 		bool check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE process_type, RECEIVE_PULSE_MODE wait_mode);
+
+		/// Zatrzymanie wszystkich ECP
+		static void kill_all_ECP (const common::robots_t & _robot_m);
 };
 
 task* return_created_mp_task (lib::configurator &_config);

@@ -80,7 +80,7 @@ void rcs_test::main_task_algorithm(void)
 
 	// petle ustawiajace stan kostki w czujnikach, az do skutku
 	bool korf_configured = false;
-	bool kociemba_configured = false;
+	//bool kociemba_configured = false;
 
 	// konfiguruje czujnik dla algorytmu Kociemby, ten od razu rozpoczyna prace
 	sensor_m[lib::SENSOR_RCS_KOCIEMBA]->to_vsp.rcs.configure_mode = lib::RCS_CUBE_STATE;

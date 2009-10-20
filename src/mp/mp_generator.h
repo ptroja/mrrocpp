@@ -10,33 +10,25 @@ namespace generator {
 
 class generator : public ecp_mp::generator::generator
 {
+	private:
+
+		//! Kopiuje dane z robotow do generatora
+		void copy_data(const common::robots_t & _robot_m);
+
+		//! Kopiuje polecenie stworzone w generatorze do robotow
+		void copy_generator_command (const common::robots_t & _robot_m);
+
+		// Zadanie, któremu podlega generator
+		task::task& mp_t;
+
 	protected:
 
 		int idle_step_counter; // Licznik jalowych krokow sterowania (bez wykonywania ruchu)
 
 	public:
 
-		task::task& mp_t;
-
 		// Funkcja ruchu
 		void Move (void);
-
-		// zbior obejmujacy mozliwe stany obiektu klasy generator_set
-		enum GEN_SET_PHASE {
-		    BEFORE_FIRST_STEP,
-		    AFTER_STEP,
-		    AFTER_INITIATE_READING,
-		    WAITING_FOR_ECP_BEFORE_EXECUTE_MOTION,
-		    AFTER_EXECUTE_MOTION,
-		    AFTER_GET_READING,
-		    GS_FINISHED
-		};
-
-		//! faza w ktorej znajduje sie generator
-		GEN_SET_PHASE phase;
-
-		//! czy nowy puls zostal sprawdzony (wykorzystywane w scheduler_run() )
-		bool new_pulse_checked;
 
 		/*!
 		 * okresla czy przed next step Move ma sie zawieszac w oczekwianiu na puls z ECP;
@@ -47,15 +39,8 @@ class generator : public ecp_mp::generator::generator
 		//! mapa wszystkich robotow
 		common::robots_t robot_m;
 
+		//! Konstruktor
 		generator(task::task& _mp_task);
-
-		void re_run(void); // powrot do stanu wyjsciowego
-
-		//! Kopiuje dane z robotow do generatora
-		void copy_data(const common::robots_t & _robot_m);
-
-		//! Kopiuje polecenie stworzone w generatorze do robotow
-		void copy_generator_command (const common::robots_t & _robot_m);
 
 		//! Klasa obslugi bledow generatora na poziomie MP
 		class MP_error
@@ -70,7 +55,9 @@ class generator : public ecp_mp::generator::generator
 				}
 		};
 };
+
 } // namespace common
 } // namespace mp
 } // namespace mrrocpp
+
 #endif /*MP_GENERATOR_H_*/
