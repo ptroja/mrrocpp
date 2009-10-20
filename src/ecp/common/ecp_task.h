@@ -4,14 +4,10 @@
 #include "ecp_mp/ecp_mp_task.h"
 #include "ecp/common/ecp_robot.h"
 
-
-
-
 namespace mrrocpp {
 namespace ecp {
 namespace common {
 namespace task {
-
 
 // klasa globalna dla calego procesu MP
 class task : public ecp_mp::task::task
@@ -74,9 +70,6 @@ class task : public ecp_mp::task::task
 
 		// Oczekiwanie na STOP
 		void ecp_wait_for_stop(void);
-
-
-
 
 	public: // TODO: what follows should be private method
 

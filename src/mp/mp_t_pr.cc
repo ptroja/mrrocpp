@@ -76,15 +76,12 @@ void pr::task_initialization(void)
 		sensor_m_iterator->second->configure_sensor();
 	}
 
-	usleep(1000*100);
 	sr_ecp_msg->message("MP pr loaded");
-
 }
 
 
 void pr::main_task_algorithm(void)
 {
-
 	generator::nose_run_force mp_nrf_gen(*this, 8);
 	mp_nrf_gen.robot_m = robot_m;
 	mp_nrf_gen.sensor_m = sensor_m;

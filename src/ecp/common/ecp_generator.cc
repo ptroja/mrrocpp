@@ -63,7 +63,6 @@ void generator::Move()
     do
     { // realizacja ruchu
 
-
         // zadanie przygotowania danych od czujnikow
         ecp_t.all_sensors_initiate_reading(sensor_m);
 

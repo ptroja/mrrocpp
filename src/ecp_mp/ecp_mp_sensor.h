@@ -2,8 +2,9 @@
 #define _ECP_MP_SENSOR_H
 
 #include "lib/sensor.h"
-
 #include "lib/messip/messip.h"
+
+#include <map>
 
 namespace mrrocpp {
 namespace ecp_mp {
@@ -18,16 +19,15 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-
-
 // Klasa bazowa czujnikow po stronie procesu ECP.
-class sensor: public lib::sensor{
+class sensor: public lib::sensor {
 protected:
-	// Sensor descriptor - uchwyt do /dev/twoj_sensor.
-
+	//! Sensor manger descriptor
+#if !defined(USE_MESSIP_SRR)
 	int sd;
-#if defined(USE_MESSIP_SRR)
-	messip_channel_t *ch;
+#else
+	//! Sensor descriptor
+	messip_channel_t *sd;
 #endif /* USE_MESSIP_SRR */
 	// Nazwa czujnika.
 	std::string VSP_NAME;
@@ -42,14 +42,21 @@ public:
 	// Wlasciwy konstruktor czujnika wirtualnego.
 	sensor(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object);
 
+	// TODO: Destruktor czujnika wirtualnego
+//	virtual ~sensor();
+
 	virtual void configure_sensor(void);
 	virtual void initiate_reading(void);
 	virtual void terminate(void);
 	virtual void get_reading(void);
-	void get_reading(lib::SENSOR_IMAGE *sensor_image);
+	void get_reading(lib::SENSOR_IMAGE & sensor_image);
 };
 
 } // namespace sensor
+
+// Kontener zawierajacy wykorzystywane czyjniki
+typedef std::map<lib::SENSOR_ENUM, lib::sensor *> sensors_t;
+
 } // namespace ecp_mp
 } // namespace mrrocpp
 

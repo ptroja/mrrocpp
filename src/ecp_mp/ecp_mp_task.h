@@ -19,7 +19,7 @@
 #include "lib/configurator.h"
 
 #include "ecp_mp/transmitter.h"
-#include "lib/sensor.h"
+#include "ecp_mp/ecp_mp_sensor.h"
 
 #include <libxml/tree.h>
 
@@ -27,10 +27,6 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
-
-typedef std::map<lib::SENSOR_ENUM, lib::sensor*> sensors_t;
-typedef std::map<transmitter::TRANSMITTER_ENUM, transmitter::transmitter*> transmitters_t;
-
 namespace task {
 
 // klasa macierzysta dla klas globalnych procesow ECP i MP

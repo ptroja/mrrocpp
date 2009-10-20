@@ -17,6 +17,8 @@
 #include "ecp_mp/ecp_mp_sensor.h"				// zawiera klase ecp_mp_sensor
 #include "ecp_mp/ecp_mp_s_vis_sac.h"		// zawiera klase ecp_mp_sensor
 
+#warning file not ported to MESSIP yet
+
 namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
@@ -33,6 +35,7 @@ vis_sac::vis_sac (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task
 
 // odebranie odczytu od VSP
 void vis_sac::get_reading(){
+#if !defined(USE_MESSIP_SRR)
  	if(read(sd, &from_vsp, sizeof(lib::VSP_ECP_MSG))==-1)
 		sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
 	// jesli odczyt sie powodl, przepisanie pol obrazu z bufora komunikacyjnego do image;
@@ -46,6 +49,7 @@ void vis_sac::get_reading(){
 
 	}
 	std::cout << "OUT of block" << std::endl;
+#endif
 }
 
 } // namespace sensor

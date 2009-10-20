@@ -17,7 +17,6 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-
 #define BUFFER_SIZE 8*256
 
 /*!

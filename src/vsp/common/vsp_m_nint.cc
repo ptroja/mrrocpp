@@ -169,11 +169,11 @@ void write_to_sensor( lib::VSP_COMMAND i_code){
 			break;
 		case lib::VSP_TERMINATE :
 			vsp::common::vs->terminate();
-			 TERMINATE=true;
+			TERMINATE=true;
 			break;
 		default :
 			throw lib::VSP_main_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
-		};
+	}
 }
 
 /********************************* IO_READ **********************************/
@@ -407,7 +407,7 @@ int main(int argc, char *argv[]) {
 	catch (lib::VSP_main_error e){
 		vsp::common::error_handler(e);
 		exit(EXIT_FAILURE);
-		}; // end CATCH
+		} // end CATCH
 	}	// end MAIN
 
 

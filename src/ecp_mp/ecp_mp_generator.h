@@ -3,14 +3,12 @@
 
 #include <map>
 #include "lib/srlib.h"
-#include "lib/sensor.h"
+#include "ecp_mp/ecp_mp_sensor.h"
 #include "ecp_mp/transmitter.h"
 
 namespace mrrocpp {
 namespace ecp_mp {
 namespace generator {
-
-
 
 class generator
 {
@@ -33,10 +31,10 @@ public:
 	virtual ~generator();
 
 	// mapa wszystkich czujnikow
-	std::map <lib::SENSOR_ENUM, lib::sensor*> sensor_m;
+	sensors_t sensor_m;
 
 	// mapa wszystkich transmiterow
-	std::map <transmitter::TRANSMITTER_ENUM, transmitter::transmitter*> transmitter_m;
+	transmitters_t transmitter_m;
 
 	// generuje pierwszy krok ruchu -
 	// pierwszy krok czesto rozni sie od pozostalych,

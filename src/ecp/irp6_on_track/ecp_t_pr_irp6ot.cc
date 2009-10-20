@@ -16,6 +16,7 @@
 
 #include "ecp/common/ecp_g_jarosz.h"
 
+#include "ecp_mp/ecp_mp_sensor.h"
 
 namespace mrrocpp {
 namespace ecp {

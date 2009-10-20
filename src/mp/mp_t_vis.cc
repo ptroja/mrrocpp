@@ -7,7 +7,6 @@
 
 #include <stdio.h>
 #include <unistd.h>
-#include <map>
 
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
@@ -52,21 +51,15 @@ void vis::task_initialization(void)
 		sensor_m_iterator->second->configure_sensor();
 	}
 
-
-	usleep(1000*100);
 	sr_ecp_msg->message("MP vis loaded");
-};
+}
 
 
 void vis::main_task_algorithm(void)
 {
-
-
 	generator::seven_eye eyegen(*this, 4);
 	eyegen.robot_m[lib::ROBOT_IRP6_ON_TRACK] = robot_m[lib::ROBOT_IRP6_ON_TRACK];
 	eyegen.sensor_m[lib::SENSOR_CAMERA_SA] = sensor_m[lib::SENSOR_CAMERA_SA];
-
-
 
 	sr_ecp_msg->message("New loop");
 
@@ -117,7 +110,7 @@ void vis::main_task_algorithm(void)
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 	(1, 1, lib::ROBOT_IRP6_ON_TRACK, lib::ROBOT_IRP6_ON_TRACK);
 
-};
+}
 
 
 } // namespace task

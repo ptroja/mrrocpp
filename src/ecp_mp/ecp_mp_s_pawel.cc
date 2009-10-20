@@ -60,7 +60,7 @@ void pawel::initiate_reading() {
 
 /***************************** GET  READING *********************************/
 void pawel::get_reading(void) {
-
+#if !defined(USE_MESSIP_SRR)
 	if(read(sd, &from_vsp, sizeof(lib::VSP_ECP_MSG)) == -1)
 		sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME.c_str());
 
@@ -79,6 +79,7 @@ void pawel::get_reading(void) {
 	} else {
 		printf("[ecp_mp]\treply from VSP not OK\n");
 	}
+#endif
 }
 
 } // namespace sensor

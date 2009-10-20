@@ -20,9 +20,6 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace transmitter {
 
-
-
-
 // TRASMITERY
 
 enum TRANSMITTER_ENUM {
@@ -122,6 +119,9 @@ class transmitter
 }; // end: class transmitter
 
 } // namespace transmitter
+
+typedef std::map<transmitter::TRANSMITTER_ENUM, transmitter::transmitter*> transmitters_t;
+
 } // namespace ecp_mp
 } // namespace mrrocpp
 

@@ -70,6 +70,7 @@ void rcs_kociemba::initiate_reading(){
 
 /***************************** GET  READING *********************************/
 void rcs_kociemba::get_reading() {
+#if !defined(USE_MESSIP_SRR)
 	if(read(sd, &from_vsp, sizeof(lib::VSP_ECP_MSG)) == -1) {
 		image.sensor_union.rcs.cube_solution[0] = '\0';
 		image.sensor_union.rcs.reading_mode = lib::RCS_SOLUTION_NOTFOUND;
@@ -84,6 +85,7 @@ void rcs_kociemba::get_reading() {
 		image.sensor_union.rcs.reading_mode = lib::RCS_SOLUTION_NOTFOUND;
 		printf("ECP_MP KC get_reading: Reply from VSP not OK!\n");
 	}
+#endif
 } // end: get_reading
 
 } // namespace sensor

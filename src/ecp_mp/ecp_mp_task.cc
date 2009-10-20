@@ -223,7 +223,7 @@ bool task::show_message (const char* message)
 void task::kill_all_VSP (sensors_t & _sensor_m)
 {
 	// Zabicie wszystkich procesow VSP
-	for (ecp_mp::sensors_t::iterator sensor_m_iterator = _sensor_m.begin();
+	for (sensors_t::iterator sensor_m_iterator = _sensor_m.begin();
 	        sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++) {
 		if (sensor_m_iterator->second->pid !=0) {
 #if defined(PROCESS_SPAWN_RSH)
@@ -240,7 +240,7 @@ void task::kill_all_VSP (sensors_t & _sensor_m)
 
 void task::all_sensors_initiate_reading (sensors_t & _sensor_m)
 {
-	for (ecp_mp::sensors_t::iterator sensor_m_iterator = _sensor_m.begin();
+	for (sensors_t::iterator sensor_m_iterator = _sensor_m.begin();
 	        sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++) {
 		if (sensor_m_iterator->second->base_period > 0) {
 			if (sensor_m_iterator->second->current_period == sensor_m_iterator->second->base_period) {
@@ -253,7 +253,7 @@ void task::all_sensors_initiate_reading (sensors_t & _sensor_m)
 
 void task::all_sensors_get_reading (sensors_t & _sensor_m)
 {
-	for (ecp_mp::sensors_t::iterator sensor_m_iterator = _sensor_m.begin();
+	for (sensors_t::iterator sensor_m_iterator = _sensor_m.begin();
 	        sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++) {
 		// jesli wogole mamy robic pomiar
 		if (sensor_m_iterator->second->base_period > 0) {
