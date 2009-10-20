@@ -56,6 +56,7 @@ public:
 
 // Kontener zawierajacy wykorzystywane czyjniki
 typedef std::map<lib::SENSOR_ENUM, lib::sensor *> sensors_t;
+typedef std::pair<const lib::SENSOR_ENUM, lib::sensor*> sensor_item_t;
 
 } // namespace ecp_mp
 } // namespace mrrocpp
