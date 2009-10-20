@@ -19,6 +19,8 @@
 #include "ecp_mp/ecp_mp_s_schunk.h"
 #include "ecp_mp/ecp_mp_s_vis.h"
 
+#include <boost/foreach.hpp>
+
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -43,11 +45,9 @@ void vis_force::task_initialization(void)
 		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_SA, "[vsp2_section]", *this);
 
 	// Konfiguracja wszystkich czujnikow
-	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
-	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-	{
-		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-		sensor_m_iterator->second->configure_sensor();
+	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_item.second->configure_sensor();
 	}
 
 	sr_ecp_msg->message("MP vf loaded");
@@ -61,10 +61,8 @@ void vis_force::main_task_algorithm(void)
 	vf_gen.robot_m = robot_m;
 	vf_gen.sensor_m = sensor_m;
 
-
 	vf_gen.Move();
-
-};
+}
 
 } // namespace task
 } // namespace mp

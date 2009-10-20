@@ -5,7 +5,6 @@
 //
 // -------------------------------------------------------------------------
 
-
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
@@ -27,6 +26,8 @@
 #include "ecp_mp/ecp_mp_tr_rc_windows.h"
 #include "ecp_mp/ecp_mp_s_rcs_kociemba.h"
 #include "ecp_mp/ecp_mp_s_rcs_korf.h"
+
+#include <boost/foreach.hpp>
 
 namespace mrrocpp {
 namespace mp {
@@ -683,11 +684,9 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	sensor_m[lib::SENSOR_FORCE_POSTUMENT]->to_vsp.parameters=1; // biasowanie czujnika
 	sensor_m[lib::SENSOR_FORCE_POSTUMENT]->configure_sensor();
 	/*
-	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
-			 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-	{
-		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-		sensor_m_iterator->second->configure_sensor();
+	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_item.second->configure_sensor();
 	}
 	 */
 
@@ -805,12 +804,10 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 	sensor_m[lib::SENSOR_FORCE_POSTUMENT]->to_vsp.parameters=1; // biasowanie czujnika
 	sensor_m[lib::SENSOR_FORCE_POSTUMENT]->configure_sensor();
 	/*
-	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
-			 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-		{
-			sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-			sensor_m_iterator->second->configure_sensor();
-		}
+	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_item.second->configure_sensor();
+	}
 	 */
 
 
@@ -1132,11 +1129,9 @@ void rubik_cube_solver::task_initialization(void)
 		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 
 	// Konfiguracja wszystkich czujnikow
-	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
-	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-	{
-		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-		sensor_m_iterator->second->configure_sensor();
+	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_item.second->configure_sensor();
 	}
 
 	// dodanie transmitter'a
@@ -1187,11 +1182,9 @@ void rubik_cube_solver::main_task_algorithm(void)
 			sensor_m[lib::SENSOR_FORCE_POSTUMENT]->configure_sensor();
 
 			/*
-			for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
-				 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-			{
-				sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-				sensor_m_iterator->second->configure_sensor();
+			BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+				sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+				sensor_item.second->configure_sensor();
 			}
 			 */
 

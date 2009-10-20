@@ -5,7 +5,6 @@
 //
 // -------------------------------------------------------------------------
 
-
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
@@ -47,7 +46,6 @@ void haptic::configure_edp_force_sensor(bool configure_track, bool configure_pos
     if (configure_track)
     {
         set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_BIAS_EDP_FORCE, 0, "", 1, lib::ROBOT_IRP6_ON_TRACK);
-
     }
 
     if (configure_postument)

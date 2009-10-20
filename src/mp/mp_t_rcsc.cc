@@ -20,6 +20,8 @@
 #include "ecp/festival/ecp_g_festival.h"
 #include "ecp_mp/ecp_mp_t_festival.h"
 
+#include <boost/foreach.hpp>
+
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -45,21 +47,18 @@ rubik_cube_solver::~rubik_cube_solver()
 
 void rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogladanie scian)
 {
-
 	//sekwencja poczatkowa w kolejnosci: UP, DOWN, FRONT, BACK, LEFT, RIGHT
 	//cube_initial_state=BGROWY
 
 	// manianka
 	cube_state->set_state(common::BLUE, common::GREEN, common::RED, common::ORANGE, common::WHITE, common::YELLOW);
 
-	const common::CUBE_TURN_ANGLE changing_order[]=
-	{
-			common::CL_0, common::CL_0, common::CL_180, common::CL_0, common::CL_180, common::CL_0
+	const common::CUBE_TURN_ANGLE changing_order[] = {
+		common::CL_0, common::CL_0, common::CL_180, common::CL_0, common::CL_180, common::CL_0
 	};
 
 	for(int k=0; k<6; k++)
 	{
-
 		face_turn_op(common::CL_0);
 
 		set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_FESTIVAL, 0, "oglo~dam kolory na s~ciance", 1, lib::ROBOT_FESTIVAL);
@@ -69,13 +68,11 @@ void rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogladanie s
 		(1, 1, lib::ROBOT_FESTIVAL, lib::ROBOT_FESTIVAL);
 
 		if (vis_servoing)
-				{
+		{
 		wait_ms(5000);
 		sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->initiate_reading();
 		wait_ms(1000);
 		sensor_m[lib::SENSOR_CAMERA_ON_TRACK]->get_reading();
-
-
 
 		for(int i=0; i<3; i++)
 			for(int j=0; j<3; j++)
@@ -526,8 +523,6 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	run_extended_empty_gen (false, 1, lib::ROBOT_IRP6_ON_TRACK);
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
 
-
-
 	// odejscie tracka od postumenta
 
 	// wlaczenie generatora uczacego  robocie irp6ot
@@ -535,7 +530,7 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_SMOOTH2, 0, "trj/rcsc2/irp6ot_sm_fturn_de.trj", 1, lib::ROBOT_IRP6_ON_TRACK);
 	// uruchomienie generatora empty_gen
 	run_extended_empty_gen (false, 1, lib::ROBOT_IRP6_ON_TRACK);
-};
+}
 
 
 
@@ -550,8 +545,6 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 	set_next_ecps_state ((int) ecp_mp::task::ECP_GEN_FESTIVAL, 0, "przekl/adam kostke~", 1, lib::ROBOT_FESTIVAL);
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-
-
 
 	// wlaczenie generatora uczacego w obu robotach
 	switch (turn_angle)
@@ -1006,11 +999,9 @@ void rubik_cube_solver::task_initialization(void)
 	}
 
 	// Konfiguracja wszystkich czujnikow
-	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
-	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-	{
-		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-		sensor_m_iterator->second->configure_sensor();
+	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_item.second->configure_sensor();
 	}
 
 	}
@@ -1053,11 +1044,9 @@ void rubik_cube_solver::main_task_algorithm(void)
 
 		printf("if vis servoing\n");
 		flushall();
-		for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
-		sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-		{
-			sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-			sensor_m_iterator->second->configure_sensor();
+		BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+			sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+			sensor_item.second->configure_sensor();
 		}
 
 		}

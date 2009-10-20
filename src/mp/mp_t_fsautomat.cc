@@ -34,6 +34,8 @@
 #include "mp/State.h"
 #include "mp/StateHeap.h"
 
+#include <boost/foreach.hpp>
+
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -138,10 +140,9 @@ void fsautomat::task_initialization(void)
 	}
 
 	// Konfiguracja wszystkich czujnikow
-	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
-			!= sensor_m.end(); sensor_m_iterator++) {
-		sensor_m_iterator->second->to_vsp.parameters = 1; // biasowanie czujnika
-		sensor_m_iterator->second->configure_sensor();
+	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_item.second->configure_sensor();
 	}
 
 	// dodanie transmitter'a
@@ -297,12 +298,10 @@ void fsautomat::configureProperSensor(const char *propSensor)
 	}
 
 	// Konfiguracja wszystkich czujnikow
-	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
-			!= sensor_m.end(); sensor_m_iterator++) {
-		sensor_m_iterator->second->to_vsp.parameters = 1; // biasowanie czujnika
-		sensor_m_iterator->second->configure_sensor();
+	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_item.second->configure_sensor();
 	}
-	usleep(1000 * 100);
 }
 
 void fsautomat::configureProperTransmitter(const char *propTrans)
@@ -350,13 +349,12 @@ void fsautomat::executeMotion(common::State &state)
 
 void fsautomat::sensorInitialization()
 {
-	/*	for (sensors_t::iterator sensor_m_iterator = sensor_m.begin();
-	 sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-	 {
-	 sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-	 sensor_m_iterator->second->configure_sensor();
-	 }
-	 */
+/*
+	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_item.second->configure_sensor();
+	}
+*/
 }
 
 void fsautomat::initializeCubeState(common::State &state)

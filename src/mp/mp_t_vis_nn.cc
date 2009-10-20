@@ -22,6 +22,8 @@
 #include "ecp_mp/ecp_mp_s_schunk.h"
 #include "ecp_mp/ecp_mp_t_rcsc.h"
 
+#include <boost/foreach.hpp>
+
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -33,8 +35,8 @@ task* return_created_mp_task(lib::configurator &_config)
 
 vis_nn::vis_nn(lib::configurator &_config) :
 	task(_config)
-	{
-	}
+{
+}
 
 // methods fo mp template to redefine in concete class
 void vis_nn::task_initialization(void)
@@ -45,10 +47,9 @@ void vis_nn::task_initialization(void)
 	sensor_m[lib::SENSOR_CAMERA_SA] = new ecp_mp::sensor::vis_nn (lib::SENSOR_CAMERA_SA, "[vsp_nn]", *this); //change if SENSOR_CAMERA_SA used for nonnn recog (vsp_vis_pbeolsac)
 
 	// Konfiguracja wszystkich czujnikow
-	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
-	!= sensor_m.end(); sensor_m_iterator++) {
-		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-		sensor_m_iterator->second->configure_sensor();
+	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_item.second->configure_sensor();
 	}
 
 	sr_ecp_msg->message("MP vis nn loaded");
@@ -57,11 +58,9 @@ void vis_nn::task_initialization(void)
 
 void vis_nn::main_task_algorithm(void)
 {
-
 	generator::nn_eye eyegen(*this, 4);
 	eyegen.robot_m[lib::ROBOT_IRP6_ON_TRACK] = robot_m[lib::ROBOT_IRP6_ON_TRACK];
 	eyegen.sensor_m[lib::SENSOR_CAMERA_SA] = sensor_m[lib::SENSOR_CAMERA_SA];
-
 
 	sr_ecp_msg->message("New loop");
 
@@ -69,10 +68,9 @@ void vis_nn::main_task_algorithm(void)
 	//eyegen.robot_m = robot_m;
 	//eyegen.sensor_m = sensor_m;
 	//po cholere biasujemy jeszcze raz te czujniki i co to w ogole oznacza???
-	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin(); sensor_m_iterator
-	!= sensor_m.end(); sensor_m_iterator++) {
-		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-		sensor_m_iterator->second->configure_sensor();
+	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_item.second->configure_sensor();
 	}
 
 	set_next_ecps_state((int) ecp_mp::task::ECP_GEN_TEACH_IN, 0, "../trj/rcsc/irp6ot_ap_1.trj", 1, lib::ROBOT_IRP6_ON_TRACK);

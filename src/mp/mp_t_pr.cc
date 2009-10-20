@@ -5,7 +5,6 @@
 //
 // ------------------------------------------------------------------------
 
-
 #include <stdio.h>
 #include <unistd.h>
 
@@ -19,6 +18,7 @@
 #include "mp/mp_t_pr.h"
 #include "mp/mp_common_generators.h"
 
+#include <boost/foreach.hpp>
 
 namespace mrrocpp {
 namespace mp {
@@ -69,11 +69,9 @@ void pr::task_initialization(void)
 		new ecp_mp::sensor::schunk (lib::SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
 
 	// Konfiguracja wszystkich czujnikow
-	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
-	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-	{
-		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-		sensor_m_iterator->second->configure_sensor();
+	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_item.second->configure_sensor();
 	}
 
 	sr_ecp_msg->message("MP pr loaded");
@@ -93,11 +91,9 @@ void pr::main_task_algorithm(void)
 
 
 
-	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
-	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-	{
-		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-		sensor_m_iterator->second->configure_sensor();
+	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_item.second->configure_sensor();
 	}
 
 	sr_ecp_msg->message("NOWA SERIA");

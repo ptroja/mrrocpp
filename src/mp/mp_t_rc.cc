@@ -26,6 +26,8 @@
 #include "ecp_mp/ecp_mp_s_vis.h"
 #include "ecp_mp/ecp_mp_tr_rc_windows.h"
 
+#include <boost/foreach.hpp>
+
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -407,11 +409,9 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	// zacisniecie postumenta na kostce
 
 
-	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
-	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-	{
-		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-		sensor_m_iterator->second->configure_sensor();
+	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_item.second->configure_sensor();
 	}
 
 	generator::tff_rubik_grab mp_tff_rg_gen(*this, 10);
@@ -508,11 +508,9 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 
 	// zacisniecie tracka na kostce
 
-	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
-	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-	{
-		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-		sensor_m_iterator->second->configure_sensor();
+	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_item.second->configure_sensor();
 	}
 
 	generator::tff_rubik_grab mp_tff_rg_gen(*this, 10);
@@ -783,11 +781,9 @@ void rubik_cube_solver::task_initialization(void)
 		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
 
 	// Konfiguracja wszystkich czujnikow
-	for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
-	sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-	{
-		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-		sensor_m_iterator->second->configure_sensor();
+	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_item.second->configure_sensor();
 	}
 
 	usleep(1000*100);
@@ -797,7 +793,7 @@ void rubik_cube_solver::task_initialization(void)
 		new ecp_mp::transmitter::rc_windows (ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
 
 	sr_ecp_msg->message("MP rc loaded");
-};
+}
 
 
 void rubik_cube_solver::main_task_algorithm(void)
@@ -819,11 +815,9 @@ void rubik_cube_solver::main_task_algorithm(void)
 		for(;;)
 		{
 			sr_ecp_msg->message("Nowa seria");
-			for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
-			sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-			{
-				sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-				sensor_m_iterator->second->configure_sensor();
+			BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+				sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+				sensor_item.second->configure_sensor();
 			}
 
 

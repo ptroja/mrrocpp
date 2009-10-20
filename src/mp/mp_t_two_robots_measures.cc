@@ -41,10 +41,8 @@ void two_robots_measures::task_initialization(void)
 // Wlasciwe zadanie.
 void two_robots_measures::main_task_algorithm(void)
 {
-
 	rmg->Move();
 	sr_ecp_msg->message("Po move");
-
 }
 
 
