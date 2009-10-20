@@ -50,11 +50,8 @@ void vis_pbeclsac::task_initialization(void)
 		sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
 		sensor_m_iterator->second->configure_sensor();
 	}
-
-
-	usleep(1000*100);
 	sr_ecp_msg->message("MP vis nn loaded");
-};
+}
 
 
 void vis_pbeclsac::main_task_algorithm(void)

@@ -1139,8 +1139,6 @@ void rubik_cube_solver::task_initialization(void)
 		sensor_m_iterator->second->configure_sensor();
 	}
 
-	usleep(1000*100);
-
 	// dodanie transmitter'a
 	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] =
 		new ecp_mp::transmitter::rc_windows (ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);

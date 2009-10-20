@@ -1014,7 +1014,6 @@ void rubik_cube_solver::task_initialization(void)
 	}
 
 	}
-	usleep(1000*100);
 	if (vis_servoing)
 		{
 	// dodanie transmitter'a

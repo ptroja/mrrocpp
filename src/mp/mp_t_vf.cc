@@ -50,10 +50,8 @@ void vis_force::task_initialization(void)
 		sensor_m_iterator->second->configure_sensor();
 	}
 
-
-	usleep(1000*100);
 	sr_ecp_msg->message("MP vf loaded");
-};
+}
 
 
 void vis_force::main_task_algorithm(void)
