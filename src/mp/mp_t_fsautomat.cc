@@ -40,18 +40,13 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-fsautomat::fsautomat(lib::configurator &_config) :
-	task(_config)
-{
-}
-
 task* return_created_mp_task(lib::configurator &_config)
 {
 	return new fsautomat(_config);
 }
 
-// methods fo mp template to redefine in concete class
-void fsautomat::task_initialization(void)
+fsautomat::fsautomat(lib::configurator &_config) :
+	task(_config)
 {
 	/*	int size, conArg;
 	 char *filePath;
@@ -150,8 +145,6 @@ void fsautomat::task_initialization(void)
 			"[transmitter_rc_windows]", *this);
 
 	cube_state = new common::CubeState();
-
-	sr_ecp_msg->message("MP fsautomat loaded");
 }
 
 common::State * fsautomat::createState(xmlNodePtr stateNode)

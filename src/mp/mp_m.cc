@@ -59,6 +59,8 @@ int main (int argc, char *argv[], char **arge)
 
 			mp::common::mp_t = mp::task::return_created_mp_task(*_config);
 
+			mp::common::mp_t->sr_ecp_msg->message("MP loaded");
+
 			lib::set_thread_priority(pthread_self(), MAX_PRIORITY-4);
 			signal(SIGTERM, &(mp::common::catch_signal_in_mp));
 			//signal(SIGINT,  &(catch_signal_in_mp));
@@ -67,14 +69,6 @@ int main (int argc, char *argv[], char **arge)
 #if defined(PROCESS_SPAWN_RSH)
 			signal(SIGINT, SIG_IGN);
 #endif
-
-			mp::common::mp_t->initialize_communication();
-
-			// Utworzenie listy robotow, powolanie procesow ECP i nawiazanie komunikacji z nimi
-			mp::common::mp_t->create_robots();
-
-			mp::common::mp_t->task_initialization();
-
 		}
 		catch (ecp_mp::task::ECP_MP_main_error e) {
 			/* Obsluga bledow ECP_MP_main_error */
@@ -127,8 +121,10 @@ int main (int argc, char *argv[], char **arge)
 
 			try {
 				mp::common::mp_t->sr_ecp_msg->message("MP - wcisnij start");
+
 				// Oczekiwanie na zlecenie START od UI
 				mp::common::mp_t->wait_for_start();
+
 				// Wyslanie START do wszystkich ECP
 				mp::common::mp_t->start_all(mp::common::mp_t->robot_m);
 				mp::common::mp_t->main_task_algorithm();

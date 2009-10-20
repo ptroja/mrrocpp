@@ -27,7 +27,6 @@ public:
 	haptic(lib::configurator &_config);
 
 	// methods for mp template
-	void task_initialization(void);
 	void main_task_algorithm(void);
 
 };

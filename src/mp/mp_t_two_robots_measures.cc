@@ -26,11 +26,6 @@ task* return_created_mp_task(lib::configurator &_config)
 two_robots_measures::two_robots_measures(lib::configurator &_config) :
 	task(_config)
 {
-}
-
-// Inicjalizacja obiektow uzywanych prez zadanie.
-void two_robots_measures::task_initialization(void)
-{
 	// Stworzenie generatora.
 	rmg = new generator::two_robots_measures(*this);
 	rmg->robot_m = robot_m;

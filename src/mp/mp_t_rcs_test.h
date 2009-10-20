@@ -14,18 +14,17 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class rcs_test : public task  
+class rcs_test : public task
 {
 public:
 
     // konstruktor
     rcs_test(lib::configurator &_config);
-	
+
     // destruktor
     ~rcs_test();
 
 	// metody z mp
-	void task_initialization(void);
 	void main_task_algorithm(void);
 
 }; // end : class mp_task_rcs_test

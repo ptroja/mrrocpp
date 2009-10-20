@@ -50,7 +50,6 @@ public:
 
     ~rubik_cube_solver();
 
-
     // MANIPULACJA
     // manipulacja pojedyncza sciana
     void manipulate (common::CUBE_COLOR face_to_turn, common::CUBE_TURN_ANGLE turn_angle );
@@ -81,11 +80,9 @@ public:
     void gripper_opening(double track_increment, double postument_increment, int motion_time);
 
     // methods for mp template
-    void task_initialization(void);
     void main_task_algorithm(void);
 
-}
-; // end : class nose_run_force
+};
 
 
 } // namespace task

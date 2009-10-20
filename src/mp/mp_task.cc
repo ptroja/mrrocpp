@@ -112,6 +112,11 @@ task::task(lib::configurator &_config)
 	ui_opened(false),
 	ui_new_pulse(false)
 {
+	// initialize communication with other processes
+	initialize_communication();
+
+	// Utworzenie listy robotow, powolanie procesow ECP i nawiazanie komunikacji z nimi
+	create_robots();
 }
 
 task::~task()
@@ -193,17 +198,6 @@ void task::create_robots()
 		created_robot = new robot::robot (lib::ROBOT_FESTIVAL, "[ecp_festival]", *this);
 		robot_m[lib::ROBOT_FESTIVAL] = created_robot;
 	}
-}
-
-
-// methods for mp template to redefine in concrete classes
-void task::task_initialization(void)
-{
-	sr_ecp_msg->message("MP loaded");
-}
-
-void task::main_task_algorithm(void)
-{
 }
 
 // metody do obslugi najczesniej uzywanych generatorow

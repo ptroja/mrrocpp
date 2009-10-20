@@ -37,7 +37,40 @@ void rubik_cube_solver::initiate(common::CUBE_COLOR up_is, common::CUBE_COLOR do
 rubik_cube_solver::rubik_cube_solver(lib::configurator &_config)
 	: task(_config),
 	cube_state(NULL)
-{}
+{
+	// Powolanie czujnikow
+	vis_servoing = config.return_int_value("vis_servoing");
+
+	if (vis_servoing)
+	{
+
+	sensor_m[lib::SENSOR_CAMERA_ON_TRACK] =
+		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
+
+	if (config.return_int_value("vis_servoing"))
+	{
+
+		sensor_m[lib::SENSOR_CAMERA_SA] =
+			new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+
+	}
+
+	// Konfiguracja wszystkich czujnikow
+	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_item.second->configure_sensor();
+	}
+
+	}
+	if (vis_servoing)
+		{
+	// dodanie transmitter'a
+	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] =
+		new ecp_mp::transmitter::rc_windows (ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
+
+		}
+}
+
 
 rubik_cube_solver::~rubik_cube_solver()
 {
@@ -976,45 +1009,6 @@ void rubik_cube_solver::gripper_opening(double track_increment, double postument
 
 
 
-
-
-// methods fo mp template to redefine in concete class
-void rubik_cube_solver::task_initialization(void)
-{
-	// Powolanie czujnikow
-	vis_servoing = config.return_int_value("vis_servoing");
-
-	if (vis_servoing)
-	{
-
-	sensor_m[lib::SENSOR_CAMERA_ON_TRACK] =
-		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
-
-	if (config.return_int_value("vis_servoing"))
-	{
-
-		sensor_m[lib::SENSOR_CAMERA_SA] =
-			new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
-
-	}
-
-	// Konfiguracja wszystkich czujnikow
-	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
-		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
-		sensor_item.second->configure_sensor();
-	}
-
-	}
-	if (vis_servoing)
-		{
-	// dodanie transmitter'a
-	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] =
-		new ecp_mp::transmitter::rc_windows (ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
-
-		}
-
-	sr_ecp_msg->message("MP rcsc loaded");
-}
 
 
 void rubik_cube_solver::main_task_algorithm(void)

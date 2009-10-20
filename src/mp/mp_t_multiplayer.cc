@@ -37,11 +37,6 @@ task* return_created_mp_task (lib::configurator &_config)
 	return new multiplayer(_config);
 }
 
-void multiplayer::task_initialization(void)
-{
-	sr_ecp_msg->message("MP multiplayer task loaded");
-}
-
 #define FRICTION_CORRECTOR	1.5
 
 void multiplayer::main_task_algorithm(void)

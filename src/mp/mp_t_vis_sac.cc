@@ -34,11 +34,6 @@ task* return_created_mp_task(lib::configurator &_config)
 
 vis_sac::vis_sac(lib::configurator &_config) :
 	task(_config)
-	{
-	}
-
-// methods fo mp template to redefine in concete class
-void vis_sac::task_initialization(void)
 {
 	// Powolanie czujnikow
 	sensor_m[lib::SENSOR_FORCE_ON_TRACK] = new ecp_mp::sensor::schunk (lib::SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
@@ -50,14 +45,10 @@ void vis_sac::task_initialization(void)
 		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
 		sensor_item.second->configure_sensor();
 	}
-
-	sr_ecp_msg->message("MP vis nn loaded");
 }
 
 void vis_sac::main_task_algorithm(void)
 {
-
-
 	generator::vis_sac eyegen(*this, 4);
 	eyegen.robot_m[lib::ROBOT_IRP6_ON_TRACK] = robot_m[lib::ROBOT_IRP6_ON_TRACK];
 	eyegen.sensor_m[lib::SENSOR_CAMERA_SA] = sensor_m[lib::SENSOR_CAMERA_SA];

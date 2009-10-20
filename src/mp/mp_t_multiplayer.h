@@ -11,14 +11,12 @@ class multiplayer : public task
 {
 	private:
 		void move_electron_robot(const lib::playerpos_goal_t &goal);
-	public:
 
+	public:
 		multiplayer(lib::configurator &_config);
 
 		// methods for mp template
-		void task_initialization(void);
 		void main_task_algorithm(void);
-
 };
 
 

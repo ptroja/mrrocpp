@@ -9,15 +9,14 @@ namespace task {
 
 class cxx: public task
 {
-	
+
 public:
-	
+
 	cxx(lib::configurator &_config);
 
 	// methods fo mp template to redefine in concete class
-	void task_initialization(void);
 	void main_task_algorithm(void);
-  
+
 };
 
 } // namespace task

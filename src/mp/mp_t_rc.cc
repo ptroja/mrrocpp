@@ -41,6 +41,30 @@ void rubik_cube_solver::initiate(common::CUBE_COLOR up_is, common::CUBE_COLOR do
 
 rubik_cube_solver::rubik_cube_solver(lib::configurator &_config) : task(_config)
 {
+	// Powolanie czujnikow
+	sensor_m[lib::SENSOR_FORCE_ON_TRACK] =
+		new ecp_mp::sensor::schunk (lib::SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
+
+	sensor_m[lib::SENSOR_FORCE_POSTUMENT] =
+		new ecp_mp::sensor::schunk (lib::SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
+
+	sensor_m[lib::SENSOR_CAMERA_ON_TRACK] =
+		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
+
+	sensor_m[lib::SENSOR_CAMERA_SA] =
+		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
+
+	// Konfiguracja wszystkich czujnikow
+	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
+		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_item.second->configure_sensor();
+	}
+
+	usleep(1000*100);
+
+	// dodanie transmitter'a
+	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] =
+		new ecp_mp::transmitter::rc_windows (ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
 }
 
 
@@ -761,40 +785,6 @@ task* return_created_mp_task (lib::configurator &_config)
 {
 	return new rubik_cube_solver(_config);
 }
-
-
-
-// methods fo mp template to redefine in concete class
-void rubik_cube_solver::task_initialization(void)
-{
-	// Powolanie czujnikow
-	sensor_m[lib::SENSOR_FORCE_ON_TRACK] =
-		new ecp_mp::sensor::schunk (lib::SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
-
-	sensor_m[lib::SENSOR_FORCE_POSTUMENT] =
-		new ecp_mp::sensor::schunk (lib::SENSOR_FORCE_POSTUMENT, "[vsp_force_irp6p]", *this);
-
-	sensor_m[lib::SENSOR_CAMERA_ON_TRACK] =
-		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_ON_TRACK, "[vsp_vis_eih]", *this);
-
-	sensor_m[lib::SENSOR_CAMERA_SA] =
-		new ecp_mp::sensor::vis (lib::SENSOR_CAMERA_SA, "[vsp_vis_sac]", *this);
-
-	// Konfiguracja wszystkich czujnikow
-	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m) {
-		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
-		sensor_item.second->configure_sensor();
-	}
-
-	usleep(1000*100);
-
-	// dodanie transmitter'a
-	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] =
-		new ecp_mp::transmitter::rc_windows (ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
-
-	sr_ecp_msg->message("MP rc loaded");
-}
-
 
 void rubik_cube_solver::main_task_algorithm(void)
 {

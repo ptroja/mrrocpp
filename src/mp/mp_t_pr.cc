@@ -56,11 +56,6 @@ void pr::mp_short_move_up(void)
 
 pr::pr(lib::configurator &_config) : task(_config)
 {
-}
-
-// methods for mp template to redefine in concrete class
-void pr::task_initialization(void)
-{
 	// Powolanie czujnikow
 	sensor_m[lib::SENSOR_FORCE_ON_TRACK] =
 		new ecp_mp::sensor::schunk (lib::SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
@@ -73,10 +68,7 @@ void pr::task_initialization(void)
 		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
 		sensor_item.second->configure_sensor();
 	}
-
-	sr_ecp_msg->message("MP pr loaded");
 }
-
 
 void pr::main_task_algorithm(void)
 {

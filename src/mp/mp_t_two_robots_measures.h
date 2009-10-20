@@ -20,20 +20,18 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class two_robots_measures : public task  
+class two_robots_measures : public task
 {
 protected:
 	generator::two_robots_measures *rmg;
 public:
-	
+
 	two_robots_measures(lib::configurator &_config);
-	
-	// Object initialization.
-	void task_initialization(void);
+
 	// Exact task algorithm.
 	void main_task_algorithm(void);
-};//: mp_task_two_robots_measures
 
+};//: mp_task_two_robots_measures
 
 } // namespace task
 } // namespace mp

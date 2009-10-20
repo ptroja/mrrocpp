@@ -85,7 +85,6 @@ public:
 	void gripper_opening(double track_increment, double postument_increment, int motion_time);
 
 	// methods for mp template
-	void task_initialization(void);
 	void main_task_algorithm(void);
 
 }; // end : class nose_run_force

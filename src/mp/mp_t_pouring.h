@@ -16,19 +16,13 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class pouring : public task  
+class pouring : public task
 {
-protected:
-
-
 public:
     // konstruktor
     pouring(lib::configurator &_config);
-	
-    ~pouring();
 
 	// methods for mp template
-	void task_initialization(void);
 	void main_task_algorithm(void);
 
 	void approach(void);

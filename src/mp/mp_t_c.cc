@@ -22,20 +22,13 @@ cxx::cxx(lib::configurator &_config) : task(_config)
 {
 }
 
-// methods for mp template to redefine in concrete class
-void cxx::task_initialization(void) 
-{
-	sr_ecp_msg->message("MP c loaded");
-}
- 
 void cxx::main_task_algorithm(void)
 {
 	generator::empty empty_gen (*this); // "Pusty" generator
 	empty_gen.robot_m = robot_m;
-   
-	// Zlecenie wykonania kolejnego makrokroku
-	empty_gen.Move(); 
 
+	// Zlecenie wykonania kolejnego makrokroku
+	empty_gen.Move();
 }
 
 

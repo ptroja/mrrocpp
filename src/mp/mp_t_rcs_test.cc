@@ -33,21 +33,6 @@ rcs_test::rcs_test(lib::configurator &_config) :
 	task(_config)
 {
 	printf("MP Construct\n");
-}
-
-rcs_test::~rcs_test()
-{
-	printf("MP Destruct\n");
-
-	// konczy prace czujnikow
-	sensor_m[lib::SENSOR_RCS_KOCIEMBA]->terminate();
-	sensor_m[lib::SENSOR_RCS_KORF]->terminate();
-}
-
-// methods fo mp template to redefine in concete class
-void rcs_test::task_initialization(void)
-{
-	printf("MP Init\n");
 
 	// tworzy i konfiguruje czujnik dla algorytmu Kociemby (w powloce nieinteraktywnej)
 	sensor_m[lib::SENSOR_RCS_KOCIEMBA] = new ecp_mp::sensor::rcs_kociemba(lib::SENSOR_RCS_KOCIEMBA, "[vsp_rcs_kociemba]", *this);
@@ -59,6 +44,15 @@ void rcs_test::task_initialization(void)
 	sensor_m[lib::SENSOR_RCS_KORF]->to_vsp.rcs.configure_mode = lib::RCS_BUILD_TABLES;
 	sensor_m[lib::SENSOR_RCS_KORF]->configure_sensor();
 
+}
+
+rcs_test::~rcs_test()
+{
+	printf("MP Destruct\n");
+
+	// konczy prace czujnikow
+	sensor_m[lib::SENSOR_RCS_KOCIEMBA]->terminate();
+	sensor_m[lib::SENSOR_RCS_KORF]->terminate();
 }
 
 // rcs - znajdz rozwiazanie

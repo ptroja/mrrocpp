@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 //                            mp_task_rc.h
 // Definicje struktur danych i metod dla procesow MP - zadanie powielania rysunku
-// 
+//
 // Ostatnia modyfikacja: 2007
 // -------------------------------------------------------------------------
 
@@ -16,17 +16,16 @@ namespace task {
 
 class pr: public task  {
 protected:
-	
+
 	void mp_short_move_up(void);
-	
+
 public:
-	
+
 	pr(lib::configurator &_config);
 
 	// methods for mp template
-	void task_initialization(void);
 	void main_task_algorithm(void);
-  
+
 };
 
 

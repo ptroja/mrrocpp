@@ -4,7 +4,6 @@
 //
 // ------------------------------------------------------------------------
 
-
 #include <stdio.h>
 #include <unistd.h>
 
@@ -33,11 +32,6 @@ task* return_created_mp_task (lib::configurator &_config)
 
 vis::vis(lib::configurator &_config) : task(_config)
 {
-}
-
-// methods fo mp template to redefine in concete class
-void vis::task_initialization(void)
-{
 	// Powolanie czujnikow
 	sensor_m[lib::SENSOR_FORCE_ON_TRACK] =
 		new ecp_mp::sensor::schunk (lib::SENSOR_FORCE_ON_TRACK, "[vsp_force_irp6ot]", *this);
@@ -50,10 +44,7 @@ void vis::task_initialization(void)
 		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
 		sensor_item.second->configure_sensor();
 	}
-
-	sr_ecp_msg->message("MP vis loaded");
 }
-
 
 void vis::main_task_algorithm(void)
 {

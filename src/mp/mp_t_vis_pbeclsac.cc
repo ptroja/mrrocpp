@@ -32,10 +32,6 @@ task* return_created_mp_task (lib::configurator &_config)
 }
 
 vis_pbeclsac::vis_pbeclsac(lib::configurator &_config) : task(_config)
-{}
-
-// methods fo mp template to redefine in concete class
-void vis_pbeclsac::task_initialization(void)
 {
 	// Powolanie czujnikow
 	sensor_m[lib::SENSOR_FORCE_ON_TRACK] =
@@ -49,8 +45,6 @@ void vis_pbeclsac::task_initialization(void)
 		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
 		sensor_item.second->configure_sensor();
 	}
-
-	sr_ecp_msg->message("MP vis nn loaded");
 }
 
 

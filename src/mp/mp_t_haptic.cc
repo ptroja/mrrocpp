@@ -33,14 +33,6 @@ haptic::haptic(lib::configurator &_config) : task(_config)
 {
 }
 
-// methods fo mp template to redefine in concete class
-void haptic::task_initialization(void)
-{
-	sr_ecp_msg->message("MP haptic device loaded");
-}
-
-
-
 void haptic::configure_edp_force_sensor(bool configure_track, bool configure_postument)
 {
     if (configure_track)
