@@ -41,10 +41,10 @@ namespace generator {
 void force_controlled_trajectory::return_sensor_reading(ecp_mp::sensor::force& the_sensor, double sensor_reading[6]){
 	lib::SENSOR_IMAGE si;
 	// Nowe odczyty czujnika.
-	the_sensor.get_reading(&si);
+	the_sensor.get_reading(si);
 	// Przepisanie pozycji z bufora.
 	memcpy(sensor_reading, si.sensor_union.force.rez, 6*sizeof(double));
-    }; // end: return_sensor_reading
+    } // end: return_sensor_reading
 
 /*************************** RETURN  POSITION *******************************/
 void force_controlled_trajectory::return_position (double robot_position[8]){
@@ -60,7 +60,7 @@ void force_controlled_trajectory::return_position (double robot_position[8]){
 
         // Koniec sekcji krytycznej.
     pthread_mutex_unlock(&ROBOT_POSITION_MUTEX);
-    }; // end: return_position
+    } // end: return_position
 
 /************************ RETURN  MOTOR POSITION ***************************/
 void force_controlled_trajectory::return_motor_position (double robot_position[8]){
@@ -70,7 +70,7 @@ void force_controlled_trajectory::return_motor_position (double robot_position[8
         memcpy(robot_position, current_motor_position, 8*sizeof(double));
     // Koniec sekcji krytycznej.
     pthread_mutex_unlock(&ROBOT_POSITION_MUTEX);
-    }; // end: return_position
+    } // end: return_position
 
 /************************* GET CURRENT POSITION *****************************/
 void force_controlled_trajectory::get_current_position (){
@@ -109,7 +109,7 @@ void force_controlled_trajectory::get_current_position (){
             } // end: if*/
     // Koniec sekcji krytycznej.
     pthread_mutex_unlock(&ROBOT_POSITION_MUTEX);
-    }; // end: get_current_position
+    } // end: get_current_position
 
 
 /**************************** CHANGE CONTROL *******************************/
@@ -133,8 +133,8 @@ void force_controlled_trajectory::change_control(lib::POSE_SPECIFICATION ps){
         memcpy(current_delta, external_delta, 6*sizeof(double));
         memcpy(current_delta_increment, external_delta_increment, 6*sizeof(double));
         memcpy(current_max_delta_increment, external_max_delta_increment, 6*sizeof(double));
-        };
-    }; // end: change_control
+        }
+    } // end: change_control
 
 
 /*****************************  KONSTRUKTOR *********************************/
@@ -200,7 +200,7 @@ force_controlled_trajectory::force_controlled_trajectory (common::task::task& _e
     current_control = lib::XYZ_EULER_ZYZ;
     // Ustawienie sterowania na MOTOR.
     change_control(lib::MOTOR);
-    }; // end: force_controlled_trajectory_generator
+    } // end: force_controlled_trajectory_generator
 
 
 /********************************* ADD STEP ***********************************/
@@ -214,7 +214,7 @@ void force_controlled_trajectory::add_step (int motion_time){
     }else{
         // Jesli nastepny element.
         insert_pose_list_element(lib::MOTOR, motion_time, current_motor_position);
-        }; // end else
+        } // end else
     // Wyswietlenie dodanego elementu.
 /*    printf("Robot :: ");
     for(int i=0; i<8; i++)
@@ -222,7 +222,7 @@ void force_controlled_trajectory::add_step (int motion_time){
     printf("\n");*/
   // Koniec sekcji krytycznej.
     pthread_mutex_unlock(&ROBOT_POSITION_MUTEX);
-    }; // end: add_step
+    } // end: add_step
 
 /****************************** SET MOVE TYPE *********************************/
 void force_controlled_trajectory::set_move_type(short move_type){
@@ -234,8 +234,8 @@ void force_controlled_trajectory::set_move_type(short move_type){
         // Ruch w "lewo".
         dir = -1;
         number = -move_type - 1;
-        };
-    }; // end: set_move_type
+        }
+    } // end: set_move_type
 
 /******************************** FIRST STEP ***********************************/
 bool force_controlled_trajectory::first_step(){
@@ -404,7 +404,7 @@ bool force_controlled_trajectory::increment_delta(double &tmp_delta, double dire
         // Sprawdzenie, czy osiagnieta zostala "maksymalna" wielkosc przystostu.
         if (tmp_delta >= max_delta_increment)
             return false;
-        }; // end: else
+        } // end: else
     // Nie osiagnieto jeszcze maksymalnego przyspieszenia.
     return true;
 }
@@ -424,8 +424,8 @@ bool force_controlled_trajectory::slow_down_condition(double start_position, dou
             return true;
         else
             return false;
-        }; // end: else
-    }; // end: check_slow_down_condition
+        } // end: else
+    } // end: check_slow_down_condition
 
 /***************************  DECREMENT DELTA *******************************/
 bool force_controlled_trajectory::decrement_delta(double &tmp_delta, double direction, double delta_increment){
@@ -442,10 +442,10 @@ bool force_controlled_trajectory::decrement_delta(double &tmp_delta, double dire
         // Sprawdzenie, czy robot sie nie zatrzymal.
         if (tmp_delta > 0)
             return false;
-        }; // end: else
+        } // end: else
     // Wykonanie dalszego ruchu.
     return true;
-    }; // end: decrement_delta
+    } // end: decrement_delta
 
 /**************************** SAVE TRAJECTORY ********************************/
 void force_controlled_trajectory::save_trajectory(char* filename) {
@@ -455,7 +455,7 @@ void force_controlled_trajectory::save_trajectory(char* filename) {
     if (pose_list_length() == 0){
         sr_ecp_msg.message("Empty trajectory");
         return;
-        };
+        }
 try{
     // Otwarcie pliku.
 	std::ofstream to_file(filename);
@@ -480,7 +480,7 @@ try{
         to_file << '\n';
         // Nastepna pozycja.
         next_pose_list_ptr();
-        };
+        }
     // Zapisanie ostatniego elementu.
     // Pobranie pozycji.
     get_pose (tip);
@@ -498,15 +498,15 @@ try{
 catch(ECP_error e){
     // Wylapanie i oblsuga bledow.
     sr_ecp_msg.message (e.error_class, e.error_no);
-    };
-    }; // end: save_trajectory
+    }
+    } // end: save_trajectory
 
 
 /*************************  SET DANGEROUS FORCE *****************************/
 void force_controlled_trajectory::set_dangerous_force(){
 	dangerous_force = ecp_t.config.return_int_value("dangerous_force");
 	sr_ecp_msg.message("Dangerous force size readed properly from INI file");
-    }; // end: set_dangerous_force
+    } // end: set_dangerous_force
 
 
 
@@ -516,27 +516,27 @@ force_controlled_trajectory::~force_controlled_trajectory (void) {
     flush_pose_list();
     flush_position_list();
 	pthread_mutex_destroy(&ROBOT_POSITION_MUTEX);
-    };
+    }
 
 /********************* METODY ZWIAZANE Z LISTA POZYCJI **********************/
 void force_controlled_trajectory::flush_position_list ( void ) {
     // Jezeli sa jakies elementy
     position_list.clear();
-    }; // end: flush_position_list
+    } // end: flush_position_list
 
 void force_controlled_trajectory::initiate_position_list(void) {
     position_list_iterator = position_list.begin();
-    };
+    }
 
 void force_controlled_trajectory::next_position_list_element (void) {
     // Przejscie na nastepny element.
   	position_list_iterator++;
-    };
+    }
 
 void force_controlled_trajectory::get_position_list_element (double &position){
     // Przepisanie polozenia z listy.
     position = *position_list_iterator;
-    };
+    }
 
 
 bool force_controlled_trajectory::is_position_list_element ( void ) {
@@ -545,19 +545,19 @@ bool force_controlled_trajectory::is_position_list_element ( void ) {
         return true;
     else
         return false;
-    };
+    }
 
 void force_controlled_trajectory::create_position_list_head (double position) {
     // Wstawienie glowy.
     	position_list.push_back(double(position));
 	position_list_iterator = position_list.begin();
-    };
+    }
 
 void force_controlled_trajectory::insert_position_list_element (double position) {
     // Wlasciwe wstawienie elementu.
     position_list.push_back(double(position));
 	position_list_iterator++;
-    };
+    }
 
 /**************** KONIEC: METODY ZWIAZANE Z LISTA POZYCJI ******************/
 
