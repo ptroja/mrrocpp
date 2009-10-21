@@ -16,6 +16,8 @@
 #include <iostream>
 #include <string>
 
+#include <boost/thread/mutex.hpp>
+
 // Typy zmiennych odczytywanych z pliku INI.
 #include "lib/cfgopts.h"
 
@@ -31,19 +33,16 @@ namespace lib {
 class configurator
 {
 private:
-	char* node;
-	char* dir;
-	char* ini_file;
+	const std::string node;
+	const std::string dir;
+	std::string ini_file;
 	std::string mrrocpp_network_path;
 	struct utsname sysinfo;
 
 	// do ochrony wylacznosci dostepu do pliku miedzy watkami jednego procesu
-	pthread_mutex_t mutex; // = PTHREAD_MUTEX_INITIALIZER ;
+	boost::mutex file_mutex;
 
-	int	lock_mutex(); // zajecie mutex'a
-	int	unlock_mutex(); // zwolnienie mutex'a
-
-	char* session_name; // nazwa sesji skojarzona z pojedynczym uruchomieniem aplikacji mroka
+	const std::string session_name; // nazwa sesji skojarzona z pojedynczym uruchomieniem aplikacji mroka
 
 #ifdef USE_MESSIP_SRR
 	messip_channel_t *ch;
@@ -66,8 +65,12 @@ public:
 	char* section_name;
 
 	// Konstruktor obiektu - konfiguratora.
-	configurator(const char* _node, const char* _dir, const char* _ini_file, const char* _section_name,
-		const char* _session_name);
+	configurator(
+			const std::string & _node,
+			const std::string & _dir,
+			const std::string & _ini_file,
+			const char* _section_name,
+			const std::string & _session_name);
 
 	// zmiana nazwy sesji z modyfikacja pliku konfiguracyjnego
 	void change_ini_file (const char* _ini_file);
@@ -76,7 +79,7 @@ public:
 	pid_t process_spawn(const char* _section_name);
 
 	// Zwraca numer wezla.
-	static int return_node_number (std::string node_name_l);
+	static int return_node_number (const std::string & node_name_l);
 
 	// Zwraca attach point'a serwerow w zaleznosci od typu
 

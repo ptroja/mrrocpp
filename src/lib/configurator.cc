@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+#include <string>
 
 #if defined(__QNXNTO__)
 #include <process.h>
@@ -38,23 +39,20 @@ namespace mrrocpp {
 namespace lib {
 
 // Konstruktor obiektu - konfiguratora.
-configurator::configurator (const char* _node, const char* _dir, const char* _ini_file, const char* _section_name,
-		const char* _session_name)
-
+configurator::configurator (
+		const std::string & _node,
+		const std::string & _dir,
+		const std::string & _ini_file,
+		const char* _section_name,
+		const std::string & _session_name) :
+	node(_node),
+	dir(_dir),
+	ini_file(_ini_file),
+	session_name(_session_name)
 {
-	assert(_node);
-	assert(_dir);
-	assert(_ini_file);
 	assert(_section_name);
-	assert(_session_name);
 
-	node = strdup(_node);
-	dir = strdup(_dir);
-	ini_file = strdup(_ini_file);
 	section_name = strdup(_section_name);
-	session_name = strdup(_session_name);
-
-	pthread_mutex_init(&mutex, NULL );
 
 	if( uname( &sysinfo ) == -1 ) {
 		perror( "uname" );
@@ -82,39 +80,24 @@ void configurator::change_ini_file (const char* _ini_file)
 	snprintf(config_msg.data.configfile, sizeof(config_msg.data.configfile), "%s", _ini_file);
 	int32_t answer;
 
-	lock_mutex();
+	boost::mutex::scoped_lock l(file_mutex);
 
 	messip_send(this->ch, CONFIG_CHANGE_INI_FILE, 0,
 			&config_msg, sizeof(config_msg),
 			&answer, NULL, 0,
 			MESSIP_NOTIMEOUT);
-
-	unlock_mutex();
 #else
-	lock_mutex();
-	if (ini_file) free(ini_file);
-	ini_file = strdup(_ini_file);
+	boost::mutex::scoped_lock l(file_mutex);
+
+	ini_file =_ini_file;
 
 	file_location = return_ini_file_path();
 	common_file_location = return_common_ini_file_path();
-
-	unlock_mutex();
 #endif /* USE_MESSIP_SRR */
 }
 
-int	configurator::lock_mutex() // zajecie mutex'a
-{
-	return pthread_mutex_lock( &mutex );
-}
-
-int	configurator::unlock_mutex() // zwolnienie mutex'a
-{
-	return pthread_mutex_unlock( &mutex );
-}
-
-
 // Zwraca numer wezla.
-int configurator::return_node_number(std::string node_name_l)
+int configurator::return_node_number(const std::string & node_name_l)
 {
 #if defined(PROCESS_SPAWN_RSH)
 	return ND_LOCAL_NODE;
@@ -207,14 +190,12 @@ bool configurator::exists(const char* _key, const char* __section_name)
 
 	bool value;
 
-	lock_mutex();
+	boost::mutex::scoped_lock l(file_mutex);
 
 	messip_send(this->ch, CONFIG_EXISTS, 0,
 			&config_msg, sizeof(config_msg),
 			&answer, &value, sizeof(value),
 			MESSIP_NOTIMEOUT);
-
-	unlock_mutex();
 
 	return value;
 #else
@@ -227,17 +208,15 @@ bool configurator::exists(const char* _key, const char* __section_name)
 			{ NULL , Error_Tag, NULL }
 	};
 
-	lock_mutex();
+	boost::mutex::scoped_lock l(file_mutex);
+
 	if (input_config(file_location, configs, _section_name)<1) {
 		if (input_config(common_file_location, configs, _section_name)<1) {
-			unlock_mutex();
 			// Zwolnienie pamieci.
-
 
 			return false;
 		}
 	}
-	unlock_mutex();
 
 	return true;
 #endif /* USE_MESSIP_SRR */
@@ -256,14 +235,12 @@ int configurator::return_int_value(const char* _key, const char* __section_name)
 
 	int value = 0;
 
-	lock_mutex();
+	boost::mutex::scoped_lock l(file_mutex);
 
 	messip_send(this->ch, CONFIG_RETURN_INT_VALUE, 0,
 			&config_msg, sizeof(config_msg),
 			&answer, &value, sizeof(value),
 			MESSIP_NOTIMEOUT);
-
-	unlock_mutex();
 
 	return value;
 #else
@@ -277,15 +254,14 @@ int configurator::return_int_value(const char* _key, const char* __section_name)
 			{ NULL , Error_Tag, NULL }
 	};
 
-
 	// Odczytanie zmiennej.
-	lock_mutex();
+	boost::mutex::scoped_lock l(file_mutex);
+
 	if (input_config(file_location, configs, _section_name)<1) {
 		if (input_config(common_file_location, configs, _section_name)<1) {
 			fprintf(stderr, "Blad input_config() w return_int_value file_location:%s, _section_name:%s, _key:%s\n", file_location.c_str(), _section_name, _key);
 		}
 	}
-	unlock_mutex();
 
 	// 	throw ERROR
 
@@ -309,14 +285,12 @@ double configurator::return_double_value(const char* _key, const char*__section_
 
 	double value = 0;
 
-	lock_mutex();
+	boost::mutex::scoped_lock l(file_mutex);
 
 	messip_send(this->ch, CONFIG_RETURN_INT_VALUE, 0,
 			&config_msg, sizeof(config_msg),
 			&answer, &value, sizeof(value),
 			MESSIP_NOTIMEOUT);
-
-	unlock_mutex();
 
 	return value;
 #else
@@ -330,16 +304,14 @@ double configurator::return_double_value(const char* _key, const char*__section_
 			{ NULL , Error_Tag, NULL }
 	};
 
-
 	// Odczytanie zmiennej.
-	lock_mutex();
+	boost::mutex::scoped_lock l(file_mutex);
 	if (input_config(file_location, configs, _section_name)<1) {
 		if (input_config(common_file_location, configs, _section_name)<1) {
 			fprintf(stderr, "Blad input_config() w return_double_value file_location:%s, _section_name:%s, _key:%s\n",
 					file_location.c_str(), _section_name, _key);
 		}
 	}
-	unlock_mutex();
 
 	// 	throw ERROR
 
@@ -363,14 +335,12 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 
 	char value[255];
 
-	lock_mutex();
+	boost::mutex::scoped_lock l(file_mutex);
 
 	messip_send(this->ch, CONFIG_RETURN_STRING_VALUE, 0,
 			&config_msg, sizeof(config_msg),
 			&answer, &value, sizeof(value),
 			MESSIP_NOTIMEOUT);
-
-	unlock_mutex();
 
 	//printf("configurator::return_string_value(%s, %s) = %s\n", _key, _section_name, value);
 
@@ -388,14 +358,14 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 	};
 
 	// Odczytanie zmiennej.
-	lock_mutex();
+	boost::mutex::scoped_lock l(file_mutex);
 	if (input_config(file_location, configs, _section_name)<1) {
 		if (input_config(common_file_location, configs, _section_name)<1) {
 			fprintf(stderr, "Blad input_config() w return_string_value file_location:%s, _section_name:%s, _key:%s\n",
 					file_location.c_str(), _section_name, _key);
 		}
 	}
-	unlock_mutex();
+
 	// 	throw ERROR
 
 	// Zwrocenie wartosci.
@@ -433,7 +403,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 
 		} else {
 			snprintf(bin_path, sizeof(bin_path), "/net/%s%sbin/",
-					node, dir);
+					node.c_str(), dir.c_str());
 		}
 
 		//ewentualne dodatkowe argumenty wywolania np. przekierowanie na konsole
@@ -447,8 +417,8 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s %s",
 				bin_path, ui_host ? ui_host : "",
 				bin_path, spawned_program_name.c_str(),
-				node, dir, ini_file, _section_name,
-				strlen(session_name) ? session_name : "\"\"", asa.c_str()
+				node.c_str(), dir.c_str(), ini_file.c_str(), _section_name,
+				session_name.length() ? session_name.c_str() : "\"\"", asa.c_str()
 		);
 
 		if (exists("username", _section_name)) {
@@ -477,8 +447,8 @@ pid_t configurator::process_spawn(const char*_section_name) {
 //					"asa ->%s<-\n",
 //					bin_path, ui_host ? ui_host : "",
 //					spawned_program_name.c_str(),
-//					node, dir, ini_file, _section_name,
-//					strlen(session_name) ? session_name : "\"\"",
+//					node.c_str(), dir.c_str(), ini_file.c_str(), _section_name,
+//					session_name.length() ? session_name.c_str() : "\"\"",
 //					asa.c_str()
 //			);
 
@@ -569,15 +539,15 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		strcpy(input.node_name, spawned_node_name);
 		strcpy(input.program_name_and_args, spawned_program_name);
 		strcat(input.program_name_and_args, " ");
-		strcat(input.program_name_and_args, node);
+		strcat(input.program_name_and_args, node.c_str());
 		strcat(input.program_name_and_args, " ");
-		strcat(input.program_name_and_args, dir);
+		strcat(input.program_name_and_args, dir.c_str());
 		strcat(input.program_name_and_args, " ");
-		strcat(input.program_name_and_args, ini_file);
+		strcat(input.program_name_and_args, ini_file.c_str());
 		strcat(input.program_name_and_args, " ");
 		strcat(input.program_name_and_args, _section_name);
 		strcat(input.program_name_and_args, " ");
-		strcat(input.program_name_and_args, session_name);
+		strcat(input.program_name_and_args, session_name.c_str());
 		strcpy(input.binaries_path, bin_path);
 
 		// cout<<"config_spawn: "<<input.node_name<<endl;
@@ -606,12 +576,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 }// : spawn
 
 configurator::~configurator() {
-	pthread_mutex_destroy(&mutex);
-	free(node);
-	free(dir);
-	free(ini_file);
 	free(section_name);
-	free(session_name);
 #ifdef USE_MESSIP_SRR
 	messip_channel_disconnect(ch, MESSIP_NOTIMEOUT);
 #endif /* USE_MESSIP_SRR */

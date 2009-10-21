@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
 #endif
 
 		// create configuration object
-		lib::configurator _config = lib::configurator(argv[1], argv[2], argv[3], argv[4], (argc < 6) ? "" : argv[5]);
+		lib::configurator _config(argv[1], argv[2], argv[3], argv[4], (argc < 6) ? "" : argv[5]);
 
 		// block test-mode timer signal for all the threads
 		if(_config.return_int_value("test_mode")) {
@@ -147,6 +147,3 @@ int main(int argc, char *argv[]) {
 		 */
 	}
 }
-
-
-
