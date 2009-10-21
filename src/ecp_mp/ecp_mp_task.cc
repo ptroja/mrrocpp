@@ -356,7 +356,7 @@ task::trajectories_t * task::loadTrajectories(const char * fileName, lib::ROBOT_
 
 	trajectories_t* trajectoriesMap = new trajectories_t();
 
-	const char * robotName = ecp_mp::common::Trajectory::returnRobotName(propRobot);
+	const char * robotName = ecp_mp::common::Trajectory::toString(propRobot).c_str();
 
 	for(xmlNodePtr cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
 	{

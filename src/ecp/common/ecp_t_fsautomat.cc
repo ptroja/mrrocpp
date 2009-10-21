@@ -84,7 +84,7 @@ fsautomat::fsautomat(lib::configurator &_config) : task(_config),
 		return;
 	}
 
-	const char * whichECP = ecp_mp::common::Trajectory::returnRobotName(ecp_m_robot->robot_name);
+	const char * whichECP = ecp_mp::common::Trajectory::toString(ecp_m_robot->robot_name).c_str();
 
 	std::string filePath(mrrocpp_network_path);
 	std::string fileName = config.return_string_value("xml_file", "[xml_settings]");
@@ -229,7 +229,7 @@ void fsautomat::main_task_algorithm(void)
 	{
 		trjMap = loadTrajectories(fileName.c_str(), ecp_m_robot->robot_name);
 		printf("Lista %s zawiera: %d elementow\n",
-				ecp_mp::common::Trajectory::returnRobotName(ecp_m_robot->robot_name),
+				ecp_mp::common::Trajectory::toString(ecp_m_robot->robot_name).c_str(),
 				trjMap->size());
 	}
 

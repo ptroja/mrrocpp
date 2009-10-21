@@ -29,8 +29,8 @@ class Trajectory
 		static lib::POSE_SPECIFICATION returnProperPS(const std::string & poseSpecification);
 		static std::string toString(double valArr[], int length);
 		static std::string toString(int numberOfPoses);
-		static const char * toString(lib::POSE_SPECIFICATION ps);
-		static const char * returnRobotName(lib::ROBOT_ENUM robot);
+		static std::string toString(lib::POSE_SPECIFICATION ps);
+		static std::string toString(lib::ROBOT_ENUM robot);
 
 		static void writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth_trajectory_pose> &poses);
 		static void writeTrajectoryToXmlFile2(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth2_trajectory_pose> &poses);//for smooth2

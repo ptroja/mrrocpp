@@ -104,46 +104,49 @@ std::string Trajectory::toString(int numberOfPoses)
 	return stm.str();
 }
 
-const char * Trajectory::returnRobotName(lib::ROBOT_ENUM robot)
+std::string Trajectory::toString(lib::ROBOT_ENUM robot)
 {
 	using namespace lib;
 	switch (robot)
 	{
 		case ROBOT_IRP6_ON_TRACK:
-			return "ROBOT_IRP6_ON_TRACK";
+			return std::string("ROBOT_IRP6_ON_TRACK");
 		case ROBOT_IRP6_POSTUMENT:
-			return "ROBOT_IRP6_POSTUMENT";
+			return std::string("ROBOT_IRP6_POSTUMENT");
 		case ROBOT_CONVEYOR:
-			return "ROBOT_CONVEYOR";
+			return std::string("ROBOT_CONVEYOR");
 		case ROBOT_SPEAKER:
-			return "ROBOT_SPEAKER";
+			return std::string("ROBOT_SPEAKER");
 		case ROBOT_IRP6_MECHATRONIKA:
-			return "ROBOT_IRP6_MECHATRONIKA";
+			return std::string("ROBOT_IRP6_MECHATRONIKA");
 		case ROBOT_ELECTRON:
-			return "ROBOT_ELECTRON";
+			return std::string("ROBOT_ELECTRON");
 		case ROBOT_FESTIVAL:
-			return "ROBOT_FESTIVAL";
+			return std::string("ROBOT_FESTIVAL");
 		case ROBOT_HAND:
-			return "ROBOT_HAND";
+			return std::string("ROBOT_HAND");
 		case ROBOT_SPEECHRECOGNITION:
-			return "ROBOT_SPEECHRECOGNITION";
+			return std::string("ROBOT_SPEECHRECOGNITION");
 		default:
-			return "ROBOT_UNDEFINED";
+			return std::string("ROBOT_UNDEFINED");
 	}
 }
 
-const char * Trajectory::toString(lib::POSE_SPECIFICATION ps)
+std::string Trajectory::toString(lib::POSE_SPECIFICATION ps)
 {
-	if ( ps == lib::MOTOR )
-	{	return "MOTOR";	}
-	if ( ps == lib::JOINT )
-	{	return "JOINT";	}
-	if ( ps == lib::XYZ_ANGLE_AXIS )
-	{	return "XYZ_ANGLE_AXIS";	}
-	if ( ps == lib::XYZ_EULER_ZYZ )
-	{	return "XYZ_EULER_ZYZ";	}
-	else
-		return "INVALID_END_EFFECTOR";
+	switch (ps)
+	{
+		case lib::MOTOR:
+			return std::string("MOTOR");
+		case lib::JOINT:
+			return std::string("JOINT");
+		case lib::XYZ_ANGLE_AXIS:
+			return std::string("XYZ_ANGLE_AXIS");
+		case lib::XYZ_EULER_ZYZ:
+			return std::string("XYZ_EULER_ZYZ");
+		default:
+			return std::string("INVALID_END_EFFECTOR");
+	}
 }
 
 void Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth_trajectory_pose> &poses)
@@ -156,7 +159,7 @@ void Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIF
 	doc = xmlNewDoc((const xmlChar *) "1.0");
 
 	doc->children = xmlNewDocNode(doc, NULL, (const xmlChar *) "Trajectory", NULL);
-	xmlSetProp(doc->children, (const xmlChar *) "coordinateType", (const xmlChar *) Trajectory::toString(ps));
+	xmlSetProp(doc->children, (const xmlChar *) "coordinateType", (const xmlChar *) Trajectory::toString(ps).c_str());
 	xmlSetProp(doc->children, (const xmlChar *) "numOfPoses", (const xmlChar *) Trajectory::toString(posCount).c_str());
 	for(it = poses.begin(); it != poses.end(); ++it)
 	{
@@ -185,7 +188,7 @@ void Trajectory::writeTrajectoryToXmlFile2(const char *fileName, lib::POSE_SPECI
 	doc = xmlNewDoc((const xmlChar *) "1.0");
 
 	doc->children = xmlNewDocNode(doc, NULL, (const xmlChar *) "Trajectory", NULL);
-	xmlSetProp(doc->children, (const xmlChar *) "coordinateType", (const xmlChar *) Trajectory::toString(ps));
+	xmlSetProp(doc->children, (const xmlChar *) "coordinateType", (const xmlChar *) Trajectory::toString(ps).c_str());
 	xmlSetProp(doc->children, (const xmlChar *) "numOfPoses", (const xmlChar *) Trajectory::toString(posCount).c_str());
 	for(it = poses.begin(); it != poses.end(); ++it)
 	{
