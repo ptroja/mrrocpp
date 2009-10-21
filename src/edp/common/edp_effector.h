@@ -56,7 +56,6 @@ public:
     bool check_config(const std::string & s);
     bool initialize_communication (void);
 
-    virtual void initialize (void) = 0;
     std::string mrrocpp_network_path;
 
 #if !defined(USE_MESSIP_SRR)

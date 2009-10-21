@@ -30,10 +30,6 @@ namespace irp6ot {
 effector::effector(lib::configurator &_config) :
 	irp6s_postument_track_effector(_config, lib::ROBOT_IRP6_ON_TRACK)
 {
-}
-
-void effector::initialize(void)
-{
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 

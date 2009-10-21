@@ -32,10 +32,13 @@ namespace polycrank {
 effector::effector (lib::configurator &_config) :
         manip_effector (_config, lib::ROBOT_POLYCRANK)
 {
+    //  Stworzenie listy dostepnych kinematyk.
+    create_kinematic_models_for_given_robot();
 
+    number_of_servos = POLYCRANK_NUM_OF_SERVOS;
+
+    reset_variables();
 }
-
-
 
 /*--------------------------------------------------------------------------*/
 void effector::set_rmodel (lib::c_buffer &instruction)
@@ -130,18 +133,6 @@ void effector::get_rmodel (lib::c_buffer &instruction)
     }
 }
 /*--------------------------------------------------------------------------*/
-
-
-
-void effector::initialize (void)
-{
-    //  Stworzenie listy dostepnych kinematyk.
-    create_kinematic_models_for_given_robot();
-
-    number_of_servos = POLYCRANK_NUM_OF_SERVOS;
-
-    reset_variables();
-}
 
 /*--------------------------------------------------------------------------*/
 void effector::arm_abs_xyz_eul_zyz_2_frame (const double *p)

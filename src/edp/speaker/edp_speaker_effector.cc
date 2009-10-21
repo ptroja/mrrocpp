@@ -57,29 +57,22 @@ namespace edp {
 namespace speaker {
 
 effector::effector (lib::configurator &_config)
-: common::effector(_config, lib::ROBOT_SPEAKER)
+	: common::effector(_config, lib::ROBOT_SPEAKER)
 {
-
 	mt_tt_obj = new common::master_trans_t_buffer();
-}
-;
 
-
-void effector::initialize (void)
-{
 	real_reply_type = lib::ACKNOWLEDGE;
 	// inicjacja deskryptora pliku by 7&Y
 	// servo_fd = name_open(lib::EDP_ATTACH_POINT, 0);
 
 	speaking=0;
 
-
 	/* Ustawienie priorytetu procesu */
 
-	lib::set_thread_priority(pthread_self() , MAX_PRIORITY-2);
+	lib::set_thread_priority(pthread_self(), MAX_PRIORITY-2);
 }
 
-int effector::init ()
+int effector::init()
 {
 	// inicjacja buforow
 	msg->message ("Initialization in progress ...");

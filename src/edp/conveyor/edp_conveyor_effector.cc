@@ -29,11 +29,6 @@ namespace conveyor {
 // Konstruktor.
 effector::effector (lib::configurator &_config) :
 	manip_and_conv_effector (_config, lib::ROBOT_CONVEYOR)
-	{
-	}
-
-
-void effector::initialize (void)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();

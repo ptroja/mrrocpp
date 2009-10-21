@@ -106,8 +106,6 @@ int main(int argc, char *argv[]) {
 
 		edp::common::master = edp::common::return_created_efector(_config);
 
-		edp::common::master->initialize();
-
 		edp::common::master->create_threads();
 
 		if (!edp::common::master->initialize_communication()) {

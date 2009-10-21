@@ -31,7 +31,6 @@ protected:
     virtual void create_kinematic_models_for_given_robot(void);
 
 public:
-    void initialize (void);
     effector (lib::configurator &_config);
 };
 

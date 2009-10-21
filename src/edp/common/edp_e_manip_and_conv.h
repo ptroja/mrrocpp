@@ -204,9 +204,6 @@ public:
     boost::mutex sg_reply_mtx;
     boost::condition sg_reply_cond;
 #endif
-
-    virtual void initialize (void) = 0;
-
     in_out_buffer in_out_obj; // bufor wejsc wyjsc
     reader_buffer rb_obj;
     master_trans_t_buffer mt_tt_obj;

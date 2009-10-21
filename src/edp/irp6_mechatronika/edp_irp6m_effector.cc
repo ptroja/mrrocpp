@@ -33,7 +33,12 @@ namespace irp6m {
 effector::effector (lib::configurator &_config) :
         manip_effector (_config, lib::ROBOT_IRP6_MECHATRONIKA)
 {
+    //  Stworzenie listy dostepnych kinematyk.
+    create_kinematic_models_for_given_robot();
 
+    number_of_servos = IRP6_MECHATRONIKA_NUM_OF_SERVOS;
+
+    reset_variables();
 }
 
 
@@ -129,19 +134,6 @@ void effector::get_rmodel (lib::c_buffer &instruction)
         // ustawie numer bledu
         throw NonFatal_error_2(INVALID_GET_RMODEL_TYPE);
     }
-}
-/*--------------------------------------------------------------------------*/
-
-
-
-void effector::initialize (void)
-{
-    //  Stworzenie listy dostepnych kinematyk.
-    create_kinematic_models_for_given_robot();
-
-    number_of_servos = IRP6_MECHATRONIKA_NUM_OF_SERVOS;
-
-    reset_variables();
 }
 
 /*--------------------------------------------------------------------------*/

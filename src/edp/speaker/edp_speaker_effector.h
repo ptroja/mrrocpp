@@ -36,7 +36,7 @@ protected:
 public:
 
 	common::master_trans_t_buffer *mt_tt_obj;
-    void initialize (void);
+
     char text2speak[MAX_TEXT]; // MAC 7
     char prosody[MAX_PROSODY]; // MAC 7
     bool speaking; // MAC7
@@ -84,7 +84,6 @@ public:
     // Wypowiedzenie tresci.
     void get_spoken (bool read_hardware, lib::c_buffer *instruction);
     int speak (lib::c_buffer *instruction);
-
 };
 
 } // namespace common

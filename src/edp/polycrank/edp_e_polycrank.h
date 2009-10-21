@@ -38,8 +38,8 @@ public:
 
     void set_rmodel (lib::c_buffer &instruction);                    // zmiana narzedzia
     void get_rmodel (lib::c_buffer &instruction);                    // odczytanie narzedzia
+
     // Konstruktor.
-    void initialize (void);
     effector (lib::configurator &_config);
 
     void servo_joints_and_frame_actualization_and_upload(void);// by Y
