@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="pnml">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="net"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="net">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="name">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="value" type="xs:string"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="labels"/>
+        <xs:element maxOccurs="unbounded" ref="place"/>
+        <xs:element maxOccurs="unbounded" ref="transition"/>
+        <xs:element maxOccurs="unbounded" ref="arc"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required" type="xs:NCName"/>
+      <xs:attribute name="type" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="labels">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="text"/>
+      </xs:sequence>
+      <xs:attribute name="border" use="required" type="xs:boolean"/>
+      <xs:attribute name="height" use="required" type="xs:integer"/>
+      <xs:attribute name="width" use="required" type="xs:integer"/>
+      <xs:attribute name="x" use="required" type="xs:integer"/>
+      <xs:attribute name="y" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="text" type="xs:string"/>
+  <xs:element name="place">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="graphics"/>
+        <xs:element ref="name"/>
+        <xs:element ref="initialMarking"/>
+        <xs:element ref="capacity"/>
+        <xs:element ref="toolspecific" minOccurs="0" maxOccurs="unbounded"></xs:element>
+      </xs:sequence>
+      <xs:attribute name="id" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="initialMarking">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="value" type="xs:nonNegativeInteger"/>
+        <xs:element ref="graphics"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="capacity">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="value" type="xs:nonNegativeInteger"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="exec" type="xs:string"/>
+  <xs:element name="trajectory">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="robot" type="xs:string"/>
+        <xs:element name="file" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="toolspecific">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="task" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:choice>
+              <xs:element ref="exec"/>
+              <xs:element ref="trajectory"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <!--<xs:any minOccurs="0" maxOccurs="unbounded" processContents="skip"/>-->
+      </xs:sequence>
+      <xs:attribute name="tool" use="required" type="xs:string"/>
+      <xs:attribute name="version" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>  
+  <xs:element name="transition">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="graphics"/>
+        <xs:element ref="name"/>
+        <xs:element ref="orientation"/>
+        <xs:element ref="rate"/>
+        <xs:element ref="timed"/>
+        <xs:element ref="infiniteServer"/>
+        <xs:element ref="priority"/>
+        <xs:element ref="toolspecific" minOccurs="0"></xs:element>
+      </xs:sequence>
+      <xs:attribute name="id" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="orientation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="value" type="xs:nonNegativeInteger"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="rate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="value" type="xs:float"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="timed">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="value" type="xs:boolean"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="infiniteServer">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="value" type="xs:boolean"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="priority">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="value" type="xs:nonNegativeInteger"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="arc">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="graphics"/>
+        <xs:element ref="inscription"/>
+        <xs:element ref="tagged"/>
+        <xs:element maxOccurs="unbounded" ref="arcpath"/>
+        <xs:element ref="type"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required" type="xs:string"/>
+      <xs:attribute name="source" use="required" type="xs:NCName"/>
+      <xs:attribute name="target" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="inscription">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="value" type="xs:nonNegativeInteger"/>
+        <xs:element ref="graphics"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tagged">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="value" type="xs:boolean"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="arcpath">
+    <xs:complexType>
+      <xs:attribute name="curvePoint" use="required" type="xs:boolean"/>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+      <xs:attribute name="x" use="required" type="xs:integer"/>
+      <xs:attribute name="y" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="type">
+    <xs:complexType>
+      <xs:attribute name="value" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="graphics">
+    <xs:complexType>
+      <xs:choice minOccurs="0">
+        <xs:element ref="offset"/>
+        <xs:element ref="position"/>
+        <!--<xs:element ref="size"/>-->
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="offset">
+    <xs:complexType>
+      <xs:attribute name="x" use="required" type="xs:decimal"/>
+      <xs:attribute name="y" use="required" type="xs:decimal"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="position">
+    <xs:complexType>
+      <xs:attribute name="x" use="required" type="xs:decimal"/>
+      <xs:attribute name="y" use="required" type="xs:decimal"/>
+    </xs:complexType>
+  </xs:element>
+  <!--
+  <xs:element name="size">
+    <xs:complexType>
+      <xs:attribute name="width" use="required" type="xs:decimal"/>
+      <xs:attribute name="height" use="required" type="xs:decimal"/>
+    </xs:complexType>
+  </xs:element>
+  -->
+  <xs:element name="name">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="value" type="xs:string"/>
+        <xs:element ref="graphics"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="value">
+    <xs:sequence>
+      <xs:element ref="value"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="value" type="xs:NMTOKEN"/>
+  <xs:group name="anyElement">
+    <xs:sequence>
+      <xs:any processContents="skip"/>
+    </xs:sequence>
+  </xs:group>
+</xs:schema>
