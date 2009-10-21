@@ -33,6 +33,8 @@
 #include <libxml/tree.h>
 #include <libxml/xinclude.h>
 
+#include <boost/foreach.hpp>
+
 namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
@@ -223,14 +225,13 @@ bool task::show_message (const char* message)
 void task::kill_all_VSP (sensors_t & _sensor_m)
 {
 	// Zabicie wszystkich procesow VSP
-	for (sensors_t::iterator sensor_m_iterator = _sensor_m.begin();
-	        sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++) {
-		if (sensor_m_iterator->second->pid !=0) {
+	BOOST_FOREACH(sensor_item_t & sensor_item, _sensor_m) {
+		if (sensor_item.second->pid !=0) {
 #if defined(PROCESS_SPAWN_RSH)
-			kill(sensor_m_iterator->second->pid, SIGTERM);
+			kill(sensor_item.second->pid, SIGTERM);
 #else
-			SignalKill(lib::configurator::return_node_number(sensor_m_iterator->second->node_name),
-			           sensor_m_iterator->second->pid, 0, SIGTERM, 0, 0);
+			SignalKill(lib::configurator::return_node_number(sensor_item.second->node_name),
+					sensor_item.second->pid, 0, SIGTERM, 0, 0);
 #endif
 		}
 	}
@@ -240,26 +241,24 @@ void task::kill_all_VSP (sensors_t & _sensor_m)
 
 void task::all_sensors_initiate_reading (sensors_t & _sensor_m)
 {
-	for (sensors_t::iterator sensor_m_iterator = _sensor_m.begin();
-	        sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++) {
-		if (sensor_m_iterator->second->base_period > 0) {
-			if (sensor_m_iterator->second->current_period == sensor_m_iterator->second->base_period) {
-				sensor_m_iterator->second->initiate_reading();
+	BOOST_FOREACH(sensor_item_t & sensor_item, _sensor_m) {
+		if (sensor_item.second->base_period > 0) {
+			if (sensor_item.second->current_period == sensor_item.second->base_period) {
+				sensor_item.second->initiate_reading();
 			}
-			sensor_m_iterator->second->current_period--;
+			sensor_item.second->current_period--;
 		}
 	}
 }
 
 void task::all_sensors_get_reading (sensors_t & _sensor_m)
 {
-	for (sensors_t::iterator sensor_m_iterator = _sensor_m.begin();
-	        sensor_m_iterator != _sensor_m.end(); sensor_m_iterator++) {
+	BOOST_FOREACH(sensor_item_t & sensor_item, _sensor_m) {
 		// jesli wogole mamy robic pomiar
-		if (sensor_m_iterator->second->base_period > 0) {
-			if (sensor_m_iterator->second->current_period == 0) {
-				sensor_m_iterator->second->get_reading();
-				sensor_m_iterator->second->current_period = sensor_m_iterator->second->base_period;
+		if (sensor_item.second->base_period > 0) {
+			if (sensor_item.second->current_period == 0) {
+				sensor_item.second->get_reading();
+				sensor_item.second->current_period = sensor_item.second->base_period;
 			}
 		}
 	}
