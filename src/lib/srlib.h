@@ -65,7 +65,7 @@ protected:
   int send_package(void);
 
 public :
-  sr(PROCESS_TYPE process_type, std::string process_name, std::string sr_name);
+  sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name);
   virtual ~sr(void);
   int message(enum ERROR_CLASS message_type, uint64_t error_code);
   int message(enum ERROR_CLASS message_type, uint64_t error_code0, uint64_t error_code1);
@@ -87,14 +87,14 @@ public :
 
 class sr_edp: public sr {
 public:
-  sr_edp(PROCESS_TYPE process_type, std::string process_name, std::string sr_name);
+  sr_edp(process_type_t process_type, const std::string & process_name, const std::string & sr_name);
 protected:
   virtual void interpret(void);
 };
 
 class sr_ecp: public sr {
 public:
-  sr_ecp(PROCESS_TYPE process_type, std::string process_name, std::string sr_name);
+  sr_ecp(process_type_t process_type, const std::string & process_name, const std::string & sr_name);
 protected:
   virtual void interpret(void);
 };
@@ -102,7 +102,7 @@ protected:
 // obsluga komunikatow generowanych przez VSP
 class sr_vsp: public sr {
 public:
-  sr_vsp(PROCESS_TYPE process_type, std::string process_name, std::string sr_name);
+  sr_vsp(process_type_t process_type, const std::string & process_name, const std::string & sr_name);
 protected:
   virtual void interpret(void);
 };
@@ -110,7 +110,7 @@ protected:
 // obsluga komunikatow generowanych przez UI// by Y
 class sr_ui: public sr {
 public:
-  sr_ui(PROCESS_TYPE process_type, std::string process_name, std::string sr_name);
+  sr_ui(process_type_t process_type, const std::string & process_name, const std::string & sr_name);
 protected:
   virtual void interpret(void);
 };

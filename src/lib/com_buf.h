@@ -264,14 +264,14 @@ struct trajectory_description
 /*!
  *  Types of processes in MRROC++.
  */
-enum PROCESS_TYPE {
+typedef enum PROCESS_TYPE {
 	UNKNOWN_PROCESS_TYPE,
 	EDP,
 	ECP,
 	MP,
 	VSP,
 	UI
-};
+} process_type_t;
 
 //------------------------------------------------------------------------------
 /*!
@@ -926,7 +926,7 @@ typedef struct _controller_state_t
 	 *  Czy wyzerowano sterowanie na silnikach po awarii sprzetowej?
 	 *  @todo Translate to English.
 	 */
-	bool is_robot_blocked;	
+	bool is_robot_blocked;
 } controller_state_t;
 
 //------------------------------------------------------------------------------

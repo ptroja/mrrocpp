@@ -42,7 +42,7 @@ sr_package::sr_package()
 
 #if !defined(USE_MESSIP_SRR)
 // Konstruktor
-sr::sr(PROCESS_TYPE process_type, std::string process_name, std::string sr_name) {
+sr::sr(process_type_t process_type, const & std::string process_name, const & std::string sr_name) {
 
  	// kilka sekund  (~1) na otworzenie urzadzenia
 	int tmp = 0;
@@ -89,7 +89,7 @@ int sr::send_package(void) {
 }
 #else /* USE_MESSIP_SRR */
 // Konstruktor
-sr::sr(const PROCESS_TYPE process_type, std::string process_name, std::string sr_name) {
+sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name) {
 
 	int tmp = 0;
 	while ((ch = messip_channel_connect(NULL, sr_name.c_str(), MESSIP_NOTIMEOUT)) == NULL) {
@@ -210,7 +210,7 @@ int sr::message(enum ERROR_CLASS message_type, uint64_t error_code0, uint64_t er
 // --------------------------------------------------------------------
 // interpretacja bledu dla EDP robota irp6_on_track
 
-sr_edp::sr_edp(PROCESS_TYPE process_type, std::string process_name, std::string sr_name) :
+sr_edp::sr_edp(process_type_t process_type, const std::string & process_name, const std::string & sr_name) :
 	sr(process_type, process_name, sr_name) { }
 
 
@@ -369,7 +369,7 @@ void sr_edp::interpret(void) {
 } // end: sr_edp::interpret()
 // ---------------------------------------------------------------------
 
-sr_ecp::sr_ecp(PROCESS_TYPE process_type, std::string process_name, std::string sr_name) :
+sr_ecp::sr_ecp(process_type_t process_type, const std::string & process_name, const std::string & sr_name) :
 	sr(process_type, process_name, sr_name)
 {
 }
@@ -466,8 +466,8 @@ switch (sr_message.message_type) {
 } // end: switch (sr_message.message_type)
 } // end: sr_ecp::interpret()
 // ---------------------------------------------------------------------
-  sr_ui::sr_ui(PROCESS_TYPE process_type, std::string process_name, std::string sr_name) :
-              sr(process_type, process_name, sr_name) { }
+sr_ui::sr_ui(process_type_t process_type, const std::string & process_name, const std::string & sr_name) :
+		  sr(process_type, process_name, sr_name) { }
 
 // Interpretacja bledow generowanych w UI // by Y - UWAGA UZUPELNIC
 void sr_ui::interpret(void) {
@@ -498,7 +498,7 @@ switch (sr_message.message_type) {
 } // end: switch (sr_message.message_type)
 } // end: sr_vsp::interpret()
 
-  sr_vsp::sr_vsp(PROCESS_TYPE process_type, std::string process_name, std::string sr_name) :
+  sr_vsp::sr_vsp(process_type_t process_type, const std::string & process_name, const std::string & sr_name) :
               sr(process_type, process_name, sr_name) { }
 
 // Interpretacja bledow generowanych w VSP
