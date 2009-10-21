@@ -42,7 +42,7 @@ sr_package::sr_package()
 
 #if !defined(USE_MESSIP_SRR)
 // Konstruktor
-sr::sr(process_type_t process_type, const & std::string process_name, const & std::string sr_name) {
+sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name) {
 
  	// kilka sekund  (~1) na otworzenie urzadzenia
 	int tmp = 0;
