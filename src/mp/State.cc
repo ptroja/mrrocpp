@@ -14,43 +14,22 @@ namespace common {
 State::State()
 {
 	numArgument = 0;
-	id = NULL;
-	type =  NULL;
-	stringArgument =  NULL;
 	robotSet = NULL;
 	stateTransitions = new std::list<Transition>();
 }
 //-----------------------------------------------------------------------------------------------------------
 State::State(const State &state)
 {
-	int size;
-	id = NULL;
-	type =  NULL;
-	stringArgument =  NULL;
-	robotSet = NULL;
 	this->numArgument = state.numArgument;
-	if(state.id)
-	{
-		size = strlen(state.id) + 1;
-		this->id = new char[size];
-		strcpy(this->id, state.id);
-	}
-	if(state.type)
-	{
-		size = strlen(state.type) + 1;
-		this->type =  new char[size];
-		strcpy(this->type, state.type);
-	}
-	if(state.stringArgument)
-	{
-		size = strlen(state.stringArgument) + 1;
-		this->stringArgument =  new char[size];
-		strcpy(this->stringArgument, state.stringArgument);
-	}
+	this->id = state.id;
+	this->type = state.type;
+	this->stringArgument = state.stringArgument;
 	robot = state.robot;
 	generatorType = state.generatorType;
 	if(state.robotSet)
 		this->robotSet = new RobotSets(*(state.robotSet));
+	else
+		robotSet = NULL;
 	this->stateTransitions = new std::list<Transition>(*(state.stateTransitions));
 }
 
@@ -58,13 +37,8 @@ State::State(const State &state)
 
 State::~State()
 {
-	if(id)
-		delete[] id;
-	if(type)
-		delete[] type;
-	if(stringArgument)
-		delete[] stringArgument;
-	delete stateTransitions;
+	if(stateTransitions)
+		delete stateTransitions;
 	if(robotSet)
 		delete robotSet;
 }
@@ -99,16 +73,14 @@ State::RobotSets::~RobotSets()
 }
 //-----------------------------------------------------------------------------------------------------------
 
-void State::setStateID(const char *stateID)
+void State::setStateID(const std::string & stateID)
 {
-	int size = strlen(stateID) + 1;
-	id = new char[size];
-	strcpy(this->id, stateID);
+	id = stateID;
 }
 
 const char* State::getStateID() const
 {
-	return id;
+	return id.c_str();
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -127,25 +99,23 @@ int State::getNumArgument() const
 
 //-----------------------------------------------------------------------------------------------------------
 
-void State::setType(const char *type)
+void State::setType(const std::string & _type)
 {
-	int size = strlen(type) + 1;
-	this->type =  new char[size];
-	strcpy(this->type, type);
+	type = _type;
 }
 
 //-----------------------------------------------------------------------------------------------------------
 
 const char * State::getType() const
 {
-	return type;
+	return type.c_str();
 }
 
 //-----------------------------------------------------------------------------------------------------------
 
-void State::setRobot(const char *robot)
+void State::setRobot(const std::string & _robot)
 {
-	this->robot = lib::returnProperRobot(robot);
+	this->robot = lib::returnProperRobot(_robot);
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -155,7 +125,7 @@ lib::robot_name_t State::getRobot() const
 	return robot;
 }
 //-----------------------------------------------------------------------------------------------------------
-void State::setGeneratorType(std::string genType)
+void State::setGeneratorType(const std::string & genType)
 {
 	//std::cout<<"######"<<genType<<std::endl;
 	//std::cout<<strcmp(genType, (const char *)"ECP_GEN_TRANSPARENT")<<std::endl;
@@ -196,18 +166,16 @@ ecp_mp::task::STATE_MACHINE_ECP_STATES State::getGeneratorType() const
 
 //----------------------------------------------------------------------------------------------------------
 
-void State::setStringArgument(const char* trajFilePath)
+void State::setStringArgument(const std::string & trajFilePath)
 {
-	int size = strlen(trajFilePath) + 1;
-	stringArgument =  new char[size];
-	strcpy(this->stringArgument, trajFilePath);
+	stringArgument =  trajFilePath;
 }
 
 //----------------------------------------------------------------------------------------------------------
 
 const char* State::getStringArgument() const
 {
-	return stringArgument;
+	return stringArgument.c_str();
 }
 
 //----------------------------------------------------------------------------------------------------------

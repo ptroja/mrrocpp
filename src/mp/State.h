@@ -40,22 +40,22 @@ class State
 			lib::robot_name_t *secondSet;
 		};
 
-		void setStateID(const char *stateID);
+		void setStateID(const std::string & stateID);
 		const char * getStateID() const;
 
 		void setNumArgument(const char *time);
 		int getNumArgument() const;
 
-		void setType(const char *type);
+		void setType(const std::string & _type);
 		const char * getType() const;
 
-		void setRobot(const char *robot);
+		void setRobot(const std::string & _robot);
 		lib::robot_name_t getRobot() const;
 
-		void setGeneratorType(std::string genType);
+		void setGeneratorType(const std::string & genType);
 		ecp_mp::task::STATE_MACHINE_ECP_STATES getGeneratorType() const;
 
-		void setStringArgument(const char *trajFilePath);
+		void setStringArgument(const std::string & trajFilePath);
 		const char * getStringArgument() const;
 
 		void setTransition(const char *cond, const char *target, lib::configurator &_config);
@@ -70,13 +70,13 @@ class State
 
 	private:
 		int numArgument;
-		char *id;
-		char *type;
+		std::string id;
+		std::string type;
 		lib::robot_name_t robot;
 		ecp_mp::task::STATE_MACHINE_ECP_STATES generatorType;
-		char *stringArgument;
-		std::list<Transition> *stateTransitions;
+		std::string stringArgument;
 
+		std::list<Transition> *stateTransitions;
 };
 
 
