@@ -13,7 +13,7 @@ UISRCDIR=$(HOMEDIR)/src/ui/src
 
 HEADERSDIR = $(HOMEDIR)/include
 
-CXXFLAGS += -I $(HEADERSDIR) -I.
+CPPFLAGS += -I $(HEADERSDIR) -I.
 #LDFLAGS += -Bstatic $(PHABOPTS)
 LDFLAGS += $(PHABOPTS)
 #SDFLAGS = $(PHABOPTS) -L$(QNX_TARGET)/mrlib/lib -lxml2 -liconv
@@ -67,3 +67,7 @@ $(MYOBJ):	$(MYHDR)
 proto:
 		@rm -f proto.h
 		approto -p $(MYSRC) > proto.h
+
+#-----------------------------------------------------------------------------------------------------------------------#
+
+include $(HOMEDIR)/depend.mk

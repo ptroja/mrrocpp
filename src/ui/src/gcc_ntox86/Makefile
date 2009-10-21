@@ -20,7 +20,7 @@ HOMEDIR = ../../../..
 include $(HOMEDIR)/common.mk
 HEADERSDIR = $(HOMEDIR)/src
 
-CXXFLAGS += -I $(HEADERSDIR) -I.
+CPPFLAGS += -I $(HEADERSDIR) -I.
 #LDFLAGS += -Bstatic -l phexlib $(ABLIB) $(PHABOPTS)
 LDFLAGS += -l phexlib $(ABLIB) $(PHABOPTS)
 #SDFLAGS = -l phexlib $(ABLIB) $(PHABOPTS) -L$(QNX_TARGET)/mrlib/lib -lxml2 -liconv
@@ -83,3 +83,7 @@ $(ABOBJ) $(MYOBJ):	$(MYHDR)
 proto:
 		@rm -f proto.h
 		approto -p $(ABSRC) $(MYSRC) > proto.h
+
+#-----------------------------------------------------------------------------------------------------------------------#
+
+include $(HOMEDIR)/depend.mk
