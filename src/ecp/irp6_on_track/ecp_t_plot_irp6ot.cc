@@ -21,12 +21,6 @@ namespace task {
 // KONSTRUKTORY
 plot::plot(lib::configurator &_config) : task(_config)
 {
-}
-
-
-// methods for ECP template to redefine in concrete classes
-void plot::task_initialization(void)
-{
     ecp_m_robot = new robot (*this);
 
     sr_ecp_msg->message("ECP loaded");

@@ -17,9 +17,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-wii_velocity::wii_velocity(lib::configurator &_config) : task(_config) {};
-
-void wii_velocity::task_initialization(void)
+wii_velocity::wii_velocity(lib::configurator &_config) : task(_config)
 {
 	ecp_m_robot = new robot (*this);
     sr_ecp_msg->message("ECP loaded");

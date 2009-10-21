@@ -76,7 +76,6 @@ public:
 #endif
 
 	ecp_vis_pb_eih_irp6ot(common::task::task& _ecp_task, int step=0);
-	virtual ~ecp_vis_pb_eih_irp6ot();
 
 	virtual bool next_step_without_constraints();
 	//virtual void entertain_constraints();

@@ -19,10 +19,6 @@ namespace task {
 
 lego_brick::lego_brick(lib::configurator &_config) :
 	task(_config)
-{}
-
-// methods for ECP template to redefine in concrete classes
-void lego_brick::task_initialization(void)
 {
     // the robot is choose dependendat on the section of configuration file sent as argv[4]
     ecp_m_robot = new robot (*this);

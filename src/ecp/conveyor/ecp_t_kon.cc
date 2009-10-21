@@ -17,13 +17,6 @@ namespace task {
 
 // KONSTRUKTORY
 kon::kon(lib::configurator &_config) : task(_config)
-{}
-
-kon::~kon()
-{}
-
-// methods for ECP template to redefine in concrete classes
-void kon::task_initialization(void)
 {
 	ecp_m_robot = new robot (*this);
 

@@ -30,7 +30,7 @@ namespace common {
 
 
 extern irp6ot::task::fct *ecp_t;
-} // namespace common 
+} // namespace common
 namespace irp6ot {
 namespace task {
 
@@ -272,11 +272,6 @@ void show_force_control_window
 // KONSTRUKTORY
 fct::fct(lib::configurator &_config) :
 	task(_config)
-{
-}
-
-// methods for ECP template to redefine in concrete classes
-void fct::task_initialization(void)
 {
 	// Nawiazanie komunikacji z EDP.
 	ecp_m_robot = new robot (*this);

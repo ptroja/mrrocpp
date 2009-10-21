@@ -23,13 +23,6 @@ namespace task {
 // KONSTRUKTORY
 rcsc::rcsc(lib::configurator &_config) : task(_config)
 {
-    gt = NULL;
-    speak = NULL;
-}
-
-// methods for ECP template to redefine in concrete classes
-void rcsc::task_initialization(void)
-{
     ecp_m_robot = new robot (*this);
 
     gt = new common::generator::transparent(*this);

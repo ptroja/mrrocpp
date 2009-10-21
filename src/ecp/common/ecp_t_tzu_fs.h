@@ -63,14 +63,12 @@ protected:
 	const char* get_trajectory(double x[]);
 public:
 	tzu_fs(lib::configurator &_config);
-	~tzu_fs();
 
 	// methods for ECP template to redefine in concrete classes
-	/** metoda odpowiedzialna za inicjalizacje zmiennych zadania **/
-	void task_initialization(void);
 	/** metoda odpowiedzialna za wykonanie zadania **/
 	void main_task_algorithm(void);
 };
+
 } // namespace task
 namespace generator {
 

@@ -17,13 +17,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-multiplayer::multiplayer(lib::configurator &_config) :
-	task(_config)
-{
-}
-
-// methods for ECP template to redefine in concrete classes
-void multiplayer::task_initialization(void)
+multiplayer::multiplayer(lib::configurator &_config) : task(_config)
 {
 	ecp_m_robot = new robot (*this);
 

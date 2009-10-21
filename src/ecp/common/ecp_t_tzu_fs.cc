@@ -29,22 +29,6 @@ using namespace std;
 /** konstruktor konstruktor**/
 tzu_fs::tzu_fs(lib::configurator &_config) : task(_config)
 {
-	sg = NULL;
-	befg = NULL;
-	ftcg = NULL;
-	tcg = NULL;
-	etnrg = NULL;
-};
-
-/** destruktor **/
-tzu_fs::~tzu_fs()
-{
-	str<<"--- KONIEC ---"<<endl;
-	str.close();
-};
-
-void tzu_fs::task_initialization(void)
-{
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	{
 		ecp_m_robot = new irp6ot::robot (*this);
@@ -65,7 +49,7 @@ void tzu_fs::task_initialization(void)
 	tcg = new generator::tool_change(*this,true);
 	etnrg = new generator::tff_nose_run(*this,8);
 	sr_ecp_msg->message("ECP loaded");
-};
+}
 
 void tzu_fs::main_task_algorithm(void)
 {
@@ -163,12 +147,12 @@ void tzu_fs::main_task_algorithm(void)
 			break;
 	}
 	ecp_termination_notice();
-};
+}
 
 task* return_created_ecp_task (lib::configurator &_config)
 {
 	return new tzu_fs(_config);
-};
+}
 
 void tzu_fs::method_alternative(int type, int sequence[], int T)
 {

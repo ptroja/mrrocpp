@@ -17,10 +17,10 @@ namespace common {
 namespace task {
 
 task::task(lib::configurator &_config) :
-	ecp_mp::task::task(_config)
+	ecp_mp::task::task(_config),
+	ecp_m_robot(NULL)
 {
-	sensor_m.clear();
-	ecp_m_robot = NULL;
+	initialize_communication();
 }
 
 task::~task()
@@ -174,16 +174,6 @@ void task::initialize_communication()
 	}
 }
 // -------------------------------------------------------------------
-
-
-// methods for ECP template to redefine in concrete classes
-void task::task_initialization(void)
-{
-}
-
-void task::main_task_algorithm(void)
-{
-}
 
 // Badanie typu polecenia z MP
 lib::MP_COMMAND task::mp_command_type(void) const

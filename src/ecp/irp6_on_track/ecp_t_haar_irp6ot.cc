@@ -20,59 +20,52 @@ namespace task {
 
 //Konstruktory
 haar::haar(lib::configurator &_config) :
-	task(_config) {
-}
+	task(_config)
+{
+	//Wczytanie parametrow konfiguracyjnych.
+	rotation    = config.return_int_value("rotation"); //Czy bedzie wyznaczana rotacja?
+	smooth_path = config.return_string_value("smooth_path");//Sciezka z opisem punktu startowego podawanego smooth_generatorowi
+	object_type = config.return_int_value("object_type");
 
-void haar::task_initialization(void) {
-
-	try {
-		//Wczytanie parametrow konfiguracyjnych.
-		rotation    = config.return_int_value("rotation"); //Czy bedzie wyznaczana rotacja?
-		smooth_path = config.return_string_value("smooth_path");//Sciezka z opisem punktu startowego podawanego smooth_generatorowi
-		object_type = config.return_int_value("object_type");
-
-		if (object_type == 0)//Ustawiamy zadanie dla puszki.
-		{
-			jaw_pinching = JAW_PINCHING_0;
-			lowering_interval = LOWERNIG_INTERVAL_0;
-			ga_gen_interval = GAGEN_INTERVAL_0;
-		}else if( object_type == 1 )
-		{
-			jaw_pinching = JAW_PINCHING_1;
-			lowering_interval = LOWERNIG_INTERVAL_1;
-			ga_gen_interval = GAGEN_INTERVAL_1;
-		}else
-		{
-			sr_ecp_msg->message("Zle zdefiniowany obiekt: USTAW PLIK KONFIGURACYJNY");
-			ecp_termination_notice();
-			ecp_wait_for_stop();
-		}
-
-
-		//Create cvFraDIA sensor - for testing purposes.
-		sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA,
-				"[vsp_cvfradia]", *this,
-				sizeof(lib::sensor_image_t::sensor_union_t::deviation_t));
-		//Configure sensor.
-		sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
-
-		ecp_m_robot = new robot(*this);
-
-		planar_vis = new ecp_vis_ib_eih_planar_irp6ot(*this);
-		planar_vis->sensor_m = sensor_m;
-
-		//Smooth generator
-		smooth_gen = new common::generator::smooth(*this, true);
-		bef_gen=new common::generator::bias_edp_force(*this);
-		//gripper approach constructor (task&, no_of_steps)
-		ga_gen=new common::generator::tff_gripper_approach (*this, 8);
-		//Linear generator.
-		linear_gen=NULL;
-
-		sr_ecp_msg->message("ECP PW loaded");
-	} catch (...) {
-		printf("EXCEPTION caught in task_initialization.\n");
+	if (object_type == 0)//Ustawiamy zadanie dla puszki.
+	{
+		jaw_pinching = JAW_PINCHING_0;
+		lowering_interval = LOWERNIG_INTERVAL_0;
+		ga_gen_interval = GAGEN_INTERVAL_0;
+	}else if( object_type == 1 )
+	{
+		jaw_pinching = JAW_PINCHING_1;
+		lowering_interval = LOWERNIG_INTERVAL_1;
+		ga_gen_interval = GAGEN_INTERVAL_1;
+	}else
+	{
+		sr_ecp_msg->message("Zle zdefiniowany obiekt: USTAW PLIK KONFIGURACYJNY");
+		ecp_termination_notice();
+		ecp_wait_for_stop();
 	}
+
+
+	//Create cvFraDIA sensor - for testing purposes.
+	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA,
+			"[vsp_cvfradia]", *this,
+			sizeof(lib::sensor_image_t::sensor_union_t::deviation_t));
+	//Configure sensor.
+	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
+
+	ecp_m_robot = new robot(*this);
+
+	planar_vis = new ecp_vis_ib_eih_planar_irp6ot(*this);
+	planar_vis->sensor_m = sensor_m;
+
+	//Smooth generator
+	smooth_gen = new common::generator::smooth(*this, true);
+	bef_gen=new common::generator::bias_edp_force(*this);
+	//gripper approach constructor (task&, no_of_steps)
+	ga_gen=new common::generator::tff_gripper_approach (*this, 8);
+	//Linear generator.
+	linear_gen=NULL;
+
+	sr_ecp_msg->message("ECP PW loaded");
 }
 
 void haar::main_task_algorithm(void) {

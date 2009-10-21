@@ -12,17 +12,15 @@ namespace irp6ot {
 namespace task {
 
 class vislx: public common::task::task  {
+	ecp_vis_pb_eol_sac_irp6ot* pbeolsac;
+	ecp_vis_pb_eih_irp6ot* pbeih;
+	ecp_vis_ib_eih_irp6ot* ibeih;
 
 	public:
-		//static std::map <lib::SENSOR_ENUM, generator*> generator_m;
-		ecp_vis_pb_eol_sac_irp6ot* pbeolsac;
-		ecp_vis_pb_eih_irp6ot* pbeih;
-		ecp_vis_ib_eih_irp6ot* ibeih;
 		// KONSTRUKTORY
 		vislx(lib::configurator &_config);
 
 		// methods for ECP template to redefine in concrete classes
-		void task_initialization(void);
 		void main_task_algorithm(void);
 };
 

@@ -19,12 +19,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-rcsc::rcsc(lib::configurator &_config) :
-	task(_config)
-	{}
-
-// methods for ECP template to redefine in concrete classes
-void rcsc::task_initialization(void)
+rcsc::rcsc(lib::configurator &_config) : task(_config)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
 	ecp_m_robot = new robot (*this);

@@ -56,9 +56,7 @@ protected:
 	void naciskanie_test();
 public:
 	tzu_test(lib::configurator &_config);
-	~tzu_test();
-	/** metoda odpowiedzialna za inicjalizacje zmiennych zadania **/
-	void task_initialization(void);
+
 	/** metoda odpowiedzialna za wykonanie zadania **/
 	void main_task_algorithm(void);
 };

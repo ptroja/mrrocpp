@@ -44,8 +44,7 @@ class eihcalibration: public common::task::task {
 
 	public:
 		eihcalibration(lib::configurator &_config);
-		~eihcalibration();
-		void task_initialization(void);
+
 		void main_task_algorithm(void);
 };
 

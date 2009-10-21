@@ -34,12 +34,6 @@ namespace task {
 // KONSTRUKTORY
 pouring::pouring(lib::configurator &_config) : task(_config)
 {
-    sg = NULL;
-}
-
-
-void pouring::task_initialization(void)
-{
     ecp_m_robot = new robot (*this);
 
     // Powolanie czujnikow

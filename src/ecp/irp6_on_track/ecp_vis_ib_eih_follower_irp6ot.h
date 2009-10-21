@@ -57,7 +57,6 @@ public:
 	bool first_move; //flaga pierwszego makrokroku
 
 	ecp_vis_ib_eih_follower_irp6ot(common::task::task& _ecp_task);
-	virtual ~ecp_vis_ib_eih_follower_irp6ot();
 	virtual bool first_step(void);
 	virtual bool next_step_without_constraints();
 	virtual void entertain_constraints();

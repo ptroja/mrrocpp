@@ -35,7 +35,7 @@ namespace ecp {
 namespace common {
 
 extern irp6ot::task::tr* ecp_t;
-} // namespace common 
+} // namespace common
 namespace irp6ot {
 namespace task {
 
@@ -296,7 +296,7 @@ void* trajectory_reproduce_thread(void* arg)
 				trg->dangerous_force_handler(e);
 				// Chwilowe zatrzymanie ruchu.
 				PAUSE_MOVE = true;
-			}; // end: catch
+			} // end: catch
 			// Dopoki sa jaskies elementy na liscie makrokrokow.
 		} while (trg->is_pose_list_element());
 		// Zakonczono trajektorie w wyniku STOP -> koniec ruchow.
@@ -305,7 +305,7 @@ void* trajectory_reproduce_thread(void* arg)
 			ZERO_POSITION_MOVE = false;
 			// Skok na poczatek petil.
 			continue;
-		};
+		}
 		// Skonczyly sie pozycje na liscie.
 		// Dalszy ruch od pierszego kroku.
 		ZERO_POSITION_MOVE = false;
@@ -365,11 +365,6 @@ void show_trajectory_reproduce_window(messip_channel_t * UI_fd)
 // KONSTRUKTORY
 tr::tr(lib::configurator &_config) :
 	task(_config)
-{
-}
-
-// methods for ECP template to redefine in concrete classes
-void tr::task_initialization(void)
 {
 	// Stworzenie obiektu robot.
 	ecp_m_robot = new robot (*this);

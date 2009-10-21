@@ -29,14 +29,6 @@ namespace task {
 // KONSTRUKTORY
 pouring::pouring(lib::configurator &_config) : task(_config)
 {
-    sg = NULL;
-    tcg = NULL;
-}
-
-
-// methods for ECP template to redefine in concrete classes
-void pouring::task_initialization(void)
-{
     // the robot is choose dependendat on the section of configuration file sent as argv[4]
     ecp_m_robot = new robot (*this);
 
@@ -44,8 +36,6 @@ void pouring::task_initialization(void)
     tcg = new common::generator::tool_change(*this, true);
 
     go_st = new common::task::ecp_sub_task_gripper_opening(*this);
-
-    sr_ecp_msg->message("ECP loaded");
 }
 
 

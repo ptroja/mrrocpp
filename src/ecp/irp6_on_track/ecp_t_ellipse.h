@@ -24,7 +24,7 @@ protected:
 	//Generator ruchu
 	generator::ellipse* eg;
 	common::generator::smooth* sg;
-	
+
 	/**
 	 * Pobiera od uzytkownika wartosc typu double
 	 * @param name nazwa parametru
@@ -33,7 +33,7 @@ protected:
 	 * @return pobrana wartosc parametru
 	 * @author jedrzej
 	 */
-	double read_double(char * name,double min,double max);	
+	double read_double(char * name,double min,double max);
 
 public:
 	/**
@@ -42,13 +42,7 @@ public:
 	 * @author jedrzej
 	 */
 	ellipse(lib::configurator &_config);
-	
-	/**
-	 * Inicjalizuje zadanie - pobiera od uzytkownika dlugosci polosi
-	 * @author jkurylo
-	 */
-	void task_initialization(void);
-	
+
 	/**
 	 * Realizuje zadanie
 	 * @author jkurylo

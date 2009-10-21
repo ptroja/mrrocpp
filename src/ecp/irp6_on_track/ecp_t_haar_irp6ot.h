@@ -59,8 +59,8 @@ public:
 	haar(lib::configurator &_config);
 
 	//Methods for ECP template to redefine in concrete classes.
-	void task_initialization(void);
 	void main_task_algorithm(void);
+
 	//Metods modifing td.
 	void set_td_coordinates(double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6);
 	void init_td(lib::POSE_SPECIFICATION ps, int internode_no);

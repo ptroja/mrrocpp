@@ -61,7 +61,6 @@ class Draughts: public common::task::task{
 		void snooze(double);
 		void takeDynamicPawn(int from);
 		void takeStaticPawn(int from, int type);
-		void task_initialization(void);\
 		void throwPawn(int from);
 		void trackPawn(char);
 		void wait4move();

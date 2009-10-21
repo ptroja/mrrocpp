@@ -30,15 +30,14 @@ namespace task {
 /*!
  * Initialize task - robot, sensors and generators.
  */
-void cvfradia::task_initialization(void)
+cvfradia::cvfradia(lib::configurator &_config) : task(_config)
 {
-	try
-	{
-		// Create cvFraDIA sensor - for testing purposes.
-		sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, "[vsp_cvfradia]", *this, sizeof(lib::sensor_image_t::sensor_union_t::fradia_t));
-		// Configure sensor.
-		sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
-    // Create an adequate robot. - depending on the ini section name.
+	// Create cvFraDIA sensor - for testing purposes.
+	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA, "[vsp_cvfradia]", *this, sizeof(lib::sensor_image_t::sensor_union_t::fradia_t));
+	// Configure sensor.
+	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
+
+	// Create an adequate robot. - depending on the ini section name.
     if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     {
         ecp_m_robot = new irp6ot::robot (*this);
@@ -49,14 +48,10 @@ void cvfradia::task_initialization(void)
         ecp_m_robot = new irp6p::robot (*this);
         sr_ecp_msg->message("IRp6p loaded");
     }
-		// Create generator and pass sensor to it.
-		cvg = new generator::cvfradia(*this);
-	 	cvg->sensor_m = sensor_m;
-	}
-	catch(...)
-	{
-		printf("EXCEPTION\n");
-	}
+
+    // Create generator and pass sensor to it.
+	cvg = new generator::cvfradia(*this);
+	cvg->sensor_m = sensor_m;
 }
 
 

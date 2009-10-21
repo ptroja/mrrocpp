@@ -81,12 +81,19 @@ const double Draughts::bkings_table[8][8]={
 /*==============================Constructor==================================*/
 //Constructors
 Draughts::Draughts(lib::configurator &_config): task(_config){
-	sgen=NULL;
-	befgen=NULL;
-	gagen=NULL;
-	aitrans=NULL;
-	bkings=0;
-	wkings=0;
+	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA,"[vsp_cvfradia]", *this,	sizeof(lib::sensor_image_t::sensor_union_t::fradia_t));
+	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
+
+	ecp_m_robot=new robot(*this);				//initialization of robot
+
+	sgen=new common::generator::smooth(*this, true);
+	befgen=new common::generator::bias_edp_force(*this);
+	gagen=new common::generator::tff_gripper_approach (*this, 8);	//gripper approach constructor (task&, no_of_steps)
+	sleepgen=new common::generator::sleep(*this);
+	aitrans=new ecp_mp::transmitter::TRDraughtsAI(ecp_mp::transmitter::TRANSMITTER_DRAUGHTSAI,"[transmitter_draughts_ai]",*this);
+
+	follower_vis = new ecp_vis_ib_eih_follower_irp6ot(*this);	//planar servomechanism generator
+	follower_vis->sensor_m = sensor_m;
 };
 
 /*============================Destructor=====================================*/
@@ -400,26 +407,6 @@ void Draughts::takeStaticPawn(int from,int type){
 	sgen->Move();
 	goUp();
 }
-
-/*=======================task_initialization=================================*/
-// methods for ECP template to redefine in concrete classes
-void Draughts::task_initialization(void){
-
-	sensor_m[lib::SENSOR_CVFRADIA] = new ecp_mp::sensor::cvfradia(lib::SENSOR_CVFRADIA,"[vsp_cvfradia]", *this,	sizeof(lib::sensor_image_t::sensor_union_t::fradia_t));
-	sensor_m[lib::SENSOR_CVFRADIA]->configure_sensor();
-
-	ecp_m_robot=new robot(*this);				//initialization of robot
-	sgen=new common::generator::smooth(*this, true);
-	befgen=new common::generator::bias_edp_force(*this);
-	gagen=new common::generator::tff_gripper_approach (*this, 8);	//gripper approach constructor (task&, no_of_steps)
-	sleepgen=new common::generator::sleep(*this);
-	aitrans=new ecp_mp::transmitter::TRDraughtsAI(ecp_mp::transmitter::TRANSMITTER_DRAUGHTSAI,"[transmitter_draughts_ai]",*this);
-
-	follower_vis = new ecp_vis_ib_eih_follower_irp6ot(*this);	//planar servomechanism generator
-	follower_vis->sensor_m = sensor_m;
-
-	sr_ecp_msg->message("ECP loaded tb");
-};
 
 /*===============================throwPawn===================================*/
 void Draughts::throwPawn(int from){

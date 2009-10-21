@@ -14,20 +14,11 @@ namespace task {
 lego_brick::lego_brick(lib::configurator &_config) : task(_config)
 {
 	absolute_position = 0.0;
-}
 
-lego_brick::~lego_brick()
-{}
-
-// methods for ECP template to redefine in concrete classes
-void lego_brick::task_initialization(void)
-{
 	ecp_m_robot = new robot (*this);
 
 	sr_ecp_msg->message("ECP loaded");
-
 }
-
 
 void lego_brick::main_task_algorithm(void)
 {

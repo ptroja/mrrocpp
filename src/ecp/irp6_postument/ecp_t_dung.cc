@@ -31,20 +31,8 @@ namespace task {
 // KONSTRUKTORY
 dung::dung(lib::configurator &_config) : task(_config)
 {
-}
-
-// methods for ECP template to redefine in concrete classes
-void dung::task_initialization(void)
-{
 	ecp_m_robot = new robot (*this);
-
-
-
-	usleep(1000*100);
-
-	sr_ecp_msg->message("ECP loaded");
 }
-
 
 void dung::main_task_algorithm(void)
 {

@@ -1,11 +1,11 @@
 // -------------------------------------------------------------------------
 //                            ecp.h dla QNX6
 // Definicje struktur danych i metod dla procesow ECP
-// 
+//
 // Modyfikacje:
 // 1. metody wirtualne w klasie bazowej sensor - ok. 160
 // 2. bonusy do testowania
-// 
+//
 // Ostatnia modyfikacja: 25.06.2003
 // autor modyfikacji: tkornuta
 // -------------------------------------------------------------------------
@@ -24,18 +24,15 @@ namespace ecp {
 namespace conveyor {
 namespace task {
 
-class test: public common::task::task 
+class test: public common::task::task
 {
 
 public:
 	// KONSTRUKTORY
 	test(lib::configurator &_config);
-	~test();
-	
+
 	// methods for ECP template to redefine in concrete classes
-	void task_initialization(void);
 	void main_task_algorithm(void);
-	
 };
 
 }

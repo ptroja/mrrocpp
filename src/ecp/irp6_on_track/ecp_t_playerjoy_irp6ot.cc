@@ -30,12 +30,6 @@ namespace task {
 // KONSTRUKTORY
 playerjoy::playerjoy(lib::configurator &_config) : task(_config)
 {
-    pjg = NULL;
-}
-
-// methods for ECP template to redefine in concrete classes
-void playerjoy::task_initialization(void)
-{
     ecp_m_robot = new robot (*this);
 
     sr_ecp_msg->message("ECP loaded");

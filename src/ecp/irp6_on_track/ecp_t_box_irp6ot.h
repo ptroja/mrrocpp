@@ -12,15 +12,13 @@ namespace irp6ot {
 namespace task {
 
 class box: public common::task::task {
-  
+
   protected:
-	  common::generator::smooth* smoothgen;
-		
+	  common::generator::smooth smoothgen;
+
 	public:
 		box(lib::configurator &_config);
-		~box();
 
-		void task_initialization(void);
 		void main_task_algorithm(void);
 };
 

@@ -16,18 +16,10 @@ namespace task {
 lego_brick::lego_brick(lib::configurator &_config) : task(_config)
 {
 	absolute_position = 0.0;
-}
 
-lego_brick::~lego_brick()
-{}
-
-// methods for ECP template to redefine in concrete classes
-void lego_brick::task_initialization(void)
-{
 	ecp_m_robot = new robot (*this);
 
 	sr_ecp_msg->message("ECP loaded");
-
 }
 
 
@@ -40,7 +32,7 @@ void lego_brick::main_task_algorithm(void)
 	//ecp_smooth_generator gen2(*this, true, true);
 	//gen.flush_pose_list();
 	//gen2.flush_pose_list();
-	
+
 	lib::POSE_SPECIFICATION ps;
 	ps = lib::JOINT;
 
@@ -54,7 +46,7 @@ void lego_brick::main_task_algorithm(void)
 	//absolute_position-= 0.25;
 	coordinates[0] = absolute_position-0.25;
 	coordinates2[0] = absolute_position;
-		
+
 	vp[0] = 0.0;
 	vk[0] = 0.0;
 	v[0] = 0.04;
@@ -71,7 +63,7 @@ void lego_brick::main_task_algorithm(void)
 	//gen.create_pose_list_head(ps, vp, vk, v, a, coordinates);
 	//gen2.create_pose_list_head(ps, vp, vk, v, a, coordinates2);
 	//ysg.sensor_m = sensor_m;
-	
+
 
 	for(;;) { // Wewnetrzna petla nieskonczona
 

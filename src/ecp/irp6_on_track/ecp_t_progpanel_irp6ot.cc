@@ -61,13 +61,6 @@ int create_grab_path(double *object_coordinates, ecp_teach_in_generator generato
 // KONSTRUKTORY
 progpanel::progpanel(lib::configurator &_config) : task(_config)
 {
-    //	tig = NULL;
-    ppg = NULL;
-}
-
-// methods for ECP template to redefine in concrete classes
-void progpanel::task_initialization(void)
-{
     ecp_m_robot = new robot (*this);
 
     // powolanie czujnikow

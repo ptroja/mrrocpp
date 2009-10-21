@@ -31,13 +31,6 @@ namespace task {
 // KONSTRUKTORY
 sk::sk(lib::configurator &_config) : task(_config)
 {
-	nrg = NULL;
-	yefg = NULL;
-}
-
-// methods for ECP template to redefine in concrete classes
-void sk::task_initialization(void)
-{
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	{
@@ -48,16 +41,12 @@ void sk::task_initialization(void)
 		ecp_m_robot = new irp6p::robot (*this);
 	}
 
-	usleep(1000*100);
-
 	nrg = new generator::tff_nose_run(*this, 8);
-
 
 	nrg->configure_pulse_check (true);
 
 	yefg = new generator::y_edge_follow_force (*this, 8);
 	befg = new generator::bias_edp_force(*this);
-
 
 	switch (ecp_m_robot->robot_name)
 	{
@@ -80,8 +69,7 @@ void sk::task_initialization(void)
 	{
 		save_activated = false;
 	}
-
-};
+}
 
 
 void sk::main_task_algorithm(void)

@@ -29,12 +29,6 @@ public:
 	wii_velocity(lib::configurator &_config);
 
 	/**
-	 * Inicjalizuje zadanie
-	 * @author jkurylo
-	 */
-	void task_initialization(void);
-
-	/**
 	 * Realizuje zadanie
 	 * @author jkurylo
 	 */

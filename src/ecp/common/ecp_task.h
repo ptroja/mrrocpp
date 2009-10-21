@@ -28,6 +28,8 @@ class task : public ecp_mp::task::task
 		// Badanie typu polecenia z MP
 		lib::MP_COMMAND mp_command_type(void) const;
 
+		void initialize_communication(void);
+
 	protected:
 		// Oczekiwanie na nowy stan od MP
 		void get_next_state(void);
@@ -51,16 +53,13 @@ class task : public ecp_mp::task::task
 		// dla gcc: `'class Foo' has virtual functions but non-virtual destructor` warning.
 		virtual ~task();
 
-		void initialize_communication(void);
-
 		// obsluga sygnalu
 		virtual void catch_signal_in_ecp_task(int sig);
 
 		virtual void terminate();
 
 		// methods for ECP template to redefine in concrete classes
-		virtual void task_initialization(void);
-		virtual void main_task_algorithm(void);
+		virtual void main_task_algorithm(void) = 0;
 
 		// Informacja dla MP o zakonczeniu zadania uzytkownika
 		void ecp_termination_notice(void);

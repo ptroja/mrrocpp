@@ -13,12 +13,9 @@ class jarosz: public common::task::task  {
 public:
 	// KONSTRUKTORY
 	jarosz(lib::configurator &_config);
-	~jarosz();
-	
+
 	// methods for ECP template to redefine in concrete classes
-	void task_initialization(void);
 	void main_task_algorithm(void);
-	
 };
 
 }

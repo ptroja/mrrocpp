@@ -28,16 +28,6 @@ spots_recognition::spots_recognition(lib::configurator &_config): task(_config)
     trajektoria_poczatkowa = "../trj/spots/traj00.trj";
     trajektoria_koncowa = "../trj/spots/traj99.trj";
     remove("../msr/kalibracja.txt");
-}
-
-spots_recognition::~spots_recognition()
-{
-
-}
-
-// methods for ECP template to redefine in concrete classes
-void spots_recognition::task_initialization(void)
-{
 
 	befg = new common::generator::bias_edp_force(*this);
 	// Create cvFraDIA sensor - for testing purposes.
@@ -48,11 +38,11 @@ void spots_recognition::task_initialization(void)
 
 // Create an adequate robot. - depending on the ini section name.
 // Note - only on track working
-if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
-{
-    ecp_m_robot = new robot (*this);
-    sr_ecp_msg->message("IRp6 on Track loaded");
-}
+	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
+	{
+		ecp_m_robot = new robot (*this);
+		sr_ecp_msg->message("IRp6 on Track loaded");
+	}
 /*else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
 {
     ecp_m_robot = new ecp_irp6_postument_robot (*this);
@@ -65,11 +55,8 @@ if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	// Create smooth generator.
 	smooth = new common::generator::smooth(*this, true, false);
 
-
 	nose = new common::generator::sr_nose_run(*this, 8);
 	nose->configure_pulse_check (true);
-
-
 }
 
 void spots_recognition::main_task_algorithm(void)

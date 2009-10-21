@@ -11,16 +11,13 @@ namespace task {
 
 class task: public common::task::task  {
 protected:
-	generator::generator* fg;
+	generator::generator fg;
 
 public:
 	task(lib::configurator &_config);
-	~task();
-	
+
 	// methods for ECP template to redefine in concrete classes
-	void task_initialization(void);
 	void main_task_algorithm(void);
-	
 };
 
 }

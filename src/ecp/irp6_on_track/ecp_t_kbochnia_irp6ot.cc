@@ -20,12 +20,6 @@ namespace task {
 // KONSTRUKTORY
 kbochnia::kbochnia(lib::configurator &_config) : task(_config)
 {
-}
-
-
-// methods for ECP template to redefine in concrete classes
-void kbochnia::task_initialization(void)
-{
     ecp_m_robot = new robot (*this);
 
     sr_ecp_msg->message("ECP loaded");

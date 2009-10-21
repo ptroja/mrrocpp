@@ -13,20 +13,9 @@ namespace task {
 
 // KONSTRUKTORY
 task::task(lib::configurator &_config) :
-	common::task::task(_config)
+	common::task::task(_config),
+	fg(*this)
 {
-	fg = new generator::generator (*this);
-}
-
-task::~task()
-{
-	delete fg;
-}
-
-// methods for ECP template to redefine in concrete classes
-void task::task_initialization(void)
-{
-	sr_ecp_msg->message("ECP loaded");
 }
 
 void task::main_task_algorithm(void)
@@ -46,9 +35,9 @@ void task::main_task_algorithm(void)
 					sr_ecp_msg->message(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				else
 				{
-					fg->set_voice((generator::generator::VOICE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
-					fg->set_phrase(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-					fg->Move();
+					fg.set_voice((generator::generator::VOICE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
+					fg.set_phrase(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+					fg.Move();
 				}
 				break;
 			default:

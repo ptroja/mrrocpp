@@ -13,20 +13,8 @@ namespace common {
 namespace task {
 
 //Constructors
-eihcalibration::eihcalibration(lib::configurator &_config): task(_config){
-	nose = NULL;
-	generator = NULL;
-	smooth2gen = NULL;
-}
-
-//Desctructor
-eihcalibration::~eihcalibration(){
-
-}
-
-//methods for ECP template to redefine in concrete classes
-void eihcalibration::task_initialization(void) {
-
+eihcalibration::eihcalibration(lib::configurator &_config) : task(_config)
+{
     // Create an adequate robot. - depending on the ini section name.
     if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     {

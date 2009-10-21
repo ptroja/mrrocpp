@@ -127,10 +127,6 @@ public:
 	*/
 	ecp_vis_pb_eol_sac_irp6ot(common::task::task& _ecp_task, int step=0);
 	/*!
-	* Destructor.
-	*/
-	virtual ~ecp_vis_pb_eol_sac_irp6ot();
-	/*!
 	* Method calcualting ^{0}r_{E'}
 	*/
 	virtual bool next_step_without_constraints();

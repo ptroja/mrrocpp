@@ -35,14 +35,7 @@ public:
 	/*!
       * Constructor.
       */
-	pcbird(lib::configurator &_config)
-	  : task(_config)
-	{ }
-
-	/*!
-      * Initialize task - robot, sensors and generators.
-      */
-	void task_initialization(void);
+	pcbird(lib::configurator &_config);
 
 	/*!
       * Main algorithm loop. Retrieves information from pcbird.

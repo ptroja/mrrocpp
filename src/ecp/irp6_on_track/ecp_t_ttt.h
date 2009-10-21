@@ -26,13 +26,7 @@ public:
 	 * @author jedrzej
 	 */
 	ttt(lib::configurator &_config);
-	
-	/**
-	 * Inicjalizuje zadanie - wczytuje trajektorie z pliku
-	 * @author jkurylo
-	 */
-	void task_initialization(void);
-	
+
 	/**
 	 * Realizuje zadanie
 	 * @author jkurylo

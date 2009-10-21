@@ -28,12 +28,6 @@ namespace task {
 // KONSTRUKTORY
 speaking::speaking(lib::configurator &_config) : task(_config)
 {
-    speak = NULL;
-}
-
-// methods for ECP template to redefine in concrete classes
-void speaking::task_initialization(void)
-{
     ecp_m_robot = new robot (*this);
 
     sensor_m[lib::SENSOR_MIC] =

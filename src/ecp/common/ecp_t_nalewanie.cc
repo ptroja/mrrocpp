@@ -30,14 +30,6 @@ namespace task {
 // KONSTRUKTORY
 nalewanie::nalewanie(lib::configurator &_config) : task(_config)
 {
-    sg = NULL;
-}
-
-// methods for ECP template to redefine in concrete classes
-void nalewanie::task_initialization(void)
-{
-    int i;
-
     if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     {
         ecp_m_robot = new irp6ot::robot (*this);

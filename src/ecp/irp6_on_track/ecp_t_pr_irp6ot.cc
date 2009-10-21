@@ -47,18 +47,6 @@ void pr::short_move_up ()
 // KONSTRUKTORY
 pr::pr(lib::configurator &_config) : task(_config)
 {
-    tig = NULL;
-}
-
-pr::~pr()
-{
-    if (tig)
-    	delete tig;
-}
-
-// methods for ECP template to redefine in concrete classes
-void pr::task_initialization(void)
-{
     ecp_m_robot = new robot (*this);
 
     // Powolanie czujnikow
@@ -100,6 +88,10 @@ void pr::task_initialization(void)
     sr_ecp_msg->message("ECP loaded");
 }
 
+pr::~pr()
+{
+	delete tig;
+}
 
 void pr::main_task_algorithm(void)
 {

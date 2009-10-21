@@ -36,16 +36,12 @@ class robot_calibration: public common::task::task
 	char * trajektoria_koncowa;
 
 	protected:
-
 		generator::robotcalibgen* generator;
 		common::generator::smooth* smooth;
 
-
 	public:
 		robot_calibration(lib::configurator &_config);
-		~robot_calibration();
 
-		void task_initialization(void);
 		void main_task_algorithm(void);
 };
 

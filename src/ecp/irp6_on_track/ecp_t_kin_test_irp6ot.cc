@@ -23,10 +23,6 @@ namespace task {
 
 // KONSTRUKTORY
 kin_test::kin_test(lib::configurator &_config) : task(_config)
-{}
-
-// methods for ECP template to redefine in concrete classes
-void kin_test::task_initialization(void)
 {
     ecp_m_robot = new robot (*this);
 

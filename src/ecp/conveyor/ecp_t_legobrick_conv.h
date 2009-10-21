@@ -1,9 +1,9 @@
 // -------------------------------------------------------------------------
 //                            ecp_t_legobrick_conv.h dla QNX6
 // Definicje struktur danych i metod dla procesow ECP tasmociagu
-// 
+//
 // Ostatnia modyfikacja: 2008.04.02
-// autor: jdembek 
+// autor: jdembek
 // -------------------------------------------------------------------------
 
 #if !defined(_ECP_T_CONV_LEGOBRICK_H)
@@ -22,19 +22,16 @@ namespace ecp {
 namespace conveyor {
 namespace task {
 
-class lego_brick: public common::task::task 
+class lego_brick: public common::task::task
 {
 	double absolute_position;
 
 public:
 	// KONSTRUKTORY
 	lego_brick(lib::configurator &_config);
-	~lego_brick();
-	
+
 	// methods for ECP template to redefine in concrete classes
-	void task_initialization(void);
 	void main_task_algorithm(void);
-	
 };
 
 }

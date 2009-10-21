@@ -91,6 +91,7 @@ sensor::sensor(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::t
 	}// end: while
 #endif /* !USE_MESSIP_SRR */
 }
+
 void sensor::terminate(void) {
 	to_vsp.i_code= lib::VSP_TERMINATE;
 #if !defined(USE_MESSIP_SRR)

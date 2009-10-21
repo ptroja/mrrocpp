@@ -25,7 +25,6 @@ class pawel: public common::task::task  {
 		pawel(lib::configurator &_config);
 
 		// methods for ECP template to redefine in concrete classes
-		void task_initialization(void);
 		void main_task_algorithm(void);
 };
 

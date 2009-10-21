@@ -26,12 +26,6 @@ speechrecognition::~speechrecognition()
     delete srg;
 }
 
-// methods for ECP template to redefine in concrete classes
-void speechrecognition::task_initialization(void)
-{
-    sr_ecp_msg->message("ECP loaded");
-}
-
 void speechrecognition::main_task_algorithm(void)
 {
     for(;;)

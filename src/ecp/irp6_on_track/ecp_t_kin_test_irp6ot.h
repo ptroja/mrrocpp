@@ -15,7 +15,6 @@ public:
 	kin_test(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
-	void task_initialization(void);
 	void main_task_algorithm(void);
 
 };

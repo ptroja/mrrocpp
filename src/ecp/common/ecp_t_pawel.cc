@@ -18,12 +18,6 @@ namespace task {
 // KONSTRUKTORY
 pawel::pawel(lib::configurator &_config) : task(_config)
 {
-    pg = NULL;
-}
-
-// methods for ECP template to redefine in concrete classes
-void pawel::task_initialization(void)
-{
     // the robot is choose dependendant on the section of configuration file sent as argv[4]
     if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     {
@@ -39,8 +33,6 @@ void pawel::task_initialization(void)
     sensor_m[lib::SENSOR_PAWEL] = new ecp_mp::sensor::pawel(lib::SENSOR_PAWEL, "[vsp_pawel]", *this);
     sensor_m[lib::SENSOR_PAWEL]->configure_sensor();
     //	sensor_m[SENSOR_PAWEL]->initiate_reading();
-
-    delay(100);
 
     pg = new generator::pawel ( *this, 20 );
     pg->sensor_m = sensor_m;

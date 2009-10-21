@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
 			return -1;
 		}
 
+		// TODO: this should not be a pointer; blcked by error handling fixup
 		// configuration read
 		lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
 
@@ -58,10 +59,6 @@ int main(int argc, char *argv[])
 #if defined(PROCESS_SPAWN_RSH)
 		signal(SIGINT, SIG_IGN);
 #endif
-
-		ecp::common::ecp_t->initialize_communication();
-
-		ecp::common::ecp_t->task_initialization();
 	}
 	catch (ecp_mp::task::ECP_MP_main_error e) {
 		if (e.error_class == lib::SYSTEM_ERROR)

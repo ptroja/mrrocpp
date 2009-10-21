@@ -72,14 +72,6 @@ ecp_vis_weights_driven_irp6ot::ecp_vis_weights_driven_irp6ot(common::task::task&
 
 }
 
-
-
-ecp_vis_weights_driven_irp6ot::~ecp_vis_weights_driven_irp6ot(){
-
-}
-
-
-
 void ecp_vis_weights_driven_irp6ot::initalize_switching_parameters(){
 
 }

@@ -29,12 +29,6 @@ namespace task {
 // KONSTRUKTORY
 teach::teach(lib::configurator &_config) : task(_config)
 {
-    tig = NULL;
-}
-
-// methods for ECP template to redefine in concrete classes
-void teach::task_initialization(void)
-{
     if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     {
         ecp_m_robot = new irp6ot::robot (*this);

@@ -13,17 +13,10 @@ namespace irp6ot {
 namespace task {
 
 //Constructors
-smooth2_test::smooth2_test(lib::configurator &_config): task(_config){
-  smoothgen2 = NULL;
-};
-//Desctructor
-smooth2_test::~smooth2_test(){
-
-};
-
-//methods for ECP template to redefine in concrete classes
-void smooth2_test::task_initialization(void) {
+smooth2_test::smooth2_test(lib::configurator &_config): task(_config)
+{
 	ecp_m_robot = new robot(*this);
+
 	//delay(20000);
 	smoothgen2 = new common::generator::smooth2(*this, true);
 	sr_ecp_msg->message("ECP loaded smooth2_test");

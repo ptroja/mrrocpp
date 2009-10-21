@@ -31,14 +31,6 @@ namespace task {
 // KONSTRUKTORY
 tw::tw(lib::configurator &_config) : task(_config)
 {
-	nrg = NULL;
-	yefg = NULL;
-}
-
-// methods for ECP template to redefine in concrete classes
-void tw::task_initialization(void)
-{
-
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	{
@@ -48,8 +40,6 @@ void tw::task_initialization(void)
 	{
 		ecp_m_robot = new irp6p::robot (*this);
 	}
-
-	usleep(1000*100);
 
 	nrg = new generator::tff_nose_run(*this, 8);
 

@@ -27,12 +27,6 @@ playerpos::~playerpos()
 	delete ppg;
 }
 
-// methods for ECP template to redefine in concrete classes
-void playerpos::task_initialization(void)
-{
-	sr_ecp_msg->message("ECP loaded");
-}
-
 void playerpos::main_task_algorithm(void)
 {
 	for (;;) {

@@ -1,11 +1,11 @@
 // -------------------------------------------------------------------------
 //                            ecp_t_mam.h dla QNX6
 // Definicje struktur danych i metod dla procesow ECP
-// 
+//
 // Modyfikacje:
 // 1. metody wirtualne w klasie bazowej sensor - ok. 160
 // 2. bonusy do testowania
-// 
+//
 // Ostatnia modyfikacja: 25.06.2003
 // autor modyfikacji: tkornuta
 // -------------------------------------------------------------------------
@@ -25,14 +25,12 @@ class mam: public common::task::task  {
 public:
 	// KONSTRUKTORY
 	mam(lib::configurator &_config);
-	~mam();
-	
+
 	// methods for ECP template to redefine in concrete classes
-	void task_initialization(void);
 	void main_task_algorithm(void);
-	
+
 	void catch_signal(int sig);
-	
+
 };
 
 } // namespace task

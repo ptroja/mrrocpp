@@ -22,17 +22,6 @@ namespace task {
 //ECP Task constructor
 robot_calibration::robot_calibration(lib::configurator &_config): task(_config)
 {
-//	sr_ecp_msg->message("ecp task constructor");
-}
-
-robot_calibration::~robot_calibration()
-{
-
-}
-
-// methods for ECP template to redefine in concrete classes
-void robot_calibration::task_initialization(void)
-{
 	sr_ecp_msg->message("(TASK: initialization");
 
 	// Create an adequate robot. - depending on the ini section name.
@@ -41,7 +30,7 @@ void robot_calibration::task_initialization(void)
     		ecp_m_robot = new ecp_irp6_on_track_robot (*this);
     		sr_ecp_msg->message("IRp6 on Track loaded");
 	}*/
- 	
+
 	// Create calibration generator.
 	generator = new generator::robotcalibgen(*this);
 	// Create pcbird sensor in the generato sensors list.
@@ -53,7 +42,7 @@ void robot_calibration::main_task_algorithm(void)
 {
 	// Execute generator Move method.
 	generator->Move();
-	// Send termination notice to the MP process.	
+	// Send termination notice to the MP process.
 	ecp_termination_notice();
 }
 

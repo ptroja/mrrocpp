@@ -33,10 +33,6 @@ namespace task {
 visioncoordinates::visioncoordinates(lib::configurator& _config)
 	: task(_config), SETTINGS_SECTION_NAME("[ecp_visioncoordinates_task]")
 {
-}
-
-void visioncoordinates::task_initialization()
-{
 	// tworzymy robota
     if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
     {
@@ -50,7 +46,7 @@ void visioncoordinates::task_initialization()
     }
 
 	// i powiazane z nim generatory - czucia wizji i ruchu :)
-	
+
 	itsVisionGen = new generator::visioncoordinates(*this);
 	itsSmoothGen = new generator::smooth(*this, true, false); // synchronized, debug
 }
@@ -76,9 +72,8 @@ void visioncoordinates::main_task_algorithm()
 		setStartPosition();
 		sleep(1);
 
-	
 		itsVisionGen->Move();		// wykonujemy ruch, polegajacy na rozpoznaniu okolicy :)
-		
+
 		bool found = false;
 		while (itsVisionGen->getCoordinates(bf))
 		{
@@ -99,19 +94,19 @@ void visioncoordinates::main_task_algorithm()
 			{
 				found = true;
 				break;		// obiekt zostal znaleziony, nie szukamy nastepnych obiektow
-			} 
+			}
 
 			debugmsg("niestety to nie jest ten obiekt");
 		}
 
-		if (found)	
+		if (found)
 			debugmsg("Znaleziono poszukiwany obiekt!");
 		else
 			debugmsg("Poszukiwanego obiektu NIE znaleziono :-(");
 	}
 
 /*	double bf[8];			// bufor na wspolrzedne prezkazywane do generatora smooth
-	
+
 	int loop = 5;
 	while (loop--)
 	{
@@ -125,7 +120,7 @@ void visioncoordinates::main_task_algorithm()
 		itsSmoothGen->Move();
 		debugmsg("itsShoothGen->reset()");
 		itsSmoothGen->reset();
-	
+
 	}*/
 }
 
@@ -139,21 +134,21 @@ void visioncoordinates::setStartPosition()
 	double vk[MAX_SERVOS_NR]={0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 	double v[MAX_SERVOS_NR]={0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 5.0};
 	double a[MAX_SERVOS_NR]={0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.5};
-	
-	double bf[MAX_SERVOS_NR]; 
+
+	double bf[MAX_SERVOS_NR];
 	memset(bf, 0, sizeof(bf));
-	
+
 	std::string position = config.return_string_value("start_joint_position", SETTINGS_SECTION_NAME);
 
-	
-	std::istringstream iss(position.c_str());
-	iss >> bf[0] >> bf[1] >> bf[2] >> bf[3] >> bf[4] >> bf[5] >> bf[6]; 
 
-	
+	std::istringstream iss(position.c_str());
+	iss >> bf[0] >> bf[1] >> bf[2] >> bf[3] >> bf[4] >> bf[5] >> bf[6];
+
+
 	itsSmoothGen->load_coordinates(lib::JOINT, vp, vk, v, a, bf);
 
 	itsSmoothGen->Move();
-	
+
 	itsSmoothGen->reset();
 
 }
@@ -175,7 +170,7 @@ bool visioncoordinates::selectObject()
 	case lib::OPTION_TWO: itsVisionGen->searchObject(1); break;
 	case lib::OPTION_THREE: itsVisionGen->searchObject(2); break;
 	case lib::OPTION_FOUR: itsVisionGen->searchObject(3); break;
-	default: 
+	default:
 		setStartPosition();
 		return false;
 	}

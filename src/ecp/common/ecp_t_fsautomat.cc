@@ -61,23 +61,18 @@ void ecp_gripper_opening (task& _ecp_task, double gripper_increment, int motion_
 }
 #endif
 // KONSTRUKTORY
-fsautomat::fsautomat(lib::configurator &_config) : task(_config)
-{
-	sg = NULL;
-	tcg = NULL;
-	gt = NULL;
-	nrg = NULL;
-	rgg = NULL;
-	gag = NULL;
-	rfrg = NULL;
-	tig = NULL;
-	befg = NULL;
-	wmg = NULL;
-
-	go_st = NULL;
-}
-
-void fsautomat::task_initialization(void)
+fsautomat::fsautomat(lib::configurator &_config) : task(_config),
+	sg(NULL),
+	tcg(NULL),
+	gt(NULL),
+	nrg(NULL),
+	rgg(NULL),
+	gag(NULL),
+	rfrg(NULL),
+	tig(NULL),
+	befg(NULL),
+	wmg(NULL),
+	go_st(NULL)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
 	if (!strcmp(config.section_name, "[ecp_irp6_on_track]")) {
@@ -222,8 +217,6 @@ void fsautomat::task_initialization(void)
 	}
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
-
-	sr_ecp_msg->message("ECP loaded");
 }
 
 void fsautomat::main_task_algorithm(void)

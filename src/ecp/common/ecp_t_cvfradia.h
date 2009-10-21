@@ -30,25 +30,17 @@ protected:
       * Generator used for communication with cvFraDIA.
       */
 	generator::cvfradia* cvg;
-	
+
 public:
 	/*!
       * Constructor.
       */
-	cvfradia(lib::configurator &_config)
-	  : task(_config)
-	{ }
-	
-	/*!
-      * Initialize task - robot, sensors and generators.
-      */
-	void task_initialization(void);
+	cvfradia(lib::configurator &_config);
 
 	/*!
       * Main algorithm loop. Retrieves information from cvFraDIA.
       */
 	void main_task_algorithm(void);
-	
 };
 
 } // namespace task

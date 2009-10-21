@@ -20,20 +20,11 @@ namespace task {
 // KONSTRUKTORY
 pteach::pteach(lib::configurator &_config) : task(_config)
 {
-    cg = NULL;
-    orc = NULL;
-}
-
-// methods for ECP template to redefine in concrete classes
-void pteach::task_initialization(void)
-{
     ecp_m_robot = new robot (*this);
 
     cg = new common::generator::calibration (*this, 10);
     // Warunek, ktorego spelnienie umozliwia realizacje ruchu do nastepnej nauczonej pozycji
     orc = new common::operator_reaction_condition (*this);
-
-    sr_ecp_msg->message("ECP loaded");
 }
 
 

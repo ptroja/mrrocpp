@@ -12,15 +12,13 @@ namespace irp6ot {
 namespace task {
 
 class smooth2_test: public common::task::task {
-  
+
   protected:
 	  common::generator::smooth2* smoothgen2;
-		
+
 	public:
 		smooth2_test(lib::configurator &_config);
-		~smooth2_test();
 
-		void task_initialization(void);
 		void main_task_algorithm(void);
 };
 

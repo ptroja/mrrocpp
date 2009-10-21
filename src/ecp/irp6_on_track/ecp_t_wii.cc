@@ -17,9 +17,7 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-wii::wii(lib::configurator &_config) : task(_config) {};
-
-void wii::task_initialization(void)
+wii::wii(lib::configurator &_config) : task(_config)
 {
 	ecp_m_robot = new robot (*this);
     sr_ecp_msg->message("ECP loaded");
@@ -36,19 +34,19 @@ void wii::main_task_algorithm(void)
 
     sg = new common::generator::smooth(*this,true);
     eg = new generator::wii(*this);
-    
+
     eg->sensor_m[lib::SENSOR_WIIMOTE] = sensor_m[lib::SENSOR_WIIMOTE];
 	firstPosition = eg->getFirstPosition();
-	
+
 	sg->reset();
 	sg->load_coordinates(lib::XYZ_EULER_ZYZ,firstPosition[0],firstPosition[1],firstPosition[2],firstPosition[3],firstPosition[4],firstPosition[5],firstPosition[6],firstPosition[7]);
 	sg->Move();
 
 	while(1)
-	{    
+	{
     	eg->Move();
     }
-    
+
     ecp_termination_notice();
 }
 

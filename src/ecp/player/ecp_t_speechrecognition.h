@@ -17,11 +17,9 @@ public:
 	// KONSTRUKTORY
 	speechrecognition(lib::configurator &_config);
 	~speechrecognition();
-	
+
 	// methods for ECP template to redefine in concrete classes
-	void task_initialization(void);
 	void main_task_algorithm(void);
-	
 };
 
 }

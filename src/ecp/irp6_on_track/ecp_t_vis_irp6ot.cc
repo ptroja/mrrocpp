@@ -15,6 +15,7 @@
 #include "ecp_mp/ecp_mp_s_vis.h"
 #include "ecp/irp6_on_track/ecp_t_vis_irp6ot.h"
 
+#include <boost/foreach.hpp>
 
 namespace mrrocpp {
 namespace ecp {
@@ -25,27 +26,18 @@ namespace task {
 // KONSTRUKTORY
 vis::vis(lib::configurator &_config) : task(_config)
 {
-}
-
-// methods for ECP template to redefine in concrete classes
-void vis::task_initialization(void)
-{
     ecp_m_robot = new robot (*this);
 
     // Powolanie czujnikow
     sensor_m[lib::SENSOR_CAMERA_SA] =
         new ecp_mp::sensor::vis (lib::SENSOR_FORCE_ON_TRACK, "[vsp_section]", *this);
 
-    // Konfiguracja wszystkich czujnikow
-    for (ecp_mp::sensors_t::iterator sensor_m_iterator = sensor_m.begin();
-            sensor_m_iterator != sensor_m.end(); sensor_m_iterator++)
-    {
-        sensor_m_iterator->second->to_vsp.parameters=1; // biasowanie czujnika
-        sensor_m_iterator->second->configure_sensor();
-    }
-
-    usleep(1000*100);
-    sr_ecp_msg->message("ECP loaded");
+	// Konfiguracja wszystkich czujnikow
+	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m)
+	{
+		sensor_item.second->to_vsp.parameters=1; // biasowanie czujnika
+		sensor_item.second->configure_sensor();
+	}
 }
 
 

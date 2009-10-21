@@ -206,15 +206,6 @@ void show_mam_window(int UI_fd)
 mam::mam(lib::configurator &_config) :
 	task(_config)
 {
-}
-
-mam::~mam()
-{
-}
-
-// methods for ECP template to redefine in concrete classes
-void mam::task_initialization(void)
-{
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0) {
 		ecp_m_robot = new irp6ot::robot (*this);

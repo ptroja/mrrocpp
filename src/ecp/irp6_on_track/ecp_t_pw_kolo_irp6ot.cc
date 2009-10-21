@@ -10,16 +10,10 @@ namespace task {
 
 //Konstruktory
 pw::pw(lib::configurator &_config) : task(_config)
-{}
-
-void pw::task_initialization(void)
 {
 	ecp_m_robot= new robot(*this);
 	kolo_gen= new generator::pw_kolo(*this);
-
-	sr_ecp_msg->message("ECP PW loaded");
 }
-
 
 void pw::main_task_algorithm(void)
 {

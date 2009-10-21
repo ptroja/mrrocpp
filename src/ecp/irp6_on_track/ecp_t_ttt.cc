@@ -18,15 +18,11 @@ namespace ecp {
 namespace irp6ot {
 namespace task {
 
-ttt::ttt(lib::configurator &_config) : common::task::task(_config) {}
-
-void ttt::task_initialization(void)
+ttt::ttt(lib::configurator &_config) : common::task::task(_config)
 {
 	ecp_m_robot = new robot (*this);
 
     sg = new common::generator::smooth (*this, true, true);
-
-    sr_ecp_msg->message("ECP loaded");
 }
 
 void ttt::main_task_algorithm(void)

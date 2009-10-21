@@ -16,10 +16,6 @@ ecp_vis_ib_eih_planar_irp6ot::ecp_vis_ib_eih_planar_irp6ot(common::task::task& _
 	retrieve_parameters();
 }
 
-ecp_vis_ib_eih_planar_irp6ot::~ecp_vis_ib_eih_planar_irp6ot() {
-
-}
-
 void ecp_vis_ib_eih_planar_irp6ot::retrieve_parameters() {
 	//Maksymalna wartosc  predkosci.
 	v_max = ecp_t.config.return_double_value("v_max");

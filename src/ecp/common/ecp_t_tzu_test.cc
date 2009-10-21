@@ -27,25 +27,8 @@ using namespace std;
 /** konstruktor **/
 tzu_test::tzu_test(lib::configurator &_config) : task(_config)
 {
-	befg = NULL;
-	ftcg = NULL;
-	tcg = NULL;
-	fmg = NULL;
-	ynrfg = NULL;
-	sg = NULL;
 	str.open("../results_test.txt"/*,ios::app*/);
-}
 
-/** destruktor **/
-tzu_test::~tzu_test()
-{
-	str<<"--- KONIEC ---"<<endl;
-	str.close();
-}
-
-// methods for ECP template to redefine in concrete classes
-void tzu_test::task_initialization(void)
-{
 	// ecp_m_robot = new ecp_irp6_on_track_robot (*this);
 	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	{

@@ -32,33 +32,28 @@ namespace task {
 /*!
  * Initialize task - robot, sensors and generators.
  */
-void pcbird::task_initialization(void)
+pcbird::pcbird(lib::configurator &_config) : task(_config)
 {
-	try
+	// Create pcbird sensor - for testing purposes.
+	sensor_m[lib::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird(lib::SENSOR_PCBIRD, "[vsp_pcbird]", *this);
+	// Configure sensor.
+	sensor_m[lib::SENSOR_PCBIRD]->configure_sensor();
+
+	// Create an adequate robot. - depending on the ini section name.
+	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
 	{
-		// Create pcbird sensor - for testing purposes.
-		sensor_m[lib::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird(lib::SENSOR_PCBIRD, "[vsp_pcbird]", *this);
-		// Configure sensor.
-		sensor_m[lib::SENSOR_PCBIRD]->configure_sensor();
-		// Create an adequate robot. - depending on the ini section name.
-		if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
-		{
-			ecp_m_robot = new irp6ot::robot (*this);
-			sr_ecp_msg->message("IRp6ot loaded");
-		}
-		else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
-		{
-			ecp_m_robot = new irp6p::robot (*this);
-			sr_ecp_msg->message("IRp6p loaded");
-		}
-		// Create generator and pass sensor to it.
-		cvg = new generator::cvfradia(*this);
-		cvg->sensor_m = sensor_m;
+		ecp_m_robot = new irp6ot::robot (*this);
+		sr_ecp_msg->message("IRp6ot loaded");
 	}
-	catch(...)
+	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
 	{
-		printf("EXCEPTION\n");
+		ecp_m_robot = new irp6p::robot (*this);
+		sr_ecp_msg->message("IRp6p loaded");
 	}
+
+	// Create generator and pass sensor to it.
+	cvg = new generator::cvfradia(*this);
+	cvg->sensor_m = sensor_m;
 }
 
 /*!

@@ -75,12 +75,10 @@ public:
 	lib::Homog_matrix G_Tx_S;
 #endif
 	ecp_vis_ib_eih_irp6ot(common::task::task& _ecp_task, int step=0);
-	virtual ~ecp_vis_ib_eih_irp6ot();
 
 	virtual bool next_step_without_constraints();
 	//virtual void entertain_constraints();
 	virtual bool first_step(void);
-
 };
 } // namespace irp6ot
 } // namespace ecp

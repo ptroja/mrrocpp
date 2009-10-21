@@ -22,18 +22,6 @@ namespace task {
 // KONSTRUKTORY
 rcsc::rcsc(lib::configurator &_config) : task(_config)
 {
-    gt = NULL;
-    nrg = NULL;
-    rgg = NULL;
-    gag = NULL;
-    rfrg = NULL;
-    tig = NULL;
-    sg = NULL;
-}
-
-// methods for ECP template to redefine in concrete classes
-void rcsc::task_initialization(void)
-{
     // the robot is choose dependendat on the section of configuration file sent as argv[4]
     ecp_m_robot = new robot (*this);
 
