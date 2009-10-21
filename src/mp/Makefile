@@ -1,4 +1,4 @@
-#-----------ecp_mp/common catalog makefile of the MRROC++ frame system --------------------#
+#----------- makefile of the MRROC++ frame system --------------------#
 #======================================================#
 
 SOURCES = ${wildcard *.cc}
@@ -37,12 +37,13 @@ BINARIES = \
 	mp_fsautomat \
 	mp_multiplayer
 
+#	mp_pnml \
 #-----------------------------------------------------------------------------------------------------------------------#
 # Should be modified only by developers not by users
 HOMEDIR = ../..
 include $(HOMEDIR)/common.mk
 
-SHOBJ = $(LIBMPMAIN) $(LIBMPROBOTS) $(LIBDIR)/libmrrocpp.a $(LIBDIR)/libecp_mp.a
+SHOBJ = $(LIBMPMAIN) $(LIBMPROBOTS) $(LIBDIR)/libecp_mp.a $(LIBDIR)/libmrrocpp.a
 
 #======================================================#	
 .PHONY: all clean install
@@ -110,6 +111,10 @@ mp_fsautomat: mp_t_fsautomat.o \
 	mp_g_vis.o $(ECP_MPDIR)/ecp_mp_s_vis.o \
 	CubeState.o SingleManipulation.o \
 	$(SHOBJ)
+	$(LD) $(LDFLAGS) -o $@ $^
+
+mp_pnml: mp_t_pnml.o mp_g_pnml.o \
+	PNExec/libpnexec.a $(SHOBJ) -lxerces-c
 	$(LD) $(LDFLAGS) -o $@ $^
 
 mp_multiplayer: mp_t_multiplayer.o $(SHOBJ)

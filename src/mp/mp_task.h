@@ -91,7 +91,7 @@ class task: public ecp_mp::task::task
 		/// utworzenie robotow
 		virtual void create_robots(void);
 
-		/// methods for MP template to redefine in concrete classes
+		/// method redefine in concrete classes
 		virtual void main_task_algorithm(void) = 0;
 
 		/// mapa wszystkich robotow

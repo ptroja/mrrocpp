@@ -27,7 +27,8 @@
 #include <fstream>
 #include <string.h>
 #include "ecp_mp/smooth_trajectory_pose.h"
-//#include "lib/y_math.h"
+
+#include "lib/datastr.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -174,7 +175,7 @@ void smooth::set_pose_from_xml(xmlNode *stateNode)
 	xmlChar *xmlDataLine;
 
 	coordinateType = xmlGetProp(stateNode, (const xmlChar *)"coordinateType");
-	ps = ecp_mp::common::Trajectory::returnProperPS((char *)coordinateType);
+	ps = lib::returnProperPS((char *)coordinateType);
 	numOfPoses = xmlGetProp(stateNode, (const xmlChar *)"numOfPoses");
 	number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
 	for(cchild_node = stateNode->children; cchild_node!=NULL; cchild_node = cchild_node->next)
@@ -186,31 +187,31 @@ void smooth::set_pose_from_xml(xmlNode *stateNode)
 					if(!xmlStrcmp(ccchild_node->name, (const xmlChar *)"StartVelocity"))
 					{
 						xmlDataLine = xmlNodeGetContent(ccchild_node);
-						ecp_mp::common::Trajectory::setValuesInArray(vp, (const char *)xmlDataLine);
+						lib::setValuesInArray(vp, (const char *)xmlDataLine);
 						xmlFree(xmlDataLine);
 					}
 					else if (!xmlStrcmp(ccchild_node->name, (const xmlChar *)"EndVelocity") )
 					{
 						xmlDataLine = xmlNodeGetContent(ccchild_node);
-						ecp_mp::common::Trajectory::setValuesInArray(vk, (const char *)xmlDataLine);
+						lib::setValuesInArray(vk, (const char *)xmlDataLine);
 						xmlFree(xmlDataLine);
 					}
 					else if (!xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
 					{
 						xmlDataLine = xmlNodeGetContent(ccchild_node);
-						ecp_mp::common::Trajectory::setValuesInArray(v, (const char *)xmlDataLine);
+						lib::setValuesInArray(v, (const char *)xmlDataLine);
 						xmlFree(xmlDataLine);
 					}
 					else if (!xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
 					{
 						xmlDataLine = xmlNodeGetContent(ccchild_node);
-						ecp_mp::common::Trajectory::setValuesInArray(a, (const char *)xmlDataLine);
+						lib::setValuesInArray(a, (const char *)xmlDataLine);
 						xmlFree(xmlDataLine);
 					}
 					else if (!xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
 					{
 						xmlDataLine = xmlNodeGetContent(ccchild_node);
-						ecp_mp::common::Trajectory::setValuesInArray(coordinates, (const char *)xmlDataLine);
+						lib::setValuesInArray(coordinates, (const char *)xmlDataLine);
 						xmlFree(xmlDataLine);
 					}
 				}

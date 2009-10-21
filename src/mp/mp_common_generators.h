@@ -24,7 +24,6 @@ public:
 
 	bool first_step ();
 	bool next_step ();
-
 };
 
 // generator for sending end_motion mesage to ecps

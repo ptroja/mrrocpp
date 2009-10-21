@@ -40,8 +40,6 @@ class State
 			lib::ROBOT_ENUM *secondSet;
 		};
 
-		static lib::ROBOT_ENUM returnProperRobot(std::string robotName);
-
 		void setStateID(const char *stateID);
 		const char * getStateID() const;
 

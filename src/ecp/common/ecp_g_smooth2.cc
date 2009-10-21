@@ -20,6 +20,8 @@
 #include <libxml/tree.h>
 #include <libxml/xinclude.h>
 
+#include <fstream>
+
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -27,8 +29,9 @@
 #include "lib/srlib.h"
 #include "lib/mathtr.h"
 #include "ecp/common/ecp_g_smooth2.h"
-#include <fstream>
 #include "ecp_mp/smooth2_trajectory_pose.h"
+
+#include "lib/datastr.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -74,7 +77,7 @@ void smooth2::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 	xmlChar *xmlDataLine;
 
 	coordinateType = xmlGetProp(stateNode, (const xmlChar *)"coordinateType");
-	ps = ecp_mp::common::Trajectory::returnProperPS((char *)coordinateType);
+	ps = lib::returnProperPS((char *)coordinateType);
 	numOfPoses = xmlGetProp(stateNode, (const xmlChar *)"numOfPoses");
 	number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
 	for(cchild_node = stateNode->children; cchild_node!=NULL; cchild_node = cchild_node->next)
@@ -85,19 +88,19 @@ void smooth2::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
 				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					ecp_mp::common::Trajectory::setValuesInArray(v, (const char *)xmlDataLine);
+					lib::setValuesInArray(v, (const char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
 				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					ecp_mp::common::Trajectory::setValuesInArray(a, (const char *)xmlDataLine);
+					lib::setValuesInArray(a, (const char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
 				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					ecp_mp::common::Trajectory::setValuesInArray(coordinates, (const char *)xmlDataLine);
+					lib::setValuesInArray(coordinates, (const char *)xmlDataLine);
 					xmlFree(xmlDataLine);
 				}
 			}

@@ -62,6 +62,7 @@ int main (int argc, char *argv[], char **arge)
 			mp::common::mp_t->sr_ecp_msg->message("MP loaded");
 
 			lib::set_thread_priority(pthread_self(), MAX_PRIORITY-4);
+
 			signal(SIGTERM, &(mp::common::catch_signal_in_mp));
 			//signal(SIGINT,  &(catch_signal_in_mp));
 			signal(SIGSEGV, &(mp::common::catch_signal_in_mp));
@@ -117,7 +118,7 @@ int main (int argc, char *argv[], char **arge)
 			exit(EXIT_FAILURE);
 		} /*end: catch  */
 
-		for (;;) {  // Zewnetrzna petla nieskonczona
+		for (;;) {  // Wewnetrzna petla nieskonczona
 
 			try {
 				mp::common::mp_t->sr_ecp_msg->message("MP - wcisnij start");
@@ -127,6 +128,7 @@ int main (int argc, char *argv[], char **arge)
 
 				// Wyslanie START do wszystkich ECP
 				mp::common::mp_t->start_all(mp::common::mp_t->robot_m);
+
 				mp::common::mp_t->main_task_algorithm();
 
 				// Oczekiwanie na STOP od UI
@@ -229,7 +231,7 @@ int main (int argc, char *argv[], char **arge)
 			catch (...) {  /* Dla zewnetrznej petli try*/
 				/*   Wylapywanie niezdfiniowanych bledow  */
 				/*  Komunikat o bledzie wysylamy do SR */
-				mp::common::mp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, (uint64_t) MP_UNIDENTIFIED_ERROR);
+				mp::common::mp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, MP_UNIDENTIFIED_ERROR);
 				exit(EXIT_FAILURE);
 			} /*end: catch  */
 
@@ -237,10 +239,10 @@ int main (int argc, char *argv[], char **arge)
 
 	}
 	catch (...) {  /* Dla zewnetrznej petli try*/
-		/* Wylapywanie niezdfiniowanych bledow  */
+		/* Wylapywanie niezdefiniowanych bledow  */
 		/* Komunikat o bledzie wysylamy do SR */
 		printf("unexpected exception throw from catch section (@%s:%d)\n", __FILE__, __LINE__);
-		mp::common::mp_t->sr_ecp_msg->message (lib::NON_FATAL_ERROR, (uint64_t) MP_UNIDENTIFIED_ERROR);
+		mp::common::mp_t->sr_ecp_msg->message (lib::FATAL_ERROR, MP_UNIDENTIFIED_ERROR);
 		exit(EXIT_FAILURE);
 	} /* end: catch  */
 

@@ -1,8 +1,10 @@
-#include <mp/State.h>
 #include <iostream>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+
+#include "lib/datastr.h"
+#include "mp/State.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -141,35 +143,9 @@ const char * State::getType() const
 
 //-----------------------------------------------------------------------------------------------------------
 
-lib::ROBOT_ENUM State::returnProperRobot(std::string robotName)
-{
-	if(robotName == "ROBOT_IRP6_ON_TRACK")
-		return lib::ROBOT_IRP6_ON_TRACK;
-	else if(robotName == "ROBOT_IRP6_POSTUMENT")
-		return lib::ROBOT_IRP6_POSTUMENT;
-	else if(robotName == "ROBOT_CONVEYOR")
-		return lib::ROBOT_CONVEYOR;
-	else if(robotName == "ROBOT_SPEAKER")
-		return lib::ROBOT_SPEAKER;
-	else if(robotName == "ROBOT_IRP6_MECHATRONIKA")
-		return lib::ROBOT_IRP6_MECHATRONIKA;
-	else if(robotName == "ROBOT_ELECTRON")
-		return lib::ROBOT_ELECTRON;
-	else if(robotName == "ROBOT_FESTIVAL")
-		return lib::ROBOT_FESTIVAL;
-	else if(robotName == "ROBOT_HAND")
-		return lib::ROBOT_HAND;
-	else if(robotName == "ROBOT_SPEECHRECOGNITION")
-		return lib::ROBOT_SPEECHRECOGNITION;
-	else
-		return lib::ROBOT_UNDEFINED;
-}
-
-//-----------------------------------------------------------------------------------------------------------
-
 void State::setRobot(const char *robot)
 {
-	this->robot = returnProperRobot(robot);
+	this->robot = lib::returnProperRobot(robot);
 }
 
 //-----------------------------------------------------------------------------------------------------------

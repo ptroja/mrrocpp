@@ -15,6 +15,10 @@
 #include <libxml/parser.h>
 #include <libxml/xinclude.h>
 
+#include <list>
+#include <map>
+#include <boost/foreach.hpp>
+
 #include "lib/typedefs.h"
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
@@ -24,9 +28,6 @@
 #include "mp/mp.h"
 #include "mp/mp_t_fsautomat.h"
 
-#include <list>
-#include <map>
-
 #include "mp/mp_g_force.h"
 #include "mp/mp_g_vis.h"
 #include "ecp_mp/ecp_mp_s_vis.h"
@@ -34,7 +35,7 @@
 #include "mp/State.h"
 #include "mp/StateHeap.h"
 
-#include <boost/foreach.hpp>
+#include "lib/datastr.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -188,7 +189,7 @@ common::State * fsautomat::createState(xmlNodePtr stateNode)
 						int index = 0;
 						for (xmlNodePtr set_node = cchild_node->children; set_node != NULL; set_node = set_node->next)
 							if (set_node->type == XML_ELEMENT_NODE && !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))
-								actState->robotSet->firstSet[index++] = common::State::returnProperRobot(
+								actState->robotSet->firstSet[index++] = lib::returnProperRobot(
 										(char *) xmlNodeGetContent(set_node));
 					}
 					if (cchild_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cchild_node->name, (const xmlChar *) "SecSet")) {
@@ -197,7 +198,7 @@ common::State * fsautomat::createState(xmlNodePtr stateNode)
 						int index = 0;
 						for (xmlNodePtr set_node = cchild_node->children; set_node != NULL; set_node = set_node->next)
 							if (set_node->type == XML_ELEMENT_NODE && !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))
-								actState->robotSet->secondSet[index++] = common::State::returnProperRobot(
+								actState->robotSet->secondSet[index++] = lib::returnProperRobot(
 										(char *) xmlNodeGetContent(set_node));
 					}
 				}

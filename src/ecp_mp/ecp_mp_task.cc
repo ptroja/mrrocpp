@@ -23,6 +23,7 @@
 #include "lib/impconst.h"
 #include "lib/com_buf.h"
 
+#include "lib/datastr.h"
 #include "lib/srlib.h"
 #include "ecp_mp/ecp_mp_task.h"
 #include "ecp_mp/ecp_mp_sensor.h"
@@ -356,7 +357,7 @@ task::trajectories_t * task::loadTrajectories(const char * fileName, lib::ROBOT_
 
 	trajectories_t* trajectoriesMap = new trajectories_t();
 
-	const char * robotName = ecp_mp::common::Trajectory::toString(propRobot).c_str();
+	const char * robotName = lib::toString(propRobot).c_str();
 
 	for(xmlNodePtr cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
 	{

@@ -29,6 +29,8 @@
 #include "ecp/common/ecp_g_force.h"
 #include "ecp/common/ecp_t_fsautomat.h"
 
+#include "lib/datastr.h"
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -84,7 +86,7 @@ fsautomat::fsautomat(lib::configurator &_config) : task(_config),
 		return;
 	}
 
-	const char * whichECP = ecp_mp::common::Trajectory::toString(ecp_m_robot->robot_name).c_str();
+	const char * whichECP = lib::toString(ecp_m_robot->robot_name).c_str();
 
 	std::string filePath(mrrocpp_network_path);
 	std::string fileName = config.return_string_value("xml_file", "[xml_settings]");
@@ -229,7 +231,7 @@ void fsautomat::main_task_algorithm(void)
 	{
 		trjMap = loadTrajectories(fileName.c_str(), ecp_m_robot->robot_name);
 		printf("Lista %s zawiera: %d elementow\n",
-				ecp_mp::common::Trajectory::toString(ecp_m_robot->robot_name).c_str(),
+				lib::toString(ecp_m_robot->robot_name).c_str(),
 				trjMap->size());
 	}
 
@@ -292,7 +294,7 @@ void fsautomat::main_task_algorithm(void)
 			case ecp_mp::task::ECP_GEN_TFF_RUBIK_GRAB:
 			{
 				double gen_args[4];
-				int size = ecp_mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+				int size = lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				if(size > 3)
 					rgg->configure(gen_args[0], gen_args[1], (int)gen_args[2], (bool)gen_args[3]);
 				else
@@ -303,7 +305,7 @@ void fsautomat::main_task_algorithm(void)
 			case ecp_mp::task::ECP_GEN_TFF_RUBIK_FACE_ROTATE:
 			{
 				double gen_args[1];
-				ecp_mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+				lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				rfrg->configure(gen_args[0]);
 				rfrg->Move();
 				break;
@@ -311,7 +313,7 @@ void fsautomat::main_task_algorithm(void)
 			case ecp_mp::task::ECP_GEN_TFF_GRIPPER_APPROACH:
 			{
 				double gen_args[2];
-				ecp_mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+				lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				gag->configure(gen_args[0] , (int)gen_args[1]);
 				gag->Move();
 				break;
@@ -319,7 +321,7 @@ void fsautomat::main_task_algorithm(void)
 			case ecp_mp::task::ECP_TOOL_CHANGE_GENERATOR:
 			{
 				double gen_args[3];
-				ecp_mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+				lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				tcg->set_tool_parameters(gen_args[0], gen_args[1], gen_args[2]);
 				tcg->Move();
 				break;
@@ -327,7 +329,7 @@ void fsautomat::main_task_algorithm(void)
 			case ecp_mp::task::RCSC_GRIPPER_OPENING:
 			{
 				double gen_args[2];
-				ecp_mp::common::Trajectory::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+				lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				go_st->configure(gen_args[0], (int)gen_args[1]);
 				go_st->execute();
 				break;

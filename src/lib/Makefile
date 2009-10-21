@@ -37,6 +37,7 @@ LIBMRROCPP_OBJECTS = \
 	timer.o \
 	srlib.o \
 	playerpos_goal.o \
+	datastr.o \
 	$(MESSIP_OBJECTS)
 
 libmrrocpp.a: $(LIBMRROCPP_OBJECTS)

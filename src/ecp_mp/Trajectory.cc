@@ -9,6 +9,7 @@
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 
+#include "lib/datastr.h"
 #include "ecp_mp/Trajectory.h"
 
 namespace mrrocpp {
@@ -20,11 +21,11 @@ Trajectory::Trajectory()
 {
 }
 
-Trajectory::Trajectory(const char *numOfPoses, std::string trajectoryID, const char *poseSpecification)
+Trajectory::Trajectory(const char *numOfPoses, const std::string & trajectoryID, const char *poseSpecification)
 {
 	trjID = trajectoryID;
 	this->numOfPoses = (uint64_t)atoi(numOfPoses);
-	poseSpec = returnProperPS(poseSpecification);
+	poseSpec = lib::returnProperPS(poseSpecification);
 }
 
 Trajectory::Trajectory(const Trajectory &trajectory)
@@ -34,10 +35,6 @@ Trajectory::Trajectory(const Trajectory &trajectory)
 	poseSpec = trajectory.poseSpec;
 	trjPoses = trajectory.trjPoses;
 	trjPoses2 = trajectory.trjPoses2;
-}
-
-Trajectory::~Trajectory()
-{
 }
 
 void Trajectory::setTrjID(const char *trjID)
@@ -50,105 +47,6 @@ const char * Trajectory::getTrjID() const
 	return trjID.c_str();
 }
 
-lib::POSE_SPECIFICATION Trajectory::returnProperPS(const std::string & poseSpecification)
-{
-	if (poseSpecification == "MOTOR")
-	{	return lib::MOTOR;	}
-	if (poseSpecification == "JOINT")
-	{	return lib::JOINT;	}
-	if (poseSpecification == "XYZ_ANGLE_AXIS")
-	{	return lib::XYZ_ANGLE_AXIS;	}
-	if (poseSpecification == "XYZ_EULER_ZYZ")
-	{	return lib::XYZ_EULER_ZYZ;	}
-	else
-		return lib::INVALID_END_EFFECTOR;
-}
-
-int Trajectory::setValuesInArray(double arrayToFill[], const char *dataString)
-{
-	int index = 0;
-	char *value;
-	char *toSplit = strdup(dataString);
-
-	value = strtok(toSplit, " \t");
-	arrayToFill[index++] = atof(value);
-	while((value = strtok(NULL, " \t"))!=NULL)
-		arrayToFill[index++] = atof(value);
-
-	free(toSplit);
-
-	return index;
-}
-
-std::string Trajectory::toString(double valArr[], int length)
-{
-	std::ostringstream stm;
-	for(int i=0; i<length; i++)
-	{
-		if(i==0)
-			stm << valArr[i];
-		else
-			stm << "\t" << valArr[i];
-	}
-
-//	std::cout<<stm.str()<<std::endl;
-	return stm.str();
-}
-
-std::string Trajectory::toString(int numberOfPoses)
-{
-	std::ostringstream stm;
-
-	stm << numberOfPoses;
-
-	return stm.str();
-}
-
-std::string Trajectory::toString(lib::ROBOT_ENUM robot)
-{
-	using namespace lib;
-	switch (robot)
-	{
-		case ROBOT_IRP6_ON_TRACK:
-			return std::string("ROBOT_IRP6_ON_TRACK");
-		case ROBOT_IRP6_POSTUMENT:
-			return std::string("ROBOT_IRP6_POSTUMENT");
-		case ROBOT_CONVEYOR:
-			return std::string("ROBOT_CONVEYOR");
-		case ROBOT_SPEAKER:
-			return std::string("ROBOT_SPEAKER");
-		case ROBOT_IRP6_MECHATRONIKA:
-			return std::string("ROBOT_IRP6_MECHATRONIKA");
-		case ROBOT_ELECTRON:
-			return std::string("ROBOT_ELECTRON");
-		case ROBOT_FESTIVAL:
-			return std::string("ROBOT_FESTIVAL");
-		case ROBOT_HAND:
-			return std::string("ROBOT_HAND");
-		case ROBOT_SPEECHRECOGNITION:
-			return std::string("ROBOT_SPEECHRECOGNITION");
-		default:
-			return std::string("ROBOT_UNDEFINED");
-	}
-}
-
-std::string Trajectory::toString(lib::POSE_SPECIFICATION ps)
-{
-	switch (ps)
-	{
-		case lib::MOTOR:
-			return std::string("MOTOR");
-		case lib::JOINT:
-			return std::string("JOINT");
-		case lib::XYZ_ANGLE_AXIS:
-			return std::string("XYZ_ANGLE_AXIS");
-		case lib::XYZ_EULER_ZYZ:
-			return std::string("XYZ_EULER_ZYZ");
-		default:
-			return std::string("INVALID_END_EFFECTOR");
-	}
-}
-
 void Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIFICATION ps, std::list<ecp_mp::common::smooth_trajectory_pose> &poses)
 {
 	int posCount = poses.size();
@@ -159,16 +57,16 @@ void Trajectory::writeTrajectoryToXmlFile(const char *fileName, lib::POSE_SPECIF
 	doc = xmlNewDoc((const xmlChar *) "1.0");
 
 	doc->children = xmlNewDocNode(doc, NULL, (const xmlChar *) "Trajectory", NULL);
-	xmlSetProp(doc->children, (const xmlChar *) "coordinateType", (const xmlChar *) Trajectory::toString(ps).c_str());
-	xmlSetProp(doc->children, (const xmlChar *) "numOfPoses", (const xmlChar *) Trajectory::toString(posCount).c_str());
+	xmlSetProp(doc->children, (const xmlChar *) "coordinateType", (const xmlChar *) lib::toString(ps).c_str());
+	xmlSetProp(doc->children, (const xmlChar *) "numOfPoses", (const xmlChar *) lib::toString(posCount).c_str());
 	for(it = poses.begin(); it != poses.end(); ++it)
 	{
 		tree = xmlNewChild(doc->children, NULL, (const xmlChar *) "Pose", NULL);
-		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"StartVelocity", (const xmlChar *)Trajectory::toString((*it).v_p, MAX_SERVOS_NR).c_str());
-		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"EndVelocity", (const xmlChar *)Trajectory::toString((*it).v_k, MAX_SERVOS_NR).c_str());
-		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Velocity", (const xmlChar *)Trajectory::toString((*it).v, MAX_SERVOS_NR).c_str());
-		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Accelerations", (const xmlChar *)Trajectory::toString((*it).a, MAX_SERVOS_NR).c_str());
-		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Coordinates", (const xmlChar *)Trajectory::toString((*it).coordinates, MAX_SERVOS_NR).c_str());
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"StartVelocity", (const xmlChar *)lib::toString((*it).v_p, MAX_SERVOS_NR).c_str());
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"EndVelocity", (const xmlChar *)lib::toString((*it).v_k, MAX_SERVOS_NR).c_str());
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Velocity", (const xmlChar *)lib::toString((*it).v, MAX_SERVOS_NR).c_str());
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Accelerations", (const xmlChar *)lib::toString((*it).a, MAX_SERVOS_NR).c_str());
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Coordinates", (const xmlChar *)lib::toString((*it).coordinates, MAX_SERVOS_NR).c_str());
 	}
 	std::string file(fileName);
 	file+=".xml";
@@ -188,14 +86,14 @@ void Trajectory::writeTrajectoryToXmlFile2(const char *fileName, lib::POSE_SPECI
 	doc = xmlNewDoc((const xmlChar *) "1.0");
 
 	doc->children = xmlNewDocNode(doc, NULL, (const xmlChar *) "Trajectory", NULL);
-	xmlSetProp(doc->children, (const xmlChar *) "coordinateType", (const xmlChar *) Trajectory::toString(ps).c_str());
-	xmlSetProp(doc->children, (const xmlChar *) "numOfPoses", (const xmlChar *) Trajectory::toString(posCount).c_str());
+	xmlSetProp(doc->children, (const xmlChar *) "coordinateType", (const xmlChar *) lib::toString(ps).c_str());
+	xmlSetProp(doc->children, (const xmlChar *) "numOfPoses", (const xmlChar *) lib::toString(posCount).c_str());
 	for(it = poses.begin(); it != poses.end(); ++it)
 	{
 		tree = xmlNewChild(doc->children, NULL, (const xmlChar *) "Pose", NULL);
-		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Velocity", (const xmlChar *)Trajectory::toString((*it).v, MAX_SERVOS_NR).c_str());
-		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Accelerations", (const xmlChar *)Trajectory::toString((*it).a, MAX_SERVOS_NR).c_str());
-		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Coordinates", (const xmlChar *)Trajectory::toString((*it).coordinates, MAX_SERVOS_NR).c_str());
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Velocity", (const xmlChar *)lib::toString((*it).v, MAX_SERVOS_NR).c_str());
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Accelerations", (const xmlChar *)lib::toString((*it).a, MAX_SERVOS_NR).c_str());
+		subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Coordinates", (const xmlChar *)lib::toString((*it).coordinates, MAX_SERVOS_NR).c_str());
 	}
 	std::string file(fileName);
 	file+=".xml";
@@ -239,7 +137,7 @@ unsigned int Trajectory::getNumberOfPoses() const
 
 void Trajectory::setPoseSpecification(const char *poseSpecification)
 {
-	poseSpec = returnProperPS(poseSpecification);
+	poseSpec = lib::returnProperPS(poseSpecification);
 }
 
 lib::POSE_SPECIFICATION Trajectory::getPoseSpecification() const
@@ -249,7 +147,7 @@ lib::POSE_SPECIFICATION Trajectory::getPoseSpecification() const
 
 void Trajectory::setStartVelocities(const char *startVelocities)
 {
-	setValuesInArray(actPose->v_p, startVelocities);
+	lib::setValuesInArray(actPose->v_p, startVelocities);
 }
 
 double * Trajectory::getStartVelocities() const
@@ -259,7 +157,7 @@ double * Trajectory::getStartVelocities() const
 
 void Trajectory::setEndVelocities(const char *endVelocities)
 {
-	setValuesInArray(actPose->v_k, endVelocities);
+	lib::setValuesInArray(actPose->v_k, endVelocities);
 }
 
 double * Trajectory::getEndVelocities() const
@@ -269,7 +167,7 @@ double * Trajectory::getEndVelocities() const
 
 void Trajectory::setVelocities(const char *Velocities)
 {
-	setValuesInArray(actPose->v, Velocities);
+	lib::setValuesInArray(actPose->v, Velocities);
 }
 
 double * Trajectory::getVelocities() const
@@ -279,7 +177,7 @@ double * Trajectory::getVelocities() const
 
 void Trajectory::setAccelerations(const char *accelerations)
 {
-	setValuesInArray(actPose->a, accelerations);
+	lib::setValuesInArray(actPose->a, accelerations);
 }
 
 double * Trajectory::getAccelerations() const
@@ -289,7 +187,7 @@ double * Trajectory::getAccelerations() const
 
 void Trajectory::setVelocities2(const char *Velocities)//for smooth2
 {
-	setValuesInArray(actPose2->v, Velocities);
+	lib::setValuesInArray(actPose2->v, Velocities);
 }
 
 double * Trajectory::getVelocities2() const//for smooth2
@@ -299,7 +197,7 @@ double * Trajectory::getVelocities2() const//for smooth2
 
 void Trajectory::setAccelerations2(const char *accelerations)//for smooth2
 {
-	setValuesInArray(actPose2->a, accelerations);
+	lib::setValuesInArray(actPose2->a, accelerations);
 }
 
 double * Trajectory::getAccelerations2() const//for smooth2
@@ -309,7 +207,7 @@ double * Trajectory::getAccelerations2() const//for smooth2
 
 void Trajectory::setCoordinates(const char *cCoordinates)
 {
-	setValuesInArray(actPose->coordinates, cCoordinates);
+	lib::setValuesInArray(actPose->coordinates, cCoordinates);
 }
 
 double * Trajectory::getCoordinates() const
@@ -319,7 +217,7 @@ double * Trajectory::getCoordinates() const
 
 void Trajectory::setCoordinates2(const char *cCoordinates)//for smooth2
 {
-	setValuesInArray(actPose2->coordinates, cCoordinates);
+	lib::setValuesInArray(actPose2->coordinates, cCoordinates);
 }
 
 double * Trajectory::getCoordinates2() const//for smooth2

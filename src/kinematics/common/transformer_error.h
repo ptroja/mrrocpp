@@ -59,7 +59,6 @@ public:
         NonFatal_error_4 (uint64_t err_no);
         // przekazywanego procedurze obslugi wyjatku
     };
-
 };
 
 } // namespace common
