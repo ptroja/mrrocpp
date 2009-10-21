@@ -52,18 +52,18 @@ class task: public ecp_mp::task::task
 		    NEW_UI_OR_ECP_PULSE
 		} WAIT_FOR_NEW_PULSE_MODE;
 
-		void set_next_playerpos_goal (lib::ROBOT_ENUM robot_l, const lib::playerpos_goal_t &goal);
+		void set_next_playerpos_goal (lib::robot_name_t robot_l, const lib::playerpos_goal_t &goal);
 
 		void set_next_ecps_state (int l_state, int l_variant, const char* l_string, int number_of_robots, ... );
 
 		void send_end_motion_to_ecps (int number_of_robots, ... );
-		void send_end_motion_to_ecps (int number_of_robots, lib::ROBOT_ENUM *properRobotsSet);
+		void send_end_motion_to_ecps (int number_of_robots, lib::robot_name_t *properRobotsSet);
 
 		void run_extended_empty_gen (bool activate_trigger, int number_of_robots, ... );
 		void run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
 		(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ... );
 		void run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-		(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::ROBOT_ENUM *robotsToMove, lib::ROBOT_ENUM *robotsWaitingForTaskTermination);
+		(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::robot_name_t *robotsToMove, lib::robot_name_t *robotsWaitingForTaskTermination);
 
 		void wait_ms (int _ms_delay); // zamiast delay
 

@@ -33,7 +33,7 @@ namespace edp {
 namespace common {
 
 /*--------------------------------------------------------------------------*/
-effector::effector(lib::configurator &_config, lib::ROBOT_ENUM l_robot_name) :
+effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 	config(_config), robot_name(l_robot_name)
 {
 

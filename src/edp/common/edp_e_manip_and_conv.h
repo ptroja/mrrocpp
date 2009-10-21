@@ -208,7 +208,7 @@ public:
     reader_buffer rb_obj;
     master_trans_t_buffer mt_tt_obj;
 
-    manip_and_conv_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name);       // konstruktor
+    manip_and_conv_effector (lib::configurator &_config, lib::robot_name_t l_robot_name);       // konstruktor
     virtual ~manip_and_conv_effector();
 
     virtual void set_rmodel (lib::c_buffer &instruction) = 0;                    // zmiana narzedzia

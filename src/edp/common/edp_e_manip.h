@@ -156,7 +156,7 @@ protected:
     // manipulatora wzgledem ukladu bazowego (polozenie w mm)
 
 public:
-    manip_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name );       // konstruktor
+    manip_effector (lib::configurator &_config, lib::robot_name_t l_robot_name );       // konstruktor
 
     void synchronise (); // synchronizacja robota
     void get_controller_state (lib::c_buffer &instruction); // synchronizacja robota

@@ -163,7 +163,7 @@ struct ECP_message
 	/*! Type of message. */
 	ECP_TO_UI_COMMAND ecp_message;
 	/*! Robot name. */
-	ROBOT_ENUM robot_name;
+	robot_name_t robot_name;
 	/*! Number of options - from 2 to 4 - - for CHOOSE_OPTION mode. */
 	uint8_t nr_of_options;
 

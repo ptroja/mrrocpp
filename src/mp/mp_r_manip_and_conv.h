@@ -13,7 +13,7 @@ class manip_and_conv : public robot
 		bool has_gripper;
 
 	public:
-		manip_and_conv (lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::task &mp_object_l);
+		manip_and_conv (lib::robot_name_t l_robot_name, const char* _section_name, task::task &mp_object_l);
 
 		virtual void create_next_pose_command (void);
 

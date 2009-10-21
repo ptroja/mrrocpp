@@ -28,8 +28,8 @@ class robot;
 
 namespace common {
 
-typedef std::pair<const lib::ROBOT_ENUM, robot::robot*> robot_pair_t;
-typedef std::map <lib::ROBOT_ENUM, robot::robot*> robots_t;
+typedef std::pair<const lib::robot_name_t, robot::robot*> robot_pair_t;
+typedef std::map <lib::robot_name_t, robot::robot*> robots_t;
 
 // ---------------------------------------------------------------
 class MP_main_error

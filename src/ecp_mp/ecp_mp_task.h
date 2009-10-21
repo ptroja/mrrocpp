@@ -87,7 +87,7 @@ public:
 	};
 
 	ecp_mp::common::Trajectory * createTrajectory(xmlNodePtr actNode, xmlChar *stateID);
-	trajectories_t * loadTrajectories(const char * fileName, lib::ROBOT_ENUM propRobot);
+	trajectories_t * loadTrajectories(const char * fileName, lib::robot_name_t propRobot);
 };
 
 // ---------------------------------------------------------------

@@ -201,7 +201,7 @@ void task::create_robots()
 }
 
 // metody do obslugi najczesniej uzywanych generatorow
-void task::set_next_playerpos_goal (lib::ROBOT_ENUM robot_l, const lib::playerpos_goal_t &goal)
+void task::set_next_playerpos_goal (lib::robot_name_t robot_l, const lib::playerpos_goal_t &goal)
 {
 	// setting the next ecps state
 	generator::set_next_ecps_state mp_snes_gen(*this);
@@ -220,12 +220,12 @@ void task::set_next_ecps_state (int l_state, int l_variant, const char* l_string
 	generator::set_next_ecps_state mp_snes_gen (*this);
 
 	va_list arguments;                     // A place to store the list of arguments
-	lib::ROBOT_ENUM robot_l;
+	lib::robot_name_t robot_l;
 
 	va_start ( arguments, number_of_robots );           // Initializing arguments to store all values after num
 	for ( int x = 0; x < number_of_robots; x++ )        // Loop until all numbers are added
 	{
-		robot_l = (lib::ROBOT_ENUM) (va_arg ( arguments, int )); // Adds the next value in argument list to sum.
+		robot_l = (lib::robot_name_t) (va_arg ( arguments, int )); // Adds the next value in argument list to sum.
 		mp_snes_gen.robot_m[robot_l] = robot_m[robot_l];
 	}
 	va_end ( arguments );                  // Cleans up the list
@@ -249,12 +249,12 @@ void task::send_end_motion_to_ecps (int number_of_robots, ... )
 	generator::send_end_motion_to_ecps mp_semte_gen (*this);
 
 	va_list arguments;                     // A place to store the list of arguments
-	lib::ROBOT_ENUM robot_l;
+	lib::robot_name_t robot_l;
 
 	va_start ( arguments, number_of_robots );           // Initializing arguments to store all values after num
 	for ( int x = 0; x < number_of_robots; x++ )        // Loop until all numbers are added
 	{
-		robot_l = (lib::ROBOT_ENUM) (va_arg ( arguments, int )); // Adds the next value in argument list to sum.
+		robot_l = (lib::robot_name_t) (va_arg ( arguments, int )); // Adds the next value in argument list to sum.
 		mp_semte_gen.robot_m[robot_l] = robot_m[robot_l];
 	}
 	va_end ( arguments );                  // Cleans up the list
@@ -263,11 +263,11 @@ void task::send_end_motion_to_ecps (int number_of_robots, ... )
 }
 
 // send_end_motion
-void task::send_end_motion_to_ecps (int number_of_robots, lib::ROBOT_ENUM *properRobotsSet)
+void task::send_end_motion_to_ecps (int number_of_robots, lib::robot_name_t *properRobotsSet)
 {
 	generator::send_end_motion_to_ecps mp_semte_gen (*this);
 
-	lib::ROBOT_ENUM robot_l;
+	lib::robot_name_t robot_l;
 
 	for ( int x = 0; x < number_of_robots; x++ )        // Loop until all numbers are added
 	{
@@ -283,12 +283,12 @@ void task::run_extended_empty_gen (bool activate_trigger, int number_of_robots, 
 	generator::extended_empty mp_ext_empty_gen (*this);
 
 	va_list arguments;                     // A place to store the list of arguments
-	lib::ROBOT_ENUM robot_l;
+	lib::robot_name_t robot_l;
 
 	va_start ( arguments, number_of_robots );           // Initializing arguments to store all values after num
 	for ( int x = 0; x < number_of_robots; x++ )        // Loop until all numbers are added
 	{
-		robot_l = (lib::ROBOT_ENUM) (va_arg ( arguments, int )); // Adds the next value in argument list to sum.
+		robot_l = (lib::robot_name_t) (va_arg ( arguments, int )); // Adds the next value in argument list to sum.
 		mp_ext_empty_gen.robot_m[robot_l] = robot_m[robot_l];
 	}
 	va_end ( arguments );                  // Cleans up the list
@@ -312,14 +312,14 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 
 	// na podstawie argumentow wywolania biezacej metody
 	va_list arguments;    // A place to store the list of arguments
-	lib::ROBOT_ENUM robot_l;
+	lib::robot_name_t robot_l;
 
 	// przypisanie robotow do zbiorow robots_to_move i robots_to_wait_for_task_termination, eliminacja robotow ktorych nie ma w systemie
 	va_start ( arguments, number_of_robots_to_wait_for_task_termin);
 	// najpierw zbior robots_to_move...
 	for ( int x = 0; x < number_of_robots_to_move; x++ )        // Loop until all numbers are added
 	{
-		robot_l = (lib::ROBOT_ENUM) (va_arg ( arguments, int )); // Adds the next value in argument list to sum.
+		robot_l = (lib::robot_name_t) (va_arg ( arguments, int )); // Adds the next value in argument list to sum.
 
 		if (robot_m.count(robot_l) == 0)
 		{
@@ -331,7 +331,7 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 	// ...potem zbior robots_to_wait_for_task_termination
 	for ( int x = 0; x < number_of_robots_to_wait_for_task_termin; x++ )        // Loop until all numbers are added
 	{
-		robot_l = (lib::ROBOT_ENUM) (va_arg ( arguments, int )); // Adds the next value in argument list to sum.
+		robot_l = (lib::robot_name_t) (va_arg ( arguments, int )); // Adds the next value in argument list to sum.
 		if (robot_m.count(robot_l) == 0)
 		{
 			sr_ecp_msg->message ("run_..._for_set_of_robots_... usunieto nadmiarowe roboty 2");
@@ -400,7 +400,7 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 }
 
 void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots
-(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::ROBOT_ENUM *robotsToMove, lib::ROBOT_ENUM *robotsWaitingForTaskTermination)
+(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::robot_name_t *robotsToMove, lib::robot_name_t *robotsWaitingForTaskTermination)
 {
 	// CZYNNOSCI WSTEPNE
 	// utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
@@ -413,7 +413,7 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 
 	// na podstawie argumentow wywolania biezacej metody
 	//va_list arguments;    // A place to store the list of arguments
-	lib::ROBOT_ENUM robot_l;
+	lib::robot_name_t robot_l;
 
 	// przypisanie robotow do zbiorow robots_to_move i robots_to_wait_for_task_termination, eliminacja robotow ktorych nie ma w systemie
 	//va_start ( arguments, number_of_robots_to_wait_for_task_termin);

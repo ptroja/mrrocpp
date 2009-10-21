@@ -31,7 +31,7 @@ namespace edp {
 namespace common {
 
 /*--------------------------------------------------------------------------*/
-manip_effector::manip_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name) :
+manip_effector::manip_effector (lib::configurator &_config, lib::robot_name_t l_robot_name) :
         manip_and_conv_effector (_config, l_robot_name)
 {}
 

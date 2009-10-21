@@ -328,7 +328,7 @@ ecp_mp::common::Trajectory * task::createTrajectory(xmlNodePtr actNode, xmlChar 
 	return actTrajectory;
 }
 
-task::trajectories_t * task::loadTrajectories(const char * fileName, lib::ROBOT_ENUM propRobot)
+task::trajectories_t * task::loadTrajectories(const char * fileName, lib::robot_name_t propRobot)
 {
 	// Stworzenie sciezki do pliku.
 	std::string filePath(mrrocpp_network_path);

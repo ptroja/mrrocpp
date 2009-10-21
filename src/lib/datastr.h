@@ -21,9 +21,9 @@ namespace lib {
 std::string toString(double valArr[], int length);
 std::string toString(int numberOfPoses);
 std::string toString(lib::POSE_SPECIFICATION ps);
-std::string toString(lib::ROBOT_ENUM robot);
+std::string toString(lib::robot_name_t robot);
 
-lib::ROBOT_ENUM returnProperRobot(const std::string & robotName);
+lib::robot_name_t returnProperRobot(const std::string & robotName);
 lib::POSE_SPECIFICATION returnProperPS(const std::string & poseSpecification);
 
 int setValuesInArray(double arrayToFill[], const char *dataString);

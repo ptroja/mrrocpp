@@ -82,10 +82,10 @@ State::RobotSets::RobotSets(const RobotSets &robotSets)
 {
 	this->firstSetCount = robotSets.firstSetCount;
 	this->secondSetCount = robotSets.secondSetCount;
-	this->firstSet = new lib::ROBOT_ENUM[firstSetCount];
+	this->firstSet = new lib::robot_name_t[firstSetCount];
 	for(int i = 0; i<firstSetCount; i++)
 		this->firstSet[i] = robotSets.firstSet[i];
-	this->secondSet = new lib::ROBOT_ENUM[secondSetCount];
+	this->secondSet = new lib::robot_name_t[secondSetCount];
 	for(int i = 0; i<secondSetCount; i++)
 		this->secondSet[i] = robotSets.secondSet[i];
 }
@@ -150,7 +150,7 @@ void State::setRobot(const char *robot)
 
 //-----------------------------------------------------------------------------------------------------------
 
-lib::ROBOT_ENUM State::getRobot() const
+lib::robot_name_t State::getRobot() const
 {
 	return robot;
 }

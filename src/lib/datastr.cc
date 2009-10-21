@@ -39,7 +39,7 @@ std::string toString(int numberOfPoses)
 	return stm.str();
 }
 
-std::string toString(lib::ROBOT_ENUM robot)
+std::string toString(lib::robot_name_t robot)
 {
 	using namespace lib;
 	switch (robot)
@@ -86,7 +86,7 @@ std::string toString(lib::POSE_SPECIFICATION ps)
 
 //-----------------------------------------------------------------------------------------------------------
 
-lib::ROBOT_ENUM returnProperRobot(const std::string & robotName)
+lib::robot_name_t returnProperRobot(const std::string & robotName)
 {
 	if(robotName == "ROBOT_IRP6_ON_TRACK")
 		return lib::ROBOT_IRP6_ON_TRACK;

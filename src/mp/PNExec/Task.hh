@@ -36,7 +36,7 @@ class Task {
 	private:
 		TASK_TYPE type;
 
-		mrrocpp::lib::ROBOT_ENUM robot_name;
+		mrrocpp::lib::robot_name_t robot_name;
 };
 
 class ExecTask : public Task {

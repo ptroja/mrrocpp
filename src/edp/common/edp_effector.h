@@ -64,7 +64,7 @@ public:
     messip_channel_t *attach;
 #endif /* USE_MESSIP_SRR */
 
-    effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name);
+    effector (lib::configurator &_config, lib::robot_name_t l_robot_name);
     virtual ~effector();
 
     lib::controller_state_t controller_state_edp_buf; // do okreslenia stanu robota
@@ -98,7 +98,7 @@ public:
     lib::ecp_command_buffer new_ecp_command;
     lib::c_buffer new_instruction, current_instruction;
 
-    const lib::ROBOT_ENUM robot_name;
+    const lib::robot_name_t robot_name;
 
     lib::POSE_SPECIFICATION previous_set_arm_type; // by Y poprzedni sposob zadawania pozycji
 };

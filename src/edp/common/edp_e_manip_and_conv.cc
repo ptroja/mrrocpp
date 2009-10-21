@@ -43,7 +43,7 @@ namespace common {
 
 
 /*--------------------------------------------------------------------------*/
-manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, lib::ROBOT_ENUM l_robot_name) :
+manip_and_conv_effector::manip_and_conv_effector (lib::configurator &_config, lib::robot_name_t l_robot_name) :
         effector (_config, l_robot_name), manager(),
 #ifndef __QNXNTO__
         servo_command_rdy(false), sg_reply_rdy(false),

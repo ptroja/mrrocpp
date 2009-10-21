@@ -36,8 +36,8 @@ class State
 
 			int firstSetCount;
 			int secondSetCount;
-			lib::ROBOT_ENUM *firstSet;
-			lib::ROBOT_ENUM *secondSet;
+			lib::robot_name_t *firstSet;
+			lib::robot_name_t *secondSet;
 		};
 
 		void setStateID(const char *stateID);
@@ -50,7 +50,7 @@ class State
 		const char * getType() const;
 
 		void setRobot(const char *robot);
-		lib::ROBOT_ENUM getRobot() const;
+		lib::robot_name_t getRobot() const;
 
 		void setGeneratorType(std::string genType);
 		ecp_mp::task::STATE_MACHINE_ECP_STATES getGeneratorType() const;
@@ -72,7 +72,7 @@ class State
 		int numArgument;
 		char *id;
 		char *type;
-		lib::ROBOT_ENUM robot;
+		lib::robot_name_t robot;
 		ecp_mp::task::STATE_MACHINE_ECP_STATES generatorType;
 		char *stringArgument;
 		std::list<Transition> *stateTransitions;

@@ -9,7 +9,7 @@ namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-manip_and_conv::manip_and_conv(lib::ROBOT_ENUM l_robot_name, const char* _section_name, task::task &mp_object_l) :
+manip_and_conv::manip_and_conv(lib::robot_name_t l_robot_name, const char* _section_name, task::task &mp_object_l) :
 	robot(l_robot_name, _section_name, mp_object_l), servos_number(0), has_gripper(false)
 {
 	switch (l_robot_name) {

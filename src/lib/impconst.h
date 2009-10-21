@@ -41,7 +41,7 @@ typedef double frame_tab[3][4];
 
 // by Y - ROBOTY
 
-enum ROBOT_ENUM {
+typedef enum _ROBOT_ENUM {
 	ROBOT_UNDEFINED,
 	ROBOT_IRP6_ON_TRACK,
 	ROBOT_IRP6_POSTUMENT,
@@ -53,7 +53,7 @@ enum ROBOT_ENUM {
 	ROBOT_FESTIVAL,
 	ROBOT_HAND,
 	ROBOT_SPEECHRECOGNITION
-};
+} robot_name_t;
 
 enum FORCE_SENSOR_ENUM {
 	FORCE_SENSOR_ATI3084,

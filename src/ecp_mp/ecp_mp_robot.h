@@ -141,9 +141,9 @@ struct robot_transmission_data
 class robot
 {
 public:
-	const lib::ROBOT_ENUM robot_name; // by Y - nazwa robota (track, postument etc.)
+	const lib::robot_name_t robot_name; // by Y - nazwa robota (track, postument etc.)
 
-	robot(lib::ROBOT_ENUM _robot_name);
+	robot(lib::robot_name_t _robot_name);
 };
 
 } // namespace ecp_mp
