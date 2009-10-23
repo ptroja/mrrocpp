@@ -61,7 +61,7 @@ void catch_signal(int sig) {
   switch(sig) {
 	case SIGTERM :
 	  TERMINATE = true;
-	  vs->terminate();
+	  delete vs;
 	  _exit(EXIT_SUCCESS);
 	  break;
 	case SIGSEGV:
@@ -132,7 +132,7 @@ void write_to_sensor(lib::VSP_COMMAND i_code){
 			vs->get_reading();
 			break;
 		case lib::VSP_TERMINATE :
-			vs->terminate();
+			delete vs;
 			 TERMINATE=true;
 			break;
 		default :

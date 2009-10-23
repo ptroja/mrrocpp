@@ -67,8 +67,8 @@ void catch_signal(int sig) {
   switch(sig) {
 	case SIGTERM :
 	  TERMINATE = true;
-	  vsp::common::vs->terminate();
 	  vsp::common::vs->sr_msg->message ("VSP terminated");
+	  delete vsp::common::vs;
 	  _exit(EXIT_SUCCESS);
 	  break;
 	case SIGSEGV:
@@ -168,7 +168,7 @@ void write_to_sensor( lib::VSP_COMMAND i_code){
 			vsp::common::vs->get_reading();
 			break;
 		case lib::VSP_TERMINATE :
-			vsp::common::vs->terminate();
+			delete vsp::common::vs;
 			TERMINATE=true;
 			break;
 		default :

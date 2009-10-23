@@ -45,7 +45,7 @@ void catch_signal(int sig) {
   switch(sig) {
 	case SIGTERM :
 	  TERMINATE = true;
-	  vs->terminate();
+	  delete vs;
 	  _exit(EXIT_SUCCESS);
 	  break;
 	case SIGSEGV:
@@ -160,7 +160,7 @@ int main(int argc, char *argv[]) {
 						vsp::common::vs->get_reading();
 						break;
 					case lib::VSP_TERMINATE :
-						vsp::common::vs->terminate();
+						delete vsp::common::vs;
 						vsp::common::TERMINATE=true;
 						break;
 					default :

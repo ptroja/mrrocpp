@@ -77,7 +77,7 @@ void catch_signal(int sig) {
 	  printf("vsp sig term\n");
 	  flushall();
 	  sem_post( &(new_command_sem));
-	  vs->terminate();
+	  delete vs;
 	  _exit(EXIT_SUCCESS);
 	  break;
 	case SIGSEGV:
@@ -229,7 +229,7 @@ void write_to_sensor( lib::VSP_COMMAND i_code){
 			return;
 		case lib::VSP_TERMINATE :
 			vs->from_vsp.vsp_report= lib::VSP_REPLY_OK;
-			vs->terminate();
+			delete vs;
 			TERMINATE=true;
 			sem_post( &(new_command_sem));
 			return;
