@@ -375,8 +375,8 @@ messip_connect0(const char *mgr_ref,
 		}
 		else
 		{
-			fprintf( stderr, "%s %d:\n\tUnable to connect to host %s, port %d\n",
-			   __FILE__, __LINE__, hostname, port );
+			fprintf( stderr, "%s %d:\n\tUnable to connect to host %s (%s), port %d\n",
+			   __FILE__, __LINE__, hostname, inet_ntoa(server.sin_addr), port );
 			close( cnx->sockfd );
 			free( cnx );
 			return NULL;
@@ -384,8 +384,8 @@ messip_connect0(const char *mgr_ref,
 	}
 	else if ( status )			// if
 	{
-		fprintf( stderr, "%s %d:\n\tUnable to connect to host %s, port %d\n",
-		   __FILE__, __LINE__, hostname, port );
+		fprintf( stderr, "%s %d:\n\tUnable to connect to host %s (%s), port %d\n",
+		   __FILE__, __LINE__, hostname, inet_ntoa(server.sin_addr), port );
 		close( cnx->sockfd );
 		free( cnx );
 		return NULL;
@@ -528,8 +528,8 @@ messip_sin( char *mgr_ref )
 	status = connect( sockfd, ( const struct sockaddr * ) &server, sizeof( server ) );
 	if ( status == -1 )
 	{
-		fprintf( stderr, "%s %d:\n\tUnable to connect to host %s, port %d\n",
-		   __FILE__, __LINE__, hostname, port );
+		fprintf( stderr, "%s %d:\n\tUnable to connect to host %s (%s), port %d\n",
+		   __FILE__, __LINE__, hostname, inet_ntoa(server.sin_addr), port );
 		if ( close( sockfd ) == -1 )
 			fprintf( stderr, "Error %d while closing socket %d\n",
 				errno, sockfd );
