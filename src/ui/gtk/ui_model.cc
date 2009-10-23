@@ -8,6 +8,8 @@
 #include "lib/configurator.h"
 
 ui_model * ui_model::pointerToTheSingletonInstance = NULL;
+
+// TODO: rewrite to boost::mutex
 pthread_mutex_t ui_model::mtx = PTHREAD_MUTEX_INITIALIZER;
 
 ui_config_entry & ui_model::getNodeByPath(GtkTreePath *path) {

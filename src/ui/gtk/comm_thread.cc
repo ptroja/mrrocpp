@@ -20,7 +20,6 @@ void *comm_thread(void* arg)
 
 	// TODO: config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", "[ui]")
 	if ((ch = messip_channel_create(NULL, "ui", MESSIP_NOTIMEOUT, 0)) == NULL) {
-		perror("messip_channel_create()");
 		return NULL;
 	}
 

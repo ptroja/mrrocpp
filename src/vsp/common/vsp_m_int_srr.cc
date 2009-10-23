@@ -125,7 +125,6 @@ int main(int argc, char *argv[]) {
 		vsp::common::vs = vsp::sensor::return_created_sensor(*_config);
 
 		if ((ch = messip_channel_create(NULL, attach_point.c_str(), MESSIP_NOTIMEOUT, 0)) == NULL) {
-			perror("messip_channel_create()");
 		}
 
 		/* start the resource manager message loop */

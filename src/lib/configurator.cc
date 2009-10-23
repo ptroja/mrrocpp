@@ -64,7 +64,6 @@ configurator::configurator (
 
 #ifdef USE_MESSIP_SRR
 	if ((ch = messip_channel_connect(NULL, CONFIGSRV_CHANNEL_NAME, MESSIP_NOTIMEOUT)) == NULL) {
-		perror("messip_channel_connect()");
 	}
 	assert(ch);
 #else

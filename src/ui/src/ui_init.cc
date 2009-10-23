@@ -154,7 +154,6 @@ void *sr_thread(void* arg)
 	messip_channel_t *ch;
 
 	if ((ch = messip_channel_create(NULL, ui_state.sr_attach_point, MESSIP_NOTIMEOUT, 0)) == NULL) {
-		perror("messip_channel_create()");
 		return NULL;
 	}
 
