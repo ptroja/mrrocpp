@@ -42,12 +42,6 @@ namespace task {
 
 lib::sr_ecp* task::sr_ecp_msg = NULL;
 
-// mapa wszystkich czujnikow
-sensors_t task::sensor_m;
-
-// mapa wszystkich transmitterów
-transmitters_t task::transmitter_m;
-
 task::task(lib::configurator &_config)
 	: config(_config)
 {

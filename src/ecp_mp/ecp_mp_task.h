@@ -40,10 +40,10 @@ public:
 	virtual ~task();
 
 	// mapa wszystkich czujnikow
-	static sensors_t sensor_m;
+	sensors_t sensor_m;
 
 	// mapa wszystkich transmiterow
-	static transmitters_t transmitter_m;
+	transmitters_t transmitter_m;
 
 	static lib::sr_ecp* sr_ecp_msg; // TODO: rename from _ecp_ (?!)
 
