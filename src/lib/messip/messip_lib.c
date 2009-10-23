@@ -580,8 +580,8 @@ select_handler( select_context_t *ctp, int fd,
 }
 #endif /* USE_QNXMSG */
 
-messip_channel_t *
-messip_channel_create( messip_cnx_t * cnx,
+static messip_channel_t *
+messip_channel_create0( messip_cnx_t * cnx,
    const char *name,
    int32_t msec_timeout,
    int32_t maxnb_msg_buffered )
@@ -608,6 +608,10 @@ messip_channel_create( messip_cnx_t * cnx,
 	if (cnx == NULL) {
 		(void) pthread_once(&messip_cnx_is_initialized, messip_cnx_init);
 		cnx = messip_cnx_private;
+	}
+
+	if (!cnx) {
+		return NULL;
 	}
 
 	/*--- Create socket ---*/
@@ -810,9 +814,22 @@ messip_channel_create( messip_cnx_t * cnx,
 	return ch;
 }								// messip_channel_create
 
+messip_channel_t *
+messip_channel_create( messip_cnx_t * cnx,
+   const char *name,
+   int32_t msec_timeout,
+   int32_t maxnb_msg_buffered )
+{
+	messip_channel_t *ret;
+	pthread_mutex_lock(&messip_cnx_mutex);
+	ret = messip_channel_create0(cnx, name, msec_timeout, maxnb_msg_buffered);
+	pthread_mutex_unlock(&messip_cnx_mutex);
+	return ret;
+}
 
-int
-messip_channel_delete( messip_channel_t * ch,
+
+static int
+messip_channel_delete0( messip_channel_t * ch,
    int32_t msec_timeout )
 {
 	int status;
@@ -936,8 +953,18 @@ messip_channel_delete( messip_channel_t * ch,
 
 }								// messip_channel_delete
 
+int
+messip_channel_delete( messip_channel_t * ch,
+   int32_t msec_timeout )
+{
+	int ret;
+	pthread_mutex_lock(&messip_cnx_mutex);
+	ret = messip_channel_delete0(ch, msec_timeout);
+	pthread_mutex_unlock(&messip_cnx_mutex);
+	return ret;
+}
 
-messip_channel_t *
+static messip_channel_t *
 messip_channel_connect0( messip_cnx_t * cnx,
    const char *name,
    int32_t msec_timeout )
@@ -961,6 +988,10 @@ messip_channel_connect0( messip_cnx_t * cnx,
 	if (cnx == NULL) {
 		(void) pthread_once(&messip_cnx_is_initialized, messip_cnx_init);
 		cnx = messip_cnx_private;
+	}
+
+	if (!cnx) {
+		return NULL;
 	}
 
 	/*--- Ready to write ? ---*/
@@ -1169,8 +1200,8 @@ messip_channel_connect( messip_cnx_t * cnx,
 	return ret;
 }
 
-int
-messip_channel_disconnect( messip_channel_t * ch,
+static int
+messip_channel_disconnect0( messip_channel_t * ch,
    int32_t msec_timeout )
 {
 	int status;
@@ -1324,6 +1355,17 @@ messip_channel_disconnect( messip_channel_t * ch,
 	return reply.ok;
 
 }								// messip_channel_disconnect
+
+int
+messip_channel_disconnect( messip_channel_t * ch,
+   int32_t msec_timeout )
+{
+	int ret;
+	pthread_mutex_lock(&messip_cnx_mutex);
+	ret = messip_channel_disconnect0(ch, msec_timeout);
+	pthread_mutex_unlock(&messip_cnx_mutex);
+	return ret;
+}
 
 
 int
