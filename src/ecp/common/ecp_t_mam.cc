@@ -64,11 +64,6 @@ void mam::catch_signal(int sig)
 		case SIGTERM:
 			// Zakonczenie pracy watkow.
 			TERMINATE = true;
-			// Koniec pracy czujnikow.
-			(((mam*)ecp_t))->sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR]->terminate();
-			// Zwolnienie pamieci - czujnik.
-			delete(((mam*)ecp_t)->sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR]);
-
 			// Zwolnienie pamieci - generator.
 			delete(mam_gen);
 			// Zwolnienie pamieci - robot.

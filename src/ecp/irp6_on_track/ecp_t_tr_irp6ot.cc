@@ -75,14 +75,6 @@ void tr::catch_signal(int sig)
 		case SIGTERM:
 			// Zakonczenie pracy watkow.
 			TERMINATE = true;
-			// Koniec pracy czujnikow.
-			common::ecp_t->sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR]->terminate();
-			// Koniec pracy czujnika.
-			if (common::ecp_t->sensor_m.count(lib::SENSOR_FORCE_ON_TRACK)>0)
-				common::ecp_t->sensor_m[lib::SENSOR_FORCE_ON_TRACK]->terminate();
-			// Zwolnienie pamieci - czujniki.
-			delete(common::ecp_t->sensor_m[lib::SENSOR_FORCE_ON_TRACK]);
-			delete(common::ecp_t->sensor_m[lib::SENSOR_DIGITAL_SCALE_SENSOR]);
 			// Zwolnienie pamieci - generator.
 			delete(trg);
 			// Zwolnienie pamieci - warunek.

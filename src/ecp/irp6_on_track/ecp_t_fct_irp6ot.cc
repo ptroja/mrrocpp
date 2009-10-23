@@ -64,11 +64,6 @@ void fct::catch_signal(int sig)
 		case SIGTERM:
 			// Zakonczenie pracy watkow.
 			TERMINATE = true;
-			// Koniec pracy czujnika.
-			if (sensor_m.count(lib::SENSOR_FORCE_ON_TRACK)>0)
-				sensor_m[lib::SENSOR_FORCE_ON_TRACK]->terminate();
-			// Zwolnienie pamieci - czujnik.
-			delete(sensor_m[lib::SENSOR_FORCE_ON_TRACK]);
 			// Zwolnienie pamieci - generator.
 			delete(fctg);
 			// Zwolnienie pamieci - robot.
