@@ -32,6 +32,11 @@ class robot : public ecp_mp::robot
     // Kazdy robot konkretny (wyprowadzony z klasy bazowej)
     // musi zawierac pola danych (skladowe) dotyczace
     // ostatnio zrealizowanej pozycji oraz pozycji zadanej
+private:
+    //! deskryptor wezla na ktorym jest powolane ECP oraz jego PID
+    uint32_t nd;
+    pid_t ECP_pid;
+
 protected:
     lib::MP_COMMAND_PACKAGE mp_command;      // Bufor z rozkazem dla ECP
     // - uzytkownik nie powinien z tego korzystac
@@ -44,10 +49,6 @@ public:
     bool communicate; // okresla czy robot ma byc obslugiwany w Move
 
     lib::sr_ecp &sr_ecp_msg;    // obiekt do komunikacji z SR
-
-    //! deskryptor wezla na ktorym jest powolane ECP oraz jego PID (dla mp_task::kill_all_ECP)
-    uint32_t nd;
-    pid_t ECP_pid;
 
 #if !defined(USE_MESSIP_SRR)
     //! main ECP request channel

@@ -9,8 +9,6 @@
 #include "ecp/common/ECP_main_error.h"
 #include "ecp/common/ecp_teach_in_generator.h"
 
-
-
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -25,6 +23,7 @@ task::task(lib::configurator &_config) :
 
 task::~task()
 {
+	// TODO: do reverse to initialize_communication()
 }
 
 bool task::pulse_check()
@@ -103,7 +102,6 @@ void task::catch_signal_in_ecp_task(int sig)
 {
 	switch (sig) {
 		case SIGTERM:
-			kill_all_VSP(sensor_m);
 			sr_ecp_msg->message("ECP terminated");
 			_exit(EXIT_SUCCESS);
 			break;
@@ -112,10 +110,6 @@ void task::catch_signal_in_ecp_task(int sig)
 			signal(SIGSEGV, SIG_DFL);
 			break;
 	}
-}
-
-void task::terminate()
-{
 }
 
 // ---------------------------------------------------------------
@@ -128,7 +122,7 @@ void task::initialize_communication()
 	if ((sr_ecp_msg = new lib::sr_ecp(lib::ECP, ecp_attach_point.c_str(), sr_net_attach_point.c_str())) == NULL) { // Obiekt do komuniacji z SR
 		int e = errno; // kod bledu systemowego
 		perror("Unable to locate SR");
-		throw ECP_main_error(lib::SYSTEM_ERROR, 0);
+		throw ECP_main_error(lib::SYSTEM_ERROR, e);
 	}
 
 	std::string mp_pulse_attach_point =

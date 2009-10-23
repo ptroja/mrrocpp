@@ -43,11 +43,10 @@ public:
 	sensor(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object);
 
 	// TODO: Destruktor czujnika wirtualnego
-//	virtual ~sensor();
+	virtual ~sensor();
 
 	virtual void configure_sensor(void);
 	virtual void initiate_reading(void);
-	virtual void terminate(void);
 	virtual void get_reading(void);
 	void get_reading(lib::SENSOR_IMAGE & sensor_image);
 };

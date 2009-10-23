@@ -38,7 +38,7 @@ private:
 	/*!
       * Sensor name.
       */
-	lib::SENSOR_ENUM sensor_name; 
+	lib::SENSOR_ENUM sensor_name;
 
 public:
 
@@ -50,7 +50,7 @@ public:
 	/*!
       * Sends sensor configuration to pcbird.
       */
-	void configure_sensor (void);	
+	void configure_sensor (void);
 
 	/*!
       * Sends initiation reading command to pcbird.
@@ -65,9 +65,9 @@ public:
 	/*!
       * Closes pcbird socket connection.
       */
-	void terminate();
+	~pcbird();
 
-}; 
+};
 
 } // namespace sensor
 } // namespace ecp_mp

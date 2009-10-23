@@ -255,7 +255,6 @@ ATI3084_force::ATI3084_force(common::irp6s_postument_track_effector &_master) :
 		do_init(); // komunikacja wstepna
 	}
 }
-;
 
 ATI3084_force::~ATI3084_force(void)
 {
@@ -267,7 +266,6 @@ ATI3084_force::~ATI3084_force(void)
 		delete gravity_transformation;
 	printf("Destruktor edp_ATI3084_force_sensor\n");
 }
-;
 
 /**************************** inicjacja czujnika ****************************/
 void ATI3084_force::configure_sensor(void)
@@ -343,9 +341,7 @@ void ATI3084_force::configure_sensor(void)
 			gravity_transformation->synchro(frame);
 		}
 	}
-
 }
-;
 
 void ATI3084_force::wait_for_event()
 {
@@ -409,7 +405,6 @@ void ATI3084_force::wait_for_event()
 		usleep(1000);
 	}
 }
-;
 
 /*************************** inicjacja odczytu ******************************/
 void ATI3084_force::initiate_reading(void)
@@ -472,21 +467,12 @@ InterruptDisable		();
 			}
 		}
 	}
-
-};
+}
 
 /***************************** odczyt z czujnika *****************************/
 void ATI3084_force::get_reading(void)
 {
 }
-;
-
-/********************** zakonczenie dzialania czujnika *************************/
-void ATI3084_force::terminate(void)
-{
-	//	printf("VSP terminate\n");
-}
-;
 
 int ATI3084_force::parallel_do_send_command(const char* command)
 {

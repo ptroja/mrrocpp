@@ -24,7 +24,7 @@ private:
 
 	unsigned Samples_Acquired, Total_Number_of_Samples;
 	short int  uValues[6]; //!<  binarne napi�cie otrzymane z karty
-	float sVolt[6];        //!<  tablica wartosi podanych w Voltach 
+	float sVolt[6];        //!<  tablica wartosi podanych w Voltach
 	float sBias[6];        //!<  tablica Bias
 
 public:
@@ -42,8 +42,7 @@ public:
 	void configure_sensor (void);           //!<  konfiguracja czujnika
 	void wait_for_event(void);              //!<  oczekiwanie na zdarzenie
 	void initiate_reading (void);           //!<  zadanie odczytu od VSP
-	void get_reading (void);                //!<  odebranie odczytu od VSP 
-	void terminate (void);                  //!<  rozkaz zakonczenia procesu VSP
+	void get_reading (void);                //!<  odebranie odczytu od VSP
 
 	//!<  Deklaracje funkcji s�u��cych do komunikacji i ustawiania karty akwizycji danych
 	void Configure_Board(void);        //!< ustawienie karty

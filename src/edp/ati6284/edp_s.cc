@@ -636,12 +636,6 @@ void ATI6284_force::get_reading(void)
 {
 }
 
-// // // // // // // // // // // // // // /   zakonczenie dzialania czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
-void ATI6284_force::terminate(void)
-{
-	//	printf("VSP terminate\n");
-}
-
 // // // // // // // // // // // // // // /  inne potrzebne funkcje // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
 void ATI6284_force::Interrupt_Service_Routine(void)

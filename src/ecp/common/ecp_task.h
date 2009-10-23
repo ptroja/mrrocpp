@@ -56,8 +56,6 @@ class task : public ecp_mp::task::task
 		// obsluga sygnalu
 		virtual void catch_signal_in_ecp_task(int sig);
 
-		virtual void terminate();
-
 		// methods for ECP template to redefine in concrete classes
 		virtual void main_task_algorithm(void) = 0;
 

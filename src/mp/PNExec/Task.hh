@@ -15,6 +15,7 @@
 
 #include "lib/impconst.h"
 #include "mp/mp_generator.h"
+#include "lib/datastr.h"
 
 namespace pnexec {
 
@@ -62,16 +63,12 @@ class TrajectoryTask : public Task {
 		const std::string robot;
 		const std::string file;
 
-	public:
-		TrajectoryTask(const task_t & task)
-		: Task(task),
-		robot(task.trajectory().get().robot()),
-		file(task.trajectory().get().file()) {
-		}
+		const mrrocpp::lib::robot_name_t robot_name;
 
-		virtual void execute(mrrocpp::mp::common::robots_t & _robots) {
-			std::cout << robot << " @ " << file << std::endl;
-		}
+	public:
+		TrajectoryTask(const task_t & task);
+
+		virtual void execute(mrrocpp::mp::common::robots_t & _robots);
 };
 
 } // namespace

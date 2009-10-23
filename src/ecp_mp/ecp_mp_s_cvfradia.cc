@@ -135,7 +135,7 @@ void cvfradia::get_reading() {
 /*!
  * Closes cvFraDIA socket connection.
  */
-void cvfradia::terminate() {
+cvfradia::~cvfradia() {
 	// Send adequate command to cvFraDIA.
 	to_vsp.i_code = lib::VSP_TERMINATE;
 	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)

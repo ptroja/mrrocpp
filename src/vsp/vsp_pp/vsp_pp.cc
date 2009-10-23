@@ -100,7 +100,10 @@ pp::pp(lib::configurator &_config) : sensor(_config){
     };// end: vsp_pp_sensor
 
 
-pp::~pp(void){};
+pp::~pp(void){
+    // Zamkniecie deskryptora urzadzenia.
+    close(RS_descriptor);
+};
 
 
 /************************** CONFIGURE SENSOR ******************************/
@@ -144,7 +147,7 @@ void pp::configure_sensor (void){
      	while(read (RS_descriptor, &position_hi_zero[2], 1) <= 0);
      	while(read (RS_descriptor, &position_lo_ext[2], 1) <= 0);
      	while(read (RS_descriptor, &position_hi_ext[2], 1) <= 0);
-     	
+
      	write (Joy_descriptor, &position_lo_zero[0], 1);
      	write (Joy_descriptor, &position_hi_zero[0], 1);
      	write (Joy_descriptor, &position_lo_ext[0], 1);
@@ -165,7 +168,7 @@ void pp::configure_sensor (void){
 		read (Joy_descriptor, &position_hi_zero[0], 1);
 		read (Joy_descriptor, &position_lo_ext[0], 1);
 		read (Joy_descriptor, &position_hi_ext[0], 1);
-		
+
 		read (Joy_descriptor, &position_lo_zero[1], 1);
 		read (Joy_descriptor, &position_hi_zero[1], 1);
 		read (Joy_descriptor, &position_lo_ext[1], 1);
@@ -207,7 +210,7 @@ void pp::initiate_reading (void){
 
 	// Sprawdz, czy panel programowania przeslal jakies polecenie
 //	Word_received = 0;
-//	if (Word_received == 1 || Word_received >= 4) 
+//	if (Word_received == 1 || Word_received >= 4)
 //		read (RS_descriptor, &Word_received, 1);
 //printf ("\n\n\nOdebrano: %d\n\n\n", Word_received);
 	switch (Command_received)
@@ -229,7 +232,7 @@ void pp::initiate_reading (void){
      		while(read (RS_descriptor, &position_hi_zero[2], 1) <= 0);
      		while(read (RS_descriptor, &position_lo_ext[2], 1) <= 0);
      		while(read (RS_descriptor, &position_hi_ext[2], 1) <= 0);
-     	
+
      		write (Joy_descriptor, &position_lo_zero[0], 1);
      		write (Joy_descriptor, &position_hi_zero[0], 1);
      		write (Joy_descriptor, &position_lo_ext[0], 1);
@@ -247,12 +250,12 @@ void pp::initiate_reading (void){
 
 			close (Joy_descriptor);
 			break;
-			
+
 		case 3:
 			from_vsp.comm_image.sensor_union.pp.active_motors += 1;
 			from_vsp.comm_image.sensor_union.pp.active_motors %= 3;
 			break;
-			
+
 		default:
 			break;
 	}
@@ -285,10 +288,10 @@ printf("Axis_Z: %d\n", axis_reading[2]);
     		for(int i=0; i<3; i++)
 			// odczyt = obraz czujnika - polozenie zerowe
 			if (axis_reading[i] < position_lo_zero[i])
-				joy_axis_img[i] = 
+				joy_axis_img[i] =
 					(double)(axis_reading[i] - position_lo_zero[i]) / (double)(position_lo_zero[i] - position_lo_ext[i]) / 1000.0;
 			else if (axis_reading[i] > position_hi_zero[i])
-				joy_axis_img[i] = 
+				joy_axis_img[i] =
 					(double)(axis_reading[i] - position_hi_zero[i]) / (double)(position_hi_ext[i] - position_hi_zero[i]) / 1000.0;
 			else joy_axis_img[i] = 0.0;
 	}
@@ -325,11 +328,6 @@ void pp::get_reading (void){
 	is_reading_ready=false;
     };// end: get_reading
 
-/****************************** TERMINATE **********************************/
-void pp::terminate(void){
-    // Zamkniecie deskryptora urzadzenia.
-    close(RS_descriptor);
-    }; // end: terminate
 } // namespace sensor
 } // namespace vsp
 } // namespace mrrocpp

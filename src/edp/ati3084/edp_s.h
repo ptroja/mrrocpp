@@ -1,8 +1,8 @@
 // -------------------------------------------------------------------------
-//                 
-// 
+//
+//
 // Definicje klasy edp_ATI3084_force_sensor
-// 
+//
 // Ostatnia modyfikacja: 2005
 // Autor: yoyek
 // -------------------------------------------------------------------------
@@ -27,9 +27,9 @@ namespace sensor {
 #define COMGIVEN	0x04
 #define COMBIAS	0x05
 #define COMUNBIAS 0x06
-#define COMDELBIAS 0x07		
-#define COMAVERAGE 0x08		
-#define COMRESET 0x09		
+#define COMDELBIAS 0x07
+#define COMAVERAGE 0x08
+#define COMRESET 0x09
 
 #define COMSERVER_END 0xFD
 
@@ -56,9 +56,9 @@ namespace sensor {
 // server's process name
 #define __CZ_SERVER_NODE "cz_ser"
 
-// Z PLIKU cz_lib.h		
+// Z PLIKU cz_lib.h
 
-#define SERIAL 1 // PARALLEL - wysylynie po zlaczu rownoleglym - dziala slabo, 
+#define SERIAL 1 // PARALLEL - wysylynie po zlaczu rownoleglym - dziala slabo,
 // SERIAL - wysylanie po zlaczu szeregowym - dziala dobrze
 
 
@@ -94,7 +94,7 @@ namespace sensor {
 #define EOI	0x20
 
 #define TIMEOUT 500
-#define MAX_BUFFER	3	
+#define MAX_BUFFER	3
 
 // by Y dla karty advantech
 
@@ -113,7 +113,7 @@ namespace sensor {
 #define INTER_CONFIG 32
 
 #define INTR_LOOP_DELAY 1000 // opoznienie pomiedzy dwoma stanami wyjscia karty w funkcji obslugi przerwania
-#define INTR_NS_DELAY 10000 // opoznienie pomiedzy dwoma stanami wyjscia karty 
+#define INTR_NS_DELAY 10000 // opoznienie pomiedzy dwoma stanami wyjscia karty
 // w funkcji obslugi przerwania w nanosekundach
 
 
@@ -167,7 +167,6 @@ public:
 	void wait_for_event(void);		// oczekiwanie na zdarzenie
 	void initiate_reading (void);		// zadanie odczytu od VSP
 	void get_reading (void);			// odebranie odczytu od VSP		// zwraca blad
-	void terminate (void);				// rozkaz zakonczenia procesu VSP
 
 }; // end: class vsp_sensor
 

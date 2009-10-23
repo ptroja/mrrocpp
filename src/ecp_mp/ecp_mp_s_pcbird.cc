@@ -94,7 +94,7 @@ void pcbird::get_reading() {
 /*!
  * Closes pcbird socket connection.
  */
-void pcbird::terminate() {
+pcbird::~pcbird() {
 	close(sockfd);
 	sr_ecp_msg.message("Terminate\n");
 } // end: terminate()

@@ -132,7 +132,6 @@ pawel::pawel(lib::configurator &_config) : sensor(_config)
 
 }
 
-
 pawel::~pawel(void)
 {
 	close(fd);
@@ -274,12 +273,6 @@ void pawel::get_reading (void)
 	printf ("[x] %f\t[y] %f\t[z] %f\t[duration] %f ms\n", ball.x, ball.y, ball.z, duration);
 */
      is_reading_ready=false; // 7
-}
-
-/********************** zakonczenie dzialania czujnika *************************/
-void pawel::terminate(void)
-{
-//	printf("[vsp_pawel]\tterminated\n");
 }
 
 } // namespace sensor

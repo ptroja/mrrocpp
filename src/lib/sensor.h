@@ -416,6 +416,9 @@ public:
 // Czujniki konkretne wyprowadzane sa z klasy bazowej
 class sensor
 {
+protected:
+	int pid; // pid vsp
+
 public:
 	// Wielkosc przesylanej unii - dla kazdego obrazu inny.
 	uint32_t union_size;
@@ -425,7 +428,6 @@ public:
 	short base_period; // by Y okresla co ile krokow generatora ma nastapic odczyt z czujnika
 	short current_period; // by Y ilosc krokow pozostajaca do odczytu z czujnika
 
-	int pid; // pid vsp
 	std::string node_name; // nazwa wezla na ktorym jest powolane vsp
 
 	// Obraz czujnika.
@@ -448,11 +450,6 @@ public:
 
 	// Zadanie odczytu od VSP.
 	virtual void initiate_reading(void)
-	{
-	}
-
-	// Rozkaz zakonczenia procesu VSP.
-	virtual void terminate(void)
 	{
 	}
 

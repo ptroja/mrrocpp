@@ -95,7 +95,7 @@ class task: public ecp_mp::task::task
 		virtual void main_task_algorithm(void) = 0;
 
 		/// mapa wszystkich robotow
-		static common::robots_t robot_m;
+		common::robots_t robot_m;
 
 		//! wait until ECP/UI calls name_open() to pulse channel;
 		//! \return {identifier (scoid/QNET or socket/messip) of the next connected process}
@@ -112,9 +112,6 @@ class task: public ecp_mp::task::task
 		bool ui_new_pulse; // okresla czy jest nowy puls
 
 		bool check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE process_type, RECEIVE_PULSE_MODE wait_mode);
-
-		/// Zatrzymanie wszystkich ECP
-		static void kill_all_ECP (const common::robots_t & _robot_m);
 };
 
 task* return_created_mp_task (lib::configurator &_config);

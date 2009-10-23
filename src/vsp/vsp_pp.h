@@ -37,7 +37,7 @@ private:
     double joy_axis_img[3];
     // Flagi stanu procesu.
     short readings_initiated;
-    
+
 public:
     // Konstruktor czujnika wirtualnego.
     pp(lib::configurator &_config);
@@ -49,8 +49,6 @@ public:
     void initiate_reading (void);
     // Odeslanie odczytu.
     void get_reading (void);
-    // Koniec pracy.
-    void terminate (void);
 }; // end: class vsp_ds_sensor
 
 } // namespace sensor

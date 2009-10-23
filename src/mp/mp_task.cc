@@ -52,8 +52,6 @@ void task::catch_signal_in_mp_task(int sig)
 	switch (sig) {
 	case SIGTERM:
 		//case SIGINT:
-		kill_all_ECP(robot_m);
-		kill_all_VSP(sensor_m);
 		sr_ecp_msg->message("MP terminated");
 		_exit(EXIT_SUCCESS);
 		break;
@@ -103,9 +101,6 @@ name_attach_t* task::mp_pulse_attach = NULL;
 messip_channel_t* task::mp_pulse_attach = NULL;
 #endif
 
-// mapa wszystkich robotow z iteratorem
-common::robots_t task::robot_m;
-
 // KONSTRUKTORY
 task::task(lib::configurator &_config)
 	: ecp_mp::task::task(_config),
@@ -121,6 +116,10 @@ task::task(lib::configurator &_config)
 
 task::~task()
 {
+	// Remove (kill) all ECP from the container
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
+		delete robot_node.second;
+	}
 }
 
 void task::stop_and_terminate()
@@ -1024,21 +1023,6 @@ void task::terminate_all (const common::robots_t & _robot_m)
 		} else {
 			check_and_optional_wait_for_new_pulse (NEW_ECP_PULSE, BLOCK);
 		}
-	}
-}
-// ------------------------------------------------------------------------
-
-
-// ------------------------------------------------------------------------
-void task::kill_all_ECP (const common::robots_t & _robot_m)
-{
-	// Zabicie wszystkich ECP z mapy
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
-#if defined(PROCESS_SPAWN_RSH)
-		kill(robot_node.second->ECP_pid, SIGTERM);
-#else
-		SignalKill(robot_node.second->nd, robot_m_iterator->second->ECP_pid, 0, SIGTERM, 0, 0);
-#endif
 	}
 }
 // ------------------------------------------------------------------------

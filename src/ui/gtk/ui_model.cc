@@ -35,7 +35,6 @@ ui_model& ui_model::instance()
 
 	// create instance if necessary
 	if (!pointerToTheSingletonInstance) {
-		printf("XXX\n");
 		pointerToTheSingletonInstance = new ui_model;
 	}
 

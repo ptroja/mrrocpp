@@ -21,9 +21,6 @@ public:
     // konstruktor
     rcs_test(lib::configurator &_config);
 
-    // destruktor
-    ~rcs_test();
-
 	// metody z mp
 	void main_task_algorithm(void);
 

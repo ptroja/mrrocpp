@@ -87,7 +87,7 @@ public:
 	/*!
       * Closes cvFraDIA socket connection.
       */
-	void terminate();
+	~cvfradia();
 
 };
 

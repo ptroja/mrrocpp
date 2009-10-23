@@ -46,15 +46,6 @@ rcs_test::rcs_test(lib::configurator &_config) :
 
 }
 
-rcs_test::~rcs_test()
-{
-	printf("MP Destruct\n");
-
-	// konczy prace czujnikow
-	sensor_m[lib::SENSOR_RCS_KOCIEMBA]->terminate();
-	sensor_m[lib::SENSOR_RCS_KORF]->terminate();
-}
-
 // rcs - znajdz rozwiazanie
 void rcs_test::main_task_algorithm(void)
 {

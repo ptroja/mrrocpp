@@ -92,8 +92,9 @@ sensor::sensor(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::t
 #endif /* !USE_MESSIP_SRR */
 }
 
-void sensor::terminate(void) {
+sensor::~sensor() {
 	to_vsp.i_code= lib::VSP_TERMINATE;
+
 #if !defined(USE_MESSIP_SRR)
 	if(write(sd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)
 		sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
@@ -107,6 +108,13 @@ void sensor::terminate(void) {
 	else
 		messip_channel_disconnect(sd, MESSIP_NOTIMEOUT);
 #endif /* !USE_MESSIP_SRR */
+
+#if defined(PROCESS_SPAWN_RSH)
+	kill(pid, SIGTERM);
+#else
+	SignalKill(lib::configurator::return_node_number(node_name),
+			pid, 0, SIGTERM, 0, 0);
+#endif
 }
 
 void sensor::initiate_reading(void) {

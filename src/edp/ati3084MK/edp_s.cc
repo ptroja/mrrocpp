@@ -247,15 +247,6 @@ void ATI3084_force::get_reading(void)
 {
 }
 
-
-/********************** zakonczenie dzialania czujnika *************************/
-void ATI3084_force::terminate(void)
-{
-	//	printf("VSP terminate\n");
-}
-
-
-
 // metoda na wypadek skasowanie pamiecia nvram
 // uwaga sterownik czujnika wysyla komunikat po zlaczu szeregowym zaraz po jego wlaczeniu
 

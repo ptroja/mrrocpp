@@ -78,6 +78,7 @@ robot::robot( lib::robot_name_t l_robot_name, const char* _section_name, task::t
 
 
 robot::~robot() {
+	fprintf(stderr, "robot::~robot()\n");
 #if !defined(USE_MESSIP_SRR)
 	if (ECP_fd >= 0) {
 		name_close(ECP_fd);
@@ -87,6 +88,12 @@ robot::~robot() {
 		messip_channel_disconnect(ECP_fd, MESSIP_NOTIMEOUT);
 	}
 #endif /* USE_MESSIP_SRR */
+
+#if defined(PROCESS_SPAWN_RSH)
+		kill(ECP_pid, SIGTERM);
+#else
+		SignalKill(nd, ECP_pid, 0, SIGTERM, 0, 0);
+#endif
 }
 
 // ------------------------------------------------------------------------

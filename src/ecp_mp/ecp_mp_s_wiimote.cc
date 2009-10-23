@@ -102,7 +102,7 @@ void wiimote::get_reading() {
 }
 
 
-void wiimote::terminate() {
+wiimote::~wiimote() {
 	// Send adequate command to wiimote.
 	to_vsp.i_code = lib::VSP_TERMINATE;
 	if(write(sockfd, &to_vsp, sizeof(lib::ECP_VSP_MSG)) == -1)

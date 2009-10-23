@@ -60,7 +60,7 @@ sensor::sensor (lib::configurator &_config) :
 
 void sensor::wait_for_event(void){};
 
-void sensor::terminate(void) {
+sensor::~sensor() {
 	sr_msg->message("VSP terminated");
 }
 

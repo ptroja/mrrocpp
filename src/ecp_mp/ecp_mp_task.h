@@ -37,6 +37,7 @@ public:
 	typedef std::map<const char*, ecp_mp::common::Trajectory /*, str_cmp */> trajectories_t;
 
 	task(lib::configurator &_config);
+	virtual ~task();
 
 	// mapa wszystkich czujnikow
 	static sensors_t sensor_m;
@@ -72,9 +73,6 @@ public:
 	// --------------------------------------------------------------------------
 	// Wyswietlenie komunikatu
 	bool show_message (const char* message);
-
-	// Zatrzymanie wszystkich VSP
-	static void kill_all_VSP (sensors_t & _sensor_m);
 
 	// funkcje do obslugi czujnikow
 	void all_sensors_initiate_reading (sensors_t & _sensor_m);

@@ -1,8 +1,8 @@
 // -------------------------------------------------------------------------
 //                            vsp_sensor.h		dla QNX6.2
-// 
+//
 // Definicje klasy vsp_vis_sensor i vsp_error
-// 
+//
 // Ostatnia modyfikacja: 25.06.2003
 // Autor: tkornuta
 // -------------------------------------------------------------------------
@@ -63,10 +63,10 @@ private:
 	unsigned short kol[XMAX][YMAX];
 	unsigned short col[XMAX];
 	unsigned short row[YMAX];
-	
+
 public:
 	short ERROR_CODE;
-	
+
 	pawel(lib::configurator &_config);
 	~pawel(void);
 
@@ -74,9 +74,7 @@ public:
 	void wait_for_event(void);		// oczekiwanie na zdarzenie
 	void initiate_reading (void);		// zadanie odczytu od VSP
 	void get_reading (void);			// odebranie odczytu od VSP		// zwraca blad
-	void terminate (void);				// rozkaz zakonczenia procesu VSP
-	
-}; 
+};
 
 } // namespace sensor
 } // namespace vsp

@@ -74,6 +74,14 @@ task::task(lib::configurator &_config)
     }
 }
 
+task::~task()
+{
+	// Zabicie wszystkich procesow VSP
+	BOOST_FOREACH(sensor_item_t & sensor_item, sensor_m) {
+		delete sensor_item.second;
+	}
+}
+
 
 // --------------------------------------------------------------------------
 // Odpowiedz operatora typu (Yes/No) na zadane pytanie (question)
@@ -221,25 +229,6 @@ bool task::show_message (const char* message)
 
 
 // Funkcje do obslugi czujnikow
-
-// ------------------------------------------------------------------------
-void task::kill_all_VSP (sensors_t & _sensor_m)
-{
-	// Zabicie wszystkich procesow VSP
-	BOOST_FOREACH(sensor_item_t & sensor_item, _sensor_m) {
-		if (sensor_item.second->pid !=0) {
-#if defined(PROCESS_SPAWN_RSH)
-			kill(sensor_item.second->pid, SIGTERM);
-#else
-			SignalKill(lib::configurator::return_node_number(sensor_item.second->node_name),
-					sensor_item.second->pid, 0, SIGTERM, 0, 0);
-#endif
-		}
-	}
-}
-// ------------------------------------------------------------------------
-
-
 void task::all_sensors_initiate_reading (sensors_t & _sensor_m)
 {
 	BOOST_FOREACH(sensor_item_t & sensor_item, _sensor_m) {
