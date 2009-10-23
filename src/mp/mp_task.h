@@ -25,7 +25,11 @@ namespace task {
 // klasa globalna dla calego procesu MP
 class task: public ecp_mp::task::task
 {
-	friend class robot::robot;
+	private:
+		void initialize_communication (void);
+
+		/// utworzenie robotow
+		virtual void create_robots(void);
 
 	public:
 #if !defined(USE_MESSIP_SRR)
@@ -37,7 +41,6 @@ class task: public ecp_mp::task::task
 		task(lib::configurator &_config);
 		virtual ~task(void);
 
-		void initialize_communication (void);
 		void stop_and_terminate (void);
 
 		// oczekiwanie na puls z ECP
@@ -82,14 +85,8 @@ class task: public ecp_mp::task::task
 		// Wyslanie rozkazu do wszystkich ECP
 		void execute_all (const common::robots_t & _robot_m);
 
-		// funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
-		void mp_receive_ui_or_ecp_pulse (common::robots_t & _robot_m, generator::generator& the_generator );
-
 		// obsluga sygnalu
 		virtual void catch_signal_in_mp_task(int sig);
-
-		/// utworzenie robotow
-		virtual void create_robots(void);
 
 		/// method redefine in concrete classes
 		virtual void main_task_algorithm(void) = 0;
@@ -97,11 +94,16 @@ class task: public ecp_mp::task::task
 		/// mapa wszystkich robotow
 		common::robots_t robot_m;
 
+		// funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
+		void mp_receive_ui_or_ecp_pulse (common::robots_t & _robot_m, generator::generator& the_generator );
+
+	private:
+		friend class robot::robot;
+
 		//! wait until ECP/UI calls name_open() to pulse channel;
 		//! \return {identifier (scoid/QNET or socket/messip) of the next connected process}
 		int wait_for_name_open(void);
 
-	private:
 	    //! A server connection ID identifying UI
 	    int ui_scoid;
 
