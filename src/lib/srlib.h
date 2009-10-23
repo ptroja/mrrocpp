@@ -36,7 +36,7 @@ typedef struct sr_package {
   msg_header_t hdr;
 #endif
   struct timespec ts;       // czas generacji wiadomosci
-  PROCESS_TYPE process_type;      // rodzaj procesu
+  process_type_t process_type;      // rodzaj procesu
   int16_t message_type;      // typ wiadomosci: blad lub komunikat
   char process_name[NAME_LENGTH];  // nazwa globalna procesu np: /irp6_on_track/EDP1
   char host_name[NAME_LENGTH]; // nazwa hosta na ktorym uruchamiany jest proces

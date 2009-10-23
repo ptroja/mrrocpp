@@ -264,7 +264,7 @@ struct trajectory_description
 /*!
  *  Types of processes in MRROC++.
  */
-typedef enum PROCESS_TYPE {
+typedef enum _PROCESS_TYPE {
 	UNKNOWN_PROCESS_TYPE,
 	EDP,
 	ECP,
