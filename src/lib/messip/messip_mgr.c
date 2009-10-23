@@ -904,7 +904,7 @@ thread_http_thread( void *arg )
 
 	/*--- Done ---*/
 	if ( close( descr->sockfd_accept ) == -1 )
-			fprintf( stderr, "Error %d while closing socket %d\n", errno, descr->sockfd_accept );
+			fprintf( stderr, "Error while closing socket %d: %s\n", descr->sockfd_accept, strerror(errno) );
 	free( descr );
 
 	pthread_exit(NULL);
@@ -961,17 +961,17 @@ http_thread( void *arg )
 			__FILE__, __LINE__,
 		   port_http );
 		if ( close( sockfd ) == -1 )
-			fprintf( stderr, "Error %d while closing socket %d\n", errno, sockfd );
+			fprintf( stderr, "Error while closing socket %d: %s\n", sockfd, strerror(errno) );
 		exit( -1 );
 	}
 	if ( status < 0 )
 	{
-		fprintf( stderr, "%s %d\n\tUnable to bind - port %d - status=%d errno=%s\n",
+		fprintf( stderr, "%s %d\n\tUnable to bind - port %d - status=%d: %s\n",
 		   __FILE__, __LINE__,
 		   port_http,
 		   status, strerror( errno ) );
 		if ( close( sockfd ) == -1 )
-			fprintf( stderr, "Error %d while closing socket %d\n", errno, sockfd );
+			fprintf( stderr, "Error while closing socket %d: %s\n", sockfd, strerror(errno) );
 		exit( -1 );
 	}
 
@@ -992,9 +992,9 @@ http_thread( void *arg )
 		{
 			if ( errno == EINTR )	// A signal has been applied
 				continue;
-			fprintf( stderr, "Socket non accepted - errno=%d\n", errno );
+			fprintf( stderr, "Socket non accepted: %s\n", strerror(errno) );
 			if ( close( sockfd ) == -1 )
-				fprintf( stderr, "Error %d while closing socket %d\n", errno, sockfd );
+				fprintf( stderr, "Error while closing socket %d: %s\n", sockfd, strerror(errno) );
 			exit( -1 );
 		}
 
@@ -1015,7 +1015,7 @@ http_thread( void *arg )
 
 	/*--- Never exit anyway ---*/
 	if ( close( sockfd ) == -1 )
-		fprintf( stderr, "Error %d while closing socket %d\n", errno, sockfd );
+		fprintf( stderr, "Error while closing socket %d: %s\n", sockfd, strerror(errno) );
 
 	return NULL;
 
@@ -1039,13 +1039,13 @@ handle_client_connect( int sockfd,
 	dcount = do_readv( sockfd, iovec, 1 );
 	if ( dcount == -1 )
 	{
-		fprintf( stderr, "%s %d: errno=%d\n", __FILE__, __LINE__, errno );
+		fprintf( stderr, "%s %d: %s\n", __FILE__, __LINE__, strerror(errno) );
 		return -1;
 	}
 	if ( dcount != sizeof( msg ) )
 	{
-		fprintf( stderr, "%s %d\n\tread %d of %d - errno=%d\n",
-		   __FILE__, __LINE__, dcount, sizeof( msg ), errno );
+		fprintf( stderr, "%s %d\n\tread %d of %d: %s\n",
+		   __FILE__, __LINE__, dcount, sizeof( msg ), strerror(errno) );
 		return -1;
 	}
 
@@ -1117,13 +1117,13 @@ client_channel_create( int sockfd,
 	dcount = do_readv( sockfd, iovec, 1 );
 	if ( dcount == -1 )
 	{
-		fprintf( stderr, "%s %d: errno=%d\n", __FILE__, __LINE__, errno );
+		fprintf( stderr, "%s %d: %s\n", __FILE__, __LINE__, strerror(errno) );
 		return -1;
 	}
 	if ( dcount != sizeof( msg ) )
 	{
-		fprintf( stderr, "%s %d: read %d of %d - errno=%d\n",
-		   __FILE__, __LINE__, dcount, sizeof( msg ), errno );
+		fprintf( stderr, "%s %d: read %d of %d: %s\n",
+		   __FILE__, __LINE__, dcount, sizeof( msg ), strerror(errno) );
 		return -1;
 	}
 #if 1
@@ -1220,7 +1220,7 @@ destroy_channel( channel_t * ch,
 	{
 		pthread_cancel( ch->tid_client_send_buffered_msg );
 		if ( close( ch->bufferedsend_sockfd ) == -1 )
-			fprintf( stderr, "Error %d while closing socket %d\n", errno, ch->bufferedsend_sockfd );
+			fprintf( stderr, "Error while closing socket %d: %s\n", ch->bufferedsend_sockfd, strerror(errno) );
 	}							// if
 
 	if ( ch->nb_msg_buffered > 0 )
@@ -1270,13 +1270,13 @@ client_channel_delete( int sockfd,
 	dcount = do_readv( sockfd, iovec, 1 );
 	if ( dcount == -1 )
 	{
-		fprintf( stderr, "%s %d: errno=%d\n", __FILE__, __LINE__, errno );
+		fprintf( stderr, "%s %d: %s\n", __FILE__, __LINE__, strerror(errno) );
 		return -1;
 	}
 	if ( dcount != sizeof( messip_send_channel_delete_t ) )
 	{
-		fprintf( stderr, "%s %d: read %d of %d - errno=%d\n",
-		   __FILE__, __LINE__, dcount, sizeof( messip_send_channel_delete_t ), errno );
+		fprintf( stderr, "%s %d: read %d of %d: %s\n",
+		   __FILE__, __LINE__, dcount, sizeof( messip_send_channel_delete_t ), strerror(errno) );
 		return -1;
 	}
 
@@ -1345,13 +1345,13 @@ client_channel_connect( int sockfd,
 	dcount = do_readv( sockfd, iovec, 1 );
 	if ( dcount == -1 )
 	{
-		fprintf( stderr, "%s %d: errno=%d\n", __FILE__, __LINE__, errno );
+		fprintf( stderr, "%s %d: %s\n", __FILE__, __LINE__, strerror(errno) );
 		return -1;
 	}
 	if ( dcount != sizeof( messip_send_channel_connect_t ) )
 	{
-		fprintf( stderr, "%s %d: read %d of %d - errno=%d\n",
-		   __FILE__, __LINE__, dcount, sizeof( messip_send_channel_connect_t ), errno );
+		fprintf( stderr, "%s %d: read %d of %d: %s\n",
+		   __FILE__, __LINE__, dcount, sizeof( messip_send_channel_connect_t ), strerror(errno) );
 		return -1;
 	}
 
@@ -1451,13 +1451,13 @@ client_channel_disconnect( int sockfd,
 	dcount = do_readv( sockfd, iovec, 1 );
 	if ( dcount == -1 )
 	{
-		fprintf( stderr, "%s %d: errno=%d\n", __FILE__, __LINE__, errno );
+		fprintf( stderr, "%s %d: %s\n", __FILE__, __LINE__, strerror(errno) );
 		return -1;
 	}
 	if ( dcount != sizeof( messip_send_channel_disconnect_t ) )
 	{
-		fprintf( stderr, "%s %d: read %d of %d - errno=%d\n",
-		   __FILE__, __LINE__, dcount, sizeof( messip_send_channel_disconnect_t ), errno );
+		fprintf( stderr, "%s %d: read %d of %d: %s\n",
+		   __FILE__, __LINE__, dcount, sizeof( messip_send_channel_disconnect_t ), strerror(errno) );
 		return -1;
 	}
 
@@ -1675,13 +1675,13 @@ client_death_notify( int sockfd,
 	dcount = do_readv( sockfd, iovec, 1 );
 	if ( dcount == -1 )
 	{
-		fprintf( stderr, "%s %d: errno=%d\n", __FILE__, __LINE__, errno );
+		fprintf( stderr, "%s %d: %s\n", __FILE__, __LINE__, strerror(errno) );
 		return -1;
 	}
 	if ( dcount != sizeof( msgsend ) )
 	{
-		fprintf( stderr, "%s %d: read %d of %d - errno=%d\n",
-		   __FILE__, __LINE__, dcount, sizeof( msgsend ), errno );
+		fprintf( stderr, "%s %d: read %d of %d: %s\n",
+		   __FILE__, __LINE__, dcount, sizeof( msgsend ), strerror(errno) );
 		return -1;
 	}
 
@@ -1733,13 +1733,13 @@ client_buffered_send( int sockfd,
 	dcount = do_readv( sockfd, iovec, 1 );
 	if ( dcount == -1 )
 	{
-		fprintf( stderr, "%s %d: errno=%d\n", __FILE__, __LINE__, errno );
+		fprintf( stderr, "%s %d: %s\n", __FILE__, __LINE__, strerror(errno) );
 		return -1;
 	}
 	if ( dcount != sizeof( msg ) )
 	{
-		fprintf( stderr, "%s %d: read %d of %d - errno=%d\n",
-		   __FILE__, __LINE__, dcount, sizeof( msg ), errno );
+		fprintf( stderr, "%s %d: read %d of %d: %s\n",
+		   __FILE__, __LINE__, dcount, sizeof( msg ), strerror(errno) );
 		return -1;
 	}
 
@@ -1800,11 +1800,11 @@ client_buffered_send( int sockfd,
 			  ( const struct sockaddr * ) &sockaddr, sizeof( sockaddr ) ) < 0 )
 		{
 			UNLOCK;
-			fprintf( stderr, "%s %d\n\tUnable to connect to host %s, port %d - errno=%d\n",
+			fprintf( stderr, "%s %d\n\tUnable to connect to host %s, port %d: %s\n",
 			   __FILE__, __LINE__,
-			   inet_ntoa( sockaddr.sin_addr ), sockaddr.sin_port, errno );
+			   inet_ntoa( sockaddr.sin_addr ), sockaddr.sin_port, strerror(errno) );
 			if ( close( ch->bufferedsend_sockfd ) == -1 )
-				fprintf( stderr, "Error %d while closing socket %d\n", errno, ch->bufferedsend_sockfd );
+				fprintf( stderr, "Error while closing socket %d: %s\n", ch->bufferedsend_sockfd, strerror(errno) );
 			return -1;
 		}
 
@@ -1906,7 +1906,7 @@ thread_client_trigger_proxy( void *arg )
 			FD_SET( sockfd, &ready );
 			status = select( sockfd+1, NULL, &ready, NULL, NULL );
 			if ( status <= 0 )
-				printf( "OOOPSS!!! status=%d errno=%d \n", status, errno );
+				printf( "OOOPSS!!! status=%d: %s\n", status, strerror(errno) );
 			assert( status > 0 );
 			if ( !FD_ISSET( sockfd, &ready ) )
 			{
@@ -1941,9 +1941,9 @@ thread_client_trigger_proxy( void *arg )
 			dcount = do_writev( sockfd, iovec, 3 );
 			tlen = sizeof( datasend ) + sizeof( int32_t ) + proxy->nbytes;
 			if ( dcount != tlen )
-				printf( "dcount=%d expected=%d nbytes=%d - errno=%d - %d - data=%p\n",
-				   dcount, tlen, proxy->nbytes, errno,
-				   sizeof( datasend ), proxy->data );
+				printf( "dcount=%d expected=%d nbytes=%d - %d - data=%p: %s\n",
+				   dcount, tlen, proxy->nbytes,
+				   sizeof( datasend ), proxy->data, strerror(errno) );
 			assert( dcount == tlen );
 
 			/*--- Now wait for an answer from the server ---*/
@@ -1963,8 +1963,8 @@ thread_client_trigger_proxy( void *arg )
 				continue;
 #if 0
 			if ( dcount != sizeof( messip_datareply_t ) )
-				fprintf( stderr, "%s %d: dcount=%d errno=%d\n",
-				   __FILE__, __LINE__, dcount, errno );
+				fprintf( stderr, "%s %d: dcount=%d: %s\n",
+				   __FILE__, __LINE__, dcount, strerror(errno) );
 #endif
 //          assert( dcount == sizeof(messip_datareply_t) );
 
@@ -2001,16 +2001,16 @@ client_proxy_attach( int sockfd,
 	dcount = do_readv( sockfd, iovec, 1 );
 	if ( dcount == -1 )
 	{
-		fprintf( stderr, "%s %d\n\terrno=%d\n",
+		fprintf( stderr, "%s %d\n\t%s\n",
 			__FILE__, __LINE__,
-			errno );
+			strerror(errno) );
 		return -1;
 	}
 	if ( dcount != sizeof( messip_send_proxy_attach_t ) )
 	{
-		fprintf( stderr, "%s %d\n\tread %d of %d - errno=%d\n",
+		fprintf( stderr, "%s %d\n\tread %d of %d: %s\n",
 		   __FILE__, __LINE__,
-		   dcount, sizeof( messip_send_proxy_attach_t ), errno );
+		   dcount, sizeof( messip_send_proxy_attach_t ), strerror(errno) );
 		return -1;
 	}
 
@@ -2118,12 +2118,12 @@ client_proxy_attach( int sockfd,
 			  ( const struct sockaddr * ) &sockaddr, sizeof( sockaddr ) ) < 0 )
 		{
 			UNLOCK;
-			fprintf( stderr, "%s %d\n\tUnable to connect to host %s, port %d - errno=%d\n",
+			fprintf( stderr, "%s %d\n\tUnable to connect to host %s, port %d: %s\n",
 			   __FILE__, __LINE__,
-			   inet_ntoa( sockaddr.sin_addr ), sockaddr.sin_port, errno );
+			   inet_ntoa( sockaddr.sin_addr ), sockaddr.sin_port, strerror(errno) );
 			if ( close( proxy->process_to_trigger_sockfd ) == -1 )
-				fprintf( stderr, "Error %d while closing socket %d\n",
-					errno, proxy->process_to_trigger_sockfd );
+				fprintf( stderr, "Error while closing socket %d: %s\n",
+						proxy->process_to_trigger_sockfd, strerror(errno) );
 			return -1;
 		}
 
@@ -2167,16 +2167,16 @@ client_proxy_detach( int sockfd,
 	dcount = do_readv( sockfd, iovec, 1 );
 	if ( dcount == -1 )
 	{
-		fprintf( stderr, "%s %d\n\terrno=%d\n",
+		fprintf( stderr, "%s %d\n\t%s\n",
 			__FILE__, __LINE__,
-			errno );
+			strerror(errno) );
 		return -1;
 	}
 	if ( dcount != sizeof( messip_send_proxy_detach_t ) )
 	{
-		fprintf( stderr, "%s %d\n\tread %d of %d - errno=%d\n",
+		fprintf( stderr, "%s %d\n\tread %d of %d: %s\n",
 		   __FILE__, __LINE__,
-		   dcount, sizeof( messip_send_proxy_detach_t ), errno );
+		   dcount, sizeof( messip_send_proxy_detach_t ), strerror(errno) );
 		return -1;
 	}
 
@@ -2196,8 +2196,8 @@ client_proxy_detach( int sockfd,
 		{
 			pthread_cancel( proxy->tid_client_proxies_to_trigger );
 			if ( close( proxy->process_to_trigger_sockfd ) == -1 )
-				fprintf( stderr, "Error %d while closing socket %d\n",
-					errno, proxy->process_to_trigger_sockfd );
+				fprintf( stderr, "Error while closing socket %d: %s\n",
+					proxy->process_to_trigger_sockfd, strerror(errno) );
 			proxy->tid_client_proxies_to_trigger = 0;
 			proxy->process_to_trigger_sockfd = -1;
 		}						// if
@@ -2237,13 +2237,13 @@ client_proxy_trigger( int sockfd,
 	dcount = do_readv( sockfd, iovec, 1 );
 	if ( dcount == -1 )
 	{
-		fprintf( stderr, "%s %d: errno=%d\n", __FILE__, __LINE__, errno );
+		fprintf( stderr, "%s %d: %s\n", __FILE__, __LINE__, strerror(errno) );
 		return -1;
 	}
 	if ( dcount != sizeof( messip_send_proxy_trigger_t ) )
 	{
-		fprintf( stderr, "%s %d: read %d of %d - errno=%d\n",
-		   __FILE__, __LINE__, dcount, sizeof( messip_send_proxy_trigger_t ), errno );
+		fprintf( stderr, "%s %d: read %d of %d: %s\n",
+		   __FILE__, __LINE__, dcount, sizeof( messip_send_proxy_trigger_t ), strerror(errno) );
 		return -1;
 	}
 
@@ -2318,13 +2318,13 @@ client_proxy_get_owner( int sockfd,
 	dcount = do_readv( sockfd, iovec, 1 );
 	if ( dcount == -1 )
 	{
-		fprintf( stderr, "%s %d: errno=%d\n", __FILE__, __LINE__, errno );
+		fprintf( stderr, "%s %d: %s\n", __FILE__, __LINE__, strerror(errno) );
 		return -1;
 	}
 	if ( dcount != sizeof( messip_send_proxy_get_owner_t ) )
 	{
-		fprintf( stderr, "%s %d: read %d of %d - errno=%d\n",
-		   __FILE__, __LINE__, dcount, sizeof( messip_send_proxy_get_owner_t ), errno );
+		fprintf( stderr, "%s %d: read %d of %d: %s\n",
+		   __FILE__, __LINE__, dcount, sizeof( messip_send_proxy_get_owner_t ), strerror(errno) );
 		return -1;
 	}
 
@@ -2383,13 +2383,13 @@ client_debug_op_inform_state( int sockfd,
 	dcount = do_readv( sockfd, iovec, 1 );
 	if ( dcount == -1 )
 	{
-		fprintf( stderr, "%s %d: errno=%d\n", __FILE__, __LINE__, errno );
+		fprintf( stderr, "%s %d: %s\n", __FILE__, __LINE__, strerror(errno) );
 		return -1;
 	}
 	if ( dcount != sizeof( messip_send_inform_messipmgr_t ) )
 	{
-		fprintf( stderr, "%s %d: read %d of %d - errno=%d\n",
-		   __FILE__, __LINE__, dcount, sizeof( messip_send_inform_messipmgr_t ), errno );
+		fprintf( stderr, "%s %d: read %d of %d: %s\n",
+		   __FILE__, __LINE__, dcount, sizeof( messip_send_inform_messipmgr_t ), strerror(errno) );
 		return -1;
 	}
 
@@ -2536,12 +2536,12 @@ notify_server_death_client( channel_t * ch,
 	{
 		if ( errno != ECONNREFUSED )
 		    perror("connect()");
-			fprintf( stderr, "%s %d\n\tUnable to connect to host %s, port %d - errno=%d\n",
+			fprintf( stderr, "%s %d\n\tUnable to connect to host %s, port %d: %s\n",
 			   __FILE__, __LINE__,
-			   inet_ntoa( sockaddr.sin_addr ), sockaddr.sin_port, errno );
+			   inet_ntoa( sockaddr.sin_addr ), sockaddr.sin_port, strerror(errno) );
 		if ( close( sockfd ) == -1 )
-			fprintf( stderr, "Error %d while closing socket %d\n",
-				errno, sockfd );
+			fprintf( stderr, "Error while closing socket %d: %s\n",
+				sockfd, strerror(errno) );
 		return -1;
 	}
 
@@ -2574,8 +2574,8 @@ notify_server_death_client( channel_t * ch,
 
 	/*--- ok ---*/
 	if ( close( sockfd ) == -1 )
-		fprintf( stderr, "Error %d while closing socket %d\n",
-			errno, sockfd );
+		fprintf( stderr, "Error while closing socket %d: %s\n",
+			sockfd, strerror(errno) );
 	return 0;
 
 }								// notify_server_death_client
@@ -2637,8 +2637,8 @@ thread_client_thread( void *arg )
 	if ( !search_socket )
 	{
 		if ( close ( descr->sockfd_accept ) == -1 )
-			fprintf( stderr, "Error %d while closing socket %d\n",
-				errno, descr->sockfd_accept );
+			fprintf( stderr, "Error while closing socket %d: %s\n",
+				descr->sockfd_accept, strerror(errno) );
 		free( descr );
 		pthread_exit( NULL );
 		return NULL;
@@ -2661,8 +2661,8 @@ thread_client_thread( void *arg )
 		fprintf( stderr, "%s %d:\n\tfound should be true\n", __FILE__, __LINE__ );
 		UNLOCK;
 		if ( close ( descr->sockfd_accept ) == -1 )
-			fprintf( stderr, "Error %d while closing socket %d\n",
-				errno, descr->sockfd_accept );
+			fprintf( stderr, "Error while closing socket %d: %s\n",
+				descr->sockfd_accept, strerror(errno) );
 		free( descr );
 		pthread_exit( NULL );
 		return NULL;
@@ -2672,8 +2672,8 @@ thread_client_thread( void *arg )
 	logg( LOG_MESSIP_INFORMATIVE, "Destroy connexion #%d sockfd=%-3d pid=%d [%s]\n",
 		  index, connexion->sockfd, connexion->pid, connexion->process_name );
 	if ( close( connexion->sockfd ) == -1 )
-		fprintf( stderr, "Unable to close socket %d: errno=%d\n",
-			connexion->sockfd, errno );
+		fprintf( stderr, "Unable to close socket %d: %s\n",
+			connexion->sockfd, strerror(errno) );
 	pid = connexion->pid;
 	tid = connexion->tid;
 	for ( k = index + 1; k < nb_connexions; k++ )
@@ -2761,8 +2761,8 @@ thread_client_thread( void *arg )
 		{
 			pthread_cancel( proxy->tid_client_proxies_to_trigger );
 			if ( close( proxy->process_to_trigger_sockfd ) == -1 )
-				fprintf( stderr, "Error %d while closing socket %d\n",
-					errno, proxy->process_to_trigger_sockfd );
+				fprintf( stderr, "Error while closing socket %d: %s\n",
+					proxy->process_to_trigger_sockfd, strerror(errno) );
 			proxy->tid_client_proxies_to_trigger = 0;
 			proxy->process_to_trigger_sockfd = -1;
 		}						// if
@@ -2796,8 +2796,8 @@ sigint_sighandler( int signum )
 	{
 		cnx = connexions[index];
 		if ( close( cnx->sockfd ) == -1 )
-			fprintf( stderr, "Error %d while closing socket %d\n",
-				errno, cnx->sockfd );
+			fprintf( stderr, "Error while closing socket %d: %s\n",
+				cnx->sockfd, strerror(errno) );
 	}							// for
 
 	UNLOCK;
@@ -2891,8 +2891,8 @@ main( int argc,
 	/*--- Create a mutex, in order to protect shared table of data ---*/
 	if ( pthread_mutex_init( &mutex, NULL ) == -1 )
 	{
-		fprintf( stderr, "%s %d\n\tUnable to initialize mutex - errno=%d\n",
-		   __FILE__, __LINE__, errno );
+		fprintf( stderr, "%s %d\n\tUnable to initialize mutex: %s\n",
+		   __FILE__, __LINE__, strerror(errno) );
 		return -1;
 	}
 
@@ -2925,19 +2925,19 @@ main( int argc,
 		   __FILE__, __LINE__,
 		   port );
 		if ( close( sockfd ) == -1 )
-			fprintf( stderr, "Error %d while closing socket %d\n",
-				errno, sockfd );
+			fprintf( stderr, "Error while closing socket %d: %s\n",
+				sockfd, strerror(errno) );
 		return -1;
 	}
 	if ( status < 0 )
 	{
-		fprintf( stderr, "%s %d\nUnable to bind - port %d - status=%d errno=%s\n",
+		fprintf( stderr, "%s %d\nUnable to bind - port %d - status=%d: %s\n",
 			__FILE__, __LINE__,
 			port,
 			status, strerror( errno ) );
 		if ( close( sockfd ) == -1 )
-			fprintf( stderr, "Error %d while closing socket %d\n",
-				errno, sockfd );
+			fprintf( stderr, "Error while closing socket %d: %s\n",
+				sockfd, strerror(errno) );
 		return -1;
 	}
 
@@ -2967,10 +2967,10 @@ main( int argc,
 		{
 			if ( errno == EINTR )	// A signal has been applied
 				continue;
-			fprintf( stderr, "Socket non accepted - errno=%d\n", errno );
+			fprintf( stderr, "Socket non accepted: %s\n", strerror(errno) );
 			if ( close( sockfd ) == -1 )
-				fprintf( stderr, "Error %d while closing socket %d\n",
-					errno, sockfd );
+				fprintf( stderr, "Error while closing socket %d: %s\n",
+					sockfd, strerror(errno) );
 			return -1;
 		}
 #if 0
@@ -2984,8 +2984,8 @@ main( int argc,
 	}							// for (;;)
 
 	if ( close( sockfd ) == -1 )
-		fprintf( stderr, "Error %d while closing socket %d\n",
-			errno, sockfd );
+		fprintf( stderr, "Error while closing socket %d: %s\n",
+			sockfd, strerror(errno) );
 	return 0;
 
 }								// main
