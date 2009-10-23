@@ -98,7 +98,8 @@ sr::sr(process_type_t process_type, const std::string & process_name, const std:
 		} else {
 			fprintf(stderr, "messip_channel_connect(\"%s\") @ %s:%d: %s\n",
 				sr_name.c_str(), __FILE__, __LINE__, strerror(errno));
-			return;
+			// TODO: throw
+			assert(0);
 		}
 	}
 

@@ -30,10 +30,12 @@ namespace task {
 time::time(lib::configurator &_config) : task(_config)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
-	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
+	if (config.section_name == "[ecp_irp6_on_track]")
 		{ ecp_m_robot = new irp6ot::robot (*this); }
-	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
+	else if (config.section_name == "[ecp_irp6_postument]")
 		{ ecp_m_robot = new irp6p::robot (*this); }
+	else
+		assert(0);
 #if 0
 	// Create sensors
 	sensor_m[lib::SENSOR_TIME] = new ecp_mp::sensor::time (lib::SENSOR_TIME, "[vsp_time]", *this);

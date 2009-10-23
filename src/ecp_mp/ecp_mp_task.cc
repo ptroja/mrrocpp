@@ -47,6 +47,11 @@ task::task(lib::configurator &_config)
 {
 	mrrocpp_network_path = config.return_mrrocpp_network_path();
 
+	std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
+
+//	// Obiekt do komuniacji z SR
+//	sr_ecp_msg = new lib::sr_ecp(process_type, process_name, sr_net_attach_point);
+
 	std::string ui_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", "[ui]");
 
     // kilka sekund  (~1) na otworzenie urzadzenia
@@ -62,8 +67,11 @@ task::task(lib::configurator &_config)
         {
             int e = errno;
             perror("Connect to UI failed");
-            sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "Connect to UI failed");
-            throw ecp_mp::task::ECP_MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+            // WARNING: sr_ecp_msg is not yet inititialized!;
+            // it will be created in ecp_task/mp_task constructors
+
+            // sr_ecp_msg->message (lib::SYSTEM_ERROR, e, "Connect to UI failed");
+            throw ecp_mp::task::ECP_MP_main_error(lib::SYSTEM_ERROR, e	);
         }
     }
 }

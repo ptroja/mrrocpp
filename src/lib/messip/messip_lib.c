@@ -1973,7 +1973,7 @@ messip_receive( messip_channel_t * ch,
 	}
 	if ( dcount == -1 )
 	{
-		TRACE( "messip_receive) %s %d\n\tdcount=%d  errno=%s\n",
+		TRACE( "messip_receive) %s %d\n\tdcount=%d: %s\n",
 			  __FILE__, __LINE__, dcount, strerror( errno ) );
 		ch->new_sockfd[index] = new_sockfd;
 		return -1;

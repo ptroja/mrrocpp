@@ -62,21 +62,21 @@ public:
 	std::string return_mrrocpp_network_path();
 	std::string return_default_reader_measures_path();
 
-	char* section_name;
+	const std::string section_name;
 
 	// Konstruktor obiektu - konfiguratora.
 	configurator(
 			const std::string & _node,
 			const std::string & _dir,
 			const std::string & _ini_file,
-			const char* _section_name,
+			const std::string & _section_name,
 			const std::string & _session_name);
 
 	// zmiana nazwy sesji z modyfikacja pliku konfiguracyjnego
-	void change_ini_file (const char* _ini_file);
+	void change_ini_file (const std::string & _ini_file);
 
 	// Odpalenie procesu zapisanego w danej sekcji INI.
-	pid_t process_spawn(const char* _section_name);
+	pid_t process_spawn(const std::string & _section_name);
 
 	// Zwraca numer wezla.
 	static int return_node_number (const std::string & node_name_l);

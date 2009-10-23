@@ -43,17 +43,14 @@ configurator::configurator (
 		const std::string & _node,
 		const std::string & _dir,
 		const std::string & _ini_file,
-		const char* _section_name,
+		const std::string & _section_name,
 		const std::string & _session_name) :
 	node(_node),
 	dir(_dir),
 	ini_file(_ini_file),
-	session_name(_session_name)
+	session_name(_session_name),
+	section_name(_section_name)
 {
-	assert(_section_name);
-
-	section_name = strdup(_section_name);
-
 	if( uname( &sysinfo ) == -1 ) {
 		perror( "uname" );
 	}
@@ -72,11 +69,11 @@ configurator::configurator (
 #endif /* USE_MESSIP_SRR */
 }// : configurator
 
-void configurator::change_ini_file (const char* _ini_file)
+void configurator::change_ini_file (const std::string & _ini_file)
 {
 #ifdef USE_MESSIP_SRR
 	config_msg_t config_msg;
-	snprintf(config_msg.data.configfile, sizeof(config_msg.data.configfile), "%s", _ini_file);
+	snprintf(config_msg.data.configfile, sizeof(config_msg.data.configfile), "%s", _ini_file.c_str());
 	int32_t answer;
 
 	boost::mutex::scoped_lock l(file_mutex);
@@ -109,7 +106,7 @@ int configurator::return_node_number(const std::string & node_name_l)
 // Zwraca attach point'a dla serwerow.
 std::string configurator::return_attach_point_name (config_path_type_t _type, const char* _key, const char* __section_name)
 {
-	const char *_section_name = (__section_name) ? __section_name : section_name;
+	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 	std::string name;
 
 	if (_type == CONFIG_RESOURCEMAN_LOCAL)
@@ -180,7 +177,7 @@ std::string configurator::return_mrrocpp_network_path()
 bool configurator::exists(const char* _key, const char* __section_name)
 {
 #ifdef USE_MESSIP_SRR
-	const char *_section_name = (__section_name) ? __section_name : section_name;
+	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 
 	config_msg_t config_msg;
 	snprintf(config_msg.data.query.key, sizeof(config_msg.data.query.key), "%s", _key);
@@ -198,7 +195,7 @@ bool configurator::exists(const char* _key, const char* __section_name)
 
 	return value;
 #else
-	const char *_section_name = (__section_name) ? __section_name : section_name;
+	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 	int value;
 	struct Config_Tag configs[] = {
 			// Pobierane pole.
@@ -225,7 +222,7 @@ bool configurator::exists(const char* _key, const char* __section_name)
 int configurator::return_int_value(const char* _key, const char* __section_name)
 {
 #ifdef USE_MESSIP_SRR
-	const char *_section_name = (__section_name) ? __section_name : section_name;
+	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 
 	config_msg_t config_msg;
 	snprintf(config_msg.data.query.key, sizeof(config_msg.data.query.key), "%s", _key);
@@ -243,7 +240,7 @@ int configurator::return_int_value(const char* _key, const char* __section_name)
 
 	return value;
 #else
-	const char *_section_name = (__section_name) ? __section_name : section_name;
+	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 	// Zwracana zmienna.
 	int value = 0;
 	struct Config_Tag configs[] = {
@@ -275,7 +272,7 @@ int configurator::return_int_value(const char* _key, const char* __section_name)
 double configurator::return_double_value(const char* _key, const char*__section_name)
 {
 #ifdef USE_MESSIP_SRR
-	const char *_section_name = (__section_name) ? __section_name : section_name;
+	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 
 	config_msg_t config_msg;
 	snprintf(config_msg.data.query.key, sizeof(config_msg.data.query.key), "%s", _key);
@@ -293,7 +290,7 @@ double configurator::return_double_value(const char* _key, const char*__section_
 
 	return value;
 #else
-	const char *_section_name = (__section_name) ? __section_name : section_name;
+	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 	// Zwracana zmienna.
 	double value;
 	struct Config_Tag configs[] = {
@@ -324,7 +321,7 @@ double configurator::return_double_value(const char* _key, const char*__section_
 std::string configurator::return_string_value(const char* _key, const char*__section_name)
 {
 #ifdef USE_MESSIP_SRR
-	const char *_section_name = (__section_name) ? __section_name : section_name;
+	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 
 	config_msg_t config_msg;
 
@@ -346,7 +343,7 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 	// Zwrocenie wartosci.
 	return std::string(value);
 #else
-	const char *_section_name = (__section_name) ? __section_name : section_name;
+	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 	// Zwracana zmienna.
 	char tmp[200];
 	struct Config_Tag configs[] = {
@@ -373,7 +370,7 @@ std::string configurator::return_string_value(const char* _key, const char*__sec
 }// : return_string_value
 
 
-pid_t configurator::process_spawn(const char*_section_name) {
+pid_t configurator::process_spawn(const std::string & _section_name) {
 #if defined(PROCESS_SPAWN_RSH)
 	pid_t child_pid = vfork();
 
@@ -416,7 +413,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s %s",
 				bin_path, ui_host ? ui_host : "",
 				bin_path, spawned_program_name.c_str(),
-				node.c_str(), dir.c_str(), ini_file.c_str(), _section_name,
+				node.c_str(), dir.c_str(), ini_file.c_str(), _section_name.c_str(),
 				session_name.length() ? session_name.c_str() : "\"\"", asa.c_str()
 		);
 
@@ -544,7 +541,7 @@ pid_t configurator::process_spawn(const char*_section_name) {
 		strcat(input.program_name_and_args, " ");
 		strcat(input.program_name_and_args, ini_file.c_str());
 		strcat(input.program_name_and_args, " ");
-		strcat(input.program_name_and_args, _section_name);
+		strcat(input.program_name_and_args, _section_name.c_str());
 		strcat(input.program_name_and_args, " ");
 		strcat(input.program_name_and_args, session_name.c_str());
 		strcpy(input.binaries_path, bin_path);
@@ -575,7 +572,6 @@ pid_t configurator::process_spawn(const char*_section_name) {
 }// : spawn
 
 configurator::~configurator() {
-	free(section_name);
 #ifdef USE_MESSIP_SRR
 	messip_channel_disconnect(ch, MESSIP_NOTIMEOUT);
 #endif /* USE_MESSIP_SRR */

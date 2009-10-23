@@ -77,9 +77,9 @@ fsautomat::fsautomat(lib::configurator &_config) : task(_config),
 	go_st(NULL)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
-	if (!strcmp(config.section_name, "[ecp_irp6_on_track]")) {
+	if (config.section_name == "[ecp_irp6_on_track]") {
 		ecp_m_robot = new irp6ot::robot (*this);
-	} else if (!strcmp(config.section_name, "[ecp_irp6_postument]")) {
+	} else if (config.section_name == "[ecp_irp6_postument]") {
 		ecp_m_robot = new irp6p::robot (*this);
 	} else {
 		// TODO: throw, robot unsupported

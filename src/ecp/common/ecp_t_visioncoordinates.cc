@@ -34,12 +34,12 @@ visioncoordinates::visioncoordinates(lib::configurator& _config)
 	: task(_config), SETTINGS_SECTION_NAME("[ecp_visioncoordinates_task]")
 {
 	// tworzymy robota
-    if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
+    if (config.section_name == "[ecp_irp6_on_track]")
     {
         ecp_m_robot = new irp6ot::robot (*this);
         debugmsg("IRp6ot loaded");
     }
-    else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
+    else if (config.section_name == "[ecp_irp6_postument]")
     {
         ecp_m_robot = new irp6p::robot(*this);
         debugmsg("IRp6p loaded");

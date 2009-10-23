@@ -106,7 +106,7 @@ void task::catch_signal_in_ecp_task(int sig)
 			_exit(EXIT_SUCCESS);
 			break;
 		case SIGSEGV:
-			fprintf(stderr, "Segmentation fault in ECP process %s\n", config.section_name);
+			fprintf(stderr, "Segmentation fault in ECP process %s\n", config.section_name.c_str());
 			signal(SIGSEGV, SIG_DFL);
 			break;
 	}
@@ -115,19 +115,17 @@ void task::catch_signal_in_ecp_task(int sig)
 // ---------------------------------------------------------------
 void task::initialize_communication()
 {
-	std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
+	std::string mp_pulse_attach_point =
+				config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", "[mp]");
+
 	std::string ecp_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_attach_point");
-	std::string trigger_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point");
+	std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
 
 	if ((sr_ecp_msg = new lib::sr_ecp(lib::ECP, ecp_attach_point.c_str(), sr_net_attach_point.c_str())) == NULL) { // Obiekt do komuniacji z SR
 		int e = errno; // kod bledu systemowego
 		perror("Unable to locate SR");
 		throw ECP_main_error(lib::SYSTEM_ERROR, e);
 	}
-
-	std::string mp_pulse_attach_point =
-				config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", "[mp]");
-
 //	std::cout << "ECP: Opening MP pulses channel at '" << mp_pulse_attach_point << "'" << std::endl;
 
 #if !defined(USE_MESSIP_SRR)
@@ -154,6 +152,8 @@ void task::initialize_communication()
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Failed to attach Effector Control Process");
 		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
+
+	std::string trigger_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point");
 
 #if !defined(USE_MESSIP_SRR)
 	if ((trigger_attach = name_attach(NULL, trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)

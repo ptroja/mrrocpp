@@ -33,27 +33,27 @@ tran::tran(lib::configurator &_config) :
 	task(_config)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	if (!strcmp(config.section_name, "[ecp_irp6_on_track]"))
+	if (config.section_name == "[ecp_irp6_on_track]")
 	{
 		ecp_m_robot = new irp6ot::robot (*this);
 	}
-	else if (!strcmp(config.section_name, "[ecp_irp6_postument]"))
+	else if (config.section_name == "[ecp_irp6_postument]")
 	{
 		ecp_m_robot = new irp6p::robot (*this);
 	}
-	else if (!strcmp(config.section_name, "[ecp_conveyor]"))
+	else if (config.section_name == "[ecp_conveyor]")
 	{
 		ecp_m_robot = new conveyor::robot (*this);
 	}
-	else if (!strcmp(config.section_name, "[ecp_speaker]"))
+	else if (config.section_name == "[ecp_speaker]")
 	{
 		ecp_m_robot = new speaker::robot (*this);
 	}
-	else if (!strcmp(config.section_name, "[ecp_irp6_mechatronika]"))
+	else if (config.section_name =="[ecp_irp6_mechatronika]")
 	{
 		ecp_m_robot = new irp6m::robot (*this);
 	}
-	else if (!strcmp(config.section_name, "[ecp_polycrank]"))
+	else if (config.section_name == "[ecp_polycrank]")
 	{
 		ecp_m_robot = new polycrank::robot (*this);
 	}

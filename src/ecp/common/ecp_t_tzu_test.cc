@@ -30,12 +30,12 @@ tzu_test::tzu_test(lib::configurator &_config) : task(_config)
 	str.open("../results_test.txt"/*,ios::app*/);
 
 	// ecp_m_robot = new ecp_irp6_on_track_robot (*this);
-	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
+	if (config.section_name == "[ecp_irp6_on_track]")
 	{
 		ecp_m_robot = new irp6ot::robot (*this);
 		robot = ON_TRACK;
 	}
-	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
+	else if (config.section_name == "[ecp_irp6_postument]")
 	{
 		ecp_m_robot = new irp6p::robot (*this);
 		robot = POSTUMENT;

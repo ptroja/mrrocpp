@@ -29,13 +29,13 @@ using namespace std;
 /** konstruktor konstruktor**/
 tzu_fs::tzu_fs(lib::configurator &_config) : task(_config)
 {
-	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
+	if (config.section_name == "[ecp_irp6_on_track]")
 	{
 		ecp_m_robot = new irp6ot::robot (*this);
 		robot = ON_TRACK;
 		str.open("../on_track_results.txt");
 	}
-	else if (strcmp(config.section_name, "[ecp_irp6_postument]") == 0)
+	else if (config.section_name == "[ecp_irp6_postument]")
 	{
 		ecp_m_robot = new irp6p::robot (*this);
 		robot = POSTUMENT;

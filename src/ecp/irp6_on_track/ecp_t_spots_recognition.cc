@@ -38,7 +38,7 @@ spots_recognition::spots_recognition(lib::configurator &_config): task(_config)
 
 // Create an adequate robot. - depending on the ini section name.
 // Note - only on track working
-	if (strcmp(config.section_name, "[ecp_irp6_on_track]") == 0)
+	if (config.section_name == "[ecp_irp6_on_track]")
 	{
 		ecp_m_robot = new robot (*this);
 		sr_ecp_msg->message("IRp6 on Track loaded");

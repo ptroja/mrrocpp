@@ -26,7 +26,7 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-#define debugmsg(msg)						task::task::sr_ecp_msg->message(msg);
+#define debugmsg(msg)						sr_ecp_msg.message(msg)
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // ecp_visioncoordinates_generator
@@ -63,13 +63,16 @@ bool visioncoordinates::first_step()
 	data.motion_type = lib::ABSOLUTE;
 	data.next_interpolation_type = lib::MIM;
 
-	// FraDIA ma znaleŸæ wszystkie obiekty, nawet trochê podobne do poszukiwanego
+	// FraDIA ma znaleï¿½ï¿½ wszystkie obiekty, nawet trochï¿½ podobne do poszukiwanego
 	sensor_out->esa.mode = lib::EM_SEARCH;
 	strcpy(sensor_out->esa.object, itsSearchObject.c_str());
 
 	debugmsg("ecp_g_visioncoordinates: Ready to get data");
 	return true;
 }
+
+#if 0
+// TODO: this should be private method, which can access generator::sr_ecp_msg object
 
 void describe_matrix(lib::Homog_matrix& matrix, const char* name)
 {
@@ -85,7 +88,7 @@ void describe_matrix(lib::Homog_matrix& matrix, const char* name)
 	matrix.get_xyz_angle_axis(t);
 	for (int i = 0; i < sizeof(t)/sizeof(t[0]); ++i)
 	{
-		if (i == 3 || i == 6) 
+		if (i == 3 || i == 6)
 			oss << "| ";
 		oss << t[i] << " ";
 	}
@@ -96,7 +99,7 @@ void describe_matrix(lib::Homog_matrix& matrix, const char* name)
 	matrix.get_xyz_euler_zyz(t);
 	for (int i = 0; i < sizeof(t)/sizeof(t[0]); ++i)
 	{
-		if (i == 3 || i == 6) 
+		if (i == 3 || i == 6)
 			oss << "| ";
 		oss << t[i] << " ";
 	}
@@ -104,10 +107,11 @@ void describe_matrix(lib::Homog_matrix& matrix, const char* name)
 
 	debugmsg(oss.str().c_str());
 }
+#endif
 
 lib::Homog_matrix visioncoordinates::calculateMove(double rot_z, double rot_dev, double distance)
 {
-	// nie wiem jak narazie policzyc dystans, o ktory sie powinnismy przesunac. dystanss powinien byc niewielki, 
+	// nie wiem jak narazie policzyc dystans, o ktory sie powinnismy przesunac. dystanss powinien byc niewielki,
 	// najlepiej ograniczony z gory, by nie narobic szkody robotem np. wbijajac sie w stol gdy zobaczymy plamke,
 	// zinterpretowana jako widziany z daleka sztuciec. Jesli za bardzo sie przysuniemy do sztucca, to tez nie zobaczymy
 	// go w calosci. Otrzymany dystans powinien byc wiec dystansem o ktory mamy sie przyblizyc, np. poprzez
@@ -121,7 +125,7 @@ lib::Homog_matrix visioncoordinates::calculateMove(double rot_z, double rot_dev,
 	lib::Homog_matrix move_z(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, 0.0, 0.0, 0.0,				0.0, 0.0, rot_z);
 	lib::Homog_matrix move_y(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, 0.0, 0.0, 0.0,				0.0, rot_dev, 0.0);
 	lib::Homog_matrix move_dist(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, 0.0, 0.0, distance,		0.0, 0.0, 0.0);
-	
+
 	lib::Homog_matrix move_back_z(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, 0.0, 0.0, 0.0,		0.0, 0.0, -rot_z);			// narazie przywracamy istniejacy kierunek
 
 	return move_z * move_y * move_dist * move_back_z;
@@ -193,7 +197,7 @@ void visioncoordinates::getKnownObjects()
 	{
 		itsKnownObjects[it] = std::string(ret->object[it % 8]);
 		std::cout << "we known object " << itsKnownObjects[it] << std::endl;
-		
+
 		++it;
 
 		if (it % 8 == 0)				// --- byc moze musimy pobrac kolejna porcje danych
@@ -224,18 +228,18 @@ void visioncoordinates::getKnownObjects()
 
 	// current_XYZ_AA_arm_coordinates zawiera 8 elementow, wykorzystujemy 6 pierwszych xyz_zyz
 	lib::Homog_matrix current_position(lib::Homog_matrix::MTR_XYZ_ANGLE_AXIS, arm[0], arm[1], arm[2], arm[3], arm[4], arm[5]); // aktualna pozycja ramienia robota
-	
-	//lib::Homog_matrix move(lib::Homog_matrix::MTR_XYZ_EULER_ZYZ, 0.0, 0.0, 0.0, z, xoz, -z); 
 
-	// 
-	// z wyznacza nam kolejny numer argumentu, do ktorego podamy sterowanie w xoz 
+	//lib::Homog_matrix move(lib::Homog_matrix::MTR_XYZ_EULER_ZYZ, 0.0, 0.0, 0.0, z, xoz, -z);
+
+	//
+	// z wyznacza nam kolejny numer argumentu, do ktorego podamy sterowanie w xoz
 	// to w celu przetestowania kolejnych osi chwytaka -- gdy juz ustalimy osie chwytaka, i przetestujemy obroty wokol nich
-	// 
-	// natepnym testem po ustaleniu osi obrotow, bedzie dodanie przesuniecia wzgledem osi chwytaka z (ruch do przodu po skierowaniu sie 
+	//
+	// natepnym testem po ustaleniu osi obrotow, bedzie dodanie przesuniecia wzgledem osi chwytaka z (ruch do przodu po skierowaniu sie
 	// w strone chwytaka)
-	// 
+	//
 	// nastepnym krokiem moze byc sprawdzenie zachowania sie robota przy troche innym polozeniu poczatkowym (moze tak, by robot nie mial za bardzo mozliwosci
-	// zmiany orientacji chwytaka na inna - w sensie by nie wystepowaly niejednoznacznosci. oprocz tego kwestia osobna jest gdy odchyla sie na bok - robot na bok odchylic sie nie 
+	// zmiany orientacji chwytaka na inna - w sensie by nie wystepowaly niejednoznacznosci. oprocz tego kwestia osobna jest gdy odchyla sie na bok - robot na bok odchylic sie nie
 	// moze, ale jesli dostanie rotacje ze nie musi odchylac sie na bok, to przeciez nie bedzie probowal... Czyli podsumowujac - niech nasz ,,bocian'' patrzy bardziej w dol
 	// i dla takiego polozenia poczatkowego (gdy nie bedzie niejednoznacznosci) sprawdzac czy rotacje rusza.
 	int mode = int(z + 0.1);
@@ -268,7 +272,7 @@ void visioncoordinates::getKnownObjects()
 	std::ostringstream oss3;
 	oss3 << "target: " << std::endl << target << std::endl;
 	describe_matrix(target, "target = current_position * move");
-	
+
 	debugmsg(oss3.str().c_str());
 
 	//memcpy(itsOutputCoordinates, arm, sizeof(data.current_XYZ_AA_arm_coordinates));
@@ -285,9 +289,9 @@ void visioncoordinates::getKnownObjects()
 	debugmsg(oss4.str().c_str());
 
 	debugmsg("VCG: Data processed");
-	
-	
-	return false;		// koniec pracy generatora, teraz zadanie powinno wywolac generator smooth	
+
+
+	return false;		// koniec pracy generatora, teraz zadanie powinno wywolac generator smooth
 }*/
 
 #undef debugmsg
