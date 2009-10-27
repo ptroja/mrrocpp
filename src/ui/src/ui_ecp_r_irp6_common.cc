@@ -394,7 +394,7 @@ void ui_common_robot::move_joints (double final_position[] )
         temp = fabs(final_position[j] - current_position[j]);
         if ( ecp->robot_name == lib::ROBOT_IRP6_ON_TRACK && j == 0 )  // tor
             max_inc_lin = (max_inc_lin > temp) ? max_inc_lin : temp;
-        else  if ( j == ecp->number_of_servos )  // gripper
+        else  if ( j == ecp->number_of_servos-1 )  // gripper
             max_inc_grip = (max_inc_grip > temp) ? max_inc_grip : temp;
         else
             max_inc_ang = (max_inc_ang > temp) ? max_inc_ang : temp;
@@ -409,7 +409,7 @@ void ui_common_robot::move_joints (double final_position[] )
         nr_of_steps = (nr_ang > nr_lin) ? nr_ang : nr_lin;
     }
     nr_of_steps = (nr_of_steps > nr_grip) ? nr_of_steps : nr_grip;
-
+    // printf("nr_of_steps: %d, nr_grip: %d\n",nr_of_steps,nr_grip);
     // Parametry zlecenia ruchu i odczytu polozenia
     ecp->ecp_command.instruction.instruction_type = lib::SET_GET;
     ecp->ecp_command.instruction.get_type = ARM_DV; // ARM
@@ -654,6 +654,8 @@ void ui_common_robot::read_motors ( double current_position[] )
     // printf("koniec read motors\n");
 }
 // ---------------------------------------------------------------
+
+
 
 // ---------------------------------------------------------------
 void ui_common_robot::read_joints ( double current_position[] )
