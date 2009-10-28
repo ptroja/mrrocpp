@@ -149,8 +149,8 @@ void smooth::set_trajectory(ecp_mp::common::Trajectory &trajectory)
 	trajectory.showTime();
 
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
-	pose_list = &trajectory.getPoses();
-	pose_list_iterator = pose_list->end();
+	pose_list = trajectory.getPoses();
+	pose_list_iterator = pose_list.end();
 
 	/*
 	for(std::list<Trajectory::Pose>::iterator it = trajectory.getPoses()->begin(); it != trajectory.getPoses()->end(); ++it)
@@ -288,8 +288,6 @@ void smooth::load_trajectory_from_xml(const char* fileName, const char* nodeName
 
 void smooth::load_file_with_path (const char* file_name)
 {
-    // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
-
 	//printf("%s\n", file_name);
 	//flushall();
 
@@ -716,18 +714,18 @@ void smooth::calculate(void)
 
 void smooth::flush_pose_list ( void )
 {
-	pose_list->clear();
+	pose_list.clear();
 }
 
 // -------------------------------------------------------return iterator to beginning of the list
 void smooth::initiate_pose_list(void)
 {
-    pose_list_iterator = pose_list->begin();
+    pose_list_iterator = pose_list.begin();
 }
 // -------------------------------------------------------
 void smooth::next_pose_list_ptr (void)
 {
-    if (pose_list_iterator != pose_list->end())
+    if (pose_list_iterator != pose_list.end())
         pose_list_iterator++;
 }
 
@@ -761,7 +759,7 @@ void smooth::set_pose (lib::POSE_SPECIFICATION ps, double vp[MAX_SERVOS_NR], dou
 bool smooth::is_pose_list_element ( void )
 {
     // sprawdza czy aktualnie wskazywany jest element listy, czy lista sie skonczyla
-    if ( pose_list_iterator != pose_list->end())
+    if ( pose_list_iterator != pose_list.end())
     {
         return true;
     }
@@ -775,9 +773,9 @@ bool smooth::is_last_list_element ( void )
 {
     // sprawdza czy aktualnie wskazywany element listy ma nastepnik
     // jesli <> nulla
-    if ( pose_list_iterator != pose_list->end() )
+    if ( pose_list_iterator != pose_list.end() )
     {
-        if ( (++pose_list_iterator) != pose_list->end() )
+        if ( (++pose_list_iterator) != pose_list.end() )
         {
             --pose_list_iterator;
             return false;
@@ -794,9 +792,9 @@ bool smooth::is_last_list_element ( void )
 
 void smooth::insert_pose_list_element (lib::POSE_SPECIFICATION ps, double v_p[MAX_SERVOS_NR], double v_k[MAX_SERVOS_NR], double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR])
 {
-    pose_list->push_back(ecp_mp::common::smooth_trajectory_pose(ps, coordinates, v, a, v_p, v_k));
-    if(pose_list->size() == 1) {
-    	pose_list_iterator = pose_list->begin();
+    pose_list.push_back(ecp_mp::common::smooth_trajectory_pose(ps, coordinates, v, a, v_p, v_k));
+    if(pose_list.size() == 1) {
+    	pose_list_iterator = pose_list.begin();
     } else {
     	pose_list_iterator++;
     }
@@ -805,7 +803,7 @@ void smooth::insert_pose_list_element (lib::POSE_SPECIFICATION ps, double v_p[MA
 // -------------------------------------------------------
 int smooth::pose_list_length(void)
 {
-    return pose_list->size();
+    return pose_list.size();
 }
 
 void smooth::load_a_v_min (const char* file_name)
@@ -901,8 +899,6 @@ smooth::smooth (common::task::task& _ecp_task, bool _is_synchronised, bool _debu
         :
         delta (_ecp_task), is_synchronised(_is_synchronised), debug(_debug)
 {
-	pose_list = new std::list<ecp_mp::common::smooth_trajectory_pose>();
-
 	// Stworzenie sciezek do plików
 	std::string path1(ecp_t.mrrocpp_network_path);
 	path1 += "data/a_v_max.txt";
