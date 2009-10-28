@@ -36,16 +36,16 @@ private:
 	lib::sr_ecp& sr_ecp_msg;
 
 	/*!
-      * Sensor name.
+      * Sensor name as defined in impconst.h
       */
-	lib::SENSOR_ENUM sensor_name;
+	const lib::SENSOR_ENUM sensor_name;
 
 public:
 
 	/*!
       * Constructor. Creates socket connection to pcbird.
       */
- 	pcbird (lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object);
+ 	pcbird (const char* _section_name, task::task& _ecp_mp_object);
 
 	/*!
       * Sends sensor configuration to pcbird.

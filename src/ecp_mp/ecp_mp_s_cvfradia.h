@@ -55,7 +55,7 @@ private:
 	/*!
       * Sensor name.
       */
-	lib::SENSOR_ENUM sensor_name;
+	const lib::SENSOR_ENUM sensor_name;
 
 public:
 

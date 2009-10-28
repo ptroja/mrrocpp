@@ -26,8 +26,8 @@ namespace sensor {
 /*!
  * Constructor. Creates socket connection to pcbird.
  */
-pcbird::pcbird(lib::SENSOR_ENUM _sensor_name, const char* _section_name, task::task& _ecp_mp_object)
-	: sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(_sensor_name)
+pcbird::pcbird(const char* _section_name, task::task& _ecp_mp_object)
+	: sr_ecp_msg(*_ecp_mp_object.sr_ecp_msg), sensor_name(lib::SENSOR_PCBIRD)
 {
 	// Set size of passed message/union.
 	union_size = sizeof(image.sensor_union.pcbird);
