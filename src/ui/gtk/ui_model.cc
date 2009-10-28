@@ -112,7 +112,8 @@ ui_model::ui_model() : tabs_visible(0),
 
 	this->config = new lib::configurator(
 			g_get_host_name(),
-			g_get_current_dir(), "rcsc.ini", "[ui]", "");
+			std::string(g_get_current_dir()) + G_DIR_SEPARATOR_S + "..",
+			"rcsc.ini", "[ui]", "");
 }
 
 void ui_model::init_sr(void) {
