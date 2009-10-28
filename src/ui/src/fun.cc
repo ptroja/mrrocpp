@@ -1068,11 +1068,11 @@ int initiate_configuration()
 
         if (config) delete config;
 		config = new lib::configurator(
-				ui_state.ui_node_name.c_str(),
-				ui_state.mrrocpp_local_path.c_str(),
-				ui_state.config_file.c_str(),
+				ui_state.ui_node_name,
+				ui_state.mrrocpp_local_path,
+				ui_state.config_file,
 				"[ui]",
-				ui_state.session_name.c_str());
+				ui_state.session_name);
 
 		std::string attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
 

@@ -110,9 +110,18 @@ ui_model::ui_model() : tabs_visible(0),
 	setMpLoadButton(false, true);
 	setEdpsLoadButton(true, true);
 
+	// TODO: rewrite with boost current_path() and basic_path iterators
+	gchar *cwd_str = g_get_current_dir();
+	std::string cwd(cwd_str);
+	g_free(cwd_str);
+
+	cwd += G_DIR_SEPARATOR_S;
+	cwd += "..";
+	cwd += G_DIR_SEPARATOR_S;
+
 	this->config = new lib::configurator(
 			g_get_host_name(),
-			std::string(g_get_current_dir()) + G_DIR_SEPARATOR_S + "..",
+			cwd,
 			"rcsc.ini", "[ui]", "");
 }
 

@@ -21,7 +21,7 @@ if [ ! -f ${CONFIG_FILE} ]; then
 	kill ${MESSIP_PID}
 	exit 1
 fi
-./configsrv `hostname` `dirname ${PWD}`/ ${CONFIG} &
+./configsrv `hostname` ${PWD}/../ ${CONFIG} &
 CONFIGSRV_PID=$!
 
 sleep 0.5
