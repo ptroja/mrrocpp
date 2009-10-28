@@ -98,17 +98,17 @@ class smooth2 : public delta {
 		void set_absolute(void); //zmiana na tryb bezwzgledny
 		void reset(void);
 
-		bool load_a_v_max(const char* file_name);
-		bool load_a_v_min(const char* file_name);
-		bool load_file_with_path(const char* file_name);
+		void load_a_v_max(const char* file_name);
+		void load_a_v_min(const char* file_name);
+		void load_file_with_path(const char* file_name);
 		void load_coordinates(lib::POSE_SPECIFICATION ps, double coordinates[MAX_SERVOS_NR], bool reset);
 		void load_coordinates(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset);
 		void load_coordinates(lib::POSE_SPECIFICATION ps, double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
 		void load_coordinates(lib::POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
 
-		bool load_trajectory_from_xml(const char* fileName, const char* nodeName);
+		void load_trajectory_from_xml(const char* fileName, const char* nodeName);
 		void set_pose_from_xml(xmlNode *stateNode, bool &first_time);
-		bool load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory);
+		void load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory);
 
 		virtual bool first_step();
 		virtual bool next_step();

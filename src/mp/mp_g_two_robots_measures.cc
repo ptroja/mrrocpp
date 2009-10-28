@@ -153,7 +153,7 @@ void two_robots_measures::save_measures_to_file (void)
 	}
 	// Otworzenie plik do zapisu.
 	std::ofstream to_file(ui_to_ecp_rep.filename);
-	if (to_file == NULL)
+	if (!to_file.good())
 	{
 		sr_ecp_msg.message (lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 		return;
@@ -168,7 +168,7 @@ void two_robots_measures::save_measures_to_file (void)
 			to_file<< trm.irp6p[i] <<"\t";
 		to_file<<"\n";
 	}
-	to_file.close();
+
 	sr_ecp_msg.message("Measures were saved to file");
 }
 

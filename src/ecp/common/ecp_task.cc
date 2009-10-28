@@ -323,19 +323,17 @@ void task::get_next_state(void)
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ECP: Reply to MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ECP: Reply to MP failed");
-		throw ECP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		throw ECP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 
 	if (ecp_stop)
 		throw common::generator::generator::ECP_error (lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 
 	if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
-		fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n",
-				__FILE__, __LINE__);
+		fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d, mp_command_type() = %d\n",
+				__FILE__, __LINE__, mp_command_type());
 		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 	}
-
-	return;
 }
 
 // Oczekiwanie na polecenie od MP

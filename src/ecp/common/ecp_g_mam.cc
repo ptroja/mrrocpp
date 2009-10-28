@@ -291,7 +291,7 @@ void manual_moves_automatic_measures::save_mam_list(char* filename)
 	try {
 		// Otworzenie pliku.
         std::ofstream to_file(filename);
-		if (!to_file)
+		if (!to_file.good())
 		throw ECP_main_error(lib::FATAL_ERROR, SAVE_FILE_ERROR);
 		// Przejscie na poczatek listy.
 		initiate_mam_list();
@@ -303,8 +303,6 @@ void manual_moves_automatic_measures::save_mam_list(char* filename)
 		}
 		// zapisanie ostatniego elementu
 		save_mam_element(to_file);
-		// Zamkniecie pliku.
-		to_file.close();
 		// Komentarz - zapisanie pliku.
 		sr_ecp_msg.message ("Measures saved properly to file");
 	}

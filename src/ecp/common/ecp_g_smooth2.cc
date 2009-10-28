@@ -52,7 +52,7 @@ bool smooth2::eq(double a, double b) {
 	return diff < EPS && diff > -EPS;
 }
 
-bool smooth2::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory) {
+void smooth2::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory) {
 	bool first_time = true;
 	int numOfPoses = trajectory.getNumberOfPoses();
 	trajectory.showTime();
@@ -60,8 +60,6 @@ bool smooth2::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory) {
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
 	pose_list = &trajectory.getPoses2();
 	pose_list_iterator = pose_list->end();
-
-	return true;
 }
 
 void smooth2::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
@@ -123,23 +121,19 @@ void smooth2::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 	xmlFree(numOfPoses);
 }
 
-bool smooth2::load_trajectory_from_xml(const char* fileName, const char* nodeName) {
+void smooth2::load_trajectory_from_xml(const char* fileName, const char* nodeName) {
     // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
 	 bool first_time = true; // Znacznik
-	 xmlNode *cur_node, *child_node, *subTaskNode;
-	 xmlChar *stateID;
 
-	 xmlDocPtr doc;
-	 doc = xmlParseFile(fileName);
+	 xmlDocPtr doc = xmlParseFile(fileName);
 	 xmlXIncludeProcess(doc);
 	 if(doc == NULL)
 	 {
         throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	 }
 
-	 xmlNode *root = NULL;
-	 root = xmlDocGetRootElement(doc);
+	 xmlNodePtr root = xmlDocGetRootElement(doc);
 	 if(!root || !root->name)
 	 {
 		 xmlFreeDoc(doc);
@@ -148,18 +142,18 @@ bool smooth2::load_trajectory_from_xml(const char* fileName, const char* nodeNam
 
 	 flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
 
-   for(cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
+   for(xmlNodePtr cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
    {
       if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "SubTask" ) )
       {
-   		for(subTaskNode = cur_node->children; subTaskNode != NULL; subTaskNode = subTaskNode->next)
+   		for(xmlNodePtr subTaskNode = cur_node->children; subTaskNode != NULL; subTaskNode = subTaskNode->next)
 			{
       		if ( subTaskNode->type == XML_ELEMENT_NODE  && !xmlStrcmp(subTaskNode->name, (const xmlChar *) "State" ) )
 				{
-					stateID = xmlGetProp(subTaskNode, (const xmlChar *) "id");
+					xmlChar * stateID = xmlGetProp(subTaskNode, (const xmlChar *) "id");
 					if(stateID && !strcmp((const char *)stateID, nodeName))
 					{
-						for(child_node = subTaskNode->children; child_node != NULL; child_node = child_node->next)
+						for(xmlNodePtr child_node = subTaskNode->children; child_node != NULL; child_node = child_node->next)
 						{
 							if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") )
 							{
@@ -173,10 +167,10 @@ bool smooth2::load_trajectory_from_xml(const char* fileName, const char* nodeNam
 		}
       if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "State" ) )
       {
-         stateID = xmlGetProp(cur_node, (const xmlChar *) "id");
+         xmlChar * stateID = xmlGetProp(cur_node, (const xmlChar *) "id");
          if(stateID && !strcmp((const char *)stateID, nodeName))
 			{
-	         for(child_node = cur_node->children; child_node != NULL; child_node = child_node->next)
+	         for(xmlNodePtr child_node = cur_node->children; child_node != NULL; child_node = child_node->next)
 	         {
 	            if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") )
 	            {
@@ -189,11 +183,9 @@ bool smooth2::load_trajectory_from_xml(const char* fileName, const char* nodeNam
 	}
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
-
-	return true;
 }
 
-bool smooth2::load_file_with_path(const char* file_name) {
+void smooth2::load_file_with_path(const char* file_name) {
 
 	reset();
 
@@ -213,7 +205,7 @@ bool smooth2::load_file_with_path(const char* file_name) {
     double coordinates[MAX_SERVOS_NR];     // Wczytane wspolrzedne
 
     std::ifstream from_file(file_name); // otworz plik do odczytu
-    if (!from_file)
+    if (!from_file.good())
     {
         perror(file_name);
         throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
@@ -221,7 +213,6 @@ bool smooth2::load_file_with_path(const char* file_name) {
 
     if ( !(from_file >> coordinate_type) )
     {
-        from_file.close();
         throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
     }
 
@@ -259,14 +250,12 @@ bool smooth2::load_file_with_path(const char* file_name) {
 
     else
     {
-        from_file.close();
         throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
     }
 
     // printf("po coord type %d\n", ps);
     if ( !(from_file >> number_of_poses) )
     {
-        from_file.close();
         throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
     }
 
@@ -284,7 +273,6 @@ bool smooth2::load_file_with_path(const char* file_name) {
         {
             if ( !(from_file >> v[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
-                from_file.close();
                 throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         }
@@ -294,7 +282,6 @@ bool smooth2::load_file_with_path(const char* file_name) {
         {
             if ( !(from_file >> a[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
-                from_file.close();
                 throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         }
@@ -304,7 +291,6 @@ bool smooth2::load_file_with_path(const char* file_name) {
         {
             if ( !(from_file >> coordinates[j]) )
             { // Zabezpieczenie przed danymi nienumerycznymi
-                from_file.close();
                 throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         }
@@ -322,9 +308,6 @@ bool smooth2::load_file_with_path(const char* file_name) {
             // printf("Pose list element: %d, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0]);
         }
     } // end: for
-    from_file.close();
-
-    return true;
 } // end: load_file_with_path()
 
 //jesli w ponizszych metodach podamy reset jako true lista pozycji zostanie wyczyszczona, jesli jako false pozycja zostanie dodana do listy bez jej czyszczenia
@@ -489,54 +472,43 @@ void smooth2::flush_coordinate_list(void) {
 	}
 }
 
-bool smooth2::load_a_v_min (const char* file_name)
+void smooth2::load_a_v_min (const char* file_name)
 {
-    uint64_t e;       // Kod bledu systemowego
-    uint64_t j;    // Liczniki petli
     std::ifstream from_file(file_name); // otworz plik do odczytu
 
-    if (!from_file)
+    if (!from_file.good())
     {
-        // printf("error\n");
         perror(file_name);
         throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
     }
 
     if ( !(from_file >> v_grip_min_zyz) )
     { // Zabezpieczenie przed danymi nienumerycznymi
-        from_file.close();
         throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
     }
 
     if ( !(from_file >> v_grip_min_aa) )
     { // Zabezpieczenie przed danymi nienumerycznymi
-        from_file.close();
         throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
     }
 
     if ( !(from_file >> v_grip_min_joint) )
     { // Zabezpieczenie przed danymi nienumerycznymi
-        from_file.close();
         throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
     }
 
     if ( !(from_file >> v_grip_min_motor) )
     { // Zabezpieczenie przed danymi nienumerycznymi
-        from_file.close();
         throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
     }
-
-    from_file.close();
-    return true;
 } // end: bool load_a_v_min()
 
-bool smooth2::load_a_v_max (const char* file_name)
+void smooth2::load_a_v_max (const char* file_name)
 {
     std::ifstream from_file(file_name); // otworz plik do odczytu
 
-    if (!from_file)
+    if (!from_file.good())
     {
-        // printf("error\n");
         perror(file_name);
         throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
     }
@@ -545,7 +517,6 @@ bool smooth2::load_a_v_max (const char* file_name)
     {
         if ( !(from_file >> v_max_motor[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            from_file.close();
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
@@ -553,7 +524,6 @@ bool smooth2::load_a_v_max (const char* file_name)
     {
         if ( !(from_file >> a_max_motor[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            from_file.close();
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
@@ -562,7 +532,6 @@ bool smooth2::load_a_v_max (const char* file_name)
     {
         if ( !(from_file >> v_max_joint[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            from_file.close();
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
@@ -570,7 +539,6 @@ bool smooth2::load_a_v_max (const char* file_name)
     {
         if ( !(from_file >> a_max_joint[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            from_file.close();
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
@@ -579,7 +547,6 @@ bool smooth2::load_a_v_max (const char* file_name)
     {
         if ( !(from_file >> v_max_zyz[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            from_file.close();
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
@@ -587,7 +554,6 @@ bool smooth2::load_a_v_max (const char* file_name)
     {
         if ( !(from_file >> a_max_zyz[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            from_file.close();
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
@@ -596,7 +562,6 @@ bool smooth2::load_a_v_max (const char* file_name)
     {
         if ( !(from_file >> v_max_aa[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            from_file.close();
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
@@ -604,13 +569,9 @@ bool smooth2::load_a_v_max (const char* file_name)
     {
         if ( !(from_file >> a_max_aa[j]) )
         { // Zabezpieczenie przed danymi nienumerycznymi
-            from_file.close();
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     }
-
-    from_file.close();
-    return true;
 } // end: bool load_a_v_max()
 
 smooth2::smooth2 (common::task::task& _ecp_task, bool _is_synchronised)

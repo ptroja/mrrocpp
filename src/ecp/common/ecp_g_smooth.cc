@@ -409,7 +409,6 @@ void smooth::load_file_with_path (const char* file_name)
         		{
         			if ( !(from_file >> extra_info) )
         			{ // Zabezpieczenie przed danymi nienumerycznymi
-        				from_file.close();
         				throw ecp_generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         			}
        				// Wstaw do listy nowa pozycje

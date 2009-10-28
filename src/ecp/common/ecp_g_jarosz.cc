@@ -3256,7 +3256,7 @@ void ecp_save_trajectory(elipsoid& the_generator, common::task::task& _ecp_task)
 	}
 	std::ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
 	e = errno;
-	if (!to_file) {
+	if (!to_file.good()) {
 		perror(ui_to_ecp_rep.filename);
 		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	} else {
@@ -3270,7 +3270,7 @@ void ecp_save_trajectory(elipsoid& the_generator, common::task::task& _ecp_task)
 			to_file << '\n';
 		}
 	}
-	to_file.close();
+
 	the_generator.clear_buffer();
 } // end: irp6_postument_save_trajectory()
 // --------------------------------------------------------------------------

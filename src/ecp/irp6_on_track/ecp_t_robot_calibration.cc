@@ -34,7 +34,7 @@ robot_calibration::robot_calibration(lib::configurator &_config): task(_config)
 	// Create calibration generator.
 	generator = new generator::robotcalibgen(*this);
 	// Create pcbird sensor in the generato sensors list.
- 	generator->sensor_m[lib::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird(lib::SENSOR_PCBIRD, "[vsp_calibration_pcbird]", *this);
+ 	generator->sensor_m[lib::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird("[vsp_calibration_pcbird]", *this);
    	sr_ecp_msg->message("TASK: PCBIRD sensor added to list");
 }
 

@@ -35,7 +35,7 @@ namespace task {
 pcbird::pcbird(lib::configurator &_config) : task(_config)
 {
 	// Create pcbird sensor - for testing purposes.
-	sensor_m[lib::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird(lib::SENSOR_PCBIRD, "[vsp_pcbird]", *this);
+	sensor_m[lib::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird("[vsp_pcbird]", *this);
 	// Configure sensor.
 	sensor_m[lib::SENSOR_PCBIRD]->configure_sensor();
 

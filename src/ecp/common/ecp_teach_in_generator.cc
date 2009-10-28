@@ -239,7 +239,7 @@ bool ecp_teach_in_generator::load_file_with_path(const char* file_name)
 
 
     std::ifstream from_file(file_name); // otworz plik do odczytu
-    if (!from_file)
+    if (!from_file.good())
       {
         perror(file_name);
         throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
@@ -247,7 +247,6 @@ bool ecp_teach_in_generator::load_file_with_path(const char* file_name)
 
     if ( !(from_file >> coordinate_type))
       {
-        from_file.close();
         throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
       }
 
@@ -280,12 +279,10 @@ bool ecp_teach_in_generator::load_file_with_path(const char* file_name)
       ps = lib::PF_VELOCITY;
     else
       {
-        from_file.close();
         throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
       }
     if ( !(from_file >> number_of_poses))
       {
-        from_file.close();
         throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
       }
     flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
@@ -293,14 +290,12 @@ bool ecp_teach_in_generator::load_file_with_path(const char* file_name)
       {
         if (!(from_file >> motion_time))
           {
-            from_file.close();
             throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
           }
         for (j = 0; j < MAX_SERVOS_NR; j++)
           {
             if ( !(from_file >> coordinates[j]))
               { // Zabezpieczenie przed danymi nienumerycznymi
-                from_file.close();
                 throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
               }
           }
@@ -309,7 +304,6 @@ bool ecp_teach_in_generator::load_file_with_path(const char* file_name)
           { // by Y
             if ( !(from_file >> extra_info))
               { // Zabezpieczenie przed danymi nienumerycznymi
-                from_file.close();
                 throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
               }
             if (first_time)
@@ -340,7 +334,7 @@ bool ecp_teach_in_generator::load_file_with_path(const char* file_name)
               }
           }
       } // end: for
-    from_file.close();
+
     return true;
   } // end: load_file()
 

@@ -31,14 +31,13 @@ void smooth2_test::main_task_algorithm(void ) {
 
 	smoothgen2->set_relative();
 
-	if (smoothgen2->load_file_with_path("/net/koleszko/mnt/mrroc/trj/smooth2test.trj")) {
+	smoothgen2->load_file_with_path("/net/koleszko/mnt/mrroc/trj/smooth2test.trj");
 		/*char size[10];
 		double size2 = smoothgen2->pose_list_length();
 		sprintf(size,"%f",size2);
 		sr_ecp_msg->message(size);*/
 
-		smoothgen2->Move();
-	};
+	smoothgen2->Move();
 
 	//printf("wielkosc listy: %d\n", smoothgen2->pose_list_length());
 	//fflush();

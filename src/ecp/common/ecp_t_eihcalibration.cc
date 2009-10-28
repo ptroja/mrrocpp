@@ -93,9 +93,8 @@ void eihcalibration::main_task_algorithm(void ){
 	}
 */
 	// wczytanie pozycji poczatkowej i przejscie do niej za pomoca smooth
-	if (smooth2gen->load_file_with_path(smooth_path.c_str())) {
-	  smooth2gen->Move();
-	}
+	smooth2gen->load_file_with_path(smooth_path.c_str());
+	smooth2gen->Move();
 
 	// doprowadzenie chwytaka do szachownicy "wodzeniem za nos"
 	while(sensor_m[lib::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found == false){

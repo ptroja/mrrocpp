@@ -161,13 +161,12 @@ bool teach_in::load_file_with_path (const char* file_name, short robot_number) {
 
 
 	ifstream from_file(file_name); // otworz plik do odczytu
-	if (!from_file) {
+	if (!from_file.good()) {
 		perror(file_name);
 		throw generator::MP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 
 	if ( !(from_file >> coordinate_type) ) {
-		from_file.close();
 		throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
@@ -195,12 +194,10 @@ bool teach_in::load_file_with_path (const char* file_name, short robot_number) {
 	else if ( !strcmp(coordinate_type, "lib::PF_VELOCITY") )
 		ps = lib::PF_VELOCITY;
 	else {
-		from_file.close();
 		throw generator::MP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
 	}
 
 	if ( !(from_file >> number_of_poses) ) {
-		from_file.close();
 		throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
@@ -208,19 +205,16 @@ bool teach_in::load_file_with_path (const char* file_name, short robot_number) {
 	for ( i = 0; i < number_of_poses; i++) {
 
 		if (!(from_file >> motion_time)) {
-			from_file.close();
 			throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 		}
 		for ( j = 0; j < MAX_SERVOS_NR; j++) {
 			if ( !(from_file >> irp6ot_coordinates[j]) ) { // Zabezpieczenie przed danymi nienumerycznymi
-				from_file.close();
 				throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 			}
 		}
 		if (robot_number > 1) {
 			for ( j = 0; j < MAX_SERVOS_NR; j++) {
 				if ( !(from_file >> irp6p_coordinates[j]) ) { // Zabezpieczenie przed danymi nienumerycznymi
-					from_file.close();
 					throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 				}
 			}
@@ -244,7 +238,7 @@ bool teach_in::load_file_with_path (const char* file_name, short robot_number) {
 		}
 
 	} // end: for
-	from_file.close();
+
 	return true;
 } // end: load_file()
 // --------------------------------------------------------------------------
@@ -296,12 +290,11 @@ bool teach_in::load_file () {
 	}
 
 	ifstream from_file(ui_to_ecp_rep.filename); // otworz plik do odczytu
-	if (!from_file) {
+	if (!from_file.good()) {
 		perror(ui_to_ecp_rep.filename);
 		throw generator::MP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 	if ( !(from_file >> coordinate_type) ) {
-		from_file.close();
 		throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
@@ -329,29 +322,24 @@ bool teach_in::load_file () {
 	else if ( !strcmp(coordinate_type, "lib::PF_VELOCITY") )
 		ps = lib::PF_VELOCITY;
 	else {
-		from_file.close();
 		throw generator::MP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
 	}
 	if ( !(from_file >> number_of_poses) ) {
-		from_file.close();
 		throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
 	for ( i = 0; i < number_of_poses; i++) {
 		if (!(from_file >> motion_time)) {
-			from_file.close();
 			throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 		}
 		for ( j = 0; j < MAX_SERVOS_NR; j++) {
 			if ( !(from_file >> coordinates[j]) ) { // Zabezpieczenie przed danymi nienumerycznymi
-				from_file.close();
 				throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 			}
 		}
 
 		if (ps == lib::PF_VELOCITY) { // by Y
 			if ( !(from_file >> extra_info) ) { // Zabezpieczenie przed danymi nienumerycznymi
-				from_file.close();
 				throw generator::MP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 			}
 			if (first_time) {
@@ -373,7 +361,7 @@ bool teach_in::load_file () {
 			}
 		}
 	} // end: for
-	from_file.close();
+
 	return true;
 } // end: load_file()
 // --------------------------------------------------------------------------

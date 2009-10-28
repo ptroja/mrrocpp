@@ -292,12 +292,11 @@ void trajectory_reproduce::load_trajectory(char* filename) {
 try{
     // Otworzenie pliku do odczytu.
 	std::ifstream from_file(filename);
-    if (!from_file){
+    if (!from_file.good()){
         throw common::ECP_main_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
         }
     // Wczytanie rodzaju wspolrzednych.
     if ( !(from_file >> coordinate_type) ) {
-        from_file.close();
         throw common::ECP_main_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
         }
     // Usuniecie spacji i tabulacji.
@@ -316,17 +315,14 @@ try{
     if ( !strcmp(coordinate_type, "MOTOR") )
         ps = lib::MOTOR;
    else{
-        from_file.close();
         throw common::ECP_main_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
         }
     // Wczytanie liczby elementow.
     if ( !(from_file >> number_of_poses) ){
-        from_file.close();
         throw common::ECP_main_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
         }
     // Musi byc wiecej niz 0 elementow.
     if ( number_of_poses <1){
-        from_file.close();
         throw common::ECP_main_error(lib::NON_FATAL_ERROR, NON_COMPATIBLE_LISTS);
         }
     // Usuniecie listy pozycji, o ile istnieje.
@@ -336,14 +332,12 @@ try{
         // Czas wykonywania ruchu.
         if (!(from_file >> motion_time)){
             // Zabezpieczenie przed danymi nienumerycznymi.
-            from_file.close();
             throw common::ECP_main_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
             }
         // Kolejne wspolrzedne.
         for ( j = 0; j < 6; j++) {
             if ( !(from_file >> coordinates[j]) ){
                 // Zabezpieczenie przed danymi nienumerycznymi.
-                from_file.close();
                 throw common::ECP_main_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
                 }
             }
@@ -360,7 +354,6 @@ try{
             }
         } // end: for
     // Zamkniecie pliku.
-    from_file.close();
     sr_ecp_msg.message("Trajectory readed properly.");
 }catch (common::ECP_main_error e){
     // Wylapanie i oblsuga bledow.

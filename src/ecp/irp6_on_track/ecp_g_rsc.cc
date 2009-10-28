@@ -189,7 +189,7 @@ void robot_stopped_condition::save_rse_list(char* filename)
 	try {
 		// Otworzenie pliku.
 		std::ofstream to_file(filename);
-		if (!to_file)
+		if (!to_file.good())
 		throw common::ECP_main_error(lib::FATAL_ERROR, SAVE_FILE_ERROR);
 		// Przejscie na poczatek listy.
 		initiate_rse_list();
@@ -218,8 +218,6 @@ void robot_stopped_condition::save_rse_list(char* filename)
 		to_file << rse.sensor_reading[i] << ' ';
 		// Nastepna linia.
 		to_file << '\n';
-		// Zamkniecie pliku.
-		to_file.close();
 		// Komentarz - zapisanie pliku.
 		sr_ecp_msg.message ("Measures saved properly to file");
 	} // end: TRY

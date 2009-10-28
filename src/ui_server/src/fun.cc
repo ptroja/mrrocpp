@@ -1299,14 +1299,12 @@ get_default_configuration_file_name() {
 		ui_state.config_file_relativepath += ui_state.config_file;
 
 		std::ofstream outfile("../configs/default_file.cfg", std::ios::out);
-		if (!outfile) {
+		if (!outfile.good()) {
 			std::cerr << "Cannot open file: default_file.cfg" << std::endl;
 			perror("because of");
 		}
 		else
 			outfile << ui_state.config_file;
-
-		outfile.close();
 
 		return 2;
 	}
@@ -1323,14 +1321,12 @@ set_default_configuration_file_name() {
 	ui_state.config_file_relativepath += ui_state.config_file;
 
 	std::ofstream outfile("../configs/default_file.cfg", std::ios::out);
-	if (!outfile) {
+	if (!outfile.good()) {
 		std::cerr << "Cannot open file: default_file.cfg\n";
 		perror("because of");
 	}
 	else
 		outfile << ui_state.config_file;
-
-	outfile.close();
 
 	return 1;
 }
