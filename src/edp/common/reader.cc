@@ -322,11 +322,12 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 		strcat(config_file_with_dir, file_name);
 
         std::ofstream outfile(config_file_with_dir, std::ios::out);
-		if (!outfile) // jesli plik nie instnieje
+		if (!outfile.good()) // jesli plik nie instnieje
 		{
 			std::cerr << "Cannot open file: " << file_name << '\n';
 			perror("because of");
 			msg->message("cannot open destination file");
+			// TODO: throw
 		} else { // jesli plik istnieje
 
 			// sprawdzenie czy bufor byl przepelniony i odpowiednie przygotowanie granic bufora przy zapi sie do pliku
@@ -420,8 +421,6 @@ void * manip_and_conv_effector::reader_thread(void* arg)
 				k++;
 			} // end for(i = 0; i < msr_counter; i++)
 
-			// zamkniecie pliku
-			outfile.close();
 			msg->message("file writing is finished");
 		}
 
