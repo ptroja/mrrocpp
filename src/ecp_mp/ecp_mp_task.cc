@@ -43,10 +43,9 @@ namespace task {
 lib::sr_ecp* task::sr_ecp_msg = NULL;
 
 task::task(lib::configurator &_config)
-	: config(_config)
+	: config(_config),
+	mrrocpp_network_path(config.return_mrrocpp_network_path())
 {
-	mrrocpp_network_path = config.return_mrrocpp_network_path();
-
 	std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", "[ui]");
 
 //	// Obiekt do komuniacji z SR
@@ -348,7 +347,7 @@ task::trajectories_t * task::loadTrajectories(const char * fileName, lib::robot_
 
 	trajectories_t* trajectoriesMap = new trajectories_t();
 
-	const char * robotName = lib::toString(propRobot).c_str();
+	const std::string robotName(lib::toString(propRobot));
 
 	for(xmlNodePtr cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
 	{
@@ -370,7 +369,7 @@ task::trajectories_t * task::loadTrajectories(const char * fileName, lib::robot_
 								robot = xmlNodeGetContent(child_node);
 							}
 							if ( child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") &&
-									!xmlStrcmp(robot, (const xmlChar *)robotName))
+									!xmlStrcmp(robot, (const xmlChar *)robotName.c_str()))
 							{
 								ecp_mp::common::Trajectory* actTrajectory = createTrajectory(child_node, stateID);//new Trajectory((char *)numOfPoses, (char *)stateID, (char *)coordinateType);
 								trajectoriesMap->insert(trajectories_t::value_type(actTrajectory->getTrjID(), *actTrajectory));
@@ -393,7 +392,7 @@ task::trajectories_t * task::loadTrajectories(const char * fileName, lib::robot_
 					}
 					if (child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(
 							child_node->name, (const xmlChar *) "Trajectory")
-							&& !xmlStrcmp(robot, (const xmlChar *) robotName)) {
+							&& !xmlStrcmp(robot, (const xmlChar *) robotName.c_str())) {
 						ecp_mp::common::Trajectory* actTrajectory = createTrajectory(child_node, stateID);
 						trajectoriesMap->insert(trajectories_t::value_type(actTrajectory->getTrjID(), *actTrajectory));
 					}

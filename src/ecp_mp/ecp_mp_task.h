@@ -54,7 +54,7 @@ public:
 #else
 	messip_channel_t *UI_fd;
 #endif
-	std::string mrrocpp_network_path;
+	const std::string mrrocpp_network_path;
 
 	// METODY
 	// Odpowiedz operatora na zadane pytanie: (Yes/No)
