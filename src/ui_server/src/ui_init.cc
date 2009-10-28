@@ -3503,7 +3503,7 @@ int init()
 
 	cwd = getcwd( buff, PATH_MAX + 1 );
 	if( cwd == NULL ) {
-		perror( "Blad cwd w UI" );
+		perror( "getcwd()" );
 	}
 
     ui_state.ui_node_name = sysinfo.nodename;
