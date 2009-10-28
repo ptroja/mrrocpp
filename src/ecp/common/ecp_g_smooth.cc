@@ -223,23 +223,18 @@ void smooth::set_pose_from_xml(xmlNode *stateNode)
 	xmlFree(numOfPoses);
 }
 
-bool smooth::load_trajectory_from_xml(const char* fileName, const char* nodeName)
+void smooth::load_trajectory_from_xml(const char* fileName, const char* nodeName)
 {
 	// Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
-	xmlNode *cur_node, *child_node, *subTaskNode;
-	xmlChar *stateID;
-
-	xmlDocPtr doc;
-	doc = xmlParseFile(fileName);
+	xmlDocPtr doc = xmlParseFile(fileName);
 	xmlXIncludeProcess(doc);
 	if(doc == NULL)
 	{
 		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 
-	xmlNode *root = NULL;
-	root = xmlDocGetRootElement(doc);
+	xmlNodePtr root = xmlDocGetRootElement(doc);
 	if(!root || !root->name)
 	{
 		xmlFreeDoc(doc);
@@ -248,18 +243,18 @@ bool smooth::load_trajectory_from_xml(const char* fileName, const char* nodeName
 
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
 
-	for(cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
+	for(xmlNodePtr cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
 	{
 		if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "SubTask" ) )
 		{
-			for(subTaskNode = cur_node->children; subTaskNode != NULL; subTaskNode = subTaskNode->next)
+			for(xmlNodePtr subTaskNode = cur_node->children; subTaskNode != NULL; subTaskNode = subTaskNode->next)
 			{
 				if ( subTaskNode->type == XML_ELEMENT_NODE  && !xmlStrcmp(subTaskNode->name, (const xmlChar *) "State" ) )
 				{
-					stateID = xmlGetProp(subTaskNode, (const xmlChar *) "id");
-					if(stateID && !strcmp((const char *)stateID, nodeName))
+					xmlChar *stateID = xmlGetProp(subTaskNode, (const xmlChar *) "id");
+					if(stateID && !strcmp((const char *) stateID, nodeName))
 					{
-						for(child_node = subTaskNode->children; child_node != NULL; child_node = child_node->next)
+						for(xmlNodePtr child_node = subTaskNode->children; child_node != NULL; child_node = child_node->next)
 						{
 							if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") )
 							{
@@ -273,10 +268,10 @@ bool smooth::load_trajectory_from_xml(const char* fileName, const char* nodeName
 		}
 		if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "State" ) )
 		{
-			stateID = xmlGetProp(cur_node, (const xmlChar *) "id");
+			xmlChar *stateID = xmlGetProp(cur_node, (const xmlChar *) "id");
 			if(stateID && !strcmp((const char *)stateID, nodeName))
 			{
-				for(child_node = cur_node->children; child_node != NULL; child_node = child_node->next)
+				for(xmlNodePtr child_node = cur_node->children; child_node != NULL; child_node = child_node->next)
 				{
 					if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") )
 					{
@@ -289,8 +284,6 @@ bool smooth::load_trajectory_from_xml(const char* fileName, const char* nodeName
 	}
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
-
-	return true;
 }
 
 void smooth::load_file_with_path (const char* file_name)

@@ -83,7 +83,7 @@ public:
 	void load_file_with_path (const char* file_name);
 
 	void set_pose_from_xml(xmlNode *stateNode);
-	bool load_trajectory_from_xml(const char* fileName, const char* nodeName);
+	void load_trajectory_from_xml(const char* fileName, const char* nodeName);
 	void set_trajectory(ecp_mp::common::Trajectory &trajectory);
 
 	void load_coordinates(lib::POSE_SPECIFICATION,double,double,double,double,double,double,double,double);
