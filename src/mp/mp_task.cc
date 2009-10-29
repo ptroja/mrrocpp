@@ -24,6 +24,7 @@
 #include "lib/com_buf.h"
 
 #include "lib/srlib.h"
+#include "lib/datastr.h"
 
 #include "mp/mp.h"
 #include "mp/mp_common_generators.h"
@@ -550,6 +551,7 @@ int task::wait_for_name_open(void)
 				   if (robot_node.second->opened && robot_node.second->scoid == msg.scoid) {
 					   robot_node.second->new_pulse = true;
 						robot_node.second->pulse_code = msg.code;
+//						fprintf(stderr, "robot %s pulse %d\n", lib::toString(robot_node.second->robot_name).c_str(), robot_node.second->pulse_code);
 				   }
 			   }
 
@@ -613,21 +615,30 @@ int task::wait_for_name_open(void)
 
 bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE process_type, RECEIVE_PULSE_MODE wait_mode)
 {
+	RECEIVE_PULSE_MODE desired_wait_mode(wait_mode);
+
+	wait_mode = NONBLOCK;
+
 	do {
+		bool desired_pulse_found = false;
+
 		// checking of already registered pulses
 		if ((process_type == NEW_ECP_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
 			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
 				if ((robot_node.second->new_pulse) && !(robot_node.second->new_pulse_checked)) {
-					return true;
+					desired_pulse_found = true;
 				}
 			}
 		}
 
 		if ((process_type == NEW_UI_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
 			if (ui_new_pulse) {
-				return true;
+				desired_pulse_found = true;
 			}
 		}
+
+		if(desired_wait_mode == BLOCK && wait_mode == BLOCK)
+			return desired_pulse_found;
 
 #if !defined(USE_MESSIP_SRR)
 		if (wait_mode == NONBLOCK) {
@@ -649,7 +660,11 @@ bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE proces
 
 		if (rcvid == -1) {/* Error condition, exit */
 			if (wait_mode == NONBLOCK && errno == ETIMEDOUT) {
-				return false;
+				if (desired_wait_mode == BLOCK) {
+					wait_mode = BLOCK;
+					continue;
+				}
+				return desired_pulse_found;
 			}
 			int e = errno;
 			perror("MP: MsgReceivePulse()");
@@ -681,17 +696,17 @@ bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE proces
 				if (ui_opened && ui_scoid == msg.scoid) {
 					ui_new_pulse = true;
 					ui_pulse_code = msg.code;
-					// continue; ?
+					continue;
 				}
 
 				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
 					if (robot_node.second->opened && robot_node.second->scoid == msg.scoid) {
 						robot_node.second->new_pulse = true;
 						robot_node.second->pulse_code = msg.code;
+//						fprintf(stderr, "robot %s pulse %d\n", lib::toString(robot_node.second->robot_name).c_str(), robot_node.second->pulse_code);
+						// break; ?
 					}
 				}
-
-				break;
 			}
 			continue;
 		} else {
@@ -932,6 +947,7 @@ void task::start_all (const common::robots_t & _robot_m)
 					robot_node.second->new_pulse = false;
 					robot_node.second->new_pulse_checked = false;
 					robot_node.second->start_ecp();
+//					fprintf(stderr, "starting %s robot\n", lib::toString(robot_node.second->robot_name).c_str());
 				} else {
 					printf("phase 2 bledny kod pulsu w start_all\n");
 					throw common::MP_main_error(lib::NON_FATAL_ERROR, INVALID_ECP_PULSE_IN_MP_START_ALL);
@@ -943,9 +959,15 @@ void task::start_all (const common::robots_t & _robot_m)
 		if (robots_m_tmp.empty()) {
 			break;
 		} else {
+			assert(0);
 			check_and_optional_wait_for_new_pulse (NEW_ECP_PULSE, BLOCK);
 		}
 	}
+//	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
+//		fprintf(stderr, "task::start_all check: robot %s new_pulse %d new_pulse_checked %d pulse_code %d\n",
+//				lib::toString(robot_node.second->robot_name).c_str(),
+//				robot_node.second->new_pulse, robot_node.second->new_pulse_checked, robot_node.second->pulse_code);
+//	}
 }
 // ------------------------------------------------------------------------
 
