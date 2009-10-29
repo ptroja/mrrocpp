@@ -103,7 +103,7 @@ ecp_pr: ../common/ecp_g_force.o ecp_t_pr_irp6ot.o $(ECP_MPDIR)/ecp_mp_s_schunk.o
 	$(LD) $(LDFLAGS) -o $@ $^ 
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_irp6ot_rcsc: ecp_t_rcsc_irp6ot.o ../common/ecp_g_force.o ../common/ecp_st_go.o ../common/ecp_g_smooth.o ../common/ecp_g_smooth2.o ../common/ecp_generator_t.o \
-		../common/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)
+		../common/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o ecp_vis_ib_eih_object_tracker_irp6ot.o $(SHOBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 #-----------------------------------------------------------------------------------------------------------------------#
 ecp_jarosz_irp6ot: ecp_t_jarosz_irp6ot.o ../common/ecp_g_jarosz.o ../common/ecp_operator_reaction_condition.o $(SHOBJ)

@@ -1,0 +1,71 @@
+/*
+ * ecp_vis_ib_eih_object_tracker_irp6ot.h
+ *
+ *  Created on: Sept 29, 2009
+ *      Author: rtulwin
+ */
+
+#ifndef ECP_VIS_IB_EIH_OBJECT_TRACKER_IRP6OT_H_
+#define ECP_VIS_IB_EIH_OBJECT_TRACKER_IRP6OT_H_
+
+#include "ecp/common/ecp_visual_servo.h"
+
+#include <string.h>
+#include <math.h>
+
+#include "lib/impconst.h"
+#include "lib/com_buf.h"
+
+#include "ecp_mp/ecp_mp_s_cvfradia.h"
+#include "ecp/common/ecp_t_cvfradia.h"
+
+#include <iostream>
+
+namespace mrrocpp {
+namespace ecp {
+namespace irp6ot {
+
+#define MOTION_STEPS 25
+
+
+class ecp_vis_ib_eih_object_tracker_irp6ot: public common::ecp_visual_servo {
+
+public:
+
+	lib::sensor *vsp_fradia; //wirtualny sensor
+    double next_position[8]; 	//pozycja w nastepnym kroku.
+    //double alpha; //orientacja koncokwi wzgledem ukladu bazowego.
+    double u[2]; //uchyb
+
+    //zmienne ruchu
+    double a_max[3]; //maks przyspieszenie;
+    double s[3]; //droga jednego makrokroku ruchu
+    double v[3]; //aktualna predkosc
+    double v_max[3]; //maks predkosc
+    double v_stop[2]; //predkosc przy ktorej mozna sie zatrzymac
+    double v_min[2]; //minimalna mozliwa do ustawienia predkosc maksymalna
+
+    double s_z; //droga do przebycia w z
+    double z_start; //pozycja poczatkowa z
+    double s_acc; //droga przyspieszania, hamowania w z
+    bool z_stop; //flaga zatrzymania z
+    double z_s; //droga przebyta w z
+
+    int dir[2]; //kierunki dla x i y
+    bool change[2]; //flaga zmiany kierunki dla x i y
+    bool reached[2]; // flaga dotarcia do celu dla x i y
+
+	bool first_move; //flaga pierwszego makrokroku
+
+	ecp_vis_ib_eih_object_tracker_irp6ot(common::task::task& _ecp_task);
+	virtual bool first_step(void);
+	virtual bool next_step_without_constraints();
+	virtual void entertain_constraints();
+	void reduce_velocity(double a, double t, double s, int i);
+};
+
+} // namespace irp6ot
+} // namespace ecp
+} // namespace mrrocpp
+
+#endif /* ECP_VIS_IB_EIH_OBJECT_TRACKER_IRP6OT_H_ */
