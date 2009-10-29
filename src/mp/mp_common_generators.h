@@ -16,7 +16,6 @@ protected:
 	lib::ecp_next_state_t ecp_next_state;
 
 public:
-
     set_next_ecps_state(task::task& _mp_task);
 
 	void configure (int l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const char* l_mp_2_ecp_next_state_string);
@@ -54,13 +53,10 @@ class extended_empty : public generator {
  public:
 	extended_empty(task::task& _mp_task);
 
-	~extended_empty(){ };
-
 	void configure (bool l_activate_trigger);
 
 	bool first_step ();
 	bool next_step ();
-
 };
 
 // ####################################################################################################
@@ -73,8 +69,6 @@ class empty : public generator {
     // sprawdzania spelnienia warunku koncowego
  public:
 	empty(task::task& _mp_task);
-
-  ~empty(){ };
 
   virtual bool first_step ();
       // generuje pierwszy krok ruchu -
@@ -93,9 +87,6 @@ class empty : public generator {
 
 class delta : public generator
 {
-protected:
-
-
 public:
 	delta(task::task& _mp_task);
 	lib::trajectory_description irp6ot_td;
@@ -108,16 +99,12 @@ public:
 
 class tight_coop : public delta
 {
-
 public:
 	tight_coop(task::task& _mp_task, lib::trajectory_description irp6ot_tr_des, lib::trajectory_description irp6p_tr_des);
-
-  ~tight_coop();
 
   virtual bool first_step ();
 
   virtual bool next_step ();
-
 };
 
 } // namespace generator
