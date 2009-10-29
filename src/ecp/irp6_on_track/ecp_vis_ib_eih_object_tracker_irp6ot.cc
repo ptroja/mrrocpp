@@ -32,6 +32,7 @@ ecp_vis_ib_eih_object_tracker_irp6ot::ecp_vis_ib_eih_object_tracker_irp6ot(commo
 	//s_z = 0.35;
 
 	axes_num = 2;//TODO wczytywanie z pliku konfiguracyjnego
+	//v_max = ecp_t.config.return_double_value("v_max"); przykladowe czytanie z pliku konfiguracyjnego
 }
 
 bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
@@ -59,6 +60,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 	for (int i = 0; i < axes_num; i++) {
 		reached[i] = false;
 		dir[i] = 1;
+		v[i] = 0;
 	}
 
 	//ecp_t.sr_ecp_msg->message("PIERWSZY");
@@ -76,10 +78,6 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 	 			the_robot->EDP_data.current_XYZ_AA_arm_coordinates, 6
 						* sizeof(double));*/
 		//next_position[6] = the_robot->EDP_data.current_gripper_coordinate;
-
-		v[0] = 0;
-		v[1] = 0;
-		v[2] = 0;
 
 		//ruch w z
 		//z_start = next_position[2];
@@ -144,7 +142,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 		u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.y;
 		u[2] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.z;
 
-		for (int i = 0; axes_num < 2; i++) {
+		for (int i = 0; i < axes_num; i++) {
 
 			tracking = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.tracking;
 

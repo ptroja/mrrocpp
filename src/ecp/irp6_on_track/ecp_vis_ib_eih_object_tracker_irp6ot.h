@@ -28,7 +28,6 @@ namespace irp6ot {
 #define MOTION_STEPS 25
 #define MAX_AXES_NUM 3
 
-
 class ecp_vis_ib_eih_object_tracker_irp6ot: public common::ecp_visual_servo {
 
 public:
