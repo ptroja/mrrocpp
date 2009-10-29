@@ -171,6 +171,7 @@ void extended_empty::configure (bool l_activate_trigger)
 
 bool extended_empty::first_step ()
 {
+    wait_for_ECP_pulse = true;
     BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
     {
     	robot_node.second->ecp_td.mp_command = lib::NEXT_POSE;
