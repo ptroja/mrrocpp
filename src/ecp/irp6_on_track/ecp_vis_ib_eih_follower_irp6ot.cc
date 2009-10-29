@@ -30,9 +30,18 @@ bool ecp_vis_ib_eih_follower_irp6ot::first_step() {
 	the_robot->EDP_data.instruction_type = lib::GET;
 	the_robot->EDP_data.get_type = ARM_DV;
 	the_robot->EDP_data.get_arm_type = lib::XYZ_ANGLE_AXIS;
-	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
+	the_robot->EDP_data.motion_type = lib::RELATIVE;
+	the_robot->EDP_data.set_type = ARM_DV;
+	the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
+	the_robot->EDP_data.next_interpolation_type = lib::MIM;
+	the_robot->EDP_data.motion_steps = MOTION_STEPS;
+	the_robot->EDP_data.value_in_step_no = MOTION_STEPS - 1;
+
+
+
 	vsp_fradia->to_vsp.haar_detect_mode = lib::WITHOUT_ROTATION;
 	first_move =  true;
+	z_s = 0;
 	z_stop = false;
 	reached[0] = false;
 	reached[1] = false;
@@ -47,24 +56,24 @@ bool ecp_vis_ib_eih_follower_irp6ot::first_step() {
 
 bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 
-	the_robot->EDP_data.instruction_type = lib::SET;
-	the_robot->EDP_data.get_type = ARM_DV;
-	the_robot->EDP_data.set_type = ARM_DV;
-	the_robot->EDP_data.set_arm_type = lib::XYZ_ANGLE_AXIS;
-	the_robot->EDP_data.get_arm_type = lib::JOINT;
-	the_robot->EDP_data.motion_type = lib::ABSOLUTE;
-	the_robot->EDP_data.next_interpolation_type = lib::MIM;
-	the_robot->EDP_data.motion_steps = MOTION_STEPS;
-	the_robot->EDP_data.value_in_step_no = MOTION_STEPS - 1;
+	the_robot->EDP_data.instruction_type = lib::SET_GET;
+
 
 	double t = MOTION_STEPS * 0.002;//TODO 0.002 trzeba zamienic na STEP z odpowiedniej biblioteki
 
 	if (first_move == true) {
 
+		//printf("poczatek sledzenia\n");
+		//flushall();
 		memcpy(next_position,
 	 			the_robot->EDP_data.current_XYZ_AA_arm_coordinates, 6
 						* sizeof(double));
-		next_position[6] = the_robot->EDP_data.current_gripper_coordinate;
+		//next_position[6] = the_robot->EDP_data.current_gripper_coordinate;
+
+		next_position[3] = 0;
+		next_position[4] = 0;
+		next_position[5] = 0;
+		next_position[6] = 0;
 
 		v[0] = 0;
 		v[1] = 0;
@@ -95,10 +104,10 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 		first_move = false;
 	}
 	//ruch w z
-	if (v[2] < v_max[2] && (s_z - s_acc) > fabs(next_position[2] - z_start)) {//przyspieszanie
+	if (v[2] < v_max[2] && (s_z - s_acc) > z_s) {//przyspieszanie
 		s[2] = (a_max[2] * t * t)/2 + (v[2] * t);
 		v[2] += a_max[2] * t;
-	} else if (v[2] > 0 && (s_z - s_acc) <= fabs(next_position[2] - z_start)) {//hamowanie
+	} else if (v[2] > 0 && (s_z - s_acc) <= z_s) {//hamowanie
 		s[2] = (a_max[2] * t * t)/2 + (v[2] * t);
 		v[2] -= a_max[2] * t;
 		if (v[2] < 0) {
@@ -109,14 +118,16 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 	}
 
 	if (z_stop == false) {
-		next_position[2] -= s[2];
+		z_s += s[2];
+		next_position[2] = s[2];
+		//next_position[2] = 0;
 	}
 	//ruch w z (koniec)
 
 	//alpha = the_robot->EDP_data.current_joint_arm_coordinates[1]- the_robot->EDP_data.current_joint_arm_coordinates[6];
 	//Uchyb wyrazony w pikselach.
-	u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.x + 40;
-	u[0] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.y - 40;
+	u[0] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.x - 40;
+	u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.y + 40;
 	bool tracking = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.tracking;
 
 	lib::VSP_REPORT vsp_report = vsp_fradia->from_vsp.vsp_report;
@@ -124,6 +135,8 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 
 		if (fabs(u[0]) < 5 && fabs(u[1]) < 5 && v[0] <= v_stop[0] & v[1] <= v_stop[1]) {
 			if (z_stop) {
+				//printf("koniec sledzenia\n");
+				//flushall();
 				return false;
 			}
 		}
@@ -138,7 +151,7 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 				u_param = 1/fabs(u[i]);
 			}
 			//im mniejsza liczba przy wspolczynniku tym wieksze znaczenie wspolczynnika
-			v_max[i] = v_max[i] - ((fabs(next_position[2] - z_start) * fabs(next_position[2] - z_start)) * 0.0005 * (u_param * 0.01));
+			v_max[i] = v_max[i] - ((z_s * z_s) * 0.0005 * (u_param * 0.01));//TODO ta funkcje trzeba przerobic... (delikatnie mowiac)
 			if (v_max[i] < v_min[i]) {
 				v_max[i] = v_min[i];
 			}
@@ -175,7 +188,7 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints() {
 			} else { //jednostajny
 				s[i] = v[i] * t;
 			}
-			next_position[i] -= dir[i] * s[i];
+			next_position[i] = - (dir[i] * s[i]);
 		}
 	}
 

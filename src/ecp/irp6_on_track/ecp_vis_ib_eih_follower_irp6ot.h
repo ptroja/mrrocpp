@@ -49,6 +49,7 @@ public:
     double z_start; //pozycja poczatkowa z
     double s_acc; //droga przyspieszania, hamowania w z
     bool z_stop; //flaga zatrzymania z
+    double z_s; //droga przebyta w z
 
     int dir[2]; //kierunki dla x i y
     bool change[2]; //flaga zmiany kierunki dla x i y

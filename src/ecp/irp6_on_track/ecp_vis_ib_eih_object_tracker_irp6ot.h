@@ -26,6 +26,7 @@ namespace ecp {
 namespace irp6ot {
 
 #define MOTION_STEPS 25
+#define MAX_AXES_NUM 3
 
 
 class ecp_vis_ib_eih_object_tracker_irp6ot: public common::ecp_visual_servo {
@@ -33,27 +34,30 @@ class ecp_vis_ib_eih_object_tracker_irp6ot: public common::ecp_visual_servo {
 public:
 
 	lib::sensor *vsp_fradia; //wirtualny sensor
-    double next_position[8]; 	//pozycja w nastepnym kroku.
+    double next_position[MAX_SERVOS_NR]; 	//pozycja w nastepnym kroku.
     //double alpha; //orientacja koncokwi wzgledem ukladu bazowego.
-    double u[2]; //uchyb
+    int axes_num; //ilosc osi w ktorych podawany jest uchyb
+    double u[MAX_AXES_NUM]; //tablica uchybów
+    bool tracking; //jesli true, obiekt jest sledzony, jesli false, zagubiony (przychodzi z fradii)
+	double t;//czas makrokroku
 
     //zmienne ruchu
-    double a_max[3]; //maks przyspieszenie;
-    double s[3]; //droga jednego makrokroku ruchu
-    double v[3]; //aktualna predkosc
-    double v_max[3]; //maks predkosc
-    double v_stop[2]; //predkosc przy ktorej mozna sie zatrzymac
-    double v_min[2]; //minimalna mozliwa do ustawienia predkosc maksymalna
+    double a_max[MAX_AXES_NUM]; //maks przyspieszenie;
+    double s[MAX_AXES_NUM]; //droga jednego makrokroku ruchu
+    double v[MAX_AXES_NUM]; //aktualna predkosc
+    double v_max[MAX_AXES_NUM]; //maks predkosc
+    double v_stop[MAX_AXES_NUM]; //predkosc przy ktorej mozna sie zatrzymac
+    double v_min[MAX_AXES_NUM]; //minimalna mozliwa do ustawienia predkosc maksymalna
 
-    double s_z; //droga do przebycia w z
-    double z_start; //pozycja poczatkowa z
-    double s_acc; //droga przyspieszania, hamowania w z
-    bool z_stop; //flaga zatrzymania z
-    double z_s; //droga przebyta w z
+    //double s_z; //droga do przebycia w z
+    //double z_start; //pozycja poczatkowa z
+    //double s_acc; //droga przyspieszania, hamowania w z
+    //bool z_stop; //flaga zatrzymania z
+    //double z_s; //droga przebyta w z
 
-    int dir[2]; //kierunki dla x i y
-    bool change[2]; //flaga zmiany kierunki dla x i y
-    bool reached[2]; // flaga dotarcia do celu dla x i y
+    int dir[MAX_AXES_NUM]; //kierunki
+    bool change[MAX_AXES_NUM]; //flaga zmiany kierunku
+    bool reached[MAX_AXES_NUM]; // flaga dotarcia do celu
 
 	bool first_move; //flaga pierwszego makrokroku
 
@@ -61,7 +65,7 @@ public:
 	virtual bool first_step(void);
 	virtual bool next_step_without_constraints();
 	virtual void entertain_constraints();
-	void reduce_velocity(double a, double t, double s, int i);
+	//void reduce_velocity(double a, double t, double s, int i);
 };
 
 } // namespace irp6ot

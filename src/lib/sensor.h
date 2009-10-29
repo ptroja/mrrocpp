@@ -171,11 +171,18 @@ typedef struct sensor_image_t
 		}deviation;
 
 		//uchyb w follower
-		struct {
+		struct { //do zlikwidowania, razem z followerem w przyszlosci
 			bool tracking;
 			int x;
 			int y;
 		}tracker;
+
+		struct {
+			bool tracking;
+			int x;
+			int y;
+			int z;
+		} object_tracker;
 
 		/*
 		 * Structure for storing pawn coordinates from cvFraDIA
