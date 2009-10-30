@@ -113,7 +113,7 @@ class task: public ecp_mp::task::task
 		char ui_pulse_code; // kod pulsu ktory zostal wyslany przez ECP w celu zgloszenia gotowosci do komunikacji (wartosci w impconst.h)
 		bool ui_new_pulse; // okresla czy jest nowy puls
 
-		bool check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE process_type, RECEIVE_PULSE_MODE wait_mode);
+		bool check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode);
 };
 
 task* return_created_mp_task (lib::configurator &_config);

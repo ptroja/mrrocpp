@@ -613,35 +613,32 @@ int task::wait_for_name_open(void)
 #endif
 }
 
-bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE process_type, RECEIVE_PULSE_MODE wait_mode)
+bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode)
 {
-	RECEIVE_PULSE_MODE desired_wait_mode(wait_mode);
+	RECEIVE_PULSE_MODE current_wait_mode(NONBLOCK);
 
-	wait_mode = NONBLOCK;
+	bool desired_pulse_found = false;
 
-	do {
-		bool desired_pulse_found = false;
-
-		// checking of already registered pulses
-		if ((process_type == NEW_ECP_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
-			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-				if ((robot_node.second->new_pulse) && !(robot_node.second->new_pulse_checked)) {
-					desired_pulse_found = true;
-				}
-			}
-		}
-
-		if ((process_type == NEW_UI_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
-			if (ui_new_pulse) {
+	// checking of already registered pulses
+	if ((process_type == NEW_ECP_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
+			if ((robot_node.second->new_pulse) && !(robot_node.second->new_pulse_checked)) {
 				desired_pulse_found = true;
 			}
 		}
+	}
 
-		if(desired_wait_mode == BLOCK && wait_mode == BLOCK)
-			return desired_pulse_found;
+	if ((process_type == NEW_UI_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
+		if (ui_new_pulse) {
+			desired_pulse_found = true;
+		}
+	}
 
+	bool exit_from_while = false;
+
+	while(!exit_from_while) {
 #if !defined(USE_MESSIP_SRR)
-		if (wait_mode == NONBLOCK) {
+		if (current_wait_mode == NONBLOCK) {
 			struct sigevent event;
 			event.sigev_notify = SIGEV_UNBLOCK;
 
@@ -659,12 +656,14 @@ bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE proces
 		int rcvid = MsgReceivePulse(mp_pulse_attach->chid, &msg, sizeof(msg), NULL);
 
 		if (rcvid == -1) {/* Error condition, exit */
-			if (wait_mode == NONBLOCK && errno == ETIMEDOUT) {
-				if (desired_wait_mode == BLOCK) {
-					wait_mode = BLOCK;
+			if (errno == ETIMEDOUT) {
+				if (desired_wait_mode == BLOCK && !desired_pulse_found) {
+					current_wait_mode = BLOCK;
 					continue;
+				} else {
+					exit_from_while = true;
 				}
-				return desired_pulse_found;
+				continue;
 			}
 			int e = errno;
 			perror("MP: MsgReceivePulse()");
@@ -696,6 +695,12 @@ bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE proces
 				if (ui_opened && ui_scoid == msg.scoid) {
 					ui_new_pulse = true;
 					ui_pulse_code = msg.code;
+					if ((process_type == NEW_UI_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
+						desired_pulse_found = true;
+						if (current_wait_mode == BLOCK) {
+							exit_from_while = true;
+						}
+					}
 					continue;
 				}
 
@@ -703,12 +708,18 @@ bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE proces
 					if (robot_node.second->opened && robot_node.second->scoid == msg.scoid) {
 						robot_node.second->new_pulse = true;
 						robot_node.second->pulse_code = msg.code;
-//						fprintf(stderr, "robot %s pulse %d\n", lib::toString(robot_node.second->robot_name).c_str(), robot_node.second->pulse_code);
-						// break; ?
+						if ((process_type == NEW_ECP_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
+							if (!(robot_node.second->new_pulse_checked)) {
+								desired_pulse_found = true;
+								if (current_wait_mode == BLOCK) {
+									exit_from_while = true;
+								}
+							}
+						}
+						// can we get out of this loop?
 					}
 				}
 			}
-			continue;
 		} else {
 			/* message was not expected here;
 			 * this should not happend if using MsgReceivePulse, but we want to be sure
@@ -718,6 +729,7 @@ bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE proces
 			throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
 		}
 #else
+		/*
 		int32_t type, subtype;
 		int rcvid = messip_receive(mp_pulse_attach,
 				&type, &subtype,
@@ -743,20 +755,23 @@ bool task::check_and_optional_wait_for_new_pulse (WAIT_FOR_NEW_PULSE_MODE proces
 			if (ui_opened && ui_scoid == mp_pulse_attach->lastmsg_sockfd) {
 				ui_new_pulse = true;
 				ui_pulse_code = type;
+				fprintf(stderr, "new UI pulse type %d received\n", type);
 			}
 
 			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
 				if (robot_node.second->opened && robot_node.second->scoid == mp_pulse_attach->lastmsg_sockfd) {
 					robot_node.second->new_pulse = true;
 					robot_node.second->pulse_code = type;
+					fprintf(stderr, "new robot pulse type %d received\n", type);
 				}
 			}
 			// continue; ?
 		}
+		*/
 #endif
-	} while (wait_mode == BLOCK);
+	}
 
-	return false;
+	return desired_pulse_found;
 }
 
 //
