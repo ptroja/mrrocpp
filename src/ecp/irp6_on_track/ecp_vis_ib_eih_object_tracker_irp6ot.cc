@@ -20,19 +20,11 @@ ecp_vis_ib_eih_object_tracker_irp6ot::ecp_vis_ib_eih_object_tracker_irp6ot(commo
 		next_position[i] = 0;
 	}
 
-	t = MOTION_STEPS * STEP;
+	t = MOTION_STEPS * STEP; //ustawianie czasu makrokroku (50 milisekund)
 
-
-	v_max[1] = v_max[0] = 0.012;//TODO to wszystko bedzie w metodzie wczytujacej z pliku
-	a_max[1] = a_max[0] = 0.01;
-	v_max[2] = 0.03;
-	a_max[2] = 0.01;
-	v_stop[0] = v_stop[1] = 0.0005;
-	v_min[0] = 	v_min[1] = 0.0015;
 	//s_z = 0.35;
 
-	axes_num = 2;//TODO wczytywanie z pliku konfiguracyjnego
-	//v_max = ecp_t.config.return_double_value("v_max"); przykladowe czytanie z pliku konfiguracyjnego
+	//axes_num = 2;
 }
 
 bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
@@ -54,10 +46,17 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step() {
 	//z_s = 0;
 	//z_stop = false;
 
-	v_max[1] = v_max[0] = 0.012; //TODO tutaj powinna być metoda wczytująca wszystko z pliku
+	if (read_parametres() == false) {//czytanie predkosci maksymalnych i przyspieszen z pliku konfiguracyjnego zadania, jesli sie nie powiodlo to przypisz domyslne
+		v_max[1] = v_max[0] = 0.012;
+		a_max[1] = a_max[0] = 0.01;
+		v_max[2] = 0.03;
+		a_max[2] = 0.01;
+		v_stop[0] = v_stop[1] = v_stop[2] = 0.0005;
+		v_min[0] = 	v_min[1] = v_min[2] = 0.0015;
+	}
 
 	//pierwsze ustawienie flag dotarcia i kierunku
-	for (int i = 0; i < axes_num; i++) {
+	for (int i = 0; i < MAX_AXES_NUM; i++) {
 		reached[i] = false;
 		dir[i] = 1;
 		v[i] = 0;
@@ -142,7 +141,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 		u[1] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.y;
 		u[2] = vsp_fradia->from_vsp.comm_image.sensor_union.object_tracker.z;
 
-		for (int i = 0; i < axes_num; i++) {
+		for (int i = 0; i < MAX_AXES_NUM; i++) {
 
 			tracking = vsp_fradia->from_vsp.comm_image.sensor_union.tracker.tracking;
 
@@ -199,6 +198,24 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints() {
 			6 * sizeof(double)); //zapisanie pozycji w angle axes
 
 	the_robot->EDP_data.next_gripper_coordinate = next_position[6]; //zapisanie pozycji grippera
+
+	return true;
+}
+
+bool ecp_vis_ib_eih_object_tracker_irp6ot::read_parametres() {//metoda wczytujaca predkosci, przyspieszenia etc z pliku konfiguracyjnego
+															//przykladowe wartosci podane sa w first stepie
+	v_max[0] = ecp_t.config.return_double_value("v_max_x");//TODO dorobić łapanie wyjątku gdy w pliku konfiguracyjnym nie ma odpowiednich zmiennych
+	v_max[1] = ecp_t.config.return_double_value("v_max_y");
+	v_max[2] = ecp_t.config.return_double_value("v_max_z");
+	a_max[0] = ecp_t.config.return_double_value("a_max_x");
+	a_max[1] = ecp_t.config.return_double_value("a_max_y");
+	a_max[2] = ecp_t.config.return_double_value("a_max_z");
+	v_stop[0] = ecp_t.config.return_double_value("v_stop_x");
+	v_stop[1] = ecp_t.config.return_double_value("v_stop_y");
+	v_stop[2] = ecp_t.config.return_double_value("v_stop_z");
+	v_min[0] = ecp_t.config.return_double_value("v_min_x");
+	v_min[1] = ecp_t.config.return_double_value("v_min_y");
+	v_min[2] = ecp_t.config.return_double_value("v_min_z");
 
 	return true;
 }

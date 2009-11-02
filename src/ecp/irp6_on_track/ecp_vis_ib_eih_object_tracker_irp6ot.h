@@ -35,10 +35,11 @@ public:
 	lib::sensor *vsp_fradia; //wirtualny sensor
     double next_position[MAX_SERVOS_NR]; 	//pozycja w nastepnym kroku.
     //double alpha; //orientacja koncokwi wzgledem ukladu bazowego.
-    int axes_num; //ilosc osi w ktorych podawany jest uchyb
+    //int axes_num; //ilosc osi w ktorych podawany jest uchyb
     double u[MAX_AXES_NUM]; //tablica uchybów
     bool tracking; //jesli true, obiekt jest sledzony, jesli false, zagubiony (przychodzi z fradii)
 	double t;//czas makrokroku
+	bool first_move; //flaga pierwszego makrokroku
 
     //zmienne ruchu
     double a_max[MAX_AXES_NUM]; //maks przyspieszenie;
@@ -58,13 +59,15 @@ public:
     bool change[MAX_AXES_NUM]; //flaga zmiany kierunku
     bool reached[MAX_AXES_NUM]; // flaga dotarcia do celu
 
-	bool first_move; //flaga pierwszego makrokroku
-
 	ecp_vis_ib_eih_object_tracker_irp6ot(common::task::task& _ecp_task);
 	virtual bool first_step(void);
 	virtual bool next_step_without_constraints();
 	virtual void entertain_constraints();
 	//void reduce_velocity(double a, double t, double s, int i);
+
+private:
+
+	bool read_parametres();
 };
 
 } // namespace irp6ot
