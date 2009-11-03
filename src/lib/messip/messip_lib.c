@@ -1081,7 +1081,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 		}
 		assert( found == 1 );
 		info = list_connect[n].info;
-		info->f_already_connected = 1;
+		info->f_already_connected++;
 
 	}
 	else
@@ -1093,6 +1093,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 		}
 
 		info->f_already_connected = 0;
+		pthread_mutex_init(&info->send_mutex, NULL);
 		info->cnx = cnx;
 		info->mgr_sockfd = msgreply.mgr_sockfd;
 		get_taskname( msgreply.pid, info->remote_taskname );
@@ -1243,6 +1244,9 @@ messip_channel_disconnect0( messip_channel_t * ch,
 		dcount = messip_writev( ch->send_sockfd, iovec, 1 );
 		LIBTRACE( ( "@messip_channel_disconnect: sendmsg dcount=%d local_fd=%d [errno=%d] \n",
 			  dcount, ch->send_sockfd, errno ) );
+		if(dcount != sizeof( messip_datasend_t )) {
+			fprintf(stderr, "error disconnecting from \"%s\" channel\n", ch->name);
+		}
 		assert( dcount == sizeof( messip_datasend_t ) );
 	}
 
@@ -1320,15 +1324,6 @@ messip_channel_disconnect0( messip_channel_t * ch,
 	}
 #endif /* USE_QNXMSG */
 
-	if (ch->send_sockfd != -1) {
-		if(shutdown(ch->send_sockfd, SHUT_RDWR)) {
-		    perror("shutdown()");
-		}
-		if(close(ch->send_sockfd)) {
-		    perror("close()");
-		}
-	}
-
 	/*--- Update list of connections to channels ---*/
 	for ( found = 0, n = 0; n < nb_list_connect; n++ )
 	{
@@ -1340,16 +1335,35 @@ messip_channel_disconnect0( messip_channel_t * ch,
 	}
 	if ( found )
 	{
-		memmove(&list_connect[n], &list_connect[n+1], sizeof( list_connect_t ) * ( nb_list_connect - n - 1 ));
-		list_connect = (list_connect_t *) realloc(list_connect, sizeof( list_connect_t )  * ( nb_list_connect - 1));
-		nb_list_connect--;
+		if (ch->f_already_connected == 0) {
+			// destroy access mutex
+			pthread_mutex_destroy(&ch->send_mutex);
+
+			// close the connection socket
+			if (ch->send_sockfd != -1) {
+				if(shutdown(ch->send_sockfd, SHUT_RDWR)) {
+				    perror("shutdown()");
+				}
+				if(close(ch->send_sockfd)) {
+				    perror("close()");
+				}
+			}
+
+			// deallocate the data
+			free(ch);
+
+			// update connection list
+			memmove(&list_connect[n], &list_connect[n+1], sizeof( list_connect_t ) * ( nb_list_connect - n - 1 ));
+			list_connect = (list_connect_t *) realloc(list_connect, sizeof( list_connect_t )  * ( nb_list_connect - 1));
+			nb_list_connect--;
+		} else {
+			ch->f_already_connected--;
+		}
 	}
 	else
 	{
 		fprintf(stderr, "messip_channel_delete: channel not found, this should not happend\n");
 	}
-
-	free(ch);
 
 	/*--- Channel deletion failed ? ---*/
 	return reply.ok;
@@ -1751,7 +1765,7 @@ messip_receive( messip_channel_t * ch,
 		}
 		else
 		{
-		    	status = select( maxfd+1, &ready, NULL, NULL, NULL );
+		    status = select( maxfd+1, &ready, NULL, NULL, NULL );
 		}
 	} while ( (status == -1) && (errno == EINTR) );
 	if ( status == -1 )
@@ -1805,7 +1819,7 @@ messip_receive( messip_channel_t * ch,
 		   ( struct sockaddr * ) &client_addr, &client_addr_len );
 		if ( new_sockfd == -1 )
 		{
-			fprintf( stderr, "messip_receive) %s %d\n: %s",
+			fprintf( stderr, "messip_receive %s %d\n: %s",
 			   __FILE__, __LINE__, strerror(errno));
 			ch->new_sockfd[index] = new_sockfd;
 			ch->channel_type[index] = CHANNEL_TYPE_MESSIP;
@@ -1856,6 +1870,7 @@ messip_receive( messip_channel_t * ch,
 		}
 */
 #endif /* USE_QNXMSG */
+//		fprintf(stderr, "actually disconnect, dcount %d ECONNRESET %d\n", dcount, ( errno == ECONNRESET ) ? 1 : 0);
 		shutdown( new_sockfd, SHUT_RDWR );
 		close( new_sockfd );
 		for ( k = (n) ? n + 1 : ch->recv_sockfd_sz; k < ch->recv_sockfd_sz; k++ )
@@ -1888,6 +1903,8 @@ messip_receive( messip_channel_t * ch,
 		*type    = -1;
 		*subtype = new_sockfd;
 		ch->new_sockfd[index] = -1;
+//		fprintf(stderr, "disconnect message\n");
+//		close(new_sockfd);
 //		return MESSIP_MSG_DISCONNECT;
 		goto restart;
 	}							// if
@@ -2068,8 +2085,8 @@ messip_receive( messip_channel_t * ch,
 }								// messip_receive
 
 
-int
-messip_send( messip_channel_t *ch,
+static int
+messip_send0( messip_channel_t *ch,
    int32_t type,
    int32_t subtype,
    const void *send_buffer,
@@ -2265,6 +2282,23 @@ printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
 
 }								// messip_send
 
+int
+messip_send( messip_channel_t *ch,
+   int32_t type,
+   int32_t subtype,
+   const void *send_buffer,
+   int send_len,
+   int32_t * answer,
+   void *reply_buffer,
+   int reply_maxlen,
+   int32_t msec_timeout )
+{
+	int ret;
+	pthread_mutex_lock(&ch->send_mutex);
+	ret = messip_send0(ch, type, subtype, send_buffer, send_len, answer, reply_buffer, reply_maxlen, msec_timeout);
+	pthread_mutex_unlock(&ch->send_mutex);
+	return ret;
+}
 
 int32_t
 messip_buffered_send( messip_channel_t * ch,

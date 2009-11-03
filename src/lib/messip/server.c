@@ -63,7 +63,7 @@ int message_handler(messip_channel_t * ch, void * handle)
 int main(int argc, char *argv[])
 {
 	messip_channel_t *ch1, *ch2;
-	messip_dispatch_t *dpp;
+	//messip_dispatch_t *dpp;
 
 #if 0
 	struct sched_param param;
@@ -78,18 +78,18 @@ int main(int argc, char *argv[])
 	assert(ch1);
 
 	//Create a channel, in order to receive messages on it
-	ch2 = messip_channel_create(NULL, "two", MESSIP_NOTIMEOUT, 0);
-	assert(ch2);
+	//ch2 = messip_channel_create(NULL, "two", MESSIP_NOTIMEOUT, 0);
+	//assert(ch2);
 
-	dpp = messip_dispatch_create();
-	assert(dpp);
+	//dpp = messip_dispatch_create();
+	//assert(dpp);
 
-	messip_dispatch_attach(dpp, ch1, message_handler, NULL);
-	messip_dispatch_attach(dpp, ch2, message_handler, NULL);
+	//messip_dispatch_attach(dpp, ch1, message_handler, NULL);
+	//messip_dispatch_attach(dpp, ch2, message_handler, NULL);
 
 	//Receive messages
 	for (;;) {
-#if 1
+#if 0
 		int b = messip_dispatch_block(dpp, MESSIP_NOTIMEOUT);
 		printf("messip_dispatch_block = %d\n", b);
 
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
 		int index;
 		char rec_buff[256], snd_buff[256];
 
-		messip_channel_t *ch = ch2;
+		messip_channel_t *ch = ch1;
 
 		index = messip_receive(ch,
 				&type, &subtype, rec_buff, sizeof(rec_buff),
@@ -143,14 +143,14 @@ int main(int argc, char *argv[])
 		messip_reply(ch, index, 0, (void *) snd_buff, strlen(snd_buff)+1, MESSIP_NOTIMEOUT);
 
 		printf("message_replied at channel \"%s\"\n", ch->name);
-		break;
+		//break;
 		//messip_reply(ch, index, 0, (void *) NULL, 0, MESSIP_NOTIMEOUT);
 #endif
 	}
 
 	messip_channel_delete(ch1, MESSIP_NOTIMEOUT);
-	messip_channel_delete(ch2, MESSIP_NOTIMEOUT);
-	messip_dispatch_delete(dpp);
+	//messip_channel_delete(ch2, MESSIP_NOTIMEOUT);
+	//messip_dispatch_delete(dpp);
 
 	return 0;
 }

@@ -36,6 +36,7 @@ main(int argc, char *argv[])
 #else /*!__QNXNTO__ */
 	struct timespec before, after;
 #endif /* __QNXNTO__ */
+	int q = 0;
 
 #if 1
     struct sched_param param;
@@ -96,7 +97,7 @@ do {
 	}
 #endif
 	messip_channel_disconnect(ch, MESSIP_NOTIMEOUT);
-} while(0);
+} while(q++ < 3);
 	return 0;
 
 }

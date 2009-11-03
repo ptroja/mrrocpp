@@ -77,7 +77,7 @@ typedef struct messip_cnx
 	struct messip_cnx *prev;
 } messip_cnx_t;
 
-typedef struct
+typedef struct messip_channel
 {
 	char 			name[MESSIP_CHANNEL_NAME_MAXLEN + 1];
 	messip_cnx_t	*cnx;
@@ -103,6 +103,7 @@ typedef struct
 	int 			nb_timers;
 	int				mgr_sockfd;					// Socket in the messip_mgr
 	int				lastmsg_sockfd;				// socket number of the last message, for QNX scoid comptibility
+	pthread_mutex_t	send_mutex;					// mutex for exclusion of simultanous write by different threads
 #ifdef USE_SRRMOD
 	int				srr_name_id;
 	int				srr_pid;
